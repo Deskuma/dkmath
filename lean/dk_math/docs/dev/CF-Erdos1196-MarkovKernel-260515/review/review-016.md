@@ -22,7 +22,7 @@ $$
 weight(q)=\frac{\log p(q)}{\log n}
 $$
 
-なので、重みは (\mathbb{R}) 側に住む。ここを (\mathbb{Q}) 版の `WeightedPathFamily` に無理やり押し込むのではなく、実数版の橋を新設したのは正しい判断じゃ。
+なので、重みは \(\mathbb{R}\) 側に住む。ここを \(\mathbb{Q}\) 版の `WeightedPathFamily` に無理やり押し込むのではなく、実数版の橋を新設したのは正しい判断じゃ。
 
 ## 2. 何が定義されたか
 
@@ -53,7 +53,7 @@ $$
 WeightSubProbability \iff totalWeight\le 1
 $$
 
-これにより、primitive set (S) が各 chain を打つ質量を、実数重み付きで足し合わせられるようになった。
+これにより、primitive set \(S\) が各 chain を打つ質量を、実数重み付きで足し合わせられるようになった。
 
 ## 3. primitive hitting bound が実数重みで閉じた
 
@@ -77,11 +77,11 @@ $$
 hitSetMass(M,S\cap chain_i)\le \mu(source_i)
 $$
 
-が既存補題から出る。それを実数へ cast し、非負重み (w_i) を掛けて足し上げる。差分でも、この補題は `primitive_chain_hitSetMass_le_single_source` を使って各 chain の hit mass を source mass で抑え、それを `mul_le_mul_of_nonneg_left` で重み付き和へ持ち上げている。
+が既存補題から出る。それを実数へ cast し、非負重み \(w_i\) を掛けて足し上げる。差分でも、この補題は `primitive_chain_hitSetMass_le_single_source` を使って各 chain の hit mass を source mass で抑え、それを `mul_le_mul_of_nonneg_left` で重み付き和へ持ち上げている。
 
 これはまさに primitive set の「chain を高々一度しか打たない」性質を、real weighted path family へ移植したものじゃ。
 
-## 4. sub-probability から一様上界 (C) へ
+## 4. sub-probability から一様上界 \(C\) へ
 
 さらに、
 
@@ -148,7 +148,7 @@ applyToSourceControlled_weightSubProbability
 weightedHitMass_le_const_of_subprob_applyToSourceControlled
 ```
 
-により、`RealWeightProvider.SubProbability` が `RealWeightedPathFamily.WeightSubProbability` へ移り、そのまま primitive weighted hit mass bound へ進める。差分の docs でも、`SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` 由来の `RealWeightProvider` を、index が一致する source-controlled family に掛けて primitive set の weighted hit mass を (C) で抑える route ができた、と整理されている。
+により、`RealWeightProvider.SubProbability` が `RealWeightedPathFamily.WeightSubProbability` へ移り、そのまま primitive weighted hit mass bound へ進める。差分の docs でも、`SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` 由来の `RealWeightProvider` を、index が一致する source-controlled family に掛けて primitive set の weighted hit mass を \(C\) で抑える route ができた、と整理されている。
 
 ## 6. 数学的に何が進んだか
 
@@ -182,7 +182,7 @@ normalized kernel weight
 
 への合流口じゃ。
 
-まだ解析的な tail bound や (1+O(1/\log x)) には入っていない。
+まだ解析的な tail bound や \(1+O(1/\log x)\) には入っていない。
 だが、finite / structural skeleton としては、本線への復帰が始まった。
 
 ## 7. DKMK-007A の位置づけ
@@ -202,7 +202,7 @@ future equivalence route:
 
 DKMK-007A は、そこから **primitive hitting の山へ戻る最初の峠** じゃ。
 
-特に、docs でも今回の変更は「full Markov equality を直接 hitting theorem に合成する最終段ではない」が、「real normalized kernel と primitive hitting API の間にあった (\mathbb{Q}) / (\mathbb{R}) の型差を越える最初の bridge」と明記されている。
+特に、docs でも今回の変更は「full Markov equality を直接 hitting theorem に合成する最終段ではない」が、「real normalized kernel と primitive hitting API の間にあった \(\mathbb{Q}\) / \(\mathbb{R}\) の型差を越える最初の bridge」と明記されている。
 
 この言い方は正確じゃ。
 

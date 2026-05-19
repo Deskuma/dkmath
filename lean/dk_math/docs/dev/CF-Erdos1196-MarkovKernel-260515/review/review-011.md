@@ -87,7 +87,7 @@ weight := fun _ _ => 0
 
 ここで `weight := 0` なのは、確率重みをここで持たせるのではなく、log-capacity route 側が実数 cost を別に供給するからじゃ。これは DkMath kernel project の設計思想、つまり **capacity first, Markov later** に沿っておる。
 
-さらに `index_dvd` では、(q=p^k) かつ (k\le n.factorization(p)) から (p^k\mid n) を出している。(n=0) は `dvd_zero` で処理し、(n\ne 0) では `pow_dvd_iff_le_factorization` を使う。きれいじゃな。
+さらに `index_dvd` では、\(q=p^k\) かつ \(k\le n.factorization(p)\) から \(p^k\mid n\) を出している。\(n=0\) は `dvd_zero` で処理し、\(n\ne 0\) では `pow_dvd_iff_le_factorization` を使う。きれいじゃな。
 
 ## 4. witness provider の作り方
 
@@ -199,7 +199,7 @@ DKMK-006F:
 
 今回の canonical model は、次の考えを Lean 上で固定したものじゃ。
 
-自然数 (n) の素因数分解を見て、各素数 (p) ごとに exponent slot
+自然数 \(n\) の素因数分解を見て、各素数 \(p\) ごとに exponent slot
 
 $$
 1,2,\dots,v_p(n)
@@ -207,7 +207,7 @@ $$
 
 を用意する。
 
-各 slot (k) に label (p^k) を置く。
+各 slot \(k\) に label \(p^k\) を置く。
 
 これらの全 label を channel とする。
 
@@ -221,7 +221,7 @@ $$
 
 という Markov equality の影が、canonical route で成立するわけじゃ。
 
-ここで (\Lambda) を直接定義していないのが DkMath らしい。
+ここで \(\Lambda\) を直接定義していないのが DkMath らしい。
 先に exponent slot と base prime cost があり、その正規化像として Markov shadow が出ている。
 
 ## 8. 今回の意義

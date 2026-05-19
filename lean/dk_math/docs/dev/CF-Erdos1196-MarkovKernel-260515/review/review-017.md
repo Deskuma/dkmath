@@ -59,13 +59,13 @@ SubMarkovShadow.applyAtToSourceControlled_weightSubProbability
 SubMarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled
 ```
 
-数学的には、状態 (s) における shadow の provider
+数学的には、状態 \(s\) における shadow の provider
 
 $$
 S.providerAt(s)
 $$
 
-を、同じ index を持つ chain family (F) に載せる。
+を、同じ index を持つ chain family \(F\) に載せる。
 
 互換性は
 
@@ -83,7 +83,7 @@ $$
 
 が `RealWeightedPathFamily.WeightSubProbability` に移る。
 
-最後に primitive set (A) について、
+最後に primitive set \(A\) について、
 
 $$
 weightedHitMass(A)\le C
@@ -91,7 +91,7 @@ $$
 
 が得られる。
 
-ここで (C) は source mass の一様上界じゃ。
+ここで \(C\) は source mass の一様上界じゃ。
 
 $$
 \forall i\in F.index,\quad \mu(F.source(i))\le C
@@ -183,7 +183,7 @@ $$
 
 を満たす。
 
-primitive set (A) は chain を高々一度しか打たない。
+primitive set \(A\) は chain を高々一度しか打たない。
 だから weighted hitting mass は source 側の総質量で抑えられる。
 
 今回の DKMK-007B は、この「重み付き流れ」から「primitive hitting bound」への変換を、shadow level で呼べるようにした。

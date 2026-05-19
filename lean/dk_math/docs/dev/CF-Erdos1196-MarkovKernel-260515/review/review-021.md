@@ -7,7 +7,7 @@ $$
 (M.μ s.1 : ℝ) ≤ C
 $$
 
-を外から渡す必要があった。今回 `unitNatMassSpace` を使って (C=1) を自動供給し、selected / canonical の両 route で **primitive real-weighted hit mass ≤ 1** を直接呼べる形にした。
+を外から渡す必要があった。今回 `unitNatMassSpace` を使って \(C=1\) を自動供給し、selected / canonical の両 route で **primitive real-weighted hit mass ≤ 1** を直接呼べる形にした。
 
 ## 1. 今回の核心
 
@@ -40,7 +40,7 @@ canonicalExponentSlotMarkovShadow
 
 ## 2. 数学的な意味
 
-DKMK-007E の divisor-step route では、各 channel (q) に対して
+DKMK-007E の divisor-step route では、各 channel \(q\) に対して
 
 $$
 chain(q)={s.1/q,s.1}
@@ -54,7 +54,7 @@ $$
 (M.μ s.1 : ℝ) ≤ C
 $$
 
-今回 `unitNatMassSpace` を選ぶと、すべての点の mass が (1) になる。ゆえに
+今回 `unitNatMassSpace` を選ぶと、すべての点の mass が \(1\) になる。ゆえに
 
 $$
 (unitNatMassSpace.μ s.1 : ℝ) ≤ 1
@@ -92,7 +92,7 @@ globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
 q ∈ IOf(s.1)
 ```
 
-が transition kernel の index に含まれるなら、その selected log-capacity sub-Markov shadow を divisor-step chain family に載せて、primitive (A) の weighted hit mass を (1) で抑える。
+が transition kernel の index に含まれるなら、その selected log-capacity sub-Markov shadow を divisor-step chain family に載せて、primitive \(A\) の weighted hit mass を \(1\) で抑える。
 
 ここでは full equality は不要じゃ。
 selected route はもともと
@@ -122,7 +122,7 @@ canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
 
 こちらは DKMK-006F で構成した canonical exponent-slot MarkovShadow を使う。
 
-canonical route では full exponent-slot enumeration により、weight 総和は等号で (1) になる。
+canonical route では full exponent-slot enumeration により、weight 総和は等号で \(1\) になる。
 それを DKMK-007E の divisor-step family に載せ、さらに unit mass により source bound を閉じる。
 
 つまり canonical route では、次が完全に一つの呼び出しで見える。
@@ -161,7 +161,7 @@ DKMK-007F:
   unitNatMassSpace で source bound を閉じ、weightedHitMass ≤ 1
 ```
 
-DKMK-007F によって、少なくとも unit mass model では、もう外部から (C) や source bound を渡さずに primitive hitting bound が呼べる。これは API として大きな実用化じゃ。
+DKMK-007F によって、少なくとも unit mass model では、もう外部から \(C\) や source bound を渡さずに primitive hitting bound が呼べる。これは API として大きな実用化じゃ。
 
 ## 6. 何がまだ残っているか
 
@@ -196,7 +196,7 @@ DKMK-007G:
   source mass bound を theorem として供給する。
 ```
 
-たとえば、後で (1/(n\log n)) 的な重みへ寄せるなら、まずは toy でもよいので
+たとえば、後で \(1/(n\log n)\) 的な重みへ寄せるなら、まずは toy でもよいので
 
 ```text
 logTailMass

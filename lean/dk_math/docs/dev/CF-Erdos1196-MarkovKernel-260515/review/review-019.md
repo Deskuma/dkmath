@@ -17,7 +17,7 @@ SourceControlledChainFamily.natSingletonSelf
 `singletonSelf` は、各 index `i` に singleton chain `{label i}` を割り当て、source も `label i` にする最小 model。
 `natSingletonSelf` は、Nat-indexed route 用に `label := id` としたものじゃ。
 
-数学的には、各 channel (q) に対して chain をただ一つの点 ({q}) にする。
+数学的には、各 channel \(q\) に対して chain をただ一つの点 \({q}\) にする。
 
 $$
 chain(q)={q},\qquad source(q)=q
@@ -110,7 +110,7 @@ log-capacity shadow
   → primitive weighted hitting bound
 ```
 
-つまり、前回までの「compatible な (F) があれば」という条件が、少なくとも singleton model では「この (F) を選べばよい」に変わった。
+つまり、前回までの「compatible な \(F\) があれば」という条件が、少なくとも singleton model では「この \(F\) を選べばよい」に変わった。
 
 これは API の段差を減らす大事な進歩じゃ。
 
@@ -118,7 +118,7 @@ log-capacity shadow
 
 ここは留意点じゃ。
 
-`natSingletonSelf` の chain は ({q}) だけなので、実際の下降過程
+`natSingletonSelf` の chain は \(\{q\}\) だけなので、実際の下降過程
 
 $$
 n\mapsto n/q
@@ -166,7 +166,7 @@ DKMK-007E:
   または SourceControlledChainFamily.ofDescentChain
 ```
 
-目標は、各 channel (q) に対して singleton ({q}) ではなく、実際の chain を持たせることじゃ。
+目標は、各 channel \(q\) に対して singleton \(\{q\}\) ではなく、実際の chain を持たせることじゃ。
 
 候補は二つある。
 
@@ -178,7 +178,7 @@ DKMK-007E:
   chain(q) := {q, basePrimeOf(q), 1} など
 ```
 
-どちらを選ぶかは、今後の hitting 対象 (A) をどこに置くかで変わる。Erdős #1196 本線に寄せるなら、親状態 (n) から (n/q) へ下る chain family の方が自然じゃ。
+どちらを選ぶかは、今後の hitting 対象 \(A\) をどこに置くかで変わる。Erdős #1196 本線に寄せるなら、親状態 \(n\) から \(n/q\) へ下る chain family の方が自然じゃ。
 
 ## 8. 総合判定
 

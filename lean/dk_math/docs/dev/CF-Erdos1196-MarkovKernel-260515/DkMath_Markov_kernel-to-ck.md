@@ -1943,6 +1943,635 @@ n → n / q₁ → n / (q₁ q₂) → ...
 
 ---
 
+## 2.28. DKMK-008A Adjacent divisor path list interface
+
+DKMK-008A では、DKMK-007 の one-step divisor descent family を
+multi-step descent chain へ伸ばすため、list-shaped divisor path の
+最小 interface を追加する。
+
+追加した module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.DivisorPathList
+```
+
+中心となる predicate は次である。
+
+```lean
+AdjacentDivisorPath L
+```
+
+定義は、既存の `DvdDescentStep` を使った list chain である。
+
+```lean
+List.IsChain DvdDescentStep L
+```
+
+つまり、list の隣接ノード `a, b` について、
+
+```text
+b ∣ a
+```
+
+が成り立つことを表す。
+
+この predicate から、primitive hitting に必要な chain 条件へ落とす
+補題を追加した。
+
+```lean
+AdjacentDivisorPath.pairwiseDvdAlongList
+AdjacentDivisorPath.divisibilityChain_toFinset
+```
+
+到達形は次である。
+
+```text
+AdjacentDivisorPath L
+  → PairwiseDvdAlongList L
+  → DivisibilityChain L.toFinset
+```
+
+また、非空 path の head を source として読むために、
+各 node が head を割ることを示す補題を追加した。
+
+```lean
+AdjacentDivisorPath.mem_dvd_head
+```
+
+これにより、
+
+```text
+source :: tail
+```
+
+型の path では、任意の node `h` について `h ∣ source` が得られる。
+
+さらに、後続 DKMK-008B/C で family constructor へ繋げるため、
+singleton family 版も追加した。
+
+```lean
+singletonChainFamilyOfAdjacentDivisorPath
+singletonDvdControlledChainFamilyOfAdjacentDivisorPath
+```
+
+後者は、
+
+```text
+AdjacentDivisorPath (source :: tail)
+→ DvdControlledChainFamily Unit
+```
+
+を与える。したがって、既存の DKMK-007 route と同じく
+`DvdMonotoneMass` を使って `SourceControlledChainFamily` へ流せる。
+
+サンプルとして、次の path を追加した。
+
+```text
+12 → 6 → 3
+```
+
+対応する theorem は次である。
+
+```lean
+adjacentDivisorPath_twelve_six_three
+divisibilityChain_twelve_six_three_toFinset
+primitive_three_five_hits_twelve_six_three_card_le_one
+primitive_three_five_singletonDvdControlled_twelve_six_three_hitMass_le_sourceMass
+```
+
+これで DKMK-008 は、まず
+
+```text
+list-shaped multi-step divisor path
+  → DivisibilityChain
+  → DvdControlledChainFamily
+  → source-controlled hitting bound
+```
+
+という最小の入口を得た。
+
+---
+
+## 2.29. DKMK-008B Indexed adjacent divisor path family
+
+DKMK-008B では、DKMK-008A の singleton divisor path を finite indexed
+family に拡張する。
+
+追加した structure は次である。
+
+```lean
+AdjacentDivisorPathFamily ι
+```
+
+これは、index set と各 index の nonempty path を持つ。
+
+```lean
+index : Finset ι
+source : ι → ℕ
+tail : ι → List ℕ
+isPath : ∀ i ∈ index, AdjacentDivisorPath (source i :: tail i)
+```
+
+各 path は、
+
+```lean
+source i :: tail i
+```
+
+として保持される。したがって head `source i` を、その chain 全体の
+source mass として使える。
+
+基本 accessor として次を追加した。
+
+```lean
+AdjacentDivisorPathFamily.path
+AdjacentDivisorPathFamily.nodeSet
+```
+
+`nodeSet` は `path i` の `toFinset` であり、primitive hitting 側で
+評価する有限 chain である。
+
+この family から既存の chain API へ落とす bridge は次である。
+
+```lean
+AdjacentDivisorPathFamily.toDivisibilityChainFamily
+AdjacentDivisorPathFamily.toDvdControlledChainFamily
+```
+
+後者は、DKMK-008A の
+
+```lean
+AdjacentDivisorPath.mem_dvd_head
+```
+
+を使い、任意の node が head source を割ることから
+`chain_dvd_source` を供給する。
+
+到達形は次である。
+
+```text
+AdjacentDivisorPathFamily
+  → DivisibilityChainFamily
+  → DvdControlledChainFamily
+  → SourceControlledChainFamily
+```
+
+さらに、`DvdMonotoneMass` を仮定した primitive hitting bound として
+次を追加した。
+
+```lean
+AdjacentDivisorPathFamily.primitive_hitMass_le_sourceMass
+```
+
+サンプルとして、Bool-indexed に二つの path を持つ family を追加した。
+
+```text
+false ↦ 12 → 6 → 3
+true  ↦ 18 → 9 → 3
+```
+
+対応する declarations は次である。
+
+```lean
+adjacentDivisorPath_eighteen_nine_three
+sampleAdjacentDivisorPathBoolFamily
+sampleAdjacentDivisorPathBoolFamilySourceControlled
+primitive_three_five_sampleAdjacentDivisorPathBoolFamily_hitMass_le_sourceMass
+```
+
+これにより、DKMK-008 は single path から indexed multi-step divisor
+path family へ進み、selected / canonical shadow の index に multi-step
+chain を添える準備ができた。
+
+---
+
+## 2.30. DKMK-008C External divisor path family shadow wrappers
+
+DKMK-008C では、DKMK-008B で追加した external multi-step divisor path
+family を、selected / canonical log-capacity shadow に直接渡す wrapper を
+追加した。
+
+selected route の入口は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+```
+
+これは、`AdjacentDivisorPathFamily ℕ` と index compatibility
+
+```lean
+IOf s.1 = F.index
+```
+
+を受け取り、内部では
+
+```text
+AdjacentDivisorPathFamily
+  → DvdControlledChainFamily
+  → SourceControlledChainFamily
+  → RealWeightedPathFamily
+```
+
+へ忘却してから selected sub-Markov shadow を適用する。
+
+対応する hitting bound は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+```
+
+canonical route でも同じ形を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+```
+
+canonical 側の index compatibility は、
+
+```lean
+canonicalExponentSlotLabels s.1 = F.index
+```
+
+である。
+
+これにより、DKMK-008 は
+
+```text
+external multi-step divisor path family
+  + selected/canonical shadow provider
+  + index compatibility
+  + source mass bound
+  → weightedHitMass ≤ C
+```
+
+まで進んだ。
+
+---
+
+## 2.31. DKMK-008D Same-source path family source-bound wrappers
+
+DKMK-008D では、DKMK-008C の external multi-step divisor path family
+wrapper に、DKMK-007H 以来の `LogCapacitySourceMassBound` を合成した。
+
+DKMK-008C の hitting bound は source mass bound を次の形で外部から
+受け取っていた。
+
+```lean
+∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C
+```
+
+DKMK-008D では、各 indexed path の source が現在の log-capacity state
+の自然数成分 `s.1` に一致する仮定を置く。
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+このとき、既存の source-bound provider
+
+```lean
+LogCapacitySourceMassBound M C
+```
+
+から、各 path source の bound が従う。
+
+selected route には次を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+canonical route には次を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+これにより、same-source external multi-step path family については、
+
+```text
+LogCapacitySourceMassBound M C
+  + ∀ q ∈ F.index, F.source q = s.1
+  → weightedHitMass ≤ C
+```
+
+が selected / canonical の両方で直接使えるようになった。
+
+---
+
+## 2.32. DKMK-008E Finite-step tail mass on same-source path families
+
+DKMK-008E では、DKMK-007M で整えた finite-step tail mass を、
+DKMK-008D の same-source external multi-step path family theorem に載せた。
+
+finite-step tail mass は次の mass space である。
+
+```lean
+finiteStepTailNatMassSpace steps threshold increment hinc
+```
+
+ここで、各 `i ∈ steps` の increment が非負である。
+
+```lean
+hinc : ∀ i ∈ steps, 0 ≤ increment i
+```
+
+DKMK-008E の selected route は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+canonical route は次である。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+どちらも、same-source 条件
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+のもとで、上界
+
+```lean
+((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+を返す。
+
+これにより、DKMK-007M の finite-step mass route は、
+
+```text
+finiteStepTailNatMassSpace
+  + same-source AdjacentDivisorPathFamily
+  + selected/canonical shadow
+  → weightedHitMass ≤ total increment
+```
+
+として multi-step divisor path family へ昇格した。
+
+---
+
+## 2.33. DKMK-008F Two-step tail mass on same-source path families
+
+DKMK-008F では、DKMK-007N の two-step-as-finite-step tail mass を、
+DKMK-008E の same-source multi-step path family route に載せた。
+
+使用する mass は次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep
+```
+
+ここで、
+
+```lean
+hLow : 0 ≤ cLow
+hStep : cLow ≤ cHigh
+```
+
+である。
+
+selected route には次を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+canonical route には次を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+どちらも same-source 条件
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+のもとで、上界
+
+```lean
+(cHigh : ℝ)
+```
+
+を返す。
+
+これにより、DKMK-007N の two-step tail mass は、
+
+```text
+twoStepAsFiniteStepTailNatMassSpace
+  + same-source AdjacentDivisorPathFamily
+  + selected/canonical shadow
+  → weightedHitMass ≤ cHigh
+```
+
+として multi-step divisor path family へ昇格した。
+
+---
+
+## 2.34. DKMK-008G One-step divisorStep as path family
+
+DKMK-008G では、DKMK-007 の one-step divisorStep route を
+`AdjacentDivisorPathFamily` の特殊例として回収した。
+
+追加した constructor は次である。
+
+```lean
+oneStepDivisorAdjacentPathFamily
+```
+
+これは、source `n`、index set `I`、divisibility witness
+
+```lean
+hdiv : ∀ q ∈ I, q ∣ n
+```
+
+から、各 index `q` に path
+
+```text
+n -> n / q
+```
+
+を割り当てる。
+
+Lean 上では、各 path は
+
+```lean
+source q := n
+tail q := [n / q]
+```
+
+として保持される。
+
+`AdjacentDivisorPath` の証明には、
+
+```lean
+Nat.div_dvd_of_dvd (hdiv q hq)
+```
+
+を使う。
+
+また、既存の one-step divisorStep route と照合しやすいように、
+node set / chain が次の形に見える simp 補題を追加した。
+
+```lean
+({n / q, n} : Finset ℕ)
+```
+
+これにより、DKMK-007 の
+
+```text
+SourceControlledChainFamily.ofDivisorStep
+```
+
+で使っていた one-step chain は、DKMK-008 の
+
+```text
+AdjacentDivisorPathFamily
+```
+
+route の特殊例として読めるようになった。
+
+---
+
+## 2.35. DKMK-008H One-step path family shadow wrappers
+
+DKMK-008H では、DKMK-008G の `oneStepDivisorAdjacentPathFamily` を、
+selected / canonical shadow wrapper に直接載せる API を追加した。
+
+selected route では、次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+canonical route では、次の theorem を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+selected route の divisibility witness は、
+
+```lean
+hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+```
+
+と
+
+```lean
+T.toDivisorTransitionKernel.index_dvd
+```
+
+から自動供給する。
+
+canonical route の divisibility witness は、
+
+```lean
+canonicalExponentSlotDivisorTransitionKernel.index_dvd
+```
+
+から自動供給する。
+
+これにより、DKMK-007 の one-step divisorStep route は、
+
+```text
+oneStepDivisorAdjacentPathFamily
+  + same-source AdjacentDivisorPathFamily theorem
+  + finite-step/two-step mass wrapper
+```
+
+として DKMK-008 route 上で読めるようになった。
+
+上界は既存 wrapper と同じく、finite-step では
+
+```lean
+((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+two-step では
+
+```lean
+(cHigh : ℝ)
+```
+
+である。
+
+---
+
+## 2.36. DKMK-008I DKMK-008 route report
+
+DKMK-008I では、新しい Lean interface は追加しない。
+代わりに、DKMK-008A から DKMK-008H までで整えた
+path-family route を一枚の report に整理する。
+
+```text
+report-DKMK-008.md
+```
+
+この report では、DKMK-007 の one-step divisorStep route と
+DKMK-008 の one-step path-family route の statement 対応を明示する。
+
+selected route の対応は次である。
+
+```text
+finite-step:
+  globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+two-step:
+  globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+canonical route の対応は次である。
+
+```text
+finite-step:
+  canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+two-step:
+  canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+これにより、DKMK-007 の one-step theorem は DKMK-008 の
+`oneStepDivisorAdjacentPathFamily` 特殊例として読めることが、
+docs 上でも固定された。
+
+次の分岐は、external path family API の利用例を増やすか、または
+prime-power channel `q = p^k` から
+
+```text
+n → n / p → n / p^2 → ... → n / p^k
+```
+
+のような multi-step path を自動生成する route へ進むことである。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

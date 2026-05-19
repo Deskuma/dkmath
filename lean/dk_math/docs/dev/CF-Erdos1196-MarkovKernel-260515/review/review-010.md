@@ -67,20 +67,20 @@ FullExponentSlotChannelSet
 theorem basePrimeOf_eq_of_prime_pow_mem
 ```
 
-主張は、indexed label (q) が外延的に
+主張は、indexed label \(q\) が外延的に
 
 $$
 q=p^k
 $$
 
-であり、(p) が素数なら、witness provider が読む base prime は (p) でなければならない、というもの。
+であり、\(p\) が素数なら、witness provider が読む base prime は \(p\) でなければならない、というもの。
 
 $$
 W.basePrimeOf(n,I,hI,q)=p
 $$
 
 証明の発想も自然じゃ。
-witness provider 内部では別の witness (L.p^{L.k}) を選ぶ可能性がある。しかし (L.p\mid q) で、かつ (q=p^k) だから、素数 (L.p) は (p^k) を割る。素数の冪を割る素数は base prime と一致するので、
+witness provider 内部では別の witness \(L.p^{L.k}\) を選ぶ可能性がある。しかし \(L.p\mid q\) で、かつ \(q=p^k\) だから、素数 \(L.p\) は \(p^k\) を割る。素数の冪を割る素数は base prime と一致するので、
 
 $$
 L.p=p
@@ -89,7 +89,7 @@ $$
 となる。
 
 これは大事じゃ。
-なぜなら `FullExponentSlotChannelSet` は外延的に「(q=p^k) の slot が入っている」と言うだけで、witness provider が同じ (p) を読むとは自動ではない。今回、そのズレを塞いだ。
+なぜなら `FullExponentSlotChannelSet` は外延的に「\(q=p^k\) の slot が入っている」と言うだけで、witness provider が同じ \(p\) を読むとは自動ではない。今回、そのズレを塞いだ。
 
 ## 4. `fullExponentSlotCoverage_of_fullExponentSlotChannelSet`
 
@@ -101,7 +101,7 @@ theorem fullExponentSlotCoverage_of_fullExponentSlotChannelSet
 
 これは、full channel set が exponent slot 集合そのものなら、各 base prime fiber の個数がちょうど factorization exponent に一致することを示す。
 
-数学的には、固定した素数 (p) について、
+数学的には、固定した素数 \(p\) について、
 
 $$
 \#{q\in C.channels(n)\mid basePrime(q)=p}=n.factorization(p)
@@ -129,7 +129,7 @@ $$
 p^k
 $$
 
-へ送る。`FullExponentSlotChannelSet` により (p^k) は channel に入る。さらに `basePrimeOf_eq_of_prime_pow_mem` により、その label の base prime は (p) と読める。よって
+へ送る。`FullExponentSlotChannelSet` により \(p^k\) は channel に入る。さらに `basePrimeOf_eq_of_prime_pow_mem` により、その label の base prime は \(p\) と読める。よって
 
 $$
 {p^1,\dots,p^{v_p(n)}}\subseteq fiber(p)
@@ -137,10 +137,10 @@ $$
 
 が出る。
 
-さらに (k\mapsto p^k) は (p\ge 2) なら injective なので、cardinality は (v_p(n))。これで下界が出る。
+さらに \(k\mapsto p^k\) は \(p\ge 2\) なら injective なので、cardinality は \(v_p(n)\) 。これで下界が出る。
 
 $$
-n.factorization(p)\le #fiber(p)
+n.factorization(p)\le \#fiber(p)
 $$
 
 上下を合わせて等号じゃ。
@@ -285,7 +285,7 @@ $$
 第二に、`T.index n` に依存せず、explicit な canonical exponent slot enumeration を新しく作る。
 
 以前から見えていた通り、わっちは第二案もかなり有望だと思う。
-slot pair ((p,k)) を先に Finset 化すれば、full equality の証明は構造的に素直じゃ。その後で label (q=p^k) への bridge を作ればよい。
+slot pair \((p,k)\) を先に Finset 化すれば、full equality の証明は構造的に素直じゃ。その後で label \(q=p^k\) への bridge を作ればよい。
 
 ## 10. 総合判定
 

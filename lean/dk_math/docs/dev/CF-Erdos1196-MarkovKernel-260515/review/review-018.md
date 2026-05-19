@@ -52,9 +52,9 @@ IOf s.1 = F.index
 
 じゃ。
 
-つまり、状態 (s) の自然数成分 (s.1) に対して、selected channel set (IOf(s.1)) と source-controlled chain family (F) の index が一致すれば、`globalLogCapacitySubMarkovShadow` の provider を (F) に載せられる。
+つまり、状態 \(s\) の自然数成分 \(s.1\) に対して、selected channel set \(IOf(s.1)\) と source-controlled chain family \(F\) の index が一致すれば、`globalLogCapacitySubMarkovShadow` の provider を \(F\) に載せられる。
 
-その結果、primitive set (A) について、
+その結果、primitive set \(A\) について、
 
 $$
 weightedHitMass(A)\le C
@@ -62,7 +62,7 @@ $$
 
 が出る。
 
-この (C) は、各 source mass の一様上界じゃ。
+この \(C\) は、各 source mass の一様上界じゃ。
 
 $$
 \forall q\in F.index,\quad \mu(F.source(q))\le C
@@ -94,7 +94,7 @@ canonicalExponentSlotLabels s.1 = F.index
 
 じゃ。
 
-つまり、canonical exponent-slot labels を index とする source-controlled chain family があれば、canonical Markov shadow をそのまま (F) に適用できる。
+つまり、canonical exponent-slot labels を index とする source-controlled chain family があれば、canonical Markov shadow をそのまま \(F\) に適用できる。
 
 canonical route は DKMK-006F/G で Markov equality まで到達していた道じゃ。
 したがって、ここでは `SubProbability` を別途仮定せず、`MarkovShadow` 側から自動的に hitting bound へ進む。
@@ -178,7 +178,7 @@ log-capacity shadow
 → primitive hitting
 ```
 
-したがって、今後必要なのは右側の concrete 化、つまり (F) の構成じゃ。
+したがって、今後必要なのは右側の concrete 化、つまり \(F\) の構成じゃ。
 
 ## 6. 今回の設計判断の良い点
 
@@ -213,7 +213,7 @@ hindex : canonicalExponentSlotLabels s.1 = F.index
 
 ## 7. 何がまだ残っているか
 
-今回の docs でも次課題として明記されている通り、まだ (F) 自体の concrete constructor は外部入力じゃ。
+今回の docs でも次課題として明記されている通り、まだ \(F\) 自体の concrete constructor は外部入力じゃ。
 
 つまり、現在の到達点はこう。
 

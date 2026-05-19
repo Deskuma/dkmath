@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-007J は **tail support mass に「高さ」を持たせた回** じゃ。
-DKMK-007I では「どこを見るか」、つまり threshold (N) 以上を見る indicator mass が入った。今回 DKMK-007J では、そこに非負な有理 height (c) を加え、 **support と weight amplitude を分離した bounded weighted-tail toy model** が DKMK-007H の共通 wrapper を通ることを確認しておる。
+DKMK-007I では「どこを見るか」、つまり threshold \(N\) 以上を見る indicator mass が入った。今回 DKMK-007J では、そこに非負な有理 height \(c\) を加え、 **support と weight amplitude を分離した bounded weighted-tail toy model** が DKMK-007H の共通 wrapper を通ることを確認しておる。
 
 ## 1. 今回の核心
 
@@ -25,8 +25,8 @@ $$
 \mu(0)=c,\quad \mu(n)=c\ \text{if}\ N\le n,\quad \mu(n)=0\ \text{otherwise}
 $$
 
-DKMK-007I の `tailIndicatorNatMassSpace N` は高さが常に (1) の indicator だった。
-今回の model は、その高さを (c) に置き換えたものじゃ。
+DKMK-007I の `tailIndicatorNatMassSpace N` は高さが常に \(1\) の indicator だった。
+今回の model は、その高さを \(c\) に置き換えたものじゃ。
 
 つまり、
 
@@ -51,7 +51,7 @@ $$
 $$
 
 のような、場所によって高さが変わる mass に進みたい。
-しかしいきなりそこへ行くと、単調性・境界・実数評価・(n=0,1) 処理が重くなる。
+しかしいきなりそこへ行くと、単調性・境界・実数評価・\(n=0,1\) 処理が重くなる。
 
 今回の scaled tail indicator は、まだ bounded toy だが、
 
@@ -88,13 +88,13 @@ $$
 
 証明構造は DKMK-007I の tail indicator と同じじゃ。
 
-* (b=0) または (N\le b) なら、target mass は (c)。source 側は (0) または (c) なので (≤c)。
-* (b\ne 0) かつ (N\nleq b) なら、(a\mid b) から (a\le b) を使う。
-* もし (N\le a) なら (N\le b) になって矛盾。
-* したがって source 側も tail ではなく、mass (0)。
+* \(b=0\) または \(N\le b\) なら、target mass は \(c\)。source 側は \(0\) または \(c\) なので \(\le c\)。
+* \(b\ne 0\) かつ \(N\nleq b\) なら、\(a\mid b\) から \(a\le b\) を使う。
+* もし \(N\le a\) なら \(N\le b\) になって矛盾。
+* したがって source 側も tail ではなく、mass \(0\)。
 
-ここでも (0) を support 側に入れているのが効く。
-全 (\mathbb{N}) 上の整除では任意の (a) が (0) を割るため、(\mu(0)) は上側として十分大きくしておく必要があるからじゃ。
+ここでも \(0\) を support 側に入れているのが効く。
+全 \(\mathbb{N}\) 上の整除では任意の \(a\) が \(0\) を割るため、\(\mu(0)\) は上側として十分大きくしておく必要があるからじゃ。
 
 ## 4. LogCapacitySourceMassBound への接続
 
@@ -112,7 +112,7 @@ $$
 
 を与える。
 
-つまり任意の log-capacity state (s) について、
+つまり任意の log-capacity state \(s\) について、
 
 $$
 (M.\mu(s.1):\mathbb{R})\le (c:\mathbb{R})
@@ -120,8 +120,8 @@ $$
 
 が成り立つ。
 
-mass の値は (0) または (c) なので、これは自然じゃ。
-Lean 側では (c:\mathbb{Q}) を (\mathbb{R}) に cast し、`exact_mod_cast hc` で非負性も渡している。
+mass の値は \(0\) または \(c\) なので、これは自然じゃ。
+Lean 側では \(c:\mathbb{Q}\) を \(\mathbb{R}\) に cast し、`exact_mod_cast hc` で非負性も渡している。
 
 ## 5. selected route への接続
 
@@ -140,7 +140,7 @@ $$
 が出るという定理じゃ。
 
 前回までの bound は (≤1) だった。
-今回から、tail support の高さ (c) に応じて上界が変わる。
+今回から、tail support の高さ \(c\) に応じて上界が変わる。
 
 これはかなり意味がある。
 weighted hitting bound が mass amplitude に比例することが theorem として見えたからじゃ。
@@ -161,8 +161,8 @@ $$
 
 を返す。
 
-canonical route では weight 総和が Markov equality により (1)。
-その上に source mass height (c) を掛けるので、bound は (c) になる。
+canonical route では weight 総和が Markov equality により \(1\)。
+その上に source mass height \(c\) を掛けるので、bound は \(c\) になる。
 これは、これまでの抽象 theorem の設計がきちんと働いている証拠じゃ。
 
 ## 7. DKMK-007I からの前進
@@ -197,7 +197,7 @@ DKMK-007J:
 
 という関係になっておる。
 
-docs でも、DKMK-007I が「どこを見るか」を threshold (N) で指定する model だったのに対し、DKMK-007J は「どれだけ重く見るか」を height (c) として分離する、と整理されている。
+docs でも、DKMK-007I が「どこを見るか」を threshold \(N\) で指定する model だったのに対し、DKMK-007J は「どれだけ重く見るか」を height \(c\) として分離する、と整理されている。
 
 ## 8. 現在の mass model 階層
 
@@ -238,8 +238,8 @@ DKMK-007J はその入口としてかなりよい。
 
 今回も、mass はまだ bounded indicator 系じゃ。
 
-値は (0) または (c)。
-(n) に応じて連続的・解析的に変わるわけではない。
+値は \(0\) または \(c\)。
+\(n\) に応じて連続的・解析的に変わるわけではない。
 
 また chain はまだ one-step divisor descent。
 
@@ -257,7 +257,7 @@ multi-step descent へ進むと、source だけでなく途中ノードや termi
 
 次は二択じゃ。
 
-第一に、height を単一 (c) から階段型にする。
+第一に、height を単一 \(c\) から階段型にする。
 
 ```text
 DKMK-007K:
@@ -272,7 +272,7 @@ $$
 $$
 
 のような形じゃ。
-ただし、`DvdMonotoneMass` を保つには、整除で小さい方へ降りると mass が小さくならねばならぬ。つまり (a\mid b) かつ (a\le b) なので、
+ただし、`DvdMonotoneMass` を保つには、整除で小さい方へ降りると mass が小さくならねばならぬ。つまり \(a\mid b\) かつ \(a\le b\) なので、
 
 $$
 \mu(a)\le\mu(b)

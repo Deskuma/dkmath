@@ -40,7 +40,7 @@ hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b
 
 ここも設計として正しい。
 
-全自然数上では、任意の (a) について
+全自然数上では、任意の \(a\) について
 
 $$
 a\mid 0
@@ -53,9 +53,9 @@ $$
 a\mid b\Rightarrow \mu(a)\le\mu(b)
 $$
 
-を (b=0) でも壊さないためには、(\mu(0)) を最大値側に置く必要がある。
+を \(b=0\) でも壊さないためには、\(\mu(0)\) を最大値側に置く必要がある。
 
-今回の `boundedMonotoneNatMassSpace` では (\mu(0)=C) とし、さらに全ての height が (C) 以下であることを `hbound` で仮定している。これにより (b=0) 分岐が綺麗に閉じる。
+今回の `boundedMonotoneNatMassSpace` では \(\mu(0)=C\) とし、さらに全ての height が \(C\) 以下であることを `hbound` で仮定している。これにより \(b=0\) 分岐が綺麗に閉じる。
 
 この設計は、これまでの `tailIndicatorNatMassSpace` や `twoStepTailNatMassSpace` で `0` を上側に置いてきた流れの一般化じゃな。
 
@@ -71,15 +71,15 @@ boundedMonotoneNatMassSpace_dvdMonotone
 
 証明の核は二分岐になっている。
 
-まず (b=0) の場合、target mass は (C)。source 側は (0) なら (C)、非ゼロなら `height a` で、どちらも (C) 以下。ここは `hbound` で閉じる。
+まず \(b=0\) の場合、target mass は \(C\)。source 側は \(0\) なら \(C\)、非ゼロなら `height a` で、どちらも \(C\) 以下。ここは `hbound` で閉じる。
 
-次に (b\ne 0) の場合、(a\mid b) から
+次に \(b\ne 0\) の場合、\(a\mid b\) から
 
 $$
 a\le b
 $$
 
-が出る。さらに (a=0) なら (0\mid b) から (b=0) になって矛盾するので、(a\ne 0)。したがって source mass は `height a`、target mass は `height b` になり、`hmono` により
+が出る。さらに \(a=0\) なら \(0\mid b\) から \(b=0\) になって矛盾するので、\(a\ne 0\)。したがって source mass は `height a`、target mass は `height b` になり、`hmono` により
 
 $$
 height(a)\le height(b)
@@ -107,14 +107,14 @@ $$
 
 を与える。
 
-つまり、任意の log-capacity state (s) で、
+つまり、任意の log-capacity state \(s\) で、
 
 $$
 (M.\mu(s.1):\mathbb{R})\le (C:\mathbb{R})
 $$
 
 が出る。
-`LogCapacityState` は (1<s.1) なので (s.1\ne 0) だが、証明は一般に場合分けしており、非ゼロ分岐では `hbound s.1` を `Rat.cast_le` 経由で実数側へ渡している。ここも堅い。
+`LogCapacityState` は \(1 < s.1\) なので \(s.1\ne 0\) だが、証明は一般に場合分けしており、非ゼロ分岐では `hbound s.1` を `Rat.cast_le` 経由で実数側へ渡している。ここも堅い。
 
 ## 5. selected route の一般化
 
@@ -241,7 +241,7 @@ $$
 を要求する。
 つまり height は自然数ラベルに対して **非減少** じゃ。
 
-これは `DvdMonotoneMass` には自然な向き。なぜなら (a\mid b) かつ (b\ne 0) なら (a\le b) だからじゃ。
+これは `DvdMonotoneMass` には自然な向き。なぜなら \(a\mid b\) かつ \(b\ne 0\) なら \(a\le b\) だからじゃ。
 
 一方で、解析的によく出る
 
@@ -249,7 +249,7 @@ $$
 \frac{1}{n\log n}
 $$
 
-は (n) が大きいほど小さくなる。
+は \(n\) が大きいほど小さくなる。
 つまりこれは非増加であり、今回の `DvdMonotoneMass` とは向きが逆になる。
 
 したがって、本命 log weight 型へ進むには二つの可能性がある。

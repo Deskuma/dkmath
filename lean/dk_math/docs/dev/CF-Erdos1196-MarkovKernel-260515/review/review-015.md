@@ -96,7 +96,7 @@ T.toDivisorTransitionKernel.index(n)=canonicalExponentSlotLabels(n)
 $$
 
 この **等号一致** が示せるなら、それでよい。
-しかし外部 kernel が自然数 label (q=p^k) そのものではなく、たとえば slot pair ((p,k)) や別表現を index として持つ場合、この等号 route にはそのまま乗らぬ。
+しかし外部 kernel が自然数 label \(q=p^k\) そのものではなく、たとえば slot pair \((p,k)\) や別表現を index として持つ場合、この等号 route にはそのまま乗らぬ。
 
 その場合に必要になるのが、
 

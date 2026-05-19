@@ -854,3 +854,327 @@ Archive
    - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---
+
+### 日時: 2026/05/19 02:27 JST (DKMK-008A adjacent divisor path list interface 追加)
+
+1. 目的:
+   - DKMK-008 の入口として、one-step divisorStep の前に list-shaped multi-step divisor path の最小仕様を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.DivisorPathList` を追加した。
+   - `AdjacentDivisorPath L := List.IsChain DvdDescentStep L` を追加した。
+   - `AdjacentDivisorPath.pairwiseDvdAlongList` と `AdjacentDivisorPath.divisibilityChain_toFinset` を追加した。
+   - 非空 path の各 node が head source を割ることを示す `AdjacentDivisorPath.mem_dvd_head` を追加した。
+   - `singletonChainFamilyOfAdjacentDivisorPath` と `singletonDvdControlledChainFamilyOfAdjacentDivisorPath` を追加した。
+   - sample path `12 -> 6 -> 3` と primitive hitting sample theorem を追加した。
+   - `DkMath.NumberTheory.PrimitiveSet` aggregator と project docs を更新した。
+3. 結論:
+   - DKMK-008 の chain 側の最小入口として、list-shaped divisor path から `DivisibilityChain` と `DvdControlledChainFamily` へ進む no-sorry API が入った。
+   - 後続で indexed external path provider を作れば、selected / canonical shadow wrapper へ接続できる。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - sample path の `DvdDescentStep` 証明で `norm_num` だけでは定義が展開されなかったため、`change 6 ∣ 12` / `change 3 ∣ 6` を明示した。
+6. 次の課題:
+   - indexed path provider から `DvdControlledChainFamily` を作る constructor を追加する。
+   - selected / canonical log-capacity shadow を multi-step divisor path family に適用する wrapper へ進む。
+
+---
+
+### 日時: 2026/05/19 02:37 JST (DKMK-008B indexed adjacent divisor path family 追加)
+
+1. 目的:
+   - DKMK-008A の singleton divisor path を、finite indexed family として扱えるようにする。
+2. 実施:
+   - `AdjacentDivisorPathFamily ι` を追加した。
+   - `AdjacentDivisorPathFamily.path` と `AdjacentDivisorPathFamily.nodeSet` を追加した。
+   - `AdjacentDivisorPathFamily.toDivisibilityChainFamily` を追加した。
+   - `AdjacentDivisorPathFamily.toDvdControlledChainFamily` を追加し、`AdjacentDivisorPath.mem_dvd_head` で `chain_dvd_source` を供給した。
+   - `AdjacentDivisorPathFamily.primitive_hitMass_le_sourceMass` を追加した。
+   - Bool-indexed sample `sampleAdjacentDivisorPathBoolFamily` と source-controlled sample theorem を追加した。
+   - project docs に DKMK-008B の位置づけを追記した。
+3. 結論:
+   - list-shaped divisor paths を index ごとに並べ、`DvdControlledChainFamily` として source-controlled hitting route へ流せるようになった。
+   - selected / canonical shadow の index に multi-step path を添えるための chain-family 側の足場が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - selected / canonical log-capacity shadow を external multi-step divisor path family に適用する wrapper を追加する。
+   - `LogCapacitySourceMassBound` と finite-step mass bound を multi-step family に合成する。
+
+---
+
+### 日時: 2026/05/19 13:46 JST (DKMK-008C external path family shadow wrappers 追加)
+
+1. 目的:
+   - DKMK-008B の `AdjacentDivisorPathFamily` を selected / canonical
+     log-capacity shadow に直接接続する。
+2. 実施:
+   - `LogCapacityHittingBridge` で `DivisorPathList` を import した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily`
+     を追加した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const`
+     を追加した。
+   - project docs に DKMK-008C の位置づけを追記した。
+3. 結論:
+   - external multi-step divisor path family を、index compatibility のもとで
+     `RealWeightedPathFamily` に変換し、weighted hitting bound へ流せるようになった。
+   - selected / canonical の両方で、`AdjacentDivisorPathFamily + source mass
+     bound → weightedHitMass ≤ C` の no-sorry API が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `LogCapacitySourceMassBound` と finite-step mass bound を multi-step
+     family wrapper に合成する。
+   - finite-step mass wrapper 側へ進み、source-bound theorem を外部 path
+     family から直接使える形にする。
+
+---
+
+### 日時: 2026/05/19 14:06 JST (DKMK-008D same-source path family source-bound wrappers 追加)
+
+1. 目的:
+   - DKMK-008C の external path family wrapper に
+     `LogCapacitySourceMassBound` を合成する。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - `hsource_eq : ∀ q ∈ F.index, F.source q = s.1` から、
+     `LogCapacitySourceMassBound M C` を各 path source の bound に変換した。
+   - project docs に DKMK-008D の位置づけを追記した。
+3. 結論:
+   - same-source external multi-step path family では、各 source bound を
+     手で渡さず、既存の statewise source-bound provider から
+     `weightedHitMass ≤ C` を得られるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では canonical theorem 名の行が 100 文字制限にかかったため、
+     `theorem` と declaration name を改行した。
+6. 次の課題:
+   - finite-step tail mass などの具体 mass wrapper を same-source
+     multi-step path family theorem に載せる。
+
+---
+
+### 日時: 2026/05/19 14:45 JST (DKMK-008E finite-step tail mass multi-step wrapper 追加)
+
+1. 目的:
+   - DKMK-007M の finite-step tail mass を、DKMK-008D の same-source
+     external multi-step path family theorem に載せる。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - `finiteStepTailNatMassSpace_dvdMonotone` と
+     `finiteStepTailNatMassSpace_logCapacitySourceMassBound` を、same-source
+     path family の source-bound wrapper に合成した。
+   - project docs に DKMK-008E の位置づけを追記した。
+3. 結論:
+   - same-source external multi-step divisor path family に finite-step tail
+     mass を載せ、selected / canonical の両方で
+     `weightedHitMass ≤ ((Finset.sum steps increment : ℚ) : ℝ)` を得る
+     no-sorry API が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - two-step-as-finite-step tail mass など、finite-step の具体特殊形を
+     multi-step path family theorem に載せる。
+
+---
+
+### 日時: 2026/05/19 14:52 JST (DKMK-008F two-step tail mass multi-step wrapper 追加)
+
+1. 目的:
+   - DKMK-007N の two-step-as-finite-step tail mass を、DKMK-008E の
+     same-source multi-step path family route に載せる。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace_dvdMonotone` と
+     `twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound` を、
+     same-source path family の source-bound wrapper に合成した。
+   - project docs に DKMK-008F の位置づけを追記した。
+3. 結論:
+   - same-source external multi-step divisor path family に two-step tail
+     mass を載せ、selected / canonical の両方で
+     `weightedHitMass ≤ (cHigh : ℝ)` を得る no-sorry API が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では two-step-as-finite-step 由来の長い theorem 名が
+     100 文字制限にかかったため、public theorem 名を
+     `twoStepTailAdjacentDivisorPathFamily` に短縮した。
+6. 次の課題:
+   - one-step divisorStep を `AdjacentDivisorPathFamily` の特殊例として
+     回収し、DKMK-007 の one-step route と DKMK-008 route を照合する。
+
+---
+
+### 日時: 2026/05/19 15:09 JST (DKMK-008G one-step divisorStep path family 追加)
+
+1. 目的:
+   - DKMK-007 の one-step divisorStep route を、DKMK-008 の
+     `AdjacentDivisorPathFamily` route の特殊例として回収する。
+2. 実施:
+   - `DivisorPathList` に `oneStepDivisorAdjacentPathFamily` を追加した。
+   - 各 index `q` に `source q := n`, `tail q := [n / q]` を割り当てた。
+   - `hdiv : ∀ q ∈ I, q ∣ n` から `Nat.div_dvd_of_dvd` で
+     `AdjacentDivisorPath (n :: [n / q])` を供給した。
+   - index / source / tail / nodeSet / toDvdControlledChainFamily.chain の
+     simp 補題を追加した。
+   - `oneStepDivisorAdjacentPathFamily_source_eq` を追加し、same-source
+     path family theorem に渡せる source equality を用意した。
+   - project docs に DKMK-008G の位置づけを追記した。
+3. 結論:
+   - 既存 `divisorStep` の one-step chain `{n / q, n}` を、
+     `AdjacentDivisorPathFamily` の node set として回収できるようになった。
+   - DKMK-007 の one-step route と DKMK-008 の external path-family route
+     を同じ chain 形で照合する足場が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - `List.toFinset` が `{n, n / q}` の順で出たため、nodeSet 補題では
+     `Finset.ext` と `or_comm` で `{n / q, n}` と照合した。
+6. 次の課題:
+   - selected / canonical one-step path family wrapper を追加し、既存
+     divisorStep theorem と DKMK-008 route の API 上の対応を確認する。
+
+---
+
+### 日時: 2026/05/19 16:45 JST (DKMK-008H one-step path family shadow wrappers 追加)
+
+1. 目的:
+   - DKMK-008G の one-step path family を selected / canonical の
+     finite-step / two-step shadow wrappers に直接載せ、DKMK-007
+     one-step route と DKMK-008 route を theorem-facing に照合する。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - selected route の `hdiv` を `hIOf` と
+     `T.toDivisorTransitionKernel.index_dvd` から自動供給した。
+   - canonical route の `hdiv` を
+     `canonicalExponentSlotDivisorTransitionKernel.index_dvd` から自動供給した。
+   - project docs に DKMK-008H の位置づけを追記した。
+3. 結論:
+   - one-step divisorStep chain を `AdjacentDivisorPathFamily` route 経由で
+     finite-step / two-step mass bounds に載せられる no-sorry API が入った。
+   - DKMK-007 one-step theorem と DKMK-008 path-family theorem の対応が
+     public wrapper で明確になった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - one-step wrapper と既存 divisorStep theorem の statement-level 対応を
+     docs/report で整理する。
+   - 必要なら path 自動生成を prime-power descent へ拡張する。
+
+---
+
+### 日時: 2026/05/19 17:34 JST (DKMK-008I route report 追加)
+
+1. 目的:
+   - DKMK-008A から DKMK-008H までの path-family route を総括し、
+     DKMK-007 one-step divisorStep theorem との statement-level 対応を
+     docs/report として固定する。
+2. 実施:
+   - `report-DKMK-008.md` を追加した。
+   - DKMK-008A-H の流れを single path、indexed path family、external
+     wrapper、same-source wrapper、finite-step / two-step wrapper、
+     one-step 回収の順に整理した。
+   - selected / canonical の finite-step / two-step theorem 対応表を追加した。
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008I の節を追加し、
+     `report-DKMK-008.md` への道標を置いた。
+3. 結論:
+   - DKMK-007 の one-step divisorStep route は、DKMK-008 の
+     `oneStepDivisorAdjacentPathFamily` 特殊例として docs 上でも
+     明確に回収された。
+   - 次に進む場合の分岐として、external path family の利用例整備と
+     prime-power channel `q = p^k` からの multi-step path 自動生成を
+     明示した。
+4. 検証:
+   - `git diff --check`
+   - `rg -n "DKMK-008I|report-DKMK-008|finiteStepTailOneStepPath|twoStepTailOneStepPath|twoStepAsFiniteStepTailDivisorStep" lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/report-DKMK-008.md lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/DkMath_Markov_kernel-to-ck.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-008 の次段として、prime-power channel `q = p^k` から
+     `n → n / p → ... → n / p^k` 型の adjacent divisor path を
+     自動生成する route を検討する。
+
+---
