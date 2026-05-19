@@ -2145,6 +2145,72 @@ chain を添える準備ができた。
 
 ---
 
+## 2.30. DKMK-008C External divisor path family shadow wrappers
+
+DKMK-008C では、DKMK-008B で追加した external multi-step divisor path
+family を、selected / canonical log-capacity shadow に直接渡す wrapper を
+追加した。
+
+selected route の入口は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+```
+
+これは、`AdjacentDivisorPathFamily ℕ` と index compatibility
+
+```lean
+IOf s.1 = F.index
+```
+
+を受け取り、内部では
+
+```text
+AdjacentDivisorPathFamily
+  → DvdControlledChainFamily
+  → SourceControlledChainFamily
+  → RealWeightedPathFamily
+```
+
+へ忘却してから selected sub-Markov shadow を適用する。
+
+対応する hitting bound は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+```
+
+canonical route でも同じ形を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+```
+
+canonical 側の index compatibility は、
+
+```lean
+canonicalExponentSlotLabels s.1 = F.index
+```
+
+である。
+
+これにより、DKMK-008 は
+
+```text
+external multi-step divisor path family
+  + selected/canonical shadow provider
+  + index compatibility
+  + source mass bound
+  → weightedHitMass ≤ C
+```
+
+まで進んだ。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

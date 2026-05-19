@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
+import DkMath.NumberTheory.PrimitiveSet.DivisorPathList
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge"
 
@@ -192,6 +193,69 @@ theorem globalLogCapacitySubMarkovShadow_weightedHitMass_le_const
       s F
       (W.globalLogCapacitySubMarkovShadow_providerAt_compatible IOf hIOf s F hindex)
       hA hC hsource
+
+/--
+Apply the selected global log-capacity sub-Markov shadow at state `s` to an
+external multi-step divisor path family whose index is `IOf s.1`.
+-/
+noncomputable def globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : IOf s.1 = F.index) :
+    RealWeightedPathFamily M ℕ :=
+  W.globalLogCapacitySubMarkovShadow_applyAtToSourceControlled IOf hIOf s
+    (F.toDvdControlledChainFamily.toSourceControlled hM)
+    (by simpa using hindex)
+
+@[simp] theorem globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : IOf s.1 = F.index) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      IOf hIOf s F hM hindex).index = F.index :=
+  rfl
+
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on an external multi-step divisor path family.
+-/
+theorem globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : IOf s.1 = F.index)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      IOf hIOf s F hM hindex).weightedHitMass A ≤ C :=
+  W.globalLogCapacitySubMarkovShadow_weightedHitMass_le_const IOf hIOf s
+    (F.toDvdControlledChainFamily.toSourceControlled hM)
+    (by simpa using hindex)
+    hA hC
+    (by
+      intro q hq
+      simpa using hsource q hq)
 
 /--
 Apply the selected global log-capacity sub-Markov shadow to the nat-indexed
@@ -568,6 +632,54 @@ theorem canonicalExponentSlotMarkovShadow_weightedHitMass_le_const
       s F
       (canonicalExponentSlotMarkovShadow_providerAt_compatible s F hindex)
       hA hC hsource
+
+/--
+Apply the canonical exponent-slot Markov shadow at state `s` to an external
+multi-step divisor path family whose index is the canonical label set.
+-/
+noncomputable def canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : canonicalExponentSlotLabels s.1 = F.index) :
+    RealWeightedPathFamily M ℕ :=
+  canonicalExponentSlotMarkovShadow_applyAtToSourceControlled s
+    (F.toDvdControlledChainFamily.toSourceControlled hM)
+    (by simpa using hindex)
+
+@[simp] theorem canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily_index
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : canonicalExponentSlotLabels s.1 = F.index) :
+    (canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      s F hM hindex).index = F.index :=
+  rfl
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on an
+external multi-step divisor path family.
+-/
+theorem canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : canonicalExponentSlotLabels s.1 = F.index)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C) :
+    (canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      s F hM hindex).weightedHitMass A ≤ C :=
+  canonicalExponentSlotMarkovShadow_weightedHitMass_le_const s
+    (F.toDvdControlledChainFamily.toSourceControlled hM)
+    (by simpa using hindex)
+    hA hC
+    (by
+      intro q hq
+      simpa using hsource q hq)
 
 /--
 Apply the canonical exponent-slot Markov shadow to the nat-indexed singleton

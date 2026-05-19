@@ -914,3 +914,45 @@ Archive
    - `LogCapacitySourceMassBound` と finite-step mass bound を multi-step family に合成する。
 
 ---
+
+### 日時: 2026/05/19 13:46 JST (DKMK-008C external path family shadow wrappers 追加)
+
+1. 目的:
+   - DKMK-008B の `AdjacentDivisorPathFamily` を selected / canonical
+     log-capacity shadow に直接接続する。
+2. 実施:
+   - `LogCapacityHittingBridge` で `DivisorPathList` を import した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily`
+     を追加した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const`
+     を追加した。
+   - project docs に DKMK-008C の位置づけを追記した。
+3. 結論:
+   - external multi-step divisor path family を、index compatibility のもとで
+     `RealWeightedPathFamily` に変換し、weighted hitting bound へ流せるようになった。
+   - selected / canonical の両方で、`AdjacentDivisorPathFamily + source mass
+     bound → weightedHitMass ≤ C` の no-sorry API が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `LogCapacitySourceMassBound` と finite-step mass bound を multi-step
+     family wrapper に合成する。
+   - finite-step mass wrapper 側へ進み、source-bound theorem を外部 path
+     family から直接使える形にする。
+
+---
