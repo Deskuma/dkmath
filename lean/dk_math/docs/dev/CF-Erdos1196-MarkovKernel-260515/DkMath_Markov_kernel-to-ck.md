@@ -2516,6 +2516,62 @@ two-step では
 
 ---
 
+## 2.36. DKMK-008I DKMK-008 route report
+
+DKMK-008I では、新しい Lean interface は追加しない。
+代わりに、DKMK-008A から DKMK-008H までで整えた
+path-family route を一枚の report に整理する。
+
+```text
+report-DKMK-008.md
+```
+
+この report では、DKMK-007 の one-step divisorStep route と
+DKMK-008 の one-step path-family route の statement 対応を明示する。
+
+selected route の対応は次である。
+
+```text
+finite-step:
+  globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+two-step:
+  globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+canonical route の対応は次である。
+
+```text
+finite-step:
+  canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+two-step:
+  canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+  ↔
+  canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+これにより、DKMK-007 の one-step theorem は DKMK-008 の
+`oneStepDivisorAdjacentPathFamily` 特殊例として読めることが、
+docs 上でも固定された。
+
+次の分岐は、external path family API の利用例を増やすか、または
+prime-power channel `q = p^k` から
+
+```text
+n → n / p → n / p^2 → ... → n / p^k
+```
+
+のような multi-step path を自動生成する route へ進むことである。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

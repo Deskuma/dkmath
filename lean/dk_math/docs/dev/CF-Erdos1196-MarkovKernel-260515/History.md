@@ -1145,3 +1145,36 @@ Archive
    - 必要なら path 自動生成を prime-power descent へ拡張する。
 
 ---
+
+### 日時: 2026/05/19 17:34 JST (DKMK-008I route report 追加)
+
+1. 目的:
+   - DKMK-008A から DKMK-008H までの path-family route を総括し、
+     DKMK-007 one-step divisorStep theorem との statement-level 対応を
+     docs/report として固定する。
+2. 実施:
+   - `report-DKMK-008.md` を追加した。
+   - DKMK-008A-H の流れを single path、indexed path family、external
+     wrapper、same-source wrapper、finite-step / two-step wrapper、
+     one-step 回収の順に整理した。
+   - selected / canonical の finite-step / two-step theorem 対応表を追加した。
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008I の節を追加し、
+     `report-DKMK-008.md` への道標を置いた。
+3. 結論:
+   - DKMK-007 の one-step divisorStep route は、DKMK-008 の
+     `oneStepDivisorAdjacentPathFamily` 特殊例として docs 上でも
+     明確に回収された。
+   - 次に進む場合の分岐として、external path family の利用例整備と
+     prime-power channel `q = p^k` からの multi-step path 自動生成を
+     明示した。
+4. 検証:
+   - `git diff --check`
+   - `rg -n "DKMK-008I|report-DKMK-008|finiteStepTailOneStepPath|twoStepTailOneStepPath|twoStepAsFiniteStepTailDivisorStep" lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/report-DKMK-008.md lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/DkMath_Markov_kernel-to-ck.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-008 の次段として、prime-power channel `q = p^k` から
+     `n → n / p → ... → n / p^k` 型の adjacent divisor path を
+     自動生成する route を検討する。
+
+---
