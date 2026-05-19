@@ -2380,6 +2380,71 @@ twoStepAsFiniteStepTailNatMassSpace
 
 ---
 
+## 2.34. DKMK-008G One-step divisorStep as path family
+
+DKMK-008G では、DKMK-007 の one-step divisorStep route を
+`AdjacentDivisorPathFamily` の特殊例として回収した。
+
+追加した constructor は次である。
+
+```lean
+oneStepDivisorAdjacentPathFamily
+```
+
+これは、source `n`、index set `I`、divisibility witness
+
+```lean
+hdiv : ∀ q ∈ I, q ∣ n
+```
+
+から、各 index `q` に path
+
+```text
+n -> n / q
+```
+
+を割り当てる。
+
+Lean 上では、各 path は
+
+```lean
+source q := n
+tail q := [n / q]
+```
+
+として保持される。
+
+`AdjacentDivisorPath` の証明には、
+
+```lean
+Nat.div_dvd_of_dvd (hdiv q hq)
+```
+
+を使う。
+
+また、既存の one-step divisorStep route と照合しやすいように、
+node set / chain が次の形に見える simp 補題を追加した。
+
+```lean
+({n / q, n} : Finset ℕ)
+```
+
+これにより、DKMK-007 の
+
+```text
+SourceControlledChainFamily.ofDivisorStep
+```
+
+で使っていた one-step chain は、DKMK-008 の
+
+```text
+AdjacentDivisorPathFamily
+```
+
+route の特殊例として読めるようになった。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

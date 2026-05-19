@@ -1064,3 +1064,39 @@ Archive
      回収し、DKMK-007 の one-step route と DKMK-008 route を照合する。
 
 ---
+
+### 日時: 2026/05/19 15:09 JST (DKMK-008G one-step divisorStep path family 追加)
+
+1. 目的:
+   - DKMK-007 の one-step divisorStep route を、DKMK-008 の
+     `AdjacentDivisorPathFamily` route の特殊例として回収する。
+2. 実施:
+   - `DivisorPathList` に `oneStepDivisorAdjacentPathFamily` を追加した。
+   - 各 index `q` に `source q := n`, `tail q := [n / q]` を割り当てた。
+   - `hdiv : ∀ q ∈ I, q ∣ n` から `Nat.div_dvd_of_dvd` で
+     `AdjacentDivisorPath (n :: [n / q])` を供給した。
+   - index / source / tail / nodeSet / toDvdControlledChainFamily.chain の
+     simp 補題を追加した。
+   - `oneStepDivisorAdjacentPathFamily_source_eq` を追加し、same-source
+     path family theorem に渡せる source equality を用意した。
+   - project docs に DKMK-008G の位置づけを追記した。
+3. 結論:
+   - 既存 `divisorStep` の one-step chain `{n / q, n}` を、
+     `AdjacentDivisorPathFamily` の node set として回収できるようになった。
+   - DKMK-007 の one-step route と DKMK-008 の external path-family route
+     を同じ chain 形で照合する足場が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - `List.toFinset` が `{n, n / q}` の順で出たため、nodeSet 補題では
+     `Finset.ext` と `or_comm` で `{n / q, n}` と照合した。
+6. 次の課題:
+   - selected / canonical one-step path family wrapper を追加し、既存
+     divisorStep theorem と DKMK-008 route の API 上の対応を確認する。
+
+---

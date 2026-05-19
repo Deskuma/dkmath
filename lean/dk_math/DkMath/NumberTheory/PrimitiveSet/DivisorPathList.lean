@@ -173,6 +173,66 @@ theorem primitive_hitMass_le_sourceMass
 
 end AdjacentDivisorPathFamily
 
+/--
+The one-step divisor-descent family `q ↦ n -> n / q` as an
+`AdjacentDivisorPathFamily`.
+
+This recovers the older one-step divisorStep route as a special case of the
+external path-family interface.
+-/
+def oneStepDivisorAdjacentPathFamily
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    AdjacentDivisorPathFamily ℕ where
+  index := I
+  source := fun _ => n
+  tail := fun q => [n / q]
+  isPath := by
+    intro q hq
+    simp only [AdjacentDivisorPath, List.isChain_cons_cons,
+      List.isChain_singleton, and_true]
+    exact Nat.div_dvd_of_dvd (hdiv q hq)
+
+@[simp] theorem oneStepDivisorAdjacentPathFamily_index
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (oneStepDivisorAdjacentPathFamily n I hdiv).index = I := rfl
+
+@[simp] theorem oneStepDivisorAdjacentPathFamily_source
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (oneStepDivisorAdjacentPathFamily n I hdiv).source = fun _ => n := rfl
+
+@[simp] theorem oneStepDivisorAdjacentPathFamily_tail
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (oneStepDivisorAdjacentPathFamily n I hdiv).tail = fun q => [n / q] := rfl
+
+@[simp] theorem oneStepDivisorAdjacentPathFamily_nodeSet
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (oneStepDivisorAdjacentPathFamily n I hdiv).nodeSet =
+      fun q => ({n / q, n} : Finset ℕ) := by
+  funext q
+  ext x
+  simp [AdjacentDivisorPathFamily.nodeSet, AdjacentDivisorPathFamily.path,
+    or_comm]
+
+@[simp] theorem oneStepDivisorAdjacentPathFamily_toDvdControlledChainFamily_chain
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (oneStepDivisorAdjacentPathFamily n I hdiv).toDvdControlledChainFamily.chain =
+      fun q => ({n / q, n} : Finset ℕ) := by
+  exact oneStepDivisorAdjacentPathFamily_nodeSet n I hdiv
+
+theorem oneStepDivisorAdjacentPathFamily_source_eq
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    ∀ q ∈ (oneStepDivisorAdjacentPathFamily n I hdiv).index,
+      (oneStepDivisorAdjacentPathFamily n I hdiv).source q = n := by
+  intro q hq
+  rfl
+
 /-- Concrete divisor path `12 -> 6 -> 3`. -/
 theorem adjacentDivisorPath_twelve_six_three :
     AdjacentDivisorPath [12, 6, 3] := by
