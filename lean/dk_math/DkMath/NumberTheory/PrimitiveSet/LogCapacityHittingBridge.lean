@@ -355,6 +355,73 @@ theorem
       N M cLow cHigh hLow hStep)
 
 /--
+Finite-step tail bound for the selected shadow through the one-step
+`AdjacentDivisorPathFamily` model of `divisorStep`.
+-/
+theorem globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      IOf hIOf s
+        (oneStepDivisorAdjacentPathFamily s.1 (IOf s.1)
+          (fun q hq =>
+            T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+        (finiteStepTailNatMassSpace_dvdMonotone
+          steps threshold increment hinc)
+        rfl).weightedHitMass A ≤
+      ((Finset.sum steps increment : ℚ) : ℝ) :=
+  W.globalLogCapacitySubMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+    IOf hIOf steps threshold increment hinc s
+    (oneStepDivisorAdjacentPathFamily s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    rfl
+    (oneStepDivisorAdjacentPathFamily_source_eq s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    hA
+
+/--
+Two-step tail bound for the selected shadow through the one-step
+`AdjacentDivisorPathFamily` model of `divisorStep`.
+-/
+theorem globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      IOf hIOf s
+        (oneStepDivisorAdjacentPathFamily s.1 (IOf s.1)
+          (fun q hq =>
+            T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+        (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+          N M cLow cHigh hLow hStep)
+        rfl).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  W.globalLogCapacitySubMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+    IOf hIOf N M cLow cHigh hLow hStep s
+    (oneStepDivisorAdjacentPathFamily s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    rfl
+    (oneStepDivisorAdjacentPathFamily_source_eq s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    hA
+
+/--
 Apply the selected global log-capacity sub-Markov shadow to the nat-indexed
 singleton source-controlled family on `IOf s.1`.
 -/
@@ -860,6 +927,61 @@ theorem
     (by exact_mod_cast hLow.trans hStep)
     (twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
       N M cLow cHigh hLow hStep)
+
+/--
+Finite-step tail bound for the canonical shadow through the one-step
+`AdjacentDivisorPathFamily` model of `divisorStep`.
+-/
+theorem canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      s
+        (oneStepDivisorAdjacentPathFamily s.1 (canonicalExponentSlotLabels s.1)
+          (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+        (finiteStepTailNatMassSpace_dvdMonotone
+          steps threshold increment hinc)
+        rfl).weightedHitMass A ≤
+      ((Finset.sum steps increment : ℚ) : ℝ) :=
+  canonicalExponentSlotMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+    steps threshold increment hinc s
+    (oneStepDivisorAdjacentPathFamily s.1 (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    rfl
+    (oneStepDivisorAdjacentPathFamily_source_eq s.1 (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    hA
+
+/--
+Two-step tail bound for the canonical shadow through the one-step
+`AdjacentDivisorPathFamily` model of `divisorStep`.
+-/
+theorem canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      s
+        (oneStepDivisorAdjacentPathFamily s.1 (canonicalExponentSlotLabels s.1)
+          (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+        (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+          N M cLow cHigh hLow hStep)
+        rfl).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+    N M cLow cHigh hLow hStep s
+    (oneStepDivisorAdjacentPathFamily s.1 (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    rfl
+    (oneStepDivisorAdjacentPathFamily_source_eq s.1 (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    hA
 
 /--
 Apply the canonical exponent-slot Markov shadow to the nat-indexed singleton

@@ -1100,3 +1100,48 @@ Archive
      divisorStep theorem と DKMK-008 route の API 上の対応を確認する。
 
 ---
+
+### 日時: 2026/05/19 16:45 JST (DKMK-008H one-step path family shadow wrappers 追加)
+
+1. 目的:
+   - DKMK-008G の one-step path family を selected / canonical の
+     finite-step / two-step shadow wrappers に直接載せ、DKMK-007
+     one-step route と DKMK-008 route を theorem-facing に照合する。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le`
+     を追加した。
+   - selected route の `hdiv` を `hIOf` と
+     `T.toDivisorTransitionKernel.index_dvd` から自動供給した。
+   - canonical route の `hdiv` を
+     `canonicalExponentSlotDivisorTransitionKernel.index_dvd` から自動供給した。
+   - project docs に DKMK-008H の位置づけを追記した。
+3. 結論:
+   - one-step divisorStep chain を `AdjacentDivisorPathFamily` route 経由で
+     finite-step / two-step mass bounds に載せられる no-sorry API が入った。
+   - DKMK-007 one-step theorem と DKMK-008 path-family theorem の対応が
+     public wrapper で明確になった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - one-step wrapper と既存 divisorStep theorem の statement-level 対応を
+     docs/report で整理する。
+   - 必要なら path 自動生成を prime-power descent へ拡張する。
+
+---

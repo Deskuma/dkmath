@@ -2445,6 +2445,77 @@ route の特殊例として読めるようになった。
 
 ---
 
+## 2.35. DKMK-008H One-step path family shadow wrappers
+
+DKMK-008H では、DKMK-008G の `oneStepDivisorAdjacentPathFamily` を、
+selected / canonical shadow wrapper に直接載せる API を追加した。
+
+selected route では、次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+canonical route では、次の theorem を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailOneStepPath_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_twoStepTailOneStepPath_weightedHitMass_le
+```
+
+selected route の divisibility witness は、
+
+```lean
+hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+```
+
+と
+
+```lean
+T.toDivisorTransitionKernel.index_dvd
+```
+
+から自動供給する。
+
+canonical route の divisibility witness は、
+
+```lean
+canonicalExponentSlotDivisorTransitionKernel.index_dvd
+```
+
+から自動供給する。
+
+これにより、DKMK-007 の one-step divisorStep route は、
+
+```text
+oneStepDivisorAdjacentPathFamily
+  + same-source AdjacentDivisorPathFamily theorem
+  + finite-step/two-step mass wrapper
+```
+
+として DKMK-008 route 上で読めるようになった。
+
+上界は既存 wrapper と同じく、finite-step では
+
+```lean
+((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+two-step では
+
+```lean
+(cHigh : ℝ)
+```
+
+である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
