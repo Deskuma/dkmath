@@ -2263,6 +2263,63 @@ LogCapacitySourceMassBound M C
 
 ---
 
+## 2.32. DKMK-008E Finite-step tail mass on same-source path families
+
+DKMK-008E では、DKMK-007M で整えた finite-step tail mass を、
+DKMK-008D の same-source external multi-step path family theorem に載せた。
+
+finite-step tail mass は次の mass space である。
+
+```lean
+finiteStepTailNatMassSpace steps threshold increment hinc
+```
+
+ここで、各 `i ∈ steps` の increment が非負である。
+
+```lean
+hinc : ∀ i ∈ steps, 0 ≤ increment i
+```
+
+DKMK-008E の selected route は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+canonical route は次である。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+どちらも、same-source 条件
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+のもとで、上界
+
+```lean
+((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+を返す。
+
+これにより、DKMK-007M の finite-step mass route は、
+
+```text
+finiteStepTailNatMassSpace
+  + same-source AdjacentDivisorPathFamily
+  + selected/canonical shadow
+  → weightedHitMass ≤ total increment
+```
+
+として multi-step divisor path family へ昇格した。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
