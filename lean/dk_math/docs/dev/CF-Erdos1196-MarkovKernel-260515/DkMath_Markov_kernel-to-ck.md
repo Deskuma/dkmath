@@ -2320,6 +2320,66 @@ finiteStepTailNatMassSpace
 
 ---
 
+## 2.33. DKMK-008F Two-step tail mass on same-source path families
+
+DKMK-008F では、DKMK-007N の two-step-as-finite-step tail mass を、
+DKMK-008E の same-source multi-step path family route に載せた。
+
+使用する mass は次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep
+```
+
+ここで、
+
+```lean
+hLow : 0 ≤ cLow
+hStep : cLow ≤ cHigh
+```
+
+である。
+
+selected route には次を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+canonical route には次を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
+```
+
+どちらも same-source 条件
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+のもとで、上界
+
+```lean
+(cHigh : ℝ)
+```
+
+を返す。
+
+これにより、DKMK-007N の two-step tail mass は、
+
+```text
+twoStepAsFiniteStepTailNatMassSpace
+  + same-source AdjacentDivisorPathFamily
+  + selected/canonical shadow
+  → weightedHitMass ≤ cHigh
+```
+
+として multi-step divisor path family へ昇格した。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

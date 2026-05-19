@@ -1027,3 +1027,40 @@ Archive
      multi-step path family theorem に載せる。
 
 ---
+
+### 日時: 2026/05/19 14:52 JST (DKMK-008F two-step tail mass multi-step wrapper 追加)
+
+1. 目的:
+   - DKMK-007N の two-step-as-finite-step tail mass を、DKMK-008E の
+     same-source multi-step path family route に載せる。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le`
+     を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace_dvdMonotone` と
+     `twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound` を、
+     same-source path family の source-bound wrapper に合成した。
+   - project docs に DKMK-008F の位置づけを追記した。
+3. 結論:
+   - same-source external multi-step divisor path family に two-step tail
+     mass を載せ、selected / canonical の両方で
+     `weightedHitMass ≤ (cHigh : ℝ)` を得る no-sorry API が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では two-step-as-finite-step 由来の長い theorem 名が
+     100 文字制限にかかったため、public theorem 名を
+     `twoStepTailAdjacentDivisorPathFamily` に短縮した。
+6. 次の課題:
+   - one-step divisorStep を `AdjacentDivisorPathFamily` の特殊例として
+     回収し、DKMK-007 の one-step route と DKMK-008 route を照合する。
+
+---
