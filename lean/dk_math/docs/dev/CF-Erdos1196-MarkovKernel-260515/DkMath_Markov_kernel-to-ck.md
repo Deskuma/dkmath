@@ -2211,6 +2211,58 @@ external multi-step divisor path family
 
 ---
 
+## 2.31. DKMK-008D Same-source path family source-bound wrappers
+
+DKMK-008D では、DKMK-008C の external multi-step divisor path family
+wrapper に、DKMK-007H 以来の `LogCapacitySourceMassBound` を合成した。
+
+DKMK-008C の hitting bound は source mass bound を次の形で外部から
+受け取っていた。
+
+```lean
+∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C
+```
+
+DKMK-008D では、各 indexed path の source が現在の log-capacity state
+の自然数成分 `s.1` に一致する仮定を置く。
+
+```lean
+hsource_eq : ∀ q ∈ F.index, F.source q = s.1
+```
+
+このとき、既存の source-bound provider
+
+```lean
+LogCapacitySourceMassBound M C
+```
+
+から、各 path source の bound が従う。
+
+selected route には次を追加した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+canonical route には次を追加した。
+
+```lean
+canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+これにより、same-source external multi-step path family については、
+
+```text
+LogCapacitySourceMassBound M C
+  + ∀ q ∈ F.index, F.source q = s.1
+  → weightedHitMass ≤ C
+```
+
+が selected / canonical の両方で直接使えるようになった。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

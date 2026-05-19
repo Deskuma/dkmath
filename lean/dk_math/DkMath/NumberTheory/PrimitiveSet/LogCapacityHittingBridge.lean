@@ -258,6 +258,33 @@ theorem globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMa
       simpa using hsource q hq)
 
 /--
+Primitive hitting bound for an external multi-step divisor path family whose
+sources are all the current log-capacity state.
+-/
+theorem globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : IOf s.1 = F.index)
+    (hsource_eq : ∀ q ∈ F.index, F.source q = s.1)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      IOf hIOf s F hM hindex).weightedHitMass A ≤ C :=
+  W.globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+    IOf hIOf s F hM hindex hA hC
+    (by
+      intro q hq
+      simpa [hsource_eq q hq] using hsource s)
+
+/--
 Apply the selected global log-capacity sub-Markov shadow to the nat-indexed
 singleton source-controlled family on `IOf s.1`.
 -/
@@ -680,6 +707,29 @@ theorem canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitM
     (by
       intro q hq
       simpa using hsource q hq)
+
+/--
+Primitive hitting bound for a canonical external multi-step divisor path family
+whose sources are all the current log-capacity state.
+-/
+theorem
+  canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : AdjacentDivisorPathFamily ℕ)
+    (hM : DvdMonotoneMass M)
+    (hindex : canonicalExponentSlotLabels s.1 = F.index)
+    (hsource_eq : ∀ q ∈ F.index, F.source q = s.1)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C) :
+    (canonicalExponentSlotMarkovShadow_applyAtToAdjacentDivisorPathFamily
+      s F hM hindex).weightedHitMass A ≤ C :=
+  canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_const
+    s F hM hindex hA hC
+    (by
+      intro q hq
+      simpa [hsource_eq q hq] using hsource s)
 
 /--
 Apply the canonical exponent-slot Markov shadow to the nat-indexed singleton

@@ -956,3 +956,38 @@ Archive
      family から直接使える形にする。
 
 ---
+
+### 日時: 2026/05/19 14:06 JST (DKMK-008D same-source path family source-bound wrappers 追加)
+
+1. 目的:
+   - DKMK-008C の external path family wrapper に
+     `LogCapacitySourceMassBound` を合成する。
+2. 実施:
+   - selected route に
+     `globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - canonical route に
+     `canonicalExponentSlotMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - `hsource_eq : ∀ q ∈ F.index, F.source q = s.1` から、
+     `LogCapacitySourceMassBound M C` を各 path source の bound に変換した。
+   - project docs に DKMK-008D の位置づけを追記した。
+3. 結論:
+   - same-source external multi-step path family では、各 source bound を
+     手で渡さず、既存の statewise source-bound provider から
+     `weightedHitMass ≤ C` を得られるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では canonical theorem 名の行が 100 文字制限にかかったため、
+     `theorem` と declaration name を改行した。
+6. 次の課題:
+   - finite-step tail mass などの具体 mass wrapper を same-source
+     multi-step path family theorem に載せる。
+
+---
