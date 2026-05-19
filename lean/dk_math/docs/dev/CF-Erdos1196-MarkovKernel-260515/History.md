@@ -884,3 +884,33 @@ Archive
    - selected / canonical log-capacity shadow を multi-step divisor path family に適用する wrapper へ進む。
 
 ---
+
+### 日時: 2026/05/19 02:37 JST (DKMK-008B indexed adjacent divisor path family 追加)
+
+1. 目的:
+   - DKMK-008A の singleton divisor path を、finite indexed family として扱えるようにする。
+2. 実施:
+   - `AdjacentDivisorPathFamily ι` を追加した。
+   - `AdjacentDivisorPathFamily.path` と `AdjacentDivisorPathFamily.nodeSet` を追加した。
+   - `AdjacentDivisorPathFamily.toDivisibilityChainFamily` を追加した。
+   - `AdjacentDivisorPathFamily.toDvdControlledChainFamily` を追加し、`AdjacentDivisorPath.mem_dvd_head` で `chain_dvd_source` を供給した。
+   - `AdjacentDivisorPathFamily.primitive_hitMass_le_sourceMass` を追加した。
+   - Bool-indexed sample `sampleAdjacentDivisorPathBoolFamily` と source-controlled sample theorem を追加した。
+   - project docs に DKMK-008B の位置づけを追記した。
+3. 結論:
+   - list-shaped divisor paths を index ごとに並べ、`DvdControlledChainFamily` として source-controlled hitting route へ流せるようになった。
+   - selected / canonical shadow の index に multi-step path を添えるための chain-family 側の足場が入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - selected / canonical log-capacity shadow を external multi-step divisor path family に適用する wrapper を追加する。
+   - `LogCapacitySourceMassBound` と finite-step mass bound を multi-step family に合成する。
+
+---

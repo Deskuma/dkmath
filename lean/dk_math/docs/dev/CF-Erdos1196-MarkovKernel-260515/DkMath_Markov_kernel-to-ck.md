@@ -2052,6 +2052,99 @@ list-shaped multi-step divisor path
 
 ---
 
+## 2.29. DKMK-008B Indexed adjacent divisor path family
+
+DKMK-008B では、DKMK-008A の singleton divisor path を finite indexed
+family に拡張する。
+
+追加した structure は次である。
+
+```lean
+AdjacentDivisorPathFamily ι
+```
+
+これは、index set と各 index の nonempty path を持つ。
+
+```lean
+index : Finset ι
+source : ι → ℕ
+tail : ι → List ℕ
+isPath : ∀ i ∈ index, AdjacentDivisorPath (source i :: tail i)
+```
+
+各 path は、
+
+```lean
+source i :: tail i
+```
+
+として保持される。したがって head `source i` を、その chain 全体の
+source mass として使える。
+
+基本 accessor として次を追加した。
+
+```lean
+AdjacentDivisorPathFamily.path
+AdjacentDivisorPathFamily.nodeSet
+```
+
+`nodeSet` は `path i` の `toFinset` であり、primitive hitting 側で
+評価する有限 chain である。
+
+この family から既存の chain API へ落とす bridge は次である。
+
+```lean
+AdjacentDivisorPathFamily.toDivisibilityChainFamily
+AdjacentDivisorPathFamily.toDvdControlledChainFamily
+```
+
+後者は、DKMK-008A の
+
+```lean
+AdjacentDivisorPath.mem_dvd_head
+```
+
+を使い、任意の node が head source を割ることから
+`chain_dvd_source` を供給する。
+
+到達形は次である。
+
+```text
+AdjacentDivisorPathFamily
+  → DivisibilityChainFamily
+  → DvdControlledChainFamily
+  → SourceControlledChainFamily
+```
+
+さらに、`DvdMonotoneMass` を仮定した primitive hitting bound として
+次を追加した。
+
+```lean
+AdjacentDivisorPathFamily.primitive_hitMass_le_sourceMass
+```
+
+サンプルとして、Bool-indexed に二つの path を持つ family を追加した。
+
+```text
+false ↦ 12 → 6 → 3
+true  ↦ 18 → 9 → 3
+```
+
+対応する declarations は次である。
+
+```lean
+adjacentDivisorPath_eighteen_nine_three
+sampleAdjacentDivisorPathBoolFamily
+sampleAdjacentDivisorPathBoolFamilySourceControlled
+primitive_three_five_sampleAdjacentDivisorPathBoolFamily_hitMass_le_sourceMass
+```
+
+これにより、DKMK-008 は single path から indexed multi-step divisor
+path family へ進み、selected / canonical shadow の index に multi-step
+chain を添える準備ができた。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
