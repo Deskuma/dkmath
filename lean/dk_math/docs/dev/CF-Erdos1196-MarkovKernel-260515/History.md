@@ -1353,3 +1353,30 @@ Archive
      追加するか検討する。
 
 ---
+
+### 日時: 2026/05/29 04:27 JST (DKMK-008O route map summary 追加)
+
+1. 目的:
+   - DKMK-008A から DKMK-008N までの path route を、
+     route map として一区切りに整理する。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008O 節を追加した。
+   - `report-DKMK-008.md` に route map summary を追加した。
+   - DKMK-008 を path substrate、shadow bridge、one-step recovery、
+     witness route の四層として整理した。
+   - docs/report layer として DKMK-008I、008M、008N の役割を整理した。
+   - manual path、one-step divisor path、witness-derived quotient path の
+     三入口を明示した。
+3. 結論:
+   - DKMK-008 は manual path、one-step path、witness-derived multi-step path
+     の三入口を持つ multi-step divisor path route として一区切りになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Lean 実装へ戻る場合は、witness-derived family の concrete theorem 追加か、
+     DKMK-009 として別の mass / capacity 層へ接続するかを選ぶ。
+
+---

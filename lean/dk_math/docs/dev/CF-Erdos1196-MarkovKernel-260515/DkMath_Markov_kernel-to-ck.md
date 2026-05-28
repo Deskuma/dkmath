@@ -2884,6 +2884,67 @@ adjacentDivisorPath_seventy_two_three_two
 
 ---
 
+## 2.42. DKMK-008O Route map summary
+
+DKMK-008O では、新しい Lean theorem は追加せず、DKMK-008A から
+DKMK-008N までの route map をまとめる。
+
+DKMK-008 の構造は、次の四層として読める。
+
+| layer | DKMK | 役割 |
+| --- | --- | --- |
+| path substrate | 008A-B | list-shaped path と indexed path family |
+| shadow bridge | 008C-F | selected / canonical shadow と mass bound への接続 |
+| one-step recovery | 008G-H | DKMK-007 divisorStep route の path-family 化 |
+| witness route | 008J-L | witness 由来の quotient path 自動生成と mass bound |
+
+DKMK-008I、008M、008N は、この構造を読むための docs/report layer である。
+
+```text
+008I:
+  DKMK-008A-H の route report
+
+008M:
+  divisorStep / oneStepPath / quotientPathFamily の比較
+
+008N:
+  72, 3, 2 concrete example
+```
+
+現在の到達点は次である。
+
+```text
+external path family:
+  user-supplied AdjacentDivisorPathFamily
+  → selected / canonical weightedHitMass bound
+
+one-step path family:
+  q ∣ n
+  → n → n / q
+  → selected / canonical weightedHitMass bound
+
+witness-derived quotient path family:
+  q = p(q)^k(q)
+  → n → n / p(q) → ... → n / p(q)^k(q)
+  → selected / canonical weightedHitMass bound
+```
+
+これにより、DKMK-008 は
+
+```text
+manual path
+one-step divisor path
+witness-derived multi-step quotient path
+```
+
+の三入口を持つ multi-step divisor path route として一区切りになる。
+
+次に Lean 実装へ戻る場合は、witness-derived family の concrete theorem を
+追加するか、DKMK-009 としてこの path route を別の mass / capacity 層へ
+接続するかを選ぶ。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
