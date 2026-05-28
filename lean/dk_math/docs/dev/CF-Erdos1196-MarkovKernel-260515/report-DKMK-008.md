@@ -360,3 +360,47 @@ witness-derived quotient path family
 ```
 
 まで theorem-facing API として到達した。
+
+## 11. 追補: DKMK-008M
+
+DKMK-008M では、DKMK-007 から DKMK-008L までで増えた route の
+使い分けを comparison table として固定する。
+
+| route | descent の読み | 主な用途 |
+| --- | --- | --- |
+| DKMK-007 divisorStep | `n -> n / q` | 既存 one-step theorem との対応 |
+| DKMK-008H oneStepPath | `n -> n / q` を path family 化 | DKMK-008 API 上の one-step 特殊例 |
+| DKMK-008L quotientPathFamily | `q = p(q)^k(q)` を展開 | witness 由来の multi-step route |
+
+one-step 系 route では、label `q` を一つの descent step として読む。
+
+```text
+n → n / q
+```
+
+一方、prime-power quotient path route では、witness が与える
+
+```text
+q = p(q)^k(q)
+```
+
+を使い、同じ label `q` を exponent-slot path へ展開する。
+
+```text
+n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+推奨入口は次のように読む。
+
+| 目的 | selected | canonical |
+| --- | --- | --- |
+| one-step path family | selected one-step wrapper | canonical one-step wrapper |
+| witness-derived path family | selected quotient-path wrapper | canonical quotient-path wrapper |
+
+命名上は、one-step wrapper は `*OneStepPath_weightedHitMass_le`、
+witness-derived wrapper は
+`*PrimePowerQuotientPathFamily_weightedHitMass_le` を目印にする。
+
+これで DKMK-008 は、外部 path family を受け取る route、one-step を
+path-family API に載せる route、witness から multi-step path を
+自動生成する route の三つを区別して参照できる。

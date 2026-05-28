@@ -1298,3 +1298,30 @@ Archive
      one-step route と multi-step witness route の使い分けを整理する。
 
 ---
+
+### 日時: 2026/05/29 00:18 JST (DKMK-008M path route comparison 追加)
+
+1. 目的:
+   - DKMK-007 divisorStep、DKMK-008H one-step path family、
+     DKMK-008L witness-derived quotient path family の使い分けを
+     docs/report 上で明確にする。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008M 節を追加した。
+   - `report-DKMK-008.md` に route comparison table を追加した。
+   - one-step route と prime-power quotient path route の数学的な違いを
+     `n -> n / q` と `n -> n / p(q) -> ... -> n / p(q)^k(q)` として整理した。
+   - selected / canonical の推奨 theorem 入口を表として記録した。
+3. 結論:
+   - DKMK-008 は external path family、one-step path family、
+     witness-derived prime-power quotient path family の三つの入口を
+     区別して参照できるようになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 必要なら concrete example として、既存の `72, 3, 2` quotient path を
+     report の example 節に接続する。
+
+---

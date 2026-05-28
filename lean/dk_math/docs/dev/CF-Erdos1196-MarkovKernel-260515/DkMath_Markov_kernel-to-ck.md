@@ -2773,6 +2773,53 @@ selected / canonical labels
 
 ---
 
+## 2.40. DKMK-008M Path route comparison
+
+DKMK-008M では、新しい Lean theorem は追加せず、DKMK-007 から
+DKMK-008L までの path route の使い分けを整理する。
+
+比較対象は次の三つである。
+
+| route | path の作り方 | 使う入口 |
+| --- | --- | --- |
+| DKMK-007 divisorStep | `q` を一発で剥がす | `*_DivisorStep_weightedHitMass_le` |
+| DKMK-008H oneStepPath | `n -> n / q` を path family 化する | `*_OneStepPath_weightedHitMass_le` |
+| DKMK-008L quotientPathFamily | `q = p^k` を `p` 段に展開する | quotient-path wrapper |
+
+数学的な違いは次である。
+
+```text
+one-step route:
+  n → n / q
+
+prime-power quotient path route:
+  n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+DKMK-007 と DKMK-008H は、同じ one-step descent を異なる API 面から
+見る route である。
+
+DKMK-008L は、prime-power witness の `(p,k)` 情報を使い、
+一つの label `q` を exponent-slot path に展開する route である。
+
+したがって推奨される使い分けは次である。
+
+- divisorStep route: 既存 theorem との statement-level 対応を見たいとき。
+- oneStepPath route: path-family API に one-step descent を載せたいとき。
+- quotientPathFamily route: witness から multi-step descent を自動生成したいとき。
+
+この比較により、DKMK-008 は
+
+```text
+external path family
+one-step path family
+witness-derived prime-power quotient path family
+```
+
+の三つの入口を持つ章として読める。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
