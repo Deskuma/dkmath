@@ -1178,3 +1178,43 @@ Archive
      自動生成する route を検討する。
 
 ---
+
+### 日時: 2026/05/28 18:58 JST (DKMK-008J prime-power quotient path 追加)
+
+1. 目的:
+   - prime-power channel `q = p^k` から multi-step divisor path を
+     自動生成するための最小 path-level constructor を追加する。
+2. 実施:
+   - `DivisorPathList` に `primePowerQuotientPath` を追加した。
+   - `primePowerQuotientPath n p k` を
+     `[n / p^0, n / p^1, ..., n / p^k]` として定義した。
+   - `p^k ∣ n` のもとでこの list が `AdjacentDivisorPath` になる
+     `primePowerQuotientPath_isPath` を追加した。
+   - 証明では `List.isChain_range_succ` と `Nat.div_dvd_div_left` を使い、
+     各 `i < k` で `n / p^(i+1) ∣ n / p^i` を示した。
+   - `primePowerQuotientPath 72 3 2 = [72, 24, 8]` と、
+     その adjacent path theorem を確認用に追加した。
+   - project docs と `report-DKMK-008.md` に DKMK-008J の位置づけを追記した。
+3. 結論:
+   - DKMK-008I で次の未踏地として整理した
+     `n → n / p → ... → n / p^k` 型 path の純粋 Lean 核が入った。
+   - `PrimePowerWitnessProvider` から `(p,k)` を読み取って
+     `AdjacentDivisorPathFamily` に載せる wrapper は次段に残した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では `primePowerQuotientPath_one` と
+     `primePowerQuotientPath_two` の表示用 simp 補題で
+     `List.range` 展開後の `p^0`, `p^1` が残ったため、`change` で
+     list 形を明示してから `simp` で閉じた。
+6. 次の課題:
+   - `PrimePowerWitnessProvider` の `label` から `(p,k)` を取り出し、
+     selected / canonical index 上の `AdjacentDivisorPathFamily` を
+     自動構成する wrapper を追加する。
+
+---

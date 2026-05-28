@@ -246,3 +246,41 @@ n → n / p → n / p^2 → ... → n / p^k
 
 DKMK-008A-H は、後者へ進むための path-family 受け口を整えた段階と
 位置づけられる。
+
+## 8. 追補: DKMK-008J
+
+DKMK-008J では、prime-power channel
+
+```text
+q = p^k
+```
+
+から multi-step divisor path を作るための path-level constructor が入った。
+
+```lean
+primePowerQuotientPath
+primePowerQuotientPath_isPath
+```
+
+`primePowerQuotientPath n p k` は、
+
+```text
+[n / p^0, n / p^1, ..., n / p^k]
+```
+
+を返す。
+
+`primePowerQuotientPath_isPath` は、`p^k ∣ n` のもとでこの list が
+`AdjacentDivisorPath` であることを示す。
+
+これにより、DKMK-008I で次の未踏地として整理した
+
+```text
+n → n / p → n / p^2 → ... → n / p^k
+```
+
+の最小 Lean 核が入った。
+
+ただし、DKMK-008J はまだ pure path-level である。
+`PrimePowerWitnessProvider` から `(p,k)` を読み、selected / canonical の
+`AdjacentDivisorPathFamily` へ自動で載せる wrapper は次段の課題として残る。

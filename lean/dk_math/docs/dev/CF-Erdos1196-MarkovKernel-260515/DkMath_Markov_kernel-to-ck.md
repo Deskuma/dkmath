@@ -2572,6 +2572,79 @@ n → n / p → n / p^2 → ... → n / p^k
 
 ---
 
+## 2.37. DKMK-008J Prime-power quotient path
+
+DKMK-008J では、prime-power channel
+
+```text
+q = p^k
+```
+
+から multi-step divisor path を自動生成するための最小核を追加する。
+
+追加した path constructor は次である。
+
+```lean
+primePowerQuotientPath
+```
+
+これは、source `n`、base `p`、exponent `k` から
+
+```text
+[n / p^0, n / p^1, ..., n / p^k]
+```
+
+という list-shaped path を作る。
+
+主要 theorem は次である。
+
+```lean
+primePowerQuotientPath_isPath
+```
+
+statement は、仮定
+
+```lean
+p ^ k ∣ n
+```
+
+のもとで、
+
+```lean
+AdjacentDivisorPath (primePowerQuotientPath n p k)
+```
+
+を返す。
+
+隣接性の証明は、各 `i < k` について
+
+```text
+n / p^(i+1) ∣ n / p^i
+```
+
+を示すことである。Lean では `Nat.div_dvd_div_left` を使い、
+
+```text
+p^(i+1) ∣ n
+p^i ∣ p^(i+1)
+```
+
+から quotient 間の divisibility を得る。
+
+この段階では、まだ `PrimePowerWitnessProvider` から自動で
+`p` と `k` を取り出して family を作るところまでは進めない。
+DKMK-008J は、後続 wrapper のための純粋な path-level constructor である。
+
+確認用に、具体例
+
+```lean
+primePowerQuotientPath 72 3 2 = [72, 24, 8]
+```
+
+と、この path が `AdjacentDivisorPath` であることも theorem として固定した。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
