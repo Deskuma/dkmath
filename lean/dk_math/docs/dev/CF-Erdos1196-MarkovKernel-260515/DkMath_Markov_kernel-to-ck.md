@@ -2820,6 +2820,70 @@ witness-derived prime-power quotient path family
 
 ---
 
+## 2.41. DKMK-008N Concrete quotient path examples
+
+DKMK-008N では、新しい Lean theorem は追加せず、DKMK-008J で固定済みの
+concrete quotient path example を DKMK-008M の route comparison に接続する。
+
+既存 Lean example は次である。
+
+```lean
+primePowerQuotientPath 72 3 2 = [72, 24, 8]
+```
+
+これは
+
+```text
+72 → 72 / 3 → 72 / 3^2
+```
+
+を表す。つまり、
+
+```text
+72 → 24 → 8
+```
+
+である。
+
+one-step route で `q = 3^2 = 9` を一括で剥がすと、
+
+```text
+72 → 72 / 9 = 8
+```
+
+として読める。
+
+一方、prime-power quotient path route では、同じ `q = 9` を
+base prime `3` の exponent slots に分解し、
+
+```text
+72 → 24 → 8
+```
+
+として読む。
+
+したがって、この example は DKMK-008M の比較表における
+
+```text
+one-step:
+  n → n / q
+
+quotient path:
+  n → n / p → ... → n / p^k
+```
+
+の違いを最小に示す sanity check である。
+
+Lean 側では、path の隣接性も既に
+
+```lean
+adjacentDivisorPath_seventy_two_three_two
+```
+
+として固定済みである。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

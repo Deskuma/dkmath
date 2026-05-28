@@ -1325,3 +1325,31 @@ Archive
      report の example 節に接続する。
 
 ---
+
+### 日時: 2026/05/29 00:31 JST (DKMK-008N concrete quotient path example 追加)
+
+1. 目的:
+   - DKMK-008J で固定済みの `72, 3, 2` quotient path example を、
+     DKMK-008M の route comparison と接続する。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008N 節を追加した。
+   - `report-DKMK-008.md` に concrete example 節を追加した。
+   - one-step route では `q = 9` を `72 -> 8` と読むことを記録した。
+   - quotient path route では `q = 3^2` を `72 -> 24 -> 8` と読むことを
+     記録した。
+   - Lean 側の既存 theorem `adjacentDivisorPath_seventy_two_three_two` を
+     sanity check として参照した。
+3. 結論:
+   - DKMK-008M の route comparison に、最小 concrete example が接続された。
+   - one-step route と witness-derived quotient path route の違いを
+     `72 -> 8` と `72 -> 24 -> 8` の差として読めるようになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 必要なら witness-derived family 側の concrete example を Lean theorem として
+     追加するか検討する。
+
+---

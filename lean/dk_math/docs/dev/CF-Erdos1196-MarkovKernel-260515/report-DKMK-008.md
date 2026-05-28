@@ -404,3 +404,50 @@ witness-derived wrapper は
 これで DKMK-008 は、外部 path family を受け取る route、one-step を
 path-family API に載せる route、witness から multi-step path を
 自動生成する route の三つを区別して参照できる。
+
+## 12. 追補: DKMK-008N
+
+DKMK-008N では、DKMK-008J で追加済みの concrete example を
+DKMK-008M の route comparison に接続する。
+
+既存 Lean example は次である。
+
+```lean
+primePowerQuotientPath 72 3 2 = [72, 24, 8]
+```
+
+これは、`q = 3^2 = 9` を base prime `3` の二段 path として読む例である。
+
+```text
+72 → 24 → 8
+```
+
+one-step route なら、同じ label `q = 9` は一括で剥がされる。
+
+```text
+72 → 8
+```
+
+quotient path route では、`q = 3^2` の内部の exponent slot を使い、
+二段の descent として剥がす。
+
+```text
+72 → 72 / 3 → 72 / 3^2
+```
+
+このため、`72, 3, 2` example は、
+
+| route | 読み |
+| --- | --- |
+| one-step | `72 -> 8` |
+| quotient path | `72 -> 24 -> 8` |
+
+という差を最小に示す sanity check である。
+
+Lean 側の隣接性確認は、既存 theorem
+
+```lean
+adjacentDivisorPath_seventy_two_three_two
+```
+
+で固定されている。
