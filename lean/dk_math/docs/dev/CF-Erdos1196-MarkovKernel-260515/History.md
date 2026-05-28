@@ -1218,3 +1218,42 @@ Archive
      自動構成する wrapper を追加する。
 
 ---
+
+### 日時: 2026/05/28 19:18 JST (DKMK-008K witness-derived path family 追加)
+
+1. 目的:
+   - DKMK-008J の prime-power quotient path を
+     `PrimePowerWitnessProvider` から自動生成される
+     `AdjacentDivisorPathFamily` に接続する。
+2. 実施:
+   - `DivisorPathList` に `primePowerQuotientPathTail` を追加した。
+   - `primePowerQuotientPath_eq_cons_tail` と
+     `primePowerQuotientPath_cons_tail_isPath` を追加し、source `n` と
+     tail の分解を theorem 化した。
+   - `PrimePowerWitnessProvider.primePowerQuotientPathFamily` を追加した。
+   - 各 `q ∈ I` について `basePrimeOf` / `baseExponentOf` から
+     quotient path を作り、`basePrimeOf_pow_baseExponentOf_dvd_source_on`
+     で divisibility を供給した。
+   - project docs と `report-DKMK-008.md` に DKMK-008K の位置づけを追記した。
+3. 結論:
+   - DKMK-008J で残していた `(p,k)` witness extraction から
+     selected / canonical index 上の path family を自動構成する入口が入った。
+   - DKMK-008 は selected labels から witness-derived quotient path family へ
+     進む Lean API を持つようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/DkMath_Markov_kernel-to-ck.md lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/report-DKMK-008.md`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では `primePowerQuotientPath_eq_cons_tail` の
+     `List.range (k + 1 + 1)` 分解が `simp` だけでは閉じなかった。
+   - `List.range_succ_eq_map`, `List.map_map`, `Nat.succ_eq_add_one` を
+     明示して、source と shifted tail の対応を閉じた。
+6. 次の課題:
+   - この witness-derived path family を same-source multi-step mass theorem に
+     直接渡す selected / canonical wrapper を追加する。
+
+---

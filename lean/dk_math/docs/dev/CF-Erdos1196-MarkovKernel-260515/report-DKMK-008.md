@@ -284,3 +284,42 @@ n → n / p → n / p^2 → ... → n / p^k
 ただし、DKMK-008J はまだ pure path-level である。
 `PrimePowerWitnessProvider` から `(p,k)` を読み、selected / canonical の
 `AdjacentDivisorPathFamily` へ自動で載せる wrapper は次段の課題として残る。
+
+## 9. 追補: DKMK-008K
+
+DKMK-008K では、DKMK-008J の path-level constructor を
+`PrimePowerWitnessProvider` に接続した。
+
+追加した constructor は次である。
+
+```lean
+PrimePowerWitnessProvider.primePowerQuotientPathFamily
+```
+
+これは、state `n` と finite index set `I` について、各 `q ∈ I` から
+witness-derived な `(p(q), k(q))` を読み、
+
+```text
+n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+を `AdjacentDivisorPathFamily` として構成する。
+
+path の divisibility 仮定は、新しい仮定ではなく既存 theorem
+
+```lean
+W.basePrimeOf_pow_baseExponentOf_dvd_source_on n I hI q hq
+```
+
+から供給する。
+
+これで DKMK-008 は、
+
+```text
+selected labels
+  → witness-derived prime-power data
+  → quotient path family
+  → same-source multi-step path-family route
+```
+
+へ進む入口を持つ。

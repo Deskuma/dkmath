@@ -2645,6 +2645,79 @@ primePowerQuotientPath 72 3 2 = [72, 24, 8]
 
 ---
 
+## 2.38. DKMK-008K Witness-derived prime-power quotient path family
+
+DKMK-008K では、DKMK-008J の path-level constructor を
+`PrimePowerWitnessProvider` に接続する。
+
+追加した family constructor は次である。
+
+```lean
+PrimePowerWitnessProvider.primePowerQuotientPathFamily
+```
+
+入力は、state `n`、finite index set `I`、および
+
+```lean
+hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n
+```
+
+である。各 label `q ∈ I` について witness provider から
+
+```lean
+W.basePrimeOf n I hI q
+W.baseExponentOf n I hI q
+```
+
+を読み、
+
+```text
+n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+という quotient path を `AdjacentDivisorPathFamily` に載せる。
+
+この construction の source は常に `n` であり、tail は
+
+```lean
+primePowerQuotientPathTail n (W.basePrimeOf n I hI q)
+  (W.baseExponentOf n I hI q)
+```
+
+である。
+
+path の隣接性には既存の witness theorem
+
+```lean
+W.basePrimeOf_pow_baseExponentOf_dvd_source_on n I hI q hq
+```
+
+を使う。これにより、各 selected label の
+
+```lean
+p(q) ^ k(q) ∣ n
+```
+
+が得られ、DKMK-008J の quotient path theorem に渡せる。
+
+補助 API として、source/tail 分解を明示する
+
+```lean
+primePowerQuotientPathTail
+primePowerQuotientPath_eq_cons_tail
+primePowerQuotientPath_cons_tail_isPath
+PrimePowerWitnessProvider.primePowerQuotientPathFamily_path
+PrimePowerWitnessProvider.primePowerQuotientPathFamily_source_eq
+```
+
+も追加した。
+
+これにより、DKMK-008J で残していた
+`PrimePowerWitnessProvider` から `(p,k)` を読み取って
+selected / canonical index 上の path family を自動構成する入口が入った。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
