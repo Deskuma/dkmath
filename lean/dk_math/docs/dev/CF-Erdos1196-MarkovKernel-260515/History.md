@@ -1257,3 +1257,44 @@ Archive
      直接渡す selected / canonical wrapper を追加する。
 
 ---
+
+### 日時: 2026/05/28 21:02 JST (DKMK-008L quotient path family mass wrapper 追加)
+
+1. 目的:
+   - DKMK-008K の witness-derived quotient path family を
+     same-source multi-step mass theorem に直接渡す selected / canonical
+     wrapper を追加する。
+2. 実施:
+   - selected route に
+     finite-step prime-power quotient path family wrapper
+     を追加した。
+   - selected route に
+     two-step prime-power quotient path family wrapper
+     を追加した。
+   - canonical route に
+     finite-step prime-power quotient path family wrapper
+     を追加した。
+   - canonical route に
+     two-step prime-power quotient path family wrapper
+     を追加した。
+   - project docs と `report-DKMK-008.md` に DKMK-008L の位置づけを追記した。
+3. 結論:
+   - selected / canonical labels から witness-derived quotient path family を作り、
+     finite-step / two-step mass bound へ直接流す theorem-facing API が入った。
+   - DKMK-008 は external path family route だけでなく、witness 由来の
+     path 自動生成 route でも weightedHitMass bound まで到達した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - long-line check on changed Lean / docs files
+   - `rg -n "\b(sorry|admit)\b" .../LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - canonical wrapper の `fun q hq => hq` で `q` の unused variable
+     warning が出たため、`fun _ hq => hq` に修正した。
+6. 次の課題:
+   - quotient path family wrapper を examples / theorem comparison 表に載せ、
+     one-step route と multi-step witness route の使い分けを整理する。
+
+---

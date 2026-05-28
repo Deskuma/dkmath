@@ -323,3 +323,40 @@ selected labels
 ```
 
 へ進む入口を持つ。
+
+## 10. 追補: DKMK-008L
+
+DKMK-008L では、DKMK-008K の witness-derived quotient path family を
+finite-step / two-step mass theorem に直接渡す wrapper を追加した。
+
+selected route の入口は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+```
+
+canonical route の入口は次である。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+canonicalExponentSlotMarkovShadow_twoStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+```
+
+selected 版では `IOf s.1`、canonical 版では
+`canonicalExponentSlotLabels s.1` に index を固定する。
+このため、既存の same-source path-family theorem に渡す compatibility は
+`rfl` で閉じる。
+
+これで DKMK-008 は、
+
+```text
+witness-derived quotient path family
+  → finite-step / two-step source mass
+  → selected / canonical weightedHitMass bound
+```
+
+まで theorem-facing API として到達した。
