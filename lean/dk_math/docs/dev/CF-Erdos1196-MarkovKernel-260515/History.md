@@ -1178,3 +1178,205 @@ Archive
      自動生成する route を検討する。
 
 ---
+
+### 日時: 2026/05/28 18:58 JST (DKMK-008J prime-power quotient path 追加)
+
+1. 目的:
+   - prime-power channel `q = p^k` から multi-step divisor path を
+     自動生成するための最小 path-level constructor を追加する。
+2. 実施:
+   - `DivisorPathList` に `primePowerQuotientPath` を追加した。
+   - `primePowerQuotientPath n p k` を
+     `[n / p^0, n / p^1, ..., n / p^k]` として定義した。
+   - `p^k ∣ n` のもとでこの list が `AdjacentDivisorPath` になる
+     `primePowerQuotientPath_isPath` を追加した。
+   - 証明では `List.isChain_range_succ` と `Nat.div_dvd_div_left` を使い、
+     各 `i < k` で `n / p^(i+1) ∣ n / p^i` を示した。
+   - `primePowerQuotientPath 72 3 2 = [72, 24, 8]` と、
+     その adjacent path theorem を確認用に追加した。
+   - project docs と `report-DKMK-008.md` に DKMK-008J の位置づけを追記した。
+3. 結論:
+   - DKMK-008I で次の未踏地として整理した
+     `n → n / p → ... → n / p^k` 型 path の純粋 Lean 核が入った。
+   - `PrimePowerWitnessProvider` から `(p,k)` を読み取って
+     `AdjacentDivisorPathFamily` に載せる wrapper は次段に残した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では `primePowerQuotientPath_one` と
+     `primePowerQuotientPath_two` の表示用 simp 補題で
+     `List.range` 展開後の `p^0`, `p^1` が残ったため、`change` で
+     list 形を明示してから `simp` で閉じた。
+6. 次の課題:
+   - `PrimePowerWitnessProvider` の `label` から `(p,k)` を取り出し、
+     selected / canonical index 上の `AdjacentDivisorPathFamily` を
+     自動構成する wrapper を追加する。
+
+---
+
+### 日時: 2026/05/28 19:18 JST (DKMK-008K witness-derived path family 追加)
+
+1. 目的:
+   - DKMK-008J の prime-power quotient path を
+     `PrimePowerWitnessProvider` から自動生成される
+     `AdjacentDivisorPathFamily` に接続する。
+2. 実施:
+   - `DivisorPathList` に `primePowerQuotientPathTail` を追加した。
+   - `primePowerQuotientPath_eq_cons_tail` と
+     `primePowerQuotientPath_cons_tail_isPath` を追加し、source `n` と
+     tail の分解を theorem 化した。
+   - `PrimePowerWitnessProvider.primePowerQuotientPathFamily` を追加した。
+   - 各 `q ∈ I` について `basePrimeOf` / `baseExponentOf` から
+     quotient path を作り、`basePrimeOf_pow_baseExponentOf_dvd_source_on`
+     で divisibility を供給した。
+   - project docs と `report-DKMK-008.md` に DKMK-008K の位置づけを追記した。
+3. 結論:
+   - DKMK-008J で残していた `(p,k)` witness extraction から
+     selected / canonical index 上の path family を自動構成する入口が入った。
+   - DKMK-008 は selected labels から witness-derived quotient path family へ
+     進む Lean API を持つようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/DkMath_Markov_kernel-to-ck.md lean/dk_math/docs/dev/CF-Erdos1196-MarkovKernel-260515/report-DKMK-008.md`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build では `primePowerQuotientPath_eq_cons_tail` の
+     `List.range (k + 1 + 1)` 分解が `simp` だけでは閉じなかった。
+   - `List.range_succ_eq_map`, `List.map_map`, `Nat.succ_eq_add_one` を
+     明示して、source と shifted tail の対応を閉じた。
+6. 次の課題:
+   - この witness-derived path family を same-source multi-step mass theorem に
+     直接渡す selected / canonical wrapper を追加する。
+
+---
+
+### 日時: 2026/05/28 21:02 JST (DKMK-008L quotient path family mass wrapper 追加)
+
+1. 目的:
+   - DKMK-008K の witness-derived quotient path family を
+     same-source multi-step mass theorem に直接渡す selected / canonical
+     wrapper を追加する。
+2. 実施:
+   - selected route に
+     finite-step prime-power quotient path family wrapper
+     を追加した。
+   - selected route に
+     two-step prime-power quotient path family wrapper
+     を追加した。
+   - canonical route に
+     finite-step prime-power quotient path family wrapper
+     を追加した。
+   - canonical route に
+     two-step prime-power quotient path family wrapper
+     を追加した。
+   - project docs と `report-DKMK-008.md` に DKMK-008L の位置づけを追記した。
+3. 結論:
+   - selected / canonical labels から witness-derived quotient path family を作り、
+     finite-step / two-step mass bound へ直接流す theorem-facing API が入った。
+   - DKMK-008 は external path family route だけでなく、witness 由来の
+     path 自動生成 route でも weightedHitMass bound まで到達した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - long-line check on changed Lean / docs files
+   - `rg -n "\b(sorry|admit)\b" .../LogCapacityHittingBridge.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - canonical wrapper の `fun q hq => hq` で `q` の unused variable
+     warning が出たため、`fun _ hq => hq` に修正した。
+6. 次の課題:
+   - quotient path family wrapper を examples / theorem comparison 表に載せ、
+     one-step route と multi-step witness route の使い分けを整理する。
+
+---
+
+### 日時: 2026/05/29 00:18 JST (DKMK-008M path route comparison 追加)
+
+1. 目的:
+   - DKMK-007 divisorStep、DKMK-008H one-step path family、
+     DKMK-008L witness-derived quotient path family の使い分けを
+     docs/report 上で明確にする。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008M 節を追加した。
+   - `report-DKMK-008.md` に route comparison table を追加した。
+   - one-step route と prime-power quotient path route の数学的な違いを
+     `n -> n / q` と `n -> n / p(q) -> ... -> n / p(q)^k(q)` として整理した。
+   - selected / canonical の推奨 theorem 入口を表として記録した。
+3. 結論:
+   - DKMK-008 は external path family、one-step path family、
+     witness-derived prime-power quotient path family の三つの入口を
+     区別して参照できるようになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 必要なら concrete example として、既存の `72, 3, 2` quotient path を
+     report の example 節に接続する。
+
+---
+
+### 日時: 2026/05/29 00:31 JST (DKMK-008N concrete quotient path example 追加)
+
+1. 目的:
+   - DKMK-008J で固定済みの `72, 3, 2` quotient path example を、
+     DKMK-008M の route comparison と接続する。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008N 節を追加した。
+   - `report-DKMK-008.md` に concrete example 節を追加した。
+   - one-step route では `q = 9` を `72 -> 8` と読むことを記録した。
+   - quotient path route では `q = 3^2` を `72 -> 24 -> 8` と読むことを
+     記録した。
+   - Lean 側の既存 theorem `adjacentDivisorPath_seventy_two_three_two` を
+     sanity check として参照した。
+3. 結論:
+   - DKMK-008M の route comparison に、最小 concrete example が接続された。
+   - one-step route と witness-derived quotient path route の違いを
+     `72 -> 8` と `72 -> 24 -> 8` の差として読めるようになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 必要なら witness-derived family 側の concrete example を Lean theorem として
+     追加するか検討する。
+
+---
+
+### 日時: 2026/05/29 04:27 JST (DKMK-008O route map summary 追加)
+
+1. 目的:
+   - DKMK-008A から DKMK-008N までの path route を、
+     route map として一区切りに整理する。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-008O 節を追加した。
+   - `report-DKMK-008.md` に route map summary を追加した。
+   - DKMK-008 を path substrate、shadow bridge、one-step recovery、
+     witness route の四層として整理した。
+   - docs/report layer として DKMK-008I、008M、008N の役割を整理した。
+   - manual path、one-step divisor path、witness-derived quotient path の
+     三入口を明示した。
+3. 結論:
+   - DKMK-008 は manual path、one-step path、witness-derived multi-step path
+     の三入口を持つ multi-step divisor path route として一区切りになった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Lean 実装へ戻る場合は、witness-derived family の concrete theorem 追加か、
+     DKMK-009 として別の mass / capacity 層へ接続するかを選ぶ。
+
+---

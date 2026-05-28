@@ -246,3 +246,246 @@ n → n / p → n / p^2 → ... → n / p^k
 
 DKMK-008A-H は、後者へ進むための path-family 受け口を整えた段階と
 位置づけられる。
+
+## 8. 追補: DKMK-008J
+
+DKMK-008J では、prime-power channel
+
+```text
+q = p^k
+```
+
+から multi-step divisor path を作るための path-level constructor が入った。
+
+```lean
+primePowerQuotientPath
+primePowerQuotientPath_isPath
+```
+
+`primePowerQuotientPath n p k` は、
+
+```text
+[n / p^0, n / p^1, ..., n / p^k]
+```
+
+を返す。
+
+`primePowerQuotientPath_isPath` は、`p^k ∣ n` のもとでこの list が
+`AdjacentDivisorPath` であることを示す。
+
+これにより、DKMK-008I で次の未踏地として整理した
+
+```text
+n → n / p → n / p^2 → ... → n / p^k
+```
+
+の最小 Lean 核が入った。
+
+ただし、DKMK-008J はまだ pure path-level である。
+`PrimePowerWitnessProvider` から `(p,k)` を読み、selected / canonical の
+`AdjacentDivisorPathFamily` へ自動で載せる wrapper は次段の課題として残る。
+
+## 9. 追補: DKMK-008K
+
+DKMK-008K では、DKMK-008J の path-level constructor を
+`PrimePowerWitnessProvider` に接続した。
+
+追加した constructor は次である。
+
+```lean
+PrimePowerWitnessProvider.primePowerQuotientPathFamily
+```
+
+これは、state `n` と finite index set `I` について、各 `q ∈ I` から
+witness-derived な `(p(q), k(q))` を読み、
+
+```text
+n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+を `AdjacentDivisorPathFamily` として構成する。
+
+path の divisibility 仮定は、新しい仮定ではなく既存 theorem
+
+```lean
+W.basePrimeOf_pow_baseExponentOf_dvd_source_on n I hI q hq
+```
+
+から供給する。
+
+これで DKMK-008 は、
+
+```text
+selected labels
+  → witness-derived prime-power data
+  → quotient path family
+  → same-source multi-step path-family route
+```
+
+へ進む入口を持つ。
+
+## 10. 追補: DKMK-008L
+
+DKMK-008L では、DKMK-008K の witness-derived quotient path family を
+finite-step / two-step mass theorem に直接渡す wrapper を追加した。
+
+selected route の入口は次である。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_finiteStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_twoStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+```
+
+canonical route の入口は次である。
+
+```lean
+canonicalExponentSlotMarkovShadow_finiteStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+canonicalExponentSlotMarkovShadow_twoStepTailPrimePowerQuotientPathFamily_weightedHitMass_le
+```
+
+selected 版では `IOf s.1`、canonical 版では
+`canonicalExponentSlotLabels s.1` に index を固定する。
+このため、既存の same-source path-family theorem に渡す compatibility は
+`rfl` で閉じる。
+
+これで DKMK-008 は、
+
+```text
+witness-derived quotient path family
+  → finite-step / two-step source mass
+  → selected / canonical weightedHitMass bound
+```
+
+まで theorem-facing API として到達した。
+
+## 11. 追補: DKMK-008M
+
+DKMK-008M では、DKMK-007 から DKMK-008L までで増えた route の
+使い分けを comparison table として固定する。
+
+| route | descent の読み | 主な用途 |
+| --- | --- | --- |
+| DKMK-007 divisorStep | `n -> n / q` | 既存 one-step theorem との対応 |
+| DKMK-008H oneStepPath | `n -> n / q` を path family 化 | DKMK-008 API 上の one-step 特殊例 |
+| DKMK-008L quotientPathFamily | `q = p(q)^k(q)` を展開 | witness 由来の multi-step route |
+
+one-step 系 route では、label `q` を一つの descent step として読む。
+
+```text
+n → n / q
+```
+
+一方、prime-power quotient path route では、witness が与える
+
+```text
+q = p(q)^k(q)
+```
+
+を使い、同じ label `q` を exponent-slot path へ展開する。
+
+```text
+n → n / p(q) → n / p(q)^2 → ... → n / p(q)^k(q)
+```
+
+推奨入口は次のように読む。
+
+| 目的 | selected | canonical |
+| --- | --- | --- |
+| one-step path family | selected one-step wrapper | canonical one-step wrapper |
+| witness-derived path family | selected quotient-path wrapper | canonical quotient-path wrapper |
+
+命名上は、one-step wrapper は `*OneStepPath_weightedHitMass_le`、
+witness-derived wrapper は
+`*PrimePowerQuotientPathFamily_weightedHitMass_le` を目印にする。
+
+これで DKMK-008 は、外部 path family を受け取る route、one-step を
+path-family API に載せる route、witness から multi-step path を
+自動生成する route の三つを区別して参照できる。
+
+## 12. 追補: DKMK-008N
+
+DKMK-008N では、DKMK-008J で追加済みの concrete example を
+DKMK-008M の route comparison に接続する。
+
+既存 Lean example は次である。
+
+```lean
+primePowerQuotientPath 72 3 2 = [72, 24, 8]
+```
+
+これは、`q = 3^2 = 9` を base prime `3` の二段 path として読む例である。
+
+```text
+72 → 24 → 8
+```
+
+one-step route なら、同じ label `q = 9` は一括で剥がされる。
+
+```text
+72 → 8
+```
+
+quotient path route では、`q = 3^2` の内部の exponent slot を使い、
+二段の descent として剥がす。
+
+```text
+72 → 72 / 3 → 72 / 3^2
+```
+
+このため、`72, 3, 2` example は、
+
+| route | 読み |
+| --- | --- |
+| one-step | `72 -> 8` |
+| quotient path | `72 -> 24 -> 8` |
+
+という差を最小に示す sanity check である。
+
+Lean 側の隣接性確認は、既存 theorem
+
+```lean
+adjacentDivisorPath_seventy_two_three_two
+```
+
+で固定されている。
+
+## 13. 追補: DKMK-008O
+
+DKMK-008O では、DKMK-008A から DKMK-008N までの route map を
+一区切りとして整理する。
+
+DKMK-008 は、次の四層で読める。
+
+| layer | DKMK | 内容 |
+| --- | --- | --- |
+| path substrate | 008A-B | `AdjacentDivisorPath` と indexed family |
+| shadow bridge | 008C-F | selected / canonical shadow と mass bound |
+| one-step recovery | 008G-H | DKMK-007 divisorStep route の回収 |
+| witness route | 008J-L | quotient path の自動生成と hitting bound |
+
+docs/report layer は次を担当する。
+
+| DKMK | 内容 |
+| --- | --- |
+| 008I | DKMK-008A-H の route report |
+| 008M | route comparison |
+| 008N | `72, 3, 2` concrete example |
+
+現在、利用者が選べる入口は三つである。
+
+| entry | 入力 | 出力 |
+| --- | --- | --- |
+| external path family | 手で与えた path family | weightedHitMass bound |
+| one-step path family | `q ∣ n` | one-step path bound |
+| quotient path family | witness-derived `(p,k)` | multi-step path bound |
+
+これで DKMK-008 は、manual path、one-step divisor path、
+witness-derived multi-step quotient path の三入口を持つ章として
+一区切りになる。
+
+次に Lean 実装へ戻る場合は、witness-derived family の concrete theorem を
+追加するか、DKMK-009 として path route を別の mass / capacity 層へ
+接続するかを選ぶ。
