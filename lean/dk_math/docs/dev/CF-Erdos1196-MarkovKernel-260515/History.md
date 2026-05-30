@@ -1433,3 +1433,31 @@ Archive
      capacity-kernel-facing route に接続する。
 
 ---
+
+### 日時: 2026/05/31 02:23 JST (DKMK-009D quotient path family capacity route 接続)
+
+1. 目的:
+   - witness-derived quotient path family を、
+     `globalLogCapacityKernel` から始まる capacity-kernel-facing route に接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily`
+     を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily_index`
+     を追加した。
+   - `PrimePowerWitnessProvider
+     .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009D 実装メモを追記した。
+3. 結論:
+   - `PrimePowerWitnessProvider -> globalLogCapacityKernel -> CapacityKernel generic bridge
+     -> primePowerQuotientPathFamily -> weightedHitMass bound` の route が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009E/F として public/docs の整理、または DKMK-009D の finite-step /
+     two-step convenience wrapper を追加するか検討する。
+
+---

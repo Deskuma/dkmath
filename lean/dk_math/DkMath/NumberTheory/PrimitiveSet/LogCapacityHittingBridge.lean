@@ -184,6 +184,67 @@ theorem globalLogCapacityKernel_weightedHitMass_le_const
       hA hC hsource
 
 /--
+Apply the selected global log-capacity capacity kernel to the witness-derived
+prime-power quotient path family.
+-/
+noncomputable def globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    RealWeightedPathFamily M ℕ :=
+  W.globalLogCapacityKernel_applyAtToSourceControlled IOf hIOf s
+    ((W.primePowerQuotientPathFamily s.1 (IOf s.1)
+      (fun q hq => hIOf s.1 q hq)).toDvdControlledChainFamily.toSourceControlled hM)
+    rfl
+
+@[simp] theorem globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s hM).index =
+      IOf s.1 :=
+  rfl
+
+/--
+Primitive hitting bound for the witness-derived prime-power quotient path
+family, with weights supplied by the selected global log-capacity capacity
+kernel through the generic capacity-kernel bridge.
+-/
+theorem globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s hM).weightedHitMass A ≤ C :=
+  W.globalLogCapacityKernel_weightedHitMass_le_const IOf hIOf s
+    ((W.primePowerQuotientPathFamily s.1 (IOf s.1)
+      (fun q hq => hIOf s.1 q hq)).toDvdControlledChainFamily.toSourceControlled hM)
+    rfl
+    hA hC
+    (by
+      intro q hq
+      simpa using hsource s)
+
+/--
 The selected global log-capacity sub-Markov shadow at state `s` is compatible
 with a source-controlled family whose index is the selected channel set
 `IOf s.1`.

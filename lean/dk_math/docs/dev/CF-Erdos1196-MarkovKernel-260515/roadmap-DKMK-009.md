@@ -375,3 +375,48 @@ lake build DkMath.NumberTheory.PrimitiveSet
 ```
 
 いずれも成功。
+
+## 13. 実装メモ: DKMK-009D
+
+DKMK-009D では、DKMK-009C の capacity-kernel-facing route を
+witness-derived quotient path family へ接続した。
+
+追加先は次。
+
+```text
+DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean
+```
+
+主な API は次。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily_index
+PrimePowerWitnessProvider
+  .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+この追加により、
+
+```text
+PrimePowerWitnessProvider
+  → globalLogCapacityKernel
+  → CapacityKernel.applyAtToSourceControlled
+  → primePowerQuotientPathFamily
+  → weightedHitMass bound
+```
+
+という DKMK-009 の本命 route が theorem-facing に固定された。
+
+上界は `LogCapacitySourceMassBound M C` から供給する。
+これは quotient path family の source が常に現在の log-capacity state `s.1`
+であることを使う。
+
+build checkpoint:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+lake build DkMath.NumberTheory.PrimitiveSet
+```
+
+いずれも成功。
