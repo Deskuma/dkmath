@@ -332,3 +332,46 @@ lake build DkMath.NumberTheory.PrimitiveSet
 ```
 
 いずれも成功。
+
+## 12. 実装メモ: DKMK-009C
+
+DKMK-009C では、DKMK-009B の generic bridge を
+`PrimePowerWitnessProvider.globalLogCapacityKernel` へ薄く特殊化した。
+
+追加先は次。
+
+```text
+DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean
+```
+
+主な API は次。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled
+PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled_index
+PrimePowerWitnessProvider.globalLogCapacityKernel_weightedHitMass_le_const
+```
+
+この追加により、
+
+```text
+PrimePowerWitnessProvider.globalLogCapacityKernel
+  → CapacityKernel.applyAtToSourceControlled
+  → RealWeightedPathFamily
+  → weightedHitMass bound
+```
+
+という読み方が theorem-facing に固定された。
+
+既存の `globalLogCapacitySubMarkovShadow_*` route は維持し、
+今回の追加は「capacity kernel から generic bridge を経由している」ことを
+明示する入口に留めた。
+
+build checkpoint:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+lake build DkMath.NumberTheory.PrimitiveSet
+```
+
+いずれも成功。

@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.NumberTheory.PrimitiveSet.CapacityKernelHittingBridge
 import DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
@@ -14,6 +15,7 @@ import DkMath.NumberTheory.PrimitiveSet.DivisorPathList
 namespace DkMath.NumberTheory.PrimitiveSet
 
 open DkMath.CosmicFormula.Mass
+open DkMath.Kernel
 
 /--
 Uniform source-mass bound on log-capacity states.
@@ -117,6 +119,69 @@ theorem twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
   simpa [twoStepAsFiniteStepTailNatMassSpace] using hsource
 
 namespace PrimePowerWitnessProvider
+
+/--
+Apply the selected global log-capacity capacity kernel at state `s` to a
+source-controlled family whose index is `IOf s.1`.
+
+This is the capacity-kernel-facing entry point.  It specializes the generic
+`CapacityKernel.applyAtToSourceControlled` bridge to
+`PrimePowerWitnessProvider.globalLogCapacityKernel`.
+-/
+noncomputable def globalLogCapacityKernel_applyAtToSourceControlled
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : SourceControlledChainFamily M ℕ)
+    (hindex : IOf s.1 = F.index) :
+    RealWeightedPathFamily M ℕ :=
+  (W.globalLogCapacityKernel IOf hIOf).applyAtToSourceControlled
+    (W.globalLogCapacityKernel_capacity_pos IOf hIOf)
+    s F
+    (by simpa using hindex)
+
+@[simp] theorem globalLogCapacityKernel_applyAtToSourceControlled_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (F : SourceControlledChainFamily M ℕ)
+    (hindex : IOf s.1 = F.index) :
+    (W.globalLogCapacityKernel_applyAtToSourceControlled IOf hIOf s F hindex).index =
+      F.index :=
+  rfl
+
+/--
+Primitive hitting bound obtained by applying the selected global log-capacity
+capacity kernel through the generic capacity-kernel hitting bridge.
+-/
+theorem globalLogCapacityKernel_weightedHitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} {A : Finset ℕ}
+    (F : SourceControlledChainFamily M ℕ)
+    (hindex : IOf s.1 = F.index)
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C) :
+    (W.globalLogCapacityKernel_applyAtToSourceControlled
+      IOf hIOf s F hindex).weightedHitMass A ≤ C :=
+  (W.globalLogCapacityKernel IOf hIOf)
+    |>.weightedHitMass_le_const_applyAtToSourceControlled
+      (W.globalLogCapacityKernel_capacity_pos IOf hIOf)
+      s F
+      (by simpa using hindex)
+      hA hC hsource
 
 /--
 The selected global log-capacity sub-Markov shadow at state `s` is compatible

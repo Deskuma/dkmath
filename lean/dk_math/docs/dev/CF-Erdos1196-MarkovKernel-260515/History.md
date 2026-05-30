@@ -1408,3 +1408,28 @@ Archive
      薄い特殊化 wrapper を追加するか検討する。
 
 ---
+
+### 日時: 2026/05/30 23:23 JST (DKMK-009C global log-capacity kernel specialization 追加)
+
+1. 目的:
+   - DKMK-009B の generic capacity-kernel hitting bridge を、
+     `PrimePowerWitnessProvider.globalLogCapacityKernel` に薄く特殊化する。
+2. 実施:
+   - `LogCapacityHittingBridge.lean` に `CapacityKernelHittingBridge` import を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled` を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled_index` を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_weightedHitMass_le_const` を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009C 実装メモを追記した。
+3. 結論:
+   - selected global log-capacity kernel から 009B の generic bridge を経由して、
+     source-controlled family への weighted hitting bound へ進む入口が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009D として witness-derived quotient path family を
+     capacity-kernel-facing route に接続する。
+
+---
