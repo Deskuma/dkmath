@@ -1380,3 +1380,31 @@ Archive
      DKMK-009 として別の mass / capacity 層へ接続するかを選ぶ。
 
 ---
+
+### 日時: 2026/05/30 13:24 JST (DKMK-009B generic capacity-kernel hitting bridge 追加)
+
+1. 目的:
+   - 既存の `CapacityKernel` 層を primitive hitting route の正式な入口として
+     theorem-facing API に接続する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/CapacityKernelHittingBridge.lean` を追加した。
+   - `CapacityKernel.normalizedSubMarkovShadow_providerAt_compatible` を追加した。
+   - `CapacityKernel.applyAtToSourceControlled` を追加した。
+   - `CapacityKernel.applyAtToSourceControlled_weightSubProbability` を追加した。
+   - `CapacityKernel.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に新規 bridge の import と説明を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009B 実装メモを追記した。
+3. 結論:
+   - positive capacity を持つ任意の `CapacityKernel` から、
+     normalized `SubMarkovShadow` を経由して primitive `weightedHitMass` bound へ
+     進む generic route が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.CapacityKernelHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009C として `PrimePowerWitnessProvider.globalLogCapacityKernel` への
+     薄い特殊化 wrapper を追加するか検討する。
+
+---
