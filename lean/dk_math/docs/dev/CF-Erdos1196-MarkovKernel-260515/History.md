@@ -1380,3 +1380,109 @@ Archive
      DKMK-009 として別の mass / capacity 層へ接続するかを選ぶ。
 
 ---
+
+### 日時: 2026/05/30 13:24 JST (DKMK-009B generic capacity-kernel hitting bridge 追加)
+
+1. 目的:
+   - 既存の `CapacityKernel` 層を primitive hitting route の正式な入口として
+     theorem-facing API に接続する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/CapacityKernelHittingBridge.lean` を追加した。
+   - `CapacityKernel.normalizedSubMarkovShadow_providerAt_compatible` を追加した。
+   - `CapacityKernel.applyAtToSourceControlled` を追加した。
+   - `CapacityKernel.applyAtToSourceControlled_weightSubProbability` を追加した。
+   - `CapacityKernel.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に新規 bridge の import と説明を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009B 実装メモを追記した。
+3. 結論:
+   - positive capacity を持つ任意の `CapacityKernel` から、
+     normalized `SubMarkovShadow` を経由して primitive `weightedHitMass` bound へ
+     進む generic route が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.CapacityKernelHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009C として `PrimePowerWitnessProvider.globalLogCapacityKernel` への
+     薄い特殊化 wrapper を追加するか検討する。
+
+---
+
+### 日時: 2026/05/30 23:23 JST (DKMK-009C global log-capacity kernel specialization 追加)
+
+1. 目的:
+   - DKMK-009B の generic capacity-kernel hitting bridge を、
+     `PrimePowerWitnessProvider.globalLogCapacityKernel` に薄く特殊化する。
+2. 実施:
+   - `LogCapacityHittingBridge.lean` に `CapacityKernelHittingBridge` import を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled` を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToSourceControlled_index` を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_weightedHitMass_le_const` を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009C 実装メモを追記した。
+3. 結論:
+   - selected global log-capacity kernel から 009B の generic bridge を経由して、
+     source-controlled family への weighted hitting bound へ進む入口が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009D として witness-derived quotient path family を
+     capacity-kernel-facing route に接続する。
+
+---
+
+### 日時: 2026/05/31 02:23 JST (DKMK-009D quotient path family capacity route 接続)
+
+1. 目的:
+   - witness-derived quotient path family を、
+     `globalLogCapacityKernel` から始まる capacity-kernel-facing route に接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily`
+     を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily_index`
+     を追加した。
+   - `PrimePowerWitnessProvider
+     .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound`
+     を追加した。
+   - `roadmap-DKMK-009.md` に DKMK-009D 実装メモを追記した。
+3. 結論:
+   - `PrimePowerWitnessProvider -> globalLogCapacityKernel -> CapacityKernel generic bridge
+     -> primePowerQuotientPathFamily -> weightedHitMass bound` の route が固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-009E/F として public/docs の整理、または DKMK-009D の finite-step /
+     two-step convenience wrapper を追加するか検討する。
+
+---
+
+### 日時: 2026/05/31 06:23 JST (DKMK-009E/F docs and report 整理)
+
+1. 目的:
+   - DKMK-009B-D で通した capacity-kernel-facing hitting route を、
+     docs/report として一区切りに整理する。
+2. 実施:
+   - `report-DKMK-009.md` を追加した。
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-009 節を追加した。
+   - `roadmap-DKMK-009.md` に completion summary を追記した。
+   - generic bridge、global log-capacity specialization、quotient path family route の
+     API 対応表を整理した。
+3. 結論:
+   - DKMK-009 は `CapacityKernel -> normalized shadow -> quotient path family
+     -> weightedHitMass bound` の章として一区切りになった。
+4. 検証:
+   - docs-only 変更として `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010 として tail / truncation / analytic estimate へ進むか、
+     必要性が明確な場合だけ DKMK-009 追補の convenience wrapper を追加する。
+
+---
