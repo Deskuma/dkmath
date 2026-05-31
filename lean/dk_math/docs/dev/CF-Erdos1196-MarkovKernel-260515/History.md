@@ -1461,3 +1461,28 @@ Archive
      two-step convenience wrapper を追加するか検討する。
 
 ---
+
+### 日時: 2026/05/31 06:23 JST (DKMK-009E/F docs and report 整理)
+
+1. 目的:
+   - DKMK-009B-D で通した capacity-kernel-facing hitting route を、
+     docs/report として一区切りに整理する。
+2. 実施:
+   - `report-DKMK-009.md` を追加した。
+   - `DkMath_Markov_kernel-to-ck.md` に DKMK-009 節を追加した。
+   - `roadmap-DKMK-009.md` に completion summary を追記した。
+   - generic bridge、global log-capacity specialization、quotient path family route の
+     API 対応表を整理した。
+3. 結論:
+   - DKMK-009 は `CapacityKernel -> normalized shadow -> quotient path family
+     -> weightedHitMass bound` の章として一区切りになった。
+4. 検証:
+   - docs-only 変更として `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010 として tail / truncation / analytic estimate へ進むか、
+     必要性が明確な場合だけ DKMK-009 追補の convenience wrapper を追加する。
+
+---

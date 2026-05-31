@@ -420,3 +420,42 @@ lake build DkMath.NumberTheory.PrimitiveSet
 ```
 
 いずれも成功。
+
+## 14. Completion summary: DKMK-009E/F
+
+DKMK-009E/F では、DKMK-009 の中核 route を docs/report として整理した。
+
+追加・更新した docs は次。
+
+```text
+report-DKMK-009.md
+DkMath_Markov_kernel-to-ck.md
+```
+
+DKMK-009 の到達形は次である。
+
+```text
+PrimePowerWitnessProvider
+  → globalLogCapacityKernel
+  → CapacityKernel generic bridge
+  → primePowerQuotientPathFamily
+  → weightedHitMass bound
+```
+
+DKMK-009B は generic capacity-kernel bridge、
+DKMK-009C は selected global log-capacity kernel への特殊化、
+DKMK-009D は witness-derived quotient path family への接続である。
+
+これにより、DKMK-009 は
+
+```text
+capacity kernel の normalized shadow が、
+primitive hitting route の正式な入力である
+```
+
+という章として一区切りになる。
+
+次の大きな分岐は DKMK-010 であり、tail / truncation / analytic estimate へ
+進む。
+有限段の convenience wrapper を追加する場合は、必要性を確認してから
+DKMK-009 の追補として扱う。

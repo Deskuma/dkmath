@@ -2945,6 +2945,77 @@ witness-derived multi-step quotient path
 
 ---
 
+## 2.43. DKMK-009 Capacity kernel hitting route
+
+DKMK-009 では、DKMK-008 で整えた witness-derived quotient path route を、
+既存の `CapacityKernel` 層へ戻す。
+
+主題は、新しい path を増やすことではなく、次の route を固定することである。
+
+```text
+CapacityKernel
+  → normalized shadow
+  → SourceControlledChainFamily
+  → RealWeightedPathFamily
+  → primitive weightedHitMass bound
+```
+
+DKMK-009B では、generic bridge として
+
+```lean
+CapacityKernel.weightedHitMass_le_const_applyAtToSourceControlled
+```
+
+を追加した。
+これは positive capacity を持つ任意の `CapacityKernel` から、
+normalized shadow を source-controlled chain family に載せ、
+primitive hitting bound へ進む入口である。
+
+DKMK-009C では、これを selected global log-capacity kernel へ特殊化した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacityKernel_weightedHitMass_le_const
+```
+
+DKMK-009D では、さらに witness-derived quotient path family へ接続した。
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+これにより、次の本線が theorem-facing に読める。
+
+```text
+PrimePowerWitnessProvider
+  → globalLogCapacityKernel
+  → CapacityKernel generic bridge
+  → primePowerQuotientPathFamily
+  → weightedHitMass bound
+```
+
+ここで `primePowerQuotientPathFamily` は、witness `q = p(q)^k(q)` から
+
+```text
+n → n / p(q) → ... → n / p(q)^k(q)
+```
+
+という multi-step quotient path を作る。
+DKMK-009D は、この path family に global log-capacity kernel の normalized
+weight を載せ、`LogCapacitySourceMassBound M C` から hitting bound を得る。
+
+DKMK-009 の到達点は、DkMath の基本理念
+
+```text
+Markov kernel is a normalized shadow of DkMath capacity kernel.
+```
+
+を、primitive hitting route 上の Lean API として固定したことである。
+
+詳細は `report-DKMK-009.md` にまとめた。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
