@@ -327,3 +327,29 @@ Archive
      report / handoff に向かうか判断する。
 
 ---
+
+### 日時: 2026/06/02 07:16 JST (DKMK-011E single-window toy provider 追加)
+
+1. 目的:
+   - DKMK-011E として、`TruncationEnvelopeEstimate` の最小 concrete provider を
+     single-window toy case で追加する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.singleWindow` を追加した。
+   - `steps = Finset.univ : Finset Unit`, `threshold = fun _ => x`,
+     `increment = fun _ => c` の一段 envelope とした。
+   - `hc : 0 <= c` と `hbound : (c : ℝ) <= 1 + error` を外部仮定として受け取り、
+     `TruncationEnvelopeEstimate` を構成するだけに留めた。
+   - `roadmap-DKMK-011.md` に DKMK-011E 実装メモを追記した。
+3. 結論:
+   - externally supplied finite-step contract の最小実例が Lean 上で確認できた。
+   - dyadic/logarithmic band や `error = c - 1` 型の計算には踏み込んでいない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011F として report / handoff に向かうか、
+     single-window route usage theorem を追加するか判断する。
+
+---

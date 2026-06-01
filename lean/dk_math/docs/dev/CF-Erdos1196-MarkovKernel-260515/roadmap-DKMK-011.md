@@ -579,3 +579,49 @@ It should either:
 
 - add a single-window toy provider for `TruncationEnvelopeEstimate`; or
 - move toward a concrete dyadic/logarithmic provider in a new section.
+
+## 11. DKMK-011E Single-window Toy Provider
+
+DKMK-011E adds the first concrete toy provider:
+
+```lean
+TruncationEnvelopeEstimate.singleWindow
+```
+
+The data shape is:
+
+```text
+steps      = Finset.univ : Finset Unit
+threshold  = fun _ => x
+increment  = fun _ => c
+error      = error
+```
+
+The provider assumes:
+
+```lean
+hc     : 0 <= c
+hbound : (c : R) <= 1 + error
+```
+
+and returns:
+
+```lean
+TruncationEnvelopeEstimate
+  (Finset.univ : Finset Unit)
+  (fun _ : Unit => x)
+  (fun _ : Unit => c)
+  error
+```
+
+This is intentionally only a toy provider.  It verifies that the generic
+`TruncationEnvelopeEstimate` contract can be constructed from simple finite
+data without committing to dyadic or logarithmic bands.
+
+The analytic estimate is still external:
+
+```text
+(c : R) <= 1 + error
+```
+
+No attempt is made to set `error = c - 1` or prove a nontrivial estimate.

@@ -164,6 +164,27 @@ end TailWindowSourceMassBound
 namespace TruncationEnvelopeEstimate
 
 /--
+Single-window toy provider for externally supplied truncation estimates.
+
+This uses one finite step with threshold `x` and increment `c`.  The analytic
+input is kept external as `(c : ℝ) <= 1 + error`.
+-/
+theorem singleWindow
+    (x : ℕ) (c : ℚ) (hc : 0 ≤ c)
+    {error : ℝ} (hbound : (c : ℝ) ≤ 1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.univ : Finset Unit)
+      (fun _ : Unit => x)
+      (fun _ : Unit => c)
+      error where
+  increment_nonneg := by
+    intro _i _hi
+    exact hc
+  analytic_bound := by
+    constructor
+    simpa using hbound
+
+/--
 Route theorem for externally supplied finite-step truncation estimates.
 
 This is a packaging wrapper around
