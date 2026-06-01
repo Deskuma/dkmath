@@ -54,7 +54,7 @@ $$
 
 を出せるところまで進んだ。
 
-今回 DKMK-008E では、その (M) と (C) に具体的に
+今回 DKMK-008E では、その \(M\) と \(C\) に具体的に
 
 ```lean
 M := finiteStepTailNatMassSpace steps threshold increment hinc
@@ -108,7 +108,7 @@ selected route では、外部から選んだ channel set
 IOf : ℕ → Finset ℕ
 ```
 
-に対応する path family (F) を与える。
+に対応する path family \(F\) を与える。
 
 必要なのは、
 
@@ -124,7 +124,7 @@ hsource_eq : ∀ q ∈ F.index, F.source q = s.1
 
 じゃ。
 
-この条件の下で、selected global log-capacity sub-Markov shadow の重みを (F) に載せ、finite-step mass による bound を得る。
+この条件の下で、selected global log-capacity sub-Markov shadow の重みを \(F\) に載せ、finite-step mass による bound を得る。
 
 ```text
 selected SubMarkovShadow
@@ -145,7 +145,7 @@ hindex : canonicalExponentSlotLabels s.1 = F.index
 
 になる。
 
-つまり、canonical exponent-slot labels の各 channel に multi-step path を割り当て、その全ての source が (s.1) なら、canonical MarkovShadow の重みを使って同じ bound が出る。
+つまり、canonical exponent-slot labels の各 channel に multi-step path を割り当て、その全ての source が \(s.1\) なら、canonical MarkovShadow の重みを使って同じ bound が出る。
 
 ```text
 canonical MarkovShadow
@@ -217,13 +217,13 @@ DKMK-007N で two-step-as-finite-step は既にあるので、それを DKMK-008
 
 その次に必要になるのは、path family 自体の自然生成じゃ。
 
-今は external (F) を渡す形。
+今は external \(F\) を渡す形。
 
 ```lean
 F : AdjacentDivisorPathFamily ℕ
 ```
 
-これを、たとえば各 channel (q) から自動生成したい。
+これを、たとえば各 channel \(q\) から自動生成したい。
 
 候補は、
 

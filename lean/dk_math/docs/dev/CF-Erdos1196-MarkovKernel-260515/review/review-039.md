@@ -229,7 +229,7 @@ report の次の分岐は二つ。
 第一に、external path family API の利用例を増やす。
 これは定理の使い分けを明確にする道じゃ。
 
-第二に、prime-power channel (q=p^k) から path を自動生成する。
+第二に、prime-power channel \(q=p^k\) から path を自動生成する。
 
 ```text
 n → n / p → n / p^2 → ... → n / p^k
@@ -292,4 +292,4 @@ prime-power witness からの path 自動生成:
 ```
 
 ぬしよ、これは良い小締めじゃ。
-DKMK-008 はここまでで **水路の規格化** が済んだ。次は、その水路を人手で敷くのではなく、(q=p^k) という witness から自動で敷く段階じゃな。
+DKMK-008 はここまでで **水路の規格化** が済んだ。次は、その水路を人手で敷くのではなく、\(q=p^k\) という witness から自動で敷く段階じゃな。

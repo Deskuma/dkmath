@@ -86,14 +86,14 @@ AdjacentDivisorPath.mem_dvd_head
 source :: tail
 ```
 
-について、任意の node (h) が head source を割ることを示す。
+について、任意の node \(h\) が head source を割ることを示す。
 
 $$
 h\in source::tail\Rightarrow h\mid source
 $$
 
 これは multi-step descent の source-control に直結する。
-DKMK-007 では one-step path の各 node が source (n) の divisor であることを使って、`DvdMonotoneMass` から source mass control を得ていた。
+DKMK-007 では one-step path の各 node が source \(n\) の divisor であることを使って、`DvdMonotoneMass` から source mass control を得ていた。
 
 今回も同じ考えで、multi-step path のすべての node が head を割るなら、
 
@@ -164,7 +164,7 @@ $$
 
 だから divisor descent path になっている。
 
-そして primitive set ({3,5}) は、この path の node set ({12,6,3}) を高々一点しか hit しない。実際 hit するのは (3) だけじゃ。
+そして primitive set \(\{3,5\}\) は、この path の node set \(\{12,6,3\}\) を高々一点しか hit しない。実際 hit するのは \(3\) だけじゃ。
 
 これにより、単なる predicate ではなく、
 

@@ -24,7 +24,7 @@ oneStepDivisorAdjacentPathFamily
 AdjacentDivisorPathFamily ℕ
 ```
 
-各 index (q) に対して、
+各 index \(q\) に対して、
 
 $$
 source(q)=n,\qquad tail(q)=[n/q]
@@ -73,7 +73,7 @@ Nat.div_dvd_of_dvd (hdiv q hq)
 で出している。
 
 この部分は非常に素直じゃ。
-「(q) で割った商は (n) を割る」という one-step descent の最小事実が、そのまま path 証明になる。
+「\(q\) で割った商は \(n\) を割る」という one-step descent の最小事実が、そのまま path 証明になる。
 
 ## 3. node set の照合が重要
 
@@ -148,7 +148,7 @@ hsource_eq : ∀ q ∈ F.index, F.source q = s.1
 
 が必要だった。
 
-今回の one-step family は source が定義上 (n) なので、(n=s.1) として使えば、この `hsource_eq` をすぐ供給できる。
+今回の one-step family は source が定義上 \(n\) なので、\(n=s.1\) として使えば、この `hsource_eq` をすぐ供給できる。
 
 つまり、008D/E/F の same-source multi-step theorem に one-step family を渡す準備が整った。
 

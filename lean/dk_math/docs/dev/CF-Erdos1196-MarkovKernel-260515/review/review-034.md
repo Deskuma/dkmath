@@ -56,13 +56,13 @@ hsource : ∀ q ∈ F.index, (M.μ (F.source q) : ℝ) ≤ C
 ```
 
 これは一般的で強い。
-しかし、log-capacity state (s) から始まる下降路を考えるなら、多くの場合は全 path の source は同じ。
+しかし、log-capacity state \(s\) から始まる下降路を考えるなら、多くの場合は全 path の source は同じ。
 
 $$
 source(q)=s.1
 $$
 
-このときは、各 (q) ごとに source bound を渡す必要はない。
+このときは、各 \(q\) ごとに source bound を渡す必要はない。
 
 $$
 LogCapacitySourceMassBound\ M\ C
@@ -74,7 +74,7 @@ $$
 (M.\mu(s.1):\mathbb{R})\le C
 $$
 
-が出る。さらに (F.source(q)=s.1) なので、
+が出る。さらに \(F.source(q)=s.1\) なので、
 
 $$
 (M.\mu(F.source(q)):\mathbb{R})\le C
@@ -109,13 +109,13 @@ same-source external multi-step divisor path family
 へ変えた。
 
 この「same-source」はかなり自然じゃ。
-なぜなら DKMK-007E の one-step divisorStep も、全 channel が同じ source (s.1) から出ていた。
+なぜなら DKMK-007E の one-step divisorStep も、全 channel が同じ source \(s.1\) から出ていた。
 
 $$
 chain(q)={s.1/q,s.1}
 $$
 
-DKMK-008 では multi-step になっただけで、出発点は同じ (s.1) と見るのが自然じゃ。
+DKMK-008 では multi-step になっただけで、出発点は同じ \(s.1\) と見るのが自然じゃ。
 
 $$
 s.1\to n_1(q)\to n_2(q)\to\cdots
@@ -139,7 +139,7 @@ hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
 
 を持つ。
 
-そして path family (F) が
+そして path family \(F\) が
 
 $$
 F.index=IOf(s.1)
@@ -151,7 +151,7 @@ $$
 F.source(q)=s.1
 $$
 
-なら、selected global log-capacity sub-Markov shadow を (F) に載せ、primitive hitting bound が得られる。
+なら、selected global log-capacity sub-Markov shadow を \(F\) に載せ、primitive hitting bound が得られる。
 
 ```text
 selected SubMarkovShadow
@@ -172,7 +172,7 @@ $$
 
 になる。
 
-つまり、canonical exponent-slot label ごとに multi-step path を持つ family (F) を用意し、そのすべてが (s.1) から始まるなら、canonical MarkovShadow を直接載せて
+つまり、canonical exponent-slot label ごとに multi-step path を持つ family \(F\) を用意し、そのすべてが \(s.1\) から始まるなら、canonical MarkovShadow を直接載せて
 
 $$
 weightedHitMass(A)\le C
@@ -199,7 +199,7 @@ LogCapacitySourceMassBound M C
 
 だった。
 
-これは state (s) ごとに、
+これは state \(s\) ごとに、
 
 $$
 (M.\mu(s.1):\mathbb{R})\le C
@@ -207,8 +207,8 @@ $$
 
 を供給する interface じゃ。
 
-DKMK-007 の one-step route では source が (s.1) だったので、そのまま使えた。
-DKMK-008C の external path family では source が一般 (F.source(q)) になったため、一度この interface から離れていた。
+DKMK-007 の one-step route では source が \(s.1\) だったので、そのまま使えた。
+DKMK-008C の external path family では source が一般 \(F.source(q)\) になったため、一度この interface から離れていた。
 
 今回 DKMK-008D で、
 
