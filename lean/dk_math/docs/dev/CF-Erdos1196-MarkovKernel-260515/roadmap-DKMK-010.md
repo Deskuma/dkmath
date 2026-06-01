@@ -203,3 +203,156 @@ tail/truncation interface should be:
 - a docs-only contract first;
 - a small Prop interface in the existing hitting bridge file; or
 - a separate Lean module for tail/truncation estimates.
+
+## 7. Source Mass Inventory
+
+DKMK-010B records the current source-mass surface before adding any Lean
+interface.
+
+The key separation is:
+
+```text
+source mass model
+  -> LogCapacitySourceMassBound M C
+  -> existing DKMK-009 / DKMK-008 route theorem
+  -> weightedHitMass <= C
+```
+
+The source bound itself is usually just a uniform estimate on log-capacity
+states.  The path route may additionally require `DvdMonotoneMass M`, because
+one-step and quotient-path families are built as divisor-descending families.
+
+Current source-bound providers:
+
+- `unitNatMassSpace_logCapacitySourceMassBound_one`
+  - model: unit mass
+  - constant: `1`
+  - route monotonicity: `unitNatMassSpace_dvdMonotone`
+- `nonunitNatMassSpace_logCapacitySourceMassBound_one`
+  - model: nonunit indicator
+  - constant: `1`
+  - route monotonicity: `nonunitNatMassSpace_dvdMonotone`
+- `tailIndicatorNatMassSpace_logCapacitySourceMassBound_one`
+  - model: tail indicator
+  - constant: `1`
+  - route monotonicity: `tailIndicatorNatMassSpace_dvdMonotone`
+- `scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound`
+  - model: scaled tail indicator
+  - constant: `c`
+  - route monotonicity: `scaledTailIndicatorNatMassSpace_dvdMonotone`
+- `twoStepTailNatMassSpace_logCapacitySourceMassBound`
+  - model: two-step tail
+  - constant: `cHigh`
+  - route monotonicity: `twoStepTailNatMassSpace_dvdMonotone`
+- `boundedMonotoneNatMassSpace_logCapacitySourceMassBound`
+  - model: bounded height envelope
+  - constant: `C`
+  - route monotonicity: `boundedMonotoneNatMassSpace_dvdMonotone`
+- `finiteStepTailNatMassSpace_logCapacitySourceMassBound`
+  - model: finite-step tail
+  - constant: `sum increment`
+  - source bound: via bounded monotone
+  - route monotonicity: `finiteStepTailNatMassSpace_dvdMonotone`
+- `twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound`
+  - model: two-step as finite-step
+  - constant: `cHigh`
+  - source bound: via finite-step
+  - route monotonicity: `twoStepAsFiniteStepTailNatMassSpace_dvdMonotone`
+
+The main DKMK-010 candidate is the finite-step tail model.  It already packages
+a finite family of thresholds and nonnegative increments as a bounded monotone
+height:
+
+```lean
+finiteStepTailNatMassSpace steps threshold increment hinc
+```
+
+and supplies:
+
+```lean
+LogCapacitySourceMassBound
+  (finiteStepTailNatMassSpace steps threshold increment hinc)
+  ((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+This is close to a finite window or truncated envelope.  It does not yet encode
+an analytic estimate, but it gives the right theorem shape for one.
+
+## 8. Existing Route Consumers
+
+The current consumers of `LogCapacitySourceMassBound M C` include the generic
+capacity-kernel endpoint:
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+and the selected `SubMarkovShadow` endpoints:
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_adjacentDivisorPathFamily_weightedHitMass_le_of_sourceBound
+PrimePowerWitnessProvider
+  .globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+```
+
+There are also concrete finite-step wrappers for one-step, adjacent family, and
+witness-derived quotient path routes.  The corresponding canonical full-shadow
+wrappers exist as well.
+
+For DKMK-010, the most important consumer remains the DKMK-009 endpoint:
+
+```text
+globalLogCapacityKernel
+  + primePowerQuotientPathFamily
+  + LogCapacitySourceMassBound M C
+  => weightedHitMass <= C
+```
+
+The source estimate layer should feed this endpoint, not duplicate it.
+
+## 9. Placement Decision
+
+The tail/truncation interface should live outside `LogCapacityHittingBridge.lean`.
+
+Recommended file:
+
+```text
+DkMath/NumberTheory/PrimitiveSet/SourceMassTruncation.lean
+```
+
+Reason:
+
+- `LogCapacityHittingBridge.lean` already carries the kernel/path route;
+- DKMK-010 is about the source estimate layer;
+- keeping truncation contracts separate prevents analytic placeholders from
+  spreading into the kernel bridge file.
+
+The first Lean step should be small.  If a wrapper is added, prefer a
+theorem-facing name such as:
+
+```lean
+TailWindowSourceMassBound
+```
+
+over a heavier analytic name.  `TailWindow` emphasizes that the object is still
+finite/truncated.  The final infinite tail estimate can be supplied later as a
+separate analytic input.
+
+## 10. DKMK-010B Conclusion
+
+DKMK-010B is docs-only inventory.
+
+The current theorem surface is already sufficient to express the route:
+
+```text
+finite-step or bounded monotone source envelope
+  -> LogCapacitySourceMassBound M C
+  -> DKMK-009 quotient-path capacity route
+  -> weightedHitMass <= C
+```
+
+The next step, DKMK-010C, should introduce the tail-window/truncation contract
+in the new `SourceMassTruncation.lean` module, unless review feedback asks for
+one more docs-only design pass first.
