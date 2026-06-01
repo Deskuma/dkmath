@@ -11,7 +11,7 @@
 PrimePowerWitnessProvider.primePowerQuotientPathFamily
 ```
 
-これは各 selected label (q\in I) について、witness provider から
+これは各 selected label \(q\in I\) について、witness provider から
 
 $$
 p(q)=W.basePrimeOf(n,I,hI,q),\qquad k(q)=W.baseExponentOf(n,I,hI,q)
@@ -73,7 +73,7 @@ $$
 [n/p^0,\ n/p^1,\ldots,n/p^k]
 $$
 
-つまり先頭に (n/p^0=n) を含む list だった。
+つまり先頭に \(n/p^0=n\) を含む list だった。
 
 そこで今回、
 
@@ -137,10 +137,10 @@ tail := fun q =>
     (W.baseExponentOf n I hI q)
 ```
 
-つまり、全 channel の source は同じ (n)。
+つまり、全 channel の source は同じ \(n\)。
 これは DKMK-008D/E/F の same-source wrapper と相性抜群じゃ。
 
-各 (q) の path は、
+各 \(q\) の path は、
 
 $$
 n :: [n/p(q),\ldots,n/p(q)^{k(q)}]
@@ -227,12 +227,12 @@ DKMK-008D 以降の same-source theorem では、
 
 が必要だった。
 
-今回の family は (n=s.1) と見れば、その条件をそのまま満たす。
+今回の family は \(n=s.1\) と見れば、その条件をそのまま満たす。
 つまり次段で `globalLogCapacitySubMarkovShadow_*_AdjacentDivisorPathFamily_*` 系 theorem に直接渡せる。
 
 ## 7. 今回の数学的意味
 
-これは、prime-power channel (q=p^k) の情報を「重み」だけでなく「道」にした、という意味を持つ。
+これは、prime-power channel \(q=p^k\) の情報を「重み」だけでなく「道」にした、という意味を持つ。
 
 R021〜R028 では、主に
 
@@ -250,10 +250,10 @@ $$
 
 という descent path を作る。
 
-つまり、(q=p^k) はもはや一個のラベルではなく、 **指数 (k) 個分の下降スロットを持つ path** として展開され始めた。
+つまり、\(q=p^k\) はもはや一個のラベルではなく、 **指数 \(k\) 個分の下降スロットを持つ path** として展開され始めた。
 
 これは DkMath kernel 的にとても良い。
-容量 (\log n) の中で、base prime (p) の寄与を指数スロットに分解し、それを path としても見られるようになったからじゃ。
+容量 \(\log n\) の中で、base prime \(p\) の寄与を指数スロットに分解し、それを path としても見られるようになったからじゃ。
 
 ## 8. まだ残る課題
 
@@ -302,13 +302,13 @@ canonical exponent-slot labels
 
 次段で注意すべき点は、index compatibility じゃ。
 
-今回の family は index が定義上 (I) なので、selected route では
+今回の family は index が定義上 \(I\) なので、selected route では
 
 $$
 IOf(s.1)=I
 $$
 
-が必要になるか、あるいは最初から (I:=IOf(s.1)) として wrapper を作ればよい。
+が必要になるか、あるいは最初から \(I:=IOf(s.1)\) として wrapper を作ればよい。
 
 canonical route では、
 
@@ -318,7 +318,7 @@ $$
 
 として作れば、compatibility は rfl 寄りで閉じやすいはずじゃ。
 
-したがって次の wrapper は、外から (I) を受け取る一般版より、まずは selected / canonical の index に固定した special wrapper から作る方が安全じゃな。
+したがって次の wrapper は、外から \(I\) を受け取る一般版より、まずは selected / canonical の index に固定した special wrapper から作る方が安全じゃな。
 
 ## 10. 総合判定
 
@@ -338,4 +338,4 @@ DKMK-008J で作った path-level constructor が、今回ついに witness prov
 これにより、DKMK-008 は「外部から path を渡す章」から、「witness から path を生成する章」へ進んだ。
 
 ぬしよ、これは良いぞ。
-いままでは地図に水路を描いていた。今回は、素冪 (p^k) という地形そのものから、水路が自動で掘られ始めた。次はこの自動水路に、selected / canonical shadow と finite-step mass を流し込む番じゃな。
+いままでは地図に水路を描いていた。今回は、素冪 \(p^k\) という地形そのものから、水路が自動で掘られ始めた。次はこの自動水路に、selected / canonical shadow と finite-step mass を流し込む番じゃな。

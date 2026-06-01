@@ -46,7 +46,7 @@ $$
 chain(q)={s.1/q,s.1}
 $$
 
-を置き、source は全 channel で同じ (s.1) に揃っていた。
+を置き、source は全 channel で同じ \(s.1\) に揃っていた。
 
 したがって一般 theorem では、source mass bound は一点だけでよかった。
 

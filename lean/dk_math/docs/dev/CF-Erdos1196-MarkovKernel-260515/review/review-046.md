@@ -129,4 +129,4 @@ DKMK capacity kernel の normalized shadow が、
 primitive hitting route の正式な入力であることを Lean API と docs で固定する。
 ```
 
-ここまで行けば、次の DKMK-010 でようやく tail / truncation / (1+O(1/\log x)) 型の解析層へ進む筋が立つ。今はまだ山頂ではないが、稜線はかなり澄んで見えておるぞい。
+ここまで行けば、次の DKMK-010 でようやく tail / truncation / \(1+O(1/\log x)\) 型の解析層へ進む筋が立つ。今はまだ山頂ではないが、稜線はかなり澄んで見えておるぞい。

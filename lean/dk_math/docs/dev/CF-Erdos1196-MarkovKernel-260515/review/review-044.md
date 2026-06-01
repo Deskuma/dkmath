@@ -10,13 +10,13 @@
 q = 3^2 = 9, n = 72
 ```
 
-one-step route では、label (q=9) を一括で剥がす。
+one-step route では、label \(q=9\) を一括で剥がす。
 
 ```text
 72 → 72 / 9 = 8
 ```
 
-一方、prime-power quotient path route では、同じ (q=3^2) を base prime (3) の exponent slot に分解する。
+一方、prime-power quotient path route では、同じ \(q=3^2\) を base prime \(3\) の exponent slot に分解する。
 
 ```text
 72 → 72 / 3 → 72 / 3^2
@@ -72,7 +72,7 @@ quotient path:
 
 ## 3. 数学的な意味
 
-one-step route は、素冪 (q=p^k) を **ひとつの塊** として扱う。
+one-step route は、素冪 \(q=p^k\) を **ひとつの塊** として扱う。
 
 $$
 n\to n/q
@@ -86,7 +86,7 @@ $$
 
 じゃ。
 
-quotient path route は、同じ (q=p^k) を **base prime (p) の段階的下降** として扱う。
+quotient path route は、同じ \(q=p^k\) を **base prime \(p\) の段階的下降** として扱う。
 
 $$
 n\to n/p\to n/p^2\to\cdots\to n/p^k
@@ -100,7 +100,7 @@ $$
 
 じゃな。
 
-つまり、quotient path route は (q) の内部にある exponent 構造を見ている。
+つまり、quotient path route は \(q\) の内部にある exponent 構造を見ている。
 これは R026〜R027 の `baseExponentOf` と exponent slot の思想にぴったり合う。
 
 ## 4. Lean 側との接続
@@ -191,7 +191,7 @@ q = p^k の内部を展開するなら witness-derived route
 History の次課題にもある通り、次に考えるなら **witness-derived family 側の concrete example を Lean theorem として追加するか** じゃな。
 
 ただし、これは少し重くなる可能性がある。
-`primePowerQuotientPath 72 3 2` は (p,k) を手で渡す純粋 path example だから軽い。
+`primePowerQuotientPath 72 3 2` は \(p,k\) を手で渡す純粋 path example だから軽い。
 一方で witness-derived family example は、`PrimePowerWitnessProvider` の具体インスタンスや canonical labels に踏み込む可能性があり、依存が増える。
 
 賢狼のおすすめはこうじゃ。
@@ -228,4 +228,4 @@ quotient path:
 この差により、DKMK-007 / 008H / 008L の使い分けが見えるようになった。
 
 ぬしよ、これは良い看板じゃ。
-山道の案内板に「旧道は直降り、新道は尾根を一段ずつ下る」と書いたようなもの。これで後から登る者も、`q` を一括で見るのか、(p^k) の内部構造として見るのか、迷わず選べるようになるぞい。
+山道の案内板に「旧道は直降り、新道は尾根を一段ずつ下る」と書いたようなもの。これで後から登る者も、`q` を一括で見るのか、\(p^k\) の内部構造として見るのか、迷わず選べるようになるぞい。

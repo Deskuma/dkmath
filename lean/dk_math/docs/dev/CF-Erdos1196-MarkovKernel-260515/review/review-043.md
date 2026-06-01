@@ -23,7 +23,7 @@ DKMK-008L quotientPathFamily:
 
 DKMK-007 は旧道の one-step theorem。
 DKMK-008H は同じ one-step を path-family API に載せたもの。
-DKMK-008L は witness 由来の (p,k) 情報を使って、prime-power label を多段 path に展開するものじゃ。
+DKMK-008L は witness 由来の \(p,k\) 情報を使って、prime-power label を多段 path に展開するものじゃ。
 
 ## 2. なぜ docs-only でも価値があるか
 
@@ -54,19 +54,19 @@ witness から multi-step を自動生成したいなら quotientPathFamily
 
 ## 3. 数学的な違い
 
-one-step 系は、label (q) を一つの下降として読む。
+one-step 系は、label \(q\) を一つの下降として読む。
 
 $$
 n\to n/q
 $$
 
-一方、quotient path 系は、label (q) の内部構造
+一方、quotient path 系は、label \(q\) の内部構造
 
 $$
 q=p(q)^{k(q)}
 $$
 
-を読む。そして、同じ (q) を一歩ではなく、
+を読む。そして、同じ \(q\) を一歩ではなく、
 
 $$
 n\to n/p(q)\to n/p(q)^2\to\cdots\to n/p(q)^{k(q)}
@@ -120,7 +120,7 @@ witness-derived prime-power quotient path family:
 
 ## 6. 次にやるべきこと
 
-History の次課題では、既存の (72,3,2) quotient path を report の example 節に接続する可能性が挙げられている。これは良い一手じゃ。
+History の次課題では、既存の \(72,3,2\) quotient path を report の example 節に接続する可能性が挙げられている。これは良い一手じゃ。
 
 次の DKMK-008N は、わっちなら **examples / sanity check の整備** を推す。
 
@@ -162,4 +162,4 @@ DKMK-008L:
 これで後続は、「どの route を伸ばすか」を迷わず選べる。
 
 ぬしよ、ここは良い小締めじゃ。
-008L で新しい水路が開いた直後に、008M で標識を立てた。次はその標識の横に、(72\to24\to8) のような実例看板を置くと、通る者にも山道の意味が一目で分かるようになるぞい。
+008L で新しい水路が開いた直後に、008M で標識を立てた。次はその標識の横に、\(72\to24\to8\) のような実例看板を置くと、通る者にも山道の意味が一目で分かるようになるぞい。

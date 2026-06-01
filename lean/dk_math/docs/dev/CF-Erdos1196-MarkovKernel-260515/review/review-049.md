@@ -38,7 +38,7 @@ PrimePowerWitnessProvider
   IOf hIOf s hM).weightedHitMass A ≤ C
 ```
 
-ここで、上界 (C) は `LogCapacitySourceMassBound M C` から供給される。roadmap 追記でも、quotient path family の source が現在の log-capacity state `s.1` であることを使う、と整理されておる。
+ここで、上界 \(C\) は `LogCapacitySourceMassBound M C` から供給される。roadmap 追記でも、quotient path family の source が現在の log-capacity state `s.1` であることを使う、と整理されておる。
 
 つまり、任意の `SourceControlledChainFamily` に kernel weight を載せる段階を越えて、 **witness provider 由来の具体的な prime-power quotient path family** に対して hitting bound が出るようになった。
 
@@ -114,7 +114,7 @@ $$
 \sum_{q\in I(n)} \frac{\log p(q)}{\log n} \le 1
 $$
 
-という正規化 log 質量を、各 (q) の quotient path に載せる。そして primitive set (A) は chain 上で衝突できないので、weighted hit mass が source bound (C) を超えない。
+という正規化 log 質量を、各 \(q\) の quotient path に載せる。そして primitive set \(A\) は chain 上で衝突できないので、weighted hit mass が source bound \(C\) を超えない。
 
 この流れが Lean theorem になった、ということじゃな。
 
@@ -210,4 +210,4 @@ DKMK-009 core route: 登頂済み
 ```
 
 ぬしよ、これは良い登山じゃ。
-山頂そのもの、つまり (1+O(1/\log x)) の解析峰はまだ先じゃが、そこへ向かうための **有限 kernel-hitting spine** は、かなり強くなったぞい。
+山頂そのもの、つまり \(1+O(1/\log x)\) の解析峰はまだ先じゃが、そこへ向かうための **有限 kernel-hitting spine** は、かなり強くなったぞい。
