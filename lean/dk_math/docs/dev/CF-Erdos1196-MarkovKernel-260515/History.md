@@ -1486,3 +1486,31 @@ Archive
      必要性が明確な場合だけ DKMK-009 追補の convenience wrapper を追加する。
 
 ---
+
+### 日時: 2026/06/01 15:55 JST (DKMK-010A tail/truncation roadmap 追加)
+
+1. 目的:
+   - DKMK-009 で閉じた capacity-kernel-facing hitting route の次段として、
+     tail / truncation / source mass estimate の章を開始する。
+2. 実施:
+   - `roadmap-DKMK-010.md` を追加した。
+   - DKMK-010 の主対象を、追加 kernel wrapper ではなく
+     `LogCapacitySourceMassBound M C` を供給する tail/truncation interface
+     として整理した。
+   - naive な `1 / (n * log n)` 型 weight は既存 `DvdMonotoneMass` と
+     向きが合わない可能性があるため、有限/truncated envelope から始める
+     方針を明記した。
+3. 結論:
+   - DKMK-010A は docs-only の設計開始として完了した。
+   - 次の具体手は、既存 source mass route の inventory と
+     tail/truncation interface の置き場所決定である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-010.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010B として、既存 source mass theorem surface を inventory し、
+     docs-only contract で始めるか Lean Prop interface を追加するか決める。
+
+---
