@@ -453,3 +453,51 @@ such as a future contract proving:
 ```text
 sum increment <= 1 + error
 ```
+
+## 13. DKMK-010E Analytic Placeholder
+
+DKMK-010E adds the first analytic placeholder contract.
+
+```lean
+structure FiniteStepTailAnalyticBound
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (increment : ι → ℚ) (error : ℝ) : Prop where
+  total_le_one_add_error :
+    ((Finset.sum steps increment : ℚ) : ℝ) ≤ 1 + error
+```
+
+This is not an analytic theorem.  It records the exact future input needed to
+upgrade the finite-step route bound from:
+
+```text
+weightedHitMass <= sum increment
+```
+
+to:
+
+```text
+weightedHitMass <= 1 + error
+```
+
+The composition theorem is:
+
+```lean
+TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+It is a transitivity wrapper:
+
+```text
+finiteStepTail_weightedHitMass_le
+  + FiniteStepTailAnalyticBound.total_le_one_add_error
+  => weightedHitMass <= 1 + error
+```
+
+So DKMK-010E fixes the interface between the finite/truncated envelope layer
+and the future analytic estimate layer without proving any analytic estimate.
+
+The next step can be either:
+
+- DKMK-010F report / handoff; or
+- a small example contract showing how a supplied analytic inequality flows
+  through this placeholder.

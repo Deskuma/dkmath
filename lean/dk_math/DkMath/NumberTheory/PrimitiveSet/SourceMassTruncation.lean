@@ -24,6 +24,18 @@ structure TailWindowSourceMassBound (M : MassSpace ℕ) (C : ℝ) : Prop where
   source_bound : LogCapacitySourceMassBound M C
   dvd_mono : DvdMonotoneMass M
 
+/--
+Analytic placeholder for a finite-step tail envelope.
+
+This does not prove an analytic estimate.  It only records the future input
+needed to turn a finite-step total increment bound into a `1 + error` bound.
+-/
+structure FiniteStepTailAnalyticBound
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (increment : ι → ℚ) (error : ℝ) : Prop where
+  total_le_one_add_error :
+    ((Finset.sum steps increment : ℚ) : ℝ) ≤ 1 + error
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -106,6 +118,33 @@ theorem finiteStepTail_weightedHitMass_le
     W IOf hIOf s
     (finiteStepTail steps threshold increment hinc)
     hA
+
+/--
+Finite-step tail route bound after supplying the analytic placeholder
+`sum increment <= 1 + error`.
+-/
+theorem finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : FiniteStepTailAnalyticBound steps increment error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment hinc)).weightedHitMass A ≤
+      1 + error :=
+  (finiteStepTail_weightedHitMass_le
+    W IOf hIOf steps threshold increment hinc s hA).trans
+    herror.total_le_one_add_error
 
 end TailWindowSourceMassBound
 

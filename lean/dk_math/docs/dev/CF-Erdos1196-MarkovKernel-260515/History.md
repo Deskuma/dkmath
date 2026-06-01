@@ -153,3 +153,32 @@ Archive
      placeholder contract を設計する。
 
 ---
+
+### 日時: 2026/06/01 18:49 JST (DKMK-010E analytic placeholder 追加)
+
+1. 目的:
+   - DKMK-010E として、finite-step tail envelope の total increment を
+     `1 + error` へ評価する将来の解析入力を theorem-facing contract にする。
+2. 実施:
+   - `FiniteStepTailAnalyticBound` を追加した。
+   - contract は `((Finset.sum steps increment : ℚ) : ℝ) ≤ 1 + error`
+     だけを記録する軽い Prop とした。
+   - `TailWindowSourceMassBound
+     .finiteStepTail_weightedHitMass_le_one_add_error` を追加し、
+     DKMK-010D の finite-step route bound と analytic placeholder を
+     推移律で合成した。
+   - `roadmap-DKMK-010.md` に DKMK-010E 実装メモを追記した。
+3. 結論:
+   - finite/truncated envelope layer と将来の analytic estimate layer の
+     接合面が Lean contract として固定された。
+   - 実解析の証明はまだ入れず、必要な仮定の形だけを明示した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010F として report / handoff を作成するか、
+     必要なら analytic placeholder の小さい usage example を追加する。
+
+---
