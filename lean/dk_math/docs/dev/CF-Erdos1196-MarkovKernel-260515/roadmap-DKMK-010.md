@@ -356,3 +356,63 @@ finite-step or bounded monotone source envelope
 The next step, DKMK-010C, should introduce the tail-window/truncation contract
 in the new `SourceMassTruncation.lean` module, unless review feedback asks for
 one more docs-only design pass first.
+
+## 11. DKMK-010C Lean Contract
+
+DKMK-010C adds the first Lean interface for the source estimate layer.
+
+New module:
+
+```text
+DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+Main contract:
+
+```lean
+structure TailWindowSourceMassBound (M : MassSpace ℕ) (C : ℝ) : Prop where
+  nonneg_const : 0 ≤ C
+  source_bound : LogCapacitySourceMassBound M C
+  dvd_mono : DvdMonotoneMass M
+```
+
+This is intentionally small.  It packages exactly the hypotheses needed to
+feed a finite or truncated source envelope into the existing quotient-path
+capacity route.
+
+The first concrete provider is:
+
+```lean
+TailWindowSourceMassBound.finiteStepTail
+```
+
+which turns `finiteStepTailNatMassSpace` into a tail-window contract with
+constant:
+
+```lean
+((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+The route theorem is:
+
+```lean
+TailWindowSourceMassBound
+  .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
+```
+
+It is only a thin wrapper around the DKMK-009 theorem:
+
+```lean
+PrimePowerWitnessProvider
+  .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+```
+
+So the layer separation remains:
+
+```text
+tail-window source contract
+  -> DKMK-009 quotient-path capacity route
+  -> weightedHitMass <= C
+```
+
+No analytic estimate is introduced in DKMK-010C.

@@ -43,6 +43,7 @@ import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge
 import DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory
 import DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+import DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -96,4 +97,5 @@ This module exposes:
 - bridge from arbitrary kernels with canonical exponent-slot index to Markov shadow
 - code-level inventory for current kernel candidates
 - bridge from log-capacity shadows to primitive hitting bounds
+- tail-window source-mass contract for truncation/envelope estimates
 -/

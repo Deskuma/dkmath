@@ -94,3 +94,33 @@ Archive
      などの theorem-facing contract を設計する。
 
 ---
+
+### 日時: 2026/06/01 16:38 JST (DKMK-010C TailWindowSourceMassBound 追加)
+
+1. 目的:
+   - DKMK-010C として、tail/truncation source estimate layer の
+     theorem-facing Lean contract を小さく追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation` を追加した。
+   - `TailWindowSourceMassBound` を追加し、`0 ≤ C`,
+     `LogCapacitySourceMassBound M C`, `DvdMonotoneMass M` を一つに束ねた。
+   - `TailWindowSourceMassBound.finiteStepTail` を追加し、
+     finite-step tail mass から tail-window contract を供給できるようにした。
+   - `TailWindowSourceMassBound
+     .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le`
+     を追加し、DKMK-009 の quotient-path capacity route へ薄く接続した。
+   - `DkMath.NumberTheory.PrimitiveSet` aggregator に import と説明を追加した。
+   - `roadmap-DKMK-010.md` に DKMK-010C 実装メモを追記した。
+3. 結論:
+   - source estimate layer を kernel/path layer から分離したまま、
+     finite/truncated envelope を DKMK-009 route に渡す入口ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010D として、必要なら finite-step tail contract の convenience
+     theorem や analytic placeholder への接続を追加する。
+
+---
