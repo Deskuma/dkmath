@@ -625,3 +625,40 @@ The analytic estimate is still external:
 ```
 
 No attempt is made to set `error = c - 1` or prove a nontrivial estimate.
+
+## 12. DKMK-011F Report / Handoff
+
+DKMK-011F closes the chapter with:
+
+```text
+report-DKMK-011.md
+```
+
+The report records the complete route:
+
+```text
+externally supplied finite-step estimate
+  -> TruncationEnvelopeEstimate
+  -> finiteStepTailNatMassSpace
+  -> TailWindowSourceMassBound
+  -> weightedHitMass <= sum increment
+  -> FiniteStepTailAnalyticBound
+  -> weightedHitMass <= 1 + error
+```
+
+It also records the single-window toy provider as a minimal construction of
+`TruncationEnvelopeEstimate`.
+
+DKMK-011 therefore closes as:
+
+```text
+analytic layer:
+  proves TruncationEnvelopeEstimate
+
+route layer:
+  consumes TruncationEnvelopeEstimate
+```
+
+The next natural chapter is DKMK-012, where dyadic/logarithmic providers or a
+more concrete analytic envelope estimate can be designed without changing the
+route layer.

@@ -353,3 +353,31 @@ Archive
      single-window route usage theorem を追加するか判断する。
 
 ---
+
+### 日時: 2026/06/02 07:20 JST (DKMK-011F report / handoff 追加)
+
+1. 目的:
+   - DKMK-011A-E で作った externally supplied finite-step estimate provider
+     の章を report として一区切りに整理する。
+2. 実施:
+   - `report-DKMK-011.md` を追加した。
+   - `TruncationEnvelopeEstimate`、route wrapper、single-window toy provider の
+     役割を整理した。
+   - analytic layer は `TruncationEnvelopeEstimate` を証明し、route layer は
+     それを消費する、という境界を明記した。
+   - `roadmap-DKMK-011.md` に DKMK-011F report / handoff を追記した。
+3. 結論:
+   - DKMK-011 は、外部供給された finite-step / truncation estimate を
+     DKMK route に渡す入口を固定する章として一区切りになった。
+   - 次は DKMK-012 として、dyadic/logarithmic provider design か
+     concrete analytic envelope estimate へ進む。
+4. 検証:
+   - docs-only 変更として `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012 の roadmap を作り、dyadic/logarithmic band provider へ進むか、
+     具体的な analytic envelope estimate へ進むかを決める。
+
+---
