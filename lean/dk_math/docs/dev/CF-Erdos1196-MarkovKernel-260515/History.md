@@ -211,3 +211,32 @@ Archive
      どの有限/truncation data から供給するか設計する。
 
 ---
+
+### 日時: 2026/06/02 05:10 JST (DKMK-011A roadmap 追加)
+
+1. 目的:
+   - DKMK-010 で固定した `FiniteStepTailAnalyticBound` の受け口を、
+     具体的な finite-step / truncation estimate provider へ進めるための
+     DKMK-011 を開始する。
+2. 実施:
+   - `roadmap-DKMK-011.md` を追加した。
+   - DKMK-011 の主題を、`steps`, `threshold`, `increment`, `error` の
+     意味づけと `sum increment <= 1 + error` の供給設計として整理した。
+   - 解析定理そのもの、Mertens theorem、big-O formalization は
+     non-goal として分離した。
+   - 最初の Lean 候補として、`TruncationEnvelopeEstimate` 型の
+     externally supplied contract 案を記録した。
+3. 結論:
+   - DKMK-011A は docs-only roadmap として完了した。
+   - 次は DKMK-011B として、具体的な finite envelope data の inventory と
+     externally supplied contract で始めるかを決める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011B として、single-window / finite-step / dyadic-log band などの
+     truncation envelope 候補を整理する。
+
+---
