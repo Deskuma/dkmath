@@ -268,3 +268,32 @@ Archive
      `FiniteStepTailAnalyticBound` を束ねる externally supplied contract を追加する。
 
 ---
+
+### 日時: 2026/06/02 07:07 JST (DKMK-011C TruncationEnvelopeEstimate 追加)
+
+1. 目的:
+   - DKMK-011C として、externally supplied finite-step estimate を
+     DKMK-010 の route theorem へ流す Lean contract を追加する。
+2. 実施:
+   - `TruncationEnvelopeEstimate` を追加した。
+   - `increment_nonneg` と `FiniteStepTailAnalyticBound` を束ね、
+     source envelope 構成と analytic total estimate を一つの Prop にした。
+   - `TruncationEnvelopeEstimate
+     .finiteStepTail_weightedHitMass_le_one_add_error` を追加した。
+   - theorem は `TailWindowSourceMassBound
+     .finiteStepTail_weightedHitMass_le_one_add_error` への薄い wrapper に留めた。
+   - `roadmap-DKMK-011.md` に DKMK-011C 実装メモを追記した。
+3. 結論:
+   - 外部供給された finite-step truncation estimate から
+     `weightedHitMass <= 1 + error` へ進む入口ができた。
+   - dyadic/logarithmic band の特殊化はまだ導入していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011D として、この contract の usage summary か、
+     single-window toy provider を追加するか検討する。
+
+---

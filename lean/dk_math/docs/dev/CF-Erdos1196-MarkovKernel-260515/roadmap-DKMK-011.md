@@ -437,3 +437,53 @@ TruncationEnvelopeEstimate
 ```
 
 No dyadic/logarithmic specialization should be added yet.
+
+## 9. DKMK-011C Lean Contract
+
+DKMK-011C adds the externally supplied finite-step contract.
+
+```lean
+structure TruncationEnvelopeEstimate
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι -> Nat)
+    (increment : ι -> Q) (error : R) : Prop where
+  increment_nonneg :
+    forall i in steps, 0 <= increment i
+  analytic_bound :
+    FiniteStepTailAnalyticBound steps increment error
+```
+
+In Lean this uses `Nat`, `Q`, and `R` as `ℕ`, `ℚ`, and `ℝ`.
+
+This contract deliberately bundles:
+
+```text
+increment_nonneg:
+  enough to build finiteStepTailNatMassSpace
+
+analytic_bound:
+  enough to upgrade sum increment to 1 + error
+```
+
+The route theorem is:
+
+```lean
+TruncationEnvelopeEstimate
+  .finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+It is only a packaging wrapper around:
+
+```lean
+TailWindowSourceMassBound
+  .finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+Thus DKMK-011C fixes the first concrete provider shape:
+
+```text
+externally supplied finite-step estimate
+  -> weightedHitMass <= 1 + error
+```
+
+No dyadic/logarithmic band data are introduced in this step.
