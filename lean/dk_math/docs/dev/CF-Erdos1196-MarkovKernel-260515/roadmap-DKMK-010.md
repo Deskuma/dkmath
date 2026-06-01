@@ -501,3 +501,32 @@ The next step can be either:
 - DKMK-010F report / handoff; or
 - a small example contract showing how a supplied analytic inequality flows
   through this placeholder.
+
+## 14. DKMK-010F Report / Handoff
+
+DKMK-010F closes the chapter with:
+
+```text
+report-DKMK-010.md
+```
+
+The report records the full route:
+
+```text
+finiteStepTailNatMassSpace
+  -> TailWindowSourceMassBound
+  -> weightedHitMass <= sum increment
+  -> FiniteStepTailAnalyticBound
+  -> weightedHitMass <= 1 + error
+```
+
+The handoff is explicit:
+
+```text
+DKMK-010 fixed the interface.
+It did not prove the analytic estimate.
+```
+
+The next natural chapter is DKMK-011, where the placeholder
+`FiniteStepTailAnalyticBound` should be supplied by a concrete finite-step /
+truncation estimate.
