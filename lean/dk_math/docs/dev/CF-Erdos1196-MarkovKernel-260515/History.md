@@ -124,3 +124,32 @@ Archive
      theorem や analytic placeholder への接続を追加する。
 
 ---
+
+### 日時: 2026/06/01 16:50 JST (DKMK-010D finite-step route convenience 追加)
+
+1. 目的:
+   - DKMK-010D として、finite-step tail envelope を DKMK-009 の
+     quotient-path capacity route へ直接流す convenience theorem を追加する。
+2. 実施:
+   - `TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le` を追加した。
+   - `finiteStepTailNatMassSpace` から
+     `TailWindowSourceMassBound.finiteStepTail` を作り、
+     DKMK-010C の route theorem へ合成する形にした。
+   - 上界は finite-step envelope の total increment
+     `((Finset.sum steps increment : ℚ) : ℝ)` とした。
+   - `roadmap-DKMK-010.md` に DKMK-010D 実装メモを追記した。
+3. 結論:
+   - finite-step tail envelope から weighted hitting bound までの
+     一気通貫の concrete entry point ができた。
+   - 新しい proof route は増やさず、DKMK-010C と DKMK-009 theorem の
+     薄い合成に留めた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-010E として、`sum increment <= 1 + error` 型の analytic
+     placeholder contract を設計する。
+
+---

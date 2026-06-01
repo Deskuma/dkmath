@@ -416,3 +416,40 @@ tail-window source contract
 ```
 
 No analytic estimate is introduced in DKMK-010C.
+
+## 12. DKMK-010D Finite-step Route Convenience
+
+DKMK-010D adds one concrete convenience theorem.
+
+```lean
+TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le
+```
+
+It composes the two DKMK-010C ingredients:
+
+```text
+finiteStepTailNatMassSpace
+  -> TailWindowSourceMassBound.finiteStepTail
+  -> TailWindowSourceMassBound
+       .globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
+```
+
+The theorem exposes the common finite-window use case directly:
+
+```text
+finite-step tail envelope
+  + globalLogCapacityKernel
+  + primePowerQuotientPathFamily
+  => weightedHitMass <= sum increment
+```
+
+This remains a convenience layer.  It does not add a new proof route and does
+not introduce an analytic estimate.
+
+DKMK-010D therefore closes the finite/truncated envelope-to-route bridge in
+the first concrete case.  The next layer can focus on analytic placeholders,
+such as a future contract proving:
+
+```text
+sum increment <= 1 + error
+```

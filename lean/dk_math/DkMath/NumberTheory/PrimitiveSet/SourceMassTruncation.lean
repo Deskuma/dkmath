@@ -78,6 +78,35 @@ theorem globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
   W.globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
     IOf hIOf s H.dvd_mono hA H.nonneg_const H.source_bound
 
+/--
+Finite-step tail source mass, applied all the way to the DKMK-009
+quotient-path capacity route.
+
+This is the concrete convenience form of `finiteStepTail` followed by
+`globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le`.
+-/
+theorem finiteStepTail_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment hinc)).weightedHitMass A ≤
+      ((Finset.sum steps increment : ℚ) : ℝ) :=
+  globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
+    W IOf hIOf s
+    (finiteStepTail steps threshold increment hinc)
+    hA
+
 end TailWindowSourceMassBound
 
 end DkMath.NumberTheory.PrimitiveSet
