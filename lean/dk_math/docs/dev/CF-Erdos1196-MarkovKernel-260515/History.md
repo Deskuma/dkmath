@@ -211,3 +211,173 @@ Archive
      どの有限/truncation data から供給するか設計する。
 
 ---
+
+### 日時: 2026/06/02 05:10 JST (DKMK-011A roadmap 追加)
+
+1. 目的:
+   - DKMK-010 で固定した `FiniteStepTailAnalyticBound` の受け口を、
+     具体的な finite-step / truncation estimate provider へ進めるための
+     DKMK-011 を開始する。
+2. 実施:
+   - `roadmap-DKMK-011.md` を追加した。
+   - DKMK-011 の主題を、`steps`, `threshold`, `increment`, `error` の
+     意味づけと `sum increment <= 1 + error` の供給設計として整理した。
+   - 解析定理そのもの、Mertens theorem、big-O formalization は
+     non-goal として分離した。
+   - 最初の Lean 候補として、`TruncationEnvelopeEstimate` 型の
+     externally supplied contract 案を記録した。
+3. 結論:
+   - DKMK-011A は docs-only roadmap として完了した。
+   - 次は DKMK-011B として、具体的な finite envelope data の inventory と
+     externally supplied contract で始めるかを決める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011B として、single-window / finite-step / dyadic-log band などの
+     truncation envelope 候補を整理する。
+
+---
+
+### 日時: 2026/06/02 07:00 JST (DKMK-011B envelope inventory 追加)
+
+1. 目的:
+   - DKMK-011B として、`FiniteStepTailAnalyticBound` を供給する
+     finite envelope data の候補を整理する。
+2. 実施:
+   - `roadmap-DKMK-011.md` に Envelope Candidate Inventory を追加した。
+   - single-window、finite-step monotone、dyadic band、logarithmic band、
+     externally supplied increment list の候補を比較した。
+   - `threshold` は source envelope の activation data、
+     `increment` は analytic total estimate の data として役割を分けた。
+   - 最初の Lean 実装は externally supplied finite-step contract に寄せ、
+     dyadic/logarithmic specialization は後段へ回す方針を記録した。
+3. 結論:
+   - DKMK-011B は docs-only inventory として完了した。
+   - DKMK-011C では `TruncationEnvelopeEstimate` 型の薄い Prop contract を
+     `SourceMassTruncation.lean` へ追加するのが自然である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011C として、`increment_nonneg` と
+     `FiniteStepTailAnalyticBound` を束ねる externally supplied contract を追加する。
+
+---
+
+### 日時: 2026/06/02 07:07 JST (DKMK-011C TruncationEnvelopeEstimate 追加)
+
+1. 目的:
+   - DKMK-011C として、externally supplied finite-step estimate を
+     DKMK-010 の route theorem へ流す Lean contract を追加する。
+2. 実施:
+   - `TruncationEnvelopeEstimate` を追加した。
+   - `increment_nonneg` と `FiniteStepTailAnalyticBound` を束ね、
+     source envelope 構成と analytic total estimate を一つの Prop にした。
+   - `TruncationEnvelopeEstimate
+     .finiteStepTail_weightedHitMass_le_one_add_error` を追加した。
+   - theorem は `TailWindowSourceMassBound
+     .finiteStepTail_weightedHitMass_le_one_add_error` への薄い wrapper に留めた。
+   - `roadmap-DKMK-011.md` に DKMK-011C 実装メモを追記した。
+3. 結論:
+   - 外部供給された finite-step truncation estimate から
+     `weightedHitMass <= 1 + error` へ進む入口ができた。
+   - dyadic/logarithmic band の特殊化はまだ導入していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011D として、この contract の usage summary か、
+     single-window toy provider を追加するか検討する。
+
+---
+
+### 日時: 2026/06/02 07:12 JST (DKMK-011D usage summary 追加)
+
+1. 目的:
+   - DKMK-011C で追加した `TruncationEnvelopeEstimate` の使い方を
+     docs-level で明確にする。
+2. 実施:
+   - `roadmap-DKMK-011.md` に DKMK-011D Usage Summary を追加した。
+   - `steps`, `threshold`, `increment`, `error` を外部入力として整理した。
+   - `H.increment_nonneg` が finite-step source envelope を作り、
+     `H.analytic_bound` が `sum increment <= 1 + error` を供給する流れを
+     明記した。
+   - `TruncationEnvelopeEstimate
+     .finiteStepTail_weightedHitMass_le_one_add_error` の最小使用パターンを
+     記録した。
+3. 結論:
+   - 外部供給された finite-step estimate を DKMK route へ流す手順が
+     docs 上で明確になった。
+   - 次は single-window toy provider か、dyadic/logarithmic provider への
+     設計へ進める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011E として single-window toy provider を追加するか、
+     report / handoff に向かうか判断する。
+
+---
+
+### 日時: 2026/06/02 07:16 JST (DKMK-011E single-window toy provider 追加)
+
+1. 目的:
+   - DKMK-011E として、`TruncationEnvelopeEstimate` の最小 concrete provider を
+     single-window toy case で追加する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.singleWindow` を追加した。
+   - `steps = Finset.univ : Finset Unit`, `threshold = fun _ => x`,
+     `increment = fun _ => c` の一段 envelope とした。
+   - `hc : 0 <= c` と `hbound : (c : ℝ) <= 1 + error` を外部仮定として受け取り、
+     `TruncationEnvelopeEstimate` を構成するだけに留めた。
+   - `roadmap-DKMK-011.md` に DKMK-011E 実装メモを追記した。
+3. 結論:
+   - externally supplied finite-step contract の最小実例が Lean 上で確認できた。
+   - dyadic/logarithmic band や `error = c - 1` 型の計算には踏み込んでいない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011F として report / handoff に向かうか、
+     single-window route usage theorem を追加するか判断する。
+
+---
+
+### 日時: 2026/06/02 07:20 JST (DKMK-011F report / handoff 追加)
+
+1. 目的:
+   - DKMK-011A-E で作った externally supplied finite-step estimate provider
+     の章を report として一区切りに整理する。
+2. 実施:
+   - `report-DKMK-011.md` を追加した。
+   - `TruncationEnvelopeEstimate`、route wrapper、single-window toy provider の
+     役割を整理した。
+   - analytic layer は `TruncationEnvelopeEstimate` を証明し、route layer は
+     それを消費する、という境界を明記した。
+   - `roadmap-DKMK-011.md` に DKMK-011F report / handoff を追記した。
+3. 結論:
+   - DKMK-011 は、外部供給された finite-step / truncation estimate を
+     DKMK route に渡す入口を固定する章として一区切りになった。
+   - 次は DKMK-012 として、dyadic/logarithmic provider design か
+     concrete analytic envelope estimate へ進む。
+4. 検証:
+   - docs-only 変更として `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012 の roadmap を作り、dyadic/logarithmic band provider へ進むか、
+     具体的な analytic envelope estimate へ進むかを決める。
+
+---

@@ -36,6 +36,19 @@ structure FiniteStepTailAnalyticBound
   total_le_one_add_error :
     ((Finset.sum steps increment : ℚ) : ℝ) ≤ 1 + error
 
+/--
+Externally supplied finite-step truncation envelope estimate.
+
+This bundles the nonnegative increment data needed to build the finite-step
+source envelope with the analytic placeholder that bounds its total increment.
+-/
+structure TruncationEnvelopeEstimate
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ)
+    (increment : ι → ℚ) (error : ℝ) : Prop where
+  increment_nonneg : ∀ i ∈ steps, 0 ≤ increment i
+  analytic_bound : FiniteStepTailAnalyticBound steps increment error
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -147,5 +160,58 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
     herror.total_le_one_add_error
 
 end TailWindowSourceMassBound
+
+namespace TruncationEnvelopeEstimate
+
+/--
+Single-window toy provider for externally supplied truncation estimates.
+
+This uses one finite step with threshold `x` and increment `c`.  The analytic
+input is kept external as `(c : ℝ) <= 1 + error`.
+-/
+theorem singleWindow
+    (x : ℕ) (c : ℚ) (hc : 0 ≤ c)
+    {error : ℝ} (hbound : (c : ℝ) ≤ 1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.univ : Finset Unit)
+      (fun _ : Unit => x)
+      (fun _ : Unit => c)
+      error where
+  increment_nonneg := by
+    intro _i _hi
+    exact hc
+  analytic_bound := by
+    constructor
+    simpa using hbound
+
+/--
+Route theorem for externally supplied finite-step truncation estimates.
+
+This is a packaging wrapper around
+`TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le_one_add_error`.
+-/
+theorem finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (H : TruncationEnvelopeEstimate steps threshold increment error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment H.increment_nonneg)).weightedHitMass A ≤
+      1 + error :=
+  TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le_one_add_error
+    W IOf hIOf steps threshold increment H.increment_nonneg s hA
+    H.analytic_bound
+
+end TruncationEnvelopeEstimate
 
 end DkMath.NumberTheory.PrimitiveSet
