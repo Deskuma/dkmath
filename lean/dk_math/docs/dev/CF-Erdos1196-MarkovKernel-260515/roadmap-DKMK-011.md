@@ -487,3 +487,95 @@ externally supplied finite-step estimate
 ```
 
 No dyadic/logarithmic band data are introduced in this step.
+
+## 10. DKMK-011D Usage Summary
+
+DKMK-011D records how the externally supplied contract is meant to be used.
+
+The route has four external inputs:
+
+```text
+steps      : finite index set
+threshold  : activation threshold for each source-envelope step
+increment  : nonnegative envelope increment for each step
+error      : analytic residual term
+```
+
+The caller supplies:
+
+```lean
+H : TruncationEnvelopeEstimate steps threshold increment error
+```
+
+This single hypothesis contains:
+
+```text
+H.increment_nonneg:
+  forall i in steps, 0 <= increment i
+
+H.analytic_bound:
+  FiniteStepTailAnalyticBound steps increment error
+```
+
+Then the route theorem is:
+
+```lean
+TruncationEnvelopeEstimate
+  .finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+Conceptually it expands to:
+
+```text
+H.increment_nonneg
+  -> finiteStepTailNatMassSpace steps threshold increment
+  -> TailWindowSourceMassBound
+  -> weightedHitMass <= sum increment
+
+H.analytic_bound
+  -> sum increment <= 1 + error
+
+therefore:
+  weightedHitMass <= 1 + error
+```
+
+### Minimal usage pattern
+
+For a selected global log-capacity route, the caller provides:
+
+```lean
+W      : PrimePowerWitnessProvider T
+IOf    : Nat -> Finset Nat
+hIOf   : forall n q, q in IOf n -> q in T.toDivisorTransitionKernel.index n
+s      : LogCapacityState
+hA     : PrimitiveOn A
+H      : TruncationEnvelopeEstimate steps threshold increment error
+```
+
+and obtains:
+
+```text
+(W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+  IOf hIOf s ...).weightedHitMass A <= 1 + error
+```
+
+The omitted proof is exactly `H.increment_nonneg` passed through
+`finiteStepTailNatMassSpace_dvdMonotone`.
+
+### Layer boundary
+
+DKMK-011D keeps the same boundary as DKMK-010:
+
+```text
+Lean route plumbing:
+  consumes TruncationEnvelopeEstimate
+
+analytic layer:
+  proves TruncationEnvelopeEstimate for a concrete envelope
+```
+
+Therefore the next Lean or docs step should not change the route theorem.
+It should either:
+
+- add a single-window toy provider for `TruncationEnvelopeEstimate`; or
+- move toward a concrete dyadic/logarithmic provider in a new section.

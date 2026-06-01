@@ -297,3 +297,33 @@ Archive
      single-window toy provider を追加するか検討する。
 
 ---
+
+### 日時: 2026/06/02 07:12 JST (DKMK-011D usage summary 追加)
+
+1. 目的:
+   - DKMK-011C で追加した `TruncationEnvelopeEstimate` の使い方を
+     docs-level で明確にする。
+2. 実施:
+   - `roadmap-DKMK-011.md` に DKMK-011D Usage Summary を追加した。
+   - `steps`, `threshold`, `increment`, `error` を外部入力として整理した。
+   - `H.increment_nonneg` が finite-step source envelope を作り、
+     `H.analytic_bound` が `sum increment <= 1 + error` を供給する流れを
+     明記した。
+   - `TruncationEnvelopeEstimate
+     .finiteStepTail_weightedHitMass_le_one_add_error` の最小使用パターンを
+     記録した。
+3. 結論:
+   - 外部供給された finite-step estimate を DKMK route へ流す手順が
+     docs 上で明確になった。
+   - 次は single-window toy provider か、dyadic/logarithmic provider への
+     設計へ進める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011E として single-window toy provider を追加するか、
+     report / handoff に向かうか判断する。
+
+---
