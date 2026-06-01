@@ -252,3 +252,188 @@ It should decide whether the first concrete provider is:
 The conservative choice is to start with the externally supplied contract,
 because it preserves the separation between finite route plumbing and analytic
 estimates.
+
+## 7. DKMK-011B Envelope Candidate Inventory
+
+DKMK-011B compares the finite envelope data candidates before adding Lean code.
+
+The target remains:
+
+```text
+finite envelope data
+  -> FiniteStepTailAnalyticBound steps increment error
+  -> weightedHitMass <= 1 + error
+```
+
+The important design point is that `threshold` and `increment` play different
+roles.
+
+```text
+threshold:
+  activates the source envelope inside finiteStepTailNatMassSpace
+
+increment:
+  contributes to the total sum used by FiniteStepTailAnalyticBound
+```
+
+`FiniteStepTailAnalyticBound` itself only sees `steps`, `increment`, and
+`error`.  It does not mention `threshold`.  Therefore the first Lean contract
+can either bundle everything together, or keep envelope data and analytic
+total estimate as separate layers.
+
+### Candidate: single-window tail envelope
+
+Shape:
+
+```text
+steps      = Unit
+threshold  = x
+increment  = C
+```
+
+Advantages:
+
+- smallest possible finite envelope;
+- easiest to connect to `finiteStepTailNatMassSpace`;
+- useful as a sanity check for the DKMK-010 route.
+
+Risks:
+
+- too coarse for the final tail estimate;
+- hides the structure needed for `1 / log x`-scale errors.
+
+This is a good toy provider, but probably not the main analytic route.
+
+### Candidate: finite-step monotone envelope
+
+Shape:
+
+```text
+steps      = arbitrary finite index set
+threshold  = piecewise thresholds
+increment  = nonnegative envelope increments
+```
+
+Advantages:
+
+- exactly matches the current `finiteStepTailNatMassSpace` API;
+- keeps `DvdMonotoneMass` available through the existing theorem;
+- allows external analytic work to choose the finite partition.
+
+Risks:
+
+- too abstract if used without additional documentation;
+- the mathematical meaning of each step must be supplied externally.
+
+This is the best first Lean target.
+
+### Candidate: dyadic band envelope
+
+Shape:
+
+```text
+steps      = k = 0, ..., K
+threshold  = 2^k * x
+increment  = band estimate
+```
+
+Advantages:
+
+- common analytic discretization;
+- finite by construction after choosing `K`;
+- easier to explain than arbitrary external data.
+
+Risks:
+
+- requires committing to powers and truncation parameters;
+- may need extra Nat/Real coercion infrastructure;
+- still does not by itself prove the final estimate.
+
+This is a likely later specialization, not the first generic contract.
+
+### Candidate: logarithmic band envelope
+
+Shape:
+
+```text
+steps      = k = 0, ..., K
+threshold  = approximate exp(k) * x
+increment  = log-density estimate
+```
+
+Advantages:
+
+- closer to `1 / log x` behavior;
+- may align better with final asymptotic statements.
+
+Risks:
+
+- natural-number thresholds require rounding choices;
+- introduces real exponential/log infrastructure too early;
+- can obscure the finite route plumbing.
+
+This should wait until the analytic layer is ready.
+
+### Candidate: externally supplied increment list
+
+Shape:
+
+```text
+steps      = arbitrary finite set
+threshold  = supplied
+increment  = supplied
+error      = supplied
+```
+
+Advantages:
+
+- Lean contract stays small;
+- preserves separation between route plumbing and analytic estimates;
+- lets later chapters instantiate the data in different ways.
+
+Risks:
+
+- weak mathematical meaning unless documented;
+- too permissive if treated as the final result.
+
+This is the conservative DKMK-011C choice.
+
+## 8. DKMK-011B Decision
+
+The first Lean contract should use externally supplied finite-step data.
+
+Recommended next Lean shape:
+
+```lean
+structure TruncationEnvelopeEstimate
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι)
+    (threshold : ι -> Nat)
+    (increment : ι -> Q)
+    (error : R) : Prop where
+  increment_nonneg :
+    forall i in steps, 0 <= increment i
+  analytic_bound :
+    FiniteStepTailAnalyticBound steps increment error
+```
+
+This bundles the two hypotheses needed by the DKMK-010E route theorem:
+
+```text
+increment_nonneg:
+  builds finiteStepTailNatMassSpace and TailWindowSourceMassBound
+
+analytic_bound:
+  upgrades sum increment to 1 + error
+```
+
+The theorem in DKMK-011C should be only a wrapper:
+
+```text
+TruncationEnvelopeEstimate
+  -> TailWindowSourceMassBound
+       .finiteStepTail_weightedHitMass_le_one_add_error
+  -> weightedHitMass <= 1 + error
+```
+
+No dyadic/logarithmic specialization should be added yet.

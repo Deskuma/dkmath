@@ -240,3 +240,31 @@ Archive
      truncation envelope 候補を整理する。
 
 ---
+
+### 日時: 2026/06/02 07:00 JST (DKMK-011B envelope inventory 追加)
+
+1. 目的:
+   - DKMK-011B として、`FiniteStepTailAnalyticBound` を供給する
+     finite envelope data の候補を整理する。
+2. 実施:
+   - `roadmap-DKMK-011.md` に Envelope Candidate Inventory を追加した。
+   - single-window、finite-step monotone、dyadic band、logarithmic band、
+     externally supplied increment list の候補を比較した。
+   - `threshold` は source envelope の activation data、
+     `increment` は analytic total estimate の data として役割を分けた。
+   - 最初の Lean 実装は externally supplied finite-step contract に寄せ、
+     dyadic/logarithmic specialization は後段へ回す方針を記録した。
+3. 結論:
+   - DKMK-011B は docs-only inventory として完了した。
+   - DKMK-011C では `TruncationEnvelopeEstimate` 型の薄い Prop contract を
+     `SourceMassTruncation.lean` へ追加するのが自然である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-011.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-011C として、`increment_nonneg` と
+     `FiniteStepTailAnalyticBound` を束ねる externally supplied contract を追加する。
+
+---
