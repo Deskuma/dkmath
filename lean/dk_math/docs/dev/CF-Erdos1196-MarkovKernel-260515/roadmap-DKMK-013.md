@@ -309,3 +309,54 @@ It should not add:
 - a big-O statement;
 - a logarithmic threshold provider;
 - a dyadic-specific hitting route theorem.
+
+## 10. DKMK-013C Lean Contract
+
+DKMK-013C adds the small Lean contract fixed by DKMK-013B:
+
+```lean
+DyadicBandAnalyticEstimate
+```
+
+The structure stores only:
+
+```text
+increment_nonneg
+total_le_one_add_error
+```
+
+It does not store:
+
+```text
+steps
+threshold
+```
+
+because these are derived by the dyadic range provider:
+
+```text
+steps     = Finset.range (K + 1)
+threshold = fun k : Nat => x * 2^k
+```
+
+DKMK-013C also adds:
+
+```lean
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+This theorem is a wrapper around:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+and passes:
+
+```text
+H.increment_nonneg
+H.total_le_one_add_error
+```
+
+No route theorem, computed increment formula, Mertens theorem, big-O
+statement, or logarithmic threshold provider is added.

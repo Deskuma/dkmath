@@ -49,6 +49,20 @@ structure TruncationEnvelopeEstimate
   increment_nonneg : ∀ i ∈ steps, 0 ≤ increment i
   analytic_bound : FiniteStepTailAnalyticBound steps increment error
 
+/--
+Analytic-side contract for dyadic band estimates.
+
+This records exactly the two analytic facts needed to feed the dyadic range
+provider: nonnegative band increments and a total `1 + error` bound.
+-/
+structure DyadicBandAnalyticEstimate
+    (x K : ℕ) (increment : ℕ → ℚ) (error : ℝ) : Prop where
+  increment_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  total_le_one_add_error :
+    ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+      1 + error
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -236,5 +250,24 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
     H.analytic_bound
 
 end TruncationEnvelopeEstimate
+
+namespace DyadicBandAnalyticEstimate
+
+/--
+Turn an analytic dyadic band estimate into the truncation envelope consumed by
+the existing finite-step route theorem.
+-/
+theorem toTruncationEnvelopeEstimate
+    {x K : ℕ} {increment : ℕ → ℚ} {error : ℝ}
+    (H : DyadicBandAnalyticEstimate x K increment error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  TruncationEnvelopeEstimate.dyadicRange
+    x K increment H.increment_nonneg H.total_le_one_add_error
+
+end DyadicBandAnalyticEstimate
 
 end DkMath.NumberTheory.PrimitiveSet

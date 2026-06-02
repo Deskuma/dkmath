@@ -608,3 +608,31 @@ Archive
      `toTruncationEnvelopeEstimate` を薄い wrapper として追加する。
 
 ---
+
+### 日時: 2026/06/02 22:56 JST (DKMK-013C Lean contract 追加)
+
+1. 目的:
+   - DKMK-013C として、DKMK-013B で固定した
+     `DyadicBandAnalyticEstimate` と bridge theorem を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate` を追加した。
+   - fields は `increment_nonneg` と `total_le_one_add_error` のみにした。
+   - `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` を追加し、
+     `TruncationEnvelopeEstimate.dyadicRange` へ渡す薄い wrapper とした。
+   - `roadmap-DKMK-013.md` に DKMK-013C Lean Contract の実装メモを追記した。
+3. 結論:
+   - dyadic analytic estimate contract から DKMK-012 の dyadic provider へ渡す
+     Lean 上の入口ができた。
+   - route theorem、computed increment formula、Mertens、big-O、
+     logarithmic threshold provider は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-013D として、`DyadicBandAnalyticEstimate` の usage summary を
+     docs 上で整理する。
+
+---
