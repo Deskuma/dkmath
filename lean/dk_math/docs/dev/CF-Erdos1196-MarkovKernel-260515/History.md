@@ -381,3 +381,171 @@ Archive
      具体的な analytic envelope estimate へ進むかを決める。
 
 ---
+
+### 日時: 2026/06/02 07:30 JST (DKMK-012A roadmap 追加)
+
+1. 目的:
+   - DKMK-011 で固定した `TruncationEnvelopeEstimate` の入口に対して、
+     dyadic / logarithmic band provider design の章を開始する。
+2. 実施:
+   - `roadmap-DKMK-012.md` を追加した。
+   - DKMK-012 の主題を、route theorem の変更ではなく
+     `TruncationEnvelopeEstimate` を作る concrete provider design として整理した。
+   - 最初の方向は dyadic provider design とし、logarithmic band は
+     real-to-Nat rounding や log/exp infrastructure が必要なため後段へ回した。
+   - `steps = Finset.range (K + 1)`,
+     `threshold = fun k => x * 2^k`,
+     `increment` と `error` は外部供給とする案を記録した。
+3. 結論:
+   - DKMK-012A は docs-only roadmap として完了した。
+   - 次は DKMK-012B として、dyadic provider の data / theorem shape を
+     docs 上で確定する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012B として、dyadic provider docs を追加し、
+     Lean theorem へ入る前に data shape を確認する。
+
+---
+
+### 日時: 2026/06/02 13:54 JST (DKMK-012B dyadic provider shape docs 追加)
+
+1. 目的:
+   - DKMK-012B として、dyadic provider の data / theorem shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012B Dyadic Provider Shape を追加した。
+   - `steps = Finset.range (K + 1)`,
+     `threshold = fun k => x * 2^k` を固定した。
+   - `increment` と `error` は外部供給とし、`hinc` と `hbound` から
+     `TruncationEnvelopeEstimate` を構成する方針を記録した。
+   - theorem 名は `TruncationEnvelopeEstimate.dyadicRange` とし、
+     route theorem は変更しない方針を明記した。
+3. 結論:
+   - DKMK-012B は docs-only provider shape 固定として完了した。
+   - 次は DKMK-012C として、`SourceMassTruncation.lean` に
+     `dyadicRange` provider を追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012C として、`TruncationEnvelopeEstimate.dyadicRange` を
+     薄い packaging theorem として追加する。
+
+---
+
+### 日時: 2026/06/02 14:28 JST (DKMK-012C dyadicRange provider 追加)
+
+1. 目的:
+   - DKMK-012C として、DKMK-012B で固定した dyadic range provider を
+     Lean 上に薄い packaging theorem として追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `TruncationEnvelopeEstimate.dyadicRange` を追加した。
+   - `steps = Finset.range (K + 1)` と
+     `threshold = fun k : ℕ => x * 2^k` を固定した。
+   - `increment` と `error` は外部供給のままとし、`hinc` と `hbound` から
+     `TruncationEnvelopeEstimate` を構成した。
+   - `roadmap-DKMK-012.md` に DKMK-012C Lean Provider の実装メモを追記した。
+3. 結論:
+   - dyadic range data から `TruncationEnvelopeEstimate` を作る入口が
+     Lean 上で利用可能になった。
+   - route theorem、logarithmic provider、Mertens / big-O statement、
+     computed increment formula は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012D として、dyadicRange から既存 route theorem へ渡す
+     usage summary を docs 上で整理する。
+
+---
+
+### 日時: 2026/06/02 14:33 JST (DKMK-012D usage summary 追加)
+
+1. 目的:
+   - DKMK-012D として、`TruncationEnvelopeEstimate.dyadicRange` から
+     既存 route theorem へ渡す使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012D Usage Summary を追加した。
+   - dyadic data、proof input、provider、route、result の流れを整理した。
+   - `hinc` は finite-step source envelope の非負性、
+     `hbound` は analytic total estimate を担うことを明記した。
+   - dyadic-specific route theorem、logarithmic provider、Mertens / big-O、
+     computed increment formula は追加しない方針を記録した。
+3. 結論:
+   - `dyadicRange` の使用経路は docs 上で
+     `weightedHitMass <= 1 + error` まで明確になった。
+   - DKMK-012D は docs-only usage summary として完了した。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `increment` と `hbound` を供給する analytic estimate の形を検討する。
+
+---
+
+### 日時: 2026/06/02 14:45 JST (DKMK-012E increment / hbound design 追加)
+
+1. 目的:
+   - DKMK-012E として、`dyadicRange` が外部入力として受け取る
+     `increment` と `hbound` の解析的意味を docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012E Increment / hbound Design を追加した。
+   - `increment k` は第 k dyadic band の analytic upper envelope を表す
+     外部供給の rational band weight として読む方針を記録した。
+   - `hinc` は finite-step source mass construction の非負性、
+     `hbound` は有限 band envelope の total estimate を担うことを明記した。
+   - candidate source として externally supplied band weights、
+     dyadic tail upper envelope、later logarithmic refinement、
+     concrete number-theoretic estimate を分けて記録した。
+3. 結論:
+   - DKMK-012 の provider plumbing から analytic input design へ移る境界が
+     docs 上で明確になった。
+   - formula、Mertens、big-O、logarithmic provider、dyadic-specific route theorem は
+     まだ追加しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012 を report で閉じるか、最初の toy analytic provider を
+     追加するか判断する。
+
+---
+
+### 日時: 2026/06/02 16:06 JST (DKMK-012F report / handoff 追加)
+
+1. 目的:
+   - DKMK-012F として、dyadic provider design の章を report にまとめ、
+     次章 DKMK-013 へ引き渡す。
+2. 実施:
+   - `report-DKMK-012.md` を追加した。
+   - DKMK-012A-E の到達点として、`dyadicRange` の data shape、
+     Lean provider、usage summary、`increment` / `hbound` design を整理した。
+   - `roadmap-DKMK-012.md` に DKMK-012F Report / Handoff を追記した。
+   - DKMK-012 では追加 toy analytic provider を増やさず、
+     `increment` と `hbound` の中身は DKMK-013 へ送る方針を記録した。
+3. 結論:
+   - DKMK-012 は dyadic band provider の器を固定する章として一区切りになった。
+   - 次は DKMK-013 として、dyadic tail upper envelope design へ進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-013 の roadmap を作り、abstract dyadic analytic estimate contract を
+     検討する。
+
+---
