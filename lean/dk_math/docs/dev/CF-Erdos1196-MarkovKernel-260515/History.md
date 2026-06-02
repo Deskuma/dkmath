@@ -467,3 +467,29 @@ Archive
      usage summary を docs 上で整理する。
 
 ---
+
+### 日時: 2026/06/02 14:33 JST (DKMK-012D usage summary 追加)
+
+1. 目的:
+   - DKMK-012D として、`TruncationEnvelopeEstimate.dyadicRange` から
+     既存 route theorem へ渡す使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012D Usage Summary を追加した。
+   - dyadic data、proof input、provider、route、result の流れを整理した。
+   - `hinc` は finite-step source envelope の非負性、
+     `hbound` は analytic total estimate を担うことを明記した。
+   - dyadic-specific route theorem、logarithmic provider、Mertens / big-O、
+     computed increment formula は追加しない方針を記録した。
+3. 結論:
+   - `dyadicRange` の使用経路は docs 上で
+     `weightedHitMass <= 1 + error` まで明確になった。
+   - DKMK-012D は docs-only usage summary として完了した。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `increment` と `hbound` を供給する analytic estimate の形を検討する。
+
+---

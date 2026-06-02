@@ -423,3 +423,101 @@ dyadicRange
   -> TruncationEnvelopeEstimate
   -> TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
 ```
+
+## 10. DKMK-012D Usage Summary
+
+DKMK-012D records how the dyadic provider is used.
+
+No new Lean route theorem is needed for this step.
+
+### Input data
+
+The dyadic data are:
+
+```text
+x         : Nat
+K         : Nat
+increment : Nat -> Q
+error     : R
+```
+
+They determine:
+
+```text
+steps     = Finset.range (K + 1)
+threshold = fun k : Nat => x * 2^k
+```
+
+### Proof inputs
+
+The provider needs exactly two proof inputs:
+
+```text
+hinc:
+  forall k in Finset.range (K + 1), 0 <= increment k
+
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+    1 + error
+```
+
+Their roles are:
+
+```text
+hinc:
+  finite-step source envelope nonnegativity
+
+hbound:
+  analytic total estimate
+```
+
+### Provider
+
+The data and proof inputs produce:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange x K increment hinc hbound
+```
+
+with target:
+
+```lean
+TruncationEnvelopeEstimate
+  (Finset.range (K + 1))
+  (fun k : Nat => x * 2^k)
+  increment
+  error
+```
+
+### Route
+
+The resulting `TruncationEnvelopeEstimate` is consumed by the existing route:
+
+```lean
+TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+The combined flow is:
+
+```text
+dyadic data
+  -> hinc and hbound
+  -> TruncationEnvelopeEstimate.dyadicRange
+  -> TruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+  -> weightedHitMass <= 1 + error
+```
+
+### Decision
+
+DKMK-012D is documentation only.
+
+It should not add:
+
+- a dyadic-specific route theorem;
+- a logarithmic provider;
+- a Mertens or big-O statement;
+- a computed formula for `increment`.
+
+The next technical question is what analytic estimate should supply
+`increment` and `hbound`.
