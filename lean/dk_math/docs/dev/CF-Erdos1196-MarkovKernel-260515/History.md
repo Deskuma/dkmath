@@ -381,3 +381,32 @@ Archive
      具体的な analytic envelope estimate へ進むかを決める。
 
 ---
+
+### 日時: 2026/06/02 07:30 JST (DKMK-012A roadmap 追加)
+
+1. 目的:
+   - DKMK-011 で固定した `TruncationEnvelopeEstimate` の入口に対して、
+     dyadic / logarithmic band provider design の章を開始する。
+2. 実施:
+   - `roadmap-DKMK-012.md` を追加した。
+   - DKMK-012 の主題を、route theorem の変更ではなく
+     `TruncationEnvelopeEstimate` を作る concrete provider design として整理した。
+   - 最初の方向は dyadic provider design とし、logarithmic band は
+     real-to-Nat rounding や log/exp infrastructure が必要なため後段へ回した。
+   - `steps = Finset.range (K + 1)`,
+     `threshold = fun k => x * 2^k`,
+     `increment` と `error` は外部供給とする案を記録した。
+3. 結論:
+   - DKMK-012A は docs-only roadmap として完了した。
+   - 次は DKMK-012B として、dyadic provider の data / theorem shape を
+     docs 上で確定する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012B として、dyadic provider docs を追加し、
+     Lean theorem へ入る前に data shape を確認する。
+
+---
