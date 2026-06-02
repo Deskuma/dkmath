@@ -603,3 +603,37 @@ DKMK-012E should not add:
 The next step after this design note is to decide whether DKMK-012 closes with
 a report, or whether it should add a first toy analytic provider for
 `increment` and `hbound`.
+
+## 12. DKMK-012F Report / Handoff
+
+DKMK-012F closes the dyadic provider design chapter with
+`report-DKMK-012.md`.
+
+The chapter closes because the provider plumbing is now fixed:
+
+```text
+dyadic range data
+  -> TruncationEnvelopeEstimate.dyadicRange
+  -> existing DKMK-011 route theorem
+```
+
+The chapter does not add another toy analytic provider.  DKMK-011E already
+contains `TruncationEnvelopeEstimate.singleWindow`, and DKMK-012C contains the
+dyadic range provider.
+
+The remaining work belongs to the analytic layer:
+
+```text
+increment k をどう選ぶか
+hbound をどう証明するか
+```
+
+The next natural chapter is:
+
+```text
+DKMK-013:
+  dyadic tail upper envelope design
+```
+
+The recommended DKMK-013 first step is to define an abstract dyadic analytic
+estimate contract before attempting Mertens, big-O, or logarithmic thresholds.
