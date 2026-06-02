@@ -157,13 +157,13 @@ TruncationEnvelopeEstimate steps threshold increment error
 If DKMK-012B is accepted, add a small Lean provider:
 
 ```lean
-TruncationEnvelopeEstimate.dyadic
+TruncationEnvelopeEstimate.dyadicRange
 ```
 
 Expected shape:
 
 ```lean
-theorem TruncationEnvelopeEstimate.dyadic
+theorem TruncationEnvelopeEstimate.dyadicRange
     (x K : Nat) (increment : Nat -> Q)
     (hinc : forall k in Finset.range (K + 1), 0 <= increment k)
     {error : R}
@@ -185,7 +185,7 @@ Document the flow:
 
 ```text
 dyadic data
-  -> TruncationEnvelopeEstimate.dyadic
+  -> TruncationEnvelopeEstimate.dyadicRange
   -> TruncationEnvelopeEstimate route theorem
   -> weightedHitMass <= 1 + error
 ```
@@ -252,3 +252,128 @@ dyadic provider docs
 ```
 
 It should confirm the exact data and theorem shape before Lean implementation.
+
+## 7. DKMK-012B Dyadic Provider Shape
+
+DKMK-012B fixes the first concrete band-provider shape.
+
+The provider is dyadic and range-indexed:
+
+```text
+steps = Finset.range (K + 1)
+```
+
+The data are:
+
+```text
+x         : Nat
+K         : Nat
+increment : Nat -> Q
+error     : R
+```
+
+The derived source-envelope threshold is:
+
+```text
+threshold k = x * 2^k
+```
+
+The analytic information remains external:
+
+```text
+hinc:
+  forall k in Finset.range (K + 1), 0 <= increment k
+
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+    1 + error
+```
+
+These are exactly the two fields needed by `TruncationEnvelopeEstimate`:
+
+```text
+hinc:
+  increment_nonneg
+
+hbound:
+  FiniteStepTailAnalyticBound.total_le_one_add_error
+```
+
+### Preferred theorem name
+
+Use:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+instead of `dyadic`.
+
+Reason:
+
+```text
+dyadicRange names both choices:
+  dyadic thresholds
+  range-indexed finite steps
+```
+
+### Expected Lean shape
+
+```lean
+theorem TruncationEnvelopeEstimate.dyadicRange
+    (x K : Nat) (increment : Nat -> Q)
+    (hinc : forall k in Finset.range (K + 1), 0 <= increment k)
+    {error : R}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+        1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : Nat => x * 2^k)
+      increment
+      error
+```
+
+The proof should be a packaging proof only:
+
+```text
+increment_nonneg := hinc
+analytic_bound  := FiniteStepTailAnalyticBound from hbound
+```
+
+No route theorem should change.
+
+### Why not logarithmic yet
+
+The dyadic provider avoids:
+
+- real-to-natural rounding;
+- `Real.exp` / `Real.log` imports;
+- floor/ceiling choices;
+- proving monotonicity or comparison lemmas for rounded thresholds.
+
+The logarithmic provider should wait until this dyadic provider is stable.
+
+## 8. DKMK-012B Decision
+
+DKMK-012C should add only:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+It should not add:
+
+- a dyadic-specific route theorem;
+- a logarithmic provider;
+- any Mertens or big-O statement;
+- computed increments from log formulas.
+
+The route remains:
+
+```text
+dyadicRange
+  -> TruncationEnvelopeEstimate
+  -> existing DKMK-011 route theorem
+  -> weightedHitMass <= 1 + error
+```

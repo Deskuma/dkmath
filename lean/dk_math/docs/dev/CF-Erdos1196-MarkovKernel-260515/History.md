@@ -410,3 +410,31 @@ Archive
      Lean theorem へ入る前に data shape を確認する。
 
 ---
+
+### 日時: 2026/06/02 13:54 JST (DKMK-012B dyadic provider shape docs 追加)
+
+1. 目的:
+   - DKMK-012B として、dyadic provider の data / theorem shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012B Dyadic Provider Shape を追加した。
+   - `steps = Finset.range (K + 1)`,
+     `threshold = fun k => x * 2^k` を固定した。
+   - `increment` と `error` は外部供給とし、`hinc` と `hbound` から
+     `TruncationEnvelopeEstimate` を構成する方針を記録した。
+   - theorem 名は `TruncationEnvelopeEstimate.dyadicRange` とし、
+     route theorem は変更しない方針を明記した。
+3. 結論:
+   - DKMK-012B は docs-only provider shape 固定として完了した。
+   - 次は DKMK-012C として、`SourceMassTruncation.lean` に
+     `dyadicRange` provider を追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012C として、`TruncationEnvelopeEstimate.dyadicRange` を
+     薄い packaging theorem として追加する。
+
+---
