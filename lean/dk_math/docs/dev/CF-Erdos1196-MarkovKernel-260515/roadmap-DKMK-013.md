@@ -360,3 +360,97 @@ H.total_le_one_add_error
 
 No route theorem, computed increment formula, Mertens theorem, big-O
 statement, or logarithmic threshold provider is added.
+
+## 11. DKMK-013D Usage Summary
+
+DKMK-013D records how the dyadic analytic contract is used.
+
+No new Lean route theorem is needed for this step.
+
+### Analytic target
+
+Future analytic work should target:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+This contract means:
+
+```text
+increment_nonneg:
+  every dyadic band increment is nonnegative
+
+total_le_one_add_error:
+  the total dyadic band increment is <= 1 + error
+```
+
+It is the analytic-input layer promise.
+
+### Provider bridge
+
+The contract is converted to the provider-layer input by:
+
+```lean
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+The bridge returns:
+
+```lean
+TruncationEnvelopeEstimate
+  (Finset.range (K + 1))
+  (fun k : Nat => x * 2^k)
+  increment
+  error
+```
+
+It is only a wrapper around:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+### Route consumer
+
+The resulting `TruncationEnvelopeEstimate` is consumed by:
+
+```lean
+TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+The complete flow is:
+
+```text
+H : DyadicBandAnalyticEstimate x K increment error
+  -> H.toTruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+  -> weightedHitMass <= 1 + error
+```
+
+### Layer boundary
+
+The roles are:
+
+```text
+DyadicBandAnalyticEstimate:
+  analytic-side target
+
+TruncationEnvelopeEstimate:
+  route-side input
+
+toTruncationEnvelopeEstimate:
+  bridge from analytic target to route input
+```
+
+DKMK-013D should not add:
+
+- a route theorem;
+- a computed formula for `increment k`;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider.
+
+The next technical question is what concrete provider should prove
+`DyadicBandAnalyticEstimate`.

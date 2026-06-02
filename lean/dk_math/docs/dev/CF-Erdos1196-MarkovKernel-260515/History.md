@@ -636,3 +636,31 @@ Archive
      docs 上で整理する。
 
 ---
+
+### 日時: 2026/06/02 23:02 JST (DKMK-013D usage summary 追加)
+
+1. 目的:
+   - DKMK-013D として、`DyadicBandAnalyticEstimate` から既存 route theorem へ
+     渡す使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013D Usage Summary を追加した。
+   - `DyadicBandAnalyticEstimate` を analytic-side target、
+     `TruncationEnvelopeEstimate` を route-side input、
+     `toTruncationEnvelopeEstimate` を bridge として整理した。
+   - `H : DyadicBandAnalyticEstimate x K increment error` から
+     `weightedHitMass <= 1 + error` へ進む流れを記録した。
+   - route theorem、computed increment formula、Mertens、big-O、
+     logarithmic threshold provider は追加しない方針を明記した。
+3. 結論:
+   - DKMK-013D は docs-only usage summary として完了した。
+   - 次の技術課題は `DyadicBandAnalyticEstimate` を証明する concrete provider を
+     どう設計するかである。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete provider の候補を整理し、最初に実装する provider shape を決める。
+
+---
