@@ -867,3 +867,31 @@ Archive
      majorant-envelope provider のどちらを優先するか決める。
 
 ---
+
+### 日時: 2026/06/03 03:51 JST (DKMK-014B majorant provider shape docs 追加)
+
+1. 目的:
+   - DKMK-014B として、first non-constant provider の exact shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に DKMK-014B Majorant Provider Shape を追加した。
+   - first non-constant provider は decreasing provider ではなく
+     majorant-envelope provider を優先する方針にした。
+   - theorem 名を `DyadicBandAnalyticEstimate.ofMajorant` とした。
+   - `increment <= majorant` の pointwise bound と majorant total bound から
+     `DyadicBandAnalyticEstimate` を作る statement を記録した。
+   - decreasing condition は、後続 theorem が消費するまで field 化しない方針を
+     明記した。
+3. 結論:
+   - DKMK-014B は docs-only exact shape review として完了した。
+   - 次は DKMK-014C として、`ofMajorant` を薄い Lean provider として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Rat 側の `Finset.sum_le_sum` と Real への cast monotonicity で
+     `ofMajorant` を実装する。
+
+---

@@ -255,3 +255,136 @@ It should decide whether the first non-constant provider is:
 
 The decision should focus on which assumptions are actually consumed to prove
 `DyadicBandAnalyticEstimate`.
+
+## 8. DKMK-014B Majorant Provider Shape
+
+DKMK-014B fixes the first non-constant provider direction.
+
+The first provider should be a majorant-envelope provider, not a decreasing
+provider.
+
+Reason:
+
+```text
+majorant assumptions directly produce the total estimate;
+decreasing assumptions are only useful after a theorem consumes them.
+```
+
+### Chosen provider
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+This theorem should build:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+from:
+
+```text
+increment nonnegativity
+pointwise increment <= majorant
+majorant total bound
+```
+
+### Expected Lean shape
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofMajorant
+    (x K : Nat)
+    (increment majorant : Nat -> Q)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hle :
+      forall k in Finset.range (K + 1), increment k <= majorant k)
+    {error : R}
+    (hmajorant_bound :
+      ((Finset.sum (Finset.range (K + 1)) majorant : Q) : R) <=
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+### Proof plan
+
+The first field is direct:
+
+```text
+increment_nonneg := hinc_nonneg
+```
+
+The second field should use Rat-side sum comparison:
+
+```text
+Finset.sum_le_sum hle
+```
+
+to prove:
+
+```text
+Finset.sum (Finset.range (K + 1)) increment
+  <= Finset.sum (Finset.range (K + 1)) majorant
+```
+
+Then cast to Real and compose with:
+
+```text
+hmajorant_bound
+```
+
+The intended final route is:
+
+```text
+sum increment <= sum majorant
+sum majorant <= 1 + error
+therefore sum increment <= 1 + error
+```
+
+### Why not decreasing first
+
+A decreasing condition such as:
+
+```text
+increment (k + 1) <= increment k
+```
+
+does not by itself prove:
+
+```text
+sum increment <= 1 + error
+```
+
+It should become a field only when a later theorem consumes it, for example:
+
+```text
+decreasing / decay assumption
+  -> construct a majorant
+  -> ofMajorant
+  -> DyadicBandAnalyticEstimate
+```
+
+### Non-goals
+
+DKMK-014B should not add:
+
+- Lean code;
+- a decreasing provider;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
+
+### Next step
+
+DKMK-014C should implement only:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+If Rat-to-Real cast monotonicity creates friction, keep the statement and proof
+small and avoid adding extra provider fields.
