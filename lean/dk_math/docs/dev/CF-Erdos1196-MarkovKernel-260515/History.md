@@ -780,3 +780,33 @@ Archive
      `constantBand` のみで次の provider design へ進む。
 
 ---
+
+### 日時: 2026/06/02 23:35 JST (DKMK-013I natCastMulBound provider 追加)
+
+1. 目的:
+   - DKMK-013I として、DKMK-013H で固定した
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` を追加した。
+   - `((((K + 1 : ℕ) : ℚ) * c : ℚ) : ℝ) <= 1 + error` 型の bound から
+     `constantBand` へ渡す wrapper とした。
+   - finite-sum simplification は
+     `Finset.sum_const`, `Finset.card_range`, `nsmul_eq_mul` で discharge した。
+   - `roadmap-DKMK-013.md` に DKMK-013I Lean natCastMulBound Provider の
+     実装メモを追記した。
+3. 結論:
+   - constant band provider は caller-facing な Nat-cast-multiply bound からも
+     利用可能になった。
+   - route changes、新 analytic contract、dyadic tail estimates、Mertens / big-O、
+     logarithmic thresholds は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-013J として、decreasing / dyadic tail provider design へ進むか、
+     DKMK-013 の report / handoff に進むか判断する。
+
+---

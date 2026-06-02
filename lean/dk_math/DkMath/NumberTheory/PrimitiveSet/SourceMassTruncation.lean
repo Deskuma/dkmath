@@ -273,6 +273,20 @@ theorem constantBand
   total_le_one_add_error := hbound
 
 /--
+Constant-band provider from the caller-facing bound
+`((K + 1 : ℚ) * c : ℝ) <= 1 + error`.
+-/
+theorem constantBand_of_natCastMulBound
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((((K + 1 : ℕ) : ℚ) * c : ℚ) : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error := by
+  apply constantBand x K c hc
+  simpa [Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hbound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/

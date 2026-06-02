@@ -897,3 +897,49 @@ DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
 
 If the finite-sum identity creates too much friction, keep `constantBand` as the
 only Lean provider and move on to decreasing / dyadic tail provider design.
+
+## 16. DKMK-013I Lean natCastMulBound Provider
+
+DKMK-013I adds:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+```
+
+The theorem uses the shape fixed in DKMK-013H:
+
+```text
+hbound:
+  ((((K + 1 : Nat) : Q) * c : Q) : R) <= 1 + error
+```
+
+and produces:
+
+```lean
+DyadicBandAnalyticEstimate x K (fun _ : Nat => c) error
+```
+
+The implementation calls:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand
+```
+
+and discharges the finite sum with:
+
+```text
+Finset.sum_const
+Finset.card_range
+nsmul_eq_mul
+```
+
+This confirms that the caller-facing Nat-cast-multiply bound is light enough to
+keep as a convenience provider.
+
+This step does not add:
+
+- route changes;
+- a new analytic contract;
+- dyadic tail estimates;
+- Mertens or big-O;
+- logarithmic thresholds.
