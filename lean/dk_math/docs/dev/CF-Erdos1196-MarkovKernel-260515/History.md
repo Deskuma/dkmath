@@ -837,3 +837,33 @@ Archive
      検討する。
 
 ---
+
+### 日時: 2026/06/03 02:33 JST (DKMK-014A roadmap 追加)
+
+1. 目的:
+   - DKMK-014 として、decreasing / dyadic tail provider design の章を開始する。
+   - DKMK-013 で固定した `DyadicBandAnalyticEstimate` に対して、
+     `k`-dependent band provider の設計方針を整理する。
+2. 実施:
+   - `roadmap-DKMK-014.md` を追加した。
+   - DKMK-014 の主題を、route theorem の変更ではなく
+     `DyadicBandAnalyticEstimate` を証明する provider design として整理した。
+   - candidate として externally supplied k-dependent estimate、
+     decreasing band provider、majorant envelope provider、
+     dyadic tail upper envelope、logarithmic refinement を分けた。
+   - monotonicity / decay / majorization は、後続 theorem が消費する場合だけ
+     field にする方針を明記した。
+3. 結論:
+   - DKMK-014A は docs-only roadmap として完了した。
+   - 次は DKMK-014B として、decreasing / majorant provider の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - first non-constant provider として decreasing-band provider と
+     majorant-envelope provider のどちらを優先するか決める。
+
+---
