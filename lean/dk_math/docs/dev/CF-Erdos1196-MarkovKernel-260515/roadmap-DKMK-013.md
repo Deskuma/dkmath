@@ -943,3 +943,31 @@ This step does not add:
 - dyadic tail estimates;
 - Mertens or big-O;
 - logarithmic thresholds.
+
+## 17. DKMK-013J Report / Handoff
+
+DKMK-013J closes the abstract dyadic analytic estimate contract chapter with
+`report-DKMK-013.md`.
+
+The chapter closes because the analytic contract surface and first constant
+providers are now fixed:
+
+```text
+DyadicBandAnalyticEstimate
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+DyadicBandAnalyticEstimate.constantBand
+DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+```
+
+The next work should move beyond constant band providers.
+
+The next natural chapter is:
+
+```text
+DKMK-014:
+  decreasing / dyadic tail provider design
+```
+
+DKMK-014 should first decide the exact shape of a `k`-dependent band provider,
+without changing the existing route theorem and without jumping directly to
+Mertens, big-O, or logarithmic thresholds.

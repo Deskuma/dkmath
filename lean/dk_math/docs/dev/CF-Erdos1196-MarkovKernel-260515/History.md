@@ -810,3 +810,30 @@ Archive
      DKMK-013 の report / handoff に進むか判断する。
 
 ---
+
+### 日時: 2026/06/02 23:39 JST (DKMK-013J report / handoff 追加)
+
+1. 目的:
+   - DKMK-013J として、abstract dyadic analytic estimate contract の章を
+     report にまとめ、次章 DKMK-014 へ引き渡す。
+2. 実施:
+   - `report-DKMK-013.md` を追加した。
+   - DKMK-013A-I の到達点として、`DyadicBandAnalyticEstimate`、
+     bridge theorem、usage summary、constantBand provider、
+     natCastMulBound provider を整理した。
+   - `roadmap-DKMK-013.md` に DKMK-013J Report / Handoff を追記した。
+   - decreasing / dyadic tail provider design は DKMK-014 へ送る方針を記録した。
+3. 結論:
+   - DKMK-013 は abstract dyadic analytic estimate contract と
+     最初の constant provider を固定する章として一区切りになった。
+   - 次は DKMK-014 として、decreasing / dyadic tail provider design へ進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014 の roadmap を作り、`k`-dependent band provider の exact shape を
+     検討する。
+
+---
