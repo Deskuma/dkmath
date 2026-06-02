@@ -803,3 +803,97 @@ This step deliberately does not add:
 - a Mertens theorem;
 - a big-O statement;
 - a logarithmic threshold provider.
+
+## 15. DKMK-013H Constant Band Sum-Bound Shape
+
+DKMK-013H fixes the exact shape for the optional finite-sum simplification
+provider.
+
+This is still a docs-only step.  It does not add Lean code.
+
+### Motivation
+
+`constantBand` currently expects:
+
+```text
+((Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c) : Q) : R) <=
+  1 + error
+```
+
+This is easy for Lean to consume, but callers may naturally have a bound in
+terms of:
+
+```text
+((K + 1 : Nat) : Q) * c
+```
+
+The optional theorem should bridge that caller-facing bound to the existing
+`constantBand` theorem.
+
+### Proposed theorem name
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+```
+
+Reason:
+
+```text
+constantBand:
+  same target as the existing constant provider
+
+of_natCastMulBound:
+  input bound is stated using a Nat-cast count multiplied by c
+```
+
+### Proposed Lean shape
+
+Use an explicit Rat expression before coercing to Real:
+
+```lean
+theorem DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+    (x K : Nat) (c : Q)
+    (hc : 0 <= c)
+    {error : R}
+    (hbound :
+      ((((K + 1 : Nat) : Q) * c : Q) : R) <= 1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : Nat => c) error
+```
+
+The proof should call:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand
+```
+
+after proving the finite-sum identity:
+
+```text
+Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c)
+  = ((K + 1 : Nat) : Q) * c
+```
+
+### Implementation risk
+
+The only expected work is finite-sum and coercion normalization.
+
+The theorem should not introduce:
+
+- route changes;
+- a new analytic contract;
+- computed dyadic tail estimates;
+- Mertens or big-O;
+- logarithmic thresholds.
+
+### Next step
+
+DKMK-013I should try the Lean implementation of:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+```
+
+If the finite-sum identity creates too much friction, keep `constantBand` as the
+only Lean provider and move on to decreasing / dyadic tail provider design.

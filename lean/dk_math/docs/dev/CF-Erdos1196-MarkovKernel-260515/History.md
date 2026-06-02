@@ -750,3 +750,33 @@ Archive
      decreasing / dyadic tail provider design へ進むか判断する。
 
 ---
+
+### 日時: 2026/06/02 23:31 JST (DKMK-013H constantBand sum-bound shape docs 追加)
+
+1. 目的:
+   - DKMK-013H として、constant band provider の optional finite-sum
+     simplification theorem の exact shape を docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013H Constant Band Sum-Bound Shape を
+     追加した。
+   - theorem 名を
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` とした。
+   - input bound は `((((K + 1 : Nat) : Q) * c : Q) : R) <= 1 + error`
+     として、Nat から Q への cast と Real への cast を明示する形にした。
+   - 実装時は `constantBand` に渡すため、
+     `Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c)` の有限和恒等式を
+     discharge する方針を記録した。
+3. 結論:
+   - DKMK-013H は docs-only shape review として完了した。
+   - 次は DKMK-013I として、finite-sum / coercion が軽く通るか Lean 実装を
+     試す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `constantBand_of_natCastMulBound` を Lean 実装し、friction が大きければ
+     `constantBand` のみで次の provider design へ進む。
+
+---
