@@ -549,3 +549,291 @@ Archive
      検討する。
 
 ---
+
+### 日時: 2026/06/02 21:06 JST (DKMK-013A roadmap 追加)
+
+1. 目的:
+   - DKMK-013 として、dyadic tail upper envelope design の章を開始する。
+   - DKMK-012 で固定した `dyadicRange` provider に対して、
+     `increment` と `hbound` を供給する analytic-input layer を設計する。
+2. 実施:
+   - `roadmap-DKMK-013.md` を追加した。
+   - DKMK-013 の主題を、route theorem の変更ではなく
+     abstract dyadic analytic estimate contract の設計として整理した。
+   - candidate structure として `DyadicBandAnalyticEstimate` を記録した。
+   - 想定 bridge として
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` から
+     `TruncationEnvelopeEstimate.dyadicRange` へ渡す構図を記録した。
+3. 結論:
+   - DKMK-013A は docs-only roadmap として完了した。
+   - 次は DKMK-013B として、`DyadicBandAnalyticEstimate` の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - contract 名、配置ファイル、bridge theorem 名、保持する data fields を
+     DKMK-013B で確定する。
+
+---
+
+### 日時: 2026/06/02 22:34 JST (DKMK-013B exact shape docs 追加)
+
+1. 目的:
+   - DKMK-013B として、`DyadicBandAnalyticEstimate` の exact shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013B Exact Shape Decision を追加した。
+   - contract 名を `DyadicBandAnalyticEstimate` とした。
+   - 初期配置は `SourceMassTruncation.lean` とし、将来必要なら別ファイル化する
+     方針を記録した。
+   - fields は `increment_nonneg` と `total_le_one_add_error` のみに絞り、
+     `steps` と `threshold` は derived data として構造体に持たせない方針を
+     明記した。
+   - bridge theorem 名を
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` とした。
+3. 結論:
+   - DKMK-013B は docs-only exact shape review として完了した。
+   - 次は DKMK-013C として、Lean 上に small contract と bridge theorem を
+     追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate` と
+     `toTruncationEnvelopeEstimate` を薄い wrapper として追加する。
+
+---
+
+### 日時: 2026/06/02 22:56 JST (DKMK-013C Lean contract 追加)
+
+1. 目的:
+   - DKMK-013C として、DKMK-013B で固定した
+     `DyadicBandAnalyticEstimate` と bridge theorem を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate` を追加した。
+   - fields は `increment_nonneg` と `total_le_one_add_error` のみにした。
+   - `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` を追加し、
+     `TruncationEnvelopeEstimate.dyadicRange` へ渡す薄い wrapper とした。
+   - `roadmap-DKMK-013.md` に DKMK-013C Lean Contract の実装メモを追記した。
+3. 結論:
+   - dyadic analytic estimate contract から DKMK-012 の dyadic provider へ渡す
+     Lean 上の入口ができた。
+   - route theorem、computed increment formula、Mertens、big-O、
+     logarithmic threshold provider は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-013D として、`DyadicBandAnalyticEstimate` の usage summary を
+     docs 上で整理する。
+
+---
+
+### 日時: 2026/06/02 23:02 JST (DKMK-013D usage summary 追加)
+
+1. 目的:
+   - DKMK-013D として、`DyadicBandAnalyticEstimate` から既存 route theorem へ
+     渡す使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013D Usage Summary を追加した。
+   - `DyadicBandAnalyticEstimate` を analytic-side target、
+     `TruncationEnvelopeEstimate` を route-side input、
+     `toTruncationEnvelopeEstimate` を bridge として整理した。
+   - `H : DyadicBandAnalyticEstimate x K increment error` から
+     `weightedHitMass <= 1 + error` へ進む流れを記録した。
+   - route theorem、computed increment formula、Mertens、big-O、
+     logarithmic threshold provider は追加しない方針を明記した。
+3. 結論:
+   - DKMK-013D は docs-only usage summary として完了した。
+   - 次の技術課題は `DyadicBandAnalyticEstimate` を証明する concrete provider を
+     どう設計するかである。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete provider の候補を整理し、最初に実装する provider shape を決める。
+
+---
+
+### 日時: 2026/06/02 23:13 JST (DKMK-013E provider candidate inventory 追加)
+
+1. 目的:
+   - DKMK-013E として、`DyadicBandAnalyticEstimate` を証明する
+     concrete provider 候補を docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013E Concrete Provider Candidate Inventory を
+     追加した。
+   - externally supplied dyadic estimate、constant band envelope、
+     decreasing dyadic envelope、dyadic tail upper envelope、
+     logarithmic refinement を候補として分けた。
+   - 最初の nontrivial Lean provider 候補として constant band envelope を記録した。
+   - Mertens、big-O、logarithmic threshold provider へはまだ進まない方針を
+     明記した。
+3. 結論:
+   - DKMK-013E は docs-only candidate inventory として完了した。
+   - 次は DKMK-013F として、constant band provider の exact Lean shape を
+     検討する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - constant band provider の有限和評価と coercion をどう statement に
+     収めるか決める。
+
+---
+
+### 日時: 2026/06/02 23:20 JST (DKMK-013F constantBand shape docs 追加)
+
+1. 目的:
+   - DKMK-013F として、constant band provider の exact Lean shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013F Constant Band Provider Shape を
+     追加した。
+   - provider 名を `DyadicBandAnalyticEstimate.constantBand` とした。
+   - statement は `Finset.sum` 形の `hbound` を外部入力として受ける形にした。
+   - `((K + 1 : Nat) : Q) * c` 型の finite-sum simplification と coercion は
+     後段の optional theorem に分ける方針を記録した。
+3. 結論:
+   - DKMK-013F は docs-only exact shape review として完了した。
+   - 次は DKMK-013G として、`constantBand` を薄い Lean provider として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate.constantBand` を
+     `Finset.sum`-form `hbound` で実装する。
+
+---
+
+### 日時: 2026/06/02 23:25 JST (DKMK-013G constantBand provider 追加)
+
+1. 目的:
+   - DKMK-013G として、DKMK-013F で固定した
+     `DyadicBandAnalyticEstimate.constantBand` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.constantBand` を追加した。
+   - `hc : 0 ≤ c` から constant increment の非負性を埋めた。
+   - `Finset.sum` 形の `hbound` をそのまま
+     `total_le_one_add_error` に渡した。
+   - `roadmap-DKMK-013.md` に DKMK-013G Lean constantBand Provider の
+     実装メモを追記した。
+3. 結論:
+   - constant band envelope から `DyadicBandAnalyticEstimate` を作る
+     最初の nontrivial provider が Lean 上で利用可能になった。
+   - finite-sum simplification、computed `((K + 1 : Nat) : Q) * c` bound、
+     route theorem、Mertens、big-O、logarithmic threshold provider は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - optional finite-sum simplification theorem を追加するか、
+     decreasing / dyadic tail provider design へ進むか判断する。
+
+---
+
+### 日時: 2026/06/02 23:31 JST (DKMK-013H constantBand sum-bound shape docs 追加)
+
+1. 目的:
+   - DKMK-013H として、constant band provider の optional finite-sum
+     simplification theorem の exact shape を docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013H Constant Band Sum-Bound Shape を
+     追加した。
+   - theorem 名を
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` とした。
+   - input bound は `((((K + 1 : Nat) : Q) * c : Q) : R) <= 1 + error`
+     として、Nat から Q への cast と Real への cast を明示する形にした。
+   - 実装時は `constantBand` に渡すため、
+     `Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c)` の有限和恒等式を
+     discharge する方針を記録した。
+3. 結論:
+   - DKMK-013H は docs-only shape review として完了した。
+   - 次は DKMK-013I として、finite-sum / coercion が軽く通るか Lean 実装を
+     試す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `constantBand_of_natCastMulBound` を Lean 実装し、friction が大きければ
+     `constantBand` のみで次の provider design へ進む。
+
+---
+
+### 日時: 2026/06/02 23:35 JST (DKMK-013I natCastMulBound provider 追加)
+
+1. 目的:
+   - DKMK-013I として、DKMK-013H で固定した
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound` を追加した。
+   - `((((K + 1 : ℕ) : ℚ) * c : ℚ) : ℝ) <= 1 + error` 型の bound から
+     `constantBand` へ渡す wrapper とした。
+   - finite-sum simplification は
+     `Finset.sum_const`, `Finset.card_range`, `nsmul_eq_mul` で discharge した。
+   - `roadmap-DKMK-013.md` に DKMK-013I Lean natCastMulBound Provider の
+     実装メモを追記した。
+3. 結論:
+   - constant band provider は caller-facing な Nat-cast-multiply bound からも
+     利用可能になった。
+   - route changes、新 analytic contract、dyadic tail estimates、Mertens / big-O、
+     logarithmic thresholds は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-013J として、decreasing / dyadic tail provider design へ進むか、
+     DKMK-013 の report / handoff に進むか判断する。
+
+---
+
+### 日時: 2026/06/02 23:39 JST (DKMK-013J report / handoff 追加)
+
+1. 目的:
+   - DKMK-013J として、abstract dyadic analytic estimate contract の章を
+     report にまとめ、次章 DKMK-014 へ引き渡す。
+2. 実施:
+   - `report-DKMK-013.md` を追加した。
+   - DKMK-013A-I の到達点として、`DyadicBandAnalyticEstimate`、
+     bridge theorem、usage summary、constantBand provider、
+     natCastMulBound provider を整理した。
+   - `roadmap-DKMK-013.md` に DKMK-013J Report / Handoff を追記した。
+   - decreasing / dyadic tail provider design は DKMK-014 へ送る方針を記録した。
+3. 結論:
+   - DKMK-013 は abstract dyadic analytic estimate contract と
+     最初の constant provider を固定する章として一区切りになった。
+   - 次は DKMK-014 として、decreasing / dyadic tail provider design へ進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014 の roadmap を作り、`k`-dependent band provider の exact shape を
+     検討する。
+
+---

@@ -49,6 +49,20 @@ structure TruncationEnvelopeEstimate
   increment_nonneg : ∀ i ∈ steps, 0 ≤ increment i
   analytic_bound : FiniteStepTailAnalyticBound steps increment error
 
+/--
+Analytic-side contract for dyadic band estimates.
+
+This records exactly the two analytic facts needed to feed the dyadic range
+provider: nonnegative band increments and a total `1 + error` bound.
+-/
+structure DyadicBandAnalyticEstimate
+    (x K : ℕ) (increment : ℕ → ℚ) (error : ℝ) : Prop where
+  increment_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  total_le_one_add_error :
+    ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+      1 + error
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -236,5 +250,57 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
     H.analytic_bound
 
 end TruncationEnvelopeEstimate
+
+namespace DyadicBandAnalyticEstimate
+
+/--
+Constant-band provider for dyadic analytic estimates.
+
+This keeps the finite-sum bound external, avoiding finite-sum simplification
+and Nat/Rat/Real coercion work in the first provider theorem.
+-/
+theorem constantBand
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) (fun _ : ℕ => c) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error where
+  increment_nonneg := by
+    intro _k _hk
+    exact hc
+  total_le_one_add_error := hbound
+
+/--
+Constant-band provider from the caller-facing bound
+`((K + 1 : ℚ) * c : ℝ) <= 1 + error`.
+-/
+theorem constantBand_of_natCastMulBound
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((((K + 1 : ℕ) : ℚ) * c : ℚ) : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error := by
+  apply constantBand x K c hc
+  simpa [Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hbound
+
+/--
+Turn an analytic dyadic band estimate into the truncation envelope consumed by
+the existing finite-step route theorem.
+-/
+theorem toTruncationEnvelopeEstimate
+    {x K : ℕ} {increment : ℕ → ℚ} {error : ℝ}
+    (H : DyadicBandAnalyticEstimate x K increment error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  TruncationEnvelopeEstimate.dyadicRange
+    x K increment H.increment_nonneg H.total_le_one_add_error
+
+end DyadicBandAnalyticEstimate
 
 end DkMath.NumberTheory.PrimitiveSet
