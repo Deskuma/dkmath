@@ -549,3 +549,32 @@ Archive
      検討する。
 
 ---
+
+### 日時: 2026/06/02 21:06 JST (DKMK-013A roadmap 追加)
+
+1. 目的:
+   - DKMK-013 として、dyadic tail upper envelope design の章を開始する。
+   - DKMK-012 で固定した `dyadicRange` provider に対して、
+     `increment` と `hbound` を供給する analytic-input layer を設計する。
+2. 実施:
+   - `roadmap-DKMK-013.md` を追加した。
+   - DKMK-013 の主題を、route theorem の変更ではなく
+     abstract dyadic analytic estimate contract の設計として整理した。
+   - candidate structure として `DyadicBandAnalyticEstimate` を記録した。
+   - 想定 bridge として
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` から
+     `TruncationEnvelopeEstimate.dyadicRange` へ渡す構図を記録した。
+3. 結論:
+   - DKMK-013A は docs-only roadmap として完了した。
+   - 次は DKMK-013B として、`DyadicBandAnalyticEstimate` の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - contract 名、配置ファイル、bridge theorem 名、保持する data fields を
+     DKMK-013B で確定する。
+
+---
