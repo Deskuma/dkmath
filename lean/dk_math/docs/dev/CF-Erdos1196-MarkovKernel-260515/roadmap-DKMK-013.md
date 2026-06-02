@@ -185,3 +185,127 @@ It should decide:
   `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate`;
 - whether the contract should store only `hinc` and `hbound`, or also derived
   data such as `steps` and `threshold`.
+
+## 9. DKMK-013B Exact Shape Decision
+
+DKMK-013B fixes the first Lean shape for the abstract dyadic analytic estimate
+contract.
+
+### Contract name
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate
+```
+
+Reason:
+
+```text
+DyadicBand:
+  the estimate is attached to the dyadic band family
+
+AnalyticEstimate:
+  the contract lives in the analytic-input layer, not the route layer
+```
+
+### Placement
+
+Place the first version in:
+
+```text
+SourceMassTruncation.lean
+```
+
+Reason:
+
+```text
+The contract is still small and sits next to TruncationEnvelopeEstimate.
+```
+
+If later DKMK-013 work adds logarithmic refinements or several
+number-theoretic estimate providers, a separate file can be introduced then.
+
+### Fields
+
+The structure should store only the two analytic facts needed by
+`TruncationEnvelopeEstimate.dyadicRange`:
+
+```lean
+structure DyadicBandAnalyticEstimate
+    (x K : Nat) (increment : Nat -> Q) (error : R) : Prop where
+  increment_nonneg :
+    forall k in Finset.range (K + 1), 0 <= increment k
+  total_le_one_add_error :
+    ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+      1 + error
+```
+
+Do not store:
+
+```text
+steps
+threshold
+```
+
+Reason:
+
+```text
+steps     = Finset.range (K + 1)
+threshold = fun k : Nat => x * 2^k
+```
+
+are derived from `x` and `K` in the dyadic range provider.
+
+### Bridge theorem
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+Expected Lean shape:
+
+```lean
+theorem DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+    {x K : Nat} {increment : Nat -> Q} {error : R}
+    (H : DyadicBandAnalyticEstimate x K increment error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : Nat => x * 2^k)
+      increment
+      error
+```
+
+The proof should be a wrapper around:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+using:
+
+```text
+H.increment_nonneg
+H.total_le_one_add_error
+```
+
+### Non-goals
+
+DKMK-013B does not add Lean code.
+
+DKMK-013C should add only:
+
+```text
+DyadicBandAnalyticEstimate
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+It should not add:
+
+- a computed formula for `increment k`;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider;
+- a dyadic-specific hitting route theorem.

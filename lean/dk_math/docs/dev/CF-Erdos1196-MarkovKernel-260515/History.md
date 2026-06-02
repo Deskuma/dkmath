@@ -578,3 +578,33 @@ Archive
      DKMK-013B で確定する。
 
 ---
+
+### 日時: 2026/06/02 22:34 JST (DKMK-013B exact shape docs 追加)
+
+1. 目的:
+   - DKMK-013B として、`DyadicBandAnalyticEstimate` の exact shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013B Exact Shape Decision を追加した。
+   - contract 名を `DyadicBandAnalyticEstimate` とした。
+   - 初期配置は `SourceMassTruncation.lean` とし、将来必要なら別ファイル化する
+     方針を記録した。
+   - fields は `increment_nonneg` と `total_le_one_add_error` のみに絞り、
+     `steps` と `threshold` は derived data として構造体に持たせない方針を
+     明記した。
+   - bridge theorem 名を
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` とした。
+3. 結論:
+   - DKMK-013B は docs-only exact shape review として完了した。
+   - 次は DKMK-013C として、Lean 上に small contract と bridge theorem を
+     追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate` と
+     `toTruncationEnvelopeEstimate` を薄い wrapper として追加する。
+
+---
