@@ -693,3 +693,29 @@ Archive
      収めるか決める。
 
 ---
+
+### 日時: 2026/06/02 23:20 JST (DKMK-013F constantBand shape docs 追加)
+
+1. 目的:
+   - DKMK-013F として、constant band provider の exact Lean shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013F Constant Band Provider Shape を
+     追加した。
+   - provider 名を `DyadicBandAnalyticEstimate.constantBand` とした。
+   - statement は `Finset.sum` 形の `hbound` を外部入力として受ける形にした。
+   - `((K + 1 : Nat) : Q) * c` 型の finite-sum simplification と coercion は
+     後段の optional theorem に分ける方針を記録した。
+3. 結論:
+   - DKMK-013F は docs-only exact shape review として完了した。
+   - 次は DKMK-013G として、`constantBand` を薄い Lean provider として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` に `DyadicBandAnalyticEstimate.constantBand` を
+     `Finset.sum`-form `hbound` で実装する。
+
+---

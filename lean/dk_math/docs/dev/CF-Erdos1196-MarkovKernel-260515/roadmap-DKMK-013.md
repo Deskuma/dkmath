@@ -643,3 +643,121 @@ constant band envelope
 DKMK-013F should decide the exact Lean shape for the constant band provider,
 including how to state the finite-sum bound without creating avoidable
 coercion friction.
+
+## 13. DKMK-013F Constant Band Provider Shape
+
+DKMK-013F fixes the first exact shape for a constant band provider.
+
+This is still a docs-only step.  It does not add Lean code.
+
+### Chosen provider
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand
+```
+
+The provider should build:
+
+```lean
+DyadicBandAnalyticEstimate x K (fun _ : Nat => c) error
+```
+
+from a nonnegative constant band weight and an externally stated finite-sum
+bound.
+
+### Expected Lean shape
+
+Use the sum-bound external form first:
+
+```lean
+theorem DyadicBandAnalyticEstimate.constantBand
+    (x K : Nat) (c : Q)
+    (hc : 0 <= c)
+    {error : R}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c) : Q) : R) <=
+        1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : Nat => c) error
+```
+
+The proof should be direct:
+
+```text
+increment_nonneg:
+  intro k hk
+  exact hc
+
+total_le_one_add_error:
+  exact hbound
+```
+
+### Why not simplify the sum yet
+
+Do not use this as the first theorem statement:
+
+```text
+((((K + 1 : Nat) : Q) * c : Q) : R) <= 1 + error
+```
+
+Reason:
+
+```text
+This adds finite-sum simplification and Nat/Q/R coercion work at the same time
+as the first provider theorem.
+```
+
+The first provider should test only that:
+
+```text
+constant increments
+  -> DyadicBandAnalyticEstimate
+```
+
+can be packaged cleanly.
+
+### Optional later theorem
+
+After `constantBand` is stable, a later theorem may add the simplified
+finite-sum form:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand_of_natCastMulBound
+```
+
+or another name chosen after checking the actual Lean coercion shape.
+
+That later theorem would discharge:
+
+```text
+Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c)
+```
+
+from a statement involving:
+
+```text
+((K + 1 : Nat) : Q) * c
+```
+
+### Non-goals
+
+DKMK-013F should not add:
+
+- Lean code;
+- a finite-sum simplification lemma;
+- a simplified constant-band theorem;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider;
+- a dyadic-specific route theorem.
+
+### Next step
+
+DKMK-013G should implement only:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand
+```
+
+with the `Finset.sum`-form `hbound`.
