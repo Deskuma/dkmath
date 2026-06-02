@@ -438,3 +438,32 @@ Archive
      薄い packaging theorem として追加する。
 
 ---
+
+### 日時: 2026/06/02 14:28 JST (DKMK-012C dyadicRange provider 追加)
+
+1. 目的:
+   - DKMK-012C として、DKMK-012B で固定した dyadic range provider を
+     Lean 上に薄い packaging theorem として追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `TruncationEnvelopeEstimate.dyadicRange` を追加した。
+   - `steps = Finset.range (K + 1)` と
+     `threshold = fun k : ℕ => x * 2^k` を固定した。
+   - `increment` と `error` は外部供給のままとし、`hinc` と `hbound` から
+     `TruncationEnvelopeEstimate` を構成した。
+   - `roadmap-DKMK-012.md` に DKMK-012C Lean Provider の実装メモを追記した。
+3. 結論:
+   - dyadic range data から `TruncationEnvelopeEstimate` を作る入口が
+     Lean 上で利用可能になった。
+   - route theorem、logarithmic provider、Mertens / big-O statement、
+     computed increment formula は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012D として、dyadicRange から既存 route theorem へ渡す
+     usage summary を docs 上で整理する。
+
+---

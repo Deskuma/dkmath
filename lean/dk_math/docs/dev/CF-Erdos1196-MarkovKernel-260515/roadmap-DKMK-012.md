@@ -377,3 +377,49 @@ dyadicRange
   -> existing DKMK-011 route theorem
   -> weightedHitMass <= 1 + error
 ```
+
+## 9. DKMK-012C Lean Provider
+
+DKMK-012C adds the Lean theorem fixed by DKMK-012B:
+
+```lean
+TruncationEnvelopeEstimate.dyadicRange
+```
+
+The theorem is a packaging provider only.
+
+It fixes:
+
+```text
+steps     = Finset.range (K + 1)
+threshold = fun k : Nat => x * 2^k
+```
+
+and consumes externally supplied analytic data:
+
+```text
+hinc:
+  forall k in Finset.range (K + 1), 0 <= increment k
+
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+    1 + error
+```
+
+The proof only fills:
+
+```text
+increment_nonneg := hinc
+analytic_bound.total_le_one_add_error := hbound
+```
+
+No route theorem, logarithmic provider, Mertens statement, big-O statement, or
+computed increment formula is added.
+
+The usage path remains:
+
+```text
+dyadicRange
+  -> TruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+```

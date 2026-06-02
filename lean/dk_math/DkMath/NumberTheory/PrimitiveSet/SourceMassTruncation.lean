@@ -185,6 +185,29 @@ theorem singleWindow
     simpa using hbound
 
 /--
+Dyadic range provider for externally supplied truncation estimates.
+
+This fixes the finite step set as `Finset.range (K + 1)` and the threshold as
+`x * 2^k`, while keeping the analytic increment estimate external.
+-/
+theorem dyadicRange
+    (x K : ℕ) (increment : ℕ → ℚ)
+    (hinc : ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    {error : ℝ}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+        1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error where
+  increment_nonneg := hinc
+  analytic_bound := by
+    constructor
+    exact hbound
+
+/--
 Route theorem for externally supplied finite-step truncation estimates.
 
 This is a packaging wrapper around
