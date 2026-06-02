@@ -664,3 +664,32 @@ Archive
    - concrete provider の候補を整理し、最初に実装する provider shape を決める。
 
 ---
+
+### 日時: 2026/06/02 23:13 JST (DKMK-013E provider candidate inventory 追加)
+
+1. 目的:
+   - DKMK-013E として、`DyadicBandAnalyticEstimate` を証明する
+     concrete provider 候補を docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-013.md` に DKMK-013E Concrete Provider Candidate Inventory を
+     追加した。
+   - externally supplied dyadic estimate、constant band envelope、
+     decreasing dyadic envelope、dyadic tail upper envelope、
+     logarithmic refinement を候補として分けた。
+   - 最初の nontrivial Lean provider 候補として constant band envelope を記録した。
+   - Mertens、big-O、logarithmic threshold provider へはまだ進まない方針を
+     明記した。
+3. 結論:
+   - DKMK-013E は docs-only candidate inventory として完了した。
+   - 次は DKMK-013F として、constant band provider の exact Lean shape を
+     検討する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-013.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - constant band provider の有限和評価と coercion をどう statement に
+     収めるか決める。
+
+---

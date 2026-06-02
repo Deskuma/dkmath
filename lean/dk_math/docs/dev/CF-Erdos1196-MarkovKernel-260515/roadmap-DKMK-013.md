@@ -454,3 +454,192 @@ DKMK-013D should not add:
 
 The next technical question is what concrete provider should prove
 `DyadicBandAnalyticEstimate`.
+
+## 12. DKMK-013E Concrete Provider Candidate Inventory
+
+DKMK-013E records candidate producers of:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+This is still a design step.  It does not add a Lean provider.
+
+### Candidate 1: externally supplied dyadic estimate
+
+This is the direct constructor shape.
+
+Data:
+
+```text
+x         : Nat
+K         : Nat
+increment : Nat -> Q
+error     : R
+```
+
+Proof input:
+
+```text
+hinc:
+  forall k in Finset.range (K + 1), 0 <= increment k
+
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+    1 + error
+```
+
+Target:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+Status:
+
+```text
+already essentially the structure constructor
+```
+
+This candidate is useful as a naming / API check, but it does not add analytic
+content.
+
+### Candidate 2: constant band envelope
+
+This is the smallest computed-shape provider candidate.
+
+Data:
+
+```text
+x     : Nat
+K     : Nat
+c     : Q
+error : R
+```
+
+Increment:
+
+```text
+increment k = c
+```
+
+Required proof input:
+
+```text
+hc:
+  0 <= c
+
+hbound:
+  (((K + 1) : Nat) * c : Q) coerced to R <= 1 + error
+```
+
+Target:
+
+```lean
+DyadicBandAnalyticEstimate x K (fun _ => c) error
+```
+
+Status:
+
+```text
+candidate for the first nontrivial Lean provider
+```
+
+This may require a small finite-sum calculation for:
+
+```text
+Finset.sum (Finset.range (K + 1)) (fun _ => c)
+```
+
+### Candidate 3: decreasing dyadic envelope
+
+This candidate keeps the dyadic structure but leaves the analytic values
+mostly external.
+
+Data:
+
+```text
+x         : Nat
+K         : Nat
+increment : Nat -> Q
+error     : R
+```
+
+Additional proof input may include:
+
+```text
+nonnegativity of each band
+finite total estimate
+optional monotonicity or decay condition
+```
+
+Status:
+
+```text
+useful design target, but not first Lean target
+```
+
+The monotonicity or decay condition should not be added unless it is consumed
+by a later theorem.
+
+### Candidate 4: dyadic tail upper envelope
+
+This is the natural next analytic direction.
+
+Data may come from:
+
+```text
+external dyadic tail theorem
+explicit finite sum estimate
+number-theoretic upper bound
+```
+
+Target:
+
+```text
+produce increment_nonneg and total_le_one_add_error
+```
+
+Status:
+
+```text
+main DKMK-013 analytic direction, but still too large for the next small step
+```
+
+### Candidate 5: logarithmic refinement
+
+This is deferred.
+
+Reason:
+
+```text
+logarithmic thresholds require real-to-Nat rounding,
+Real.log / Real.exp infrastructure,
+and additional monotonicity or comparison lemmas.
+```
+
+Status:
+
+```text
+later chapter or later DKMK-013 branch
+```
+
+### Decision
+
+The first Lean provider should likely be one of:
+
+```text
+externally supplied dyadic estimate
+constant band envelope
+```
+
+The externally supplied provider is almost just the constructor, so the more
+useful first concrete provider is probably:
+
+```text
+constant band envelope
+```
+
+DKMK-013F should decide the exact Lean shape for the constant band provider,
+including how to state the finite-sum bound without creating avoidable
+coercion friction.
