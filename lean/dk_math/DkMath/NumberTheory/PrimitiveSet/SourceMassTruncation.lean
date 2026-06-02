@@ -254,6 +254,25 @@ end TruncationEnvelopeEstimate
 namespace DyadicBandAnalyticEstimate
 
 /--
+Constant-band provider for dyadic analytic estimates.
+
+This keeps the finite-sum bound external, avoiding finite-sum simplification
+and Nat/Rat/Real coercion work in the first provider theorem.
+-/
+theorem constantBand
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) (fun _ : ℕ => c) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error where
+  increment_nonneg := by
+    intro _k _hk
+    exact hc
+  total_le_one_add_error := hbound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/

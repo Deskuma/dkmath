@@ -761,3 +761,45 @@ DyadicBandAnalyticEstimate.constantBand
 ```
 
 with the `Finset.sum`-form `hbound`.
+
+## 14. DKMK-013G Lean constantBand Provider
+
+DKMK-013G adds:
+
+```lean
+DyadicBandAnalyticEstimate.constantBand
+```
+
+The theorem uses the exact shape fixed in DKMK-013F:
+
+```text
+hc:
+  0 <= c
+
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) (fun _ : Nat => c) : Q) : R) <=
+    1 + error
+```
+
+and produces:
+
+```lean
+DyadicBandAnalyticEstimate x K (fun _ : Nat => c) error
+```
+
+The proof only fills:
+
+```text
+increment_nonneg := fun _ _ => hc
+total_le_one_add_error := hbound
+```
+
+This step deliberately does not add:
+
+- finite-sum simplification;
+- a simplified constant-band theorem;
+- a computed `((K + 1 : Nat) : Q) * c` bound;
+- a route theorem;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider.

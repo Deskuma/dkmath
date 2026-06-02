@@ -719,3 +719,34 @@ Archive
      `Finset.sum`-form `hbound` で実装する。
 
 ---
+
+### 日時: 2026/06/02 23:25 JST (DKMK-013G constantBand provider 追加)
+
+1. 目的:
+   - DKMK-013G として、DKMK-013F で固定した
+     `DyadicBandAnalyticEstimate.constantBand` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.constantBand` を追加した。
+   - `hc : 0 ≤ c` から constant increment の非負性を埋めた。
+   - `Finset.sum` 形の `hbound` をそのまま
+     `total_le_one_add_error` に渡した。
+   - `roadmap-DKMK-013.md` に DKMK-013G Lean constantBand Provider の
+     実装メモを追記した。
+3. 結論:
+   - constant band envelope から `DyadicBandAnalyticEstimate` を作る
+     最初の nontrivial provider が Lean 上で利用可能になった。
+   - finite-sum simplification、computed `((K + 1 : Nat) : Q) * c` bound、
+     route theorem、Mertens、big-O、logarithmic threshold provider は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - optional finite-sum simplification theorem を追加するか、
+     decreasing / dyadic tail provider design へ進むか判断する。
+
+---
