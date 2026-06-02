@@ -493,3 +493,33 @@ Archive
    - `increment` と `hbound` を供給する analytic estimate の形を検討する。
 
 ---
+
+### 日時: 2026/06/02 14:45 JST (DKMK-012E increment / hbound design 追加)
+
+1. 目的:
+   - DKMK-012E として、`dyadicRange` が外部入力として受け取る
+     `increment` と `hbound` の解析的意味を docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-012.md` に DKMK-012E Increment / hbound Design を追加した。
+   - `increment k` は第 k dyadic band の analytic upper envelope を表す
+     外部供給の rational band weight として読む方針を記録した。
+   - `hinc` は finite-step source mass construction の非負性、
+     `hbound` は有限 band envelope の total estimate を担うことを明記した。
+   - candidate source として externally supplied band weights、
+     dyadic tail upper envelope、later logarithmic refinement、
+     concrete number-theoretic estimate を分けて記録した。
+3. 結論:
+   - DKMK-012 の provider plumbing から analytic input design へ移る境界が
+     docs 上で明確になった。
+   - formula、Mertens、big-O、logarithmic provider、dyadic-specific route theorem は
+     まだ追加しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-012.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-012 を report で閉じるか、最初の toy analytic provider を
+     追加するか判断する。
+
+---

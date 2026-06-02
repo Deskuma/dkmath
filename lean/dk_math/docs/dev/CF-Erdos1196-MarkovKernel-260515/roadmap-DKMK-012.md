@@ -521,3 +521,85 @@ It should not add:
 
 The next technical question is what analytic estimate should supply
 `increment` and `hbound`.
+
+## 11. DKMK-012E Increment / hbound Design
+
+DKMK-012E records the analytic meaning of the two external inputs used by
+`dyadicRange`.
+
+This is still a design step.  It does not define a computed formula for
+`increment`.
+
+### Meaning of increment
+
+For dyadic data:
+
+```text
+steps     = Finset.range (K + 1)
+threshold = fun k : Nat => x * 2^k
+```
+
+the value:
+
+```text
+increment k
+```
+
+should be read as an analytic upper envelope for the contribution of the
+`k`-th dyadic band.
+
+It is not yet a formula involving logs, Mertens estimates, or asymptotic
+notation.  At this stage it is an externally supplied rational band weight.
+
+The nonnegativity hypothesis:
+
+```text
+hinc:
+  forall k in Finset.range (K + 1), 0 <= increment k
+```
+
+keeps the finite-step source mass construction valid.
+
+### Meaning of hbound
+
+The hypothesis:
+
+```text
+hbound:
+  ((Finset.sum (Finset.range (K + 1)) increment : Q) : R) <=
+    1 + error
+```
+
+is the analytic total estimate.
+
+It says that the finite collection of dyadic band envelopes has total mass at
+most `1 + error`.
+
+This is the only analytic inequality consumed by `TruncationEnvelopeEstimate`.
+
+### Candidate sources
+
+Possible future sources for `increment` and `hbound` are:
+
+- externally supplied band weights;
+- a dyadic tail upper envelope;
+- a later logarithmic refinement;
+- a concrete estimate derived from number-theoretic input.
+
+These candidates should stay separate from the route theorem.
+
+### Non-goals
+
+DKMK-012E should not add:
+
+- a formula for `increment k`;
+- a proof of a Mertens estimate;
+- a big-O statement;
+- a logarithmic threshold provider;
+- a dyadic-specific hitting route theorem.
+
+### Next question
+
+The next step after this design note is to decide whether DKMK-012 closes with
+a report, or whether it should add a first toy analytic provider for
+`increment` and `hbound`.
