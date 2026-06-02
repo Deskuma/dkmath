@@ -895,3 +895,33 @@ Archive
      `ofMajorant` を実装する。
 
 ---
+
+### 日時: 2026/06/03 03:56 JST (DKMK-014C ofMajorant provider 追加)
+
+1. 目的:
+   - DKMK-014C として、DKMK-014B で固定した
+     `DyadicBandAnalyticEstimate.ofMajorant` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofMajorant` を追加した。
+   - `hinc_nonneg` を `increment_nonneg` にそのまま渡した。
+   - Rat 側で `Finset.sum_le_sum hle` により
+     `sum increment <= sum majorant` を証明し、Real に cast して
+     `hmajorant_bound` と合成した。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014C Lean Majorant Provider の実装メモを追記した。
+3. 結論:
+   - majorant envelope から `DyadicBandAnalyticEstimate` を作る
+     first non-constant provider が Lean 上で利用可能になった。
+   - decreasing condition、route theorem、Mertens / big-O、
+     logarithmic threshold、real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014D として、majorant provider の usage summary を docs 上で整理する。
+
+---

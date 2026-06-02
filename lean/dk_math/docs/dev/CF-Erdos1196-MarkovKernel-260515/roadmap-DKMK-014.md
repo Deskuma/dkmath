@@ -388,3 +388,34 @@ DyadicBandAnalyticEstimate.ofMajorant
 
 If Rat-to-Real cast monotonicity creates friction, keep the statement and proof
 small and avoid adding extra provider fields.
+
+## 9. DKMK-014C Lean Majorant Provider
+
+DKMK-014C adds:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+The theorem consumes:
+
+```text
+increment nonnegativity
+pointwise increment <= majorant
+majorant total bound
+```
+
+and produces:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+The proof compares sums over `Finset.range (K + 1)` on the Rat side using
+`Finset.sum_le_sum`, casts the result to Real, then composes it with
+`hmajorant_bound`.
+
+This is the first non-constant provider in the DKMK-014 chapter.
+
+No decreasing condition, route theorem, Mertens / big-O, logarithmic threshold,
+or real-to-Nat rounding is added.

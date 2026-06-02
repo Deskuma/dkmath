@@ -287,6 +287,36 @@ theorem constantBand_of_natCastMulBound
   simpa [Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hbound
 
 /--
+Majorant-envelope provider for dyadic analytic estimates.
+
+The actual increment only needs nonnegativity.  Its total estimate is obtained
+by comparing it with a caller-supplied majorant on the same finite dyadic range.
+-/
+theorem ofMajorant
+    (x K : ℕ)
+    (increment majorant : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have hsum :
+        Finset.sum (Finset.range (K + 1)) increment ≤
+          Finset.sum (Finset.range (K + 1)) majorant := by
+      exact Finset.sum_le_sum hle
+    have hsumR :
+        ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+          ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) := by
+      exact_mod_cast hsum
+    exact le_trans hsumR hmajorant_bound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/
