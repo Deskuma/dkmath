@@ -1278,3 +1278,35 @@ Archive
      upper-bound theorem の exact shape へ進むかを review する。
 
 ---
+
+### 日時: 2026/06/04 03:20 JST (DKMK-015D geometric-sum upper-bound shape 追加)
+
+1. 目的:
+   - DKMK-015D として、finite geometric-sum upper-bound theorem の
+     exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015D Finite Geometric-Sum Upper-Bound Exact Shape を追加した。
+   - chosen theorem を `geomSum_range_le_one_div_one_sub` とした。
+   - expected shape として、`0 <= ratio` と `ratio < 1` から
+     `sum ratio^k <= 1 / (1 - ratio)` を出す theorem を記録した。
+   - division-form equality ではなく、下流で必要な upper-bound theorem を
+     先に固定する方針にした。
+   - `0 <= ratio`、`ratio < 1` はこの theorem が初めて消費し、
+     `ratio != 1` は明示仮定にしない方針を記録した。
+   - later base-scaled layer として
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le` の shape を記録した。
+3. 結論:
+   - DKMK-015D は docs-only exact shape review として完了した。
+   - DKMK-015 は denominator-cleared identity から order upper-bound layer へ
+     進む方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015E として、`geomSum_range_le_one_div_one_sub` を Lean 上に
+     実装できるか既存 theorem を確認し、軽ければ追加する。
+
+---

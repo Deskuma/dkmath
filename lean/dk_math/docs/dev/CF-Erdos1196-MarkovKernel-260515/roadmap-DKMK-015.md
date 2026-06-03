@@ -399,3 +399,123 @@ This step does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 11. DKMK-015D Finite Geometric-Sum Upper-Bound Exact Shape
+
+DKMK-015D fixes the first order theorem shape.
+
+The next theorem should be an upper-bound theorem, not a division-form equality.
+
+### Chosen theorem
+
+Use:
+
+```lean
+geomSum_range_le_one_div_one_sub
+```
+
+Expected shape:
+
+```lean
+theorem geomSum_range_le_one_div_one_sub
+    {ratio : R} (K : Nat)
+    (hr0 : 0 <= ratio)
+    (hr1 : ratio < 1) :
+    Finset.sum (Finset.range (K + 1))
+      (fun k : Nat => ratio ^ k)
+      <=
+    1 / (1 - ratio)
+```
+
+Lean implementation should use `R = Real` first, matching the current local
+wrapper `geomSum_range_mul_one_sub`.
+
+### Why upper-bound before division form
+
+The downstream provider chain needs:
+
+```text
+base * sum ratio^k <= 1 + error
+```
+
+not a closed-form equality.
+
+The denominator-cleared identity from DKMK-015C can support the bound directly:
+
+```text
+(1 - ratio) * sum ratio^k = 1 - ratio^(K + 1)
+```
+
+Under:
+
+```text
+0 <= ratio
+ratio < 1
+```
+
+we have:
+
+```text
+0 <= ratio^(K + 1)
+0 < 1 - ratio
+1 - ratio^(K + 1) <= 1
+```
+
+so the finite sum is bounded by:
+
+```text
+1 / (1 - ratio)
+```
+
+This path may avoid introducing a separate division-form equality theorem.
+
+### Side conditions consumed here
+
+This is the first theorem in DKMK-015 that should consume:
+
+```text
+0 <= ratio
+ratio < 1
+```
+
+It should not require:
+
+```text
+ratio != 1
+```
+
+as an explicit assumption, because `ratio < 1` already implies `1 - ratio > 0`
+for the order argument.
+
+### Later base-scaled layer
+
+The next theorem should scale this bound by `base`:
+
+```lean
+theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
+    {base ratio error : R} (K : Nat)
+    (hbase : 0 <= base)
+    (hr0 : 0 <= ratio)
+    (hr1 : ratio < 1)
+    (hbudget : base * (1 / (1 - ratio)) <= 1 + error) :
+    base *
+      Finset.sum (Finset.range (K + 1))
+        (fun k : Nat => ratio ^ k)
+      <=
+    1 + error
+```
+
+This later theorem is the first place that should consume `0 <= base`.
+
+### Non-goals
+
+DKMK-015D is docs-only.  It does not add:
+
+- Lean code;
+- a division-form equality theorem;
+- explicit `ratio != 1`;
+- base-scaled bounds;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
