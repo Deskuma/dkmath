@@ -582,3 +582,119 @@ DKMK-014E is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 12. DKMK-014F Explicit Majorant Construction Exact Shape
+
+DKMK-014F fixes the first explicit majorant-construction theorem shape.
+
+The theorem should not merely rename `ofMajorant`.  A theorem of the form:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorantBoundedBy
+```
+
+with the same assumptions as `ofMajorant` would add little.
+
+The next useful provider should expose a concrete majorant family while still
+keeping the finite sum estimate external.
+
+### Chosen provider
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+```
+
+This theorem should use the geometric-shaped majorant:
+
+```text
+majorant k = base * ratio^k
+```
+
+but it should not prove or simplify the geometric finite sum.
+
+### Expected Lean shape
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+    (x K : Nat)
+    (increment : Nat -> Q)
+    (base ratio : Q)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1),
+        increment k <= base * ratio^k)
+    {error : R}
+    (hgeom_bound :
+      ((Finset.sum (Finset.range (K + 1))
+          (fun k : Nat => base * ratio^k) : Q) : R) <=
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+### Proof plan
+
+The proof should be a thin call to:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+with:
+
+```lean
+majorant := fun k : Nat => base * ratio^k
+```
+
+The fields are then:
+
+```text
+hinc_nonneg -> increment_nonneg
+hgeom       -> pointwise increment <= majorant
+hgeom_bound -> total majorant bound
+```
+
+### Why keep the sum bound external
+
+This mirrors the DKMK-013 `constantBand` pattern.
+
+First add the provider that accepts the finite sum bound directly.  Only later,
+if useful, add a caller-facing simplification theorem for the finite geometric
+sum.
+
+The possible later theorem would be separate:
+
+```text
+geometric finite-sum assumptions
+  -> sum (base * ratio^k) <= 1 + error
+  -> ofPointwiseGeometricMajorant
+```
+
+### Boundary decision
+
+DKMK-014F fixes this boundary:
+
+```text
+ofPointwiseGeometricMajorant:
+  pointwise geometric majorization plus external geometric-sum bound
+
+future geometric-sum theorem:
+  proves or simplifies the external geometric-sum bound
+```
+
+This keeps DKMK-014F within provider shape design and avoids introducing
+geometric-series infrastructure too early.
+
+### Non-goals
+
+DKMK-014F is docs-only.  It does not add:
+
+- Lean code;
+- geometric-series lemmas;
+- assumptions such as `0 <= ratio` or `ratio < 1`;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

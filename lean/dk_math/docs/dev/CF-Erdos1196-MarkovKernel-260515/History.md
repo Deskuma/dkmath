@@ -984,3 +984,34 @@ Archive
      exact shape を決める。
 
 ---
+
+### 日時: 2026/06/03 12:43 JST (DKMK-014F geometric majorant exact shape 追加)
+
+1. 目的:
+   - DKMK-014F として、explicit majorant construction theorem の
+     first exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014F Explicit Majorant Construction Exact Shape を追加した。
+   - 単なる `ofMajorant` の別名 theorem は避け、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     chosen provider として記録した。
+   - `majorant k = base * ratio^k` という pointwise geometric majorant と、
+     外部から与える geometric finite-sum bound を statement に分けた。
+   - proof plan は `majorant := fun k => base * ratio^k` として
+     `DyadicBandAnalyticEstimate.ofMajorant` を薄く呼ぶ方針にした。
+3. 結論:
+   - DKMK-014F は docs-only exact shape review として完了した。
+   - 幾何級数補題や `0 <= ratio`, `ratio < 1` などの条件は、
+     future geometric-sum theorem 側に残す方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014G として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     Lean 上に薄い provider として追加する。
+
+---
