@@ -1183,3 +1183,35 @@ Archive
      ratio side conditions、tail-bound theorem の exact scope を決める。
 
 ---
+
+### 日時: 2026/06/03 15:34 JST (DKMK-015A roadmap 追加)
+
+1. 目的:
+   - DKMK-015 として、finite geometric-sum / tail-bound theorem design の章を
+     開始する。
+   - DKMK-014J の
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     へ接続するための theorem layer を整理する。
+2. 実施:
+   - `roadmap-DKMK-015.md` を追加した。
+   - DKMK-015 の主題を、provider plumbing ではなく
+     finite geometric-sum / tail-bound theorem design として整理した。
+   - candidate layer として finite geometric-sum identity、
+     finite geometric-sum upper bound、base-scaled bound、
+     direct caller-facing theorem を分けた。
+   - `ratio != 1`、`0 <= ratio`、`ratio < 1`、`0 <= base` は、
+     それぞれ実際に消費する theorem にだけ置く方針を明記した。
+3. 結論:
+   - DKMK-015A は docs-only roadmap として完了した。
+   - 次は DKMK-015B として、finite geometric-sum identity の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - finite geometric-sum identity を、equality theorem、
+     denominator-cleared identity、upper-bound theorem のどれから始めるか決める。
+
+---
