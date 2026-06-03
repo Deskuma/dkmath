@@ -977,3 +977,39 @@ to rewrite `base * sum ratio^k` as `sum (base * ratio^k)`.
 No closed-form finite geometric-sum theorem, tail-bound theorem, ratio
 assumption, route theorem change, Mertens / big-O, logarithmic threshold, or
 real-to-Nat rounding is added.
+
+## 17. DKMK-014K Report / Handoff
+
+DKMK-014K closes the `k`-dependent majorant provider chapter with:
+
+```text
+report-DKMK-014.md
+```
+
+The chapter closes because the provider chain is now fixed:
+
+```text
+DyadicBandAnalyticEstimate.ofMajorant
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+```
+
+This gives three levels:
+
+```text
+general majorant
+pointwise geometric majorant
+caller-facing base * sum ratio^k bound
+```
+
+The next work should move beyond provider plumbing.
+
+The next natural chapter is:
+
+```text
+DKMK-015:
+  finite geometric-sum / tail-bound theorem design
+```
+
+DKMK-015 should handle closed-form finite geometric sums, ratio side
+conditions, and tail bounds as a separate algebraic / analytic lemma layer.
