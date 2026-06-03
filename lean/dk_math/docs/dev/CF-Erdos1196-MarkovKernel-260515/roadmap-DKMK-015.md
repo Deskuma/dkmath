@@ -608,3 +608,89 @@ DKMK-015E does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 13. DKMK-015F Lean Base-Scaled Geometric-Sum Bound
+
+DKMK-015F implements the base-scaled provider-facing bound suggested after
+DKMK-015E.
+
+Added theorem:
+
+```lean
+theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
+    {base ratio error : Real} (K : Nat)
+    (hbase : 0 <= base)
+    (hr0 : 0 <= ratio)
+    (hr1 : ratio < 1)
+    (hbudget : base * (1 / (1 - ratio)) <= 1 + error) :
+    base *
+      Finset.sum (Finset.range (K + 1))
+        (fun k : Nat => ratio ^ k)
+      <=
+    1 + error
+```
+
+The Lean implementation is in:
+
+```text
+DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+### Proof route
+
+The proof first invokes the upper-bound theorem from DKMK-015E:
+
+```text
+sum ratio^k <= 1 / (1 - ratio)
+```
+
+Then it multiplies the inequality by the nonnegative `base`:
+
+```text
+base * sum ratio^k <= base * (1 / (1 - ratio))
+```
+
+Finally, it composes this scaled bound with the caller-supplied budget:
+
+```text
+base * (1 / (1 - ratio)) <= 1 + error
+```
+
+### Side-condition behavior
+
+This theorem consumes:
+
+```text
+0 <= base
+0 <= ratio
+ratio < 1
+```
+
+It does not add:
+
+```text
+ratio != 1
+```
+
+because denominator positivity is still supplied by `ratio < 1` through the
+DKMK-015E theorem.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+```
+
+### Non-goals
+
+DKMK-015F does not add:
+
+- a division-form equality theorem;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

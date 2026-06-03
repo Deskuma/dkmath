@@ -1346,3 +1346,39 @@ Archive
      の exact shape または Lean 実装へ進む。
 
 ---
+
+### 日時: 2026/06/04 03:44 JST (DKMK-015F base-scaled geometric-sum bound 実装)
+
+1. 目的:
+   - DKMK-015F として、DKMK-015E の geometric-sum upper-bound を
+     nonnegative base で scale する theorem を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に Real 版 theorem
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le` を追加した。
+   - statement は `0 <= base`、`0 <= ratio`、`ratio < 1`、
+     `base * (1 / (1 - ratio)) <= 1 + error` から
+     `base * sum ratio^k <= 1 + error` を出す形にした。
+   - proof は `geomSum_range_le_one_div_one_sub` に
+     `mul_le_mul_of_nonneg_left` を当て、
+     `le_trans` で `hbudget` へ接続する薄い wrapper とした。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015F Lean Base-Scaled Geometric-Sum Bound を追記した。
+3. 結論:
+   - DKMK-014J が要求する
+     `base * sum ratio^k <= 1 + error` 型の provider-facing bound が
+     Lean 上で利用可能になった。
+   - division-form equality、explicit `ratio != 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015G として、この base-scaled theorem を既存の
+     DKMK-014J / dyadic provider route へどう接続するか review する。
+
+---

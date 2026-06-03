@@ -115,6 +115,38 @@ theorem geomSum_range_le_one_div_one_sub
   rw [le_div_iff₀ hpos]
   simpa [mul_comm] using hmul_le
 
+/--
+Scale the finite geometric-sum upper bound by a nonnegative base.
+
+This is the caller-facing bound shape needed before plugging the estimate into
+the dyadic source-mass provider layer.
+-/
+theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
+    {base ratio error : ℝ} (K : ℕ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1)
+    (hbudget : base * (1 / (1 - ratio)) ≤ 1 + error) :
+    base *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      ≤
+    1 + error := by
+  have hsum :
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+        ≤
+      1 / (1 - ratio) :=
+    geomSum_range_le_one_div_one_sub K hr0 hr1
+  have hscaled :
+      base *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      base * (1 / (1 - ratio)) :=
+    mul_le_mul_of_nonneg_left hsum hbase
+  exact le_trans hscaled hbudget
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
