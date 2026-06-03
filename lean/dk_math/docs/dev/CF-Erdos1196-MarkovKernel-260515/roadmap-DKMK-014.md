@@ -818,3 +818,129 @@ DKMK-014H is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 15. DKMK-014I Geometric Sum-Bound Theorem Exact Shape
+
+DKMK-014I fixes the first caller-facing geometric finite-sum theorem shape.
+
+The theorem should not repeat the existing provider with the same
+`hgeom_bound`.  Its job is to accept a slightly more caller-friendly finite-sum
+bound:
+
+```text
+base * sum (ratio ^ k) <= 1 + error
+```
+
+and convert it to the bound consumed by:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+```
+
+### Chosen provider
+
+Use:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+```
+
+This theorem should still keep the finite geometric sum unevaluated.
+
+### Expected Lean shape
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+    (x K : Nat)
+    (increment : Nat -> Q)
+    (base ratio : Q)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1),
+        increment k <= base * ratio ^ k)
+    {error : R}
+    (hgeom_sum_bound :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : Nat => ratio ^ k) : Q) : R) <=
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+### Proof plan
+
+The proof should first rewrite:
+
+```text
+sum (fun k => base * ratio ^ k)
+```
+
+to:
+
+```text
+base * sum (fun k => ratio ^ k)
+```
+
+on the Rat side, then call:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+```
+
+The expected Lean ingredient is a finite-sum distribution lemma such as:
+
+```text
+Finset.mul_sum
+```
+
+or an equivalent `simpa` over `Finset.sum_mul`.
+
+### Why this is the first finite-sum theorem
+
+This theorem does not prove the closed form:
+
+```text
+base * (1 - ratio^(K + 1)) / (1 - ratio)
+```
+
+It only moves the constant `base` outside the finite sum.
+
+That is the smallest useful caller-facing step after
+`ofPointwiseGeometricMajorant`, and it does not require:
+
+```text
+0 <= base
+0 <= ratio
+ratio < 1
+ratio != 1
+```
+
+Those assumptions belong to later closed-form or tail-bound theorems.
+
+### Boundary decision
+
+DKMK-014I fixes this boundary:
+
+```text
+ofPointwiseGeometricMajorant_of_geomSumBound:
+  accepts base * sum ratio^k <= 1 + error
+  rewrites it to sum (base * ratio^k) <= 1 + error
+
+future closed-form theorem:
+  proves or bounds sum ratio^k itself
+```
+
+This keeps DKMK-014I at the algebraic finite-sum factoring layer.
+
+### Non-goals
+
+DKMK-014I is docs-only.  It does not add:
+
+- Lean code;
+- closed-form finite geometric-sum lemmas;
+- tail-bound lemmas;
+- assumptions such as `0 <= ratio`, `ratio < 1`, or `ratio != 1`;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

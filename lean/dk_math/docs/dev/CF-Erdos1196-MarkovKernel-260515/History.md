@@ -1082,3 +1082,36 @@ Archive
      exact shape を設計する。
 
 ---
+
+### 日時: 2026/06/03 14:08 JST (DKMK-014I geometric sum-bound theorem shape 追加)
+
+1. 目的:
+   - DKMK-014I として、caller-facing geometric finite-sum theorem の
+     first exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014I Geometric Sum-Bound Theorem Exact Shape を追加した。
+   - chosen provider を
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     として記録した。
+   - `sum (base * ratio ^ k)` の bound を直接受けるのではなく、
+     `base * sum (ratio ^ k)` 形式の bound を caller-facing input として
+     受ける方針にした。
+   - proof plan は Rat 側で `base` を finite sum の外へ出し、
+     `ofPointwiseGeometricMajorant` を呼ぶ形にした。
+   - closed-form finite geometric sum や tail-bound theorem は後段へ残した。
+3. 結論:
+   - DKMK-014I は docs-only exact shape review として完了した。
+   - 次の theorem は、閉形式ではなく algebraic finite-sum factoring layer に
+     留める方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014J として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を Lean 上に薄い caller-facing provider として追加する。
+
+---
