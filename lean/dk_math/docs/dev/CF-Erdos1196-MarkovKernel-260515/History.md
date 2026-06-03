@@ -837,3 +837,349 @@ Archive
      検討する。
 
 ---
+
+### 日時: 2026/06/03 02:33 JST (DKMK-014A roadmap 追加)
+
+1. 目的:
+   - DKMK-014 として、decreasing / dyadic tail provider design の章を開始する。
+   - DKMK-013 で固定した `DyadicBandAnalyticEstimate` に対して、
+     `k`-dependent band provider の設計方針を整理する。
+2. 実施:
+   - `roadmap-DKMK-014.md` を追加した。
+   - DKMK-014 の主題を、route theorem の変更ではなく
+     `DyadicBandAnalyticEstimate` を証明する provider design として整理した。
+   - candidate として externally supplied k-dependent estimate、
+     decreasing band provider、majorant envelope provider、
+     dyadic tail upper envelope、logarithmic refinement を分けた。
+   - monotonicity / decay / majorization は、後続 theorem が消費する場合だけ
+     field にする方針を明記した。
+3. 結論:
+   - DKMK-014A は docs-only roadmap として完了した。
+   - 次は DKMK-014B として、decreasing / majorant provider の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - first non-constant provider として decreasing-band provider と
+     majorant-envelope provider のどちらを優先するか決める。
+
+---
+
+### 日時: 2026/06/03 03:51 JST (DKMK-014B majorant provider shape docs 追加)
+
+1. 目的:
+   - DKMK-014B として、first non-constant provider の exact shape を
+     Lean 実装前に docs 上で確定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に DKMK-014B Majorant Provider Shape を追加した。
+   - first non-constant provider は decreasing provider ではなく
+     majorant-envelope provider を優先する方針にした。
+   - theorem 名を `DyadicBandAnalyticEstimate.ofMajorant` とした。
+   - `increment <= majorant` の pointwise bound と majorant total bound から
+     `DyadicBandAnalyticEstimate` を作る statement を記録した。
+   - decreasing condition は、後続 theorem が消費するまで field 化しない方針を
+     明記した。
+3. 結論:
+   - DKMK-014B は docs-only exact shape review として完了した。
+   - 次は DKMK-014C として、`ofMajorant` を薄い Lean provider として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Rat 側の `Finset.sum_le_sum` と Real への cast monotonicity で
+     `ofMajorant` を実装する。
+
+---
+
+### 日時: 2026/06/03 03:56 JST (DKMK-014C ofMajorant provider 追加)
+
+1. 目的:
+   - DKMK-014C として、DKMK-014B で固定した
+     `DyadicBandAnalyticEstimate.ofMajorant` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofMajorant` を追加した。
+   - `hinc_nonneg` を `increment_nonneg` にそのまま渡した。
+   - Rat 側で `Finset.sum_le_sum hle` により
+     `sum increment <= sum majorant` を証明し、Real に cast して
+     `hmajorant_bound` と合成した。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014C Lean Majorant Provider の実装メモを追記した。
+3. 結論:
+   - majorant envelope から `DyadicBandAnalyticEstimate` を作る
+     first non-constant provider が Lean 上で利用可能になった。
+   - decreasing condition、route theorem、Mertens / big-O、
+     logarithmic threshold、real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014D として、majorant provider の usage summary を docs 上で整理する。
+
+---
+
+### 日時: 2026/06/03 04:02 JST (DKMK-014D majorant provider usage summary 追加)
+
+1. 目的:
+   - DKMK-014D として、
+     `DyadicBandAnalyticEstimate.ofMajorant` の使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014D Majorant Provider Usage Summary を追加した。
+   - `increment, majorant` から `hinc_nonneg`、`hle`、
+     `hmajorant_bound` を経て `ofMajorant` に入り、
+     `toTruncationEnvelopeEstimate` と既存 finite-step route theorem へ進む
+     利用導線を整理した。
+   - `majorant` は有限和を評価する対象であり、`increment` は同じ dyadic range 上で
+     `majorant` に抑えれば route に載せられる、という役割分担を明記した。
+   - decreasing / decay assumption は、majorant を作る後続 theorem が消費するまで
+     core provider の外に置く方針を再確認した。
+3. 結論:
+   - DKMK-014D は docs-only usage summary として完了した。
+   - majorant provider の利用導線が、Lean theorem の外側でも追跡しやすくなった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014E として、dyadic tail upper envelope へ進む前に
+     majorant provider chapter のまとめ、または次の provider shape を検討する。
+
+---
+
+### 日時: 2026/06/03 12:33 JST (DKMK-014E decreasing / decay design 追加)
+
+1. 目的:
+   - DKMK-014E として、decreasing / decay information を
+     majorant construction にどう接続するかを docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014E Decreasing / Decay to Majorant Design を追加した。
+   - decreasing only、decay ratio with external total bound、
+     explicit majorant construction theorem の候補を比較した。
+   - decreasing だけでは `sum increment <= 1 + error` を出せないため、
+     core provider field にしない方針を明記した。
+   - decay 情報は `majorant` を作る、または正当化する材料として扱い、
+     最終的には `DyadicBandAnalyticEstimate.ofMajorant` に流す境界を固定した。
+3. 結論:
+   - DKMK-014E は docs-only design step として完了した。
+   - 次の Lean-facing shape は、core estimate の field 追加ではなく、
+     explicit majorant construction theorem 側に寄せる方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014F として、explicit majorant construction theorem の
+     exact shape を決める。
+
+---
+
+### 日時: 2026/06/03 12:43 JST (DKMK-014F geometric majorant exact shape 追加)
+
+1. 目的:
+   - DKMK-014F として、explicit majorant construction theorem の
+     first exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014F Explicit Majorant Construction Exact Shape を追加した。
+   - 単なる `ofMajorant` の別名 theorem は避け、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     chosen provider として記録した。
+   - `majorant k = base * ratio^k` という pointwise geometric majorant と、
+     外部から与える geometric finite-sum bound を statement に分けた。
+   - proof plan は `majorant := fun k => base * ratio^k` として
+     `DyadicBandAnalyticEstimate.ofMajorant` を薄く呼ぶ方針にした。
+3. 結論:
+   - DKMK-014F は docs-only exact shape review として完了した。
+   - 幾何級数補題や `0 <= ratio`, `ratio < 1` などの条件は、
+     future geometric-sum theorem 側に残す方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014G として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     Lean 上に薄い provider として追加する。
+
+---
+
+### 日時: 2026/06/03 12:48 JST (DKMK-014G pointwise geometric majorant provider 追加)
+
+1. 目的:
+   - DKMK-014G として、DKMK-014F で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を追加した。
+   - `majorant := fun k : ℕ => base * ratio ^ k` を明示して、
+     `DyadicBandAnalyticEstimate.ofMajorant` を薄く呼ぶ実装にした。
+   - `hinc_nonneg`、pointwise geometric bound `hgeom`、
+     external geometric finite-sum bound `hgeom_bound` をそのまま
+     `ofMajorant` へ渡した。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014G Lean Pointwise Geometric Majorant Provider を追記した。
+3. 結論:
+   - 幾何型 majorant `base * ratio ^ k` を使う provider が Lean 上で
+     利用可能になった。
+   - geometric-series lemma、`0 <= ratio`、`ratio < 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build で `ratio^k` の whitespace linter warning が出た。
+     `ratio ^ k` に修正して再 build した。
+6. 次の課題:
+   - DKMK-014H として、geometric finite-sum bound を外部入力のまま使う
+     usage summary、または caller-facing finite-sum theorem の設計へ進む。
+
+---
+
+### 日時: 2026/06/03 13:03 JST (DKMK-014H geometric majorant usage summary 追加)
+
+1. 目的:
+   - DKMK-014H として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` の利用導線を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014H Geometric Majorant Usage Summary を追加した。
+   - `increment` から `hinc_nonneg`、`hgeom`、`hgeom_bound` を経て
+     `ofPointwiseGeometricMajorant` に入り、
+     `toTruncationEnvelopeEstimate` と既存 finite-step route theorem へ進む
+     利用導線を整理した。
+   - finite total estimate `hgeom_bound` は外部入力のまま残し、
+     `ofPointwiseGeometricMajorant` はそれを消費するだけだと明記した。
+   - `0 <= base`、`0 <= ratio`、`ratio < 1`、closed-form finite geometric sum、
+     tail estimate は、`hgeom_bound` を実際に証明する後続 theorem 側に置く
+     方針を確認した。
+3. 結論:
+   - DKMK-014H は docs-only usage summary として完了した。
+   - geometric provider と future geometric-sum theorem の境界が明確になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014I として、caller-facing geometric finite-sum theorem の
+     exact shape を設計する。
+
+---
+
+### 日時: 2026/06/03 14:08 JST (DKMK-014I geometric sum-bound theorem shape 追加)
+
+1. 目的:
+   - DKMK-014I として、caller-facing geometric finite-sum theorem の
+     first exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014I Geometric Sum-Bound Theorem Exact Shape を追加した。
+   - chosen provider を
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     として記録した。
+   - `sum (base * ratio ^ k)` の bound を直接受けるのではなく、
+     `base * sum (ratio ^ k)` 形式の bound を caller-facing input として
+     受ける方針にした。
+   - proof plan は Rat 側で `base` を finite sum の外へ出し、
+     `ofPointwiseGeometricMajorant` を呼ぶ形にした。
+   - closed-form finite geometric sum や tail-bound theorem は後段へ残した。
+3. 結論:
+   - DKMK-014I は docs-only exact shape review として完了した。
+   - 次の theorem は、閉形式ではなく algebraic finite-sum factoring layer に
+     留める方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014J として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を Lean 上に薄い caller-facing provider として追加する。
+
+---
+
+### 日時: 2026/06/03 14:54 JST (DKMK-014J geometric sum-bound provider 追加)
+
+1. 目的:
+   - DKMK-014J として、DKMK-014I で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を追加した。
+   - caller-facing input として
+     `base * Finset.sum (Finset.range (K + 1)) (fun k => ratio ^ k)` の
+     Real bound を受ける形にした。
+   - `ofPointwiseGeometricMajorant` を呼び、必要な
+     `sum (base * ratio ^ k)` 型の bound は
+     `simpa [Finset.mul_sum] using hgeom_sum_bound` で与えた。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014J Lean Geometric Sum-Bound Provider を追記した。
+3. 結論:
+   - `base * sum ratio^k` 形式の caller-facing bound から、
+     pointwise geometric majorant provider を利用できるようになった。
+   - closed-form finite geometric-sum lemma、tail-bound lemma、
+     `0 <= ratio`、`ratio < 1`、`ratio != 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014K として、closed-form finite geometric-sum theorem へ進むか、
+     DKMK-014 の report / handoff へ進むかを決める。
+
+---
+
+### 日時: 2026/06/03 15:17 JST (DKMK-014K report / handoff 追加)
+
+1. 目的:
+   - DKMK-014K として、DKMK-014 の majorant provider chain を
+     report にまとめ、次章 DKMK-015 へ引き渡す。
+2. 実施:
+   - `report-DKMK-014.md` を追加した。
+   - DKMK-014A-J の到達点として、general majorant provider、
+     pointwise geometric majorant provider、caller-facing geomSumBound provider を
+     整理した。
+   - `roadmap-DKMK-014.md` に DKMK-014K Report / Handoff を追記した。
+   - closed-form finite geometric-sum lemma と tail-bound theorem は、
+     DKMK-015 の finite geometric-sum / tail-bound theorem design へ送る方針を
+     記録した。
+3. 結論:
+   - DKMK-014 は `k`-dependent band を majorant 経由で
+     `DyadicBandAnalyticEstimate` に載せる provider chain の章として
+     一区切りになった。
+   - 次は DKMK-015 として、finite geometric-sum / tail-bound theorem design へ
+     進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015 の roadmap を作り、closed-form finite geometric sum、
+     ratio side conditions、tail-bound theorem の exact scope を決める。
+
+---

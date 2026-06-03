@@ -287,6 +287,85 @@ theorem constantBand_of_natCastMulBound
   simpa [Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hbound
 
 /--
+Majorant-envelope provider for dyadic analytic estimates.
+
+The actual increment only needs nonnegativity.  Its total estimate is obtained
+by comparing it with a caller-supplied majorant on the same finite dyadic range.
+-/
+theorem ofMajorant
+    (x K : ℕ)
+    (increment majorant : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have hsum :
+        Finset.sum (Finset.range (K + 1)) increment ≤
+          Finset.sum (Finset.range (K + 1)) majorant := by
+      exact Finset.sum_le_sum hle
+    have hsumR :
+        ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+          ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) := by
+      exact_mod_cast hsum
+    exact le_trans hsumR hmajorant_bound
+
+/--
+Pointwise geometric-majorant provider for dyadic analytic estimates.
+
+This exposes the concrete majorant `base * ratio^k`, while leaving its finite
+sum estimate external.
+-/
+theorem ofPointwiseGeometricMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_bound :
+      ((Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => base * ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofMajorant x K increment
+      (fun k : ℕ => base * ratio ^ k)
+      hinc_nonneg hgeom hgeom_bound
+
+/--
+Pointwise geometric-majorant provider from the caller-facing finite-sum bound
+`base * sum ratio^k <= 1 + error`.
+
+This only factors the constant `base` out of the finite sum.  It does not prove
+a closed form for the geometric sum.
+-/
+theorem ofPointwiseGeometricMajorant_of_geomSumBound
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_sum_bound :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  apply ofPointwiseGeometricMajorant x K increment base ratio hinc_nonneg hgeom
+  simpa [Finset.mul_sum] using hgeom_sum_bound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/
