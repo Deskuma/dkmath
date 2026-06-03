@@ -78,6 +78,43 @@ theorem geomSum_range_mul_one_sub
     1 - ratio ^ (K + 1) := by
   exact mul_neg_geom_sum ratio (K + 1)
 
+/--
+Finite geometric-sum upper bound over the dyadic range length.
+
+This is the order form needed by the source-mass truncation layer; it avoids a
+separate division-form equality and uses only the positivity supplied by
+`ratio < 1`.
+-/
+theorem geomSum_range_le_one_div_one_sub
+    {ratio : ℝ} (K : ℕ)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1) :
+    (Finset.sum (Finset.range (K + 1))
+      (fun k : ℕ => ratio ^ k))
+      ≤
+    1 / (1 - ratio) := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hpow_nonneg : 0 ≤ ratio ^ (K + 1) :=
+    pow_nonneg hr0 (K + 1)
+  have hnum_le : 1 - ratio ^ (K + 1) ≤ 1 :=
+    sub_le_self 1 hpow_nonneg
+  have hmul_eq :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        =
+      1 - ratio ^ (K + 1) :=
+    geomSum_range_mul_one_sub ratio K
+  have hmul_le :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      1 := by
+    simpa [hmul_eq] using hnum_le
+  rw [le_div_iff₀ hpos]
+  simpa [mul_comm] using hmul_le
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/

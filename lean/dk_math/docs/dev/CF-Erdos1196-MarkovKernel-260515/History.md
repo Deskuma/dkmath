@@ -1310,3 +1310,39 @@ Archive
      実装できるか既存 theorem を確認し、軽ければ追加する。
 
 ---
+
+### 日時: 2026/06/04 03:37 JST (DKMK-015E geometric-sum upper-bound 実装)
+
+1. 目的:
+   - DKMK-015E として、DKMK-015D で固定した
+     `geomSum_range_le_one_div_one_sub` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に Real 版 theorem
+     `geomSum_range_le_one_div_one_sub` を追加した。
+   - statement は `0 <= ratio` と `ratio < 1` から
+     `sum_{k in range (K + 1)} ratio ^ k <= 1 / (1 - ratio)` を出す形にした。
+   - DKMK-015C の `geomSum_range_mul_one_sub` を使って
+     `(1 - ratio) * sum ratio^k <= 1` を作った。
+   - `sub_pos.mpr hr1` で `0 < 1 - ratio` を得て、
+     `le_div_iff₀` で目的の upper-bound へ変形した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015E Lean Geometric-Sum Upper Bound を追記した。
+3. 結論:
+   - finite geometric-sum の order upper-bound layer が Lean 上で
+     利用可能になった。
+   - division-form equality、explicit `ratio != 1`、base-scaled bound、
+     route theorem、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - `lake build` を repository top で実行して lakefile が見つからなかった。
+     `lean/dk_math` に移動して再実行し、成功した。
+6. 次の課題:
+   - DKMK-015F として、`base_mul_geomSum_range_le_of_base_mul_one_div_le`
+     の exact shape または Lean 実装へ進む。
+
+---

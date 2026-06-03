@@ -519,3 +519,92 @@ DKMK-015D is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 12. DKMK-015E Lean Geometric-Sum Upper Bound
+
+DKMK-015E implements the theorem shape fixed in DKMK-015D.
+
+Added theorem:
+
+```lean
+theorem geomSum_range_le_one_div_one_sub
+    {ratio : Real} (K : Nat)
+    (hr0 : 0 <= ratio)
+    (hr1 : ratio < 1) :
+    Finset.sum (Finset.range (K + 1))
+      (fun k : Nat => ratio ^ k)
+      <=
+    1 / (1 - ratio)
+```
+
+The Lean implementation is in:
+
+```text
+DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+### Proof route
+
+The proof uses the denominator-cleared identity from DKMK-015C:
+
+```text
+(1 - ratio) * sum ratio^k = 1 - ratio^(K + 1)
+```
+
+Then it uses:
+
+```text
+0 <= ratio^(K + 1)
+1 - ratio^(K + 1) <= 1
+0 < 1 - ratio
+```
+
+to derive:
+
+```text
+(1 - ratio) * sum ratio^k <= 1
+```
+
+Finally, `le_div_iff₀` moves the positive denominator to the right-hand side:
+
+```text
+sum ratio^k <= 1 / (1 - ratio)
+```
+
+### Side-condition behavior
+
+This theorem consumes:
+
+```text
+0 <= ratio
+ratio < 1
+```
+
+It does not add an explicit:
+
+```text
+ratio != 1
+```
+
+because the required denominator positivity is supplied by `ratio < 1`.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+```
+
+### Non-goals
+
+DKMK-015E does not add:
+
+- a division-form equality theorem;
+- base-scaled bounds;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
