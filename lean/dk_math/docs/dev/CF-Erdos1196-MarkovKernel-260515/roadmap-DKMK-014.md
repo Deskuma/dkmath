@@ -944,3 +944,36 @@ DKMK-014I is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 16. DKMK-014J Lean Geometric Sum-Bound Provider
+
+DKMK-014J adds:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+```
+
+The theorem consumes the caller-facing finite-sum bound:
+
+```lean
+((base * Finset.sum (Finset.range (K + 1))
+    (fun k : Nat => ratio ^ k) : Q) : R) <= 1 + error
+```
+
+and converts it into the bound required by:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+```
+
+The proof uses:
+
+```lean
+simpa [Finset.mul_sum] using hgeom_sum_bound
+```
+
+to rewrite `base * sum ratio^k` as `sum (base * ratio^k)`.
+
+No closed-form finite geometric-sum theorem, tail-bound theorem, ratio
+assumption, route theorem change, Mertens / big-O, logarithmic threshold, or
+real-to-Nat rounding is added.

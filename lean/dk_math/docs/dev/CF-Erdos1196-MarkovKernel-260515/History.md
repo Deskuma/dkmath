@@ -1115,3 +1115,40 @@ Archive
      を Lean 上に薄い caller-facing provider として追加する。
 
 ---
+
+### 日時: 2026/06/03 14:54 JST (DKMK-014J geometric sum-bound provider 追加)
+
+1. 目的:
+   - DKMK-014J として、DKMK-014I で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     を追加した。
+   - caller-facing input として
+     `base * Finset.sum (Finset.range (K + 1)) (fun k => ratio ^ k)` の
+     Real bound を受ける形にした。
+   - `ofPointwiseGeometricMajorant` を呼び、必要な
+     `sum (base * ratio ^ k)` 型の bound は
+     `simpa [Finset.mul_sum] using hgeom_sum_bound` で与えた。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014J Lean Geometric Sum-Bound Provider を追記した。
+3. 結論:
+   - `base * sum ratio^k` 形式の caller-facing bound から、
+     pointwise geometric majorant provider を利用できるようになった。
+   - closed-form finite geometric-sum lemma、tail-bound lemma、
+     `0 <= ratio`、`ratio < 1`、`ratio != 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014K として、closed-form finite geometric-sum theorem へ進むか、
+     DKMK-014 の report / handoff へ進むかを決める。
+
+---

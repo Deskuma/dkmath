@@ -342,6 +342,30 @@ theorem ofPointwiseGeometricMajorant
       hinc_nonneg hgeom hgeom_bound
 
 /--
+Pointwise geometric-majorant provider from the caller-facing finite-sum bound
+`base * sum ratio^k <= 1 + error`.
+
+This only factors the constant `base` out of the finite sum.  It does not prove
+a closed form for the geometric sum.
+-/
+theorem ofPointwiseGeometricMajorant_of_geomSumBound
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_sum_bound :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  apply ofPointwiseGeometricMajorant x K increment base ratio hinc_nonneg hgeom
+  simpa [Finset.mul_sum] using hgeom_sum_bound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/
