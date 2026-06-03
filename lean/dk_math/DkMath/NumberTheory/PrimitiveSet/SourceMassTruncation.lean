@@ -63,6 +63,21 @@ structure DyadicBandAnalyticEstimate
     ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
       1 + error
 
+/--
+Denominator-cleared finite geometric-sum identity over the dyadic range length.
+
+This is the algebraic form used before introducing any division side condition
+such as `ratio != 1`.
+-/
+theorem geomSum_range_mul_one_sub
+    (ratio : ℝ) (K : ℕ) :
+    (1 - ratio) *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      =
+    1 - ratio ^ (K + 1) := by
+  exact mul_neg_geom_sum ratio (K + 1)
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/

@@ -1245,3 +1245,36 @@ Archive
      既存 library theorem を確認し、軽ければ実装する。
 
 ---
+
+### 日時: 2026/06/04 02:58 JST (DKMK-015C denominator-cleared identity 追加)
+
+1. 目的:
+   - DKMK-015C として、DKMK-015B で固定した
+     `geomSum_range_mul_one_sub` を Lean 上に追加する。
+2. 実施:
+   - mathlib 既存 theorem として `mul_neg_geom_sum` を確認した。
+   - `SourceMassTruncation.lean` に Real 版 wrapper
+     `geomSum_range_mul_one_sub` を追加した。
+   - statement は
+     `(1 - ratio) * sum_{k in range (K + 1)} ratio ^ k =
+       1 - ratio ^ (K + 1)` とした。
+   - proof は `exact mul_neg_geom_sum ratio (K + 1)` で閉じた。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015C Lean Denominator-Cleared Identity を追記した。
+3. 結論:
+   - finite geometric-sum の最初の algebraic identity layer が Lean 上で
+     利用可能になった。
+   - division-form theorem、`ratio != 1`、`0 <= ratio`、`ratio < 1`、
+     base-scaled bound、route theorem、Mertens / big-O、
+     logarithmic threshold、real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015D として、division form へ進むか、
+     upper-bound theorem の exact shape へ進むかを review する。
+
+---

@@ -358,3 +358,44 @@ DKMK-015B is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 10. DKMK-015C Lean Denominator-Cleared Identity
+
+DKMK-015C adds:
+
+```lean
+geomSum_range_mul_one_sub
+```
+
+The theorem is the Real specialization of the denominator-cleared finite
+geometric-sum identity:
+
+```lean
+(1 - ratio) *
+  (Finset.sum (Finset.range (K + 1))
+    (fun k : Nat => ratio ^ k))
+  =
+1 - ratio ^ (K + 1)
+```
+
+The implementation uses the existing mathlib theorem:
+
+```lean
+mul_neg_geom_sum
+```
+
+with `n := K + 1`.
+
+This confirms that the first algebraic identity layer is light enough to keep
+as a local wrapper in `SourceMassTruncation.lean`.
+
+This step does not add:
+
+- a division-form theorem;
+- `ratio != 1`;
+- order assumptions such as `0 <= ratio` or `ratio < 1`;
+- base-scaled bounds;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
