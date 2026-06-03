@@ -238,3 +238,123 @@ finite geometric-sum identity exact shape review
 
 It should decide whether the first closed-form theorem is an equality theorem,
 a denominator-cleared identity, or an upper-bound theorem that avoids equality.
+
+## 9. DKMK-015B Finite Geometric-Sum Identity Exact Shape
+
+DKMK-015B fixes the first finite geometric-sum identity shape.
+
+The first theorem should be a denominator-cleared identity, not the division
+form.
+
+### Chosen identity
+
+Use:
+
+```lean
+geomSum_range_mul_one_sub
+```
+
+Expected shape:
+
+```lean
+lemma geomSum_range_mul_one_sub
+    (ratio : R) (K : Nat) :
+    (1 - ratio) *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : Nat => ratio ^ k))
+      =
+    1 - ratio ^ (K + 1)
+```
+
+Lean implementation may use `R = Real` first, or a generic commutative ring if
+the existing library theorem is already generic and convenient.
+
+### Why denominator-cleared first
+
+The division form:
+
+```text
+sum ratio^k = (1 - ratio^(K + 1)) / (1 - ratio)
+```
+
+requires:
+
+```text
+ratio != 1
+```
+
+because it divides by `1 - ratio`.
+
+The denominator-cleared form:
+
+```text
+(1 - ratio) * sum ratio^k = 1 - ratio^(K + 1)
+```
+
+does not require `ratio != 1`.
+
+This matches the DKMK-015 design principle:
+
+```text
+side conditions appear only in the theorem that consumes them
+```
+
+### Later division form
+
+The division theorem should be a later theorem:
+
+```lean
+lemma geomSum_range_eq_div_one_sub
+    {ratio : R} (hr : ratio != 1) (K : Nat) :
+    Finset.sum (Finset.range (K + 1))
+      (fun k : Nat => ratio ^ k)
+      =
+    (1 - ratio ^ (K + 1)) / (1 - ratio)
+```
+
+This later theorem is the first place that should consume `ratio != 1`.
+
+### Later order layer
+
+The upper-bound theorem should also be separate:
+
+```lean
+lemma geomSum_range_le_inv_one_sub
+    {ratio : R} (hr0 : 0 <= ratio) (hr1 : ratio < 1) (K : Nat) :
+    Finset.sum (Finset.range (K + 1))
+      (fun k : Nat => ratio ^ k)
+      <=
+    1 / (1 - ratio)
+```
+
+This later theorem is the first place that should consume:
+
+```text
+0 <= ratio
+ratio < 1
+```
+
+### Connection to DKMK-014J
+
+DKMK-014J already accepts:
+
+```text
+base * sum ratio^k <= 1 + error
+```
+
+DKMK-015B does not yet prove this bound.  It only fixes the algebraic identity
+that later division and order theorems may use.
+
+### Non-goals
+
+DKMK-015B is docs-only.  It does not add:
+
+- Lean code;
+- a division-form theorem;
+- `ratio != 1`;
+- order assumptions such as `0 <= ratio` or `ratio < 1`;
+- base-scaled bounds;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

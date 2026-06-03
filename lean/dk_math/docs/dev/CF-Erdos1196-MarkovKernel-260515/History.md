@@ -1215,3 +1215,33 @@ Archive
      denominator-cleared identity、upper-bound theorem のどれから始めるか決める。
 
 ---
+
+### 日時: 2026/06/03 22:22 JST (DKMK-015B geometric-sum identity shape 追加)
+
+1. 目的:
+   - DKMK-015B として、finite geometric-sum identity の first exact shape を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015B Finite Geometric-Sum Identity Exact Shape を追加した。
+   - 最初の theorem は division form ではなく、
+     denominator-cleared identity `geomSum_range_mul_one_sub` とした。
+   - expected shape として
+     `(1 - ratio) * sum ratio^k = 1 - ratio^(K + 1)` を記録した。
+   - `ratio != 1` は division-form theorem まで遅らせる方針を明記した。
+   - `0 <= ratio`、`ratio < 1` は upper-bound theorem 側に置く方針を
+     再確認した。
+3. 結論:
+   - DKMK-015B は docs-only exact shape review として完了した。
+   - DKMK-015 の最初の Lean-facing identity は、side condition を持たない
+     denominator-cleared algebraic identity から始める方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015C として、`geomSum_range_mul_one_sub` を Lean 上に追加できるか
+     既存 library theorem を確認し、軽ければ実装する。
+
+---
