@@ -419,3 +419,64 @@ This is the first non-constant provider in the DKMK-014 chapter.
 
 No decreasing condition, route theorem, Mertens / big-O, logarithmic threshold,
 or real-to-Nat rounding is added.
+
+## 10. DKMK-014D Majorant Provider Usage Summary
+
+The intended usage flow for the majorant provider is:
+
+```text
+increment, majorant
+  -> hinc_nonneg : 0 <= increment k on Finset.range (K + 1)
+  -> hle : increment k <= majorant k on Finset.range (K + 1)
+  -> hmajorant_bound : sum majorant <= 1 + error
+  -> DyadicBandAnalyticEstimate.ofMajorant
+  -> DyadicBandAnalyticEstimate x K increment error
+  -> DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate
+  -> existing finite-step route theorem
+  -> weightedHitMass <= 1 + error
+```
+
+The key point is that `majorant` is the object whose finite sum is estimated.
+The actual `increment` may be harder to sum directly, but it can enter the
+route once it is bounded above by `majorant` on the same dyadic range.
+
+This separates two jobs:
+
+```text
+local band control:
+  increment k <= majorant k
+
+finite analytic total estimate:
+  sum majorant <= 1 + error
+```
+
+The provider consumes exactly these two jobs plus nonnegativity of `increment`.
+It does not need to know why the majorant exists.
+
+### Decreasing assumptions
+
+A decreasing or decay assumption remains outside the core provider.
+
+The expected future shape is:
+
+```text
+decreasing / decay input
+  -> construct or justify majorant
+  -> prove pointwise increment <= majorant
+  -> prove sum majorant <= 1 + error
+  -> ofMajorant
+```
+
+This keeps decreasing information useful only when a later theorem consumes it.
+
+### Non-goals
+
+DKMK-014D is docs-only.  It does not add:
+
+- Lean code;
+- a decreasing provider;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

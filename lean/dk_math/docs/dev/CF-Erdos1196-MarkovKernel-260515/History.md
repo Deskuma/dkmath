@@ -925,3 +925,33 @@ Archive
    - DKMK-014D として、majorant provider の usage summary を docs 上で整理する。
 
 ---
+
+### 日時: 2026/06/03 04:02 JST (DKMK-014D majorant provider usage summary 追加)
+
+1. 目的:
+   - DKMK-014D として、
+     `DyadicBandAnalyticEstimate.ofMajorant` の使い方を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014D Majorant Provider Usage Summary を追加した。
+   - `increment, majorant` から `hinc_nonneg`、`hle`、
+     `hmajorant_bound` を経て `ofMajorant` に入り、
+     `toTruncationEnvelopeEstimate` と既存 finite-step route theorem へ進む
+     利用導線を整理した。
+   - `majorant` は有限和を評価する対象であり、`increment` は同じ dyadic range 上で
+     `majorant` に抑えれば route に載せられる、という役割分担を明記した。
+   - decreasing / decay assumption は、majorant を作る後続 theorem が消費するまで
+     core provider の外に置く方針を再確認した。
+3. 結論:
+   - DKMK-014D は docs-only usage summary として完了した。
+   - majorant provider の利用導線が、Lean theorem の外側でも追跡しやすくなった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014E として、dyadic tail upper envelope へ進む前に
+     majorant provider chapter のまとめ、または次の provider shape を検討する。
+
+---
