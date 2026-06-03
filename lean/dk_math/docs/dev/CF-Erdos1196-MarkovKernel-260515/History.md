@@ -955,3 +955,32 @@ Archive
      majorant provider chapter のまとめ、または次の provider shape を検討する。
 
 ---
+
+### 日時: 2026/06/03 12:33 JST (DKMK-014E decreasing / decay design 追加)
+
+1. 目的:
+   - DKMK-014E として、decreasing / decay information を
+     majorant construction にどう接続するかを docs 上で整理する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014E Decreasing / Decay to Majorant Design を追加した。
+   - decreasing only、decay ratio with external total bound、
+     explicit majorant construction theorem の候補を比較した。
+   - decreasing だけでは `sum increment <= 1 + error` を出せないため、
+     core provider field にしない方針を明記した。
+   - decay 情報は `majorant` を作る、または正当化する材料として扱い、
+     最終的には `DyadicBandAnalyticEstimate.ofMajorant` に流す境界を固定した。
+3. 結論:
+   - DKMK-014E は docs-only design step として完了した。
+   - 次の Lean-facing shape は、core estimate の field 追加ではなく、
+     explicit majorant construction theorem 側に寄せる方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014F として、explicit majorant construction theorem の
+     exact shape を決める。
+
+---

@@ -480,3 +480,105 @@ DKMK-014D is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 11. DKMK-014E Decreasing / Decay to Majorant Design
+
+The majorant provider chapter is now usable:
+
+```text
+increment <= majorant
+sum majorant <= 1 + error
+  -> DyadicBandAnalyticEstimate.ofMajorant
+```
+
+The next design question is how decreasing or decay information should help
+produce the `majorant` side of this interface.
+
+### Candidate E1: decreasing only
+
+Data:
+
+```text
+increment (k + 1) <= increment k
+0 <= increment k
+```
+
+This is not enough by itself.
+
+It gives shape information about the sequence, but it does not produce a
+finite total estimate:
+
+```text
+sum increment <= 1 + error
+```
+
+Therefore decreasing alone should not become a new provider field.
+
+### Candidate E2: decay ratio with external total bound
+
+Data:
+
+```text
+0 <= increment k
+increment (k + 1) <= r * increment k
+increment k <= majorant k
+sum majorant <= 1 + error
+```
+
+Here the decay condition may justify the pointwise majorant, but the finite
+sum estimate still remains external.
+
+This is compatible with the current provider stack because the final theorem
+can still call:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+### Candidate E3: explicit majorant construction theorem
+
+This is the preferred next Lean-facing shape.
+
+Instead of changing `DyadicBandAnalyticEstimate`, add a separate theorem that
+constructs or validates a usable majorant:
+
+```text
+decreasing / decay assumptions
+  -> hle : increment k <= majorant k
+  -> hmajorant_bound : sum majorant <= 1 + error
+  -> ofMajorant
+```
+
+The theorem may package the call to `ofMajorant`, but it should not add new
+fields to the core analytic estimate.
+
+### Boundary decision
+
+DKMK-014E fixes this boundary:
+
+```text
+decreasing / decay:
+  evidence used to build or justify a majorant
+
+majorant:
+  object whose finite sum is estimated
+
+ofMajorant:
+  bridge from pointwise majorization and total majorant bound to
+  DyadicBandAnalyticEstimate
+```
+
+This keeps the current theorem small and lets future dyadic-tail estimates
+specialize only the majorant-construction side.
+
+### Non-goals
+
+DKMK-014E is docs-only.  It does not add:
+
+- Lean code;
+- a decreasing provider theorem;
+- geometric-series lemmas;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
