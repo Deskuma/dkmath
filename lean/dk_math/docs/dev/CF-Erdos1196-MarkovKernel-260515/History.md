@@ -1050,3 +1050,35 @@ Archive
      usage summary、または caller-facing finite-sum theorem の設計へ進む。
 
 ---
+
+### 日時: 2026/06/03 13:03 JST (DKMK-014H geometric majorant usage summary 追加)
+
+1. 目的:
+   - DKMK-014H として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` の利用導線を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-014.md` に
+     DKMK-014H Geometric Majorant Usage Summary を追加した。
+   - `increment` から `hinc_nonneg`、`hgeom`、`hgeom_bound` を経て
+     `ofPointwiseGeometricMajorant` に入り、
+     `toTruncationEnvelopeEstimate` と既存 finite-step route theorem へ進む
+     利用導線を整理した。
+   - finite total estimate `hgeom_bound` は外部入力のまま残し、
+     `ofPointwiseGeometricMajorant` はそれを消費するだけだと明記した。
+   - `0 <= base`、`0 <= ratio`、`ratio < 1`、closed-form finite geometric sum、
+     tail estimate は、`hgeom_bound` を実際に証明する後続 theorem 側に置く
+     方針を確認した。
+3. 結論:
+   - DKMK-014H は docs-only usage summary として完了した。
+   - geometric provider と future geometric-sum theorem の境界が明確になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-014.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-014I として、caller-facing geometric finite-sum theorem の
+     exact shape を設計する。
+
+---

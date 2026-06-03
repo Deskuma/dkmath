@@ -732,3 +732,89 @@ with the geometric majorant supplied explicitly.
 No geometric-series simplification is performed.  In particular, no assumptions
 such as `0 <= ratio` or `ratio < 1` are introduced here.  Those belong to a
 future theorem that proves the external geometric finite-sum bound.
+
+## 14. DKMK-014H Geometric Majorant Usage Summary
+
+The intended usage flow for the pointwise geometric majorant provider is:
+
+```text
+increment
+  -> hinc_nonneg :
+       0 <= increment k on Finset.range (K + 1)
+  -> hgeom :
+       increment k <= base * ratio ^ k on Finset.range (K + 1)
+  -> hgeom_bound :
+       sum (base * ratio ^ k) <= 1 + error
+  -> DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+  -> DyadicBandAnalyticEstimate x K increment error
+  -> DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+  -> TruncationEnvelopeEstimate
+  -> existing finite-step route theorem
+  -> weightedHitMass <= 1 + error
+```
+
+The theorem has three jobs:
+
+```text
+nonnegativity:
+  hinc_nonneg
+
+pointwise geometric control:
+  hgeom
+
+finite total estimate:
+  hgeom_bound
+```
+
+Only the second job is specific to the geometric shape.  The finite total
+estimate remains external.
+
+### Why the finite-sum bound is still external
+
+`ofPointwiseGeometricMajorant` does not prove:
+
+```text
+sum (base * ratio ^ k) <= 1 + error
+```
+
+It only consumes that estimate.
+
+This keeps the provider independent of the analytic side conditions needed to
+prove a geometric finite-sum estimate, such as:
+
+```text
+0 <= base
+0 <= ratio
+ratio < 1
+closed-form finite geometric sum
+tail estimate
+```
+
+Those assumptions should appear only in a later theorem that actually proves
+`hgeom_bound`.
+
+### Next theorem boundary
+
+The next possible caller-facing theorem should have the shape:
+
+```text
+geometric finite-sum assumptions
+  -> hgeom_bound :
+       sum (base * ratio ^ k) <= 1 + error
+  -> ofPointwiseGeometricMajorant
+```
+
+That theorem may introduce ratio assumptions or finite geometric-sum lemmas.
+It should remain separate from the current provider.
+
+### Non-goals
+
+DKMK-014H is docs-only.  It does not add:
+
+- Lean code;
+- geometric-series lemmas;
+- assumptions such as `0 <= ratio` or `ratio < 1`;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
