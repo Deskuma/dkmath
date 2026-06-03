@@ -317,6 +317,31 @@ theorem ofMajorant
     exact le_trans hsumR hmajorant_bound
 
 /--
+Pointwise geometric-majorant provider for dyadic analytic estimates.
+
+This exposes the concrete majorant `base * ratio^k`, while leaving its finite
+sum estimate external.
+-/
+theorem ofPointwiseGeometricMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_bound :
+      ((Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => base * ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofMajorant x K increment
+      (fun k : ℕ => base * ratio ^ k)
+      hinc_nonneg hgeom hgeom_bound
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/

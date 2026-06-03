@@ -698,3 +698,37 @@ DKMK-014F is docs-only.  It does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 13. DKMK-014G Lean Pointwise Geometric Majorant Provider
+
+DKMK-014G adds:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant
+```
+
+The theorem exposes the concrete pointwise majorant:
+
+```lean
+fun k : Nat => base * ratio ^ k
+```
+
+and consumes:
+
+```text
+increment nonnegativity
+pointwise increment k <= base * ratio^k
+external finite geometric-sum bound
+```
+
+The proof is a thin call to:
+
+```lean
+DyadicBandAnalyticEstimate.ofMajorant
+```
+
+with the geometric majorant supplied explicitly.
+
+No geometric-series simplification is performed.  In particular, no assumptions
+such as `0 <= ratio` or `ratio < 1` are introduced here.  Those belong to a
+future theorem that proves the external geometric finite-sum bound.

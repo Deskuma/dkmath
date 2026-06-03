@@ -1015,3 +1015,38 @@ Archive
      Lean 上に薄い provider として追加する。
 
 ---
+
+### 日時: 2026/06/03 12:48 JST (DKMK-014G pointwise geometric majorant provider 追加)
+
+1. 目的:
+   - DKMK-014G として、DKMK-014F で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を
+     Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant` を追加した。
+   - `majorant := fun k : ℕ => base * ratio ^ k` を明示して、
+     `DyadicBandAnalyticEstimate.ofMajorant` を薄く呼ぶ実装にした。
+   - `hinc_nonneg`、pointwise geometric bound `hgeom`、
+     external geometric finite-sum bound `hgeom_bound` をそのまま
+     `ofMajorant` へ渡した。
+   - `roadmap-DKMK-014.md` に
+     DKMK-014G Lean Pointwise Geometric Majorant Provider を追記した。
+3. 結論:
+   - 幾何型 majorant `base * ratio ^ k` を使う provider が Lean 上で
+     利用可能になった。
+   - geometric-series lemma、`0 <= ratio`、`ratio < 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - 初回 build で `ratio^k` の whitespace linter warning が出た。
+     `ratio ^ k` に修正して再 build した。
+6. 次の課題:
+   - DKMK-014H として、geometric finite-sum bound を外部入力のまま使う
+     usage summary、または caller-facing finite-sum theorem の設計へ進む。
+
+---
