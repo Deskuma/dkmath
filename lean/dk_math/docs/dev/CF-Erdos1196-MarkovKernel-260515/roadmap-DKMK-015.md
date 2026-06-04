@@ -811,3 +811,102 @@ DKMK-015G does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 15. DKMK-015H Lean Dyadic Provider Connection
+
+DKMK-015H implements the connection theorem fixed in DKMK-015G.
+
+Added theorem:
+
+```lean
+theorem DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_baseGeomBudget
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (base ratio : Rat)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1), increment k <= base * ratio ^ k)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    {error : Real}
+    (hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+The Lean implementation is in:
+
+```text
+DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+### Proof route
+
+The proof first builds the Real-side provider-facing bound:
+
+```text
+(base : Real) * sum ((ratio : Real) ^ k) <= 1 + error
+```
+
+using:
+
+```lean
+base_mul_geomSum_range_le_of_base_mul_one_div_le
+```
+
+Then it closes the rational-to-real finite-sum cast boundary locally:
+
+```text
+((base * sum (fun k => ratio ^ k) : Rat) : Real)
+=
+(base : Real) * sum (fun k => (ratio : Real) ^ k)
+```
+
+This cast identity closes by `simp`.
+
+Finally, it invokes the existing DKMK-014J provider:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+```
+
+### Resulting caller path
+
+Callers can now provide:
+
+```text
+base * (1 / (1 - ratio)) <= 1 + error
+```
+
+over `Real`, together with the pointwise rational geometric majorant, and get:
+
+```lean
+DyadicBandAnalyticEstimate x K increment error
+```
+
+This completes the connection from DKMK-015 finite geometric-sum estimates to
+the existing DKMK-014J dyadic provider route.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+```
+
+### Non-goals
+
+DKMK-015H does not add:
+
+- a new provider structure;
+- a duplicate low-level provider;
+- a division-form equality theorem;
+- route theorem changes beyond the connection wrapper;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

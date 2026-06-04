@@ -450,6 +450,47 @@ theorem ofPointwiseGeometricMajorant_of_geomSumBound
   simpa [Finset.mul_sum] using hgeom_sum_bound
 
 /--
+Pointwise geometric-majorant provider from the one-over-one-minus budget.
+
+This is the convenience wrapper that crosses from the Real geometric-sum
+budget theorem back into the rational-valued dyadic provider layer.
+-/
+theorem ofPointwiseGeometricMajorant_of_baseGeomBudget
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    {error : ℝ}
+    (hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  have hreal :
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k))
+        ≤
+      1 + error :=
+    base_mul_geomSum_range_le_of_base_mul_one_div_le
+      K hbase hr0 hr1 hbudget
+  have hcast :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ)
+        =
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k)) := by
+    simp
+  exact
+    ofPointwiseGeometricMajorant_of_geomSumBound
+      x K increment base ratio hinc_nonneg hgeom
+      (by simpa [hcast] using hreal)
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/

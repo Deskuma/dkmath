@@ -1417,3 +1417,42 @@ Archive
      を実装し、既存 provider へ接続する。
 
 ---
+
+### 日時: 2026/06/04 16:32 JST (DKMK-015H dyadic provider connection 実装)
+
+1. 目的:
+   - DKMK-015H として、DKMK-015G で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` の `DyadicBandAnalyticEstimate` namespace に
+     theorem `ofPointwiseGeometricMajorant_of_baseGeomBudget` を追加した。
+   - `base_mul_geomSum_range_le_of_base_mul_one_div_le` で Real 側の
+     `base * sum ratio^k <= 1 + error` bound を作った。
+   - `((base * sum ratio^k : Rat) : Real)` と
+     `(base : Real) * sum ((ratio : Real) ^ k)` の cast 境界を
+     局所補題 `hcast` として `simp` で閉じた。
+   - 最後に既存 provider
+     `ofPointwiseGeometricMajorant_of_geomSumBound` へ接続した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015H Lean Dyadic Provider Connection を追記した。
+3. 結論:
+   - DKMK-015 の Real geometric-budget route が、既存 DKMK-014J の
+     rational dyadic provider route へ接続された。
+   - caller は `base * (1 / (1 - ratio)) <= 1 + error` を Real 側で
+     与えることで `DyadicBandAnalyticEstimate` を得られる。
+   - 新 provider structure、duplicate low-level provider、
+     division-form equality、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015I として、DKMK-015 のまとめまたは次の route 接続方針を
+     review する。
+
+---
