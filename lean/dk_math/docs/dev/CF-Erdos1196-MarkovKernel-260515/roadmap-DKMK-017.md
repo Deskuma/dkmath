@@ -255,3 +255,84 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 7. DKMK-017B Source Constructor Bundle
+
+DKMK-017B tested whether `FirstBandDecayBudgetSource` should rely on raw record
+syntax or provide explicit constructors for analytic-input callers.
+
+### Tried targets
+
+Minimal constructor from an existing budget source:
+
+```lean
+def FirstBandDecayBudgetSource.ofBudgetSource
+    {K : Nat} {increment : Nat -> Rat}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hbase0 : increment 0 <= B.base)
+    (hdecay :
+      forall k in Finset.range K,
+        increment (k + 1) <= B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment
+```
+
+Constructor from an explicit one-over-one-minus budget:
+
+```lean
+def FirstBandDecayBudgetSource.ofBudgetAndDecay
+    {K : Nat} {increment : Nat -> Rat}
+    (base ratio : Rat)
+    (error : Real)
+    ...
+    FirstBandDecayBudgetSource K increment
+```
+
+The second constructor builds:
+
+```text
+GeometricBudgetSource.ofBudget
+  -> FirstBandDecayBudgetSource.ofBudgetSource
+```
+
+### Result
+
+Both constructors were accepted.
+
+`ofBudgetSource` is the minimal package constructor.  `ofBudgetAndDecay` is the
+caller-facing constructor for the concrete hbudget input:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+### Lean findings
+
+The first implementation attempt placed the `FirstBandDecayBudgetSource`
+namespace before `GeometricBudgetSource.ofBudget`.  Lean correctly failed with:
+
+```text
+Unknown constant `DkMath.NumberTheory.PrimitiveSet.GeometricBudgetSource.ofBudget`
+```
+
+Moving the constructor namespace after `end GeometricBudgetSource` fixed the
+issue.  No proof or coercion problem remained.
+
+### Decision
+
+Adopt both constructors.
+
+This is not a new analytic theorem.  It is the first concrete source-constructor
+surface for loading analytic inputs into the DKMK-017 package.
+
+### Verification
+
+DKMK-017B was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.

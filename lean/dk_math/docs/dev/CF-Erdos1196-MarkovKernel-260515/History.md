@@ -2061,3 +2061,34 @@ Archive
      helper lemma を検討する。
 
 ---
+
+### 日時: 2026/06/05 08:15 JST (DKMK-017B source constructor bundle)
+
+1. 目的:
+   - DKMK-017B として、`FirstBandDecayBudgetSource` に流し込む
+     concrete source constructor が Lean 上で有効か試す。
+2. 実施:
+   - `FirstBandDecayBudgetSource.ofBudgetSource` を追加した。
+   - `FirstBandDecayBudgetSource.ofBudgetAndDecay` を追加し、
+     `GeometricBudgetSource.ofBudget` から package を作れるようにした。
+   - `roadmap-DKMK-017.md` に DKMK-017B Source Constructor Bundle を
+     追記した。
+3. 結論:
+   - record syntax だけでも表現可能だが、constructor を置くことで
+     analytic input boundary が明確になった。
+   - `ofBudgetSource` と `ofBudgetAndDecay` は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - 最初は `FirstBandDecayBudgetSource` namespace を
+     `GeometricBudgetSource.ofBudget` より前に置いたため、Lean が
+     unknown constant として失敗した。
+   - constructor 群を `end GeometricBudgetSource` の後へ移して解消した。
+6. 次の課題:
+   - budget proof そのものを供給する helper lemma または concrete source を
+     検討する。
+
+---

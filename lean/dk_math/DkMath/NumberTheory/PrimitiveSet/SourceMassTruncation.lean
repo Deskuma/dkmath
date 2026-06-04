@@ -273,6 +273,58 @@ def ofZeroRatio
 
 end GeometricBudgetSource
 
+namespace FirstBandDecayBudgetSource
+
+/--
+Build a first-band / uniform-decay source from an already packaged geometric
+budget.
+
+This is the minimal constructor for the DKMK-017 analytic-input package.
+-/
+def ofBudgetSource
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment where
+  budget := B
+  hinc_nonneg := hinc_nonneg
+  hbase0 := hbase0
+  hdecay := hdecay
+
+/--
+Build a first-band / uniform-decay source from an explicit geometric budget.
+
+This keeps the concrete one-over-one-minus budget proof at the analytic-input
+boundary while producing the package consumed by the dyadic provider route.
+-/
+def ofBudgetAndDecay
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource
+    (GeometricBudgetSource.ofBudget
+      base ratio error hbase hr0 hr1 hbudget)
+    hinc_nonneg hbase0 hdecay
+
+end FirstBandDecayBudgetSource
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
