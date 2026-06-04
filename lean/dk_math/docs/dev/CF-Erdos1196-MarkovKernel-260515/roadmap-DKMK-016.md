@@ -1341,3 +1341,136 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed files
 ```
+
+## 18. DKMK-016M First-Band Decay Provider Wrapper Shape Review
+
+DKMK-016M fixes the provider-facing wrapper shape that combines:
+
+```text
+GeometricBudgetSource
+hinc_nonneg
+first-band bound
+uniform decay
+```
+
+into:
+
+```text
+DyadicBandAnalyticEstimate
+```
+
+This is the connection point after DKMK-016L.
+
+### Recommended theorem shape
+
+The next Lean target should be:
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hbase0 : increment 0 <= B.base)
+    (hdecay :
+      forall k in Finset.range K,
+        increment (k + 1) <= B.ratio * increment k) :
+    DyadicBandAnalyticEstimate x K increment B.error
+```
+
+The proof should build:
+
+```lean
+have hgeom :
+    forall k in Finset.range (K + 1),
+      increment k <= B.base * B.ratio^k
+```
+
+using:
+
+```lean
+pointwiseGeometricMajorant_of_firstBand_decay
+  K increment B.base B.ratio hbase0 hdecay hr0_rat
+```
+
+then pass `hgeom` to:
+
+```lean
+DyadicBandAnalyticEstimate
+  .ofPointwiseGeometricMajorant_of_budgetSource
+    x K increment B hinc_nonneg hgeom
+```
+
+### Cast boundary
+
+The only expected type-boundary issue is the ratio nonnegativity hypothesis.
+
+`GeometricBudgetSource` stores:
+
+```lean
+B.hr0 : 0 <= (B.ratio : Real)
+```
+
+while `pointwiseGeometricMajorant_of_firstBand_decay` currently requires:
+
+```lean
+hr0_rat : 0 <= B.ratio
+```
+
+The implementation should try:
+
+```lean
+have hr0_rat : 0 <= B.ratio := by
+  exact_mod_cast B.hr0
+```
+
+If that cast does not work directly, the theorem may need a small helper lemma
+for rational nonnegativity reflected by the real cast.
+
+### Responsibility split
+
+This wrapper should not prove:
+
+```text
+base * (1 / (1 - ratio)) <= 1 + error
+```
+
+That proof remains inside `B : GeometricBudgetSource`.
+
+This wrapper should also not prove:
+
+```text
+0 <= increment k
+```
+
+That remains the caller-supplied `hinc_nonneg`.
+
+Its only new work is:
+
+```text
+first-band + decay -> hgeom
+```
+
+followed by the existing budget-source provider wrapper.
+
+### Non-goals
+
+DKMK-016M does not add:
+
+- Lean code;
+- a new structure;
+- an analytic budget theorem;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding;
+- a finite-step route theorem.
+
+### Verification
+
+DKMK-016M is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```

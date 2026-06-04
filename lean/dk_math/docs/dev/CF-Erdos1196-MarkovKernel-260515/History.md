@@ -1876,3 +1876,33 @@ Archive
      review する。
 
 ---
+
+### 日時: 2026/06/05 06:47 JST (DKMK-016M provider wrapper shape review 追加)
+
+1. 目的:
+   - DKMK-016M として、`pointwiseGeometricMajorant_of_firstBand_decay` を
+     `GeometricBudgetSource` と provider wrapper へ接続する theorem shape を
+     Lean 実装前に固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016M First-Band Decay Provider Wrapper Shape Review を追記した。
+   - 次の Lean target として
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を提案した。
+   - `B.hr0 : 0 <= (B.ratio : Real)` から
+     `hr0_rat : 0 <= B.ratio` を作る cast boundary を明示した。
+   - wrapper は budget proof と increment nonnegativity を証明せず、
+     `hgeom` 生成と既存 budget-source provider wrapper への接続だけを
+     担当する方針にした。
+3. 結論:
+   - 次は `ofFirstBandDecayBudgetSource` を Lean 上に追加するのが妥当。
+   - 主なリスクは数学ではなく Rat / Real cast 境界である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016N として `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`
+     を Lean 上に実装する。
+
+---
