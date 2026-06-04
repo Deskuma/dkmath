@@ -972,3 +972,126 @@ DKMK-016I is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 15. DKMK-016J First-Band / Uniform-Decay Interface Review
+
+DKMK-016J fixes the interface obligations behind Candidate C.
+
+The provider route needs two independent inputs:
+
+```text
+Budget obligation:
+  base * (1 / (1 - ratio)) <= 1 + error
+
+Pointwise decay obligation:
+  increment k <= base * ratio^k
+```
+
+`GeometricBudgetSource` packages the budget obligation.  It should not also
+package the pointwise decay of a particular `increment`, because it is not
+indexed by `x`, `K`, or `increment`.
+
+### Recommended interface split
+
+The first-band / uniform-decay interface should remain split:
+
+```text
+GeometricBudgetSource.ofBudget
+  packages base, ratio, error, hbase, hr0, hr1, hbudget
+
+hgeom
+  proves increment k <= base * ratio^k on Finset.range (K + 1)
+```
+
+Then the existing provider wrapper combines them:
+
+```lean
+DyadicBandAnalyticEstimate
+  .ofPointwiseGeometricMajorant_of_budgetSource
+    x K increment B hinc_nonneg hgeom
+```
+
+This avoids adding a duplicate `FirstBandDecayBudgetInput` structure that would
+have the same fields as `GeometricBudgetSource` plus an `increment`-specific
+property.
+
+### Future pointwise-decay theorem shape
+
+The meaningful next Lean theorem is not another budget constructor.  It is a
+future lemma that turns first-band and uniform-decay hypotheses into `hgeom`.
+
+Candidate shape:
+
+```lean
+theorem pointwiseGeometricMajorant_of_firstBand_decay
+    (K : Nat)
+    (increment : Nat -> Rat)
+    (base ratio : Rat)
+    (hbase0 : increment 0 <= base)
+    (hdecay :
+      forall k in Finset.range K,
+        increment (k + 1) <= ratio * increment k)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hr0 : 0 <= ratio) :
+    forall k in Finset.range (K + 1),
+      increment k <= base * ratio^k
+```
+
+This theorem may need careful indexing and algebraic side conditions.  It
+should be reviewed before implementation.
+
+### Why not add a structure now
+
+A structure such as:
+
+```lean
+structure FirstBandDecayBudgetInput where
+  base : Rat
+  ratio : Rat
+  error : Real
+  ...
+```
+
+would duplicate `GeometricBudgetSource`.
+
+The actual new content is not another package of `base`, `ratio`, and `error`;
+it is the derivation of pointwise geometric control from first-band and decay
+assumptions.
+
+### Recommended next step
+
+The next step should review the theorem shape for:
+
+```text
+first-band bound + uniform step decay
+  -> hgeom
+```
+
+before adding Lean code.  In particular, it should check:
+
+- whether `hdecay` should range over `Finset.range K` or all `k < K`;
+- whether `hr0 : 0 <= ratio` is enough;
+- whether `hinc_nonneg` is needed in the induction proof;
+- whether the theorem should be stated over `Rat` only or later generalized.
+
+### Non-goals
+
+DKMK-016J does not add:
+
+- Lean code;
+- a new structure;
+- an analytic budget theorem;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding;
+- a provider wrapper.
+
+### Verification
+
+DKMK-016J is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```

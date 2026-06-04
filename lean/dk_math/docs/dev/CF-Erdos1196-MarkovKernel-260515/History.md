@@ -1783,3 +1783,32 @@ Archive
      review する。
 
 ---
+
+### 日時: 2026/06/05 03:02 JST (DKMK-016J first-band decay interface review 追加)
+
+1. 目的:
+   - DKMK-016J として、Candidate C の first-band / uniform-decay interface を
+     Lean 実装前に整理する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016J First-Band / Uniform-Decay Interface Review を追記した。
+   - obligation を budget obligation と pointwise decay obligation に分けた。
+   - `GeometricBudgetSource` は budget obligation を package し、
+     `hgeom` は increment-specific な pointwise control として外に置く方針を
+     固定した。
+   - 新構造体 `FirstBandDecayBudgetInput` は
+     `GeometricBudgetSource` と重複するため、現時点では追加しない方針にした。
+3. 結論:
+   - 次に意味のある Lean target は constructor ではなく、
+     first-band bound と uniform decay から `hgeom` を作る theorem shape である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016K として
+     `pointwiseGeometricMajorant_of_firstBand_decay` の theorem shape を
+     review する。
+
+---
