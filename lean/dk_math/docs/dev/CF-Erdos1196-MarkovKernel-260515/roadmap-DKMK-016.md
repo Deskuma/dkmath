@@ -1548,3 +1548,116 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed files
 ```
+
+## 20. DKMK-016O Truncation-Envelope Branch Review
+
+DKMK-016O reviews whether to extend the new first-band decay provider wrapper
+directly to the truncation envelope route.
+
+DKMK-016N now gives:
+
+```text
+GeometricBudgetSource
++ hinc_nonneg
++ first-band bound
++ uniform decay
+  -> DyadicBandAnalyticEstimate
+```
+
+The existing route already contains:
+
+```lean
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+with shape:
+
+```lean
+(H : DyadicBandAnalyticEstimate x K increment error) :
+  TruncationEnvelopeEstimate
+    (Finset.range (K + 1))
+    (fun k : Nat => x * 2^k)
+    increment
+    error
+```
+
+Therefore the current route is already:
+
+```text
+ofFirstBandDecayBudgetSource
+  -> DyadicBandAnalyticEstimate
+  -> toTruncationEnvelopeEstimate
+  -> existing finite-step route
+```
+
+### Branch A: add a thin truncation wrapper
+
+A possible Lean wrapper would combine DKMK-016N with
+`toTruncationEnvelopeEstimate`:
+
+```lean
+theorem TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSource
+    ...
+```
+
+This would be convenient, but it would not add new mathematical content.  It
+would only save one explicit call at the caller site.
+
+### Branch B: close DKMK-016 with a summary
+
+The current Lean API already exposes each layer:
+
+```text
+GeometricBudgetSource.ofBudget
+pointwiseGeometricMajorant_of_firstBand_decay
+DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+This is enough to summarize DKMK-016 before moving to the next analytic source
+problem.
+
+### Decision
+
+Prefer Branch B for the next step.
+
+The extra truncation wrapper can be added later if caller code shows that the
+two-step path is noisy.  At this point, the route is explicit and the chapter
+has reached a natural stopping point:
+
+```text
+budget source + first-band decay
+  -> dyadic analytic estimate
+  -> truncation envelope
+```
+
+### Recommended next step
+
+DKMK-016P should be a chapter summary:
+
+- list the Lean API added in DKMK-016;
+- record the final responsibility split;
+- identify what remains analytic input rather than API plumbing;
+- decide whether the next chapter should target concrete analytic source
+  estimates.
+
+### Non-goals
+
+DKMK-016O does not add:
+
+- Lean code;
+- a truncation wrapper;
+- a finite-step route theorem;
+- an analytic budget theorem;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
+
+### Verification
+
+DKMK-016O is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```

@@ -1940,3 +1940,28 @@ Archive
      接続するか、DKMK-016 のまとめに進むかを review する。
 
 ---
+
+### 日時: 2026/06/05 07:05 JST (DKMK-016O truncation branch review 追加)
+
+1. 目的:
+   - DKMK-016O として、DKMK-016N の provider wrapper を
+     truncation envelope へ直接接続するか、章まとめへ進むかを review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016O Truncation-Envelope Branch Review を追記した。
+   - 既存の
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` により、
+     N の出力はすでに truncation envelope へ接続可能であることを確認した。
+   - thin truncation wrapper は便利だが新しい数学的内容はないと整理した。
+3. 結論:
+   - 次は追加 Lean wrapper ではなく、DKMK-016 の章まとめへ進む方針にした。
+   - truncation wrapper は caller code が煩雑になった時点で追加すればよい。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016P として、章のまとめと次章への analytic input を整理する。
+
+---
