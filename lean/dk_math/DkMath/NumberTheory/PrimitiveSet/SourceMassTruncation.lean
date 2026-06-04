@@ -619,6 +619,34 @@ theorem ofPointwiseGeometricMajorant_of_budgetSource
     B.hbase B.hr0 B.hr1 B.hbudget
 
 /--
+Provider wrapper from first-band control and uniform step decay.
+
+This builds the pointwise geometric majorant and then applies the packaged
+budget-source provider wrapper.
+-/
+theorem ofFirstBandDecayBudgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    DyadicBandAnalyticEstimate x K increment B.error := by
+  have hr0_rat : 0 ≤ B.ratio := by
+    exact_mod_cast B.hr0
+  have hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k :=
+    pointwiseGeometricMajorant_of_firstBand_decay
+      K increment B.base B.ratio hbase0 hdecay hr0_rat
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment B hinc_nonneg hgeom
+
+/--
 Usage wrapper for the zero-ratio budget source.
 
 This checks the caller path

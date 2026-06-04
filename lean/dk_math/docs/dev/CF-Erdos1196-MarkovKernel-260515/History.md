@@ -1906,3 +1906,37 @@ Archive
      を Lean 上に実装する。
 
 ---
+
+### 日時: 2026/06/05 07:00 JST (DKMK-016N provider wrapper 実装)
+
+1. 目的:
+   - DKMK-016N として
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を Lean 上に
+     追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を追加した。
+   - `B.hr0 : 0 <= (B.ratio : Real)` から
+     `hr0_rat : 0 <= B.ratio` への cast は `exact_mod_cast B.hr0` で閉じた。
+   - `pointwiseGeometricMajorant_of_firstBand_decay` で `hgeom` を生成し、
+     既存の
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     へ渡した。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016N Lean First-Band Decay Provider Wrapper を追記した。
+3. 結論:
+   - `GeometricBudgetSource + hinc_nonneg + first-band bound + uniform decay`
+     から `DyadicBandAnalyticEstimate` へ到達する provider-facing wrapper が
+     Lean 上で通った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016O として、この provider wrapper を truncation envelope へ
+     接続するか、DKMK-016 のまとめに進むかを review する。
+
+---

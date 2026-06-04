@@ -1474,3 +1474,77 @@ DKMK-016M is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 19. DKMK-016N Lean First-Band Decay Provider Wrapper
+
+DKMK-016N implements the provider-facing wrapper reviewed in DKMK-016M.
+
+Added theorem:
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hbase0 : increment 0 <= B.base)
+    (hdecay :
+      forall k in Finset.range K,
+        increment (k + 1) <= B.ratio * increment k) :
+    DyadicBandAnalyticEstimate x K increment B.error
+```
+
+The proof first converts the ratio nonnegativity stored in the budget source:
+
+```lean
+have hr0_rat : 0 <= B.ratio := by
+  exact_mod_cast B.hr0
+```
+
+Then it builds:
+
+```lean
+have hgeom :
+    forall k in Finset.range (K + 1),
+      increment k <= B.base * B.ratio^k
+```
+
+by applying:
+
+```lean
+pointwiseGeometricMajorant_of_firstBand_decay
+```
+
+Finally it calls:
+
+```lean
+DyadicBandAnalyticEstimate
+  .ofPointwiseGeometricMajorant_of_budgetSource
+```
+
+### Role
+
+This theorem closes the Candidate C provider-facing route:
+
+```text
+GeometricBudgetSource
++ hinc_nonneg
++ first-band bound
++ uniform decay
+  -> DyadicBandAnalyticEstimate
+```
+
+It still does not prove an analytic budget, increment nonnegativity, or a
+finite-step route theorem.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed files
+```
