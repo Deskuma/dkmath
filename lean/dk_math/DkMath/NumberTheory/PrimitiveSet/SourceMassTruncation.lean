@@ -147,6 +147,21 @@ theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
     mul_le_mul_of_nonneg_left hsum hbase
   exact le_trans hscaled hbudget
 
+/--
+Abstract source of the one-over-one-minus geometric budget.
+
+This package separates the analytic origin of `base` and `ratio` from the
+dyadic provider route.
+-/
+structure GeometricBudgetSource where
+  base : ℚ
+  ratio : ℚ
+  error : ℝ
+  hbase : 0 ≤ (base : ℝ)
+  hr0 : 0 ≤ (ratio : ℝ)
+  hr1 : (ratio : ℝ) < 1
+  hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -489,6 +504,26 @@ theorem ofPointwiseGeometricMajorant_of_baseGeomBudget
     ofPointwiseGeometricMajorant_of_geomSumBound
       x K increment base ratio hinc_nonneg hgeom
       (by simpa [hcast] using hreal)
+
+/--
+Pointwise geometric-majorant provider from a packaged geometric budget source.
+
+This wrapper keeps callers from passing the budget side conditions separately.
+-/
+theorem ofPointwiseGeometricMajorant_of_budgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k) :
+    DyadicBandAnalyticEstimate x K increment B.error :=
+  ofPointwiseGeometricMajorant_of_baseGeomBudget
+    x K increment B.base B.ratio
+    hinc_nonneg hgeom
+    B.hbase B.hr0 B.hr1 B.hbudget
 
 /--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by

@@ -1527,3 +1527,40 @@ Archive
      追加できるか review する。
 
 ---
+
+### 日時: 2026/06/04 17:37 JST (DKMK-016B GeometricBudgetSource 実装)
+
+1. 目的:
+   - DKMK-016B として、DKMK-016A で固定した
+     `GeometricBudgetSource` と budget-source wrapper を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に structure `GeometricBudgetSource` を
+     追加した。
+   - fields は `base : Rat`、`ratio : Rat`、`error : Real`、
+     `hbase`、`hr0`、`hr1`、`hbudget` とした。
+   - `DyadicBandAnalyticEstimate` namespace に theorem
+     `ofPointwiseGeometricMajorant_of_budgetSource` を追加した。
+   - proof は既存
+     `ofPointwiseGeometricMajorant_of_baseGeomBudget` へ
+     `B.base`、`B.ratio`、`B.hbase`、`B.hr0`、`B.hr1`、`B.hbudget`
+     を渡す薄い wrapper とした。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016B Lean Abstract Budget Source を追記した。
+3. 結論:
+   - `hbudget` 供給源を抽象 package として受け取り、
+     DKMK-015H の dyadic provider connection へ渡す API ができた。
+   - concrete `base` / `ratio`、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding、dependent `GeometricBudgetSourceFor` は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016C として、具体的な budget constructor へ進む前に、
+     `GeometricBudgetSource` の constructor / usage docs を review する。
+
+---

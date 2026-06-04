@@ -163,3 +163,97 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 7. DKMK-016B Lean Abstract Budget Source
+
+DKMK-016B implements the first abstract budget source surface.
+
+Added structure:
+
+```lean
+structure GeometricBudgetSource where
+  base : Rat
+  ratio : Rat
+  error : Real
+  hbase : 0 <= (base : Real)
+  hr0 : 0 <= (ratio : Real)
+  hr1 : (ratio : Real) < 1
+  hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+Added wrapper:
+
+```lean
+theorem DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_budgetSource
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1),
+        increment k <= B.base * B.ratio ^ k) :
+    DyadicBandAnalyticEstimate x K increment B.error
+```
+
+The Lean implementation is in:
+
+```text
+DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+### Proof route
+
+The wrapper is a direct call to:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget
+```
+
+It passes:
+
+```text
+B.base
+B.ratio
+B.error
+B.hbase
+B.hr0
+B.hr1
+B.hbudget
+```
+
+No new analytic estimate is proved here.
+
+### Type-boundary behavior
+
+The structure is not indexed by `x`, `K`, or `increment`.
+
+This keeps the budget source independent of a particular dyadic band provider
+instance.  If future budgets depend on `x` or `K`, a later
+`GeometricBudgetSourceFor` style package can be added without changing this
+abstract source.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+```
+
+### Non-goals
+
+DKMK-016B does not add:
+
+- concrete choices of `base` or `ratio`;
+- a dependent `GeometricBudgetSourceFor`;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider;
+- real-to-Nat rounding;
+- route theorem changes;
+- a new dyadic provider structure;
+- a duplicate of DKMK-015H.
