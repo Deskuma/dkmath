@@ -1564,3 +1564,33 @@ Archive
      `GeometricBudgetSource` の constructor / usage docs を review する。
 
 ---
+
+### 日時: 2026/06/04 17:42 JST (DKMK-016C usage review 追加)
+
+1. 目的:
+   - DKMK-016C として、具体 constructor へ進む前に
+     `GeometricBudgetSource` の作り方と provider wrapper の使い方を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016C GeometricBudgetSource Usage Review を追記した。
+   - `B : GeometricBudgetSource` が package する fields と side conditions を
+     construction pattern として整理した。
+   - `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     の caller usage を例示した。
+   - `GeometricBudgetSource` と wrapper の責務分担を記録した。
+   - 将来 `base`、`ratio`、`error` が `x` または `K` に依存するときだけ
+     `GeometricBudgetSourceFor` 型の indexed package を検討する方針にした。
+3. 結論:
+   - DKMK-016C は docs-only usage review として完了した。
+   - 現時点では unindexed `GeometricBudgetSource` を preferred API とする。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016D として、小さな constructor theorem を追加するか、
+     concrete `base` / `ratio` candidate の review へ進むかを決める。
+
+---

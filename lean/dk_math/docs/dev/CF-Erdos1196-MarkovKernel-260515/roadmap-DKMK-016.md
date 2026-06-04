@@ -257,3 +257,127 @@ DKMK-016B does not add:
 - route theorem changes;
 - a new dyadic provider structure;
 - a duplicate of DKMK-015H.
+
+## 8. DKMK-016C GeometricBudgetSource Usage Review
+
+DKMK-016C fixes the intended usage of `GeometricBudgetSource` before adding any
+concrete constructors.
+
+### Construction pattern
+
+A caller or future constructor should build:
+
+```lean
+B : GeometricBudgetSource
+```
+
+by supplying:
+
+```text
+B.base    : Rat
+B.ratio   : Rat
+B.error   : Real
+B.hbase   : 0 <= (B.base : Real)
+B.hr0     : 0 <= (B.ratio : Real)
+B.hr1     : (B.ratio : Real) < 1
+B.hbudget : (B.base : Real) * (1 / (1 - (B.ratio : Real))) <= 1 + B.error
+```
+
+The package should be treated as the source of the geometric budget, not as a
+dyadic band estimate by itself.
+
+### Provider usage pattern
+
+Once `B : GeometricBudgetSource` is available, the caller should use:
+
+```lean
+have hE :
+    DyadicBandAnalyticEstimate x K increment B.error :=
+  DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment B hinc_nonneg hgeom
+```
+
+where:
+
+```text
+hinc_nonneg :
+  forall k in Finset.range (K + 1), 0 <= increment k
+
+hgeom :
+  forall k in Finset.range (K + 1),
+    increment k <= B.base * B.ratio ^ k
+```
+
+This keeps pointwise band control outside the budget source.
+
+### Responsibility split
+
+`GeometricBudgetSource` is responsible for:
+
+```text
+base
+ratio
+error
+base nonnegativity
+ratio nonnegativity
+ratio contractivity
+one-over-one-minus budget
+```
+
+`ofPointwiseGeometricMajorant_of_budgetSource` is responsible for:
+
+```text
+connecting B to the rational dyadic provider
+using hgeom to compare increment with B.base * B.ratio^k
+returning DyadicBandAnalyticEstimate x K increment B.error
+```
+
+It should not prove a concrete analytic estimate.
+
+### When an indexed source may be needed
+
+The current structure is intentionally not indexed by `x`, `K`, or `increment`.
+
+An indexed package may become useful only when future concrete constructors make
+`base`, `ratio`, or `error` depend on the dyadic window, for example:
+
+```lean
+structure GeometricBudgetSourceFor (x K : Nat) where
+  ...
+```
+
+or:
+
+```lean
+structure GeometricBudgetSourceFor (K : Nat) where
+  ...
+```
+
+Until such a dependency is forced by a concrete route, the unindexed
+`GeometricBudgetSource` remains the preferred API.
+
+### Next implementation direction
+
+The next Lean step should not duplicate the wrapper.
+
+Possible next steps are:
+
+- add a small constructor theorem for `GeometricBudgetSource`;
+- review a concrete `base` / `ratio` candidate;
+- introduce an abstract upstream budget predicate;
+- or postpone constructors until a concrete analytic route is identified.
+
+### Non-goals
+
+DKMK-016C does not add:
+
+- Lean code;
+- concrete choices of `base` or `ratio`;
+- a dependent `GeometricBudgetSourceFor`;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider;
+- real-to-Nat rounding;
+- route theorem changes;
+- a new dyadic provider structure.
