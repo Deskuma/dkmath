@@ -531,3 +531,78 @@ DKMK-016D does not add:
 - real-to-Nat rounding;
 - route theorem changes;
 - a new dyadic provider structure.
+
+## 10. DKMK-016E Lean Zero-Ratio Budget Source
+
+DKMK-016E implements the zero-ratio API sanity constructor selected in
+DKMK-016D.
+
+Added definition:
+
+```lean
+def GeometricBudgetSource.ofZeroRatio
+    (base : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hbudget : (base : Real) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+This constructor sets:
+
+```text
+ratio := 0
+```
+
+and closes the ratio side conditions by `norm_num`.
+
+The budget field reduces from:
+
+```text
+(base : Real) * (1 / (1 - (0 : Real))) <= 1 + error
+```
+
+to the caller-supplied:
+
+```text
+(base : Real) <= 1 + error
+```
+
+### Type-boundary note
+
+The implementation is a `def`, not a `theorem`.
+
+The return type is `GeometricBudgetSource`, which is data, not `Prop`.
+Therefore Lean correctly rejects:
+
+```lean
+theorem GeometricBudgetSource.ofZeroRatio ... : GeometricBudgetSource
+```
+
+with:
+
+```text
+type of theorem is not a proposition
+```
+
+This is useful API pressure: constructor-style packages of evidence should be
+implemented as definitions unless the target itself is a proposition.
+
+### Role
+
+`GeometricBudgetSource.ofZeroRatio` is not an analytic estimate.
+
+It is a small constructor proving that the abstract budget package can be
+instantiated in a degenerate ratio case.  Future positive-ratio or analytic
+budget constructors can use the same structure boundary.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed files
+```

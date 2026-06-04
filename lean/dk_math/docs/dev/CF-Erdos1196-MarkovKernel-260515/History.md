@@ -1625,3 +1625,38 @@ Archive
    - DKMK-016E として、`GeometricBudgetSource.ofZeroRatio` を実装する。
 
 ---
+
+### 日時: 2026/06/04 19:57 JST (DKMK-016E zero-ratio budget source 追加)
+
+1. 目的:
+   - DKMK-016E として、`GeometricBudgetSource` の最初の小さな
+     constructor API を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `GeometricBudgetSource.ofZeroRatio` を追加した。
+   - `ratio := 0` とし、`hr0` と `hr1` は `norm_num` で閉じた。
+   - `hbudget` は
+     `(base : Real) * (1 / (1 - (0 : Real))) <= 1 + error`
+     を caller supplied の `(base : Real) <= 1 + error` に簡約して閉じた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016E Lean Zero-Ratio Budget Source を追記した。
+3. 結論:
+   - zero-ratio case で `GeometricBudgetSource` を構築する API ができた。
+   - これは analytic estimate ではなく、abstract budget package の
+     sanity constructor である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - 最初に `theorem GeometricBudgetSource.ofZeroRatio` として書いたが、
+     Lean は theorem の型に `Prop` を要求するため失敗した。
+   - 返り値は `GeometricBudgetSource` という data なので、`def` に変更して
+     通した。
+6. 次の課題:
+   - DKMK-016F として、positive ratio constructor に進むか、
+     current constructor を budget wrapper usage に接続する小さな example を
+     追加するかを review する。
+
+---

@@ -162,6 +162,31 @@ structure GeometricBudgetSource where
   hr1 : (ratio : ℝ) < 1
   hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
 
+namespace GeometricBudgetSource
+
+/--
+Build a geometric budget source with zero ratio.
+
+This is an API sanity constructor, not an analytic estimate.  With ratio zero,
+the one-over-one-minus budget reduces to the caller-supplied `base <= 1 + error`.
+-/
+def ofZeroRatio
+    (base : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := 0
+  error := error
+  hbase := hbase
+  hr0 := by norm_num
+  hr1 := by norm_num
+  hbudget := by
+    simpa using hbudget
+
+end GeometricBudgetSource
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
