@@ -833,3 +833,142 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed files
 ```
+
+## 14. DKMK-016I Concrete Base/Ratio Candidate Review
+
+DKMK-016I shifts from constructor API to candidate budget design.
+
+The target budget shape is:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+This step does not prove Mertens, big-O, logarithmic thresholds, or rounding.
+It only compares symbolic candidates for future analytic input.
+
+### Candidate A: logarithmic base with dyadic ratio
+
+Shape:
+
+```text
+base  = c / log x
+ratio = 1 / 2
+```
+
+Budget pressure:
+
+```text
+base * (1 / (1 - ratio)) = 2 * c / log x
+```
+
+This is simple and matches a dyadic decay intuition.  It is attractive as a
+first symbolic candidate because the budget reduces to a single logarithmic
+smallness condition.
+
+Risk:
+
+```text
+c / log x
+```
+
+is not rational-valued without an extra approximation or rational envelope.
+Using it directly would require a real-to-rational bridge or an indexed source.
+
+### Candidate B: logarithmic base with prime-dependent ratio
+
+Shape:
+
+```text
+base  = c / log x
+ratio = 1 / q
+```
+
+Budget pressure:
+
+```text
+base * (1 / (1 - ratio)) = (c / log x) * (q / (q - 1))
+```
+
+This could better match prime-power or quotient-path structure, but it exposes
+more parameters.  It should wait until the upstream route says whether `q` is a
+fixed prime, a selected divisor, or a local branch parameter.
+
+### Candidate C: first-band mass with uniform decay
+
+Shape:
+
+```text
+base  = first band mass upper bound
+ratio = uniform decay bound
+```
+
+This is the most compatible with the existing pointwise majorant:
+
+```text
+increment k <= base * ratio^k
+```
+
+It separates two future obligations:
+
+```text
+increment 0 <= base
+increment (k + 1) <= ratio * increment k
+```
+
+or a direct pointwise version of the same decay claim.
+
+This is the best next design target because it matches the current
+`DyadicBandAnalyticEstimate` interface without forcing a concrete analytic
+formula yet.
+
+### Candidate D: tail-mass envelope as base
+
+Shape:
+
+```text
+base  = dyadic band tail mass envelope
+ratio = geometric decay rate
+```
+
+This is closer to the final route, but it may duplicate the role of
+`increment` unless the envelope is clearly separated from the actual dyadic
+increments.
+
+It should be considered after Candidate C has a stable interface.
+
+### Recommended next step
+
+The next step should review Candidate C as an interface:
+
+```text
+first-band upper bound
+uniform decay bound
+  -> GeometricBudgetSource.ofBudget
+```
+
+The likely Lean-facing package would not prove the analytic decay yet.  It
+would name the inputs needed to turn a future first-band/decay estimate into a
+`GeometricBudgetSource`.
+
+### Non-goals
+
+DKMK-016I does not add:
+
+- Lean code;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding;
+- rational approximation of `log x`;
+- a concrete value of `c`;
+- a concrete value of `x`;
+- a provider wrapper.
+
+### Verification
+
+DKMK-016I is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```

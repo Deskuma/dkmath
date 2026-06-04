@@ -1753,3 +1753,33 @@ Archive
    - 必要なら `ofBudget` を使った small usage example を追加するか確認する。
 
 ---
+
+### 日時: 2026/06/05 02:57 JST (DKMK-016I base/ratio candidate review 追加)
+
+1. 目的:
+   - DKMK-016I として、constructor API から concrete `base` / `ratio`
+     candidate design へ進む。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016I Concrete Base/Ratio Candidate Review を追記した。
+   - 候補として logarithmic base with dyadic ratio、logarithmic base with
+     prime-dependent ratio、first-band mass with uniform decay、
+     tail-mass envelope as base を比較した。
+   - 次の design target として
+     first-band upper bound と uniform decay bound から
+     `GeometricBudgetSource.ofBudget` へ進む interface を推奨した。
+3. 結論:
+   - 次は concrete analytic theorem ではなく、first-band/decay estimate を
+     `GeometricBudgetSource` に渡す interface review が妥当。
+   - Mertens、big-O、logarithmic threshold、rounding、rational approximation は
+     まだ導入しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016J として first-band / uniform-decay budget interface の shape を
+     review する。
+
+---
