@@ -1495,3 +1495,508 @@ Archive
      concrete `base` / `ratio` 設計を review する。
 
 ---
+
+### 日時: 2026/06/04 17:16 JST (DKMK-016A roadmap 追加)
+
+1. 目的:
+   - DKMK-016 を開始し、DKMK-015 で残った
+     `hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error`
+     の供給源設計を次章の主題として固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` を追加した。
+   - 章題を Geometric Budget Source とした。
+   - DKMK-016A の first interface shape として
+     `GeometricBudgetSource` structure の候補を記録した。
+   - package する要素を `base : Rat`、`ratio : Rat`、`error : Real`、
+     `hbase`、`hr0`、`hr1`、`hbudget` とした。
+   - 後続 connection theorem 候補として
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     を記録した。
+3. 結論:
+   - DKMK-016 は finite geometric sum ではなく、
+     geometric budget source の抽象 surface 設計から始める方針になった。
+   - Mertens / big-O / logarithmic threshold / real-to-Nat rounding は
+     まだ non-goal として維持する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016B として、`GeometricBudgetSource` を Lean 上に
+     追加できるか review する。
+
+---
+
+### 日時: 2026/06/04 17:37 JST (DKMK-016B GeometricBudgetSource 実装)
+
+1. 目的:
+   - DKMK-016B として、DKMK-016A で固定した
+     `GeometricBudgetSource` と budget-source wrapper を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に structure `GeometricBudgetSource` を
+     追加した。
+   - fields は `base : Rat`、`ratio : Rat`、`error : Real`、
+     `hbase`、`hr0`、`hr1`、`hbudget` とした。
+   - `DyadicBandAnalyticEstimate` namespace に theorem
+     `ofPointwiseGeometricMajorant_of_budgetSource` を追加した。
+   - proof は既存
+     `ofPointwiseGeometricMajorant_of_baseGeomBudget` へ
+     `B.base`、`B.ratio`、`B.hbase`、`B.hr0`、`B.hr1`、`B.hbudget`
+     を渡す薄い wrapper とした。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016B Lean Abstract Budget Source を追記した。
+3. 結論:
+   - `hbudget` 供給源を抽象 package として受け取り、
+     DKMK-015H の dyadic provider connection へ渡す API ができた。
+   - concrete `base` / `ratio`、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding、dependent `GeometricBudgetSourceFor` は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016C として、具体的な budget constructor へ進む前に、
+     `GeometricBudgetSource` の constructor / usage docs を review する。
+
+---
+
+### 日時: 2026/06/04 17:42 JST (DKMK-016C usage review 追加)
+
+1. 目的:
+   - DKMK-016C として、具体 constructor へ進む前に
+     `GeometricBudgetSource` の作り方と provider wrapper の使い方を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016C GeometricBudgetSource Usage Review を追記した。
+   - `B : GeometricBudgetSource` が package する fields と side conditions を
+     construction pattern として整理した。
+   - `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     の caller usage を例示した。
+   - `GeometricBudgetSource` と wrapper の責務分担を記録した。
+   - 将来 `base`、`ratio`、`error` が `x` または `K` に依存するときだけ
+     `GeometricBudgetSourceFor` 型の indexed package を検討する方針にした。
+3. 結論:
+   - DKMK-016C は docs-only usage review として完了した。
+   - 現時点では unindexed `GeometricBudgetSource` を preferred API とする。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016D として、小さな constructor theorem を追加するか、
+     concrete `base` / `ratio` candidate の review へ進むかを決める。
+
+---
+
+### 日時: 2026/06/04 17:46 JST (DKMK-016D concrete candidate review 追加)
+
+1. 目的:
+   - DKMK-016D として、`GeometricBudgetSource` の最初の concrete
+     `base` / `ratio` candidate を review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016D Concrete Base/Ratio Candidate Review を追記した。
+   - 候補として direct record construction、zero-ratio sanity constructor、
+     external positive ratio constructor、analytic budget constructor を
+     比較した。
+   - 次の Lean target として `GeometricBudgetSource.ofZeroRatio` を
+     推奨候補にした。
+   - `ratio = 0` の場合、budget が
+     `(base : Real) <= 1 + error` に簡約されることを記録した。
+   - この constructor は analytic result ではなく API sanity constructor と
+     位置づけた。
+3. 結論:
+   - DKMK-016D は docs-only concrete candidate review として完了した。
+   - 次は DKMK-016E として、`GeometricBudgetSource.ofZeroRatio` を
+     Lean 上に追加できるか確認する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016E として、`GeometricBudgetSource.ofZeroRatio` を実装する。
+
+---
+
+### 日時: 2026/06/04 19:57 JST (DKMK-016E zero-ratio budget source 追加)
+
+1. 目的:
+   - DKMK-016E として、`GeometricBudgetSource` の最初の小さな
+     constructor API を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `GeometricBudgetSource.ofZeroRatio` を追加した。
+   - `ratio := 0` とし、`hr0` と `hr1` は `norm_num` で閉じた。
+   - `hbudget` は
+     `(base : Real) * (1 / (1 - (0 : Real))) <= 1 + error`
+     を caller supplied の `(base : Real) <= 1 + error` に簡約して閉じた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016E Lean Zero-Ratio Budget Source を追記した。
+3. 結論:
+   - zero-ratio case で `GeometricBudgetSource` を構築する API ができた。
+   - これは analytic estimate ではなく、abstract budget package の
+     sanity constructor である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - 最初に `theorem GeometricBudgetSource.ofZeroRatio` として書いたが、
+     Lean は theorem の型に `Prop` を要求するため失敗した。
+   - 返り値は `GeometricBudgetSource` という data なので、`def` に変更して
+     通した。
+6. 次の課題:
+   - DKMK-016F として、positive ratio constructor に進むか、
+     current constructor を budget wrapper usage に接続する小さな example を
+     追加するかを review する。
+
+---
+
+### 日時: 2026/06/04 20:14 JST (DKMK-016F zero-ratio usage wrapper 追加)
+
+1. 目的:
+   - DKMK-016F として、`GeometricBudgetSource.ofZeroRatio` を
+     budget-source provider wrapper へ通す caller 経路を Lean 上で確認する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseZeroRatioMajorant` を追加した。
+   - proof では
+     `GeometricBudgetSource.ofZeroRatio base error hbase hbudget` を構築し、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     へ渡した。
+   - `hgeom` は
+     `increment k <= base * (0 : Rat) ^ k`
+     の形で受け取り、zero-ratio source の unfolding により既存 wrapper の
+     `B.base * B.ratio ^ k` に合わせた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016F Zero-Ratio Usage Wrapper を追記した。
+3. 結論:
+   - `ofZeroRatio -> of_budgetSource -> DyadicBandAnalyticEstimate` の
+     caller route が小さな wrapper theorem として通った。
+   - positive-ratio constructor へ進む前に、abstract budget package の
+     使用感を Lean 上で確認できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016G として positive-ratio constructor の shape を review する。
+   - あるいは、zero-ratio wrapper から truncation envelope まで接続する
+     追加 usage theorem が必要か確認する。
+
+---
+
+### 日時: 2026/06/04 21:20 JST (DKMK-016G positive-ratio constructor review 追加)
+
+1. 目的:
+   - DKMK-016G として、非退化な positive-ratio constructor の shape を
+     Lean 実装前に review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016G Positive-Ratio Constructor Shape Review を追記した。
+   - 候補 `GeometricBudgetSource.ofBudget` は record syntax とほぼ同じで、
+     analytic estimate ではなく readability constructor と位置づけた。
+   - DKMK-016E の学びを反映し、constructor 候補は `theorem` ではなく
+     `def` として記録した。
+   - 既存の DKMK-016D 候補スニペットも `def` 表記に整えた。
+3. 結論:
+   - 次の Lean target は
+     `def GeometricBudgetSource.ofBudget` が妥当。
+   - ただし、その step では provider wrapper、finite-sum theorem、
+     analytic estimate を追加しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016H として `GeometricBudgetSource.ofBudget` を Lean 上に追加する。
+
+---
+
+### 日時: 2026/06/05 02:42 JST (DKMK-016H explicit budget constructor 追加)
+
+1. 目的:
+   - DKMK-016H として、`GeometricBudgetSource.ofBudget` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` の `GeometricBudgetSource` namespace に
+     `def ofBudget` を追加した。
+   - `base`、`ratio`、`error`、`hbase`、`hr0`、`hr1`、`hbudget` を
+     そのまま package する direct record construction とした。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016H Lean Explicit Budget Constructor を追記した。
+3. 結論:
+   - 明示的な one-over-one-minus budget proof から
+     `GeometricBudgetSource` を作る named constructor ができた。
+   - これは analytic estimate ではなく readability constructor である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete `base` / `ratio` candidate review へ進む。
+   - 必要なら `ofBudget` を使った small usage example を追加するか確認する。
+
+---
+
+### 日時: 2026/06/05 02:57 JST (DKMK-016I base/ratio candidate review 追加)
+
+1. 目的:
+   - DKMK-016I として、constructor API から concrete `base` / `ratio`
+     candidate design へ進む。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016I Concrete Base/Ratio Candidate Review を追記した。
+   - 候補として logarithmic base with dyadic ratio、logarithmic base with
+     prime-dependent ratio、first-band mass with uniform decay、
+     tail-mass envelope as base を比較した。
+   - 次の design target として
+     first-band upper bound と uniform decay bound から
+     `GeometricBudgetSource.ofBudget` へ進む interface を推奨した。
+3. 結論:
+   - 次は concrete analytic theorem ではなく、first-band/decay estimate を
+     `GeometricBudgetSource` に渡す interface review が妥当。
+   - Mertens、big-O、logarithmic threshold、rounding、rational approximation は
+     まだ導入しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016J として first-band / uniform-decay budget interface の shape を
+     review する。
+
+---
+
+### 日時: 2026/06/05 03:02 JST (DKMK-016J first-band decay interface review 追加)
+
+1. 目的:
+   - DKMK-016J として、Candidate C の first-band / uniform-decay interface を
+     Lean 実装前に整理する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016J First-Band / Uniform-Decay Interface Review を追記した。
+   - obligation を budget obligation と pointwise decay obligation に分けた。
+   - `GeometricBudgetSource` は budget obligation を package し、
+     `hgeom` は increment-specific な pointwise control として外に置く方針を
+     固定した。
+   - 新構造体 `FirstBandDecayBudgetInput` は
+     `GeometricBudgetSource` と重複するため、現時点では追加しない方針にした。
+3. 結論:
+   - 次に意味のある Lean target は constructor ではなく、
+     first-band bound と uniform decay から `hgeom` を作る theorem shape である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016K として
+     `pointwiseGeometricMajorant_of_firstBand_decay` の theorem shape を
+     review する。
+
+---
+
+### 日時: 2026/06/05 03:06 JST (DKMK-016K pointwise majorant shape review 追加)
+
+1. 目的:
+   - DKMK-016K として、
+     `pointwiseGeometricMajorant_of_firstBand_decay` の theorem shape を
+     Lean 実装前に固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016K Pointwise Geometric Majorant Shape Review を追記した。
+   - theorem は `hgeom` の生成だけを担当し、`hinc_nonneg` は provider 側の
+     別入力として残す方針にした。
+   - `hdecay` の範囲は `Finset.range K` とし、結論は
+     `Finset.range (K + 1)` 上の pointwise majorant とした。
+   - 実装リスクは数学ではなく Nat indexing と Rat algebra にあると整理した。
+3. 結論:
+   - 次の Lean target は `hinc_nonneg` なしの
+     `pointwiseGeometricMajorant_of_firstBand_decay` が妥当。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016L として
+     `pointwiseGeometricMajorant_of_firstBand_decay` を Lean 上に実装する。
+
+---
+
+### 日時: 2026/06/05 03:12 JST (DKMK-016L pointwise majorant 実装)
+
+1. 目的:
+   - DKMK-016L として、
+     `pointwiseGeometricMajorant_of_firstBand_decay` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `pointwiseGeometricMajorant_of_firstBand_decay` を追加した。
+   - theorem は `hinc_nonneg` を受け取らず、`hgeom` の生成だけを担当する。
+   - proof では内部補題
+     `forall k, k <= K -> increment k <= base * ratio^k`
+     を帰納法で示した。
+   - successor case では `k + 1 <= K` から `k < K` を作り、
+     `hdecay k` を適用した。
+   - `hr0` により左から `ratio` を掛けた不等式を保ち、最後の Rat algebra は
+     `ring_nf` で閉じた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016L Lean Pointwise Geometric Majorant を追記した。
+3. 結論:
+   - first-band bound と uniform step decay から provider 用の `hgeom` を
+     作る Lean theorem ができた。
+   - provider wrapper への接続はまだ追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016M として、この `hgeom` theorem を
+     `GeometricBudgetSource` と provider wrapper へ接続する theorem shape を
+     review する。
+
+---
+
+### 日時: 2026/06/05 06:47 JST (DKMK-016M provider wrapper shape review 追加)
+
+1. 目的:
+   - DKMK-016M として、`pointwiseGeometricMajorant_of_firstBand_decay` を
+     `GeometricBudgetSource` と provider wrapper へ接続する theorem shape を
+     Lean 実装前に固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016M First-Band Decay Provider Wrapper Shape Review を追記した。
+   - 次の Lean target として
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を提案した。
+   - `B.hr0 : 0 <= (B.ratio : Real)` から
+     `hr0_rat : 0 <= B.ratio` を作る cast boundary を明示した。
+   - wrapper は budget proof と increment nonnegativity を証明せず、
+     `hgeom` 生成と既存 budget-source provider wrapper への接続だけを
+     担当する方針にした。
+3. 結論:
+   - 次は `ofFirstBandDecayBudgetSource` を Lean 上に追加するのが妥当。
+   - 主なリスクは数学ではなく Rat / Real cast 境界である。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016N として `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`
+     を Lean 上に実装する。
+
+---
+
+### 日時: 2026/06/05 07:00 JST (DKMK-016N provider wrapper 実装)
+
+1. 目的:
+   - DKMK-016N として
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を Lean 上に
+     追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` を追加した。
+   - `B.hr0 : 0 <= (B.ratio : Real)` から
+     `hr0_rat : 0 <= B.ratio` への cast は `exact_mod_cast B.hr0` で閉じた。
+   - `pointwiseGeometricMajorant_of_firstBand_decay` で `hgeom` を生成し、
+     既存の
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     へ渡した。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016N Lean First-Band Decay Provider Wrapper を追記した。
+3. 結論:
+   - `GeometricBudgetSource + hinc_nonneg + first-band bound + uniform decay`
+     から `DyadicBandAnalyticEstimate` へ到達する provider-facing wrapper が
+     Lean 上で通った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016O として、この provider wrapper を truncation envelope へ
+     接続するか、DKMK-016 のまとめに進むかを review する。
+
+---
+
+### 日時: 2026/06/05 07:05 JST (DKMK-016O truncation branch review 追加)
+
+1. 目的:
+   - DKMK-016O として、DKMK-016N の provider wrapper を
+     truncation envelope へ直接接続するか、章まとめへ進むかを review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016O Truncation-Envelope Branch Review を追記した。
+   - 既存の
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` により、
+     N の出力はすでに truncation envelope へ接続可能であることを確認した。
+   - thin truncation wrapper は便利だが新しい数学的内容はないと整理した。
+3. 結論:
+   - 次は追加 Lean wrapper ではなく、DKMK-016 の章まとめへ進む方針にした。
+   - truncation wrapper は caller code が煩雑になった時点で追加すればよい。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016P として、章のまとめと次章への analytic input を整理する。
+
+---
+
+### 日時: 2026/06/05 07:12 JST (DKMK-016P chapter summary 追加)
+
+1. 目的:
+   - DKMK-016P として、DKMK-016 の Lean API、final route、
+     responsibility split、non-goals、次章 analytic input を整理する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に DKMK-016P Chapter Summary を追記した。
+   - 追加された Lean surface を budget source、budget-source provider、
+     zero-ratio sanity route、first-band / uniform-decay route、
+     downstream bridge に分けて整理した。
+   - final caller route を
+     `GeometricBudgetSource.ofBudget`、
+     `pointwiseGeometricMajorant_of_firstBand_decay`、
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`、
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate`
+     の流れとして記録した。
+   - budget layer / pointwise layer / provider layer / downstream layer の
+     responsibility split を明示した。
+   - 次章の analytic input candidates を first-band upper bound、
+     uniform decay、`GeometricBudgetSource.ofBudget` の concrete budget proof
+     として記録した。
+3. 結論:
+   - DKMK-016 は API plumbing と first-band/uniform-decay provider route の
+     章として自然な停止点に到達した。
+   - 次は追加 wrapper ではなく concrete analytic input source の review へ進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete analytic input source の roadmap/review へ進む。
+
+---

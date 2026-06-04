@@ -147,6 +147,114 @@ theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
     mul_le_mul_of_nonneg_left hsum hbase
   exact le_trans hscaled hbudget
 
+/--
+Pointwise geometric majorant from a first-band bound and uniform step decay.
+
+This only builds the geometric pointwise control.  The provider's separate
+nonnegativity hypothesis stays outside this theorem.
+-/
+theorem pointwiseGeometricMajorant_of_firstBand_decay
+    (K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k ∈ Finset.range (K + 1),
+      increment k ≤ base * ratio ^ k := by
+  have hmain :
+      ∀ k, k ≤ K → increment k ≤ base * ratio ^ k := by
+    intro k
+    induction k with
+    | zero =>
+        intro _hk
+        simpa using hbase0
+    | succ k ih =>
+        intro hk_succ
+        have hk_le : k ≤ K :=
+          le_trans (Nat.le_succ k) hk_succ
+        have hk_lt : k < K :=
+          Nat.lt_of_succ_le hk_succ
+        have hstep :
+            increment (k + 1) ≤ ratio * increment k :=
+          hdecay k (Finset.mem_range.mpr hk_lt)
+        have hmul :
+            ratio * increment k ≤ ratio * (base * ratio ^ k) :=
+          mul_le_mul_of_nonneg_left (ih hk_le) hr0
+        calc
+          increment (k + 1) ≤ ratio * increment k := hstep
+          _ ≤ ratio * (base * ratio ^ k) := hmul
+          _ = base * ratio ^ (k + 1) := by
+            ring_nf
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hmain k hk_le
+
+/--
+Abstract source of the one-over-one-minus geometric budget.
+
+This package separates the analytic origin of `base` and `ratio` from the
+dyadic provider route.
+-/
+structure GeometricBudgetSource where
+  base : ℚ
+  ratio : ℚ
+  error : ℝ
+  hbase : 0 ≤ (base : ℝ)
+  hr0 : 0 ≤ (ratio : ℝ)
+  hr1 : (ratio : ℝ) < 1
+  hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
+
+namespace GeometricBudgetSource
+
+/--
+Build a geometric budget source from an explicit one-over-one-minus budget.
+
+This is a readability constructor, not an analytic estimate.
+-/
+def ofBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := ratio
+  error := error
+  hbase := hbase
+  hr0 := hr0
+  hr1 := hr1
+  hbudget := hbudget
+
+/--
+Build a geometric budget source with zero ratio.
+
+This is an API sanity constructor, not an analytic estimate.  With ratio zero,
+the one-over-one-minus budget reduces to the caller-supplied `base <= 1 + error`.
+-/
+def ofZeroRatio
+    (base : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := 0
+  error := error
+  hbase := hbase
+  hr0 := by norm_num
+  hr1 := by norm_num
+  hbudget := by
+    simpa using hbudget
+
+end GeometricBudgetSource
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -489,6 +597,82 @@ theorem ofPointwiseGeometricMajorant_of_baseGeomBudget
     ofPointwiseGeometricMajorant_of_geomSumBound
       x K increment base ratio hinc_nonneg hgeom
       (by simpa [hcast] using hreal)
+
+/--
+Pointwise geometric-majorant provider from a packaged geometric budget source.
+
+This wrapper keeps callers from passing the budget side conditions separately.
+-/
+theorem ofPointwiseGeometricMajorant_of_budgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k) :
+    DyadicBandAnalyticEstimate x K increment B.error :=
+  ofPointwiseGeometricMajorant_of_baseGeomBudget
+    x K increment B.base B.ratio
+    hinc_nonneg hgeom
+    B.hbase B.hr0 B.hr1 B.hbudget
+
+/--
+Provider wrapper from first-band control and uniform step decay.
+
+This builds the pointwise geometric majorant and then applies the packaged
+budget-source provider wrapper.
+-/
+theorem ofFirstBandDecayBudgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    DyadicBandAnalyticEstimate x K increment B.error := by
+  have hr0_rat : 0 ≤ B.ratio := by
+    exact_mod_cast B.hr0
+  have hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k :=
+    pointwiseGeometricMajorant_of_firstBand_decay
+      K increment B.base B.ratio hbase0 hdecay hr0_rat
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment B hinc_nonneg hgeom
+
+/--
+Usage wrapper for the zero-ratio budget source.
+
+This checks the caller path
+`GeometricBudgetSource.ofZeroRatio ->
+ofPointwiseGeometricMajorant_of_budgetSource`.
+-/
+theorem ofPointwiseZeroRatioMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ base * (0 : ℚ) ^ k)
+    {error : ℝ}
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment
+      (GeometricBudgetSource.ofZeroRatio base error hbase hbudget)
+      hinc_nonneg
+      (by
+        simpa [GeometricBudgetSource.ofZeroRatio] using hgeom)
 
 /--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
