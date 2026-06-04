@@ -1594,3 +1594,34 @@ Archive
      concrete `base` / `ratio` candidate の review へ進むかを決める。
 
 ---
+
+### 日時: 2026/06/04 17:46 JST (DKMK-016D concrete candidate review 追加)
+
+1. 目的:
+   - DKMK-016D として、`GeometricBudgetSource` の最初の concrete
+     `base` / `ratio` candidate を review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016D Concrete Base/Ratio Candidate Review を追記した。
+   - 候補として direct record construction、zero-ratio sanity constructor、
+     external positive ratio constructor、analytic budget constructor を
+     比較した。
+   - 次の Lean target として `GeometricBudgetSource.ofZeroRatio` を
+     推奨候補にした。
+   - `ratio = 0` の場合、budget が
+     `(base : Real) <= 1 + error` に簡約されることを記録した。
+   - この constructor は analytic result ではなく API sanity constructor と
+     位置づけた。
+3. 結論:
+   - DKMK-016D は docs-only concrete candidate review として完了した。
+   - 次は DKMK-016E として、`GeometricBudgetSource.ofZeroRatio` を
+     Lean 上に追加できるか確認する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016E として、`GeometricBudgetSource.ofZeroRatio` を実装する。
+
+---

@@ -381,3 +381,153 @@ DKMK-016C does not add:
 - real-to-Nat rounding;
 - route theorem changes;
 - a new dyadic provider structure.
+
+## 9. DKMK-016D Concrete Base/Ratio Candidate Review
+
+DKMK-016D reviews the first concrete `base` / `ratio` candidate before adding
+another Lean theorem.
+
+The goal is not to solve the analytic budget problem yet.  The goal is to pick
+a small first constructor that tests the `GeometricBudgetSource` API without
+introducing Mertens, big-O, logarithmic thresholds, or rounding.
+
+### Candidate 1: no constructor yet
+
+The most conservative option is to stop with:
+
+```lean
+B : GeometricBudgetSource
+```
+
+and require callers to build `B` directly by record syntax.
+
+This keeps the API minimal, but it does not exercise the intended constructor
+path.  It also leaves no small example for later concrete constructors to
+follow.
+
+### Candidate 2: zero-ratio sanity constructor
+
+The first concrete candidate should be:
+
+```lean
+GeometricBudgetSource.ofZeroRatio
+```
+
+Expected shape:
+
+```lean
+theorem GeometricBudgetSource.ofZeroRatio
+    (base : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hbudget : (base : Real) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+with:
+
+```text
+ratio = 0
+```
+
+The key budget reduces to:
+
+```text
+(base : Real) * (1 / (1 - (0 : Real))) <= 1 + error
+```
+
+which should simplify to:
+
+```text
+(base : Real) <= 1 + error
+```
+
+This constructor is not an analytic result.  It is an API sanity constructor:
+it confirms that `GeometricBudgetSource` can be built from a concrete ratio and
+then passed into `ofPointwiseGeometricMajorant_of_budgetSource`.
+
+### Candidate 3: external positive ratio constructor
+
+A more general constructor would take a rational ratio and an explicit budget:
+
+```lean
+theorem GeometricBudgetSource.ofBudget
+    (base ratio : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    (hbudget :
+      (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+This is essentially record syntax.  It is useful only if it improves caller
+readability.  It should not be the first concrete constructor.
+
+### Candidate 4: analytic budget constructor
+
+Later work may build a source from a real analytic estimate, for example from
+specific choices of `base` and `ratio` coming from dyadic bands.
+
+This is not yet ready.  It should wait until a concrete upstream route tells us
+what `base`, `ratio`, and `error` should be.
+
+### Chosen next Lean target
+
+The recommended DKMK-016E target is:
+
+```lean
+GeometricBudgetSource.ofZeroRatio
+```
+
+This is deliberately small and concrete.
+
+It should not introduce:
+
+- `x`;
+- `K`;
+- `increment`;
+- `DyadicBandAnalyticEstimate`;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.
+
+### Expected proof route
+
+The proof should build the structure directly:
+
+```lean
+{
+  base := base
+  ratio := 0
+  error := error
+  hbase := hbase
+  hr0 := by norm_num
+  hr1 := by norm_num
+  hbudget := by
+    simpa using hbudget
+}
+```
+
+If `simpa` does not simplify the budget expression, the proof should first
+normalize:
+
+```text
+1 - (0 : Real) = 1
+1 / 1 = 1
+base * 1 = base
+```
+
+### Non-goals
+
+DKMK-016D does not add:
+
+- Lean code;
+- an analytic budget theorem;
+- a dependent `GeometricBudgetSourceFor`;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding;
+- route theorem changes;
+- a new dyadic provider structure.
