@@ -606,3 +606,77 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed files
 ```
+
+## 11. DKMK-016F Zero-Ratio Usage Wrapper
+
+DKMK-016F checks the caller route from the zero-ratio constructor into the
+budget-source provider wrapper.
+
+Added theorem:
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofPointwiseZeroRatioMajorant
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (base : Rat)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1),
+        increment k <= base * (0 : Rat) ^ k)
+    {error : Real}
+    (hbase : 0 <= (base : Real))
+    (hbudget : (base : Real) <= 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+The proof constructs:
+
+```lean
+GeometricBudgetSource.ofZeroRatio base error hbase hbudget
+```
+
+and passes it to:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource
+```
+
+The only local simplification is unfolding the zero-ratio source so that
+`B.base` and `B.ratio` reduce to `base` and `0`.
+
+### Why this step comes before positive-ratio constructors
+
+DKMK-016E showed that the abstract budget package can be constructed.
+
+DKMK-016F confirms that the package is also convenient at the provider call
+site:
+
+```text
+GeometricBudgetSource.ofZeroRatio
+  -> ofPointwiseGeometricMajorant_of_budgetSource
+  -> DyadicBandAnalyticEstimate
+```
+
+This keeps API pressure visible before adding a less degenerate
+positive-ratio constructor.
+
+### Role
+
+This theorem is still not an analytic estimate.
+
+It is a usage wrapper for the degenerate ratio case.  Since `0^0 = 1` and
+`0^k = 0` for positive `k`, the hypothesis is intentionally strong away from
+the initial dyadic band.  Its purpose is to test API composition, not to model
+the eventual analytic source.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed files
+```

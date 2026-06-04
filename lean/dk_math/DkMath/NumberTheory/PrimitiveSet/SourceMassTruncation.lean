@@ -551,6 +551,34 @@ theorem ofPointwiseGeometricMajorant_of_budgetSource
     B.hbase B.hr0 B.hr1 B.hbudget
 
 /--
+Usage wrapper for the zero-ratio budget source.
+
+This checks the caller path
+`GeometricBudgetSource.ofZeroRatio ->
+ofPointwiseGeometricMajorant_of_budgetSource`.
+-/
+theorem ofPointwiseZeroRatioMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ base * (0 : ℚ) ^ k)
+    {error : ℝ}
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment
+      (GeometricBudgetSource.ofZeroRatio base error hbase hbudget)
+      hinc_nonneg
+      (by
+        simpa [GeometricBudgetSource.ofZeroRatio] using hgeom)
+
+/--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
 the existing finite-step route theorem.
 -/

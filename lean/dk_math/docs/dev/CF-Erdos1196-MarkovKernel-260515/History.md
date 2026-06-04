@@ -1660,3 +1660,40 @@ Archive
      追加するかを review する。
 
 ---
+
+### 日時: 2026/06/04 20:14 JST (DKMK-016F zero-ratio usage wrapper 追加)
+
+1. 目的:
+   - DKMK-016F として、`GeometricBudgetSource.ofZeroRatio` を
+     budget-source provider wrapper へ通す caller 経路を Lean 上で確認する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `DyadicBandAnalyticEstimate.ofPointwiseZeroRatioMajorant` を追加した。
+   - proof では
+     `GeometricBudgetSource.ofZeroRatio base error hbase hbudget` を構築し、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     へ渡した。
+   - `hgeom` は
+     `increment k <= base * (0 : Rat) ^ k`
+     の形で受け取り、zero-ratio source の unfolding により既存 wrapper の
+     `B.base * B.ratio ^ k` に合わせた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016F Zero-Ratio Usage Wrapper を追記した。
+3. 結論:
+   - `ofZeroRatio -> of_budgetSource -> DyadicBandAnalyticEstimate` の
+     caller route が小さな wrapper theorem として通った。
+   - positive-ratio constructor へ進む前に、abstract budget package の
+     使用感を Lean 上で確認できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016G として positive-ratio constructor の shape を review する。
+   - あるいは、zero-ratio wrapper から truncation envelope まで接続する
+     追加 usage theorem が必要か確認する。
+
+---
