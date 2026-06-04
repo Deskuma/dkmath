@@ -772,3 +772,64 @@ DKMK-016G is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 13. DKMK-016H Lean Explicit Budget Constructor
+
+DKMK-016H implements the readability constructor reviewed in DKMK-016G.
+
+Added definition:
+
+```lean
+def GeometricBudgetSource.ofBudget
+    (base ratio : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    (hbudget :
+      (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+The implementation is direct record construction:
+
+```lean
+{
+  base := base
+  ratio := ratio
+  error := error
+  hbase := hbase
+  hr0 := hr0
+  hr1 := hr1
+  hbudget := hbudget
+}
+```
+
+No simplification, finite-sum theorem, provider wrapper, or analytic estimate
+is introduced here.
+
+### Role
+
+`GeometricBudgetSource.ofBudget` is the generic constructor for an already
+proved one-over-one-minus budget.
+
+It accepts nonnegative contractive ratios:
+
+```text
+0 <= (ratio : Real)
+(ratio : Real) < 1
+```
+
+so it is more accurately a nonnegative-contractive-ratio constructor than a
+strict positive-ratio constructor.
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed files
+```

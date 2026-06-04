@@ -165,6 +165,28 @@ structure GeometricBudgetSource where
 namespace GeometricBudgetSource
 
 /--
+Build a geometric budget source from an explicit one-over-one-minus budget.
+
+This is a readability constructor, not an analytic estimate.
+-/
+def ofBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := ratio
+  error := error
+  hbase := hbase
+  hr0 := hr0
+  hr1 := hr1
+  hbudget := hbudget
+
+/--
 Build a geometric budget source with zero ratio.
 
 This is an API sanity constructor, not an analytic estimate.  With ratio zero,

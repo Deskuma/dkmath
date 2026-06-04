@@ -1725,3 +1725,31 @@ Archive
    - DKMK-016H として `GeometricBudgetSource.ofBudget` を Lean 上に追加する。
 
 ---
+
+### 日時: 2026/06/05 02:42 JST (DKMK-016H explicit budget constructor 追加)
+
+1. 目的:
+   - DKMK-016H として、`GeometricBudgetSource.ofBudget` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` の `GeometricBudgetSource` namespace に
+     `def ofBudget` を追加した。
+   - `base`、`ratio`、`error`、`hbase`、`hr0`、`hr1`、`hbudget` を
+     そのまま package する direct record construction とした。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016H Lean Explicit Budget Constructor を追記した。
+3. 結論:
+   - 明示的な one-over-one-minus budget proof から
+     `GeometricBudgetSource` を作る named constructor ができた。
+   - これは analytic estimate ではなく readability constructor である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete `base` / `ratio` candidate review へ進む。
+   - 必要なら `ofBudget` を使った small usage example を追加するか確認する。
+
+---
