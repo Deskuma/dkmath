@@ -1183,3 +1183,315 @@ Archive
      ratio side conditions、tail-bound theorem の exact scope を決める。
 
 ---
+
+### 日時: 2026/06/03 15:34 JST (DKMK-015A roadmap 追加)
+
+1. 目的:
+   - DKMK-015 として、finite geometric-sum / tail-bound theorem design の章を
+     開始する。
+   - DKMK-014J の
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     へ接続するための theorem layer を整理する。
+2. 実施:
+   - `roadmap-DKMK-015.md` を追加した。
+   - DKMK-015 の主題を、provider plumbing ではなく
+     finite geometric-sum / tail-bound theorem design として整理した。
+   - candidate layer として finite geometric-sum identity、
+     finite geometric-sum upper bound、base-scaled bound、
+     direct caller-facing theorem を分けた。
+   - `ratio != 1`、`0 <= ratio`、`ratio < 1`、`0 <= base` は、
+     それぞれ実際に消費する theorem にだけ置く方針を明記した。
+3. 結論:
+   - DKMK-015A は docs-only roadmap として完了した。
+   - 次は DKMK-015B として、finite geometric-sum identity の exact shape を
+     review する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - finite geometric-sum identity を、equality theorem、
+     denominator-cleared identity、upper-bound theorem のどれから始めるか決める。
+
+---
+
+### 日時: 2026/06/03 22:22 JST (DKMK-015B geometric-sum identity shape 追加)
+
+1. 目的:
+   - DKMK-015B として、finite geometric-sum identity の first exact shape を
+     docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015B Finite Geometric-Sum Identity Exact Shape を追加した。
+   - 最初の theorem は division form ではなく、
+     denominator-cleared identity `geomSum_range_mul_one_sub` とした。
+   - expected shape として
+     `(1 - ratio) * sum ratio^k = 1 - ratio^(K + 1)` を記録した。
+   - `ratio != 1` は division-form theorem まで遅らせる方針を明記した。
+   - `0 <= ratio`、`ratio < 1` は upper-bound theorem 側に置く方針を
+     再確認した。
+3. 結論:
+   - DKMK-015B は docs-only exact shape review として完了した。
+   - DKMK-015 の最初の Lean-facing identity は、side condition を持たない
+     denominator-cleared algebraic identity から始める方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015C として、`geomSum_range_mul_one_sub` を Lean 上に追加できるか
+     既存 library theorem を確認し、軽ければ実装する。
+
+---
+
+### 日時: 2026/06/04 02:58 JST (DKMK-015C denominator-cleared identity 追加)
+
+1. 目的:
+   - DKMK-015C として、DKMK-015B で固定した
+     `geomSum_range_mul_one_sub` を Lean 上に追加する。
+2. 実施:
+   - mathlib 既存 theorem として `mul_neg_geom_sum` を確認した。
+   - `SourceMassTruncation.lean` に Real 版 wrapper
+     `geomSum_range_mul_one_sub` を追加した。
+   - statement は
+     `(1 - ratio) * sum_{k in range (K + 1)} ratio ^ k =
+       1 - ratio ^ (K + 1)` とした。
+   - proof は `exact mul_neg_geom_sum ratio (K + 1)` で閉じた。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015C Lean Denominator-Cleared Identity を追記した。
+3. 結論:
+   - finite geometric-sum の最初の algebraic identity layer が Lean 上で
+     利用可能になった。
+   - division-form theorem、`ratio != 1`、`0 <= ratio`、`ratio < 1`、
+     base-scaled bound、route theorem、Mertens / big-O、
+     logarithmic threshold、real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015D として、division form へ進むか、
+     upper-bound theorem の exact shape へ進むかを review する。
+
+---
+
+### 日時: 2026/06/04 03:20 JST (DKMK-015D geometric-sum upper-bound shape 追加)
+
+1. 目的:
+   - DKMK-015D として、finite geometric-sum upper-bound theorem の
+     exact shape を docs 上で固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015D Finite Geometric-Sum Upper-Bound Exact Shape を追加した。
+   - chosen theorem を `geomSum_range_le_one_div_one_sub` とした。
+   - expected shape として、`0 <= ratio` と `ratio < 1` から
+     `sum ratio^k <= 1 / (1 - ratio)` を出す theorem を記録した。
+   - division-form equality ではなく、下流で必要な upper-bound theorem を
+     先に固定する方針にした。
+   - `0 <= ratio`、`ratio < 1` はこの theorem が初めて消費し、
+     `ratio != 1` は明示仮定にしない方針を記録した。
+   - later base-scaled layer として
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le` の shape を記録した。
+3. 結論:
+   - DKMK-015D は docs-only exact shape review として完了した。
+   - DKMK-015 は denominator-cleared identity から order upper-bound layer へ
+     進む方針になった。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015E として、`geomSum_range_le_one_div_one_sub` を Lean 上に
+     実装できるか既存 theorem を確認し、軽ければ追加する。
+
+---
+
+### 日時: 2026/06/04 03:37 JST (DKMK-015E geometric-sum upper-bound 実装)
+
+1. 目的:
+   - DKMK-015E として、DKMK-015D で固定した
+     `geomSum_range_le_one_div_one_sub` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に Real 版 theorem
+     `geomSum_range_le_one_div_one_sub` を追加した。
+   - statement は `0 <= ratio` と `ratio < 1` から
+     `sum_{k in range (K + 1)} ratio ^ k <= 1 / (1 - ratio)` を出す形にした。
+   - DKMK-015C の `geomSum_range_mul_one_sub` を使って
+     `(1 - ratio) * sum ratio^k <= 1` を作った。
+   - `sub_pos.mpr hr1` で `0 < 1 - ratio` を得て、
+     `le_div_iff₀` で目的の upper-bound へ変形した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015E Lean Geometric-Sum Upper Bound を追記した。
+3. 結論:
+   - finite geometric-sum の order upper-bound layer が Lean 上で
+     利用可能になった。
+   - division-form equality、explicit `ratio != 1`、base-scaled bound、
+     route theorem、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - `lake build` を repository top で実行して lakefile が見つからなかった。
+     `lean/dk_math` に移動して再実行し、成功した。
+6. 次の課題:
+   - DKMK-015F として、`base_mul_geomSum_range_le_of_base_mul_one_div_le`
+     の exact shape または Lean 実装へ進む。
+
+---
+
+### 日時: 2026/06/04 03:44 JST (DKMK-015F base-scaled geometric-sum bound 実装)
+
+1. 目的:
+   - DKMK-015F として、DKMK-015E の geometric-sum upper-bound を
+     nonnegative base で scale する theorem を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に Real 版 theorem
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le` を追加した。
+   - statement は `0 <= base`、`0 <= ratio`、`ratio < 1`、
+     `base * (1 / (1 - ratio)) <= 1 + error` から
+     `base * sum ratio^k <= 1 + error` を出す形にした。
+   - proof は `geomSum_range_le_one_div_one_sub` に
+     `mul_le_mul_of_nonneg_left` を当て、
+     `le_trans` で `hbudget` へ接続する薄い wrapper とした。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015F Lean Base-Scaled Geometric-Sum Bound を追記した。
+3. 結論:
+   - DKMK-014J が要求する
+     `base * sum ratio^k <= 1 + error` 型の provider-facing bound が
+     Lean 上で利用可能になった。
+   - division-form equality、explicit `ratio != 1`、route theorem、
+     Mertens / big-O、logarithmic threshold、real-to-Nat rounding は
+     追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015G として、この base-scaled theorem を既存の
+     DKMK-014J / dyadic provider route へどう接続するか review する。
+
+---
+
+### 日時: 2026/06/04 16:24 JST (DKMK-015G dyadic provider connection shape review)
+
+1. 目的:
+   - DKMK-015G として、DKMK-015F の base-scaled theorem を
+     既存 dyadic provider route へ接続する次 theorem の shape を固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015G Dyadic Provider Connection Shape Review を追記した。
+   - 既存 provider
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     が `base * sum ratio^k <= 1 + error` 型の finite-sum bound を
+     受け取ることを再確認した。
+   - 次 theorem 名を
+     `ofPointwiseGeometricMajorant_of_baseGeomBudget` とする方針にした。
+   - provider 側は `base ratio : Rat`、geometric-budget 側は `Real` に
+     留め、接続 theorem で cast 境界を処理する方針にした。
+   - `((base * sum ratio^k : Rat) : Real)` と
+     `(base : Real) * sum ((ratio : Real) ^ k)` の同一視を
+     次実装の主要境界として記録した。
+3. 結論:
+   - DKMK-015G は docs-only connection shape review として完了した。
+   - 次は DKMK-015H として、この connection theorem を Lean 上に
+     実装できるか確認する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015H として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を実装し、既存 provider へ接続する。
+
+---
+
+### 日時: 2026/06/04 16:32 JST (DKMK-015H dyadic provider connection 実装)
+
+1. 目的:
+   - DKMK-015H として、DKMK-015G で固定した
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` の `DyadicBandAnalyticEstimate` namespace に
+     theorem `ofPointwiseGeometricMajorant_of_baseGeomBudget` を追加した。
+   - `base_mul_geomSum_range_le_of_base_mul_one_div_le` で Real 側の
+     `base * sum ratio^k <= 1 + error` bound を作った。
+   - `((base * sum ratio^k : Rat) : Real)` と
+     `(base : Real) * sum ((ratio : Real) ^ k)` の cast 境界を
+     局所補題 `hcast` として `simp` で閉じた。
+   - 最後に既存 provider
+     `ofPointwiseGeometricMajorant_of_geomSumBound` へ接続した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015H Lean Dyadic Provider Connection を追記した。
+3. 結論:
+   - DKMK-015 の Real geometric-budget route が、既存 DKMK-014J の
+     rational dyadic provider route へ接続された。
+   - caller は `base * (1 / (1 - ratio)) <= 1 + error` を Real 側で
+     与えることで `DyadicBandAnalyticEstimate` を得られる。
+   - 新 provider structure、duplicate low-level provider、
+     division-form equality、Mertens / big-O、logarithmic threshold、
+     real-to-Nat rounding は追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015I として、DKMK-015 のまとめまたは次の route 接続方針を
+     review する。
+
+---
+
+### 日時: 2026/06/04 16:42 JST (DKMK-015I chapter summary 追加)
+
+1. 目的:
+   - DKMK-015I として、DKMK-015B-H の finite geometric-sum /
+     dyadic provider connection route を総括し、次の budget source 問題を
+     明確にする。
+2. 実施:
+   - `report-DKMK-015.md` を追加した。
+   - DKMK-015 の追加 Lean surface として
+     `geomSum_range_mul_one_sub`、
+     `geomSum_range_le_one_div_one_sub`、
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le`、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を整理した。
+   - caller path を
+     `hinc_nonneg`、`hgeom`、`hbase`、`hr0`、`hr1`、`hbudget`
+     から `DyadicBandAnalyticEstimate` へ入る形として記録した。
+   - 次の主課題を
+     `(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error`
+     の供給源設計として明記した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015I Chapter Summary And Next Budget Source を追記した。
+3. 結論:
+   - DKMK-015 は
+     `geometric budget -> finite sum bound -> dyadic source-mass provider`
+     の実用 API 章として区切れる状態になった。
+   - 次章では finite geometric sum ではなく、上位 route が `hbudget` を
+     どう供給するかを扱う。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次章として、`hbudget` の abstract budget provider または
+     concrete `base` / `ratio` 設計を review する。
+
+---

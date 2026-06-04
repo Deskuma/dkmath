@@ -63,6 +63,90 @@ structure DyadicBandAnalyticEstimate
     ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
       1 + error
 
+/--
+Denominator-cleared finite geometric-sum identity over the dyadic range length.
+
+This is the algebraic form used before introducing any division side condition
+such as `ratio != 1`.
+-/
+theorem geomSum_range_mul_one_sub
+    (ratio : ℝ) (K : ℕ) :
+    (1 - ratio) *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      =
+    1 - ratio ^ (K + 1) := by
+  exact mul_neg_geom_sum ratio (K + 1)
+
+/--
+Finite geometric-sum upper bound over the dyadic range length.
+
+This is the order form needed by the source-mass truncation layer; it avoids a
+separate division-form equality and uses only the positivity supplied by
+`ratio < 1`.
+-/
+theorem geomSum_range_le_one_div_one_sub
+    {ratio : ℝ} (K : ℕ)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1) :
+    (Finset.sum (Finset.range (K + 1))
+      (fun k : ℕ => ratio ^ k))
+      ≤
+    1 / (1 - ratio) := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hpow_nonneg : 0 ≤ ratio ^ (K + 1) :=
+    pow_nonneg hr0 (K + 1)
+  have hnum_le : 1 - ratio ^ (K + 1) ≤ 1 :=
+    sub_le_self 1 hpow_nonneg
+  have hmul_eq :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        =
+      1 - ratio ^ (K + 1) :=
+    geomSum_range_mul_one_sub ratio K
+  have hmul_le :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      1 := by
+    simpa [hmul_eq] using hnum_le
+  rw [le_div_iff₀ hpos]
+  simpa [mul_comm] using hmul_le
+
+/--
+Scale the finite geometric-sum upper bound by a nonnegative base.
+
+This is the caller-facing bound shape needed before plugging the estimate into
+the dyadic source-mass provider layer.
+-/
+theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
+    {base ratio error : ℝ} (K : ℕ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1)
+    (hbudget : base * (1 / (1 - ratio)) ≤ 1 + error) :
+    base *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      ≤
+    1 + error := by
+  have hsum :
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+        ≤
+      1 / (1 - ratio) :=
+    geomSum_range_le_one_div_one_sub K hr0 hr1
+  have hscaled :
+      base *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      base * (1 / (1 - ratio)) :=
+    mul_le_mul_of_nonneg_left hsum hbase
+  exact le_trans hscaled hbudget
+
 namespace TailWindowSourceMassBound
 
 /-- Build a tail-window contract from the three existing route hypotheses. -/
@@ -364,6 +448,47 @@ theorem ofPointwiseGeometricMajorant_of_geomSumBound
     DyadicBandAnalyticEstimate x K increment error := by
   apply ofPointwiseGeometricMajorant x K increment base ratio hinc_nonneg hgeom
   simpa [Finset.mul_sum] using hgeom_sum_bound
+
+/--
+Pointwise geometric-majorant provider from the one-over-one-minus budget.
+
+This is the convenience wrapper that crosses from the Real geometric-sum
+budget theorem back into the rational-valued dyadic provider layer.
+-/
+theorem ofPointwiseGeometricMajorant_of_baseGeomBudget
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    {error : ℝ}
+    (hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  have hreal :
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k))
+        ≤
+      1 + error :=
+    base_mul_geomSum_range_le_of_base_mul_one_div_le
+      K hbase hr0 hr1 hbudget
+  have hcast :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ)
+        =
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k)) := by
+    simp
+  exact
+    ofPointwiseGeometricMajorant_of_geomSumBound
+      x K increment base ratio hinc_nonneg hgeom
+      (by simpa [hcast] using hreal)
 
 /--
 Turn an analytic dyadic band estimate into the truncation envelope consumed by
