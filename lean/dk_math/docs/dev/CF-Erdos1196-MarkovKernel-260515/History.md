@@ -2000,3 +2000,32 @@ Archive
    - concrete analytic input source の roadmap/review へ進む。
 
 ---
+
+### 日時: 2026/06/05 07:39 JST (DKMK-017 roadmap 開始)
+
+1. 目的:
+   - DKMK-017 の開始にあたり、作業粒度を大きくし、実装・自己診断・
+     検証結果をまとめて報告する運用へ切り替える。
+2. 実施:
+   - `roadmap-DKMK-017.md` を新規作成した。
+   - DKMK-017 を Analytic Input Source 章として位置付けた。
+   - docs-only review の連続を抑え、Lean 実装 bundle 単位で進める方針を
+     明記した。
+   - reviewer 判断を仰ぐタイミングと、自己判断で進めるタイミングを分けた。
+   - 最初の bundle target として、first-band bound、uniform decay、
+     concrete budget proof source の入力 surface 調査を置いた。
+3. 結論:
+   - DKMK-017 では、細かな wrapper や constructor を個別 review せず、
+     route-shape が変わる判断点でのみ厚く相談する。
+   - 次は Lean 側で analytic input source surface を実験し、どこまで実装可能かを
+     bundle として報告する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017 の first implementation bundle として、analytic input source
+     surface を Lean で試す。
+
+---
