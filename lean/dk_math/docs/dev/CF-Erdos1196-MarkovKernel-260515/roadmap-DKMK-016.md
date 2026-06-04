@@ -1,0 +1,165 @@
+# DKMK-016: Geometric Budget Source
+
+DKMK-016 starts after DKMK-015 closed the finite geometric-sum / dyadic
+provider connection route.
+
+DKMK-015 ended with the caller path:
+
+```text
+hinc_nonneg
+hgeom : increment k <= base * ratio^k
+hbase : 0 <= (base : Real)
+hr0   : 0 <= (ratio : Real)
+hr1   : (ratio : Real) < 1
+hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+  -> DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget
+  -> DyadicBandAnalyticEstimate
+  -> existing finite-step route
+```
+
+The remaining question is:
+
+```text
+Where does hbudget come from?
+```
+
+DKMK-016 should answer this at the interface level before introducing concrete
+analytic estimates.
+
+## 1. Scope
+
+The chapter focus is the budget source:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+The first step should not prove a Mertens estimate, a big-O theorem, a
+logarithmic threshold, or real-to-Nat rounding.
+
+The first step should define an abstract surface that packages:
+
+- the rational `base`;
+- the rational `ratio`;
+- the real `error`;
+- nonnegativity of `base`;
+- nonnegativity of `ratio`;
+- strict contractivity of `ratio`;
+- the geometric budget bound.
+
+This keeps analytic input separate from the already completed DKMK-015 provider
+connection.
+
+## 2. DKMK-016A Abstract Budget Source Shape
+
+DKMK-016A fixes the first interface shape.
+
+Recommended Lean-facing shape:
+
+```lean
+structure GeometricBudgetSource where
+  base : Rat
+  ratio : Rat
+  error : Real
+  hbase : 0 <= (base : Real)
+  hr0 : 0 <= (ratio : Real)
+  hr1 : (ratio : Real) < 1
+  hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+This is intentionally a small abstract package.
+
+It does not yet mention:
+
+- `x`;
+- `K`;
+- `increment`;
+- pointwise majorization;
+- `DyadicBandAnalyticEstimate`;
+- finite-step source mass;
+- log-capacity states.
+
+Those belong to connection theorems after the budget source shape is stable.
+
+## 3. Candidate Connection Theorem
+
+After the structure exists, the natural connection theorem is:
+
+```lean
+theorem DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_budgetSource
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1),
+        increment k <= B.base * B.ratio ^ k) :
+    DyadicBandAnalyticEstimate x K increment B.error
+```
+
+This should be a thin wrapper around:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget
+```
+
+The structure should therefore be introduced before this theorem.
+
+## 4. Why Abstract First
+
+The next analytic problem is not finite geometric sums anymore.
+
+The next problem is to justify:
+
+```text
+base / (1 - ratio) <= 1 + error
+```
+
+for concrete future choices of `base` and `ratio`.
+
+Keeping this as an abstract budget source first has two advantages:
+
+1. concrete analytic estimates can be plugged in later;
+2. the existing dyadic provider route can remain independent of how the budget
+   is proved.
+
+This continues the DKMK pattern:
+
+```text
+abstract source
+  -> thin provider wrapper
+  -> concrete source refinements later
+```
+
+## 5. Non-goals
+
+DKMK-016A should not add:
+
+- concrete choices of `base` or `ratio`;
+- a Mertens theorem;
+- a big-O statement;
+- a logarithmic threshold provider;
+- real-to-Nat rounding;
+- route theorem changes;
+- a new dyadic provider structure;
+- a duplicate of DKMK-015H.
+
+## 6. Verification Plan
+
+For docs-only steps:
+
+```text
+git diff --check
+long-line check on changed docs
+```
+
+For Lean steps:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```

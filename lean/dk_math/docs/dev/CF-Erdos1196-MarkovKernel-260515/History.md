@@ -1495,3 +1495,35 @@ Archive
      concrete `base` / `ratio` 設計を review する。
 
 ---
+
+### 日時: 2026/06/04 17:16 JST (DKMK-016A roadmap 追加)
+
+1. 目的:
+   - DKMK-016 を開始し、DKMK-015 で残った
+     `hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error`
+     の供給源設計を次章の主題として固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` を追加した。
+   - 章題を Geometric Budget Source とした。
+   - DKMK-016A の first interface shape として
+     `GeometricBudgetSource` structure の候補を記録した。
+   - package する要素を `base : Rat`、`ratio : Rat`、`error : Real`、
+     `hbase`、`hr0`、`hr1`、`hbudget` とした。
+   - 後続 connection theorem 候補として
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+     を記録した。
+3. 結論:
+   - DKMK-016 は finite geometric sum ではなく、
+     geometric budget source の抽象 surface 設計から始める方針になった。
+   - Mertens / big-O / logarithmic threshold / real-to-Nat rounding は
+     まだ non-goal として維持する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016B として、`GeometricBudgetSource` を Lean 上に
+     追加できるか review する。
+
+---
