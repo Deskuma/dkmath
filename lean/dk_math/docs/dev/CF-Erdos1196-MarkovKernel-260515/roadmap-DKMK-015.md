@@ -910,3 +910,77 @@ DKMK-015H does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 16. DKMK-015I Chapter Summary And Next Budget Source
+
+DKMK-015I closes the finite geometric-sum / provider connection chapter as a
+docs-only summary.
+
+The chapter report is:
+
+```text
+report-DKMK-015.md
+```
+
+### Completed route
+
+DKMK-015 now provides the route:
+
+```text
+geometric budget
+  -> finite geometric-sum bound
+  -> base-scaled finite-sum bound
+  -> dyadic source-mass provider
+```
+
+The public Lean surfaces added in this chapter are:
+
+```text
+geomSum_range_mul_one_sub
+geomSum_range_le_one_div_one_sub
+base_mul_geomSum_range_le_of_base_mul_one_div_le
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget
+```
+
+The practical caller path is:
+
+```text
+hinc_nonneg
+hgeom : increment k <= base * ratio^k
+hbase : 0 <= (base : Real)
+hr0   : 0 <= (ratio : Real)
+hr1   : (ratio : Real) < 1
+hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+  -> DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget
+  -> DyadicBandAnalyticEstimate
+  -> existing finite-step route
+```
+
+### Next route question
+
+The next chapter should focus on the source of:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+This is now the main remaining abstract budget obligation.
+
+The next work should decide whether this budget is supplied by:
+
+- an abstract budget provider;
+- concrete choices of `base` and `ratio`;
+- a log-capacity / dyadic-band analytic estimate;
+- or a staged route that first packages the budget and only later refines it.
+
+### Non-goals
+
+DKMK-015I does not add:
+
+- Lean code;
+- new theorem statements;
+- a division-form equality theorem;
+- explicit `ratio != 1`;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

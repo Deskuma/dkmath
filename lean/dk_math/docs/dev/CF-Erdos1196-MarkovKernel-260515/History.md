@@ -1456,3 +1456,42 @@ Archive
      review する。
 
 ---
+
+### 日時: 2026/06/04 16:42 JST (DKMK-015I chapter summary 追加)
+
+1. 目的:
+   - DKMK-015I として、DKMK-015B-H の finite geometric-sum /
+     dyadic provider connection route を総括し、次の budget source 問題を
+     明確にする。
+2. 実施:
+   - `report-DKMK-015.md` を追加した。
+   - DKMK-015 の追加 Lean surface として
+     `geomSum_range_mul_one_sub`、
+     `geomSum_range_le_one_div_one_sub`、
+     `base_mul_geomSum_range_le_of_base_mul_one_div_le`、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を整理した。
+   - caller path を
+     `hinc_nonneg`、`hgeom`、`hbase`、`hr0`、`hr1`、`hbudget`
+     から `DyadicBandAnalyticEstimate` へ入る形として記録した。
+   - 次の主課題を
+     `(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error`
+     の供給源設計として明記した。
+   - `roadmap-DKMK-015.md` に
+     DKMK-015I Chapter Summary And Next Budget Source を追記した。
+3. 結論:
+   - DKMK-015 は
+     `geometric budget -> finite sum bound -> dyadic source-mass provider`
+     の実用 API 章として区切れる状態になった。
+   - 次章では finite geometric sum ではなく、上位 route が `hbudget` を
+     どう供給するかを扱う。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次章として、`hbudget` の abstract budget provider または
+     concrete `base` / `ratio` 設計を review する。
+
+---
