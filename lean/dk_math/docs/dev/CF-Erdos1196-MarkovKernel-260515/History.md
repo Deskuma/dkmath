@@ -2029,3 +2029,35 @@ Archive
      surface を Lean で試す。
 
 ---
+
+### 日時: 2026/06/05 08:04 JST (DKMK-017A implementation bundle)
+
+1. 目的:
+   - DKMK-017A として、first-band / uniform-decay / budget source をまとめる
+     analytic input package が Lean 上で有効か試す。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `FirstBandDecayBudgetSource` を追加した。
+   - `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage` を追加し、
+     既存の
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`
+     へ直接委譲した。
+   - `roadmap-DKMK-017.md` に DKMK-017A First Implementation Bundle を
+     追記した。
+3. 結論:
+   - combined source は、DKMK-016 の責務分担を置き換えるものではなく、
+     analytic input boundary の package として採用可能。
+   - Rat / Real cast 問題はこの bundle では発生しなかった。
+   - 新しい truncation wrapper は追加しない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `FirstBandDecayBudgetSource` へ流し込む具体的 source constructor または
+     helper lemma を検討する。
+
+---

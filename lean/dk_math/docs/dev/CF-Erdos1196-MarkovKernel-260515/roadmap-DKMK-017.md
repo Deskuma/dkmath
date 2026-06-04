@@ -168,3 +168,90 @@ DKMK-017 should not start by proving:
 
 Those may become later inputs, but the first task is to find the right Lean
 surface for feeding the already established provider route.
+
+## 6. DKMK-017A First Implementation Bundle
+
+DKMK-017A tested the combined source package proposed in the chapter setup.
+
+### Tried target
+
+Lean target:
+
+```lean
+structure FirstBandDecayBudgetSource
+    (K : Nat)
+    (increment : Nat -> Rat) where
+  budget : GeometricBudgetSource
+  hinc_nonneg :
+    forall k in Finset.range (K + 1), 0 <= increment k
+  hbase0 :
+    increment 0 <= budget.base
+  hdecay :
+    forall k in Finset.range K,
+      increment (k + 1) <= budget.ratio * increment k
+```
+
+Provider target:
+
+```lean
+theorem DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (S : FirstBandDecayBudgetSource K increment) :
+    DyadicBandAnalyticEstimate x K increment S.budget.error
+```
+
+### Result
+
+The target was accepted.
+
+`FirstBandDecayBudgetSource` is useful as an analytic-input package.  It does
+not replace the DKMK-016 responsibility split, and it does not add a new
+analytic theorem.  It simply packages the four inputs that are already consumed
+together by:
+
+```lean
+DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+```
+
+### Lean findings
+
+No Rat / Real cast issue appeared in this bundle.
+
+The package theorem is a direct delegation:
+
+```text
+S.budget
+S.hinc_nonneg
+S.hbase0
+S.hdecay
+  -> DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+```
+
+This means the combined package is ergonomically valid, but it should stay at
+the analytic-input boundary.  It should not be expanded into a second route
+layer.
+
+### Decision
+
+Adopt `FirstBandDecayBudgetSource` as the DKMK-017 analytic-input package.
+
+Do not add a new truncation wrapper in this bundle.  The existing route remains:
+
+```text
+FirstBandDecayBudgetSource
+  -> DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+  -> DyadicBandAnalyticEstimate
+  -> DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+### Verification
+
+DKMK-017A was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.

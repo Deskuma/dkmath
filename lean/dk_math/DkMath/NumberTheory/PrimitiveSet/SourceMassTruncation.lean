@@ -208,6 +208,24 @@ structure GeometricBudgetSource where
   hr1 : (ratio : ℝ) < 1
   hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
 
+/--
+Analytic input package for the first-band and uniform-decay route.
+
+This does not replace the DKMK-016 responsibility split.  It packages the
+remaining caller-side analytic inputs that are consumed together by
+`DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`.
+-/
+structure FirstBandDecayBudgetSource
+    (K : ℕ) (increment : ℕ → ℚ) where
+  budget : GeometricBudgetSource
+  hinc_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  hbase0 :
+    increment 0 ≤ budget.base
+  hdecay :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ budget.ratio * increment k
+
 namespace GeometricBudgetSource
 
 /--
@@ -645,6 +663,21 @@ theorem ofFirstBandDecayBudgetSource
   exact
     ofPointwiseGeometricMajorant_of_budgetSource
       x K increment B hinc_nonneg hgeom
+
+/--
+Provider wrapper from a packaged first-band / uniform-decay analytic source.
+
+This is the DKMK-017-A ergonomics test for `FirstBandDecayBudgetSource`: the
+combined source is accepted only as an input package and still delegates to the
+DKMK-016 provider route.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    DyadicBandAnalyticEstimate x K increment S.budget.error :=
+  ofFirstBandDecayBudgetSource
+    x K increment S.budget S.hinc_nonneg S.hbase0 S.hdecay
 
 /--
 Usage wrapper for the zero-ratio budget source.
