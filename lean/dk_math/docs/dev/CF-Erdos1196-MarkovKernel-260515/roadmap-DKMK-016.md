@@ -416,7 +416,7 @@ GeometricBudgetSource.ofZeroRatio
 Expected shape:
 
 ```lean
-theorem GeometricBudgetSource.ofZeroRatio
+def GeometricBudgetSource.ofZeroRatio
     (base : Rat)
     (error : Real)
     (hbase : 0 <= (base : Real))
@@ -451,7 +451,7 @@ then passed into `ofPointwiseGeometricMajorant_of_budgetSource`.
 A more general constructor would take a rational ratio and an explicit budget:
 
 ```lean
-theorem GeometricBudgetSource.ofBudget
+def GeometricBudgetSource.ofBudget
     (base ratio : Rat)
     (error : Real)
     (hbase : 0 <= (base : Real))
@@ -679,4 +679,96 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed files
+```
+
+## 12. DKMK-016G Positive-Ratio Constructor Shape Review
+
+DKMK-016G reviews the next non-degenerate constructor shape before adding more
+Lean code.
+
+The obvious positive-ratio constructor is:
+
+```lean
+def GeometricBudgetSource.ofBudget
+    (base ratio : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    (hbudget :
+      (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+This is a named constructor for the full structure fields.  It does not prove
+a new analytic estimate and it does not simplify a budget inequality.  Its
+only value is API readability at call sites.
+
+### Comparison with record syntax
+
+Direct record syntax already works:
+
+```lean
+{
+  base := base
+  ratio := ratio
+  error := error
+  hbase := hbase
+  hr0 := hr0
+  hr1 := hr1
+  hbudget := hbudget
+}
+```
+
+`GeometricBudgetSource.ofBudget` is therefore useful only if we want a stable
+named API that hides record-field order and gives later constructors a common
+namespace style.
+
+### Comparison with analytic constructors
+
+An analytic constructor would do more work.  For example, it might take a
+Mertens-style estimate, a logarithmic threshold, or a rounded dyadic parameter
+and derive:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+That is not the role of `ofBudget`.  `ofBudget` should take the budget proof as
+input.
+
+### Recommended next Lean step
+
+The next Lean step should add `GeometricBudgetSource.ofBudget` only as a
+readability constructor:
+
+```lean
+def GeometricBudgetSource.ofBudget
+    (base ratio : Rat)
+    (error : Real)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    (hbudget :
+      (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    GeometricBudgetSource
+```
+
+The proof should be direct record construction.  No provider wrapper, no
+finite-sum theorem, and no analytic estimate should be added in the same step.
+
+### Type-boundary rule
+
+As learned in DKMK-016E, this must be a `def`, not a `theorem`.
+
+`GeometricBudgetSource` is data in `Type`, even though it contains proof fields.
+Constructor APIs returning it should therefore be definitions.
+
+### Verification
+
+DKMK-016G is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
 ```

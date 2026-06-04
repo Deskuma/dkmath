@@ -1697,3 +1697,31 @@ Archive
      追加 usage theorem が必要か確認する。
 
 ---
+
+### 日時: 2026/06/04 21:20 JST (DKMK-016G positive-ratio constructor review 追加)
+
+1. 目的:
+   - DKMK-016G として、非退化な positive-ratio constructor の shape を
+     Lean 実装前に review する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016G Positive-Ratio Constructor Shape Review を追記した。
+   - 候補 `GeometricBudgetSource.ofBudget` は record syntax とほぼ同じで、
+     analytic estimate ではなく readability constructor と位置づけた。
+   - DKMK-016E の学びを反映し、constructor 候補は `theorem` ではなく
+     `def` として記録した。
+   - 既存の DKMK-016D 候補スニペットも `def` 表記に整えた。
+3. 結論:
+   - 次の Lean target は
+     `def GeometricBudgetSource.ofBudget` が妥当。
+   - ただし、その step では provider wrapper、finite-sum theorem、
+     analytic estimate を追加しない。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016H として `GeometricBudgetSource.ofBudget` を Lean 上に追加する。
+
+---
