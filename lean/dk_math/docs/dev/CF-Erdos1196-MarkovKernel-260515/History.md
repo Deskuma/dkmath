@@ -1812,3 +1812,31 @@ Archive
      review する。
 
 ---
+
+### 日時: 2026/06/05 03:06 JST (DKMK-016K pointwise majorant shape review 追加)
+
+1. 目的:
+   - DKMK-016K として、
+     `pointwiseGeometricMajorant_of_firstBand_decay` の theorem shape を
+     Lean 実装前に固定する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に
+     DKMK-016K Pointwise Geometric Majorant Shape Review を追記した。
+   - theorem は `hgeom` の生成だけを担当し、`hinc_nonneg` は provider 側の
+     別入力として残す方針にした。
+   - `hdecay` の範囲は `Finset.range K` とし、結論は
+     `Finset.range (K + 1)` 上の pointwise majorant とした。
+   - 実装リスクは数学ではなく Nat indexing と Rat algebra にあると整理した。
+3. 結論:
+   - 次の Lean target は `hinc_nonneg` なしの
+     `pointwiseGeometricMajorant_of_firstBand_decay` が妥当。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016L として
+     `pointwiseGeometricMajorant_of_firstBand_decay` を Lean 上に実装する。
+
+---
