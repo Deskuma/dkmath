@@ -1661,3 +1661,139 @@ DKMK-016O is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 21. DKMK-016P Chapter Summary
+
+DKMK-016 closes the geometric budget source and first-band/uniform-decay
+provider route.  The chapter is now primarily an API-plumbing chapter, not an
+analytic-estimate chapter.
+
+### Added Lean surface
+
+Budget source:
+
+- `GeometricBudgetSource`
+- `GeometricBudgetSource.ofBudget`
+- `GeometricBudgetSource.ofZeroRatio`
+
+Budget-source provider:
+
+- `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_budgetSource`
+
+Zero-ratio sanity route:
+
+- `DyadicBandAnalyticEstimate.ofPointwiseZeroRatioMajorant`
+
+First-band / uniform-decay route:
+
+- `pointwiseGeometricMajorant_of_firstBand_decay`
+- `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`
+
+Existing downstream bridge reused:
+
+- `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate`
+
+### Final caller route
+
+The final route is:
+
+```text
+GeometricBudgetSource.ofBudget
+  supplies the geometric budget side
+
+pointwiseGeometricMajorant_of_firstBand_decay
+  supplies hgeom from first-band + uniform decay
+
+DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource
+  combines B + hinc_nonneg + first-band + decay
+
+DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+  enters the truncation-envelope route
+```
+
+In caller-facing hypothesis form, the key inputs are:
+
+```text
+B : GeometricBudgetSource
+hinc_nonneg :
+  forall k in Finset.range (K + 1), 0 <= increment k
+hbase0 :
+  increment 0 <= B.base
+hdecay :
+  forall k in Finset.range K,
+    increment (k + 1) <= B.ratio * increment k
+```
+
+These inputs produce:
+
+```text
+DyadicBandAnalyticEstimate
+  -> TruncationEnvelopeEstimate
+  -> existing finite-step route
+```
+
+### Responsibility split
+
+Budget layer:
+
+- `GeometricBudgetSource` packages `base`, `ratio`, `error`, and the proof that
+  the geometric budget is bounded by `1 + error`.
+
+Pointwise layer:
+
+- `pointwiseGeometricMajorant_of_firstBand_decay` proves
+  `increment k <= base * ratio ^ k` from the first-band bound and uniform
+  step decay.
+
+Provider layer:
+
+- `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource` combines
+  `B`, increment nonnegativity, the first-band bound, and uniform decay.
+
+Downstream layer:
+
+- `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` reuses the existing
+  truncation-envelope and finite-step route.
+
+### What remains analytic input
+
+DKMK-016 deliberately leaves the following as input hypotheses:
+
+- first-band upper bound, `increment 0 <= B.base`;
+- uniform step decay, `increment (k + 1) <= B.ratio * increment k`;
+- increment nonnegativity;
+- construction of a concrete `B : GeometricBudgetSource`;
+- the concrete budget proof behind `GeometricBudgetSource.ofBudget`;
+- rational envelopes for any real or logarithmic analytic candidates.
+
+### Non-goals kept out
+
+DKMK-016 intentionally does not introduce:
+
+- Mertens or big-O estimates;
+- logarithmic thresholds;
+- real-to-Nat rounding;
+- rational approximation of `log x`;
+- finite-step route wrapper proliferation;
+- an extra truncation wrapper with no new mathematical content.
+
+### Next chapter recommendation
+
+The next chapter should target concrete analytic source inputs rather than more
+API wrappers.  The natural candidates are:
+
+1. a first-band upper-bound source;
+2. a uniform-decay source;
+3. a concrete budget proof source for `GeometricBudgetSource.ofBudget`.
+
+This keeps the route anchored at the current Lean surface while moving the work
+back toward the missing analytic estimates.
+
+### Verification
+
+DKMK-016P is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```

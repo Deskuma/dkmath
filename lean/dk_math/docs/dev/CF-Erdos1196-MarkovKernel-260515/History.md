@@ -1965,3 +1965,38 @@ Archive
    - DKMK-016P として、章のまとめと次章への analytic input を整理する。
 
 ---
+
+### 日時: 2026/06/05 07:12 JST (DKMK-016P chapter summary 追加)
+
+1. 目的:
+   - DKMK-016P として、DKMK-016 の Lean API、final route、
+     responsibility split、non-goals、次章 analytic input を整理する。
+2. 実施:
+   - `roadmap-DKMK-016.md` に DKMK-016P Chapter Summary を追記した。
+   - 追加された Lean surface を budget source、budget-source provider、
+     zero-ratio sanity route、first-band / uniform-decay route、
+     downstream bridge に分けて整理した。
+   - final caller route を
+     `GeometricBudgetSource.ofBudget`、
+     `pointwiseGeometricMajorant_of_firstBand_decay`、
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`、
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate`
+     の流れとして記録した。
+   - budget layer / pointwise layer / provider layer / downstream layer の
+     responsibility split を明示した。
+   - 次章の analytic input candidates を first-band upper bound、
+     uniform decay、`GeometricBudgetSource.ofBudget` の concrete budget proof
+     として記録した。
+3. 結論:
+   - DKMK-016 は API plumbing と first-band/uniform-decay provider route の
+     章として自然な停止点に到達した。
+   - 次は追加 wrapper ではなく concrete analytic input source の review へ進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-016.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete analytic input source の roadmap/review へ進む。
+
+---
