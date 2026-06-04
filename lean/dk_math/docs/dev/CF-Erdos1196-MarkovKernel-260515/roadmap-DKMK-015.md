@@ -694,3 +694,120 @@ DKMK-015F does not add:
 - Mertens or big-O;
 - logarithmic thresholds;
 - real-to-Nat rounding.
+
+## 14. DKMK-015G Dyadic Provider Connection Shape Review
+
+DKMK-015G fixes the next connection step without adding Lean code.
+
+DKMK-015F provides the Real-side budget theorem:
+
+```lean
+base_mul_geomSum_range_le_of_base_mul_one_div_le
+```
+
+The existing DKMK-014J provider consumes the finite-sum bound directly:
+
+```lean
+DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound
+```
+
+The next theorem should connect these two layers.
+
+### Existing provider shape
+
+The existing provider has rational `base` and `ratio`:
+
+```lean
+theorem DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_geomSumBound
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (base ratio : Rat)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1), increment k <= base * ratio ^ k)
+    {error : Real}
+    (hgeom_sum_bound :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : Nat => ratio ^ k) : Rat) : Real) <=
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+This is already the correct low-level provider.
+
+### Chosen next theorem
+
+The next theorem should be a convenience wrapper:
+
+```lean
+theorem DyadicBandAnalyticEstimate
+    .ofPointwiseGeometricMajorant_of_baseGeomBudget
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (base ratio : Rat)
+    (hinc_nonneg :
+      forall k in Finset.range (K + 1), 0 <= increment k)
+    (hgeom :
+      forall k in Finset.range (K + 1), increment k <= base * ratio ^ k)
+    (hbase : 0 <= (base : Real))
+    (hr0 : 0 <= (ratio : Real))
+    (hr1 : (ratio : Real) < 1)
+    {error : Real}
+    (hbudget : (base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error
+```
+
+The theorem name should be:
+
+```lean
+ofPointwiseGeometricMajorant_of_baseGeomBudget
+```
+
+This keeps the public caller-facing name shorter than
+`ofPointwiseGeometricMajorant_of_baseOneDivOneSubBound`, while the docs explain
+that the budget is `base * (1 / (1 - ratio)) <= 1 + error`.
+
+### Proof route for the later Lean implementation
+
+The theorem should:
+
+1. call `base_mul_geomSum_range_le_of_base_mul_one_div_le` with
+   `(base : Real)` and `(ratio : Real)`;
+2. convert the resulting Real finite-sum bound back to the shape expected by
+   `ofPointwiseGeometricMajorant_of_geomSumBound`;
+3. call `ofPointwiseGeometricMajorant_of_geomSumBound`.
+
+The main implementation boundary is the coercion identity:
+
+```text
+((base * sum (fun k => ratio ^ k) : Rat) : Real)
+=
+(base : Real) * sum (fun k => (ratio : Real) ^ k)
+```
+
+This should be handled locally in the connection theorem.
+
+### Type-boundary decision
+
+Keep the provider theorem in the `Rat`-increment layer, because
+`DyadicBandAnalyticEstimate` is currently rational-valued.
+
+Keep the geometric-budget theorem in the `Real` layer, because DKMK-015C-F
+already use `Real` and the downstream `error` target is `Real`.
+
+The connection theorem is therefore the correct place to pay the cast cost.
+
+### Non-goals
+
+DKMK-015G does not add:
+
+- Lean code;
+- a new provider structure;
+- a duplicate of `ofPointwiseGeometricMajorant_of_geomSumBound`;
+- a division-form equality theorem;
+- route theorem changes;
+- Mertens or big-O;
+- logarithmic thresholds;
+- real-to-Nat rounding.

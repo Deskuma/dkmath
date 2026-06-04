@@ -1382,3 +1382,38 @@ Archive
      DKMK-014J / dyadic provider route へどう接続するか review する。
 
 ---
+
+### 日時: 2026/06/04 16:24 JST (DKMK-015G dyadic provider connection shape review)
+
+1. 目的:
+   - DKMK-015G として、DKMK-015F の base-scaled theorem を
+     既存 dyadic provider route へ接続する次 theorem の shape を固定する。
+2. 実施:
+   - `roadmap-DKMK-015.md` に
+     DKMK-015G Dyadic Provider Connection Shape Review を追記した。
+   - 既存 provider
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_geomSumBound`
+     が `base * sum ratio^k <= 1 + error` 型の finite-sum bound を
+     受け取ることを再確認した。
+   - 次 theorem 名を
+     `ofPointwiseGeometricMajorant_of_baseGeomBudget` とする方針にした。
+   - provider 側は `base ratio : Rat`、geometric-budget 側は `Real` に
+     留め、接続 theorem で cast 境界を処理する方針にした。
+   - `((base * sum ratio^k : Rat) : Real)` と
+     `(base : Real) * sum ((ratio : Real) ^ k)` の同一視を
+     次実装の主要境界として記録した。
+3. 結論:
+   - DKMK-015G は docs-only connection shape review として完了した。
+   - 次は DKMK-015H として、この connection theorem を Lean 上に
+     実装できるか確認する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-015.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-015H として、
+     `DyadicBandAnalyticEstimate.ofPointwiseGeometricMajorant_of_baseGeomBudget`
+     を実装し、既存 provider へ接続する。
+
+---
