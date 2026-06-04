@@ -148,6 +148,52 @@ theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
   exact le_trans hscaled hbudget
 
 /--
+Pointwise geometric majorant from a first-band bound and uniform step decay.
+
+This only builds the geometric pointwise control.  The provider's separate
+nonnegativity hypothesis stays outside this theorem.
+-/
+theorem pointwiseGeometricMajorant_of_firstBand_decay
+    (K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k ∈ Finset.range (K + 1),
+      increment k ≤ base * ratio ^ k := by
+  have hmain :
+      ∀ k, k ≤ K → increment k ≤ base * ratio ^ k := by
+    intro k
+    induction k with
+    | zero =>
+        intro _hk
+        simpa using hbase0
+    | succ k ih =>
+        intro hk_succ
+        have hk_le : k ≤ K :=
+          le_trans (Nat.le_succ k) hk_succ
+        have hk_lt : k < K :=
+          Nat.lt_of_succ_le hk_succ
+        have hstep :
+            increment (k + 1) ≤ ratio * increment k :=
+          hdecay k (Finset.mem_range.mpr hk_lt)
+        have hmul :
+            ratio * increment k ≤ ratio * (base * ratio ^ k) :=
+          mul_le_mul_of_nonneg_left (ih hk_le) hr0
+        calc
+          increment (k + 1) ≤ ratio * increment k := hstep
+          _ ≤ ratio * (base * ratio ^ k) := hmul
+          _ = base * ratio ^ (k + 1) := by
+            ring_nf
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hmain k hk_le
+
+/--
 Abstract source of the one-over-one-minus geometric budget.
 
 This package separates the analytic origin of `base` and `ratio` from the

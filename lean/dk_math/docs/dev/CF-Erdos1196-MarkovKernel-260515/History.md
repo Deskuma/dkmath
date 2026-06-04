@@ -1840,3 +1840,39 @@ Archive
      `pointwiseGeometricMajorant_of_firstBand_decay` を Lean 上に実装する。
 
 ---
+
+### 日時: 2026/06/05 03:12 JST (DKMK-016L pointwise majorant 実装)
+
+1. 目的:
+   - DKMK-016L として、
+     `pointwiseGeometricMajorant_of_firstBand_decay` を Lean 上に追加する。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `pointwiseGeometricMajorant_of_firstBand_decay` を追加した。
+   - theorem は `hinc_nonneg` を受け取らず、`hgeom` の生成だけを担当する。
+   - proof では内部補題
+     `forall k, k <= K -> increment k <= base * ratio^k`
+     を帰納法で示した。
+   - successor case では `k + 1 <= K` から `k < K` を作り、
+     `hdecay k` を適用した。
+   - `hr0` により左から `ratio` を掛けた不等式を保ち、最後の Rat algebra は
+     `ring_nf` で閉じた。
+   - `roadmap-DKMK-016.md` に
+     DKMK-016L Lean Pointwise Geometric Majorant を追記した。
+3. 結論:
+   - first-band bound と uniform step decay から provider 用の `hgeom` を
+     作る Lean theorem ができた。
+   - provider wrapper への接続はまだ追加していない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed files
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-016M として、この `hgeom` theorem を
+     `GeometricBudgetSource` と provider wrapper へ接続する theorem shape を
+     review する。
+
+---

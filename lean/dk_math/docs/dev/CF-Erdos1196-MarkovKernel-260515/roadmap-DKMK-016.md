@@ -1247,3 +1247,97 @@ DKMK-016K is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 17. DKMK-016L Lean Pointwise Geometric Majorant
+
+DKMK-016L implements the pointwise majorant theorem fixed in DKMK-016K.
+
+Added theorem:
+
+```lean
+theorem pointwiseGeometricMajorant_of_firstBand_decay
+    (K : Nat)
+    (increment : Nat -> Rat)
+    (base ratio : Rat)
+    (hbase0 : increment 0 <= base)
+    (hdecay :
+      forall k in Finset.range K,
+        increment (k + 1) <= ratio * increment k)
+    (hr0 : 0 <= ratio) :
+    forall k in Finset.range (K + 1),
+      increment k <= base * ratio^k
+```
+
+The theorem deliberately does not take `hinc_nonneg`.  It only constructs
+`hgeom`; the provider still receives nonnegativity separately.
+
+### Proof shape
+
+The implementation first proves an internal `k <= K` statement:
+
+```lean
+have hmain :
+    forall k, k <= K -> increment k <= base * ratio^k
+```
+
+Then the final `Finset.range (K + 1)` conclusion follows from:
+
+```text
+k in range (K + 1) -> k <= K
+```
+
+### Induction step
+
+For the successor case, `k + 1 <= K` gives:
+
+```text
+k < K
+```
+
+so the decay hypothesis applies:
+
+```text
+increment (k + 1) <= ratio * increment k
+```
+
+The induction hypothesis and `hr0 : 0 <= ratio` give:
+
+```text
+ratio * increment k <= ratio * (base * ratio^k)
+```
+
+and the final algebraic normalization:
+
+```text
+ratio * (base * ratio^k) = base * ratio^(k + 1)
+```
+
+is closed by `ring_nf` over `Rat`.
+
+### Role
+
+This theorem supplies the missing route from Candidate C to the existing
+provider input:
+
+```text
+first-band bound + uniform step decay
+  -> hgeom
+```
+
+The provider composition remains a later step:
+
+```text
+GeometricBudgetSource + hinc_nonneg + hgeom
+  -> DyadicBandAnalyticEstimate
+```
+
+### Verification
+
+The implementation was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed files
+```
