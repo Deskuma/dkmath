@@ -71,3 +71,32 @@ Archive
      Real-majorant bridge を最小実装できるか試す。
 
 ---
+
+### 日時: 2026/06/06 04:04 JST (DKMK-018B Real-majorant bridge)
+
+1. 目的:
+   - Real-valued analytic majorant が既存 Rat finite-step route を certify
+     できるか Lean で確認する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.ofRealMajorant` を追加した。
+   - `DyadicBandAnalyticEstimate.ofRealMajorant` を追加した。
+   - `TruncationEnvelopeEstimate.ofRealWeightProviderMajorant` を追加し、
+     `RealWeightProvider` を次 checkpoint の source として使える形にした。
+3. 結論:
+   - Real-valued majorant から rational `TruncationEnvelopeEstimate` は閉じる。
+   - dyadic-band 版も閉じる。
+   - `RealWeightProvider.SubProbability` と `0 <= error` からも envelope を
+     作れるため、LogCapacityKernel / RealLog provider を次に接続できる。
+   - 現時点では Real-native finite-step mass refactor は不要。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider` などの
+     concrete Real provider を DKMK-018B bridge に接続する。
+
+---

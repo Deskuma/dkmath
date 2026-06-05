@@ -779,6 +779,68 @@ theorem dyadicRange
     exact hbound
 
 /--
+Finite-step truncation estimate certified by a Real-valued majorant.
+
+This is the DKMK-018B bridge: the finite-step mass route remains rational,
+while an analytic source may live in `Real`.
+-/
+theorem ofRealMajorant
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ)
+    (increment : ι → ℚ) (majorant : ι → ℝ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    {error : ℝ}
+    (hle :
+      ∀ i ∈ steps, (increment i : ℝ) ≤ majorant i)
+    (hmajorant_bound :
+      (Finset.sum steps fun i => majorant i) ≤ 1 + error) :
+    TruncationEnvelopeEstimate steps threshold increment error where
+  increment_nonneg := hinc
+  analytic_bound := by
+    constructor
+    have hsum :
+        (Finset.sum steps fun i => (increment i : ℝ)) ≤
+          Finset.sum steps majorant := by
+      exact Finset.sum_le_sum hle
+    have hcast :
+        ((Finset.sum steps increment : ℚ) : ℝ) =
+          Finset.sum steps fun i => (increment i : ℝ) := by
+      exact_mod_cast (rfl : Finset.sum steps increment = Finset.sum steps increment)
+    exact (by simpa [hcast] using le_trans hsum hmajorant_bound)
+
+/--
+Finite-step truncation estimate certified by a `RealWeightProvider`.
+
+This is the first DKMK-018C-facing bridge: a Real log/capacity provider can
+certify an existing rational increment whenever the rational increment is
+pointwise bounded by the provider weights.
+-/
+theorem ofRealWeightProviderMajorant
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (increment : ι → ℚ)
+    (hinc : ∀ i ∈ P.index, 0 ≤ increment i)
+    (hle :
+      ∀ i ∈ P.index, (increment i : ℝ) ≤ P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold increment error := by
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have hprovider_bound :
+      (Finset.sum P.index fun i => P.weight i) ≤ 1 + error := by
+    have hprob' :
+        (Finset.sum P.index fun i => P.weight i) ≤ 1 := by
+      simpa [RealWeightProvider.SubProbability,
+        RealWeightProvider.totalWeight] using hprob
+    exact le_trans hprob' hone_le
+  exact
+    ofRealMajorant P.index threshold increment P.weight
+      hinc hle hprovider_bound
+
+/--
 Route theorem for externally supplied finite-step truncation estimates.
 
 This is a packaging wrapper around
@@ -872,6 +934,44 @@ theorem ofMajorant
           ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) := by
       exact_mod_cast hsum
     exact le_trans hsumR hmajorant_bound
+
+/--
+Real-majorant provider for dyadic analytic estimates.
+
+This is the dyadic-band form of the DKMK-018B bridge.  It lets a Real-valued
+analytic envelope certify a rational dyadic increment without changing the
+finite-step mass route.
+-/
+theorem ofRealMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (majorant : ℕ → ℝ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), (increment k : ℝ) ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      (Finset.sum (Finset.range (K + 1)) fun k => majorant k) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have H :
+        TruncationEnvelopeEstimate
+          (Finset.range (K + 1))
+          (fun k : ℕ => x * 2^k)
+          increment
+          error :=
+      TruncationEnvelopeEstimate.ofRealMajorant
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        increment
+        majorant
+        hinc_nonneg
+        hle
+        hmajorant_bound
+    exact H.analytic_bound.total_le_one_add_error
 
 /--
 Pointwise geometric-majorant provider for dyadic analytic estimates.

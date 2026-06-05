@@ -163,3 +163,92 @@ DKMK-018A is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 3. DKMK-018B Real-Majorant Bridge
+
+DKMK-018B tested whether a Real-valued analytic majorant can certify the
+existing rational finite-step route.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `TruncationEnvelopeEstimate.ofRealMajorant`
+- `TruncationEnvelopeEstimate.ofRealWeightProviderMajorant`
+- `DyadicBandAnalyticEstimate.ofRealMajorant`
+
+### Result
+
+The bridge is accepted.
+
+For a finite step set, the route now accepts:
+
+```text
+increment : i -> Rat
+majorant  : i -> Real
+
+forall i in steps, 0 <= increment i
+forall i in steps, (increment i : Real) <= majorant i
+sum majorant <= 1 + error
+```
+
+and produces:
+
+```text
+TruncationEnvelopeEstimate steps threshold increment error
+```
+
+The dyadic-band version also closes:
+
+```text
+DyadicBandAnalyticEstimate x K increment error
+```
+
+from a Real-valued majorant over `Finset.range (K + 1)`.
+
+### Provider bridge
+
+DKMK-018B also implemented the next bridge surface toward DKMK-018C:
+
+```text
+RealWeightProvider
++ pointwise majorization of a Rat increment
++ provider SubProbability
++ 0 <= error
+  -> TruncationEnvelopeEstimate
+```
+
+This means `logCapacityKernelRealWeightProvider` can be used in the next
+checkpoint as a Real source, provided a rational increment is chosen below its
+weights.
+
+### Interpretation
+
+The large Real-native finite-step refactor is not needed yet.
+
+The existing rational finite-step mass route can remain in place while Real
+analysis supplies an upper envelope.
+
+### Decision
+
+Adopt the Real-majorant bridge.
+
+The next checkpoint should attach an actual Real log/capacity source, starting
+with:
+
+```text
+PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider
+```
+
+or another `RealWeightProvider` from the Real log-ratio route.
+
+### Verification
+
+DKMK-018B was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
