@@ -336,6 +336,29 @@ theorem geometricIncrement_decay_le
   intro k
   exact le_of_eq (geometricIncrement_decay base ratio k)
 
+/--
+Canonical first-band budget for the geometric increment when
+`base = 1 - ratio`.
+-/
+theorem geometricIncrement_baseEqOneSub_budget
+    {base ratio : ℚ} {error : ℝ}
+    (hbaseEq : base = 1 - ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)) := by
+  have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+    exact_mod_cast hbaseEq
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have honeSub_nonneg : 0 ≤ 1 - (ratio : ℝ) :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hmul :
+      1 - (ratio : ℝ) ≤
+        (1 + error) * (1 - (ratio : ℝ)) := by
+    simpa [one_mul] using
+      mul_le_mul_of_nonneg_right hone_le honeSub_nonneg
+  simpa [hbaseEqReal] using hmul
+
 namespace GeometricBudgetSource
 
 /--
@@ -567,6 +590,33 @@ def ofGeometricIncrement
     (by simpa [geometricIncrement_zero] using hbaseBudget)
     (fun k _hk => geometricIncrement_nonneg hbase hr0 k)
     (fun k _hk => geometricIncrement_decay_le base ratio k)
+
+/--
+Canonical geometric increment source when `base = 1 - ratio`.
+
+The first-band budget is discharged from `0 <= error`; nonnegativity of the
+base follows from `ratio < 1`.
+-/
+def ofGeometricIncrementBaseEqOneSub
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) := by
+  have hbaseReal : 0 ≤ (base : ℝ) := by
+    have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+      exact_mod_cast hbaseEq
+    rw [hbaseEqReal]
+    exact le_of_lt (sub_pos.mpr hr1)
+  have hbase : 0 ≤ base := by
+    exact_mod_cast hbaseReal
+  exact
+    ofGeometricIncrement
+      base ratio error hbase hr0 hr1
+      (geometricIncrement_baseEqOneSub_budget hbaseEq hr1 herror)
 
 end FirstBandDecayBudgetSource
 
@@ -1097,6 +1147,30 @@ theorem ofGeometricIncrement
     x K (geometricIncrement base ratio)
     (FirstBandDecayBudgetSource.ofGeometricIncrement
       base ratio error hbase hr0 hr1 hbaseBudget)
+
+/--
+Canonical geometric increment source, applied directly to the truncation
+envelope, when `base = 1 - ratio`.
+
+This removes the explicit first-band budget from the caller surface.
+-/
+theorem ofGeometricIncrementBaseEqOneSub
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub
+      base ratio error hbaseEq hr0 hr1 herror)
 
 end TruncationEnvelopeEstimate
 

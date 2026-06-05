@@ -2313,3 +2313,33 @@ Archive
      `base = 1 - ratio` などの canonical specialization を試す。
 
 ---
+
+### 日時: 2026/06/05 15:15 JST (DKMK-017J canonical first-band budget)
+
+1. 目的:
+   - DKMK-017J として、`base = 1 - ratio` の canonical specialization から
+     first-band budget を Lean で閉じ、envelope まで接続する。
+2. 実施:
+   - `geometricIncrement_baseEqOneSub_budget` を追加した。
+   - `FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub` を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub` を追加した。
+3. 結論:
+   - `base = 1 - ratio`, `0 <= ratio`, `(ratio : Real) < 1`,
+     `0 <= error` から、concrete geometric increment は
+     `TruncationEnvelopeEstimate` まで通る。
+   - `base` の非負性は `base = 1 - ratio` と `(ratio : Real) < 1` から
+     閉じる。
+   - DKMK-017I で残っていた first-band budget は、この canonical source では
+     caller-side obligation から外せた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - explicit `base` を持たない `base := 1 - ratio` 型の theorem を足すか、
+     finite-step mass route との接続へ進むか判断する。
+
+---

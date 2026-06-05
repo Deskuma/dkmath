@@ -936,3 +936,91 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 15. DKMK-017J Canonical First-Band Budget
+
+DKMK-017J specialized the geometric increment route to the canonical first-band
+choice:
+
+```text
+base = 1 - ratio
+```
+
+This is the first concrete discharge of the remaining DKMK-017I analytic input:
+
+```text
+(base : Real) <= (1 + error) * (1 - (ratio : Real))
+```
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `geometricIncrement_baseEqOneSub_budget`
+- `FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub`
+- `TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub`
+
+### Result
+
+The canonical route is accepted.
+
+The caller now supplies:
+
+```text
+base = 1 - ratio
+0 <= ratio
+(ratio : Real) < 1
+0 <= error
+```
+
+and obtains:
+
+```text
+TruncationEnvelopeEstimate
+  (Finset.range (K + 1))
+  (fun k : Nat => x * 2^k)
+  (geometricIncrement base ratio)
+  error
+```
+
+The first-band budget is discharged internally:
+
+```text
+base = 1 - ratio
+0 <= error
+  -> (base : Real) <= (1 + error) * (1 - (ratio : Real))
+```
+
+Nonnegativity of `base` follows from `(ratio : Real) < 1` and
+`base = 1 - ratio`.
+
+### Interpretation
+
+DKMK-017I showed that the concrete geometric increment can reach the envelope
+when the first-band budget is supplied.
+
+DKMK-017J removes that supplied budget for the canonical geometric choice.  For
+this source, the full DKMK-017 route now only needs nonnegative error and the
+usual ratio bounds.
+
+### Decision
+
+Adopt the canonical `base = 1 - ratio` specialization.
+
+This is still a route-validation source, not the final analytic/logarithmic
+source.  The next checkpoint can now decide whether to:
+
+1. add a more ergonomic `base := 1 - ratio` theorem with no explicit `base`;
+2. connect this geometric source to a finite-step mass theorem;
+3. move toward a logarithmic or capacity-derived source.
+
+### Verification
+
+DKMK-017J was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
