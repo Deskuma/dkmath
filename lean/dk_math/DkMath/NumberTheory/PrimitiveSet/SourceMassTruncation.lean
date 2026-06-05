@@ -450,6 +450,59 @@ def ofBudgetAndDecay
       base ratio error hbase hr0 hr1 hbudget)
     hinc_nonneg hbase0 hdecay
 
+/--
+Build a first-band / uniform-decay source from a denominator-cleared budget
+and Nat-indexed nonnegativity/decay hypotheses.
+
+This combines the DKMK-017C budget helper with the DKMK-017D Nat-bound source
+constructor.
+-/
+def ofDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSourceNatBounds
+    (GeometricBudgetSource.ofDenomClearedBudget
+      base ratio error hbase hr0 hr1 hbaseBudget)
+    hinc_nonneg hbase0 hdecay
+
+/--
+Build a first-band / uniform-decay source using `increment 0` as the base.
+
+This closes the first-band bound by reflexivity.  The caller still supplies the
+denominator-cleared budget for that base.
+-/
+def ofSelfBaseDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment := by
+  have hbase : 0 ≤ (increment 0 : ℝ) := by
+    exact_mod_cast hinc_nonneg 0 (Nat.zero_le K)
+  exact
+    ofDenomClearedBudgetNatBounds
+      (increment 0) ratio error hbase hr0 hr1 hbaseBudget
+      hinc_nonneg le_rfl hdecay
+
 end FirstBandDecayBudgetSource
 
 namespace TailWindowSourceMassBound

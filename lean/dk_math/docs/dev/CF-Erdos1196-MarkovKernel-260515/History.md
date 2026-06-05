@@ -2152,3 +2152,37 @@ Archive
      denominator-cleared budget constructor の合成可否を検討する。
 
 ---
+
+### 日時: 2026/06/05 09:13 JST (DKMK-017E first-band self-base bundle)
+
+1. 目的:
+   - DKMK-017E として、first-band upper bound `hbase0` を
+     `base := increment 0` により閉じられるか Lean 上で試す。
+   - library-facing wrapper として、denominator-cleared budget と
+     Nat-bound source constructor の合成も試す。
+2. 実施:
+   - `FirstBandDecayBudgetSource.ofDenomClearedBudgetNatBounds` を追加した。
+   - `FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds` を
+     追加した。
+   - self-base constructor では、`hinc_nonneg 0 (Nat.zero_le K)` から
+     `0 <= (increment 0 : Real)` を作り、`hbase0` は `le_rfl` で閉じた。
+   - `roadmap-DKMK-017.md` に DKMK-017E First-Band Self-Base Bundle を
+     追記した。
+3. 結論:
+   - `base := increment 0` による first-band bound の自動化は Lean 上で通った。
+   - ただし budget obligation は
+     `(increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))`
+     へ移る。
+   - library 化の観点から、composition wrapper は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017A-E の source surface をまとめ、次に concrete analytic source
+     へ進むか、追加 wrapper を最小限足すか判断する。
+
+---

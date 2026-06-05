@@ -489,3 +489,86 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 10. DKMK-017E First-Band Self-Base Bundle
+
+DKMK-017E tested whether the remaining first-band input:
+
+```text
+hbase0 : increment 0 <= base
+```
+
+can be closed by choosing `base := increment 0`.
+
+### Tried targets
+
+Combined denominator-cleared / Nat-bound constructor:
+
+```lean
+def FirstBandDecayBudgetSource.ofDenomClearedBudgetNatBounds
+```
+
+Self-base constructor:
+
+```lean
+def FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
+    {K : Nat} {increment : Nat -> Rat}
+    (ratio : Rat)
+    (error : Real)
+    ...
+    FirstBandDecayBudgetSource K increment
+```
+
+The self-base constructor fixes:
+
+```text
+base := increment 0
+```
+
+and closes:
+
+```text
+increment 0 <= base
+```
+
+by reflexivity.
+
+### Result
+
+Both targets were accepted.
+
+The self-base route derives:
+
+```text
+0 <= (increment 0 : Real)
+```
+
+from the Nat-bound nonnegativity hypothesis at `k = 0`.
+
+### Decision
+
+Adopt both constructors.
+
+`ofDenomClearedBudgetNatBounds` is a library-facing composition wrapper for
+the DKMK-017C and DKMK-017D surfaces.
+
+`ofSelfBaseDenomClearedBudgetNatBounds` is the first constructor that removes
+the explicit `hbase0` argument.  It does not remove the budget obligation; it
+moves it to:
+
+```text
+(increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))
+```
+
+This is useful when the first band itself is the intended geometric base.
+
+### Verification
+
+DKMK-017E was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.
