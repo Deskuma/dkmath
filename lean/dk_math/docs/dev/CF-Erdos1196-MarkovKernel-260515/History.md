@@ -42,3 +42,32 @@ Archive
    - （内容）
 
 ---
+
+### 日時: 2026/06/06 03:50 JST (DKMK-018A analytic source replacement start)
+
+1. 目的:
+   - DKMK-018 を開始し、geometric test source を置き換える analytic source
+     candidate を比較する。
+2. 実施:
+   - `roadmap-DKMK-018.md` を追加した。
+   - `RealLog.lean`, `ValuationBudget.lean`, `LogCapacityKernel.lean`,
+     `SourceMassTruncation.lean` 周辺を検索した。
+   - Real log-ratio route, multiplicity / valuation budget route,
+     capacity-derived route, DKMK-017 dyadic route を candidate として分類した。
+3. 結論:
+   - 最も近い meaningful candidate は Real log-ratio / capacity-derived source。
+   - 既存 Real 側には nonnegativity と sub-probability がある。
+   - 現行 DKMK-017 route は `Nat -> Rat` increment を消費するため、主要な
+     obstacle は `Real analytic weight -> Rat finite-step increment` の bridge。
+   - 次は Real-valued analytic majorant が既存 Rat route を certify できるか、
+     最小 bridge surface を Lean で試す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `TruncationEnvelopeEstimate` または `DyadicBandAnalyticEstimate` 周辺に
+     Real-majorant bridge を最小実装できるか試す。
+
+---
