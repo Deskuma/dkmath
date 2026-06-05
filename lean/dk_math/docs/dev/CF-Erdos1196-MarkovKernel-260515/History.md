@@ -2186,3 +2186,36 @@ Archive
      へ進むか、追加 wrapper を最小限足すか判断する。
 
 ---
+
+### 日時: 2026/06/05 10:53 JST (DKMK-017F truncation wrapper checkpoint)
+
+1. 目的:
+   - DKMK-017F として、abstract source surface から truncation envelope までの
+     library-facing wrapper を最小限追加できるか試す。
+2. 実施:
+   - `TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage` を追加した。
+   - `TruncationEnvelopeEstimate.ofSelfBaseDenomClearedBudgetNatBounds` を追加した。
+   - package-to-envelope wrapper は
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage` と
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` を合成した。
+   - self-base route は
+     `FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds` を
+     envelope wrapper へ渡す形で閉じた。
+   - `roadmap-DKMK-017.md` に DKMK-017F Truncation Wrapper Checkpoint を
+     追記した。
+3. 結論:
+   - 標準 route を truncation envelope boundary まで一段で示す wrapper は通った。
+   - 追加 analytic obligation はない。
+   - library 化の観点から、この最小 downstream wrapper は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017A-F の source surface をまとめ、concrete analytic source へ
+     進む準備をする。
+
+---

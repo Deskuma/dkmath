@@ -572,3 +572,77 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 11. DKMK-017F Truncation Wrapper Checkpoint
+
+DKMK-017F tested whether one final downstream wrapper is useful before moving
+from abstract source surfaces to concrete analytic estimates.
+
+### Tried targets
+
+Package-to-envelope wrapper:
+
+```lean
+theorem TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage
+    (x K : Nat)
+    (increment : Nat -> Rat)
+    (S : FirstBandDecayBudgetSource K increment) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : Nat => x * 2^k)
+      increment
+      S.budget.error
+```
+
+Self-base standard route:
+
+```lean
+theorem TruncationEnvelopeEstimate
+    .ofSelfBaseDenomClearedBudgetNatBounds
+```
+
+### Result
+
+Both targets were accepted.
+
+The package-to-envelope wrapper composes:
+
+```text
+DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+  -> DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate
+```
+
+The self-base route composes:
+
+```text
+FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
+  -> TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage
+```
+
+### Decision
+
+Adopt both wrappers.
+
+These wrappers are intentionally downstream and library-facing.  They do not
+add analytic assumptions and they do not replace the explicit dyadic route.
+They make the standard DKMK-017 caller route visible at the truncation-envelope
+boundary:
+
+```text
+ratio, error
+hbaseBudget for increment 0
+Nat-bound nonnegativity
+Nat-bound decay
+  -> TruncationEnvelopeEstimate
+```
+
+### Verification
+
+DKMK-017F was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.

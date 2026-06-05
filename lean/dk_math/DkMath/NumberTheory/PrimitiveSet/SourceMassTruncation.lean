@@ -956,4 +956,57 @@ theorem toTruncationEnvelopeEstimate
 
 end DyadicBandAnalyticEstimate
 
+namespace TruncationEnvelopeEstimate
+
+/--
+Turn a packaged first-band / uniform-decay analytic source directly into the
+truncation envelope consumed by the existing finite-step route.
+
+This is a library-facing wrapper over the already accepted dyadic provider
+route; it does not add a new analytic obligation.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      S.budget.error :=
+  (DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+    x K increment S).toTruncationEnvelopeEstimate
+
+/--
+Self-base denominator-cleared first-band source, applied directly to the
+truncation envelope.
+
+This is the standard DKMK-017 caller route when the first band itself is the
+geometric base.
+-/
+theorem ofSelfBaseDenomClearedBudgetNatBounds
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K increment
+    (FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
+      ratio error hr0 hr1 hbaseBudget hinc_nonneg hdecay)
+
+end TruncationEnvelopeEstimate
+
 end DkMath.NumberTheory.PrimitiveSet
