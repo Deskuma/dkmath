@@ -148,6 +148,45 @@ theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
   exact le_trans hscaled hbudget
 
 /--
+Turn a denominator-cleared budget inequality into the one-over-one-minus form.
+
+This is the Real-side helper used to build the `hbudget` field of
+`GeometricBudgetSource`.
+-/
+theorem geometricBudget_le_of_base_le_mul_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (hbaseBudget : base ≤ (1 + error) * (1 - ratio)) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hdiv : base / (1 - ratio) ≤ 1 + error := by
+    rw [div_le_iff₀ hpos]
+    exact hbaseBudget
+  simpa [div_eq_mul_inv] using hdiv
+
+/--
+Special case of the geometric budget helper when the budget target is `1`.
+
+The assumption `0 <= error` then upgrades the bound to `1 + error`.
+-/
+theorem geometricBudget_le_one_add_error_of_base_le_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : base ≤ 1 - ratio) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 ≤ 1 - ratio :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hone_le : 1 ≤ 1 + error := by
+    linarith
+  have hmul :
+      1 - ratio ≤ (1 + error) * (1 - ratio) := by
+    simpa [one_mul] using mul_le_mul_of_nonneg_right hone_le hpos
+  exact
+    geometricBudget_le_of_base_le_mul_one_sub
+      hr1 (le_trans hbaseBudget hmul)
+
+/--
 Pointwise geometric majorant from a first-band bound and uniform step decay.
 
 This only builds the geometric pointwise control.  The provider's separate
@@ -249,6 +288,43 @@ def ofBudget
   hr0 := hr0
   hr1 := hr1
   hbudget := hbudget
+
+/--
+Build a geometric budget source from a denominator-cleared Real budget.
+
+This is often easier for callers than proving the one-over-one-minus form
+directly.
+-/
+def ofDenomClearedBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_of_base_le_mul_one_sub hr1 hbaseBudget)
+
+/--
+Build a geometric budget source from the special bound `base <= 1 - ratio`.
+
+The nonnegative error assumption upgrades the resulting budget from `1` to
+`1 + error`.
+-/
+def ofBaseLeOneSub
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : (base : ℝ) ≤ 1 - (ratio : ℝ)) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_one_add_error_of_base_le_one_sub
+      hr1 herror hbaseBudget)
 
 /--
 Build a geometric budget source with zero ratio.

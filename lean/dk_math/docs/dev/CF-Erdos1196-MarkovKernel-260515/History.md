@@ -2092,3 +2092,34 @@ Archive
      検討する。
 
 ---
+
+### 日時: 2026/06/05 08:23 JST (DKMK-017C budget inequality helper bundle)
+
+1. 目的:
+   - DKMK-017C として、`GeometricBudgetSource.hbudget` を作るための
+     Real 側 helper lemma と constructor を Lean 上で試す。
+2. 実施:
+   - `geometricBudget_le_of_base_le_mul_one_sub` を追加した。
+   - `geometricBudget_le_one_add_error_of_base_le_one_sub` を追加した。
+   - `GeometricBudgetSource.ofDenomClearedBudget` を追加した。
+   - `GeometricBudgetSource.ofBaseLeOneSub` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017C Budget Inequality Helper Bundle を
+     追記した。
+3. 結論:
+   - denominator-cleared form
+     `(base : Real) <= (1 + error) * (1 - (ratio : Real))`
+     から hbudget を作る route は Lean 上で通った。
+   - `ratio < 1` から `0 < 1 - ratio` を作り、`div_le_iff₀` で閉じた。
+   - `base <= 1 - ratio` の特殊形は `0 <= error` を追加すれば通る。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - budget source constructor と `FirstBandDecayBudgetSource` constructor を
+     さらに合成するか、hbase0 / hdecay の供給 helper へ進むかを判断する。
+
+---

@@ -336,3 +336,83 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 8. DKMK-017C Budget Inequality Helper Bundle
+
+DKMK-017C tested Real-side helper lemmas for producing the `hbudget` field of
+`GeometricBudgetSource`.
+
+### Tried targets
+
+Denominator-cleared helper:
+
+```lean
+theorem geometricBudget_le_of_base_le_mul_one_sub
+    {base ratio error : Real}
+    (hr1 : ratio < 1)
+    (hbaseBudget : base <= (1 + error) * (1 - ratio)) :
+    base * (1 / (1 - ratio)) <= 1 + error
+```
+
+Special case with a `1` budget:
+
+```lean
+theorem geometricBudget_le_one_add_error_of_base_le_one_sub
+    {base ratio error : Real}
+    (hr1 : ratio < 1)
+    (herror : 0 <= error)
+    (hbaseBudget : base <= 1 - ratio) :
+    base * (1 / (1 - ratio)) <= 1 + error
+```
+
+Geometric budget source constructors:
+
+```lean
+def GeometricBudgetSource.ofDenomClearedBudget
+def GeometricBudgetSource.ofBaseLeOneSub
+```
+
+### Result
+
+All targets were accepted.
+
+The main helper uses `div_le_iff₀` with:
+
+```text
+0 < 1 - ratio
+```
+
+derived from `ratio < 1`.  No nonnegativity assumption on `1 + error` is needed
+for the denominator-cleared helper.
+
+The special `base <= 1 - ratio` helper needs `0 <= error`, because it upgrades
+the target bound from `1` to `1 + error`.
+
+### Decision
+
+Adopt the denominator-cleared helper and both budget source constructors.
+
+This is the first DKMK-017 helper that actually reduces the burden of proving:
+
+```text
+(base : Real) * (1 / (1 - (ratio : Real))) <= 1 + error
+```
+
+Callers may now prove the denominator-cleared form:
+
+```text
+(base : Real) <= (1 + error) * (1 - (ratio : Real))
+```
+
+and use `GeometricBudgetSource.ofDenomClearedBudget`.
+
+### Verification
+
+DKMK-017C was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.
