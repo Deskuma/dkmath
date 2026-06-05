@@ -2251,3 +2251,32 @@ Archive
      first Lean target を選ぶ。
 
 ---
+
+### 日時: 2026/06/05 14:24 JST (DKMK-017H increment candidate discovery)
+
+1. 目的:
+   - concrete `increment : Nat -> Rat` candidate を既存 PrimitiveSet /
+     SourceMassTruncation 周辺から探す。
+2. 実施:
+   - `SourceMassTruncation.lean`, `DescentBridge.lean`,
+     `LogCapacityHittingBridge.lean`, `WeightedPathFamily.lean`,
+     `WeightProvider.lean` と近傍 module を検索した。
+   - `finiteStepTail...`, `twoStepTailFiniteIncrement`, `sampleBool...` 系を
+     candidate として分類した。
+3. 結論:
+   - 既存の concrete dyadic-band `Nat -> Rat` increment は見つからなかった。
+   - 既存 concrete candidates は `Bool -> Rat` や arbitrary `ι -> Rat` であり、
+     DKMK-017 standard route の `Nat -> Rat` には直接合わない。
+   - 次は `geometricIncrement base ratio : Nat -> Rat` のような concrete
+     dyadic-band candidate を Lean に導入し、まず `hinc_nonneg` を試すのが
+     妥当。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017I として `geometricIncrement` candidate と `hinc_nonneg` lemma
+     を試す。
+
+---

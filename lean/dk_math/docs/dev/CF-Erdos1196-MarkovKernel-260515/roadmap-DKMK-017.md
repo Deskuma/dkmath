@@ -740,3 +740,106 @@ DKMK-017G is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 13. DKMK-017H Increment Candidate Discovery Bundle
+
+DKMK-017H searched existing PrimitiveSet / SourceMassTruncation definitions for
+a concrete dyadic-band `increment : Nat -> Rat` candidate.
+
+### Search targets
+
+Checked:
+
+- `SourceMassTruncation.lean`
+- `DescentBridge.lean`
+- `LogCapacityHittingBridge.lean`
+- `WeightedPathFamily.lean`
+- `WeightProvider.lean`
+- nearby PrimitiveSet modules using `increment`, `weight`, `mass`, `band`,
+  and `source`
+
+### Findings
+
+No concrete dyadic-band `increment : Nat -> Rat` candidate is currently exposed.
+
+Existing increment-like surfaces split into three groups:
+
+1. Abstract dyadic-band input:
+   - `DyadicBandAnalyticEstimate`
+   - `TruncationEnvelopeEstimate.dyadicRange`
+   - `FirstBandDecayBudgetSource`
+   These already take `increment : Nat -> Rat` as caller-supplied input.
+2. Finite-step source-mass input:
+   - `finiteStepTailHeight`
+   - `finiteStepTailNatMassSpace`
+   - `finiteStepTailNatMassSpace_logCapacitySourceMassBound`
+   These take arbitrary `increment : ι -> Rat`, not a concrete dyadic
+   `Nat -> Rat`.
+3. Concrete finite/sample weights:
+   - `twoStepTailFiniteIncrement : Bool -> Rat`
+   - `sampleBoolPathWeight : Bool -> Rat`
+   - `sampleBoolSubprobPathWeight : Bool -> Rat`
+   These are concrete and nonnegative, but they are Bool-indexed finite samples,
+   not dyadic-band `Nat -> Rat` candidates.
+
+### Immediate Lean implication
+
+There is no existing candidate for which the standard DKMK-017 route can now
+prove:
+
+```text
+hinc_nonneg :
+  forall k, k <= K -> 0 <= increment k
+
+hbaseBudget :
+  (increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))
+
+hdecay :
+  forall k, k < K -> increment (k + 1) <= ratio * increment k
+```
+
+without first defining or exposing a concrete dyadic-band increment.
+
+### Candidate ranking
+
+For DKMK-017, the viable next target is not a proof of `hdecay` yet.  It is an
+increment-shape definition.
+
+Recommended next candidate:
+
+- define an abstract-but-concrete geometric increment:
+  `geometricIncrement base ratio : Nat -> Rat := fun k => base * ratio ^ k`
+
+Why:
+
+- `hinc_nonneg` should be provable from `0 <= base` and `0 <= ratio`;
+- `hdecay` should be equality or a one-line inequality;
+- `hbaseBudget` connects directly to the existing denominator-cleared budget
+  helper;
+- it tests the DKMK-017 route with a real `Nat -> Rat` candidate before
+  importing heavier analytic estimates.
+
+Not recommended yet:
+
+- using `twoStepTailFiniteIncrement`, because it is `Bool -> Rat`;
+- using weighted path sample weights, because they are path-indexed, not
+  dyadic-band indexed;
+- introducing quotient-path/logarithmic estimates before a dyadic-band
+  increment shape exists.
+
+### Decision
+
+DKMK-017H is discovery-only.
+
+The next Lean implementation bundle should introduce a concrete dyadic-band
+candidate, preferably `geometricIncrement`, and prove at least `hinc_nonneg`.
+If build friction is low, also try the exact decay lemma.
+
+### Verification
+
+DKMK-017H is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```
