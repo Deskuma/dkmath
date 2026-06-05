@@ -2123,3 +2123,32 @@ Archive
      さらに合成するか、hbase0 / hdecay の供給 helper へ進むかを判断する。
 
 ---
+
+### 日時: 2026/06/05 09:04 JST (DKMK-017D Nat-bound source helper bundle)
+
+1. 目的:
+   - DKMK-017D として、`hinc_nonneg` と `hdecay` を Nat 境界の仮定から
+     provider が消費する `Finset.range` shape へ変換できるか試す。
+2. 実施:
+   - `rangeSuccNonneg_of_le` を追加した。
+   - `rangeDecay_of_lt` を追加した。
+   - `FirstBandDecayBudgetSource.ofBudgetSourceNatBounds` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017D Nat-Bound Source Helper Bundle を
+     追記した。
+3. 結論:
+   - `k <= K` 形式の nonnegativity と `k < K` 形式の decay を、
+     既存 provider route の `Finset.range` 入力へ変換できた。
+   - decay は割り算型にせず、既存の multiplicative inequality のままにした。
+   - そのため `increment k > 0` の追加仮定は不要だった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `hbase0` の供給 helper、または Nat-bound constructor と
+     denominator-cleared budget constructor の合成可否を検討する。
+
+---

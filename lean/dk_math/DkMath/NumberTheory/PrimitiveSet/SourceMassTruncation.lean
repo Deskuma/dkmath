@@ -187,6 +187,37 @@ theorem geometricBudget_le_one_add_error_of_base_le_one_sub
       hr1 (le_trans hbaseBudget hmul)
 
 /--
+Convert a Nat-indexed nonnegativity hypothesis into the dyadic range shape.
+
+Analytic inputs often state bounds with `k <= K`; the provider route consumes
+membership in `Finset.range (K + 1)`.
+-/
+theorem rangeSuccNonneg_of_le
+    (K : ℕ) (increment : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k) :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k := by
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hinc_nonneg k hk_le
+
+/--
+Convert a Nat-indexed uniform-decay hypothesis into the dyadic range shape.
+
+This avoids introducing division into the decay source; callers still prove the
+same multiplicative inequality as the provider route consumes.
+-/
+theorem rangeDecay_of_lt
+    (K : ℕ) (increment : ℕ → ℚ) (ratio : ℚ)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ ratio * increment k := by
+  intro k hk
+  exact hdecay k (Finset.mem_range.mp hk)
+
+/--
 Pointwise geometric majorant from a first-band bound and uniform step decay.
 
 This only builds the geometric pointwise control.  The provider's separate
@@ -371,6 +402,26 @@ def ofBudgetSource
   hinc_nonneg := hinc_nonneg
   hbase0 := hbase0
   hdecay := hdecay
+
+/--
+Build a first-band / uniform-decay source from Nat-indexed hypotheses.
+
+This is the first DKMK-017 source constructor that reduces the Finset
+membership burden for analytic callers.
+-/
+def ofBudgetSourceNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource B
+    (rangeSuccNonneg_of_le K increment hinc_nonneg)
+    hbase0
+    (rangeDecay_of_lt K increment B.ratio hdecay)
 
 /--
 Build a first-band / uniform-decay source from an explicit geometric budget.

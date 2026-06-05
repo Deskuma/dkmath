@@ -416,3 +416,76 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 9. DKMK-017D Nat-Bound Source Helper Bundle
+
+DKMK-017D tested helper surfaces for supplying `hinc_nonneg` and `hdecay`
+without asking analytic callers to work directly with `Finset.range`
+membership.
+
+### Tried targets
+
+Nonnegativity conversion:
+
+```lean
+theorem rangeSuccNonneg_of_le
+    (K : Nat) (increment : Nat -> Rat)
+    (hinc_nonneg :
+      forall k, k <= K -> 0 <= increment k) :
+    forall k in Finset.range (K + 1), 0 <= increment k
+```
+
+Uniform decay conversion:
+
+```lean
+theorem rangeDecay_of_lt
+    (K : Nat) (increment : Nat -> Rat) (ratio : Rat)
+    (hdecay :
+      forall k, k < K -> increment (k + 1) <= ratio * increment k) :
+    forall k in Finset.range K,
+      increment (k + 1) <= ratio * increment k
+```
+
+Source constructor from Nat-indexed hypotheses:
+
+```lean
+def FirstBandDecayBudgetSource.ofBudgetSourceNatBounds
+```
+
+### Result
+
+All targets were accepted.
+
+The decay helper deliberately keeps the multiplicative form:
+
+```text
+increment (k + 1) <= ratio * increment k
+```
+
+It does not introduce division by `increment k`, so no positivity hypothesis on
+`increment k` is needed.
+
+### Decision
+
+Adopt the Nat-bound helpers and `ofBudgetSourceNatBounds`.
+
+This is the first DKMK-017 helper that reduces the burden of supplying:
+
+```text
+hinc_nonneg
+hdecay
+```
+
+without changing the provider route or the mathematical strength of the decay
+obligation.
+
+### Verification
+
+DKMK-017D was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```
+
+The primitive-set aggregator build and diff hygiene checks are run after the
+chapter notes are updated.
