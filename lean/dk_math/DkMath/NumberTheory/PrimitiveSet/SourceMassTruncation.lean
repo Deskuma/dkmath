@@ -148,6 +148,76 @@ theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
   exact le_trans hscaled hbudget
 
 /--
+Turn a denominator-cleared budget inequality into the one-over-one-minus form.
+
+This is the Real-side helper used to build the `hbudget` field of
+`GeometricBudgetSource`.
+-/
+theorem geometricBudget_le_of_base_le_mul_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (hbaseBudget : base ≤ (1 + error) * (1 - ratio)) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hdiv : base / (1 - ratio) ≤ 1 + error := by
+    rw [div_le_iff₀ hpos]
+    exact hbaseBudget
+  simpa [div_eq_mul_inv] using hdiv
+
+/--
+Special case of the geometric budget helper when the budget target is `1`.
+
+The assumption `0 <= error` then upgrades the bound to `1 + error`.
+-/
+theorem geometricBudget_le_one_add_error_of_base_le_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : base ≤ 1 - ratio) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 ≤ 1 - ratio :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hone_le : 1 ≤ 1 + error := by
+    linarith
+  have hmul :
+      1 - ratio ≤ (1 + error) * (1 - ratio) := by
+    simpa [one_mul] using mul_le_mul_of_nonneg_right hone_le hpos
+  exact
+    geometricBudget_le_of_base_le_mul_one_sub
+      hr1 (le_trans hbaseBudget hmul)
+
+/--
+Convert a Nat-indexed nonnegativity hypothesis into the dyadic range shape.
+
+Analytic inputs often state bounds with `k <= K`; the provider route consumes
+membership in `Finset.range (K + 1)`.
+-/
+theorem rangeSuccNonneg_of_le
+    (K : ℕ) (increment : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k) :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k := by
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hinc_nonneg k hk_le
+
+/--
+Convert a Nat-indexed uniform-decay hypothesis into the dyadic range shape.
+
+This avoids introducing division into the decay source; callers still prove the
+same multiplicative inequality as the provider route consumes.
+-/
+theorem rangeDecay_of_lt
+    (K : ℕ) (increment : ℕ → ℚ) (ratio : ℚ)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ ratio * increment k := by
+  intro k hk
+  exact hdecay k (Finset.mem_range.mp hk)
+
+/--
 Pointwise geometric majorant from a first-band bound and uniform step decay.
 
 This only builds the geometric pointwise control.  The provider's separate
@@ -208,6 +278,87 @@ structure GeometricBudgetSource where
   hr1 : (ratio : ℝ) < 1
   hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
 
+/--
+Analytic input package for the first-band and uniform-decay route.
+
+This does not replace the DKMK-016 responsibility split.  It packages the
+remaining caller-side analytic inputs that are consumed together by
+`DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`.
+-/
+structure FirstBandDecayBudgetSource
+    (K : ℕ) (increment : ℕ → ℚ) where
+  budget : GeometricBudgetSource
+  hinc_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  hbase0 :
+    increment 0 ≤ budget.base
+  hdecay :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ budget.ratio * increment k
+
+/--
+Concrete geometric dyadic-band increment.
+
+This is the first DKMK-017 concrete `Nat -> Rat` source candidate.  It is not a
+deep analytic estimate; it is a minimal test object for the first-band /
+uniform-decay route.
+-/
+def geometricIncrement (base ratio : ℚ) (k : ℕ) : ℚ :=
+  base * ratio ^ k
+
+/-- Geometric increments are nonnegative when their base and ratio are. -/
+theorem geometricIncrement_nonneg
+    {base ratio : ℚ}
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k, 0 ≤ geometricIncrement base ratio k := by
+  intro k
+  exact mul_nonneg hbase (pow_nonneg hr0 k)
+
+/-- The first geometric increment is the base. -/
+theorem geometricIncrement_zero
+    (base ratio : ℚ) :
+    geometricIncrement base ratio 0 = base := by
+  simp [geometricIncrement]
+
+/-- Geometric increments satisfy exact one-step decay. -/
+theorem geometricIncrement_decay
+    (base ratio : ℚ) (k : ℕ) :
+    geometricIncrement base ratio (k + 1) =
+      ratio * geometricIncrement base ratio k := by
+  simp [geometricIncrement, pow_succ, mul_comm, mul_left_comm]
+
+/-- Inequality form of exact geometric decay. -/
+theorem geometricIncrement_decay_le
+    (base ratio : ℚ) :
+    ∀ k, geometricIncrement base ratio (k + 1) ≤
+      ratio * geometricIncrement base ratio k := by
+  intro k
+  exact le_of_eq (geometricIncrement_decay base ratio k)
+
+/--
+Canonical first-band budget for the geometric increment when
+`base = 1 - ratio`.
+-/
+theorem geometricIncrement_baseEqOneSub_budget
+    {base ratio : ℚ} {error : ℝ}
+    (hbaseEq : base = 1 - ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)) := by
+  have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+    exact_mod_cast hbaseEq
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have honeSub_nonneg : 0 ≤ 1 - (ratio : ℝ) :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hmul :
+      1 - (ratio : ℝ) ≤
+        (1 + error) * (1 - (ratio : ℝ)) := by
+    simpa [one_mul] using
+      mul_le_mul_of_nonneg_right hone_le honeSub_nonneg
+  simpa [hbaseEqReal] using hmul
+
 namespace GeometricBudgetSource
 
 /--
@@ -233,6 +384,43 @@ def ofBudget
   hbudget := hbudget
 
 /--
+Build a geometric budget source from a denominator-cleared Real budget.
+
+This is often easier for callers than proving the one-over-one-minus form
+directly.
+-/
+def ofDenomClearedBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_of_base_le_mul_one_sub hr1 hbaseBudget)
+
+/--
+Build a geometric budget source from the special bound `base <= 1 - ratio`.
+
+The nonnegative error assumption upgrades the resulting budget from `1` to
+`1 + error`.
+-/
+def ofBaseLeOneSub
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : (base : ℝ) ≤ 1 - (ratio : ℝ)) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_one_add_error_of_base_le_one_sub
+      hr1 herror hbaseBudget)
+
+/--
 Build a geometric budget source with zero ratio.
 
 This is an API sanity constructor, not an analytic estimate.  With ratio zero,
@@ -254,6 +442,183 @@ def ofZeroRatio
     simpa using hbudget
 
 end GeometricBudgetSource
+
+namespace FirstBandDecayBudgetSource
+
+/--
+Build a first-band / uniform-decay source from an already packaged geometric
+budget.
+
+This is the minimal constructor for the DKMK-017 analytic-input package.
+-/
+def ofBudgetSource
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment where
+  budget := B
+  hinc_nonneg := hinc_nonneg
+  hbase0 := hbase0
+  hdecay := hdecay
+
+/--
+Build a first-band / uniform-decay source from Nat-indexed hypotheses.
+
+This is the first DKMK-017 source constructor that reduces the Finset
+membership burden for analytic callers.
+-/
+def ofBudgetSourceNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource B
+    (rangeSuccNonneg_of_le K increment hinc_nonneg)
+    hbase0
+    (rangeDecay_of_lt K increment B.ratio hdecay)
+
+/--
+Build a first-band / uniform-decay source from an explicit geometric budget.
+
+This keeps the concrete one-over-one-minus budget proof at the analytic-input
+boundary while producing the package consumed by the dyadic provider route.
+-/
+def ofBudgetAndDecay
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource
+    (GeometricBudgetSource.ofBudget
+      base ratio error hbase hr0 hr1 hbudget)
+    hinc_nonneg hbase0 hdecay
+
+/--
+Build a first-band / uniform-decay source from a denominator-cleared budget
+and Nat-indexed nonnegativity/decay hypotheses.
+
+This combines the DKMK-017C budget helper with the DKMK-017D Nat-bound source
+constructor.
+-/
+def ofDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSourceNatBounds
+    (GeometricBudgetSource.ofDenomClearedBudget
+      base ratio error hbase hr0 hr1 hbaseBudget)
+    hinc_nonneg hbase0 hdecay
+
+/--
+Build a first-band / uniform-decay source using `increment 0` as the base.
+
+This closes the first-band bound by reflexivity.  The caller still supplies the
+denominator-cleared budget for that base.
+-/
+def ofSelfBaseDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment := by
+  have hbase : 0 ≤ (increment 0 : ℝ) := by
+    exact_mod_cast hinc_nonneg 0 (Nat.zero_le K)
+  exact
+    ofDenomClearedBudgetNatBounds
+      (increment 0) ratio error hbase hr0 hr1 hbaseBudget
+      hinc_nonneg le_rfl hdecay
+
+/--
+Build a first-band / uniform-decay source from the concrete geometric
+increment candidate.
+
+The only analytic input left is the denominator-cleared first-band budget for
+the base.
+-/
+def ofGeometricIncrement
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) :=
+  ofSelfBaseDenomClearedBudgetNatBounds
+    ratio error
+    (by exact_mod_cast hr0)
+    hr1
+    (by simpa [geometricIncrement_zero] using hbaseBudget)
+    (fun k _hk => geometricIncrement_nonneg hbase hr0 k)
+    (fun k _hk => geometricIncrement_decay_le base ratio k)
+
+/--
+Canonical geometric increment source when `base = 1 - ratio`.
+
+The first-band budget is discharged from `0 <= error`; nonnegativity of the
+base follows from `ratio < 1`.
+-/
+def ofGeometricIncrementBaseEqOneSub
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) := by
+  have hbaseReal : 0 ≤ (base : ℝ) := by
+    have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+      exact_mod_cast hbaseEq
+    rw [hbaseEqReal]
+    exact le_of_lt (sub_pos.mpr hr1)
+  have hbase : 0 ≤ base := by
+    exact_mod_cast hbaseReal
+  exact
+    ofGeometricIncrement
+      base ratio error hbase hr0 hr1
+      (geometricIncrement_baseEqOneSub_budget hbaseEq hr1 herror)
+
+end FirstBandDecayBudgetSource
 
 namespace TailWindowSourceMassBound
 
@@ -647,6 +1012,21 @@ theorem ofFirstBandDecayBudgetSource
       x K increment B hinc_nonneg hgeom
 
 /--
+Provider wrapper from a packaged first-band / uniform-decay analytic source.
+
+This is the DKMK-017-A ergonomics test for `FirstBandDecayBudgetSource`: the
+combined source is accepted only as an input package and still delegates to the
+DKMK-016 provider route.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    DyadicBandAnalyticEstimate x K increment S.budget.error :=
+  ofFirstBandDecayBudgetSource
+    x K increment S.budget S.hinc_nonneg S.hbase0 S.hdecay
+
+/--
 Usage wrapper for the zero-ratio budget source.
 
 This checks the caller path
@@ -690,5 +1070,153 @@ theorem toTruncationEnvelopeEstimate
     x K increment H.increment_nonneg H.total_le_one_add_error
 
 end DyadicBandAnalyticEstimate
+
+namespace TruncationEnvelopeEstimate
+
+/--
+Turn a packaged first-band / uniform-decay analytic source directly into the
+truncation envelope consumed by the existing finite-step route.
+
+This is a library-facing wrapper over the already accepted dyadic provider
+route; it does not add a new analytic obligation.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      S.budget.error :=
+  (DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+    x K increment S).toTruncationEnvelopeEstimate
+
+/--
+Self-base denominator-cleared first-band source, applied directly to the
+truncation envelope.
+
+This is the standard DKMK-017 caller route when the first band itself is the
+geometric base.
+-/
+theorem ofSelfBaseDenomClearedBudgetNatBounds
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K increment
+    (FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
+      ratio error hr0 hr1 hbaseBudget hinc_nonneg hdecay)
+
+/--
+Concrete geometric increment source, applied directly to the truncation
+envelope.
+
+This is the DKMK-017I route test: a real `Nat -> Rat` increment candidate
+feeds the standard self-base denominator-cleared route.
+-/
+theorem ofGeometricIncrement
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrement
+      base ratio error hbase hr0 hr1 hbaseBudget)
+
+/--
+Canonical geometric increment source, applied directly to the truncation
+envelope, when `base = 1 - ratio`.
+
+This removes the explicit first-band budget from the caller surface.
+-/
+theorem ofGeometricIncrementBaseEqOneSub
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub
+      base ratio error hbaseEq hr0 hr1 herror)
+
+/--
+Canonical geometric increment source, applied through the finite-step mass
+route to the DKMK-009 quotient-path hitting bound.
+
+This checks that the DKMK-017J envelope is consumable by the existing
+finite-step route theorem.
+-/
+theorem geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    let H :=
+      ofGeometricIncrementBaseEqOneSub
+        x K base ratio error hbaseEq hr0 hr1 herror
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        (geometricIncrement base ratio)
+        H.increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  let H :=
+    ofGeometricIncrementBaseEqOneSub
+      x K base ratio error hbaseEq hr0 hr1 herror
+  exact
+    finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      s hA H
+
+end TruncationEnvelopeEstimate
 
 end DkMath.NumberTheory.PrimitiveSet

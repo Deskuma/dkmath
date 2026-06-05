@@ -2000,3 +2000,406 @@ Archive
    - concrete analytic input source の roadmap/review へ進む。
 
 ---
+
+### 日時: 2026/06/05 07:39 JST (DKMK-017 roadmap 開始)
+
+1. 目的:
+   - DKMK-017 の開始にあたり、作業粒度を大きくし、実装・自己診断・
+     検証結果をまとめて報告する運用へ切り替える。
+2. 実施:
+   - `roadmap-DKMK-017.md` を新規作成した。
+   - DKMK-017 を Analytic Input Source 章として位置付けた。
+   - docs-only review の連続を抑え、Lean 実装 bundle 単位で進める方針を
+     明記した。
+   - reviewer 判断を仰ぐタイミングと、自己判断で進めるタイミングを分けた。
+   - 最初の bundle target として、first-band bound、uniform decay、
+     concrete budget proof source の入力 surface 調査を置いた。
+3. 結論:
+   - DKMK-017 では、細かな wrapper や constructor を個別 review せず、
+     route-shape が変わる判断点でのみ厚く相談する。
+   - 次は Lean 側で analytic input source surface を実験し、どこまで実装可能かを
+     bundle として報告する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017 の first implementation bundle として、analytic input source
+     surface を Lean で試す。
+
+---
+
+### 日時: 2026/06/05 08:04 JST (DKMK-017A implementation bundle)
+
+1. 目的:
+   - DKMK-017A として、first-band / uniform-decay / budget source をまとめる
+     analytic input package が Lean 上で有効か試す。
+2. 実施:
+   - `SourceMassTruncation.lean` に
+     `FirstBandDecayBudgetSource` を追加した。
+   - `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage` を追加し、
+     既存の
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`
+     へ直接委譲した。
+   - `roadmap-DKMK-017.md` に DKMK-017A First Implementation Bundle を
+     追記した。
+3. 結論:
+   - combined source は、DKMK-016 の責務分担を置き換えるものではなく、
+     analytic input boundary の package として採用可能。
+   - Rat / Real cast 問題はこの bundle では発生しなかった。
+   - 新しい truncation wrapper は追加しない。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `FirstBandDecayBudgetSource` へ流し込む具体的 source constructor または
+     helper lemma を検討する。
+
+---
+
+### 日時: 2026/06/05 08:15 JST (DKMK-017B source constructor bundle)
+
+1. 目的:
+   - DKMK-017B として、`FirstBandDecayBudgetSource` に流し込む
+     concrete source constructor が Lean 上で有効か試す。
+2. 実施:
+   - `FirstBandDecayBudgetSource.ofBudgetSource` を追加した。
+   - `FirstBandDecayBudgetSource.ofBudgetAndDecay` を追加し、
+     `GeometricBudgetSource.ofBudget` から package を作れるようにした。
+   - `roadmap-DKMK-017.md` に DKMK-017B Source Constructor Bundle を
+     追記した。
+3. 結論:
+   - record syntax だけでも表現可能だが、constructor を置くことで
+     analytic input boundary が明確になった。
+   - `ofBudgetSource` と `ofBudgetAndDecay` は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - 最初は `FirstBandDecayBudgetSource` namespace を
+     `GeometricBudgetSource.ofBudget` より前に置いたため、Lean が
+     unknown constant として失敗した。
+   - constructor 群を `end GeometricBudgetSource` の後へ移して解消した。
+6. 次の課題:
+   - budget proof そのものを供給する helper lemma または concrete source を
+     検討する。
+
+---
+
+### 日時: 2026/06/05 08:23 JST (DKMK-017C budget inequality helper bundle)
+
+1. 目的:
+   - DKMK-017C として、`GeometricBudgetSource.hbudget` を作るための
+     Real 側 helper lemma と constructor を Lean 上で試す。
+2. 実施:
+   - `geometricBudget_le_of_base_le_mul_one_sub` を追加した。
+   - `geometricBudget_le_one_add_error_of_base_le_one_sub` を追加した。
+   - `GeometricBudgetSource.ofDenomClearedBudget` を追加した。
+   - `GeometricBudgetSource.ofBaseLeOneSub` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017C Budget Inequality Helper Bundle を
+     追記した。
+3. 結論:
+   - denominator-cleared form
+     `(base : Real) <= (1 + error) * (1 - (ratio : Real))`
+     から hbudget を作る route は Lean 上で通った。
+   - `ratio < 1` から `0 < 1 - ratio` を作り、`div_le_iff₀` で閉じた。
+   - `base <= 1 - ratio` の特殊形は `0 <= error` を追加すれば通る。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - budget source constructor と `FirstBandDecayBudgetSource` constructor を
+     さらに合成するか、hbase0 / hdecay の供給 helper へ進むかを判断する。
+
+---
+
+### 日時: 2026/06/05 09:04 JST (DKMK-017D Nat-bound source helper bundle)
+
+1. 目的:
+   - DKMK-017D として、`hinc_nonneg` と `hdecay` を Nat 境界の仮定から
+     provider が消費する `Finset.range` shape へ変換できるか試す。
+2. 実施:
+   - `rangeSuccNonneg_of_le` を追加した。
+   - `rangeDecay_of_lt` を追加した。
+   - `FirstBandDecayBudgetSource.ofBudgetSourceNatBounds` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017D Nat-Bound Source Helper Bundle を
+     追記した。
+3. 結論:
+   - `k <= K` 形式の nonnegativity と `k < K` 形式の decay を、
+     既存 provider route の `Finset.range` 入力へ変換できた。
+   - decay は割り算型にせず、既存の multiplicative inequality のままにした。
+   - そのため `increment k > 0` の追加仮定は不要だった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `hbase0` の供給 helper、または Nat-bound constructor と
+     denominator-cleared budget constructor の合成可否を検討する。
+
+---
+
+### 日時: 2026/06/05 09:13 JST (DKMK-017E first-band self-base bundle)
+
+1. 目的:
+   - DKMK-017E として、first-band upper bound `hbase0` を
+     `base := increment 0` により閉じられるか Lean 上で試す。
+   - library-facing wrapper として、denominator-cleared budget と
+     Nat-bound source constructor の合成も試す。
+2. 実施:
+   - `FirstBandDecayBudgetSource.ofDenomClearedBudgetNatBounds` を追加した。
+   - `FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds` を
+     追加した。
+   - self-base constructor では、`hinc_nonneg 0 (Nat.zero_le K)` から
+     `0 <= (increment 0 : Real)` を作り、`hbase0` は `le_rfl` で閉じた。
+   - `roadmap-DKMK-017.md` に DKMK-017E First-Band Self-Base Bundle を
+     追記した。
+3. 結論:
+   - `base := increment 0` による first-band bound の自動化は Lean 上で通った。
+   - ただし budget obligation は
+     `(increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))`
+     へ移る。
+   - library 化の観点から、composition wrapper は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017A-E の source surface をまとめ、次に concrete analytic source
+     へ進むか、追加 wrapper を最小限足すか判断する。
+
+---
+
+### 日時: 2026/06/05 10:53 JST (DKMK-017F truncation wrapper checkpoint)
+
+1. 目的:
+   - DKMK-017F として、abstract source surface から truncation envelope までの
+     library-facing wrapper を最小限追加できるか試す。
+2. 実施:
+   - `TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage` を追加した。
+   - `TruncationEnvelopeEstimate.ofSelfBaseDenomClearedBudgetNatBounds` を追加した。
+   - package-to-envelope wrapper は
+     `DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage` と
+     `DyadicBandAnalyticEstimate.toTruncationEnvelopeEstimate` を合成した。
+   - self-base route は
+     `FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds` を
+     envelope wrapper へ渡す形で閉じた。
+   - `roadmap-DKMK-017.md` に DKMK-017F Truncation Wrapper Checkpoint を
+     追記した。
+3. 結論:
+   - 標準 route を truncation envelope boundary まで一段で示す wrapper は通った。
+   - 追加 analytic obligation はない。
+   - library 化の観点から、この最小 downstream wrapper は採用する。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017A-F の source surface をまとめ、concrete analytic source へ
+     進む準備をする。
+
+---
+
+### 日時: 2026/06/05 14:17 JST (DKMK-017G source surface checkpoint)
+
+1. 目的:
+   - DKMK-017G として、DKMK-017A-F の abstract source surface を軽く整理し、
+     concrete analytic source へ進む準備をする。
+2. 実施:
+   - `roadmap-DKMK-017.md` に DKMK-017G Source Surface Checkpoint を
+     追記した。
+   - 標準 route を
+     `TruncationEnvelopeEstimate.ofSelfBaseDenomClearedBudgetNatBounds`
+     へ集約して整理した。
+   - general route として
+     `GeometricBudgetSource.ofDenomClearedBudget` から
+     `TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage`
+     へ至る流れも記録した。
+   - 残る concrete analytic input を `hbaseBudget`, `hinc_nonneg`,
+     `hdecay` の三つに絞って記録した。
+3. 結論:
+   - DKMK-017A-F により abstract source surface は十分に整った。
+   - wrapper 追加はここで一旦止め、次は concrete `increment` candidate の調査へ
+     進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 既存の candidate definitions を調査し、concrete analytic source の
+     first Lean target を選ぶ。
+
+---
+
+### 日時: 2026/06/05 14:24 JST (DKMK-017H increment candidate discovery)
+
+1. 目的:
+   - concrete `increment : Nat -> Rat` candidate を既存 PrimitiveSet /
+     SourceMassTruncation 周辺から探す。
+2. 実施:
+   - `SourceMassTruncation.lean`, `DescentBridge.lean`,
+     `LogCapacityHittingBridge.lean`, `WeightedPathFamily.lean`,
+     `WeightProvider.lean` と近傍 module を検索した。
+   - `finiteStepTail...`, `twoStepTailFiniteIncrement`, `sampleBool...` 系を
+     candidate として分類した。
+3. 結論:
+   - 既存の concrete dyadic-band `Nat -> Rat` increment は見つからなかった。
+   - 既存 concrete candidates は `Bool -> Rat` や arbitrary `ι -> Rat` であり、
+     DKMK-017 standard route の `Nat -> Rat` には直接合わない。
+   - 次は `geometricIncrement base ratio : Nat -> Rat` のような concrete
+     dyadic-band candidate を Lean に導入し、まず `hinc_nonneg` を試すのが
+     妥当。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017I として `geometricIncrement` candidate と `hinc_nonneg` lemma
+     を試す。
+
+---
+
+### 日時: 2026/06/05 15:00 JST (DKMK-017I geometric increment route test)
+
+1. 目的:
+   - DKMK-017I として、concrete dyadic-band
+     `increment : Nat -> Rat` candidate を Lean に導入し、標準 route が
+     実際に通るか検証する。
+2. 実施:
+   - `SourceMassTruncation.lean` に `geometricIncrement` を追加した。
+   - `geometricIncrement_nonneg`, `geometricIncrement_zero`,
+     `geometricIncrement_decay`, `geometricIncrement_decay_le` を追加した。
+   - `FirstBandDecayBudgetSource.ofGeometricIncrement` を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrement` を追加し、
+     concrete candidate から envelope まで接続した。
+3. 結論:
+   - `geometricIncrement base ratio : Nat -> Rat` は DKMK-017 の最初の
+     concrete test source として採用できる。
+   - `hinc_nonneg` は `0 <= base`, `0 <= ratio` から閉じる。
+   - `hdecay` は定義展開による equality から閉じる。
+   - 残る主要 analytic input は
+     `(base : Real) <= (1 + error) * (1 - (ratio : Real))` である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - first-band budget を useful な `base`, `ratio`, `error` から導くか、
+     `base = 1 - ratio` などの canonical specialization を試す。
+
+---
+
+### 日時: 2026/06/05 15:15 JST (DKMK-017J canonical first-band budget)
+
+1. 目的:
+   - DKMK-017J として、`base = 1 - ratio` の canonical specialization から
+     first-band budget を Lean で閉じ、envelope まで接続する。
+2. 実施:
+   - `geometricIncrement_baseEqOneSub_budget` を追加した。
+   - `FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub` を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub` を追加した。
+3. 結論:
+   - `base = 1 - ratio`, `0 <= ratio`, `(ratio : Real) < 1`,
+     `0 <= error` から、concrete geometric increment は
+     `TruncationEnvelopeEstimate` まで通る。
+   - `base` の非負性は `base = 1 - ratio` と `(ratio : Real) < 1` から
+     閉じる。
+   - DKMK-017I で残っていた first-band budget は、この canonical source では
+     caller-side obligation から外せた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - explicit `base` を持たない `base := 1 - ratio` 型の theorem を足すか、
+     finite-step mass route との接続へ進むか判断する。
+
+---
+
+### 日時: 2026/06/05 15:22 JST (DKMK-017K finite-step route connection)
+
+1. 目的:
+   - DKMK-017K として、DKMK-017J の canonical geometric envelope が
+     既存 finite-step mass route に消費されるか確認する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error`
+     を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub` を
+     `TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error`
+     へ渡し、quotient-path weightedHitMass bound まで接続した。
+3. 結論:
+   - canonical geometric source は finite-step tail mass を経由して
+     `weightedHitMass A <= 1 + error` まで通る。
+   - DKMK-017J の envelope は終端ではなく、既存 finite-step route に
+     実際に消費される。
+   - geometric source の route-validation 役割は十分に完了した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017 を route-validation complete としてまとめるか、
+     logarithmic / capacity-derived source candidate の検討へ進む。
+
+---
+
+### 日時: 2026/06/05 15:30 JST (DKMK-017L route-validation close)
+
+1. 目的:
+   - DKMK-017 を route-validation complete として軽くまとめ、次分岐を
+     analytic source replacement へ向ける。
+2. 実施:
+   - `report-DKMK-017.md` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017L Route-Validation Close を追記した。
+   - DKMK-017A-K の到達 route を
+     `geometricIncrement -> TruncationEnvelopeEstimate -> finiteStepTailNatMassSpace
+      -> weightedHitMass bound`
+     として整理した。
+3. 結論:
+   - DKMK-017 は route-validation complete として閉じてよい。
+   - geometric source は canonical test source として採用するが、最終的な
+     analytic/logarithmic source ではない。
+   - 以後は convenience wrapper を増やすより、geometric source を置き換える
+     analytic source candidate を探す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `report-DKMK-017.md`, `roadmap-DKMK-017.md`, and
+     `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - logarithmic source, capacity-derived source, dyadic band mass estimate,
+     quotient-path local decay source のどれを次の実装候補にするか選ぶ。
+
+---
