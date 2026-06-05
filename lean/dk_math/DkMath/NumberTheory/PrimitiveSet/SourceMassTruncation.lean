@@ -1172,6 +1172,51 @@ theorem ofGeometricIncrementBaseEqOneSub
     (FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub
       base ratio error hbaseEq hr0 hr1 herror)
 
+/--
+Canonical geometric increment source, applied through the finite-step mass
+route to the DKMK-009 quotient-path hitting bound.
+
+This checks that the DKMK-017J envelope is consumable by the existing
+finite-step route theorem.
+-/
+theorem geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    let H :=
+      ofGeometricIncrementBaseEqOneSub
+        x K base ratio error hbaseEq hr0 hr1 herror
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        (geometricIncrement base ratio)
+        H.increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  let H :=
+    ofGeometricIncrementBaseEqOneSub
+      x K base ratio error hbaseEq hr0 hr1 herror
+  exact
+    finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      s hA H
+
 end TruncationEnvelopeEstimate
 
 end DkMath.NumberTheory.PrimitiveSet

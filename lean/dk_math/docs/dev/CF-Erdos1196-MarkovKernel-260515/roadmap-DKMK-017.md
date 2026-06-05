@@ -1024,3 +1024,95 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 16. DKMK-017K Finite-Step Route Connection
+
+DKMK-017K connected the canonical geometric increment source to the existing
+finite-step mass route.
+
+This follows the review-125 preference:
+
+```text
+do not add another thin base := 1 - ratio wrapper yet;
+first check whether the DKMK-017J envelope is consumed by the finite-step route.
+```
+
+### Lean addition
+
+Added to `SourceMassTruncation.lean`:
+
+- `TruncationEnvelopeEstimate.geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error`
+
+### Result
+
+The finite-step connection is accepted.
+
+The route now reaches:
+
+```text
+base = 1 - ratio
+0 <= ratio
+(ratio : Real) < 1
+0 <= error
+PrimitiveOn A
+  -> weightedHitMass A <= 1 + error
+```
+
+through:
+
+```text
+TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub
+  -> TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+The finite-step mass used by the final bound is:
+
+```text
+finiteStepTailNatMassSpace
+  (Finset.range (K + 1))
+  (fun k : Nat => x * 2^k)
+  (geometricIncrement base ratio)
+```
+
+with nonnegativity supplied by the envelope.
+
+### Interpretation
+
+DKMK-017J made the canonical geometric source reach `TruncationEnvelopeEstimate`.
+
+DKMK-017K shows that this envelope is not a dead endpoint.  It is consumed by
+the existing finite-step tail machinery and reaches the DKMK-009 quotient-path
+capacity hitting bound.
+
+This completes the route-validation role of the geometric source:
+
+```text
+geometricIncrement
+  -> canonical first-band budget
+  -> truncation envelope
+  -> finite-step tail mass
+  -> quotient-path weightedHitMass bound
+```
+
+### Decision
+
+Adopt the finite-step connection.
+
+The route-validation source is now complete enough.  The next branch should
+avoid more convenience wrappers unless they remove real friction.  The useful
+next targets are:
+
+1. summarize/close DKMK-017 as route-validation complete;
+2. move toward logarithmic or capacity-derived source candidates;
+3. identify which analytic source should replace the toy geometric increment.
+
+### Verification
+
+DKMK-017K was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```

@@ -2343,3 +2343,33 @@ Archive
      finite-step mass route との接続へ進むか判断する。
 
 ---
+
+### 日時: 2026/06/05 15:22 JST (DKMK-017K finite-step route connection)
+
+1. 目的:
+   - DKMK-017K として、DKMK-017J の canonical geometric envelope が
+     既存 finite-step mass route に消費されるか確認する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error`
+     を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrementBaseEqOneSub` を
+     `TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error`
+     へ渡し、quotient-path weightedHitMass bound まで接続した。
+3. 結論:
+   - canonical geometric source は finite-step tail mass を経由して
+     `weightedHitMass A <= 1 + error` まで通る。
+   - DKMK-017J の envelope は終端ではなく、既存 finite-step route に
+     実際に消費される。
+   - geometric source の route-validation 役割は十分に完了した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-017 を route-validation complete としてまとめるか、
+     logarithmic / capacity-derived source candidate の検討へ進む。
+
+---
