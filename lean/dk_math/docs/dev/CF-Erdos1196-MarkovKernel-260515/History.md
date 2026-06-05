@@ -2219,3 +2219,35 @@ Archive
      進む準備をする。
 
 ---
+
+### 日時: 2026/06/05 14:17 JST (DKMK-017G source surface checkpoint)
+
+1. 目的:
+   - DKMK-017G として、DKMK-017A-F の abstract source surface を軽く整理し、
+     concrete analytic source へ進む準備をする。
+2. 実施:
+   - `roadmap-DKMK-017.md` に DKMK-017G Source Surface Checkpoint を
+     追記した。
+   - 標準 route を
+     `TruncationEnvelopeEstimate.ofSelfBaseDenomClearedBudgetNatBounds`
+     へ集約して整理した。
+   - general route として
+     `GeometricBudgetSource.ofDenomClearedBudget` から
+     `TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage`
+     へ至る流れも記録した。
+   - 残る concrete analytic input を `hbaseBudget`, `hinc_nonneg`,
+     `hdecay` の三つに絞って記録した。
+3. 結論:
+   - DKMK-017A-F により abstract source surface は十分に整った。
+   - wrapper 追加はここで一旦止め、次は concrete `increment` candidate の調査へ
+     進む。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 既存の candidate definitions を調査し、concrete analytic source の
+     first Lean target を選ぶ。
+
+---

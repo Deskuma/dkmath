@@ -646,3 +646,97 @@ lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 
 The primitive-set aggregator build and diff hygiene checks are run after the
 chapter notes are updated.
+
+## 12. DKMK-017G Source Surface Checkpoint
+
+DKMK-017G closes the abstract source-surface pass before moving to concrete
+analytic estimates.
+
+### Accepted standard route
+
+The standard caller route is now:
+
+```text
+ratio : Rat
+error : Real
+
+hr0 :
+  0 <= (ratio : Real)
+
+hr1 :
+  (ratio : Real) < 1
+
+hbaseBudget :
+  (increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))
+
+hinc_nonneg :
+  forall k, k <= K -> 0 <= increment k
+
+hdecay :
+  forall k, k < K -> increment (k + 1) <= ratio * increment k
+
+TruncationEnvelopeEstimate.ofSelfBaseDenomClearedBudgetNatBounds
+  -> TruncationEnvelopeEstimate
+```
+
+This route avoids exposing callers to:
+
+- `GeometricBudgetSource`;
+- `FirstBandDecayBudgetSource`;
+- `DyadicBandAnalyticEstimate`;
+- direct `Finset.range` membership proofs;
+- direct one-over-one-minus budget proofs.
+
+### General route still available
+
+The more general route remains available when the geometric base is not
+`increment 0`:
+
+```text
+GeometricBudgetSource.ofDenomClearedBudget
+  -> FirstBandDecayBudgetSource.ofBudgetSourceNatBounds
+  -> DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+  -> TruncationEnvelopeEstimate.ofFirstBandDecayBudgetSourcePackage
+```
+
+### What is now reduced to concrete analytic input
+
+The remaining mathematical inputs are:
+
+```text
+hbaseBudget:
+  (increment 0 : Real) <= (1 + error) * (1 - (ratio : Real))
+
+hinc_nonneg:
+  forall k, k <= K -> 0 <= increment k
+
+hdecay:
+  forall k, k < K -> increment (k + 1) <= ratio * increment k
+```
+
+DKMK-017A-F did not prove these.  It made their interface smaller and more
+caller-friendly.
+
+### Decision
+
+Stop adding wrappers for now.
+
+The next checkpoint should start concrete analytic source work.  The first
+target should be one of:
+
+1. choose or expose a concrete `increment` candidate;
+2. prove `hinc_nonneg` for that candidate;
+3. prove first-band budget for `increment 0`;
+4. prove uniform decay for the candidate.
+
+The preferred next move is to inspect the existing candidate definitions before
+adding another abstraction.
+
+### Verification
+
+DKMK-017G is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```
