@@ -2373,3 +2373,33 @@ Archive
      logarithmic / capacity-derived source candidate の検討へ進む。
 
 ---
+
+### 日時: 2026/06/05 15:30 JST (DKMK-017L route-validation close)
+
+1. 目的:
+   - DKMK-017 を route-validation complete として軽くまとめ、次分岐を
+     analytic source replacement へ向ける。
+2. 実施:
+   - `report-DKMK-017.md` を追加した。
+   - `roadmap-DKMK-017.md` に DKMK-017L Route-Validation Close を追記した。
+   - DKMK-017A-K の到達 route を
+     `geometricIncrement -> TruncationEnvelopeEstimate -> finiteStepTailNatMassSpace
+      -> weightedHitMass bound`
+     として整理した。
+3. 結論:
+   - DKMK-017 は route-validation complete として閉じてよい。
+   - geometric source は canonical test source として採用するが、最終的な
+     analytic/logarithmic source ではない。
+   - 以後は convenience wrapper を増やすより、geometric source を置き換える
+     analytic source candidate を探す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `report-DKMK-017.md`, `roadmap-DKMK-017.md`, and
+     `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - logarithmic source, capacity-derived source, dyadic band mass estimate,
+     quotient-path local decay source のどれを次の実装候補にするか選ぶ。
+
+---

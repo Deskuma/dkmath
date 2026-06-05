@@ -1116,3 +1116,57 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 17. DKMK-017L Route-Validation Close
+
+DKMK-017L closes the chapter as route-validation complete.
+
+### Closure report
+
+Added:
+
+- `report-DKMK-017.md`
+
+The report records the DKMK-017A-K result:
+
+```text
+geometricIncrement
+  -> canonical first-band budget
+  -> TruncationEnvelopeEstimate
+  -> finiteStepTailNatMassSpace
+  -> quotient-path weightedHitMass bound
+```
+
+### Decision
+
+DKMK-017 should stop adding wrappers for the geometric test source.
+
+The route-validation role is complete because a concrete `Nat -> Rat` source
+now reaches:
+
+```text
+weightedHitMass A <= 1 + error
+```
+
+through the existing finite-step route.
+
+### Next branch
+
+The next workstream should replace the toy geometric source with a meaningful
+analytic source candidate.
+
+Candidate directions:
+
+- logarithmic source;
+- capacity-derived source;
+- dyadic band mass estimate;
+- quotient-path local decay source.
+
+### Verification
+
+DKMK-017L is docs-only.  It was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```
