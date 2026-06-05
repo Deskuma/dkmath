@@ -296,6 +296,46 @@ structure FirstBandDecayBudgetSource
     ∀ k ∈ Finset.range K,
       increment (k + 1) ≤ budget.ratio * increment k
 
+/--
+Concrete geometric dyadic-band increment.
+
+This is the first DKMK-017 concrete `Nat -> Rat` source candidate.  It is not a
+deep analytic estimate; it is a minimal test object for the first-band /
+uniform-decay route.
+-/
+def geometricIncrement (base ratio : ℚ) (k : ℕ) : ℚ :=
+  base * ratio ^ k
+
+/-- Geometric increments are nonnegative when their base and ratio are. -/
+theorem geometricIncrement_nonneg
+    {base ratio : ℚ}
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k, 0 ≤ geometricIncrement base ratio k := by
+  intro k
+  exact mul_nonneg hbase (pow_nonneg hr0 k)
+
+/-- The first geometric increment is the base. -/
+theorem geometricIncrement_zero
+    (base ratio : ℚ) :
+    geometricIncrement base ratio 0 = base := by
+  simp [geometricIncrement]
+
+/-- Geometric increments satisfy exact one-step decay. -/
+theorem geometricIncrement_decay
+    (base ratio : ℚ) (k : ℕ) :
+    geometricIncrement base ratio (k + 1) =
+      ratio * geometricIncrement base ratio k := by
+  simp [geometricIncrement, pow_succ, mul_comm, mul_left_comm]
+
+/-- Inequality form of exact geometric decay. -/
+theorem geometricIncrement_decay_le
+    (base ratio : ℚ) :
+    ∀ k, geometricIncrement base ratio (k + 1) ≤
+      ratio * geometricIncrement base ratio k := by
+  intro k
+  exact le_of_eq (geometricIncrement_decay base ratio k)
+
 namespace GeometricBudgetSource
 
 /--
@@ -502,6 +542,31 @@ def ofSelfBaseDenomClearedBudgetNatBounds
     ofDenomClearedBudgetNatBounds
       (increment 0) ratio error hbase hr0 hr1 hbaseBudget
       hinc_nonneg le_rfl hdecay
+
+/--
+Build a first-band / uniform-decay source from the concrete geometric
+increment candidate.
+
+The only analytic input left is the denominator-cleared first-band budget for
+the base.
+-/
+def ofGeometricIncrement
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) :=
+  ofSelfBaseDenomClearedBudgetNatBounds
+    ratio error
+    (by exact_mod_cast hr0)
+    hr1
+    (by simpa [geometricIncrement_zero] using hbaseBudget)
+    (fun k _hk => geometricIncrement_nonneg hbase hr0 k)
+    (fun k _hk => geometricIncrement_decay_le base ratio k)
 
 end FirstBandDecayBudgetSource
 
@@ -1006,6 +1071,32 @@ theorem ofSelfBaseDenomClearedBudgetNatBounds
     x K increment
     (FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
       ratio error hr0 hr1 hbaseBudget hinc_nonneg hdecay)
+
+/--
+Concrete geometric increment source, applied directly to the truncation
+envelope.
+
+This is the DKMK-017I route test: a real `Nat -> Rat` increment candidate
+feeds the standard self-base denominator-cleared route.
+-/
+theorem ofGeometricIncrement
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrement
+      base ratio error hbase hr0 hr1 hbaseBudget)
 
 end TruncationEnvelopeEstimate
 

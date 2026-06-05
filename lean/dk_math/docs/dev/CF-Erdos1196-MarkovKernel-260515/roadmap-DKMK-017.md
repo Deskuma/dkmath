@@ -843,3 +843,96 @@ DKMK-017H is docs-only.  It was checked with:
 git diff --check
 long-line check on changed docs
 ```
+
+## 14. DKMK-017I Geometric Increment Route Test
+
+DKMK-017I introduced the first concrete dyadic-band
+`increment : Nat -> Rat` candidate:
+
+```lean
+def geometricIncrement (base ratio : Rat) (k : Nat) : Rat :=
+  base * ratio ^ k
+```
+
+This candidate is intentionally simple.  Its purpose is to test whether the
+DKMK-017 self-base route can consume a real `Nat -> Rat` increment without
+adding new analytic machinery.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `geometricIncrement`
+- `geometricIncrement_nonneg`
+- `geometricIncrement_zero`
+- `geometricIncrement_decay`
+- `geometricIncrement_decay_le`
+- `FirstBandDecayBudgetSource.ofGeometricIncrement`
+- `TruncationEnvelopeEstimate.ofGeometricIncrement`
+
+### Result
+
+The concrete route is accepted.
+
+The local increment facts close as expected:
+
+```text
+0 <= base, 0 <= ratio
+  -> forall k, 0 <= geometricIncrement base ratio k
+
+geometricIncrement base ratio 0 = base
+
+geometricIncrement base ratio (k + 1)
+  = ratio * geometricIncrement base ratio k
+```
+
+The full truncation-envelope route also closes:
+
+```text
+base, ratio, error
+0 <= base
+0 <= ratio
+(ratio : Real) < 1
+(base : Real) <= (1 + error) * (1 - (ratio : Real))
+  -> TruncationEnvelopeEstimate
+       (Finset.range (K + 1))
+       (fun k : Nat => x * 2^k)
+       (geometricIncrement base ratio)
+       error
+```
+
+### Interpretation
+
+DKMK-017A-H reduced the route to a usable concrete interface.  DKMK-017I shows
+that this interface is not merely abstract plumbing: a concrete dyadic-band
+source can now reach `TruncationEnvelopeEstimate`.
+
+The remaining analytic burden is exactly the first-band budget:
+
+```text
+(base : Real) <= (1 + error) * (1 - (ratio : Real))
+```
+
+For this geometric candidate, `hinc_nonneg` and `hdecay` are no longer the
+hard inputs.
+
+### Decision
+
+Adopt `geometricIncrement` as the first concrete test source for DKMK-017.
+
+The next checkpoint should decide whether to:
+
+1. derive first-band budget facts for useful `base`, `ratio`, and `error`;
+2. specialize the candidate to canonical choices such as `base = 1 - ratio`;
+3. connect the candidate to a more analytic/logarithmic source.
+
+### Verification
+
+DKMK-017I was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```

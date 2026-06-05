@@ -2280,3 +2280,36 @@ Archive
      を試す。
 
 ---
+
+### 日時: 2026/06/05 15:00 JST (DKMK-017I geometric increment route test)
+
+1. 目的:
+   - DKMK-017I として、concrete dyadic-band
+     `increment : Nat -> Rat` candidate を Lean に導入し、標準 route が
+     実際に通るか検証する。
+2. 実施:
+   - `SourceMassTruncation.lean` に `geometricIncrement` を追加した。
+   - `geometricIncrement_nonneg`, `geometricIncrement_zero`,
+     `geometricIncrement_decay`, `geometricIncrement_decay_le` を追加した。
+   - `FirstBandDecayBudgetSource.ofGeometricIncrement` を追加した。
+   - `TruncationEnvelopeEstimate.ofGeometricIncrement` を追加し、
+     concrete candidate から envelope まで接続した。
+3. 結論:
+   - `geometricIncrement base ratio : Nat -> Rat` は DKMK-017 の最初の
+     concrete test source として採用できる。
+   - `hinc_nonneg` は `0 <= base`, `0 <= ratio` から閉じる。
+   - `hdecay` は定義展開による equality から閉じる。
+   - 残る主要 analytic input は
+     `(base : Real) <= (1 + error) * (1 - (ratio : Real))` である。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-017.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - first-band budget を useful な `base`, `ratio`, `error` から導くか、
+     `base = 1 - ratio` などの canonical specialization を試す。
+
+---
