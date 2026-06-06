@@ -219,3 +219,29 @@ Archive
      総括し、次章の target を決める。
 
 ---
+
+### 日時: 2026/06/06 14:07 JST (DKMK-018 completion report)
+
+1. 目的:
+   - DKMK-018 を completed analytic source replacement milestone として
+     総括する。
+2. 実施:
+   - `report-DKMK-018.md` を追加した。
+   - `roadmap-DKMK-018.md` に completion 節を追加した。
+3. 結論:
+   - DKMK-018 は、LogCapacityKernel Real provider を positive Rat
+     under-approximation に落とし、`TruncationEnvelopeEstimate` と
+     DKMK-017 finite-step weighted-hit route へ接続する章として完了した。
+   - 章末 theorem は
+     `PrimePowerWitnessProvider.logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error`。
+   - 次章候補は API simplification / façade theorem、または
+     LogCapacityKernel 以外の analytic source expansion。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次章 target を選ぶ。
+
+---

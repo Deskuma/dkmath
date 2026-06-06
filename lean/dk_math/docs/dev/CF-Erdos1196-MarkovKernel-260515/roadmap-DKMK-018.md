@@ -564,3 +564,58 @@ DKMK-018F was checked with:
 ```text
 lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 ```
+
+## 8. DKMK-018 Completion
+
+DKMK-018 is complete as the first analytic source replacement milestone.
+
+### Completion report
+
+The chapter summary is recorded in:
+
+```text
+report-DKMK-018.md
+```
+
+### Final route
+
+The accepted end-to-end route is:
+
+```text
+LogCapacityKernel Real provider
+  -> strict positive Real weights
+  -> positive Rat under-approximation
+  -> TruncationEnvelopeEstimate
+  -> finiteStepTailNatMassSpace
+  -> quotient-path weightedHitMass bound
+```
+
+### Main theorem surface
+
+The chapter-end theorem is:
+
+```text
+PrimePowerWitnessProvider
+  .logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+### Decision
+
+Stop extending DKMK-018 with more wrappers unless they remove real caller
+friction.
+
+The next chapter should choose between:
+
+```text
+API simplification / façade theorem
+analytic source expansion beyond LogCapacityKernel
+```
+
+### Verification
+
+The completion report is docs-only and was checked with:
+
+```text
+git diff --check
+long-line check on changed docs
+```
