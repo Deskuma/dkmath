@@ -1079,6 +1079,55 @@ theorem logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
       herror
       (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
 
+/--
+Concrete log-capacity source replacement route all the way to the finite-step
+weighted-hit bound.
+
+This is the DKMK-018F chapter-end connection: the log-capacity Real source
+constructs its positive rational under-approximation, builds the truncation
+envelope, and then feeds the DKMK-017 finite-step route.
+-/
+theorem logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (IOf s.1)
+        threshold
+        (RealWeightProvider.positiveRatIncrementBelow
+          (W.logCapacityKernelRealWeightProvider
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+          (W.logCapacityKernelRealWeightProvider_weight_pos
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+        (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+          threshold herror).increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  exact
+    TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (IOf s.1)
+      threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+        (W.logCapacityKernelRealWeightProvider_weight_pos
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+      s hA
+      (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+        s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+        threshold herror)
+
 end PrimePowerWitnessProvider
 
 namespace DyadicBandAnalyticEstimate

@@ -490,3 +490,77 @@ DKMK-018E was checked with:
 ```text
 lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
 ```
+
+## 7. DKMK-018F Weighted-Hit Route Connection
+
+DKMK-018F connected the DKMK-018E log-capacity envelope to the DKMK-017
+finite-step weighted-hit bound.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `PrimePowerWitnessProvider.logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error`
+
+### Result
+
+The concrete source replacement route now reaches the final finite-step
+weighted-hit estimate.
+
+For a global log-capacity state `s`, the theorem uses:
+
+```text
+n := s.1
+I := IOf s.1
+```
+
+and constructs the positive rational source from:
+
+```text
+logCapacityKernelRealWeightProvider s.1 (IOf s.1) ...
+```
+
+Then it feeds the resulting `TruncationEnvelopeEstimate` through:
+
+```text
+TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+```
+
+to prove:
+
+```text
+weightedHitMass A <= 1 + error
+```
+
+for primitive `A`.
+
+### Interpretation
+
+This completes the first full analytic source replacement path:
+
+```text
+LogCapacityKernel Real provider
+  -> strict positive Real weights
+  -> positive Rat under-approximation
+  -> TruncationEnvelopeEstimate
+  -> finiteStepTailNatMassSpace
+  -> quotient-path weightedHitMass bound
+```
+
+The theorem is intentionally a wrapper: it does not add new analysis, but
+records that the DKMK-018 source can run through the DKMK-017 route end to end.
+
+### Decision
+
+Adopt the weighted-hit connection as the DKMK-018F chapter-end theorem.
+
+The next checkpoint should summarize DKMK-018 as a completed analytic source
+replacement milestone and decide the next chapter target.
+
+### Verification
+
+DKMK-018F was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```

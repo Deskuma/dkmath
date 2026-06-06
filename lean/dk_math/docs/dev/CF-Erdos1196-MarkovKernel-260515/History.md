@@ -193,3 +193,29 @@ Archive
      DKMK-018 の analytic source replacement milestone として整理する。
 
 ---
+
+### 日時: 2026/06/06 14:00 JST (DKMK-018F weighted-hit route connection)
+
+1. 目的:
+   - 018E の log-capacity positive Rat envelope を、DKMK-017 の
+     finite-step weighted-hit bound へ直接接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `s : LogCapacityState` に対して `n := s.1`, `I := IOf s.1` とし、
+     LogCapacityKernel Real provider から positive Rat increment を構成した。
+   - 得られた `TruncationEnvelopeEstimate` を
+     `TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error`
+     に流し、primitive `A` の weighted-hit bound `<= 1 + error` まで接続した。
+   - DKMK-018 の first concrete analytic source replacement route は、
+     DKMK-017 finite-step route の終端 bound まで到達した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-018 を completed analytic source replacement milestone として
+     総括し、次章の target を決める。
+
+---
