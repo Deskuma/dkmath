@@ -157,6 +157,9 @@ Archive
      または positive-weight support restriction が次の入力になる。
 4. 検証:
    - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-019.md` and `History.md`
 5. 失敗事例:
    - なし。
 6. 次の課題:
@@ -186,6 +189,9 @@ Archive
      閉じた。
 4. 検証:
    - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-019.md` and `History.md`
 5. 失敗事例:
    - なし。
 6. 次の課題:
@@ -243,5 +249,117 @@ Archive
    - なし。
 6. 次の課題:
    - 次章 target を選ぶ。
+
+---
+
+### 日時: 2026/06/06 17:48 JST (DKMK-019A LogCapacity source facade roadmap)
+
+1. 目的:
+   - DKMK-019 を LogCapacity Source Facade 章として開始し、実装前の
+     façade surface を固定する。
+2. 実施:
+   - `roadmap-DKMK-019.md` を追加した。
+3. 結論:
+   - DKMK-018F の theorem は route として正しいが、caller-facing API としては
+     `positiveRatIncrementBelow` と `finiteStepTailNatMassSpace_dvdMonotone` の
+     式が長い。
+   - DKMK-019 では `logCapacitySourceRatIncrement`、
+     `logCapacitySourceTruncationEnvelope`、`logCapacitySourceFiniteStepMass`、
+     `logCapacitySource_weightedHitMass_le_one_add_error` のような薄い façade を
+     第一候補にする。
+   - 新しい解析理論ではなく、DKMK-018 の到達点を短い public surface に
+     包む章として進める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` で `logCapacitySourceRatIncrement` から
+     `logCapacitySourceTruncationEnvelope` までを Lean 実装する。
+
+---
+
+### 日時: 2026/06/06 20:35 JST (DKMK-019B LogCapacity source facade implementation)
+
+1. 目的:
+   - DKMK-018F の長い source construction を、caller-facing façade に包む。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacitySourceRatIncrement` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceTruncationEnvelope` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass_dvdMonotone` を
+     追加した。
+   - `PrimePowerWitnessProvider.logCapacitySource_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `positiveRatIncrementBelow (...)` は
+     `logCapacitySourceRatIncrement W IOf hIOf s` として短名化された。
+   - finite-step mass-space construction は
+     `logCapacitySourceFiniteStepMass` と
+     `logCapacitySourceFiniteStepMass_dvdMonotone` に包まれた。
+   - weighted-hit route は
+     `logCapacitySource_weightedHitMass_le_one_add_error` として読めるように
+     なった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - façade が十分に短いか、さらに高階の theorem で結論側を隠すべきか
+     判断する。
+
+---
+
+### 日時: 2026/06/06 22:11 JST (DKMK-019C path-family facade)
+
+1. 目的:
+   - DKMK-019B で残った conclusion 側の長い quotient-path application を
+     path-family façade に包む。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacitySourcePathFamily` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourcePathFamily_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily ...` は
+     `logCapacitySourcePathFamily W IOf hIOf s threshold` として短名化された。
+   - 最終 theorem は
+     `(W.logCapacitySourcePathFamily IOf hIOf s threshold).weightedHitMass A <=
+      1 + error`
+     という path-family 主語の形で読めるようになった。
+   - DKMK-019 の façade stack は source / envelope / mass / path-family /
+     weighted-hit bound まで揃った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-019 を completed façade chapter として総括するか判断する。
+
+---
+
+### 日時: 2026/06/07 01:51 JST (DKMK-019D completion report)
+
+1. 目的:
+   - DKMK-019 を LogCapacity source façade chapter として総括する。
+2. 実施:
+   - `report-DKMK-019.md` を追加した。
+   - `roadmap-DKMK-019.md` に DKMK-019C と completion 節を追記した。
+3. 結論:
+   - `logCapacitySourceRatIncrement` から
+     `logCapacitySourcePathFamily_weightedHitMass_le_one_add_error` までの
+     façade stack は完了した。
+   - DKMK-018 の analytic source route は、source / envelope / mass /
+     path-family / weighted-hit bound の caller-facing surface として
+     読めるようになった。
+   - DKMK-019 は completed façade chapter として閉じる。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-020 として threshold/support policy を先に扱うか、analytic source
+     expansion へ進むかを決める。
 
 ---
