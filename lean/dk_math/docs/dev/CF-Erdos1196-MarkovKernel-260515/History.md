@@ -245,3 +245,31 @@ Archive
    - 次章 target を選ぶ。
 
 ---
+
+### 日時: 2026/06/06 17:48 JST (DKMK-019A LogCapacity source facade roadmap)
+
+1. 目的:
+   - DKMK-019 を LogCapacity Source Facade 章として開始し、実装前の
+     façade surface を固定する。
+2. 実施:
+   - `roadmap-DKMK-019.md` を追加した。
+3. 結論:
+   - DKMK-018F の theorem は route として正しいが、caller-facing API としては
+     `positiveRatIncrementBelow` と `finiteStepTailNatMassSpace_dvdMonotone` の
+     式が長い。
+   - DKMK-019 では `logCapacitySourceRatIncrement`、
+     `logCapacitySourceTruncationEnvelope`、`logCapacitySourceFiniteStepMass`、
+     `logCapacitySource_weightedHitMass_le_one_add_error` のような薄い façade を
+     第一候補にする。
+   - 新しい解析理論ではなく、DKMK-018 の到達点を短い public surface に
+     包む章として進める。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` で `logCapacitySourceRatIncrement` から
+     `logCapacitySourceTruncationEnvelope` までを Lean 実装する。
+
+---
