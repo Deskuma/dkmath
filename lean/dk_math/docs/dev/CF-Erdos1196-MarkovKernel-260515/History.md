@@ -419,3 +419,27 @@ Archive
      validity / compatibility を追加すべきか判断する。
 
 ---
+
+### 日時: 2026/06/07 06:03 JST (DKMK-020C policy sufficiency decision)
+
+1. 目的:
+   - `LogCapacitySourcePolicy` に validity / compatibility predicate を
+     今すぐ追加すべきか判断する。
+2. 実施:
+   - `roadmap-DKMK-020.md` に DKMK-020C の判断を追記した。
+3. 結論:
+   - 現在の route は `P.IOf`、`P.hIOf`、`P.threshold` だけを使用する。
+   - support compatibility、threshold monotonicity、policy validity は
+     現時点の theorem では未使用である。
+   - DKMK-020 では `LogCapacitySourcePolicy` を data-only のまま維持する。
+   - 将来必要になった場合は structure field ではなく、
+     `LogCapacitySourcePolicy.Valid P` などの別 predicate として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `report-DKMK-020.md` を作成し、DKMK-020 を総括する。
+
+---

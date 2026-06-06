@@ -293,3 +293,79 @@ long-line check on changed docs
 DKMK-020C should decide whether the thin policy object is sufficient as the
 chapter endpoint, or whether a separate validity predicate is needed before
 closing DKMK-020.
+
+## 10. DKMK-020C Policy Sufficiency Decision
+
+DKMK-020C keeps `LogCapacitySourcePolicy` data-only.
+
+### Current Route Requirement
+
+The accepted policy-facing route uses exactly:
+
+```text
+P.IOf
+P.hIOf
+P.threshold
+```
+
+through:
+
+```text
+logCapacityPolicyPathFamily
+logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error
+```
+
+No current theorem consumes:
+
+```text
+support compatibility
+threshold monotonicity
+threshold support-locality
+policy validity
+```
+
+### Decision
+
+Do not add validity fields to `LogCapacitySourcePolicy` in DKMK-020.
+
+The policy object remains:
+
+```text
+support family
+index proof
+threshold map
+```
+
+This keeps the current endpoint light:
+
+```text
+(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error
+```
+
+and avoids forcing unused obligations on every future policy constructor.
+
+### Future Extension Point
+
+If a later theorem needs additional assumptions, add them as predicates rather
+than structure fields:
+
+```text
+LogCapacitySourcePolicy.Valid P
+LogCapacitySourcePolicy.SupportCompatible P
+LogCapacitySourcePolicy.ThresholdMonotone P
+```
+
+This preserves the data-only public surface while allowing stronger routes to
+ask for stronger policy facts.
+
+### Chapter Status
+
+DKMK-020 has achieved its policy/API goal.
+
+It does not need more Lean implementation before a completion report.
+
+The next checkpoint should be:
+
+```text
+report-DKMK-020.md
+```
