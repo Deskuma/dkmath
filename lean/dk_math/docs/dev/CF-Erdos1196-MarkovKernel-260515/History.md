@@ -363,3 +363,111 @@ Archive
      expansion へ進むかを決める。
 
 ---
+
+### 日時: 2026/06/07 02:10 JST (DKMK-020A Threshold / Support Policy roadmap)
+
+1. 目的:
+   - DKMK-020 を Threshold / Support Policy 章として開始する。
+2. 実施:
+   - `roadmap-DKMK-020.md` を追加した。
+3. 結論:
+   - DKMK-019 の endpoint は安定した path-family façade になったが、
+     `IOf`、`hIOf`、`threshold` はまだ loose inputs として残っている。
+   - DKMK-020 では、これらを `LogCapacitySourcePolicy` のような名前付き
+     policy surface に包むことを第一候補にする。
+   - source expansion は、threshold/support policy の境界を固定した後の
+     章に分離する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` で `LogCapacitySourcePolicy` と
+     policy wrapper theorem を Lean 実装する。
+
+---
+
+### 日時: 2026/06/07 02:22 JST (DKMK-020B policy wrapper implementation)
+
+1. 目的:
+   - `IOf`、`hIOf`、`threshold` を名前付き policy surface に包む。
+2. 実施:
+   - `LogCapacitySourcePolicy` を追加した。
+   - `PrimePowerWitnessProvider.logCapacityPolicyPathFamily` を追加した。
+   - `PrimePowerWitnessProvider.logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error`
+     を追加した。
+   - `roadmap-DKMK-020.md` に DKMK-020B の結果を追記した。
+3. 結論:
+   - DKMK-019 の loose inputs は `P : LogCapacitySourcePolicy T` として
+     束ねられた。
+   - 最終 theorem は
+     `(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error`
+     として読めるようになった。
+   - support compatibility や threshold monotonicity は未使用なので、
+     DKMK-020B では構造体に入れなかった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - repo root で `lake build` を実行すると lakefile が見つからなかった。
+     `lean/dk_math` を working directory として再実行し成功した。
+6. 次の課題:
+   - DKMK-020C で thin policy object だけで十分か、別 predicate として
+     validity / compatibility を追加すべきか判断する。
+
+---
+
+### 日時: 2026/06/07 06:03 JST (DKMK-020C policy sufficiency decision)
+
+1. 目的:
+   - `LogCapacitySourcePolicy` に validity / compatibility predicate を
+     今すぐ追加すべきか判断する。
+2. 実施:
+   - `roadmap-DKMK-020.md` に DKMK-020C の判断を追記した。
+3. 結論:
+   - 現在の route は `P.IOf`、`P.hIOf`、`P.threshold` だけを使用する。
+   - support compatibility、threshold monotonicity、policy validity は
+     現時点の theorem では未使用である。
+   - DKMK-020 では `LogCapacitySourcePolicy` を data-only のまま維持する。
+   - 将来必要になった場合は structure field ではなく、
+     `LogCapacitySourcePolicy.Valid P` などの別 predicate として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `report-DKMK-020.md` を作成し、DKMK-020 を総括する。
+
+---
+
+### 日時: 2026/06/07 06:07 JST (DKMK-020D completion report)
+
+1. 目的:
+   - DKMK-020 を threshold/support policy API chapter として総括する。
+2. 実施:
+   - `report-DKMK-020.md` を追加した。
+   - `roadmap-DKMK-020.md` に completion 節を追記した。
+3. 結論:
+   - DKMK-019 の loose inputs だった `IOf`、`hIOf`、`threshold` は
+     `P : LogCapacitySourcePolicy T` に束ねられた。
+   - policy-facing theorem は
+     `(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error`
+     として読めるようになった。
+   - DKMK-020 は threshold 最適化章ではなく、threshold/support choices を
+     public API 上の policy input に昇格する章として閉じる。
+   - validity / compatibility / monotonicity は将来必要になった時に
+     別 predicate として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-021 として source expansion survey または
+     policy validity requirements survey を開始する。
+
+---
