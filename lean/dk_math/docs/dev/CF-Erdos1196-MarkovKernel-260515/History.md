@@ -363,3 +363,27 @@ Archive
      expansion へ進むかを決める。
 
 ---
+
+### 日時: 2026/06/07 02:10 JST (DKMK-020A Threshold / Support Policy roadmap)
+
+1. 目的:
+   - DKMK-020 を Threshold / Support Policy 章として開始する。
+2. 実施:
+   - `roadmap-DKMK-020.md` を追加した。
+3. 結論:
+   - DKMK-019 の endpoint は安定した path-family façade になったが、
+     `IOf`、`hIOf`、`threshold` はまだ loose inputs として残っている。
+   - DKMK-020 では、これらを `LogCapacitySourcePolicy` のような名前付き
+     policy surface に包むことを第一候補にする。
+   - source expansion は、threshold/support policy の境界を固定した後の
+     章に分離する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `SourceMassTruncation.lean` で `LogCapacitySourcePolicy` と
+     policy wrapper theorem を Lean 実装する。
+
+---
