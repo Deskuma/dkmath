@@ -411,3 +411,82 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 6. DKMK-018E Log-Capacity Positive Rat Source
+
+DKMK-018E attached the generic positive-rationalization wrapper to the concrete
+log-capacity provider.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider_weight_pos`
+- `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow`
+
+### Result
+
+The source-specific positivity proof is accepted.
+
+For every selected channel `q in I`,
+
+```text
+0 < (logCapacityKernelRealWeightProvider n I hI hn).weight q
+```
+
+is proved from:
+
+```text
+Nat.Prime (basePrimeOf q)
+1 < n
+```
+
+using positivity of the natural-number logarithm and `div_pos`.
+
+The concrete source replacement route now constructs the positive rational
+increment itself:
+
+```text
+RealWeightProvider.positiveRatIncrementBelow
+  (logCapacityKernelRealWeightProvider n I hI hn)
+  logCapacityKernelRealWeightProvider_weight_pos
+```
+
+and produces:
+
+```text
+TruncationEnvelopeEstimate I threshold increment error
+```
+
+under only `0 <= error` and the existing log-capacity sub-probability theorem.
+
+### Interpretation
+
+This closes the first concrete source replacement route:
+
+```text
+LogCapacityKernel Real provider
+  -> strict positive Real weights
+  -> positive Rat under-approximation
+  -> TruncationEnvelopeEstimate
+  -> DKMK-017 finite-step route
+```
+
+No positive-support restriction was needed.  The selected index `I` is already
+inside the prime-power witness index, so `basePrimeOf` is prime on `I`.
+
+### Decision
+
+Adopt the log-capacity positive-rational source as the DKMK-018E surface.
+
+The next checkpoint can either connect this envelope directly to the
+`finiteStepTail_weightedHitMass_le_one_add_error` route, or summarize DKMK-018
+as the completed analytic source replacement milestone.
+
+### Verification
+
+DKMK-018E was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+```

@@ -1026,6 +1026,59 @@ theorem logCapacityKernel_truncationEnvelope_zeroIncrement
         (W.logCapacityKernelRealWeightProvider n I hI hn).weight_nonneg q hq)
     herror
 
+/--
+The local log-capacity Real provider has strictly positive weights on its
+selected channel index.
+
+This is the source-specific positivity input needed by the DKMK-018D positive
+rationalization wrapper.
+-/
+theorem logCapacityKernelRealWeightProvider_weight_pos
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    ∀ q ∈ I,
+      0 < (W.logCapacityKernelRealWeightProvider n I hI hn).weight q := by
+  intro q hq
+  rw [logCapacityKernelRealWeightProvider_weight]
+  exact div_pos
+    (real_log_nat_pos_of_one_lt
+      ((W.basePrimeOf_prime_on n I hI q hq).one_lt))
+    (real_log_nat_pos_of_one_lt hn)
+
+/--
+Concrete log-capacity source replacement route using the selected positive
+rational under-approximation of the log-capacity weights.
+
+This packages DKMK-018C, DKMK-018D, and the source-specific positivity proof
+into a single truncation-envelope entry point.
+-/
+theorem logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider n I hI hn)
+        (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn))
+      error := by
+  simpa [logCapacityKernelRealWeightProvider_index] using
+    RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow
+      (W.logCapacityKernelRealWeightProvider n I hI hn)
+      threshold
+      (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn)
+      herror
+      (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
 end PrimePowerWitnessProvider
 
 namespace DyadicBandAnalyticEstimate

@@ -164,3 +164,32 @@ Archive
      取り出せるか調査する。
 
 ---
+
+### 日時: 2026/06/06 13:52 JST (DKMK-018E log-capacity positive Rat source)
+
+1. 目的:
+   - `logCapacityKernelRealWeightProvider` の index 上 strict positivity を証明し、
+     018D の positive rational under-approximation を concrete source に接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider_weight_pos`
+     を追加した。
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow`
+     を追加した。
+3. 結論:
+   - `q in I` では `basePrimeOf q` が prime なので、分子
+     `Real.log (basePrimeOf q : Real)` は正になる。
+   - `hn : 1 < n` から分母 `Real.log (n : Real)` も正になり、`div_pos` で
+     provider weight の strict positivity が閉じた。
+   - positive-weight support restriction は不要だった。
+   - LogCapacityKernel Real provider から positive Rat increment を自動選択し、
+     `TruncationEnvelopeEstimate` へ接続する concrete source replacement route が
+     閉じた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - この envelope を DKMK-017 の finite-step weighted-hit route に直接接続するか、
+     DKMK-018 の analytic source replacement milestone として整理する。
+
+---
