@@ -870,6 +870,97 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
 
 end TruncationEnvelopeEstimate
 
+namespace RealWeightProvider
+
+/--
+Choose a positive rational number below a positive real number.
+
+This is the scalar rationalization primitive for DKMK-018D.  It uses density of
+`Rat` in `Real` and records the result in the order shape consumed by the
+rational finite-step route.
+-/
+theorem exists_positive_rat_below
+    {x : ℝ} (hx : 0 < x) :
+    ∃ q : ℚ, 0 < q ∧ (q : ℝ) ≤ x := by
+  rcases exists_rat_btwn hx with ⟨q, hq_pos, hq_lt⟩
+  refine ⟨q, ?_, le_of_lt hq_lt⟩
+  exact_mod_cast hq_pos
+
+/--
+Select a rational increment below each positive provider weight.
+
+Outside the provider index the value is irrelevant to all finite sums, so it is
+set to `0`.
+-/
+noncomputable def positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) : ι → ℚ :=
+  fun i =>
+    if hi : i ∈ P.index then
+      Classical.choose (exists_positive_rat_below (hpos i hi))
+    else
+      0
+
+/-- The selected rational increment is positive on the provider index. -/
+theorem positiveRatIncrementBelow_pos
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index, 0 < positiveRatIncrementBelow P hpos i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.1
+
+/-- The selected rational increment is bounded by the provider weight. -/
+theorem positiveRatIncrementBelow_le_weight
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index,
+      (positiveRatIncrementBelow P hpos i : ℝ) ≤ P.weight i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.2
+
+/--
+Finite-step truncation estimate using the provider's selected positive rational
+under-approximation.
+
+This is the DKMK-018D positive-rationalization surface.  It keeps the main
+route rational-valued while isolating the strict-positivity requirement needed
+to construct nonzero increments.
+-/
+theorem truncationEnvelope_of_positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold
+      (positiveRatIncrementBelow P hpos) error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    P threshold (positiveRatIncrementBelow P hpos)
+    (fun i hi => le_of_lt (positiveRatIncrementBelow_pos P hpos i hi))
+    (positiveRatIncrementBelow_le_weight P hpos)
+    herror hprob
+
+end RealWeightProvider
+
 namespace PrimePowerWitnessProvider
 
 /--

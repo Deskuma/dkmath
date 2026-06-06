@@ -334,3 +334,80 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 5. DKMK-018D Positive Rational Under-Approximation
+
+DKMK-018D tested the finite-index rationalization policy for positive Real
+weights.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `RealWeightProvider.exists_positive_rat_below`
+- `RealWeightProvider.positiveRatIncrementBelow`
+- `RealWeightProvider.positiveRatIncrementBelow_pos`
+- `RealWeightProvider.positiveRatIncrementBelow_le_weight`
+- `RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow`
+
+### Result
+
+The generic rational under-approximation route is accepted.
+
+For any finite `RealWeightProvider`, strict positivity on the provider index
+
+```text
+forall i in P.index, 0 < P.weight i
+```
+
+constructs a rational increment such that
+
+```text
+forall i in P.index, 0 < increment i
+forall i in P.index, (increment i : Real) <= P.weight i
+```
+
+and the selected increment feeds the existing rational truncation route:
+
+```text
+P.SubProbability
+0 <= error
+  -> TruncationEnvelopeEstimate P.index threshold increment error
+```
+
+### Interpretation
+
+This closes the generic nonzero rationalization surface.  The DKMK-017 route
+can remain `Rat`-valued; no Real-native finite-step mass refactor is needed at
+this point.
+
+The remaining work is source-specific: to use this theorem for
+`logCapacityKernelRealWeightProvider`, the next checkpoint must expose strict
+positivity of the log-capacity provider weights on the relevant index.  The
+nonnegative smoke route from DKMK-018C remains valid without that extra input.
+
+### Decision
+
+Adopt the positive-rational under-approximation wrapper as the DKMK-018D
+surface.
+
+The next checkpoint should investigate whether the existing log-capacity /
+base-prime API can prove:
+
+```text
+forall q in I,
+  0 < (logCapacityKernelRealWeightProvider n I hI hn).weight q
+```
+
+or whether the index must be restricted to a positive-weight support.
+
+### Verification
+
+DKMK-018D was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```

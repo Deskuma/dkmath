@@ -133,3 +133,34 @@ Archive
      判断する。
 
 ---
+
+### 日時: 2026/06/06 12:36 JST (DKMK-018D positive rational under-approximation)
+
+1. 目的:
+   - 正値な `RealWeightProvider` weight の下に、非ゼロの rational increment を
+     finite index 上で構成できるか確認する。
+2. 実施:
+   - `RealWeightProvider.exists_positive_rat_below` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow_pos` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow_le_weight` を追加した。
+   - `RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow` を
+     追加した。
+3. 結論:
+   - `forall i in P.index, 0 < P.weight i` があれば、
+     `0 < increment i` かつ `(increment i : Real) <= P.weight i` を満たす
+     rational increment を構成できる。
+   - その increment は既存の rational `TruncationEnvelopeEstimate` route に
+     接続できる。
+   - Real-native finite-step mass refactor は現時点では不要。
+   - LogCapacityKernel へ具体適用するには、provider weight の strict positivity
+     または positive-weight support restriction が次の入力になる。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `logCapacityKernelRealWeightProvider` の index 上で strict positivity を
+     取り出せるか調査する。
+
+---
