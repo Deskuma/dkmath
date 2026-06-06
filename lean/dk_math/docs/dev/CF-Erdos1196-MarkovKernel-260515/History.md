@@ -100,3 +100,36 @@ Archive
      concrete Real provider を DKMK-018B bridge に接続する。
 
 ---
+
+### 日時: 2026/06/06 05:20 JST (DKMK-018C log-capacity provider attachment)
+
+1. 目的:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider` を
+     DKMK-018B bridge に接続し、concrete Real provider が Rat envelope へ
+     届くか確認する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement`
+     を追加した。
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_zeroIncrement`
+     を追加した。
+3. 結論:
+   - LogCapacityKernel の Real provider は
+     `TruncationEnvelopeEstimate.ofRealWeightProviderMajorant` に接続できる。
+   - zero increment の smoke connection は通った。
+   - 非自明な Rat increment は外部仮定
+     `(increment q : Real) <= provider.weight q` として受ける surface まで
+     通った。
+   - 次の焦点は rationalization policy。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - finite index 上の rational lower approximation を作るか、
+     assumed-rationalization route を main theorem surface として採用するか
+     判断する。
+
+---

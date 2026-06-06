@@ -870,6 +870,73 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
 
 end TruncationEnvelopeEstimate
 
+namespace PrimePowerWitnessProvider
+
+/--
+Log-capacity Real provider, used as a Real majorant for a rational finite-step
+increment.
+
+This is the DKMK-018C assumed-rationalization route.  The rational increment is
+still supplied externally; the log-capacity provider supplies the Real
+sub-probability majorant.
+-/
+theorem logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    (increment : ℕ → ℚ)
+    (hinc : ∀ q ∈ I, 0 ≤ increment q)
+    (hle :
+      ∀ q ∈ I,
+        (increment q : ℝ) ≤
+          (W.logCapacityKernelRealWeightProvider n I hI hn).weight q)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold increment error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    (W.logCapacityKernelRealWeightProvider n I hI hn)
+    threshold
+    increment
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hinc)
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hle)
+    herror
+    (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
+/--
+Smoke-test connection from the log-capacity Real provider to the rational
+finite-step truncation route, using the zero rational increment.
+
+This proves the provider/API plumbing before choosing a nontrivial rational
+under-approximation policy.
+-/
+theorem logCapacityKernel_truncationEnvelope_zeroIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold (fun _ : ℕ => (0 : ℚ)) error :=
+  W.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    n I hI hn threshold (fun _ : ℕ => (0 : ℚ))
+    (by
+      intro _q _hq
+      norm_num)
+    (by
+      intro q hq
+      simpa using
+        (W.logCapacityKernelRealWeightProvider n I hI hn).weight_nonneg q hq)
+    herror
+
+end PrimePowerWitnessProvider
+
 namespace DyadicBandAnalyticEstimate
 
 /--

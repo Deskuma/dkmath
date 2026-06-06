@@ -252,3 +252,85 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 4. DKMK-018C Log-Capacity Provider Attachment
+
+DKMK-018C attached the first concrete Real source to the DKMK-018B bridge:
+
+```text
+PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider
+```
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement`
+- `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_zeroIncrement`
+
+### Result
+
+The concrete provider connection is accepted.
+
+The assumed-rationalization route is:
+
+```text
+increment : Nat -> Rat
+forall q in I, 0 <= increment q
+forall q in I,
+  (increment q : Real)
+    <= (logCapacityKernelRealWeightProvider n I hI hn).weight q
+0 <= error
+  -> TruncationEnvelopeEstimate I threshold increment error
+```
+
+The smoke route also closes:
+
+```text
+increment := fun _ => 0
+  -> TruncationEnvelopeEstimate I threshold increment error
+```
+
+### Interpretation
+
+DKMK-018B proved that a `RealWeightProvider` can certify a rational
+finite-step route.
+
+DKMK-018C shows that the actual log-capacity Real provider fits that bridge.
+This is no longer just an abstract majorant theorem: the DKMK log-capacity
+source reaches the DKMK-017 truncation-envelope entry point.
+
+### Remaining issue
+
+The nontrivial rational increment is still external.
+
+DKMK-018C intentionally keeps the pointwise majorization hypothesis:
+
+```text
+(increment q : Real) <= provider.weight q
+```
+
+The next problem is rationalization policy:
+
+1. keep the assumed-rationalization route as the main theorem surface;
+2. construct rational lower approximations on finite provider indices;
+3. introduce a Real-native finite-step route only if rationalization becomes
+   the wrong abstraction.
+
+### Decision
+
+Adopt the log-capacity provider attachment.
+
+DKMK-018D should decide how to obtain nonzero rational increments under the
+Real log-capacity weights.
+
+### Verification
+
+DKMK-018C was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
