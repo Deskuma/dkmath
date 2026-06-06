@@ -42,3 +42,206 @@ Archive
    - （内容）
 
 ---
+
+### 日時: 2026/06/06 03:50 JST (DKMK-018A analytic source replacement start)
+
+1. 目的:
+   - DKMK-018 を開始し、geometric test source を置き換える analytic source
+     candidate を比較する。
+2. 実施:
+   - `roadmap-DKMK-018.md` を追加した。
+   - `RealLog.lean`, `ValuationBudget.lean`, `LogCapacityKernel.lean`,
+     `SourceMassTruncation.lean` 周辺を検索した。
+   - Real log-ratio route, multiplicity / valuation budget route,
+     capacity-derived route, DKMK-017 dyadic route を candidate として分類した。
+3. 結論:
+   - 最も近い meaningful candidate は Real log-ratio / capacity-derived source。
+   - 既存 Real 側には nonnegativity と sub-probability がある。
+   - 現行 DKMK-017 route は `Nat -> Rat` increment を消費するため、主要な
+     obstacle は `Real analytic weight -> Rat finite-step increment` の bridge。
+   - 次は Real-valued analytic majorant が既存 Rat route を certify できるか、
+     最小 bridge surface を Lean で試す。
+4. 検証:
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `TruncationEnvelopeEstimate` または `DyadicBandAnalyticEstimate` 周辺に
+     Real-majorant bridge を最小実装できるか試す。
+
+---
+
+### 日時: 2026/06/06 04:04 JST (DKMK-018B Real-majorant bridge)
+
+1. 目的:
+   - Real-valued analytic majorant が既存 Rat finite-step route を certify
+     できるか Lean で確認する。
+2. 実施:
+   - `TruncationEnvelopeEstimate.ofRealMajorant` を追加した。
+   - `DyadicBandAnalyticEstimate.ofRealMajorant` を追加した。
+   - `TruncationEnvelopeEstimate.ofRealWeightProviderMajorant` を追加し、
+     `RealWeightProvider` を次 checkpoint の source として使える形にした。
+3. 結論:
+   - Real-valued majorant から rational `TruncationEnvelopeEstimate` は閉じる。
+   - dyadic-band 版も閉じる。
+   - `RealWeightProvider.SubProbability` と `0 <= error` からも envelope を
+     作れるため、LogCapacityKernel / RealLog provider を次に接続できる。
+   - 現時点では Real-native finite-step mass refactor は不要。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider` などの
+     concrete Real provider を DKMK-018B bridge に接続する。
+
+---
+
+### 日時: 2026/06/06 05:20 JST (DKMK-018C log-capacity provider attachment)
+
+1. 目的:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider` を
+     DKMK-018B bridge に接続し、concrete Real provider が Rat envelope へ
+     届くか確認する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement`
+     を追加した。
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_zeroIncrement`
+     を追加した。
+3. 結論:
+   - LogCapacityKernel の Real provider は
+     `TruncationEnvelopeEstimate.ofRealWeightProviderMajorant` に接続できる。
+   - zero increment の smoke connection は通った。
+   - 非自明な Rat increment は外部仮定
+     `(increment q : Real) <= provider.weight q` として受ける surface まで
+     通った。
+   - 次の焦点は rationalization policy。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-018.md` and `History.md`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - finite index 上の rational lower approximation を作るか、
+     assumed-rationalization route を main theorem surface として採用するか
+     判断する。
+
+---
+
+### 日時: 2026/06/06 12:36 JST (DKMK-018D positive rational under-approximation)
+
+1. 目的:
+   - 正値な `RealWeightProvider` weight の下に、非ゼロの rational increment を
+     finite index 上で構成できるか確認する。
+2. 実施:
+   - `RealWeightProvider.exists_positive_rat_below` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow_pos` を追加した。
+   - `RealWeightProvider.positiveRatIncrementBelow_le_weight` を追加した。
+   - `RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow` を
+     追加した。
+3. 結論:
+   - `forall i in P.index, 0 < P.weight i` があれば、
+     `0 < increment i` かつ `(increment i : Real) <= P.weight i` を満たす
+     rational increment を構成できる。
+   - その increment は既存の rational `TruncationEnvelopeEstimate` route に
+     接続できる。
+   - Real-native finite-step mass refactor は現時点では不要。
+   - LogCapacityKernel へ具体適用するには、provider weight の strict positivity
+     または positive-weight support restriction が次の入力になる。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `logCapacityKernelRealWeightProvider` の index 上で strict positivity を
+     取り出せるか調査する。
+
+---
+
+### 日時: 2026/06/06 13:52 JST (DKMK-018E log-capacity positive Rat source)
+
+1. 目的:
+   - `logCapacityKernelRealWeightProvider` の index 上 strict positivity を証明し、
+     018D の positive rational under-approximation を concrete source に接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider_weight_pos`
+     を追加した。
+   - `PrimePowerWitnessProvider.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow`
+     を追加した。
+3. 結論:
+   - `q in I` では `basePrimeOf q` が prime なので、分子
+     `Real.log (basePrimeOf q : Real)` は正になる。
+   - `hn : 1 < n` から分母 `Real.log (n : Real)` も正になり、`div_pos` で
+     provider weight の strict positivity が閉じた。
+   - positive-weight support restriction は不要だった。
+   - LogCapacityKernel Real provider から positive Rat increment を自動選択し、
+     `TruncationEnvelopeEstimate` へ接続する concrete source replacement route が
+     閉じた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - この envelope を DKMK-017 の finite-step weighted-hit route に直接接続するか、
+     DKMK-018 の analytic source replacement milestone として整理する。
+
+---
+
+### 日時: 2026/06/06 14:00 JST (DKMK-018F weighted-hit route connection)
+
+1. 目的:
+   - 018E の log-capacity positive Rat envelope を、DKMK-017 の
+     finite-step weighted-hit bound へ直接接続する。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `s : LogCapacityState` に対して `n := s.1`, `I := IOf s.1` とし、
+     LogCapacityKernel Real provider から positive Rat increment を構成した。
+   - 得られた `TruncationEnvelopeEstimate` を
+     `TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error`
+     に流し、primitive `A` の weighted-hit bound `<= 1 + error` まで接続した。
+   - DKMK-018 の first concrete analytic source replacement route は、
+     DKMK-017 finite-step route の終端 bound まで到達した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-018 を completed analytic source replacement milestone として
+     総括し、次章の target を決める。
+
+---
+
+### 日時: 2026/06/06 14:07 JST (DKMK-018 completion report)
+
+1. 目的:
+   - DKMK-018 を completed analytic source replacement milestone として
+     総括する。
+2. 実施:
+   - `report-DKMK-018.md` を追加した。
+   - `roadmap-DKMK-018.md` に completion 節を追加した。
+3. 結論:
+   - DKMK-018 は、LogCapacityKernel Real provider を positive Rat
+     under-approximation に落とし、`TruncationEnvelopeEstimate` と
+     DKMK-017 finite-step weighted-hit route へ接続する章として完了した。
+   - 章末 theorem は
+     `PrimePowerWitnessProvider.logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error`。
+   - 次章候補は API simplification / façade theorem、または
+     LogCapacityKernel 以外の analytic source expansion。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次章 target を選ぶ。
+
+---

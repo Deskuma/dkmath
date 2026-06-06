@@ -779,6 +779,68 @@ theorem dyadicRange
     exact hbound
 
 /--
+Finite-step truncation estimate certified by a Real-valued majorant.
+
+This is the DKMK-018B bridge: the finite-step mass route remains rational,
+while an analytic source may live in `Real`.
+-/
+theorem ofRealMajorant
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ)
+    (increment : ι → ℚ) (majorant : ι → ℝ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    {error : ℝ}
+    (hle :
+      ∀ i ∈ steps, (increment i : ℝ) ≤ majorant i)
+    (hmajorant_bound :
+      (Finset.sum steps fun i => majorant i) ≤ 1 + error) :
+    TruncationEnvelopeEstimate steps threshold increment error where
+  increment_nonneg := hinc
+  analytic_bound := by
+    constructor
+    have hsum :
+        (Finset.sum steps fun i => (increment i : ℝ)) ≤
+          Finset.sum steps majorant := by
+      exact Finset.sum_le_sum hle
+    have hcast :
+        ((Finset.sum steps increment : ℚ) : ℝ) =
+          Finset.sum steps fun i => (increment i : ℝ) := by
+      exact_mod_cast (rfl : Finset.sum steps increment = Finset.sum steps increment)
+    exact (by simpa [hcast] using le_trans hsum hmajorant_bound)
+
+/--
+Finite-step truncation estimate certified by a `RealWeightProvider`.
+
+This is the first DKMK-018C-facing bridge: a Real log/capacity provider can
+certify an existing rational increment whenever the rational increment is
+pointwise bounded by the provider weights.
+-/
+theorem ofRealWeightProviderMajorant
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (increment : ι → ℚ)
+    (hinc : ∀ i ∈ P.index, 0 ≤ increment i)
+    (hle :
+      ∀ i ∈ P.index, (increment i : ℝ) ≤ P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold increment error := by
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have hprovider_bound :
+      (Finset.sum P.index fun i => P.weight i) ≤ 1 + error := by
+    have hprob' :
+        (Finset.sum P.index fun i => P.weight i) ≤ 1 := by
+      simpa [RealWeightProvider.SubProbability,
+        RealWeightProvider.totalWeight] using hprob
+    exact le_trans hprob' hone_le
+  exact
+    ofRealMajorant P.index threshold increment P.weight
+      hinc hle hprovider_bound
+
+/--
 Route theorem for externally supplied finite-step truncation estimates.
 
 This is a packaging wrapper around
@@ -807,6 +869,266 @@ theorem finiteStepTail_weightedHitMass_le_one_add_error
     H.analytic_bound
 
 end TruncationEnvelopeEstimate
+
+namespace RealWeightProvider
+
+/--
+Choose a positive rational number below a positive real number.
+
+This is the scalar rationalization primitive for DKMK-018D.  It uses density of
+`Rat` in `Real` and records the result in the order shape consumed by the
+rational finite-step route.
+-/
+theorem exists_positive_rat_below
+    {x : ℝ} (hx : 0 < x) :
+    ∃ q : ℚ, 0 < q ∧ (q : ℝ) ≤ x := by
+  rcases exists_rat_btwn hx with ⟨q, hq_pos, hq_lt⟩
+  refine ⟨q, ?_, le_of_lt hq_lt⟩
+  exact_mod_cast hq_pos
+
+/--
+Select a rational increment below each positive provider weight.
+
+Outside the provider index the value is irrelevant to all finite sums, so it is
+set to `0`.
+-/
+noncomputable def positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) : ι → ℚ :=
+  fun i =>
+    if hi : i ∈ P.index then
+      Classical.choose (exists_positive_rat_below (hpos i hi))
+    else
+      0
+
+/-- The selected rational increment is positive on the provider index. -/
+theorem positiveRatIncrementBelow_pos
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index, 0 < positiveRatIncrementBelow P hpos i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.1
+
+/-- The selected rational increment is bounded by the provider weight. -/
+theorem positiveRatIncrementBelow_le_weight
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index,
+      (positiveRatIncrementBelow P hpos i : ℝ) ≤ P.weight i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.2
+
+/--
+Finite-step truncation estimate using the provider's selected positive rational
+under-approximation.
+
+This is the DKMK-018D positive-rationalization surface.  It keeps the main
+route rational-valued while isolating the strict-positivity requirement needed
+to construct nonzero increments.
+-/
+theorem truncationEnvelope_of_positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold
+      (positiveRatIncrementBelow P hpos) error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    P threshold (positiveRatIncrementBelow P hpos)
+    (fun i hi => le_of_lt (positiveRatIncrementBelow_pos P hpos i hi))
+    (positiveRatIncrementBelow_le_weight P hpos)
+    herror hprob
+
+end RealWeightProvider
+
+namespace PrimePowerWitnessProvider
+
+/--
+Log-capacity Real provider, used as a Real majorant for a rational finite-step
+increment.
+
+This is the DKMK-018C assumed-rationalization route.  The rational increment is
+still supplied externally; the log-capacity provider supplies the Real
+sub-probability majorant.
+-/
+theorem logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    (increment : ℕ → ℚ)
+    (hinc : ∀ q ∈ I, 0 ≤ increment q)
+    (hle :
+      ∀ q ∈ I,
+        (increment q : ℝ) ≤
+          (W.logCapacityKernelRealWeightProvider n I hI hn).weight q)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold increment error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    (W.logCapacityKernelRealWeightProvider n I hI hn)
+    threshold
+    increment
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hinc)
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hle)
+    herror
+    (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
+/--
+Smoke-test connection from the log-capacity Real provider to the rational
+finite-step truncation route, using the zero rational increment.
+
+This proves the provider/API plumbing before choosing a nontrivial rational
+under-approximation policy.
+-/
+theorem logCapacityKernel_truncationEnvelope_zeroIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold (fun _ : ℕ => (0 : ℚ)) error :=
+  W.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    n I hI hn threshold (fun _ : ℕ => (0 : ℚ))
+    (by
+      intro _q _hq
+      norm_num)
+    (by
+      intro q hq
+      simpa using
+        (W.logCapacityKernelRealWeightProvider n I hI hn).weight_nonneg q hq)
+    herror
+
+/--
+The local log-capacity Real provider has strictly positive weights on its
+selected channel index.
+
+This is the source-specific positivity input needed by the DKMK-018D positive
+rationalization wrapper.
+-/
+theorem logCapacityKernelRealWeightProvider_weight_pos
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    ∀ q ∈ I,
+      0 < (W.logCapacityKernelRealWeightProvider n I hI hn).weight q := by
+  intro q hq
+  rw [logCapacityKernelRealWeightProvider_weight]
+  exact div_pos
+    (real_log_nat_pos_of_one_lt
+      ((W.basePrimeOf_prime_on n I hI q hq).one_lt))
+    (real_log_nat_pos_of_one_lt hn)
+
+/--
+Concrete log-capacity source replacement route using the selected positive
+rational under-approximation of the log-capacity weights.
+
+This packages DKMK-018C, DKMK-018D, and the source-specific positivity proof
+into a single truncation-envelope entry point.
+-/
+theorem logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider n I hI hn)
+        (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn))
+      error := by
+  simpa [logCapacityKernelRealWeightProvider_index] using
+    RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow
+      (W.logCapacityKernelRealWeightProvider n I hI hn)
+      threshold
+      (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn)
+      herror
+      (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
+/--
+Concrete log-capacity source replacement route all the way to the finite-step
+weighted-hit bound.
+
+This is the DKMK-018F chapter-end connection: the log-capacity Real source
+constructs its positive rational under-approximation, builds the truncation
+envelope, and then feeds the DKMK-017 finite-step route.
+-/
+theorem logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (IOf s.1)
+        threshold
+        (RealWeightProvider.positiveRatIncrementBelow
+          (W.logCapacityKernelRealWeightProvider
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+          (W.logCapacityKernelRealWeightProvider_weight_pos
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+        (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+          threshold herror).increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  exact
+    TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (IOf s.1)
+      threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+        (W.logCapacityKernelRealWeightProvider_weight_pos
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+      s hA
+      (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+        s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+        threshold herror)
+
+end PrimePowerWitnessProvider
 
 namespace DyadicBandAnalyticEstimate
 
@@ -872,6 +1194,44 @@ theorem ofMajorant
           ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) := by
       exact_mod_cast hsum
     exact le_trans hsumR hmajorant_bound
+
+/--
+Real-majorant provider for dyadic analytic estimates.
+
+This is the dyadic-band form of the DKMK-018B bridge.  It lets a Real-valued
+analytic envelope certify a rational dyadic increment without changing the
+finite-step mass route.
+-/
+theorem ofRealMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (majorant : ℕ → ℝ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), (increment k : ℝ) ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      (Finset.sum (Finset.range (K + 1)) fun k => majorant k) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have H :
+        TruncationEnvelopeEstimate
+          (Finset.range (K + 1))
+          (fun k : ℕ => x * 2^k)
+          increment
+          error :=
+      TruncationEnvelopeEstimate.ofRealMajorant
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        increment
+        majorant
+        hinc_nonneg
+        hle
+        hmajorant_bound
+    exact H.analytic_bound.total_le_one_add_error
 
 /--
 Pointwise geometric-majorant provider for dyadic analytic estimates.
