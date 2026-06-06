@@ -189,6 +189,9 @@ Archive
      閉じた。
 4. 検証:
    - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-019.md` and `History.md`
 5. 失敗事例:
    - なし。
 6. 次の課題:
@@ -305,5 +308,32 @@ Archive
 6. 次の課題:
    - façade が十分に短いか、さらに高階の theorem で結論側を隠すべきか
      判断する。
+
+---
+
+### 日時: 2026/06/06 22:11 JST (DKMK-019C path-family facade)
+
+1. 目的:
+   - DKMK-019B で残った conclusion 側の長い quotient-path application を
+     path-family façade に包む。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacitySourcePathFamily` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourcePathFamily_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily ...` は
+     `logCapacitySourcePathFamily W IOf hIOf s threshold` として短名化された。
+   - 最終 theorem は
+     `(W.logCapacitySourcePathFamily IOf hIOf s threshold).weightedHitMass A <=
+      1 + error`
+     という path-family 主語の形で読めるようになった。
+   - DKMK-019 の façade stack は source / envelope / mass / path-family /
+     weighted-hit bound まで揃った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-019 を completed façade chapter として総括するか判断する。
 
 ---

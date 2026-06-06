@@ -1242,6 +1242,48 @@ theorem logCapacitySource_weightedHitMass_le_one_add_error
       s hA
       (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold herror)
 
+/--
+Caller-facing weighted path family induced by the log-capacity source façade.
+
+This hides the quotient-path application and the finite-step source monotonicity
+proof behind one path-family name.
+-/
+noncomputable def logCapacitySourcePathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    RealWeightedPathFamily
+      (W.logCapacitySourceFiniteStepMass IOf hIOf s threshold) ℕ :=
+  W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+    IOf hIOf s
+    (W.logCapacitySourceFiniteStepMass_dvdMonotone IOf hIOf s threshold)
+
+/--
+Final caller-facing weighted-hit bound for the log-capacity source path family.
+
+The theorem statement now has the path family itself as the subject.
+-/
+theorem logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.logCapacitySourcePathFamily IOf hIOf s threshold).weightedHitMass A ≤
+      1 + error :=
+  W.logCapacitySource_weightedHitMass_le_one_add_error
+    IOf hIOf s threshold hA herror
+
 end PrimePowerWitnessProvider
 
 namespace DyadicBandAnalyticEstimate

@@ -257,3 +257,65 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 9. DKMK-019C Path-Family Facade
+
+DKMK-019C added the final path-family façade layer.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `PrimePowerWitnessProvider.logCapacitySourcePathFamily`
+- `PrimePowerWitnessProvider.logCapacitySourcePathFamily_weightedHitMass_le_one_add_error`
+
+### Result
+
+The quotient-path application is now named as a log-capacity source path
+family:
+
+```text
+logCapacitySourcePathFamily W IOf hIOf s threshold
+```
+
+The final weighted-hit theorem can now be read with the path family as the
+subject:
+
+```text
+(W.logCapacitySourcePathFamily IOf hIOf s threshold).weightedHitMass A
+  <= 1 + error
+```
+
+### Interpretation
+
+This completes the caller-facing façade stack:
+
+```text
+logCapacitySourceRatIncrement
+  -> logCapacitySourceTruncationEnvelope
+  -> logCapacitySourceFiniteStepMass
+  -> logCapacitySourcePathFamily
+  -> weightedHitMass bound
+```
+
+The theorem no longer exposes the raw `positiveRatIncrementBelow` expression
+or the raw quotient-path application in its final subject.
+
+### Decision
+
+Adopt `logCapacitySourcePathFamily` as the preferred caller-facing subject for
+the DKMK-019 route.
+
+The next checkpoint should decide whether DKMK-019 can be summarized as a
+completed façade chapter.
+
+### Verification
+
+DKMK-019C was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
