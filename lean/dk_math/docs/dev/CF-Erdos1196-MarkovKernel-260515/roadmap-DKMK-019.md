@@ -319,3 +319,30 @@ lake build DkMath.NumberTheory.PrimitiveSet
 git diff --check
 long-line check on changed docs
 ```
+
+## 10. DKMK-019 Completion
+
+DKMK-019 is complete as the LogCapacity source facade chapter.
+
+The preferred caller-facing theorem is:
+
+```lean
+PrimePowerWitnessProvider
+  .logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
+```
+
+Completion report:
+
+```text
+report-DKMK-019.md
+```
+
+Next branch candidates:
+
+```text
+threshold/support policy
+analytic source expansion
+```
+
+The threshold/support policy should probably come first, because the current
+source route now has a stable facade and can serve as the policy test surface.

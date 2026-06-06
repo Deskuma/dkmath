@@ -337,3 +337,29 @@ Archive
    - DKMK-019 を completed façade chapter として総括するか判断する。
 
 ---
+
+### 日時: 2026/06/07 01:51 JST (DKMK-019D completion report)
+
+1. 目的:
+   - DKMK-019 を LogCapacity source façade chapter として総括する。
+2. 実施:
+   - `report-DKMK-019.md` を追加した。
+   - `roadmap-DKMK-019.md` に DKMK-019C と completion 節を追記した。
+3. 結論:
+   - `logCapacitySourceRatIncrement` から
+     `logCapacitySourcePathFamily_weightedHitMass_le_one_add_error` までの
+     façade stack は完了した。
+   - DKMK-018 の analytic source route は、source / envelope / mass /
+     path-family / weighted-hit bound の caller-facing surface として
+     読めるようになった。
+   - DKMK-019 は completed façade chapter として閉じる。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-020 として threshold/support policy を先に扱うか、analytic source
+     expansion へ進むかを決める。
+
+---
