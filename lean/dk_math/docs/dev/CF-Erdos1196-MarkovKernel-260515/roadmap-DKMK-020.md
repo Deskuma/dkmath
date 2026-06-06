@@ -219,3 +219,77 @@ For this docs-only setup:
 git diff --check
 long-line check on changed docs
 ```
+
+## 9. DKMK-020B Policy Wrapper Implementation
+
+DKMK-020B implemented the first threshold/support policy surface.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `LogCapacitySourcePolicy`
+- `PrimePowerWitnessProvider.logCapacityPolicyPathFamily`
+- `PrimePowerWitnessProvider.logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error`
+
+### Result
+
+The loose caller-facing inputs:
+
+```text
+IOf : Nat -> Finset Nat
+hIOf : forall n q, q in IOf n -> q in T.toDivisorTransitionKernel.index n
+threshold : Nat -> Nat
+```
+
+are now packaged as:
+
+```text
+P : LogCapacitySourcePolicy T
+```
+
+The policy-facing path-family subject is:
+
+```text
+W.logCapacityPolicyPathFamily P s
+```
+
+The final theorem now reads:
+
+```text
+(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error
+```
+
+### Compatibility Decision
+
+No support-compatibility or threshold-monotonicity predicate was added in
+DKMK-020B.
+
+The current DKMK-019 route only needs the support family, its index proof, and
+the threshold map.  Adding unused validity fields now would make later wrappers
+heavier without proving new route facts.
+
+If later steps need extra policy conditions, they should be added as separate
+predicates such as:
+
+```text
+LogCapacitySourcePolicy.Valid
+LogCapacitySourcePolicy.SupportCompatible
+```
+
+### Verification
+
+DKMK-020B was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
+
+### Next Checkpoint
+
+DKMK-020C should decide whether the thin policy object is sufficient as the
+chapter endpoint, or whether a separate validity predicate is needed before
+closing DKMK-020.

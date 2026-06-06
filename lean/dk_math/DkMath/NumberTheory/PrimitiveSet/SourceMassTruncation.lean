@@ -961,6 +961,19 @@ theorem truncationEnvelope_of_positiveRatIncrementBelow
 
 end RealWeightProvider
 
+/--
+Named support and threshold policy for the log-capacity source route.
+
+This packages the loose `IOf`, `hIOf`, and `threshold` inputs used by the
+DKMK-019 façade without adding a support-compatibility predicate yet.
+-/
+structure LogCapacitySourcePolicy
+    (T : PrimePowerDivisorTransitionKernel) where
+  IOf : ℕ → Finset ℕ
+  hIOf :
+    ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+  threshold : ℕ → ℕ
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -1283,6 +1296,41 @@ theorem logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
       1 + error :=
   W.logCapacitySource_weightedHitMass_le_one_add_error
     IOf hIOf s threshold hA herror
+
+/--
+Policy-facing weighted path family for the log-capacity source route.
+
+This is the DKMK-020 façade over `logCapacitySourcePathFamily`, replacing the
+loose `IOf`, `hIOf`, and `threshold` inputs by one named policy object.
+-/
+noncomputable def logCapacityPolicyPathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (P : LogCapacitySourcePolicy T)
+    (s : LogCapacityState) :
+    RealWeightedPathFamily
+      (W.logCapacitySourceFiniteStepMass P.IOf P.hIOf s P.threshold) ℕ :=
+  W.logCapacitySourcePathFamily P.IOf P.hIOf s P.threshold
+
+/--
+Policy-facing weighted-hit bound for the log-capacity source route.
+
+The theorem statement exposes the named threshold/support policy as a single
+input and otherwise reuses the DKMK-019 path-family endpoint.
+-/
+theorem logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (P : LogCapacitySourcePolicy T)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.logCapacityPolicyPathFamily P s).weightedHitMass A ≤
+      1 + error :=
+  W.logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
+    P.IOf P.hIOf s P.threshold hA herror
 
 end PrimePowerWitnessProvider
 

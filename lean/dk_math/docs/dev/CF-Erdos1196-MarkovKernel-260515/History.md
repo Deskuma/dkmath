@@ -387,3 +387,35 @@ Archive
      policy wrapper theorem を Lean 実装する。
 
 ---
+
+### 日時: 2026/06/07 02:22 JST (DKMK-020B policy wrapper implementation)
+
+1. 目的:
+   - `IOf`、`hIOf`、`threshold` を名前付き policy surface に包む。
+2. 実施:
+   - `LogCapacitySourcePolicy` を追加した。
+   - `PrimePowerWitnessProvider.logCapacityPolicyPathFamily` を追加した。
+   - `PrimePowerWitnessProvider.logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error`
+     を追加した。
+   - `roadmap-DKMK-020.md` に DKMK-020B の結果を追記した。
+3. 結論:
+   - DKMK-019 の loose inputs は `P : LogCapacitySourcePolicy T` として
+     束ねられた。
+   - 最終 theorem は
+     `(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error`
+     として読めるようになった。
+   - support compatibility や threshold monotonicity は未使用なので、
+     DKMK-020B では構造体に入れなかった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - repo root で `lake build` を実行すると lakefile が見つからなかった。
+     `lean/dk_math` を working directory として再実行し成功した。
+6. 次の課題:
+   - DKMK-020C で thin policy object だけで十分か、別 predicate として
+     validity / compatibility を追加すべきか判断する。
+
+---
