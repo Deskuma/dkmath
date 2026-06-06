@@ -369,3 +369,42 @@ The next checkpoint should be:
 ```text
 report-DKMK-020.md
 ```
+
+## 11. DKMK-020 Completion
+
+DKMK-020 is complete as the threshold/support policy API chapter.
+
+The accepted endpoint is:
+
+```lean
+PrimePowerWitnessProvider
+  .logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error
+```
+
+The final theorem reads:
+
+```text
+(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error
+```
+
+The policy object remains data-only:
+
+```text
+P : LogCapacitySourcePolicy T
+```
+
+Completion report:
+
+```text
+report-DKMK-020.md
+```
+
+Next branch candidates:
+
+```text
+source expansion survey
+policy validity requirements survey
+```
+
+Do not add `Valid`, `SupportCompatible`, or `ThresholdMonotone` fields until a
+later theorem actually requires them.

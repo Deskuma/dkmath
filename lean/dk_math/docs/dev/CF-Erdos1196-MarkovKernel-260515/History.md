@@ -443,3 +443,31 @@ Archive
    - `report-DKMK-020.md` を作成し、DKMK-020 を総括する。
 
 ---
+
+### 日時: 2026/06/07 06:07 JST (DKMK-020D completion report)
+
+1. 目的:
+   - DKMK-020 を threshold/support policy API chapter として総括する。
+2. 実施:
+   - `report-DKMK-020.md` を追加した。
+   - `roadmap-DKMK-020.md` に completion 節を追記した。
+3. 結論:
+   - DKMK-019 の loose inputs だった `IOf`、`hIOf`、`threshold` は
+     `P : LogCapacitySourcePolicy T` に束ねられた。
+   - policy-facing theorem は
+     `(W.logCapacityPolicyPathFamily P s).weightedHitMass A <= 1 + error`
+     として読めるようになった。
+   - DKMK-020 は threshold 最適化章ではなく、threshold/support choices を
+     public API 上の policy input に昇格する章として閉じる。
+   - validity / compatibility / monotonicity は将来必要になった時に
+     別 predicate として追加する。
+4. 検証:
+   - `git diff --check`
+   - long-line check on changed docs
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-021 として source expansion survey または
+     policy validity requirements survey を開始する。
+
+---
