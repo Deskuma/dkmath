@@ -157,6 +157,9 @@ Archive
      または positive-weight support restriction が次の入力になる。
 4. 検証:
    - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `git diff --check`
+   - long-line check on `roadmap-DKMK-019.md` and `History.md`
 5. 失敗事例:
    - なし。
 6. 次の課題:
@@ -271,5 +274,36 @@ Archive
 6. 次の課題:
    - `SourceMassTruncation.lean` で `logCapacitySourceRatIncrement` から
      `logCapacitySourceTruncationEnvelope` までを Lean 実装する。
+
+---
+
+### 日時: 2026/06/06 20:35 JST (DKMK-019B LogCapacity source facade implementation)
+
+1. 目的:
+   - DKMK-018F の長い source construction を、caller-facing façade に包む。
+2. 実施:
+   - `PrimePowerWitnessProvider.logCapacitySourceRatIncrement` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceTruncationEnvelope` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass` を追加した。
+   - `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass_dvdMonotone` を
+     追加した。
+   - `PrimePowerWitnessProvider.logCapacitySource_weightedHitMass_le_one_add_error`
+     を追加した。
+3. 結論:
+   - `positiveRatIncrementBelow (...)` は
+     `logCapacitySourceRatIncrement W IOf hIOf s` として短名化された。
+   - finite-step mass-space construction は
+     `logCapacitySourceFiniteStepMass` と
+     `logCapacitySourceFiniteStepMass_dvdMonotone` に包まれた。
+   - weighted-hit route は
+     `logCapacitySource_weightedHitMass_le_one_add_error` として読めるように
+     なった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - façade が十分に短いか、さらに高階の theorem で結論側を隠すべきか
+     判断する。
 
 ---

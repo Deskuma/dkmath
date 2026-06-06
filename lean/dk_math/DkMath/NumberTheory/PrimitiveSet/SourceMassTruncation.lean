@@ -1128,6 +1128,120 @@ theorem logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error
         s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
         threshold herror)
 
+/--
+Caller-facing rational log-capacity source at a global log-capacity state.
+
+This hides the `RealWeightProvider.positiveRatIncrementBelow` construction used
+by the DKMK-018 source replacement route.
+-/
+noncomputable def logCapacitySourceRatIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState) : ℕ → ℚ :=
+  RealWeightProvider.positiveRatIncrementBelow
+    (W.logCapacityKernelRealWeightProvider
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+    (W.logCapacityKernelRealWeightProvider_weight_pos
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+
+/--
+Truncation envelope for the caller-facing log-capacity rational source.
+
+This is the DKMK-019 façade over
+`logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow`.
+-/
+theorem logCapacitySourceTruncationEnvelope
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate (IOf s.1) threshold
+      (W.logCapacitySourceRatIncrement IOf hIOf s) error := by
+  simpa [logCapacitySourceRatIncrement] using
+    W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2 threshold herror
+
+/--
+Finite-step mass space supplied by the caller-facing log-capacity source.
+-/
+noncomputable def logCapacitySourceFiniteStepMass
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    MassSpace ℕ :=
+  finiteStepTailNatMassSpace
+    (IOf s.1)
+    threshold
+    (W.logCapacitySourceRatIncrement IOf hIOf s)
+    (fun q hq =>
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold
+        (show (0 : ℝ) ≤ 0 by norm_num)).increment_nonneg q hq)
+
+/--
+Divisibility monotonicity for the caller-facing log-capacity finite-step mass.
+-/
+def logCapacitySourceFiniteStepMass_dvdMonotone
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    DvdMonotoneMass
+      (W.logCapacitySourceFiniteStepMass IOf hIOf s threshold) :=
+  finiteStepTailNatMassSpace_dvdMonotone
+    (IOf s.1)
+    threshold
+    (W.logCapacitySourceRatIncrement IOf hIOf s)
+    (fun q hq =>
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold
+        (show (0 : ℝ) ≤ 0 by norm_num)).increment_nonneg q hq)
+
+/--
+Caller-facing weighted-hit bound for the log-capacity source façade.
+
+The conclusion mentions the façade mass-space monotonicity proof rather than
+the raw `positiveRatIncrementBelow` expression.
+-/
+theorem logCapacitySource_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (W.logCapacitySourceFiniteStepMass_dvdMonotone
+        IOf hIOf s threshold)).weightedHitMass A ≤
+      1 + error := by
+  exact
+    TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (IOf s.1)
+      threshold
+      (W.logCapacitySourceRatIncrement IOf hIOf s)
+      s hA
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold herror)
+
 end PrimePowerWitnessProvider
 
 namespace DyadicBandAnalyticEstimate

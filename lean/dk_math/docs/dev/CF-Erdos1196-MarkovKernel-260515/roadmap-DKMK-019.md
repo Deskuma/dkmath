@@ -177,3 +177,83 @@ For this docs-only setup:
 git diff --check
 long-line check on changed docs
 ```
+
+## 8. DKMK-019B Facade Implementation
+
+DKMK-019B implemented the first caller-facing façade bundle.
+
+### Lean additions
+
+Added to `SourceMassTruncation.lean`:
+
+- `PrimePowerWitnessProvider.logCapacitySourceRatIncrement`
+- `PrimePowerWitnessProvider.logCapacitySourceTruncationEnvelope`
+- `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass`
+- `PrimePowerWitnessProvider.logCapacitySourceFiniteStepMass_dvdMonotone`
+- `PrimePowerWitnessProvider.logCapacitySource_weightedHitMass_le_one_add_error`
+
+### Result
+
+The full façade bundle is accepted.
+
+The positive-rational source is now named:
+
+```text
+logCapacitySourceRatIncrement W IOf hIOf s
+```
+
+The truncation envelope is now exposed as:
+
+```text
+logCapacitySourceTruncationEnvelope W IOf hIOf s threshold herror
+```
+
+The finite-step mass-space layer is now named:
+
+```text
+logCapacitySourceFiniteStepMass W IOf hIOf s threshold
+logCapacitySourceFiniteStepMass_dvdMonotone W IOf hIOf s threshold
+```
+
+The final caller-facing theorem is:
+
+```text
+logCapacitySource_weightedHitMass_le_one_add_error
+```
+
+Its conclusion mentions the façade monotonicity proof instead of the raw
+`positiveRatIncrementBelow` expression.
+
+### Interpretation
+
+This does not change the mathematics of DKMK-018.
+
+The change is API-facing:
+
+```text
+positiveRatIncrementBelow (...)      -> logCapacitySourceRatIncrement
+finiteStepTailNatMassSpace (...)     -> logCapacitySourceFiniteStepMass
+weighted-hit route wrapper           -> logCapacitySource_weightedHitMass...
+```
+
+The route now reads as a named log-capacity source rather than as an exposed
+construction chain.
+
+### Decision
+
+Adopt this façade bundle as the DKMK-019B surface.
+
+The next checkpoint should decide whether the façade is sufficiently short, or
+whether a still higher-level theorem should hide the monotonicity proof name in
+the weighted-hit conclusion.
+
+### Verification
+
+DKMK-019B was checked with:
+
+```text
+lake build DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation
+lake build DkMath.NumberTheory.PrimitiveSet
+git diff --check
+long-line check on changed docs
+```
