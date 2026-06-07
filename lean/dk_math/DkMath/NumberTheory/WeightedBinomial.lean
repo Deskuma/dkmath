@@ -28,6 +28,10 @@ bridge belongs to the later CFBRC/GN checkpoint.
 def weightedBinomialTerm (d k x u : ℕ) : ℕ :=
   Nat.choose d k * x ^ k * u ^ (d - k)
 
+/-- All inner weighted terms in row `d` are divisible by `m`. -/
+def AllInnerWeightedTermDivisible (d m x u : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d → m ∣ weightedBinomialTerm d k x u
+
 /-- Divisibility coming from the binomial coefficient. -/
 theorem dvd_weightedBinomialTerm_of_dvd_choose
     {q d k x u : ℕ}
@@ -68,6 +72,25 @@ theorem allInnerChooseDivisible_dvd_inner_weightedBinomialTerm
   dvd_weightedBinomialTerm_of_dvd_choose
     (allInnerChooseDivisible_dvd_choose h hk0 hkd)
 
+/--
+Coefficient-level inner divisibility lifts to the whole weighted inner row.
+-/
+theorem allInnerChooseDivisible_allInnerWeightedTermDivisible
+    {m d x u : ℕ}
+    (h : AllInnerChooseDivisible d m) :
+    AllInnerWeightedTermDivisible d m x u := by
+  intro k hk0 hkd
+  exact allInnerChooseDivisible_dvd_inner_weightedBinomialTerm h hk0 hkd
+
+/--
+Unpack `AllInnerWeightedTermDivisible` at a concrete inner index.
+-/
+theorem allInnerWeightedTermDivisible_dvd_term
+    {d m k x u : ℕ}
+    (h : AllInnerWeightedTermDivisible d m x u) (hk0 : 0 < k) (hkd : k < d) :
+    m ∣ weightedBinomialTerm d k x u :=
+  h k hk0 hkd
+
 /-- In a prime row, every inner weighted term is divisible by that prime. -/
 theorem prime_dvd_inner_weightedBinomialTerm
     {p k x u : ℕ}
@@ -75,6 +98,27 @@ theorem prime_dvd_inner_weightedBinomialTerm
     p ∣ weightedBinomialTerm p k x u :=
   dvd_weightedBinomialTerm_of_dvd_choose
     (prime_dvd_inner_choose hp hk0 hkp)
+
+/-- Prime rows make all inner weighted terms divisible by the row prime. -/
+theorem prime_allInnerWeightedTermDivisible
+    {p x u : ℕ} (hp : p.Prime) :
+    AllInnerWeightedTermDivisible p p x u :=
+  allInnerChooseDivisible_allInnerWeightedTermDivisible
+    (prime_allInnerChooseDivisible_self hp)
+
+/-- Inner weighted terms inherit divisibility from `x`. -/
+theorem dvd_inner_weightedBinomialTerm_of_dvd_x
+    {q d k x u : ℕ}
+    (h : q ∣ x) (hk0 : 0 < k) (_hkd : k < d) :
+    q ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_x h hk0
+
+/-- Inner weighted terms inherit divisibility from `u`. -/
+theorem dvd_inner_weightedBinomialTerm_of_dvd_u
+    {q d k x u : ℕ}
+    (h : q ∣ u) (_hk0 : 0 < k) (hkd : k < d) :
+    q ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_u h hkd
 
 /-- The left boundary term is `u^d`. -/
 theorem weightedBinomialTerm_left

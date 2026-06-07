@@ -219,3 +219,28 @@ git diff --check
 ```
 
 新規補題に `sorry` / `axiom` / `admit` はありません。
+
+### 2026/06/08  5:35
+
+次の軽い層として、weighted inner row 全体を扱う API を追加しました。
+
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:31) に追加:
+
+- `AllInnerWeightedTermDivisible`
+- `allInnerChooseDivisible_allInnerWeightedTermDivisible`
+- `allInnerWeightedTermDivisible_dvd_term`
+- `prime_allInnerWeightedTermDivisible`
+- `dvd_inner_weightedBinomialTerm_of_dvd_x`
+- `dvd_inner_weightedBinomialTerm_of_dvd_u`
+
+これで、係数列側の「内側が全部割れる」を、そのまま重み付き三角形の内側項列へ持ち上げられます。
+
+確認済みです。
+
+```bash
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+`sorry` / `axiom` / `admit` も入っていません。
