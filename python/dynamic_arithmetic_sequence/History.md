@@ -244,3 +244,26 @@ git diff --check
 ```
 
 `sorry` / `axiom` / `admit` も入っていません。
+
+### 2026/06/08  5:37
+
+次の軽い補題層として、行全体を扱う API を追加しました。
+
+[WeightedBinomial.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:35) に追加:
+
+- `AllWeightedTermDivisible`
+- `allWeightedTermDivisible_dvd_term`
+- `allWeightedTermDivisible_of_dvd_x_dvd_u`
+- `allWeightedTermDivisible_allInnerWeightedTermDivisible`
+
+これで、`x` と `u` の両方が同じ因子 `q` を運ぶなら、正の次数 `d` の weighted row 全体が `q` を運ぶ、という形を使えます。境界 `u^d` / `x^d` と内側項をまとめて扱えるので、次の GN/CFBRC bridge に渡しやすくなりました。
+
+確認済みです。
+
+```bash
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+`sorry` / `axiom` / `admit` は入っていません。

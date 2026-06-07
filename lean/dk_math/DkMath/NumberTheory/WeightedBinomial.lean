@@ -32,6 +32,10 @@ def weightedBinomialTerm (d k x u : ℕ) : ℕ :=
 def AllInnerWeightedTermDivisible (d m x u : ℕ) : Prop :=
   ∀ k, 0 < k → k < d → m ∣ weightedBinomialTerm d k x u
 
+/-- All weighted terms in row `d`, including both boundary vertices, are divisible by `m`. -/
+def AllWeightedTermDivisible (d m x u : ℕ) : Prop :=
+  ∀ k, k ≤ d → m ∣ weightedBinomialTerm d k x u
+
 /-- Divisibility coming from the binomial coefficient. -/
 theorem dvd_weightedBinomialTerm_of_dvd_choose
     {q d k x u : ℕ}
@@ -91,6 +95,15 @@ theorem allInnerWeightedTermDivisible_dvd_term
     m ∣ weightedBinomialTerm d k x u :=
   h k hk0 hkd
 
+/--
+Unpack `AllWeightedTermDivisible` at a concrete index in the row.
+-/
+theorem allWeightedTermDivisible_dvd_term
+    {d m k x u : ℕ}
+    (h : AllWeightedTermDivisible d m x u) (hkd : k ≤ d) :
+    m ∣ weightedBinomialTerm d k x u :=
+  h k hkd
+
 /-- In a prime row, every inner weighted term is divisible by that prime. -/
 theorem prime_dvd_inner_weightedBinomialTerm
     {p k x u : ℕ}
@@ -145,6 +158,35 @@ theorem dvd_weightedBinomialTerm_right_of_dvd_x
     (h : q ∣ x) (hd : 0 < d) :
     q ∣ weightedBinomialTerm d d x u := by
   simpa [weightedBinomialTerm_right] using h.pow hd.ne'
+
+/--
+If both boundary units carry `q`, then every term in a positive weighted row
+carries `q`.
+-/
+theorem allWeightedTermDivisible_of_dvd_x_dvd_u
+    {q d x u : ℕ}
+    (hd : 0 < d) (hx : q ∣ x) (hu : q ∣ u) :
+    AllWeightedTermDivisible d q x u := by
+  intro k hkd
+  by_cases hk0 : k = 0
+  · subst hk0
+    exact dvd_weightedBinomialTerm_left_of_dvd_u hu hd
+  · by_cases hkd_eq : k = d
+    · subst hkd_eq
+      exact dvd_weightedBinomialTerm_right_of_dvd_x hx hd
+    · have hk_pos : 0 < k := Nat.pos_of_ne_zero hk0
+      have hk_lt : k < d := by omega
+      exact dvd_inner_weightedBinomialTerm_of_dvd_x hx hk_pos hk_lt
+
+/--
+The full-row statement restricts to the inner-row statement.
+-/
+theorem allWeightedTermDivisible_allInnerWeightedTermDivisible
+    {d m x u : ℕ}
+    (h : AllWeightedTermDivisible d m x u) :
+    AllInnerWeightedTermDivisible d m x u := by
+  intro k hk0 hkd
+  exact h k hkd.le
 
 end NumberTheory
 end DkMath
