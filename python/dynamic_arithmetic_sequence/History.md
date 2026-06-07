@@ -155,3 +155,19 @@ lake build DkMath
 検証は docs-only なので Lean build は回さず、`git diff --check` を通しました。
 
 補足: `git status` には既存の `lean/dk_math/DkMath/DHNT/docs/DHNT_DAS_Note.md` と `python/dynamic_arithmetic_sequence/lean-implements-design.md` の変更も出ていますが、今回こちらで編集したのは新規追加した `Sequence/docs/DHNT-DAS-reinterpretation.md` だけです。
+
+### 2026/06/08  1:31
+
+実装前の地固めとして、ロードマップ文書を追加しました。
+
+追加ファイル: [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+
+中身は、二項係数から素数性を読む `BinomialPrime` と、`choose d k * x^k * u^(d-k)` の可除性を分離する `WeightedBinomial` を、段階的に実装する計画です。特に「まず Zsigmondy へ急がず、係数由来・x 由来・u 由来の因子を Lean 上で区別する」という方針に寄せています。
+
+確認済みです。
+
+```bash
+git diff --check
+```
+
+Lean ファイルはまだ増やしていないので、今回は `lake build` は走らせていません。次の実装チェックポイントは `DkMath.NumberTheory.BinomialPrime` の最小 API、つまり `AllInnerChooseDivisible` と prime 段の内側二項係数可除性です。
