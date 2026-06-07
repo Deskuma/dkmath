@@ -19,5 +19,6 @@ import DkMath.KUS.Coeff
 import DkMath.KUS.Examples
 import DkMath.KUS.Bridge
 import DkMath.KUS.CosmicBridge
+import DkMath.KUS.DynamicArithmeticSequence
 
 #print "file: DkMath.KUS"
