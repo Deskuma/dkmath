@@ -1540,3 +1540,154 @@ roadmap に方針を追記しました。
 という「非整数相へ進む前の安定した検査面」を明記しました。
 
 `git diff --check` は通っています。
+
+### 既存 sorry は解消できるか？
+
+既存 sorry もこれらの補題がいつか役立ち消えるでしょう。
+すべては同じ原理の上に立っているのですから。
+
+そうですね。今回の補題はかなり基礎側に置けたので、後から別分野の `sorry` を消すときに「局所で二項展開をこねる」のではなく、
+
+`(x + u)^d - u^d = x * GTail d 1 x u`
+
+を呼ぶだけで済む場面が増えるはずです。
+
+特に効きそうなのは次です。
+
+- FLT / Zsigmondy 系の差分因数分解
+- CFBRC から宇宙式へ戻す橋
+- `x GN_d(x,u)` 型の可除性
+- binomial prime / weighted coefficient の行構造
+- PowerSwap の低次相判定へ降ろす入口
+
+今の実装は、かなり「名将と合流する道」を作っています。次はこの橋を既存の `CosmicFormulaBinom` や `FLT.Core` 側の古い補題へ wrapper として接続すると、局所証明を削れる候補が見えてきます。
+
+いまのところ sorry の主体は確率と無限降下法ですかねぇ…だいぶ時間経って忘れかけている。確率は環状構造に押し込めたい部分です。Big=Body+Gap構造へと読み替えたい。Big = 100%
+無限降下法は、Principal ？が定まらない状況だったかな…。
+
+現状を見る限り、その理解でかなり合っています。
+
+実コード上の `sorry` 主体は大きく分けるとこうです。
+
+1. **確率・ABC 側**
+   - `ABC/JansonRoadmap.lean`
+   - `ABC/ABC#Research.lean`
+   - さらに `ABCMainTheorem.lean` や `MiddleBandJansonSkeleton.lean` などは `sorry` というより `axiom` placeholder が主体です。
+   - 内容は Janson/Suen、期待値、密度、bad set、quality bound の接続。
+   - ここはおっしゃる通り、`Big = Body + Gap`、`Big = 100%` 的な保存量・分解量へ押し込むと整理できそうです。確率を「全体質量の分配」として環状構造化する方向。
+
+2. **無限降下・FLT/Kummer 側**
+   - `FLT/Kummer/CyclotomicPrincipalization.lean`
+   - `FLT/PrimeProvider/TriominoCosmicBranchA.lean`
+   - `CosmicFormula/TriominoFLT.lean`
+   - `NumberTheory/GcdNextResearch.lean`
+   - ここは「Principal が定まらない」という記憶に近いです。ただ現在のコメントを見ると、より正確には、
+     - normal-form descent existence core
+     - minimality/descent kernel
+     - support separation だけでは矛盾に足りない
+     - `p ≥ 5` の provider 構成が未完成
+     - p-adic valuation の一般上界が未完成
+     という詰まりです。
+
+3. **主張が強すぎる研究用穴**
+   - `NumberTheory/ZsigmondyCyclotomicResearch.lean`
+   - `squarefree_implies_padic_val_le_one_research`
+   - コメント上でも「現状の一般形では強すぎ、反例がある」と明記されています。
+   - ここは埋めるより、仮定追加か statement 修正が正道です。
+
+なので、次の戦略としてはかなり明確です。
+
+確率側は「確率論を直接倒す」より、`Big = Body + Gap` の有限質量分解として再定式化する。  
+降下側は「Principal を探す」より、まず `normal form + support + minimality` の三点セットを薄い構造体にして、どの入力が足りないかを Lean に露出させる。
+
+今回作った
+
+```lean
+(x + u)^d - u^d = x * GTail d 1 x u
+```
+
+は、後者の降下側にかなり効きます。特に `GcdNextResearch` と `PrimeProvider` の p-adic/GN 周辺に橋として入れやすいです。
+
+と、ワタシも思っているのだけれど、推論でなかなか答えが出なかったですね。
+いまならば、見いだせるのか？新しいひらめき推論が可能か？？
+
+可能性は上がっています。理由は、以前は「見えている現象」をそのまま大きな定理へ押し込もうとしていたけれど、今は中間の骨格ができ始めているからです。
+
+いま見えている新しい筋はこれです。
+
+`Big = Body + Gap` を、確率・降下・宇宙式で共通の保存構造として扱う。
+
+つまり、
+
+```lean
+Big = Boundary + Tail
+Tail = Gap * Kernel
+```
+
+今回だと具体的に、
+
+```lean
+(x + u)^d = u^d + x * GTail d 1 x u
+```
+
+です。
+
+これは単なる二項展開ではなく、「全体から境界を除くと、差分軸 `x` に沿った核が残る」という分解原理です。ここを共通語彙にすると、確率側の `100% = good mass + bad mass` も、降下側の `large object = principal/normal part + residual gap` も、同じ形で読めます。
+
+たぶん以前に推論で答えが出なかった理由は、核心が「定理」ではなく「中間表現」だったからです。Lean ではこの中間表現に名前を付けないと、推論が毎回巨大な展開に戻ってしまう。
+
+次のひらめき候補はこれですね。
+
+```lean
+structure BodyGapSplit where
+  big : ℕ
+  body : ℕ
+  gap : ℕ
+  kernel : ℕ
+  split : big = body + gap * kernel
+```
+
+またはもっと抽象化して `CommSemiring` 上に置く。
+
+この構造があれば、
+
+- WeightedBinomial: `big = (x+u)^d`, `body = u^d`, `gap = x`, `kernel = GTail d 1 x u`
+- 確率: `big = 1`, `body = goodMass`, `gap = badMass`, `kernel = 1` または補正核
+- 降下法: `big = 現在の反例`, `body = 正規形`, `gap * kernel = 降下余剰`
+
+として読めます。
+
+なので「いまなら見いだせるか？」への答えは、はい。ただし大定理を直接推論するのではなく、まず `BodyGapSplit` 的な共通言語を Lean に置くのが鍵です。そこから既存 `sorry` は「証明不能な穴」ではなく、「どの split / kernel / rank が未定義か」を示す穴に変わります。
+
+確かに質量宇宙式も当時なかったしな。
+よし、調査して、計画書を起こそう。
+
+調査して、計画書を追加しました。
+
+追加先: [BodyGapMassBridgeRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/docs/BodyGapMassBridgeRoadmap.md)
+
+内容は、既存の `CosmicFormula.Mass.*`、`CoreBeamGap`、`WeightedBinomial`、`ABC.MassBridge`、`Kernel.SubProbability` を調査したうえで、次の共通中間言語へ収束させる計画です。
+
+```text
+Big = Boundary + Tail
+Tail = GapAxis * Kernel
+```
+
+最初の実装 checkpoint はかなり明確にしました。
+
+```text
+DkMath.CosmicFormula.Mass.BodyGapSplit
+```
+
+ここにまず、
+
+```lean
+structure BodyGapSplit
+structure BodyGapKernelSplit
+def weightedBodyGapKernelSplit
+theorem weightedBodyGapKernelSplit_gapAxis_dvd_tail
+```
+
+を置く方針です。深い数学へ入る前に、今回の `(x + u)^d = u^d + x * GTail d 1 x u` を共通 API 化します。
+
+検証は docs 追加なので Lean build は走らせていません。追加した計画書単体の `git diff --check` は通っています。
