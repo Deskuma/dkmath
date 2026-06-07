@@ -171,3 +171,32 @@ git diff --check
 ```
 
 Lean ファイルはまだ増やしていないので、今回は `lake build` は走らせていません。次の実装チェックポイントは `DkMath.NumberTheory.BinomialPrime` の最小 API、つまり `AllInnerChooseDivisible` と prime 段の内側二項係数可除性です。
+
+### 2026/06/08  4:30
+
+進めました。Phase 1 と Phase 2 の確実に閉じる部分を Lean 実装しています。
+
+追加:
+
+- [BinomialPrime.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrime.lean#L25)
+  - `AllInnerChooseDivisible`
+  - `prime_allInnerChooseDivisible_self`
+  - `prime_dvd_inner_choose`
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L27)
+  - `weightedBinomialTerm`
+  - 係数由来 / `x` 由来 / `u` 由来の可除性補題
+  - `prime_dvd_inner_weightedBinomialTerm`
+  - 境界項 `u^d`, `x^d`
+
+`DkMath.lean` にも import を追加しました。新規ファイルに `sorry` / `axiom` / `admit` はありません。
+
+確認:
+
+```bash
+lake build DkMath.NumberTheory.BinomialPrime
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+全部通っています。`prime_iff_allInnerChooseDivisible_self` の逆向きは、証明負荷が大きいので今回は無理に入れず、まず可除性 API を固めました。次はこの逆向きの証明経路を調査するか、先に `WeightedBinomial` と GN/CFBRC の橋を薄く作るのが自然です。

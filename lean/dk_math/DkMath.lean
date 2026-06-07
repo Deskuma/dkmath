@@ -20,6 +20,8 @@ import DkMath.Zsigmondy  -- Zsigmondy bridge layer
 import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations
 -- NumberTheory Module
 import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Fillability
+import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
+import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
