@@ -5,12 +5,15 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.BinomialPrime
+import DkMath.Lib.Cosmic.GTail
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
 #print "file: DkMath.NumberTheory.WeightedBinomial"
 
 namespace DkMath
 namespace NumberTheory
+
+open DkMath.CosmicFormula
 
 /-!
 ## Weighted binomial terms
@@ -216,6 +219,28 @@ theorem dvd_weightedBinomialRowSum_of_dvd_x_dvd_u
     q ∣ weightedBinomialRowSum d x u :=
   dvd_weightedBinomialRowSum_of_allWeightedTermDivisible
     (allWeightedTermDivisible_of_dvd_x_dvd_u hd hx hu)
+
+/--
+The weighted row sum is the `r = 0` cosmic tail.
+-/
+theorem weightedBinomialRowSum_eq_GTail_zero
+    (d x u : ℕ) :
+    weightedBinomialRowSum d x u = GTail d 0 x u := by
+  unfold weightedBinomialRowSum weightedBinomialTerm GTail
+  apply Finset.sum_congr rfl
+  intro k hk
+  simp [mul_assoc]
+
+/--
+The weighted row sum is the ordinary binomial expansion `(x + u)^d`.
+
+This is routed through the library kernel `GTail_zero_eq_add_pow`.
+-/
+theorem weightedBinomialRowSum_eq_add_pow
+    (d x u : ℕ) :
+    weightedBinomialRowSum d x u = (x + u) ^ d := by
+  rw [weightedBinomialRowSum_eq_GTail_zero]
+  exact GTail_zero_eq_add_pow d x u
 
 end NumberTheory
 end DkMath

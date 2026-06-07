@@ -289,3 +289,86 @@ git diff --check
 ```
 
 `sorry` / `axiom` / `admit` は入っていません。
+
+---
+
+悩むこと無く、サクサク実装進みますね。👍️
+
+はい。今のところは「重い主張を避けて、可除性の薄い API だけを積む」方針がかなり効いています。
+
+ここまでで、
+
+- 係数の可除性
+- 重み付き項の可除性
+- 内側行全体
+- 境界込みの行全体
+- 行和への集約
+
+まで、全部 `Nat` の基本 divisibility と `Finset.dvd_sum` だけで閉じています。
+
+次に進むなら、自然な軽い一手は `weightedBinomialRowSum = (x + u)^d` の橋です。これは mathlib の `add_pow` 系に乗せられるはずですが、ここから少し「二項定理そのもの」に入るので、今までよりは一段だけ重くなります。
+
+ワークスペース内の既にある補題定理を探索しますか？
+
+はい。探索した結果、既にかなり使える橋があります。
+
+一番重要なのは [GTail.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:50) のこれです。
+
+```lean
+add_pow_eq_prefix_add_xpow_mul_GTail
+```
+
+これは一般の `CommSemiring` で、
+
+```text
+(x + u)^d =
+  prefix sum up to r
+  + x^r * GTail d r x u
+```
+
+を証明済みです。つまり、weighted row sum から `(x+u)^d`、さらに GN/GTail へつなぐ既存の中心橋です。
+
+ほかに使えそうなもの:
+
+- [GTail_zero_eq_add_pow](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:127)  
+  `GTail d 0 x u = (x + u)^d`
+- [GTail_one_eq_sum](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:211)  
+  `r = 1` の GN 形に近い和
+- [GN_eq_sum](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:328)  
+  既存 GN の和表示
+- [pow_sub_pow_eq_mul_GN](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean:314)  
+  `(x+u)^d - u^d = x * GN d x u` 系
+- [CFBRC.Basic](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CFBRC/Basic.lean:151) に GN と差商の橋
+
+次の実装は、`WeightedBinomial.weightedBinomialRowSum` を既存 `add_pow` / `GTail_zero_eq_add_pow` 側へ合わせる小さな補題が良さそうです。重複して二項定理を証明するより、既存 `GTail` の正規形へ接続するのが自然です。
+
+DkMath.Lib.* へ昇華した核心定理ですからね。このライブラリのコアKernelです。
+どんどん使っていきましょう！
+
+### 2026/06/08  5:47
+
+`DkMath.Lib.Cosmic.GTail` のコア Kernel に接続しました。
+
+[WeightedBinomial.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:222) に追加:
+
+- `weightedBinomialRowSum_eq_GTail_zero`
+- `weightedBinomialRowSum_eq_add_pow`
+
+つまり、
+
+```lean
+weightedBinomialRowSum d x u = GTail d 0 x u
+weightedBinomialRowSum d x u = (x + u) ^ d
+```
+
+が使えるようになりました。二項定理を再証明せず、`GTail_zero_eq_add_pow` を経由しています。これはかなり良い接続点です。
+
+確認済みです。
+
+```bash
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+`sorry` / `axiom` / `admit` は入っていません。
