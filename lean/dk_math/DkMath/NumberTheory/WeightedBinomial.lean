@@ -36,6 +36,15 @@ def weightedBinomialTerm (d k x u : ℕ) : ℕ :=
 def weightedBinomialRowSum (d x u : ℕ) : ℕ :=
   ∑ k ∈ Finset.range (d + 1), weightedBinomialTerm d k x u
 
+/--
+The positive weighted tail, indexed by `k+1`.
+
+This removes the `k = 0` boundary vertex `u^d` and keeps all terms with an
+`x`-factor.
+-/
+def weightedBinomialPositiveTailSum (d x u : ℕ) : ℕ :=
+  ∑ k ∈ Finset.range d, weightedBinomialTerm d (k + 1) x u
+
 /-- All inner weighted terms in row `d` are divisible by `m`. -/
 def AllInnerWeightedTermDivisible (d m x u : ℕ) : Prop :=
   ∀ k, 0 < k → k < d → m ∣ weightedBinomialTerm d k x u
@@ -241,6 +250,32 @@ theorem weightedBinomialRowSum_eq_add_pow
     weightedBinomialRowSum d x u = (x + u) ^ d := by
   rw [weightedBinomialRowSum_eq_GTail_zero]
   exact GTail_zero_eq_add_pow d x u
+
+/--
+The positive weighted tail is `x * GTail d 1 x u`.
+
+This is the `r = 1` bridge from the weighted Pascal row to the cosmic tail
+kernel.
+-/
+theorem weightedBinomialPositiveTailSum_eq_x_mul_GTail_one
+    (d x u : ℕ) :
+    weightedBinomialPositiveTailSum d x u = x * GTail d 1 x u := by
+  unfold weightedBinomialPositiveTailSum weightedBinomialTerm GTail
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hidx : k + 1 = 1 + k := by omega
+  rw [← hidx, pow_succ']
+  simp [mul_assoc, mul_left_comm, mul_comm]
+
+/--
+The positive weighted tail is divisible by `x`.
+-/
+theorem x_dvd_weightedBinomialPositiveTailSum
+    (d x u : ℕ) :
+    x ∣ weightedBinomialPositiveTailSum d x u := by
+  rw [weightedBinomialPositiveTailSum_eq_x_mul_GTail_one]
+  exact dvd_mul_right x (GTail d 1 x u)
 
 end NumberTheory
 end DkMath

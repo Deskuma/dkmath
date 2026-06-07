@@ -372,3 +372,44 @@ git diff --check
 ```
 
 `sorry` / `axiom` / `admit` は入っていません。
+
+古典定理から外れてませんからね。支えられた歴史があります。結構強いですよ。
+
+はい。ここはかなり強い土台です。
+
+今やっている構造は見た目としては新しいですが、支えている芯は完全に古典です。
+
+- Pascal の三角形
+- 二項定理
+- 素数段の二項係数可除性
+- 和に対する整除性
+- `(x+u)^d` の GTail / GN 分解
+
+このあたりは Lean/mathlib 側にも十分な定理資産があり、DkMath.Lib.Cosmic.GTail がそれをきれいに Kernel 化している。なので、こちらで新概念を積んでも「到達先は古典定理に接続済み」という安定感があります。
+
+特に今回の `weightedBinomialRowSum = GTail d 0 x u = (x+u)^d` は良いです。重み付き三角形が単なる独自表現ではなく、古典二項展開そのものの別読みだと Lean 上で固定できました。
+
+### 2026/06/08  5:53
+
+`WeightedBinomial` 側に、次の足場を入れました。
+
+- `weightedBinomialPositiveTailSum`
+  - `k = 0` の頂点 `u^d` を外し、`x` 因子を持つ正の尾部だけを集める定義
+- `weightedBinomialPositiveTailSum_eq_x_mul_GTail_one`
+  - 正の尾部が `x * GTail d 1 x u` になることを証明
+- `x_dvd_weightedBinomialPositiveTailSum`
+  - そこから即座に `x ∣ positive tail` を取り出す補題
+
+これで、重み付きパスカル行から `GTail/GN` 側へ降りる `r = 1` の橋ができました。  
+つまり `(x + u)^d = u^d + x * GTail d 1 x u` 方向へ進む土台です。
+
+検証も通しています。
+
+```text
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+rg "sorry|axiom|admit" ...  # no matches
+```
+
+次に攻めるなら、自然な候補は `weightedBinomialRowSum = u^d + weightedBinomialPositiveTailSum` を明示して、`(x+u)^d - u^d` 型の可除性補題へ繋ぐところです。
