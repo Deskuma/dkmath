@@ -44,5 +44,14 @@ theorem prime_dvd_inner_choose
     p ∣ Nat.choose p k :=
   prime_allInnerChooseDivisible_self hp k hk0 hkp
 
+/--
+Unpack `AllInnerChooseDivisible` at a concrete inner index.
+-/
+theorem allInnerChooseDivisible_dvd_choose
+    {d m k : ℕ}
+    (h : AllInnerChooseDivisible d m) (hk0 : 0 < k) (hkd : k < d) :
+    m ∣ Nat.choose d k :=
+  h k hk0 hkd
+
 end NumberTheory
 end DkMath

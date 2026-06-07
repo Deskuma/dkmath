@@ -57,6 +57,17 @@ theorem dvd_weightedBinomialTerm_of_dvd_u
   unfold weightedBinomialTerm
   exact dvd_mul_of_dvd_right hpow (Nat.choose d k * x ^ k)
 
+/--
+Lift a row-level inner coefficient divisibility statement to the corresponding
+weighted inner term.
+-/
+theorem allInnerChooseDivisible_dvd_inner_weightedBinomialTerm
+    {m d k x u : ℕ}
+    (h : AllInnerChooseDivisible d m) (hk0 : 0 < k) (hkd : k < d) :
+    m ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (allInnerChooseDivisible_dvd_choose h hk0 hkd)
+
 /-- In a prime row, every inner weighted term is divisible by that prime. -/
 theorem prime_dvd_inner_weightedBinomialTerm
     {p k x u : ℕ}
@@ -76,6 +87,20 @@ theorem weightedBinomialTerm_right
     (d x u : ℕ) :
     weightedBinomialTerm d d x u = x ^ d := by
   simp [weightedBinomialTerm]
+
+/-- Divisibility at the `u^d` boundary vertex. -/
+theorem dvd_weightedBinomialTerm_left_of_dvd_u
+    {q d x u : ℕ}
+    (h : q ∣ u) (hd : 0 < d) :
+    q ∣ weightedBinomialTerm d 0 x u := by
+  simpa [weightedBinomialTerm_left] using h.pow hd.ne'
+
+/-- Divisibility at the `x^d` boundary vertex. -/
+theorem dvd_weightedBinomialTerm_right_of_dvd_x
+    {q d x u : ℕ}
+    (h : q ∣ x) (hd : 0 < d) :
+    q ∣ weightedBinomialTerm d d x u := by
+  simpa [weightedBinomialTerm_right] using h.pow hd.ne'
 
 end NumberTheory
 end DkMath

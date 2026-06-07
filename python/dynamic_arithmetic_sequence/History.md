@@ -200,3 +200,22 @@ git diff --check
 ```
 
 全部通っています。`prime_iff_allInnerChooseDivisible_self` の逆向きは、証明負荷が大きいので今回は無理に入れず、まず可除性 API を固めました。次はこの逆向きの証明経路を調査するか、先に `WeightedBinomial` と GN/CFBRC の橋を薄く作るのが自然です。
+
+### 2026/06/08  5:31
+
+軽めの補題ツールを追加しました。
+
+[BinomialPrime.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrime.lean:48) には、`AllInnerChooseDivisible` を具体的な `k` で取り出す `allInnerChooseDivisible_dvd_choose` を追加。
+
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:61) には、行レベルの係数可除性を重み付き内側項へ運ぶ補題と、境界頂点 `u^d` / `x^d` での可除性補題を追加しました。
+
+確認済みです。
+
+```bash
+lake build DkMath.NumberTheory.BinomialPrime
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+新規補題に `sorry` / `axiom` / `admit` はありません。
