@@ -413,3 +413,32 @@ rg "sorry|axiom|admit" ...  # no matches
 ```
 
 次に攻めるなら、自然な候補は `weightedBinomialRowSum = u^d + weightedBinomialPositiveTailSum` を明示して、`(x+u)^d - u^d` 型の可除性補題へ繋ぐところです。
+
+### 2026/06/08  5:58
+
+攻め筋を通しました。`WeightedBinomial.lean` に、重み付きパスカル行から差分・GN/GTail 側へ降りる橋を追加しています。
+
+追加した主な補題はこの5本です。
+
+- `weightedBinomialRowSum_eq_left_add_positiveTail`
+  - `rowSum = u^d + positiveTail`
+- `add_pow_eq_left_add_positiveTail`
+  - `(x + u)^d = u^d + positiveTail`
+- `add_pow_eq_left_add_x_mul_GTail_one`
+  - `(x + u)^d = u^d + x * GTail d 1 x u`
+- `add_pow_sub_left_eq_x_mul_GTail_one`
+  - `(x + u)^d - u^d = x * GTail d 1 x u`
+- `x_dvd_add_pow_sub_left`
+  - `x ∣ (x + u)^d - u^d`
+
+これで「頂点 `u^d` を外すと、残りは gap `x` を因子に持つ」という形が、`WeightedBinomial` の世界から `GTail/GN` カーネルへ直接繋がりました。かなり良い橋です。
+
+検証済みです。
+
+```text
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+今回触った `BinomialPrime.lean` / `WeightedBinomial.lean` には `sorry/axiom/admit` なしです。全体ビルド中に既存の別モジュール由来の `sorry` warning は出ていますが、今回の変更起因ではありません。

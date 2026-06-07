@@ -252,6 +252,18 @@ theorem weightedBinomialRowSum_eq_add_pow
   exact GTail_zero_eq_add_pow d x u
 
 /--
+The full weighted row splits into the left boundary vertex `u^d` and the
+positive weighted tail.
+-/
+theorem weightedBinomialRowSum_eq_left_add_positiveTail
+    (d x u : ℕ) :
+    weightedBinomialRowSum d x u =
+      u ^ d + weightedBinomialPositiveTailSum d x u := by
+  unfold weightedBinomialRowSum weightedBinomialPositiveTailSum
+  rw [Finset.sum_range_succ']
+  simp [weightedBinomialTerm_left, add_comm]
+
+/--
 The positive weighted tail is `x * GTail d 1 x u`.
 
 This is the `r = 1` bridge from the weighted Pascal row to the cosmic tail
@@ -275,6 +287,55 @@ theorem x_dvd_weightedBinomialPositiveTailSum
     (d x u : ℕ) :
     x ∣ weightedBinomialPositiveTailSum d x u := by
   rw [weightedBinomialPositiveTailSum_eq_x_mul_GTail_one]
+  exact dvd_mul_right x (GTail d 1 x u)
+
+/--
+The binomial body splits into the left boundary vertex and the positive tail.
+-/
+theorem add_pow_eq_left_add_positiveTail
+    (d x u : ℕ) :
+    (x + u) ^ d =
+      u ^ d + weightedBinomialPositiveTailSum d x u := by
+  rw [← weightedBinomialRowSum_eq_add_pow]
+  exact weightedBinomialRowSum_eq_left_add_positiveTail d x u
+
+/--
+The binomial body splits into the left boundary vertex and the normalized
+`r = 1` cosmic tail.
+-/
+theorem add_pow_eq_left_add_x_mul_GTail_one
+    (d x u : ℕ) :
+    (x + u) ^ d = u ^ d + x * GTail d 1 x u := by
+  rw [add_pow_eq_left_add_positiveTail,
+    weightedBinomialPositiveTailSum_eq_x_mul_GTail_one]
+
+/--
+Subtracting the left boundary vertex leaves exactly the positive weighted
+tail.
+-/
+theorem add_pow_sub_left_eq_positiveTail
+    (d x u : ℕ) :
+    (x + u) ^ d - u ^ d =
+      weightedBinomialPositiveTailSum d x u :=
+  Nat.sub_eq_of_eq_add
+    (by simpa [add_comm] using add_pow_eq_left_add_positiveTail d x u)
+
+/--
+Subtracting the left boundary vertex leaves `x * GTail d 1 x u`.
+-/
+theorem add_pow_sub_left_eq_x_mul_GTail_one
+    (d x u : ℕ) :
+    (x + u) ^ d - u ^ d = x * GTail d 1 x u := by
+  rw [add_pow_sub_left_eq_positiveTail,
+    weightedBinomialPositiveTailSum_eq_x_mul_GTail_one]
+
+/--
+The left-boundary difference is divisible by the gap `x`.
+-/
+theorem x_dvd_add_pow_sub_left
+    (d x u : ℕ) :
+    x ∣ (x + u) ^ d - u ^ d := by
+  rw [add_pow_sub_left_eq_x_mul_GTail_one]
   exact dvd_mul_right x (GTail d 1 x u)
 
 end NumberTheory
