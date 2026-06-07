@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.BinomialPrime
+import Mathlib.Algebra.BigOperators.Ring.Finset
 
 #print "file: DkMath.NumberTheory.WeightedBinomial"
 
@@ -27,6 +28,10 @@ bridge belongs to the later CFBRC/GN checkpoint.
 /-- The `k`-th weighted term in row `d`: `C(d,k) * x^k * u^(d-k)`. -/
 def weightedBinomialTerm (d k x u : ℕ) : ℕ :=
   Nat.choose d k * x ^ k * u ^ (d - k)
+
+/-- The full weighted row sum, indexed over `0 ≤ k ≤ d`. -/
+def weightedBinomialRowSum (d x u : ℕ) : ℕ :=
+  ∑ k ∈ Finset.range (d + 1), weightedBinomialTerm d k x u
 
 /-- All inner weighted terms in row `d` are divisible by `m`. -/
 def AllInnerWeightedTermDivisible (d m x u : ℕ) : Prop :=
@@ -187,6 +192,30 @@ theorem allWeightedTermDivisible_allInnerWeightedTermDivisible
     AllInnerWeightedTermDivisible d m x u := by
   intro k hk0 hkd
   exact h k hkd.le
+
+/--
+If every weighted term in the row is divisible by `m`, then the row sum is
+divisible by `m`.
+-/
+theorem dvd_weightedBinomialRowSum_of_allWeightedTermDivisible
+    {d m x u : ℕ}
+    (h : AllWeightedTermDivisible d m x u) :
+    m ∣ weightedBinomialRowSum d x u := by
+  unfold weightedBinomialRowSum
+  refine Finset.dvd_sum ?_
+  intro k hk
+  exact h k (Nat.lt_succ_iff.mp (Finset.mem_range.mp hk))
+
+/--
+If both boundary units carry `q`, then the whole positive weighted row sum
+carries `q`.
+-/
+theorem dvd_weightedBinomialRowSum_of_dvd_x_dvd_u
+    {q d x u : ℕ}
+    (hd : 0 < d) (hx : q ∣ x) (hu : q ∣ u) :
+    q ∣ weightedBinomialRowSum d x u :=
+  dvd_weightedBinomialRowSum_of_allWeightedTermDivisible
+    (allWeightedTermDivisible_of_dvd_x_dvd_u hd hx hu)
 
 end NumberTheory
 end DkMath

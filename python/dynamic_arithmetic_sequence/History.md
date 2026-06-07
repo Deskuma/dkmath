@@ -249,7 +249,7 @@ git diff --check
 
 次の軽い補題層として、行全体を扱う API を追加しました。
 
-[WeightedBinomial.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:35) に追加:
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:35) に追加:
 
 - `AllWeightedTermDivisible`
 - `allWeightedTermDivisible_dvd_term`
@@ -257,6 +257,28 @@ git diff --check
 - `allWeightedTermDivisible_allInnerWeightedTermDivisible`
 
 これで、`x` と `u` の両方が同じ因子 `q` を運ぶなら、正の次数 `d` の weighted row 全体が `q` を運ぶ、という形を使えます。境界 `u^d` / `x^d` と内側項をまとめて扱えるので、次の GN/CFBRC bridge に渡しやすくなりました。
+
+確認済みです。
+
+```bash
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+`sorry` / `axiom` / `admit` は入っていません。
+
+### 2026/06/08  5:41
+
+次の集約補題まで進めました。
+
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:29) に追加:
+
+- `weightedBinomialRowSum`
+- `dvd_weightedBinomialRowSum_of_allWeightedTermDivisible`
+- `dvd_weightedBinomialRowSum_of_dvd_x_dvd_u`
+
+これで、項ごとの可除性を row sum へ集約できます。まだ `(x+u)^d` との同一視には踏み込まず、「割れる項の和も割れる」という軽い道具だけです。
 
 確認済みです。
 
