@@ -852,3 +852,641 @@ $$
 そんな感じの説明からのDASへの繋がり。
 
 [DHNT-DAS-reinterpretation.md](lean/dk_math/DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md)
+
+### 複素数演算と宇宙式を繋ぐ橋 CFBRC
+
+はい。CFBRC 方式の利点は、かなり端的に言うと：
+
+**複素現象を、まず実係数の代数 core として扱えること**です。
+
+虚数単位や三角関数を完全に不要にする、というより、
+
+```text
+複素数・三角関数は観測層に置く
+代数・数論の本体は実係数/可換環上の core に置く
+```
+
+という分離ができるのが強いです。
+
+CFBRC の中心は、複素差分
+
+```text
+G_d(x, θ) = (x + iθ)^d - (iθ)^d
+```
+
+ではありますが、指定の paper にある通り、その下に
+
+```text
+H_d(x,u) = ((x+u)^d - u^d) / x
+```
+
+という代数 core がある。Lean 側ではこれを商より安全な幾何和として
+
+```lean
+cyclotomicPrimeCore p x u =
+  ∑ k ∈ Finset.range p, (x + u)^k * u^(p - 1 - k)
+```
+
+で扱っています。
+
+つまり CFBRC の利点は次です。
+
+1. **虚数単位を本体から追い出せる**
+   `i` は複素観測のためには使うが、core theorem は `CommSemiring` や `CommRing` 上で言える。
+   例えば [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean:61) の
+
+   ```lean
+   (x + u)^p = x * cyclotomicPrimeCore p x u + u^p
+   ```
+
+   は複素数に依存しません。
+
+2. **三角関数を本体から追い出せる**
+   三角関数は `X = a cos φ`, `Θ = a sin φ` のような観測座標で使う。
+   しかし CFBRC core は二項展開、差冪、円分多項式で進められる。
+   `TrigBridge` は三角関数を使う場所を分離する役割です。
+
+3. **複素位相観測と数論 core を分離できる**
+   複素側では
+
+   ```text
+   (x+iθ)^d - (iθ)^d
+   ```
+
+   を見る。
+   数論側では
+
+   ```text
+   (x+u)^d - u^d = x * core
+   ```
+
+   を見る。
+   両者は `u = iθ` と読むことで接続されるが、証明の主戦場は後者にできる。
+
+4. **円分多項式に接続できる**
+   prime case では
+
+   ```text
+   H_p(x,u) = Φ_p^h(x+u,u)
+   ```
+
+   となる。
+   これは「複素っぽい現象」を、円分多項式の斉次化評価として扱えるということです。
+
+5. **Zsigmondy / valuation / primitive factor へ橋がかかる**
+   [CFBRC.Bridge](/lean/dk_math/DkMath/CFBRC/Bridge.lean:17) では、差冪を割る素数を `cyclotomicPrimeCore` 側へ移す補題が置かれています。
+   これは複素観測から数論的 core へ降りるために重要です。
+
+なので、質問への答えは：
+
+```text
+虚数単位がいらない？
+→ 本体証明にはかなり不要にできる。観測層では使う。
+
+三角関数を使わない？
+→ 本体証明には不要にできる。極座標・位相観測では使う。
+```
+
+です。
+
+CFBRC 方式の本当の利点は、`i` や `sin/cos` を禁止することではなく、**それらを観測装置として外側に置き、中心には差冪 core・GN・円分多項式・整除構造を置けること**だと思います。
+
+### 既存定理との接続
+
+未開の地を開拓する道具はだいぶ揃っている。
+だが、これらの新構造を既存数学の定理とリンク、繋ぐ橋が少ない。
+メジャーな定理と繋げば、今後実装する予定の環群体設計が楽になるだろう。
+結果は同じ、到達経路が違うだけ。
+その経路の景色もまた違う。新しい発見もあるだろう。
+
+そうですね。今ある道具はかなり「内部理論」として育ってきています。次の弱点はまさに、既存数学への橋です。
+
+今の構造を外へつなぐなら、優先順位はたぶんこうです。
+
+1. **二項定理**
+   宇宙式、CFBRC、GTail、DAS の最初の共通言語です。
+
+   ```text
+   (x+u)^d
+   ```
+
+   を既存 mathlib の `CommSemiring` 上の二項展開へ接続する。
+   ここが強くなると、独自構造が「ただの新記法」ではなく既存代数の上に乗ります。
+
+2. **等比数列・幾何和**
+   CFBRC の core は
+
+   ```text
+   ((x+u)^d - u^d) / x
+   = ∑ (x+u)^k u^(d-1-k)
+   ```
+
+   なので、既存の geometric sum とつなぐ価値が高いです。
+   これは `Sequence` とも自然に接続できます。
+
+3. **円分多項式**
+   CFBRC の一番強い橋です。
+
+   ```text
+   H_p(x,u) = Φ_p^h(x+u,u)
+   ```
+
+   ここを厚くすると、既存の cyclotomic / primitive root / divisibility へ接続できます。
+
+4. **Zsigmondy / primitive prime divisor**
+   差冪
+
+   ```text
+   a^n - b^n
+   ```
+
+   に primitive prime が出る既存定理へつなぐ。
+   これは CFBRC の数論的価値を一気に上げます。
+
+5. **Monoid / Semiring / Ring / Field**
+   DAS や Sequence は、今は生成規則です。
+   ここを既存の代数型クラスに接続すると、将来の環群体設計がかなり楽になります。
+   ただし、急いで独自の ring API を作らず、まず既存 typeclass に薄く乗る方がいいです。
+
+6. **Linear recurrence / matrix powers**
+   Fibonacci から自然に行けます。
+
+   ```text
+   state_{n+1} = M * state_n
+   ```
+
+   と見れば、Sequence は線形代数とつながります。
+
+7. **Polynomial evaluation**
+   `Sequence`, `PowerSwap.NormalForm`, `CFBRC` はすべて「式を評価する」構造を持っています。
+   既存の `Polynomial.eval` とつなぐと、正規形・生成器・差冪 core を統一しやすくなります。
+
+方針としては、
+
+```text
+新構造を大きくする前に、
+既存数学の定理へ到達する薄い橋を増やす
+```
+
+が良いと思います。
+
+具体的な次の一手なら、私は **CFBRC core と既存の幾何和/円分多項式の橋を厚くする** のが一番効果的だと思います。
+
+理由は、ここが
+
+```text
+宇宙式
+差冪
+GN
+CFBRC
+PowerSwap
+円分多項式
+Zsigmondy
+valuation
+```
+
+を一気に束ねる中心だからです。
+
+「結果は同じ、到達経路が違うだけ」という見方は重要です。Lean では、その違う経路を定理として並べることで、
+
+```text
+同じ対象に複数の normal form がある
+```
+
+ことを表せます。そこに新しい発見が出やすいです。
+
+### 二項定理との接続
+
+このプロジェクトでも最近トレンドとなっている「二項定理」か。
+パスカルの三角から自動で得られる素数性の補題定理も欲しい。
+(x+u)^d の d と二項係数リストさえあれば、 d が素数であるか否かの判定ができる。
+そして x GN の可除性。ここは、かなり強い。
+自身 d で二項係数はすべて割り切るが、他の d' では、割ることができない。
+ここは、現象としても面白いところだ。
+当プロジェクトでも早急に整備していきたいところ。
+
+はい。これは早めに整備する価値が高いです。
+
+核になる定理は、まずこれです。
+
+```lean
+theorem prime_iff_dvd_all_inner_choose
+    {d : ℕ} (hd : 1 < d) :
+    d.Prime ↔ ∀ k, 0 < k → k < d → d ∣ Nat.choose d k
+```
+
+これは「パスカルの三角の第 `d` 行の内側係数がすべて `d` で割れる iff `d` は素数」という形です。
+
+片方向は mathlib にほぼあります。
+
+```lean
+hp.dvd_choose_self hk0 hklt
+```
+
+つまり、
+
+```lean
+d.Prime → d ∣ choose d k
+```
+
+です。
+
+逆方向が DkMath 側で公開 API として欲しい部分です。合成数 `d` なら、内側のどこかに `d` で割れない二項係数が現れる、という形にすると使いやすいです。
+
+```lean
+theorem exists_inner_choose_not_dvd_of_not_prime
+    {d : ℕ} (hd : 1 < d) (hcomp : ¬ d.Prime) :
+    ∃ k, 0 < k ∧ k < d ∧ ¬ d ∣ Nat.choose d k
+```
+
+この定理があると、観測的には：
+
+```text
+第 d 行の内側係数すべてが d で割れる
+→ d は素数
+```
+
+が Lean で使える。
+
+ただし一点だけ注意があります。
+
+「他の `d'` では割ることができない」は、正確には少し調整が必要です。
+
+素数 `p` の第 `p` 行では、内側係数の gcd は `p` です。したがって、
+
+```text
+すべての内側係数を割る自然数は p の約数
+```
+
+という形が安全です。つまり `1` と `p` は割れる。`p` 以外の非自明な数は割れない。
+
+欲しい定理名としては：
+
+```lean
+theorem gcd_inner_choose_prime
+    (hp : p.Prime) :
+    innerChooseGcd p = p
+```
+
+または、gcd を定義せずに：
+
+```lean
+theorem dvd_all_inner_choose_of_prime
+    (hp : p.Prime) :
+    ∀ k, 0 < k → k < p → p ∣ Nat.choose p k
+
+theorem dvd_prime_of_dvd_all_inner_choose_of_prime
+    (hp : p.Prime)
+    (m : ℕ)
+    (hm : ∀ k, 0 < k → k < p → m ∣ Nat.choose p k) :
+    m ∣ p
+```
+
+ただ、後者は `m` が全係数を割るとき `m ∣ p` を示すには gcd API が必要なので、最初は gcd なしの `prime_iff_dvd_all_inner_choose` から始めるのがよいです。
+
+DkMath での置き場所は、既存構造を見ると候補はこのあたりです。
+
+```text
+DkMath/Algebra/BinomialPrime.lean
+DkMath/NumberTheory/BinomialPrime.lean
+DkMath/Lib/Cosmic/BinomialPrime.lean
+```
+
+私は `DkMath.NumberTheory.BinomialPrime` が良いと思います。理由は、これは CFBRC/GN 専用ではなく、二項係数から素数性を読む一般定理だからです。
+
+その後、CFBRC/GN 側には橋を置く。
+
+```lean
+theorem prime_dvd_all_GN_coeffs
+theorem not_prime_exists_GN_coeff_not_dvd
+theorem prime_iff_dvd_all_GN_coeffs
+```
+
+ここまで行くと、
+
+```text
+(x+u)^d の二項係数列
+→ d の素数性
+→ x * GN の可除性
+→ GTail / p-adic / cyclotomic bridge
+```
+
+という道が通ります。
+
+これはかなり強いです。特に `d` が素数かどうかを「次数」ではなく「展開係数列の整除パターン」から読むので、DkMath の景色に合っています。
+
+次に実装するなら、最小セットはこれです。
+
+```lean
+-- NumberTheory/BinomialPrime.lean
+
+def AllInnerChooseDivisible (d m : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d → m ∣ Nat.choose d k
+
+theorem prime_allInnerChooseDivisible_self
+    {p : ℕ} (hp : p.Prime) :
+    AllInnerChooseDivisible p p
+
+theorem prime_iff_allInnerChooseDivisible_self
+    {d : ℕ} (hd : 1 < d) :
+    d.Prime ↔ AllInnerChooseDivisible d d
+```
+
+そして第二段階で：
+
+```lean
+theorem not_prime_exists_inner_choose_not_dvd
+theorem allInnerChooseDivisible_self_of_coeff_row
+theorem GN_coeff_prime_divisibility
+```
+
+この順番がいいです。まず「パスカル行から素数性を読む」を独立に固める。その後で GN/CFBRC に接続する。ここを急がず薄く切ると、後の環群体設計にもそのまま使えます。
+
+### 二項係数の一般化
+
+「`1` と `p` は割れる。`p` 以外の非自明な数は割れない。」
+なるほど、これならば、両端の係数１も u=1 を含められる。
+
+ちょっと先の話だが、二項係数の開始数「１」を「ｕ」に一般化して、
+この原理を追求しようと思っている。
+
+(x+u)^d = x GN_d(x,u) + u^d
+
+だから、正しくは「u^d」を三角形の頂点として、係数表を作る。
+すると、三角の両サイドは常に u^d となり、単位 u^d で割れる。
+
+中間項の係数は、どんな因子が出てくるのか？
+素数段 p で、どのような模様になるか。
+
+だいぶ面白い模様が見える気がしている。通常の自然数と比較した差分構造が。
+
+はい、ここはかなり面白いです。ただし整理すると、少なくとも 3 種類の「係数表」があります。
+
+1. **通常の Pascal 係数**
+
+   ```text
+   choose d k
+   ```
+
+   両端は `1`。素数段 `p` では内側がすべて `p` で割れる。
+
+2. **u-weighted Pascal 行**
+
+   ```text
+   choose d k * u^(d-k)
+   ```
+
+   これは `(x+u)^d` を `x^k` の係数として見たもの。
+   右端は `1`、左端は `u^d`。
+
+3. **homogeneous term 表**
+
+   ```text
+   choose d k * x^k * u^(d-k)
+   ```
+
+   これは係数だけでなく項そのものを見る表。
+   この場合、各項の可除性は `choose d k` と `x^k` と `u^(d-k)` の合成になる。
+
+CFBRC/GN の形では、
+
+```text
+(x+u)^d = x * GN_d(x,u) + u^d
+```
+
+なので、`u^d` は確かに「分離された頂点」です。残りは
+
+```text
+x * GN_d(x,u)
+= Σ_{k=0}^{d-1} choose d (k+1) * x^(k+1) * u^(d-1-k)
+```
+
+です。
+
+ここで素数段 `p` だと、内側係数
+
+```text
+choose p j     1 ≤ j ≤ p-1
+```
+
+は全部 `p` で割れる。したがって
+
+```text
+(x+u)^p = x^p + u^p + p * middle
+```
+
+という模様になります。より正確には、
+
+```text
+(x+u)^p - x^p - u^p
+```
+
+が `p` で割れる。
+
+ここに `u` を入れると、可除性は二層になります。
+
+```text
+p による係数可除性
+u による単位冪可除性
+```
+
+つまり prime row では中間項が
+
+```text
+p * u^r * x^s * ...
+```
+
+の形を持つ。これは通常の自然数 Pascal 行より情報が濃いです。
+
+次に狙うなら、定義としてはこういう名前がよさそうです。
+
+```lean
+def weightedChooseTerm (d k : ℕ) (x u : ℕ) : ℕ :=
+  Nat.choose d k * x^k * u^(d-k)
+
+def weightedChooseCoeff (d k : ℕ) (u : ℕ) : ℕ :=
+  Nat.choose d k * u^(d-k)
+```
+
+そして prime 段の定理：
+
+```lean
+theorem prime_dvd_inner_weightedChooseTerm
+    (hp : p.Prime) (hk0 : 0 < k) (hkp : k < p) :
+    p ∣ weightedChooseTerm p k x u
+```
+
+これは `p ∣ Nat.choose p k` からすぐ出ます。
+
+さらに `u` 側は：
+
+```lean
+theorem u_pow_dvd_weightedChooseTerm
+    (hk : k ≤ d) :
+    u^(d-k) ∣ weightedChooseTerm d k x u
+```
+
+この 2 つを合わせると、prime 段では中間項が「素数 p と単位 u の冪」の両方を持つことが見える。
+
+ここから先が面白いところで、通常 Pascal では見えない
+
+```text
+係数素因子の模様
+単位冪の模様
+x 側冪の模様
+```
+
+が同じ三角形上に重なります。
+
+なので、次の整備はまず：
+
+```text
+DkMath.NumberTheory.BinomialPrime
+DkMath.NumberTheory.WeightedBinomial
+```
+
+あたりに分けるのが良いと思います。
+
+`BinomialPrime` は通常係数の素数性。
+`WeightedBinomial` は `x,u` を含めた重み付き三角形。
+
+この順なら、後で GN/CFBRC へ自然に接続できます。
+
+### Zsigmondy との関係
+
+うまく行けば、数にこだわらずに、可除性の性質だけを取り出せそうだ。
+そんな補題定理を捕まえられると、Zsigmondy への繋がりが見えそうだ。
+
+はい。その方向はかなり筋が良いです。
+
+目標は「数そのもの」ではなく、
+
+```text
+どの因子が必ず現れるか
+どの因子が境界項から消えるか
+どの因子が中間項だけに残るか
+```
+
+を抽出することですね。
+
+この場合、最初に欲しい補題は数値計算ではなく、可除性だけを見る形です。
+
+```lean
+def WeightedBinomialTerm (d k x u : ℕ) : ℕ :=
+  Nat.choose d k * x^k * u^(d-k)
+```
+
+そして基本補題：
+
+```lean
+theorem dvd_weightedBinomialTerm_of_dvd_choose
+    (h : q ∣ Nat.choose d k) :
+    q ∣ WeightedBinomialTerm d k x u
+```
+
+```lean
+theorem dvd_weightedBinomialTerm_of_dvd_x
+    (h : q ∣ x) (hk : 0 < k) :
+    q ∣ WeightedBinomialTerm d k x u
+```
+
+```lean
+theorem dvd_weightedBinomialTerm_of_dvd_u
+    (h : q ∣ u) (hk : k < d) :
+    q ∣ WeightedBinomialTerm d k x u
+```
+
+これらがあると、各項の可除性を
+
+```text
+二項係数由来
+x 側由来
+u 側由来
+```
+
+に分解できます。
+
+素数段 `p` では、
+
+```lean
+theorem prime_dvd_inner_weightedBinomialTerm
+    (hp : p.Prime) (hk0 : 0 < k) (hkp : k < p) :
+    p ∣ WeightedBinomialTerm p k x u
+```
+
+が得られます。これは二項係数由来。
+
+一方で、境界項は：
+
+```text
+k = 0: choose d 0 * x^0 * u^d = u^d
+k = d: choose d d * x^d * u^0 = x^d
+```
+
+です。
+
+ここで `q ∤ x` かつ `q ∤ u` なら、境界項には `q` が出ない。しかし prime 段の中間項には `p` が係数由来で出る。これが強い。
+
+Zsigmondy へつなぐには、この見方が効きます。
+
+```text
+a^d - b^d
+```
+
+の新しい素因子は、低次差分には出なかった因子が高次差分に現れる、という話です。
+
+CFBRC/GN 側では、
+
+```text
+(x+u)^d - u^d = x * GN_d(x,u)
+```
+
+なので、`q ∤ x` なら
+
+```text
+q ∣ ((x+u)^d - u^d)
+↔
+q ∣ GN_d(x,u)
+```
+
+へ移せる。
+
+つまり欲しい橋は：
+
+```text
+weighted binomial terms の可除性
+→ GN の可除性
+→ 差冪の可除性
+→ primitive prime / Zsigmondy
+```
+
+です。
+
+最初の実装単位としては、
+
+```text
+DkMath.NumberTheory.WeightedBinomial
+```
+
+が良いと思います。中身はまだ定理を欲張らず、
+
+```lean
+weightedBinomialTerm
+dvd_of_dvd_choose
+dvd_of_dvd_x
+dvd_of_dvd_u
+prime_dvd_inner_of_prime
+boundary_left
+boundary_right
+```
+
+くらいで十分です。
+
+これは「数値として何かを計算する」補題ではなく、**項がどの因子を必ず運ぶか**だけを抽出する補題群になります。Zsigmondy への橋としてかなり使いやすいです。
+
+### 二項係数定理との橋の実装へ向けて
+
+あまり展望ばかり進めると夢物語になってしまう。
+確実なところから、地固めしていくか。実装を進めよう。
+
+先に、実装設計、計画ロードマップ (docs) を作っておくか。
