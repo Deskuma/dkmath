@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.DHNT.DynamicArithmeticSequence
+import DkMath.Sequence.Arithmetic
 import DkMath.KUS.Coeff
 
 #print "file: DkMath.KUS.DynamicArithmeticSequence"
@@ -29,13 +29,13 @@ variable {Blueprint : BlueprintFamily U}
 def gArithmeticTerm [Semiring C]
     (support : US U Blueprint) (a d : C) (i : ℕ) :
     GKUS C U Blueprint :=
-  mkGWith (DkMath.DHNT.arithmeticTerm a d i) support
+  mkGWith (DkMath.Sequence.arithmeticTerm a d i) support
 
 /-- Dynamic arithmetic term packaged as a `GKUS` value over fixed support. -/
 def gDynamicTerm [Semiring C]
     (support : US U Blueprint) (a d k : C) (i : ℕ) :
     GKUS C U Blueprint :=
-  mkGWith (DkMath.DHNT.dynamicTerm a d k i) support
+  mkGWith (DkMath.Sequence.dynamicTerm a d k i) support
 
 /-- First `n` dynamic terms as `GKUS` values over the same support. -/
 def gDynamicSequence [Semiring C]
@@ -46,7 +46,7 @@ def gDynamicSequence [Semiring C]
 @[simp] theorem toCoeff_gArithmeticTerm
     [Semiring C] (support : US U Blueprint) (a d : C) (i : ℕ) :
     toCoeff (gArithmeticTerm support a d i) =
-      DkMath.DHNT.arithmeticTerm a d i := by
+      DkMath.Sequence.arithmeticTerm a d i := by
   rfl
 
 @[simp] theorem extract_g_gArithmeticTerm
@@ -57,7 +57,7 @@ def gDynamicSequence [Semiring C]
 @[simp] theorem toCoeff_gDynamicTerm
     [Semiring C] (support : US U Blueprint) (a d k : C) (i : ℕ) :
     toCoeff (gDynamicTerm support a d k i) =
-      DkMath.DHNT.dynamicTerm a d k i := by
+      DkMath.Sequence.dynamicTerm a d k i := by
   rfl
 
 @[simp] theorem extract_g_gDynamicTerm
@@ -81,8 +81,9 @@ def gDynamicSequence [Semiring C]
 @[simp] theorem gDynamicTerm_zeroScale
     [Semiring C] (support : US U Blueprint) (a d : C) (i : ℕ) :
     gDynamicTerm support a d 0 i = mkGWith a support := by
-  simp [gDynamicTerm, DkMath.DHNT.dynamicTerm, DkMath.DHNT.arithmeticTerm,
-    DkMath.DHNT.dynamicStep]
+  simp [gDynamicTerm, DkMath.Sequence.dynamicTerm, DkMath.Sequence.dynamicGenerator,
+    DkMath.Sequence.arithmeticGenerator, DkMath.Sequence.dynamicStep,
+    DkMath.Sequence.AdditiveGenerator.term]
 
 end KUS
 end DkMath

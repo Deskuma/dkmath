@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import DkMath.Sequence.Arithmetic
 
 #print "file: DkMath.DHNT.DynamicArithmeticSequence"
 
@@ -26,50 +26,50 @@ The Lean-side normal form does not use `log` or `exp`.  The dynamic parameter
 variable {C : Type*}
 
 /-- The `k`-scaled common difference. -/
-def dynamicStep [Mul C] (d k : C) : C :=
-  d * k
+abbrev dynamicStep [Mul C] (d k : C) : C :=
+  DkMath.Sequence.dynamicStep d k
 
 /-- The `i`-th term of an ordinary arithmetic sequence. -/
-def arithmeticTerm [Semiring C] (a d : C) (i : ℕ) : C :=
-  a + (i : C) * d
+abbrev arithmeticTerm [Semiring C] (a d : C) (i : ℕ) : C :=
+  DkMath.Sequence.arithmeticTerm a d i
 
 /-- The `i`-th term of a dynamic arithmetic sequence. -/
-def dynamicTerm [Semiring C] (a d k : C) (i : ℕ) : C :=
-  arithmeticTerm a (dynamicStep d k) i
+abbrev dynamicTerm [Semiring C] (a d k : C) (i : ℕ) : C :=
+  DkMath.Sequence.dynamicTerm a d k i
 
 /-- The dynamic sequence as a finite list of its first `n` terms. -/
-def dynamicSequence [Semiring C] (a d k : C) (n : ℕ) : List C :=
-  (List.range n).map fun i => dynamicTerm a d k i
+abbrev dynamicSequence [Semiring C] (a d k : C) (n : ℕ) : List C :=
+  DkMath.Sequence.dynamicSequence a d k n
 
 /-- Dynamic arithmetic is ordinary arithmetic with common difference `d * k`. -/
 @[simp] theorem dynamicTerm_eq_arithmeticTerm_scaledDiff
     [Semiring C] (a d k : C) (i : ℕ) :
     dynamicTerm a d k i = arithmeticTerm a (d * k) i := by
-  rfl
+  exact DkMath.Sequence.dynamicTerm_eq_arithmeticTerm_scaledDiff a d k i
 
 /-- The `k = 1` specialization recovers the ordinary arithmetic sequence. -/
 @[simp] theorem dynamicTerm_one
     [Semiring C] (a d : C) (i : ℕ) :
     dynamicTerm a d 1 i = arithmeticTerm a d i := by
-  simp [dynamicTerm, arithmeticTerm, dynamicStep]
+  exact DkMath.Sequence.dynamicTerm_one a d i
 
 /-- Zero scale collapses the sequence to its initial value. -/
 @[simp] theorem dynamicTerm_zeroScale
     [Semiring C] (a d : C) (i : ℕ) :
     dynamicTerm a d 0 i = a := by
-  simp [dynamicTerm, arithmeticTerm, dynamicStep]
+  exact DkMath.Sequence.dynamicTerm_zeroScale a d i
 
 /-- Zero difference collapses the sequence to its initial value. -/
 @[simp] theorem dynamicTerm_zeroDiff
     [Semiring C] (a k : C) (i : ℕ) :
     dynamicTerm a 0 k i = a := by
-  simp [dynamicTerm, arithmeticTerm, dynamicStep]
+  exact DkMath.Sequence.dynamicTerm_zeroDiff a k i
 
 /-- Successive terms differ by the scaled common difference. -/
 @[simp] theorem dynamicTerm_succ
     [Semiring C] (a d k : C) (i : ℕ) :
     dynamicTerm a d k (i + 1) = dynamicTerm a d k i + d * k := by
-  simp [dynamicTerm, arithmeticTerm, dynamicStep, Nat.cast_add, add_mul, add_assoc]
+  exact DkMath.Sequence.dynamicTerm_succ a d k i
 
 /-! ## Small rational examples mirroring the Python demo without rounding -/
 
