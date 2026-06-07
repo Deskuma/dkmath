@@ -355,3 +355,476 @@ Units.NP.Sequence
 ```
 
 この方向だと DAS は出発点で、最終的には「数列とは何か」をかなり Lean らしく整理できます。まず建てるなら `DkMath.Sequence.Generator` と `DkMath.Sequence.Arithmetic` がよいです。
+
+### 数列から環群体への展望
+
+このプロトタイプDAS構造のテンプレートがあれば、
+数列世界の演算→環群体論へ広げられそうです。
+まだ、欲張ってそこへは足を突っ込みませんが。
+
+はい、かなり良い足場になりました。
+
+今回の `Sequence` はまだ軽量ですが、構造としてはもう次の拡張に耐えます。
+
+```text
+Closed              : ℕ → A
+AdditiveGenerator   : origin + i * step
+Recurrence          : seed + next
+StateRecurrence     : hidden state + observe
+```
+
+この 4 つがあるので、将来的には自然に、
+
+```text
+sequence の map
+sequence の zip/add/mul
+pointwise 演算
+畳み込み
+線形再帰
+生成関数
+module / group / ring 上の列
+KUS support-preserving orbit
+```
+
+へ広げられます。
+
+ただ、今の時点では欲張らないのが正解だと思います。まずは DAS 由来の「生成原理」を `Sequence` に切り出せたことが大きいです。KUS 側も `support を固定した係数軌道` として乗っていますし、Fibonacci も `StateRecurrence` で入ったので、世界観の輪郭はできています。
+
+次にやるなら小さく、
+
+```lean
+Closed.map
+Closed.zipWith
+AdditiveGenerator.toRecurrence
+```
+
+くらいですね。環・群・体は、その API が自然に必要になったタイミングで載せるのがよさそうです。
+
+### Mul の抽象演算
+
+`d * k` は数値演算の積にとどまらない。
+
+```lean
+/-- The homogeneous version of `HMul`: `a * b : α` where `a b : α`. -/
+class Mul (α : Type u) where
+  /-- `a * b` computes the product of `a` and `b`. See `HMul`. -/
+  mul : α → α → α
+```
+
+はい、`[Mul C]` を使っている時点で、かなり抽象化済みです。
+
+```lean
+def dynamicStep [Mul C] (d k : C) : C :=
+  d * k
+```
+
+これは「`C` が何であるか」は問わず、`*` が定義されていればよい、という意味です。だから `C` は `ℕ`, `ℤ`, `ℚ`, `ℝ` でもよいし、行列、関数、ある種の作用素でもよいです。
+
+ただし、ここで抽象化されているのは **二項演算としての積** までです。
+
+もう一段抽象化すると、`k` は `C` の元である必要すらなくなります。例えば「係数型 `C` に、スケール型 `K` が作用する」と見るなら、
+
+```lean
+def dynamicStep [SMul K C] (d : C) (k : K) : C :=
+  k • d
+```
+
+になります。
+
+こちらはもっと広いです。
+
+```text
+Mul C
+  d : C, k : C
+  d * k : C
+
+SMul K C
+  k : K, d : C
+  k • d : C
+```
+
+つまり、
+
+```text
+Mul C は「同じ世界の中で掛ける」
+SMul K C は「外部スケールが係数世界に作用する」
+```
+
+です。
+
+DAS の意味を考えると、本当は `SMul` 版の方が概念的にはきれいかもしれません。
+
+```lean
+def dynamicStep [SMul K C] (k : K) (d : C) : C :=
+  k • d
+```
+
+ただし今の
+
+```lean
+d * k
+```
+
+も悪くありません。理由は、Python 由来の `d * k` という直感に近く、`Semiring C` の中では自然だからです。
+
+今後の拡張としては、こういう二層設計が良さそうです。
+
+```lean
+-- 現在の同型スケール
+def dynamicStep [Mul C] (d k : C) : C :=
+  d * k
+
+-- 将来の外部スケール
+def scaledStep [SMul K C] (k : K) (d : C) : C :=
+  k • d
+```
+
+そして DAS は、
+
+```lean
+dynamicGenerator a d k
+```
+
+を `scaledStep` ベースに一般化できる。
+
+つまり結論は：
+
+**`Mul C` でかなり抽象化されている。ただし「スケール係数」と「公差」が別世界に属する可能性まで考えるなら、次の抽象化は `SMul K C` です。**
+
+### SMul に向けて
+
+なるほど。早急に手を打つ必要ないですね。素晴らしい。
+SMul に備えて、準備する感じでよいか。
+
+外部スケール。異なる数宇宙との接続か。
+ここは宇宙式の概念持ち込みで、２つの閉じた宇宙を突き合わせる。
+そのような土台が必要なのかもな。
+
+はい、今すぐ `SMul` に置き換えなくていいです。むしろ今は `Mul C` のままにして、設計上だけ「外部スケールに開ける」と見ておくのが良いです。
+
+今の構造はこうです。
+
+```lean
+d : C
+k : C
+d * k : C
+```
+
+これは **同じ宇宙 `C` の中でのスケール** です。
+
+次の段階はこうなります。
+
+```lean
+d : C
+k : K
+k • d : C
+```
+
+これは **スケール宇宙 `K` が、係数宇宙 `C` に作用する** という見方です。
+
+かなり良い表現をすると、
+
+```text
+K : 外部スケール宇宙
+C : 係数宇宙
+SMul K C : K が C に触れるための接続法則
+```
+
+です。
+
+「2つの閉じた宇宙を突き合わせる」という感覚は、Lean 的にはかなり自然にこう表現できます。
+
+```lean
+class ScaleAction (K C : Type*) where
+  act : K → C → C
+```
+
+ただ、Lean にはすでにこれに近い標準構造として
+
+```lean
+SMul K C
+```
+
+があります。
+
+そして、さらに法則まで欲しくなったら、
+
+```lean
+MulAction K C
+DistribMulAction K C
+Module K C
+```
+
+へ進めます。
+
+段階としては：
+
+```text
+SMul K C
+  ただ作用できる
+
+MulAction K C
+  1 • x = x
+  (k₁ * k₂) • x = k₁ • (k₂ • x)
+
+DistribMulAction K C
+  加法構造を保つ
+  k • (x + y) = k • x + k • y
+
+Module K C
+  線形空間・加群
+```
+
+なので、宇宙式っぽく言うなら：
+
+```text
+SMul              接触
+MulAction         接触の合成法則
+DistribMulAction 係数構造を保つ接触
+Module           線形宇宙としての統合
+```
+
+今の `dynamicStep d k = d * k` は、同一宇宙内の最小プロトタイプです。  
+将来 `SMul` を入れるなら、たぶん名前は `externalDynamicStep` か `scaledStep` がよいです。
+
+```lean
+def scaledStep [SMul K C] (k : K) (d : C) : C :=
+  k • d
+```
+
+そして今の `dynamicStep` は、その特殊ケースとして残せます。
+
+```lean
+def dynamicStep [Mul C] (d k : C) : C :=
+  d * k
+```
+
+このまま進めれば、後で「異なる数宇宙の接続」を追加しても、現在の DAS は壊さずに拡張できます。
+
+### PowerSwap との接続
+
+宇宙式の閉じた世界は (x+u)^d という多次元幾何構造です。
+それを１本の軸として並べ替える。だけ。と言ってしまえばそうなのですが…。
+
+この (x+u)^d → n^1 への変換は、DkMath.PowerSwap の世界です。
+つまり、異なる宇宙も、いちど互いに型を揃える必要がある。
+
+PowerSwap は a^b = b^a を示しています。
+積構造、積演算をこの概念と繋ぐ実装になるかと思います。
+
+積を施した後 xy → z^n と正規化する。新たな宇宙です。
+
+はい。ここで見えているのは、単なる `Mul` 抽象ではなく、もう一段上の構造ですね。
+
+今の DAS は：
+
+```lean
+d * k
+```
+
+つまり、
+
+```text
+同じ宇宙 C の中で積を作る
+```
+
+でした。
+
+でも今話している PowerSwap 接続は、
+
+```text
+x y という積を作る
+→ それを z^n という別宇宙の正規形へ送る
+→ その正規形を新しい軸として Sequence 化する
+```
+
+という流れです。
+
+かなり自然に分けると、こうです。
+
+```text
+Sequence
+  並び規則
+
+Mul / SMul
+  一つの宇宙内、または外部宇宙からの作用
+
+PowerSwap
+  冪宇宙間の交換・正規化
+
+Normalizer / Transport
+  xy → z^n のような宇宙変換
+
+KUS
+  変換後も support / blueprint を失わない構造保持
+```
+
+なので、`d * k` の次に建てるべき抽象はたぶん `SMul` そのものではなく、
+
+```lean
+structure PowerNormalize (A B : Type*) where
+  sourceMul : A → A → A
+  normalize : A → B
+```
+
+のような「積後の正規化」層です。
+
+ただし、もっと Lean らしく小さく始めるなら：
+
+```lean
+structure NormalizedProduct (A B : Type*) where
+  mulForm : A
+  normalForm : B
+```
+
+または PowerSwap に寄せて：
+
+```lean
+structure PowNormalForm where
+  base : ℕ
+  exponent : ℕ
+
+def eval (p : PowNormalForm) : ℕ :=
+  p.base ^ p.exponent
+```
+
+そして、
+
+```lean
+xy = z^n
+```
+
+は
+
+```lean
+eval normalForm = x * y
+```
+
+として持つ。
+
+これはかなり良いです。なぜなら `PowerSwap.Exchange` にはすでに、
+
+```lean
+A = a^t → A^m = a^(t*m)
+```
+
+があります。つまり `A` を一度 `a^t` へ正規化できれば、その後の冪操作は指数側の積 `t*m` に移せます。
+
+概念的には：
+
+```text
+積の世界:
+  x * y
+
+冪の世界:
+  z ^ n
+
+PowerSwap:
+  冪表現同士の交換・同値
+
+Sequence:
+  正規化された冪表現を軸に並べる
+```
+
+です。
+
+だから「積を施した後 `xy → z^n` と正規化する。新たな宇宙です」という見方はかなり正しいです。
+
+今すぐ実装するなら、まだ大きな PowerSwap-Sequence 統合には行かず、次の小さな型だけが良いと思います。
+
+```lean
+structure PowNormalForm where
+  base : ℕ
+  exponent : ℕ
+
+def PowNormalForm.eval (p : PowNormalForm) : ℕ :=
+  p.base ^ p.exponent
+
+structure HasPowNormalForm (n : ℕ) where
+  form : PowNormalForm
+  eval_eq : form.eval = n
+```
+
+これができると、
+
+```text
+xy を作る
+xy の PowNormalForm を持つ
+その normalForm の exponent 側を Sequence として動かす
+```
+
+という橋ができます。
+
+ここは面白いですが、確かに慎重にやる場所です。`Sequence` の次に直接「環群体論」へ行くより、まず `PowerNormalize` / `PowNormalForm` という宇宙変換の薄い中間層を置くのがよさそうです。
+
+### PowerSwap 強化
+
+はい。その順番がよいです。
+
+`Sequence` 側は今の時点で十分な足場があります。ここから無理に `PowerSwap` と接続すると、未成熟な正規化概念を `Sequence` に持ち込んで、両方が重くなります。
+
+先にやるべきは `PowerSwap` の増強です。
+
+具体的には、次の薄い層からが良いです。
+
+```lean
+structure PowNormalForm where
+  base : ℕ
+  exponent : ℕ
+
+def PowNormalForm.eval (p : PowNormalForm) : ℕ :=
+  p.base ^ p.exponent
+```
+
+次に、
+
+```lean
+structure HasPowNormalForm (n : ℕ) where
+  form : PowNormalForm
+  eval_eq : form.eval = n
+```
+
+そして PowerSwap 側に、
+
+```lean
+theorem eval_mk (a n : ℕ) :
+  PowNormalForm.eval ⟨a, n⟩ = a ^ n
+
+theorem exchange_of_normalized :
+  A = a ^ t →
+  A ^ m = PowNormalForm.eval ⟨a, t * m⟩
+```
+
+のような補題を置く。
+
+これで `PowerSwap.Exchange` の現在の
+
+```lean
+A = a^t → A^m = a^(t*m)
+```
+
+を、単なる等式補題から「正規形への移送」として見られるようになります。
+
+その後に、
+
+```text
+xy の正規形
+冪正規形の列
+正規形列の KUS support
+```
+
+へ進むのが自然です。
+
+つまり順序は：
+
+```text
+1. PowerSwap に PowNormalForm を追加
+2. exchange_condition を normal-form API に言い換える
+3. 積 xy → normal form の保持構造を作る
+4. それを Sequence に持ち上げる
+5. 必要なら KUS support を載せる
+```
+
+です。
+
+今は `Sequence` は触らず、次の工事は `DkMath.PowerSwap.NormalForm` あたりがちょうどよいと思います。
