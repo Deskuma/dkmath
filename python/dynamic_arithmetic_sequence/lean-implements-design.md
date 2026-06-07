@@ -1,5 +1,11 @@
 # Lean 実装計画
 
+## DHNT DAS Note
+
+[Note](/lean/dk_math/DkMath/DHNT/docs/DHNT_DAS_Note.md)
+
+## 設計考察
+
 実装計画としては、Python をそのまま移植せず、Lean では「列を作るプログラム」より先に「項の定義」と「同値補題」を中心に置くのが良いです。
 
 **方針**

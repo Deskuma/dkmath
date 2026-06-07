@@ -131,3 +131,27 @@ lake build DkMath
 ```
 
 すべて成功しました。トップ build では既存ファイル由来の `sorry` warning はありますが、今回追加した `NormalForm` は warning なしです。
+
+### 2026/06/08  0:44
+
+解説ドキュメントを追加しました。
+
+追加先:
+[DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md](/lean/dk_math/DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md:1)
+
+内容は、単なる実装履歴ではなく、
+
+- DHNT の異単位調和演算
+- 指数対数法則と単位分岐
+- `e^{iπ} = -1` と宇宙式 `(x+1)^2 - x(x+2) = 1` の接続視点
+- DAS を `ln(e^k)` から `a + i * (d*k)` へ正規化した理由
+- `Sequence` へ切り出した理由
+- KUS で support 固定の係数軌道として読む理由
+- PowerSwap の冪正規形との今後の接続
+- 現時点で「まだ入れない」境界
+
+をまとめています。
+
+検証は docs-only なので Lean build は回さず、`git diff --check` を通しました。
+
+補足: `git status` には既存の `lean/dk_math/DkMath/DHNT/docs/DHNT_DAS_Note.md` と `python/dynamic_arithmetic_sequence/lean-implements-design.md` の変更も出ていますが、今回こちらで編集したのは新規追加した `Sequence/docs/DHNT-DAS-reinterpretation.md` だけです。

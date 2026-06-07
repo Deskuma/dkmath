@@ -827,4 +827,28 @@ xy の正規形
 
 です。
 
-今は `Sequence` は触らず、次の工事は `DkMath.PowerSwap.NormalForm` あたりがちょうどよいと思います。
+今は `Sequence` は触らず、次の工事は [`DkMath.PowerSwap.NormalForm`](/lean/dk_math/DkMath/PowerSwap/NormalForm.lean) あたりがちょうどよいと思います。
+
+### 解説書の整備
+
+少し、解説ドキュメントを書き残しておいたほうが良いかな。
+ここまでの作業のメモは取ってあるのだけども。
+
+そもそも何でこんな構造で再解釈して構築しているのか？
+だよねぇ…。
+
+発端は DHNT 動的調和数論という概念。
+指数対数法則を利用した、異単位調和演算という概念か。
+オイラーの等式から得た、無限に分岐する単位。
+しかし、それらの異なる単位群も、複素数を通じて束ねて演算ができる。
+この原理を、指数対数の法則で行う視点で開発している。
+
+$$
+e^{i\pi} = -1 → f(x)=(x+1)^2-x(x+2)=1
+$$
+
+この関係は、繋がっている。ということ。
+
+そんな感じの説明からのDASへの繋がり。
+
+[DHNT-DAS-reinterpretation.md](lean/dk_math/DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md)
