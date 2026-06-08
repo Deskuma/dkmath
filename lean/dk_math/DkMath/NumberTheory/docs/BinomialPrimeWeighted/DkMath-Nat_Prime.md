@@ -1844,3 +1844,54 @@ theorem prime_polynomial_X_add_C_pow_eq
 ```
 
 これは `ZMod p` 上の freshman dream で、AKS の多項式合同へ進むための入口です。まだ `X^r - 1` による剰余多項式環までは入れていません。そこは次段です。
+
+### AKS 次ステップ
+
+総合判断では、次は **AKS の続きを少しだけ進めてから、既存定理との接続に戻る** のがよいです。
+
+理由は、今の AKSBridge v1 は「prime なら成立する」側が綺麗に閉じたところです。
+ここで一気に AKS 全体へ進むより、次の小さな層だけ足すと、既存定理へ戻るときの比較面がかなり強くなります。
+
+優先順はこうです。
+
+1. **AKS predicate の範囲化**
+
+   ```lean
+   ∀ a < bound, AKSCyclicFoldedCongruenceHolds n r a
+   ```
+
+   いまは単一 `a` の predicate なので、AKS らしい「shift の範囲検査」へ拡張する。これは軽い。
+
+2. **composite failure witness 層**
+   prime なら成立する、の対岸として、
+
+   ```text
+   composite n では壊れる witness がある
+   ```
+
+   をすぐ theorem にするのではなく、まず小さい例と predicate 名を整える。ここは「素性」検出に直結します。
+
+3. **既存定理との接続**
+   `BinomialPrimePower`, `PascalPrimeDial`, `padicValNat`, `WeightedBinomial` へ戻って、
+
+   ```text
+   AKS cyclic failure
+   ↔ Beam が消えない
+   ↔ p-adic support が残る
+   ```
+
+   という橋を探す。
+
+つまり次の実装ステップとしては、
+
+```text
+AKSBridge v1.5:
+  single shift a
+    → range of shifts
+    → prime satisfies all shifts
+    → composite examples / obstruction predicate
+```
+
+が良いと思います。
+
+Zsigmondy / primitive prime divisor へ本格接続するのは、その後が安全です。今はまだ「新しい素因子がどこで発生するか」を見る観測器を整えている段階なので、AKS の巡回商をもう一段だけ道具化してから戻るのが一番リターンが大きいです。
