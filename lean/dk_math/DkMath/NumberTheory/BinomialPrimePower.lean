@@ -51,6 +51,26 @@ def FilteredBeamHeight (d p h : ℕ) (P : ℕ → Prop) : Prop :=
     padicValNat p (Nat.choose d k) = h
 
 /--
+The beam-birth boundary for `p`.
+
+Rows below `p` have no visible `p`-height, while row `p` has uniform height
+`1`.  The prime theorem below proves that prime numbers satisfy this boundary.
+-/
+def BeamBirthBoundary (p : ℕ) : Prop :=
+  (∀ d, d < p → UniformBeamHeight d p 0) ∧
+    UniformBeamHeight p p 1
+
+/--
+A concrete obstruction to beam-birth behavior at row `p`.
+
+This isolates the witness needed for the reverse direction: to refute a
+boundary at a composite row, it suffices to find one inner coefficient whose
+`p`-height is not `1`.
+-/
+def BeamBirthBoundaryObstruction (p : ℕ) : Prop :=
+  ∃ k, 0 < k ∧ k < p ∧ padicValNat p (Nat.choose p k) ≠ 1
+
+/--
 Every inner coefficient of row `p^n` is divisible by `p`.
 
 This is the support-level `p^n` filter.  It deliberately records only the first
@@ -214,6 +234,54 @@ theorem prime_uniformBeamHeight_self
     (padicValNat_choose_prime_pow (p := p) (n := 1) (k := k) hp hkp_pow hk_ne)
 
 /--
+Prime rows satisfy the beam-birth boundary.
+-/
+theorem prime_beamBirthBoundary
+    {p : ℕ} (hp : p.Prime) :
+    BeamBirthBoundary p :=
+  ⟨fun _ hdp => below_prime_uniformBeamHeight_zero hp hdp,
+    prime_uniformBeamHeight_self hp⟩
+
+/-- The lower side of a packaged beam-birth boundary. -/
+theorem BeamBirthBoundary.below
+    {p d : ℕ} (H : BeamBirthBoundary p) (hdp : d < p) :
+    UniformBeamHeight d p 0 :=
+  H.1 d hdp
+
+/-- The birth-row side of a packaged beam-birth boundary. -/
+theorem BeamBirthBoundary.self
+    {p : ℕ} (H : BeamBirthBoundary p) :
+    UniformBeamHeight p p 1 :=
+  H.2
+
+/--
+For a known prime, a beam-birth boundary recovers the older inner support-prime
+view.
+-/
+theorem BeamBirthBoundary.innerRowSupportPrime
+    {p : ℕ} (hp : p.Prime) (H : BeamBirthBoundary p) :
+    InnerRowSupportPrime p p :=
+  H.self.innerRowSupportPrime hp (by norm_num)
+
+/--
+Any concrete obstruction rules out the beam-birth boundary.
+-/
+theorem not_beamBirthBoundary_of_obstruction
+    {p : ℕ} (h : BeamBirthBoundaryObstruction p) :
+    ¬ BeamBirthBoundary p := by
+  rintro H
+  rcases h with ⟨k, hk0, hkp, hk_ne⟩
+  exact hk_ne (H.self k hk0 hkp)
+
+/--
+The prime boundary has no obstruction.
+-/
+theorem not_obstruction_of_prime
+    {p : ℕ} (hp : p.Prime) :
+    ¬ BeamBirthBoundaryObstruction p := by
+  exact fun h => not_beamBirthBoundary_of_obstruction h (prime_beamBirthBoundary hp)
+
+/--
 Prime rows recover their inner support prime through the uniform-height bridge.
 -/
 theorem prime_innerRowSupportPrime_self_of_uniformBeamHeight
@@ -269,6 +337,10 @@ example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
 example {p : ℕ} (hp : p.Prime) :
     UniformBeamHeight p p 1 :=
   prime_uniformBeamHeight_self hp
+
+example {p : ℕ} (hp : p.Prime) :
+    BeamBirthBoundary p :=
+  prime_beamBirthBoundary hp
 
 example {d p : ℕ} (hp : p.Prime) (hdp : d < p) :
     UniformBeamHeight d p 0 :=

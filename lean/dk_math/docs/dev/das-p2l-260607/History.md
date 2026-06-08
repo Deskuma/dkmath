@@ -338,3 +338,50 @@ d = p : p-height = 1
 が固定されました。
 
 これで「p 境界」はかなり確固たる形です。`p` は `p` 行未満では Beam に現れず、`p` 行で初めて全 Beam に高さ 1 として現れる。
+
+### 2026/06/09  0:14
+
+実装で確認しました。`BeamBirthBoundary` と obstruction 側の橋を [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean) に追加しています。
+
+入れた定義：
+
+```lean
+def BeamBirthBoundary (p : ℕ) : Prop :=
+  (∀ d, d < p → UniformBeamHeight d p 0) ∧
+    UniformBeamHeight p p
+
+```
+
+```lean
+def BeamBirthBoundaryObstruction (p : ℕ) : Prop :=
+  ∃ k, 0 < k ∧ k < p ∧ padicValNat p (Nat.choose p k) ≠ 1
+```
+
+確認できた定理：
+
+```lean
+theorem prime_beamBirthBoundary
+    {p : ℕ} (hp : p.Prime) :
+    BeamBirthBoundary p
+```
+
+つまり、素数なら
+
+```text
+p 未満の行では p-height = 0
+p 行では p-height = 1
+```
+
+が Lean 上で固定されました。
+
+さらに分解用 API も追加しています。
+
+```lean
+theorem BeamBirthBoundary.below
+theorem BeamBirthBoundary.self
+theorem BeamBirthBoundary.innerRowSupportPrime
+theorem not_beamBirthBoundary_of_obstruction
+theorem not_obstruction_of_prime
+```
+
+逆向き `BeamBirthBoundary p → p.Prime` は、既存 API だけではまだ直接つながりませんでした。今の不足要素は明確で、「合成数 `p` なら `BeamBirthBoundaryObstruction p` が存在する」という witness 定理です。
