@@ -21,7 +21,7 @@
 
 場所:
 
-- [ABC038.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/ABC/ABC038.lean)
+- [ABC038.lean](/lean/dk_math/DkMath/ABC/ABC038.lean)
 - `quality_le_of_not_bad_with_tail`
 - `quality_le_of_not_bad_with_log`
 
@@ -61,7 +61,7 @@ bridge が刺さる理由:
 
 場所:
 
-- [ABC016.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/ABC/ABC016.lean)
+- [ABC016.lean](/lean/dk_math/DkMath/ABC/ABC016.lean)
 - `twoTail_le_rad_pow_of_log_bound`
 - その上流の `piSqRad_adjacent_le_of_not_is_bad_a`
 
@@ -100,7 +100,7 @@ bridge が刺さる理由:
 
 場所:
 
-- [RatioBound.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/ABC/RatioBound.lean)
+- [RatioBound.lean](/lean/dk_math/DkMath/ABC/RatioBound.lean)
 - `count_with_rad_eq_le_div`
 
 現状の役割:

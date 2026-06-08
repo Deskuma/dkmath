@@ -19,7 +19,7 @@
 
 対象 theorem:
 
-- [ABC038.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/ABC/ABC038.lean)
+- [ABC038.lean](/lean/dk_math/DkMath/ABC/ABC038.lean)
   - `quality_le_of_not_bad_with_tail`
   - `quality_le_of_not_bad_with_log`
 

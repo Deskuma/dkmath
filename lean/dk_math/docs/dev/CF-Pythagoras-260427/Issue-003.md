@@ -88,8 +88,8 @@ Lean 4 Web (<https://live.lean-lang.org/>) でも同じコードが問題なく�
 
 ## 関連ファイル
 
-- `/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaPythagoras.lean`
-- `/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaPythagorasExamples.lean`
+- `/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaPythagoras.lean`
+- `/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaPythagorasExamples.lean`
 
 ## 参照
 
