@@ -291,6 +291,14 @@ noncomputable def aksQuotientC (R : Type*) [CommRing R] (r : ℕ) (a : R) :
     AKSCyclicQuotient R r :=
   aksQuotientMap R r (C a)
 
+def AKSCyclicCongruenceHolds (n r a : ℕ) : Prop :=
+  (aksQuotientX (ZMod n) r + aksQuotientC (ZMod n) r (a : ZMod n)) ^ n =
+    aksQuotientX (ZMod n) r ^ n + aksQuotientC (ZMod n) r (a : ZMod n)
+
+def AKSCyclicFoldedCongruenceHolds (n r a : ℕ) : Prop :=
+  (aksQuotientX (ZMod n) r + aksQuotientC (ZMod n) r (a : ZMod n)) ^ n =
+    aksQuotientX (ZMod n) r ^ (n % r) + aksQuotientC (ZMod n) r (a : ZMod n)
+
 /-- The quotient map sends polynomial `X` to `aksQuotientX`. -/
 theorem aksQuotientMap_X
     (R : Type*) [CommRing R] (r : ℕ) :
@@ -444,6 +452,39 @@ theorem prime_aksQuotient_X_add_C_pow_eq
   have h := prime_aksQuotientMap_X_add_C_pow_eq (r := r) (a := a) hp
   rw [aksQuotientMap_X_add_C_pow, aksQuotientMap_X_pow_add_C] at h
   exact h
+
+theorem prime_aksQuotient_X_add_C_pow_eq_mod
+    {p r a : ℕ} (hp : p.Prime) :
+    (aksQuotientX (ZMod p) r + aksQuotientC (ZMod p) r (a : ZMod p)) ^ p =
+      aksQuotientX (ZMod p) r ^ (p % r) +
+        aksQuotientC (ZMod p) r (a : ZMod p) := by
+  rw [prime_aksQuotient_X_add_C_pow_eq hp]
+  rw [aksQuotientX_pow_eq_pow_mod]
+
+theorem AKSCyclicCongruenceHolds.prime
+    {p r a : ℕ} (hp : p.Prime) :
+    AKSCyclicCongruenceHolds p r a := by
+  unfold AKSCyclicCongruenceHolds
+  exact prime_aksQuotient_X_add_C_pow_eq hp
+
+theorem prime_aks_cyclic_frobenius
+    {p r a : ℕ} (hp : p.Prime) :
+    (aksQuotientX (ZMod p) r + aksQuotientC (ZMod p) r (a : ZMod p)) ^ p =
+      aksQuotientX (ZMod p) r ^ (p % r) +
+        aksQuotientC (ZMod p) r (a : ZMod p) := by
+  exact prime_aksQuotient_X_add_C_pow_eq_mod hp
+
+theorem prime_AKSCyclicCongruenceHolds
+    {p r a : ℕ} (hp : p.Prime) :
+    AKSCyclicCongruenceHolds p r a := by
+  unfold AKSCyclicCongruenceHolds
+  exact prime_aksQuotient_X_add_C_pow_eq hp
+
+theorem prime_AKSCyclicFoldedCongruenceHolds
+    {p r a : ℕ} (hp : p.Prime) :
+    AKSCyclicFoldedCongruenceHolds p r a := by
+  unfold AKSCyclicFoldedCongruenceHolds
+  exact prime_aks_cyclic_frobenius hp
 
 section samples
 
