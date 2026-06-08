@@ -472,3 +472,26 @@ theorem prime_not_dvd_pascalCoeffMass_of_row_lt
 ```
 
 `k ≤ n` を入れているのは重要で、`k > n` だと `Nat.choose n k = 0` になり、自然数では任意の `p` が `0` を割ってしまうためです。
+
+### 2026/06/09  1:45
+
+整理ドキュメントを追加しました。
+
+新規作成:
+[PascalPrimeDialProgress.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/PascalPrimeDialProgress.md)
+
+内容は、当初ロードマップから派生した現在地の整理です。`BinomialPrime`、`BinomialPrimePower`、`WeightedBinomial`、`PascalPrimeDial` の役割、追加された `PrimePrebirthAlternation`、未到達 prime の補題、次の安全な実装候補をまとめています。
+
+追記:
+[BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+
+ロードマップ冒頭に、今回の `PascalPrimeDial` 系は本線の置き換えではなく、Pascal 行の prime support 観測層として派生したものだと明記し、新規整理文書への参照を追加しました。
+
+検証は docs-only なので Lean build は走らせず、以下を確認しました。
+
+```text
+git diff --check
+wc -L
+```
+
+どちらも問題なしです。
