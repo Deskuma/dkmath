@@ -1158,7 +1158,7 @@ UniformBeamHeight d p h
 → AllInnerChooseDivisible d p
 ```
 
-これは「高さが正なら `p` で割れる」という基本橋です。  
+これは「高さが正なら `p` で割れる」という基本橋です。
 `padicValNat_le_iff_dvd` でほぼそのまま行けます。
 
 1. 素数行の高さ定理から既存構造へ接続
@@ -1181,7 +1181,7 @@ prime_uniformBeamHeight_self
 v_p(choose(p^n, k)) = n - v_p(k)
 ```
 
-なので、全 inner coefficient が高さ `n` で揃うわけではありません。  
+なので、全 inner coefficient が高さ `n` で揃うわけではありません。
 揃うのは `¬ p ∣ k` の層です。
 
 だから次に必要なのは、おそらくこれです。
@@ -1217,3 +1217,92 @@ theorem prime_power_unitFilteredBeamHeight
 ```
 
 へきれいに分かれます。既存素数定理との橋として十分強いです。
+
+---
+
+d = p : p-height = 1 が何故、成立するのか。
+何故高さが１で並ぶのか？
+その原理追求からの素数境界の条件を抽出すべきか？
+
+はい、抽出すべきです。今見えているのは単なる事実ではなく、かなり綺麗な「素数境界原理」です。
+
+原理はこう分解できます。
+
+```text
+d < p  : p-height = 0
+d = p  : p-height = 1
+```
+
+なぜ `d = p` で高さが 1 に揃うかというと、構造的には：
+
+```text
+k * choose(p, k) = p * choose(p - 1, k - 1)
+```
+
+だからです。
+
+`0 < k < p` なら `p ∤ k`。
+さらに `p - 1 < p` なので、前段 `p - 1` の係数には `p` が出ない。
+つまり右辺には `p` がちょうど 1 個だけあり、それが `choose(p,k)` 側へ移る。
+
+```text
+v_p(k) = 0
+v_p(choose(p - 1, k - 1)) = 0
+v_p(p) = 1
+
+よって
+v_p(choose(p,k)) = 1
+```
+
+これが「高さ 1 で並ぶ」理由です。
+
+今の Lean 実装では Kummer 経由で証明していますが、概念としては次の定義を切り出すとよさそうです。
+
+```lean
+def BeamBirthBoundary (p : ℕ) : Prop :=
+  (∀ d, d < p → UniformBeamHeight d p 0) ∧
+  UniformBeamHeight p p 1
+```
+
+そしてまず：
+
+```lean
+theorem prime_beamBirthBoundary
+    {p : ℕ} (hp : p.Prime) :
+    BeamBirthBoundary p
+```
+
+これは既存の
+
+```lean
+below_prime_uniformBeamHeight_zero
+prime_uniformBeamHeight_self
+```
+
+だけで即通るはずです。
+
+その次に欲しい橋は逆向きです。
+
+```lean
+theorem prime_of_beamBirthBoundary
+    {p : ℕ} (hp_gt1 : 1 < p)
+    (h : BeamBirthBoundary p) :
+    p.Prime
+```
+
+これは少し重い可能性があります。実質的には古典定理：
+
+```text
+n が素数 ⇔ 0 < k < n のすべてで n ∣ choose(n,k)
+```
+
+への橋です。
+
+なので次の実装順は：
+
+1. `BeamBirthBoundary` を定義する
+2. `p.Prime → BeamBirthBoundary p` を固定する
+3. `BeamBirthBoundary p → AllInnerChooseDivisible p p` を出す
+4. 逆向き `AllInnerChooseDivisible p p → p.Prime` の既存定理探索、なければ別ファイルで計画化
+
+ここまで行くと、「p 行で初めて p が生まれる」が単なる説明ではなく、Lean の境界定理になります。

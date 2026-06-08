@@ -236,7 +236,7 @@ git diff --check
 
 ### 2026/06/08 20:28
 
-行けました。`UniformBeamHeight` と素数行の高さ定理を [BinomialPrimePower.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) に追加しました。
+行けました。`UniformBeamHeight` と素数行の高さ定理を [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) に追加しました。
 
 追加内容：
 
@@ -299,7 +299,7 @@ theorem prime_power_unitFilteredBeamHeight
 
 実装しました。これで「`p` 行が初出生ライン」という形が Lean 上でかなり明確になりました。
 
-追加した定理は [BinomialPrimePower.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) のこの2本です。
+追加した定理は [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) のこの2本です。
 
 ```lean
 theorem below_prime_uniformBeamHeight_zero
