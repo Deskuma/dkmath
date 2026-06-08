@@ -495,3 +495,41 @@ wc -L
 ```
 
 どちらも問題なしです。
+
+### 2026/06/09  4:01
+
+AKS 入口の橋を実装しました。
+
+追加:
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean)
+
+主な定理はこの3つです。
+
+```lean
+theorem prime_inner_choose_eq_zero_zmod
+theorem prime_inner_pascalCoeffMass_eq_zero_zmod
+theorem prime_polynomial_X_add_C_pow_eq
+```
+
+特に AKS の核になる形を固定しました。
+
+```lean
+theorem prime_polynomial_X_add_C_pow_eq
+    {p a : ℕ} (hp : p.Prime) :
+    ((X : (ZMod p)[X]) + C (a : ZMod p)) ^ p =
+      X ^ p + C (a : ZMod p)
+```
+
+これは `ZMod p` 上の freshman dream で、AKS の多項式合同へ進むための入口です。まだ `X^r - 1` による剰余多項式環までは入れていません。そこは次段です。
+
+トップレベル [DkMath.lean](/lean/dk_math/DkMath.lean) にも import を追加済みです。
+
+検証済み:
+
+```text
+lake build DkMath.NumberTheory.AKSBridge
+lake build DkMath
+git diff --check
+```
+
+`AKSBridge.lean` に `sorry/axiom/admit` はありません。全体ビルドでは既存ファイル由来の `sorry` 警告は出ています。
