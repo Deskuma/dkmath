@@ -725,3 +725,228 @@ FactorRigid p → ¬ NontrivialGapPowerDiff p
   mathlib の Kummer/factorization 形を `padicValNat` 形に変換。
 - `prime_power_dvd_choose_of_not_dvd_index`
   `¬ p ∣ k` なら `p^n ∣ choose (p^n) k`。ここが「p^n フィルター」の最初の精密層です。
+
+## p^n 篩
+
+ここで追加する「篩」は、**Beam の p-adic 高さを見る層**ですね。
+
+既存ファイルの流れに足すなら、こんな設計が自然です。
+
+```lean
+/--
+All inner coefficients in row `d` have exactly the same `p`-adic height `h`.
+
+This is a stricter beam filter than mere divisibility: not only does `p`
+divide every inner coefficient, the visible `p`-support has uniform height.
+-/
+def UniformBeamHeight (d p h : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d →
+    padicValNat p (Nat.choose d k) = h
+```
+
+意味は：
+
+```text
+第 d 行の Beam 係数すべてについて、
+p の指数がちょうど h で揃っている
+```
+
+です。
+
+---
+
+素数行では高さ `1` に揃います。
+
+```lean
+/--
+Prime rows have uniform beam height `1` at their own prime.
+-/
+theorem prime_uniformBeamHeight_self
+    {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1 := by
+  intro k hk0 hkp
+  have hkp_le : k ≤ p := le_of_lt hkp
+  have hk0_ne : k ≠ 0 := hk0.ne'
+  have hval :
+      padicValNat p (Nat.choose (p ^ 1) k) =
+        1 - padicValNat p k := by
+    simpa using
+      (padicValNat_choose_prime_pow (p := p) (n := 1) (k := k)
+        hp (by simpa using hkp_le) hk0_ne)
+  have hpk : ¬ p ∣ k := by
+    intro hdiv
+    rcases hdiv with ⟨c, hc⟩
+    have hp_le_k : p ≤ k := by
+      rw [hc]
+      -- since p ∣ k and k ≠ 0, quotient c is positive
+      have hcpos : 0 < c := by
+        by_contra hc0
+        have hc_eq : c = 0 := Nat.eq_zero_of_not_pos hc0
+        rw [hc_eq, mul_zero] at hc
+        exact hk0_ne hc.symm
+      exact Nat.le_mul_of_pos_right hcpos
+    exact not_le_of_gt hkp hp_le_k
+  have hvk : padicValNat p k = 0 :=
+    (DkMath.ABC.padicValNat_eq_zero_iff hp hk0_ne).mpr hpk
+  rw [hval, hvk]
+  norm_num
+```
+
+ただ、ここはもっと簡単にいける可能性があります。
+`0 < k < p` から `¬ p ∣ k` を作る部分が少し長いです。
+
+---
+
+素数冪行の濃淡そのものは、すでにこの定理で表せています。
+
+```lean
+theorem padicValNat_choose_prime_pow_add_index
+    {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
+    padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n
+```
+
+これを「篩」として名前付けするなら、こういう定義も良いです。
+
+```lean
+/--
+Prime-power beam height law.
+
+The `p`-height of the `k`-th beam coefficient and the `p`-height already
+present in the index `k` add up to the row exponent.
+-/
+def PrimePowerBeamHeightLaw (p n : ℕ) : Prop :=
+  ∀ k, 0 < k → k < p ^ n →
+    padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n
+```
+
+そして定理：
+
+```lean
+/--
+Prime-power rows satisfy the beam height conservation law.
+-/
+theorem prime_power_beamHeightLaw
+    {p n : ℕ} (hp : p.Prime) :
+    PrimePowerBeamHeightLaw p n := by
+  intro k hk0 hkp
+  exact padicValNat_choose_prime_pow_add_index
+    hp (le_of_lt hkp) hk0.ne'
+```
+
+これはかなり綺麗です。
+
+---
+
+さらに、素数行はこの法則の `n = 1` で、しかも内側 index は `p` を持たないので、高さが全部 `1` に揃う、という位置づけになります。
+
+構造としてはこうです。
+
+```text
+AllInnerChooseDivisible d p
+  Beam に p が最低1本通る
+
+UniformBeamHeight d p h
+  Beam の p 高さが h で揃う
+
+PrimePowerBeamHeightLaw p n
+  row p^n では
+  Beam係数高さ + index高さ = n
+```
+
+---
+
+追加場所は、`BinomialPrimePower.lean` の `padicValNat_choose_prime_pow_add_index` の直後がよさそうです。
+
+おすすめ追加コードはまずこの2つです。
+
+```lean
+/--
+All inner coefficients in row `d` have exactly the same `p`-adic height `h`.
+
+This is a stricter beam filter than mere divisibility: not only does `p`
+divide every inner coefficient, the visible `p`-support has uniform height.
+-/
+def UniformBeamHeight (d p h : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d →
+    padicValNat p (Nat.choose d k) = h
+
+/--
+Prime-power beam height law.
+
+The `p`-height of the `k`-th beam coefficient and the `p`-height already
+present in the index `k` add up to the row exponent.
+-/
+def PrimePowerBeamHeightLaw (p n : ℕ) : Prop :=
+  ∀ k, 0 < k → k < p ^ n →
+    padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n
+
+/--
+Prime-power rows satisfy the beam height conservation law.
+-/
+theorem prime_power_beamHeightLaw
+    {p n : ℕ} (hp : p.Prime) :
+    PrimePowerBeamHeightLaw p n := by
+  intro k hk0 hkp
+  exact padicValNat_choose_prime_pow_add_index
+    hp (le_of_lt hkp) hk0.ne'
+```
+
+これは既存の定理だけで通るはずです。
+
+---
+
+そして「素数行では高さが揃う」は、次のチェックポイントで追加するとよいです。
+
+```lean
+/--
+Prime rows have uniform beam height `1` at their own prime.
+-/
+theorem prime_uniformBeamHeight_self
+    {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1 := by
+  intro k hk0 hkp
+  have hlaw :
+      padicValNat p (Nat.choose (p ^ 1) k) + padicValNat p k = 1 :=
+    padicValNat_choose_prime_pow_add_index
+      hp (by simpa using le_of_lt hkp) hk0.ne'
+  have hnot : ¬ p ∣ k := by
+    intro hpk
+    have hp_le_k : p ≤ k := Nat.Prime.le_of_dvd hp hk0.ne' hpk
+    exact not_le_of_gt hkp hp_le_k
+  have hvk : padicValNat p k = 0 :=
+    (DkMath.ABC.padicValNat_eq_zero_iff hp hk0.ne').mpr hnot
+  rw [hvk, add_zero] at hlaw
+  simpa using hlaw
+```
+
+ここで使っている
+
+```lean
+Nat.Prime.le_of_dvd
+```
+
+が環境で通らない場合は、さっきのように `rcases hpk` で手作りできます。
+
+---
+
+この篩を入れると、分類がこうなります。
+
+```text
+Row p:
+  UniformBeamHeight p p 1
+
+Row p^n:
+  PrimePowerBeamHeightLaw p n
+  高さは n - v_p(k)
+
+Row 6, 36 など:
+  そもそも単一 p が全 Beam を貫通しない
+```
+
+つまり新しい篩は、
+
+> Beam に support があるか
+> その support の高さが揃っているか
+> 素数冪として濃淡法則を持つか
+
+を見る層になります。
