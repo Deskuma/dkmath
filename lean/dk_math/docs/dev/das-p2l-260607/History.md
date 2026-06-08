@@ -66,3 +66,49 @@ git diff --check
 ```
 
 今回追加・変更した Lean ファイルには `sorry/axiom/admit` なしです。
+
+### 2026/06/08 14:42
+
+適用実験の第1波を入れました。`Big = Boundary + GapAxis * Kernel` が、WeightedBinomial だけでなく宇宙式本体と ABC mass 側にも刺さりました。
+
+主な追加:
+
+- [Mass/Decompose.lean](/lean/dk_math/DkMath/CosmicFormula/Mass/Decompose.lean)
+  - `coreBeamGapBodyGapSplit`
+  - `coreBeamGapBodyGapKernelSplit`
+  - `residualNatBodyGapSplit`
+  - `residualNatBodyGapSplit_gap_eq_residual`
+  - `residualIntBodyGapSplit`
+  - `residualIntBodyGapSplit_gap_eq_residual`
+
+- [ABC/MassBridge.lean](/lean/dk_math/DkMath/ABC/MassBridge.lean)
+  - `abcBodyGapSplit`
+  - `abc_bodyGapSplit_body_le_big`
+  - `abc_bodyGapSplit_gap_le_big`
+  - `abc_bodyGapSplit_gap_eq_residual`
+
+特に重要なのはこれです。
+
+```lean
+coreBeamGapBodyGapKernelSplit
+```
+
+宇宙式本体を
+
+```text
+Big = Gap + x * GN
+```
+
+として `BodyGapKernelSplit` に載せました。これで `WeightedBinomial` の `GTail` 版と、`CoreBeamGap` の `GN` 版が同じ interface に乗ります。
+
+検証済み:
+
+```text
+lake build DkMath.CosmicFormula.Mass.Decompose
+lake build DkMath.ABC.MassBridge
+lake build DkMath.CosmicFormula.Mass
+lake build DkMath
+git diff --check
+```
+
+今回対象ファイルには `sorry/axiom/admit` なしです。既存の別モジュール由来の `sorry` warning は継続しています。

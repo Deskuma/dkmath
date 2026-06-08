@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CosmicFormula.Mass.Core
+import DkMath.CosmicFormula.Mass.BodyGapSplit
 
 #print "file: DkMath.CosmicFormula.Mass.Decompose"
 
@@ -42,6 +43,30 @@ theorem mass_big_eq_mass_core_add_mass_beam_add_mass_gap_of_coreBeamGap
         (ofCoreBeamGap R).massGap d x u := by
   simpa [ofCoreBeamGap] using
     DkMath.CosmicFormula.CoreBeamGap.big_eq_core_beam_gap (d := d) hd x u
+
+/-- `CoreBeamGap` packaged as a reusable `BodyGapSplit`. -/
+def coreBeamGapBodyGapSplit
+    (d : ℕ) (x u : R) : BodyGapSplit R where
+  big := (ofCoreBeamGap R).massBig d x u
+  body := (ofCoreBeamGap R).massBody d x u
+  gap := (ofCoreBeamGap R).massGap d x u
+  split := mass_big_eq_mass_body_add_mass_gap_of_coreBeamGap d x u
+
+/--
+`CoreBeamGap` packaged as `Big = Gap + x * GN`.
+
+This is the cosmic-formula specialization of the common
+`Big = Boundary + GapAxis * Kernel` interface.
+-/
+def coreBeamGapBodyGapKernelSplit
+    (d : ℕ) (x u : R) : BodyGapKernelSplit R where
+  big := (ofCoreBeamGap R).massBig d x u
+  boundary := (ofCoreBeamGap R).massGap d x u
+  gapAxis := x
+  kernel := DkMath.CosmicFormulaBinom.GN d x u
+  split := by
+    simpa [ofCoreBeamGap, DkMath.CosmicFormulaBinom.BodyN, add_comm] using
+      mass_big_eq_mass_body_add_mass_gap_of_coreBeamGap d x u
 
 end CoreBeamGap
 
@@ -91,6 +116,22 @@ theorem mass_residual_eq_mass_gap_of_residualNat
   simpa [ofResidualNat] using
     DkMath.CosmicFormula.residual_eq_gap d x u
 
+/-- `ResidualNat` packaged as a reusable `BodyGapSplit`. -/
+def residualNatBodyGapSplit
+    (d x u : ℕ) : BodyGapSplit ℕ where
+  big := ofResidualNat.massBig d x u
+  body := ofResidualNat.massBody d x u
+  gap := ofResidualNat.massGap d x u
+  split := mass_big_eq_mass_body_add_mass_gap_of_residualNat d x u
+
+/-- The residual part of the `ResidualNat` split is exactly its gap. -/
+theorem residualNatBodyGapSplit_gap_eq_residual
+    (d x u : ℕ) :
+    (residualNatBodyGapSplit d x u).gap =
+      ofResidualNat.massResidual d x u := by
+  symm
+  exact mass_residual_eq_mass_gap_of_residualNat d x u
+
 end ResidualNat
 
 section ResidualInt
@@ -123,6 +164,22 @@ theorem mass_residual_eq_mass_gap_of_residualInt
     (d : ℕ) (x u : ℤ) :
     ofResidualInt.massResidual d x u = ofResidualInt.massGap d x u := by
   exact DkMath.CosmicFormula.residualInt_eq_gapInt d x u
+
+/-- `ResidualInt` packaged as a reusable `BodyGapSplit`. -/
+def residualIntBodyGapSplit
+    (d : ℕ) (x u : ℤ) : BodyGapSplit ℤ where
+  big := ofResidualInt.massBig d x u
+  body := ofResidualInt.massBody d x u
+  gap := ofResidualInt.massGap d x u
+  split := mass_big_eq_mass_body_add_mass_gap_of_residualInt d x u
+
+/-- The residual part of the `ResidualInt` split is exactly its gap. -/
+theorem residualIntBodyGapSplit_gap_eq_residual
+    (d : ℕ) (x u : ℤ) :
+    (residualIntBodyGapSplit d x u).gap =
+      ofResidualInt.massResidual d x u := by
+  symm
+  exact mass_residual_eq_mass_gap_of_residualInt d x u
 
 end ResidualInt
 
