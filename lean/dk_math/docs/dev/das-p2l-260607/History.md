@@ -669,3 +669,38 @@ X^(k+r) = X^k
 - 追加箇所に `sorry/admit/axiom` なし
 
 全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09  5:23
+
+追加しました。場所は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+入れた補題:
+
+```lean
+theorem pow_add_mul_period_of_pow_eq_one
+theorem pow_eq_pow_mod_of_pow_eq_one
+
+theorem aksQuotientX_pow_add_mul_r_eq_pow
+theorem aksQuotientX_pow_eq_pow_mod
+```
+
+これで次が Lean 上で固定されました。
+
+```lean
+-- 抽象形
+a^r = 1 → a^(k + r*t) = a^k
+a^r = 1 → a^k = a^(k % r)
+
+-- AKS quotient 形
+X^(k + r*t) = X^k
+X^k = X^(k % r)
+```
+
+`X^k = X^(k % r)` は `Nat.mod_add_div` を使っているので、`r > 0` 仮定なしで通っています。`r = 0` の場合も `k % 0 = k` なので自明形になります。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
