@@ -715,6 +715,161 @@ FactorRigid p → ¬ NontrivialGapPowerDiff p
 
 ---
 
+## p^n フィルター
+
+ここからですよねぇ。
+Kummerの定理、p^n フィルター。
+可除性構造のみで素数の原始を捕まえられるか。
+
+はい、ここが Kummer 入口です。
+
+可除性構造だけで見える範囲はかなり強いですが、整理するとこうです。
+
+- `AllInnerChooseDivisible d p` は「段 `d` の内側係数がすべて `p` を含む」という支持構造を捕まえる。
+- ただしこれは `d = p` だけでなく `d = p^n` でも成立する。
+- したがって「素数段そのもの」を捕まえるには不足。
+- しかし「段 `d` が `p` 系の素数冪段である」ことを捕まえる方向には非常に自然。
+
+ここで Kummer / factorization が効きます。
+
+```lean
+Nat.factorization_choose_prime_pow
+```
+
+の形で、概念的には
+
+```text
+v_p (choose (p^n) k) = n - v_p(k)
+```
+
+が使えます。
+
+つまり `0 < k < p^n` なら `v_p(k) < n` なので、内側係数は必ず `p` で割れる。
+さらに `p ∤ k` なら `v_p(k) = 0` なので、
+
+```text
+p^n ∣ choose (p^n) k
+```
+
+まで見える。
+
+ここが `p^n` フィルターですね。
+
+Lean 実装としては次の一手がよさそうです。
+
+```lean
+def PrimePowerRowSupport (d p : ℕ) : Prop :=
+  ∃ n, 0 < n ∧ d = p ^ n ∧ InnerRowSupportPrime d p
+```
+
+または、より直接に
+
+```lean
+def PrimePowerInnerFilter (p n : ℕ) : Prop :=
+  p.Prime ∧ 0 < n ∧ InnerRowSupportPrime (p ^ n) p
+```
+
+そして最初の定理はこれです。
+
+```lean
+theorem prime_power_innerRowSupportPrime
+    {p n : ℕ} (hp : p.Prime) (hn : 0 < n) :
+    InnerRowSupportPrime (p ^ n) p := ...
+```
+
+この定理が固定できると、現在の `RowBirthPrime` は「素数段」から「素数冪段の支持」へ自然に拡張できます。
+
+結論としては、可除性だけで「原始的な素数の発生源」はかなり捕まえられます。ただし `d = p` と `d = p^n` を分離するには、単なる `p ∣ choose d k` では足りず、`p^n` 可除性の階層、つまり factorization / valuation を「可除性の段階構造」として導入するのが Lean らしい道筋です。
+
+入れた主な補題は次です。
+
+- `prime_power_innerRowSupportPrime`
+  `p^n` 段の内側係数がすべて `p` を支持することを固定。
+- `prime_power_rowBirthPrime`
+  `0 < n` なら `p ∣ p^n` なので `RowBirthPrime (p^n) p` へ接続。
+- `padicValNat_choose_prime_pow`
+  mathlib の Kummer/factorization 形を `padicValNat` 形に変換。
+- `prime_power_dvd_choose_of_not_dvd_index`
+  `¬ p ∣ k` なら `p^n ∣ choose (p^n) k`。ここが「p^n フィルター」の最初の精密層です。
+
+ここからどう攻めるか？
+
+攻め筋は `prime_power_dvd_choose_of_not_dvd_index` を特殊例として、もっと一般の **valuation filter** に昇格するのがよいです。
+
+今ある定理は：
+
+```lean
+¬ p ∣ k → p ^ n ∣ Nat.choose (p ^ n) k
+```
+
+つまり `v_p(k) = 0` の層だけを見ています。次はこれを
+
+```text
+v_p(choose (p^n) k) = n - v_p(k)
+```
+
+から直接、
+
+```lean
+r + padicValNat p k ≤ n →
+p ^ r ∣ Nat.choose (p ^ n) k
+```
+
+へ一般化するのが本筋です。
+
+名前は例えば：
+
+```lean
+theorem prime_power_pow_dvd_choose_of_padicValNat_index
+    {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ Nat.choose (p ^ n) k
+```
+
+これが立つと、全部が統一されます。
+
+- `r = 1`
+  内側係数は `p` で割れる、つまり `InnerRowSupportPrime`
+- `r = n` かつ `padicValNat p k = 0`
+  既存の `prime_power_dvd_choose_of_not_dvd_index`
+- `k` が `p^s` を含む場合
+  係数側には `p^(n-s)` が残る
+
+これで「p^n フィルター」が、単なる yes/no 可除性ではなく、層構造として使えます。
+
+その次にやるべきは weighted 側への持ち上げです。
+
+```lean
+p ^ r ∣ Nat.choose (p ^ n) k →
+p ^ r ∣ weightedBinomialTerm (p ^ n) k x u
+```
+
+これは乗算で保たれるので軽いです。ここまで行くと、
+
+```text
+Pascal の加法生成
+→ binomial coefficient の p-adic 層
+→ weighted term
+→ GN / BodyGapKernelSplit
+```
+
+の橋ができます。
+
+なので次の実装チェックポイントはこれです。
+
+1. `prime_power_pow_dvd_choose_of_padicValNat_index`
+2. `prime_power_padicValNat_choose_add_index`
+
+   ```lean
+   padicValNat p (choose (p^n) k) + padicValNat p k = n
+   ```
+
+3. weighted term への `p^r` 可除性リフト
+
+ここを固めると、「素数原始を可除性だけで観測する」道具としてかなり強くなります。
+
+---
+
 入れた主な補題は次です。
 
 - `prime_power_innerRowSupportPrime`
@@ -968,3 +1123,97 @@ theorem prime_uniformBeamHeight_self
 ```
 
 証明は `padicValNat_choose_prime_pow` の `n = 1` 特殊化を使っています。`0 < k < p` なので `p ∤ k`、よって `padicValNat p k = 0`。したがって Beam 側は `1 - 0 = 1` です。
+
+### 素数定理への橋
+
+はい。ここからは「既存素数定理とつなぐ橋」を作りながら、足りないものを露出させる段階です。
+
+今の `UniformBeamHeight` は、既存定理へかなり自然に接続できます。
+
+まず直結する既存定理はこのあたりです。
+
+```lean
+Nat.Prime.dvd_choose_self
+Nat.Prime.dvd_choose_pow
+Nat.Prime.dvd_choose_pow_iff
+Nat.factorization_choose_prime_pow
+padicValNat_choose
+```
+
+DkMath 側では特にこの系列と相性がよいです。
+
+```lean
+DkMath.ABC.padicValNat_le_iff_dvd
+DkMath.ABC.padicValNat_eq_zero_iff
+DkMath.NumberTheory.UniqueFactorizationGN.factorization_eq_of_prime_pow_dvd_iff
+```
+
+攻め方は次の順がよさそうです。
+
+1. `UniformBeamHeight` から既存の可除性観測へ戻す橋
+
+```lean
+UniformBeamHeight d p h
+0 < h
+→ AllInnerChooseDivisible d p
+```
+
+これは「高さが正なら `p` で割れる」という基本橋です。  
+`padicValNat_le_iff_dvd` でほぼそのまま行けます。
+
+1. 素数行の高さ定理から既存構造へ接続
+
+```lean
+prime_uniformBeamHeight_self
+→ prime_allInnerChooseDivisible_self
+→ prime_innerRowSupportPrime_self
+```
+
+つまり、新しい高さ観測が、既存の `InnerRowSupportPrime` より強いことを明示できます。
+
+1. `p^n` 行では「全 Beam 一様」ではなく「単位 index 上で一様」
+
+ここが重要です。
+
+`p^n` 行では一般に
+
+```text
+v_p(choose(p^n, k)) = n - v_p(k)
+```
+
+なので、全 inner coefficient が高さ `n` で揃うわけではありません。  
+揃うのは `¬ p ∣ k` の層です。
+
+だから次に必要なのは、おそらくこれです。
+
+```lean
+def FilteredBeamHeight (d p h : ℕ) (P : ℕ → Prop) : Prop :=
+  ∀ k, 0 < k → k < d → P k →
+    padicValNat p (Nat.choose d k) = h
+```
+
+そして：
+
+```lean
+theorem prime_power_unitFilteredBeamHeight
+    {p n : ℕ} (hp : p.Prime) :
+    FilteredBeamHeight (p ^ n) p n (fun k => ¬ p ∣ k)
+```
+
+これが本当の `p^n` 篩です。
+
+まとめると、足りない要素はこの3つです。
+
+- `UniformBeamHeight → AllInnerChooseDivisible` の下降橋
+- `FilteredBeamHeight` の定義
+- `p^n` 行の unit-index filtered height 定理
+
+ここまで作ると、Beam の観測層が
+
+```text
+可除性
+→ p-adic 高さ
+→ filtered p^n 高さ
+```
+
+へきれいに分かれます。既存素数定理との橋として十分強いです。
