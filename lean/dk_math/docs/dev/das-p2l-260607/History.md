@@ -414,3 +414,49 @@ sorry/axiom/admit なし
 ```
 
 これはかなり良い「目撃情報」です。`BeamBirthBoundary` が `p` 行での誕生だとすると、`PrimePrebirthAlternation` はその直前に現れる「前駆交代相」として扱えます。
+
+### 2026/06/09  1:11
+
+実装実験、通りました。
+
+追加したのは [PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean) です。中核はこの3つです。
+
+```lean
+def pascalCoeffMass (n k : ℕ) : ℕ :=
+  Nat.choose n k
+
+def pascalRowMass (n : ℕ) : ℕ :=
+  2 ^ n
+
+def pascalPrimeDialHeight (p n k : ℕ) : ℕ :=
+  padicValNat p (pascalCoeffMass n k)
+```
+
+既存定理との橋も固定しました。
+
+```lean
+theorem pascalCoeffMass_sum_eq_rowMass
+theorem uniformPrimeDialHeight_iff_uniformBeamHeight
+theorem filteredPrimeDialHeight_iff_filteredBeamHeight
+theorem pascalPrimeDialHeight_prime_pow_add_index
+theorem pascalPrimeDialHeight_prime_pow
+theorem prime_power_unitFilteredPrimeDialHeight
+```
+
+これで「係数質量 `C(n,k)`」「行全体の質量 `2^n`」「素数ダイヤル高さ `v_p(C(n,k))`」が Lean 上でつながりました。特に Kummer 系は、
+
+```lean
+pascalPrimeDialHeight p (p ^ n) k + padicValNat p k = n
+```
+
+として読めるので、素数ダイヤルの回転数観測としてかなり強いです。
+
+検証済みです。
+
+```text
+lake build DkMath.NumberTheory.PascalPrimeDial
+lake build DkMath
+git diff --check
+```
+
+新規ファイルに `sorry/axiom/admit` はありません。既存の `DkMath-Nat_Prime.md` に変更が残っていますが、今回こちらでは触っていません。

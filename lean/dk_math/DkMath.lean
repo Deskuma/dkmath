@@ -22,6 +22,7 @@ import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations
 import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Fillability
 import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
 import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePower: prime-power rows in Pascal's triangle
+import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics

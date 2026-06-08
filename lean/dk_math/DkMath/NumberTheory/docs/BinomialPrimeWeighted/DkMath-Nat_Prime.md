@@ -1369,3 +1369,262 @@ theorem choose_prime_sub_one_mod
 
 これは `p` 行の「全中間係数が p で割れる」の一段前に、`p - 1` 行が **完全な符号交代境界**として現れる、という形です。
 かなり良い観測点です。次に実装する価値があります。
+
+### 三角の模様を追う
+
+p 行と p-1 行の対の関係は、これで明確化。
+p_0 行から次の p_1 行、 p_1 - 1 行は、いまので OK.
+
+p_0 + 1 行から p_1 行の法則か。
+これはきっと三角由来だから、中央項から変化を始めて、次段でサイドへ広がって、最終的に p_1 - 1 行で +1-1 交代和な運動が繰り広げられているように予想される。
+
+ここはある程度大きな素数区間を観測しないと解像度が低いわよねぇ。
+数値検証かな。代数構造的にそれ見える？
+
+見えます。代数構造としてはかなりきれいです。
+
+`mod p₁` で Pascal 行を見るなら、各行は有限体 `ZMod p₁` 上の多項式
+
+```lean
+(1 + X)^n
+```
+
+の係数列です。つまり、`p₀ + 1` 行から `p₁` 行までは
+
+```text
+Pₙ(X) = (1 + X)^n  in  F_{p₁}[X]
+Pₙ₊₁ = (1 + X) Pₙ
+```
+
+という「Pascal flow」です。
+
+そして終端で Frobenius が発動します。
+
+```text
+(1 + X)^p₁ = 1 + X^p₁   in F_{p₁}[X]
+```
+
+だから `p₁` 行では中間係数が全部消える。
+その一段前は
+
+```text
+(1 + X)^(p₁ - 1) * (1 + X) = 1 + X^p₁
+```
+
+なので、次数 `< p₁` の範囲では
+
+```text
+(1 + X)^(p₁ - 1) = 1 - X + X^2 - X^3 + ...
+```
+
+となる。今回固定した `PrimePrebirthAlternation` はこの「Frobenius 境界の一段前」です。
+
+なので、`p₀ + 1` から `p₁ - 1` までは、代数的には
+
+```text
+(1 + X)^n が Frobenius 境界 (1 + X)^p = 1 + X^p に向かう流れ
+```
+
+として見えます。
+
+ただし「中央項から変化し、サイドへ広がる」という模様は、代数的には部分的に見えますが、視覚的な解像度は数値観測が強いです。理由は、端の係数は
+
+```text
+C(n,1)=n
+C(n,2)=n(n-1)/2
+C(n,3)=n(n-1)(n-2)/6
+```
+
+のような低次多項式なので動きが読みやすい。一方、中央付近は高次係数なので `mod p` で急に複雑に振る舞う。結果として、中央部の模様が先に「荒れる」ように見える可能性があります。
+
+名前を付けるなら、この層は例えば：
+
+```text
+PrimeIntervalPascalFlow
+```
+
+または少し概念寄りに：
+
+```text
+FrobeniusPrebirthFlow
+```
+
+が良さそうです。
+
+次の Lean 実装対象は、数値列そのものよりもまずこれですね。
+
+```lean
+def PrimeIntervalPascalFlow (p n : ℕ) : Prop :=
+  n < p ∧ -- row n observed modulo p
+    True
+```
+
+より実用的には、多項式または係数観測として：
+
+```lean
+def PascalRowMod (p n k : ℕ) : ZMod p :=
+  (Nat.choose n k : ZMod p)
+```
+
+そして固定したい核は：
+
+```text
+Pₙ₊₁(k) = Pₙ(k-1) + Pₙ(k)
+P_p(k) = 0 for 0 < k < p
+P_{p-1}(k) = (-1)^k
+```
+
+この3点セットです。これで「Pascal 加法流 → Frobenius 境界 → prebirth 交代相」が一本になります。
+
+### 素数ダイヤル
+
+ゼータ関数解析で使ってたんだけど、まだ DkMath では未実装かな。
+「素数ダイヤル」という素数周期のダイヤルを仮想創造して、
+自然数の素因数の出現をダイヤルの１回転周期の同期として見ていたのね。
+それがリーマンゼータ関数の非自明なゼロ点を境に組み合わせの変化が起きている。
+つまり、非自明なゼロ点が素数ではなくて、その間が素数と合成数の集合セットみたいな。各素数の寄与率としての観測。始まりは全素数が一斉に揃う。
+つまり自然数の無限。そこからすべてのダイアルが、それぞれ素数周期で回転を始めていく。
+当然、二度と揃うことはない。
+もしも揃ったら、素数無限は成り立たないし、自然数の無限の終着点がある。という事になってしまう。
+
+この観点をパスカルの三角形に応用すると、
+そのダイヤルは、段が進むごとに回される。
+回る回転角は前段項の和の結果による。
+但し、単純でなく log の回転角か。係数の総和からの相対角になるだろう。
+
+１＋２＋１＝４　1/4=0.25
+１＋３＋３＋１＝８　1/8=0.125
+１＋４＋６＋４＋１＝１６　1/16=0.0625
+
+この観点でも 1/2^n か。
+
+つまり、両端は常に＋１なのだけど、相対的には log 同様、+1 の重みは低くなる。
+
+この１段降りるごとに回転する素数ダイヤルを各項の係数が持っている。
+二項係数→素因子の成長→ダイヤルの回転数という観測をする。
+
+これはかなり筋が良い観測モデルです。
+DkMath 的には、直接ゼータ解析へ行く前に、Pascal 行の係数を「素数ダイヤル群の状態」として読む層を作るのが自然です。
+
+核になる見方は：
+
+```text
+row n:
+  C(n,0), C(n,1), ..., C(n,n)
+
+各係数 C(n,k) に対して
+  prime p の出現量 = padicValNat p (C(n,k))
+```
+
+つまり各項は、素数ごとの高さベクトルを持つ。
+
+```text
+C(n,k) ↦ (v₂, v₃, v₅, v₇, ...)
+```
+
+これが「素数ダイヤルの回転数」に相当します。
+
+相対重みまで入れるなら、係数総和が `2^n` なので：
+
+```text
+relativeWeight(n,k) = C(n,k) / 2^n
+```
+
+両端の `1` は絶対値としては常に `1` だけど、相対重みは：
+
+```text
+1 / 2^n
+```
+
+なので、段が進むほど薄くなる。これはまさに「log 的に寄与率が落ちる」観測ですね。
+
+Lean での第一段階は、実数や log を使わずにこう切るのが良さそうです。
+
+```lean
+/-- Prime-dial height of one Pascal coefficient. -/
+def pascalPrimeDialHeight (p n k : ℕ) : ℕ :=
+  padicValNat p (Nat.choose n k)
+```
+
+次に、相対重みはまだ割り算せず、分母付き構造で持つ。
+
+```lean
+/-- The raw mass of one Pascal coefficient in row n. -/
+def pascalCoeffMass (n k : ℕ) : ℕ :=
+  Nat.choose n k
+
+/-- The total mass of row n. -/
+def pascalRowMass (n : ℕ) : ℕ :=
+  2 ^ n
+```
+
+すると観測対象は：
+
+```text
+coefficient mass: C(n,k)
+row mass: 2^n
+prime dial height: v_p(C(n,k))
+relative position: C(n,k) / 2^n
+```
+
+ここで重要なのは、`padicValNat p (Nat.choose n k)` には既に Kummer/Lucas 系の強い理論があることです。つまり「ダイヤルの回転数」は単なる比喩ではなく、既存定理に接続できる。
+
+Pascal の三角形におけるダイヤル観測は、名前を付けるなら：
+
+```text
+PascalPrimeDial
+```
+
+または、ゼータとの橋を意識するなら：
+
+```text
+PrimeDialMassFlow
+```
+
+が良さそうです。
+
+構造としてはこうです。
+
+```text
+PascalPrimeDial
+  row        : n
+  index      : k
+  coeff      : C(n,k)
+  rowMass    : 2^n
+  pHeight    : padicValNat p C(n,k)
+```
+
+この層を作ると、今までの
+
+```text
+BeamBirthBoundary
+PrimePrebirthAlternation
+UniformBeamHeight
+FilteredBeamHeight
+```
+
+が全部「素数ダイヤル観測」の特殊ケースになります。
+
+特に：
+
+```text
+p 行:
+  すべての中間係数で p-dial が 1 回転
+
+p - 1 行:
+  mod p では +1/-1 交代、つまり p-dial 誕生直前の位相境界
+
+p^n 行:
+  index が p で割れるかどうかに応じて dial height が変わる
+```
+
+これはかなり良い抽象化です。
+次に実装するなら、数値実験用ではなく、まず Lean 側に小さく：
+
+```lean
+pascalPrimeDialHeight
+pascalRowMass
+pascalCoeffMass
+```
+
+を置いて、既存の `UniformBeamHeight` と `FilteredBeamHeight` を「dial height の一様性」として読み替える橋を作るのが堅いです。
