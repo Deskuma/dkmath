@@ -40,6 +40,17 @@ def UniformBeamHeight (d p h : ℕ) : Prop :=
     padicValNat p (Nat.choose d k) = h
 
 /--
+All inner coefficients satisfying a filter predicate have the same `p`-adic
+height.
+
+This is the `p^n` sieve shape: the whole beam need not have uniform height, but
+a selected layer of indices can.
+-/
+def FilteredBeamHeight (d p h : ℕ) (P : ℕ → Prop) : Prop :=
+  ∀ k, 0 < k → k < d → P k →
+    padicValNat p (Nat.choose d k) = h
+
+/--
 Every inner coefficient of row `p^n` is divisible by `p`.
 
 This is the support-level `p^n` filter.  It deliberately records only the first
@@ -128,6 +139,33 @@ theorem prime_power_pow_dvd_choose_of_padicValNat_index
   exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp hr_le
 
 /--
+Positive uniform beam height implies ordinary inner coefficient divisibility.
+
+This is the bridge from the stricter p-adic height view back to the older
+`AllInnerChooseDivisible` support view.
+-/
+theorem UniformBeamHeight.allInnerChooseDivisible
+    {d p h : ℕ} (hp : p.Prime) (hh : 0 < h)
+    (H : UniformBeamHeight d p h) :
+    AllInnerChooseDivisible d p := by
+  intro k hk0 hkd
+  have hk_le : k ≤ d := hkd.le
+  have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hk_le
+  have hv : padicValNat p (Nat.choose d k) = h := H k hk0 hkd
+  simpa using
+    (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne 1).mp (by omega)
+
+/--
+Uniform beam height refines an inner row support prime when the height is
+positive.
+-/
+theorem UniformBeamHeight.innerRowSupportPrime
+    {d p h : ℕ} (hp : p.Prime) (hh : 0 < h)
+    (H : UniformBeamHeight d p h) :
+    InnerRowSupportPrime d p :=
+  ⟨hp, H.allInnerChooseDivisible hp hh⟩
+
+/--
 Prime rows have uniform beam height `1` at their own prime.
 -/
 theorem prime_uniformBeamHeight_self
@@ -145,6 +183,31 @@ theorem prime_uniformBeamHeight_self
   have hkp_pow : k ≤ p ^ 1 := by simpa using hkp_le
   simpa [hvk] using
     (padicValNat_choose_prime_pow (p := p) (n := 1) (k := k) hp hkp_pow hk_ne)
+
+/--
+Prime rows recover their inner support prime through the uniform-height bridge.
+-/
+theorem prime_innerRowSupportPrime_self_of_uniformBeamHeight
+    {p : ℕ} (hp : p.Prime) :
+    InnerRowSupportPrime p p :=
+  (prime_uniformBeamHeight_self hp).innerRowSupportPrime hp (by norm_num)
+
+/--
+In row `p^n`, the indices not divisible by `p` all have coefficient height
+exactly `n`.
+
+This is the first filtered `p^n` sieve: the full beam has varying height, but
+the `p`-unit index layer is uniform.
+-/
+theorem prime_power_unitFilteredBeamHeight
+    {p n : ℕ} (hp : p.Prime) :
+    FilteredBeamHeight (p ^ n) p n (fun k => ¬ p ∣ k) := by
+  intro k hk0 hkp hpk
+  have hk_le : k ≤ p ^ n := hkp.le
+  have hk_ne : k ≠ 0 := hk0.ne'
+  have hvk : padicValNat p k = 0 :=
+    (DkMath.ABC.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
+  rw [padicValNat_choose_prime_pow hp hk_le hk_ne, hvk, Nat.sub_zero]
 
 /--
 If the inner index is a `p`-unit, the row `p^n` coefficient carries the full
@@ -177,6 +240,10 @@ example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
 example {p : ℕ} (hp : p.Prime) :
     UniformBeamHeight p p 1 :=
   prime_uniformBeamHeight_self hp
+
+example {p n : ℕ} (hp : p.Prime) :
+    FilteredBeamHeight (p ^ n) p n (fun k => ¬ p ∣ k) :=
+  prime_power_unitFilteredBeamHeight hp
 
 end samples
 

@@ -254,12 +254,43 @@ theorem prime_uniformBeamHeight_self
 
 証明は `padicValNat_choose_prime_pow` の `n = 1` 特殊化を使っています。`0 < k < p` なので `p ∤ k`、よって `padicValNat p k = 0`。したがって Beam 側は `1 - 0 = 1` です。
 
-確認済みです。
+### 2026/06/08 22:03
 
-```sh
-lake build DkMath.NumberTheory.BinomialPrimePower
-lake build DkMath
-git diff --check
+実装しました。`BinomialPrimePower.lean` に、既存素数定理へ戻す橋と `p^n` 篩の filtered 版を追加しています。
+
+追加した橋はこれです。
+
+```lean
+def FilteredBeamHeight (d p h : ℕ) (P : ℕ → Prop) : Prop
 ```
 
-対象ファイルに `sorry/axiom/admit` はありません。
+```lean
+theorem UniformBeamHeight.allInnerChooseDivisible
+theorem UniformBeamHeight.innerRowSupportPrime
+```
+
+これで
+
+```lean
+UniformBeamHeight d p h
+0 < h
+```
+
+から、既存の
+
+```lean
+AllInnerChooseDivisible d p
+InnerRowSupportPrime d p
+```
+
+へ戻せます。つまり、高さ観測が従来の可除性観測より強いことを Lean 上で固定しました。
+
+さらに `p^n` 篩として：
+
+```lean
+theorem prime_power_unitFilteredBeamHeight
+    {p n : ℕ} (hp : p.Prime) :
+    FilteredBeamHeight (p ^ n) p n (fun k => ¬ p ∣ k)
+```
+
+を追加しました。`p ∤ k` の index 層では、Beam 係数の高さがちょうど `n` に揃う、という形です。
