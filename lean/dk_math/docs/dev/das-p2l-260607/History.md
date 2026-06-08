@@ -195,3 +195,41 @@ git diff --check
 ```
 
 新規ファイルに `sorry/axiom/admit` はありません。
+
+### 2026/06/08 19:28
+
+実装しました。`prime_power_dvd_choose_of_not_dvd_index` を特殊例にして、一般の valuation filter を追加しています。
+
+[BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean) に追加した核はこれです。
+
+```lean
+theorem padicValNat_choose_prime_pow_add_index
+theorem prime_power_pow_dvd_choose_of_padicValNat_index
+```
+
+中心形は：
+
+```lean
+r + padicValNat p k ≤ n →
+p ^ r ∣ Nat.choose (p ^ n) k
+```
+
+これで `¬ p ∣ k` のときの `p^n ∣ choose (p^n) k` は `r = n` の特殊例として読めます。
+
+さらに [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean) 側へも持ち上げました。
+
+```lean
+theorem prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index
+theorem prime_power_dvd_weightedBinomialTerm_of_not_dvd_index
+```
+
+確認済みです。
+
+```sh
+lake build DkMath.NumberTheory.BinomialPrimePower
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+対象ファイルに `sorry/axiom/admit` はありません。

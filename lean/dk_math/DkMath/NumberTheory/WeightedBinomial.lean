@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.NumberTheory.BinomialPrime
+import DkMath.NumberTheory.BinomialPrimePower
 import DkMath.CosmicFormula.Mass.BodyGapSplit
 import DkMath.Lib.Cosmic.GTail
 import Mathlib.Algebra.BigOperators.Ring.Finset
@@ -172,6 +172,29 @@ theorem rowBirthPrime_dvd_inner_weightedBinomialTerm
     (h : RowBirthPrime d p) (hk0 : 0 < k) (hkd : k < d) :
     p ∣ weightedBinomialTerm d k x u :=
   innerRowSupportPrime_dvd_inner_weightedBinomialTerm h.1 hk0 hkd
+
+/--
+Prime-power row filters lift from binomial coefficients to weighted terms.
+-/
+theorem prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index
+    {p n k r x u : ℕ}
+    (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ weightedBinomialTerm (p ^ n) k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 hr)
+
+/--
+If the index is a `p`-unit, the weighted term in row `p^n` carries the full
+`p^n` coefficient support.
+-/
+theorem prime_power_dvd_weightedBinomialTerm_of_not_dvd_index
+    {p n k x u : ℕ}
+    (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hpk : ¬ p ∣ k) :
+    p ^ n ∣ weightedBinomialTerm (p ^ n) k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk)
 
 /-- Inner weighted terms inherit divisibility from `x`. -/
 theorem dvd_inner_weightedBinomialTerm_of_dvd_x

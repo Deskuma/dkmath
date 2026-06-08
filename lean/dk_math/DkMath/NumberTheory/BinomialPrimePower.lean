@@ -84,6 +84,40 @@ theorem padicValNat_choose_prime_pow
   exact hfac
 
 /--
+Kummer's prime-power binomial valuation in additive form.
+
+This is often the most convenient formulation for filters: the support carried
+by the coefficient plus the support already present in the index is exactly the
+row exponent.
+-/
+theorem padicValNat_choose_prime_pow_add_index
+    {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
+    padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n := by
+  have hfac := Nat.factorization_choose_prime_pow_add_factorization hp hkn hk0
+  rw [Nat.factorization_def (Nat.choose (p ^ n) k) hp,
+    Nat.factorization_def k hp] at hfac
+  exact hfac
+
+/--
+Prime-power row filter.
+
+If the requested layer `r` plus the `p`-support already present in the index
+fits inside the row exponent `n`, then the binomial coefficient carries `p^r`.
+-/
+theorem prime_power_pow_dvd_choose_of_padicValNat_index
+    {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ Nat.choose (p ^ n) k := by
+  have hchoose_ne : Nat.choose (p ^ n) k ≠ 0 := Nat.choose_ne_zero hkn
+  have hvchoose :
+      padicValNat p (Nat.choose (p ^ n) k) = n - padicValNat p k :=
+    padicValNat_choose_prime_pow hp hkn hk0
+  have hr_le : r ≤ padicValNat p (Nat.choose (p ^ n) k) := by
+    rw [hvchoose]
+    omega
+  exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp hr_le
+
+/--
 If the inner index is a `p`-unit, the row `p^n` coefficient carries the full
 `p^n` divisibility.
 -/
@@ -91,13 +125,9 @@ theorem prime_power_dvd_choose_of_not_dvd_index
     {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hpk : ¬ p ∣ k) :
     p ^ n ∣ Nat.choose (p ^ n) k := by
-  have hchoose_ne : Nat.choose (p ^ n) k ≠ 0 := Nat.choose_ne_zero hkn
   have hvk : padicValNat p k = 0 :=
     (DkMath.ABC.padicValNat_eq_zero_iff hp hk0).mpr hpk
-  have hvchoose :
-      padicValNat p (Nat.choose (p ^ n) k) = n := by
-    rw [padicValNat_choose_prime_pow hp hkn hk0, hvk, Nat.sub_zero]
-  exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne n).mp (by omega)
+  exact prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 (by omega)
 
 section samples
 
@@ -109,6 +139,11 @@ example {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hpk : ¬ p ∣ k) :
     p ^ n ∣ Nat.choose (p ^ n) k :=
   prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk
+
+example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ Nat.choose (p ^ n) k :=
+  prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 hr
 
 end samples
 
