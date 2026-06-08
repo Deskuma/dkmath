@@ -218,6 +218,20 @@ theorem prime_zmod_congruent_cosmic_formula
   exact h
 
 /--
+Prime congruent cosmic formula in the prime field.
+
+This is the finite-field observation form of
+
+`Big = Core + Beam + GapRaw`
+
+where the prime row kills the beam and Frobenius compresses the gap.
+-/
+theorem prime_field_congruent_cosmic_formula
+    {p : ℕ} (hp : p.Prime) (x u : ZMod p) :
+    (x + u) ^ p = x ^ p + u :=
+  prime_zmod_congruent_cosmic_formula hp x u
+
+/--
 The inner coefficients of prime row `p` vanish in `ZMod p`.
 
 This is the coefficient-level AKS/Frobenius input.
@@ -282,6 +296,21 @@ example {p x u : ℕ} (hp : p.Prime) :
 example {p : ℕ} (hp : p.Prime) (x u : ZMod p) :
     (x + u) ^ p = x ^ p + u :=
   prime_zmod_congruent_cosmic_formula hp x u
+
+/-- Composite modulus can break the congruent cosmic formula. -/
+example :
+    ¬ ((1 + 1) ^ 4 ≡ 1 ^ 4 + 1 [MOD 4]) := by
+  decide
+
+/-- Another small composite failure witness. -/
+example :
+    ¬ ((1 + 2) ^ 4 ≡ 1 ^ 4 + 2 [MOD 4]) := by
+  decide
+
+/-- But a composite modulus may still pass for some particular witnesses. -/
+example :
+    (2 + 1) ^ 4 ≡ 2 ^ 4 + 1 [MOD 4] := by
+  decide
 
 end samples
 
