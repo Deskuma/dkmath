@@ -291,10 +291,23 @@ noncomputable def aksQuotientC (R : Type*) [CommRing R] (r : ℕ) (a : R) :
     AKSCyclicQuotient R r :=
   aksQuotientMap R r (C a)
 
+/--
+The AKS cyclic congruence predicate for one modulus `n`, period `r`, and
+shift `a`.
+
+It records the quotient-ring form of the AKS/Frobenius test before folding the
+exponent of `X` modulo `r`.
+-/
 def AKSCyclicCongruenceHolds (n r a : ℕ) : Prop :=
   (aksQuotientX (ZMod n) r + aksQuotientC (ZMod n) r (a : ZMod n)) ^ n =
     aksQuotientX (ZMod n) r ^ n + aksQuotientC (ZMod n) r (a : ZMod n)
 
+/--
+The folded AKS cyclic congruence predicate.
+
+This is the same quotient-ring test as `AKSCyclicCongruenceHolds`, but with the
+right-hand `X^n` term reduced to the residue exponent `n % r`.
+-/
 def AKSCyclicFoldedCongruenceHolds (n r a : ℕ) : Prop :=
   (aksQuotientX (ZMod n) r + aksQuotientC (ZMod n) r (a : ZMod n)) ^ n =
     aksQuotientX (ZMod n) r ^ (n % r) + aksQuotientC (ZMod n) r (a : ZMod n)
@@ -371,18 +384,29 @@ theorem aksQuotientMap_X_pow_eq_mod
   rw [aksQuotientMap_X_pow, aksQuotientMap_X_pow]
   exact aksQuotientX_pow_eq_pow_mod R r k
 
+/-- The quotient map sends `X + C a` to the quotient element `Xbar + Cbar a`. -/
 theorem aksQuotientMap_X_add_C
     (R : Type*) [CommRing R] (r : ℕ) (a : R) :
     aksQuotientMap R r ((X : R[X]) + C a) =
       aksQuotientX R r + aksQuotientC R r a := by
   rw [map_add, aksQuotientMap_X, aksQuotientMap_C]
 
+/--
+The quotient map sends `(X + C a)^n` to the corresponding power of
+`Xbar + Cbar a`.
+-/
 theorem aksQuotientMap_X_add_C_pow
     (R : Type*) [CommRing R] (r n : ℕ) (a : R) :
     aksQuotientMap R r (((X : R[X]) + C a) ^ n) =
       (aksQuotientX R r + aksQuotientC R r a) ^ n := by
   rw [map_pow, aksQuotientMap_X_add_C]
 
+/--
+The quotient map sends `X^n + C a` to `Xbar^n + Cbar a`.
+
+This is the right-hand side shape used after applying the prime Frobenius
+identity to `(X + C a)^p`.
+-/
 theorem aksQuotientMap_X_pow_add_C
     (R : Type*) [CommRing R] (r n : ℕ) (a : R) :
     aksQuotientMap R r ((X : R[X]) ^ n + C a) =
@@ -436,6 +460,13 @@ theorem prime_polynomial_X_add_C_pow_eq_pow_C
   letI : Fact p.Prime := ⟨hp⟩
   exact add_pow_char (X : (ZMod p)[X]) (C (a : ZMod p)) p
 
+/--
+The polynomial prime Frobenius identity after applying the AKS cyclic quotient
+map.
+
+This keeps the statement at the polynomial-map level before rewriting the image
+as quotient elements `aksQuotientX` and `aksQuotientC`.
+-/
 theorem prime_aksQuotientMap_X_add_C_pow_eq
     {p r a : ℕ} (hp : p.Prime) :
     aksQuotientMap (ZMod p) r
@@ -444,6 +475,12 @@ theorem prime_aksQuotientMap_X_add_C_pow_eq
       ((X : (ZMod p)[X]) ^ p + C (a : ZMod p)) := by
   rw [prime_polynomial_X_add_C_pow_eq hp]
 
+/--
+Prime Frobenius inside the AKS cyclic quotient.
+
+For prime `p`, the quotient element `Xbar + Cbar a` satisfies the same
+Freshman's dream shape as the polynomial before quotienting.
+-/
 theorem prime_aksQuotient_X_add_C_pow_eq
     {p r a : ℕ} (hp : p.Prime) :
     (aksQuotientX (ZMod p) r + aksQuotientC (ZMod p) r (a : ZMod p)) ^ p =
@@ -453,6 +490,10 @@ theorem prime_aksQuotient_X_add_C_pow_eq
   rw [aksQuotientMap_X_add_C_pow, aksQuotientMap_X_pow_add_C] at h
   exact h
 
+/--
+Prime Frobenius inside the AKS cyclic quotient with the exponent of `X` folded
+modulo `r`.
+-/
 theorem prime_aksQuotient_X_add_C_pow_eq_mod
     {p r a : ℕ} (hp : p.Prime) :
     (aksQuotientX (ZMod p) r + aksQuotientC (ZMod p) r (a : ZMod p)) ^ p =
@@ -461,12 +502,19 @@ theorem prime_aksQuotient_X_add_C_pow_eq_mod
   rw [prime_aksQuotient_X_add_C_pow_eq hp]
   rw [aksQuotientX_pow_eq_pow_mod]
 
+/-- Prime moduli satisfy the non-folded AKS cyclic congruence predicate. -/
 theorem AKSCyclicCongruenceHolds.prime
     {p r a : ℕ} (hp : p.Prime) :
     AKSCyclicCongruenceHolds p r a := by
   unfold AKSCyclicCongruenceHolds
   exact prime_aksQuotient_X_add_C_pow_eq hp
 
+/--
+Prime AKS cyclic Frobenius observation.
+
+This is the folded quotient-ring form used by AKS: the prime Frobenius result
+and the relation `X^r = 1` combine to replace `X^p` by `X^(p % r)`.
+-/
 theorem prime_aks_cyclic_frobenius
     {p r a : ℕ} (hp : p.Prime) :
     (aksQuotientX (ZMod p) r + aksQuotientC (ZMod p) r (a : ZMod p)) ^ p =
@@ -474,12 +522,20 @@ theorem prime_aks_cyclic_frobenius
         aksQuotientC (ZMod p) r (a : ZMod p) := by
   exact prime_aksQuotient_X_add_C_pow_eq_mod hp
 
+/--
+Alias-style theorem: every prime modulus satisfies
+`AKSCyclicCongruenceHolds`.
+-/
 theorem prime_AKSCyclicCongruenceHolds
     {p r a : ℕ} (hp : p.Prime) :
     AKSCyclicCongruenceHolds p r a := by
   unfold AKSCyclicCongruenceHolds
   exact prime_aksQuotient_X_add_C_pow_eq hp
 
+/--
+Alias-style theorem: every prime modulus satisfies the folded AKS cyclic
+congruence predicate.
+-/
 theorem prime_AKSCyclicFoldedCongruenceHolds
     {p r a : ℕ} (hp : p.Prime) :
     AKSCyclicFoldedCongruenceHolds p r a := by
