@@ -451,12 +451,24 @@ pascalPrimeDialHeight p (p ^ n) k + padicValNat p k = n
 
 として読めるので、素数ダイヤルの回転数観測としてかなり強いです。
 
-検証済みです。
+### 2026/06/09  1:30
 
-```text
-lake build DkMath.NumberTheory.PascalPrimeDial
-lake build DkMath
-git diff --check
+追加しました。[PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean) に、未到達の素数ダイヤルを固定する補題を2つ置いています。
+
+```lean
+theorem pascalPrimeDialHeight_eq_zero_of_row_lt
+    {p n k : ℕ} (hp : p.Prime) (hnp : n < p) :
+    pascalPrimeDialHeight p n k = 0
 ```
 
-新規ファイルに `sorry/axiom/admit` はありません。既存の `DkMath-Nat_Prime.md` に変更が残っていますが、今回こちらでは触っていません。
+これは「row `n` が `p` 未満なら、`p` ダイヤル高さは 0」という観測です。
+
+さらに、実際に存在する係数 `k ≤ n` については可除性として：
+
+```lean
+theorem prime_not_dvd_pascalCoeffMass_of_row_lt
+    {p n k : ℕ} (hp : p.Prime) (hnp : n < p) (hkn : k ≤ n) :
+    ¬ p ∣ pascalCoeffMass n k
+```
+
+`k ≤ n` を入れているのは重要で、`k > n` だと `Nat.choose n k = 0` になり、自然数では任意の `p` が `0` を割ってしまうためです。

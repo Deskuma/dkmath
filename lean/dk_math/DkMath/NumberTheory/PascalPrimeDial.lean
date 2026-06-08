@@ -92,6 +92,36 @@ theorem below_prime_uniformPrimeDialHeight_zero
     (below_prime_uniformBeamHeight_zero hp hdp)
 
 /--
+Before row `p`, the `p`-dial has height `0` on every Pascal coefficient.
+
+This is the coefficient-level version of "a prime larger than the row index has
+not appeared yet".
+-/
+theorem pascalPrimeDialHeight_eq_zero_of_row_lt
+    {p n k : ℕ} (hp : p.Prime) (hnp : n < p) :
+    pascalPrimeDialHeight p n k = 0 := by
+  have hfac : (pascalCoeffMass n k).factorization p = 0 := by
+    simpa [pascalCoeffMass] using Nat.factorization_choose_eq_zero_of_lt (k := k) hnp
+  rw [Nat.factorization_def (pascalCoeffMass n k) hp] at hfac
+  simpa [pascalPrimeDialHeight] using hfac
+
+/--
+No prime larger than the row index can divide an actual Pascal coefficient in
+that row.
+
+The bound `k ≤ n` excludes the out-of-row zero coefficients, since every natural
+number divides `0`.
+-/
+theorem prime_not_dvd_pascalCoeffMass_of_row_lt
+    {p n k : ℕ} (hp : p.Prime) (hnp : n < p) (hkn : k ≤ n) :
+    ¬ p ∣ pascalCoeffMass n k := by
+  have hcoeff_ne : pascalCoeffMass n k ≠ 0 := by
+    simpa [pascalCoeffMass] using Nat.choose_ne_zero hkn
+  have hv : pascalPrimeDialHeight p n k = 0 :=
+    pascalPrimeDialHeight_eq_zero_of_row_lt hp hnp
+  exact (DkMath.ABC.padicValNat_eq_zero_iff hp hcoeff_ne).mp hv
+
+/--
 Kummer's prime-power row formula in prime-dial language.
 
 In row `p^n`, the coefficient dial height plus the dial height already present
@@ -131,6 +161,10 @@ example {p : ℕ} (hp : p.Prime) :
 example {d p : ℕ} (hp : p.Prime) (hdp : d < p) :
     UniformPrimeDialHeight d p 0 :=
   below_prime_uniformPrimeDialHeight_zero hp hdp
+
+example {p n k : ℕ} (hp : p.Prime) (hnp : n < p) (hkn : k ≤ n) :
+    ¬ p ∣ pascalCoeffMass n k :=
+  prime_not_dvd_pascalCoeffMass_of_row_lt hp hnp hkn
 
 example {p n : ℕ} (hp : p.Prime) :
     FilteredPrimeDialHeight (p ^ n) p n (fun k => ¬ p ∣ k) :=
