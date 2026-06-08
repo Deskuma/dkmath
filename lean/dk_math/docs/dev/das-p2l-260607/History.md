@@ -744,3 +744,33 @@ overline{X^k} = overline{X^(k % r)}
 - 追加箇所に `sorry/admit/axiom` なし
 
 全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09  6:53
+
+説明書を追加しました。
+
+追加ファイル:
+
+[AKSBridge-v1.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/AKSBridge-v1.md)
+
+内容は指定された 8 段階をベースにして、各段階の意味と対応する Lean 名を整理しています。
+
+```text
+1. Pascal prime row
+2. Weighted universe split
+3. Congruent cosmic formula
+4. Finite-field form
+5. Polynomial Frobenius
+6. AKS cyclic quotient
+7. Prime AKS cyclic Frobenius
+8. Predicate layer
+```
+
+`Cyclotomic` と混線しないように、文中でも `AKS cyclic quotient` / `Cyclic` を明示しました。
+
+検証:
+
+- `git diff --check` 成功
+- docs-only なので Lean build は走らせていません
+
+`git status --short` では新規 docs ファイルが untracked です。
