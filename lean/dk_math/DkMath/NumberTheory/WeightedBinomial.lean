@@ -138,6 +138,41 @@ theorem prime_allInnerWeightedTermDivisible
   allInnerChooseDivisible_allInnerWeightedTermDivisible
     (prime_allInnerChooseDivisible_self hp)
 
+/--
+An inner row support prime lifts from coefficients to all inner weighted terms.
+-/
+theorem innerRowSupportPrime_allInnerWeightedTermDivisible
+    {d p x u : ℕ} (h : InnerRowSupportPrime d p) :
+    AllInnerWeightedTermDivisible d p x u :=
+  allInnerChooseDivisible_allInnerWeightedTermDivisible h.2
+
+/--
+A row-birth support prime lifts from coefficients to all inner weighted terms.
+-/
+theorem rowBirthPrime_allInnerWeightedTermDivisible
+    {d p x u : ℕ} (h : RowBirthPrime d p) :
+    AllInnerWeightedTermDivisible d p x u :=
+  innerRowSupportPrime_allInnerWeightedTermDivisible h.1
+
+/--
+Unpack an inner support prime at a concrete weighted term.
+-/
+theorem innerRowSupportPrime_dvd_inner_weightedBinomialTerm
+    {d p k x u : ℕ}
+    (h : InnerRowSupportPrime d p) (hk0 : 0 < k) (hkd : k < d) :
+    p ∣ weightedBinomialTerm d k x u :=
+  allInnerWeightedTermDivisible_dvd_term
+    (innerRowSupportPrime_allInnerWeightedTermDivisible h) hk0 hkd
+
+/--
+Unpack a row-birth support prime at a concrete weighted term.
+-/
+theorem rowBirthPrime_dvd_inner_weightedBinomialTerm
+    {d p k x u : ℕ}
+    (h : RowBirthPrime d p) (hk0 : 0 < k) (hkd : k < d) :
+    p ∣ weightedBinomialTerm d k x u :=
+  innerRowSupportPrime_dvd_inner_weightedBinomialTerm h.1 hk0 hkd
+
 /-- Inner weighted terms inherit divisibility from `x`. -/
 theorem dvd_inner_weightedBinomialTerm_of_dvd_x
     {q d k x u : ℕ}

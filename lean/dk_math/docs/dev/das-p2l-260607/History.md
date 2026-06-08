@@ -112,3 +112,60 @@ git diff --check
 ```
 
 今回対象ファイルには `sorry/axiom/admit` なしです。既存の別モジュール由来の `sorry` warning は継続しています。
+
+### 2026/06/08 15:03
+
+固定しました。パスカル加法成長から「素数 support が発生する段」を観測するための薄い predicate と証明を追加しています。
+
+[BinomialPrime.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrime.lean) に追加:
+
+```lean
+def InnerRowSupportPrime (d p : ℕ) : Prop :=
+  p.Prime ∧ AllInnerChooseDivisible d p
+
+def RowBirthPrime (d p : ℕ) : Prop :=
+  InnerRowSupportPrime d p ∧ p ∣ d
+```
+
+証明済みの核:
+
+```lean
+theorem prime_innerRowSupportPrime_self
+    {p : ℕ} (hp : p.Prime) :
+    InnerRowSupportPrime p p
+
+theorem prime_rowBirthPrime_self
+    {p : ℕ} (hp : p.Prime) :
+    RowBirthPrime p p
+```
+
+つまり、
+
+```text
+p が素数なら、Pascal 三角形の p 段は、
+内側係数すべてに p という support prime を要求する
+```
+
+を Lean 上で固定しました。
+
+さらに [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean) にも持ち上げて、
+
+```lean
+innerRowSupportPrime_allInnerWeightedTermDivisible
+rowBirthPrime_allInnerWeightedTermDivisible
+innerRowSupportPrime_dvd_inner_weightedBinomialTerm
+rowBirthPrime_dvd_inner_weightedBinomialTerm
+```
+
+を追加しました。これで、係数列で発生した support prime が weighted term 側にもそのまま流れます。
+
+検証済み:
+
+```text
+lake build DkMath.NumberTheory.BinomialPrime
+lake build DkMath.NumberTheory.WeightedBinomial
+lake build DkMath
+git diff --check
+```
+
+今回対象ファイルに `sorry/axiom/admit` はありません。
