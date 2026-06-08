@@ -633,3 +633,39 @@ theorem prime_zmod_congruent_cosmic_formula
 ```lean
 (x + u)^p = x^p + u
 ```
+
+### 2026/06/09  5:14
+
+進めました。今回は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) に、AKS の `X^r = 1` 周期層を追加しています。
+
+追加した主なもの:
+
+```lean
+theorem pow_add_period_of_pow_eq_one
+noncomputable def aksCyclotomicIdeal
+abbrev AKSCyclotomicQuotient
+noncomputable def aksQuotientX
+theorem aksQuotientX_pow_r_eq_one
+theorem aksQuotientX_pow_add_r_eq_pow
+```
+
+これで次の形が固定できました。
+
+```lean
+-- 抽象形
+a ^ r = 1 → a ^ (k + r) = a ^ k
+
+-- AKS quotient 形
+R[X] / (X^r - 1) では
+X^r = 1
+X^(k+r) = X^k
+```
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。
