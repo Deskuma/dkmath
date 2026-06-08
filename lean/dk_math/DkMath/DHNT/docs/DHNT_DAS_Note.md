@@ -1713,7 +1713,7 @@ split : big = boundary + gapAxis * kernel
 
 加法と積が混在しています！
 
-はい、そこがかなり面白いです。  
+はい、そこがかなり面白いです。
 `BodyGapKernelSplit` は、まさに「加法構造の中に、積構造として読める尾部を露出させる」道具になっています。
 
 ABC 予想の入口は
@@ -1815,7 +1815,7 @@ ABC の核心は、おそらくこの翻訳の歪みです。
 その小ささは、tail = gapAxis * kernel のどこに吸収されたのか？
 ```
 
-ここを Lean で見えるようにするのが、今回の `BodyGapKernelSplit` の意味ですね。  
+ここを Lean で見えるようにするのが、今回の `BodyGapKernelSplit` の意味ですね。
 加法と積が混在しているのは欠点ではなく、むしろ ABC 型の問題に必要な接続面そのものです。
 
 パスカルの三角形の成長も合成数の段では、新しい素数を必要としていません。
@@ -1866,7 +1866,7 @@ inner weighted terms carry p through choose p k
 
 となる。
 
-これは、単に「素数 p は choose p k を割る」という既知定理以上の意味を持ちます。  
+これは、単に「素数 p は choose p k を割る」という既知定理以上の意味を持ちます。
 加法成長が、どの段で積的 support を強制するかを見る観測器になる。
 
 次に置くと良さそうな概念はこれです。
@@ -1950,3 +1950,71 @@ p.Prime → InnerRowSupportPrime p p
 ```
 
 だけを証明するのが安全です。
+
+### p^n フィルター
+
+[DkMath-Nat_Prime](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/DkMath-Nat_Prime.md)
+
+ここからですよねぇ。
+Kummerの定理、p^n フィルター。
+可除性構造のみで素数の原始を捕まえられるか。
+
+はい、ここが Kummer 入口です。
+
+可除性構造だけで見える範囲はかなり強いですが、整理するとこうです。
+
+- `AllInnerChooseDivisible d p` は「段 `d` の内側係数がすべて `p` を含む」という支持構造を捕まえる。
+- ただしこれは `d = p` だけでなく `d = p^n` でも成立する。
+- したがって「素数段そのもの」を捕まえるには不足。
+- しかし「段 `d` が `p` 系の素数冪段である」ことを捕まえる方向には非常に自然。
+
+ここで Kummer / factorization が効きます。
+
+```lean
+Nat.factorization_choose_prime_pow
+```
+
+の形で、概念的には
+
+```text
+v_p (choose (p^n) k) = n - v_p(k)
+```
+
+が使えます。
+
+つまり `0 < k < p^n` なら `v_p(k) < n` なので、内側係数は必ず `p` で割れる。
+さらに `p ∤ k` なら `v_p(k) = 0` なので、
+
+```text
+p^n ∣ choose (p^n) k
+```
+
+まで見える。
+
+ここが `p^n` フィルターですね。
+
+Lean 実装としては次の一手がよさそうです。
+
+```lean
+def PrimePowerRowSupport (d p : ℕ) : Prop :=
+  ∃ n, 0 < n ∧ d = p ^ n ∧ InnerRowSupportPrime d p
+```
+
+または、より直接に
+
+```lean
+def PrimePowerInnerFilter (p n : ℕ) : Prop :=
+  p.Prime ∧ 0 < n ∧ InnerRowSupportPrime (p ^ n) p
+```
+
+そして最初の定理はこれです。
+
+```lean
+theorem prime_power_innerRowSupportPrime
+    {p n : ℕ} (hp : p.Prime) (hn : 0 < n) :
+    InnerRowSupportPrime (p ^ n) p := ...
+```
+
+この定理が固定できると、現在の `RowBirthPrime` は「素数段」から「素数冪段の支持」へ自然に拡張できます。
+
+結論としては、可除性だけで「原始的な素数の発生源」はかなり捕まえられます。ただし `d = p` と `d = p^n` を分離するには、単なる `p ∣ choose d k` では足りず、`p^n` 可除性の階層、つまり factorization / valuation を「可除性の段階構造」として導入するのが Lean らしい道筋です。

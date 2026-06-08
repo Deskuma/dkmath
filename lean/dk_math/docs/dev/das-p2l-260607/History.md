@@ -169,3 +169,29 @@ git diff --check
 ```
 
 今回対象ファイルに `sorry/axiom/admit` はありません。
+
+### 2026/06/08 17:26
+
+実装しました。`p^n` フィルターの入口として [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean) を新設し、
+[DkMath.lean](/lean/dk_math/DkMath.lean#L24) に import を追加しています。
+
+入れた主な補題は次です。
+
+- `prime_power_innerRowSupportPrime`
+  `p^n` 段の内側係数がすべて `p` を支持することを固定。
+- `prime_power_rowBirthPrime`
+  `0 < n` なら `p ∣ p^n` なので `RowBirthPrime (p^n) p` へ接続。
+- `padicValNat_choose_prime_pow`
+  mathlib の Kummer/factorization 形を `padicValNat` 形に変換。
+- `prime_power_dvd_choose_of_not_dvd_index`
+  `¬ p ∣ k` なら `p^n ∣ choose (p^n) k`。ここが「p^n フィルター」の最初の精密層です。
+
+確認済みです。
+
+```sh
+lake build DkMath.NumberTheory.BinomialPrimePower
+lake build DkMath
+git diff --check
+```
+
+新規ファイルに `sorry/axiom/admit` はありません。
