@@ -572,3 +572,30 @@ u^d ≡ u [MOD m]
 - `AKSBridge.lean` に `sorry/admit/axiom` なし
 
 全体ビルドでは既存ファイル由来の `sorry` 警告は出ていますが、今回追加分にはありません。
+
+### 2026/06/09  4:44
+
+追加しました。場所は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+入れた定理名は指定どおりです。
+
+```lean
+theorem prime_innerBeam_modEq_zero
+theorem prime_gap_compress_modEq
+theorem prime_congruent_cosmic_formula
+```
+
+`prime_congruent_cosmic_formula` は、ちゃんと
+
+```lean
+prime_innerBeam_modEq_zero hp
+prime_gap_compress_modEq hp
+```
+
+を合成して証明する形にしました。つまり「Beam = 0」「u^p compress」の2要素が見える証明構造です。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし

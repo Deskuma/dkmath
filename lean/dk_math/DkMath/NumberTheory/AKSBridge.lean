@@ -107,6 +107,12 @@ theorem prime_dvd_weightedBinomialInnerBeamSum
   dvd_weightedBinomialInnerBeamSum_of_allInnerWeightedTermDivisible
     (prime_allInnerWeightedTermDivisible hp)
 
+/-- Prime rows make the inner beam congruent to zero modulo the row prime. -/
+theorem prime_innerBeam_modEq_zero
+    {p x u : ℕ} (hp : p.Prime) :
+    weightedBinomialInnerBeamSum p x u ≡ 0 [MOD p] :=
+  Nat.modEq_zero_iff_dvd.mpr (prime_dvd_weightedBinomialInnerBeamSum hp)
+
 /--
 Generic congruence assembler for the universe-form split.
 
@@ -144,6 +150,15 @@ theorem prime_pow_modEq_self
   simp [Nat.cast_pow, ZMod.pow_card]
 
 /--
+Prime gap compression:
+the left boundary vertex `u^p` compresses back to `u` modulo `p`.
+-/
+theorem prime_gap_compress_modEq
+    {p u : ℕ} (hp : p.Prime) :
+    u ^ p ≡ u [MOD p] :=
+  prime_pow_modEq_self hp
+
+/--
 Prime-row universe-form Frobenius congruence for natural numbers.
 
 The proof factors through the two intended components:
@@ -156,6 +171,18 @@ theorem prime_add_pow_modEq_right_add_u
   add_pow_modEq_right_add_u_of_dvd_innerBeam_and_left_modEq hp.pos
     (prime_dvd_weightedBinomialInnerBeamSum hp)
     (prime_pow_modEq_self hp)
+
+/--
+Prime congruent cosmic formula:
+after the prime-row beam vanishes and the gap compresses, the universe-form
+binomial body is congruent to `x^p + u`.
+-/
+theorem prime_congruent_cosmic_formula
+    {p x u : ℕ} (hp : p.Prime) :
+    (x + u) ^ p ≡ x ^ p + u [MOD p] :=
+  add_pow_modEq_right_add_u_of_innerBeam_modEq_zero_and_left_modEq hp.pos
+    (prime_innerBeam_modEq_zero hp)
+    (prime_gap_compress_modEq hp)
 
 /--
 The inner coefficients of prime row `p` vanish in `ZMod p`.
@@ -217,7 +244,7 @@ example {p a : ℕ} (hp : p.Prime) :
 
 example {p x u : ℕ} (hp : p.Prime) :
     (x + u) ^ p ≡ x ^ p + u [MOD p] :=
-  prime_add_pow_modEq_right_add_u hp
+  prime_congruent_cosmic_formula hp
 
 end samples
 
