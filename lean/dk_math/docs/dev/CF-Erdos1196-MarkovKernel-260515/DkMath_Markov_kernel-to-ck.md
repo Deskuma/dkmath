@@ -3705,7 +3705,7 @@ DkMath kernel は Markov kernel そのものではない。
 
 ## 13.4. 既存証明 route との関係
 
-既存証明を否定するものではない。  
+既存証明を否定するものではない。
 既存証明の kernel を、DkMath の capacity 構造から再解釈する project である。
 
 ---

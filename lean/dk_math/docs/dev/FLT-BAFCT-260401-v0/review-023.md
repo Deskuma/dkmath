@@ -267,7 +267,7 @@ BranchB
 * `ValuationPeel` 側は `TailError + PacketFromError` に割れていて、実質 open は後者 1 本
 * BranchB は `NonLiftableGNBridge` の独立 kernel
 
-という 3 本立てじゃ。  
+という 3 本立てじゃ。
 
 ## 4. GNReducedGap 側の数学内容
 

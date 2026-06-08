@@ -103,7 +103,7 @@ $$
 
 ## 3.1. 設計段階はかなり終わった
 
-proof file を切り、canonical 置き場を確保し、mainline から packet descent への wrapper もある。さらに今回は proof file 内で reference / mainline / split を同じ土俵へ並べた。  
+proof file を切り、canonical 置き場を確保し、mainline から packet descent への wrapper もある。さらに今回は proof file 内で reference / mainline / split を同じ土俵へ並べた。
 
 この意味で、「どこで何を証明するのか」はだいぶ固まった。
 

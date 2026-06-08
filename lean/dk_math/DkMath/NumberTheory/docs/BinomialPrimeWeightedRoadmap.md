@@ -7,6 +7,19 @@
 本ロードマップの目的は、展望を広げすぎず、確実に Lean 化できる補題から順に
 `DkMath` の既存構造へ接続することである。
 
+補足:
+
+実装中に、当初の `BinomialPrime / WeightedBinomial` 路線から派生して、
+`BinomialPrimePower`、`PrimePrebirthAlternation`、`PascalPrimeDial` が追加された。
+これはロードマップの置き換えではなく、Pascal 行の prime support を観測するための
+補助層である。
+
+現在地の整理は次にまとめる。
+
+```text
+lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/PascalPrimeDialProgress.md
+```
+
 中心となる観測は次である。
 
 ```text

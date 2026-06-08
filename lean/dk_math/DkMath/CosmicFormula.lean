@@ -12,6 +12,7 @@ import DkMath.CosmicFormula.PowerGapBeam  -- Power Gap/Beam for higher degrees
 import DkMath.CosmicFormula.PowerGapBeamGcd  -- GCD control for Power Gap/Beam
 import DkMath.CosmicFormula.PowerGapBeamGN  -- Bridge from Power Beam to GN
 import DkMath.CosmicFormula.PowerGapBeamPrimitive  -- Primitive Power Beam bridge
+import DkMath.CosmicFormula.Mass  -- Cosmic mass and Body/Gap split layer
 
 #print "file: DkMath.CosmicFormula"
 

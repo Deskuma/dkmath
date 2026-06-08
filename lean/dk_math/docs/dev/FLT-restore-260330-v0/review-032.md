@@ -11,7 +11,7 @@
 \( \text{fringe bundle} \to \text{hLift} \to \text{local valuation theory} \)
 
 の最初の矢が仮定つきじゃった。
-今はその矢が実装されたので、既に通っていた局所結果、特に central theorem 側を **fringe bundle からそのまま使える** 段になったのじゃ。central theorem 自体は一つ前の段で既に sorry-free になっておるから、主線はほぼ開通したと見てよい。  
+今はその矢が実装されたので、既に通っていた局所結果、特に central theorem 側を **fringe bundle からそのまま使える** 段になったのじゃ。central theorem 自体は一つ前の段で既に sorry-free になっておるから、主線はほぼ開通したと見てよい。
 
 ## 2. 数学的解説
 
@@ -42,7 +42,7 @@
 \( GN = \delta \cdot U,\quad U \text{ は unit} \)
 
 という local factorization だけで central theorem を閉じられた。
-だから、数学の本体はもう exact product には依存しておらぬ。  
+だから、数学の本体はもう exact product には依存しておらぬ。
 
 ## 3. 次の作業の選択
 
@@ -69,7 +69,7 @@ $$
 
 \( v_q(\delta.val)=p\,v_q(s) \)
 
-まで取れておるので、降下 1 step ごとの valuation 減少を exact に追える。よって、その次の本命は terminal case でよい。ただしその前に、不要になった exact product theorem をどう扱うか決めて、ファイルを clean にしておくのが賢い。  
+まで取れておるので、降下 1 step ごとの valuation 減少を exact に追える。よって、その次の本命は terminal case でよい。ただしその前に、不要になった exact product theorem をどう扱うか決めて、ファイルを clean にしておくのが賢い。
 
 ## 4. 実務的な順番
 

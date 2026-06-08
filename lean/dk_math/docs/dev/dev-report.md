@@ -963,7 +963,7 @@ theorem branchA_qpow_dvd_GN
 
 #### 39.2. `RealizationSeed` の精密化
 
-旧構造：`(hSeed, x', y', z')` — `(x, y, z)` の無意味なプレースホルダ。  
+旧構造：`(hSeed, x', y', z')` — `(x, y, z)` の無意味なプレースホルダ。
 新構造：`(hSeed, x', y', z', hxMul, hyEq)` — 数学的根拠付き。
 
 | フィールド | 型 | 意味 |
@@ -998,7 +998,7 @@ theorem branchA_qpow_dvd_GN
        └─ [⬛] StrictDescentTarget       ← 中核: z' < z
 ```
 
-**`CounterexamplePackTarget` が genuinely hardest kernel** じゃ。  
+**`CounterexamplePackTarget` が genuinely hardest kernel** じゃ。
 これは `(x/q)^p + y^p = z'^p` を満たす `z'` が存在すること、かつ `z'` がちゃんとした counterexample pack を構成することを示す。
 
 Branch B では `q^p ∣ GN` と `q ∤ (z-y)` から同じ構造が利用できるが、Branch A では

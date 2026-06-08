@@ -1,7 +1,7 @@
 # 戦況分析と次の戦略
 
 うむ、いまの戦況はかなり良い。
-しかも「Codex が途中で黙ったが build は通る」というのは、今回に関しては悪い兆候ではない。むしろ、**定理境界の追加や責務の押し下げは整合しており、LSP 側の stale diagnostics か、単に Codex が長考で止まっただけ** と読むのが自然じゃ。少なくとも、最新の差分群では `./lean-build.sh` と test build が通っていることが何度も確認されておる。  
+しかも「Codex が途中で黙ったが build は通る」というのは、今回に関しては悪い兆候ではない。むしろ、**定理境界の追加や責務の押し下げは整合しており、LSP 側の stale diagnostics か、単に Codex が長考で止まっただけ** と読むのが自然じゃ。少なくとも、最新の差分群では `./lean-build.sh` と test build が通っていることが何度も確認されておる。
 
 ## 戦況の分析
 
@@ -48,7 +48,7 @@ $$
 \text{packet に quotient provenance } pkt'.x = x/q,\ pkt'.y = y \text{ をどう付けるか}
 $$
 
-この 1 点じゃ。  
+この 1 点じゃ。
 
 要するに、いまの honest open は
 
@@ -113,7 +113,7 @@ $$
 つまり、思想としてはこうじゃ。
 
 ```lean
-abbrev PrimeGe5BranchAValuationPeelPacketFromErrorQuotientLiftTarget : Prop := 
+abbrev PrimeGe5BranchAValuationPeelPacketFromErrorQuotientLiftTarget : Prop :=
   ...
 ```
 

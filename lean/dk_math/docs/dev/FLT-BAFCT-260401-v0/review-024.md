@@ -202,7 +202,7 @@ $$
 * `GNReducedGap → SmallerCounterexample` の橋は全部 concrete
 * primitive 側の真の open kernel は `GNReducedGap` ただ 1 本
 
-と判明した。ゆえに、 **本当に設計すべき補題は「(z') をどう構成するか」だけ** じゃ。  
+と判明した。ゆえに、 **本当に設計すべき補題は「(z') をどう構成するか」だけ** じゃ。
 
 ## 1. 設計方針
 

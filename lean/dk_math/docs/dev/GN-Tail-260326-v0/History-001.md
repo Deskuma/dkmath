@@ -398,37 +398,37 @@
 
 **対応済み**
 
-- §2 一般化定義  
+- §2 一般化定義
   [GTail.lean](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L19) の `GTail` が文書の `GN_d^(r)` に対応しています。添字の書き方だけ違い、内容は
   `sum_{j=r}^d ... x^(j-r) u^(d-j)` を `k = j-r` に直した形です。
-- §3 Tail 分解  
+- §3 Tail 分解
   [add_pow_eq_prefix_add_xpow_mul_GTail](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L30) がそのまま対応しています。
-- §4.1 `r = 0`  
+- §4.1 `r = 0`
   [GTail_zero_eq_add_pow](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L87)
-- §4.2 `r = 1` 標準 GN  
+- §4.2 `r = 1` 標準 GN
   [GTail_one_eq_sum](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L139) と、[CosmicFormulaBinom.lean](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L266) の `abbrev GN := GTail d 1 x u`、さらに [GN_eq_sum](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L275)
-- §4.3 `r = d`  
+- §4.3 `r = d`
   [GTail_self_eq_one](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L95)
-- §5 再帰  
+- §5 再帰
   [GTail_rec](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L107)
-- §8 評価点  
+- §8 評価点
   [GTail_eval_zero](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L154)
 
 **部分実装**
 
-- §1 背景の `(x+u)^d - u^d = x * GN_d(x,u)`  
+- §1 背景の `(x+u)^d - u^d = x * GN_d(x,u)`
   これは [cosmic_id_csr'](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L304) と [add_pow_gap_factor](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L318) で維持されています。しかも今は `GTail` 主定理ベースに寄っています。
-- §9 まとめの「可除性・p進付値・原始素因子解析への応用」  
+- §9 まとめの「可除性・p進付値・原始素因子解析への応用」
   これは実際に下流で使い始めていますが、`GTail` 名義の generic API としてはまだ薄いです。現状は `GN` wrapper を通じた利用が中心です。
 
 **まだ薄い / 未整理**
 
-- §6 最小次数と可除性  
+- §6 最小次数と可除性
   数学的には [add_pow_eq_prefix_add_xpow_mul_GTail](/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L30) から読めますが、
   「`x^r ∣ ...`」を standalone lemma としてはまだ切っていません。
-- §7 Beam 解釈  
+- §7 Beam 解釈
   文書上の意味づけは合っていますが、Lean ではまだ comments / 命名方針の段階です。`GTail` を Beam family の canonical API として整理し切ったところまでは行っていません。
-- `Defs.lean` の `Gn` 整理  
+- `Defs.lean` の `Gn` 整理
   まだ未着手です。履歴どおり保留中です。
 
 **見立て**
@@ -447,11 +447,11 @@
 
 現状の整理はこうです。
 
-- [GTail.lean](/lean/dk_math/DkMath/CosmicFormula/GTail.lean)  
+- [GTail.lean](/lean/dk_math/DkMath/CosmicFormula/GTail.lean)
   文書の `GN_d^(r)` 本体です。定義、tail 分解、`r=0/1/d`、再帰、`x=0` 評価まであります。
-- [CosmicFormulaBinom.lean](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean)  
+- [CosmicFormulaBinom.lean](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean)
   ここで `GN := GTail d 1 x u` の wrapper 化が済んでいます。
-- [Defs.lean](/lean/dk_math/DkMath/CosmicFormula/Defs.lean)  
+- [Defs.lean](/lean/dk_math/DkMath/CosmicFormula/Defs.lean)
   ここには今も古い `G` / `Gn` / `Big` / `Body` / `Gap` がありますが、意味が mainline と揃っていません。
 
 特に問題なのは `Defs` 側です。
@@ -463,13 +463,13 @@
 
 なので、結論はこれです。
 
-1. `Defs` を最終的な固定点にする方針自体は妥当  
-2. ただし今すぐ「散らばった def を全部 Defs へ移す」のは危険  
+1. `Defs` を最終的な固定点にする方針自体は妥当
+2. ただし今すぐ「散らばった def を全部 Defs へ移す」のは危険
 3. 先に `Defs` を canonical-definition file に作り替える段階が必要
 
 安全な移行順はこうです。
 
-1. [Defs.lean](/lean/dk_math/DkMath/CosmicFormula/Defs.lean) に新 canonical 名を追加する  
+1. [Defs.lean](/lean/dk_math/DkMath/CosmicFormula/Defs.lean) に新 canonical 名を追加する
    - `GN`
    - `GZ`
    - 将来の `GC` 用 placeholder
@@ -487,7 +487,7 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
 - `G -> GZ`
 - `GC` 新設
 
-という最終図は良いです。  
+という最終図は良いです。
 ただし次の実装作業は「移設」そのものではなく、まず **`Defs` を新 canonical API の受け皿に改造する** ことです。
 
 必要なら次に、その Phase 1 として

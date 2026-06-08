@@ -177,7 +177,7 @@ def dynamicGenerator (a d k : C) : AdditiveGenerator C :=
   { origin := a, step := d * k }
 ```
 
-この設計にすると、DAS は「数列の一種」ではなく、**生成器の一例** になります。  
+この設計にすると、DAS は「数列の一種」ではなく、**生成器の一例** になります。
 ここから KUS 版、Unit 版、NP 半ステップ版を全部同じ原理の上に載せられます。
 
 ### 実装場所
@@ -198,7 +198,7 @@ DkMath.KUS
   extract_g が不変である定理
 ```
 
-つまり、**「数列の生成原理そのもの」は KUS 非依存**にしておくのが良いです。  
+つまり、**「数列の生成原理そのもの」は KUS 非依存**にしておくのが良いです。
 KUS はその生成原理を「support を保持する状態空間」に持ち上げる層です。
 
 今の構造で言うと、
@@ -584,7 +584,7 @@ DistribMulAction 係数構造を保つ接触
 Module           線形宇宙としての統合
 ```
 
-今の `dynamicStep d k = d * k` は、同一宇宙内の最小プロトタイプです。  
+今の `dynamicStep d k = d * k` は、同一宇宙内の最小プロトタイプです。
 将来 `SMul` を入れるなら、たぶん名前は `externalDynamicStep` か `scaledStep` がよいです。
 
 ```lean
@@ -1597,7 +1597,7 @@ roadmap に方針を追記しました。
 
 なので、次の戦略としてはかなり明確です。
 
-確率側は「確率論を直接倒す」より、`Big = Body + Gap` の有限質量分解として再定式化する。  
+確率側は「確率論を直接倒す」より、`Big = Body + Gap` の有限質量分解として再定式化する。
 降下側は「Principal を探す」より、まず `normal form + support + minimality` の三点セットを薄い構造体にして、どの入力が足りないかを Lean に露出させる。
 
 今回作った
@@ -1664,7 +1664,7 @@ structure BodyGapSplit where
 
 調査して、計画書を追加しました。
 
-追加先: [BodyGapMassBridgeRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/docs/BodyGapMassBridgeRoadmap.md)
+追加先: [BodyGapMassBridgeRoadmap.md](/lean/dk_math/DkMath/CosmicFormula/docs/BodyGapMassBridgeRoadmap.md)
 
 内容は、既存の `CosmicFormula.Mass.*`、`CoreBeamGap`、`WeightedBinomial`、`ABC.MassBridge`、`Kernel.SubProbability` を調査したうえで、次の共通中間言語へ収束させる計画です。
 
@@ -1691,3 +1691,264 @@ theorem weightedBodyGapKernelSplit_gapAxis_dvd_tail
 を置く方針です。深い数学へ入る前に、今回の `(x + u)^d = u^d + x * GTail d 1 x u` を共通 API 化します。
 
 検証は docs 追加なので Lean build は走らせていません。追加した計画書単体の `git diff --check` は通っています。
+
+### 加法構造を加法で解明？
+
+よくよく考えると奇妙で面白いですね。
+ABC予想は加法則の原理追求です。
+加法構造を積構造として変換し、調べることが一般的アプローチです。
+
+いまやってるのは
+それを解明するための道具の整備ですが
+基本的に a+b=c の加法構造です。
+
+Big = Body + Gap
+
+これで何が見えるのか？
+
+今回追加されたものは、
+
+BodyGapKernelSplit
+split : big = boundary + gapAxis * kernel
+
+加法と積が混在しています！
+
+はい、そこがかなり面白いです。
+`BodyGapKernelSplit` は、まさに「加法構造の中に、積構造として読める尾部を露出させる」道具になっています。
+
+ABC 予想の入口は
+
+```text
+a + b = c
+```
+
+という加法です。
+
+でも解析するときは、
+
+```text
+rad(abc)
+prime divisors
+valuation
+support
+multiplicative channels
+```
+
+のように積構造へ移します。
+
+今回の形はその中間にあります。
+
+```lean
+big = boundary + gapAxis * kernel
+```
+
+つまり、
+
+```text
+加法:
+  big = boundary + tail
+
+積構造:
+  tail = gapAxis * kernel
+```
+
+です。
+
+見えてくるものは、単なる `a + b = c` ではなく、
+
+```text
+c は boundary に tail を足したもの
+tail は gapAxis と kernel の積として分解できる
+```
+
+という二段構造です。
+
+宇宙式では、
+
+```text
+(x + u)^d = u^d + x * GTail d 1 x u
+```
+
+なので、
+
+```text
+boundary = u^d
+gapAxis  = x
+kernel   = GTail d 1 x u
+```
+
+ABC 的に読むと、
+
+```text
+c = stable side + variation side
+variation side = visible gap * hidden kernel
+```
+
+です。
+
+この「visible gap」と「hidden kernel」の分離が効きます。ABC 予想では `rad(abc)` が見ているのは、重複度ではなく素因子の support です。だから `tail = gapAxis * kernel` と分けると、
+
+```text
+gapAxis 由来の素因子
+kernel 由来の素因子
+boundary と共有する素因子
+boundary とは分離している素因子
+```
+
+を追跡できる。
+
+これはまさに `supportMass` や `rad` と相性がいいです。
+
+言い換えると、今回の構造は
+
+```text
+加法方程式を、支え集合の積的流れへ翻訳するための型
+```
+
+です。
+
+ABC の核心は、おそらくこの翻訳の歪みです。
+
+```text
+加法では c = a + b と単純
+積的 support では rad(abc) が小さすぎる場合がある
+その小ささは、tail = gapAxis * kernel のどこに吸収されたのか？
+```
+
+ここを Lean で見えるようにするのが、今回の `BodyGapKernelSplit` の意味ですね。
+加法と積が混在しているのは欠点ではなく、むしろ ABC 型の問題に必要な接続面そのものです。
+
+パスカルの三角形の成長も合成数の段では、新しい素数を必要としていません。
+素数の段に来て始めて、新しい素数を要求し生んでいます。
+そしてパスカルの三角形もまた加法構造だけで構成されている。
+この合成数と素数発生の段の間で何が起きているか？
+というのを抽出する観測道具となれば…！
+
+はい。そこはかなり筋が良いです。
+
+パスカルの三角形は定義としては純粋に加法です。
+
+```text
+next(k) = prev(k-1) + prev(k)
+```
+
+しかし、各段を観測すると、素因子 support の振る舞いが突然変わる。
+
+```text
+合成数段:
+  既存の素因子構造の再配置・増幅が主
+
+素数段 p:
+  内側係数 choose p k がすべて p を要求する
+```
+
+つまり、加法で作られた配列の中に、ある段で積的な「新しい共通因子」が発生する。
+
+ここを `BodyGapKernelSplit` 的に読むと、
+
+```text
+Big = Boundary + GapAxis * Kernel
+```
+
+の `Kernel` が、段 `d` の内部構造を背負います。
+
+素数段では、
+
+```text
+Kernel 内部の全中間項が p を持つ
+```
+
+または weighted row では、
+
+```text
+inner weighted terms carry p through choose p k
+```
+
+となる。
+
+これは、単に「素数 p は choose p k を割る」という既知定理以上の意味を持ちます。
+加法成長が、どの段で積的 support を強制するかを見る観測器になる。
+
+次に置くと良さそうな概念はこれです。
+
+```lean
+def RowForcesPrimeSupport (d p : ℕ) : Prop :=
+  p.Prime ∧ ∀ k, 0 < k → k < d → p ∣ Nat.choose d k
+```
+
+ただし、これは `d = p` だけでなく `d = p^a` にも似た現象が出るので、慎重に分ける必要があります。
+
+観測器としては、むしろ次の二層がよさそうです。
+
+```lean
+def InnerRowSupportPrime (d p : ℕ) : Prop :=
+  p.Prime ∧ ∀ k, 0 < k → k < d → p ∣ Nat.choose d k
+```
+
+```lean
+def RowBirthPrime (d p : ℕ) : Prop :=
+  InnerRowSupportPrime d p ∧ p ∣ d
+```
+
+そして本命はたぶん、
+
+```text
+d が素数段:
+  RowBirthPrime d d
+
+d が合成数段:
+  support は d の既存素因子に支配される
+```
+
+という切り分けです。
+
+ここで `BodyGapKernelSplit` が効くのは、二項段を単なる係数列としてでなく、
+
+```text
+boundary + gapAxis * kernel
+```
+
+の `kernel` 側 support として観測できるからです。
+
+つまり次の観測ができるようになります。
+
+```text
+Pascal additive growth
+  ↓
+weighted binomial row
+  ↓
+tail = gapAxis * kernel
+  ↓
+kernel/support/prime-channel の発生
+```
+
+これは ABC ともかなり近いです。ABC も、
+
+```text
+a + b = c
+```
+
+という加法から、
+
+```text
+rad(abc)
+```
+
+という support を観測する話なので。
+
+次の実装候補は、`BinomialPrime` か `WeightedBinomial` に
+
+```lean
+InnerRowSupportPrime
+PrimeRowSupportBirth
+```
+
+のような薄い観測 predicate を置くことです。最初は深い逆向き定理を狙わず、
+
+```lean
+p.Prime → InnerRowSupportPrime p p
+```
+
+だけを証明するのが安全です。
+
+[DkMath-Nat_Prime](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/DkMath-Nat_Prime.md)

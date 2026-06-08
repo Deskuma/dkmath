@@ -47,6 +47,31 @@ theorem abc_residual_eq_gap_mass (d x u : ℕ) :
   exact mass_residual_eq_mass_gap_of_residualNat d x u
 
 /--
+ABC-side spelling of the residual `Big = Body + Gap` split.
+
+This keeps ABC mass arguments on the same `BodyGapSplit` interface as the
+cosmic-formula layer.
+-/
+def abcBodyGapSplit (d x u : ℕ) : BodyGapSplit ℕ :=
+  residualNatBodyGapSplit d x u
+
+/-- In the ABC residual split, the body mass is bounded by the big mass. -/
+theorem abc_bodyGapSplit_body_le_big (d x u : ℕ) :
+    (abcBodyGapSplit d x u).body ≤ (abcBodyGapSplit d x u).big :=
+  BodyGapSplit.body_le_big_nat (abcBodyGapSplit d x u)
+
+/-- In the ABC residual split, the gap mass is bounded by the big mass. -/
+theorem abc_bodyGapSplit_gap_le_big (d x u : ℕ) :
+    (abcBodyGapSplit d x u).gap ≤ (abcBodyGapSplit d x u).big :=
+  BodyGapSplit.gap_le_big_nat (abcBodyGapSplit d x u)
+
+/-- The ABC residual split reads the residual mass as the gap part. -/
+theorem abc_bodyGapSplit_gap_eq_residual (d x u : ℕ) :
+    (abcBodyGapSplit d x u).gap =
+      CosmicResidualMassAPI.ofResidualNat.massResidual d x u :=
+  residualNatBodyGapSplit_gap_eq_residual d x u
+
+/--
 For squarefree `n`, the support mass already captures all of `n`.
 
 The theorem is stated as a lower bound because later bridge users often read

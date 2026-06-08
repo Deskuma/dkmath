@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.NumberTheory.BinomialPrime
+import DkMath.NumberTheory.BinomialPrimePower
+import DkMath.CosmicFormula.Mass.BodyGapSplit
 import DkMath.Lib.Cosmic.GTail
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
@@ -14,6 +15,7 @@ namespace DkMath
 namespace NumberTheory
 
 open DkMath.CosmicFormula
+open DkMath.CosmicFormula.Mass
 
 /-!
 ## Weighted binomial terms
@@ -135,6 +137,64 @@ theorem prime_allInnerWeightedTermDivisible
     AllInnerWeightedTermDivisible p p x u :=
   allInnerChooseDivisible_allInnerWeightedTermDivisible
     (prime_allInnerChooseDivisible_self hp)
+
+/--
+An inner row support prime lifts from coefficients to all inner weighted terms.
+-/
+theorem innerRowSupportPrime_allInnerWeightedTermDivisible
+    {d p x u : ℕ} (h : InnerRowSupportPrime d p) :
+    AllInnerWeightedTermDivisible d p x u :=
+  allInnerChooseDivisible_allInnerWeightedTermDivisible h.2
+
+/--
+A row-birth support prime lifts from coefficients to all inner weighted terms.
+-/
+theorem rowBirthPrime_allInnerWeightedTermDivisible
+    {d p x u : ℕ} (h : RowBirthPrime d p) :
+    AllInnerWeightedTermDivisible d p x u :=
+  innerRowSupportPrime_allInnerWeightedTermDivisible h.1
+
+/--
+Unpack an inner support prime at a concrete weighted term.
+-/
+theorem innerRowSupportPrime_dvd_inner_weightedBinomialTerm
+    {d p k x u : ℕ}
+    (h : InnerRowSupportPrime d p) (hk0 : 0 < k) (hkd : k < d) :
+    p ∣ weightedBinomialTerm d k x u :=
+  allInnerWeightedTermDivisible_dvd_term
+    (innerRowSupportPrime_allInnerWeightedTermDivisible h) hk0 hkd
+
+/--
+Unpack a row-birth support prime at a concrete weighted term.
+-/
+theorem rowBirthPrime_dvd_inner_weightedBinomialTerm
+    {d p k x u : ℕ}
+    (h : RowBirthPrime d p) (hk0 : 0 < k) (hkd : k < d) :
+    p ∣ weightedBinomialTerm d k x u :=
+  innerRowSupportPrime_dvd_inner_weightedBinomialTerm h.1 hk0 hkd
+
+/--
+Prime-power row filters lift from binomial coefficients to weighted terms.
+-/
+theorem prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index
+    {p n k r x u : ℕ}
+    (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ weightedBinomialTerm (p ^ n) k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 hr)
+
+/--
+If the index is a `p`-unit, the weighted term in row `p^n` carries the full
+`p^n` coefficient support.
+-/
+theorem prime_power_dvd_weightedBinomialTerm_of_not_dvd_index
+    {p n k x u : ℕ}
+    (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hpk : ¬ p ∣ k) :
+    p ^ n ∣ weightedBinomialTerm (p ^ n) k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk)
 
 /-- Inner weighted terms inherit divisibility from `x`. -/
 theorem dvd_inner_weightedBinomialTerm_of_dvd_x
@@ -337,6 +397,48 @@ theorem x_dvd_add_pow_sub_left
     x ∣ (x + u) ^ d - u ^ d := by
   rw [add_pow_sub_left_eq_x_mul_GTail_one]
   exact dvd_mul_right x (GTail d 1 x u)
+
+/--
+The weighted binomial row as a `BodyGapKernelSplit`.
+
+This packages `(x + u)^d = u^d + x * GTail d 1 x u` as the common
+`Big = Boundary + GapAxis * Kernel` interface.
+-/
+def weightedBodyGapKernelSplit
+    (d x u : ℕ) : BodyGapKernelSplit ℕ where
+  big := (x + u) ^ d
+  boundary := u ^ d
+  gapAxis := x
+  kernel := GTail d 1 x u
+  split := add_pow_eq_left_add_x_mul_GTail_one d x u
+
+/-- The weighted split tail is the left-boundary difference. -/
+theorem weightedBodyGapKernelSplit_tail_eq_sub
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).tail =
+      (x + u) ^ d - u ^ d := by
+  symm
+  exact BodyGapKernelSplit.big_sub_boundary_eq_tail_nat
+    (weightedBodyGapKernelSplit d x u)
+
+/-- The weighted split tail is divisible by the gap axis `x`. -/
+theorem weightedBodyGapKernelSplit_gapAxis_dvd_tail
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).gapAxis ∣
+      (weightedBodyGapKernelSplit d x u).tail :=
+  BodyGapKernelSplit.gapAxis_dvd_tail_nat
+    (weightedBodyGapKernelSplit d x u)
+
+/--
+The weighted split recovers the existing divisibility statement
+`x ∣ (x + u)^d - u^d`.
+-/
+theorem weightedBodyGapKernelSplit_gapAxis_dvd_sub
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).gapAxis ∣
+      (x + u) ^ d - u ^ d := by
+  rw [← weightedBodyGapKernelSplit_tail_eq_sub]
+  exact weightedBodyGapKernelSplit_gapAxis_dvd_tail d x u
 
 end NumberTheory
 end DkMath
