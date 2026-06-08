@@ -330,13 +330,13 @@ add_pow_eq_prefix_add_xpow_mul_GTail
 
 ほかに使えそうなもの:
 
-- [GTail_zero_eq_add_pow](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:127)  
+- [GTail_zero_eq_add_pow](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:127)
   `GTail d 0 x u = (x + u)^d`
-- [GTail_one_eq_sum](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:211)  
+- [GTail_one_eq_sum](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:211)
   `r = 1` の GN 形に近い和
-- [GN_eq_sum](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:328)  
+- [GN_eq_sum](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:328)
   既存 GN の和表示
-- [pow_sub_pow_eq_mul_GN](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean:314)  
+- [pow_sub_pow_eq_mul_GN](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean:314)
   `(x+u)^d - u^d = x * GN d x u` 系
 - [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean:151) に GN と差商の橋
 
@@ -400,7 +400,7 @@ git diff --check
 - `x_dvd_weightedBinomialPositiveTailSum`
   - そこから即座に `x ∣ positive tail` を取り出す補題
 
-これで、重み付きパスカル行から `GTail/GN` 側へ降りる `r = 1` の橋ができました。  
+これで、重み付きパスカル行から `GTail/GN` 側へ降りる `r = 1` の橋ができました。
 つまり `(x + u)^d = u^d + x * GTail d 1 x u` 方向へ進む土台です。
 
 検証も通しています。

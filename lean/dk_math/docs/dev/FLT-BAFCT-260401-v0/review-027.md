@@ -71,7 +71,7 @@ $$
 > だから descent がある
 
 とは全く言えぬ。
-ぬしのログ自身が、それは **local-global gap** だと書いておるし、数値実験でも simple residue / CRT では崩れぬと出ておる。ここを取り違えると過大評価になる。  
+ぬしのログ自身が、それは **local-global gap** だと書いておるし、数値実験でも simple residue / CRT では崩れぬと出ておる。ここを取り違えると過大評価になる。
 
 ### 3.3. つまり何が open か
 
@@ -111,7 +111,7 @@ $$
 
 という条件付きじゃ。
 つまり **この residue obstruction はまだ theorem ではなく、Kummer 的 element-level p-th power 分解を elementary に言い換えられたなら効きそう** という段階じゃ。
-ここを「証明が見えた」と読むのはまだ早い。  
+ここを「証明が見えた」と読むのはまだ早い。
 
 ## 5. 今回の進展をどう位置づけるべきか
 
@@ -133,7 +133,7 @@ $$
 \text{valuation} + \text{root branch} + \text{unit/residue obstruction}
 $$
 
-まで揃わぬと足りぬ、という形に変わってきたからじゃ。  
+まで揃わぬと足りぬ、という形に変わってきたからじゃ。
 
 ## 6. いま一番危ない誤読
 
@@ -149,7 +149,7 @@ $$
 
 現状はむしろ逆で、
 **GNReducedGap が “単なる divisibility の問題ではない” と、より深く分かった** のじゃ。
-つまり open kernel の難しさが、より正確に見えた段階じゃよ。  
+つまり open kernel の難しさが、より正確に見えた段階じゃよ。
 
 ## 7. いま一番筋の良い次の一手
 
@@ -178,7 +178,7 @@ $$
 $$
 
 の先頭係数が (p)-乗剰余でなければならぬ、という **unit 部分の必要条件** を、有限体上で本当に定理へ落とせるか探る。
-ここが通れば、「Kummer lemma の elementary extraction」に最も近づく。  
+ここが通れば、「Kummer lemma の elementary extraction」に最も近づく。
 
 ## 8. 一文でまとめると
 

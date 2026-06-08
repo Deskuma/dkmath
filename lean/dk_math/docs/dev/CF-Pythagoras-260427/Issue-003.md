@@ -1,7 +1,7 @@
 # Issue-003: VSCode Lint Error vs. Lean Build Success
 
-cid: 69e72cfc-9944-83e8-8786-53c02b36fb89  
-Date: 2026/04/27  
+cid: 69e72cfc-9944-83e8-8786-53c02b36fb89
+Date: 2026/04/27
 Status: Resolved (Not a real issue - VSCode extension cache problem)
 
 ## 問題の概要

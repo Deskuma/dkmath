@@ -177,7 +177,7 @@ def dynamicGenerator (a d k : C) : AdditiveGenerator C :=
   { origin := a, step := d * k }
 ```
 
-この設計にすると、DAS は「数列の一種」ではなく、**生成器の一例** になります。  
+この設計にすると、DAS は「数列の一種」ではなく、**生成器の一例** になります。
 ここから KUS 版、Unit 版、NP 半ステップ版を全部同じ原理の上に載せられます。
 
 ### 実装場所
@@ -198,7 +198,7 @@ DkMath.KUS
   extract_g が不変である定理
 ```
 
-つまり、**「数列の生成原理そのもの」は KUS 非依存**にしておくのが良いです。  
+つまり、**「数列の生成原理そのもの」は KUS 非依存**にしておくのが良いです。
 KUS はその生成原理を「support を保持する状態空間」に持ち上げる層です。
 
 今の構造で言うと、
@@ -584,7 +584,7 @@ DistribMulAction 係数構造を保つ接触
 Module           線形宇宙としての統合
 ```
 
-今の `dynamicStep d k = d * k` は、同一宇宙内の最小プロトタイプです。  
+今の `dynamicStep d k = d * k` は、同一宇宙内の最小プロトタイプです。
 将来 `SMul` を入れるなら、たぶん名前は `externalDynamicStep` か `scaledStep` がよいです。
 
 ```lean
@@ -1597,7 +1597,7 @@ roadmap に方針を追記しました。
 
 なので、次の戦略としてはかなり明確です。
 
-確率側は「確率論を直接倒す」より、`Big = Body + Gap` の有限質量分解として再定式化する。  
+確率側は「確率論を直接倒す」より、`Big = Body + Gap` の有限質量分解として再定式化する。
 降下側は「Principal を探す」より、まず `normal form + support + minimality` の三点セットを薄い構造体にして、どの入力が足りないかを Lean に露出させる。
 
 今回作った
