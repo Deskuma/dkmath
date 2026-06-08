@@ -533,3 +533,42 @@ git diff --check
 ```
 
 `AKSBridge.lean` に `sorry/axiom/admit` はありません。全体ビルドでは既存ファイル由来の `sorry` 警告は出ています。
+
+### 2026/06/09  4:38
+
+実装しました。対象は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+追加した流れはこの形です。
+
+```lean
+(x + u)^d = x^d + Beam + u^d
+
+Beam ≡ 0 [MOD m]
+u^d ≡ u [MOD m]
+--------------------------------
+(x + u)^d ≡ x^d + u [MOD m]
+```
+
+主な追加補題:
+
+- `weightedBinomialInnerBeamSum`
+  - 両端 `u^d`, `x^d` を除いた中間 Beam
+- `add_pow_eq_right_add_innerBeam_add_left`
+  - 宇宙式分解 `(x + u)^d = x^d + Beam + u^d`
+- `add_pow_modEq_right_add_u_of_innerBeam_modEq_zero_and_left_modEq`
+  - `Beam = 0` と `u^d ≡ u` を合成する汎用 `Nat.ModEq` 補題
+- `prime_dvd_weightedBinomialInnerBeamSum`
+  - prime 行では Beam が `p` で割れる
+- `prime_pow_modEq_self`
+  - prime Frobenius/Fermat endpoint: `u^p ≡ u [MOD p]`
+- `prime_add_pow_modEq_right_add_u`
+  - 最終形: `(x + u)^p ≡ x^p + u [MOD p]`
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- `AKSBridge.lean` に `sorry/admit/axiom` なし
+
+全体ビルドでは既存ファイル由来の `sorry` 警告は出ていますが、今回追加分にはありません。
