@@ -774,3 +774,27 @@ overline{X^k} = overline{X^(k % r)}
 - docs-only なので Lean build は走らせていません
 
 `git status --short` では新規 docs ファイルが untracked です。
+
+### 2026/06/09  7:01
+
+状況整理を [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md) に追記しました。
+
+入れた内容は主に2点です。
+
+1. 冒頭の目的を更新
+   - 素数そのものだけでなく「素性」
+   - primitive prime divisor へ渡せる可除性の痕跡
+   - 境界由来、中間項由来、prime row だけで消える構造の切り分け
+
+2. `Phase 4.5: AKSBridge v1 の巡回商観測` を追加
+   - `DkMath.NumberTheory.AKSBridge`
+   - `AKSBridge-v1.md`
+   - `AKSCyclicCongruenceHolds`
+   - `AKSCyclicFoldedCongruenceHolds`
+   - `prime_aks_cyclic_frobenius`
+   - composite failure witness や primitive prime divisor 境界への比較面、という位置づけ
+
+検証:
+
+- `git diff --check` 成功
+- docs-only なので Lean build は走らせていません。

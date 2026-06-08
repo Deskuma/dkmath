@@ -4,6 +4,20 @@
 
 二項定理の係数列から、次数 `d` の素数性と可除性の構造を取り出す。
 
+より大きな目的は、素数そのものだけでなく「素性」、特に primitive prime divisor
+へ渡せる可除性の痕跡を Lean 上で追えるようにすることである。
+
+ここで追っているものは、単なる素数判定ではない。二項係数、重み付き二項項、
+Frobenius 形、AKS の巡回商を通じて、
+
+```text
+どこで新しい素因子が現れるか
+どの因子が境界由来で、どの因子が中間項由来か
+どの構造が prime row でだけ消えるか
+```
+
+を切り分けるための道具を整備している。
+
 本ロードマップの目的は、展望を広げすぎず、確実に Lean 化できる補題から順に
 `DkMath` の既存構造へ接続することである。
 
@@ -19,6 +33,32 @@
 ```text
 lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/PascalPrimeDialProgress.md
 ```
+
+さらに、二項定理と相性の良い AKS 素数判定法の土台定理として、
+`DkMath.NumberTheory.AKSBridge` の v1 が閉じた。
+
+この整理は次にまとめる。
+
+```text
+lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/AKSBridge-v1.md
+```
+
+AKSBridge v1 の位置づけは次である。
+
+```text
+Pascal prime row
+  → weighted universe split
+  → congruent cosmic formula
+  → finite-field Frobenius
+  → polynomial Frobenius
+  → AKS cyclic quotient R[X] / (X^r - 1)
+  → exponent folding X^k = X^(k % r)
+  → prime AKS cyclic Frobenius
+```
+
+これは完全な AKS 素数判定法ではない。
+しかし、素数段で中間項が消え、巡回商で指数が折り畳まれるという、
+原始素因子を追うために重要な観測面を Lean 上で固定した段階である。
 
 中心となる観測は次である。
 
@@ -328,6 +368,54 @@ weightedBinomialTerm の中間項
 の可除性移送を整理する。
 
 この段階ではまだ Zsigmondy 本体へ踏み込まない。
+
+### Phase 4.5: AKSBridge v1 の巡回商観測
+
+実装済み:
+
+```text
+DkMath.NumberTheory.AKSBridge
+```
+
+記録:
+
+```text
+lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/AKSBridge-v1.md
+```
+
+目標:
+
+- Pascal prime row から Frobenius 形へ進む。
+- `(x+u)^p ≡ x^p + u [MOD p]` を `ZMod p` と polynomial Frobenius へ移す。
+- AKS の巡回商 `R[X] / (X^r - 1)` を導入する。
+- `X^r = 1` から `X^k = X^(k % r)` を固定する。
+- prime modulus が AKS cyclic congruence predicate を満たすことを示す。
+
+主な API:
+
+```lean
+def AKSCyclicCongruenceHolds
+def AKSCyclicFoldedCongruenceHolds
+
+theorem prime_congruent_cosmic_formula
+theorem prime_zmod_congruent_cosmic_formula
+theorem prime_polynomial_X_add_C_pow_eq
+theorem aksQuotientX_pow_eq_pow_mod
+theorem prime_aks_cyclic_frobenius
+theorem prime_AKSCyclicCongruenceHolds
+theorem prime_AKSCyclicFoldedCongruenceHolds
+```
+
+意味:
+
+```text
+素数 p では Frobenius により中間項が消える。
+AKS cyclic quotient では X^r = 1 により指数が r 周期へ畳まれる。
+したがって prime row の消滅現象を、巡回商上の有限な観測へ移せる。
+```
+
+これは、後で composite modulus の failure witness や、primitive prime divisor の
+発生境界を調べるための比較面になる。
 
 ### Phase 5: Zsigmondy への接続準備
 
