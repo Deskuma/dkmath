@@ -8,5 +8,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.PowerSwap.Basic
 import DkMath.PowerSwap.Exchange
+import DkMath.PowerSwap.NormalForm
 import DkMath.PowerSwap.Branch
 import DkMath.PowerSwap.Contours

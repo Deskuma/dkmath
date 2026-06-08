@@ -20,6 +20,8 @@ import DkMath.Zsigmondy  -- Zsigmondy bridge layer
 import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations
 -- NumberTheory Module
 import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Fillability
+import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
+import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
@@ -32,6 +34,7 @@ import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 -- DHNT: Dynamic Harmonic Number Theory
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 import DkMath.KUS  -- KUS: coefficient-unit-blueprint kernel
+import DkMath.Sequence  -- Sequence generators and recurrence principles
 import DkMath.Kernel  -- Capacity-kernel normalization layer
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
