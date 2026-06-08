@@ -294,3 +294,47 @@ theorem prime_power_unitFilteredBeamHeight
 ```
 
 を追加しました。`p ∤ k` の index 層では、Beam 係数の高さがちょうど `n` に揃う、という形です。
+
+### 2026/06/08 22:17
+
+実装しました。これで「`p` 行が初出生ライン」という形が Lean 上でかなり明確になりました。
+
+追加した定理は [BinomialPrimePower.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) のこの2本です。
+
+```lean
+theorem below_prime_uniformBeamHeight_zero
+    {d p : ℕ} (hp : p.Prime) (hdp : d < p) :
+    UniformBeamHeight d p 0
+```
+
+```lean
+theorem below_prime_not_dvd_inner_choose
+    {d p k : ℕ} (hp : p.Prime) (hdp : d < p)
+    (hk0 : 0 < k) (hkd : k < d) :
+    ¬ p ∣ Nat.choose d k
+```
+
+意味としては：
+
+```text
+d < p のすべての行では、Beam 係数の p-adic 高さは 0。
+つまり p は一切出てこない。
+```
+
+既存の
+
+```lean
+prime_uniformBeamHeight_self :
+  p.Prime → UniformBeamHeight p p 1
+```
+
+と合わせて、
+
+```text
+d < p : p-height = 0
+d = p : p-height = 1
+```
+
+が固定されました。
+
+これで「p 境界」はかなり確固たる形です。`p` は `p` 行未満では Beam に現れず、`p` 行で初めて全 Beam に高さ 1 として現れる。

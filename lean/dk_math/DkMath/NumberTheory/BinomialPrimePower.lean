@@ -166,6 +166,35 @@ theorem UniformBeamHeight.innerRowSupportPrime
   ⟨hp, H.allInnerChooseDivisible hp hh⟩
 
 /--
+Below row `p`, the prime `p` is absent from every beam coefficient.
+
+This gives the lower side of the `p`-boundary: before the prime row, the
+`p`-adic beam height is uniformly zero.
+-/
+theorem below_prime_uniformBeamHeight_zero
+    {d p : ℕ} (hp : p.Prime) (hdp : d < p) :
+    UniformBeamHeight d p 0 := by
+  intro k _hk0 _hkd
+  have hfac : (Nat.choose d k).factorization p = 0 :=
+    Nat.factorization_choose_eq_zero_of_lt hdp
+  rw [Nat.factorization_def (Nat.choose d k) hp] at hfac
+  exact hfac
+
+/--
+No row below `p` contains `p` in an inner binomial coefficient.
+-/
+theorem below_prime_not_dvd_inner_choose
+    {d p k : ℕ} (hp : p.Prime) (hdp : d < p)
+    (hk0 : 0 < k) (hkd : k < d) :
+    ¬ p ∣ Nat.choose d k := by
+  have H : UniformBeamHeight d p 0 :=
+    below_prime_uniformBeamHeight_zero hp hdp
+  have hk_le : k ≤ d := hkd.le
+  have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hk_le
+  have hv : padicValNat p (Nat.choose d k) = 0 := H k hk0 hkd
+  exact (DkMath.ABC.padicValNat_eq_zero_iff hp hchoose_ne).mp hv
+
+/--
 Prime rows have uniform beam height `1` at their own prime.
 -/
 theorem prime_uniformBeamHeight_self
@@ -240,6 +269,10 @@ example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
 example {p : ℕ} (hp : p.Prime) :
     UniformBeamHeight p p 1 :=
   prime_uniformBeamHeight_self hp
+
+example {d p : ℕ} (hp : p.Prime) (hdp : d < p) :
+    UniformBeamHeight d p 0 :=
+  below_prime_uniformBeamHeight_zero hp hdp
 
 example {p n : ℕ} (hp : p.Prime) :
     FilteredBeamHeight (p ^ n) p n (fun k => ¬ p ∣ k) :=
