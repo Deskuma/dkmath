@@ -30,6 +30,16 @@ def PrimePowerRowSupport (p n : ℕ) : Prop :=
   p.Prime ∧ 0 < n ∧ InnerRowSupportPrime (p ^ n) p
 
 /--
+All inner coefficients in row `d` have exactly the same `p`-adic height `h`.
+
+This is a stricter beam filter than mere divisibility: not only does `p`
+divide every inner coefficient, the visible `p`-support has uniform height.
+-/
+def UniformBeamHeight (d p h : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d →
+    padicValNat p (Nat.choose d k) = h
+
+/--
 Every inner coefficient of row `p^n` is divisible by `p`.
 
 This is the support-level `p^n` filter.  It deliberately records only the first
@@ -118,6 +128,25 @@ theorem prime_power_pow_dvd_choose_of_padicValNat_index
   exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp hr_le
 
 /--
+Prime rows have uniform beam height `1` at their own prime.
+-/
+theorem prime_uniformBeamHeight_self
+    {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1 := by
+  intro k hk0 hkp
+  have hkp_le : k ≤ p := hkp.le
+  have hk_ne : k ≠ 0 := hk0.ne'
+  have hpk : ¬ p ∣ k := by
+    intro hdiv
+    have hple : p ≤ k := Nat.le_of_dvd hk0 hdiv
+    omega
+  have hvk : padicValNat p k = 0 :=
+    (DkMath.ABC.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
+  have hkp_pow : k ≤ p ^ 1 := by simpa using hkp_le
+  simpa [hvk] using
+    (padicValNat_choose_prime_pow (p := p) (n := 1) (k := k) hp hkp_pow hk_ne)
+
+/--
 If the inner index is a `p`-unit, the row `p^n` coefficient carries the full
 `p^n` divisibility.
 -/
@@ -144,6 +173,10 @@ example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hr : r + padicValNat p k ≤ n) :
     p ^ r ∣ Nat.choose (p ^ n) k :=
   prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 hr
+
+example {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1 :=
+  prime_uniformBeamHeight_self hp
 
 end samples
 

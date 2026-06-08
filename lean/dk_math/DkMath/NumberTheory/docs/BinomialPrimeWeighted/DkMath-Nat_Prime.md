@@ -950,3 +950,21 @@ Row 6, 36 など:
 > 素数冪として濃淡法則を持つか
 
 を見る層になります。
+
+---
+
+追加内容：
+
+```lean
+def UniformBeamHeight (d p h : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d →
+    padicValNat p (Nat.choose d k) = h
+```
+
+```lean
+theorem prime_uniformBeamHeight_self
+    {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1
+```
+
+証明は `padicValNat_choose_prime_pow` の `n = 1` 特殊化を使っています。`0 < k < p` なので `p ∤ k`、よって `padicValNat p k = 0`。したがって Beam 側は `1 - 0 = 1` です。

@@ -233,3 +233,33 @@ git diff --check
 ```
 
 対象ファイルに `sorry/axiom/admit` はありません。
+
+### 2026/06/08 20:28
+
+行けました。`UniformBeamHeight` と素数行の高さ定理を [BinomialPrimePower.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) に追加しました。
+
+追加内容：
+
+```lean
+def UniformBeamHeight (d p h : ℕ) : Prop :=
+  ∀ k, 0 < k → k < d →
+    padicValNat p (Nat.choose d k) = h
+```
+
+```lean
+theorem prime_uniformBeamHeight_self
+    {p : ℕ} (hp : p.Prime) :
+    UniformBeamHeight p p 1
+```
+
+証明は `padicValNat_choose_prime_pow` の `n = 1` 特殊化を使っています。`0 < k < p` なので `p ∤ k`、よって `padicValNat p k = 0`。したがって Beam 側は `1 - 0 = 1` です。
+
+確認済みです。
+
+```sh
+lake build DkMath.NumberTheory.BinomialPrimePower
+lake build DkMath
+git diff --check
+```
+
+対象ファイルに `sorry/axiom/admit` はありません。
