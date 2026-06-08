@@ -704,3 +704,43 @@ X^k = X^(k % r)
 - `lake build DkMath` 成功
 - `git diff --check` 成功
 - 追加箇所に `sorry/admit/axiom` なし
+
+### 2026/06/09  5:38
+
+追加しました。対象は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+今回入れた層:
+
+```lean
+noncomputable def aksQuotientMap
+noncomputable def aksQuotientC
+
+theorem aksQuotientMap_X
+theorem aksQuotientMap_C
+theorem aksQuotientMap_X_pow
+theorem aksQuotientMap_X_pow_eq_mod
+```
+
+これで、商環へ写す操作が
+
+```lean
+R[X] →+* AKSCyclotomicQuotient R r
+```
+
+として名前を持ちました。さらに、
+
+```lean
+overline{X^k} = overline{X}^k
+overline{X^k} = overline{X^(k % r)}
+```
+
+が使える状態です。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。

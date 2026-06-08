@@ -276,10 +276,39 @@ noncomputable def aksCyclotomicIdeal (R : Type*) [CommRing R] (r : ℕ) : Ideal 
 abbrev AKSCyclotomicQuotient (R : Type*) [CommRing R] (r : ℕ) :=
   R[X] ⧸ aksCyclotomicIdeal R r
 
+/-- The quotient map from polynomials to the AKS cyclic quotient. -/
+noncomputable def aksQuotientMap (R : Type*) [CommRing R] (r : ℕ) :
+    R[X] →+* AKSCyclotomicQuotient R r :=
+  Ideal.Quotient.mk (aksCyclotomicIdeal R r)
+
 /-- The image of polynomial `X` in the AKS cyclic quotient. -/
 noncomputable def aksQuotientX (R : Type*) [CommRing R] (r : ℕ) :
     AKSCyclotomicQuotient R r :=
   Ideal.Quotient.mk (aksCyclotomicIdeal R r) (X : R[X])
+
+/-- The image of a constant polynomial in the AKS cyclic quotient. -/
+noncomputable def aksQuotientC (R : Type*) [CommRing R] (r : ℕ) (a : R) :
+    AKSCyclotomicQuotient R r :=
+  aksQuotientMap R r (C a)
+
+/-- The quotient map sends polynomial `X` to `aksQuotientX`. -/
+theorem aksQuotientMap_X
+    (R : Type*) [CommRing R] (r : ℕ) :
+    aksQuotientMap R r (X : R[X]) = aksQuotientX R r := by
+  rfl
+
+/-- The quotient map sends constants to `aksQuotientC`. -/
+theorem aksQuotientMap_C
+    (R : Type*) [CommRing R] (r : ℕ) (a : R) :
+    aksQuotientMap R r (C a) = aksQuotientC R r a := by
+  rfl
+
+/-- A polynomial power `X^k` maps to the corresponding power of the quotient `X`. -/
+theorem aksQuotientMap_X_pow
+    (R : Type*) [CommRing R] (r k : ℕ) :
+    aksQuotientMap R r ((X : R[X]) ^ k) =
+      aksQuotientX R r ^ k := by
+  rw [map_pow, aksQuotientMap_X]
 
 /-- In the cyclic quotient by `X^r - 1`, the image of `X` satisfies `X^r = 1`. -/
 theorem aksQuotientX_pow_r_eq_one
@@ -322,6 +351,17 @@ theorem aks_cyclic_observation_X_pow_eq_pow_mod
     (R : Type*) [CommRing R] (r k : ℕ) :
     aksQuotientX R r ^ k = aksQuotientX R r ^ (k % r) :=
   aksQuotientX_pow_eq_pow_mod R r k
+
+/--
+After passing through the AKS quotient map, powers of `X` fold to residue
+exponents modulo `r`.
+-/
+theorem aksQuotientMap_X_pow_eq_mod
+    (R : Type*) [CommRing R] (r k : ℕ) :
+    aksQuotientMap R r ((X : R[X]) ^ k) =
+      aksQuotientMap R r ((X : R[X]) ^ (k % r)) := by
+  rw [aksQuotientMap_X_pow, aksQuotientMap_X_pow]
+  exact aksQuotientX_pow_eq_pow_mod R r k
 
 /--
 The inner coefficients of prime row `p` vanish in `ZMod p`.
@@ -418,6 +458,11 @@ example (p r k : ℕ) :
     aksQuotientX (ZMod p) r ^ k =
       aksQuotientX (ZMod p) r ^ (k % r) :=
   aksQuotientX_pow_eq_pow_mod (ZMod p) r k
+
+example (p r k : ℕ) :
+    aksQuotientMap (ZMod p) r ((X : (ZMod p)[X]) ^ k) =
+      aksQuotientMap (ZMod p) r ((X : (ZMod p)[X]) ^ (k % r)) :=
+  aksQuotientMap_X_pow_eq_mod (ZMod p) r k
 
 end samples
 
