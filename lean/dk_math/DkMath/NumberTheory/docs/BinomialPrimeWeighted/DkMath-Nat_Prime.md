@@ -1717,3 +1717,130 @@ theorem prime_not_dvd_pascalCoeffMass_of_row_lt
 ```
 
 という観測が固定できます。
+
+### AKS素数判定法は二項定理の原理を応用したもの
+
+はい。AKS 素数判定法の核心は、かなり二項定理そのものです。
+
+基本原理はこれです。
+
+```text
+n が素数なら
+(x + a)^n ≡ x^n + a  (mod n)
+```
+
+より正確には多項式環で、
+
+```text
+(X + a)^n ≡ X^n + a  mod n
+```
+
+が成り立ちます。理由は、素数 `p` なら二項係数
+
+```text
+C(p,k), 0 < k < p
+```
+
+がすべて `p` で割れるからです。
+
+つまり、
+
+```text
+(X + a)^p
+= X^p + C(p,1)aX^(p-1) + ... + C(p,p-1)a^(p-1)X + a^p
+≡ X^p + a^p  mod p
+```
+
+さらに Fermat 小定理で
+
+```text
+a^p ≡ a mod p
+```
+
+なので、
+
+```text
+(X + a)^p ≡ X^p + a mod p
+```
+
+になります。
+
+AKS はこの「素数なら Frobenius 的に振る舞う」という性質を、有限個の `a` と、剰余多項式環
+
+```text
+(Z/nZ)[X] / (X^r - 1)
+```
+
+で検査できるようにしたものです。
+
+DkMath の今の流れに引き寄せると：
+
+```text
+PrimePrebirthAlternation
+BeamBirthBoundary
+PascalPrimeDial
+```
+
+は、AKS の核とかなり近い位置にいます。
+
+特に、
+
+```lean
+PrimePrebirthAlternation
+```
+
+は `p - 1` 行の mod `p` 交代相。
+
+```lean
+prime_uniformBeamHeight_self
+```
+
+は `p` 行の中間係数が `p`-height `1` で揃うこと。
+
+```lean
+pascalPrimeDialHeight
+```
+
+は任意の行の係数に対する prime support 観測。
+
+AKS は、これを「多項式合同」として使う判定法です。  
+なので次に橋を作るなら、かなり自然なターゲットは：
+
+```lean
+theorem prime_add_pow_congr
+    {p a : ℕ} (hp : p.Prime) :
+    -- (X + a)^p ≡ X^p + a mod p
+```
+
+または、まず係数レベルで：
+
+```lean
+theorem prime_inner_coeff_vanish_mod
+    {p k : ℕ} (hp : p.Prime) (hk0 : 0 < k) (hkp : k < p) :
+    ((Nat.choose p k : ZMod p) = 0)
+```
+
+これはもう `prime_dvd_inner_choose` からすぐ出せます。  
+AKS への最初の橋としては、後者の係数消滅補題が堅いです。
+
+追加:
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean)
+
+主な定理はこの3つです。
+
+```lean
+theorem prime_inner_choose_eq_zero_zmod
+theorem prime_inner_pascalCoeffMass_eq_zero_zmod
+theorem prime_polynomial_X_add_C_pow_eq
+```
+
+特に AKS の核になる形を固定しました。
+
+```lean
+theorem prime_polynomial_X_add_C_pow_eq
+    {p a : ℕ} (hp : p.Prime) :
+    ((X : (ZMod p)[X]) + C (a : ZMod p)) ^ p =
+      X ^ p + C (a : ZMod p)
+```
+
+これは `ZMod p` 上の freshman dream で、AKS の多項式合同へ進むための入口です。まだ `X^r - 1` による剰余多項式環までは入れていません。そこは次段です。

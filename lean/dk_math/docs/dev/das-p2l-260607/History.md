@@ -495,3 +495,282 @@ wc -L
 ```
 
 どちらも問題なしです。
+
+### 2026/06/09  4:01
+
+AKS 入口の橋を実装しました。
+
+追加:
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean)
+
+主な定理はこの3つです。
+
+```lean
+theorem prime_inner_choose_eq_zero_zmod
+theorem prime_inner_pascalCoeffMass_eq_zero_zmod
+theorem prime_polynomial_X_add_C_pow_eq
+```
+
+特に AKS の核になる形を固定しました。
+
+```lean
+theorem prime_polynomial_X_add_C_pow_eq
+    {p a : ℕ} (hp : p.Prime) :
+    ((X : (ZMod p)[X]) + C (a : ZMod p)) ^ p =
+      X ^ p + C (a : ZMod p)
+```
+
+これは `ZMod p` 上の freshman dream で、AKS の多項式合同へ進むための入口です。まだ `X^r - 1` による剰余多項式環までは入れていません。そこは次段です。
+
+トップレベル [DkMath.lean](/lean/dk_math/DkMath.lean) にも import を追加済みです。
+
+検証済み:
+
+```text
+lake build DkMath.NumberTheory.AKSBridge
+lake build DkMath
+git diff --check
+```
+
+`AKSBridge.lean` に `sorry/axiom/admit` はありません。全体ビルドでは既存ファイル由来の `sorry` 警告は出ています。
+
+### 2026/06/09  4:38
+
+実装しました。対象は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+追加した流れはこの形です。
+
+```lean
+(x + u)^d = x^d + Beam + u^d
+
+Beam ≡ 0 [MOD m]
+u^d ≡ u [MOD m]
+--------------------------------
+(x + u)^d ≡ x^d + u [MOD m]
+```
+
+主な追加補題:
+
+- `weightedBinomialInnerBeamSum`
+  - 両端 `u^d`, `x^d` を除いた中間 Beam
+- `add_pow_eq_right_add_innerBeam_add_left`
+  - 宇宙式分解 `(x + u)^d = x^d + Beam + u^d`
+- `add_pow_modEq_right_add_u_of_innerBeam_modEq_zero_and_left_modEq`
+  - `Beam = 0` と `u^d ≡ u` を合成する汎用 `Nat.ModEq` 補題
+- `prime_dvd_weightedBinomialInnerBeamSum`
+  - prime 行では Beam が `p` で割れる
+- `prime_pow_modEq_self`
+  - prime Frobenius/Fermat endpoint: `u^p ≡ u [MOD p]`
+- `prime_add_pow_modEq_right_add_u`
+  - 最終形: `(x + u)^p ≡ x^p + u [MOD p]`
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- `AKSBridge.lean` に `sorry/admit/axiom` なし
+
+全体ビルドでは既存ファイル由来の `sorry` 警告は出ていますが、今回追加分にはありません。
+
+### 2026/06/09  4:44
+
+追加しました。場所は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+入れた定理名は指定どおりです。
+
+```lean
+theorem prime_innerBeam_modEq_zero
+theorem prime_gap_compress_modEq
+theorem prime_congruent_cosmic_formula
+```
+
+`prime_congruent_cosmic_formula` は、ちゃんと
+
+```lean
+prime_innerBeam_modEq_zero hp
+prime_gap_compress_modEq hp
+```
+
+を合成して証明する形にしました。つまり「Beam = 0」「u^p compress」の2要素が見える証明構造です。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+### 2026/06/09  4:52
+
+進めました。今回は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) に `F_p = ZMod p` への橋を追加しています。
+
+追加した主な補題:
+
+```lean
+theorem prime_congruent_cosmic_formula_natCast_zmod
+```
+
+Nat 側の
+
+```lean
+(x + u)^p ≡ x^p + u [MOD p]
+```
+
+を `ZMod p` 上の等式として読む橋です。
+
+```lean
+theorem prime_zmod_gap_compress
+```
+
+`F_p` 内での `u^p = u`。
+
+```lean
+theorem prime_zmod_congruent_cosmic_formula
+```
+
+`x u : ZMod p` そのものに対する
+
+```lean
+(x + u)^p = x^p + u
+```
+
+### 2026/06/09  5:14
+
+進めました。今回は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) に、AKS の `X^r = 1` 周期層を追加しています。
+
+追加した主なもの:
+
+```lean
+theorem pow_add_period_of_pow_eq_one
+noncomputable def aksCyclotomicIdeal
+abbrev AKSCyclotomicQuotient
+noncomputable def aksQuotientX
+theorem aksQuotientX_pow_r_eq_one
+theorem aksQuotientX_pow_add_r_eq_pow
+```
+
+これで次の形が固定できました。
+
+```lean
+-- 抽象形
+a ^ r = 1 → a ^ (k + r) = a ^ k
+
+-- AKS quotient 形
+R[X] / (X^r - 1) では
+X^r = 1
+X^(k+r) = X^k
+```
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09  5:23
+
+追加しました。場所は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+入れた補題:
+
+```lean
+theorem pow_add_mul_period_of_pow_eq_one
+theorem pow_eq_pow_mod_of_pow_eq_one
+
+theorem aksQuotientX_pow_add_mul_r_eq_pow
+theorem aksQuotientX_pow_eq_pow_mod
+```
+
+これで次が Lean 上で固定されました。
+
+```lean
+-- 抽象形
+a^r = 1 → a^(k + r*t) = a^k
+a^r = 1 → a^k = a^(k % r)
+
+-- AKS quotient 形
+X^(k + r*t) = X^k
+X^k = X^(k % r)
+```
+
+`X^k = X^(k % r)` は `Nat.mod_add_div` を使っているので、`r > 0` 仮定なしで通っています。`r = 0` の場合も `k % 0 = k` なので自明形になります。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+### 2026/06/09  5:38
+
+追加しました。対象は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) です。
+
+今回入れた層:
+
+```lean
+noncomputable def aksQuotientMap
+noncomputable def aksQuotientC
+
+theorem aksQuotientMap_X
+theorem aksQuotientMap_C
+theorem aksQuotientMap_X_pow
+theorem aksQuotientMap_X_pow_eq_mod
+```
+
+これで、商環へ写す操作が
+
+```lean
+R[X] →+* AKSCyclotomicQuotient R r
+```
+
+として名前を持ちました。さらに、
+
+```lean
+overline{X^k} = overline{X}^k
+overline{X^k} = overline{X^(k % r)}
+```
+
+が使える状態です。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- 追加箇所に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09  6:53
+
+説明書を追加しました。
+
+追加ファイル:
+
+[AKSBridge-v1.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/AKSBridge-v1.md)
+
+内容は指定された 8 段階をベースにして、各段階の意味と対応する Lean 名を整理しています。
+
+```text
+1. Pascal prime row
+2. Weighted universe split
+3. Congruent cosmic formula
+4. Finite-field form
+5. Polynomial Frobenius
+6. AKS cyclic quotient
+7. Prime AKS cyclic Frobenius
+8. Predicate layer
+```
+
+`Cyclotomic` と混線しないように、文中でも `AKS cyclic quotient` / `Cyclic` を明示しました。
+
+検証:
+
+- `git diff --check` 成功
+- docs-only なので Lean build は走らせていません
+
+`git status --short` では新規 docs ファイルが untracked です。
