@@ -2018,3 +2018,90 @@ theorem prime_power_innerRowSupportPrime
 この定理が固定できると、現在の `RowBirthPrime` は「素数段」から「素数冪段の支持」へ自然に拡張できます。
 
 結論としては、可除性だけで「原始的な素数の発生源」はかなり捕まえられます。ただし `d = p` と `d = p^n` を分離するには、単なる `p ∣ choose d k` では足りず、`p^n` 可除性の階層、つまり factorization / valuation を「可除性の段階構造」として導入するのが Lean らしい道筋です。
+
+入れた主な補題は次です。
+
+- `prime_power_innerRowSupportPrime`
+  `p^n` 段の内側係数がすべて `p` を支持することを固定。
+- `prime_power_rowBirthPrime`
+  `0 < n` なら `p ∣ p^n` なので `RowBirthPrime (p^n) p` へ接続。
+- `padicValNat_choose_prime_pow`
+  mathlib の Kummer/factorization 形を `padicValNat` 形に変換。
+- `prime_power_dvd_choose_of_not_dvd_index`
+  `¬ p ∣ k` なら `p^n ∣ choose (p^n) k`。ここが「p^n フィルター」の最初の精密層です。
+
+ここからどう攻めるか？
+
+攻め筋は `prime_power_dvd_choose_of_not_dvd_index` を特殊例として、もっと一般の **valuation filter** に昇格するのがよいです。
+
+今ある定理は：
+
+```lean
+¬ p ∣ k → p ^ n ∣ Nat.choose (p ^ n) k
+```
+
+つまり `v_p(k) = 0` の層だけを見ています。次はこれを
+
+```text
+v_p(choose (p^n) k) = n - v_p(k)
+```
+
+から直接、
+
+```lean
+r + padicValNat p k ≤ n →
+p ^ r ∣ Nat.choose (p ^ n) k
+```
+
+へ一般化するのが本筋です。
+
+名前は例えば：
+
+```lean
+theorem prime_power_pow_dvd_choose_of_padicValNat_index
+    {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
+    (hr : r + padicValNat p k ≤ n) :
+    p ^ r ∣ Nat.choose (p ^ n) k
+```
+
+これが立つと、全部が統一されます。
+
+- `r = 1`
+  内側係数は `p` で割れる、つまり `InnerRowSupportPrime`
+- `r = n` かつ `padicValNat p k = 0`
+  既存の `prime_power_dvd_choose_of_not_dvd_index`
+- `k` が `p^s` を含む場合
+  係数側には `p^(n-s)` が残る
+
+これで「p^n フィルター」が、単なる yes/no 可除性ではなく、層構造として使えます。
+
+その次にやるべきは weighted 側への持ち上げです。
+
+```lean
+p ^ r ∣ Nat.choose (p ^ n) k →
+p ^ r ∣ weightedBinomialTerm (p ^ n) k x u
+```
+
+これは乗算で保たれるので軽いです。ここまで行くと、
+
+```text
+Pascal の加法生成
+→ binomial coefficient の p-adic 層
+→ weighted term
+→ GN / BodyGapKernelSplit
+```
+
+の橋ができます。
+
+なので次の実装チェックポイントはこれです。
+
+1. `prime_power_pow_dvd_choose_of_padicValNat_index`
+2. `prime_power_padicValNat_choose_add_index`
+
+   ```lean
+   padicValNat p (choose (p^n) k) + padicValNat p k = n
+   ```
+
+3. weighted term への `p^r` 可除性リフト
+
+ここを固めると、「素数原始を可除性だけで観測する」道具としてかなり強くなります。

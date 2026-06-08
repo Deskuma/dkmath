@@ -712,3 +712,16 @@ FactorRigid p → ¬ NontrivialGapPowerDiff p
 > ただし p.Prime を使わないなら、代わりに「非自明分解できない」という FactorRigid を導入する。
 > さらに冪差因数分解を見ると、非自明な冪差が分解不能な p になるには、因子の片方が 1 になる必要がある。
 > その不可能性を分析器として使える。
+
+---
+
+入れた主な補題は次です。
+
+- `prime_power_innerRowSupportPrime`
+  `p^n` 段の内側係数がすべて `p` を支持することを固定。
+- `prime_power_rowBirthPrime`
+  `0 < n` なら `p ∣ p^n` なので `RowBirthPrime (p^n) p` へ接続。
+- `padicValNat_choose_prime_pow`
+  mathlib の Kummer/factorization 形を `padicValNat` 形に変換。
+- `prime_power_dvd_choose_of_not_dvd_index`
+  `¬ p ∣ k` なら `p^n ∣ choose (p^n) k`。ここが「p^n フィルター」の最初の精密層です。
