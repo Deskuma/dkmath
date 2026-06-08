@@ -1664,7 +1664,7 @@ structure BodyGapSplit where
 
 調査して、計画書を追加しました。
 
-追加先: [BodyGapMassBridgeRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/docs/BodyGapMassBridgeRoadmap.md)
+追加先: [BodyGapMassBridgeRoadmap.md](/lean/dk_math/DkMath/CosmicFormula/docs/BodyGapMassBridgeRoadmap.md)
 
 内容は、既存の `CosmicFormula.Mass.*`、`CoreBeamGap`、`WeightedBinomial`、`ABC.MassBridge`、`Kernel.SubProbability` を調査したうえで、次の共通中間言語へ収束させる計画です。
 

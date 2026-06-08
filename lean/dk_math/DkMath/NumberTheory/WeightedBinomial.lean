@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.BinomialPrime
+import DkMath.CosmicFormula.Mass.BodyGapSplit
 import DkMath.Lib.Cosmic.GTail
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
@@ -14,6 +15,7 @@ namespace DkMath
 namespace NumberTheory
 
 open DkMath.CosmicFormula
+open DkMath.CosmicFormula.Mass
 
 /-!
 ## Weighted binomial terms
@@ -337,6 +339,48 @@ theorem x_dvd_add_pow_sub_left
     x ∣ (x + u) ^ d - u ^ d := by
   rw [add_pow_sub_left_eq_x_mul_GTail_one]
   exact dvd_mul_right x (GTail d 1 x u)
+
+/--
+The weighted binomial row as a `BodyGapKernelSplit`.
+
+This packages `(x + u)^d = u^d + x * GTail d 1 x u` as the common
+`Big = Boundary + GapAxis * Kernel` interface.
+-/
+def weightedBodyGapKernelSplit
+    (d x u : ℕ) : BodyGapKernelSplit ℕ where
+  big := (x + u) ^ d
+  boundary := u ^ d
+  gapAxis := x
+  kernel := GTail d 1 x u
+  split := add_pow_eq_left_add_x_mul_GTail_one d x u
+
+/-- The weighted split tail is the left-boundary difference. -/
+theorem weightedBodyGapKernelSplit_tail_eq_sub
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).tail =
+      (x + u) ^ d - u ^ d := by
+  symm
+  exact BodyGapKernelSplit.big_sub_boundary_eq_tail_nat
+    (weightedBodyGapKernelSplit d x u)
+
+/-- The weighted split tail is divisible by the gap axis `x`. -/
+theorem weightedBodyGapKernelSplit_gapAxis_dvd_tail
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).gapAxis ∣
+      (weightedBodyGapKernelSplit d x u).tail :=
+  BodyGapKernelSplit.gapAxis_dvd_tail_nat
+    (weightedBodyGapKernelSplit d x u)
+
+/--
+The weighted split recovers the existing divisibility statement
+`x ∣ (x + u)^d - u^d`.
+-/
+theorem weightedBodyGapKernelSplit_gapAxis_dvd_sub
+    (d x u : ℕ) :
+    (weightedBodyGapKernelSplit d x u).gapAxis ∣
+      (x + u) ^ d - u ^ d := by
+  rw [← weightedBodyGapKernelSplit_tail_eq_sub]
+  exact weightedBodyGapKernelSplit_gapAxis_dvd_tail d x u
 
 end NumberTheory
 end DkMath
