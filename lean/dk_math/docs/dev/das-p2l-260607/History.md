@@ -599,3 +599,37 @@ prime_gap_compress_modEq hp
 - `lake build DkMath.NumberTheory.AKSBridge` 成功
 - `git diff --check` 成功
 - 追加箇所に `sorry/admit/axiom` なし
+
+### 2026/06/09  4:52
+
+進めました。今回は [AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean) に `F_p = ZMod p` への橋を追加しています。
+
+追加した主な補題:
+
+```lean
+theorem prime_congruent_cosmic_formula_natCast_zmod
+```
+
+Nat 側の
+
+```lean
+(x + u)^p ≡ x^p + u [MOD p]
+```
+
+を `ZMod p` 上の等式として読む橋です。
+
+```lean
+theorem prime_zmod_gap_compress
+```
+
+`F_p` 内での `u^p = u`。
+
+```lean
+theorem prime_zmod_congruent_cosmic_formula
+```
+
+`x u : ZMod p` そのものに対する
+
+```lean
+(x + u)^p = x^p + u
+```

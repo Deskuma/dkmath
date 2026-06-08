@@ -185,6 +185,39 @@ theorem prime_congruent_cosmic_formula
     (prime_gap_compress_modEq hp)
 
 /--
+The natural-number congruent cosmic formula as an equality in `ZMod p`.
+-/
+theorem prime_congruent_cosmic_formula_natCast_zmod
+    {p x u : ℕ} (hp : p.Prime) :
+    (((x + u) ^ p : ℕ) : ZMod p) = ((x ^ p + u : ℕ) : ZMod p) :=
+  (ZMod.natCast_eq_natCast_iff _ _ _).mpr
+    (prime_congruent_cosmic_formula hp)
+
+/--
+Gap compression inside the prime field itself.
+-/
+theorem prime_zmod_gap_compress
+    {p : ℕ} (hp : p.Prime) (u : ZMod p) :
+    u ^ p = u := by
+  letI : Fact p.Prime := ⟨hp⟩
+  exact ZMod.pow_card u
+
+/--
+Prime-field cosmic formula.
+
+This is the same endpoint as `prime_congruent_cosmic_formula`, but stated after
+moving fully into `F_p = ZMod p`.
+-/
+theorem prime_zmod_congruent_cosmic_formula
+    {p : ℕ} (hp : p.Prime) (x u : ZMod p) :
+    (x + u) ^ p = x ^ p + u := by
+  letI : Fact p.Prime := ⟨hp⟩
+  have h := add_pow_char x u p
+  have hu : u ^ p = u := ZMod.pow_card u
+  rw [hu] at h
+  exact h
+
+/--
 The inner coefficients of prime row `p` vanish in `ZMod p`.
 
 This is the coefficient-level AKS/Frobenius input.
@@ -245,6 +278,10 @@ example {p a : ℕ} (hp : p.Prime) :
 example {p x u : ℕ} (hp : p.Prime) :
     (x + u) ^ p ≡ x ^ p + u [MOD p] :=
   prime_congruent_cosmic_formula hp
+
+example {p : ℕ} (hp : p.Prime) (x u : ZMod p) :
+    (x + u) ^ p = x ^ p + u :=
+  prime_zmod_congruent_cosmic_formula hp x u
 
 end samples
 
