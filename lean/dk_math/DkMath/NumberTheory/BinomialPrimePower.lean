@@ -8,6 +8,7 @@ import DkMath.ABC.PadicValNat
 import DkMath.NumberTheory.BinomialPrime
 import Mathlib.Data.Nat.Choose.Factorization
 import Mathlib.Data.Nat.Multiplicity
+import Mathlib.Data.ZMod.Basic
 
 #print "file: DkMath.NumberTheory.BinomialPrimePower"
 
@@ -69,6 +70,16 @@ boundary at a composite row, it suffices to find one inner coefficient whose
 -/
 def BeamBirthBoundaryObstruction (p : ℕ) : Prop :=
   ∃ k, 0 < k ∧ k < p ∧ padicValNat p (Nat.choose p k) ≠ 1
+
+/--
+The pre-birth alternation visible just before a prime row.
+
+Row `p - 1` is not a divisibility beam for `p`; instead, when viewed modulo
+`p`, its coefficients alternate as `1, -1, 1, -1, ...`.
+-/
+def PrimePrebirthAlternation (p : ℕ) : Prop :=
+  ∀ k, k ≤ p - 1 →
+    ((Nat.choose (p - 1) k : ZMod p) = (-1 : ZMod p) ^ k)
 
 /--
 Every inner coefficient of row `p^n` is divisible by `p`.
@@ -241,6 +252,57 @@ theorem prime_beamBirthBoundary
     BeamBirthBoundary p :=
   ⟨fun _ hdp => below_prime_uniformBeamHeight_zero hp hdp,
     prime_uniformBeamHeight_self hp⟩
+
+/--
+In the row before a prime row, adjacent coefficients are negatives modulo the
+prime.
+
+This is the local step behind the visible alternating pattern in row `p - 1`.
+-/
+theorem prime_prebirthAlternation_step
+    {p k : ℕ} (hp : p.Prime) (hk : k + 1 < p) :
+    ((Nat.choose (p - 1) (k + 1) : ZMod p) =
+      - (Nat.choose (p - 1) k : ZMod p)) := by
+  have hpascal :
+      Nat.choose p (k + 1) =
+        Nat.choose (p - 1) k + Nat.choose (p - 1) (k + 1) := by
+    simpa using Nat.choose_succ_right p k hp.pos
+  have hdiv : p ∣ Nat.choose p (k + 1) :=
+    prime_dvd_inner_choose hp (Nat.succ_pos k) hk
+  have hzero : ((Nat.choose p (k + 1) : ℕ) : ZMod p) = 0 :=
+    (ZMod.natCast_eq_zero_iff _ _).mpr hdiv
+  have hsum :
+      (Nat.choose (p - 1) k : ZMod p) +
+        (Nat.choose (p - 1) (k + 1) : ZMod p) = 0 := by
+    simpa [hpascal, Nat.cast_add] using hzero
+  exact eq_neg_of_add_eq_zero_left (by simpa [add_comm] using hsum)
+
+/--
+Prime rows have a pre-birth alternation one row below them.
+
+Modulo `p`, row `p - 1` is exactly the coefficient pattern of `(1 - 1)^(p-1)`:
+the `k`-th coefficient is `(-1)^k`.
+-/
+theorem prime_prebirthAlternation
+    {p : ℕ} (hp : p.Prime) :
+    PrimePrebirthAlternation p := by
+  intro k
+  induction k with
+  | zero =>
+      intro _hk
+      simp
+  | succ k ih =>
+      intro hk
+      have hk_prev : k ≤ p - 1 := by omega
+      have hk_lt : k + 1 < p := by omega
+      calc
+        (Nat.choose (p - 1) (k + 1) : ZMod p)
+            = - (Nat.choose (p - 1) k : ZMod p) :=
+              prime_prebirthAlternation_step hp hk_lt
+        _ = - ((-1 : ZMod p) ^ k) := by rw [ih hk_prev]
+        _ = (-1 : ZMod p) ^ (k + 1) := by
+              rw [pow_succ]
+              ring
 
 /-- The lower side of a packaged beam-birth boundary. -/
 theorem BeamBirthBoundary.below

@@ -385,3 +385,32 @@ theorem not_obstruction_of_prime
 ```
 
 逆向き `BeamBirthBoundary p → p.Prime` は、既存 API だけではまだ直接つながりませんでした。今の不足要素は明確で、「合成数 `p` なら `BeamBirthBoundaryObstruction p` が存在する」という witness 定理です。
+
+### 2026/06/09  0:36
+
+実装しました。`p - 1` 行を `mod p` で見ると `1, -1, 1, -1, ...` になる現象を、[BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean) に `PrimePrebirthAlternation` として固定しています。
+
+追加した主なものは：
+
+```lean
+def PrimePrebirthAlternation (p : ℕ) : Prop :=
+  ∀ k, k ≤ p - 1 →
+    ((Nat.choose (p - 1) k : ZMod p) = (-1 : ZMod p) ^ k)
+```
+
+証明は、`p` 行の中間係数が `mod p` で消えることから、Pascal の関係式で `p - 1` 行の隣接係数が互いに反数になる、という形です。
+
+```lean
+theorem prime_prebirthAlternation_step
+theorem prime_prebirthAlternation
+```
+
+検証済み：
+
+```text
+lake build DkMath.NumberTheory.BinomialPrimePower
+git diff --check
+sorry/axiom/admit なし
+```
+
+これはかなり良い「目撃情報」です。`BeamBirthBoundary` が `p` 行での誕生だとすると、`PrimePrebirthAlternation` はその直前に現れる「前駆交代相」として扱えます。
