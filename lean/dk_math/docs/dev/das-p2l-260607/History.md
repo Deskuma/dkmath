@@ -1179,3 +1179,23 @@ git diff --check
 ```
 
 今回追加分に `sorry` はありません。
+
+### 2026/06/10  4:06
+
+Summary を新規作成しました。
+
+[FLGNB-FermatLittleGNBridge-Summary.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-FermatLittleGNBridge-Summary.md)
+
+整理した主軸は以下です。
+
+```text
+1. Fermat 小定理との接続点
+2. WeightedGNBridge の実装済み endpoint
+3. GN を主語にして Pascal を自然数断面として読む方針
+4. Dynamic Boundary-Beam Residue Principle の候補
+5. Gamma を急がず GN / powerKernel 既存補題を使う解析方針
+6. Relative Polygon / Petal 系の棚卸しが次 checkpoint
+7. PetalGNBridge と S0_nat への p=3 特化補題候補
+```
+
+`git diff --check` も通っています。
