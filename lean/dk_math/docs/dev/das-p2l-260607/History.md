@@ -872,3 +872,100 @@ theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
 - `lake build DkMath`
 
 全体ビルドは成功。既存の unrelated な `sorry` warning は残っています。
+
+---
+
+#### AKS 完了、既存定理接続へ
+
+了解です。AKSBridge はここで v1.5 くらいの閉じ方で良いと思います。
+
+次は本線として、二項定理・p-adic・primitive prime divisor / Zsigmondy 接続へ戻すのが自然です。優先順はこのあたりです。
+
+1. `Nat.choose` / `padicValNat` / `prime_power_dvd_choose_of_not_dvd_index` 周辺の既存補題を、今回の Beam / height / failure predicate と接続
+2. `weightedBinomialInnerBeamSum` の可除性から、個別係数の p-adic 高さ観測へ戻す橋を整理
+3. primitive side へ向けて、「この段で初めて現れる素因子」を表す薄い predicate を作る
+4. Zsigmondy 既存ファイルの定理名・使える補題を再探索して、次の実装候補を絞る
+
+次の実装ターゲットとしては、まず既存定理探索から入って、`AKSBridge` ではなく `BinomialPrimePower` / `PascalPrimeDial` / `WeightedBinomial` / `Zsigmondy*` のどこに橋を置くのが一番自然か見ます。
+
+---
+
+既存定理探索、要点が見えました。
+結論として、次の本線は **AKS ではなく `BinomialPrimePower → PascalPrimeDial → WeightedBinomial → PrimitiveBeam/Zsigmondy` の橋**です。
+
+**使える核心定理**
+
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:130)
+  - `padicValNat_choose_prime_pow`
+  - `padicValNat_choose_prime_pow_add_index`
+  - `prime_power_pow_dvd_choose_of_padicValNat_index`
+  - `prime_power_dvd_choose_of_not_dvd_index`
+  - `prime_power_unitFilteredBeamHeight`
+- [PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean:108)
+  - `pascalPrimeDialHeight_prime_pow_add_index`
+  - `pascalPrimeDialHeight_prime_pow`
+  - `prime_power_unitFilteredPrimeDialHeight`
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:196)
+  - `prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index`
+  - `prime_power_dvd_weightedBinomialTerm_of_not_dvd_index`
+  - `weightedBodyGapKernelSplit`
+- [PrimitiveBeam.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean:18)
+  - `PrimitivePrimeFactorOfDiffPow`
+  - `exists_primitive_prime_factor_as_prop`
+  - `primitive_prime_dvd_GN`
+  - `primitive_prime_padic_eq_GN`
+  - `primitive_prime_padic_bound_diff_of_squarefree_GN`
+
+**重要な判断**
+既に Kummer の p^n フィルターは実装済みです。
+なので次は Kummer 本体を作るより、`FilteredBeamHeight` / `FilteredPrimeDialHeight` の観測を `weightedBinomialTerm` と `GTail/GN` 側へ運ぶ薄い bridge が良いです。
+
+特に実装候補はこれです。
+
+```lean
+theorem filteredBeamHeight_dvd_choose_of_height_ge
+theorem filteredBeamHeight_dvd_weightedTerm_of_height_ge
+theorem prime_power_unitFilteredBeamHeight_dvd_weightedTerm
+```
+
+その次に、`weightedBinomialPositiveTailSum = x * GTail d 1 x u` が既にあるので、Beam の項別 p-adic 支持を `GTail` へ移す観測補題を作るのが自然です。
+
+注意点として、Zsigmondy 精密層には既に反例付きの警告があります。`padicValNat ≤ 1` は一般には危険で、現在の honest route は `Squarefree (GN d (a - b) b)` 仮定付きです。ここは無理に一般化せず、まず p^n フィルターの「見える層」を GN/GTail に接続する方が安全です。
+
+### 2026/06/09 16:08
+
+実装しました。
+
+追加した橋はこの2段です。
+
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:61)
+  - `FilteredBeamHeight.dvd_choose_of_height_ge`
+  - `UniformBeamHeight.dvd_choose_of_height_ge`
+  - `prime_power_unitFilteredBeamHeight_dvd_choose`
+
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:183)
+  - `FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
+  - `UniformBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
+  - `prime_power_unitFilteredBeamHeight_dvd_weightedBinomialTerm`
+
+意味としては、
+
+```text
+p-adic height が h ある
+かつ r ≤ h
+なら p^r が係数を割る
+
+さらに、その係数可除性は weighted term 全体へ持ち上がる
+```
+
+という橋です。これで `p^n` 篩の観測層から weighted Beam/GTail 側へ進める足場ができました。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.WeightedBinomial`
+- `lake build DkMath.NumberTheory.PascalPrimeDial`
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `lake build DkMath`
+- `git diff --check`
+
+全体ビルド成功。既存の unrelated な `sorry` warning はそのままです。

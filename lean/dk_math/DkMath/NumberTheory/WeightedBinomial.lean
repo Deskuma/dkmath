@@ -174,6 +174,33 @@ theorem rowBirthPrime_dvd_inner_weightedBinomialTerm
   innerRowSupportPrime_dvd_inner_weightedBinomialTerm h.1 hk0 hkd
 
 /--
+Filtered beam-height divisibility lifts from the coefficient to the weighted
+binomial term.
+
+This keeps the p-adic sieve layer independent of the powers `x^k` and
+`u^(d-k)`: once the coefficient carries `p^r`, the whole weighted term does.
+-/
+theorem FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+    {d p h : ℕ} {P : ℕ → Prop}
+    (hp : p.Prime) (H : FilteredBeamHeight d p h P)
+    {k r x u : ℕ} (hk0 : 0 < k) (hkd : k < d) (hPk : P k)
+    (hr : r ≤ h) :
+    p ^ r ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (H.dvd_choose_of_height_ge hp hk0 hkd hPk hr)
+
+/--
+Uniform beam-height divisibility lifts from the coefficient to the weighted
+binomial term.
+-/
+theorem UniformBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+    {d p h k r x u : ℕ} (hp : p.Prime) (H : UniformBeamHeight d p h)
+    (hk0 : 0 < k) (hkd : k < d) (hr : r ≤ h) :
+    p ^ r ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (H.dvd_choose_of_height_ge hp hk0 hkd hr)
+
+/--
 Prime-power row filters lift from binomial coefficients to weighted terms.
 -/
 theorem prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index
@@ -195,6 +222,22 @@ theorem prime_power_dvd_weightedBinomialTerm_of_not_dvd_index
     p ^ n ∣ weightedBinomialTerm (p ^ n) k x u :=
   dvd_weightedBinomialTerm_of_dvd_choose
     (prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk)
+
+/--
+The unit-index layer of a prime-power row carries the full `p^n` divisibility
+through each weighted term.
+
+This is the weighted form of the `p^n` sieve.
+-/
+theorem prime_power_unitFilteredBeamHeight_dvd_weightedBinomialTerm
+    {p n k x u : ℕ} (hp : p.Prime)
+    (hk0 : 0 < k) (hkp : k < p ^ n) (hpk : ¬ p ∣ k) :
+    p ^ n ∣ weightedBinomialTerm (p ^ n) k x u := by
+  exact
+    FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+      (p := p) (h := n) (P := fun k => ¬ p ∣ k)
+      hp (prime_power_unitFilteredBeamHeight (p := p) (n := n) hp)
+      hk0 hkp hpk le_rfl
 
 /-- Inner weighted terms inherit divisibility from `x`. -/
 theorem dvd_inner_weightedBinomialTerm_of_dvd_x
