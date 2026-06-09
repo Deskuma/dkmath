@@ -353,6 +353,31 @@ theorem dvd_filteredGTailOneSum
   exact h k hk_inner hPk
 
 /--
+Coefficient-level inner divisibility lifts to the full unfiltered inner Beam of
+the one-gap `GTail`.
+
+The right-boundary term of `GTail d 1 x u` is not included here; it has
+coefficient `choose d d = 1` and must be handled separately.
+-/
+theorem allInnerChooseDivisible_dvd_filteredGTailOneSum_true
+    {m d x u : ℕ}
+    (h : AllInnerChooseDivisible d m) :
+    m ∣ filteredGTailOneSum d x u (fun _ => True) := by
+  exact
+    dvd_filteredGTailOneSum (P := fun _ => True)
+      (fun k hkd _ =>
+        dvd_GTailOneTerm_of_dvd_choose
+          (allInnerChooseDivisible_dvd_choose h (Nat.succ_pos k) hkd))
+
+/-- In a prime row, the full inner Beam of the one-gap `GTail` is divisible by `p`. -/
+theorem prime_dvd_filteredGTailOneSum_true
+    {p x u : ℕ} (hp : p.Prime) :
+    p ∣ filteredGTailOneSum p x u (fun _ => True) := by
+  exact
+    allInnerChooseDivisible_dvd_filteredGTailOneSum_true
+      (prime_allInnerChooseDivisible_self hp)
+
+/--
 The filtered beam-height sieve gives divisibility of the corresponding
 filtered one-gap `GTail` sum.
 -/

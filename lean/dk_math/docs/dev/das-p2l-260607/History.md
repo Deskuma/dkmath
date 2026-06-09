@@ -1011,3 +1011,27 @@ p-adic height が h ある
 - `git diff --check`
 
 全体ビルド成功です。
+
+### 2026/06/09 19:03
+
+次の一手として、`WeightedBinomial.lean` に軽い橋を追加しました。
+
+追加したもの:
+
+- `allInnerChooseDivisible_dvd_filteredGTailOneSum_true`
+  - 係数レベルで inner 項がすべて `m` で割れるなら、`GTail d 1` の inner Beam 和も `m` で割れる。
+  - ただし右端境界 `x^(d-1)` は除外。ここが重要です。
+
+- `prime_dvd_filteredGTailOneSum_true`
+  - 素数行 `p` では、`filteredGTailOneSum p x u (fun _ => True)` が `p` で割れる。
+
+確認済み:
+
+```txt
+lake build DkMath.NumberTheory.WeightedBinomial
+git diff --check
+```
+
+どちらも成功です。
+
+次は本線として、これを `GN d x u = GTail d 1 x u` 側へ接続して、`GN = inner Beam + right boundary` という観測補題を置くのが良いです。これで PrimitiveBeam / Zsigmondy 側の `GN` 定理群に、今回の `p^n` 篩を差し込めるようになります。
