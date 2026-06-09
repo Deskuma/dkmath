@@ -1199,3 +1199,17 @@ Summary を新規作成しました。
 ```
 
 `git diff --check` も通っています。
+
+### 2026/06/10  4:26
+
+[FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md) を新規作成しました。
+
+内容は、指定の軸に沿って整理しています。
+
+- 設計思想: `GN -> Petal / relative polygon -> Pascal -> prime-row -> primitive factor`
+- 実装計画・手順: `DkMath.Petal.*` の新設順序
+- 相対多角数 Petal 整備計画: `RelPolygon`, `S0/S1`, `termial`, `R(n)` の位置づけ
+- 既存定理 Bridge Link theorem 予定: `GN_three_sub_eq_S0_nat`、Fermat boundary から `S0_nat` へ渡す補題、GN gcd から Petal gcd への橋
+- 既存補題リスト: `UnitCycle.RelPolygon`, `FLT.PetalDetect`, `FLT.CosmicPetalBridge`, `NumberTheory.Gcd.GN`, `GEisensteinBridge` などを分類
+
+検証は `git diff --check` 済みです。 docs 追加のみなので Lean build は走らせていません。
