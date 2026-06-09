@@ -1337,3 +1337,50 @@ git diff --check
 ```
 
 すべて成功です。
+
+### 2026/06/10  7:23
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に `outerPetalRemainder` 層を追加しました。
+
+追加した定義:
+
+```lean
+def outerPetalRemainder (n lap m : Nat) : Nat :=
+  (outerPetalAddress n lap m).offset
+```
+
+追加した補題:
+
+```lean
+theorem outerPetalRemainder_eq_offset
+theorem outerPetalRemainder_pos
+theorem outerPetalRemainder_le_blockSize
+theorem outerPetalRemainder_eq_self_of_le_blockSize
+theorem outerPetalRemainder_eq_self_of_isInheritanceChannel
+theorem outerPetalAddress_channel_zero_remainder_eq_self
+```
+
+これで review の推奨だった核心、
+
+```text
+channel = 0 -> offset = m
+```
+
+を固定できました。つまり Lean 上で、
+
+```text
+継承口に入った値は、そのまま inner lap へ降りる
+```
+
+と言える状態になっています。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。

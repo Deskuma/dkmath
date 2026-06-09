@@ -60,6 +60,15 @@ def outerPetalAddress (n lap m : Nat) : PetalAddress :=
     channel := (m - 1) / b
     offset := (m - 1) % b + 1 }
 
+/--
+The one-step remainder passed to the next inner lap.
+
+This is the offset component of the outer address.  If the address lands in the
+inheritance/core channel, this remainder is the original value itself.
+-/
+def outerPetalRemainder (n lap m : Nat) : Nat :=
+  (outerPetalAddress n lap m).offset
+
 /-- The block size at lap zero is the base unit core. -/
 theorem relPetalBlockSize_zero (n : Nat) :
     relPetalBlockSize n 0 = n := by
@@ -87,6 +96,11 @@ theorem outerPetalAddress_five_two_twentyfive :
 /-- The address lap field is definitionally the observed lap. -/
 theorem outerPetalAddress_lap (n lap m : Nat) :
     (outerPetalAddress n lap m).lap = lap := by
+  rfl
+
+/-- The outer remainder is definitionally the address offset. -/
+theorem outerPetalRemainder_eq_offset (n lap m : Nat) :
+    outerPetalRemainder n lap m = (outerPetalAddress n lap m).offset := by
   rfl
 
 /-- The address is in the inheritance/core channel exactly when its channel is zero. -/
@@ -121,12 +135,24 @@ theorem outerPetalAddress_offset_pos
     0 < (outerPetalAddress n lap m).offset := by
   simp [outerPetalAddress]
 
+/-- The outer remainder is always positive. -/
+theorem outerPetalRemainder_pos
+    {n lap m : Nat} :
+    0 < outerPetalRemainder n lap m := by
+  exact outerPetalAddress_offset_pos
+
 /-- The offset of a valid address is bounded by the outer block size. -/
 theorem outerPetalAddress_offset_le_blockSize
     {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
     (outerPetalAddress n lap m).offset ≤ relPetalBlockSize n lap := by
   rw [outerPetalAddress]
   exact Nat.succ_le_of_lt (Nat.mod_lt _ hb)
+
+/-- The outer remainder is bounded by the outer block size. -/
+theorem outerPetalRemainder_le_blockSize
+    {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
+    outerPetalRemainder n lap m ≤ relPetalBlockSize n lap := by
+  exact outerPetalAddress_offset_le_blockSize hb
 
 /--
 The channel is bounded by the lap base when the observed value stays inside the
@@ -205,6 +231,46 @@ theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
       m ≤ relPetalBlockSize n lap :=
     (outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb).1 h0
   exact (not_lt_of_ge hle) hbm
+
+/--
+If a one-based value stays inside the first outer block, the outer remainder is
+the original value.
+-/
+theorem outerPetalRemainder_eq_self_of_le_blockSize
+    {n lap m : Nat}
+    (hm : 1 ≤ m)
+    (hmb : m ≤ relPetalBlockSize n lap) :
+    outerPetalRemainder n lap m = m := by
+  have hlt : m - 1 < relPetalBlockSize n lap :=
+    Nat.sub_one_lt_of_le hm hmb
+  rw [outerPetalRemainder, outerPetalAddress]
+  rw [Nat.mod_eq_of_lt hlt]
+  exact Nat.sub_add_cancel hm
+
+/--
+If the outer address lands in the inheritance/core channel, the outer remainder
+is the original value.
+-/
+theorem outerPetalRemainder_eq_self_of_isInheritanceChannel
+    {n lap m : Nat}
+    (hm : 1 ≤ m)
+    (hb : 0 < relPetalBlockSize n lap)
+    (hA : IsInheritanceChannel (outerPetalAddress n lap m)) :
+    outerPetalRemainder n lap m = m := by
+  have hle : m ≤ relPetalBlockSize n lap :=
+    (outerPetalAddress_isInheritanceChannel_iff_le_blockSize hm hb).1 hA
+  exact outerPetalRemainder_eq_self_of_le_blockSize hm hle
+
+/--
+Channel `0` means the value descends unchanged to the next inner lap.
+-/
+theorem outerPetalAddress_channel_zero_remainder_eq_self
+    {n lap m : Nat}
+    (hm : 1 ≤ m)
+    (hb : 0 < relPetalBlockSize n lap)
+    (hch : (outerPetalAddress n lap m).channel = 0) :
+    outerPetalRemainder n lap m = m := by
+  exact outerPetalRemainder_eq_self_of_isInheritanceChannel hm hb hch
 
 /-- A bounded channel is at most the base unit core. -/
 theorem outerPetalAddress_channel_le_baseUnitCore
