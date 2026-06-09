@@ -40,6 +40,14 @@ structure PetalAddress where
   offset : Nat
 deriving Repr, DecidableEq
 
+/-- The inheritance/core channel is channel `0`. -/
+def IsInheritanceChannel (A : PetalAddress) : Prop :=
+  A.channel = 0
+
+/-- Petal channels are the positive channels. -/
+def IsPetalChannel (A : PetalAddress) : Prop :=
+  0 < A.channel
+
 /--
 Outer one-step address of a one-based value `m`.
 
@@ -81,6 +89,32 @@ theorem outerPetalAddress_lap (n lap m : Nat) :
     (outerPetalAddress n lap m).lap = lap := by
   rfl
 
+/-- The address is in the inheritance/core channel exactly when its channel is zero. -/
+theorem isInheritanceChannel_iff_channel_eq_zero (A : PetalAddress) :
+    IsInheritanceChannel A ↔ A.channel = 0 := by
+  rfl
+
+/-- The address is in a Petal channel exactly when its channel is positive. -/
+theorem isPetalChannel_iff_channel_pos (A : PetalAddress) :
+    IsPetalChannel A ↔ 0 < A.channel := by
+  rfl
+
+/-- No address can be both inheritance/core and Petal. -/
+theorem not_isPetalChannel_of_isInheritanceChannel {A : PetalAddress}
+    (hA : IsInheritanceChannel A) :
+    ¬ IsPetalChannel A := by
+  intro hP
+  unfold IsInheritanceChannel at hA
+  unfold IsPetalChannel at hP
+  rw [hA] at hP
+  exact Nat.not_lt_zero _ hP
+
+/-- A non-inheritance address is a Petal channel. -/
+theorem isPetalChannel_of_not_isInheritanceChannel {A : PetalAddress}
+    (hA : ¬ IsInheritanceChannel A) :
+    IsPetalChannel A := by
+  exact Nat.pos_of_ne_zero hA
+
 /-- The offset of an outer address is always positive. -/
 theorem outerPetalAddress_offset_pos
     {n lap m : Nat} :
@@ -114,6 +148,75 @@ theorem outerPetalAddress_channel_lt_lapBase
     exact lt_of_lt_of_le hlt (by simpa [htotal] using hbound)
   rw [outerPetalAddress, relPetalBlockSize_succ]
   exact Nat.div_lt_of_lt_mul hsub_lt
+
+/--
+The outer address lands in channel `0` exactly when the zero-based position
+`m - 1` is still inside the first outer block.
+-/
+theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
+    {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
+    (outerPetalAddress n lap m).channel = 0 ↔
+      m - 1 < relPetalBlockSize n lap := by
+  rw [outerPetalAddress]
+  constructor
+  · intro h
+    by_contra hlt
+    have hle : relPetalBlockSize n lap ≤ m - 1 := Nat.le_of_not_gt hlt
+    have hdiv_pos : 0 < (m - 1) / relPetalBlockSize n lap :=
+      Nat.div_pos hle hb
+    change (m - 1) / relPetalBlockSize n lap = 0 at h
+    rw [h] at hdiv_pos
+    exact Nat.not_lt_zero _ hdiv_pos
+  · intro h
+    exact Nat.div_eq_of_lt h
+
+/--
+For a one-based value, channel `0` is equivalent to staying within the first
+outer block.
+-/
+theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
+    {n lap m : Nat} (hm : 1 ≤ m) (hb : 0 < relPetalBlockSize n lap) :
+    (outerPetalAddress n lap m).channel = 0 ↔
+      m ≤ relPetalBlockSize n lap := by
+  rw [outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize hb]
+  constructor
+  · intro h
+    exact Nat.le_of_pred_lt h
+  · intro h
+    exact Nat.sub_one_lt_of_le hm h
+
+/-- The inheritance/core predicate for an outer address is the channel-zero test. -/
+theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
+    {n lap m : Nat} (hm : 1 ≤ m) (hb : 0 < relPetalBlockSize n lap) :
+    IsInheritanceChannel (outerPetalAddress n lap m) ↔
+      m ≤ relPetalBlockSize n lap := by
+  exact outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb
+
+/-- If a valid one-based value is past the first block, it is in a Petal channel. -/
+theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
+    {n lap m : Nat}
+    (hb : 0 < relPetalBlockSize n lap)
+    (hbm : relPetalBlockSize n lap < m) :
+    IsPetalChannel (outerPetalAddress n lap m) := by
+  apply isPetalChannel_of_not_isInheritanceChannel
+  intro h0
+  have hm : 1 ≤ m := Nat.succ_le_of_lt (lt_of_le_of_lt (Nat.zero_le _) hbm)
+  have hle :
+      m ≤ relPetalBlockSize n lap :=
+    (outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb).1 h0
+  exact (not_lt_of_ge hle) hbm
+
+/-- A bounded channel is at most the base unit core. -/
+theorem outerPetalAddress_channel_le_baseUnitCore
+    {n lap m : Nat}
+    (hlap : 0 < lap)
+    (hm : 1 ≤ m)
+    (hbound : m ≤ relPetalTotal n lap) :
+    (outerPetalAddress n lap m).channel ≤ baseUnitCore n := by
+  have hlt := outerPetalAddress_channel_lt_lapBase
+    (n := n) (lap := lap) (m := m) hlap hm hbound
+  rw [lapBase_eq_succ] at hlt
+  simpa [baseUnitCore] using Nat.lt_succ_iff.mp hlt
 
 end Petal
 end DkMath

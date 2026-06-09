@@ -1288,3 +1288,52 @@ git diff --check
 ```
 
 すべて成功です。
+
+### 2026/06/10  7:00
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に channel 判定層を実装しました。
+
+追加した内容:
+
+```lean
+def IsInheritanceChannel
+def IsPetalChannel
+```
+
+基本補題:
+
+```lean
+theorem isInheritanceChannel_iff_channel_eq_zero
+theorem isPetalChannel_iff_channel_pos
+theorem not_isPetalChannel_of_isInheritanceChannel
+theorem isPetalChannel_of_not_isInheritanceChannel
+```
+
+outer address 側の補題:
+
+```lean
+theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
+theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
+theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
+theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
+theorem outerPetalAddress_channel_le_baseUnitCore
+```
+
+これで、1-based value `m` について、
+
+```text
+channel = 0  ↔  m ≤ blockSize
+```
+
+が Lean 上で固定されました。つまり「外側 block の最初に収まるなら inheritance/core channel」という読みが theorem になっています。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
