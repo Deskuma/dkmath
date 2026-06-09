@@ -101,6 +101,30 @@ theorem prime_GN_modEq_rightBoundary
       (prime_dvd_filteredGTailOneSum_true hp)
 
 /--
+If `x` is not divisible by the row prime, Fermat's little theorem reads the
+right-boundary term as `1`.
+-/
+theorem prime_GN_modEq_one_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    GN p x u ≡ 1 [MOD p] := by
+  have hx_coprime : Nat.Coprime p x := (hp.coprime_iff_not_dvd).2 hx
+  have hright : x ^ (p - 1) ≡ 1 [MOD p] :=
+    Nat.ModEq.pow_card_sub_one_eq_one (n := x) hp hx_coprime.symm
+  exact (prime_GN_modEq_rightBoundary hp).trans hright
+
+/--
+If `x` is not divisible by the row prime, then the prime cannot divide `GN`.
+-/
+theorem prime_not_dvd_GN_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    ¬ p ∣ GN p x u := by
+  intro hdiv
+  have hzero : GN p x u ≡ 0 [MOD p] := Nat.modEq_zero_iff_dvd.mpr hdiv
+  have hone : GN p x u ≡ 1 [MOD p] := prime_GN_modEq_one_of_not_dvd_x hp hx
+  have h01 : (0 : ℕ) ≡ 1 [MOD p] := hzero.symm.trans hone
+  simp [Nat.ModEq, Nat.mod_eq_of_lt hp.one_lt] at h01
+
+/--
 Prime rows make the difference `GN p x u - x^(p-1)` divisible by `p`.
 -/
 theorem prime_GN_sub_rightBoundary_dvd

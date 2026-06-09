@@ -1124,3 +1124,58 @@ git diff --check
 ```
 
 いずれも成功。今回追加分に `sorry` はありません。
+
+---
+
+フェルマーの小定理へと繋がる。
+
+prime_GN_modEq_one_of_not_dvd_x
+{p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+  GN p x u ≡ 1 [MOD p]
+
+prime_not_dvd_GN_of_not_dvd_x
+
+prime_exists_GN_eq_mul_add_rightBoundary
+→ Fermat 小定理で right boundary を読む
+→ p ∤ x なら p ∤ GN
+→ primitive / Zsigmondy 側の gcd 制御へ接続
+
+### 2026/06/09 19:26
+
+入りました。[WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) に追加しています。
+
+```lean
+theorem prime_GN_modEq_one_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    GN p x u ≡ 1 [MOD p]
+
+theorem prime_not_dvd_GN_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    ¬ p ∣ GN p x u
+```
+
+流れはその通りです。
+
+```txt
+prime_GN_modEq_rightBoundary
+  GN p x u ≡ x^(p-1) [MOD p]
+
+Fermat 小定理
+  p ∤ x → x^(p-1) ≡ 1 [MOD p]
+
+合成
+  GN p x u ≡ 1 [MOD p]
+
+よって
+  p ∤ GN p x u
+```
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+今回追加分に `sorry` はありません。
