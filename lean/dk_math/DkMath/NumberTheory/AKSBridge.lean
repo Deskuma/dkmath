@@ -366,6 +366,48 @@ comparing composite behavior against the prime witness theorems.
 def ExistsAKSCyclicFoldedFailureBelow (n r bound : ℕ) : Prop :=
   ∃ a, a < bound ∧ AKSCyclicFoldedCongruenceFails n r a
 
+/--
+The selected AKS shift bound.
+
+This is a deliberately lightweight hook.  The current body is only a coarse
+placeholder so that range predicates can already be connected to a named
+`AKSBound n r`; the analytic AKS choice such as
+`floor (sqrt (phi r) * log n)` can replace this definition later.
+-/
+def AKSBound (n _r : ℕ) : ℕ :=
+  n
+
+/--
+The non-folded AKS cyclic congruence tested up to the selected `AKSBound`.
+
+This packages the existing arbitrary-bound range predicate behind the bound
+name that will later carry the real AKS estimate.
+-/
+def AKSCyclicCongruenceHoldsUpToAKSBound (n r : ℕ) : Prop :=
+  AKSCyclicCongruenceHoldsForRange n r (AKSBound n r)
+
+/--
+The folded AKS cyclic congruence tested up to the selected `AKSBound`.
+
+This is the range predicate most closely aligned with the AKS quotient test,
+because the exponent of `X` has already been folded modulo `r`.
+-/
+def AKSCyclicFoldedCongruenceHoldsUpToAKSBound (n r : ℕ) : Prop :=
+  AKSCyclicFoldedCongruenceHoldsForRange n r (AKSBound n r)
+
+/--
+There is a non-folded AKS cyclic failure witness below the selected
+`AKSBound`.
+-/
+def ExistsAKSCyclicFailureBelowAKSBound (n r : ℕ) : Prop :=
+  ExistsAKSCyclicFailureBelow n r (AKSBound n r)
+
+/--
+There is a folded AKS cyclic failure witness below the selected `AKSBound`.
+-/
+def ExistsAKSCyclicFoldedFailureBelowAKSBound (n r : ℕ) : Prop :=
+  ExistsAKSCyclicFoldedFailureBelow n r (AKSBound n r)
+
 /-- The quotient map sends polynomial `X` to `aksQuotientX`. -/
 theorem aksQuotientMap_X
     (R : Type*) [CommRing R] (r : ℕ) :
@@ -642,6 +684,105 @@ theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
   rintro ⟨a, ha, hfail⟩
   exact hfail ((AKSCyclicFoldedCongruenceHoldsForRange.prime hp) a ha)
 
+/--
+Prime moduli satisfy the non-folded AKS cyclic congruence up to the selected
+`AKSBound`.
+-/
+theorem prime_AKSCyclicCongruenceHoldsUpToAKSBound
+    {p r : ℕ} (hp : p.Prime) :
+    AKSCyclicCongruenceHoldsUpToAKSBound p r := by
+  unfold AKSCyclicCongruenceHoldsUpToAKSBound
+  exact prime_AKSCyclicCongruenceHoldsForRange hp
+
+/--
+Prime moduli satisfy the folded AKS cyclic congruence up to the selected
+`AKSBound`.
+-/
+theorem prime_AKSCyclicFoldedCongruenceHoldsUpToAKSBound
+    {p r : ℕ} (hp : p.Prime) :
+    AKSCyclicFoldedCongruenceHoldsUpToAKSBound p r := by
+  unfold AKSCyclicFoldedCongruenceHoldsUpToAKSBound
+  exact prime_AKSCyclicFoldedCongruenceHoldsForRange hp
+
+/-- Prime moduli have no non-folded failure witness below the selected `AKSBound`. -/
+theorem not_exists_AKSCyclicFailureBelowAKSBound_of_prime
+    {p r : ℕ} (hp : p.Prime) :
+    ¬ ExistsAKSCyclicFailureBelowAKSBound p r := by
+  unfold ExistsAKSCyclicFailureBelowAKSBound
+  exact not_exists_AKSCyclicFailureBelow_of_prime hp
+
+/-- Prime moduli have no folded failure witness below the selected `AKSBound`. -/
+theorem not_exists_AKSCyclicFoldedFailureBelowAKSBound_of_prime
+    {p r : ℕ} (hp : p.Prime) :
+    ¬ ExistsAKSCyclicFoldedFailureBelowAKSBound p r := by
+  unfold ExistsAKSCyclicFoldedFailureBelowAKSBound
+  exact not_exists_AKSCyclicFoldedFailureBelow_of_prime hp
+
+/--
+A concrete composite witness for the non-folded AKS cyclic congruence.
+
+For `n = 4`, `r = 1`, and `a = 1`, the quotient by `X - 1` would force the
+difference polynomial to vanish at `X = 1`.  Its value is `14`, which is not
+zero in `ZMod 4`.
+-/
+theorem composite_AKSCyclicCongruenceFails_four_one_one :
+    AKSCyclicCongruenceFails 4 1 1 := by
+  unfold AKSCyclicCongruenceFails AKSCyclicCongruenceHolds
+  intro h
+  unfold aksQuotientX aksQuotientC aksQuotientMap AKSCyclicQuotient aksCyclicIdeal at h
+  rw [← map_add, ← map_pow, ← map_pow, ← map_add] at h
+  rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem] at h
+  rw [Ideal.mem_span_singleton] at h
+  have hroot :
+      (((X + 1) ^ 4 - (X ^ 4 + 1) : (ZMod 4)[X]).IsRoot (1 : ZMod 4)) := by
+    rw [← Polynomial.dvd_iff_isRoot]
+    simpa using h
+  rw [Polynomial.IsRoot.def] at hroot
+  norm_num at hroot
+  have hdiv : 4 ∣ 14 := (ZMod.natCast_eq_zero_iff 14 4).mp hroot
+  norm_num at hdiv
+
+/--
+A concrete composite witness for the folded AKS cyclic congruence.
+
+The same `n = 4`, `r = 1`, `a = 1` witness also breaks the folded form, where
+the right-hand exponent is reduced to `4 % 1`.
+-/
+theorem composite_AKSCyclicFoldedCongruenceFails_four_one_one :
+    AKSCyclicFoldedCongruenceFails 4 1 1 := by
+  unfold AKSCyclicFoldedCongruenceFails AKSCyclicFoldedCongruenceHolds
+  intro h
+  unfold aksQuotientX aksQuotientC aksQuotientMap AKSCyclicQuotient aksCyclicIdeal at h
+  rw [← map_add, ← map_pow, ← map_pow, ← map_add] at h
+  rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem] at h
+  rw [Ideal.mem_span_singleton] at h
+  have hroot :
+      (((X + 1) ^ 4 - (X ^ (4 % 1) + 1) : (ZMod 4)[X]).IsRoot (1 : ZMod 4)) := by
+    rw [← Polynomial.dvd_iff_isRoot]
+    simpa using h
+  rw [Polynomial.IsRoot.def] at hroot
+  norm_num at hroot
+  have hdiv : 4 ∣ 14 := (ZMod.natCast_eq_zero_iff 14 4).mp hroot
+  norm_num at hdiv
+
+/-- The concrete non-folded composite witness packaged below the small bound `2`. -/
+theorem exists_AKSCyclicFailureBelow_four_one_two :
+    ExistsAKSCyclicFailureBelow 4 1 2 := by
+  exact ⟨1, by decide, composite_AKSCyclicCongruenceFails_four_one_one⟩
+
+/-- The concrete folded composite witness packaged below the small bound `2`. -/
+theorem exists_AKSCyclicFoldedFailureBelow_four_one_two :
+    ExistsAKSCyclicFoldedFailureBelow 4 1 2 := by
+  exact ⟨1, by decide, composite_AKSCyclicFoldedCongruenceFails_four_one_one⟩
+
+/--
+The concrete folded composite witness also lies below the current selected
+`AKSBound`.
+-/
+theorem exists_AKSCyclicFoldedFailureBelowAKSBound_four_one :
+    ExistsAKSCyclicFoldedFailureBelowAKSBound 4 1 := by
+  exact ⟨1, by decide, composite_AKSCyclicFoldedCongruenceFails_four_one_one⟩
+
 section samples
 
 example {p k : ℕ} (hp : p.Prime) (hk0 : 0 < k) (hkp : k < p) :
@@ -675,6 +816,26 @@ example :
 example :
     (2 + 1) ^ 4 ≡ 2 ^ 4 + 1 [MOD 4] := by
   decide
+
+/-- Composite modulus `4` breaks the AKS cyclic congruence at `r = 1`, `a = 1`. -/
+example :
+    AKSCyclicCongruenceFails 4 1 1 :=
+  composite_AKSCyclicCongruenceFails_four_one_one
+
+/-- Composite modulus `4` also breaks the folded AKS cyclic congruence. -/
+example :
+    AKSCyclicFoldedCongruenceFails 4 1 1 :=
+  composite_AKSCyclicFoldedCongruenceFails_four_one_one
+
+/-- The folded witness appears below the small bound `2`. -/
+example :
+    ExistsAKSCyclicFoldedFailureBelow 4 1 2 :=
+  exists_AKSCyclicFoldedFailureBelow_four_one_two
+
+/-- The folded witness appears below the current selected `AKSBound`. -/
+example :
+    ExistsAKSCyclicFoldedFailureBelowAKSBound 4 1 :=
+  exists_AKSCyclicFoldedFailureBelowAKSBound_four_one
 
 example (p r k : ℕ) :
     aksQuotientX (ZMod p) r ^ (k + r) =

@@ -1895,3 +1895,18 @@ AKSBridge v1.5:
 が良いと思います。
 
 Zsigmondy / primitive prime divisor へ本格接続するのは、その後が安全です。今はまだ「新しい素因子がどこで発生するか」を見る観測器を整えている段階なので、AKS の巡回商をもう一段だけ道具化してから戻るのが一番リターンが大きいです。
+
+---
+
+bound ≈ floor (sqrt (φ r) * log n)
+
+これもやりたいけど後まわし。
+先に以下を。
+
+A. composite witness examples
+  小さい n, r, a で AKS cyclic congruence が壊れる例を置く
+
+B. AKS bound abstraction
+  bound を任意自然数から、後で選ぶ AKSBound n r へ接続する
+
+---

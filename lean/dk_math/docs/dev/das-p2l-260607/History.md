@@ -841,3 +841,34 @@ theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
 - `AKSBridge.lean` 内に `sorry/admit/axiom` なし
 
 全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09 15:50
+
+実装しました。
+
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean:377) に追加した内容は主に2つです。
+
+- `AKSBound n r` の抽象フックを追加
+  - 現状は粗い placeholder として `n`
+  - `AKSCyclicCongruenceHoldsUpToAKSBound`
+  - `AKSCyclicFoldedCongruenceHoldsUpToAKSBound`
+  - `ExistsAKSCyclicFailureBelowAKSBound`
+  - `ExistsAKSCyclicFoldedFailureBelowAKSBound`
+  - prime なら bound 以下で failure が存在しない補題も接続済み
+
+- composite witness examples を追加
+  - `n = 4, r = 1, a = 1`
+  - `composite_AKSCyclicCongruenceFails_four_one_one`
+  - `composite_AKSCyclicFoldedCongruenceFails_four_one_one`
+  - `ExistsAKSCyclicFoldedFailureBelow 4 1 2`
+  - `ExistsAKSCyclicFoldedFailureBelowAKSBound 4 1`
+
+反例証明は quotient equality を `Ideal.Quotient.mk_eq_mk_iff_sub_mem` でイデアル所属へ落とし、`X - 1` で割れるなら `X = 1` で根になる、という形で `14 ≠ 0 mod 4` に帰着しています。AKS らしい観測例として悪くない形です。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `git diff --check`
+- `lake build DkMath`
+
+全体ビルドは成功。既存の unrelated な `sorry` warning は残っています。
