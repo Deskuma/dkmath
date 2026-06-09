@@ -47,6 +47,52 @@ This removes the `k = 0` boundary vertex `u^d` and keeps all terms with an
 def weightedBinomialPositiveTailSum (d x u : ℕ) : ℕ :=
   ∑ k ∈ Finset.range d, weightedBinomialTerm d (k + 1) x u
 
+/--
+The `k`-th term of the one-gap `GTail d 1 x u` expansion.
+
+This is the weighted positive-tail term after factoring out one copy of `x`.
+-/
+def GTailOneTerm (d k x u : ℕ) : ℕ :=
+  Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+
+/--
+The filtered inner-beam part of the one-gap `GTail` sum.
+
+The predicate is stated on the original Pascal index `k + 1`, so it lines up
+directly with `FilteredBeamHeight`.  The range is `d - 1`, excluding the final
+right-boundary coefficient `choose d d = 1`.
+-/
+def filteredGTailOneSum (d x u : ℕ) (P : ℕ → Prop) [DecidablePred P] : ℕ :=
+  ∑ k ∈ (Finset.range (d - 1)).filter (fun k => P (k + 1)), GTailOneTerm d k x u
+
+/--
+The one-gap `GTail` is the sum of its `GTailOneTerm` terms.
+-/
+theorem GTail_one_eq_GTailOneTerm_sum
+    (d x u : ℕ) :
+    GTail d 1 x u =
+      ∑ k ∈ Finset.range d, GTailOneTerm d k x u := by
+  rw [GTail_one_eq_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  simp [GTailOneTerm]
+
+/--
+The one-gap `GTail` splits into its inner Beam part and its right-boundary
+term.
+
+The inner Beam part is exactly `filteredGTailOneSum` with the always-true
+filter; the final right-boundary term is `x^(d-1)`.
+-/
+theorem GTail_one_eq_innerBeam_add_right
+    {d x u : ℕ} (hd : 0 < d) :
+    GTail d 1 x u =
+      filteredGTailOneSum d x u (fun _ => True) + x ^ (d - 1) := by
+  rw [GTail_one_eq_GTailOneTerm_sum]
+  have hd_len : d = d - 1 + 1 := by omega
+  rw [hd_len, Finset.sum_range_succ]
+  simp [filteredGTailOneSum, GTailOneTerm, add_comm]
+
 /-- All inner weighted terms in row `d` are divisible by `m`. -/
 def AllInnerWeightedTermDivisible (d m x u : ℕ) : Prop :=
   ∀ k, 0 < k → k < d → m ∣ weightedBinomialTerm d k x u
@@ -62,6 +108,14 @@ theorem dvd_weightedBinomialTerm_of_dvd_choose
     q ∣ weightedBinomialTerm d k x u := by
   unfold weightedBinomialTerm
   exact dvd_mul_of_dvd_left (dvd_mul_of_dvd_left h (x ^ k)) (u ^ (d - k))
+
+/-- Divisibility of a one-gap `GTail` term coming from its binomial coefficient. -/
+theorem dvd_GTailOneTerm_of_dvd_choose
+    {q d k x u : ℕ}
+    (h : q ∣ Nat.choose d (k + 1)) :
+    q ∣ GTailOneTerm d k x u := by
+  unfold GTailOneTerm
+  exact dvd_mul_of_dvd_left (dvd_mul_of_dvd_left h (x ^ k)) (u ^ (d - 1 - k))
 
 /-- Divisibility coming from the `x`-power. -/
 theorem dvd_weightedBinomialTerm_of_dvd_x
@@ -174,6 +228,60 @@ theorem rowBirthPrime_dvd_inner_weightedBinomialTerm
   innerRowSupportPrime_dvd_inner_weightedBinomialTerm h.1 hk0 hkd
 
 /--
+Filtered beam-height divisibility lifts from the coefficient to the weighted
+binomial term.
+
+This keeps the p-adic sieve layer independent of the powers `x^k` and
+`u^(d-k)`: once the coefficient carries `p^r`, the whole weighted term does.
+-/
+theorem FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+    {d p h : ℕ} {P : ℕ → Prop}
+    (hp : p.Prime) (H : FilteredBeamHeight d p h P)
+    {k r x u : ℕ} (hk0 : 0 < k) (hkd : k < d) (hPk : P k)
+    (hr : r ≤ h) :
+    p ^ r ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (H.dvd_choose_of_height_ge hp hk0 hkd hPk hr)
+
+/--
+Uniform beam-height divisibility lifts from the coefficient to the weighted
+binomial term.
+-/
+theorem UniformBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+    {d p h k r x u : ℕ} (hp : p.Prime) (H : UniformBeamHeight d p h)
+    (hk0 : 0 < k) (hkd : k < d) (hr : r ≤ h) :
+    p ^ r ∣ weightedBinomialTerm d k x u :=
+  dvd_weightedBinomialTerm_of_dvd_choose
+    (H.dvd_choose_of_height_ge hp hk0 hkd hr)
+
+/--
+Filtered beam-height divisibility lifts from the coefficient to a one-gap
+`GTail` term.
+-/
+theorem FilteredBeamHeight.dvd_GTailOneTerm_of_height_ge
+    {d p h : ℕ} {P : ℕ → Prop}
+    (hp : p.Prime) (H : FilteredBeamHeight d p h P)
+    {k r x u : ℕ} (hkd : k + 1 < d) (hPk : P (k + 1)) (hr : r ≤ h) :
+    p ^ r ∣ GTailOneTerm d k x u := by
+  have hk1_pos : 0 < k + 1 := Nat.succ_pos k
+  exact
+    dvd_GTailOneTerm_of_dvd_choose
+      (H.dvd_choose_of_height_ge hp hk1_pos hkd hPk hr)
+
+/--
+Uniform beam-height divisibility lifts from the coefficient to a one-gap
+`GTail` term.
+-/
+theorem UniformBeamHeight.dvd_GTailOneTerm_of_height_ge
+    {d p h k r x u : ℕ} (hp : p.Prime) (H : UniformBeamHeight d p h)
+    (hkd : k + 1 < d) (hr : r ≤ h) :
+    p ^ r ∣ GTailOneTerm d k x u := by
+  have hk1_pos : 0 < k + 1 := Nat.succ_pos k
+  exact
+    dvd_GTailOneTerm_of_dvd_choose
+      (H.dvd_choose_of_height_ge hp hk1_pos hkd hr)
+
+/--
 Prime-power row filters lift from binomial coefficients to weighted terms.
 -/
 theorem prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index
@@ -195,6 +303,103 @@ theorem prime_power_dvd_weightedBinomialTerm_of_not_dvd_index
     p ^ n ∣ weightedBinomialTerm (p ^ n) k x u :=
   dvd_weightedBinomialTerm_of_dvd_choose
     (prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk)
+
+/--
+The unit-index layer of a prime-power row carries the full `p^n` divisibility
+through each weighted term.
+
+This is the weighted form of the `p^n` sieve.
+-/
+theorem prime_power_unitFilteredBeamHeight_dvd_weightedBinomialTerm
+    {p n k x u : ℕ} (hp : p.Prime)
+    (hk0 : 0 < k) (hkp : k < p ^ n) (hpk : ¬ p ∣ k) :
+    p ^ n ∣ weightedBinomialTerm (p ^ n) k x u := by
+  exact
+    FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge
+      (p := p) (h := n) (P := fun k => ¬ p ∣ k)
+      hp (prime_power_unitFilteredBeamHeight (p := p) (n := n) hp)
+      hk0 hkp hpk le_rfl
+
+/--
+The unit-index layer of a prime-power row carries the full `p^n` divisibility
+through each one-gap `GTail` term.
+-/
+theorem prime_power_unitFilteredBeamHeight_dvd_GTailOneTerm
+    {p n k x u : ℕ} (hp : p.Prime)
+    (hkp : k + 1 < p ^ n) (hpk : ¬ p ∣ k + 1) :
+    p ^ n ∣ GTailOneTerm (p ^ n) k x u := by
+  exact
+    FilteredBeamHeight.dvd_GTailOneTerm_of_height_ge
+      (p := p) (h := n) (P := fun k => ¬ p ∣ k)
+      hp (prime_power_unitFilteredBeamHeight (p := p) (n := n) hp)
+      (by omega) hpk le_rfl
+
+/--
+If every selected one-gap `GTail` term is divisible by `m`, then the filtered
+one-gap sum is divisible by `m`.
+-/
+theorem dvd_filteredGTailOneSum
+    {d m x u : ℕ} {P : ℕ → Prop} [DecidablePred P]
+    (h : ∀ k, k + 1 < d → P (k + 1) → m ∣ GTailOneTerm d k x u) :
+    m ∣ filteredGTailOneSum d x u P := by
+  unfold filteredGTailOneSum
+  refine Finset.dvd_sum ?_
+  intro k hk
+  have hk_range : k ∈ Finset.range (d - 1) := (Finset.mem_filter.mp hk).1
+  have hPk : P (k + 1) := (Finset.mem_filter.mp hk).2
+  have hk_inner : k + 1 < d := by
+    have hk_lt : k < d - 1 := Finset.mem_range.mp hk_range
+    omega
+  exact h k hk_inner hPk
+
+/--
+Coefficient-level inner divisibility lifts to the full unfiltered inner Beam of
+the one-gap `GTail`.
+
+The right-boundary term of `GTail d 1 x u` is not included here; it has
+coefficient `choose d d = 1` and must be handled separately.
+-/
+theorem allInnerChooseDivisible_dvd_filteredGTailOneSum_true
+    {m d x u : ℕ}
+    (h : AllInnerChooseDivisible d m) :
+    m ∣ filteredGTailOneSum d x u (fun _ => True) := by
+  exact
+    dvd_filteredGTailOneSum (P := fun _ => True)
+      (fun k hkd _ =>
+        dvd_GTailOneTerm_of_dvd_choose
+          (allInnerChooseDivisible_dvd_choose h (Nat.succ_pos k) hkd))
+
+/-- In a prime row, the full inner Beam of the one-gap `GTail` is divisible by `p`. -/
+theorem prime_dvd_filteredGTailOneSum_true
+    {p x u : ℕ} (hp : p.Prime) :
+    p ∣ filteredGTailOneSum p x u (fun _ => True) := by
+  exact
+    allInnerChooseDivisible_dvd_filteredGTailOneSum_true
+      (prime_allInnerChooseDivisible_self hp)
+
+/--
+The filtered beam-height sieve gives divisibility of the corresponding
+filtered one-gap `GTail` sum.
+-/
+theorem FilteredBeamHeight.dvd_filteredGTailOneSum_of_height_ge
+    {d p h r x u : ℕ} {P : ℕ → Prop} [DecidablePred P]
+    (hp : p.Prime) (H : FilteredBeamHeight d p h P) (hr : r ≤ h) :
+    p ^ r ∣ filteredGTailOneSum d x u P := by
+  exact
+    dvd_filteredGTailOneSum
+      (fun k hkd hPk => H.dvd_GTailOneTerm_of_height_ge hp hkd hPk hr)
+
+/--
+The unit-index layer of a prime-power row gives a `p^n`-divisible filtered
+one-gap `GTail` sum.
+-/
+theorem prime_power_unitFilteredBeamHeight_dvd_filteredGTailOneSum
+    {p n x u : ℕ} (hp : p.Prime) :
+    p ^ n ∣ filteredGTailOneSum (p ^ n) x u (fun k => ¬ p ∣ k) := by
+  exact
+    FilteredBeamHeight.dvd_filteredGTailOneSum_of_height_ge
+      (p := p) (h := n) (P := fun k => ¬ p ∣ k)
+      hp (prime_power_unitFilteredBeamHeight (p := p) (n := n) hp) le_rfl
 
 /-- Inner weighted terms inherit divisibility from `x`. -/
 theorem dvd_inner_weightedBinomialTerm_of_dvd_x

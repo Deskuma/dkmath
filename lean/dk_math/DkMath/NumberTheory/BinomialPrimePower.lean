@@ -52,6 +52,36 @@ def FilteredBeamHeight (d p h : ℕ) (P : ℕ → Prop) : Prop :=
     padicValNat p (Nat.choose d k) = h
 
 /--
+A filtered beam-height observation gives a divisibility statement for any
+requested layer below that height.
+
+This is the basic bridge from the p-adic observation language back to ordinary
+divisibility of binomial coefficients.
+-/
+theorem FilteredBeamHeight.dvd_choose_of_height_ge
+    {d p h : ℕ} {P : ℕ → Prop}
+    (hp : p.Prime) (H : FilteredBeamHeight d p h P)
+    {k r : ℕ} (hk0 : 0 < k) (hkd : k < d) (hPk : P k)
+    (hr : r ≤ h) :
+    p ^ r ∣ Nat.choose d k := by
+  have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hkd.le
+  have hv : padicValNat p (Nat.choose d k) = h := H k hk0 hkd hPk
+  exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp (by omega)
+
+/--
+A uniform beam-height observation gives a divisibility statement for any
+requested layer below that height.
+-/
+theorem UniformBeamHeight.dvd_choose_of_height_ge
+    {d p h k r : ℕ} (hp : p.Prime) (H : UniformBeamHeight d p h)
+    (hk0 : 0 < k) (hkd : k < d) (hr : r ≤ h) :
+    p ^ r ∣ Nat.choose d k := by
+  exact
+    (FilteredBeamHeight.dvd_choose_of_height_ge
+      (P := fun _ => True) hp (by intro j hj0 hjd _; exact H j hj0 hjd)
+      hk0 hkd trivial hr)
+
+/--
 The beam-birth boundary for `p`.
 
 Rows below `p` have no visible `p`-height, while row `p` has uniform height
@@ -380,6 +410,18 @@ theorem prime_power_dvd_choose_of_not_dvd_index
     (DkMath.ABC.padicValNat_eq_zero_iff hp hk0).mpr hpk
   exact prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 (by omega)
 
+/--
+The unit-index layer of a prime-power row carries the full `p^n` divisibility,
+derived through the filtered beam-height interface.
+-/
+theorem prime_power_unitFilteredBeamHeight_dvd_choose
+    {p n k : ℕ} (hp : p.Prime)
+    (hk0 : 0 < k) (hkp : k < p ^ n) (hpk : ¬ p ∣ k) :
+    p ^ n ∣ Nat.choose (p ^ n) k := by
+  exact
+    (prime_power_unitFilteredBeamHeight (p := p) (n := n) hp).dvd_choose_of_height_ge
+      hp hk0 hkp hpk le_rfl
+
 section samples
 
 example {p n : ℕ} (hp : p.Prime) :
@@ -390,6 +432,11 @@ example {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hpk : ¬ p ∣ k) :
     p ^ n ∣ Nat.choose (p ^ n) k :=
   prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk
+
+example {p n k : ℕ} (hp : p.Prime) (hk0 : 0 < k) (hkp : k < p ^ n)
+    (hpk : ¬ p ∣ k) :
+    p ^ n ∣ Nat.choose (p ^ n) k :=
+  prime_power_unitFilteredBeamHeight_dvd_choose hp hk0 hkp hpk
 
 example {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hr : r + padicValNat p k ≤ n) :

@@ -1,5 +1,8 @@
 # History
 
+cid: 6a2711e6-6180-83a6-a2ff-bba7cb77e2e3
+cid: 6a27be44-9404-83a6-aa95-b9f407eeffe8
+
 ## DAS 関連の実装履歴
 
 ## 関連ファイル
@@ -774,3 +777,405 @@ overline{X^k} = overline{X^(k % r)}
 - docs-only なので Lean build は走らせていません
 
 `git status --short` では新規 docs ファイルが untracked です。
+
+### 2026/06/09  7:01
+
+状況整理を [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md) に追記しました。
+
+入れた内容は主に2点です。
+
+1. 冒頭の目的を更新
+   - 素数そのものだけでなく「素性」
+   - primitive prime divisor へ渡せる可除性の痕跡
+   - 境界由来、中間項由来、prime row だけで消える構造の切り分け
+
+2. `Phase 4.5: AKSBridge v1 の巡回商観測` を追加
+   - `DkMath.NumberTheory.AKSBridge`
+   - `AKSBridge-v1.md`
+   - `AKSCyclicCongruenceHolds`
+   - `AKSCyclicFoldedCongruenceHolds`
+   - `prime_aks_cyclic_frobenius`
+   - composite failure witness や primitive prime divisor 境界への比較面、という位置づけ
+
+検証:
+
+- `git diff --check` 成功
+- docs-only なので Lean build は走らせていません。
+
+### 2026/06/09 15:22
+
+進めました。`AKSBridge.lean` に v1.5 として、single shift から range predicate へ拡張する層を追加しています。
+
+追加した主な定義:
+
+```lean
+def AKSCyclicCongruenceHoldsForRange
+def AKSCyclicFoldedCongruenceHoldsForRange
+def AKSCyclicCongruenceFails
+def AKSCyclicFoldedCongruenceFails
+def ExistsAKSCyclicFailureBelow
+def ExistsAKSCyclicFoldedFailureBelow
+```
+
+追加した prime 側の定理:
+
+```lean
+theorem AKSCyclicCongruenceHoldsForRange.prime
+theorem AKSCyclicFoldedCongruenceHoldsForRange.prime
+theorem prime_AKSCyclicCongruenceHoldsForRange
+theorem prime_AKSCyclicFoldedCongruenceHoldsForRange
+theorem not_exists_AKSCyclicFailureBelow_of_prime
+theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
+```
+
+これで、
+
+```text
+∀ a < bound, AKS cyclic congruence holds
+```
+
+という AKS らしい範囲検査の形が入りました。さらに prime なら failure witness は存在しない、という対岸の観測面も用意できています。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- `AKSBridge.lean` 内に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。
+
+### 2026/06/09 15:50
+
+実装しました。
+
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean:377) に追加した内容は主に2つです。
+
+- `AKSBound n r` の抽象フックを追加
+  - 現状は粗い placeholder として `n`
+  - `AKSCyclicCongruenceHoldsUpToAKSBound`
+  - `AKSCyclicFoldedCongruenceHoldsUpToAKSBound`
+  - `ExistsAKSCyclicFailureBelowAKSBound`
+  - `ExistsAKSCyclicFoldedFailureBelowAKSBound`
+  - prime なら bound 以下で failure が存在しない補題も接続済み
+
+- composite witness examples を追加
+  - `n = 4, r = 1, a = 1`
+  - `composite_AKSCyclicCongruenceFails_four_one_one`
+  - `composite_AKSCyclicFoldedCongruenceFails_four_one_one`
+  - `ExistsAKSCyclicFoldedFailureBelow 4 1 2`
+  - `ExistsAKSCyclicFoldedFailureBelowAKSBound 4 1`
+
+反例証明は quotient equality を `Ideal.Quotient.mk_eq_mk_iff_sub_mem` でイデアル所属へ落とし、`X - 1` で割れるなら `X = 1` で根になる、という形で `14 ≠ 0 mod 4` に帰着しています。AKS らしい観測例として悪くない形です。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `git diff --check`
+- `lake build DkMath`
+
+全体ビルドは成功。既存の unrelated な `sorry` warning は残っています。
+
+---
+
+#### AKS 完了、既存定理接続へ
+
+了解です。AKSBridge はここで v1.5 くらいの閉じ方で良いと思います。
+
+次は本線として、二項定理・p-adic・primitive prime divisor / Zsigmondy 接続へ戻すのが自然です。優先順はこのあたりです。
+
+1. `Nat.choose` / `padicValNat` / `prime_power_dvd_choose_of_not_dvd_index` 周辺の既存補題を、今回の Beam / height / failure predicate と接続
+2. `weightedBinomialInnerBeamSum` の可除性から、個別係数の p-adic 高さ観測へ戻す橋を整理
+3. primitive side へ向けて、「この段で初めて現れる素因子」を表す薄い predicate を作る
+4. Zsigmondy 既存ファイルの定理名・使える補題を再探索して、次の実装候補を絞る
+
+次の実装ターゲットとしては、まず既存定理探索から入って、`AKSBridge` ではなく `BinomialPrimePower` / `PascalPrimeDial` / `WeightedBinomial` / `Zsigmondy*` のどこに橋を置くのが一番自然か見ます。
+
+---
+
+既存定理探索、要点が見えました。
+結論として、次の本線は **AKS ではなく `BinomialPrimePower → PascalPrimeDial → WeightedBinomial → PrimitiveBeam/Zsigmondy` の橋**です。
+
+**使える核心定理**
+
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:130)
+  - `padicValNat_choose_prime_pow`
+  - `padicValNat_choose_prime_pow_add_index`
+  - `prime_power_pow_dvd_choose_of_padicValNat_index`
+  - `prime_power_dvd_choose_of_not_dvd_index`
+  - `prime_power_unitFilteredBeamHeight`
+- [PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean:108)
+  - `pascalPrimeDialHeight_prime_pow_add_index`
+  - `pascalPrimeDialHeight_prime_pow`
+  - `prime_power_unitFilteredPrimeDialHeight`
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:196)
+  - `prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index`
+  - `prime_power_dvd_weightedBinomialTerm_of_not_dvd_index`
+  - `weightedBodyGapKernelSplit`
+- [PrimitiveBeam.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean:18)
+  - `PrimitivePrimeFactorOfDiffPow`
+  - `exists_primitive_prime_factor_as_prop`
+  - `primitive_prime_dvd_GN`
+  - `primitive_prime_padic_eq_GN`
+  - `primitive_prime_padic_bound_diff_of_squarefree_GN`
+
+**重要な判断**
+既に Kummer の p^n フィルターは実装済みです。
+なので次は Kummer 本体を作るより、`FilteredBeamHeight` / `FilteredPrimeDialHeight` の観測を `weightedBinomialTerm` と `GTail/GN` 側へ運ぶ薄い bridge が良いです。
+
+特に実装候補はこれです。
+
+```lean
+theorem filteredBeamHeight_dvd_choose_of_height_ge
+theorem filteredBeamHeight_dvd_weightedTerm_of_height_ge
+theorem prime_power_unitFilteredBeamHeight_dvd_weightedTerm
+```
+
+その次に、`weightedBinomialPositiveTailSum = x * GTail d 1 x u` が既にあるので、Beam の項別 p-adic 支持を `GTail` へ移す観測補題を作るのが自然です。
+
+注意点として、Zsigmondy 精密層には既に反例付きの警告があります。`padicValNat ≤ 1` は一般には危険で、現在の honest route は `Squarefree (GN d (a - b) b)` 仮定付きです。ここは無理に一般化せず、まず p^n フィルターの「見える層」を GN/GTail に接続する方が安全です。
+
+### 2026/06/09 16:08
+
+実装しました。
+
+追加した橋はこの2段です。
+
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:61)
+  - `FilteredBeamHeight.dvd_choose_of_height_ge`
+  - `UniformBeamHeight.dvd_choose_of_height_ge`
+  - `prime_power_unitFilteredBeamHeight_dvd_choose`
+
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:183)
+  - `FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
+  - `UniformBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
+  - `prime_power_unitFilteredBeamHeight_dvd_weightedBinomialTerm`
+
+意味としては、
+
+```text
+p-adic height が h ある
+かつ r ≤ h
+なら p^r が係数を割る
+
+さらに、その係数可除性は weighted term 全体へ持ち上がる
+```
+
+という橋です。これで `p^n` 篩の観測層から weighted Beam/GTail 側へ進める足場ができました。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.WeightedBinomial`
+- `lake build DkMath.NumberTheory.PascalPrimeDial`
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `lake build DkMath`
+- `git diff --check`
+
+全体ビルド成功。既存の unrelated な `sorry` warning はそのままです。
+
+### 2026/06/09 18:14
+
+`weighted Beam/GTail` 側を進めました。
+
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:55) に追加しています。
+
+主な追加:
+
+- `GTailOneTerm`
+  - `GTail d 1 x u` の各項を明示する term 定義
+- `filteredGTailOneSum`
+  - `FilteredBeamHeight` と合うように、内側 Beam 部分だけを filter して足す sum
+  - 右境界 `choose d d = 1` は係数篩の対象外なので除外
+- `GTail_one_eq_GTailOneTerm_sum`
+- `GTail_one_eq_innerBeam_add_right`
+  - `GTail d 1 = inner Beam part + x^(d-1)` を固定
+- `FilteredBeamHeight.dvd_GTailOneTerm_of_height_ge`
+- `UniformBeamHeight.dvd_GTailOneTerm_of_height_ge`
+- `prime_power_unitFilteredBeamHeight_dvd_GTailOneTerm`
+- `FilteredBeamHeight.dvd_filteredGTailOneSum_of_height_ge`
+- `prime_power_unitFilteredBeamHeight_dvd_filteredGTailOneSum`
+
+これで、
+
+```text
+係数の p-adic height
+→ GTail の各 Beam 項の p^r 可除性
+→ filtered GTail Beam sum の p^r 可除性
+```
+
+までつながりました。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.WeightedBinomial`
+- `lake build DkMath.NumberTheory.PascalPrimeDial`
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `lake build DkMath`
+- `git diff --check`
+
+全体ビルド成功です。
+
+### 2026/06/09 19:03
+
+次の一手として、`WeightedBinomial.lean` に軽い橋を追加しました。
+
+追加したもの:
+
+- `allInnerChooseDivisible_dvd_filteredGTailOneSum_true`
+  - 係数レベルで inner 項がすべて `m` で割れるなら、`GTail d 1` の inner Beam 和も `m` で割れる。
+  - ただし右端境界 `x^(d-1)` は除外。ここが重要です。
+
+- `prime_dvd_filteredGTailOneSum_true`
+  - 素数行 `p` では、`filteredGTailOneSum p x u (fun _ => True)` が `p` で割れる。
+
+確認済み:
+
+```txt
+lake build DkMath.NumberTheory.WeightedBinomial
+git diff --check
+```
+
+どちらも成功です。
+
+次は本線として、これを `GN d x u = GTail d 1 x u` 側へ接続して、`GN = inner Beam + right boundary` という観測補題を置くのが良いです。これで PrimitiveBeam / Zsigmondy 側の `GN` 定理群に、今回の `p^n` 篩を差し込めるようになります。
+
+### 2026/06/09 19:08
+
+実装しました。`GN` へ直接つなぐ薄い bridge として [WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) を新設し、[DkMath.lean](/lean/dk_math/DkMath.lean:28) に import を追加しています。
+
+入れた補題はこの 3 つです。
+
+```lean
+GN_eq_filteredGTailOneSum_true_add_right
+GN_modEq_rightBoundary_of_dvd_filteredGTailOneSum_true
+prime_GN_modEq_rightBoundary
+```
+
+意味としては、`GN d x u` を
+
+```txt
+GN = inner Beam + right boundary
+```
+
+に分解し、素数行では inner Beam が `p` で消えるので、
+
+```lean
+GN p x u ≡ x ^ (p - 1) [MOD p]
+```
+
+まで固定しました。ここで `GN` 全体が割れるとは主張せず、境界項が残る形にしてあります。
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` は成功。既存の `sorry` warning は出ていますが、今回追加分には `sorry` はありません。
+
+---
+
+theorem prime_GN_sub_rightBoundary_dvd
+
+∃ B, filteredGTailOneSum p x u (fun _ => True) = p * B
+
+∃ B, GN p x u = p * B + x ^ (p - 1)
+
+---
+
+### 2026/06/09 19:19
+
+実装しました。[WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) に以下を追加しています。
+
+```lean
+dvd_GN_sub_rightBoundary_of_dvd_filteredGTailOneSum_true
+exists_filteredGTailOneSum_true_eq_mul_of_dvd
+exists_GN_eq_mul_add_rightBoundary_of_dvd_filteredGTailOneSum_true
+
+prime_GN_sub_rightBoundary_dvd
+prime_exists_filteredGTailOneSum_true_eq_mul
+prime_exists_GN_eq_mul_add_rightBoundary
+```
+
+ユーザー指定の形はこの 3 つで入っています。
+
+```lean
+theorem prime_GN_sub_rightBoundary_dvd
+    {p x u : ℕ} (hp : p.Prime) :
+    p ∣ GN p x u - x ^ (p - 1)
+
+theorem prime_exists_filteredGTailOneSum_true_eq_mul
+    {p x u : ℕ} (hp : p.Prime) :
+    ∃ B, filteredGTailOneSum p x u (fun _ => True) = p * B
+
+theorem prime_exists_GN_eq_mul_add_rightBoundary
+    {p x u : ℕ} (hp : p.Prime) :
+    ∃ B, GN p x u = p * B + x ^ (p - 1)
+```
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+いずれも成功。今回追加分に `sorry` はありません。
+
+---
+
+フェルマーの小定理へと繋がる。
+
+prime_GN_modEq_one_of_not_dvd_x
+{p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+  GN p x u ≡ 1 [MOD p]
+
+prime_not_dvd_GN_of_not_dvd_x
+
+prime_exists_GN_eq_mul_add_rightBoundary
+→ Fermat 小定理で right boundary を読む
+→ p ∤ x なら p ∤ GN
+→ primitive / Zsigmondy 側の gcd 制御へ接続
+
+### 2026/06/09 19:26
+
+入りました。[WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) に追加しています。
+
+```lean
+theorem prime_GN_modEq_one_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    GN p x u ≡ 1 [MOD p]
+
+theorem prime_not_dvd_GN_of_not_dvd_x
+    {p x u : ℕ} (hp : p.Prime) (hx : ¬ p ∣ x) :
+    ¬ p ∣ GN p x u
+```
+
+流れはその通りです。
+
+```txt
+prime_GN_modEq_rightBoundary
+  GN p x u ≡ x^(p-1) [MOD p]
+
+Fermat 小定理
+  p ∤ x → x^(p-1) ≡ 1 [MOD p]
+
+合成
+  GN p x u ≡ 1 [MOD p]
+
+よって
+  p ∤ GN p x u
+```
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+今回追加分に `sorry` はありません。
