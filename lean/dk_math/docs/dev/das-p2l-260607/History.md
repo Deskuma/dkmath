@@ -969,3 +969,45 @@ p-adic height が h ある
 - `git diff --check`
 
 全体ビルド成功。既存の unrelated な `sorry` warning はそのままです。
+
+### 2026/06/09 18:14
+
+`weighted Beam/GTail` 側を進めました。
+
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:55) に追加しています。
+
+主な追加:
+
+- `GTailOneTerm`
+  - `GTail d 1 x u` の各項を明示する term 定義
+- `filteredGTailOneSum`
+  - `FilteredBeamHeight` と合うように、内側 Beam 部分だけを filter して足す sum
+  - 右境界 `choose d d = 1` は係数篩の対象外なので除外
+- `GTail_one_eq_GTailOneTerm_sum`
+- `GTail_one_eq_innerBeam_add_right`
+  - `GTail d 1 = inner Beam part + x^(d-1)` を固定
+- `FilteredBeamHeight.dvd_GTailOneTerm_of_height_ge`
+- `UniformBeamHeight.dvd_GTailOneTerm_of_height_ge`
+- `prime_power_unitFilteredBeamHeight_dvd_GTailOneTerm`
+- `FilteredBeamHeight.dvd_filteredGTailOneSum_of_height_ge`
+- `prime_power_unitFilteredBeamHeight_dvd_filteredGTailOneSum`
+
+これで、
+
+```text
+係数の p-adic height
+→ GTail の各 Beam 項の p^r 可除性
+→ filtered GTail Beam sum の p^r 可除性
+```
+
+までつながりました。
+
+検証済みです。
+
+- `lake build DkMath.NumberTheory.WeightedBinomial`
+- `lake build DkMath.NumberTheory.PascalPrimeDial`
+- `lake build DkMath.NumberTheory.AKSBridge`
+- `lake build DkMath`
+- `git diff --check`
+
+全体ビルド成功です。
