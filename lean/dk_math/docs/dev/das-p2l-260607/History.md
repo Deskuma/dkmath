@@ -1248,3 +1248,43 @@ git diff --check
 ```
 
 すべて成功しています。
+
+### 2026/06/10  6:41
+
+Petal の基礎語彙を Lean 側に固定しました。今回は `GNBridge` へ進まず、設計ノートに沿って「数え上げ・住所・境界」の最小核を追加しています。
+
+追加:
+
+- [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean)
+  - `baseUnitCore`
+  - `inheritanceSlot`
+  - `lapBase`
+  - `relPetalTotal`
+  - `relPolygonKernel`
+  - `SameRelPetalOrbit`
+  - `R_5(0)=5`, `R_5(1)=30`, `R_5(2)=180`
+  - `5,30,180` が同じ Petal orbit 上にある補題
+
+- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean)
+  - `relPetalBlockSize`
+  - `PetalAddress`
+  - `outerPetalAddress`
+  - `channel 0 = inheritance/core channel`
+  - `channel 1..n = Petal channels`
+  - `outerPetalAddress 5 1 25 = { lap := 1, channel := 4, offset := 5 }`
+  - `outerPetalAddress 5 2 25 = { lap := 2, channel := 0, offset := 25 }`
+  - offset と channel の基本境界補題
+
+更新:
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean) に `Counting` / `Address` を追加 import
+
+検証:
+
+```text
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。

@@ -1,0 +1,119 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.Petal.Counting
+
+#print "file: DkMath.Petal.Address"
+
+/-!
+# Petal Addressing
+
+This file fixes the first outer address convention for relative Petal systems.
+
+The address is one-step and outermost.  The channel is internally zero-based:
+
+* channel `0` is the inheritance/core channel;
+* channels `1..n` are Petal channels.
+
+The value `m` is read as a one-based position inside the current lap total.
+-/
+
+namespace DkMath
+namespace Petal
+
+/-- One-step outer block size at the given lap. -/
+def relPetalBlockSize (n lap : Nat) : Nat :=
+  relPetalTotal n (lap - 1)
+
+/--
+Outer Petal address.
+
+`channel = 0` is the inheritance/core channel.  Positive channels are Petal
+channels.  `offset` is one-based inside the selected outer block.
+-/
+structure PetalAddress where
+  lap : Nat
+  channel : Nat
+  offset : Nat
+deriving Repr, DecidableEq
+
+/--
+Outer one-step address of a one-based value `m`.
+
+The correctness lemmas are intended for `0 < n`, `0 < lap`, and
+`1 <= m <= relPetalTotal n lap`.
+-/
+def outerPetalAddress (n lap m : Nat) : PetalAddress :=
+  let b := relPetalBlockSize n lap
+  { lap := lap
+    channel := (m - 1) / b
+    offset := (m - 1) % b + 1 }
+
+/-- The block size at lap zero is the base unit core. -/
+theorem relPetalBlockSize_zero (n : Nat) :
+    relPetalBlockSize n 0 = n := by
+  simp [relPetalBlockSize, relPetalTotal_zero]
+
+/-- A positive-lap block size is the previous lap total. -/
+theorem relPetalBlockSize_succ (n lap : Nat) :
+    relPetalBlockSize n (lap + 1) = relPetalTotal n lap := by
+  simp [relPetalBlockSize]
+
+/-- The pentagonal one-lap address of `25`. -/
+theorem outerPetalAddress_five_one_twentyfive :
+    outerPetalAddress 5 1 25 = { lap := 1, channel := 4, offset := 5 } := by
+  decide
+
+/--
+The pentagonal two-lap address of `25`.
+
+This lands in channel `0`, the inheritance/core channel, with offset `25`.
+-/
+theorem outerPetalAddress_five_two_twentyfive :
+    outerPetalAddress 5 2 25 = { lap := 2, channel := 0, offset := 25 } := by
+  decide
+
+/-- The address lap field is definitionally the observed lap. -/
+theorem outerPetalAddress_lap (n lap m : Nat) :
+    (outerPetalAddress n lap m).lap = lap := by
+  rfl
+
+/-- The offset of an outer address is always positive. -/
+theorem outerPetalAddress_offset_pos
+    {n lap m : Nat} :
+    0 < (outerPetalAddress n lap m).offset := by
+  simp [outerPetalAddress]
+
+/-- The offset of a valid address is bounded by the outer block size. -/
+theorem outerPetalAddress_offset_le_blockSize
+    {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
+    (outerPetalAddress n lap m).offset ≤ relPetalBlockSize n lap := by
+  rw [outerPetalAddress]
+  exact Nat.succ_le_of_lt (Nat.mod_lt _ hb)
+
+/--
+The channel is bounded by the lap base when the observed value stays inside the
+current lap total.
+-/
+theorem outerPetalAddress_channel_lt_lapBase
+    {n lap m : Nat}
+    (hlap : 0 < lap)
+    (hm : 1 ≤ m)
+    (hbound : m ≤ relPetalTotal n lap) :
+    (outerPetalAddress n lap m).channel < lapBase n := by
+  rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hlap) with ⟨k, rfl⟩
+  have hm_pos : 0 < m := hm
+  have htotal :
+      relPetalTotal n (k + 1) = relPetalTotal n k * lapBase n :=
+    relPetalTotal_succ n k
+  have hsub_lt : m - 1 < relPetalTotal n k * lapBase n := by
+    have hlt : m - 1 < m := Nat.sub_lt hm_pos Nat.zero_lt_one
+    exact lt_of_lt_of_le hlt (by simpa [htotal] using hbound)
+  rw [outerPetalAddress, relPetalBlockSize_succ]
+  exact Nat.div_lt_of_lt_mul hsub_lt
+
+end Petal
+end DkMath
