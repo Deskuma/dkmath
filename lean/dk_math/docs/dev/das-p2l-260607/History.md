@@ -1074,3 +1074,53 @@ git diff --check
 ```
 
 `lake build DkMath` は成功。既存の `sorry` warning は出ていますが、今回追加分には `sorry` はありません。
+
+---
+
+theorem prime_GN_sub_rightBoundary_dvd
+
+∃ B, filteredGTailOneSum p x u (fun _ => True) = p * B
+
+∃ B, GN p x u = p * B + x ^ (p - 1)
+
+---
+
+### 2026/06/09 19:19
+
+実装しました。[WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) に以下を追加しています。
+
+```lean
+dvd_GN_sub_rightBoundary_of_dvd_filteredGTailOneSum_true
+exists_filteredGTailOneSum_true_eq_mul_of_dvd
+exists_GN_eq_mul_add_rightBoundary_of_dvd_filteredGTailOneSum_true
+
+prime_GN_sub_rightBoundary_dvd
+prime_exists_filteredGTailOneSum_true_eq_mul
+prime_exists_GN_eq_mul_add_rightBoundary
+```
+
+ユーザー指定の形はこの 3 つで入っています。
+
+```lean
+theorem prime_GN_sub_rightBoundary_dvd
+    {p x u : ℕ} (hp : p.Prime) :
+    p ∣ GN p x u - x ^ (p - 1)
+
+theorem prime_exists_filteredGTailOneSum_true_eq_mul
+    {p x u : ℕ} (hp : p.Prime) :
+    ∃ B, filteredGTailOneSum p x u (fun _ => True) = p * B
+
+theorem prime_exists_GN_eq_mul_add_rightBoundary
+    {p x u : ℕ} (hp : p.Prime) :
+    ∃ B, GN p x u = p * B + x ^ (p - 1)
+```
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+いずれも成功。今回追加分に `sorry` はありません。
