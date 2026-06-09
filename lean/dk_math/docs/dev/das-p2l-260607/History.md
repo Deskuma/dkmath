@@ -1213,3 +1213,38 @@ Summary を新規作成しました。
 - 既存補題リスト: `UnitCycle.RelPolygon`, `FLT.PetalDetect`, `FLT.CosmicPetalBridge`, `NumberTheory.Gcd.GN`, `GEisensteinBridge` などを分類
 
 検証は `git diff --check` 済みです。 docs 追加のみなので Lean build は走らせていません。
+
+### 2026/06/10  4:45
+
+`DkMath.Petal.*` の土台を追加しました。
+
+追加した入口は以下です。
+
+- [DkMath/Petal.lean](/lean/dk_math/DkMath/Petal.lean)
+- [DkMath/Petal/Basic.lean](/lean/dk_math/DkMath/Petal/Basic.lean)
+- [DkMath/Petal/Forms.lean](/lean/dk_math/DkMath/Petal/Forms.lean)
+- [DkMath/Petal/RelPolygon.lean](/lean/dk_math/DkMath/Petal/RelPolygon.lean)
+- [DkMath/Petal/CoreUnit.lean](/lean/dk_math/DkMath/Petal/CoreUnit.lean)
+- [DkMath/Petal/GNBridge.lean](/lean/dk_math/DkMath/Petal/GNBridge.lean)
+
+実装した主な橋補題は `GNBridge` に置いています。
+
+```lean
+theorem S0_nat_eq_GN_three_sub
+theorem three_S0_nat_modEq_one_of_not_dvd_sub
+theorem three_not_dvd_S0_nat_of_not_dvd_sub
+```
+
+つまり、`GN 3 (c - b) b = S0_nat c b` を Petal 側の正向き API として固定し、さらに FLGNB の Fermat 境界補題から `3 ∤ c-b` のとき `S0_nat c b ≡ 1 [MOD 3]`、`3 ∤ S0_nat c b` まで繋ぎました。
+
+[DkMath.lean](/lean/dk_math/DkMath.lean) にも `import DkMath.Petal` を追加済みです。
+
+検証:
+
+```text
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功しています。
