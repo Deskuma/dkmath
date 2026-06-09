@@ -312,6 +312,60 @@ def AKSCyclicFoldedCongruenceHolds (n r a : ℕ) : Prop :=
   (aksQuotientX (ZMod n) r + aksQuotientC (ZMod n) r (a : ZMod n)) ^ n =
     aksQuotientX (ZMod n) r ^ (n % r) + aksQuotientC (ZMod n) r (a : ZMod n)
 
+/--
+The AKS cyclic congruence predicate for every shift `a < bound`.
+
+This is the first range-based layer: it does not choose the AKS bound yet, but
+it packages the repeated shift test as one proposition.
+-/
+def AKSCyclicCongruenceHoldsForRange (n r bound : ℕ) : Prop :=
+  ∀ a, a < bound → AKSCyclicCongruenceHolds n r a
+
+/--
+The folded AKS cyclic congruence predicate for every shift `a < bound`.
+
+This is the range version of `AKSCyclicFoldedCongruenceHolds`, where the
+right-hand exponent has already been reduced modulo `r`.
+-/
+def AKSCyclicFoldedCongruenceHoldsForRange (n r bound : ℕ) : Prop :=
+  ∀ a, a < bound → AKSCyclicFoldedCongruenceHolds n r a
+
+/--
+A single-shift failure of the non-folded AKS cyclic congruence.
+
+This is an observation predicate for the composite side.  It records that a
+particular shift `a` breaks the expected quotient-ring identity.
+-/
+def AKSCyclicCongruenceFails (n r a : ℕ) : Prop :=
+  ¬ AKSCyclicCongruenceHolds n r a
+
+/--
+A single-shift failure of the folded AKS cyclic congruence.
+
+This is the folded version of `AKSCyclicCongruenceFails`, and is the more AKS
+native obstruction because powers of `X` are already reduced modulo `r`.
+-/
+def AKSCyclicFoldedCongruenceFails (n r a : ℕ) : Prop :=
+  ¬ AKSCyclicFoldedCongruenceHolds n r a
+
+/--
+There is a non-folded AKS cyclic failure witness below `bound`.
+
+This predicate is intended for the composite side: it packages the existence of
+one shift `a < bound` where the congruence fails.
+-/
+def ExistsAKSCyclicFailureBelow (n r bound : ℕ) : Prop :=
+  ∃ a, a < bound ∧ AKSCyclicCongruenceFails n r a
+
+/--
+There is a folded AKS cyclic failure witness below `bound`.
+
+This is the folded obstruction predicate that will be most useful when
+comparing composite behavior against the prime witness theorems.
+-/
+def ExistsAKSCyclicFoldedFailureBelow (n r bound : ℕ) : Prop :=
+  ∃ a, a < bound ∧ AKSCyclicFoldedCongruenceFails n r a
+
 /-- The quotient map sends polynomial `X` to `aksQuotientX`. -/
 theorem aksQuotientMap_X
     (R : Type*) [CommRing R] (r : ℕ) :
@@ -541,6 +595,52 @@ theorem prime_AKSCyclicFoldedCongruenceHolds
     AKSCyclicFoldedCongruenceHolds p r a := by
   unfold AKSCyclicFoldedCongruenceHolds
   exact prime_aks_cyclic_frobenius hp
+
+/-- Prime moduli satisfy the non-folded AKS cyclic congruence for every tested shift. -/
+theorem AKSCyclicCongruenceHoldsForRange.prime
+    {p r bound : ℕ} (hp : p.Prime) :
+    AKSCyclicCongruenceHoldsForRange p r bound := by
+  intro a _ha
+  exact AKSCyclicCongruenceHolds.prime hp
+
+/-- Prime moduli satisfy the folded AKS cyclic congruence for every tested shift. -/
+theorem AKSCyclicFoldedCongruenceHoldsForRange.prime
+    {p r bound : ℕ} (hp : p.Prime) :
+    AKSCyclicFoldedCongruenceHoldsForRange p r bound := by
+  intro a _ha
+  exact prime_AKSCyclicFoldedCongruenceHolds hp
+
+/--
+Alias-style theorem: every prime modulus satisfies
+`AKSCyclicCongruenceHoldsForRange`.
+-/
+theorem prime_AKSCyclicCongruenceHoldsForRange
+    {p r bound : ℕ} (hp : p.Prime) :
+    AKSCyclicCongruenceHoldsForRange p r bound :=
+  AKSCyclicCongruenceHoldsForRange.prime hp
+
+/--
+Alias-style theorem: every prime modulus satisfies the folded AKS cyclic
+congruence for every tested shift.
+-/
+theorem prime_AKSCyclicFoldedCongruenceHoldsForRange
+    {p r bound : ℕ} (hp : p.Prime) :
+    AKSCyclicFoldedCongruenceHoldsForRange p r bound :=
+  AKSCyclicFoldedCongruenceHoldsForRange.prime hp
+
+/-- Prime moduli have no non-folded AKS cyclic failure witness below any bound. -/
+theorem not_exists_AKSCyclicFailureBelow_of_prime
+    {p r bound : ℕ} (hp : p.Prime) :
+    ¬ ExistsAKSCyclicFailureBelow p r bound := by
+  rintro ⟨a, ha, hfail⟩
+  exact hfail ((AKSCyclicCongruenceHoldsForRange.prime hp) a ha)
+
+/-- Prime moduli have no folded AKS cyclic failure witness below any bound. -/
+theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
+    {p r bound : ℕ} (hp : p.Prime) :
+    ¬ ExistsAKSCyclicFoldedFailureBelow p r bound := by
+  rintro ⟨a, ha, hfail⟩
+  exact hfail ((AKSCyclicFoldedCongruenceHoldsForRange.prime hp) a ha)
 
 section samples
 

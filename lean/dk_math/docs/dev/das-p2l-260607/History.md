@@ -798,3 +798,46 @@ overline{X^k} = overline{X^(k % r)}
 
 - `git diff --check` 成功
 - docs-only なので Lean build は走らせていません。
+
+### 2026/06/09 15:22
+
+進めました。`AKSBridge.lean` に v1.5 として、single shift から range predicate へ拡張する層を追加しています。
+
+追加した主な定義:
+
+```lean
+def AKSCyclicCongruenceHoldsForRange
+def AKSCyclicFoldedCongruenceHoldsForRange
+def AKSCyclicCongruenceFails
+def AKSCyclicFoldedCongruenceFails
+def ExistsAKSCyclicFailureBelow
+def ExistsAKSCyclicFoldedFailureBelow
+```
+
+追加した prime 側の定理:
+
+```lean
+theorem AKSCyclicCongruenceHoldsForRange.prime
+theorem AKSCyclicFoldedCongruenceHoldsForRange.prime
+theorem prime_AKSCyclicCongruenceHoldsForRange
+theorem prime_AKSCyclicFoldedCongruenceHoldsForRange
+theorem not_exists_AKSCyclicFailureBelow_of_prime
+theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
+```
+
+これで、
+
+```text
+∀ a < bound, AKS cyclic congruence holds
+```
+
+という AKS らしい範囲検査の形が入りました。さらに prime なら failure witness は存在しない、という対岸の観測面も用意できています。
+
+検証:
+
+- `lake build DkMath.NumberTheory.AKSBridge` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+- `AKSBridge.lean` 内に `sorry/admit/axiom` なし
+
+全体ビルドでは既存の unrelated `sorry` 警告は出ています。
