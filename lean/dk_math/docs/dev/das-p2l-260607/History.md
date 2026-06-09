@@ -1,5 +1,8 @@
 # History
 
+cid: 6a2711e6-6180-83a6-a2ff-bba7cb77e2e3
+cid: 6a27be44-9404-83a6-aa95-b9f407eeffe8
+
 ## DAS 関連の実装履歴
 
 ## 関連ファイル
@@ -1035,3 +1038,39 @@ git diff --check
 どちらも成功です。
 
 次は本線として、これを `GN d x u = GTail d 1 x u` 側へ接続して、`GN = inner Beam + right boundary` という観測補題を置くのが良いです。これで PrimitiveBeam / Zsigmondy 側の `GN` 定理群に、今回の `p^n` 篩を差し込めるようになります。
+
+### 2026/06/09 19:08
+
+実装しました。`GN` へ直接つなぐ薄い bridge として [WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) を新設し、[DkMath.lean](/lean/dk_math/DkMath.lean:28) に import を追加しています。
+
+入れた補題はこの 3 つです。
+
+```lean
+GN_eq_filteredGTailOneSum_true_add_right
+GN_modEq_rightBoundary_of_dvd_filteredGTailOneSum_true
+prime_GN_modEq_rightBoundary
+```
+
+意味としては、`GN d x u` を
+
+```txt
+GN = inner Beam + right boundary
+```
+
+に分解し、素数行では inner Beam が `p` で消えるので、
+
+```lean
+GN p x u ≡ x ^ (p - 1) [MOD p]
+```
+
+まで固定しました。ここで `GN` 全体が割れるとは主張せず、境界項が残る形にしてあります。
+
+確認済みです。
+
+```txt
+lake build DkMath.NumberTheory.WeightedGNBridge
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` は成功。既存の `sorry` warning は出ていますが、今回追加分には `sorry` はありません。
