@@ -1803,7 +1803,7 @@ pascalPrimeDialHeight
 
 は任意の行の係数に対する prime support 観測。
 
-AKS は、これを「多項式合同」として使う判定法です。  
+AKS は、これを「多項式合同」として使う判定法です。
 なので次に橋を作るなら、かなり自然なターゲットは：
 
 ```lean
@@ -1820,7 +1820,7 @@ theorem prime_inner_coeff_vanish_mod
     ((Nat.choose p k : ZMod p) = 0)
 ```
 
-これはもう `prime_dvd_inner_choose` からすぐ出せます。  
+これはもう `prime_dvd_inner_choose` からすぐ出せます。
 AKS への最初の橋としては、後者の係数消滅補題が堅いです。
 
 追加:
