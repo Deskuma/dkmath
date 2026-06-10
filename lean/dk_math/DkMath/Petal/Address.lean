@@ -272,6 +272,60 @@ theorem outerPetalAddress_channel_zero_remainder_eq_self
     outerPetalRemainder n lap m = m := by
   exact outerPetalRemainder_eq_self_of_isInheritanceChannel hm hb hch
 
+/--
+For a valid one-based value, the remainder is a valid value for the previous
+lap total.
+-/
+theorem outerPetalRemainder_le_prevTotal_of_valid
+    {n lap m : Nat}
+    (hlap : 0 < lap)
+    (hm : 1 ≤ m)
+    (hbound : m ≤ relPetalTotal n lap) :
+    outerPetalRemainder n lap m ≤ relPetalTotal n (lap - 1) := by
+  rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hlap) with ⟨k, rfl⟩
+  have hm_pos : 0 < m := hm
+  have htotal :
+      relPetalTotal n (k + 1) = relPetalTotal n k * lapBase n :=
+    relPetalTotal_succ n k
+  have htotal_pos : 0 < relPetalTotal n (k + 1) :=
+    lt_of_lt_of_le hm_pos hbound
+  have hb_prev : 0 < relPetalTotal n k := by
+    by_contra hnot
+    have hzero : relPetalTotal n k = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [htotal, hzero, zero_mul] at htotal_pos
+    exact Nat.not_lt_zero _ htotal_pos
+  simpa [relPetalBlockSize_succ] using
+    (outerPetalRemainder_le_blockSize
+      (n := n) (lap := k + 1) (m := m) (by simpa [relPetalBlockSize_succ] using hb_prev))
+
+/--
+One-step Petal address decomposition.
+
+For one-based values, the address is the usual quotient/remainder
+decomposition:
+
+`m = channel * blockSize + remainder`.
+-/
+theorem outerPetalAddress_decompose
+    {n lap m : Nat}
+    (hm : 1 ≤ m) :
+    m =
+      (outerPetalAddress n lap m).channel * relPetalBlockSize n lap
+        + outerPetalRemainder n lap m := by
+  let B := relPetalBlockSize n lap
+  have hdiv :
+      (m - 1) % B + B * ((m - 1) / B) = m - 1 :=
+    Nat.mod_add_div (m - 1) B
+  rw [outerPetalRemainder, outerPetalAddress]
+  change m = ((m - 1) / B) * B + ((m - 1) % B + 1)
+  calc
+    m = (m - 1) + 1 := by rw [Nat.sub_add_cancel hm]
+    _ = ((m - 1) % B + B * ((m - 1) / B)) + 1 := by rw [hdiv]
+    _ = B * ((m - 1) / B) + ((m - 1) % B + 1) := by
+      omega
+    _ = ((m - 1) / B) * B + ((m - 1) % B + 1) := by
+      rw [Nat.mul_comm B ((m - 1) / B)]
+
 /-- A bounded channel is at most the base unit core. -/
 theorem outerPetalAddress_channel_le_baseUnitCore
     {n lap m : Nat}
