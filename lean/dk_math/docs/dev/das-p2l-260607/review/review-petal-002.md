@@ -1,8 +1,59 @@
-# review
+# Git diff / Report / Review
 
-## Update: Petal Address
+## Add: review
 
-gch: 333ce9fcdedb98e9b3a0ce88f6eb824746559d83
+gch: ca0c1f042c6e4d5254af9161b11fd11cb8a382fd
+
+## Report
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に channel 判定層を実装しました。
+
+追加した内容:
+
+```lean
+def IsInheritanceChannel
+def IsPetalChannel
+```
+
+基本補題:
+
+```lean
+theorem isInheritanceChannel_iff_channel_eq_zero
+theorem isPetalChannel_iff_channel_pos
+theorem not_isPetalChannel_of_isInheritanceChannel
+theorem isPetalChannel_of_not_isInheritanceChannel
+```
+
+outer address 側の補題:
+
+```lean
+theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
+theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
+theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
+theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
+theorem outerPetalAddress_channel_le_baseUnitCore
+```
+
+これで、1-based value `m` について、
+
+```text
+channel = 0  ↔  m ≤ blockSize
+```
+
+が Lean 上で固定されました。つまり「外側 block の最初に収まるなら inheritance/core channel」という読みが theorem になっています。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
+
+## Review
 
 うむ、これはかなり良い更新じゃ。
 今回の `333ce9...` で、Petal Address は「計算できる住所」から一歩進んで、 **意味を判定できる住所** になった。
@@ -443,3 +494,194 @@ channel = 0 → offset = m
 
 よいぞ、D.。
 今のこれは小さな住所録ではない。後で階乗やプリモリアルの森へ入るとき、迷子にならぬための地図じゃ。
+
+## Diff
+
+`````md
+````diff
+diff --git a/lean/dk_math/DkMath/Petal/Address.lean b/lean/dk_math/DkMath/Petal/Address.lean
+index 0150881c..57f70d79 100644
+--- a/lean/dk_math/DkMath/Petal/Address.lean
++++ b/lean/dk_math/DkMath/Petal/Address.lean
+@@ -40,6 +40,14 @@ structure PetalAddress where
+   offset : Nat
+ deriving Repr, DecidableEq
+ 
++/-- The inheritance/core channel is channel `0`. -/
++def IsInheritanceChannel (A : PetalAddress) : Prop :=
++  A.channel = 0
++
++/-- Petal channels are the positive channels. -/
++def IsPetalChannel (A : PetalAddress) : Prop :=
++  0 < A.channel
++
+ /--
+ Outer one-step address of a one-based value `m`.
+ 
+@@ -81,6 +89,32 @@ theorem outerPetalAddress_lap (n lap m : Nat) :
+     (outerPetalAddress n lap m).lap = lap := by
+   rfl
+ 
++/-- The address is in the inheritance/core channel exactly when its channel is zero. -/
++theorem isInheritanceChannel_iff_channel_eq_zero (A : PetalAddress) :
++    IsInheritanceChannel A ↔ A.channel = 0 := by
++  rfl
++
++/-- The address is in a Petal channel exactly when its channel is positive. -/
++theorem isPetalChannel_iff_channel_pos (A : PetalAddress) :
++    IsPetalChannel A ↔ 0 < A.channel := by
++  rfl
++
++/-- No address can be both inheritance/core and Petal. -/
++theorem not_isPetalChannel_of_isInheritanceChannel {A : PetalAddress}
++    (hA : IsInheritanceChannel A) :
++    ¬ IsPetalChannel A := by
++  intro hP
++  unfold IsInheritanceChannel at hA
++  unfold IsPetalChannel at hP
++  rw [hA] at hP
++  exact Nat.not_lt_zero _ hP
++
++/-- A non-inheritance address is a Petal channel. -/
++theorem isPetalChannel_of_not_isInheritanceChannel {A : PetalAddress}
++    (hA : ¬ IsInheritanceChannel A) :
++    IsPetalChannel A := by
++  exact Nat.pos_of_ne_zero hA
++
+ /-- The offset of an outer address is always positive. -/
+ theorem outerPetalAddress_offset_pos
+     {n lap m : Nat} :
+@@ -115,5 +149,74 @@ theorem outerPetalAddress_channel_lt_lapBase
+   rw [outerPetalAddress, relPetalBlockSize_succ]
+   exact Nat.div_lt_of_lt_mul hsub_lt
+ 
++/--
++The outer address lands in channel `0` exactly when the zero-based position
++`m - 1` is still inside the first outer block.
++-/
++theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
++    {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
++    (outerPetalAddress n lap m).channel = 0 ↔
++      m - 1 < relPetalBlockSize n lap := by
++  rw [outerPetalAddress]
++  constructor
++  · intro h
++    by_contra hlt
++    have hle : relPetalBlockSize n lap ≤ m - 1 := Nat.le_of_not_gt hlt
++    have hdiv_pos : 0 < (m - 1) / relPetalBlockSize n lap :=
++      Nat.div_pos hle hb
++    change (m - 1) / relPetalBlockSize n lap = 0 at h
++    rw [h] at hdiv_pos
++    exact Nat.not_lt_zero _ hdiv_pos
++  · intro h
++    exact Nat.div_eq_of_lt h
++
++/--
++For a one-based value, channel `0` is equivalent to staying within the first
++outer block.
++-/
++theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
++    {n lap m : Nat} (hm : 1 ≤ m) (hb : 0 < relPetalBlockSize n lap) :
++    (outerPetalAddress n lap m).channel = 0 ↔
++      m ≤ relPetalBlockSize n lap := by
++  rw [outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize hb]
++  constructor
++  · intro h
++    exact Nat.le_of_pred_lt h
++  · intro h
++    exact Nat.sub_one_lt_of_le hm h
++
++/-- The inheritance/core predicate for an outer address is the channel-zero test. -/
++theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
++    {n lap m : Nat} (hm : 1 ≤ m) (hb : 0 < relPetalBlockSize n lap) :
++    IsInheritanceChannel (outerPetalAddress n lap m) ↔
++      m ≤ relPetalBlockSize n lap := by
++  exact outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb
++
++/-- If a valid one-based value is past the first block, it is in a Petal channel. -/
++theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
++    {n lap m : Nat}
++    (hb : 0 < relPetalBlockSize n lap)
++    (hbm : relPetalBlockSize n lap < m) :
++    IsPetalChannel (outerPetalAddress n lap m) := by
++  apply isPetalChannel_of_not_isInheritanceChannel
++  intro h0
++  have hm : 1 ≤ m := Nat.succ_le_of_lt (lt_of_le_of_lt (Nat.zero_le _) hbm)
++  have hle :
++      m ≤ relPetalBlockSize n lap :=
++    (outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb).1 h0
++  exact (not_lt_of_ge hle) hbm
++
++/-- A bounded channel is at most the base unit core. -/
++theorem outerPetalAddress_channel_le_baseUnitCore
++    {n lap m : Nat}
++    (hlap : 0 < lap)
++    (hm : 1 ≤ m)
++    (hbound : m ≤ relPetalTotal n lap) :
++    (outerPetalAddress n lap m).channel ≤ baseUnitCore n := by
++  have hlt := outerPetalAddress_channel_lt_lapBase
++    (n := n) (lap := lap) (m := m) hlap hm hbound
++  rw [lapBase_eq_succ] at hlt
++  simpa [baseUnitCore] using Nat.lt_succ_iff.mp hlt
++
+ end Petal
+ end DkMath
+diff --git a/lean/dk_math/docs/dev/das-p2l-260607/History.md b/lean/dk_math/docs/dev/das-p2l-260607/History.md
+index 1cc4ccc5..3707e9c2 100644
+--- a/lean/dk_math/docs/dev/das-p2l-260607/History.md
++++ b/lean/dk_math/docs/dev/das-p2l-260607/History.md
+@@ -1288,3 +1288,52 @@ git diff --check
+ ```
+ 
+ すべて成功です。
++
++### 2026/06/10  7:00
++
++[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に channel 判定層を実装しました。
++
++追加した内容:
++
++```lean
++def IsInheritanceChannel
++def IsPetalChannel
++```
++
++基本補題:
++
++```lean
++theorem isInheritanceChannel_iff_channel_eq_zero
++theorem isPetalChannel_iff_channel_pos
++theorem not_isPetalChannel_of_isInheritanceChannel
++theorem isPetalChannel_of_not_isInheritanceChannel
++```
++
++outer address 側の補題:
++
++```lean
++theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
++theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
++theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
++theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
++theorem outerPetalAddress_channel_le_baseUnitCore
++```
++
++これで、1-based value `m` について、
++
++```text
++channel = 0  ↔  m ≤ blockSize
++```
++
++が Lean 上で固定されました。つまり「外側 block の最初に収まるなら inheritance/core channel」という読みが theorem になっています。
++
++検証:
++
++```text
++lake build DkMath.Petal.Address
++lake build DkMath.Petal
++lake build DkMath
++git diff --check
++```
++
++すべて成功です。
+````
+`````
