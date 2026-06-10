@@ -1384,3 +1384,40 @@ git diff --check
 ```
 
 すべて成功です。
+
+### 2026/06/11  2:08
+
+[Address.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Petal/Address.lean) に review 指定の次 theorem を実装しました。
+
+追加:
+
+```lean
+theorem outerPetalRemainder_le_prevTotal_of_valid
+```
+
+valid な `m` について、remainder が前段 lap total に収まることを固定しました。nested address の次段へ渡すための名前付き補題です。
+
+```lean
+theorem outerPetalAddress_decompose
+```
+
+one-based value に対する分解式を固定しました。
+
+```lean
+m =
+  (outerPetalAddress n lap m).channel * relPetalBlockSize n lap
+    + outerPetalRemainder n lap m
+```
+
+注意点として、これは `m = 0` では偽なので、定理には `1 ≤ m` を仮定に入れています。`blockSize` の正値仮定は不要でした。`blockSize = 0` でも one-based remainder の定義により分解式自体は成立します。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
