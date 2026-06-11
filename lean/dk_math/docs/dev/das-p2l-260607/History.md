@@ -1572,3 +1572,27 @@ git diff --check
 ```
 
 既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/12  0:49
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に review-petal-010 の checkpoint を追加しました。
+
+追加した補題:
+
+- `dynamicOrbitTotal_base_dvd_of_lt`
+  - `i < k` なら、`b i ∣ dynamicOrbitTotal b k`
+- `primeBaseOrbitTotal_base_dvd_of_lt`
+  - prime-base orbit 側の alias
+- `primeBaseOrbitTotal_prime_dvd_of_lt`
+  - `IsPrimeBaseSequence` の解釈を保持した版
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功しています。全体ビルドでは既存の `sorry` warning は出ていますが、今回追加箇所による失敗はありません。
