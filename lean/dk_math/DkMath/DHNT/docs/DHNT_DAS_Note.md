@@ -2030,3 +2030,49 @@ Phase 5: Zsigmondy preparation
 ```
 
 次にやるなら、実験設計書を更新して、タイトルを例えば **“S0/GN Anchor Phase: Remaining Reduced-Support Experiment”** のように変え、完了済み bridge を明記したうえで、残タスクを `DkMath.Petal.ReducedSupport` 候補に絞るのが良いです。
+
+### 現状の残タスク
+
+了解。残タスクはこの2段で整理できます。
+
+**Next 1: 小総括 docs**
+
+- `Petal-Overview.md` または `FLGNB-PetalRoadmap.md` に、今回の `GcdBridge / PadicBridge / PrimitiveBridge` を「Zsigmondy preparation 実装済み」として追記。
+- これは docs-only。先にやると現在地が見えやすくなります。
+
+**Next 2: PrimitiveBridge の使いやすい projection**
+追加候補:
+
+```lean
+theorem exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
+```
+
+これは `exists_primitiveOnS0_of_not_three_dvd_sub` から取り出すだけなので軽いです。`PrimitiveOnS0` を知らない caller 向けの Petal-facing theorem としてかなり良い。
+
+**Next 3: ReducedSupport**
+次の本線候補:
+
+```text
+lean/dk_math/DkMath/Petal/ReducedSupport.lean
+```
+
+最小 API:
+
+```lean
+def HasNoPrimeBelow (r n : ℕ) : Prop :=
+  ∀ p, p.Prime → p < r → ¬ p ∣ n
+
+def HasAnchorPrime (r n : ℕ) : Prop :=
+  r.Prime ∧ r ∣ n ∧ HasNoPrimeBelow r n
+
+theorem hasAnchorPrime_prime
+theorem hasAnchorPrime_anchor_dvd
+theorem hasAnchorPrime_no_smaller_prime
+```
+
+ここはまだ `S0` / `GN` を import せず、carrier の支配的最小素因子だけを固定するのが良いです。
+
+進める順番としては、私は **PrimitiveBridge projection を先に1本入れて、その後 `ReducedSupport.lean` を新設** が良いと思います。docs はその後に「実装済み」としてまとめるとズレが少ないです。
