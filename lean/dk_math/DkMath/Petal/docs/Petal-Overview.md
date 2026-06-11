@@ -154,6 +154,12 @@ CoreUnit
 
 Connects the degree-three Petal face to the GN kernel.
 
+Reference note:
+
+```text
+docs/explanation/S0_cubic_petal_kernel.md
+```
+
 Important names:
 
 ```lean
