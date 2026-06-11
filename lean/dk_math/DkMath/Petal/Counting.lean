@@ -298,6 +298,20 @@ theorem IsStrictPrimeBaseSequence.distinct
     IsDistinctPrimeBaseSequence p :=
   ⟨hp.1, hp.injective⟩
 
+/-- Earlier laps have smaller bases in a strict prime-base sequence. -/
+theorem IsStrictPrimeBaseSequence.base_lt_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i < p j :=
+  hp.strictMono hij
+
+/-- Earlier and later laps in a strict prime-base sequence have different bases. -/
+theorem IsStrictPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j :=
+  hp.distinct.ne_of_lt hij
+
 /-- The dynamic Petal total at zero laps is the initial base unit core. -/
 theorem dynamicPetalTotal_zero (a : Nat → Nat) :
     dynamicPetalTotal a 0 = a 0 := by
