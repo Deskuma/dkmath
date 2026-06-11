@@ -1446,3 +1446,20 @@ git diff --check
 ```
 
 `lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 21:14
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:374) のみです。
+
+追加したのは `nestedPetalAddress` の最小基盤です。outermost lap から innermost lap へ、`outerPetalRemainder` を渡しながら `List PetalAddress` を作ります。あわせて `zero`、`succ`、`head?`、`tail`、`length` の基本補題と、五角例 `nestedPetalAddress 5 2 25 = [...]` を固定しました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
