@@ -81,6 +81,33 @@ theorem dynamicOrbitTotal_succ (b : Nat → Nat) (k : Nat) :
     dynamicOrbitTotal b (k + 1) = dynamicOrbitTotal b k * b k := by
   simp [dynamicOrbitTotal, Finset.prod_range_succ]
 
+/-- A dynamic orbit prefix product divides the next prefix product. -/
+theorem dynamicOrbitTotal_dvd_succ
+    (b : Nat → Nat) (k : Nat) :
+    dynamicOrbitTotal b k ∣ dynamicOrbitTotal b (k + 1) := by
+  rw [dynamicOrbitTotal_succ]
+  exact Nat.dvd_mul_right _ _
+
+/--
+Dynamic orbit prefix products are monotone for divisibility.
+
+If `k ≤ l`, then every factor already present at lap `k` is still present in
+the longer prefix product at lap `l`.
+-/
+theorem dynamicOrbitTotal_dvd_of_le
+    (b : Nat → Nat) {k l : Nat} (hkl : k ≤ l) :
+    dynamicOrbitTotal b k ∣ dynamicOrbitTotal b l := by
+  obtain ⟨t, rfl⟩ := Nat.exists_eq_add_of_le hkl
+  have hstep : ∀ t : Nat, dynamicOrbitTotal b k ∣ dynamicOrbitTotal b (k + t) := by
+    intro t
+    induction t with
+    | zero =>
+        simp
+    | succ t ih =>
+        exact Nat.dvd_trans ih (by
+          simpa [Nat.add_assoc] using dynamicOrbitTotal_dvd_succ b (k + t))
+  exact hstep t
+
 /-- A constant dynamic orbit is an ordinary power. -/
 theorem dynamicOrbitTotal_const (b k : Nat) :
     dynamicOrbitTotal (fun _ => b) k = b ^ k := by
@@ -142,6 +169,16 @@ theorem primeBaseOrbitTotal_dvd_succ
     primeBaseOrbitTotal p k ∣ primeBaseOrbitTotal p (k + 1) := by
   rw [primeBaseOrbitTotal_succ]
   exact Nat.dvd_mul_right _ _
+
+/--
+Prime-base orbit prefix products are monotone for divisibility.
+
+This is the prime-base alias of `dynamicOrbitTotal_dvd_of_le`.
+-/
+theorem primeBaseOrbitTotal_dvd_of_le
+    (p : Nat → Nat) {k l : Nat} (hkl : k ≤ l) :
+    primeBaseOrbitTotal p k ∣ primeBaseOrbitTotal p l := by
+  exact dynamicOrbitTotal_dvd_of_le p hkl
 
 /--
 The next base divides the next prime-base prefix product.
