@@ -1546,3 +1546,29 @@ git diff --check
 ```
 
 既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/12  0:38
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:131) のみです。
+
+追加したのは prime-base orbit の基本可除性です。
+
+- `primeBaseOrbitTotal_dvd_succ`
+  - `primeBaseOrbitTotal p k ∣ primeBaseOrbitTotal p (k + 1)`
+  - prefix product が次の prefix product を割ることを固定
+- `primeBaseOrbitTotal_nextPrime_dvd_succ`
+  - `IsPrimeBaseSequence p` のもとで `p k ∣ primeBaseOrbitTotal p (k + 1)`
+  - 素数列 orbit の次 base が次段 product に含まれることを固定
+
+まだ distinct / strict prime sequence は入れていません。まずは抽象 prime-base prefix product の骨格だけを固めました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
