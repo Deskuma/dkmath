@@ -367,6 +367,63 @@ theorem outerPetalAddress_five_inner_after_two_twentyfive :
       { lap := 1, channel := 4, offset := 5 } := by
   decide
 
+/--
+Nested Petal address obtained by repeatedly descending through outer
+remainders.
+
+The list is ordered from the outermost lap to the innermost lap.
+-/
+def nestedPetalAddress (n : Nat) : Nat → Nat → List PetalAddress
+  | 0, _ => []
+  | lap + 1, m =>
+      let A := outerPetalAddress n (lap + 1) m
+      A :: nestedPetalAddress n lap (outerPetalRemainder n (lap + 1) m)
+
+/-- The nested address at lap zero is empty. -/
+theorem nestedPetalAddress_zero (n m : Nat) :
+    nestedPetalAddress n 0 m = [] := by
+  rfl
+
+/-- One unfolding step for a positive nested address. -/
+theorem nestedPetalAddress_succ (n lap m : Nat) :
+    nestedPetalAddress n (lap + 1) m =
+      outerPetalAddress n (lap + 1) m ::
+        nestedPetalAddress n lap (outerPetalRemainder n (lap + 1) m) := by
+  rfl
+
+/-- The first component of a positive nested address is the outer address. -/
+theorem nestedPetalAddress_head?_succ (n lap m : Nat) :
+    (nestedPetalAddress n (lap + 1) m).head? =
+      some (outerPetalAddress n (lap + 1) m) := by
+  rw [nestedPetalAddress_succ]
+  rfl
+
+/-- The tail of a positive nested address is the nested address of the remainder. -/
+theorem nestedPetalAddress_tail_succ (n lap m : Nat) :
+    (nestedPetalAddress n (lap + 1) m).tail =
+      nestedPetalAddress n lap (outerPetalRemainder n (lap + 1) m) := by
+  rw [nestedPetalAddress_succ]
+  rfl
+
+/-- Nested addresses have one component for each lap. -/
+theorem nestedPetalAddress_length (n lap m : Nat) :
+    (nestedPetalAddress n lap m).length = lap := by
+  induction lap generalizing m with
+  | zero =>
+      rfl
+  | succ lap ih =>
+      rw [nestedPetalAddress_succ]
+      simp [ih]
+
+/-- The pentagonal nested address of `25` at lap `2`. -/
+theorem nestedPetalAddress_five_two_twentyfive :
+    nestedPetalAddress 5 2 25 =
+      [
+        { lap := 2, channel := 0, offset := 25 },
+        { lap := 1, channel := 4, offset := 5 }
+      ] := by
+  decide
+
 /-- A bounded channel is at most the base unit core. -/
 theorem outerPetalAddress_channel_le_baseUnitCore
     {n lap m : Nat}
