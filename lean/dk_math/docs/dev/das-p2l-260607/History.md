@@ -1463,3 +1463,25 @@ git diff --check
 ```
 
 `lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 21:22
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:302) のみです。
+
+追加した主補題は `outerPetalRemainder_valid_for_prevTotal` です。valid な one-based 入力 `1 ≤ m ≤ relPetalTotal n lap` が positive lap で読まれたとき、remainder が次の inner lap の valid value になることを `1 ≤ remainder ∧ remainder ≤ relPetalTotal n (lap - 1)` として束ねました。
+
+あわせて nested list 側に軽い観測補題を足しました。
+
+- `nestedPetalAddress_ne_nil_of_pos`
+- `nestedPetalAddress_head?_eq_none_iff_lap_zero`
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` の既存 `sorry` warning は残っていますが、今回の変更による失敗や新規 warning はありません。
