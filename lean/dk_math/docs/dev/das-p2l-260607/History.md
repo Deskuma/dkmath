@@ -1596,3 +1596,27 @@ git diff --check
 - `lake build DkMath`
 
 すべて成功しています。全体ビルドでは既存の `sorry` warning は出ていますが、今回追加箇所による失敗はありません。
+
+### 2026/06/12  1:39
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に prefix product の可除性単調性を追加しました。
+
+追加した補題:
+
+- `dynamicOrbitTotal_dvd_succ`
+  - `dynamicOrbitTotal b k ∣ dynamicOrbitTotal b (k + 1)`
+- `dynamicOrbitTotal_dvd_of_le`
+  - `k ≤ l` なら `dynamicOrbitTotal b k ∣ dynamicOrbitTotal b l`
+- `primeBaseOrbitTotal_dvd_of_le`
+  - prime-base orbit 側の alias
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning は全体ビルドで出ていますが、今回追加分は問題ありません。
