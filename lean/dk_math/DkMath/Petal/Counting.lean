@@ -91,6 +91,49 @@ theorem dynamicOrbitTotal_const (b k : Nat) :
       rw [dynamicOrbitTotal_succ, ih]
       rw [pow_succ]
 
+/--
+Factorial orbit.
+
+The dynamic orbit with lap base `i + 1` is the ordinary factorial.
+-/
+theorem dynamicOrbitTotal_succIndex_eq_factorial (k : Nat) :
+    dynamicOrbitTotal (fun i => i + 1) k = Nat.factorial k := by
+  induction k with
+  | zero =>
+      simp [dynamicOrbitTotal_zero]
+  | succ k ih =>
+      rw [dynamicOrbitTotal_succ, ih, Nat.factorial_succ]
+      rw [Nat.mul_comm]
+
+/--
+Abstract prime-base orbit total.
+
+This is a thin Petal-facing name for a dynamic orbit whose bases are intended
+to be prime values.  The concrete prime sequence is kept abstract here.
+-/
+def primeBaseOrbitTotal (p : Nat → Nat) (k : Nat) : Nat :=
+  dynamicOrbitTotal p k
+
+/-- A prime-base sequence assigns a prime base to every lap. -/
+def IsPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  ∀ i, Nat.Prime (p i)
+
+/-- The prime-base orbit at zero laps is empty-product `1`. -/
+theorem primeBaseOrbitTotal_zero (p : Nat → Nat) :
+    primeBaseOrbitTotal p 0 = 1 := by
+  simp [primeBaseOrbitTotal, dynamicOrbitTotal_zero]
+
+/-- One more abstract prime-base lap multiplies by the next prime base. -/
+theorem primeBaseOrbitTotal_succ (p : Nat → Nat) (k : Nat) :
+    primeBaseOrbitTotal p (k + 1) = primeBaseOrbitTotal p k * p k := by
+  simp [primeBaseOrbitTotal, dynamicOrbitTotal_succ]
+
+/-- A prime-base sequence supplies a prime at each lap. -/
+theorem IsPrimeBaseSequence.prime_at
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p) (i : Nat) :
+    Nat.Prime (p i) :=
+  hp i
+
 /-- The dynamic Petal total at zero laps is the initial base unit core. -/
 theorem dynamicPetalTotal_zero (a : Nat → Nat) :
     dynamicPetalTotal a 0 = a 0 := by
