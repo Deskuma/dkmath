@@ -1783,7 +1783,7 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 
 新規作成:
 
-- [Petal-Overview.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
   - `DkMath.Petal` の目的、Phase 4.5 と Phase 5 の間での位置づけ
   - Gamma 関数回避としての `dynamicOrbitTotal`
   - factorial / prime-base / strict prime-base orbit の意味
@@ -1792,11 +1792,11 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 
 更新:
 
-- [BinomialPrimeWeightedRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+- [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
   - `Phase 4.7: Petal dynamic counting and address layer` を追加
   - `AKSBridge v1 → Petal → Zsigmondy` の接続位置を明記
 
-- [FLGNB-PetalRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
   - 実装済み範囲を反映
   - `Counting` / `Address` の節を追加
   - 実装手順を `completed` / `planned` に整理
