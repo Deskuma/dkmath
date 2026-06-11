@@ -251,6 +251,21 @@ theorem IsDistinctPrimeBaseSequence.injective
     Function.Injective p :=
   hp.2
 
+/-- Different laps in a distinct prime-base sequence have different bases. -/
+theorem IsDistinctPrimeBaseSequence.ne_of_ne
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i ≠ j) :
+    p i ≠ p j := by
+  intro hpij
+  exact hij (hp.injective hpij)
+
+/-- Earlier and later laps in a distinct prime-base sequence have different bases. -/
+theorem IsDistinctPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j := by
+  exact hp.ne_of_ne (Nat.ne_of_lt hij)
+
 /-- The dynamic Petal total at zero laps is the initial base unit core. -/
 theorem dynamicPetalTotal_zero (a : Nat → Nat) :
     dynamicPetalTotal a 0 = a 0 := by
