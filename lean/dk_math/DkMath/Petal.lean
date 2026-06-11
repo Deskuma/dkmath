@@ -11,6 +11,9 @@ import DkMath.Petal.Forms
 import DkMath.Petal.RelPolygon
 import DkMath.Petal.CoreUnit
 import DkMath.Petal.GNBridge
+import DkMath.Petal.GcdBridge
+import DkMath.Petal.PadicBridge
+import DkMath.Petal.PrimitiveBridge
 
 #print "file: DkMath.Petal"
 
