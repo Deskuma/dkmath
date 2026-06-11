@@ -1776,3 +1776,70 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  3:04
+
+ドキュメント整理を実施しました。
+
+新規作成:
+
+- [Petal-Overview.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+  - `DkMath.Petal` の目的、Phase 4.5 と Phase 5 の間での位置づけ
+  - Gamma 関数回避としての `dynamicOrbitTotal`
+  - factorial / prime-base / strict prime-base orbit の意味
+  - `Counting`, `Address`, `GNBridge` の到達点
+  - 次候補として `GcdBridge`, primorial 接続, nested address 応用を整理
+
+更新:
+
+- [BinomialPrimeWeightedRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+  - `Phase 4.7: Petal dynamic counting and address layer` を追加
+  - `AKSBridge v1 → Petal → Zsigmondy` の接続位置を明記
+
+- [FLGNB-PetalRoadmap.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+  - 実装済み範囲を反映
+  - `Counting` / `Address` の節を追加
+  - 実装手順を `completed` / `planned` に整理
+  - 次の未実装候補を `GcdBridge`, `EisensteinBridge`, `AnalyticBridge` として明確化
+
+確認:
+
+- `git diff --check` 成功
+- 対象 Markdown の trailing whitespace 検査も問題なし
+- docs-only なので Lean build は実行していません
+
+`*-ja.md` は触れていません。
+
+---
+
+実装しました。
+
+追加したもの:
+
+- [GcdBridge.lean](/lean/dk_math/DkMath/Petal/GcdBridge.lean)
+  - `coprime_sub_right_of_coprime`
+  - `gcd_sub_S0_nat_eq_gcd_sub_three`
+  - `gcd_sub_S0_nat_dvd_three`
+  - `coprime_sub_S0_nat_of_coprime_of_not_dvd_three`
+
+- [PadicBridge.lean](/lean/dk_math/DkMath/Petal/PadicBridge.lean)
+  - `padicValNat_cube_sub_eq_padicValNat_S0_nat_of_not_dvd_sub`
+  - `padicValNat_three_cube_sub_eq_padicValNat_three_S0_nat_of_not_dvd_sub`
+
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean)
+  - `primitive_prime_dvd_S0_nat`
+  - `primitive_prime_padicValNat_cube_sub_eq_S0_nat`
+  - `primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub`
+  - `exists_primitiveOnS0_of_not_three_dvd_sub`
+
+集約入口 [Petal.lean](/lean/dk_math/DkMath/Petal.lean) にも import を追加済みです。
+
+確認:
+
+- `lake build DkMath.Petal.GcdBridge` 成功
+- `lake build DkMath.Petal.PadicBridge` 成功
+- `lake build DkMath.Petal.PrimitiveBridge` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+注意点として、ビルド中に既存の `DkMath.NumberTheory.ZsigmondyCyclotomicResearch` の `sorry` warning は出ていますが、今回追加した Petal bridge 自体には `sorry` はありません。
