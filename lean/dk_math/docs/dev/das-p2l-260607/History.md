@@ -1516,3 +1516,33 @@ git diff --check
 ```
 
 既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 23:55
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:96) のみです。
+
+追加した内容は、Dynamic Counting の拡張応用です。
+
+- `dynamicOrbitTotal_succIndex_eq_factorial`
+  - `dynamicOrbitTotal (fun i => i + 1) k = Nat.factorial k`
+  - 階乗を dynamic orbit の特殊ケースとして固定
+- `primeBaseOrbitTotal`
+  - 抽象 prime-base orbit の薄い Petal-facing alias
+- `IsPrimeBaseSequence`
+  - 各 lap base が素数であることを表す述語
+- `primeBaseOrbitTotal_zero`
+- `primeBaseOrbitTotal_succ`
+- `IsPrimeBaseSequence.prime_at`
+
+具体的な `nthPrime` や primorial の標準定義にはまだ接続せず、まず「素数列を入れた prefix product」という抽象層だけ固定しました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
