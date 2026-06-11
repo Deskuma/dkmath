@@ -209,6 +209,21 @@ theorem primeBaseOrbitTotal_prime_dvd_of_lt
   have _hp_i : Nat.Prime (p i) := hp i
   exact primeBaseOrbitTotal_base_dvd_of_lt p hi
 
+/--
+An already adopted prime base remains a divisor of every later prime-base
+prefix product.
+
+This packages the two prefix facts: adopted bases divide their current prefix,
+and prefix products are monotone for divisibility.
+-/
+theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p)
+    {i k l : Nat} (hi : i < k) (hkl : k ≤ l) :
+    p i ∣ primeBaseOrbitTotal p l := by
+  exact Nat.dvd_trans
+    (primeBaseOrbitTotal_prime_dvd_of_lt hp hi)
+    (primeBaseOrbitTotal_dvd_of_le p hkl)
+
 /-- A prime-base sequence supplies a prime at each lap. -/
 theorem IsPrimeBaseSequence.prime_at
     {p : Nat → Nat} (hp : IsPrimeBaseSequence p) (i : Nat) :
