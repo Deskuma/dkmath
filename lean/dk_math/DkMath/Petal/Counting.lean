@@ -128,6 +128,26 @@ theorem primeBaseOrbitTotal_succ (p : Nat → Nat) (k : Nat) :
     primeBaseOrbitTotal p (k + 1) = primeBaseOrbitTotal p k * p k := by
   simp [primeBaseOrbitTotal, dynamicOrbitTotal_succ]
 
+/-- A prime-base prefix product divides the next prefix product. -/
+theorem primeBaseOrbitTotal_dvd_succ
+    (p : Nat → Nat) (k : Nat) :
+    primeBaseOrbitTotal p k ∣ primeBaseOrbitTotal p (k + 1) := by
+  rw [primeBaseOrbitTotal_succ]
+  exact Nat.dvd_mul_right _ _
+
+/--
+The next base divides the next prime-base prefix product.
+
+The primality assumption records the intended interpretation of `p` as a
+prime-base sequence; the divisibility itself only uses the product structure.
+-/
+theorem primeBaseOrbitTotal_nextPrime_dvd_succ
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p) (k : Nat) :
+    p k ∣ primeBaseOrbitTotal p (k + 1) := by
+  have _hp_k : Nat.Prime (p k) := hp k
+  rw [primeBaseOrbitTotal_succ]
+  exact Nat.dvd_mul_left _ _
+
 /-- A prime-base sequence supplies a prime at each lap. -/
 theorem IsPrimeBaseSequence.prime_at
     {p : Nat → Nat} (hp : IsPrimeBaseSequence p) (i : Nat) :
