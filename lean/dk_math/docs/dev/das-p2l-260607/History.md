@@ -1485,3 +1485,294 @@ git diff --check
 ```
 
 `lake build DkMath` の既存 `sorry` warning は残っていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 23:50
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:60) のみです。
+
+追加した中核はこの3つです。
+
+- `dynamicOrbitTotal`
+- `dynamicPetalTotal`
+- `dynamicPetalTotal_const`
+
+あわせて、使いやすい基本補題も入れました。
+
+- `dynamicOrbitTotal_zero`
+- `dynamicOrbitTotal_succ`
+- `dynamicOrbitTotal_const`
+- `dynamicPetalTotal_zero`
+- `dynamicPetalTotal_succ`
+
+これで固定核の `relPetalTotal n k` が、動的核 `dynamicPetalTotal (fun _ => n) k` の特殊ケースとして Lean 上で固定されました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 23:55
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:96) のみです。
+
+追加した内容は、Dynamic Counting の拡張応用です。
+
+- `dynamicOrbitTotal_succIndex_eq_factorial`
+  - `dynamicOrbitTotal (fun i => i + 1) k = Nat.factorial k`
+  - 階乗を dynamic orbit の特殊ケースとして固定
+- `primeBaseOrbitTotal`
+  - 抽象 prime-base orbit の薄い Petal-facing alias
+- `IsPrimeBaseSequence`
+  - 各 lap base が素数であることを表す述語
+- `primeBaseOrbitTotal_zero`
+- `primeBaseOrbitTotal_succ`
+- `IsPrimeBaseSequence.prime_at`
+
+具体的な `nthPrime` や primorial の標準定義にはまだ接続せず、まず「素数列を入れた prefix product」という抽象層だけ固定しました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/12  0:38
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:131) のみです。
+
+追加したのは prime-base orbit の基本可除性です。
+
+- `primeBaseOrbitTotal_dvd_succ`
+  - `primeBaseOrbitTotal p k ∣ primeBaseOrbitTotal p (k + 1)`
+  - prefix product が次の prefix product を割ることを固定
+- `primeBaseOrbitTotal_nextPrime_dvd_succ`
+  - `IsPrimeBaseSequence p` のもとで `p k ∣ primeBaseOrbitTotal p (k + 1)`
+  - 素数列 orbit の次 base が次段 product に含まれることを固定
+
+まだ distinct / strict prime sequence は入れていません。まずは抽象 prime-base prefix product の骨格だけを固めました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/12  0:49
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に review-petal-010 の checkpoint を追加しました。
+
+追加した補題:
+
+- `dynamicOrbitTotal_base_dvd_of_lt`
+  - `i < k` なら、`b i ∣ dynamicOrbitTotal b k`
+- `primeBaseOrbitTotal_base_dvd_of_lt`
+  - prime-base orbit 側の alias
+- `primeBaseOrbitTotal_prime_dvd_of_lt`
+  - `IsPrimeBaseSequence` の解釈を保持した版
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功しています。全体ビルドでは既存の `sorry` warning は出ていますが、今回追加箇所による失敗はありません。
+
+### 2026/06/12  1:39
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に prefix product の可除性単調性を追加しました。
+
+追加した補題:
+
+- `dynamicOrbitTotal_dvd_succ`
+  - `dynamicOrbitTotal b k ∣ dynamicOrbitTotal b (k + 1)`
+- `dynamicOrbitTotal_dvd_of_le`
+  - `k ≤ l` なら `dynamicOrbitTotal b k ∣ dynamicOrbitTotal b l`
+- `primeBaseOrbitTotal_dvd_of_le`
+  - prime-base orbit 側の alias
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning は全体ビルドで出ていますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:43
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に、採用済み prime base が後段 prefix product にも残る橋補題を追加しました。
+
+```lean
+theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p)
+    {i k l : Nat} (hi : i < k) (hkl : k ≤ l) :
+    p i ∣ primeBaseOrbitTotal p l
+```
+
+中身は自然に、
+
+- `primeBaseOrbitTotal_prime_dvd_of_lt`
+- `primeBaseOrbitTotal_dvd_of_le`
+- `Nat.dvd_trans`
+
+を接続しています。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning は出ていますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:48
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に distinct prime-base sequence の入口を追加しました。
+
+追加内容:
+
+```lean
+def IsDistinctPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ Function.Injective p
+```
+
+projection 補題:
+
+- `IsDistinctPrimeBaseSequence.prime_at`
+- `IsDistinctPrimeBaseSequence.injective`
+
+これで「各 base は素数」「同じ素数 base を二度採用しない」を、順序までは要求せずに扱える土台ができました。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:52
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に distinct 性を実際に使う補題を追加しました。
+
+追加補題:
+
+```lean
+theorem IsDistinctPrimeBaseSequence.ne_of_ne
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i ≠ j) :
+    p i ≠ p j
+```
+
+```lean
+theorem IsDistinctPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j
+```
+
+これで「重複なし素数列」の意味が、実用補題として使える形になりました。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:57
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に strict prime-base sequence 層を追加しました。
+
+追加内容:
+
+```lean
+def IsStrictPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ StrictMono p
+```
+
+projection / bridge 補題:
+
+- `IsStrictPrimeBaseSequence.prime_at`
+- `IsStrictPrimeBaseSequence.strictMono`
+- `IsStrictPrimeBaseSequence.injective`
+- `IsStrictPrimeBaseSequence.distinct`
+
+これで `strict → injective → distinct` の橋が固定されました。標準プリモリアルや `nthPrime` 的な順序付き素数列へ接続する準備ができています。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  2:03
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に strict prime-base sequence の実用補題を追加しました。
+
+追加補題:
+
+```lean
+theorem IsStrictPrimeBaseSequence.base_lt_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i < p j
+```
+
+```lean
+theorem IsStrictPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j
+```
+
+これで strict 層から、大小関係と非重複性を直接取り出せます。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
