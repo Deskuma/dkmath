@@ -153,6 +153,15 @@ def primeBaseOrbitTotal (p : Nat → Nat) (k : Nat) : Nat :=
 def IsPrimeBaseSequence (p : Nat → Nat) : Prop :=
   ∀ i, Nat.Prime (p i)
 
+/--
+A distinct prime-base sequence assigns prime bases without repetition.
+
+This keeps the order of bases abstract; it only records primality and
+injectivity.
+-/
+def IsDistinctPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ Function.Injective p
+
 /-- The prime-base orbit at zero laps is empty-product `1`. -/
 theorem primeBaseOrbitTotal_zero (p : Nat → Nat) :
     primeBaseOrbitTotal p 0 = 1 := by
@@ -229,6 +238,18 @@ theorem IsPrimeBaseSequence.prime_at
     {p : Nat → Nat} (hp : IsPrimeBaseSequence p) (i : Nat) :
     Nat.Prime (p i) :=
   hp i
+
+/-- A distinct prime-base sequence supplies a prime at each lap. -/
+theorem IsDistinctPrimeBaseSequence.prime_at
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p) (i : Nat) :
+    Nat.Prime (p i) :=
+  hp.1 i
+
+/-- A distinct prime-base sequence is injective. -/
+theorem IsDistinctPrimeBaseSequence.injective
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p) :
+    Function.Injective p :=
+  hp.2
 
 /-- The dynamic Petal total at zero laps is the initial base unit core. -/
 theorem dynamicPetalTotal_zero (a : Nat → Nat) :
