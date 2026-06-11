@@ -1679,3 +1679,36 @@ projection 補題:
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:52
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に distinct 性を実際に使う補題を追加しました。
+
+追加補題:
+
+```lean
+theorem IsDistinctPrimeBaseSequence.ne_of_ne
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i ≠ j) :
+    p i ≠ p j
+```
+
+```lean
+theorem IsDistinctPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j
+```
+
+これで「重複なし素数列」の意味が、実用補題として使える形になりました。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
