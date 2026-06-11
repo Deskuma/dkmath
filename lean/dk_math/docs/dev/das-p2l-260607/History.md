@@ -1712,3 +1712,34 @@ theorem IsDistinctPrimeBaseSequence.ne_of_lt
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:57
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に strict prime-base sequence 層を追加しました。
+
+追加内容:
+
+```lean
+def IsStrictPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ StrictMono p
+```
+
+projection / bridge 補題:
+
+- `IsStrictPrimeBaseSequence.prime_at`
+- `IsStrictPrimeBaseSequence.strictMono`
+- `IsStrictPrimeBaseSequence.injective`
+- `IsStrictPrimeBaseSequence.distinct`
+
+これで `strict → injective → distinct` の橋が固定されました。標準プリモリアルや `nthPrime` 的な順序付き素数列へ接続する準備ができています。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
