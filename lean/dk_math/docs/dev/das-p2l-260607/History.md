@@ -1179,3 +1179,309 @@ git diff --check
 ```
 
 今回追加分に `sorry` はありません。
+
+### 2026/06/10  4:06
+
+Summary を新規作成しました。
+
+[FLGNB-FermatLittleGNBridge-Summary.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-FermatLittleGNBridge-Summary.md)
+
+整理した主軸は以下です。
+
+```text
+1. Fermat 小定理との接続点
+2. WeightedGNBridge の実装済み endpoint
+3. GN を主語にして Pascal を自然数断面として読む方針
+4. Dynamic Boundary-Beam Residue Principle の候補
+5. Gamma を急がず GN / powerKernel 既存補題を使う解析方針
+6. Relative Polygon / Petal 系の棚卸しが次 checkpoint
+7. PetalGNBridge と S0_nat への p=3 特化補題候補
+```
+
+`git diff --check` も通っています。
+
+### 2026/06/10  4:26
+
+[FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md) を新規作成しました。
+
+内容は、指定の軸に沿って整理しています。
+
+- 設計思想: `GN -> Petal / relative polygon -> Pascal -> prime-row -> primitive factor`
+- 実装計画・手順: `DkMath.Petal.*` の新設順序
+- 相対多角数 Petal 整備計画: `RelPolygon`, `S0/S1`, `termial`, `R(n)` の位置づけ
+- 既存定理 Bridge Link theorem 予定: `GN_three_sub_eq_S0_nat`、Fermat boundary から `S0_nat` へ渡す補題、GN gcd から Petal gcd への橋
+- 既存補題リスト: `UnitCycle.RelPolygon`, `FLT.PetalDetect`, `FLT.CosmicPetalBridge`, `NumberTheory.Gcd.GN`, `GEisensteinBridge` などを分類
+
+検証は `git diff --check` 済みです。 docs 追加のみなので Lean build は走らせていません。
+
+### 2026/06/10  4:45
+
+`DkMath.Petal.*` の土台を追加しました。
+
+追加した入口は以下です。
+
+- [DkMath/Petal.lean](/lean/dk_math/DkMath/Petal.lean)
+- [DkMath/Petal/Basic.lean](/lean/dk_math/DkMath/Petal/Basic.lean)
+- [DkMath/Petal/Forms.lean](/lean/dk_math/DkMath/Petal/Forms.lean)
+- [DkMath/Petal/RelPolygon.lean](/lean/dk_math/DkMath/Petal/RelPolygon.lean)
+- [DkMath/Petal/CoreUnit.lean](/lean/dk_math/DkMath/Petal/CoreUnit.lean)
+- [DkMath/Petal/GNBridge.lean](/lean/dk_math/DkMath/Petal/GNBridge.lean)
+
+実装した主な橋補題は `GNBridge` に置いています。
+
+```lean
+theorem S0_nat_eq_GN_three_sub
+theorem three_S0_nat_modEq_one_of_not_dvd_sub
+theorem three_not_dvd_S0_nat_of_not_dvd_sub
+```
+
+つまり、`GN 3 (c - b) b = S0_nat c b` を Petal 側の正向き API として固定し、さらに FLGNB の Fermat 境界補題から `3 ∤ c-b` のとき `S0_nat c b ≡ 1 [MOD 3]`、`3 ∤ S0_nat c b` まで繋ぎました。
+
+[DkMath.lean](/lean/dk_math/DkMath.lean) にも `import DkMath.Petal` を追加済みです。
+
+検証:
+
+```text
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功しています。
+
+### 2026/06/10  6:41
+
+Petal の基礎語彙を Lean 側に固定しました。今回は `GNBridge` へ進まず、設計ノートに沿って「数え上げ・住所・境界」の最小核を追加しています。
+
+追加:
+
+- [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean)
+  - `baseUnitCore`
+  - `inheritanceSlot`
+  - `lapBase`
+  - `relPetalTotal`
+  - `relPolygonKernel`
+  - `SameRelPetalOrbit`
+  - `R_5(0)=5`, `R_5(1)=30`, `R_5(2)=180`
+  - `5,30,180` が同じ Petal orbit 上にある補題
+
+- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean)
+  - `relPetalBlockSize`
+  - `PetalAddress`
+  - `outerPetalAddress`
+  - `channel 0 = inheritance/core channel`
+  - `channel 1..n = Petal channels`
+  - `outerPetalAddress 5 1 25 = { lap := 1, channel := 4, offset := 5 }`
+  - `outerPetalAddress 5 2 25 = { lap := 2, channel := 0, offset := 25 }`
+  - offset と channel の基本境界補題
+
+更新:
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean) に `Counting` / `Address` を追加 import
+
+検証:
+
+```text
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
+
+### 2026/06/10  7:00
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に channel 判定層を実装しました。
+
+追加した内容:
+
+```lean
+def IsInheritanceChannel
+def IsPetalChannel
+```
+
+基本補題:
+
+```lean
+theorem isInheritanceChannel_iff_channel_eq_zero
+theorem isPetalChannel_iff_channel_pos
+theorem not_isPetalChannel_of_isInheritanceChannel
+theorem isPetalChannel_of_not_isInheritanceChannel
+```
+
+outer address 側の補題:
+
+```lean
+theorem outerPetalAddress_channel_eq_zero_iff_sub_lt_blockSize
+theorem outerPetalAddress_channel_eq_zero_iff_le_blockSize
+theorem outerPetalAddress_isInheritanceChannel_iff_le_blockSize
+theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
+theorem outerPetalAddress_channel_le_baseUnitCore
+```
+
+これで、1-based value `m` について、
+
+```text
+channel = 0  ↔  m ≤ blockSize
+```
+
+が Lean 上で固定されました。つまり「外側 block の最初に収まるなら inheritance/core channel」という読みが theorem になっています。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
+
+### 2026/06/10  7:23
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に `outerPetalRemainder` 層を追加しました。
+
+追加した定義:
+
+```lean
+def outerPetalRemainder (n lap m : Nat) : Nat :=
+  (outerPetalAddress n lap m).offset
+```
+
+追加した補題:
+
+```lean
+theorem outerPetalRemainder_eq_offset
+theorem outerPetalRemainder_pos
+theorem outerPetalRemainder_le_blockSize
+theorem outerPetalRemainder_eq_self_of_le_blockSize
+theorem outerPetalRemainder_eq_self_of_isInheritanceChannel
+theorem outerPetalAddress_channel_zero_remainder_eq_self
+```
+
+これで review の推奨だった核心、
+
+```text
+channel = 0 -> offset = m
+```
+
+を固定できました。つまり Lean 上で、
+
+```text
+継承口に入った値は、そのまま inner lap へ降りる
+```
+
+と言える状態になっています。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
+
+### 2026/06/11  2:08
+
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に review 指定の次 theorem を実装しました。
+
+追加:
+
+```lean
+theorem outerPetalRemainder_le_prevTotal_of_valid
+```
+
+valid な `m` について、remainder が前段 lap total に収まることを固定しました。nested address の次段へ渡すための名前付き補題です。
+
+```lean
+theorem outerPetalAddress_decompose
+```
+
+one-based value に対する分解式を固定しました。
+
+```lean
+m =
+  (outerPetalAddress n lap m).channel * relPetalBlockSize n lap
+    + outerPetalRemainder n lap m
+```
+
+注意点として、これは `m = 0` では偽なので、定理には `1 ≤ m` を仮定に入れています。`blockSize` の正値仮定は不要でした。`blockSize = 0` でも one-based remainder の定義により分解式自体は成立します。
+
+検証:
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+すべて成功です。
+
+### 2026/06/11 21:05
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:336) のみです。
+
+追加内容は次の3本です。
+
+- `outerPetalAddress_decompose_sub_one`
+  - `m - 1 = channel * blockSize + (remainder - 1)` を固定
+  - 仮定なしで通りました
+- `outerPetalRemainder_five_two_twentyfive`
+  - lap 2 の `25` が remainder `25` として降りる具体例
+- `outerPetalAddress_five_inner_after_two_twentyfive`
+  - その remainder を lap 1 で読むと `{ channel := 4, offset := 5 }` になる nested 最小例
+
+検証も通っています。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 21:14
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:374) のみです。
+
+追加したのは `nestedPetalAddress` の最小基盤です。outermost lap から innermost lap へ、`outerPetalRemainder` を渡しながら `List PetalAddress` を作ります。あわせて `zero`、`succ`、`head?`、`tail`、`length` の基本補題と、五角例 `nestedPetalAddress 5 2 25 = [...]` を固定しました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 21:22
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:302) のみです。
+
+追加した主補題は `outerPetalRemainder_valid_for_prevTotal` です。valid な one-based 入力 `1 ≤ m ≤ relPetalTotal n lap` が positive lap で読まれたとき、remainder が次の inner lap の valid value になることを `1 ≤ remainder ∧ remainder ≤ relPetalTotal n (lap - 1)` として束ねました。
+
+あわせて nested list 側に軽い観測補題を足しました。
+
+- `nestedPetalAddress_ne_nil_of_pos`
+- `nestedPetalAddress_head?_eq_none_iff_lap_zero`
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` の既存 `sorry` warning は残っていますが、今回の変更による失敗や新規 warning はありません。

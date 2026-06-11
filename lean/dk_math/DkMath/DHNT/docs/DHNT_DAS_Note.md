@@ -1952,3 +1952,33 @@ p.Prime → InnerRowSupportPrime p p
 だけを証明するのが安全です。
 
 [DkMath-Nat_Prime](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/DkMath-Nat_Prime.md)
+
+### AKS → Zsigmondy
+
+はい。ここはかなり良い接続点です。
+
+現在の流れはこう整理できます。
+
+```text
+Phase 4.5: AKSBridge v1
+  X^r = 1
+  X^k = X^(k % r)
+  prime cyclic Frobenius
+
+Phase 4.6: Petal / GN bridge
+  GN 3 (c - b) b = S0_nat c b
+  GN prime boundary control
+  p ∤ x -> p ∤ GN p x u
+
+Phase 4.7: support / gcd bridge
+  GN の可除性制御を S0 / Petal 側へ移す
+  row prime と primitive prime を分離する
+
+Phase 5: Zsigmondy preparation
+  a^n - b^n = (a - b) * GN n (a - b) b
+  primitive prime factor を GN 側で捕まえる
+```
+
+特に重要なのは、AKSBridge が「巡回商で指数を畳む」道具を与え、Petal/GNBridge が「低次相で因子構造を見る」道具を与えることです。
+
+次の実装チェックポイントとしては、Roadmap に書いた通りまず `DkMath.Petal.*` の土台を作り、`S0_nat_eq_GN_three_sub` と `three_not_dvd_S0_nat_of_not_dvd_sub` あたりを固定するのが堅いです。そこが通ると、Zsigmondy 側へ渡す前の「Petal support theorem」層が作れます。
