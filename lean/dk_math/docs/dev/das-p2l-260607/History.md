@@ -1485,3 +1485,34 @@ git diff --check
 ```
 
 `lake build DkMath` の既存 `sorry` warning は残っていますが、今回の変更による失敗や新規 warning はありません。
+
+### 2026/06/11 23:50
+
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:60) のみです。
+
+追加した中核はこの3つです。
+
+- `dynamicOrbitTotal`
+- `dynamicPetalTotal`
+- `dynamicPetalTotal_const`
+
+あわせて、使いやすい基本補題も入れました。
+
+- `dynamicOrbitTotal_zero`
+- `dynamicOrbitTotal_succ`
+- `dynamicOrbitTotal_const`
+- `dynamicPetalTotal_zero`
+- `dynamicPetalTotal_succ`
+
+これで固定核の `relPetalTotal n k` が、動的核 `dynamicPetalTotal (fun _ => n) k` の特殊ケースとして Lean 上で固定されました。
+
+検証済みです。
+
+```text
+lake build DkMath.Petal.Counting
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
