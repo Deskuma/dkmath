@@ -1,5 +1,7 @@
 # FLGNB Petal ロードマップ
 
+[原本](./FLGNB-PetalRoadmap.md) - 2026/06/12  2:27 update [※日本語版は未反映！](#diff)
+
 ## 位置
 
 この文書は、
@@ -830,3 +832,472 @@ DkMath.Petalをビルドします。
 ```
 
 これによりステップは小さく抑えられますが、後の原始因子とジグモンディ対応の作業の基盤が構築されます。
+
+---
+
+## 英文版 Roadmap 未反映 差分
+
+## Diff
+
+`````md
+````diff
+diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
+index 3d575422..d73b619c 100644
+--- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
++++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
+@@ -28,6 +28,29 @@ GN difference kernel
+ `DkMath.Petal.*` should become the package where the Petal side of this route is
+ made visible.
+ 
++Current status:
++
++```text
++Petal import surface: implemented
++Petal GN bridge: implemented for the degree-three S0 face
++Petal counting layer: implemented
++Petal address layer: implemented
++Dynamic / factorial / prime-base orbit layer: implemented
++Distinct / strict prime-base sequence layer: implemented
++```
++
++This places Petal as the bridge layer between:
++
++```text
++Phase 4.5: AKSBridge v1
++Phase 5: Zsigmondy preparation
++```
++
++The reason for this intermediate layer is that the project wants a
++factorial-like and primorial-like counting surface without committing the next
++step to Gamma-function continuation.  Petal counting keeps the construction
++inside natural-number products and divisibility first.
++
+ ## Design Principle
+ 
+ The Petal package should describe the relative polygon layer, not replace the
+@@ -363,7 +386,7 @@ This should be a bridge layer, not the initial foundation.
+ 
+ ## Petal Package Plan
+ 
+-Create the package in small steps:
++The package is being built in small steps.  The current surface is:
+ 
+ ```text
+ DkMath/Petal/Basic.lean
+@@ -371,11 +394,34 @@ DkMath/Petal/Forms.lean
+ DkMath/Petal/RelPolygon.lean
+ DkMath/Petal/CoreUnit.lean
+ DkMath/Petal/GNBridge.lean
++DkMath/Petal/Counting.lean
++DkMath/Petal/Address.lean
+ DkMath/Petal/GcdBridge.lean
+ DkMath/Petal/EisensteinBridge.lean
+ DkMath/Petal.lean
+ ```
+ 
++Implemented:
++
++```text
++DkMath/Petal/Basic.lean
++DkMath/Petal/Forms.lean
++DkMath/Petal/RelPolygon.lean
++DkMath/Petal/CoreUnit.lean
++DkMath/Petal/GNBridge.lean
++DkMath/Petal/Counting.lean
++DkMath/Petal/Address.lean
++DkMath/Petal.lean
++```
++
++Still planned:
++
++```text
++DkMath/Petal/GcdBridge.lean
++DkMath/Petal/EisensteinBridge.lean
++DkMath/Petal/AnalyticBridge.lean
++```
++
+ ### `DkMath.Petal.Basic`
+ 
+ Purpose:
+@@ -523,6 +569,152 @@ Fermat boundary return
+ 
+ becomes a reusable bridge theorem.
+ 
++Current status:
++
++```text
++implemented
++```
++
++Implemented names:
++
++```lean
++theorem S0_nat_eq_GN_three_sub
++theorem three_S0_nat_modEq_one_of_not_dvd_sub
++theorem three_not_dvd_S0_nat_of_not_dvd_sub
++```
++
++### `DkMath.Petal.Counting`
++
++Purpose:
++
++```text
++fixed Petal totals, dynamic orbit products, factorial orbit,
++and abstract prime-base prefix products
++```
++
++Current status:
++
++```text
++implemented
++```
++
++Implemented fixed and dynamic names:
++
++```lean
++def baseUnitCore
++def inheritanceSlot
++def lapBase
++def relPetalTotal
++def relPolygonKernel
++def dynamicOrbitTotal
++def dynamicPetalTotal
++```
++
++Implemented factorial and const bridges:
++
++```lean
++theorem dynamicOrbitTotal_const
++theorem dynamicOrbitTotal_succIndex_eq_factorial
++theorem dynamicPetalTotal_const
++```
++
++Implemented divisibility facts:
++
++```lean
++theorem dynamicOrbitTotal_base_dvd_of_lt
++theorem dynamicOrbitTotal_dvd_succ
++theorem dynamicOrbitTotal_dvd_of_le
++```
++
++Implemented prime-base orbit:
++
++```lean
++def primeBaseOrbitTotal
++def IsPrimeBaseSequence
++def IsDistinctPrimeBaseSequence
++def IsStrictPrimeBaseSequence
++```
++
++Implemented prime-base persistence:
++
++```lean
++theorem primeBaseOrbitTotal_base_dvd_of_lt
++theorem primeBaseOrbitTotal_prime_dvd_of_lt
++theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
++theorem primeBaseOrbitTotal_dvd_of_le
++```
++
++Implemented sequence API:
++
++```lean
++theorem IsPrimeBaseSequence.prime_at
++theorem IsDistinctPrimeBaseSequence.prime_at
++theorem IsDistinctPrimeBaseSequence.injective
++theorem IsDistinctPrimeBaseSequence.ne_of_ne
++theorem IsDistinctPrimeBaseSequence.ne_of_lt
++theorem IsStrictPrimeBaseSequence.prime_at
++theorem IsStrictPrimeBaseSequence.strictMono
++theorem IsStrictPrimeBaseSequence.injective
++theorem IsStrictPrimeBaseSequence.distinct
++theorem IsStrictPrimeBaseSequence.base_lt_of_lt
++theorem IsStrictPrimeBaseSequence.ne_of_lt
++```
++
++Role:
++
++```text
++avoid jumping directly to Gamma-function continuation;
++first express factorial-like and primorial-like growth as prefix products
++with stable divisibility persistence theorems
++```
++
++### `DkMath.Petal.Address`
++
++Purpose:
++
++```text
++one-based Petal channel addressing and nested address observations
++```
++
++Current status:
++
++```text
++implemented
++```
++
++Implemented names:
++
++```lean
++def relPetalBlockSize
++structure PetalAddress
++def IsInheritanceChannel
++def IsPetalChannel
++def outerPetalAddress
++def outerPetalRemainder
++def nestedPetalAddress
++```
++
++Key theorems:
++
++```lean
++theorem outerPetalRemainder_le_prevTotal_of_valid
++theorem outerPetalRemainder_valid_for_prevTotal
++theorem outerPetalAddress_decompose
++theorem outerPetalAddress_decompose_sub_one
++theorem nestedPetalAddress_length
++theorem nestedPetalAddress_head?_eq_none_iff_lap_zero
++```
++
++Role:
++
++```text
++make a Petal layer address into quotient-remainder arithmetic:
++
++m = channel * blockSize + remainder
++```
++
++This gives a stable language for later nested channel observations.
++
+ ### `DkMath.Petal.GcdBridge`
+ 
+ Purpose:
+@@ -580,7 +772,13 @@ This layer is important, but should come after `GNBridge` and `GcdBridge`.
+ 
+ ### Step 1: Create the Petal import surface
+ 
+-Create:
++Status:
++
++```text
++completed
++```
++
++Implemented:
+ 
+ ```text
+ DkMath/Petal/Basic.lean
+@@ -600,7 +798,13 @@ lake build DkMath.Petal
+ 
+ ### Step 2: Add `DkMath.Petal.GNBridge`
+ 
+-Create the first Petal bridge theorem group:
++Status:
++
++```text
++completed
++```
++
++Implemented the first Petal bridge theorem group:
+ 
+ ```lean
+ theorem S0_nat_eq_GN_three_sub
+@@ -622,7 +826,68 @@ lake build DkMath.Petal.GNBridge
+ lake build DkMath.Petal
+ ```
+ 
+-### Step 3: Add `DkMath.Petal.GcdBridge`
++### Step 3: Add `DkMath.Petal.Counting`
++
++Status:
++
++```text
++completed
++```
++
++This step was added after the original roadmap because the project needed a
++factorial-like and primorial-like prefix-product layer before moving to
++Zsigmondy.
++
++Implemented:
++
++```text
++fixed Petal totals
++dynamic orbit products
++factorial orbit bridge
++prime-base prefix products
++prime / distinct / strict prime-base sequence predicates
++factor persistence across later prefix products
++```
++
++Expected validation:
++
++```sh
++lake build DkMath.Petal.Counting
++lake build DkMath.Petal
++```
++
++### Step 4: Add `DkMath.Petal.Address`
++
++Status:
++
++```text
++completed
++```
++
++This step fixes the one-based Petal channel address system and its
++quotient-remainder decomposition.
++
++Implemented:
++
++```lean
++theorem outerPetalAddress_decompose
++theorem outerPetalAddress_decompose_sub_one
++```
++
++Expected validation:
++
++```sh
++lake build DkMath.Petal.Address
++lake build DkMath.Petal
++```
++
++### Step 5: Add `DkMath.Petal.GcdBridge`
++
++Status:
++
++```text
++planned
++```
+ 
+ Transfer the existing GN gcd statements to S0-facing names.
+ 
+@@ -635,7 +900,13 @@ GN_three_sub_eq_S0_nat
+ This step should not invent new gcd theory.  It should provide link theorem
+ names that downstream FLT and primitive-factor files can import.
+ 
+-### Step 4: Add `DkMath.Petal.EisensteinBridge`
++### Step 6: Add `DkMath.Petal.EisensteinBridge`
++
++Status:
++
++```text
++planned
++```
+ 
+ Expose the Eisenstein norm route as a Petal-facing bridge.
+ 
+@@ -647,7 +918,13 @@ GN 3
+   <-> Eisenstein norm
+ ```
+ 
+-### Step 5: Refactor imports gradually
++### Step 7: Refactor imports gradually
++
++Status:
++
++```text
++planned
++```
+ 
+ After the Petal bridge files build, downstream files may be updated to import
+ Petal-facing modules.
+diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
+index bac1a89e..d344dc34 100644
+--- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
++++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
+@@ -417,6 +417,92 @@ AKS cyclic quotient では X^r = 1 により指数が r 周期へ畳まれる。
+ これは、後で composite modulus の failure witness や、primitive prime divisor の
+ 発生境界を調べるための比較面になる。
+ 
++### Phase 4.7: Petal dynamic counting and address layer
++
++実装済み:
++
++```text
++DkMath.Petal
++DkMath.Petal.Counting
++DkMath.Petal.Address
++DkMath.Petal.GNBridge
++```
++
++記録:
++
++```text
++lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
++lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
++```
++
++目的:
++
++- Phase 4.5 の AKS cyclic observation から Phase 5 の Zsigmondy bridge へ進む前に、
++  Petal 側の counting / address / GN surface を固定する。
++- Gamma 関数による階乗連続化へ直接進まず、まず Lean 上で
++  factorial-like growth を `dynamicOrbitTotal` として抽象化する。
++- `n!`、固定 Petal total、prime-base prefix product を同じ prefix product の
++  可除性構造として読む。
++- primitive prime divisor を追う前段として、
++  「採用済み因子が後段 product に残る」ことを theorem 化する。
++
++主な API:
++
++```lean
++def dynamicOrbitTotal
++def dynamicPetalTotal
++def primeBaseOrbitTotal
++def IsPrimeBaseSequence
++def IsDistinctPrimeBaseSequence
++def IsStrictPrimeBaseSequence
++
++theorem dynamicOrbitTotal_succIndex_eq_factorial
++theorem dynamicOrbitTotal_base_dvd_of_lt
++theorem dynamicOrbitTotal_dvd_of_le
++theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
++theorem IsStrictPrimeBaseSequence.distinct
++theorem IsStrictPrimeBaseSequence.base_lt_of_lt
++```
++
++Petal address 側:
++
++```lean
++def outerPetalAddress
++def outerPetalRemainder
++def nestedPetalAddress
++
++theorem outerPetalAddress_decompose
++theorem outerPetalAddress_decompose_sub_one
++```
++
++GN bridge 側:
++
++```lean
++theorem S0_nat_eq_GN_three_sub
++theorem three_S0_nat_modEq_one_of_not_dvd_sub
++theorem three_not_dvd_S0_nat_of_not_dvd_sub
++```
++
++意味:
++
++```text
++AKSBridge v1:
++  prime row / Frobenius / cyclic quotient observation
++
++Petal Phase 4.7:
++  factorial and primorial-like prefix products
++  factor persistence
++  Petal quotient-remainder address
++  GN degree-three Petal face
++
++Phase 5:
++  primitive prime divisor / Zsigmondy bridge
++```
++
++これは Zsigmondy 本体ではない。
++Zsigmondy へ渡す前に、どの因子がどの orbit / channel / GN face に保存されるかを
++Lean 上で追うための道具である。
++
+ ### Phase 5: Zsigmondy への接続準備
+ 
+ 目標:
+````
+`````

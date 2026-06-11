@@ -417,6 +417,92 @@ AKS cyclic quotient では X^r = 1 により指数が r 周期へ畳まれる。
 これは、後で composite modulus の failure witness や、primitive prime divisor の
 発生境界を調べるための比較面になる。
 
+### Phase 4.7: Petal dynamic counting and address layer
+
+実装済み:
+
+```text
+DkMath.Petal
+DkMath.Petal.Counting
+DkMath.Petal.Address
+DkMath.Petal.GNBridge
+```
+
+記録:
+
+```text
+lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
+lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
+```
+
+目的:
+
+- Phase 4.5 の AKS cyclic observation から Phase 5 の Zsigmondy bridge へ進む前に、
+  Petal 側の counting / address / GN surface を固定する。
+- Gamma 関数による階乗連続化へ直接進まず、まず Lean 上で
+  factorial-like growth を `dynamicOrbitTotal` として抽象化する。
+- `n!`、固定 Petal total、prime-base prefix product を同じ prefix product の
+  可除性構造として読む。
+- primitive prime divisor を追う前段として、
+  「採用済み因子が後段 product に残る」ことを theorem 化する。
+
+主な API:
+
+```lean
+def dynamicOrbitTotal
+def dynamicPetalTotal
+def primeBaseOrbitTotal
+def IsPrimeBaseSequence
+def IsDistinctPrimeBaseSequence
+def IsStrictPrimeBaseSequence
+
+theorem dynamicOrbitTotal_succIndex_eq_factorial
+theorem dynamicOrbitTotal_base_dvd_of_lt
+theorem dynamicOrbitTotal_dvd_of_le
+theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
+theorem IsStrictPrimeBaseSequence.distinct
+theorem IsStrictPrimeBaseSequence.base_lt_of_lt
+```
+
+Petal address 側:
+
+```lean
+def outerPetalAddress
+def outerPetalRemainder
+def nestedPetalAddress
+
+theorem outerPetalAddress_decompose
+theorem outerPetalAddress_decompose_sub_one
+```
+
+GN bridge 側:
+
+```lean
+theorem S0_nat_eq_GN_three_sub
+theorem three_S0_nat_modEq_one_of_not_dvd_sub
+theorem three_not_dvd_S0_nat_of_not_dvd_sub
+```
+
+意味:
+
+```text
+AKSBridge v1:
+  prime row / Frobenius / cyclic quotient observation
+
+Petal Phase 4.7:
+  factorial and primorial-like prefix products
+  factor persistence
+  Petal quotient-remainder address
+  GN degree-three Petal face
+
+Phase 5:
+  primitive prime divisor / Zsigmondy bridge
+```
+
+これは Zsigmondy 本体ではない。
+Zsigmondy へ渡す前に、どの因子がどの orbit / channel / GN face に保存されるかを
+Lean 上で追うための道具である。
+
 ### Phase 5: Zsigmondy への接続準備
 
 目標:
