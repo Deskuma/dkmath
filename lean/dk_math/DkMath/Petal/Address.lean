@@ -299,6 +299,22 @@ theorem outerPetalRemainder_le_prevTotal_of_valid
       (n := n) (lap := k + 1) (m := m) (by simpa [relPetalBlockSize_succ] using hb_prev))
 
 /--
+For a valid one-based value in a positive lap, the outer remainder is a valid
+one-based value for the previous lap total.
+-/
+theorem outerPetalRemainder_valid_for_prevTotal
+    {n lap m : Nat}
+    (hlap : 0 < lap)
+    (hm : 1 ≤ m)
+    (hbound : m ≤ relPetalTotal n lap) :
+    1 ≤ outerPetalRemainder n lap m ∧
+      outerPetalRemainder n lap m ≤ relPetalTotal n (lap - 1) := by
+  exact ⟨
+    outerPetalRemainder_pos,
+    outerPetalRemainder_le_prevTotal_of_valid hlap hm hbound
+  ⟩
+
+/--
 One-step Petal address decomposition.
 
 For one-based values, the address is the usual quotient/remainder
@@ -414,6 +430,31 @@ theorem nestedPetalAddress_length (n lap m : Nat) :
   | succ lap ih =>
       rw [nestedPetalAddress_succ]
       simp [ih]
+
+/-- A positive-lap nested address is nonempty. -/
+theorem nestedPetalAddress_ne_nil_of_pos
+    {n lap m : Nat}
+    (hlap : 0 < lap) :
+    nestedPetalAddress n lap m ≠ [] := by
+  intro hnil
+  have hlen := congrArg List.length hnil
+  have hlap_zero : lap = 0 := by
+    simpa [nestedPetalAddress_length] using hlen
+  exact Nat.ne_of_gt hlap hlap_zero
+
+/-- A nested address has no head exactly at lap zero. -/
+theorem nestedPetalAddress_head?_eq_none_iff_lap_zero
+    (n lap m : Nat) :
+    (nestedPetalAddress n lap m).head? = none ↔ lap = 0 := by
+  constructor
+  · intro h
+    by_contra hpos
+    rcases Nat.exists_eq_succ_of_ne_zero hpos with ⟨k, rfl⟩
+    rw [nestedPetalAddress_head?_succ] at h
+    cases h
+  · intro h
+    rw [h, nestedPetalAddress_zero]
+    rfl
 
 /-- The pentagonal nested address of `25` at lap `2`. -/
 theorem nestedPetalAddress_five_two_twentyfive :
