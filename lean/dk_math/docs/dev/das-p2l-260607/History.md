@@ -1743,3 +1743,36 @@ projection / bridge 補題:
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  2:03
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に strict prime-base sequence の実用補題を追加しました。
+
+追加補題:
+
+```lean
+theorem IsStrictPrimeBaseSequence.base_lt_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i < p j
+```
+
+```lean
+theorem IsStrictPrimeBaseSequence.ne_of_lt
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)
+    {i j : Nat} (hij : i < j) :
+    p i ≠ p j
+```
+
+これで strict 層から、大小関係と非重複性を直接取り出せます。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
