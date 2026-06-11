@@ -326,6 +326,47 @@ theorem outerPetalAddress_decompose
     _ = ((m - 1) / B) * B + ((m - 1) % B + 1) := by
       rw [Nat.mul_comm B ((m - 1) / B)]
 
+/--
+Zero-based form of the one-step Petal address decomposition.
+
+This is the raw quotient/remainder decomposition behind the one-based address:
+
+`m - 1 = channel * blockSize + (remainder - 1)`.
+-/
+theorem outerPetalAddress_decompose_sub_one
+    {n lap m : Nat} :
+    m - 1 =
+      (outerPetalAddress n lap m).channel * relPetalBlockSize n lap
+        + (outerPetalRemainder n lap m - 1) := by
+  let B := relPetalBlockSize n lap
+  have hdiv :
+      (m - 1) % B + B * ((m - 1) / B) = m - 1 :=
+    Nat.mod_add_div (m - 1) B
+  have hrem : (((m - 1) % B + 1) - 1) = (m - 1) % B := by
+    omega
+  rw [outerPetalRemainder, outerPetalAddress]
+  change m - 1 = ((m - 1) / B) * B + (((m - 1) % B + 1) - 1)
+  rw [hrem]
+  conv_lhs => rw [← hdiv]
+  rw [Nat.mul_comm B ((m - 1) / B)]
+  rw [Nat.add_comm ((m - 1) % B) (((m - 1) / B) * B)]
+
+/-- In the pentagonal two-lap example, the outer remainder stays `25`. -/
+theorem outerPetalRemainder_five_two_twentyfive :
+    outerPetalRemainder 5 2 25 = 25 := by
+  decide
+
+/--
+The pentagonal nested-address sample.
+
+Reading `25` at lap `2` first descends unchanged through channel `0`; reading
+that remainder at lap `1` lands in Petal channel `4` with offset `5`.
+-/
+theorem outerPetalAddress_five_inner_after_two_twentyfive :
+    outerPetalAddress 5 1 (outerPetalRemainder 5 2 25) =
+      { lap := 1, channel := 4, offset := 5 } := by
+  decide
+
 /-- A bounded channel is at most the base unit core. -/
 theorem outerPetalAddress_channel_le_baseUnitCore
     {n lap m : Nat}
