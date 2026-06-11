@@ -1620,3 +1620,33 @@ git diff --check
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning は全体ビルドで出ていますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:43
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に、採用済み prime base が後段 prefix product にも残る橋補題を追加しました。
+
+```lean
+theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p)
+    {i k l : Nat} (hi : i < k) (hkl : k ≤ l) :
+    p i ∣ primeBaseOrbitTotal p l
+```
+
+中身は自然に、
+
+- `primeBaseOrbitTotal_prime_dvd_of_lt`
+- `primeBaseOrbitTotal_dvd_of_le`
+- `Nat.dvd_trans`
+
+を接続しています。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning は出ていますが、今回追加分は問題ありません。
