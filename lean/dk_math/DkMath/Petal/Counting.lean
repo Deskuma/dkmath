@@ -54,6 +54,58 @@ theorem relPetalTotal_succ (n lap : Nat) :
     relPetalTotal n (lap + 1) = relPetalTotal n lap * lapBase n := by
   simp [relPetalTotal, pow_succ, Nat.mul_assoc]
 
+/--
+Dynamic orbit total.
+
+This is the product of a lap-base sequence over the first `k` laps.
+-/
+def dynamicOrbitTotal (b : Nat → Nat) (k : Nat) : Nat :=
+  Finset.prod (Finset.range k) b
+
+/--
+Dynamic Petal total.
+
+The base unit core is allowed to vary by lap.  The initial core is `a 0`, and
+each lap uses the dynamic lap base `a i + 1`.
+-/
+def dynamicPetalTotal (a : Nat → Nat) (k : Nat) : Nat :=
+  a 0 * dynamicOrbitTotal (fun i => a i + 1) k
+
+/-- The dynamic orbit total at zero laps is empty-product `1`. -/
+theorem dynamicOrbitTotal_zero (b : Nat → Nat) :
+    dynamicOrbitTotal b 0 = 1 := by
+  simp [dynamicOrbitTotal]
+
+/-- One more dynamic lap multiplies by the next lap base. -/
+theorem dynamicOrbitTotal_succ (b : Nat → Nat) (k : Nat) :
+    dynamicOrbitTotal b (k + 1) = dynamicOrbitTotal b k * b k := by
+  simp [dynamicOrbitTotal, Finset.prod_range_succ]
+
+/-- A constant dynamic orbit is an ordinary power. -/
+theorem dynamicOrbitTotal_const (b k : Nat) :
+    dynamicOrbitTotal (fun _ => b) k = b ^ k := by
+  induction k with
+  | zero =>
+      simp [dynamicOrbitTotal_zero]
+  | succ k ih =>
+      rw [dynamicOrbitTotal_succ, ih]
+      rw [pow_succ]
+
+/-- The dynamic Petal total at zero laps is the initial base unit core. -/
+theorem dynamicPetalTotal_zero (a : Nat → Nat) :
+    dynamicPetalTotal a 0 = a 0 := by
+  simp [dynamicPetalTotal, dynamicOrbitTotal_zero]
+
+/-- One more dynamic Petal lap multiplies by the next dynamic lap base. -/
+theorem dynamicPetalTotal_succ (a : Nat → Nat) (k : Nat) :
+    dynamicPetalTotal a (k + 1) = dynamicPetalTotal a k * (a k + 1) := by
+  simp [dynamicPetalTotal, dynamicOrbitTotal_succ, Nat.mul_assoc]
+
+/-- Fixed-core Petal counting is the constant-core dynamic Petal total. -/
+theorem dynamicPetalTotal_const (n k : Nat) :
+    dynamicPetalTotal (fun _ => n) k = relPetalTotal n k := by
+  simp [dynamicPetalTotal, dynamicOrbitTotal_const, relPetalTotal, lapBase_eq_succ, baseUnitCore]
+
 /-- The one-lap total is the relative polygon kernel. -/
 theorem relPetalTotal_one (n : Nat) :
     relPetalTotal n 1 = relPolygonKernel n := by
