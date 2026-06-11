@@ -1650,3 +1650,32 @@ theorem primeBaseOrbitTotal_prime_dvd_of_lt_of_le
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning は出ていますが、今回追加分は問題ありません。
+
+### 2026/06/12  1:48
+
+実装完了です。
+
+[Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean) に distinct prime-base sequence の入口を追加しました。
+
+追加内容:
+
+```lean
+def IsDistinctPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ Function.Injective p
+```
+
+projection 補題:
+
+- `IsDistinctPrimeBaseSequence.prime_at`
+- `IsDistinctPrimeBaseSequence.injective`
+
+これで「各 base は素数」「同じ素数 base を二度採用しない」を、順序までは要求せずに扱える土台ができました。
+
+確認済み:
+
+- `lake build DkMath.Petal.Counting`
+- `lake build DkMath.Petal`
+- `git diff --check`
+- `lake build DkMath`
+
+すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
