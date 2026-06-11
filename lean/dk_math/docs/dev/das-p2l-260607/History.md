@@ -1387,7 +1387,7 @@ git diff --check
 
 ### 2026/06/11  2:08
 
-[Address.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Petal/Address.lean) に review 指定の次 theorem を実装しました。
+[Address.lean](/lean/dk_math/DkMath/Petal/Address.lean) に review 指定の次 theorem を実装しました。
 
 追加:
 
@@ -1421,3 +1421,28 @@ git diff --check
 ```
 
 すべて成功です。
+
+### 2026/06/11 21:05
+
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:336) のみです。
+
+追加内容は次の3本です。
+
+- `outerPetalAddress_decompose_sub_one`
+  - `m - 1 = channel * blockSize + (remainder - 1)` を固定
+  - 仮定なしで通りました
+- `outerPetalRemainder_five_two_twentyfive`
+  - lap 2 の `25` が remainder `25` として降りる具体例
+- `outerPetalAddress_five_inner_after_two_twentyfive`
+  - その remainder を lap 1 で読むと `{ channel := 4, offset := 5 }` になる nested 最小例
+
+検証も通っています。
+
+```text
+lake build DkMath.Petal.Address
+lake build DkMath.Petal
+lake build DkMath
+git diff --check
+```
+
+`lake build DkMath` では既存の `sorry` warning は出ていますが、今回の変更による失敗や新規 warning はありません。
