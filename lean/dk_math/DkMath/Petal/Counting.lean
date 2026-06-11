@@ -162,6 +162,14 @@ injectivity.
 def IsDistinctPrimeBaseSequence (p : Nat → Nat) : Prop :=
   IsPrimeBaseSequence p ∧ Function.Injective p
 
+/--
+A strict prime-base sequence assigns prime bases in strictly increasing order.
+
+This is the ordered version of a distinct prime-base sequence.
+-/
+def IsStrictPrimeBaseSequence (p : Nat → Nat) : Prop :=
+  IsPrimeBaseSequence p ∧ StrictMono p
+
 /-- The prime-base orbit at zero laps is empty-product `1`. -/
 theorem primeBaseOrbitTotal_zero (p : Nat → Nat) :
     primeBaseOrbitTotal p 0 = 1 := by
@@ -265,6 +273,30 @@ theorem IsDistinctPrimeBaseSequence.ne_of_lt
     {i j : Nat} (hij : i < j) :
     p i ≠ p j := by
   exact hp.ne_of_ne (Nat.ne_of_lt hij)
+
+/-- A strict prime-base sequence supplies a prime at each lap. -/
+theorem IsStrictPrimeBaseSequence.prime_at
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p) (i : Nat) :
+    Nat.Prime (p i) :=
+  hp.1 i
+
+/-- A strict prime-base sequence is strictly monotone. -/
+theorem IsStrictPrimeBaseSequence.strictMono
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p) :
+    StrictMono p :=
+  hp.2
+
+/-- A strict prime-base sequence is injective. -/
+theorem IsStrictPrimeBaseSequence.injective
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p) :
+    Function.Injective p :=
+  hp.strictMono.injective
+
+/-- A strict prime-base sequence is a distinct prime-base sequence. -/
+theorem IsStrictPrimeBaseSequence.distinct
+    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p) :
+    IsDistinctPrimeBaseSequence p :=
+  ⟨hp.1, hp.injective⟩
 
 /-- The dynamic Petal total at zero laps is the initial base unit core. -/
 theorem dynamicPetalTotal_zero (a : Nat → Nat) :
