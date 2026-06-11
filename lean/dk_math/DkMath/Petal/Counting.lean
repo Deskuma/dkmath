@@ -92,6 +92,14 @@ theorem dynamicOrbitTotal_const (b k : Nat) :
       rw [pow_succ]
 
 /--
+Every base already passed by a dynamic orbit divides the current prefix product.
+-/
+theorem dynamicOrbitTotal_base_dvd_of_lt
+    (b : Nat → Nat) {i k : Nat} (hi : i < k) :
+    b i ∣ dynamicOrbitTotal b k := by
+  exact Finset.dvd_prod_of_mem b (by simpa [dynamicOrbitTotal] using hi)
+
+/--
 Factorial orbit.
 
 The dynamic orbit with lap base `i + 1` is the ordinary factorial.
@@ -147,6 +155,22 @@ theorem primeBaseOrbitTotal_nextPrime_dvd_succ
   have _hp_k : Nat.Prime (p k) := hp k
   rw [primeBaseOrbitTotal_succ]
   exact Nat.dvd_mul_left _ _
+
+/-- Every earlier prime base divides the current prime-base prefix product. -/
+theorem primeBaseOrbitTotal_base_dvd_of_lt
+    (p : Nat → Nat) {i k : Nat} (hi : i < k) :
+    p i ∣ primeBaseOrbitTotal p k := by
+  exact dynamicOrbitTotal_base_dvd_of_lt p hi
+
+/--
+Every earlier prime base divides the current prime-base prefix product, with
+the prime-sequence interpretation recorded in the hypothesis.
+-/
+theorem primeBaseOrbitTotal_prime_dvd_of_lt
+    {p : Nat → Nat} (hp : IsPrimeBaseSequence p) {i k : Nat} (hi : i < k) :
+    p i ∣ primeBaseOrbitTotal p k := by
+  have _hp_i : Nat.Prime (p i) := hp i
+  exact primeBaseOrbitTotal_base_dvd_of_lt p hi
 
 /-- A prime-base sequence supplies a prime at each lap. -/
 theorem IsPrimeBaseSequence.prime_at
