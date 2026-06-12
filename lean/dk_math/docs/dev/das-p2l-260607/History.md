@@ -2021,3 +2021,46 @@ Docs も同期:
 - `git diff --check` 成功
 
 既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
+
+### 2026/06/12 20:28
+
+実装と整理を進めました。
+
+`DkMath.Petal.Anchor` に reviewer 指摘の projection を追加しました。
+
+- `anchoredS0Carrier_anchor_prime`
+- `anchoredGNCarrier_anchor_prime`
+
+新規に [BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean) を追加し、3 次 Petal 境界を固定しました。
+
+- `BoundaryD3Branch`
+- `BoundaryD3Reduced`
+- `three_dvd_S0_nat_of_three_dvd_sub`
+- `three_dvd_sub_of_three_dvd_S0_nat`
+- `three_dvd_S0_nat_iff_three_dvd_sub`
+- `boundaryD3Reduced_three_not_dvd_S0_nat`
+- `boundaryD3Branch_three_dvd_S0_nat`
+- `boundaryD3Reduced_coprime_sub_S0_nat`
+
+意味としては、
+
+```text
+3 ∣ S0_nat c b  ↔  3 ∣ c - b
+```
+
+を Petal 用語として固定し、reduced branch では `S0_nat` と境界 gap の gcd 制御へ接続できる形にしました。
+
+docs も更新済みです。
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告だけ出ていますが、今回追加分では新しい `sorry` はありません。
