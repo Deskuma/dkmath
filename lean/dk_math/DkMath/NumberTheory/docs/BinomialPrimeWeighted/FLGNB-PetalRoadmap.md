@@ -804,6 +804,7 @@ hasPositiveAnchorPrime_prime
 hasPositiveAnchorPrime_anchor_dvd
 hasPositiveAnchorPrime_no_smaller_prime
 hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_self_of_prime
 ```
 
 This layer intentionally does not import S0/GN bridge files yet.  It should
@@ -851,6 +852,7 @@ anchoredGNCarrier_ne_zero
 anchoredGNCarrier_anchor_le_of_prime_dvd
 anchoredGNCarrier_of_anchoredS0Carrier
 anchoredS0Carrier_of_anchoredGNCarrier
+exists_anchoredS0Carrier_of_not_three_dvd_sub
 ```
 
 This layer is the first place where `ReducedSupport` imports meet the S0/GN
@@ -1051,6 +1053,7 @@ hasPositiveAnchorPrime_prime
 hasPositiveAnchorPrime_anchor_dvd
 hasPositiveAnchorPrime_no_smaller_prime
 hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_self_of_prime
 ```
 
 Expected validation:
@@ -1075,6 +1078,7 @@ AnchoredS0Carrier
 AnchoredGNCarrier
 anchoredGNCarrier_of_anchoredS0Carrier
 anchoredS0Carrier_of_anchoredGNCarrier
+exists_anchoredS0Carrier_of_not_three_dvd_sub
 ```
 
 Expected validation:

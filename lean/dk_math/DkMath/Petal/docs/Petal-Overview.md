@@ -234,6 +234,7 @@ hasPositiveAnchorPrime_prime
 hasPositiveAnchorPrime_anchor_dvd
 hasPositiveAnchorPrime_no_smaller_prime
 hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_self_of_prime
 ```
 
 `HasAnchorPrime` is the wide raw carrier predicate.  Use
@@ -254,6 +255,7 @@ anchoredS0Carrier_dvd_S0
 anchoredGNCarrier_dvd_GN
 anchoredGNCarrier_of_anchoredS0Carrier
 anchoredS0Carrier_of_anchoredGNCarrier
+exists_anchoredS0Carrier_of_not_three_dvd_sub
 ```
 
 ### `DkMath.Petal.Counting`

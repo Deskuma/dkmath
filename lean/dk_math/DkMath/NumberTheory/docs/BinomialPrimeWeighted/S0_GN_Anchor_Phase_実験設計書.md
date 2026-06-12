@@ -404,6 +404,7 @@ theorem hasPositiveAnchorPrime_prime
 theorem hasPositiveAnchorPrime_anchor_dvd
 theorem hasPositiveAnchorPrime_no_smaller_prime
 theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+theorem hasPositiveAnchorPrime_self_of_prime
 ```
 
 Keep this layer independent of S0 at first.

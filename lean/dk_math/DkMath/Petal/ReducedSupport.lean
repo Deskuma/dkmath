@@ -125,5 +125,19 @@ theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
     r ≤ p :=
   hasAnchorPrime_anchor_le_of_prime_dvd h.2 hp hpdiv
 
+/--
+A prime is its own positive anchor carrier.
+
+This is useful when a primitive-prime witness itself is used as the anchored
+carrier.
+-/
+theorem hasPositiveAnchorPrime_self_of_prime
+    {q : ℕ} (hq : Nat.Prime q) :
+    HasPositiveAnchorPrime q q := by
+  refine ⟨hq.pos, hq, dvd_rfl, ?_⟩
+  intro p hp hp_lt hp_dvd
+  have hp_eq_q : p = q := (Nat.prime_dvd_prime_iff_eq hp hq).1 hp_dvd
+  omega
+
 end Petal
 end DkMath

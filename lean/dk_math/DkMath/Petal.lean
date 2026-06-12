@@ -6,7 +6,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Petal.Basic
 import DkMath.Petal.ReducedSupport
-import DkMath.Petal.Anchor
 import DkMath.Petal.Counting
 import DkMath.Petal.Address
 import DkMath.Petal.Forms
@@ -16,6 +15,7 @@ import DkMath.Petal.GNBridge
 import DkMath.Petal.GcdBridge
 import DkMath.Petal.PadicBridge
 import DkMath.Petal.PrimitiveBridge
+import DkMath.Petal.Anchor
 
 #print "file: DkMath.Petal"
 

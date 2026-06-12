@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Petal.ReducedSupport
 import DkMath.Petal.GNBridge
+import DkMath.Petal.PrimitiveBridge
 
 #print "file: DkMath.Petal.Anchor"
 
@@ -123,6 +124,21 @@ theorem anchoredS0Carrier_of_anchoredGNCarrier
   refine ⟨h.1, ?_⟩
   rw [S0_nat_eq_GN_three_sub hbc]
   exact h.2
+
+/--
+Primitive S0 existence, upgraded to an anchored S0 carrier.
+
+If `3` does not divide the boundary gap, then there is a prime `q` such that
+`q` is its own positive anchor carrier, `q` divides `S0_nat c b`, and `q` does
+not divide the boundary gap.
+-/
+theorem exists_anchoredS0Carrier_of_not_three_dvd_sub
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, AnchoredS0Carrier q c b q ∧ ¬ q ∣ c - b := by
+  rcases exists_prime_dvd_S0_nat_of_not_three_dvd_sub hbc hb hcop h3 with
+    ⟨q, hq, hq_dvd_S0, hq_not_dvd_sub⟩
+  exact ⟨q, ⟨⟨hasPositiveAnchorPrime_self_of_prime hq, hq_dvd_S0⟩, hq_not_dvd_sub⟩⟩
 
 end Petal
 end DkMath
