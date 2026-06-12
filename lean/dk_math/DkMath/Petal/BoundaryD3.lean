@@ -17,6 +17,46 @@ This file records the degree-three boundary behavior of the Petal detector
 
 The central observation is that, on the cubic Petal face, the prime `3` is
 exactly the contact component between the boundary gap `c - b` and `S0_nat`.
+
+## Refactor note: keep this dependency issue visible
+
+This file currently imports `DkMath.Petal.Anchor` because it exposes
+`exists_anchoredS0Carrier_of_boundaryD3Reduced`.
+
+Mathematically that theorem belongs to the useful public API: downstream code
+often wants to stay in the named branch vocabulary
+
+```text
+BoundaryD3Reduced c b
+```
+
+instead of unfolding it back to `¬ 3 ∣ c - b`.  For that reason we keep the
+wrapper here for now.
+
+However, this also makes `BoundaryD3` heavier than its pure boundary role:
+
+```text
+BoundaryD3
+  -> Anchor
+  -> PrimitiveBridge
+```
+
+The long-term package shape should be reconsidered during the planned
+`DkMath.Lib.*` promotion refactor.  At that time, split the layers if this file
+is used as a low-level import:
+
+```text
+DkMath.Petal.BoundaryD3
+  branch / reduced / 3-contact / gcd facts only
+
+DkMath.Petal.BoundaryD3Anchor
+  BoundaryD3Reduced -> AnchoredS0Carrier existence
+```
+
+Do not silently delete this note when moving code.  The important invariant is
+that the pure boundary layer should not need anchored primitive-carrier
+machinery once the library hierarchy is mature.  The current layout is a
+deliberate temporary convenience, not the final dependency direction.
 -/
 
 namespace DkMath
