@@ -744,6 +744,82 @@ theorem GN_three_sub_eq_S0_nat
 This file should also collect p-adic bridge statements where the S0 theorem is
 only a rewritten GN theorem.
 
+Status:
+
+```text
+completed
+```
+
+Implemented bridge files:
+
+```text
+DkMath.Petal.GcdBridge
+DkMath.Petal.PadicBridge
+DkMath.Petal.PrimitiveBridge
+```
+
+Important names:
+
+```lean
+gcd_sub_S0_nat_eq_gcd_sub_three
+padicValNat_cube_sub_eq_padicValNat_S0_nat_of_not_dvd_sub
+primitive_prime_dvd_S0_nat
+primitive_prime_padicValNat_cube_sub_eq_S0_nat
+primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub
+exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+```
+
+This completed the Petal-side Zsigmondy preparation bridge for the cubic S0
+surface.  The remaining experiment is the reduced-support / anchor vocabulary,
+not the S0/GN bridge itself.
+
+### `DkMath.Petal.ReducedSupport`
+
+Purpose:
+
+```text
+introduce a small carrier-level vocabulary for r-started prime support
+```
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
+
+```lean
+HasNoPrimeBelow
+HasAnchorPrime
+HasPositiveAnchorPrime
+hasAnchorPrime_prime
+hasAnchorPrime_anchor_dvd
+hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_ne_zero
+hasPositiveAnchorPrime_of_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+```
+
+This layer intentionally does not import S0/GN bridge files yet.  It should
+first remain a thin carrier predicate surface, then connect to GN/S0 support
+only after a concrete theorem needs that bridge.
+
+Design note:
+
+```text
+HasAnchorPrime is the wide raw carrier predicate.
+HasPositiveAnchorPrime is the strict support predicate for nonzero carriers.
+```
+
+This keeps the entrance broad while preventing `0` from being treated as an
+actual support carrier in downstream theorems.
+
 ### `DkMath.Petal.EisensteinBridge`
 
 Purpose:
@@ -886,7 +962,7 @@ lake build DkMath.Petal
 Status:
 
 ```text
-planned
+completed
 ```
 
 Transfer the existing GN gcd statements to S0-facing names.
@@ -899,6 +975,54 @@ GN_three_sub_eq_S0_nat
 
 This step should not invent new gcd theory.  It should provide link theorem
 names that downstream FLT and primitive-factor files can import.
+
+Implemented as the three bridge files:
+
+```text
+DkMath/Petal/GcdBridge.lean
+DkMath/Petal/PadicBridge.lean
+DkMath/Petal/PrimitiveBridge.lean
+```
+
+Additional caller-friendly projection:
+
+```lean
+exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+```
+
+### Step 5.5: Add `DkMath.Petal.ReducedSupport`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+HasNoPrimeBelow
+HasAnchorPrime
+HasPositiveAnchorPrime
+hasAnchorPrime_prime
+hasAnchorPrime_anchor_dvd
+hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_ne_zero
+hasPositiveAnchorPrime_of_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.ReducedSupport
+lake build DkMath.Petal
+```
 
 ### Step 6: Add `DkMath.Petal.EisensteinBridge`
 

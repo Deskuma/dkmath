@@ -1776,3 +1776,170 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 - `lake build DkMath`
 
 すべて成功です。既存の `sorry` warning はありますが、今回追加分は問題ありません。
+
+### 2026/06/12  3:04
+
+ドキュメント整理を実施しました。
+
+新規作成:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+  - `DkMath.Petal` の目的、Phase 4.5 と Phase 5 の間での位置づけ
+  - Gamma 関数回避としての `dynamicOrbitTotal`
+  - factorial / prime-base / strict prime-base orbit の意味
+  - `Counting`, `Address`, `GNBridge` の到達点
+  - 次候補として `GcdBridge`, primorial 接続, nested address 応用を整理
+
+更新:
+
+- [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+  - `Phase 4.7: Petal dynamic counting and address layer` を追加
+  - `AKSBridge v1 → Petal → Zsigmondy` の接続位置を明記
+
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+  - 実装済み範囲を反映
+  - `Counting` / `Address` の節を追加
+  - 実装手順を `completed` / `planned` に整理
+  - 次の未実装候補を `GcdBridge`, `EisensteinBridge`, `AnalyticBridge` として明確化
+
+確認:
+
+- `git diff --check` 成功
+- 対象 Markdown の trailing whitespace 検査も問題なし
+- docs-only なので Lean build は実行していません
+
+`*-ja.md` は触れていません。
+
+---
+
+実装しました。
+
+追加したもの:
+
+- [GcdBridge.lean](/lean/dk_math/DkMath/Petal/GcdBridge.lean)
+  - `coprime_sub_right_of_coprime`
+  - `gcd_sub_S0_nat_eq_gcd_sub_three`
+  - `gcd_sub_S0_nat_dvd_three`
+  - `coprime_sub_S0_nat_of_coprime_of_not_dvd_three`
+
+- [PadicBridge.lean](/lean/dk_math/DkMath/Petal/PadicBridge.lean)
+  - `padicValNat_cube_sub_eq_padicValNat_S0_nat_of_not_dvd_sub`
+  - `padicValNat_three_cube_sub_eq_padicValNat_three_S0_nat_of_not_dvd_sub`
+
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean)
+  - `primitive_prime_dvd_S0_nat`
+  - `primitive_prime_padicValNat_cube_sub_eq_S0_nat`
+  - `primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub`
+  - `exists_primitiveOnS0_of_not_three_dvd_sub`
+
+集約入口 [Petal.lean](/lean/dk_math/DkMath/Petal.lean) にも import を追加済みです。
+
+確認:
+
+- `lake build DkMath.Petal.GcdBridge` 成功
+- `lake build DkMath.Petal.PadicBridge` 成功
+- `lake build DkMath.Petal.PrimitiveBridge` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+注意点として、ビルド中に既存の `DkMath.NumberTheory.ZsigmondyCyclotomicResearch` の `sorry` warning は出ていますが、今回追加した Petal bridge 自体には `sorry` はありません。
+
+### 2026/06/12 14:09
+
+進めました。
+
+実装:
+
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean:94)
+  - `exists_prime_dvd_S0_nat_of_not_three_dvd_sub`
+  - `PrimitiveOnS0` を知らない caller 向けに、`∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b` を直接返す projection です。
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:30)
+  - `HasNoPrimeBelow`
+  - `HasAnchorPrime`
+  - `hasAnchorPrime_prime`
+  - `hasAnchorPrime_anchor_dvd`
+  - `hasAnchorPrime_no_smaller_prime`
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean:8)
+  - `DkMath.Petal.ReducedSupport` を集約 import に追加。
+
+Docs:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:216)
+  - `GcdBridge / PadicBridge / PrimitiveBridge / ReducedSupport` の小総括を追加。
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:776)
+  - Bridge 完了、`ReducedSupport` initial API 実装済みとして更新。
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal.PrimitiveBridge` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は引き続き出ていますが、今回追加分には `sorry` はありません。
+
+### 2026/06/12 14:20
+
+B 案で実装しました。`HasAnchorPrime` は広い raw predicate のまま残し、厳密な非ゼロ support 用に `HasPositiveAnchorPrime` を追加しています。
+
+変更:
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean)
+  - `HasPositiveAnchorPrime`
+  - `hasAnchorPrime_anchor_le_of_prime_dvd`
+  - `hasPositiveAnchorPrime_pos`
+  - `hasPositiveAnchorPrime_prime`
+  - `hasPositiveAnchorPrime_anchor_dvd`
+  - `hasPositiveAnchorPrime_no_smaller_prime`
+  - `hasPositiveAnchorPrime_anchor_le_of_prime_dvd`
+
+意味づけ:
+
+```text
+HasAnchorPrime           = 間口の広い raw carrier predicate
+HasPositiveAnchorPrime   = 0 を除外した strict support predicate
+```
+
+これで `HasAnchorPrime 2 0` のような raw 成立可能性は許容しつつ、下流の「実際の素因子 support」として使う場面では `HasPositiveAnchorPrime` で厳密性を担保できます。
+
+Docs も同期しました:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は今回も出ていますが、今回追加分には `sorry` はありません。
+
+### 2026/06/12 16:59
+
+追加しました。
+
+[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:91) に以下を追加:
+
+```lean
+theorem hasPositiveAnchorPrime_ne_zero
+    {r n : ℕ} (h : HasPositiveAnchorPrime r n) :
+    n ≠ 0
+
+theorem hasPositiveAnchorPrime_of_pos
+    {r n : ℕ} (hn : 0 < n) (h : HasAnchorPrime r n) :
+    HasPositiveAnchorPrime r n
+```
+
+あわせて docs の API リストも同期しました。
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+今回も追加分に `sorry` はありません。

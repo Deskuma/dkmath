@@ -5,12 +5,16 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Petal.Basic
+import DkMath.Petal.ReducedSupport
 import DkMath.Petal.Counting
 import DkMath.Petal.Address
 import DkMath.Petal.Forms
 import DkMath.Petal.RelPolygon
 import DkMath.Petal.CoreUnit
 import DkMath.Petal.GNBridge
+import DkMath.Petal.GcdBridge
+import DkMath.Petal.PadicBridge
+import DkMath.Petal.PrimitiveBridge
 
 #print "file: DkMath.Petal"
 

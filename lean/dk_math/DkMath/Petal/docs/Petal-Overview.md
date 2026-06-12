@@ -154,6 +154,12 @@ CoreUnit
 
 Connects the degree-three Petal face to the GN kernel.
 
+Reference note:
+
+```text
+docs/explanation/S0_cubic_petal_kernel.md
+```
+
 Important names:
 
 ```lean
@@ -169,6 +175,70 @@ GN 3
   -> S0 / Petal face
   -> divisibility observation
 ```
+
+### `DkMath.Petal.GcdBridge`
+
+Transfers existing degree-three GN gcd control to the `S0_nat` surface.
+
+Important names:
+
+```lean
+gcd_sub_S0_nat_eq_gcd_sub_three
+gcd_sub_S0_nat_dvd_three
+coprime_sub_S0_nat_of_coprime_of_not_dvd_three
+```
+
+### `DkMath.Petal.PadicBridge`
+
+Reads boundary-free cubic valuations on the `S0_nat` surface.
+
+Important names:
+
+```lean
+padicValNat_cube_sub_eq_padicValNat_S0_nat_of_not_dvd_sub
+padicValNat_three_cube_sub_eq_padicValNat_three_S0_nat_of_not_dvd_sub
+```
+
+### `DkMath.Petal.PrimitiveBridge`
+
+Connects degree-three primitive-prime witnesses to `S0_nat`.
+
+Important names:
+
+```lean
+primitive_prime_dvd_S0_nat
+primitive_prime_padicValNat_cube_sub_eq_S0_nat
+primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub
+exists_primitiveOnS0_of_not_three_dvd_sub
+exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+```
+
+### `DkMath.Petal.ReducedSupport`
+
+Introduces the reduced-support vocabulary for anchor-prime observations.
+
+Important names:
+
+```lean
+HasNoPrimeBelow
+HasAnchorPrime
+HasPositiveAnchorPrime
+hasAnchorPrime_prime
+hasAnchorPrime_anchor_dvd
+hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_ne_zero
+hasPositiveAnchorPrime_of_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+```
+
+`HasAnchorPrime` is the wide raw carrier predicate.  Use
+`HasPositiveAnchorPrime` when the carrier must be a genuine nonzero support
+object.
 
 ### `DkMath.Petal.Counting`
 
@@ -317,19 +387,17 @@ how GN degree 3 becomes the Petal S0 face
 The next reasonable implementation directions are:
 
 ```text
-1. connect strict prime-base orbits to a concrete prime enumeration
-2. add Petal-facing gcd / p-adic bridge files
-3. use Petal address decomposition in nested observations
-4. connect GN / Petal divisibility persistence to primitive-factor statements
+1. connect ReducedSupport to GN/S0 carriers
+2. use Petal address decomposition in nested observations
+3. connect strict prime-base orbits to a concrete prime enumeration
+4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
 ```
 
 The most conservative next theorem work is probably:
 
 ```text
-DkMath.Petal.GcdBridge
+DkMath.Petal.Anchor
 ```
-
-with bridge statements rewritten from existing GN gcd theorems.
 
 The most concrete arithmetic next step is:
 

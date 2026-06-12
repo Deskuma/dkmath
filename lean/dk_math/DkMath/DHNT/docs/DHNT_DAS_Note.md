@@ -1982,3 +1982,99 @@ Phase 5: Zsigmondy preparation
 特に重要なのは、AKSBridge が「巡回商で指数を畳む」道具を与え、Petal/GNBridge が「低次相で因子構造を見る」道具を与えることです。
 
 次の実装チェックポイントとしては、Roadmap に書いた通りまず `DkMath.Petal.*` の土台を作り、`S0_nat_eq_GN_three_sub` と `three_not_dvd_S0_nat_of_not_dvd_sub` あたりを固定するのが堅いです。そこが通ると、Zsigmondy 側へ渡す前の「Petal support theorem」層が作れます。
+
+### DkMath.Petal 実装
+
+- [review-001](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-001.md)
+- から
+- [review-018](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-018.md)
+
+### S0 GN Anchor Phase 実験
+
+[S0_GN_Anchor_Phase_実験設計書](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+[review-018](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-018.md)
+
+直近に実装された内容は、この実験を行う必要は無くなったのか？
+
+結論: **実験全体は不要にはなっていません。ただし、実験設計書の Phase A/B/D の一部は、直近実装でほぼ本線実装済みになりました。**
+
+つまり、`S0_GN_Anchor_Phase_実験設計書.md` は「そのまま実験する文書」ではなく、今は **済んだ項目を消し込み、残りを Anchor / ReducedSupport 実験へ縮小する段階**です。
+
+対応状況:
+
+- Phase A: S0 / GN 三次面の再固定  
+  ほぼ完了。`DkMath.Petal.GNBridge` の `S0_nat_eq_GN_three_sub` が該当します。
+
+- Phase B: 三例外の構造分離  
+  かなり進行済み。`three_not_dvd_S0_nat_of_not_dvd_sub` に加えて、[GcdBridge.lean](/lean/dk_math/DkMath/Petal/GcdBridge.lean) の `gcd_sub_S0_nat_eq_gcd_sub_three` / `gcd_sub_S0_nat_dvd_three` が、3 が境界と S0 の接触成分であることをより強く固定しています。
+
+- Phase D: GN primitive candidate  
+  一部完了。特に [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean) の `primitive_prime_dvd_S0_nat` と `primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub` が、primitive prime を S0 側へ送る橋になっています。
+
+- Phase C/E: Anchor / Reduced support  
+  **まだ未実装**です。`HasNoPrimeBelow`, `HasAnchorPrime`, `AnchoredGNCarrier` などの「r から始まる reduced world」はまだ残っています。
+
+なので判断としてはこうです。
+
+```text
+旧実験:
+  S0 が GN3 face か？
+  3 例外を分離できるか？
+  primitive prime は S0/GN 側へ入るか？
+
+これはかなり実装済み。
+
+残る実験:
+  reduced support / anchor prime predicate を導入してよいか？
+  それが Zsigmondy 入力語彙として本当に便利か？
+```
+
+次にやるなら、実験設計書を更新して、タイトルを例えば **“S0/GN Anchor Phase: Remaining Reduced-Support Experiment”** のように変え、完了済み bridge を明記したうえで、残タスクを `DkMath.Petal.ReducedSupport` 候補に絞るのが良いです。
+
+### 現状の残タスク
+
+了解。残タスクはこの2段で整理できます。
+
+**Next 1: 小総括 docs**
+
+- `Petal-Overview.md` または `FLGNB-PetalRoadmap.md` に、今回の `GcdBridge / PadicBridge / PrimitiveBridge` を「Zsigmondy preparation 実装済み」として追記。
+- これは docs-only。先にやると現在地が見えやすくなります。
+
+**Next 2: PrimitiveBridge の使いやすい projection**
+追加候補:
+
+```lean
+theorem exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
+```
+
+これは `exists_primitiveOnS0_of_not_three_dvd_sub` から取り出すだけなので軽いです。`PrimitiveOnS0` を知らない caller 向けの Petal-facing theorem としてかなり良い。
+
+**Next 3: ReducedSupport**
+次の本線候補:
+
+```text
+lean/dk_math/DkMath/Petal/ReducedSupport.lean
+```
+
+最小 API:
+
+```lean
+def HasNoPrimeBelow (r n : ℕ) : Prop :=
+  ∀ p, p.Prime → p < r → ¬ p ∣ n
+
+def HasAnchorPrime (r n : ℕ) : Prop :=
+  r.Prime ∧ r ∣ n ∧ HasNoPrimeBelow r n
+
+theorem hasAnchorPrime_prime
+theorem hasAnchorPrime_anchor_dvd
+theorem hasAnchorPrime_no_smaller_prime
+```
+
+ここはまだ `S0` / `GN` を import せず、carrier の支配的最小素因子だけを固定するのが良いです。
+
+進める順番としては、私は **PrimitiveBridge projection を先に1本入れて、その後 `ReducedSupport.lean` を新設** が良いと思います。docs はその後に「実装済み」としてまとめるとズレが少ないです。
+
+→ [実装とレビュー](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-020.md)
