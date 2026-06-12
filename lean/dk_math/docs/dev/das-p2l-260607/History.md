@@ -1879,3 +1879,41 @@ Docs:
 - `git diff --check` 成功
 
 既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は引き続き出ていますが、今回追加分には `sorry` はありません。
+
+### 2026/06/12 14:20
+
+B 案で実装しました。`HasAnchorPrime` は広い raw predicate のまま残し、厳密な非ゼロ support 用に `HasPositiveAnchorPrime` を追加しています。
+
+変更:
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean)
+  - `HasPositiveAnchorPrime`
+  - `hasAnchorPrime_anchor_le_of_prime_dvd`
+  - `hasPositiveAnchorPrime_pos`
+  - `hasPositiveAnchorPrime_prime`
+  - `hasPositiveAnchorPrime_anchor_dvd`
+  - `hasPositiveAnchorPrime_no_smaller_prime`
+  - `hasPositiveAnchorPrime_anchor_le_of_prime_dvd`
+
+意味づけ:
+
+```text
+HasAnchorPrime           = 間口の広い raw carrier predicate
+HasPositiveAnchorPrime   = 0 を除外した strict support predicate
+```
+
+これで `HasAnchorPrime 2 0` のような raw 成立可能性は許容しつつ、下流の「実際の素因子 support」として使う場面では `HasPositiveAnchorPrime` で厳密性を担保できます。
+
+Docs も同期しました:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は今回も出ていますが、今回追加分には `sorry` はありません。
