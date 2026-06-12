@@ -87,6 +87,18 @@ theorem hasPositiveAnchorPrime_pos
     0 < n :=
   h.1
 
+/-- Positive anchored carriers are nonzero. -/
+theorem hasPositiveAnchorPrime_ne_zero
+    {r n : ℕ} (h : HasPositiveAnchorPrime r n) :
+    n ≠ 0 :=
+  Nat.ne_of_gt h.1
+
+/-- Build a positive anchored carrier from positivity and the raw anchor predicate. -/
+theorem hasPositiveAnchorPrime_of_pos
+    {r n : ℕ} (hn : 0 < n) (h : HasAnchorPrime r n) :
+    HasPositiveAnchorPrime r n :=
+  ⟨hn, h⟩
+
 /-- The anchor in `HasPositiveAnchorPrime r n` is prime. -/
 theorem hasPositiveAnchorPrime_prime
     {r n : ℕ} (h : HasPositiveAnchorPrime r n) :
