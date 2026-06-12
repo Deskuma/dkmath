@@ -493,6 +493,16 @@ BoundaryD3Reduced
 This closes the current S0/GN3/BoundaryD3/Anchor/Eisenstein surface as a
 usable API for later FLT and Zsigmondy-facing work.
 
+The Zsigmondy-facing preflight investigation is recorded in:
+
+```text
+DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+Its main conclusion is that the next bridge should translate the `d = 3`
+Petal witness into Zsigmondy's primitive-divisor language, while keeping
+valuation `<= 1` separate under squarefree/no-lift hypotheses.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

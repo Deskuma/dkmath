@@ -536,6 +536,31 @@ DkMath.Lib.* promotion of neutral S0 / Eisenstein facts
 BoundaryD3Anchor split and final import-direction cleanup
 ```
 
+Zsigmondy へ進む前の実態調査:
+
+```text
+lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+調査結果の要点:
+
+```text
+Zsigmondy:
+  primitive q の存在
+
+Petal / GN / BoundaryD3 / Anchor:
+  q が boundary ではなく S0/GN3 側にいること
+
+Squarefree / NoLift / ValuationFlow:
+  q の重複度、すなわち padicValNat <= 1
+```
+
+したがって次に作る橋は、まず三次 reduced Petal witness を
+`DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q` へ翻訳する薄い
+`ZsigmondyD3Bridge` でよい。
+`padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
+持つ別層の仕事として扱う。
+
 ### Phase 5: Zsigmondy への接続準備
 
 目標:

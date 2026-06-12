@@ -1270,6 +1270,35 @@ lake build DkMath.Petal
 git diff --check
 ```
 
+### Step 5.9: Zsigmondy preflight investigation
+
+Status:
+
+```text
+investigated
+```
+
+Record:
+
+```text
+DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+Conclusion:
+
+```text
+Zsigmondy gives existence.
+Petal gives location.
+Squarefree/NoLift gives multiplicity.
+```
+
+The next Lean-facing bridge should therefore be `DkMath.Petal.ZsigmondyD3Bridge`
+or an equivalent `PrimitiveD3` layer.  It should translate the reduced cubic
+Petal witness into `DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q`.
+
+It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
+squarefree or no-lift hypothesis.
+
 ### Step 7: Refactor imports gradually
 
 Status:
