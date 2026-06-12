@@ -85,5 +85,18 @@ theorem exists_primitiveOnS0_of_not_three_dvd_sub
       hbc hb hcop h3 with ⟨q, hq, hq_dvd, hq_not_dvd_sub⟩
   exact ⟨q, primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub hbc hq hq_dvd hq_not_dvd_sub⟩
 
+/--
+Petal-facing projection of the primitive witness.
+
+If the boundary gap is not divisible by `3`, then `S0_nat` has a prime divisor
+that does not divide the boundary gap.
+-/
+theorem exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b := by
+  rcases exists_primitiveOnS0_of_not_three_dvd_sub hbc hb hcop h3 with ⟨q, hprim⟩
+  exact ⟨q, hprim.1, hprim.2.1, hprim.2.2⟩
+
 end Petal
 end DkMath
