@@ -1943,3 +1943,44 @@ theorem hasPositiveAnchorPrime_of_pos
 - `git diff --check` 成功
 
 今回も追加分に `sorry` はありません。
+
+### 2026/06/12 19:15
+
+`DkMath.Petal.Anchor` を新設して、Anchor と S0/GN の接続を始めました。
+
+追加:
+
+- [Anchor.lean](/lean/dk_math/DkMath/Petal/Anchor.lean)
+  - `AnchoredS0Carrier`
+  - `AnchoredGNCarrier`
+  - `anchoredS0Carrier_anchor`
+  - `anchoredS0Carrier_dvd_S0`
+  - `anchoredS0Carrier_pos`
+  - `anchoredS0Carrier_ne_zero`
+  - `anchoredS0Carrier_anchor_le_of_prime_dvd`
+  - `anchoredGNCarrier_anchor`
+  - `anchoredGNCarrier_dvd_GN`
+  - `anchoredGNCarrier_pos`
+  - `anchoredGNCarrier_ne_zero`
+  - `anchoredGNCarrier_anchor_le_of_prime_dvd`
+  - `anchoredGNCarrier_of_anchoredS0Carrier`
+  - `anchoredS0Carrier_of_anchoredGNCarrier`
+
+ポイントは、`ReducedSupport` は S0/GN 非依存のまま維持し、`Anchor.lean` で初めて `S0_nat` / `GN` へ接続したことです。
+
+集約:
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean) に `DkMath.Petal.Anchor` を追加。
+
+Docs:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+
+確認:
+
+- `lake build DkMath.Petal.Anchor` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
