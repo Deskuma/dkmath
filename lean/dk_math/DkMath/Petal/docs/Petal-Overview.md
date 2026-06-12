@@ -240,6 +240,22 @@ hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 `HasPositiveAnchorPrime` when the carrier must be a genuine nonzero support
 object.
 
+### `DkMath.Petal.Anchor`
+
+Connects positive anchored carriers to concrete `S0_nat` and `GN` divisibility
+surfaces.
+
+Important names:
+
+```lean
+AnchoredS0Carrier
+AnchoredGNCarrier
+anchoredS0Carrier_dvd_S0
+anchoredGNCarrier_dvd_GN
+anchoredGNCarrier_of_anchoredS0Carrier
+anchoredS0Carrier_of_anchoredGNCarrier
+```
+
 ### `DkMath.Petal.Counting`
 
 Defines the fixed and dynamic counting layer.
@@ -387,7 +403,7 @@ how GN degree 3 becomes the Petal S0 face
 The next reasonable implementation directions are:
 
 ```text
-1. connect ReducedSupport to GN/S0 carriers
+1. connect AnchoredS0Carrier to the primitive S0 witnesses
 2. use Petal address decomposition in nested observations
 3. connect strict prime-base orbits to a concrete prime enumeration
 4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
@@ -396,7 +412,7 @@ The next reasonable implementation directions are:
 The most conservative next theorem work is probably:
 
 ```text
-DkMath.Petal.Anchor
+DkMath.Petal.Anchor plus PrimitiveBridge
 ```
 
 The most concrete arithmetic next step is:

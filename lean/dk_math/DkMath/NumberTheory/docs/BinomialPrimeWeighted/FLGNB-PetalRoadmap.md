@@ -820,6 +820,42 @@ HasPositiveAnchorPrime is the strict support predicate for nonzero carriers.
 This keeps the entrance broad while preventing `0` from being treated as an
 actual support carrier in downstream theorems.
 
+### `DkMath.Petal.Anchor`
+
+Purpose:
+
+```text
+connect positive anchored carriers to concrete S0/GN divisibility surfaces
+```
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
+
+```lean
+AnchoredS0Carrier
+AnchoredGNCarrier
+anchoredS0Carrier_anchor
+anchoredS0Carrier_dvd_S0
+anchoredS0Carrier_pos
+anchoredS0Carrier_ne_zero
+anchoredS0Carrier_anchor_le_of_prime_dvd
+anchoredGNCarrier_anchor
+anchoredGNCarrier_dvd_GN
+anchoredGNCarrier_pos
+anchoredGNCarrier_ne_zero
+anchoredGNCarrier_anchor_le_of_prime_dvd
+anchoredGNCarrier_of_anchoredS0Carrier
+anchoredS0Carrier_of_anchoredGNCarrier
+```
+
+This layer is the first place where `ReducedSupport` imports meet the S0/GN
+surface.  `ReducedSupport` itself remains independent.
+
 ### `DkMath.Petal.EisensteinBridge`
 
 Purpose:
@@ -1021,6 +1057,30 @@ Expected validation:
 
 ```sh
 lake build DkMath.Petal.ReducedSupport
+lake build DkMath.Petal
+```
+
+### Step 5.6: Add `DkMath.Petal.Anchor`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+AnchoredS0Carrier
+AnchoredGNCarrier
+anchoredGNCarrier_of_anchoredS0Carrier
+anchoredS0Carrier_of_anchoredGNCarrier
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.Anchor
 lake build DkMath.Petal
 ```
 
