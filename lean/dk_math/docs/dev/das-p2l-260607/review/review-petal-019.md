@@ -9,7 +9,7 @@ gch: 70c2d333b212e69c5066999afa3a1237a5bfd11a
 実験計画書を現状に合わせて更新しました。
 
 更新先:
-[S0_GN_Anchor_Phase_実験設計書.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+[S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
 
 主な変更:
 
