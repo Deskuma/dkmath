@@ -285,7 +285,7 @@ DkMath.FLT.cube_sub_eq_mul_sub_S0
 
 ## 4.2. Phase B. 三例外の構造分離
 
-Status: **[DONE FOR S0] / [ACTIVE FOR GENERAL REDUCED SUPPORT]**
+Status: **[DONE FOR S0] / [PACKAGE API IMPLEMENTED AS `DkMath.Petal.BoundaryD3`]**
 
 目的は、\(3\) が S0 と境界にまたがることを明示することである。
 
@@ -322,6 +322,19 @@ DkMath.Petal.gcd_sub_S0_nat_dvd_three
 DkMath.Petal.coprime_sub_S0_nat_of_coprime_of_not_dvd_three
 ```
 
+BoundaryD3 package names:
+
+```lean
+DkMath.Petal.BoundaryD3Branch
+DkMath.Petal.BoundaryD3Reduced
+DkMath.Petal.three_dvd_S0_nat_of_three_dvd_sub
+DkMath.Petal.three_dvd_sub_of_three_dvd_S0_nat
+DkMath.Petal.three_dvd_S0_nat_iff_three_dvd_sub
+DkMath.Petal.boundaryD3Reduced_three_not_dvd_S0_nat
+DkMath.Petal.boundaryD3Branch_three_dvd_S0_nat
+DkMath.Petal.boundaryD3Reduced_coprime_sub_S0_nat
+```
+
 The stronger gcd formula makes the original one-way experiment less important:
 
 ```text
@@ -330,9 +343,21 @@ gcd(c - b, S0(c,b)) = gcd(c - b, 3)
 
 This is the desired "3-primary contact" observation for the cubic Petal face.
 
+The current `BoundaryD3` layer packages this as a branch/reduced-branch
+interface:
+
+```text
+BoundaryD3Branch c b   := 3 | (c - b)
+BoundaryD3Reduced c b  := not 3 | (c - b)
+```
+
+Thus the experiment is no longer only a proposed calculation.  It is now a
+named Petal package layer that can be imported by primitive or Zsigmondy-facing
+files.
+
 ## 4.3. Phase C. (r)-anchor reduced support
 
-Status: **[ACTIVE]**
+Status: **[INITIAL API IMPLEMENTED AS `DkMath.Petal.ReducedSupport`]**
 
 目的は、\(3,5,7,11,\dots\) から始まる世界を、射影・同型的な観測面として Lean に置くことである。
 
@@ -404,6 +429,7 @@ theorem hasPositiveAnchorPrime_prime
 theorem hasPositiveAnchorPrime_anchor_dvd
 theorem hasPositiveAnchorPrime_no_smaller_prime
 theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+theorem hasPositiveAnchorPrime_self_of_prime
 ```
 
 Keep this layer independent of S0 at first.
@@ -419,9 +445,15 @@ This is the B-plan for the `0` carrier issue.  The wide predicate keeps the
 entrance broad, while the positive predicate is used when strict prime-support
 semantics are required.
 
+The initial API has been implemented in:
+
+```text
+lean/dk_math/DkMath/Petal/ReducedSupport.lean
+```
+
 ## 4.4. Phase D. GN primitive candidate
 
-Status: **[PARTIAL]**
+Status: **[PARTIAL] / [ANCHOR CARRIER SURFACE IMPLEMENTED]**
 
 目的は、GN 側に現れる素因子を primitive candidate として包装することである。
 

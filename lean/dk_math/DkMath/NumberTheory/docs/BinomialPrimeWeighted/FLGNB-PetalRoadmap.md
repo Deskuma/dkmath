@@ -804,6 +804,7 @@ hasPositiveAnchorPrime_prime
 hasPositiveAnchorPrime_anchor_dvd
 hasPositiveAnchorPrime_no_smaller_prime
 hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_self_of_prime
 ```
 
 This layer intentionally does not import S0/GN bridge files yet.  It should
@@ -820,6 +821,86 @@ HasPositiveAnchorPrime is the strict support predicate for nonzero carriers.
 This keeps the entrance broad while preventing `0` from being treated as an
 actual support carrier in downstream theorems.
 
+### `DkMath.Petal.Anchor`
+
+Purpose:
+
+```text
+connect positive anchored carriers to concrete S0/GN divisibility surfaces
+```
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
+
+```lean
+AnchoredS0Carrier
+AnchoredGNCarrier
+anchoredS0Carrier_anchor
+anchoredS0Carrier_anchor_prime
+anchoredS0Carrier_dvd_S0
+anchoredS0Carrier_pos
+anchoredS0Carrier_ne_zero
+anchoredS0Carrier_anchor_le_of_prime_dvd
+anchoredGNCarrier_anchor
+anchoredGNCarrier_anchor_prime
+anchoredGNCarrier_dvd_GN
+anchoredGNCarrier_pos
+anchoredGNCarrier_ne_zero
+anchoredGNCarrier_anchor_le_of_prime_dvd
+anchoredGNCarrier_of_anchoredS0Carrier
+anchoredS0Carrier_of_anchoredGNCarrier
+exists_anchoredS0Carrier_of_not_three_dvd_sub
+```
+
+This layer is the first place where `ReducedSupport` imports meet the S0/GN
+surface.  `ReducedSupport` itself remains independent.
+
+### `DkMath.Petal.BoundaryD3`
+
+Purpose:
+
+```text
+record the degree-three split between the 3-boundary branch and the reduced
+S0 branch
+```
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
+
+```lean
+BoundaryD3Branch
+BoundaryD3Reduced
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
+three_dvd_S0_nat_of_three_dvd_sub
+three_dvd_sub_of_three_dvd_S0_nat
+three_dvd_S0_nat_iff_three_dvd_sub
+boundaryD3Reduced_three_not_dvd_S0_nat
+boundaryD3Branch_three_dvd_S0_nat
+boundaryD3Reduced_coprime_sub_S0_nat
+exists_anchoredS0Carrier_of_boundaryD3Reduced
+```
+
+This layer makes the cubic contact prime explicit:
+
+```text
+3 | S0_nat c b  iff  3 | (c - b)
+```
+
+In the reduced branch, and under `Nat.Coprime c b`, the boundary gap is
+coprime to `S0_nat c b`.  This is the usable S0 surface for primitive and
+Zsigmondy-facing arguments.
+
 ### `DkMath.Petal.EisensteinBridge`
 
 Purpose:
@@ -828,11 +909,19 @@ Purpose:
 Petal S0 -> Eisenstein norm bridge
 ```
 
-Candidate aliases:
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
 
 ```lean
-theorem petal_S0_eq_eisensteinNorm_shift
-theorem petal_GN3_sub_eq_eisensteinNorm_shift
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
 ```
 
 These should reference:
@@ -842,7 +931,9 @@ theorem S0_eq_eisensteinNorm_shift
 theorem GN3_sub_eq_eisensteinNorm_shift
 ```
 
-This layer is important, but should come after `GNBridge` and `GcdBridge`.
+This layer is intentionally thin.  It re-exposes the existing FLT Eisenstein
+norm facts through Petal-facing names so later Petal/Zsigmondy files can import
+the package surface.
 
 ## Implementation Steps
 
@@ -1015,6 +1106,7 @@ hasPositiveAnchorPrime_prime
 hasPositiveAnchorPrime_anchor_dvd
 hasPositiveAnchorPrime_no_smaller_prime
 hasPositiveAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_self_of_prime
 ```
 
 Expected validation:
@@ -1024,12 +1116,70 @@ lake build DkMath.Petal.ReducedSupport
 lake build DkMath.Petal
 ```
 
+### Step 5.6: Add `DkMath.Petal.Anchor`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+AnchoredS0Carrier
+AnchoredGNCarrier
+anchoredS0Carrier_anchor_prime
+anchoredGNCarrier_anchor_prime
+anchoredGNCarrier_of_anchoredS0Carrier
+anchoredS0Carrier_of_anchoredGNCarrier
+exists_anchoredS0Carrier_of_not_three_dvd_sub
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.Anchor
+lake build DkMath.Petal
+```
+
+### Step 5.7: Add `DkMath.Petal.BoundaryD3`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+BoundaryD3Branch
+BoundaryD3Reduced
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
+three_dvd_S0_nat_of_three_dvd_sub
+three_dvd_sub_of_three_dvd_S0_nat
+three_dvd_S0_nat_iff_three_dvd_sub
+boundaryD3Reduced_three_not_dvd_S0_nat
+boundaryD3Branch_three_dvd_S0_nat
+boundaryD3Reduced_coprime_sub_S0_nat
+exists_anchoredS0Carrier_of_boundaryD3Reduced
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.BoundaryD3
+lake build DkMath.Petal
+```
+
 ### Step 6: Add `DkMath.Petal.EisensteinBridge`
 
 Status:
 
 ```text
-planned
+initial API implemented
 ```
 
 Expose the Eisenstein norm route as a Petal-facing bridge.
@@ -1040,6 +1190,84 @@ This makes the following triangle explicit:
 GN 3
   <-> S0 Petal form
   <-> Eisenstein norm
+```
+
+Implemented:
+
+```lean
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.EisensteinBridge
+lake build DkMath.Petal
+```
+
+### Step 5.8: Petal cubic surface closure
+
+Status:
+
+```text
+completed
+```
+
+This checkpoint closes the current degree-three Petal surface:
+
+```text
+S0_nat c b
+  = GN 3 (c - b) b
+  = shifted Eisenstein norm
+```
+
+Completed package layers:
+
+```text
+DkMath.Petal.GNBridge
+DkMath.Petal.GcdBridge
+DkMath.Petal.PadicBridge
+DkMath.Petal.PrimitiveBridge
+DkMath.Petal.ReducedSupport
+DkMath.Petal.Anchor
+DkMath.Petal.BoundaryD3
+DkMath.Petal.EisensteinBridge
+```
+
+Closed surface:
+
+```text
+S0 / GN3 / BoundaryD3 / Anchor / Eisenstein
+```
+
+The main interpretation is:
+
+```text
+BoundaryD3Reduced
+  -> boundary and S0 are separated
+  -> primitive S0 witnesses can be read as anchored carriers
+  -> the same S0/GN3 face can be viewed as a shifted Eisenstein norm
+```
+
+Deferred:
+
+```text
+BoundaryD3Anchor split
+FLT namespace dependency refactor
+DkMath.Lib.* promotion of neutral Eisenstein and S0 facts
+general d boundary behavior
+full Zsigmondy bridge
+FLT descent
+```
+
+Validation:
+
+```sh
+lake build DkMath.Petal
+git diff --check
 ```
 
 ### Step 7: Refactor imports gradually

@@ -1943,3 +1943,229 @@ theorem hasPositiveAnchorPrime_of_pos
 - `git diff --check` 成功
 
 今回も追加分に `sorry` はありません。
+
+### 2026/06/12 19:15
+
+`DkMath.Petal.Anchor` を新設して、Anchor と S0/GN の接続を始めました。
+
+追加:
+
+- [Anchor.lean](/lean/dk_math/DkMath/Petal/Anchor.lean)
+  - `AnchoredS0Carrier`
+  - `AnchoredGNCarrier`
+  - `anchoredS0Carrier_anchor`
+  - `anchoredS0Carrier_dvd_S0`
+  - `anchoredS0Carrier_pos`
+  - `anchoredS0Carrier_ne_zero`
+  - `anchoredS0Carrier_anchor_le_of_prime_dvd`
+  - `anchoredGNCarrier_anchor`
+  - `anchoredGNCarrier_dvd_GN`
+  - `anchoredGNCarrier_pos`
+  - `anchoredGNCarrier_ne_zero`
+  - `anchoredGNCarrier_anchor_le_of_prime_dvd`
+  - `anchoredGNCarrier_of_anchoredS0Carrier`
+  - `anchoredS0Carrier_of_anchoredGNCarrier`
+
+ポイントは、`ReducedSupport` は S0/GN 非依存のまま維持し、`Anchor.lean` で初めて `S0_nat` / `GN` へ接続したことです。
+
+集約:
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean) に `DkMath.Petal.Anchor` を追加。
+
+Docs:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+
+確認:
+
+- `lake build DkMath.Petal.Anchor` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
+
+### 2026/06/12 19:48
+
+レビューの次目的地に合わせて進めました。
+
+追加実装:
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean)
+  - `hasPositiveAnchorPrime_self_of_prime`
+  - prime witness 自身を positive anchored carrier として扱うための基礎補題です。
+
+- [Anchor.lean](/lean/dk_math/DkMath/Petal/Anchor.lean)
+  - `exists_anchoredS0Carrier_of_not_three_dvd_sub`
+  - `PrimitiveBridge` の `exists_prime_dvd_S0_nat_of_not_three_dvd_sub` を使い、`S0_nat` 上の primitive prime witness を `AnchoredS0Carrier q c b q` へ昇格します。
+
+依存方向も整理しました:
+
+```text
+ReducedSupport
+  -> PrimitiveBridge
+  -> Anchor
+```
+
+Docs も同期:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal.Anchor` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
+
+### 2026/06/12 20:28
+
+実装と整理を進めました。
+
+`DkMath.Petal.Anchor` に reviewer 指摘の projection を追加しました。
+
+- `anchoredS0Carrier_anchor_prime`
+- `anchoredGNCarrier_anchor_prime`
+
+新規に [BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean) を追加し、3 次 Petal 境界を固定しました。
+
+- `BoundaryD3Branch`
+- `BoundaryD3Reduced`
+- `three_dvd_S0_nat_of_three_dvd_sub`
+- `three_dvd_sub_of_three_dvd_S0_nat`
+- `three_dvd_S0_nat_iff_three_dvd_sub`
+- `boundaryD3Reduced_three_not_dvd_S0_nat`
+- `boundaryD3Branch_three_dvd_S0_nat`
+- `boundaryD3Reduced_coprime_sub_S0_nat`
+
+意味としては、
+
+```text
+3 ∣ S0_nat c b  ↔  3 ∣ c - b
+```
+
+を Petal 用語として固定し、reduced branch では `S0_nat` と境界 gap の gcd 制御へ接続できる形にしました。
+
+docs も更新済みです。
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告だけ出ていますが、今回追加分では新しい `sorry` はありません。
+
+### 2026/06/12 20:50
+
+次の目的地まで進めました。
+
+[BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean) に、review 指摘の使いやすい入口を追加しました。
+
+```lean
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
+exists_anchoredS0Carrier_of_boundaryD3Reduced
+```
+
+これで downstream は `¬ 3 ∣ c - b` に戻らず、`BoundaryD3Reduced c b` のまま
+
+```text
+reduced branch
+  -> boundary/S0 coprime
+  -> anchored primitive S0 carrier exists
+```
+
+へ進めます。
+
+さらに新規に [EisensteinBridge.lean](/lean/dk_math/DkMath/Petal/EisensteinBridge.lean) を追加しました。既存 `DkMath.FLT.GEisensteinBridge` の定理を Petal-facing alias として公開しています。
+
+```lean
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
+```
+
+`DkMath.Petal.lean` にも import 済みで、docs も更新しました。
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning だけで、今回追加分に新しい `sorry` はありません。
+
+### 2026/06/12 22:55
+
+レビュー指摘は、今すぐ構造を割らずに「将来の `DkMath.Lib.*` 昇格リファクタリングで必ず見るべき依存問題」としてソース上に強めに明記しました。
+
+追加したのは module doc の注意書きです。
+
+- [BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean)
+  - `BoundaryD3 -> Anchor -> PrimitiveBridge` になっている現状を明記
+  - 将来は `BoundaryD3` と `BoundaryD3Anchor` に分ける候補を明示
+  - 現状は便利 API として一時的に同居させている、と残しました
+
+- [EisensteinBridge.lean](/lean/dk_math/DkMath/Petal/EisensteinBridge.lean)
+  - `Petal -> FLT` の import 方向は最終形ではないと明記
+  - `DkMath.Lib.*` または neutral な `NumberTheory` 層へ Eisenstein core facts を移し、将来は `FLT` が Petal/neutral layer を使う方向に直す、と残しました
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。今回も新しい `sorry` はありません。
+
+### 2026/06/12 23:12
+
+総括段階として、実装追加はせずに整理しました。
+
+`DkMath.Petal` の import 順を物語順に整え、module doc にその意図を追記しました。
+
+```text
+basic forms / relative polygon vocabulary
+  -> counting and address layers
+  -> GN/GCD/p-adic/primitive bridges
+  -> reduced support and anchored carriers
+  -> BoundaryD3 cubic branch split
+  -> shifted Eisenstein norm bridge
+```
+
+docs 側は以下を更新しました。
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+  - `Current Closed Surface` を追加
+  - `Petal cubic surface closure` として、S0/GN3/BoundaryD3/Anchor/Eisenstein の閉じた範囲を明記
+  - 未主張の範囲も整理
+
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+  - `Step 5.8: Petal cubic surface closure` を追加
+  - 完了済み層、閉じた表面、延期項目を明記
+
+- [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+  - Phase 4.7 を現状に合わせて更新
+  - Phase 5 へ渡す前段として、三次 Petal 表面が閉じたことを反映
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning のみで、今回の変更による新しい `sorry` はありません。
