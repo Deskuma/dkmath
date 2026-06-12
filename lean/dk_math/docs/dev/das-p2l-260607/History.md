@@ -2130,3 +2130,42 @@ git diff --check
 ```
 
 どちらも成功です。今回も新しい `sorry` はありません。
+
+### 2026/06/12 23:12
+
+総括段階として、実装追加はせずに整理しました。
+
+`DkMath.Petal` の import 順を物語順に整え、module doc にその意図を追記しました。
+
+```text
+basic forms / relative polygon vocabulary
+  -> counting and address layers
+  -> GN/GCD/p-adic/primitive bridges
+  -> reduced support and anchored carriers
+  -> BoundaryD3 cubic branch split
+  -> shifted Eisenstein norm bridge
+```
+
+docs 側は以下を更新しました。
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+  - `Current Closed Surface` を追加
+  - `Petal cubic surface closure` として、S0/GN3/BoundaryD3/Anchor/Eisenstein の閉じた範囲を明記
+  - 未主張の範囲も整理
+
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+  - `Step 5.8: Petal cubic surface closure` を追加
+  - 完了済み層、閉じた表面、延期項目を明記
+
+- [BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md)
+  - Phase 4.7 を現状に合わせて更新
+  - Phase 5 へ渡す前段として、三次 Petal 表面が閉じたことを反映
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning のみで、今回の変更による新しい `sorry` はありません。
