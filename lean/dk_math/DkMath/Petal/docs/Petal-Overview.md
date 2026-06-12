@@ -98,9 +98,16 @@ DkMath.Petal.Basic
 DkMath.Petal.Forms
 DkMath.Petal.RelPolygon
 DkMath.Petal.CoreUnit
-DkMath.Petal.GNBridge
 DkMath.Petal.Counting
 DkMath.Petal.Address
+DkMath.Petal.GNBridge
+DkMath.Petal.GcdBridge
+DkMath.Petal.PadicBridge
+DkMath.Petal.PrimitiveBridge
+DkMath.Petal.ReducedSupport
+DkMath.Petal.Anchor
+DkMath.Petal.BoundaryD3
+DkMath.Petal.EisensteinBridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -447,32 +454,77 @@ the cubic 3-contact is exactly the boundary branch
 S0 and GN3 can be viewed through the shifted Eisenstein norm
 ```
 
+## Current Closed Surface
+
+The current closure checkpoint is:
+
+```text
+Petal cubic surface closure
+```
+
+At this checkpoint, `DkMath.Petal` can express the following degree-three
+surface without importing research files:
+
+```text
+S0_nat c b
+  = GN 3 (c - b) b
+  = shifted Eisenstein norm
+```
+
+It can also classify the cubic boundary contact:
+
+```text
+BoundaryD3Branch c b   := 3 | (c - b)
+BoundaryD3Reduced c b  := not 3 | (c - b)
+
+3 | S0_nat c b iff 3 | (c - b)
+```
+
+On the reduced branch, the package has the prepared route:
+
+```text
+BoundaryD3Reduced
+  -> 3 does not divide S0_nat
+  -> Coprime (c - b) (S0_nat c b), assuming Coprime c b
+  -> primitive S0 witness exists
+  -> witness can be read as an anchored S0 carrier
+```
+
+This closes the current S0/GN3/BoundaryD3/Anchor/Eisenstein surface as a
+usable API for later FLT and Zsigmondy-facing work.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete
 prime enumeration such as `nthPrime`.
 
-It also does not yet prove a Zsigmondy theorem.  Instead, it prepares the
-language needed for that bridge:
+It also does not yet prove:
 
 ```text
-where factors are stored
-which factors persist across later layers
-how Petal addresses split a layer into channels
-how GN degree 3 becomes the Petal S0 face
-how reduced cubic support excludes the boundary prime 3
-how the same cubic face enters the Eisenstein norm route
+general d boundary classification
+full Zsigmondy theorem
+FLT descent
+complete Eisenstein refactor away from the FLT namespace
+complete split of BoundaryD3 and BoundaryD3Anchor
+concrete prime enumeration / standard primorial theorem
 ```
+
+Instead, it prepares the language needed for those bridges: where factors are
+stored, which factors persist across later layers, how Petal addresses split a
+layer into channels, how GN degree 3 becomes the Petal S0 face, how reduced
+cubic support excludes the boundary prime `3`, and how the same cubic face
+enters the Eisenstein norm route.
 
 ## Next Directions
 
 The next reasonable implementation directions are:
 
 ```text
-1. use Petal address decomposition in nested observations
-2. connect strict prime-base orbits to a concrete prime enumeration
-3. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
-4. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
+1. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
+2. use Petal address decomposition in nested observations
+3. connect strict prime-base orbits to a concrete prime enumeration
+4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
+5. perform the deferred `DkMath.Lib.*` promotion refactor
 ```
 
 The most conservative next theorem work is probably:

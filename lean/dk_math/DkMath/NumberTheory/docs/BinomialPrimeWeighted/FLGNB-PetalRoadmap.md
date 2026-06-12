@@ -1208,6 +1208,68 @@ lake build DkMath.Petal.EisensteinBridge
 lake build DkMath.Petal
 ```
 
+### Step 5.8: Petal cubic surface closure
+
+Status:
+
+```text
+completed
+```
+
+This checkpoint closes the current degree-three Petal surface:
+
+```text
+S0_nat c b
+  = GN 3 (c - b) b
+  = shifted Eisenstein norm
+```
+
+Completed package layers:
+
+```text
+DkMath.Petal.GNBridge
+DkMath.Petal.GcdBridge
+DkMath.Petal.PadicBridge
+DkMath.Petal.PrimitiveBridge
+DkMath.Petal.ReducedSupport
+DkMath.Petal.Anchor
+DkMath.Petal.BoundaryD3
+DkMath.Petal.EisensteinBridge
+```
+
+Closed surface:
+
+```text
+S0 / GN3 / BoundaryD3 / Anchor / Eisenstein
+```
+
+The main interpretation is:
+
+```text
+BoundaryD3Reduced
+  -> boundary and S0 are separated
+  -> primitive S0 witnesses can be read as anchored carriers
+  -> the same S0/GN3 face can be viewed as a shifted Eisenstein norm
+```
+
+Deferred:
+
+```text
+BoundaryD3Anchor split
+FLT namespace dependency refactor
+DkMath.Lib.* promotion of neutral Eisenstein and S0 facts
+general d boundary behavior
+full Zsigmondy bridge
+FLT descent
+```
+
+Validation:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:

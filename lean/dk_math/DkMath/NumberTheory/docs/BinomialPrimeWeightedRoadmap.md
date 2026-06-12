@@ -426,6 +426,13 @@ DkMath.Petal
 DkMath.Petal.Counting
 DkMath.Petal.Address
 DkMath.Petal.GNBridge
+DkMath.Petal.GcdBridge
+DkMath.Petal.PadicBridge
+DkMath.Petal.PrimitiveBridge
+DkMath.Petal.ReducedSupport
+DkMath.Petal.Anchor
+DkMath.Petal.BoundaryD3
+DkMath.Petal.EisensteinBridge
 ```
 
 記録:
@@ -445,6 +452,8 @@ lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.m
   可除性構造として読む。
 - primitive prime divisor を追う前段として、
   「採用済み因子が後段 product に残る」ことを theorem 化する。
+- S0/GN3/BoundaryD3/Anchor/Eisenstein を、Phase 5 へ渡す三次 Petal 表面 API
+  として一旦閉じる。
 
 主な API:
 
@@ -483,6 +492,18 @@ theorem three_S0_nat_modEq_one_of_not_dvd_sub
 theorem three_not_dvd_S0_nat_of_not_dvd_sub
 ```
 
+S0/GN3 cubic surface closure:
+
+```lean
+theorem gcd_sub_S0_nat_eq_gcd_sub_three
+theorem padicValNat_cube_sub_eq_padicValNat_S0_nat_of_not_dvd_sub
+theorem exists_prime_dvd_S0_nat_of_not_three_dvd_sub
+theorem exists_anchoredS0Carrier_of_boundaryD3Reduced
+theorem three_dvd_S0_nat_iff_three_dvd_sub
+theorem petal_S0_eq_eisensteinNorm_shift
+theorem petal_GN3_sub_eq_eisensteinNorm_shift
+```
+
 意味:
 
 ```text
@@ -494,6 +515,7 @@ Petal Phase 4.7:
   factor persistence
   Petal quotient-remainder address
   GN degree-three Petal face
+  S0/GN3/BoundaryD3/Anchor/Eisenstein cubic surface closure
 
 Phase 5:
   primitive prime divisor / Zsigmondy bridge
@@ -502,6 +524,17 @@ Phase 5:
 これは Zsigmondy 本体ではない。
 Zsigmondy へ渡す前に、どの因子がどの orbit / channel / GN face に保存されるかを
 Lean 上で追うための道具である。
+
+現在の Phase 4.7 closure で閉じたのは、一般次数 `d` ではなく三次 `S0/GN3`
+表面である。未処理の項目は以下に残す:
+
+```text
+general d boundary classification
+full Zsigmondy theorem
+FLT descent
+DkMath.Lib.* promotion of neutral S0 / Eisenstein facts
+BoundaryD3Anchor split and final import-direction cleanup
+```
 
 ### Phase 5: Zsigmondy への接続準備
 
