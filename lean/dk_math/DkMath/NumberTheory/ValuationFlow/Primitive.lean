@@ -74,4 +74,6 @@ theorem primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
   exact primitive_prime_padic_bound_diff_of_squarefree_GN
     hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
 
+#print axioms primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
+
 end DkMath.NumberTheory.ValuationFlow
