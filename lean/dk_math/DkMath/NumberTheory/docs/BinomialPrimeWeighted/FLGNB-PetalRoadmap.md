@@ -1292,12 +1292,46 @@ Petal gives location.
 Squarefree/NoLift gives multiplicity.
 ```
 
-The next Lean-facing bridge should therefore be `DkMath.Petal.ZsigmondyD3Bridge`
-or an equivalent `PrimitiveD3` layer.  It should translate the reduced cubic
-Petal witness into `DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q`.
+The next Lean-facing bridge is `DkMath.Petal.ZsigmondyD3Bridge`.  It feeds the
+reduced cubic Petal hypotheses into Zsigmondy's `d = 3` existence theorem and
+shares the same witness with the anchored `S0_nat` carrier surface.
 
 It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
 squarefree or no-lift hypothesis.
+
+### Step 6.0: Add `DkMath.Petal.ZsigmondyD3Bridge`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
+primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeDivisor_d3_dvd_S0_nat
+anchoredS0Carrier_of_primitivePrimeDivisor_d3
+exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
+```
+
+Meaning:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy primitive divisor q for c^3 - b^3
+  -> the same q as an anchored S0 carrier
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.ZsigmondyD3Bridge
+lake build DkMath.Petal
+```
 
 ### Step 7: Refactor imports gradually
 

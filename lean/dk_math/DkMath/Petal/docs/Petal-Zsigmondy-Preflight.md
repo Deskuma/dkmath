@@ -26,8 +26,9 @@ BoundaryD3Reduced
 The next question is not yet "prove Zsigmondy".  The immediate question is:
 
 ```text
-Can the Petal anchored S0 witness be translated into the existing
-Zsigmondy primitive-divisor language?
+Can the reduced cubic Petal hypotheses be fed into the existing
+Zsigmondy d = 3 existence theorem, and can that same Zsigmondy witness be
+shared with the Petal anchored S0 carrier surface?
 ```
 
 ## Existing Zsigmondy Contract
@@ -90,8 +91,9 @@ theorem exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
 This is not a full Zsigmondy theorem.  It is the `d = 3` handshake:
 
 ```text
-Petal reduced cubic witness
-  -> primitive divisor witness for c^3 - b^3
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy primitive divisor q for c^3 - b^3
+  -> the same q as an anchored S0 carrier
 ```
 
 ## Important Separation: Existence, Location, Multiplicity

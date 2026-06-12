@@ -557,7 +557,9 @@ Squarefree / NoLift / ValuationFlow:
 
 したがって次に作る橋は、まず三次 reduced Petal witness を
 `DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q` へ翻訳する薄い
-`ZsigmondyD3Bridge` でよい。
+`ZsigmondyD3Bridge` でよい。この初期 bridge は
+`DkMath.Petal.ZsigmondyD3Bridge` として実装済みであり、同じ witness を
+Zsigmondy primitive divisor と Petal anchored `S0_nat` carrier として共有する。
 `padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
 持つ別層の仕事として扱う。
 

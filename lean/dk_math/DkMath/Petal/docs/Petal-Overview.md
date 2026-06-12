@@ -108,6 +108,7 @@ DkMath.Petal.ReducedSupport
 DkMath.Petal.Anchor
 DkMath.Petal.BoundaryD3
 DkMath.Petal.EisensteinBridge
+DkMath.Petal.ZsigmondyD3Bridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -319,6 +320,26 @@ This is an alias bridge over `DkMath.FLT.GEisensteinBridge`, not a new
 arithmetic development.  Its role is to let later Petal/Zsigmondy-facing files
 import the Petal package surface instead of depending directly on the FLT file
 layout.
+
+### `DkMath.Petal.ZsigmondyD3Bridge`
+
+Shares the same `d = 3` Zsigmondy primitive-divisor witness with the Petal
+anchored `S0_nat` carrier surface.
+
+Important names:
+
+```lean
+exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
+primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeDivisor_d3_dvd_S0_nat
+anchoredS0Carrier_of_primitivePrimeDivisor_d3
+exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
+```
+
+This bridge intentionally does not prove any `padicValNat <= 1` theorem.
+Zsigmondy supplies existence, Petal supplies location, and squarefree/no-lift
+layers supply multiplicity.
 
 ### `DkMath.Petal.Counting`
 
