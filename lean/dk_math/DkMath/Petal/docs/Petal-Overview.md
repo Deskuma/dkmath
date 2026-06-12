@@ -269,12 +269,15 @@ Important names:
 ```lean
 BoundaryD3Branch
 BoundaryD3Reduced
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
 three_dvd_S0_nat_of_three_dvd_sub
 three_dvd_sub_of_three_dvd_S0_nat
 three_dvd_S0_nat_iff_three_dvd_sub
 boundaryD3Reduced_three_not_dvd_S0_nat
 boundaryD3Branch_three_dvd_S0_nat
 boundaryD3Reduced_coprime_sub_S0_nat
+exists_anchoredS0Carrier_of_boundaryD3Reduced
 ```
 
 Conceptually, this says:
@@ -289,7 +292,26 @@ The reduced branch therefore gives the usable cubic Petal surface:
 BoundaryD3Reduced c b
   -> not 3 | S0_nat c b
   -> Coprime (c - b) (S0_nat c b), assuming Coprime c b
+  -> an anchored primitive S0 carrier exists, under the primitive bridge inputs
 ```
+
+### `DkMath.Petal.EisensteinBridge`
+
+Exposes the existing Eisenstein norm route through Petal-facing names.
+
+Important names:
+
+```lean
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
+```
+
+This is an alias bridge over `DkMath.FLT.GEisensteinBridge`, not a new
+arithmetic development.  Its role is to let later Petal/Zsigmondy-facing files
+import the Petal package surface instead of depending directly on the FLT file
+layout.
 
 ### `DkMath.Petal.Counting`
 
@@ -409,6 +431,7 @@ Fixed Petal counting
   -> S0/GN primitive bridge
   -> reduced-support anchor carriers
   -> degree-three boundary split
+  -> Petal-facing Eisenstein norm bridge
 ```
 
 This means the package can already express:
@@ -421,6 +444,7 @@ one Petal address step is a quotient-remainder decomposition
 S0 is a visible degree-three Petal face of GN
 primitive S0 witnesses can be read as anchored carriers
 the cubic 3-contact is exactly the boundary branch
+S0 and GN3 can be viewed through the shifted Eisenstein norm
 ```
 
 ## What This Does Not Claim Yet
@@ -437,6 +461,7 @@ which factors persist across later layers
 how Petal addresses split a layer into channels
 how GN degree 3 becomes the Petal S0 face
 how reduced cubic support excludes the boundary prime 3
+how the same cubic face enters the Eisenstein norm route
 ```
 
 ## Next Directions
@@ -444,17 +469,16 @@ how reduced cubic support excludes the boundary prime 3
 The next reasonable implementation directions are:
 
 ```text
-1. connect AnchoredS0Carrier to the primitive S0 witnesses
-2. use Petal address decomposition in nested observations
-3. expose the Eisenstein norm route through `DkMath.Petal.EisensteinBridge`
-4. connect strict prime-base orbits to a concrete prime enumeration
-5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
+1. use Petal address decomposition in nested observations
+2. connect strict prime-base orbits to a concrete prime enumeration
+3. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
+4. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
 ```
 
 The most conservative next theorem work is probably:
 
 ```text
-DkMath.Petal.EisensteinBridge
+BoundaryD3 / EisensteinBridge downstream corollaries
 ```
 
 The most concrete arithmetic next step is:

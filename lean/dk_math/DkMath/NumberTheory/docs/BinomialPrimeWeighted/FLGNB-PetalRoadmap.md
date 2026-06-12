@@ -880,12 +880,15 @@ Implemented names:
 ```lean
 BoundaryD3Branch
 BoundaryD3Reduced
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
 three_dvd_S0_nat_of_three_dvd_sub
 three_dvd_sub_of_three_dvd_S0_nat
 three_dvd_S0_nat_iff_three_dvd_sub
 boundaryD3Reduced_three_not_dvd_S0_nat
 boundaryD3Branch_three_dvd_S0_nat
 boundaryD3Reduced_coprime_sub_S0_nat
+exists_anchoredS0Carrier_of_boundaryD3Reduced
 ```
 
 This layer makes the cubic contact prime explicit:
@@ -906,11 +909,19 @@ Purpose:
 Petal S0 -> Eisenstein norm bridge
 ```
 
-Candidate aliases:
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
 
 ```lean
-theorem petal_S0_eq_eisensteinNorm_shift
-theorem petal_GN3_sub_eq_eisensteinNorm_shift
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
 ```
 
 These should reference:
@@ -920,7 +931,9 @@ theorem S0_eq_eisensteinNorm_shift
 theorem GN3_sub_eq_eisensteinNorm_shift
 ```
 
-This layer is important, but should come after `GNBridge` and `GcdBridge`.
+This layer is intentionally thin.  It re-exposes the existing FLT Eisenstein
+norm facts through Petal-facing names so later Petal/Zsigmondy files can import
+the package surface.
 
 ## Implementation Steps
 
@@ -1143,12 +1156,15 @@ Implemented:
 ```lean
 BoundaryD3Branch
 BoundaryD3Reduced
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
 three_dvd_S0_nat_of_three_dvd_sub
 three_dvd_sub_of_three_dvd_S0_nat
 three_dvd_S0_nat_iff_three_dvd_sub
 boundaryD3Reduced_three_not_dvd_S0_nat
 boundaryD3Branch_three_dvd_S0_nat
 boundaryD3Reduced_coprime_sub_S0_nat
+exists_anchoredS0Carrier_of_boundaryD3Reduced
 ```
 
 Expected validation:
@@ -1163,7 +1179,7 @@ lake build DkMath.Petal
 Status:
 
 ```text
-planned
+initial API implemented
 ```
 
 Expose the Eisenstein norm route as a Petal-facing bridge.
@@ -1174,6 +1190,22 @@ This makes the following triangle explicit:
 GN 3
   <-> S0 Petal form
   <-> Eisenstein norm
+```
+
+Implemented:
+
+```lean
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.EisensteinBridge
+lake build DkMath.Petal
 ```
 
 ### Step 7: Refactor imports gradually

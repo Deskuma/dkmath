@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Petal.Anchor
 import DkMath.Petal.GcdBridge
 
 #print "file: DkMath.Petal.BoundaryD3"
@@ -30,6 +31,19 @@ def BoundaryD3Branch (c b : ℕ) : Prop :=
 /-- The degree-three reduced branch: `3` does not divide the boundary gap. -/
 def BoundaryD3Reduced (c b : ℕ) : Prop :=
   ¬ 3 ∣ c - b
+
+/-- Every cubic Petal coordinate lies on either the boundary branch or the reduced branch. -/
+theorem boundaryD3Branch_or_reduced (c b : ℕ) :
+    BoundaryD3Branch c b ∨ BoundaryD3Reduced c b := by
+  by_cases h : 3 ∣ c - b
+  · exact Or.inl h
+  · exact Or.inr h
+
+/-- The reduced branch is not the boundary branch. -/
+theorem not_boundaryD3Branch_of_reduced
+    {c b : ℕ} (h : BoundaryD3Reduced c b) :
+    ¬ BoundaryD3Branch c b :=
+  h
 
 /--
 On the degree-three boundary branch, `3` divides the Petal detector `S0_nat`.
@@ -86,6 +100,16 @@ theorem boundaryD3Reduced_coprime_sub_S0_nat
     (h : BoundaryD3Reduced c b) :
     Nat.Coprime (c - b) (S0_nat c b) :=
   coprime_sub_S0_nat_of_coprime_of_not_dvd_three hbc hcop h
+
+/--
+On the reduced branch, the primitive S0 witness can be read as an anchored
+S0 carrier without unfolding the branch definition.
+-/
+theorem exists_anchoredS0Carrier_of_boundaryD3Reduced
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (hred : BoundaryD3Reduced c b) :
+    ∃ q : ℕ, AnchoredS0Carrier q c b q ∧ ¬ q ∣ c - b :=
+  exists_anchoredS0Carrier_of_not_three_dvd_sub hbc hb hcop hred
 
 end Petal
 end DkMath
