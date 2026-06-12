@@ -109,6 +109,7 @@ DkMath.Petal.Anchor
 DkMath.Petal.BoundaryD3
 DkMath.Petal.EisensteinBridge
 DkMath.Petal.ZsigmondyD3Bridge
+DkMath.Petal.PrimitiveD3ValuationBridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -346,6 +347,25 @@ layers supply multiplicity.
 It also shares the same witness `q` with
 `PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`, preparing the downstream
 squarefree/no-lift valuation layer without proving that layer here.
+
+### `DkMath.Petal.PrimitiveD3ValuationBridge`
+
+Connects the shared `d = 3` witness to the honest squarefree valuation theorem.
+
+Important names:
+
+```lean
+primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
+```
+
+This file is deliberately conditional.  It does not prove that `GN 3 (c - b) b`
+is squarefree.  It only says that, once squarefreeness is supplied, the same
+`q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
+
+```text
+padicValNat q (c^3 - b^3) <= 1
+```
 
 ### `DkMath.Petal.Counting`
 

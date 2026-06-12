@@ -1340,6 +1340,43 @@ lake build DkMath.Petal.ZsigmondyD3Bridge
 lake build DkMath.Petal
 ```
 
+### Step 6.1: Add `DkMath.Petal.PrimitiveD3ValuationBridge`
+
+Status:
+
+```text
+implemented
+```
+
+This step connects the shared `d = 3` primitive witness to the honest
+squarefree/no-lift valuation layer.
+
+Implemented:
+
+```lean
+primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
+```
+
+Meaning:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy/Petal/PrimitiveBeam shared witness q
+  -> Squarefree (GN 3 (c - b) b)
+  -> padicValNat q (c^3 - b^3) <= 1
+```
+
+This is still not an unconditional valuation theorem.  The squarefree `GN3`
+hypothesis is explicit and belongs to the multiplicity/no-lift layer.
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.PrimitiveD3ValuationBridge
+lake build DkMath.Petal
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:
