@@ -252,10 +252,43 @@ Important names:
 AnchoredS0Carrier
 AnchoredGNCarrier
 anchoredS0Carrier_dvd_S0
+anchoredS0Carrier_anchor_prime
 anchoredGNCarrier_dvd_GN
+anchoredGNCarrier_anchor_prime
 anchoredGNCarrier_of_anchoredS0Carrier
 anchoredS0Carrier_of_anchoredGNCarrier
 exists_anchoredS0Carrier_of_not_three_dvd_sub
+```
+
+### `DkMath.Petal.BoundaryD3`
+
+Records the degree-three boundary split for the cubic Petal detector.
+
+Important names:
+
+```lean
+BoundaryD3Branch
+BoundaryD3Reduced
+three_dvd_S0_nat_of_three_dvd_sub
+three_dvd_sub_of_three_dvd_S0_nat
+three_dvd_S0_nat_iff_three_dvd_sub
+boundaryD3Reduced_three_not_dvd_S0_nat
+boundaryD3Branch_three_dvd_S0_nat
+boundaryD3Reduced_coprime_sub_S0_nat
+```
+
+Conceptually, this says:
+
+```text
+3 divides S0_nat c b exactly on the boundary branch 3 | (c - b).
+```
+
+The reduced branch therefore gives the usable cubic Petal surface:
+
+```text
+BoundaryD3Reduced c b
+  -> not 3 | S0_nat c b
+  -> Coprime (c - b) (S0_nat c b), assuming Coprime c b
 ```
 
 ### `DkMath.Petal.Counting`
@@ -373,6 +406,9 @@ Fixed Petal counting
   -> prefix divisibility persistence
   -> Petal address decomposition
   -> GN degree-three bridge
+  -> S0/GN primitive bridge
+  -> reduced-support anchor carriers
+  -> degree-three boundary split
 ```
 
 This means the package can already express:
@@ -383,6 +419,8 @@ an adopted prime base remains visible in later prime-base products
 strict prime-base sequences preserve order and non-repetition
 one Petal address step is a quotient-remainder decomposition
 S0 is a visible degree-three Petal face of GN
+primitive S0 witnesses can be read as anchored carriers
+the cubic 3-contact is exactly the boundary branch
 ```
 
 ## What This Does Not Claim Yet
@@ -398,6 +436,7 @@ where factors are stored
 which factors persist across later layers
 how Petal addresses split a layer into channels
 how GN degree 3 becomes the Petal S0 face
+how reduced cubic support excludes the boundary prime 3
 ```
 
 ## Next Directions
@@ -407,14 +446,15 @@ The next reasonable implementation directions are:
 ```text
 1. connect AnchoredS0Carrier to the primitive S0 witnesses
 2. use Petal address decomposition in nested observations
-3. connect strict prime-base orbits to a concrete prime enumeration
-4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
+3. expose the Eisenstein norm route through `DkMath.Petal.EisensteinBridge`
+4. connect strict prime-base orbits to a concrete prime enumeration
+5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
 ```
 
 The most conservative next theorem work is probably:
 
 ```text
-DkMath.Petal.Anchor plus PrimitiveBridge
+DkMath.Petal.EisensteinBridge
 ```
 
 The most concrete arithmetic next step is:

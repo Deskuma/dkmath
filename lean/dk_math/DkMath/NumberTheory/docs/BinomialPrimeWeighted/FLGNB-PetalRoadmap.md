@@ -841,11 +841,13 @@ Implemented names:
 AnchoredS0Carrier
 AnchoredGNCarrier
 anchoredS0Carrier_anchor
+anchoredS0Carrier_anchor_prime
 anchoredS0Carrier_dvd_S0
 anchoredS0Carrier_pos
 anchoredS0Carrier_ne_zero
 anchoredS0Carrier_anchor_le_of_prime_dvd
 anchoredGNCarrier_anchor
+anchoredGNCarrier_anchor_prime
 anchoredGNCarrier_dvd_GN
 anchoredGNCarrier_pos
 anchoredGNCarrier_ne_zero
@@ -857,6 +859,44 @@ exists_anchoredS0Carrier_of_not_three_dvd_sub
 
 This layer is the first place where `ReducedSupport` imports meet the S0/GN
 surface.  `ReducedSupport` itself remains independent.
+
+### `DkMath.Petal.BoundaryD3`
+
+Purpose:
+
+```text
+record the degree-three split between the 3-boundary branch and the reduced
+S0 branch
+```
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented names:
+
+```lean
+BoundaryD3Branch
+BoundaryD3Reduced
+three_dvd_S0_nat_of_three_dvd_sub
+three_dvd_sub_of_three_dvd_S0_nat
+three_dvd_S0_nat_iff_three_dvd_sub
+boundaryD3Reduced_three_not_dvd_S0_nat
+boundaryD3Branch_three_dvd_S0_nat
+boundaryD3Reduced_coprime_sub_S0_nat
+```
+
+This layer makes the cubic contact prime explicit:
+
+```text
+3 | S0_nat c b  iff  3 | (c - b)
+```
+
+In the reduced branch, and under `Nat.Coprime c b`, the boundary gap is
+coprime to `S0_nat c b`.  This is the usable S0 surface for primitive and
+Zsigmondy-facing arguments.
 
 ### `DkMath.Petal.EisensteinBridge`
 
@@ -1076,6 +1116,8 @@ Implemented:
 ```lean
 AnchoredS0Carrier
 AnchoredGNCarrier
+anchoredS0Carrier_anchor_prime
+anchoredGNCarrier_anchor_prime
 anchoredGNCarrier_of_anchoredS0Carrier
 anchoredS0Carrier_of_anchoredGNCarrier
 exists_anchoredS0Carrier_of_not_three_dvd_sub
@@ -1085,6 +1127,34 @@ Expected validation:
 
 ```sh
 lake build DkMath.Petal.Anchor
+lake build DkMath.Petal
+```
+
+### Step 5.7: Add `DkMath.Petal.BoundaryD3`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+BoundaryD3Branch
+BoundaryD3Reduced
+three_dvd_S0_nat_of_three_dvd_sub
+three_dvd_sub_of_three_dvd_S0_nat
+three_dvd_S0_nat_iff_three_dvd_sub
+boundaryD3Reduced_three_not_dvd_S0_nat
+boundaryD3Branch_three_dvd_S0_nat
+boundaryD3Reduced_coprime_sub_S0_nat
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.BoundaryD3
 lake build DkMath.Petal
 ```
 

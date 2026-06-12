@@ -16,6 +16,7 @@ import DkMath.Petal.GcdBridge
 import DkMath.Petal.PadicBridge
 import DkMath.Petal.PrimitiveBridge
 import DkMath.Petal.Anchor
+import DkMath.Petal.BoundaryD3
 
 #print "file: DkMath.Petal"
 

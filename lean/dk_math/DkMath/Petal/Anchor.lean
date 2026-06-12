@@ -45,6 +45,12 @@ theorem anchoredS0Carrier_anchor
     HasPositiveAnchorPrime r n :=
   h.1
 
+/-- The anchor of an anchored `S0_nat` carrier is prime. -/
+theorem anchoredS0Carrier_anchor_prime
+    {r c b n : ℕ} (h : AnchoredS0Carrier r c b n) :
+    Nat.Prime r :=
+  hasPositiveAnchorPrime_prime h.1
+
 /-- Extract the divisibility statement from an anchored `S0_nat` carrier. -/
 theorem anchoredS0Carrier_dvd_S0
     {r c b n : ℕ} (h : AnchoredS0Carrier r c b n) :
@@ -75,6 +81,12 @@ theorem anchoredGNCarrier_anchor
     {r d x u n : ℕ} (h : AnchoredGNCarrier r d x u n) :
     HasPositiveAnchorPrime r n :=
   h.1
+
+/-- The anchor of an anchored GN carrier is prime. -/
+theorem anchoredGNCarrier_anchor_prime
+    {r d x u n : ℕ} (h : AnchoredGNCarrier r d x u n) :
+    Nat.Prime r :=
+  hasPositiveAnchorPrime_prime h.1
 
 /-- Extract the divisibility statement from an anchored GN carrier. -/
 theorem anchoredGNCarrier_dvd_GN
