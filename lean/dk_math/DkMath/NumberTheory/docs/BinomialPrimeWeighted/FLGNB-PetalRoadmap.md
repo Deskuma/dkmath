@@ -792,14 +792,31 @@ Implemented names:
 ```lean
 HasNoPrimeBelow
 HasAnchorPrime
+HasPositiveAnchorPrime
 hasAnchorPrime_prime
 hasAnchorPrime_anchor_dvd
 hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 ```
 
 This layer intentionally does not import S0/GN bridge files yet.  It should
 first remain a thin carrier predicate surface, then connect to GN/S0 support
 only after a concrete theorem needs that bridge.
+
+Design note:
+
+```text
+HasAnchorPrime is the wide raw carrier predicate.
+HasPositiveAnchorPrime is the strict support predicate for nonzero carriers.
+```
+
+This keeps the entrance broad while preventing `0` from being treated as an
+actual support carrier in downstream theorems.
 
 ### `DkMath.Petal.EisensteinBridge`
 
@@ -984,9 +1001,16 @@ Implemented:
 ```lean
 HasNoPrimeBelow
 HasAnchorPrime
+HasPositiveAnchorPrime
 hasAnchorPrime_prime
 hasAnchorPrime_anchor_dvd
 hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 ```
 
 Expected validation:

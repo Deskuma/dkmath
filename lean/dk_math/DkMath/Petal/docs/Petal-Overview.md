@@ -222,10 +222,21 @@ Important names:
 ```lean
 HasNoPrimeBelow
 HasAnchorPrime
+HasPositiveAnchorPrime
 hasAnchorPrime_prime
 hasAnchorPrime_anchor_dvd
 hasAnchorPrime_no_smaller_prime
+hasAnchorPrime_anchor_le_of_prime_dvd
+hasPositiveAnchorPrime_pos
+hasPositiveAnchorPrime_prime
+hasPositiveAnchorPrime_anchor_dvd
+hasPositiveAnchorPrime_no_smaller_prime
+hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 ```
+
+`HasAnchorPrime` is the wide raw carrier predicate.  Use
+`HasPositiveAnchorPrime` when the carrier must be a genuine nonzero support
+object.
 
 ### `DkMath.Petal.Counting`
 

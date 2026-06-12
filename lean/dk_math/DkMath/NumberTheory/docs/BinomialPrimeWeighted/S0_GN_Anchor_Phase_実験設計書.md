@@ -390,12 +390,32 @@ def HasNoPrimeBelow (r n : ℕ) : Prop :=
 def HasAnchorPrime (r n : ℕ) : Prop :=
   r.Prime ∧ r ∣ n ∧ HasNoPrimeBelow r n
 
+def HasPositiveAnchorPrime (r n : ℕ) : Prop :=
+  0 < n ∧ HasAnchorPrime r n
+
 theorem hasAnchorPrime_prime
 theorem hasAnchorPrime_anchor_dvd
 theorem hasAnchorPrime_no_smaller_prime
+theorem hasAnchorPrime_anchor_le_of_prime_dvd
+theorem hasPositiveAnchorPrime_pos
+theorem hasPositiveAnchorPrime_prime
+theorem hasPositiveAnchorPrime_anchor_dvd
+theorem hasPositiveAnchorPrime_no_smaller_prime
+theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 ```
 
 Keep this layer independent of S0 at first.
+
+Design decision:
+
+```text
+HasAnchorPrime           = wide raw carrier predicate
+HasPositiveAnchorPrime   = strict support predicate for nonzero carriers
+```
+
+This is the B-plan for the `0` carrier issue.  The wide predicate keeps the
+entrance broad, while the positive predicate is used when strict prime-support
+semantics are required.
 
 ## 4.4. Phase D. GN primitive candidate
 
