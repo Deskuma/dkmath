@@ -96,6 +96,26 @@ BoundaryD3Reduced hypotheses
   -> the same q as an anchored S0 carrier
 ```
 
+## Handshake Result
+
+Status: **initial API implemented**
+
+`DkMath.Petal.ZsigmondyD3Bridge` implements this handshake.
+
+The reduced cubic hypotheses now produce a single witness `q` such that:
+
+```text
+q is a Zsigmondy primitive divisor for c^3 - b^3
+q does not divide c - b
+q divides S0_nat c b
+q is an anchored S0_nat carrier
+q is also a PrimitivePrimeFactorOfDiffPow q c b 3 witness
+```
+
+The last item is a compatibility bridge to the existing `PrimitiveBeam` API.
+It does not add a valuation claim.  It only ensures that the later
+squarefree/no-lift layer can consume the same primitive divisor.
+
 ## Important Separation: Existence, Location, Multiplicity
 
 The investigation confirms that three concerns must remain separated.

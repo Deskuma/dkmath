@@ -1296,6 +1296,11 @@ The next Lean-facing bridge is `DkMath.Petal.ZsigmondyD3Bridge`.  It feeds the
 reduced cubic Petal hypotheses into Zsigmondy's `d = 3` existence theorem and
 shares the same witness with the anchored `S0_nat` carrier surface.
 
+The same witness is also exposed as
+`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q c b 3`, so later
+squarefree/no-lift APIs can consume the primitive divisor without changing
+the chosen `q`.
+
 It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
 squarefree or no-lift hypothesis.
 
@@ -1312,9 +1317,11 @@ Implemented:
 ```lean
 exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
 primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3
 primitivePrimeDivisor_d3_dvd_S0_nat
 anchoredS0Carrier_of_primitivePrimeDivisor_d3
 exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
 exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
 ```
 

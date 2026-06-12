@@ -560,6 +560,8 @@ Squarefree / NoLift / ValuationFlow:
 `ZsigmondyD3Bridge` でよい。この初期 bridge は
 `DkMath.Petal.ZsigmondyD3Bridge` として実装済みであり、同じ witness を
 Zsigmondy primitive divisor と Petal anchored `S0_nat` carrier として共有する。
+さらに同じ witness を `PrimitiveBeam.PrimitivePrimeFactorOfDiffPow` としても
+共有し、後続の squarefree/no-lift 評価値層へ渡せる形にした。
 `padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
 持つ別層の仕事として扱う。
 

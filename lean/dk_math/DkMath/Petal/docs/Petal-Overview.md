@@ -331,15 +331,21 @@ Important names:
 ```lean
 exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
 primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3
 primitivePrimeDivisor_d3_dvd_S0_nat
 anchoredS0Carrier_of_primitivePrimeDivisor_d3
 exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
 exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
 ```
 
 This bridge intentionally does not prove any `padicValNat <= 1` theorem.
 Zsigmondy supplies existence, Petal supplies location, and squarefree/no-lift
 layers supply multiplicity.
+
+It also shares the same witness `q` with
+`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`, preparing the downstream
+squarefree/no-lift valuation layer without proving that layer here.
 
 ### `DkMath.Petal.Counting`
 

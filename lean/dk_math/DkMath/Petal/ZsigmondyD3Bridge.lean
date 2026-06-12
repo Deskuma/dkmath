@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Petal.BoundaryD3
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.Zsigmondy
 
 #print "file: DkMath.Petal.ZsigmondyD3Bridge"
@@ -25,6 +26,7 @@ namespace Petal
 
 open DkMath.CosmicFormulaBinom
 open DkMath.FLT.PetalDetect
+open DkMath.NumberTheory.PrimitiveBeam
 
 /--
 Reduced cubic Petal coordinates satisfy the existing Zsigmondy `d = 3`
@@ -50,6 +52,22 @@ theorem primitivePrimeDivisor_d3_not_dvd_sub
     DkMath.Zsigmondy.PrimitivePrimeDivisor.not_dvd_lower
       hprim (by norm_num) (by norm_num)
   simpa using hnot
+
+/--
+A `d = 3` Zsigmondy primitive divisor is also the existing
+`PrimitivePrimeFactorOfDiffPow` witness.
+-/
+theorem primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3
+    {c b q : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q) :
+    PrimitivePrimeFactorOfDiffPow q c b 3 := by
+  refine
+    ⟨DkMath.Zsigmondy.PrimitivePrimeDivisor.prime hprim,
+      DkMath.Zsigmondy.PrimitivePrimeDivisor.dvd hprim, ?_⟩
+  intro k hk_pos hk_lt
+  exact
+    DkMath.Zsigmondy.PrimitivePrimeDivisor.not_dvd_lower
+      hprim hk_pos hk_lt
 
 /--
 A `d = 3` primitive divisor obtained from Zsigmondy lies on the cubic Petal
@@ -100,6 +118,24 @@ theorem exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
   exact
     ⟨q, hprim, anchoredS0Carrier_of_primitivePrimeDivisor_d3 hbc hprim,
       primitivePrimeDivisor_d3_not_dvd_sub hprim⟩
+
+/--
+The reduced cubic branch also provides the existing `PrimitiveBeam`
+primitive-prime witness, using the same `q` as the Zsigmondy/Petal witness.
+-/
+theorem exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (hred : BoundaryD3Reduced c b) :
+    ∃ q : ℕ,
+      DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q ∧
+        PrimitivePrimeFactorOfDiffPow q c b 3 ∧
+          AnchoredS0Carrier q c b q := by
+  rcases exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3 hbc hb hcop hred with
+    ⟨q, hprim, hcarrier, _hq_not_dvd_sub⟩
+  exact
+    ⟨q, hprim,
+      primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim,
+      hcarrier⟩
 
 /--
 Projection form: the reduced cubic branch has a boundary-free prime divisor on
