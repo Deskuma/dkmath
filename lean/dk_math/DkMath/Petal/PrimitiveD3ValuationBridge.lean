@@ -17,6 +17,9 @@ to the honest squarefree/no-lift valuation layer.
 It does not prove squarefreeness.  It only says that once the caller supplies
 `Squarefree (GN 3 (c - b) b)`, the same primitive divisor `q` already shared by
 Zsigmondy, Petal, and PrimitiveBeam has `padicValNat <= 1` in `c^3 - b^3`.
+
+The file also exposes the strictly weaker local no-lift version:
+`¬ q^2 ∣ GN 3 (c - b) b` is enough for the same bound for that particular `q`.
 -/
 
 namespace DkMath
@@ -24,6 +27,44 @@ namespace Petal
 
 open DkMath.CosmicFormulaBinom
 open DkMath.NumberTheory.PrimitiveBeam
+
+/--
+Local no-lift on `GN3` turns the shared `d = 3` primitive witness into the
+valuation bound on the difference body.
+
+This is weaker than squarefree `GN3`: it only asks that the selected witness
+`q` does not lift to `q^2` on the `GN3` side.
+-/
+theorem primitiveD3_padicValNat_le_one_of_noLift_GN
+    {c b q : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q)
+    (hNoLift : ¬ q ^ 2 ∣ GN 3 (c - b) b) :
+    padicValNat q (c ^ 3 - b ^ 3) ≤ 1 := by
+  let hprimitive : PrimitivePrimeFactorOfDiffPow q c b 3 :=
+    primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim
+  have hEq :
+      padicValNat q (c ^ 3 - b ^ 3) =
+        padicValNat q (GN 3 (c - b) b) := by
+    exact
+      primitive_prime_padic_eq_GN
+        (q := q) (a := c) (b := b) (d := 3)
+        hprimitive (by norm_num) (by norm_num) hbc
+  have hGN_ne : GN 3 (c - b) b ≠ 0 := by
+    exact
+      GN_ne_zero_nat_of_two_le
+        (d := 3) (x := c - b) (u := b)
+        (by norm_num) (Nat.sub_pos_of_lt hbc) hb
+  by_contra h_not_le
+  have htwo_le_diff : 2 ≤ padicValNat q (c ^ 3 - b ^ 3) := by
+    omega
+  have htwo_le_GN : 2 ≤ padicValNat q (GN 3 (c - b) b) := by
+    simpa [hEq] using htwo_le_diff
+  have hq2_dvd_GN : q ^ 2 ∣ GN 3 (c - b) b := by
+    exact
+      (@padicValNat_dvd_iff_le q
+        (Fact.mk (DkMath.Zsigmondy.PrimitivePrimeDivisor.prime hprim))
+        (GN 3 (c - b) b) 2 hGN_ne).2 htwo_le_GN
+  exact hNoLift hq2_dvd_GN
 
 /--
 Squarefree `GN3` turns the shared `d = 3` primitive witness into the honest
@@ -50,6 +91,30 @@ theorem primitiveD3_padicValNat_le_one_of_squarefree_GN
       hred
       (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
       hG_sq
+
+/--
+Existence form for the local no-lift route: on the reduced cubic branch, if the
+selected shared witness has no `q^2` lift on `GN3`, then it has valuation at
+most one in the difference body.
+-/
+theorem exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
+    {c b : ℕ} (hbc : b < c) (hb : 0 < b)
+    (hcop : Nat.Coprime c b) (hred : BoundaryD3Reduced c b)
+    (hNoLift :
+      ∀ {q : ℕ}, DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q →
+        ¬ q ^ 2 ∣ GN 3 (c - b) b) :
+    ∃ q : ℕ,
+      DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q ∧
+        PrimitivePrimeFactorOfDiffPow q c b 3 ∧
+          AnchoredS0Carrier q c b q ∧
+            padicValNat q (c ^ 3 - b ^ 3) ≤ 1 := by
+  rcases exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
+      hbc hb hcop hred with
+    ⟨q, hprim, hprimitive, hcarrier⟩
+  exact
+    ⟨q, hprim, hprimitive, hcarrier,
+      primitiveD3_padicValNat_le_one_of_noLift_GN
+        hbc hb hprim (hNoLift hprim)⟩
 
 /--
 Existence form: on the reduced cubic branch, if the `GN3` side is squarefree,

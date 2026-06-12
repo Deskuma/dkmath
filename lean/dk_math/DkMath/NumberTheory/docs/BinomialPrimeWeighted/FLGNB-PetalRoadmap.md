@@ -1354,7 +1354,9 @@ squarefree/no-lift valuation layer.
 Implemented:
 
 ```lean
+primitiveD3_padicValNat_le_one_of_noLift_GN
 primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
 exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
 ```
 
@@ -1363,12 +1365,22 @@ Meaning:
 ```text
 BoundaryD3Reduced hypotheses
   -> Zsigmondy/Petal/PrimitiveBeam shared witness q
+  -> not q^2 divides GN 3 (c - b) b
+  -> padicValNat q (c^3 - b^3) <= 1
+```
+
+The squarefree variant is the stronger sufficient-condition wrapper:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy/Petal/PrimitiveBeam shared witness q
   -> Squarefree (GN 3 (c - b) b)
   -> padicValNat q (c^3 - b^3) <= 1
 ```
 
-This is still not an unconditional valuation theorem.  The squarefree `GN3`
-hypothesis is explicit and belongs to the multiplicity/no-lift layer.
+This is still not an unconditional valuation theorem.  The local no-lift or
+squarefree `GN3` hypothesis is explicit and belongs to the multiplicity/no-lift
+layer.
 
 Expected validation:
 

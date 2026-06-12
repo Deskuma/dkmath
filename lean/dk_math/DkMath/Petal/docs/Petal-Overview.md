@@ -355,16 +355,24 @@ Connects the shared `d = 3` witness to the honest squarefree valuation theorem.
 Important names:
 
 ```lean
+primitiveD3_padicValNat_le_one_of_noLift_GN
 primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
 exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
 ```
 
 This file is deliberately conditional.  It does not prove that `GN 3 (c - b) b`
-is squarefree.  It only says that, once squarefreeness is supplied, the same
-`q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
+is squarefree.  It only says that, once local no-lift or squarefreeness is
+supplied, the same `q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
 
 ```text
 padicValNat q (c^3 - b^3) <= 1
+```
+
+The local no-lift input is weaker than full squarefreeness:
+
+```text
+not q^2 divides GN 3 (c - b) b
 ```
 
 ### `DkMath.Petal.Counting`
