@@ -1843,3 +1843,39 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 - `git diff --check` 成功
 
 注意点として、ビルド中に既存の `DkMath.NumberTheory.ZsigmondyCyclotomicResearch` の `sorry` warning は出ていますが、今回追加した Petal bridge 自体には `sorry` はありません。
+
+### 2026/06/12 14:09
+
+進めました。
+
+実装:
+
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean:94)
+  - `exists_prime_dvd_S0_nat_of_not_three_dvd_sub`
+  - `PrimitiveOnS0` を知らない caller 向けに、`∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b` を直接返す projection です。
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:30)
+  - `HasNoPrimeBelow`
+  - `HasAnchorPrime`
+  - `hasAnchorPrime_prime`
+  - `hasAnchorPrime_anchor_dvd`
+  - `hasAnchorPrime_no_smaller_prime`
+
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean:8)
+  - `DkMath.Petal.ReducedSupport` を集約 import に追加。
+
+Docs:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:216)
+  - `GcdBridge / PadicBridge / PrimitiveBridge / ReducedSupport` の小総括を追加。
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:776)
+  - Bridge 完了、`ReducedSupport` initial API 実装済みとして更新。
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal.PrimitiveBridge` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は引き続き出ていますが、今回追加分には `sorry` はありません。

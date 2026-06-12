@@ -2076,3 +2076,5 @@ theorem hasAnchorPrime_no_smaller_prime
 ここはまだ `S0` / `GN` を import せず、carrier の支配的最小素因子だけを固定するのが良いです。
 
 進める順番としては、私は **PrimitiveBridge projection を先に1本入れて、その後 `ReducedSupport.lean` を新設** が良いと思います。docs はその後に「実装済み」としてまとめるとズレが少ないです。
+
+→ [実装とレビュー](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-020.md)
