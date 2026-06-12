@@ -1984,3 +1984,40 @@ Docs:
 - `git diff --check` 成功
 
 既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
+
+### 2026/06/12 19:48
+
+レビューの次目的地に合わせて進めました。
+
+追加実装:
+
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean)
+  - `hasPositiveAnchorPrime_self_of_prime`
+  - prime witness 自身を positive anchored carrier として扱うための基礎補題です。
+
+- [Anchor.lean](/lean/dk_math/DkMath/Petal/Anchor.lean)
+  - `exists_anchoredS0Carrier_of_not_three_dvd_sub`
+  - `PrimitiveBridge` の `exists_prime_dvd_S0_nat_of_not_three_dvd_sub` を使い、`S0_nat` 上の primitive prime witness を `AnchoredS0Carrier q c b q` へ昇格します。
+
+依存方向も整理しました:
+
+```text
+ReducedSupport
+  -> PrimitiveBridge
+  -> Anchor
+```
+
+Docs も同期:
+
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md)
+- [S0_GN_Anchor_Phase_実験設計書.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_実験設計書.md)
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal.Anchor` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は出ていますが、今回追加分に `sorry` はありません。
