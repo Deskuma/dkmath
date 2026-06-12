@@ -2064,3 +2064,45 @@ git diff --check
 ```
 
 どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告だけ出ていますが、今回追加分では新しい `sorry` はありません。
+
+### 2026/06/12 20:50
+
+次の目的地まで進めました。
+
+[BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean) に、review 指摘の使いやすい入口を追加しました。
+
+```lean
+boundaryD3Branch_or_reduced
+not_boundaryD3Branch_of_reduced
+exists_anchoredS0Carrier_of_boundaryD3Reduced
+```
+
+これで downstream は `¬ 3 ∣ c - b` に戻らず、`BoundaryD3Reduced c b` のまま
+
+```text
+reduced branch
+  -> boundary/S0 coprime
+  -> anchored primitive S0 carrier exists
+```
+
+へ進めます。
+
+さらに新規に [EisensteinBridge.lean](/lean/dk_math/DkMath/Petal/EisensteinBridge.lean) を追加しました。既存 `DkMath.FLT.GEisensteinBridge` の定理を Petal-facing alias として公開しています。
+
+```lean
+petal_S0_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift
+petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
+petal_S0_nat_eq_eisensteinNorm_shift_of_lt
+```
+
+`DkMath.Petal.lean` にも import 済みで、docs も更新しました。
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning だけで、今回追加分に新しい `sorry` はありません。
