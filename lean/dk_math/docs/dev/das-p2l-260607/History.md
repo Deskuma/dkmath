@@ -2106,3 +2106,27 @@ git diff --check
 ```
 
 どちらも成功です。既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning だけで、今回追加分に新しい `sorry` はありません。
+
+### 2026/06/12 22:55
+
+レビュー指摘は、今すぐ構造を割らずに「将来の `DkMath.Lib.*` 昇格リファクタリングで必ず見るべき依存問題」としてソース上に強めに明記しました。
+
+追加したのは module doc の注意書きです。
+
+- [BoundaryD3.lean](/lean/dk_math/DkMath/Petal/BoundaryD3.lean)
+  - `BoundaryD3 -> Anchor -> PrimitiveBridge` になっている現状を明記
+  - 将来は `BoundaryD3` と `BoundaryD3Anchor` に分ける候補を明示
+  - 現状は便利 API として一時的に同居させている、と残しました
+
+- [EisensteinBridge.lean](/lean/dk_math/DkMath/Petal/EisensteinBridge.lean)
+  - `Petal -> FLT` の import 方向は最終形ではないと明記
+  - `DkMath.Lib.*` または neutral な `NumberTheory` 層へ Eisenstein core facts を移し、将来は `FLT` が Petal/neutral layer を使う方向に直す、と残しました
+
+検証:
+
+```sh
+lake build DkMath.Petal
+git diff --check
+```
+
+どちらも成功です。今回も新しい `sorry` はありません。
