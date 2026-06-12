@@ -1917,3 +1917,29 @@ Docs も同期しました:
 - `git diff --check` 成功
 
 既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` warning は今回も出ていますが、今回追加分には `sorry` はありません。
+
+### 2026/06/12 16:59
+
+追加しました。
+
+[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:91) に以下を追加:
+
+```lean
+theorem hasPositiveAnchorPrime_ne_zero
+    {r n : ℕ} (h : HasPositiveAnchorPrime r n) :
+    n ≠ 0
+
+theorem hasPositiveAnchorPrime_of_pos
+    {r n : ℕ} (hn : 0 < n) (h : HasAnchorPrime r n) :
+    HasPositiveAnchorPrime r n
+```
+
+あわせて docs の API リストも同期しました。
+
+確認:
+
+- `lake build DkMath.Petal.ReducedSupport` 成功
+- `lake build DkMath.Petal` 成功
+- `git diff --check` 成功
+
+今回も追加分に `sorry` はありません。
