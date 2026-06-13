@@ -382,11 +382,18 @@ The underlying local no-lift valuation helper is now available in
 primitive_prime_GN_ne_zero
 primitive_prime_padic_bound_diff_of_noLift_GN
 primitive_prime_padic_bound_diff_of_squarefree_GN_local
+primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
+primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
 ```
 
 The older heavier squarefree wrapper is kept for compatibility, but the local
 route is now the canonical reading: squarefree `GN` supplies no-lift for the
 selected witness.
+
+The same local no-lift route also feeds the perfect-power obstruction layer:
+once the selected primitive witness has no `q^2` lift on `GN`, both the
+difference body and the `GN` side are prevented from being perfect `d`-th
+powers.
 
 ### `DkMath.Petal.Counting`
 

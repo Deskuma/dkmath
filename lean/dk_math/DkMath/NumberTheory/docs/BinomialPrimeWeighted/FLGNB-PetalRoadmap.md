@@ -1367,11 +1367,17 @@ The generic no-lift valuation helper has also been promoted to
 primitive_prime_GN_ne_zero
 primitive_prime_padic_bound_diff_of_noLift_GN
 primitive_prime_padic_bound_diff_of_squarefree_GN_local
+primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
+primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
 ```
 
 The local squarefree helper is a sufficient-condition wrapper over the no-lift
 helper.  The older heavier squarefree wrapper remains available for callers
 that still use the previous primitive-prime repair signature.
+
+The no-lift route now also reaches the perfect-power obstruction layer.  This
+gives downstream FLT/ABC code an honest replacement path for older research
+calls, provided it can supply local no-lift for the selected primitive witness.
 
 Meaning:
 

@@ -385,17 +385,19 @@ theorem primitive_prime_obstructs_GN_perfect_power
   exact primitive_prime_obstructs_GN_perfect_power_research hd_prime hd_ge hab_lt hb hab hpnd
 
 /--
-Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
+Honest local no-lift repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
 
-This is the migration shape for the two legacy callers in this file: if the caller can supply
-`Squarefree (GN d (a - b) b)`, the contradiction argument closes without the research placeholder.
+The theorem obtains a primitive witness from Zsigmondy and asks only that the
+selected witness has no `q^2` lift on the `GN` side.
 -/
-theorem primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN
+theorem primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
     {a b d : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b)
-    (hG_sq : Squarefree (GN d (a - b) b)) :
+    (hNoLift :
+      ∀ {q : ℕ}, PrimitivePrimeFactorOfDiffPow q a b d →
+        ¬ q ^ 2 ∣ GN d (a - b) b) :
     ¬ ∃ t : ℕ, 0 < t ∧ a ^ d - b ^ d = t ^ d := by
   intro hpow
   rcases hpow with ⟨t, ht, heq⟩
@@ -417,25 +419,60 @@ theorem primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN
     calc
       d = d * 1 := (Nat.mul_one d).symm
       _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hd_pos : 0 < d := hd_prime.pos
+  have hd1 : 1 < d := by omega
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    primitive_prime_padic_bound_diff_of_squarefree_GN
-      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+    primitive_prime_padic_bound_diff_of_noLift_GN
+      hq hd_pos hd1 hab_lt (hNoLift hq)
   have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
     rw [heq]
   omega
 
 /--
-Honest squarefree-GN repair of `primitive_prime_obstructs_GN_perfect_power`.
+Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
 
-This makes the repair plan explicit: the current obstruction theorem can be recovered cleanly once
-the caller provides `Squarefree (GN d (a - b) b)`.
+This is the migration shape for the two legacy callers in this file: if the caller can supply
+`Squarefree (GN d (a - b) b)`, the contradiction argument closes without the research placeholder.
 -/
-theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
+theorem primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN
     {a b d : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b)
     (hG_sq : Squarefree (GN d (a - b) b)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ a ^ d - b ^ d = t ^ d := by
+  refine
+    primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
+      hd_prime hd_ge hab_lt hb hab hpnd ?_
+  intro q hq
+  have hd_pos : 0 < d := hd_prime.pos
+  have hGN_ne : GN d (a - b) b ≠ 0 :=
+    primitive_prime_GN_ne_zero hq hd_pos hab_lt
+  intro hq2_dvd
+  have hVal : padicValNat q (GN d (a - b) b) ≤ 1 :=
+    DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree
+      hq.1 hGN_ne hG_sq
+  have h2_le : 2 ≤ padicValNat q (GN d (a - b) b) := by
+    exact
+      (@padicValNat_dvd_iff_le q (Fact.mk hq.1)
+        (GN d (a - b) b) 2 hGN_ne).1 hq2_dvd
+  exact (not_le_of_gt h2_le) hVal
+
+/--
+Honest local no-lift repair of `primitive_prime_obstructs_GN_perfect_power`.
+
+This is the direct obstruction route: a primitive witness exists, and if that
+witness does not lift to `q^2` on `GN`, then `GN` cannot be a perfect `d`-th
+power.
+-/
+theorem primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hNoLift :
+      ∀ {q : ℕ}, PrimitivePrimeFactorOfDiffPow q a b d →
+        ¬ q ^ 2 ∣ GN d (a - b) b) :
     ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
   intro hpow
   have hd_pos : 0 < d := hd_prime.pos
@@ -448,15 +485,8 @@ theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
       padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) :=
     primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
   rcases hpow with ⟨t, ht⟩
-  have hdiff_ne : a ^ d - b ^ d ≠ 0 := by
-    have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd_pos
-    exact Nat.sub_ne_zero_of_lt (Nat.pow_lt_pow_left hab_lt hd_ne)
-  have hGN_ne : GN d (a - b) b ≠ 0 := by
-    intro hGN0
-    have hfactor : a ^ d - b ^ d = (a - b) * GN d (a - b) b := by
-      simpa using pow_sub_pow_factor_cosmic_N (a := a) (b := b) (d := d) hd_pos hab_lt
-    rw [hfactor, hGN0, mul_zero] at hdiff_ne
-    exact hdiff_ne rfl
+  have hGN_ne : GN d (a - b) b ≠ 0 :=
+    primitive_prime_GN_ne_zero hq hd_pos hab_lt
   have ht_ne : t ≠ 0 := by
     intro ht0
     apply hGN_ne
@@ -476,8 +506,7 @@ theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
       d = d * 1 := (Nat.mul_one d).symm
       _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    primitive_prime_padic_bound_diff_of_squarefree_GN
-      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+    primitive_prime_padic_bound_diff_of_noLift_GN hq hd_pos hd1 hab_lt (hNoLift hq)
   have hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1 := by
     rw [← hpadic_eq_GN]
     exact hpadic_bound_diff
@@ -487,6 +516,36 @@ theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
       _ = padicValNat q (GN d (a - b) b) := by rw [← ht]
       _ ≤ 1 := hpadic_bound_GN
   omega
+
+/--
+Honest squarefree-GN repair of `primitive_prime_obstructs_GN_perfect_power`.
+
+This makes the repair plan explicit: the current obstruction theorem can be recovered cleanly once
+the caller provides `Squarefree (GN d (a - b) b)`.
+-/
+theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
+  refine
+    primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
+      hd_prime hd_ge hab_lt hb hab hpnd ?_
+  intro q hq
+  have hd_pos : 0 < d := hd_prime.pos
+  have hGN_ne : GN d (a - b) b ≠ 0 :=
+    primitive_prime_GN_ne_zero hq hd_pos hab_lt
+  intro hq2_dvd
+  have hVal : padicValNat q (GN d (a - b) b) ≤ 1 :=
+    DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree
+      hq.1 hGN_ne hG_sq
+  have h2_le : 2 ≤ padicValNat q (GN d (a - b) b) := by
+    exact
+      (@padicValNat_dvd_iff_le q (Fact.mk hq.1)
+        (GN d (a - b) b) 2 hGN_ne).1 hq2_dvd
+  exact (not_le_of_gt h2_le) hVal
 
 /-- Compatibility alias with explicit `d`-th-power wording. -/
 theorem primitive_prime_obstructs_GN_dth_power
