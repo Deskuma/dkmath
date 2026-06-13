@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Petal.Anchor
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.UniqueFactorizationGN
+import DkMath.Zsigmondy
 
 #print "file: DkMath.Petal.BezoutBridge"
 
@@ -22,6 +23,8 @@ The mathematical core is already present in the lower layers:
   `a^d - b^d = (a - b) * GN d (a - b) b` to the `GN` side.
 * `UniqueFactorizationGN` controls the gcd between the visible boundary and the
   residual `GN` kernel.
+* `DkMath.Zsigmondy.PrimitivePrimeDivisor` is converted to the existing
+  `PrimitiveBeam` witness shape before entering the Petal/Anchor surface.
 
 This bridge does not introduce a new Bezout theorem.  Instead it records the
 interpretation needed by the Petal/Zsigmondy route:
@@ -86,6 +89,87 @@ theorem primitivePrimeFactor_dvd_bodyGN_of_cosmicBoundary
     q ∣ GN d x u :=
   primitive_prime_dvd_GN_body
     (q := q) (x := x) (u := u) (d := d) hq hd hd1
+
+/--
+Primitive witnesses avoid the visible boundary.
+
+This is the first half of the Bezout reading: the primitive prime cannot live
+on the `a - b` boundary because exponent `1` is a lower layer.
+-/
+theorem primitivePrimeFactor_not_dvd_boundary
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd1 : 1 < d) :
+    ¬ q ∣ a - b :=
+  primitive_prime_not_dvd_boundary hq hd1
+
+/--
+For a primitive witness, the `q`-adic height of the whole body difference is
+exactly the height seen on the residual `GN` kernel.
+-/
+theorem padicValNat_bodyDiff_eq_GN_of_primitivePrimeFactor
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    padicValNat q (a ^ d - b ^ d) =
+      padicValNat q (GN d (a - b) b) :=
+  primitive_prime_padic_eq_GN hq hd hd1 hab_lt
+
+/--
+Convert the public Zsigmondy primitive-divisor witness to the existing
+`PrimitiveBeam` primitive-prime-factor witness.
+
+This is the generic handshake between the Zsigmondy API and the Petal/GN
+location API.
+-/
+theorem primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q) :
+    PrimitivePrimeFactorOfDiffPow q a b d := by
+  refine
+    ⟨DkMath.Zsigmondy.PrimitivePrimeDivisor.prime hprim,
+      DkMath.Zsigmondy.PrimitivePrimeDivisor.dvd hprim, ?_⟩
+  intro k hk_pos hk_lt
+  exact DkMath.Zsigmondy.PrimitivePrimeDivisor.not_dvd_lower
+    hprim hk_pos hk_lt
+
+/--
+A Zsigmondy primitive divisor avoids the visible boundary.
+-/
+theorem zsigmondyPrimitivePrimeDivisor_not_dvd_boundary
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd1 : 1 < d) :
+    ¬ q ∣ a - b :=
+  primitivePrimeFactor_not_dvd_boundary
+    (primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor hprim)
+    hd1
+
+/--
+A Zsigmondy primitive divisor is observed on the residual `GN` kernel.
+-/
+theorem zsigmondyPrimitivePrimeDivisor_dvd_GN
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    q ∣ GN d (a - b) b :=
+  primitivePrimeFactor_dvd_GN_of_cosmicBoundary
+    (primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor hprim)
+    hd hd1 hab_lt
+
+/--
+For a Zsigmondy primitive divisor, the body-difference valuation is exactly the
+valuation on the residual `GN` kernel.
+-/
+theorem padicValNat_bodyDiff_eq_GN_of_zsigmondyPrimitivePrimeDivisor
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    padicValNat q (a ^ d - b ^ d) =
+      padicValNat q (GN d (a - b) b) :=
+  padicValNat_bodyDiff_eq_GN_of_primitivePrimeFactor
+    (primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor hprim)
+    hd hd1 hab_lt
 
 /--
 Non-exceptional primes cannot sit in the gcd between the visible boundary and
@@ -160,6 +244,18 @@ theorem anchoredGNCarrier_of_bodyPrimitivePrimeFactor
   refine ⟨?_, ?_⟩
   · exact hasPositiveAnchorPrime_self_of_prime hq.1
   · exact primitivePrimeFactor_dvd_bodyGN_of_cosmicBoundary hq hd hd1
+
+/--
+Zsigmondy primitive divisors can be packaged as anchored GN carriers.
+-/
+theorem anchoredGNCarrier_of_zsigmondyPrimitivePrimeDivisor
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    AnchoredGNCarrier q d (a - b) b q :=
+  anchoredGNCarrier_of_primitivePrimeFactor
+    (primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor hprim)
+    hd hd1 hab_lt
 
 end Petal
 end DkMath
