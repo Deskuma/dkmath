@@ -1,4 +1,4 @@
-import DkMath.ABC
+import DkMath.ABC.ChernoffMgf
 
 #print "file: DkMathTest.ABC"
 
