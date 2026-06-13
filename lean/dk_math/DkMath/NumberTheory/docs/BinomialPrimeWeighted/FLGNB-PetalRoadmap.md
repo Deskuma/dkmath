@@ -1702,6 +1702,62 @@ Therefore `DkMath.Zsigmondy` remains the project-owned facade.  If Mathlib later
 adds the full theorem, the desired migration is to keep `DkMath.Zsigmondy` as a
 stable facade and redirect its public theorems internally.
 
+### Step 6.5: Petal / Erdos Bridge Experiment Plan
+
+Status:
+
+```text
+planned
+```
+
+The next experimental checkpoint is documented in:
+
+```text
+DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
+```
+
+Purpose:
+
+```text
+Petal / Zsigmondy / GN:
+  local primitive witness location
+
+Erdos #1196 / PrimitiveSet:
+  global log-capacity control
+```
+
+The experiment should not attempt to prove new unconditional number theory.
+The first target is a translation-and-budget-consumption bridge:
+
+```text
+Petal carrier
+  -> Erdos prime channel
+  -> prime-valued family
+  -> multiplicity budget assumption
+  -> log-capacity sub-probability
+```
+
+Recommended first file:
+
+```text
+DkMath.Petal.ErdosBridge
+```
+
+Recommended first theorem shape:
+
+```text
+Petal carrier family
+  + NatBaseMultiplicityBudgetOn against n
+  -> normalized log-cost sum <= 1
+```
+
+The research question postponed until after the first bridge is:
+
+```text
+Can Petal address noncollision supply the multiplicity budget required by the
+Erdos log-capacity route?
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:

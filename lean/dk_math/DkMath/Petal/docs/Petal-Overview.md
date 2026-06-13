@@ -619,6 +619,12 @@ The Zsigmondy-facing preflight investigation is recorded in:
 DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 ```
 
+The experimental Petal/Erdos bridge plan is recorded in:
+
+```text
+DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
+```
+
 Its main conclusion is that the next bridge should translate the `d = 3`
 Petal witness into Zsigmondy's primitive-divisor language, while keeping
 valuation `<= 1` separate under squarefree/no-lift hypotheses.
