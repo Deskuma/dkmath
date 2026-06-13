@@ -16,6 +16,7 @@ import DkMath.Petal.PadicBridge
 import DkMath.Petal.PrimitiveBridge
 import DkMath.Petal.ReducedSupport
 import DkMath.Petal.Anchor
+import DkMath.Petal.BezoutBridge
 import DkMath.Petal.BoundaryD3
 import DkMath.Petal.EisensteinBridge
 import DkMath.Petal.ZsigmondyD3Bridge
@@ -38,7 +39,7 @@ The import order is arranged as the public story of the package:
 basic forms / relative polygon vocabulary
   -> counting and address layers
   -> GN/GCD/p-adic/primitive bridges
-  -> reduced support and anchored carriers
+  -> reduced support, anchored carriers, and Bezout/GN location reading
   -> BoundaryD3 cubic branch split
   -> shifted Eisenstein norm bridge
   -> Zsigmondy d = 3 primitive-divisor bridge
