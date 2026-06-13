@@ -297,9 +297,9 @@ index d8c8e9c6..8c389051 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/issue-petal-028.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/issue-petal-028.md
 @@ -2,6 +2,30 @@
- 
+
  [現況: review-028](./review-petal-028.md)
- 
+
 +## Status update: 2026-06-14
 +
 +This issue is closed as a blocker for the main Petal -> Zsigmondy route.
@@ -325,7 +325,7 @@ index d8c8e9c6..8c389051 100644
 +```
 +
  ## ABC / FLT 両方から参照される命題（主張の強い命題）
- 
+
  以下が `DkMath.FLT.*` / `DkMath.ABC.*` 両方から参照されている。
 ````
 `````

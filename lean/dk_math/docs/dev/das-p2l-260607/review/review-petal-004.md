@@ -320,7 +320,7 @@ index 6802c66a..bbe786a3 100644
 @@ -272,6 +272,60 @@ theorem outerPetalAddress_channel_zero_remainder_eq_self
      outerPetalRemainder n lap m = m := by
    exact outerPetalRemainder_eq_self_of_isInheritanceChannel hm hb hch
- 
+
 +/--
 +For a valid one-based value, the remainder is a valid value for the previous
 +lap total.

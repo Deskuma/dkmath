@@ -335,7 +335,7 @@ index 067ce600..31b06f18 100644
 @@ -858,6 +860,44 @@ exists_anchoredS0Carrier_of_not_three_dvd_sub
  This layer is the first place where `ReducedSupport` imports meet the S0/GN
  surface.  `ReducedSupport` itself remains independent.
- 
+
 +### `DkMath.Petal.BoundaryD3`
 +
 +Purpose:
@@ -375,7 +375,7 @@ index 067ce600..31b06f18 100644
 +Zsigmondy-facing arguments.
 +
  ### `DkMath.Petal.EisensteinBridge`
- 
+
  Purpose:
 @@ -1076,6 +1116,8 @@ Implemented:
  ```lean
@@ -389,7 +389,7 @@ index 067ce600..31b06f18 100644
 @@ -1088,6 +1130,34 @@ lake build DkMath.Petal.Anchor
  lake build DkMath.Petal
  ```
- 
+
 +### Step 5.7: Add `DkMath.Petal.BoundaryD3`
 +
 +Status:
@@ -419,25 +419,25 @@ index 067ce600..31b06f18 100644
 +```
 +
  ### Step 6: Add `DkMath.Petal.EisensteinBridge`
- 
+
  Status:
 diff --git "a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md" "b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md"
 index f7fb0300..e99103fc 100644
 --- "a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md"
 +++ "b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md"
 @@ -285,7 +285,7 @@ DkMath.FLT.cube_sub_eq_mul_sub_S0
- 
+
  ## 4.2. Phase B. 三例外の構造分離
- 
+
 -Status: **[DONE FOR S0] / [ACTIVE FOR GENERAL REDUCED SUPPORT]**
 +Status: **[DONE FOR S0] / [PACKAGE API IMPLEMENTED AS `DkMath.Petal.BoundaryD3`]**
- 
+
  目的は、\(3\) が S0 と境界にまたがることを明示することである。
- 
+
 @@ -322,6 +322,19 @@ DkMath.Petal.gcd_sub_S0_nat_dvd_three
  DkMath.Petal.coprime_sub_S0_nat_of_coprime_of_not_dvd_three
  ```
- 
+
 +BoundaryD3 package names:
 +
 +```lean
@@ -452,12 +452,12 @@ index f7fb0300..e99103fc 100644
 +```
 +
  The stronger gcd formula makes the original one-way experiment less important:
- 
+
  ```text
 @@ -330,9 +343,21 @@ gcd(c - b, S0(c,b)) = gcd(c - b, 3)
- 
+
  This is the desired "3-primary contact" observation for the cubic Petal face.
- 
+
 +The current `BoundaryD3` layer packages this as a branch/reduced-branch
 +interface:
 +
@@ -471,16 +471,16 @@ index f7fb0300..e99103fc 100644
 +files.
 +
  ## 4.3. Phase C. (r)-anchor reduced support
- 
+
 -Status: **[ACTIVE]**
 +Status: **[INITIAL API IMPLEMENTED AS `DkMath.Petal.ReducedSupport`]**
- 
+
  目的は、\(3,5,7,11,\dots\) から始まる世界を、射影・同型的な観測面として Lean に置くことである。
- 
+
 @@ -420,9 +445,15 @@ This is the B-plan for the `0` carrier issue.  The wide predicate keeps the
  entrance broad, while the positive predicate is used when strict prime-support
  semantics are required.
- 
+
 +The initial API has been implemented in:
 +
 +```text
@@ -488,12 +488,12 @@ index f7fb0300..e99103fc 100644
 +```
 +
  ## 4.4. Phase D. GN primitive candidate
- 
+
 -Status: **[PARTIAL]**
 +Status: **[PARTIAL] / [ANCHOR CARRIER SURFACE IMPLEMENTED]**
- 
+
  目的は、GN 側に現れる素因子を primitive candidate として包装することである。
- 
+
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 93f041dc..5e60e74b 100644
 --- a/lean/dk_math/DkMath/Petal.lean
@@ -503,9 +503,9 @@ index 93f041dc..5e60e74b 100644
  import DkMath.Petal.PrimitiveBridge
  import DkMath.Petal.Anchor
 +import DkMath.Petal.BoundaryD3
- 
+
  #print "file: DkMath.Petal"
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/Anchor.lean b/lean/dk_math/DkMath/Petal/Anchor.lean
 index e6126f62..9eee2b26 100644
 --- a/lean/dk_math/DkMath/Petal/Anchor.lean
@@ -513,7 +513,7 @@ index e6126f62..9eee2b26 100644
 @@ -45,6 +45,12 @@ theorem anchoredS0Carrier_anchor
      HasPositiveAnchorPrime r n :=
    h.1
- 
+
 +/-- The anchor of an anchored `S0_nat` carrier is prime. -/
 +theorem anchoredS0Carrier_anchor_prime
 +    {r c b n : ℕ} (h : AnchoredS0Carrier r c b n) :
@@ -526,7 +526,7 @@ index e6126f62..9eee2b26 100644
 @@ -76,6 +82,12 @@ theorem anchoredGNCarrier_anchor
      HasPositiveAnchorPrime r n :=
    h.1
- 
+
 +/-- The anchor of an anchored GN carrier is prime. -/
 +theorem anchoredGNCarrier_anchor_prime
 +    {r d x u n : ℕ} (h : AnchoredGNCarrier r d x u n) :
@@ -648,7 +648,7 @@ index d05df3d4..e46005b3 100644
  anchoredS0Carrier_of_anchoredGNCarrier
  exists_anchoredS0Carrier_of_not_three_dvd_sub
  ```
- 
+
 +### `DkMath.Petal.BoundaryD3`
 +
 +Records the degree-three boundary split for the cubic Petal detector.
@@ -681,7 +681,7 @@ index d05df3d4..e46005b3 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 @@ -373,6 +406,9 @@ Fixed Petal counting
    -> prefix divisibility persistence
@@ -691,7 +691,7 @@ index d05df3d4..e46005b3 100644
 +  -> reduced-support anchor carriers
 +  -> degree-three boundary split
  ```
- 
+
  This means the package can already express:
 @@ -383,6 +419,8 @@ an adopted prime base remains visible in later prime-base products
  strict prime-base sequences preserve order and non-repetition
@@ -700,7 +700,7 @@ index d05df3d4..e46005b3 100644
 +primitive S0 witnesses can be read as anchored carriers
 +the cubic 3-contact is exactly the boundary branch
  ```
- 
+
  ## What This Does Not Claim Yet
 @@ -398,6 +436,7 @@ where factors are stored
  which factors persist across later layers
@@ -708,7 +708,7 @@ index d05df3d4..e46005b3 100644
  how GN degree 3 becomes the Petal S0 face
 +how reduced cubic support excludes the boundary prime 3
  ```
- 
+
  ## Next Directions
 @@ -407,14 +446,15 @@ The next reasonable implementation directions are:
  ```text
@@ -720,14 +720,14 @@ index d05df3d4..e46005b3 100644
 +4. connect strict prime-base orbits to a concrete prime enumeration
 +5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
  ```
- 
+
  The most conservative next theorem work is probably:
- 
+
  ```text
 -DkMath.Petal.Anchor plus PrimitiveBridge
 +DkMath.Petal.EisensteinBridge
  ```
- 
+
  The most concrete arithmetic next step is:
 ````
 `````

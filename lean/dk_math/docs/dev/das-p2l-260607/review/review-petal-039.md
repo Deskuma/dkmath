@@ -253,7 +253,7 @@ index 7c41b5f2..349f3d94 100644
 @@ -41,6 +41,17 @@ private theorem primitiveWitness_13_6_5_3 :
    intro k hk_pos hk_lt
    interval_cases k <;> decide
- 
+
 +/--
 +`7` is primitive for `4^3 - 2^3`, while `GN 3 (4 - 2) 2 = 28` is not
 +squarefree.  This sample separates the local no-lift route from the stronger
@@ -271,7 +271,7 @@ index 7c41b5f2..349f3d94 100644
 @@ -107,6 +118,22 @@ example : diffMass 31 2 1 5 ≤ 1 := by
      (hq := primitiveWitness_31_2_1_5)
      hG_sq
- 
+
 +/--
 +The local no-lift route can apply even when the full beam factor is not
 +squarefree: `GN 3 (4 - 2) 2 = 28 = 2^2 * 7`, but `7^2` does not divide it.
@@ -298,7 +298,7 @@ index fe58edf5..4f2aa4f8 100644
 @@ -1449,6 +1449,32 @@ compatibility route:
    squarefree_beam_bounds_local_load
  ```
- 
+
 +It also records a separating sample:
 +
 +```text
@@ -326,7 +326,7 @@ index fe58edf5..4f2aa4f8 100644
 +```
 +
  Meaning:
- 
+
  ```text
 ````
 `````

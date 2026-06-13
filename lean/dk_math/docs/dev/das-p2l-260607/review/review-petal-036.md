@@ -515,11 +515,11 @@ index 66a60564..d0823e88 100644
 +++ b/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean
 @@ -385,17 +385,19 @@ theorem primitive_prime_obstructs_GN_perfect_power
    exact primitive_prime_obstructs_GN_perfect_power_research hd_prime hd_ge hab_lt hb hab hpnd
- 
+
  /--
 -Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
 +Honest local no-lift repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
- 
+
 -This is the migration shape for the two legacy callers in this file: if the caller can supply
 -`Squarefree (GN d (a - b) b)`, the contradiction argument closes without the research placeholder.
 +The theorem obtains a primitive witness from Zsigmondy and asks only that the
@@ -552,11 +552,11 @@ index 66a60564..d0823e88 100644
    have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
      rw [heq]
    omega
- 
+
  /--
 -Honest squarefree-GN repair of `primitive_prime_obstructs_GN_perfect_power`.
 +Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
- 
+
 -This makes the repair plan explicit: the current obstruction theorem can be recovered cleanly once
 -the caller provides `Squarefree (GN d (a - b) b)`.
 +This is the migration shape for the two legacy callers in this file: if the caller can supply
@@ -636,7 +636,7 @@ index 66a60564..d0823e88 100644
 @@ -488,6 +517,36 @@ theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
        _ ≤ 1 := hpadic_bound_GN
    omega
- 
+
 +/--
 +Honest squarefree-GN repair of `primitive_prime_obstructs_GN_perfect_power`.
 +
@@ -681,17 +681,17 @@ index b9fb7b57..2d5de34b 100644
 +primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
 +primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
  ```
- 
+
  The local squarefree helper is a sufficient-condition wrapper over the no-lift
  helper.  The older heavier squarefree wrapper remains available for callers
  that still use the previous primitive-prime repair signature.
- 
+
 +The no-lift route now also reaches the perfect-power obstruction layer.  This
 +gives downstream FLT/ABC code an honest replacement path for older research
 +calls, provided it can supply local no-lift for the selected primitive witness.
 +
  Meaning:
- 
+
  ```text
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 0023c1fb..d0eb0e5e 100644
@@ -704,18 +704,18 @@ index 0023c1fb..d0eb0e5e 100644
 +primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
 +primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
  ```
- 
+
  The older heavier squarefree wrapper is kept for compatibility, but the local
  route is now the canonical reading: squarefree `GN` supplies no-lift for the
  selected witness.
- 
+
 +The same local no-lift route also feeds the perfect-power obstruction layer:
 +once the selected primitive witness has no `q^2` lift on `GN`, both the
 +difference body and the `GN` side are prevented from being perfect `d`-th
 +powers.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````

@@ -495,7 +495,7 @@ index 506aa272..f3c3655e 100644
 +++ b/lean/dk_math/DkMath/Petal.lean
 @@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Petal.Basic
 +import DkMath.Petal.Counting
 +import DkMath.Petal.Address
@@ -746,7 +746,7 @@ index dbdb86ec..1cc4ccc5 100644
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/History.md
 @@ -1248,3 +1248,43 @@ git diff --check
  ```
- 
+
  すべて成功しています。
 +
 +### 2026/06/10  6:41

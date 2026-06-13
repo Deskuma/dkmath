@@ -365,9 +365,9 @@ index f3c3655e..44e8ea02 100644
 +import DkMath.Petal.GcdBridge
 +import DkMath.Petal.PadicBridge
 +import DkMath.Petal.PrimitiveBridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/GcdBridge.lean b/lean/dk_math/DkMath/Petal/GcdBridge.lean
 new file mode 100644
 index 00000000..051908db

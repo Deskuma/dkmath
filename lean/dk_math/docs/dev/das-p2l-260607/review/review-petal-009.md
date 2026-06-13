@@ -353,7 +353,7 @@ index 27cf4116..938b2c1e 100644
 @@ -91,6 +91,49 @@ theorem dynamicOrbitTotal_const (b k : Nat) :
        rw [dynamicOrbitTotal_succ, ih]
        rw [pow_succ]
- 
+
 +/--
 +Factorial orbit.
 +

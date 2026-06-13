@@ -310,7 +310,7 @@ index bbe786a3..b26f4f99 100644
 @@ -326,6 +326,47 @@ theorem outerPetalAddress_decompose
      _ = ((m - 1) / B) * B + ((m - 1) % B + 1) := by
        rw [Nat.mul_comm B ((m - 1) / B)]
- 
+
 +/--
 +Zero-based form of the one-step Petal address decomposition.
 +

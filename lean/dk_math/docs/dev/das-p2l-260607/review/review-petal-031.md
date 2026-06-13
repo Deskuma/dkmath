@@ -228,7 +228,7 @@ index 0ddf769f..0d611302 100644
 @@ -1296,6 +1296,11 @@ The next Lean-facing bridge is `DkMath.Petal.ZsigmondyD3Bridge`.  It feeds the
  reduced cubic Petal hypotheses into Zsigmondy's `d = 3` existence theorem and
  shares the same witness with the anchored `S0_nat` carrier surface.
- 
+
 +The same witness is also exposed as
 +`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q c b 3`, so later
 +squarefree/no-lift APIs can consume the primitive divisor without changing
@@ -236,7 +236,7 @@ index 0ddf769f..0d611302 100644
 +
  It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
  squarefree or no-lift hypothesis.
- 
+
 @@ -1312,9 +1317,11 @@ Implemented:
  ```lean
  exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
@@ -248,7 +248,7 @@ index 0ddf769f..0d611302 100644
 +exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
  exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
  ```
- 
+
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index 64c403a8..e53cb3d7 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
@@ -261,31 +261,31 @@ index 64c403a8..e53cb3d7 100644
 +共有し、後続の squarefree/no-lift 評価値層へ渡せる形にした。
  `padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
  持つ別層の仕事として扱う。
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean b/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean
 index fed15598..6ea74ce6 100644
 --- a/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean
 +++ b/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Petal.BoundaryD3
 +import DkMath.NumberTheory.PrimitiveBeam
  import DkMath.Zsigmondy
- 
+
  #print "file: DkMath.Petal.ZsigmondyD3Bridge"
 @@ -25,6 +26,7 @@ namespace Petal
- 
+
  open DkMath.CosmicFormulaBinom
  open DkMath.FLT.PetalDetect
 +open DkMath.NumberTheory.PrimitiveBeam
- 
+
  /--
  Reduced cubic Petal coordinates satisfy the existing Zsigmondy `d = 3`
 @@ -51,6 +53,22 @@ theorem primitivePrimeDivisor_d3_not_dvd_sub
        hprim (by norm_num) (by norm_num)
    simpa using hnot
- 
+
 +/--
 +A `d = 3` Zsigmondy primitive divisor is also the existing
 +`PrimitivePrimeFactorOfDiffPow` witness.
@@ -308,7 +308,7 @@ index fed15598..6ea74ce6 100644
 @@ -101,6 +119,24 @@ theorem exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
      ⟨q, hprim, anchoredS0Carrier_of_primitivePrimeDivisor_d3 hbc hprim,
        primitivePrimeDivisor_d3_not_dvd_sub hprim⟩
- 
+
 +/--
 +The reduced cubic branch also provides the existing `PrimitiveBeam`
 +primitive-prime witness, using the same `q` as the Zsigmondy/Petal witness.
@@ -345,17 +345,17 @@ index d9c93730..a0165c92 100644
 +exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
  exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
  ```
- 
+
 @@ -341,6 +343,10 @@ This bridge intentionally does not prove any `padicValNat <= 1` theorem.
  Zsigmondy supplies existence, Petal supplies location, and squarefree/no-lift
  layers supply multiplicity.
- 
+
 +It also shares the same witness `q` with
 +`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`, preparing the downstream
 +squarefree/no-lift valuation layer without proving that layer here.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 index 0a82a060..de8ea9f3 100644
@@ -364,7 +364,7 @@ index 0a82a060..de8ea9f3 100644
 @@ -96,6 +96,26 @@ BoundaryD3Reduced hypotheses
    -> the same q as an anchored S0 carrier
  ```
- 
+
 +## Handshake Result
 +
 +Status: **initial API implemented**
@@ -386,7 +386,7 @@ index 0a82a060..de8ea9f3 100644
 +squarefree/no-lift layer can consume the same primitive divisor.
 +
  ## Important Separation: Existence, Location, Multiplicity
- 
+
  The investigation confirms that three concerns must remain separated.
 ````
 `````

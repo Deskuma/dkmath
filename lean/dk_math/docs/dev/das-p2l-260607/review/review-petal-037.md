@@ -494,7 +494,7 @@ index 9c3555e1..0539e4dc 100644
 +++ b/lean/dk_math/DkMath/ABC/ValuationFlowBridge.lean
 @@ -335,17 +335,47 @@ theorem primitive_prime_transfers_diff_load_to_beam
    exact primitivePrimeFlow_diffMass_eq_beamMass hq hd hd1 hab_lt
- 
+
  /--
 -Under a squarefree beam hypothesis, the local diff load is bounded by `1`.
 +Under a local no-lift beam hypothesis, the local diff load is bounded by `1`.
@@ -544,23 +544,23 @@ index 9c3555e1..0539e4dc 100644
 +  have hd : 0 < d := hd_prime.pos
 +  have hd1 : 1 < d := by omega
 +  exact squarefree_beam_bounds_local_load_local hq hd hd1 hab_lt hG_sq
- 
+
  end DkMath.ABC
 diff --git a/lean/dk_math/DkMath/NumberTheory/ValuationFlow/Primitive.lean b/lean/dk_math/DkMath/NumberTheory/ValuationFlow/Primitive.lean
 index b1eff310..a2dc8bb6 100644
 --- a/lean/dk_math/DkMath/NumberTheory/ValuationFlow/Primitive.lean
 +++ b/lean/dk_math/DkMath/NumberTheory/ValuationFlow/Primitive.lean
 @@ -6,7 +6,6 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.NumberTheory.ValuationFlow.Basic
  import DkMath.NumberTheory.PrimitiveBeam
 -import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
- 
+
  #print "file: DkMath.NumberTheory.ValuationFlow.Primitive"
- 
+
 @@ -61,18 +60,54 @@ theorem primitivePrimeFlow_diffMass_eq_beamMass
    exact primitive_prime_padic_eq_GN hq hd hd1 hab_lt
- 
+
  /--
 -Under a squarefree beam hypothesis, the primitive-prime diff mass is at most `1`.
 +Under a local no-lift beam hypothesis, the primitive-prime diff mass is at most
@@ -616,9 +616,9 @@ index b1eff310..a2dc8bb6 100644
 +  have hd1 : 1 < d := by omega
 +  exact primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
 +    hq hd hd1 hab_lt hG_sq
- 
+
  #print axioms primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
- 
+
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 index 2d5de34b..64820344 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
@@ -626,7 +626,7 @@ index 2d5de34b..64820344 100644
 @@ -1408,6 +1408,51 @@ lake build DkMath.Petal.PrimitiveD3ValuationBridge
  lake build DkMath.Petal
  ```
- 
+
 +### Step 6.2: Thin ValuationFlow / ABC Wrappers
 +
 +Status:
@@ -673,7 +673,7 @@ index 2d5de34b..64820344 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index c2e17708..cfd29ca8 100644
@@ -685,8 +685,8 @@ index c2e17708..cfd29ca8 100644
  持つ別層の仕事として扱う。
 +さらに `ValuationFlow.Primitive` と `ABC.ValuationFlowBridge` は、NoLift 版と
 +local squarefree 版の薄い wrapper を持つ形へ整理済みである。
- 
+
  ### Phase 5: Zsigmondy への接続準備
- 
+
 ````
 `````

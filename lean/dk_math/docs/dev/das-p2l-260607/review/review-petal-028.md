@@ -189,7 +189,7 @@ index 36a49b39..32978520 100644
 @@ -1208,6 +1208,68 @@ lake build DkMath.Petal.EisensteinBridge
  lake build DkMath.Petal
  ```
- 
+
 +### Step 5.8: Petal cubic surface closure
 +
 +Status:
@@ -253,7 +253,7 @@ index 36a49b39..32978520 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index d344dc34..0901a240 100644
@@ -271,7 +271,7 @@ index d344dc34..0901a240 100644
 +DkMath.Petal.BoundaryD3
 +DkMath.Petal.EisensteinBridge
  ```
- 
+
  記録:
 @@ -445,6 +452,8 @@ lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.m
    可除性構造として読む。
@@ -279,13 +279,13 @@ index d344dc34..0901a240 100644
    「採用済み因子が後段 product に残る」ことを theorem 化する。
 +- S0/GN3/BoundaryD3/Anchor/Eisenstein を、Phase 5 へ渡す三次 Petal 表面 API
 +  として一旦閉じる。
- 
+
  主な API:
- 
+
 @@ -483,6 +492,18 @@ theorem three_S0_nat_modEq_one_of_not_dvd_sub
  theorem three_not_dvd_S0_nat_of_not_dvd_sub
  ```
- 
+
 +S0/GN3 cubic surface closure:
 +
 +```lean
@@ -299,20 +299,20 @@ index d344dc34..0901a240 100644
 +```
 +
  意味:
- 
+
  ```text
 @@ -494,6 +515,7 @@ Petal Phase 4.7:
    factor persistence
    Petal quotient-remainder address
    GN degree-three Petal face
 +  S0/GN3/BoundaryD3/Anchor/Eisenstein cubic surface closure
- 
+
  Phase 5:
    primitive prime divisor / Zsigmondy bridge
 @@ -503,6 +525,17 @@ Phase 5:
  Zsigmondy へ渡す前に、どの因子がどの orbit / channel / GN face に保存されるかを
  Lean 上で追うための道具である。
- 
+
 +現在の Phase 4.7 closure で閉じたのは、一般次数 `d` ではなく三次 `S0/GN3`
 +表面である。未処理の項目は以下に残す:
 +
@@ -325,7 +325,7 @@ index d344dc34..0901a240 100644
 +```
 +
  ### Phase 5: Zsigmondy への接続準備
- 
+
  目標:
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index e11dc4d3..60edd166 100644
@@ -333,7 +333,7 @@ index e11dc4d3..60edd166 100644
 +++ b/lean/dk_math/DkMath/Petal.lean
 @@ -5,16 +5,16 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Petal.Basic
 -import DkMath.Petal.ReducedSupport
 -import DkMath.Petal.Counting
@@ -371,7 +371,7 @@ index e11dc4d3..60edd166 100644
 +carry temporary dependencies that are documented at their module headers and
 +should be reconsidered during the planned `DkMath.Lib.*` promotion refactor.
  -/
- 
+
  namespace DkMath
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 33cd9bb2..02a3dbe6 100644
@@ -393,12 +393,12 @@ index 33cd9bb2..02a3dbe6 100644
 +DkMath.Petal.BoundaryD3
 +DkMath.Petal.EisensteinBridge
  ```
- 
+
  ### `DkMath.Petal.Basic`
 @@ -447,32 +454,77 @@ the cubic 3-contact is exactly the boundary branch
  S0 and GN3 can be viewed through the shifted Eisenstein norm
  ```
- 
+
 +## Current Closed Surface
 +
 +The current closure checkpoint is:
@@ -439,14 +439,14 @@ index 33cd9bb2..02a3dbe6 100644
 +usable API for later FLT and Zsigmondy-facing work.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
  prime enumeration such as `nthPrime`.
- 
+
 -It also does not yet prove a Zsigmondy theorem.  Instead, it prepares the
 -language needed for that bridge:
 +It also does not yet prove:
- 
+
  ```text
 -where factors are stored
 -which factors persist across later layers
@@ -461,7 +461,7 @@ index 33cd9bb2..02a3dbe6 100644
 +complete split of BoundaryD3 and BoundaryD3Anchor
 +concrete prime enumeration / standard primorial theorem
  ```
- 
+
 +Instead, it prepares the language needed for those bridges: where factors are
 +stored, which factors persist across later layers, how Petal addresses split a
 +layer into channels, how GN degree 3 becomes the Petal S0 face, how reduced
@@ -469,9 +469,9 @@ index 33cd9bb2..02a3dbe6 100644
 +enters the Eisenstein norm route.
 +
  ## Next Directions
- 
+
  The next reasonable implementation directions are:
- 
+
  ```text
 -1. use Petal address decomposition in nested observations
 -2. connect strict prime-base orbits to a concrete prime enumeration
@@ -483,7 +483,7 @@ index 33cd9bb2..02a3dbe6 100644
 +4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
 +5. perform the deferred `DkMath.Lib.*` promotion refactor
  ```
- 
+
  The most conservative next theorem work is probably:
 ````
 `````

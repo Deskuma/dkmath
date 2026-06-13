@@ -233,7 +233,7 @@ index d64232a3..de31acb5 100644
 @@ -153,6 +153,15 @@ def primeBaseOrbitTotal (p : Nat → Nat) (k : Nat) : Nat :=
  def IsPrimeBaseSequence (p : Nat → Nat) : Prop :=
    ∀ i, Nat.Prime (p i)
- 
+
 +/--
 +A distinct prime-base sequence assigns prime bases without repetition.
 +
@@ -249,7 +249,7 @@ index d64232a3..de31acb5 100644
 @@ -230,6 +239,18 @@ theorem IsPrimeBaseSequence.prime_at
      Nat.Prime (p i) :=
    hp i
- 
+
 +/-- A distinct prime-base sequence supplies a prime at each lap. -/
 +theorem IsDistinctPrimeBaseSequence.prime_at
 +    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p) (i : Nat) :

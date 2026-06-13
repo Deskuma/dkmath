@@ -290,7 +290,7 @@ index 88fdcb18..4d500bd1 100644
 @@ -81,6 +81,33 @@ theorem dynamicOrbitTotal_succ (b : Nat → Nat) (k : Nat) :
      dynamicOrbitTotal b (k + 1) = dynamicOrbitTotal b k * b k := by
    simp [dynamicOrbitTotal, Finset.prod_range_succ]
- 
+
 +/-- A dynamic orbit prefix product divides the next prefix product. -/
 +theorem dynamicOrbitTotal_dvd_succ
 +    (b : Nat → Nat) (k : Nat) :
@@ -324,7 +324,7 @@ index 88fdcb18..4d500bd1 100644
 @@ -143,6 +170,16 @@ theorem primeBaseOrbitTotal_dvd_succ
    rw [primeBaseOrbitTotal_succ]
    exact Nat.dvd_mul_right _ _
- 
+
 +/--
 +Prime-base orbit prefix products are monotone for divisibility.
 +
@@ -337,6 +337,6 @@ index 88fdcb18..4d500bd1 100644
 +
  /--
  The next base divides the next prime-base prefix product.
- 
+
 ````
 `````

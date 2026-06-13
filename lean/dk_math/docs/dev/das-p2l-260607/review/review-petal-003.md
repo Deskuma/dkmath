@@ -476,7 +476,7 @@ index 57f70d79..6802c66a 100644
 @@ -60,6 +60,15 @@ def outerPetalAddress (n lap m : Nat) : PetalAddress :=
      channel := (m - 1) / b
      offset := (m - 1) % b + 1 }
- 
+
 +/--
 +The one-step remainder passed to the next inner lap.
 +
@@ -492,7 +492,7 @@ index 57f70d79..6802c66a 100644
 @@ -89,6 +98,11 @@ theorem outerPetalAddress_lap (n lap m : Nat) :
      (outerPetalAddress n lap m).lap = lap := by
    rfl
- 
+
 +/-- The outer remainder is definitionally the address offset. -/
 +theorem outerPetalRemainder_eq_offset (n lap m : Nat) :
 +    outerPetalRemainder n lap m = (outerPetalAddress n lap m).offset := by
@@ -504,7 +504,7 @@ index 57f70d79..6802c66a 100644
 @@ -121,6 +135,12 @@ theorem outerPetalAddress_offset_pos
      0 < (outerPetalAddress n lap m).offset := by
    simp [outerPetalAddress]
- 
+
 +/-- The outer remainder is always positive. -/
 +theorem outerPetalRemainder_pos
 +    {n lap m : Nat} :
@@ -517,7 +517,7 @@ index 57f70d79..6802c66a 100644
 @@ -128,6 +148,12 @@ theorem outerPetalAddress_offset_le_blockSize
    rw [outerPetalAddress]
    exact Nat.succ_le_of_lt (Nat.mod_lt _ hb)
- 
+
 +/-- The outer remainder is bounded by the outer block size. -/
 +theorem outerPetalRemainder_le_blockSize
 +    {n lap m : Nat} (hb : 0 < relPetalBlockSize n lap) :
@@ -530,7 +530,7 @@ index 57f70d79..6802c66a 100644
 @@ -206,6 +232,46 @@ theorem outerPetalAddress_isPetalChannel_of_blockSize_lt
      (outerPetalAddress_channel_eq_zero_iff_le_blockSize hm hb).1 h0
    exact (not_lt_of_ge hle) hbm
- 
+
 +/--
 +If a one-based value stays inside the first outer block, the outer remainder is
 +the original value.
@@ -580,7 +580,7 @@ index 3707e9c2..de095a5b 100644
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/History.md
 @@ -1337,3 +1337,50 @@ git diff --check
  ```
- 
+
  すべて成功です。
 +
 +### 2026/06/10  7:23

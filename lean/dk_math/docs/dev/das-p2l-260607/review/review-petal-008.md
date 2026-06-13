@@ -374,7 +374,7 @@ index e1f6b27e..27cf4116 100644
 @@ -54,6 +54,58 @@ theorem relPetalTotal_succ (n lap : Nat) :
      relPetalTotal n (lap + 1) = relPetalTotal n lap * lapBase n := by
    simp [relPetalTotal, pow_succ, Nat.mul_assoc]
- 
+
 +/--
 +Dynamic orbit total.
 +

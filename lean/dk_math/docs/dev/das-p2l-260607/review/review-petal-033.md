@@ -243,16 +243,16 @@ index b22fb99c..68d47056 100644
 +++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 @@ -1354,12 +1354,23 @@ squarefree/no-lift valuation layer.
  Implemented:
- 
+
  ```lean
 +primitiveD3_padicValNat_le_one_of_noLift_GN
  primitiveD3_padicValNat_le_one_of_squarefree_GN
 +exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
  exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
  ```
- 
+
  Meaning:
- 
+
 +```text
 +BoundaryD3Reduced hypotheses
 +  -> Zsigmondy/Petal/PrimitiveBeam shared witness q
@@ -268,15 +268,15 @@ index b22fb99c..68d47056 100644
 @@ -1367,8 +1378,9 @@ BoundaryD3Reduced hypotheses
    -> padicValNat q (c^3 - b^3) <= 1
  ```
- 
+
 -This is still not an unconditional valuation theorem.  The squarefree `GN3`
 -hypothesis is explicit and belongs to the multiplicity/no-lift layer.
 +This is still not an unconditional valuation theorem.  The local no-lift or
 +squarefree `GN3` hypothesis is explicit and belongs to the multiplicity/no-lift
 +layer.
- 
+
  Expected validation:
- 
+
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index 084a5be9..c2e17708 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
@@ -303,12 +303,12 @@ index 02dfedc3..f3a25643 100644
 +The file also exposes the strictly weaker local no-lift version:
 +`¬ q^2 ∣ GN 3 (c - b) b` is enough for the same bound for that particular `q`.
  -/
- 
+
  namespace DkMath
 @@ -25,6 +28,44 @@ namespace Petal
  open DkMath.CosmicFormulaBinom
  open DkMath.NumberTheory.PrimitiveBeam
- 
+
 +/--
 +Local no-lift on `GN3` turns the shared `d = 3` primitive witness into the
 +valuation bound on the difference body.
@@ -353,7 +353,7 @@ index 02dfedc3..f3a25643 100644
 @@ -51,6 +92,30 @@ theorem primitiveD3_padicValNat_le_one_of_squarefree_GN
        (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
        hG_sq
- 
+
 +/--
 +Existence form for the local no-lift route: on the reduced cubic branch, if the
 +selected shared witness has no `q^2` lift on `GN3`, then it has valuation at
@@ -387,24 +387,24 @@ index 1b8dea02..b0e4ef28 100644
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 @@ -355,18 +355,26 @@ Connects the shared `d = 3` witness to the honest squarefree valuation theorem.
  Important names:
- 
+
  ```lean
 +primitiveD3_padicValNat_le_one_of_noLift_GN
  primitiveD3_padicValNat_le_one_of_squarefree_GN
 +exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
  exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
  ```
- 
+
  This file is deliberately conditional.  It does not prove that `GN 3 (c - b) b`
 -is squarefree.  It only says that, once squarefreeness is supplied, the same
 -`q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
 +is squarefree.  It only says that, once local no-lift or squarefreeness is
 +supplied, the same `q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
- 
+
  ```text
  padicValNat q (c^3 - b^3) <= 1
  ```
- 
+
 +The local no-lift input is weaker than full squarefreeness:
 +
 +```text
@@ -412,7 +412,7 @@ index 1b8dea02..b0e4ef28 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````

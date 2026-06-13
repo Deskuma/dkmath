@@ -244,17 +244,17 @@ index c37a2ba9..0ddf769f 100644
 @@ -1292,13 +1292,47 @@ Petal gives location.
  Squarefree/NoLift gives multiplicity.
  ```
- 
+
 -The next Lean-facing bridge should therefore be `DkMath.Petal.ZsigmondyD3Bridge`
 -or an equivalent `PrimitiveD3` layer.  It should translate the reduced cubic
 -Petal witness into `DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q`.
 +The next Lean-facing bridge is `DkMath.Petal.ZsigmondyD3Bridge`.  It feeds the
 +reduced cubic Petal hypotheses into Zsigmondy's `d = 3` existence theorem and
 +shares the same witness with the anchored `S0_nat` carrier surface.
- 
+
  It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
  squarefree or no-lift hypothesis.
- 
+
 +### Step 6.0: Add `DkMath.Petal.ZsigmondyD3Bridge`
 +
 +Status:
@@ -290,14 +290,14 @@ index c37a2ba9..0ddf769f 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index 299550ff..64c403a8 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 +++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 @@ -557,7 +557,9 @@ Squarefree / NoLift / ValuationFlow:
- 
+
  したがって次に作る橋は、まず三次 reduced Petal witness を
  `DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q` へ翻訳する薄い
 -`ZsigmondyD3Bridge` でよい。
@@ -306,7 +306,7 @@ index 299550ff..64c403a8 100644
 +Zsigmondy primitive divisor と Petal anchored `S0_nat` carrier として共有する。
  `padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
  持つ別層の仕事として扱う。
- 
+
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 60edd166..a6826e32 100644
 --- a/lean/dk_math/DkMath/Petal.lean
@@ -316,16 +316,16 @@ index 60edd166..a6826e32 100644
  import DkMath.Petal.BoundaryD3
  import DkMath.Petal.EisensteinBridge
 +import DkMath.Petal.ZsigmondyD3Bridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -39,6 +40,7 @@ basic forms / relative polygon vocabulary
    -> reduced support and anchored carriers
    -> BoundaryD3 cubic branch split
    -> shifted Eisenstein norm bridge
 +  -> Zsigmondy d = 3 primitive-divisor bridge
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean b/lean/dk_math/DkMath/Petal/ZsigmondyD3Bridge.lean
 new file mode 100644
@@ -462,12 +462,12 @@ index 9cb68c2a..d9c93730 100644
  DkMath.Petal.EisensteinBridge
 +DkMath.Petal.ZsigmondyD3Bridge
  ```
- 
+
  ### `DkMath.Petal.Basic`
 @@ -320,6 +321,26 @@ arithmetic development.  Its role is to let later Petal/Zsigmondy-facing files
  import the Petal package surface instead of depending directly on the FLT file
  layout.
- 
+
 +### `DkMath.Petal.ZsigmondyD3Bridge`
 +
 +Shares the same `d = 3` Zsigmondy primitive-divisor witness with the Petal
@@ -489,7 +489,7 @@ index 9cb68c2a..d9c93730 100644
 +layers supply multiplicity.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 index 505af458..0a82a060 100644
@@ -497,7 +497,7 @@ index 505af458..0a82a060 100644
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 @@ -26,8 +26,9 @@ BoundaryD3Reduced
  The next question is not yet "prove Zsigmondy".  The immediate question is:
- 
+
  ```text
 -Can the Petal anchored S0 witness be translated into the existing
 -Zsigmondy primitive-divisor language?
@@ -505,11 +505,11 @@ index 505af458..0a82a060 100644
 +Zsigmondy d = 3 existence theorem, and can that same Zsigmondy witness be
 +shared with the Petal anchored S0 carrier surface?
  ```
- 
+
  ## Existing Zsigmondy Contract
 @@ -90,8 +91,9 @@ theorem exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
  This is not a full Zsigmondy theorem.  It is the `d = 3` handshake:
- 
+
  ```text
 -Petal reduced cubic witness
 -  -> primitive divisor witness for c^3 - b^3
@@ -517,7 +517,7 @@ index 505af458..0a82a060 100644
 +  -> Zsigmondy primitive divisor q for c^3 - b^3
 +  -> the same q as an anchored S0 carrier
  ```
- 
+
  ## Important Separation: Existence, Location, Multiplicity
 ````
 `````

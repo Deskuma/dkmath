@@ -506,7 +506,7 @@ index 0150881c..57f70d79 100644
 @@ -40,6 +40,14 @@ structure PetalAddress where
    offset : Nat
  deriving Repr, DecidableEq
- 
+
 +/-- The inheritance/core channel is channel `0`. -/
 +def IsInheritanceChannel (A : PetalAddress) : Prop :=
 +  A.channel = 0
@@ -517,11 +517,11 @@ index 0150881c..57f70d79 100644
 +
  /--
  Outer one-step address of a one-based value `m`.
- 
+
 @@ -81,6 +89,32 @@ theorem outerPetalAddress_lap (n lap m : Nat) :
      (outerPetalAddress n lap m).lap = lap := by
    rfl
- 
+
 +/-- The address is in the inheritance/core channel exactly when its channel is zero. -/
 +theorem isInheritanceChannel_iff_channel_eq_zero (A : PetalAddress) :
 +    IsInheritanceChannel A ↔ A.channel = 0 := by
@@ -554,7 +554,7 @@ index 0150881c..57f70d79 100644
 @@ -115,5 +149,74 @@ theorem outerPetalAddress_channel_lt_lapBase
    rw [outerPetalAddress, relPetalBlockSize_succ]
    exact Nat.div_lt_of_lt_mul hsub_lt
- 
+
 +/--
 +The outer address lands in channel `0` exactly when the zero-based position
 +`m - 1` is still inside the first outer block.
@@ -632,7 +632,7 @@ index 1cc4ccc5..3707e9c2 100644
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/History.md
 @@ -1288,3 +1288,52 @@ git diff --check
  ```
- 
+
  すべて成功です。
 +
 +### 2026/06/10  7:00

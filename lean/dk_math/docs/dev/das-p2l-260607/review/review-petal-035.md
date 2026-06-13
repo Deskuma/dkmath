@@ -331,7 +331,7 @@ index ecec0c90..66a60564 100644
 @@ -101,6 +101,24 @@ lemma primitive_prime_padic_eq_GN
    have hzero : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
    simpa [hzero] using hpadic
- 
+
 +/--
 +For a positive exponent and a strict body boundary `b < a`, the `GN` factor
 +attached to a primitive prime witness is nonzero.
@@ -374,7 +374,7 @@ index ecec0c90..66a60564 100644
 @@ -140,6 +151,34 @@ lemma primitive_prime_padic_bound_diff_of_noLift_GN
          (GN d (a - b) b) 2 hGN_ne).2 htwo_le_GN
    exact hNoLift hq2_dvd_GN
- 
+
 +/--
 +Local squarefree route for the primitive-prime valuation bound.
 +
@@ -437,7 +437,7 @@ index ecec0c90..66a60564 100644
 -      hq_ndiv_diff
 -      hG_sq
 +  exact primitive_prime_padic_bound_diff_of_squarefree_GN_local hq hd_pos hd1 hab_lt hG_sq
- 
+
  /-- Specialized `Body = x * GN d x u` form of `primitive_prime_dvd_GN`. -/
  lemma primitive_prime_dvd_GN_body
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
@@ -446,19 +446,19 @@ index d6709d58..b9fb7b57 100644
 +++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 @@ -1364,9 +1364,15 @@ The generic no-lift valuation helper has also been promoted to
  `DkMath.NumberTheory.PrimitiveBeam`:
- 
+
  ```lean
 +primitive_prime_GN_ne_zero
  primitive_prime_padic_bound_diff_of_noLift_GN
 +primitive_prime_padic_bound_diff_of_squarefree_GN_local
  ```
- 
+
 +The local squarefree helper is a sufficient-condition wrapper over the no-lift
 +helper.  The older heavier squarefree wrapper remains available for callers
 +that still use the previous primitive-prime repair signature.
 +
  Meaning:
- 
+
  ```text
 diff --git a/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean b/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean
 index bc884b57..acfed62c 100644
@@ -488,7 +488,7 @@ index bc884b57..acfed62c 100644
 -      hred
 -      (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
        hG_sq
- 
+
  /--
 @@ -119,7 +115,7 @@ theorem exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree
    exact
@@ -496,7 +496,7 @@ index bc884b57..acfed62c 100644
        primitiveD3_padicValNat_le_one_of_squarefree_GN
 -        hbc hb hcop hred hprim hG_sq⟩
 +        hbc hprim hG_sq⟩
- 
+
  end Petal
  end DkMath
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
@@ -505,19 +505,19 @@ index e87f5a3c..0023c1fb 100644
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 @@ -379,9 +379,15 @@ The underlying local no-lift valuation helper is now available in
  `DkMath.NumberTheory.PrimitiveBeam` as:
- 
+
  ```lean
 +primitive_prime_GN_ne_zero
  primitive_prime_padic_bound_diff_of_noLift_GN
 +primitive_prime_padic_bound_diff_of_squarefree_GN_local
  ```
- 
+
 +The older heavier squarefree wrapper is kept for compatibility, but the local
 +route is now the canonical reading: squarefree `GN` supplies no-lift for the
 +selected witness.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````

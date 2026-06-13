@@ -155,11 +155,11 @@ index 5e6d01aa..0ba5db7d 100644
 +hasPositiveAnchorPrime_no_smaller_prime
 +hasPositiveAnchorPrime_anchor_le_of_prime_dvd
  ```
- 
+
  This layer intentionally does not import S0/GN bridge files yet.  It should
  first remain a thin carrier predicate surface, then connect to GN/S0 support
  only after a concrete theorem needs that bridge.
- 
+
 +Design note:
 +
 +```text
@@ -171,7 +171,7 @@ index 5e6d01aa..0ba5db7d 100644
 +actual support carrier in downstream theorems.
 +
  ### `DkMath.Petal.EisensteinBridge`
- 
+
  Purpose:
 @@ -984,9 +1001,16 @@ Implemented:
  ```lean
@@ -188,7 +188,7 @@ index 5e6d01aa..0ba5db7d 100644
 +hasPositiveAnchorPrime_no_smaller_prime
 +hasPositiveAnchorPrime_anchor_le_of_prime_dvd
  ```
- 
+
  Expected validation:
 diff --git "a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md" "b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md"
 index 63926952..821f1a24 100644
@@ -197,7 +197,7 @@ index 63926952..821f1a24 100644
 @@ -390,13 +390,33 @@ def HasNoPrimeBelow (r n : ℕ) : Prop :=
  def HasAnchorPrime (r n : ℕ) : Prop :=
    r.Prime ∧ r ∣ n ∧ HasNoPrimeBelow r n
- 
+
 +def HasPositiveAnchorPrime (r n : ℕ) : Prop :=
 +  0 < n ∧ HasAnchorPrime r n
 +
@@ -211,9 +211,9 @@ index 63926952..821f1a24 100644
 +theorem hasPositiveAnchorPrime_no_smaller_prime
 +theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
  ```
- 
+
  Keep this layer independent of S0 at first.
- 
+
 +Design decision:
 +
 +```text
@@ -226,7 +226,7 @@ index 63926952..821f1a24 100644
 +semantics are required.
 +
  ## 4.4. Phase D. GN primitive candidate
- 
+
  Status: **[PARTIAL]**
 diff --git a/lean/dk_math/DkMath/Petal/ReducedSupport.lean b/lean/dk_math/DkMath/Petal/ReducedSupport.lean
 index e4bd9895..993ae91c 100644
@@ -234,7 +234,7 @@ index e4bd9895..993ae91c 100644
 +++ b/lean/dk_math/DkMath/Petal/ReducedSupport.lean
 @@ -34,10 +34,22 @@ def HasNoPrimeBelow (r n : ℕ) : Prop :=
  `r` is the anchor prime of the carrier `n`.
- 
+
  This means `r` is prime, `r` divides `n`, and no smaller prime divides `n`.
 +
 +This is the raw carrier predicate.  It intentionally does not require `0 < n`;
@@ -243,7 +243,7 @@ index e4bd9895..993ae91c 100644
  -/
  def HasAnchorPrime (r n : ℕ) : Prop :=
    Nat.Prime r ∧ r ∣ n ∧ HasNoPrimeBelow r n
- 
+
 +/--
 +Positive version of `HasAnchorPrime`.
 +
@@ -258,7 +258,7 @@ index e4bd9895..993ae91c 100644
 @@ -57,5 +69,49 @@ theorem hasAnchorPrime_no_smaller_prime
      ¬ p ∣ n :=
    h.2.2 p hp hpr
- 
+
 +/--
 +Any prime divisor of the carrier is at least the anchor.
 +
@@ -324,13 +324,13 @@ index 37cb5ba2..b68d0842 100644
 +hasPositiveAnchorPrime_no_smaller_prime
 +hasPositiveAnchorPrime_anchor_le_of_prime_dvd
  ```
- 
+
 +`HasAnchorPrime` is the wide raw carrier predicate.  Use
 +`HasPositiveAnchorPrime` when the carrier must be a genuine nonzero support
 +object.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````
