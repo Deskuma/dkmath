@@ -1435,6 +1435,20 @@ squarefree_beam_bounds_local_load_local
 squarefree_beam_bounds_local_load
 ```
 
+`DkMath.ABC.ValuationFlowBridgeExamples` records the same API split on the
+small primitive sample `q = 31, a = 2, b = 1, d = 5`:
+
+```text
+NoLift route:
+  noLift_beam_bounds_local_load
+
+local squarefree route:
+  squarefree_beam_bounds_local_load_local
+
+compatibility route:
+  squarefree_beam_bounds_local_load
+```
+
 Meaning:
 
 ```text
@@ -1451,6 +1465,7 @@ Expected validation:
 ```sh
 lake build DkMath.NumberTheory.ValuationFlow.Primitive
 lake build DkMath.ABC.ValuationFlowBridge
+lake build DkMath.ABC.ValuationFlowBridgeExamples
 ```
 
 ### Step 7: Refactor imports gradually

@@ -69,17 +69,41 @@ example : diffMass 31 2 1 5 = beamMass 31 2 1 5 := by
 
 /-- The squarefree beam sample `GN 5 1 1 = 31` yields local load at most `1`. -/
 example : diffMass 31 2 1 5 ≤ 1 := by
+  have hNoLift : ¬ 31 ^ 2 ∣ DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1 := by
+    decide
+  exact noLift_beam_bounds_local_load
+    (hq := primitiveWitness_31_2_1_5)
+    (hd := by decide)
+    (hd1 := by decide)
+    (hab_lt := by decide)
+    hNoLift
+
+/-- Squarefree `GN 5 1 1 = 31` is a sufficient condition for the same local load bound. -/
+example : diffMass 31 2 1 5 ≤ 1 := by
+  have hGN : DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1 = 31 := by
+    decide
+  have hG_sq : Squarefree (DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1) := by
+    simpa [hGN] using (show Squarefree 31 from (show Nat.Prime 31 by decide).squarefree)
+  exact squarefree_beam_bounds_local_load_local
+    (hq := primitiveWitness_31_2_1_5)
+    (hd := by decide)
+    (hd1 := by decide)
+    (hab_lt := by decide)
+    hG_sq
+
+/-- Compatibility sample for the older squarefree-beam API. -/
+example : diffMass 31 2 1 5 ≤ 1 := by
   have hGN : DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1 = 31 := by
     decide
   have hG_sq : Squarefree (DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1) := by
     simpa [hGN] using (show Squarefree 31 from (show Nat.Prime 31 by decide).squarefree)
   exact squarefree_beam_bounds_local_load
     (hd_prime := by decide)
-    (hd_ge := by decide)
+    (_hd_ge := by decide)
     (hab_lt := by decide)
-    (hb := by decide)
-    (hab := by decide)
-    (hpnd := by decide)
+    (_hb := by decide)
+    (_hab := by decide)
+    (_hpnd := by decide)
     (hq := primitiveWitness_31_2_1_5)
     hG_sq
 
