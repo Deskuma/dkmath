@@ -2,6 +2,30 @@
 
 [現況: review-028](./review-petal-028.md)
 
+## Status update: 2026-06-14
+
+This issue is closed as a blocker for the main Petal -> Zsigmondy route.
+
+The old research theorem is still intentionally not proved.  The current repair
+route is to use the separated honest layers:
+
+```text
+Zsigmondy:
+  primitive prime existence
+
+Petal / GN / Anchor:
+  location away from boundary
+
+NoLift / squarefree:
+  multiplicity control
+```
+
+Current closure report:
+
+```text
+./report-petal-042.md
+```
+
 ## ABC / FLT 両方から参照される命題（主張の強い命題）
 
 以下が `DkMath.FLT.*` / `DkMath.ABC.*` 両方から参照されている。
