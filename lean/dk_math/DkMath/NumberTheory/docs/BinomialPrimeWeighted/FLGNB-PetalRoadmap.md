@@ -1538,9 +1538,9 @@ Status:
 implemented
 ```
 
-`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` now has a
-direct handshake from the FLT Branch-B primitive-prime inputs to the shared
-`PrimitiveBeam` predicate:
+`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation` now holds the
+no-sorry valuation surface.  It provides the direct handshake from the FLT
+Branch-B primitive-prime inputs to the shared `PrimitiveBeam` predicate:
 
 ```lean
 primitivePrimeFactorOfDiffPow_of_FLT_branch
@@ -1595,13 +1595,43 @@ Squarefree:
   sufficient condition that produces NoLift
 
 Research placeholder:
-  still isolated in the old research core, not used by the honest NoLift target
+  isolated in CosmicPetalBridgeGNNoWieferichResearch
+  not used by the honest NoLift / squarefree valuation target
+```
+
+Import split:
+
+```text
+CosmicPetalBridgeGNNoWieferichValuation:
+  honest valuation target
+  PrimitiveBeam handoff
+  NoLift wrapper
+  squarefree-as-NoLift wrapper
+
+CosmicPetalBridgeGNNoWieferichResearch:
+  legacy research core
+  fixed injection / target abstraction around the old placeholder
+
+TriominoSquarefreeGNBridgeProviderImpl:
+  now imports the Valuation surface, not the Research file
+
+CosmicPetalBridgeGN:
+  imports the Valuation surface explicitly because its public branch API uses
+  TriominoPrimitivePrimeFactorPadicValNatLeOneTarget
+
+remaining direct Research imports:
+  CosmicPetalBridgeGNNoWieferichDefault
+  CosmicPetalBridgeGNDescentBQuarantine
 ```
 
 Expected validation:
 
 ```sh
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
 lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+lake build DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
+lake build DkMath.FLT.PrimeProvider
 ```
 
 ### Step 7: Refactor imports gradually
