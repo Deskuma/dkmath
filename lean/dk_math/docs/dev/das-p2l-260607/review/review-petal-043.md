@@ -10,8 +10,8 @@ gch: e3f8918fe7c52b61f662d94b8940f342003e424a
 
 作成・更新した docs:
 
-- 新規: [report-petal-042.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-042.md)
-- 更新: [issue-petal-028.md](/home/deskuma/develop/lean/dkmath/lean/dk_math/docs/dev/das-p2l-260607/review/issue-petal-028.md)
+- 新規: [report-petal-042.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-042.md)
+- 更新: [issue-petal-028.md](/lean/dk_math/docs/dev/das-p2l-260607/review/issue-petal-028.md)
 
 レポートでは、当初の懸念を以下の観点で整理しました。
 
