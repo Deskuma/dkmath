@@ -1270,6 +1270,370 @@ lake build DkMath.Petal
 git diff --check
 ```
 
+### Step 5.9: Zsigmondy preflight investigation
+
+Status:
+
+```text
+investigated
+```
+
+Record:
+
+```text
+DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+Conclusion:
+
+```text
+Zsigmondy gives existence.
+Petal gives location.
+Squarefree/NoLift gives multiplicity.
+```
+
+The next Lean-facing bridge is `DkMath.Petal.ZsigmondyD3Bridge`.  It feeds the
+reduced cubic Petal hypotheses into Zsigmondy's `d = 3` existence theorem and
+shares the same witness with the anchored `S0_nat` carrier surface.
+
+The same witness is also exposed as
+`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q c b 3`, so later
+squarefree/no-lift APIs can consume the primitive divisor without changing
+the chosen `q`.
+
+It should not try to prove `padicValNat q (c^3 - b^3) <= 1` without an explicit
+squarefree or no-lift hypothesis.
+
+### Step 6.0: Add `DkMath.Petal.ZsigmondyD3Bridge`
+
+Status:
+
+```text
+initial API implemented
+```
+
+Implemented:
+
+```lean
+exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
+primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3
+primitivePrimeDivisor_d3_dvd_S0_nat
+anchoredS0Carrier_of_primitivePrimeDivisor_d3
+exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
+exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
+```
+
+Meaning:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy primitive divisor q for c^3 - b^3
+  -> the same q as an anchored S0 carrier
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.ZsigmondyD3Bridge
+lake build DkMath.Petal
+```
+
+### Step 6.1: Add `DkMath.Petal.PrimitiveD3ValuationBridge`
+
+Status:
+
+```text
+implemented
+```
+
+This step connects the shared `d = 3` primitive witness to the honest
+squarefree/no-lift valuation layer.
+
+Implemented:
+
+```lean
+primitiveD3_padicValNat_le_one_of_noLift_GN
+primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
+```
+
+The generic no-lift valuation helper has also been promoted to
+`DkMath.NumberTheory.PrimitiveBeam`:
+
+```lean
+primitive_prime_GN_ne_zero
+primitive_prime_padic_bound_diff_of_noLift_GN
+primitive_prime_padic_bound_diff_of_squarefree_GN_local
+primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
+primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
+```
+
+The local squarefree helper is a sufficient-condition wrapper over the no-lift
+helper.  The older heavier squarefree wrapper remains available for callers
+that still use the previous primitive-prime repair signature.
+
+The no-lift route now also reaches the perfect-power obstruction layer.  This
+gives downstream FLT/ABC code an honest replacement path for older research
+calls, provided it can supply local no-lift for the selected primitive witness.
+
+Meaning:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy/Petal/PrimitiveBeam shared witness q
+  -> not q^2 divides GN 3 (c - b) b
+  -> padicValNat q (c^3 - b^3) <= 1
+```
+
+The squarefree variant is the stronger sufficient-condition wrapper:
+
+```text
+BoundaryD3Reduced hypotheses
+  -> Zsigmondy/Petal/PrimitiveBeam shared witness q
+  -> Squarefree (GN 3 (c - b) b)
+  -> padicValNat q (c^3 - b^3) <= 1
+```
+
+This is still not an unconditional valuation theorem.  The local no-lift or
+squarefree `GN3` hypothesis is explicit and belongs to the multiplicity/no-lift
+layer.
+
+Expected validation:
+
+```sh
+lake build DkMath.Petal.PrimitiveD3ValuationBridge
+lake build DkMath.Petal
+```
+
+### Step 6.2: Thin ValuationFlow / ABC Wrappers
+
+Status:
+
+```text
+implemented
+```
+
+`DkMath.NumberTheory.ValuationFlow.Primitive` now exposes the local no-lift and
+local squarefree routes directly:
+
+```lean
+primitivePrimeFlow_diffMass_le_one_of_noLift_beam
+primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
+```
+
+The older heavier `primitivePrimeFlow_diffMass_le_one_of_squarefree_beam`
+remains as a compatibility wrapper.
+
+`DkMath.ABC.ValuationFlowBridge` mirrors this shape:
+
+```lean
+noLift_beam_bounds_local_load
+squarefree_beam_bounds_local_load_local
+squarefree_beam_bounds_local_load
+```
+
+`DkMath.ABC.ValuationFlowBridgeExamples` records the same API split on the
+small primitive sample `q = 31, a = 2, b = 1, d = 5`:
+
+```text
+NoLift route:
+  noLift_beam_bounds_local_load
+
+local squarefree route:
+  squarefree_beam_bounds_local_load_local
+
+compatibility route:
+  squarefree_beam_bounds_local_load
+```
+
+It also records a separating sample:
+
+```text
+q = 7, a = 4, b = 2, d = 3
+GN 3 (4 - 2) 2 = 28 = 2^2 * 7
+
+full beam squarefree:
+  false
+
+local NoLift at q:
+  true, because 7^2 does not divide 28
+
+result:
+  noLift_beam_bounds_local_load still gives diffMass 7 4 2 3 <= 1
+```
+
+This example makes the intended hierarchy concrete:
+
+```text
+NoLift at q
+  weaker than full beam squarefree
+
+full beam squarefree
+  sufficient for NoLift at every prime channel
+```
+
+Meaning:
+
+```text
+PrimitiveBeam no-lift valuation
+  -> ValuationFlow diffMass <= 1
+  -> ABC local-load bridge
+```
+
+This keeps `NoLift` as the main multiplicity hypothesis while preserving the
+older squarefree API for downstream callers.
+
+Caller survey:
+
+```text
+current direct Lean callers of the old ABC wrapper:
+  DkMath.ABC.ValuationFlowBridgeExamples
+
+current direct Lean callers of the old ValuationFlow wrapper:
+  DkMath.ABC.ValuationFlowBridge
+
+classification:
+  example caller:
+    intentionally kept as a compatibility regression sample
+
+  ABC wrapper caller:
+    intentionally kept as the public compatibility surface
+
+  new development:
+    should use noLift_beam_bounds_local_load when local NoLift is available
+    should use squarefree_beam_bounds_local_load_local when only full GN
+    squarefreeness is available
+```
+
+ABC-side closure status:
+
+```text
+implemented:
+  NoLift API
+  local squarefree API
+  compatibility API
+  squarefree example
+  non-squarefree local NoLift example
+
+remaining:
+  no mandatory ABC-side replacement work before returning to Petal/Zsigmondy
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.NumberTheory.ValuationFlow.Primitive
+lake build DkMath.ABC.ValuationFlowBridge
+lake build DkMath.ABC.ValuationFlowBridgeExamples
+```
+
+### Step 6.3: Thin FLT NoWieferich Research Bridge
+
+Status:
+
+```text
+implemented
+```
+
+`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation` now holds the
+no-sorry valuation surface.  It provides the direct handshake from the FLT
+Branch-B primitive-prime inputs to the shared `PrimitiveBeam` predicate:
+
+```lean
+primitivePrimeFactorOfDiffPow_of_FLT_branch
+```
+
+This theorem translates:
+
+```text
+PrimeGe5CounterexamplePack p x y z
+q prime
+q divides z^p - y^p
+q does not divide z - y
+```
+
+into:
+
+```lean
+DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q z y p
+```
+
+The NoLift target wrapper:
+
+```lean
+triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
+```
+
+now delegates its valuation core to:
+
+```lean
+DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_noLift_GN
+```
+
+The squarefree target wrapper:
+
+```lean
+triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
+```
+
+is now routed through the NoLift wrapper via:
+
+```lean
+triominoNoLiftGNBridge_of_squarefree_GN
+```
+
+This aligns the FLT-side hierarchy with the ABC-side hierarchy:
+
+```text
+NoLift:
+  main local multiplicity route
+
+Squarefree:
+  sufficient condition that produces NoLift
+
+Research placeholder:
+  isolated in CosmicPetalBridgeGNNoWieferichResearch
+  not used by the honest NoLift / squarefree valuation target
+```
+
+Import split:
+
+```text
+CosmicPetalBridgeGNNoWieferichValuation:
+  honest valuation target
+  PrimitiveBeam handoff
+  NoLift wrapper
+  squarefree-as-NoLift wrapper
+
+CosmicPetalBridgeGNNoWieferichResearch:
+  legacy research core
+  fixed injection / target abstraction around the old placeholder
+
+TriominoSquarefreeGNBridgeProviderImpl:
+  now imports the Valuation surface, not the Research file
+
+CosmicPetalBridgeGN:
+  imports the Valuation surface explicitly because its public branch API uses
+  TriominoPrimitivePrimeFactorPadicValNatLeOneTarget
+
+remaining direct Research imports:
+  CosmicPetalBridgeGNNoWieferichDefault
+  CosmicPetalBridgeGNDescentBQuarantine
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+lake build DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
+lake build DkMath.FLT.PrimeProvider
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:

@@ -536,6 +536,41 @@ DkMath.Lib.* promotion of neutral S0 / Eisenstein facts
 BoundaryD3Anchor split and final import-direction cleanup
 ```
 
+Zsigmondy へ進む前の実態調査:
+
+```text
+lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+調査結果の要点:
+
+```text
+Zsigmondy:
+  primitive q の存在
+
+Petal / GN / BoundaryD3 / Anchor:
+  q が boundary ではなく S0/GN3 側にいること
+
+Squarefree / NoLift / ValuationFlow:
+  q の重複度、すなわち padicValNat <= 1
+```
+
+したがって次に作る橋は、まず三次 reduced Petal witness を
+`DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q` へ翻訳する薄い
+`ZsigmondyD3Bridge` でよい。この初期 bridge は
+`DkMath.Petal.ZsigmondyD3Bridge` として実装済みであり、同じ witness を
+Zsigmondy primitive divisor と Petal anchored `S0_nat` carrier として共有する。
+さらに同じ witness を `PrimitiveBeam.PrimitivePrimeFactorOfDiffPow` としても
+共有し、後続の squarefree/no-lift 評価値層へ渡せる形にした。
+その次の条件付き bridge として `DkMath.Petal.PrimitiveD3ValuationBridge` も
+実装済みであり、局所 no-lift `¬ q^2 ∣ GN 3 (c - b) b`、またはその十分条件
+である `Squarefree (GN 3 (c - b) b)` を明示仮定にした場合のみ
+`padicValNat q (c^3 - b^3) <= 1` へ進む。
+`padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
+持つ別層の仕事として扱う。
+さらに `ValuationFlow.Primitive` と `ABC.ValuationFlowBridge` は、NoLift 版と
+local squarefree 版の薄い wrapper を持つ形へ整理済みである。
+
 ### Phase 5: Zsigmondy への接続準備
 
 目標:

@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
-import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
 
 #print "file: DkMath.FLT.TriominoSquarefreeGNBridgeProviderImpl"
 

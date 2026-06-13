@@ -18,6 +18,8 @@ import DkMath.Petal.ReducedSupport
 import DkMath.Petal.Anchor
 import DkMath.Petal.BoundaryD3
 import DkMath.Petal.EisensteinBridge
+import DkMath.Petal.ZsigmondyD3Bridge
+import DkMath.Petal.PrimitiveD3ValuationBridge
 
 #print "file: DkMath.Petal"
 
@@ -39,6 +41,8 @@ basic forms / relative polygon vocabulary
   -> reduced support and anchored carriers
   -> BoundaryD3 cubic branch split
   -> shifted Eisenstein norm bridge
+  -> Zsigmondy d = 3 primitive-divisor bridge
+  -> squarefree GN3 valuation bridge
 ```
 
 This is not a claim that every import is logically minimal.  Some files still

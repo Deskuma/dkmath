@@ -335,17 +335,47 @@ theorem primitive_prime_transfers_diff_load_to_beam
   exact primitivePrimeFlow_diffMass_eq_beamMass hq hd hd1 hab_lt
 
 /--
-Under a squarefree beam hypothesis, the local diff load is bounded by `1`.
+Under a local no-lift beam hypothesis, the local diff load is bounded by `1`.
+-/
+theorem noLift_beam_bounds_local_load
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hNoLift : ¬ q ^ 2 ∣ DkMath.CosmicFormulaBinom.GN d (a - b) b) :
+    diffMass q a b d ≤ 1 := by
+  exact primitivePrimeFlow_diffMass_le_one_of_noLift_beam
+    hq hd hd1 hab_lt hNoLift
+
+/--
+Under a local squarefree beam hypothesis, the local diff load is bounded by `1`.
+-/
+theorem squarefree_beam_bounds_local_load_local
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hG_sq : Squarefree (DkMath.CosmicFormulaBinom.GN d (a - b) b)) :
+    diffMass q a b d ≤ 1 := by
+  exact primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
+    hq hd hd1 hab_lt hG_sq
+
+/--
+Compatibility wrapper with the old heavier squarefree-beam signature.
+
+New callers should prefer `noLift_beam_bounds_local_load` or
+`squarefree_beam_bounds_local_load_local`.
 -/
 theorem squarefree_beam_bounds_local_load
     {q a b d : ℕ}
-    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
-    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (hpnd : ¬ d ∣ a - b)
+    (hd_prime : Nat.Prime d) (_hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (_hb : 0 < b) (_hab : Nat.Coprime a b)
+    (_hpnd : ¬ d ∣ a - b)
     (hq : PrimitivePrimeFlowWitness q a b d)
     (hG_sq : Squarefree (DkMath.CosmicFormulaBinom.GN d (a - b) b)) :
     diffMass q a b d ≤ 1 := by
-  exact primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
-    hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+  have hd : 0 < d := hd_prime.pos
+  have hd1 : 1 < d := by omega
+  exact squarefree_beam_bounds_local_load_local hq hd hd1 hab_lt hG_sq
 
 end DkMath.ABC

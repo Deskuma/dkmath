@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
 

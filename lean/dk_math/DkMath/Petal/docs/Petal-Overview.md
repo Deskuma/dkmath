@@ -108,6 +108,8 @@ DkMath.Petal.ReducedSupport
 DkMath.Petal.Anchor
 DkMath.Petal.BoundaryD3
 DkMath.Petal.EisensteinBridge
+DkMath.Petal.ZsigmondyD3Bridge
+DkMath.Petal.PrimitiveD3ValuationBridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -320,6 +322,79 @@ arithmetic development.  Its role is to let later Petal/Zsigmondy-facing files
 import the Petal package surface instead of depending directly on the FLT file
 layout.
 
+### `DkMath.Petal.ZsigmondyD3Bridge`
+
+Shares the same `d = 3` Zsigmondy primitive-divisor witness with the Petal
+anchored `S0_nat` carrier surface.
+
+Important names:
+
+```lean
+exists_primitivePrimeDivisor_d3_of_boundaryD3Reduced
+primitivePrimeDivisor_d3_not_dvd_sub
+primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3
+primitivePrimeDivisor_d3_dvd_S0_nat
+anchoredS0Carrier_of_primitivePrimeDivisor_d3
+exists_anchoredS0Carrier_and_primitivePrimeDivisor_d3
+exists_primitivePrimeFactorOfDiffPow_d3_of_boundaryD3Reduced
+exists_prime_dvd_S0_nat_of_boundaryD3Reduced_via_zsigmondy
+```
+
+This bridge intentionally does not prove any `padicValNat <= 1` theorem.
+Zsigmondy supplies existence, Petal supplies location, and squarefree/no-lift
+layers supply multiplicity.
+
+It also shares the same witness `q` with
+`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`, preparing the downstream
+squarefree/no-lift valuation layer without proving that layer here.
+
+### `DkMath.Petal.PrimitiveD3ValuationBridge`
+
+Connects the shared `d = 3` witness to the honest squarefree valuation theorem.
+
+Important names:
+
+```lean
+primitiveD3_padicValNat_le_one_of_noLift_GN
+primitiveD3_padicValNat_le_one_of_squarefree_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
+exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
+```
+
+This file is deliberately conditional.  It does not prove that `GN 3 (c - b) b`
+is squarefree.  It only says that, once local no-lift or squarefreeness is
+supplied, the same `q` shared by Zsigmondy, Petal, and PrimitiveBeam satisfies:
+
+```text
+padicValNat q (c^3 - b^3) <= 1
+```
+
+The local no-lift input is weaker than full squarefreeness:
+
+```text
+not q^2 divides GN 3 (c - b) b
+```
+
+The underlying local no-lift valuation helper is now available in
+`DkMath.NumberTheory.PrimitiveBeam` as:
+
+```lean
+primitive_prime_GN_ne_zero
+primitive_prime_padic_bound_diff_of_noLift_GN
+primitive_prime_padic_bound_diff_of_squarefree_GN_local
+primitive_prime_factor_forbids_perfect_pow_diff_of_noLift_GN
+primitive_prime_obstructs_GN_perfect_power_of_noLift_GN
+```
+
+The older heavier squarefree wrapper is kept for compatibility, but the local
+route is now the canonical reading: squarefree `GN` supplies no-lift for the
+selected witness.
+
+The same local no-lift route also feeds the perfect-power obstruction layer:
+once the selected primitive witness has no `q^2` lift on `GN`, both the
+difference body and the `GN` side are prevented from being perfect `d`-th
+powers.
+
 ### `DkMath.Petal.Counting`
 
 Defines the fixed and dynamic counting layer.
@@ -492,6 +567,16 @@ BoundaryD3Reduced
 
 This closes the current S0/GN3/BoundaryD3/Anchor/Eisenstein surface as a
 usable API for later FLT and Zsigmondy-facing work.
+
+The Zsigmondy-facing preflight investigation is recorded in:
+
+```text
+DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
+```
+
+Its main conclusion is that the next bridge should translate the `d = 3`
+Petal witness into Zsigmondy's primitive-divisor language, while keeping
+valuation `<= 1` separate under squarefree/no-lift hypotheses.
 
 ## What This Does Not Claim Yet
 

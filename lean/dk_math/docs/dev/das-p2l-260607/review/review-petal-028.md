@@ -173,6 +173,11 @@ Phase 5 側から、この閉じた Petal cubic surface をどう使うか
 うむ。良い締めじゃ。
 S0 (d=3) の例外は、もう「揉めていた反例」ではなく、`BoundaryD3` によって名付けられた構造になった。これは大きい。
 
+## Appendix
+
+[Zsigmondy との交渉の行方](./note-petal-028.md)
+[直近問題](./issue-petal-028.md)
+
 ## Diff
 
 `````md
