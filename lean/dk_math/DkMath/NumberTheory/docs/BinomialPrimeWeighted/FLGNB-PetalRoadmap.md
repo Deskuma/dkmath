@@ -1486,6 +1486,42 @@ PrimitiveBeam no-lift valuation
 This keeps `NoLift` as the main multiplicity hypothesis while preserving the
 older squarefree API for downstream callers.
 
+Caller survey:
+
+```text
+current direct Lean callers of the old ABC wrapper:
+  DkMath.ABC.ValuationFlowBridgeExamples
+
+current direct Lean callers of the old ValuationFlow wrapper:
+  DkMath.ABC.ValuationFlowBridge
+
+classification:
+  example caller:
+    intentionally kept as a compatibility regression sample
+
+  ABC wrapper caller:
+    intentionally kept as the public compatibility surface
+
+  new development:
+    should use noLift_beam_bounds_local_load when local NoLift is available
+    should use squarefree_beam_bounds_local_load_local when only full GN
+    squarefreeness is available
+```
+
+ABC-side closure status:
+
+```text
+implemented:
+  NoLift API
+  local squarefree API
+  compatibility API
+  squarefree example
+  non-squarefree local NoLift example
+
+remaining:
+  no mandatory ABC-side replacement work before returning to Petal/Zsigmondy
+```
+
 Expected validation:
 
 ```sh
