@@ -2,6 +2,7 @@
 
 cid: 6a2711e6-6180-83a6-a2ff-bba7cb77e2e3
 cid: 6a27be44-9404-83a6-aa95-b9f407eeffe8
+cid: 6a2af1cb-3fc4-83a4-afa2-53bf0dc1e4bc
 
 ## DAS 関連の実装履歴
 
