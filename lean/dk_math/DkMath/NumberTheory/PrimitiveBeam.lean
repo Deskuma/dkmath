@@ -102,6 +102,45 @@ lemma primitive_prime_padic_eq_GN
   simpa [hzero] using hpadic
 
 /--
+Honest local no-lift route for the primitive-prime valuation bound:
+if the selected primitive prime `q` does not lift to `q^2` on the `GN` side,
+then its valuation in `a^d - b^d` is at most one.
+
+This is weaker than the squarefree-GN route because it only controls the chosen
+primitive witness.
+-/
+lemma primitive_prime_padic_bound_diff_of_noLift_GN
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hNoLift : ¬ q ^ 2 ∣ GN d (a - b) b) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  have hpadic_eq_GN :
+      padicValNat q (a ^ d - b ^ d) =
+        padicValNat q (GN d (a - b) b) :=
+    primitive_prime_padic_eq_GN hq hd hd1 hab_lt
+  have hGN_ne : GN d (a - b) b ≠ 0 := by
+    intro hGN0
+    have hdiff_ne : a ^ d - b ^ d ≠ 0 := by
+      have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd
+      exact Nat.sub_ne_zero_of_lt (Nat.pow_lt_pow_left hab_lt hd_ne)
+    have hfactor : a ^ d - b ^ d = (a - b) * GN d (a - b) b := by
+      simpa using pow_sub_pow_factor_cosmic_N (a := a) (b := b) (d := d) hd hab_lt
+    rw [hfactor, hGN0, mul_zero] at hdiff_ne
+    exact hdiff_ne rfl
+  by_contra h_not_le
+  have htwo_le_diff : 2 ≤ padicValNat q (a ^ d - b ^ d) := by
+    omega
+  have htwo_le_GN : 2 ≤ padicValNat q (GN d (a - b) b) := by
+    simpa [hpadic_eq_GN] using htwo_le_diff
+  have hq2_dvd_GN : q ^ 2 ∣ GN d (a - b) b := by
+    exact
+      (@padicValNat_dvd_iff_le q (Fact.mk hq.1)
+        (GN d (a - b) b) 2 hGN_ne).2 htwo_le_GN
+  exact hNoLift hq2_dvd_GN
+
+/--
 Honest repair route for the primitive-prime valuation bound:
 once `Squarefree (GN d (a - b) b)` is available, the old research placeholder is unnecessary.
 -/

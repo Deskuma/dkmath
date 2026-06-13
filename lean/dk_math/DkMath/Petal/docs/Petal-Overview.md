@@ -375,6 +375,13 @@ The local no-lift input is weaker than full squarefreeness:
 not q^2 divides GN 3 (c - b) b
 ```
 
+The underlying local no-lift valuation helper is now available in
+`DkMath.NumberTheory.PrimitiveBeam` as:
+
+```lean
+primitive_prime_padic_bound_diff_of_noLift_GN
+```
+
 ### `DkMath.Petal.Counting`
 
 Defines the fixed and dynamic counting layer.

@@ -36,35 +36,18 @@ This is weaker than squarefree `GN3`: it only asks that the selected witness
 `q` does not lift to `q^2` on the `GN3` side.
 -/
 theorem primitiveD3_padicValNat_le_one_of_noLift_GN
-    {c b q : ℕ} (hbc : b < c) (hb : 0 < b)
+    {c b q : ℕ} (hbc : b < c)
     (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q)
     (hNoLift : ¬ q ^ 2 ∣ GN 3 (c - b) b) :
     padicValNat q (c ^ 3 - b ^ 3) ≤ 1 := by
-  let hprimitive : PrimitivePrimeFactorOfDiffPow q c b 3 :=
-    primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim
-  have hEq :
-      padicValNat q (c ^ 3 - b ^ 3) =
-        padicValNat q (GN 3 (c - b) b) := by
-    exact
-      primitive_prime_padic_eq_GN
-        (q := q) (a := c) (b := b) (d := 3)
-        hprimitive (by norm_num) (by norm_num) hbc
-  have hGN_ne : GN 3 (c - b) b ≠ 0 := by
-    exact
-      GN_ne_zero_nat_of_two_le
-        (d := 3) (x := c - b) (u := b)
-        (by norm_num) (Nat.sub_pos_of_lt hbc) hb
-  by_contra h_not_le
-  have htwo_le_diff : 2 ≤ padicValNat q (c ^ 3 - b ^ 3) := by
-    omega
-  have htwo_le_GN : 2 ≤ padicValNat q (GN 3 (c - b) b) := by
-    simpa [hEq] using htwo_le_diff
-  have hq2_dvd_GN : q ^ 2 ∣ GN 3 (c - b) b := by
-    exact
-      (@padicValNat_dvd_iff_le q
-        (Fact.mk (DkMath.Zsigmondy.PrimitivePrimeDivisor.prime hprim))
-        (GN 3 (c - b) b) 2 hGN_ne).2 htwo_le_GN
-  exact hNoLift hq2_dvd_GN
+  exact
+    primitive_prime_padic_bound_diff_of_noLift_GN
+      (q := q) (a := c) (b := b) (d := 3)
+      (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
+      (by norm_num)
+      (by norm_num)
+      hbc
+      hNoLift
 
 /--
 Squarefree `GN3` turns the shared `d = 3` primitive witness into the honest
@@ -114,7 +97,7 @@ theorem exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
   exact
     ⟨q, hprim, hprimitive, hcarrier,
       primitiveD3_padicValNat_le_one_of_noLift_GN
-        hbc hb hprim (hNoLift hprim)⟩
+        hbc hprim (hNoLift hprim)⟩
 
 /--
 Existence form: on the reduced cubic branch, if the `GN3` side is squarefree,

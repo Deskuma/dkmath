@@ -1360,6 +1360,13 @@ exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
 exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
 ```
 
+The generic no-lift valuation helper has also been promoted to
+`DkMath.NumberTheory.PrimitiveBeam`:
+
+```lean
+primitive_prime_padic_bound_diff_of_noLift_GN
+```
+
 Meaning:
 
 ```text
