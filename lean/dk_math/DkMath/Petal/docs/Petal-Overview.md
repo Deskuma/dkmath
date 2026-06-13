@@ -395,6 +395,51 @@ once the selected primitive witness has no `q^2` lift on `GN`, both the
 difference body and the `GN` side are prevented from being perfect `d`-th
 powers.
 
+### `DkMath.Petal.BezoutBridge`
+
+Records the Bezout/gcd reading of the Cosmic `GN` split in Petal-facing names.
+
+Important names:
+
+```lean
+cosmicBody_eq_boundary_mul_GN
+primitivePrimeFactor_not_dvd_boundary
+primitivePrimeFactor_dvd_GN_of_cosmicBoundary
+primitivePrimeFactor_dvd_bodyGN_of_cosmicBoundary
+padicValNat_bodyDiff_eq_GN_of_primitivePrimeFactor
+primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor
+zsigmondyPrimitivePrimeDivisor_not_dvd_boundary
+zsigmondyPrimitivePrimeDivisor_dvd_GN
+padicValNat_bodyDiff_eq_GN_of_zsigmondyPrimitivePrimeDivisor
+anchoredGNCarrier_of_zsigmondyPrimitivePrimeDivisor
+```
+
+This file is the general Petal/Zsigmondy negotiation surface:
+
+```text
+Zsigmondy primitive divisor
+  -> PrimitiveBeam witness
+  -> boundary is avoided
+  -> GN carries the witness
+  -> body-difference valuation is read on GN
+  -> AnchoredGNCarrier
+```
+
+It is intentionally not a full ideal-theoretic Bezout development.  It is the
+thin bridge that lets downstream FLT and ABC files trade with Zsigmondy using
+the exact conditions they need.
+
+Current Mathlib status:
+
+```text
+No Bang-Zsigmondy / Zsigmondy primitive-divisor headquarters was found in the
+current local Mathlib dependency snapshot.
+```
+
+`DkMath.Zsigmondy` should therefore be treated as the project-owned facade for
+now.  If Mathlib later gains the full theorem, `DkMath.Zsigmondy` should remain
+as the stable package surface and be redirected internally.
+
 ### `DkMath.Petal.Counting`
 
 Defines the fixed and dynamic counting layer.

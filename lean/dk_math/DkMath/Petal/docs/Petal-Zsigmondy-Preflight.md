@@ -57,6 +57,90 @@ DkMath.Zsigmondy.primitivePrimeDivisor_body_three_imp_dvd_GN
 This means the existence layer is already present.  The missing Petal-facing
 piece is a thin translation layer for the `d = 3` reduced cubic surface.
 
+## Mathlib Headquarters Check
+
+Status: **no upstream headquarters found in the current local Mathlib**
+
+The local Mathlib dependency was searched for the following terms:
+
+```text
+Zsigmondy
+PrimitivePrimeDivisor
+primitive divisor
+Bang
+```
+
+No Mathlib theorem or namespace corresponding to the classical
+Bang-Zsigmondy theorem was found.  The search did return unrelated
+`Birkhoff` files, but those are Birkhoff representation / Birkhoff sum /
+convexity results and are not a Zsigmondy primitive-divisor API.
+
+Therefore the current working interpretation is:
+
+```text
+Mathlib headquarters:
+  not available in the current dependency snapshot
+
+DkMath.Zsigmondy:
+  local branch office / project-owned primitive-divisor API
+```
+
+`DkMath.Zsigmondy` should not be described as a full replacement for a future
+Mathlib headquarters.  It is currently a safe, project-owned contract around
+the prime-exponent route needed by Petal, FLT, and ABC work.
+
+If Mathlib later gains a full Bang-Zsigmondy theorem, the preferred migration
+is not to delete the DkMath-facing API.  Instead, keep `DkMath.Zsigmondy` as the
+stable facade and reprove or redirect its public theorems from the Mathlib
+headquarters.
+
+## Contract Scope for FLT / ABC
+
+The Petal-Zsigmondy negotiation is meaningful only if the contract includes the
+conditions needed by downstream FLT and ABC callers.
+
+The contract must not stop at:
+
+```text
+there exists a primitive prime q
+```
+
+Downstream callers need the stronger routed package:
+
+```text
+Zsigmondy existence:
+  PrimitivePrimeDivisor a b d q
+
+Petal / GN location:
+  q divides GN d (a - b) b
+  q avoids the visible boundary a - b
+
+Anchor carrier:
+  AnchoredGNCarrier q d (a - b) b q
+
+Valuation transfer:
+  padicValNat q (a^d - b^d)
+    = padicValNat q (GN d (a - b) b)
+
+Multiplicity condition supplied separately:
+  local NoLift at q, or squarefree GN as a sufficient condition
+```
+
+This is the condition bundle that FLT and ABC are allowed to trade for.  In
+particular:
+
+```text
+Zsigmondy gives existence.
+Petal / BezoutBridge gives location and boundary separation.
+PrimitiveBeam / ValuationFlow gives valuation transfer.
+NoLift or squarefree GN gives multiplicity control.
+```
+
+The contract explicitly does **not** claim an unconditional
+`padicValNat <= 1` bound.  That bound is false in general without a no-lift or
+squarefree-style hypothesis, as the `q = 7, a = 5, b = 3, d = 3` counterexample
+below shows.
+
 ## Recommended New Bridge
 
 Recommended file:

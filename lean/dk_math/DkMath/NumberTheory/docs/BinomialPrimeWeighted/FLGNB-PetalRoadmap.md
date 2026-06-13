@@ -1634,6 +1634,74 @@ lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 lake build DkMath.FLT.PrimeProvider
 ```
 
+### Step 6.4: Zsigmondy Contract Conditions for FLT / ABC
+
+Status:
+
+```text
+documented
+```
+
+The Petal-Zsigmondy negotiation is not useful if it only states that a
+primitive prime exists.  Downstream FLT and ABC code needs a complete contract
+bundle.
+
+The contract now has this intended shape:
+
+```text
+Zsigmondy:
+  PrimitivePrimeDivisor a b d q
+
+Petal / BezoutBridge:
+  q avoids the visible boundary a - b
+  q divides GN d (a - b) b
+  padicValNat q (a^d - b^d)
+    = padicValNat q (GN d (a - b) b)
+  AnchoredGNCarrier q d (a - b) b q
+
+Multiplicity layer:
+  local NoLift at q, or squarefree GN as a sufficient condition
+
+ABC:
+  ValuationFlow / local-load wrappers consume the multiplicity condition
+
+FLT:
+  PrimeProvider / no-Wieferich valuation surfaces consume the same routed q
+```
+
+Implemented Petal-facing names:
+
+```lean
+DkMath.Petal.primitivePrimeFactorOfDiffPow_of_zsigmondyPrimitivePrimeDivisor
+DkMath.Petal.zsigmondyPrimitivePrimeDivisor_not_dvd_boundary
+DkMath.Petal.zsigmondyPrimitivePrimeDivisor_dvd_GN
+DkMath.Petal.padicValNat_bodyDiff_eq_GN_of_zsigmondyPrimitivePrimeDivisor
+DkMath.Petal.anchoredGNCarrier_of_zsigmondyPrimitivePrimeDivisor
+```
+
+This is the correct trading surface:
+
+```text
+Zsigmondy gives existence.
+Petal / BezoutBridge gives location and boundary separation.
+PrimitiveBeam / ValuationFlow gives valuation transfer.
+NoLift or squarefree GN gives multiplicity control.
+```
+
+The contract explicitly does not claim an unconditional `padicValNat <= 1`
+bound.  That bound belongs to the no-lift / squarefree layer.
+
+Mathlib status:
+
+```text
+The current local Mathlib dependency snapshot does not appear to contain a
+Bang-Zsigmondy / Zsigmondy primitive-divisor headquarters.
+```
+
+Therefore `DkMath.Zsigmondy` remains the project-owned facade.  If Mathlib later
+adds the full theorem, the desired migration is to keep `DkMath.Zsigmondy` as a
+stable facade and redirect its public theorems internally.
+
 ### Step 7: Refactor imports gradually
 
 Status:
