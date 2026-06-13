@@ -1530,6 +1530,80 @@ lake build DkMath.ABC.ValuationFlowBridge
 lake build DkMath.ABC.ValuationFlowBridgeExamples
 ```
 
+### Step 6.3: Thin FLT NoWieferich Research Bridge
+
+Status:
+
+```text
+implemented
+```
+
+`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` now has a
+direct handshake from the FLT Branch-B primitive-prime inputs to the shared
+`PrimitiveBeam` predicate:
+
+```lean
+primitivePrimeFactorOfDiffPow_of_FLT_branch
+```
+
+This theorem translates:
+
+```text
+PrimeGe5CounterexamplePack p x y z
+q prime
+q divides z^p - y^p
+q does not divide z - y
+```
+
+into:
+
+```lean
+DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q z y p
+```
+
+The NoLift target wrapper:
+
+```lean
+triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
+```
+
+now delegates its valuation core to:
+
+```lean
+DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_noLift_GN
+```
+
+The squarefree target wrapper:
+
+```lean
+triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
+```
+
+is now routed through the NoLift wrapper via:
+
+```lean
+triominoNoLiftGNBridge_of_squarefree_GN
+```
+
+This aligns the FLT-side hierarchy with the ABC-side hierarchy:
+
+```text
+NoLift:
+  main local multiplicity route
+
+Squarefree:
+  sufficient condition that produces NoLift
+
+Research placeholder:
+  still isolated in the old research core, not used by the honest NoLift target
+```
+
+Expected validation:
+
+```sh
+lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:

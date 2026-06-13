@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
 #print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch"
@@ -74,17 +75,37 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
   exact hVal hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
 
 /--
-squarefree bridge が供給されれば、primitive-prime branch の valuation target は
-既存 honest route だけで直ちに従う。
+Translate the FLT Branch-B primitive-prime inputs into the shared
+`PrimitiveBeam` primitive-factor predicate.
+
+This is the main handshake between the FLT NoWieferich branch and the newer
+`PrimitiveBeam` valuation route.
 -/
-theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
-    (hSq : TriominoSquarefreeGNBridge) :
-    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
-  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+theorem primitivePrimeFactorOfDiffPow_of_FLT_branch
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_dvd_diff : q ∣ (z ^ p - y ^ p))
+    (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q z y p := by
+  refine ⟨hqP, hq_dvd_diff, ?_⟩
+  have hzy_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  intro k hk_pos hk_lt
   exact
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core
-      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-      (hSq hpack hpB hqP hq_dvd_diff hq_not_dvd_gap)
+    DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+      (a := z) (b := y) (d := p) (q := q)
+      hpack.hp
+      hpack.hp.one_lt
+      hqP
+      hzy_coprime
+      hpack.hyz_lt
+      hpack.y_pos
+      hq_dvd_diff
+      hq_not_dvd_gap
+      hk_pos
+      hk_lt
 
 /--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
@@ -136,24 +157,34 @@ theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
     (hNoLift : TriominoNoLiftGNBridge) :
     TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
   intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  have hGN_ne : GN p (z - y) y ≠ 0 :=
-    triominoWieferichShrink_GN_ne_zero_core
+  have hPrim :
+      DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q z y p :=
+    primitivePrimeFactorOfDiffPow_of_FLT_branch
       hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
   have hGN_not_sq : ¬ q ^ 2 ∣ GN p (z - y) y :=
     hNoLift hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  have hGN_le : padicValNat q (GN p (z - y) y) ≤ 1 := by
-    by_contra h_not_le
-    have h_two_le : 2 ≤ padicValNat q (GN p (z - y) y) := by
-      omega
-    have hq2_dvd_GN : q ^ 2 ∣ GN p (z - y) y :=
-      (@padicValNat_dvd_iff_le q (Fact.mk hqP) (GN p (z - y) y) 2 hGN_ne).2 h_two_le
-    exact hGN_not_sq hq2_dvd_GN
-  have hEq :
-      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
-    triominoWieferichShrink_padicValNat_diff_eq_GN_core
-      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  rw [hEq]
-  exact hGN_le
+  exact
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_noLift_GN
+      hPrim
+      hpack.hp.pos
+      hpack.hp.one_lt
+      hpack.hyz_lt
+      hGN_not_sq
+
+/--
+squarefree bridge が供給されれば、primitive-prime branch の valuation target は
+NoLift bridge 経由で従う。
+
+This keeps the FLT-side hierarchy aligned with the ABC-side hierarchy:
+local NoLift is the main route, and full `GN` squarefreeness is a sufficient
+condition.
+-/
+theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
+    (hSq : TriominoSquarefreeGNBridge) :
+    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
+  exact
+    triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
+      (triominoNoLiftGNBridge_of_squarefree_GN hSq)
 
 /--
 phase-15 の研究核:
