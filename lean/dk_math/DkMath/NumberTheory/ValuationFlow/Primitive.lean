@@ -6,7 +6,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.ValuationFlow.Basic
 import DkMath.NumberTheory.PrimitiveBeam
-import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
 #print "file: DkMath.NumberTheory.ValuationFlow.Primitive"
 
@@ -61,18 +60,54 @@ theorem primitivePrimeFlow_diffMass_eq_beamMass
   exact primitive_prime_padic_eq_GN hq hd hd1 hab_lt
 
 /--
-Under a squarefree beam hypothesis, the primitive-prime diff mass is at most `1`.
+Under a local no-lift beam hypothesis, the primitive-prime diff mass is at most
+`1`.
+
+This is the thin valuation-flow surface over the `PrimitiveBeam` no-lift route.
+-/
+theorem primitivePrimeFlow_diffMass_le_one_of_noLift_beam
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hNoLift : ¬ q ^ 2 ∣ GN d (a - b) b) :
+    diffMass q a b d ≤ 1 := by
+  exact primitive_prime_padic_bound_diff_of_noLift_GN hq hd hd1 hab_lt hNoLift
+
+/--
+Under a local squarefree beam hypothesis, the primitive-prime diff mass is at
+most `1`.
+
+This is a sufficient-condition wrapper over the no-lift route.
+-/
+theorem primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    diffMass q a b d ≤ 1 := by
+  exact primitive_prime_padic_bound_diff_of_squarefree_GN_local
+    hq hd hd1 hab_lt hG_sq
+
+/--
+Compatibility wrapper with the old heavier squarefree-beam signature.
+
+New callers should prefer `primitivePrimeFlow_diffMass_le_one_of_noLift_beam`
+or `primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local`.
 -/
 theorem primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
     {q a b d : ℕ}
-    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
-    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (hpnd : ¬ d ∣ a - b)
+    (hd_prime : Nat.Prime d) (_hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (_hb : 0 < b) (_hab : Nat.Coprime a b)
+    (_hpnd : ¬ d ∣ a - b)
     (hq : PrimitivePrimeFlowWitness q a b d)
     (hG_sq : Squarefree (GN d (a - b) b)) :
     diffMass q a b d ≤ 1 := by
-  exact primitive_prime_padic_bound_diff_of_squarefree_GN
-    hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+  have hd : 0 < d := hd_prime.pos
+  have hd1 : 1 < d := by omega
+  exact primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
+    hq hd hd1 hab_lt hG_sq
 
 #print axioms primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
 

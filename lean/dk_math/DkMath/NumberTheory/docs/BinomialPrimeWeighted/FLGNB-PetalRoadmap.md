@@ -1408,6 +1408,51 @@ lake build DkMath.Petal.PrimitiveD3ValuationBridge
 lake build DkMath.Petal
 ```
 
+### Step 6.2: Thin ValuationFlow / ABC Wrappers
+
+Status:
+
+```text
+implemented
+```
+
+`DkMath.NumberTheory.ValuationFlow.Primitive` now exposes the local no-lift and
+local squarefree routes directly:
+
+```lean
+primitivePrimeFlow_diffMass_le_one_of_noLift_beam
+primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
+```
+
+The older heavier `primitivePrimeFlow_diffMass_le_one_of_squarefree_beam`
+remains as a compatibility wrapper.
+
+`DkMath.ABC.ValuationFlowBridge` mirrors this shape:
+
+```lean
+noLift_beam_bounds_local_load
+squarefree_beam_bounds_local_load_local
+squarefree_beam_bounds_local_load
+```
+
+Meaning:
+
+```text
+PrimitiveBeam no-lift valuation
+  -> ValuationFlow diffMass <= 1
+  -> ABC local-load bridge
+```
+
+This keeps `NoLift` as the main multiplicity hypothesis while preserving the
+older squarefree API for downstream callers.
+
+Expected validation:
+
+```sh
+lake build DkMath.NumberTheory.ValuationFlow.Primitive
+lake build DkMath.ABC.ValuationFlowBridge
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:
