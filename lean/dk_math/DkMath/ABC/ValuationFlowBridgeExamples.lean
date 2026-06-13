@@ -41,6 +41,17 @@ private theorem primitiveWitness_13_6_5_3 :
   intro k hk_pos hk_lt
   interval_cases k <;> decide
 
+/--
+`7` is primitive for `4^3 - 2^3`, while `GN 3 (4 - 2) 2 = 28` is not
+squarefree.  This sample separates the local no-lift route from the stronger
+global squarefree route.
+-/
+private theorem primitiveWitness_7_4_2_3 :
+    PrimitivePrimeFlowWitness 7 4 2 3 := by
+  refine ⟨by decide, by decide, ?_⟩
+  intro k hk_pos hk_lt
+  interval_cases k <;> decide
+
 /-- Finite-family packaging of the `7,13` primitive witness sample. -/
 private theorem primitiveWitnessFamily_6_5_3
     (q : ℕ) (hq : q ∈ ({7, 13} : Finset ℕ)) :
@@ -106,6 +117,22 @@ example : diffMass 31 2 1 5 ≤ 1 := by
     (_hpnd := by decide)
     (hq := primitiveWitness_31_2_1_5)
     hG_sq
+
+/--
+The local no-lift route can apply even when the full beam factor is not
+squarefree: `GN 3 (4 - 2) 2 = 28 = 2^2 * 7`, but `7^2` does not divide it.
+-/
+example : diffMass 7 4 2 3 ≤ 1 := by
+  have hGN_not_sq : ¬ Squarefree (DkMath.CosmicFormulaBinom.GN 3 (4 - 2) 2) := by
+    decide
+  have hNoLift : ¬ 7 ^ 2 ∣ DkMath.CosmicFormulaBinom.GN 3 (4 - 2) 2 := by
+    decide
+  exact noLift_beam_bounds_local_load
+    (hq := primitiveWitness_7_4_2_3)
+    (hd := by decide)
+    (hd1 := by decide)
+    (hab_lt := by decide)
+    hNoLift
 
 /-- Two distinct primitive witnesses give two distinct prime channels on the diff side. -/
 example :

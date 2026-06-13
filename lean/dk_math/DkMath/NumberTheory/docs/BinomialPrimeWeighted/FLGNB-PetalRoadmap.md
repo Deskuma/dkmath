@@ -1449,6 +1449,32 @@ compatibility route:
   squarefree_beam_bounds_local_load
 ```
 
+It also records a separating sample:
+
+```text
+q = 7, a = 4, b = 2, d = 3
+GN 3 (4 - 2) 2 = 28 = 2^2 * 7
+
+full beam squarefree:
+  false
+
+local NoLift at q:
+  true, because 7^2 does not divide 28
+
+result:
+  noLift_beam_bounds_local_load still gives diffMass 7 4 2 3 <= 1
+```
+
+This example makes the intended hierarchy concrete:
+
+```text
+NoLift at q
+  weaker than full beam squarefree
+
+full beam squarefree
+  sufficient for NoLift at every prime channel
+```
+
 Meaning:
 
 ```text
