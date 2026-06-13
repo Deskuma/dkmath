@@ -379,8 +379,14 @@ The underlying local no-lift valuation helper is now available in
 `DkMath.NumberTheory.PrimitiveBeam` as:
 
 ```lean
+primitive_prime_GN_ne_zero
 primitive_prime_padic_bound_diff_of_noLift_GN
+primitive_prime_padic_bound_diff_of_squarefree_GN_local
 ```
+
+The older heavier squarefree wrapper is kept for compatibility, but the local
+route is now the canonical reading: squarefree `GN` supplies no-lift for the
+selected witness.
 
 ### `DkMath.Petal.Counting`
 

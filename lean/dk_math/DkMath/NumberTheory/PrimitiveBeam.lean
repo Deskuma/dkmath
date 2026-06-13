@@ -102,6 +102,24 @@ lemma primitive_prime_padic_eq_GN
   simpa [hzero] using hpadic
 
 /--
+For a positive exponent and a strict body boundary `b < a`, the `GN` factor
+attached to a primitive prime witness is nonzero.
+-/
+lemma primitive_prime_GN_ne_zero
+    {q a b d : ℕ}
+    (_hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hab_lt : b < a) :
+    GN d (a - b) b ≠ 0 := by
+  intro hGN0
+  have hdiff_ne : a ^ d - b ^ d ≠ 0 := by
+    have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd
+    exact Nat.sub_ne_zero_of_lt (Nat.pow_lt_pow_left hab_lt hd_ne)
+  have hfactor : a ^ d - b ^ d = (a - b) * GN d (a - b) b := by
+    simpa using pow_sub_pow_factor_cosmic_N (a := a) (b := b) (d := d) hd hab_lt
+  rw [hfactor, hGN0, mul_zero] at hdiff_ne
+  exact hdiff_ne rfl
+
+/--
 Honest local no-lift route for the primitive-prime valuation bound:
 if the selected primitive prime `q` does not lift to `q^2` on the `GN` side,
 then its valuation in `a^d - b^d` is at most one.
@@ -120,15 +138,8 @@ lemma primitive_prime_padic_bound_diff_of_noLift_GN
       padicValNat q (a ^ d - b ^ d) =
         padicValNat q (GN d (a - b) b) :=
     primitive_prime_padic_eq_GN hq hd hd1 hab_lt
-  have hGN_ne : GN d (a - b) b ≠ 0 := by
-    intro hGN0
-    have hdiff_ne : a ^ d - b ^ d ≠ 0 := by
-      have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd
-      exact Nat.sub_ne_zero_of_lt (Nat.pow_lt_pow_left hab_lt hd_ne)
-    have hfactor : a ^ d - b ^ d = (a - b) * GN d (a - b) b := by
-      simpa using pow_sub_pow_factor_cosmic_N (a := a) (b := b) (d := d) hd hab_lt
-    rw [hfactor, hGN0, mul_zero] at hdiff_ne
-    exact hdiff_ne rfl
+  have hGN_ne : GN d (a - b) b ≠ 0 :=
+    primitive_prime_GN_ne_zero hq hd hab_lt
   by_contra h_not_le
   have htwo_le_diff : 2 ≤ padicValNat q (a ^ d - b ^ d) := by
     omega
@@ -141,35 +152,48 @@ lemma primitive_prime_padic_bound_diff_of_noLift_GN
   exact hNoLift hq2_dvd_GN
 
 /--
+Local squarefree route for the primitive-prime valuation bound.
+
+This is a sufficient-condition wrapper around
+`primitive_prime_padic_bound_diff_of_noLift_GN`: squarefree `GN` forbids the
+selected primitive witness from lifting to `q^2`.
+-/
+lemma primitive_prime_padic_bound_diff_of_squarefree_GN_local
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  have hGN_ne : GN d (a - b) b ≠ 0 :=
+    primitive_prime_GN_ne_zero hq hd hab_lt
+  have hNoLift : ¬ q ^ 2 ∣ GN d (a - b) b := by
+    intro hq2_dvd
+    have hVal : padicValNat q (GN d (a - b) b) ≤ 1 :=
+      DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree
+        hq.1 hGN_ne hG_sq
+    have h2_le : 2 ≤ padicValNat q (GN d (a - b) b) := by
+      exact
+        (@padicValNat_dvd_iff_le q (Fact.mk hq.1)
+          (GN d (a - b) b) 2 hGN_ne).1 hq2_dvd
+    exact (not_le_of_gt h2_le) hVal
+  exact primitive_prime_padic_bound_diff_of_noLift_GN hq hd hd1 hab_lt hNoLift
+
+/--
 Honest repair route for the primitive-prime valuation bound:
 once `Squarefree (GN d (a - b) b)` is available, the old research placeholder is unnecessary.
 -/
 lemma primitive_prime_padic_bound_diff_of_squarefree_GN
     {q a b d : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
-    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (hpnd : ¬ d ∣ a - b)
+    (hab_lt : b < a) (_hb : 0 < b) (_hab : Nat.Coprime a b)
+    (_hpnd : ¬ d ∣ a - b)
     (hq : PrimitivePrimeFactorOfDiffPow q a b d)
     (hG_sq : Squarefree (GN d (a - b) b)) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  have hq_prime : Nat.Prime q := hq.1
-  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hd_pos : 0 < d := hd_prime.pos
   have hd1 : 1 < d := by omega
-  have hq_ndiv_diff : ¬ q ∣ a - b :=
-    primitive_prime_not_dvd_boundary hq hd1
-  exact
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_honest
-      (a := a) (b := b) (d := d) (q := q)
-      hd_prime
-      hd_ge
-      hab_lt
-      hb
-      hab
-      hpnd
-      hq_prime
-      hq_div_pow
-      hq_ndiv_diff
-      hG_sq
+  exact primitive_prime_padic_bound_diff_of_squarefree_GN_local hq hd_pos hd1 hab_lt hG_sq
 
 /-- Specialized `Body = x * GN d x u` form of `primitive_prime_dvd_GN`. -/
 lemma primitive_prime_dvd_GN_body

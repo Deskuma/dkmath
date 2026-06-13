@@ -58,21 +58,17 @@ Petal contribution is only the `BoundaryD3Reduced` vocabulary and the
 Zsigmondy-to-PrimitiveBeam witness conversion.
 -/
 theorem primitiveD3_padicValNat_le_one_of_squarefree_GN
-    {c b q : ℕ} (hbc : b < c) (hb : 0 < b)
-    (hcop : Nat.Coprime c b) (hred : BoundaryD3Reduced c b)
+    {c b q : ℕ} (hbc : b < c)
     (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor c b 3 q)
     (hG_sq : Squarefree (GN 3 (c - b) b)) :
     padicValNat q (c ^ 3 - b ^ 3) ≤ 1 := by
   exact
-    primitive_prime_padic_bound_diff_of_squarefree_GN
+    primitive_prime_padic_bound_diff_of_squarefree_GN_local
       (q := q) (a := c) (b := b) (d := 3)
-      Nat.prime_three
+      (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
+      (by norm_num)
       (by norm_num)
       hbc
-      hb
-      hcop
-      hred
-      (primitivePrimeFactorOfDiffPow_of_primitivePrimeDivisor_d3 hprim)
       hG_sq
 
 /--
@@ -119,7 +115,7 @@ theorem exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree
   exact
     ⟨q, hprim, hprimitive, hcarrier,
       primitiveD3_padicValNat_le_one_of_squarefree_GN
-        hbc hb hcop hred hprim hG_sq⟩
+        hbc hprim hG_sq⟩
 
 end Petal
 end DkMath

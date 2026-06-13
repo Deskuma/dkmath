@@ -1364,8 +1364,14 @@ The generic no-lift valuation helper has also been promoted to
 `DkMath.NumberTheory.PrimitiveBeam`:
 
 ```lean
+primitive_prime_GN_ne_zero
 primitive_prime_padic_bound_diff_of_noLift_GN
+primitive_prime_padic_bound_diff_of_squarefree_GN_local
 ```
+
+The local squarefree helper is a sufficient-condition wrapper over the no-lift
+helper.  The older heavier squarefree wrapper remains available for callers
+that still use the previous primitive-prime repair signature.
 
 Meaning:
 
