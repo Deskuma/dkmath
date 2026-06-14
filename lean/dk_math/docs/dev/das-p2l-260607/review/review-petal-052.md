@@ -444,7 +444,7 @@ index 88e6fb13..a118a57f 100644
 @@ -67,6 +67,23 @@ theorem natBaseMultiplicityBudgetOn_iff
        ∀ p, Nat.Prime p → NatBaseMultiplicityOn I pOf p ≤ n.factorization p :=
    Iff.rfl
- 
+
 +/--
 +Pairwise distinct selected bases are injective on the selected finite index.
 +
@@ -468,7 +468,7 @@ index 88e6fb13..a118a57f 100644
 @@ -114,6 +131,26 @@ theorem natBaseMultiplicityBudgetOn_of_injOn_of_dvd
        exact hex ⟨i, hiI, hip⟩
      simp [hfilter_empty]
- 
+
 +/--
 +Pairwise distinct selected bases give a multiplicity budget when every selected
 +base divides `n`.
@@ -501,16 +501,16 @@ index 51959ffe..46d5ccf6 100644
  import DkMath.Petal.ZsigmondyD3Bridge
  import DkMath.Petal.PrimitiveD3ValuationBridge
 +import DkMath.Petal.ErdosBridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -44,6 +45,7 @@ basic forms / relative polygon vocabulary
    -> shifted Eisenstein norm bridge
    -> Zsigmondy d = 3 primitive-divisor bridge
    -> squarefree GN3 valuation bridge
 +  -> Erdos log-capacity bridge from GN carrier channels
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 4b57339e..52e9d27e 100644
@@ -519,7 +519,7 @@ index 4b57339e..52e9d27e 100644
 @@ -261,6 +261,59 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_injOn
        I d x u qOf (Nat.ne_of_gt (Nat.lt_trans Nat.zero_lt_one hGN))
        hinj hcarrier)
- 
+
 +/--
 +Pairwise distinct Petal prime-channel labels on the same GN surface supply an
 +Erdos multiplicity budget against that GN surface.
@@ -575,11 +575,11 @@ index 4b57339e..52e9d27e 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -320,6 +373,24 @@ theorem petalNoLiftPrimeChannel_padicValNat_GN_eq_one
      exact h.2 ((padicValNat_dvd_iff_le hGN0).mpr htwo)
    omega
- 
+
 +/--
 +A no-lift Petal channel family has exact one-slot valuation at every selected
 +label.

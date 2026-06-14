@@ -265,7 +265,7 @@ index 1b7419d2..a6a52071 100644
 @@ -1634,6 +1634,74 @@ lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
  lake build DkMath.FLT.PrimeProvider
  ```
- 
+
 +### Step 6.4: Zsigmondy Contract Conditions for FLT / ABC
 +
 +Status:
@@ -335,7 +335,7 @@ index 1b7419d2..a6a52071 100644
 +stable facade and redirect its public theorems internally.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index d0eb0e5e..b227b03b 100644
@@ -344,7 +344,7 @@ index d0eb0e5e..b227b03b 100644
 @@ -395,6 +395,51 @@ once the selected primitive witness has no `q^2` lift on `GN`, both the
  difference body and the `GN` side are prevented from being perfect `d`-th
  powers.
- 
+
 +### `DkMath.Petal.BezoutBridge`
 +
 +Records the Bezout/gcd reading of the Cosmic `GN` split in Petal-facing names.
@@ -391,7 +391,7 @@ index d0eb0e5e..b227b03b 100644
 +as the stable package surface and be redirected internally.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 index a50f7c8c..85171b1a 100644
@@ -400,7 +400,7 @@ index a50f7c8c..85171b1a 100644
 @@ -57,6 +57,90 @@ DkMath.Zsigmondy.primitivePrimeDivisor_body_three_imp_dvd_GN
  This means the existence layer is already present.  The missing Petal-facing
  piece is a thin translation layer for the `d = 3` reduced cubic surface.
- 
+
 +## Mathlib Headquarters Check
 +
 +Status: **no upstream headquarters found in the current local Mathlib**
@@ -486,7 +486,7 @@ index a50f7c8c..85171b1a 100644
 +below shows.
 +
  ## Recommended New Bridge
- 
+
  Recommended file:
 ````
 `````

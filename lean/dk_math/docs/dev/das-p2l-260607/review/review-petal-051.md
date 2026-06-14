@@ -315,7 +315,7 @@ index a0026169..88e6fb13 100644
 @@ -67,6 +67,53 @@ theorem natBaseMultiplicityBudgetOn_iff
        ∀ p, Nat.Prime p → NatBaseMultiplicityOn I pOf p ≤ n.factorization p :=
    Iff.rfl
- 
+
 +/--
 +Injective selected bases give a multiplicity budget when every selected base
 +divides `n`.
@@ -373,7 +373,7 @@ index d34f70f5..4b57339e 100644
 @@ -211,6 +211,56 @@ theorem petalCarrierFamily_logSubProbability_of_multiplicityBudget
      (petalPrimeChannel_natPrimeValuedOn I d x u qOf hcarrier)
      hbudget
- 
+
 +/--
 +Distinct Petal prime channels on the same GN surface supply an Erdos
 +multiplicity budget against that GN surface.
@@ -426,16 +426,16 @@ index d34f70f5..4b57339e 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -225,16 +275,63 @@ theorem petalNoLiftPrimeChannel_GN_ne_zero
    exact h.2 (by rw [hzero]; exact dvd_zero _)
- 
+
  /--
 -A single no-lift Petal prime channel fits into the Erdos multiplicity budget of
 -its own GN surface.
 +A Petal prime channel on a nonzero GN surface forces that surface to be larger
 +than `1`.
- 
+
 -This is the first local capacity witness: the singleton selected channel uses
 -one exponent slot at `q`, and `q ∣ GN d x u` supplies that slot in the
 -factorization of `GN d x u`.
@@ -507,7 +507,7 @@ index d34f70f5..4b57339e 100644
      have hq_pow_dvd : q ^ 1 ∣ GN d x u := by simpa using hq_dvd
      exact (hp.pow_dvd_iff_le_factorization hGN0).mp hq_pow_dvd
    · simp [hpq]
- 
+
 +/--
 +A single no-lift Petal prime channel fits into the Erdos multiplicity budget of
 +its own GN surface.
@@ -529,7 +529,7 @@ index d34f70f5..4b57339e 100644
 @@ -279,6 +390,59 @@ theorem petalNoLiftPrimeChannel_singleton_logSubProbability_GN
        exact h.1)
      (petalNoLiftPrimeChannel_singleton_multiplicityBudget_GN h)
- 
+
 +/--
 +No-lift Petal channels give a direct singleton Erdos log sub-probability
 +against their own GN surface.
@@ -585,6 +585,6 @@ index d34f70f5..4b57339e 100644
 +
  /--
  Zsigmondy-family form of the first Petal-to-Erdos capacity bridge.
- 
+
 ````
 `````

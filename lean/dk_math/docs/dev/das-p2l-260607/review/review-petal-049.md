@@ -411,7 +411,7 @@ index b6d4d958..3922a1db 100644
 @@ -80,6 +80,26 @@ theorem petalNoLiftPrimeChannel_noLift
      ¬ q ^ 2 ∣ GN d x u :=
    h.2
- 
+
 +/--
 +PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
 +-/

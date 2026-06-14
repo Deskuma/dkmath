@@ -301,7 +301,7 @@ index a6a52071..34b21021 100644
 @@ -1702,6 +1702,62 @@ Therefore `DkMath.Zsigmondy` remains the project-owned facade.  If Mathlib later
  adds the full theorem, the desired migration is to keep `DkMath.Zsigmondy` as a
  stable facade and redirect its public theorems internally.
- 
+
 +### Step 6.5: Petal / Erdos Bridge Experiment Plan
 +
 +Status:
@@ -359,7 +359,7 @@ index a6a52071..34b21021 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index b227b03b..bb664d46 100644
@@ -368,7 +368,7 @@ index b227b03b..bb664d46 100644
 @@ -619,6 +619,12 @@ The Zsigmondy-facing preflight investigation is recorded in:
  DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
  ```
- 
+
 +The experimental Petal/Erdos bridge plan is recorded in:
 +
 +```text

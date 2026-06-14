@@ -424,22 +424,22 @@ index a034c037..242244fb 100644
  import DkMath.NumberTheory.PrimitiveBeam
  import DkMath.NumberTheory.UniqueFactorizationGN
 +import DkMath.Zsigmondy
- 
+
  #print "file: DkMath.Petal.BezoutBridge"
- 
+
 @@ -22,6 +23,8 @@ The mathematical core is already present in the lower layers:
    `a^d - b^d = (a - b) * GN d (a - b) b` to the `GN` side.
  * `UniqueFactorizationGN` controls the gcd between the visible boundary and the
    residual `GN` kernel.
 +* `DkMath.Zsigmondy.PrimitivePrimeDivisor` is converted to the existing
 +  `PrimitiveBeam` witness shape before entering the Petal/Anchor surface.
- 
+
  This bridge does not introduce a new Bezout theorem.  Instead it records the
  interpretation needed by the Petal/Zsigmondy route:
 @@ -87,6 +90,87 @@ theorem primitivePrimeFactor_dvd_bodyGN_of_cosmicBoundary
    primitive_prime_dvd_GN_body
      (q := q) (x := x) (u := u) (d := d) hq hd hd1
- 
+
 +/--
 +Primitive witnesses avoid the visible boundary.
 +
@@ -527,7 +527,7 @@ index a034c037..242244fb 100644
 @@ -161,5 +245,17 @@ theorem anchoredGNCarrier_of_bodyPrimitivePrimeFactor
    · exact hasPositiveAnchorPrime_self_of_prime hq.1
    · exact primitivePrimeFactor_dvd_bodyGN_of_cosmicBoundary hq hd hd1
- 
+
 +/--
 +Zsigmondy primitive divisors can be packaged as anchored GN carriers.
 +-/

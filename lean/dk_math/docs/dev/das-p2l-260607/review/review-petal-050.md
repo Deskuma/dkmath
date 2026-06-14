@@ -400,7 +400,7 @@ index 3922a1db..d34f70f5 100644
 @@ -110,6 +110,30 @@ theorem petalPrimeChannel_log_nonneg
    DkMath.NumberTheory.PrimitiveSet.real_log_nat_nonneg_of_one_le
      (le_of_lt (petalPrimeChannel_prime h).one_lt)
- 
+
 +/--
 +PrimitiveBeam witnesses have nonnegative Erdos log cost after entering the
 +Petal prime channel.
@@ -431,7 +431,7 @@ index 3922a1db..d34f70f5 100644
 @@ -124,6 +148,29 @@ theorem petalPrimeChannel_natPrimeValuedOn
    intro i hi
    exact petalPrimeChannel_prime (hcarrier i hi)
- 
+
 +/--
 +A finite family of Zsigmondy primitive divisors is prime-valued in the Erdos
 +`PrimitiveSet` sense.
@@ -461,7 +461,7 @@ index 3922a1db..d34f70f5 100644
 @@ -164,5 +211,105 @@ theorem petalCarrierFamily_logSubProbability_of_multiplicityBudget
      (petalPrimeChannel_natPrimeValuedOn I d x u qOf hcarrier)
      hbudget
- 
+
 +/--
 +Local no-lift makes the observed GN surface nonzero.
 +

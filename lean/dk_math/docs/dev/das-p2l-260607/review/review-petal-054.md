@@ -435,32 +435,32 @@ index 35770182..964e34a4 100644
 +  -> multiplicity budget assumption or Petal carrier-label noncollision
    -> log-capacity sub-probability
  ```
- 
+
 @@ -1751,7 +1751,7 @@ Petal carrier family
    -> normalized log-cost sum <= 1
- 
+
  PetalPrimeChannel family on one GN surface
 -  + NatPairwiseDistinctOn labels
 +  + PetalCarrierLabelNoncollisionOn labels
    -> NatBaseMultiplicityBudgetOn against GN
    -> realLogRatioWeightProvider.SubProbability
- 
+
 @@ -1762,9 +1762,15 @@ PetalNoLiftPrimeChannel
  The current research question after the first bridge is:
- 
+
  ```text
 -Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn I qOf`?
 +Can Petal address / carrier noncollision supply
 +`PetalCarrierLabelNoncollisionOn I qOf`?
  ```
- 
+
 +`PetalCarrierLabelNoncollisionOn` is currently the public Petal-facing wrapper
 +around `NatPairwiseDistinctOn`.  It exists so the later address layer can target
 +Petal vocabulary first, while the already-proved Erdos bridge consumes the
 +underlying duplicate-free condition.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 4eed2d8e..84a81000 100644
@@ -469,7 +469,7 @@ index 4eed2d8e..84a81000 100644
 @@ -77,6 +77,21 @@ It is deliberately weaker than asking the whole `GN` value to be squarefree.
  def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
    PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
- 
+
 +/--
 +Carrier-label noncollision for a finite Petal channel family.
 +
@@ -491,7 +491,7 @@ index 4eed2d8e..84a81000 100644
 @@ -105,6 +120,33 @@ theorem petalNoLiftPrimeChannel_noLift
      ¬ q ^ 2 ∣ GN d x u :=
    h.2
- 
+
 +/--
 +Unfold carrier-label noncollision to the underlying `PrimitiveSet`
 +duplicate-free condition.
@@ -525,7 +525,7 @@ index 4eed2d8e..84a81000 100644
 @@ -339,6 +381,56 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
        I qOf hdistinct)
      hcarrier
- 
+
 +/--
 +Carrier-label noncollision on one GN surface supplies an Erdos multiplicity
 +budget against that GN surface.
@@ -578,13 +578,13 @@ index 4eed2d8e..84a81000 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md b/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 index 9dfc94b0..88c657ed 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 @@ -152,11 +152,15 @@ The currently implemented public route is:
- 
+
  ```text
  PetalPrimeChannel family
 -  + NatPairwiseDistinctOn labels
@@ -592,23 +592,23 @@ index 9dfc94b0..88c657ed 100644
    -> NatBaseMultiplicityBudgetOn against GN
    -> realLogRatioWeightProvider.SubProbability
  ```
- 
+
 +`PetalCarrierLabelNoncollisionOn I qOf` is currently the Petal-facing name for
 +the lower-level `NatPairwiseDistinctOn I qOf` condition.  The intended next
 +step is to derive it from Petal address/carrier geometry.
 +
  The currently implemented local no-lift route is:
- 
+
  ```text
 @@ -446,12 +450,13 @@ multiplicity budget directly.
- 
+
  ### Step 6: Research Target - Address Antichain to Multiplicity Budget
- 
+
 -Status: **current research target**
 +Status: **current research target, with public label-noncollision hook**
- 
+
  Now that Step 5 is implemented, investigate:
- 
+
  ```text
  Petal address noncollision
 +  -> PetalCarrierLabelNoncollisionOn I qOf
@@ -616,26 +616,26 @@ index 9dfc94b0..88c657ed 100644
    -> base-prime multiplicity budget
  ```
 @@ -508,12 +513,14 @@ Implement the address-facing noncollision layer:
- 
+
  ```text
  Petal address / carrier noncollision
 +  -> PetalCarrierLabelNoncollisionOn I qOf
    -> NatPairwiseDistinctOn I qOf
  ```
- 
+
  This is now the missing input needed by:
- 
+
  ```lean
 +petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
  petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
  ```
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 46cfebc6..252abbcf 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 @@ -648,11 +648,29 @@ The current implemented route is:
- 
+
  ```text
  PetalPrimeChannel family
 -  + NatPairwiseDistinctOn labels
@@ -643,7 +643,7 @@ index 46cfebc6..252abbcf 100644
    -> NatBaseMultiplicityBudgetOn against GN
    -> realLogRatioWeightProvider.SubProbability
  ```
- 
+
 +Here `PetalCarrierLabelNoncollisionOn I qOf` is the Petal-facing name for
 +`NatPairwiseDistinctOn I qOf`.  It records only that selected carriers do not
 +reuse the same prime label.  It is not yet derived from Petal address geometry.
@@ -663,15 +663,15 @@ index 46cfebc6..252abbcf 100644
 +```
 +
  The no-lift side is deliberately separate:
- 
+
  ```text
 @@ -667,6 +685,7 @@ Current research target:
- 
+
  ```text
  Petal address / carrier noncollision
 +  -> PetalCarrierLabelNoncollisionOn I qOf
    -> NatPairwiseDistinctOn I qOf
  ```
- 
+
 ````
 `````

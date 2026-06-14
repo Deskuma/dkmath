@@ -358,7 +358,7 @@ index 964e34a4..92336b76 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 +++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 @@ -1757,6 +1757,10 @@ PetalPrimeChannel family on one GN surface
- 
+
  PetalNoLiftPrimeChannel
    -> padicValNat q (GN d x u) = 1
 +
@@ -366,7 +366,7 @@ index 964e34a4..92336b76 100644
 +  + PetalCarrierLabelNoncollisionOn labels
 +  -> finite GN log-capacity sub-probability
  ```
- 
+
  The current research question after the first bridge is:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 84a81000..1007ff58 100644
@@ -374,17 +374,17 @@ index 84a81000..1007ff58 100644
 +++ b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 @@ -27,7 +27,7 @@ PetalPrimeChannel family
    -> multiplicity-budgeted log sub-probability
- 
+
  PetalPrimeChannel family on one GN surface
 -  + pairwise distinct prime labels
 +  + PetalCarrierLabelNoncollisionOn prime labels
    -> GN multiplicity budget
    -> log sub-probability against that GN surface
- 
+
 @@ -37,17 +37,26 @@ PetalNoLiftPrimeChannel
- 
+
  Two conditions remain separate by design:
- 
+
 -* `NatPairwiseDistinctOn I qOf` is the family noncollision condition that
 -  prevents selected channels from reusing the same exponent slot.
 +* `PetalCarrierLabelNoncollisionOn I qOf` is the family noncollision condition
@@ -392,7 +392,7 @@ index 84a81000..1007ff58 100644
  * `PetalNoLiftPrimeChannel` is a local one-slot condition for one selected
    prime label.  A family of no-lift channels does not by itself imply that the
    labels are distinct.
- 
+
 +The current crossroad is:
 +
 +```text
@@ -403,18 +403,18 @@ index 84a81000..1007ff58 100644
 +```
 +
  Current research target:
- 
+
  ```text
  Petal address / carrier noncollision
 -  -> NatPairwiseDistinctOn I qOf
 +  -> PetalCarrierLabelNoncollisionOn I qOf
  ```
- 
+
  The file also keeps explicit guardrails: Zsigmondy alone is not claimed to imply
 @@ -508,6 +517,38 @@ theorem petalNoLiftPrimeChannelFamily_padicValNat_GN_eq_one
    intro i hi
    exact petalNoLiftPrimeChannel_padicValNat_GN_eq_one (hcarrier i hi)
- 
+
 +/--
 +No-lift Petal channel families with noncolliding labels feed the finite Erdos
 +log-capacity bridge on the observed GN surface.
@@ -457,7 +457,7 @@ index 88c657ed..ca6e0abe 100644
 @@ -171,6 +171,18 @@ PetalNoLiftPrimeChannel
  These are separate facts.  NoLift gives local one-slot valuation for a selected
  prime label; it does not prove family label distinctness.
- 
+
 +The first public crossroads theorem is now:
 +
 +```text
@@ -471,12 +471,12 @@ index 88c657ed..ca6e0abe 100644
 +Zsigmondy gives no-lift.
 +
  ## Strong Claims We May Be Able to Extract
- 
+
  ### Claim A: Zsigmondy Witness as an Erdos Channel
 @@ -524,6 +536,19 @@ petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
  petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
  ```
- 
+
 +The downstream signposts from this checkpoint are:
 +
 +```text
@@ -491,7 +491,7 @@ index 88c657ed..ca6e0abe 100644
 +```
 +
  ## Final Assessment
- 
+
  The first public bridge is implemented:
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 252abbcf..aac2c3d6 100644
@@ -500,7 +500,7 @@ index 252abbcf..aac2c3d6 100644
 @@ -681,6 +681,38 @@ PetalNoLiftPrimeChannel
  This says that a selected channel has exactly one local exponent slot.  It does
  not say that different selected indices have different prime labels.
- 
+
 +The public crossroads theorem combines the two axes when both inputs are
 +available:
 +
@@ -534,7 +534,7 @@ index 252abbcf..aac2c3d6 100644
 +```
 +
  Current research target:
- 
+
  ```text
 ````
 `````
