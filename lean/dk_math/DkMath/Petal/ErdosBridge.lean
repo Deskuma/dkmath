@@ -212,6 +212,56 @@ theorem petalCarrierFamily_logSubProbability_of_multiplicityBudget
     hbudget
 
 /--
+Distinct Petal prime channels on the same GN surface supply an Erdos
+multiplicity budget against that GN surface.
+
+This is the multi-channel counterpart of the singleton budget theorem.  The
+new ingredient is injectivity of the selected prime labels on `I`; it prevents
+two selected channels from consuming the same prime exponent slot.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hinj : Set.InjOn qOf ↑I)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  DkMath.NumberTheory.PrimitiveSet.natBaseMultiplicityBudgetOn_of_injOn_of_dvd
+    I qOf (GN d x u) hGN0 hinj
+    (fun i hi => anchoredGNCarrier_dvd_GN (hcarrier i hi))
+
+/--
+Distinct Petal prime channels on the same GN surface give an Erdos
+sub-probability provider once that GN surface is above `1`.
+
+This is still an injective-family theorem, not a Petal-address theorem.  A
+future address/noncollision layer should supply the `Set.InjOn` hypothesis.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (hinj : Set.InjOn qOf ↑I)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalCarrierFamily_logSubProbability_of_multiplicityBudget
+    I (fun _ => d) (fun _ => x) (fun _ => u) qOf (GN d x u) hGN
+    hcarrier
+    (petalPrimeChannelFamily_multiplicityBudget_GN_of_injOn
+      I d x u qOf (Nat.ne_of_gt (Nat.lt_trans Nat.zero_lt_one hGN))
+      hinj hcarrier)
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -225,16 +275,63 @@ theorem petalNoLiftPrimeChannel_GN_ne_zero
   exact h.2 (by rw [hzero]; exact dvd_zero _)
 
 /--
-A single no-lift Petal prime channel fits into the Erdos multiplicity budget of
-its own GN surface.
+A Petal prime channel on a nonzero GN surface forces that surface to be larger
+than `1`.
 
-This is the first local capacity witness: the singleton selected channel uses
-one exponent slot at `q`, and `q ∣ GN d x u` supplies that slot in the
-factorization of `GN d x u`.
+The reason is purely arithmetic: the prime label `q` divides the nonzero GN
+surface, so `q ≤ GN d x u`, while primality gives `1 < q`.
 -/
-theorem petalNoLiftPrimeChannel_singleton_multiplicityBudget_GN
+theorem petalPrimeChannel_GN_one_lt_of_ne_zero
+    {d x u q : ℕ}
+    (h : PetalPrimeChannel d x u q)
+    (hGN0 : GN d x u ≠ 0) :
+    1 < GN d x u := by
+  have hq_dvd : q ∣ GN d x u := anchoredGNCarrier_dvd_GN h
+  have hq_le : q ≤ GN d x u :=
+    Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr hGN0) hq_dvd
+  exact lt_of_lt_of_le (petalPrimeChannel_prime h).one_lt hq_le
+
+/-- A no-lift Petal prime channel automatically lies on a GN surface above `1`. -/
+theorem petalNoLiftPrimeChannel_GN_one_lt
     {d x u q : ℕ}
     (h : PetalNoLiftPrimeChannel d x u q) :
+    1 < GN d x u :=
+  petalPrimeChannel_GN_one_lt_of_ne_zero h.1
+    (petalNoLiftPrimeChannel_GN_ne_zero h)
+
+/--
+No-lift means that the selected prime has exactly one `p`-adic slot on the GN
+surface.
+
+This is the local valuation reading of `PetalNoLiftPrimeChannel`: the channel
+prime divides `GN d x u`, but its square does not.
+-/
+theorem petalNoLiftPrimeChannel_padicValNat_GN_eq_one
+    {d x u q : ℕ}
+    (h : PetalNoLiftPrimeChannel d x u q) :
+    padicValNat q (GN d x u) = 1 := by
+  letI : Fact q.Prime := ⟨petalNoLiftPrimeChannel_prime h⟩
+  have hGN0 : GN d x u ≠ 0 := petalNoLiftPrimeChannel_GN_ne_zero h
+  have hq_dvd : q ∣ GN d x u := anchoredGNCarrier_dvd_GN h.1
+  have hle_one : 1 ≤ padicValNat q (GN d x u) :=
+    one_le_padicValNat_of_dvd hGN0 hq_dvd
+  have hnot_two : ¬ 2 ≤ padicValNat q (GN d x u) := by
+    intro htwo
+    exact h.2 ((padicValNat_dvd_iff_le hGN0).mpr htwo)
+  omega
+
+/--
+A single Petal prime channel fits into the Erdos multiplicity budget of its own
+nonzero GN surface.
+
+This isolates the lower-slot part of the argument: `q ∣ GN d x u` supplies one
+factorization slot at `q`.  No no-lift hypothesis is needed for this lower
+bound; no-lift only supplies nonzeroness in the specialized theorem below.
+-/
+theorem petalPrimeChannel_singleton_multiplicityBudget_GN_of_ne_zero
+    {d x u q : ℕ}
+    (h : PetalPrimeChannel d x u q)
+    (hGN0 : GN d x u ≠ 0) :
     DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
       ({()} : Finset Unit) (fun _ : Unit => q) (GN d x u) := by
   classical
@@ -243,11 +340,25 @@ theorem petalNoLiftPrimeChannel_singleton_multiplicityBudget_GN
   by_cases hpq : q = p
   · subst hpq
     simp only [Finset.filter_true, Finset.card_singleton]
-    have hGN0 : GN d x u ≠ 0 := petalNoLiftPrimeChannel_GN_ne_zero h
-    have hq_dvd : q ∣ GN d x u := anchoredGNCarrier_dvd_GN h.1
+    have hq_dvd : q ∣ GN d x u := anchoredGNCarrier_dvd_GN h
     have hq_pow_dvd : q ^ 1 ∣ GN d x u := by simpa using hq_dvd
     exact (hp.pow_dvd_iff_le_factorization hGN0).mp hq_pow_dvd
   · simp [hpq]
+
+/--
+A single no-lift Petal prime channel fits into the Erdos multiplicity budget of
+its own GN surface.
+
+This is the no-lift specialization of
+`petalPrimeChannel_singleton_multiplicityBudget_GN_of_ne_zero`.
+-/
+theorem petalNoLiftPrimeChannel_singleton_multiplicityBudget_GN
+    {d x u q : ℕ}
+    (h : PetalNoLiftPrimeChannel d x u q) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      ({()} : Finset Unit) (fun _ : Unit => q) (GN d x u) :=
+  petalPrimeChannel_singleton_multiplicityBudget_GN_of_ne_zero h.1
+    (petalNoLiftPrimeChannel_GN_ne_zero h)
 
 /--
 Singleton no-lift Petal channels give a direct Erdos log sub-probability
@@ -278,6 +389,59 @@ theorem petalNoLiftPrimeChannel_singleton_logSubProbability_GN
       cases i
       exact h.1)
     (petalNoLiftPrimeChannel_singleton_multiplicityBudget_GN h)
+
+/--
+No-lift Petal channels give a direct singleton Erdos log sub-probability
+against their own GN surface.
+
+Compared with `petalNoLiftPrimeChannel_singleton_logSubProbability_GN`, this
+version removes the explicit `1 < GN d x u` hypothesis: it is forced by the
+prime channel and local no-lift.
+-/
+theorem petalNoLiftPrimeChannel_singleton_logSubProbability_GN_self
+    {d x u q : ℕ}
+    (h : PetalNoLiftPrimeChannel d x u q) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider
+      ({()} : Finset Unit) (fun _ : Unit => q) (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        ({()} : Finset Unit) (fun _ : Unit => d) (fun _ : Unit => x)
+        (fun _ : Unit => u) (fun _ : Unit => q)
+        (by
+          intro i _hi
+          cases i
+          exact h.1))
+      (petalNoLiftPrimeChannel_GN_one_lt h)).SubProbability :=
+  petalNoLiftPrimeChannel_singleton_logSubProbability_GN h
+    (petalNoLiftPrimeChannel_GN_one_lt h)
+
+/--
+Zsigmondy primitive divisors with an explicit no-lift condition give a singleton
+Erdos log sub-probability on the corresponding GN surface.
+
+This theorem deliberately keeps no-lift as an explicit hypothesis.  Zsigmondy
+alone does not imply no-lift.
+-/
+theorem zsigmondyPrimitivePrimeDivisor_noLift_singleton_logSubProbability_GN
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hNoLift : ¬ q ^ 2 ∣ GN d (a - b) b) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider
+      ({()} : Finset Unit) (fun _ : Unit => q) (GN d (a - b) b)
+      (petalPrimeChannel_realLogNonnegOn
+        ({()} : Finset Unit) (fun _ : Unit => d)
+        (fun _ : Unit => a - b) (fun _ : Unit => b) (fun _ : Unit => q)
+        (by
+          intro i _hi
+          cases i
+          exact zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+            hprim hd hd1 hab_lt))
+      (petalNoLiftPrimeChannel_GN_one_lt
+        ⟨zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+          hprim hd hd1 hab_lt, hNoLift⟩)).SubProbability :=
+  petalNoLiftPrimeChannel_singleton_logSubProbability_GN_self
+    ⟨zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+      hprim hd hd1 hab_lt, hNoLift⟩
 
 /--
 Zsigmondy-family form of the first Petal-to-Erdos capacity bridge.
