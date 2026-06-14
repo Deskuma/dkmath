@@ -639,5 +639,18 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
 This wrapper deliberately keeps prime-channel construction separate.  The map
 form supplies only the noncollision/recovery layer.
 
+The first toy case `f = id` is now fixed:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This checks the value-map API without importing a prime enumeration or a choice
+function.  It still assumes the selected values are already valid
+PetalPrimeChannel / NoLift labels when the log-capacity theorem is applied.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

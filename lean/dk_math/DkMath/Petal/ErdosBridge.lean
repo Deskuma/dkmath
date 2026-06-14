@@ -377,6 +377,26 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
       I n lap mOf qOf f hq hf)
 
 /--
+Toy outer-address route where the selected label is the selected value itself.
+
+This is the `f = id` sanity check for the value-map API.  It proves only
+noncollision of labels; it does **not** say that the selected values are prime
+channels.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_value_self
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf : ι → Nat)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I) :
+    PetalCarrierLabelNoncollisionOn I mOf :=
+  petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+    I n lap mOf mOf id hm hminj
+    (fun _ _ => rfl)
+    (fun _ _ _ _ h => h)
+
+/--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
 -/
 theorem primitivePrimeFactor_petalPrimeChannel
@@ -843,6 +863,60 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injectiv
     hcarrier
 
 /--
+Toy `qOf = mOf` form of the outer-address GN multiplicity-budget route.
+
+This is an API sanity check: if the selected values themselves are assumed to
+be Petal prime-channel labels, then value injectivity supplies the required
+label noncollision.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf : ι → Nat)
+    (hGN0 : GN d x u ≠ 0)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (mOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I mOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u mOf hGN0
+    (petalCarrierLabelNoncollisionOn_outer_of_value_self
+      I n lap mOf hm hminj)
+    hcarrier
+
+/--
+Toy `qOf = mOf` form of the outer-address GN log-capacity route.
+
+This theorem intentionally keeps the strong hypothesis
+`PetalPrimeChannel d x u (mOf i)` explicit.  It is a control theorem for the
+noncollision machinery, not a prime-construction theorem.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (mOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I mOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) mOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u mOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_self
+      I n lap mOf hm hminj)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -1050,6 +1124,35 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_in
     I d x u qOf hGN
     (petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
       I n lap mOf qOf f hm hminj hq hf)
+    hcarrier
+
+/--
+Toy `qOf = mOf` form of the outer-address no-lift GN log-capacity route.
+
+The theorem checks that the no-lift bridge composes with the identity value-map
+route.  It still assumes that each selected value is already a no-lift Petal
+prime-channel label.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (mOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I mOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) mOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u mOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_self
+      I n lap mOf hm hminj)
     hcarrier
 
 /--

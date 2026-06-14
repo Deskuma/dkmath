@@ -793,6 +793,19 @@ This does not claim that `f` constructs prime channels.  It only supplies the
 label-recovery/noncollision part once the prime-channel hypotheses are already
 available.
 
+The identity map sanity check is implemented separately:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This is a toy control route.  It says that if the selected values themselves
+are already assumed to be prime-channel labels, then the outer-address
+noncollision machinery composes correctly.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

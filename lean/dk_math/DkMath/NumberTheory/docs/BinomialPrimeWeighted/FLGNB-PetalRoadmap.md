@@ -1850,6 +1850,18 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
 This is a label-recovery wrapper, not a theorem that a value map automatically
 constructs prime channels.
 
+The `f = id` toy case is also implemented:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This is a control theorem for the wrapper.  It does not turn arbitrary Petal
+values into prime-channel labels.
+
 ### Step 7: Refactor imports gradually
 
 Status:
