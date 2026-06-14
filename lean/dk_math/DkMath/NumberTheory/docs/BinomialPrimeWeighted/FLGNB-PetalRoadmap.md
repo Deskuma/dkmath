@@ -1757,6 +1757,10 @@ PetalPrimeChannel family on one GN surface
 
 PetalNoLiftPrimeChannel
   -> padicValNat q (GN d x u) = 1
+
+PetalNoLiftPrimeChannel family
+  + PetalCarrierLabelNoncollisionOn labels
+  -> finite GN log-capacity sub-probability
 ```
 
 The current research question after the first bridge is:

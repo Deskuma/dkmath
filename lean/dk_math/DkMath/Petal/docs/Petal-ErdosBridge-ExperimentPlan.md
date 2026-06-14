@@ -171,6 +171,18 @@ PetalNoLiftPrimeChannel
 These are separate facts.  NoLift gives local one-slot valuation for a selected
 prime label; it does not prove family label distinctness.
 
+The first public crossroads theorem is now:
+
+```text
+PetalNoLiftPrimeChannel family
+  + PetalCarrierLabelNoncollisionOn labels
+  -> petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+```
+
+This theorem is intentionally finite and conditional.  It is a signpost for
+the common route, not a proof that address geometry gives noncollision or that
+Zsigmondy gives no-lift.
+
 ## Strong Claims We May Be Able to Extract
 
 ### Claim A: Zsigmondy Witness as an Erdos Channel
@@ -522,6 +534,19 @@ This is now the missing input needed by:
 ```lean
 petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
+```
+
+The downstream signposts from this checkpoint are:
+
+```text
+Erdos:
+  address/carrier noncollision -> finite GN log-capacity family
+
+FLT:
+  NoLift one-slot -> d-th-power valuation obstruction
+
+ABC:
+  distinct one-slot channels -> support/rad lower-bound bridge
 ```
 
 ## Final Assessment

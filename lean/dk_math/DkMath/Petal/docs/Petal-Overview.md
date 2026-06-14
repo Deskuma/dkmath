@@ -681,6 +681,38 @@ PetalNoLiftPrimeChannel
 This says that a selected channel has exactly one local exponent slot.  It does
 not say that different selected indices have different prime labels.
 
+The public crossroads theorem combines the two axes when both inputs are
+available:
+
+```text
+PetalNoLiftPrimeChannel family
+  + PetalCarrierLabelNoncollisionOn labels
+  -> petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+```
+
+This is the current finite log-capacity signpost.  It says that distinct
+selected no-lift carriers can be consumed by the Erdos bridge.  It still does
+not claim that address geometry supplies label noncollision, or that Zsigmondy
+alone supplies no-lift.
+
+## Crossroad Signposts
+
+The same selected prime label `q` now has three downstream readings:
+
+```text
+Erdos #1196:
+  finite target: selected Petal channels consume GN log capacity
+  next missing input: address/carrier noncollision -> label noncollision
+
+FLT:
+  target: clash one-slot GN valuation with d-th-power valuation transfer
+  next missing input: dedicated obstruction theorem
+
+ABC:
+  target: distinct one-slot channels become support/rad lower-bound material
+  next missing input: rad/supportMass bridge for label-noncolliding channels
+```
+
 Current research target:
 
 ```text

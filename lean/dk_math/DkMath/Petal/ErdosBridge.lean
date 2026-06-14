@@ -27,7 +27,7 @@ PetalPrimeChannel family
   -> multiplicity-budgeted log sub-probability
 
 PetalPrimeChannel family on one GN surface
-  + pairwise distinct prime labels
+  + PetalCarrierLabelNoncollisionOn prime labels
   -> GN multiplicity budget
   -> log sub-probability against that GN surface
 
@@ -37,17 +37,26 @@ PetalNoLiftPrimeChannel
 
 Two conditions remain separate by design:
 
-* `NatPairwiseDistinctOn I qOf` is the family noncollision condition that
-  prevents selected channels from reusing the same exponent slot.
+* `PetalCarrierLabelNoncollisionOn I qOf` is the family noncollision condition
+  that prevents selected channels from reusing the same exponent slot.
 * `PetalNoLiftPrimeChannel` is a local one-slot condition for one selected
   prime label.  A family of no-lift channels does not by itself imply that the
   labels are distinct.
+
+The current crossroad is:
+
+```text
+NoLift family
+  + carrier-label noncollision
+  -> distinct selected channels, each with one local GN slot
+  -> finite log-capacity control
+```
 
 Current research target:
 
 ```text
 Petal address / carrier noncollision
-  -> NatPairwiseDistinctOn I qOf
+  -> PetalCarrierLabelNoncollisionOn I qOf
 ```
 
 The file also keeps explicit guardrails: Zsigmondy alone is not claimed to imply
@@ -507,6 +516,38 @@ theorem petalNoLiftPrimeChannelFamily_padicValNat_GN_eq_one
     ∀ i, i ∈ I → padicValNat (qOf i) (GN d x u) = 1 := by
   intro i hi
   exact petalNoLiftPrimeChannel_padicValNat_GN_eq_one (hcarrier i hi)
+
+/--
+No-lift Petal channel families with noncolliding labels feed the finite Erdos
+log-capacity bridge on the observed GN surface.
+
+This is the crossroads theorem for the current public API:
+
+* no-lift gives exact one-slot local valuation at each selected label;
+* carrier-label noncollision prevents two selected indices from reusing the
+  same prime label;
+* the existing GN budget bridge then gives log sub-probability.
+
+The theorem still does not claim that Petal address geometry supplies
+noncollision, nor that Zsigmondy alone supplies no-lift.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (hnoncollision : PetalCarrierLabelNoncollisionOn I qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN hnoncollision
+    (fun i hi => (hcarrier i hi).1)
 
 /--
 A single Petal prime channel fits into the Erdos multiplicity budget of its own
