@@ -1707,7 +1707,7 @@ stable facade and redirect its public theorems internally.
 Status:
 
 ```text
-planned
+first public bridge implemented
 ```
 
 The next experimental checkpoint is documented in:
@@ -1726,36 +1726,43 @@ Erdos #1196 / PrimitiveSet:
   global log-capacity control
 ```
 
-The experiment should not attempt to prove new unconditional number theory.
-The first target is a translation-and-budget-consumption bridge:
+The bridge does not attempt to prove new unconditional number theory.  The
+first public bridge has implemented translation and budget-consumption:
 
 ```text
 Petal carrier
   -> Erdos prime channel
   -> prime-valued family
-  -> multiplicity budget assumption
+  -> multiplicity budget assumption or pairwise distinct GN-family labels
   -> log-capacity sub-probability
 ```
 
-Recommended first file:
+Implemented file:
 
 ```text
 DkMath.Petal.ErdosBridge
 ```
 
-Recommended first theorem shape:
+Implemented theorem shapes:
 
 ```text
 Petal carrier family
   + NatBaseMultiplicityBudgetOn against n
   -> normalized log-cost sum <= 1
+
+PetalPrimeChannel family on one GN surface
+  + NatPairwiseDistinctOn labels
+  -> NatBaseMultiplicityBudgetOn against GN
+  -> realLogRatioWeightProvider.SubProbability
+
+PetalNoLiftPrimeChannel
+  -> padicValNat q (GN d x u) = 1
 ```
 
-The research question postponed until after the first bridge is:
+The current research question after the first bridge is:
 
 ```text
-Can Petal address noncollision supply the multiplicity budget required by the
-Erdos log-capacity route?
+Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn I qOf`?
 ```
 
 ### Step 7: Refactor imports gradually

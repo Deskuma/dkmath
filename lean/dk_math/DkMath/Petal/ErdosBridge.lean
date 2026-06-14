@@ -12,21 +12,46 @@ import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 /-!
 # Petal Erdos Bridge
 
-This file starts the experimental bridge from Petal/GN carriers to the finite
-Erdos #1196 log-capacity machinery.
+This file is the public bridge from Petal/GN carriers to the finite Erdos
+#1196 log-capacity machinery.
 
-The first step is intentionally small:
+It does **not** prove the analytic Erdos #1196 tail estimate.  Instead, it
+shows that GN-observed Petal carriers can be read as prime-valued channels for
+the existing `PrimitiveSet` log-capacity route.
+
+The current implemented route is:
 
 ```text
-Petal carrier
-  -> prime-valued Erdos channel
+PetalPrimeChannel family
+  -> prime-valued Erdos channel family
   -> multiplicity-budgeted log sub-probability
+
+PetalPrimeChannel family on one GN surface
+  + pairwise distinct prime labels
+  -> GN multiplicity budget
+  -> log sub-probability against that GN surface
+
+PetalNoLiftPrimeChannel
+  -> padicValNat q (GN d x u) = 1
 ```
 
-No multiplicity budget is proved here.  The caller still supplies the existing
-`PrimitiveSet.NatBaseMultiplicityBudgetOn` hypothesis.  This keeps the bridge
-honest: Petal supplies carrier location, while the Erdos side supplies the
-global capacity bound once a multiplicity budget is available.
+Two conditions remain separate by design:
+
+* `NatPairwiseDistinctOn I qOf` is the family noncollision condition that
+  prevents selected channels from reusing the same exponent slot.
+* `PetalNoLiftPrimeChannel` is a local one-slot condition for one selected
+  prime label.  A family of no-lift channels does not by itself imply that the
+  labels are distinct.
+
+Current research target:
+
+```text
+Petal address / carrier noncollision
+  -> NatPairwiseDistinctOn I qOf
+```
+
+The file also keeps explicit guardrails: Zsigmondy alone is not claimed to imply
+no-lift, squarefreeness of GN, or the full multiplicity budget.
 -/
 
 namespace DkMath

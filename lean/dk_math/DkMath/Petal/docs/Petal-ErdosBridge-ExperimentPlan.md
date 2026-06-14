@@ -1,6 +1,6 @@
 # Petal / Erdos #1196 Bridge Experiment Plan
 
-Status: **planning**
+Status: **first public bridge implemented**
 
 This document records the next experimental route after the Petal/Zsigmondy
 contract work.
@@ -13,9 +13,16 @@ Erdos #1196 formalization, and can the Erdos log-capacity machinery return
 useful global conditions for Zsigmondy / FLT / ABC?
 ```
 
-The answer is: **yes, but only as a staged experiment**.  The current workspace
-already contains enough infrastructure to test the connection, but not enough
-to claim a new unconditional Zsigmondy or FLT theorem.
+The answer is: **yes, for the finite log-capacity bridge**.  The current
+workspace now contains the first public Petal/Erdos bridge:
+
+```text
+DkMath.Petal.ErdosBridge
+```
+
+This is still not a new unconditional Zsigmondy, FLT, ABC, or analytic Erdős
+#1196 theorem.  It is the public bridge that lets Petal GN carrier channels be
+consumed by the existing finite `PrimitiveSet` log-capacity machinery.
 
 ## Current Coordinates
 
@@ -39,6 +46,7 @@ Zsigmondy handshake:
 Multiplicity layer:
   local NoLift at q
   squarefree GN as a sufficient condition
+  pairwise distinct selected labels as the current family noncollision input
 ```
 
 Important files:
@@ -60,6 +68,7 @@ Zsigmondy gives a primitive q.
 Petal tells us where q is observed: on GN, not on the boundary.
 Valuation transfer lets the body-difference height be read on GN.
 NoLift / squarefree controls the multiplicity.
+PairwiseDistinct controls family label collisions.
 ```
 
 ### Erdos #1196 Side
@@ -107,6 +116,14 @@ selected prime-power channels
 
 This is the finite R/log capacity route.
 
+The bridge now uses the following implemented `PrimitiveSet` support:
+
+```lean
+natPairwiseDistinctOn_injOn
+natBaseMultiplicityBudgetOn_of_injOn_of_dvd
+natBaseMultiplicityBudgetOn_of_pairwiseDistinct_of_dvd
+```
+
 ## Conceptual Bridge
 
 The bridge is:
@@ -131,9 +148,30 @@ AnchoredGNCarrier
 This does not prove a new primitive-divisor theorem.  It gives a way to feed
 Petal/Zsigmondy witnesses into the existing Erdos capacity machinery.
 
+The currently implemented public route is:
+
+```text
+PetalPrimeChannel family
+  + NatPairwiseDistinctOn labels
+  -> NatBaseMultiplicityBudgetOn against GN
+  -> realLogRatioWeightProvider.SubProbability
+```
+
+The currently implemented local no-lift route is:
+
+```text
+PetalNoLiftPrimeChannel
+  -> padicValNat q (GN d x u) = 1
+```
+
+These are separate facts.  NoLift gives local one-slot valuation for a selected
+prime label; it does not prove family label distinctness.
+
 ## Strong Claims We May Be Able to Extract
 
 ### Claim A: Zsigmondy Witness as an Erdos Channel
+
+Status: **implemented**
 
 Expected form:
 
@@ -152,6 +190,8 @@ Zsigmondy witness can be inserted into the Erdos channel vocabulary.
 ```
 
 ### Claim B: Petal Carrier Cost is Log-Capacity Cost
+
+Status: **implemented**
 
 Expected form:
 
@@ -172,12 +212,22 @@ Petal carrier has a capacity cost.
 
 ### Claim C: Finite Petal Carrier Family Has a Sub-Probability Budget
 
+Status: **implemented, with two entry forms**
+
 Expected form:
 
 ```lean
 finite family of Petal carriers
   + base-prime multiplicity budget against n
   -> sum log(base prime) / log n <= 1
+```
+
+Implemented forms include:
+
+```lean
+petalCarrierFamily_logSubProbability_of_multiplicityBudget
+petalPrimeChannelFamily_logSubProbability_GN_of_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
 
 This should reuse:
@@ -196,6 +246,8 @@ Petal carrier families can be viewed as Erdos finite capacity kernels.
 ```
 
 ### Claim D: NoLift Separates Multiplicity from Capacity
+
+Status: **implemented locally**
 
 The Petal/Zsigmondy contract says:
 
@@ -224,6 +276,21 @@ Expected role:
 NoLift controls whether a Petal carrier is a unit-cost Erdos channel.
 ```
 
+Implemented core:
+
+```lean
+petalNoLiftPrimeChannel_padicValNat_GN_eq_one
+petalNoLiftPrimeChannel_singleton_logSubProbability_GN_self
+petalNoLiftPrimeChannelFamily_padicValNat_GN_eq_one
+```
+
+Important guardrail:
+
+```text
+NoLift is local.  A no-lift family does not imply that selected labels are
+pairwise distinct.
+```
+
 ## Claims Not Yet Justified
 
 The following should **not** be claimed yet:
@@ -234,6 +301,8 @@ Petal carriers automatically satisfy the Erdos multiplicity budget.
 Zsigmondy automatically supplies local NoLift.
 Zsigmondy automatically supplies padicValNat <= 1.
 GN carriers are automatically squarefree.
+Petal address noncollision automatically supplies NatPairwiseDistinctOn.
+Full analytic Erdős #1196 tail estimate.
 ```
 
 These are research directions, not current theorems.
@@ -252,6 +321,8 @@ So multiplicity hypotheses cannot be erased.
 ## Proposed Implementation Route
 
 ### Step 1: Add a Thin `Petal.ErdosBridge` File
+
+Status: **implemented**
 
 Candidate file:
 
@@ -289,6 +360,8 @@ re-export the reading under Erdos/channel vocabulary.
 
 ### Step 2: Define a Minimal Petal Channel Predicate
 
+Status: **implemented**
+
 Candidate:
 
 ```lean
@@ -309,6 +382,8 @@ def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
 
 ### Step 3: Connect Prime Channel to Log-Cost Nonnegativity
 
+Status: **implemented**
+
 Expected target:
 
 ```lean
@@ -322,13 +397,13 @@ This should follow from `Nat.Prime.one_lt` and the existing real-log helpers in
 
 ### Step 4: Finite Family Experiment
 
-Define an experimental family predicate, not a public final API:
+Status: **implemented without adding a separate family predicate**
+
+The current implementation did not add a separate family predicate.  It uses
+ordinary quantified hypotheses:
 
 ```lean
-def PetalCarrierFamilyOn
-    {ι : Type*} (I : Finset ι)
-    (d x u : ι -> ℕ) (qOf : ι -> ℕ) : Prop :=
-  ∀ i, i ∈ I -> PetalPrimeChannel (d i) (x i) (u i) (qOf i)
+∀ i, i ∈ I -> PetalPrimeChannel (d i) (x i) (u i) (qOf i)
 ```
 
 Then try to prove:
@@ -341,6 +416,8 @@ PetalCarrierFamilyOn I d x u qOf
 This is a direct entry into the existing Erdos valuation-budget API.
 
 ### Step 5: Capacity Budget as an Assumption
+
+Status: **implemented**
 
 Do not try to prove multiplicity budget from Petal geometry yet.
 
@@ -363,12 +440,19 @@ Petal supplies prime-valued carriers.
 Erdos supplies capacity once multiplicity budget is given.
 ```
 
+The implementation then went further: when all selected channels lie on the
+same GN surface and labels are pairwise distinct, Petal supplies the GN
+multiplicity budget directly.
+
 ### Step 6: Research Target - Address Antichain to Multiplicity Budget
 
-Only after Step 5, investigate:
+Status: **current research target**
+
+Now that Step 5 is implemented, investigate:
 
 ```text
 Petal address noncollision
+  -> NatPairwiseDistinctOn I qOf
   -> base-prime multiplicity budget
 ```
 
@@ -381,9 +465,14 @@ PetalAddressAntichain family
   -> NatBaseMultiplicityBudgetOn I qOf n
 ```
 
-This is not yet ready for implementation.  It requires deciding what the
-parent `n` is: body difference, GN, source state, or an abstract capacity
-carrier.
+The current public bridge has chosen one concrete parent for this route:
+
+```text
+GN d x u
+```
+
+Other parents, such as body difference, source state, or an abstract capacity
+carrier, remain separate design questions.
 
 ## Proposed Documentation / Naming Policy
 
@@ -415,35 +504,22 @@ Those are not established.
 
 ## Recommended Next Checkpoint
 
-Implement:
+Implement the address-facing noncollision layer:
 
 ```text
-DkMath.Petal.ErdosBridge
+Petal address / carrier noncollision
+  -> NatPairwiseDistinctOn I qOf
 ```
 
-with only:
+This is now the missing input needed by:
 
 ```lean
-def PetalPrimeChannel
-def PetalNoLiftPrimeChannel
-theorem petalPrimeChannel_prime
-theorem petalPrimeChannel_natPrimeValuedOn
-theorem petalPrimeChannel_log_nonneg
+petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
-
-Then add one finite-family theorem:
-
-```lean
-theorem petalCarrierFamily_logSubProbability_of_multiplicityBudget
-```
-
-This theorem should assume the multiplicity budget and reuse the existing
-PrimitiveSet log-capacity machinery.  That gives the first concrete Petal ->
-Erdos bridge without overclaiming.
 
 ## Final Assessment
 
-The project is ready to enter an experimental bridge phase:
+The first public bridge is implemented:
 
 ```text
 Petal / Zsigmondy / GN:
@@ -453,14 +529,13 @@ Erdos #1196 / PrimitiveSet:
   global log-capacity control
 ```
 
-The first experiment should prove translation and budget-consumption theorems,
-not new unconditional number theory.
+The implemented bridge proves translation and budget-consumption theorems.  It
+also proves the duplicate-free GN-family route through `NatPairwiseDistinctOn`.
 
-If this bridge succeeds, the next research target is:
+The next research target is:
 
 ```text
-Can Petal address noncollision supply the multiplicity budget required by the
-Erdos log-capacity route?
+Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn`?
 ```
 
 That is the point where Petal may start producing genuinely strong conditions

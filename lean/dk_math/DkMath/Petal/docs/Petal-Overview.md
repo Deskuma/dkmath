@@ -110,6 +110,7 @@ DkMath.Petal.BoundaryD3
 DkMath.Petal.EisensteinBridge
 DkMath.Petal.ZsigmondyD3Bridge
 DkMath.Petal.PrimitiveD3ValuationBridge
+DkMath.Petal.ErdosBridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -625,9 +626,49 @@ The experimental Petal/Erdos bridge plan is recorded in:
 DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 ```
 
-Its main conclusion is that the next bridge should translate the `d = 3`
-Petal witness into Zsigmondy's primitive-divisor language, while keeping
-valuation `<= 1` separate under squarefree/no-lift hypotheses.
+The public Petal/Erdos bridge is now exposed as:
+
+```text
+DkMath.Petal.ErdosBridge
+```
+
+Its purpose is narrow and explicit:
+
+```text
+Petal GN carrier
+  -> Erdos finite log-capacity channel
+```
+
+It does not prove the analytic Erdős #1196 tail estimate.  It proves that
+Petal prime-channel families can be consumed by the existing `PrimitiveSet`
+log-capacity machinery once the required duplicate-free / multiplicity-budget
+conditions are supplied.
+
+The current implemented route is:
+
+```text
+PetalPrimeChannel family
+  + NatPairwiseDistinctOn labels
+  -> NatBaseMultiplicityBudgetOn against GN
+  -> realLogRatioWeightProvider.SubProbability
+```
+
+The no-lift side is deliberately separate:
+
+```text
+PetalNoLiftPrimeChannel
+  -> padicValNat q (GN d x u) = 1
+```
+
+This says that a selected channel has exactly one local exponent slot.  It does
+not say that different selected indices have different prime labels.
+
+Current research target:
+
+```text
+Petal address / carrier noncollision
+  -> NatPairwiseDistinctOn I qOf
+```
 
 ## What This Does Not Claim Yet
 
@@ -640,6 +681,8 @@ It also does not yet prove:
 general d boundary classification
 full Zsigmondy theorem
 FLT descent
+full Erdős #1196 analytic tail estimate
+Petal address noncollision -> NatPairwiseDistinctOn
 complete Eisenstein refactor away from the FLT namespace
 complete split of BoundaryD3 and BoundaryD3Anchor
 concrete prime enumeration / standard primorial theorem
@@ -657,10 +700,11 @@ The next reasonable implementation directions are:
 
 ```text
 1. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
-2. use Petal address decomposition in nested observations
-3. connect strict prime-base orbits to a concrete prime enumeration
-4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
-5. perform the deferred `DkMath.Lib.*` promotion refactor
+2. connect Petal address / carrier noncollision to `NatPairwiseDistinctOn`
+3. use Petal address decomposition in nested observations
+4. connect strict prime-base orbits to a concrete prime enumeration
+5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
+6. perform the deferred `DkMath.Lib.*` promotion refactor
 ```
 
 The most conservative next theorem work is probably:
