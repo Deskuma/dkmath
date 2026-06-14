@@ -648,9 +648,27 @@ The current implemented route is:
 
 ```text
 PetalPrimeChannel family
-  + NatPairwiseDistinctOn labels
+  + PetalCarrierLabelNoncollisionOn labels
   -> NatBaseMultiplicityBudgetOn against GN
   -> realLogRatioWeightProvider.SubProbability
+```
+
+Here `PetalCarrierLabelNoncollisionOn I qOf` is the Petal-facing name for
+`NatPairwiseDistinctOn I qOf`.  It records only that selected carriers do not
+reuse the same prime label.  It is not yet derived from Petal address geometry.
+
+Typical use:
+
+```text
+1. produce PetalPrimeChannel d x u (qOf i) for each i in I
+2. prove PetalCarrierLabelNoncollisionOn I qOf
+3. apply petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+```
+
+The lower-level pairwise-distinct theorem remains available:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
 
 The no-lift side is deliberately separate:
@@ -667,6 +685,7 @@ Current research target:
 
 ```text
 Petal address / carrier noncollision
+  -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
 ```
 

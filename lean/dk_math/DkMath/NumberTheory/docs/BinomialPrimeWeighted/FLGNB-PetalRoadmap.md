@@ -1733,7 +1733,7 @@ first public bridge has implemented translation and budget-consumption:
 Petal carrier
   -> Erdos prime channel
   -> prime-valued family
-  -> multiplicity budget assumption or pairwise distinct GN-family labels
+  -> multiplicity budget assumption or Petal carrier-label noncollision
   -> log-capacity sub-probability
 ```
 
@@ -1751,7 +1751,7 @@ Petal carrier family
   -> normalized log-cost sum <= 1
 
 PetalPrimeChannel family on one GN surface
-  + NatPairwiseDistinctOn labels
+  + PetalCarrierLabelNoncollisionOn labels
   -> NatBaseMultiplicityBudgetOn against GN
   -> realLogRatioWeightProvider.SubProbability
 
@@ -1762,8 +1762,14 @@ PetalNoLiftPrimeChannel
 The current research question after the first bridge is:
 
 ```text
-Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn I qOf`?
+Can Petal address / carrier noncollision supply
+`PetalCarrierLabelNoncollisionOn I qOf`?
 ```
+
+`PetalCarrierLabelNoncollisionOn` is currently the public Petal-facing wrapper
+around `NatPairwiseDistinctOn`.  It exists so the later address layer can target
+Petal vocabulary first, while the already-proved Erdos bridge consumes the
+underlying duplicate-free condition.
 
 ### Step 7: Refactor imports gradually
 

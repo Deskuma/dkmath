@@ -152,10 +152,14 @@ The currently implemented public route is:
 
 ```text
 PetalPrimeChannel family
-  + NatPairwiseDistinctOn labels
+  + PetalCarrierLabelNoncollisionOn labels
   -> NatBaseMultiplicityBudgetOn against GN
   -> realLogRatioWeightProvider.SubProbability
 ```
+
+`PetalCarrierLabelNoncollisionOn I qOf` is currently the Petal-facing name for
+the lower-level `NatPairwiseDistinctOn I qOf` condition.  The intended next
+step is to derive it from Petal address/carrier geometry.
 
 The currently implemented local no-lift route is:
 
@@ -446,12 +450,13 @@ multiplicity budget directly.
 
 ### Step 6: Research Target - Address Antichain to Multiplicity Budget
 
-Status: **current research target**
+Status: **current research target, with public label-noncollision hook**
 
 Now that Step 5 is implemented, investigate:
 
 ```text
 Petal address noncollision
+  -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
   -> base-prime multiplicity budget
 ```
@@ -508,12 +513,14 @@ Implement the address-facing noncollision layer:
 
 ```text
 Petal address / carrier noncollision
+  -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
 ```
 
 This is now the missing input needed by:
 
 ```lean
+petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
 

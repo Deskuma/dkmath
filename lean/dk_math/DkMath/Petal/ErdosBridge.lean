@@ -77,6 +77,21 @@ It is deliberately weaker than asking the whole `GN` value to be squarefree.
 def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
   PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
 
+/--
+Carrier-label noncollision for a finite Petal channel family.
+
+This is intentionally just the Petal-facing name for
+`NatPairwiseDistinctOn I qOf`: different selected carriers must not reuse the
+same prime label.  It is **not** yet derived from Petal addresses.  The next
+geometry layer should prove this predicate from an address/carrier
+noncollision theorem and then feed the public bridge below.
+-/
+def PetalCarrierLabelNoncollisionOn
+    {ι : Type _}
+    (I : Finset ι)
+    (qOf : ι → ℕ) : Prop :=
+  DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf
+
 /-- A Petal prime channel carries a prime label. -/
 theorem petalPrimeChannel_prime
     {d x u q : ℕ}
@@ -104,6 +119,33 @@ theorem petalNoLiftPrimeChannel_noLift
     (h : PetalNoLiftPrimeChannel d x u q) :
     ¬ q ^ 2 ∣ GN d x u :=
   h.2
+
+/--
+Unfold carrier-label noncollision to the underlying `PrimitiveSet`
+duplicate-free condition.
+-/
+theorem petalCarrierLabelNoncollisionOn_pairwiseDistinct
+    {ι : Type _}
+    (I : Finset ι)
+    (qOf : ι → ℕ)
+    (h : PetalCarrierLabelNoncollisionOn I qOf) :
+    DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf :=
+  h
+
+/--
+Carrier-label noncollision gives injectivity of selected labels on the finite
+index.
+
+This is the form needed by the older injective-family multiplicity-budget
+theorem.
+-/
+theorem petalCarrierLabelNoncollisionOn_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (qOf : ι → ℕ)
+    (h : PetalCarrierLabelNoncollisionOn I qOf) :
+    Set.InjOn qOf ↑I :=
+  DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn I qOf h
 
 /--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
@@ -337,6 +379,56 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
     I d x u qOf hGN
     (DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn
       I qOf hdistinct)
+    hcarrier
+
+/--
+Carrier-label noncollision on one GN surface supplies an Erdos multiplicity
+budget against that GN surface.
+
+This theorem is the Petal-named entry point for the current research target:
+future address/carrier geometry should prove
+`PetalCarrierLabelNoncollisionOn I qOf`, then this bridge handles the
+valuation-budget side.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hnoncollision : PetalCarrierLabelNoncollisionOn I qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_pairwiseDistinct
+    I d x u qOf hGN0
+    (petalCarrierLabelNoncollisionOn_pairwiseDistinct I qOf hnoncollision)
+    hcarrier
+
+/--
+Carrier-label noncollision on one GN surface gives the Erdos log
+sub-probability provider.
+
+This is the recommended public theorem for callers that already know their
+Petal carriers do not collide as prime labels.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (hnoncollision : PetalCarrierLabelNoncollisionOn I qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_pairwiseDistinct I qOf hnoncollision)
     hcarrier
 
 /--
