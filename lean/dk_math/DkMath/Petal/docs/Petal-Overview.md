@@ -771,6 +771,28 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 ```
 
+There is also a concrete value-map supply form.  If the selected labels are
+presented as
+
+```text
+qOf i = f (mOf i)
+```
+
+and equality of `f (mOf i)` recovers equality of the selected values on the
+finite family, then the same outer-address route is available:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This does not claim that `f` constructs prime channels.  It only supplies the
+label-recovery/noncollision part once the prime-channel hypotheses are already
+available.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

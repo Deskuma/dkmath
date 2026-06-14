@@ -612,5 +612,32 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 ```
 
+The next experimental wrapper is also implemented.  It covers the situation
+where labels are described by a value-indexed map:
+
+```text
+qOf i = f (mOf i)
+```
+
+The required condition is not that `f` is globally injective.  It is only that
+equal selected labels recover equal selected values on the finite family:
+
+```text
+f (mOf i) = f (mOf j) -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This wrapper deliberately keeps prime-channel construction separate.  The map
+form supplies only the noncollision/recovery layer.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

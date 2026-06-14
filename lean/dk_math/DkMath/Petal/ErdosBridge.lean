@@ -317,6 +317,66 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_injOn
       I n lap mOf qOf hlabel)
 
 /--
+Outer-address label compatibility from a value-indexed label map.
+
+This is the concrete `qOf = f(mOf)` supply form.  The map `f` does not have to
+be a global injection; it only has to recover the selected one-based values on
+the finite family under consideration.
+-/
+theorem petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (f : Nat → Nat)
+    (hq :
+      ∀ i, i ∈ I → qOf i = f (mOf i))
+    (hf :
+      ∀ i, i ∈ I → ∀ j, j ∈ I →
+        f (mOf i) = f (mOf j) → mOf i = mOf j) :
+    PetalCarrierLabelCompatibleOn I
+      (fun i => outerPetalAddress n lap (mOf i)) qOf := by
+  apply petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+  intro i hi j hj hij
+  apply hf i hi j hj
+  rw [← hq i hi, ← hq j hj]
+  exact hij
+
+/--
+Outer-address value conditions supply carrier-label noncollision when labels
+come from a value-indexed map.
+
+This packages the common experimental situation:
+
+```text
+mOf i          selected one-based Petal value
+qOf i = f(mOf i)  selected prime/carrier label
+```
+
+The theorem only asks for the local recovery property of `f` on the selected
+family.  It does not claim that `f` constructs prime channels by itself.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (f : Nat → Nat)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = f (mOf i))
+    (hf :
+      ∀ i, i ∈ I → ∀ j, j ∈ I →
+        f (mOf i) = f (mOf j) → mOf i = mOf j) :
+    PetalCarrierLabelNoncollisionOn I qOf :=
+  petalAddressNoncollision_labelNoncollision I
+    (fun i => outerPetalAddress n lap (mOf i)) qOf
+    (petalAddressNoncollisionOn_outer_of_value_injOn I n lap mOf hm hminj)
+    (petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+      I n lap mOf qOf f hq hf)
+
+/--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
 -/
 theorem primitivePrimeFactor_petalPrimeChannel
@@ -715,6 +775,74 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
     hcarrier
 
 /--
+Value-map form of the outer-address GN multiplicity-budget route.
+
+This is the practical wrapper for experiments where the selected label is
+presented as `qOf i = f (mOf i)`.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (f : Nat → Nat)
+    (hGN0 : GN d x u ≠ 0)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = f (mOf i))
+    (hf :
+      ∀ i, i ∈ I → ∀ j, j ∈ I →
+        f (mOf i) = f (mOf j) → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u qOf hGN0
+    (petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+      I n lap mOf qOf f hm hminj hq hf)
+    hcarrier
+
+/--
+Value-map form of the outer-address GN log-capacity route.
+
+The finite-family label noncollision is supplied from:
+
+* valid one-based values,
+* injectivity of `mOf` on the selected index set,
+* `qOf i = f (mOf i)`,
+* local recovery of `mOf` from equal `f (mOf)` labels.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (f : Nat → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = f (mOf i))
+    (hf :
+      ∀ i, i ∈ I → ∀ j, j ∈ I →
+        f (mOf i) = f (mOf j) → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+      I n lap mOf qOf f hm hminj hq hf)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -888,6 +1016,40 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
     I d x u qOf hGN
     (petalCarrierLabelNoncollisionOn_outer_of_value_injOn
       I n lap mOf qOf hm hminj hlabel)
+    hcarrier
+
+/--
+Value-map form of the outer-address no-lift GN log-capacity route.
+
+This is the no-lift counterpart of
+`petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective`.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (f : Nat → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = f (mOf i))
+    (hf :
+      ∀ i, i ∈ I → ∀ j, j ∈ I →
+        f (mOf i) = f (mOf j) → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+      I n lap mOf qOf f hm hminj hq hf)
     hcarrier
 
 /--

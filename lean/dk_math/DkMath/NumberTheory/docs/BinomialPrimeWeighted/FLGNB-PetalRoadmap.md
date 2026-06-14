@@ -1824,6 +1824,32 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
 ```
 
+A concrete value-map supply form is also implemented.  It applies when the
+selected label is presented as:
+
+```text
+qOf i = f (mOf i)
+```
+
+and equal selected `f (mOf)` labels recover equal selected values:
+
+```text
+f (mOf i) = f (mOf j) -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This is a label-recovery wrapper, not a theorem that a value map automatically
+constructs prime channels.
+
 ### Step 7: Refactor imports gradually
 
 Status:
