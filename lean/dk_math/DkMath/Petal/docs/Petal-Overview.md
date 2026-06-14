@@ -702,7 +702,7 @@ The same selected prime label `q` now has three downstream readings:
 ```text
 Erdos #1196:
   finite target: selected Petal channels consume GN log capacity
-  next missing input: address/carrier noncollision -> label noncollision
+  current bridge: address noncollision + label compatibility -> log capacity
 
 FLT:
   target: clash one-slot GN valuation with d-th-power valuation transfer
@@ -717,8 +717,22 @@ Current research target:
 
 ```text
 Petal address / carrier noncollision
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
+```
+
+The address-facing theorem implemented for this checkpoint is:
+
+```text
+petalAddressNoncollision_labelNoncollision
+```
+
+and the direct finite log-capacity routes are:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 ```
 
 ## What This Does Not Claim Yet
@@ -733,7 +747,7 @@ general d boundary classification
 full Zsigmondy theorem
 FLT descent
 full Erdős #1196 analytic tail estimate
-Petal address noncollision -> NatPairwiseDistinctOn
+Petal address noncollision alone -> NatPairwiseDistinctOn
 complete Eisenstein refactor away from the FLT namespace
 complete split of BoundaryD3 and BoundaryD3Anchor
 concrete prime enumeration / standard primorial theorem
@@ -751,7 +765,7 @@ The next reasonable implementation directions are:
 
 ```text
 1. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
-2. connect Petal address / carrier noncollision to `NatPairwiseDistinctOn`
+2. derive concrete address noncollision and label compatibility from Petal geometry
 3. use Petal address decomposition in nested observations
 4. connect strict prime-base orbits to a concrete prime enumeration
 5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer

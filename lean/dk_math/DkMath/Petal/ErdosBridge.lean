@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Petal.Address
 import DkMath.Petal.BezoutBridge
 import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 
@@ -56,6 +57,7 @@ Current research target:
 
 ```text
 Petal address / carrier noncollision
+  + address-to-label compatibility
   -> PetalCarrierLabelNoncollisionOn I qOf
 ```
 
@@ -100,6 +102,33 @@ def PetalCarrierLabelNoncollisionOn
     (I : Finset ι)
     (qOf : ι → ℕ) : Prop :=
   DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf
+
+/--
+Address-level noncollision for a finite Petal carrier family.
+
+This says only that distinct selected indices have distinct Petal addresses.
+It does not by itself say anything about the selected prime labels.
+-/
+def PetalAddressNoncollisionOn
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress) : Prop :=
+  ∀ i, i ∈ I → ∀ j, j ∈ I → i ≠ j → addrOf i ≠ addrOf j
+
+/--
+Compatibility between Petal addresses and selected prime labels.
+
+This is the explicit bridge assumption saying that distinct observed addresses
+produce distinct selected labels.  Keeping this separate prevents the public
+API from pretending that address geometry alone already knows how labels are
+chosen.
+-/
+def PetalCarrierLabelCompatibleOn
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ) : Prop :=
+  ∀ i, i ∈ I → ∀ j, j ∈ I → addrOf i ≠ addrOf j → qOf i ≠ qOf j
 
 /-- A Petal prime channel carries a prime label. -/
 theorem petalPrimeChannel_prime
@@ -155,6 +184,41 @@ theorem petalCarrierLabelNoncollisionOn_injOn
     (h : PetalCarrierLabelNoncollisionOn I qOf) :
     Set.InjOn qOf ↑I :=
   DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn I qOf h
+
+/--
+Address noncollision plus address-to-label compatibility gives carrier-label
+noncollision.
+
+This is the first formal address-facing checkpoint.  The hard geometric work is
+still outside this theorem: callers must provide both the address noncollision
+fact and the compatibility explaining how addresses determine labels.
+-/
+theorem petalAddressNoncollision_labelNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (haddr : PetalAddressNoncollisionOn I addrOf)
+    (hcompat : PetalCarrierLabelCompatibleOn I addrOf qOf) :
+    PetalCarrierLabelNoncollisionOn I qOf := by
+  intro i hi j hj hij
+  exact hcompat i hi j hj (haddr i hi j hj hij)
+
+/--
+Address noncollision plus compatibility gives injectivity of selected labels.
+
+This is the `Set.InjOn` form for older bridge theorems.
+-/
+theorem petalAddressNoncollision_label_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (haddr : PetalAddressNoncollisionOn I addrOf)
+    (hcompat : PetalCarrierLabelCompatibleOn I addrOf qOf) :
+    Set.InjOn qOf ↑I :=
+  petalCarrierLabelNoncollisionOn_injOn I qOf
+    (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
 
 /--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
@@ -441,6 +505,63 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
     hcarrier
 
 /--
+Address-facing GN multiplicity-budget bridge.
+
+If Petal addresses do not collide and the selected labels are compatible with
+those addresses, the existing carrier-label bridge supplies the GN multiplicity
+budget.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_addressNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (haddr : PetalAddressNoncollisionOn I addrOf)
+    (hcompat : PetalCarrierLabelCompatibleOn I addrOf qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u qOf hGN0
+    (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
+    hcarrier
+
+/--
+Address-facing finite Erdos bridge for Petal prime channels on one GN surface.
+
+This is the public route:
+
+```text
+address noncollision
+  + address-to-label compatibility
+  + PetalPrimeChannel family
+  -> finite GN log-capacity sub-probability
+```
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (haddr : PetalAddressNoncollisionOn I addrOf)
+    (hcompat : PetalCarrierLabelCompatibleOn I addrOf qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -548,6 +669,42 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
   petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
     I d x u qOf hGN hnoncollision
     (fun i hi => (hcarrier i hi).1)
+
+/--
+Address-facing finite Erdos bridge for no-lift Petal channels.
+
+This composes the current address checkpoint with the crossroads theorem:
+
+```text
+address noncollision
+  + address-to-label compatibility
+  + NoLift Petal channel family
+  -> finite GN log-capacity sub-probability
+```
+
+It still keeps the two hard inputs explicit: address noncollision and
+compatibility between addresses and selected labels.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (haddr : PetalAddressNoncollisionOn I addrOf)
+    (hcompat : PetalCarrierLabelCompatibleOn I addrOf qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
+    hcarrier
 
 /--
 A single Petal prime channel fits into the Erdos multiplicity budget of its own

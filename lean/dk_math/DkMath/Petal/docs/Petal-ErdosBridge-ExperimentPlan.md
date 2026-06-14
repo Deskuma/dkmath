@@ -159,7 +159,8 @@ PetalPrimeChannel family
 
 `PetalCarrierLabelNoncollisionOn I qOf` is currently the Petal-facing name for
 the lower-level `NatPairwiseDistinctOn I qOf` condition.  The intended next
-step is to derive it from Petal address/carrier geometry.
+step is to derive it from Petal address/carrier geometry plus an explicit
+address-to-label compatibility condition.
 
 The currently implemented local no-lift route is:
 
@@ -317,7 +318,7 @@ Petal carriers automatically satisfy the Erdos multiplicity budget.
 Zsigmondy automatically supplies local NoLift.
 Zsigmondy automatically supplies padicValNat <= 1.
 GN carriers are automatically squarefree.
-Petal address noncollision automatically supplies NatPairwiseDistinctOn.
+Petal address noncollision alone supplies NatPairwiseDistinctOn.
 Full analytic Erdős #1196 tail estimate.
 ```
 
@@ -468,6 +469,7 @@ Now that Step 5 is implemented, investigate:
 
 ```text
 Petal address noncollision
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
   -> base-prime multiplicity budget
@@ -525,6 +527,7 @@ Implement the address-facing noncollision layer:
 
 ```text
 Petal address / carrier noncollision
+  + address-to-label compatibility
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
 ```
@@ -532,6 +535,9 @@ Petal address / carrier noncollision
 This is now the missing input needed by:
 
 ```lean
+petalAddressNoncollision_labelNoncollision
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
@@ -540,7 +546,7 @@ The downstream signposts from this checkpoint are:
 
 ```text
 Erdos:
-  address/carrier noncollision -> finite GN log-capacity family
+  address noncollision + label compatibility -> finite GN log-capacity family
 
 FLT:
   NoLift one-slot -> d-th-power valuation obstruction
@@ -567,7 +573,8 @@ also proves the duplicate-free GN-family route through `NatPairwiseDistinctOn`.
 The next research target is:
 
 ```text
-Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn`?
+Can Petal geometry supply concrete address noncollision and
+address-to-label compatibility?
 ```
 
 That is the point where Petal may start producing genuinely strong conditions

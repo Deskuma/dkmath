@@ -1767,13 +1767,26 @@ The current research question after the first bridge is:
 
 ```text
 Can Petal address / carrier noncollision supply
-`PetalCarrierLabelNoncollisionOn I qOf`?
+`PetalCarrierLabelNoncollisionOn I qOf`
+through explicit address-to-label compatibility?
 ```
 
 `PetalCarrierLabelNoncollisionOn` is currently the public Petal-facing wrapper
 around `NatPairwiseDistinctOn`.  It exists so the later address layer can target
 Petal vocabulary first, while the already-proved Erdos bridge consumes the
 underlying duplicate-free condition.
+
+The first address-facing checkpoint is now implemented by:
+
+```text
+PetalAddressNoncollisionOn I addrOf
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
+  -> PetalCarrierLabelNoncollisionOn I qOf
+
+petalAddressNoncollision_labelNoncollision
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+```
 
 ### Step 7: Refactor imports gradually
 
