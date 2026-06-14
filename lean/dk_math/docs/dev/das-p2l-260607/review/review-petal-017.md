@@ -274,7 +274,7 @@ index 59c358b4..6d2766ec 100644
 @@ -298,6 +298,20 @@ theorem IsStrictPrimeBaseSequence.distinct
      IsDistinctPrimeBaseSequence p :=
    ⟨hp.1, hp.injective⟩
- 
+
 +/-- Earlier laps have smaller bases in a strict prime-base sequence. -/
 +theorem IsStrictPrimeBaseSequence.base_lt_of_lt
 +    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p)

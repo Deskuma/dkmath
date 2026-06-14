@@ -209,7 +209,7 @@ index d73b619c..5e6d01aa 100644
 @@ -744,6 +744,63 @@ theorem GN_three_sub_eq_S0_nat
  This file should also collect p-adic bridge statements where the S0 theorem is
  only a rewritten GN theorem.
- 
+
 +Status:
 +
 +```text
@@ -268,21 +268,21 @@ index d73b619c..5e6d01aa 100644
 +only after a concrete theorem needs that bridge.
 +
  ### `DkMath.Petal.EisensteinBridge`
- 
+
  Purpose:
 @@ -886,7 +943,7 @@ lake build DkMath.Petal
  Status:
- 
+
  ```text
 -planned
 +completed
  ```
- 
+
  Transfer the existing GN gcd statements to S0-facing names.
 @@ -900,6 +957,45 @@ GN_three_sub_eq_S0_nat
  This step should not invent new gcd theory.  It should provide link theorem
  names that downstream FLT and primitive-factor files can import.
- 
+
 +Implemented as the three bridge files:
 +
 +```text
@@ -323,7 +323,7 @@ index d73b619c..5e6d01aa 100644
 +```
 +
  ### Step 6: Add `DkMath.Petal.EisensteinBridge`
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 44e8ea02..4f69d814 100644
@@ -331,7 +331,7 @@ index 44e8ea02..4f69d814 100644
 +++ b/lean/dk_math/DkMath/Petal.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Petal.Basic
 +import DkMath.Petal.ReducedSupport
  import DkMath.Petal.Counting
@@ -344,7 +344,7 @@ index f79bb9e5..453c20c7 100644
 @@ -85,5 +85,18 @@ theorem exists_primitiveOnS0_of_not_three_dvd_sub
        hbc hb hcop h3 with ⟨q, hq, hq_dvd, hq_not_dvd_sub⟩
    exact ⟨q, primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub hbc hq hq_dvd hq_not_dvd_sub⟩
- 
+
 +/--
 +Petal-facing projection of the primitive witness.
 +
@@ -434,7 +434,7 @@ index 82d9378f..37cb5ba2 100644
 @@ -176,6 +176,57 @@ GN 3
    -> divisibility observation
  ```
- 
+
 +### `DkMath.Petal.GcdBridge`
 +
 +Transfers existing degree-three GN gcd control to the `S0_nat` surface.
@@ -487,11 +487,11 @@ index 82d9378f..37cb5ba2 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 @@ -323,20 +374,18 @@ how GN degree 3 becomes the Petal S0 face
  The next reasonable implementation directions are:
- 
+
  ```text
 -1. connect strict prime-base orbits to a concrete prime enumeration
 -2. add Petal-facing gcd / p-adic bridge files
@@ -502,18 +502,18 @@ index 82d9378f..37cb5ba2 100644
 +3. connect strict prime-base orbits to a concrete prime enumeration
 +4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
  ```
- 
+
  The most conservative next theorem work is probably:
- 
+
  ```text
 -DkMath.Petal.GcdBridge
 +DkMath.Petal.Anchor
  ```
- 
+
 -with bridge statements rewritten from existing GN gcd theorems.
 -
  The most concrete arithmetic next step is:
- 
+
  ```text
 ````
 `````

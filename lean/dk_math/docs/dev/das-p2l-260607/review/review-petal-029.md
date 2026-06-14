@@ -240,7 +240,7 @@ index 32978520..c37a2ba9 100644
 @@ -1270,6 +1270,35 @@ lake build DkMath.Petal
  git diff --check
  ```
- 
+
 +### Step 5.9: Zsigmondy preflight investigation
 +
 +Status:
@@ -271,7 +271,7 @@ index 32978520..c37a2ba9 100644
 +squarefree or no-lift hypothesis.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index 0901a240..299550ff 100644
@@ -280,7 +280,7 @@ index 0901a240..299550ff 100644
 @@ -536,6 +536,31 @@ DkMath.Lib.* promotion of neutral S0 / Eisenstein facts
  BoundaryD3Anchor split and final import-direction cleanup
  ```
- 
+
 +Zsigmondy へ進む前の実態調査:
 +
 +```text
@@ -307,7 +307,7 @@ index 0901a240..299550ff 100644
 +持つ別層の仕事として扱う。
 +
  ### Phase 5: Zsigmondy への接続準備
- 
+
  目標:
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 02a3dbe6..9cb68c2a 100644
@@ -316,7 +316,7 @@ index 02a3dbe6..9cb68c2a 100644
 @@ -493,6 +493,16 @@ BoundaryD3Reduced
  This closes the current S0/GN3/BoundaryD3/Anchor/Eisenstein surface as a
  usable API for later FLT and Zsigmondy-facing work.
- 
+
 +The Zsigmondy-facing preflight investigation is recorded in:
 +
 +```text
@@ -328,7 +328,7 @@ index 02a3dbe6..9cb68c2a 100644
 +valuation `<= 1` separate under squarefree/no-lift hypotheses.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

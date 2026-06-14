@@ -299,7 +299,7 @@ index 33ca035e..59c358b4 100644
 @@ -162,6 +162,14 @@ injectivity.
  def IsDistinctPrimeBaseSequence (p : Nat → Nat) : Prop :=
    IsPrimeBaseSequence p ∧ Function.Injective p
- 
+
 +/--
 +A strict prime-base sequence assigns prime bases in strictly increasing order.
 +
@@ -314,7 +314,7 @@ index 33ca035e..59c358b4 100644
 @@ -266,6 +274,30 @@ theorem IsDistinctPrimeBaseSequence.ne_of_lt
      p i ≠ p j := by
    exact hp.ne_of_ne (Nat.ne_of_lt hij)
- 
+
 +/-- A strict prime-base sequence supplies a prime at each lap. -/
 +theorem IsStrictPrimeBaseSequence.prime_at
 +    {p : Nat → Nat} (hp : IsStrictPrimeBaseSequence p) (i : Nat) :

@@ -16,10 +16,12 @@ import DkMath.Petal.PadicBridge
 import DkMath.Petal.PrimitiveBridge
 import DkMath.Petal.ReducedSupport
 import DkMath.Petal.Anchor
+import DkMath.Petal.BezoutBridge
 import DkMath.Petal.BoundaryD3
 import DkMath.Petal.EisensteinBridge
 import DkMath.Petal.ZsigmondyD3Bridge
 import DkMath.Petal.PrimitiveD3ValuationBridge
+import DkMath.Petal.ErdosBridge
 
 #print "file: DkMath.Petal"
 
@@ -38,11 +40,12 @@ The import order is arranged as the public story of the package:
 basic forms / relative polygon vocabulary
   -> counting and address layers
   -> GN/GCD/p-adic/primitive bridges
-  -> reduced support and anchored carriers
+  -> reduced support, anchored carriers, and Bezout/GN location reading
   -> BoundaryD3 cubic branch split
   -> shifted Eisenstein norm bridge
   -> Zsigmondy d = 3 primitive-divisor bridge
   -> squarefree GN3 valuation bridge
+  -> Erdos log-capacity bridge from GN carrier channels
 ```
 
 This is not a claim that every import is logically minimal.  Some files still

@@ -237,7 +237,7 @@ index 6f89737f..067ce600 100644
  hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 +hasPositiveAnchorPrime_self_of_prime
  ```
- 
+
  This layer intentionally does not import S0/GN bridge files yet.  It should
 @@ -851,6 +852,7 @@ anchoredGNCarrier_ne_zero
  anchoredGNCarrier_anchor_le_of_prime_dvd
@@ -245,7 +245,7 @@ index 6f89737f..067ce600 100644
  anchoredS0Carrier_of_anchoredGNCarrier
 +exists_anchoredS0Carrier_of_not_three_dvd_sub
  ```
- 
+
  This layer is the first place where `ReducedSupport` imports meet the S0/GN
 @@ -1051,6 +1053,7 @@ hasPositiveAnchorPrime_prime
  hasPositiveAnchorPrime_anchor_dvd
@@ -253,7 +253,7 @@ index 6f89737f..067ce600 100644
  hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 +hasPositiveAnchorPrime_self_of_prime
  ```
- 
+
  Expected validation:
 @@ -1075,6 +1078,7 @@ AnchoredS0Carrier
  AnchoredGNCarrier
@@ -261,7 +261,7 @@ index 6f89737f..067ce600 100644
  anchoredS0Carrier_of_anchoredGNCarrier
 +exists_anchoredS0Carrier_of_not_three_dvd_sub
  ```
- 
+
  Expected validation:
 diff --git "a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md" "b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/S0_GN_Anchor_Phase_\345\256\237\351\250\223\350\250\255\350\250\210\346\233\270.md"
 index e612fcfc..f7fb0300 100644
@@ -273,14 +273,14 @@ index e612fcfc..f7fb0300 100644
  theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 +theorem hasPositiveAnchorPrime_self_of_prime
  ```
- 
+
  Keep this layer independent of S0 at first.
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 7a3d6a0f..93f041dc 100644
 --- a/lean/dk_math/DkMath/Petal.lean
 +++ b/lean/dk_math/DkMath/Petal.lean
 @@ -6,7 +6,6 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Petal.Basic
  import DkMath.Petal.ReducedSupport
 -import DkMath.Petal.Anchor
@@ -292,25 +292,25 @@ index 7a3d6a0f..93f041dc 100644
  import DkMath.Petal.PadicBridge
  import DkMath.Petal.PrimitiveBridge
 +import DkMath.Petal.Anchor
- 
+
  #print "file: DkMath.Petal"
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/Anchor.lean b/lean/dk_math/DkMath/Petal/Anchor.lean
 index eb84927b..e6126f62 100644
 --- a/lean/dk_math/DkMath/Petal/Anchor.lean
 +++ b/lean/dk_math/DkMath/Petal/Anchor.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Petal.ReducedSupport
  import DkMath.Petal.GNBridge
 +import DkMath.Petal.PrimitiveBridge
- 
+
  #print "file: DkMath.Petal.Anchor"
- 
+
 @@ -124,5 +125,20 @@ theorem anchoredS0Carrier_of_anchoredGNCarrier
    rw [S0_nat_eq_GN_three_sub hbc]
    exact h.2
- 
+
 +/--
 +Primitive S0 existence, upgraded to an anchored S0 carrier.
 +
@@ -335,7 +335,7 @@ index 18348535..d4f7b649 100644
 @@ -125,5 +125,19 @@ theorem hasPositiveAnchorPrime_anchor_le_of_prime_dvd
      r ≤ p :=
    hasAnchorPrime_anchor_le_of_prime_dvd h.2 hp hpdiv
- 
+
 +/--
 +A prime is its own positive anchor carrier.
 +
@@ -362,7 +362,7 @@ index 829e7925..d05df3d4 100644
  hasPositiveAnchorPrime_anchor_le_of_prime_dvd
 +hasPositiveAnchorPrime_self_of_prime
  ```
- 
+
  `HasAnchorPrime` is the wide raw carrier predicate.  Use
 @@ -254,6 +255,7 @@ anchoredS0Carrier_dvd_S0
  anchoredGNCarrier_dvd_GN
@@ -370,7 +370,7 @@ index 829e7925..d05df3d4 100644
  anchoredS0Carrier_of_anchoredGNCarrier
 +exists_anchoredS0Carrier_of_not_three_dvd_sub
  ```
- 
+
  ### `DkMath.Petal.Counting`
 ````
 `````

@@ -301,15 +301,15 @@ index 1f32036a..7786ee2e 100644
 +++ b/lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferichResearch.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
 +import DkMath.NumberTheory.PrimitiveBeam
  import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
- 
+
  #print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch"
 @@ -74,17 +75,37 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
    exact hVal hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
- 
+
  /--
 -squarefree bridge が供給されれば、primitive-prime branch の valuation target は
 -既存 honest route だけで直ちに従う。
@@ -351,7 +351,7 @@ index 1f32036a..7786ee2e 100644
 +      hq_not_dvd_gap
 +      hk_pos
 +      hk_lt
- 
+
  /--
  `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
 @@ -136,24 +157,34 @@ theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
@@ -401,7 +401,7 @@ index 1f32036a..7786ee2e 100644
 +  exact
 +    triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
 +      (triominoNoLiftGNBridge_of_squarefree_GN hSq)
- 
+
  /--
  phase-15 の研究核:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
@@ -411,7 +411,7 @@ index 5718302a..5939018c 100644
 @@ -1530,6 +1530,80 @@ lake build DkMath.ABC.ValuationFlowBridge
  lake build DkMath.ABC.ValuationFlowBridgeExamples
  ```
- 
+
 +### Step 6.3: Thin FLT NoWieferich Research Bridge
 +
 +Status:
@@ -487,7 +487,7 @@ index 5718302a..5939018c 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 ````
 `````

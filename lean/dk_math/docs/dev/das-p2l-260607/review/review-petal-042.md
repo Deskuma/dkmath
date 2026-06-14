@@ -404,12 +404,12 @@ index b501c315..696c43cb 100644
 +++ b/lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 +import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
  import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
  import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
- 
+
 diff --git a/lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferichResearch.lean b/lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferichResearch.lean
 index 7786ee2e..930e98a6 100644
 --- a/lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferichResearch.lean
@@ -417,17 +417,17 @@ index 7786ee2e..930e98a6 100644
 @@ -4,8 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
 -import DkMath.NumberTheory.PrimitiveBeam
 +import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
  import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
- 
+
  #print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch"
 @@ -17,19 +16,6 @@ namespace DkMath.FLT
- 
+
  open DkMath.CosmicFormulaBinom
- 
+
 -/--
 -phase-15 で current research debt として残っている最小入力仕様。
 -
@@ -447,7 +447,7 @@ index 7786ee2e..930e98a6 100644
 @@ -74,39 +60,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
    intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
    exact hVal hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
- 
+
 -/--
 -Translate the FLT Branch-B primitive-prime inputs into the shared
 -`PrimitiveBeam` primitive-factor predicate.
@@ -487,7 +487,7 @@ index 7786ee2e..930e98a6 100644
 @@ -149,43 +102,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_o
    rw [← hEq]
    exact hdiff_le
- 
+
 -/--
 -direct no-lift bridge (`¬ q^2 ∣ GN`) が供給されれば、
 -primitive-prime branch の valuation target は no-`so#rry` で閉じる。
@@ -642,13 +642,13 @@ index 2e0c32e8..de71324c 100644
 +++ b/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean
 @@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
 -import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
 +import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
- 
+
  #print "file: DkMath.FLT.TriominoSquarefreeGNBridgeProviderImpl"
- 
+
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 index 5939018c..1b7419d2 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
@@ -656,19 +656,19 @@ index 5939018c..1b7419d2 100644
 @@ -1538,9 +1538,9 @@ Status:
  implemented
  ```
- 
+
 -`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` now has a
 -direct handshake from the FLT Branch-B primitive-prime inputs to the shared
 -`PrimitiveBeam` predicate:
 +`DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation` now holds the
 +no-sorry valuation surface.  It provides the direct handshake from the FLT
 +Branch-B primitive-prime inputs to the shared `PrimitiveBeam` predicate:
- 
+
  ```lean
  primitivePrimeFactorOfDiffPow_of_FLT_branch
 @@ -1595,13 +1595,43 @@ Squarefree:
    sufficient condition that produces NoLift
- 
+
  Research placeholder:
 -  still isolated in the old research core, not used by the honest NoLift target
 +  isolated in CosmicPetalBridgeGNNoWieferichResearch
@@ -699,9 +699,9 @@ index 5939018c..1b7419d2 100644
 +  CosmicPetalBridgeGNNoWieferichDefault
 +  CosmicPetalBridgeGNDescentBQuarantine
  ```
- 
+
  Expected validation:
- 
+
  ```sh
 +lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
  lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
@@ -709,7 +709,7 @@ index 5939018c..1b7419d2 100644
 +lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 +lake build DkMath.FLT.PrimeProvider
  ```
- 
+
  ### Step 7: Refactor imports gradually
 ````
 `````

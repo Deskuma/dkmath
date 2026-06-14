@@ -277,7 +277,7 @@ index 3e59b4a8..ecec0c90 100644
 @@ -101,6 +101,45 @@ lemma primitive_prime_padic_eq_GN
    have hzero : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
    simpa [hzero] using hpadic
- 
+
 +/--
 +Honest local no-lift route for the primitive-prime valuation bound:
 +if the selected primitive prime `q` does not lift to `q^2` on the `GN` side,
@@ -327,7 +327,7 @@ index 68d47056..d6709d58 100644
 @@ -1360,6 +1360,13 @@ exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
  exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_squarefree_GN
  ```
- 
+
 +The generic no-lift valuation helper has also been promoted to
 +`DkMath.NumberTheory.PrimitiveBeam`:
 +
@@ -336,7 +336,7 @@ index 68d47056..d6709d58 100644
 +```
 +
  Meaning:
- 
+
  ```text
 diff --git a/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean b/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean
 index f3a25643..bc884b57 100644
@@ -384,7 +384,7 @@ index f3a25643..bc884b57 100644
 +      (by norm_num)
 +      hbc
 +      hNoLift
- 
+
  /--
  Squarefree `GN3` turns the shared `d = 3` primitive witness into the honest
 @@ -114,7 +97,7 @@ theorem exists_primitiveD3_padicValNat_le_one_of_boundaryD3Reduced_of_noLift_GN
@@ -393,7 +393,7 @@ index f3a25643..bc884b57 100644
        primitiveD3_padicValNat_le_one_of_noLift_GN
 -        hbc hb hprim (hNoLift hprim)⟩
 +        hbc hprim (hNoLift hprim)⟩
- 
+
  /--
  Existence form: on the reduced cubic branch, if the `GN3` side is squarefree,
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
@@ -403,7 +403,7 @@ index b0e4ef28..e87f5a3c 100644
 @@ -375,6 +375,13 @@ The local no-lift input is weaker than full squarefreeness:
  not q^2 divides GN 3 (c - b) b
  ```
- 
+
 +The underlying local no-lift valuation helper is now available in
 +`DkMath.NumberTheory.PrimitiveBeam` as:
 +
@@ -412,7 +412,7 @@ index b0e4ef28..e87f5a3c 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````

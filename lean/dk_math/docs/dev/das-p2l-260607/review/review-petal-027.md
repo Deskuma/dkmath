@@ -420,7 +420,7 @@ index 0d173e4a..654200f9 100644
 --- a/lean/dk_math/DkMath/Petal/BoundaryD3.lean
 +++ b/lean/dk_math/DkMath/Petal/BoundaryD3.lean
 @@ -17,6 +17,46 @@ This file records the degree-three boundary behavior of the Petal detector
- 
+
  The central observation is that, on the cubic Petal face, the prime `3` is
  exactly the contact component between the boundary gap `c - b` and `S0_nat`.
 +
@@ -464,7 +464,7 @@ index 0d173e4a..654200f9 100644
 +machinery once the library hierarchy is mature.  The current layout is a
 +deliberate temporary convenience, not the final dependency direction.
  -/
- 
+
  namespace DkMath
 diff --git a/lean/dk_math/DkMath/Petal/EisensteinBridge.lean b/lean/dk_math/DkMath/Petal/EisensteinBridge.lean
 index fff834ba..3cb57601 100644
@@ -513,7 +513,7 @@ index fff834ba..3cb57601 100644
 +is a migration window: the theorem names here are the API that should survive
 +after the dependency direction is corrected.
  -/
- 
+
  namespace DkMath
 ````
 `````

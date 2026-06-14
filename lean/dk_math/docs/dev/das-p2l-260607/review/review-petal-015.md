@@ -262,7 +262,7 @@ index de31acb5..33ca035e 100644
 @@ -251,6 +251,21 @@ theorem IsDistinctPrimeBaseSequence.injective
      Function.Injective p :=
    hp.2
- 
+
 +/-- Different laps in a distinct prime-base sequence have different bases. -/
 +theorem IsDistinctPrimeBaseSequence.ne_of_ne
 +    {p : Nat → Nat} (hp : IsDistinctPrimeBaseSequence p)

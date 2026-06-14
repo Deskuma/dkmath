@@ -159,7 +159,7 @@ index 993ae91c..18348535 100644
 @@ -87,6 +87,18 @@ theorem hasPositiveAnchorPrime_pos
      0 < n :=
    h.1
- 
+
 +/-- Positive anchored carriers are nonzero. -/
 +theorem hasPositiveAnchorPrime_ne_zero
 +    {r n : ℕ} (h : HasPositiveAnchorPrime r n) :

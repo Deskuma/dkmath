@@ -443,7 +443,7 @@ index 4f2aa4f8..5718302a 100644
 @@ -1486,6 +1486,42 @@ PrimitiveBeam no-lift valuation
  This keeps `NoLift` as the main multiplicity hypothesis while preserving the
  older squarefree API for downstream callers.
- 
+
 +Caller survey:
 +
 +```text
@@ -481,52 +481,52 @@ index 4f2aa4f8..5718302a 100644
 +```
 +
  Expected validation:
- 
+
  ```sh
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 index de8ea9f3..a50f7c8c 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md
 @@ -183,35 +183,55 @@ or replaced at the callers by honest squarefree/no-lift APIs.
- 
+
  ## Honest Replacement Targets
- 
+
 -The honest squarefree theorem already exists:
 +The current honest replacement route is local no-lift first:
- 
+
  ```lean
 -DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
 +DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_noLift_GN
 +DkMath.NumberTheory.ValuationFlow.primitivePrimeFlow_diffMass_le_one_of_noLift_beam
 +DkMath.ABC.noLift_beam_bounds_local_load
  ```
- 
+
 -This theorem requires:
 +This route requires only the selected primitive channel to avoid lifting on the
 +`GN` side:
- 
+
  ```lean
 -Squarefree (GN d (a - b) b)
 +¬ q ^ 2 ∣ GN d (a - b) b
  ```
- 
+
 -The valuation-flow wrapper also exists:
 +Full beam squarefreeness is now treated as a sufficient condition, not as the
 +main hypothesis:
- 
+
  ```lean
 -DkMath.NumberTheory.ValuationFlow.primitivePrimeFlow_diffMass_le_one_of_squarefree_beam
 +DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_squarefree_GN_local
 +DkMath.NumberTheory.ValuationFlow.primitivePrimeFlow_diffMass_le_one_of_squarefree_beam_local
 +DkMath.ABC.squarefree_beam_bounds_local_load_local
  ```
- 
+
 -This is the ABC-facing mass-control form.
 -
 -The underlying primitive-beam route also exists:
 +The compatibility wrappers remain available for old callers that still carry
 +the heavier squarefree-beam signature:
- 
+
  ```lean
 -DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN
 -DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN
@@ -547,13 +547,13 @@ index de8ea9f3..a50f7c8c 100644
 +Compatibility wrappers:
 +  migration surface for older callers
  ```
- 
+
 -These are the real replacement targets for valuation `<= 1`.
 +`DkMath.ABC.ValuationFlowBridgeExamples` records both a squarefree sample and a
 +non-squarefree local NoLift sample, so this hierarchy is now regression-checked
 +on concrete data.
- 
+
  ## Current Research Dependencies
- 
+
 ````
 `````

@@ -252,7 +252,7 @@ index 4d500bd1..d64232a3 100644
 @@ -209,6 +209,21 @@ theorem primeBaseOrbitTotal_prime_dvd_of_lt
    have _hp_i : Nat.Prime (p i) := hp i
    exact primeBaseOrbitTotal_base_dvd_of_lt p hi
- 
+
 +/--
 +An already adopted prime base remains a divisor of every later prime-base
 +prefix product.

@@ -271,7 +271,7 @@ index a849530f..88fdcb18 100644
 @@ -91,6 +91,14 @@ theorem dynamicOrbitTotal_const (b k : Nat) :
        rw [dynamicOrbitTotal_succ, ih]
        rw [pow_succ]
- 
+
 +/--
 +Every base already passed by a dynamic orbit divides the current prefix product.
 +-/
@@ -282,11 +282,11 @@ index a849530f..88fdcb18 100644
 +
  /--
  Factorial orbit.
- 
+
 @@ -148,6 +156,22 @@ theorem primeBaseOrbitTotal_nextPrime_dvd_succ
    rw [primeBaseOrbitTotal_succ]
    exact Nat.dvd_mul_left _ _
- 
+
 +/-- Every earlier prime base divides the current prime-base prefix product. -/
 +theorem primeBaseOrbitTotal_base_dvd_of_lt
 +    (p : Nat → Nat) {i k : Nat} (hi : i < k) :

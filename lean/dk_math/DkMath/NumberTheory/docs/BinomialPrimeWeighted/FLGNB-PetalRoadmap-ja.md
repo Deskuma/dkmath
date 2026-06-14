@@ -848,7 +848,7 @@ index 3d575422..d73b619c 100644
 @@ -28,6 +28,29 @@ GN difference kernel
  `DkMath.Petal.*` should become the package where the Petal side of this route is
  made visible.
- 
+
 +Current status:
 +
 +```text
@@ -873,15 +873,15 @@ index 3d575422..d73b619c 100644
 +inside natural-number products and divisibility first.
 +
  ## Design Principle
- 
+
  The Petal package should describe the relative polygon layer, not replace the
 @@ -363,7 +386,7 @@ This should be a bridge layer, not the initial foundation.
- 
+
  ## Petal Package Plan
- 
+
 -Create the package in small steps:
 +The package is being built in small steps.  The current surface is:
- 
+
  ```text
  DkMath/Petal/Basic.lean
 @@ -371,11 +394,34 @@ DkMath/Petal/Forms.lean
@@ -894,7 +894,7 @@ index 3d575422..d73b619c 100644
  DkMath/Petal/EisensteinBridge.lean
  DkMath/Petal.lean
  ```
- 
+
 +Implemented:
 +
 +```text
@@ -917,12 +917,12 @@ index 3d575422..d73b619c 100644
 +```
 +
  ### `DkMath.Petal.Basic`
- 
+
  Purpose:
 @@ -523,6 +569,152 @@ Fermat boundary return
- 
+
  becomes a reusable bridge theorem.
- 
+
 +Current status:
 +
 +```text
@@ -1070,12 +1070,12 @@ index 3d575422..d73b619c 100644
 +This gives a stable language for later nested channel observations.
 +
  ### `DkMath.Petal.GcdBridge`
- 
+
  Purpose:
 @@ -580,7 +772,13 @@ This layer is important, but should come after `GNBridge` and `GcdBridge`.
- 
+
  ### Step 1: Create the Petal import surface
- 
+
 -Create:
 +Status:
 +
@@ -1084,13 +1084,13 @@ index 3d575422..d73b619c 100644
 +```
 +
 +Implemented:
- 
+
  ```text
  DkMath/Petal/Basic.lean
 @@ -600,7 +798,13 @@ lake build DkMath.Petal
- 
+
  ### Step 2: Add `DkMath.Petal.GNBridge`
- 
+
 -Create the first Petal bridge theorem group:
 +Status:
 +
@@ -1099,13 +1099,13 @@ index 3d575422..d73b619c 100644
 +```
 +
 +Implemented the first Petal bridge theorem group:
- 
+
  ```lean
  theorem S0_nat_eq_GN_three_sub
 @@ -622,7 +826,68 @@ lake build DkMath.Petal.GNBridge
  lake build DkMath.Petal
  ```
- 
+
 -### Step 3: Add `DkMath.Petal.GcdBridge`
 +### Step 3: Add `DkMath.Petal.Counting`
 +
@@ -1169,13 +1169,13 @@ index 3d575422..d73b619c 100644
 +```text
 +planned
 +```
- 
+
  Transfer the existing GN gcd statements to S0-facing names.
- 
+
 @@ -635,7 +900,13 @@ GN_three_sub_eq_S0_nat
  This step should not invent new gcd theory.  It should provide link theorem
  names that downstream FLT and primitive-factor files can import.
- 
+
 -### Step 4: Add `DkMath.Petal.EisensteinBridge`
 +### Step 6: Add `DkMath.Petal.EisensteinBridge`
 +
@@ -1184,13 +1184,13 @@ index 3d575422..d73b619c 100644
 +```text
 +planned
 +```
- 
+
  Expose the Eisenstein norm route as a Petal-facing bridge.
- 
+
 @@ -647,7 +918,13 @@ GN 3
    <-> Eisenstein norm
  ```
- 
+
 -### Step 5: Refactor imports gradually
 +### Step 7: Refactor imports gradually
 +
@@ -1199,7 +1199,7 @@ index 3d575422..d73b619c 100644
 +```text
 +planned
 +```
- 
+
  After the Petal bridge files build, downstream files may be updated to import
  Petal-facing modules.
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
@@ -1209,7 +1209,7 @@ index bac1a89e..d344dc34 100644
 @@ -417,6 +417,92 @@ AKS cyclic quotient では X^r = 1 により指数が r 周期へ畳まれる。
  これは、後で composite modulus の failure witness や、primitive prime divisor の
  発生境界を調べるための比較面になる。
- 
+
 +### Phase 4.7: Petal dynamic counting and address layer
 +
 +実装済み:
@@ -1297,7 +1297,7 @@ index bac1a89e..d344dc34 100644
 +Lean 上で追うための道具である。
 +
  ### Phase 5: Zsigmondy への接続準備
- 
+
  目標:
 ````
 `````

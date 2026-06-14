@@ -216,7 +216,7 @@ index ca1853c2..6f89737f 100644
 @@ -820,6 +820,42 @@ HasPositiveAnchorPrime is the strict support predicate for nonzero carriers.
  This keeps the entrance broad while preventing `0` from being treated as an
  actual support carrier in downstream theorems.
- 
+
 +### `DkMath.Petal.Anchor`
 +
 +Purpose:
@@ -254,12 +254,12 @@ index ca1853c2..6f89737f 100644
 +surface.  `ReducedSupport` itself remains independent.
 +
  ### `DkMath.Petal.EisensteinBridge`
- 
+
  Purpose:
 @@ -1024,6 +1060,30 @@ lake build DkMath.Petal.ReducedSupport
  lake build DkMath.Petal
  ```
- 
+
 +### Step 5.6: Add `DkMath.Petal.Anchor`
 +
 +Status:
@@ -285,14 +285,14 @@ index ca1853c2..6f89737f 100644
 +```
 +
  ### Step 6: Add `DkMath.Petal.EisensteinBridge`
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 4f69d814..7a3d6a0f 100644
 --- a/lean/dk_math/DkMath/Petal.lean
 +++ b/lean/dk_math/DkMath/Petal.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Petal.Basic
  import DkMath.Petal.ReducedSupport
 +import DkMath.Petal.Anchor
@@ -440,7 +440,7 @@ index b768dee3..829e7925 100644
 @@ -240,6 +240,22 @@ hasPositiveAnchorPrime_anchor_le_of_prime_dvd
  `HasPositiveAnchorPrime` when the carrier must be a genuine nonzero support
  object.
- 
+
 +### `DkMath.Petal.Anchor`
 +
 +Connects positive anchored carriers to concrete `S0_nat` and `GN` divisibility
@@ -458,11 +458,11 @@ index b768dee3..829e7925 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 @@ -387,7 +403,7 @@ how GN degree 3 becomes the Petal S0 face
  The next reasonable implementation directions are:
- 
+
  ```text
 -1. connect ReducedSupport to GN/S0 carriers
 +1. connect AnchoredS0Carrier to the primitive S0 witnesses
@@ -471,12 +471,12 @@ index b768dee3..829e7925 100644
  4. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
 @@ -396,7 +412,7 @@ The next reasonable implementation directions are:
  The most conservative next theorem work is probably:
- 
+
  ```text
 -DkMath.Petal.Anchor
 +DkMath.Petal.Anchor plus PrimitiveBridge
  ```
- 
+
  The most concrete arithmetic next step is:
 ````
 `````

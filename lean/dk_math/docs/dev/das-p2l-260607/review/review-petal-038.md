@@ -221,7 +221,7 @@ index 460208f2..7c41b5f2 100644
 +++ b/lean/dk_math/DkMath/ABC/ValuationFlowBridgeExamples.lean
 @@ -68,6 +68,30 @@ example : diffMass 31 2 1 5 = beamMass 31 2 1 5 := by
      (by decide)
- 
+
  /-- The squarefree beam sample `GN 5 1 1 = 31` yields local load at most `1`. -/
 +example : diffMass 31 2 1 5 ≤ 1 := by
 +  have hNoLift : ¬ 31 ^ 2 ∣ DkMath.CosmicFormulaBinom.GN 5 (2 - 1) 1 := by
@@ -265,7 +265,7 @@ index 460208f2..7c41b5f2 100644
 +    (_hpnd := by decide)
      (hq := primitiveWitness_31_2_1_5)
      hG_sq
- 
+
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 index 64820344..fe58edf5 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
@@ -273,7 +273,7 @@ index 64820344..fe58edf5 100644
 @@ -1435,6 +1435,20 @@ squarefree_beam_bounds_local_load_local
  squarefree_beam_bounds_local_load
  ```
- 
+
 +`DkMath.ABC.ValuationFlowBridgeExamples` records the same API split on the
 +small primitive sample `q = 31, a = 2, b = 1, d = 5`:
 +
@@ -289,7 +289,7 @@ index 64820344..fe58edf5 100644
 +```
 +
  Meaning:
- 
+
  ```text
 @@ -1451,6 +1465,7 @@ Expected validation:
  ```sh
@@ -297,7 +297,7 @@ index 64820344..fe58edf5 100644
  lake build DkMath.ABC.ValuationFlowBridge
 +lake build DkMath.ABC.ValuationFlowBridgeExamples
  ```
- 
+
  ### Step 7: Refactor imports gradually
 ````
 `````

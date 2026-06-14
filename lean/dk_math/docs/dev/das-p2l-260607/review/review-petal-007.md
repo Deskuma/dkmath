@@ -305,7 +305,7 @@ index a68a7c2a..be91d118 100644
 @@ -298,6 +298,22 @@ theorem outerPetalRemainder_le_prevTotal_of_valid
      (outerPetalRemainder_le_blockSize
        (n := n) (lap := k + 1) (m := m) (by simpa [relPetalBlockSize_succ] using hb_prev))
- 
+
 +/--
 +For a valid one-based value in a positive lap, the outer remainder is a valid
 +one-based value for the previous lap total.
@@ -324,11 +324,11 @@ index a68a7c2a..be91d118 100644
 +
  /--
  One-step Petal address decomposition.
- 
+
 @@ -415,6 +431,31 @@ theorem nestedPetalAddress_length (n lap m : Nat) :
        rw [nestedPetalAddress_succ]
        simp [ih]
- 
+
 +/-- A positive-lap nested address is nonempty. -/
 +theorem nestedPetalAddress_ne_nil_of_pos
 +    {n lap m : Nat}

@@ -309,7 +309,7 @@ index 938b2c1e..a849530f 100644
 @@ -128,6 +128,26 @@ theorem primeBaseOrbitTotal_succ (p : Nat → Nat) (k : Nat) :
      primeBaseOrbitTotal p (k + 1) = primeBaseOrbitTotal p k * p k := by
    simp [primeBaseOrbitTotal, dynamicOrbitTotal_succ]
- 
+
 +/-- A prime-base prefix product divides the next prefix product. -/
 +theorem primeBaseOrbitTotal_dvd_succ
 +    (p : Nat → Nat) (k : Nat) :

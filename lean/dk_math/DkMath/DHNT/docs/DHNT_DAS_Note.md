@@ -2002,16 +2002,16 @@ Phase 5: Zsigmondy preparation
 
 対応状況:
 
-- Phase A: S0 / GN 三次面の再固定  
+- Phase A: S0 / GN 三次面の再固定
   ほぼ完了。`DkMath.Petal.GNBridge` の `S0_nat_eq_GN_three_sub` が該当します。
 
-- Phase B: 三例外の構造分離  
+- Phase B: 三例外の構造分離
   かなり進行済み。`three_not_dvd_S0_nat_of_not_dvd_sub` に加えて、[GcdBridge.lean](/lean/dk_math/DkMath/Petal/GcdBridge.lean) の `gcd_sub_S0_nat_eq_gcd_sub_three` / `gcd_sub_S0_nat_dvd_three` が、3 が境界と S0 の接触成分であることをより強く固定しています。
 
-- Phase D: GN primitive candidate  
+- Phase D: GN primitive candidate
   一部完了。特に [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean) の `primitive_prime_dvd_S0_nat` と `primitiveOnS0_of_prime_dvd_cube_sub_not_dvd_sub` が、primitive prime を S0 側へ送る橋になっています。
 
-- Phase C/E: Anchor / Reduced support  
+- Phase C/E: Anchor / Reduced support
   **まだ未実装**です。`HasNoPrimeBelow`, `HasAnchorPrime`, `AnchoredGNCarrier` などの「r から始まる reduced world」はまだ残っています。
 
 なので判断としてはこうです。
@@ -2078,3 +2078,265 @@ theorem hasAnchorPrime_no_smaller_prime
 進める順番としては、私は **PrimitiveBridge projection を先に1本入れて、その後 `ReducedSupport.lean` を新設** が良いと思います。docs はその後に「実装済み」としてまとめるとズレが少ないです。
 
 → [実装とレビュー](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-020.md)
+
+### ベズーの等式
+
+さて。少し考察かな。状況を理解しつつ、Petal 観測 GN 可除性から Zsigmondy へどう接続するか。
+
+最近得た知見ではベズーの等式が宇宙式と繋がり、
+
+ax+by=gcd(a,b)
+
+ここで多項式版
+
+f(x)+g(x)=d(x)
+
+この d(x) が x GN 構造の共通因子 x になる。
+
+f(x)=d(x)F(x)
+g(x)=d(x)G(x)
+
+GN とは、割り切れなさの部分を担う多項式という事になる。
+
+---
+
+はい。この見方はかなり本線に合っています。
+
+要点は、GN を「既に見えている境界因子を剥がした後に残る観測核」と読むことです。
+
+```text
+(x + u)^d - u^d = x * GN d x u
+```
+
+ここで `x` は boundary / gap / common factor 側です。
+Zsigmondy がくれる原始素因子 `q` がこの境界 `x` を割らないなら、積の右側で `q` は `GN d x u` 側に入らざるを得ない。
+
+```text
+q ∣ (x * GN)
+¬ q ∣ x
+----------------
+q ∣ GN
+```
+
+これが Petal 観測から Zsigmondy への一番自然な接続です。
+
+ただし「GN は割り切れない部分」という言い方は、Lean では少し注意が必要です。GN が既約・squarefree であるとは限らないので、正確には、
+
+```text
+GN = boundary を剥がした residual kernel / cofactor
+```
+
+です。
+そこに「原始素因子が載る」ことと、「その重複度が 1 以下になる」ことは別問題です。だから現在の三分割はかなり良いです。
+
+```text
+1. Zsigmondy:
+   primitive q の存在
+
+2. Petal / GN / Anchor:
+   q が boundary ではなく GN / S0 側に載る
+
+3. NoLift / squarefree:
+   padicValNat q GN ≤ 1 などの重複度制御
+```
+
+ベズー視点は、この 2 番目を強く説明できます。
+
+```text
+ax + by = gcd(a,b)
+
+f = d * F
+g = d * G
+```
+
+という分解では、`d` が共通境界で、`F`, `G` が境界除去後の核です。Petal/GN ではこの `d` に相当するものが `x = c-b` などの boundary で、`GN` が cofactor 側になる。よって `gcd(boundary, GN)` を制御できれば、原始素因子の所在がかなり明確になります。
+
+次に Lean で狙うなら、いきなり大きな Zsigmondy 一般化ではなく、次の橋が良さそうです。
+
+```lean
+-- 概念名の候補
+primitivePrimeDivisor_dvd_GN_of_not_dvd_boundary
+exists_anchoredGNCarrier_and_primitivePrimeDivisor
+```
+
+D3 ではすでに、
+
+```text
+S0_nat c b = GN 3 (c - b) b
+```
+
+を通じて同じ構造が出ています。次はこの D3 固定版を、`d x u` の一般 GN carrier に持ち上げる段階ですね。
+
+結論として、現在の接続方針はこう整理できます。
+
+```text
+Zsigmondy gives q on the whole difference.
+Petal/GN removes the visible boundary.
+Bezout/gcd control proves q cannot hide in the boundary.
+Therefore q is observed on GN.
+NoLift/squarefree then controls the height of q on GN.
+```
+
+この形なら、Phase 5 へ進む前の設計としてかなり堅いです。
+次の実装は `Petal` 側に「GN carrier 上の primitive divisor location theorem」を薄く置くのがよさそうです。
+
+### ベズー定理との接続
+
+では、
+
+```txt
+2. Petal / GN / Anchor:
+   q が boundary ではなく GN / S0 側に載る
+```
+
+を、補強する三角構図をベズー補題の実装を進めよう。
+宇宙式 GN ↔ ベズー補題
+ここを、先につなぐ。
+
+そこから共通因子と残された多項式の状態条件の抽出補題を得る。
+
+ベズーの補題は新規で NumberTheory かな？
+あるいは、CosmicFormula から Mathlib にベズー定理があれば Bridge 接続
+広くはイデアルまで成り立つから、Cosmic からかなあ。
+
+宇宙式 → ベズー定理との接続 → イデアル解釈へ通ずる
+
+のような流れで。設計。
+
+---
+
+はい。設計としては、新しい「ベズー定理そのもの」を作るより、既存の `gcd / coprime / ideal coprime` を **宇宙式 GN の読み方へ接続する Bridge** を作るのがよいです。
+
+現状の最短構図はこれです。
+
+```text
+Zsigmondy / primitive prime
+        ↓
+q ∣ (a^d - b^d)
+
+Cosmic GN factorization
+        ↓
+a^d - b^d = (a - b) * GN d (a-b) b
+
+Boundary exclusion
+        ↓
+¬ q ∣ (a - b)
+
+Prime divisibility
+        ↓
+q ∣ GN d (a-b) b
+```
+
+ここは既に `DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN` がかなり直接やっています。なので次に欲しいのは、「これはベズー/gcd 分離の一例である」と読める Petal-facing な薄い橋です。
+
+**配置案**
+新規ファイルは、まず Petal 側に置くのが安全です。
+
+```text
+lean/dk_math/DkMath/Petal/BezoutBridge.lean
+```
+
+理由は、今回の目的が「一般ベズー理論の整備」ではなく、
+
+```text
+Petal / GN / Anchor:
+q が boundary ではなく GN / S0 側に載る
+```
+
+を補強することだからです。
+
+中身は三層に分けるのがよいです。
+
+```text
+1. Factor split
+   body = boundary * kernel
+
+2. gcd / Bezout separation
+   common factor は boundary 側に閉じ込める
+
+3. primitive witness relocation
+   boundary を避ける prime は GN 側に移る
+```
+
+**Lean API 候補**
+
+まずは既存定理の Petal-facing alias / bridge で十分です。
+
+```lean
+theorem primitivePrimeFactor_dvd_GN_of_boundary_excluded
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hab_lt : b < a) :
+    q ∣ GN d (a - b) b
+```
+
+これは実質 `primitive_prime_dvd_GN` の別名です。
+
+次に、ベズー/gcd 観測としては既存の `UniqueFactorizationGN` にあるこの系統が本命です。
+
+```lean
+prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp
+not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+```
+
+Petal 側ではこれを次のように読ませたい。
+
+```lean
+theorem prime_not_dvd_boundary_GN_gcd
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x)
+    (hcop : Nat.Coprime x u)
+    (hq : Nat.Prime q) (hqnd : ¬ q ∣ d) :
+    ¬ q ∣ Nat.gcd x (GN d x u)
+```
+
+これは名前を Petal/GN 文脈に寄せるだけで、意味は強いです。
+
+```text
+q ∤ d なら、q は boundary と GN の共通因子になれない。
+```
+
+つまり、GN が「境界を剥がした後の残核」であることを gcd レベルで固定できます。
+
+**将来の一般化**
+その後に `NumberTheory` または `DkMath.Lib` へ昇格するなら、一般形はこうです。
+
+```lean
+def HasCofactorSplit (body boundary kernel : ℕ) : Prop :=
+  body = boundary * kernel
+```
+
+または多項式/環まで見るなら、
+
+```lean
+body = boundary * kernel
+IsCoprime boundary kernel
+```
+
+を持つ構造にします。ただし今これを抽象化しすぎると import と設計が重くなるので、最初は `Petal.BezoutBridge` に閉じるのがよいです。
+
+**設計結論**
+今やるべき実装はこれです。
+
+```text
+DkMath.Petal.BezoutBridge
+
+- GN を boundary cofactor として読む alias
+- primitive prime が boundary を避けると GN に載る bridge
+- gcd(boundary, GN) に q が入れない bridge
+- padicValNat gcd = 0 の Petal-facing wrapper
+```
+
+これで、
+
+```text
+宇宙式 GN
+  ↔ boundary * kernel
+  ↔ gcd / Bezout separation
+  ↔ primitive prime is located on GN
+  ↔ Anchor carrier
+```
+
+という三角構図が Lean 上で見えるようになります。

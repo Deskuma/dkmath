@@ -264,7 +264,7 @@ index 0d611302..b22fb99c 100644
 @@ -1340,6 +1340,43 @@ lake build DkMath.Petal.ZsigmondyD3Bridge
  lake build DkMath.Petal
  ```
- 
+
 +### Step 6.1: Add `DkMath.Petal.PrimitiveD3ValuationBridge`
 +
 +Status:
@@ -303,7 +303,7 @@ index 0d611302..b22fb99c 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md
 index e53cb3d7..084a5be9 100644
@@ -318,7 +318,7 @@ index e53cb3d7..084a5be9 100644
 +`padicValNat q (c^3 - b^3) <= 1` へ進む。
  `padicValNat <= 1` は Zsigmondy だけでは出ず、squarefree/no-lift 仮定を
  持つ別層の仕事として扱う。
- 
+
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index a6826e32..27cb90db 100644
 --- a/lean/dk_math/DkMath/Petal.lean
@@ -328,16 +328,16 @@ index a6826e32..27cb90db 100644
  import DkMath.Petal.EisensteinBridge
  import DkMath.Petal.ZsigmondyD3Bridge
 +import DkMath.Petal.PrimitiveD3ValuationBridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -41,6 +42,7 @@ basic forms / relative polygon vocabulary
    -> BoundaryD3 cubic branch split
    -> shifted Eisenstein norm bridge
    -> Zsigmondy d = 3 primitive-divisor bridge
 +  -> squarefree GN3 valuation bridge
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean b/lean/dk_math/DkMath/Petal/PrimitiveD3ValuationBridge.lean
 new file mode 100644
@@ -432,12 +432,12 @@ index a0165c92..1b8dea02 100644
  DkMath.Petal.ZsigmondyD3Bridge
 +DkMath.Petal.PrimitiveD3ValuationBridge
  ```
- 
+
  ### `DkMath.Petal.Basic`
 @@ -347,6 +348,25 @@ It also shares the same witness `q` with
  `PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`, preparing the downstream
  squarefree/no-lift valuation layer without proving that layer here.
- 
+
 +### `DkMath.Petal.PrimitiveD3ValuationBridge`
 +
 +Connects the shared `d = 3` witness to the honest squarefree valuation theorem.
@@ -458,7 +458,7 @@ index a0165c92..1b8dea02 100644
 +```
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 ````
 `````

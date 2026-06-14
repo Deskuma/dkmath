@@ -299,12 +299,12 @@ index 31b06f18..36a49b39 100644
  boundaryD3Reduced_coprime_sub_S0_nat
 +exists_anchoredS0Carrier_of_boundaryD3Reduced
  ```
- 
+
  This layer makes the cubic contact prime explicit:
 @@ -906,11 +909,19 @@ Purpose:
  Petal S0 -> Eisenstein norm bridge
  ```
- 
+
 -Candidate aliases:
 +Status:
 +
@@ -313,7 +313,7 @@ index 31b06f18..36a49b39 100644
 +```
 +
 +Implemented names:
- 
+
  ```lean
 -theorem petal_S0_eq_eisensteinNorm_shift
 -theorem petal_GN3_sub_eq_eisensteinNorm_shift
@@ -322,19 +322,19 @@ index 31b06f18..36a49b39 100644
 +petal_GN3_sub_eq_eisensteinNorm_shift_of_lt
 +petal_S0_nat_eq_eisensteinNorm_shift_of_lt
  ```
- 
+
  These should reference:
 @@ -920,7 +931,9 @@ theorem S0_eq_eisensteinNorm_shift
  theorem GN3_sub_eq_eisensteinNorm_shift
  ```
- 
+
 -This layer is important, but should come after `GNBridge` and `GcdBridge`.
 +This layer is intentionally thin.  It re-exposes the existing FLT Eisenstein
 +norm facts through Petal-facing names so later Petal/Zsigmondy files can import
 +the package surface.
- 
+
  ## Implementation Steps
- 
+
 @@ -1143,12 +1156,15 @@ Implemented:
  ```lean
  BoundaryD3Branch
@@ -349,21 +349,21 @@ index 31b06f18..36a49b39 100644
  boundaryD3Reduced_coprime_sub_S0_nat
 +exists_anchoredS0Carrier_of_boundaryD3Reduced
  ```
- 
+
  Expected validation:
 @@ -1163,7 +1179,7 @@ lake build DkMath.Petal
  Status:
- 
+
  ```text
 -planned
 +initial API implemented
  ```
- 
+
  Expose the Eisenstein norm route as a Petal-facing bridge.
 @@ -1176,6 +1192,22 @@ GN 3
    <-> Eisenstein norm
  ```
- 
+
 +Implemented:
 +
 +```lean
@@ -381,7 +381,7 @@ index 31b06f18..36a49b39 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal.lean b/lean/dk_math/DkMath/Petal.lean
 index 5e60e74b..e11dc4d3 100644
@@ -392,9 +392,9 @@ index 5e60e74b..e11dc4d3 100644
  import DkMath.Petal.Anchor
  import DkMath.Petal.BoundaryD3
 +import DkMath.Petal.EisensteinBridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/BoundaryD3.lean b/lean/dk_math/DkMath/Petal/BoundaryD3.lean
 index b088b24c..0d173e4a 100644
 --- a/lean/dk_math/DkMath/Petal/BoundaryD3.lean
@@ -402,15 +402,15 @@ index b088b24c..0d173e4a 100644
 @@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 +import DkMath.Petal.Anchor
  import DkMath.Petal.GcdBridge
- 
+
  #print "file: DkMath.Petal.BoundaryD3"
 @@ -31,6 +32,19 @@ def BoundaryD3Branch (c b : ℕ) : Prop :=
  def BoundaryD3Reduced (c b : ℕ) : Prop :=
    ¬ 3 ∣ c - b
- 
+
 +/-- Every cubic Petal coordinate lies on either the boundary branch or the reduced branch. -/
 +theorem boundaryD3Branch_or_reduced (c b : ℕ) :
 +    BoundaryD3Branch c b ∨ BoundaryD3Reduced c b := by
@@ -430,7 +430,7 @@ index b088b24c..0d173e4a 100644
 @@ -87,5 +101,15 @@ theorem boundaryD3Reduced_coprime_sub_S0_nat
      Nat.Coprime (c - b) (S0_nat c b) :=
    coprime_sub_S0_nat_of_coprime_of_not_dvd_three hbc hcop h
- 
+
 +/--
 +On the reduced branch, the primitive S0 witness can be read as an anchored
 +S0 carrier without unfolding the branch definition.
@@ -535,7 +535,7 @@ index e46005b3..33cd9bb2 100644
  boundaryD3Reduced_coprime_sub_S0_nat
 +exists_anchoredS0Carrier_of_boundaryD3Reduced
  ```
- 
+
  Conceptually, this says:
 @@ -289,8 +292,27 @@ The reduced branch therefore gives the usable cubic Petal surface:
  BoundaryD3Reduced c b
@@ -543,7 +543,7 @@ index e46005b3..33cd9bb2 100644
    -> Coprime (c - b) (S0_nat c b), assuming Coprime c b
 +  -> an anchored primitive S0 carrier exists, under the primitive bridge inputs
  ```
- 
+
 +### `DkMath.Petal.EisensteinBridge`
 +
 +Exposes the existing Eisenstein norm route through Petal-facing names.
@@ -563,7 +563,7 @@ index e46005b3..33cd9bb2 100644
 +layout.
 +
  ### `DkMath.Petal.Counting`
- 
+
  Defines the fixed and dynamic counting layer.
 @@ -409,6 +431,7 @@ Fixed Petal counting
    -> S0/GN primitive bridge
@@ -571,7 +571,7 @@ index e46005b3..33cd9bb2 100644
    -> degree-three boundary split
 +  -> Petal-facing Eisenstein norm bridge
  ```
- 
+
  This means the package can already express:
 @@ -421,6 +444,7 @@ one Petal address step is a quotient-remainder decomposition
  S0 is a visible degree-three Petal face of GN
@@ -579,7 +579,7 @@ index e46005b3..33cd9bb2 100644
  the cubic 3-contact is exactly the boundary branch
 +S0 and GN3 can be viewed through the shifted Eisenstein norm
  ```
- 
+
  ## What This Does Not Claim Yet
 @@ -437,6 +461,7 @@ which factors persist across later layers
  how Petal addresses split a layer into channels
@@ -587,11 +587,11 @@ index e46005b3..33cd9bb2 100644
  how reduced cubic support excludes the boundary prime 3
 +how the same cubic face enters the Eisenstein norm route
  ```
- 
+
  ## Next Directions
 @@ -444,17 +469,16 @@ how reduced cubic support excludes the boundary prime 3
  The next reasonable implementation directions are:
- 
+
  ```text
 -1. connect AnchoredS0Carrier to the primitive S0 witnesses
 -2. use Petal address decomposition in nested observations
@@ -603,14 +603,14 @@ index e46005b3..33cd9bb2 100644
 +3. decide whether GNPrimitiveCandidate needs a separate vocabulary layer
 +4. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
  ```
- 
+
  The most conservative next theorem work is probably:
- 
+
  ```text
 -DkMath.Petal.EisensteinBridge
 +BoundaryD3 / EisensteinBridge downstream corollaries
  ```
- 
+
  The most concrete arithmetic next step is:
 ````
 `````

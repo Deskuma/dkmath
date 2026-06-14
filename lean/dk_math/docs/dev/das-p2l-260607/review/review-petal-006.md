@@ -353,7 +353,7 @@ index b26f4f99..a68a7c2a 100644
 @@ -367,6 +367,63 @@ theorem outerPetalAddress_five_inner_after_two_twentyfive :
        { lap := 1, channel := 4, offset := 5 } := by
    decide
- 
+
 +/--
 +Nested Petal address obtained by repeatedly descending through outer
 +remainders.
