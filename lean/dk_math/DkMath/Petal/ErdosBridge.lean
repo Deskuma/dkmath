@@ -81,6 +81,26 @@ theorem petalNoLiftPrimeChannel_noLift
   h.2
 
 /--
+PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
+-/
+theorem primitivePrimeFactor_petalPrimeChannel
+    {q a b d : ℕ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    PetalPrimeChannel d (a - b) b q :=
+  anchoredGNCarrier_of_primitivePrimeFactor hq hd hd1 hab_lt
+
+/--
+Zsigmondy primitive divisors enter the Erdos bridge as Petal prime channels.
+-/
+theorem zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+    {q a b d : ℕ}
+    (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b d q)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a) :
+    PetalPrimeChannel d (a - b) b q :=
+  anchoredGNCarrier_of_zsigmondyPrimitivePrimeDivisor hprim hd hd1 hab_lt
+
+/--
 The logarithmic cost of a Petal prime channel is nonnegative.
 -/
 theorem petalPrimeChannel_log_nonneg
