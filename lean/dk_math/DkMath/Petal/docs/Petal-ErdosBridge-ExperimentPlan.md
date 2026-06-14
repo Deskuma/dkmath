@@ -577,5 +577,19 @@ Can Petal geometry supply concrete address noncollision and
 address-to-label compatibility?
 ```
 
+The first part now has a concrete outer-address supply theorem:
+
+```text
+outerPetalAddress_eq_value_eq
+
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+Thus an injective selected value family gives noncolliding
+`outerPetalAddress` values.  The remaining geometric task is to derive
+meaningful `PetalCarrierLabelCompatibleOn` assumptions from the actual carrier
+or label construction, rather than keeping compatibility as a permanent raw
+hypothesis.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

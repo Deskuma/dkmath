@@ -221,6 +221,59 @@ theorem petalAddressNoncollision_label_injOn
     (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
 
 /--
+Injective selected addresses supply Petal address noncollision.
+
+This is a generic bridge for concrete address constructions: once a construction
+is known to be injective on the selected finite index, it satisfies the Petal
+noncollision predicate used by the log-capacity route.
+-/
+theorem petalAddressNoncollisionOn_of_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress)
+    (hinj : Set.InjOn addrOf ↑I) :
+    PetalAddressNoncollisionOn I addrOf := by
+  intro i hi j hj hij haddr
+  exact hij (hinj hi hj haddr)
+
+/--
+Contrapositive label compatibility criterion.
+
+If equal selected labels force equal Petal addresses, then distinct Petal
+addresses force distinct selected labels.
+-/
+theorem petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+    {ι : Type _}
+    (I : Finset ι)
+    (addrOf : ι → PetalAddress)
+    (qOf : ι → ℕ)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → addrOf i = addrOf j) :
+    PetalCarrierLabelCompatibleOn I addrOf qOf := by
+  intro i hi j hj haddr hij
+  exact haddr (hlabel i hi j hj hij)
+
+/--
+Outer Petal addresses are noncolliding when their source one-based values are
+injective on the selected finite index.
+
+This is the first concrete address-construction supply theorem for the current
+Erdos bridge.
+-/
+theorem petalAddressNoncollisionOn_outer_of_value_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf : ι → Nat)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hinj : Set.InjOn mOf ↑I) :
+    PetalAddressNoncollisionOn I (fun i => outerPetalAddress n lap (mOf i)) := by
+  apply petalAddressNoncollisionOn_of_injOn
+  intro i hi j hj haddr
+  exact hinj hi hj
+    (outerPetalAddress_eq_value_eq (hm i hi) (hm j hj) haddr)
+
+/--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
 -/
 theorem primitivePrimeFactor_petalPrimeChannel

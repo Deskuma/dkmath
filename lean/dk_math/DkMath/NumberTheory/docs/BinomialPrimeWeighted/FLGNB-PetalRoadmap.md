@@ -1788,6 +1788,25 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 ```
 
+The first concrete Petal-address supply theorem is also available:
+
+```text
+outerPetalAddress_eq_value_eq
+
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+This says that valid one-based values can be recovered from their
+`outerPetalAddress`, so any injective selected value family yields
+`PetalAddressNoncollisionOn` for the corresponding outer addresses.
+
+The compatibility side remains a separate input, but it has a useful
+contrapositive helper:
+
+```text
+petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:

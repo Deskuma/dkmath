@@ -367,6 +367,31 @@ theorem outerPetalAddress_decompose_sub_one
   rw [Nat.mul_comm B ((m - 1) / B)]
   rw [Nat.add_comm ((m - 1) % B) (((m - 1) / B) * B)]
 
+/--
+An outer Petal address determines its one-based value, provided the values are
+valid one-based inputs.
+
+This is the injectivity form needed by later carrier-family noncollision
+bridges: if two valid values have the same one-step address, then the values
+were already the same.
+-/
+theorem outerPetalAddress_eq_value_eq
+    {n lap m₁ m₂ : Nat}
+    (hm₁ : 1 ≤ m₁)
+    (hm₂ : 1 ≤ m₂)
+    (haddr : outerPetalAddress n lap m₁ = outerPetalAddress n lap m₂) :
+    m₁ = m₂ := by
+  calc
+    m₁ =
+        (outerPetalAddress n lap m₁).channel * relPetalBlockSize n lap
+          + outerPetalRemainder n lap m₁ := outerPetalAddress_decompose hm₁
+    _ =
+        (outerPetalAddress n lap m₂).channel * relPetalBlockSize n lap
+          + outerPetalRemainder n lap m₂ := by
+          rw [outerPetalRemainder_eq_offset, outerPetalRemainder_eq_offset]
+          rw [haddr]
+    _ = m₂ := (outerPetalAddress_decompose hm₂).symm
+
 /-- In the pentagonal two-lap example, the outer remainder stays `25`. -/
 theorem outerPetalRemainder_five_two_twentyfive :
     outerPetalRemainder 5 2 25 = 25 := by

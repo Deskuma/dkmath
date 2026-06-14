@@ -735,6 +735,26 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 ```
 
+The first concrete address-construction supply theorem is:
+
+```text
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+It says that an injective family of valid one-based values gives noncolliding
+`outerPetalAddress` values.  The underlying address reconstruction lemma is:
+
+```text
+outerPetalAddress_eq_value_eq
+```
+
+The compatibility side is still explicit, but it now has a convenient
+contrapositive criterion:
+
+```text
+petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+```
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete
