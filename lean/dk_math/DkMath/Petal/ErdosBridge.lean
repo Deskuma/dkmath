@@ -274,6 +274,49 @@ theorem petalAddressNoncollisionOn_outer_of_value_injOn
     (outerPetalAddress_eq_value_eq (hm i hi) (hm j hj) haddr)
 
 /--
+Outer-address label compatibility from value determination by labels.
+
+If equality of selected labels forces equality of the underlying one-based
+values, then those labels are compatible with the corresponding outer Petal
+addresses.
+-/
+theorem petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j) :
+    PetalCarrierLabelCompatibleOn I
+      (fun i => outerPetalAddress n lap (mOf i)) qOf := by
+  apply petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+  intro i hi j hj hij
+  rw [hlabel i hi j hj hij]
+
+/--
+Outer-address value conditions supply carrier-label noncollision.
+
+This is the first fully outer-address-facing noncollision theorem: injective
+values give address noncollision, and labels that determine values give
+address-to-label compatibility.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j) :
+    PetalCarrierLabelNoncollisionOn I qOf :=
+  petalAddressNoncollision_labelNoncollision I
+    (fun i => outerPetalAddress n lap (mOf i)) qOf
+    (petalAddressNoncollisionOn_outer_of_value_injOn I n lap mOf hm hminj)
+    (petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+      I n lap mOf qOf hlabel)
+
+/--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
 -/
 theorem primitivePrimeFactor_petalPrimeChannel
@@ -615,6 +658,63 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
     hcarrier
 
 /--
+Outer-address value conditions supply an Erdos multiplicity budget on one GN
+surface.
+
+This is the multiplicity-budget form of the outer-address route.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN0 : GN d x u ≠ 0)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u qOf hGN0
+    (petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+      I n lap mOf qOf hm hminj hlabel)
+    hcarrier
+
+/--
+Outer-address value conditions feed Petal prime channels into the finite GN
+log-capacity route.
+
+The hypotheses say that the selected one-based values are noncolliding and that
+the selected prime labels determine those values.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+      I n lap mOf qOf hm hminj hlabel)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -757,6 +857,37 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollisio
   petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
     I d x u qOf hGN
     (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
+    hcarrier
+
+/--
+Outer-address value conditions feed no-lift Petal channels into the finite GN
+log-capacity route.
+
+This is the no-lift version of
+`petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn`.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+      I n lap mOf qOf hm hminj hlabel)
     hcarrier
 
 /--

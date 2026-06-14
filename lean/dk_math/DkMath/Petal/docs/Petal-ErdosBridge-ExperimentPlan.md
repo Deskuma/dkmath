@@ -591,5 +591,26 @@ meaningful `PetalCarrierLabelCompatibleOn` assumptions from the actual carrier
 or label construction, rather than keeping compatibility as a permanent raw
 hypothesis.
 
+The first outer-address compatibility supply theorem is now implemented:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+```
+
+It uses the condition:
+
+```text
+qOf i = qOf j -> mOf i = mOf j
+```
+
+Together with value injectivity, this gives the outer-address log-capacity
+route:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

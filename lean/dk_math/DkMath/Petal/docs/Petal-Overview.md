@@ -755,6 +755,22 @@ contrapositive criterion:
 petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
 ```
 
+For outer addresses, compatibility can now be supplied from value determination:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+```
+
+Combining value injectivity with value determination by labels gives the
+outer-address noncollision route directly:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

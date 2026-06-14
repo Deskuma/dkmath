@@ -1807,6 +1807,23 @@ contrapositive helper:
 petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
 ```
 
+For outer addresses, the compatibility side can now be supplied by a value
+determination condition:
+
+```text
+qOf i = qOf j -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
 ### Step 7: Refactor imports gradually
 
 Status:
