@@ -262,6 +262,59 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_injOn
       hinj hcarrier)
 
 /--
+Pairwise distinct Petal prime-channel labels on the same GN surface supply an
+Erdos multiplicity budget against that GN surface.
+
+This is the duplicate-free vocabulary version of
+`petalPrimeChannelFamily_multiplicityBudget_GN_of_injOn`.  It is the form that
+an address/noncollision layer should be able to target first.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_pairwiseDistinct
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hdistinct :
+      DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_injOn
+    I d x u qOf hGN0
+    (DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn
+      I qOf hdistinct)
+    hcarrier
+
+/--
+Pairwise distinct Petal prime-channel labels on the same GN surface give an
+Erdos sub-probability provider.
+
+This is the current address-facing theorem: once Petal geometry can prove
+pairwise distinct prime labels, the log-capacity bridge is available.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hGN : 1 < GN d x u)
+    (hdistinct :
+      DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_injOn
+    I d x u qOf hGN
+    (DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn
+      I qOf hdistinct)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -319,6 +372,24 @@ theorem petalNoLiftPrimeChannel_padicValNat_GN_eq_one
     intro htwo
     exact h.2 ((padicValNat_dvd_iff_le hGN0).mpr htwo)
   omega
+
+/--
+A no-lift Petal channel family has exact one-slot valuation at every selected
+label.
+
+This theorem does not assert distinctness of the labels.  If two indices choose
+the same prime label, they read the same one-slot valuation.
+-/
+theorem petalNoLiftPrimeChannelFamily_padicValNat_GN_eq_one
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (qOf : ι → ℕ)
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    ∀ i, i ∈ I → padicValNat (qOf i) (GN d x u) = 1 := by
+  intro i hi
+  exact petalNoLiftPrimeChannel_padicValNat_GN_eq_one (hcarrier i hi)
 
 /--
 A single Petal prime channel fits into the Erdos multiplicity budget of its own

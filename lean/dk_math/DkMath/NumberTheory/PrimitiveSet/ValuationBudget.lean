@@ -68,6 +68,23 @@ theorem natBaseMultiplicityBudgetOn_iff
   Iff.rfl
 
 /--
+Pairwise distinct selected bases are injective on the selected finite index.
+
+This is the conversion layer between the older duplicate-free vocabulary
+`NatPairwiseDistinctOn` and the newer multiplicity-budget theorem that expects
+`Set.InjOn`.
+-/
+theorem natPairwiseDistinctOn_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hdistinct : NatPairwiseDistinctOn I pOf) :
+    Set.InjOn pOf ↑I := by
+  intro i hi j hj hij_eq
+  by_contra hij
+  exact (hdistinct i hi j hj hij) hij_eq
+
+/--
 Injective selected bases give a multiplicity budget when every selected base
 divides `n`.
 
@@ -113,6 +130,26 @@ theorem natBaseMultiplicityBudgetOn_of_injOn_of_dvd
       intro i hiI hip
       exact hex ⟨i, hiI, hip⟩
     simp [hfilter_empty]
+
+/--
+Pairwise distinct selected bases give a multiplicity budget when every selected
+base divides `n`.
+
+This is the duplicate-free form of
+`natBaseMultiplicityBudgetOn_of_injOn_of_dvd`.
+-/
+theorem natBaseMultiplicityBudgetOn_of_pairwiseDistinct_of_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn0 : n ≠ 0)
+    (hdistinct : NatPairwiseDistinctOn I pOf)
+    (hdvd : ∀ i, i ∈ I → pOf i ∣ n) :
+    NatBaseMultiplicityBudgetOn I pOf n :=
+  natBaseMultiplicityBudgetOn_of_injOn_of_dvd I pOf n hn0
+    (natPairwiseDistinctOn_injOn I pOf hdistinct)
+    hdvd
 
 /--
 For prime-valued selected bases, the exponent of a prime `p` in the selected

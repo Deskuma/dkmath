@@ -21,6 +21,7 @@ import DkMath.Petal.BoundaryD3
 import DkMath.Petal.EisensteinBridge
 import DkMath.Petal.ZsigmondyD3Bridge
 import DkMath.Petal.PrimitiveD3ValuationBridge
+import DkMath.Petal.ErdosBridge
 
 #print "file: DkMath.Petal"
 
@@ -44,6 +45,7 @@ basic forms / relative polygon vocabulary
   -> shifted Eisenstein norm bridge
   -> Zsigmondy d = 3 primitive-divisor bridge
   -> squarefree GN3 valuation bridge
+  -> Erdos log-capacity bridge from GN carrier channels
 ```
 
 This is not a claim that every import is logically minimal.  Some files still
