@@ -378,10 +378,19 @@ Implemented theorem set:
 petalCarrierLabelSupport
 petalCarrierLabelMapData_labelSupport_prime_dvd_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalCarrierLabelMapData_labelSupport_card_eq
+petalNoLiftCarrierLabelMapData_labelSupport_card_eq
+petal_two_pow_card_le_prod_of_two_le
+petalCarrierLabelMapData_two_pow_card_le_labelSupport_prod
+petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod
 petalCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
 petalCarrierLabelMapData_labelSupport_prod_le_rad_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalCarrierLabelMapData_two_pow_card_le_rad_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
 ```
 
 The bridge reads Petal carrier-label data as ABC finite support:
@@ -389,8 +398,25 @@ The bridge reads Petal carrier-label data as ABC finite support:
 ```text
 Petal carrier labels on GN
   -> finite support of prime divisors of GN
+  -> label noncollision preserves selected cardinality
+  -> 2^(selected channel count) <= product of label support
   -> supportMass/rad lower bound
 ```
 
 This is intentionally separate from NoLift.  ABC support/rad consumes prime
 support; NoLift is kept for p-adic valuation obstruction.
+
+The second checkpoint makes the bridge count-facing:
+
+```text
+PetalCarrierLabelMapData on I
+  -> card(labelSupport) = card(I)
+  -> every label prime has 2 <= q
+  -> 2^card(I) <= product(labelSupport)
+  -> 2^card(I) <= supportMass(GN d x u)
+  -> 2^card(I) <= rad(GN d x u)
+```
+
+This is the ABC analogue of the Erdos finite-family count spine.  It gives a
+small, reusable lower bound without requiring a concrete prime enumeration and
+without consuming NoLift.

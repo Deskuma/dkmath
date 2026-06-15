@@ -111,6 +111,8 @@ DkMath.Petal.EisensteinBridge
 DkMath.Petal.ZsigmondyD3Bridge
 DkMath.Petal.PrimitiveD3ValuationBridge
 DkMath.Petal.ErdosBridge
+DkMath.Petal.Obstruction
+DkMath.Petal.ABCBridge
 ```
 
 ### `DkMath.Petal.Basic`
@@ -709,8 +711,8 @@ FLT:
   next missing input: dedicated obstruction theorem
 
 ABC:
-  target: distinct one-slot channels become support/rad lower-bound material
-  next missing input: rad/supportMass bridge for label-noncolliding channels
+  current bridge: distinct carrier labels become supportMass/rad lower bounds
+  count form: selected channel count gives 2^card <= supportMass/rad
 ```
 
 Current research target:
@@ -917,8 +919,10 @@ reuse the same selected prime label at two distinct indices.
 ```text
 PetalCarrierLabelMapData
   -> label support primes divide GN
+  -> label support cardinality = selected index cardinality
   -> product of label support <= supportMass GN
   -> product of label support <= rad GN
+  -> 2^(selected index count) <= supportMass/rad GN
 ```
 
 Core theorem names:
@@ -927,10 +931,19 @@ Core theorem names:
 petalCarrierLabelSupport
 petalCarrierLabelMapData_labelSupport_prime_dvd_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalCarrierLabelMapData_labelSupport_card_eq
+petalNoLiftCarrierLabelMapData_labelSupport_card_eq
+petal_two_pow_card_le_prod_of_two_le
+petalCarrierLabelMapData_two_pow_card_le_labelSupport_prod
+petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod
 petalCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
 petalCarrierLabelMapData_labelSupport_prod_le_rad_GN
 petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalCarrierLabelMapData_two_pow_card_le_rad_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
 ```
 
 NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
