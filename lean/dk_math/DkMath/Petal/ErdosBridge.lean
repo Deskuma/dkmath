@@ -673,6 +673,116 @@ theorem zsigmondyPrimitivePrimeDivisor_natPrimeValuedOn
     (hprim i hi) (hd i hi) (hd1 i hi) (hab_lt i hi)
 
 /--
+PrimitiveBeam family constructor for `PetalCarrierLabelMapData` in body
+coordinates.
+
+This is the first practical constructor for the carrier-label data layer:
+primitive witnesses for `(x + u)^d - u^d` supply actual Petal prime channels
+on `GN d x u`; the caller supplies the finite-address validity and label
+recovery conditions.
+-/
+theorem petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    PetalCarrierLabelMapData I d x u mOf qOf :=
+  ⟨hm, hminj, hlabel,
+    fun i hi =>
+      anchoredGNCarrier_of_bodyPrimitivePrimeFactor
+        (hprim i hi) hd hd1⟩
+
+/--
+PrimitiveBeam family constructor for no-lift carrier-label data in body
+coordinates.
+
+The primitive witnesses supply the GN carriers; the explicit local no-lift
+hypothesis supplies the one-slot strengthening.
+-/
+theorem petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d)
+    (hNoLift : ∀ i, i ∈ I → ¬ (qOf i) ^ 2 ∣ GN d x u) :
+    PetalNoLiftCarrierLabelMapData I d x u mOf qOf :=
+  ⟨hm, hminj, hlabel,
+    fun i hi =>
+      ⟨anchoredGNCarrier_of_bodyPrimitivePrimeFactor
+          (hprim i hi) hd hd1,
+        hNoLift i hi⟩⟩
+
+/--
+Zsigmondy primitive-divisor family constructor for `PetalCarrierLabelMapData`.
+
+This is the non-body-coordinate constructor: primitive divisors of
+`a^d - b^d` supply Petal prime channels on `GN d (a - b) b`.
+-/
+theorem petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    PetalCarrierLabelMapData I d (a - b) b mOf qOf :=
+  ⟨hm, hminj, hlabel,
+    fun i hi =>
+      zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+        (hprim i hi) hd hd1 hab_lt⟩
+
+/--
+Zsigmondy primitive-divisor family constructor for no-lift carrier-label data.
+
+Zsigmondy supplies the carrier; local no-lift remains an explicit additional
+hypothesis.
+-/
+theorem petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i))
+    (hNoLift : ∀ i, i ∈ I → ¬ (qOf i) ^ 2 ∣ GN d (a - b) b) :
+    PetalNoLiftCarrierLabelMapData I d (a - b) b mOf qOf :=
+  ⟨hm, hminj, hlabel,
+    fun i hi =>
+      ⟨zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
+          (hprim i hi) hd hd1 hab_lt,
+        hNoLift i hi⟩⟩
+
+/--
 A finite family of Petal prime channels supplies the real/log nonnegativity
 input for the Erdos log-capacity route.
 -/

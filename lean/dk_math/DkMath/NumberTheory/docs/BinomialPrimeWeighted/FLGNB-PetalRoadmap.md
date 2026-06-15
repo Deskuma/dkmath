@@ -1898,6 +1898,18 @@ This is the structure/predicate precursor to `carrierAnchorOf(m)`: it records
 finite-family carrier assignments and their recovery conditions before
 requiring a canonical choice function.
 
+Primitive/Zsigmondy family constructors now feed this carrier-label data layer:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+The no-lift constructors keep local no-lift as an explicit hypothesis.
+Primitive/Zsigmondy witnesses supply carrier location, not automatic no-lift.
+
 ### Step 7: Refactor imports gradually
 
 Status:

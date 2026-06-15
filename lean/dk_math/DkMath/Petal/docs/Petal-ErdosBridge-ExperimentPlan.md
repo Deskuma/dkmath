@@ -689,5 +689,18 @@ This is the safe precursor to `carrierAnchorOf(m)`.  It lets experiments supply
 finite-family carrier labels, recovery, and GN divisibility/no-lift facts first;
 canonical choice can be added later if uniqueness becomes available.
 
+PrimitiveBeam and Zsigmondy family constructors are now available:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These constructors are the first practical supply route into
+`PetalCarrierLabelMapData`.  The no-lift versions still require explicit local
+no-lift hypotheses; they do not claim Zsigmondy alone implies no-lift.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

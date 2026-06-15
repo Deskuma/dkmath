@@ -843,6 +843,19 @@ This is the predicate/structure version of the future `carrierAnchorOf` route:
 it records valid values, value injectivity, label recovery, and actual GN
 carrier facts without forcing a uniqueness or choice theorem too early.
 
+Primitive/Zsigmondy family constructors now supply this data layer:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+The no-lift constructors deliberately keep local no-lift as an explicit
+hypothesis.  Primitive/Zsigmondy witnesses supply GN carriers, not automatic
+no-lift.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete
