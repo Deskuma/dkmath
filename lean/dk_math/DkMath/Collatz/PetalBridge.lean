@@ -33,6 +33,16 @@ shape of a merge, fold, or cycle candidate.
 namespace DkMath.Collatz
 
 /--
+The finite observation window for the first `k` accelerated Collatz states.
+
+This is intentionally just `Finset.range k`; the point is to give the Collatz
+side a named window that can later carry address, height, or statistical
+observations.
+-/
+def OrbitWindow (_n : OddNat) (k : ℕ) : Finset ℕ :=
+  Finset.range k
+
+/--
 The natural-number label of the `i`-th accelerated Collatz odd state.
 
 This is the Collatz-facing candidate for a Petal `qOf i` label.  It deliberately
@@ -50,6 +60,28 @@ different in-range times have different observed odd states.
 -/
 def OddOrbitLabelsPairwiseSeparated (n : OddNat) (k : ℕ) : Prop :=
   ∀ i, i < k → ∀ j, j < k → i ≠ j → oddOrbitLabel n i ≠ oddOrbitLabel n j
+
+/--
+Window-level spelling of pairwise separation for accelerated Collatz labels.
+-/
+def OrbitWindowSeparated (n : OddNat) (k : ℕ) : Prop :=
+  OddOrbitLabelsPairwiseSeparated n k
+
+/--
+Window-level collision: two distinct in-window times have the same accelerated
+odd-state label.
+
+For Petal/ABC this blocks independent range counting.  For Collatz dynamics it
+is the observable merge/fold/cycle signal.
+-/
+def OrbitWindowCollision (n : OddNat) (k : ℕ) : Prop :=
+  ∃ i j, i < k ∧ j < k ∧ i ≠ j ∧ oddOrbitLabel n i = oddOrbitLabel n j
+
+/--
+The named Collatz observation window is definitionally the range window.
+-/
+theorem orbitWindow_eq_range (n : OddNat) (k : ℕ) :
+    OrbitWindow n k = Finset.range k := rfl
 
 /--
 Pairwise separated Collatz orbit labels give the Petal range-label injectivity
@@ -105,5 +137,56 @@ theorem same_iterateT_of_oddOrbitLabel_collision
     (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
     iterateT i n = iterateT j n :=
   iterateT_eq_of_oddOrbitLabel_eq hlabel
+
+/--
+A window collision identifies the two accelerated Collatz states at the
+colliding times.
+-/
+theorem exists_same_iterateT_of_orbitWindowCollision
+    {n : OddNat} {k : ℕ}
+    (hcollision : OrbitWindowCollision n k) :
+    ∃ i j, i < k ∧ j < k ∧ i ≠ j ∧ iterateT i n = iterateT j n := by
+  rcases hcollision with ⟨i, j, hi, hj, hne, hlabel⟩
+  exact ⟨i, j, hi, hj, hne, iterateT_eq_of_oddOrbitLabel_eq hlabel⟩
+
+/--
+Separated windows have no collision.
+-/
+theorem not_orbitWindowCollision_of_separated
+    {n : OddNat} {k : ℕ}
+    (hsep : OrbitWindowSeparated n k) :
+    ¬ OrbitWindowCollision n k := by
+  intro hcollision
+  rcases hcollision with ⟨i, j, hi, hj, hne, hlabel⟩
+  exact (hsep i hi j hj hne) hlabel
+
+/--
+A collision closes the separated-window route as `False`.
+-/
+theorem orbitWindowSeparated_contradiction_of_collision
+    {n : OddNat} {k : ℕ}
+    (hsep : OrbitWindowSeparated n k)
+    (hcollision : OrbitWindowCollision n k) :
+    False :=
+  not_orbitWindowCollision_of_separated hsep hcollision
+
+/--
+Finite observation split: an accelerated Collatz window is either pairwise
+separated, or it contains a collision.
+
+This is not a convergence statement.  It only names the two basic observation
+modes for a finite window.
+-/
+theorem orbitWindowSeparated_or_collision
+    (n : OddNat) (k : ℕ) :
+    OrbitWindowSeparated n k ∨ OrbitWindowCollision n k := by
+  classical
+  by_cases hsep : OrbitWindowSeparated n k
+  · exact Or.inl hsep
+  · right
+    unfold OrbitWindowSeparated OddOrbitLabelsPairwiseSeparated at hsep
+    push Not at hsep
+    rcases hsep with ⟨i, hi, j, hj, hne, hlabel⟩
+    exact ⟨i, j, hi, hj, hne, hlabel⟩
 
 end DkMath.Collatz

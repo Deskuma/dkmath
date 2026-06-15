@@ -74,23 +74,32 @@ DkMath.Collatz.PetalBridge
 It defines:
 
 ```lean
+OrbitWindow
 oddOrbitLabel
 OddOrbitLabelsPairwiseSeparated
+OrbitWindowSeparated
+OrbitWindowCollision
 ```
 
 where:
 
 ```text
+OrbitWindow n k = Finset.range k
 oddOrbitLabel n i = the natural value of iterateT i n
 ```
 
 The first theorem set is deliberately thin:
 
 ```lean
+orbitWindow_eq_range
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
 oddOrbitLabelsPairwiseSeparated_contradiction_of_same_label_ne_index
 same_iterateT_of_oddOrbitLabel_collision
+exists_same_iterateT_of_orbitWindowCollision
+not_orbitWindowCollision_of_separated
+orbitWindowSeparated_contradiction_of_collision
+orbitWindowSeparated_or_collision
 ```
 
 ## Interpretation
@@ -139,6 +148,18 @@ Collatz orbit segment
   -> either separated segment or collision obstruction
 ```
 
+The current window-level split is:
+
+```text
+OrbitWindowSeparated n k
+or
+OrbitWindowCollision n k
+```
+
+This is only a finite observation split.  It does not prove that a Collatz
+orbit converges or cycles; it merely fixes the two observation modes available
+inside a chosen finite window.
+
 This gives a clean place to attach future hypotheses:
 
 ```text
@@ -153,9 +174,9 @@ orbit collision implies a specific fold/cycle condition
 The next safe steps are:
 
 ```text
-1. Define a Collatz orbit segment as a finite range family.
-2. Add a collision-vs-separated predicate split.
-3. Connect v2_shift_invariant to a Petal address/residue reading.
+1. Connect v2_shift_invariant to a Petal address/residue reading.
+2. Add a window occupation/address transition layer.
+3. Test whether an external label transform can turn orbit labels into carrier labels.
 4. Only after that, test whether Collatz labels can feed ABC support/rad.
 ```
 
