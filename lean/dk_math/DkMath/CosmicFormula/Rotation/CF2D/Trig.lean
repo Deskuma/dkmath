@@ -59,6 +59,11 @@ theorem kernel_zero (F : KernelFamily T R) :
     ((F.kernel 0 : UnitKernel R) : Vec R) = Vec.one R :=
   F.map_zero
 
+theorem kernel_zero_one (F : KernelFamily T R) :
+    F.kernel 0 = UnitKernel.one R := by
+  apply UnitKernel.ext
+  exact F.kernel_zero
+
 @[simp]
 theorem C_zero (F : KernelFamily T R) : F.C 0 = 1 := by
   have h := congrArg Vec.core F.kernel_zero
@@ -106,6 +111,11 @@ theorem kernel_add (F : KernelFamily T R) (t s : T) :
       = Vec.star (((F.kernel t : UnitKernel R) : Vec R))
           (((F.kernel s : UnitKernel R) : Vec R)) :=
   F.map_add t s
+
+theorem kernel_add_star (F : KernelFamily T R) (t s : T) :
+    F.kernel (t + s) = UnitKernel.star (F.kernel t) (F.kernel s) := by
+  apply UnitKernel.ext
+  simpa using F.kernel_add t s
 
 /--
 Core addition law:

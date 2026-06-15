@@ -122,6 +122,15 @@ theorem q2_starPlusMinus [CommRing R] (r z : Vec R) :
           simp [q2, starPlusMinus]
           ring
 
+theorem starPlusMinus_eq_star_conj_left [CommRing R] (r z : Vec R) :
+    starPlusMinus r z = star (conj r) z := by
+  cases r with
+  | mk a b =>
+      cases z with
+      | mk x y =>
+          simp [starPlusMinus, star, conj]
+          ring
+
 end Vec
 
 end CF2D

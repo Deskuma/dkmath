@@ -48,6 +48,18 @@ This is proved by polynomial expansion with `ring`, over an arbitrary
 commutative ring.  No trigonometric functions, circle facts, angle facts, or
 metric-space facts are used.
 
+The basic two-component conjugation is:
+
+```lean
+Vec.conj z = (z.core, -z.beam)
+
+Vec.q2_conj :
+  Vec.q2 (Vec.conj z) = Vec.q2 z
+```
+
+It is used to identify the second preserving sign pattern as the ordinary
+`Vec.star` action by a conjugated left kernel.
+
 ## Unit Kernels and Rotation Reading
 
 `UnitKernel R` packages a vector whose square mass is `1`:
@@ -143,6 +155,12 @@ KernelFamily.S F t
 The formal identities are:
 
 ```lean
+KernelFamily.kernel_zero_one :
+  F.kernel 0 = UnitKernel.one R
+
+KernelFamily.kernel_add_star :
+  F.kernel (t + s) = UnitKernel.star (F.kernel t) (F.kernel s)
+
 KernelFamily.C_sq_add_S_sq :
   F.C t ^ 2 + F.S t ^ 2 = 1
 
@@ -235,11 +253,16 @@ Vec.starPlusMinus (a,b) (x,y) = (a*x + b*y, a*y - b*x)
 
 Vec.q2_starPlusMinus :
   Vec.q2 (Vec.starPlusMinus r z) = Vec.q2 r * Vec.q2 z
+
+Vec.starPlusMinus_eq_star_conj_left :
+  Vec.starPlusMinus r z = Vec.star (Vec.conj r) z
 ```
 
 This separates the preservation kernels from superficially similar
 non-preserving kernels.  The cancellation in `Vec.q2_star` and
 `Vec.q2_starPlusMinus` depends on opposite signs in the two beam cross terms.
+The plus-minus preserving pattern is not treated as a second primary product:
+it is the usual `Vec.star` action by the conjugated left kernel.
 
 ## Additive Group Layer
 

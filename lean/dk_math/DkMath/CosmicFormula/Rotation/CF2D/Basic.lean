@@ -136,6 +136,21 @@ theorem star_comm [CommRing R] (r z : Vec R) : star r z = star z r := by
           simp [star]
           constructor <;> ring
 
+/-- Conjugation flips the beam coordinate and keeps the core coordinate. -/
+def conj [Neg R] (z : Vec R) : Vec R :=
+  ⟨z.core, -z.beam⟩
+
+@[simp]
+theorem conj_core [Neg R] (z : Vec R) : (conj z).core = z.core := rfl
+
+@[simp]
+theorem conj_beam [Neg R] (z : Vec R) : (conj z).beam = -z.beam := rfl
+
+theorem q2_conj [CommRing R] (z : Vec R) : q2 (conj z) = q2 z := by
+  cases z with
+  | mk x y =>
+      simp [q2, conj]
+
 end Vec
 
 /-- A map preserves the two-component square mass. -/
