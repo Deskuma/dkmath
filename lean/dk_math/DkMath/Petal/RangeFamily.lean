@@ -69,6 +69,25 @@ theorem rangeLabel_injOn_of_pairwise_ne
   exact hneq i (by simpa using hi) j (by simpa using hj) hij hq
 
 /--
+Range pairwise label separation breaks as soon as two distinct in-range indices
+reuse the same label.
+
+This is the `False` observation form of `rangeLabel_injOn_of_pairwise_ne`.
+It is useful when testing a proposed `qOf`: finding one duplicate label at
+different indices identifies exactly why the range-family route cannot supply
+independent carrier labels.
+-/
+theorem rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
+    {k : ℕ} {qOf : ℕ → ℕ} {i j : ℕ}
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j)
+    (hi : i < k) (hj : j < k)
+    (hlabel : qOf i = qOf j)
+    (hne : i ≠ j) :
+    False :=
+  (hneq i hi j hj hne) hlabel
+
+/--
 Body-coordinate range-family constructor for `PetalCarrierLabelMapData`.
 
 The concrete address/value choice is:

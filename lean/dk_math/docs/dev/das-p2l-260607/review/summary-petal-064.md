@@ -499,6 +499,7 @@ Implemented theorem set:
 ```lean
 rangeSuccValue_injOn
 rangeLabel_injOn_of_pairwise_ne
+rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
 petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
 petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
 petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
@@ -537,3 +538,20 @@ i < k, j < k, i != j -> qOf i != qOf j
 
 This is converted into `Set.InjOn qOf ↑(Finset.range k)`, so concrete
 experiments can avoid constructing the subtype-level injectivity proof by hand.
+
+False/obstruction checkpoint:
+
+```lean
+rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
+```
+
+This records the failure mode of the range pairwise route:
+
+```text
+pairwise label separation
+same label at two distinct in-range indices
+  -> False
+```
+
+The theorem does not prove that any proposed family is good.  It proves exactly
+where a candidate `qOf` fails when a duplicate label is found.

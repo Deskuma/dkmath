@@ -997,6 +997,7 @@ Important names:
 ```text
 rangeSuccValue_injOn
 rangeLabel_injOn_of_pairwise_ne
+rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
 petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
 petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
 petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
@@ -1025,6 +1026,13 @@ i < k, j < k, i != j -> qOf i != qOf j
 
 The helper `rangeLabel_injOn_of_pairwise_ne` converts this to the `Set.InjOn`
 hypothesis required by the core constructors.
+
+The obstruction companion
+`rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index` records the
+negative test: if two distinct in-range indices reuse the same label, the
+pairwise range route closes as `False`.  This is intentionally small; it is a
+diagnostic tool for deciding whether a proposed `qOf` can feed the independent
+carrier family.
 
 ## What This Does Not Claim Yet
 
