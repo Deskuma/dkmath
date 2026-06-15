@@ -856,6 +856,20 @@ The no-lift constructors deliberately keep local no-lift as an explicit
 hypothesis.  Primitive/Zsigmondy witnesses supply GN carriers, not automatic
 no-lift.
 
+Direct log-capacity wrappers now compose these constructors with the finite GN
+route:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These wrappers are the current public route from PrimitiveBeam/Zsigmondy witness
+families to the finite Erdos log-capacity provider.  The no-lift wrappers still
+require explicit local no-lift hypotheses.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

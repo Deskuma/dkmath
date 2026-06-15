@@ -702,5 +702,19 @@ These constructors are the first practical supply route into
 `PetalCarrierLabelMapData`.  The no-lift versions still require explicit local
 no-lift hypotheses; they do not claim Zsigmondy alone implies no-lift.
 
+The constructor layer now has direct log-capacity wrappers:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These are composition theorems: PrimitiveBeam/Zsigmondy family witnesses produce
+carrier-label data, and the existing finite GN route turns that data into a
+log-capacity sub-probability statement.  No-lift remains an explicit local
+condition.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

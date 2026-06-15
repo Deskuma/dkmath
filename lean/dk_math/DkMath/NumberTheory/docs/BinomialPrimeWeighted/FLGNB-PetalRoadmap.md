@@ -1910,6 +1910,19 @@ petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
 The no-lift constructors keep local no-lift as an explicit hypothesis.
 Primitive/Zsigmondy witnesses supply carrier location, not automatic no-lift.
 
+Direct log-capacity wrappers now close the constructor-to-provider route:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+This is the current checkpoint before returning to the main Zsigmondy line:
+PrimitiveBeam/Zsigmondy witness families can be fed directly into the finite GN
+log-capacity route, while no-lift remains a separate local contract.
+
 ### Step 7: Refactor imports gradually
 
 Status:

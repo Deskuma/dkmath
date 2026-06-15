@@ -1518,6 +1518,148 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabel
     hdata.carrier
 
 /--
+Direct PrimitiveBeam-to-log-capacity wrapper in body coordinates.
+
+This composes the PrimitiveBeam family constructor for
+`PetalCarrierLabelMapData` with the packaged finite GN log-capacity route.
+The address/recovery hypotheses remain explicit.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+          I d x u mOf qOf hd hd1 hm hminj hlabel hprim).carrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+    I d x u n lap mOf qOf hGN
+    (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+      I d x u mOf qOf hd hd1 hm hminj hlabel hprim)
+
+/--
+Direct PrimitiveBeam-to-log-capacity wrapper with local no-lift.
+
+PrimitiveBeam witnesses supply the carrier location.  The no-lift condition is
+kept as an explicit hypothesis and then fed through
+`PetalNoLiftCarrierLabelMapData`.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d)
+    (hNoLift : ∀ i, i ∈ I → ¬ (qOf i) ^ 2 ∣ GN d x u) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi =>
+          ((petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+              I d x u mOf qOf hd hd1 hm hminj hlabel hprim hNoLift).carrier
+            i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+    I d x u n lap mOf qOf hGN
+    (petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+      I d x u mOf qOf hd hd1 hm hminj hlabel hprim hNoLift)
+
+/--
+Direct Zsigmondy-to-log-capacity wrapper on the GN surface
+`GN d (a - b) b`.
+
+Zsigmondy primitive divisors supply Petal prime carriers after the coordinate
+reading `x = a - b`, `u = b`; address/recovery hypotheses are still supplied by
+the caller.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d (a - b) b)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d (a - b) b)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => a - b) (fun _ => b) qOf
+        (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+          I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim).carrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+    I d (a - b) b n lap mOf qOf hGN
+    (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+      I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim)
+
+/--
+Direct Zsigmondy-to-log-capacity wrapper with local no-lift.
+
+This is the no-lift Zsigmondy family route into the finite GN log-capacity
+provider.  It intentionally keeps
+`¬ (qOf i)^2 ∣ GN d (a - b) b` as an explicit hypothesis; Zsigmondy supplies the
+carrier location, not automatic one-slot multiplicity.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d (a - b) b)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i))
+    (hNoLift : ∀ i, i ∈ I → ¬ (qOf i) ^ 2 ∣ GN d (a - b) b) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d (a - b) b)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => a - b) (fun _ => b) qOf
+        (fun i hi =>
+          ((petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+              I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim hNoLift).carrier
+            i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+    I d (a - b) b n lap mOf qOf hGN
+    (petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+      I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim hNoLift)
+
+/--
 Value-map form of the outer-address no-lift GN log-capacity route.
 
 This is the no-lift counterpart of
