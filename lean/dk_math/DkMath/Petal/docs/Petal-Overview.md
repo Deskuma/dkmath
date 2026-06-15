@@ -996,12 +996,17 @@ Important names:
 
 ```text
 rangeSuccValue_injOn
+rangeLabel_injOn_of_pairwise_ne
 petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
 petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
 petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
 petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
 petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
 ```
 
 This is the first endpoint that reads directly as:
@@ -1010,6 +1015,16 @@ This is the first endpoint that reads directly as:
 k range-indexed primitive carriers
   -> 2^k <= supportMass/rad(GN)
 ```
+
+The `_pairwise` endpoints let experiments provide label separation in the
+natural indexed form:
+
+```text
+i < k, j < k, i != j -> qOf i != qOf j
+```
+
+The helper `rangeLabel_injOn_of_pairwise_ne` converts this to the `Set.InjOn`
+hypothesis required by the core constructors.
 
 ## What This Does Not Claim Yet
 

@@ -47,6 +47,28 @@ theorem rangeSuccValue_injOn (k : ℕ) :
   exact Nat.succ.inj h
 
 /--
+Pairwise label noncollision on natural range indices gives label injectivity on
+`Finset.range k`.
+
+This is a caller-facing helper for concrete experiments: it is often easier to
+prove
+
+```text
+i < k, j < k, i != j -> qOf i != qOf j
+```
+
+than to construct `Set.InjOn qOf ↑(Finset.range k)` directly.
+-/
+theorem rangeLabel_injOn_of_pairwise_ne
+    {k : ℕ} {qOf : ℕ → ℕ}
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j) :
+    Set.InjOn qOf ↑(Finset.range k) := by
+  intro i hi j hj hq
+  by_contra hij
+  exact hneq i (by simpa using hi) j (by simpa using hj) hij hq
+
+/--
 Body-coordinate range-family constructor for `PetalCarrierLabelMapData`.
 
 The concrete address/value choice is:
@@ -152,6 +174,50 @@ theorem petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
         k d x u qOf hd hd1 hqinj hprim)
 
 /--
+Pairwise-noncollision version of
+`petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family`.
+
+The caller may provide label separation as
+`i < k -> j < k -> i != j -> qOf i != qOf j`; this theorem converts it to the
+`Set.InjOn` hypothesis required by the core range-family constructor.
+-/
+theorem petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_pairwise
+    (k d x u : ℕ)
+    (qOf : ℕ → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j)
+    (hprim :
+      ∀ i, i ∈ Finset.range k →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    2 ^ k ≤ DkMath.ABC.supportMass (GN d x u) :=
+  petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+    k d x u qOf hGN0 hd hd1
+    (rangeLabel_injOn_of_pairwise_ne hneq) hprim
+
+/--
+Pairwise-noncollision version of
+`petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family`.
+-/
+theorem petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_pairwise
+    (k d x u : ℕ)
+    (qOf : ℕ → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j)
+    (hprim :
+      ∀ i, i ∈ Finset.range k →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d x u) :=
+  petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+    k d x u qOf hGN0 hd hd1
+    (rangeLabel_injOn_of_pairwise_ne hneq) hprim
+
+/--
 Range-indexed Zsigmondy family gives the concrete ABC support-mass lower bound
 `2^k <= supportMass(GN d (a - b) b)`.
 -/
@@ -190,6 +256,44 @@ theorem petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
       (Finset.range k) hGN0
       (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
         k a b d qOf hd hd1 hab_lt hqinj hprim)
+
+/--
+Pairwise-noncollision version of
+`petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family`.
+-/
+theorem petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+    (k a b d : ℕ)
+    (qOf : ℕ → ℕ)
+    (hGN0 : GN d (a - b) b ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j)
+    (hprim :
+      ∀ i, i ∈ Finset.range k →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    2 ^ k ≤ DkMath.ABC.supportMass (GN d (a - b) b) :=
+  petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    k a b d qOf hGN0 hd hd1 hab_lt
+    (rangeLabel_injOn_of_pairwise_ne hneq) hprim
+
+/--
+Pairwise-noncollision version of
+`petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family`.
+-/
+theorem petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+    (k a b d : ℕ)
+    (qOf : ℕ → ℕ)
+    (hGN0 : GN d (a - b) b ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hneq :
+      ∀ i, i < k → ∀ j, j < k → i ≠ j → qOf i ≠ qOf j)
+    (hprim :
+      ∀ i, i ∈ Finset.range k →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d (a - b) b) :=
+  petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    k a b d qOf hGN0 hd hd1 hab_lt
+    (rangeLabel_injOn_of_pairwise_ne hneq) hprim
 
 end Petal
 end DkMath

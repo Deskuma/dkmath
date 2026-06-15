@@ -498,12 +498,17 @@ Implemented theorem set:
 
 ```lean
 rangeSuccValue_injOn
+rangeLabel_injOn_of_pairwise_ne
 petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
 petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
 petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
 petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
 petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
 ```
 
 The construction still leaves the serious arithmetic hypotheses explicit:
@@ -521,3 +526,14 @@ k range-indexed primitive carriers
   -> 2^k <= supportMass(GN)
   -> 2^k <= rad(GN)
 ```
+
+Follow-up checkpoint:
+
+The range layer now also accepts pairwise label noncollision:
+
+```text
+i < k, j < k, i != j -> qOf i != qOf j
+```
+
+This is converted into `Set.InjOn qOf ↑(Finset.range k)`, so concrete
+experiments can avoid constructing the subtype-level injectivity proof by hand.
