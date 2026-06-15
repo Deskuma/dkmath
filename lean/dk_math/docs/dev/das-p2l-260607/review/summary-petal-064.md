@@ -391,10 +391,16 @@ petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalCarrierLabelMapData_two_pow_card_le_rad_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
+petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
 petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
 petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
 petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
+petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
 ```
 
 The bridge reads Petal carrier-label data as ABC finite support:
@@ -440,3 +446,15 @@ Zsigmondy primitive-divisor family
 These are thin wrapper theorems.  They do not add arithmetic strength beyond
 the constructor route; they make the ABC negotiation callable directly from the
 two main primitive-prime provider families.
+
+The fourth checkpoint adds named-cardinality endpoints:
+
+```text
+I.card = k
+  -> 2^k <= supportMass(GN)
+  -> 2^k <= rad(GN)
+```
+
+This is the first small step toward concrete family constructions.  The
+construction-specific proof of `I.card = k` remains outside `ABCBridge`; this
+file now has the API needed to consume it immediately.

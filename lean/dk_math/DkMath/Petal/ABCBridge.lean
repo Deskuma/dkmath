@@ -310,6 +310,76 @@ theorem petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
     (petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN I hGN0 hdata)
 
 /--
+Carrier-label map data gives an ABC support-mass lower bound for any named
+cardinality `k` of the selected family.
+
+This is a convenience form for callers that have already computed
+`I.card = k` from a concrete construction.
+-/
+theorem petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    {d x u k : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d x u ≠ 0)
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    2 ^ k ≤ DkMath.ABC.supportMass (GN d x u) := by
+  simpa [← hcard] using
+    petalCarrierLabelMapData_two_pow_card_le_supportMass_GN I hGN0 hdata
+
+/--
+Carrier-label map data gives an ABC radical lower bound for any named
+cardinality `k` of the selected family.
+-/
+theorem petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    {d x u k : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d x u ≠ 0)
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d x u) := by
+  simpa [← hcard] using
+    petalCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0 hdata
+
+/--
+No-lift carrier-label map data gives the same named-cardinality support-mass
+lower bound.
+
+NoLift is still not consumed by the ABC argument; this theorem exists so
+NoLift-family callers do not need to project back to the non-NoLift data layer.
+-/
+theorem petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    {d x u k : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d x u ≠ 0)
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    2 ^ k ≤ DkMath.ABC.supportMass (GN d x u) := by
+  simpa [← hcard] using
+    petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN I hGN0 hdata
+
+/--
+No-lift carrier-label map data gives the same named-cardinality radical lower
+bound.
+-/
+theorem petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    {d x u k : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d x u ≠ 0)
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d x u) := by
+  simpa [← hcard] using
+    petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0 hdata
+
+/--
 Direct PrimitiveBeam-to-ABC support-mass count lower bound in body coordinates.
 
 PrimitiveBeam witnesses supply the Petal carrier locations.  The address and
@@ -368,6 +438,35 @@ theorem petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
       I d x u mOf qOf hd hd1 hm hminj hlabel hprim)
 
 /--
+Named-cardinality PrimitiveBeam-to-ABC radical count lower bound in body
+coordinates.
+
+Use this form when a concrete family construction has already proved
+`I.card = k`.
+-/
+theorem petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ)
+    {k : ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d x u ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d x u) := by
+  simpa [← hcard] using
+    petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+      I d x u mOf qOf hGN0 hd hd1 hm hminj hlabel hprim
+
+/--
 Direct Zsigmondy-to-ABC support-mass count lower bound on the GN surface
 `GN d (a - b) b`.
 
@@ -422,6 +521,31 @@ theorem petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
   petalCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0
     (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
       I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim)
+
+/--
+Named-cardinality Zsigmondy-to-ABC radical count lower bound on the GN surface
+`GN d (a - b) b`.
+-/
+theorem petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (mOf qOf : ι → ℕ)
+    {k : ℕ}
+    (hcard : I.card = k)
+    (hGN0 : GN d (a - b) b ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    2 ^ k ≤ DkMath.ABC.rad (GN d (a - b) b) := by
+  simpa [← hcard] using
+    petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+      I a b d mOf qOf hGN0 hd hd1 hab_lt hm hminj hlabel hprim
 
 end Petal
 end DkMath
