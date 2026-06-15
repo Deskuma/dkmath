@@ -162,6 +162,15 @@ instance [Semiring R] : Coe (UnitKernel R) (Vec R) :=
 theorem coe_q2 [Semiring R] (r : UnitKernel R) : Vec.q2 (r : Vec R) = 1 :=
   r.q2_eq_one
 
+@[ext]
+theorem ext [Semiring R] {r s : UnitKernel R} (h : (r : Vec R) = (s : Vec R)) : r = s := by
+  cases r with
+  | mk rv hr =>
+      cases s with
+      | mk sv hs =>
+          cases h
+          rfl
+
 /-- The neutral unit kernel `(1,0)`. -/
 def one (R : Type u) [CommRing R] : UnitKernel R :=
   ⟨Vec.one R, by simp [Vec.q2, Vec.one]⟩
@@ -211,6 +220,17 @@ theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
 /-- The action of a unit kernel on a two-component state. -/
 def act [CommRing R] (r : UnitKernel R) (z : Vec R) : Vec R :=
   Vec.star (r : Vec R) z
+
+@[simp]
+theorem act_one [CommRing R] (z : Vec R) : act (one R) z = z := by
+  simp [act, one]
+
+theorem act_star [CommRing R] (r s : UnitKernel R) (z : Vec R) :
+    act (star r s) z = act r (act s z) := by
+  change Vec.star ((star r s : UnitKernel R) : Vec R) z
+      = Vec.star (r : Vec R) (Vec.star (s : Vec R) z)
+  rw [star_val]
+  exact Vec.star_assoc (r : Vec R) (s : Vec R) z
 
 @[simp]
 theorem act_core [CommRing R] (r : UnitKernel R) (z : Vec R) :

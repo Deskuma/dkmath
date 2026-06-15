@@ -83,6 +83,9 @@ UnitKernel.star r s
 UnitKernel.star_val :
   (UnitKernel.star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R)
 
+UnitKernel.ext :
+  (r : Vec R) = (s : Vec R) -> r = s
+
 UnitKernel.star_one :
   UnitKernel.star r (UnitKernel.one R) = r
 
@@ -95,10 +98,19 @@ UnitKernel.star_assoc :
 
 UnitKernel.star_comm :
   UnitKernel.star r s = UnitKernel.star s r
+
+UnitKernel.act_one :
+  UnitKernel.act (UnitKernel.one R) z = z
+
+UnitKernel.act_star :
+  UnitKernel.act (UnitKernel.star r s) z
+    = UnitKernel.act r (UnitKernel.act s z)
 ```
 
 These lemmas make the unit kernels available as the abstract rotation-kernel
 surface, while the underlying product remains the same `Vec.star` calculation.
+The `act_star` theorem is the action law: multiplying kernels and then acting
+is the same as acting successively.
 
 ## Level Sets
 
@@ -206,9 +218,28 @@ Vec.q2_badStarPlus_eq_q2_mul_add_residual :
     = Vec.q2 r * Vec.q2 z + 4 * r.core * r.beam * z.core * z.beam
 ```
 
-This separates the preservation kernel from a superficially similar but
-non-preserving kernel.  The cancellation in `Vec.q2_star` depends on the
-opposite signs in the two beam cross terms.
+The minus-minus variant leaves the opposite residual:
+
+```lean
+Vec.badStarMinus (a,b) (x,y) = (a*x - b*y, a*y - b*x)
+
+Vec.q2_badStarMinus_eq_q2_mul_sub_residual :
+  Vec.q2 (Vec.badStarMinus r z)
+    = Vec.q2 r * Vec.q2 z - 4 * r.core * r.beam * z.core * z.beam
+```
+
+The plus-minus variant preserves square mass:
+
+```lean
+Vec.starPlusMinus (a,b) (x,y) = (a*x + b*y, a*y - b*x)
+
+Vec.q2_starPlusMinus :
+  Vec.q2 (Vec.starPlusMinus r z) = Vec.q2 r * Vec.q2 z
+```
+
+This separates the preservation kernels from superficially similar
+non-preserving kernels.  The cancellation in `Vec.q2_star` and
+`Vec.q2_starPlusMinus` depends on opposite signs in the two beam cross terms.
 
 ## Additive Group Layer
 
