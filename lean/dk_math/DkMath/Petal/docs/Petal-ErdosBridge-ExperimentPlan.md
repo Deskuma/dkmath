@@ -652,5 +652,24 @@ This checks the value-map API without importing a prime enumeration or a choice
 function.  It still assumes the selected values are already valid
 PetalPrimeChannel / NoLift labels when the log-capacity theorem is applied.
 
+The next experiment uses Mathlib's standard prime enumeration through the
+Petal-facing alias `petalNthPrimeLabel`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This verifies the route for a genuine injective prime-valued label map.  The
+GN carrier and no-lift facts remain separate hypotheses.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

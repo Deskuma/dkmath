@@ -1862,6 +1862,25 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
 This is a control theorem for the wrapper.  It does not turn arbitrary Petal
 values into prime-channel labels.
 
+The standard prime-enumeration experiment is implemented through
+`petalNthPrimeLabel`, defined as a Petal-facing alias for `Nat.nth Nat.Prime`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This confirms that the route works with a genuine prime-valued injective label
+map.  It does not prove that the nth prime divides a GN surface.
+
 ### Step 7: Refactor imports gradually
 
 Status:

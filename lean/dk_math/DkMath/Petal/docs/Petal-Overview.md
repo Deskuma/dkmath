@@ -806,6 +806,25 @@ This is a toy control route.  It says that if the selected values themselves
 are already assumed to be prime-channel labels, then the outer-address
 noncollision machinery composes correctly.
 
+The standard prime-enumeration experiment is also implemented through
+`petalNthPrimeLabel`, a Petal-facing alias for `Nat.nth Nat.Prime`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This route supplies real prime labels and label recovery.  It still does not
+say that those primes divide the chosen GN surface.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

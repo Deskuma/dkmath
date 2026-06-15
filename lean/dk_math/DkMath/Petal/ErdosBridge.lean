@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Petal.Address
 import DkMath.Petal.BezoutBridge
 import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
+import Mathlib.NumberTheory.PrimeCounting
 
 #print "file: DkMath.Petal.ErdosBridge"
 
@@ -89,6 +90,16 @@ def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
   PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
 
 /--
+The standard Mathlib prime enumeration, exposed under Petal naming.
+
+This is an experimental label map for the outer-address route.  It supplies
+prime labels and injectivity, but it does not say that the chosen prime divides
+any particular GN surface.
+-/
+noncomputable def petalNthPrimeLabel (m : Nat) : Nat :=
+  Nat.nth Nat.Prime m
+
+/--
 Carrier-label noncollision for a finite Petal channel family.
 
 This is intentionally just the Petal-facing name for
@@ -157,6 +168,26 @@ theorem petalNoLiftPrimeChannel_noLift
     (h : PetalNoLiftPrimeChannel d x u q) :
     ¬ q ^ 2 ∣ GN d x u :=
   h.2
+
+/-- The Petal nth-prime label is prime. -/
+theorem petalNthPrimeLabel_prime
+    (m : Nat) :
+    Nat.Prime (petalNthPrimeLabel m) := by
+  unfold petalNthPrimeLabel
+  exact Nat.prime_nth_prime m
+
+/-- The Petal nth-prime label map is injective. -/
+theorem petalNthPrimeLabel_injective :
+    Function.Injective petalNthPrimeLabel := by
+  unfold petalNthPrimeLabel
+  exact Nat.nth_injective Nat.infinite_setOf_prime
+
+/-- Equal Petal nth-prime labels recover equal source values. -/
+theorem petalNthPrimeLabel_eq_imp_eq
+    {m n : Nat}
+    (h : petalNthPrimeLabel m = petalNthPrimeLabel n) :
+    m = n :=
+  petalNthPrimeLabel_injective h
 
 /--
 Unfold carrier-label noncollision to the underlying `PrimitiveSet`
@@ -395,6 +426,64 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_self
     I n lap mOf mOf id hm hminj
     (fun _ _ => rfl)
     (fun _ _ _ _ h => h)
+
+/--
+Outer-address label compatibility for the nth-prime label map.
+
+This is the first standard prime-enumeration experiment:
+`qOf i = petalNthPrimeLabel (mOf i)`.  It supplies label recovery from the
+injectivity of Mathlib's prime enumeration.
+-/
+theorem petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i)) :
+    PetalCarrierLabelCompatibleOn I
+      (fun i => outerPetalAddress n lap (mOf i)) qOf :=
+  petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+    I n lap mOf qOf petalNthPrimeLabel hq
+    (fun _ _ _ _ h => petalNthPrimeLabel_eq_imp_eq h)
+
+/--
+Outer-address noncollision for nth-prime labels.
+
+The nth-prime map gives prime labels and label recovery.  This theorem only
+uses the recovery part; channel divisibility is still handled by separate
+PetalPrimeChannel hypotheses in the log-capacity route.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+    {ι : Type _}
+    (I : Finset ι)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i)) :
+    PetalCarrierLabelNoncollisionOn I qOf :=
+  petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+    I n lap mOf qOf petalNthPrimeLabel hm hminj hq
+    (fun _ _ _ _ h => petalNthPrimeLabel_eq_imp_eq h)
+
+/--
+The nth-prime label map gives a prime-valued family.
+
+This records the part of the experiment that really is supplied by
+`petalNthPrimeLabel`: primality of the selected labels.
+-/
+theorem petalNthPrimeLabel_natPrimeValuedOn
+    {ι : Type _}
+    (I : Finset ι)
+    (mOf qOf : ι → Nat)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatPrimeValuedOn I qOf := by
+  intro i hi
+  rw [hq i hi]
+  exact petalNthPrimeLabel_prime (mOf i)
 
 /--
 PrimitiveBeam witnesses enter the Erdos bridge as Petal prime channels.
@@ -917,6 +1006,64 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
     hcarrier
 
 /--
+Nth-prime label form of the outer-address GN multiplicity-budget route.
+
+The label map supplies prime labels and noncollision.  The theorem still
+requires explicit `PetalPrimeChannel` hypotheses, because being the nth prime
+does not imply divisibility of the observed GN surface.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN0 : GN d x u ≠ 0)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i))
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u qOf hGN0
+    (petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+      I n lap mOf qOf hm hminj hq)
+    hcarrier
+
+/--
+Nth-prime label form of the outer-address GN log-capacity route.
+
+This is the standard prime-enumeration experiment for the value-map API.
+It proves that the route works with a genuine prime-valued injective label map,
+while keeping the actual GN-carrier condition explicit.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i))
+    (hcarrier :
+      ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hcarrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+      I n lap mOf qOf hm hminj hq)
+    hcarrier
+
+/--
 Local no-lift makes the observed GN surface nonzero.
 
 If `GN d x u` were zero, then every number, in particular `q ^ 2`, would divide
@@ -1153,6 +1300,37 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
     I d x u mOf hGN
     (petalCarrierLabelNoncollisionOn_outer_of_value_self
       I n lap mOf hm hminj)
+    hcarrier
+
+/--
+Nth-prime label form of the outer-address no-lift GN log-capacity route.
+
+The nth-prime map supplies a standard injective prime-valued label family.
+No-lift and GN divisibility remain explicit hypotheses through
+`PetalNoLiftPrimeChannel`.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hq :
+      ∀ i, i ∈ I → qOf i = petalNthPrimeLabel (mOf i))
+    (hcarrier :
+      ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hcarrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+      I n lap mOf qOf hm hminj hq)
     hcarrier
 
 /--
