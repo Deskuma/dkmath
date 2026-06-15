@@ -87,9 +87,11 @@ the conserved square mass.
 ```lean
 structure KernelFamily (T : Type u) (R : Type v) [AddMonoid T] [CommRing R] where
   kernel : T -> UnitKernel R
-  map_zero : kernel 0 = Vec.one R
+  map_zero : ((kernel 0 : UnitKernel R) : Vec R) = Vec.one R
   map_add : forall t s,
-    kernel (t + s) = Vec.star (kernel t) (kernel s)
+    ((kernel (t + s) : UnitKernel R) : Vec R)
+      = Vec.star ((kernel t : UnitKernel R) : Vec R)
+          ((kernel s : UnitKernel R) : Vec R)
 ```
 
 The coordinate functions are:
@@ -110,6 +112,18 @@ KernelFamily.C_zero :
 
 KernelFamily.S_zero :
   F.S 0 = 0
+
+KernelFamily.C_add_zero :
+  F.C (t + 0) = F.C t
+
+KernelFamily.S_add_zero :
+  F.S (t + 0) = F.S t
+
+KernelFamily.C_zero_add :
+  F.C (0 + t) = F.C t
+
+KernelFamily.S_zero_add :
+  F.S (0 + t) = F.S t
 
 KernelFamily.C_add :
   F.C (t + s) = F.C t * F.C s - F.S t * F.S s

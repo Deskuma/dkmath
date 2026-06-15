@@ -69,6 +69,22 @@ theorem S_zero (F : KernelFamily T R) : F.S 0 = 0 := by
   have h := congrArg Vec.beam F.kernel_zero
   simpa [S, Vec.one] using h
 
+@[simp]
+theorem C_add_zero (F : KernelFamily T R) (t : T) : F.C (t + 0) = F.C t := by
+  simp
+
+@[simp]
+theorem S_add_zero (F : KernelFamily T R) (t : T) : F.S (t + 0) = F.S t := by
+  simp
+
+@[simp]
+theorem C_zero_add (F : KernelFamily T R) (t : T) : F.C (0 + t) = F.C t := by
+  simp
+
+@[simp]
+theorem S_zero_add (F : KernelFamily T R) (t : T) : F.S (0 + t) = F.S t := by
+  simp
+
 /--
 The basic identity for the coordinate functions:
 `C(t)^2 + S(t)^2 = 1`.
