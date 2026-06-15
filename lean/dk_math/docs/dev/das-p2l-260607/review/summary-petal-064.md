@@ -395,12 +395,20 @@ petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
 petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
 petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
 petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_le
+petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_le
+petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_le
+petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_le
 petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
 petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
 petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
 petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
 petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
+petal_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family_card_le
+petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_le
+petal_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
+petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
 ```
 
 The bridge reads Petal carrier-label data as ABC finite support:
@@ -458,3 +466,15 @@ I.card = k
 This is the first small step toward concrete family constructions.  The
 construction-specific proof of `I.card = k` remains outside `ABCBridge`; this
 file now has the API needed to consume it immediately.
+
+The fifth checkpoint adds lower-cardinality endpoints:
+
+```text
+k <= I.card
+  -> 2^k <= supportMass(GN)
+  -> 2^k <= rad(GN)
+```
+
+This is more flexible than exact cardinality.  Experimental constructions often
+produce "at least k independent carriers" before they produce an exact count,
+so the `_of_card_le` API lets that weaker result already feed ABC.
