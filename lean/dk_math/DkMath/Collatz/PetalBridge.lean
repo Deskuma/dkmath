@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Collatz.Accelerated
+import DkMath.Collatz.Shift
 import DkMath.Petal.RangeFamily
 
 #print "file: DkMath.Collatz.PetalBridge"
@@ -33,6 +34,20 @@ shape of a merge, fold, or cycle candidate.
 namespace DkMath.Collatz
 
 /--
+Raw 2-adic height observation for a natural state.
+
+This is the address-like Collatz quantity:
+
+```text
+n -> v2 (3n + 1)
+```
+
+For an odd state it is exactly the accelerated Collatz observation `s`.
+-/
+def rawHeightLabel (n : ℕ) : ℕ :=
+  v2 (3 * n + 1)
+
+/--
 The finite observation window for the first `k` accelerated Collatz states.
 
 This is intentionally just `Finset.range k`; the point is to give the Collatz
@@ -51,6 +66,14 @@ value.
 -/
 noncomputable def oddOrbitLabel (n : OddNat) (i : ℕ) : ℕ :=
   (iterateT i n).1
+
+/--
+The 2-adic height observed at the `i`-th accelerated Collatz odd state.
+
+This is the first address-like label attached to the Collatz observation window.
+-/
+noncomputable def orbitWindowHeight (n : OddNat) (i : ℕ) : ℕ :=
+  rawHeightLabel (oddOrbitLabel n i)
 
 /--
 The first `k` accelerated Collatz odd-state labels are pairwise separated.
@@ -82,6 +105,33 @@ The named Collatz observation window is definitionally the range window.
 -/
 theorem orbitWindow_eq_range (n : OddNat) (k : ℕ) :
     OrbitWindow n k = Finset.range k := rfl
+
+/--
+Raw height agrees with the existing Collatz observation `s` on odd states.
+-/
+theorem rawHeightLabel_eq_s (n : OddNat) :
+    rawHeightLabel n.1 = s n := rfl
+
+/--
+The window height is the existing Collatz observation `s` applied to the
+corresponding accelerated state.
+-/
+theorem orbitWindowHeight_eq_s_iterateT (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i = s (iterateT i n) := rfl
+
+/--
+Block shifts preserve the raw height when the observed height is below the
+block exponent.
+
+This is `v2_shift_invariant` in the observation-window vocabulary.  It is the
+first stable bridge from Collatz shift invariance to a Petal-style address
+reading: inside a sufficiently large `2^k` block, the height label is conserved.
+-/
+theorem rawHeightLabel_shift_eq
+    (k m n : ℕ)
+    (hk : rawHeightLabel n < k) :
+    rawHeightLabel (shift k m n) = rawHeightLabel n :=
+  v2_shift_invariant k m n hk
 
 /--
 Pairwise separated Collatz orbit labels give the Petal range-label injectivity

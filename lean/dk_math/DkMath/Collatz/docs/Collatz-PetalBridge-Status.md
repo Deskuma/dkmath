@@ -75,7 +75,9 @@ It defines:
 
 ```lean
 OrbitWindow
+rawHeightLabel
 oddOrbitLabel
+orbitWindowHeight
 OddOrbitLabelsPairwiseSeparated
 OrbitWindowSeparated
 OrbitWindowCollision
@@ -86,12 +88,16 @@ where:
 ```text
 OrbitWindow n k = Finset.range k
 oddOrbitLabel n i = the natural value of iterateT i n
+orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
 ```
 
 The first theorem set is deliberately thin:
 
 ```lean
 orbitWindow_eq_range
+rawHeightLabel_eq_s
+orbitWindowHeight_eq_s_iterateT
+rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
 oddOrbitLabelsPairwiseSeparated_contradiction_of_same_label_ne_index
@@ -159,6 +165,24 @@ OrbitWindowCollision n k
 This is only a finite observation split.  It does not prove that a Collatz
 orbit converges or cycles; it merely fixes the two observation modes available
 inside a chosen finite window.
+
+The first address-like observation is now the 2-adic height:
+
+```text
+rawHeightLabel n = v2 (3n + 1)
+orbitWindowHeight n i = rawHeightLabel (oddOrbitLabel n i)
+```
+
+The bridge theorem
+
+```lean
+rawHeightLabel_shift_eq
+```
+
+repackages `v2_shift_invariant`: inside a sufficiently large `2^k` shift
+block, the raw height label is conserved.  This is the current entry point for
+reading Collatz block-shift invariance as a Petal-style address conservation
+phenomenon.
 
 This gives a clean place to attach future hypotheses:
 
