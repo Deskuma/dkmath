@@ -363,3 +363,34 @@ ABC consumes distinct support/rad growth.
 
 False lemmas are the guardrails.  They are not dead ends to hide; they are
 records of the assumptions that make a route impossible.
+
+## 8. ABC Negotiation Checkpoint
+
+Implemented first support/rad negotiation layer:
+
+```text
+DkMath.Petal.ABCBridge
+```
+
+Implemented theorem set:
+
+```lean
+petalCarrierLabelSupport
+petalCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
+```
+
+The bridge reads Petal carrier-label data as ABC finite support:
+
+```text
+Petal carrier labels on GN
+  -> finite support of prime divisors of GN
+  -> supportMass/rad lower bound
+```
+
+This is intentionally separate from NoLift.  ABC support/rad consumes prime
+support; NoLift is kept for p-adic valuation obstruction.

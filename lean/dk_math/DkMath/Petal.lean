@@ -23,6 +23,7 @@ import DkMath.Petal.ZsigmondyD3Bridge
 import DkMath.Petal.PrimitiveD3ValuationBridge
 import DkMath.Petal.ErdosBridge
 import DkMath.Petal.Obstruction
+import DkMath.Petal.ABCBridge
 
 #print "file: DkMath.Petal"
 
@@ -48,6 +49,7 @@ basic forms / relative polygon vocabulary
   -> squarefree GN3 valuation bridge
   -> Erdos log-capacity bridge from GN carrier channels
   -> obstruction lemmas marking route-breaking assumptions
+  -> ABC supportMass/rad bridge from Petal carrier-label support
 ```
 
 This is not a claim that every import is logically minimal.  Some files still

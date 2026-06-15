@@ -910,6 +910,33 @@ therefore labels are injective and duplicate-free on the finite family
 The corresponding obstruction theorem fires when a candidate route tries to
 reuse the same selected prime label at two distinct indices.
 
+### ABC Bridge
+
+`DkMath.Petal.ABCBridge` is the first support/rad negotiation layer:
+
+```text
+PetalCarrierLabelMapData
+  -> label support primes divide GN
+  -> product of label support <= supportMass GN
+  -> product of label support <= rad GN
+```
+
+Core theorem names:
+
+```text
+petalCarrierLabelSupport
+petalCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
+```
+
+NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
+only needs finite prime support; NoLift remains available for valuation
+obstruction routes.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete
