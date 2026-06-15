@@ -76,6 +76,16 @@ noncomputable def orbitWindowHeight (n : OddNat) (i : ℕ) : ℕ :=
   rawHeightLabel (oddOrbitLabel n i)
 
 /--
+The ordered height profile observed in the first `k` accelerated Collatz
+states.
+
+This keeps order, unlike a finite support/image view.  It is the window-level
+form of the sequence summed by `sumS`.
+-/
+noncomputable def orbitWindowHeightSeq (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowHeight n)
+
+/--
 The first `k` accelerated Collatz odd-state labels are pairwise separated.
 
 This is the Collatz-specific spelling of the RangeFamily pairwise condition:
@@ -118,6 +128,31 @@ corresponding accelerated state.
 -/
 theorem orbitWindowHeight_eq_s_iterateT (n : OddNat) (i : ℕ) :
     orbitWindowHeight n i = s (iterateT i n) := rfl
+
+/--
+The ordered height profile has length equal to the window size.
+-/
+theorem orbitWindowHeightSeq_length (n : OddNat) (k : ℕ) :
+    (orbitWindowHeightSeq n k).length = k := by
+  simp [orbitWindowHeightSeq]
+
+/--
+The sum of the ordered height profile is exactly the existing Collatz `sumS`.
+
+This connects the Petal-style finite observation window with the existing
+Collatz drift/statistics API.
+-/
+theorem orbitWindowHeightSeq_sum_eq_sumS (n : OddNat) (k : ℕ) :
+    (orbitWindowHeightSeq n k).sum = sumS n k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowHeightSeq, sumS]
+  | succ k ih =>
+      have ih' :
+          (List.map (orbitWindowHeight n) (List.range k)).sum = sumS n k := by
+        simpa [orbitWindowHeightSeq] using ih
+      simp [orbitWindowHeightSeq, List.range_succ, sumS,
+        orbitWindowHeight_eq_s_iterateT, ih']
 
 /--
 Block shifts preserve the raw height when the observed height is below the

@@ -78,6 +78,7 @@ OrbitWindow
 rawHeightLabel
 oddOrbitLabel
 orbitWindowHeight
+orbitWindowHeightSeq
 OddOrbitLabelsPairwiseSeparated
 OrbitWindowSeparated
 OrbitWindowCollision
@@ -89,6 +90,7 @@ where:
 OrbitWindow n k = Finset.range k
 oddOrbitLabel n i = the natural value of iterateT i n
 orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
+orbitWindowHeightSeq n k = the ordered list of the first k height labels
 ```
 
 The first theorem set is deliberately thin:
@@ -97,6 +99,8 @@ The first theorem set is deliberately thin:
 orbitWindow_eq_range
 rawHeightLabel_eq_s
 orbitWindowHeight_eq_s_iterateT
+orbitWindowHeightSeq_length
+orbitWindowHeightSeq_sum_eq_sumS
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -173,6 +177,26 @@ rawHeightLabel n = v2 (3n + 1)
 orbitWindowHeight n i = rawHeightLabel (oddOrbitLabel n i)
 ```
 
+The ordered height profile is now explicitly connected to the existing
+Collatz accumulated-height API:
+
+```text
+(orbitWindowHeightSeq n k).sum = sumS n k
+```
+
+This means the Petal observation window can read the same data in two ways:
+
+```text
+ordered local profile:
+  [height at time 0, height at time 1, ...]
+
+accumulated drift input:
+  sumS n k
+```
+
+The profile form is useful for address/window diagnostics, while `sumS` is the
+existing Collatz side used by drift and growth estimates.
+
 The bridge theorem
 
 ```lean
@@ -191,6 +215,7 @@ orbit labels are usable carrier labels
 orbit labels are mapped to prime labels
 orbit collision implies a specific fold/cycle condition
 2-adic height controls Petal address movement
+ordered height profile controls accumulated Collatz drift
 ```
 
 ## Next Candidate Work
@@ -198,10 +223,11 @@ orbit collision implies a specific fold/cycle condition
 The next safe steps are:
 
 ```text
-1. Connect v2_shift_invariant to a Petal address/residue reading.
+1. Connect the ordered height profile to a Petal address/residue reading.
 2. Add a window occupation/address transition layer.
-3. Test whether an external label transform can turn orbit labels into carrier labels.
-4. Only after that, test whether Collatz labels can feed ABC support/rad.
+3. Use `sumS`/height-profile bounds as the Collatz-side drift input.
+4. Test whether an external label transform can turn orbit labels into carrier labels.
+5. Only after that, test whether Collatz labels can feed ABC support/rad.
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge
