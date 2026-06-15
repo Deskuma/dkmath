@@ -211,6 +211,11 @@ Implemented theorem set:
 petalAddressNoncollision_contradiction_of_same_address_ne_index
 labelRecovery_contradiction_of_same_label_ne_value
 valueInjective_contradiction_of_same_value_ne_index
+labelRecovery_valueInjective_eq_of_same_label
+petalCarrierLabelMapData_eq_of_same_label
+petalNoLiftCarrierLabelMapData_eq_of_same_label
+petalCarrierLabelMapData_contradiction_of_same_label_ne_index
+petalNoLiftCarrierLabelMapData_contradiction_of_same_label_ne_index
 petalCarrierLabelNoncollision_contradiction_of_same_label_ne_index
 noLift_contradiction_of_square_dvd_GN
 padicValNat_eq_one_contradiction_of_two_le
@@ -218,12 +223,14 @@ petalNoLift_contradiction_of_padicValNat_two_le
 petalNoLift_obstruction_of_padicValNat_ge
 ```
 
-This first set focuses on the smallest route-breaking witnesses:
+This first set focuses on the smallest route-breaking witnesses and the
+positive safety chain behind them:
 
 ```text
 same address under address noncollision
 same label but different value under label recovery
 same value but different index under value injectivity
+same label -> same value -> same selected index
 duplicate selected prime label under carrier-label noncollision
 q^2 | GN under NoLift
 two-slot valuation under one-slot p-adic reading

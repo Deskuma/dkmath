@@ -91,6 +91,108 @@ theorem valueInjective_contradiction_of_same_value_ne_index
   hne (hinj hi hj hvalue)
 
 /--
+Label recovery followed by value injectivity turns equal labels into equal
+selected indices.
+
+This is the positive form of the finite-family safety chain:
+
+```text
+same label -> same value -> same index
+```
+-/
+theorem labelRecovery_valueInjective_eq_of_same_label
+    {ι : Type _}
+    {I : Finset ι}
+    {mOf qOf : ι → ℕ}
+    {i j : ι}
+    (hrec :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hinj : Set.InjOn mOf ↑I)
+    (hi : i ∈ I) (hj : j ∈ I)
+    (hlabel : qOf i = qOf j) :
+    i = j :=
+  hinj hi hj (hrec i hi j hj hlabel)
+
+/--
+Carrier-label map data turns equal labels into equal selected indices.
+
+This packages the safety chain stored in `PetalCarrierLabelMapData`.
+-/
+theorem petalCarrierLabelMapData_eq_of_same_label
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    {i j : ι}
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf)
+    (hi : i ∈ I) (hj : j ∈ I)
+    (hlabel : qOf i = qOf j) :
+    i = j :=
+  labelRecovery_valueInjective_eq_of_same_label
+    hdata.labelRecovery hdata.valueInjective hi hj hlabel
+
+/--
+No-lift carrier-label map data also turns equal labels into equal selected
+indices.
+
+The no-lift data carries the same finite-family recovery and injectivity
+contract as the prime-channel data.
+-/
+theorem petalNoLiftCarrierLabelMapData_eq_of_same_label
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    {i j : ι}
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf)
+    (hi : i ∈ I) (hj : j ∈ I)
+    (hlabel : qOf i = qOf j) :
+    i = j :=
+  labelRecovery_valueInjective_eq_of_same_label
+    hdata.labelRecovery hdata.valueInjective hi hj hlabel
+
+/--
+Carrier-label map data breaks if two distinct selected indices reuse the same
+label.
+
+This is the packaged obstruction form of
+`same label -> same value -> same index`.
+-/
+theorem petalCarrierLabelMapData_contradiction_of_same_label_ne_index
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    {i j : ι}
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf)
+    (hi : i ∈ I) (hj : j ∈ I)
+    (hlabel : qOf i = qOf j)
+    (hne : i ≠ j) :
+    False :=
+  hne (petalCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel)
+
+/--
+No-lift carrier-label map data breaks if two distinct selected indices reuse
+the same label.
+
+NoLift does not cause this obstruction; the finite-family recovery contract
+does.  Keeping the theorem named for no-lift data makes the packaged route easy
+to diagnose.
+-/
+theorem petalNoLiftCarrierLabelMapData_contradiction_of_same_label_ne_index
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    {i j : ι}
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf)
+    (hi : i ∈ I) (hj : j ∈ I)
+    (hlabel : qOf i = qOf j)
+    (hne : i ≠ j) :
+    False :=
+  hne (petalNoLiftCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel)
+
+/--
 Carrier-label noncollision breaks when two distinct selected indices reuse the
 same prime label.
 
