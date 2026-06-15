@@ -1881,6 +1881,23 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
 This confirms that the route works with a genuine prime-valued injective label
 map.  It does not prove that the nth prime divides a GN surface.
 
+The DkMath carrier-label route now has a packaged data layer:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the structure/predicate precursor to `carrierAnchorOf(m)`: it records
+finite-family carrier assignments and their recovery conditions before
+requiring a canonical choice function.
+
 ### Step 7: Refactor imports gradually
 
 Status:

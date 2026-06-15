@@ -825,6 +825,24 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
 This route supplies real prime labels and label recovery.  It still does not
 say that those primes divide the chosen GN surface.
 
+The DkMath-facing carrier-label contract is now packaged before choosing a
+canonical `carrierAnchorOf` function:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the predicate/structure version of the future `carrierAnchorOf` route:
+it records valid values, value injectivity, label recovery, and actual GN
+carrier facts without forcing a uniqueness or choice theorem too early.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete

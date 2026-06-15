@@ -90,6 +90,49 @@ def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
   PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
 
 /--
+Family data for a Petal carrier label map on one GN surface.
+
+This is the predicate form of the planned `carrierAnchorOf` route.  It avoids
+choosing a canonical carrier function too early: callers may supply any
+finite-family assignment `mOf/qOf` as long as values are valid and injective,
+labels recover values, and every label is an actual Petal prime channel.
+-/
+structure PetalCarrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ) : Prop where
+  validValue :
+    ∀ i, i ∈ I → 1 ≤ mOf i
+  valueInjective :
+    Set.InjOn mOf ↑I
+  labelRecovery :
+    ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j
+  carrier :
+    ∀ i, i ∈ I → PetalPrimeChannel d x u (qOf i)
+
+/--
+No-lift version of `PetalCarrierLabelMapData`.
+
+This strengthens the local channel condition from `PetalPrimeChannel` to
+`PetalNoLiftPrimeChannel`, while keeping the same value/address and label
+recovery contract.
+-/
+structure PetalNoLiftCarrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ) : Prop where
+  validValue :
+    ∀ i, i ∈ I → 1 ≤ mOf i
+  valueInjective :
+    Set.InjOn mOf ↑I
+  labelRecovery :
+    ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j
+  carrier :
+    ∀ i, i ∈ I → PetalNoLiftPrimeChannel d x u (qOf i)
+
+/--
 The standard Mathlib prime enumeration, exposed under Petal naming.
 
 This is an experimental label map for the outer-address route.  It supplies
@@ -426,6 +469,59 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_self
     I n lap mOf mOf id hm hminj
     (fun _ _ => rfl)
     (fun _ _ _ _ h => h)
+
+/--
+Carrier-label map data supplies outer-address label noncollision.
+
+This is the packaged form of the current DkMath route: a family data object
+stores valid values, value injectivity, label recovery, and carrier facts.
+This theorem extracts only the noncollision part.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    PetalCarrierLabelNoncollisionOn I qOf :=
+  petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+    I n lap mOf qOf hdata.validValue hdata.valueInjective
+    hdata.labelRecovery
+
+/--
+No-lift carrier-label map data supplies outer-address label noncollision.
+
+The no-lift data has the same recovery contract as the prime-channel data, so
+the noncollision extraction is identical.
+-/
+theorem petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    PetalCarrierLabelNoncollisionOn I qOf :=
+  petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+    I n lap mOf qOf hdata.validValue hdata.valueInjective
+    hdata.labelRecovery
+
+/--
+No-lift carrier-label map data can be weakened to prime-channel data.
+
+This keeps the structure layer composable: no-lift data is a stronger version
+of the same carrier-label contract.
+-/
+theorem petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → Nat)
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    PetalCarrierLabelMapData I d x u mOf qOf :=
+  ⟨hdata.validValue, hdata.valueInjective, hdata.labelRecovery,
+    fun i hi => (hdata.carrier i hi).1⟩
 
 /--
 Outer-address label compatibility for the nth-prime label map.
@@ -884,6 +980,53 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
     hcarrier
 
 /--
+Carrier-label map data supplies an Erdos multiplicity budget on one GN surface.
+
+This is the packaged `carrierAnchorOf`-preparation theorem: once a family data
+object supplies valid values, label recovery, and prime-channel carriers, the
+GN multiplicity budget follows.
+-/
+theorem petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN0 : GN d x u ≠ 0)
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    DkMath.NumberTheory.PrimitiveSet.NatBaseMultiplicityBudgetOn
+      I qOf (GN d x u) :=
+  petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision
+    I d x u qOf hGN0
+    (petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+      I d x u n lap mOf qOf hdata)
+    hdata.carrier
+
+/--
+Carrier-label map data feeds the finite GN log-capacity route.
+
+This is the structure-packaged version of
+`petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn`.
+-/
+theorem petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf hdata.carrier)
+      hGN).SubProbability :=
+  petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+      I d x u n lap mOf qOf hdata)
+    hdata.carrier
+
+/--
 Value-map form of the outer-address GN multiplicity-budget route.
 
 This is the practical wrapper for experiments where the selected label is
@@ -1238,6 +1381,31 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
     (petalCarrierLabelNoncollisionOn_outer_of_value_injOn
       I n lap mOf qOf hm hminj hlabel)
     hcarrier
+
+/--
+No-lift carrier-label map data feeds the finite GN log-capacity route.
+
+This is the packaged form for the future `carrierAnchorOf` route when the
+selected carriers also have local one-slot/no-lift information.
+-/
+theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (n lap : Nat)
+    (mOf qOf : ι → Nat)
+    (hGN : 1 < GN d x u)
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    (DkMath.NumberTheory.PrimitiveSet.realLogRatioWeightProvider I qOf (GN d x u)
+      (petalPrimeChannel_realLogNonnegOn
+        I (fun _ => d) (fun _ => x) (fun _ => u) qOf
+        (fun i hi => (hdata.carrier i hi).1))
+      hGN).SubProbability :=
+  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
+    I d x u qOf hGN
+    (petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+      I d x u n lap mOf qOf hdata)
+    hdata.carrier
 
 /--
 Value-map form of the outer-address no-lift GN log-capacity route.

@@ -671,5 +671,23 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
 This verifies the route for a genuine injective prime-valued label map.  The
 GN carrier and no-lift facts remain separate hypotheses.
 
+The first DkMath-facing carrier-label contract is now implemented as data,
+without forcing a canonical carrier-selection function:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the safe precursor to `carrierAnchorOf(m)`.  It lets experiments supply
+finite-family carrier labels, recovery, and GN divisibility/no-lift facts first;
+canonical choice can be added later if uniqueness becomes available.
+
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.
