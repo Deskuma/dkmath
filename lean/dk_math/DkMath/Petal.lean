@@ -24,6 +24,7 @@ import DkMath.Petal.PrimitiveD3ValuationBridge
 import DkMath.Petal.ErdosBridge
 import DkMath.Petal.Obstruction
 import DkMath.Petal.ABCBridge
+import DkMath.Petal.RangeFamily
 
 #print "file: DkMath.Petal"
 
@@ -50,6 +51,7 @@ basic forms / relative polygon vocabulary
   -> Erdos log-capacity bridge from GN carrier channels
   -> obstruction lemmas marking route-breaking assumptions
   -> ABC supportMass/rad bridge from Petal carrier-label support
+  -> concrete range-family constructors feeding ABC count lower bounds
 ```
 
 This is not a claim that every import is logically minimal.  Some files still

@@ -478,3 +478,46 @@ k <= I.card
 This is more flexible than exact cardinality.  Experimental constructions often
 produce "at least k independent carriers" before they produce an exact count,
 so the `_of_card_le` API lets that weaker result already feed ABC.
+
+## 9. Range Family Construction Checkpoint
+
+Implemented first concrete range-indexed construction layer:
+
+```text
+DkMath.Petal.RangeFamily
+```
+
+This fixes the finite family shape as:
+
+```text
+I = Finset.range k
+mOf i = i + 1
+```
+
+Implemented theorem set:
+
+```lean
+rangeSuccValue_injOn
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+The construction still leaves the serious arithmetic hypotheses explicit:
+
+```text
+label injectivity on Finset.range k
+PrimitiveBeam or Zsigmondy witnesses for each index
+```
+
+But once those are supplied, the range cardinality is automatic, so the ABC
+endpoint is concrete:
+
+```text
+k range-indexed primitive carriers
+  -> 2^k <= supportMass(GN)
+  -> 2^k <= rad(GN)
+```

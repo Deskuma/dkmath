@@ -113,6 +113,7 @@ DkMath.Petal.PrimitiveD3ValuationBridge
 DkMath.Petal.ErdosBridge
 DkMath.Petal.Obstruction
 DkMath.Petal.ABCBridge
+DkMath.Petal.RangeFamily
 ```
 
 ### `DkMath.Petal.Basic`
@@ -976,6 +977,39 @@ family construction.
 NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
 only needs finite prime support; NoLift remains available for valuation
 obstruction routes.
+
+### Range Family
+
+`DkMath.Petal.RangeFamily` is the first concrete finite-family construction
+layer for the Petal-to-ABC route.  It fixes the index set and selected value
+map as:
+
+```text
+I = Finset.range k
+mOf i = i + 1
+```
+
+The caller still supplies the arithmetic content: label injectivity and
+PrimitiveBeam / Zsigmondy witnesses.
+
+Important names:
+
+```text
+rangeSuccValue_injOn
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+This is the first endpoint that reads directly as:
+
+```text
+k range-indexed primitive carriers
+  -> 2^k <= supportMass/rad(GN)
+```
 
 ## What This Does Not Claim Yet
 
