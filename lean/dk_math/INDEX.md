@@ -71,6 +71,7 @@
 ### 3.3 コラッツ
 
 - `DkMath.Collatz.Collatz2K26`
+- `DkMath.Collatz.PetalBridge`
 
 ### 3.4 宇宙式（Cosmic Formula）
 
@@ -470,7 +471,7 @@ graph TD
 # IV. 独立柱（SilverRatio / Collatz / UnitCycle / DHNT）
 
 - SilverRatio / UniqueRepresentation は **代数的独立柱**。
-- Collatz は **動的離散系の実験塔**。
+- Collatz は **動的離散系の実験塔**。PetalBridge により、加速軌道の label 分離と collision を Petal RangeFamily の窓口で読める。
 - UnitCycle / DHNT は **宇宙式と接続可能な補助構造**。
 
 ---

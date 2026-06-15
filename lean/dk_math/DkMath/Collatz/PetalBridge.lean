@@ -1,0 +1,109 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.Collatz.Accelerated
+import DkMath.Petal.RangeFamily
+
+#print "file: DkMath.Collatz.PetalBridge"
+
+/-!
+# Collatz Petal Bridge
+
+This file is a small observation window between the accelerated Collatz
+dynamics and the Petal range-family API.
+
+The bridge is intentionally thin.  It does not claim any Collatz convergence
+or nontrivial cycle theorem.  It only fixes the common language:
+
+```text
+accelerated Collatz orbit segment
+  -> range-indexed labels
+  -> either pairwise separated, or a collision closes that route as False
+```
+
+For Petal/ABC routes, a repeated label means that a proposed independent
+range-family cannot be counted as `k` independent carriers.  For Collatz
+dynamics, the same collision is not merely a failure: it is the observable
+shape of a merge, fold, or cycle candidate.
+-/
+
+namespace DkMath.Collatz
+
+/--
+The natural-number label of the `i`-th accelerated Collatz odd state.
+
+This is the Collatz-facing candidate for a Petal `qOf i` label.  It deliberately
+forgets the proof that the state is odd and keeps only the observed address
+value.
+-/
+noncomputable def oddOrbitLabel (n : OddNat) (i : ℕ) : ℕ :=
+  (iterateT i n).1
+
+/--
+The first `k` accelerated Collatz odd-state labels are pairwise separated.
+
+This is the Collatz-specific spelling of the RangeFamily pairwise condition:
+different in-range times have different observed odd states.
+-/
+def OddOrbitLabelsPairwiseSeparated (n : OddNat) (k : ℕ) : Prop :=
+  ∀ i, i < k → ∀ j, j < k → i ≠ j → oddOrbitLabel n i ≠ oddOrbitLabel n j
+
+/--
+Pairwise separated Collatz orbit labels give the Petal range-label injectivity
+condition.
+-/
+theorem oddOrbitLabel_injOn_of_pairwiseSeparated
+    (n : OddNat) {k : ℕ}
+    (hsep : OddOrbitLabelsPairwiseSeparated n k) :
+    Set.InjOn (oddOrbitLabel n) ↑(Finset.range k) :=
+  DkMath.Petal.rangeLabel_injOn_of_pairwise_ne hsep
+
+/--
+Equal Collatz odd-state labels identify the accelerated states themselves.
+
+Since `OddNat` is a subtype of natural numbers, equality of the stored natural
+value is equality of the subtype state.
+-/
+theorem iterateT_eq_of_oddOrbitLabel_eq
+    {n : OddNat} {i j : ℕ}
+    (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
+    iterateT i n = iterateT j n := by
+  apply Subtype.ext
+  exact hlabel
+
+/--
+False/obstruction window for Collatz orbit labels.
+
+If an orbit segment is assumed pairwise separated but two distinct in-range
+times have the same odd-state label, the independent Petal range route closes
+as `False`.
+-/
+theorem oddOrbitLabelsPairwiseSeparated_contradiction_of_same_label_ne_index
+    {n : OddNat} {k i j : ℕ}
+    (hsep : OddOrbitLabelsPairwiseSeparated n k)
+    (hi : i < k) (hj : j < k)
+    (hlabel : oddOrbitLabel n i = oddOrbitLabel n j)
+    (hne : i ≠ j) :
+    False :=
+  DkMath.Petal.rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
+    hsep hi hj hlabel hne
+
+/--
+Collision observation form.
+
+When two different in-range Collatz times have the same label, they are the
+same accelerated odd state.  This theorem does not call that good or bad:
+Petal/ABC reads it as an independence obstruction, while Collatz reads it as a
+merge/fold/cycle candidate.
+-/
+theorem same_iterateT_of_oddOrbitLabel_collision
+    {n : OddNat} {k i j : ℕ}
+    (_hi : i < k) (_hj : j < k)
+    (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
+    iterateT i n = iterateT j n :=
+  iterateT_eq_of_oddOrbitLabel_eq hlabel
+
+end DkMath.Collatz
