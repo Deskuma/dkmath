@@ -702,7 +702,7 @@ The same selected prime label `q` now has three downstream readings:
 ```text
 Erdos #1196:
   finite target: selected Petal channels consume GN log capacity
-  next missing input: address/carrier noncollision -> label noncollision
+  current bridge: address noncollision + label compatibility -> log capacity
 
 FLT:
   target: clash one-slot GN valuation with d-th-power valuation transfer
@@ -717,9 +717,158 @@ Current research target:
 
 ```text
 Petal address / carrier noncollision
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
 ```
+
+The address-facing theorem implemented for this checkpoint is:
+
+```text
+petalAddressNoncollision_labelNoncollision
+```
+
+and the direct finite log-capacity routes are:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+```
+
+The first concrete address-construction supply theorem is:
+
+```text
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+It says that an injective family of valid one-based values gives noncolliding
+`outerPetalAddress` values.  The underlying address reconstruction lemma is:
+
+```text
+outerPetalAddress_eq_value_eq
+```
+
+The compatibility side is still explicit, but it now has a convenient
+contrapositive criterion:
+
+```text
+petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+```
+
+For outer addresses, compatibility can now be supplied from value determination:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+```
+
+Combining value injectivity with value determination by labels gives the
+outer-address noncollision route directly:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
+There is also a concrete value-map supply form.  If the selected labels are
+presented as
+
+```text
+qOf i = f (mOf i)
+```
+
+and equality of `f (mOf i)` recovers equality of the selected values on the
+finite family, then the same outer-address route is available:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This does not claim that `f` constructs prime channels.  It only supplies the
+label-recovery/noncollision part once the prime-channel hypotheses are already
+available.
+
+The identity map sanity check is implemented separately:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This is a toy control route.  It says that if the selected values themselves
+are already assumed to be prime-channel labels, then the outer-address
+noncollision machinery composes correctly.
+
+The standard prime-enumeration experiment is also implemented through
+`petalNthPrimeLabel`, a Petal-facing alias for `Nat.nth Nat.Prime`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This route supplies real prime labels and label recovery.  It still does not
+say that those primes divide the chosen GN surface.
+
+The DkMath-facing carrier-label contract is now packaged before choosing a
+canonical `carrierAnchorOf` function:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the predicate/structure version of the future `carrierAnchorOf` route:
+it records valid values, value injectivity, label recovery, and actual GN
+carrier facts without forcing a uniqueness or choice theorem too early.
+
+Primitive/Zsigmondy family constructors now supply this data layer:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+The no-lift constructors deliberately keep local no-lift as an explicit
+hypothesis.  Primitive/Zsigmondy witnesses supply GN carriers, not automatic
+no-lift.
+
+Direct log-capacity wrappers now compose these constructors with the finite GN
+route:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These wrappers are the current public route from PrimitiveBeam/Zsigmondy witness
+families to the finite Erdos log-capacity provider.  The no-lift wrappers still
+require explicit local no-lift hypotheses.
 
 ## What This Does Not Claim Yet
 
@@ -733,7 +882,7 @@ general d boundary classification
 full Zsigmondy theorem
 FLT descent
 full Erdős #1196 analytic tail estimate
-Petal address noncollision -> NatPairwiseDistinctOn
+Petal address noncollision alone -> NatPairwiseDistinctOn
 complete Eisenstein refactor away from the FLT namespace
 complete split of BoundaryD3 and BoundaryD3Anchor
 concrete prime enumeration / standard primorial theorem
@@ -751,7 +900,7 @@ The next reasonable implementation directions are:
 
 ```text
 1. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
-2. connect Petal address / carrier noncollision to `NatPairwiseDistinctOn`
+2. derive concrete address noncollision and label compatibility from Petal geometry
 3. use Petal address decomposition in nested observations
 4. connect strict prime-base orbits to a concrete prime enumeration
 5. decide whether GNPrimitiveCandidate needs a separate vocabulary layer

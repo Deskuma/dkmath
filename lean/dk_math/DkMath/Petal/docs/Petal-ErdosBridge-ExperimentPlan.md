@@ -159,7 +159,8 @@ PetalPrimeChannel family
 
 `PetalCarrierLabelNoncollisionOn I qOf` is currently the Petal-facing name for
 the lower-level `NatPairwiseDistinctOn I qOf` condition.  The intended next
-step is to derive it from Petal address/carrier geometry.
+step is to derive it from Petal address/carrier geometry plus an explicit
+address-to-label compatibility condition.
 
 The currently implemented local no-lift route is:
 
@@ -317,7 +318,7 @@ Petal carriers automatically satisfy the Erdos multiplicity budget.
 Zsigmondy automatically supplies local NoLift.
 Zsigmondy automatically supplies padicValNat <= 1.
 GN carriers are automatically squarefree.
-Petal address noncollision automatically supplies NatPairwiseDistinctOn.
+Petal address noncollision alone supplies NatPairwiseDistinctOn.
 Full analytic Erdős #1196 tail estimate.
 ```
 
@@ -468,6 +469,7 @@ Now that Step 5 is implemented, investigate:
 
 ```text
 Petal address noncollision
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
   -> base-prime multiplicity budget
@@ -525,6 +527,7 @@ Implement the address-facing noncollision layer:
 
 ```text
 Petal address / carrier noncollision
+  + address-to-label compatibility
   -> PetalCarrierLabelNoncollisionOn I qOf
   -> NatPairwiseDistinctOn I qOf
 ```
@@ -532,6 +535,9 @@ Petal address / carrier noncollision
 This is now the missing input needed by:
 
 ```lean
+petalAddressNoncollision_labelNoncollision
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
 petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
 ```
@@ -540,7 +546,7 @@ The downstream signposts from this checkpoint are:
 
 ```text
 Erdos:
-  address/carrier noncollision -> finite GN log-capacity family
+  address noncollision + label compatibility -> finite GN log-capacity family
 
 FLT:
   NoLift one-slot -> d-th-power valuation obstruction
@@ -567,8 +573,148 @@ also proves the duplicate-free GN-family route through `NatPairwiseDistinctOn`.
 The next research target is:
 
 ```text
-Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn`?
+Can Petal geometry supply concrete address noncollision and
+address-to-label compatibility?
 ```
+
+The first part now has a concrete outer-address supply theorem:
+
+```text
+outerPetalAddress_eq_value_eq
+
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+Thus an injective selected value family gives noncolliding
+`outerPetalAddress` values.  The remaining geometric task is to derive
+meaningful `PetalCarrierLabelCompatibleOn` assumptions from the actual carrier
+or label construction, rather than keeping compatibility as a permanent raw
+hypothesis.
+
+The first outer-address compatibility supply theorem is now implemented:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+```
+
+It uses the condition:
+
+```text
+qOf i = qOf j -> mOf i = mOf j
+```
+
+Together with value injectivity, this gives the outer-address log-capacity
+route:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
+The next experimental wrapper is also implemented.  It covers the situation
+where labels are described by a value-indexed map:
+
+```text
+qOf i = f (mOf i)
+```
+
+The required condition is not that `f` is globally injective.  It is only that
+equal selected labels recover equal selected values on the finite family:
+
+```text
+f (mOf i) = f (mOf j) -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This wrapper deliberately keeps prime-channel construction separate.  The map
+form supplies only the noncollision/recovery layer.
+
+The first toy case `f = id` is now fixed:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This checks the value-map API without importing a prime enumeration or a choice
+function.  It still assumes the selected values are already valid
+PetalPrimeChannel / NoLift labels when the log-capacity theorem is applied.
+
+The next experiment uses Mathlib's standard prime enumeration through the
+Petal-facing alias `petalNthPrimeLabel`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This verifies the route for a genuine injective prime-valued label map.  The
+GN carrier and no-lift facts remain separate hypotheses.
+
+The first DkMath-facing carrier-label contract is now implemented as data,
+without forcing a canonical carrier-selection function:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the safe precursor to `carrierAnchorOf(m)`.  It lets experiments supply
+finite-family carrier labels, recovery, and GN divisibility/no-lift facts first;
+canonical choice can be added later if uniqueness becomes available.
+
+PrimitiveBeam and Zsigmondy family constructors are now available:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These constructors are the first practical supply route into
+`PetalCarrierLabelMapData`.  The no-lift versions still require explicit local
+no-lift hypotheses; they do not claim Zsigmondy alone implies no-lift.
+
+The constructor layer now has direct log-capacity wrappers:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+These are composition theorems: PrimitiveBeam/Zsigmondy family witnesses produce
+carrier-label data, and the existing finite GN route turns that data into a
+log-capacity sub-probability statement.  No-lift remains an explicit local
+condition.
 
 That is the point where Petal may start producing genuinely strong conditions
 useful for Zsigmondy, FLT, and ABC.

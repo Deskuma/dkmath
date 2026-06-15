@@ -1767,13 +1767,161 @@ The current research question after the first bridge is:
 
 ```text
 Can Petal address / carrier noncollision supply
-`PetalCarrierLabelNoncollisionOn I qOf`?
+`PetalCarrierLabelNoncollisionOn I qOf`
+through explicit address-to-label compatibility?
 ```
 
 `PetalCarrierLabelNoncollisionOn` is currently the public Petal-facing wrapper
 around `NatPairwiseDistinctOn`.  It exists so the later address layer can target
 Petal vocabulary first, while the already-proved Erdos bridge consumes the
 underlying duplicate-free condition.
+
+The first address-facing checkpoint is now implemented by:
+
+```text
+PetalAddressNoncollisionOn I addrOf
+  + PetalCarrierLabelCompatibleOn I addrOf qOf
+  -> PetalCarrierLabelNoncollisionOn I qOf
+
+petalAddressNoncollision_labelNoncollision
+petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
+```
+
+The first concrete Petal-address supply theorem is also available:
+
+```text
+outerPetalAddress_eq_value_eq
+
+petalAddressNoncollisionOn_outer_of_value_injOn
+```
+
+This says that valid one-based values can be recovered from their
+`outerPetalAddress`, so any injective selected value family yields
+`PetalAddressNoncollisionOn` for the corresponding outer addresses.
+
+The compatibility side remains a separate input, but it has a useful
+contrapositive helper:
+
+```text
+petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
+```
+
+For outer addresses, the compatibility side can now be supplied by a value
+determination condition:
+
+```text
+qOf i = qOf j -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
+petalCarrierLabelNoncollisionOn_outer_of_value_injOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_injOn
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
+```
+
+A concrete value-map supply form is also implemented.  It applies when the
+selected label is presented as:
+
+```text
+qOf i = f (mOf i)
+```
+
+and equal selected `f (mOf)` labels recover equal selected values:
+
+```text
+f (mOf i) = f (mOf j) -> mOf i = mOf j
+```
+
+Implemented theorem names:
+
+```text
+petalCarrierLabelCompatibleOn_outer_of_value_map_injective
+petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_map_injective
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
+```
+
+This is a label-recovery wrapper, not a theorem that a value map automatically
+constructs prime channels.
+
+The `f = id` toy case is also implemented:
+
+```text
+petalCarrierLabelNoncollisionOn_outer_of_value_self
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_value_self
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
+```
+
+This is a control theorem for the wrapper.  It does not turn arbitrary Petal
+values into prime-channel labels.
+
+The standard prime-enumeration experiment is implemented through
+`petalNthPrimeLabel`, defined as a Petal-facing alias for `Nat.nth Nat.Prime`:
+
+```text
+petalNthPrimeLabel
+petalNthPrimeLabel_prime
+petalNthPrimeLabel_injective
+petalNthPrimeLabel_eq_imp_eq
+petalCarrierLabelCompatibleOn_outer_of_nthPrime_value_map
+petalCarrierLabelNoncollisionOn_outer_of_nthPrime_value_map
+petalNthPrimeLabel_natPrimeValuedOn
+petalPrimeChannelFamily_multiplicityBudget_GN_of_outer_nthPrime_value_map
+petalPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
+```
+
+This confirms that the route works with a genuine prime-valued injective label
+map.  It does not prove that the nth prime divides a GN surface.
+
+The DkMath carrier-label route now has a packaged data layer:
+
+```text
+PetalCarrierLabelMapData
+PetalNoLiftCarrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_carrierLabelMapData
+petalCarrierLabelNoncollisionOn_outer_of_noLiftCarrierLabelMapData
+petalCarrierLabelMapData_of_noLiftCarrierLabelMapData
+petalPrimeChannelFamily_multiplicityBudget_GN_of_carrierLabelMapData
+petalPrimeChannelFamily_logSubProbability_GN_of_carrierLabelMapData
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabelMapData
+```
+
+This is the structure/predicate precursor to `carrierAnchorOf(m)`: it records
+finite-family carrier assignments and their recovery conditions before
+requiring a canonical choice function.
+
+Primitive/Zsigmondy family constructors now feed this carrier-label data layer:
+
+```text
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalNoLiftCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+The no-lift constructors keep local no-lift as an explicit hypothesis.
+Primitive/Zsigmondy witnesses supply carrier location, not automatic no-lift.
+
+Direct log-capacity wrappers now close the constructor-to-provider route:
+
+```text
+petalPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_bodyPrimitivePrimeFactor_family
+petalPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDivisor_family
+```
+
+This is the current checkpoint before returning to the main Zsigmondy line:
+PrimitiveBeam/Zsigmondy witness families can be fed directly into the finite GN
+log-capacity route, while no-lift remains a separate local contract.
 
 ### Step 7: Refactor imports gradually
 
