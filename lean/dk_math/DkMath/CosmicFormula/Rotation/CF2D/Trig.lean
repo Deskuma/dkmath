@@ -26,20 +26,21 @@ namespace Rotation
 namespace CF2D
 
 /--
-An additive family of square-mass-one kernels.
+An additive-monoid family of square-mass-one kernels.
 
 The parameter type `T` can later be instantiated by `ℝ`, `ℤ`, a formal time
 monoid, or another additive parameter space. Continuity or analytic structure is
 deliberately not part of this algebraic layer.
 -/
-structure KernelFamily (T : Type u) (R : Type v) [Add T] [CommRing R] where
+structure KernelFamily (T : Type u) (R : Type v) [AddMonoid T] [CommRing R] where
   kernel : T → UnitKernel R
+  map_zero : ((kernel 0 : UnitKernel R) : Vec R) = Vec.one R
   map_add : ∀ t s, ((kernel (t + s) : UnitKernel R) : Vec R)
     = Vec.star ((kernel t : UnitKernel R) : Vec R) ((kernel s : UnitKernel R) : Vec R)
 
 namespace KernelFamily
 
-variable {T : Type u} {R : Type v} [Add T] [CommRing R]
+variable {T : Type u} {R : Type v} [AddMonoid T] [CommRing R]
 
 /-- Core coordinate of a unit-kernel family. -/
 def C (F : KernelFamily T R) (t : T) : R :=
@@ -53,6 +54,20 @@ def S (F : KernelFamily T R) (t : T) : R :=
 theorem kernel_q2 (F : KernelFamily T R) (t : T) :
     Vec.q2 (((F.kernel t : UnitKernel R) : Vec R)) = 1 :=
   UnitKernel.coe_q2 (F.kernel t)
+
+theorem kernel_zero (F : KernelFamily T R) :
+    ((F.kernel 0 : UnitKernel R) : Vec R) = Vec.one R :=
+  F.map_zero
+
+@[simp]
+theorem C_zero (F : KernelFamily T R) : F.C 0 = 1 := by
+  have h := congrArg Vec.core F.kernel_zero
+  simpa [C, Vec.one] using h
+
+@[simp]
+theorem S_zero (F : KernelFamily T R) : F.S 0 = 0 := by
+  have h := congrArg Vec.beam F.kernel_zero
+  simpa [S, Vec.one] using h
 
 /--
 The basic identity for the coordinate functions:

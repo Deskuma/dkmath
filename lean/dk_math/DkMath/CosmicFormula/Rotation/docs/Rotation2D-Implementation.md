@@ -82,11 +82,12 @@ the conserved square mass.
 
 ## Coordinate Functions
 
-`Trig.lean` defines an abstract additive family of unit kernels:
+`Trig.lean` defines an abstract additive-monoid family of unit kernels:
 
 ```lean
-structure KernelFamily (T R : Type u) [Add T] [CommRing R] where
+structure KernelFamily (T : Type u) (R : Type v) [AddMonoid T] [CommRing R] where
   kernel : T -> UnitKernel R
+  map_zero : kernel 0 = Vec.one R
   map_add : forall t s,
     kernel (t + s) = Vec.star (kernel t) (kernel s)
 ```
@@ -103,6 +104,12 @@ The formal identities are:
 ```lean
 KernelFamily.C_sq_add_S_sq :
   F.C t ^ 2 + F.S t ^ 2 = 1
+
+KernelFamily.C_zero :
+  F.C 0 = 1
+
+KernelFamily.S_zero :
+  F.S 0 = 0
 
 KernelFamily.C_add :
   F.C (t + s) = F.C t * F.C s - F.S t * F.S s
