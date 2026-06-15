@@ -103,9 +103,19 @@ orbitWindowHeightSeq_length
 orbitWindowHeightSeq_sum_eq_sumS
 orbitWindowHeightSeq_sum_ge_of_forall_ge
 orbitWindowHeightSeq_take_sum_eq_sumS
+orbitWindowHeightSeq_take_length
 orbitWindowHeightSeq_get?_eq_some
+orbitWindowHeightSeq_take_get?_eq_some
+orbitWindowHeightSeq_prefix_sum_ge_of_forall_ge
 orbitWindowHeight_eq_of_oddOrbitLabel_eq
 orbitWindowHeight_eq_of_collision
+orbitWindowHeight_eq_of_same_iterateT
+orbitWindowHeightCountEq
+orbitWindowHeightCountGe
+orbitWindowHeightCountEq_le_window
+orbitWindowHeightCountGe_le_window
+orbitWindowHeightCountEq_eq_window_of_forall_eq
+orbitWindowHeightCountGe_eq_window_of_forall_ge
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -227,6 +237,31 @@ local entries
   -> collision/fold height equality
 ```
 
+The bridge now also has the first occupation-count vocabulary:
+
+```text
+orbitWindowHeightCountEq n k h
+  = number of entries with height exactly h
+
+orbitWindowHeightCountGe n k threshold
+  = number of entries with height at least threshold
+```
+
+The current count API is intentionally minimal:
+
+```text
+exact-height count <= k
+threshold count <= k
+all heights equal h
+  -> exact-height count = k
+all heights >= threshold
+  -> threshold count = k
+```
+
+This is the first distribution layer.  It does not yet decompose `sumS` by
+height classes, but it gives future drift estimates a stable place to count
+how often each local height regime appears.
+
 The bridge theorem
 
 ```lean
@@ -248,6 +283,7 @@ orbit collision implies a specific fold/cycle condition
 ordered height profile controls accumulated Collatz drift
 height-threshold hypotheses give integer lower bounds for `sumS`
 label collisions preserve the next height observation
+height occupation counts measure exact and lower-bound regimes
 ```
 
 ## Next Candidate Work
@@ -257,9 +293,10 @@ The next safe steps are:
 ```text
 1. Connect the ordered height profile to a Petal address/residue reading.
 2. Add a window occupation/address transition layer.
-3. Use prefix sums and threshold bounds as the Collatz-side drift input.
-4. Test whether an external label transform can turn orbit labels into carrier labels.
-5. Only after that, test whether Collatz labels can feed ABC support/rad.
+3. Refine occupation counts into distribution estimates for `sumS`.
+4. Use prefix sums and threshold bounds as the Collatz-side drift input.
+5. Test whether an external label transform can turn orbit labels into carrier labels.
+6. Only after that, test whether Collatz labels can feed ABC support/rad.
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge

@@ -189,6 +189,14 @@ theorem orbitWindowHeightSeq_take_sum_eq_sumS
   simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
 
 /--
+The prefix of length `r` has length `r` when `r` lies inside the window.
+-/
+theorem orbitWindowHeightSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowHeightSeq n k).take r).length = r := by
+  simp [orbitWindowHeightSeq_length, Nat.min_eq_left hr]
+
+/--
 Reading the ordered height profile at an in-window time recovers the pointwise
 height observation.
 -/
@@ -196,6 +204,26 @@ theorem orbitWindowHeightSeq_get?_eq_some
     (n : OddNat) {i k : ℕ} (hi : i < k) :
     (orbitWindowHeightSeq n k)[i]? = some (orbitWindowHeight n i) := by
   simp [orbitWindowHeightSeq, hi]
+
+/--
+Reading a prefix of the ordered height profile recovers the same pointwise
+height observation while the index remains inside the prefix.
+-/
+theorem orbitWindowHeightSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowHeightSeq n k).take r)[i]? = some (orbitWindowHeight n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowHeightSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
+
+/--
+The integer threshold lower bound also applies to prefixes.
+-/
+theorem orbitWindowHeightSeq_prefix_sum_ge_of_forall_ge
+    (n : OddNat) {r k threshold : ℕ} (hr : r ≤ k)
+    (h : ∀ i, i < r → threshold ≤ orbitWindowHeight n i) :
+    r * threshold ≤ ((orbitWindowHeightSeq n k).take r).sum := by
+  rw [orbitWindowHeightSeq_take_sum_eq_sumS n hr]
+  exact orbitWindowHeightSeq_sum_ge_of_forall_ge n h
 
 /--
 Equal Collatz orbit labels have equal height observations.
@@ -219,6 +247,87 @@ theorem orbitWindowHeight_eq_of_collision
     (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
     orbitWindowHeight n i = orbitWindowHeight n j :=
   orbitWindowHeight_eq_of_oddOrbitLabel_eq hlabel
+
+/--
+Equal accelerated Collatz states have equal height observations.
+-/
+theorem orbitWindowHeight_eq_of_same_iterateT
+    {n : OddNat} {i j : ℕ}
+    (hstate : iterateT i n = iterateT j n) :
+    orbitWindowHeight n i = orbitWindowHeight n j :=
+  orbitWindowHeight_eq_of_oddOrbitLabel_eq (congrArg Subtype.val hstate)
+
+/--
+Number of occurrences of an exact height inside the ordered window profile.
+-/
+noncomputable def orbitWindowHeightCountEq (n : OddNat) (k h : ℕ) : ℕ :=
+  (orbitWindowHeightSeq n k).countP (fun x => x == h)
+
+/--
+Number of entries whose height is at least `threshold` inside the ordered
+window profile.
+-/
+noncomputable def orbitWindowHeightCountGe (n : OddNat) (k threshold : ℕ) : ℕ :=
+  (orbitWindowHeightSeq n k).countP (fun x => decide (threshold ≤ x))
+
+/--
+The exact-height occupation count is bounded by the window size.
+-/
+theorem orbitWindowHeightCountEq_le_window
+    (n : OddNat) (k h : ℕ) :
+    orbitWindowHeightCountEq n k h ≤ k := by
+  unfold orbitWindowHeightCountEq
+  simpa [orbitWindowHeightSeq_length] using
+    (List.countP_le_length (p := fun x => x == h) (l := orbitWindowHeightSeq n k))
+
+/--
+The threshold occupation count is bounded by the window size.
+-/
+theorem orbitWindowHeightCountGe_le_window
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGe n k threshold ≤ k := by
+  unfold orbitWindowHeightCountGe
+  simpa [orbitWindowHeightSeq_length] using
+    (List.countP_le_length
+      (p := fun x => decide (threshold ≤ x)) (l := orbitWindowHeightSeq n k))
+
+/--
+If every in-window height is exactly `h`, then the exact-height occupation
+count fills the whole window.
+-/
+theorem orbitWindowHeightCountEq_eq_window_of_forall_eq
+    (n : OddNat) {k h : ℕ}
+    (hall : ∀ i, i < k → orbitWindowHeight n i = h) :
+    orbitWindowHeightCountEq n k h = k := by
+  unfold orbitWindowHeightCountEq orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      have hprefix : ∀ i, i < k → orbitWindowHeight n i = h := by
+        intro i hi
+        exact hall i (Nat.lt_trans hi (Nat.lt_succ_self k))
+      have hlast : orbitWindowHeight n k = h := hall k (Nat.lt_succ_self k)
+      simp [List.range_succ, ih hprefix, hlast]
+
+/--
+If every in-window height is at least `threshold`, then the threshold
+occupation count fills the whole window.
+-/
+theorem orbitWindowHeightCountGe_eq_window_of_forall_ge
+    (n : OddNat) {k threshold : ℕ}
+    (hall : ∀ i, i < k → threshold ≤ orbitWindowHeight n i) :
+    orbitWindowHeightCountGe n k threshold = k := by
+  unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      have hprefix : ∀ i, i < k → threshold ≤ orbitWindowHeight n i := by
+        intro i hi
+        exact hall i (Nat.lt_trans hi (Nat.lt_succ_self k))
+      have hlast : threshold ≤ orbitWindowHeight n k := hall k (Nat.lt_succ_self k)
+      simp [List.range_succ, ih hprefix, hlast]
 
 /--
 Block shifts preserve the raw height when the observed height is below the
