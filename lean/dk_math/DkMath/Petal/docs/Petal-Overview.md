@@ -923,6 +923,7 @@ PetalCarrierLabelMapData
   -> product of label support <= supportMass GN
   -> product of label support <= rad GN
   -> 2^(selected index count) <= supportMass/rad GN
+  -> PrimitiveBeam/Zsigmondy families directly supply the same count bound
 ```
 
 Core theorem names:
@@ -944,6 +945,10 @@ petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalCarrierLabelMapData_two_pow_card_le_rad_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
+petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
 ```
 
 NoLift is deliberately not consumed by this bridge.  The ABC support/rad side

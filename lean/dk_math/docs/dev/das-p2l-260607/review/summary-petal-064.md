@@ -391,6 +391,10 @@ petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
 petalCarrierLabelMapData_two_pow_card_le_rad_GN
 petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
+petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
 ```
 
 The bridge reads Petal carrier-label data as ABC finite support:
@@ -420,3 +424,19 @@ PetalCarrierLabelMapData on I
 This is the ABC analogue of the Erdos finite-family count spine.  It gives a
 small, reusable lower bound without requiring a concrete prime enumeration and
 without consuming NoLift.
+
+The third checkpoint adds direct PrimitiveBeam / Zsigmondy wrappers:
+
+```text
+PrimitiveBeam family in body coordinates
+  -> 2^card(I) <= supportMass(GN d x u)
+  -> 2^card(I) <= rad(GN d x u)
+
+Zsigmondy primitive-divisor family
+  -> 2^card(I) <= supportMass(GN d (a - b) b)
+  -> 2^card(I) <= rad(GN d (a - b) b)
+```
+
+These are thin wrapper theorems.  They do not add arithmetic strength beyond
+the constructor route; they make the ABC negotiation callable directly from the
+two main primitive-prime provider families.

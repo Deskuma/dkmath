@@ -309,5 +309,119 @@ theorem petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
     (petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod I hdata)
     (petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN I hGN0 hdata)
 
+/--
+Direct PrimitiveBeam-to-ABC support-mass count lower bound in body coordinates.
+
+PrimitiveBeam witnesses supply the Petal carrier locations.  The address and
+label-recovery hypotheses ensure that the selected labels remain distinct, so
+`card I` independent prime supports force `2 ^ I.card` into the ABC support
+mass of the GN surface.
+-/
+theorem petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    2 ^ I.card ≤ DkMath.ABC.supportMass (GN d x u) :=
+  petalCarrierLabelMapData_two_pow_card_le_supportMass_GN I hGN0
+    (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+      I d x u mOf qOf hd hd1 hm hminj hlabel hprim)
+
+/--
+Direct PrimitiveBeam-to-ABC radical count lower bound in body coordinates.
+
+This is the compact ABC-facing form:
+
+```text
+PrimitiveBeam family with k selected carriers
+  -> 2^k <= rad(GN d x u)
+```
+-/
+theorem petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (d x u : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hGN0 : GN d x u ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow
+          (qOf i) (x + u) u d) :
+    2 ^ I.card ≤ DkMath.ABC.rad (GN d x u) :=
+  petalCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0
+    (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
+      I d x u mOf qOf hd hd1 hm hminj hlabel hprim)
+
+/--
+Direct Zsigmondy-to-ABC support-mass count lower bound on the GN surface
+`GN d (a - b) b`.
+
+Zsigmondy supplies carrier locations; the explicit family-level address and
+label-recovery hypotheses supply distinct selected support.
+-/
+theorem petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hGN0 : GN d (a - b) b ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    2 ^ I.card ≤ DkMath.ABC.supportMass (GN d (a - b) b) :=
+  petalCarrierLabelMapData_two_pow_card_le_supportMass_GN I hGN0
+    (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+      I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim)
+
+/--
+Direct Zsigmondy-to-ABC radical count lower bound on the GN surface
+`GN d (a - b) b`.
+
+This is the compact Zsigmondy-facing ABC form:
+
+```text
+Zsigmondy primitive-divisor family with k selected carriers
+  -> 2^k <= rad(GN d (a - b) b)
+```
+-/
+theorem petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+    {ι : Type _}
+    (I : Finset ι)
+    (a b d : ℕ)
+    (mOf qOf : ι → ℕ)
+    (hGN0 : GN d (a - b) b ≠ 0)
+    (hd : 0 < d) (hd1 : 1 < d) (hab_lt : b < a)
+    (hm : ∀ i, i ∈ I → 1 ≤ mOf i)
+    (hminj : Set.InjOn mOf ↑I)
+    (hlabel :
+      ∀ i, i ∈ I → ∀ j, j ∈ I → qOf i = qOf j → mOf i = mOf j)
+    (hprim :
+      ∀ i, i ∈ I →
+        DkMath.Zsigmondy.PrimitivePrimeDivisor a b d (qOf i)) :
+    2 ^ I.card ≤ DkMath.ABC.rad (GN d (a - b) b) :=
+  petalCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0
+    (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
+      I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim)
+
 end Petal
 end DkMath
