@@ -870,6 +870,26 @@ These wrappers are the current public route from PrimitiveBeam/Zsigmondy witness
 families to the finite Erdos log-capacity provider.  The no-lift wrappers still
 require explicit local no-lift hypotheses.
 
+### Obstruction Lemmas
+
+`DkMath.Petal.Obstruction` records the first small `False` lemmas for route
+boundaries:
+
+```text
+petalAddressNoncollision_contradiction_of_same_address_ne_index
+labelRecovery_contradiction_of_same_label_ne_value
+valueInjective_contradiction_of_same_value_ne_index
+petalCarrierLabelNoncollision_contradiction_of_same_label_ne_index
+noLift_contradiction_of_square_dvd_GN
+padicValNat_eq_one_contradiction_of_two_le
+petalNoLift_contradiction_of_padicValNat_two_le
+petalNoLift_obstruction_of_padicValNat_ge
+```
+
+These theorems do not add bad assumptions as axioms.  They name the points where
+a candidate route stops being compatible with address noncollision, finite
+prime-channel independence, or local no-lift valuation control.
+
 ## What This Does Not Claim Yet
 
 The package does not yet prove a standard primorial theorem using a concrete
