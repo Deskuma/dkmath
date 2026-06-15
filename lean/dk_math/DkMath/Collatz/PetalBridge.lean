@@ -155,6 +155,72 @@ theorem orbitWindowHeightSeq_sum_eq_sumS (n : OddNat) (k : ℕ) :
         orbitWindowHeight_eq_s_iterateT, ih']
 
 /--
+If every height in the window is at least `threshold`, then the accumulated
+Collatz height is at least `k * threshold`.
+
+This is the integer threshold form of an average-height lower bound.  It avoids
+real logarithms and keeps the bridge on the combinatorial side.
+-/
+theorem orbitWindowHeightSeq_sum_ge_of_forall_ge
+    (n : OddNat) {k threshold : ℕ}
+    (h : ∀ i, i < k → threshold ≤ orbitWindowHeight n i) :
+    k * threshold ≤ sumS n k := by
+  induction k with
+  | zero =>
+      simp [sumS]
+  | succ k ih =>
+      have hprefix : ∀ i, i < k → threshold ≤ orbitWindowHeight n i := by
+        intro i hi
+        exact h i (Nat.lt_trans hi (Nat.lt_succ_self k))
+      have hlast : threshold ≤ orbitWindowHeight n k := h k (Nat.lt_succ_self k)
+      have ih' : k * threshold ≤ sumS n k := ih hprefix
+      rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+      rw [Nat.succ_mul]
+      exact Nat.add_le_add ih' hlast
+
+/--
+The prefix of the ordered height profile has sum `sumS n r`, as long as the
+prefix length `r` lies inside the ambient window `k`.
+-/
+theorem orbitWindowHeightSeq_take_sum_eq_sumS
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowHeightSeq n k).take r).sum = sumS n r := by
+  rw [← orbitWindowHeightSeq_sum_eq_sumS n r]
+  simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
+
+/--
+Reading the ordered height profile at an in-window time recovers the pointwise
+height observation.
+-/
+theorem orbitWindowHeightSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowHeightSeq n k)[i]? = some (orbitWindowHeight n i) := by
+  simp [orbitWindowHeightSeq, hi]
+
+/--
+Equal Collatz orbit labels have equal height observations.
+-/
+theorem orbitWindowHeight_eq_of_oddOrbitLabel_eq
+    {n : OddNat} {i j : ℕ}
+    (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
+    orbitWindowHeight n i = orbitWindowHeight n j := by
+  simp [orbitWindowHeight, hlabel]
+
+/--
+A label collision forces equality of the height observations at the colliding
+times.
+
+If the orbit has returned to the same odd state, then the next `v2` height read
+from that state is also the same.
+-/
+theorem orbitWindowHeight_eq_of_collision
+    {n : OddNat} {k i j : ℕ}
+    (_hi : i < k) (_hj : j < k)
+    (hlabel : oddOrbitLabel n i = oddOrbitLabel n j) :
+    orbitWindowHeight n i = orbitWindowHeight n j :=
+  orbitWindowHeight_eq_of_oddOrbitLabel_eq hlabel
+
+/--
 Block shifts preserve the raw height when the observed height is below the
 block exponent.
 

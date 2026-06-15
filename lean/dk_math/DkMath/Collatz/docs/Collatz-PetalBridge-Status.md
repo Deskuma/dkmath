@@ -101,6 +101,11 @@ rawHeightLabel_eq_s
 orbitWindowHeight_eq_s_iterateT
 orbitWindowHeightSeq_length
 orbitWindowHeightSeq_sum_eq_sumS
+orbitWindowHeightSeq_sum_ge_of_forall_ge
+orbitWindowHeightSeq_take_sum_eq_sumS
+orbitWindowHeightSeq_get?_eq_some
+orbitWindowHeight_eq_of_oddOrbitLabel_eq
+orbitWindowHeight_eq_of_collision
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -197,6 +202,31 @@ accumulated drift input:
 The profile form is useful for address/window diagnostics, while `sumS` is the
 existing Collatz side used by drift and growth estimates.
 
+The next small API layer records how to use the profile:
+
+```text
+all heights >= threshold
+  -> k * threshold <= sumS n k
+
+take r from a k-window, with r <= k
+  -> prefix sum = sumS n r
+
+read index i in a k-window, with i < k
+  -> the list entry is orbitWindowHeight n i
+
+same orbit label at i and j
+  -> same height at i and j
+```
+
+This gives the window a usable sequence interface:
+
+```text
+local entries
+  -> prefix sums
+  -> threshold lower bounds
+  -> collision/fold height equality
+```
+
 The bridge theorem
 
 ```lean
@@ -216,6 +246,8 @@ orbit labels are mapped to prime labels
 orbit collision implies a specific fold/cycle condition
 2-adic height controls Petal address movement
 ordered height profile controls accumulated Collatz drift
+height-threshold hypotheses give integer lower bounds for `sumS`
+label collisions preserve the next height observation
 ```
 
 ## Next Candidate Work
@@ -225,7 +257,7 @@ The next safe steps are:
 ```text
 1. Connect the ordered height profile to a Petal address/residue reading.
 2. Add a window occupation/address transition layer.
-3. Use `sumS`/height-profile bounds as the Collatz-side drift input.
+3. Use prefix sums and threshold bounds as the Collatz-side drift input.
 4. Test whether an external label transform can turn orbit labels into carrier labels.
 5. Only after that, test whether Collatz labels can feed ABC support/rad.
 ```
