@@ -214,6 +214,10 @@ valueInjective_contradiction_of_same_value_ne_index
 labelRecovery_valueInjective_eq_of_same_label
 petalCarrierLabelMapData_eq_of_same_label
 petalNoLiftCarrierLabelMapData_eq_of_same_label
+petalCarrierLabelMapData_label_injOn
+petalNoLiftCarrierLabelMapData_label_injOn
+petalCarrierLabelMapData_labelNoncollision
+petalNoLiftCarrierLabelMapData_labelNoncollision
 petalCarrierLabelMapData_contradiction_of_same_label_ne_index
 petalNoLiftCarrierLabelMapData_contradiction_of_same_label_ne_index
 petalCarrierLabelNoncollision_contradiction_of_same_label_ne_index
@@ -231,6 +235,7 @@ same address under address noncollision
 same label but different value under label recovery
 same value but different index under value injectivity
 same label -> same value -> same selected index
+label injectivity and duplicate-free support from carrier-label map data
 duplicate selected prime label under carrier-label noncollision
 q^2 | GN under NoLift
 two-slot valuation under one-slot p-adic reading

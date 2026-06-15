@@ -152,6 +152,70 @@ theorem petalNoLiftCarrierLabelMapData_eq_of_same_label
     hdata.labelRecovery hdata.valueInjective hi hj hlabel
 
 /--
+Carrier-label map data makes the selected label map injective on the finite
+index set.
+
+This is the `Set.InjOn` API form of the safety chain
+`same label -> same value -> same selected index`.
+-/
+theorem petalCarrierLabelMapData_label_injOn
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    Set.InjOn qOf ↑I := by
+  intro i hi j hj hlabel
+  exact petalCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel
+
+/--
+No-lift carrier-label map data makes the selected label map injective on the
+finite index set.
+-/
+theorem petalNoLiftCarrierLabelMapData_label_injOn
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    Set.InjOn qOf ↑I := by
+  intro i hi j hj hlabel
+  exact petalNoLiftCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel
+
+/--
+Carrier-label map data supplies duplicate-free selected labels directly.
+
+Unlike the outer-address route, this theorem uses only the data object's
+recovery and injectivity fields.
+-/
+theorem petalCarrierLabelMapData_labelNoncollision
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hdata : PetalCarrierLabelMapData I d x u mOf qOf) :
+    PetalCarrierLabelNoncollisionOn I qOf := by
+  intro i hi j hj hij hlabel
+  exact hij (petalCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel)
+
+/--
+No-lift carrier-label map data supplies duplicate-free selected labels
+directly.
+
+The duplicate-free conclusion comes from the finite-family label contract, not
+from the no-lift valuation condition.
+-/
+theorem petalNoLiftCarrierLabelMapData_labelNoncollision
+    {ι : Type _}
+    {I : Finset ι}
+    {d x u : ℕ}
+    {mOf qOf : ι → ℕ}
+    (hdata : PetalNoLiftCarrierLabelMapData I d x u mOf qOf) :
+    PetalCarrierLabelNoncollisionOn I qOf := by
+  intro i hi j hj hij hlabel
+  exact hij (petalNoLiftCarrierLabelMapData_eq_of_same_label hdata hi hj hlabel)
+
+/--
 Carrier-label map data breaks if two distinct selected indices reuse the same
 label.
 

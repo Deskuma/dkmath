@@ -882,6 +882,10 @@ valueInjective_contradiction_of_same_value_ne_index
 labelRecovery_valueInjective_eq_of_same_label
 petalCarrierLabelMapData_eq_of_same_label
 petalNoLiftCarrierLabelMapData_eq_of_same_label
+petalCarrierLabelMapData_label_injOn
+petalNoLiftCarrierLabelMapData_label_injOn
+petalCarrierLabelMapData_labelNoncollision
+petalNoLiftCarrierLabelMapData_labelNoncollision
 petalCarrierLabelMapData_contradiction_of_same_label_ne_index
 petalNoLiftCarrierLabelMapData_contradiction_of_same_label_ne_index
 petalCarrierLabelNoncollision_contradiction_of_same_label_ne_index
@@ -899,6 +903,8 @@ The packaged carrier-label map lemmas also record the positive safety chain:
 
 ```text
 same label -> same value -> same selected index
+same label -> same selected index
+therefore labels are injective and duplicate-free on the finite family
 ```
 
 The corresponding obstruction theorem fires when a candidate route tries to
