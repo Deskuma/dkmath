@@ -85,6 +85,13 @@ theorem C_zero_add (F : KernelFamily T R) (t : T) : F.C (0 + t) = F.C t := by
 theorem S_zero_add (F : KernelFamily T R) (t : T) : F.S (0 + t) = F.S t := by
   simp
 
+@[simp]
+theorem act_zero (F : KernelFamily T R) (z : Vec R) :
+    UnitKernel.act (F.kernel 0) z = z := by
+  change Vec.star (((F.kernel 0 : UnitKernel R) : Vec R)) z = z
+  rw [F.kernel_zero]
+  simp
+
 /--
 The basic identity for the coordinate functions:
 `C(t)^2 + S(t)^2 = 1`.
@@ -117,6 +124,80 @@ theorem S_add (F : KernelFamily T R) (t s : T) :
     F.S (t + s) = F.C t * F.S s + F.S t * F.C s := by
   have h := congrArg Vec.beam (F.kernel_add t s)
   simpa [C, S, Vec.star] using h
+
+/-- Unit-kernel family action composes according to parameter addition. -/
+theorem act_add (F : KernelFamily T R) (t s : T) (z : Vec R) :
+    UnitKernel.act (F.kernel (t + s)) z
+      = UnitKernel.act (F.kernel t) (UnitKernel.act (F.kernel s) z) := by
+  change Vec.star (((F.kernel (t + s) : UnitKernel R) : Vec R)) z
+      = Vec.star (((F.kernel t : UnitKernel R) : Vec R))
+          (Vec.star (((F.kernel s : UnitKernel R) : Vec R)) z)
+  rw [F.kernel_add t s]
+  exact Vec.star_assoc
+    (((F.kernel t : UnitKernel R) : Vec R))
+    (((F.kernel s : UnitKernel R) : Vec R))
+    z
+
+/-- Core double-angle formula in the abstract unit-kernel family. -/
+theorem C_add_self (F : KernelFamily T R) (t : T) :
+    F.C (t + t) = F.C t ^ 2 - F.S t ^ 2 := by
+  rw [F.C_add]
+  ring
+
+/-- Beam double-angle formula in the abstract unit-kernel family. -/
+theorem S_add_self (F : KernelFamily T R) (t : T) :
+    F.S (t + t) = 2 * F.C t * F.S t := by
+  rw [F.S_add]
+  ring
+
+section AddGroup
+
+variable {T : Type u} {R : Type v} [AddGroup T] [CommRing R]
+
+theorem kernel_add_neg (F : KernelFamily T R) (t : T) :
+    Vec.star (((F.kernel t : UnitKernel R) : Vec R))
+      (((F.kernel (-t) : UnitKernel R) : Vec R)) = Vec.one R := by
+  have h := F.kernel_add t (-t)
+  have h' :
+      Vec.star (((F.kernel t : UnitKernel R) : Vec R))
+        (((F.kernel (-t) : UnitKernel R) : Vec R))
+        = ((F.kernel 0 : UnitKernel R) : Vec R) := by
+    simpa using h.symm
+  exact h'.trans F.kernel_zero
+
+theorem C_neg (F : KernelFamily T R) (t : T) :
+    F.C (-t) = F.C t := by
+  have hq : F.C t ^ 2 + F.S t ^ 2 = 1 := F.C_sq_add_S_sq t
+  have hc : F.C t * F.C (-t) - F.S t * F.S (-t) = 1 := by
+    simpa using (F.C_add t (-t)).symm
+  have hs : F.C t * F.S (-t) + F.S t * F.C (-t) = 0 := by
+    simpa using (F.S_add t (-t)).symm
+  have h : F.C (-t) - F.C t = 0 := by
+    linear_combination -F.C (-t) * hq + F.C t * hc + F.S t * hs
+  exact sub_eq_zero.mp h
+
+theorem S_neg (F : KernelFamily T R) (t : T) :
+    F.S (-t) = -F.S t := by
+  have hq : F.C t ^ 2 + F.S t ^ 2 = 1 := F.C_sq_add_S_sq t
+  have hc : F.C t * F.C (-t) - F.S t * F.S (-t) = 1 := by
+    simpa using (F.C_add t (-t)).symm
+  have hs : F.C t * F.S (-t) + F.S t * F.C (-t) = 0 := by
+    simpa using (F.S_add t (-t)).symm
+  have h : F.S (-t) + F.S t = 0 := by
+    linear_combination -F.S (-t) * hq - F.S t * hc + F.C t * hs
+  exact eq_neg_of_add_eq_zero_left h
+
+theorem C_sub (F : KernelFamily T R) (t s : T) :
+    F.C (t - s) = F.C t * F.C s + F.S t * F.S s := by
+  rw [sub_eq_add_neg, F.C_add, F.C_neg, F.S_neg]
+  ring
+
+theorem S_sub (F : KernelFamily T R) (t s : T) :
+    F.S (t - s) = F.S t * F.C s - F.C t * F.S s := by
+  rw [sub_eq_add_neg, F.S_add, F.C_neg, F.S_neg]
+  ring
+
+end AddGroup
 
 end KernelFamily
 

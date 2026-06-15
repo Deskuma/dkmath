@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.CosmicFormula.Rotation.CF2D.Basic
 import DkMath.CosmicFormula.Rotation.CF2D.Trig
+import DkMath.CosmicFormula.Rotation.CF2D.Real
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D"
 
