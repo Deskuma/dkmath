@@ -7,6 +7,7 @@ The implementation is under:
 - `DkMath.CosmicFormula.Rotation`
 - `DkMath.CosmicFormula.Rotation.CF2D`
 - `DkMath.CosmicFormula.Rotation.CF2D.Basic`
+- `DkMath.CosmicFormula.Rotation.CF2D.Failure`
 - `DkMath.CosmicFormula.Rotation.CF2D.Trig`
 - `DkMath.CosmicFormula.Rotation.CF2D.Real`
 
@@ -74,6 +75,31 @@ Thus a "rotation" is not assumed first.  The formal layer finds a
 square-mass-preserving unit-kernel action, and this action receives the
 rotation interpretation.
 
+Unit kernels also form the algebraic kernel product:
+
+```lean
+UnitKernel.star r s
+
+UnitKernel.star_val :
+  (UnitKernel.star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R)
+
+UnitKernel.star_one :
+  UnitKernel.star r (UnitKernel.one R) = r
+
+UnitKernel.one_star :
+  UnitKernel.star (UnitKernel.one R) r = r
+
+UnitKernel.star_assoc :
+  UnitKernel.star (UnitKernel.star p q) r
+    = UnitKernel.star p (UnitKernel.star q r)
+
+UnitKernel.star_comm :
+  UnitKernel.star r s = UnitKernel.star s r
+```
+
+These lemmas make the unit kernels available as the abstract rotation-kernel
+surface, while the underlying product remains the same `Vec.star` calculation.
+
 ## Level Sets
 
 `LevelSet R rho2` is the square-mass level set `Vec.q2 z = rho2`.
@@ -139,6 +165,15 @@ KernelFamily.act_add :
   UnitKernel.act (F.kernel (t + s)) z
     = UnitKernel.act (F.kernel t) (UnitKernel.act (F.kernel s) z)
 
+KernelFamily.actLevel :
+  LevelSet R rho2 -> LevelSet R rho2
+
+KernelFamily.actLevel_zero :
+  F.actLevel 0 z = z
+
+KernelFamily.actLevel_add :
+  F.actLevel (t + s) z = F.actLevel t (F.actLevel s z)
+
 KernelFamily.C_add_self :
   F.C (t + t) = F.C t ^ 2 - F.S t ^ 2
 
@@ -149,6 +184,31 @@ KernelFamily.S_add_self :
 These are the cosmic-formula versions of the basic trigonometric identities:
 they are derived from conservation and kernel composition, not from existing
 trigonometric API.
+
+## Failure Kernel
+
+`Failure.lean` records the nearby wrong-sign calculation.  If both coordinates
+use the plus sign
+
+```lean
+Vec.badStarPlus (a,b) (x,y) = (a*x + b*y, a*y + b*x)
+```
+
+then the square mass is not multiplicative.  The residual term is formalized as:
+
+```lean
+Vec.q2_badStarPlus :
+  Vec.q2 (Vec.badStarPlus (Vec.mk a b) (Vec.mk x y))
+    = (a ^ 2 + b ^ 2) * (x ^ 2 + y ^ 2) + 4 * a * b * x * y
+
+Vec.q2_badStarPlus_eq_q2_mul_add_residual :
+  Vec.q2 (Vec.badStarPlus r z)
+    = Vec.q2 r * Vec.q2 z + 4 * r.core * r.beam * z.core * z.beam
+```
+
+This separates the preservation kernel from a superficially similar but
+non-preserving kernel.  The cancellation in `Vec.q2_star` depends on the
+opposite signs in the two beam cross terms.
 
 ## Additive Group Layer
 

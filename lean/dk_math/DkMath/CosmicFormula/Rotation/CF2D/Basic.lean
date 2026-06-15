@@ -166,6 +166,48 @@ theorem coe_q2 [Semiring R] (r : UnitKernel R) : Vec.q2 (r : Vec R) = 1 :=
 def one (R : Type u) [CommRing R] : UnitKernel R :=
   ⟨Vec.one R, by simp [Vec.q2, Vec.one]⟩
 
+/-- Product of two unit kernels. -/
+def star [CommRing R] (r s : UnitKernel R) : UnitKernel R :=
+  ⟨Vec.star (r : Vec R) (s : Vec R), by
+    rw [Vec.q2_star, coe_q2, coe_q2, one_mul]⟩
+
+@[simp]
+theorem star_val [CommRing R] (r s : UnitKernel R) :
+    (star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R) := rfl
+
+@[simp]
+theorem star_q2 [CommRing R] (r s : UnitKernel R) : Vec.q2 (star r s : Vec R) = 1 :=
+  coe_q2 (star r s)
+
+@[simp]
+theorem star_one [CommRing R] (r : UnitKernel R) : star r (one R) = r := by
+  cases r with
+  | mk val q2_eq_one =>
+      simp [star, one]
+
+@[simp]
+theorem one_star [CommRing R] (r : UnitKernel R) : star (one R) r = r := by
+  cases r with
+  | mk val q2_eq_one =>
+      simp [star, one]
+
+theorem star_assoc [CommRing R] (p q r : UnitKernel R) :
+    star (star p q) r = star p (star q r) := by
+  cases p with
+  | mk pv hp =>
+      cases q with
+      | mk qv hq =>
+          cases r with
+          | mk rv hr =>
+              simp [star, Vec.star_assoc]
+
+theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
+  cases r with
+  | mk rv hr =>
+      cases s with
+      | mk sv hs =>
+          simp [star, Vec.star_comm]
+
 /-- The action of a unit kernel on a two-component state. -/
 def act [CommRing R] (r : UnitKernel R) (z : Vec R) : Vec R :=
   Vec.star (r : Vec R) z

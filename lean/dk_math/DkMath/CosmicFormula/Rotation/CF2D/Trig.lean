@@ -138,6 +138,29 @@ theorem act_add (F : KernelFamily T R) (t s : T) (z : Vec R) :
     (((F.kernel s : UnitKernel R) : Vec R))
     z
 
+/-- A kernel family acts on every square-mass level set. -/
+def actLevel (F : KernelFamily T R) (t : T) {rho2 : R}
+    (z : LevelSet R rho2) : LevelSet R rho2 :=
+  LevelSet.act (F.kernel t) z
+
+@[simp]
+theorem actLevel_val (F : KernelFamily T R) (t : T) {rho2 : R}
+    (z : LevelSet R rho2) :
+    (F.actLevel t z).1 = UnitKernel.act (F.kernel t) z.1 := rfl
+
+@[simp]
+theorem actLevel_zero (F : KernelFamily T R) {rho2 : R}
+    (z : LevelSet R rho2) :
+    F.actLevel 0 z = z := by
+  apply Subtype.ext
+  simp [actLevel, F.act_zero]
+
+theorem actLevel_add (F : KernelFamily T R) (t s : T) {rho2 : R}
+    (z : LevelSet R rho2) :
+    F.actLevel (t + s) z = F.actLevel t (F.actLevel s z) := by
+  apply Subtype.ext
+  simp [actLevel, F.act_add]
+
 /-- Core double-angle formula in the abstract unit-kernel family. -/
 theorem C_add_self (F : KernelFamily T R) (t : T) :
     F.C (t + t) = F.C t ^ 2 - F.S t ^ 2 := by
