@@ -9,6 +9,7 @@ The implementation is under:
 - `DkMath.CosmicFormula.Rotation.CF2D.Basic`
 - `DkMath.CosmicFormula.Rotation.CF2D.Failure`
 - `DkMath.CosmicFormula.Rotation.CF2D.Trig`
+- `DkMath.CosmicFormula.Rotation.CF2D.CFSinCos`
 - `DkMath.CosmicFormula.Rotation.CF2D.Real`
 
 The physical directory is `DkMath/CosmicFormula/Rotation/CF2D`.  The `CF2D`
@@ -242,6 +243,59 @@ The target unit-kernel product is commutative, so a `KernelFamily` records the
 commutative image of the additive parameter.  This is compatible with the
 intended angle-parameter examples.
 
+## Cosmic-Formula Sine and Cosine
+
+`CFSinCos.lean` gives user-facing names to the two coordinate functions of a
+kernel family:
+
+```lean
+KernelFamily.cfcos F t = F.C t
+KernelFamily.cfsin F t = F.S t
+```
+
+These are not defined from `Real.cos` or `Real.sin`.  They are the core and
+beam coordinates of a square-mass-preserving unit-kernel family.
+
+The wrapper API exposes the same algebraic identities under cosmic-formula
+names:
+
+```lean
+KernelFamily.cfcos_sq_add_cfsin_sq :
+  F.cfcos t ^ 2 + F.cfsin t ^ 2 = 1
+
+KernelFamily.cfcos_add :
+  F.cfcos (t + s)
+    = F.cfcos t * F.cfcos s - F.cfsin t * F.cfsin s
+
+KernelFamily.cfsin_add :
+  F.cfsin (t + s)
+    = F.cfcos t * F.cfsin s + F.cfsin t * F.cfcos s
+
+KernelFamily.cfcos_add_self :
+  F.cfcos (t + t) = F.cfcos t ^ 2 - F.cfsin t ^ 2
+
+KernelFamily.cfsin_add_self :
+  F.cfsin (t + t) = 2 * F.cfcos t * F.cfsin t
+```
+
+For additive groups, the same file exposes negation and subtraction formulas:
+
+```lean
+KernelFamily.cfcos_neg :
+  F.cfcos (-t) = F.cfcos t
+
+KernelFamily.cfsin_neg :
+  F.cfsin (-t) = -F.cfsin t
+
+KernelFamily.cfcos_sub :
+  F.cfcos (t - s)
+    = F.cfcos t * F.cfcos s + F.cfsin t * F.cfsin s
+
+KernelFamily.cfsin_sub :
+  F.cfsin (t - s)
+    = F.cfsin t * F.cfcos s - F.cfcos t * F.cfsin s
+```
+
 ## Failure Kernel
 
 `Failure.lean` records the nearby wrong-sign calculation.  If both coordinates
@@ -334,6 +388,12 @@ realTrigKernelFamily_C :
 
 realTrigKernelFamily_S :
   realTrigKernelFamily.S t = Real.sin t
+
+realTrigKernelFamily_cfcos :
+  realTrigKernelFamily.cfcos t = Real.cos t
+
+realTrigKernelFamily_cfsin :
+  realTrigKernelFamily.cfsin t = Real.sin t
 ```
 
 ## Extension Notes

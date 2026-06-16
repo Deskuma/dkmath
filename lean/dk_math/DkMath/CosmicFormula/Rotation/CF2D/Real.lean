@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.CosmicFormula.Rotation.CF2D.Trig
+import DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.Real"
 
@@ -43,6 +43,14 @@ theorem realTrigKernelFamily_C (t : ℝ) :
 @[simp]
 theorem realTrigKernelFamily_S (t : ℝ) :
     realTrigKernelFamily.S t = Real.sin t := rfl
+
+@[simp]
+theorem realTrigKernelFamily_cfcos (t : ℝ) :
+    realTrigKernelFamily.cfcos t = Real.cos t := rfl
+
+@[simp]
+theorem realTrigKernelFamily_cfsin (t : ℝ) :
+    realTrigKernelFamily.cfsin t = Real.sin t := rfl
 
 @[simp]
 theorem realTrigKernelFamily_kernel_val (t : ℝ) :
