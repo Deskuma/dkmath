@@ -339,9 +339,9 @@ index 191e1929..2b291063 100644
  import DkMath.CosmicFormula.PowerGapBeamPrimitive  -- Primitive Power Beam bridge
  import DkMath.CosmicFormula.Mass  -- Cosmic mass and Body/Gap split layer
 +import DkMath.CosmicFormula.Rotation  -- Cosmic Formula rotation layer
- 
+
  #print "file: DkMath.CosmicFormula"
- 
+
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation.lean
 new file mode 100644
 index 00000000..e132d1b1

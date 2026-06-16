@@ -423,12 +423,12 @@ index 5ba3aa2a..fd579fea 100644
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.CosmicFormula.Rotation.CF2D.Basic
 +import DkMath.CosmicFormula.Rotation.CF2D.Failure
  import DkMath.CosmicFormula.Rotation.CF2D.Trig
  import DkMath.CosmicFormula.Rotation.CF2D.Real
- 
+
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Basic.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Basic.lean
 index c5d56b85..fcb1dbf5 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Basic.lean
@@ -436,7 +436,7 @@ index c5d56b85..fcb1dbf5 100644
 @@ -166,6 +166,48 @@ theorem coe_q2 [Semiring R] (r : UnitKernel R) : Vec.q2 (r : Vec R) = 1 :=
  def one (R : Type u) [CommRing R] : UnitKernel R :=
    ⟨Vec.one R, by simp [Vec.q2, Vec.one]⟩
- 
+
 +/-- Product of two unit kernels. -/
 +def star [CommRing R] (r s : UnitKernel R) : UnitKernel R :=
 +  ⟨Vec.star (r : Vec R) (s : Vec R), by
@@ -566,7 +566,7 @@ index 71820603..577bef6b 100644
 @@ -138,6 +138,29 @@ theorem act_add (F : KernelFamily T R) (t s : T) (z : Vec R) :
      (((F.kernel s : UnitKernel R) : Vec R))
      z
- 
+
 +/-- A kernel family acts on every square-mass level set. -/
 +def actLevel (F : KernelFamily T R) (t : T) {rho2 : R}
 +    (z : LevelSet R rho2) : LevelSet R rho2 :=
@@ -604,11 +604,11 @@ index 42f5f49e..9c9c5802 100644
 +- `DkMath.CosmicFormula.Rotation.CF2D.Failure`
  - `DkMath.CosmicFormula.Rotation.CF2D.Trig`
  - `DkMath.CosmicFormula.Rotation.CF2D.Real`
- 
+
 @@ -74,6 +75,31 @@ Thus a "rotation" is not assumed first.  The formal layer finds a
  square-mass-preserving unit-kernel action, and this action receives the
  rotation interpretation.
- 
+
 +Unit kernels also form the algebraic kernel product:
 +
 +```lean
@@ -635,12 +635,12 @@ index 42f5f49e..9c9c5802 100644
 +surface, while the underlying product remains the same `Vec.star` calculation.
 +
  ## Level Sets
- 
+
  `LevelSet R rho2` is the square-mass level set `Vec.q2 z = rho2`.
 @@ -139,6 +165,15 @@ KernelFamily.act_add :
    UnitKernel.act (F.kernel (t + s)) z
      = UnitKernel.act (F.kernel t) (UnitKernel.act (F.kernel s) z)
- 
+
 +KernelFamily.actLevel :
 +  LevelSet R rho2 -> LevelSet R rho2
 +
@@ -652,11 +652,11 @@ index 42f5f49e..9c9c5802 100644
 +
  KernelFamily.C_add_self :
    F.C (t + t) = F.C t ^ 2 - F.S t ^ 2
- 
+
 @@ -150,6 +185,31 @@ These are the cosmic-formula versions of the basic trigonometric identities:
  they are derived from conservation and kernel composition, not from existing
  trigonometric API.
- 
+
 +## Failure Kernel
 +
 +`Failure.lean` records the nearby wrong-sign calculation.  If both coordinates
@@ -683,7 +683,7 @@ index 42f5f49e..9c9c5802 100644
 +opposite signs in the two beam cross terms.
 +
  ## Additive Group Layer
- 
+
  When the parameter type has an additive group structure, `Trig.lean` also
 ````
 `````

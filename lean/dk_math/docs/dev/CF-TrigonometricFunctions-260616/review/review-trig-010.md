@@ -323,7 +323,7 @@ index b52d8be9..57d7c787 100644
 @@ -73,6 +73,53 @@ theorem cfsin_add_self (F : KernelFamily T R) (t : T) :
      F.cfsin (t + t) = 2 * F.cfcos t * F.cfsin t := by
    simpa [cfcos, cfsin] using F.S_add_self t
- 
+
 +/-- The unit kernel is reconstructed from `cfcos` and `cfsin`. -/
 +theorem kernel_val_eq_mk_cfcos_cfsin (F : KernelFamily T R) (t : T) :
 +    ((F.kernel t : UnitKernel R) : Vec R) = Vec.mk (F.cfcos t) (F.cfsin t) := by
@@ -372,7 +372,7 @@ index b52d8be9..57d7c787 100644
 +              simp [cfcos, cfsin, C, S, UnitKernel.act, Vec.star, h]
 +
  section AddGroup
- 
+
  variable {T : Type u} {R : Type v} [AddGroup T] [CommRing R]
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean
 index a6864a04..f420565b 100644
@@ -381,7 +381,7 @@ index a6864a04..f420565b 100644
 @@ -57,6 +57,16 @@ theorem realTrigKernelFamily_kernel_val (t : ℝ) :
      ((realTrigKernelFamily.kernel t : UnitKernel ℝ) : Vec ℝ)
        = ⟨Real.cos t, Real.sin t⟩ := rfl
- 
+
 +theorem realTrigKernelFamily_act_core (t : ℝ) (z : Vec ℝ) :
 +    (UnitKernel.act (realTrigKernelFamily.kernel t) z).core
 +      = Real.cos t * z.core - Real.sin t * z.beam := by
@@ -402,7 +402,7 @@ index 6c4ef94b..15c2bbe6 100644
 @@ -278,6 +278,29 @@ KernelFamily.cfsin_add_self :
    F.cfsin (t + t) = 2 * F.cfcos t * F.cfsin t
  ```
- 
+
 +The same API also states that `cfcos` and `cfsin` reconstruct the unit kernel
 +and generate its coordinate action:
 +
@@ -427,10 +427,10 @@ index 6c4ef94b..15c2bbe6 100644
 +```
 +
  For additive groups, the same file exposes negation and subtraction formulas:
- 
+
  ```lean
 @@ -394,8 +417,21 @@ realTrigKernelFamily_cfcos :
- 
+
  realTrigKernelFamily_cfsin :
    realTrigKernelFamily.cfsin t = Real.sin t
 +
@@ -442,14 +442,14 @@ index 6c4ef94b..15c2bbe6 100644
 +  (UnitKernel.act (realTrigKernelFamily.kernel t) z).beam
 +    = Real.cos t * z.beam + Real.sin t * z.core
  ```
- 
+
 +The final API interpretation is that `cfcos` and `cfsin` are not aliases for
 +the analytic real functions.  They reconstruct the square-mass-one kernel and
 +give the coordinate formula for its action.  The usual real sine and cosine are
 +provided only as the standard real model of this algebraic kernel action.
 +
  ## Extension Notes
- 
+
  The implementation is deliberately algebraic and ring-polymorphic.  This keeps
 ````
 `````

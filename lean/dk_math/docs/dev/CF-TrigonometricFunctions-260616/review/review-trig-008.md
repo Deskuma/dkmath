@@ -512,7 +512,7 @@ index d21f29b6..2df0bd0c 100644
 @@ -151,6 +151,35 @@ theorem q2_conj [CommRing R] (z : Vec R) : q2 (conj z) = q2 z := by
    | mk x y =>
        simp [q2, conj]
- 
+
 +@[simp]
 +theorem conj_conj [Ring R] (z : Vec R) : conj (conj z) = z := by
 +  cases z with
@@ -543,12 +543,12 @@ index d21f29b6..2df0bd0c 100644
 +      constructor <;> ring
 +
  end Vec
- 
+
  /-- A map preserves the two-component square mass. -/
 @@ -190,6 +219,15 @@ theorem ext [Semiring R] {r s : UnitKernel R} (h : (r : Vec R) = (s : Vec R)) :
  def one (R : Type u) [CommRing R] : UnitKernel R :=
    ⟨Vec.one R, by simp [Vec.q2, Vec.one]⟩
- 
+
 +/-- Conjugation of a unit kernel. -/
 +def conj [CommRing R] (r : UnitKernel R) : UnitKernel R :=
 +  ⟨Vec.conj (r : Vec R), by
@@ -564,7 +564,7 @@ index d21f29b6..2df0bd0c 100644
 @@ -232,6 +270,18 @@ theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
        | mk sv hs =>
            simp [star, Vec.star_comm]
- 
+
 +@[simp]
 +theorem star_conj [CommRing R] (r : UnitKernel R) : star r (conj r) = one R := by
 +  apply UnitKernel.ext
@@ -585,7 +585,7 @@ index 008a82f7..ec782654 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md
 @@ -55,10 +55,23 @@ Vec.conj z = (z.core, -z.beam)
- 
+
  Vec.q2_conj :
    Vec.q2 (Vec.conj z) = Vec.q2 z
 +
@@ -601,28 +601,28 @@ index 008a82f7..ec782654 100644
 +Vec.conj_star_self :
 +  Vec.star (Vec.conj z) z = Vec.mk (Vec.q2 z) 0
  ```
- 
+
  It is used to identify the second preserving sign pattern as the ordinary
 -`Vec.star` action by a conjugated left kernel.
 +`Vec.star` action by a conjugated left kernel.  The self-product identities
 +show that conjugation recovers the square mass into the core coordinate.
- 
+
  ## Unit Kernels and Rotation Reading
- 
+
 @@ -95,6 +108,9 @@ UnitKernel.star r s
  UnitKernel.star_val :
    (UnitKernel.star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R)
- 
+
 +UnitKernel.conj :
 +  UnitKernel R -> UnitKernel R
 +
  UnitKernel.ext :
    (r : Vec R) = (s : Vec R) -> r = s
- 
+
 @@ -111,6 +127,12 @@ UnitKernel.star_assoc :
  UnitKernel.star_comm :
    UnitKernel.star r s = UnitKernel.star s r
- 
+
 +UnitKernel.star_conj :
 +  UnitKernel.star r (UnitKernel.conj r) = UnitKernel.one R
 +
@@ -631,16 +631,16 @@ index 008a82f7..ec782654 100644
 +
  UnitKernel.act_one :
    UnitKernel.act (UnitKernel.one R) z = z
- 
+
 @@ -123,6 +145,8 @@ These lemmas make the unit kernels available as the abstract rotation-kernel
  surface, while the underlying product remains the same `Vec.star` calculation.
  The `act_star` theorem is the action law: multiplying kernels and then acting
  is the same as acting successively.
 +The `UnitKernel.conj` theorems show that conjugation acts as the inverse of a
 +unit kernel, without yet installing a global `Group` instance.
- 
+
  ## Level Sets
- 
+
 @@ -214,6 +238,9 @@ KernelFamily.S_add_self :
  These are the cosmic-formula versions of the basic trigonometric identities:
  they are derived from conservation and kernel composition, not from existing
@@ -648,8 +648,8 @@ index 008a82f7..ec782654 100644
 +The target unit-kernel product is commutative, so a `KernelFamily` records the
 +commutative image of the additive parameter.  This is compatible with the
 +intended angle-parameter examples.
- 
+
  ## Failure Kernel
- 
+
 ````
 `````

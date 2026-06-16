@@ -458,7 +458,7 @@ index ac6fab25..b3f545a7 100644
 @@ -69,6 +69,22 @@ theorem S_zero (F : KernelFamily T R) : F.S 0 = 0 := by
    have h := congrArg Vec.beam F.kernel_zero
    simpa [S, Vec.one] using h
- 
+
 +@[simp]
 +theorem C_add_zero (F : KernelFamily T R) (t : T) : F.C (t + 0) = F.C t := by
 +  simp
@@ -494,12 +494,12 @@ index 891a2c20..56377702 100644
 +      = Vec.star ((kernel t : UnitKernel R) : Vec R)
 +          ((kernel s : UnitKernel R) : Vec R)
  ```
- 
+
  The coordinate functions are:
 @@ -111,6 +113,18 @@ KernelFamily.C_zero :
  KernelFamily.S_zero :
    F.S 0 = 0
- 
+
 +KernelFamily.C_add_zero :
 +  F.C (t + 0) = F.C t
 +
@@ -514,6 +514,6 @@ index 891a2c20..56377702 100644
 +
  KernelFamily.C_add :
    F.C (t + s) = F.C t * F.C s - F.S t * F.S s
- 
+
 ````
 `````

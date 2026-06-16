@@ -736,7 +736,7 @@ index fd579fea..9963d717 100644
  import DkMath.CosmicFormula.Rotation.CF2D.Trig
 +import DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
  import DkMath.CosmicFormula.Rotation.CF2D.Real
- 
+
  #print "file: DkMath.CosmicFormula.Rotation.CF2D"
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/CFSinCos.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/CFSinCos.lean
 new file mode 100644
@@ -856,16 +856,16 @@ index 99d40f57..a6864a04 100644
 @@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.CosmicFormula.Rotation.CF2D.Trig
 +import DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
- 
+
  #print "file: DkMath.CosmicFormula.Rotation.CF2D.Real"
- 
+
 @@ -44,6 +44,14 @@ theorem realTrigKernelFamily_C (t : ℝ) :
  theorem realTrigKernelFamily_S (t : ℝ) :
      realTrigKernelFamily.S t = Real.sin t := rfl
- 
+
 +@[simp]
 +theorem realTrigKernelFamily_cfcos (t : ℝ) :
 +    realTrigKernelFamily.cfcos t = Real.cos t := rfl
@@ -887,12 +887,12 @@ index ec782654..6c4ef94b 100644
  - `DkMath.CosmicFormula.Rotation.CF2D.Trig`
 +- `DkMath.CosmicFormula.Rotation.CF2D.CFSinCos`
  - `DkMath.CosmicFormula.Rotation.CF2D.Real`
- 
+
  The physical directory is `DkMath/CosmicFormula/Rotation/CF2D`.  The `CF2D`
 @@ -242,6 +243,59 @@ The target unit-kernel product is commutative, so a `KernelFamily` records the
  commutative image of the additive parameter.  This is compatible with the
  intended angle-parameter examples.
- 
+
 +## Cosmic-Formula Sine and Cosine
 +
 +`CFSinCos.lean` gives user-facing names to the two coordinate functions of a
@@ -947,10 +947,10 @@ index ec782654..6c4ef94b 100644
 +```
 +
  ## Failure Kernel
- 
+
  `Failure.lean` records the nearby wrong-sign calculation.  If both coordinates
 @@ -334,6 +388,12 @@ realTrigKernelFamily_C :
- 
+
  realTrigKernelFamily_S :
    realTrigKernelFamily.S t = Real.sin t
 +
@@ -960,7 +960,7 @@ index ec782654..6c4ef94b 100644
 +realTrigKernelFamily_cfsin :
 +  realTrigKernelFamily.cfsin t = Real.sin t
  ```
- 
+
  ## Extension Notes
 ````
 `````

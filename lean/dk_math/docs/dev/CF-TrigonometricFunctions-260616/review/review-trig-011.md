@@ -281,7 +281,7 @@ index f420565b..80a0e51b 100644
 @@ -67,6 +67,14 @@ theorem realTrigKernelFamily_act_beam (t : ℝ) (z : Vec ℝ) :
        = Real.cos t * z.beam + Real.sin t * z.core := by
    simp
- 
+
 +theorem realTrigKernelFamily_act_eq (t : ℝ) (z : Vec ℝ) :
 +    UnitKernel.act (realTrigKernelFamily.kernel t) z
 +      = Vec.mk

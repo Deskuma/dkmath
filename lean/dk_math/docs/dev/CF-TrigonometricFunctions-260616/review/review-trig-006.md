@@ -421,7 +421,7 @@ index fcb1dbf5..1edc4999 100644
 @@ -162,6 +162,15 @@ instance [Semiring R] : Coe (UnitKernel R) (Vec R) :=
  theorem coe_q2 [Semiring R] (r : UnitKernel R) : Vec.q2 (r : Vec R) = 1 :=
    r.q2_eq_one
- 
+
 +@[ext]
 +theorem ext [Semiring R] {r s : UnitKernel R} (h : (r : Vec R) = (s : Vec R)) : r = s := by
 +  cases r with
@@ -437,7 +437,7 @@ index fcb1dbf5..1edc4999 100644
 @@ -212,6 +221,17 @@ theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
  def act [CommRing R] (r : UnitKernel R) (z : Vec R) : Vec R :=
    Vec.star (r : Vec R) z
- 
+
 +@[simp]
 +theorem act_one [CommRing R] (z : Vec R) : act (one R) z = z := by
 +  simp [act, one]
@@ -459,7 +459,7 @@ index d2b490ed..20e20bf8 100644
 @@ -11,10 +11,10 @@ import DkMath.CosmicFormula.Rotation.CF2D.Basic
  /-!
  # Failure examples for the CF2D rotation kernel
- 
+
 -This file records what breaks when the sign pattern of the two-component kernel
 -is changed.  The correct kernel cancels the opposite beam terms.  The plus-plus
 -kernel leaves a residual `4 * a * b * x * y`, so it does not preserve `q2` in
@@ -469,12 +469,12 @@ index d2b490ed..20e20bf8 100644
 +nearby sign patterns preserve `q2`; others leave a residual
 +`± 4 * a * b * x * y`.
  -/
- 
+
  namespace DkMath
 @@ -62,10 +62,69 @@ theorem q2_badStarPlus_eq_q2_mul_add_residual [CommRing R] (r z : Vec R) :
        | mk x y =>
            simpa [q2] using q2_badStarPlus (R := R) a b x y
- 
+
 +/--
 +A second wrong sign pattern.
 +
@@ -536,7 +536,7 @@ index d2b490ed..20e20bf8 100644
 +          ring
 +
  end Vec
- 
+
  end CF2D
  end Rotation
  end CosmicFormula
@@ -549,15 +549,15 @@ index 9c9c5802..fd8fd71e 100644
 @@ -83,6 +83,9 @@ UnitKernel.star r s
  UnitKernel.star_val :
    (UnitKernel.star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R)
- 
+
 +UnitKernel.ext :
 +  (r : Vec R) = (s : Vec R) -> r = s
 +
  UnitKernel.star_one :
    UnitKernel.star r (UnitKernel.one R) = r
- 
+
 @@ -95,10 +98,19 @@ UnitKernel.star_assoc :
- 
+
  UnitKernel.star_comm :
    UnitKernel.star r s = UnitKernel.star s r
 +
@@ -568,18 +568,18 @@ index 9c9c5802..fd8fd71e 100644
 +  UnitKernel.act (UnitKernel.star r s) z
 +    = UnitKernel.act r (UnitKernel.act s z)
  ```
- 
+
  These lemmas make the unit kernels available as the abstract rotation-kernel
  surface, while the underlying product remains the same `Vec.star` calculation.
 +The `act_star` theorem is the action law: multiplying kernels and then acting
 +is the same as acting successively.
- 
+
  ## Level Sets
- 
+
 @@ -206,9 +218,28 @@ Vec.q2_badStarPlus_eq_q2_mul_add_residual :
      = Vec.q2 r * Vec.q2 z + 4 * r.core * r.beam * z.core * z.beam
  ```
- 
+
 -This separates the preservation kernel from a superficially similar but
 -non-preserving kernel.  The cancellation in `Vec.q2_star` depends on the
 -opposite signs in the two beam cross terms.
@@ -605,8 +605,8 @@ index 9c9c5802..fd8fd71e 100644
 +This separates the preservation kernels from superficially similar
 +non-preserving kernels.  The cancellation in `Vec.q2_star` and
 +`Vec.q2_starPlusMinus` depends on opposite signs in the two beam cross terms.
- 
+
  ## Additive Group Layer
- 
+
 ````
 `````

@@ -184,11 +184,11 @@ index 1127baed..ac6fab25 100644
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean
 @@ -26,20 +26,21 @@ namespace Rotation
  namespace CF2D
- 
+
  /--
 -An additive family of square-mass-one kernels.
 +An additive-monoid family of square-mass-one kernels.
- 
+
  The parameter type `T` can later be instantiated by `ℝ`, `ℤ`, a formal time
  monoid, or another additive parameter space. Continuity or analytic structure is
  deliberately not part of this algebraic layer.
@@ -199,18 +199,18 @@ index 1127baed..ac6fab25 100644
 +  map_zero : ((kernel 0 : UnitKernel R) : Vec R) = Vec.one R
    map_add : ∀ t s, ((kernel (t + s) : UnitKernel R) : Vec R)
      = Vec.star ((kernel t : UnitKernel R) : Vec R) ((kernel s : UnitKernel R) : Vec R)
- 
+
  namespace KernelFamily
- 
+
 -variable {T : Type u} {R : Type v} [Add T] [CommRing R]
 +variable {T : Type u} {R : Type v} [AddMonoid T] [CommRing R]
- 
+
  /-- Core coordinate of a unit-kernel family. -/
  def C (F : KernelFamily T R) (t : T) : R :=
 @@ -54,6 +55,20 @@ theorem kernel_q2 (F : KernelFamily T R) (t : T) :
      Vec.q2 (((F.kernel t : UnitKernel R) : Vec R)) = 1 :=
    UnitKernel.coe_q2 (F.kernel t)
- 
+
 +theorem kernel_zero (F : KernelFamily T R) :
 +    ((F.kernel 0 : UnitKernel R) : Vec R) = Vec.one R :=
 +  F.map_zero
@@ -233,12 +233,12 @@ index d957a87a..891a2c20 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md
 @@ -82,11 +82,12 @@ the conserved square mass.
- 
+
  ## Coordinate Functions
- 
+
 -`Trig.lean` defines an abstract additive family of unit kernels:
 +`Trig.lean` defines an abstract additive-monoid family of unit kernels:
- 
+
  ```lean
 -structure KernelFamily (T R : Type u) [Add T] [CommRing R] where
 +structure KernelFamily (T : Type u) (R : Type v) [AddMonoid T] [CommRing R] where
@@ -250,7 +250,7 @@ index d957a87a..891a2c20 100644
 @@ -104,6 +105,12 @@ The formal identities are:
  KernelFamily.C_sq_add_S_sq :
    F.C t ^ 2 + F.S t ^ 2 = 1
- 
+
 +KernelFamily.C_zero :
 +  F.C 0 = 1
 +
@@ -259,6 +259,6 @@ index d957a87a..891a2c20 100644
 +
  KernelFamily.C_add :
    F.C (t + s) = F.C t * F.C s - F.S t * F.S s
- 
+
 ````
 `````

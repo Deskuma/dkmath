@@ -545,13 +545,13 @@ index 342d3be1..5ba3aa2a 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D.lean
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.CosmicFormula.Rotation.CF2D.Basic
  import DkMath.CosmicFormula.Rotation.CF2D.Trig
 +import DkMath.CosmicFormula.Rotation.CF2D.Real
- 
+
  #print "file: DkMath.CosmicFormula.Rotation.CF2D"
- 
+
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean
 new file mode 100644
 index 00000000..99d40f57
@@ -620,7 +620,7 @@ index b3f545a7..71820603 100644
 @@ -85,6 +85,13 @@ theorem C_zero_add (F : KernelFamily T R) (t : T) : F.C (0 + t) = F.C t := by
  theorem S_zero_add (F : KernelFamily T R) (t : T) : F.S (0 + t) = F.S t := by
    simp
- 
+
 +@[simp]
 +theorem act_zero (F : KernelFamily T R) (z : Vec R) :
 +    UnitKernel.act (F.kernel 0) z = z := by
@@ -634,7 +634,7 @@ index b3f545a7..71820603 100644
 @@ -118,6 +125,80 @@ theorem S_add (F : KernelFamily T R) (t s : T) :
    have h := congrArg Vec.beam (F.kernel_add t s)
    simpa [C, S, Vec.star] using h
- 
+
 +/-- Unit-kernel family action composes according to parameter addition. -/
 +theorem act_add (F : KernelFamily T R) (t s : T) (z : Vec R) :
 +    UnitKernel.act (F.kernel (t + s)) z
@@ -710,7 +710,7 @@ index b3f545a7..71820603 100644
 +end AddGroup
 +
  end KernelFamily
- 
+
  end CF2D
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md b/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md
 index 56377702..42f5f49e 100644
@@ -721,19 +721,19 @@ index 56377702..42f5f49e 100644
  - `DkMath.CosmicFormula.Rotation.CF2D.Basic`
  - `DkMath.CosmicFormula.Rotation.CF2D.Trig`
 +- `DkMath.CosmicFormula.Rotation.CF2D.Real`
- 
+
  The physical directory is `DkMath/CosmicFormula/Rotation/CF2D`.  The `CF2D`
  name avoids Lean's escaped-identifier syntax while keeping the public module
 @@ -125,20 +126,79 @@ KernelFamily.C_zero_add :
  KernelFamily.S_zero_add :
    F.S (0 + t) = F.S t
- 
+
 +KernelFamily.act_zero :
 +  UnitKernel.act (F.kernel 0) z = z
 +
  KernelFamily.C_add :
    F.C (t + s) = F.C t * F.C s - F.S t * F.S s
- 
+
  KernelFamily.S_add :
    F.S (t + s) = F.C t * F.S s + F.S t * F.C s
 +
@@ -747,11 +747,11 @@ index 56377702..42f5f49e 100644
 +KernelFamily.S_add_self :
 +  F.S (t + t) = 2 * F.C t * F.S t
  ```
- 
+
  These are the cosmic-formula versions of the basic trigonometric identities:
  they are derived from conservation and kernel composition, not from existing
  trigonometric API.
- 
+
 +## Additive Group Layer
 +
 +When the parameter type has an additive group structure, `Trig.lean` also
@@ -798,7 +798,7 @@ index 56377702..42f5f49e 100644
 +```
 +
  ## Extension Notes
- 
+
  The implementation is deliberately algebraic and ring-polymorphic.  This keeps
  the 2D kernel reusable for later CFBRC, complex-like, 3D, or finite-dimensional
  geometric layers.  Analytic assumptions such as continuity of the parameter

@@ -373,7 +373,7 @@ index 1edc4999..d21f29b6 100644
 @@ -136,6 +136,21 @@ theorem star_comm [CommRing R] (r z : Vec R) : star r z = star z r := by
            simp [star]
            constructor <;> ring
- 
+
 +/-- Conjugation flips the beam coordinate and keeps the core coordinate. -/
 +def conj [Neg R] (z : Vec R) : Vec R :=
 +  ⟨z.core, -z.beam⟩
@@ -390,7 +390,7 @@ index 1edc4999..d21f29b6 100644
 +      simp [q2, conj]
 +
  end Vec
- 
+
  /-- A map preserves the two-component square mass. -/
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Failure.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Failure.lean
 index 20e20bf8..b9f301e7 100644
@@ -399,7 +399,7 @@ index 20e20bf8..b9f301e7 100644
 @@ -122,6 +122,15 @@ theorem q2_starPlusMinus [CommRing R] (r z : Vec R) :
            simp [q2, starPlusMinus]
            ring
- 
+
 +theorem starPlusMinus_eq_star_conj_left [CommRing R] (r z : Vec R) :
 +    starPlusMinus r z = star (conj r) z := by
 +  cases r with
@@ -410,7 +410,7 @@ index 20e20bf8..b9f301e7 100644
 +          ring
 +
  end Vec
- 
+
  end CF2D
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean
 index 577bef6b..fa21b75b 100644
@@ -419,7 +419,7 @@ index 577bef6b..fa21b75b 100644
 @@ -59,6 +59,11 @@ theorem kernel_zero (F : KernelFamily T R) :
      ((F.kernel 0 : UnitKernel R) : Vec R) = Vec.one R :=
    F.map_zero
- 
+
 +theorem kernel_zero_one (F : KernelFamily T R) :
 +    F.kernel 0 = UnitKernel.one R := by
 +  apply UnitKernel.ext
@@ -431,7 +431,7 @@ index 577bef6b..fa21b75b 100644
 @@ -107,6 +112,11 @@ theorem kernel_add (F : KernelFamily T R) (t s : T) :
            (((F.kernel s : UnitKernel R) : Vec R)) :=
    F.map_add t s
- 
+
 +theorem kernel_add_star (F : KernelFamily T R) (t s : T) :
 +    F.kernel (t + s) = UnitKernel.star (F.kernel t) (F.kernel s) := by
 +  apply UnitKernel.ext
@@ -447,7 +447,7 @@ index fd8fd71e..008a82f7 100644
 @@ -48,6 +48,18 @@ This is proved by polynomial expansion with `ring`, over an arbitrary
  commutative ring.  No trigonometric functions, circle facts, angle facts, or
  metric-space facts are used.
- 
+
 +The basic two-component conjugation is:
 +
 +```lean
@@ -461,11 +461,11 @@ index fd8fd71e..008a82f7 100644
 +`Vec.star` action by a conjugated left kernel.
 +
  ## Unit Kernels and Rotation Reading
- 
+
  `UnitKernel R` packages a vector whose square mass is `1`:
 @@ -143,6 +155,12 @@ KernelFamily.S F t
  The formal identities are:
- 
+
  ```lean
 +KernelFamily.kernel_zero_one :
 +  F.kernel 0 = UnitKernel.one R
@@ -475,23 +475,23 @@ index fd8fd71e..008a82f7 100644
 +
  KernelFamily.C_sq_add_S_sq :
    F.C t ^ 2 + F.S t ^ 2 = 1
- 
+
 @@ -235,11 +253,16 @@ Vec.starPlusMinus (a,b) (x,y) = (a*x + b*y, a*y - b*x)
- 
+
  Vec.q2_starPlusMinus :
    Vec.q2 (Vec.starPlusMinus r z) = Vec.q2 r * Vec.q2 z
 +
 +Vec.starPlusMinus_eq_star_conj_left :
 +  Vec.starPlusMinus r z = Vec.star (Vec.conj r) z
  ```
- 
+
  This separates the preservation kernels from superficially similar
  non-preserving kernels.  The cancellation in `Vec.q2_star` and
  `Vec.q2_starPlusMinus` depends on opposite signs in the two beam cross terms.
 +The plus-minus preserving pattern is not treated as a second primary product:
 +it is the usual `Vec.star` action by the conjugated left kernel.
- 
+
  ## Additive Group Layer
- 
+
 ````
 `````
