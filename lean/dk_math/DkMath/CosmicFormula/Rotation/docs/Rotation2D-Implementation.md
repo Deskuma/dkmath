@@ -55,10 +55,23 @@ Vec.conj z = (z.core, -z.beam)
 
 Vec.q2_conj :
   Vec.q2 (Vec.conj z) = Vec.q2 z
+
+Vec.conj_conj :
+  Vec.conj (Vec.conj z) = z
+
+Vec.conj_star :
+  Vec.conj (Vec.star r z) = Vec.star (Vec.conj r) (Vec.conj z)
+
+Vec.star_conj_self :
+  Vec.star z (Vec.conj z) = Vec.mk (Vec.q2 z) 0
+
+Vec.conj_star_self :
+  Vec.star (Vec.conj z) z = Vec.mk (Vec.q2 z) 0
 ```
 
 It is used to identify the second preserving sign pattern as the ordinary
-`Vec.star` action by a conjugated left kernel.
+`Vec.star` action by a conjugated left kernel.  The self-product identities
+show that conjugation recovers the square mass into the core coordinate.
 
 ## Unit Kernels and Rotation Reading
 
@@ -95,6 +108,9 @@ UnitKernel.star r s
 UnitKernel.star_val :
   (UnitKernel.star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R)
 
+UnitKernel.conj :
+  UnitKernel R -> UnitKernel R
+
 UnitKernel.ext :
   (r : Vec R) = (s : Vec R) -> r = s
 
@@ -111,6 +127,12 @@ UnitKernel.star_assoc :
 UnitKernel.star_comm :
   UnitKernel.star r s = UnitKernel.star s r
 
+UnitKernel.star_conj :
+  UnitKernel.star r (UnitKernel.conj r) = UnitKernel.one R
+
+UnitKernel.conj_star :
+  UnitKernel.star (UnitKernel.conj r) r = UnitKernel.one R
+
 UnitKernel.act_one :
   UnitKernel.act (UnitKernel.one R) z = z
 
@@ -123,6 +145,8 @@ These lemmas make the unit kernels available as the abstract rotation-kernel
 surface, while the underlying product remains the same `Vec.star` calculation.
 The `act_star` theorem is the action law: multiplying kernels and then acting
 is the same as acting successively.
+The `UnitKernel.conj` theorems show that conjugation acts as the inverse of a
+unit kernel, without yet installing a global `Group` instance.
 
 ## Level Sets
 
@@ -214,6 +238,9 @@ KernelFamily.S_add_self :
 These are the cosmic-formula versions of the basic trigonometric identities:
 they are derived from conservation and kernel composition, not from existing
 trigonometric API.
+The target unit-kernel product is commutative, so a `KernelFamily` records the
+commutative image of the additive parameter.  This is compatible with the
+intended angle-parameter examples.
 
 ## Failure Kernel
 

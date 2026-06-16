@@ -151,6 +151,35 @@ theorem q2_conj [CommRing R] (z : Vec R) : q2 (conj z) = q2 z := by
   | mk x y =>
       simp [q2, conj]
 
+@[simp]
+theorem conj_conj [Ring R] (z : Vec R) : conj (conj z) = z := by
+  cases z with
+  | mk x y =>
+      simp [conj]
+
+theorem conj_star [CommRing R] (r z : Vec R) :
+    conj (star r z) = star (conj r) (conj z) := by
+  cases r with
+  | mk a b =>
+      cases z with
+      | mk x y =>
+          simp [conj, star]
+          ring
+
+theorem star_conj_self [CommRing R] (z : Vec R) :
+    star z (conj z) = Vec.mk (q2 z) 0 := by
+  cases z with
+  | mk x y =>
+      simp [star, conj, q2]
+      constructor <;> ring
+
+theorem conj_star_self [CommRing R] (z : Vec R) :
+    star (conj z) z = Vec.mk (q2 z) 0 := by
+  cases z with
+  | mk x y =>
+      simp [star, conj, q2]
+      constructor <;> ring
+
 end Vec
 
 /-- A map preserves the two-component square mass. -/
@@ -189,6 +218,15 @@ theorem ext [Semiring R] {r s : UnitKernel R} (h : (r : Vec R) = (s : Vec R)) : 
 /-- The neutral unit kernel `(1,0)`. -/
 def one (R : Type u) [CommRing R] : UnitKernel R :=
   ⟨Vec.one R, by simp [Vec.q2, Vec.one]⟩
+
+/-- Conjugation of a unit kernel. -/
+def conj [CommRing R] (r : UnitKernel R) : UnitKernel R :=
+  ⟨Vec.conj (r : Vec R), by
+    rw [Vec.q2_conj, coe_q2]⟩
+
+@[simp]
+theorem conj_val [CommRing R] (r : UnitKernel R) :
+    (conj r : Vec R) = Vec.conj (r : Vec R) := rfl
 
 /-- Product of two unit kernels. -/
 def star [CommRing R] (r s : UnitKernel R) : UnitKernel R :=
@@ -231,6 +269,18 @@ theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
       cases s with
       | mk sv hs =>
           simp [star, Vec.star_comm]
+
+@[simp]
+theorem star_conj [CommRing R] (r : UnitKernel R) : star r (conj r) = one R := by
+  apply UnitKernel.ext
+  rw [star_val, conj_val, Vec.star_conj_self]
+  simp [one, Vec.one]
+
+@[simp]
+theorem conj_star [CommRing R] (r : UnitKernel R) : star (conj r) r = one R := by
+  apply UnitKernel.ext
+  rw [star_val, conj_val, Vec.conj_star_self]
+  simp [one, Vec.one]
 
 /-- The action of a unit kernel on a two-component state. -/
 def act [CommRing R] (r : UnitKernel R) (z : Vec R) : Vec R :=
