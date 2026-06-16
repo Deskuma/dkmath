@@ -278,6 +278,29 @@ KernelFamily.cfsin_add_self :
   F.cfsin (t + t) = 2 * F.cfcos t * F.cfsin t
 ```
 
+The same API also states that `cfcos` and `cfsin` reconstruct the unit kernel
+and generate its coordinate action:
+
+```lean
+KernelFamily.kernel_val_eq_mk_cfcos_cfsin :
+  ((F.kernel t : UnitKernel R) : Vec R)
+    = Vec.mk (F.cfcos t) (F.cfsin t)
+
+KernelFamily.act_eq_cfcos_cfsin :
+  UnitKernel.act (F.kernel t) z
+    = Vec.mk
+      (F.cfcos t * z.core - F.cfsin t * z.beam)
+      (F.cfcos t * z.beam + F.cfsin t * z.core)
+
+KernelFamily.act_core_eq_cfcos_cfsin :
+  (UnitKernel.act (F.kernel t) z).core
+    = F.cfcos t * z.core - F.cfsin t * z.beam
+
+KernelFamily.act_beam_eq_cfcos_cfsin :
+  (UnitKernel.act (F.kernel t) z).beam
+    = F.cfcos t * z.beam + F.cfsin t * z.core
+```
+
 For additive groups, the same file exposes negation and subtraction formulas:
 
 ```lean
@@ -394,7 +417,20 @@ realTrigKernelFamily_cfcos :
 
 realTrigKernelFamily_cfsin :
   realTrigKernelFamily.cfsin t = Real.sin t
+
+realTrigKernelFamily_act_core :
+  (UnitKernel.act (realTrigKernelFamily.kernel t) z).core
+    = Real.cos t * z.core - Real.sin t * z.beam
+
+realTrigKernelFamily_act_beam :
+  (UnitKernel.act (realTrigKernelFamily.kernel t) z).beam
+    = Real.cos t * z.beam + Real.sin t * z.core
 ```
+
+The final API interpretation is that `cfcos` and `cfsin` are not aliases for
+the analytic real functions.  They reconstruct the square-mass-one kernel and
+give the coordinate formula for its action.  The usual real sine and cosine are
+provided only as the standard real model of this algebraic kernel action.
 
 ## Extension Notes
 

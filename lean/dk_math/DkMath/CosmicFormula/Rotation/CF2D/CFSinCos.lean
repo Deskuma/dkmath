@@ -73,6 +73,53 @@ theorem cfsin_add_self (F : KernelFamily T R) (t : T) :
     F.cfsin (t + t) = 2 * F.cfcos t * F.cfsin t := by
   simpa [cfcos, cfsin] using F.S_add_self t
 
+/-- The unit kernel is reconstructed from `cfcos` and `cfsin`. -/
+theorem kernel_val_eq_mk_cfcos_cfsin (F : KernelFamily T R) (t : T) :
+    ((F.kernel t : UnitKernel R) : Vec R) = Vec.mk (F.cfcos t) (F.cfsin t) := by
+  cases h : F.kernel t with
+  | mk v hv =>
+      cases v with
+      | mk c s =>
+          simp [cfcos, cfsin, C, S, h]
+
+/-- Core coordinate of the action by the cosmic-formula sine/cosine kernel. -/
+theorem act_core_eq_cfcos_cfsin (F : KernelFamily T R) (t : T) (z : Vec R) :
+    (UnitKernel.act (F.kernel t) z).core
+      = F.cfcos t * z.core - F.cfsin t * z.beam := by
+  cases h : F.kernel t with
+  | mk v hv =>
+      cases v with
+      | mk c s =>
+          cases z with
+          | mk x y =>
+              simp [cfcos, cfsin, C, S, UnitKernel.act, Vec.star, h]
+
+/-- Beam coordinate of the action by the cosmic-formula sine/cosine kernel. -/
+theorem act_beam_eq_cfcos_cfsin (F : KernelFamily T R) (t : T) (z : Vec R) :
+    (UnitKernel.act (F.kernel t) z).beam
+      = F.cfcos t * z.beam + F.cfsin t * z.core := by
+  cases h : F.kernel t with
+  | mk v hv =>
+      cases v with
+      | mk c s =>
+          cases z with
+          | mk x y =>
+              simp [cfcos, cfsin, C, S, UnitKernel.act, Vec.star, h]
+
+/-- Full action formula for the cosmic-formula sine/cosine kernel. -/
+theorem act_eq_cfcos_cfsin (F : KernelFamily T R) (t : T) (z : Vec R) :
+    UnitKernel.act (F.kernel t) z
+      = Vec.mk
+        (F.cfcos t * z.core - F.cfsin t * z.beam)
+        (F.cfcos t * z.beam + F.cfsin t * z.core) := by
+  cases h : F.kernel t with
+  | mk v hv =>
+      cases v with
+      | mk c s =>
+          cases z with
+          | mk x y =>
+              simp [cfcos, cfsin, C, S, UnitKernel.act, Vec.star, h]
+
 section AddGroup
 
 variable {T : Type u} {R : Type v} [AddGroup T] [CommRing R]
