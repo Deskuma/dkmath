@@ -52,7 +52,7 @@ Vec.q2
 さらに、単位核作用に相当する積
 
 $$
-(a,b)\star(x,y)=(ax-by,;ay+bx)
+(a,b)\star(x,y)=(ax-by,\;ay+bx)
 $$
 
 を

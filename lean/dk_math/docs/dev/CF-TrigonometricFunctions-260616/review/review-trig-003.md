@@ -359,7 +359,7 @@ noncomputable def realTrigKernelFamily : KernelFamily ℝ ℝ where
 ```
 
 これは既存数学を使うが、 **core 層ではなく bridge 層** なので問題ない。
-「DkMath の抽象 (C,S) は、実数解析では通常の (\cos,\sin) に一致する」と示す互換性ファイルじゃ。
+「DkMath の抽象 \(C,S\) は、実数解析では通常の \(\cos,\sin\) に一致する」と示す互換性ファイルじゃ。
 
 ## 4.2. `UnitKernel` の monoid 化
 

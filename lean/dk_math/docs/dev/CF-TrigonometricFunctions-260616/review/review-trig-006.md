@@ -202,7 +202,7 @@ $$
 実際、
 
 $$
-\operatorname{star}((a,-b),(x,y))=(ax+by,;ay-bx)
+\operatorname{star}((a,-b),(x,y))=(ax+by,\;ay-bx)
 $$
 
 じゃ。

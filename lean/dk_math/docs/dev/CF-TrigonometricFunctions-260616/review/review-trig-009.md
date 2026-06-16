@@ -103,20 +103,14 @@ $$
 $$
 
 $$
-\operatorname{cfcos}_F(t+s)
-===========================
-
-## \operatorname{cfcos}_F(t)\operatorname{cfcos}_F(s)
-
+\operatorname{cfcos}_F(t+s) =
+\operatorname{cfcos}_F(t)\operatorname{cfcos}_F(s) -
 \operatorname{cfsin}_F(t)\operatorname{cfsin}_F(s)
 $$
 
 $$
-\operatorname{cfsin}_F(t+s)
-===========================
-
-\operatorname{cfcos}_F(t)\operatorname{cfsin}_F(s)
-+
+\operatorname{cfsin}_F(t+s) =
+\operatorname{cfcos}_F(t)\operatorname{cfsin}_F(s) +
 \operatorname{cfsin}_F(t)\operatorname{cfcos}_F(s)
 $$
 
@@ -130,16 +124,13 @@ $$
 
 $$
 \operatorname{cfcos}_F(t-t')=
-\operatorname{cfcos}_F(t)\operatorname{cfcos}_F(t')
-+
+\operatorname{cfcos}_F(t)\operatorname{cfcos}_F(t') +
 \operatorname{cfsin}_F(t)\operatorname{cfsin}_F(t')
 $$
 
 $$
 \operatorname{cfsin}_F(t-t')=
-\operatorname{cfsin}_F(t)\operatorname{cfcos}_F(t')
----------------------------------------------------
-
+\operatorname{cfsin}_F(t)\operatorname{cfcos}_F(t') -
 \operatorname{cfcos}_F(t)\operatorname{cfsin}_F(t')
 $$
 
@@ -517,8 +508,7 @@ $$
 
 $$
 (x,y)\mapsto
-(\mathrm{cfcos}(t)x-\mathrm{cfsin}(t)y,;
-\mathrm{cfcos}(t)y+\mathrm{cfsin}(t)x)
+(\mathrm{cfcos}(t)x-\mathrm{cfsin}(t)y,\;\mathrm{cfcos}(t)y+\mathrm{cfsin}(t)x)
 $$
 
 を theorem として出す。これで「宇宙式版 sin/cos は、保存単位核を構成し、実際に回転作用する座標関数である」と閉じられる。

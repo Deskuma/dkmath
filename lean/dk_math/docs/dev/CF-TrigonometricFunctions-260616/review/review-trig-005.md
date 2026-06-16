@@ -55,7 +55,7 @@ git diff --check
 正しい核は、
 
 $$
-(a,b)\star(x,y)=(ax-by,;ay+bx)
+(a,b)\star(x,y)=(ax-by,\;ay+bx)
 $$
 
 であり、
@@ -69,7 +69,7 @@ $$
 一方、今回追加された失敗核は、
 
 $$
-(a,b)\diamond(x,y)=(ax+by,;ay+bx)
+(a,b)\diamond(x,y)=(ax+by,\;ay+bx)
 $$
 
 じゃ。

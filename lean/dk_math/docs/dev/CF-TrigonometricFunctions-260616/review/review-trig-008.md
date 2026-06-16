@@ -84,9 +84,7 @@ $$
 `Vec.conj_star` が入ったので、共役は単なる符号反転ではなく、`star` と相性のよい対称操作になった。
 
 $$
-\operatorname{conj}(r\star z)
-=============================
-
+\operatorname{conj}(r\star z) =
 \operatorname{conj}(r)\star\operatorname{conj}(z)
 $$
 

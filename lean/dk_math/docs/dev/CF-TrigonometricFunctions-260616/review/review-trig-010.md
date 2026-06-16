@@ -78,7 +78,7 @@ $$
 (x,y)
 \mapsto
 \left(
-\mathrm{cfcos}(t)x-\mathrm{cfsin}(t)y,;
+\mathrm{cfcos}(t)x-\mathrm{cfsin}(t)y,\;
 \mathrm{cfcos}(t)y+\mathrm{cfsin}(t)x
 \right)
 $$
@@ -182,18 +182,14 @@ Real.cos / Real.sin
 
 $$
 \boxed{
-\mathrm{cfcos}_F(t)
-===================
-
+\mathrm{cfcos}_F(t) =
 F(t)\text{ の Core 成分}
 }
 $$
 
 $$
 \boxed{
-\mathrm{cfsin}_F(t)
-===================
-
+\mathrm{cfsin}_F(t) =
 F(t)\text{ の Beam 成分}
 }
 $$
@@ -202,9 +198,7 @@ $$
 
 $$
 \boxed{
-F(t)
-====
-
+F(t) =
 (\mathrm{cfcos}_F(t),\mathrm{cfsin}_F(t))
 }
 $$
@@ -213,10 +207,8 @@ $$
 
 $$
 \boxed{
-F(t)\star(x,y)
-==============
-
-(\mathrm{cfcos}_F(t)x-\mathrm{cfsin}_F(t)y,;
+F(t)\star(x,y) =
+(\mathrm{cfcos}_F(t)x-\mathrm{cfsin}_F(t)y,\;
 \mathrm{cfcos}_F(t)y+\mathrm{cfsin}_F(t)x)
 }
 $$
