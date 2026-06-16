@@ -67,6 +67,14 @@ theorem realTrigKernelFamily_act_beam (t : ℝ) (z : Vec ℝ) :
       = Real.cos t * z.beam + Real.sin t * z.core := by
   simp
 
+theorem realTrigKernelFamily_act_eq (t : ℝ) (z : Vec ℝ) :
+    UnitKernel.act (realTrigKernelFamily.kernel t) z
+      = Vec.mk
+        (Real.cos t * z.core - Real.sin t * z.beam)
+        (Real.cos t * z.beam + Real.sin t * z.core) := by
+  simpa using
+    (KernelFamily.act_eq_cfcos_cfsin realTrigKernelFamily t z)
+
 end CF2D
 end Rotation
 end CosmicFormula
