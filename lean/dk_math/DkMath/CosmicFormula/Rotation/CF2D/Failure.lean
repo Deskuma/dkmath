@@ -35,10 +35,12 @@ def badStarPlus [Ring R] (r z : Vec R) : Vec R :=
   ⟨r.core * z.core + r.beam * z.beam,
     r.core * z.beam + r.beam * z.core⟩
 
+/-- Core coordinate formula for the plus-plus wrong product. -/
 @[simp]
 theorem badStarPlus_core [Ring R] (r z : Vec R) :
     (badStarPlus r z).core = r.core * z.core + r.beam * z.beam := rfl
 
+/-- Beam coordinate formula for the plus-plus wrong product. -/
 @[simp]
 theorem badStarPlus_beam [Ring R] (r z : Vec R) :
     (badStarPlus r z).beam = r.core * z.beam + r.beam * z.core := rfl
@@ -54,6 +56,12 @@ theorem q2_badStarPlus [CommRing R] (a b x y : R) :
   simp [q2, badStarPlus]
   ring
 
+/--
+Vector form of the plus-plus failure formula.
+
+The extra `4abxy` term measures exactly the failure of square-mass
+multiplicativity for this sign pattern.
+-/
 theorem q2_badStarPlus_eq_q2_mul_add_residual [CommRing R] (r z : Vec R) :
     q2 (badStarPlus r z) = q2 r * q2 z + 4 * r.core * r.beam * z.core * z.beam := by
   cases r with
@@ -72,20 +80,32 @@ def badStarMinus [Ring R] (r z : Vec R) : Vec R :=
   ⟨r.core * z.core - r.beam * z.beam,
     r.core * z.beam - r.beam * z.core⟩
 
+/-- Core coordinate formula for the minus-minus wrong product. -/
 @[simp]
 theorem badStarMinus_core [Ring R] (r z : Vec R) :
     (badStarMinus r z).core = r.core * z.core - r.beam * z.beam := rfl
 
+/-- Beam coordinate formula for the minus-minus wrong product. -/
 @[simp]
 theorem badStarMinus_beam [Ring R] (r z : Vec R) :
     (badStarMinus r z).beam = r.core * z.beam - r.beam * z.core := rfl
 
+/--
+The minus-minus sign pattern leaves the opposite residual from `badStarPlus`.
+
+This identifies the failed cancellation as a sign-sensitive phenomenon.
+-/
 theorem q2_badStarMinus [CommRing R] (a b x y : R) :
     q2 (badStarMinus (Vec.mk a b) (Vec.mk x y))
       = (a ^ 2 + b ^ 2) * (x ^ 2 + y ^ 2) - 4 * a * b * x * y := by
   simp [q2, badStarMinus]
   ring
 
+/--
+Vector form of the minus-minus failure formula.
+
+The residual is `-4 * r.core * r.beam * z.core * z.beam`.
+-/
 theorem q2_badStarMinus_eq_q2_mul_sub_residual [CommRing R] (r z : Vec R) :
     q2 (badStarMinus r z) = q2 r * q2 z - 4 * r.core * r.beam * z.core * z.beam := by
   cases r with
@@ -105,14 +125,22 @@ def starPlusMinus [Ring R] (r z : Vec R) : Vec R :=
   ⟨r.core * z.core + r.beam * z.beam,
     r.core * z.beam - r.beam * z.core⟩
 
+/-- Core coordinate formula for the plus-minus preserving product. -/
 @[simp]
 theorem starPlusMinus_core [Ring R] (r z : Vec R) :
     (starPlusMinus r z).core = r.core * z.core + r.beam * z.beam := rfl
 
+/-- Beam coordinate formula for the plus-minus preserving product. -/
 @[simp]
 theorem starPlusMinus_beam [Ring R] (r z : Vec R) :
     (starPlusMinus r z).beam = r.core * z.beam - r.beam * z.core := rfl
 
+/--
+The plus-minus sign pattern also preserves square mass.
+
+It is not the selected convention, but it is algebraically explained by
+conjugating the left kernel.
+-/
 theorem q2_starPlusMinus [CommRing R] (r z : Vec R) :
     q2 (starPlusMinus r z) = q2 r * q2 z := by
   cases r with
@@ -122,6 +150,10 @@ theorem q2_starPlusMinus [CommRing R] (r z : Vec R) :
           simp [q2, starPlusMinus]
           ring
 
+/--
+The plus-minus preserving product is ordinary `star` after conjugating the
+left input.
+-/
 theorem starPlusMinus_eq_star_conj_left [CommRing R] (r z : Vec R) :
     starPlusMinus r z = star (conj r) z := by
   cases r with
