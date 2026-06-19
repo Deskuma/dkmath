@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Analysis.DkReal.Interval
 import DkMath.Analysis.DkReal.Basic
 import DkMath.Analysis.DkReal.Pow
+import DkMath.Analysis.DkReal.PowBound
 
 #print "file: DkMath.Analysis.DkReal"
 

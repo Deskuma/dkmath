@@ -50,6 +50,9 @@ DkMath.Analysis.DkReal.Basic
 DkMath.Analysis.DkReal.Pow
   computable pointwise power approximations for nonnegative DkReal values
 
+DkMath.Analysis.DkReal.PowBound
+  finite-sum gapGN bounds and the completed nonnegative power map
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -287,16 +290,41 @@ and therefore constructs a completed powered value:
 DkReal.powNonnegOfGapGNBounded
 ```
 
-The remaining unconditional-power obligation is now isolated to one statement:
-prove that the sequence
+The finite-sum layer now proves that the sequence
 
 ```text
 gapGN d (lower endpoint at n) (width at n)
 ```
 
-is bounded for a nested nonnegative `DkReal`. This should be implemented as a
-separate finite-polynomial bound rather than folded into the interval
-construction.
+is bounded for a nested nonnegative `DkReal`.
+
+The proof proceeds through:
+
+```lean
+DkReal.gapGN_nonneg_of_nonneg
+DkReal.gapGN_le_of_nonneg_of_le
+DkReal.gapGN_le_initial_hi
+DkReal.gapGN_bounded_on_nonnegative_nested
+```
+
+The uniform upper bound is the exact rational value
+
+```text
+gapGN d initialUpperEndpoint initialUpperEndpoint
+```
+
+rather than a prematurely normalized closed form. This keeps the proof directly
+aligned with the finite `GN_eq_sum` expansion.
+
+Combining this bound with the conditional constructor yields the completed,
+computable map:
+
+```lean
+DkReal.powNonneg
+```
+
+Thus natural powers of nonnegative nested rational approximations are again
+`DkReal` values, with no `noncomputable` declaration in the DkReal layer.
 
 `TaylorBridge` and `RealBridge` may use noncomputable real-number operations.
 The `DkReal` files remain computational and use rational interval data only.
