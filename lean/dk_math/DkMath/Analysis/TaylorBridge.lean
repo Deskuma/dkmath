@@ -99,11 +99,26 @@ theorem tendsto_powerDifferenceQuotient_zero
   exact (powerDifferenceQuotient_eq_gapGN_of_ne_zero d base delta hdelta_ne).symm
 
 /--
-Mathlib derivative theorem for natural powers, exposed through the `gapGN`
-bridge.
+Derivative theorem obtained directly from the `gapGN` difference-quotient
+limit.
+
+Unlike `hasDerivAt_pow_via_gapGN`, this proof does not delegate to an existing
+power derivative theorem. It feeds `tendsto_powerDifferenceQuotient_zero`
+directly into the general punctured difference-kernel criterion.
+-/
+theorem hasDerivAt_pow_from_gapGN_limit (d : ℕ) (base : ℝ) :
+    HasDerivAt (fun y : ℝ => y ^ d) ((d : ℝ) * base ^ (d - 1)) base := by
+  apply DkMath.CosmicFormula.hasDerivAt_of_tendsto_cosmicKernel
+  simpa [DkMath.CosmicFormula.cosmicKernel, DkMath.CosmicFormula.delta,
+    powerDifferenceQuotient] using
+    (tendsto_powerDifferenceQuotient_zero d base)
+
+/--
+Canonical public derivative theorem for powers through the Analysis `gapGN`
+flow.
 -/
 theorem hasDerivAt_pow_via_gapGN (d : ℕ) (base : ℝ) :
     HasDerivAt (fun y : ℝ => y ^ d) ((d : ℝ) * base ^ (d - 1)) base :=
-  DkMath.CosmicFormula.hasDerivAt_pow_cosmic d base
+  hasDerivAt_pow_from_gapGN_limit d base
 
 end DkMath.Analysis

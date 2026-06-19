@@ -47,6 +47,9 @@ DkMath.Analysis.DkReal.Interval
 DkMath.Analysis.DkReal.Basic
   nested rational intervals with widths tending to zero
 
+DkMath.Analysis.DkReal.Pow
+  computable pointwise power approximations for nonnegative DkReal values
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -229,3 +232,49 @@ exact algebraic factorization
 ```
 
 The derivative is not used to define the kernel.
+
+`hasDerivAt_pow_from_gapGN_limit` now makes the last step explicit. It passes
+the punctured limit of `powerDifferenceQuotient` directly to the general
+cosmic-kernel derivative criterion. The canonical
+`hasDerivAt_pow_via_gapGN` theorem delegates to this direct proof rather than
+to an already completed power derivative theorem.
+
+## Nonnegative DkReal Power Approximations
+
+The computable layer keeps all real-number semantic choices outside `DkReal`.
+Nonnegativity is expressed by rational lower endpoints:
+
+```lean
+DkReal.Nonnegative x := forall n, 0 <= (x.interval n).lo
+```
+
+The stagewise power approximation is:
+
+```lean
+DkReal.powNonnegApprox d x hx n
+  = (x.interval n).powNonneg d (hx n)
+```
+
+The implementation proves:
+
+```lean
+DkReal.powNonnegApprox_lo_le_succ_lo
+DkReal.powNonnegApprox_succ_hi_le_hi
+DkReal.powNonnegApprox_nested
+DkReal.powNonnegApprox_width_eq
+```
+
+Thus natural powers preserve the nested interval structure for nonnegative
+approximations. The width formula is exact:
+
+```text
+powered width
+  = original width * gapGN d lowerEndpoint originalWidth
+```
+
+A completed map from nonnegative `DkReal` values to `DkReal` values is
+deliberately deferred. Its remaining mathematical obligation is to control the
+`gapGN` factor strongly enough to prove that the powered widths tend to zero.
+
+`TaylorBridge` and `RealBridge` may use noncomputable real-number operations.
+The `DkReal` files remain computational and use rational interval data only.
