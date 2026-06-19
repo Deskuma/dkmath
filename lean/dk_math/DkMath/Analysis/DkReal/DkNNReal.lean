@@ -16,7 +16,8 @@ nonnegativity. It removes proof arguments from the public nonnegative
 arithmetic operations while retaining the computable interval representation.
 
 Algebraic laws are stated using representation equivalence, not raw structure
-equality. A quotient can be introduced later once its public API is justified.
+equality. `DkNNRealQ` is the quotient-backed public value type on which these
+laws become ordinary Lean equalities.
 -/
 
 namespace DkMath.Analysis
@@ -138,9 +139,13 @@ theorem pow_one (x : DkNNReal) :
 /-!
 ## Nonnegative semiring laws modulo representation equivalence
 
-These are the algebraic laws needed by a future quotient. They intentionally
-use `Equiv`; raw equality would distinguish different interval sequences
+These are the algebraic laws used to construct `DkNNRealQ`. They intentionally
+use `Equiv`; raw equality distinguishes different interval sequences
 representing the same value.
+
+The wrapper remains useful below the quotient as the computational carrier:
+its fields expose the rational interval sequence and the nonnegativity
+certificate needed by endpoint multiplication.
 -/
 
 /-- Addition is associative modulo representation equivalence. -/

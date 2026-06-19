@@ -234,10 +234,9 @@ interval separation. This implication depends on each `GapInterval` being a
 valid ordered closed interval; it is not a generic fact about arbitrary pairs
 of endpoint sequences.
 
-At this point addition, nonnegative multiplication, and natural powers all
-respect the representation setoid. The next design question is whether to
-introduce a quotient or a dedicated wrapper for the nonnegative computable
-semiring API.
+At this stage of the construction, addition, nonnegative multiplication, and
+natural powers were proved to respect the representation setoid. The following
+sections record how the wrapper and quotient were subsequently introduced.
 
 ## DkNNReal Wrapper
 
@@ -273,9 +272,8 @@ available modulo `Equiv`.
 
 No `Add`, `Mul`, `Pow`, or `Semiring` instance is introduced on the raw wrapper.
 Such instances would state laws using Lean equality, whereas the established
-laws concern representation equivalence. A later quotient of
-`DkNNReal.equivSetoid`, or a dedicated quotient-backed public type, is the
-appropriate place for ordinary algebraic typeclasses.
+laws concern representation equivalence. The quotient-backed `DkNNRealQ`
+defined below is the appropriate place for ordinary algebraic typeclasses.
 
 ## Quotient-Backed Public Type
 

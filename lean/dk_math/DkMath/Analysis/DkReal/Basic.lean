@@ -16,6 +16,10 @@ rational gap intervals whose widths converge to zero.
 
 No evaluation into Mathlib's real numbers is chosen here. This keeps the
 computational approximation structure separate from its future semantic bridge.
+
+The carrier is a representation space rather than an extensional real-number
+type: distinct interval sequences may encode the same limiting value.
+Extensional identification is supplied later by `DkReal.Equiv`.
 -/
 
 namespace DkMath.Analysis
@@ -25,7 +29,12 @@ A DkMath real approximation given by nested rational intervals with vanishing
 width.
 
 The interval at `n + 1` is contained in the interval at `n`. The convergence
-condition says that the remaining rational uncertainty tends to zero.
+condition says that the remaining rational uncertainty tends to zero. This is
+the nested-interval analogue of a regular Cauchy representation, with explicit
+lower and upper rational observations rather than a chosen real limit.
+
+No completeness axiom is stored in this structure. Completeness enters only
+when a semantic value in Mathlib's `Real` is later extracted.
 -/
 structure DkReal where
   interval : ℕ → DkReal.GapInterval

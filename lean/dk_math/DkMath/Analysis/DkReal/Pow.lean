@@ -14,9 +14,17 @@ import DkMath.Analysis.DkReal.Basic
 This file lifts `GapInterval.powNonneg` pointwise to the approximation sequence
 of a nonnegative `DkReal`.
 
-The result is currently an interval sequence rather than a completed `DkReal`.
-To construct the latter, a later checkpoint must prove that the powered widths
-tend to zero, using suitable bounds on the exact `gapGN` factor.
+It separates the finite interval transformation from the convergence theorem.
+`powNonnegApprox` supplies the rational observations and proves nestedness.
+`DkMath.Analysis.DkReal.PowBound` proves uniform boundedness of the exact
+`gapGN` factor and packages these observations as the completed `powNonneg`
+operation.
+
+Mathematically, this file isolates the identity
+
+`width(I^d) = width(I) * gapGN d I.lo width(I)`
+
+before any limiting argument is applied.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -107,8 +115,9 @@ theorem powNonnegApprox_interval_subset_of_le
 /--
 Exact width formula for every powered approximation interval.
 
-This identifies the remaining obligation for a full `DkReal` power map: prove
-that this product tends to zero.
+This identifies the convergence obligation discharged in `PowBound`: the
+first factor tends to zero and the exact correction-kernel factor is uniformly
+bounded on a fixed nonnegative rational box.
 -/
 theorem powNonnegApprox_width_eq
     (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
@@ -142,8 +151,9 @@ theorem tendsto_powNonnegApprox_width_zero_of_gapGN_bounded
 Construct the full powered `DkReal` once boundedness of the exact correction
 kernel has been supplied.
 
-This isolates the only remaining analytic obligation from the computational
-interval transformation.
+This conditional constructor records the interface between finite rational
+computation and the bounded-times-null convergence principle. The canonical
+unconditional operation is `powNonneg` in `PowBound`.
 -/
 def powNonnegOfGapGNBounded
     (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)

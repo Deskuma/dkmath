@@ -18,6 +18,10 @@ increment its value is the first-order coefficient of the power map.
 This file does not define `gapGN` by differentiation. Instead, it connects the
 exact algebraic kernel to Mathlib's derivative API after the algebraic
 factorization has already been established.
+
+The local `noncomputable` definition below belongs to the semantic real-analysis
+route. It does not affect the computability of rational interval operations,
+`DkReal`, or `DkNNRealQ`.
 -/
 
 namespace DkMath.Analysis

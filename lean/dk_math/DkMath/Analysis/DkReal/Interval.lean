@@ -11,11 +11,14 @@ import DkMath.Analysis.GapGN
 /-!
 # Rational gap intervals
 
-This is the first computational substrate for a future `DkReal`.
+This is the finite-observation substrate of `DkReal`.
 
 A `GapInterval` records rational lower and upper observations. Its width and
 nonnegative power image are exact rational data; no real-number completion is
 needed at this layer.
+
+The interval is closed and ordered. This validity invariant is essential for
+the separation estimates used by representation equivalence.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -171,7 +174,9 @@ theorem lo_sub_hi_le_separation (I J : GapInterval) :
 Triangle-type estimate for interval separation.
 
 The width of the middle interval appears because a path may enter it at one
-endpoint and leave it at the other.
+endpoint and leave it at the other. Thus `separation` is not literally a metric
+on intervals, but it becomes sufficient for an equivalence relation when all
+representation widths tend to zero.
 -/
 theorem separation_triangle (I J K : GapInterval) :
     I.separation K ≤ I.separation J + J.width + J.separation K := by

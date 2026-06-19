@@ -18,13 +18,27 @@ stagewise rational intervals tends to zero.
 This relation compares represented values rather than the raw Lean structures.
 It remains in the computable approximation layer: no evaluation into
 Mathlib's `Real` and no choice of a limit point is used.
+
+The transitivity proof is a vanishing-width version of the triangle inequality:
+
+`sep(I,K) ≤ sep(I,J) + width(J) + sep(J,K)`.
+
+Consequently, shrinking uncertainty converts interval separation into an
+extensional equivalence relation on representations.
+
+[TODO] Compare this relation with persistent interval intersection.
+
+[TODO] For a future semantic evaluation `eval`, prove
+`Equiv x y → eval x = eval y` and, when justified by the representation
+theorem, the converse.
 -/
 
 namespace DkMath.Analysis.DkReal
 
 /--
 Two `DkReal` approximations represent the same value when their interval
-separation vanishes.
+separation vanishes. This is the extensional equality used by quotient
+constructions in the nonnegative Route B layer.
 -/
 def Equiv (x y : DkMath.Analysis.DkReal) : Prop :=
   Filter.Tendsto
@@ -93,7 +107,8 @@ theorem equiv_of_interval_eq
 ## Compatibility with addition
 
 Addition is nonexpansive for interval separation up to summing the two input
-separations. Therefore it descends to any future quotient by `Equiv`.
+separations. Therefore it descends to the quotient constructions defined later
+in this package.
 -/
 
 /-- Addition preserves representation equivalence in both arguments. -/

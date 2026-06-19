@@ -14,8 +14,13 @@ Route A:
   followed by an explicit bridge to Mathlib real analysis.
 
 Route B:
-  exact rational intervals as a computational substrate for a future DkReal.
+  nested rational interval representations, representation equivalence,
+  and the quotient-backed nonnegative commutative semiring DkNNRealQ.
 ```
+
+Route B is an algebraic checkpoint, not a completeness theorem for all real
+numbers. It constructs a computable representation and quotient without
+selecting a value in Mathlib's `Real`.
 
 ## Module Boundary
 
@@ -76,10 +81,35 @@ DkMath.Analysis.DkReal
 The closure of nonnegative `DkReal` values under natural powers and its
 computability significance are recorded in
 [`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).
+The completed quotient-semiring checkpoint is summarized in
+[`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
 
 `RealBridge` remains the home of continuity and interval mapping. The separate
 `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
 without mixing those concerns into the basic real bridge.
+
+## Next Independent Layers
+
+The algebraic Route B checkpoint is closed. The next layers should remain
+separate:
+
+```text
+Order:
+  define a representative relation
+  prove Equiv compatibility
+  lift to DkNNRealQ
+  prove partial or linear order laws
+
+BridgeNNReal / BridgeReal:
+  select the unique semantic limit
+  prove representative independence
+  prove semiring-homomorphism laws
+  compare semantic equality with DkReal.Equiv
+```
+
+The order should not be defined by choosing arbitrary quotient
+representatives. The semantic bridge should not be imported by the computable
+core merely to obtain an order.
 
 ## Canonical Kernel Bridge
 

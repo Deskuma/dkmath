@@ -18,7 +18,24 @@ import DkMath.Analysis.DkReal.DkNNRealQ
 /-!
 # DkReal approximation layer
 
-Public entry point for rational gap intervals and nested interval
-approximations. Evaluation into Mathlib's real numbers is intentionally left to
-a later bridge module.
+Public entry point for the complete Route B algebraic checkpoint:
+
+* `GapInterval` gives exact rational closed intervals;
+* `DkReal` gives nested interval sequences of vanishing width;
+* `DkReal.Equiv` identifies representations of vanishing separation;
+* `DkNNReal` packages nonnegativity;
+* `DkNNRealQ` is the quotient-backed nonnegative `CommSemiring`.
+
+All endpoint operations in this import tree remain computable. No represented
+limit in Mathlib's `Real` or `NNReal` is selected here.
+
+[TODO] Define a quotient-compatible order, or derive it from a separately
+isolated semantic evaluation map.
+
+[TODO] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
+chosen evaluation is independent of representatives. Such evaluation may
+legitimately be `noncomputable`.
+
+[TODO] General signed multiplication requires the minimum and maximum of four
+endpoint products and belongs outside the current nonnegative API.
 -/

@@ -15,6 +15,13 @@ import DkMath.Analysis.GapFill
 The definitions in `DkMath.Analysis` are algebraic and remain meaningful over
 general rings. This file records their standard real interpretation and begins
 the bridge to Mathlib's topological and analytic API.
+
+This module concerns algebraic expressions already valued in `Real`. It is not
+the semantic evaluation bridge from `DkReal` or `DkNNRealQ`.
+
+[TODO] Keep the future representation-evaluation bridge in a distinct module,
+for example `DkMath.Analysis.DkReal.BridgeNNReal`, so importing elementary real
+continuity does not introduce a noncomputable dependency into Route B.
 -/
 
 namespace DkMath.Analysis

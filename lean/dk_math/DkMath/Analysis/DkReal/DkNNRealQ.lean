@@ -16,13 +16,29 @@ separation. The operations below are lifted from `DkNNReal`, so the semiring
 laws previously stated modulo representation equivalence become ordinary Lean
 equalities.
 
-This remains a computable representation layer. No evaluation into Mathlib's
-`Real` is selected.
+The resulting quotient is a commutative semiring. Its natural-number embedding
+sends `n` to the class of the constant singleton interval `[n,n]`.
+
+This remains a computable representation layer. Quotient elimination is used
+only to define representation-independent operations; no evaluation into
+Mathlib's `Real` is selected.
+
+[TODO] Before adding an order instance, define an order predicate on
+representatives and prove invariance under `DkNNReal.Equiv` in both arguments.
+
+[TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
+bridge module and proved to preserve zero, one, addition, multiplication,
+natural powers, and the future order.
 -/
 
 namespace DkMath.Analysis
 
-/-- Nonnegative computable real approximations modulo representation equivalence. -/
+/--
+Nonnegative computable real approximations modulo vanishing separation.
+
+Two representatives define the same quotient value precisely when the
+separation of their stagewise rational intervals tends to zero.
+-/
 def DkNNRealQ :=
   Quotient DkNNReal.equivSetoid
 
@@ -68,18 +84,23 @@ def pow (x : DkNNRealQ) (d : ℕ) : DkNNRealQ :=
       intro a b hab
       exact Quotient.sound (DkNNReal.equiv_pow d hab))
 
+/-- Additive identity induced by the class of the singleton interval `[0,0]`. -/
 instance : Zero DkNNRealQ where
   zero := zero
 
+/-- Multiplicative identity induced by the class of the singleton interval `[1,1]`. -/
 instance : One DkNNRealQ where
   one := one
 
+/-- Addition induced by stagewise Minkowski addition of representatives. -/
 instance : Add DkNNRealQ where
   add := add
 
+/-- Multiplication induced by endpoint multiplication of nonnegative representatives. -/
 instance : Mul DkNNRealQ where
   mul := mul
 
+/-- Natural powers induced by stagewise nonnegative endpoint powers. -/
 instance : Pow DkNNRealQ ℕ where
   pow := pow
 
@@ -87,6 +108,7 @@ instance : Pow DkNNRealQ ℕ where
 def natCast (n : ℕ) : DkNNRealQ :=
   ofRat (n : ℚ) (by positivity)
 
+/-- Natural-number cast through constant nonnegative rational intervals. -/
 instance : NatCast DkNNRealQ where
   natCast := natCast
 
@@ -175,12 +197,14 @@ They validate the quotient design while keeping instance construction and
 natural-number coercions as a separate API decision.
 -/
 
+/-- Quotient addition is associative. -/
 theorem add_assoc (x y z : DkNNRealQ) :
     (x + y) + z = x + (y + z) := by
   refine Quotient.inductionOn₃ x y z ?_
   intro a b c
   exact Quotient.sound (DkNNReal.add_assoc a b c)
 
+/-- Quotient addition is commutative. -/
 theorem add_comm (x y : DkNNRealQ) :
     x + y = y + x := by
   refine Quotient.inductionOn₂ x y ?_
@@ -201,12 +225,14 @@ theorem zero_add (x : DkNNRealQ) :
   intro a
   exact Quotient.sound (DkNNReal.zero_add a)
 
+/-- Quotient multiplication is associative. -/
 theorem mul_assoc (x y z : DkNNRealQ) :
     (x * y) * z = x * (y * z) := by
   refine Quotient.inductionOn₃ x y z ?_
   intro a b c
   exact Quotient.sound (DkNNReal.mul_assoc a b c)
 
+/-- Quotient multiplication is commutative. -/
 theorem mul_comm (x y : DkNNRealQ) :
     x * y = y * x := by
   refine Quotient.inductionOn₂ x y ?_
@@ -241,12 +267,14 @@ theorem zero_mul (x : DkNNRealQ) :
   intro a
   exact Quotient.sound (DkNNReal.zero_mul a)
 
+/-- Multiplication distributes over quotient addition from the left. -/
 theorem left_distrib (x y z : DkNNRealQ) :
     x * (y + z) = x * y + x * z := by
   refine Quotient.inductionOn₃ x y z ?_
   intro a b c
   exact Quotient.sound (DkNNReal.left_distrib a b c)
 
+/-- Multiplication distributes over quotient addition from the right. -/
 theorem right_distrib (x y z : DkNNRealQ) :
     (x + y) * z = x * z + y * z := by
   refine Quotient.inductionOn₃ x y z ?_
@@ -258,8 +286,18 @@ theorem right_distrib (x y z : DkNNRealQ) :
 
 The natural cast is fixed to the rational singleton embedding. The standard
 algebraic hierarchy can therefore use the quotient equalities proved above.
+The instance does not assert completeness, decidable equality, linear order,
+or equivalence with all of Mathlib's nonnegative real numbers.
 -/
 
+/--
+Commutative semiring structure on nonnegative computable-real values.
+
+The structure is extensional because its carrier is already quotiented by
+vanishing interval separation. It supplies algebraic operations only; no order,
+topology, metric completeness, or semantic equivalence with `NNReal` is
+asserted.
+-/
 instance : CommSemiring DkNNRealQ where
   add_assoc := add_assoc
   zero_add := zero_add

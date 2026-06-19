@@ -2,7 +2,66 @@
 
 作成日: 2026-06-19  
 対象: Lean `DkMath.Analysis.*` 実装準備 / Codex 作業指示用  
-状態: Draft 0.1
+状態: Draft 0.1 + implementation checkpoint
+
+## 0.1. 2026-06-19 implementation checkpoint
+
+This draft began as a pre-implementation design. The Route B algebraic core is
+now implemented beyond the original second milestone:
+
+```text
+GapInterval
+  exact rational closed intervals, width, separation, addition,
+  nonnegative multiplication, and nonnegative powers
+
+DkReal
+  nested rational intervals with width tending to zero
+
+DkReal.Equiv
+  vanishing-separation equivalence and Setoid
+
+DkNNReal
+  nonnegative representation wrapper
+
+DkNNRealQ
+  quotient by representation equivalence
+  Zero / One / Add / Mul / Pow / NatCast
+  CommSemiring
+```
+
+The following design boundary is now authoritative:
+
+```text
+Computable algebraic layer:
+  DkReal, DkNNReal, DkNNRealQ
+  rational endpoint computation
+  convergence and congruence certificates
+  no selected Mathlib real value
+
+Semantic bridge layer:
+  future DkNNRealQ -> NNReal / Real
+  representative independence
+  preservation and reflection of order
+  may be noncomputable
+```
+
+The next independent tasks are:
+
+1. **Order design.** Define a relation on representatives, prove invariance
+   under `Equiv`, then lift it to `DkNNRealQ`. Do not install an order instance
+   before antisymmetry on quotient values is established.
+2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
+   `BridgeReal.lean`, extract the unique real point of a nested interval
+   representation and prove independence from representatives.
+3. **Bridge comparison.** Prove `Equiv x y -> eval x = eval y`; investigate
+   the converse from the nested-width hypotheses.
+4. **General signed arithmetic.** General multiplication requires minimum and
+   maximum over four endpoint products and must not reuse the name
+   `mulNonneg`.
+
+The earlier future-tense file lists below are retained as historical planning
+records. The implemented module list in `Analysis-Initial-Layer.md` is the
+current source of truth.
 
 ## 0. 目的
 
