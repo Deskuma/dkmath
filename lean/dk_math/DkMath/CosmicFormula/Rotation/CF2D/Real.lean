@@ -36,37 +36,50 @@ noncomputable def realTrigKernelFamily : KernelFamily ℝ ℝ where
     simp [Vec.star, Real.cos_add, Real.sin_add]
     ring
 
+/-- In the real model, the abstract core coordinate is the usual `Real.cos`. -/
 @[simp]
 theorem realTrigKernelFamily_C (t : ℝ) :
     realTrigKernelFamily.C t = Real.cos t := rfl
 
+/-- In the real model, the abstract beam coordinate is the usual `Real.sin`. -/
 @[simp]
 theorem realTrigKernelFamily_S (t : ℝ) :
     realTrigKernelFamily.S t = Real.sin t := rfl
 
+/-- The cosmic-formula cosine specializes to the usual real cosine. -/
 @[simp]
 theorem realTrigKernelFamily_cfcos (t : ℝ) :
     realTrigKernelFamily.cfcos t = Real.cos t := rfl
 
+/-- The cosmic-formula sine specializes to the usual real sine. -/
 @[simp]
 theorem realTrigKernelFamily_cfsin (t : ℝ) :
     realTrigKernelFamily.cfsin t = Real.sin t := rfl
 
+/-- The real kernel at `t` is the pair `(cos t, sin t)`. -/
 @[simp]
 theorem realTrigKernelFamily_kernel_val (t : ℝ) :
     ((realTrigKernelFamily.kernel t : UnitKernel ℝ) : Vec ℝ)
       = ⟨Real.cos t, Real.sin t⟩ := rfl
 
+/-- Core coordinate of the usual real rotation action. -/
 theorem realTrigKernelFamily_act_core (t : ℝ) (z : Vec ℝ) :
     (UnitKernel.act (realTrigKernelFamily.kernel t) z).core
       = Real.cos t * z.core - Real.sin t * z.beam := by
   simp
 
+/-- Beam coordinate of the usual real rotation action. -/
 theorem realTrigKernelFamily_act_beam (t : ℝ) (z : Vec ℝ) :
     (UnitKernel.act (realTrigKernelFamily.kernel t) z).beam
       = Real.cos t * z.beam + Real.sin t * z.core := by
   simp
 
+/--
+Full real rotation action formula.
+
+This is the standard coordinate formula obtained as a specialization of the
+abstract cosmic-formula action theorem.
+-/
 theorem realTrigKernelFamily_act_eq (t : ℝ) (z : Vec ℝ) :
     UnitKernel.act (realTrigKernelFamily.kernel t) z
       = Vec.mk

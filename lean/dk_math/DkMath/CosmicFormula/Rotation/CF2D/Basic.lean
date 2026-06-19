@@ -57,19 +57,24 @@ def star [Ring R] (r z : Vec R) : Vec R :=
   ⟨r.core * z.core - r.beam * z.beam,
     r.core * z.beam + r.beam * z.core⟩
 
+/-- The square mass of an explicit pair is the displayed quadratic form. -/
 @[simp]
 theorem q2_mk [Semiring R] (x y : R) : q2 (Vec.mk x y) = x ^ 2 + y ^ 2 := rfl
 
+/-- The core coordinate of the neutral kernel is `1`. -/
 @[simp]
 theorem one_core [Zero R] [One R] : (one R).core = 1 := rfl
 
+/-- The beam coordinate of the neutral kernel is `0`. -/
 @[simp]
 theorem one_beam [Zero R] [One R] : (one R).beam = 0 := rfl
 
+/-- Core coordinate formula for the unit-kernel product. -/
 @[simp]
 theorem star_core [Ring R] (r z : Vec R) :
     (star r z).core = r.core * z.core - r.beam * z.beam := rfl
 
+/-- Beam coordinate formula for the unit-kernel product. -/
 @[simp]
 theorem star_beam [Ring R] (r z : Vec R) :
     (star r z).beam = r.core * z.beam + r.beam * z.core := rfl
@@ -105,18 +110,26 @@ theorem q2_star [CommRing R] (r z : Vec R) :
           simp [q2, star]
           ring
 
+/-- Multiplication by the neutral kernel on the right does not change a vector. -/
 @[simp]
 theorem star_one [CommRing R] (z : Vec R) : star z (one R) = z := by
   cases z with
   | mk x y =>
       simp [star, one]
 
+/-- Multiplication by the neutral kernel on the left does not change a vector. -/
 @[simp]
 theorem one_star [CommRing R] (z : Vec R) : star (one R) z = z := by
   cases z with
   | mk x y =>
       simp [star, one]
 
+/--
+Associativity of the two-component product.
+
+This is the algebraic reason that kernel multiplication can later be read as
+composition of actions.
+-/
 theorem star_assoc [CommRing R] (p q z : Vec R) :
     star (star p q) z = star p (star q z) := by
   cases p with
@@ -128,6 +141,12 @@ theorem star_assoc [CommRing R] (p q z : Vec R) :
               simp [star]
               constructor <;> ring
 
+/--
+Commutativity of the two-component product over a commutative ring.
+
+For the rotation interpretation this says that the 2D unit kernels form an
+abelian multiplication law.
+-/
 theorem star_comm [CommRing R] (r z : Vec R) : star r z = star z r := by
   cases r with
   | mk a b =>
@@ -140,23 +159,32 @@ theorem star_comm [CommRing R] (r z : Vec R) : star r z = star z r := by
 def conj [Neg R] (z : Vec R) : Vec R :=
   ⟨z.core, -z.beam⟩
 
+/-- The core coordinate is unchanged by conjugation. -/
 @[simp]
 theorem conj_core [Neg R] (z : Vec R) : (conj z).core = z.core := rfl
 
+/-- The beam coordinate changes sign under conjugation. -/
 @[simp]
 theorem conj_beam [Neg R] (z : Vec R) : (conj z).beam = -z.beam := rfl
 
+/-- Conjugation preserves the square mass. -/
 theorem q2_conj [CommRing R] (z : Vec R) : q2 (conj z) = q2 z := by
   cases z with
   | mk x y =>
       simp [q2, conj]
 
+/-- Conjugating twice returns the original two-component state. -/
 @[simp]
 theorem conj_conj [Ring R] (z : Vec R) : conj (conj z) = z := by
   cases z with
   | mk x y =>
       simp [conj]
 
+/--
+Conjugation distributes over the two-component product.
+
+This is the CF2D analogue of complex conjugation preserving multiplication.
+-/
 theorem conj_star [CommRing R] (r z : Vec R) :
     conj (star r z) = star (conj r) (conj z) := by
   cases r with
@@ -166,6 +194,10 @@ theorem conj_star [CommRing R] (r z : Vec R) :
           simp [conj, star]
           ring
 
+/--
+Multiplying a vector by its conjugate removes the beam coordinate and leaves
+the square mass in the core coordinate.
+-/
 theorem star_conj_self [CommRing R] (z : Vec R) :
     star z (conj z) = Vec.mk (q2 z) 0 := by
   cases z with
@@ -173,6 +205,12 @@ theorem star_conj_self [CommRing R] (z : Vec R) :
       simp [star, conj, q2]
       constructor <;> ring
 
+/--
+The same inverse-like identity with the conjugate placed on the left.
+
+The result agrees with `star_conj_self` because the product is commutative in
+this commutative-ring layer.
+-/
 theorem conj_star_self [CommRing R] (z : Vec R) :
     star (conj z) z = Vec.mk (q2 z) 0 := by
   cases z with
@@ -202,10 +240,12 @@ variable {R : Type u}
 instance [Semiring R] : Coe (UnitKernel R) (Vec R) :=
   ⟨UnitKernel.val⟩
 
+/-- Coercing a unit kernel to `Vec` exposes its defining square-mass-one law. -/
 @[simp]
 theorem coe_q2 [Semiring R] (r : UnitKernel R) : Vec.q2 (r : Vec R) = 1 :=
   r.q2_eq_one
 
+/-- Unit kernels are equal when their underlying two-component vectors are equal. -/
 @[ext]
 theorem ext [Semiring R] {r s : UnitKernel R} (h : (r : Vec R) = (s : Vec R)) : r = s := by
   cases r with
@@ -224,6 +264,7 @@ def conj [CommRing R] (r : UnitKernel R) : UnitKernel R :=
   ⟨Vec.conj (r : Vec R), by
     rw [Vec.q2_conj, coe_q2]⟩
 
+/-- The underlying vector of a conjugated unit kernel is vector conjugation. -/
 @[simp]
 theorem conj_val [CommRing R] (r : UnitKernel R) :
     (conj r : Vec R) = Vec.conj (r : Vec R) := rfl
@@ -233,26 +274,31 @@ def star [CommRing R] (r s : UnitKernel R) : UnitKernel R :=
   ⟨Vec.star (r : Vec R) (s : Vec R), by
     rw [Vec.q2_star, coe_q2, coe_q2, one_mul]⟩
 
+/-- The underlying vector of a product of unit kernels is the vector product. -/
 @[simp]
 theorem star_val [CommRing R] (r s : UnitKernel R) :
     (star r s : Vec R) = Vec.star (r : Vec R) (s : Vec R) := rfl
 
+/-- Product of unit kernels again has square mass `1`. -/
 @[simp]
 theorem star_q2 [CommRing R] (r s : UnitKernel R) : Vec.q2 (star r s : Vec R) = 1 :=
   coe_q2 (star r s)
 
+/-- The neutral unit kernel is a right identity for kernel multiplication. -/
 @[simp]
 theorem star_one [CommRing R] (r : UnitKernel R) : star r (one R) = r := by
   cases r with
   | mk val q2_eq_one =>
       simp [star, one]
 
+/-- The neutral unit kernel is a left identity for kernel multiplication. -/
 @[simp]
 theorem one_star [CommRing R] (r : UnitKernel R) : star (one R) r = r := by
   cases r with
   | mk val q2_eq_one =>
       simp [star, one]
 
+/-- Associativity of multiplication for unit kernels. -/
 theorem star_assoc [CommRing R] (p q r : UnitKernel R) :
     star (star p q) r = star p (star q r) := by
   cases p with
@@ -263,6 +309,7 @@ theorem star_assoc [CommRing R] (p q r : UnitKernel R) :
           | mk rv hr =>
               simp [star, Vec.star_assoc]
 
+/-- Commutativity of multiplication for unit kernels. -/
 theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
   cases r with
   | mk rv hr =>
@@ -270,12 +317,14 @@ theorem star_comm [CommRing R] (r s : UnitKernel R) : star r s = star s r := by
       | mk sv hs =>
           simp [star, Vec.star_comm]
 
+/-- A unit kernel multiplied by its conjugate is the neutral kernel. -/
 @[simp]
 theorem star_conj [CommRing R] (r : UnitKernel R) : star r (conj r) = one R := by
   apply UnitKernel.ext
   rw [star_val, conj_val, Vec.star_conj_self]
   simp [one, Vec.one]
 
+/-- The conjugate multiplied on the left is also inverse-like. -/
 @[simp]
 theorem conj_star [CommRing R] (r : UnitKernel R) : star (conj r) r = one R := by
   apply UnitKernel.ext
@@ -286,10 +335,16 @@ theorem conj_star [CommRing R] (r : UnitKernel R) : star (conj r) r = one R := b
 def act [CommRing R] (r : UnitKernel R) (z : Vec R) : Vec R :=
   Vec.star (r : Vec R) z
 
+/-- The neutral unit kernel acts as the identity map. -/
 @[simp]
 theorem act_one [CommRing R] (z : Vec R) : act (one R) z = z := by
   simp [act, one]
 
+/--
+Action by a product of kernels is composition of the two actions.
+
+This is the formal bridge from kernel multiplication to rotation composition.
+-/
 theorem act_star [CommRing R] (r s : UnitKernel R) (z : Vec R) :
     act (star r s) z = act r (act s z) := by
   change Vec.star ((star r s : UnitKernel R) : Vec R) z
@@ -297,10 +352,12 @@ theorem act_star [CommRing R] (r s : UnitKernel R) (z : Vec R) :
   rw [star_val]
   exact Vec.star_assoc (r : Vec R) (s : Vec R) z
 
+/-- Core coordinate formula for the action of a unit kernel. -/
 @[simp]
 theorem act_core [CommRing R] (r : UnitKernel R) (z : Vec R) :
     (act r z).core = (r : Vec R).core * z.core - (r : Vec R).beam * z.beam := rfl
 
+/-- Beam coordinate formula for the action of a unit kernel. -/
 @[simp]
 theorem act_beam [CommRing R] (r : UnitKernel R) (z : Vec R) :
     (act r z).beam = (r : Vec R).core * z.beam + (r : Vec R).beam * z.core := rfl
@@ -310,6 +367,7 @@ theorem q2_act [CommRing R] (r : UnitKernel R) (z : Vec R) :
     Vec.q2 (act r z) = Vec.q2 z := by
   rw [act, Vec.q2_star, coe_q2, one_mul]
 
+/-- The action of a unit kernel is a square-mass-preserving map. -/
 theorem preservesQ2_act [CommRing R] (r : UnitKernel R) : PreservesQ2 (act r) :=
   q2_act r
 
@@ -333,6 +391,7 @@ def act (r : UnitKernel R) (z : LevelSet R rho2) : LevelSet R rho2 :=
     have h := UnitKernel.q2_act r z.1
     simpa [z.2] using h⟩
 
+/-- The underlying value of a level-set action is the ordinary unit-kernel action. -/
 @[simp]
 theorem act_val (r : UnitKernel R) (z : LevelSet R rho2) :
     (act r z).1 = UnitKernel.act r z.1 := rfl
