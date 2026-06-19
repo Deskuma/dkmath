@@ -1,4 +1,6 @@
-# Closure Reports: DkMath.Analysis.DkReal. Step No.019
+# Closure Reports: Step No.019
+
+DkMath.Analysis.DkReal
 
 うむ、ここは一旦キャンプを張ってよい。
 わっちの判定では、`DkMath.Analysis.DkReal` は **構想段階を抜けて、最初の演算閉性を持つ計算可能実数近似体系** まで来た。
