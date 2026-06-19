@@ -139,3 +139,38 @@ restriction; multiplication currently remains on the nonnegative quadrant so
 that endpoint multiplication is order preserving. These operations establish
 the computational core needed for a future nonnegative ordered-semiring API,
 before introducing a semantic map to Mathlib's `Real`.
+
+## Nonnegative Computable Semiring Core
+
+The arithmetic layer now proves the expected semiring laws at every finite
+observation stage:
+
+```lean
+add_assoc_interval
+add_comm_interval
+add_zero_interval
+zero_add_interval
+mulNonneg_assoc_interval
+mulNonneg_comm_interval
+mulNonneg_one_interval
+one_mulNonneg_interval
+left_distrib_interval
+right_distrib_interval
+```
+
+These statements identify the rational intervals produced at a fixed stage.
+They do not use the raw structure equality of `DkReal`. This distinction is
+essential: two different nested interval sequences may eventually represent
+the same real number without being definitionally equal as Lean structures.
+
+Consequently, no `Add`, `Mul`, or semiring typeclass instance is introduced
+yet. The implementation has a computable nonnegative semiring core at the
+observation level, but a formal algebraic structure should wait until the
+representation equivalence has been chosen and its congruence properties have
+been proved.
+
+Candidate equivalence principles include persistent interval intersection,
+vanishing separation between two approximations, or equality after a future
+evaluation map into Mathlib's `Real`. These formulations are not
+interchangeable by definition, so selecting one is a mathematical design
+decision rather than a routine API addition.

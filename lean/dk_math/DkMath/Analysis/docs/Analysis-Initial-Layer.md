@@ -54,7 +54,8 @@ DkMath.Analysis.DkReal.PowBound
   finite-sum gapGN bounds and the completed nonnegative power map
 
 DkMath.Analysis.DkReal.Arithmetic
-  computable interval addition and nonnegative multiplication
+  computable interval addition, nonnegative multiplication, and stagewise
+  semiring laws
 
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer

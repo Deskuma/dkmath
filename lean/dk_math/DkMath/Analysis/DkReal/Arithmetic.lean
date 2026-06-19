@@ -86,6 +86,32 @@ theorem add_zero_interval (x : DkMath.Analysis.DkReal) (n : ℕ) :
   apply GapInterval.ext <;> simp [add, addApprox]
 
 /-!
+## Additive interval laws
+
+These laws deliberately compare the interval observed at each stage. They do
+not identify two `DkReal` structures whose approximation sequences merely
+represent the same limiting real number.
+-/
+
+/-- Embedded zero is a left identity at every approximation stage. -/
+@[simp]
+theorem zero_add_interval (x : DkMath.Analysis.DkReal) (n : ℕ) :
+    (add (DkMath.Analysis.DkReal.ofRat 0) x).interval n = x.interval n := by
+  apply GapInterval.ext <;> simp [add, addApprox]
+
+/-- Addition is commutative at every approximation stage. -/
+theorem add_comm_interval
+    (x y : DkMath.Analysis.DkReal) (n : ℕ) :
+    (add x y).interval n = (add y x).interval n := by
+  apply GapInterval.ext <;> simp [add, addApprox, add_comm]
+
+/-- Addition is associative at every approximation stage. -/
+theorem add_assoc_interval
+    (x y z : DkMath.Analysis.DkReal) (n : ℕ) :
+    (add (add x y) z).interval n = (add x (add y z)).interval n := by
+  apply GapInterval.ext <;> simp [add, addApprox, add_assoc]
+
+/-!
 ## II. Multiplication on the nonnegative quadrant
 
 For nonnegative nested intervals, endpoint multiplication is isotone. The
@@ -237,5 +263,65 @@ theorem mulNonneg_one_interval
         (nonnegative_ofRat zero_le_one)).interval n
       = x.interval n := by
   apply GapInterval.ext <;> simp [mulNonneg, mulNonnegApprox]
+
+/-!
+## III. Nonnegative semiring laws at the interval level
+
+Proof arguments witness that endpoint multiplication is valid on the
+nonnegative quadrant. The conclusions concern only rational endpoints, so
+proof irrelevance removes any dependence on how those witnesses were obtained.
+-/
+
+/-- Embedded one is a left identity for nonnegative multiplication stagewise. -/
+@[simp]
+theorem one_mulNonneg_interval
+    (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
+    (mulNonneg (DkMath.Analysis.DkReal.ofRat 1) x
+        (nonnegative_ofRat zero_le_one) hx).interval n
+      = x.interval n := by
+  apply GapInterval.ext <;> simp [mulNonneg, mulNonnegApprox]
+
+/-- Nonnegative multiplication is commutative at every approximation stage. -/
+theorem mulNonneg_comm_interval
+    (x y : DkMath.Analysis.DkReal) (hx : Nonnegative x) (hy : Nonnegative y)
+    (n : ℕ) :
+    (mulNonneg x y hx hy).interval n
+      = (mulNonneg y x hy hx).interval n := by
+  apply GapInterval.ext <;> simp [mulNonneg, mulNonnegApprox, mul_comm]
+
+/-- Nonnegative multiplication is associative at every approximation stage. -/
+theorem mulNonneg_assoc_interval
+    (x y z : DkMath.Analysis.DkReal)
+    (hx : Nonnegative x) (hy : Nonnegative y) (hz : Nonnegative z)
+    (n : ℕ) :
+    (mulNonneg (mulNonneg x y hx hy) z
+        (nonnegative_mulNonneg hx hy) hz).interval n
+      =
+    (mulNonneg x (mulNonneg y z hy hz)
+        hx (nonnegative_mulNonneg hy hz)).interval n := by
+  apply GapInterval.ext <;>
+    simp [mulNonneg, mulNonnegApprox, mul_assoc]
+
+/-- Nonnegative multiplication distributes over addition from the left stagewise. -/
+theorem left_distrib_interval
+    (x y z : DkMath.Analysis.DkReal)
+    (hx : Nonnegative x) (hy : Nonnegative y) (hz : Nonnegative z)
+    (n : ℕ) :
+    (mulNonneg x (add y z) hx (nonnegative_add hy hz)).interval n
+      =
+    (add (mulNonneg x y hx hy) (mulNonneg x z hx hz)).interval n := by
+  apply GapInterval.ext <;>
+    simp [add, addApprox, mulNonneg, mulNonnegApprox, mul_add]
+
+/-- Nonnegative multiplication distributes over addition from the right stagewise. -/
+theorem right_distrib_interval
+    (x y z : DkMath.Analysis.DkReal)
+    (hx : Nonnegative x) (hy : Nonnegative y) (hz : Nonnegative z)
+    (n : ℕ) :
+    (mulNonneg (add x y) z (nonnegative_add hx hy) hz).interval n
+      =
+    (add (mulNonneg x z hx hz) (mulNonneg y z hy hz)).interval n := by
+  apply GapInterval.ext <;>
+    simp [add, addApprox, mulNonneg, mulNonnegApprox, add_mul]
 
 end DkMath.Analysis.DkReal
