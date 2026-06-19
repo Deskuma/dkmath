@@ -18,7 +18,7 @@ nonnegative power image are exact rational data; no real-number completion is
 needed at this layer.
 -/
 
-namespace DkMath.Analysis
+namespace DkMath.Analysis.DkReal
 
 /-- A closed interval with rational endpoints. -/
 structure GapInterval where
@@ -29,9 +29,26 @@ deriving Repr
 
 namespace GapInterval
 
+/-- The degenerate rational interval containing only `q`. -/
+def singleton (q : ℚ) : GapInterval :=
+  ⟨q, q, le_rfl⟩
+
+/-- Both endpoints of a singleton interval are its unique value. -/
+@[simp]
+theorem singleton_lo (q : ℚ) : (singleton q).lo = q := rfl
+
+/-- Both endpoints of a singleton interval are its unique value. -/
+@[simp]
+theorem singleton_hi (q : ℚ) : (singleton q).hi = q := rfl
+
 /-- Exact rational width of a gap interval. -/
 def width (I : GapInterval) : ℚ :=
   I.hi - I.lo
+
+/-- A singleton interval has zero width. -/
+@[simp]
+theorem singleton_width (q : ℚ) : (singleton q).width = 0 := by
+  simp [width]
 
 /-- Every valid gap interval has nonnegative width. -/
 theorem width_nonneg (I : GapInterval) : 0 ≤ I.width :=
@@ -76,4 +93,4 @@ theorem powNonneg_width_eq
 
 end GapInterval
 
-end DkMath.Analysis
+end DkMath.Analysis.DkReal

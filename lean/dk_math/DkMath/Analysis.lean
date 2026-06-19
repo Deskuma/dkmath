@@ -10,7 +10,7 @@ import DkMath.Analysis.GapGN
 import DkMath.Analysis.ErrorKernel
 import DkMath.Analysis.GapFill
 import DkMath.Analysis.RealBridge
-import DkMath.Analysis.DkReal.Interval
+import DkMath.Analysis.DkReal
 
 #print "file: DkMath.Analysis"
 

@@ -36,11 +36,21 @@ DkMath.Analysis.GapFill
   affine interval scan, powered fill, endpoint identity, and real order theorem
 
 DkMath.Analysis.RealBridge
-  specialization to Real and Mathlib Continuous / Set.MapsTo
+  first bridge to Real and Mathlib Continuous / Set.MapsTo
 
 DkMath.Analysis.DkReal.Interval
-  rational GapInterval, width, nonnegative power image, and exact width formula
+  DkReal.GapInterval, width, nonnegative power image, and exact width formula
+
+DkMath.Analysis.DkReal.Basic
+  nested rational intervals with widths tending to zero
+
+DkMath.Analysis.DkReal
+  public entry point for the computable approximation layer
 ```
+
+The current `RealBridge` is intentionally only the first analytic bridge.
+Differentiability, `HasDerivAt`, and the Taylor-facing interpretation of
+`gapGN` are not part of this checkpoint.
 
 ## Canonical Kernel Bridge
 
@@ -132,9 +142,11 @@ proves continuity in `t`.
 
 ## Rational Interval Prototype
 
-`GapInterval` contains exact rational endpoints:
+`DkReal.GapInterval` contains exact rational endpoints:
 
 ```lean
+namespace DkMath.Analysis.DkReal
+
 structure GapInterval where
   lo : Rat
   hi : Rat
@@ -145,11 +157,23 @@ For a nonnegative interval, `powNonneg` maps both endpoints through a natural
 power while preserving order. Its width satisfies:
 
 ```lean
-GapInterval.powNonneg_width_eq :
+DkReal.GapInterval.powNonneg_width_eq :
   (I.powNonneg d hlo).width
     = I.width * gapGN d I.lo I.width
 ```
 
-This is the initial computational basis for `DkReal`. Nested interval
-sequences, convergence, and evaluation into Mathlib's real numbers are deferred
-to later checkpoints.
+The first `DkReal` carrier is now also present:
+
+```lean
+structure DkReal where
+  interval : Nat -> DkReal.GapInterval
+  nested : forall n,
+    (interval n).lo <= (interval (n + 1)).lo
+      and (interval (n + 1)).hi <= (interval n).hi
+  width_tends_zero :
+    Tendsto (fun n => (interval n).width) atTop (nhds 0)
+```
+
+Rational values embed as constant singleton interval sequences through
+`DkReal.ofRat`. Evaluation into Mathlib's real numbers remains deferred to a
+later semantic bridge.
