@@ -190,10 +190,28 @@ and symmetry follow from the corresponding finite-interval identities. The
 module therefore supplies a proved `Setoid`, not merely a candidate relation.
 
 Addition respects this equivalence because separation of interval sums is
-bounded by the sum of the input separations. Nonnegative multiplication
-congruence remains the next arithmetic obligation; it requires a bounded
-endpoint estimate analogous to the width argument already used to construct
-`mulNonneg`.
+bounded by the sum of the input separations. Nonnegative multiplication now
+also respects equivalence. The proof first derives
+
+```text
+Equiv(x,y) -> lo(x_n) - lo(y_n) -> 0.
+```
+
+The difference between product lower endpoints is then factored as
+
+```text
+a_n b_n - c_n d_n
+  = a_n (b_n-d_n) + d_n (a_n-c_n).
+```
+
+The endpoint factors are bounded and the difference factors tend to zero.
+Finally, interval separation is bounded by the absolute difference between
+the product lower endpoints. This gives `equiv_mulNonneg` and its one-sided
+variants without evaluating either representation as a Mathlib real number.
+
+The next arithmetic congruence target is `powNonneg`. It should follow from
+the same endpoint-convergence principle together with a uniform bound for the
+finite `gapGN` correction factor.
 
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing

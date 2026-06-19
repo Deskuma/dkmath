@@ -58,8 +58,8 @@ DkMath.Analysis.DkReal.Arithmetic
   semiring laws
 
 DkMath.Analysis.DkReal.Equiv
-  vanishing interval separation, representation setoid, and additive
-  congruence
+  vanishing interval separation, representation setoid, endpoint convergence,
+  and additive/nonnegative multiplicative congruence
 
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer

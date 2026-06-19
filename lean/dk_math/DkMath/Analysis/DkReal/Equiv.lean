@@ -121,4 +121,126 @@ theorem equiv_add_right
     Equiv (add x y) (add x y') :=
   equiv_add (equiv_refl x) hyy'
 
+/-!
+## Endpoint consequences
+
+Vanishing interval separation, together with the vanishing widths of both
+representations, forces corresponding rational endpoints to approach one
+another.
+-/
+
+/-- Equivalent representations have vanishing absolute lower-endpoint difference. -/
+theorem equiv_tendsto_abs_lo_sub_zero
+    {x y : DkMath.Analysis.DkReal} (hxy : Equiv x y) :
+    Filter.Tendsto
+      (fun n => |(x.interval n).lo - (y.interval n).lo|)
+      Filter.atTop (nhds 0) := by
+  have hupper :
+      Filter.Tendsto
+        (fun n =>
+          (x.interval n).separation (y.interval n) +
+            (x.interval n).width + (y.interval n).width)
+        Filter.atTop (nhds 0) := by
+    simpa only [zero_add, add_zero] using
+      (hxy.add x.tendsto_width_zero).add y.tendsto_width_zero
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds hupper
+    (fun n => abs_nonneg _)
+    (fun n => (x.interval n).abs_lo_sub_lo_le (y.interval n))
+
+/-- Equivalent representations have lower-endpoint difference tending to zero. -/
+theorem equiv_tendsto_lo_sub_zero
+    {x y : DkMath.Analysis.DkReal} (hxy : Equiv x y) :
+    Filter.Tendsto
+      (fun n => (x.interval n).lo - (y.interval n).lo)
+      Filter.atTop (nhds 0) := by
+  have habs := equiv_tendsto_abs_lo_sub_zero hxy
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    (by simpa using habs.neg) habs
+    (fun n => neg_abs_le ((x.interval n).lo - (y.interval n).lo))
+    (fun n => le_abs_self ((x.interval n).lo - (y.interval n).lo))
+
+/-!
+## Compatibility with nonnegative multiplication
+
+Lower endpoints of nonnegative `DkReal` approximations are bounded. Combining
+this boundedness with vanishing endpoint differences proves that the lower
+endpoints of equivalent products approach one another. Interval separation is
+then bounded by that lower-endpoint distance.
+-/
+
+/-- Nonnegative multiplication preserves representation equivalence. -/
+theorem equiv_mulNonneg
+    {x x' y y' : DkMath.Analysis.DkReal}
+    (hx : Nonnegative x) (hx' : Nonnegative x')
+    (hy : Nonnegative y) (hy' : Nonnegative y')
+    (hxx' : Equiv x x') (hyy' : Equiv y y') :
+    Equiv
+      (mulNonneg x y hx hy)
+      (mulNonneg x' y' hx' hy') := by
+  have hylo := equiv_tendsto_lo_sub_zero hyy'
+  have hxlo := equiv_tendsto_lo_sub_zero hxx'
+  have hleft :
+      Filter.Tendsto
+        (fun n =>
+          (x.interval n).lo *
+            ((y.interval n).lo - (y'.interval n).lo))
+        Filter.atTop (nhds 0) := by
+    simpa only [mul_comm] using
+      hylo.zero_mul_isBoundedUnder_le (isBoundedUnder_norm_lo x hx)
+  have hright :
+      Filter.Tendsto
+        (fun n =>
+          (y'.interval n).lo *
+            ((x.interval n).lo - (x'.interval n).lo))
+        Filter.atTop (nhds 0) := by
+    simpa only [mul_comm] using
+      hxlo.zero_mul_isBoundedUnder_le (isBoundedUnder_norm_lo y' hy')
+  have hproductLo :
+      Filter.Tendsto
+        (fun n =>
+          (x.interval n).lo * (y.interval n).lo -
+            (x'.interval n).lo * (y'.interval n).lo)
+        Filter.atTop (nhds 0) := by
+    convert hleft.add hright using 1
+    · funext n
+      dsimp
+      ring
+    · simp
+  have hproductAbs :
+      Filter.Tendsto
+        (fun n =>
+          |(x.interval n).lo * (y.interval n).lo -
+            (x'.interval n).lo * (y'.interval n).lo|)
+        Filter.atTop (nhds 0) := by
+    simpa using hproductLo.abs
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds hproductAbs
+    (fun n =>
+      ((mulNonneg x y hx hy).interval n).separation_nonneg
+        ((mulNonneg x' y' hx' hy').interval n))
+    (fun n => by
+      simpa only [mulNonneg_interval, mulNonnegApprox,
+        GapInterval.mulNonneg_lo] using
+        ((x.interval n).mulNonneg (y.interval n) (hx n) (hy n)).separation_le_abs_lo_sub_lo
+          ((x'.interval n).mulNonneg (y'.interval n) (hx' n) (hy' n)))
+
+/-- Nonnegative multiplication preserves equivalence in the left argument. -/
+theorem equiv_mulNonneg_left
+    {x x' : DkMath.Analysis.DkReal}
+    (hx : Nonnegative x) (hx' : Nonnegative x')
+    (hxx' : Equiv x x')
+    (y : DkMath.Analysis.DkReal) (hy : Nonnegative y) :
+    Equiv (mulNonneg x y hx hy) (mulNonneg x' y hx' hy) :=
+  equiv_mulNonneg hx hx' hy hy hxx' (equiv_refl y)
+
+/-- Nonnegative multiplication preserves equivalence in the right argument. -/
+theorem equiv_mulNonneg_right
+    (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)
+    {y y' : DkMath.Analysis.DkReal}
+    (hy : Nonnegative y) (hy' : Nonnegative y')
+    (hyy' : Equiv y y') :
+    Equiv (mulNonneg x y hx hy) (mulNonneg x y' hx hy') :=
+  equiv_mulNonneg hx hx hy hy' (equiv_refl x) hyy'
+
 end DkMath.Analysis.DkReal

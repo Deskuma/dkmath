@@ -209,6 +209,37 @@ theorem separation_add_le (I J K L : GapInterval) :
       simp only [add_lo, add_hi]
       linarith
 
+/-- Interval separation is bounded by the distance between the lower endpoints. -/
+theorem separation_le_abs_lo_sub_lo (I J : GapInterval) :
+    I.separation J ≤ |I.lo - J.lo| := by
+  apply max_le
+  · exact abs_nonneg _
+  · apply max_le
+    · have habs : I.lo - J.lo ≤ |I.lo - J.lo| := le_abs_self _
+      linarith [J.le_lo_hi]
+    · have habs : -(I.lo - J.lo) ≤ |I.lo - J.lo| := neg_le_abs _
+      linarith [I.le_lo_hi]
+
+/--
+The lower-endpoint distance is controlled by interval separation plus both
+interval widths.
+-/
+theorem abs_lo_sub_lo_le (I J : GapInterval) :
+    |I.lo - J.lo| ≤ I.separation J + I.width + J.width := by
+  rw [abs_le]
+  constructor
+  · have hJI := J.lo_sub_hi_le_separation I
+    rw [separation_comm J I] at hJI
+    simp only [width] at *
+    have hIwidth : 0 ≤ I.hi - I.lo := sub_nonneg.mpr I.le_lo_hi
+    have hJwidth : 0 ≤ J.hi - J.lo := sub_nonneg.mpr J.le_lo_hi
+    linarith
+  · have hIJ := I.lo_sub_hi_le_separation J
+    simp only [width] at *
+    have hIwidth : 0 ≤ I.hi - I.lo := sub_nonneg.mpr I.le_lo_hi
+    have hJwidth : 0 ≤ J.hi - J.lo := sub_nonneg.mpr J.le_lo_hi
+    linarith
+
 /--
 Image of a nonnegative rational interval under the natural power map.
 
