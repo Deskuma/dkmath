@@ -8,6 +8,7 @@ import DkMath.Analysis.DkReal.Interval
 import DkMath.Analysis.DkReal.Basic
 import DkMath.Analysis.DkReal.Pow
 import DkMath.Analysis.DkReal.PowBound
+import DkMath.Analysis.DkReal.Arithmetic
 
 #print "file: DkMath.Analysis.DkReal"
 

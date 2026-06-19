@@ -133,7 +133,9 @@ provides precisely the finite correction factor needed to transport vanishing
 width. Real analysis appears later as an interpretation of this construction,
 not as a prerequisite for defining it.
 
-The next natural tests of the same principle are nonnegative addition and
-multiplication. They will determine how much of an ordered semiring structure
-can be built entirely inside the rational-interval layer before introducing a
-semantic map to Mathlib's `Real`.
+The next tests of this principle, addition and nonnegative multiplication, are
+now implemented in `DkMath.Analysis.DkReal.Arithmetic`. Addition needs no sign
+restriction; multiplication currently remains on the nonnegative quadrant so
+that endpoint multiplication is order preserving. These operations establish
+the computational core needed for a future nonnegative ordered-semiring API,
+before introducing a semantic map to Mathlib's `Real`.

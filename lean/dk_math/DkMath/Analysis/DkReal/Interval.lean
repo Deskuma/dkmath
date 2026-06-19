@@ -65,6 +65,74 @@ theorem width_nonneg (I : GapInterval) : 0 ≤ I.width :=
 theorem lo_add_width (I : GapInterval) : I.lo + I.width = I.hi := by
   simp [width]
 
+/-!
+## Interval arithmetic
+
+Minkowski addition adds corresponding endpoints. On the nonnegative quadrant,
+interval multiplication also uses the endpoint products because multiplication
+is isotone in each variable there.
+-/
+
+/-- Minkowski sum of two rational gap intervals. -/
+def add (I J : GapInterval) : GapInterval where
+  lo := I.lo + J.lo
+  hi := I.hi + J.hi
+  le_lo_hi := add_le_add I.le_lo_hi J.le_lo_hi
+
+/-- Lower endpoint of an interval sum. -/
+@[simp]
+theorem add_lo (I J : GapInterval) : (I.add J).lo = I.lo + J.lo := rfl
+
+/-- Upper endpoint of an interval sum. -/
+@[simp]
+theorem add_hi (I J : GapInterval) : (I.add J).hi = I.hi + J.hi := rfl
+
+/-- Width is additive under Minkowski addition. -/
+@[simp]
+theorem add_width (I J : GapInterval) :
+    (I.add J).width = I.width + J.width := by
+  simp [width]
+  ring
+
+/--
+Product of two nonnegative rational gap intervals.
+
+Both lower-endpoint hypotheses are needed to make endpoint multiplication
+order preserving.
+-/
+def mulNonneg
+    (I J : GapInterval) (hI : 0 ≤ I.lo) (hJ : 0 ≤ J.lo) :
+    GapInterval where
+  lo := I.lo * J.lo
+  hi := I.hi * J.hi
+  le_lo_hi := by
+    have hIhi : 0 ≤ I.hi := hI.trans I.le_lo_hi
+    exact mul_le_mul I.le_lo_hi J.le_lo_hi hJ hIhi
+
+/-- Lower endpoint of a nonnegative interval product. -/
+@[simp]
+theorem mulNonneg_lo
+    (I J : GapInterval) (hI : 0 ≤ I.lo) (hJ : 0 ≤ J.lo) :
+    (I.mulNonneg J hI hJ).lo = I.lo * J.lo := rfl
+
+/-- Upper endpoint of a nonnegative interval product. -/
+@[simp]
+theorem mulNonneg_hi
+    (I J : GapInterval) (hI : 0 ≤ I.lo) (hJ : 0 ≤ J.lo) :
+    (I.mulNonneg J hI hJ).hi = I.hi * J.hi := rfl
+
+/--
+The product width is the sum of two first-order interval contributions:
+the width of `J` scaled by the upper endpoint of `I`, and the width of `I`
+scaled by the lower endpoint of `J`.
+-/
+theorem mulNonneg_width_eq
+    (I J : GapInterval) (hI : 0 ≤ I.lo) (hJ : 0 ≤ J.lo) :
+    (I.mulNonneg J hI hJ).width
+      = I.hi * J.width + J.lo * I.width := by
+  simp [width]
+  ring
+
 /--
 Image of a nonnegative rational interval under the natural power map.
 
