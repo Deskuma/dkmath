@@ -239,6 +239,44 @@ respect the representation setoid. The next design question is whether to
 introduce a quotient or a dedicated wrapper for the nonnegative computable
 semiring API.
 
+## DkNNReal Wrapper
+
+The first public nonnegative arithmetic surface is now the wrapper
+`DkMath.Analysis.DkNNReal`:
+
+```lean
+structure DkNNReal where
+  val : DkReal
+  nonnegative : DkReal.Nonnegative val
+```
+
+It provides:
+
+```lean
+DkNNReal.ofRat
+DkNNReal.zero
+DkNNReal.one
+DkNNReal.add
+DkNNReal.mul
+DkNNReal.pow
+```
+
+The nonnegativity witnesses are carried by the wrapper and no longer appear as
+arguments at each multiplication or power call. All operations remain
+computable transformations of rational interval observations.
+
+`DkNNReal.Equiv` lifts the existing representation equivalence, and
+`DkNNReal.equivSetoid` records it as a setoid. Addition, multiplication, and
+power have congruence theorems on this wrapper. The additive and multiplicative
+identity, associativity, commutativity, and distributivity laws are also
+available modulo `Equiv`.
+
+No `Add`, `Mul`, `Pow`, or `Semiring` instance is introduced on the raw wrapper.
+Such instances would state laws using Lean equality, whereas the established
+laws concern representation equivalence. A later quotient of
+`DkNNReal.equivSetoid`, or a dedicated quotient-backed public type, is the
+appropriate place for ordinary algebraic typeclasses.
+
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing
 separation should be proved later rather than assumed by definition.

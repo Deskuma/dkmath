@@ -10,6 +10,7 @@ import DkMath.Analysis.DkReal.Pow
 import DkMath.Analysis.DkReal.PowBound
 import DkMath.Analysis.DkReal.Arithmetic
 import DkMath.Analysis.DkReal.Equiv
+import DkMath.Analysis.DkReal.DkNNReal
 
 #print "file: DkMath.Analysis.DkReal"
 

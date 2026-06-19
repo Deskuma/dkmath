@@ -61,6 +61,10 @@ DkMath.Analysis.DkReal.Equiv
   vanishing interval separation, representation setoid, endpoint convergence,
   and additive, nonnegative multiplicative, and natural-power congruence
 
+DkMath.Analysis.DkReal.DkNNReal
+  nonnegative wrapper with proof-free arithmetic operations and semiring laws
+  modulo representation equivalence
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
