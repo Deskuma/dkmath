@@ -11,6 +11,7 @@ import DkMath.Analysis.DkReal.PowBound
 import DkMath.Analysis.DkReal.Arithmetic
 import DkMath.Analysis.DkReal.Equiv
 import DkMath.Analysis.DkReal.DkNNReal
+import DkMath.Analysis.DkReal.DkNNRealQ
 
 #print "file: DkMath.Analysis.DkReal"
 

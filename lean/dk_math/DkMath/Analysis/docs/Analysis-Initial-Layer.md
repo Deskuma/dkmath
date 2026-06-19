@@ -65,6 +65,10 @@ DkMath.Analysis.DkReal.DkNNReal
   nonnegative wrapper with proof-free arithmetic operations and semiring laws
   modulo representation equivalence
 
+DkMath.Analysis.DkReal.DkNNRealQ
+  quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
+  commutative semiring laws as ordinary equalities
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```

@@ -277,6 +277,37 @@ laws concern representation equivalence. A later quotient of
 `DkNNReal.equivSetoid`, or a dedicated quotient-backed public type, is the
 appropriate place for ordinary algebraic typeclasses.
 
+## Quotient-Backed Public Type
+
+`DkMath.Analysis.DkNNRealQ` is now defined as
+
+```lean
+Quotient DkNNReal.equivSetoid.
+```
+
+The quotient provides `ofRat`, `zero`, `one`, `add`, `mul`, and natural
+`pow`. Their lifts are well defined by the wrapper congruence theorems.
+Instances for `Zero`, `One`, `Add`, `Mul`, and `Pow DkNNRealQ Nat` expose the
+usual notation.
+
+The following laws now hold as ordinary Lean equalities:
+
+```text
+add_assoc, add_comm, add_zero, zero_add
+mul_assoc, mul_comm, mul_one, one_mul
+mul_zero, zero_mul
+left_distrib, right_distrib
+pow_zero, pow_one
+```
+
+Embedded nonnegative rationals also satisfy exact quotient equalities for
+addition and multiplication.
+
+A full `Semiring` instance is intentionally deferred. Constructing that
+instance also commits to natural-number coercions and their public
+normalization behavior. The current quotient establishes the mathematical
+equalities and notation first, leaving that policy decision isolated.
+
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing
 separation should be proved later rather than assumed by definition.

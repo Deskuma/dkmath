@@ -104,6 +104,38 @@ theorem equiv_pow
   DkReal.equiv_powNonneg d x.nonnegative y.nonnegative hxy
 
 /-!
+## Exact rational and elementary power rules
+
+These rules become ordinary equalities after quotienting by representation
+equivalence.
+-/
+
+/-- Addition of embedded nonnegative rationals agrees with rational addition. -/
+theorem add_ofRat
+    {p q : ℚ} (hp : 0 ≤ p) (hq : 0 ≤ q) :
+    Equiv (add (ofRat p hp) (ofRat q hq)) (ofRat (p + q) (add_nonneg hp hq)) :=
+  DkReal.equiv_of_interval_eq (DkReal.add_ofRat_interval p q)
+
+/-- Multiplication of embedded nonnegative rationals agrees with rational multiplication. -/
+theorem mul_ofRat
+    {p q : ℚ} (hp : 0 ≤ p) (hq : 0 ≤ q) :
+    Equiv (mul (ofRat p hp) (ofRat q hq))
+      (ofRat (p * q) (mul_nonneg hp hq)) :=
+  DkReal.equiv_of_interval_eq (DkReal.mulNonneg_ofRat_interval hp hq)
+
+/-- Zeroth power is one modulo representation equivalence. -/
+theorem pow_zero (x : DkNNReal) :
+    Equiv (pow x 0) one :=
+  DkReal.equiv_of_interval_eq
+    (DkReal.powNonneg_zero_interval x.val x.nonnegative)
+
+/-- First power is the original value modulo representation equivalence. -/
+theorem pow_one (x : DkNNReal) :
+    Equiv (pow x 1) x :=
+  DkReal.equiv_of_interval_eq
+    (DkReal.powNonneg_one_interval x.val x.nonnegative)
+
+/-!
 ## Nonnegative semiring laws modulo representation equivalence
 
 These are the algebraic laws needed by a future quotient. They intentionally
@@ -156,6 +188,17 @@ theorem one_mul (x : DkNNReal) :
     Equiv (mul one x) x :=
   DkReal.equiv_of_interval_eq
     (DkReal.one_mulNonneg_interval x.val x.nonnegative)
+
+/-- Zero absorbs multiplication on the right modulo representation equivalence. -/
+theorem mul_zero (x : DkNNReal) :
+    Equiv (mul x zero) zero :=
+  DkReal.equiv_of_interval_eq
+    (DkReal.mulNonneg_zero_interval x.val x.nonnegative)
+
+/-- Zero absorbs multiplication on the left modulo representation equivalence. -/
+theorem zero_mul (x : DkNNReal) :
+    Equiv (mul zero x) zero :=
+  equiv_trans (mul_comm zero x) (mul_zero x)
 
 /-- Multiplication distributes over addition from the left modulo equivalence. -/
 theorem left_distrib (x y z : DkNNReal) :
