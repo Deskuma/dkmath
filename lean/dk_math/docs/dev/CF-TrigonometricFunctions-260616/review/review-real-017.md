@@ -117,9 +117,7 @@ powNonnegApprox_width_eq
 で明示している。
 
 $$
-\operatorname{width}(I_n^d)
-===========================
-
+\operatorname{width}(I_n^d) =
 \operatorname{width}(I_n)\cdot gapGN_d(I_n.lo,\operatorname{width}(I_n))
 $$
 
@@ -203,7 +201,7 @@ $$
 w_n\cdot gapGN_d(lo_n,w_n)\to0
 $$
 
-じゃ。ここで (w_n\to0) は `DkReal` の定義からある。
+じゃ。ここで \(w_n\to0\) は `DkReal` の定義からある。
 残りは `gapGN` の有界性。
 
 入れ子非負区間なら、すべての区間は初期区間に含まれるので、
@@ -218,7 +216,7 @@ $$
 gapGN_d(lo_n,w_n)
 $$
 
-は (hi_0) と (d) によって有界になる。
+は \(hi_0\) と \(d\) によって有界になる。
 
 次の段階では、いきなり最強の評価を狙わず、まずは粗い上界でよい。
 
