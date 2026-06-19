@@ -57,6 +57,10 @@ DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
 
+The closure of nonnegative `DkReal` values under natural powers and its
+computability significance are recorded in
+[`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).
+
 `RealBridge` remains the home of continuity and interval mapping. The separate
 `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
 without mixing those concerns into the basic real bridge.

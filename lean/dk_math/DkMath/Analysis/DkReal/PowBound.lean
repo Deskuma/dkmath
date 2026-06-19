@@ -20,6 +20,14 @@ analysis or a mean-value theorem.
 
 namespace DkMath.Analysis.DkReal
 
+/-!
+## I. Positivity and isotonicity of the exact correction kernel
+
+For nonnegative variables, every term in the finite binomial expansion of
+`gapGN` is nonnegative. Coordinatewise order of the base and increment is
+therefore transported through the kernel.
+-/
+
 /-- `gapGN` is nonnegative when both its base and increment are nonnegative. -/
 theorem gapGN_nonneg_of_nonneg
     (d : ℕ) {base delta : ℚ} (hbase : 0 ≤ base) (hdelta : 0 ≤ delta) :
@@ -45,6 +53,14 @@ theorem gapGN_le_of_nonneg_of_le
   intro k hk
   gcongr
 
+/-!
+## II. Order bounds supplied by nested rational intervals
+
+If `Iₙ = [aₙ,bₙ]` is nested, then `aₙ ≤ bₙ ≤ b₀`. Under nonnegativity,
+the width `wₙ = bₙ - aₙ` also satisfies `0 ≤ wₙ ≤ b₀`. These inequalities
+place both arguments of `gapGN d aₙ wₙ` in a fixed nonnegative box.
+-/
+
 /-- Every lower endpoint is bounded above by the initial upper endpoint. -/
 theorem lo_le_initial_hi
     (x : DkMath.Analysis.DkReal) (n : ℕ) :
@@ -69,11 +85,21 @@ theorem gapGN_le_initial_hi
     (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
     gapGN d (x.interval n).lo (x.interval n).width
       ≤ gapGN d (x.interval 0).hi (x.interval 0).hi := by
-  have hhi0 : 0 ≤ (x.interval 0).hi :=
-    (hx 0).trans (x.interval 0).le_lo_hi
   exact gapGN_le_of_nonneg_of_le d
     (hx n) (lo_le_initial_hi x n)
     (x.interval n).width_nonneg (width_le_initial_hi x hx n)
+
+/-!
+## III. Uniform boundedness and propagation of vanishing width
+
+The powered width factors exactly as
+
+`wₙ * gapGN d aₙ wₙ`.
+
+The first factor tends to zero by the definition of `DkReal`; the second is
+uniformly bounded by its value at `(b₀,b₀)`. Hence powered widths also tend to
+zero. This is the closure mechanism for natural powers.
+-/
 
 /-- The `gapGN` sequence along a nested nonnegative approximation is uniformly bounded. -/
 theorem gapGN_bounded_on_nonnegative_nested
@@ -99,10 +125,40 @@ def powNonneg
   powNonnegOfGapGNBounded d x hx
     (gapGN_bounded_on_nonnegative_nested d x hx)
 
+/-!
+## IV. Computable natural-power closure
+
+`powNonneg` transforms rational endpoints stage by stage and packages the
+nestedness and vanishing-width proofs. No evaluation into Mathlib's `ℝ` is
+used, so this construction remains computable.
+-/
+
 /-- The intervals of `powNonneg` are the pointwise powered intervals. -/
 @[simp]
 theorem powNonneg_interval
     (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
     (powNonneg d x hx).interval n = powNonnegApprox d x hx n := rfl
+
+/-- Natural power of an embedded nonnegative rational is its powered singleton interval. -/
+@[simp]
+theorem powNonneg_ofRat_interval
+    (d : ℕ) {q : ℚ} (hq : 0 ≤ q) (n : ℕ) :
+    (powNonneg d (DkMath.Analysis.DkReal.ofRat q) (nonnegative_ofRat hq)).interval n
+      = GapInterval.singleton (q ^ d) := by
+  apply GapInterval.ext <;> simp [powNonneg, powNonnegApprox]
+
+/-- Zeroth power produces the singleton interval at `1` at every stage. -/
+@[simp]
+theorem powNonneg_zero_interval
+    (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
+    (powNonneg 0 x hx).interval n = GapInterval.singleton 1 := by
+  apply GapInterval.ext <;> simp [powNonneg, powNonnegApprox]
+
+/-- First power leaves every approximation interval unchanged. -/
+@[simp]
+theorem powNonneg_one_interval
+    (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
+    (powNonneg 1 x hx).interval n = x.interval n := by
+  apply GapInterval.ext <;> simp [powNonneg, powNonnegApprox]
 
 end DkMath.Analysis.DkReal

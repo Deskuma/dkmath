@@ -29,6 +29,13 @@ deriving Repr
 
 namespace GapInterval
 
+/-- Two rational gap intervals are equal when both endpoints are equal. -/
+@[ext]
+theorem ext {I J : GapInterval} (hlo : I.lo = J.lo) (hhi : I.hi = J.hi) : I = J := by
+  cases I
+  cases J
+  simp_all
+
 /-- The degenerate rational interval containing only `q`. -/
 def singleton (q : ℚ) : GapInterval :=
   ⟨q, q, le_rfl⟩
