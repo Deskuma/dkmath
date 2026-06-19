@@ -161,4 +161,11 @@ theorem powNonneg_one_interval
     (powNonneg 1 x hx).interval n = x.interval n := by
   apply GapInterval.ext <;> simp [powNonneg, powNonnegApprox]
 
+/-- Natural powers of a nonnegative `DkReal` remain nonnegative. -/
+theorem nonnegative_powNonneg
+    (d : ℕ) {x : DkMath.Analysis.DkReal} (hx : Nonnegative x) :
+    Nonnegative (powNonneg d x hx) := by
+  intro n
+  exact pow_nonneg (hx n) d
+
 end DkMath.Analysis.DkReal

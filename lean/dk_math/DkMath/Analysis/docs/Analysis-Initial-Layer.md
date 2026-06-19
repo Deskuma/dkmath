@@ -59,7 +59,7 @@ DkMath.Analysis.DkReal.Arithmetic
 
 DkMath.Analysis.DkReal.Equiv
   vanishing interval separation, representation setoid, endpoint convergence,
-  and additive/nonnegative multiplicative congruence
+  and additive, nonnegative multiplicative, and natural-power congruence
 
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer

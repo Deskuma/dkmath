@@ -209,9 +209,35 @@ Finally, interval separation is bounded by the absolute difference between
 the product lower endpoints. This gives `equiv_mulNonneg` and its one-sided
 variants without evaluating either representation as a Mathlib real number.
 
-The next arithmetic congruence target is `powNonneg`. It should follow from
-the same endpoint-convergence principle together with a uniform bound for the
-finite `gapGN` correction factor.
+Natural powers now also preserve representation equivalence through
+`equiv_powNonneg`. The proof does not require a new absolute-value estimate for
+`gapGN`. Instead it uses the algebraic recursion
+
+```text
+x^(d+1) = x^d * x
+```
+
+at every approximation stage and applies `equiv_mulNonneg` inductively. This
+keeps the congruence proof inside the already established nonnegative
+multiplicative structure, while `gapGN` remains responsible for the separate
+width-convergence proof that constructs `powNonneg`.
+
+The general interval lemma
+
+```lean
+separation_le_abs_lo_sub_lo
+```
+
+is the final bridge in both multiplication and power arguments: proving
+convergence of lower-endpoint differences is sufficient to prove vanishing
+interval separation. This implication depends on each `GapInterval` being a
+valid ordered closed interval; it is not a generic fact about arbitrary pairs
+of endpoint sequences.
+
+At this point addition, nonnegative multiplication, and natural powers all
+respect the representation setoid. The next design question is whether to
+introduce a quotient or a dedicated wrapper for the nonnegative computable
+semiring API.
 
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing

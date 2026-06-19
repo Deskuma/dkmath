@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Analysis.DkReal.PowBound
 import DkMath.Analysis.DkReal.Arithmetic
 
 #print "file: DkMath.Analysis.DkReal.Equiv"
@@ -79,6 +80,14 @@ theorem equiv_of_eq
     Equiv x y := by
   subst y
   exact equiv_refl x
+
+/-- Pointwise equality of approximation intervals implies representation equivalence. -/
+theorem equiv_of_interval_eq
+    {x y : DkMath.Analysis.DkReal}
+    (hxy : ∀ n, x.interval n = y.interval n) :
+    Equiv x y := by
+  simp only [Equiv, hxy, GapInterval.separation_self]
+  exact tendsto_const_nhds
 
 /-!
 ## Compatibility with addition
@@ -242,5 +251,62 @@ theorem equiv_mulNonneg_right
     (hyy' : Equiv y y') :
     Equiv (mulNonneg x y hx hy) (mulNonneg x y' hx hy') :=
   equiv_mulNonneg hx hx hy hy' (equiv_refl x) hyy'
+
+/-!
+## Compatibility with natural powers
+
+Natural power congruence is obtained from multiplicative congruence by
+induction on the exponent. This avoids introducing a signed increment into
+`gapGN`: successor powers are stagewise the product of the preceding power and
+the original approximation.
+-/
+
+/--
+The successor power agrees stagewise with multiplying the preceding power by
+the original nonnegative approximation.
+-/
+theorem powNonneg_succ_interval
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
+    (powNonneg (d + 1) x hx).interval n
+      =
+    (mulNonneg (powNonneg d x hx) x
+        (nonnegative_powNonneg d hx) hx).interval n := by
+  apply GapInterval.ext <;>
+    simp [powNonneg, powNonnegApprox, mulNonneg, mulNonnegApprox, pow_succ]
+
+/-- Natural powers preserve representation equivalence on the nonnegative domain. -/
+theorem equiv_powNonneg
+    (d : ℕ) {x x' : DkMath.Analysis.DkReal}
+    (hx : Nonnegative x) (hx' : Nonnegative x')
+    (hxx' : Equiv x x') :
+    Equiv (powNonneg d x hx) (powNonneg d x' hx') := by
+  induction d with
+  | zero =>
+      apply equiv_of_interval_eq
+      intro n
+      rw [powNonneg_zero_interval, powNonneg_zero_interval]
+  | succ d ih =>
+      have hmul :
+          Equiv
+            (mulNonneg (powNonneg d x hx) x
+              (nonnegative_powNonneg d hx) hx)
+            (mulNonneg (powNonneg d x' hx') x'
+              (nonnegative_powNonneg d hx') hx') :=
+        equiv_mulNonneg
+          (nonnegative_powNonneg d hx) (nonnegative_powNonneg d hx')
+          hx hx' ih hxx'
+      have hleft :
+          Equiv
+            (powNonneg (d + 1) x hx)
+            (mulNonneg (powNonneg d x hx) x
+              (nonnegative_powNonneg d hx) hx) :=
+        equiv_of_interval_eq (powNonneg_succ_interval d x hx)
+      have hright :
+          Equiv
+            (mulNonneg (powNonneg d x' hx') x'
+              (nonnegative_powNonneg d hx') hx')
+            (powNonneg (d + 1) x' hx') :=
+        equiv_symm (equiv_of_interval_eq (powNonneg_succ_interval d x' hx'))
+      exact equiv_trans (equiv_trans hleft hmul) hright
 
 end DkMath.Analysis.DkReal
