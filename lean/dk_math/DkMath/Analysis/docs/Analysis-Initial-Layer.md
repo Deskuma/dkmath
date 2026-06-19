@@ -258,9 +258,12 @@ DkReal.powNonnegApprox d x hx n
 The implementation proves:
 
 ```lean
+DkReal.nonnegative_of_initial_lo
 DkReal.powNonnegApprox_lo_le_succ_lo
 DkReal.powNonnegApprox_succ_hi_le_hi
 DkReal.powNonnegApprox_nested
+DkReal.powNonnegApprox_width_nonneg
+DkReal.powNonnegApprox_interval_subset_of_le
 DkReal.powNonnegApprox_width_eq
 ```
 
@@ -272,9 +275,28 @@ powered width
   = original width * gapGN d lowerEndpoint originalWidth
 ```
 
-A completed map from nonnegative `DkReal` values to `DkReal` values is
-deliberately deferred. Its remaining mathematical obligation is to control the
-`gapGN` factor strongly enough to prove that the powered widths tend to zero.
+A bounded `gapGN` sequence now gives the powered width limit:
+
+```lean
+DkReal.tendsto_powNonnegApprox_width_zero_of_gapGN_bounded
+```
+
+and therefore constructs a completed powered value:
+
+```lean
+DkReal.powNonnegOfGapGNBounded
+```
+
+The remaining unconditional-power obligation is now isolated to one statement:
+prove that the sequence
+
+```text
+gapGN d (lower endpoint at n) (width at n)
+```
+
+is bounded for a nested nonnegative `DkReal`. This should be implemented as a
+separate finite-polynomial bound rather than folded into the interval
+construction.
 
 `TaylorBridge` and `RealBridge` may use noncomputable real-number operations.
 The `DkReal` files remain computational and use rational interval data only.

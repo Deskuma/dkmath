@@ -25,6 +25,13 @@ namespace DkMath.Analysis.DkReal
 def Nonnegative (x : DkMath.Analysis.DkReal) : Prop :=
   ∀ n, 0 ≤ (x.interval n).lo
 
+/-- Nonnegativity of the initial lower endpoint propagates to every stage. -/
+theorem nonnegative_of_initial_lo
+    (x : DkMath.Analysis.DkReal) (h0 : 0 ≤ (x.interval 0).lo) :
+    Nonnegative x := by
+  intro n
+  exact h0.trans (x.lo_mono (Nat.zero_le n))
+
 /--
 Apply the natural power map to every approximation interval of a nonnegative
 `DkReal`.
@@ -76,6 +83,27 @@ theorem powNonnegApprox_nested
   exact ⟨powNonnegApprox_lo_le_succ_lo d x hx n,
     powNonnegApprox_succ_hi_le_hi d x hx n⟩
 
+/-- Every powered approximation interval has nonnegative width. -/
+theorem powNonnegApprox_width_nonneg
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
+    0 ≤ (powNonnegApprox d x hx n).width :=
+  (powNonnegApprox d x hx n).width_nonneg
+
+/-- Powered approximation intervals satisfy arbitrary-stage containment. -/
+theorem powNonnegApprox_interval_subset_of_le
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)
+    {n m : ℕ} (h : n ≤ m) :
+    Set.Icc (powNonnegApprox d x hx m).lo (powNonnegApprox d x hx m).hi
+      ⊆ Set.Icc (powNonnegApprox d x hx n).lo
+        (powNonnegApprox d x hx n).hi := by
+  intro q hq
+  constructor
+  · exact
+      (pow_le_pow_left₀ (hx n) (x.lo_mono h) d).trans hq.1
+  · have hmhi : 0 ≤ (x.interval m).hi :=
+      (hx m).trans (x.interval m).le_lo_hi
+    exact hq.2.trans (pow_le_pow_left₀ hmhi (x.hi_antitone h) d)
+
 /--
 Exact width formula for every powered approximation interval.
 
@@ -88,6 +116,58 @@ theorem powNonnegApprox_width_eq
       = (x.interval n).width *
         gapGN d (x.interval n).lo (x.interval n).width :=
   GapInterval.powNonneg_width_eq d (x.interval n) (hx n)
+
+/--
+If the exact `gapGN` factors along a nonnegative approximation are bounded,
+then the powered interval widths tend to zero.
+-/
+theorem tendsto_powNonnegApprox_width_zero_of_gapGN_bounded
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)
+    (hbounded :
+      Filter.IsBoundedUnder (· ≤ ·) Filter.atTop
+        (norm ∘ fun n =>
+          gapGN d (x.interval n).lo (x.interval n).width)) :
+    Filter.Tendsto (fun n => (powNonnegApprox d x hx n).width)
+      Filter.atTop (nhds 0) := by
+  have hmul :
+      Filter.Tendsto
+        (fun n =>
+          (x.interval n).width *
+            gapGN d (x.interval n).lo (x.interval n).width)
+        Filter.atTop (nhds 0) :=
+    x.tendsto_width_zero.zero_mul_isBoundedUnder_le hbounded
+  simpa only [powNonnegApprox_width_eq] using hmul
+
+/--
+Construct the full powered `DkReal` once boundedness of the exact correction
+kernel has been supplied.
+
+This isolates the only remaining analytic obligation from the computational
+interval transformation.
+-/
+def powNonnegOfGapGNBounded
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)
+    (hbounded :
+      Filter.IsBoundedUnder (· ≤ ·) Filter.atTop
+        (norm ∘ fun n =>
+          gapGN d (x.interval n).lo (x.interval n).width)) :
+    DkMath.Analysis.DkReal where
+  interval := powNonnegApprox d x hx
+  nested := powNonnegApprox_nested d x hx
+  width_tends_zero :=
+    tendsto_powNonnegApprox_width_zero_of_gapGN_bounded d x hx hbounded
+
+/-- The intervals of the conditionally completed power map are the powered approximations. -/
+@[simp]
+theorem powNonnegOfGapGNBounded_interval
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x)
+    (hbounded :
+      Filter.IsBoundedUnder (· ≤ ·) Filter.atTop
+        (norm ∘ fun n =>
+          gapGN d (x.interval n).lo (x.interval n).width))
+    (n : ℕ) :
+    (powNonnegOfGapGNBounded d x hx hbounded).interval n
+      = powNonnegApprox d x hx n := rfl
 
 /-- Embedded nonnegative rationals satisfy the approximation nonnegativity condition. -/
 theorem nonnegative_ofRat {q : ℚ} (hq : 0 ≤ q) :
