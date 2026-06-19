@@ -169,8 +169,32 @@ observation level, but a formal algebraic structure should wait until the
 representation equivalence has been chosen and its congruence properties have
 been proved.
 
-Candidate equivalence principles include persistent interval intersection,
-vanishing separation between two approximations, or equality after a future
-evaluation map into Mathlib's `Real`. These formulations are not
-interchangeable by definition, so selecting one is a mathematical design
-decision rather than a routine API addition.
+The first representation equivalence is now implemented in
+`DkMath.Analysis.DkReal.Equiv`. For rational closed intervals it defines
+
+```text
+separation(I,J)
+  = max 0 (max (I.lo - J.hi) (J.lo - I.hi)).
+```
+
+Two `DkReal` approximations are equivalent when this stagewise separation
+tends to zero. The key estimate is
+
+```text
+separation(I,K)
+  <= separation(I,J) + width(J) + separation(J,K).
+```
+
+Since every `DkReal` width tends to zero, this proves transitivity. Reflexivity
+and symmetry follow from the corresponding finite-interval identities. The
+module therefore supplies a proved `Setoid`, not merely a candidate relation.
+
+Addition respects this equivalence because separation of interval sums is
+bounded by the sum of the input separations. Nonnegative multiplication
+congruence remains the next arithmetic obligation; it requires a bounded
+endpoint estimate analogous to the width argument already used to construct
+`mulNonneg`.
+
+Persistent intersection and equality after a future evaluation into Mathlib's
+`Real` remain comparison principles. Their equivalence with vanishing
+separation should be proved later rather than assumed by definition.

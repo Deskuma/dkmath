@@ -57,6 +57,10 @@ DkMath.Analysis.DkReal.Arithmetic
   computable interval addition, nonnegative multiplication, and stagewise
   semiring laws
 
+DkMath.Analysis.DkReal.Equiv
+  vanishing interval separation, representation setoid, and additive
+  congruence
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
