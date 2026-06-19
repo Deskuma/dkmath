@@ -47,10 +47,29 @@ theorem succ_hi_le_hi (x : DkReal) (n : ℕ) :
     (x.interval (n + 1)).hi ≤ (x.interval n).hi :=
   (x.nested n).2
 
+/-- Lower endpoints are monotone across arbitrary approximation stages. -/
+theorem lo_mono (x : DkReal) {n m : ℕ} (h : n ≤ m) :
+    (x.interval n).lo ≤ (x.interval m).lo := by
+  induction m, h using Nat.le_induction with
+  | base => exact le_rfl
+  | succ m hnm ih => exact ih.trans (x.lo_le_succ_lo m)
+
+/-- Upper endpoints are antitone across arbitrary approximation stages. -/
+theorem hi_antitone (x : DkReal) {n m : ℕ} (h : n ≤ m) :
+    (x.interval m).hi ≤ (x.interval n).hi := by
+  induction m, h using Nat.le_induction with
+  | base => exact le_rfl
+  | succ m hnm ih => exact (x.succ_hi_le_hi m).trans ih
+
 /-- Every approximation interval has nonnegative rational width. -/
 theorem width_nonneg (x : DkReal) (n : ℕ) :
     0 ≤ (x.interval n).width :=
   (x.interval n).width_nonneg
+
+/-- Nested approximation makes interval width nonincreasing at each step. -/
+theorem width_succ_le_width (x : DkReal) (n : ℕ) :
+    (x.interval (n + 1)).width ≤ (x.interval n).width := by
+  exact sub_le_sub (x.succ_hi_le_hi n) (x.lo_le_succ_lo n)
 
 /-- Later approximation intervals are contained in the preceding interval. -/
 theorem interval_succ_subset (x : DkReal) (n : ℕ) :
@@ -58,6 +77,13 @@ theorem interval_succ_subset (x : DkReal) (n : ℕ) :
       ⊆ Set.Icc (x.interval n).lo (x.interval n).hi := by
   intro q hq
   exact ⟨(x.lo_le_succ_lo n).trans hq.1, hq.2.trans (x.succ_hi_le_hi n)⟩
+
+/-- Every later approximation interval is contained in every earlier one. -/
+theorem interval_subset_of_le (x : DkReal) {n m : ℕ} (h : n ≤ m) :
+    Set.Icc (x.interval m).lo (x.interval m).hi
+      ⊆ Set.Icc (x.interval n).lo (x.interval n).hi := by
+  intro q hq
+  exact ⟨(x.lo_mono h).trans hq.1, hq.2.trans (x.hi_antitone h)⟩
 
 /-- The interval widths of a `DkReal` tend to zero by construction. -/
 theorem tendsto_width_zero (x : DkReal) :

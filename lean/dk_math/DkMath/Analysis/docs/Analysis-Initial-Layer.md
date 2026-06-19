@@ -38,6 +38,9 @@ DkMath.Analysis.GapFill
 DkMath.Analysis.RealBridge
   first bridge to Real and Mathlib Continuous / Set.MapsTo
 
+DkMath.Analysis.TaylorBridge
+  zero-increment coefficient, difference quotient, limit, and HasDerivAt bridge
+
 DkMath.Analysis.DkReal.Interval
   DkReal.GapInterval, width, nonnegative power image, and exact width formula
 
@@ -48,9 +51,9 @@ DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
 
-The current `RealBridge` is intentionally only the first analytic bridge.
-Differentiability, `HasDerivAt`, and the Taylor-facing interpretation of
-`gapGN` are not part of this checkpoint.
+`RealBridge` remains the home of continuity and interval mapping. The separate
+`TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
+without mixing those concerns into the basic real bridge.
 
 ## Canonical Kernel Bridge
 
@@ -177,3 +180,52 @@ structure DkReal where
 Rational values embed as constant singleton interval sequences through
 `DkReal.ofRat`. Evaluation into Mathlib's real numbers remains deferred to a
 later semantic bridge.
+
+The nested interval API also includes arbitrary-stage control:
+
+```lean
+DkReal.lo_mono
+DkReal.hi_antitone
+DkReal.interval_subset_of_le
+DkReal.width_succ_le_width
+```
+
+These lemmas provide the order foundation needed by a future evaluation map and
+interval arithmetic.
+
+## Taylor And Derivative Bridge
+
+The center value of the exact gap kernel is:
+
+```lean
+gapGN_zero :
+  gapGN d base 0 = d * base^(d - 1)
+
+gapGN_succ_zero :
+  gapGN (d + 1) base 0 = (d + 1) * base^d
+```
+
+The successor form avoids natural-number truncated subtraction in the displayed
+exponent.
+
+Over the reals, `gapGN` is identified with the existing cosmic
+`powerKernel`. This yields:
+
+```lean
+continuous_gapGN
+tendsto_gapGN_zero
+powerDifferenceQuotient_eq_gapGN_of_ne_zero
+tendsto_powerDifferenceQuotient_zero
+hasDerivAt_pow_via_gapGN
+```
+
+The logical direction remains:
+
+```text
+exact algebraic factorization
+  -> exact gap kernel
+  -> zero-increment coefficient and limit
+  -> Mathlib HasDerivAt bridge
+```
+
+The derivative is not used to define the kernel.
