@@ -303,10 +303,24 @@ pow_zero, pow_one
 Embedded nonnegative rationals also satisfy exact quotient equalities for
 addition and multiplication.
 
-A full `Semiring` instance is intentionally deferred. Constructing that
-instance also commits to natural-number coercions and their public
-normalization behavior. The current quotient establishes the mathematical
-equalities and notation first, leaving that policy decision isolated.
+The natural-number embedding is now fixed by
+
+```lean
+natCast n = ofRat (n : Rat) (by positivity).
+```
+
+It preserves zero, successor, addition, and multiplication. With this policy
+made explicit, the quotient now carries a `CommSemiring` instance assembled
+from the previously proved quotient equalities. Standard natural-number casts,
+addition, multiplication, powers, and semiring lemmas are therefore available
+through Lean's algebraic hierarchy.
+
+This completes the first algebraic public surface of the nonnegative
+computable-real quotient. Order remains separate: an eventually ordered
+representative relation must be shown compatible with `Equiv`, or derived from
+a later semantic bridge. Likewise, any map to Mathlib's `NNReal` or `Real`
+should remain in a separate bridge module because selecting the represented
+limit may require `noncomputable`.
 
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing

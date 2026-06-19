@@ -67,7 +67,7 @@ DkMath.Analysis.DkReal.DkNNReal
 
 DkMath.Analysis.DkReal.DkNNRealQ
   quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
-  commutative semiring laws as ordinary equalities
+  a canonical NatCast and CommSemiring instance
 
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
