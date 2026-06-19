@@ -6,7 +6,7 @@
 
 **作業方向は「これ以上 verification を細かく割る」ではなく、まず statement の形を正し、`RealizationSeed` を実質化する方向へ切り替えるべき** じゃ。
 
-今回の差分で restore arithmetic core が 6 段へ整理されたのは良い。報告どおり、前 5 段は default / bridge で閉じ、見かけ上の未完核は `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget` 1 本へ局所化された。これは設計上の前進じゃ。  
+今回の差分で restore arithmetic core が 6 段へ整理されたのは良い。報告どおり、前 5 段は default / bridge で閉じ、見かけ上の未完核は `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget` 1 本へ局所化された。これは設計上の前進じゃ。
 
 されど、いまの verification target は **そのままでは強すぎる**。
 ここが重要じゃ。
@@ -25,7 +25,7 @@ p \mid (hR.z' - hR.y')
 hR.z' < z
 $$
 
-を要求しておる。つまり **任意の** `hR` について、候補 triple が正しい smaller counterexample であることを証明せよ、という形じゃ。  
+を要求しておる。つまり **任意の** `hR` について、候補 triple が正しい smaller counterexample であることを証明せよ、という形じゃ。
 
 ところが default realization seed は、
 
@@ -33,7 +33,7 @@ $$
 x' := x,\qquad y' := y,\qquad z' := z
 $$
 
-をそのまま仮候補として包む thin wrapper になっておる。  
+をそのまま仮候補として包む thin wrapper になっておる。
 
 この 2 つを合わせると、verification target は少なくとも default の `hR` に対して
 
@@ -233,7 +233,7 @@ $$
 z < z
 $$
 
-を強いるので、そのまま先へ割っても実りが薄い。  
+を強いるので、そのまま先へ割っても実りが薄い。
 
 ゆえに作業方向の判定はこれじゃ。
 

@@ -38,7 +38,7 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 
 - [r3085207725](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085207725)
 
-結論だけ言うと、今は「`classGroupPTorsionFree_of_regularPrime` だけを `p` 一般化する段階」ではないです。  
+結論だけ言うと、今は「`classGroupPTorsionFree_of_regularPrime` だけを `p` 一般化する段階」ではないです。
 やるなら `target` 側から一段下までまとめて `p` を通す必要があります。
 
 理由は明確で、いまの設計は
@@ -47,7 +47,7 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 - でも [`CyclotomicClassGroupPTorsionFreeTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:4812) はまだ `∀ n`
 - さらに [`CyclotomicPTorsionAnnihilationTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:843) も `∀ n`
 
-という形だからです。  
+という形だからです。
 この状態で comment 7725 のように theorem だけ
 
 ```lean

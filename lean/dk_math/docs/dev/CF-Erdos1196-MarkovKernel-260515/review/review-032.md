@@ -15,14 +15,14 @@ structure AdjacentDivisorPathFamily (ι : Type _) [DecidableEq ι] where
   isPath : ∀ i ∈ index, AdjacentDivisorPath (source i :: tail i)
 ```
 
-各 index (i) に対し、path は
+各 index \(i\) に対し、path は
 
 $$
 source(i)::tail(i)
 $$
 
 として保持される。
-つまり、最初の node (source(i)) が、その chain 全体の source mass を担う。
+つまり、最初の node \(source(i)\) が、その chain 全体の source mass を担う。
 
 DKMK-008A では一つの path だけだった。
 今回で、有限 index family として複数の divisor descent path を同時に扱えるようになった。docs にも、DKMK-008A の singleton divisor path を finite indexed family に拡張した、と整理されておる。
@@ -76,7 +76,7 @@ AdjacentDivisorPath.mem_dvd_head
 
 で供給している。
 
-つまり任意の node (h\in nodeSet(i)) について、
+つまり任意の node \(h\in nodeSet(i)\) について、
 
 $$
 h\mid source(i)
@@ -131,7 +131,7 @@ primitive_three_five_sampleAdjacentDivisorPathBoolFamily_hitMass_le_sourceMass
 じゃ。
 
 これにより、single path の sample から、複数 path family の sample へ進んだ。
-primitive set ({3,5}) が、この二本の multi-step divisor path family に対しても source mass で抑えられることを確認したわけじゃ。
+primitive set \(\{3,5\}\) が、この二本の multi-step divisor path family に対しても source mass で抑えられることを確認したわけじゃ。
 
 地味だが大事な sanity check じゃな。
 

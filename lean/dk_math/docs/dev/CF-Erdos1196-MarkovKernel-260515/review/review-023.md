@@ -191,7 +191,7 @@ mass model 側に必要な証明だけを追加すれば、既存の DKMK-007 ro
 
 ## 7. 今回の注意点
 
-`LogCapacitySourceMassBound` は現時点では **source (s.1) の一点上界** だけを見る。
+`LogCapacitySourceMassBound` は現時点では **source \(s.1\) の一点上界** だけを見る。
 
 これは one-step divisor-step family にぴったり合っている。
 ただし、multi-step descent chain に進むと、source だけでなく途中ノードや terminal node の mass を評価したくなる可能性がある。

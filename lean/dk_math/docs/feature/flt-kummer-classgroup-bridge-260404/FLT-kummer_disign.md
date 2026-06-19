@@ -137,7 +137,7 @@ abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget : Prop 
 ### 5.2. Kummer principalization 仮定
 
 ```lean id="ywq6qg"
-abbrev CyclotomicPrincipalizationTarget : Prop := 
+abbrev CyclotomicPrincipalizationTarget : Prop :=
   ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
     Nat.Prime q →
     q ∣ x →

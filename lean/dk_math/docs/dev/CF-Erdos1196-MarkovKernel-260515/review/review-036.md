@@ -18,7 +18,7 @@ canonical route はこれ。
 canonicalExponentSlotMarkovShadow_twoStepTailAdjacentDivisorPathFamily_weightedHitMass_le
 ```
 
-どちらも、same-source な external multi-step divisor path family (F) に対して、two-step tail mass を使い、
+どちらも、same-source な external multi-step divisor path family \(F\) に対して、two-step tail mass を使い、
 
 $$
 weightedHitMass(A)\le (cHigh:\mathbb{R})
@@ -109,7 +109,7 @@ hsource_eq : ∀ q ∈ F.index, F.source q = s.1
 
 を仮定する。
 
-このとき、selected global log-capacity sub-Markov shadow を (F) に載せ、two-step tail mass によって
+このとき、selected global log-capacity sub-Markov shadow を \(F\) に載せ、two-step tail mass によって
 
 $$
 weightedHitMass(A)\le (cHigh:\mathbb{R})
@@ -138,7 +138,7 @@ hindex : canonicalExponentSlotLabels s.1 = F.index
 
 を要求する。
 
-つまり canonical exponent-slot labels の各 channel に multi-step path を割り当て、その全 path が同じ source (s.1) から出るなら、canonical MarkovShadow の重みを載せて、
+つまり canonical exponent-slot labels の各 channel に multi-step path を割り当て、その全 path が同じ source \(s.1\) から出るなら、canonical MarkovShadow の重みを載せて、
 
 $$
 weightedHitMass(A)\le (cHigh:\mathbb{R})
@@ -170,7 +170,7 @@ twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
 
 を渡している。
 
-また (0\le cHigh) は、
+また \(0\le cHigh\) は、
 
 ```lean
 hLow.trans hStep
@@ -261,7 +261,7 @@ def canonicalOneStepAdjacentDivisorPathFamily
 
 を作る。
 
-各 index (q) に対して、
+各 index \(q\) に対して、
 
 ```lean
 source q := s.1
@@ -277,7 +277,7 @@ s.1/q\mid s.1
 $$
 
 が必要じゃ。
-これは (q\mid s.1) から出せる。selected route なら `hIOf` と kernel の `index_dvd`、canonical route なら canonical kernel の `index_dvd` から供給できるはずじゃ。
+これは \(q\mid s.1\) から出せる。selected route なら `hIOf` と kernel の `index_dvd`、canonical route なら canonical kernel の `index_dvd` から供給できるはずじゃ。
 
 到達目標は、
 

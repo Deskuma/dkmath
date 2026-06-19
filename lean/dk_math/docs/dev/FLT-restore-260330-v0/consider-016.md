@@ -66,7 +66,7 @@ Fermat の小定理: `gcd(s, p) = 1` なら `s^{p-1} ≡ 1 [MOD p]`。さらに 
 - `ModP3SourceTarget` 経由 → **行き止まり**（偽命題）
 - 直接 `RestoreContradictionTarget` → これが本丸で、深い数論が必要
 
-現実的にできることを考える。  
+現実的にできることを考える。
 
 ## *adapter 設計と配置決定* (3/5)
 
@@ -417,7 +417,7 @@ $$
 2. `RestoreContradictionTarget` 向けの新しい注入口として、q の情報を活用する target を設計する
 3. GapInvariant 側に adapter を追加する
 
-具体的に `WitnessConstraintConflictTarget` のような新 target を設計する。  
+具体的に `WitnessConstraintConflictTarget` のような新 target を設計する。
 
 `ModP3SourceTarget` は BranchA.lean 内のみで使用されており、GapInvariant/Restore からは参照されていない。影響範囲は限定的。
 
@@ -430,7 +430,7 @@ $$
 3. `primeGe5BranchARefuter_of_witnessConflictSource` theorem で refuter へ接続
 4. GapInvariant 側に `BranchAWitnessConflictSourceAdapterTarget` を追加
 
-では実装する。  
+では実装する。
 
 ## *実装と build 検証* (4/5)
 

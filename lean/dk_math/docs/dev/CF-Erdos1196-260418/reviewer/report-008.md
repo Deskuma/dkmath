@@ -70,7 +70,7 @@ primitive witness から
 * diff load は beam load に移る
 * squarefree beam なら局所 load は高々 1
 
-という線が揃った。さらに二本 witness 版、`Finset` family 版、`PrimitiveWitnessFamily` package 版へと持ち上がっておる。これは、当初計画よりむしろ一段整理が進んだ部分じゃ。  
+という線が揃った。さらに二本 witness 版、`Finset` family 版、`PrimitiveWitnessFamily` package 版へと持ち上がっておる。これは、当初計画よりむしろ一段整理が進んだ部分じゃ。
 
 ### 3.4. Phase D. ABC bridge
 
@@ -89,7 +89,7 @@ $$
 * package 版の下界
 
 までそろっておる。
-最初の plan では「translation layer に徹する」段階じゃったが、実際には **translation layer の中で lower-bound spine がかなり育っている**。ここは新しい進展じゃな。  
+最初の plan では「translation layer に徹する」段階じゃったが、実際には **translation layer の中で lower-bound spine がかなり育っている**。ここは新しい進展じゃな。
 
 ### 3.5. Phase E. 例と public import
 
@@ -121,7 +121,7 @@ $$
 $$
 
 という読みにまで到達しておる。
-これは、以前は「面白い見方」だったものが、今や Lean 上で theorem 名を持つ spine になった、という意味で確かな進展じゃ。  
+これは、以前は「面白い見方」だったものが、今や Lean 上で theorem 名を持つ spine になった、という意味で確かな進展じゃ。
 
 特に重要なのは、これは **ABC 本体の অসম式を直接証明したわけではない** が、ABC で一番使いたい量の一つである `rad` に対して、「異なる channel が増えると support mass が下から持ち上がる」という形を明示したことじゃ。
 これにより、primitive prime の存在や分離が、単なる局所情報ではなく **global lower bound** に変換できるようになった。ここが今回の数学的収穫じゃな。
@@ -221,7 +221,7 @@ $$
 現況を一言でまとめるぞい。
 
 **今回の snapshot で、Erdős #1196 由来の mass / channel / support の考え方は、ABC 側で使える “公開 bridge API” として一段完成した。**
-これは新しい進展じゃ。しかも単なる整理でなく、`rad` 下界と primitive witness family を結ぶ lower-bound spine まで入っておる。  
+これは新しい進展じゃ。しかも単なる整理でなく、`rad` 下界と primitive witness family を結ぶ lower-bound spine まで入っておる。
 
 ただし、**ABC 予想本体の重い未完核はまだ残っている**。
 ゆえに「もう勝った」とは言えぬが、「別ルートの足場がかなり強くなった」とははっきり言える。今はちょうど、

@@ -37,7 +37,7 @@ CapacityKernel.weightedHitMass_le_const_applyAtToSourceControlled
 (K.applyAtToSourceControlled hcap s F hindex).weightedHitMass A ≤ C
 ```
 
-これにより、positive capacity を持つ任意の `CapacityKernel` について、normalized weight が sub-probability になり、その重みを chain family に載せたとき、primitive set への hitting mass が source bound (C) を超えない、という定理形まで到達した。
+これにより、positive capacity を持つ任意の `CapacityKernel` について、normalized weight が sub-probability になり、その重みを chain family に載せたとき、primitive set への hitting mass が source bound \(C\) を超えない、という定理形まで到達した。
 
 数学的には、
 

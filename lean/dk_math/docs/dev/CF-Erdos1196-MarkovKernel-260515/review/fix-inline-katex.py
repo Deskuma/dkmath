@@ -1,1 +1,1 @@
-../../CF-Erdos1196-260508/review/fix-inline-katex.py
+../../fix-inline-katex.py

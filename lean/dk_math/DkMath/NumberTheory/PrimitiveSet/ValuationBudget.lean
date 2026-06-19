@@ -68,6 +68,90 @@ theorem natBaseMultiplicityBudgetOn_iff
   Iff.rfl
 
 /--
+Pairwise distinct selected bases are injective on the selected finite index.
+
+This is the conversion layer between the older duplicate-free vocabulary
+`NatPairwiseDistinctOn` and the newer multiplicity-budget theorem that expects
+`Set.InjOn`.
+-/
+theorem natPairwiseDistinctOn_injOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hdistinct : NatPairwiseDistinctOn I pOf) :
+    Set.InjOn pOf ↑I := by
+  intro i hi j hj hij_eq
+  by_contra hij
+  exact (hdistinct i hi j hj hij) hij_eq
+
+/--
+Injective selected bases give a multiplicity budget when every selected base
+divides `n`.
+
+For each prime `p`, injectivity makes the selected fiber `{i ∈ I | pOf i = p}`
+have cardinal at most one.  If the fiber is nonempty, the corresponding selected
+base divides `n`, so one factorization slot at `p` exists.
+
+This theorem intentionally does not require `pOf` to be prime-valued.  The
+budget only tests prime fibers, and a non-prime selected base is invisible to
+those fibers unless it is equal to the tested prime.
+-/
+theorem natBaseMultiplicityBudgetOn_of_injOn_of_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn0 : n ≠ 0)
+    (hinj : Set.InjOn pOf ↑I)
+    (hdvd : ∀ i, i ∈ I → pOf i ∣ n) :
+    NatBaseMultiplicityBudgetOn I pOf n := by
+  classical
+  intro p hp
+  unfold NatBaseMultiplicityOn
+  have hcard_le_one :
+      (I.filter fun i => pOf i = p).card ≤ 1 := by
+    rw [Finset.card_le_one]
+    intro a ha b hb
+    exact hinj
+      (Finset.mem_filter.mp ha).1
+      (Finset.mem_filter.mp hb).1
+      ((Finset.mem_filter.mp ha).2.trans (Finset.mem_filter.mp hb).2.symm)
+  by_cases hex : ∃ i, i ∈ I ∧ pOf i = p
+  · rcases hex with ⟨i, hiI, hip⟩
+    have hp_dvd : p ∣ n := by
+      rw [← hip]
+      exact hdvd i hiI
+    have hone : 1 ≤ n.factorization p := by
+      have hpow_dvd : p ^ 1 ∣ n := by simpa using hp_dvd
+      exact (hp.pow_dvd_iff_le_factorization hn0).mp hpow_dvd
+    exact hcard_le_one.trans hone
+  · have hfilter_empty : (I.filter fun i => pOf i = p) = ∅ := by
+      rw [Finset.filter_eq_empty_iff]
+      intro i hiI hip
+      exact hex ⟨i, hiI, hip⟩
+    simp [hfilter_empty]
+
+/--
+Pairwise distinct selected bases give a multiplicity budget when every selected
+base divides `n`.
+
+This is the duplicate-free form of
+`natBaseMultiplicityBudgetOn_of_injOn_of_dvd`.
+-/
+theorem natBaseMultiplicityBudgetOn_of_pairwiseDistinct_of_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn0 : n ≠ 0)
+    (hdistinct : NatPairwiseDistinctOn I pOf)
+    (hdvd : ∀ i, i ∈ I → pOf i ∣ n) :
+    NatBaseMultiplicityBudgetOn I pOf n :=
+  natBaseMultiplicityBudgetOn_of_injOn_of_dvd I pOf n hn0
+    (natPairwiseDistinctOn_injOn I pOf hdistinct)
+    hdvd
+
+/--
 For prime-valued selected bases, the exponent of a prime `p` in the selected
 product is exactly the number of selected occurrences of `p`.
 -/

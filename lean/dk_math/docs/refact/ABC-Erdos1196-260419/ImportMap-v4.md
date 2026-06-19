@@ -1,6 +1,6 @@
 # DkMath.ABC Import Map
 
-> 目的：`DkMath.ABC.*` の現況を、**公開面 / bridge spine / legacy heavy chain** の 3 層で把握できるようにする。  
+> 目的：`DkMath.ABC.*` の現況を、**公開面 / bridge spine / legacy heavy chain** の 3 層で把握できるようにする。
 > 詳細な全 import は `logs/summary_report/__imports.txt` を参照し、本ページは **構造理解のための圧縮地図** とする。
 
 ---
@@ -11,12 +11,12 @@
 
 ### 1.1. 公開面
 
-外部利用者が最初に触る入口。  
+外部利用者が最初に触る入口。
 `DkMath.ABC`, `DkMath.ABC.Main`, `DkMath.ABC.Bridge` など。
 
 ### 1.2. Bridge spine
 
-今回の named module 化で中心になった層。  
+今回の named module 化で中心になった層。
 大筋は
 
 \[
@@ -33,14 +33,14 @@
 
 ### 1.3. Legacy / heavy chain
 
-Chernoff, Janson, quality, tail などを含む重い解析本体。  
+Chernoff, Janson, quality, tail などを含む重い解析本体。
 旧 numbered modules の残留や、まだ named 側へ吸収しきっていない部分をここに含める。
 
 ---
 
 ## 2. 現況まとめ
 
-現時点では、`ABC0*.lean` 由来の **公開依存の主経路** はかなり named module 側へ移っていると見てよい。  
+現時点では、`ABC0*.lean` 由来の **公開依存の主経路** はかなり named module 側へ移っていると見てよい。
 ただし、旧番号付きファイル群そのものが完全消滅したとまではまだ言わず、**legacy residue として残る可能性のある重層** は別枠で見る。
 
 構造的には、いまの `DkMath.ABC.*` は次の 2 本柱で読むのがよい。
@@ -209,7 +209,7 @@ ABC 側の最初の目標は、大定理を直接詰めることではなく、
 2. bridge spine
 3. legacy / heavy chain
 
-の 3 枚へ分けて示す。  
+の 3 枚へ分けて示す。
 これにより、named 化の進捗と、残る residue の両方が見える。
 
 ---
@@ -238,7 +238,7 @@ ABC 側の最初の目標は、大定理を直接詰めることではなく、
 
 ## 8. 参照先
 
-このページは **概説** に徹する。  
+このページは **概説** に徹する。
 詳細確認は次を参照する。
 
 - `logs/summary_report/__imports.txt`

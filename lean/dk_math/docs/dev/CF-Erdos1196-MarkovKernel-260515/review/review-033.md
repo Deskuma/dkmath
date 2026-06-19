@@ -86,7 +86,7 @@ hindex : canonicalExponentSlotLabels s.1 = F.index
 
 じゃ。
 
-つまり、external path family (F) の index が canonical exponent-slot labels と一致していれば、canonical MarkovShadow の重みを (F) に載せられる。
+つまり、external path family \(F\) の index が canonical exponent-slot labels と一致していれば、canonical MarkovShadow の重みを \(F\) に載せられる。
 
 これは DKMK-006F/G で作った canonical equality route が、multi-step divisor path family に接続されたという意味じゃ。
 
@@ -133,7 +133,7 @@ $$
 n\to n/q
 $$
 
-DKMK-008C では、index (q) ごとに、たとえば
+DKMK-008C では、index \(q\) ごとに、たとえば
 
 $$
 n_0\to n_1\to n_2\to \cdots\to n_r
@@ -149,7 +149,7 @@ $$
 
 を満たす。
 
-この path family に、selected / canonical の重み (w(q)) を載せて、
+この path family に、selected / canonical の重み \(w(q)\) を載せて、
 
 $$
 weightedHitMass(A)\le C
@@ -227,7 +227,7 @@ DKMK-007H では、one-step divisorStep 用に `LogCapacitySourceMassBound M C` 
 
 ただし注意点がある。
 
-DKMK-007 の one-step divisorStep では、全 source が同じ (s.1) だった。
+DKMK-007 の one-step divisorStep では、全 source が同じ \(s.1\) だった。
 だから `LogCapacitySourceMassBound M C` だけで source bound が閉じた。
 
 今回の `AdjacentDivisorPathFamily` は、一般には
@@ -246,7 +246,7 @@ F.source q
 
 または source が `LogCapacityState` として読める条件が必要になる。
 
-もし DKMK-008D で sources を (s.1) に固定した special wrapper を作るなら、007H の source-bound interface をそのまま再利用しやすい。
+もし DKMK-008D で sources を \(s.1\) に固定した special wrapper を作るなら、007H の source-bound interface をそのまま再利用しやすい。
 
 ## 9. 次の一手
 
@@ -262,7 +262,7 @@ def AdjacentDivisorPathFamily.SourceMassBound
 
 これを置けば、今回の theorem の `hsource` を named predicate にできる。
 
-第二は、log-capacity state (s) に対して source がすべて (s.1) である family を special case として作る道。
+第二は、log-capacity state \(s\) に対して source がすべて \(s.1\) である family を special case として作る道。
 
 ```text
 ∀ q ∈ F.index, F.source q = s.1
@@ -271,7 +271,7 @@ def AdjacentDivisorPathFamily.SourceMassBound
 この場合は `LogCapacitySourceMassBound M C` から `hsource` がすぐ出る。
 
 わっちなら、まず第二を推す。
-DKMK-007 からの自然な拡張は「同じ state (s.1) から複数段に降りる path family」だからじゃ。
+DKMK-007 からの自然な拡張は「同じ state \(s.1\) から複数段に降りる path family」だからじゃ。
 
 つまり DKMK-008D はこう。
 

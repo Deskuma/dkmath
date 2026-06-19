@@ -5,7 +5,7 @@
 
 今回の共有ログから読む限り、first-case specialization の Stage 3 は、`NormEqGN` 側も `UnitAbsorb` 側も concrete theorem として閉じており、さらに `GN p (z - y) y = s ^ p` を返す wrapper と contradiction bridge まで concrete 化されておる。つまり、 **Stage 3 first-case split 自体は、もう open ではない** という整理でよい。検証も `lake build DkMath.NumberTheory.Gcd.GN`、`lake build DkMath.FLT.Kummer.CyclotomicPrincipalization`、`lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` が通っておる。
 
-一方で、残る `sorry` が消えたわけではない。最新の差分メモでも、残りは **Stage 3 split ではなく** 、既存の legacy wrapper / one-shot route 側に限られる、と整理されておる。特に `FLTPrimeGe5Target_of_kummerRoute` はまだ `uses sorry` と明示されておるし、`cyclotomicPrincipalization_of_classGroupPTorsionFree` のような旧 wrapper も残存箇所として挙がっておる。  
+一方で、残る `sorry` が消えたわけではない。最新の差分メモでも、残りは **Stage 3 split ではなく** 、既存の legacy wrapper / one-shot route 側に限られる、と整理されておる。特に `FLTPrimeGe5Target_of_kummerRoute` はまだ `uses sorry` と明示されておるし、`cyclotomicPrincipalization_of_classGroupPTorsionFree` のような旧 wrapper も残存箇所として挙がっておる。
 
 だから戦況を賢狼流に言い切ると、こうじゃ。
 
@@ -14,7 +14,7 @@
 
 * **まだ敵が残る戦場**
   旧来の one-shot route、legacy wrapper、downstream routing。
-  つまり「理論が足りない」のではなく、「古い配線が新しい concrete theorem 群へまだ差し替わっておらぬ」部分じゃ。  
+  つまり「理論が足りない」のではなく、「古い配線が新しい concrete theorem 群へまだ差し替わっておらぬ」部分じゃ。
 
 ゆえに、お主の問い「`sorry` 埋められるようになったの？」への答えは、
 
@@ -56,7 +56,7 @@ $$
 \exists s : \mathbb{N},; n = s^p
 $$
 
-を回収できた。ここで ±1 の場合分けが不要だった、というのが特に強い。設計が正しかった証拠じゃ。  
+を回収できた。ここで ±1 の場合分けが不要だった、というのが特に強い。設計が正しかった証拠じゃ。
 
 つまり今後の `sorry` 埋めは、「新理論の大発明」が要るというより、 **既に concrete 化された部品へ旧 wrapper を寄せていく配線作業** に変わりつつある。ここが長戦としては非常に良い変化じゃ。
 
@@ -110,7 +110,7 @@ INDEX では `__sorries.txt` を真実の源泉として確認する方針が明
 * research 側の残り
 
 を 3 列にした一覧を作るのがよい。
-これで「埋まる `sorry`」と「今はまだ触らぬ `sorry`」がさらに明確になる。  
+これで「埋まる `sorry`」と「今はまだ触らぬ `sorry`」がさらに明確になる。
 
 ## 4. 提案指示
 

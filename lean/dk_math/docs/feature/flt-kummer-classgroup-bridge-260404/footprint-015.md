@@ -106,7 +106,7 @@ cid: 69d13ce6-7814-83a8-8075-aa4b1b4b48af
 
   * `CyclotomicUnitNormalizationTarget`
   * `CyclotomicNormDescentTarget`
-  * legacy な one-shot wrapper `cyclotomicPrincipalization_of_classGroupPTorsionFree` は、事実上この 2 つを暗に抱えている残骸  
+  * legacy な one-shot wrapper `cyclotomicPrincipalization_of_classGroupPTorsionFree` は、事実上この 2 つを暗に抱えている残骸
 
 必要なら次に、この流れを
 **「設計の流れ」** と **「数学の流れ」** の 2 本立てでも整理して出すぞい。

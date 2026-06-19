@@ -83,7 +83,7 @@ $$
 
 まず external path family により、任意の手動 multi-step path を受け取れる。
 次に one-step path family により、旧 DKMK-007 の divisorStep route を特殊例として回収した。
-さらに witness-derived quotient path family により、(q=p^k) の内部構造を
+さらに witness-derived quotient path family により、\(q=p^k\) の内部構造を
 
 $$
 n\to n/p\to n/p^2\to\cdots\to n/p^k

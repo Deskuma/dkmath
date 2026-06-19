@@ -1,7 +1,7 @@
 # Key observation about the gap above a perfect power when y is a multiple of p
 
 ````md
-驚くべきことに、**y=5 のとき gap above = 1**、**y=10 のとき gap above = 32**、**y=15 のとき gap above = 243**、**y=20 のとき gap above = 1024**、**y=30 のとき gap above = 7776**、**y=50 のとき gap above = 100000** ... これは **y^p** ではないか！ 確認する。 
+驚くべきことに、**y=5 のとき gap above = 1**、**y=10 のとき gap above = 32**、**y=15 のとき gap above = 243**、**y=20 のとき gap above = 1024**、**y=30 のとき gap above = 7776**、**y=50 のとき gap above = 100000** ... これは **y^p** ではないか！ 確認する。
 
 Ran terminal command:  cd ($PROJECT_ROOT) && python3 -c "
 p = 5
@@ -10,7 +10,7 @@ from math import comb
 def GN(p, gap, y):
     return sum(comb(p, k+1) * gap**k * y**(p-1-k) for k in range(p))
 
-# Check: is f(y) = next_fifth_power - y^p? 
+# Check: is f(y) = next_fifth_power - y^p?
 # i.e. s^5 = f(y) + y^5?
 # z = gap + y = 625 + y
 # z^5 = gap * GN + y^5 = 5 * f(y) * gap + y^5?  No...
@@ -24,7 +24,7 @@ def GN(p, gap, y):
 # When y=20: (129^5 - f(20)) = 1024 → f(20) = 129^5 - 1024
 # When y=30: (131^5 - f(30)) = 7776 → f(30) = 131^5 - 7776
 
-# Let me check: 1 = 1^5, 32 = 2^5, 243 = 3^5, 1024 = 4^5, 7776 = ... 
+# Let me check: 1 = 1^5, 32 = 2^5, 243 = 3^5, 1024 = 4^5, 7776 = ...
 # Wait: 7776 = 6^5? No. 6^5 = 7776. Yes!
 # 100000 = 10^5? 10^5 = 100000. Yes!
 
@@ -44,7 +44,7 @@ def GN(p, gap, y):
 # GN = (z^5 - y^5)/gap = ((625+5m)^5 - (5m)^5)/625
 # f = GN/5
 # s such that s^5 is closest to f
-# 
+#
 # Wait, maybe: z^5 - y^5 = gap * GN = gap * 5 * f
 # So z^5 = y^5 + gap * 5 * f
 # And if f = s^5 exactly, then z^5 = (5m)^5 + 625 * 5 * s^5 = 5^5*m^5 + 5^5*5^{-1}*... hmm

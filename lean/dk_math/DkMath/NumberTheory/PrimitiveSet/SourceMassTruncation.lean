@@ -1,0 +1,1786 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+
+#print "file: DkMath.NumberTheory.PrimitiveSet.SourceMassTruncation"
+
+namespace DkMath.NumberTheory.PrimitiveSet
+
+open DkMath.CosmicFormula.Mass
+
+/--
+Finite-window source-mass contract for the log-capacity hitting route.
+
+This packages the source estimate layer needed by the DKMK-009 quotient-path
+endpoint: a nonnegative constant, a uniform source bound on log-capacity
+states, and divisibility monotonicity for descending path families.
+-/
+structure TailWindowSourceMassBound (M : MassSpace ℕ) (C : ℝ) : Prop where
+  nonneg_const : 0 ≤ C
+  source_bound : LogCapacitySourceMassBound M C
+  dvd_mono : DvdMonotoneMass M
+
+/--
+Analytic placeholder for a finite-step tail envelope.
+
+This does not prove an analytic estimate.  It only records the future input
+needed to turn a finite-step total increment bound into a `1 + error` bound.
+-/
+structure FiniteStepTailAnalyticBound
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (increment : ι → ℚ) (error : ℝ) : Prop where
+  total_le_one_add_error :
+    ((Finset.sum steps increment : ℚ) : ℝ) ≤ 1 + error
+
+/--
+Externally supplied finite-step truncation envelope estimate.
+
+This bundles the nonnegative increment data needed to build the finite-step
+source envelope with the analytic placeholder that bounds its total increment.
+-/
+structure TruncationEnvelopeEstimate
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ)
+    (increment : ι → ℚ) (error : ℝ) : Prop where
+  increment_nonneg : ∀ i ∈ steps, 0 ≤ increment i
+  analytic_bound : FiniteStepTailAnalyticBound steps increment error
+
+/--
+Analytic-side contract for dyadic band estimates.
+
+This records exactly the two analytic facts needed to feed the dyadic range
+provider: nonnegative band increments and a total `1 + error` bound.
+-/
+structure DyadicBandAnalyticEstimate
+    (x K : ℕ) (increment : ℕ → ℚ) (error : ℝ) : Prop where
+  increment_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  total_le_one_add_error :
+    ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+      1 + error
+
+/--
+Denominator-cleared finite geometric-sum identity over the dyadic range length.
+
+This is the algebraic form used before introducing any division side condition
+such as `ratio != 1`.
+-/
+theorem geomSum_range_mul_one_sub
+    (ratio : ℝ) (K : ℕ) :
+    (1 - ratio) *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      =
+    1 - ratio ^ (K + 1) := by
+  exact mul_neg_geom_sum ratio (K + 1)
+
+/--
+Finite geometric-sum upper bound over the dyadic range length.
+
+This is the order form needed by the source-mass truncation layer; it avoids a
+separate division-form equality and uses only the positivity supplied by
+`ratio < 1`.
+-/
+theorem geomSum_range_le_one_div_one_sub
+    {ratio : ℝ} (K : ℕ)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1) :
+    (Finset.sum (Finset.range (K + 1))
+      (fun k : ℕ => ratio ^ k))
+      ≤
+    1 / (1 - ratio) := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hpow_nonneg : 0 ≤ ratio ^ (K + 1) :=
+    pow_nonneg hr0 (K + 1)
+  have hnum_le : 1 - ratio ^ (K + 1) ≤ 1 :=
+    sub_le_self 1 hpow_nonneg
+  have hmul_eq :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        =
+      1 - ratio ^ (K + 1) :=
+    geomSum_range_mul_one_sub ratio K
+  have hmul_le :
+      (1 - ratio) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      1 := by
+    simpa [hmul_eq] using hnum_le
+  rw [le_div_iff₀ hpos]
+  simpa [mul_comm] using hmul_le
+
+/--
+Scale the finite geometric-sum upper bound by a nonnegative base.
+
+This is the caller-facing bound shape needed before plugging the estimate into
+the dyadic source-mass provider layer.
+-/
+theorem base_mul_geomSum_range_le_of_base_mul_one_div_le
+    {base ratio error : ℝ} (K : ℕ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : ratio < 1)
+    (hbudget : base * (1 / (1 - ratio)) ≤ 1 + error) :
+    base *
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+      ≤
+    1 + error := by
+  have hsum :
+      (Finset.sum (Finset.range (K + 1))
+        (fun k : ℕ => ratio ^ k))
+        ≤
+      1 / (1 - ratio) :=
+    geomSum_range_le_one_div_one_sub K hr0 hr1
+  have hscaled :
+      base *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k))
+        ≤
+      base * (1 / (1 - ratio)) :=
+    mul_le_mul_of_nonneg_left hsum hbase
+  exact le_trans hscaled hbudget
+
+/--
+Turn a denominator-cleared budget inequality into the one-over-one-minus form.
+
+This is the Real-side helper used to build the `hbudget` field of
+`GeometricBudgetSource`.
+-/
+theorem geometricBudget_le_of_base_le_mul_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (hbaseBudget : base ≤ (1 + error) * (1 - ratio)) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 < 1 - ratio := sub_pos.mpr hr1
+  have hdiv : base / (1 - ratio) ≤ 1 + error := by
+    rw [div_le_iff₀ hpos]
+    exact hbaseBudget
+  simpa [div_eq_mul_inv] using hdiv
+
+/--
+Special case of the geometric budget helper when the budget target is `1`.
+
+The assumption `0 <= error` then upgrades the bound to `1 + error`.
+-/
+theorem geometricBudget_le_one_add_error_of_base_le_one_sub
+    {base ratio error : ℝ}
+    (hr1 : ratio < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : base ≤ 1 - ratio) :
+    base * (1 / (1 - ratio)) ≤ 1 + error := by
+  have hpos : 0 ≤ 1 - ratio :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hone_le : 1 ≤ 1 + error := by
+    linarith
+  have hmul :
+      1 - ratio ≤ (1 + error) * (1 - ratio) := by
+    simpa [one_mul] using mul_le_mul_of_nonneg_right hone_le hpos
+  exact
+    geometricBudget_le_of_base_le_mul_one_sub
+      hr1 (le_trans hbaseBudget hmul)
+
+/--
+Convert a Nat-indexed nonnegativity hypothesis into the dyadic range shape.
+
+Analytic inputs often state bounds with `k <= K`; the provider route consumes
+membership in `Finset.range (K + 1)`.
+-/
+theorem rangeSuccNonneg_of_le
+    (K : ℕ) (increment : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k) :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k := by
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hinc_nonneg k hk_le
+
+/--
+Convert a Nat-indexed uniform-decay hypothesis into the dyadic range shape.
+
+This avoids introducing division into the decay source; callers still prove the
+same multiplicative inequality as the provider route consumes.
+-/
+theorem rangeDecay_of_lt
+    (K : ℕ) (increment : ℕ → ℚ) (ratio : ℚ)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ ratio * increment k := by
+  intro k hk
+  exact hdecay k (Finset.mem_range.mp hk)
+
+/--
+Pointwise geometric majorant from a first-band bound and uniform step decay.
+
+This only builds the geometric pointwise control.  The provider's separate
+nonnegativity hypothesis stays outside this theorem.
+-/
+theorem pointwiseGeometricMajorant_of_firstBand_decay
+    (K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k ∈ Finset.range (K + 1),
+      increment k ≤ base * ratio ^ k := by
+  have hmain :
+      ∀ k, k ≤ K → increment k ≤ base * ratio ^ k := by
+    intro k
+    induction k with
+    | zero =>
+        intro _hk
+        simpa using hbase0
+    | succ k ih =>
+        intro hk_succ
+        have hk_le : k ≤ K :=
+          le_trans (Nat.le_succ k) hk_succ
+        have hk_lt : k < K :=
+          Nat.lt_of_succ_le hk_succ
+        have hstep :
+            increment (k + 1) ≤ ratio * increment k :=
+          hdecay k (Finset.mem_range.mpr hk_lt)
+        have hmul :
+            ratio * increment k ≤ ratio * (base * ratio ^ k) :=
+          mul_le_mul_of_nonneg_left (ih hk_le) hr0
+        calc
+          increment (k + 1) ≤ ratio * increment k := hstep
+          _ ≤ ratio * (base * ratio ^ k) := hmul
+          _ = base * ratio ^ (k + 1) := by
+            ring_nf
+  intro k hk
+  have hk_le : k ≤ K :=
+    Nat.lt_succ_iff.mp (Finset.mem_range.mp hk)
+  exact hmain k hk_le
+
+/--
+Abstract source of the one-over-one-minus geometric budget.
+
+This package separates the analytic origin of `base` and `ratio` from the
+dyadic provider route.
+-/
+structure GeometricBudgetSource where
+  base : ℚ
+  ratio : ℚ
+  error : ℝ
+  hbase : 0 ≤ (base : ℝ)
+  hr0 : 0 ≤ (ratio : ℝ)
+  hr1 : (ratio : ℝ) < 1
+  hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error
+
+/--
+Analytic input package for the first-band and uniform-decay route.
+
+This does not replace the DKMK-016 responsibility split.  It packages the
+remaining caller-side analytic inputs that are consumed together by
+`DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSource`.
+-/
+structure FirstBandDecayBudgetSource
+    (K : ℕ) (increment : ℕ → ℚ) where
+  budget : GeometricBudgetSource
+  hinc_nonneg :
+    ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k
+  hbase0 :
+    increment 0 ≤ budget.base
+  hdecay :
+    ∀ k ∈ Finset.range K,
+      increment (k + 1) ≤ budget.ratio * increment k
+
+/--
+Concrete geometric dyadic-band increment.
+
+This is the first DKMK-017 concrete `Nat -> Rat` source candidate.  It is not a
+deep analytic estimate; it is a minimal test object for the first-band /
+uniform-decay route.
+-/
+def geometricIncrement (base ratio : ℚ) (k : ℕ) : ℚ :=
+  base * ratio ^ k
+
+/-- Geometric increments are nonnegative when their base and ratio are. -/
+theorem geometricIncrement_nonneg
+    {base ratio : ℚ}
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio) :
+    ∀ k, 0 ≤ geometricIncrement base ratio k := by
+  intro k
+  exact mul_nonneg hbase (pow_nonneg hr0 k)
+
+/-- The first geometric increment is the base. -/
+theorem geometricIncrement_zero
+    (base ratio : ℚ) :
+    geometricIncrement base ratio 0 = base := by
+  simp [geometricIncrement]
+
+/-- Geometric increments satisfy exact one-step decay. -/
+theorem geometricIncrement_decay
+    (base ratio : ℚ) (k : ℕ) :
+    geometricIncrement base ratio (k + 1) =
+      ratio * geometricIncrement base ratio k := by
+  simp [geometricIncrement, pow_succ, mul_comm, mul_left_comm]
+
+/-- Inequality form of exact geometric decay. -/
+theorem geometricIncrement_decay_le
+    (base ratio : ℚ) :
+    ∀ k, geometricIncrement base ratio (k + 1) ≤
+      ratio * geometricIncrement base ratio k := by
+  intro k
+  exact le_of_eq (geometricIncrement_decay base ratio k)
+
+/--
+Canonical first-band budget for the geometric increment when
+`base = 1 - ratio`.
+-/
+theorem geometricIncrement_baseEqOneSub_budget
+    {base ratio : ℚ} {error : ℝ}
+    (hbaseEq : base = 1 - ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)) := by
+  have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+    exact_mod_cast hbaseEq
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have honeSub_nonneg : 0 ≤ 1 - (ratio : ℝ) :=
+    le_of_lt (sub_pos.mpr hr1)
+  have hmul :
+      1 - (ratio : ℝ) ≤
+        (1 + error) * (1 - (ratio : ℝ)) := by
+    simpa [one_mul] using
+      mul_le_mul_of_nonneg_right hone_le honeSub_nonneg
+  simpa [hbaseEqReal] using hmul
+
+namespace GeometricBudgetSource
+
+/--
+Build a geometric budget source from an explicit one-over-one-minus budget.
+
+This is a readability constructor, not an analytic estimate.
+-/
+def ofBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := ratio
+  error := error
+  hbase := hbase
+  hr0 := hr0
+  hr1 := hr1
+  hbudget := hbudget
+
+/--
+Build a geometric budget source from a denominator-cleared Real budget.
+
+This is often easier for callers than proving the one-over-one-minus form
+directly.
+-/
+def ofDenomClearedBudget
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_of_base_le_mul_one_sub hr1 hbaseBudget)
+
+/--
+Build a geometric budget source from the special bound `base <= 1 - ratio`.
+
+The nonnegative error assumption upgrades the resulting budget from `1` to
+`1 + error`.
+-/
+def ofBaseLeOneSub
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (hbaseBudget : (base : ℝ) ≤ 1 - (ratio : ℝ)) :
+    GeometricBudgetSource :=
+  ofBudget base ratio error hbase hr0 hr1
+    (geometricBudget_le_one_add_error_of_base_le_one_sub
+      hr1 herror hbaseBudget)
+
+/--
+Build a geometric budget source with zero ratio.
+
+This is an API sanity constructor, not an analytic estimate.  With ratio zero,
+the one-over-one-minus budget reduces to the caller-supplied `base <= 1 + error`.
+-/
+def ofZeroRatio
+    (base : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    GeometricBudgetSource where
+  base := base
+  ratio := 0
+  error := error
+  hbase := hbase
+  hr0 := by norm_num
+  hr1 := by norm_num
+  hbudget := by
+    simpa using hbudget
+
+end GeometricBudgetSource
+
+namespace FirstBandDecayBudgetSource
+
+/--
+Build a first-band / uniform-decay source from an already packaged geometric
+budget.
+
+This is the minimal constructor for the DKMK-017 analytic-input package.
+-/
+def ofBudgetSource
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment where
+  budget := B
+  hinc_nonneg := hinc_nonneg
+  hbase0 := hbase0
+  hdecay := hdecay
+
+/--
+Build a first-band / uniform-decay source from Nat-indexed hypotheses.
+
+This is the first DKMK-017 source constructor that reduces the Finset
+membership burden for analytic callers.
+-/
+def ofBudgetSourceNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ B.ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource B
+    (rangeSuccNonneg_of_le K increment hinc_nonneg)
+    hbase0
+    (rangeDecay_of_lt K increment B.ratio hdecay)
+
+/--
+Build a first-band / uniform-decay source from an explicit geometric budget.
+
+This keeps the concrete one-over-one-minus budget proof at the analytic-input
+boundary while producing the package consumed by the dyadic provider route.
+-/
+def ofBudgetAndDecay
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbudget :
+      (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSource
+    (GeometricBudgetSource.ofBudget
+      base ratio error hbase hr0 hr1 hbudget)
+    hinc_nonneg hbase0 hdecay
+
+/--
+Build a first-band / uniform-decay source from a denominator-cleared budget
+and Nat-indexed nonnegativity/decay hypotheses.
+
+This combines the DKMK-017C budget helper with the DKMK-017D Nat-bound source
+constructor.
+-/
+def ofDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ base)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment :=
+  ofBudgetSourceNatBounds
+    (GeometricBudgetSource.ofDenomClearedBudget
+      base ratio error hbase hr0 hr1 hbaseBudget)
+    hinc_nonneg hbase0 hdecay
+
+/--
+Build a first-band / uniform-decay source using `increment 0` as the base.
+
+This closes the first-band bound by reflexivity.  The caller still supplies the
+denominator-cleared budget for that base.
+-/
+def ofSelfBaseDenomClearedBudgetNatBounds
+    {K : ℕ} {increment : ℕ → ℚ}
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    FirstBandDecayBudgetSource K increment := by
+  have hbase : 0 ≤ (increment 0 : ℝ) := by
+    exact_mod_cast hinc_nonneg 0 (Nat.zero_le K)
+  exact
+    ofDenomClearedBudgetNatBounds
+      (increment 0) ratio error hbase hr0 hr1 hbaseBudget
+      hinc_nonneg le_rfl hdecay
+
+/--
+Build a first-band / uniform-decay source from the concrete geometric
+increment candidate.
+
+The only analytic input left is the denominator-cleared first-band budget for
+the base.
+-/
+def ofGeometricIncrement
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) :=
+  ofSelfBaseDenomClearedBudgetNatBounds
+    ratio error
+    (by exact_mod_cast hr0)
+    hr1
+    (by simpa [geometricIncrement_zero] using hbaseBudget)
+    (fun k _hk => geometricIncrement_nonneg hbase hr0 k)
+    (fun k _hk => geometricIncrement_decay_le base ratio k)
+
+/--
+Canonical geometric increment source when `base = 1 - ratio`.
+
+The first-band budget is discharged from `0 <= error`; nonnegativity of the
+base follows from `ratio < 1`.
+-/
+def ofGeometricIncrementBaseEqOneSub
+    {K : ℕ}
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    FirstBandDecayBudgetSource K (geometricIncrement base ratio) := by
+  have hbaseReal : 0 ≤ (base : ℝ) := by
+    have hbaseEqReal : (base : ℝ) = 1 - (ratio : ℝ) := by
+      exact_mod_cast hbaseEq
+    rw [hbaseEqReal]
+    exact le_of_lt (sub_pos.mpr hr1)
+  have hbase : 0 ≤ base := by
+    exact_mod_cast hbaseReal
+  exact
+    ofGeometricIncrement
+      base ratio error hbase hr0 hr1
+      (geometricIncrement_baseEqOneSub_budget hbaseEq hr1 herror)
+
+end FirstBandDecayBudgetSource
+
+namespace TailWindowSourceMassBound
+
+/-- Build a tail-window contract from the three existing route hypotheses. -/
+theorem ofSourceBound
+    {M : MassSpace ℕ} {C : ℝ}
+    (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C)
+    (hM : DvdMonotoneMass M) :
+    TailWindowSourceMassBound M C where
+  nonneg_const := hC
+  source_bound := hsource
+  dvd_mono := hM
+
+/--
+Finite-step tail mass supplies a tail-window source-mass contract.
+-/
+theorem finiteStepTail
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    TailWindowSourceMassBound
+      (finiteStepTailNatMassSpace steps threshold increment hinc)
+      ((Finset.sum steps increment : ℚ) : ℝ) where
+  nonneg_const := by
+    exact_mod_cast Finset.sum_nonneg hinc
+  source_bound :=
+    finiteStepTailNatMassSpace_logCapacitySourceMassBound
+      steps threshold increment hinc
+  dvd_mono :=
+    finiteStepTailNatMassSpace_dvdMonotone steps threshold increment hinc
+
+/--
+Use a tail-window source-mass contract in the DKMK-009 quotient-path capacity
+route.
+
+This theorem is intentionally a thin wrapper around
+`globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound`.
+-/
+theorem globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} {C : ℝ}
+    (H : TailWindowSourceMassBound M C)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s H.dvd_mono).weightedHitMass A ≤ C :=
+  W.globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le_of_sourceBound
+    IOf hIOf s H.dvd_mono hA H.nonneg_const H.source_bound
+
+/--
+Finite-step tail source mass, applied all the way to the DKMK-009
+quotient-path capacity route.
+
+This is the concrete convenience form of `finiteStepTail` followed by
+`globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le`.
+-/
+theorem finiteStepTail_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment hinc)).weightedHitMass A ≤
+      ((Finset.sum steps increment : ℚ) : ℝ) :=
+  globalLogCapacityKernel_primePowerQuotientPathFamily_weightedHitMass_le
+    W IOf hIOf s
+    (finiteStepTail steps threshold increment hinc)
+    hA
+
+/--
+Finite-step tail route bound after supplying the analytic placeholder
+`sum increment <= 1 + error`.
+-/
+theorem finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : FiniteStepTailAnalyticBound steps increment error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment hinc)).weightedHitMass A ≤
+      1 + error :=
+  (finiteStepTail_weightedHitMass_le
+    W IOf hIOf steps threshold increment hinc s hA).trans
+    herror.total_le_one_add_error
+
+end TailWindowSourceMassBound
+
+namespace TruncationEnvelopeEstimate
+
+/--
+Single-window toy provider for externally supplied truncation estimates.
+
+This uses one finite step with threshold `x` and increment `c`.  The analytic
+input is kept external as `(c : ℝ) <= 1 + error`.
+-/
+theorem singleWindow
+    (x : ℕ) (c : ℚ) (hc : 0 ≤ c)
+    {error : ℝ} (hbound : (c : ℝ) ≤ 1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.univ : Finset Unit)
+      (fun _ : Unit => x)
+      (fun _ : Unit => c)
+      error where
+  increment_nonneg := by
+    intro _i _hi
+    exact hc
+  analytic_bound := by
+    constructor
+    simpa using hbound
+
+/--
+Dyadic range provider for externally supplied truncation estimates.
+
+This fixes the finite step set as `Finset.range (K + 1)` and the threshold as
+`x * 2^k`, while keeping the analytic increment estimate external.
+-/
+theorem dyadicRange
+    (x K : ℕ) (increment : ℕ → ℚ)
+    (hinc : ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    {error : ℝ}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+        1 + error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error where
+  increment_nonneg := hinc
+  analytic_bound := by
+    constructor
+    exact hbound
+
+/--
+Finite-step truncation estimate certified by a Real-valued majorant.
+
+This is the DKMK-018B bridge: the finite-step mass route remains rational,
+while an analytic source may live in `Real`.
+-/
+theorem ofRealMajorant
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ)
+    (increment : ι → ℚ) (majorant : ι → ℝ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i)
+    {error : ℝ}
+    (hle :
+      ∀ i ∈ steps, (increment i : ℝ) ≤ majorant i)
+    (hmajorant_bound :
+      (Finset.sum steps fun i => majorant i) ≤ 1 + error) :
+    TruncationEnvelopeEstimate steps threshold increment error where
+  increment_nonneg := hinc
+  analytic_bound := by
+    constructor
+    have hsum :
+        (Finset.sum steps fun i => (increment i : ℝ)) ≤
+          Finset.sum steps majorant := by
+      exact Finset.sum_le_sum hle
+    have hcast :
+        ((Finset.sum steps increment : ℚ) : ℝ) =
+          Finset.sum steps fun i => (increment i : ℝ) := by
+      exact_mod_cast (rfl : Finset.sum steps increment = Finset.sum steps increment)
+    exact (by simpa [hcast] using le_trans hsum hmajorant_bound)
+
+/--
+Finite-step truncation estimate certified by a `RealWeightProvider`.
+
+This is the first DKMK-018C-facing bridge: a Real log/capacity provider can
+certify an existing rational increment whenever the rational increment is
+pointwise bounded by the provider weights.
+-/
+theorem ofRealWeightProviderMajorant
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (increment : ι → ℚ)
+    (hinc : ∀ i ∈ P.index, 0 ≤ increment i)
+    (hle :
+      ∀ i ∈ P.index, (increment i : ℝ) ≤ P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold increment error := by
+  have hone_le : (1 : ℝ) ≤ 1 + error := by
+    linarith
+  have hprovider_bound :
+      (Finset.sum P.index fun i => P.weight i) ≤ 1 + error := by
+    have hprob' :
+        (Finset.sum P.index fun i => P.weight i) ≤ 1 := by
+      simpa [RealWeightProvider.SubProbability,
+        RealWeightProvider.totalWeight] using hprob
+    exact le_trans hprob' hone_le
+  exact
+    ofRealMajorant P.index threshold increment P.weight
+      hinc hle hprovider_bound
+
+/--
+Route theorem for externally supplied finite-step truncation estimates.
+
+This is a packaging wrapper around
+`TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le_one_add_error`.
+-/
+theorem finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    {ι : Type _} [DecidableEq ι]
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (H : TruncationEnvelopeEstimate steps threshold increment error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        steps threshold increment H.increment_nonneg)).weightedHitMass A ≤
+      1 + error :=
+  TailWindowSourceMassBound.finiteStepTail_weightedHitMass_le_one_add_error
+    W IOf hIOf steps threshold increment H.increment_nonneg s hA
+    H.analytic_bound
+
+end TruncationEnvelopeEstimate
+
+namespace RealWeightProvider
+
+/--
+Choose a positive rational number below a positive real number.
+
+This is the scalar rationalization primitive for DKMK-018D.  It uses density of
+`Rat` in `Real` and records the result in the order shape consumed by the
+rational finite-step route.
+-/
+theorem exists_positive_rat_below
+    {x : ℝ} (hx : 0 < x) :
+    ∃ q : ℚ, 0 < q ∧ (q : ℝ) ≤ x := by
+  rcases exists_rat_btwn hx with ⟨q, hq_pos, hq_lt⟩
+  refine ⟨q, ?_, le_of_lt hq_lt⟩
+  exact_mod_cast hq_pos
+
+/--
+Select a rational increment below each positive provider weight.
+
+Outside the provider index the value is irrelevant to all finite sums, so it is
+set to `0`.
+-/
+noncomputable def positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) : ι → ℚ :=
+  fun i =>
+    if hi : i ∈ P.index then
+      Classical.choose (exists_positive_rat_below (hpos i hi))
+    else
+      0
+
+/-- The selected rational increment is positive on the provider index. -/
+theorem positiveRatIncrementBelow_pos
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index, 0 < positiveRatIncrementBelow P hpos i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.1
+
+/-- The selected rational increment is bounded by the provider weight. -/
+theorem positiveRatIncrementBelow_le_weight
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i) :
+    ∀ i ∈ P.index,
+      (positiveRatIncrementBelow P hpos i : ℝ) ≤ P.weight i := by
+  intro i hi
+  have hspec :
+      0 <
+        Classical.choose (exists_positive_rat_below (hpos i hi)) ∧
+      ((Classical.choose
+        (exists_positive_rat_below (hpos i hi)) : ℚ) : ℝ) ≤
+        P.weight i :=
+    Classical.choose_spec (exists_positive_rat_below (hpos i hi))
+  simpa [positiveRatIncrementBelow, hi] using hspec.2
+
+/--
+Finite-step truncation estimate using the provider's selected positive rational
+under-approximation.
+
+This is the DKMK-018D positive-rationalization surface.  It keeps the main
+route rational-valued while isolating the strict-positivity requirement needed
+to construct nonzero increments.
+-/
+theorem truncationEnvelope_of_positiveRatIncrementBelow
+    {ι : Type _} [DecidableEq ι]
+    (P : RealWeightProvider ι)
+    (threshold : ι → ℕ)
+    (hpos : ∀ i ∈ P.index, 0 < P.weight i)
+    {error : ℝ}
+    (herror : 0 ≤ error)
+    (hprob : P.SubProbability) :
+    TruncationEnvelopeEstimate P.index threshold
+      (positiveRatIncrementBelow P hpos) error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    P threshold (positiveRatIncrementBelow P hpos)
+    (fun i hi => le_of_lt (positiveRatIncrementBelow_pos P hpos i hi))
+    (positiveRatIncrementBelow_le_weight P hpos)
+    herror hprob
+
+end RealWeightProvider
+
+/--
+Named support and threshold policy for the log-capacity source route.
+
+This packages the loose `IOf`, `hIOf`, and `threshold` inputs used by the
+DKMK-019 façade without adding a support-compatibility predicate yet.
+-/
+structure LogCapacitySourcePolicy
+    (T : PrimePowerDivisorTransitionKernel) where
+  IOf : ℕ → Finset ℕ
+  hIOf :
+    ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+  threshold : ℕ → ℕ
+
+namespace PrimePowerWitnessProvider
+
+/--
+Log-capacity Real provider, used as a Real majorant for a rational finite-step
+increment.
+
+This is the DKMK-018C assumed-rationalization route.  The rational increment is
+still supplied externally; the log-capacity provider supplies the Real
+sub-probability majorant.
+-/
+theorem logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    (increment : ℕ → ℚ)
+    (hinc : ∀ q ∈ I, 0 ≤ increment q)
+    (hle :
+      ∀ q ∈ I,
+        (increment q : ℝ) ≤
+          (W.logCapacityKernelRealWeightProvider n I hI hn).weight q)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold increment error :=
+  TruncationEnvelopeEstimate.ofRealWeightProviderMajorant
+    (W.logCapacityKernelRealWeightProvider n I hI hn)
+    threshold
+    increment
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hinc)
+    (by simpa [logCapacityKernelRealWeightProvider_index] using hle)
+    herror
+    (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
+/--
+Smoke-test connection from the log-capacity Real provider to the rational
+finite-step truncation route, using the zero rational increment.
+
+This proves the provider/API plumbing before choosing a nontrivial rational
+under-approximation policy.
+-/
+theorem logCapacityKernel_truncationEnvelope_zeroIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold (fun _ : ℕ => (0 : ℚ)) error :=
+  W.logCapacityKernel_truncationEnvelope_of_ratMajorizedIncrement
+    n I hI hn threshold (fun _ : ℕ => (0 : ℚ))
+    (by
+      intro _q _hq
+      norm_num)
+    (by
+      intro q hq
+      simpa using
+        (W.logCapacityKernelRealWeightProvider n I hI hn).weight_nonneg q hq)
+    herror
+
+/--
+The local log-capacity Real provider has strictly positive weights on its
+selected channel index.
+
+This is the source-specific positivity input needed by the DKMK-018D positive
+rationalization wrapper.
+-/
+theorem logCapacityKernelRealWeightProvider_weight_pos
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    ∀ q ∈ I,
+      0 < (W.logCapacityKernelRealWeightProvider n I hI hn).weight q := by
+  intro q hq
+  rw [logCapacityKernelRealWeightProvider_weight]
+  exact div_pos
+    (real_log_nat_pos_of_one_lt
+      ((W.basePrimeOf_prime_on n I hI q hq).one_lt))
+    (real_log_nat_pos_of_one_lt hn)
+
+/--
+Concrete log-capacity source replacement route using the selected positive
+rational under-approximation of the log-capacity weights.
+
+This packages DKMK-018C, DKMK-018D, and the source-specific positivity proof
+into a single truncation-envelope entry point.
+-/
+theorem logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate I threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider n I hI hn)
+        (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn))
+      error := by
+  simpa [logCapacityKernelRealWeightProvider_index] using
+    RealWeightProvider.truncationEnvelope_of_positiveRatIncrementBelow
+      (W.logCapacityKernelRealWeightProvider n I hI hn)
+      threshold
+      (W.logCapacityKernelRealWeightProvider_weight_pos n I hI hn)
+      herror
+      (W.logCapacityKernelRealWeightProvider_subProbability n I hI hn)
+
+/--
+Concrete log-capacity source replacement route all the way to the finite-step
+weighted-hit bound.
+
+This is the DKMK-018F chapter-end connection: the log-capacity Real source
+constructs its positive rational under-approximation, builds the truncation
+envelope, and then feeds the DKMK-017 finite-step route.
+-/
+theorem logCapacityKernel_finiteStepTail_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (IOf s.1)
+        threshold
+        (RealWeightProvider.positiveRatIncrementBelow
+          (W.logCapacityKernelRealWeightProvider
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+          (W.logCapacityKernelRealWeightProvider_weight_pos
+            s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+        (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+          threshold herror).increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  exact
+    TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (IOf s.1)
+      threshold
+      (RealWeightProvider.positiveRatIncrementBelow
+        (W.logCapacityKernelRealWeightProvider
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+        (W.logCapacityKernelRealWeightProvider_weight_pos
+          s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2))
+      s hA
+      (W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+        s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2
+        threshold herror)
+
+/--
+Caller-facing rational log-capacity source at a global log-capacity state.
+
+This hides the `RealWeightProvider.positiveRatIncrementBelow` construction used
+by the DKMK-018 source replacement route.
+-/
+noncomputable def logCapacitySourceRatIncrement
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState) : ℕ → ℚ :=
+  RealWeightProvider.positiveRatIncrementBelow
+    (W.logCapacityKernelRealWeightProvider
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+    (W.logCapacityKernelRealWeightProvider_weight_pos
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2)
+
+/--
+Truncation envelope for the caller-facing log-capacity rational source.
+
+This is the DKMK-019 façade over
+`logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow`.
+-/
+theorem logCapacitySourceTruncationEnvelope
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate (IOf s.1) threshold
+      (W.logCapacitySourceRatIncrement IOf hIOf s) error := by
+  simpa [logCapacitySourceRatIncrement] using
+    W.logCapacityKernel_truncationEnvelope_positiveRatIncrementBelow
+      s.1 (IOf s.1) (fun q hq => hIOf s.1 q hq) s.2 threshold herror
+
+/--
+Finite-step mass space supplied by the caller-facing log-capacity source.
+-/
+noncomputable def logCapacitySourceFiniteStepMass
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    MassSpace ℕ :=
+  finiteStepTailNatMassSpace
+    (IOf s.1)
+    threshold
+    (W.logCapacitySourceRatIncrement IOf hIOf s)
+    (fun q hq =>
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold
+        (show (0 : ℝ) ≤ 0 by norm_num)).increment_nonneg q hq)
+
+/--
+Divisibility monotonicity for the caller-facing log-capacity finite-step mass.
+-/
+def logCapacitySourceFiniteStepMass_dvdMonotone
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    DvdMonotoneMass
+      (W.logCapacitySourceFiniteStepMass IOf hIOf s threshold) :=
+  finiteStepTailNatMassSpace_dvdMonotone
+    (IOf s.1)
+    threshold
+    (W.logCapacitySourceRatIncrement IOf hIOf s)
+    (fun q hq =>
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold
+        (show (0 : ℝ) ≤ 0 by norm_num)).increment_nonneg q hq)
+
+/--
+Caller-facing weighted-hit bound for the log-capacity source façade.
+
+The conclusion mentions the façade mass-space monotonicity proof rather than
+the raw `positiveRatIncrementBelow` expression.
+-/
+theorem logCapacitySource_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (W.logCapacitySourceFiniteStepMass_dvdMonotone
+        IOf hIOf s threshold)).weightedHitMass A ≤
+      1 + error := by
+  exact
+    TruncationEnvelopeEstimate.finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (IOf s.1)
+      threshold
+      (W.logCapacitySourceRatIncrement IOf hIOf s)
+      s hA
+      (W.logCapacitySourceTruncationEnvelope IOf hIOf s threshold herror)
+
+/--
+Caller-facing weighted path family induced by the log-capacity source façade.
+
+This hides the quotient-path application and the finite-step source monotonicity
+proof behind one path-family name.
+-/
+noncomputable def logCapacitySourcePathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ) :
+    RealWeightedPathFamily
+      (W.logCapacitySourceFiniteStepMass IOf hIOf s threshold) ℕ :=
+  W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+    IOf hIOf s
+    (W.logCapacitySourceFiniteStepMass_dvdMonotone IOf hIOf s threshold)
+
+/--
+Final caller-facing weighted-hit bound for the log-capacity source path family.
+
+The theorem statement now has the path family itself as the subject.
+-/
+theorem logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    (threshold : ℕ → ℕ)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.logCapacitySourcePathFamily IOf hIOf s threshold).weightedHitMass A ≤
+      1 + error :=
+  W.logCapacitySource_weightedHitMass_le_one_add_error
+    IOf hIOf s threshold hA herror
+
+/--
+Policy-facing weighted path family for the log-capacity source route.
+
+This is the DKMK-020 façade over `logCapacitySourcePathFamily`, replacing the
+loose `IOf`, `hIOf`, and `threshold` inputs by one named policy object.
+-/
+noncomputable def logCapacityPolicyPathFamily
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (P : LogCapacitySourcePolicy T)
+    (s : LogCapacityState) :
+    RealWeightedPathFamily
+      (W.logCapacitySourceFiniteStepMass P.IOf P.hIOf s P.threshold) ℕ :=
+  W.logCapacitySourcePathFamily P.IOf P.hIOf s P.threshold
+
+/--
+Policy-facing weighted-hit bound for the log-capacity source route.
+
+The theorem statement exposes the named threshold/support policy as a single
+input and otherwise reuses the DKMK-019 path-family endpoint.
+-/
+theorem logCapacityPolicyPathFamily_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (P : LogCapacitySourcePolicy T)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A)
+    {error : ℝ}
+    (herror : 0 ≤ error) :
+    (W.logCapacityPolicyPathFamily P s).weightedHitMass A ≤
+      1 + error :=
+  W.logCapacitySourcePathFamily_weightedHitMass_le_one_add_error
+    P.IOf P.hIOf s P.threshold hA herror
+
+end PrimePowerWitnessProvider
+
+namespace DyadicBandAnalyticEstimate
+
+/--
+Constant-band provider for dyadic analytic estimates.
+
+This keeps the finite-sum bound external, avoiding finite-sum simplification
+and Nat/Rat/Real coercion work in the first provider theorem.
+-/
+theorem constantBand
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((Finset.sum (Finset.range (K + 1)) (fun _ : ℕ => c) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error where
+  increment_nonneg := by
+    intro _k _hk
+    exact hc
+  total_le_one_add_error := hbound
+
+/--
+Constant-band provider from the caller-facing bound
+`((K + 1 : ℚ) * c : ℝ) <= 1 + error`.
+-/
+theorem constantBand_of_natCastMulBound
+    (x K : ℕ) (c : ℚ)
+    (hc : 0 ≤ c)
+    {error : ℝ}
+    (hbound :
+      ((((K + 1 : ℕ) : ℚ) * c : ℚ) : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K (fun _ : ℕ => c) error := by
+  apply constantBand x K c hc
+  simpa [Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hbound
+
+/--
+Majorant-envelope provider for dyadic analytic estimates.
+
+The actual increment only needs nonnegativity.  Its total estimate is obtained
+by comparing it with a caller-supplied majorant on the same finite dyadic range.
+-/
+theorem ofMajorant
+    (x K : ℕ)
+    (increment majorant : ℕ → ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have hsum :
+        Finset.sum (Finset.range (K + 1)) increment ≤
+          Finset.sum (Finset.range (K + 1)) majorant := by
+      exact Finset.sum_le_sum hle
+    have hsumR :
+        ((Finset.sum (Finset.range (K + 1)) increment : ℚ) : ℝ) ≤
+          ((Finset.sum (Finset.range (K + 1)) majorant : ℚ) : ℝ) := by
+      exact_mod_cast hsum
+    exact le_trans hsumR hmajorant_bound
+
+/--
+Real-majorant provider for dyadic analytic estimates.
+
+This is the dyadic-band form of the DKMK-018B bridge.  It lets a Real-valued
+analytic envelope certify a rational dyadic increment without changing the
+finite-step mass route.
+-/
+theorem ofRealMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (majorant : ℕ → ℝ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hle :
+      ∀ k ∈ Finset.range (K + 1), (increment k : ℝ) ≤ majorant k)
+    {error : ℝ}
+    (hmajorant_bound :
+      (Finset.sum (Finset.range (K + 1)) fun k => majorant k) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error where
+  increment_nonneg := hinc_nonneg
+  total_le_one_add_error := by
+    have H :
+        TruncationEnvelopeEstimate
+          (Finset.range (K + 1))
+          (fun k : ℕ => x * 2^k)
+          increment
+          error :=
+      TruncationEnvelopeEstimate.ofRealMajorant
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        increment
+        majorant
+        hinc_nonneg
+        hle
+        hmajorant_bound
+    exact H.analytic_bound.total_le_one_add_error
+
+/--
+Pointwise geometric-majorant provider for dyadic analytic estimates.
+
+This exposes the concrete majorant `base * ratio^k`, while leaving its finite
+sum estimate external.
+-/
+theorem ofPointwiseGeometricMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_bound :
+      ((Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => base * ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofMajorant x K increment
+      (fun k : ℕ => base * ratio ^ k)
+      hinc_nonneg hgeom hgeom_bound
+
+/--
+Pointwise geometric-majorant provider from the caller-facing finite-sum bound
+`base * sum ratio^k <= 1 + error`.
+
+This only factors the constant `base` out of the finite sum.  It does not prove
+a closed form for the geometric sum.
+-/
+theorem ofPointwiseGeometricMajorant_of_geomSumBound
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    {error : ℝ}
+    (hgeom_sum_bound :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ) ≤
+        1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  apply ofPointwiseGeometricMajorant x K increment base ratio hinc_nonneg hgeom
+  simpa [Finset.mul_sum] using hgeom_sum_bound
+
+/--
+Pointwise geometric-majorant provider from the one-over-one-minus budget.
+
+This is the convenience wrapper that crosses from the Real geometric-sum
+budget theorem back into the rational-valued dyadic provider layer.
+-/
+theorem ofPointwiseGeometricMajorant_of_baseGeomBudget
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base ratio : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1), increment k ≤ base * ratio ^ k)
+    (hbase : 0 ≤ (base : ℝ))
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    {error : ℝ}
+    (hbudget : (base : ℝ) * (1 / (1 - (ratio : ℝ))) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  have hreal :
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k))
+        ≤
+      1 + error :=
+    base_mul_geomSum_range_le_of_base_mul_one_div_le
+      K hbase hr0 hr1 hbudget
+  have hcast :
+      ((base * Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => ratio ^ k) : ℚ) : ℝ)
+        =
+      (base : ℝ) *
+        (Finset.sum (Finset.range (K + 1))
+          (fun k : ℕ => (ratio : ℝ) ^ k)) := by
+    simp
+  exact
+    ofPointwiseGeometricMajorant_of_geomSumBound
+      x K increment base ratio hinc_nonneg hgeom
+      (by simpa [hcast] using hreal)
+
+/--
+Pointwise geometric-majorant provider from a packaged geometric budget source.
+
+This wrapper keeps callers from passing the budget side conditions separately.
+-/
+theorem ofPointwiseGeometricMajorant_of_budgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k) :
+    DyadicBandAnalyticEstimate x K increment B.error :=
+  ofPointwiseGeometricMajorant_of_baseGeomBudget
+    x K increment B.base B.ratio
+    hinc_nonneg hgeom
+    B.hbase B.hr0 B.hr1 B.hbudget
+
+/--
+Provider wrapper from first-band control and uniform step decay.
+
+This builds the pointwise geometric majorant and then applies the packaged
+budget-source provider wrapper.
+-/
+theorem ofFirstBandDecayBudgetSource
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (B : GeometricBudgetSource)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hbase0 : increment 0 ≤ B.base)
+    (hdecay :
+      ∀ k ∈ Finset.range K,
+        increment (k + 1) ≤ B.ratio * increment k) :
+    DyadicBandAnalyticEstimate x K increment B.error := by
+  have hr0_rat : 0 ≤ B.ratio := by
+    exact_mod_cast B.hr0
+  have hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ B.base * B.ratio ^ k :=
+    pointwiseGeometricMajorant_of_firstBand_decay
+      K increment B.base B.ratio hbase0 hdecay hr0_rat
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment B hinc_nonneg hgeom
+
+/--
+Provider wrapper from a packaged first-band / uniform-decay analytic source.
+
+This is the DKMK-017-A ergonomics test for `FirstBandDecayBudgetSource`: the
+combined source is accepted only as an input package and still delegates to the
+DKMK-016 provider route.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    DyadicBandAnalyticEstimate x K increment S.budget.error :=
+  ofFirstBandDecayBudgetSource
+    x K increment S.budget S.hinc_nonneg S.hbase0 S.hdecay
+
+/--
+Usage wrapper for the zero-ratio budget source.
+
+This checks the caller path
+`GeometricBudgetSource.ofZeroRatio ->
+ofPointwiseGeometricMajorant_of_budgetSource`.
+-/
+theorem ofPointwiseZeroRatioMajorant
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (base : ℚ)
+    (hinc_nonneg :
+      ∀ k ∈ Finset.range (K + 1), 0 ≤ increment k)
+    (hgeom :
+      ∀ k ∈ Finset.range (K + 1),
+        increment k ≤ base * (0 : ℚ) ^ k)
+    {error : ℝ}
+    (hbase : 0 ≤ (base : ℝ))
+    (hbudget : (base : ℝ) ≤ 1 + error) :
+    DyadicBandAnalyticEstimate x K increment error := by
+  exact
+    ofPointwiseGeometricMajorant_of_budgetSource
+      x K increment
+      (GeometricBudgetSource.ofZeroRatio base error hbase hbudget)
+      hinc_nonneg
+      (by
+        simpa [GeometricBudgetSource.ofZeroRatio] using hgeom)
+
+/--
+Turn an analytic dyadic band estimate into the truncation envelope consumed by
+the existing finite-step route theorem.
+-/
+theorem toTruncationEnvelopeEstimate
+    {x K : ℕ} {increment : ℕ → ℚ} {error : ℝ}
+    (H : DyadicBandAnalyticEstimate x K increment error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  TruncationEnvelopeEstimate.dyadicRange
+    x K increment H.increment_nonneg H.total_le_one_add_error
+
+end DyadicBandAnalyticEstimate
+
+namespace TruncationEnvelopeEstimate
+
+/--
+Turn a packaged first-band / uniform-decay analytic source directly into the
+truncation envelope consumed by the existing finite-step route.
+
+This is a library-facing wrapper over the already accepted dyadic provider
+route; it does not add a new analytic obligation.
+-/
+theorem ofFirstBandDecayBudgetSourcePackage
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (S : FirstBandDecayBudgetSource K increment) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      S.budget.error :=
+  (DyadicBandAnalyticEstimate.ofFirstBandDecayBudgetSourcePackage
+    x K increment S).toTruncationEnvelopeEstimate
+
+/--
+Self-base denominator-cleared first-band source, applied directly to the
+truncation envelope.
+
+This is the standard DKMK-017 caller route when the first band itself is the
+geometric base.
+-/
+theorem ofSelfBaseDenomClearedBudgetNatBounds
+    (x K : ℕ)
+    (increment : ℕ → ℚ)
+    (ratio : ℚ)
+    (error : ℝ)
+    (hr0 : 0 ≤ (ratio : ℝ))
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (increment 0 : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ)))
+    (hinc_nonneg :
+      ∀ k, k ≤ K → 0 ≤ increment k)
+    (hdecay :
+      ∀ k, k < K → increment (k + 1) ≤ ratio * increment k) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      increment
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K increment
+    (FirstBandDecayBudgetSource.ofSelfBaseDenomClearedBudgetNatBounds
+      ratio error hr0 hr1 hbaseBudget hinc_nonneg hdecay)
+
+/--
+Concrete geometric increment source, applied directly to the truncation
+envelope.
+
+This is the DKMK-017I route test: a real `Nat -> Rat` increment candidate
+feeds the standard self-base denominator-cleared route.
+-/
+theorem ofGeometricIncrement
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbase : 0 ≤ base)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (hbaseBudget :
+      (base : ℝ) ≤ (1 + error) * (1 - (ratio : ℝ))) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrement
+      base ratio error hbase hr0 hr1 hbaseBudget)
+
+/--
+Canonical geometric increment source, applied directly to the truncation
+envelope, when `base = 1 - ratio`.
+
+This removes the explicit first-band budget from the caller surface.
+-/
+theorem ofGeometricIncrementBaseEqOneSub
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error) :
+    TruncationEnvelopeEstimate
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      error :=
+  ofFirstBandDecayBudgetSourcePackage
+    x K (geometricIncrement base ratio)
+    (FirstBandDecayBudgetSource.ofGeometricIncrementBaseEqOneSub
+      base ratio error hbaseEq hr0 hr1 herror)
+
+/--
+Canonical geometric increment source, applied through the finite-step mass
+route to the DKMK-009 quotient-path hitting bound.
+
+This checks that the DKMK-017J envelope is consumable by the existing
+finite-step route theorem.
+-/
+theorem geometricIncrementBaseEqOneSub_weightedHitMass_le_one_add_error
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (x K : ℕ)
+    (base ratio : ℚ)
+    (error : ℝ)
+    (hbaseEq : base = 1 - ratio)
+    (hr0 : 0 ≤ ratio)
+    (hr1 : (ratio : ℝ) < 1)
+    (herror : 0 ≤ error)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    let H :=
+      ofGeometricIncrementBaseEqOneSub
+        x K base ratio error hbaseEq hr0 hr1 herror
+    (W.globalLogCapacityKernel_applyAtToPrimePowerQuotientPathFamily
+      IOf hIOf s
+      (finiteStepTailNatMassSpace_dvdMonotone
+        (Finset.range (K + 1))
+        (fun k : ℕ => x * 2^k)
+        (geometricIncrement base ratio)
+        H.increment_nonneg)).weightedHitMass A ≤
+      1 + error := by
+  let H :=
+    ofGeometricIncrementBaseEqOneSub
+      x K base ratio error hbaseEq hr0 hr1 herror
+  exact
+    finiteStepTail_weightedHitMass_le_one_add_error
+      W IOf hIOf
+      (Finset.range (K + 1))
+      (fun k : ℕ => x * 2^k)
+      (geometricIncrement base ratio)
+      s hA H
+
+end TruncationEnvelopeEstimate
+
+end DkMath.NumberTheory.PrimitiveSet

@@ -649,21 +649,21 @@ $$
 - 目的：\(\text{twoTail}(c)\) を \( \text{rad}(ab)^\gamma \)（あるいは \( \text{rad}(abc)^\gamma \)）で**上から抑える補題**を別に立て、最終的に
   $$
   c \;=\; \text{rad}(c)\cdot \text{sqTail}(c)
-  ;\le; \text{rad}(c)\cdot \text{piSqRad}(c)\cdot \text{rad}(ab)^\gamma
+  \;\le\; \text{rad}(c)\cdot \text{piSqRad}(c)\cdot \text{rad}(ab)^\gamma
   $$
   と合成する。
 
 - ここに、既存の重い素因子制御（“heavy slice”）から出る
   $$
-  \text{piSqRad}(c) ;\le; \big(\text{rad}(ab)\big)^\delta
+  \text{piSqRad}(c) \;\le\; \big(\text{rad}(ab)\big)^\delta
   $$
   を掛け合わせれば
   $$
-  c ;\le; \text{rad}(c)\cdot \big(\text{rad}(ab)\big)^{\delta+\gamma}.
+  c \;\le\; \text{rad}(c)\cdot \big(\text{rad}(ab)\big)^{\delta+\gamma}.
   $$
   あとは \( \log \) の単調性と \(\log \text{rad}(abc)\) の下界で
   $$
-  \mathrm{quality}=\frac{\log c}{\log \text{rad}(abc)} ;\le; 1+\varepsilon
+  \mathrm{quality}=\frac{\log c}{\log \text{rad}(abc)} \;\le\; 1+\varepsilon
   \quad(\delta+\gamma \le 1+\varepsilon)
   $$
   を押し切れる（あなたの `quality_le_of_pi_tail_adj` がこの設計）。
@@ -706,13 +706,13 @@ lemma quality_le_of_pi_tail_general
 各素数 (p) の指数 (e=v_p(c)) に対し、平方部 \(\text{sqPart}(c):=\prod p^{2\lfloor e/2\rfloor}\) を導入すると**常に**
 
 $$
-\text{sqTail}(c)=\prod p^{e-1} ;\le; \prod p^{2\lfloor e/2\rfloor}=\text{sqPart}(c)
+\text{sqTail}(c)=\prod p^{e-1} \;\le\; \prod p^{2\lfloor e/2\rfloor}=\text{sqPart}(c)
 $$
 
 が成り立ちます。理由は (e-1 \le 2\lfloor e/2\rfloor)（(e) が偶数でも奇数でも真）。したがって
 
 $$
-c = \text{rad}(c)\cdot \text{sqTail}(c) ;\le; \text{rad}(c)\cdot \text{sqPart}(c).
+c = \text{rad}(c)\cdot \text{sqTail}(c) \;\le\; \text{rad}(c)\cdot \text{sqPart}(c).
 $$
 
 ここからのブリッジは

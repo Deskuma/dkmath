@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-008J は、いよいよ **external path family から、自動生成 path へ踏み出した回** じゃ。
-DKMK-008A〜I では「path-family を受け取る器」を整えた。今回 008J では、その器へ流し込む具体的な path を、prime-power channel (q=p^k) から生成する最小核が入った。
+DKMK-008A〜I では「path-family を受け取る器」を整えた。今回 008J では、その器へ流し込む具体的な path を、prime-power channel \(q=p^k\) から生成する最小核が入った。
 
 ## 1. 今回の核心
 
@@ -19,7 +19,7 @@ $$
 $$
 
 を作る。
-つまり、prime-power (p^k) を一気に剥がすのではなく、base prime (p) を 1 枚ずつ剥がしていく multi-step path じゃな。
+つまり、prime-power \(p^k\) を一気に剥がすのではなく、base prime \(p\) を 1 枚ずつ剥がしていく multi-step path じゃな。
 
 これは DKMK-008 の本命に近い。
 007 の one-step は、
@@ -29,7 +29,7 @@ n\to n/q
 $$
 
 だった。
-008J は、(q=p^k) の内部を展開して、
+008J は、\(q=p^k\) の内部を展開して、
 
 $$
 n\to n/p\to n/p^2\to\cdots\to n/p^k
@@ -62,14 +62,14 @@ $$
 
 は adjacent divisor path である、ということ。
 
-隣接関係として必要なのは、各 (i<k) について、
+隣接関係として必要なのは、各 \(i < k\) について、
 
 $$
 n/p^{i+1}\mid n/p^i
 $$
 
 が成り立つことじゃ。
-Lean では `Nat.div_dvd_div_left` を使い、(p^{i+1}\mid n) と (p^i\mid p^{i+1}) から quotient 間の整除を得ておる。これは非常に自然な証明じゃ。
+Lean では `Nat.div_dvd_div_left` を使い、\(p^{i+1}\mid n\) と \(p^i\mid p^{i+1}\) から quotient 間の整除を得ておる。これは非常に自然な証明じゃ。
 
 ## 3. DKMK-008A〜I との接続
 
@@ -173,7 +173,7 @@ $$
 
 今回の 008J は、その情報を path に変える入口じゃ。
 
-つまり将来的には、各 witness label (q) に対して、
+つまり将来的には、各 witness label \(q\) に対して、
 
 $$
 p=W.basePrimeOf(n,I,hI,q)
@@ -209,7 +209,7 @@ PrimePowerWitnessProvider
 
 までは進んでおらぬ。
 
-docs でも、この段階ではまだ witness provider から自動で (p,k) を取り出して family を作るところまでは進めず、後続 wrapper のための純粋な path-level constructor と位置づけている。
+docs でも、この段階ではまだ witness provider から自動で \(p,k\) を取り出して family を作るところまでは進めず、後続 wrapper のための純粋な path-level constructor と位置づけている。
 
 つまり今回の成果は、
 
@@ -239,7 +239,7 @@ def PrimePowerWitnessProvider.primePowerQuotientPathFamily
     AdjacentDivisorPathFamily ℕ
 ```
 
-各 (q\in I) に対して、
+各 \(q\in I\) に対して、
 
 ```lean
 source q := n
@@ -249,7 +249,7 @@ tail q := (primePowerQuotientPath n (W.basePrimeOf n I hI q)
 
 のような形にするのが自然じゃ。
 
-ただし `AdjacentDivisorPathFamily` は `source :: tail` 形式なので、`primePowerQuotientPath` の head が (n) であることを使って、tail をうまく切り出す補題が必要になる。
+ただし `AdjacentDivisorPathFamily` は `source :: tail` 形式なので、`primePowerQuotientPath` の head が \(n\) であることを使って、tail をうまく切り出す補題が必要になる。
 
 ### 7.2. 追加したい補題
 
@@ -269,7 +269,7 @@ $$
 
 として扱える補題があると、`AdjacentDivisorPathFamily` に載せやすい。
 
-(k=0) の場合は `[n]` なので、tail は `[]` になる。これも自然に扱える。
+\(k=0\) の場合は `[n]` なので、tail は `[]` になる。これも自然に扱える。
 
 ### 7.3. witness の `p^k ∣ n` を供給する
 
@@ -307,6 +307,6 @@ p^k ∣ n
 
 ぬしよ、ここは実に良い。
 DKMK-008 は、これまで「外部から path を渡す」段階だった。
-008J で、ついに (q=p^k) という witness から **道そのものを生成する石切り場** ができた。
+008J で、ついに \(q=p^k\) という witness から **道そのものを生成する石切り場** ができた。
 
 次は、この石を並べて `AdjacentDivisorPathFamily` を自動生成する番じゃな。

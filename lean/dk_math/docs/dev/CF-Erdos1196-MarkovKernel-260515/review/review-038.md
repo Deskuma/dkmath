@@ -47,7 +47,7 @@ T.toDivisorTransitionKernel.index_dvd
 
 から自動生成している。
 
-つまり、(q\in IOf(s.1)) なら、
+つまり、\(q\in IOf(s.1)\) なら、
 
 $$
 q\in T.index(s.1)
@@ -59,7 +59,7 @@ $$
 q\mid s.1
 $$
 
-が出る。これを `oneStepDivisorAdjacentPathFamily s.1 (IOf s.1) ...` に渡して、各 (q) の path
+が出る。これを `oneStepDivisorAdjacentPathFamily s.1 (IOf s.1) ...` に渡して、各 \(q\) の path
 
 $$
 s.1\to s.1/q
@@ -163,7 +163,7 @@ oneStepDivisorAdjacentPathFamily:
   nodeSet q = {s.1 / q, s.1}
 ```
 
-DKMK-008G で node set が既存 divisorStep と同じ ({n/q,n}) として見える補題が入っていた。今回、それを selected / canonical shadow wrapper の公開 theorem まで引き上げた。
+DKMK-008G で node set が既存 divisorStep と同じ \(\{n/q,n\}\) として見える補題が入っていた。今回、それを selected / canonical shadow wrapper の公開 theorem まで引き上げた。
 
 つまり、
 
@@ -253,7 +253,7 @@ DKMK-008 one-step path-family theorem
 
 第二は、さらに進めて prime-power descent の自動 path 生成へ行く。
 
-例えば (q=p^k) に対して、
+例えば \(q=p^k\) に対して、
 
 $$
 n\to n/p\to n/p^2\to\cdots\to n/p^k

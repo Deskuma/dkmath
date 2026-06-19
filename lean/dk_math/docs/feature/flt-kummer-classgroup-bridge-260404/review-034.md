@@ -24,7 +24,7 @@ $$
 * \(P \mid (p)\) 分岐は 2 target 待ち
 
 という状態じゃった。
-いまはその 2 target が両方埋まったので、`chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack` に入れるべき deep assumptions が actual theorem に置き換わった、と見てよい。  
+いまはその 2 target が両方埋まったので、`chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack` に入れるべき deep assumptions が actual theorem に置き換わった、と見てよい。
 
 つまり、Stage 1 の戦場そのものはもう
 
@@ -93,7 +93,7 @@ $$
 * `cyclotomicUnitNormalization_of_tailFactorCoprimeRoute`
 
 へ接続し、Stage 2 まで雪崩のように流すことじゃ。
-ここまで行けば、残る本丸は **Stage 3 の norm descent** にかなり集中するはずじゃ。  
+ここまで行けば、残る本丸は **Stage 3 の norm descent** にかなり集中するはずじゃ。
 
 ## ひとことで総括
 

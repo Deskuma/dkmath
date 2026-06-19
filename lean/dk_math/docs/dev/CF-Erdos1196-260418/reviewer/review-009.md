@@ -2,7 +2,7 @@
 
 ## 1. 総評
 
-これは **小さいが、筋の良い一手** じゃ。  
+これは **小さいが、筋の良い一手** じゃ。
 今回の差分は新しい大定理を足したのではなく、`PrimitiveWitnessFamily` の公開面に **minimal counting / extraction alias** を 1 段だけ追加したものじゃな。追加されたのは
 
 - `channelProduct`
@@ -43,7 +43,7 @@
 \text{channelProduct}
 \]
 
-という **public-facing な数え上げ語彙** を 1 枚かぶせた格好じゃ。  
+という **public-facing な数え上げ語彙** を 1 枚かぶせた格好じゃ。
 つまり内部では `F.support.prod id` として持っていたものを、公開面では
 
 \[
@@ -73,7 +73,7 @@ F.\texttt{channelProduct}
 F.\texttt{channelProduct} := \prod_{q \in F.\texttt{support}} q
 \]
 
-を public 名で固定したことじゃ。  
+を public 名で固定したことじゃ。
 中身そのものは新しくない。じゃが意味ははっきりしておる。`PrimitiveWitnessFamily` は primitive witness の有限族を持っておるので、その support の積は **その family が生み出す相異なる prime channel の squarefree な総量** を表しておる。つまり `channelProduct` は、単なる product alias ではなく、bridge 文脈では
 
 \[
@@ -84,19 +84,19 @@ F.\texttt{channelProduct} := \prod_{q \in F.\texttt{support}} q
 
 ### 3.2. `channelProduct_eq_support_prod` の意味
 
-この補題は中身としては `rfl` じゃ。  
+この補題は中身としては `rfl` じゃ。
 じゃが API 設計としては重要じゃ。なぜなら公開面では `channelProduct` を使いたいが、内部の既存補題群はまだ `support.prod id` を使っている。そこで
 
 \[
 F.\texttt{channelProduct} = F.\texttt{support}.\prod id
 \]
 
-を `[simp]` で与えておくと、**旧 spine と新 alias の往復コストがゼロになる**。  
+を `[simp]` で与えておくと、**旧 spine と新 alias の往復コストがゼロになる**。
 Lean 的には小さい工夫じゃが、公開 API を厚くしすぎずに整える、という今回の狙いにとても合っておる。
 
 ### 3.3. `channelProduct_le_supportMass` の意味
 
-これも新数学ではなく既存 `supportMassLowerBound` の再公開じゃ。  
+これも新数学ではなく既存 `supportMassLowerBound` の再公開じゃ。
 ただ、名前の意味は明確で、
 
 \[
@@ -105,7 +105,7 @@ F.\texttt{channelProduct}
 \operatorname{supportMass}(a^d-b^d)
 \]
 
-という形で、family object から直接 lower bound が読める。  
+という形で、family object から直接 lower bound が読める。
 つまり利用側から見ると、
 
 \[
@@ -120,7 +120,7 @@ F.\texttt{channelProduct}
 
 ### 3.4. example の意味
 
-今回の example は、数学的には大きくないが **公開導線の検査として非常に適切** じゃ。  
+今回の example は、数学的には大きくないが **公開導線の検査として非常に適切** じゃ。
 singleton family `primitiveWitnessFamilyPack_8_1_1` に対して、
 
 \[
@@ -135,7 +135,7 @@ singleton family `primitiveWitnessFamilyPack_8_1_1` に対して、
 \operatorname{supportMass}(8^1-1^1)
 \]
 
-を public method だけで読めることを示している。  
+を public method だけで読めることを示している。
 これは「alias を足しただけ」で終わらず、その alias が本当に利用者の記述を短くしている、と証明しておる。そこが良い。
 
 ---
@@ -146,7 +146,7 @@ singleton family `primitiveWitnessFamilyPack_8_1_1` に対して、
 
 ### 4.1. support の multiplicative 読みが閉じた
 
-前までは、family の multiplicative size を読むには `F.support.prod id` と内部表現に触れる必要があった。  
+前までは、family の multiplicative size を読むには `F.support.prod id` と内部表現に触れる必要があった。
 今回はそれが
 
 \[
@@ -157,18 +157,18 @@ F.\texttt{channelProduct}
 
 ### 4.2. lower bound が channel-product 名で閉じた
 
-前までは lower bound は `supportMassLowerBound` という support ベースの名で読んでいた。  
-今回はそれが `channelProduct_le_supportMass` となり、「channel を掛け合わせた量が support mass 以下になる」という読みが前面に出た。  
+前までは lower bound は `supportMassLowerBound` という support ベースの名で読んでいた。
+今回はそれが `channelProduct_le_supportMass` となり、「channel を掛け合わせた量が support mass 以下になる」という読みが前面に出た。
 この読み替えは、次の counting / extraction 段へ進む時に効く。なぜなら次は product だけでなく card や各 channel の extraction を並べていく段だからじゃ。
 
 ---
 
 ## 5. 良い点
 
-まず、**再包装に徹している** のがよい。  
+まず、**再包装に徹している** のがよい。
 新しい theorem burden を増やさず、既存 lower-bound API を public surface 向けに読みやすくしただけで閉じている。これは今のフェーズに合っておる。
 
-次に、`channelProduct` という名が bridge 文脈に素直に合っておる。  
+次に、`channelProduct` という名が bridge 文脈に素直に合っておる。
 `support.prod id` は内部表現としては正しいが、利用側には味気ない。`channelProduct` なら「disjoint channels の multiplicative size」とすぐ読める。ここは naming の勝ちじゃ。
 
 最後に、今のお主の方針、すなわち **入口ドキュメント導線は後回しにして extraction/counting を先へ進める** という判断と完全に噛み合っておる。public surface を微増しつつ、数学的な次手を阻害しないからじゃ。
@@ -179,8 +179,8 @@ F.\texttt{channelProduct}
 
 ### 6.1. まだ `counting` より `product alias` の段階である
 
-今回の `channelProduct` は multiplicative size を読む alias じゃ。  
-したがって、厳密にはまだ「counting API が整った」というより、「counting/extraction へ進むための product 語彙が整った」という段階じゃな。  
+今回の `channelProduct` は multiplicative size を読む alias じゃ。
+したがって、厳密にはまだ「counting API が整った」というより、「counting/extraction へ進むための product 語彙が整った」という段階じゃな。
 次の本命は、やはり
 
 - `support.card`
@@ -191,7 +191,7 @@ F.\texttt{channelProduct}
 
 ### 6.2. `channelProduct` は squarefree 的情報しか持たない
 
-`Finset` の product なので、当然ながら multiplicity は忘れておる。  
+`Finset` の product なので、当然ながら multiplicity は忘れておる。
 いまの橋の目的は `rad` 的 lower bound だから、それで正しい。じゃが、将来 valuation の重み付き counting へ進むなら、別の quantity が要る。ゆえに `channelProduct` はあくまで
 
 \[
@@ -208,7 +208,7 @@ F.\texttt{channelProduct}
 - `supportMassLowerBound`
 - `channelProduct`
 
-はある。  
+はある。
 じゃが、たとえば
 
 \[
@@ -221,7 +221,7 @@ q \in F.\texttt{support} \Rightarrow \operatorname{Prime}(q)
 q \in F.\texttt{support} \Rightarrow q \mid a^d-b^d
 \]
 
-を method 名で読める形にはまだなっておらぬ。  
+を method 名で読める形にはまだなっておらぬ。
 ここがまさに次の extraction 段の中心になりそうじゃ。
 
 ---
@@ -273,11 +273,11 @@ q \in F.\texttt{support} \Rightarrow q \mid a^d-b^d
 
 ## 8. 最終判断
 
-今回の差分は、**bridge の公開面に multiplicative counting 語彙を足した回** じゃ。  
+今回の差分は、**bridge の公開面に multiplicative counting 語彙を足した回** じゃ。
 数学の本体を前へ押したというより、次の extraction/counting 段へ進むための public surface を整えた、と見るのが正しい。
 
-そして、その整理の仕方が良い。  
-`channelProduct` は内部表現の露出を減らしつつ、既存 lower-bound spine と完全に整合しておる。  
+そして、その整理の仕方が良い。
+`channelProduct` は内部表現の露出を減らしつつ、既存 lower-bound spine と完全に整合しておる。
 文書導線を後に回し、次に
 
 \[

@@ -34,7 +34,7 @@ PrimePowerWitnessProvider.globalLogCapacityKernel_weightedHitMass_le_const
   IOf hIOf s F hindex).weightedHitMass A ≤ C
 ```
 
-つまり、選択された global log-capacity kernel を `SourceControlledChainFamily` に適用し、その weighted family が primitive set (A) を hit する総質量は、source 側の一様上界 (C) を超えない、という形まで落ちた。
+つまり、選択された global log-capacity kernel を `SourceControlledChainFamily` に適用し、その weighted family が primitive set \(A\) を hit する総質量は、source 側の一様上界 \(C\) を超えない、という形まで落ちた。
 
 数学的には、
 
