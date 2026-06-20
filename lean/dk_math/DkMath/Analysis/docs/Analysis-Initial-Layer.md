@@ -75,8 +75,8 @@ DkMath.Analysis.DkReal.DkNNRealQ
   a canonical NatCast and CommSemiring instance
 
 DkMath.Analysis.DkReal.Order
-  asymptotic lower-endpoint order, Equiv compatibility, and PartialOrder on
-  DkNNRealQ
+  asymptotic lower-endpoint order, Equiv compatibility, PartialOrder,
+  ordered-semiring compatibility, and totality research boundary
 
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
@@ -87,6 +87,8 @@ computability significance are recorded in
 [`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).
 The completed quotient-semiring checkpoint is summarized in
 [`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
+The internal totality route is analyzed in
+[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
 
 `RealBridge` remains the home of continuity and interval mapping. The separate
 `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
@@ -104,7 +106,8 @@ Order:
   zero is least
   IsOrderedRing packages semiring-level ordered compatibility
   canonical, strict, and linear order structures remain open
-  investigate totality before any LinearOrder claim
+  investigate totality by persistent separation versus persistent overlap
+  use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:
   select the unique semantic limit

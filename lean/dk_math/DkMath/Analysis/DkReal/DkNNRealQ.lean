@@ -31,9 +31,13 @@ order, and zero is the least quotient value. `DkReal.Order` packages these
 facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
 strict, and linear order structures remain unclaimed.
 
-[TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
+[TODO: totality] Prefer an internal proof through persistent interval
+separation/overlap before importing a semantic linear order.
+
+[TODO: semantic-bridge] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,
-natural powers, and the future order.
+natural powers, and order. It should also provide an independent validation
+of any future internal totality theorem.
 -/
 
 namespace DkMath.Analysis

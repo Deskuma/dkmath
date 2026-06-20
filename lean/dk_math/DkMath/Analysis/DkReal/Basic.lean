@@ -56,14 +56,25 @@ theorem succ_hi_le_hi (x : DkReal) (n : ℕ) :
     (x.interval (n + 1)).hi ≤ (x.interval n).hi :=
   (x.nested n).2
 
-/-- Lower endpoints are monotone across arbitrary approximation stages. -/
+/--
+Lower endpoints are monotone across arbitrary approximation stages.
+
+This is one half of persistence for comparison orientation: a later Core
+observation cannot move left of an earlier lower bound.
+-/
 theorem lo_mono (x : DkReal) {n m : ℕ} (h : n ≤ m) :
     (x.interval n).lo ≤ (x.interval m).lo := by
   induction m, h using Nat.le_induction with
   | base => exact le_rfl
   | succ m hnm ih => exact ih.trans (x.lo_le_succ_lo m)
 
-/-- Upper endpoints are antitone across arbitrary approximation stages. -/
+/--
+Upper endpoints are antitone across arbitrary approximation stages.
+
+Together with `lo_mono`, this implies that once two approximation intervals
+are strictly separated, their left/right orientation persists at every later
+stage.
+-/
 theorem hi_antitone (x : DkReal) {n m : ℕ} (h : n ≤ m) :
     (x.interval m).hi ≤ (x.interval n).hi := by
   induction m, h using Nat.le_induction with

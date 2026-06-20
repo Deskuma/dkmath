@@ -19,6 +19,12 @@ needed at this layer.
 
 The interval is closed and ordered. This validity invariant is essential for
 the separation estimates used by representation equivalence.
+
+For pairwise comparison, `separation I J` is the finite rational Gap between
+two observed interval universes. It is zero in the Merge/overlap state and
+positive exactly when one interval is strictly separated from the other.
+This finite geometry is the proposed basis for proving totality without
+selecting a Mathlib real limit.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -141,7 +147,14 @@ theorem mulNonneg_width_eq
 
 The separation is zero when the intervals overlap. Otherwise it is the
 positive rational gap between the interval lying on the left and the interval
-lying on the right.
+lying on the right. In the totality design this is the comparison Gap inside
+the hull, or "comparison Big", containing both intervals.
+
+[TODO: totality/interval] Prove:
+
+* `separation I J = 0` iff `I.lo ≤ J.hi ∧ J.lo ≤ I.hi`;
+* strict left separation and strict right separation are mutually exclusive;
+* shrinking both intervals cannot decrease a positive separation.
 -/
 
 /-- Nonnegative separation between two closed rational intervals. -/

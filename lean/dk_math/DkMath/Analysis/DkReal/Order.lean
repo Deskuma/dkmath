@@ -23,8 +23,46 @@ lower-endpoint distance and therefore implies `DkReal.Equiv`.
 The relation is invariant under `Equiv` in both arguments, so it descends to a
 partial order on `DkNNRealQ`.
 
-[TODO] Prove totality, or identify the additional representation theorem needed
-to derive it.
+## Cosmic comparison geometry
+
+The order can be read in DkMath's Core--Gap language. At stage `n`, the two
+lower endpoints are the observable Core coordinates. Their directed excess
+
+`x.lo n - y.lo n`
+
+is clipped to its positive part by `orderDefect`. The widths of the two
+intervals are the unresolved Gap. Thus `Le x y` says that the part of the
+`x`-Core protruding to the right of the `y`-Core disappears as the common
+comparison Gap closes.
+
+For totality, the most promising internal route is not to choose the sign of
+an abstract real limit. It is the following trichotomy of nested rational
+intervals:
+
+1. at some stage `x.hi < y.lo`; nestedness makes this left separation
+   persistent and gives `Le x y`;
+2. at some stage `y.hi < x.lo`; symmetrically this gives `Le y x`;
+3. neither separation ever occurs; every pair of stage intervals overlaps,
+   their separation is identically zero, and hence `Equiv x y`.
+
+This is a two-universe Big/Core/Gap argument entirely inside the rational
+representation layer. Here "comparison Big" means the hull containing the two
+stage intervals; it is an explanatory geometric construction, not the
+algebraic `DkMath.CosmicFormula.CoreBeamGap.Big`.
+
+[TODO: totality/interval] Add endpoint lemmas characterizing zero separation
+as overlap and proving that strict left or right separation persists under
+nested refinement.
+
+[TODO: totality/representation] Prove that persistent overlap implies `Equiv`,
+and that one witnessed strict separation implies the corresponding `Le`.
+
+[TODO: totality/quotient] Combine the three cases into representative totality,
+lift it to `DkNNRealQ`, and only then consider a `LinearOrder` or linear ordered
+semiring API.
+
+[TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
+cross-check, not as a dependency of the computable order core.
 
 Addition, multiplication on nonnegative representations, and natural powers
 are monotone for this order, and zero is the least quotient value. The
@@ -35,7 +73,21 @@ strict-order, or linear-order structure is claimed.
 
 namespace DkMath.Analysis.DkReal
 
-/-- Positive lower-endpoint order defect at approximation stage `n`. -/
+/-!
+## I. Directed Core defect
+
+The comparison starts from finite rational observations. No semantic limit is
+chosen: direction is measured by the positive part of a lower-endpoint
+difference, and order means disappearance of that defect.
+-/
+
+/--
+Positive lower-endpoint order defect at approximation stage `n`.
+
+This is the directed Core excess in the pairwise comparison universe:
+`orderDefect x y n = 0` exactly when the observed lower Core of `x` does not
+lie to the right of that of `y`.
+-/
 def orderDefect
     (x y : DkMath.Analysis.DkReal) (n : ℕ) : ℚ :=
   max 0 ((x.interval n).lo - (y.interval n).lo)
@@ -44,10 +96,18 @@ def orderDefect
 Asymptotic order on interval representations.
 
 `Le x y` states that any positive excess of the lower endpoint of `x` over
-that of `y` vanishes with increasing precision.
+that of `y` vanishes with increasing precision. It does not select a real
+limit; it compares only rational Core observations against a shrinking Gap.
 -/
 def Le (x y : DkMath.Analysis.DkReal) : Prop :=
   Filter.Tendsto (orderDefect x y) Filter.atTop (nhds 0)
+
+/-!
+## II. Preorder and extensional equality
+
+At the representation level `Le` is a preorder. Its symmetric kernel is
+exactly the vanishing-separation relation needed by the quotient.
+-/
 
 /-- Asymptotic order is reflexive. -/
 theorem le_refl (x : DkMath.Analysis.DkReal) : Le x x := by
@@ -55,7 +115,12 @@ theorem le_refl (x : DkMath.Analysis.DkReal) : Le x x := by
   simp only [sub_self, max_self]
   exact tendsto_const_nhds
 
-/-- Representation equivalence implies asymptotic order. -/
+/--
+Representation equivalence implies asymptotic order.
+
+Vanishing interval separation and vanishing widths force the directed
+lower-Core excess to vanish.
+-/
 theorem equiv_le
     {x y : DkMath.Analysis.DkReal} (hxy : Equiv x y) :
     Le x y := by
@@ -63,7 +128,12 @@ theorem equiv_le
   simpa only [Le, orderDefect, max_comm] using
     hlo.max tendsto_const_nhds
 
-/-- Asymptotic order is transitive. -/
+/--
+Asymptotic order is transitive.
+
+The direct defect from `x` to `z` is bounded by the sum of the defects through
+the intermediate Core `y`.
+-/
 theorem le_trans
     {x y z : DkMath.Analysis.DkReal} (hxy : Le x y) (hyz : Le y z) :
     Le x z := by
@@ -89,7 +159,13 @@ theorem le_trans
       · exact add_nonneg (le_max_left _ _) (le_max_left _ _)
       · linarith)
 
-/-- Mutual asymptotic order implies representation equivalence. -/
+/--
+Mutual asymptotic order implies representation equivalence.
+
+The two directed defects sum to the absolute lower-endpoint difference.
+Vanishing of both directions therefore collapses the pairwise Core distance,
+which bounds interval separation.
+-/
 theorem equiv_of_le_of_le
     {x y : DkMath.Analysis.DkReal} (hxy : Le x y) (hyx : Le y x) :
     Equiv x y := by
@@ -152,6 +228,14 @@ theorem zero_le
     exact max_eq_left (neg_nonpos.mpr (hx n))
   rw [hzero]
   exact tendsto_const_nhds
+
+/-!
+## III. Ordered arithmetic
+
+The arithmetic proofs control output defects by null input defects. Addition
+uses subadditivity; multiplication additionally uses uniform boundedness of
+nonnegative lower endpoints.
+-/
 
 /--
 Stagewise addition is monotone for asymptotic order.
@@ -244,6 +328,13 @@ end DkMath.Analysis.DkReal
 
 namespace DkMath.Analysis.DkNNReal
 
+/-!
+## IV. Nonnegative wrapper order
+
+The wrapper carries all nonnegativity hypotheses needed by multiplication, so
+its public order lemmas have no proof arguments.
+-/
+
 /-- Asymptotic order lifted to nonnegative representation wrappers. -/
 def Le (x y : DkNNReal) : Prop :=
   DkReal.Le x.val y.val
@@ -275,6 +366,14 @@ end DkMath.Analysis.DkNNReal
 
 namespace DkMath.Analysis.DkNNRealQ
 
+/-!
+## V. Quotient order and Mathlib hierarchy
+
+Congruence of representative order permits a quotient relation. Mutual order
+becomes quotient equality, while the arithmetic compatibility theorems supply
+the semiring-level ordered hierarchy.
+-/
+
 /-- Quotient order induced by asymptotic order on representatives. -/
 def le (x y : DkNNRealQ) : Prop :=
   Quotient.liftOn₂ x y DkNNReal.Le
@@ -282,10 +381,16 @@ def le (x y : DkNNRealQ) : Prop :=
       intro a a' b b' haa' hbb'
       exact propext (DkNNReal.le_congr haa' hbb'))
 
+/-- Standard `≤` notation for the quotient's asymptotic order. -/
 instance : LE DkNNRealQ where
   le := le
 
-/-- The quotient order is a partial order. -/
+/--
+The quotient order is a partial order.
+
+Antisymmetry is not raw equality of interval sequences. Mutual order first
+produces vanishing separation of representatives and then quotient equality.
+-/
 instance : PartialOrder DkNNRealQ where
   le_refl x := by
     refine Quotient.inductionOn x ?_
@@ -377,7 +482,8 @@ Despite its historical name, Mathlib's `IsOrderedRing` requires only a
 `Semiring`, a partial order, monotone addition, `0 ≤ 1`, and monotonicity of
 multiplication by nonnegative factors. Every quotient value is nonnegative,
 so the stronger two-variable multiplication theorem supplies both one-sided
-fields.
+fields. This instance does not assert additive inverses, totality, canonical
+order, strict monotonicity, or semantic equivalence with `NNReal`.
 -/
 instance : IsOrderedRing DkNNRealQ where
   add_le_add_left _ _ h z := add_le_add_left h z

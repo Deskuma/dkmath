@@ -1,14 +1,15 @@
-# DkNNRealQ CommSemiring Checkpoint
+# DkNNRealQ Ordered Algebra Checkpoint
 
 ## Result
 
-The first algebraic checkpoint of Route B is complete.
+The first algebraic and ordered-algebra checkpoint of Route B is complete.
 
 ```text
 DkNNRealQ = Quotient DkNNReal.equivSetoid
 ```
 
-is a Lean `CommSemiring`. Its representatives are nonnegative nested rational
+is a Lean `CommSemiring` with `PartialOrder` and the semiring-level
+`IsOrderedRing` predicate. Its representatives are nonnegative nested rational
 interval sequences of vanishing width. Two representatives are identified
 when their interval separation tends to zero.
 
@@ -41,11 +42,27 @@ interval sequence:
 n |-> class of the sequence k |-> [n,n].
 ```
 
-## Scope
+## Established Order Surface
+
+The order is defined by the vanishing positive lower-endpoint defect:
+
+```text
+x <= y  iff  max(0, x.lo(n) - y.lo(n)) -> 0.
+```
+
+The implementation establishes:
+
+- `PartialOrder DkNNRealQ`;
+- zero as the least quotient value;
+- monotonicity of addition and nonnegative multiplication;
+- monotonicity of natural powers;
+- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`.
 
 This checkpoint does not establish:
 
-- an order on `DkNNRealQ`;
+- totality or a `LinearOrder`;
+- canonical order by additive differences;
+- strict ordered-semiring structure;
 - completeness;
 - decidable equality;
 - representation of every `NNReal`;
@@ -54,17 +71,29 @@ This checkpoint does not establish:
 
 ## Next Independent Designs
 
-### Order
+### Totality
 
-The next phase defines representative order by vanishing positive
-lower-endpoint defect. It is invariant under vanishing-separation equivalence
-and yields a `PartialOrder` on `DkNNRealQ`.
+The preferred internal route uses the finite geometry of nested closed
+intervals. For two representations, exactly one of the following explanatory
+states should control the proof:
 
-Addition, multiplication, and natural powers are monotone for this order.
-Zero is the least quotient value. These facts provide Mathlib's `IsOrderedRing`
-predicate, which at this version requires only a semiring and partial order.
-Canonical order and totality remain separate questions.
-No `LinearOrder` is claimed yet.
+```text
+SeparatedLeft:
+  at some stage x.hi < y.lo, hence x <= y;
+
+SeparatedRight:
+  at some stage y.hi < x.lo, hence y <= x;
+
+Merge:
+  neither separation occurs, so every stage overlaps and x ~ y.
+```
+
+Nestedness makes either strict separation persistent. The Merge branch has
+stagewise separation zero and therefore gives `Equiv`. This is the current
+candidate for proving totality without evaluating into `Real`.
+
+See
+[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
 
 ### Semantic Bridge
 
@@ -80,4 +109,4 @@ eval (x * y) = eval x * eval y
 ```
 
 Such a bridge may be `noncomputable`; that declaration must remain outside the
-computable core.
+computable core. It should validate, rather than define, the internal order.

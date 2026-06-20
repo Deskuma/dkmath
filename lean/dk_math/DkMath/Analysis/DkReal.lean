@@ -31,15 +31,26 @@ All endpoint operations in this import tree remain computable. No represented
 limit in Mathlib's `Real` or `NNReal` is selected here.
 
 `DkReal.Order` defines a quotient-compatible asymptotic order and installs a
-`PartialOrder` on `DkNNRealQ`.
+`PartialOrder` and Mathlib's semiring-level `IsOrderedRing` predicate on
+`DkNNRealQ`. Addition, nonnegative multiplication, and natural powers are
+monotone, and zero is least.
 
-[TODO] Prove additive and multiplicative monotonicity, then determine whether
-the quotient order is total before installing ordered-semiring typeclasses.
+[TODO: totality] Prove totality internally from nested-interval geometry:
+eventual strict left separation, eventual strict right separation, or
+persistent overlap. The first two branches give one order direction; the
+overlap branch gives `Equiv`.
 
-[TODO] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
+[TODO: linear-order] Install no `LinearOrder` or linear ordered semiring API
+until representative totality has been proved and lifted through the quotient.
+
+[TODO: canonical-order] Treat `x ≤ y ↔ ∃ z, y = x + z` as an independent
+problem. It is not a consequence of the current ordered-semiring compatibility
+alone.
+
+[TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 chosen evaluation is independent of representatives. Such evaluation may
 legitimately be `noncomputable`.
 
-[TODO] General signed multiplication requires the minimum and maximum of four
+[TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
 endpoint products and belongs outside the current nonnegative API.
 -/

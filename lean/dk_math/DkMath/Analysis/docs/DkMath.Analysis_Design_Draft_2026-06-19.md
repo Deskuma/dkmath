@@ -51,13 +51,15 @@ The next independent tasks are:
    lower-endpoint defect, proves invariance under `Equiv`, and installs a
    `PartialOrder` on `DkNNRealQ`. Addition, multiplication, and natural powers
    are monotone, and zero is least. Mathlib's semiring-level `IsOrderedRing`
-   predicate is installed. Canonical order and totality remain to be
-   investigated before claiming stronger structures.
+   predicate is installed. The leading totality route is now the internal
+   trichotomy of persistent left separation, persistent right separation, and
+   persistent overlap. Canonical order remains independent.
 2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
    `BridgeReal.lean`, extract the unique real point of a nested interval
    representation and prove independence from representatives.
 3. **Bridge comparison.** Prove `Equiv x y -> eval x = eval y`; investigate
-   the converse from the nested-width hypotheses.
+   the converse from the nested-width hypotheses. Use semantic order to
+   cross-check, rather than define, internal totality.
 4. **General signed arithmetic.** General multiplication requires minimum and
    maximum over four endpoint products and must not reuse the name
    `mulNonneg`.
