@@ -50,9 +50,9 @@ The next independent tasks are:
 1. **Ordered algebra.** `DkReal.Order` now defines order by vanishing positive
    lower-endpoint defect, proves invariance under `Equiv`, and installs a
    `PartialOrder` on `DkNNRealQ`. Addition, multiplication, and natural powers
-   are monotone, and zero is least. Next package these results in the
-   appropriate ordered-algebra hierarchy and investigate totality before
-   claiming a `LinearOrder`.
+   are monotone, and zero is least. Mathlib's semiring-level `IsOrderedRing`
+   predicate is installed. Canonical order and totality remain to be
+   investigated before claiming stronger structures.
 2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
    `BridgeReal.lean`, extract the unique real point of a nested interval
    representation and prove independence from representatives.

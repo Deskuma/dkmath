@@ -102,7 +102,8 @@ Order:
   PartialOrder is implemented via vanishing positive lower-endpoint defect
   addition, multiplication, and natural-power monotonicity are proved
   zero is least
-  next package these results into the appropriate ordered-algebra typeclass
+  IsOrderedRing packages semiring-level ordered compatibility
+  canonical, strict, and linear order structures remain open
   investigate totality before any LinearOrder claim
 
 BridgeNNReal / BridgeReal:

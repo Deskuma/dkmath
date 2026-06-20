@@ -61,8 +61,9 @@ lower-endpoint defect. It is invariant under vanishing-separation equivalence
 and yields a `PartialOrder` on `DkNNRealQ`.
 
 Addition, multiplication, and natural powers are monotone for this order.
-Zero is the least quotient value. Remaining ordered-algebra work is selecting
-the appropriate typeclass hierarchy, together with totality.
+Zero is the least quotient value. These facts provide Mathlib's `IsOrderedRing`
+predicate, which at this version requires only a semiring and partial order.
+Canonical order and totality remain separate questions.
 No `LinearOrder` is claimed yet.
 
 ### Semantic Bridge

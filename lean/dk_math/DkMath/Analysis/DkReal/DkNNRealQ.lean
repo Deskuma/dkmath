@@ -27,8 +27,9 @@ Mathlib's `Real` is selected.
 under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
 
 Addition, multiplication, and natural powers are monotone for the asymptotic
-order, and zero is the least quotient value. Verify the intended
-ordered-algebra hierarchy before installing stronger typeclasses.
+order, and zero is the least quotient value. `DkReal.Order` packages these
+facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
+strict, and linear order structures remain unclaimed.
 
 [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,

@@ -28,8 +28,9 @@ to derive it.
 
 Addition, multiplication on nonnegative representations, and natural powers
 are monotone for this order, and zero is the least quotient value. The
-remaining ordered-algebra work is to match these theorems with the intended
-typeclass hierarchy.
+quotient therefore carries Mathlib's `IsOrderedRing` predicate, whose name is
+historical: its algebraic assumption is only `Semiring`. No canonical-order,
+strict-order, or linear-order structure is claimed.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -305,6 +306,10 @@ theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
   intro a
   exact DkNNReal.zero_le a
 
+/-- Zero is below one. -/
+theorem zero_le_one : (0 : DkNNRealQ) ≤ 1 :=
+  zero_le 1
+
 /-- Quotient addition is monotone in both arguments. -/
 theorem add_le_add
     {x y z w : DkNNRealQ} (hxy : x ≤ y) (hzw : z ≤ w) :
@@ -315,6 +320,18 @@ theorem add_le_add
   intro c d hcd
   exact DkNNReal.add_le_add hab hcd
 
+/-- Addition by a fixed right summand preserves order. -/
+theorem add_le_add_left
+    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
+    x + z ≤ y + z :=
+  add_le_add hxy (le_refl z)
+
+/-- Addition by a fixed left summand preserves order. -/
+theorem add_le_add_right
+    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
+    z + x ≤ z + y :=
+  add_le_add (le_refl z) hxy
+
 /-- Quotient multiplication is monotone in both arguments. -/
 theorem mul_le_mul
     {x y z w : DkNNRealQ} (hxy : x ≤ y) (hzw : z ≤ w) :
@@ -324,6 +341,18 @@ theorem mul_le_mul
   refine Quotient.inductionOn₂ z w ?_ hzw
   intro c d hcd
   exact DkNNReal.mul_le_mul hab hcd
+
+/-- Multiplication by a fixed left factor preserves order. -/
+theorem mul_le_mul_of_nonneg_left
+    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
+    z * x ≤ z * y :=
+  mul_le_mul (le_refl z) hxy
+
+/-- Multiplication by a fixed right factor preserves order. -/
+theorem mul_le_mul_of_nonneg_right
+    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
+    x * z ≤ y * z :=
+  mul_le_mul hxy (le_refl z)
 
 /--
 Natural powers are monotone.
@@ -340,5 +369,24 @@ theorem pow_le_pow
   | succ d ih =>
       rw [pow_succ_eq, pow_succ_eq]
       exact mul_le_mul ih hxy
+
+/--
+Ordered-semiring compatibility for the quotient.
+
+Despite its historical name, Mathlib's `IsOrderedRing` requires only a
+`Semiring`, a partial order, monotone addition, `0 ≤ 1`, and monotonicity of
+multiplication by nonnegative factors. Every quotient value is nonnegative,
+so the stronger two-variable multiplication theorem supplies both one-sided
+fields.
+-/
+instance : IsOrderedRing DkNNRealQ where
+  add_le_add_left _ _ h z := add_le_add_left h z
+  zero_le_one := zero_le_one
+  mul_le_mul_of_nonneg_left := by
+    intro a _ b c hbc
+    exact mul_le_mul_of_nonneg_left hbc a
+  mul_le_mul_of_nonneg_right := by
+    intro c _ a b hab
+    exact mul_le_mul_of_nonneg_right hab c
 
 end DkMath.Analysis.DkNNRealQ
