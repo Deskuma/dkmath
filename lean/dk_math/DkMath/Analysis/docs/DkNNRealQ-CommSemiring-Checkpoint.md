@@ -24,7 +24,8 @@ The following data remain in the computable representation layer:
 - quotient operations and natural-number casts.
 
 No point of Mathlib's `Real` or `NNReal` is selected. In particular, the
-Route B import tree contains no `noncomputable` declaration.
+`DkReal` / `DkNNRealQ` computable core contains no `noncomputable`
+declaration.
 
 ## Algebraic Meaning
 
@@ -33,10 +34,11 @@ removes representation dependence. Consequently, laws formerly stated modulo
 `DkNNReal.Equiv` become ordinary equality and support the standard Mathlib
 commutative-semiring API.
 
-The natural-number cast is the constant singleton representation:
+The natural-number cast is the equivalence class of the constant singleton
+interval sequence:
 
 ```text
-n |-> class([n,n], [n,n], ...).
+n |-> class of the sequence k |-> [n,n].
 ```
 
 ## Scope
@@ -54,9 +56,12 @@ This checkpoint does not establish:
 
 ### Order
 
-A representative-level order must be invariant under vanishing-separation
-equivalence. Candidate formulations should be compared before installing
-`LE`, `PartialOrder`, or `LinearOrder`.
+The next phase defines representative order by vanishing positive
+lower-endpoint defect. It is invariant under vanishing-separation equivalence
+and yields a `PartialOrder` on `DkNNRealQ`.
+
+Remaining order work is operation monotonicity and the question of totality.
+No `LinearOrder` is claimed yet.
 
 ### Semantic Bridge
 

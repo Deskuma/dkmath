@@ -23,8 +23,11 @@ This remains a computable representation layer. Quotient elimination is used
 only to define representation-independent operations; no evaluation into
 Mathlib's `Real` is selected.
 
-[TODO] Before adding an order instance, define an order predicate on
-representatives and prove invariance under `DkNNReal.Equiv` in both arguments.
+`DkReal.Order` defines an asymptotic representative order, proves invariance
+under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
+
+[TODO] Establish monotonicity of addition, multiplication, and powers for that
+order before extending the algebraic hierarchy to ordered semirings.
 
 [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,

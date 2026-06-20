@@ -74,6 +74,10 @@ DkMath.Analysis.DkReal.DkNNRealQ
   quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
   a canonical NatCast and CommSemiring instance
 
+DkMath.Analysis.DkReal.Order
+  asymptotic lower-endpoint order, Equiv compatibility, and PartialOrder on
+  DkNNRealQ
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -95,10 +99,9 @@ separate:
 
 ```text
 Order:
-  define a representative relation
-  prove Equiv compatibility
-  lift to DkNNRealQ
-  prove partial or linear order laws
+  PartialOrder is implemented via vanishing positive lower-endpoint defect
+  next prove operation monotonicity
+  investigate totality before any LinearOrder claim
 
 BridgeNNReal / BridgeReal:
   select the unique semantic limit

@@ -12,6 +12,7 @@ import DkMath.Analysis.DkReal.Arithmetic
 import DkMath.Analysis.DkReal.Equiv
 import DkMath.Analysis.DkReal.DkNNReal
 import DkMath.Analysis.DkReal.DkNNRealQ
+import DkMath.Analysis.DkReal.Order
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -29,8 +30,11 @@ Public entry point for the complete Route B algebraic checkpoint:
 All endpoint operations in this import tree remain computable. No represented
 limit in Mathlib's `Real` or `NNReal` is selected here.
 
-[TODO] Define a quotient-compatible order, or derive it from a separately
-isolated semantic evaluation map.
+`DkReal.Order` defines a quotient-compatible asymptotic order and installs a
+`PartialOrder` on `DkNNRealQ`.
+
+[TODO] Prove additive and multiplicative monotonicity, then determine whether
+the quotient order is total before installing ordered-semiring typeclasses.
 
 [TODO] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 chosen evaluation is independent of representatives. Such evaluation may
