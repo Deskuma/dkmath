@@ -35,13 +35,13 @@ limit in Mathlib's `Real` or `NNReal` is selected here.
 `DkNNRealQ`. Addition, nonnegative multiplication, and natural powers are
 monotone, and zero is least.
 
-[TODO: totality] Prove totality internally from nested-interval geometry:
-eventual strict left separation, eventual strict right separation, or
-persistent overlap. The first two branches give one order direction; the
-overlap branch gives `Equiv`.
+Totality is proved internally from nested-interval geometry. If a finite
+strict left separation is witnessed, it persists. Otherwise the reverse order
+defect is bounded by a vanishing interval width.
 
-[TODO: linear-order] Install no `LinearOrder` or linear ordered semiring API
-until representative totality has been proved and lifted through the quotient.
+[TODO: linear-order] Decide whether the now-proved quotient totality should be
+packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
+plus `Std.Total` so that decidable comparison remains an explicit choice.
 
 [TODO: canonical-order] Treat `x ≤ y ↔ ∃ z, y = x + z` as an independent
 problem. It is not a consequence of the current ordered-semiring compatibility

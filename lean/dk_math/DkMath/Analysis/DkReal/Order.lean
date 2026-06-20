@@ -50,16 +50,14 @@ representation layer. Here "comparison Big" means the hull containing the two
 stage intervals; it is an explanatory geometric construction, not the
 algebraic `DkMath.CosmicFormula.CoreBeamGap.Big`.
 
-[TODO: totality/interval] Add endpoint lemmas characterizing zero separation
-as overlap and proving that strict left or right separation persists under
-nested refinement.
+The overlap characterization, persistence lemmas, representative totality,
+and quotient totality are implemented below. Lean accepts the stronger
+two-branch proof: either a finite left separation is witnessed, or the reverse
+defect is bounded at every stage by the first interval's width.
 
-[TODO: totality/representation] Prove that persistent overlap implies `Equiv`,
-and that one witnessed strict separation implies the corresponding `Le`.
-
-[TODO: totality/quotient] Combine the three cases into representative totality,
-lift it to `DkNNRealQ`, and only then consider a `LinearOrder` or linear ordered
-semiring API.
+[TODO: linear-order] Decide whether to install a direct `LinearOrder` instance
+or expose totality through `Std.Total` while keeping decidability and classical
+comparison choices explicit.
 
 [TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
 cross-check, not as a dependency of the computable order core.
@@ -101,6 +99,16 @@ limit; it compares only rational Core observations against a shrinking Gap.
 -/
 def Le (x y : DkMath.Analysis.DkReal) : Prop :=
   Filter.Tendsto (orderDefect x y) Filter.atTop (nhds 0)
+
+/-- At stage `n`, the interval for `x` lies strictly to the left of that for `y`. -/
+def LeftSeparatedAt
+    (x y : DkMath.Analysis.DkReal) (n : ℕ) : Prop :=
+  (x.interval n).hi < (y.interval n).lo
+
+/-- At stage `n`, the interval for `y` lies strictly to the left of that for `x`. -/
+def RightSeparatedAt
+    (x y : DkMath.Analysis.DkReal) (n : ℕ) : Prop :=
+  (y.interval n).hi < (x.interval n).lo
 
 /-!
 ## II. Preorder and extensional equality
@@ -211,6 +219,99 @@ theorem le_congr
     exact le_trans (equiv_le hxx')
       (le_trans hx'y' (equiv_le (equiv_symm hyy')))
 
+/-!
+## III. Finite separation and total orientation
+
+Nestedness turns one finite strict separation into a permanent orientation.
+If no left separation ever appears, the reverse defect is bounded by the
+width of `x`, so it vanishes. This closes representative totality without
+selecting a semantic real limit.
+-/
+
+/-- A witnessed left separation persists at every later approximation stage. -/
+theorem leftSeparatedAt_persistent
+    {x y : DkMath.Analysis.DkReal} {n m : ℕ}
+    (hsep : LeftSeparatedAt x y n) (hnm : n ≤ m) :
+    LeftSeparatedAt x y m := by
+  unfold LeftSeparatedAt at *
+  exact (x.hi_antitone hnm).trans_lt
+    (hsep.trans_le (y.lo_mono hnm))
+
+/-- A witnessed right separation persists at every later approximation stage. -/
+theorem rightSeparatedAt_persistent
+    {x y : DkMath.Analysis.DkReal} {n m : ℕ}
+    (hsep : RightSeparatedAt x y n) (hnm : n ≤ m) :
+    RightSeparatedAt x y m :=
+  leftSeparatedAt_persistent hsep hnm
+
+/-- One finite left separation determines the asymptotic order `x ≤ y`. -/
+theorem le_of_leftSeparatedAt
+    {x y : DkMath.Analysis.DkReal} {n : ℕ}
+    (hsep : LeftSeparatedAt x y n) :
+    Le x y := by
+  have heq : ∀ᶠ m in Filter.atTop, orderDefect x y m = 0 := by
+    filter_upwards [Filter.eventually_ge_atTop n] with m hnm
+    have hpersist := leftSeparatedAt_persistent hsep hnm
+    unfold LeftSeparatedAt at hpersist
+    simp only [orderDefect]
+    exact max_eq_left (sub_nonpos.mpr
+      ((x.interval m).le_lo_hi.trans hpersist.le))
+  exact Filter.Tendsto.congr' (Filter.EventuallyEq.symm heq) tendsto_const_nhds
+
+/-- One finite right separation determines the reverse asymptotic order. -/
+theorem le_of_rightSeparatedAt
+    {x y : DkMath.Analysis.DkReal} {n : ℕ}
+    (hsep : RightSeparatedAt x y n) :
+    Le y x :=
+  le_of_leftSeparatedAt hsep
+
+/-- Stagewise overlap of two representations implies vanishing separation. -/
+theorem equiv_of_forall_overlaps
+    {x y : DkMath.Analysis.DkReal}
+    (hoverlap : ∀ n, (x.interval n).Overlaps (y.interval n)) :
+    Equiv x y := by
+  unfold Equiv
+  have heq :
+      (fun n => (x.interval n).separation (y.interval n)) =
+        fun _ => (0 : ℚ) := by
+    funext n
+    exact GapInterval.separation_eq_zero_of_overlaps (hoverlap n)
+  rw [heq]
+  exact tendsto_const_nhds
+
+/--
+If `x` is never strictly left-separated from `y`, then `y ≤ x`.
+
+At each stage `y.lo ≤ x.hi`; hence the positive lower-Core excess of `y` over
+`x` is bounded by the width of `x`, which tends to zero.
+-/
+theorem le_of_not_exists_leftSeparatedAt
+    {x y : DkMath.Analysis.DkReal}
+    (hsep : ¬ ∃ n, LeftSeparatedAt x y n) :
+    Le y x := by
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds x.tendsto_width_zero
+    (fun n => le_max_left 0 _)
+    (fun n => by
+      have hnot : ¬ (x.interval n).hi < (y.interval n).lo := by
+        intro hn
+        exact hsep ⟨n, hn⟩
+      have hyx : (y.interval n).lo ≤ (x.interval n).hi :=
+        le_of_not_gt hnot
+      simp only [orderDefect, GapInterval.width]
+      apply max_le
+      · exact (x.interval n).width_nonneg
+      · linarith)
+
+/-- The asymptotic order on all `DkReal` representations is total. -/
+theorem le_total_repr (x y : DkMath.Analysis.DkReal) :
+    Le x y ∨ Le y x := by
+  classical
+  by_cases hsep : ∃ n, LeftSeparatedAt x y n
+  · obtain ⟨n, hn⟩ := hsep
+    exact Or.inl (le_of_leftSeparatedAt hn)
+  · exact Or.inr (le_of_not_exists_leftSeparatedAt hsep)
+
 /--
 The rational zero approximation is below every nonnegative representation.
 
@@ -230,7 +331,7 @@ theorem zero_le
   exact tendsto_const_nhds
 
 /-!
-## III. Ordered arithmetic
+## IV. Ordered arithmetic
 
 The arithmetic proofs control output defects by null input defects. Addition
 uses subadditivity; multiplication additionally uses uniform boundedness of
@@ -329,7 +430,7 @@ end DkMath.Analysis.DkReal
 namespace DkMath.Analysis.DkNNReal
 
 /-!
-## IV. Nonnegative wrapper order
+## V. Nonnegative wrapper order
 
 The wrapper carries all nonnegativity hypotheses needed by multiplication, so
 its public order lemmas have no proof arguments.
@@ -362,12 +463,16 @@ theorem mul_le_mul
   DkReal.mulNonneg_le_mulNonneg
     x.nonnegative y.nonnegative z.nonnegative w.nonnegative hxy hzw
 
+/-- The wrapper order is total because the underlying representation order is total. -/
+theorem le_total (x y : DkNNReal) : Le x y ∨ Le y x :=
+  DkReal.le_total_repr x.val y.val
+
 end DkMath.Analysis.DkNNReal
 
 namespace DkMath.Analysis.DkNNRealQ
 
 /-!
-## V. Quotient order and Mathlib hierarchy
+## VI. Quotient order and Mathlib hierarchy
 
 Congruence of representative order permits a quotient relation. Mutual order
 becomes quotient equality, while the arithmetic compatibility theorems supply
@@ -404,6 +509,16 @@ instance : PartialOrder DkNNRealQ where
     refine Quotient.inductionOn₂ x y ?_
     intro a b hab hba
     exact Quotient.sound (DkReal.equiv_of_le_of_le hab hba)
+
+/-- The quotient order is total. -/
+theorem le_total (x y : DkNNRealQ) : x ≤ y ∨ y ≤ x := by
+  refine Quotient.inductionOn₂ x y ?_
+  intro a b
+  exact DkNNReal.le_total a b
+
+/-- Standard totality witness for the quotient order. -/
+instance : Std.Total (α := DkNNRealQ) (· ≤ ·) where
+  total := le_total
 
 /-- Zero is the least value of the nonnegative quotient. -/
 theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by

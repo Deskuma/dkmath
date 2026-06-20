@@ -2,7 +2,8 @@
 
 ## Status
 
-This is a pre-implementation report. No `LinearOrder` is claimed.
+The internal totality experiment is implemented and accepted by Lean. No
+direct `LinearOrder` is claimed yet.
 
 The current computable core already provides:
 
@@ -17,7 +18,7 @@ DkNNRealQ:
   pow_le_pow
 ```
 
-The remaining question is whether every pair satisfies
+Every pair now satisfies
 
 ```lean
 x <= y ∨ y <= x.
@@ -53,8 +54,8 @@ this protrusion disappears as precision increases.
 ## Main Finding
 
 The workspace contains a stronger route than selecting the sign of an
-unspecified real limit. Nested interval geometry suggests the following
-trichotomy.
+unspecified real limit. Nested interval geometry gives the following
+comparison.
 
 ### Separated Left
 
@@ -104,40 +105,43 @@ This route uses only:
 
 It does not require evaluation into Mathlib's `Real` or `NNReal`.
 
-## Proposed Lean Checkpoints
-
-The implementation should proceed in small lemmas.
+## Implemented Lean Checkpoints
 
 ```text
 GapInterval:
-  separation_eq_zero_iff_overlap
-  strict separation orientations are exclusive
+  Overlaps
+  separation_eq_zero_iff_overlaps
 
 DkReal:
-  leftSeparated persists under later stages
-  rightSeparated persists under later stages
-  Le of one witnessed left separation
-  Equiv of overlap at every stage
+  LeftSeparatedAt / RightSeparatedAt
+  leftSeparatedAt_persistent
+  rightSeparatedAt_persistent
+  le_of_leftSeparatedAt / le_of_rightSeparatedAt
+  equiv_of_forall_overlaps
+  le_of_not_exists_leftSeparatedAt
+  le_total_repr
 
 DkNNRealQ:
-  representative le_total
-  quotient le_total
-  LinearOrder decision only after verification
+  le_total
+  Std.Total (· <= ·)
 ```
 
-Suggested proposition names are provisional:
+No abstract `HasBigGapTotality` axiom was needed.
 
-```lean
-GapInterval.Overlaps
-DkReal.LeftSeparatedAt
-DkReal.RightSeparatedAt
-DkReal.le_of_leftSeparatedAt
-DkReal.equiv_of_forall_overlaps
-DkNNRealQ.le_total
+The final proof is stronger and shorter than the explanatory three-state
+picture:
+
+```text
+if exists n, x.hi(n) < y.lo(n):
+  x <= y
+else:
+  y.lo(n) <= x.hi(n) for every n
+  defect(y,x,n) <= width(x,n)
+  therefore y <= x
 ```
 
-Avoid adding an abstract `HasBigGapTotality` axiom while the concrete interval
-proof remains available.
+The Merge state remains useful for interpretation and is represented by
+`equiv_of_forall_overlaps`.
 
 ## Relation To The Hint
 
@@ -148,10 +152,10 @@ The hint correctly identifies:
 - positive and negative directed Core defects;
 - the Merge state.
 
-The refinement from workspace exploration is that totality may not require a
+The refinement from workspace exploration was correct: totality requires no
 new sign-selection principle. Nestedness turns a finite witnessed separation
-into a permanent orientation, while absence of either separation forces
-stagewise overlap.
+into a permanent orientation, while absence of left separation bounds the
+reverse defect by a vanishing width.
 
 ## Semantic Cross-Check
 

@@ -51,9 +51,9 @@ The next independent tasks are:
    lower-endpoint defect, proves invariance under `Equiv`, and installs a
    `PartialOrder` on `DkNNRealQ`. Addition, multiplication, and natural powers
    are monotone, and zero is least. Mathlib's semiring-level `IsOrderedRing`
-   predicate is installed. The leading totality route is now the internal
-   trichotomy of persistent left separation, persistent right separation, and
-   persistent overlap. Canonical order remains independent.
+   predicate is installed. Totality is proved internally from persistent
+   separation and a vanishing-width bound, and exported through `Std.Total`.
+   Canonical order and a direct `LinearOrder` instance remain independent.
 2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
    `BridgeReal.lean`, extract the unique real point of a nested interval
    representation and prove independence from representatives.

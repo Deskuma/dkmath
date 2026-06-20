@@ -105,8 +105,8 @@ Order:
   addition, multiplication, and natural-power monotonicity are proved
   zero is least
   IsOrderedRing packages semiring-level ordered compatibility
-  canonical, strict, and linear order structures remain open
-  investigate totality by persistent separation versus persistent overlap
+  totality is proved and exported through Std.Total
+  canonical, strict, and direct linear order structures remain open
   use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:

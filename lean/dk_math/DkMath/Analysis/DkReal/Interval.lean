@@ -150,16 +150,51 @@ positive rational gap between the interval lying on the left and the interval
 lying on the right. In the totality design this is the comparison Gap inside
 the hull, or "comparison Big", containing both intervals.
 
-[TODO: totality/interval] Prove:
-
-* `separation I J = 0` iff `I.lo ≤ J.hi ∧ J.lo ≤ I.hi`;
-* strict left separation and strict right separation are mutually exclusive;
-* shrinking both intervals cannot decrease a positive separation.
+The overlap characterization below is the finite comparison lemma used by the
+totality proof.
 -/
 
 /-- Nonnegative separation between two closed rational intervals. -/
 def separation (I J : GapInterval) : ℚ :=
   max 0 (max (I.lo - J.hi) (J.lo - I.hi))
+
+/-- Two closed rational intervals overlap when neither lies strictly beyond the other. -/
+def Overlaps (I J : GapInterval) : Prop :=
+  I.lo ≤ J.hi ∧ J.lo ≤ I.hi
+
+/-- Overlapping intervals have zero separation. -/
+theorem separation_eq_zero_of_overlaps
+    {I J : GapInterval} (h : I.Overlaps J) :
+    I.separation J = 0 := by
+  rcases h with ⟨hleft, hright⟩
+  unfold separation
+  apply max_eq_left
+  exact max_le
+    (sub_nonpos.mpr hleft)
+    (sub_nonpos.mpr hright)
+
+/-- Zero separation implies overlap of the two closed intervals. -/
+theorem overlaps_of_separation_eq_zero
+    {I J : GapInterval} (h : I.separation J = 0) :
+    I.Overlaps J := by
+  have hleft : I.lo - J.hi ≤ 0 := by
+    calc
+      I.lo - J.hi ≤ max (I.lo - J.hi) (J.lo - I.hi) := le_max_left _ _
+      _ ≤ I.separation J := le_max_right _ _
+      _ = 0 := h
+  have hright : J.lo - I.hi ≤ 0 := by
+    calc
+      J.lo - I.hi ≤ max (I.lo - J.hi) (J.lo - I.hi) := le_max_right _ _
+      _ ≤ I.separation J := le_max_right _ _
+      _ = 0 := h
+  constructor
+  · exact sub_nonpos.mp hleft
+  · exact sub_nonpos.mp hright
+
+/-- Separation vanishes exactly when the two closed intervals overlap. -/
+theorem separation_eq_zero_iff_overlaps (I J : GapInterval) :
+    I.separation J = 0 ↔ I.Overlaps J :=
+  ⟨overlaps_of_separation_eq_zero, separation_eq_zero_of_overlaps⟩
 
 /-- Interval separation is nonnegative. -/
 theorem separation_nonneg (I J : GapInterval) : 0 ≤ I.separation J :=

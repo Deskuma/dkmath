@@ -56,11 +56,12 @@ The implementation establishes:
 - zero as the least quotient value;
 - monotonicity of addition and nonnegative multiplication;
 - monotonicity of natural powers;
-- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`.
+- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`;
+- totality through `Std.Total (· ≤ ·)`.
 
 This checkpoint does not establish:
 
-- totality or a `LinearOrder`;
+- a direct `LinearOrder` instance;
 - canonical order by additive differences;
 - strict ordered-semiring structure;
 - completeness;
@@ -73,9 +74,8 @@ This checkpoint does not establish:
 
 ### Totality
 
-The preferred internal route uses the finite geometry of nested closed
-intervals. For two representations, exactly one of the following explanatory
-states should control the proof:
+The internal proof uses the finite geometry of nested closed intervals.
+The explanatory states are:
 
 ```text
 SeparatedLeft:
@@ -88,9 +88,10 @@ Merge:
   neither separation occurs, so every stage overlaps and x ~ y.
 ```
 
-Nestedness makes either strict separation persistent. The Merge branch has
-stagewise separation zero and therefore gives `Equiv`. This is the current
-candidate for proving totality without evaluating into `Real`.
+Nestedness makes strict separation persistent. More strongly, if no left
+separation exists, the reverse order defect is bounded by the first
+representation's vanishing width. Totality is therefore proved without
+evaluating into `Real`.
 
 See
 [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
