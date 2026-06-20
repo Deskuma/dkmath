@@ -26,8 +26,9 @@ partial order on `DkNNRealQ`.
 [TODO] Prove totality, or identify the additional representation theorem needed
 to derive it.
 
-[TODO] Prove compatibility with addition, multiplication by nonnegative
-values, and natural powers before installing ordered-semiring typeclasses.
+Addition is monotone for this order. The corresponding results for
+multiplication by nonnegative values and natural powers remain prerequisites
+for ordered-semiring typeclasses.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -132,6 +133,38 @@ theorem le_congr
     exact le_trans (equiv_le hxx')
       (le_trans hx'y' (equiv_le (equiv_symm hyy')))
 
+/--
+Stagewise addition is monotone for asymptotic order.
+
+The positive defect of the sum is bounded by the sum of the two positive
+defects, and the latter tends to zero.
+-/
+theorem add_le_add
+    {x y z w : DkMath.Analysis.DkReal}
+    (hxy : Le x y) (hzw : Le z w) :
+    Le (add x z) (add y w) := by
+  have hupper :
+      Filter.Tendsto
+        (fun n => orderDefect x y n + orderDefect z w n)
+        Filter.atTop (nhds 0) := by
+    simpa only [zero_add] using hxy.add hzw
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds hupper
+    (fun n => le_max_left 0 _)
+    (fun n => by
+      simp only [orderDefect, add_interval, addApprox, GapInterval.add]
+      apply max_le
+      · exact add_nonneg (le_max_left _ _) (le_max_left _ _)
+      · have hxy' :
+            (x.interval n).lo - (y.interval n).lo ≤
+              max 0 ((x.interval n).lo - (y.interval n).lo) :=
+          le_max_right _ _
+        have hzw' :
+            (z.interval n).lo - (w.interval n).lo ≤
+              max 0 ((z.interval n).lo - (w.interval n).lo) :=
+          le_max_right _ _
+        linarith)
+
 end DkMath.Analysis.DkReal
 
 namespace DkMath.Analysis.DkNNReal
@@ -145,6 +178,12 @@ theorem le_congr
     {x x' y y' : DkNNReal} (hxx' : Equiv x x') (hyy' : Equiv y y') :
     Le x y ↔ Le x' y' :=
   DkReal.le_congr hxx' hyy'
+
+/-- Addition of nonnegative representatives is monotone in both arguments. -/
+theorem add_le_add
+    {x y z w : DkNNReal} (hxy : Le x y) (hzw : Le z w) :
+    Le (add x z) (add y w) :=
+  DkReal.add_le_add hxy hzw
 
 end DkMath.Analysis.DkNNReal
 
@@ -174,5 +213,15 @@ instance : PartialOrder DkNNRealQ where
     refine Quotient.inductionOn₂ x y ?_
     intro a b hab hba
     exact Quotient.sound (DkReal.equiv_of_le_of_le hab hba)
+
+/-- Quotient addition is monotone in both arguments. -/
+theorem add_le_add
+    {x y z w : DkNNRealQ} (hxy : x ≤ y) (hzw : z ≤ w) :
+    x + z ≤ y + w := by
+  refine Quotient.inductionOn₂ x y ?_ hxy
+  intro a b hab
+  refine Quotient.inductionOn₂ z w ?_ hzw
+  intro c d hcd
+  exact DkNNReal.add_le_add hab hcd
 
 end DkMath.Analysis.DkNNRealQ

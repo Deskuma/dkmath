@@ -317,7 +317,8 @@ This completes the first algebraic public surface of the nonnegative
 computable-real quotient. The next phase defines asymptotic order by requiring
 the positive lower-endpoint defect to tend to zero. This relation is compatible
 with `Equiv` and gives `DkNNRealQ` a `PartialOrder`. Ordered-semiring instances
-remain deferred until operation monotonicity has been proved.
+remain deferred until multiplication and power monotonicity have been proved;
+addition monotonicity is now available.
 
 Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
 module because selecting the represented limit may require `noncomputable`.

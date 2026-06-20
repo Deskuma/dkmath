@@ -100,7 +100,7 @@ separate:
 ```text
 Order:
   PartialOrder is implemented via vanishing positive lower-endpoint defect
-  next prove operation monotonicity
+  addition monotonicity is proved; multiplication and power monotonicity remain
   investigate totality before any LinearOrder claim
 
 BridgeNNReal / BridgeReal:

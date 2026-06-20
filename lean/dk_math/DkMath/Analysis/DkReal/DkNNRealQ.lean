@@ -26,8 +26,9 @@ Mathlib's `Real` is selected.
 `DkReal.Order` defines an asymptotic representative order, proves invariance
 under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
 
-[TODO] Establish monotonicity of addition, multiplication, and powers for that
-order before extending the algebraic hierarchy to ordered semirings.
+Addition is monotone for the asymptotic order. Establish monotonicity of
+multiplication and powers before extending the algebraic hierarchy to ordered
+semirings.
 
 [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,
