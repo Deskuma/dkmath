@@ -26,9 +26,9 @@ partial order on `DkNNRealQ`.
 [TODO] Prove totality, or identify the additional representation theorem needed
 to derive it.
 
-Addition is monotone for this order. The corresponding results for
-multiplication by nonnegative values and natural powers remain prerequisites
-for ordered-semiring typeclasses.
+Addition and multiplication on nonnegative representations are monotone for
+this order. Natural-power monotonicity remains a prerequisite for the intended
+ordered-semiring API.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -165,6 +165,61 @@ theorem add_le_add
           le_max_right _ _
         linarith)
 
+/--
+Nonnegative multiplication is monotone for asymptotic order.
+
+The positive defect of a product is bounded by
+
+`x.lo * defect(z,w) + w.lo * defect(x,y)`.
+
+Both lower-endpoint sequences are uniformly bounded, while both defects tend
+to zero.
+-/
+theorem mulNonneg_le_mulNonneg
+    {x y z w : DkMath.Analysis.DkReal}
+    (hx : Nonnegative x) (hy : Nonnegative y)
+    (hz : Nonnegative z) (hw : Nonnegative w)
+    (hxy : Le x y) (hzw : Le z w) :
+    Le (mulNonneg x z hx hz) (mulNonneg y w hy hw) := by
+  have hleft :
+      Filter.Tendsto
+        (fun n => (x.interval n).lo * orderDefect z w n)
+        Filter.atTop (nhds 0) := by
+    simpa only [mul_comm] using
+      hzw.zero_mul_isBoundedUnder_le (isBoundedUnder_norm_lo x hx)
+  have hright :
+      Filter.Tendsto
+        (fun n => (w.interval n).lo * orderDefect x y n)
+        Filter.atTop (nhds 0) := by
+    simpa only [mul_comm] using
+      hxy.zero_mul_isBoundedUnder_le (isBoundedUnder_norm_lo w hw)
+  have hupper :
+      Filter.Tendsto
+        (fun n =>
+          (x.interval n).lo * orderDefect z w n +
+            (w.interval n).lo * orderDefect x y n)
+        Filter.atTop (nhds 0) := by
+    simpa only [zero_add] using hleft.add hright
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds hupper
+    (fun n => le_max_left 0 _)
+    (fun n => by
+      simp only [orderDefect, mulNonneg_interval, mulNonnegApprox,
+        GapInterval.mulNonneg_lo]
+      apply max_le
+      · exact add_nonneg
+          (mul_nonneg (hx n) (le_max_left _ _))
+          (mul_nonneg (hw n) (le_max_left _ _))
+      · have hzw' :
+            (z.interval n).lo - (w.interval n).lo ≤
+              max 0 ((z.interval n).lo - (w.interval n).lo) :=
+          le_max_right _ _
+        have hxy' :
+            (x.interval n).lo - (y.interval n).lo ≤
+              max 0 ((x.interval n).lo - (y.interval n).lo) :=
+          le_max_right _ _
+        nlinarith [hx n, hw n])
+
 end DkMath.Analysis.DkReal
 
 namespace DkMath.Analysis.DkNNReal
@@ -184,6 +239,13 @@ theorem add_le_add
     {x y z w : DkNNReal} (hxy : Le x y) (hzw : Le z w) :
     Le (add x z) (add y w) :=
   DkReal.add_le_add hxy hzw
+
+/-- Multiplication of nonnegative representatives is monotone in both arguments. -/
+theorem mul_le_mul
+    {x y z w : DkNNReal} (hxy : Le x y) (hzw : Le z w) :
+    Le (mul x z) (mul y w) :=
+  DkReal.mulNonneg_le_mulNonneg
+    x.nonnegative y.nonnegative z.nonnegative w.nonnegative hxy hzw
 
 end DkMath.Analysis.DkNNReal
 
@@ -223,5 +285,15 @@ theorem add_le_add
   refine Quotient.inductionOn₂ z w ?_ hzw
   intro c d hcd
   exact DkNNReal.add_le_add hab hcd
+
+/-- Quotient multiplication is monotone in both arguments. -/
+theorem mul_le_mul
+    {x y z w : DkNNRealQ} (hxy : x ≤ y) (hzw : z ≤ w) :
+    x * z ≤ y * w := by
+  refine Quotient.inductionOn₂ x y ?_ hxy
+  intro a b hab
+  refine Quotient.inductionOn₂ z w ?_ hzw
+  intro c d hcd
+  exact DkNNReal.mul_le_mul hab hcd
 
 end DkMath.Analysis.DkNNRealQ

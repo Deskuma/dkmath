@@ -60,8 +60,8 @@ The next phase defines representative order by vanishing positive
 lower-endpoint defect. It is invariant under vanishing-separation equivalence
 and yields a `PartialOrder` on `DkNNRealQ`.
 
-Addition is monotone for this order. Remaining order work is multiplication
-and power monotonicity, together with the question of totality.
+Addition and multiplication are monotone for this order. Remaining order work
+is power monotonicity, together with the question of totality.
 No `LinearOrder` is claimed yet.
 
 ### Semantic Bridge
