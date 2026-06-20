@@ -61,8 +61,8 @@ lower-endpoint defect. It is invariant under vanishing-separation equivalence
 and yields a `PartialOrder` on `DkNNRealQ`.
 
 Addition, multiplication, and natural powers are monotone for this order.
-Remaining ordered-algebra work includes proving that zero is least and
-selecting the appropriate typeclass hierarchy, together with totality.
+Zero is the least quotient value. Remaining ordered-algebra work is selecting
+the appropriate typeclass hierarchy, together with totality.
 No `LinearOrder` is claimed yet.
 
 ### Semantic Bridge

@@ -27,9 +27,9 @@ partial order on `DkNNRealQ`.
 to derive it.
 
 Addition, multiplication on nonnegative representations, and natural powers
-are monotone for this order. The remaining ordered-algebra work is to prove
-that zero is least and to match these theorems with the intended typeclass
-hierarchy.
+are monotone for this order, and zero is the least quotient value. The
+remaining ordered-algebra work is to match these theorems with the intended
+typeclass hierarchy.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -135,6 +135,24 @@ theorem le_congr
       (le_trans hx'y' (equiv_le (equiv_symm hyy')))
 
 /--
+The rational zero approximation is below every nonnegative representation.
+
+At every stage its lower endpoint is zero, so the order defect is identically
+zero by nonnegativity of the other lower endpoint.
+-/
+theorem zero_le
+    {x : DkMath.Analysis.DkReal} (hx : Nonnegative x) :
+    Le (DkMath.Analysis.DkReal.ofRat 0) x := by
+  unfold Le orderDefect
+  simp only [ofRat_interval, GapInterval.singleton_lo, zero_sub]
+  have hzero :
+      (fun n => max 0 (-(x.interval n).lo)) = fun _ => (0 : ℚ) := by
+    funext n
+    exact max_eq_left (neg_nonpos.mpr (hx n))
+  rw [hzero]
+  exact tendsto_const_nhds
+
+/--
 Stagewise addition is monotone for asymptotic order.
 
 The positive defect of the sum is bounded by the sum of the two positive
@@ -235,6 +253,10 @@ theorem le_congr
     Le x y ↔ Le x' y' :=
   DkReal.le_congr hxx' hyy'
 
+/-- Zero is below every nonnegative representative. -/
+theorem zero_le (x : DkNNReal) : Le zero x :=
+  DkReal.zero_le x.nonnegative
+
 /-- Addition of nonnegative representatives is monotone in both arguments. -/
 theorem add_le_add
     {x y z w : DkNNReal} (hxy : Le x y) (hzw : Le z w) :
@@ -276,6 +298,12 @@ instance : PartialOrder DkNNRealQ where
     refine Quotient.inductionOn₂ x y ?_
     intro a b hab hba
     exact Quotient.sound (DkReal.equiv_of_le_of_le hab hba)
+
+/-- Zero is the least value of the nonnegative quotient. -/
+theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
+  refine Quotient.inductionOn x ?_
+  intro a
+  exact DkNNReal.zero_le a
 
 /-- Quotient addition is monotone in both arguments. -/
 theorem add_le_add

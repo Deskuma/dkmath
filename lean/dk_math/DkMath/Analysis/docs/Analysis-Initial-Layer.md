@@ -101,7 +101,8 @@ separate:
 Order:
   PartialOrder is implemented via vanishing positive lower-endpoint defect
   addition, multiplication, and natural-power monotonicity are proved
-  next prove that zero is least and inspect ordered-algebra typeclass requirements
+  zero is least
+  next package these results into the appropriate ordered-algebra typeclass
   investigate totality before any LinearOrder claim
 
 BridgeNNReal / BridgeReal:
