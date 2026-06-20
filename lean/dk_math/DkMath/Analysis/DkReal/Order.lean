@@ -26,9 +26,10 @@ partial order on `DkNNRealQ`.
 [TODO] Prove totality, or identify the additional representation theorem needed
 to derive it.
 
-Addition and multiplication on nonnegative representations are monotone for
-this order. Natural-power monotonicity remains a prerequisite for the intended
-ordered-semiring API.
+Addition, multiplication on nonnegative representations, and natural powers
+are monotone for this order. The remaining ordered-algebra work is to prove
+that zero is least and to match these theorems with the intended typeclass
+hierarchy.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -295,5 +296,21 @@ theorem mul_le_mul
   refine Quotient.inductionOn₂ z w ?_ hzw
   intro c d hcd
   exact DkNNReal.mul_le_mul hab hcd
+
+/--
+Natural powers are monotone.
+
+The proof is algebraic: the successor step combines the induction hypothesis
+with monotonicity of multiplication.
+-/
+theorem pow_le_pow
+    {x y : DkNNRealQ} (hxy : x ≤ y) (d : ℕ) :
+    x ^ d ≤ y ^ d := by
+  induction d with
+  | zero =>
+      rw [pow_zero, pow_zero]
+  | succ d ih =>
+      rw [pow_succ_eq, pow_succ_eq]
+      exact mul_le_mul ih hxy
 
 end DkMath.Analysis.DkNNRealQ

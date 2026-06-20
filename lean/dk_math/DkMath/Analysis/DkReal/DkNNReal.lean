@@ -136,6 +136,12 @@ theorem pow_one (x : DkNNReal) :
   DkReal.equiv_of_interval_eq
     (DkReal.powNonneg_one_interval x.val x.nonnegative)
 
+/-- A successor power is multiplication of the preceding power by the base, modulo equivalence. -/
+theorem pow_succ (x : DkNNReal) (d : ℕ) :
+    Equiv (pow x (d + 1)) (mul (pow x d) x) :=
+  DkReal.equiv_of_interval_eq
+    (DkReal.powNonneg_succ_interval d x.val x.nonnegative)
+
 /-!
 ## Nonnegative semiring laws modulo representation equivalence
 

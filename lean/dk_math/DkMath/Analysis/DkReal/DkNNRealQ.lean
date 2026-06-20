@@ -26,9 +26,9 @@ Mathlib's `Real` is selected.
 `DkReal.Order` defines an asymptotic representative order, proves invariance
 under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
 
-Addition and multiplication are monotone for the asymptotic order. Establish
-power monotonicity and verify the intended ordered-algebra hierarchy before
-installing stronger typeclasses.
+Addition, multiplication, and natural powers are monotone for the asymptotic
+order. Prove that zero is least and verify the intended ordered-algebra
+hierarchy before installing stronger typeclasses.
 
 [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,
@@ -192,6 +192,13 @@ theorem pow_one (x : DkNNRealQ) : x ^ (1 : ℕ) = x := by
   refine Quotient.inductionOn x ?_
   intro a
   exact Quotient.sound (DkNNReal.pow_one a)
+
+/-- Successor powers agree with multiplication by the base. -/
+theorem pow_succ_eq (x : DkNNRealQ) (d : ℕ) :
+    x ^ (d + 1) = x ^ d * x := by
+  refine Quotient.inductionOn x ?_
+  intro a
+  exact Quotient.sound (DkNNReal.pow_succ a d)
 
 /-!
 ## Commutative semiring laws as quotient equalities
