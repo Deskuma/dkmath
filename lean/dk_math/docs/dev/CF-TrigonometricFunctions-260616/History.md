@@ -236,6 +236,30 @@ Archive
 6. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 04:17 JST (Fixed points and positive finite action order)
+
+1. 方針:
+   - fixed point は Mathlib `Function.IsFixedPt` を用いる。
+   - zero iterate でも成立する弱い finite order と、正の witness を持つ版を
+     分離する。
+2. 実施:
+   - `SemanticFixed` を追加した。
+   - fixed point、period one、minimal period one の同値を公開した。
+   - fixed point が任意 period の周期点になることを証明した。
+   - 原点が全 transported action の fixed point であることを証明した。
+   - `SemanticPositiveFiniteOrder` を追加した。
+   - 正有限位数の正倍数伝播と、全点の minimal period positivity を証明した。
+3. 注意:
+   - positive finite order の `n` は正だが、作用の最小正位数とは限らない。
+4. 結論:
+   - fixed / periodic / minimal-period / finite-order の基本関係が標準 API
+     上で揃った。
+5. 次の候補:
+   - 明示的 kernel 条件下での非零 fixed point の座標分類。
+   - source-level family は signed DkReal 層まで保留。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 03:50 JST (Periodic points and finite action order)
 
 1. 方針:

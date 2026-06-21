@@ -138,6 +138,8 @@ BridgeNNReal / BridgeReal:
   periodic points use Mathlib IsPeriodicPt
   finite action order makes every level-set point periodic
   minimal periods divide all known return times and finite action orders
+  fixed points are exactly minimal-period-one points
+  positive finite order excludes the vacuous zero iterate
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

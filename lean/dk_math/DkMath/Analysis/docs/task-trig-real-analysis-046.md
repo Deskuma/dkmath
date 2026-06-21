@@ -94,6 +94,9 @@ semanticFiniteOrder_of_dvd
 semanticMinimalPeriod
 semanticPeriodic_iff_minimalPeriod_dvd
 semanticMinimalPeriod_dvd_of_finiteOrder
+SemanticFixed
+semanticFixed_iff_minimalPeriod_eq_one
+SemanticPositiveFiniteOrder
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -125,8 +128,14 @@ equivalent to divisibility by this minimal period. Every point's minimal
 period divides any finite action order, and finite action order propagates to
 all multiples.
 
+Fixed points use Mathlib's `Function.IsFixedPt`: they are exactly period-one
+points and exactly points of minimal period one. The origin is fixed by every
+transported action. `SemanticPositiveFiniteOrder` adds positivity to an
+exhibited finite action order; it does not claim minimality of that order.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example classifying fixed points or finite-order
-actions. Order reflection remains a separate, heavier task.
+remain on the real side, for example coordinate classification of nonzero
+fixed points under explicit kernel hypotheses. Order reflection remains a
+separate, heavier task.

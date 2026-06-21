@@ -463,6 +463,68 @@ theorem semanticMinimalPeriod_pos
     0 < semanticMinimalPeriod r z :=
   Function.IsPeriodicPt.minimalPeriod_pos hn h
 
+/-- A fixed point of the transported real action. -/
+def SemanticFixed
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Prop :=
+  Function.IsFixedPt (semanticAct r) z
+
+/-- Fixed points are exactly period-one points. -/
+theorem semanticFixed_iff_periodic_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    SemanticFixed r z ↔ SemanticPeriodic r z 1 := by
+  rfl
+
+/-- Fixed points are exactly points of minimal period one. -/
+theorem semanticFixed_iff_minimalPeriod_eq_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    SemanticFixed r z ↔ semanticMinimalPeriod r z = 1 := by
+  exact Function.minimalPeriod_eq_one_iff_isFixedPt.symm
+
+/-- A fixed point is periodic at every iterate count. -/
+theorem semanticPeriodic_of_fixed
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (h : SemanticFixed r z) (n : ℕ) :
+    SemanticPeriodic r z n :=
+  Function.IsFixedPt.isPeriodicPt h n
+
+/-- The origin is fixed by every transported linear CF2D action. -/
+theorem semanticFixed_zero (r : UnitKernel DkNNRealQ) :
+    SemanticFixed r (Vec.mk 0 0) := by
+  simp [SemanticFixed, Function.IsFixedPt, semanticAct, UnitKernel.act,
+    Vec.star]
+
+/--
+Positive finite action order excludes the vacuous zero-iterate witness.
+
+This still records an exhibited positive order, not necessarily the least
+positive order of the action.
+-/
+def SemanticPositiveFiniteOrder
+    (r : UnitKernel DkNNRealQ) (n : ℕ) : Prop :=
+  0 < n ∧ SemanticFiniteOrder r n
+
+/-- Positive finite action order supplies positive periodicity of every point. -/
+theorem semanticPeriodic_of_positiveFiniteOrder
+    {r : UnitKernel DkNNRealQ} {n : ℕ}
+    (h : SemanticPositiveFiniteOrder r n) (z : Vec ℝ) :
+    0 < n ∧ SemanticPeriodic r z n :=
+  ⟨h.1, (semanticFiniteOrder_iff r n).mp h.2 z⟩
+
+/-- Positive finite action order persists at every positive multiple. -/
+theorem semanticPositiveFiniteOrder_of_dvd
+    {r : UnitKernel DkNNRealQ} {m n : ℕ}
+    (h : SemanticPositiveFiniteOrder r m) (hmn : m ∣ n) (hn : 0 < n) :
+    SemanticPositiveFiniteOrder r n :=
+  ⟨hn, semanticFiniteOrder_of_dvd h.2 hmn⟩
+
+/-- Under positive finite order, every point has positive minimal period. -/
+theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
+    {r : UnitKernel DkNNRealQ} {n : ℕ}
+    (h : SemanticPositiveFiniteOrder r n) (z : Vec ℝ) :
+    0 < semanticMinimalPeriod r z :=
+  semanticMinimalPeriod_pos h.1
+    ((semanticFiniteOrder_iff r n).mp h.2 z)
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.
