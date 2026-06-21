@@ -68,7 +68,16 @@ semanticVec
 semanticValue_q2
 semanticValue_q2_eq
 semanticUnitKernel
+semanticUnitKernel_sq_add_sq
+semanticAct
+semanticAct_q2
 ```
 
-The next consumer should use the transported real `UnitKernel` in an analytic
-CF2D theorem. Order reflection remains a separate, heavier task.
+The transported kernel now acts on real CF2D vectors and preserves `q2`.
+Subtraction appears only after transport to `Real`; it is not added to the
+nonnegative source semiring.
+
+The next structural boundary is source-level `Vec.star` and `KernelFamily`.
+Both require signed arithmetic. They should wait for a signed DkReal layer
+rather than forcing subtraction into `DkNNRealQ`. Order reflection remains a
+separate, heavier task.

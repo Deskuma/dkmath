@@ -80,6 +80,72 @@ def semanticUnitKernel (r : UnitKernel DkNNRealQ) : UnitKernel ℝ :=
 theorem semanticUnitKernel_val (r : UnitKernel DkNNRealQ) :
     (semanticUnitKernel r : Vec ℝ) = semanticVec (r : Vec DkNNRealQ) := rfl
 
+/-- The interpreted core coordinate remains nonnegative. -/
+theorem semanticUnitKernel_core_nonneg (r : UnitKernel DkNNRealQ) :
+    0 ≤ (semanticUnitKernel r : Vec ℝ).core :=
+  semanticValue_nonneg (r : Vec DkNNRealQ).core
+
+/-- The interpreted beam coordinate remains nonnegative. -/
+theorem semanticUnitKernel_beam_nonneg (r : UnitKernel DkNNRealQ) :
+    0 ≤ (semanticUnitKernel r : Vec ℝ).beam :=
+  semanticValue_nonneg (r : Vec DkNNRealQ).beam
+
+/--
+The coordinates of an interpreted nonnegative unit kernel satisfy the real
+Pythagorean identity.
+-/
+theorem semanticUnitKernel_sq_add_sq (r : UnitKernel DkNNRealQ) :
+    semanticValue (r : Vec DkNNRealQ).core ^ 2
+      + semanticValue (r : Vec DkNNRealQ).beam ^ 2 = 1 := by
+  simpa [Vec.q2, semanticVec] using
+    (UnitKernel.coe_q2 (semanticUnitKernel r))
+
+/--
+Act on a real CF2D vector by first interpreting a nonnegative DkMath unit
+kernel as a real unit kernel.
+
+Subtraction enters only in this real-side action. It is not added to
+`DkNNRealQ`.
+-/
+def semanticAct (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  UnitKernel.act (semanticUnitKernel r) z
+
+/-- Core-coordinate formula for the transported real action. -/
+@[simp]
+theorem semanticAct_core (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    (semanticAct r z).core =
+      semanticValue (r : Vec DkNNRealQ).core * z.core
+        - semanticValue (r : Vec DkNNRealQ).beam * z.beam := rfl
+
+/-- Beam-coordinate formula for the transported real action. -/
+@[simp]
+theorem semanticAct_beam (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    (semanticAct r z).beam =
+      semanticValue (r : Vec DkNNRealQ).core * z.beam
+        + semanticValue (r : Vec DkNNRealQ).beam * z.core := rfl
+
+/--
+The transported real action preserves the CF2D quadratic invariant.
+
+This is the first direct consumer of an existing real-side CF2D action
+theorem. No new analytic argument is needed after the unit-kernel transport.
+-/
+theorem semanticAct_q2 (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    Vec.q2 (semanticAct r z) = Vec.q2 z :=
+  UnitKernel.q2_act (semanticUnitKernel r) z
+
+/-- The transported action is a square-mass-preserving real map. -/
+theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
+    PreservesQ2 (semanticAct r) :=
+  semanticAct_q2 r
+
+/-
+[TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
+`KernelFamily` require a ring because their core coordinate uses subtraction.
+Keep the source in the nonnegative semiring until a signed DkReal layer is
+introduced; do not manufacture subtraction merely to mirror the real target.
+-/
+
 end
 
 end DkMath.Analysis.DkNNRealQ

@@ -189,3 +189,25 @@ Archive
    - transported real `UnitKernel` を最初の CF2D 解析定理へ接続する。
    - order reflection は subtraction や decidable comparison を導入せず、
      独立課題として検討する。
+
+### 2026/06/21 23:29 JST (Real-side CF2D action without source subtraction)
+
+1. 方針:
+   - DkNNRealQ へ subtraction を追加せず、transport 後の `Real` 側でのみ
+     CF2D action を使う。
+2. 実施:
+   - semantic unit kernel の core / beam 非負性を証明した。
+   - semantic 座標について `C^2 + S^2 = 1` を証明した。
+   - `semanticAct` とその core / beam 座標式を追加した。
+   - 既存 `UnitKernel.q2_act` を直接消費し、`semanticAct_q2` と
+     `semanticAct_preservesQ2` を証明した。
+   - `Equiv.lean` と `RealBridge.lean` の完了済み future TODO を更新した。
+3. 結論:
+   - 非負区間世界から実数回転作用まで、source subtraction なしで接続した。
+   - subtraction は意味論輸送後の既知の `Real` 構造にだけ現れる。
+4. 境界:
+   - source-level `Vec.star` と `KernelFamily` は ring を要求するため、
+     signed DkReal 層まで保留する。
+   - order reflection も独立した重い課題として維持する。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。

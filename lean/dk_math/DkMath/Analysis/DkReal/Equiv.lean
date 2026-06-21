@@ -32,9 +32,12 @@ monotonicity of interval separation under refinement: once a positive
 separation appears, nestedness prevents it from returning to zero. The reverse
 direction is immediate because every stage separation is zero.
 
-[TODO: semantic-bridge] For a future semantic evaluation `eval`, prove
-`Equiv x y → eval x = eval y` and, when justified by the representation
-theorem, the converse.
+[IMPLEMENTED: semantic-forward] `DkReal.semanticValue_eq_of_equiv` proves
+`Equiv x y → semanticValue x = semanticValue y`.
+
+[TODO: semantic-reflection] Prove the converse when needed. This is the
+representation-level equality-reflection problem and should remain separate
+from the computable definition of `Equiv`.
 -/
 
 namespace DkMath.Analysis.DkReal

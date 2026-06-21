@@ -78,9 +78,12 @@ constants, addition, multiplication, natural powers, and canonical order.
 values reconstructs the canonical quotient order, without adding decidable
 comparison.
 
-[TODO: semantic-cf2d-analysis] Use the transported real `UnitKernel` as the
-input to the first CF2D analytic theorem. The algebraic `q2` transport is
-implemented separately in `DkReal.SemanticCF2D`.
+[IMPLEMENTED: semantic-cf2d-action] `DkReal.SemanticCF2D` transports unit
+kernels to `Real`, derives the Pythagorean coordinate identity, and applies
+the resulting kernel as a real square-mass-preserving action.
+
+[TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
+signed arithmetic. Defer them until a signed DkReal layer exists.
 
 [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
 endpoint products and belongs outside the current nonnegative API.

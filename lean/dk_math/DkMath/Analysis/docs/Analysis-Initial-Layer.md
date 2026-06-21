@@ -128,7 +128,9 @@ BridgeNNReal / BridgeReal:
   canonical order preservation is proved by additive Gap extraction
   the semantic map is bundled as a semiring homomorphism to Real
   CF2D q2 and unit kernels are transported coordinatewise to Real
-  next consume the transported unit kernel in the analytic CF2D layer
+  transported kernels act on real vectors and preserve q2
+  their coordinates satisfy the real Pythagorean identity
+  source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv
 ```
