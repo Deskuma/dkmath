@@ -93,6 +93,8 @@ The completed quotient-semiring checkpoint is summarized in
 [`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
 The internal totality route is analyzed in
 [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
+The next strict-order kernel is designed in
+[`DkNNRealQ-StrictGap-Design.md`](DkNNRealQ-StrictGap-Design.md).
 
 `RealBridge` remains the home of continuity and interval mapping. The separate
 `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
@@ -111,7 +113,8 @@ Order:
   IsOrderedRing packages semiring-level ordered compatibility
   totality is proved and exported through Std.Total
   canonical additive order is proved by nonnegative Gap extraction
-  strict and direct linear order structures remain open
+  strict order is designed as finite positivity of the extracted Gap
+  direct linear order structure remains open
   use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:

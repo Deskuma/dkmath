@@ -50,6 +50,16 @@ def diffNonnegInterval (I J : GapInterval) : GapInterval where
     apply max_le_max_left
     exact sub_le_sub J.le_lo_hi I.le_lo_hi
 
+/--
+DkMath-facing name for the finite nonnegative Gap extracted inside a
+Body--Big pair.
+
+`diffNonnegInterval` remains the implementation name; this alias exposes the
+construction as a Gap rather than as a subtraction operation.
+-/
+abbrev gapInterval (I J : GapInterval) : GapInterval :=
+  diffNonnegInterval I J
+
 /-- The extracted Gap has a nonnegative lower endpoint. -/
 theorem diffNonnegInterval_lo_nonneg (I J : GapInterval) :
     0 ≤ (diffNonnegInterval I J).lo :=
@@ -77,6 +87,11 @@ theorem diffNonnegInterval_width_le (I J : GapInterval) :
 def diffNonnegApprox
     (x y : DkMath.Analysis.DkReal) (n : ℕ) : GapInterval :=
   diffNonnegInterval (x.interval n) (y.interval n)
+
+/-- DkMath-facing name for the stagewise extracted Gap observations. -/
+abbrev gapApprox
+    (x y : DkMath.Analysis.DkReal) (n : ℕ) : GapInterval :=
+  diffNonnegApprox x y n
 
 /-- Extracted Gap intervals remain nested. -/
 theorem diffNonnegApprox_nested
@@ -115,6 +130,11 @@ def diffNonneg
   interval := diffNonnegApprox x y
   nested := diffNonnegApprox_nested x y
   width_tends_zero := tendsto_diffNonnegApprox_width_zero x y
+
+/-- DkMath-facing name for the extracted nonnegative Gap representation. -/
+abbrev gap
+    (x y : DkMath.Analysis.DkReal) : DkMath.Analysis.DkReal :=
+  diffNonneg x y
 
 /-- The extracted Gap representation is stagewise nonnegative. -/
 theorem nonnegative_diffNonneg
@@ -195,6 +215,15 @@ namespace DkMath.Analysis.DkNNReal
 def diffOfLe (x y : DkNNReal) (_hxy : Le x y) : DkNNReal :=
   ⟨DkReal.diffNonneg x.val y.val,
     DkReal.nonnegative_diffNonneg x.val y.val⟩
+
+/--
+The nonnegative Gap universe filling `x` to `y`.
+
+The order proof certifies that this extracted representation reconstructs the
+same quotient Big as `y`.
+-/
+abbrev gapOfLe (x y : DkNNReal) (hxy : Le x y) : DkNNReal :=
+  diffOfLe x y hxy
 
 /-- Adding the extracted Gap reconstructs the larger representative modulo equivalence. -/
 theorem add_diffOfLe_equiv

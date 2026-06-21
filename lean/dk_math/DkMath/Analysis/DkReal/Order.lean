@@ -67,6 +67,32 @@ are monotone for this order, and zero is the least quotient value. The
 quotient therefore carries Mathlib's `IsOrderedRing` predicate, whose name is
 historical: its algebraic assumption is only `Semiring`. No canonical-order,
 strict-order, or linear-order structure is claimed.
+
+## Next difference kernel: strict Gap
+
+Canonical order fills the known frame
+
+`Big = Body + Gap`
+
+by extracting a nonnegative Gap representation. Strict order should not start
+from a new abstract `<`. Its missing kernel is whether that extracted Gap
+collapses to zero or opens positively at finite precision:
+
+* equality: `Big = Body + 0`;
+* strict orientation: at some stage `Body.hi < Big.lo`;
+* finite strict Gap: `0 < Big.lo - Body.hi`.
+
+[TODO: strict/core] Define representative strictness by
+`Le x y ∧ ¬ Le y x`, then prove it is equivalent to
+`∃ n, LeftSeparatedAt x y n`.
+
+[TODO: strict/gap] Relate finite separation to the canonical Gap extraction:
+under strictness, some lower endpoint of `gapOfLe` is positive; conversely a
+positive extracted Gap lower endpoint witnesses strict separation.
+
+[TODO: strict/arithmetic] Derive strict addition from preservation of the
+finite Gap. For multiplication, require a strictly positive factor and isolate
+the zero-factor branch before considering `IsStrictOrderedRing`.
 -/
 
 namespace DkMath.Analysis.DkReal

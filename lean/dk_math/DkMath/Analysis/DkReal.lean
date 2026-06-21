@@ -46,6 +46,10 @@ Canonical order is also constructive at the representation level. From
 `y = x + z` in the quotient. No subtraction operation is added to
 `DkNNRealQ`.
 
+The next strict-order layer should classify this known Gap: zero Gap gives
+equality, while a positive lower Gap observed at a finite stage gives strict
+order. This keeps the design in the same `Big = (Core + Beam) + Gap` pattern.
+
 [TODO: linear-order] Decide whether the now-proved quotient totality should be
 packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 plus `Std.Total` so that decidable comparison remains an explicit choice.
