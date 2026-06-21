@@ -89,6 +89,8 @@ finite action order are expressed through Mathlib's standard discrete-dynamics
 API. Minimal periods use Mathlib's zero-for-aperiodic convention and divide
 all known return times. Fixed points and positive finite action order are
 separated from the weaker zero-iterate-compatible periodicity predicates.
+Identity transported kernels fix every point; nonidentity transported kernels
+fix exactly the origin.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

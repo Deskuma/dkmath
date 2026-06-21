@@ -525,6 +525,96 @@ theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
   semanticMinimalPeriod_pos h.1
     ((semanticFiniteOrder_iff r n).mp h.2 z)
 
+/-- The transported kernel is the neutral real unit kernel. -/
+def SemanticIdentityKernel (r : UnitKernel DkNNRealQ) : Prop :=
+  semanticUnitKernel r = UnitKernel.one ℝ
+
+/--
+For a transported first-quadrant unit kernel, core coordinate one forces the
+beam coordinate to vanish.
+-/
+theorem semanticUnitKernel_beam_eq_zero_of_core_eq_one
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 1) :
+    semanticValue (r : Vec DkNNRealQ).beam = 0 := by
+  have hq := semanticUnitKernel_sq_add_sq r
+  nlinarith [sq_nonneg (semanticValue (r : Vec DkNNRealQ).beam)]
+
+/-- Identity-kernel status is characterized by semantic core coordinate one. -/
+theorem semanticIdentityKernel_iff_core_eq_one
+    (r : UnitKernel DkNNRealQ) :
+    SemanticIdentityKernel r ↔
+      semanticValue (r : Vec DkNNRealQ).core = 1 := by
+  constructor
+  · intro h
+    have hv := congrArg (fun k : UnitKernel ℝ => (k : Vec ℝ).core) h
+    simpa [SemanticIdentityKernel, semanticUnitKernel, semanticVec,
+      UnitKernel.one, Vec.one] using hv
+  · intro hcore
+    have hbeam := semanticUnitKernel_beam_eq_zero_of_core_eq_one hcore
+    apply UnitKernel.ext
+    cases r with
+    | mk val hq =>
+        cases val with
+        | mk core beam =>
+            simp_all [semanticUnitKernel, semanticVec, UnitKernel.one, Vec.one]
+
+/-- An identity transported kernel fixes every real vector. -/
+theorem semanticFixed_of_identityKernel
+    {r : UnitKernel DkNNRealQ} (h : SemanticIdentityKernel r)
+    (z : Vec ℝ) :
+    SemanticFixed r z := by
+  rw [SemanticIdentityKernel] at h
+  simp [SemanticFixed, Function.IsFixedPt, semanticAct, h]
+
+/--
+If the semantic core coordinate is not one, the transported action has only
+the origin as a fixed point.
+-/
+theorem eq_zero_of_semanticFixed_of_core_ne_one
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core ≠ 1)
+    (hz : SemanticFixed r z) :
+    z = Vec.mk 0 0 := by
+  let C := semanticValue (r : Vec DkNNRealQ).core
+  let S := semanticValue (r : Vec DkNNRealQ).beam
+  have hq : C ^ 2 + S ^ 2 = 1 := by
+    simpa [C, S] using semanticUnitKernel_sq_add_sq r
+  have hfix := hz
+  rw [SemanticFixed, Function.IsFixedPt] at hfix
+  have hx :
+      C * z.core - S * z.beam = z.core := by
+    simpa [semanticAct, C, S] using congrArg Vec.core hfix
+  have hy :
+      C * z.beam + S * z.core = z.beam := by
+    simpa [semanticAct, C, S] using congrArg Vec.beam hfix
+  have hdet : (C - 1) ^ 2 + S ^ 2 ≠ 0 := by
+    intro hzero
+    have : C = 1 := by nlinarith [sq_nonneg (C - 1), sq_nonneg S]
+    exact hcore (by simpa [C] using this)
+  have hdx : ((C - 1) ^ 2 + S ^ 2) * z.core = 0 := by
+    linear_combination (C - 1) * hx + S * hy
+  have hdy : ((C - 1) ^ 2 + S ^ 2) * z.beam = 0 := by
+    linear_combination (C - 1) * hy - S * hx
+  have zx : z.core = 0 :=
+    (mul_eq_zero.mp hdx).resolve_left hdet
+  have zy : z.beam = 0 :=
+    (mul_eq_zero.mp hdy).resolve_left hdet
+  cases z
+  simp_all
+
+/-- A nonidentity transported kernel fixes exactly the origin. -/
+theorem semanticFixed_iff_eq_zero_of_not_identity
+    {r : UnitKernel DkNNRealQ} (h : ¬SemanticIdentityKernel r)
+    (z : Vec ℝ) :
+    SemanticFixed r z ↔ z = Vec.mk 0 0 := by
+  have hcore :
+      semanticValue (r : Vec DkNNRealQ).core ≠ 1 := by
+    intro hcore
+    exact h ((semanticIdentityKernel_iff_core_eq_one r).2 hcore)
+  exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
+    fun hz => hz ▸ semanticFixed_zero r⟩
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

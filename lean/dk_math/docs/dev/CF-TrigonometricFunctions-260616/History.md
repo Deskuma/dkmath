@@ -236,6 +236,28 @@ Archive
 6. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 04:23 JST (Fixed-point classification without angles)
+
+1. 目的:
+   - transported action の非零 fixed point を座標的に分類する。
+2. 実施:
+   - `SemanticIdentityKernel` を real neutral kernel との等式として定義した。
+   - semantic core が one なら `C^2 + S^2 = 1` から beam zero を証明した。
+   - identity-kernel 条件と semantic core one の同値を証明した。
+   - identity kernel が全実数 vector を固定することを証明した。
+   - core が one でない kernel の fixed point 連立方程式から、行列式
+     `(C - 1)^2 + S^2` を用いて両座標 zero を導いた。
+   - 非 identity kernel の fixed point が原点と同値であることを証明した。
+3. 結論:
+   - identity kernel なら全点 fixed。
+   - nonidentity transported kernel なら fixed point は原点のみ。
+4. 使用していないもの:
+   - angle、continuity、signed DkReal source。
+5. 次の候補:
+   - 明示的 semantic coordinate 条件下での finite-order classification。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 04:17 JST (Fixed points and positive finite action order)
 
 1. 方針:

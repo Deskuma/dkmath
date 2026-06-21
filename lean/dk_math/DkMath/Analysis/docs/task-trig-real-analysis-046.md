@@ -97,6 +97,9 @@ semanticMinimalPeriod_dvd_of_finiteOrder
 SemanticFixed
 semanticFixed_iff_minimalPeriod_eq_one
 SemanticPositiveFiniteOrder
+SemanticIdentityKernel
+semanticIdentityKernel_iff_core_eq_one
+semanticFixed_iff_eq_zero_of_not_identity
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -133,9 +136,16 @@ points and exactly points of minimal period one. The origin is fixed by every
 transported action. `SemanticPositiveFiniteOrder` adds positivity to an
 exhibited finite action order; it does not claim minimality of that order.
 
+The first fixed-point classification is complete. For a transported
+first-quadrant unit kernel, semantic core coordinate one forces beam zero and
+therefore the neutral kernel. An identity kernel fixes every point; every
+nonidentity transported kernel fixes exactly the origin. The proof uses only
+the Pythagorean kernel identity and the determinant of the fixed-point linear
+system.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example coordinate classification of nonzero
-fixed points under explicit kernel hypotheses. Order reflection remains a
-separate, heavier task.
+remain on the real side, for example finite-order classification under
+explicit semantic coordinate hypotheses. Order reflection remains a separate,
+heavier task.
