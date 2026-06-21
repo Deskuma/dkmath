@@ -231,6 +231,36 @@ theorem add_diffOfLe_equiv
     Equiv (add x (diffOfLe x y hxy)) y :=
   DkReal.add_diffNonneg_equiv hxy
 
+/--
+The extracted canonical Gap is positive at stage `n` exactly when the Body
+and Big representatives are strictly separated there.
+-/
+theorem gapOfLe_lo_pos_iff_leftSeparatedAt
+    (x y : DkNNReal) (hxy : Le x y) (n : ℕ) :
+    0 < ((gapOfLe x y hxy).val.interval n).lo ↔
+      DkReal.LeftSeparatedAt x.val y.val n := by
+  simp only [gapOfLe, diffOfLe, DkReal.diffNonneg,
+    DkReal.diffNonnegApprox, DkReal.diffNonnegInterval,
+    DkReal.LeftSeparatedAt]
+  constructor
+  · intro h
+    by_contra hsep
+    have hnonpos :
+        (y.val.interval n).lo - (x.val.interval n).hi ≤ 0 :=
+      sub_nonpos.mpr (le_of_not_gt hsep)
+    rw [max_eq_left hnonpos] at h
+    exact (lt_irrefl 0) h
+  · intro hsep
+    rw [max_eq_right (sub_nonneg.mpr hsep.le)]
+    exact sub_pos.mpr hsep
+
+/-- Strict wrapper order is finite positivity of the extracted canonical Gap. -/
+theorem lt_iff_exists_gapOfLe_lo_pos
+    (x y : DkNNReal) (hxy : Le x y) :
+    Lt x y ↔ ∃ n, 0 < ((gapOfLe x y hxy).val.interval n).lo := by
+  rw [lt_iff_exists_leftSeparatedAt]
+  exact exists_congr fun n => (gapOfLe_lo_pos_iff_leftSeparatedAt x y hxy n).symm
+
 end DkMath.Analysis.DkNNReal
 
 namespace DkMath.Analysis.DkNNRealQ

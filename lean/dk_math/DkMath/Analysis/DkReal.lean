@@ -46,9 +46,13 @@ Canonical order is also constructive at the representation level. From
 `y = x + z` in the quotient. No subtraction operation is added to
 `DkNNRealQ`.
 
-The next strict-order layer should classify this known Gap: zero Gap gives
-equality, while a positive lower Gap observed at a finite stage gives strict
-order. This keeps the design in the same `Big = (Core + Beam) + Gap` pattern.
+The strict-order kernel classifies this known Gap: wrapper strictness is
+equivalent both to finite left separation and to a positive lower endpoint of
+the canonical Gap at some stage. This keeps the design in the same
+`Big = (Core + Beam) + Gap` pattern.
+
+[TODO: strict-arithmetic] Prove preservation by addition and by multiplication
+with a strictly positive factor before selecting a strict-order typeclass.
 
 [TODO: linear-order] Decide whether the now-proved quotient totality should be
 packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`

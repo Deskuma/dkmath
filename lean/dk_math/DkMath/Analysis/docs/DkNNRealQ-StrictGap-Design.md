@@ -61,22 +61,22 @@ Extracted Gap:
 The middle form is the finite Core--Gap separation. The last form says that
 the canonical Gap universe has become observably positive.
 
-## Proposed Lean Sequence
+## Implementation Status
 
 ```text
-1. DkReal.not_le_of_leftSeparatedAt
-2. DkReal.lt_iff_exists_leftSeparatedAt
-3. DkNNReal.Lt := Le x y and not Le y x
-4. DkNNReal.lt_iff_exists_leftSeparatedAt
-5. positive lower endpoint of gapOfLe iff finite separation
-6. quotient strict-order characterization
-7. strict addition
-8. positive-factor strict multiplication
+[done] DkReal.not_le_of_leftSeparatedAt
+[done] representative strictness iff finite left separation
+[done] DkNNReal.Lt := Le x y and not Le y x
+[done] DkNNReal.lt_iff_exists_leftSeparatedAt
+[done] positive lower endpoint of gapOfLe iff finite separation
+[next] quotient strict-order characterization
+[next] strict addition
+[next] positive-factor strict multiplication
 ```
 
-The representative theorem should precede any strict ordered-semiring
-typeclass. It is the actual mathematical kernel; the typeclass is only its
-later packaging.
+The representative theorem now precedes every strict ordered-semiring
+typeclass. It is the mathematical kernel; a typeclass will only package its
+later quotient consequences.
 
 ## Arithmetic Interpretation
 

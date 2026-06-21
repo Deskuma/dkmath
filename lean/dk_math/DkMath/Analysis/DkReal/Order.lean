@@ -68,27 +68,24 @@ quotient therefore carries Mathlib's `IsOrderedRing` predicate, whose name is
 historical: its algebraic assumption is only `Semiring`. No canonical-order,
 strict-order, or linear-order structure is claimed.
 
-## Next difference kernel: strict Gap
+## Strict Gap kernel
 
 Canonical order fills the known frame
 
 `Big = Body + Gap`
 
-by extracting a nonnegative Gap representation. Strict order should not start
-from a new abstract `<`. Its missing kernel is whether that extracted Gap
-collapses to zero or opens positively at finite precision:
+by extracting a nonnegative Gap representation. Strict order does not start
+from a new comparison mechanism. It asks whether that extracted Gap collapses
+to zero or opens positively at finite precision:
 
 * equality: `Big = Body + 0`;
 * strict orientation: at some stage `Body.hi < Big.lo`;
 * finite strict Gap: `0 < Big.lo - Body.hi`.
 
-[TODO: strict/core] Define representative strictness by
-`Le x y ∧ ¬ Le y x`, then prove it is equivalent to
-`∃ n, LeftSeparatedAt x y n`.
-
-[TODO: strict/gap] Relate finite separation to the canonical Gap extraction:
-under strictness, some lower endpoint of `gapOfLe` is positive; conversely a
-positive extracted Gap lower endpoint witnesses strict separation.
+The representative and wrapper theorems below prove that
+`Le x y ∧ ¬ Le y x` is equivalent to `∃ n, LeftSeparatedAt x y n`.
+`CanonicalOrder` then identifies the same witness with a positive lower
+endpoint of `gapOfLe`.
 
 [TODO: strict/arithmetic] Derive strict addition from preservation of the
 finite Gap. For multiplication, require a strictly positive factor and isolate
@@ -291,6 +288,43 @@ theorem le_of_rightSeparatedAt
     Le y x :=
   le_of_leftSeparatedAt hsep
 
+/--
+A finite left separation excludes the reverse asymptotic order.
+
+The witnessed rational Gap remains a positive lower bound for the reverse
+order defect at every later stage, contradicting convergence to zero.
+-/
+theorem not_le_of_leftSeparatedAt
+    {x y : DkMath.Analysis.DkReal} {n : ℕ}
+    (hsep : LeftSeparatedAt x y n) :
+    ¬ Le y x := by
+  intro hyx
+  let ε : ℚ := (y.interval n).lo - (x.interval n).hi
+  have hε : 0 < ε := sub_pos.mpr hsep
+  have heventually_lt :
+      ∀ᶠ m in Filter.atTop, orderDefect y x m < ε :=
+    hyx.eventually_lt_const hε
+  have heventually_ge :
+      ∀ᶠ m in Filter.atTop, ε ≤ orderDefect y x m := by
+    filter_upwards [Filter.eventually_ge_atTop n] with m hnm
+    have hylo := y.lo_mono hnm
+    have hxhi := x.hi_antitone hnm
+    have hxlohi := (x.interval m).le_lo_hi
+    simp only [ε, orderDefect]
+    have hdiff :
+        (y.interval n).lo - (x.interval n).hi ≤
+          (y.interval m).lo - (x.interval m).lo := by
+      linarith
+    exact hdiff.trans (le_max_right _ _)
+  exact (heventually_lt.and heventually_ge).exists.elim fun _ h => (not_lt_of_ge h.2) h.1
+
+/-- A finite right separation excludes the forward asymptotic order. -/
+theorem not_le_of_rightSeparatedAt
+    {x y : DkMath.Analysis.DkReal} {n : ℕ}
+    (hsep : RightSeparatedAt x y n) :
+    ¬ Le x y :=
+  not_le_of_leftSeparatedAt hsep
+
 /-- Stagewise overlap of two representations implies vanishing separation. -/
 theorem equiv_of_forall_overlaps
     {x y : DkMath.Analysis.DkReal}
@@ -328,6 +362,23 @@ theorem le_of_not_exists_leftSeparatedAt
       apply max_le
       · exact (x.interval n).width_nonneg
       · linarith)
+
+/--
+Strict representative order is equivalent to a finite observed left
+separation.
+
+This is the strict Gap kernel: non-strict orientation is asymptotic, while
+strict orientation is witnessed at finite rational precision.
+-/
+theorem le_and_not_le_iff_exists_leftSeparatedAt
+    (x y : DkMath.Analysis.DkReal) :
+    (Le x y ∧ ¬ Le y x) ↔ ∃ n, LeftSeparatedAt x y n := by
+  constructor
+  · intro h
+    by_contra hnone
+    exact h.2 (le_of_not_exists_leftSeparatedAt hnone)
+  · rintro ⟨n, hn⟩
+    exact ⟨le_of_leftSeparatedAt hn, not_le_of_leftSeparatedAt hn⟩
 
 /-- The asymptotic order on all `DkReal` representations is total. -/
 theorem le_total_repr (x y : DkMath.Analysis.DkReal) :
@@ -466,6 +517,10 @@ its public order lemmas have no proof arguments.
 def Le (x y : DkNNReal) : Prop :=
   DkReal.Le x.val y.val
 
+/-- Strict wrapper order: forward order without reverse order. -/
+def Lt (x y : DkNNReal) : Prop :=
+  Le x y ∧ ¬ Le y x
+
 /-- Wrapper equivalence preserves asymptotic order in both arguments. -/
 theorem le_congr
     {x x' y y' : DkNNReal} (hxx' : Equiv x x') (hyy' : Equiv y y') :
@@ -492,6 +547,11 @@ theorem mul_le_mul
 /-- The wrapper order is total because the underlying representation order is total. -/
 theorem le_total (x y : DkNNReal) : Le x y ∨ Le y x :=
   DkReal.le_total_repr x.val y.val
+
+/-- Wrapper strictness is exactly finite left separation of representatives. -/
+theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
+    Lt x y ↔ ∃ n, DkReal.LeftSeparatedAt x.val y.val n :=
+  DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
 
 end DkMath.Analysis.DkNNReal
 
