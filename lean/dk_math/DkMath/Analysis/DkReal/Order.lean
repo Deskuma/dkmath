@@ -55,9 +55,10 @@ and quotient totality are implemented below. Lean accepts the stronger
 two-branch proof: either a finite left separation is witnessed, or the reverse
 defect is bounded at every stage by the first interval's width.
 
-[TODO: linear-order] Decide whether to install a direct `LinearOrder` instance
-or expose totality through `Std.Total` while keeping decidability and classical
-comparison choices explicit.
+[DESIGN: linear-order] Retain `PartialOrder` plus `Std.Total` rather than
+installing `LinearOrder`. Mathlib's `LinearOrder` requires decidable `≤`, `<`,
+and equality, while no terminating decision procedure for this asymptotic
+order has been established. Classical comparison can be selected locally.
 
 [TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
 cross-check, not as a dependency of the computable order core.
@@ -65,8 +66,9 @@ cross-check, not as a dependency of the computable order core.
 Addition, multiplication on nonnegative representations, and natural powers
 are monotone for this order, and zero is the least quotient value. The
 quotient therefore carries Mathlib's `IsOrderedRing` predicate, whose name is
-historical: its algebraic assumption is only `Semiring`. No canonical-order,
-strict-order, or linear-order structure is claimed.
+historical: its algebraic assumption is only `Semiring`. Canonical and strict
+ordered-semiring structures are installed by `CanonicalOrder`; no
+`LinearOrder` is claimed.
 
 ## Strict Gap kernel
 

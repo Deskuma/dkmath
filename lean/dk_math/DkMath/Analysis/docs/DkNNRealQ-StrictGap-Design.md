@@ -74,13 +74,35 @@ the canonical Gap universe has become observably positive.
 [done] finite positivity of a nonnegative wrapper
 [done] positivity of a product by stage alignment
 [done] positive-factor strict multiplication through the canonical Gap
-[next] strict ordered-semiring interface selection
-[next] direct LinearOrder decision
+[done] `IsStrictOrderedRing` interface
+[decision] retain `PartialOrder` plus `Std.Total`; do not install `LinearOrder`
 ```
 
 The representative theorem now precedes every strict ordered-semiring
 typeclass. It is the mathematical kernel; a typeclass will only package its
 later quotient consequences.
+
+## Interface Decision
+
+Mathlib's `IsStrictOrderedRing` fits this quotient without adding inverses or
+linear-order structure. Additive cancellation follows from totality and strict
+addition; the multiplication fields are exactly the positive-factor Gap
+transformation proved above.
+
+Mathlib's `LinearOrder` requires decidable `<=`, `<`, and equality. Totality as
+a proposition does not supply a terminating comparison algorithm for
+asymptotic interval representations. The public structure therefore remains:
+
+```text
+PartialOrder
+Std.Total (· <= ·)
+IsOrderedRing
+IsStrictOrderedRing
+CanonicallyOrderedAdd
+```
+
+Clients may select classical decidability locally when algorithmic comparison
+is not required.
 
 ## Arithmetic Interpretation
 

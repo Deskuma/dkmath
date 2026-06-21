@@ -56,13 +56,15 @@ moving to a sufficiently precise stage. Multiplication preserves it for a
 strictly positive factor by transforming the canonical Gap from `z` to
 `z * a`; the zero-factor branch collapses that Gap.
 
-[TODO: strict-order-instance] Select the appropriate Mathlib strict ordered
-semiring interface only after checking that its fields match this API without
-adding stronger or classical structure accidentally.
+`CanonicalOrder` installs Mathlib's `IsStrictOrderedRing`. Its requirements
+match the proved API: cancellative ordered addition, nontriviality, and strict
+multiplication by positive factors. It requires neither additive inverses nor
+a linear order.
 
-[TODO: linear-order] Decide whether the now-proved quotient totality should be
-packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
-plus `Std.Total` so that decidable comparison remains an explicit choice.
+[DESIGN: linear-order] Retain `PartialOrder` plus `Std.Total`. Mathlib's
+`LinearOrder` requires decidable comparison and equality, but no terminating
+decision procedure for asymptotic interval order is currently available.
+Classical comparison should therefore remain an explicit local choice.
 
 [TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 chosen evaluation is independent of representatives. Such evaluation may

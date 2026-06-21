@@ -327,6 +327,55 @@ theorem mul_lt_mul_of_pos_left
     a * x < a * y := by
   simpa only [mul_comm] using mul_lt_mul_of_pos_right hxy ha
 
+/--
+Order can be cancelled across a common left summand.
+
+If the conclusion failed, totality would orient the operands strictly in the
+opposite direction. Strict addition would then contradict the assumed
+non-strict inequality.
+-/
+theorem le_of_add_le_add_left
+    (a b c : DkNNRealQ) (h : a + b ≤ a + c) :
+    b ≤ c := by
+  rcases le_total b c with hbc | hcb
+  · exact hbc
+  · by_contra hnot
+    have hlt : c < b := ⟨hcb, hnot⟩
+    exact (not_lt_of_ge h) (add_lt_add_left hlt a)
+
+/-- Order can be cancelled across a common right summand. -/
+theorem le_of_add_le_add_right
+    (a b c : DkNNRealQ) (h : b + a ≤ c + a) :
+    b ≤ c := by
+  rw [add_comm b a, add_comm c a] at h
+  exact le_of_add_le_add_left a b c h
+
+/-- Zero is strictly below one in the quotient order. -/
+theorem zero_lt_one : (0 : DkNNRealQ) < 1 := by
+  rw [show (0 : DkNNRealQ) = mk DkNNReal.zero by rfl,
+    show (1 : DkNNRealQ) = mk DkNNReal.one by rfl,
+    mk_lt_mk_iff, DkNNReal.zero_lt_iff_exists_lo_pos]
+  exact ⟨0, by simp [DkNNReal.one, DkNNReal.ofRat]⟩
+
+/--
+Strict ordered-semiring compatibility for the quotient.
+
+The interface requires only a semiring, partial order, cancellative ordered
+addition, nontriviality, and strict multiplication by positive factors. It
+does not install a `LinearOrder`, decidable comparison, or additive inverses.
+-/
+instance : IsStrictOrderedRing DkNNRealQ where
+  add_le_add_left _ _ h z := add_le_add h (le_refl z)
+  le_of_add_le_add_left := le_of_add_le_add_left
+  zero_le_one := zero_le_one
+  exists_pair_ne := ⟨0, 1, ne_of_lt zero_lt_one⟩
+  mul_lt_mul_of_pos_left := by
+    intro a ha b c hbc
+    exact mul_lt_mul_of_pos_left hbc ha
+  mul_lt_mul_of_pos_right := by
+    intro a ha b c hbc
+    exact mul_lt_mul_of_pos_right hbc ha
+
 /-- Mathlib interface for extracting an additive Gap from an order proof. -/
 instance : ExistsAddOfLE DkNNRealQ where
   exists_add_of_le := exists_add_of_le
