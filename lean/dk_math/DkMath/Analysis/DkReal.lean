@@ -86,7 +86,8 @@ square-mass level set. Real-side conjugation supplies inverse actions, so
 these maps are equivalences of the plane and of each level set. Their finite
 iterates generate forward orbits of constant square mass. Periodic points and
 finite action order are expressed through Mathlib's standard discrete-dynamics
-API.
+API. Minimal periods use Mathlib's zero-for-aperiodic convention and divide
+all known return times.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

@@ -338,7 +338,12 @@ theorem semanticLevelOrbit_val
         Function.iterate_succ_apply', Function.iterate_succ_apply']
       exact congrArg (semanticAct r) ih
 
-/-- A real vector is periodic when a finite semantic orbit returns to it. -/
+/--
+A real vector is periodic when a finite semantic orbit returns to it.
+
+The supplied `n` need not be positive or minimal. This is Mathlib's ordinary
+iterate-period predicate, not an angle period.
+-/
 def SemanticPeriodic
     (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) : Prop :=
   Function.IsPeriodicPt (semanticAct r) n z
@@ -412,6 +417,51 @@ theorem semanticPeriodic_of_dvd
     (h : SemanticPeriodic r z m) (hmn : m ∣ n) :
     SemanticPeriodic r z n :=
   Function.IsPeriodicPt.trans_dvd h hmn
+
+/-- Finite action order persists at every multiple. -/
+theorem semanticFiniteOrder_of_dvd
+    {r : UnitKernel DkNNRealQ} {m n : ℕ}
+    (h : SemanticFiniteOrder r m) (hmn : m ∣ n) :
+    SemanticFiniteOrder r n := by
+  rw [semanticFiniteOrder_iff] at h ⊢
+  intro z
+  exact semanticPeriodic_of_dvd (h z) hmn
+
+/--
+Minimal positive return time of a point under the transported action.
+
+Mathlib assigns value zero when the point has no positive period.
+-/
+noncomputable def semanticMinimalPeriod
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : ℕ :=
+  Function.minimalPeriod (semanticAct r) z
+
+/-- Every point returns at its Mathlib minimal period. -/
+theorem semanticPeriodic_minimalPeriod
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    SemanticPeriodic r z (semanticMinimalPeriod r z) :=
+  Function.isPeriodicPt_minimalPeriod (semanticAct r) z
+
+/-- Periodicity at `n` is divisibility by the minimal period. -/
+theorem semanticPeriodic_iff_minimalPeriod_dvd
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) :
+    SemanticPeriodic r z n ↔ semanticMinimalPeriod r z ∣ n :=
+  Function.isPeriodicPt_iff_minimalPeriod_dvd
+
+/-- Any finite action order is divisible by every point's minimal period. -/
+theorem semanticMinimalPeriod_dvd_of_finiteOrder
+    {r : UnitKernel DkNNRealQ} {n : ℕ}
+    (h : SemanticFiniteOrder r n) (z : Vec ℝ) :
+    semanticMinimalPeriod r z ∣ n := by
+  rw [← semanticPeriodic_iff_minimalPeriod_dvd]
+  exact (semanticFiniteOrder_iff r n).mp h z
+
+/-- Positive periodicity forces a positive minimal period. -/
+theorem semanticMinimalPeriod_pos
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ} {n : ℕ}
+    (hn : 0 < n) (h : SemanticPeriodic r z n) :
+    0 < semanticMinimalPeriod r z :=
+  Function.IsPeriodicPt.minimalPeriod_pos hn h
 
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and

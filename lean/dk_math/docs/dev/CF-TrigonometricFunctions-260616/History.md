@@ -212,6 +212,30 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 04:09 JST (Minimal periods and finite-order divisibility)
+
+1. 注意点:
+   - `SemanticPeriodic r z n` の `n` は正とも最小とも限らず、角度周期でも
+     ないことを docstring に明記した。
+2. 実施:
+   - finite action order の倍数伝播を証明した。
+   - Mathlib `minimalPeriod` を包む `semanticMinimalPeriod` を追加した。
+   - periodicity と minimal period divisibility の同値を公開した。
+   - 任意の finite action order が全点の minimal period で割り切れることを
+     証明した。
+   - 正周期が存在すれば minimal period が正であることを証明した。
+3. 規約:
+   - periodic point の minimal period は最小正周期。
+   - 非周期点では Mathlib 規約により minimal period は zero。
+4. 結論:
+   - orbit return、period divisibility、finite action order が Mathlib の
+     標準周期 API 上で統一された。
+5. 次の候補:
+   - fixed point / finite-order action の分類。
+   - source-level family は signed DkReal 層まで保留。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 03:50 JST (Periodic points and finite action order)
 
 1. 方針:

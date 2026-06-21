@@ -90,6 +90,10 @@ SemanticPeriodic
 SemanticLevelPeriodic
 SemanticFiniteOrder
 semanticFiniteOrder_iff
+semanticFiniteOrder_of_dvd
+semanticMinimalPeriod
+semanticPeriodic_iff_minimalPeriod_dvd
+semanticMinimalPeriod_dvd_of_finiteOrder
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -114,8 +118,15 @@ equivalent to periodicity of the underlying plane point. Finite action order
 means that one iterate is the identity on the whole plane; this makes every
 point of every level set periodic.
 
+The period argument of `SemanticPeriodic` is neither required to be positive
+nor minimal. `semanticMinimalPeriod` uses Mathlib's convention: it is the
+least positive period for a periodic point and zero otherwise. Periodicity is
+equivalent to divisibility by this minimal period. Every point's minimal
+period divides any finite action order, and finite action order propagates to
+all multiples.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example divisibility and minimal-period
-statements. Order reflection remains a separate, heavier task.
+remain on the real side, for example classifying fixed points or finite-order
+actions. Order reflection remains a separate, heavier task.
