@@ -53,7 +53,9 @@ The next independent tasks are:
    are monotone, and zero is least. Mathlib's semiring-level `IsOrderedRing`
    predicate is installed. Totality is proved internally from persistent
    separation and a vanishing-width bound, and exported through `Std.Total`.
-   Canonical order and a direct `LinearOrder` instance remain independent.
+   Canonical additive order is proved by extracting a nonnegative Gap universe
+   from ordered representatives. A direct `LinearOrder` instance remains
+   independent.
 2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
    `BridgeReal.lean`, extract the unique real point of a nested interval
    representation and prove independence from representatives.

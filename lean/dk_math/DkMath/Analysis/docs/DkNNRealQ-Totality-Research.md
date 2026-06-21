@@ -177,8 +177,9 @@ Totality does not settle canonical order. The statement
 x <= y ↔ ∃ z, y = x + z
 ```
 
-requires constructing a nonnegative difference representation and should be
-treated separately.
+is now proved separately in `DkReal.CanonicalOrder` by constructing a
+nonnegative Gap representation. The construction adds no subtraction
+operation to the quotient.
 
 Strict order also needs its own analysis. In particular, strict monotonicity
 and cancellation must not be inferred solely from `IsOrderedRing`.

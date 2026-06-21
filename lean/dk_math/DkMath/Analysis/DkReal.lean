@@ -13,6 +13,7 @@ import DkMath.Analysis.DkReal.Equiv
 import DkMath.Analysis.DkReal.DkNNReal
 import DkMath.Analysis.DkReal.DkNNRealQ
 import DkMath.Analysis.DkReal.Order
+import DkMath.Analysis.DkReal.CanonicalOrder
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -25,7 +26,8 @@ Public entry point for the complete Route B algebraic checkpoint:
 * `DkReal` gives nested interval sequences of vanishing width;
 * `DkReal.Equiv` identifies representations of vanishing separation;
 * `DkNNReal` packages nonnegativity;
-* `DkNNRealQ` is the quotient-backed nonnegative `CommSemiring`.
+* `DkNNRealQ` is the quotient-backed nonnegative ordered `CommSemiring`;
+* `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
 
 All endpoint operations in this import tree remain computable. No represented
 limit in Mathlib's `Real` or `NNReal` is selected here.
@@ -39,13 +41,14 @@ Totality is proved internally from nested-interval geometry. If a finite
 strict left separation is witnessed, it persists. Otherwise the reverse order
 defect is bounded by a vanishing interval width.
 
+Canonical order is also constructive at the representation level. From
+`x ≤ y`, `CanonicalOrder` extracts a computable nonnegative Gap `z` such that
+`y = x + z` in the quotient. No subtraction operation is added to
+`DkNNRealQ`.
+
 [TODO: linear-order] Decide whether the now-proved quotient totality should be
 packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 plus `Std.Total` so that decidable comparison remains an explicit choice.
-
-[TODO: canonical-order] Treat `x ≤ y ↔ ∃ z, y = x + z` as an independent
-problem. It is not a consequence of the current ordered-semiring compatibility
-alone.
 
 [TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 chosen evaluation is independent of representatives. Such evaluation may

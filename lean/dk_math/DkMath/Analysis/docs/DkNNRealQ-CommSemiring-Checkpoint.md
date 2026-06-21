@@ -57,12 +57,12 @@ The implementation establishes:
 - monotonicity of addition and nonnegative multiplication;
 - monotonicity of natural powers;
 - Mathlib's semiring-level `IsOrderedRing DkNNRealQ`;
-- totality through `Std.Total (· ≤ ·)`.
+- totality through `Std.Total (· ≤ ·)`;
+- canonical additive order through `CanonicallyOrderedAdd DkNNRealQ`.
 
 This checkpoint does not establish:
 
 - a direct `LinearOrder` instance;
-- canonical order by additive differences;
 - strict ordered-semiring structure;
 - completeness;
 - decidable equality;
@@ -95,6 +95,24 @@ evaluating into `Real`.
 
 See
 [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
+
+### Canonical Gap Extraction
+
+For `x ≤ y`, the implementation constructs stagewise intervals
+
+```text
+[max(0, y.lo - x.hi), max(0, y.hi - x.lo)].
+```
+
+They form a nested nonnegative representation of vanishing width. Adding this
+Gap representation to `x` is equivalent to `y`, so quotient equality gives
+
+```text
+x ≤ y  iff  exists z, y = x + z.
+```
+
+This is packaged as `ExistsAddOfLE` and `CanonicallyOrderedAdd`. No subtraction
+operation is introduced on `DkNNRealQ`.
 
 ### Semantic Bridge
 

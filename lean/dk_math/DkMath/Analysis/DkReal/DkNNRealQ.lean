@@ -29,10 +29,13 @@ under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
 Addition, multiplication, and natural powers are monotone for the asymptotic
 order, and zero is the least quotient value. `DkReal.Order` packages these
 facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
-strict, and linear order structures remain unclaimed.
+strict, and linear order structures are developed in later modules.
 
 `DkReal.Order` proves totality internally through finite separation or a
 vanishing-width bound and exports `Std.Total (· ≤ ·)`.
+
+`DkReal.CanonicalOrder` subsequently proves
+`x ≤ y ↔ ∃ z, y = x + z` and installs `CanonicallyOrderedAdd`.
 
 [TODO: semantic-bridge] A semantic map to Mathlib's `NNReal` should be placed in a separate
 bridge module and proved to preserve zero, one, addition, multiplication,

@@ -78,6 +78,10 @@ DkMath.Analysis.DkReal.Order
   asymptotic lower-endpoint order, Equiv compatibility, PartialOrder,
   ordered-semiring compatibility, and totality research boundary
 
+DkMath.Analysis.DkReal.CanonicalOrder
+  subtraction-free extraction of a nonnegative Gap representation,
+  ExistsAddOfLE, and CanonicallyOrderedAdd
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -106,7 +110,8 @@ Order:
   zero is least
   IsOrderedRing packages semiring-level ordered compatibility
   totality is proved and exported through Std.Total
-  canonical, strict, and direct linear order structures remain open
+  canonical additive order is proved by nonnegative Gap extraction
+  strict and direct linear order structures remain open
   use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:
