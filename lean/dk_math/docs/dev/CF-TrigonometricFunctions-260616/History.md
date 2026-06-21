@@ -166,3 +166,26 @@ Archive
 5. 次の課題:
    - semantic order reflection を証明する。
    - CF2D の保存量 `q2` を最初の実数解析 consumer として接続する。
+
+### 2026/06/21 23:18 JST (Bundled semantics and the first CF2D consumer)
+
+1. 方針:
+   - order reflection は専用課題として保留する。
+   - 現在の半環保存則だけで到達できる CF2D bridge を先行する。
+2. 実施:
+   - `semanticValue` を `DkNNRealQ →+* ℝ` の `semanticRingHom` として束ねた。
+   - `SemanticCF2D.lean` を新設し、CF2D 依存を意味論本体から隔離した。
+   - `semanticVec` と `semanticValue_q2` を実装した。
+   - 非負 DkMath unit kernel を実数 unit kernel へ運ぶ
+     `semanticUnitKernel` を実装した。
+3. 観測:
+   - CF2D の抽象 `Semiring` 冪と DkNNRealQ の表現用 `Pow` は、型クラス上
+     異なる経路を取る。
+   - `q2` の二乗を積へ正規化すると、semantic multiplication だけで橋が
+     閉じる。追加の冪同一視や解析定理は不要だった。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+5. 次の課題:
+   - transported real `UnitKernel` を最初の CF2D 解析定理へ接続する。
+   - order reflection は subtraction や decidable comparison を導入せず、
+     独立課題として検討する。

@@ -78,8 +78,9 @@ constants, addition, multiplication, natural powers, and canonical order.
 values reconstructs the canonical quotient order, without adding decidable
 comparison.
 
-[TODO: semantic-cf2d] Use the semantic map to transport the CF2D quadratic
-invariant `q2` into the Mathlib real-analysis layer.
+[TODO: semantic-cf2d-analysis] Use the transported real `UnitKernel` as the
+input to the first CF2D analytic theorem. The algebraic `q2` transport is
+implemented separately in `DkReal.SemanticCF2D`.
 
 [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
 endpoint products and belongs outside the current nonnegative API.

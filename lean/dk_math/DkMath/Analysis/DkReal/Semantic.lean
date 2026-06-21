@@ -355,6 +355,26 @@ theorem semanticValue_mono
   rw [semanticValue_add]
   exact le_add_of_nonneg_right (semanticValue_nonneg z)
 
+/--
+The semantic interpretation bundled as a semiring homomorphism into
+Mathlib's real numbers.
+
+This definition packages the already proved preservation laws. Its
+noncomputability comes only from selecting the unique real point represented
+by a nested rational interval sequence.
+-/
+def semanticRingHom : DkNNRealQ →+* ℝ where
+  toFun := semanticValue
+  map_zero' := semanticValue_zero
+  map_one' := semanticValue_one
+  map_add' := semanticValue_add
+  map_mul' := semanticValue_mul
+
+/-- Applying the bundled semantic homomorphism is semantic evaluation. -/
+@[simp]
+theorem semanticRingHom_apply (x : DkNNRealQ) :
+    semanticRingHom x = semanticValue x := rfl
+
 end
 
 end DkMath.Analysis.DkNNRealQ

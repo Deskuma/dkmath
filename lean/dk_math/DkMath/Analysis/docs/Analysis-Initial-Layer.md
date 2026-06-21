@@ -126,7 +126,10 @@ BridgeNNReal / BridgeReal:
   uniqueness and representative independence are proved
   DkNNRealQ evaluation and semiring operations are preserved
   canonical order preservation is proved by additive Gap extraction
-  next prove order reflection and connect the CF2D quadratic invariant
+  the semantic map is bundled as a semiring homomorphism to Real
+  CF2D q2 and unit kernels are transported coordinatewise to Real
+  next consume the transported unit kernel in the analytic CF2D layer
+  treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv
 ```
 

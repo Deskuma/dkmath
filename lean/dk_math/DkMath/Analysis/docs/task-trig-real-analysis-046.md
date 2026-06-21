@@ -60,5 +60,15 @@ consumer. Order reflection should remain independent of decidable comparison:
 semanticValue x ≤ semanticValue y -> x ≤ y
 ```
 
-After that, the first CF2D consumer should transport the quadratic invariant
-`q2` through semantic evaluation.
+The first CF2D consumer is now implemented in
+`DkMath.Analysis.DkReal.SemanticCF2D`:
+
+```text
+semanticVec
+semanticValue_q2
+semanticValue_q2_eq
+semanticUnitKernel
+```
+
+The next consumer should use the transported real `UnitKernel` in an analytic
+CF2D theorem. Order reflection remains a separate, heavier task.
