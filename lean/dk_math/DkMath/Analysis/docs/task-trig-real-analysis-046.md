@@ -36,14 +36,19 @@ DkReal representation
 ## Current Implementation Step
 
 `DkMath.Analysis.DkReal.Semantic` implements the lower-endpoint supremum,
-boundedness, interval membership, and monotone convergence.
+boundedness, interval membership, width convergence, uniqueness, monotone
+endpoint convergence, and invariance under `DkReal.Equiv`.
 
-The next obligation is representative independence. It should use:
+The next obligation is quotient descent:
 
 ```text
-equiv_tendsto_lo_sub_zero
-tendsto_lowerReal_semanticValue
-uniqueness of limits in Real
+DkNNRealQ.semanticValue
+map_zero
+map_one
+map_add
+map_mul
+map_pow
+order preservation and reflection
 ```
 
 No global decidable comparison or `LinearOrder` instance is needed.

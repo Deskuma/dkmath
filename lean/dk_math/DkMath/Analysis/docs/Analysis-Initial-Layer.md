@@ -123,8 +123,9 @@ Order:
 
 BridgeNNReal / BridgeReal:
   semanticValue now selects the lower-endpoint supremum
-  next prove representative independence and uniqueness
-  prove semiring-homomorphism laws
+  uniqueness and representative independence are proved
+  DkNNRealQ evaluation, rational constants, and addition are proved
+  next prove multiplication, powers, and order bridge laws
   compare semantic equality with DkReal.Equiv
 ```
 

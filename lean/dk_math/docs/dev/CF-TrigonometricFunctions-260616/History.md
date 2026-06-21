@@ -114,3 +114,32 @@ Archive
    - 全区間に属する実数点の一意性を証明する。
    - `Equiv x y -> semanticValue x = semanticValue y` を証明する。
    - その後 `DkNNRealQ` へ semantic map を降ろす。
+
+### 2026/06/21 20:28 JST (Semantic uniqueness and quotient descent)
+
+1. 目的:
+   - review-trig-046 の指摘を反映し、semantic point の一意性と
+     representative independence を閉じる。
+   - `DkNNRealQ` へ semantic evaluation を降ろす。
+2. 実施:
+   - `widthReal` と `tendsto_widthReal_zero` を追加した。
+   - 全 approximation interval に属する実数点の一意性を証明した。
+   - `Equiv x y -> semanticValue x = semanticValue y` を証明した。
+   - `DkNNRealQ.semanticValue` を quotient lift として定義した。
+   - rational constants、zero、one、addition の semantic 保存を証明した。
+   - 公開 import の計算可能性説明を semantic module 付きの現状へ修正した。
+3. 結論:
+   - DkReal representation から Mathlib Real への写像が quotient-compatible
+     になった。
+   - 次の解析本線は nonnegative multiplication、power、order bridge である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.Semantic` 成功。
+5. 失敗事例:
+   - rational-to-real cast の composed function が簡約されず、関数外延性で
+     cast 前後の式を明示的に一致させた。
+   - quotient zero/one は `rfl` では閉じず、rational evaluation theorem を
+     経由した。
+6. 次の課題:
+   - semantic multiplication と natural power preservation。
+   - internal order と Mathlib Real order の保存・反映。
+   - 保存量 `q2` の semantic bridge を最初の CF2D consumer とする。
