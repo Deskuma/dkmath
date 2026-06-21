@@ -212,6 +212,29 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 02:30 JST (Bundled automorphisms and finite orbits)
+
+1. 目的:
+   - transported action の可逆性を bundled equivalence として公開する。
+   - finite iterate と orbit の保存量を定理化する。
+2. 実施:
+   - `semanticActEquiv` と `semanticActLevelEquiv` を追加した。
+   - plane / level-set action の全 finite iterate が bijective と証明した。
+   - `semanticAct_iterate_q2` を帰納法で証明した。
+   - `semanticOrbit` と `semanticLevelOrbit` を定義した。
+   - orbit 全体で `q2` が初期値に等しいことを証明した。
+   - level-set orbit の underlying vector が plane orbit と一致することを
+     証明した。
+3. 結論:
+   - DkNNRealQ 由来 kernel は Real の各 `q2` level set 上に離散力学系を
+     生成する。
+   - signed source、角度復元、連続性を導入せず finite orbit まで到達した。
+4. 次の候補:
+   - periodic point / finite-order kernel の一般定理。
+   - source-level family は signed DkReal 層まで保留。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 00:59 JST (Inverse kernels and level-set automorphisms)
 
 1. 方針:

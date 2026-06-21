@@ -257,6 +257,87 @@ theorem semanticActLevel_bijective
     semanticInverseActLevel_semanticActLevel r,
     semanticActLevel_semanticInverseActLevel r⟩
 
+/-- The transported action bundled as an equivalence of the real CF2D plane. -/
+def semanticActEquiv (r : UnitKernel DkNNRealQ) : Vec ℝ ≃ Vec ℝ where
+  toFun := semanticAct r
+  invFun := semanticInverseAct r
+  left_inv := semanticInverseAct_semanticAct r
+  right_inv := semanticAct_semanticInverseAct r
+
+/-- Applying the bundled plane equivalence is semantic action. -/
+@[simp]
+theorem semanticActEquiv_apply
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticActEquiv r z = semanticAct r z := rfl
+
+/-- The transported action bundled as an equivalence of a real level set. -/
+def semanticActLevelEquiv
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ} :
+    LevelSet ℝ rho2 ≃ LevelSet ℝ rho2 where
+  toFun := semanticActLevel r
+  invFun := semanticInverseActLevel r
+  left_inv := semanticInverseActLevel_semanticActLevel r
+  right_inv := semanticActLevel_semanticInverseActLevel r
+
+/-- Applying the bundled level-set equivalence is semantic level-set action. -/
+@[simp]
+theorem semanticActLevelEquiv_apply
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    semanticActLevelEquiv r z = semanticActLevel r z := rfl
+
+/-- Every finite iterate of a transported action preserves square mass. -/
+theorem semanticAct_iterate_q2
+    (r : UnitKernel DkNNRealQ) (n : ℕ) (z : Vec ℝ) :
+    Vec.q2 ((semanticAct r)^[n] z) = Vec.q2 z := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+      rw [Function.iterate_succ_apply']
+      exact (semanticAct_q2 r _).trans ih
+
+/-- Every finite iterate of a transported action is bijective. -/
+theorem semanticAct_iterate_bijective
+    (r : UnitKernel DkNNRealQ) (n : ℕ) :
+    Function.Bijective ((semanticAct r)^[n]) :=
+  (semanticAct_bijective r).iterate n
+
+/-- Every finite iterate of a level-set action is bijective. -/
+theorem semanticActLevel_iterate_bijective
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ} (n : ℕ) :
+    Function.Bijective
+      ((semanticActLevel r : LevelSet ℝ rho2 → LevelSet ℝ rho2)^[n]) :=
+  (semanticActLevel_bijective r).iterate n
+
+/-- Forward orbit of a real vector under a transported DkMath kernel. -/
+def semanticOrbit
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) : Vec ℝ :=
+  (semanticAct r)^[n] z
+
+/-- Every point of a transported orbit has the initial square mass. -/
+theorem semanticOrbit_q2
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) :
+    Vec.q2 (semanticOrbit r z n) = Vec.q2 z :=
+  semanticAct_iterate_q2 r n z
+
+/-- Forward orbit of a point inside a fixed real square-mass level set. -/
+def semanticLevelOrbit
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) (n : ℕ) : LevelSet ℝ rho2 :=
+  (semanticActLevel r)^[n] z
+
+/-- The underlying vector of a level-set orbit is the corresponding plane orbit. -/
+theorem semanticLevelOrbit_val
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) (n : ℕ) :
+    (semanticLevelOrbit r z n).1 = semanticOrbit r z.1 n := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+      rw [semanticLevelOrbit, semanticOrbit,
+        Function.iterate_succ_apply', Function.iterate_succ_apply']
+      exact congrArg (semanticAct r) ih
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.
