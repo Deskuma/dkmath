@@ -87,8 +87,10 @@ The representative and wrapper theorems below prove that
 `CanonicalOrder` then identifies the same witness with a positive lower
 endpoint of `gapOfLe`.
 
-[TODO: strict/arithmetic] Derive strict addition from preservation of the
-finite Gap. For multiplication, require a strictly positive factor and isolate
+Strict addition is proved below by moving to a later stage where the added
+interval width is smaller than the finite Gap.
+
+[TODO: strict-multiplication] Require a strictly positive factor and isolate
 the zero-factor branch before considering `IsStrictOrderedRing`.
 -/
 
@@ -318,7 +320,11 @@ theorem not_le_of_leftSeparatedAt
     exact hdiff.trans (le_max_right _ _)
   exact (heventually_lt.and heventually_ge).exists.elim fun _ h => (not_lt_of_ge h.2) h.1
 
-/-- A finite right separation excludes the forward asymptotic order. -/
+/--
+A finite right separation excludes the forward asymptotic order.
+
+Right separation is left separation with the two arguments exchanged.
+-/
 theorem not_le_of_rightSeparatedAt
     {x y : DkMath.Analysis.DkReal} {n : ℕ}
     (hsep : RightSeparatedAt x y n) :
@@ -553,6 +559,36 @@ theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
     Lt x y ↔ ∃ n, DkReal.LeftSeparatedAt x.val y.val n :=
   DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
 
+/--
+Adding a fixed nonnegative approximation preserves wrapper strictness.
+
+Finite separation need not survive at the same approximation stage because
+the added interval has nonzero width. The original positive separation is
+fixed first; convergence of the added width then supplies a later stage where
+that width is smaller than the separation.
+-/
+theorem add_lt_add_right
+    {x y : DkNNReal} (hxy : Lt x y) (a : DkNNReal) :
+    Lt (add x a) (add y a) := by
+  rw [lt_iff_exists_leftSeparatedAt] at hxy ⊢
+  obtain ⟨n, hsep⟩ := hxy
+  let ε : ℚ := (y.val.interval n).lo - (x.val.interval n).hi
+  have hε : 0 < ε := sub_pos.mpr hsep
+  have hwidth :
+      ∀ᶠ m in Filter.atTop, (a.val.interval m).width < ε :=
+    a.val.tendsto_width_zero.eventually_lt_const hε
+  obtain ⟨m, hnm, hmwidth⟩ :=
+    (Filter.eventually_ge_atTop n |>.and hwidth).exists
+  refine ⟨m, ?_⟩
+  have hxhi := x.val.hi_antitone hnm
+  have hylo := y.val.lo_mono hnm
+  simp only [DkReal.LeftSeparatedAt, add, DkReal.add_interval,
+    DkReal.addApprox, DkReal.GapInterval.add_hi,
+    DkReal.GapInterval.add_lo]
+  simp only [DkReal.GapInterval.width] at hmwidth
+  dsimp only [ε] at hmwidth
+  linarith
+
 end DkMath.Analysis.DkNNReal
 
 namespace DkMath.Analysis.DkNNRealQ
@@ -606,6 +642,33 @@ theorem le_total (x y : DkNNRealQ) : x ≤ y ∨ y ≤ x := by
 instance : Std.Total (α := DkNNRealQ) (· ≤ ·) where
   total := le_total
 
+/--
+Strict quotient order is the asymmetric part of the non-strict order.
+
+This theorem records explicitly the strict relation supplied by the quotient's
+`PartialOrder`; it introduces no second comparison mechanism.
+-/
+theorem lt_iff_le_and_not_le (x y : DkNNRealQ) :
+    x < y ↔ x ≤ y ∧ ¬ y ≤ x :=
+  Iff.rfl
+
+/--
+On quotient constructors, standard strict order computes to wrapper
+strictness.
+-/
+theorem mk_lt_mk_iff (x y : DkNNReal) :
+    mk x < mk y ↔ DkNNReal.Lt x y :=
+  Iff.rfl
+
+/--
+Two represented quotient values are strictly ordered exactly when their
+interval universes become finitely left-separated.
+-/
+theorem mk_lt_mk_iff_exists_leftSeparatedAt (x y : DkNNReal) :
+    mk x < mk y ↔
+      ∃ n, DkReal.LeftSeparatedAt x.val y.val n := by
+  rw [mk_lt_mk_iff, DkNNReal.lt_iff_exists_leftSeparatedAt]
+
 /-- Zero is the least value of the nonnegative quotient. -/
 theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
   refine Quotient.inductionOn x ?_
@@ -637,6 +700,25 @@ theorem add_le_add_right
     {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
     z + x ≤ z + y :=
   add_le_add (le_refl z) hxy
+
+/--
+Addition by a fixed right summand preserves strict quotient order.
+
+The representative proof moves to a sufficiently precise later stage, where
+the summand width is smaller than the already witnessed strict Gap.
+-/
+theorem add_lt_add_right
+    {x y : DkNNRealQ} (hxy : x < y) (a : DkNNRealQ) :
+    x + a < y + a := by
+  refine Quotient.inductionOn₃ x y a ?_ hxy
+  intro x y a hxy
+  exact DkNNReal.add_lt_add_right hxy a
+
+/-- Addition by a fixed left summand preserves strict quotient order. -/
+theorem add_lt_add_left
+    {x y : DkNNRealQ} (hxy : x < y) (a : DkNNRealQ) :
+    a + x < a + y := by
+  simpa only [add_comm] using add_lt_add_right hxy a
 
 /-- Quotient multiplication is monotone in both arguments. -/
 theorem mul_le_mul

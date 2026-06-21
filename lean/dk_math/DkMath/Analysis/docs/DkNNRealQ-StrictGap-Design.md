@@ -69,8 +69,8 @@ the canonical Gap universe has become observably positive.
 [done] DkNNReal.Lt := Le x y and not Le y x
 [done] DkNNReal.lt_iff_exists_leftSeparatedAt
 [done] positive lower endpoint of gapOfLe iff finite separation
-[next] quotient strict-order characterization
-[next] strict addition
+[done] quotient strict-order characterization
+[done] strict addition at a sufficiently precise later stage
 [next] positive-factor strict multiplication
 ```
 
@@ -80,11 +80,15 @@ later quotient consequences.
 
 ## Arithmetic Interpretation
 
-Addition preserves the strict Gap:
+Addition preserves the strict Gap after refinement:
 
 ```text
 (x + a) + z = (y + a).
 ```
+
+At a fixed stage the interval width of `a` can hide the observed separation.
+The proof therefore fixes a positive separation `epsilon` and advances until
+`width(a) < epsilon`; strict separation is then visible again.
 
 Multiplication transforms it:
 

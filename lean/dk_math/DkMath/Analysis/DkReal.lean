@@ -51,8 +51,11 @@ equivalent both to finite left separation and to a positive lower endpoint of
 the canonical Gap at some stage. This keeps the design in the same
 `Big = (Core + Beam) + Gap` pattern.
 
-[TODO: strict-arithmetic] Prove preservation by addition and by multiplication
-with a strictly positive factor before selecting a strict-order typeclass.
+Strict order has now descended to the quotient, and addition preserves it by
+moving to a sufficiently precise stage.
+
+[TODO: strict-multiplication] Prove preservation by multiplication with a
+strictly positive factor before selecting a strict-order typeclass.
 
 [TODO: linear-order] Decide whether the now-proved quotient totality should be
 packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
