@@ -25,6 +25,23 @@ proof-carrying strict comparison    constructive
 full DkNNRealQ comparison           total as a proposition, not decidable
 ```
 
+### Type-name policy
+
+This plan intentionally uses both existing types; they are not aliases:
+
+```text
+DkNNReal:
+  a nonnegative interval representative;
+  finite endpoint inspection and executable bounded search live here.
+
+DkNNRealQ:
+  the quotient of representatives;
+  public equality, order, semiring operations, and frame evaluation live here.
+```
+
+Every observation theorem must connect its representative result to quotient
+order through `DkNNRealQ.mk`. A future rename is outside this plan.
+
 ## 2. Current implementation
 
 The public entry point `DkMath.PowerSwap` imports five modules.
@@ -206,6 +223,21 @@ with a domain carrying stronger certificates.
 
 ## 6. Feasible implementation plan
 
+### Phase 0: Reconfirm the live workspace
+
+Before each implementation phase, verify the current names rather than relying
+on this document alone:
+
+```text
+DkNNReal and DkNNRealQ definitions and namespaces
+DkMath.Analysis.DkReal.CanonicalOrder import path
+DkNNRealQ.pow_le_pow and available strict power lemmas
+DkReal.LeftSeparatedAt and mk strict-order bridge names
+DkMath.lean and DkMath.PowerSwap import effects
+```
+
+Record any renamed API in the module docstring before adapting the plan.
+
 ### Phase 1: Stabilize the existing structural core
 
 Add:
@@ -222,9 +254,17 @@ structure NatPowerFrame (α : Type u) where
   degree : Nat
 
 def NatPowerFrame.eval [Pow α Nat] (A : NatPowerFrame α) : α
+
+def NatPowerFrame.power
+    (A : NatPowerFrame α) (m : Nat) : NatPowerFrame α
 ```
 
 Avoid `Pow α α` initially. Real exponents already belong to `Branch`.
+
+The data definitions require only `[Pow α Nat]`. Theorems using
+`(a ^ n) ^ m = a ^ (n * m)` must be placed in a section with `[Monoid α]`, or
+another explicit structure that supplies `pow_mul`. This law must not be
+claimed from an arbitrary `Pow` instance.
 
 Preserve `PowNormalForm` for compatibility. Relate it to
 `NatPowerFrame Nat` by an equivalence or conversion functions instead of
@@ -254,8 +294,9 @@ structure NormalizesTo [Pow α Nat]
   value_eq : source.eval = target.eval
 ```
 
-Provide reflexivity, symmetry, transitivity, and composition with
-`NatPowerFrame.power`.
+Provide reflexivity, symmetry, and transitivity using equality alone.
+Composition with `NatPowerFrame.power` belongs in a `[Monoid α]` section
+because its evaluation theorem depends on `pow_mul`.
 
 Relate `HasPowNormalForm` to this generic witness. Do not implement arbitrary
 root extraction.
@@ -274,6 +315,16 @@ Define:
 SameDegree
 SameDegreeComparison
 SameDegreeStrictComparison
+```
+
+The strict specification must carry positive degree:
+
+```lean
+structure SameDegreeStrictComparison [LT α]
+    (A B : NatPowerFrame α) : Prop where
+  same_degree : A.degree = B.degree
+  degree_pos : 0 < A.degree
+  base_lt : A.base < B.base
 ```
 
 Prove generic evaluation theorems from explicit monotonicity hypotheses. Keep
@@ -321,7 +372,7 @@ Initial theorems:
 NatPowerFrame.evalDk
 CosmicPowerFrame.evalDk
 eval_le_of_sameDegree_base_le
-eval_lt_of_sameDegree_base_lt, degree != 0
+eval_lt_of_sameDegree_base_lt, with 0 < degree
 eval_eq_of_normalizesTo
 cosmic_eval_le
 ```
@@ -366,6 +417,11 @@ none         -> no conclusion beyond the searched prefix
 
 Do not state completeness for finite fuel.
 
+The use of `DkNNReal` here is deliberate: endpoint inspection is a
+representative operation. Soundness must conclude statements about
+`DkNNRealQ.mk x` and `DkNNRealQ.mk y`; `compareAt` must not be defined directly
+on quotient values.
+
 ### Phase 7: Refine module exports
 
 Keep `DkMath.PowerSwap` as the compatibility umbrella. Add a lightweight
@@ -390,6 +446,15 @@ CosmicFrame
 Treat `Branch` and `Contours` as the analytic layer. Moving files into an
 `Analytic` directory is optional and should only be done with compatibility
 re-export modules.
+
+Add a thin analytic entry point:
+
+```text
+DkMath.PowerSwap.Analytic
+  imports Branch and Contours
+```
+
+New structural consumers must import `DkMath.PowerSwap.Core`, not the umbrella.
 
 ### Phase 8: Consumer bridges
 
@@ -419,13 +484,14 @@ moving or renaming all existing analytic modules at once
 The smallest low-risk sequence is:
 
 ```text
+0. Reconfirm live names and imports
 1. Frame
 2. Normalize
 3. Compare
 4. CosmicFrame
 5. PowerSwapBridge for DkNNRealQ
-6. finite StageComparison and compareUpTo
-7. public import cleanup
+6. finite StageComparison on DkNNReal and quotient soundness
+7. Core and Analytic public entry points
 8. consumer bridges
 ```
 

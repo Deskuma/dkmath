@@ -2,6 +2,36 @@
 
 DkMath.PowerSwap Implementation Plan and Design Document
 
+> **Document status (2026-06-21): historical design baseline**
+>
+> The mathematical direction remains valid, but the module names and
+> implementation order no longer describe the current workspace. New work
+> should follow
+> [the feasible implementation plan](./DkMath_PowerSwap-Current-Gap-and-Feasible-Implementation-Plan-2026-06-21.md)
+> while using this document for the original mathematical motivation.
+
+## Current alignment note
+
+The current package already contains `Basic`, `Exchange`, `NormalForm`,
+`Branch`, and `Contours`. The `Nat`-specific normal form and analytic real
+branch were implemented before the generic structural middle layer proposed
+here. The remaining work is therefore an insertion, not a restart:
+
+```text
+NatPowerFrame
+NormalizesTo
+same-degree comparison specifications
+CosmicPowerFrame
+DkNNRealQ bridge
+finite representative observation
+```
+
+The existing types have distinct roles. `DkNNReal` is an interval
+representative used by finite executable observation. `DkNNRealQ` is the
+quotient value used by public equality, order, and power comparison. Full
+quotient order is total as a proposition, but no global `DecidableLE`,
+`DecidableEq`, or `LinearOrder` is planned.
+
 ## 0. 目的
 
 `DkMath.PowerSwap.*` は、冪構造を比較・正規化するための独立した基盤層として実装する。
@@ -337,28 +367,13 @@ center < point
 DkMath/PowerSwap/Normalize.lean
 ```
 
-正規化後の frame。
-
-```lean
-structure NormalPowerFrame (α : Type u) where
-  degree : α
-  base : α
-```
-
-自然数次数版。
-
-```lean
-structure NormalNatPowerFrame (α : Type u) where
-  degree : ℕ
-  base : α
-```
-
-正規化 relation。
+正規化 relation。改訂計画では正規化専用の frame 型を重複して作らず、
+source と target の両方に `NatPowerFrame` を用いる。
 
 ```lean
 structure NormalizesTo [Pow α ℕ]
-    (A : NatPowerFrame α) (N : NormalNatPowerFrame α) : Prop where
-  value_eq : A.base ^ A.degree = N.base ^ N.degree
+    (source target : NatPowerFrame α) : Prop where
+  value_eq : source.eval = target.eval
 ```
 
 この段階では、正規化関数そのものを必ずしも作らない。
@@ -424,6 +439,17 @@ structure SameDegreeComparison [LE α] (A B : NatPowerFrame α) : Prop where
   base_le : A.base ≤ B.base
 ```
 
+厳密比較では次数 0 による値 `1` への退化を除くため、正次数を証拠として
+持つ。
+
+```lean
+structure SameDegreeStrictComparison [LT α]
+    (A B : NatPowerFrame α) : Prop where
+  same_degree : A.degree = B.degree
+  degree_pos : 0 < A.degree
+  base_lt : A.base < B.base
+```
+
 Bridge 側で、これを実値比較に変換する。
 
 ## 9. Stage 7: Cosmic decomposition
@@ -448,8 +474,8 @@ DkMath/PowerSwap/CosmicFrame.lean
 
 ```lean
 structure CosmicPowerFrame (α : Type u) where
-  x : α
-  u : α
+  core : α
+  gap : α
   degree : ℕ
 ```
 
@@ -458,14 +484,14 @@ structure CosmicPowerFrame (α : Type u) where
 ```lean
 def CosmicPowerFrame.value [Add α] [Pow α ℕ]
     (A : CosmicPowerFrame α) : α :=
-  (A.x + A.u) ^ A.degree
+  (A.core + A.gap) ^ A.degree
 ```
 
 基本定理。
 
 ```lean
 theorem CosmicPowerFrame.value_congr
-theorem CosmicPowerFrame.same_x_same_u_same_degree
+theorem CosmicPowerFrame.same_core_same_gap_same_degree
 ```
 
 比較用 frame。
@@ -474,7 +500,7 @@ theorem CosmicPowerFrame.same_x_same_u_same_degree
 structure SameCosmicDegreeComparison [Add α] [LE α]
     (A B : CosmicPowerFrame α) : Prop where
   same_degree : A.degree = B.degree
-  base_le : A.x + A.u ≤ B.x + B.u
+  base_le : A.core + A.gap ≤ B.core + B.gap
 ```
 
 DkMath 的な意味は次である。
@@ -498,44 +524,46 @@ x + u:
 
 ## 10. 依存関係の設計
 
-推奨 module 構成。
+改訂後の推奨 module 構成。
 
 ```text
-DkMath.PowerSwap.Core
-DkMath.PowerSwap.Swap
-DkMath.PowerSwap.Level
-DkMath.PowerSwap.Branch
+DkMath.PowerSwap.Basic
+DkMath.PowerSwap.Exchange
+DkMath.PowerSwap.NormalForm
+DkMath.PowerSwap.Frame
 DkMath.PowerSwap.Normalize
 DkMath.PowerSwap.Compare
 DkMath.PowerSwap.CosmicFrame
-DkMath.PowerSwap.Basic
+DkMath.PowerSwap.Core
+
+DkMath.PowerSwap.Branch
+DkMath.PowerSwap.Contours
+DkMath.PowerSwap.Analytic
+
+DkMath.PowerSwap
 ```
 
-`Basic.lean` は再 export 用。
+`DkMath.PowerSwap.Core` は軽量な structural entry point とする。
 
 ```lean
-import DkMath.PowerSwap.Core
-import DkMath.PowerSwap.Swap
-import DkMath.PowerSwap.Level
-import DkMath.PowerSwap.Branch
+import DkMath.PowerSwap.Basic
+import DkMath.PowerSwap.Exchange
+import DkMath.PowerSwap.NormalForm
+import DkMath.PowerSwap.Frame
 import DkMath.PowerSwap.Normalize
 import DkMath.PowerSwap.Compare
 import DkMath.PowerSwap.CosmicFrame
 ```
 
-解析的な `log`、`exp`、`e` を含む層は別にする。
+解析的な `log`、`exp`、`e` を含む既存モジュールには薄い入口を追加する。
 
 ```text
 DkMath.PowerSwap.Analytic
 ```
 
-または、Real 依存を避けたい場合は Analysis 側へ置く。
-
-```text
-DkMath.Analysis.PowerSwap.Analytic
-```
-
-最初の実装では `Analytic` は後回しでよい。
+既存 `DkMath.PowerSwap` は互換 umbrella として `Core + Analytic` を
+re-export する。新規の非解析 consumer は `DkMath.PowerSwap.Core` を
+import する。
 
 ## 11. DkNNRealQ Bridge の後続計画
 
@@ -638,112 +666,90 @@ PowerSwap は、DkNNRealQ 全体の comparison を一撃で解くものではな
 
 そこから DkNNRealQ Bridge が、既存の order API に渡す。
 
-## 13. 最初に作るべき最小 API
+## 13. 次に作るべき最小 API
 
-第一コミットでは、以下だけでよい。
+既存 `Basic / Exchange / NormalForm / Branch / Contours` を維持し、次の
+structural middle layer を追加する。
 
 ```text
-PowerFrame
 NatPowerFrame
-NatPowerValue
-swap
-IsPowerSwap
-PowerSwapRel
-SameDegree
-NormalNatPowerFrame
+NatPowerFrame.eval
+NatPowerFrame.power
 NormalizesTo
+SameDegree
+SameDegreeComparison
+SameDegreeStrictComparison
 CosmicPowerFrame
 CosmicPowerFrame.value
+CosmicPowerFrame.toNatPowerFrame
 ```
 
-証明は軽くする。
+`NatPowerFrame` のデータ定義と `eval` は `[Pow α ℕ]` でよい。
+`eval_power` のように `pow_mul` を使う定理は `[Monoid α]` を要求する。
 
 ```text
-swap_swap
-PowerSwapRel.refl
-PowerSwapRel.symm
-PowerSwapRel.trans
-NatPowerValue_congr
-CosmicPowerFrame.value_congr
-NormalizesTo.value_eq
+definitions:
+  [Pow α ℕ]
+
+power-law theorems:
+  [Monoid α]
 ```
 
-この段階では比較や `log` はまだ入れない。
+既存 `PowNormalForm` は置換せず、`NatPowerFrame ℕ` との変換を追加する。
 
 ## 14. 第二コミット候補
 
-第二コミットで、比較用の relation を入れる。
+比較仕様と DkNNRealQ Bridge を分離する。
 
 ```text
-SameDegreeComparison
-SameCosmicDegreeComparison
+PowerSwap core:
+  SameDegree
+  SameDegreeComparison
+  SameDegreeStrictComparison
+
+DkReal bridge:
+  eval equality
+  same-degree non-strict comparison
+  same-degree strict comparison with 0 < degree
 ```
 
-DkNNRealQ に依存しない形で、比較の仕様だけを定義する。
-
-定理は抽象的にするか、Bridge 側に送る。
+core は `DkNNRealQ` に依存しない。Bridge が既存の `pow_le_pow` と
+strict ordered-semiring API へ渡す。
 
 ## 15. 第三コミット候補
 
-第三コミットで、DkNNRealQ Bridge を開始する。
-
-```text
-DkMath.Analysis.DkReal.PowerSwapBridge
-```
-
-ここで初めて `DkNNRealQ` を使う。
-
-実装候補。
+`DkMath.Analysis.DkReal.PowerSwapBridge` を追加する。
 
 ```lean
 def NatPowerFrame.evalDk
 def CosmicPowerFrame.evalDk
 theorem evalDk_eq_of_NormalizesTo
 theorem evalDk_le_of_sameDegree_base_le
+theorem evalDk_lt_of_sameDegree_base_lt
 theorem cosmic_evalDk_le_of_same_degree_base_le
 ```
 
+strict theorem は `degree ≠ 0` ではなく `0 < degree` を主仮定にする。
+
 ## 16. 第四コミット候補
 
-第四コミットで、analytic interpretation を別層に置く。
+有限観測比較と import 境界を追加する。
 
 ```text
+StageComparison
+compareAt on DkNNReal representatives
+compareUpTo with finite fuel
+StrictCertificate
+DkMath.PowerSwap.Core
 DkMath.PowerSwap.Analytic
 ```
 
-または、
+`compareAt` は代表元の rational endpoint を読むため `DkNNReal` 上に置く。
+soundness theorem は `DkNNRealQ.mk` の strict order を結論とする。
+`none` は検索範囲内で分離が見つからなかったことだけを表し、等号を意味しない。
 
-```text
-DkMath.Analysis.PowerSwap.Analytic
-```
-
-ここで初めて次を扱う。
-
-$$
-\Phi(t)=\frac{\log t}{t}
-$$
-
-中心点。
-
-$$
-e
-$$
-
-分岐。
-
-```text
-left:
-  t < e
-
-center:
-  t = e
-
-right:
-  e < t
-```
-
-ただし、この層は noncomputable になってよい可能性がある。
-PowerSwap core は computable / structural に保つ。
+解析実装はすでに `Branch` と `Contours` に存在する。新設する
+`DkMath.PowerSwap.Analytic` は両者をまとめる薄い入口とする。
 
 ## 17. DkMath 的な解釈
 
