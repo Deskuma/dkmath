@@ -29,7 +29,7 @@ Public entry point for the complete Route B algebraic checkpoint:
 * `DkNNReal` packages nonnegativity;
 * `DkNNRealQ` is the quotient-backed nonnegative ordered `CommSemiring`;
 * `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
-* `DkReal.Semantic` begins the noncomputable bridge to Mathlib's `Real`.
+* `DkReal.Semantic` gives the noncomputable bridge to Mathlib's `Real`.
 
 All endpoint operations in the representation modules remain computable. The
 publicly imported optional `Semantic` module selects a Mathlib `Real` value
@@ -71,10 +71,15 @@ Classical comparison should therefore remain an explicit local choice.
 
 `DkReal.Semantic` selects the lower-endpoint supremum, proves that it is the
 unique real point lying in every approximation interval, and proves invariance
-under representation equivalence.
+under representation equivalence. Its quotient map preserves rational
+constants, addition, multiplication, natural powers, and canonical order.
 
-[TODO: semantic-bridge] Lift semantic evaluation to `DkNNRealQ` and establish
-arithmetic and order bridge laws.
+[TODO: semantic-order-reflection] Prove that an inequality between semantic
+values reconstructs the canonical quotient order, without adding decidable
+comparison.
+
+[TODO: semantic-cf2d] Use the semantic map to transport the CF2D quadratic
+invariant `q2` into the Mathlib real-analysis layer.
 
 [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
 endpoint products and belongs outside the current nonnegative API.

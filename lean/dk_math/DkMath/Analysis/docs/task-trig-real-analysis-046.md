@@ -39,16 +39,26 @@ DkReal representation
 boundedness, interval membership, width convergence, uniqueness, monotone
 endpoint convergence, and invariance under `DkReal.Equiv`.
 
-The next obligation is quotient descent:
+Quotient descent and the first algebraic bridge are now complete:
 
 ```text
 DkNNRealQ.semanticValue
-map_zero
-map_one
-map_add
-map_mul
-map_pow
-order preservation and reflection
+semanticValue_zero
+semanticValue_one
+semanticValue_add
+semanticValue_mul
+semanticValue_pow
+semanticValue_mono
 ```
 
 No global decidable comparison or `LinearOrder` instance is needed.
+
+The next semantic obligations are order reflection and the first analytic
+consumer. Order reflection should remain independent of decidable comparison:
+
+```text
+semanticValue x ≤ semanticValue y -> x ≤ y
+```
+
+After that, the first CF2D consumer should transport the quadratic invariant
+`q2` through semantic evaluation.

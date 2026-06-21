@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Analysis.DkReal.DkNNRealQ
+import DkMath.Analysis.DkReal.CanonicalOrder
 
 #print "file: DkMath.Analysis.DkReal.Semantic"
 
@@ -19,13 +19,13 @@ them to `Real`. Nestedness makes this sequence monotone, while every upper
 endpoint bounds it. Consequently the supremum lies in every approximation
 interval.
 
-This file deliberately stops before quotient descent and arithmetic
-preservation. Representative independence of `semanticValue` is proved here
-as the final representation-level bridge.
+Representative independence permits quotient descent to `DkNNRealQ`.
+The resulting semantic map preserves rational constants, nonnegative
+addition, multiplication, natural powers, and order.
 
-[TODO: semantic/quotient] Lift the value through `DkNNRealQ`, then prove
-preservation of nonnegative multiplication, powers, and order. Quotient
-descent, rational constants, and addition are established below.
+[TODO: semantic/order-reflection] Prove that semantic order reflects the
+canonical quotient order. This requires recovering a nonnegative canonical
+Gap from an inequality between semantic values.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -192,8 +192,81 @@ theorem semanticValue_add
   have hx := semanticValue_mem_interval x n
   have hy := semanticValue_mem_interval y n
   constructor
-  · simpa [lowerReal, add_interval, addApprox] using add_le_add hx.1 hy.1
-  · simpa [upperReal, add_interval, addApprox] using add_le_add hx.2 hy.2
+  · simpa [lowerReal, add_interval, addApprox] using
+      _root_.add_le_add hx.1 hy.1
+  · simpa [upperReal, add_interval, addApprox] using
+      _root_.add_le_add hx.2 hy.2
+
+/-- A nonnegative representation has a nonnegative semantic value. -/
+theorem semanticValue_nonneg
+    {x : DkMath.Analysis.DkReal} (hx : Nonnegative x) :
+    0 ≤ semanticValue x := by
+  have hlo : (0 : ℝ) ≤ lowerReal x 0 := by
+    simp only [lowerReal]
+    exact_mod_cast hx 0
+  exact hlo.trans (lowerReal_le_semanticValue x 0)
+
+/--
+Semantic evaluation preserves multiplication on the nonnegative quadrant.
+
+The product of the two semantic points lies in every stagewise endpoint
+product interval, so semantic uniqueness identifies it with the represented
+product.
+-/
+theorem semanticValue_mulNonneg
+    (x y : DkMath.Analysis.DkReal) (hx : Nonnegative x) (hy : Nonnegative y) :
+    semanticValue (mulNonneg x y hx hy) =
+      semanticValue x * semanticValue y := by
+  symm
+  apply eq_semanticValue_of_mem_all_intervals
+  intro n
+  have hxi := semanticValue_mem_interval x n
+  have hyi := semanticValue_mem_interval y n
+  have hxlo : (0 : ℝ) ≤ lowerReal x n := by
+    simp only [lowerReal]
+    exact_mod_cast hx n
+  have hylo : (0 : ℝ) ≤ lowerReal y n := by
+    simp only [lowerReal]
+    exact_mod_cast hy n
+  constructor
+  · have h :=
+      mul_le_mul hxi.1 hyi.1 hylo (semanticValue_nonneg hx)
+    simpa [lowerReal, mulNonneg_interval, mulNonnegApprox] using h
+  · have hxsem := semanticValue_nonneg hx
+    have h :=
+      mul_le_mul hxi.2 hyi.2 (semanticValue_nonneg hy)
+        (hxsem.trans hxi.2)
+    simpa [upperReal, mulNonneg_interval, mulNonnegApprox] using h
+
+/-- Semantic evaluation preserves natural powers of nonnegative representations. -/
+theorem semanticValue_powNonneg
+    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) :
+    semanticValue (powNonneg d x hx) = semanticValue x ^ d := by
+  induction d with
+  | zero =>
+      calc
+        semanticValue (powNonneg 0 x hx)
+            = semanticValue (DkMath.Analysis.DkReal.ofRat 1) := by
+                apply semanticValue_eq_of_equiv
+                apply equiv_of_interval_eq
+                intro n
+                exact powNonneg_zero_interval x hx n
+        _ = 1 := by
+          simp
+        _ = semanticValue x ^ 0 := by rw [pow_zero]
+  | succ d ih =>
+      calc
+        semanticValue (powNonneg (d + 1) x hx)
+            =
+          semanticValue
+            (mulNonneg (powNonneg d x hx) x
+              (nonnegative_powNonneg d hx) hx) :=
+          semanticValue_eq_of_equiv
+            (equiv_of_interval_eq (powNonneg_succ_interval d x hx))
+        _ = semanticValue (powNonneg d x hx) * semanticValue x :=
+          semanticValue_mulNonneg _ _ (nonnegative_powNonneg d hx) hx
+        _ = semanticValue x ^ d * semanticValue x := by rw [ih]
+        _ = semanticValue x ^ (d + 1) := by rw [pow_succ]
 
 end
 
@@ -236,7 +309,7 @@ theorem semanticValue_zero :
 @[simp]
 theorem semanticValue_one :
     semanticValue 1 = 1 := by
-  change semanticValue (ofRat 1 zero_le_one) = 1
+  change semanticValue (ofRat 1 (by norm_num : (0 : ℚ) ≤ 1)) = 1
   simp
 
 /-- Semantic evaluation preserves quotient addition. -/
@@ -245,6 +318,42 @@ theorem semanticValue_add (x y : DkNNRealQ) :
   refine Quotient.inductionOn₂ x y ?_
   intro x y
   exact DkReal.semanticValue_add x.val y.val
+
+/-- Quotient semantic values are nonnegative. -/
+theorem semanticValue_nonneg (x : DkNNRealQ) :
+    0 ≤ semanticValue x := by
+  refine Quotient.inductionOn x ?_
+  intro x
+  exact DkReal.semanticValue_nonneg x.nonnegative
+
+/-- Semantic evaluation preserves quotient multiplication. -/
+theorem semanticValue_mul (x y : DkNNRealQ) :
+    semanticValue (x * y) = semanticValue x * semanticValue y := by
+  refine Quotient.inductionOn₂ x y ?_
+  intro x y
+  exact DkReal.semanticValue_mulNonneg
+    x.val y.val x.nonnegative y.nonnegative
+
+/-- Semantic evaluation preserves quotient natural powers. -/
+theorem semanticValue_pow (x : DkNNRealQ) (d : ℕ) :
+    semanticValue (x ^ d) = semanticValue x ^ d := by
+  refine Quotient.inductionOn x ?_
+  intro x
+  exact DkReal.semanticValue_powNonneg d x.val x.nonnegative
+
+/--
+Semantic evaluation preserves the canonical quotient order.
+
+If `x ≤ y`, canonical order supplies a nonnegative Gap `z` with
+`y = x + z`. Additivity then turns the order claim into nonnegativity of the
+semantic Gap.
+-/
+theorem semanticValue_mono
+    {x y : DkNNRealQ} (hxy : x ≤ y) :
+    semanticValue x ≤ semanticValue y := by
+  obtain ⟨z, rfl⟩ := exists_add_of_le hxy
+  rw [semanticValue_add]
+  exact le_add_of_nonneg_right (semanticValue_nonneg z)
 
 end
 

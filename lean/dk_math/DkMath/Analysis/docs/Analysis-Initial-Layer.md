@@ -124,8 +124,9 @@ Order:
 BridgeNNReal / BridgeReal:
   semanticValue now selects the lower-endpoint supremum
   uniqueness and representative independence are proved
-  DkNNRealQ evaluation, rational constants, and addition are proved
-  next prove multiplication, powers, and order bridge laws
+  DkNNRealQ evaluation and semiring operations are preserved
+  canonical order preservation is proved by additive Gap extraction
+  next prove order reflection and connect the CF2D quadratic invariant
   compare semantic equality with DkReal.Equiv
 ```
 
