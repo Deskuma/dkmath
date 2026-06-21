@@ -71,7 +71,11 @@ the canonical Gap universe has become observably positive.
 [done] positive lower endpoint of gapOfLe iff finite separation
 [done] quotient strict-order characterization
 [done] strict addition at a sufficiently precise later stage
-[next] positive-factor strict multiplication
+[done] finite positivity of a nonnegative wrapper
+[done] positivity of a product by stage alignment
+[done] positive-factor strict multiplication through the canonical Gap
+[next] strict ordered-semiring interface selection
+[next] direct LinearOrder decision
 ```
 
 The representative theorem now precedes every strict ordered-semiring
@@ -98,8 +102,10 @@ y * a = x * a + z * a.
 ```
 
 If `a = 0`, the transformed Gap collapses. If `0 < a`, positivity of the Gap
-should persist. This is the exact branch distinction required before
-`IsStrictOrderedRing` can be considered.
+persists: positive lower endpoints of `z` and `a` are aligned at a common
+later stage, so the lower endpoint of `z * a` is positive. This is the exact
+branch distinction required before a strict ordered-semiring interface can be
+considered.
 
 ## Boundary
 

@@ -88,10 +88,12 @@ The representative and wrapper theorems below prove that
 endpoint of `gapOfLe`.
 
 Strict addition is proved below by moving to a later stage where the added
-interval width is smaller than the finite Gap.
+interval width is smaller than the finite Gap. Strict positivity of products
+is proved by aligning two positive lower-endpoint observations.
 
-[TODO: strict-multiplication] Require a strictly positive factor and isolate
-the zero-factor branch before considering `IsStrictOrderedRing`.
+`CanonicalOrder` uses these kernels to prove strict multiplication by a
+positive factor. The zero-factor branch remains non-strict because it
+collapses every transformed Gap.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -560,6 +562,39 @@ theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
   DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
 
 /--
+A nonnegative wrapper is strictly positive exactly when a finite lower
+endpoint is positive.
+
+This is finite separation from the constant singleton interval `[0,0]`.
+-/
+theorem zero_lt_iff_exists_lo_pos (a : DkNNReal) :
+    Lt zero a ↔ ∃ n, 0 < (a.val.interval n).lo := by
+  rw [lt_iff_exists_leftSeparatedAt]
+  simp only [DkReal.LeftSeparatedAt, zero, ofRat, DkReal.ofRat_interval,
+    DkReal.GapInterval.singleton_hi]
+
+/--
+The product of two strictly positive nonnegative wrappers is strictly
+positive.
+
+The two positive lower endpoints may occur at different stages. Passing to
+their maximum aligns the observations; nestedness preserves both positive
+lower bounds, and the product lower endpoint is then positive.
+-/
+theorem zero_lt_mul
+    {x y : DkNNReal} (hx : Lt zero x) (hy : Lt zero y) :
+    Lt zero (mul x y) := by
+  rw [zero_lt_iff_exists_lo_pos] at hx hy ⊢
+  obtain ⟨n, hn⟩ := hx
+  obtain ⟨k, hk⟩ := hy
+  refine ⟨max n k, ?_⟩
+  have hnx := x.val.lo_mono (le_max_left n k)
+  have hky := y.val.lo_mono (le_max_right n k)
+  simp only [mul, DkReal.mulNonneg_interval, DkReal.mulNonnegApprox,
+    DkReal.GapInterval.mulNonneg_lo]
+  exact mul_pos (hn.trans_le hnx) (hk.trans_le hky)
+
+/--
 Adding a fixed nonnegative approximation preserves wrapper strictness.
 
 Finite separation need not survive at the same approximation stage because
@@ -678,6 +713,14 @@ theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
 /-- Zero is below one. -/
 theorem zero_le_one : (0 : DkNNRealQ) ≤ 1 :=
   zero_le 1
+
+/-- The product of two strictly positive quotient values is strictly positive. -/
+theorem zero_lt_mul
+    {x y : DkNNRealQ} (hx : 0 < x) (hy : 0 < y) :
+    0 < x * y := by
+  refine Quotient.inductionOn₂ x y ?_ hx hy
+  intro x y hx hy
+  exact DkNNReal.zero_lt_mul hx hy
 
 /-- Quotient addition is monotone in both arguments. -/
 theorem add_le_add

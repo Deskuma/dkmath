@@ -293,6 +293,40 @@ theorem le_iff_exists_add
     x ≤ y ↔ ∃ z : DkNNRealQ, y = x + z :=
   ⟨exists_add_of_le, le_of_exists_add⟩
 
+/--
+Multiplication by a strictly positive right factor preserves strict order.
+
+For `x < y`, canonical order extracts `z` with `y = x + z`. The Gap cannot
+be zero, hence `0 < z`; positivity of the factor gives `0 < z * a`. Strict
+addition and distributivity then reconstruct the transformed strict Gap
+
+`y * a = x * a + z * a`.
+-/
+theorem mul_lt_mul_of_pos_right
+    {x y a : DkNNRealQ} (hxy : x < y) (ha : 0 < a) :
+    x * a < y * a := by
+  obtain ⟨z, hz⟩ := exists_add_of_le (le_of_lt hxy)
+  have hzpos : 0 < z := by
+    rw [lt_iff_le_and_not_le]
+    refine ⟨zero_le z, ?_⟩
+    intro hzle
+    have hz0 : z = 0 := le_antisymm hzle (zero_le z)
+    subst z
+    simp only [add_zero] at hz
+    exact (ne_of_lt hxy) hz.symm
+  have hza : 0 < z * a := zero_lt_mul hzpos ha
+  calc
+    x * a = x * a + 0 := (add_zero (x * a)).symm
+    _ < x * a + z * a := add_lt_add_left hza (x * a)
+    _ = (x + z) * a := (add_mul x z a).symm
+    _ = y * a := congrArg (· * a) hz.symm
+
+/-- Multiplication by a strictly positive left factor preserves strict order. -/
+theorem mul_lt_mul_of_pos_left
+    {x y a : DkNNRealQ} (hxy : x < y) (ha : 0 < a) :
+    a * x < a * y := by
+  simpa only [mul_comm] using mul_lt_mul_of_pos_right hxy ha
+
 /-- Mathlib interface for extracting an additive Gap from an order proof. -/
 instance : ExistsAddOfLE DkNNRealQ where
   exists_add_of_le := exists_add_of_le

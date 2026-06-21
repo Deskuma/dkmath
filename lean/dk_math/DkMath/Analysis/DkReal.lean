@@ -51,11 +51,14 @@ equivalent both to finite left separation and to a positive lower endpoint of
 the canonical Gap at some stage. This keeps the design in the same
 `Big = (Core + Beam) + Gap` pattern.
 
-Strict order has now descended to the quotient, and addition preserves it by
-moving to a sufficiently precise stage.
+Strict order has now descended to the quotient. Addition preserves it by
+moving to a sufficiently precise stage. Multiplication preserves it for a
+strictly positive factor by transforming the canonical Gap from `z` to
+`z * a`; the zero-factor branch collapses that Gap.
 
-[TODO: strict-multiplication] Prove preservation by multiplication with a
-strictly positive factor before selecting a strict-order typeclass.
+[TODO: strict-order-instance] Select the appropriate Mathlib strict ordered
+semiring interface only after checking that its fields match this API without
+adding stronger or classical structure accidentally.
 
 [TODO: linear-order] Decide whether the now-proved quotient totality should be
 packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
