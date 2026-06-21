@@ -87,3 +87,30 @@ Archive
 - `git diff --check` 成功
 
 補足: 既に index に載っていた前回追加分があるため、`git status` では旧 staged との差分として `AM` と新 `CF2D` untracked が混ざって見えています。staging は触っていません。
+
+### 2026/06/21 19:54 JST (Return to the trigonometric real-analysis route)
+
+1. 目的:
+   - `LinearOrder` と decidable comparison を独立保留課題とし、CF2D
+     Phase 2 に必要な実数解析本線へ戻る。
+   - 現場管理文書と TODO を再確認し、次の実装可能な checkpoint を定める。
+2. 実施:
+   - `DkMath.Analysis.DkReal.Semantic` を追加した。
+   - lower endpoint の実数列を定義し、単調性と上方有界性を証明した。
+   - semantic value を lower endpoint の上限として noncomputable に定義した。
+   - semantic value が全 approximation interval に属することを証明した。
+   - lower endpoint が semantic value へ単調収束することを証明した。
+   - `task-trig-real-analysis-046.md` に semantic bridge の実装順を記録した。
+3. 結論:
+   - Route B の計算可能核を変更せず、Mathlib `Real` の completeness を
+     semantic bridge にだけ導入できた。
+   - 次の主課題は `DkReal.Equiv` による semantic value の不変性である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.Semantic` 成功。
+5. 失敗事例:
+   - 最初のビルドでは `lowerReal` / `upperReal` が未展開のため
+     `exact_mod_cast` が型一致しなかった。定義を明示展開して修正した。
+6. 次の課題:
+   - 全区間に属する実数点の一意性を証明する。
+   - `Equiv x y -> semanticValue x = semanticValue y` を証明する。
+   - その後 `DkNNRealQ` へ semantic map を降ろす。

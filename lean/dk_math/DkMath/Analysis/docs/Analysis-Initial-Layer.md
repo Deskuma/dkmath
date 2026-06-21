@@ -82,6 +82,10 @@ DkMath.Analysis.DkReal.CanonicalOrder
   subtraction-free extraction of a nonnegative Gap representation,
   ExistsAddOfLE, and CanonicallyOrderedAdd
 
+DkMath.Analysis.DkReal.Semantic
+  noncomputable lower-endpoint supremum in Mathlib Real, interval membership,
+  and monotone endpoint convergence
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -118,8 +122,8 @@ Order:
   use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:
-  select the unique semantic limit
-  prove representative independence
+  semanticValue now selects the lower-endpoint supremum
+  next prove representative independence and uniqueness
   prove semiring-homomorphism laws
   compare semantic equality with DkReal.Equiv
 ```

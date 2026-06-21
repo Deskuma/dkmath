@@ -14,6 +14,7 @@ import DkMath.Analysis.DkReal.DkNNReal
 import DkMath.Analysis.DkReal.DkNNRealQ
 import DkMath.Analysis.DkReal.Order
 import DkMath.Analysis.DkReal.CanonicalOrder
+import DkMath.Analysis.DkReal.Semantic
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -28,6 +29,7 @@ Public entry point for the complete Route B algebraic checkpoint:
 * `DkNNReal` packages nonnegativity;
 * `DkNNRealQ` is the quotient-backed nonnegative ordered `CommSemiring`;
 * `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
+* `DkReal.Semantic` begins the noncomputable bridge to Mathlib's `Real`.
 
 All endpoint operations in this import tree remain computable. No represented
 limit in Mathlib's `Real` or `NNReal` is selected here.
@@ -66,9 +68,12 @@ a linear order.
 decision procedure for asymptotic interval order is currently available.
 Classical comparison should therefore remain an explicit local choice.
 
-[TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
-chosen evaluation is independent of representatives. Such evaluation may
-legitimately be `noncomputable`.
+`DkReal.Semantic` now selects the lower-endpoint supremum and proves that it
+lies in every approximation interval.
+
+[TODO: semantic-bridge] Prove that semantic evaluation is independent of
+representatives, then lift it to `DkNNRealQ` and establish arithmetic and order
+bridge laws.
 
 [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
 endpoint products and belongs outside the current nonnegative API.
