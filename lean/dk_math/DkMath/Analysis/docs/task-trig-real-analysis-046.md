@@ -86,6 +86,10 @@ semanticAct_iterate_q2
 semanticOrbit
 semanticOrbit_q2
 semanticLevelOrbit
+SemanticPeriodic
+SemanticLevelPeriodic
+SemanticFiniteOrder
+semanticFiniteOrder_iff
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -105,8 +109,13 @@ The actions are bundled as equivalences. Their finite iterates remain
 bijective, and every forward orbit has constant `q2`. A level-set orbit is the
 same plane orbit viewed with its invariant carried in the type.
 
+Periodicity uses Mathlib's `Function.IsPeriodicPt`. Level-set periodicity is
+equivalent to periodicity of the underlying plane point. Finite action order
+means that one iterate is the identity on the whole plane; this makes every
+point of every level set periodic.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example periodic-point and finite-order
+remain on the real side, for example divisibility and minimal-period
 statements. Order reflection remains a separate, heavier task.

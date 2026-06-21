@@ -212,6 +212,28 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 03:50 JST (Periodic points and finite action order)
+
+1. 方針:
+   - 独自の周期点概念を作らず、Mathlib `Function.IsPeriodicPt` を用いる。
+2. 実施:
+   - `SemanticPeriodic` と orbit-return 同値を追加した。
+   - `SemanticLevelPeriodic` を定義し、underlying plane point の周期性との
+     同値を証明した。
+   - `SemanticFiniteOrder` を action iterate が恒等写像となる性質として
+     定義した。
+   - finite order と全 plane point の周期性が同値であることを証明した。
+   - finite order から任意 level-set point の周期性を導いた。
+   - 周期が倍数へ伝播することを Mathlib の `trans_dvd` で公開した。
+3. 結論:
+   - 保存 orbit から periodic dynamics まで標準 Mathlib API に接続した。
+   - 角度、連続性、signed source は依然として不要である。
+4. 次の候補:
+   - minimal period と finite-order divisibility。
+   - source-level family は signed DkReal 層まで保留。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 02:30 JST (Bundled automorphisms and finite orbits)
 
 1. 目的:

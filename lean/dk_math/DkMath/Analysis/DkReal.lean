@@ -84,7 +84,9 @@ the resulting kernel as a real square-mass-preserving action. Transported
 actions compose through real-side kernel products and restrict to every real
 square-mass level set. Real-side conjugation supplies inverse actions, so
 these maps are equivalences of the plane and of each level set. Their finite
-iterates generate forward orbits of constant square mass.
+iterates generate forward orbits of constant square mass. Periodic points and
+finite action order are expressed through Mathlib's standard discrete-dynamics
+API.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

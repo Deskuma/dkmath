@@ -338,6 +338,81 @@ theorem semanticLevelOrbit_val
         Function.iterate_succ_apply', Function.iterate_succ_apply']
       exact congrArg (semanticAct r) ih
 
+/-- A real vector is periodic when a finite semantic orbit returns to it. -/
+def SemanticPeriodic
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) : Prop :=
+  Function.IsPeriodicPt (semanticAct r) n z
+
+/-- Periodicity is exactly return of the explicitly named semantic orbit. -/
+theorem semanticPeriodic_iff
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) :
+    SemanticPeriodic r z n ↔ semanticOrbit r z n = z :=
+  Iff.rfl
+
+/-- A point of a real level set is periodic under the restricted action. -/
+def SemanticLevelPeriodic
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) (n : ℕ) : Prop :=
+  Function.IsPeriodicPt (semanticActLevel r) n z
+
+/--
+Level-set periodicity is equivalent to periodicity of the underlying plane
+orbit.
+-/
+theorem semanticLevelPeriodic_iff
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) (n : ℕ) :
+    SemanticLevelPeriodic r z n ↔ SemanticPeriodic r z.1 n := by
+  constructor
+  · intro h
+    change (semanticActLevel r)^[n] z = z at h
+    change semanticOrbit r z.1 n = z.1
+    rw [← semanticLevelOrbit_val]
+    exact congrArg Subtype.val h
+  · intro h
+    change semanticOrbit r z.1 n = z.1 at h
+    change (semanticActLevel r)^[n] z = z
+    apply Subtype.ext
+    change (semanticLevelOrbit r z n).1 = z.1
+    rw [semanticLevelOrbit_val]
+    exact h
+
+/--
+A transported kernel has finite action order `n` when its `n`-fold real
+action is the identity on the whole plane.
+-/
+def SemanticFiniteOrder
+    (r : UnitKernel DkNNRealQ) (n : ℕ) : Prop :=
+  (semanticAct r)^[n] = id
+
+/-- Finite action order is equivalent to every real vector being periodic. -/
+theorem semanticFiniteOrder_iff
+    (r : UnitKernel DkNNRealQ) (n : ℕ) :
+    SemanticFiniteOrder r n ↔ ∀ z : Vec ℝ, SemanticPeriodic r z n := by
+  constructor
+  · intro h z
+    rw [SemanticPeriodic, Function.IsPeriodicPt, h]
+    rfl
+  · intro h
+    funext z
+    exact h z
+
+/-- A finite-order transported kernel makes every level-set point periodic. -/
+theorem semanticLevelPeriodic_of_finiteOrder
+    {r : UnitKernel DkNNRealQ} {n : ℕ}
+    (h : SemanticFiniteOrder r n) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    SemanticLevelPeriodic r z n := by
+  rw [semanticLevelPeriodic_iff]
+  exact (semanticFiniteOrder_iff r n).mp h z.1
+
+/-- Periodicity persists at every multiple of a known period. -/
+theorem semanticPeriodic_of_dvd
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ} {m n : ℕ}
+    (h : SemanticPeriodic r z m) (hmn : m ∣ n) :
+    SemanticPeriodic r z n :=
+  Function.IsPeriodicPt.trans_dvd h hmn
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.
