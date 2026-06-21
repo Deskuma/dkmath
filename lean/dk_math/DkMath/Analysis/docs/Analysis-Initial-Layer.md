@@ -142,6 +142,8 @@ BridgeNNReal / BridgeReal:
   positive finite order excludes the vacuous zero iterate
   identity kernels fix every point
   nonidentity transported kernels fix exactly the origin
+  real-side kernel powers act as the corresponding function iterates
+  kernel-product finite order is equivalent to finite action order
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

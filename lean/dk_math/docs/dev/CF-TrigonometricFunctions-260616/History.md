@@ -367,3 +367,25 @@ Archive
    - それまでは第一象限 kernel の Real 幾何 consumer を進められる。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:30 JST (Real-side kernel powers and finite-order equivalence)
+
+1. 方針:
+   - source 側の積は定義せず、transport 後の `UnitKernel Real` だけで
+     kernel の反復積を構成する。
+2. 実施:
+   - `semanticKernelPower` を real-side の n-fold product として追加した。
+   - `semanticKernelPower_act` で、その作用が `semanticAct` の n 回反復と
+     一致することを証明した。
+   - 単位ベクトルへの作用から kernel を復元する忠実性
+     `unitKernel_eq_one_of_act_eq_id` を証明した。
+   - `semanticKernelFiniteOrder_iff` により、反復積が中立核になる条件と
+     finite action order が同値であることを証明した。
+3. 結論:
+   - finite order は、作用側と kernel 積側のどちらからでも同じ条件として
+     扱える。
+   - signed source、角度、連続性、`noncomputable` は不要。
+4. 境界:
+   - この積は Real 側だけに存在し、非負 source の積を主張しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。

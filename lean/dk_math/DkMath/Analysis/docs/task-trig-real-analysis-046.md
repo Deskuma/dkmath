@@ -100,6 +100,11 @@ SemanticPositiveFiniteOrder
 SemanticIdentityKernel
 semanticIdentityKernel_iff_core_eq_one
 semanticFixed_iff_eq_zero_of_not_identity
+semanticKernelPower
+semanticKernelPower_act
+unitKernel_eq_one_of_act_eq_id
+SemanticKernelFiniteOrder
+semanticKernelFiniteOrder_iff
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -143,9 +148,26 @@ nonidentity transported kernel fixes exactly the origin. The proof uses only
 the Pythagorean kernel identity and the determinant of the fixed-point linear
 system.
 
+Finite-order classification now has an algebraic real-side formulation.
+`semanticKernelPower r n` is the repeated product of the transported unit
+kernel, formed only in `UnitKernel Real`. Its action is exactly the `n`th
+iterate of `semanticAct r`. Since a real unit kernel is recovered by applying
+its action to the multiplicative unit vector, the action is faithful.
+Consequently:
+
+```text
+semanticKernelPower r n = UnitKernel.one Real
+  iff
+(semanticAct r)^[n] = id
+```
+
+This closes the bridge between kernel product order and finite action order
+without defining multiplication, subtraction, or inverses in the nonnegative
+source.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example finite-order classification under
-explicit semantic coordinate hypotheses. Order reflection remains a separate,
+remain on the real side, for example classifying low product orders through
+explicit semantic coordinate identities. Order reflection remains a separate,
 heavier task.

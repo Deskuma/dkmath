@@ -615,6 +615,86 @@ theorem semanticFixed_iff_eq_zero_of_not_identity
   exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
     fun hz => hz ▸ semanticFixed_zero r⟩
 
+/--
+The `n`-fold product of a transported kernel, formed entirely in the real
+unit-kernel monoid.
+
+The successor convention
+`semanticUnitKernel r ⋆ semanticKernelPower r n` matches the convention for
+function iteration: the new action is applied after the previous `n` actions.
+-/
+def semanticKernelPower
+    (r : UnitKernel DkNNRealQ) : ℕ → UnitKernel ℝ
+  | 0 => UnitKernel.one ℝ
+  | n + 1 =>
+      UnitKernel.star (semanticUnitKernel r) (semanticKernelPower r n)
+
+/-- The action of the real-side kernel power is the corresponding orbit term. -/
+theorem semanticKernelPower_act
+    (r : UnitKernel DkNNRealQ) (n : ℕ) (z : Vec ℝ) :
+    UnitKernel.act (semanticKernelPower r n) z = semanticOrbit r z n := by
+  induction n with
+  | zero =>
+      simp [semanticKernelPower, semanticOrbit]
+  | succ n ih =>
+      simp [semanticKernelPower, UnitKernel.act_star, semanticOrbit,
+        semanticAct, Function.iterate_succ_apply', ih]
+
+/--
+An action by a real unit kernel is faithful: if it acts as the identity on
+the plane, then the kernel itself is the neutral kernel.
+-/
+theorem unitKernel_eq_one_of_act_eq_id
+    {k : UnitKernel ℝ} (h : UnitKernel.act k = id) :
+    k = UnitKernel.one ℝ := by
+  apply UnitKernel.ext
+  have hone := congrFun h (Vec.one ℝ)
+  simpa [UnitKernel.act] using hone
+
+/--
+The transported kernel has product order dividing `n` when its `n`-fold
+real-side product is the neutral kernel.
+
+This predicate makes no assertion that a corresponding product exists in the
+nonnegative source semiring.
+-/
+def SemanticKernelFiniteOrder
+    (r : UnitKernel DkNNRealQ) (n : ℕ) : Prop :=
+  semanticKernelPower r n = UnitKernel.one ℝ
+
+/--
+Real-side kernel order and finite order of the transported plane action are
+equivalent.
+
+The forward implication is the action law for the repeated kernel product.
+The reverse implication uses faithfulness, detected by evaluating the action
+at the multiplicative unit vector.
+-/
+theorem semanticKernelFiniteOrder_iff
+    (r : UnitKernel DkNNRealQ) (n : ℕ) :
+    SemanticKernelFiniteOrder r n ↔ SemanticFiniteOrder r n := by
+  constructor
+  · intro h
+    change semanticKernelPower r n = UnitKernel.one ℝ at h
+    change (semanticAct r)^[n] = id
+    funext z
+    calc
+      (semanticAct r)^[n] z =
+          UnitKernel.act (semanticKernelPower r n) z := by
+            symm
+            simpa [semanticOrbit] using semanticKernelPower_act r n z
+      _ = UnitKernel.act (UnitKernel.one ℝ) z := by rw [h]
+      _ = id z := by simp
+  · intro h
+    change (semanticAct r)^[n] = id at h
+    apply unitKernel_eq_one_of_act_eq_id
+    funext z
+    calc
+      UnitKernel.act (semanticKernelPower r n) z =
+          (semanticAct r)^[n] z := by
+            simpa [semanticOrbit] using semanticKernelPower_act r n z
+      _ = id z := congrFun h z
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.
