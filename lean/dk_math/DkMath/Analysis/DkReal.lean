@@ -80,7 +80,9 @@ comparison.
 
 [IMPLEMENTED: semantic-cf2d-action] `DkReal.SemanticCF2D` transports unit
 kernels to `Real`, derives the Pythagorean coordinate identity, and applies
-the resulting kernel as a real square-mass-preserving action.
+the resulting kernel as a real square-mass-preserving action. Transported
+actions compose through real-side kernel products and restrict to every real
+square-mass level set.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

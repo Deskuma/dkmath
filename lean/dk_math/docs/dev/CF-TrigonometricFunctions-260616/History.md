@@ -211,3 +211,24 @@ Archive
    - order reflection も独立した重い課題として維持する。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 00:49 JST (Real-side composition and level-set action)
+
+1. 方針:
+   - source-level kernel product は導入せず、二つの kernel を個別に Real へ
+     輸送した後でのみ積を取る。
+2. 実施:
+   - `semanticKernelProduct` を real unit-kernel product として定義した。
+   - `semanticAct_comp` で successive action と product action を接続した。
+   - `semanticActLevel` を追加し、任意の実数 `q2` level set 上の自己写像を
+     構成した。
+   - `semanticActLevel_comp` で level-set action の合成を証明した。
+   - `DkNNRealQ.lean` の semantic bridge TODO を実装済み状態へ更新した。
+3. 結論:
+   - DkNNRealQ 由来の kernel は、Real 上で合成可能な保存作用を生成する。
+   - source semiring に subtraction や kernel product を要求しない。
+4. 次の境界:
+   - source-level `Vec.star` / `KernelFamily` は signed DkReal 待ち。
+   - それまでは第一象限 kernel の Real 幾何 consumer を進められる。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。

@@ -37,10 +37,14 @@ vanishing-width bound and exports `Std.Total (· ≤ ·)`.
 `DkReal.CanonicalOrder` subsequently proves
 `x ≤ y ↔ ∃ z, y = x + z` and installs `CanonicallyOrderedAdd`.
 
-[TODO: semantic-bridge] A semantic map to Mathlib's `NNReal` should be placed in a separate
-bridge module and proved to preserve zero, one, addition, multiplication,
-natural powers, and order. It should also provide an independent validation
-of any future internal totality theorem.
+[IMPLEMENTED: semantic-real-bridge] `DkMath.Analysis.DkReal.Semantic`
+constructs a representation-independent map to Mathlib `Real`, bundles it as
+a semiring homomorphism, and proves order preservation. The computable
+quotient core remains independent of that module.
+
+[TODO: semantic-nnreal-codomain] Add the optional codomain refinement to
+Mathlib `NNReal` only when a consumer benefits from carrying nonnegativity in
+the target type.
 -/
 
 namespace DkMath.Analysis

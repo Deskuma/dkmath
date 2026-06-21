@@ -139,6 +139,53 @@ theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
     PreservesQ2 (semanticAct r) :=
   semanticAct_q2 r
 
+/--
+Real-side product of two independently interpreted nonnegative DkMath
+kernels.
+
+The product is deliberately formed after semantic transport, where signed
+coordinates and subtraction are already available.
+-/
+def semanticKernelProduct
+    (r s : UnitKernel DkNNRealQ) : UnitKernel ℝ :=
+  UnitKernel.star (semanticUnitKernel r) (semanticUnitKernel s)
+
+/--
+Successive transported actions are action by the real-side product kernel.
+
+This records composition without asserting that a corresponding source-level
+product exists in the nonnegative semiring.
+-/
+theorem semanticAct_comp
+    (r s : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticAct r (semanticAct s z) =
+      UnitKernel.act (semanticKernelProduct r s) z := by
+  exact
+    (UnitKernel.act_star
+      (semanticUnitKernel r) (semanticUnitKernel s) z).symm
+
+/-- Transported action restricted to a real square-mass level set. -/
+def semanticActLevel
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) : LevelSet ℝ rho2 :=
+  LevelSet.act (semanticUnitKernel r) z
+
+/-- The value of a transported level-set action is the ordinary semantic action. -/
+@[simp]
+theorem semanticActLevel_val
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    (semanticActLevel r z).1 = semanticAct r z.1 := rfl
+
+/-- Successive transported actions compose on every real level set. -/
+theorem semanticActLevel_comp
+    (r s : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    semanticActLevel r (semanticActLevel s z) =
+      LevelSet.act (semanticKernelProduct r s) z := by
+  apply Subtype.ext
+  exact semanticAct_comp r s z.1
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

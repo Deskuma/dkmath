@@ -130,6 +130,8 @@ BridgeNNReal / BridgeReal:
   CF2D q2 and unit kernels are transported coordinatewise to Real
   transported kernels act on real vectors and preserve q2
   their coordinates satisfy the real Pythagorean identity
+  transported actions compose through real-side kernel products
+  every real q2 level set is stable under transported actions
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

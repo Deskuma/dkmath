@@ -71,13 +71,22 @@ semanticUnitKernel
 semanticUnitKernel_sq_add_sq
 semanticAct
 semanticAct_q2
+semanticKernelProduct
+semanticAct_comp
+semanticActLevel
+semanticActLevel_comp
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
 Subtraction appears only after transport to `Real`; it is not added to the
 nonnegative source semiring.
 
+Two transported actions compose through the product of their real unit
+kernels, and every real `q2` level set is stable under the transported action.
+No source-level kernel product is asserted.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
-rather than forcing subtraction into `DkNNRealQ`. Order reflection remains a
-separate, heavier task.
+rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
+remain on the real side, for example first-quadrant geometric consumers.
+Order reflection remains a separate, heavier task.
