@@ -75,6 +75,11 @@ semanticKernelProduct
 semanticAct_comp
 semanticActLevel
 semanticActLevel_comp
+semanticInverseKernel
+semanticInverseAct
+semanticAct_bijective
+semanticInverseActLevel
+semanticActLevel_bijective
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -85,8 +90,13 @@ Two transported actions compose through the product of their real unit
 kernels, and every real `q2` level set is stable under the transported action.
 No source-level kernel product is asserted.
 
+Real-side conjugation supplies an inverse kernel. Consequently each
+transported action is a bijection of the real CF2D plane and restricts to a
+bijection of every `q2` level set. The inverse generally leaves the first
+quadrant and is therefore not reflected back into the nonnegative source.
+
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
 rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example first-quadrant geometric consumers.
+remain on the real side, for example finite iterates and orbit statements.
 Order reflection remains a separate, heavier task.

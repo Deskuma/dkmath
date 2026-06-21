@@ -212,6 +212,26 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 00:59 JST (Inverse kernels and level-set automorphisms)
+
+1. 方針:
+   - inverse は source に構成せず、transport 後の Real unit kernel の共役で
+     与える。
+2. 実施:
+   - `semanticInverseKernel` と `semanticInverseAct` を追加した。
+   - 左右の inverse action law を既存 `star_conj` / `conj_star` から証明した。
+   - `semanticAct_bijective` を証明した。
+   - level set 側にも inverse action を降ろし、
+     `semanticActLevel_bijective` を証明した。
+3. 結論:
+   - DkNNRealQ 由来 kernel は Real 平面の `q2` 保存全単射を生成する。
+   - 任意の実数 `q2` level set 上でも全単射となる。
+4. 境界:
+   - 共役 inverse は一般に beam 座標が負となるため、第一象限の source
+     kernel へ戻るとは主張しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 00:49 JST (Real-side composition and level-set action)
 
 1. 方針:

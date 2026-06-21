@@ -186,6 +186,77 @@ theorem semanticActLevel_comp
   apply Subtype.ext
   exact semanticAct_comp r s z.1
 
+/--
+Real-side inverse kernel of an interpreted nonnegative DkMath kernel.
+
+The inverse generally leaves the first quadrant, so it is intentionally not
+claimed to come from a `DkNNRealQ` unit kernel.
+-/
+def semanticInverseKernel (r : UnitKernel DkNNRealQ) : UnitKernel ℝ :=
+  UnitKernel.conj (semanticUnitKernel r)
+
+/-- Real-side action by the inverse kernel. -/
+def semanticInverseAct (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  UnitKernel.act (semanticInverseKernel r) z
+
+/-- The inverse action cancels a transported action on the left. -/
+@[simp]
+theorem semanticInverseAct_semanticAct
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticInverseAct r (semanticAct r z) = z := by
+  rw [semanticInverseAct, semanticAct, ← UnitKernel.act_star]
+  rw [semanticInverseKernel, UnitKernel.conj_star]
+  exact UnitKernel.act_one z
+
+/-- The inverse action cancels a transported action on the right. -/
+@[simp]
+theorem semanticAct_semanticInverseAct
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticAct r (semanticInverseAct r z) = z := by
+  rw [semanticInverseAct, semanticAct, ← UnitKernel.act_star]
+  rw [semanticInverseKernel, UnitKernel.star_conj]
+  exact UnitKernel.act_one z
+
+/-- Every transported action is a bijection of the real CF2D plane. -/
+theorem semanticAct_bijective (r : UnitKernel DkNNRealQ) :
+    Function.Bijective (semanticAct r) := by
+  refine Function.bijective_iff_has_inverse.mpr ?_
+  exact ⟨semanticInverseAct r, semanticInverseAct_semanticAct r,
+    semanticAct_semanticInverseAct r⟩
+
+/-- Real-side inverse action restricted to a square-mass level set. -/
+def semanticInverseActLevel
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) : LevelSet ℝ rho2 :=
+  LevelSet.act (semanticInverseKernel r) z
+
+/-- The inverse level-set action cancels the transported level-set action. -/
+@[simp]
+theorem semanticInverseActLevel_semanticActLevel
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    semanticInverseActLevel r (semanticActLevel r z) = z := by
+  apply Subtype.ext
+  exact semanticInverseAct_semanticAct r z.1
+
+/-- The transported level-set action cancels its inverse. -/
+@[simp]
+theorem semanticActLevel_semanticInverseActLevel
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
+    (z : LevelSet ℝ rho2) :
+    semanticActLevel r (semanticInverseActLevel r z) = z := by
+  apply Subtype.ext
+  exact semanticAct_semanticInverseAct r z.1
+
+/-- Every transported action is a bijection of each real square-mass level set. -/
+theorem semanticActLevel_bijective
+    (r : UnitKernel DkNNRealQ) {rho2 : ℝ} :
+    Function.Bijective (semanticActLevel r : LevelSet ℝ rho2 → LevelSet ℝ rho2) := by
+  refine Function.bijective_iff_has_inverse.mpr ?_
+  exact ⟨semanticInverseActLevel r,
+    semanticInverseActLevel_semanticActLevel r,
+    semanticActLevel_semanticInverseActLevel r⟩
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

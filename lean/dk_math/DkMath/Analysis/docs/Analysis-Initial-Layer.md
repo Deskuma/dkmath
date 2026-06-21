@@ -132,6 +132,8 @@ BridgeNNReal / BridgeReal:
   their coordinates satisfy the real Pythagorean identity
   transported actions compose through real-side kernel products
   every real q2 level set is stable under transported actions
+  real-side conjugation makes each transported action bijective
+  each q2 level set therefore carries a transported automorphism
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv
