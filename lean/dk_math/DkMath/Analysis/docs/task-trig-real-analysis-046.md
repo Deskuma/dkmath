@@ -105,6 +105,11 @@ semanticKernelPower_act
 unitKernel_eq_one_of_act_eq_id
 SemanticKernelFiniteOrder
 semanticKernelFiniteOrder_iff
+semanticKernelPower_one
+semanticKernelFiniteOrder_one_iff_identity
+semanticKernelFiniteOrder_one_iff_core_eq_one
+semanticKernelFiniteOrder_two_iff_identity
+semanticKernelFiniteOrder_two_iff_core_eq_one
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -164,6 +169,14 @@ semanticKernelPower r n = UnitKernel.one Real
 This closes the bridge between kernel product order and finite action order
 without defining multiplication, subtraction, or inverses in the nonnegative
 source.
+
+The first low-order classification is also complete. Product order dividing
+one is equivalent to semantic identity and to semantic core coordinate one.
+For transported first-quadrant kernels the same is true of product order
+dividing two. A general real unit kernel would also admit `(-1, 0)` as a
+square root of the neutral kernel, but coordinatewise transport from
+`DkNNRealQ` makes both semantic coordinates nonnegative and excludes that
+case. Thus no nonidentity transported kernel has order two.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer

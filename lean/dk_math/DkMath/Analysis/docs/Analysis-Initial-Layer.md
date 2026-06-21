@@ -144,6 +144,7 @@ BridgeNNReal / BridgeReal:
   nonidentity transported kernels fix exactly the origin
   real-side kernel powers act as the corresponding function iterates
   kernel-product finite order is equivalent to finite action order
+  product orders dividing one or two force the transported identity kernel
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

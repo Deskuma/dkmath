@@ -695,6 +695,69 @@ theorem semanticKernelFiniteOrder_iff
             simpa [semanticOrbit] using semanticKernelPower_act r n z
       _ = id z := congrFun h z
 
+/-- The first real-side kernel power is the transported kernel itself. -/
+@[simp]
+theorem semanticKernelPower_one (r : UnitKernel DkNNRealQ) :
+    semanticKernelPower r 1 = semanticUnitKernel r := by
+  simp [semanticKernelPower]
+
+/-- Product order dividing one is exactly semantic identity-kernel status. -/
+theorem semanticKernelFiniteOrder_one_iff_identity
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 1 ↔ SemanticIdentityKernel r := by
+  simp [SemanticKernelFiniteOrder, SemanticIdentityKernel]
+
+/-- Product order dividing one is characterized by semantic core coordinate one. -/
+theorem semanticKernelFiniteOrder_one_iff_core_eq_one
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 1 ↔
+      semanticValue (r : Vec DkNNRealQ).core = 1 := by
+  rw [semanticKernelFiniteOrder_one_iff_identity,
+    semanticIdentityKernel_iff_core_eq_one]
+
+/--
+For a transported first-quadrant kernel, product order dividing two already
+forces the neutral kernel.
+
+Over all real unit kernels the square equation also admits `(-1, 0)`. That
+case is excluded here because both semantic coordinates transported from
+`DkNNRealQ` are nonnegative.
+-/
+theorem semanticKernelFiniteOrder_two_iff_identity
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 2 ↔ SemanticIdentityKernel r := by
+  let C := semanticValue (r : Vec DkNNRealQ).core
+  let S := semanticValue (r : Vec DkNNRealQ).beam
+  constructor
+  · intro h
+    change semanticKernelPower r 2 = UnitKernel.one ℝ at h
+    have hcore := congrArg (fun k : UnitKernel ℝ => (k : Vec ℝ).core) h
+    have hC : 0 ≤ C := by
+      simpa [C] using semanticUnitKernel_core_nonneg r
+    have hS : 0 ≤ S := by
+      simpa [S] using semanticUnitKernel_beam_nonneg r
+    have hq : C ^ 2 + S ^ 2 = 1 := by
+      simpa [C, S] using semanticUnitKernel_sq_add_sq r
+    have hsquare : C ^ 2 - S ^ 2 = 1 := by
+      simpa [semanticKernelPower, semanticUnitKernel, semanticVec,
+        UnitKernel.star, Vec.star, UnitKernel.one, Vec.one, C, S, pow_two]
+        using hcore
+    apply (semanticIdentityKernel_iff_core_eq_one r).2
+    change C = 1
+    nlinarith [sq_nonneg (C - 1)]
+  · intro h
+    change semanticKernelPower r 2 = UnitKernel.one ℝ
+    rw [SemanticIdentityKernel] at h
+    simp [semanticKernelPower, h]
+
+/-- Product order dividing two is also characterized by semantic core one. -/
+theorem semanticKernelFiniteOrder_two_iff_core_eq_one
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 2 ↔
+      semanticValue (r : Vec DkNNRealQ).core = 1 := by
+  rw [semanticKernelFiniteOrder_two_iff_identity,
+    semanticIdentityKernel_iff_core_eq_one]
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

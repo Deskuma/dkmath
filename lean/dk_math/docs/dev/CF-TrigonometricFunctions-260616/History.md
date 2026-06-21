@@ -212,6 +212,26 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 04:42 JST (Low-order classification: orders one and two)
+
+1. 修正:
+   - semantic bridge 全体は noncomputable 文脈にあることを明記し、前節の
+     `noncomputable` 不要という表現を限定した。
+2. 実施:
+   - kernel power one が transported kernel 自身であることを証明した。
+   - order dividing one を identity および core coordinate one と分類した。
+   - order dividing two も identity および core coordinate one と分類した。
+3. 数学的理由:
+   - 一般の Real unit kernel では `(-1, 0)` も二乗して中立核になる。
+   - 今回は DkNNRealQ からの座標別 transport により core と beam がともに
+     非負なので、この候補は排除される。
+4. 結論:
+   - transported first-quadrant kernel に非自明な order two は存在しない。
+   - 証明は unit-square 恒等式と二乗積の core 座標だけで閉じ、角度や
+     連続性を使用しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 04:09 JST (Minimal periods and finite-order divisibility)
 
 1. 注意点:
@@ -384,7 +404,9 @@ Archive
 3. 結論:
    - finite order は、作用側と kernel 積側のどちらからでも同じ条件として
      扱える。
-   - signed source、角度、連続性、`noncomputable` は不要。
+   - signed source、角度、連続性は不要。
+   - semantic bridge 自体は noncomputable 文脈だが、この反復積の段階では
+     新たな解析的 noncomputable 要素を増やしていない。
 4. 境界:
    - この積は Real 側だけに存在し、非負 source の積を主張しない。
 5. 検証:
