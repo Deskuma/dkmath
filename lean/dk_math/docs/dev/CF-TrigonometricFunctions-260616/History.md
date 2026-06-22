@@ -629,3 +629,25 @@ Archive
 4. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
      (8277 jobs)。
+
+### 2026/06/23 06:35 JST (Normalized closed four-phase path)
+
+1. レビュー補正:
+   - 一般補題 `Vec.q2_scale` を追加した。
+   - `phaseNormalization_sq_mul_phaseDepth` を追加し、平方根補正の消去則を
+     独立 API とした。
+   - normalized edge の `q2` 証明をこれらの構造的補題で整理した。
+2. 四相:
+   - `normalizedPhaseEdgeAt` を master edge の action translate として
+     定義した。
+   - endpoint、seam、固定 `q2`、phase index の4周期性を証明した。
+   - 全 translated edge の連続性を証明した。
+3. closed path:
+   - 各 normalized edge を Mathlib `Path` に包装した。
+   - 4本を連結し、core-zero exact order four により `Path z z` を構成した。
+   - 円・角度なしで fixed-`q2` continuous closed path に到達した。
+4. 次段階:
+   - path の target を `LevelSet Real (q2 z)` へ強化する候補を記録した。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。

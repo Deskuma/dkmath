@@ -109,7 +109,9 @@ is not yet normalized to a fixed `q2` boundary.
 `DkReal.SemanticCF2DNormalize` divides one affine edge by the positive square
 root of `phaseDepth`. The resulting edge is continuous, has the same
 endpoints, and remains on the initial `q2` boundary for every real parameter
-under the core-zero action.
+under the core-zero action. Its four action translates retain this boundary,
+join at exact seams, repeat with phase index four, and concatenate to a closed
+continuous path.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

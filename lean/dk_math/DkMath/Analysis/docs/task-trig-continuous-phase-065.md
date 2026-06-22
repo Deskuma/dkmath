@@ -17,6 +17,10 @@ The positive reciprocal-square-root correction, normalized master edge,
 endpoint laws, continuity, and fixed-`q2` theorem are implemented in
 `DkMath.Analysis.DkReal.SemanticCF2DNormalize`.
 
+That module also implements all four normalized action translates, their
+seams, common fixed-`q2` law, phase-index periodicity, continuous paths, and
+the resulting closed four-phase path.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -334,7 +338,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/path-topology]
 [IMPLEMENTED: semantic-cf2d-phase/path-concatenation]
 [IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]
-[TODO: semantic-cf2d-phase/normalized-four-path]
+[IMPLEMENTED: semantic-cf2d-phase/normalized-four-path]
+[TODO: semantic-cf2d-phase/levelset-path]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]

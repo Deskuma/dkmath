@@ -105,13 +105,13 @@ theorem, not inserted as notation.
 4. Core-zero exact order four closes the endpoint without Euclidean
    terminology.
 
-### Milestone B: boundary normalization - one edge implemented
+### Milestone B: boundary normalization - implemented
 
 1. The positive correction `1 / sqrt (phaseDepth t)` is defined and continuous.
 2. The normalized master edge preserves the original `q2` value.
 3. The normalized master edge is continuous and has the original endpoints.
-4. Compatibility with all four action translates and their closed-path
-   concatenation remains to be implemented.
+4. All four action translates preserve the same boundary, meet at exact
+   seams, and concatenate to a closed continuous path.
 
 ### Milestone C: refinement law
 
@@ -153,6 +153,6 @@ mechanism from which these theorem obligations can be investigated.
 
 ## Immediate Next Step
 
-The next implementation transports the normalized edge through all four
-action phases and concatenates those boundary-valued paths into a closed path.
-Refinement and limit arguments remain separate checkpoints.
+The next implementation may package the path directly in the `q2` level-set
+subtype before introducing any Euclidean circle terminology. Refinement and
+limit arguments remain separate checkpoints.

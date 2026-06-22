@@ -1326,9 +1326,12 @@ into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
 of its `q2` profile and proves that the resulting continuous edge stays on the
 original boundary.
 
-[TODO: semantic-cf2d-phase/normalized-four-path] Transport the normalized edge
-through all four action phases and concatenate the resulting boundary-valued
-paths into a closed path.
+[IMPLEMENTED: semantic-cf2d-phase/normalized-four-path] The normalized edge is
+transported through all four action phases. The resulting fixed-`q2` paths
+have exact seams and concatenate to a closed path.
+
+[TODO: semantic-cf2d-phase/levelset-path] Package the normalized paths directly
+in `LevelSet Real (q2 z)`, making boundary membership part of the target type.
 
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 identify the fixed-`q2` path with the standard Euclidean circle model and
