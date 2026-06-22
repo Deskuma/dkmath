@@ -228,6 +228,24 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/23 04:34 JST (Pre-geometric research consolidation)
+
+1. 判断:
+   - 完成論文へ直行せず、主定理・依存原理・非主張事項を固定する研究
+     consolidation report を先に作る段階とした。
+2. コード整理:
+   - `SemanticCF2D.lean` を semantic transport、boundary action、
+     composition/inverse、period、fixed point、low-order classification、
+     four-phase action の節へ整理した。
+3. 文書:
+   - `CF2D-PreGeometric-Boundary-Action-Report.md` を新設した。
+   - 境界判定機と作用が先にあり、円・角度は Euclidean model による後段
+     解釈であることを主軸にした。
+   - 現時点の claims / non-claims と論文化前の不足項目を明示した。
+4. 表現修正:
+   - 証明本体の段階で `(0,1)` を quarter-turn と断定せず、後段の標準
+     Euclidean 解釈でそう読める、という順序へ統一した。
+
 ### 2026/06/22 17:25 JST (Boundary first, geometry later)
 
 1. 文書整理:

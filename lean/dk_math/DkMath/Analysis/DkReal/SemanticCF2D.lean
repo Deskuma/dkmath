@@ -60,6 +60,13 @@ Nothing below requires the two coordinates to have been declared orthogonal
 axes or requires a convention measuring one full turn by 360 degrees.
 -/
 
+/-
+## Semantic transport and boundary detection
+
+Coordinates are transported independently. The first structure recorded after
+transport is the conserved `q2` boundary, without a geometric interpretation.
+-/
+
 /-- Interpret both coordinates of a CF2D vector as Mathlib real numbers. -/
 def semanticVec (z : Vec DkNNRealQ) : Vec ℝ :=
   ⟨semanticValue z.core, semanticValue z.beam⟩
@@ -125,6 +132,13 @@ theorem semanticUnitKernel_sq_add_sq (r : UnitKernel DkNNRealQ) :
   simpa [Vec.q2, semanticVec] using
     (UnitKernel.coe_q2 (semanticUnitKernel r))
 
+/-
+## Boundary-preserving action
+
+The action is introduced only after transport to the signed real target. This
+is the first layer that needs subtraction.
+-/
+
 /--
 Act on a real CF2D vector by first interpreting a nonnegative DkMath unit
 kernel as a real unit kernel.
@@ -163,6 +177,13 @@ theorem semanticAct_q2 (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
 theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
     PreservesQ2 (semanticAct r) :=
   semanticAct_q2 r
+
+/-
+## Composition, inverse, and level-set actions
+
+Products and inverse kernels remain on the real side. Source preimages for
+these signed kernels are neither required nor asserted.
+-/
 
 /--
 Real-side product of two independently interpreted nonnegative DkMath
@@ -310,6 +331,12 @@ theorem semanticActLevelEquiv_apply
     (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
     (z : LevelSet ℝ rho2) :
     semanticActLevelEquiv r z = semanticActLevel r z := rfl
+
+/-
+## Iteration, orbit, and point period
+
+Period parameters in this section are iterate counts, not angle measures.
+-/
 
 /-- Every finite iterate of a transported action preserves square mass. -/
 theorem semanticAct_iterate_q2
@@ -550,6 +577,13 @@ theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
   semanticMinimalPeriod_pos h.1
     ((semanticFiniteOrder_iff r n).mp h.2 z)
 
+/-
+## Identity and fixed-point classification
+
+The classification uses only the unit equation and a two-variable linear
+system. No continuity or angular parameterization enters.
+-/
+
 /-- The transported kernel is the neutral real unit kernel. -/
 def SemanticIdentityKernel (r : UnitKernel DkNNRealQ) : Prop :=
   semanticUnitKernel r = UnitKernel.one ℝ
@@ -639,6 +673,14 @@ theorem semanticFixed_iff_eq_zero_of_not_identity
     exact h ((semanticIdentityKernel_iff_core_eq_one r).2 hcore)
   exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
     fun hz => hz ▸ semanticFixed_zero r⟩
+
+/-
+## Real-side powers and low-order classification
+
+Finite powers turn repeated action into polynomial coordinate identities.
+Orders one through three collapse to identity in the transported first
+quadrant; order four introduces the nonidentity boundary case.
+-/
 
 /--
 The `n`-fold product of a transported kernel, formed entirely in the real
@@ -1122,6 +1164,13 @@ theorem semanticExactActionOrderFour_of_core_eq_zero
     (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
     SemanticExactActionOrderFour r :=
   (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
+
+/-
+## Pre-geometric four-phase boundary action
+
+The following results expose the four-step orbit and its point periods. A
+Euclidean circle and angle measure have not been chosen.
+-/
 
 /--
 At the exact-order-four boundary, the transported action exchanges the two
