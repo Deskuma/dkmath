@@ -107,7 +107,7 @@ $$
 
 $$
 \text{distinguished prime を取る}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{packet を復元する}
 $$
 

@@ -41,7 +41,7 @@ Ptolemy は弦表を作るために Ptolemy の定理を使いました。この
 Ptolemy はおそらく、現代のように
 
 $$
-(C,S)\star(x,y)=(Cx-Sy,;Cy+Sx)
+(C,S)\star(x,y)=(Cx-Sy,\;Cy+Sx)
 $$
 
 という代数積を定義していたわけではありません。

@@ -135,10 +135,7 @@ $$
 だから実質
 
 $$
-\text{selection の truly new kernel}
-===================================
-
-\texttt{CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget}
+\text{selection の truly new kernel} = \texttt{CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget}
 $$
 
 だけ、という読みになる。

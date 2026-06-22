@@ -126,7 +126,7 @@ source 側 kernel family がある
 作用を
 
 $$
-(x,y)\mapsto (C x - S y,; C y + S x)
+(x,y)\mapsto (C x - S y,\; C y + S x)
 $$
 
 と見ると、固定点条件は次の二式になる。

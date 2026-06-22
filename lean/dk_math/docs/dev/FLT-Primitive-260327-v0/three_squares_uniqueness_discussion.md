@@ -421,14 +421,7 @@ $$
 図式的には
 
 $$
-\text{Big}
-==========
-
-\text{Core}
-+
-\text{Beam}
-+
-\text{Gap}
+\text{Big} = \text{Core} + \text{Beam} + \text{Gap}
 $$
 
 で、Big は全部を含む。

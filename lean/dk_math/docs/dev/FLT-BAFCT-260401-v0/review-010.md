@@ -477,7 +477,7 @@ $$
 の `Step 1` に差し込む
 
 $$
-\exists pkt' : \texttt{PrimeGe5BranchANormalFormPacket } p,; pkt'.z < z
+\exists pkt' : \texttt{PrimeGe5BranchANormalFormPacket } p,\; pkt'.z < z
 $$
 
 の **concrete 供給源** を突き止めることじゃ。
@@ -603,7 +603,7 @@ $$
 ### 4.1. packet を concrete に返す
 
 $$
-\exists pkt',; pkt'.z < z
+\exists pkt',\; pkt'.z < z
 $$
 が本文中で **実際に構成** されていること。
 

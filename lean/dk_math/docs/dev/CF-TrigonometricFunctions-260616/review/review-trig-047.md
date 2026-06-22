@@ -145,7 +145,7 @@ $$
 
 $$
 \operatorname{semanticValue}(x)\operatorname{semanticValue}(y)
-\in [x.lo_n y.lo_n,;x.hi_n y.hi_n]
+\in [x.lo_n y.lo_n,\;x.hi_n y.hi_n]
 $$
 
 に入る。よって一意性で落とす。

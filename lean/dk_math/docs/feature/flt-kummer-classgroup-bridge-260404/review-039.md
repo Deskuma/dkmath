@@ -240,7 +240,7 @@ abbrev CyclotomicNormUnitAbsorbOfFirstCasePackThin
 この後半は、実は statement をもっと弱くしてもよい。
 つまり最初は
 $$
-\exists g',; g'^p = n
+\exists g',\; g'^p = n
 $$
 程度でも十分で、そのあと既存の整数 descent 側補題へ橋渡ししてもよい。
 
@@ -327,7 +327,7 @@ $$
 
 4. 最後に合成して
    $$
-   \exists g',; g' \cdot GN,p,g',y = (x/q)^p
+   \exists g',\; g' \cdot GN,p,g',y = (x/q)^p
    $$
    を返す。
 

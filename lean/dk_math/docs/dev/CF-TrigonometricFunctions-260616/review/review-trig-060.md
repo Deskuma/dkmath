@@ -49,7 +49,7 @@ Real 側 kernel power
 二乗の座標式は自然じゃ。
 
 $$
-(C,S)^2=(C^2-S^2,;2CS)
+(C,S)^2=(C^2-S^2,\;2CS)
 $$
 
 Lean 側では、
@@ -69,7 +69,7 @@ semanticKernelPower_two_beam
 三乗の座標式も正しい。
 
 $$
-(C,S)^3=(C^3-3CS^2,;3C^2S-S^3)
+(C,S)^3=(C^3-3CS^2,\;3C^2S-S^3)
 $$
 
 これを、

@@ -72,10 +72,7 @@ $$
 はとても見やすい。予算も、
 
 $$
-base\cdot \frac{1}{1-ratio}
-===========================
-
-\frac{2c}{\log x}
+base\cdot \frac{1}{1-ratio} = \frac{2c}{\log x}
 $$
 
 へ落ちる。
