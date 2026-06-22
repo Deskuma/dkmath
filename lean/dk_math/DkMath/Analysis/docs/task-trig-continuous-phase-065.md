@@ -8,6 +8,11 @@ The scalar profile, affine master edge, endpoint laws, exact core-zero `q2`
 profile, and half-fold observation theorem are implemented in
 `DkMath.Analysis.DkReal.SemanticCF2DPhase`.
 
+The coordinate-product topology, continuous edge paths, four-edge
+concatenation, and core-zero closed path are implemented in
+`DkMath.CosmicFormula.Rotation.CF2D.Topology` and
+`DkMath.Analysis.DkReal.SemanticCF2DPath`.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -322,8 +327,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/master-edge]
 [IMPLEMENTED: semantic-cf2d-phase/four-translates]
 [IMPLEMENTED: semantic-cf2d-phase/half-fold-profile]
-[TODO: semantic-cf2d-phase/path-topology]
-[TODO: semantic-cf2d-phase/path-concatenation]
+[IMPLEMENTED: semantic-cf2d-phase/path-topology]
+[IMPLEMENTED: semantic-cf2d-phase/path-concatenation]
 [TODO: semantic-cf2d-phase/boundary-normalization]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]

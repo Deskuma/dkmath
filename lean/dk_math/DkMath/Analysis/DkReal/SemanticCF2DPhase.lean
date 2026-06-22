@@ -103,6 +103,18 @@ theorem phaseDepth_half :
     phaseDepth (1 / 2 : ℝ) = 1 / 2 := by
   norm_num [phaseDepth]
 
+/-- The midpoint is the unique point at which phase depth reaches its minimum. -/
+theorem phaseDepth_eq_half_iff (t : ℝ) :
+    phaseDepth t = 1 / 2 ↔ t = 1 / 2 := by
+  rw [phaseDepth_eq_two_sq_add_half]
+  constructor
+  · intro h
+    have hsquare : (t - (1 / 2 : ℝ)) ^ 2 = 0 := by
+      linarith
+    exact sub_eq_zero.mp (sq_eq_zero_iff.mp hsquare)
+  · rintro rfl
+    norm_num
+
 /-!
 ## One affine master edge
 

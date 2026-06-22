@@ -587,3 +587,25 @@ Archive
      段階として分離し、次は continuous four-edge path と定めた。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DPhase` 成功 (8274 jobs)。
+
+### 2026/06/23 06:05 JST (Continuous closed four-phase path)
+
+1. レビュー補正:
+   - `phaseDepth_eq_half_iff` を追加し、midpoint が unique minimum であるという
+     module docstring の主張を定理化した。
+2. 位相 bridge:
+   - `CF2D.Topology.lean` を新設した。
+   - `Vec R` と `R × R` の座標同値、および積から誘導される topology を
+     実装した。
+   - `Vec` 値関数の連続性を2座標の連続性へ分解する API を追加した。
+3. Path:
+   - `SemanticCF2DPath.lean` を新設した。
+   - master edge と全 action translate の連続性を証明した。
+   - 各 edge を Mathlib `Path` として包装し、4本を `Path.trans` で連結した。
+   - core-zero exact order four により `Path z z` となる閉路を構成した。
+4. 境界:
+   - 得られたものは continuous piecewise-affine closed path であり、まだ
+     fixed-`q2` boundary path ではない。
+   - 次段階を `phaseDepth` による boundary normalization とした。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPath` 成功 (8276 jobs)。

@@ -97,13 +97,13 @@ theorem, not inserted as notation.
 
 ## Formal Milestones
 
-### Milestone A: continuous four-edge loop
+### Milestone A: continuous four-edge loop - implemented
 
-1. Equip the real CF2D target with an explicit topology or bridge it to
-   `Real × Real`.
-2. Package each affine edge as a Mathlib `Path`.
-3. Concatenate four seam-compatible paths.
-4. Prove endpoint closure independently of Euclidean terminology.
+1. The real CF2D target carries the topology induced from `Real × Real`.
+2. Each affine edge is packaged as a Mathlib `Path`.
+3. Four seam-compatible paths are concatenated.
+4. Core-zero exact order four closes the endpoint without Euclidean
+   terminology.
 
 ### Milestone B: boundary normalization
 
@@ -152,7 +152,7 @@ mechanism from which these theorem obligations can be investigated.
 
 ## Immediate Next Step
 
-The next implementation should be the topological bridge for the already
-proved affine edge family. It should stop after constructing the continuous
-closed four-edge path. Boundary normalization and limit arguments remain
-separate checkpoints.
+The next implementation is boundary normalization of one affine edge. It must
+first prove the correction factor continuous and well-defined from the strict
+positivity of `phaseDepth`, then prove preservation of the original `q2`
+value. Refinement and limit arguments remain separate checkpoints.

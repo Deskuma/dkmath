@@ -1317,9 +1317,9 @@ form exact seams, and the family is four-periodic under a core-zero kernel.
 profile `((1-t)^2 + t^2) * q2 z`, symmetric under `t ↦ 1-t`, with a positive
 lower bound of one half.
 
-[TODO: semantic-cf2d-phase/path-concatenation] Package the four compatible
-edges as a closed Mathlib `Path`. This is a piecewise-affine loop, not yet a
-fixed-`q2` boundary path.
+[IMPLEMENTED: semantic-cf2d-phase/path-concatenation] `SemanticCF2DPath`
+packages each compatible edge as a Mathlib `Path` and concatenates four edges
+into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
 
 [TODO: semantic-cf2d-phase/boundary-normalization] In a separate analytic
 module, normalize the affine edge by its positive `q2` profile and prove that

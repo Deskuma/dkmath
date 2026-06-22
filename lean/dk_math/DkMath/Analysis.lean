@@ -14,6 +14,7 @@ import DkMath.Analysis.TaylorBridge
 import DkMath.Analysis.DkReal
 import DkMath.Analysis.DkReal.SemanticCF2D
 import DkMath.Analysis.DkReal.SemanticCF2DPhase
+import DkMath.Analysis.DkReal.SemanticCF2DPath
 
 #print "file: DkMath.Analysis"
 

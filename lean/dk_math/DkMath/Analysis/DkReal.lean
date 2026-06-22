@@ -99,6 +99,12 @@ fixed `q2` boundary by the exact factor
 of one half, and reflection about the midpoint proves the first continuous
 half-fold symmetry without introducing circles or angles.
 
+[IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
+coordinate-product topology from `CF2D.Topology` to package every translated
+affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
+closed continuous piecewise-affine path under the core-zero action. This path
+is not yet normalized to a fixed `q2` boundary.
+
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.
 
