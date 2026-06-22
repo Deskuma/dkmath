@@ -1305,6 +1305,27 @@ theorem semanticMinimalPeriod_eq_four_of_core_eq_zero_of_ne_zero
 `KernelFamily` require a ring because their core coordinate uses subtraction.
 Keep the source in the nonnegative semiring until a signed DkReal layer is
 introduced; do not manufacture subtraction merely to mirror the real target.
+
+[TODO: semantic-cf2d-phase/master-edge] Fill one transition affinely in the
+semantic real target, from `z` to `semanticAct r z`.
+
+[TODO: semantic-cf2d-phase/four-translates] Generate all four transition edges
+by applying action iterates to the one master edge, and prove seam closure.
+
+[TODO: semantic-cf2d-phase/half-fold-profile] Prove that the affine edge has
+`q2` profile `((1-t)^2 + t^2) * q2 z`, symmetric under `t ↦ 1-t`.
+
+[TODO: semantic-cf2d-phase/path-concatenation] Package the four compatible
+edges as a closed Mathlib `Path`. This is a piecewise-affine loop, not yet a
+fixed-`q2` boundary path.
+
+[TODO: semantic-cf2d-phase/boundary-normalization] In a separate analytic
+module, normalize the affine edge by its positive `q2` profile and prove that
+the normalized path stays on the original boundary.
+
+[TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
+identify the fixed-`q2` path with the standard Euclidean circle model and
+extract angular terminology.
 -/
 
 end

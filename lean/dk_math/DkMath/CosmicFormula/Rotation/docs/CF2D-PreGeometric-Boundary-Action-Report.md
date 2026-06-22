@@ -174,3 +174,29 @@ A finished paper should still add:
 
 The result is beyond a speculative note, but the correct present artifact is a
 research consolidation report and theorem package before a full manuscript.
+
+## Next Phase: Continuous Transition Before Angle
+
+The next phase should fill the four discrete transitions continuously without
+calling the result a circle in advance.
+
+One affine master edge is sufficient:
+
+```text
+E z t = (1-t) z + t A z.
+```
+
+The four edges are generated as `A^[k] (E z t)`. Their endpoints glue because
+the endpoint of edge `k` is the start of edge `k+1`, and exact order four
+closes the final seam.
+
+The affine path does not remain on the `q2` boundary. Its scalar profile is:
+
+```text
+q2 (E z t) = ((1-t)^2 + t^2) q2 z.
+```
+
+This profile is invariant under `t -> 1-t`, so one half determines the other.
+Boundary normalization is a later analytic operation requiring square root
+and division. The detailed design is recorded in
+`DkMath/Analysis/docs/task-trig-continuous-phase-065.md`.

@@ -543,3 +543,24 @@ Archive
    - この積は Real 側だけに存在し、非負 source の積を主張しない。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/23 05:10 JST (Continuous four-phase design)
+
+1. 設計:
+   - 離散四状態を一つの affine master edge と、その作用反復による四つの
+     translate として連続化する方針を定めた。
+   - 四区間の seam 接続と endpoint closure を、円や角度より先に扱う。
+2. 対称性:
+   - affine edge の `q2` profile を
+     `((1-t)^2 + t^2) * q2 z` と予測し、`t -> 1-t` の半折返し対称を
+     次の中心定理とした。
+3. 境界:
+   - affine 補間は連続な閉路を与えるが、途中では固定 `q2` 境界を離れる。
+   - piecewise-linear loop、cyclic parameter、boundary normalization、
+     Euclidean circle interpretation を別層に分離した。
+4. DkReal:
+   - nested interval completion の考え方を parameter approximation に再利用
+     するが、連続性の最初の定理は semantic Real target で行う。
+5. 文書:
+   - `task-trig-continuous-phase-065.md` を新設し、実装順と module boundary
+     を記録した。
