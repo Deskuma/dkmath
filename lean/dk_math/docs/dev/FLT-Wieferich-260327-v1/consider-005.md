@@ -19,7 +19,7 @@ $$
 $$
 p \mid t
 ;\Longrightarrow;
-\exists t_1,B,;
+\exists t_1,B,\;
 t = p t_1,\quad
 s^p = y^{p-1} + p^{2p-1}(t_1^p B)
 $$
@@ -129,7 +129,7 @@ $$
 $$
 p \mid t
 \Longrightarrow
-\exists t_1,;
+\exists t_1,\;
 t = p t_1
 ;\land;
 GN\bigl(p,p^{p-1}t_1^p,y\bigr)=p,s^p

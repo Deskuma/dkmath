@@ -36,7 +36,7 @@ $$
 前段階では、未解決核は universal kernel
 
 $$
-\forall q,;
+\forall q,\;
 q \mid x+1 \land q \nmid x
 ;\Longrightarrow;
 (u-1)^d \equiv u^d \pmod q
@@ -48,7 +48,7 @@ $$
 今回それを、
 
 $$
-\exists q,;
+\exists q,\;
 \mathrm{Prime}(q)\land q\mid x+1 \land q\nmid x
 \land
 (u-1)^d \equiv u^d \pmod q

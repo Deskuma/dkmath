@@ -8,7 +8,7 @@
 今回の追加は、
 
 $$
-\text{GN 側で } q \mid GN,p,(z-y),y,; q\nmid(z-y)
+\text{GN 側で } q \mid GN,p,(z-y),y,\; q\nmid(z-y)
 $$
 
 をいきなり狙うのではなく、まず

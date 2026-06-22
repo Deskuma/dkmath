@@ -96,7 +96,7 @@ $$
 ただし non-first-case 側には、依然として
 
 $$
-\exists z',; z'^p = (x/q)^p + y^p
+\exists z',\; z'^p = (x/q)^p + y^p
 $$
 
 を返す一点に局所化された直接 `sorry` が 1 個残っておる。
