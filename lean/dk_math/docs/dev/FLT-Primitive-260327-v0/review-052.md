@@ -81,7 +81,7 @@ selected route へ落とす橋が十分に揃ったからじゃ。
 これは現在、
 
 $$
-\text{diffPow系} ;\Rightarrow; \text{SelectedCoreOnWitness}
+\text{diffPow系} \;\Rightarrow\; \text{SelectedCoreOnWitness}
 $$
 
 という読み替えの中心じゃ。

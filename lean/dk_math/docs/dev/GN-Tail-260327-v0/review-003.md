@@ -19,7 +19,7 @@ $$
 構造として
 
 $$
-GTail(d,1,x,u) ;\leftrightarrow; GN\text{-layer}
+GTail(d,1,x,u) \;\leftrightarrow\; GN\text{-layer}
 $$
 
 を固定したうえで、再帰・零評価・非可除性・valuation zero・exact valuation まで **全部 GN 名で読める** ようになった。これで今後の theorem 文は、もう `GTail d 1 x u` を毎回「これは実質 GN です」と脳内変換せずに済む。これは実装者にとって効く。たいへん効く。

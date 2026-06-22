@@ -94,9 +94,9 @@ $$
 
 $$
 \text{zsigmondy existence}
-;+;
+\;+\;
 \text{arithmetic fallout}
-;+;
+\;+\;
 \text{restore-from-arithmetic}
 $$
 

@@ -11,7 +11,7 @@ $$
 いま確定しておるのは、`smaller packet` 全体が
 
 $$
-\texttt{valuation peel route} ;+; \texttt{primitive packet descent route}
+\texttt{valuation peel route} \;+\; \texttt{primitive packet descent route}
 $$
 
 の二分岐で閉じること、そして valuation peel 側では既に
@@ -74,7 +74,7 @@ s^p
 ===
 
 \frac{1}{p},GN\bigl(p,p^{p-1}t_1^p,y\bigr)
-;+;
+\;+\;
 \text{余剰項}
 $$
 
@@ -131,7 +131,7 @@ p \mid t
 \Longrightarrow
 \exists t_1,\;
 t = p t_1
-;\land;
+\;\land\;
 GN\bigl(p,p^{p-1}t_1^p,y\bigr)=p,s^p
 $$
 

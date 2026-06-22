@@ -10,7 +10,7 @@
 ひとつめは、`CyclotomicLinearFactorIdealPthPowerTarget` を「任意の principal ideal (I)」ではなく、
 
 $$
-\exists I,\ I \text{ principal} ;\land; \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \;\land\; \operatorname{span}(z-\zeta y)=I^p
 $$
 
 という **存在形** に直したことじゃ。これは Stage 1 の出力として正しい。Stage 1 が自然に返すのは「ある root ideal がある」であって、「どの principal ideal に対しても成り立つ」ではないからの。

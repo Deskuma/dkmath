@@ -172,7 +172,7 @@ $$
 
 $$
 \texttt{CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget}
-;+;
+\;+\;
 \texttt{Restore}
 \Longrightarrow
 \texttt{PacketDescent}
@@ -182,7 +182,7 @@ $$
 
 $$
 \texttt{CFBRCPrimitiveBoundarySelectionOnSplitTarget}
-;+;
+\;+\;
 \texttt{Restore}
 \Longrightarrow
 \texttt{PacketDescent}

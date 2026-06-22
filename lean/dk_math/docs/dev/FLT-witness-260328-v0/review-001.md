@@ -205,7 +205,7 @@ $$
 ではなく
 
 $$
-\text{arithmetic witness} ;+; \text{body/core witness}
+\text{arithmetic witness} \;+\; \text{body/core witness}
 $$
 
 の **二本立て existential route** へ切り替える。

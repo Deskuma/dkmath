@@ -8,11 +8,11 @@
 いまの局面を数式で書けば、こうじゃ。
 
 $$
-\text{StrongProvider} ;\checkmark
+\text{StrongProvider} \;\checkmark
 \qquad
-\text{FringeDescent} ;\checkmark
+\text{FringeDescent} \;\checkmark
 \qquad
-\text{RestoreArithmeticStrong} ;=; \text{2 kernels}
+\text{RestoreArithmeticStrong} \;=\; \text{2 kernels}
 $$
 
 残った kernel は、ぬしの diff のとおり次の 2 つじゃ。
