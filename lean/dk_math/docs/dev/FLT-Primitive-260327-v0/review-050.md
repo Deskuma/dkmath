@@ -38,7 +38,7 @@ $$
 $$
 \forall q,\;
 q \mid x+1 \land q \nmid x
-;\Longrightarrow;
+\;\Longrightarrow\;
 (u-1)^d \equiv u^d \pmod q
 $$
 

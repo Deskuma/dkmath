@@ -7,7 +7,7 @@
 前回は「弱い達成」と「本命未達」を型で切り分けたのが成果じゃった。今回はそこからさらに、
 
 $$
-\text{Hensel 1-step} ;\Longrightarrow; \text{Strong V2}
+\text{Hensel 1-step} \;\Longrightarrow\; \text{Strong V2}
 $$
 
 という供給口を置いた。つまり Level 1 本丸が、ただの理想論でなく **実装単位に分解された** のじゃ。これは設計としてかなり正しい。

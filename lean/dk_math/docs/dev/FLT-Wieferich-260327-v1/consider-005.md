@@ -18,7 +18,7 @@ $$
 
 $$
 p \mid t
-;\Longrightarrow;
+\;\Longrightarrow\;
 \exists t_1,B,\;
 t = p t_1,\quad
 s^p = y^{p-1} + p^{2p-1}(t_1^p B)

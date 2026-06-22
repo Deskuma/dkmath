@@ -61,7 +61,7 @@ $$
 
 $$
 \text{cyclotomic / diff-power existence}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{GN distinguished prime}
 $$
 

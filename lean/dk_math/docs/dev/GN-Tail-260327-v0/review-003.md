@@ -113,7 +113,7 @@ GN の先頭項が何であるかを固定する。
 
 $$
 p \nmid \binom d1 u^{d-1},\ p \mid x
-;\Longrightarrow;
+\;\Longrightarrow\;
 p \nmid GN_d(x,u)
 $$
 
