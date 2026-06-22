@@ -1132,8 +1132,8 @@ $$
 ### 8.1. 必要条件層
 
 $$
-q\mid s ;\Rightarrow; q^p\mid (z^p-y^p)
-;\Rightarrow;
+q\mid s \;\Rightarrow\; q^p\mid (z^p-y^p)
+\;\Rightarrow\;
 z^p \equiv y^p \pmod{q^p}
 $$
 

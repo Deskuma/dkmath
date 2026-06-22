@@ -12,7 +12,7 @@ $$
 \qquad
 \text{FringeDescent} ;\checkmark
 \qquad
-\text{RestoreArithmeticStrong} ;=; \text{2 kernels}
+\text{RestoreArithmeticStrong} \;=\; \text{2 kernels}
 $$
 
 残った kernel は、ぬしの diff のとおり次の 2 つじゃ。
