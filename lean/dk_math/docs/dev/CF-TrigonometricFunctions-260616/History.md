@@ -212,6 +212,23 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 05:15 JST (Order dividing four classification)
+
+1. 実施:
+   - 四乗 kernel の core / beam 座標多項式を API 化した。
+   - order dividing four と `semantic core = 1 or 0` の同値を証明した。
+2. 証明:
+   - 四乗 core 方程式と unit-square の二乗から `C^2*S^2 = 0` を得た。
+   - `S = 0` 側は `C = 1`、`C = 0` 側は非負性から `S = 1` となる。
+3. 結論:
+   - order dividing one, two, three は identity のみだった。
+   - order dividing four では初めて非 identity の `(0,1)` 分岐が残る。
+   - これは transported first quadrant 内の exact order-four 候補である。
+4. 境界:
+   - 90 度という角度解釈は使用せず、有限積の座標多項式だけで分類した。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 05:02 JST (Order dividing three classification)
 
 1. 実施:

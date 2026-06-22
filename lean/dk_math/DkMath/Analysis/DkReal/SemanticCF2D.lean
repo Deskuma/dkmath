@@ -754,6 +754,34 @@ theorem semanticKernelPower_three_beam (r : UnitKernel DkNNRealQ) :
     Vec.star, UnitKernel.one, Vec.one]
   ring
 
+/--
+The core coordinate of the fourth kernel power is
+`C^4 - 6*C^2*S^2 + S^4`.
+-/
+theorem semanticKernelPower_four_core (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 4 : Vec ℝ).core =
+      semanticValue (r : Vec DkNNRealQ).core ^ 4 -
+        6 * semanticValue (r : Vec DkNNRealQ).core ^ 2 *
+          semanticValue (r : Vec DkNNRealQ).beam ^ 2 +
+        semanticValue (r : Vec DkNNRealQ).beam ^ 4 := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one]
+  ring
+
+/--
+The beam coordinate of the fourth kernel power is
+`4*C*S*(C^2 - S^2)`.
+-/
+theorem semanticKernelPower_four_beam (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 4 : Vec ℝ).beam =
+      4 * semanticValue (r : Vec DkNNRealQ).core *
+        semanticValue (r : Vec DkNNRealQ).beam *
+        (semanticValue (r : Vec DkNNRealQ).core ^ 2 -
+          semanticValue (r : Vec DkNNRealQ).beam ^ 2) := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one]
+  ring
+
 /-- Product order dividing one is exactly semantic identity-kernel status. -/
 theorem semanticKernelFiniteOrder_one_iff_identity
     (r : UnitKernel DkNNRealQ) :
@@ -879,6 +907,69 @@ theorem semanticKernelFiniteOrder_three_iff_core_eq_one
       semanticValue (r : Vec DkNNRealQ).core = 1 := by
   rw [semanticKernelFiniteOrder_three_iff_identity,
     semanticIdentityKernel_iff_core_eq_one]
+
+/--
+Product order dividing four is characterized by a boundary core coordinate:
+the transported kernel has semantic core `1` or semantic core `0`.
+
+The `core = 1` branch is the neutral kernel. The `core = 0` branch has beam
+`1` by the unit-square equation and coordinate nonnegativity; it is the first
+nonidentity finite-order kernel admitted by the transported first quadrant.
+-/
+theorem semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 4 ↔
+      semanticValue (r : Vec DkNNRealQ).core = 1 ∨
+        semanticValue (r : Vec DkNNRealQ).core = 0 := by
+  let C := semanticValue (r : Vec DkNNRealQ).core
+  let S := semanticValue (r : Vec DkNNRealQ).beam
+  have hC : 0 ≤ C := by
+    simpa [C] using semanticUnitKernel_core_nonneg r
+  have hS : 0 ≤ S := by
+    simpa [S] using semanticUnitKernel_beam_nonneg r
+  have hq : C ^ 2 + S ^ 2 = 1 := by
+    simpa [C, S] using semanticUnitKernel_sq_add_sq r
+  constructor
+  · intro h
+    change semanticKernelPower r 4 = UnitKernel.one ℝ at h
+    have hcore := congrArg (fun k : UnitKernel ℝ => (k : Vec ℝ).core) h
+    have hfour :
+        C ^ 4 - 6 * C ^ 2 * S ^ 2 + S ^ 4 = 1 := by
+      calc
+        C ^ 4 - 6 * C ^ 2 * S ^ 2 + S ^ 4 =
+            (semanticKernelPower r 4 : Vec ℝ).core := by
+              symm
+              simpa [C, S] using semanticKernelPower_four_core r
+        _ = 1 := by simpa [UnitKernel.one, Vec.one] using hcore
+    have hqSquare : (C ^ 2 + S ^ 2) ^ 2 = 1 := by rw [hq]; norm_num
+    have hprod : C ^ 2 * S ^ 2 = 0 := by
+      nlinarith
+    rcases mul_eq_zero.mp hprod with hCsq | hSsq
+    · right
+      change C = 0
+      nlinarith [sq_nonneg C]
+    · left
+      change C = 1
+      nlinarith [sq_nonneg (C - 1), sq_nonneg S]
+  · rintro (hCeq | hCeq)
+    · have hid : semanticUnitKernel r = UnitKernel.one ℝ :=
+        (semanticIdentityKernel_iff_core_eq_one r).2 hCeq
+      change semanticKernelPower r 4 = UnitKernel.one ℝ
+      simp [semanticKernelPower, hid]
+    · have hSeq : S = 1 := by
+        change C = 0 at hCeq
+        nlinarith [sq_nonneg (S - 1)]
+      change semanticKernelPower r 4 = UnitKernel.one ℝ
+      apply UnitKernel.ext
+      have hcore :
+          (semanticKernelPower r 4 : Vec ℝ).core = 1 := by
+        simpa [C, S, hCeq, hSeq] using semanticKernelPower_four_core r
+      have hbeam :
+          (semanticKernelPower r 4 : Vec ℝ).beam = 0 := by
+        simpa [C, S, hCeq, hSeq] using semanticKernelPower_four_beam r
+      cases hp : (semanticKernelPower r 4 : Vec ℝ) with
+      | mk core beam =>
+          simp_all [UnitKernel.one, Vec.one]
 
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and

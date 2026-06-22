@@ -146,6 +146,7 @@ BridgeNNReal / BridgeReal:
   kernel-product finite order is equivalent to finite action order
   product orders dividing one, two, or three force the identity kernel
   second and third kernel powers have explicit polynomial coordinate formulas
+  order dividing four is equivalent to semantic core zero or one
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

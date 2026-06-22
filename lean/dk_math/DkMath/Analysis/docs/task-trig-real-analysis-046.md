@@ -110,12 +110,15 @@ semanticKernelPower_two_core
 semanticKernelPower_two_beam
 semanticKernelPower_three_core
 semanticKernelPower_three_beam
+semanticKernelPower_four_core
+semanticKernelPower_four_beam
 semanticKernelFiniteOrder_one_iff_identity
 semanticKernelFiniteOrder_one_iff_core_eq_one
 semanticKernelFiniteOrder_two_iff_identity
 semanticKernelFiniteOrder_two_iff_core_eq_one
 semanticKernelFiniteOrder_three_iff_identity
 semanticKernelFiniteOrder_three_iff_core_eq_one
+semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -213,6 +216,22 @@ unit-square equation gives `C^2 = 1/4` and `S^2 = 3/4`; nonnegativity gives
 `C = 1/2`, and the cubic core equation then contradicts identity. Therefore
 orders dividing one, two, or three all force semantic identity. This concerns
 order dividing the displayed integer, not an assertion of exact order.
+
+Order dividing four is the first classification with a nonidentity branch.
+The fourth-power core polynomial, together with the square of the unit
+equation, forces `C^2*S^2 = 0`. Coordinate nonnegativity then gives:
+
+```text
+semanticKernelPower r 4 = one
+  iff
+C = 1 or C = 0
+```
+
+The `C = 1` branch is identity. In the `C = 0` branch, the unit equation and
+`S >= 0` force `S = 1`, so the transported kernel is `(0,1)`. Thus the
+first-quadrant restriction excludes nontrivial orders two and three but admits
+the quarter-turn kernel as an exact order-four candidate, still without
+introducing an angle parameter.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
