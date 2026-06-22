@@ -114,6 +114,8 @@ semanticKernelFiniteOrder_one_iff_identity
 semanticKernelFiniteOrder_one_iff_core_eq_one
 semanticKernelFiniteOrder_two_iff_identity
 semanticKernelFiniteOrder_two_iff_core_eq_one
+semanticKernelFiniteOrder_three_iff_identity
+semanticKernelFiniteOrder_three_iff_core_eq_one
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -196,6 +198,21 @@ triple-angle theorems. The order-two classification now consumes the
 quadratic core formula rather than reopening the recursive product
 definition. The cubic formulas provide the next input for classifying product
 order dividing three under the transported first-quadrant constraints.
+
+Product order dividing three is now classified as well. The cubic beam
+equation factors into:
+
+```text
+S = 0
+or
+S^2 = 3*C^2
+```
+
+The first branch gives the neutral kernel. In the second branch the
+unit-square equation gives `C^2 = 1/4` and `S^2 = 3/4`; nonnegativity gives
+`C = 1/2`, and the cubic core equation then contradicts identity. Therefore
+orders dividing one, two, or three all force semantic identity. This concerns
+order dividing the displayed integer, not an assertion of exact order.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer

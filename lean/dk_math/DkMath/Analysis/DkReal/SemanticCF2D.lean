@@ -814,6 +814,72 @@ theorem semanticKernelFiniteOrder_two_iff_core_eq_one
   rw [semanticKernelFiniteOrder_two_iff_identity,
     semanticIdentityKernel_iff_core_eq_one]
 
+/--
+For a transported first-quadrant kernel, product order dividing three also
+forces the neutral kernel.
+
+The cubic beam equation factors as `S * (3*C^2 - S^2) = 0`. The branch
+`S = 0` gives `C = 1`. In the other branch the unit-square equation forces
+`C^2 = 1/4` and `S^2 = 3/4`, which contradicts the cubic core equation.
+No square root or angle parameter is introduced.
+-/
+theorem semanticKernelFiniteOrder_three_iff_identity
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 3 ↔ SemanticIdentityKernel r := by
+  let C := semanticValue (r : Vec DkNNRealQ).core
+  let S := semanticValue (r : Vec DkNNRealQ).beam
+  constructor
+  · intro h
+    change semanticKernelPower r 3 = UnitKernel.one ℝ at h
+    have hcore := congrArg (fun k : UnitKernel ℝ => (k : Vec ℝ).core) h
+    have hbeam := congrArg (fun k : UnitKernel ℝ => (k : Vec ℝ).beam) h
+    have hC : 0 ≤ C := by
+      simpa [C] using semanticUnitKernel_core_nonneg r
+    have hS : 0 ≤ S := by
+      simpa [S] using semanticUnitKernel_beam_nonneg r
+    have hq : C ^ 2 + S ^ 2 = 1 := by
+      simpa [C, S] using semanticUnitKernel_sq_add_sq r
+    have hcubic : C ^ 3 - 3 * C * S ^ 2 = 1 := by
+      calc
+        C ^ 3 - 3 * C * S ^ 2 =
+            (semanticKernelPower r 3 : Vec ℝ).core := by
+              symm
+              simpa [C, S] using semanticKernelPower_three_core r
+        _ = 1 := by simpa [UnitKernel.one, Vec.one] using hcore
+    have hbeamCubic : 3 * C ^ 2 * S - S ^ 3 = 0 := by
+      calc
+        3 * C ^ 2 * S - S ^ 3 =
+            (semanticKernelPower r 3 : Vec ℝ).beam := by
+              symm
+              simpa [C, S] using semanticKernelPower_three_beam r
+        _ = 0 := by simpa [UnitKernel.one, Vec.one] using hbeam
+    have hfactor : S * (3 * C ^ 2 - S ^ 2) = 0 := by
+      nlinarith
+    rcases mul_eq_zero.mp hfactor with hSzero | hrelation
+    · apply (semanticIdentityKernel_iff_core_eq_one r).2
+      change C = 1
+      nlinarith [sq_nonneg (C - 1)]
+    · have hCsq : C ^ 2 = 1 / 4 := by
+        nlinarith
+      have hCeq : C = 1 / 2 := by
+        nlinarith [sq_nonneg (C - 1 / 2)]
+      have hSsq : S ^ 2 = 3 / 4 := by
+        nlinarith
+      exfalso
+      nlinarith
+  · intro h
+    change semanticKernelPower r 3 = UnitKernel.one ℝ
+    rw [SemanticIdentityKernel] at h
+    simp [semanticKernelPower, h]
+
+/-- Product order dividing three is characterized by semantic core one. -/
+theorem semanticKernelFiniteOrder_three_iff_core_eq_one
+    (r : UnitKernel DkNNRealQ) :
+    SemanticKernelFiniteOrder r 3 ↔
+      semanticValue (r : Vec DkNNRealQ).core = 1 := by
+  rw [semanticKernelFiniteOrder_three_iff_identity,
+    semanticIdentityKernel_iff_core_eq_one]
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

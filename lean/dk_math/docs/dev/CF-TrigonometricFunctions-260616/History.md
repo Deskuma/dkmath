@@ -212,6 +212,25 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 05:02 JST (Order dividing three classification)
+
+1. 実施:
+   - `semanticKernelFiniteOrder_three_iff_identity` を追加した。
+   - order dividing three を semantic core coordinate one とも同値にした。
+2. 証明:
+   - 三乗 beam 方程式を `S * (3*C^2 - S^2) = 0` と因数分解した。
+   - `S = 0` 分岐は unit-square と core 非負性から `C = 1`。
+   - 他方は `C^2 = 1/4`, `S^2 = 3/4`, `C = 1/2` となり、三乗 core
+     方程式と矛盾する。
+3. 結論:
+   - transported first-quadrant kernel では、order dividing one, two,
+     three のいずれも identity に潰れる。
+   - exact order three の非自明 kernel は存在しない。
+4. 境界:
+   - 平方根、角度、連続性、signed source は使用していない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 04:51 JST (Polynomial coordinates for powers two and three)
 
 1. 方針:
