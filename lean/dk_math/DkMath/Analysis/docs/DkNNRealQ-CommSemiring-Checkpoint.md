@@ -1,14 +1,15 @@
-# DkNNRealQ CommSemiring Checkpoint
+# DkNNRealQ Ordered Algebra Checkpoint
 
 ## Result
 
-The first algebraic checkpoint of Route B is complete.
+The first algebraic and ordered-algebra checkpoint of Route B is complete.
 
 ```text
 DkNNRealQ = Quotient DkNNReal.equivSetoid
 ```
 
-is a Lean `CommSemiring`. Its representatives are nonnegative nested rational
+is a Lean `CommSemiring` with `PartialOrder` and the semiring-level
+`IsOrderedRing` predicate. Its representatives are nonnegative nested rational
 interval sequences of vanishing width. Two representatives are identified
 when their interval separation tends to zero.
 
@@ -24,7 +25,8 @@ The following data remain in the computable representation layer:
 - quotient operations and natural-number casts.
 
 No point of Mathlib's `Real` or `NNReal` is selected. In particular, the
-Route B import tree contains no `noncomputable` declaration.
+`DkReal` / `DkNNRealQ` computable core contains no `noncomputable`
+declaration.
 
 ## Algebraic Meaning
 
@@ -33,17 +35,35 @@ removes representation dependence. Consequently, laws formerly stated modulo
 `DkNNReal.Equiv` become ordinary equality and support the standard Mathlib
 commutative-semiring API.
 
-The natural-number cast is the constant singleton representation:
+The natural-number cast is the equivalence class of the constant singleton
+interval sequence:
 
 ```text
-n |-> class([n,n], [n,n], ...).
+n |-> class of the sequence k |-> [n,n].
 ```
 
-## Scope
+## Established Order Surface
+
+The order is defined by the vanishing positive lower-endpoint defect:
+
+```text
+x <= y  iff  max(0, x.lo(n) - y.lo(n)) -> 0.
+```
+
+The implementation establishes:
+
+- `PartialOrder DkNNRealQ`;
+- zero as the least quotient value;
+- monotonicity of addition and nonnegative multiplication;
+- monotonicity of natural powers;
+- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`;
+- totality through `Std.Total (· ≤ ·)`;
+- canonical additive order through `CanonicallyOrderedAdd DkNNRealQ`.
 
 This checkpoint does not establish:
 
-- an order on `DkNNRealQ`;
+- a direct `LinearOrder` instance;
+- strict ordered-semiring structure;
 - completeness;
 - decidable equality;
 - representation of every `NNReal`;
@@ -52,11 +72,47 @@ This checkpoint does not establish:
 
 ## Next Independent Designs
 
-### Order
+### Totality
 
-A representative-level order must be invariant under vanishing-separation
-equivalence. Candidate formulations should be compared before installing
-`LE`, `PartialOrder`, or `LinearOrder`.
+The internal proof uses the finite geometry of nested closed intervals.
+The explanatory states are:
+
+```text
+SeparatedLeft:
+  at some stage x.hi < y.lo, hence x <= y;
+
+SeparatedRight:
+  at some stage y.hi < x.lo, hence y <= x;
+
+Merge:
+  neither separation occurs, so every stage overlaps and x ~ y.
+```
+
+Nestedness makes strict separation persistent. More strongly, if no left
+separation exists, the reverse order defect is bounded by the first
+representation's vanishing width. Totality is therefore proved without
+evaluating into `Real`.
+
+See
+[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
+
+### Canonical Gap Extraction
+
+For `x ≤ y`, the implementation constructs stagewise intervals
+
+```text
+[max(0, y.lo - x.hi), max(0, y.hi - x.lo)].
+```
+
+They form a nested nonnegative representation of vanishing width. Adding this
+Gap representation to `x` is equivalent to `y`, so quotient equality gives
+
+```text
+x ≤ y  iff  exists z, y = x + z.
+```
+
+This is packaged as `ExistsAddOfLE` and `CanonicallyOrderedAdd`. No subtraction
+operation is introduced on `DkNNRealQ`.
 
 ### Semantic Bridge
 
@@ -72,4 +128,4 @@ eval (x * y) = eval x * eval y
 ```
 
 Such a bridge may be `noncomputable`; that declaration must remain outside the
-computable core.
+computable core. It should validate, rather than define, the internal order.

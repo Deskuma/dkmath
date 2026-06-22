@@ -314,11 +314,15 @@ addition, multiplication, powers, and semiring lemmas are therefore available
 through Lean's algebraic hierarchy.
 
 This completes the first algebraic public surface of the nonnegative
-computable-real quotient. Order remains separate: an eventually ordered
-representative relation must be shown compatible with `Equiv`, or derived from
-a later semantic bridge. Likewise, any map to Mathlib's `NNReal` or `Real`
-should remain in a separate bridge module because selecting the represented
-limit may require `noncomputable`.
+computable-real quotient. The next phase defines asymptotic order by requiring
+the positive lower-endpoint defect to tend to zero. This relation is compatible
+with `Equiv` and gives `DkNNRealQ` a `PartialOrder`. Ordered-semiring instances
+now include the semiring-level `IsOrderedRing` predicate. Canonical, strict,
+and linear order structures remain deferred; zero-minimality and addition,
+multiplication, and natural-power monotonicity are available.
+
+Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
+module because selecting the represented limit may require `noncomputable`.
 
 Persistent intersection and equality after a future evaluation into Mathlib's
 `Real` remain comparison principles. Their equivalence with vanishing

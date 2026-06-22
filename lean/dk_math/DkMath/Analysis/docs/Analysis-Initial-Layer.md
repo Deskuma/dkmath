@@ -74,6 +74,18 @@ DkMath.Analysis.DkReal.DkNNRealQ
   quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
   a canonical NatCast and CommSemiring instance
 
+DkMath.Analysis.DkReal.Order
+  asymptotic lower-endpoint order, Equiv compatibility, PartialOrder,
+  ordered-semiring compatibility, and totality research boundary
+
+DkMath.Analysis.DkReal.CanonicalOrder
+  subtraction-free extraction of a nonnegative Gap representation,
+  ExistsAddOfLE, and CanonicallyOrderedAdd
+
+DkMath.Analysis.DkReal.Semantic
+  noncomputable lower-endpoint supremum in Mathlib Real, interval membership,
+  and monotone endpoint convergence
+
 DkMath.Analysis.DkReal
   public entry point for the computable approximation layer
 ```
@@ -83,6 +95,10 @@ computability significance are recorded in
 [`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).
 The completed quotient-semiring checkpoint is summarized in
 [`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
+The internal totality route is analyzed in
+[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
+The next strict-order kernel is designed in
+[`DkNNRealQ-StrictGap-Design.md`](DkNNRealQ-StrictGap-Design.md).
 
 `RealBridge` remains the home of continuity and interval mapping. The separate
 `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
@@ -95,15 +111,47 @@ separate:
 
 ```text
 Order:
-  define a representative relation
-  prove Equiv compatibility
-  lift to DkNNRealQ
-  prove partial or linear order laws
+  PartialOrder is implemented via vanishing positive lower-endpoint defect
+  addition, multiplication, and natural-power monotonicity are proved
+  zero is least
+  IsOrderedRing packages semiring-level ordered compatibility
+  totality is proved and exported through Std.Total
+  canonical additive order is proved by nonnegative Gap extraction
+  strict order is designed as finite positivity of the extracted Gap
+  direct linear order structure remains open
+  use a semantic bridge only as an independent cross-check
 
 BridgeNNReal / BridgeReal:
-  select the unique semantic limit
-  prove representative independence
-  prove semiring-homomorphism laws
+  semanticValue now selects the lower-endpoint supremum
+  uniqueness and representative independence are proved
+  DkNNRealQ evaluation and semiring operations are preserved
+  canonical order preservation is proved by additive Gap extraction
+  the semantic map is bundled as a semiring homomorphism to Real
+  CF2D q2 and unit kernels are transported coordinatewise to Real
+  transported kernels act on real vectors and preserve q2
+  their coordinates satisfy the real Pythagorean identity
+  transported actions compose through real-side kernel products
+  every real q2 level set is stable under transported actions
+  real-side conjugation makes each transported action bijective
+  each q2 level set therefore carries a transported automorphism
+  finite iterates and forward orbits retain the same q2 value
+  periodic points use Mathlib IsPeriodicPt
+  finite action order makes every level-set point periodic
+  minimal periods divide all known return times and finite action orders
+  fixed points are exactly minimal-period-one points
+  positive finite order excludes the vacuous zero iterate
+  identity kernels fix every point
+  nonidentity transported kernels fix exactly the origin
+  real-side kernel powers act as the corresponding function iterates
+  kernel-product finite order is equivalent to finite action order
+  product orders dividing one, two, or three force the identity kernel
+  second and third kernel powers have explicit polynomial coordinate formulas
+  order dividing four is equivalent to semantic core zero or one
+  exact kernel order four is equivalent to semantic coordinates `(0,1)`
+  exact kernel order four agrees with exact order of the plane action
+  every nonzero point has minimal period four under the core-zero action
+  source-level star and KernelFamily wait for signed DkReal arithmetic
+  treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv
 ```
 
