@@ -258,6 +258,108 @@ def normalizedClosedFourPhasePath
       source' := p.source
       target' := p.target.trans hclose }
 
+/-!
+## Paths internal to the square-mass boundary
+
+The preceding paths are valued in `Vec Real`, with boundary membership proved
+by a theorem. The following layer strengthens the codomain to
+`LevelSet Real (q2 z)`, so leaving the boundary is no longer type-correct.
+-/
+
+/-- The `k`th discrete action state, packaged in the initial `q2` level set. -/
+def semanticPhaseLevelPoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    LevelSet ℝ (Vec.q2 z) :=
+  ⟨(semanticAct r)^[k] z, semanticAct_iterate_q2 r k z⟩
+
+@[simp]
+theorem semanticPhaseLevelPoint_val
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    (semanticPhaseLevelPoint r z k).1 = (semanticAct r)^[k] z := rfl
+
+/--
+The `k`th normalized transition as a point of the fixed square-mass level set.
+-/
+def normalizedPhaseLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) :
+    LevelSet ℝ (Vec.q2 z) :=
+  ⟨normalizedPhaseEdgeAt r z k t,
+    normalizedPhaseEdgeAt_q2_of_core_eq_zero hcore z k t⟩
+
+@[simp]
+theorem normalizedPhaseLevelEdge_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) :
+    (normalizedPhaseLevelEdge hcore z k t).1 =
+      normalizedPhaseEdgeAt r z k t := rfl
+
+/-- The level-set-valued normalized edge is continuous. -/
+theorem continuous_normalizedPhaseLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    Continuous (fun t : ℝ => normalizedPhaseLevelEdge hcore z k t) :=
+  Continuous.subtype_mk (continuous_normalizedPhaseEdgeAt r z k) _
+
+/--
+The `k`th normalized phase as a path whose target type is the fixed `q2`
+boundary itself.
+-/
+def normalizedPhaseLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    Path (semanticPhaseLevelPoint r z k)
+      (semanticPhaseLevelPoint r z (k + 1)) where
+  toFun t := normalizedPhaseLevelEdge hcore z k t
+  continuous_toFun :=
+    (continuous_normalizedPhaseLevelEdge hcore z k).comp
+      continuous_subtype_val
+  source' := by
+    apply Subtype.ext
+    simp [normalizedPhaseLevelEdge, semanticPhaseLevelPoint]
+  target' := by
+    apply Subtype.ext
+    simp [normalizedPhaseLevelEdge, semanticPhaseLevelPoint]
+
+/-- Four normalized phases concatenated inside the fixed `q2` level set. -/
+def normalizedLevelFourPhasePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path (semanticPhaseLevelPoint r z 0)
+      (semanticPhaseLevelPoint r z 4) :=
+  (((normalizedPhaseLevelPath hcore z 0).trans
+      (normalizedPhaseLevelPath hcore z 1)).trans
+    (normalizedPhaseLevelPath hcore z 2)).trans
+      (normalizedPhaseLevelPath hcore z 3)
+
+/--
+The normalized four-phase path is a closed path internal to the fixed
+square-mass level set.
+-/
+def normalizedClosedLevelFourPhasePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path (semanticPhaseLevelPoint r z 0)
+      (semanticPhaseLevelPoint r z 0) := by
+  have hclose :
+      semanticPhaseLevelPoint r z 4 = semanticPhaseLevelPoint r z 0 := by
+    apply Subtype.ext
+    change (semanticAct r)^[4] z = (semanticAct r)^[0] z
+    have hfour := (semanticExactActionOrderFour_of_core_eq_zero hcore).1
+    rw [hfour]
+    rfl
+  let p := normalizedLevelFourPhasePath hcore z
+  exact
+    { toContinuousMap := p.toContinuousMap
+      source' := p.source
+      target' := p.target.trans hclose }
+
 end
 
 end DkMath.Analysis.DkNNRealQ

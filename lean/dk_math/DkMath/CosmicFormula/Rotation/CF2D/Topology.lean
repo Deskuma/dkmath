@@ -94,6 +94,24 @@ theorem Continuous.vec_mk
     Continuous (fun x => Vec.mk (f x) (g x)) :=
   continuous_vec_iff.mpr ⟨hf, hg⟩
 
+section LevelSet
+
+variable [Semiring R] (rho2 : R)
+
+/--
+The topology on a square-mass level set is the subtype topology inherited
+from the coordinate-product topology on `Vec R`.
+-/
+instance : TopologicalSpace (LevelSet R rho2) :=
+  inferInstanceAs (TopologicalSpace {z : Vec R // Vec.q2 z = rho2})
+
+/-- Forgetting level-set membership is continuous. -/
+theorem continuous_levelSet_val :
+    Continuous (fun z : LevelSet R rho2 => z.1) :=
+  continuous_subtype_val
+
+end LevelSet
+
 end Topology
 
 end DkMath.CosmicFormula.Rotation.CF2D

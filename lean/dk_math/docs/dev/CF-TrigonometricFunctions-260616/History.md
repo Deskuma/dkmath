@@ -651,3 +651,25 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
      (8277 jobs)。
+
+### 2026/06/23 06:50 JST (Level-set internal closed path)
+
+1. topology:
+   - `CF2D.Topology` に `LevelSet R rho2` の subtype topology を追加した。
+   - level-set から underlying `Vec` への射影の連続性を追加した。
+2. boundary type:
+   - 離散 action state を `semanticPhaseLevelPoint` として
+     `LevelSet Real (q2 z)` に包装した。
+   - normalized edge を `normalizedPhaseLevelEdge` として同じ level set に
+     包装し、その連続性を証明した。
+3. path:
+   - 各 edge を `normalizedPhaseLevelPath` として level-set 内部の Path にした。
+   - 4本を連結し、exact order four により
+     `normalizedClosedLevelFourPhasePath` を構成した。
+4. 結論:
+   - fixed-`q2` boundary membership は外部定理だけでなく codomain の型に
+     組み込まれた。
+   - 次候補は既存 path を Euclidean circle model へ解釈する bridge。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。

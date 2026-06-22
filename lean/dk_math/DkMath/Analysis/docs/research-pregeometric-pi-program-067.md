@@ -112,6 +112,8 @@ theorem, not inserted as notation.
 3. The normalized master edge is continuous and has the original endpoints.
 4. All four action translates preserve the same boundary, meet at exact
    seams, and concatenate to a closed continuous path.
+5. The closed path is packaged in the fixed `q2` level-set subtype, so
+   boundary membership is enforced by the target type.
 
 ### Milestone C: refinement law
 
@@ -153,6 +155,7 @@ mechanism from which these theorem obligations can be investigated.
 
 ## Immediate Next Step
 
-The next implementation may package the path directly in the `q2` level-set
-subtype before introducing any Euclidean circle terminology. Refinement and
-limit arguments remain separate checkpoints.
+The next bridge may identify positive real `q2` level sets with a standard
+Euclidean circle model. That bridge must remain an interpretation of the
+existing boundary path, not a replacement construction. Refinement and limit
+arguments remain separate checkpoints.

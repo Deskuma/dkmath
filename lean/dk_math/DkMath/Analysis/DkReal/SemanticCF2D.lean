@@ -1330,8 +1330,13 @@ original boundary.
 transported through all four action phases. The resulting fixed-`q2` paths
 have exact seams and concatenate to a closed path.
 
-[TODO: semantic-cf2d-phase/levelset-path] Package the normalized paths directly
-in `LevelSet Real (q2 z)`, making boundary membership part of the target type.
+[IMPLEMENTED: semantic-cf2d-phase/levelset-path] The normalized phases and
+their closed four-phase concatenation are packaged directly in
+`LevelSet Real (q2 z)`, making boundary membership part of the target type.
+
+[TODO: semantic-cf2d-phase/euclidean-levelset-bridge] Identify the positive
+real `q2` level sets with the corresponding Euclidean circle model without
+changing the pre-geometric construction.
 
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 identify the fixed-`q2` path with the standard Euclidean circle model and

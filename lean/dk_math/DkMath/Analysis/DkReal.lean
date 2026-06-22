@@ -111,7 +111,8 @@ root of `phaseDepth`. The resulting edge is continuous, has the same
 endpoints, and remains on the initial `q2` boundary for every real parameter
 under the core-zero action. Its four action translates retain this boundary,
 join at exact seams, repeat with phase index four, and concatenate to a closed
-continuous path.
+continuous path. The final path is also packaged directly in
+`LevelSet Real (q2 z)`, so boundary membership is enforced by its codomain.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.
