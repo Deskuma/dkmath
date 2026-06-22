@@ -564,3 +564,26 @@ Archive
 5. 文書:
    - `task-trig-continuous-phase-065.md` を新設し、実装順と module boundary
      を記録した。
+
+### 2026/06/23 05:49 JST (Affine phase profile and four translates)
+
+1. 実装:
+   - `SemanticCF2DPhase.lean` を新設した。
+   - `phaseDepth t = (1-t)^2 + t^2`、平方完成、正値性、端点値、半折返し
+     対称性を証明した。
+   - 一本の `semanticPhaseEdge` とその端点則を実装した。
+2. 保存境界からの離脱:
+   - core-zero 作用について affine edge の `q2` が
+     `phaseDepth t * q2 z` と厳密に一致することを証明した。
+   - 状態そのものではなく、境界深度の観測値が `t -> 1-t` で折り返すことを
+     定理化した。
+3. 四相:
+   - `semanticPhaseEdgeAt` を作用反復による唯一の master edge の translate
+     として定義した。
+   - endpoint、seam、共通 `q2` profile、位相番号の4周期性を証明した。
+4. 研究方針:
+   - `research-pregeometric-pi-program-067.md` を追加した。
+   - refinement、Gaussian limit、独立な正規化定数、`Real.pi` 同定を未証明の
+     段階として分離し、次は continuous four-edge path と定めた。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPhase` 成功 (8274 jobs)。

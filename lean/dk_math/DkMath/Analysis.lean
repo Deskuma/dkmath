@@ -13,6 +13,7 @@ import DkMath.Analysis.RealBridge
 import DkMath.Analysis.TaylorBridge
 import DkMath.Analysis.DkReal
 import DkMath.Analysis.DkReal.SemanticCF2D
+import DkMath.Analysis.DkReal.SemanticCF2DPhase
 
 #print "file: DkMath.Analysis"
 

@@ -2,7 +2,11 @@
 
 ## Status
 
-Design checkpoint for the phase after the discrete exact-order-four result.
+Implementation in progress after the discrete exact-order-four result.
+
+The scalar profile, affine master edge, endpoint laws, exact core-zero `q2`
+profile, and half-fold observation theorem are implemented in
+`DkMath.Analysis.DkReal.SemanticCF2DPhase`.
 
 The current implementation proves a four-state return:
 
@@ -315,10 +319,20 @@ explicit.
 ## IX. Tagged Future Work
 
 ```text
-[TODO: semantic-cf2d-phase/master-edge]
-[TODO: semantic-cf2d-phase/four-translates]
-[TODO: semantic-cf2d-phase/half-fold-profile]
+[IMPLEMENTED: semantic-cf2d-phase/master-edge]
+[IMPLEMENTED: semantic-cf2d-phase/four-translates]
+[IMPLEMENTED: semantic-cf2d-phase/half-fold-profile]
+[TODO: semantic-cf2d-phase/path-topology]
 [TODO: semantic-cf2d-phase/path-concatenation]
 [TODO: semantic-cf2d-phase/boundary-normalization]
+[TODO: semantic-cf2d-phase/refinement-law]
+[TODO: semantic-cf2d-phase/gaussian-limit]
+[TODO: semantic-cf2d-phase/pi-identification]
 [TODO: semantic-cf2d-phase/euclidean-interpretation]
 ```
+
+The longer route from this local quadratic profile to a possible
+pre-geometric normalization constant is recorded in
+`research-pregeometric-pi-program-067.md`. That document separates proved
+transition laws from conjectural refinement, Gaussian, and identification
+stages.

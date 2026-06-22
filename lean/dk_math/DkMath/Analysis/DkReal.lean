@@ -92,6 +92,13 @@ separated from the weaker zero-iterate-compatible periodicity predicates.
 Identity transported kernels fix every point; nonidentity transported kernels
 fix exactly the origin.
 
+[IMPLEMENTED: semantic-cf2d-phase-profile] `DkReal.SemanticCF2DPhase` fills one
+step of the core-zero order-four action by an affine edge. The edge leaves the
+fixed `q2` boundary by the exact factor
+`phaseDepth t = (1-t)^2 + t^2`. Square completion proves a positive lower bound
+of one half, and reflection about the midpoint proves the first continuous
+half-fold symmetry without introducing circles or angles.
+
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.
 
