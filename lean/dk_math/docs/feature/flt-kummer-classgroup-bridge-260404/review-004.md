@@ -7,7 +7,7 @@
 
 $$
 \text{class が trivial}
-;\Rightarrow;
+\;\Rightarrow\;
 \text{principal ideal を取り出せる}
 $$
 

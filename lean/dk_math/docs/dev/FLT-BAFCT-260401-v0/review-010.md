@@ -8,9 +8,9 @@
 いまの局面を数式で書けば、こうじゃ。
 
 $$
-\text{StrongProvider} ;\checkmark
+\text{StrongProvider} \;\checkmark
 \qquad
-\text{FringeDescent} ;\checkmark
+\text{FringeDescent} \;\checkmark
 \qquad
 \text{RestoreArithmeticStrong} \;=\; \text{2 kernels}
 $$

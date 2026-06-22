@@ -106,19 +106,19 @@ $$
 今の戦況は
 
 $$
-\text{Level 0} ; \checkmark
+\text{Level 0} \; \checkmark
 $$
 
 $$
-\text{Level 1 weak} ; \checkmark
+\text{Level 1 weak} \; \checkmark
 $$
 
 $$
-\text{Level 1 strong} ; \text{本命}
+\text{Level 1 strong} \; \text{本命}
 $$
 
 $$
-\text{Level 2} ; \text{真の open kernel}
+\text{Level 2} \; \text{真の open kernel}
 $$
 
 という形に、ようやく整った。

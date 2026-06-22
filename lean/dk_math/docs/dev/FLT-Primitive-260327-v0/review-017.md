@@ -98,7 +98,7 @@ $$
 
 $$
 \texttt{CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget}
-;+;
+\;+\;
 \texttt{PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget}
 $$
 

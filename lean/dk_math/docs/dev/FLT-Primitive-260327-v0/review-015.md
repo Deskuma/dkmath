@@ -112,7 +112,7 @@ $$
 
 $$
 \texttt{CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget}
-;+;
+\;+\;
 \texttt{PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget}
 $$
 

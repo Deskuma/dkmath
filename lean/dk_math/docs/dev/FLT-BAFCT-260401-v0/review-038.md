@@ -75,16 +75,16 @@ $$
 
 $$
 \text{SqZero}
-;\checkmark;
+\;\checkmark\;
 \Longrightarrow
 \text{NewtonCorrection}
-; \text{open}
+\; \text{open}
 \Longrightarrow
 \text{ZeroLift}
-; \text{open}
+\; \text{open}
 \Longrightarrow
 \text{Level 1s}
-; \text{open}
+\; \text{open}
 $$
 
 という位置じゃ。

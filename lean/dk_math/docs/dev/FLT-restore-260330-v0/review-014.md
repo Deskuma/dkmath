@@ -13,16 +13,16 @@
 
 $$
 \texttt{BranchAWitnessRouteBundleTarget}
-;+;
+\;+\;
 \texttt{BranchAContradictionRouteBundleTarget}
-;\to;
+\;\to\;
 \texttt{primeGe5BranchARefuter}
 $$
 
 まで theorem として通った。さらに default bundle から読む
 
 $$
-\texttt{primeGe5BranchARefuter_of_routeBundles_default}
+\texttt{primeGe5BranchARefuter\_of\_routeBundles\_default}
 $$
 
 も入っておる。つまり **新経路はもう使える**。
@@ -42,7 +42,7 @@ $$
 既存の
 
 $$
-\texttt{primeGe5BranchARefuter_default}
+\texttt{primeGe5BranchARefuter\_default}
 $$
 
 はそのまま残す。
