@@ -212,6 +212,25 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 04:51 JST (Polynomial coordinates for powers two and three)
+
+1. 方針:
+   - order 3 の分類へ直接進む前に、低冪 kernel の座標式を公開 API として
+     分離する。
+2. 実施:
+   - 二乗の core を `C^2 - S^2`、beam を `2*C*S` と証明した。
+   - 三乗の core を `C^3 - 3*C*S^2`、beam を
+     `3*C^2*S - S^3` と証明した。
+   - order dividing two の分類を二乗 core API を利用する形へ整理した。
+3. 意味:
+   - これらは double-angle / triple-angle theorem ではなく、有限回の
+     `Vec.star` 展開から得られる多項式恒等式である。
+   - order dividing three の分類に必要な座標入力が揃った。
+4. 境界:
+   - source 側の積、角度、連続性は導入していない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 04:42 JST (Low-order classification: orders one and two)
 
 1. 修正:

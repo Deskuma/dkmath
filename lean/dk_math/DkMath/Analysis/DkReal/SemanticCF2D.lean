@@ -701,6 +701,59 @@ theorem semanticKernelPower_one (r : UnitKernel DkNNRealQ) :
     semanticKernelPower r 1 = semanticUnitKernel r := by
   simp [semanticKernelPower]
 
+/--
+The core coordinate of the second kernel power is the quadratic difference
+`C^2 - S^2`.
+
+This is the algebraic double-angle polynomial, obtained solely by expanding
+the CF2D product.
+-/
+theorem semanticKernelPower_two_core (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 2 : Vec ℝ).core =
+      semanticValue (r : Vec DkNNRealQ).core ^ 2 -
+        semanticValue (r : Vec DkNNRealQ).beam ^ 2 := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one, pow_two]
+
+/--
+The beam coordinate of the second kernel power is the quadratic cross term
+`2*C*S`.
+-/
+theorem semanticKernelPower_two_beam (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 2 : Vec ℝ).beam =
+      2 * semanticValue (r : Vec DkNNRealQ).core *
+        semanticValue (r : Vec DkNNRealQ).beam := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one]
+  ring
+
+/--
+The core coordinate of the third kernel power is `C^3 - 3*C*S^2`.
+
+This is the triple-angle polynomial as a finite CF2D product identity; no
+angle parameter or trigonometric theorem is used.
+-/
+theorem semanticKernelPower_three_core (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 3 : Vec ℝ).core =
+      semanticValue (r : Vec DkNNRealQ).core ^ 3 -
+        3 * semanticValue (r : Vec DkNNRealQ).core *
+          semanticValue (r : Vec DkNNRealQ).beam ^ 2 := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one]
+  ring
+
+/--
+The beam coordinate of the third kernel power is `3*C^2*S - S^3`.
+-/
+theorem semanticKernelPower_three_beam (r : UnitKernel DkNNRealQ) :
+    (semanticKernelPower r 3 : Vec ℝ).beam =
+      3 * semanticValue (r : Vec DkNNRealQ).core ^ 2 *
+          semanticValue (r : Vec DkNNRealQ).beam -
+        semanticValue (r : Vec DkNNRealQ).beam ^ 3 := by
+  simp [semanticKernelPower, semanticUnitKernel, semanticVec, UnitKernel.star,
+    Vec.star, UnitKernel.one, Vec.one]
+  ring
+
 /-- Product order dividing one is exactly semantic identity-kernel status. -/
 theorem semanticKernelFiniteOrder_one_iff_identity
     (r : UnitKernel DkNNRealQ) :
@@ -739,9 +792,12 @@ theorem semanticKernelFiniteOrder_two_iff_identity
     have hq : C ^ 2 + S ^ 2 = 1 := by
       simpa [C, S] using semanticUnitKernel_sq_add_sq r
     have hsquare : C ^ 2 - S ^ 2 = 1 := by
-      simpa [semanticKernelPower, semanticUnitKernel, semanticVec,
-        UnitKernel.star, Vec.star, UnitKernel.one, Vec.one, C, S, pow_two]
-        using hcore
+      calc
+        C ^ 2 - S ^ 2 =
+            (semanticKernelPower r 2 : Vec ℝ).core := by
+              symm
+              simpa [C, S] using semanticKernelPower_two_core r
+        _ = 1 := by simpa [UnitKernel.one, Vec.one] using hcore
     apply (semanticIdentityKernel_iff_core_eq_one r).2
     change C = 1
     nlinarith [sq_nonneg (C - 1)]

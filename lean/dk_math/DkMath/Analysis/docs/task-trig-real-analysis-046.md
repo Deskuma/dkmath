@@ -106,6 +106,10 @@ unitKernel_eq_one_of_act_eq_id
 SemanticKernelFiniteOrder
 semanticKernelFiniteOrder_iff
 semanticKernelPower_one
+semanticKernelPower_two_core
+semanticKernelPower_two_beam
+semanticKernelPower_three_core
+semanticKernelPower_three_beam
 semanticKernelFiniteOrder_one_iff_identity
 semanticKernelFiniteOrder_one_iff_core_eq_one
 semanticKernelFiniteOrder_two_iff_identity
@@ -177,6 +181,21 @@ dividing two. A general real unit kernel would also admit `(-1, 0)` as a
 square root of the neutral kernel, but coordinatewise transport from
 `DkNNRealQ` makes both semantic coordinates nonnegative and excludes that
 case. Thus no nonidentity transported kernel has order two.
+
+Low-power coordinate formulas are now exposed as a reusable algebraic API:
+
+```text
+power 2 core = C^2 - S^2
+power 2 beam = 2*C*S
+power 3 core = C^3 - 3*C*S^2
+power 3 beam = 3*C^2*S - S^3
+```
+
+These are finite CF2D product expansions, not invocations of double-angle or
+triple-angle theorems. The order-two classification now consumes the
+quadratic core formula rather than reopening the recursive product
+definition. The cubic formulas provide the next input for classifying product
+order dividing three under the transported first-quadrant constraints.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer

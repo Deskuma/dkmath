@@ -145,6 +145,7 @@ BridgeNNReal / BridgeReal:
   real-side kernel powers act as the corresponding function iterates
   kernel-product finite order is equivalent to finite action order
   product orders dividing one or two force the transported identity kernel
+  second and third kernel powers have explicit polynomial coordinate formulas
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv
