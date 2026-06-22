@@ -116,7 +116,9 @@ continuous path. The final path is also packaged directly in
 `CF2D.EuclideanPhase` then interprets this boundary as the explicit
 two-coordinate Euclidean circle equation and maps the existing closed path
 through that homeomorphism. The zero boundary is kept as a separate
-one-point degenerate case.
+one-point degenerate case. A second homeomorphism identifies the coordinate
+circle with Mathlib's standard `EuclideanSpace Real (Fin 2)` L2 metric sphere
+of radius `sqrt (q2 z)`.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

@@ -1340,13 +1340,15 @@ two-coordinate Euclidean circle equation of squared radius `rho2`. It
 separates the zero one-point boundary and maps the existing closed path
 through this interpretation.
 
-[TODO: semantic-cf2d-phase/standard-euclidean-space] Relate the explicit
-coordinate circle equation to the standard `EuclideanSpace Real (Fin 2)`
-metric sphere, keeping the zero and positive-radius cases separate.
+[IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space] The explicit
+coordinate circle equation is homeomorphic to the standard
+`EuclideanSpace Real (Fin 2)` L2 metric sphere of radius `sqrt rho2`.
+The closed path is mapped through this bridge, and positive squared radius is
+separated from the zero-radius degenerate case.
 
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
-identify the fixed-`q2` path with the standard Euclidean circle model and
-extract angular terminology.
+extract angular terminology and compare the action with the standard
+quarter-turn linear isometry.
 -/
 
 end

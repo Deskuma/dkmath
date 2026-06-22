@@ -155,9 +155,9 @@ mechanism from which these theorem obligations can be investigated.
 
 ## Immediate Next Step
 
-The next bridge may identify positive real `q2` level sets with a standard
-Euclidean metric sphere. The coordinate-circle homeomorphism is now
-implemented, including the degenerate zero boundary; the remaining bridge is
-to `EuclideanSpace Real (Fin 2)`. It must remain an interpretation of the
+The coordinate-circle and standard `EuclideanSpace Real (Fin 2)` metric-sphere
+bridges are now implemented, including the degenerate zero boundary. The next
+interpretive step may identify the core-zero action with the standard
+quarter-turn linear isometry. It must remain an interpretation of the
 existing boundary path, not a replacement construction. Refinement and limit
 arguments remain separate checkpoints.

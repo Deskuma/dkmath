@@ -29,6 +29,11 @@ topology, and the final closed path cannot leave the boundary by construction.
 equation `x^2 + y^2 = rho2` by a homeomorphism. The already-constructed closed
 path is mapped through that bridge; it is not reconstructed geometrically.
 
+The coordinate equation is further identified with Mathlib's standard L2
+metric sphere in `EuclideanSpace Real (Fin 2)`, of radius `sqrt rho2`.
+This avoids confusing the ordinary product norm on `Real × Real` with the
+Euclidean L2 norm.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -349,7 +354,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/normalized-four-path]
 [IMPLEMENTED: semantic-cf2d-phase/levelset-path]
 [IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
-[TODO: semantic-cf2d-phase/standard-euclidean-space]
+[IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
+[TODO: semantic-cf2d-phase/quarter-turn-isometry]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]

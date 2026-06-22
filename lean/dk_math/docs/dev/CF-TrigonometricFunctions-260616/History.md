@@ -697,3 +697,26 @@ Archive
 5. 検証:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/23 07:08 JST (Standard Euclidean L2 sphere bridge)
+
+1. 設計:
+   - ordinary `Real × Real` product norm を使わず、
+     `EuclideanSpace Real (Fin 2)` の L2 norm へ明示的に接続した。
+2. 実装:
+   - `EuclideanPlane` と `EuclideanSphereSq rho2` を定義した。
+   - coordinate pair と Euclidean plane の相互変換を continuous linear
+     equivalence から構成した。
+   - L2 norm square が2座標の square sum に等しいことを証明した。
+   - 非負 `rho2` について coordinate circle と半径 `sqrt rho2` の metric
+     sphere の homeomorphism を構成した。
+3. path:
+   - 既存 coordinate-circle path を homeomorphism で写し、
+     `normalizedClosedEuclideanSpherePath` を構成した。
+4. 境界:
+   - `rho2 = 0` は zero-radius singleton sphere として保持した。
+   - `0 < rho2` なら radius が正であることを独立定理にした。
+   - 次候補は core-zero action と標準 quarter-turn linear isometry の同定。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
