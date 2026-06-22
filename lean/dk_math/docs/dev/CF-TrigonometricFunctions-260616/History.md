@@ -673,3 +673,27 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
      (8277 jobs)。
+
+### 2026/06/23 06:58 JST (Euclidean coordinate-circle interpretation)
+
+1. 実装:
+   - `CF2D.EuclideanPhase.lean` を新設した。
+   - squared radius による `EuclideanCircleSq rho2` を定義した。
+   - `LevelSet Real rho2` と coordinate equation
+     `x^2 + y^2 = rho2` の homeomorphism を構成した。
+2. 境界分類:
+   - `Vec.q2_nonneg`、`Vec.q2_eq_zero_iff`、
+     `Vec.q2_pos_iff_ne_zero` を証明した。
+   - squared radius zero の circle equation が原点一つへ退化することを
+     証明した。
+3. path interpretation:
+   - 既存 `normalizedClosedLevelFourPhasePath` を homeomorphism で写し、
+     `normalizedClosedEuclideanCircleSqPath` を構成した。
+   - path は再構成せず、pre-geometric path の解釈として保持した。
+4. 境界:
+   - 標準積型の norm は L2 ではないため、単純な `Real × Real` metric sphere
+     とは同一視していない。
+   - 次候補は `EuclideanSpace Real (Fin 2)` の標準 metric sphere への bridge。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

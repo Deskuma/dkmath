@@ -25,6 +25,10 @@ The same construction is now packaged directly in
 `LevelSet Real (Vec.q2 z)`. The level-set subtype carries its inherited
 topology, and the final closed path cannot leave the boundary by construction.
 
+`CF2D.EuclideanPhase` interprets this level set as the explicit coordinate
+equation `x^2 + y^2 = rho2` by a homeomorphism. The already-constructed closed
+path is mapped through that bridge; it is not reconstructed geometrically.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -344,7 +348,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]
 [IMPLEMENTED: semantic-cf2d-phase/normalized-four-path]
 [IMPLEMENTED: semantic-cf2d-phase/levelset-path]
-[TODO: semantic-cf2d-phase/euclidean-levelset-bridge]
+[IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
+[TODO: semantic-cf2d-phase/standard-euclidean-space]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]

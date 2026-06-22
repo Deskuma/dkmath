@@ -113,6 +113,10 @@ under the core-zero action. Its four action translates retain this boundary,
 join at exact seams, repeat with phase index four, and concatenate to a closed
 continuous path. The final path is also packaged directly in
 `LevelSet Real (q2 z)`, so boundary membership is enforced by its codomain.
+`CF2D.EuclideanPhase` then interprets this boundary as the explicit
+two-coordinate Euclidean circle equation and maps the existing closed path
+through that homeomorphism. The zero boundary is kept as a separate
+one-point degenerate case.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

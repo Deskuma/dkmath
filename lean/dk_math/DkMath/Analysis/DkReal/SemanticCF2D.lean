@@ -1334,9 +1334,15 @@ have exact seams and concatenate to a closed path.
 their closed four-phase concatenation are packaged directly in
 `LevelSet Real (q2 z)`, making boundary membership part of the target type.
 
-[TODO: semantic-cf2d-phase/euclidean-levelset-bridge] Identify the positive
-real `q2` level sets with the corresponding Euclidean circle model without
-changing the pre-geometric construction.
+[IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
+`CF2D.EuclideanPhase` identifies every real `q2` level set with the explicit
+two-coordinate Euclidean circle equation of squared radius `rho2`. It
+separates the zero one-point boundary and maps the existing closed path
+through this interpretation.
+
+[TODO: semantic-cf2d-phase/standard-euclidean-space] Relate the explicit
+coordinate circle equation to the standard `EuclideanSpace Real (Fin 2)`
+metric sphere, keeping the zero and positive-radius cases separate.
 
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 identify the fixed-`q2` path with the standard Euclidean circle model and
