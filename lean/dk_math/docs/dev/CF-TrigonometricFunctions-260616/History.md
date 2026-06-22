@@ -185,6 +185,22 @@ Archive
      閉じる。追加の冪同一視や解析定理は不要だった。
 4. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 05:38 JST (Exact order four on the plane action)
+
+1. 実施:
+   - `SemanticExactActionOrderFour` を定義した。
+   - exact kernel order four と exact action order four の同値を証明した。
+   - exact action order four と semantic core zero の同値を証明した。
+2. 原理:
+   - `q2 = 1` の保存核条件が kernel を unit locus に拘束する。
+   - `star` の結合則と `act_star` が kernel 積を作用合成へ移す。
+   - action の忠実性が作用等式から kernel 等式へ戻す。
+3. 結論:
+   - 保存則単独ではなく、保存核・加法則に相当する積・忠実作用・
+     第一象限制約の組合せが、角度なしの有限位数分類を生んでいる。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 5. 次の課題:
    - transported real `UnitKernel` を最初の CF2D 解析定理へ接続する。
    - order reflection は subtraction や decidable comparison を導入せず、

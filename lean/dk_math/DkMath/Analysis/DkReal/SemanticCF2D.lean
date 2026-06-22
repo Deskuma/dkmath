@@ -1054,6 +1054,47 @@ theorem semanticExactKernelOrderFour_iff_core_eq_zero
       not_semanticKernelFiniteOrder_two_of_core_eq_zero hzero,
       not_semanticKernelFiniteOrder_three_of_core_eq_zero hzero⟩
 
+/--
+The transported plane action has exact order four: its fourth iterate is the
+identity function, while none of its first three positive iterates is.
+-/
+def SemanticExactActionOrderFour (r : UnitKernel DkNNRealQ) : Prop :=
+  SemanticFiniteOrder r 4 ∧
+    ¬SemanticFiniteOrder r 1 ∧
+    ¬SemanticFiniteOrder r 2 ∧
+    ¬SemanticFiniteOrder r 3
+
+/--
+Exact order four is invariant under passage from the real-side kernel product
+to its action on the CF2D plane.
+
+This is the finite-order form of the CF2D addition law: kernel multiplication
+is represented faithfully by composition of the associated actions.
+-/
+theorem semanticExactKernelOrderFour_iff_exactActionOrderFour
+    (r : UnitKernel DkNNRealQ) :
+    SemanticExactKernelOrderFour r ↔ SemanticExactActionOrderFour r := by
+  simp only [SemanticExactKernelOrderFour, SemanticExactActionOrderFour,
+    semanticKernelFiniteOrder_iff]
+
+/-- Exact action order four is characterized by semantic core zero. -/
+theorem semanticExactActionOrderFour_iff_core_eq_zero
+    (r : UnitKernel DkNNRealQ) :
+    SemanticExactActionOrderFour r ↔
+      semanticValue (r : Vec DkNNRealQ).core = 0 := by
+  rw [← semanticExactKernelOrderFour_iff_exactActionOrderFour,
+    semanticExactKernelOrderFour_iff_core_eq_zero]
+
+/--
+Semantic core zero gives a plane action whose fourth iterate is the identity
+and whose first three positive iterates are not the identity.
+-/
+theorem semanticExactActionOrderFour_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    SemanticExactActionOrderFour r :=
+  (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.

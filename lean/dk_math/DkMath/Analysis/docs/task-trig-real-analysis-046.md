@@ -126,6 +126,10 @@ not_semanticKernelFiniteOrder_two_of_core_eq_zero
 not_semanticKernelFiniteOrder_three_of_core_eq_zero
 SemanticExactKernelOrderFour
 semanticExactKernelOrderFour_iff_core_eq_zero
+SemanticExactActionOrderFour
+semanticExactKernelOrderFour_iff_exactActionOrderFour
+semanticExactActionOrderFour_iff_core_eq_zero
+semanticExactActionOrderFour_of_core_eq_zero
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -247,6 +251,26 @@ precisely the transported real kernel `(0,1)`. This also confirms that its
 intermediate real-side powers need not remain in the transported first
 quadrant, which is why kernel multiplication remains confined to the real
 side.
+
+The same exact-order statement now holds for the plane action. Exact kernel
+order four is equivalent to exact action order four, and both are equivalent
+to semantic core zero. This is where the strength of the CF2D addition law
+becomes explicit:
+
+```text
+unit-square preservation
+  constrains every kernel to the unit locus
+
+associative star product and act_star
+  turn repeated addition of phase into finite kernel multiplication
+
+faithfulness of the action
+  recovers kernel equality from equality of plane actions
+```
+
+The preservation law alone would not classify finite order. The classification
+comes from preservation, the addition/product law, faithful action, and the
+first-quadrant semantic boundary acting together.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
