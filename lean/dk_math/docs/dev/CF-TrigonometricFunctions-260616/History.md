@@ -212,6 +212,25 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 05:27 JST (Exact order four)
+
+1. 実施:
+   - semantic core zero から beam one を導く補題を追加した。
+   - core zero から order dividing four、および order dividing one,
+     two, three の否定を個別に証明した。
+   - `SemanticExactKernelOrderFour` を定義した。
+   - exact order four と semantic core zero の同値を証明した。
+2. 結論:
+   - semantic coordinates `(0,1)` は候補ではなく、exact order four と
+     確定した。
+   - 逆に exact order four の transported first-quadrant kernel は
+     `(0,1)` に限られる。
+3. 設計上の意味:
+   - 元 kernel は第一象限にあるが、中間 power は第一象限を出られる。
+   - source 側へ積を押し込まず Real 側だけで power を扱う境界が必要である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 05:15 JST (Order dividing four classification)
 
 1. 実施:

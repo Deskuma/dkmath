@@ -119,6 +119,13 @@ semanticKernelFiniteOrder_two_iff_core_eq_one
 semanticKernelFiniteOrder_three_iff_identity
 semanticKernelFiniteOrder_three_iff_core_eq_one
 semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
+semanticUnitKernel_beam_eq_one_of_core_eq_zero
+semanticKernelFiniteOrder_four_of_core_eq_zero
+not_semanticKernelFiniteOrder_one_of_core_eq_zero
+not_semanticKernelFiniteOrder_two_of_core_eq_zero
+not_semanticKernelFiniteOrder_three_of_core_eq_zero
+SemanticExactKernelOrderFour
+semanticExactKernelOrderFour_iff_core_eq_zero
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -230,8 +237,16 @@ C = 1 or C = 0
 The `C = 1` branch is identity. In the `C = 0` branch, the unit equation and
 `S >= 0` force `S = 1`, so the transported kernel is `(0,1)`. Thus the
 first-quadrant restriction excludes nontrivial orders two and three but admits
-the quarter-turn kernel as an exact order-four candidate, still without
-introducing an angle parameter.
+the quarter-turn kernel.
+
+Exact order four is now recorded explicitly. `SemanticExactKernelOrderFour`
+requires the fourth power to be neutral and excludes neutrality of powers
+one, two, and three. It is equivalent to semantic core zero. The same
+hypothesis determines semantic beam one, so the exact-order branch is
+precisely the transported real kernel `(0,1)`. This also confirms that its
+intermediate real-side powers need not remain in the transported first
+quadrant, which is why kernel multiplication remains confined to the real
+side.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer

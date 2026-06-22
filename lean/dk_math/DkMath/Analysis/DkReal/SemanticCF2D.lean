@@ -971,6 +971,89 @@ theorem semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
       | mk core beam =>
           simp_all [UnitKernel.one, Vec.one]
 
+/--
+Semantic core zero determines semantic beam one for a transported unit
+kernel in the first quadrant.
+-/
+theorem semanticUnitKernel_beam_eq_one_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    semanticValue (r : Vec DkNNRealQ).beam = 1 := by
+  have hbeam :
+      0 ≤ semanticValue (r : Vec DkNNRealQ).beam := by
+    simpa [semanticUnitKernel, semanticVec] using
+      semanticUnitKernel_beam_nonneg r
+  have hq := semanticUnitKernel_sq_add_sq r
+  nlinarith [sq_nonneg
+    (semanticValue (r : Vec DkNNRealQ).beam - 1)]
+
+/-- Semantic core zero supplies product order dividing four. -/
+theorem semanticKernelFiniteOrder_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    SemanticKernelFiniteOrder r 4 :=
+  (semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero r).2 (Or.inr hcore)
+
+/-- Semantic core zero excludes product order dividing one. -/
+theorem not_semanticKernelFiniteOrder_one_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    ¬SemanticKernelFiniteOrder r 1 := by
+  rw [semanticKernelFiniteOrder_one_iff_core_eq_one]
+  intro hone
+  linarith
+
+/-- Semantic core zero excludes product order dividing two. -/
+theorem not_semanticKernelFiniteOrder_two_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    ¬SemanticKernelFiniteOrder r 2 := by
+  rw [semanticKernelFiniteOrder_two_iff_core_eq_one]
+  intro hone
+  linarith
+
+/-- Semantic core zero excludes product order dividing three. -/
+theorem not_semanticKernelFiniteOrder_three_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
+    ¬SemanticKernelFiniteOrder r 3 := by
+  rw [semanticKernelFiniteOrder_three_iff_core_eq_one]
+  intro hone
+  linarith
+
+/--
+The transported kernel has exact product order four: its fourth power is
+neutral, while none of its first three positive powers is neutral.
+-/
+def SemanticExactKernelOrderFour (r : UnitKernel DkNNRealQ) : Prop :=
+  SemanticKernelFiniteOrder r 4 ∧
+    ¬SemanticKernelFiniteOrder r 1 ∧
+    ¬SemanticKernelFiniteOrder r 2 ∧
+    ¬SemanticKernelFiniteOrder r 3
+
+/--
+Exact product order four is characterized by semantic core zero.
+
+The unit-square equation then also determines semantic beam one, so this is
+precisely the transported boundary kernel `(0,1)`.
+-/
+theorem semanticExactKernelOrderFour_iff_core_eq_zero
+    (r : UnitKernel DkNNRealQ) :
+    SemanticExactKernelOrderFour r ↔
+      semanticValue (r : Vec DkNNRealQ).core = 0 := by
+  constructor
+  · intro h
+    rcases (semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero r).1 h.1 with
+      hone | hzero
+    · exact False.elim (h.2.1
+        ((semanticKernelFiniteOrder_one_iff_core_eq_one r).2 hone))
+    · exact hzero
+  · intro hzero
+    exact ⟨semanticKernelFiniteOrder_four_of_core_eq_zero hzero,
+      not_semanticKernelFiniteOrder_one_of_core_eq_zero hzero,
+      not_semanticKernelFiniteOrder_two_of_core_eq_zero hzero,
+      not_semanticKernelFiniteOrder_three_of_core_eq_zero hzero⟩
+
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and
 `KernelFamily` require a ring because their core coordinate uses subtraction.
