@@ -149,6 +149,7 @@ BridgeNNReal / BridgeReal:
   order dividing four is equivalent to semantic core zero or one
   exact kernel order four is equivalent to semantic coordinates `(0,1)`
   exact kernel order four agrees with exact order of the plane action
+  every nonzero point has minimal period four under the core-zero action
   source-level star and KernelFamily wait for signed DkReal arithmetic
   treat order reflection as a separate heavier task
   compare semantic equality with DkReal.Equiv

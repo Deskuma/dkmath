@@ -20,6 +20,20 @@ shows that the quadratic invariant
 
 is preserved by that interpretation.
 
+The logical order of this file is deliberately pre-geometric:
+
+1. `q2` is a boundary detector selecting a conserved level set;
+2. `star` specifies how kernels compose;
+3. `act_star` represents that composition as successive actions;
+4. faithfulness recovers kernel equality from equality of actions;
+5. coordinate nonnegativity removes roots outside the transported boundary.
+
+At this stage no circle, orthogonal coordinate frame, angle, full turn, or
+degree measure has been defined. In particular, the primary exact-order-four
+result is an algebraic statement about a `q2`-preserving action. Its later
+interpretation as a quarter-turn on a Euclidean circle is an additional model
+of the already-proved structure, not an assumption used by the proof.
+
 The bridge uses only the semiring laws already proved for `semanticValue`.
 It does not require subtraction, decidable comparison, order reflection, or
 any analytic theorem about trigonometric functions.
@@ -34,6 +48,17 @@ namespace DkMath.Analysis.DkNNRealQ
 open DkMath.CosmicFormula.Rotation.CF2D
 
 noncomputable section
+
+/-
+The boundary-and-action layer comes first. Geometric terminology belongs to a
+later interpretation layer:
+
+  conserved q2 boundary -> composable action -> finite-order classification
+  -> optional Euclidean reading as circles and angles.
+
+Nothing below requires the two coordinates to have been declared orthogonal
+axes or requires a convention measuring one full turn by 360 degrees.
+-/
 
 /-- Interpret both coordinates of a CF2D vector as Mathlib real numbers. -/
 def semanticVec (z : Vec DkNNRealQ) : Vec ℝ :=
@@ -1057,6 +1082,9 @@ theorem semanticExactKernelOrderFour_iff_core_eq_zero
 /--
 The transported plane action has exact order four: its fourth iterate is the
 identity function, while none of its first three positive iterates is.
+
+This is the primary statement. Calling the action a 90-degree rotation would
+require a later Euclidean interpretation and an angle-measure convention.
 -/
 def SemanticExactActionOrderFour (r : UnitKernel DkNNRealQ) : Prop :=
   SemanticFiniteOrder r 4 ∧
@@ -1094,6 +1122,134 @@ theorem semanticExactActionOrderFour_of_core_eq_zero
     (hcore : semanticValue (r : Vec DkNNRealQ).core = 0) :
     SemanticExactActionOrderFour r :=
   (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
+
+/--
+At the exact-order-four boundary, the transported action exchanges the two
+coordinates with one sign change.
+
+This coordinate law is proved before assigning any geometric meaning to the
+coordinates. Its later Euclidean reading as a quarter-turn is optional.
+-/
+theorem semanticAct_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticAct r z = Vec.mk (-z.beam) z.core := by
+  have hbeam := semanticUnitKernel_beam_eq_one_of_core_eq_zero hcore
+  cases z with
+  | mk x y =>
+      simp [semanticAct, UnitKernel.act, semanticUnitKernel, semanticVec,
+        Vec.star, hcore, hbeam]
+
+/-- Two boundary actions negate both coordinates. -/
+theorem semanticAct_twice_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticAct r (semanticAct r z) = Vec.mk (-z.core) (-z.beam) := by
+  calc
+    semanticAct r (semanticAct r z) =
+        Vec.mk (-(semanticAct r z).beam) (semanticAct r z).core :=
+      semanticAct_of_core_eq_zero hcore (semanticAct r z)
+    _ = Vec.mk (-z.core) (-z.beam) := by
+      rw [semanticAct_of_core_eq_zero hcore]
+
+/-- Three boundary actions reverse the first exchange law. -/
+theorem semanticAct_thrice_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticAct r (semanticAct r (semanticAct r z)) =
+      Vec.mk z.beam (-z.core) := by
+  calc
+    semanticAct r (semanticAct r (semanticAct r z)) =
+        Vec.mk (-(semanticAct r (semanticAct r z)).beam)
+          (semanticAct r (semanticAct r z)).core :=
+      semanticAct_of_core_eq_zero hcore
+        (semanticAct r (semanticAct r z))
+    _ = Vec.mk z.beam (-z.core) := by
+      rw [semanticAct_twice_of_core_eq_zero hcore]
+      simp
+
+/-- A nonzero vector cannot return after one boundary action. -/
+theorem not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (hz : z ≠ Vec.mk 0 0) :
+    ¬SemanticPeriodic r z 1 := by
+  intro hperiodic
+  change semanticAct r z = z at hperiodic
+  rw [semanticAct_of_core_eq_zero hcore] at hperiodic
+  cases z with
+  | mk x y =>
+      simp only [Vec.mk.injEq] at hperiodic
+      apply hz
+      simp only [Vec.mk.injEq]
+      constructor <;> linarith [hperiodic.1, hperiodic.2]
+
+/-- A nonzero vector cannot return after two boundary actions. -/
+theorem not_semanticPeriodic_two_of_core_eq_zero_of_ne_zero
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (hz : z ≠ Vec.mk 0 0) :
+    ¬SemanticPeriodic r z 2 := by
+  intro hperiodic
+  change semanticAct r (semanticAct r z) = z at hperiodic
+  rw [semanticAct_twice_of_core_eq_zero hcore] at hperiodic
+  cases z with
+  | mk x y =>
+      simp only [Vec.mk.injEq] at hperiodic
+      apply hz
+      simp only [Vec.mk.injEq]
+      constructor <;> linarith [hperiodic.1, hperiodic.2]
+
+/-- A nonzero vector cannot return after three boundary actions. -/
+theorem not_semanticPeriodic_three_of_core_eq_zero_of_ne_zero
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (hz : z ≠ Vec.mk 0 0) :
+    ¬SemanticPeriodic r z 3 := by
+  intro hperiodic
+  change semanticAct r (semanticAct r (semanticAct r z)) = z at hperiodic
+  rw [semanticAct_thrice_of_core_eq_zero hcore] at hperiodic
+  cases z with
+  | mk x y =>
+      simp only [Vec.mk.injEq] at hperiodic
+      apply hz
+      simp only [Vec.mk.injEq]
+      constructor <;> linarith [hperiodic.1, hperiodic.2]
+
+/--
+Every nonzero vector has minimal period four under the boundary action.
+
+The origin remains fixed, so exact order of the whole action does not mean
+that every point has point period four.
+-/
+theorem semanticMinimalPeriod_eq_four_of_core_eq_zero_of_ne_zero
+    {r : UnitKernel DkNNRealQ} {z : Vec ℝ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (hz : z ≠ Vec.mk 0 0) :
+    semanticMinimalPeriod r z = 4 := by
+  have horder := semanticExactActionOrderFour_of_core_eq_zero hcore
+  have hperiodic : SemanticPeriodic r z 4 :=
+    (semanticFiniteOrder_iff r 4).mp horder.1 z
+  have hpos : 0 < semanticMinimalPeriod r z :=
+    semanticMinimalPeriod_pos (by norm_num) hperiodic
+  have hle : semanticMinimalPeriod r z ≤ 4 :=
+    Function.IsPeriodicPt.minimalPeriod_le (by norm_num) hperiodic
+  have hneOne : semanticMinimalPeriod r z ≠ 1 := by
+    intro hperiod
+    apply not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero hcore hz
+    rw [semanticPeriodic_iff_minimalPeriod_dvd, hperiod]
+  have hneTwo : semanticMinimalPeriod r z ≠ 2 := by
+    intro hperiod
+    apply not_semanticPeriodic_two_of_core_eq_zero_of_ne_zero hcore hz
+    rw [semanticPeriodic_iff_minimalPeriod_dvd, hperiod]
+  have hneThree : semanticMinimalPeriod r z ≠ 3 := by
+    intro hperiod
+    apply not_semanticPeriodic_three_of_core_eq_zero_of_ne_zero hcore hz
+    rw [semanticPeriodic_iff_minimalPeriod_dvd, hperiod]
+  omega
 
 /-
 [TODO: semantic-cf2d/signed-kernel] Source-level `Vec.star` and

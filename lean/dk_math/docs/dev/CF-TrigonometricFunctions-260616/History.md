@@ -228,6 +228,30 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/22 17:25 JST (Boundary first, geometry later)
+
+1. 文書整理:
+   - `note-trig-064.md` の観測をコード冒頭、現場資料、論文草稿へ反映した。
+   - `q2` をまず保存 level set の境界判定機として位置付けた。
+   - 円、直交座標、角度、一周、度数法は後段の Euclidean 解釈であり、
+     Lean 証明の前提ではないことを明記した。
+2. 原理:
+   - 保存則が境界を決め、`star` が合成を決める。
+   - `act_star` が合成を作用へ移し、忠実性が戻り道を保証する。
+   - 第一象限制約が transport 可能な根を選別する。
+3. 実装:
+   - core zero の作用を `(x,y) -> (-y,x)` と座標表示した。
+   - 二回・三回作用の座標式を追加した。
+   - 非零点が 1, 2, 3 回では戻らず、最小周期が正確に 4 であることを
+     証明した。原点は固定点として区別される。
+4. 結論:
+   - 主結果は「90 度回転」ではなく、円や角度以前の
+     exact-order-four `q2` 保存作用である。
+   - 標準 Euclidean 構造へ写した後に、同じ作用を円上の quarter-turn と
+     解釈できる。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
 ### 2026/06/22 05:27 JST (Exact order four)
 
 1. 実施:

@@ -94,6 +94,81 @@ Analytic task:
 Phase 1 completes the algebraic task and verifies that the standard real
 functions instantiate it.
 
+## Before Circles And Before Angles
+
+The strongest reading of the current result begins before Euclidean geometry.
+The primary objects are not a circle and an angle. They are a boundary
+predicate and an action:
+
+```text
+q2:
+  detects the conserved boundary
+
+star:
+  defines composition of kernels
+
+act_star:
+  transfers kernel composition to composition of actions
+
+faithfulness:
+  recovers the kernel from its action
+
+first-quadrant transport:
+  removes algebraic roots outside the semantic boundary
+```
+
+This order matters. The statement proved for the distinguished boundary
+kernel is:
+
+```text
+the q2-preserving action has exact order four
+```
+
+It is not initially:
+
+```text
+the action is a 90-degree rotation of a circle
+```
+
+The latter sentence contains additional information not present in the
+algebraic definitions. Reading `q2(x,y) = x^2 + y^2` as squared Euclidean
+radius requires a choice of a Euclidean plane, equally scaled orthogonal axes,
+and the usual geometric interpretation of its level sets. Reading exact order
+four as 90 degrees additionally requires a notion of angle, a full turn, and a
+degree convention.
+
+None of those choices is used in the Lean proof. What Lean establishes first
+is a composable boundary-preserving mechanism with four-step return and no
+earlier positive return. Once the standard Euclidean model is supplied, the
+same mechanism is recognized as a quarter-turn. Geometry does not generate
+the algebraic behavior here; geometry is a later interpretation in which the
+already-proved behavior has a familiar name.
+
+This gives a more precise explanation of the construction's strength:
+
+```text
+the preservation law locates the motion;
+the product law generates the motion;
+the action law realizes the motion;
+faithfulness makes the realization exact;
+the semantic boundary selects the admissible roots.
+```
+
+The usual circle and trigonometric descriptions are therefore models of this
+earlier algebraic structure.
+
+The pointwise orbit makes the distinction concrete:
+
+```text
+(x,y) -> (-y,x) -> (-x,-y) -> (y,-x) -> (x,y).
+```
+
+For a nonzero state this orbit has minimal period four. The zero state remains
+fixed. Thus exact order four of the action is a global function statement; it
+does not assert that every state has the same point period. Neither statement
+requires a circle or an angle. Those concepts explain the orbit after a
+Euclidean model is chosen.
+
 ## Compass, Pin, String, And Pen
 
 The construction has a classical geometric analogy.
@@ -102,7 +177,7 @@ One does not need to solve real analysis in order to draw a circle.  A compass
 is enough.  A pin, a string, and a pen are also enough.  These devices enforce
 a constraint: the distance from the center remains fixed.
 
-The CF2D implementation does the formal analogue.  Instead of first building
+The CF2D implementation does the formal analogue. Instead of first building
 all analytic properties of `sin` and `cos`, it installs an algebraic device:
 
 ```text
@@ -117,9 +192,10 @@ action:
 ```
 
 The theorem `UnitKernel.q2_act` says that this device keeps the square mass
-fixed.  This is the Lean version of "the string length remains fixed."  Once
-the invariant is built into the kernel, the circle-like behavior follows from
-algebra.
+fixed. This is the Lean version of "the string length remains fixed." More
+precisely, the theorem first gives invariant level sets. Calling those level
+sets circles is justified only after the standard Euclidean interpretation is
+chosen.
 
 This analogy also explains why the code is short.  The implementation is not
 simulating motion point-by-point.  It specifies the preserving mechanism.

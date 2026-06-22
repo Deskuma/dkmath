@@ -130,6 +130,13 @@ SemanticExactActionOrderFour
 semanticExactKernelOrderFour_iff_exactActionOrderFour
 semanticExactActionOrderFour_iff_core_eq_zero
 semanticExactActionOrderFour_of_core_eq_zero
+semanticAct_of_core_eq_zero
+semanticAct_twice_of_core_eq_zero
+semanticAct_thrice_of_core_eq_zero
+not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero
+not_semanticPeriodic_two_of_core_eq_zero_of_ne_zero
+not_semanticPeriodic_three_of_core_eq_zero_of_ne_zero
+semanticMinimalPeriod_eq_four_of_core_eq_zero_of_ne_zero
 ```
 
 The transported kernel now acts on real CF2D vectors and preserves `q2`.
@@ -271,6 +278,31 @@ faithfulness of the action
 The preservation law alone would not classify finite order. The classification
 comes from preservation, the addition/product law, faithful action, and the
 first-quadrant semantic boundary acting together.
+
+The conceptual order is boundary first, action second, geometry later.
+`q2` initially acts as a boundary detector for conserved level sets; it has
+not yet been identified with Euclidean squared radius. The exact-order-four
+action is therefore proved before any circle, orthogonality, angle, full-turn,
+or degree convention exists. After choosing the standard Euclidean model, the
+same algebraic action can be read as a quarter-turn. That geometric reading is
+a model of the theorem, not an ingredient of its proof.
+
+The boundary action now has an explicit coordinate orbit without geometric
+terminology:
+
+```text
+(x,y)
+  -> (-y,x)
+  -> (-x,-y)
+  -> (y,-x)
+  -> (x,y)
+```
+
+For every nonzero vector this sequence has minimal period four. The origin is
+fixed, so exact order of the action as a function must remain distinct from
+the minimal period of each point. Again, the four-step algebraic return is the
+primary theorem; interpreting the displayed orbit as motion around a circle
+comes later.
 
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 Both require signed arithmetic. They should wait for a signed DkReal layer
