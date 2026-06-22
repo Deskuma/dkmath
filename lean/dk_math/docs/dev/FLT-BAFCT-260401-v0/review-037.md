@@ -92,11 +92,7 @@ $$
 に対する Hensel 補正は、本質的に
 
 $$
-F(R+\Delta)
-===========
-
-F(R) + F'(R)\Delta
-\quad (\Delta^2=0)
+F(R+\Delta) = F(R) + F'(R)\Delta \quad (\Delta^2=0)
 $$
 
 という **一次で止まる展開** が心臓だからじゃ。
@@ -141,12 +137,7 @@ $$
 `GeomSumFirstOrderSqZeroTarget` は
 
 $$
-\sum_{i=0}^{p-1}(R+\Delta)^i
-============================
-
-\sum_{i=0}^{p-1}R^i
-+
-\left(\sum_{i=0}^{p-1} i,R^{i-1}\right)\Delta
+\sum_{i=0}^{p-1}(R+\Delta)^i = \sum_{i=0}^{p-1}R^i + \left(\sum_{i=0}^{p-1} i,R^{i-1}\right)\Delta
 $$
 
 を、(\Delta^2=0) の下で要求しておる。

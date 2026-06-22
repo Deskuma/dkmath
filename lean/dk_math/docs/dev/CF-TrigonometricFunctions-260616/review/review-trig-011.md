@@ -43,10 +43,7 @@ realTrigKernelFamily_act_eq
 これで、
 
 $$
-\operatorname{act}((\cos t,\sin t),(x,y))
-=========================================
-
-(\cos t\cdot x-\sin t\cdot y,;\cos t\cdot y+\sin t\cdot x)
+\operatorname{act}((\cos t,\sin t),(x,y)) = (\cos t\cdot x-\sin t\cdot y,\;\cos t\cdot y+\sin t\cdot x)
 $$
 
 が、通常の実三角関数モデルで明示された。

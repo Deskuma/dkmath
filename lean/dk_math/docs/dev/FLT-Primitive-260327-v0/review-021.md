@@ -154,10 +154,7 @@ $$
 わっちの見立てでは、今回の整理で **数学的な未完核** はほぼ固定完了じゃ。
 
 $$
-\text{selection 側 truly new kernel}
-===================================
-
-\texttt{CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget}
+\text{selection 側 truly new kernel} = \texttt{CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget}
 $$
 
 と見てよい。

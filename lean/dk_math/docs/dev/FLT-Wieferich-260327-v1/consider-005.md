@@ -186,10 +186,7 @@ $$
 ### 5.1. . `GN/p` の tail 展開補題
 
 $$
-\frac{1}{p}GN\bigl(p,p^{p-1}u,y\bigr)
-=====================================
-
-y^{p-1} + p^{p-1}u\cdot C_p(u,y)
+\frac{1}{p}GN\bigl(p,p^{p-1}u,y\bigr) = y^{p-1} + p^{p-1}u\cdot C_p(u,y)
 $$
 
 型の補題を、まず **完全に explicit** にする。
@@ -197,10 +194,7 @@ $$
 ### 5.2. . `u = t_1^p` 代入版
 
 $$
-\frac{1}{p}GN\bigl(p,p^{p-1}t_1^p,y\bigr)
-=========================================
-
-y^{p-1} + p^{p-1}t_1^p\cdot C_p(t_1,y)
+\frac{1}{p}GN\bigl(p,p^{p-1}t_1^p,y\bigr) = y^{p-1} + p^{p-1}t_1^p\cdot C_p(t_1,y)
 $$
 
 へ落とす。
@@ -214,10 +208,7 @@ $$
 と
 
 $$
-\frac{1}{p}GN\bigl(p,p^{p-1}t_1^p,y\bigr)
-=========================================
-
-y^{p-1}+p^{p-1}t_1^p C_p
+\frac{1}{p}GN\bigl(p,p^{p-1}t_1^p,y\bigr) = y^{p-1}+p^{p-1}t_1^p C_p
 $$
 
 を比べて、
