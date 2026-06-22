@@ -1321,9 +1321,14 @@ lower bound of one half.
 packages each compatible edge as a Mathlib `Path` and concatenates four edges
 into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
 
-[TODO: semantic-cf2d-phase/boundary-normalization] In a separate analytic
-module, normalize the affine edge by its positive `q2` profile and prove that
-the normalized path stays on the original boundary.
+[IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]
+`SemanticCF2DNormalize` normalizes one affine edge by the positive square root
+of its `q2` profile and proves that the resulting continuous edge stays on the
+original boundary.
+
+[TODO: semantic-cf2d-phase/normalized-four-path] Transport the normalized edge
+through all four action phases and concatenate the resulting boundary-valued
+paths into a closed path.
 
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 identify the fixed-`q2` path with the standard Euclidean circle model and

@@ -13,6 +13,10 @@ concatenation, and core-zero closed path are implemented in
 `DkMath.CosmicFormula.Rotation.CF2D.Topology` and
 `DkMath.Analysis.DkReal.SemanticCF2DPath`.
 
+The positive reciprocal-square-root correction, normalized master edge,
+endpoint laws, continuity, and fixed-`q2` theorem are implemented in
+`DkMath.Analysis.DkReal.SemanticCF2DNormalize`.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -329,7 +333,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/half-fold-profile]
 [IMPLEMENTED: semantic-cf2d-phase/path-topology]
 [IMPLEMENTED: semantic-cf2d-phase/path-concatenation]
-[TODO: semantic-cf2d-phase/boundary-normalization]
+[IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]
+[TODO: semantic-cf2d-phase/normalized-four-path]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]

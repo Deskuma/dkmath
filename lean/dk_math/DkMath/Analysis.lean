@@ -15,6 +15,7 @@ import DkMath.Analysis.DkReal
 import DkMath.Analysis.DkReal.SemanticCF2D
 import DkMath.Analysis.DkReal.SemanticCF2DPhase
 import DkMath.Analysis.DkReal.SemanticCF2DPath
+import DkMath.Analysis.DkReal.SemanticCF2DNormalize
 
 #print "file: DkMath.Analysis"
 

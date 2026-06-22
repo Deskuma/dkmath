@@ -609,3 +609,23 @@ Archive
    - 次段階を `phaseDepth` による boundary normalization とした。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DPath` 成功 (8276 jobs)。
+
+### 2026/06/23 06:15 JST (Normalized boundary edge)
+
+1. 実装:
+   - `SemanticCF2DNormalize.lean` を新設した。
+   - `phaseNormalization t = 1 / sqrt (phaseDepth t)` を定義した。
+   - 平方根と補正係数の正値性、非零性、端点値、折返し対称性、連続性を
+     証明した。
+2. normalized edge:
+   - `normalizedPhaseEdge` を座標ごとのスカラー補正として定義した。
+   - affine edge と同じ始点・終点を持つことを証明した。
+   - core-zero 作用では全実数 parameter に対して
+     `q2 (normalizedPhaseEdge r z t) = q2 z` を証明した。
+   - normalized edge の連続性を証明した。
+3. 境界:
+   - 一本の edge の固定 `q2` 境界復帰までを今回の checkpoint とした。
+   - 四相 translate、seam、boundary-valued closed path は次段階とした。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。

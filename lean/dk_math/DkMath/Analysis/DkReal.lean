@@ -105,6 +105,12 @@ affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
 closed continuous piecewise-affine path under the core-zero action. This path
 is not yet normalized to a fixed `q2` boundary.
 
+[IMPLEMENTED: semantic-cf2d-normalized-edge]
+`DkReal.SemanticCF2DNormalize` divides one affine edge by the positive square
+root of `phaseDepth`. The resulting edge is continuous, has the same
+endpoints, and remains on the initial `q2` boundary for every real parameter
+under the core-zero action.
+
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.
 

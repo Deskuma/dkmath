@@ -105,12 +105,13 @@ theorem, not inserted as notation.
 4. Core-zero exact order four closes the endpoint without Euclidean
    terminology.
 
-### Milestone B: boundary normalization
+### Milestone B: boundary normalization - one edge implemented
 
-1. Define the positive correction `1 / sqrt (phaseDepth t)`.
-2. Prove that the normalized edge preserves the original `q2` value.
-3. Prove continuity of the normalized edge.
-4. Prove compatibility of normalization with all four action translates.
+1. The positive correction `1 / sqrt (phaseDepth t)` is defined and continuous.
+2. The normalized master edge preserves the original `q2` value.
+3. The normalized master edge is continuous and has the original endpoints.
+4. Compatibility with all four action translates and their closed-path
+   concatenation remains to be implemented.
 
 ### Milestone C: refinement law
 
@@ -152,7 +153,6 @@ mechanism from which these theorem obligations can be investigated.
 
 ## Immediate Next Step
 
-The next implementation is boundary normalization of one affine edge. It must
-first prove the correction factor continuous and well-defined from the strict
-positivity of `phaseDepth`, then prove preservation of the original `q2`
-value. Refinement and limit arguments remain separate checkpoints.
+The next implementation transports the normalized edge through all four
+action phases and concatenates those boundary-valued paths into a closed path.
+Refinement and limit arguments remain separate checkpoints.
