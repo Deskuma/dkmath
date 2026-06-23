@@ -99,6 +99,11 @@ fixed `q2` boundary by the exact factor
 of one half, and reflection about the midpoint proves the first continuous
 half-fold symmetry without introducing circles or angles.
 
+[IMPLEMENTED: semantic-cf2d-dyadic] `DkReal.SemanticCF2DDyadic` samples one
+phase at the finite nodes `k / 2^n`. Endpoint, unit-interval, reflection,
+even-child, odd-child midpoint, and reflected phase-depth laws are proved
+without selecting a correction product or taking a limit.
+
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
 affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a

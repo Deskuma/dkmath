@@ -135,6 +135,13 @@ their reflection symmetry, and a theorem stating how one subdivision level
 refines the preceding level. No infinite product or Gaussian claim belongs
 in that checkpoint.
 
+This finite checkpoint is now implemented in `SemanticCF2DDyadic.lean`.
+Even child indices recover their parent nodes exactly, while odd child
+indices are the midpoints of adjacent parents. Complementary indices produce
+the reflected parameter `1 - t`, and therefore have equal `phaseDepth`.
+The remaining refinement-law task is to identify a mathematically justified
+composition law for local corrections.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

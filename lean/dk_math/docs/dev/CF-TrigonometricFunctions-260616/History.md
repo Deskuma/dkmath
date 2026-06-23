@@ -770,3 +770,23 @@ Archive
      に分解した。
    - infinite product、logarithmic sum、Gaussian limit は、有限合成則が
      証明されるまで仮定しない方針を明記した。
+
+### 2026/06/23 17:59 JST (Finite dyadic phase refinement)
+
+1. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DDyadic` を新設し、公開 Analysis
+     entry point へ追加した。
+2. finite nodes:
+   - `dyadicPhaseDenom n = 2^n` と
+     `dyadicPhaseNode n k = k / 2^n` を定義した。
+   - denominator positivity、両端点、unit interval membership を証明した。
+3. refinement:
+   - complementary index の reflection law を証明した。
+   - even child が parent と一致し、odd child が隣接 parent の midpoint
+     となることを証明した。
+   - reflected dyadic nodes で `phaseDepth` が一致することを証明した。
+4. boundary:
+   - correction product、logarithmic sum、Gaussian limit は導入していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DDyadic` 成功
+     (8275 jobs)。
