@@ -364,7 +364,9 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/dyadic-refinement]
 `SemanticCF2DDyadic` defines the finite nodes `k / 2^n`, proves their endpoint,
 unit-interval, reflection, even-child, odd-child midpoint, and reflected
-phase-depth laws.
+phase-depth laws. Since the nodes use division in `Real`, this semantic mesh
+is noncomputable; a rational-node implementation remains a separate possible
+computable layer.
 [IMPLEMENTED: semantic-cf2d-phase/finite-depth-refinement]
 `SemanticCF2DRefinement` proves reflection and even-child inheritance for
 dyadic depth and normalization. Quadraticity gives the exact odd-child law:
@@ -375,10 +377,13 @@ children introduced at that level is exactly `1 / (2 * 2^n)`.
 [IMPLEMENTED: semantic-cf2d-phase/depth-limit] The per-level total is
 `(1/2)^(n+1)` and tends to zero. Its finite cumulative sum through level
 `m - 1` is `1 - (1/2)^m` and tends to one.
-[TODO: semantic-cf2d-phase/correction-composition] Select and prove an
-aggregate composition law for local boundary corrections. Do not assume that
-it is an infinite product or a logarithmic sum before its finite form is
-established.
+[IMPLEMENTED: semantic-cf2d-phase/finite-correction-composition]
+On the complete finite dyadic mesh, the squared product of sampled
+normalizations exactly cancels the product of sampled depths. Both products
+are strictly positive.
+[TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
+finite product, logarithmic sum, or another quantity has a canonical
+refinement limit. The finite cancellation theorem alone does not select one.
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]
 ```

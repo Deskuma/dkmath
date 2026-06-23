@@ -23,8 +23,6 @@ normalization.
 
 namespace DkMath.Analysis.DkNNRealQ
 
-noncomputable section
-
 /-- The total depth defect introduced at one refinement level tends to zero. -/
 theorem tendsto_totalDyadicPhaseDepthDefect_zero :
     Filter.Tendsto totalDyadicPhaseDepthDefect Filter.atTop (nhds 0) := by
@@ -55,7 +53,5 @@ theorem tendsto_cumulativeDyadicPhaseDepthDefect_one :
   · funext m
     exact cumulativeDyadicPhaseDepthDefect_eq m
   · norm_num
-
-end
 
 end DkMath.Analysis.DkNNRealQ

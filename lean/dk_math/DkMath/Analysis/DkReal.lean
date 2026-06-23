@@ -102,7 +102,9 @@ half-fold symmetry without introducing circles or angles.
 [IMPLEMENTED: semantic-cf2d-dyadic] `DkReal.SemanticCF2DDyadic` samples one
 phase at the finite nodes `k / 2^n`. Endpoint, unit-interval, reflection,
 even-child, odd-child midpoint, and reflected phase-depth laws are proved
-without selecting a correction product or taking a limit.
+without selecting a correction product or taking a limit. This semantic-real
+mesh is noncomputable because its nodes use division in `Real`; a future
+computable variant should retain rational nodes before crossing the bridge.
 
 [IMPLEMENTED: semantic-cf2d-finite-refinement]
 `DkReal.SemanticCF2DRefinement` evaluates depth and normalization on the
@@ -118,6 +120,15 @@ the per-level and cumulative scales. The total defect introduced at level
 `n + 1` is `(1/2)^(n+1)` and tends to zero. The cumulative defect through
 levels `0, ..., m-1` is exactly `1 - (1/2)^m` and tends to one. These are
 elementary geometric limits, not Gaussian or `pi` identifications.
+The limit module itself introduces only theorems and therefore needs no
+`noncomputable section`, while its imported real-valued definitions remain
+noncomputable.
+
+[IMPLEMENTED: semantic-cf2d-finite-composition]
+`DkReal.SemanticCF2DComposition` samples depth and normalization on the same
+complete finite dyadic mesh. The squared normalization product exactly
+cancels the depth product, and both products are strictly positive. This is a
+finite pointwise-composition theorem, not a selected infinite-product limit.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

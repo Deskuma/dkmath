@@ -20,18 +20,23 @@ at
 The endpoint, reflection, and parent-child laws are exact algebraic
 identities. No infinite product, logarithmic correction, Gaussian weight, or
 identification with `pi` is assumed here.
+
+Although the mesh indices and denominator are computable naturals, the node
+is valued in `Real` and uses real division. Consequently this semantic-real
+module is noncomputable. A computable mesh should instead retain rational
+nodes and cross to `Real` through a separate bridge.
 -/
 
 namespace DkMath.Analysis.DkNNRealQ
 
-noncomputable section
+-- noncomputable section
 
 /-- The number of equal subintervals in the `n`th dyadic phase partition. -/
 def dyadicPhaseDenom (n : ℕ) : ℕ :=
   2 ^ n
 
 /-- The `k`th real node of the `n`th dyadic phase partition. -/
-def dyadicPhaseNode (n k : ℕ) : ℝ :=
+noncomputable def dyadicPhaseNode (n k : ℕ) : ℝ :=
   (k : ℝ) / (dyadicPhaseDenom n : ℝ)
 
 /-- Every dyadic phase denominator is strictly positive. -/
@@ -108,6 +113,6 @@ theorem phaseDepth_dyadic_reflect
       phaseDepth (dyadicPhaseNode n k) := by
   rw [dyadicPhaseNode_reflect hk, phaseDepth_one_sub]
 
-end
+-- end
 
 end DkMath.Analysis.DkNNRealQ

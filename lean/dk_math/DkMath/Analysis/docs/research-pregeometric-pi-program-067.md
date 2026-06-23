@@ -177,6 +177,24 @@ structural: each new level becomes negligible, while all levels together
 retain a nonzero conserved account. No Gaussian or `pi` interpretation is
 attached to this geometric-series limit.
 
+The first finite normalization-composition theorem is now implemented in
+`SemanticCF2DComposition.lean`. At every sampled node,
+
+```text
+normalization^2 * depth = 1.
+```
+
+Multiplying this identity over the complete finite dyadic mesh gives
+
+```text
+(product normalization)^2 * product depth = 1.
+```
+
+Both finite products are strictly positive. This is an exact transport of the
+pointwise boundary-restoration law through finite multiplication. It does not
+yet identify either product as the canonical refinement observable, nor does
+it justify an infinite product or logarithmic limit.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

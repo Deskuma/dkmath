@@ -310,9 +310,20 @@ theorem euclideanPlaneOrientation_map_complex :
 theorem euclideanPlaneComplexIsometry_quarterTurn (v : EuclideanPlane) :
     euclideanPlaneComplexIsometry (quarterTurnLinearIsometry v) =
       Complex.I * euclideanPlaneComplexIsometry v := by
+  simp only [euclideanPlaneComplexIsometry, OrthonormalBasis.equiv, quarterTurnLinearIsometry,
+    quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair,
+    ContinuousLinearEquiv.finTwoArrow_apply, Fin.isValue, PiLp.continuousLinearEquiv_apply,
+    ContinuousLinearEquiv.finTwoArrow_symm_apply, PiLp.continuousLinearEquiv_symm_apply,
+    LinearIsometryEquiv.coe_mk, LinearEquiv.coe_mk, LinearMap.coe_mk, AddHom.coe_mk,
+    LinearIsometryEquiv.trans_apply, Complex.orthonormalBasisOneI_repr_symm_apply,
+    LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_refl, Equiv.refl_apply,
+    EuclideanSpace.basisFun_repr, Matrix.cons_val_zero, Complex.ofReal_neg, Matrix.cons_val_one,
+    Matrix.cons_val_fin_one]
+/- original simp
   simp [euclideanPlaneComplexIsometry, quarterTurnLinearIsometry,
     quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair,
     OrthonormalBasis.equiv]
+-/
   change
     (-(v 1 : ℂ) + (v 0 : ℂ) * Complex.I) =
       Complex.I * ((v 0 : ℂ) + (v 1 : ℂ) * Complex.I)

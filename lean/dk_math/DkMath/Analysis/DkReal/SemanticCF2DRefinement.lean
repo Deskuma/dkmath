@@ -20,6 +20,10 @@ The key new identity concerns an odd child. Since `phaseDepth` is quadratic,
 its value at the midpoint of adjacent parent nodes is their average depth
 minus an explicit positive mesh correction. This is a finite algebraic
 refinement law, not an asymptotic or Gaussian statement.
+
+These observations inherit noncomputability from the real-valued dyadic node
+and, for normalization, from real square root. Their formulas remain exact;
+computability requires a separate rational observation layer.
 -/
 
 namespace DkMath.Analysis.DkNNRealQ
@@ -141,6 +145,12 @@ theorem totalDyadicPhaseDepthDefect_eq_pow (n : ℕ) :
     totalDyadicPhaseDepthDefect n = (1 / 2 : ℝ) ^ (n + 1) := by
   simp [totalDyadicPhaseDepthDefect, dyadicPhaseDenom, pow_succ]
 
+/-- Every per-level total depth defect is strictly positive. -/
+theorem totalDyadicPhaseDepthDefect_pos (n : ℕ) :
+    0 < totalDyadicPhaseDepthDefect n := by
+  rw [totalDyadicPhaseDepthDefect_eq_pow]
+  positivity
+
 /--
 The cumulative depth defect through the first `m` refinement levels.
 
@@ -161,6 +171,26 @@ theorem cumulativeDyadicPhaseDepthDefect_eq (m : ℕ) :
           cumulativeDyadicPhaseDepthDefect m by
         rfl, ih, totalDyadicPhaseDepthDefect_eq_pow]
       ring
+
+/-- The unrecovered depth after `m` levels is exactly the dyadic tail. -/
+theorem one_sub_cumulativeDyadicPhaseDepthDefect_eq (m : ℕ) :
+    1 - cumulativeDyadicPhaseDepthDefect m = (1 / 2 : ℝ) ^ m := by
+  rw [cumulativeDyadicPhaseDepthDefect_eq]
+  ring
+
+/-- Every finite cumulative depth defect is nonnegative. -/
+theorem cumulativeDyadicPhaseDepthDefect_nonneg (m : ℕ) :
+    0 ≤ cumulativeDyadicPhaseDepthDefect m := by
+  rw [cumulativeDyadicPhaseDepthDefect_eq]
+  have hpow : (1 / 2 : ℝ) ^ m ≤ 1 := by
+    exact pow_le_one₀ (by norm_num) (by norm_num)
+  linarith
+
+/-- Every finite cumulative depth defect remains strictly below its limit one. -/
+theorem cumulativeDyadicPhaseDepthDefect_lt_one (m : ℕ) :
+    cumulativeDyadicPhaseDepthDefect m < 1 := by
+  rw [cumulativeDyadicPhaseDepthDefect_eq]
+  exact sub_lt_self _ (by positivity)
 
 end
 

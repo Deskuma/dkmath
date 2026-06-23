@@ -847,3 +847,39 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLimit` 成功
      (8280 jobs)。
+
+### 2026/06/23 (Computability boundary correction)
+
+1. correction:
+   - `dyadicPhaseNode` は `Real` division を使用するため noncomputable
+     であることを再確認した。
+   - `SemanticCF2DDyadic` と、その real-valued definitions に依存する
+     `SemanticCF2DRefinement` に `noncomputable section` を維持した。
+2. boundary:
+   - `SemanticCF2DLimit` は theorem のみなので section 修飾を外しても
+     ビルド可能であることを確認した。
+   - computable mesh が必要な場合は rational nodes を保持し、別 bridge
+     で `Real` へ移す設計とする。
+3. supporting API:
+   - per-level defect の正値性、cumulative defect の非負性・1未満性、
+     および残差 `(1/2)^m` の厳密式を追加した。
+
+### 2026/06/23 19:48 JST (Finite normalization composition)
+
+1. module:
+   - `SemanticCF2DComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. finite observations:
+   - 両端点を含む complete dyadic mesh index を定義した。
+   - mesh 上の depth product と normalization product を定義した。
+3. composition:
+   - 各 node で `normalization^2 * depth = 1` を証明した。
+   - finite product 全体で
+     `(normalization product)^2 * depth product = 1` を証明した。
+   - 両 finite product の厳密正値性を証明した。
+4. boundary:
+   - この定理は pointwise cancellation の有限積版であり、canonical
+     refinement observable、infinite product、log sum を選択しない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。
