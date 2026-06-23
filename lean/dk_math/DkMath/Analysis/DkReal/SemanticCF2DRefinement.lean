@@ -118,13 +118,49 @@ The total defect over all odd children introduced at level `n + 1` is
 There are `2^n` parent intervals, each carrying the same inverse-square local
 defect. This is a finite identity and makes no convergence claim.
 -/
-theorem sum_dyadicPhaseDepthDefect :
+theorem sum_dyadicPhaseDepthDefect (n : ℕ) :
     ∑ _k ∈ Finset.range (dyadicPhaseDenom n), dyadicPhaseDepthDefect n =
       1 / (2 * (dyadicPhaseDenom n : ℝ)) := by
   have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
     exact_mod_cast (dyadicPhaseDenom_pos n).ne'
   simp [dyadicPhaseDepthDefect]
   field_simp
+
+/-- The total odd-child depth defect introduced at refinement level `n + 1`. -/
+def totalDyadicPhaseDepthDefect (n : ℕ) : ℝ :=
+  1 / (2 * (dyadicPhaseDenom n : ℝ))
+
+/-- The finite odd-child sum is the named total level defect. -/
+theorem sum_dyadicPhaseDepthDefect_eq_total (n : ℕ) :
+    ∑ _k ∈ Finset.range (dyadicPhaseDenom n), dyadicPhaseDepthDefect n =
+      totalDyadicPhaseDepthDefect n :=
+  sum_dyadicPhaseDepthDefect n
+
+/-- Closed geometric form of the total defect introduced at one level. -/
+theorem totalDyadicPhaseDepthDefect_eq_pow (n : ℕ) :
+    totalDyadicPhaseDepthDefect n = (1 / 2 : ℝ) ^ (n + 1) := by
+  simp [totalDyadicPhaseDepthDefect, dyadicPhaseDenom, pow_succ]
+
+/--
+The cumulative depth defect through the first `m` refinement levels.
+
+The range convention includes levels `0, ..., m - 1`.
+-/
+def cumulativeDyadicPhaseDepthDefect (m : ℕ) : ℝ :=
+  ∑ n ∈ Finset.range m, totalDyadicPhaseDepthDefect n
+
+/-- Exact finite geometric formula for the cumulative depth defect. -/
+theorem cumulativeDyadicPhaseDepthDefect_eq (m : ℕ) :
+    cumulativeDyadicPhaseDepthDefect m = 1 - (1 / 2 : ℝ) ^ m := by
+  induction m with
+  | zero =>
+      simp [cumulativeDyadicPhaseDepthDefect]
+  | succ m ih =>
+      rw [cumulativeDyadicPhaseDepthDefect, Finset.sum_range_succ]
+      rw [show (∑ n ∈ Finset.range m, totalDyadicPhaseDepthDefect n) =
+          cumulativeDyadicPhaseDepthDefect m by
+        rfl, ih, totalDyadicPhaseDepthDefect_eq_pow]
+      ring
 
 end
 

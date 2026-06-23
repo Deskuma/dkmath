@@ -164,6 +164,19 @@ although its closed form exposes the scale that a later limit theorem must
 analyze. The remaining task is to identify a mathematically justified
 aggregate composition law for boundary normalization.
 
+The elementary limit layer is now implemented separately in
+`SemanticCF2DLimit.lean`. The defect introduced at one level has the exact
+form `(1/2)^(n+1)` and tends to zero. However, the cumulative finite sum is
+
+```text
+sum over n < m = 1 - (1/2)^m,
+```
+
+so the full hierarchy tends to the normalized total one. This distinction is
+structural: each new level becomes negligible, while all levels together
+retain a nonzero conserved account. No Gaussian or `pi` interpretation is
+attached to this geometric-series limit.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

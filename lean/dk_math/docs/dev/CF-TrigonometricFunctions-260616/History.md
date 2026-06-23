@@ -827,3 +827,23 @@ Archive
 4. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
      (8279 jobs)。
+
+### 2026/06/23 19:23 JST (Dyadic depth defect limit)
+
+1. cleanup:
+   - `sum_dyadicPhaseDepthDefect` の level 引数を明示化した。
+2. finite hierarchy:
+   - per-level total defect を `totalDyadicPhaseDepthDefect` として定義した。
+   - closed form `(1/2)^(n+1)` を証明した。
+   - finite cumulative defect を定義し、
+     `1 - (1/2)^m` という厳密式を帰納法で証明した。
+3. limit layer:
+   - `SemanticCF2DLimit.lean` を新設した。
+   - per-level total defect が 0 に収束することを証明した。
+   - cumulative defect が 1 に収束することを証明した。
+4. boundary:
+   - geometric-series limit として閉じ、Gaussian、normalization
+     composition、`pi` identification とは接続していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLimit` 成功
+     (8280 jobs)。

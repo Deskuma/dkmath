@@ -113,6 +113,12 @@ is positive, so every genuine odd child lies strictly below that average.
 Summing the identical defect over all `2^n` parent intervals gives the exact
 finite total `1 / (2 * 2^n)`.
 
+[IMPLEMENTED: semantic-cf2d-depth-limit] `DkReal.SemanticCF2DLimit` separates
+the per-level and cumulative scales. The total defect introduced at level
+`n + 1` is `(1/2)^(n+1)` and tends to zero. The cumulative defect through
+levels `0, ..., m-1` is exactly `1 - (1/2)^m` and tends to one. These are
+elementary geometric limits, not Gaussian or `pi` identifications.
+
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
 affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
