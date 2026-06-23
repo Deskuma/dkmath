@@ -759,3 +759,14 @@ Archive
 4. 検証:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/23 (Direct semantic rotation bridge and refinement preparation)
+
+1. bridge:
+   - core-zero semantic action を Euclidean plane へ移した結果が、chosen
+     orientation の `rotation (Real.pi / 2)` に直接等しい合成定理を追加した。
+2. refinement design:
+   - 次段階を finite dyadic nodes、reflection、one-step subdivision relation
+     に分解した。
+   - infinite product、logarithmic sum、Gaussian limit は、有限合成則が
+     証明されるまで仮定しない方針を明記した。

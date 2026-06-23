@@ -361,7 +361,12 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
 [IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry]
 [IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two]
-[TODO: semantic-cf2d-phase/refinement-law]
+[TODO: semantic-cf2d-phase/dyadic-refinement] Define finite dyadic phase
+nodes, prove their endpoint and reflection laws, and state the finite
+one-step subdivision relation before introducing any limit.
+[TODO: semantic-cf2d-phase/refinement-law] Select and prove the composition
+law for local boundary corrections. Do not assume that it is an infinite
+product or a logarithmic sum before this finite law is established.
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]
 ```

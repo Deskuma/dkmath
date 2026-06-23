@@ -117,10 +117,23 @@ theorem, not inserted as notation.
 
 ### Milestone C: refinement law
 
-1. Define dyadic or rational subdivision of an affine phase.
-2. Express the total correction as a finite product or sum of logarithms.
-3. Prove compatibility under refinement.
-4. Identify the exact local quadratic term controlling the limit.
+1. Define a finite partition of one affine phase, initially by the dyadic
+   nodes `k / 2^n`.
+2. Define the local boundary correction from the exact identity
+   `q2 (semanticPhaseEdge r z t) = phaseDepth t * q2 z`.
+3. Specify whether refinement composes corrections multiplicatively or,
+   after taking logarithms, additively. This choice must be made by a proved
+   composition law rather than by analogy with Gaussian normalization.
+4. Prove the one-step refinement equation comparing level `n` with
+   level `n + 1`.
+5. Identify the centered quadratic term
+   `2 * (t - 1/2)^2 + 1/2` as the exact local datum controlling any later
+   asymptotic statement.
+
+The first implementation checkpoint is deliberately finite: dyadic nodes,
+their reflection symmetry, and a theorem stating how one subdivision level
+refines the preceding level. No infinite product or Gaussian claim belongs
+in that checkpoint.
 
 ### Milestone D: limit and Gaussian bridge
 

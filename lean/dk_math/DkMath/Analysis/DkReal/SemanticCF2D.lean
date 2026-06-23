@@ -1354,8 +1354,10 @@ under the coordinate bridge.
 [IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two] The standard
 orientation is pulled back from Mathlib's complex plane, and the quarter-turn
 isometry is proved equal to the resulting oriented rotation by
-`Real.pi / 2`. This is a Euclidean interpretation theorem; it does not yet
-derive `pi` intrinsically from the pre-geometric phase construction.
+`Real.pi / 2`. A direct composite theorem identifies the transported
+core-zero semantic action with that rotation. This is a Euclidean
+interpretation theorem; it does not yet derive `pi` intrinsically from the
+pre-geometric phase construction.
 -/
 
 end

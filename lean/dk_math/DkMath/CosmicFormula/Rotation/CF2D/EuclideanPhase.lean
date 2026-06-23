@@ -352,6 +352,10 @@ open DkMath.CosmicFormula.Rotation.CF2D
 
 noncomputable section
 
+local instance euclideanPlaneFinrankTwo :
+    Fact (Module.finrank ℝ EuclideanPlane = 2) :=
+  ⟨finrank_euclideanSpace_fin⟩
+
 /--
 The normalized closed level-set path interpreted in the explicit Euclidean
 circle equation with squared radius `q2 z`.
@@ -404,6 +408,24 @@ theorem pairToEuclideanPlane_semanticAct_of_core_eq_zero
   fin_cases i <;>
     simp [pairToEuclideanPlane, quarterTurnLinearIsometry,
       quarterTurnLinearEquiv, euclideanPlaneToPair, Vec.toProd]
+
+/--
+Under the Euclidean coordinate bridge, the semantic core-zero action is
+Mathlib's oriented rotation by `pi / 2`.
+
+This theorem composes the pre-geometric semantic-action bridge with the
+chosen Euclidean orientation. It is an external interpretation of the action,
+not an intrinsic construction of `pi`.
+-/
+theorem pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticAct r z)) =
+      euclideanPlaneOrientation.rotation (Real.pi / 2 : ℝ)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  rw [pairToEuclideanPlane_semanticAct_of_core_eq_zero hcore,
+    rotation_pi_div_two_eq_quarterTurn]
 
 end
 
