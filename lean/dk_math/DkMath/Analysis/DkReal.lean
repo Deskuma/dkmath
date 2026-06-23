@@ -108,7 +108,10 @@ without selecting a correction product or taking a limit.
 `DkReal.SemanticCF2DRefinement` evaluates depth and normalization on the
 dyadic mesh. Reflection and even-child inheritance hold for both observations.
 At every odd child, quadraticity gives the exact finite correction
-`1 / (2 * (2^n)^2)` from the average of adjacent parent depths.
+`1 / (2 * (2^n)^2)` from the average of adjacent parent depths. This defect
+is positive, so every genuine odd child lies strictly below that average.
+Summing the identical defect over all `2^n` parent intervals gives the exact
+finite total `1 / (2 * 2^n)`.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

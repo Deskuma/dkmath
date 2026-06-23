@@ -34,6 +34,21 @@ def dyadicPhaseDepth (n k : ℕ) : ℝ :=
 def dyadicPhaseNormalization (n k : ℕ) : ℝ :=
   phaseNormalization (dyadicPhaseNode n k)
 
+/--
+The local quadratic defect introduced at every odd child of refinement level
+`n + 1`.
+-/
+def dyadicPhaseDepthDefect (n : ℕ) : ℝ :=
+  1 / (2 * (dyadicPhaseDenom n : ℝ) ^ 2)
+
+/-- The local dyadic depth defect is strictly positive. -/
+theorem dyadicPhaseDepthDefect_pos (n : ℕ) :
+    0 < dyadicPhaseDepthDefect n := by
+  have hdenom : (0 : ℝ) < dyadicPhaseDenom n := by
+    exact_mod_cast dyadicPhaseDenom_pos n
+  apply one_div_pos.mpr
+  exact mul_pos (by norm_num) (sq_pos_of_pos hdenom)
+
 /-- Complementary dyadic nodes have equal boundary depth. -/
 theorem dyadicPhaseDepth_reflect
     {n k : ℕ} (hk : k ≤ dyadicPhaseDenom n) :
@@ -70,13 +85,46 @@ theorem dyadicPhaseDepth_child_odd
     (n k : ℕ) :
     dyadicPhaseDepth (n + 1) (2 * k + 1) =
       (dyadicPhaseDepth n k + dyadicPhaseDepth n (k + 1)) / 2 -
-        1 / (2 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+        dyadicPhaseDepthDefect n := by
   have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
     exact_mod_cast (dyadicPhaseDenom_pos n).ne'
-  simp [dyadicPhaseDepth, dyadicPhaseNode, dyadicPhaseDenom, phaseDepth,
-    pow_succ]
+  simp [dyadicPhaseDepth, dyadicPhaseDepthDefect, dyadicPhaseNode,
+    dyadicPhaseDenom, phaseDepth, pow_succ]
   field_simp
   ring
+
+/--
+The odd-child law restricted to an actual parent interval of the dyadic mesh.
+-/
+theorem dyadicPhaseDepth_child_odd_of_lt
+    {n k : ℕ} (_hk : k < dyadicPhaseDenom n) :
+    dyadicPhaseDepth (n + 1) (2 * k + 1) =
+      (dyadicPhaseDepth n k + dyadicPhaseDepth n (k + 1)) / 2 -
+        dyadicPhaseDepthDefect n :=
+  dyadicPhaseDepth_child_odd n k
+
+/-- Every genuine odd child lies strictly below its adjacent-parent average. -/
+theorem dyadicPhaseDepth_child_odd_lt_average
+    {n k : ℕ} (_hk : k < dyadicPhaseDenom n) :
+    dyadicPhaseDepth (n + 1) (2 * k + 1) <
+      (dyadicPhaseDepth n k + dyadicPhaseDepth n (k + 1)) / 2 := by
+  rw [dyadicPhaseDepth_child_odd n k]
+  exact sub_lt_self _ (dyadicPhaseDepthDefect_pos n)
+
+/--
+The total defect over all odd children introduced at level `n + 1` is
+`1 / (2 * 2^n)`.
+
+There are `2^n` parent intervals, each carrying the same inverse-square local
+defect. This is a finite identity and makes no convergence claim.
+-/
+theorem sum_dyadicPhaseDepthDefect :
+    ∑ _k ∈ Finset.range (dyadicPhaseDenom n), dyadicPhaseDepthDefect n =
+      1 / (2 * (dyadicPhaseDenom n : ℝ)) := by
+  have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
+    exact_mod_cast (dyadicPhaseDenom_pos n).ne'
+  simp [dyadicPhaseDepthDefect]
+  field_simp
 
 end
 

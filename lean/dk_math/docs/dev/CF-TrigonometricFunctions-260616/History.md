@@ -809,3 +809,21 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
      (8279 jobs)。
+
+### 2026/06/23 19:03 JST (Finite total dyadic depth defect)
+
+1. local defect:
+   - `dyadicPhaseDepthDefect n = 1 / (2 * (2^n)^2)` を定義した。
+   - defect の厳密正値性を証明した。
+2. semantic form:
+   - mesh 内の parent interval に限定した odd-child refinement theorem を
+     追加した。
+   - genuine odd child depth が adjacent-parent average より厳密に小さい
+     ことを証明した。
+3. finite aggregation:
+   - level `n + 1` で導入される全 `2^n` odd children の defect 総和が
+     `1 / (2 * 2^n)` に厳密に等しいことを証明した。
+   - これは有限恒等式であり、収束定理とは区別した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。

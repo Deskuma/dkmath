@@ -151,8 +151,18 @@ child depth
 ```
 
 Thus the first refinement defect is an explicit positive inverse-square mesh
-term. The remaining task is to identify a mathematically justified aggregate
-composition law for local corrections.
+term. It is now named `dyadicPhaseDepthDefect`; its positivity proves that
+every genuine odd child lies strictly below the adjacent-parent average.
+There are exactly `2^n` such children, and their finite total defect is
+
+```text
+2^n * 1 / (2 * (2^n)^2) = 1 / (2 * 2^n).
+```
+
+This is an exact finite aggregation law. It does not yet assert convergence,
+although its closed form exposes the scale that a later limit theorem must
+analyze. The remaining task is to identify a mathematically justified
+aggregate composition law for boundary normalization.
 
 ### Milestone D: limit and Gaussian bridge
 

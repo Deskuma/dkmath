@@ -369,7 +369,9 @@ phase-depth laws.
 `SemanticCF2DRefinement` proves reflection and even-child inheritance for
 dyadic depth and normalization. Quadraticity gives the exact odd-child law:
 its depth is the average adjacent-parent depth minus
-`1 / (2 * (2^n)^2)`.
+`1 / (2 * (2^n)^2)`. The named defect is positive, every genuine odd child
+lies strictly below its parent average, and the finite sum over all odd
+children introduced at that level is exactly `1 / (2 * 2^n)`.
 [TODO: semantic-cf2d-phase/correction-composition] Select and prove an
 aggregate composition law for local boundary corrections. Do not assume that
 it is an infinite product or a logarithmic sum before its finite form is
