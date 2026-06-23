@@ -720,3 +720,23 @@ Archive
 5. 検証:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/23 15:10 JST (Quarter-turn linear isometry interpretation)
+
+1. 実装:
+   - Euclidean plane 上の座標写像 `(x,y) -> (-y,x)` を
+     `quarterTurnLinearEquiv` として定義した。
+   - inverse、加法、scalar multiplication を座標ごとに証明した。
+   - L2 norm 保存を証明し、`quarterTurnLinearIsometry` として包装した。
+2. semantic bridge:
+   - core-zero semantic action を Euclidean plane へ写すと、
+     `quarterTurnLinearIsometry` と一致することを証明した。
+3. 意味:
+   - exact-order-four action の Euclidean 読みが、角度を仮定せず
+     quarter-turn linear isometry として確定した。
+4. 次段階:
+   - orientation を選び、Mathlib の oriented rotation `Real.pi / 2` と
+     比較する bridge を候補とした。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

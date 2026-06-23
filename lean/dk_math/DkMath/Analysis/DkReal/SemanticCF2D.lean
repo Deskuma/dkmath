@@ -1346,9 +1346,14 @@ coordinate circle equation is homeomorphic to the standard
 The closed path is mapped through this bridge, and positive squared radius is
 separated from the zero-radius degenerate case.
 
+[IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry] The coordinate map
+`(x,y) ↦ (-y,x)` is packaged as a Euclidean linear isometry equivalence, and
+the transported core-zero semantic action is proved equal to this isometry
+under the coordinate bridge.
+
 [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
-extract angular terminology and compare the action with the standard
-quarter-turn linear isometry.
+choose an orientation and compare the quarter-turn isometry with Mathlib's
+oriented rotation by `Real.pi / 2`.
 -/
 
 end

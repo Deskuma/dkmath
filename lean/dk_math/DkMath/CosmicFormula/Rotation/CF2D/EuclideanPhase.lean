@@ -222,6 +222,61 @@ theorem sqrt_pos_of_sqRadius_pos {rho2 : ℝ} (hrho : 0 < rho2) :
     0 < Real.sqrt rho2 :=
   Real.sqrt_pos.2 hrho
 
+/-!
+## Quarter-turn as a linear isometry
+
+The terminology is introduced only after reaching the standard Euclidean
+plane. The construction itself remains the coordinate map `(x,y) ↦ (-y,x)`.
+-/
+
+/-- The coordinate quarter-turn as a linear equivalence of the Euclidean plane. -/
+def quarterTurnLinearEquiv : EuclideanPlane ≃ₗ[ℝ] EuclideanPlane where
+  toFun v :=
+    pairToEuclideanPlane
+      (-(euclideanPlaneToPair v).2, (euclideanPlaneToPair v).1)
+  invFun v :=
+    pairToEuclideanPlane
+      ((euclideanPlaneToPair v).2, -(euclideanPlaneToPair v).1)
+  left_inv v := by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+    ext i
+    fin_cases i <;>
+      simp [pairToEuclideanPlane, euclideanPlaneToPair]
+  right_inv v := by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+    ext i
+    fin_cases i <;>
+      simp [pairToEuclideanPlane, euclideanPlaneToPair]
+  map_add' u v := by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+    ext i
+    fin_cases i <;> simp [pairToEuclideanPlane, euclideanPlaneToPair]
+    ring
+  map_smul' c v := by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+    ext i
+    fin_cases i <;> simp [pairToEuclideanPlane, euclideanPlaneToPair]
+
+/-- The coordinate quarter-turn preserves the Euclidean L2 norm. -/
+theorem quarterTurnLinearEquiv_norm (v : EuclideanPlane) :
+    ‖quarterTurnLinearEquiv v‖ = ‖v‖ := by
+  apply (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp
+  rw [EuclideanSpace.real_norm_sq_eq, EuclideanSpace.real_norm_sq_eq,
+    Fin.sum_univ_two, Fin.sum_univ_two]
+  simp [quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair]
+  ring
+
+/-- The standard coordinate quarter-turn as a Euclidean linear isometry equivalence. -/
+def quarterTurnLinearIsometry :
+    EuclideanPlane ≃ₗᵢ[ℝ] EuclideanPlane :=
+  LinearIsometryEquiv.mk quarterTurnLinearEquiv quarterTurnLinearEquiv_norm
+
+/-- Coordinate form of the standard quarter-turn linear isometry. -/
+theorem euclideanPlaneToPair_quarterTurn (v : EuclideanPlane) :
+    euclideanPlaneToPair (quarterTurnLinearIsometry v) =
+      (-(euclideanPlaneToPair v).2, (euclideanPlaneToPair v).1) := by
+  simp [quarterTurnLinearIsometry, quarterTurnLinearEquiv]
+
 end
 
 end DkMath.CosmicFormula.Rotation.CF2D
@@ -266,6 +321,24 @@ def normalizedClosedEuclideanSpherePath
   (normalizedClosedEuclideanCircleSqPath hcore z).map
     (euclideanCircleSqHomeomorphSphere
       (rho2 := Vec.q2 z) (Vec.q2_nonneg z)).continuous
+
+/--
+Under the Euclidean coordinate bridge, the semantic core-zero action is the
+standard quarter-turn linear isometry.
+-/
+theorem pairToEuclideanPlane_semanticAct_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticAct r z)) =
+      quarterTurnLinearIsometry
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  rw [semanticAct_of_core_eq_zero hcore]
+  apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+  ext i
+  fin_cases i <;>
+    simp [pairToEuclideanPlane, quarterTurnLinearIsometry,
+      quarterTurnLinearEquiv, euclideanPlaneToPair, Vec.toProd]
 
 end
 

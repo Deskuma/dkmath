@@ -119,6 +119,8 @@ through that homeomorphism. The zero boundary is kept as a separate
 one-point degenerate case. A second homeomorphism identifies the coordinate
 circle with Mathlib's standard `EuclideanSpace Real (Fin 2)` L2 metric sphere
 of radius `sqrt (q2 z)`.
+In that standard Euclidean plane, the semantic core-zero action is identified
+with the coordinate quarter-turn linear isometry `(x,y) ↦ (-y,x)`.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

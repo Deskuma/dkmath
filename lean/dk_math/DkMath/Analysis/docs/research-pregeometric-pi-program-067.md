@@ -157,7 +157,8 @@ mechanism from which these theorem obligations can be investigated.
 
 The coordinate-circle and standard `EuclideanSpace Real (Fin 2)` metric-sphere
 bridges are now implemented, including the degenerate zero boundary. The next
-interpretive step may identify the core-zero action with the standard
-quarter-turn linear isometry. It must remain an interpretation of the
-existing boundary path, not a replacement construction. Refinement and limit
-arguments remain separate checkpoints.
+interpretive step has also identified the core-zero action with the standard
+coordinate quarter-turn linear isometry. A later orientation bridge may
+compare it with Mathlib's rotation by `Real.pi / 2`; this remains an
+interpretation of the existing boundary path, not a replacement construction.
+Refinement and limit arguments remain separate checkpoints.

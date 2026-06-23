@@ -34,6 +34,10 @@ metric sphere in `EuclideanSpace Real (Fin 2)`, of radius `sqrt rho2`.
 This avoids confusing the ordinary product norm on `Real × Real` with the
 Euclidean L2 norm.
 
+The core-zero semantic action is then identified with the standard coordinate
+quarter-turn linear isometry `(x,y) ↦ (-y,x)`. This introduces the geometric
+name only after the linear isometry model is available.
+
 The current implementation proves a four-state return:
 
 ```text
@@ -355,7 +359,8 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/levelset-path]
 [IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
 [IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
-[TODO: semantic-cf2d-phase/quarter-turn-isometry]
+[IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry]
+[TODO: semantic-cf2d-phase/oriented-pi-over-two]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]
