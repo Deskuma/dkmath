@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Analysis.DkReal.SemanticCF2DNormalize
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
 import Mathlib.Topology.Homeomorph.Defs
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase"
@@ -276,6 +277,70 @@ theorem euclideanPlaneToPair_quarterTurn (v : EuclideanPlane) :
     euclideanPlaneToPair (quarterTurnLinearIsometry v) =
       (-(euclideanPlaneToPair v).2, (euclideanPlaneToPair v).1) := by
   simp [quarterTurnLinearIsometry, quarterTurnLinearEquiv]
+
+/-!
+## Oriented angle interpretation
+
+The standard orientation is pulled back from Mathlib's complex-plane
+orientation through the orthonormal basis equivalence. This fixes the sign
+convention before mentioning `pi / 2`.
+-/
+
+/-- Standard Euclidean-plane coordinates interpreted as a complex number. -/
+def euclideanPlaneComplexIsometry : EuclideanPlane ≃ₗᵢ[ℝ] ℂ :=
+  (EuclideanSpace.basisFun (Fin 2) ℝ).equiv
+    Complex.orthonormalBasisOneI (Equiv.refl (Fin 2))
+
+local instance euclideanPlaneFinrankTwo :
+    Fact (Module.finrank ℝ EuclideanPlane = 2) :=
+  ⟨finrank_euclideanSpace_fin⟩
+
+/-- The orientation whose positive quarter-turn agrees with multiplication by `I`. -/
+def euclideanPlaneOrientation : Orientation ℝ EuclideanPlane (Fin 2) :=
+  (Orientation.map (Fin 2) euclideanPlaneComplexIsometry.toLinearEquiv).symm
+    Complex.orientation
+
+/-- The chosen orientation transports to Mathlib's standard complex orientation. -/
+theorem euclideanPlaneOrientation_map_complex :
+    Orientation.map (Fin 2) euclideanPlaneComplexIsometry.toLinearEquiv
+      euclideanPlaneOrientation = Complex.orientation := by
+  exact Equiv.apply_symm_apply _ _
+
+/-- Complex coordinates of the explicit quarter-turn are multiplication by `I`. -/
+theorem euclideanPlaneComplexIsometry_quarterTurn (v : EuclideanPlane) :
+    euclideanPlaneComplexIsometry (quarterTurnLinearIsometry v) =
+      Complex.I * euclideanPlaneComplexIsometry v := by
+  simp [euclideanPlaneComplexIsometry, quarterTurnLinearIsometry,
+    quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair,
+    OrthonormalBasis.equiv]
+  change
+    (-(v 1 : ℂ) + (v 0 : ℂ) * Complex.I) =
+      Complex.I * ((v 0 : ℂ) + (v 1 : ℂ) * Complex.I)
+  rw [mul_add, ← mul_assoc,
+    show Complex.I * (v 1 : ℂ) = (v 1 : ℂ) * Complex.I by ring,
+    mul_assoc, Complex.I_mul_I]
+  ring
+
+/-- The chosen orientation's right-angle rotation is the explicit quarter-turn. -/
+theorem rightAngleRotation_eq_quarterTurn :
+    euclideanPlaneOrientation.rightAngleRotation =
+      quarterTurnLinearIsometry := by
+  apply LinearIsometryEquiv.ext
+  intro v
+  apply euclideanPlaneComplexIsometry.injective
+  rw [euclideanPlaneOrientation.rightAngleRotation_map_complex
+    euclideanPlaneComplexIsometry euclideanPlaneOrientation_map_complex]
+  exact (euclideanPlaneComplexIsometry_quarterTurn v).symm
+
+/--
+The explicit quarter-turn is Mathlib's oriented rotation by `pi / 2` for the
+chosen standard orientation.
+-/
+theorem rotation_pi_div_two_eq_quarterTurn :
+    euclideanPlaneOrientation.rotation (Real.pi / 2 : ℝ) =
+      quarterTurnLinearIsometry := by
+  rw [euclideanPlaneOrientation.rotation_pi_div_two,
+    rightAngleRotation_eq_quarterTurn]
 
 end
 

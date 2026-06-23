@@ -360,11 +360,10 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
 [IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
 [IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry]
-[TODO: semantic-cf2d-phase/oriented-pi-over-two]
+[IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two]
 [TODO: semantic-cf2d-phase/refinement-law]
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]
-[TODO: semantic-cf2d-phase/euclidean-interpretation]
 ```
 
 The longer route from this local quadratic profile to a possible

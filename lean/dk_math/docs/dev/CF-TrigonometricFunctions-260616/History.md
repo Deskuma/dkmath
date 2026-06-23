@@ -740,3 +740,22 @@ Archive
 5. 検証:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/23 15:26 JST (Oriented rotation by pi/2 bridge)
+
+1. orientation:
+   - Euclidean plane と complex plane の orthonormal-basis isometry を定義した。
+   - complex plane の標準 orientation を Euclidean plane へ引き戻した。
+2. rotation bridge:
+   - 座標 quarter-turn が complex multiplication by `I` に写ることを証明した。
+   - chosen orientation の right-angle rotation と
+     `quarterTurnLinearIsometry` を同定した。
+   - Mathlib の `rotation_pi_div_two` により、quarter-turn が oriented
+     rotation by `Real.pi / 2` に等しいことを証明した。
+3. 境界:
+   - これは既存の pre-geometric action の Euclidean 解釈であり、
+     `pi` の内在的導出ではない。refinement、Gaussian limit、
+     pi identification は独立した未実装課題として維持する。
+4. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

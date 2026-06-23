@@ -1351,9 +1351,11 @@ separated from the zero-radius degenerate case.
 the transported core-zero semantic action is proved equal to this isometry
 under the coordinate bridge.
 
-[TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
-choose an orientation and compare the quarter-turn isometry with Mathlib's
-oriented rotation by `Real.pi / 2`.
+[IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two] The standard
+orientation is pulled back from Mathlib's complex plane, and the quarter-turn
+isometry is proved equal to the resulting oriented rotation by
+`Real.pi / 2`. This is a Euclidean interpretation theorem; it does not yet
+derive `pi` intrinsically from the pre-geometric phase construction.
 -/
 
 end
