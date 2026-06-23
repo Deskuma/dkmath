@@ -195,6 +195,19 @@ pointwise boundary-restoration law through finite multiplication. It does not
 yet identify either product as the canonical refinement observable, nor does
 it justify an infinite product or logarithmic limit.
 
+`SemanticCF2DLogComposition.lean` now records the equivalent finite additive
+form. Pointwise positivity permits logarithms, and summation over the same
+complete mesh gives
+
+```text
+2 * logNormalizationSum + logDepthSum = 0.
+```
+
+The two sums are proved equal to the logarithms of their respective finite
+products. This equivalence supplies a comparison surface for later limit
+selection; it does not select the raw sum, an average, or a weighted sum as
+canonical.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

@@ -18,6 +18,7 @@ import DkMath.Analysis.DkReal.SemanticCF2DDyadic
 import DkMath.Analysis.DkReal.SemanticCF2DRefinement
 import DkMath.Analysis.DkReal.SemanticCF2DLimit
 import DkMath.Analysis.DkReal.SemanticCF2DComposition
+import DkMath.Analysis.DkReal.SemanticCF2DLogComposition
 import DkMath.Analysis.DkReal.SemanticCF2DPath
 import DkMath.Analysis.DkReal.SemanticCF2DNormalize
 import DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase

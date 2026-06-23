@@ -382,6 +382,10 @@ On the complete finite dyadic mesh, the squared product of sampled
 normalizations exactly cancels the product of sampled depths. Both products
 are strictly positive and nonzero, and the cancellation law is available in
 both reciprocal forms.
+[IMPLEMENTED: semantic-cf2d-phase/finite-log-composition] Positivity permits
+the same finite law to be expressed as logarithmic sums:
+`2 * logNormalizationSum + logDepthSum = 0`. Each sum is also proved equal
+to the logarithm of its corresponding finite product.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, logarithmic sum, or another quantity has a canonical
 refinement limit. The finite cancellation theorem alone does not select one.

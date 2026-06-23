@@ -897,3 +897,24 @@ Archive
 3. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
      (8280 jobs)。
+
+### 2026/06/23 20:49 JST (Finite logarithmic composition)
+
+1. module:
+   - `SemanticCF2DLogComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. positivity:
+   - dyadic depth と normalization の pointwise positivity wrapper を
+     追加した。
+3. finite log laws:
+   - depth / normalization の complete-mesh log sum を定義した。
+   - 各 log sum が対応する finite product の log に等しいことを証明した。
+   - pointwise および finite mesh 全体で
+     `2 * logNormalization + logDepth = 0` を証明した。
+4. boundary:
+   - log sum は finite product cancellation の加法表示に限定した。
+     raw sum、average、weighted sum のいずれも canonical limit として
+     選択していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

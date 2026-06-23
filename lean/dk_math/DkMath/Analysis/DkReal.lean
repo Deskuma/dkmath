@@ -132,6 +132,13 @@ finite pointwise-composition theorem, not a selected infinite-product limit.
 Nonvanishing and reciprocal forms are also exposed for downstream finite
 algebra.
 
+[IMPLEMENTED: semantic-cf2d-finite-log-composition]
+`DkReal.SemanticCF2DLogComposition` transfers the positive finite
+cancellation law to logarithmic sums. Each log sum is identified with the
+logarithm of its finite product, and
+`2 * logNormalizationSum + logDepthSum = 0`. No logarithmic quantity is yet
+selected as the canonical refinement-limit observable.
+
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
 affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
