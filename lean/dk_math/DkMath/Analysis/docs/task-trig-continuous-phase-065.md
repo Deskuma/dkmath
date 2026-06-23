@@ -365,9 +365,15 @@ explicit.
 `SemanticCF2DDyadic` defines the finite nodes `k / 2^n`, proves their endpoint,
 unit-interval, reflection, even-child, odd-child midpoint, and reflected
 phase-depth laws.
-[TODO: semantic-cf2d-phase/refinement-law] Select and prove the composition
-law for local boundary corrections. Do not assume that it is an infinite
-product or a logarithmic sum before this finite law is established.
+[IMPLEMENTED: semantic-cf2d-phase/finite-depth-refinement]
+`SemanticCF2DRefinement` proves reflection and even-child inheritance for
+dyadic depth and normalization. Quadraticity gives the exact odd-child law:
+its depth is the average adjacent-parent depth minus
+`1 / (2 * (2^n)^2)`.
+[TODO: semantic-cf2d-phase/correction-composition] Select and prove an
+aggregate composition law for local boundary corrections. Do not assume that
+it is an infinite product or a logarithmic sum before its finite form is
+established.
 [TODO: semantic-cf2d-phase/gaussian-limit]
 [TODO: semantic-cf2d-phase/pi-identification]
 ```

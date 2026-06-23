@@ -139,7 +139,19 @@ This finite checkpoint is now implemented in `SemanticCF2DDyadic.lean`.
 Even child indices recover their parent nodes exactly, while odd child
 indices are the midpoints of adjacent parents. Complementary indices produce
 the reflected parameter `1 - t`, and therefore have equal `phaseDepth`.
-The remaining refinement-law task is to identify a mathematically justified
+
+`SemanticCF2DRefinement.lean` now adds the first exact observation law.
+Depth and normalization are inherited by even children and preserved by
+reflection. At an odd child, the quadratic profile satisfies
+
+```text
+child depth
+  = average of adjacent parent depths
+    - 1 / (2 * (2^n)^2).
+```
+
+Thus the first refinement defect is an explicit positive inverse-square mesh
+term. The remaining task is to identify a mathematically justified aggregate
 composition law for local corrections.
 
 ### Milestone D: limit and Gaussian bridge

@@ -104,6 +104,12 @@ phase at the finite nodes `k / 2^n`. Endpoint, unit-interval, reflection,
 even-child, odd-child midpoint, and reflected phase-depth laws are proved
 without selecting a correction product or taking a limit.
 
+[IMPLEMENTED: semantic-cf2d-finite-refinement]
+`DkReal.SemanticCF2DRefinement` evaluates depth and normalization on the
+dyadic mesh. Reflection and even-child inheritance hold for both observations.
+At every odd child, quadraticity gives the exact finite correction
+`1 / (2 * (2^n)^2)` from the average of adjacent parent depths.
+
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
 affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a

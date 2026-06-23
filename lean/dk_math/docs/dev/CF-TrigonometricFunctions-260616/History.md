@@ -790,3 +790,22 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DDyadic` 成功
      (8275 jobs)。
+
+### 2026/06/23 18:06 JST (Exact finite depth refinement law)
+
+1. correction:
+   - odd child を parent interval として利用する場合の範囲付き
+     unit-interval theorem を追加した。
+2. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DRefinement` を新設した。
+   - dyadic mesh 上の depth と normalization observation を定義した。
+3. exact laws:
+   - reflection と even-child inheritance を両 observation で証明した。
+   - odd-child depth が adjacent-parent depth の平均から
+     `1 / (2 * (2^n)^2)` を引いた値に厳密に等しいことを証明した。
+4. boundary:
+   - aggregate correction、infinite product、log sum、Gaussian limit は
+     引き続き未選択とした。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。

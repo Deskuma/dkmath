@@ -89,6 +89,18 @@ theorem dyadicPhaseNode_child_odd_mid (n k : ℕ) :
   simp [dyadicPhaseNode, dyadicPhaseDenom, pow_succ]
   ring
 
+/--
+For a genuine parent interval, its odd child midpoint lies in the closed
+phase interval.
+-/
+theorem dyadicPhaseNode_child_odd_mem_unitInterval
+    {n k : ℕ} (hk : k < dyadicPhaseDenom n) :
+    dyadicPhaseNode (n + 1) (2 * k + 1) ∈ Set.Icc (0 : ℝ) 1 := by
+  apply dyadicPhaseNode_mem_unitInterval
+  simp only [dyadicPhaseDenom] at hk ⊢
+  rw [pow_succ]
+  omega
+
 /-- The exact phase-depth observation agrees at complementary dyadic nodes. -/
 theorem phaseDepth_dyadic_reflect
     {n k : ℕ} (hk : k ≤ dyadicPhaseDenom n) :
