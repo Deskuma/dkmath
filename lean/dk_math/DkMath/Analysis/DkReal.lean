@@ -129,6 +129,8 @@ noncomputable.
 complete finite dyadic mesh. The squared normalization product exactly
 cancels the depth product, and both products are strictly positive. This is a
 finite pointwise-composition theorem, not a selected infinite-product limit.
+Nonvanishing and reciprocal forms are also exposed for downstream finite
+algebra.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

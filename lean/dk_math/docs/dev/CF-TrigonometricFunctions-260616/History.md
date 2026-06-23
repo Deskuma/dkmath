@@ -883,3 +883,17 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
      (8280 jobs)。
+
+### 2026/06/23 20:32 JST (Finite composition reciprocal API)
+
+1. API:
+   - depth product と normalization product の nonzero theorem を追加した。
+   - finite cancellation law を双方の reciprocal equation に変換した。
+   - 後続文書向けに `dyadicPhaseFiniteBoundaryCancellation` という短い
+     theorem 名を追加した。
+2. boundary:
+   - 新たな limit observable は選択していない。既存 finite identity の
+     利用形のみを整備した。
+3. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。

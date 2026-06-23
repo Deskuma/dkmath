@@ -380,7 +380,8 @@ children introduced at that level is exactly `1 / (2 * 2^n)`.
 [IMPLEMENTED: semantic-cf2d-phase/finite-correction-composition]
 On the complete finite dyadic mesh, the squared product of sampled
 normalizations exactly cancels the product of sampled depths. Both products
-are strictly positive.
+are strictly positive and nonzero, and the cancellation law is available in
+both reciprocal forms.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, logarithmic sum, or another quantity has a canonical
 refinement limit. The finite cancellation theorem alone does not select one.

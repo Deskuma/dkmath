@@ -68,6 +68,42 @@ theorem dyadicPhaseDepthProduct_pos (n : ℕ) :
   intro k hk
   exact phaseDepth_pos (dyadicPhaseNode n k)
 
+/-- The finite normalization product never vanishes. -/
+theorem dyadicPhaseNormalizationProduct_ne_zero (n : ℕ) :
+    dyadicPhaseNormalizationProduct n ≠ 0 :=
+  (dyadicPhaseNormalizationProduct_pos n).ne'
+
+/-- The finite depth product never vanishes. -/
+theorem dyadicPhaseDepthProduct_ne_zero (n : ℕ) :
+    dyadicPhaseDepthProduct n ≠ 0 :=
+  (dyadicPhaseDepthProduct_pos n).ne'
+
+/--
+The squared finite normalization product is the reciprocal of the finite
+depth product.
+-/
+theorem dyadicPhaseNormalizationProduct_sq_eq_inv_depthProduct (n : ℕ) :
+    dyadicPhaseNormalizationProduct n ^ 2 =
+      (dyadicPhaseDepthProduct n)⁻¹ := by
+  exact eq_inv_of_mul_eq_one_left
+    (dyadicPhaseNormalizationProduct_sq_mul_depthProduct n)
+
+/--
+The finite depth product is the reciprocal of the squared finite
+normalization product.
+-/
+theorem dyadicPhaseDepthProduct_eq_inv_normalizationProduct_sq (n : ℕ) :
+    dyadicPhaseDepthProduct n =
+      (dyadicPhaseNormalizationProduct n ^ 2)⁻¹ := by
+  exact eq_inv_of_mul_eq_one_right
+    (dyadicPhaseNormalizationProduct_sq_mul_depthProduct n)
+
+/-- Short name for the finite boundary-cancellation law. -/
+theorem dyadicPhaseFiniteBoundaryCancellation (n : ℕ) :
+    dyadicPhaseNormalizationProduct n ^ 2 *
+        dyadicPhaseDepthProduct n = 1 :=
+  dyadicPhaseNormalizationProduct_sq_mul_depthProduct n
+
 end
 
 end DkMath.Analysis.DkNNRealQ
