@@ -172,7 +172,7 @@ theorem euclid_from_cosmic_boundary :
     exact (Finset.mem_filter.mp hp).2
   -- 宇宙境界定理から、s の外側の新しい素数 q を得る
   obtain ⟨q, hq_prime, _hq_dvd_boundary, hq_not_mem⟩ :=
-    cosmic_boundary_demands_new_prime s hs
+    cosmic_boundary_demands_new_prime_gcd_style s hs
   refine ⟨q, ?_, hq_prime⟩
   -- q < n だと、q は s に入ってしまい矛盾
   by_contra hq_not_ge
