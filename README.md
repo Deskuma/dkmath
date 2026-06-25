@@ -4,6 +4,38 @@ The result of "D." and Wise Wolf's (GPT) experiment with new mathematical theori
 
 「D」と🐺賢狼(GPT)による新しい数学理論の実験結果。
 
+## News
+
+> ## Verified Challenge: Infinitely Many Primes
+
+DkMath.CosmicFormula provides a Lean-formalized proof route from the Cosmic Formula boundary structure to the infinitude of primes.
+
+The proof was validated on Lean Comparator Live against the known challenge:
+
+- Challenge: "Infinitely Many Primes"
+- Theorem: `InfinitudeOfPrimes`
+- Internal route: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
+- Core structure: `cosmicN P = P * (P + 2)` and `cosmicN P + 1 = (P + 1)^2`
+
+see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
+
+---
+
+## 検証済み Challenge: 素数の無限性
+
+DkMath.CosmicFormula は、宇宙式境界構造から素数の無限性へ至る Lean 形式証明ルートを含む。
+
+この証明は Lean Comparator Live の既知 Challenge “Infinitely Many Primes” に対して検証成功した。
+
+- Challenge: `Infinitely Many Primes`
+- Theorem: `InfinitudeOfPrimes`
+- 内部ルート: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
+- 中核構造: `cosmicN P = P * (P + 2)` および `cosmicN P + 1 = (P + 1)^2`
+
+see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
+
+## About Repository
+
 > [!IMPORTANT]
 > The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
 >
@@ -13,6 +45,10 @@ The result of "D." and Wise Wolf's (GPT) experiment with new mathematical theori
 > Please check the following before working:
 > `git checkout nightly`
 
+> For more up-to-the-minute activity, please refer to the **develop** branch.
+
+リポジトリについて
+
 > [!IMPORTANT]
 > main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
 >
@@ -21,6 +57,8 @@ The result of "D." and Wise Wolf's (GPT) experiment with new mathematical theori
 >
 > 作業前に次を確認してください:
 > `git checkout nightly`
+
+> さらにリアルタイムな活動を得るなら **develop** branch を参照してください。
 
 ## Index
 
