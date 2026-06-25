@@ -81,10 +81,7 @@ $$
 で、one-step Newton 補正の heart は
 
 $$
-F(R+q^n c)
-==========
-
-F(R)+F'(R),(q^n c)
+F(R+q^n c) = F(R)+F'(R),(q^n c)
 $$
 
 の一次項だけを見ればよい、というところにある。

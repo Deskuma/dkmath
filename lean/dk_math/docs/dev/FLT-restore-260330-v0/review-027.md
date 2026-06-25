@@ -18,7 +18,7 @@ v_q(z-\omega_k y)=p\cdot v_q(s)
 $$
 
 を目標とする central theorem の骨格が実装された。
-ただし現時点では、既存の Hensel lift existence の 1 個に加え、今回追加の 5 箇所が残っており、合計 6 箇所の sorry がある、という段階じゃ。  
+ただし現時点では、既存の Hensel lift existence の 1 個に加え、今回追加の 5 箇所が残っており、合計 6 箇所の sorry がある、という段階じゃ。
 
 ## 2. 数学的核心
 
@@ -46,7 +46,7 @@ $$
   $$
   は射影で 0 に落ちない
 
-ことが分かっている。さらに今回、その non-distinguished 側は \(\mathbb{N}\) の `padicValNat` で 0、distinguished 側は少なくとも \(q\)-可除、という翻訳まで入った。  
+ことが分かっている。さらに今回、その non-distinguished 側は \(\mathbb{N}\) の `padicValNat` で 0、distinguished 側は少なくとも \(q\)-可除、という翻訳まで入った。
 
 つまり、狙いは
 
@@ -128,7 +128,7 @@ $$
 
 Hensel existence の sorry。
 これは今すぐ mainline を押すより、局所版の exact equality が閉じたあとで戻ってよい。
-なぜなら、いまの central theorem はすでに `hLift : BranchAHenselLiftData` を仮定して進められる形に整っておるからじゃ。  
+なぜなら、いまの central theorem はすでに `hLift : BranchAHenselLiftData` を仮定して進められる形に整っておるからじゃ。
 
 ## 5. terminal case はいつやるべきか
 

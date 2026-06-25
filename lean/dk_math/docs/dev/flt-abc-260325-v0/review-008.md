@@ -194,7 +194,7 @@ $$
 
 $$
 \mathrm{Coprime}(t,s)
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{NePSupportKernel の条件}
 $$
 
@@ -213,7 +213,7 @@ $$
 
 $$
 \text{NePSupportKernel の条件}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \mathrm{Coprime}(t,s)
 $$
 

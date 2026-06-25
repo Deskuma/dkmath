@@ -20,7 +20,7 @@ These are small, reusable statements around:
  -/
 
 
-namespace ABC
+namespace DkMath.ABC
 
 
 section RX1_defs
@@ -468,4 +468,4 @@ lemma layercake_rhs_bound_for_layercake
           + ((p : ℝ)^t - 1) * (Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))) := by
           rfl
 
-end ABC
+end DkMath.ABC

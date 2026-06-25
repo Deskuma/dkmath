@@ -13,7 +13,7 @@ $$
 \texttt{PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget}
 $$
 
-を **canonical 入口** として埋める段に入った、ということじゃな。  
+を **canonical 入口** として埋める段に入った、ということじゃな。
 
 今回の diff では、その方針をコメントで何度も明示し、さらに
 
@@ -74,7 +74,7 @@ $$
 の証明スケッチを起こす。
 
 これが第一じゃ。
-local theorem が埋まれば、今回追加した wrapper 群にそのまま流し込めるので、packet descent 側まで橋で閉じやすい。  
+local theorem が埋まれば、今回追加した wrapper 群にそのまま流し込めるので、packet descent 側まで橋で閉じやすい。
 
 ### 4.2. そのときの作業内容
 
@@ -147,7 +147,7 @@ $$
 一言で言えば、
 
 $$
-\text{残る新規数学} ;=; \text{Branch A 局所 exceptional existence の 1 本}
+\text{残る新規数学} \;=\; \text{Branch A 局所 exceptional existence の 1 本}
 $$
 
 じゃ。

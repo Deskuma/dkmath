@@ -960,7 +960,7 @@ Archive
 
 1. 目的:
    - `GTail-impl-plan.md` の Phase C（GTail / GN 高次解析）を実装する。
-   - `GTail.lean` に合同性補題と mod p^2 / mod p^3 展開補題を追加し、  
+   - `GTail.lean` に合同性補題と mod p^2 / mod p^3 展開補題を追加し、
      Branch A の Wieferich 解析や円分核橋への接続基盤を整える。
 
 2. 実施:
@@ -1058,19 +1058,19 @@ Archive
 
    `[DkMath/CFBRC/Basic.lean]` に以下を追加:
 
-   - `cyclotomicPrimeCore_eq_GN_of_gap`  
+   - `cyclotomicPrimeCore_eq_GN_of_gap`
      `y < z`（すなわち gap 正）を仮定した
      `cyclotomicPrimeCore p (z-y) y = GN p (z-y) y` の specialization。
 
-   - `GN_eq_diffQuot_of_pow`  
+   - `GN_eq_diffQuot_of_pow`
      `x > 0` の下で
      `GN p x u = ((x+u)^p - u^p) / x` を与える差分商 bridge。
      （`sub_eq_mul_cyclotomicPrimeCore_nat` + `cyclotomicPrimeCore_eq_GN_nat` を合成）
 
-   - `cyclotomicPrimeCore_eq_diffPowQuot`  
+   - `cyclotomicPrimeCore_eq_diffPowQuot`
      同条件で core 側も同じ差分商に一致。
 
-   - `GN_eq_dividedDifference_pow`  
+   - `GN_eq_dividedDifference_pow`
      計画書名との互換 alias。
 
    **Phase B: witness route / contradiction route bundle 名寄せ**
@@ -1086,13 +1086,13 @@ Archive
 
    同ファイルに以下を追加:
 
-   - `branchA_spow_congr_head_mod_p2`  
+   - `branchA_spow_congr_head_mod_p2`
      既存 `primeGe5BranchA_spow_congr_head_mod_p_sq` の計画名 alias。
 
-   - `branchA_contradiction_of_mod_p2_conflict`  
+   - `branchA_contradiction_of_mod_p2_conflict`
      `¬ (s^p ≡ y^(p-1) [MOD p^2])` を仮定すれば `False` を返す局所衝突補題。
 
-   - `branchA_Wieferich_head_conflict_mod_p2`  
+   - `branchA_Wieferich_head_conflict_mod_p2`
      `¬ (y^(p-1) ≡ 1 [MOD p^2])` と normal form から `False` を返す concrete 版。
 
 3. 結論:

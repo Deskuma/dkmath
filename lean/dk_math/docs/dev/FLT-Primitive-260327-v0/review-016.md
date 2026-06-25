@@ -82,7 +82,7 @@ $$
 
 $$
 \texttt{CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget}
-;+;
+\;+\;
 \texttt{PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget}
 $$
 

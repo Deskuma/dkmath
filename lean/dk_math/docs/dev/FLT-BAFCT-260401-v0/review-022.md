@@ -362,7 +362,7 @@ Phase III.
 
 **本命は `NePCoprimeKernel`、副戦場は `GNReducedGapTarget`。**
 `CyclotomicExistence` が concrete に落ちた今、comparison route は最短化され、descent route は見通しが良くなった。
-ゆえに、 **「最短 route を狙いながら、構成的 route を腐らせない」** のが最適じゃ。  
+ゆえに、 **「最短 route を狙いながら、構成的 route を腐らせない」** のが最適じゃ。
 
 必要なら次に、
 **`NePCoprimeKernel` 用の 3 層補題リスト** と **`GNReducedGapTarget` 用の 2 層補題リスト** を、Lean 名の雛形つきで起こすぞい。

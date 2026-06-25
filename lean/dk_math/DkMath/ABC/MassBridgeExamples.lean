@@ -1,0 +1,72 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.ABC.MassBridge
+
+#print "file: DkMath.ABC.MassBridgeExamples"
+
+namespace DkMath.ABC.MassBridgeExamples
+
+open DkMath.ABC
+open DkMath.CosmicFormula.Mass
+
+/-- Concrete check of the bridge identity `Big = Body + Gap`. -/
+example :
+    CosmicResidualMassAPI.ofResidualNat.massBig 2 3 1 =
+      CosmicResidualMassAPI.ofResidualNat.massBody 2 3 1 +
+        CosmicResidualMassAPI.ofResidualNat.massGap 2 3 1 := by
+  exact abc_big_eq_body_add_gap_mass 2 3 1
+
+/-- Concrete check of the bridge inequality `Gap ≤ Big`. -/
+example :
+    CosmicResidualMassAPI.ofResidualNat.massGap 2 3 1 ≤
+      CosmicResidualMassAPI.ofResidualNat.massBig 2 3 1 := by
+  exact abc_gap_mass_le_big_mass 2 3 1
+
+/-- Concrete check of the bridge identity `residual = gap`. -/
+example :
+    CosmicResidualMassAPI.ofResidualNat.massResidual 2 3 1 =
+      CosmicResidualMassAPI.ofResidualNat.massGap 2 3 1 := by
+  exact abc_residual_eq_gap_mass 2 3 1
+
+/-- For the prime sample `31`, support mass already captures the full mass. -/
+example : 31 ≤ supportMass 31 := by
+  exact abc_squarefree_support_lower_bound
+    (n := 31)
+    (by decide)
+    (show Nat.Prime 31 by decide).squarefree
+
+/-- The support mass still divides the original mass for a non-squarefree sample. -/
+example : supportMass 12 ∣ 12 := by
+  exact abc_supportMass_dvd_self (n := 12) (by decide)
+
+/-- Two distinct prime channels already force a lower bound on support mass. -/
+example : 2 * 3 ≤ supportMass 12 := by
+  exact supportMass_ge_of_two_distinct_prime_channels
+    (n := 12)
+    (p := 2)
+    (q := 3)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+
+/-- The same `2,3` sample also works in the finite-family statement. -/
+example : ({2, 3} : Finset ℕ).prod id ≤ supportMass 12 := by
+  exact supportMass_ge_prod_of_prime_channel_family
+    (n := 12)
+    (S := ({2, 3} : Finset ℕ))
+    (by decide)
+    (by
+      intro p hp
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hp
+      rcases hp with rfl | rfl
+      · exact ⟨by decide, by decide⟩
+      · exact ⟨by decide, by decide⟩)
+
+end DkMath.ABC.MassBridgeExamples

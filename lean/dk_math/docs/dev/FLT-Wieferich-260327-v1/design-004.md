@@ -148,7 +148,7 @@ $$
 
 $$
 \text{余分な distinguished-prime 深さ}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{smaller packet}
 $$
 

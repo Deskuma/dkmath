@@ -126,11 +126,11 @@ $$
 
 $$
 \text{universal kernel}
-;\Rightarrow;
+\;\Rightarrow\;
 \text{selected congruence witness}
-;\Rightarrow;
+\;\Rightarrow\;
 \text{selected core witness}
-;\Rightarrow;
+\;\Rightarrow\;
 \text{selected core on witness}
 $$
 

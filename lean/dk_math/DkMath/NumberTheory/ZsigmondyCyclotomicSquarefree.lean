@@ -82,4 +82,6 @@ lemma padicValNat_primitive_prime_factor_le_one_of_squarefree_G {a b d q : ℕ}
     padicValNat q (a ^ d - b ^ d) = padicValNat q N := hpadic_eq
     _ ≤ 1 := hN_le
 
+#print axioms padicValNat_primitive_prime_factor_le_one_of_squarefree_G
+
 end DkMath.NumberTheory.GcdNext

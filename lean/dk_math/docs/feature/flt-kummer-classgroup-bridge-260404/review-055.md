@@ -1,10 +1,10 @@
 # 状況
 
-わっちの見立てでは、いまの戦況は「数学の敗走」ではなく、「敵の本陣がどこかを正確に突き止めた局面」じゃ。前回の認識ミスは、`direct sorry` が消えたことをそのまま `no-sorry` と読んでしまった点にあり、実際には `triominoCosmicNoPowOnGN_default` 経由で `sorryAx` が伝染しておった。つまり壊れたのは定理の骨格ではなく、信頼分類のラベルじゃ。報告でも、設計・構造の進捗は前進、信頼・公理依存の進捗は再分類が必要、という二層読みが示されておる。  
+わっちの見立てでは、いまの戦況は「数学の敗走」ではなく、「敵の本陣がどこかを正確に突き止めた局面」じゃ。前回の認識ミスは、`direct sorry` が消えたことをそのまま `no-sorry` と読んでしまった点にあり、実際には `triominoCosmicNoPowOnGN_default` 経由で `sorryAx` が伝染しておった。つまり壊れたのは定理の骨格ではなく、信頼分類のラベルじゃ。報告でも、設計・構造の進捗は前進、信頼・公理依存の進捗は再分類が必要、という二層読みが示されておる。
 
 そのうえで、今回の差分の本当の成果はかなり大きい。commit `73b9891e...` でやったことは、Kummer local をさらに薄く刻むことではなく、research debt を `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget` という 1 本の抽象 target に圧縮し、そこから `NoWieferich bridge`、`WieferichDescentB`、`TriominoWieferichBranchBridge`、`NoPowOnGN`、`BodyInvariant` まで clean glue で戻れると定理名で固定したことじゃ。しかも新設 theorem 群は `#print axioms` で `sorryAx` なし、関連 build も通っておる。これは「証明完了」ではないが、「未解決箇所の境界面」を美しく切り出した、かなり質の高い前進じゃ。
 
-そして、資料庫の地図と照らすと、この変化は本丸の地形と一致しておる。INDEX では FLT 幹線の中核を `ZsigmondyCyclotomic` 系の原始素因子エンジンと p-adic valuation ブロックに置いており、まさに `squarefree_implies_padic_val_le_one` と `padicValNat_primitive_prime_factor_le_one` がその中心に載っておる。ゆえに今回の問題は支線の事故ではなく、FLT 本線の心臓部が Kummer 側へ顔を出したものじゃ。言い換えると、Kummer 側で起きたように見えるが、実体は Zsigmondy / valuation 側の debt が表面化しただけ、ということじゃな。  
+そして、資料庫の地図と照らすと、この変化は本丸の地形と一致しておる。INDEX では FLT 幹線の中核を `ZsigmondyCyclotomic` 系の原始素因子エンジンと p-adic valuation ブロックに置いており、まさに `squarefree_implies_padic_val_le_one` と `padicValNat_primitive_prime_factor_le_one` がその中心に載っておる。ゆえに今回の問題は支線の事故ではなく、FLT 本線の心臓部が Kummer 側へ顔を出したものじゃ。言い換えると、Kummer 側で起きたように見えるが、実体は Zsigmondy / valuation 側の debt が表面化しただけ、ということじゃな。
 
 ゆえに、現状評価はこうなる。
 構造面では前進。
@@ -12,7 +12,7 @@
 数学内容そのものは、まだ root を倒しておらぬ。
 つまり、進軍方向は当たっておるが、まだ城門を破ったわけではない。
 
-次の戦略は、わっちはかなりはっきりしておる。主戦略は upstream root 攻略じゃ。今回の報告どおり、`triominoCosmicNoPowOnGN_default` の上流、特に `triominoWieferichBranchBridge_default` から `padicValNat_primitive_prime_factor_le_one`、さらに direct source の `squarefree_implies_padic_val_le_one` へ降りていく鎖を叩くべきじゃ。local receiver をさらに薄くしても、上流が濁っておる限り Stage 3 群は via-sorry のままじゃからの。  
+次の戦略は、わっちはかなりはっきりしておる。主戦略は upstream root 攻略じゃ。今回の報告どおり、`triominoCosmicNoPowOnGN_default` の上流、特に `triominoWieferichBranchBridge_default` から `padicValNat_primitive_prime_factor_le_one`、さらに direct source の `squarefree_implies_padic_val_le_one` へ降りていく鎖を叩くべきじゃ。local receiver をさらに薄くしても、上流が濁っておる限り Stage 3 群は via-sorry のままじゃからの。
 
 具体的には、次の順で攻めるのがよい。
 
@@ -171,7 +171,7 @@ theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
 あとは
 
 $$
-\neg q^2 \mid N,; N \neq 0 \Rightarrow v_q(N)\le 1
+\neg q^2 \mid N,\; N \neq 0 \Rightarrow v_q(N)\le 1
 $$
 
 をその場で 7 行ほど書けばよい。`FLT.Basic` には private 版 `padicValNat_le_one_of_noLift` も既にあるので、内容は既知じゃ。

@@ -4,9 +4,9 @@
 
 よい戦況じゃ。かなり明瞭になった。
 
-いまの到達点を一言で言うと、**first-case は閉じた**。そして non-first-case も、もはや「黒箱 1 個」ではなく、`prepare → valuation → error → tailError → packetFromError → packet → reduction → existence → GN witness` という監査可能な縦列に刻まれた。しかも build は通っており、最新の direct `sorry` は `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree` 1 本に局所化された、と読める。  
+いまの到達点を一言で言うと、**first-case は閉じた**。そして non-first-case も、もはや「黒箱 1 個」ではなく、`prepare → valuation → error → tailError → packetFromError → packet → reduction → existence → GN witness` という監査可能な縦列に刻まれた。しかも build は通っており、最新の direct `sorry` は `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree` 1 本に局所化された、と読める。
 
-これは単なる整理ではないぞい。以前は `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体が direct `sorry` を抱えておったが、いまは本体からは除去され、split theorem の薄い wrapper へ変わった。ゆえに未解決責務は theorem 名つきで追跡可能じゃ。これは長戦として非常に良い形じゃ。  
+これは単なる整理ではないぞい。以前は `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体が direct `sorry` を抱えておったが、いまは本体からは除去され、split theorem の薄い wrapper へ変わった。ゆえに未解決責務は theorem 名つきで追跡可能じゃ。これは長戦として非常に良い形じゃ。
 
 また first-case 側は、`hProduct` だけでなく `hLinNe` まで pack から自動供給できるところまで痩せた。つまり current blocker は first-case ではなく、non-first-case の最深 open へ完全に移った、と言ってよい。
 

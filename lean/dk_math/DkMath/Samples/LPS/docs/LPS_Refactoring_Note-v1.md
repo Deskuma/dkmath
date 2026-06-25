@@ -203,9 +203,9 @@ DkMath/FLT/PowerSwapBridge.lean
 
 \[
 \text{CosmicFormula}
-;;\text{and};;
+\;\;\text{and}\;\;
 \text{PowerSwap}
-;;\text{and};;
+\;\;\text{and}\;\;
 \text{NumberTheory.PowerSums}
 \quad \longrightarrow \quad
 \text{FLT bridges}

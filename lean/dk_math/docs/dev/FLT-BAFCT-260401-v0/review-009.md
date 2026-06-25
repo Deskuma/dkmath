@@ -23,7 +23,7 @@ $$
 
 $$
 \text{ArithmeticCore weak}
-;+;
+\;+\;
 \text{PacketPackaging strong}
 \Longrightarrow
 \text{RestoreFromArithmeticStrong}

@@ -69,7 +69,7 @@ $$
 
 $$
 S0(a,b)=a^2+ab+b^2 = N(a-\omega b)
-\quad (\omega^3=1,;\omega\neq 1)
+\quad (\omega^3=1,\;\omega\neq 1)
 $$
 
 この見方にすると、「どの素数 $q$ が $S0$ を割れるか」が **$q \bmod 3$** でほぼ決まる。

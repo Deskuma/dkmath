@@ -13,7 +13,7 @@
 * (q \mid t \land \neg q \mid s)
 * peel 側 exact-error equation
 
-までは no-sorry で露出できるようになっておった。つまり、その時点で open の正体は「bookkeeping」ではなく **normal form 後の t-side descent** だと読めるようになっていたのじゃ。  
+までは no-sorry で露出できるようになっておった。つまり、その時点で open の正体は「bookkeeping」ではなく **normal form 後の t-side descent** だと読めるようになっていたのじゃ。
 
 そのさらに先の差分では、`PacketFromError` 全体を open とみなすのでなく、
 

@@ -15,11 +15,11 @@ open scoped BigOperators
 open Finset
 open Filter
 
-#check @ABC.rpow_layer_cake
-#check @ABC.div_le_iff
-#check @ABC.ceil_spec
+#check @DkMath.ABC.rpow_layer_cake
+#check @DkMath.ABC.div_le_iff
+#check @DkMath.ABC.ceil_spec
 
-namespace ABC
+namespace DkMath.ABC
 
 -- 便利略記：p-進評価
 @[simp] abbrev Vp (p n : ℕ) : ℕ := padicValNat p (2 * n + 1)
@@ -854,4 +854,4 @@ lemma bad_set_density_bound
 
   -- これで証明終了
 
-end ABC
+end DkMath.ABC

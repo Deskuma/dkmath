@@ -122,7 +122,7 @@ $$
 $$
 z - \zeta y = u \cdot \beta^p
 $$
-を返す `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` が入っており、次課題はまさに「Stage 3 を pack-thin receiver として切り出す」「\(N(z-\zeta y)\) を \(GN,p,(z-y),y\) へ落とす補題群」「unit norm 吸収の分離」の 3 点じゃ。  
+を返す `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` が入っており、次課題はまさに「Stage 3 を pack-thin receiver として切り出す」「\(N(z-\zeta y)\) を \(GN,p,(z-y),y\) へ落とす補題群」「unit norm 吸収の分離」の 3 点じゃ。
 
 なので、わっちの提案は **3 本立て** じゃ。
 
@@ -172,7 +172,7 @@ theorem cyclotomicNormDescent_of_firstCase_of_pack_thin
 
 ## 2. receiver に渡す補題 2 本を独立に置く
 
-今回の diff と直近メモの主旨どおり、Stage 3 は **norm 計算本体** と **unit norm 吸収** を分けるのが筋じゃ。  
+今回の diff と直近メモの主旨どおり、Stage 3 は **norm 計算本体** と **unit norm 吸収** を分けるのが筋じゃ。
 
 ### 2.1. norm 計算側
 
@@ -240,7 +240,7 @@ abbrev CyclotomicNormUnitAbsorbOfFirstCasePackThin
 この後半は、実は statement をもっと弱くしてもよい。
 つまり最初は
 $$
-\exists g',; g'^p = n
+\exists g',\; g'^p = n
 $$
 程度でも十分で、そのあと既存の整数 descent 側補題へ橋渡ししてもよい。
 
@@ -257,7 +257,7 @@ $$
 * `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin`
 * `cyclotomicUnitNormalization_of_firstCase_of_pack_thin`
 
-と綺麗に階段が揃う。今回追加済みの thin wrapper も、まさに Stage 3 直前の入口として置かれておるから、この命名は自然じゃ。  
+と綺麗に階段が揃う。今回追加済みの thin wrapper も、まさに Stage 3 直前の入口として置かれておるから、この命名は自然じゃ。
 
 ## 4. さらに Lean で通しやすい、もう一段薄い版
 
@@ -327,7 +327,7 @@ $$
 
 4. 最後に合成して
    $$
-   \exists g',; g' \cdot GN,p,g',y = (x/q)^p
+   \exists g',\; g' \cdot GN,p,g',y = (x/q)^p
    $$
    を返す。
 
@@ -392,4 +392,4 @@ theorem cyclotomicNormDescent_of_firstCase_of_pack_thin
   exact hUnitAbsorb hpack hgap_eq hFirstCase hLinNe hProduct hKill hUnit hEq hNorm
 ```
 
-この雛形の良いところは、 **今ある thin wrapper をそのまま Stage 3 の入口に使える** ことじゃ。そこは今回の変更内容とぴたり一致しておる。  
+この雛形の良いところは、 **今ある thin wrapper をそのまま Stage 3 の入口に使える** ことじゃ。そこは今回の変更内容とぴたり一致しておる。

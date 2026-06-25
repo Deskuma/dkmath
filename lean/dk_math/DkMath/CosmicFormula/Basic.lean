@@ -21,6 +21,9 @@ import DkMath.CosmicFormula.CosmicFormulaCellDim  -- Cosmic Formula Cell Dimensi
 import DkMath.CosmicFormula.CosmicFormulaExp  -- Cosmic Formula Exponent
 import DkMath.CosmicFormula.CosmicFormulaBinom  -- Cosmic Formula Binomial Expansion
 import DkMath.CosmicFormula.CoreBeamGap  -- Core・Beam・Gap 構造の明示化
+import DkMath.CosmicFormula.Mass.Core
+import DkMath.CosmicFormula.Mass.Decompose
+import DkMath.CosmicFormula.Mass.Branch
 import DkMath.CosmicFormula.CosmicTheorems  -- Cosmic Formula Theorems
 
 #print "file: DkMath.CosmicFormula.Basic"

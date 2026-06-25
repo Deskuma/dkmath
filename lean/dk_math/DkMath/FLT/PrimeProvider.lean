@@ -8,8 +8,8 @@ import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichDefault
-import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
 import DkMath.FLT.PrimeProvider.TriominoCosmic

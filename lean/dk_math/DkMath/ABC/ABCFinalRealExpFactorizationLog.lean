@@ -38,7 +38,7 @@ lemma Finset.prod_rpow {α : Type*} (s : Finset α) (f : α → ℝ) (r : ℝ) (
     -- (f a) ^ r * ∏ a ∈ s, f a ^ r = ∏ a ∈ insert a s, f a ^ r
     rw [Finset.prod_insert ha]
 
-namespace ABC
+namespace DkMath.ABC
 
 
 
@@ -407,4 +407,4 @@ lemma twoTail_exp_prod_eq (t : ℝ) (n : ℕ) (hn : 2 * n + 1 ≠ 0) :
   apply Real.exp_sum
 
 
-end ABC
+end DkMath.ABC

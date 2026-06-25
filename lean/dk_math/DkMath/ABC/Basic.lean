@@ -34,7 +34,7 @@ end Real
 -- ABC Basic Tool Lemmas
 -- ==========================================
 
-namespace ABC
+namespace DkMath.ABC
 
 
 -- ABC.Int
@@ -788,11 +788,11 @@ lemma prod_rpow {α : Type*} (s : Finset α) (f : α → ℝ) (r : ℝ) (_hr : 0
 
 end Finset
 
-end ABC
+end DkMath.ABC
 
 
 
-namespace ABC
+namespace DkMath.ABC
 
 -- General lemmas used in multiple places in mgf_twoTail_log
 
@@ -981,7 +981,7 @@ theorem div_lt_iff {a b c : ℝ} (hc : 0 < c) :
 
 end general_lemmas
 
-end ABC
+end DkMath.ABC
 
 
 

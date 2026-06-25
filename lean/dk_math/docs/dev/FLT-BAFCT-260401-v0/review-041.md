@@ -109,7 +109,7 @@ $$
 
 $$
 \text{Level 1s}
-;\approx;
+\;\approx\;
 \text{DerivativeUnit concrete 化待ち}
 $$
 

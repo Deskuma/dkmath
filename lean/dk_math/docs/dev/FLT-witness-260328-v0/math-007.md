@@ -7,9 +7,9 @@
 $$
 \text{残核}=
 \bigl(d \mid \mathrm{core}\bigr)
-;\land;
+\;\land\;
 \bigl(d \nmid \mathrm{core}/d\bigr)
-;\land;
+\;\land\;
 \bigl(1<\mathrm{core}/d\bigr)
 $$
 
@@ -151,7 +151,7 @@ $$
 ゆえに boundary-core route は、数学的には
 
 $$
-\text{step 1} ;+; \text{step 2-5}
+\text{step 1} \;+\; \text{step 2-5}
 $$
 
 が揃い、実証明で一本通ったと見てよい。

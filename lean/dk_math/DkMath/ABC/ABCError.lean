@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC090
+
+import DkMath.ABC.Basic
 
 #print "file: DkMath.ABC.ABCError"
 
@@ -16,7 +17,7 @@ set_option linter.style.emptyLine false
   ここでエラーを取り除いてから ABCNoError.lean に移動する。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -28,4 +29,4 @@ open MeasureTheory ProbabilityTheory
 
 -- -------------------------------------------------------
 
-end ABC
+end DkMath.ABC

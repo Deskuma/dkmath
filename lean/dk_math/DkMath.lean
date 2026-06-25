@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic  -- Basic Definitions and Utilities
+import DkMath.Lib  -- Reusable library components
 import DkMath.Samples  -- Sample Theorems and Examples
 -- ABC: abc Conjecture Module
 import DkMath.ABC  -- ABC Conjecture Module
@@ -19,6 +20,13 @@ import DkMath.Zsigmondy  -- Zsigmondy bridge layer
 import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations
 -- NumberTheory Module
 import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Fillability
+import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
+import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePower: prime-power rows in Pascal's triangle
+import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
+import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
+import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
+import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
+import DkMath.Petal  -- Petal: relative polygon and GN bridge surface
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
@@ -31,6 +39,9 @@ import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 -- DHNT: Dynamic Harmonic Number Theory
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 import DkMath.KUS  -- KUS: coefficient-unit-blueprint kernel
+import DkMath.Sequence  -- Sequence generators and recurrence principles
+import DkMath.Kernel  -- Capacity-kernel normalization layer
+import DkMath.Analysis  -- Gap, correction-kernel, and real-analysis bridge layer
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 -- Unit Cycle Module

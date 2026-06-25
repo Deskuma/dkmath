@@ -76,7 +76,7 @@ $$
 
 だと見切れておったからじゃ。
 通常枝は既存 `CFBRC/Bridge` theorem が持っている。
-ならば direct concrete 実装の入口も、全体ではなく **新規性が集中している right branch** に置く方が自然じゃろう。  
+ならば direct concrete 実装の入口も、全体ではなく **新規性が集中している right branch** に置く方が自然じゃろう。
 
 つまり今回は、数学の中身を変えたというより、
 
@@ -98,7 +98,7 @@ $$
 
 $$
 \texttt{CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget}
-;+;
+\;+\;
 \texttt{PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget}
 $$
 

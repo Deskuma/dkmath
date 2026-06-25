@@ -13,7 +13,7 @@ $$
 ところが作業を進めた結果、Level 1s 側は provider 語彙まで direct concrete に閉じた。つまり、**one-step Hensel を整備すること自体が最終目的ではなくなった** のじゃ。`strongSuperWieferichCongruenceV2_concrete` と `strongSuperWieferichProvider_concrete` が入って、Level 1s は FLT 本線で必要な意味では concrete と見てよい段に入った。
 
 だから、ぬしの言う通り **ルートは変わった**。
-以前のロードマップは「Level 1s を閉じれば primitive 側が片付く」という形だったが、いまはそうではない。`QAdicDescentExistenceTarget` が本線へ刺さることが定理列で固定され、主戦場は完全に Level 2 側へ移った。しかもその後さらに整理が進んで、粗い `Level 2c` ではなく、`Level 2m`、さらにその中でも `2m-geom`、そして今は **`2m-core` が最終 1 核候補** だと見えておる。  
+以前のロードマップは「Level 1s を閉じれば primitive 側が片付く」という形だったが、いまはそうではない。`QAdicDescentExistenceTarget` が本線へ刺さることが定理列で固定され、主戦場は完全に Level 2 側へ移った。しかもその後さらに整理が進んで、粗い `Level 2c` ではなく、`Level 2m`、さらにその中でも `2m-geom`、そして今は **`2m-core` が最終 1 核候補** だと見えておる。
 
 いまの読みを一番短く言うと、こうじゃ。
 
@@ -42,7 +42,7 @@ $$
 
 ## 2. 現在のロードマップ
 
-`QAdicDescentExistenceTarget` を coarse bridge と見て、その中の open content を `Level 2m-int` と `Level 2m-geom` に分け、さらに bookkeeping を剥がして **`PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget`** を最終 1 核候補として扱う構成。  
+`QAdicDescentExistenceTarget` を coarse bridge と見て、その中の open content を `Level 2m-int` と `Level 2m-geom` に分け、さらに bookkeeping を剥がして **`PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget`** を最終 1 核候補として扱う構成。
 
 ## 3. 次にやるべきこと
 

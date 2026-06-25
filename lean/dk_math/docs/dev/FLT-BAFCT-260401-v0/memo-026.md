@@ -691,11 +691,11 @@ Strategy 3: MODULAR DESCENT (elementary)
 Strategy 4: SELF-SIMILAR DESCENT (new idea)
   The counterexample (x,y,z) with x = p·t·s and q|s
   gives gap·GN = x^p where GN = p·s^p
-  
+
   Now consider (gap', GN') with gap' = gap, s' = s/q:
   GN' = p·(s/q)^p = GN/q^p
   gap·GN' = gap·GN/q^p = x^p/q^p = (x/q)^p
-  
+
   So: gap · (GN/q^p) = (x/q)^p
   And: (gap + y)^p - y^p = gap·GN = x^p
   Want: (gap + y')^p - y'^p = gap·(GN/q^p) = (x/q)^p
@@ -1132,8 +1132,8 @@ $$
 ### 8.1. 必要条件層
 
 $$
-q\mid s ;\Rightarrow; q^p\mid (z^p-y^p)
-;\Rightarrow;
+q\mid s \;\Rightarrow\; q^p\mid (z^p-y^p)
+\;\Rightarrow\;
 z^p \equiv y^p \pmod{q^p}
 $$
 

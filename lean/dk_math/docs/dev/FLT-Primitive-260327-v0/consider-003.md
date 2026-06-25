@@ -14,7 +14,7 @@ $$
 $$
 
 そのものじゃ。いま切り出した target も、まさに
-(q \mid GN,p,(z-y),y) かつ (q \nmid (z-y)) を要求しておる。これは packet restoration から独立した「prime を 1 本取る段」として分離された、という整理じゃな。  
+(q \mid GN,p,(z-y),y) かつ (q \nmid (z-y)) を要求しておる。これは packet restoration から独立した「prime を 1 本取る段」として分離された、という整理じゃな。
 
 ## 1. いちばん自然な接続
 
@@ -69,13 +69,13 @@ INDEX の整理でも、FLT 幹線は
 * `cyclotomic_*`
 * `padicValNat_of_primitive_prime_factor_via_G`
 
-のような、まさに今回の橋に使いたい部品群が並んでおる。  
+のような、まさに今回の橋に使いたい部品群が並んでおる。
 
 ゆえに、設計としては
 
 $$
 \text{difference-of-powers primitive prime}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{GN 側 distinguished prime}
 $$
 

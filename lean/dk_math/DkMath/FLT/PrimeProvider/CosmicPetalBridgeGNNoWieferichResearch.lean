@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
 #print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch"
@@ -15,19 +15,6 @@ set_option linter.style.emptyLine false
 namespace DkMath.FLT
 
 open DkMath.CosmicFormulaBinom
-
-/--
-phase-15 で current research debt として残っている最小入力仕様。
-
-primitive-prime branch で
-`padicValNat q (z^p - y^p) ≤ 1`
-が一様に供給できれば、PrimeProvider / Kummer 側の glue は clean に閉じる。
--/
-abbrev TriominoPrimitivePrimeFactorPadicValNatLeOneTarget : Prop :=
-  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
-    ¬ p ∣ (z - y) →
-    Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
-    padicValNat q (z ^ p - y ^ p) ≤ 1
 
 /--
 phase-15 の研究核（diff 版）:
@@ -74,19 +61,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
   exact hVal hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
 
 /--
-squarefree bridge が供給されれば、primitive-prime branch の valuation target は
-既存 honest route だけで直ちに従う。
--/
-theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
-    (hSq : TriominoSquarefreeGNBridge) :
-    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
-  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  exact
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core
-      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-      (hSq hpack hpB hqP hq_dvd_diff hq_not_dvd_gap)
-
-/--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
 `padicValNat q (z^p - y^p) ≤ 1` は no-`so#rry` で従う。
 -/
@@ -127,33 +101,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_o
       hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
   rw [← hEq]
   exact hdiff_le
-
-/--
-direct no-lift bridge (`¬ q^2 ∣ GN`) が供給されれば、
-primitive-prime branch の valuation target は no-`so#rry` で閉じる。
--/
-theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge
-    (hNoLift : TriominoNoLiftGNBridge) :
-    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
-  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  have hGN_ne : GN p (z - y) y ≠ 0 :=
-    triominoWieferichShrink_GN_ne_zero_core
-      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  have hGN_not_sq : ¬ q ^ 2 ∣ GN p (z - y) y :=
-    hNoLift hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  have hGN_le : padicValNat q (GN p (z - y) y) ≤ 1 := by
-    by_contra h_not_le
-    have h_two_le : 2 ≤ padicValNat q (GN p (z - y) y) := by
-      omega
-    have hq2_dvd_GN : q ^ 2 ∣ GN p (z - y) y :=
-      (@padicValNat_dvd_iff_le q (Fact.mk hqP) (GN p (z - y) y) 2 hGN_ne).2 h_two_le
-    exact hGN_not_sq hq2_dvd_GN
-  have hEq :
-      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
-    triominoWieferichShrink_padicValNat_diff_eq_GN_core
-      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
-  rw [hEq]
-  exact hGN_le
 
 /--
 phase-15 の研究核:

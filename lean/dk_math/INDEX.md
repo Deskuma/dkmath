@@ -54,6 +54,17 @@
 ### 3.2 ABC まわり
 
 - `DkMath.ABC`
+- 推奨 bridge 入口:
+  `DkMath.ABC.Bridge`
+  - Erdos #1196 系の bridge API (`supportMass`, prime-channel family lower bounds,
+    `PrimitiveWitnessFamily` とその counting / extraction API) を読む標準入口
+- `DkMath.ABC.ABC038Bridge`
+  - `ABC.Chernoff` convenience theorem 群へ接続する
+    `rad(abc)` 直結 route の入口
+  - 推奨定理:
+    `ABC.Chernoff.quality_le_of_not_bad_with_targetRadTail_on_radAbc`
+    /
+    `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
 - `DkMath.ABC.PadicValNat`
 - `DkMath.ABC.CountPowersDividing2n1`
 
