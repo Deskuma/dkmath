@@ -43,10 +43,7 @@ realTrigKernelFamily_act_eq
 これで、
 
 $$
-\operatorname{act}((\cos t,\sin t),(x,y))
-=========================================
-
-(\cos t\cdot x-\sin t\cdot y,;\cos t\cdot y+\sin t\cdot x)
+\operatorname{act}((\cos t,\sin t),(x,y)) = (\cos t\cdot x-\sin t\cdot y,\;\cos t\cdot y+\sin t\cdot x)
 $$
 
 が、通常の実三角関数モデルで明示された。
@@ -186,7 +183,7 @@ Real.cos / Real.sin は、その構造の標準実解析モデルにすぎない
 正しい積
 
 $$
-(a x-b y,;a y+b x)
+(a x-b y,\;a y+b x)
 $$
 
 は平方質量を保存する一方、plus-plus や minus-minus の符号パターンでは (\pm 4abxy) の残差が出る。もう一つの保存パターンは共役で説明される、という整理になっている。

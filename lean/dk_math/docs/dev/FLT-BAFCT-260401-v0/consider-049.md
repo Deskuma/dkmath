@@ -14,7 +14,7 @@
 
 $$
 \text{pack} + \text{strong q-adic witness } R
-;\Longrightarrow;
+\;\Longrightarrow\;
 \exists g' \in \mathbb{N},\quad g' , GN(p,g',y)=(x/q)^p
 $$
 

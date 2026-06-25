@@ -23,12 +23,28 @@ This remains a computable representation layer. Quotient elimination is used
 only to define representation-independent operations; no evaluation into
 Mathlib's `Real` is selected.
 
-[TODO] Before adding an order instance, define an order predicate on
-representatives and prove invariance under `DkNNReal.Equiv` in both arguments.
+`DkReal.Order` defines an asymptotic representative order, proves invariance
+under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
 
-[TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
-bridge module and proved to preserve zero, one, addition, multiplication,
-natural powers, and the future order.
+Addition, multiplication, and natural powers are monotone for the asymptotic
+order, and zero is the least quotient value. `DkReal.Order` packages these
+facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
+strict, and linear order structures are developed in later modules.
+
+`DkReal.Order` proves totality internally through finite separation or a
+vanishing-width bound and exports `Std.Total (· ≤ ·)`.
+
+`DkReal.CanonicalOrder` subsequently proves
+`x ≤ y ↔ ∃ z, y = x + z` and installs `CanonicallyOrderedAdd`.
+
+[IMPLEMENTED: semantic-real-bridge] `DkMath.Analysis.DkReal.Semantic`
+constructs a representation-independent map to Mathlib `Real`, bundles it as
+a semiring homomorphism, and proves order preservation. The computable
+quotient core remains independent of that module.
+
+[TODO: semantic-nnreal-codomain] Add the optional codomain refinement to
+Mathlib `NNReal` only when a consumer benefits from carrying nonnegativity in
+the target type.
 -/
 
 namespace DkMath.Analysis
@@ -188,6 +204,13 @@ theorem pow_one (x : DkNNRealQ) : x ^ (1 : ℕ) = x := by
   refine Quotient.inductionOn x ?_
   intro a
   exact Quotient.sound (DkNNReal.pow_one a)
+
+/-- Successor powers agree with multiplication by the base. -/
+theorem pow_succ_eq (x : DkNNRealQ) (d : ℕ) :
+    x ^ (d + 1) = x ^ d * x := by
+  refine Quotient.inductionOn x ?_
+  intro a
+  exact Quotient.sound (DkNNReal.pow_succ a d)
 
 /-!
 ## Commutative semiring laws as quotient equalities

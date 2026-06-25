@@ -677,7 +677,7 @@ $$
 
 $$
 (\text{primitive 条件}) \lor (\text{squarefree 条件})
-;\Longrightarrow;
+\;\Longrightarrow\;
 \neg \exists t>0,\ (x+u)^d-u^d=t^d
 $$
 

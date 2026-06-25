@@ -24,10 +24,7 @@ $$
 つまり G の本質は、数学ではなく **型境界** じゃ。
 
 $$
-\left((base\cdot \sum ratio^k : \mathbb{Q}) : \mathbb{R}\right)
-===============================================================
-
-(base:\mathbb{R})\cdot \sum (ratio:\mathbb{R})^k
+\left((base\cdot \sum ratio^k : \mathbb{Q}) : \mathbb{R}\right) = (base:\mathbb{R})\cdot \sum (ratio:\mathbb{R})^k
 $$
 
 この同一視を次の H で処理する、という整理になっておる。

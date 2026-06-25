@@ -116,7 +116,7 @@ $$
 
 $$
 \text{Body 座標の互いに素性}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{boundary と kernel の分離}
 $$
 

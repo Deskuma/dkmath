@@ -147,7 +147,7 @@ $$
 一言で言えば、
 
 $$
-\text{残る新規数学} ;=; \text{Branch A 局所 exceptional existence の 1 本}
+\text{残る新規数学} \;=\; \text{Branch A 局所 exceptional existence の 1 本}
 $$
 
 じゃ。

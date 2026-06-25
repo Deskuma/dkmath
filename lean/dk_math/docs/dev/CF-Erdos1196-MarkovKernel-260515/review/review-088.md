@@ -97,10 +97,7 @@ base * sum ratio^k
 数学的には、この theorem は次を使っておるだけじゃ。
 
 $$
-base\sum_{k=0}^{K} ratio^k
-==========================
-
-\sum_{k=0}^{K} base,ratio^k
+base\sum_{k=0}^{K} ratio^k = \sum_{k=0}^{K} base,ratio^k
 $$
 
 この変形により、利用者は
@@ -115,10 +112,7 @@ $$
 まだ
 
 $$
-\sum_{k=0}^{K} ratio^k
-======================
-
-\frac{1-ratio^{K+1}}{1-ratio}
+\sum_{k=0}^{K} ratio^k = \frac{1-ratio^{K+1}}{1-ratio}
 $$
 
 には進んでいない。

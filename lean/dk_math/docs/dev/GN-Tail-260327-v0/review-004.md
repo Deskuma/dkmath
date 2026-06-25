@@ -5,7 +5,7 @@
 
 $$
 \text{squarefree } GN
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{Body 差分は } d\text{ 乗完全冪でない}
 $$
 

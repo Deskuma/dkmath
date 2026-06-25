@@ -90,6 +90,7 @@ MATH_ATOMS = {
     "y",
     "z",
     "pOf",
+    "q2",
 }
 
 

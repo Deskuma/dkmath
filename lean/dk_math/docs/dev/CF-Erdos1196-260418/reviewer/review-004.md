@@ -43,11 +43,11 @@ $$
 
 $$
 \text{保存則}
-;\to;
+\;\to\;
 \text{valuation flow}
-;\to;
+\;\to\;
 \text{support mass}
-;\to;
+\;\to\;
 \text{prime channel lower bound}
 $$
 

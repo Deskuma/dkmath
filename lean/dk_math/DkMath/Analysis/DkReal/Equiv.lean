@@ -26,11 +26,18 @@ The transitivity proof is a vanishing-width version of the triangle inequality:
 Consequently, shrinking uncertainty converts interval separation into an
 extensional equivalence relation on representations.
 
-[TODO] Compare this relation with persistent interval intersection.
+[TODO: totality/overlap] Prove that `Equiv x y` is equivalent to stagewise
+overlap of the two nested interval sequences. The forward direction should use
+monotonicity of interval separation under refinement: once a positive
+separation appears, nestedness prevents it from returning to zero. The reverse
+direction is immediate because every stage separation is zero.
 
-[TODO] For a future semantic evaluation `eval`, prove
-`Equiv x y → eval x = eval y` and, when justified by the representation
-theorem, the converse.
+[IMPLEMENTED: semantic-forward] `DkReal.semanticValue_eq_of_equiv` proves
+`Equiv x y → semanticValue x = semanticValue y`.
+
+[TODO: semantic-reflection] Prove the converse when needed. This is the
+representation-level equality-reflection problem and should remain separate
+from the computable definition of `Equiv`.
 -/
 
 namespace DkMath.Analysis.DkReal
@@ -39,6 +46,11 @@ namespace DkMath.Analysis.DkReal
 Two `DkReal` approximations represent the same value when their interval
 separation vanishes. This is the extensional equality used by quotient
 constructions in the nonnegative Route B layer.
+
+In the proposed internal totality proof, this is the Merge branch: if neither
+interval universe ever becomes strictly left-separated from the other, the
+two nested interval sequences overlap at every precision and collapse to one
+quotient Core.
 -/
 def Equiv (x y : DkMath.Analysis.DkReal) : Prop :=
   Filter.Tendsto

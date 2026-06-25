@@ -16,12 +16,12 @@
 いま `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget` は、要するに
 
 $$
-\forall hR : \texttt{PrimeGe5BranchAPrimitiveRestoreRealizationSeed}; p,x,y,z,t,s,q,
+\forall hR : \texttt{PrimeGe5BranchAPrimitiveRestoreRealizationSeed}\; p,x,y,z,t,s,q,
 \quad
-\texttt{PrimeGe5CounterexamplePack}; p; hR.x'; hR.y'; hR.z'
-;\wedge;
+\texttt{PrimeGe5CounterexamplePack}\; p\; hR.x'\; hR.y'\; hR.z'
+\;\wedge\;
 p \mid (hR.z' - hR.y')
-;\wedge;
+\;\wedge\;
 hR.z' < z
 $$
 

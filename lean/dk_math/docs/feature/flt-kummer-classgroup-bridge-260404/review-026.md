@@ -28,11 +28,11 @@
 
 $$
 \text{tail-product equality}
-;+;
+\;+\;
 \text{coprimality}
-;+;
+\;+\;
 (x)\neq \bot
-;\Longrightarrow;
+\;\Longrightarrow\;
 \operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 

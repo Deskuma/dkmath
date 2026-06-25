@@ -54,9 +54,9 @@ API 設計として強いのぅ。
 
 $$
 \text{Wieferich witness target}
-;+;
+\;+\;
 \text{Wieferich refuter target}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{Branch A refuter}
 $$
 

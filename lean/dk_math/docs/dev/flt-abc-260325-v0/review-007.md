@@ -12,9 +12,9 @@ $$
 今回追加した 2 本、
 
 $$
-q \mid t ;\Longrightarrow; q \nmid s,
+q \mid t \;\Longrightarrow\; q \nmid s,
 \qquad
-q \mid s ;\Longrightarrow; q \nmid t
+q \mid s \;\Longrightarrow\; q \nmid t
 \quad (q\neq p)
 $$
 

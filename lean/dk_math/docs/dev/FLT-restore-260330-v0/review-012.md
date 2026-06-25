@@ -19,9 +19,9 @@
 
 $$
 \text{cyclotomicPrimeCore}
-;\leftrightarrow;
+\;\leftrightarrow\;
 GN
-;\leftrightarrow;
+\;\leftrightarrow\;
 \frac{(x+u)^p-u^p}{x}
 $$
 

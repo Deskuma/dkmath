@@ -47,14 +47,21 @@ Semantic bridge layer:
 
 The next independent tasks are:
 
-1. **Order design.** Define a relation on representatives, prove invariance
-   under `Equiv`, then lift it to `DkNNRealQ`. Do not install an order instance
-   before antisymmetry on quotient values is established.
+1. **Ordered algebra.** `DkReal.Order` now defines order by vanishing positive
+   lower-endpoint defect, proves invariance under `Equiv`, and installs a
+   `PartialOrder` on `DkNNRealQ`. Addition, multiplication, and natural powers
+   are monotone, and zero is least. Mathlib's semiring-level `IsOrderedRing`
+   predicate is installed. Totality is proved internally from persistent
+   separation and a vanishing-width bound, and exported through `Std.Total`.
+   Canonical additive order is proved by extracting a nonnegative Gap universe
+   from ordered representatives. A direct `LinearOrder` instance remains
+   independent.
 2. **Semantic evaluation.** In a separate `BridgeNNReal.lean` or
    `BridgeReal.lean`, extract the unique real point of a nested interval
    representation and prove independence from representatives.
 3. **Bridge comparison.** Prove `Equiv x y -> eval x = eval y`; investigate
-   the converse from the nested-width hypotheses.
+   the converse from the nested-width hypotheses. Use semantic order to
+   cross-check, rather than define, internal totality.
 4. **General signed arithmetic.** General multiplication requires minimum and
    maximum over four endpoint products and must not reuse the name
    `mulNonneg`.

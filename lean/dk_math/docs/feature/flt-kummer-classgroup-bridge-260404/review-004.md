@@ -7,7 +7,7 @@
 
 $$
 \text{class が trivial}
-;\Rightarrow;
+\;\Rightarrow\;
 \text{principal ideal を取り出せる}
 $$
 
@@ -126,7 +126,7 @@ Stage 1b を短距離で concrete 化できるか試す。
 具体的には、class-group 一般 API で
 
 $$
-[a]^p = 1 ;\Rightarrow; [a] = 1
+[a]^p = 1 \;\Rightarrow\; [a] = 1
 $$
 
 型、あるいはそれに準ずる p-torsion annihilation の statement をどう書くかを scratch で確認する。

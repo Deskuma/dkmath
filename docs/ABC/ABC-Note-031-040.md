@@ -1347,7 +1347,7 @@ $$
 は大域で $o(1)$。したがって、Janson/Suen の一般形
 
 $$
-\Pr(S\ge \mu+t)\ \le\ \exp\!\Big(-\psi(t;\Delta)\Big)
+\Pr(S\ge \mu+t)\ \le\ \exp\!\Big(-\psi(t\;\Delta)\Big)
 $$
 
 においても、$\psi$ の中の依存補正は**定数で固定**できる。MGF 版の（2）→（5）の議論は、この $\Delta$ を**明示の $\frac{2}{X}$** で吸収した具体化に等しい。

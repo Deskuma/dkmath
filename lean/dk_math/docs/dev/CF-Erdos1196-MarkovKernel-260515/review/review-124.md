@@ -39,10 +39,7 @@ $$
 かつ、
 
 $$
-geometricIncrement(base,ratio,k+1)
-==================================
-
-ratio\cdot geometricIncrement(base,ratio,k)
+geometricIncrement(base,ratio,k+1) = ratio\cdot geometricIncrement(base,ratio,k)
 $$
 
 が Lean 上で閉じた。

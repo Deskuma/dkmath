@@ -12,6 +12,7 @@ import DkMath.Analysis.GapFill
 import DkMath.Analysis.RealBridge
 import DkMath.Analysis.TaylorBridge
 import DkMath.Analysis.DkReal
+import DkMath.Analysis.DkReal.SemanticCF2D
 
 #print "file: DkMath.Analysis"
 

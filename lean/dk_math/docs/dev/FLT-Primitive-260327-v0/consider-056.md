@@ -231,7 +231,7 @@ $x GN → GN$ になるのか。
 
 $$
 x \, GN_d(x,u')
-;\longrightarrow;
+\;\Longrightarrow\;
 GN_d(1,u')
 $$
 

@@ -91,7 +91,7 @@ $$
 
 $$
 \text{family object}
-;\to;
+\;\to\;
 \text{lower bound on diff support mass}
 $$
 
