@@ -1,6 +1,7 @@
 # 宇宙式からの素数無限性の定理を導く: 証明戦略の解説
 
-> DkMath.CosmicFormula の宇宙式境界ルートによる素数無限証明が、Lean Comparator Live の既知 Challenge “Infinitely Many Primes” に対して検証成功した。(2026/06/26  1:22)
+> DkMath.CosmicFormula における宇宙式境界ルートを用いて、Lean Comparator Live の既知 Challenge “Infinitely Many Primes” を検証成功した。特に、宇宙式本体 $\mathrm{cosmicN}(P)=P(P+2)$ と境界平方 $\mathrm{cosmicN}(P)+1=(P+1)^2$ の互除構造から新しい素数の存在を導き、最終的に InfinitudeOfPrimes を証明した。
+> (2026/06/26  1:22)
 
 ## 全体構造
 
