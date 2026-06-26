@@ -1004,3 +1004,21 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 06:47 JST (Mesh-trapezoid endpoint correction)
+
+1. finite comparison:
+   - 任意の sampled observable `f : ℕ → ℝ` について、plain mesh-width
+     complete-node sum と trapezoidal sum の差が
+     `h_n / 2 * (f 0 + f (2^n))` になる theorem を追加した。
+2. interpretation:
+   - 前回の log-depth / log-normalization 一致は、端点 log 値が `0`
+     になるための特殊例として見えるようになった。
+   - centered log increment では端点値が一般に `0` ではなくなるため、
+     この一般補題が次段の比較面になる。
+3. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

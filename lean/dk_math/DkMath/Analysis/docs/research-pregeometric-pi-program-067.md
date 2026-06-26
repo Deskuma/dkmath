@@ -243,6 +243,18 @@ Thus the two candidates differ as measures, but not on these particular
 boundary-log observables. This distinction keeps the finite bookkeeping sharp
 without prematurely selecting a canonical limit.
 
+The general finite comparison is now explicit: for any sampled observable
+`f`, the difference between the plain mesh-width complete-node sum and the
+trapezoidal sum is
+
+```text
+h_n / 2 * (f 0 + f (2^n)).
+```
+
+The log-depth and log-normalization equalities are therefore special cases
+where the endpoint values vanish. This theorem is intentionally finite; it
+does not identify which weighted observable should survive refinement.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

@@ -377,6 +377,52 @@ theorem sum_dyadicPhaseTrapezoidWeight_eq_one (n : ℕ) :
       rw [hmesh, hend]
       ring
 
+/--
+Plain mesh-width and trapezoidal finite sums differ only by the half-width
+endpoint correction.
+
+This theorem separates the choice of finite weights from the sampled
+observable `f`. It is the general bookkeeping identity behind the later
+special cases where endpoint logarithms vanish.
+-/
+theorem dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+    (n : ℕ) (f : ℕ → ℝ) :
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k * f k) =
+      dyadicPhaseMeshWeight n / 2 *
+        (f 0 + f (dyadicPhaseDenom n)) := by
+  calc
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k * f k)
+        = ∑ k ∈ dyadicPhaseNodeIndices n,
+            (dyadicPhaseMeshWeight n * f k -
+              dyadicPhaseTrapezoidWeight n k * f k) := by
+          rw [Finset.sum_sub_distrib]
+    _ = ∑ k ∈ dyadicPhaseNodeIndices n,
+          (if k = 0 ∨ k = dyadicPhaseDenom n then
+            dyadicPhaseMeshWeight n / 2 * f k
+          else
+            0) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        unfold dyadicPhaseTrapezoidWeight
+        by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+        · rw [if_pos hendpoint]
+          simp [hendpoint]
+          ring_nf
+        · rw [if_neg hendpoint]
+          simp [hendpoint]
+    _ = dyadicPhaseMeshWeight n / 2 *
+        (f 0 + f (dyadicPhaseDenom n)) := by
+        rw [← Finset.sum_filter]
+        rw [dyadicPhaseEndpointFilter_eq]
+        have hdistinct : (0 : ℕ) ≠ dyadicPhaseDenom n :=
+          (dyadicPhaseDenom_pos n).ne
+        simp [hdistinct]
+        ring
+
 /-- Trapezoidal finite log-depth sum on the complete dyadic node mesh. -/
 def dyadicPhaseTrapezoidLogDepthSum (n : ℕ) : ℝ :=
   ∑ k ∈ dyadicPhaseNodeIndices n,

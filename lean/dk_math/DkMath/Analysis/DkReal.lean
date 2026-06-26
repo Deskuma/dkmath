@@ -146,6 +146,9 @@ trapezoidal weights are also exposed to distinguish sample-mean,
 endpoint-overcounted complete-mesh, and closed-interval candidates. The
 endpoint logarithms vanish, so the plain mesh-width and trapezoidal log-depth
 and log-normalization observables agree despite their different total masses.
+The underlying general comparison theorem states that, for any finite
+observable, the mesh-width minus trapezoid discrepancy is exactly the
+half-width endpoint correction.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
