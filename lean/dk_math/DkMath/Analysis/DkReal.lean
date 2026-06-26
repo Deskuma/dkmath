@@ -136,8 +136,10 @@ algebra.
 `DkReal.SemanticCF2DLogComposition` transfers the positive finite
 cancellation law to logarithmic sums. Each log sum is identified with the
 logarithm of its finite product, and
-`2 * logNormalizationSum + logDepthSum = 0`. No logarithmic quantity is yet
-selected as the canonical refinement-limit observable.
+`2 * logNormalizationSum + logDepthSum = 0`. Uniform-average and mesh-width
+weighted variants are exposed as finite candidate observables, and the same
+cancellation law is proved for them. No logarithmic quantity is yet selected
+as the canonical refinement-limit observable.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

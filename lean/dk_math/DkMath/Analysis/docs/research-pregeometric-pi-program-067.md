@@ -208,6 +208,14 @@ products. This equivalence supplies a comparison surface for later limit
 selection; it does not select the raw sum, an average, or a weighted sum as
 canonical.
 
+The same module also records two scalar reweightings as finite candidate
+observables. The uniform average divides by the number of complete-mesh nodes,
+and the mesh-width version multiplies by `1 / 2^n`. In both cases, the
+logarithmic cancellation law is transported exactly. These are not yet
+canonical limit choices; they only make the candidate comparison surface
+explicit before trapezoidal, midpoint, or other weighted observables are
+tested.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

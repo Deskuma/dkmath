@@ -918,3 +918,25 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 06:01 JST (Finite logarithmic candidate observables)
+
+1. API:
+   - complete dyadic node mesh の cardinality lemma
+     `dyadicPhaseNodeIndices_card` を追加した。
+   - uniform-average weight と mesh-width weight を定義した。
+   - average / mesh-weighted log depth と log normalization の finite
+     candidate observables を追加した。
+2. finite laws:
+   - raw log-sum cancellation を scalar multiplication で移送し、
+     average 版と mesh-weighted 版の cancellation を証明した。
+3. boundary:
+   - 追加した量はいずれも finite candidate observable に留めた。
+     canonical limit、Gaussian weight、`pi` identification はまだ選択して
+     いない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
