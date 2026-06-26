@@ -961,3 +961,25 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 06:23 JST (Finite weight mass comparison)
+
+1. API:
+   - pointwise weighted cancellation の短名 alias
+     `dyadicPhaseWeightedLogCancellation` を追加した。
+   - average weight、plain complete mesh-width weight、trapezoid weight の
+     total mass theorem を追加した。
+2. finite laws:
+   - average と trapezoid は total mass `1` として証明した。
+   - plain complete mesh-width は total mass `1 + h_n` として証明し、
+     endpoint overcount を Lean 上で可視化した。
+3. boundary:
+   - weight mass の比較は observable selection のための有限分類であり、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

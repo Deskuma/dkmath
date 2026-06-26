@@ -229,6 +229,12 @@ two endpoints half a mesh width and every interior node one mesh width. This
 is still a finite observable; it does not by itself prove convergence or
 select the Gaussian-relevant normalization.
 
+The weight totals are now part of the formal comparison. Uniform average and
+trapezoidal weights both have total mass `1`. In contrast, the plain
+mesh-width complete-node weights have total mass `1 + h_n`, exposing the
+endpoint overcount that must be considered before treating that observable as
+a closed-interval integration candidate.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

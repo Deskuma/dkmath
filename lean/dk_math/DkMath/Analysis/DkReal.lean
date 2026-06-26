@@ -141,7 +141,9 @@ weighted variants are exposed as finite candidate observables, and the same
 cancellation law is proved for them. A pointwise weighted cancellation lemma
 then supplies the standard trapezoidal endpoint half-weight candidate. No
 logarithmic quantity is yet selected as the canonical refinement-limit
-observable.
+observable. The total masses of the average, plain mesh-width, and
+trapezoidal weights are also exposed to distinguish sample-mean,
+endpoint-overcounted complete-mesh, and closed-interval candidates.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

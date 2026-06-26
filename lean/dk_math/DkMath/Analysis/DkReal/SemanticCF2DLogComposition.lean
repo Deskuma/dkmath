@@ -119,6 +119,20 @@ theorem two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
         simp
 
 /--
+Short API name for pointwise weighted logarithmic boundary cancellation.
+
+This alias is intended for downstream candidate observables where the weight
+choice is the main object of study.
+-/
+theorem dyadicPhaseWeightedLogCancellation
+    (n : ℕ) (w : ℕ → ℝ) :
+    2 * (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseNormalization n k)) +
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseDepth n k)) = 0 :=
+  two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum n w
+
+/--
 The complete dyadic mesh has one more node than its dyadic denominator.
 
 This is the finite bookkeeping distinction between complete node meshes and
@@ -144,6 +158,17 @@ theorem dyadicPhaseAverageWeight_pos (n : ℕ) :
     rw [dyadicPhaseNodeIndices_card]
     exact Nat.succ_pos _
   exact one_div_pos.2 (by exact_mod_cast hcard)
+
+/-- The uniform average weights on the complete dyadic mesh have total mass one. -/
+theorem sum_dyadicPhaseAverageWeight_eq_one (n : ℕ) :
+    ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseAverageWeight n = 1 := by
+  have hcard_nat : 0 < (dyadicPhaseNodeIndices n).card := by
+    rw [dyadicPhaseNodeIndices_card]
+    exact Nat.succ_pos _
+  have hcard_pos : (0 : ℝ) < (dyadicPhaseNodeIndices n).card := by
+    exact_mod_cast hcard_nat
+  simp [dyadicPhaseAverageWeight]
+  field_simp [(ne_of_gt hcard_pos)]
 
 /-- Uniform average of logarithmic depth observations on the complete mesh. -/
 def dyadicPhaseAverageLogDepth (n : ℕ) : ℝ :=
@@ -187,6 +212,20 @@ def dyadicPhaseMeshWeight (n : ℕ) : ℝ :=
 theorem dyadicPhaseMeshWeight_pos (n : ℕ) :
     0 < dyadicPhaseMeshWeight n := by
   exact one_div_pos.2 (by exact_mod_cast dyadicPhaseDenom_pos n)
+
+/--
+The complete-node mesh-width weights have total mass `1 + h_n`.
+
+This records the endpoint overcount of the plain complete-node mesh-width
+candidate relative to a closed-interval integration rule.
+-/
+theorem sum_dyadicPhaseMeshWeight_eq_one_add (n : ℕ) :
+    ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n =
+      1 + dyadicPhaseMeshWeight n := by
+  have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
+    exact_mod_cast (dyadicPhaseDenom_pos n).ne'
+  simp [dyadicPhaseNodeIndices, dyadicPhaseMeshWeight]
+  field_simp [hdenom]
 
 /-- Mesh-weighted finite log-depth sum. -/
 def dyadicPhaseWeightedLogDepthSum (n : ℕ) : ℝ :=
@@ -239,6 +278,80 @@ theorem dyadicPhaseTrapezoidWeight_pos (n k : ℕ) :
   split_ifs
   · exact div_pos (dyadicPhaseMeshWeight_pos n) (by norm_num)
   · exact dyadicPhaseMeshWeight_pos n
+
+/--
+The endpoint set of the complete dyadic mesh consists of the two boundary
+indices `0` and `2^n`.
+-/
+theorem dyadicPhaseEndpointFilter_eq (n : ℕ) :
+    (dyadicPhaseNodeIndices n).filter
+        (fun k => k = 0 ∨ k = dyadicPhaseDenom n) =
+      {0, dyadicPhaseDenom n} := by
+  ext k
+  constructor
+  · intro hk
+    exact by
+      simp only [Finset.mem_filter] at hk
+      simpa using hk.2
+  · intro hk
+    have hdenom_pos := dyadicPhaseDenom_pos n
+    have hk' : k = 0 ∨ k = dyadicPhaseDenom n := by
+      simpa using hk
+    simp only [Finset.mem_filter]
+    constructor
+    · simp only [dyadicPhaseNodeIndices, Finset.mem_range,
+        Nat.lt_succ_iff]
+      rcases hk' with rfl | rfl
+      · exact Nat.zero_le _
+      · exact le_rfl
+    · exact hk'
+
+/--
+The trapezoidal weights on the complete dyadic node mesh have total mass one.
+
+This is the finite closed-interval bookkeeping property: two endpoints have
+half mesh width and all interior nodes have full mesh width.
+-/
+theorem sum_dyadicPhaseTrapezoidWeight_eq_one (n : ℕ) :
+    ∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseTrapezoidWeight n k = 1 := by
+  have hmesh :
+      ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n =
+        1 + dyadicPhaseMeshWeight n :=
+    sum_dyadicPhaseMeshWeight_eq_one_add n
+  have hend :
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+          (if k = 0 ∨ k = dyadicPhaseDenom n then
+            dyadicPhaseMeshWeight n / 2
+          else
+            0) =
+        dyadicPhaseMeshWeight n := by
+    rw [← Finset.sum_filter]
+    rw [dyadicPhaseEndpointFilter_eq]
+    have hdistinct : (0 : ℕ) ≠ dyadicPhaseDenom n :=
+      (dyadicPhaseDenom_pos n).ne
+    simp [hdistinct]
+    ring
+  calc
+    ∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseTrapezoidWeight n k
+        = (∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n) -
+            ∑ k ∈ dyadicPhaseNodeIndices n,
+              (if k = 0 ∨ k = dyadicPhaseDenom n then
+                dyadicPhaseMeshWeight n / 2
+              else
+                0) := by
+          rw [← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro k hk
+          unfold dyadicPhaseTrapezoidWeight
+          by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+          · rw [if_pos hendpoint]
+            simp [hendpoint]
+            ring_nf
+          · rw [if_neg hendpoint]
+            simp [hendpoint]
+    _ = 1 := by
+      rw [hmesh, hend]
+      ring
 
 /-- Trapezoidal finite log-depth sum on the complete dyadic node mesh. -/
 def dyadicPhaseTrapezoidLogDepthSum (n : ℕ) : ℝ :=
