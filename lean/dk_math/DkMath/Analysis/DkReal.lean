@@ -143,7 +143,9 @@ then supplies the standard trapezoidal endpoint half-weight candidate. No
 logarithmic quantity is yet selected as the canonical refinement-limit
 observable. The total masses of the average, plain mesh-width, and
 trapezoidal weights are also exposed to distinguish sample-mean,
-endpoint-overcounted complete-mesh, and closed-interval candidates.
+endpoint-overcounted complete-mesh, and closed-interval candidates. The
+endpoint logarithms vanish, so the plain mesh-width and trapezoidal log-depth
+and log-normalization observables agree despite their different total masses.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

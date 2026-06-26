@@ -392,7 +392,9 @@ pointwise weighted cancellation lemma now covers arbitrary finite weights on
 the complete mesh, and the trapezoidal endpoint half-weight candidate is
 implemented from it. The weight masses are formalized: average and trapezoid
 weights have total mass `1`, while the plain complete mesh-width weights have
-total mass `1 + h_n`.
+total mass `1 + h_n`. The endpoint logarithms of depth and normalization are
+zero, so the plain mesh-width and trapezoidal log observables are proved equal
+at every finite level despite their different total masses.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, raw logarithmic sum, average, mesh-weighted sum, trapezoidal
 sum, midpoint sum, or another quantity has a canonical refinement limit. The

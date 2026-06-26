@@ -983,3 +983,24 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 06:40 JST (Endpoint log comparison)
+
+1. API:
+   - depth と normalization の left / right endpoint log が `0` になる
+     theorem を追加した。
+2. finite comparison:
+   - plain complete mesh-width log-depth sum と trapezoidal log-depth sum が
+     有限段階で一致することを証明した。
+   - plain complete mesh-width log-normalization sum と trapezoidal
+     log-normalization sum も有限段階で一致することを証明した。
+3. interpretation:
+   - weight mass としては plain mesh-width と trapezoid は異なるが、
+     discrepancy が log 値 `0` の端点にだけ載るため、現在の boundary-log
+     observables では同じ値を測ることを Lean 上で可視化した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

@@ -81,6 +81,30 @@ theorem log_dyadicPhaseNormalizationProduct (n : ℕ) :
   rw [dyadicPhaseNormalizationProduct, dyadicPhaseLogNormalizationSum]
   exact Real.log_prod fun k _ => (dyadicPhaseNormalization_pos n k).ne'
 
+/-- The logarithmic depth observation vanishes at the left endpoint. -/
+@[simp]
+theorem log_dyadicPhaseDepth_left_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseDepth n 0) = 0 := by
+  simp [dyadicPhaseDepth]
+
+/-- The logarithmic depth observation vanishes at the right endpoint. -/
+@[simp]
+theorem log_dyadicPhaseDepth_right_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseDepth n (dyadicPhaseDenom n)) = 0 := by
+  simp [dyadicPhaseDepth]
+
+/-- The logarithmic normalization observation vanishes at the left endpoint. -/
+@[simp]
+theorem log_dyadicPhaseNormalization_left_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseNormalization n 0) = 0 := by
+  simp [dyadicPhaseNormalization]
+
+/-- The logarithmic normalization observation vanishes at the right endpoint. -/
+@[simp]
+theorem log_dyadicPhaseNormalization_right_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseNormalization n (dyadicPhaseDenom n)) = 0 := by
+  simp [dyadicPhaseNormalization]
+
 /-- Finite boundary cancellation in additive logarithmic form. -/
 theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
   (n : ℕ) :
@@ -381,6 +405,47 @@ theorem two_mul_dyadicPhaseTrapezoidLogNormalizationSum_add_trapezoidLogDepthSum
     dyadicPhaseTrapezoidLogDepthSum]
   exact two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
     n (dyadicPhaseTrapezoidWeight n)
+
+/--
+Plain mesh-width and trapezoidal log-depth sums agree on the complete mesh.
+
+Although the total masses of the two weights differ, the discrepancy is
+supported only at the two endpoints, where the logarithmic depth observation
+is zero.
+-/
+theorem dyadicPhaseWeightedLogDepthSum_eq_trapezoidLogDepthSum (n : ℕ) :
+    dyadicPhaseWeightedLogDepthSum n =
+      dyadicPhaseTrapezoidLogDepthSum n := by
+  rw [dyadicPhaseWeightedLogDepthSum, dyadicPhaseLogDepthSum,
+    dyadicPhaseTrapezoidLogDepthSum, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+  · rcases hendpoint with rfl | rfl
+    · simp [dyadicPhaseTrapezoidWeight]
+    · simp [dyadicPhaseTrapezoidWeight]
+  · simp [dyadicPhaseTrapezoidWeight, hendpoint]
+
+/--
+Plain mesh-width and trapezoidal log-normalization sums agree on the complete
+mesh.
+
+As for depth, the endpoint correction has no logarithmic contribution because
+the normalization factor is one at both endpoints.
+-/
+theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
+    (n : ℕ) :
+    dyadicPhaseWeightedLogNormalizationSum n =
+      dyadicPhaseTrapezoidLogNormalizationSum n := by
+  rw [dyadicPhaseWeightedLogNormalizationSum, dyadicPhaseLogNormalizationSum,
+    dyadicPhaseTrapezoidLogNormalizationSum, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+  · rcases hendpoint with rfl | rfl
+    · simp [dyadicPhaseTrapezoidWeight]
+    · simp [dyadicPhaseTrapezoidWeight]
+  · simp [dyadicPhaseTrapezoidWeight, hendpoint]
 
 end
 

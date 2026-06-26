@@ -235,6 +235,14 @@ mesh-width complete-node weights have total mass `1 + h_n`, exposing the
 endpoint overcount that must be considered before treating that observable as
 a closed-interval integration candidate.
 
+There is a useful finite cancellation in this comparison. At both endpoints,
+depth and normalization are equal to `1`, so their logarithmic observations
+are zero. Consequently, the plain mesh-width and trapezoidal log-depth sums
+are equal at every finite level, and the same is true for log-normalization.
+Thus the two candidates differ as measures, but not on these particular
+boundary-log observables. This distinction keeps the finite bookkeeping sharp
+without prematurely selecting a canonical limit.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.
