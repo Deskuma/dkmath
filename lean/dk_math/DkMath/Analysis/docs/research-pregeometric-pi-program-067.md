@@ -216,6 +216,19 @@ canonical limit choices; they only make the candidate comparison surface
 explicit before trapezoidal, midpoint, or other weighted observables are
 tested.
 
+The finite comparison surface now also contains the pointwise weighted
+cancellation principle
+
+```text
+sum_k w_k * (2 log normalization_k + log depth_k) = 0.
+```
+
+This theorem separates the algebraic cancellation mechanism from the choice of
+weights. The standard trapezoidal candidate is then implemented by giving the
+two endpoints half a mesh width and every interior node one mesh width. This
+is still a finite observable; it does not by itself prove convergence or
+select the Gaussian-relevant normalization.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

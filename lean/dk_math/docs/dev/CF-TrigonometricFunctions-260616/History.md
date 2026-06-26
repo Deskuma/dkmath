@@ -940,3 +940,24 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 06:13 JST (Weighted logarithmic cancellation)
+
+1. API:
+   - complete finite mesh 上の任意重み `w : ℕ → ℝ` に対する
+     pointwise weighted log cancellation を追加した。
+   - trapezoidal endpoint half-weight
+     `dyadicPhaseTrapezoidWeight` を定義し、positivity を証明した。
+   - trapezoidal log depth / log normalization sum を追加した。
+2. finite laws:
+   - 任意重み補題から、trapezoidal log cancellation を導出した。
+3. boundary:
+   - 台形則は closed-interval integration candidate として記録しただけで、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

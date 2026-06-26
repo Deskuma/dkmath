@@ -387,7 +387,10 @@ the same finite law to be expressed as logarithmic sums:
 `2 * logNormalizationSum + logDepthSum = 0`. Each sum is also proved equal
 to the logarithm of its corresponding finite product. Uniform-average and
 mesh-width weighted log sums are now recorded as finite candidate observables,
-with the same cancellation law transported by scalar multiplication.
+with the same cancellation law transported by scalar multiplication. A
+pointwise weighted cancellation lemma now covers arbitrary finite weights on
+the complete mesh, and the trapezoidal endpoint half-weight candidate is
+implemented from it.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, raw logarithmic sum, average, mesh-weighted sum, trapezoidal
 sum, midpoint sum, or another quantity has a canonical refinement limit. The

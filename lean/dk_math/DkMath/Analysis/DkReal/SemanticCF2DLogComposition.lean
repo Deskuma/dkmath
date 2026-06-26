@@ -23,6 +23,9 @@ This module still does not select a logarithmic sum as the canonical
 refinement-limit observable. The average and mesh-weighted variants below are
 therefore recorded only as finite candidate observables: the same cancellation
 law survives scalar reweighting, but no limiting interpretation is chosen here.
+The trapezoidal candidate records the standard closed-interval endpoint
+half-weight pattern as another finite observable, again without selecting a
+limit.
 -/
 
 namespace DkMath.Analysis.DkNNRealQ
@@ -87,6 +90,33 @@ theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
     Finset.mul_sum, ← Finset.sum_add_distrib]
   exact Finset.sum_eq_zero fun k hk =>
     two_mul_log_dyadicPhaseNormalization_add_log_depth n k
+
+/--
+Pointwise weighted finite logarithmic cancellation.
+
+Every weight function on the complete finite mesh preserves the cancellation
+law because the cancellation already holds at each sampled node. This is the
+finite algebraic form needed before choosing any particular observable such as
+an average, a mesh-width sum, or a trapezoidal sum.
+-/
+theorem two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
+    (n : ℕ) (w : ℕ → ℝ) :
+    2 * (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseNormalization n k)) +
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseDepth n k)) = 0 := by
+  rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+  exact Finset.sum_eq_zero fun k hk => by
+    calc
+      2 * (w k * Real.log (dyadicPhaseNormalization n k)) +
+          w k * Real.log (dyadicPhaseDepth n k)
+          = w k *
+              (2 * Real.log (dyadicPhaseNormalization n k) +
+                Real.log (dyadicPhaseDepth n k)) := by
+            ring
+      _ = 0 := by
+        rw [two_mul_log_dyadicPhaseNormalization_add_log_depth n k]
+        simp
 
 /--
 The complete dyadic mesh has one more node than its dyadic denominator.
@@ -188,6 +218,56 @@ theorem two_mul_dyadicPhaseWeightedLogNormalizationSum_add_weightedLogDepthSum
     _ = 0 := by
       rw [two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum]
       simp
+
+/--
+Trapezoidal weight on the complete finite dyadic node mesh.
+
+The endpoints receive half a mesh width and every interior node receives one
+mesh width. This is a finite closed-interval integration candidate only; no
+convergence or canonical-observable statement is made here.
+-/
+def dyadicPhaseTrapezoidWeight (n k : ℕ) : ℝ :=
+  if k = 0 ∨ k = dyadicPhaseDenom n then
+    dyadicPhaseMeshWeight n / 2
+  else
+    dyadicPhaseMeshWeight n
+
+/-- Every trapezoidal mesh weight is positive. -/
+theorem dyadicPhaseTrapezoidWeight_pos (n k : ℕ) :
+    0 < dyadicPhaseTrapezoidWeight n k := by
+  unfold dyadicPhaseTrapezoidWeight
+  split_ifs
+  · exact div_pos (dyadicPhaseMeshWeight_pos n) (by norm_num)
+  · exact dyadicPhaseMeshWeight_pos n
+
+/-- Trapezoidal finite log-depth sum on the complete dyadic node mesh. -/
+def dyadicPhaseTrapezoidLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * Real.log (dyadicPhaseDepth n k)
+
+/--
+Trapezoidal finite log-normalization sum on the complete dyadic node mesh.
+-/
+def dyadicPhaseTrapezoidLogNormalizationSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k *
+      Real.log (dyadicPhaseNormalization n k)
+
+/--
+Finite logarithmic cancellation survives trapezoidal endpoint weighting.
+
+This is an application of pointwise weighted cancellation. It records a
+standard closed-interval finite candidate without asserting that this is the
+canonical refinement limit.
+-/
+theorem two_mul_dyadicPhaseTrapezoidLogNormalizationSum_add_trapezoidLogDepthSum
+    (n : ℕ) :
+    2 * dyadicPhaseTrapezoidLogNormalizationSum n +
+        dyadicPhaseTrapezoidLogDepthSum n = 0 := by
+  rw [dyadicPhaseTrapezoidLogNormalizationSum,
+    dyadicPhaseTrapezoidLogDepthSum]
+  exact two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
+    n (dyadicPhaseTrapezoidWeight n)
 
 end
 

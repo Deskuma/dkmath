@@ -138,8 +138,10 @@ cancellation law to logarithmic sums. Each log sum is identified with the
 logarithm of its finite product, and
 `2 * logNormalizationSum + logDepthSum = 0`. Uniform-average and mesh-width
 weighted variants are exposed as finite candidate observables, and the same
-cancellation law is proved for them. No logarithmic quantity is yet selected
-as the canonical refinement-limit observable.
+cancellation law is proved for them. A pointwise weighted cancellation lemma
+then supplies the standard trapezoidal endpoint half-weight candidate. No
+logarithmic quantity is yet selected as the canonical refinement-limit
+observable.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
