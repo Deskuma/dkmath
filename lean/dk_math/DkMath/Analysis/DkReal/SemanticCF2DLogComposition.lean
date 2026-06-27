@@ -161,6 +161,42 @@ theorem centeredLogPhaseDepth_eq_log_one_add_four_sq (t : ℝ) :
   rw [phaseDepth_eq_two_sq_add_half]
   ring
 
+/-- The centered quadratic logarithm profile is strictly positive inside `log`. -/
+theorem centeredQuadraticProfile_pos (t : ℝ) :
+    0 < 1 + 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ))]
+
+/-- The centered quadratic logarithm profile is at least one. -/
+theorem one_le_centeredQuadraticProfile (t : ℝ) :
+    1 ≤ 1 + 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ))]
+
+/--
+Centered log-depth is nonnegative.
+
+The centered profile is `log (1 + 4s^2)`, and the argument is at least one.
+-/
+theorem centeredLogPhaseDepth_nonneg (t : ℝ) :
+    0 ≤ centeredLogPhaseDepth t := by
+  rw [centeredLogPhaseDepth_eq_log_one_add_four_sq]
+  rw [← Real.log_one]
+  exact Real.log_le_log (by norm_num : (0 : ℝ) < 1)
+    (one_le_centeredQuadraticProfile t)
+
+/--
+Centered log-depth is bounded above by its quadratic argument.
+
+This is the finite pointwise comparison `log (1 + x) ≤ x` at
+`x = 4 * (t - 1/2)^2`. It is the first quadratic upper bound for the later
+Gaussian bridge, without asserting any limit.
+-/
+theorem centeredLogPhaseDepth_le_four_sq (t : ℝ) :
+    centeredLogPhaseDepth t ≤ 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  rw [centeredLogPhaseDepth_eq_log_one_add_four_sq]
+  have hpos := centeredQuadraticProfile_pos t
+  have hlog := Real.log_le_sub_one_of_pos hpos
+  nlinarith
+
 /-- Finite boundary cancellation in additive logarithmic form. -/
 theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
   (n : ℕ) :

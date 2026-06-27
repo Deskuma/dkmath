@@ -401,7 +401,9 @@ corollary for observables whose endpoint correction vanishes. Centered
 log-depth is now defined at the phase and dyadic-sample levels. It vanishes at
 the midpoint, has endpoint value `log 2`, equals the log of the centered
 quadratic profile `1 + 4 * (t - 1/2)^2`, and has mesh/trapezoid discrepancy
-`h_n * log 2` at every finite level.
+`h_n * log 2` at every finite level. The profile is positive, and
+centered log-depth now has the pointwise quadratic comparison
+`0 <= centeredLogPhaseDepth t <= 4 * (t - 1/2)^2`.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, raw logarithmic sum, average, mesh-weighted sum, trapezoidal
 sum, midpoint sum, or another quantity has a canonical refinement limit. The

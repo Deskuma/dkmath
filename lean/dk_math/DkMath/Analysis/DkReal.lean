@@ -151,7 +151,9 @@ observable, the mesh-width minus trapezoid discrepancy is exactly the
 half-width endpoint correction. A zero-endpoint corollary packages the common
 case where that correction vanishes. The centered log-depth increment is now
 defined, identified with an explicit centered quadratic logarithm, and shown
-to restore a finite mesh/trapezoid discrepancy of `h_n * log 2`.
+to restore a finite mesh/trapezoid discrepancy of `h_n * log 2`. Its centered
+quadratic profile is positive, and the pointwise bound
+`0 ≤ centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` is available.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

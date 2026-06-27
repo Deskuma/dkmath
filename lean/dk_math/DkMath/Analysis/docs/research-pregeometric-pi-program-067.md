@@ -273,6 +273,18 @@ the trapezoidal centered log-depth sum differ by exactly `h_n * log 2`. This
 is the finite point where the endpoint correction reappears after centering.
 It is a quadratic-profile bridge, not yet a Gaussian limit.
 
+The pointwise quadratic comparison is also implemented:
+
+```text
+0 <= centeredLogPhaseDepth t
+centeredLogPhaseDepth t <= 4 * (t - 1/2)^2
+```
+
+The first inequality follows because the centered quadratic profile is at
+least `1`; the second is the `log(1 + x) <= x` comparison applied to
+`x = 4 * (t - 1/2)^2`. This creates the finite bridge from logarithmic
+correction accounting to quadratic moment estimates.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.
