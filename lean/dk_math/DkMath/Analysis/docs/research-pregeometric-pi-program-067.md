@@ -21,6 +21,13 @@ The intention is not to redefine `Real.pi` prematurely. It is to construct an
 independent normalization constant from the transition mechanism and
 eventually prove a bridge theorem identifying it with `Real.pi`.
 
+The Euclidean bridge now names the first external angle as
+`semanticQuarterTurnAngle`. This value is definitionally `Real.pi / 2`, but
+its role is deliberately interpretive: the algebraic four-state action is
+constructed first, and the Euclidean model later reads one semantic action as
+the angle `theta = pi / 2`. Thus the current theorem is an angle-reading
+bridge, not a derivation of `pi`.
+
 ## Proven Starting Point
 
 For a semantic core-zero kernel, one affine transition is
@@ -96,6 +103,22 @@ The square-root phenomenon must be derived from a dimension or product
 theorem, not inserted as notation.
 
 ## Formal Milestones
+
+### Milestone 0: first angle reading - implemented
+
+`EuclideanPhase.lean` now packages the existing quarter-turn comparison as a
+DkMath-named angle bridge:
+
+```text
+semanticQuarterTurnAngle = Real.pi / 2
+semantic action = Euclidean rotation by semanticQuarterTurnAngle
+```
+
+This keeps the main line visible. Before a circle parameter or polar angle is
+constructed, the boundary detector and the exact order-four action already
+determine a transition with the same operational behavior as a Euclidean
+quarter-turn. The standard Euclidean plane supplies the later interpretation
+as `theta = pi / 2`.
 
 ### Milestone A: continuous four-edge loop - implemented
 

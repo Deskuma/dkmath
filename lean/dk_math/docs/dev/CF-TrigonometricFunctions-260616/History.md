@@ -1203,3 +1203,31 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogLimit` 成功
      (8283 jobs)。
+
+### 2026/06/27 16:49 JST (Semantic quarter-turn angle bridge)
+
+1. Euclidean angle bridge:
+   - `semanticQuarterTurnAngle : ℝ` を
+     `DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` に追加した。
+   - 定義値は `Real.pi / 2` だが、役割は intrinsic な `pi` 構成ではなく、
+     既存の semantic four-state action を Euclidean plane で読むための
+     angle bridge とした。
+2. theorem API:
+   - `rotation_semanticQuarterTurnAngle_eq_quarterTurn` を追加し、
+     DkMath 名の角度による rotation が explicit coordinate quarter-turn
+     であることを記録した。
+   - `pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle`
+     を追加し、core-zero semantic action が
+     `theta = semanticQuarterTurnAngle` の Euclidean rotation として読める
+     ことを記録した。
+3. interpretation:
+   - 本線は DkMath 版三角関数、`pi`、角度 `theta` の実現である。
+   - 今回はその最初の角度読み取りとして、円や polar coordinates を
+     仮定する前に得られている四状態作用を、後から Euclidean 角度
+     `pi / 2` と比較する入口を整えた。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に
+     first angle reading milestone を追加した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

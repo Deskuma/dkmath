@@ -353,6 +353,35 @@ theorem rotation_pi_div_two_eq_quarterTurn :
   rw [euclideanPlaneOrientation.rotation_pi_div_two,
     rightAngleRotation_eq_quarterTurn]
 
+/--
+The first Euclidean angle attached to the semantic four-state action.
+
+This is not an intrinsic construction of `pi`. It is the external Euclidean
+interpretation of one already-proved quarter-turn transition. The definition
+is intentionally transparent so that later intrinsic normalization constants
+can be compared against this standard angle by bridge theorems.
+-/
+def semanticQuarterTurnAngle : ℝ :=
+  Real.pi / 2
+
+@[simp]
+theorem semanticQuarterTurnAngle_eq :
+    semanticQuarterTurnAngle = Real.pi / 2 :=
+  rfl
+
+/--
+Rotating by the semantic quarter-turn angle is the explicit coordinate
+quarter-turn.
+
+The theorem packages the first `theta` value for the Euclidean interpretation:
+the pre-geometric action supplies the operation, while the Euclidean model
+reads that operation as angle `pi / 2`.
+-/
+theorem rotation_semanticQuarterTurnAngle_eq_quarterTurn :
+    euclideanPlaneOrientation.rotation semanticQuarterTurnAngle =
+      quarterTurnLinearIsometry := by
+  simpa [semanticQuarterTurnAngle] using rotation_pi_div_two_eq_quarterTurn
+
 end
 
 end DkMath.CosmicFormula.Rotation.CF2D
@@ -437,6 +466,25 @@ theorem pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two
         (pairToEuclideanPlane (Vec.toProd z)) := by
   rw [pairToEuclideanPlane_semanticAct_of_core_eq_zero hcore,
     rotation_pi_div_two_eq_quarterTurn]
+
+/--
+Under the Euclidean coordinate bridge, one semantic core-zero action is
+rotation by the DkMath semantic quarter-turn angle.
+
+This is the main-line angle bridge for the present stage. The algebraic
+four-state transition is already available before circles or polar
+coordinates are introduced; the Euclidean model later reads that transition
+as the angle `theta = pi / 2`.
+-/
+theorem pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticAct r z)) =
+      euclideanPlaneOrientation.rotation semanticQuarterTurnAngle
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  simpa [semanticQuarterTurnAngle] using
+    pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two hcore z
 
 end
 
