@@ -1300,6 +1300,50 @@ theorem semanticActIter_add_four_of_core_eq_zero
   rw [semanticActIter, semanticActIter, Function.iterate_add_apply, hfour]
   rfl
 
+/--
+Adding any multiple of four to the iterate index does not change the
+core-zero boundary action.
+
+This is the induction form used to pass from exact period four to modulo-four
+classification.
+-/
+theorem semanticActIter_add_four_mul_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (q k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 4 * q) z = semanticActIter r k z := by
+  induction q with
+  | zero =>
+      simp
+  | succ q ih =>
+      calc
+        semanticActIter r (k + 4 * (q + 1)) z =
+            semanticActIter r ((k + 4 * q) + 4) z := by
+              congr 1
+        _ = semanticActIter r (k + 4 * q) z :=
+            semanticActIter_add_four_of_core_eq_zero hcore
+              (k + 4 * q) z
+        _ = semanticActIter r k z := ih
+
+/--
+The core-zero semantic iterate depends only on the phase index modulo four.
+
+This is the semantic rotation table in quotient form, before any Euclidean
+angle interpretation is attached.
+-/
+theorem semanticActIter_eq_mod_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r k z = semanticActIter r (k % 4) z := by
+  calc
+    semanticActIter r k z =
+        semanticActIter r (k % 4 + 4 * (k / 4)) z := by
+          rw [Nat.mod_add_div]
+    _ = semanticActIter r (k % 4) z :=
+        semanticActIter_add_four_mul_of_core_eq_zero hcore
+          (k / 4) (k % 4) z
+
 /-- A nonzero vector cannot return after one boundary action. -/
 theorem not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero
     {r : UnitKernel DkNNRealQ} {z : Vec ℝ}

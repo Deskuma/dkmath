@@ -161,6 +161,22 @@ under the same core-zero hypothesis. The Euclidean side also exposes the
 `k = 0` and `k = 1` iterate-form bridges, so the finite table is available in
 one notation before moving to a full modulo-four classifier.
 
+The modulo-four classifier is now implemented in two layers:
+
+```text
+semanticActIter r k z = semanticActIter r (k % 4) z
+```
+
+on the semantic side, and then
+
+```text
+semanticActIter r k
+  <-> Euclidean rotation by semanticPhaseAngle (k % 4)
+```
+
+on the Euclidean reading side. This closes the finite order-four phase table
+without claiming an intrinsic construction of `pi`.
+
 ### Milestone A: continuous four-edge loop - implemented
 
 1. The real CF2D target carries the topology induced from `Real × Real`.

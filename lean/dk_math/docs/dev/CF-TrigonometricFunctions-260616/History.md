@@ -1338,3 +1338,29 @@ Archive
 5. verification:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/27 23:18 JST (Modulo-four semantic phase classifier)
+
+1. semantic modulo-four classification:
+   - `semanticActIter_add_four_mul_of_core_eq_zero` を追加し、
+     `k + 4 * q` の形で任意個の full-turn を消せるようにした。
+   - `semanticActIter_eq_mod_four_of_core_eq_zero` を追加し、
+     core-zero semantic action の iterate が `k % 4` のみに依存することを
+     記録した。
+2. Euclidean modulo-four bridge:
+   - `pairToEuclideanPlane_semanticActIter_eq_rotation_semanticPhaseAngle_mod_four`
+     を追加した。
+   - semantic 側で `k % 4` に縮約し、`0,1,2,3` の有限位相表へ分岐して
+     Euclidean angle reading に接続する。
+3. interpretation:
+   - DkMath の exact order-four action が、Euclidean 解釈では
+     `semanticPhaseAngle (k % 4)` の回転として読まれるところまで閉じた。
+   - これは `pi` の内在構成ではなく、四状態対称性の Euclidean
+     angle reading である。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に modulo-four classifier
+     の二層構造を追記した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

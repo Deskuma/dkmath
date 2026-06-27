@@ -732,6 +732,49 @@ theorem pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle
     semanticPhaseAngle_four, rotation_semanticFullTurnAngle_eq_refl]
   rfl
 
+/--
+Modulo-four Euclidean angle reading of the semantic action iterate.
+
+The semantic side first reduces the iterate index to `k % 4`. The remaining
+four cases are exactly the finite rotation table: identity, quarter-turn,
+half-turn, and reverse quarter-turn.
+-/
+theorem pairToEuclideanPlane_semanticActIter_eq_rotation_semanticPhaseAngle_mod_four
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (k : ℕ) (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r k z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle (k % 4))
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  let n := k % 4
+  have hnlt : n < 4 := by
+    dsimp [n]
+    exact Nat.mod_lt k (by norm_num)
+  have hcases : n = 0 ∨ n = 1 ∨ n = 2 ∨ n = 3 := by
+    omega
+  rw [semanticActIter_eq_mod_four_of_core_eq_zero hcore]
+  rcases hcases with hzero | hone | htwo | hthree
+  · have hkmod : k % 4 = 0 := by
+      simpa [n] using hzero
+    rw [hkmod]
+    exact pairToEuclideanPlane_semanticActIter_zero_eq_rotation_semanticPhaseAngle
+      r z
+  · have hkmod : k % 4 = 1 := by
+      simpa [n] using hone
+    rw [hkmod]
+    exact pairToEuclideanPlane_semanticActIter_one_eq_rotation_semanticPhaseAngle
+      hcore z
+  · have hkmod : k % 4 = 2 := by
+      simpa [n] using htwo
+    rw [hkmod]
+    exact pairToEuclideanPlane_semanticActIter_two_eq_rotation_semanticPhaseAngle
+      hcore z
+  · have hkmod : k % 4 = 3 := by
+      simpa [n] using hthree
+    rw [hkmod]
+    exact pairToEuclideanPlane_semanticActIter_three_eq_rotation_semanticPhaseAngle
+      hcore z
+
 end
 
 end DkMath.Analysis.DkNNRealQ
