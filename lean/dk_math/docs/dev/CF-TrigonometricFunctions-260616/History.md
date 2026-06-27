@@ -1110,3 +1110,24 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 13:42 JST (Trapezoidal quadratic moment bound)
+
+1. correction:
+   - `research-pregeometric-pi-program-067.md` の centered endpoint
+     correction 周辺に残っていた stray sentence を整理した。
+2. API:
+   - unit interval 上で centered quadratic profile が `≤ 1` である
+     `centeredQuadratic_le_one_of_mem_unit` を追加した。
+   - complete dyadic node 上の対応する点wise bound
+     `dyadicPhaseCenteredQuadratic_le_one` を追加した。
+3. finite moment:
+   - 台形重みの total mass one と点wise bound から
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_le_one` を証明した。
+   - 閉形式 `1/3 + 2/(3 * (2^n)^2)` は code TODO として残した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

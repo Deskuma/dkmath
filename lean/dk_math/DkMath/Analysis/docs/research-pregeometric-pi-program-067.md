@@ -275,7 +275,6 @@ centered log-depth sums are therefore nonnegative and bounded above by their
 corresponding finite centered quadratic moments. This is a finite estimate
 only: it prepares the next moment calculation, but it does not yet assert a
 closed form, a limiting integral, a Gaussian law, or a `pi` identification.
-endpoint increments expose the correction term.
 
 The first centered observable is now implemented. `centeredLogPhaseDepth`
 subtracts the midpoint baseline `log(1/2)` from `log(phaseDepth t)`. It
@@ -301,6 +300,23 @@ The first inequality follows because the centered quadratic profile is at
 least `1`; the second is the `log(1 + x) <= x` comparison applied to
 `x = 4 * (t - 1/2)^2`. This creates the finite bridge from logarithmic
 correction accounting to quadratic moment estimates.
+
+The first finite quadratic moment bound is also implemented. On the unit
+interval, the centered quadratic profile satisfies
+
+```text
+4 * (t - 1/2)^2 <= 1.
+```
+
+Every complete dyadic node lies in that interval, and the trapezoidal weights
+have total mass one, so Lean proves
+
+```text
+dyadicPhaseTrapezoidCenteredQuadraticSum n <= 1.
+```
+
+This is deliberately a crude finite bound. The sharper expected closed form
+`1/3 + 2/(3 * (2^n)^2)` is marked in code as the next finite-sum target.
 
 ### Milestone D: limit and Gaussian bridge
 

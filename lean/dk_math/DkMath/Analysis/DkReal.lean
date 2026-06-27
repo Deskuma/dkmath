@@ -157,7 +157,10 @@ quadratic profile is positive, and the pointwise bound
 also been lifted to arbitrary nonnegative finite weights, with mesh-width,
 uniform-average, and trapezoidal corollaries. Thus the centered logarithmic
 correction is already controlled by finite centered quadratic moments, before
-any Gaussian, integral, or `pi` interpretation is selected.
+any Gaussian, integral, or `pi` interpretation is selected. The first crude
+finite moment estimate is also available: the trapezoidal centered quadratic
+sum is bounded by one. The sharper closed form remains a tagged TODO in the
+log-composition module.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

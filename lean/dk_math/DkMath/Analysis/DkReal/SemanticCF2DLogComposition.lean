@@ -213,6 +213,27 @@ theorem dyadicPhaseCenteredLogDepth_le_centeredQuadratic (n k : ℕ) :
   centeredLogPhaseDepth_le_four_sq (dyadicPhaseNode n k)
 
 /--
+The centered quadratic profile is at most one on the unit interval.
+
+This is the finite real-line bound behind the first crude moment estimate.
+The sharper trapezoidal closed form is left for the next finite-sum layer.
+-/
+theorem centeredQuadratic_le_one_of_mem_unit
+    {t : ℝ} (h0 : 0 ≤ t) (h1 : t ≤ 1) :
+    4 * (t - (1 / 2 : ℝ)) ^ 2 ≤ 1 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ)),
+    sq_nonneg (t - 1), sq_nonneg t]
+
+/-- Dyadic centered quadratic samples are at most one on the complete mesh. -/
+theorem dyadicPhaseCenteredQuadratic_le_one
+    {n k : ℕ} (hk : k ∈ dyadicPhaseNodeIndices n) :
+    dyadicPhaseCenteredQuadratic n k ≤ 1 := by
+  have hk_le : k ≤ dyadicPhaseDenom n := by
+    simpa [dyadicPhaseNodeIndices, Nat.lt_succ_iff] using hk
+  have hunit := dyadicPhaseNode_mem_unitInterval (n := n) (k := k) hk_le
+  exact centeredQuadratic_le_one_of_mem_unit hunit.1 hunit.2
+
+/--
 Nonnegative finite weights preserve nonnegativity of centered log-depth.
 
 This is the finite weighted-sum lift of the pointwise lower bound.
@@ -753,6 +774,36 @@ theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
   exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
     (dyadicPhaseTrapezoidWeight n)
     (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
+
+/--
+The trapezoidal centered quadratic moment is bounded by one.
+
+This is the first finite moment bound: the sampled centered quadratic profile
+is at most one on `[0,1]`, and the trapezoidal weights have total mass one.
+
+[TODO: finite-trapezoid-quadratic-closed-form] Prove the sharper closed form
+`1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)` by an explicit finite
+quadratic-sum calculation.
+-/
+theorem dyadicPhaseTrapezoidCenteredQuadraticSum_le_one (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredQuadraticSum n ≤ 1 := by
+  rw [dyadicPhaseTrapezoidCenteredQuadraticSum]
+  calc
+    ∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
+        ≤ ∑ k ∈ dyadicPhaseNodeIndices n,
+            dyadicPhaseTrapezoidWeight n k * 1 := by
+          exact Finset.sum_le_sum fun k hk => by
+            have hle :=
+              dyadicPhaseCenteredQuadratic_le_one (n := n) (k := k) hk
+            have hdiff :
+                0 ≤ dyadicPhaseTrapezoidWeight n k *
+                  (1 - dyadicPhaseCenteredQuadratic n k) :=
+              mul_nonneg (dyadicPhaseTrapezoidWeight_pos n k).le
+                (sub_nonneg.mpr hle)
+            nlinarith
+    _ = 1 := by
+      simpa using sum_dyadicPhaseTrapezoidWeight_eq_one n
 
 /--
 For centered log-depth, the plain mesh-width and trapezoidal sums differ by

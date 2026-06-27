@@ -44,7 +44,9 @@ identified with `log (1 + 4 * (t - 1/2)^2)`, is pointwise nonnegative, and is
 bounded above by `4 * (t - 1/2)^2`. This pointwise estimate has been lifted to
 arbitrary nonnegative finite weights, with mesh-width, uniform-average, and
 trapezoidal corollaries. These are finite quadratic-moment controls only; no
-Gaussian, integral, angle, or `pi` interpretation is selected here.
+Gaussian, integral, angle, or `pi` interpretation is selected here. The first
+trapezoidal centered quadratic moment bound is now `<= 1`; the sharper closed
+finite formula is intentionally left as the next finite-sum target.
 
 The current implementation proves a four-state return:
 
