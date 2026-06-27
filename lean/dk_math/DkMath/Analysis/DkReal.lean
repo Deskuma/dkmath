@@ -179,8 +179,11 @@ The local center `phaseCenter = 1 / 2` is recognized by the unique minimum of
 quarter-cycle coordinates prove that the seam endpoint between adjacent
 quarter edges is the midpoint between their centers, isolating the one-eighth
 phase displacement without using circle or arc language. Scalar return laws
-for dyadic and positive `k` cycle divisions are also recorded, and the affine
-and normalized semantic edges expose their midpoint `q2` facts.
+for dyadic and positive `k` cycle divisions are also recorded. The shifted
+scalar frame now names neighboring centers as endpoints and proves that its
+affine center is the old seam endpoint. The affine and normalized semantic
+edges expose their midpoint `q2` facts, while shifted semantic paths remain a
+later definition.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

@@ -314,6 +314,15 @@ SemanticCF2DPhaseShift.lean
   globalQuarterCenter_succ_sub_center
   globalQuarterCenter_succ_eq_center_add_quarter
   globalQuarterEndpoint_succ_is_center_between_centers
+  shiftedQuarterLeftEndpoint
+  shiftedQuarterRightEndpoint
+  shiftedQuarterCenter
+  shiftedQuarterLeftEndpoint_eq_center
+  shiftedQuarterRightEndpoint_eq_next_center
+  shiftedQuarterCenter_eq_next_endpoint
+  shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter
+  shiftedQuarterCenter_eq_midpoint
+  shiftedQuarterAffine_center_eq_shiftedQuarterCenter
   normalizedCycleStep
   dyadicCycleStep
   normalizedCycleStep_mul_returnCount
@@ -325,8 +334,9 @@ SemanticCF2DPhaseShift.lean
 
 ## Boundary and Normalization Targets
 
-After the scalar shift theorem, the next target is to lift it back to the
-semantic edge and normalized edge APIs.
+The scalar shifted-frame API is now implemented. The next target is to choose
+the semantic endpoint states for a shifted semantic edge and then lift the
+shifted-frame scalar center theorem to that path.
 
 Candidate theorem directions:
 
@@ -377,38 +387,49 @@ depend on that reading.
 
 ## Implementation Plan
 
-1. Add scalar aliases for `phaseCenter` and `phaseHalfQuarterStep`.
-2. Prove `phaseDepth_center_eq` and `phaseDepth_center_unique` as API aliases.
-3. Prove `phaseDepth_centered_reflect`.
-4. Add a small phase-shift module for global quarter endpoints and centers.
-5. Prove the endpoint-between-centers identity.
-6. Add scalar cycle-step facts for dyadic and positive `k` divisions.
-7. Lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
-8. Only after that, add a Euclidean bridge that reads `1/8` full-cycle
+1. Implemented: add scalar aliases for `phaseCenter` and `phaseHalfQuarterStep`.
+2. Implemented: prove `phaseDepth_center_eq` and `phaseDepth_center_unique`.
+3. Implemented: prove `phaseDepth_centered_reflect`.
+4. Implemented: add a phase-shift module for global quarter endpoints and centers.
+5. Implemented: prove the endpoint-between-centers identity.
+6. Implemented: add scalar cycle-step facts for dyadic and positive `k` divisions.
+7. Implemented: add scalar shifted-frame endpoints, center, and affine midpoint theorem.
+8. Implemented: lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
+9. Next: choose a shifted semantic edge definition.
+10. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
-## TODO Tags
+## Implemented Tags
 
 ```text
-[TODO: semantic-cf2d/phase-center-alias]
+[IMPLEMENTED: semantic-cf2d/phase-center-alias]
 Add `phaseCenter`, `phaseHalfQuarterStep`, and centered-coordinate wrappers.
 
-[TODO: semantic-cf2d/centered-reflection]
+[IMPLEMENTED: semantic-cf2d/centered-reflection]
 Expose reflection about `phaseCenter` directly, not only as `t -> 1 - t`.
 
-[TODO: semantic-cf2d/endpoint-as-shifted-center]
+[IMPLEMENTED: semantic-cf2d/endpoint-as-shifted-center]
 Prove that the seam endpoint between adjacent quarter edges is the midpoint
 between their centers.
 
-[TODO: semantic-cf2d/one-eighth-euclidean-reading]
-After the algebraic shift theorem is closed, bridge the one-eighth phase
-displacement to the Euclidean `pi / 4` reading.
-
-[TODO: semantic-cf2d/dyadic-cycle-step]
+[IMPLEMENTED: semantic-cf2d/dyadic-cycle-step]
 Expose the dyadic return law `2^n * (1 / 2^n) = 1` as a normalized cycle
 parameter fact, not as an angle subdivision.
 
-[TODO: semantic-cf2d/k-division-cycle-step]
+[IMPLEMENTED: semantic-cf2d/k-division-cycle-step]
 Expose the positive `k` return law `k * (1 / k) = 1` for the normalized cycle
 parameter before assigning any Euclidean shape.
+```
+
+## Remaining TODO Tags
+
+```text
+[TODO: semantic-cf2d/shifted-semantic-edge]
+Choose the endpoint states for the shifted semantic edge and prove its scalar
+compatibility with `shiftedQuarterCenter`.
+
+[TODO: semantic-cf2d/one-eighth-euclidean-reading]
+After the algebraic shifted-frame theorem is closed at the semantic path
+level, bridge the one-eighth phase displacement to the Euclidean `pi / 4`
+reading.
 ```

@@ -161,6 +161,85 @@ theorem globalQuarterEndpoint_succ_is_center_between_centers (k : ℕ) :
   ring
 
 /-!
+## Scalar shifted quarter frame
+
+The shifted frame uses the neighboring quarter centers as its endpoints. In
+that frame, the old seam endpoint is now the center. This remains scalar
+coordinate bookkeeping; no shifted semantic path is introduced yet.
+-/
+
+/-- Left endpoint of the shifted quarter frame around the seam after edge `k`. -/
+def shiftedQuarterLeftEndpoint (k : ℕ) : ℝ :=
+  globalQuarterCenter k
+
+/-- Right endpoint of the shifted quarter frame around the seam after edge `k`. -/
+def shiftedQuarterRightEndpoint (k : ℕ) : ℝ :=
+  globalQuarterCenter (k + 1)
+
+/-- Center of the shifted quarter frame, namely the old seam endpoint. -/
+def shiftedQuarterCenter (k : ℕ) : ℝ :=
+  globalQuarterEndpoint (k + 1)
+
+/-- The shifted-frame left endpoint is the old center of quarter edge `k`. -/
+@[simp]
+theorem shiftedQuarterLeftEndpoint_eq_center (k : ℕ) :
+    shiftedQuarterLeftEndpoint k = globalQuarterCenter k := rfl
+
+/-- The shifted-frame right endpoint is the old center of quarter edge `k + 1`. -/
+@[simp]
+theorem shiftedQuarterRightEndpoint_eq_next_center (k : ℕ) :
+    shiftedQuarterRightEndpoint k = globalQuarterCenter (k + 1) := rfl
+
+/-- The shifted-frame center is the old seam endpoint after quarter edge `k`. -/
+@[simp]
+theorem shiftedQuarterCenter_eq_next_endpoint (k : ℕ) :
+    shiftedQuarterCenter k = globalQuarterEndpoint (k + 1) := rfl
+
+/-- The shifted-frame endpoints are separated by one quarter step. -/
+theorem shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter (k : ℕ) :
+    shiftedQuarterRightEndpoint k =
+      shiftedQuarterLeftEndpoint k + 1 / 4 := by
+  simp [shiftedQuarterLeftEndpoint, shiftedQuarterRightEndpoint,
+    globalQuarterCenter_succ_eq_center_add_quarter]
+
+/--
+The shifted-frame center is the midpoint of its shifted endpoints.
+
+This is the named scalar reading of the endpoint-to-center shift: the seam
+that was an endpoint in the old quarter frame is the center in the shifted
+frame.
+-/
+theorem shiftedQuarterCenter_eq_midpoint (k : ℕ) :
+    shiftedQuarterCenter k =
+      (shiftedQuarterLeftEndpoint k + shiftedQuarterRightEndpoint k) / 2 := by
+  rw [shiftedQuarterCenter_eq_next_endpoint,
+    shiftedQuarterLeftEndpoint_eq_center,
+    shiftedQuarterRightEndpoint_eq_next_center]
+  exact (globalQuarterEndpoint_succ_is_center_between_centers k).symm
+
+/--
+Affine interpolation in the shifted scalar frame reaches the shifted center
+at the local phase center.
+
+This prepares a future shifted semantic edge without defining that path yet.
+-/
+theorem shiftedQuarterAffine_center_eq_shiftedQuarterCenter (k : ℕ) :
+    (1 - phaseCenter) * shiftedQuarterLeftEndpoint k +
+        phaseCenter * shiftedQuarterRightEndpoint k =
+      shiftedQuarterCenter k := by
+  rw [shiftedQuarterCenter_eq_midpoint]
+  simp [phaseCenter]
+  ring
+
+/-!
+[TODO: semantic-cf2d/shifted-semantic-edge]
+Define a shifted semantic edge only after choosing the endpoint states that
+correspond to `shiftedQuarterLeftEndpoint` and `shiftedQuarterRightEndpoint`.
+The expected scalar compatibility theorem is that its value at `phaseCenter`
+represents `shiftedQuarterCenter`.
+-/
+
+/-!
 ## Scalar return laws for normalized cycle divisions
 
 The next facts record return counts for a normalized cycle parameter. They do
