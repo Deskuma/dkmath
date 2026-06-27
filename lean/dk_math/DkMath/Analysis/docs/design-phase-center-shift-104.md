@@ -321,7 +321,13 @@ SemanticCF2DPhaseShift.lean
   shiftedQuarterRightEndpoint_eq_next_center
   shiftedQuarterCenter_eq_next_endpoint
   shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter
+  shiftedQuarterRightEndpoint_sub_leftEndpoint
   shiftedQuarterCenter_eq_midpoint
+  shiftedQuarterCenter_eq_leftEndpoint_add_halfQuarter
+  shiftedQuarterRightEndpoint_eq_center_add_halfQuarter
+  shiftedQuarterAffine
+  shiftedQuarterAffine_zero_eq_leftEndpoint
+  shiftedQuarterAffine_one_eq_rightEndpoint
   shiftedQuarterAffine_center_eq_shiftedQuarterCenter
   normalizedCycleStep
   dyadicCycleStep
@@ -334,8 +340,10 @@ SemanticCF2DPhaseShift.lean
 
 ## Boundary and Normalization Targets
 
-The scalar shifted-frame API is now implemented. The next target is to choose
-the semantic endpoint states for a shifted semantic edge and then lift the
+The scalar shifted-frame API is now implemented, including endpoint
+separation, center half-quarter formulas, and the affine interpolation helper
+`shiftedQuarterAffine`. The next target is to choose the semantic endpoint
+states and correction law for a shifted semantic edge, then lift the
 shifted-frame scalar center theorem to that path.
 
 Candidate theorem directions:
@@ -425,7 +433,10 @@ parameter before assigning any Euclidean shape.
 
 ```text
 [TODO: semantic-cf2d/shifted-semantic-edge]
-Choose the endpoint states for the shifted semantic edge and prove its scalar
+Choose the endpoint states and correction law for the shifted semantic edge.
+The natural candidates are normalized center states of neighboring quarter
+edges, but their raw affine midpoint is not generally the old seam state.
+After selecting the shifted normalization/projection law, prove scalar
 compatibility with `shiftedQuarterCenter`.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]

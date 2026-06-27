@@ -202,6 +202,12 @@ theorem shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter (k : ℕ) :
   simp [shiftedQuarterLeftEndpoint, shiftedQuarterRightEndpoint,
     globalQuarterCenter_succ_eq_center_add_quarter]
 
+/-- Difference form of the shifted-frame endpoint separation. -/
+theorem shiftedQuarterRightEndpoint_sub_leftEndpoint (k : ℕ) :
+    shiftedQuarterRightEndpoint k - shiftedQuarterLeftEndpoint k = 1 / 4 := by
+  rw [shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter]
+  ring
+
 /--
 The shifted-frame center is the midpoint of its shifted endpoints.
 
@@ -217,6 +223,46 @@ theorem shiftedQuarterCenter_eq_midpoint (k : ℕ) :
     shiftedQuarterRightEndpoint_eq_next_center]
   exact (globalQuarterEndpoint_succ_is_center_between_centers k).symm
 
+/-- The shifted-frame center is a half-quarter step after its left endpoint. -/
+theorem shiftedQuarterCenter_eq_leftEndpoint_add_halfQuarter (k : ℕ) :
+    shiftedQuarterCenter k =
+      shiftedQuarterLeftEndpoint k + phaseHalfQuarterStep := by
+  rw [shiftedQuarterCenter_eq_midpoint,
+    shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter]
+  simp [phaseHalfQuarterStep]
+  ring
+
+/-- The shifted-frame right endpoint is a half-quarter step after its center. -/
+theorem shiftedQuarterRightEndpoint_eq_center_add_halfQuarter (k : ℕ) :
+    shiftedQuarterRightEndpoint k =
+      shiftedQuarterCenter k + phaseHalfQuarterStep := by
+  rw [shiftedQuarterCenter_eq_leftEndpoint_add_halfQuarter,
+    shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter]
+  simp [phaseHalfQuarterStep]
+  ring
+
+/--
+Affine interpolation between the endpoints of the shifted scalar frame.
+
+This is a scalar parameter skeleton only. It does not yet choose semantic
+states for a shifted path.
+-/
+def shiftedQuarterAffine (k : ℕ) (t : ℝ) : ℝ :=
+  (1 - t) * shiftedQuarterLeftEndpoint k +
+    t * shiftedQuarterRightEndpoint k
+
+/-- The shifted affine scalar starts at its left endpoint. -/
+@[simp]
+theorem shiftedQuarterAffine_zero_eq_leftEndpoint (k : ℕ) :
+    shiftedQuarterAffine k 0 = shiftedQuarterLeftEndpoint k := by
+  simp [shiftedQuarterAffine]
+
+/-- The shifted affine scalar ends at its right endpoint. -/
+@[simp]
+theorem shiftedQuarterAffine_one_eq_rightEndpoint (k : ℕ) :
+    shiftedQuarterAffine k 1 = shiftedQuarterRightEndpoint k := by
+  simp [shiftedQuarterAffine]
+
 /--
 Affine interpolation in the shifted scalar frame reaches the shifted center
 at the local phase center.
@@ -224,19 +270,22 @@ at the local phase center.
 This prepares a future shifted semantic edge without defining that path yet.
 -/
 theorem shiftedQuarterAffine_center_eq_shiftedQuarterCenter (k : ℕ) :
-    (1 - phaseCenter) * shiftedQuarterLeftEndpoint k +
-        phaseCenter * shiftedQuarterRightEndpoint k =
-      shiftedQuarterCenter k := by
+    shiftedQuarterAffine k phaseCenter = shiftedQuarterCenter k := by
+  unfold shiftedQuarterAffine
   rw [shiftedQuarterCenter_eq_midpoint]
   simp [phaseCenter]
   ring
 
 /-!
 [TODO: semantic-cf2d/shifted-semantic-edge]
-Define a shifted semantic edge only after choosing the endpoint states that
-correspond to `shiftedQuarterLeftEndpoint` and `shiftedQuarterRightEndpoint`.
-The expected scalar compatibility theorem is that its value at `phaseCenter`
-represents `shiftedQuarterCenter`.
+Define a shifted semantic edge only after choosing the endpoint states and
+the correction law that correspond to `shiftedQuarterLeftEndpoint` and
+`shiftedQuarterRightEndpoint`. The natural endpoint candidates are the
+normalized center states of neighboring quarter edges, but their raw affine
+midpoint is not the old seam state in general; a shifted normalization or
+projection law must be selected first. The expected compatibility theorem is
+that the selected shifted edge at `phaseCenter` represents
+`shiftedQuarterCenter`.
 -/
 
 /-!
