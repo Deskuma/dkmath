@@ -119,6 +119,10 @@ def centeredLogPhaseDepth (t : ℝ) : ℝ :=
 def dyadicPhaseCenteredLogDepth (n k : ℕ) : ℝ :=
   centeredLogPhaseDepth (dyadicPhaseNode n k)
 
+/-- Dyadic samples of the centered quadratic upper-bound profile. -/
+def dyadicPhaseCenteredQuadratic (n k : ℕ) : ℝ :=
+  4 * (dyadicPhaseNode n k - (1 / 2 : ℝ)) ^ 2
+
 /-- The midpoint baseline makes the centered log-depth increment vanish. -/
 @[simp]
 theorem centeredLogPhaseDepth_half :
@@ -196,6 +200,56 @@ theorem centeredLogPhaseDepth_le_four_sq (t : ℝ) :
   have hpos := centeredQuadraticProfile_pos t
   have hlog := Real.log_le_sub_one_of_pos hpos
   nlinarith
+
+/-- Dyadic centered log-depth samples are nonnegative. -/
+theorem dyadicPhaseCenteredLogDepth_nonneg (n k : ℕ) :
+    0 ≤ dyadicPhaseCenteredLogDepth n k :=
+  centeredLogPhaseDepth_nonneg (dyadicPhaseNode n k)
+
+/-- Dyadic centered log-depth samples are bounded by the centered quadratic profile. -/
+theorem dyadicPhaseCenteredLogDepth_le_centeredQuadratic (n k : ℕ) :
+    dyadicPhaseCenteredLogDepth n k ≤
+      dyadicPhaseCenteredQuadratic n k :=
+  centeredLogPhaseDepth_le_four_sq (dyadicPhaseNode n k)
+
+/--
+Nonnegative finite weights preserve nonnegativity of centered log-depth.
+
+This is the finite weighted-sum lift of the pointwise lower bound.
+-/
+theorem weighted_centeredLogDepth_nonneg
+    (n : ℕ) (w : ℕ → ℝ)
+    (hw : ∀ k ∈ dyadicPhaseNodeIndices n, (0 : ℝ) ≤ w k) :
+    0 ≤
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredLogDepth n k := by
+  exact Finset.sum_nonneg fun k hk =>
+    mul_nonneg (hw k hk) (dyadicPhaseCenteredLogDepth_nonneg n k)
+
+/--
+Nonnegative finite weights transport the centered log-depth quadratic upper
+bound to finite sums.
+
+This is the first general bridge from centered logarithmic correction to a
+weighted finite quadratic moment.
+-/
+theorem weighted_centeredLogDepth_le_weighted_centeredQuadratic
+    (n : ℕ) (w : ℕ → ℝ)
+    (hw : ∀ k ∈ dyadicPhaseNodeIndices n, (0 : ℝ) ≤ w k) :
+    (∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredLogDepth n k)
+      ≤
+    ∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredQuadratic n k := by
+  exact Finset.sum_le_sum fun k hk =>
+    by
+      have hle := dyadicPhaseCenteredLogDepth_le_centeredQuadratic n k
+      have hdiff :
+          0 ≤ w k *
+            (dyadicPhaseCenteredQuadratic n k -
+              dyadicPhaseCenteredLogDepth n k) :=
+        mul_nonneg (hw k hk) (sub_nonneg.mpr hle)
+      nlinarith
 
 /-- Finite boundary cancellation in additive logarithmic form. -/
 theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
@@ -609,10 +663,96 @@ def dyadicPhaseMeshWeightedCenteredLogDepthSum (n : ℕ) : ℝ :=
   ∑ k ∈ dyadicPhaseNodeIndices n,
     dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k
 
+/-- Plain mesh-width finite sum of centered quadratic observations. -/
+def dyadicPhaseMeshWeightedCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseMeshWeight n * dyadicPhaseCenteredQuadratic n k
+
+/-- Uniform-average finite sum of centered log-depth observations. -/
+def dyadicPhaseAverageCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseAverageWeight n * dyadicPhaseCenteredLogDepth n k
+
+/-- Uniform-average finite sum of centered quadratic observations. -/
+def dyadicPhaseAverageCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseAverageWeight n * dyadicPhaseCenteredQuadratic n k
+
 /-- Trapezoidal finite sum of centered log-depth observations. -/
 def dyadicPhaseTrapezoidCenteredLogDepthSum (n : ℕ) : ℝ :=
   ∑ k ∈ dyadicPhaseNodeIndices n,
     dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredLogDepth n k
+
+/-- Trapezoidal finite sum of centered quadratic observations. -/
+def dyadicPhaseTrapezoidCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
+
+/-- Plain mesh-width centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseMeshWeightedCenteredLogDepthSum n := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (fun _k => dyadicPhaseMeshWeight n)
+    (fun k hk => (dyadicPhaseMeshWeight_pos n).le)
+
+/--
+Plain mesh-width centered log-depth sums are bounded by the corresponding
+finite centered quadratic moment.
+-/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredLogDepthSum n ≤
+      dyadicPhaseMeshWeightedCenteredQuadraticSum n := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum,
+    dyadicPhaseMeshWeightedCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (fun _k => dyadicPhaseMeshWeight n)
+    (fun k hk => (dyadicPhaseMeshWeight_pos n).le)
+
+/-- Uniform-average centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseAverageCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseAverageCenteredLogDepthSum n := by
+  rw [dyadicPhaseAverageCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (fun _k => dyadicPhaseAverageWeight n)
+    (fun k hk => (dyadicPhaseAverageWeight_pos n).le)
+
+/--
+Uniform-average centered log-depth sums are bounded by the corresponding
+finite centered quadratic moment.
+-/
+theorem dyadicPhaseAverageCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseAverageCenteredLogDepthSum n ≤
+      dyadicPhaseAverageCenteredQuadraticSum n := by
+  rw [dyadicPhaseAverageCenteredLogDepthSum,
+    dyadicPhaseAverageCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (fun _k => dyadicPhaseAverageWeight n)
+    (fun k hk => (dyadicPhaseAverageWeight_pos n).le)
+
+/-- Trapezoidal centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseTrapezoidCenteredLogDepthSum n := by
+  rw [dyadicPhaseTrapezoidCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (dyadicPhaseTrapezoidWeight n)
+    (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
+
+/--
+Trapezoidal centered log-depth sums are bounded by the corresponding finite
+centered quadratic moment.
+-/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredLogDepthSum n ≤
+      dyadicPhaseTrapezoidCenteredQuadraticSum n := by
+  rw [dyadicPhaseTrapezoidCenteredLogDepthSum,
+    dyadicPhaseTrapezoidCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (dyadicPhaseTrapezoidWeight n)
+    (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
 
 /--
 For centered log-depth, the plain mesh-width and trapezoidal sums differ by

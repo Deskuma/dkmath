@@ -38,6 +38,14 @@ The core-zero semantic action is then identified with the standard coordinate
 quarter-turn linear isometry `(x,y) ↦ (-y,x)`. This introduces the geometric
 name only after the linear isometry model is available.
 
+`SemanticCF2DLogComposition` now supplies the finite logarithmic comparison
+surface for dyadic phase samples. The centered log-depth increment is
+identified with `log (1 + 4 * (t - 1/2)^2)`, is pointwise nonnegative, and is
+bounded above by `4 * (t - 1/2)^2`. This pointwise estimate has been lifted to
+arbitrary nonnegative finite weights, with mesh-width, uniform-average, and
+trapezoidal corollaries. These are finite quadratic-moment controls only; no
+Gaussian, integral, angle, or `pi` interpretation is selected here.
+
 The current implementation proves a four-state return:
 
 ```text

@@ -1085,3 +1085,28 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 13:34 JST (Finite weighted quadratic control)
+
+1. API:
+   - dyadic centered quadratic samples
+     `dyadicPhaseCenteredQuadratic` を finite moment 用の公開対象として
+     使う形に整理した。
+   - 任意の非負有限重みで centered log-depth の非負性を保つ
+     `weighted_centeredLogDepth_nonneg` を追加した。
+   - 任意の非負有限重みで centered log-depth sum が centered quadratic
+     moment に支配される
+     `weighted_centeredLogDepth_le_weighted_centeredQuadratic` を追加した。
+2. finite candidates:
+   - mesh-width、uniform-average、trapezoidal の centered log-depth sum と
+     centered quadratic sum を比較する corollary を追加した。
+3. interpretation:
+   - pointwise な `log(1+x) ≤ x` から、有限重み付き二次モーメント制御へ
+     移行した。
+   - Gaussian limit、積分値、`pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

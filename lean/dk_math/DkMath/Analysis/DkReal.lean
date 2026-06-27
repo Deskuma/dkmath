@@ -153,7 +153,11 @@ case where that correction vanishes. The centered log-depth increment is now
 defined, identified with an explicit centered quadratic logarithm, and shown
 to restore a finite mesh/trapezoid discrepancy of `h_n * log 2`. Its centered
 quadratic profile is positive, and the pointwise bound
-`0 ≤ centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` is available.
+`0 ≤ centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` is available. The bound has
+also been lifted to arbitrary nonnegative finite weights, with mesh-width,
+uniform-average, and trapezoidal corollaries. Thus the centered logarithmic
+correction is already controlled by finite centered quadratic moments, before
+any Gaussian, integral, or `pi` interpretation is selected.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

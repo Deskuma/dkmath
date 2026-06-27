@@ -258,6 +258,23 @@ does not identify which weighted observable should survive refinement.
 The endpoint-zero case is now packaged as a separate corollary. This keeps
 future observables cleanly classified: endpoint-zero quantities inherit
 mesh/trapezoid equality immediately, while centered quantities with nonzero
+endpoint values must account for the endpoint correction.
+
+The centered logarithmic correction now has its first finite quadratic
+estimate. Lean proves
+
+```text
+centeredLogPhaseDepth(t) = log(1 + 4 * (t - 1/2)^2),
+0 <= centeredLogPhaseDepth(t),
+centeredLogPhaseDepth(t) <= 4 * (t - 1/2)^2.
+```
+
+These pointwise inequalities have been lifted to arbitrary nonnegative finite
+weights on the dyadic mesh. Mesh-width, uniform-average, and trapezoidal
+centered log-depth sums are therefore nonnegative and bounded above by their
+corresponding finite centered quadratic moments. This is a finite estimate
+only: it prepares the next moment calculation, but it does not yet assert a
+closed form, a limiting integral, a Gaussian law, or a `pi` identification.
 endpoint increments expose the correction term.
 
 The first centered observable is now implemented. `centeredLogPhaseDepth`
