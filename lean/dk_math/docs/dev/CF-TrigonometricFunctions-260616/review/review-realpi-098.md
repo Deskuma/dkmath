@@ -86,7 +86,7 @@ $$
 $$
 \mathrm{semanticAct}
 \quad\longleftrightarrow\quad
-\mathrm{rotation}\left\(\frac{\pi}{2}\right\)
+\mathrm{rotation}\left(\frac{\pi}{2}\right)
 $$
 
 ただし、左側は DkMath 側の保存核・四状態作用から出たもの。

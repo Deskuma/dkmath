@@ -85,21 +85,21 @@ semanticFullTurnAngle = 2*pi
 今回の本質はこれじゃ。
 
 $$
-A^2\(z\)=-z
+A^2(z)=-z
 $$
 
 $$
-A^4\(z\)=z
+A^4(z)=z
 $$
 
 という DkMath 側の core-zero action law を、Euclidean plane 側で
 
 $$
-R_{\pi}\(z\)=-z
+R_{\pi}(z)=-z
 $$
 
 $$
-R_{2\pi}\(z\)=z
+R_{2\pi}(z)=z
 $$
 
 として読む。
