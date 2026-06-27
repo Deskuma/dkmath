@@ -423,6 +423,33 @@ theorem dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
         simp [hdistinct]
         ring
 
+/--
+If a sampled observable vanishes at both endpoints, then the plain mesh-width
+sum and the trapezoidal sum agree.
+
+This is the zero-endpoint corollary of the half-width endpoint correction
+formula. It is useful for boundary-log observables, and it will also isolate
+where centered observables differ from them.
+-/
+theorem dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero
+    (n : ℕ) (f : ℕ → ℝ)
+    (h0 : f 0 = 0)
+    (h1 : f (dyadicPhaseDenom n) = 0) :
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) =
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseTrapezoidWeight n k * f k := by
+  have h :=
+    dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half n f
+  rw [h0, h1] at h
+  have hzero :
+      (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+          (∑ k ∈ dyadicPhaseNodeIndices n,
+            dyadicPhaseTrapezoidWeight n k * f k) = 0 := by
+    have hright : dyadicPhaseMeshWeight n / 2 * (0 + 0) = 0 := by ring
+    rw [hright] at h
+    exact h
+  exact sub_eq_zero.mp hzero
+
 /-- Trapezoidal finite log-depth sum on the complete dyadic node mesh. -/
 def dyadicPhaseTrapezoidLogDepthSum (n : ℕ) : ℝ :=
   ∑ k ∈ dyadicPhaseNodeIndices n,
@@ -464,13 +491,9 @@ theorem dyadicPhaseWeightedLogDepthSum_eq_trapezoidLogDepthSum (n : ℕ) :
       dyadicPhaseTrapezoidLogDepthSum n := by
   rw [dyadicPhaseWeightedLogDepthSum, dyadicPhaseLogDepthSum,
     dyadicPhaseTrapezoidLogDepthSum, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro k hk
-  by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
-  · rcases hendpoint with rfl | rfl
-    · simp [dyadicPhaseTrapezoidWeight]
-    · simp [dyadicPhaseTrapezoidWeight]
-  · simp [dyadicPhaseTrapezoidWeight, hendpoint]
+  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
+    (fun k => Real.log (dyadicPhaseDepth n k))
+    (by simp) (by simp)
 
 /--
 Plain mesh-width and trapezoidal log-normalization sums agree on the complete
@@ -485,13 +508,9 @@ theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
       dyadicPhaseTrapezoidLogNormalizationSum n := by
   rw [dyadicPhaseWeightedLogNormalizationSum, dyadicPhaseLogNormalizationSum,
     dyadicPhaseTrapezoidLogNormalizationSum, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro k hk
-  by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
-  · rcases hendpoint with rfl | rfl
-    · simp [dyadicPhaseTrapezoidWeight]
-    · simp [dyadicPhaseTrapezoidWeight]
-  · simp [dyadicPhaseTrapezoidWeight, hendpoint]
+  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
+    (fun k => Real.log (dyadicPhaseNormalization n k))
+    (by simp) (by simp)
 
 end
 

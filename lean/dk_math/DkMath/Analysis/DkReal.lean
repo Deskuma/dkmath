@@ -148,7 +148,8 @@ endpoint logarithms vanish, so the plain mesh-width and trapezoidal log-depth
 and log-normalization observables agree despite their different total masses.
 The underlying general comparison theorem states that, for any finite
 observable, the mesh-width minus trapezoid discrepancy is exactly the
-half-width endpoint correction.
+half-width endpoint correction. A zero-endpoint corollary packages the common
+case where that correction vanishes.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

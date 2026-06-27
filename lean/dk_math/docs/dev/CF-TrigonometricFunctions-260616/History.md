@@ -1022,3 +1022,23 @@ Archive
 4. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 07:02 JST (Endpoint-zero mesh-trapezoid corollary)
+
+1. API:
+   - endpoint-zero observable 用に
+     `dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero`
+     を追加した。
+2. refactor:
+   - log-depth と log-normalization の mesh-width / trapezoid 一致定理を、
+     一般 endpoint correction theorem の zero-endpoint corollary から導く
+     形へ整理した。
+3. interpretation:
+   - boundary-log observables は端点補正が消える側、centered observables
+     は端点補正が復活する側として分類できる準備が整った。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

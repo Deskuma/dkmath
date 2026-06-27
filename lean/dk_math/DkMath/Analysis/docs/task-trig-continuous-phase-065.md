@@ -396,7 +396,8 @@ total mass `1 + h_n`. The endpoint logarithms of depth and normalization are
 zero, so the plain mesh-width and trapezoidal log observables are proved equal
 at every finite level despite their different total masses. The general
 mesh-width minus trapezoid comparison is also formalized for arbitrary finite
-observables as a half-width endpoint correction.
+observables as a half-width endpoint correction, with a zero-endpoint
+corollary for observables whose endpoint correction vanishes.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, raw logarithmic sum, average, mesh-weighted sum, trapezoidal
 sum, midpoint sum, or another quantity has a canonical refinement limit. The

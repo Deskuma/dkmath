@@ -255,6 +255,11 @@ The log-depth and log-normalization equalities are therefore special cases
 where the endpoint values vanish. This theorem is intentionally finite; it
 does not identify which weighted observable should survive refinement.
 
+The endpoint-zero case is now packaged as a separate corollary. This keeps
+future observables cleanly classified: endpoint-zero quantities inherit
+mesh/trapezoid equality immediately, while centered quantities with nonzero
+endpoint increments expose the correction term.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.
