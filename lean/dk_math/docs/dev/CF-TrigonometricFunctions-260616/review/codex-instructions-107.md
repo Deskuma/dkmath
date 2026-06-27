@@ -1,4 +1,4 @@
-# Codex plan
+# Codex instructions
 
 Target:
   DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
