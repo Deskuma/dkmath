@@ -133,6 +133,17 @@ k semantic actions  <->  Euclidean rotation by semanticPhaseAngle k
 The implemented special cases already read two quarter-turns as negation and
 four quarter-turns as the identity rotation.
 
+The action side is now connected for the first two special cases:
+
+```text
+two semantic actions   <->  Euclidean rotation by semanticHalfTurnAngle
+four semantic actions  <->  Euclidean rotation by semanticFullTurnAngle
+```
+
+These theorems use the pre-existing core-zero action laws: two actions
+negate both coordinates, while four actions return to the identity. Thus the
+angle reading remains downstream of the algebraic order-four structure.
+
 ### Milestone A: continuous four-edge loop - implemented
 
 1. The real CF2D target carries the topology induced from `Real × Real`.

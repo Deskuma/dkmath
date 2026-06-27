@@ -1256,3 +1256,30 @@ Archive
 5. documentation:
    - `research-pregeometric-pi-program-067.md` の first angle reading
      milestone を half/full turn まで拡張した。
+
+### 2026/06/27 18:39 JST (Semantic action iteration angle bridge)
+
+1. angle API:
+   - `semanticPhaseAngle_two` と `semanticPhaseAngle_four` を追加し、
+     phase index `2` と `4` が half/full turn 名に一致することを
+     simp theorem として記録した。
+   - `semanticPhaseAngle_add` を追加し、phase index の加法が angle の
+     加法として読めることを記録した。
+2. coordinate bridge:
+   - `pairToEuclideanPlane_neg` を追加し、coordinate insertion が
+     negation と可換であることを記録した。
+3. action iteration bridge:
+   - `pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticAct_four_eq_rotation_semanticFullTurnAngle`
+     を追加した。
+4. interpretation:
+   - 既存の core-zero action law
+     `semanticAct_twice_of_core_eq_zero` を使い、二回作用は Euclidean
+     half-turn として読まれる。
+   - 四回作用は Euclidean full-turn、すなわち identity rotation として
+     読まれる。
+   - まだ一般 `k` 回作用の theorem は未実装。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
