@@ -346,6 +346,43 @@ def shiftedSemanticRawMidpoint
         (shiftedSemanticRightEndpoint r z).beam) / 2)
 
 /--
+Raw affine interpolation between the semantic shifted endpoint candidates.
+
+This helper is intentionally uncorrected. Its center is the raw midpoint,
+which still lies at half square-mass depth under the core-zero hypothesis.
+-/
+def shiftedSemanticRawAffine
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (t : ℝ) : Vec ℝ :=
+  Vec.mk
+    ((1 - t) * (shiftedSemanticLeftEndpoint r z).core +
+      t * (shiftedSemanticRightEndpoint r z).core)
+    ((1 - t) * (shiftedSemanticLeftEndpoint r z).beam +
+      t * (shiftedSemanticRightEndpoint r z).beam)
+
+/-- The raw semantic shifted affine starts at the left endpoint candidate. -/
+@[simp]
+theorem shiftedSemanticRawAffine_zero
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticRawAffine r z 0 = shiftedSemanticLeftEndpoint r z := by
+  simp [shiftedSemanticRawAffine]
+
+/-- The raw semantic shifted affine ends at the right endpoint candidate. -/
+@[simp]
+theorem shiftedSemanticRawAffine_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticRawAffine r z 1 = shiftedSemanticRightEndpoint r z := by
+  simp [shiftedSemanticRawAffine]
+
+/-- At the local center, the raw semantic shifted affine is its raw midpoint. -/
+@[simp]
+theorem shiftedSemanticRawAffine_center_eq_rawMidpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticRawAffine r z phaseCenter =
+      shiftedSemanticRawMidpoint r z := by
+  simp [shiftedSemanticRawAffine, shiftedSemanticRawMidpoint, phaseCenter]
+  constructor <;> ring
+
+/--
 For a core-zero action, the raw midpoint of the normalized center candidates
 is a scalar multiple of the old seam state.
 
@@ -405,6 +442,61 @@ theorem shiftedSemanticRawMidpoint_q2_half_of_core_eq_zero
   have hfactor : (phaseNormalization phaseCenter / 2) ^ 2 = 1 / 2 := by
     nlinarith [sq_nonneg (phaseNormalization phaseCenter)]
   rw [hfactor]
+
+/--
+Correct the raw shifted midpoint by the inverse of its seam-scale factor.
+
+This is only a center correction, not a full shifted semantic path.
+-/
+def shiftedSemanticCorrectedMidpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  Vec.mk
+    ((2 / phaseNormalization phaseCenter) *
+      (shiftedSemanticRawMidpoint r z).core)
+    ((2 / phaseNormalization phaseCenter) *
+      (shiftedSemanticRawMidpoint r z).beam)
+
+/-- The center normalization factor is nonzero. -/
+theorem phaseNormalization_center_ne_zero :
+    phaseNormalization phaseCenter ≠ 0 :=
+  (phaseNormalization_pos phaseCenter).ne'
+
+/--
+The correction scalar cancels the raw midpoint seam-scale factor.
+-/
+theorem shiftedSemanticCorrection_mul_rawScale :
+    (2 / phaseNormalization phaseCenter) *
+        (phaseNormalization phaseCenter / 2) = 1 := by
+  field_simp [phaseNormalization_center_ne_zero]
+
+/--
+Under the core-zero law, the corrected shifted midpoint is exactly the old
+seam state.
+
+This closes the center correction without yet choosing a pointwise correction
+law for the whole shifted semantic edge.
+-/
+theorem shiftedSemanticCorrectedMidpoint_eq_seam_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCorrectedMidpoint r z = shiftedSemanticSeam r z := by
+  rw [shiftedSemanticCorrectedMidpoint,
+    shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero hcore]
+  cases shiftedSemanticSeam r z
+  simp only [Vec.mk.injEq]
+  constructor
+  · field_simp [phaseNormalization_center_ne_zero]
+  · field_simp [phaseNormalization_center_ne_zero]
+
+/-- The corrected shifted midpoint returns to the original `q2` boundary. -/
+theorem shiftedSemanticCorrectedMidpoint_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticCorrectedMidpoint r z) = Vec.q2 z := by
+  rw [shiftedSemanticCorrectedMidpoint_eq_seam_of_core_eq_zero hcore,
+    shiftedSemanticSeam_q2]
 
 /-!
 [TODO: semantic-cf2d/shifted-semantic-edge]
