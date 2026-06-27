@@ -1129,6 +1129,35 @@ def finFourSucc (i : Fin 4) : Fin 4 :=
 theorem finFourSucc_val (i : Fin 4) :
     (finFourSucc i).val = (i.val + 1) % 4 := rfl
 
+/-- The finite successor sends `0` to `1`. -/
+@[simp]
+theorem finFourSucc_zero :
+    finFourSucc ⟨0, by norm_num⟩ = ⟨1, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `1` to `2`. -/
+@[simp]
+theorem finFourSucc_one :
+    finFourSucc ⟨1, by norm_num⟩ = ⟨2, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `2` to `3`. -/
+@[simp]
+theorem finFourSucc_two :
+    finFourSucc ⟨2, by norm_num⟩ = ⟨3, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `3` back to `0`. -/
+@[simp]
+theorem finFourSucc_three :
+    finFourSucc ⟨3, by norm_num⟩ = ⟨0, by norm_num⟩ := by
+  rfl
+
+/-- Applying the finite successor four times returns to the starting index. -/
+theorem finFourSucc_four_cycle (i : Fin 4) :
+    finFourSucc (finFourSucc (finFourSucc (finFourSucc i))) = i := by
+  fin_cases i <;> rfl
+
 /-- The shifted base state indexed by `Fin 4`. -/
 def shiftedSemanticFinBase
     (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) : Vec ℝ :=
@@ -1157,6 +1186,20 @@ theorem shiftedSemanticFinEdge_eq_indexed
     shiftedSemanticFinEdge r z i t =
       shiftedSemanticIndexedEdge r z i.val t := rfl
 
+/-- The finite shifted edge starts at its finite left endpoint. -/
+theorem shiftedSemanticFinEdge_leftEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i 0 =
+      shiftedSemanticLeftEndpoint r (shiftedSemanticFinBase r z i) := by
+  simp [shiftedSemanticFinEdge, shiftedSemanticIndexedEdge]
+
+/-- The finite shifted edge ends at its finite right endpoint. -/
+theorem shiftedSemanticFinEdge_rightEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i 1 =
+      shiftedSemanticRightEndpoint r (shiftedSemanticFinBase r z i) := by
+  simp [shiftedSemanticFinEdge, shiftedSemanticIndexedEdge]
+
 /-- The finite shifted edge stays on the original square-mass boundary. -/
 theorem shiftedSemanticFinEdge_q2_of_core_eq_zero
     {r : UnitKernel DkNNRealQ}
@@ -1175,6 +1218,25 @@ theorem shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero
     shiftedSemanticFinEdge r z i phaseCenter =
       shiftedSemanticIndexedBase r z (i.val + 1) :=
   shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
+
+/-- The finite shifted edge center reaches the cyclic successor base. -/
+theorem shiftedSemanticFinEdge_center_eq_succ_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i phaseCenter =
+      shiftedSemanticFinBase r z (finFourSucc i) := by
+  fin_cases i
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨0, by norm_num⟩
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨1, by norm_num⟩
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨2, by norm_num⟩
+  · calc
+      shiftedSemanticFinEdge r z ⟨3, by norm_num⟩ phaseCenter =
+          shiftedSemanticIndexedBase r z (3 + 1) :=
+        shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨3, by norm_num⟩
+      _ = shiftedSemanticFinBase r z (finFourSucc ⟨3, by norm_num⟩) := by
+        norm_num
+        exact semanticAct_four_of_core_eq_zero hcore z
 
 /-- The finite shifted normalized edge as a path. -/
 def shiftedSemanticFinPath
@@ -1252,6 +1314,28 @@ theorem shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero
       shiftedSemanticIndexedBaseLevelPoint r z (i.val + 1) :=
   shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
 
+/-- The finite level edge center reaches the cyclic successor base point. -/
+theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinLevelEdge hcore z i phaseCenter =
+      shiftedSemanticIndexedBaseLevelPoint r z (finFourSucc i).val := by
+  fin_cases i
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨0, by norm_num⟩
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨1, by norm_num⟩
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨2, by norm_num⟩
+  · apply Subtype.ext
+    calc
+      (shiftedSemanticFinLevelEdge hcore z ⟨3, by norm_num⟩ phaseCenter).1 =
+          shiftedSemanticIndexedBase r z (3 + 1) :=
+        congrArg Subtype.val
+          (shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero
+            hcore z ⟨3, by norm_num⟩)
+      _ = (shiftedSemanticIndexedBaseLevelPoint r z (finFourSucc ⟨3, by norm_num⟩).val).1 := by
+        norm_num
+        exact semanticAct_four_of_core_eq_zero hcore z
+
 /-- The finite shifted normalized edge as a fixed-boundary path. -/
 def shiftedSemanticFinLevelPath
     {r : UnitKernel DkNNRealQ}
@@ -1285,6 +1369,44 @@ theorem shiftedSemanticFinRightLevelEndpoint_eq_succ_left
   · exact shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 2
   · exact shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left hcore z
 
+/-- Finite seam compatibility from edge `0` to edge `1`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨0, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨1, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨0, by norm_num⟩
+
+/-- Finite seam compatibility from edge `1` to edge `2`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_one_eq_two_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨1, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨2, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨1, by norm_num⟩
+
+/-- Finite seam compatibility from edge `2` to edge `3`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_two_eq_three_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨2, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨3, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨2, by norm_num⟩
+
+/-- Finite seam compatibility from edge `3` back to edge `0`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨3, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨0, by norm_num⟩ :=
+  by
+    simpa using
+      shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨3, by norm_num⟩
+
 /-- Finite-index alias for the closed four shifted level path. -/
 def shiftedSemanticFinFourLevelPath
     {r : UnitKernel DkNNRealQ}
@@ -1294,6 +1416,24 @@ def shiftedSemanticFinFourLevelPath
       (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0)
       (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0) :=
   shiftedSemanticFourLevelPath hcore z
+
+/-- Source endpoint of the closed shifted four-level path. -/
+theorem shiftedSemanticFourLevelPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFourLevelPath hcore z 0 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  (shiftedSemanticFourLevelPath hcore z).source
+
+/-- Target endpoint of the closed shifted four-level path. -/
+theorem shiftedSemanticFourLevelPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFourLevelPath hcore z 1 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  (shiftedSemanticFourLevelPath hcore z).target
 
 /-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
@@ -1322,7 +1462,10 @@ core-zero four-step return law, not any geometric angle reading.
 [IMPLEMENTED: semantic-cf2d/shifted-fin-four]
 The shifted indexed layer now has `Fin 4` wrappers for bases, edges, paths,
 fixed-`q2` level edges, and level paths. A finite cyclic successor records the
-four-state seam law without introducing a continuous quotient parameter.
+four-state seam law without introducing a continuous quotient parameter. The
+successor has named small-step facts and a four-cycle law, finite edges expose
+endpoint and center-to-successor facts, and the closed shifted path exposes
+source and target aliases.
 
 [TODO: semantic-cf2d/shifted-cyclic-quotient]
 Introduce a quotient phase parameter only after the four-edge closed path is

@@ -203,7 +203,10 @@ fixed-`q2` path object; the closing seam is supplied by the core-zero
 four-step return law. The same finite cyclic layer is also exposed through
 `Fin 4` wrappers for bases, edges, level edges, and paths, with a finite
 successor seam law for downstream code that wants a bounded index rather than
-raw natural-number indices.
+raw natural-number indices. The finite successor has named small-step facts
+and a four-cycle law. Finite edges expose endpoint aliases and
+center-to-successor-base compatibility, and the closed shifted path exposes
+source and target aliases.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
