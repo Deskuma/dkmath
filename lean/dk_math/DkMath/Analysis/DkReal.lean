@@ -16,6 +16,7 @@ import DkMath.Analysis.DkReal.Order
 import DkMath.Analysis.DkReal.CanonicalOrder
 import DkMath.Analysis.DkReal.Semantic
 import DkMath.Analysis.DkReal.SemanticCF2DLogLimit
+import DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -170,6 +171,16 @@ the closed quadratic bound and the trapezoidal centered quadratic moment both
 tend to `1 / 3` along refinement depth. These theorems use Mathlib filters
 through the `DkLimit` vocabulary and still do not identify the centered
 log-depth limit.
+
+[IMPLEMENTED: semantic-cf2d-phase-shift] `DkReal.SemanticCF2DPhaseShift`
+exposes the endpoint-center-pole-shift skeleton before any angle vocabulary.
+The local center `phaseCenter = 1 / 2` is recognized by the unique minimum of
+`phaseDepth`, and centered reflection is available directly. Unwrapped
+quarter-cycle coordinates prove that the seam endpoint between adjacent
+quarter edges is the midpoint between their centers, isolating the one-eighth
+phase displacement without using circle or arc language. Scalar return laws
+for dyadic and positive `k` cycle divisions are also recorded, and the affine
+and normalized semantic edges expose their midpoint `q2` facts.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

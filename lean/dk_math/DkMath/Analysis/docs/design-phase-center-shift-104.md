@@ -240,7 +240,8 @@ def centeredPhaseCoord (t : ℝ) : ℝ :=
 ```
 
 The four-edge/global parameter names can live in a small new module, for
-example `SemanticCF2DPhaseShift.lean`:
+example `SemanticCF2DPhaseShift.lean`. These are unwrapped real
+representatives; modulo-one cyclic wrapping is a later quotient reading:
 
 ```lean
 def globalQuarterEndpoint (k : ℕ) : ℝ :=
@@ -293,6 +294,32 @@ endpoints to neighboring centers, the old endpoint is now the midpoint.
 
 The cycle-step theorems are deliberately scalar. They record return laws for
 the normalized parameter before any geometric shape is assigned to the path.
+
+Implemented checkpoint:
+
+```text
+SemanticCF2DPhaseShift.lean
+  phaseCenter
+  phaseHalfQuarterStep
+  centeredPhaseCoord
+  phaseDepth_center_eq
+  phaseDepth_center_unique
+  phaseDepth_centered_reflect
+  globalQuarterEndpoint
+  globalQuarterCenter
+  globalQuarterEndpoint_zero
+  globalQuarterEndpoint_four
+  globalQuarterCenter_eq_endpoint_add_halfQuarter
+  globalQuarterCenter_succ_sub_center
+  globalQuarterEndpoint_succ_is_center_between_centers
+  normalizedCycleStep
+  dyadicCycleStep
+  normalizedCycleStep_mul_returnCount
+  dyadicCycleStep_mul_returnCount
+  semanticPhaseEdge_center
+  semanticPhaseEdge_q2_center_of_core_eq_zero
+  normalizedPhaseEdge_q2_center_of_core_eq_zero
+```
 
 ## Boundary and Normalization Targets
 
