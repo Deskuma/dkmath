@@ -16,6 +16,7 @@ import DkMath.Analysis.DkReal.Order
 import DkMath.Analysis.DkReal.CanonicalOrder
 import DkMath.Analysis.DkReal.Semantic
 import DkMath.Analysis.DkReal.SemanticCF2DLogLimit
+import DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -171,6 +172,36 @@ tend to `1 / 3` along refinement depth. These theorems use Mathlib filters
 through the `DkLimit` vocabulary and still do not identify the centered
 log-depth limit.
 
+[IMPLEMENTED: semantic-cf2d-phase-shift] `DkReal.SemanticCF2DPhaseShift`
+exposes the endpoint-center-pole-shift skeleton before any angle vocabulary.
+The local center `phaseCenter = 1 / 2` is recognized by the unique minimum of
+`phaseDepth`, and centered reflection is available directly. Unwrapped
+quarter-cycle coordinates prove that the seam endpoint between adjacent
+quarter edges is the midpoint between their centers, isolating the one-eighth
+phase displacement without using circle or arc language. Scalar return laws
+for dyadic and positive `k` cycle divisions are also recorded. The shifted
+scalar frame now names neighboring centers as endpoints and proves that its
+affine center is the old seam endpoint. The affine and normalized semantic
+edges expose their midpoint `q2` facts. The semantic shifted-endpoint
+candidates are also named: normalized neighboring centers stay on the same
+`q2` boundary, but their raw midpoint has square mass `1 / 2 * q2 z`, so a
+center correction rescales that raw midpoint exactly back to the old seam and
+to the original `q2` boundary. The raw shifted affine edge has the same
+`phaseDepth` profile as the original affine edge, so the same pointwise
+normalization defines a shifted boundary-valued edge whose center is the old
+seam. This shifted normalized edge is now continuous, packaged as a Mathlib
+`Path`, and also packaged as a path internal to the fixed `q2` level set.
+Adjacent shifted edges share their normalized center endpoint, preparing the
+later cyclic concatenation layer without adding geometric angle vocabulary.
+The shifted edge is now also indexed by semantic action iterates. Indexed
+bases stay on the initial square-mass level, adjacent indexed shifted edges
+share seams, their centers are the next indexed bases, and core-zero
+four-step return holds for bases, endpoints, and edge functions. Fixed-`q2`
+indexed level-set paths expose the same compatibility inside the boundary.
+The first four indexed shifted level paths now concatenate to a closed
+fixed-`q2` path object; the closing seam is supplied by the core-zero
+four-step return law.
+
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
 affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
@@ -193,6 +224,15 @@ circle with Mathlib's standard `EuclideanSpace Real (Fin 2)` L2 metric sphere
 of radius `sqrt (q2 z)`.
 In that standard Euclidean plane, the semantic core-zero action is identified
 with the coordinate quarter-turn linear isometry `(x,y) ↦ (-y,x)`.
+The same Euclidean interpretation now names the angle-reading vocabulary:
+`semanticQuarterTurnAngle = Real.pi / 2`, `semanticHalfTurnAngle = Real.pi`,
+and `semanticFullTurnAngle = 2 * Real.pi`. These are external readings of the
+already-proved action, not intrinsic constructions of `pi`. The iterate API
+`semanticActIter r k z` proves that core-zero semantic action depends only on
+`k % 4`, and `EuclideanPhase` reads that finite phase as rotation by
+`semanticPhaseAngle (k % 4)`. This closes the finite four-state phase table
+while leaving intrinsic `pi` and continuous-angle construction as future
+research tasks.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.

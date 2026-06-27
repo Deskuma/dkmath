@@ -464,6 +464,29 @@ requires a matching lower estimate.
    `Real.pi`.
 4. Only then introduce an angular interpretation.
 
+### Milestone F: continuous theta extraction
+
+The modulo-four table is discrete. The next trigonometric milestone is not to
+replace it by a circle parametrization immediately, but to explain how the
+four transitions are filled by a continuous parameter.
+
+The intended order is:
+
+```text
+finite phase residue k % 4
+  -> one normalized continuous edge inside that residue
+  -> four transported copies
+  -> endpoint gluing
+  -> cyclic parameter
+  -> continuous theta coordinate
+  -> comparison with Euclidean angle
+```
+
+This keeps `theta` downstream of the transition mechanism. The first
+continuous parameter is the local edge parameter, not yet a global angle.
+Only after the cyclic parameter is constructed should a bridge to the usual
+Euclidean angular coordinate be stated.
+
 ## Guardrails
 
 The following claims are not established by the current implementation:
@@ -482,11 +505,25 @@ mechanism from which these theorem obligations can be investigated.
 ## Immediate Next Step
 
 The coordinate-circle and standard `EuclideanSpace Real (Fin 2)` metric-sphere
-bridges are now implemented, including the degenerate zero boundary. The next
-interpretive step has also identified the core-zero action with the standard
-coordinate quarter-turn linear isometry. After pulling back Mathlib's standard
-complex orientation, that isometry is now proved equal to the oriented
-rotation by `Real.pi / 2`. This remains an interpretation of the existing
-boundary action, not an intrinsic derivation of `pi` and not a replacement
-construction.
-Refinement and limit arguments remain separate checkpoints.
+bridges are implemented, including the degenerate zero boundary. The
+core-zero action is identified with the standard coordinate quarter-turn, and
+the finite iterate table now reduces by `k % 4`. Under the Euclidean reading,
+that residue table is rotation by
+`semanticPhaseAngle (k % 4)`.
+
+The next implementation choices are intentionally separate:
+
+```text
+light theorem route:
+  map-level wrappers for the modulo-four action bridge
+
+continuous-theta route:
+  construct the global cyclic parameter from normalized edges
+
+intrinsic-pi route:
+  continue the refinement/log-depth/Gaussian investigation
+```
+
+The current checkpoint closes the finite order-four angle-reading table. It
+does not derive `pi` intrinsically, define a global angle coordinate, or prove
+the usual trigonometric functions from a continuous parameter.
