@@ -329,6 +329,17 @@ SemanticCF2DPhaseShift.lean
   shiftedQuarterAffine_zero_eq_leftEndpoint
   shiftedQuarterAffine_one_eq_rightEndpoint
   shiftedQuarterAffine_center_eq_shiftedQuarterCenter
+  shiftedSemanticLeftEndpoint
+  shiftedSemanticRightEndpoint
+  shiftedSemanticSeam
+  shiftedSemanticLeftEndpoint_q2_of_core_eq_zero
+  shiftedSemanticRightEndpoint_q2_of_core_eq_zero
+  shiftedSemanticSeam_q2
+  shiftedSemanticSeam_q2_of_core_eq_zero
+  shiftedSemanticRawMidpoint
+  shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero
+  shiftedSemanticRawMidpoint_q2_of_core_eq_zero
+  shiftedSemanticRawMidpoint_q2_half_of_core_eq_zero
   normalizedCycleStep
   dyadicCycleStep
   normalizedCycleStep_mul_returnCount
@@ -342,9 +353,34 @@ SemanticCF2DPhaseShift.lean
 
 The scalar shifted-frame API is now implemented, including endpoint
 separation, center half-quarter formulas, and the affine interpolation helper
-`shiftedQuarterAffine`. The next target is to choose the semantic endpoint
-states and correction law for a shifted semantic edge, then lift the
-shifted-frame scalar center theorem to that path.
+`shiftedQuarterAffine`.
+
+The first semantic endpoint candidates are also implemented:
+
+```text
+left candidate:
+  normalized center state of the current quarter edge
+
+right candidate:
+  normalized center state of the next quarter edge
+
+seam:
+  the old endpoint state between those two edges
+```
+
+The candidates all lie on the same `q2` boundary under the core-zero
+hypothesis. However, their raw affine midpoint is not the seam state in
+general. Lean records the obstruction in two forms:
+
+```text
+shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero
+shiftedSemanticRawMidpoint_q2_half_of_core_eq_zero
+```
+
+The raw midpoint is a scalar multiple of the seam state, and its square mass
+is exactly `1 / 2 * q2 z`. Therefore the next target is not another raw affine
+edge; it is to choose the shifted correction or projection law that returns
+this midpoint to the boundary seam.
 
 Candidate theorem directions:
 
@@ -403,8 +439,9 @@ depend on that reading.
 6. Implemented: add scalar cycle-step facts for dyadic and positive `k` divisions.
 7. Implemented: add scalar shifted-frame endpoints, center, and affine midpoint theorem.
 8. Implemented: lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
-9. Next: choose a shifted semantic edge definition.
-10. Later: add a Euclidean bridge that reads `1/8` full-cycle
+9. Implemented: name semantic endpoint candidates and prove their raw midpoint obstruction.
+10. Next: choose a shifted correction/projection law.
+11. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -433,11 +470,11 @@ parameter before assigning any Euclidean shape.
 
 ```text
 [TODO: semantic-cf2d/shifted-semantic-edge]
-Choose the endpoint states and correction law for the shifted semantic edge.
-The natural candidates are normalized center states of neighboring quarter
-edges, but their raw affine midpoint is not generally the old seam state.
-After selecting the shifted normalization/projection law, prove scalar
-compatibility with `shiftedQuarterCenter`.
+Choose the correction law for the shifted semantic edge. The endpoint
+candidates are now fixed as normalized center states of neighboring quarter
+edges. Their raw affine midpoint has `q2 = 1 / 2 * q2 z`, so a shifted
+normalization or projection must return it to the seam boundary before the
+final shifted path is defined.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path

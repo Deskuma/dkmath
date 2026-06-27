@@ -182,8 +182,11 @@ phase displacement without using circle or arc language. Scalar return laws
 for dyadic and positive `k` cycle divisions are also recorded. The shifted
 scalar frame now names neighboring centers as endpoints and proves that its
 affine center is the old seam endpoint. The affine and normalized semantic
-edges expose their midpoint `q2` facts, while shifted semantic paths remain a
-later definition.
+edges expose their midpoint `q2` facts. The semantic shifted-endpoint
+candidates are also named: normalized neighboring centers stay on the same
+`q2` boundary, but their raw midpoint has square mass `1 / 2 * q2 z`, so a
+shifted correction law is still needed before defining the final shifted
+semantic path.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

@@ -277,6 +277,136 @@ theorem shiftedQuarterAffine_center_eq_shiftedQuarterCenter (k : ℕ) :
   ring
 
 /-!
+## Semantic shifted endpoint candidates
+
+The natural semantic endpoint candidates are the normalized center states of
+two neighboring quarter edges. Their raw midpoint is deliberately computed
+below instead of being assumed to be the old seam state.
+-/
+
+/-- Left semantic endpoint candidate for the shifted frame. -/
+def shiftedSemanticLeftEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  normalizedPhaseEdge r z phaseCenter
+
+/-- Right semantic endpoint candidate for the shifted frame. -/
+def shiftedSemanticRightEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  normalizedPhaseEdge r (semanticAct r z) phaseCenter
+
+/-- The old seam state between the neighboring quarter edges. -/
+def shiftedSemanticSeam
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  semanticAct r z
+
+/-- The left semantic endpoint candidate remains on the original `q2` boundary. -/
+theorem shiftedSemanticLeftEndpoint_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticLeftEndpoint r z) = Vec.q2 z := by
+  exact normalizedPhaseEdge_q2_of_core_eq_zero hcore z phaseCenter
+
+/-- The right semantic endpoint candidate remains on the original `q2` boundary. -/
+theorem shiftedSemanticRightEndpoint_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticRightEndpoint r z) = Vec.q2 z := by
+  rw [shiftedSemanticRightEndpoint,
+    normalizedPhaseEdge_q2_of_core_eq_zero hcore,
+    semanticAct_q2]
+
+/-- The old seam state is on the same `q2` boundary. -/
+theorem shiftedSemanticSeam_q2
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticSeam r z) = Vec.q2 z :=
+  semanticAct_q2 r z
+
+/-- Core-zero spelling of `shiftedSemanticSeam_q2`, for uniform downstream APIs. -/
+theorem shiftedSemanticSeam_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (_hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticSeam r z) = Vec.q2 z :=
+  shiftedSemanticSeam_q2 r z
+
+/--
+Raw coordinate midpoint between the shifted semantic endpoint candidates.
+
+This is only the uncorrected midpoint. It is useful precisely because it lets
+the next theorem state the correction obstruction explicitly.
+-/
+def shiftedSemanticRawMidpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
+  Vec.mk
+    (((shiftedSemanticLeftEndpoint r z).core +
+        (shiftedSemanticRightEndpoint r z).core) / 2)
+    (((shiftedSemanticLeftEndpoint r z).beam +
+        (shiftedSemanticRightEndpoint r z).beam) / 2)
+
+/--
+For a core-zero action, the raw midpoint of the normalized center candidates
+is a scalar multiple of the old seam state.
+
+The scalar is `phaseNormalization phaseCenter / 2`, not definitionally `1`.
+This is the concrete obstruction: a final shifted semantic edge needs an
+additional correction or projection law before its center can be identified
+with the seam state.
+-/
+theorem shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticRawMidpoint r z =
+      Vec.mk
+        ((phaseNormalization phaseCenter / 2) * (shiftedSemanticSeam r z).core)
+        ((phaseNormalization phaseCenter / 2) * (shiftedSemanticSeam r z).beam) := by
+  cases z
+  simp [shiftedSemanticRawMidpoint, shiftedSemanticLeftEndpoint,
+    shiftedSemanticRightEndpoint, shiftedSemanticSeam, normalizedPhaseEdge,
+    semanticPhaseEdge, phaseCenter, semanticAct_of_core_eq_zero hcore]
+  constructor <;> ring
+
+/--
+The raw shifted midpoint has the square-mass of the seam scaled by
+`(phaseNormalization phaseCenter / 2)^2`.
+
+This packages the same obstruction at the boundary-observation level.
+-/
+theorem shiftedSemanticRawMidpoint_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticRawMidpoint r z) =
+      (phaseNormalization phaseCenter / 2) ^ 2 * Vec.q2 z := by
+  rw [shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero hcore]
+  rw [Vec.q2_scale, shiftedSemanticSeam_q2]
+
+/--
+At the boundary-observation level, the raw midpoint has only half the original
+square mass.
+
+This stronger form makes the obstruction explicit: the candidate endpoints
+are individually normalized, but their raw midpoint has fallen back to the
+same half-depth value as an unnormalized affine center.
+-/
+theorem shiftedSemanticRawMidpoint_q2_half_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Vec.q2 (shiftedSemanticRawMidpoint r z) =
+      (1 / 2 : ℝ) * Vec.q2 z := by
+  have hnorm_sq : phaseNormalization phaseCenter ^ 2 = 2 := by
+    have hcancel := phaseNormalization_sq_mul_phaseDepth phaseCenter
+    rw [phaseDepth_center_eq] at hcancel
+    nlinarith
+  rw [shiftedSemanticRawMidpoint_q2_of_core_eq_zero hcore]
+  have hfactor : (phaseNormalization phaseCenter / 2) ^ 2 = 1 / 2 := by
+    nlinarith [sq_nonneg (phaseNormalization phaseCenter)]
+  rw [hfactor]
+
+/-!
 [TODO: semantic-cf2d/shifted-semantic-edge]
 Define a shifted semantic edge only after choosing the endpoint states and
 the correction law that correspond to `shiftedQuarterLeftEndpoint` and
