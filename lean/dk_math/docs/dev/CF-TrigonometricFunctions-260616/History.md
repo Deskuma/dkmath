@@ -1042,3 +1042,27 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 13:15 JST (Centered log-depth increment)
+
+1. API:
+   - `centeredLogPhaseDepth` と dyadic sample 版
+     `dyadicPhaseCenteredLogDepth` を追加した。
+   - centered log-depth の mesh-width sum と trapezoidal sum を定義した。
+2. finite laws:
+   - centered log-depth は midpoint で `0`、左右 endpoint で `log 2`
+     になることを証明した。
+   - `centeredLogPhaseDepth t =
+     log (1 + 4 * (t - 1/2)^2)` を証明した。
+   - centered log-depth の plain mesh-width sum と trapezoidal sum の差が
+     `h_n * log 2` になることを証明した。
+3. interpretation:
+   - boundary-log では消えていた endpoint correction が、centered
+     observable では有限段階で復活することを Lean 上で可視化した。
+   - Gaussian limit や `pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

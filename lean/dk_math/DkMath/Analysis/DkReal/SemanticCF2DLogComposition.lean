@@ -105,6 +105,62 @@ theorem log_dyadicPhaseNormalization_right_endpoint (n : ℕ) :
     Real.log (dyadicPhaseNormalization n (dyadicPhaseDenom n)) = 0 := by
   simp [dyadicPhaseNormalization]
 
+/--
+Centered logarithmic phase-depth increment.
+
+The baseline is the midpoint depth `1 / 2`. This is the first finite
+observable whose endpoint values no longer vanish, so endpoint corrections
+become visible again.
+-/
+def centeredLogPhaseDepth (t : ℝ) : ℝ :=
+  Real.log (phaseDepth t) - Real.log (1 / 2 : ℝ)
+
+/-- Dyadic samples of the centered logarithmic phase-depth increment. -/
+def dyadicPhaseCenteredLogDepth (n k : ℕ) : ℝ :=
+  centeredLogPhaseDepth (dyadicPhaseNode n k)
+
+/-- The midpoint baseline makes the centered log-depth increment vanish. -/
+@[simp]
+theorem centeredLogPhaseDepth_half :
+    centeredLogPhaseDepth (1 / 2 : ℝ) = 0 := by
+  rw [centeredLogPhaseDepth, phaseDepth_half]
+  ring
+
+/-- The left endpoint centered log-depth increment is `log 2`. -/
+@[simp]
+theorem centeredLogPhaseDepth_zero :
+    centeredLogPhaseDepth 0 = Real.log (2 : ℝ) := by
+  have hhalf : Real.log (1 / 2 : ℝ) = -Real.log (2 : ℝ) := by
+    rw [show (1 / 2 : ℝ) = (2 : ℝ)⁻¹ by norm_num, Real.log_inv]
+  rw [centeredLogPhaseDepth, phaseDepth_zero, hhalf, Real.log_one]
+  ring
+
+/-- The right endpoint centered log-depth increment is `log 2`. -/
+@[simp]
+theorem centeredLogPhaseDepth_one :
+    centeredLogPhaseDepth 1 = Real.log (2 : ℝ) := by
+  have hhalf : Real.log (1 / 2 : ℝ) = -Real.log (2 : ℝ) := by
+    rw [show (1 / 2 : ℝ) = (2 : ℝ)⁻¹ by norm_num, Real.log_inv]
+  rw [centeredLogPhaseDepth, phaseDepth_one, hhalf, Real.log_one]
+  ring
+
+/--
+The centered log-depth increment is the logarithm of an explicit centered
+quadratic profile.
+
+This is still a finite algebraic observation. It identifies the quadratic
+shape that will later be compared with Gaussian-type kernels, without
+asserting a Gaussian limit.
+-/
+theorem centeredLogPhaseDepth_eq_log_one_add_four_sq (t : ℝ) :
+    centeredLogPhaseDepth t =
+      Real.log (1 + 4 * (t - (1 / 2 : ℝ)) ^ 2) := by
+  unfold centeredLogPhaseDepth
+  rw [← Real.log_div (phaseDepth_pos t).ne' (by norm_num : (1 / 2 : ℝ) ≠ 0)]
+  congr
+  rw [phaseDepth_eq_two_sq_add_half]
+  ring
+
 /-- Finite boundary cancellation in additive logarithmic form. -/
 theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
   (n : ℕ) :
@@ -511,6 +567,46 @@ theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
   exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
     (fun k => Real.log (dyadicPhaseNormalization n k))
     (by simp) (by simp)
+
+/-- Plain mesh-width finite sum of centered log-depth observations. -/
+def dyadicPhaseMeshWeightedCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k
+
+/-- Trapezoidal finite sum of centered log-depth observations. -/
+def dyadicPhaseTrapezoidCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredLogDepth n k
+
+/--
+For centered log-depth, the plain mesh-width and trapezoidal sums differ by
+the restored endpoint correction `h_n * log 2`.
+
+Boundary logs had zero endpoint values, so their correction vanished. Centered
+log-depth has endpoint value `log 2`, making the same finite endpoint
+correction visible again.
+-/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_sub_trapezoidCenteredLogDepthSum
+    (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredLogDepthSum n -
+        dyadicPhaseTrapezoidCenteredLogDepthSum n =
+      dyadicPhaseMeshWeight n * Real.log (2 : ℝ) := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum,
+    dyadicPhaseTrapezoidCenteredLogDepthSum]
+  calc
+    (∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k *
+            dyadicPhaseCenteredLogDepth n k)
+        = dyadicPhaseMeshWeight n / 2 *
+            (dyadicPhaseCenteredLogDepth n 0 +
+              dyadicPhaseCenteredLogDepth n (dyadicPhaseDenom n)) := by
+          exact dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+            n (dyadicPhaseCenteredLogDepth n)
+    _ = dyadicPhaseMeshWeight n * Real.log (2 : ℝ) := by
+      simp [dyadicPhaseCenteredLogDepth]
+      ring
 
 end
 

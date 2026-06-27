@@ -260,6 +260,19 @@ future observables cleanly classified: endpoint-zero quantities inherit
 mesh/trapezoid equality immediately, while centered quantities with nonzero
 endpoint increments expose the correction term.
 
+The first centered observable is now implemented. `centeredLogPhaseDepth`
+subtracts the midpoint baseline `log(1/2)` from `log(phaseDepth t)`. It
+vanishes at `t = 1/2`, has endpoint value `log 2`, and is identified with
+
+```text
+log (1 + 4 * (t - 1/2)^2).
+```
+
+On the complete dyadic mesh, the plain mesh-width centered log-depth sum and
+the trapezoidal centered log-depth sum differ by exactly `h_n * log 2`. This
+is the finite point where the endpoint correction reappears after centering.
+It is a quadratic-profile bridge, not yet a Gaussian limit.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

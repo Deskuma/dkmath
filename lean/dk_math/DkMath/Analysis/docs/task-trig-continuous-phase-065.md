@@ -397,7 +397,11 @@ zero, so the plain mesh-width and trapezoidal log observables are proved equal
 at every finite level despite their different total masses. The general
 mesh-width minus trapezoid comparison is also formalized for arbitrary finite
 observables as a half-width endpoint correction, with a zero-endpoint
-corollary for observables whose endpoint correction vanishes.
+corollary for observables whose endpoint correction vanishes. Centered
+log-depth is now defined at the phase and dyadic-sample levels. It vanishes at
+the midpoint, has endpoint value `log 2`, equals the log of the centered
+quadratic profile `1 + 4 * (t - 1/2)^2`, and has mesh/trapezoid discrepancy
+`h_n * log 2` at every finite level.
 [TODO: semantic-cf2d-phase/correction-limit-selection] Determine whether any
 finite product, raw logarithmic sum, average, mesh-weighted sum, trapezoidal
 sum, midpoint sum, or another quantity has a canonical refinement limit. The
