@@ -117,6 +117,16 @@ theorem globalQuarterCenter_eq_endpoint_add_halfQuarter (k : ℕ) :
   ring
 
 /--
+Successive quarter endpoints differ by one quarter of the unwrapped full
+cycle.
+-/
+theorem globalQuarterEndpoint_succ_eq_endpoint_add_quarter (k : ℕ) :
+    globalQuarterEndpoint (k + 1) =
+      globalQuarterEndpoint k + 1 / 4 := by
+  simp [globalQuarterEndpoint]
+  ring
+
+/--
 Neighboring quarter-edge centers are separated by one full quarter step.
 
 This is still an unwrapped scalar statement, not an assertion about arc
@@ -124,6 +134,16 @@ length on a circle.
 -/
 theorem globalQuarterCenter_succ_sub_center (k : ℕ) :
     globalQuarterCenter (k + 1) - globalQuarterCenter k = 1 / 4 := by
+  simp [globalQuarterCenter]
+  ring
+
+/--
+Additive form of the center-step law, convenient for later shifted-frame
+definitions.
+-/
+theorem globalQuarterCenter_succ_eq_center_add_quarter (k : ℕ) :
+    globalQuarterCenter (k + 1) =
+      globalQuarterCenter k + 1 / 4 := by
   simp [globalQuarterCenter]
   ring
 

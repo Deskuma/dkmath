@@ -310,7 +310,9 @@ SemanticCF2DPhaseShift.lean
   globalQuarterEndpoint_zero
   globalQuarterEndpoint_four
   globalQuarterCenter_eq_endpoint_add_halfQuarter
+  globalQuarterEndpoint_succ_eq_endpoint_add_quarter
   globalQuarterCenter_succ_sub_center
+  globalQuarterCenter_succ_eq_center_add_quarter
   globalQuarterEndpoint_succ_is_center_between_centers
   normalizedCycleStep
   dyadicCycleStep
