@@ -149,6 +149,32 @@ Subtraction enters only in this real-side action. It is not added to
 def semanticAct (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
   UnitKernel.act (semanticUnitKernel r) z
 
+/--
+Iterate the transported semantic action `k` times.
+
+This is only notation for `Function.iterate`, but it gives the DkMath
+rotation bridge a stable API before proving general angle-addition theorems.
+-/
+def semanticActIter (r : UnitKernel DkNNRealQ) (k : ℕ) (z : Vec ℝ) : Vec ℝ :=
+  (semanticAct r)^[k] z
+
+@[simp]
+theorem semanticActIter_zero
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticActIter r 0 z = z := rfl
+
+@[simp]
+theorem semanticActIter_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticActIter r 1 z = semanticAct r z := rfl
+
+@[simp]
+theorem semanticActIter_succ
+    (r : UnitKernel DkNNRealQ) (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 1) z =
+      semanticAct r (semanticActIter r k z) := by
+  simp [semanticActIter, Function.iterate_succ_apply']
+
 /-- Core-coordinate formula for the transported real action. -/
 @[simp]
 theorem semanticAct_core (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
@@ -1219,6 +1245,42 @@ theorem semanticAct_thrice_of_core_eq_zero
     _ = Vec.mk z.beam (-z.core) := by
       rw [semanticAct_twice_of_core_eq_zero hcore]
       simp
+
+/-- Four boundary actions return every vector to itself. -/
+theorem semanticAct_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticAct r (semanticAct r (semanticAct r (semanticAct r z))) = z := by
+  rw [semanticAct_twice_of_core_eq_zero hcore,
+    semanticAct_twice_of_core_eq_zero hcore]
+  cases z with
+  | mk x y =>
+      simp
+
+/-- Iterate form of the two-step boundary action. -/
+theorem semanticActIter_two_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 2 z = Vec.mk (-z.core) (-z.beam) := by
+  exact semanticAct_twice_of_core_eq_zero hcore z
+
+/-- Iterate form of the three-step boundary action. -/
+theorem semanticActIter_three_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 3 z = Vec.mk z.beam (-z.core) := by
+  exact semanticAct_thrice_of_core_eq_zero hcore z
+
+/-- Iterate form of the four-step boundary action. -/
+theorem semanticActIter_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 4 z = z := by
+  exact semanticAct_four_of_core_eq_zero hcore z
 
 /-- A nonzero vector cannot return after one boundary action. -/
 theorem not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero

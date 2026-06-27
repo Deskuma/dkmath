@@ -1283,3 +1283,35 @@ Archive
 5. verification:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/27 21:54 JST (Iterate API and three-quarter turn bridge)
+
+1. semantic iterate API:
+   - `semanticActIter r k z := (semanticAct r)^[k] z` を追加した。
+   - `semanticActIter_zero`、`semanticActIter_one`、
+     `semanticActIter_succ` を追加した。
+   - core-zero 境界作用の iterate 形式として
+     `semanticActIter_two_of_core_eq_zero`、
+     `semanticActIter_three_of_core_eq_zero`、
+     `semanticActIter_four_of_core_eq_zero` を追加した。
+2. four-step semantic action:
+   - `semanticAct_four_of_core_eq_zero` を semantic 層に追加し、
+     Euclidean bridge 側の四回作用証明を読みやすくした。
+3. angle bridge:
+   - `semanticPhaseAngle_three` を追加し、
+     `semanticPhaseAngle 3 = 3 * Real.pi / 2` を記録した。
+   - `rotation_semanticPhaseAngle_three` を追加し、三つの quarter-turn が
+     reverse quarter-turn として読まれることを記録した。
+4. action iteration bridge:
+   - `pairToEuclideanPlane_semanticActIter_two_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_three_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle`
+     を追加した。
+5. interpretation:
+   - `k = 0,1,2,3,4` の四状態 angle reading の土台が揃った。
+   - 次は一般 `k` または `k % 4` による分類 theorem が候補。
+6. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

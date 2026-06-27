@@ -411,6 +411,12 @@ theorem semanticPhaseAngle_two :
   rfl
 
 @[simp]
+theorem semanticPhaseAngle_three :
+    semanticPhaseAngle 3 = 3 * Real.pi / 2 := by
+  simp [semanticPhaseAngle, semanticQuarterTurnAngle]
+  ring
+
+@[simp]
 theorem semanticPhaseAngle_four :
     semanticPhaseAngle 4 = semanticFullTurnAngle :=
   rfl
@@ -474,6 +480,37 @@ theorem rotation_semanticFullTurnAngle_eq_refl :
       LinearIsometryEquiv.refl ℝ EuclideanPlane := by
   ext v
   simp [semanticFullTurnAngle_eq_two_pi]
+
+/--
+Rotating by three semantic quarter-turns is the inverse coordinate
+quarter-turn.
+
+This completes the Euclidean angle reading of the four-state table at the
+operation level: `0` is identity, `1` is quarter-turn, `2` is negation, and
+`3` is the reverse quarter-turn.
+-/
+theorem rotation_semanticPhaseAngle_three (v : EuclideanPlane) :
+    euclideanPlaneOrientation.rotation (semanticPhaseAngle 3) v =
+      pairToEuclideanPlane
+        ((euclideanPlaneToPair v).2, -(euclideanPlaneToPair v).1) := by
+  have hangle :
+      (semanticPhaseAngle 3 : Real.Angle) =
+        ((Real.pi + Real.pi / 2 : ℝ) : Real.Angle) := by
+    have hreal : semanticPhaseAngle 3 = Real.pi + Real.pi / 2 := by
+      rw [semanticPhaseAngle_three]
+      ring
+    exact congrArg (fun x : ℝ => (x : Real.Angle)) hreal
+  rw [hangle]
+  rw [Real.Angle.coe_add]
+  rw [← euclideanPlaneOrientation.rotation_rotation
+    (Real.pi : Real.Angle) ((Real.pi / 2 : ℝ) : Real.Angle) v]
+  rw [euclideanPlaneOrientation.rotation_pi_div_two,
+    rightAngleRotation_eq_quarterTurn]
+  rw [euclideanPlaneOrientation.rotation_pi_apply]
+  apply (EuclideanSpace.equiv (Fin 2) ℝ).injective
+  ext i
+  fin_cases i <;> simp [quarterTurnLinearIsometry,
+    quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair]
 
 end
 
@@ -601,6 +638,41 @@ theorem pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle
       exact pairToEuclideanPlane_neg (x, y)
 
 /--
+Iterate notation for the two-action half-turn bridge.
+-/
+theorem pairToEuclideanPlane_semanticActIter_two_eq_rotation_semanticPhaseAngle
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r 2 z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle 2)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  simpa [semanticPhaseAngle_two] using
+    pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle
+      hcore z
+
+/--
+Under the Euclidean coordinate bridge, three semantic core-zero actions are
+rotation by `semanticPhaseAngle 3`.
+
+This fills the remaining nontrivial state in the order-four table. Algebraic
+threefold action is the reverse coordinate exchange, and the Euclidean model
+reads it as three quarter-turns.
+-/
+theorem pairToEuclideanPlane_semanticActIter_three_eq_rotation_semanticPhaseAngle
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r 3 z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle 3)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  rw [semanticActIter_three_of_core_eq_zero hcore,
+    rotation_semanticPhaseAngle_three]
+  cases z with
+  | mk x y =>
+      simp [Vec.toProd, euclideanPlaneToPair_pairToEuclideanPlane]
+
+/--
 Under the Euclidean coordinate bridge, four semantic core-zero actions are
 rotation by the semantic full-turn angle.
 
@@ -616,14 +688,22 @@ theorem pairToEuclideanPlane_semanticAct_four_eq_rotation_semanticFullTurnAngle
           (semanticAct r (semanticAct r (semanticAct r (semanticAct r z))))) =
       euclideanPlaneOrientation.rotation semanticFullTurnAngle
         (pairToEuclideanPlane (Vec.toProd z)) := by
-  have htwo :
-      semanticAct r (semanticAct r (semanticAct r (semanticAct r z))) = z := by
-    rw [semanticAct_twice_of_core_eq_zero hcore,
-      semanticAct_twice_of_core_eq_zero hcore]
-    cases z with
-    | mk x y =>
-        simp
-  rw [htwo, rotation_semanticFullTurnAngle_eq_refl]
+  rw [semanticAct_four_of_core_eq_zero hcore,
+    rotation_semanticFullTurnAngle_eq_refl]
+  rfl
+
+/--
+Iterate notation for the four-action full-turn bridge.
+-/
+theorem pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r 4 z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle 4)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  rw [semanticActIter_four_of_core_eq_zero hcore,
+    semanticPhaseAngle_four, rotation_semanticFullTurnAngle_eq_refl]
   rfl
 
 end

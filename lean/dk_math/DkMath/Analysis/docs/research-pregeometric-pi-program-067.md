@@ -137,12 +137,19 @@ The action side is now connected for the first two special cases:
 
 ```text
 two semantic actions   <->  Euclidean rotation by semanticHalfTurnAngle
+three semantic actions <->  Euclidean rotation by semanticPhaseAngle 3
 four semantic actions  <->  Euclidean rotation by semanticFullTurnAngle
 ```
 
 These theorems use the pre-existing core-zero action laws: two actions
-negate both coordinates, while four actions return to the identity. Thus the
-angle reading remains downstream of the algebraic order-four structure.
+negate both coordinates, three actions give the reverse coordinate exchange,
+and four actions return to the identity. Thus the angle reading remains
+downstream of the algebraic order-four structure.
+
+The semantic action now also has the explicit notation
+`semanticActIter r k z = (semanticAct r)^[k] z`. This is the API bridge toward
+the eventual general theorem relating `k` semantic actions to rotation by
+`semanticPhaseAngle k`.
 
 ### Milestone A: continuous four-edge loop - implemented
 
