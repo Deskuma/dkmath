@@ -440,6 +440,16 @@ shiftedSemanticIndexedLevelEndpoint_2_3
 shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left
 shiftedSemanticIndexedLevelEdge_add_four_of_core_eq_zero
 shiftedSemanticFourLevelPath
+finFourSucc
+shiftedSemanticFinBase
+shiftedSemanticFinEdge
+shiftedSemanticFinEdge_q2_of_core_eq_zero
+shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero
+shiftedSemanticFinPath
+shiftedSemanticFinLevelEdge
+shiftedSemanticFinLevelPath
+shiftedSemanticFinRightLevelEndpoint_eq_succ_left
+shiftedSemanticFinFourLevelPath
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -487,6 +497,25 @@ It concatenates the first four indexed shifted normalized level paths inside
 the fixed `q2` boundary. The first three seams are adjacent endpoint
 compatibility facts, and the final seam from edge `3` back to edge `0` uses
 the core-zero four-step return law.
+
+The finite cyclic wrapper is now available through `Fin 4`. It keeps the
+Nat-indexed API as the source of truth while giving downstream code a bounded
+four-state index:
+
+```text
+shiftedSemanticFinBase r z i = shiftedSemanticIndexedBase r z i.val
+shiftedSemanticFinEdge r z i t = shiftedSemanticIndexedEdge r z i.val t
+```
+
+The finite successor `finFourSucc` is defined by `(i.val + 1) % 4`, and Lean
+proves the finite seam law:
+
+```text
+right endpoint of finite edge i = left endpoint of finite edge (finFourSucc i)
+```
+
+This is still a finite cyclic index, not a continuous quotient phase
+parameter.
 
 Candidate theorem directions:
 
@@ -559,7 +588,9 @@ depend on that reading.
 18. Implemented: package indexed shifted paths inside the fixed `q2` level set.
 19. Implemented: prove the four endpoint compatibility facts for indexed shifted level paths.
 20. Implemented: concatenate the four indexed shifted level paths into a closed fixed-`q2` path.
-21. Later: add a Euclidean bridge that reads `1/8` full-cycle
+21. Implemented: add `Fin 4` wrappers for shifted bases, edges, paths, level edges, and level paths.
+22. Implemented: prove the finite successor seam law on `Fin 4`.
+23. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -603,6 +634,11 @@ wrappers.
 [IMPLEMENTED: semantic-cf2d/shifted-four-level-path]
 Prove the four seam compatibility facts and concatenate the first four indexed
 shifted normalized level paths into one closed fixed-`q2` path object.
+
+[IMPLEMENTED: semantic-cf2d/shifted-fin-four]
+Expose the shifted cyclic index through `Fin 4` wrappers for bases, edges,
+paths, fixed-`q2` level edges, and fixed-`q2` level paths. Add a finite
+successor and prove the corresponding cyclic seam law.
 ```
 
 ## Remaining TODO Tags
