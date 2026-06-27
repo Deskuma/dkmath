@@ -349,6 +349,12 @@ SemanticCF2DPhaseShift.lean
   shiftedSemanticCorrection_mul_rawScale
   shiftedSemanticCorrectedMidpoint_eq_seam_of_core_eq_zero
   shiftedSemanticCorrectedMidpoint_q2_of_core_eq_zero
+  shiftedSemanticRawAffine_q2_of_core_eq_zero
+  shiftedSemanticNormalizedEdge
+  shiftedSemanticNormalizedEdge_zero
+  shiftedSemanticNormalizedEdge_one
+  shiftedSemanticNormalizedEdge_q2_of_core_eq_zero
+  shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero
   normalizedCycleStep
   dyadicCycleStep
   normalizedCycleStep_mul_returnCount
@@ -395,9 +401,26 @@ shiftedSemanticCorrectedMidpoint_q2_of_core_eq_zero
 ```
 
 Thus the center point itself can be corrected back to the seam and to the
-original `q2` boundary. The next target is not to re-prove the center law, but
-to choose whether the full shifted semantic edge should use pointwise `q2`
-normalization, seam-centered projection, or another correction law.
+original `q2` boundary.
+
+Lean also verifies the stronger pointwise statement:
+
+```text
+shiftedSemanticRawAffine_q2_of_core_eq_zero
+```
+
+The raw shifted semantic affine has exactly the same `phaseDepth` profile as
+the original affine edge. Therefore the same pointwise normalization is valid:
+
+```text
+shiftedSemanticNormalizedEdge
+shiftedSemanticNormalizedEdge_q2_of_core_eq_zero
+shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero
+```
+
+The shifted normalized edge starts at the left normalized center candidate,
+ends at the right normalized center candidate, stays on the original `q2`
+boundary, and reaches the old seam at `phaseCenter`.
 
 Candidate theorem directions:
 
@@ -458,8 +481,9 @@ depend on that reading.
 8. Implemented: lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
 9. Implemented: name semantic endpoint candidates and prove their raw midpoint obstruction.
 10. Implemented: define the corrected shifted midpoint and prove it returns to the seam.
-11. Next: choose a pointwise shifted correction/projection law for the whole edge.
-12. Later: add a Euclidean bridge that reads `1/8` full-cycle
+11. Implemented: prove the raw shifted affine has the `phaseDepth` profile.
+12. Implemented: define the pointwise normalized shifted semantic edge.
+13. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -482,16 +506,19 @@ parameter fact, not as an angle subdivision.
 [IMPLEMENTED: semantic-cf2d/k-division-cycle-step]
 Expose the positive `k` return law `k * (1 / k) = 1` for the normalized cycle
 parameter before assigning any Euclidean shape.
+
+[IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
+Define the shifted semantic normalized edge from neighboring normalized center
+states, prove its raw `phaseDepth` profile, prove boundary preservation, and
+prove its center is the old seam.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-semantic-edge]
-Choose the pointwise correction law for the shifted semantic edge. The
-endpoint candidates are fixed, and the center correction is implemented.
-What remains is to decide whether every interior point should use raw `q2`
-normalization, seam-centered projection, or another DkMath correction law.
+[TODO: semantic-cf2d/shifted-semantic-path]
+Package `shiftedSemanticNormalizedEdge` as a topological path when the next
+layer needs path concatenation or a cyclic quotient parameter.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path

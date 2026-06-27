@@ -434,13 +434,11 @@ theorem shiftedSemanticRawMidpoint_q2_half_of_core_eq_zero
     (z : Vec ℝ) :
     Vec.q2 (shiftedSemanticRawMidpoint r z) =
       (1 / 2 : ℝ) * Vec.q2 z := by
-  have hnorm_sq : phaseNormalization phaseCenter ^ 2 = 2 := by
+  rw [shiftedSemanticRawMidpoint_q2_of_core_eq_zero hcore]
+  have hfactor : (phaseNormalization phaseCenter / 2) ^ 2 = 1 / 2 := by
     have hcancel := phaseNormalization_sq_mul_phaseDepth phaseCenter
     rw [phaseDepth_center_eq] at hcancel
     nlinarith
-  rw [shiftedSemanticRawMidpoint_q2_of_core_eq_zero hcore]
-  have hfactor : (phaseNormalization phaseCenter / 2) ^ 2 = 1 / 2 := by
-    nlinarith [sq_nonneg (phaseNormalization phaseCenter)]
   rw [hfactor]
 
 /--
@@ -460,6 +458,13 @@ def shiftedSemanticCorrectedMidpoint
 theorem phaseNormalization_center_ne_zero :
     phaseNormalization phaseCenter ≠ 0 :=
   (phaseNormalization_pos phaseCenter).ne'
+
+/-- At the phase center, the square of the normalization factor is two. -/
+theorem phaseNormalization_center_sq :
+    phaseNormalization phaseCenter ^ 2 = 2 := by
+  have hcancel := phaseNormalization_sq_mul_phaseDepth phaseCenter
+  rw [phaseDepth_center_eq] at hcancel
+  nlinarith
 
 /--
 The correction scalar cancels the raw midpoint seam-scale factor.
@@ -498,16 +503,106 @@ theorem shiftedSemanticCorrectedMidpoint_q2_of_core_eq_zero
   rw [shiftedSemanticCorrectedMidpoint_eq_seam_of_core_eq_zero hcore,
     shiftedSemanticSeam_q2]
 
+/--
+The raw shifted semantic affine has the same scalar `q2` profile as the
+original affine phase edge.
+
+This verifies that the whole shifted edge can use the same pointwise
+normalization scalar, not only a special center correction.
+-/
+theorem shiftedSemanticRawAffine_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : ℝ) :
+    Vec.q2 (shiftedSemanticRawAffine r z t) =
+      phaseDepth t * Vec.q2 z := by
+  cases z
+  simp [shiftedSemanticRawAffine, shiftedSemanticLeftEndpoint,
+    shiftedSemanticRightEndpoint, normalizedPhaseEdge, semanticPhaseEdge,
+    phaseCenter, semanticAct_of_core_eq_zero hcore, Vec.q2, phaseDepth]
+  have hsq : phaseNormalization (1 / 2 : ℝ) ^ 2 = 2 := by
+    simpa [phaseCenter] using phaseNormalization_center_sq
+  ring_nf
+  rw [hsq]
+  ring
+
+/--
+Pointwise normalization of the raw shifted semantic affine.
+
+This is the first full shifted semantic edge candidate. It is still
+pre-geometric: the normalization is expressed only through `q2` depth.
+-/
+def shiftedSemanticNormalizedEdge
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (t : ℝ) : Vec ℝ :=
+  Vec.mk
+    (phaseNormalization t * (shiftedSemanticRawAffine r z t).core)
+    (phaseNormalization t * (shiftedSemanticRawAffine r z t).beam)
+
+/-- The normalized shifted edge starts at the left endpoint candidate. -/
+@[simp]
+theorem shiftedSemanticNormalizedEdge_zero
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z 0 = shiftedSemanticLeftEndpoint r z := by
+  simp [shiftedSemanticNormalizedEdge]
+
+/-- The normalized shifted edge ends at the right endpoint candidate. -/
+@[simp]
+theorem shiftedSemanticNormalizedEdge_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z 1 = shiftedSemanticRightEndpoint r z := by
+  simp [shiftedSemanticNormalizedEdge]
+
+/-- The normalized shifted edge stays on the original `q2` boundary. -/
+theorem shiftedSemanticNormalizedEdge_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : ℝ) :
+    Vec.q2 (shiftedSemanticNormalizedEdge r z t) = Vec.q2 z := by
+  rw [show Vec.q2 (shiftedSemanticNormalizedEdge r z t) =
+      phaseNormalization t ^ 2 * Vec.q2 (shiftedSemanticRawAffine r z t) by
+    exact Vec.q2_scale _ _]
+  rw [shiftedSemanticRawAffine_q2_of_core_eq_zero hcore]
+  calc
+    phaseNormalization t ^ 2 * (phaseDepth t * Vec.q2 z) =
+        (phaseNormalization t ^ 2 * phaseDepth t) * Vec.q2 z := by ring
+    _ = Vec.q2 z := by
+      rw [phaseNormalization_sq_mul_phaseDepth]
+      ring
+
+/-- At the center, the normalized shifted edge returns to the old seam. -/
+theorem shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z phaseCenter =
+      shiftedSemanticSeam r z := by
+  rw [shiftedSemanticNormalizedEdge, shiftedSemanticRawAffine_center_eq_rawMidpoint,
+    shiftedSemanticRawMidpoint_eq_scaled_seam_of_core_eq_zero hcore]
+  cases shiftedSemanticSeam r z with
+  | mk x y =>
+  simp only [Vec.mk.injEq]
+  constructor
+  · calc
+      phaseNormalization phaseCenter *
+          ((phaseNormalization phaseCenter / 2) * x) =
+        (phaseNormalization phaseCenter ^ 2 / 2) * x := by ring
+      _ = x := by rw [phaseNormalization_center_sq]; ring
+  · calc
+      phaseNormalization phaseCenter *
+          ((phaseNormalization phaseCenter / 2) * y) =
+        (phaseNormalization phaseCenter ^ 2 / 2) * y := by ring
+      _ = y := by rw [phaseNormalization_center_sq]; ring
+
 /-!
-[TODO: semantic-cf2d/shifted-semantic-edge]
-Define a shifted semantic edge only after choosing the endpoint states and
-the correction law that correspond to `shiftedQuarterLeftEndpoint` and
-`shiftedQuarterRightEndpoint`. The natural endpoint candidates are the
-normalized center states of neighboring quarter edges, but their raw affine
-midpoint is not the old seam state in general; a shifted normalization or
-projection law must be selected first. The expected compatibility theorem is
-that the selected shifted edge at `phaseCenter` represents
-`shiftedQuarterCenter`.
+[IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
+The shifted semantic edge uses the normalized center states of neighboring
+quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
+profile as the original affine edge, so the same pointwise normalization
+keeps it on the original `q2` boundary and sends its center to the old seam.
+
+[TODO: semantic-cf2d/shifted-semantic-path]
+Package `shiftedSemanticNormalizedEdge` as a topological path once downstream
+code needs path concatenation or a cyclic quotient parameter.
 -/
 
 /-!

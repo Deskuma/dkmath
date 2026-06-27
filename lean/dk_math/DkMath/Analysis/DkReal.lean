@@ -186,8 +186,10 @@ edges expose their midpoint `q2` facts. The semantic shifted-endpoint
 candidates are also named: normalized neighboring centers stay on the same
 `q2` boundary, but their raw midpoint has square mass `1 / 2 * q2 z`, so a
 center correction rescales that raw midpoint exactly back to the old seam and
-to the original `q2` boundary. A pointwise correction law for the whole
-shifted semantic path remains a later definition.
+to the original `q2` boundary. The raw shifted affine edge has the same
+`phaseDepth` profile as the original affine edge, so the same pointwise
+normalization defines a shifted boundary-valued edge whose center is the old
+seam.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
