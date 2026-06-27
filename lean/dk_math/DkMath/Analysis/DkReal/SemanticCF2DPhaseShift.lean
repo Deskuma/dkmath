@@ -545,12 +545,38 @@ theorem shiftedSemanticNormalizedEdge_zero
     shiftedSemanticNormalizedEdge r z 0 = shiftedSemanticLeftEndpoint r z := by
   simp [shiftedSemanticNormalizedEdge]
 
+/-- Endpoint spelling for downstream shifted-path code. -/
+theorem shiftedSemanticNormalizedEdge_leftEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z 0 =
+      shiftedSemanticLeftEndpoint r z :=
+  shiftedSemanticNormalizedEdge_zero r z
+
 /-- The normalized shifted edge ends at the right endpoint candidate. -/
 @[simp]
 theorem shiftedSemanticNormalizedEdge_one
     (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
     shiftedSemanticNormalizedEdge r z 1 = shiftedSemanticRightEndpoint r z := by
   simp [shiftedSemanticNormalizedEdge]
+
+/-- Endpoint spelling for downstream shifted-path code. -/
+theorem shiftedSemanticNormalizedEdge_rightEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z 1 =
+      shiftedSemanticRightEndpoint r z :=
+  shiftedSemanticNormalizedEdge_one r z
+
+/--
+Adjacent shifted normalized edges meet at the same normalized center state.
+
+This is the seam-compatibility fact needed before any cyclic concatenation
+layer is introduced.
+-/
+theorem shiftedSemanticNormalizedEdge_right_eq_next_left
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z 1 =
+      shiftedSemanticNormalizedEdge r (semanticAct r z) 0 := by
+  simp [shiftedSemanticRightEndpoint, shiftedSemanticLeftEndpoint]
 
 /-- The normalized shifted edge stays on the original `q2` boundary. -/
 theorem shiftedSemanticNormalizedEdge_q2_of_core_eq_zero
@@ -593,6 +619,172 @@ theorem shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero
         (phaseNormalization phaseCenter ^ 2 / 2) * y := by ring
       _ = y := by rw [phaseNormalization_center_sq]; ring
 
+/--
+Center-to-seam spelling using the underlying semantic action.
+
+This form is convenient for later cyclic concatenation, where the seam is
+usually expressed as the next action state.
+-/
+theorem shiftedSemanticNormalizedEdge_center_eq_semanticAct_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticNormalizedEdge r z phaseCenter =
+      semanticAct r z := by
+  rw [shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero hcore]
+  rfl
+
+/-!
+## Shifted normalized paths
+
+The shifted edge has the same analytic shape as the normalized phase edge:
+a continuous raw affine interpolation followed by the same positive scalar
+normalization. The path API below is still pre-geometric. It records only
+endpoint compatibility, seam compatibility, and fixed-`q2` boundary
+membership.
+-/
+
+/-- The raw shifted affine edge is continuous. -/
+theorem continuous_shiftedSemanticRawAffine
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    Continuous (fun t : ℝ => shiftedSemanticRawAffine r z t) := by
+  apply Continuous.vec_mk
+  · fun_prop
+  · fun_prop
+
+/-- The shifted normalized edge is continuous. -/
+theorem continuous_shiftedSemanticNormalizedEdge
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    Continuous (fun t : ℝ => shiftedSemanticNormalizedEdge r z t) := by
+  rcases continuous_vec_iff.mp
+      (continuous_shiftedSemanticRawAffine r z) with
+    ⟨hcore, hbeam⟩
+  apply Continuous.vec_mk
+  · exact continuous_phaseNormalization.mul hcore
+  · exact continuous_phaseNormalization.mul hbeam
+
+/--
+The shifted normalized edge packaged as a Mathlib path between neighboring
+normalized center states.
+-/
+def shiftedSemanticNormalizedPath
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    Path (shiftedSemanticLeftEndpoint r z)
+      (shiftedSemanticRightEndpoint r z) where
+  toFun t := shiftedSemanticNormalizedEdge r z t
+  continuous_toFun :=
+    (continuous_shiftedSemanticNormalizedEdge r z).comp continuous_subtype_val
+  source' := by simp
+  target' := by simp
+
+@[simp]
+theorem shiftedSemanticNormalizedPath_apply
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (t : unitInterval) :
+    shiftedSemanticNormalizedPath r z t =
+      shiftedSemanticNormalizedEdge r z t := rfl
+
+/-- The shifted normalized path remains on the original `q2` boundary. -/
+theorem shiftedSemanticNormalizedPath_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 (shiftedSemanticNormalizedPath r z t) = Vec.q2 z :=
+  shiftedSemanticNormalizedEdge_q2_of_core_eq_zero hcore z t
+
+/-!
+## Shifted paths internal to the square-mass boundary
+
+As in the original normalized path layer, the next wrappers strengthen the
+codomain from `Vec Real` to the fixed `q2` level set.
+-/
+
+/-- The shifted left endpoint as a point of the fixed square-mass level set. -/
+def shiftedSemanticLeftLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticLeftEndpoint r z,
+    shiftedSemanticLeftEndpoint_q2_of_core_eq_zero hcore z⟩
+
+/-- The shifted right endpoint as a point of the fixed square-mass level set. -/
+def shiftedSemanticRightLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticRightEndpoint r z,
+    shiftedSemanticRightEndpoint_q2_of_core_eq_zero hcore z⟩
+
+/-- The shifted seam as a point of the fixed square-mass level set. -/
+def shiftedSemanticSeamLevelPoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticSeam r z, shiftedSemanticSeam_q2 r z⟩
+
+/--
+The shifted normalized edge as a point of the fixed square-mass level set.
+-/
+def shiftedSemanticNormalizedLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : ℝ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticNormalizedEdge r z t,
+    shiftedSemanticNormalizedEdge_q2_of_core_eq_zero hcore z t⟩
+
+@[simp]
+theorem shiftedSemanticNormalizedLevelEdge_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : ℝ) :
+    (shiftedSemanticNormalizedLevelEdge hcore z t).1 =
+      shiftedSemanticNormalizedEdge r z t := rfl
+
+/-- The level-set-valued shifted normalized edge is continuous. -/
+theorem continuous_shiftedSemanticNormalizedLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Continuous (fun t : ℝ => shiftedSemanticNormalizedLevelEdge hcore z t) :=
+  Continuous.subtype_mk (continuous_shiftedSemanticNormalizedEdge r z) _
+
+/--
+The shifted normalized edge as a path internal to the fixed square-mass level
+set.
+-/
+def shiftedSemanticNormalizedLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path (shiftedSemanticLeftLevelEndpoint hcore z)
+      (shiftedSemanticRightLevelEndpoint hcore z) where
+  toFun t := shiftedSemanticNormalizedLevelEdge hcore z t
+  continuous_toFun :=
+    (continuous_shiftedSemanticNormalizedLevelEdge hcore z).comp
+      continuous_subtype_val
+  source' := by
+    apply Subtype.ext
+    simp [shiftedSemanticNormalizedLevelEdge, shiftedSemanticLeftLevelEndpoint]
+  target' := by
+    apply Subtype.ext
+    simp [shiftedSemanticNormalizedLevelEdge, shiftedSemanticRightLevelEndpoint]
+
+@[simp]
+theorem shiftedSemanticNormalizedLevelPath_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    (shiftedSemanticNormalizedLevelPath hcore z t).1 =
+      shiftedSemanticNormalizedEdge r z t := rfl
+
+/-- At the center, the level-set-valued shifted path reaches the seam point. -/
+theorem shiftedSemanticNormalizedLevelEdge_center_eq_seam
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticNormalizedLevelEdge hcore z phaseCenter =
+      shiftedSemanticSeamLevelPoint r z := by
+  apply Subtype.ext
+  exact shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero hcore z
+
 /-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
 The shifted semantic edge uses the normalized center states of neighboring
@@ -600,9 +792,15 @@ quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
 profile as the original affine edge, so the same pointwise normalization
 keeps it on the original `q2` boundary and sends its center to the old seam.
 
-[TODO: semantic-cf2d/shifted-semantic-path]
-Package `shiftedSemanticNormalizedEdge` as a topological path once downstream
-code needs path concatenation or a cyclic quotient parameter.
+[IMPLEMENTED: semantic-cf2d/shifted-semantic-path]
+The shifted normalized edge is continuous and is packaged both as a `Vec Real`
+path and as a path internal to the fixed `q2` level set. Adjacent shifted
+edges share endpoint states, and the center of the shifted edge is the old
+seam state under the core-zero action law.
+
+[TODO: semantic-cf2d/shifted-cyclic-parameter]
+Package four shifted normalized paths by an explicit cyclic index once the
+next layer needs concatenation or a quotient phase parameter.
 -/
 
 /-!

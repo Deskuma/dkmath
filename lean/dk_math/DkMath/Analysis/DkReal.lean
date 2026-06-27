@@ -189,7 +189,10 @@ center correction rescales that raw midpoint exactly back to the old seam and
 to the original `q2` boundary. The raw shifted affine edge has the same
 `phaseDepth` profile as the original affine edge, so the same pointwise
 normalization defines a shifted boundary-valued edge whose center is the old
-seam.
+seam. This shifted normalized edge is now continuous, packaged as a Mathlib
+`Path`, and also packaged as a path internal to the fixed `q2` level set.
+Adjacent shifted edges share their normalized center endpoint, preparing the
+later cyclic concatenation layer without adding geometric angle vocabulary.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
