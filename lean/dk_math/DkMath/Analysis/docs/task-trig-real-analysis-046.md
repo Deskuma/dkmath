@@ -248,7 +248,8 @@ C = 1 or C = 0
 The `C = 1` branch is identity. In the `C = 0` branch, the unit equation and
 `S >= 0` force `S = 1`, so the transported kernel is `(0,1)`. Thus the
 first-quadrant restriction excludes nontrivial orders two and three but admits
-the quarter-turn kernel.
+the first nonidentity exact-order boundary kernel. Under the later standard
+Euclidean interpretation this kernel is read as a quarter-turn.
 
 Exact order four is now recorded explicitly. `SemanticExactKernelOrderFour`
 requires the fourth power to be neutral and excludes neutrality of powers
@@ -304,9 +305,10 @@ the minimal period of each point. Again, the four-step algebraic return is the
 primary theorem; interpreting the displayed orbit as motion around a circle
 comes later.
 
+The present chapter is now at a documentation and consolidation checkpoint.
 The next structural boundary is source-level `Vec.star` and `KernelFamily`.
-Both require signed arithmetic. They should wait for a signed DkReal layer
-rather than forcing subtraction into `DkNNRealQ`. Until then, further work can
-remain on the real side, for example classifying low product orders through
-explicit semantic coordinate identities. Order reflection remains a separate,
+Both require signed arithmetic and should wait for a signed DkReal layer.
+Before crossing that boundary, the current pre-geometric result should be
+packaged as a research statement and its later Euclidean interpretation should
+be specified as a separate bridge. Order reflection remains an independent,
 heavier task.

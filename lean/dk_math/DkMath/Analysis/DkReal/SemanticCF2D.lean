@@ -60,6 +60,13 @@ Nothing below requires the two coordinates to have been declared orthogonal
 axes or requires a convention measuring one full turn by 360 degrees.
 -/
 
+/-
+## Semantic transport and boundary detection
+
+Coordinates are transported independently. The first structure recorded after
+transport is the conserved `q2` boundary, without a geometric interpretation.
+-/
+
 /-- Interpret both coordinates of a CF2D vector as Mathlib real numbers. -/
 def semanticVec (z : Vec DkNNRealQ) : Vec ℝ :=
   ⟨semanticValue z.core, semanticValue z.beam⟩
@@ -125,6 +132,13 @@ theorem semanticUnitKernel_sq_add_sq (r : UnitKernel DkNNRealQ) :
   simpa [Vec.q2, semanticVec] using
     (UnitKernel.coe_q2 (semanticUnitKernel r))
 
+/-
+## Boundary-preserving action
+
+The action is introduced only after transport to the signed real target. This
+is the first layer that needs subtraction.
+-/
+
 /--
 Act on a real CF2D vector by first interpreting a nonnegative DkMath unit
 kernel as a real unit kernel.
@@ -134,6 +148,32 @@ Subtraction enters only in this real-side action. It is not added to
 -/
 def semanticAct (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
   UnitKernel.act (semanticUnitKernel r) z
+
+/--
+Iterate the transported semantic action `k` times.
+
+This is only notation for `Function.iterate`, but it gives the DkMath
+rotation bridge a stable API before proving general angle-addition theorems.
+-/
+def semanticActIter (r : UnitKernel DkNNRealQ) (k : ℕ) (z : Vec ℝ) : Vec ℝ :=
+  (semanticAct r)^[k] z
+
+@[simp]
+theorem semanticActIter_zero
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticActIter r 0 z = z := rfl
+
+@[simp]
+theorem semanticActIter_one
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    semanticActIter r 1 z = semanticAct r z := rfl
+
+@[simp]
+theorem semanticActIter_succ
+    (r : UnitKernel DkNNRealQ) (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 1) z =
+      semanticAct r (semanticActIter r k z) := by
+  simp [semanticActIter, Function.iterate_succ_apply']
 
 /-- Core-coordinate formula for the transported real action. -/
 @[simp]
@@ -163,6 +203,13 @@ theorem semanticAct_q2 (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
 theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
     PreservesQ2 (semanticAct r) :=
   semanticAct_q2 r
+
+/-
+## Composition, inverse, and level-set actions
+
+Products and inverse kernels remain on the real side. Source preimages for
+these signed kernels are neither required nor asserted.
+-/
 
 /--
 Real-side product of two independently interpreted nonnegative DkMath
@@ -310,6 +357,12 @@ theorem semanticActLevelEquiv_apply
     (r : UnitKernel DkNNRealQ) {rho2 : ℝ}
     (z : LevelSet ℝ rho2) :
     semanticActLevelEquiv r z = semanticActLevel r z := rfl
+
+/-
+## Iteration, orbit, and point period
+
+Period parameters in this section are iterate counts, not angle measures.
+-/
 
 /-- Every finite iterate of a transported action preserves square mass. -/
 theorem semanticAct_iterate_q2
@@ -550,6 +603,13 @@ theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
   semanticMinimalPeriod_pos h.1
     ((semanticFiniteOrder_iff r n).mp h.2 z)
 
+/-
+## Identity and fixed-point classification
+
+The classification uses only the unit equation and a two-variable linear
+system. No continuity or angular parameterization enters.
+-/
+
 /-- The transported kernel is the neutral real unit kernel. -/
 def SemanticIdentityKernel (r : UnitKernel DkNNRealQ) : Prop :=
   semanticUnitKernel r = UnitKernel.one ℝ
@@ -639,6 +699,14 @@ theorem semanticFixed_iff_eq_zero_of_not_identity
     exact h ((semanticIdentityKernel_iff_core_eq_one r).2 hcore)
   exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
     fun hz => hz ▸ semanticFixed_zero r⟩
+
+/-
+## Real-side powers and low-order classification
+
+Finite powers turn repeated action into polynomial coordinate identities.
+Orders one through three collapse to identity in the transported first
+quadrant; order four introduces the nonidentity boundary case.
+-/
 
 /--
 The `n`-fold product of a transported kernel, formed entirely in the real
@@ -1123,6 +1191,13 @@ theorem semanticExactActionOrderFour_of_core_eq_zero
     SemanticExactActionOrderFour r :=
   (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
 
+/-
+## Pre-geometric four-phase boundary action
+
+The following results expose the four-step orbit and its point periods. A
+Euclidean circle and angle measure have not been chosen.
+-/
+
 /--
 At the exact-order-four boundary, the transported action exchanges the two
 coordinates with one sign change.
@@ -1170,6 +1245,104 @@ theorem semanticAct_thrice_of_core_eq_zero
     _ = Vec.mk z.beam (-z.core) := by
       rw [semanticAct_twice_of_core_eq_zero hcore]
       simp
+
+/-- Four boundary actions return every vector to itself. -/
+theorem semanticAct_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticAct r (semanticAct r (semanticAct r (semanticAct r z))) = z := by
+  rw [semanticAct_twice_of_core_eq_zero hcore,
+    semanticAct_twice_of_core_eq_zero hcore]
+  cases z with
+  | mk x y =>
+      simp
+
+/-- Iterate form of the two-step boundary action. -/
+theorem semanticActIter_two_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 2 z = Vec.mk (-z.core) (-z.beam) := by
+  exact semanticAct_twice_of_core_eq_zero hcore z
+
+/-- Iterate form of the three-step boundary action. -/
+theorem semanticActIter_three_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 3 z = Vec.mk z.beam (-z.core) := by
+  exact semanticAct_thrice_of_core_eq_zero hcore z
+
+/-- Iterate form of the four-step boundary action. -/
+theorem semanticActIter_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    semanticActIter r 4 z = z := by
+  exact semanticAct_four_of_core_eq_zero hcore z
+
+/--
+The boundary-action iterate is periodic with period four.
+
+This is the semantic side of the future modulo-four classification. It states
+the exact-order-four law in iterate notation without mentioning Euclidean
+angles.
+-/
+theorem semanticActIter_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 4) z = semanticActIter r k z := by
+  have hfour :
+      (semanticAct r)^[4] = id :=
+    (semanticExactActionOrderFour_of_core_eq_zero hcore).1
+  rw [semanticActIter, semanticActIter, Function.iterate_add_apply, hfour]
+  rfl
+
+/--
+Adding any multiple of four to the iterate index does not change the
+core-zero boundary action.
+
+This is the induction form used to pass from exact period four to modulo-four
+classification.
+-/
+theorem semanticActIter_add_four_mul_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (q k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 4 * q) z = semanticActIter r k z := by
+  induction q with
+  | zero =>
+      simp
+  | succ q ih =>
+      calc
+        semanticActIter r (k + 4 * (q + 1)) z =
+            semanticActIter r ((k + 4 * q) + 4) z := by
+              congr 1
+        _ = semanticActIter r (k + 4 * q) z :=
+            semanticActIter_add_four_of_core_eq_zero hcore
+              (k + 4 * q) z
+        _ = semanticActIter r k z := ih
+
+/--
+The core-zero semantic iterate depends only on the phase index modulo four.
+
+This is the semantic rotation table in quotient form, before any Euclidean
+angle interpretation is attached.
+-/
+theorem semanticActIter_eq_mod_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r k z = semanticActIter r (k % 4) z := by
+  calc
+    semanticActIter r k z =
+        semanticActIter r (k % 4 + 4 * (k / 4)) z := by
+          rw [Nat.mod_add_div]
+    _ = semanticActIter r (k % 4) z :=
+        semanticActIter_add_four_mul_of_core_eq_zero hcore
+          (k / 4) (k % 4) z
 
 /-- A nonzero vector cannot return after one boundary action. -/
 theorem not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero
@@ -1256,6 +1429,59 @@ theorem semanticMinimalPeriod_eq_four_of_core_eq_zero_of_ne_zero
 `KernelFamily` require a ring because their core coordinate uses subtraction.
 Keep the source in the nonnegative semiring until a signed DkReal layer is
 introduced; do not manufacture subtraction merely to mirror the real target.
+
+[IMPLEMENTED: semantic-cf2d-phase/master-edge] `SemanticCF2DPhase` fills one
+transition affinely in the semantic real target, from `z` to `semanticAct r z`.
+
+[IMPLEMENTED: semantic-cf2d-phase/four-translates] All transition edges are
+generated by applying action iterates to the one master edge. Their endpoints
+form exact seams, and the family is four-periodic under a core-zero kernel.
+
+[IMPLEMENTED: semantic-cf2d-phase/half-fold-profile] The affine edge has `q2`
+profile `((1-t)^2 + t^2) * q2 z`, symmetric under `t ↦ 1-t`, with a positive
+lower bound of one half.
+
+[IMPLEMENTED: semantic-cf2d-phase/path-concatenation] `SemanticCF2DPath`
+packages each compatible edge as a Mathlib `Path` and concatenates four edges
+into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
+
+[IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]
+`SemanticCF2DNormalize` normalizes one affine edge by the positive square root
+of its `q2` profile and proves that the resulting continuous edge stays on the
+original boundary.
+
+[IMPLEMENTED: semantic-cf2d-phase/normalized-four-path] The normalized edge is
+transported through all four action phases. The resulting fixed-`q2` paths
+have exact seams and concatenate to a closed path.
+
+[IMPLEMENTED: semantic-cf2d-phase/levelset-path] The normalized phases and
+their closed four-phase concatenation are packaged directly in
+`LevelSet Real (q2 z)`, making boundary membership part of the target type.
+
+[IMPLEMENTED: semantic-cf2d-phase/euclidean-levelset-bridge]
+`CF2D.EuclideanPhase` identifies every real `q2` level set with the explicit
+two-coordinate Euclidean circle equation of squared radius `rho2`. It
+separates the zero one-point boundary and maps the existing closed path
+through this interpretation.
+
+[IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space] The explicit
+coordinate circle equation is homeomorphic to the standard
+`EuclideanSpace Real (Fin 2)` L2 metric sphere of radius `sqrt rho2`.
+The closed path is mapped through this bridge, and positive squared radius is
+separated from the zero-radius degenerate case.
+
+[IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry] The coordinate map
+`(x,y) ↦ (-y,x)` is packaged as a Euclidean linear isometry equivalence, and
+the transported core-zero semantic action is proved equal to this isometry
+under the coordinate bridge.
+
+[IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two] The standard
+orientation is pulled back from Mathlib's complex plane, and the quarter-turn
+isometry is proved equal to the resulting oriented rotation by
+`Real.pi / 2`. A direct composite theorem identifies the transported
+core-zero semantic action with that rotation. This is a Euclidean
+interpretation theorem; it does not yet derive `pi` intrinsically from the
+pre-geometric phase construction.
 -/
 
 end

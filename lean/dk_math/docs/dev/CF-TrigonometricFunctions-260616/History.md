@@ -228,6 +228,24 @@ Archive
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 
+### 2026/06/23 04:34 JST (Pre-geometric research consolidation)
+
+1. 判断:
+   - 完成論文へ直行せず、主定理・依存原理・非主張事項を固定する研究
+     consolidation report を先に作る段階とした。
+2. コード整理:
+   - `SemanticCF2D.lean` を semantic transport、boundary action、
+     composition/inverse、period、fixed point、low-order classification、
+     four-phase action の節へ整理した。
+3. 文書:
+   - `CF2D-PreGeometric-Boundary-Action-Report.md` を新設した。
+   - 境界判定機と作用が先にあり、円・角度は Euclidean model による後段
+     解釈であることを主軸にした。
+   - 現時点の claims / non-claims と論文化前の不足項目を明示した。
+4. 表現修正:
+   - 証明本体の段階で `(0,1)` を quarter-turn と断定せず、後段の標準
+     Euclidean 解釈でそう読める、という順序へ統一した。
+
 ### 2026/06/22 17:25 JST (Boundary first, geometry later)
 
 1. 文書整理:
@@ -525,3 +543,824 @@ Archive
    - この積は Real 側だけに存在し、非負 source の積を主張しない。
 5. 検証:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/23 05:10 JST (Continuous four-phase design)
+
+1. 設計:
+   - 離散四状態を一つの affine master edge と、その作用反復による四つの
+     translate として連続化する方針を定めた。
+   - 四区間の seam 接続と endpoint closure を、円や角度より先に扱う。
+2. 対称性:
+   - affine edge の `q2` profile を
+     `((1-t)^2 + t^2) * q2 z` と予測し、`t -> 1-t` の半折返し対称を
+     次の中心定理とした。
+3. 境界:
+   - affine 補間は連続な閉路を与えるが、途中では固定 `q2` 境界を離れる。
+   - piecewise-linear loop、cyclic parameter、boundary normalization、
+     Euclidean circle interpretation を別層に分離した。
+4. DkReal:
+   - nested interval completion の考え方を parameter approximation に再利用
+     するが、連続性の最初の定理は semantic Real target で行う。
+5. 文書:
+   - `task-trig-continuous-phase-065.md` を新設し、実装順と module boundary
+     を記録した。
+
+### 2026/06/23 05:49 JST (Affine phase profile and four translates)
+
+1. 実装:
+   - `SemanticCF2DPhase.lean` を新設した。
+   - `phaseDepth t = (1-t)^2 + t^2`、平方完成、正値性、端点値、半折返し
+     対称性を証明した。
+   - 一本の `semanticPhaseEdge` とその端点則を実装した。
+2. 保存境界からの離脱:
+   - core-zero 作用について affine edge の `q2` が
+     `phaseDepth t * q2 z` と厳密に一致することを証明した。
+   - 状態そのものではなく、境界深度の観測値が `t -> 1-t` で折り返すことを
+     定理化した。
+3. 四相:
+   - `semanticPhaseEdgeAt` を作用反復による唯一の master edge の translate
+     として定義した。
+   - endpoint、seam、共通 `q2` profile、位相番号の4周期性を証明した。
+4. 研究方針:
+   - `research-pregeometric-pi-program-067.md` を追加した。
+   - refinement、Gaussian limit、独立な正規化定数、`Real.pi` 同定を未証明の
+     段階として分離し、次は continuous four-edge path と定めた。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPhase` 成功 (8274 jobs)。
+
+### 2026/06/23 06:05 JST (Continuous closed four-phase path)
+
+1. レビュー補正:
+   - `phaseDepth_eq_half_iff` を追加し、midpoint が unique minimum であるという
+     module docstring の主張を定理化した。
+2. 位相 bridge:
+   - `CF2D.Topology.lean` を新設した。
+   - `Vec R` と `R × R` の座標同値、および積から誘導される topology を
+     実装した。
+   - `Vec` 値関数の連続性を2座標の連続性へ分解する API を追加した。
+3. Path:
+   - `SemanticCF2DPath.lean` を新設した。
+   - master edge と全 action translate の連続性を証明した。
+   - 各 edge を Mathlib `Path` として包装し、4本を `Path.trans` で連結した。
+   - core-zero exact order four により `Path z z` となる閉路を構成した。
+4. 境界:
+   - 得られたものは continuous piecewise-affine closed path であり、まだ
+     fixed-`q2` boundary path ではない。
+   - 次段階を `phaseDepth` による boundary normalization とした。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPath` 成功 (8276 jobs)。
+
+### 2026/06/23 06:15 JST (Normalized boundary edge)
+
+1. 実装:
+   - `SemanticCF2DNormalize.lean` を新設した。
+   - `phaseNormalization t = 1 / sqrt (phaseDepth t)` を定義した。
+   - 平方根と補正係数の正値性、非零性、端点値、折返し対称性、連続性を
+     証明した。
+2. normalized edge:
+   - `normalizedPhaseEdge` を座標ごとのスカラー補正として定義した。
+   - affine edge と同じ始点・終点を持つことを証明した。
+   - core-zero 作用では全実数 parameter に対して
+     `q2 (normalizedPhaseEdge r z t) = q2 z` を証明した。
+   - normalized edge の連続性を証明した。
+3. 境界:
+   - 一本の edge の固定 `q2` 境界復帰までを今回の checkpoint とした。
+   - 四相 translate、seam、boundary-valued closed path は次段階とした。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:35 JST (Normalized closed four-phase path)
+
+1. レビュー補正:
+   - 一般補題 `Vec.q2_scale` を追加した。
+   - `phaseNormalization_sq_mul_phaseDepth` を追加し、平方根補正の消去則を
+     独立 API とした。
+   - normalized edge の `q2` 証明をこれらの構造的補題で整理した。
+2. 四相:
+   - `normalizedPhaseEdgeAt` を master edge の action translate として
+     定義した。
+   - endpoint、seam、固定 `q2`、phase index の4周期性を証明した。
+   - 全 translated edge の連続性を証明した。
+3. closed path:
+   - 各 normalized edge を Mathlib `Path` に包装した。
+   - 4本を連結し、core-zero exact order four により `Path z z` を構成した。
+   - 円・角度なしで fixed-`q2` continuous closed path に到達した。
+4. 次段階:
+   - path の target を `LevelSet Real (q2 z)` へ強化する候補を記録した。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:50 JST (Level-set internal closed path)
+
+1. topology:
+   - `CF2D.Topology` に `LevelSet R rho2` の subtype topology を追加した。
+   - level-set から underlying `Vec` への射影の連続性を追加した。
+2. boundary type:
+   - 離散 action state を `semanticPhaseLevelPoint` として
+     `LevelSet Real (q2 z)` に包装した。
+   - normalized edge を `normalizedPhaseLevelEdge` として同じ level set に
+     包装し、その連続性を証明した。
+3. path:
+   - 各 edge を `normalizedPhaseLevelPath` として level-set 内部の Path にした。
+   - 4本を連結し、exact order four により
+     `normalizedClosedLevelFourPhasePath` を構成した。
+4. 結論:
+   - fixed-`q2` boundary membership は外部定理だけでなく codomain の型に
+     組み込まれた。
+   - 次候補は既存 path を Euclidean circle model へ解釈する bridge。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:58 JST (Euclidean coordinate-circle interpretation)
+
+1. 実装:
+   - `CF2D.EuclideanPhase.lean` を新設した。
+   - squared radius による `EuclideanCircleSq rho2` を定義した。
+   - `LevelSet Real rho2` と coordinate equation
+     `x^2 + y^2 = rho2` の homeomorphism を構成した。
+2. 境界分類:
+   - `Vec.q2_nonneg`、`Vec.q2_eq_zero_iff`、
+     `Vec.q2_pos_iff_ne_zero` を証明した。
+   - squared radius zero の circle equation が原点一つへ退化することを
+     証明した。
+3. path interpretation:
+   - 既存 `normalizedClosedLevelFourPhasePath` を homeomorphism で写し、
+     `normalizedClosedEuclideanCircleSqPath` を構成した。
+   - path は再構成せず、pre-geometric path の解釈として保持した。
+4. 境界:
+   - 標準積型の norm は L2 ではないため、単純な `Real × Real` metric sphere
+     とは同一視していない。
+   - 次候補は `EuclideanSpace Real (Fin 2)` の標準 metric sphere への bridge。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 07:08 JST (Standard Euclidean L2 sphere bridge)
+
+1. 設計:
+   - ordinary `Real × Real` product norm を使わず、
+     `EuclideanSpace Real (Fin 2)` の L2 norm へ明示的に接続した。
+2. 実装:
+   - `EuclideanPlane` と `EuclideanSphereSq rho2` を定義した。
+   - coordinate pair と Euclidean plane の相互変換を continuous linear
+     equivalence から構成した。
+   - L2 norm square が2座標の square sum に等しいことを証明した。
+   - 非負 `rho2` について coordinate circle と半径 `sqrt rho2` の metric
+     sphere の homeomorphism を構成した。
+3. path:
+   - 既存 coordinate-circle path を homeomorphism で写し、
+     `normalizedClosedEuclideanSpherePath` を構成した。
+4. 境界:
+   - `rho2 = 0` は zero-radius singleton sphere として保持した。
+   - `0 < rho2` なら radius が正であることを独立定理にした。
+   - 次候補は core-zero action と標準 quarter-turn linear isometry の同定。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 15:10 JST (Quarter-turn linear isometry interpretation)
+
+1. 実装:
+   - Euclidean plane 上の座標写像 `(x,y) -> (-y,x)` を
+     `quarterTurnLinearEquiv` として定義した。
+   - inverse、加法、scalar multiplication を座標ごとに証明した。
+   - L2 norm 保存を証明し、`quarterTurnLinearIsometry` として包装した。
+2. semantic bridge:
+   - core-zero semantic action を Euclidean plane へ写すと、
+     `quarterTurnLinearIsometry` と一致することを証明した。
+3. 意味:
+   - exact-order-four action の Euclidean 読みが、角度を仮定せず
+     quarter-turn linear isometry として確定した。
+4. 次段階:
+   - orientation を選び、Mathlib の oriented rotation `Real.pi / 2` と
+     比較する bridge を候補とした。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 15:26 JST (Oriented rotation by pi/2 bridge)
+
+1. orientation:
+   - Euclidean plane と complex plane の orthonormal-basis isometry を定義した。
+   - complex plane の標準 orientation を Euclidean plane へ引き戻した。
+2. rotation bridge:
+   - 座標 quarter-turn が complex multiplication by `I` に写ることを証明した。
+   - chosen orientation の right-angle rotation と
+     `quarterTurnLinearIsometry` を同定した。
+   - Mathlib の `rotation_pi_div_two` により、quarter-turn が oriented
+     rotation by `Real.pi / 2` に等しいことを証明した。
+3. 境界:
+   - これは既存の pre-geometric action の Euclidean 解釈であり、
+     `pi` の内在的導出ではない。refinement、Gaussian limit、
+     pi identification は独立した未実装課題として維持する。
+4. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 (Direct semantic rotation bridge and refinement preparation)
+
+1. bridge:
+   - core-zero semantic action を Euclidean plane へ移した結果が、chosen
+     orientation の `rotation (Real.pi / 2)` に直接等しい合成定理を追加した。
+2. refinement design:
+   - 次段階を finite dyadic nodes、reflection、one-step subdivision relation
+     に分解した。
+   - infinite product、logarithmic sum、Gaussian limit は、有限合成則が
+     証明されるまで仮定しない方針を明記した。
+
+### 2026/06/23 17:59 JST (Finite dyadic phase refinement)
+
+1. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DDyadic` を新設し、公開 Analysis
+     entry point へ追加した。
+2. finite nodes:
+   - `dyadicPhaseDenom n = 2^n` と
+     `dyadicPhaseNode n k = k / 2^n` を定義した。
+   - denominator positivity、両端点、unit interval membership を証明した。
+3. refinement:
+   - complementary index の reflection law を証明した。
+   - even child が parent と一致し、odd child が隣接 parent の midpoint
+     となることを証明した。
+   - reflected dyadic nodes で `phaseDepth` が一致することを証明した。
+4. boundary:
+   - correction product、logarithmic sum、Gaussian limit は導入していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DDyadic` 成功
+     (8275 jobs)。
+
+### 2026/06/23 18:06 JST (Exact finite depth refinement law)
+
+1. correction:
+   - odd child を parent interval として利用する場合の範囲付き
+     unit-interval theorem を追加した。
+2. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DRefinement` を新設した。
+   - dyadic mesh 上の depth と normalization observation を定義した。
+3. exact laws:
+   - reflection と even-child inheritance を両 observation で証明した。
+   - odd-child depth が adjacent-parent depth の平均から
+     `1 / (2 * (2^n)^2)` を引いた値に厳密に等しいことを証明した。
+4. boundary:
+   - aggregate correction、infinite product、log sum、Gaussian limit は
+     引き続き未選択とした。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。
+
+### 2026/06/23 19:03 JST (Finite total dyadic depth defect)
+
+1. local defect:
+   - `dyadicPhaseDepthDefect n = 1 / (2 * (2^n)^2)` を定義した。
+   - defect の厳密正値性を証明した。
+2. semantic form:
+   - mesh 内の parent interval に限定した odd-child refinement theorem を
+     追加した。
+   - genuine odd child depth が adjacent-parent average より厳密に小さい
+     ことを証明した。
+3. finite aggregation:
+   - level `n + 1` で導入される全 `2^n` odd children の defect 総和が
+     `1 / (2 * 2^n)` に厳密に等しいことを証明した。
+   - これは有限恒等式であり、収束定理とは区別した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。
+
+### 2026/06/23 19:23 JST (Dyadic depth defect limit)
+
+1. cleanup:
+   - `sum_dyadicPhaseDepthDefect` の level 引数を明示化した。
+2. finite hierarchy:
+   - per-level total defect を `totalDyadicPhaseDepthDefect` として定義した。
+   - closed form `(1/2)^(n+1)` を証明した。
+   - finite cumulative defect を定義し、
+     `1 - (1/2)^m` という厳密式を帰納法で証明した。
+3. limit layer:
+   - `SemanticCF2DLimit.lean` を新設した。
+   - per-level total defect が 0 に収束することを証明した。
+   - cumulative defect が 1 に収束することを証明した。
+4. boundary:
+   - geometric-series limit として閉じ、Gaussian、normalization
+     composition、`pi` identification とは接続していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLimit` 成功
+     (8280 jobs)。
+
+### 2026/06/23 (Computability boundary correction)
+
+1. correction:
+   - `dyadicPhaseNode` は `Real` division を使用するため noncomputable
+     であることを再確認した。
+   - `SemanticCF2DDyadic` と、その real-valued definitions に依存する
+     `SemanticCF2DRefinement` に `noncomputable section` を維持した。
+2. boundary:
+   - `SemanticCF2DLimit` は theorem のみなので section 修飾を外しても
+     ビルド可能であることを確認した。
+   - computable mesh が必要な場合は rational nodes を保持し、別 bridge
+     で `Real` へ移す設計とする。
+3. supporting API:
+   - per-level defect の正値性、cumulative defect の非負性・1未満性、
+     および残差 `(1/2)^m` の厳密式を追加した。
+
+### 2026/06/23 19:48 JST (Finite normalization composition)
+
+1. module:
+   - `SemanticCF2DComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. finite observations:
+   - 両端点を含む complete dyadic mesh index を定義した。
+   - mesh 上の depth product と normalization product を定義した。
+3. composition:
+   - 各 node で `normalization^2 * depth = 1` を証明した。
+   - finite product 全体で
+     `(normalization product)^2 * depth product = 1` を証明した。
+   - 両 finite product の厳密正値性を証明した。
+4. boundary:
+   - この定理は pointwise cancellation の有限積版であり、canonical
+     refinement observable、infinite product、log sum を選択しない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。
+
+### 2026/06/23 20:32 JST (Finite composition reciprocal API)
+
+1. API:
+   - depth product と normalization product の nonzero theorem を追加した。
+   - finite cancellation law を双方の reciprocal equation に変換した。
+   - 後続文書向けに `dyadicPhaseFiniteBoundaryCancellation` という短い
+     theorem 名を追加した。
+2. boundary:
+   - 新たな limit observable は選択していない。既存 finite identity の
+     利用形のみを整備した。
+3. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。
+
+### 2026/06/23 20:49 JST (Finite logarithmic composition)
+
+1. module:
+   - `SemanticCF2DLogComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. positivity:
+   - dyadic depth と normalization の pointwise positivity wrapper を
+     追加した。
+3. finite log laws:
+   - depth / normalization の complete-mesh log sum を定義した。
+   - 各 log sum が対応する finite product の log に等しいことを証明した。
+   - pointwise および finite mesh 全体で
+     `2 * logNormalization + logDepth = 0` を証明した。
+4. boundary:
+   - log sum は finite product cancellation の加法表示に限定した。
+     raw sum、average、weighted sum のいずれも canonical limit として
+     選択していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:01 JST (Finite logarithmic candidate observables)
+
+1. API:
+   - complete dyadic node mesh の cardinality lemma
+     `dyadicPhaseNodeIndices_card` を追加した。
+   - uniform-average weight と mesh-width weight を定義した。
+   - average / mesh-weighted log depth と log normalization の finite
+     candidate observables を追加した。
+2. finite laws:
+   - raw log-sum cancellation を scalar multiplication で移送し、
+     average 版と mesh-weighted 版の cancellation を証明した。
+3. boundary:
+   - 追加した量はいずれも finite candidate observable に留めた。
+     canonical limit、Gaussian weight、`pi` identification はまだ選択して
+     いない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:13 JST (Weighted logarithmic cancellation)
+
+1. API:
+   - complete finite mesh 上の任意重み `w : ℕ → ℝ` に対する
+     pointwise weighted log cancellation を追加した。
+   - trapezoidal endpoint half-weight
+     `dyadicPhaseTrapezoidWeight` を定義し、positivity を証明した。
+   - trapezoidal log depth / log normalization sum を追加した。
+2. finite laws:
+   - 任意重み補題から、trapezoidal log cancellation を導出した。
+3. boundary:
+   - 台形則は closed-interval integration candidate として記録しただけで、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:23 JST (Finite weight mass comparison)
+
+1. API:
+   - pointwise weighted cancellation の短名 alias
+     `dyadicPhaseWeightedLogCancellation` を追加した。
+   - average weight、plain complete mesh-width weight、trapezoid weight の
+     total mass theorem を追加した。
+2. finite laws:
+   - average と trapezoid は total mass `1` として証明した。
+   - plain complete mesh-width は total mass `1 + h_n` として証明し、
+     endpoint overcount を Lean 上で可視化した。
+3. boundary:
+   - weight mass の比較は observable selection のための有限分類であり、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:40 JST (Endpoint log comparison)
+
+1. API:
+   - depth と normalization の left / right endpoint log が `0` になる
+     theorem を追加した。
+2. finite comparison:
+   - plain complete mesh-width log-depth sum と trapezoidal log-depth sum が
+     有限段階で一致することを証明した。
+   - plain complete mesh-width log-normalization sum と trapezoidal
+     log-normalization sum も有限段階で一致することを証明した。
+3. interpretation:
+   - weight mass としては plain mesh-width と trapezoid は異なるが、
+     discrepancy が log 値 `0` の端点にだけ載るため、現在の boundary-log
+     observables では同じ値を測ることを Lean 上で可視化した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:47 JST (Mesh-trapezoid endpoint correction)
+
+1. finite comparison:
+   - 任意の sampled observable `f : ℕ → ℝ` について、plain mesh-width
+     complete-node sum と trapezoidal sum の差が
+     `h_n / 2 * (f 0 + f (2^n))` になる theorem を追加した。
+2. interpretation:
+   - 前回の log-depth / log-normalization 一致は、端点 log 値が `0`
+     になるための特殊例として見えるようになった。
+   - centered log increment では端点値が一般に `0` ではなくなるため、
+     この一般補題が次段の比較面になる。
+3. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 07:02 JST (Endpoint-zero mesh-trapezoid corollary)
+
+1. API:
+   - endpoint-zero observable 用に
+     `dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero`
+     を追加した。
+2. refactor:
+   - log-depth と log-normalization の mesh-width / trapezoid 一致定理を、
+     一般 endpoint correction theorem の zero-endpoint corollary から導く
+     形へ整理した。
+3. interpretation:
+   - boundary-log observables は端点補正が消える側、centered observables
+     は端点補正が復活する側として分類できる準備が整った。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:15 JST (Centered log-depth increment)
+
+1. API:
+   - `centeredLogPhaseDepth` と dyadic sample 版
+     `dyadicPhaseCenteredLogDepth` を追加した。
+   - centered log-depth の mesh-width sum と trapezoidal sum を定義した。
+2. finite laws:
+   - centered log-depth は midpoint で `0`、左右 endpoint で `log 2`
+     になることを証明した。
+   - `centeredLogPhaseDepth t =
+     log (1 + 4 * (t - 1/2)^2)` を証明した。
+   - centered log-depth の plain mesh-width sum と trapezoidal sum の差が
+     `h_n * log 2` になることを証明した。
+3. interpretation:
+   - boundary-log では消えていた endpoint correction が、centered
+     observable では有限段階で復活することを Lean 上で可視化した。
+   - Gaussian limit や `pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:22 JST (Centered log-depth quadratic bounds)
+
+1. API:
+   - centered quadratic profile の positivity と `1 ≤ profile` theorem を
+     追加した。
+2. pointwise bounds:
+   - `0 ≤ centeredLogPhaseDepth t` を証明した。
+   - `centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` を証明した。
+3. interpretation:
+   - centered log-depth が有限段階で quadratic moment estimates へ移る
+     ための pointwise bridge になった。
+   - Gaussian limit や `pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:34 JST (Finite weighted quadratic control)
+
+1. API:
+   - dyadic centered quadratic samples
+     `dyadicPhaseCenteredQuadratic` を finite moment 用の公開対象として
+     使う形に整理した。
+   - 任意の非負有限重みで centered log-depth の非負性を保つ
+     `weighted_centeredLogDepth_nonneg` を追加した。
+   - 任意の非負有限重みで centered log-depth sum が centered quadratic
+     moment に支配される
+     `weighted_centeredLogDepth_le_weighted_centeredQuadratic` を追加した。
+2. finite candidates:
+   - mesh-width、uniform-average、trapezoidal の centered log-depth sum と
+     centered quadratic sum を比較する corollary を追加した。
+3. interpretation:
+   - pointwise な `log(1+x) ≤ x` から、有限重み付き二次モーメント制御へ
+     移行した。
+   - Gaussian limit、積分値、`pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:42 JST (Trapezoidal quadratic moment bound)
+
+1. correction:
+   - `research-pregeometric-pi-program-067.md` の centered endpoint
+     correction 周辺に残っていた stray sentence を整理した。
+2. API:
+   - unit interval 上で centered quadratic profile が `≤ 1` である
+     `centeredQuadratic_le_one_of_mem_unit` を追加した。
+   - complete dyadic node 上の対応する点wise bound
+     `dyadicPhaseCenteredQuadratic_le_one` を追加した。
+3. finite moment:
+   - 台形重みの total mass one と点wise bound から
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_le_one` を証明した。
+   - 閉形式 `1/3 + 2/(3 * (2^n)^2)` は code TODO として残した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:59 JST (Trapezoidal quadratic moment closed form)
+
+1. finite sums:
+   - `sum_range_succ_id_real` と `sum_range_succ_sq_real` を局所補助として
+     追加し、`0, ..., N` の一次和・二乗和を `ℝ` 上で閉じた。
+   - complete-node mesh-width centered quadratic moment の閉形式
+     `dyadicPhaseMeshWeightedCenteredQuadraticSum_eq` を追加した。
+2. trapezoid moment:
+   - endpoint correction を使って
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を証明した。
+   - 有限値は
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)`。
+3. interpretation:
+   - 台形 centered quadratic moment が有限段階で `1 / 3` に対する
+     explicit correction を持つことが Lean 上で見えた。
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 14:40 JST (Centered log-depth closed quadratic bound)
+
+1. API:
+   - `dyadicPhaseTrapezoidCenteredLogDepthSum_le_closedQuadraticBound` を
+     追加した。
+2. finite estimate:
+   - 既存の
+     `dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum` と
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を合成し、
+     centered log-depth の台形和を
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)` で上から抑えた。
+3. documentation:
+   - `dyadicPhaseDenom n = 2^n` を研究メモ側に明記した。
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. interpretation:
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+     これは finite-level closed upper bound である。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 15:32 JST (DkLimit entrance and quadratic moment limit)
+
+1. API:
+   - `DkMath.Analysis.DkLimit` を新規追加した。
+   - Mathlib `Filter.Tendsto` を包む DkMath 語彙として
+     `DkTendstoAtTop`、`DkGapCollapsesTo`、
+     `DkPuncturedGapCollapsesTo` を追加した。
+2. CF2D log limit layer:
+   - `DkMath.Analysis.DkReal.SemanticCF2DLogLimit` を新規追加した。
+   - closed quadratic bound が `1 / 3` へ向かう
+     `dkTendsto_dyadicPhaseClosedQuadraticBound_one_third` と
+     Mathlib spelling の theorem を追加した。
+   - finite closed form から
+     `dkTendsto_dyadicPhaseTrapezoidCenteredQuadraticSum_one_third` と
+     Mathlib spelling の theorem を追加した。
+3. interpretation:
+   - DkLimit は現時点では自前極限型ではなく、Mathlib filter の
+     DkMath 語彙入口である。
+   - centered log-depth sum 自体の極限はまだ主張していない。
+     そこには下界評価が必要。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogLimit` 成功
+     (8283 jobs)。
+
+### 2026/06/27 16:49 JST (Semantic quarter-turn angle bridge)
+
+1. Euclidean angle bridge:
+   - `semanticQuarterTurnAngle : ℝ` を
+     `DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` に追加した。
+   - 定義値は `Real.pi / 2` だが、役割は intrinsic な `pi` 構成ではなく、
+     既存の semantic four-state action を Euclidean plane で読むための
+     angle bridge とした。
+2. theorem API:
+   - `rotation_semanticQuarterTurnAngle_eq_quarterTurn` を追加し、
+     DkMath 名の角度による rotation が explicit coordinate quarter-turn
+     であることを記録した。
+   - `pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle`
+     を追加し、core-zero semantic action が
+     `theta = semanticQuarterTurnAngle` の Euclidean rotation として読める
+     ことを記録した。
+3. interpretation:
+   - 本線は DkMath 版三角関数、`pi`、角度 `theta` の実現である。
+   - 今回はその最初の角度読み取りとして、円や polar coordinates を
+     仮定する前に得られている四状態作用を、後から Euclidean 角度
+     `pi / 2` と比較する入口を整えた。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に
+     first angle reading milestone を追加した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 17:06 JST (Half-turn and full-turn angle readings)
+
+1. angle vocabulary:
+   - `semanticPhaseAngle (k : ℕ) : ℝ` を追加し、
+     `k * semanticQuarterTurnAngle` を DkMath 名で表した。
+   - `semanticHalfTurnAngle` と `semanticFullTurnAngle` を追加した。
+2. exact angle values:
+   - `semanticHalfTurnAngle_eq_pi` により二つの semantic quarter-turn が
+     `Real.pi` として読まれることを記録した。
+   - `semanticFullTurnAngle_eq_two_pi` により四つの semantic quarter-turn が
+     `2 * Real.pi` として読まれることを記録した。
+3. rotation bridge:
+   - `rotation_semanticHalfTurnAngle_eq_neg` を追加し、半回転が Euclidean
+     plane の negation であることを記録した。
+   - `rotation_semanticFullTurnAngle_eq_refl` を追加し、全回転が identity
+     rotation であることを記録した。
+4. interpretation:
+   - 対称性ルートの本線として、
+     `k semantic actions <-> rotation by semanticPhaseAngle k`
+     へ進むための角度側 API を先に整えた。
+   - まだ反復 semantic action との一般 theorem は未実装。
+5. documentation:
+   - `research-pregeometric-pi-program-067.md` の first angle reading
+     milestone を half/full turn まで拡張した。
+
+### 2026/06/27 18:39 JST (Semantic action iteration angle bridge)
+
+1. angle API:
+   - `semanticPhaseAngle_two` と `semanticPhaseAngle_four` を追加し、
+     phase index `2` と `4` が half/full turn 名に一致することを
+     simp theorem として記録した。
+   - `semanticPhaseAngle_add` を追加し、phase index の加法が angle の
+     加法として読めることを記録した。
+2. coordinate bridge:
+   - `pairToEuclideanPlane_neg` を追加し、coordinate insertion が
+     negation と可換であることを記録した。
+3. action iteration bridge:
+   - `pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticAct_four_eq_rotation_semanticFullTurnAngle`
+     を追加した。
+4. interpretation:
+   - 既存の core-zero action law
+     `semanticAct_twice_of_core_eq_zero` を使い、二回作用は Euclidean
+     half-turn として読まれる。
+   - 四回作用は Euclidean full-turn、すなわち identity rotation として
+     読まれる。
+   - まだ一般 `k` 回作用の theorem は未実装。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 21:54 JST (Iterate API and three-quarter turn bridge)
+
+1. semantic iterate API:
+   - `semanticActIter r k z := (semanticAct r)^[k] z` を追加した。
+   - `semanticActIter_zero`、`semanticActIter_one`、
+     `semanticActIter_succ` を追加した。
+   - core-zero 境界作用の iterate 形式として
+     `semanticActIter_two_of_core_eq_zero`、
+     `semanticActIter_three_of_core_eq_zero`、
+     `semanticActIter_four_of_core_eq_zero` を追加した。
+2. four-step semantic action:
+   - `semanticAct_four_of_core_eq_zero` を semantic 層に追加し、
+     Euclidean bridge 側の四回作用証明を読みやすくした。
+3. angle bridge:
+   - `semanticPhaseAngle_three` を追加し、
+     `semanticPhaseAngle 3 = 3 * Real.pi / 2` を記録した。
+   - `rotation_semanticPhaseAngle_three` を追加し、三つの quarter-turn が
+     reverse quarter-turn として読まれることを記録した。
+4. action iteration bridge:
+   - `pairToEuclideanPlane_semanticActIter_two_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_three_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle`
+     を追加した。
+5. interpretation:
+   - `k = 0,1,2,3,4` の四状態 angle reading の土台が揃った。
+   - 次は一般 `k` または `k % 4` による分類 theorem が候補。
+6. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 22:25 JST (Period-four iterate table preparation)
+
+1. semantic periodicity:
+   - `semanticActIter_add_four_of_core_eq_zero` を追加し、
+     core-zero 境界作用の iterate が `k + 4` で同じ状態へ戻ることを
+     semantic 層で記録した。
+2. Euclidean iterate table:
+   - `pairToEuclideanPlane_semanticActIter_zero_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 0` の identity row を angle bridge として記録した。
+   - `pairToEuclideanPlane_semanticActIter_one_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 1` の quarter-turn row を iterate 形式でも
+     使えるようにした。
+3. interpretation:
+   - `k = 0,1,2,3,4` が同じ `semanticActIter` 表記で揃った。
+   - `k + 4` の周期性も semantic 層に入ったため、次は本格的な
+     `k % 4` 分類 theorem へ進める。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に period-four iterate
+     preparation を追記した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 23:18 JST (Modulo-four semantic phase classifier)
+
+1. semantic modulo-four classification:
+   - `semanticActIter_add_four_mul_of_core_eq_zero` を追加し、
+     `k + 4 * q` の形で任意個の full-turn を消せるようにした。
+   - `semanticActIter_eq_mod_four_of_core_eq_zero` を追加し、
+     core-zero semantic action の iterate が `k % 4` のみに依存することを
+     記録した。
+2. Euclidean modulo-four bridge:
+   - `pairToEuclideanPlane_semanticActIter_eq_rotation_semanticPhaseAngle_mod_four`
+     を追加した。
+   - semantic 側で `k % 4` に縮約し、`0,1,2,3` の有限位相表へ分岐して
+     Euclidean angle reading に接続する。
+3. interpretation:
+   - DkMath の exact order-four action が、Euclidean 解釈では
+     `semanticPhaseAngle (k % 4)` の回転として読まれるところまで閉じた。
+   - これは `pi` の内在構成ではなく、四状態対称性の Euclidean
+     angle reading である。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に modulo-four classifier
+     の二層構造を追記した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

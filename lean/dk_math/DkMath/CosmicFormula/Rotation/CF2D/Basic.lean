@@ -61,6 +61,12 @@ def star [Ring R] (r z : Vec R) : Vec R :=
 @[simp]
 theorem q2_mk [Semiring R] (x y : R) : q2 (Vec.mk x y) = x ^ 2 + y ^ 2 := rfl
 
+/-- Scaling both coordinates scales square mass by the square of the scalar. -/
+theorem q2_scale [CommSemiring R] (c : R) (z : Vec R) :
+    q2 (Vec.mk (c * z.core) (c * z.beam)) = c ^ 2 * q2 z := by
+  simp [q2]
+  ring
+
 /-- The core coordinate of the neutral kernel is `1`. -/
 @[simp]
 theorem one_core [Zero R] [One R] : (one R).core = 1 := rfl

@@ -9,7 +9,7 @@ gch: 7704f1c1de89e9b5705e03b6563624efbf54d85b
 この方針で一段進めました。
 
 - `semanticValue` を `semanticRingHom : DkNNRealQ →+* ℝ` として束ねた
-- [SemanticCF2D.lean](/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean:1) を新設
+- [SemanticCF2D.lean](/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean:1) を新設
 - `semanticVec`、`semanticValue_q2`、`semanticUnitKernel` を実装
 - 順序反映は重い独立課題として保留
 
