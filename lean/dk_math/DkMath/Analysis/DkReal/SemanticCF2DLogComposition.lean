@@ -709,6 +709,82 @@ def dyadicPhaseTrapezoidCenteredQuadraticSum (n : ℕ) : ℝ :=
   ∑ k ∈ dyadicPhaseNodeIndices n,
     dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
 
+/-- Finite closed form for the first-power sum over `0, ..., N`. -/
+private theorem sum_range_succ_id_real (N : ℕ) :
+    (∑ k ∈ Finset.range (N + 1), (k : ℝ)) =
+      (N : ℝ) * (N + 1 : ℝ) / 2 := by
+  induction N with
+  | zero =>
+      norm_num
+  | succ N ih =>
+      rw [Finset.sum_range_succ, ih]
+      norm_num
+      ring
+
+/-- Finite closed form for the square sum over `0, ..., N`. -/
+private theorem sum_range_succ_sq_real (N : ℕ) :
+    (∑ k ∈ Finset.range (N + 1), (k : ℝ) ^ 2) =
+      (N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6 := by
+  induction N with
+  | zero =>
+      norm_num
+  | succ N ih =>
+      rw [Finset.sum_range_succ, ih]
+      norm_num
+      ring
+
+/--
+Closed form for the complete-node mesh-width centered quadratic sum.
+
+This is the finite algebraic core behind the trapezoidal closed form. It uses
+only the elementary first-power and square-sum identities.
+-/
+private theorem mesh_centered_quadratic_sum_eq_of_pos
+    {N : ℕ} (hN : 0 < N) :
+    (∑ k ∈ Finset.range (N + 1),
+        (1 / (N : ℝ)) *
+          (4 * ((k : ℝ) / (N : ℝ) - (1 / 2 : ℝ)) ^ 2)) =
+      (N + 1 : ℝ) * (N + 2 : ℝ) / (3 * (N : ℝ) ^ 2) := by
+  have hNz : (N : ℝ) ≠ 0 := by
+    exact_mod_cast hN.ne'
+  rw [← Finset.mul_sum]
+  ring_nf
+  rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+  have hsum1 :
+      (∑ x ∈ Finset.range (1 + N), (x : ℝ)) =
+        (N : ℝ) * (N + 1 : ℝ) / 2 := by
+    simpa [Nat.add_comm] using sum_range_succ_id_real N
+  have hsum2 :
+      (∑ x ∈ Finset.range (1 + N), (x : ℝ) ^ 2) =
+        (N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6 := by
+    simpa [Nat.add_comm] using sum_range_succ_sq_real N
+  have hsum1' :
+      (∑ x ∈ Finset.range (1 + N), (N : ℝ)⁻¹ * (x : ℝ) * 4) =
+        (N : ℝ)⁻¹ * ((N : ℝ) * (N + 1 : ℝ) / 2) * 4 := by
+    rw [← Finset.sum_mul, ← Finset.mul_sum, hsum1]
+  have hsum2' :
+      (∑ x ∈ Finset.range (1 + N), (N : ℝ)⁻¹ ^ 2 * (x : ℝ) ^ 2 * 4) =
+        (N : ℝ)⁻¹ ^ 2 *
+          ((N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6) * 4 := by
+    rw [← Finset.sum_mul, ← Finset.mul_sum, hsum2]
+  rw [hsum1', hsum2']
+  field_simp [hNz]
+  norm_num
+  ring
+
+/-- Closed form for the complete-node mesh-width centered quadratic moment. -/
+theorem dyadicPhaseMeshWeightedCenteredQuadraticSum_eq (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredQuadraticSum n =
+      (dyadicPhaseDenom n + 1 : ℝ) *
+          (dyadicPhaseDenom n + 2 : ℝ) /
+        (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  simp [dyadicPhaseMeshWeightedCenteredQuadraticSum,
+    dyadicPhaseNodeIndices, dyadicPhaseMeshWeight,
+    dyadicPhaseCenteredQuadratic, dyadicPhaseNode]
+  simpa using
+    mesh_centered_quadratic_sum_eq_of_pos (dyadicPhaseDenom_pos n)
+
 /-- Plain mesh-width centered log-depth sums are nonnegative. -/
 theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_nonneg (n : ℕ) :
     0 ≤ dyadicPhaseMeshWeightedCenteredLogDepthSum n := by
@@ -778,12 +854,9 @@ theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
 /--
 The trapezoidal centered quadratic moment is bounded by one.
 
-This is the first finite moment bound: the sampled centered quadratic profile
-is at most one on `[0,1]`, and the trapezoidal weights have total mass one.
-
-[TODO: finite-trapezoid-quadratic-closed-form] Prove the sharper closed form
-`1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)` by an explicit finite
-quadratic-sum calculation.
+This follows immediately from the sampled centered quadratic profile being at
+most one on `[0,1]`, and from the trapezoidal weights having total mass one.
+The sharper closed form is proved below.
 -/
 theorem dyadicPhaseTrapezoidCenteredQuadraticSum_le_one (n : ℕ) :
     dyadicPhaseTrapezoidCenteredQuadraticSum n ≤ 1 := by
@@ -804,6 +877,48 @@ theorem dyadicPhaseTrapezoidCenteredQuadraticSum_le_one (n : ℕ) :
             nlinarith
     _ = 1 := by
       simpa using sum_dyadicPhaseTrapezoidWeight_eq_one n
+
+/--
+Closed form for the trapezoidal centered quadratic moment.
+
+The complete-node mesh-width moment is first evaluated by elementary finite
+power sums. The trapezoidal value then subtracts the half-width endpoint
+correction. Since the centered quadratic endpoint values are both one, the
+correction is exactly one mesh width.
+-/
+theorem dyadicPhaseTrapezoidCenteredQuadraticSum_eq (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredQuadraticSum n =
+      1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
+    exact_mod_cast (dyadicPhaseDenom_pos n).ne'
+  have hdiff :
+      dyadicPhaseMeshWeightedCenteredQuadraticSum n -
+          dyadicPhaseTrapezoidCenteredQuadraticSum n =
+        dyadicPhaseMeshWeight n := by
+    rw [dyadicPhaseMeshWeightedCenteredQuadraticSum,
+      dyadicPhaseTrapezoidCenteredQuadraticSum, dyadicPhaseMeshWeight]
+    simp [dyadicPhaseCenteredQuadratic, dyadicPhaseNode]
+    have h :=
+      dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+        n (dyadicPhaseCenteredQuadratic n)
+    simp [dyadicPhaseCenteredQuadratic, dyadicPhaseNode,
+      dyadicPhaseMeshWeight, hdenom] at h
+    norm_num at h
+    simpa using h
+  calc
+    dyadicPhaseTrapezoidCenteredQuadraticSum n
+        = dyadicPhaseMeshWeightedCenteredQuadraticSum n -
+            dyadicPhaseMeshWeight n := by
+          linarith
+    _ = (dyadicPhaseDenom n + 1 : ℝ) *
+            (dyadicPhaseDenom n + 2 : ℝ) /
+          (3 * (dyadicPhaseDenom n : ℝ) ^ 2) -
+            1 / (dyadicPhaseDenom n : ℝ) := by
+          rw [dyadicPhaseMeshWeightedCenteredQuadraticSum_eq,
+            dyadicPhaseMeshWeight]
+    _ = 1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+          field_simp [hdenom]
+          ring
 
 /--
 For centered log-depth, the plain mesh-width and trapezoidal sums differ by

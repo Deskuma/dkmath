@@ -1131,3 +1131,26 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 13:59 JST (Trapezoidal quadratic moment closed form)
+
+1. finite sums:
+   - `sum_range_succ_id_real` と `sum_range_succ_sq_real` を局所補助として
+     追加し、`0, ..., N` の一次和・二乗和を `ℝ` 上で閉じた。
+   - complete-node mesh-width centered quadratic moment の閉形式
+     `dyadicPhaseMeshWeightedCenteredQuadraticSum_eq` を追加した。
+2. trapezoid moment:
+   - endpoint correction を使って
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を証明した。
+   - 有限値は
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)`。
+3. interpretation:
+   - 台形 centered quadratic moment が有限段階で `1 / 3` に対する
+     explicit correction を持つことが Lean 上で見えた。
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

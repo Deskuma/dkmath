@@ -45,8 +45,9 @@ bounded above by `4 * (t - 1/2)^2`. This pointwise estimate has been lifted to
 arbitrary nonnegative finite weights, with mesh-width, uniform-average, and
 trapezoidal corollaries. These are finite quadratic-moment controls only; no
 Gaussian, integral, angle, or `pi` interpretation is selected here. The first
-trapezoidal centered quadratic moment bound is now `<= 1`; the sharper closed
-finite formula is intentionally left as the next finite-sum target.
+trapezoidal centered quadratic moment bound is now `<= 1`, and its exact
+finite value is
+`1/3 + 2/(3 * (dyadicPhaseDenom n : Real)^2)`.
 
 The current implementation proves a four-state return:
 

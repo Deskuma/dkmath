@@ -315,8 +315,17 @@ have total mass one, so Lean proves
 dyadicPhaseTrapezoidCenteredQuadraticSum n <= 1.
 ```
 
-This is deliberately a crude finite bound. The sharper expected closed form
-`1/3 + 2/(3 * (2^n)^2)` is marked in code as the next finite-sum target.
+The exact finite value is now also proved:
+
+```text
+dyadicPhaseTrapezoidCenteredQuadraticSum n
+  = 1/3 + 2/(3 * (2^n)^2).
+```
+
+The proof stays finite. It first evaluates the complete-node mesh-width
+quadratic moment by elementary first-power and square-sum formulas, then
+subtracts the trapezoidal endpoint correction. This exposes the finite
+correction to the later `1/3` target without invoking an integral or a limit.
 
 ### Milestone D: limit and Gaussian bridge
 
