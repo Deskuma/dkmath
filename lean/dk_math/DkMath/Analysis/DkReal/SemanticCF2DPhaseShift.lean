@@ -786,6 +786,229 @@ theorem shiftedSemanticNormalizedLevelEdge_center_eq_seam
   exact shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero hcore z
 
 /-!
+## Indexed shifted normalized edges
+
+The next layer moves the shifted edge along the finite action orbit. The
+index is still an action count, not a geometric angle parameter.
+-/
+
+/-- The base state for the `k`th shifted edge. -/
+def shiftedSemanticIndexedBase
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) : Vec ℝ :=
+  semanticActIter r k z
+
+@[simp]
+theorem shiftedSemanticIndexedBase_zero
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    shiftedSemanticIndexedBase r z 0 = z := rfl
+
+@[simp]
+theorem shiftedSemanticIndexedBase_succ
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedBase r z (k + 1) =
+      semanticAct r (shiftedSemanticIndexedBase r z k) := by
+  simp [shiftedSemanticIndexedBase]
+
+/-- Every indexed base remains on the original square-mass level. -/
+theorem shiftedSemanticIndexedBase_q2
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    Vec.q2 (shiftedSemanticIndexedBase r z k) = Vec.q2 z := by
+  rw [shiftedSemanticIndexedBase, semanticActIter, semanticAct_iterate_q2]
+
+/-- The `k`th shifted normalized edge. -/
+def shiftedSemanticIndexedEdge
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) (t : ℝ) : Vec ℝ :=
+  shiftedSemanticNormalizedEdge r (shiftedSemanticIndexedBase r z k) t
+
+/-- The `k`th shifted normalized edge as a Mathlib path. -/
+def shiftedSemanticIndexedPath
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    Path
+      (shiftedSemanticLeftEndpoint r (shiftedSemanticIndexedBase r z k))
+      (shiftedSemanticRightEndpoint r (shiftedSemanticIndexedBase r z k)) :=
+  shiftedSemanticNormalizedPath r (shiftedSemanticIndexedBase r z k)
+
+@[simp]
+theorem shiftedSemanticIndexedPath_apply
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) (t : unitInterval) :
+    shiftedSemanticIndexedPath r z k t =
+      shiftedSemanticIndexedEdge r z k t := rfl
+
+/-- Consecutive indexed shifted edges share their seam endpoint. -/
+theorem shiftedSemanticIndexedEdge_right_eq_next_left
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedEdge r z k 1 =
+      shiftedSemanticIndexedEdge r z (k + 1) 0 := by
+  rw [shiftedSemanticIndexedEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticIndexedBase_succ]
+  exact shiftedSemanticNormalizedEdge_right_eq_next_left r
+    (shiftedSemanticIndexedBase r z k)
+
+/--
+At its center, the `k`th indexed shifted edge reaches the next indexed base
+state.
+-/
+theorem shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedEdge r z k phaseCenter =
+      shiftedSemanticIndexedBase r z (k + 1) := by
+  simp [shiftedSemanticIndexedEdge,
+    shiftedSemanticNormalizedEdge_center_eq_semanticAct_of_core_eq_zero hcore]
+
+/-- Core-zero indexed bases repeat after four action steps. -/
+theorem shiftedSemanticIndexedBase_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedBase r z (k + 4) =
+      shiftedSemanticIndexedBase r z k := by
+  exact semanticActIter_add_four_of_core_eq_zero hcore k z
+
+/-- The indexed shifted left endpoints repeat after four action steps. -/
+theorem shiftedSemanticIndexedLeftEndpoint_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticLeftEndpoint r
+        (shiftedSemanticIndexedBase r z (k + 4)) =
+      shiftedSemanticLeftEndpoint r
+        (shiftedSemanticIndexedBase r z k) := by
+  rw [shiftedSemanticIndexedBase_add_four_of_core_eq_zero hcore]
+
+/-- The indexed shifted right endpoints repeat after four action steps. -/
+theorem shiftedSemanticIndexedRightEndpoint_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticRightEndpoint r
+        (shiftedSemanticIndexedBase r z (k + 4)) =
+      shiftedSemanticRightEndpoint r
+        (shiftedSemanticIndexedBase r z k) := by
+  rw [shiftedSemanticIndexedBase_add_four_of_core_eq_zero hcore]
+
+/-- Indexed shifted edges repeat after four action steps. -/
+theorem shiftedSemanticIndexedEdge_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) :
+    shiftedSemanticIndexedEdge r z (k + 4) t =
+      shiftedSemanticIndexedEdge r z k t := by
+  rw [shiftedSemanticIndexedEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticIndexedBase_add_four_of_core_eq_zero hcore]
+
+/-!
+## Indexed shifted paths inside the square-mass boundary
+
+These wrappers keep the codomain fixed at the original `q2 z` level while
+the indexed base state moves by the semantic action.
+-/
+
+/-- The indexed base as a point of the original square-mass level set. -/
+def shiftedSemanticIndexedBaseLevelPoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (k : ℕ) :
+    LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticIndexedBase r z k,
+    shiftedSemanticIndexedBase_q2 r z k⟩
+
+/-- The indexed shifted left endpoint inside the original square-mass level set. -/
+def shiftedSemanticIndexedLeftLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticLeftEndpoint r (shiftedSemanticIndexedBase r z k), by
+    rw [shiftedSemanticLeftEndpoint_q2_of_core_eq_zero hcore,
+      shiftedSemanticIndexedBase_q2]⟩
+
+/-- The indexed shifted right endpoint inside the original square-mass level set. -/
+def shiftedSemanticIndexedRightLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticRightEndpoint r (shiftedSemanticIndexedBase r z k), by
+    rw [shiftedSemanticRightEndpoint_q2_of_core_eq_zero hcore,
+      shiftedSemanticIndexedBase_q2]⟩
+
+/-- The indexed shifted normalized edge inside the original square-mass level set. -/
+def shiftedSemanticIndexedLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) : LevelSet ℝ (Vec.q2 z) :=
+  ⟨shiftedSemanticIndexedEdge r z k t, by
+    rw [shiftedSemanticIndexedEdge,
+      shiftedSemanticNormalizedEdge_q2_of_core_eq_zero hcore,
+      shiftedSemanticIndexedBase_q2]⟩
+
+@[simp]
+theorem shiftedSemanticIndexedLevelEdge_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) :
+    (shiftedSemanticIndexedLevelEdge hcore z k t).1 =
+      shiftedSemanticIndexedEdge r z k t := rfl
+
+/-- The indexed level-set-valued shifted edge is continuous. -/
+theorem continuous_shiftedSemanticIndexedLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    Continuous (fun t : ℝ => shiftedSemanticIndexedLevelEdge hcore z k t) :=
+  Continuous.subtype_mk
+    (continuous_shiftedSemanticNormalizedEdge r
+      (shiftedSemanticIndexedBase r z k)) _
+
+/-- The indexed shifted normalized edge as a fixed-boundary path. -/
+def shiftedSemanticIndexedLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    Path (shiftedSemanticIndexedLeftLevelEndpoint hcore z k)
+      (shiftedSemanticIndexedRightLevelEndpoint hcore z k) where
+  toFun t := shiftedSemanticIndexedLevelEdge hcore z k t
+  continuous_toFun :=
+    (continuous_shiftedSemanticIndexedLevelEdge hcore z k).comp
+      continuous_subtype_val
+  source' := by
+    apply Subtype.ext
+    simp [shiftedSemanticIndexedLevelEdge,
+      shiftedSemanticIndexedLeftLevelEndpoint, shiftedSemanticIndexedEdge]
+  target' := by
+    apply Subtype.ext
+    simp [shiftedSemanticIndexedLevelEdge,
+      shiftedSemanticIndexedRightLevelEndpoint, shiftedSemanticIndexedEdge]
+
+@[simp]
+theorem shiftedSemanticIndexedLevelPath_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : unitInterval) :
+    (shiftedSemanticIndexedLevelPath hcore z k t).1 =
+      shiftedSemanticIndexedEdge r z k t := rfl
+
+/-- Consecutive indexed level endpoints are the same seam point. -/
+theorem shiftedSemanticIndexedRightLevelEndpoint_eq_next_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z k =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z (k + 1) := by
+  apply Subtype.ext
+  simp [shiftedSemanticIndexedRightLevelEndpoint,
+    shiftedSemanticIndexedLeftLevelEndpoint, shiftedSemanticRightEndpoint,
+    shiftedSemanticLeftEndpoint]
+
+/-- The indexed level edge center is the next indexed base point. -/
+theorem shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedLevelEdge hcore z k phaseCenter =
+      shiftedSemanticIndexedBaseLevelPoint r z (k + 1) := by
+  apply Subtype.ext
+  exact shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z k
+
+/-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
 The shifted semantic edge uses the normalized center states of neighboring
 quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
@@ -801,6 +1024,16 @@ seam state under the core-zero action law.
 [TODO: semantic-cf2d/shifted-cyclic-parameter]
 Package four shifted normalized paths by an explicit cyclic index once the
 next layer needs concatenation or a quotient phase parameter.
+
+[IMPLEMENTED: semantic-cf2d/shifted-indexed-edge]
+The shifted normalized edge is now indexed by semantic action iterates.
+Indexed edges have adjacent seam compatibility, centers at the next indexed
+base state, four-step return under the core-zero law, and fixed-`q2`
+level-set path wrappers.
+
+[TODO: semantic-cf2d/shifted-four-path]
+Concatenate four indexed shifted normalized paths once the next layer needs a
+single closed path object rather than edgewise compatibility facts.
 -/
 
 /-!

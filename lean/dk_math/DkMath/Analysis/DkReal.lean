@@ -193,6 +193,11 @@ seam. This shifted normalized edge is now continuous, packaged as a Mathlib
 `Path`, and also packaged as a path internal to the fixed `q2` level set.
 Adjacent shifted edges share their normalized center endpoint, preparing the
 later cyclic concatenation layer without adding geometric angle vocabulary.
+The shifted edge is now also indexed by semantic action iterates. Indexed
+bases stay on the initial square-mass level, adjacent indexed shifted edges
+share seams, their centers are the next indexed bases, and core-zero
+four-step return holds for bases, endpoints, and edge functions. Fixed-`q2`
+indexed level-set paths expose the same compatibility inside the boundary.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

@@ -424,6 +424,16 @@ shiftedSemanticNormalizedPath
 shiftedSemanticNormalizedPath_q2_of_core_eq_zero
 shiftedSemanticNormalizedLevelPath
 shiftedSemanticNormalizedLevelEdge_center_eq_seam
+shiftedSemanticIndexedBase
+shiftedSemanticIndexedEdge
+shiftedSemanticIndexedPath
+shiftedSemanticIndexedEdge_right_eq_next_left
+shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero
+shiftedSemanticIndexedBase_add_four_of_core_eq_zero
+shiftedSemanticIndexedEdge_add_four_of_core_eq_zero
+shiftedSemanticIndexedLevelPath
+shiftedSemanticIndexedRightLevelEndpoint_eq_next_left
+shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -440,6 +450,26 @@ shiftedSemanticNormalizedEdge r (semanticAct r z) 0
 
 This is the seam-compatibility fact needed before four-edge shifted
 concatenation or a cyclic quotient parameter is introduced.
+
+The cyclic-index preparation is now also formalized. The `k`th shifted edge
+uses the semantic action iterate as its base state:
+
+```text
+shiftedSemanticIndexedBase r z k = semanticActIter r k z
+```
+
+The indexed edge is the shifted normalized edge at that base. Lean proves:
+
+```text
+right endpoint of edge k = left endpoint of edge k+1
+center of edge k = indexed base k+1
+indexed base (k+4) = indexed base k       under core-zero
+indexed edge (k+4) = indexed edge k       under core-zero
+```
+
+The same indexed API is available inside the fixed `q2 z` level set, so the
+next layer can concatenate edgewise-compatible paths without re-proving
+boundary membership.
 
 Candidate theorem directions:
 
@@ -505,7 +535,11 @@ depend on that reading.
 12. Implemented: define the pointwise normalized shifted semantic edge.
 13. Implemented: package the shifted normalized edge as a topological path.
 14. Implemented: package the shifted normalized edge inside the fixed `q2` level set.
-15. Later: add a Euclidean bridge that reads `1/8` full-cycle
+15. Implemented: index shifted normalized edges by semantic action iterates.
+16. Implemented: prove indexed adjacent seam compatibility and center-to-next-base compatibility.
+17. Implemented: prove core-zero four-step return for indexed bases, endpoints, and edge functions.
+18. Implemented: package indexed shifted paths inside the fixed `q2` level set.
+19. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -539,14 +573,24 @@ Package the shifted semantic normalized edge as a `Vec Real` path and as a
 fixed-`q2` level-set path. Endpoint aliases, adjacent seam compatibility, and
 center-to-action compatibility are exposed for downstream cyclic
 concatenation.
+
+[IMPLEMENTED: semantic-cf2d/shifted-indexed-edge]
+Index shifted normalized edges by semantic action iterates. Prove adjacent
+indexed seam compatibility, center-to-next-base compatibility, four-step
+return for bases and edge functions, and fixed-`q2` indexed level-set path
+wrappers.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-cyclic-parameter]
-Package four shifted normalized paths by an explicit cyclic index when the
-next layer needs concatenation or a quotient phase parameter.
+[TODO: semantic-cf2d/shifted-four-path]
+Concatenate four indexed shifted normalized paths into one closed fixed-`q2`
+path object.
+
+[TODO: semantic-cf2d/shifted-cyclic-quotient]
+Introduce a quotient phase parameter only after the four indexed path
+concatenation is stable.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path
