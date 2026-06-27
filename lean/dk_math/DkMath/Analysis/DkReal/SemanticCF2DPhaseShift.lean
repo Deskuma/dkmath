@@ -1009,6 +1009,112 @@ theorem shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
   exact shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z k
 
 /-!
+## Four indexed shifted paths
+
+The four seam facts below expose the endpoint chain needed for concatenation.
+The final seam uses the core-zero four-step return law to close edge `3` back
+to edge `0`.
+-/
+
+/-- Seam compatibility from indexed shifted level path `0` to `1`. -/
+theorem shiftedSemanticIndexedLevelEndpoint_0_1
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z 0 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 1 :=
+  shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 0
+
+/-- Seam compatibility from indexed shifted level path `1` to `2`. -/
+theorem shiftedSemanticIndexedLevelEndpoint_1_2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z 1 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 2 :=
+  shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 1
+
+/-- Seam compatibility from indexed shifted level path `2` to `3`. -/
+theorem shiftedSemanticIndexedLevelEndpoint_2_3
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z 2 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 3 :=
+  shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 2
+
+/-- Indexed shifted left level endpoints repeat after four action steps. -/
+theorem shiftedSemanticIndexedLeftLevelEndpoint_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedLeftLevelEndpoint hcore z (k + 4) =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z k := by
+  apply Subtype.ext
+  exact shiftedSemanticIndexedLeftEndpoint_add_four_of_core_eq_zero hcore z k
+
+/-- Indexed shifted right level endpoints repeat after four action steps. -/
+theorem shiftedSemanticIndexedRightLevelEndpoint_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z (k + 4) =
+      shiftedSemanticIndexedRightLevelEndpoint hcore z k := by
+  apply Subtype.ext
+  exact shiftedSemanticIndexedRightEndpoint_add_four_of_core_eq_zero hcore z k
+
+/-- Closing seam compatibility from indexed shifted level path `3` back to `0`. -/
+theorem shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticIndexedRightLevelEndpoint hcore z 3 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 := by
+  calc
+    shiftedSemanticIndexedRightLevelEndpoint hcore z 3 =
+        shiftedSemanticIndexedLeftLevelEndpoint hcore z (3 + 1) :=
+      shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 3
+    _ = shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 := by
+      norm_num
+      exact shiftedSemanticIndexedLeftLevelEndpoint_add_four_of_core_eq_zero hcore z 0
+
+/-- Indexed level edges repeat after four action steps. -/
+theorem shiftedSemanticIndexedLevelEdge_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (k : ℕ) (t : ℝ) :
+    shiftedSemanticIndexedLevelEdge hcore z (k + 4) t =
+      shiftedSemanticIndexedLevelEdge hcore z k t := by
+  apply Subtype.ext
+  exact shiftedSemanticIndexedEdge_add_four_of_core_eq_zero hcore z k t
+
+/--
+The four indexed shifted normalized paths concatenated inside the fixed
+square-mass boundary.
+
+The intermediate paths are cast only along proved seam equalities; no
+geometric angle parameter is used.
+-/
+def shiftedSemanticFourLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0)
+      (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0) := by
+  let p0 := shiftedSemanticIndexedLevelPath hcore z 0
+  let p1 := shiftedSemanticIndexedLevelPath hcore z 1
+  let p2 := shiftedSemanticIndexedLevelPath hcore z 2
+  let p3 := shiftedSemanticIndexedLevelPath hcore z 3
+  let h01 := shiftedSemanticIndexedLevelEndpoint_0_1 hcore z
+  let h12 := shiftedSemanticIndexedLevelEndpoint_1_2 hcore z
+  let h23 := shiftedSemanticIndexedLevelEndpoint_2_3 hcore z
+  let h30 := shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left hcore z
+  exact
+    (((p0.trans (p1.cast h01 rfl)).trans
+      (p2.cast h12 rfl)).trans
+      (p3.cast h23 rfl)).cast rfl h30.symm
+
+/-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
 The shifted semantic edge uses the normalized center states of neighboring
 quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
@@ -1021,19 +1127,20 @@ path and as a path internal to the fixed `q2` level set. Adjacent shifted
 edges share endpoint states, and the center of the shifted edge is the old
 seam state under the core-zero action law.
 
-[TODO: semantic-cf2d/shifted-cyclic-parameter]
-Package four shifted normalized paths by an explicit cyclic index once the
-next layer needs concatenation or a quotient phase parameter.
-
 [IMPLEMENTED: semantic-cf2d/shifted-indexed-edge]
 The shifted normalized edge is now indexed by semantic action iterates.
 Indexed edges have adjacent seam compatibility, centers at the next indexed
 base state, four-step return under the core-zero law, and fixed-`q2`
 level-set path wrappers.
 
-[TODO: semantic-cf2d/shifted-four-path]
-Concatenate four indexed shifted normalized paths once the next layer needs a
-single closed path object rather than edgewise compatibility facts.
+[IMPLEMENTED: semantic-cf2d/shifted-four-level-path]
+The first four indexed shifted normalized level paths are seam-compatible and
+concatenate to a closed fixed-`q2` path object. The closing seam uses the
+core-zero four-step return law, not any geometric angle reading.
+
+[TODO: semantic-cf2d/shifted-cyclic-quotient]
+Introduce a quotient phase parameter only after the four-edge closed path is
+stable enough for downstream consumers.
 -/
 
 /-!

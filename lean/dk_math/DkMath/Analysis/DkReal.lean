@@ -198,6 +198,9 @@ bases stay on the initial square-mass level, adjacent indexed shifted edges
 share seams, their centers are the next indexed bases, and core-zero
 four-step return holds for bases, endpoints, and edge functions. Fixed-`q2`
 indexed level-set paths expose the same compatibility inside the boundary.
+The first four indexed shifted level paths now concatenate to a closed
+fixed-`q2` path object; the closing seam is supplied by the core-zero
+four-step return law.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

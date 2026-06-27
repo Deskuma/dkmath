@@ -434,6 +434,12 @@ shiftedSemanticIndexedEdge_add_four_of_core_eq_zero
 shiftedSemanticIndexedLevelPath
 shiftedSemanticIndexedRightLevelEndpoint_eq_next_left
 shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
+shiftedSemanticIndexedLevelEndpoint_0_1
+shiftedSemanticIndexedLevelEndpoint_1_2
+shiftedSemanticIndexedLevelEndpoint_2_3
+shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left
+shiftedSemanticIndexedLevelEdge_add_four_of_core_eq_zero
+shiftedSemanticFourLevelPath
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -471,6 +477,17 @@ The same indexed API is available inside the fixed `q2 z` level set, so the
 next layer can concatenate edgewise-compatible paths without re-proving
 boundary membership.
 
+The four-edge shifted path object is now also available:
+
+```text
+shiftedSemanticFourLevelPath
+```
+
+It concatenates the first four indexed shifted normalized level paths inside
+the fixed `q2` boundary. The first three seams are adjacent endpoint
+compatibility facts, and the final seam from edge `3` back to edge `0` uses
+the core-zero four-step return law.
+
 Candidate theorem directions:
 
 ```text
@@ -490,7 +507,8 @@ shifted-frame conservation
 
 The shifted path definition has now been chosen in the same style as
 `normalizedPhasePath`: first a `Vec Real` path, then a fixed-`q2` level-set
-path. Four-edge shifted concatenation remains a later packaging layer.
+path. The first four shifted level paths are now also concatenated into a
+closed fixed-boundary path object.
 
 ## Guardrails
 
@@ -539,7 +557,9 @@ depend on that reading.
 16. Implemented: prove indexed adjacent seam compatibility and center-to-next-base compatibility.
 17. Implemented: prove core-zero four-step return for indexed bases, endpoints, and edge functions.
 18. Implemented: package indexed shifted paths inside the fixed `q2` level set.
-19. Later: add a Euclidean bridge that reads `1/8` full-cycle
+19. Implemented: prove the four endpoint compatibility facts for indexed shifted level paths.
+20. Implemented: concatenate the four indexed shifted level paths into a closed fixed-`q2` path.
+21. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -579,15 +599,15 @@ Index shifted normalized edges by semantic action iterates. Prove adjacent
 indexed seam compatibility, center-to-next-base compatibility, four-step
 return for bases and edge functions, and fixed-`q2` indexed level-set path
 wrappers.
+
+[IMPLEMENTED: semantic-cf2d/shifted-four-level-path]
+Prove the four seam compatibility facts and concatenate the first four indexed
+shifted normalized level paths into one closed fixed-`q2` path object.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-four-path]
-Concatenate four indexed shifted normalized paths into one closed fixed-`q2`
-path object.
-
 [TODO: semantic-cf2d/shifted-cyclic-quotient]
 Introduce a quotient phase parameter only after the four indexed path
 concatenation is stable.
