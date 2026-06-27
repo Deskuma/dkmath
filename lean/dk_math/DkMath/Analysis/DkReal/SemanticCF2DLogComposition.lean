@@ -921,6 +921,24 @@ theorem dyadicPhaseTrapezoidCenteredQuadraticSum_eq (n : ℕ) :
           ring
 
 /--
+Closed finite upper bound for the trapezoidal centered log-depth sum.
+
+This combines the pointwise logarithmic estimate with the exact trapezoidal
+centered quadratic moment. It is still a finite-level theorem; no limiting
+integral, Gaussian law, or `pi` identification is used.
+-/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_closedQuadraticBound
+    (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredLogDepthSum n ≤
+      1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  calc
+    dyadicPhaseTrapezoidCenteredLogDepthSum n
+        ≤ dyadicPhaseTrapezoidCenteredQuadraticSum n :=
+          dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum n
+    _ = 1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+          rw [dyadicPhaseTrapezoidCenteredQuadraticSum_eq]
+
+/--
 For centered log-depth, the plain mesh-width and trapezoidal sums differ by
 the restored endpoint correction `h_n * log 2`.
 

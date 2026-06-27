@@ -162,7 +162,8 @@ finite moment estimate is also available: the trapezoidal centered quadratic
 sum is bounded by one. The finite trapezoidal centered quadratic moment is
 now evaluated exactly as
 `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ)^2)`, exposing the finite correction
-to the later `1 / 3` target without taking a limit.
+to the later `1 / 3` target without taking a limit. The centered log-depth
+trapezoidal sum is consequently bounded above by that same closed expression.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

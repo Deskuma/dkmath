@@ -322,10 +322,25 @@ dyadicPhaseTrapezoidCenteredQuadraticSum n
   = 1/3 + 2/(3 * (2^n)^2).
 ```
 
+Here `2^n` is Lean's `dyadicPhaseDenom n`. The code states the theorem with
+`dyadicPhaseDenom n`, and the equality `dyadicPhaseDenom n = 2^n` is the
+definition of the dyadic denominator.
+
 The proof stays finite. It first evaluates the complete-node mesh-width
 quadratic moment by elementary first-power and square-sum formulas, then
 subtracts the trapezoidal endpoint correction. This exposes the finite
 correction to the later `1/3` target without invoking an integral or a limit.
+
+Combining this closed quadratic moment with the pointwise logarithmic upper
+bound gives the finite centered log-depth estimate
+
+```text
+dyadicPhaseTrapezoidCenteredLogDepthSum n
+  <= 1/3 + 2/(3 * (2^n)^2).
+```
+
+This is still only a finite inequality. It does not assert convergence of the
+left-hand side.
 
 ### Milestone D: limit and Gaussian bridge
 

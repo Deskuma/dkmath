@@ -1154,3 +1154,25 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 14:40 JST (Centered log-depth closed quadratic bound)
+
+1. API:
+   - `dyadicPhaseTrapezoidCenteredLogDepthSum_le_closedQuadraticBound` を
+     追加した。
+2. finite estimate:
+   - 既存の
+     `dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum` と
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を合成し、
+     centered log-depth の台形和を
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)` で上から抑えた。
+3. documentation:
+   - `dyadicPhaseDenom n = 2^n` を研究メモ側に明記した。
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. interpretation:
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+     これは finite-level closed upper bound である。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。

@@ -47,7 +47,9 @@ trapezoidal corollaries. These are finite quadratic-moment controls only; no
 Gaussian, integral, angle, or `pi` interpretation is selected here. The first
 trapezoidal centered quadratic moment bound is now `<= 1`, and its exact
 finite value is
-`1/3 + 2/(3 * (dyadicPhaseDenom n : Real)^2)`.
+`1/3 + 2/(3 * (dyadicPhaseDenom n : Real)^2)`. Here
+`dyadicPhaseDenom n = 2^n`. The trapezoidal centered log-depth sum is bounded
+above by the same closed finite expression.
 
 The current implementation proves a four-state return:
 
