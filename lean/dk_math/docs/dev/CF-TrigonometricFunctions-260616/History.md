@@ -1231,3 +1231,28 @@ Archive
 5. verification:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/27 17:06 JST (Half-turn and full-turn angle readings)
+
+1. angle vocabulary:
+   - `semanticPhaseAngle (k : ℕ) : ℝ` を追加し、
+     `k * semanticQuarterTurnAngle` を DkMath 名で表した。
+   - `semanticHalfTurnAngle` と `semanticFullTurnAngle` を追加した。
+2. exact angle values:
+   - `semanticHalfTurnAngle_eq_pi` により二つの semantic quarter-turn が
+     `Real.pi` として読まれることを記録した。
+   - `semanticFullTurnAngle_eq_two_pi` により四つの semantic quarter-turn が
+     `2 * Real.pi` として読まれることを記録した。
+3. rotation bridge:
+   - `rotation_semanticHalfTurnAngle_eq_neg` を追加し、半回転が Euclidean
+     plane の negation であることを記録した。
+   - `rotation_semanticFullTurnAngle_eq_refl` を追加し、全回転が identity
+     rotation であることを記録した。
+4. interpretation:
+   - 対称性ルートの本線として、
+     `k semantic actions <-> rotation by semanticPhaseAngle k`
+     へ進むための角度側 API を先に整えた。
+   - まだ反復 semantic action との一般 theorem は未実装。
+5. documentation:
+   - `research-pregeometric-pi-program-067.md` の first angle reading
+     milestone を half/full turn まで拡張した。

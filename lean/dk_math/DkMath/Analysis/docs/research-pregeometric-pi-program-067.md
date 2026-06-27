@@ -111,6 +111,8 @@ DkMath-named angle bridge:
 
 ```text
 semanticQuarterTurnAngle = Real.pi / 2
+semanticHalfTurnAngle    = Real.pi
+semanticFullTurnAngle    = 2 * Real.pi
 semantic action = Euclidean rotation by semanticQuarterTurnAngle
 ```
 
@@ -119,6 +121,17 @@ constructed, the boundary detector and the exact order-four action already
 determine a transition with the same operational behavior as a Euclidean
 quarter-turn. The standard Euclidean plane supplies the later interpretation
 as `theta = pi / 2`.
+
+The same module also introduces `semanticPhaseAngle k = k * theta`. At the
+current stage this is only Euclidean angle vocabulary, but it is deliberately
+shaped for the next bridge:
+
+```text
+k semantic actions  <->  Euclidean rotation by semanticPhaseAngle k
+```
+
+The implemented special cases already read two quarter-turns as negation and
+four quarter-turns as the identity rotation.
 
 ### Milestone A: continuous four-edge loop - implemented
 

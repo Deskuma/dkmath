@@ -370,6 +370,47 @@ theorem semanticQuarterTurnAngle_eq :
   rfl
 
 /--
+The Euclidean angle read from `k` semantic quarter-turn phases.
+
+This is the additive angle vocabulary for the symmetry route. It does not
+assert that the intrinsic DkMath normalization constant has already been
+constructed; it only records how the standard Euclidean model reads repeated
+quarter-turn actions.
+-/
+def semanticPhaseAngle (k : ℕ) : ℝ :=
+  (k : ℝ) * semanticQuarterTurnAngle
+
+/-- The angle read from two semantic quarter-turns. -/
+def semanticHalfTurnAngle : ℝ :=
+  semanticPhaseAngle 2
+
+/-- The angle read from four semantic quarter-turns. -/
+def semanticFullTurnAngle : ℝ :=
+  semanticPhaseAngle 4
+
+@[simp]
+theorem semanticPhaseAngle_zero :
+    semanticPhaseAngle 0 = 0 := by
+  simp [semanticPhaseAngle]
+
+@[simp]
+theorem semanticPhaseAngle_one :
+    semanticPhaseAngle 1 = semanticQuarterTurnAngle := by
+  simp [semanticPhaseAngle]
+
+@[simp]
+theorem semanticHalfTurnAngle_eq_pi :
+    semanticHalfTurnAngle = Real.pi := by
+  simp [semanticHalfTurnAngle, semanticPhaseAngle, semanticQuarterTurnAngle]
+  ring_nf
+
+@[simp]
+theorem semanticFullTurnAngle_eq_two_pi :
+    semanticFullTurnAngle = 2 * Real.pi := by
+  simp [semanticFullTurnAngle, semanticPhaseAngle, semanticQuarterTurnAngle]
+  ring
+
+/--
 Rotating by the semantic quarter-turn angle is the explicit coordinate
 quarter-turn.
 
@@ -380,7 +421,30 @@ reads that operation as angle `pi / 2`.
 theorem rotation_semanticQuarterTurnAngle_eq_quarterTurn :
     euclideanPlaneOrientation.rotation semanticQuarterTurnAngle =
       quarterTurnLinearIsometry := by
-  simpa [semanticQuarterTurnAngle] using rotation_pi_div_two_eq_quarterTurn
+  simp [semanticQuarterTurnAngle, rotation_pi_div_two_eq_quarterTurn]
+
+/--
+Rotating by the semantic half-turn angle is negation on the Euclidean plane.
+
+This is the `theta = pi` reading of two semantic quarter-turns.
+-/
+theorem rotation_semanticHalfTurnAngle_eq_neg :
+    euclideanPlaneOrientation.rotation semanticHalfTurnAngle =
+      LinearIsometryEquiv.neg ℝ := by
+  simp [semanticHalfTurnAngle_eq_pi]
+
+/--
+Rotating by the semantic full-turn angle is the identity on the Euclidean
+plane.
+
+This is the `theta = 2 * pi` reading of four semantic quarter-turns. It is the
+Euclidean angle counterpart of exact order four.
+-/
+theorem rotation_semanticFullTurnAngle_eq_refl :
+    euclideanPlaneOrientation.rotation semanticFullTurnAngle =
+      LinearIsometryEquiv.refl ℝ EuclideanPlane := by
+  ext v
+  simp [semanticFullTurnAngle_eq_two_pi]
 
 end
 
