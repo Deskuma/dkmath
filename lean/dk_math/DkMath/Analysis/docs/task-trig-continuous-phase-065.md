@@ -51,6 +51,17 @@ finite value is
 `dyadicPhaseDenom n = 2^n`. The trapezoidal centered log-depth sum is bounded
 above by the same closed finite expression.
 
+`DkMath.Analysis.DkLimit` now provides the first DkMath-named entrance for
+limits. It is a thin vocabulary layer over Mathlib filters: refinement-depth
+limits use `DkTendstoAtTop`, full Gap collapse uses `DkGapCollapsesTo`, and
+punctured Gap collapse uses `DkPuncturedGapCollapsesTo`.
+
+`SemanticCF2DLogLimit` uses that vocabulary to prove that the closed
+quadratic bound and the trapezoidal centered quadratic moment both tend to
+`1/3` along dyadic refinement depth. This is only the controlling quadratic
+moment limit; the centered log-depth sum itself still needs a lower estimate
+before its limit can be identified.
+
 The current implementation proves a four-state return:
 
 ```text

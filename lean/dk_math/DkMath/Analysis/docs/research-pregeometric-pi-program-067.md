@@ -342,6 +342,32 @@ dyadicPhaseTrapezoidCenteredLogDepthSum n
 This is still only a finite inequality. It does not assert convergence of the
 left-hand side.
 
+The first DkMath limit vocabulary is now implemented in
+`DkMath.Analysis.DkLimit`. It deliberately keeps Mathlib's filter semantics
+under the hood, but gives DkMath names to the recurring collapse roles:
+
+```text
+DkTendstoAtTop
+DkGapCollapsesTo
+DkPuncturedGapCollapsesTo
+```
+
+This is an entrance, not a replacement for Mathlib analysis. It lets later
+files state DkMath-shaped theorems while preserving a stable bridge to
+`Filter.Tendsto`.
+
+`SemanticCF2DLogLimit.lean` is the first use of that entrance in this
+trigonometric route. Lean proves
+
+```text
+1/3 + 2/(3 * (2^n)^2) -> 1/3,
+dyadicPhaseTrapezoidCenteredQuadraticSum n -> 1/3.
+```
+
+The second theorem follows from the finite closed form. This is still a
+quadratic-control limit, not a centered log-depth limit. The log-depth limit
+requires a matching lower estimate.
+
 ### Milestone D: limit and Gaussian bridge
 
 1. Prove convergence of the refinement correction.

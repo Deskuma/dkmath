@@ -1176,3 +1176,30 @@ Archive
 5. verification:
    - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
      (8281 jobs)。
+
+### 2026/06/27 15:32 JST (DkLimit entrance and quadratic moment limit)
+
+1. API:
+   - `DkMath.Analysis.DkLimit` を新規追加した。
+   - Mathlib `Filter.Tendsto` を包む DkMath 語彙として
+     `DkTendstoAtTop`、`DkGapCollapsesTo`、
+     `DkPuncturedGapCollapsesTo` を追加した。
+2. CF2D log limit layer:
+   - `DkMath.Analysis.DkReal.SemanticCF2DLogLimit` を新規追加した。
+   - closed quadratic bound が `1 / 3` へ向かう
+     `dkTendsto_dyadicPhaseClosedQuadraticBound_one_third` と
+     Mathlib spelling の theorem を追加した。
+   - finite closed form から
+     `dkTendsto_dyadicPhaseTrapezoidCenteredQuadraticSum_one_third` と
+     Mathlib spelling の theorem を追加した。
+3. interpretation:
+   - DkLimit は現時点では自前極限型ではなく、Mathlib filter の
+     DkMath 語彙入口である。
+   - centered log-depth sum 自体の極限はまだ主張していない。
+     そこには下界評価が必要。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogLimit` 成功
+     (8283 jobs)。

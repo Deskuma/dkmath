@@ -15,6 +15,7 @@ import DkMath.Analysis.DkReal.DkNNRealQ
 import DkMath.Analysis.DkReal.Order
 import DkMath.Analysis.DkReal.CanonicalOrder
 import DkMath.Analysis.DkReal.Semantic
+import DkMath.Analysis.DkReal.SemanticCF2DLogLimit
 
 #print "file: DkMath.Analysis.DkReal"
 
@@ -164,6 +165,11 @@ now evaluated exactly as
 `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ)^2)`, exposing the finite correction
 to the later `1 / 3` target without taking a limit. The centered log-depth
 trapezoidal sum is consequently bounded above by that same closed expression.
+`DkReal.SemanticCF2DLogLimit` then opens the first DkMath-named limit layer:
+the closed quadratic bound and the trapezoidal centered quadratic moment both
+tend to `1 / 3` along refinement depth. These theorems use Mathlib filters
+through the `DkLimit` vocabulary and still do not identify the centered
+log-depth limit.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
