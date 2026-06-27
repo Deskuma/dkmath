@@ -1315,3 +1315,26 @@ Archive
 6. verification:
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/27 22:25 JST (Period-four iterate table preparation)
+
+1. semantic periodicity:
+   - `semanticActIter_add_four_of_core_eq_zero` を追加し、
+     core-zero 境界作用の iterate が `k + 4` で同じ状態へ戻ることを
+     semantic 層で記録した。
+2. Euclidean iterate table:
+   - `pairToEuclideanPlane_semanticActIter_zero_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 0` の identity row を angle bridge として記録した。
+   - `pairToEuclideanPlane_semanticActIter_one_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 1` の quarter-turn row を iterate 形式でも
+     使えるようにした。
+3. interpretation:
+   - `k = 0,1,2,3,4` が同じ `semanticActIter` 表記で揃った。
+   - `k + 4` の周期性も semantic 層に入ったため、次は本格的な
+     `k % 4` 分類 theorem へ進める。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に period-four iterate
+     preparation を追記した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。

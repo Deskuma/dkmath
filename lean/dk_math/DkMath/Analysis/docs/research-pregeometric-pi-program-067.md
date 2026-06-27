@@ -151,6 +151,16 @@ The semantic action now also has the explicit notation
 the eventual general theorem relating `k` semantic actions to rotation by
 `semanticPhaseAngle k`.
 
+The semantic iterate now records the period-four step directly:
+
+```text
+semanticActIter r (k + 4) z = semanticActIter r k z
+```
+
+under the same core-zero hypothesis. The Euclidean side also exposes the
+`k = 0` and `k = 1` iterate-form bridges, so the finite table is available in
+one notation before moving to a full modulo-four classifier.
+
 ### Milestone A: continuous four-edge loop - implemented
 
 1. The real CF2D target carries the topology induced from `Real × Real`.

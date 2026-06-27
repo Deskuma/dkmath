@@ -1282,6 +1282,24 @@ theorem semanticActIter_four_of_core_eq_zero
     semanticActIter r 4 z = z := by
   exact semanticAct_four_of_core_eq_zero hcore z
 
+/--
+The boundary-action iterate is periodic with period four.
+
+This is the semantic side of the future modulo-four classification. It states
+the exact-order-four law in iterate notation without mentioning Euclidean
+angles.
+-/
+theorem semanticActIter_add_four_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (k : ℕ) (z : Vec ℝ) :
+    semanticActIter r (k + 4) z = semanticActIter r k z := by
+  have hfour :
+      (semanticAct r)^[4] = id :=
+    (semanticExactActionOrderFour_of_core_eq_zero hcore).1
+  rw [semanticActIter, semanticActIter, Function.iterate_add_apply, hfour]
+  rfl
+
 /-- A nonzero vector cannot return after one boundary action. -/
 theorem not_semanticPeriodic_one_of_core_eq_zero_of_ne_zero
     {r : UnitKernel DkNNRealQ} {z : Vec ℝ}

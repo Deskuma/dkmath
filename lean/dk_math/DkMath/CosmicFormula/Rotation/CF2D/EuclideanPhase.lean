@@ -617,6 +617,32 @@ theorem pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle
     pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two hcore z
 
 /--
+Iterate notation for the zero-action identity bridge.
+
+This is the first row of the four-state angle table.
+-/
+theorem pairToEuclideanPlane_semanticActIter_zero_eq_rotation_semanticPhaseAngle
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r 0 z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle 0)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  simp [semanticPhaseAngle_zero]
+
+/--
+Iterate notation for the one-action quarter-turn bridge.
+-/
+theorem pairToEuclideanPlane_semanticActIter_one_eq_rotation_semanticPhaseAngle
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    pairToEuclideanPlane (Vec.toProd (semanticActIter r 1 z)) =
+      euclideanPlaneOrientation.rotation (semanticPhaseAngle 1)
+        (pairToEuclideanPlane (Vec.toProd z)) := by
+  simpa [semanticPhaseAngle_one] using
+    pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle
+      hcore z
+
+/--
 Under the Euclidean coordinate bridge, two semantic core-zero actions are
 rotation by the semantic half-turn angle.
 
