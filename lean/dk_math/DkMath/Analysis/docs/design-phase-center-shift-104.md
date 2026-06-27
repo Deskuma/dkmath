@@ -14,6 +14,8 @@ four-state action
   -> center and depth extremum on one edge
   -> shifted observation frame
   -> one-eighth phase displacement
+  -> dyadic refinement of the normalized cycle
+  -> general k-division observation
   -> later Euclidean reading as theta = pi / 4
 ```
 
@@ -146,6 +148,85 @@ The later Euclidean interpretation reads this displacement as the motion
 corresponding to `theta = pi / 4`, but the formal proof should first use only
 `1/8` phase language.
 
+## Refinement Beyond One Eighth
+
+The one-eighth displacement is not an isolated endpoint. It is the first
+visible refinement step after the four-state table.
+
+```text
+four-state cycle:
+  one edge has width 1/4
+
+endpoint-to-center shift:
+  half of that edge has width 1/8
+
+repeat the midpoint observation:
+  1/8 -> 1/16 -> 1/32 -> ...
+```
+
+Thus the same operation suggests the dyadic chain:
+
+```text
+1/4 -> 1/8 -> 1/16 -> 1/32 -> ... -> 1/2^n
+```
+
+This is not yet an angle subdivision. It is a refinement of the normalized
+cycle parameter carried by the conserved boundary mechanism.
+
+For a dyadic step size,
+
+```text
+step size = 1 / 2^n
+return count = 2^n
+```
+
+the return law is the scalar identity:
+
+```text
+2^n * (1 / 2^n) = 1
+```
+
+This records a finite return count on the normalized cycle. It does not assert
+that the path is a Euclidean circle or that the subdivision is arc length.
+
+## General k-Division Observation
+
+The same design can be stated for an arbitrary positive division count `k`.
+
+```text
+unit phase step = 1 / k
+return count = k
+cycle law = k * (1 / k) = 1
+```
+
+This gives the parameter skeleton needed by the continuous trigonometric
+program:
+
+```text
+conserved kernel
+  -> normalized cycle
+  -> k-division observation
+  -> finite return law
+  -> refinement / limiting parameter
+  -> Euclidean reading
+```
+
+The shape of the path is intentionally not part of this theorem. The current
+object of study is the periodic parameter and its return law.
+
+## Radius-Like Data
+
+No separate radius should be introduced at this stage. The radius-like datum is
+the conserved `q2` level:
+
+```text
+q2(z) = constant
+```
+
+The phase-like datum is the normalized cyclic parameter. Later Euclidean
+geometry may read a fixed `q2` level as a circle of fixed radius, but the
+DkMath construction should first prove preservation on the boundary detector.
+
 ## Proposed Lean Surface
 
 The scalar names can live near `SemanticCF2DPhase.lean`:
@@ -169,6 +250,17 @@ def globalQuarterCenter (k : ℕ) : ℝ :=
   ((k : ℝ) + 1 / 2) / 4
 ```
 
+The normalized cycle division names can live in the same module or in a later
+small `SemanticCF2DCycle.lean` module:
+
+```lean
+def normalizedCycleStep (k : ℕ) : ℝ :=
+  1 / (k : ℝ)
+
+def dyadicCycleStep (n : ℕ) : ℝ :=
+  1 / (2 : ℝ) ^ n
+```
+
 Candidate theorem names:
 
 ```lean
@@ -187,11 +279,20 @@ theorem globalQuarterCenter_eq_endpoint_add_halfQuarter (k : ℕ) :
 theorem globalQuarterEndpoint_succ_is_center_between_centers (k : ℕ) :
     (globalQuarterCenter k + globalQuarterCenter (k + 1)) / 2 =
       globalQuarterEndpoint (k + 1)
+
+theorem normalizedCycleStep_mul_returnCount {k : ℕ} (hk : 0 < k) :
+    (k : ℝ) * normalizedCycleStep k = 1
+
+theorem dyadicCycleStep_mul_returnCount (n : ℕ) :
+    ((2 : ℕ) ^ n : ℝ) * dyadicCycleStep n = 1
 ```
 
-The last theorem is the main checkpoint. It says that, after shifting the
-observation frame from endpoints to neighboring centers, the old endpoint is
-now the midpoint.
+The theorem `globalQuarterEndpoint_succ_is_center_between_centers` is the main
+shift checkpoint. It says that, after shifting the observation frame from
+endpoints to neighboring centers, the old endpoint is now the midpoint.
+
+The cycle-step theorems are deliberately scalar. They record return laws for
+the normalized parameter before any geometric shape is assigned to the path.
 
 ## Boundary and Normalization Targets
 
@@ -252,8 +353,9 @@ depend on that reading.
 3. Prove `phaseDepth_centered_reflect`.
 4. Add a small phase-shift module for global quarter endpoints and centers.
 5. Prove the endpoint-between-centers identity.
-6. Lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
-7. Only after that, add a Euclidean bridge that reads `1/8` full-cycle
+6. Add scalar cycle-step facts for dyadic and positive `k` divisions.
+7. Lift midpoint facts to `semanticPhaseEdge` and `normalizedPhaseEdge`.
+8. Only after that, add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## TODO Tags
@@ -272,4 +374,12 @@ between their centers.
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shift theorem is closed, bridge the one-eighth phase
 displacement to the Euclidean `pi / 4` reading.
+
+[TODO: semantic-cf2d/dyadic-cycle-step]
+Expose the dyadic return law `2^n * (1 / 2^n) = 1` as a normalized cycle
+parameter fact, not as an angle subdivision.
+
+[TODO: semantic-cf2d/k-division-cycle-step]
+Expose the positive `k` return law `k * (1 / k) = 1` for the normalized cycle
+parameter before assigning any Euclidean shape.
 ```
