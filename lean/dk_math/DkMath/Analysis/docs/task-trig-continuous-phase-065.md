@@ -62,7 +62,9 @@ quadratic bound and the trapezoidal centered quadratic moment both tend to
 moment limit; the centered log-depth sum itself still needs a lower estimate
 before its limit can be identified.
 
-The current implementation proves a four-state return:
+The finite phase table is now formalized in iterate notation. For the
+semantic core-zero action `A`, Lean proves both the four-state return and the
+modulo-four classifier:
 
 ```text
 z
@@ -70,10 +72,23 @@ z
   -> A^2 z
   -> A^3 z
   -> z
+
+semanticActIter r k z = semanticActIter r (k % 4) z
 ```
 
-for the semantic core-zero action `A`. The next task is to fill each discrete
-transition continuously without assuming a circle or angle in advance.
+The Euclidean interpretation reads this finite semantic phase as
+
+```text
+semantic action count k
+  -> k % 4
+  -> finite phase table
+  -> Euclidean rotation by semanticPhaseAngle (k % 4)
+```
+
+This is still an angle-reading bridge. It is not an intrinsic construction of
+`pi`, and it does not replace the refinement-limit route. The continuous
+transition path and normalized boundary path were constructed before this
+Euclidean reading was attached.
 
 ## Design Principle
 
@@ -352,6 +367,18 @@ introduce angle only after the circle model is available
 compare with Real.sin and Real.cos
 ```
 
+Current angle-reading responsibilities additionally include:
+
+```text
+semanticPhaseAngle k
+semanticActIter modulo-four classifier
+finite table: 0, 1, 2, 3 phases
+external Euclidean reading: 0, pi/2, pi, 3pi/2
+```
+
+The right-hand entries are Mathlib/Euclidean interpretation data. They are
+not yet the DkMath-intrinsic source of `pi`.
+
 ## VIII. First Implementation Milestone
 
 The next safe implementation target is deliberately smaller than the full
@@ -385,6 +412,12 @@ explicit.
 [IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
 [IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry]
 [IMPLEMENTED: semantic-cf2d-phase/oriented-pi-over-two]
+[IMPLEMENTED: semantic-cf2d-phase/mod-four-angle-reading]
+`SemanticCF2D` defines `semanticActIter r k z` and proves that the core-zero
+iterate depends only on `k % 4`. `EuclideanPhase` then reads each residue as a
+standard Euclidean rotation by `semanticPhaseAngle (k % 4)`. This closes the
+finite four-state phase table but still does not construct an intrinsic
+angle continuum or intrinsic `pi`.
 [IMPLEMENTED: semantic-cf2d-phase/dyadic-refinement]
 `SemanticCF2DDyadic` defines the finite nodes `k / 2^n`, proves their endpoint,
 unit-interval, reflection, even-child, odd-child midpoint, and reflected

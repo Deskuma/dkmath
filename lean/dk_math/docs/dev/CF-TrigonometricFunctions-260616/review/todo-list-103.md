@@ -2,19 +2,29 @@
 
 ## docs
 
-- [ ] docstring 補強とコメントを主とする記述へ改善。ドキュメントは副。
-- [ ] 現作業の到達点の記録
-- [ ] DkLimit まわりの TODO 残案件
+- [x] docstring 補強とコメントを主とする記述へ改善。ドキュメントは副。
+  - `DkLimit.lean` と `DkReal.lean` の public module comment を補強。
+- [x] 現作業の到達点の記録
+  - `History.md`、`research-pregeometric-pi-program-067.md`、
+    `task-trig-continuous-phase-065.md` に反映。
+- [x] DkLimit まわりの TODO 残案件
   - 中断された提案の TODO をコメントで残しておく。
+  - `dk-limit/import-scope`、`dk-limit/cosmic-derivative-alias`、
+    `dk-limit/punctured-gap-spelling` を追加。
 - [ ] 解析対称構造の説明
   - 端点の存在と中心点・極点の存在、また端点が中心点となるシフト構造
   - この説明に必要な補題がなければ TODO とする。円形構造は意識しない。
-- [ ] θ 角度・偏角の説明
+- [x] θ 角度・偏角の説明
   - 連続化へ向けてのロードマップ
-- [ ] 三角関数の定義の再解釈版
+  - `trigonometric-spec-103.md` に有限位相表から連続 theta へ向かう
+    仕様を記録。
+- [x] 三角関数の定義の再解釈版
   - 主目的である三角関数の構築と証明において、かなり一般認識と異なる構築手順ゆえに DkMath 版の三角関数仕様の定義を置く。
-- [ ] 𝜋 導出計画書
+  - `trigonometric-spec-103.md` を新規追加。
+- [x] 𝜋 導出計画書
   - 研究テーマ research ドキュメントの見直しと今後の計画。
+  - `research-pregeometric-pi-program-067.md` に continuous theta extraction
+    と route 分岐を追記。
 
 作業記録、差分、及びレビュー、メモなどは全て以下の場所に記録されている。
 末尾番号が作業順、同番号が作業追加資料。必要であれば参照のこと。

@@ -24,6 +24,20 @@ This keeps the current implementation compatible with Mathlib analysis while
 leaving room for a later computable or interval-native `DkLimit` layer. In the
 `Big = Body + Gap` reading, these abbreviations name the collapse operation;
 they do not change the underlying topology.
+
+[TODO: dk-limit/import-scope] The current module imports all of `Mathlib` for
+stability while the surrounding analysis layer is still moving. Once the API
+settles, reduce this to the specific filter and topology imports actually
+used here.
+
+[TODO: dk-limit/cosmic-derivative-alias] Add DkMath-named wrappers for the
+existing cosmic derivative limit theorems, for example power-kernel Gap
+collapse at zero. This will connect `DkGapCollapsesTo` with the older
+`CosmicDerivativePowerLimit` surface without changing either proof.
+
+[TODO: dk-limit/punctured-gap-spelling] If later bridge theorems benefit from
+`simp`, consider replacing the current punctured neighborhood spelling with
+`{u : ℝ | u ≠ 0}` or adding a lemma equating the two forms.
 -/
 
 namespace DkMath.Analysis

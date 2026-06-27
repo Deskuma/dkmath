@@ -1364,3 +1364,29 @@ Archive
    - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
    - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
      (8278 jobs)。
+
+### 2026/06/28 00:00 JST (Checkpoint 103 documentation consolidation)
+
+1. code comments:
+   - `DkMath.Analysis.DkLimit` に残 TODO を追記した。
+   - import scope、cosmic derivative theorem alias、punctured Gap spelling
+     の三点を今後の軽量化・橋定理候補として明示した。
+   - public `DkReal.lean` comment に modulo-four finite phase table と
+     Euclidean angle reading の到達点を追記した。
+2. specification document:
+   - `DkMath/Analysis/docs/trigonometric-spec-103.md` を新規追加した。
+   - DkMath 版三角関数の仕様を、角度先行ではなく
+     `q2 boundary detector -> core-zero action -> exact order four ->
+     finite phase table -> continuous theta` の順序として整理した。
+3. research docs:
+   - `research-pregeometric-pi-program-067.md` に
+     continuous theta extraction milestone と、今後の三つの route
+     (map-level wrapper、continuous theta、intrinsic pi) を追記した。
+   - `task-trig-continuous-phase-065.md` に finite modulo-four phase table
+     と Euclidean angle reading を反映した。
+4. TODO status:
+   - `todo-list-103.md` を更新し、完了項目と残る解析対称構造説明を
+     分離した。
+5. scope:
+   - 今回は docs/comment consolidation が主目的で、実装 theorem は追加
+     していない。

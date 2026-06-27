@@ -193,6 +193,15 @@ circle with Mathlib's standard `EuclideanSpace Real (Fin 2)` L2 metric sphere
 of radius `sqrt (q2 z)`.
 In that standard Euclidean plane, the semantic core-zero action is identified
 with the coordinate quarter-turn linear isometry `(x,y) ↦ (-y,x)`.
+The same Euclidean interpretation now names the angle-reading vocabulary:
+`semanticQuarterTurnAngle = Real.pi / 2`, `semanticHalfTurnAngle = Real.pi`,
+and `semanticFullTurnAngle = 2 * Real.pi`. These are external readings of the
+already-proved action, not intrinsic constructions of `pi`. The iterate API
+`semanticActIter r k z` proves that core-zero semantic action depends only on
+`k % 4`, and `EuclideanPhase` reads that finite phase as rotation by
+`semanticPhaseAngle (k % 4)`. This closes the finite four-state phase table
+while leaving intrinsic `pi` and continuous-angle construction as future
+research tasks.
 
 [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 signed arithmetic. Defer them until a signed DkReal layer exists.
