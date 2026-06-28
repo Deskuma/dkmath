@@ -515,6 +515,13 @@ shiftedSemanticCyclicChartEval_edgePath_zero
 shiftedSemanticObservedCyclicEdgePath
 shiftedSemanticObservedCyclicEdgePath_apply
 shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+shiftedFourPathConcatWithSeams
+shiftedFourPathConcatWithSeams_source
+shiftedFourPathConcatWithSeams_target
+shiftedFourPathConcatWithSeams_congr
+shiftedSemanticObservedCyclicFourPathViaEdges
+shiftedSemanticFinFourLevelPathViaEdges
+shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
 shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
@@ -726,6 +733,32 @@ shiftedSemanticObservedCyclicEdgePath_apply
 shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
 ```
 
+The four-edge packaging has also been standardized. The helper
+`shiftedFourPathConcatWithSeams` glues four paths by explicit endpoint seam
+equalities, exposes source and target aliases, and has a congruence theorem
+for replacing all four component paths at once:
+
+```text
+shiftedFourPathConcatWithSeams
+shiftedFourPathConcatWithSeams_source
+shiftedFourPathConcatWithSeams_target
+shiftedFourPathConcatWithSeams_congr
+```
+
+Using that common concatenator, the observed quotient-edge package and the
+direct finite-edge package are now available as canonical via-edge closed
+paths:
+
+```text
+shiftedSemanticObservedCyclicFourPathViaEdges
+shiftedSemanticFinFourLevelPathViaEdges
+shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+```
+
+The canonical via-edge equality follows from the four single-edge equalities.
+The older closed four-path definitions are intentionally not forced into this
+shape yet.
+
 Value-level source and target comparisons are also available for the closed
 four-edge paths:
 
@@ -744,6 +777,11 @@ The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it
 requires path-trans cast normalization lemmas. This is still not a Euclidean
 angle parameter.
+
+The next packaging task is to compare the older closed four-path definitions
+with the canonical via-edge versions. That should be a pure `Path.trans` /
+`Path.cast` normalization step, because the semantic edge comparison has
+already been proved locally and in canonical four-edge form.
 
 Candidate theorem directions:
 

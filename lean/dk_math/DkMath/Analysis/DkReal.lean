@@ -228,7 +228,10 @@ wrapper for the later full path comparison. A single observed quotient edge
 is also packaged as a fixed-boundary path and proved equal to the direct
 finite fixed-boundary edge path. The remaining four-edge comparison is
 therefore a normalization problem for nested `Path.trans` and endpoint casts,
-not a semantic obstruction.
+not a semantic obstruction. A reusable four-edge concatenator with explicit
+seams now packages canonical via-edge observed and direct finite closed
+paths, and those two canonical paths are equal by the four single-edge
+equalities.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

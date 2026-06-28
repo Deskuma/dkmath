@@ -2002,6 +2002,159 @@ theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
   rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
 
 /--
+Canonical four-edge concatenation with explicit seam equalities.
+
+This helper fixes one standard packaging for a closed four-edge traversal.
+It is intentionally generic and pre-geometric: it only records how four paths
+are glued by endpoint equalities.
+-/
+def shiftedFourPathConcatWithSeams
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    Path a0 a0 :=
+  (((p0.trans (p1.cast h01 rfl)).trans
+    (p2.cast h12 rfl)).trans
+    (p3.cast h23 rfl)).cast rfl h30.symm
+
+/-- The canonical four-edge concatenator starts at its first source. -/
+theorem shiftedFourPathConcatWithSeams_source
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 0 =
+      a0 :=
+  (shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30).source
+
+/-- The canonical four-edge concatenator returns to its first source. -/
+theorem shiftedFourPathConcatWithSeams_target
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 1 =
+      a0 :=
+  (shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30).target
+
+/--
+Congruence for the canonical four-edge concatenator with fixed seams.
+
+Once two edge packages use the same endpoint equalities, equality of the four
+component paths is enough to identify the closed concatenations.
+-/
+theorem shiftedFourPathConcatWithSeams_congr
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    {p0 q0 : Path a0 b0}
+    {p1 q1 : Path a1 b1}
+    {p2 q2 : Path a2 b2}
+    {p3 q3 : Path a3 b3}
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0)
+    (hp0 : p0 = q0)
+    (hp1 : p1 = q1)
+    (hp2 : p2 = q2)
+    (hp3 : p3 = q3) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 =
+      shiftedFourPathConcatWithSeams q0 q1 q2 q3 h01 h12 h23 h30 := by
+  cases hp0
+  cases hp1
+  cases hp2
+  cases hp3
+  rfl
+
+/--
+Canonical four-edge path obtained by observing quotient edges individually.
+
+This avoids comparing against the older closed quotient path packaging
+directly. The four single-edge observations are first put into one standard
+concatenation shape.
+-/
+def shiftedSemanticObservedCyclicFourPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedSemanticObservedCyclicEdgePath hcore z (0 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (1 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (2 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (3 : Fin 4))
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+
+/--
+Canonical four-edge path obtained from direct finite fixed-boundary edges.
+
+It uses the same concatenator and the same seam equalities as the observed
+quotient-edge version.
+-/
+def shiftedSemanticFinFourLevelPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedSemanticFinLevelPath hcore z (0 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (1 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (2 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (3 : Fin 4))
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+
+/--
+The canonical observed four-edge path equals the canonical direct finite path.
+
+Because both sides use the same four-path concatenator, the proof reduces to
+the four single-edge observed/direct equalities.
+-/
+theorem shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathViaEdges hcore z =
+      shiftedSemanticFinFourLevelPathViaEdges hcore z :=
+  shiftedFourPathConcatWithSeams_congr
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (0 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (1 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (2 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (3 : Fin 4))
+
+/--
 The closed quotient chart path observed inside the fixed square-mass boundary.
 
 This composes the closed quotient traversal with the descended semantic
@@ -2218,10 +2371,17 @@ The source/target comparison is also exposed after `Subtype.val`. A single
 observed quotient edge is packaged as a fixed-boundary path and proved equal
 to the direct finite fixed-boundary edge path, so the remaining four-edge
 comparison is only nested path-packaging normalization.
+A canonical four-edge concatenator with explicit seams now packages both the
+observed-edge and direct finite-edge versions. These canonical via-edge
+closed paths are equal by the four single-edge equalities.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 path after path-trans cast normalization lemmas are available.
+
+[TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
+Compare the older closed four-path definitions with the canonical via-edge
+versions after the common concatenator is stable.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended
