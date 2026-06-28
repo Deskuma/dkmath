@@ -1936,6 +1936,24 @@ theorem shiftedPath_map_cast
   rfl
 
 /--
+Changing only the equality proofs used by a path cast does not change the
+path.
+
+This keeps later seam-alignment proofs from depending on the exact proof term
+chosen for an endpoint equality.
+-/
+theorem shiftedPath_cast_proof_irrel
+    {α : Type _} [TopologicalSpace α]
+    {a b c d : α}
+    (p : Path a b)
+    (h₁ h₂ : c = a)
+    (k₁ k₂ : d = b) :
+    p.cast h₁ k₁ = p.cast h₂ k₂ := by
+  apply Path.ext
+  funext t
+  rfl
+
+/--
 Mapping a concatenated path agrees with concatenating the mapped paths.
 
 This is a DkMath-named wrapper around Mathlib's `Path.map_trans`, used to keep
@@ -2277,6 +2295,117 @@ theorem shiftedSemanticCyclicChartEval_left_zero
         shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
   shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
 
+/-- Evaluation of the first quotient right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (0 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)
+
+/-- Evaluation of the second quotient left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_one
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (1 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)
+
+/-- Evaluation of quotient edge `1` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_one
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (1 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)
+
+/-- Evaluation of quotient edge `2` left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_two
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (2 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)
+
+/-- Evaluation of quotient edge `2` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_two
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (2 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)
+
+/-- Evaluation of quotient edge `3` left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_three
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (3 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)
+
+/-- Evaluation of quotient edge `3` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_three
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (3 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)
+
+/--
+Semantic evaluation sends the first quotient seam to the finite seam value.
+
+The statement uses the value-level finite seam equality rather than proof-term
+equality between mapped seam proofs.
+-/
+theorem shiftedSemanticCyclicChartEval_seam_zero_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (0 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z
+
+/-- Semantic evaluation sends the second quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_one_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (1 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z
+
+/-- Semantic evaluation sends the third quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_two_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (2 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z
+
+/-- Semantic evaluation sends the closing quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_three_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (3 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z
+
 /--
 The older observed closed quotient path recast to finite endpoint types.
 
@@ -2520,7 +2649,9 @@ only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
 by the cast.
 Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
 `Path.map`/`Path.cast` compatibility theorem is available for the next
-packaging step.
+packaging step. Quotient endpoint evaluation aliases, finite seam value
+alignment aliases, and a path-cast proof-irrelevance helper isolate the
+remaining seam proof alignment problem.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -2534,7 +2665,8 @@ endpoint casting from the observed quotient-left endpoint to the finite left
 endpoint. The endpoint mismatch is solved; the remaining obstruction is the
 compatibility of descended semantic evaluation with the nested `Path.trans`
 and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
-proof alignment after mapping.
+proof alignment after mapping. The current stable route prefers value-level
+seam alignment over direct equality of seam proof terms.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

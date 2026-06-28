@@ -511,6 +511,7 @@ shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
 shiftedPath_cast_apply
+shiftedPath_cast_proof_irrel
 shiftedPath_map_cast
 shiftedPath_map_trans
 shiftedPath_trans_apply_source
@@ -531,6 +532,17 @@ shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_left_zero
+shiftedSemanticCyclicChartEval_right_zero
+shiftedSemanticCyclicChartEval_left_one
+shiftedSemanticCyclicChartEval_right_one
+shiftedSemanticCyclicChartEval_left_two
+shiftedSemanticCyclicChartEval_right_two
+shiftedSemanticCyclicChartEval_left_three
+shiftedSemanticCyclicChartEval_right_three
+shiftedSemanticCyclicChartEval_seam_zero_value
+shiftedSemanticCyclicChartEval_seam_one_value
+shiftedSemanticCyclicChartEval_seam_two_value
+shiftedSemanticCyclicChartEval_seam_three_value
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
@@ -735,6 +747,7 @@ shiftedPath_map_trans
 shiftedPath_trans_apply_source
 shiftedPath_trans_apply_target
 shiftedSemanticCyclicChartEval_edgePath_zero
+shiftedPath_cast_proof_irrel
 ```
 
 The edge-local bridge is now stronger than an endpoint comparison. A single
@@ -839,6 +852,30 @@ So the endpoint mismatch is solved. The remaining obstruction is the
 compatibility of descended semantic evaluation with the nested `Path.trans`
 and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
 proof alignment after mapping.
+
+The seam alignment layer is now explicit. Quotient endpoint evaluation aliases
+identify the semantic evaluation of quotient left/right representatives with
+the finite fixed-boundary endpoint APIs, and value-level seam aliases record
+the four finite seam equalities:
+
+```text
+shiftedSemanticCyclicChartEval_right_zero
+shiftedSemanticCyclicChartEval_left_one
+shiftedSemanticCyclicChartEval_right_one
+shiftedSemanticCyclicChartEval_left_two
+shiftedSemanticCyclicChartEval_right_two
+shiftedSemanticCyclicChartEval_left_three
+shiftedSemanticCyclicChartEval_right_three
+shiftedSemanticCyclicChartEval_seam_zero_value
+shiftedSemanticCyclicChartEval_seam_one_value
+shiftedSemanticCyclicChartEval_seam_two_value
+shiftedSemanticCyclicChartEval_seam_three_value
+```
+
+The helper `shiftedPath_cast_proof_irrel` records that changing only the proof
+terms inside a path cast does not change the resulting path. The current
+stable route therefore avoids direct equality of mapped seam proof terms and
+uses value-level seam alignment plus cast proof irrelevance instead.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it

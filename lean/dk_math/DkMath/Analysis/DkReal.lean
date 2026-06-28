@@ -237,10 +237,13 @@ older observed closed path is also endpoint-cast to the finite left endpoint,
 with source, target, and apply aliases proving that only endpoint labels
 changed. The casted observed path also preserves the fixed-`q2` boundary.
 Mathlib's path-map/trans compatibility and a local path-map/cast compatibility
-theorem are now exposed for this package. The remaining bridge is to commute
-descended semantic evaluation with the nested `Path.trans` and `Path.cast`
-structure of the canonical four-path concatenator for this endpoint-cast
-observed path, including seam proof alignment after mapping.
+theorem are now exposed for this package. Quotient endpoint evaluation
+aliases, finite seam value-alignment aliases, and a path-cast
+proof-irrelevance helper isolate the seam proof bookkeeping. The remaining
+bridge is to commute descended semantic evaluation with the nested
+`Path.trans` and `Path.cast` structure of the canonical four-path concatenator
+for this endpoint-cast observed path, including seam proof alignment after
+mapping.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
