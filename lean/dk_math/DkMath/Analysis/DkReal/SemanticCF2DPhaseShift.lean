@@ -2313,6 +2313,21 @@ theorem shiftedSemanticObservedCyclicFourPath_q2
   (shiftedSemanticObservedCyclicFourPath hcore z t).2
 
 /--
+The endpoint-cast observed closed path remains on the original `q2` boundary.
+
+The proof reuses the pointwise cast-apply theorem, so this records that the
+endpoint relabelling does not change the boundary observation.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 ((shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z t).1) =
+      Vec.q2 z := by
+  rw [shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply]
+  exact shiftedSemanticObservedCyclicFourPath_q2 hcore z t
+
+/--
 The observed quotient traversal and the finite four-level path have the same
 source value.
 
@@ -2469,7 +2484,8 @@ via-edge form, and the older finite fixed-boundary four-level path is
 definitionally equal to the canonical direct finite via-edge form.
 The older observed closed path can now be endpoint-cast to the same finite
 endpoint type, with source, target, and pointwise apply aliases showing that
-only endpoint labels changed.
+only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
+by the cast.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -2480,7 +2496,9 @@ The quotient-side closed path and finite closed path match their canonical
 via-edge versions. The observed quotient path still needs a lemma commuting
 descended semantic evaluation with the canonical four-path concatenator, after
 endpoint casting from the observed quotient-left endpoint to the finite left
-endpoint.
+endpoint. The endpoint mismatch is solved; the remaining obstruction is the
+compatibility of descended semantic evaluation with the nested `Path.trans`
+and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

@@ -533,6 +533,7 @@ shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
 shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
 shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
@@ -794,6 +795,11 @@ paths, and its apply theorem states that endpoint casting does not change the
 pointwise observed value. Thus the remaining bridge is no longer endpoint
 typing; it is the compatibility of descended semantic evaluation with the
 canonical four-path concatenator.
+The fixed-boundary observation also survives the endpoint cast:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+```
 
 Value-level source and target comparisons are also available for the closed
 four-edge paths:
@@ -813,7 +819,18 @@ More precisely, the quotient-side closed path and finite closed path now match
 their canonical via-edge versions. The observed quotient path still needs a
 lemma commuting descended semantic evaluation with the canonical four-path
 concatenator after endpoint casting from the observed quotient-left endpoint
-to the finite left endpoint.
+to the finite left endpoint. A direct value-level bridge was reduced by Lean
+to exactly this missing shape:
+
+```text
+semantic evaluation of nested Path.trans / Path.cast
+=
+nested Path.trans / Path.cast of semantic edge evaluations
+```
+
+So the endpoint mismatch is solved. The remaining obstruction is the
+compatibility of descended semantic evaluation with the nested `Path.trans`
+and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it
