@@ -1917,6 +1917,38 @@ theorem shiftedPath_cast_apply
     (t : unitInterval) :
     (p.cast hac hbd) t = p t := rfl
 
+/--
+Mapping a casted path is the same pointwise as casting the mapped path.
+
+Mathlib already provides `Path.map` and `Path.map_trans`; this is the local
+companion needed for endpoint bookkeeping in seam-glued path packages.
+-/
+theorem shiftedPath_map_cast
+    {α β : Type _} [TopologicalSpace α] [TopologicalSpace β]
+    {a b c d : α}
+    (p : Path a b)
+    (f : α → β) (hf : Continuous f)
+    (hac : c = a) (hbd : d = b) :
+    (p.cast hac hbd).map hf =
+      (p.map hf).cast (by rw [hac]) (by rw [hbd]) := by
+  apply Path.ext
+  funext t
+  rfl
+
+/--
+Mapping a concatenated path agrees with concatenating the mapped paths.
+
+This is a DkMath-named wrapper around Mathlib's `Path.map_trans`, used to keep
+the phase-shift packaging API self-contained.
+-/
+theorem shiftedPath_map_trans
+    {α β : Type _} [TopologicalSpace α] [TopologicalSpace β]
+    {a b c : α}
+    (p : Path a b) (q : Path b c)
+    (f : α → β) (hf : Continuous f) :
+    (p.trans q).map hf = (p.map hf).trans (q.map hf) :=
+  Path.map_trans p q hf
+
 /-- The source endpoint of a concatenated path is the source of the first path. -/
 theorem shiftedPath_trans_apply_source
     {α : Type _} [TopologicalSpace α]
@@ -2486,6 +2518,9 @@ The older observed closed path can now be endpoint-cast to the same finite
 endpoint type, with source, target, and pointwise apply aliases showing that
 only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
 by the cast.
+Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
+`Path.map`/`Path.cast` compatibility theorem is available for the next
+packaging step.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -2498,7 +2533,8 @@ descended semantic evaluation with the canonical four-path concatenator, after
 endpoint casting from the observed quotient-left endpoint to the finite left
 endpoint. The endpoint mismatch is solved; the remaining obstruction is the
 compatibility of descended semantic evaluation with the nested `Path.trans`
-and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
+and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
+proof alignment after mapping.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

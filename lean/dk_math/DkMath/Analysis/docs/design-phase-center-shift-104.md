@@ -511,6 +511,8 @@ shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
 shiftedPath_cast_apply
+shiftedPath_map_cast
+shiftedPath_map_trans
 shiftedPath_trans_apply_source
 shiftedPath_trans_apply_target
 shiftedSemanticCyclicChartEval_edgePath_zero
@@ -719,12 +721,17 @@ shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
 ```
 
 A small pointwise `Path.cast` helper records that endpoint-type casts do not
-change path values. Source and target helpers for `Path.trans` record the
-endpoint behavior of path concatenation, and the edge-zero wrapper specializes
-the local quotient edge evaluation theorem to the first finite edge:
+change path values. Mathlib's path-map/trans compatibility is exposed through
+a local wrapper, and the local path-map/cast compatibility theorem handles
+endpoint relabelling under mapping. Source and target helpers for
+`Path.trans` record the endpoint behavior of path concatenation, and the
+edge-zero wrapper specializes the local quotient edge evaluation theorem to
+the first finite edge:
 
 ```text
 shiftedPath_cast_apply
+shiftedPath_map_cast
+shiftedPath_map_trans
 shiftedPath_trans_apply_source
 shiftedPath_trans_apply_target
 shiftedSemanticCyclicChartEval_edgePath_zero
@@ -830,7 +837,8 @@ nested Path.trans / Path.cast of semantic edge evaluations
 
 So the endpoint mismatch is solved. The remaining obstruction is the
 compatibility of descended semantic evaluation with the nested `Path.trans`
-and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
+and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
+proof alignment after mapping.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it

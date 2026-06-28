@@ -236,9 +236,11 @@ path are definitionally equal to their canonical via-edge versions. The
 older observed closed path is also endpoint-cast to the finite left endpoint,
 with source, target, and apply aliases proving that only endpoint labels
 changed. The casted observed path also preserves the fixed-`q2` boundary.
-The remaining bridge is to commute descended semantic evaluation with the
-nested `Path.trans` and `Path.cast` structure of the canonical four-path
-concatenator for this endpoint-cast observed path.
+Mathlib's path-map/trans compatibility and a local path-map/cast compatibility
+theorem are now exposed for this package. The remaining bridge is to commute
+descended semantic evaluation with the nested `Path.trans` and `Path.cast`
+structure of the canonical four-path concatenator for this endpoint-cast
+observed path, including seam proof alignment after mapping.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
