@@ -211,8 +211,11 @@ states are also packaged directly as points of the fixed square-mass level
 set. Finally, the finite chart layer evaluates `Fin 4 × unitInterval` into
 the same fixed boundary, closes the finite seam relation under
 `Relation.EqvGen`, packages the quotient as `ShiftedCyclicChart`, and
-descends chart evaluation to that quotient. Topology and path structure on
-the quotient are deliberately left to a later layer.
+descends chart evaluation to that quotient. Representative constructor
+aliases, left and right endpoint representatives, quotient seam equality, and
+endpoint evaluation theorems make the quotient readable without opening its
+representatives. Topology and path structure on the quotient are deliberately
+left to a later layer.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

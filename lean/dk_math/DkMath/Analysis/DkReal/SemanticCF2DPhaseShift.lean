@@ -1608,6 +1608,60 @@ selected here.
 abbrev ShiftedCyclicChart :=
   Quot shiftedFiniteChartSetoid
 
+/-- Constructor alias for representatives of `ShiftedCyclicChart`. -/
+def shiftedCyclicChartMk (p : ShiftedFiniteChart) : ShiftedCyclicChart :=
+  Quot.mk shiftedFiniteChartSetoid p
+
+/-- The constructor alias is definitionally the quotient representative map. -/
+@[simp]
+theorem shiftedCyclicChartMk_eq_mk (p : ShiftedFiniteChart) :
+    shiftedCyclicChartMk p = Quot.mk shiftedFiniteChartSetoid p := rfl
+
+/-- Left endpoint representative of a finite shifted chart in the quotient. -/
+def shiftedCyclicChartLeft (i : Fin 4) : ShiftedCyclicChart :=
+  shiftedCyclicChartMk (i, (0 : unitInterval))
+
+/-- Right endpoint representative of a finite shifted chart in the quotient. -/
+def shiftedCyclicChartRight (i : Fin 4) : ShiftedCyclicChart :=
+  shiftedCyclicChartMk (i, (1 : unitInterval))
+
+/--
+The generating seam is an equality inside the shifted cyclic chart quotient.
+
+This is the quotient-side form of the finite seam law: the right endpoint of
+edge `i` and the left endpoint of its finite successor are the same cyclic
+chart point.
+-/
+theorem shiftedCyclicChartRight_eq_succ_left (i : Fin 4) :
+    shiftedCyclicChartRight i =
+      shiftedCyclicChartLeft (finFourSucc i) := by
+  apply Quot.sound
+  exact Relation.EqvGen.rel _ _ ⟨i, rfl, rfl⟩
+
+/-- The quotient seam sends finite edge `0` to finite edge `1`. -/
+theorem shiftedCyclicChartRight_zero_eq_one_left :
+    shiftedCyclicChartRight (0 : Fin 4) =
+      shiftedCyclicChartLeft (1 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨0, by norm_num⟩
+
+/-- The quotient seam sends finite edge `1` to finite edge `2`. -/
+theorem shiftedCyclicChartRight_one_eq_two_left :
+    shiftedCyclicChartRight (1 : Fin 4) =
+      shiftedCyclicChartLeft (2 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨1, by norm_num⟩
+
+/-- The quotient seam sends finite edge `2` to finite edge `3`. -/
+theorem shiftedCyclicChartRight_two_eq_three_left :
+    shiftedCyclicChartRight (2 : Fin 4) =
+      shiftedCyclicChartLeft (3 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨2, by norm_num⟩
+
+/-- The quotient seam sends finite edge `3` back to finite edge `0`. -/
+theorem shiftedCyclicChartRight_three_eq_zero_left :
+    shiftedCyclicChartRight (3 : Fin 4) =
+      shiftedCyclicChartLeft (0 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
+
 /--
 Chart evaluation is compatible with the generated seam equivalence.
 
@@ -1661,6 +1715,42 @@ theorem shiftedSemanticCyclicChartEval_mk
     (p : ShiftedFiniteChart) :
     shiftedSemanticCyclicChartEval hcore z (Quot.mk _ p) =
       shiftedSemanticFinChartEval hcore z p := rfl
+
+/-- Quotient evaluation at a left endpoint representative. -/
+theorem shiftedSemanticCyclicChartEval_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartLeft i) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z i := by
+  rw [shiftedCyclicChartLeft, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk,
+    shiftedSemanticFinChartEval_at_left]
+
+/-- Quotient evaluation at a right endpoint representative. -/
+theorem shiftedSemanticCyclicChartEval_right
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartRight i) =
+      shiftedSemanticFinRightLevelEndpoint hcore z i := by
+  rw [shiftedCyclicChartRight, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk,
+    shiftedSemanticFinChartEval_at_right]
+
+/--
+Quotient evaluation has matching values across the quotient seam.
+
+This is the evaluation-side reading of `shiftedCyclicChartRight_eq_succ_left`.
+-/
+theorem shiftedSemanticCyclicChartEval_right_eq_succ_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartRight i) =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (finFourSucc i)) := by
+  rw [shiftedCyclicChartRight_eq_succ_left]
 
 /--
 The quotiented chart evaluation still lands on the original `q2` boundary.
@@ -1723,10 +1813,13 @@ proved.
 The finite seam relation is closed under `Relation.EqvGen`, packaged as a
 setoid quotient `ShiftedCyclicChart`, and chart evaluation descends to the
 quotient as a fixed-`q2` boundary-valued function.
+Representative constructor aliases, left and right endpoint representatives,
+quotient seam equality, endpoint evaluation theorems, and quotient evaluation
+seam compatibility are also exposed.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology]
-Add topology/path structure to the shifted cyclic chart quotient only after
-the quotient evaluation API is stable.
+Add topology/path structure to `ShiftedCyclicChart` after the quotient
+representative and seam-equality API is stable.
 -/
 
 /-!
