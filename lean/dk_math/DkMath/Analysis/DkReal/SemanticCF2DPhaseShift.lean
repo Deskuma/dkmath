@@ -1896,6 +1896,74 @@ theorem shiftedSemanticCyclicChartEval_edgePath
   rfl
 
 /--
+The closed quotient chart path observed inside the fixed square-mass boundary.
+
+This composes the closed quotient traversal with the descended semantic
+evaluation. The codomain is already `LevelSet ℝ (Vec.q2 z)`, so fixed-boundary
+membership is carried by the type.
+-/
+def shiftedSemanticObservedCyclicFourPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)))
+      (shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4))) where
+  toFun t := shiftedSemanticCyclicChartEval hcore z (shiftedCyclicFourPath t)
+  continuous_toFun :=
+    (continuous_shiftedSemanticCyclicChartEval hcore z).comp
+      shiftedCyclicFourPath.continuous_toFun
+  source' := by
+    rw [shiftedCyclicFourPath_source]
+  target' := by
+    rw [shiftedCyclicFourPath_target]
+
+/-- The observed closed quotient path starts at the observed first left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 0 =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).source
+
+/-- The observed closed quotient path returns to the observed first left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 1 =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).target
+
+/-- Evaluation of the first quotient left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (0 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
+
+/--
+The observed closed quotient path remains on the original `q2` boundary.
+
+This is a projection of the subtype proof carried by the path codomain.
+-/
+theorem shiftedSemanticObservedCyclicFourPath_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 ((shiftedSemanticObservedCyclicFourPath hcore z t).1) =
+      Vec.q2 z :=
+  (shiftedSemanticObservedCyclicFourPath hcore z t).2
+
+/--
 The quotiented chart evaluation still lands on the original `q2` boundary.
 
 This small observation is useful downstream because consumers of the quotient
@@ -1971,6 +2039,11 @@ The quotient chart edge path traverses one finite chart representative, and
 the first four quotient edge paths concatenate to a closed quotient path by
 using the quotient seam equalities. Evaluating one quotient edge recovers the
 corresponding fixed-`q2` finite level edge.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-observation]
+The closed quotient path is observed through the descended semantic
+evaluation as a fixed-`q2` path. Source, target, endpoint-evaluation, and
+boundary-observation aliases are exposed.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level

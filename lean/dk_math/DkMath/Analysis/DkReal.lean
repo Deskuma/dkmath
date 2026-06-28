@@ -219,6 +219,9 @@ the representative map, finite chart evaluation, and descended fixed-boundary
 quotient evaluation are continuous. The quotient edge path and closed
 four-edge quotient path are packaged in the glued chart space, and evaluating
 one quotient edge recovers the corresponding fixed-`q2` finite level edge.
+Observing the closed quotient path through the descended evaluation now gives
+a closed fixed-boundary path with source, target, endpoint, and `q2`
+observation aliases.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

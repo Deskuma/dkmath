@@ -508,6 +508,11 @@ shiftedCyclicFourPath
 shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
+shiftedSemanticObservedCyclicFourPath
+shiftedSemanticObservedCyclicFourPath_source
+shiftedSemanticObservedCyclicFourPath_target
+shiftedSemanticCyclicChartEval_left_zero
+shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticCyclicChartEval_q2
 ```
 
@@ -665,6 +670,19 @@ shiftedSemanticCyclicChartEval hcore z
 shiftedSemanticFinLevelEdge hcore z i t
 ```
 
+The closed quotient path can now be observed through the descended semantic
+evaluation:
+
+```text
+shiftedSemanticObservedCyclicFourPath hcore z
+```
+
+This is a closed `Path` in the fixed `q2 z` level set. Source, target,
+first-left-endpoint evaluation, and boundary-observation aliases are exposed.
+Thus the quotient traversal is already connected to a fixed-boundary
+observation path, even before comparing the whole concatenated path with the
+existing finite four-level path.
+
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it
 requires path-trans cast normalization lemmas. This is still not a Euclidean
@@ -767,9 +785,13 @@ depend on that reading.
     quotient path.
 42. Implemented: prove the local edge evaluation comparison against the
     fixed-`q2` finite level edge.
-43. Later: compare the evaluated closed quotient path with the existing
+43. Implemented: observe the closed quotient path as a closed fixed-`q2`
+    boundary path.
+44. Implemented: expose source, target, endpoint-evaluation, and `q2`
+    observation aliases for the observed closed quotient path.
+45. Later: compare the evaluated closed quotient path with the existing
     fixed-`q2` four-level path after path-trans cast normalization lemmas.
-44. Later: add a Euclidean bridge that reads `1/8` full-cycle
+46. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -852,6 +874,11 @@ Package one quotient chart edge path, concatenate the first four quotient edge
 paths into a closed quotient path by quotient seam equalities, expose source
 and target aliases, and prove the local edge evaluation comparison with the
 fixed-`q2` finite level edge.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-observation]
+Observe the closed quotient chart path through the descended semantic
+evaluation as a closed path in the fixed `q2` boundary. Source, target,
+first-left-endpoint evaluation, and boundary-observation aliases are exposed.
 ```
 
 ## Remaining TODO Tags
