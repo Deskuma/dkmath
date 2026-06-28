@@ -1381,6 +1381,15 @@ theorem shiftedSemanticFinLevelPath_apply
     (shiftedSemanticFinLevelPath hcore z i t).1 =
       shiftedSemanticFinEdge r z i t := rfl
 
+/-- Applying a finite level path gives the corresponding finite level edge. -/
+@[simp]
+theorem shiftedSemanticFinLevelPath_apply_eq_levelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticFinLevelPath hcore z i t =
+      shiftedSemanticFinLevelEdge hcore z i t := rfl
+
 /--
 Finite cyclic seam compatibility: the right endpoint of finite edge `i` is
 the left endpoint of its cyclic successor.
@@ -1908,6 +1917,22 @@ theorem shiftedPath_cast_apply
     (t : unitInterval) :
     (p.cast hac hbd) t = p t := rfl
 
+/-- The source endpoint of a concatenated path is the source of the first path. -/
+theorem shiftedPath_trans_apply_source
+    {α : Type _} [TopologicalSpace α]
+    {a b c : α}
+    (p : Path a b) (q : Path b c) :
+    (p.trans q) 0 = p 0 := by
+  rw [p.source, (p.trans q).source]
+
+/-- The target endpoint of a concatenated path is the target of the second path. -/
+theorem shiftedPath_trans_apply_target
+    {α : Type _} [TopologicalSpace α]
+    {a b c : α}
+    (p : Path a b) (q : Path b c) :
+    (p.trans q) 1 = q 1 := by
+  rw [q.target, (p.trans q).target]
+
 /--
 Edge-zero specialization of quotient-edge evaluation.
 
@@ -1922,6 +1947,59 @@ theorem shiftedSemanticCyclicChartEval_edgePath_zero
       (shiftedCyclicChartEdgePath (0 : Fin 4) t) =
         shiftedSemanticFinLevelEdge hcore z (0 : Fin 4) t :=
   shiftedSemanticCyclicChartEval_edgePath hcore z (0 : Fin 4) t
+
+/--
+Observe a single quotient edge inside the fixed square-mass boundary.
+
+Unlike the closed four-edge path, this object contains no nested
+`Path.trans`. It is therefore the clean local bridge between quotient chart
+traversal and the direct finite level path.
+-/
+def shiftedSemanticObservedCyclicEdgePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z i)
+      (shiftedSemanticFinRightLevelEndpoint hcore z i) where
+  toFun t := shiftedSemanticCyclicChartEval hcore z
+    (shiftedCyclicChartEdgePath i t)
+  continuous_toFun :=
+    (continuous_shiftedSemanticCyclicChartEval hcore z).comp
+      (shiftedCyclicChartEdgePath i).continuous_toFun
+  source' := by
+    rw [shiftedCyclicChartEdgePath_source,
+      shiftedSemanticCyclicChartEval_left]
+  target' := by
+    rw [shiftedCyclicChartEdgePath_target,
+      shiftedSemanticCyclicChartEval_right]
+
+/-- Evaluating a single observed quotient edge gives the finite level edge. -/
+theorem shiftedSemanticObservedCyclicEdgePath_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticObservedCyclicEdgePath hcore z i t =
+      shiftedSemanticFinLevelEdge hcore z i t :=
+  shiftedSemanticCyclicChartEval_edgePath hcore z i t
+
+/--
+The observed single quotient edge is the direct finite fixed-boundary path.
+
+This is the edge-local comparison theorem. The remaining four-edge comparison
+is therefore a path-packaging problem about nested `Path.trans` and endpoint
+casts, not a semantic mismatch.
+-/
+theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticObservedCyclicEdgePath hcore z i =
+      shiftedSemanticFinLevelPath hcore z i := by
+  apply Path.ext
+  funext t
+  rw [shiftedSemanticObservedCyclicEdgePath_apply]
+  rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
 
 /--
 The closed quotient chart path observed inside the fixed square-mass boundary.
@@ -2009,6 +2087,17 @@ theorem shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
     shiftedSemanticFinFourLevelPath_source]
   rfl
 
+/-- Value-level source comparison for the observed and finite four-level paths. -/
+theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedSemanticObservedCyclicFourPath hcore z 0).1 =
+      (shiftedSemanticFinFourLevelPath hcore z 0).1 :=
+  congrArg Subtype.val
+    (shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+      hcore z)
+
 /--
 The observed quotient traversal and the finite four-level path have the same
 target value.
@@ -2026,6 +2115,17 @@ theorem shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
     shiftedSemanticCyclicChartEval_left_zero,
     shiftedSemanticFinFourLevelPath_target]
   rfl
+
+/-- Value-level target comparison for the observed and finite four-level paths. -/
+theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedSemanticObservedCyclicFourPath hcore z 1).1 =
+      (shiftedSemanticFinFourLevelPath hcore z 1).1 :=
+  congrArg Subtype.val
+    (shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+      hcore z)
 
 /--
 The quotiented chart evaluation still lands on the original `q2` boundary.
@@ -2114,6 +2214,10 @@ The observed quotient path and the finite four-level path now have explicit
 source and target comparison theorems. A local `Path.cast` pointwise helper
 and an edge-zero evaluation wrapper prepare the later full comparison without
 forcing `Path.trans` interval-splitting normalization yet.
+The source/target comparison is also exposed after `Subtype.val`. A single
+observed quotient edge is packaged as a fixed-boundary path and proved equal
+to the direct finite fixed-boundary edge path, so the remaining four-edge
+comparison is only nested path-packaging normalization.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level

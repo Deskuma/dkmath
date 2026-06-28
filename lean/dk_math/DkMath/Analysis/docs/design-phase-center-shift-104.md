@@ -509,7 +509,12 @@ shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
 shiftedPath_cast_apply
+shiftedPath_trans_apply_source
+shiftedPath_trans_apply_target
 shiftedSemanticCyclicChartEval_edgePath_zero
+shiftedSemanticObservedCyclicEdgePath
+shiftedSemanticObservedCyclicEdgePath_apply
+shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
 shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
@@ -517,6 +522,8 @@ shiftedSemanticCyclicChartEval_left_zero
 shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
 shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
 shiftedSemanticCyclicChartEval_q2
 ```
 
@@ -697,17 +704,41 @@ shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
 ```
 
 A small pointwise `Path.cast` helper records that endpoint-type casts do not
-change path values, and the edge-zero wrapper specializes the local quotient
-edge evaluation theorem to the first finite edge:
+change path values. Source and target helpers for `Path.trans` record the
+endpoint behavior of path concatenation, and the edge-zero wrapper specializes
+the local quotient edge evaluation theorem to the first finite edge:
 
 ```text
 shiftedPath_cast_apply
+shiftedPath_trans_apply_source
+shiftedPath_trans_apply_target
 shiftedSemanticCyclicChartEval_edgePath_zero
 ```
 
-These facts keep the comparison pre-geometric. They prepare the full
-`Path.trans` normalization step without asserting any circle, angle, arc, or
-Euclidean one-eighth reading.
+The edge-local bridge is now stronger than an endpoint comparison. A single
+quotient edge observed through the descended semantic evaluation is packaged
+as a fixed-boundary path and proved equal to the direct finite fixed-boundary
+edge path:
+
+```text
+shiftedSemanticObservedCyclicEdgePath
+shiftedSemanticObservedCyclicEdgePath_apply
+shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+```
+
+Value-level source and target comparisons are also available for the closed
+four-edge paths:
+
+```text
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
+```
+
+These facts keep the comparison pre-geometric. The remaining obstruction is
+not semantic: each local edge comparison is available. The remaining task is
+normalizing the nested `Path.trans` and endpoint `Path.cast` structure used by
+the two closed four-path packages, without asserting any circle, angle, arc,
+or Euclidean one-eighth reading.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it
