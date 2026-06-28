@@ -529,6 +529,10 @@ shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_left_zero
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
 shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
 shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
@@ -775,6 +779,22 @@ observed via-edge path is typed at the finite left endpoint. Even pointwise,
 the remaining theorem must commute descended semantic evaluation with the
 canonical four-path concatenator.
 
+The endpoint mismatch has been isolated by an endpoint-casted older observed
+path:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+```
+
+This casted path has the same finite endpoint type as the canonical via-edge
+paths, and its apply theorem states that endpoint casting does not change the
+pointwise observed value. Thus the remaining bridge is no longer endpoint
+typing; it is the compatibility of descended semantic evaluation with the
+canonical four-path concatenator.
+
 Value-level source and target comparisons are also available for the closed
 four-edge paths:
 
@@ -792,7 +812,8 @@ or Euclidean one-eighth reading.
 More precisely, the quotient-side closed path and finite closed path now match
 their canonical via-edge versions. The observed quotient path still needs a
 lemma commuting descended semantic evaluation with the canonical four-path
-concatenator.
+concatenator after endpoint casting from the observed quotient-left endpoint
+to the finite left endpoint.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it

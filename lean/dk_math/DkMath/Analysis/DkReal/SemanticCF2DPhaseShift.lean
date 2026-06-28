@@ -2246,6 +2246,60 @@ theorem shiftedSemanticCyclicChartEval_left_zero
   shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
 
 /--
+The older observed closed quotient path recast to finite endpoint types.
+
+The path values are unchanged; only the source and target expressions are
+relabelled from the observed quotient left endpoint to the finite left
+endpoint.
+-/
+def shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).cast
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+
+/-- The recast observed closed path starts at the finite left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z 0 =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z).source
+
+/-- The recast observed closed path returns to the finite left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z 1 =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z).target
+
+/--
+Endpoint casting the older observed path does not change its pointwise values.
+
+This is the local bridge that separates endpoint-type bookkeeping from the
+later evaluation-concatenation compatibility problem.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z t =
+      shiftedSemanticObservedCyclicFourPath hcore z t :=
+  shiftedPath_cast_apply
+    (shiftedSemanticObservedCyclicFourPath hcore z)
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    t
+
+/--
 The observed closed quotient path remains on the original `q2` boundary.
 
 This is a projection of the subtype proof carried by the path codomain.
@@ -2413,6 +2467,9 @@ closed paths are equal by the four single-edge equalities.
 The older quotient closed path is definitionally equal to its canonical
 via-edge form, and the older finite fixed-boundary four-level path is
 definitionally equal to the canonical direct finite via-edge form.
+The older observed closed path can now be endpoint-cast to the same finite
+endpoint type, with source, target, and pointwise apply aliases showing that
+only endpoint labels changed.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -2421,7 +2478,9 @@ path after path-trans cast normalization lemmas are available.
 [TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
 The quotient-side closed path and finite closed path match their canonical
 via-edge versions. The observed quotient path still needs a lemma commuting
-descended semantic evaluation with the canonical four-path concatenator.
+descended semantic evaluation with the canonical four-path concatenator, after
+endpoint casting from the observed quotient-left endpoint to the finite left
+endpoint.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

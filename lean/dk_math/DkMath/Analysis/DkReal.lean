@@ -233,8 +233,11 @@ seams now packages canonical via-edge observed and direct finite closed
 paths, and those two canonical paths are equal by the four single-edge
 equalities. The older quotient closed path and the older finite four-level
 path are definitionally equal to their canonical via-edge versions. The
-remaining bridge is to commute descended semantic evaluation with the
-canonical four-path concatenator for the older observed path.
+older observed closed path is also endpoint-cast to the finite left endpoint,
+with source, target, and apply aliases proving that only endpoint labels
+changed. The remaining bridge is to commute descended semantic evaluation
+with the canonical four-path concatenator for this endpoint-cast observed
+path.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
