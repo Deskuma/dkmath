@@ -231,7 +231,10 @@ therefore a normalization problem for nested `Path.trans` and endpoint casts,
 not a semantic obstruction. A reusable four-edge concatenator with explicit
 seams now packages canonical via-edge observed and direct finite closed
 paths, and those two canonical paths are equal by the four single-edge
-equalities.
+equalities. The older quotient closed path and the older finite four-level
+path are definitionally equal to their canonical via-edge versions. The
+remaining bridge is to commute descended semantic evaluation with the
+canonical four-path concatenator for the older observed path.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

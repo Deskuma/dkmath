@@ -2086,6 +2086,29 @@ theorem shiftedFourPathConcatWithSeams_congr
   rfl
 
 /--
+Canonical quotient four-edge path via the common seam concatenator.
+
+This is the quotient-chart version of the canonical via-edge packaging used
+for semantic observations below.
+-/
+def shiftedCyclicFourPathViaEdges :
+    Path (shiftedCyclicChartLeft (0 : Fin 4))
+      (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedCyclicChartEdgePath (0 : Fin 4))
+    (shiftedCyclicChartEdgePath (1 : Fin 4))
+    (shiftedCyclicChartEdgePath (2 : Fin 4))
+    (shiftedCyclicChartEdgePath (3 : Fin 4))
+    shiftedCyclicChartRight_zero_eq_one_left
+    shiftedCyclicChartRight_one_eq_two_left
+    shiftedCyclicChartRight_two_eq_three_left
+    shiftedCyclicChartRight_three_eq_zero_left
+
+/-- The older quotient closed path is definitionally the canonical via-edge path. -/
+theorem shiftedCyclicFourPath_eq_viaEdges :
+    shiftedCyclicFourPath = shiftedCyclicFourPathViaEdges := rfl
+
+/--
 Canonical four-edge path obtained by observing quotient edges individually.
 
 This avoids comparing against the older closed quotient path packaging
@@ -2131,6 +2154,19 @@ def shiftedSemanticFinFourLevelPathViaEdges
     (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
     (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
     (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+
+/--
+The older finite four-level path is the canonical direct finite via-edge path.
+
+The `Fin 4` wrappers are thin aliases for the indexed paths and seams used by
+the older definition.
+-/
+theorem shiftedSemanticFinFourLevelPath_eq_viaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinFourLevelPath hcore z =
+      shiftedSemanticFinFourLevelPathViaEdges hcore z := rfl
 
 /--
 The canonical observed four-edge path equals the canonical direct finite path.
@@ -2374,14 +2410,18 @@ comparison is only nested path-packaging normalization.
 A canonical four-edge concatenator with explicit seams now packages both the
 observed-edge and direct finite-edge versions. These canonical via-edge
 closed paths are equal by the four single-edge equalities.
+The older quotient closed path is definitionally equal to its canonical
+via-edge form, and the older finite fixed-boundary four-level path is
+definitionally equal to the canonical direct finite via-edge form.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 path after path-trans cast normalization lemmas are available.
 
 [TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
-Compare the older closed four-path definitions with the canonical via-edge
-versions after the common concatenator is stable.
+The quotient-side closed path and finite closed path match their canonical
+via-edge versions. The observed quotient path still needs a lemma commuting
+descended semantic evaluation with the canonical four-path concatenator.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

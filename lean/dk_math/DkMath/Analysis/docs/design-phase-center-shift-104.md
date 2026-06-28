@@ -505,6 +505,8 @@ shiftedCyclicChartEdgePath_apply
 shiftedCyclicChartEdgePath_source
 shiftedCyclicChartEdgePath_target
 shiftedCyclicFourPath
+shiftedCyclicFourPathViaEdges
+shiftedCyclicFourPath_eq_viaEdges
 shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
@@ -522,6 +524,7 @@ shiftedFourPathConcatWithSeams_congr
 shiftedSemanticObservedCyclicFourPathViaEdges
 shiftedSemanticFinFourLevelPathViaEdges
 shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+shiftedSemanticFinFourLevelPath_eq_viaEdges
 shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
@@ -756,8 +759,21 @@ shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
 ```
 
 The canonical via-edge equality follows from the four single-edge equalities.
-The older closed four-path definitions are intentionally not forced into this
-shape yet.
+The older quotient closed path is also definitionally equal to its canonical
+via-edge quotient path, and the older finite four-level path is definitionally
+equal to the canonical direct finite via-edge path:
+
+```text
+shiftedCyclicFourPathViaEdges
+shiftedCyclicFourPath_eq_viaEdges
+shiftedSemanticFinFourLevelPath_eq_viaEdges
+```
+
+The older observed closed path is intentionally not forced into this shape
+yet. It is typed at the observed quotient left endpoint, while the canonical
+observed via-edge path is typed at the finite left endpoint. Even pointwise,
+the remaining theorem must commute descended semantic evaluation with the
+canonical four-path concatenator.
 
 Value-level source and target comparisons are also available for the closed
 four-edge paths:
@@ -772,6 +788,11 @@ not semantic: each local edge comparison is available. The remaining task is
 normalizing the nested `Path.trans` and endpoint `Path.cast` structure used by
 the two closed four-path packages, without asserting any circle, angle, arc,
 or Euclidean one-eighth reading.
+
+More precisely, the quotient-side closed path and finite closed path now match
+their canonical via-edge versions. The observed quotient path still needs a
+lemma commuting descended semantic evaluation with the canonical four-path
+concatenator.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it
