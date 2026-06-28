@@ -206,7 +206,9 @@ successor seam law for downstream code that wants a bounded index rather than
 raw natural-number indices. The finite successor has named small-step facts
 and a four-cycle law. Finite edges expose endpoint aliases and
 center-to-successor-base compatibility, and the closed shifted path exposes
-source and target aliases.
+source, target, and fixed-`q2` boundary-observation aliases. Finite base
+states are also packaged directly as points of the fixed square-mass level
+set.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

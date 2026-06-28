@@ -447,6 +447,7 @@ finFourSucc_two
 finFourSucc_three
 finFourSucc_four_cycle
 shiftedSemanticFinBase
+shiftedSemanticFinBaseLevelPoint
 shiftedSemanticFinEdge
 shiftedSemanticFinEdge_leftEndpoint
 shiftedSemanticFinEdge_rightEndpoint
@@ -456,6 +457,7 @@ shiftedSemanticFinEdge_center_eq_succ_base_of_core_eq_zero
 shiftedSemanticFinPath
 shiftedSemanticFinLevelEdge
 shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
+shiftedSemanticFinLevelEdge_center_eq_succ_base_level_of_core_eq_zero
 shiftedSemanticFinLevelPath
 shiftedSemanticFinRightLevelEndpoint_eq_succ_left
 shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left
@@ -465,6 +467,9 @@ shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left
 shiftedSemanticFinFourLevelPath
 shiftedSemanticFourLevelPath_source
 shiftedSemanticFourLevelPath_target
+shiftedSemanticFinFourLevelPath_source
+shiftedSemanticFinFourLevelPath_target
+shiftedSemanticFinFourLevelPath_q2
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -533,7 +538,9 @@ This is still a finite cyclic index, not a continuous quotient phase
 parameter. The successor has named values for `0 -> 1 -> 2 -> 3 -> 0` and a
 four-cycle theorem. Finite shifted edges also expose endpoint aliases and a
 center-to-successor-base theorem. The closed shifted four-level path exposes
-named source and target aliases for downstream observation code.
+named source, target, and fixed-`q2` boundary-observation aliases for
+downstream observation code. Finite base states are also packaged directly as
+fixed-level points.
 
 Candidate theorem directions:
 
@@ -611,7 +618,9 @@ depend on that reading.
 23. Implemented: add small-step and four-cycle API for `finFourSucc`.
 24. Implemented: add finite endpoint aliases and center-to-successor-base compatibility.
 25. Implemented: add source and target aliases for the closed shifted four-level path.
-26. Later: add a Euclidean bridge that reads `1/8` full-cycle
+26. Implemented: add finite base level-point wrappers.
+27. Implemented: add finite closed-path fixed-`q2` observation.
+28. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -663,6 +672,11 @@ successor and prove the corresponding cyclic seam law. The successor has
 named small-step facts and a four-cycle law, finite edges expose endpoint and
 center-to-successor-base compatibility, and the closed shifted path has named
 source and target aliases.
+
+[IMPLEMENTED: semantic-cf2d/shifted-fin-observation]
+Package finite base states as fixed-`q2` level points. Expose the finite
+center-to-successor-base theorem at the level-point API and add source,
+target, and fixed-`q2` observation aliases for the finite closed shifted path.
 ```
 
 ## Remaining TODO Tags
