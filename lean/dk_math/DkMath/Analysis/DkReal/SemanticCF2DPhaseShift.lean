@@ -1493,6 +1493,98 @@ theorem shiftedSemanticFinFourLevelPath_q2
   (shiftedSemanticFinFourLevelPath hcore z t).2
 
 /-!
+## Finite chart evaluation before quotienting
+
+The next definitions expose the finite chart space for the shifted boundary:
+a finite edge index together with a local unit-interval parameter. The seam
+relation is recorded as a relation only; no quotient type is introduced here.
+-/
+
+/-- A finite shifted chart is one of four shifted edges and a local parameter. -/
+abbrev ShiftedFiniteChart :=
+  Fin 4 × unitInterval
+
+/-- Evaluate a finite shifted chart inside the fixed square-mass boundary. -/
+def shiftedSemanticFinChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedFiniteChart) : LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticFinLevelEdge hcore z p.1 p.2
+
+@[simp]
+theorem shiftedSemanticFinChartEval_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedFiniteChart) :
+    (shiftedSemanticFinChartEval hcore z p).1 =
+      shiftedSemanticFinEdge r z p.1 p.2 := rfl
+
+/-- Evaluating a finite chart at local `0` gives its left endpoint. -/
+theorem shiftedSemanticFinChartEval_at_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (0 : unitInterval)) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z i := by
+  apply Subtype.ext
+  simp [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge,
+    shiftedSemanticIndexedLevelEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticFinLeftLevelEndpoint,
+    shiftedSemanticIndexedLeftLevelEndpoint]
+
+/-- Evaluating a finite chart at local `1` gives its right endpoint. -/
+theorem shiftedSemanticFinChartEval_at_right
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (1 : unitInterval)) =
+      shiftedSemanticFinRightLevelEndpoint hcore z i := by
+  apply Subtype.ext
+  simp [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge,
+    shiftedSemanticIndexedLevelEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticFinRightLevelEndpoint,
+    shiftedSemanticIndexedRightLevelEndpoint]
+
+/--
+Finite seam relation between charts.
+
+It relates the right endpoint of edge `i` to the left endpoint of its finite
+successor. This is the intended input for a later quotient wrapper.
+-/
+def shiftedFiniteSeamRel (p q : ShiftedFiniteChart) : Prop :=
+  ∃ i : Fin 4,
+    p = (i, (1 : unitInterval)) ∧
+      q = (finFourSucc i, (0 : unitInterval))
+
+/-- The chart evaluation has matching values across a single finite seam. -/
+theorem shiftedSemanticFinChartEval_right_eq_succ_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (1 : unitInterval)) =
+      shiftedSemanticFinChartEval hcore z
+        (finFourSucc i, (0 : unitInterval)) := by
+  rw [shiftedSemanticFinChartEval_at_right,
+    shiftedSemanticFinChartEval_at_left]
+  exact shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z i
+
+/-- Chart evaluation is compatible with the finite seam relation. -/
+theorem shiftedSemanticFinChartEval_eq_of_seamRel
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    {p q : ShiftedFiniteChart}
+    (hrel : shiftedFiniteSeamRel p q) :
+    shiftedSemanticFinChartEval hcore z p =
+      shiftedSemanticFinChartEval hcore z q := by
+  rcases hrel with ⟨i, hp, hq⟩
+  subst hp
+  subst hq
+  exact shiftedSemanticFinChartEval_right_eq_succ_left hcore z i
+
+/-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
 The shifted semantic edge uses the normalized center states of neighboring
 quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
@@ -1530,8 +1622,14 @@ level edge center theorem now targets the finite successor base point, and the
 finite closed shifted path exposes source, target, and boundary-observation
 facts.
 
+[IMPLEMENTED: semantic-cf2d/shifted-finite-chart]
+The finite chart space `Fin 4 × unitInterval` evaluates into the fixed `q2`
+boundary. Endpoint chart evaluations and seam-relation compatibility are
+proved before constructing any quotient.
+
 [TODO: semantic-cf2d/shifted-cyclic-quotient]
-Introduce a quotient phase parameter only after the four-edge closed path is
+Use `ShiftedFiniteChart` modulo `shiftedFiniteSeamRel`, or an equivalent
+project-specific quotient wrapper, once chart evaluation compatibility is
 stable enough for downstream consumers.
 -/
 

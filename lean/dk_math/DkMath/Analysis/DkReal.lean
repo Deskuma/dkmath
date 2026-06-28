@@ -208,7 +208,9 @@ and a four-cycle law. Finite edges expose endpoint aliases and
 center-to-successor-base compatibility, and the closed shifted path exposes
 source, target, and fixed-`q2` boundary-observation aliases. Finite base
 states are also packaged directly as points of the fixed square-mass level
-set.
+set. Finally, the pre-quotient chart layer evaluates `Fin 4 × unitInterval`
+into the same fixed boundary and proves compatibility across the finite seam
+relation. No quotient phase parameter is introduced yet.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

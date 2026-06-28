@@ -470,6 +470,14 @@ shiftedSemanticFourLevelPath_target
 shiftedSemanticFinFourLevelPath_source
 shiftedSemanticFinFourLevelPath_target
 shiftedSemanticFinFourLevelPath_q2
+ShiftedFiniteChart
+shiftedSemanticFinChartEval
+shiftedSemanticFinChartEval_val
+shiftedSemanticFinChartEval_at_left
+shiftedSemanticFinChartEval_at_right
+shiftedFiniteSeamRel
+shiftedSemanticFinChartEval_right_eq_succ_left
+shiftedSemanticFinChartEval_eq_of_seamRel
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -541,6 +549,17 @@ center-to-successor-base theorem. The closed shifted four-level path exposes
 named source, target, and fixed-`q2` boundary-observation aliases for
 downstream observation code. Finite base states are also packaged directly as
 fixed-level points.
+
+The pre-quotient chart layer is now explicit:
+
+```text
+ShiftedFiniteChart = Fin 4 x unitInterval
+```
+
+Chart evaluation maps each chart into the fixed `q2 z` level set. The seam
+relation identifies `(i, 1)` with `(finFourSucc i, 0)`, and Lean proves that
+chart evaluation is compatible with that relation. This prepares a quotient
+wrapper without choosing one yet.
 
 Candidate theorem directions:
 
@@ -620,7 +639,9 @@ depend on that reading.
 25. Implemented: add source and target aliases for the closed shifted four-level path.
 26. Implemented: add finite base level-point wrappers.
 27. Implemented: add finite closed-path fixed-`q2` observation.
-28. Later: add a Euclidean bridge that reads `1/8` full-cycle
+28. Implemented: add finite chart evaluation into the fixed `q2` level set.
+29. Implemented: add finite seam relation and chart-evaluation seam compatibility.
+30. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -677,14 +698,20 @@ source and target aliases.
 Package finite base states as fixed-`q2` level points. Expose the finite
 center-to-successor-base theorem at the level-point API and add source,
 target, and fixed-`q2` observation aliases for the finite closed shifted path.
+
+[IMPLEMENTED: semantic-cf2d/shifted-finite-chart]
+Expose `ShiftedFiniteChart = Fin 4 x unitInterval`, evaluate it into the
+fixed `q2` boundary, record the finite seam relation, and prove chart
+evaluation compatibility across seams.
 ```
 
 ## Remaining TODO Tags
 
 ```text
 [TODO: semantic-cf2d/shifted-cyclic-quotient]
-Introduce a quotient phase parameter only after the four indexed path
-concatenation is stable.
+Use `ShiftedFiniteChart` modulo `shiftedFiniteSeamRel`, or an equivalent
+project-specific quotient wrapper, once chart evaluation compatibility is
+stable.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path
