@@ -1815,6 +1815,87 @@ theorem continuous_shiftedSemanticCyclicChartEval
         shiftedSemanticFinChartEval_eq_of_chartRel hcore z hrel)
 
 /--
+The quotient chart edge traversing one finite index.
+
+It is the representative path `t ↦ (i, t)` followed by the quotient map. This
+is still a path in the chart quotient, not a Euclidean geometric path.
+-/
+def shiftedCyclicChartEdgePath (i : Fin 4) :
+    Path (shiftedCyclicChartLeft i) (shiftedCyclicChartRight i) where
+  toFun t := shiftedCyclicChartMk (i, t)
+  continuous_toFun := by
+    exact continuous_shiftedCyclicChartMk.comp
+      (continuous_const.prodMk continuous_id)
+  source' := rfl
+  target' := rfl
+
+/-- Applying the quotient edge path gives its representative chart class. -/
+@[simp]
+theorem shiftedCyclicChartEdgePath_apply
+    (i : Fin 4) (t : unitInterval) :
+    shiftedCyclicChartEdgePath i t =
+      shiftedCyclicChartMk (i, t) := rfl
+
+/-- The quotient edge path starts at its left endpoint representative. -/
+theorem shiftedCyclicChartEdgePath_source (i : Fin 4) :
+    shiftedCyclicChartEdgePath i 0 = shiftedCyclicChartLeft i :=
+  (shiftedCyclicChartEdgePath i).source
+
+/-- The quotient edge path ends at its right endpoint representative. -/
+theorem shiftedCyclicChartEdgePath_target (i : Fin 4) :
+    shiftedCyclicChartEdgePath i 1 = shiftedCyclicChartRight i :=
+  (shiftedCyclicChartEdgePath i).target
+
+/--
+The first four quotient chart edges concatenated into a closed quotient path.
+
+The casts are exactly the quotient seam equalities. No geometric parameter is
+introduced; this is only traversal in the glued chart space.
+-/
+def shiftedCyclicFourPath :
+    Path (shiftedCyclicChartLeft (0 : Fin 4))
+      (shiftedCyclicChartLeft (0 : Fin 4)) := by
+  let p0 := shiftedCyclicChartEdgePath (0 : Fin 4)
+  let p1 := shiftedCyclicChartEdgePath (1 : Fin 4)
+  let p2 := shiftedCyclicChartEdgePath (2 : Fin 4)
+  let p3 := shiftedCyclicChartEdgePath (3 : Fin 4)
+  let h01 := shiftedCyclicChartRight_zero_eq_one_left
+  let h12 := shiftedCyclicChartRight_one_eq_two_left
+  let h23 := shiftedCyclicChartRight_two_eq_three_left
+  let h30 := shiftedCyclicChartRight_three_eq_zero_left
+  exact
+    (((p0.trans (p1.cast h01 rfl)).trans
+      (p2.cast h12 rfl)).trans
+      (p3.cast h23 rfl)).cast rfl h30.symm
+
+/-- The closed quotient chart path starts at the first finite left endpoint. -/
+theorem shiftedCyclicFourPath_source :
+    shiftedCyclicFourPath 0 = shiftedCyclicChartLeft (0 : Fin 4) :=
+  shiftedCyclicFourPath.source
+
+/-- The closed quotient chart path returns to the first finite left endpoint. -/
+theorem shiftedCyclicFourPath_target :
+    shiftedCyclicFourPath 1 = shiftedCyclicChartLeft (0 : Fin 4) :=
+  shiftedCyclicFourPath.target
+
+/--
+Evaluating a quotient edge path recovers the corresponding fixed-boundary
+finite level edge.
+
+This is the local comparison between quotient chart traversal and the
+semantic boundary observation.
+-/
+theorem shiftedSemanticCyclicChartEval_edgePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartEdgePath i t) =
+      shiftedSemanticFinLevelEdge hcore z i t := by
+  rw [shiftedCyclicChartEdgePath_apply, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk]
+  rfl
+
+/--
 The quotiented chart evaluation still lands on the original `q2` boundary.
 
 This small observation is useful downstream because consumers of the quotient
@@ -1885,9 +1966,15 @@ chart wrapper. The representative map, finite chart evaluation, and descended
 quotient evaluation are continuous. The codomain of the descended evaluation
 is already the fixed `q2` boundary.
 
-[TODO: semantic-cf2d/shifted-cyclic-path]
-Package path traversal on `ShiftedCyclicChart` only after continuous quotient
-evaluation is stable.
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path]
+The quotient chart edge path traverses one finite chart representative, and
+the first four quotient edge paths concatenate to a closed quotient path by
+using the quotient seam equalities. Evaluating one quotient edge recovers the
+corresponding fixed-`q2` finite level edge.
+
+[TODO: semantic-cf2d/shifted-cyclic-path-eval]
+Compare evaluation of the closed quotient path with the fixed-`q2` four-level
+path after path-trans cast normalization lemmas are available.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

@@ -216,8 +216,9 @@ aliases, left and right endpoint representatives, quotient seam equality, and
 endpoint evaluation theorems make the quotient readable without opening its
 representatives. Mathlib's quotient topology is now connected to this wrapper:
 the representative map, finite chart evaluation, and descended fixed-boundary
-quotient evaluation are continuous. A quotient path structure is deliberately
-left to a later layer.
+quotient evaluation are continuous. The quotient edge path and closed
+four-edge quotient path are packaged in the glued chart space, and evaluating
+one quotient edge recovers the corresponding fixed-`q2` finite level edge.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

@@ -500,6 +500,14 @@ shiftedSemanticCyclicChartEval_left
 shiftedSemanticCyclicChartEval_right
 shiftedSemanticCyclicChartEval_right_eq_succ_left
 continuous_shiftedSemanticCyclicChartEval
+shiftedCyclicChartEdgePath
+shiftedCyclicChartEdgePath_apply
+shiftedCyclicChartEdgePath_source
+shiftedCyclicChartEdgePath_target
+shiftedCyclicFourPath
+shiftedCyclicFourPath_source
+shiftedCyclicFourPath_target
+shiftedSemanticCyclicChartEval_edgePath
 shiftedSemanticCyclicChartEval_q2
 ```
 
@@ -642,7 +650,25 @@ Boundary evaluation:
 Lean now proves continuity of `shiftedCyclicChartMk`, continuity of finite
 chart evaluation before quotienting, and continuity of the descended
 fixed-`q2` boundary evaluation. This is still not a Euclidean angle parameter.
-No quotient traversal path is selected yet.
+The quotient traversal path layer is now also available. For each finite
+index, `shiftedCyclicChartEdgePath i` traverses the representative charts
+`(i, t)` inside the quotient. The four finite quotient edges concatenate,
+using only the quotient seam equalities, into the closed path
+`shiftedCyclicFourPath`.
+
+The local evaluation comparison is proved:
+
+```text
+shiftedSemanticCyclicChartEval hcore z
+  (shiftedCyclicChartEdgePath i t)
+=
+shiftedSemanticFinLevelEdge hcore z i t
+```
+
+The full comparison between evaluation of `shiftedCyclicFourPath` and the
+existing fixed-`q2` four-level path is intentionally left as a TODO because it
+requires path-trans cast normalization lemmas. This is still not a Euclidean
+angle parameter.
 
 Candidate theorem directions:
 
@@ -736,9 +762,14 @@ depend on that reading.
 37. Implemented: connect Mathlib's quotient topology to `ShiftedCyclicChart`.
 38. Implemented: prove representative-level chart evaluation continuity.
 39. Implemented: prove descended quotient evaluation continuity.
-40. Later: package shifted cyclic path traversal only after the continuous
-    quotient evaluation API is stable.
-41. Later: add a Euclidean bridge that reads `1/8` full-cycle
+40. Implemented: package one quotient chart edge path.
+41. Implemented: concatenate the first four quotient edge paths into a closed
+    quotient path.
+42. Implemented: prove the local edge evaluation comparison against the
+    fixed-`q2` finite level edge.
+43. Later: compare the evaluated closed quotient path with the existing
+    fixed-`q2` four-level path after path-trans cast normalization lemmas.
+44. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -815,14 +846,20 @@ Connect Mathlib's quotient topology on `Quot` to `ShiftedCyclicChart`. The
 representative map, finite chart evaluation before quotienting, and descended
 fixed-`q2` quotient evaluation are continuous. This is a quotient-topology
 statement only; it does not select a quotient path structure.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path]
+Package one quotient chart edge path, concatenate the first four quotient edge
+paths into a closed quotient path by quotient seam equalities, expose source
+and target aliases, and prove the local edge evaluation comparison with the
+fixed-`q2` finite level edge.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-cyclic-path]
-Package path traversal on `ShiftedCyclicChart` only after continuous quotient
-evaluation is stable.
+[TODO: semantic-cf2d/shifted-cyclic-path-eval]
+Compare evaluation of the closed quotient path with the fixed-`q2` four-level
+path after path-trans cast normalization lemmas are available.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended
