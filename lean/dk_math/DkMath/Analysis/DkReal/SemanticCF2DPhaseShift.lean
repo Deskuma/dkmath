@@ -1663,6 +1663,18 @@ theorem shiftedCyclicChartRight_three_eq_zero_left :
   simpa using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
 
 /--
+The representative map into the shifted cyclic chart quotient is continuous.
+
+This uses Mathlib's quotient topology on `Quot`: a subset of the quotient is
+open exactly when its preimage along the representative map is open.
+-/
+theorem continuous_shiftedCyclicChartMk :
+    Continuous shiftedCyclicChartMk := by
+  simpa [shiftedCyclicChartMk] using
+    (continuous_quot_mk :
+      Continuous (@Quot.mk ShiftedFiniteChart shiftedFiniteChartSetoid))
+
+/--
 Chart evaluation is compatible with the generated seam equivalence.
 
 The proof is pure relation induction: a generating seam is handled by
@@ -1686,6 +1698,38 @@ theorem shiftedSemanticFinChartEval_eq_of_chartRel
       exact ih.symm
   | trans _ _ _ _ _ ih₁ ih₂ =>
       exact ih₁.trans ih₂
+
+/--
+Finite chart evaluation is continuous on each fixed finite edge.
+
+The finite index is frozen here, so continuity is inherited from the indexed
+level edge after restricting the real parameter to `unitInterval`.
+-/
+theorem continuous_shiftedSemanticFinChartEval_of_fixed_index
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    Continuous (fun t : unitInterval =>
+      shiftedSemanticFinChartEval hcore z (i, t)) := by
+  simpa [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge]
+    using (continuous_shiftedSemanticIndexedLevelEdge hcore z i.val).comp
+      continuous_subtype_val
+
+/--
+Finite chart evaluation is continuous before quotienting.
+
+The chart domain is `Fin 4 × unitInterval`. Since `Fin 4` is discrete, it is
+enough to prove continuity on each fixed finite edge.
+-/
+theorem continuous_shiftedSemanticFinChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Continuous (fun p : ShiftedFiniteChart =>
+      shiftedSemanticFinChartEval hcore z p) := by
+  rw [continuous_prod_of_discrete_left]
+  intro i
+  exact continuous_shiftedSemanticFinChartEval_of_fixed_index hcore z i
 
 /--
 Evaluate a seam-quotiented shifted chart inside the fixed square-mass
@@ -1753,6 +1797,24 @@ theorem shiftedSemanticCyclicChartEval_right_eq_succ_left
   rw [shiftedCyclicChartRight_eq_succ_left]
 
 /--
+The descended shifted cyclic chart evaluation is continuous.
+
+The proof connects the representative-level continuity with Mathlib's
+quotient-lift continuity theorem. The codomain is already the fixed `q2`
+boundary, so no extra boundary predicate is needed.
+-/
+theorem continuous_shiftedSemanticCyclicChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Continuous (fun p : ShiftedCyclicChart =>
+      shiftedSemanticCyclicChartEval hcore z p) := by
+  simpa [shiftedSemanticCyclicChartEval] using
+    (continuous_shiftedSemanticFinChartEval hcore z).quotient_lift
+      (fun p q hrel =>
+        shiftedSemanticFinChartEval_eq_of_chartRel hcore z hrel)
+
+/--
 The quotiented chart evaluation still lands on the original `q2` boundary.
 
 This small observation is useful downstream because consumers of the quotient
@@ -1817,9 +1879,19 @@ Representative constructor aliases, left and right endpoint representatives,
 quotient seam equality, endpoint evaluation theorems, and quotient evaluation
 seam compatibility are also exposed.
 
-[TODO: semantic-cf2d/shifted-cyclic-topology]
-Add topology/path structure to `ShiftedCyclicChart` after the quotient
-representative and seam-equality API is stable.
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-topology]
+Mathlib's quotient topology on `Quot` is now connected to the shifted cyclic
+chart wrapper. The representative map, finite chart evaluation, and descended
+quotient evaluation are continuous. The codomain of the descended evaluation
+is already the fixed `q2` boundary.
+
+[TODO: semantic-cf2d/shifted-cyclic-path]
+Package path traversal on `ShiftedCyclicChart` only after continuous quotient
+evaluation is stable.
+
+[TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
+Develop any additional quotient-space structure only after the descended
+continuous evaluation API has downstream consumers.
 -/
 
 /-!

@@ -490,12 +490,16 @@ shiftedCyclicChartRight_zero_eq_one_left
 shiftedCyclicChartRight_one_eq_two_left
 shiftedCyclicChartRight_two_eq_three_left
 shiftedCyclicChartRight_three_eq_zero_left
+continuous_shiftedCyclicChartMk
 shiftedSemanticFinChartEval_eq_of_chartRel
+continuous_shiftedSemanticFinChartEval_of_fixed_index
+continuous_shiftedSemanticFinChartEval
 shiftedSemanticCyclicChartEval
 shiftedSemanticCyclicChartEval_mk
 shiftedSemanticCyclicChartEval_left
 shiftedSemanticCyclicChartEval_right
 shiftedSemanticCyclicChartEval_right_eq_succ_left
+continuous_shiftedSemanticCyclicChartEval
 shiftedSemanticCyclicChartEval_q2
 ```
 
@@ -621,6 +625,25 @@ and also exposes the four concrete seam aliases `0 -> 1`, `1 -> 2`,
 computes back to the finite left and right level endpoints, and quotient
 evaluation is seam-compatible by rewriting through the quotient equality.
 
+The first topological quotient layer is also implemented.
+
+```text
+Algebraic quotient:
+  identifies seam endpoints as equal chart points.
+
+Topological quotient:
+  additionally gives the glued chart space the quotient topology.
+
+Boundary evaluation:
+  is continuous after representative-level evaluation and the quotient-lift
+  theorem are connected.
+```
+
+Lean now proves continuity of `shiftedCyclicChartMk`, continuity of finite
+chart evaluation before quotienting, and continuity of the descended
+fixed-`q2` boundary evaluation. This is still not a Euclidean angle parameter.
+No quotient traversal path is selected yet.
+
 Candidate theorem directions:
 
 ```text
@@ -710,8 +733,12 @@ depend on that reading.
 35. Implemented: prove quotient seam equality and four finite seam aliases.
 36. Implemented: expose quotient evaluation at endpoint representatives and
     quotient evaluation seam compatibility.
-37. Later: add topology/path structure to the shifted cyclic chart quotient.
-38. Later: add a Euclidean bridge that reads `1/8` full-cycle
+37. Implemented: connect Mathlib's quotient topology to `ShiftedCyclicChart`.
+38. Implemented: prove representative-level chart evaluation continuity.
+39. Implemented: prove descended quotient evaluation continuity.
+40. Later: package shifted cyclic path traversal only after the continuous
+    quotient evaluation API is stable.
+41. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -782,14 +809,24 @@ representatives and the descended `q2` observation are also exposed.
 Representative constructor aliases, endpoint representatives, quotient seam
 equality, concrete seam aliases, endpoint evaluation theorems, and quotient
 evaluation seam compatibility are also exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-topology]
+Connect Mathlib's quotient topology on `Quot` to `ShiftedCyclicChart`. The
+representative map, finite chart evaluation before quotienting, and descended
+fixed-`q2` quotient evaluation are continuous. This is a quotient-topology
+statement only; it does not select a quotient path structure.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-cyclic-topology]
-Add topology/path structure to `ShiftedCyclicChart` after the quotient
-representative and seam-equality API is stable.
+[TODO: semantic-cf2d/shifted-cyclic-path]
+Package path traversal on `ShiftedCyclicChart` only after continuous quotient
+evaluation is stable.
+
+[TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
+Develop any additional quotient-space structure only after the descended
+continuous evaluation API has downstream consumers.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path

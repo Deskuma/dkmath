@@ -214,7 +214,9 @@ the same fixed boundary, closes the finite seam relation under
 descends chart evaluation to that quotient. Representative constructor
 aliases, left and right endpoint representatives, quotient seam equality, and
 endpoint evaluation theorems make the quotient readable without opening its
-representatives. Topology and path structure on the quotient are deliberately
+representatives. Mathlib's quotient topology is now connected to this wrapper:
+the representative map, finite chart evaluation, and descended fixed-boundary
+quotient evaluation are continuous. A quotient path structure is deliberately
 left to a later layer.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
