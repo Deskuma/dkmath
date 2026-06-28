@@ -1,7 +1,5 @@
 # Codex instructions
 
-## Codex 指示書
-
 Target:
 DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
 
