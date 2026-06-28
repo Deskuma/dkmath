@@ -508,11 +508,15 @@ shiftedCyclicFourPath
 shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
+shiftedPath_cast_apply
+shiftedSemanticCyclicChartEval_edgePath_zero
 shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
 shiftedSemanticObservedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_left_zero
 shiftedSemanticObservedCyclicFourPath_q2
+shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
 shiftedSemanticCyclicChartEval_q2
 ```
 
@@ -682,6 +686,28 @@ first-left-endpoint evaluation, and boundary-observation aliases are exposed.
 Thus the quotient traversal is already connected to a fixed-boundary
 observation path, even before comparing the whole concatenated path with the
 existing finite four-level path.
+
+The first comparison layer is now also formalized. The observed quotient path
+and the existing finite four-level path are proved to agree at their source
+and target values:
+
+```text
+shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+```
+
+A small pointwise `Path.cast` helper records that endpoint-type casts do not
+change path values, and the edge-zero wrapper specializes the local quotient
+edge evaluation theorem to the first finite edge:
+
+```text
+shiftedPath_cast_apply
+shiftedSemanticCyclicChartEval_edgePath_zero
+```
+
+These facts keep the comparison pre-geometric. They prepare the full
+`Path.trans` normalization step without asserting any circle, angle, arc, or
+Euclidean one-eighth reading.
 
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
 existing fixed-`q2` four-level path is intentionally left as a TODO because it

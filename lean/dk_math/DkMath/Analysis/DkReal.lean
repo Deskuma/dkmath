@@ -221,7 +221,10 @@ four-edge quotient path are packaged in the glued chart space, and evaluating
 one quotient edge recovers the corresponding fixed-`q2` finite level edge.
 Observing the closed quotient path through the descended evaluation now gives
 a closed fixed-boundary path with source, target, endpoint, and `q2`
-observation aliases.
+observation aliases. The observed quotient path and the existing finite
+four-level path now have explicit source and target comparison theorems,
+together with a pointwise `Path.cast` helper and an edge-zero evaluation
+wrapper for the later full path comparison.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
