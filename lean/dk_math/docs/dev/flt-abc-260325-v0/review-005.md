@@ -12,13 +12,13 @@ $$
 今回の差分で特に効いているのは、この 2 本じゃな。
 
 $$
-x = p * (t * s) ;\Longrightarrow; x = t * (p * s)
+x = p * (t * s) \;\Longrightarrow\; x = t * (p * s)
 $$
 
 と
 
 $$
-t \perp y,\ (p*s)\perp y ;\Longrightarrow; t*(p*s)\perp y
+t \perp y,\ (p*s)\perp y \;\Longrightarrow\; t*(p*s)\perp y
 $$
 
 これで `x` を「ただの 1 個の数」ではなく、**線形因子の積** として見られるようになった。

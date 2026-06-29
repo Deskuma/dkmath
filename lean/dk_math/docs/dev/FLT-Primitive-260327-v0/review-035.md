@@ -32,7 +32,7 @@ $$
 $$
 \text{split theorem 全体} =
 \text{ordinary/reference}
-;\cup;
+\;\cup\;
 \text{exceptional/datum}
 $$
 
@@ -43,7 +43,7 @@ $$
 前回の時点で、datum concrete target の canonical skeleton として
 
 $$
-\texttt{exceptional_boundary_datum_concrete_of_split}
+\texttt{exceptional\_boundary\_datum\_concrete\_of\_split}
 $$
 
 が置かれており、そこでは `hSplit` を仮定として受けておった。
@@ -217,7 +217,7 @@ exceptional datum theorem だけに集中すれば、下流は自動的に流れ
 
 $$
 \text{Wieferich + } d \mid x
-;\Rightarrow;
+\;\Rightarrow\;
 \text{right boundary core に primitive/prime existence}
 $$
 

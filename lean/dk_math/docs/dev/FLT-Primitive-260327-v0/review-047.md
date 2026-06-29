@@ -90,10 +90,7 @@ $$
 で、
 
 $$
-\texttt{cyclotomicPrimeCore}\ d\ 1\ (u-1)
-=========================================
-
-\sum_{k \in \mathrm{range}(d)} (u-1)^k u^{,d-1-k}
+\texttt{cyclotomicPrimeCore}\ d\ 1\ (u-1) = \sum_{k \in \mathrm{range}(d)} (u-1)^k u^{,d-1-k}
 $$
 
 を示した。

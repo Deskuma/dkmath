@@ -143,7 +143,7 @@ $$
 つまり、History に書かれておる
 
 $$
-\texttt{castHom}(\delta)=0 ;\Longleftrightarrow; q \mid \texttt{ZMod.val}(\delta)
+\texttt{castHom}(\delta)=0 \;\Longleftrightarrow\; q \mid \texttt{ZMod.val}(\delta)
 $$
 
 の方向じゃ。

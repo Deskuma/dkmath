@@ -40,4 +40,4 @@ echo '````' >> __git.diff
 echo '`````' >> __git.diff
 echo '' >> __git.diff
 
-code __git.diff
+# code __git.diff

@@ -69,7 +69,7 @@ $$
 なぜなら、これで問いがほぼ
 
 $$
-\text{pack} + \text{strong witness} ;\Rightarrow; \exists g' \in \mathbb{N},\ g' \cdot GN(p,g',y) = (x/q)^p
+\text{pack} + \text{strong witness} \;\Rightarrow\; \exists g' \in \mathbb{N},\ g' \cdot GN(p,g',y) = (x/q)^p
 $$
 
 という、**純粋な q-adic gap-reduction 問題** へ見えるようになったからじゃ。

@@ -849,7 +849,7 @@ PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget
 
 * weak core が返していた
   $$
-  \exists x' y' z',;
+  \exists x' y' z',\;
   \text{Pack'} \wedge p \mid (z'-y') \wedge z' < z
   $$
 * に

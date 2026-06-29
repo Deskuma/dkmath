@@ -21,7 +21,7 @@ $$
 前者は、exceptional 側で truly new な差分入力を
 
 $$
-d \mid x ;\land; u^{d-1}\equiv 1 \pmod{d^2}
+d \mid x \;\land\; u^{d-1}\equiv 1 \pmod{d^2}
 $$
 
 という **ひとつの datum** として明示化したもの。

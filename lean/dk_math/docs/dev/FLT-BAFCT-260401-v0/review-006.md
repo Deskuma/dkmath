@@ -25,7 +25,7 @@ $$
 理由は単純で、`PrimeGe5BranchAPrimitiveWieferichPacketTarget` は
 
 $$
-\exists pkt',; pkt'.z < z
+\exists pkt',\; pkt'.z < z
 $$
 
 しか返さぬ。
@@ -135,7 +135,7 @@ theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_*
 ここで strong target は
 
 $$
-\exists pkt',; pkt'.z < z \land \neg p \mid pkt'.t
+\exists pkt',\; pkt'.z < z \land \neg p \mid pkt'.t
 $$
 
 を返すようにする。

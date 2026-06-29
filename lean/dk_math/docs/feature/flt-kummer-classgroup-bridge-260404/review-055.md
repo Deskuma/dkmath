@@ -171,7 +171,7 @@ theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge
 あとは
 
 $$
-\neg q^2 \mid N,; N \neq 0 \Rightarrow v_q(N)\le 1
+\neg q^2 \mid N,\; N \neq 0 \Rightarrow v_q(N)\le 1
 $$
 
 をその場で 7 行ほど書けばよい。`FLT.Basic` には private 版 `padicValNat_le_one_of_noLift` も既にあるので、内容は既知じゃ。

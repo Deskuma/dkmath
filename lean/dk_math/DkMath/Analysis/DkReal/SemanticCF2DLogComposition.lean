@@ -1,0 +1,973 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.Analysis.DkReal.SemanticCF2DComposition
+
+#print "file: DkMath.Analysis.DkReal.SemanticCF2DLogComposition"
+
+/-!
+# Finite logarithmic form of dyadic boundary cancellation
+
+All sampled depths and normalizations are strictly positive. Their finite
+products may therefore be transferred to additive logarithmic sums.
+
+The resulting identity
+
+`2 * logNormalizationSum + logDepthSum = 0`
+
+is exactly equivalent to the previously proved finite product cancellation.
+This module still does not select a logarithmic sum as the canonical
+refinement-limit observable. The average and mesh-weighted variants below are
+therefore recorded only as finite candidate observables: the same cancellation
+law survives scalar reweighting, but no limiting interpretation is chosen here.
+The trapezoidal candidate records the standard closed-interval endpoint
+half-weight pattern as another finite observable, again without selecting a
+limit.
+-/
+
+namespace DkMath.Analysis.DkNNRealQ
+
+noncomputable section
+
+/-- Pointwise positivity of the dyadic phase-depth observation. -/
+theorem dyadicPhaseDepth_pos (n k : ℕ) :
+    0 < dyadicPhaseDepth n k :=
+  phaseDepth_pos (dyadicPhaseNode n k)
+
+/-- Pointwise positivity of the dyadic normalization observation. -/
+theorem dyadicPhaseNormalization_pos (n k : ℕ) :
+    0 < dyadicPhaseNormalization n k :=
+  phaseNormalization_pos (dyadicPhaseNode n k)
+
+/-- Finite sum of logarithmic depth observations over the complete mesh. -/
+def dyadicPhaseLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n, Real.log (dyadicPhaseDepth n k)
+
+/-- Finite sum of logarithmic normalization observations over the complete mesh. -/
+def dyadicPhaseLogNormalizationSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n, Real.log (dyadicPhaseNormalization n k)
+
+/-- Pointwise boundary cancellation in additive logarithmic form. -/
+theorem two_mul_log_dyadicPhaseNormalization_add_log_depth
+    (n k : ℕ) :
+    2 * Real.log (dyadicPhaseNormalization n k) +
+        Real.log (dyadicPhaseDepth n k) = 0 := by
+  have h := congrArg Real.log
+    (dyadicPhaseNormalization_sq_mul_depth n k)
+  rw [Real.log_mul
+      (pow_ne_zero 2 (dyadicPhaseNormalization_pos n k).ne')
+      (dyadicPhaseDepth_pos n k).ne',
+    Real.log_pow, Real.log_one] at h
+  norm_num at h ⊢
+  linarith
+
+/-- The finite log-depth sum is the logarithm of the finite depth product. -/
+theorem log_dyadicPhaseDepthProduct (n : ℕ) :
+    Real.log (dyadicPhaseDepthProduct n) =
+      dyadicPhaseLogDepthSum n := by
+  rw [dyadicPhaseDepthProduct, dyadicPhaseLogDepthSum]
+  exact Real.log_prod fun k _ => (dyadicPhaseDepth_pos n k).ne'
+
+/--
+The finite log-normalization sum is the logarithm of the finite
+normalization product.
+-/
+theorem log_dyadicPhaseNormalizationProduct (n : ℕ) :
+    Real.log (dyadicPhaseNormalizationProduct n) =
+      dyadicPhaseLogNormalizationSum n := by
+  rw [dyadicPhaseNormalizationProduct, dyadicPhaseLogNormalizationSum]
+  exact Real.log_prod fun k _ => (dyadicPhaseNormalization_pos n k).ne'
+
+/-- The logarithmic depth observation vanishes at the left endpoint. -/
+@[simp]
+theorem log_dyadicPhaseDepth_left_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseDepth n 0) = 0 := by
+  simp [dyadicPhaseDepth]
+
+/-- The logarithmic depth observation vanishes at the right endpoint. -/
+@[simp]
+theorem log_dyadicPhaseDepth_right_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseDepth n (dyadicPhaseDenom n)) = 0 := by
+  simp [dyadicPhaseDepth]
+
+/-- The logarithmic normalization observation vanishes at the left endpoint. -/
+@[simp]
+theorem log_dyadicPhaseNormalization_left_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseNormalization n 0) = 0 := by
+  simp [dyadicPhaseNormalization]
+
+/-- The logarithmic normalization observation vanishes at the right endpoint. -/
+@[simp]
+theorem log_dyadicPhaseNormalization_right_endpoint (n : ℕ) :
+    Real.log (dyadicPhaseNormalization n (dyadicPhaseDenom n)) = 0 := by
+  simp [dyadicPhaseNormalization]
+
+/--
+Centered logarithmic phase-depth increment.
+
+The baseline is the midpoint depth `1 / 2`. This is the first finite
+observable whose endpoint values no longer vanish, so endpoint corrections
+become visible again.
+-/
+def centeredLogPhaseDepth (t : ℝ) : ℝ :=
+  Real.log (phaseDepth t) - Real.log (1 / 2 : ℝ)
+
+/-- Dyadic samples of the centered logarithmic phase-depth increment. -/
+def dyadicPhaseCenteredLogDepth (n k : ℕ) : ℝ :=
+  centeredLogPhaseDepth (dyadicPhaseNode n k)
+
+/-- Dyadic samples of the centered quadratic upper-bound profile. -/
+def dyadicPhaseCenteredQuadratic (n k : ℕ) : ℝ :=
+  4 * (dyadicPhaseNode n k - (1 / 2 : ℝ)) ^ 2
+
+/-- The midpoint baseline makes the centered log-depth increment vanish. -/
+@[simp]
+theorem centeredLogPhaseDepth_half :
+    centeredLogPhaseDepth (1 / 2 : ℝ) = 0 := by
+  rw [centeredLogPhaseDepth, phaseDepth_half]
+  ring
+
+/-- The left endpoint centered log-depth increment is `log 2`. -/
+@[simp]
+theorem centeredLogPhaseDepth_zero :
+    centeredLogPhaseDepth 0 = Real.log (2 : ℝ) := by
+  have hhalf : Real.log (1 / 2 : ℝ) = -Real.log (2 : ℝ) := by
+    rw [show (1 / 2 : ℝ) = (2 : ℝ)⁻¹ by norm_num, Real.log_inv]
+  rw [centeredLogPhaseDepth, phaseDepth_zero, hhalf, Real.log_one]
+  ring
+
+/-- The right endpoint centered log-depth increment is `log 2`. -/
+@[simp]
+theorem centeredLogPhaseDepth_one :
+    centeredLogPhaseDepth 1 = Real.log (2 : ℝ) := by
+  have hhalf : Real.log (1 / 2 : ℝ) = -Real.log (2 : ℝ) := by
+    rw [show (1 / 2 : ℝ) = (2 : ℝ)⁻¹ by norm_num, Real.log_inv]
+  rw [centeredLogPhaseDepth, phaseDepth_one, hhalf, Real.log_one]
+  ring
+
+/--
+The centered log-depth increment is the logarithm of an explicit centered
+quadratic profile.
+
+This is still a finite algebraic observation. It identifies the quadratic
+shape that will later be compared with Gaussian-type kernels, without
+asserting a Gaussian limit.
+-/
+theorem centeredLogPhaseDepth_eq_log_one_add_four_sq (t : ℝ) :
+    centeredLogPhaseDepth t =
+      Real.log (1 + 4 * (t - (1 / 2 : ℝ)) ^ 2) := by
+  unfold centeredLogPhaseDepth
+  rw [← Real.log_div (phaseDepth_pos t).ne' (by norm_num : (1 / 2 : ℝ) ≠ 0)]
+  congr
+  rw [phaseDepth_eq_two_sq_add_half]
+  ring
+
+/-- The centered quadratic logarithm profile is strictly positive inside `log`. -/
+theorem centeredQuadraticProfile_pos (t : ℝ) :
+    0 < 1 + 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ))]
+
+/-- The centered quadratic logarithm profile is at least one. -/
+theorem one_le_centeredQuadraticProfile (t : ℝ) :
+    1 ≤ 1 + 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ))]
+
+/--
+Centered log-depth is nonnegative.
+
+The centered profile is `log (1 + 4s^2)`, and the argument is at least one.
+-/
+theorem centeredLogPhaseDepth_nonneg (t : ℝ) :
+    0 ≤ centeredLogPhaseDepth t := by
+  rw [centeredLogPhaseDepth_eq_log_one_add_four_sq]
+  rw [← Real.log_one]
+  exact Real.log_le_log (by norm_num : (0 : ℝ) < 1)
+    (one_le_centeredQuadraticProfile t)
+
+/--
+Centered log-depth is bounded above by its quadratic argument.
+
+This is the finite pointwise comparison `log (1 + x) ≤ x` at
+`x = 4 * (t - 1/2)^2`. It is the first quadratic upper bound for the later
+Gaussian bridge, without asserting any limit.
+-/
+theorem centeredLogPhaseDepth_le_four_sq (t : ℝ) :
+    centeredLogPhaseDepth t ≤ 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
+  rw [centeredLogPhaseDepth_eq_log_one_add_four_sq]
+  have hpos := centeredQuadraticProfile_pos t
+  have hlog := Real.log_le_sub_one_of_pos hpos
+  nlinarith
+
+/-- Dyadic centered log-depth samples are nonnegative. -/
+theorem dyadicPhaseCenteredLogDepth_nonneg (n k : ℕ) :
+    0 ≤ dyadicPhaseCenteredLogDepth n k :=
+  centeredLogPhaseDepth_nonneg (dyadicPhaseNode n k)
+
+/-- Dyadic centered log-depth samples are bounded by the centered quadratic profile. -/
+theorem dyadicPhaseCenteredLogDepth_le_centeredQuadratic (n k : ℕ) :
+    dyadicPhaseCenteredLogDepth n k ≤
+      dyadicPhaseCenteredQuadratic n k :=
+  centeredLogPhaseDepth_le_four_sq (dyadicPhaseNode n k)
+
+/--
+The centered quadratic profile is at most one on the unit interval.
+
+This is the finite real-line bound behind the first crude moment estimate.
+The sharper trapezoidal closed form is left for the next finite-sum layer.
+-/
+theorem centeredQuadratic_le_one_of_mem_unit
+    {t : ℝ} (h0 : 0 ≤ t) (h1 : t ≤ 1) :
+    4 * (t - (1 / 2 : ℝ)) ^ 2 ≤ 1 := by
+  nlinarith [sq_nonneg (t - (1 / 2 : ℝ)),
+    sq_nonneg (t - 1), sq_nonneg t]
+
+/-- Dyadic centered quadratic samples are at most one on the complete mesh. -/
+theorem dyadicPhaseCenteredQuadratic_le_one
+    {n k : ℕ} (hk : k ∈ dyadicPhaseNodeIndices n) :
+    dyadicPhaseCenteredQuadratic n k ≤ 1 := by
+  have hk_le : k ≤ dyadicPhaseDenom n := by
+    simpa [dyadicPhaseNodeIndices, Nat.lt_succ_iff] using hk
+  have hunit := dyadicPhaseNode_mem_unitInterval (n := n) (k := k) hk_le
+  exact centeredQuadratic_le_one_of_mem_unit hunit.1 hunit.2
+
+/--
+Nonnegative finite weights preserve nonnegativity of centered log-depth.
+
+This is the finite weighted-sum lift of the pointwise lower bound.
+-/
+theorem weighted_centeredLogDepth_nonneg
+    (n : ℕ) (w : ℕ → ℝ)
+    (hw : ∀ k ∈ dyadicPhaseNodeIndices n, (0 : ℝ) ≤ w k) :
+    0 ≤
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredLogDepth n k := by
+  exact Finset.sum_nonneg fun k hk =>
+    mul_nonneg (hw k hk) (dyadicPhaseCenteredLogDepth_nonneg n k)
+
+/--
+Nonnegative finite weights transport the centered log-depth quadratic upper
+bound to finite sums.
+
+This is the first general bridge from centered logarithmic correction to a
+weighted finite quadratic moment.
+-/
+theorem weighted_centeredLogDepth_le_weighted_centeredQuadratic
+    (n : ℕ) (w : ℕ → ℝ)
+    (hw : ∀ k ∈ dyadicPhaseNodeIndices n, (0 : ℝ) ≤ w k) :
+    (∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredLogDepth n k)
+      ≤
+    ∑ k ∈ dyadicPhaseNodeIndices n,
+        w k * dyadicPhaseCenteredQuadratic n k := by
+  exact Finset.sum_le_sum fun k hk =>
+    by
+      have hle := dyadicPhaseCenteredLogDepth_le_centeredQuadratic n k
+      have hdiff :
+          0 ≤ w k *
+            (dyadicPhaseCenteredQuadratic n k -
+              dyadicPhaseCenteredLogDepth n k) :=
+        mul_nonneg (hw k hk) (sub_nonneg.mpr hle)
+      nlinarith
+
+/-- Finite boundary cancellation in additive logarithmic form. -/
+theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
+  (n : ℕ) :
+    2 * dyadicPhaseLogNormalizationSum n +
+        dyadicPhaseLogDepthSum n = 0 := by
+  rw [dyadicPhaseLogNormalizationSum, dyadicPhaseLogDepthSum,
+    Finset.mul_sum, ← Finset.sum_add_distrib]
+  exact Finset.sum_eq_zero fun k hk =>
+    two_mul_log_dyadicPhaseNormalization_add_log_depth n k
+
+/--
+Pointwise weighted finite logarithmic cancellation.
+
+Every weight function on the complete finite mesh preserves the cancellation
+law because the cancellation already holds at each sampled node. This is the
+finite algebraic form needed before choosing any particular observable such as
+an average, a mesh-width sum, or a trapezoidal sum.
+-/
+theorem two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
+    (n : ℕ) (w : ℕ → ℝ) :
+    2 * (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseNormalization n k)) +
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseDepth n k)) = 0 := by
+  rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+  exact Finset.sum_eq_zero fun k hk => by
+    calc
+      2 * (w k * Real.log (dyadicPhaseNormalization n k)) +
+          w k * Real.log (dyadicPhaseDepth n k)
+          = w k *
+              (2 * Real.log (dyadicPhaseNormalization n k) +
+                Real.log (dyadicPhaseDepth n k)) := by
+            ring
+      _ = 0 := by
+        rw [two_mul_log_dyadicPhaseNormalization_add_log_depth n k]
+        simp
+
+/--
+Short API name for pointwise weighted logarithmic boundary cancellation.
+
+This alias is intended for downstream candidate observables where the weight
+choice is the main object of study.
+-/
+theorem dyadicPhaseWeightedLogCancellation
+    (n : ℕ) (w : ℕ → ℝ) :
+    2 * (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseNormalization n k)) +
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          w k * Real.log (dyadicPhaseDepth n k)) = 0 :=
+  two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum n w
+
+/--
+The complete dyadic mesh has one more node than its dyadic denominator.
+
+This is the finite bookkeeping distinction between complete node meshes and
+midpoint or odd-child meshes.
+-/
+theorem dyadicPhaseNodeIndices_card (n : ℕ) :
+    (dyadicPhaseNodeIndices n).card = dyadicPhaseDenom n + 1 := by
+  simp [dyadicPhaseNodeIndices]
+
+/--
+Uniform average weight on the complete finite dyadic node mesh.
+
+This is a finite candidate observable. It does not assert that the uniform
+average is the canonical refinement-limit quantity.
+-/
+def dyadicPhaseAverageWeight (n : ℕ) : ℝ :=
+  1 / ((dyadicPhaseNodeIndices n).card : ℝ)
+
+/-- The complete finite dyadic mesh has a positive averaging weight. -/
+theorem dyadicPhaseAverageWeight_pos (n : ℕ) :
+    0 < dyadicPhaseAverageWeight n := by
+  have hcard : 0 < (dyadicPhaseNodeIndices n).card := by
+    rw [dyadicPhaseNodeIndices_card]
+    exact Nat.succ_pos _
+  exact one_div_pos.2 (by exact_mod_cast hcard)
+
+/-- The uniform average weights on the complete dyadic mesh have total mass one. -/
+theorem sum_dyadicPhaseAverageWeight_eq_one (n : ℕ) :
+    ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseAverageWeight n = 1 := by
+  have hcard_nat : 0 < (dyadicPhaseNodeIndices n).card := by
+    rw [dyadicPhaseNodeIndices_card]
+    exact Nat.succ_pos _
+  have hcard_pos : (0 : ℝ) < (dyadicPhaseNodeIndices n).card := by
+    exact_mod_cast hcard_nat
+  simp [dyadicPhaseAverageWeight]
+  field_simp [(ne_of_gt hcard_pos)]
+
+/-- Uniform average of logarithmic depth observations on the complete mesh. -/
+def dyadicPhaseAverageLogDepth (n : ℕ) : ℝ :=
+  dyadicPhaseAverageWeight n * dyadicPhaseLogDepthSum n
+
+/--
+Uniform average of logarithmic normalization observations on the complete
+mesh.
+-/
+def dyadicPhaseAverageLogNormalization (n : ℕ) : ℝ :=
+  dyadicPhaseAverageWeight n * dyadicPhaseLogNormalizationSum n
+
+/-- Finite logarithmic cancellation survives uniform averaging. -/
+theorem two_mul_dyadicPhaseAverageLogNormalization_add_averageLogDepth
+    (n : ℕ) :
+    2 * dyadicPhaseAverageLogNormalization n +
+        dyadicPhaseAverageLogDepth n = 0 := by
+  calc
+    2 * dyadicPhaseAverageLogNormalization n +
+        dyadicPhaseAverageLogDepth n
+        = dyadicPhaseAverageWeight n *
+            (2 * dyadicPhaseLogNormalizationSum n +
+              dyadicPhaseLogDepthSum n) := by
+          rw [dyadicPhaseAverageLogNormalization,
+            dyadicPhaseAverageLogDepth]
+          ring
+    _ = 0 := by
+      rw [two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum]
+      simp
+
+/--
+Mesh width of the dyadic subdivision.
+
+This is the natural scalar for finite Riemann-style candidates on the complete
+node mesh. Endpoint weights are deliberately not chosen here.
+-/
+def dyadicPhaseMeshWeight (n : ℕ) : ℝ :=
+  1 / (dyadicPhaseDenom n : ℝ)
+
+/-- The dyadic mesh width is positive. -/
+theorem dyadicPhaseMeshWeight_pos (n : ℕ) :
+    0 < dyadicPhaseMeshWeight n := by
+  exact one_div_pos.2 (by exact_mod_cast dyadicPhaseDenom_pos n)
+
+/--
+The complete-node mesh-width weights have total mass `1 + h_n`.
+
+This records the endpoint overcount of the plain complete-node mesh-width
+candidate relative to a closed-interval integration rule.
+-/
+theorem sum_dyadicPhaseMeshWeight_eq_one_add (n : ℕ) :
+    ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n =
+      1 + dyadicPhaseMeshWeight n := by
+  have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
+    exact_mod_cast (dyadicPhaseDenom_pos n).ne'
+  simp [dyadicPhaseNodeIndices, dyadicPhaseMeshWeight]
+  field_simp [hdenom]
+
+/-- Mesh-weighted finite log-depth sum. -/
+def dyadicPhaseWeightedLogDepthSum (n : ℕ) : ℝ :=
+  dyadicPhaseMeshWeight n * dyadicPhaseLogDepthSum n
+
+/-- Mesh-weighted finite log-normalization sum. -/
+def dyadicPhaseWeightedLogNormalizationSum (n : ℕ) : ℝ :=
+  dyadicPhaseMeshWeight n * dyadicPhaseLogNormalizationSum n
+
+/--
+Finite logarithmic cancellation survives mesh-width weighting.
+
+This is only a finite scalar transport of the log-sum identity; it does not
+assert that the mesh-weighted quantity is the canonical limit observable.
+-/
+theorem two_mul_dyadicPhaseWeightedLogNormalizationSum_add_weightedLogDepthSum
+    (n : ℕ) :
+    2 * dyadicPhaseWeightedLogNormalizationSum n +
+        dyadicPhaseWeightedLogDepthSum n = 0 := by
+  calc
+    2 * dyadicPhaseWeightedLogNormalizationSum n +
+        dyadicPhaseWeightedLogDepthSum n
+        = dyadicPhaseMeshWeight n *
+            (2 * dyadicPhaseLogNormalizationSum n +
+              dyadicPhaseLogDepthSum n) := by
+          rw [dyadicPhaseWeightedLogNormalizationSum,
+            dyadicPhaseWeightedLogDepthSum]
+          ring
+    _ = 0 := by
+      rw [two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum]
+      simp
+
+/--
+Trapezoidal weight on the complete finite dyadic node mesh.
+
+The endpoints receive half a mesh width and every interior node receives one
+mesh width. This is a finite closed-interval integration candidate only; no
+convergence or canonical-observable statement is made here.
+-/
+def dyadicPhaseTrapezoidWeight (n k : ℕ) : ℝ :=
+  if k = 0 ∨ k = dyadicPhaseDenom n then
+    dyadicPhaseMeshWeight n / 2
+  else
+    dyadicPhaseMeshWeight n
+
+/-- Every trapezoidal mesh weight is positive. -/
+theorem dyadicPhaseTrapezoidWeight_pos (n k : ℕ) :
+    0 < dyadicPhaseTrapezoidWeight n k := by
+  unfold dyadicPhaseTrapezoidWeight
+  split_ifs
+  · exact div_pos (dyadicPhaseMeshWeight_pos n) (by norm_num)
+  · exact dyadicPhaseMeshWeight_pos n
+
+/--
+The endpoint set of the complete dyadic mesh consists of the two boundary
+indices `0` and `2^n`.
+-/
+theorem dyadicPhaseEndpointFilter_eq (n : ℕ) :
+    (dyadicPhaseNodeIndices n).filter
+        (fun k => k = 0 ∨ k = dyadicPhaseDenom n) =
+      {0, dyadicPhaseDenom n} := by
+  ext k
+  constructor
+  · intro hk
+    exact by
+      simp only [Finset.mem_filter] at hk
+      simpa using hk.2
+  · intro hk
+    have hdenom_pos := dyadicPhaseDenom_pos n
+    have hk' : k = 0 ∨ k = dyadicPhaseDenom n := by
+      simpa using hk
+    simp only [Finset.mem_filter]
+    constructor
+    · simp only [dyadicPhaseNodeIndices, Finset.mem_range,
+        Nat.lt_succ_iff]
+      rcases hk' with rfl | rfl
+      · exact Nat.zero_le _
+      · exact le_rfl
+    · exact hk'
+
+/--
+The trapezoidal weights on the complete dyadic node mesh have total mass one.
+
+This is the finite closed-interval bookkeeping property: two endpoints have
+half mesh width and all interior nodes have full mesh width.
+-/
+theorem sum_dyadicPhaseTrapezoidWeight_eq_one (n : ℕ) :
+    ∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseTrapezoidWeight n k = 1 := by
+  have hmesh :
+      ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n =
+        1 + dyadicPhaseMeshWeight n :=
+    sum_dyadicPhaseMeshWeight_eq_one_add n
+  have hend :
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+          (if k = 0 ∨ k = dyadicPhaseDenom n then
+            dyadicPhaseMeshWeight n / 2
+          else
+            0) =
+        dyadicPhaseMeshWeight n := by
+    rw [← Finset.sum_filter]
+    rw [dyadicPhaseEndpointFilter_eq]
+    have hdistinct : (0 : ℕ) ≠ dyadicPhaseDenom n :=
+      (dyadicPhaseDenom_pos n).ne
+    simp [hdistinct]
+    ring
+  calc
+    ∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseTrapezoidWeight n k
+        = (∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n) -
+            ∑ k ∈ dyadicPhaseNodeIndices n,
+              (if k = 0 ∨ k = dyadicPhaseDenom n then
+                dyadicPhaseMeshWeight n / 2
+              else
+                0) := by
+          rw [← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro k hk
+          unfold dyadicPhaseTrapezoidWeight
+          by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+          · rw [if_pos hendpoint]
+            simp [hendpoint]
+            ring_nf
+          · rw [if_neg hendpoint]
+            simp [hendpoint]
+    _ = 1 := by
+      rw [hmesh, hend]
+      ring
+
+/--
+Plain mesh-width and trapezoidal finite sums differ only by the half-width
+endpoint correction.
+
+This theorem separates the choice of finite weights from the sampled
+observable `f`. It is the general bookkeeping identity behind the later
+special cases where endpoint logarithms vanish.
+-/
+theorem dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+    (n : ℕ) (f : ℕ → ℝ) :
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k * f k) =
+      dyadicPhaseMeshWeight n / 2 *
+        (f 0 + f (dyadicPhaseDenom n)) := by
+  calc
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k * f k)
+        = ∑ k ∈ dyadicPhaseNodeIndices n,
+            (dyadicPhaseMeshWeight n * f k -
+              dyadicPhaseTrapezoidWeight n k * f k) := by
+          rw [Finset.sum_sub_distrib]
+    _ = ∑ k ∈ dyadicPhaseNodeIndices n,
+          (if k = 0 ∨ k = dyadicPhaseDenom n then
+            dyadicPhaseMeshWeight n / 2 * f k
+          else
+            0) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        unfold dyadicPhaseTrapezoidWeight
+        by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
+        · rw [if_pos hendpoint]
+          simp [hendpoint]
+          ring_nf
+        · rw [if_neg hendpoint]
+          simp [hendpoint]
+    _ = dyadicPhaseMeshWeight n / 2 *
+        (f 0 + f (dyadicPhaseDenom n)) := by
+        rw [← Finset.sum_filter]
+        rw [dyadicPhaseEndpointFilter_eq]
+        have hdistinct : (0 : ℕ) ≠ dyadicPhaseDenom n :=
+          (dyadicPhaseDenom_pos n).ne
+        simp [hdistinct]
+        ring
+
+/--
+If a sampled observable vanishes at both endpoints, then the plain mesh-width
+sum and the trapezoidal sum agree.
+
+This is the zero-endpoint corollary of the half-width endpoint correction
+formula. It is useful for boundary-log observables, and it will also isolate
+where centered observables differ from them.
+-/
+theorem dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero
+    (n : ℕ) (f : ℕ → ℝ)
+    (h0 : f 0 = 0)
+    (h1 : f (dyadicPhaseDenom n) = 0) :
+    (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) =
+      ∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseTrapezoidWeight n k * f k := by
+  have h :=
+    dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half n f
+  rw [h0, h1] at h
+  have hzero :
+      (∑ k ∈ dyadicPhaseNodeIndices n, dyadicPhaseMeshWeight n * f k) -
+          (∑ k ∈ dyadicPhaseNodeIndices n,
+            dyadicPhaseTrapezoidWeight n k * f k) = 0 := by
+    have hright : dyadicPhaseMeshWeight n / 2 * (0 + 0) = 0 := by ring
+    rw [hright] at h
+    exact h
+  exact sub_eq_zero.mp hzero
+
+/-- Trapezoidal finite log-depth sum on the complete dyadic node mesh. -/
+def dyadicPhaseTrapezoidLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * Real.log (dyadicPhaseDepth n k)
+
+/--
+Trapezoidal finite log-normalization sum on the complete dyadic node mesh.
+-/
+def dyadicPhaseTrapezoidLogNormalizationSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k *
+      Real.log (dyadicPhaseNormalization n k)
+
+/--
+Finite logarithmic cancellation survives trapezoidal endpoint weighting.
+
+This is an application of pointwise weighted cancellation. It records a
+standard closed-interval finite candidate without asserting that this is the
+canonical refinement limit.
+-/
+theorem two_mul_dyadicPhaseTrapezoidLogNormalizationSum_add_trapezoidLogDepthSum
+    (n : ℕ) :
+    2 * dyadicPhaseTrapezoidLogNormalizationSum n +
+        dyadicPhaseTrapezoidLogDepthSum n = 0 := by
+  rw [dyadicPhaseTrapezoidLogNormalizationSum,
+    dyadicPhaseTrapezoidLogDepthSum]
+  exact two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
+    n (dyadicPhaseTrapezoidWeight n)
+
+/--
+Plain mesh-width and trapezoidal log-depth sums agree on the complete mesh.
+
+Although the total masses of the two weights differ, the discrepancy is
+supported only at the two endpoints, where the logarithmic depth observation
+is zero.
+-/
+theorem dyadicPhaseWeightedLogDepthSum_eq_trapezoidLogDepthSum (n : ℕ) :
+    dyadicPhaseWeightedLogDepthSum n =
+      dyadicPhaseTrapezoidLogDepthSum n := by
+  rw [dyadicPhaseWeightedLogDepthSum, dyadicPhaseLogDepthSum,
+    dyadicPhaseTrapezoidLogDepthSum, Finset.mul_sum]
+  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
+    (fun k => Real.log (dyadicPhaseDepth n k))
+    (by simp) (by simp)
+
+/--
+Plain mesh-width and trapezoidal log-normalization sums agree on the complete
+mesh.
+
+As for depth, the endpoint correction has no logarithmic contribution because
+the normalization factor is one at both endpoints.
+-/
+theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
+    (n : ℕ) :
+    dyadicPhaseWeightedLogNormalizationSum n =
+      dyadicPhaseTrapezoidLogNormalizationSum n := by
+  rw [dyadicPhaseWeightedLogNormalizationSum, dyadicPhaseLogNormalizationSum,
+    dyadicPhaseTrapezoidLogNormalizationSum, Finset.mul_sum]
+  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
+    (fun k => Real.log (dyadicPhaseNormalization n k))
+    (by simp) (by simp)
+
+/-- Plain mesh-width finite sum of centered log-depth observations. -/
+def dyadicPhaseMeshWeightedCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k
+
+/-- Plain mesh-width finite sum of centered quadratic observations. -/
+def dyadicPhaseMeshWeightedCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseMeshWeight n * dyadicPhaseCenteredQuadratic n k
+
+/-- Uniform-average finite sum of centered log-depth observations. -/
+def dyadicPhaseAverageCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseAverageWeight n * dyadicPhaseCenteredLogDepth n k
+
+/-- Uniform-average finite sum of centered quadratic observations. -/
+def dyadicPhaseAverageCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseAverageWeight n * dyadicPhaseCenteredQuadratic n k
+
+/-- Trapezoidal finite sum of centered log-depth observations. -/
+def dyadicPhaseTrapezoidCenteredLogDepthSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredLogDepth n k
+
+/-- Trapezoidal finite sum of centered quadratic observations. -/
+def dyadicPhaseTrapezoidCenteredQuadraticSum (n : ℕ) : ℝ :=
+  ∑ k ∈ dyadicPhaseNodeIndices n,
+    dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
+
+/-- Finite closed form for the first-power sum over `0, ..., N`. -/
+private theorem sum_range_succ_id_real (N : ℕ) :
+    (∑ k ∈ Finset.range (N + 1), (k : ℝ)) =
+      (N : ℝ) * (N + 1 : ℝ) / 2 := by
+  induction N with
+  | zero =>
+      norm_num
+  | succ N ih =>
+      rw [Finset.sum_range_succ, ih]
+      norm_num
+      ring
+
+/-- Finite closed form for the square sum over `0, ..., N`. -/
+private theorem sum_range_succ_sq_real (N : ℕ) :
+    (∑ k ∈ Finset.range (N + 1), (k : ℝ) ^ 2) =
+      (N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6 := by
+  induction N with
+  | zero =>
+      norm_num
+  | succ N ih =>
+      rw [Finset.sum_range_succ, ih]
+      norm_num
+      ring
+
+/--
+Closed form for the complete-node mesh-width centered quadratic sum.
+
+This is the finite algebraic core behind the trapezoidal closed form. It uses
+only the elementary first-power and square-sum identities.
+-/
+private theorem mesh_centered_quadratic_sum_eq_of_pos
+    {N : ℕ} (hN : 0 < N) :
+    (∑ k ∈ Finset.range (N + 1),
+        (1 / (N : ℝ)) *
+          (4 * ((k : ℝ) / (N : ℝ) - (1 / 2 : ℝ)) ^ 2)) =
+      (N + 1 : ℝ) * (N + 2 : ℝ) / (3 * (N : ℝ) ^ 2) := by
+  have hNz : (N : ℝ) ≠ 0 := by
+    exact_mod_cast hN.ne'
+  rw [← Finset.mul_sum]
+  ring_nf
+  rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+  have hsum1 :
+      (∑ x ∈ Finset.range (1 + N), (x : ℝ)) =
+        (N : ℝ) * (N + 1 : ℝ) / 2 := by
+    simpa [Nat.add_comm] using sum_range_succ_id_real N
+  have hsum2 :
+      (∑ x ∈ Finset.range (1 + N), (x : ℝ) ^ 2) =
+        (N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6 := by
+    simpa [Nat.add_comm] using sum_range_succ_sq_real N
+  have hsum1' :
+      (∑ x ∈ Finset.range (1 + N), (N : ℝ)⁻¹ * (x : ℝ) * 4) =
+        (N : ℝ)⁻¹ * ((N : ℝ) * (N + 1 : ℝ) / 2) * 4 := by
+    rw [← Finset.sum_mul, ← Finset.mul_sum, hsum1]
+  have hsum2' :
+      (∑ x ∈ Finset.range (1 + N), (N : ℝ)⁻¹ ^ 2 * (x : ℝ) ^ 2 * 4) =
+        (N : ℝ)⁻¹ ^ 2 *
+          ((N : ℝ) * (N + 1 : ℝ) * (2 * N + 1 : ℝ) / 6) * 4 := by
+    rw [← Finset.sum_mul, ← Finset.mul_sum, hsum2]
+  rw [hsum1', hsum2']
+  field_simp [hNz]
+  norm_num
+  ring
+
+/-- Closed form for the complete-node mesh-width centered quadratic moment. -/
+theorem dyadicPhaseMeshWeightedCenteredQuadraticSum_eq (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredQuadraticSum n =
+      (dyadicPhaseDenom n + 1 : ℝ) *
+          (dyadicPhaseDenom n + 2 : ℝ) /
+        (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  simp [dyadicPhaseMeshWeightedCenteredQuadraticSum,
+    dyadicPhaseNodeIndices, dyadicPhaseMeshWeight,
+    dyadicPhaseCenteredQuadratic, dyadicPhaseNode]
+  simpa using
+    mesh_centered_quadratic_sum_eq_of_pos (dyadicPhaseDenom_pos n)
+
+/-- Plain mesh-width centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseMeshWeightedCenteredLogDepthSum n := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (fun _k => dyadicPhaseMeshWeight n)
+    (fun k hk => (dyadicPhaseMeshWeight_pos n).le)
+
+/--
+Plain mesh-width centered log-depth sums are bounded by the corresponding
+finite centered quadratic moment.
+-/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredLogDepthSum n ≤
+      dyadicPhaseMeshWeightedCenteredQuadraticSum n := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum,
+    dyadicPhaseMeshWeightedCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (fun _k => dyadicPhaseMeshWeight n)
+    (fun k hk => (dyadicPhaseMeshWeight_pos n).le)
+
+/-- Uniform-average centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseAverageCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseAverageCenteredLogDepthSum n := by
+  rw [dyadicPhaseAverageCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (fun _k => dyadicPhaseAverageWeight n)
+    (fun k hk => (dyadicPhaseAverageWeight_pos n).le)
+
+/--
+Uniform-average centered log-depth sums are bounded by the corresponding
+finite centered quadratic moment.
+-/
+theorem dyadicPhaseAverageCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseAverageCenteredLogDepthSum n ≤
+      dyadicPhaseAverageCenteredQuadraticSum n := by
+  rw [dyadicPhaseAverageCenteredLogDepthSum,
+    dyadicPhaseAverageCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (fun _k => dyadicPhaseAverageWeight n)
+    (fun k hk => (dyadicPhaseAverageWeight_pos n).le)
+
+/-- Trapezoidal centered log-depth sums are nonnegative. -/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_nonneg (n : ℕ) :
+    0 ≤ dyadicPhaseTrapezoidCenteredLogDepthSum n := by
+  rw [dyadicPhaseTrapezoidCenteredLogDepthSum]
+  exact weighted_centeredLogDepth_nonneg n
+    (dyadicPhaseTrapezoidWeight n)
+    (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
+
+/--
+Trapezoidal centered log-depth sums are bounded by the corresponding finite
+centered quadratic moment.
+-/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
+    (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredLogDepthSum n ≤
+      dyadicPhaseTrapezoidCenteredQuadraticSum n := by
+  rw [dyadicPhaseTrapezoidCenteredLogDepthSum,
+    dyadicPhaseTrapezoidCenteredQuadraticSum]
+  exact weighted_centeredLogDepth_le_weighted_centeredQuadratic n
+    (dyadicPhaseTrapezoidWeight n)
+    (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
+
+/--
+The trapezoidal centered quadratic moment is bounded by one.
+
+This follows immediately from the sampled centered quadratic profile being at
+most one on `[0,1]`, and from the trapezoidal weights having total mass one.
+The sharper closed form is proved below.
+-/
+theorem dyadicPhaseTrapezoidCenteredQuadraticSum_le_one (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredQuadraticSum n ≤ 1 := by
+  rw [dyadicPhaseTrapezoidCenteredQuadraticSum]
+  calc
+    ∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
+        ≤ ∑ k ∈ dyadicPhaseNodeIndices n,
+            dyadicPhaseTrapezoidWeight n k * 1 := by
+          exact Finset.sum_le_sum fun k hk => by
+            have hle :=
+              dyadicPhaseCenteredQuadratic_le_one (n := n) (k := k) hk
+            have hdiff :
+                0 ≤ dyadicPhaseTrapezoidWeight n k *
+                  (1 - dyadicPhaseCenteredQuadratic n k) :=
+              mul_nonneg (dyadicPhaseTrapezoidWeight_pos n k).le
+                (sub_nonneg.mpr hle)
+            nlinarith
+    _ = 1 := by
+      simpa using sum_dyadicPhaseTrapezoidWeight_eq_one n
+
+/--
+Closed form for the trapezoidal centered quadratic moment.
+
+The complete-node mesh-width moment is first evaluated by elementary finite
+power sums. The trapezoidal value then subtracts the half-width endpoint
+correction. Since the centered quadratic endpoint values are both one, the
+correction is exactly one mesh width.
+-/
+theorem dyadicPhaseTrapezoidCenteredQuadraticSum_eq (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredQuadraticSum n =
+      1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  have hdenom : (dyadicPhaseDenom n : ℝ) ≠ 0 := by
+    exact_mod_cast (dyadicPhaseDenom_pos n).ne'
+  have hdiff :
+      dyadicPhaseMeshWeightedCenteredQuadraticSum n -
+          dyadicPhaseTrapezoidCenteredQuadraticSum n =
+        dyadicPhaseMeshWeight n := by
+    rw [dyadicPhaseMeshWeightedCenteredQuadraticSum,
+      dyadicPhaseTrapezoidCenteredQuadraticSum, dyadicPhaseMeshWeight]
+    simp [dyadicPhaseCenteredQuadratic, dyadicPhaseNode]
+    have h :=
+      dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+        n (dyadicPhaseCenteredQuadratic n)
+    simp [dyadicPhaseCenteredQuadratic, dyadicPhaseNode,
+      dyadicPhaseMeshWeight, hdenom] at h
+    norm_num at h
+    simpa using h
+  calc
+    dyadicPhaseTrapezoidCenteredQuadraticSum n
+        = dyadicPhaseMeshWeightedCenteredQuadraticSum n -
+            dyadicPhaseMeshWeight n := by
+          linarith
+    _ = (dyadicPhaseDenom n + 1 : ℝ) *
+            (dyadicPhaseDenom n + 2 : ℝ) /
+          (3 * (dyadicPhaseDenom n : ℝ) ^ 2) -
+            1 / (dyadicPhaseDenom n : ℝ) := by
+          rw [dyadicPhaseMeshWeightedCenteredQuadraticSum_eq,
+            dyadicPhaseMeshWeight]
+    _ = 1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+          field_simp [hdenom]
+          ring
+
+/--
+Closed finite upper bound for the trapezoidal centered log-depth sum.
+
+This combines the pointwise logarithmic estimate with the exact trapezoidal
+centered quadratic moment. It is still a finite-level theorem; no limiting
+integral, Gaussian law, or `pi` identification is used.
+-/
+theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_closedQuadraticBound
+    (n : ℕ) :
+    dyadicPhaseTrapezoidCenteredLogDepthSum n ≤
+      1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+  calc
+    dyadicPhaseTrapezoidCenteredLogDepthSum n
+        ≤ dyadicPhaseTrapezoidCenteredQuadraticSum n :=
+          dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum n
+    _ = 1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2) := by
+          rw [dyadicPhaseTrapezoidCenteredQuadraticSum_eq]
+
+/--
+For centered log-depth, the plain mesh-width and trapezoidal sums differ by
+the restored endpoint correction `h_n * log 2`.
+
+Boundary logs had zero endpoint values, so their correction vanished. Centered
+log-depth has endpoint value `log 2`, making the same finite endpoint
+correction visible again.
+-/
+theorem dyadicPhaseMeshWeightedCenteredLogDepthSum_sub_trapezoidCenteredLogDepthSum
+    (n : ℕ) :
+    dyadicPhaseMeshWeightedCenteredLogDepthSum n -
+        dyadicPhaseTrapezoidCenteredLogDepthSum n =
+      dyadicPhaseMeshWeight n * Real.log (2 : ℝ) := by
+  rw [dyadicPhaseMeshWeightedCenteredLogDepthSum,
+    dyadicPhaseTrapezoidCenteredLogDepthSum]
+  calc
+    (∑ k ∈ dyadicPhaseNodeIndices n,
+        dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k) -
+        (∑ k ∈ dyadicPhaseNodeIndices n,
+          dyadicPhaseTrapezoidWeight n k *
+            dyadicPhaseCenteredLogDepth n k)
+        = dyadicPhaseMeshWeight n / 2 *
+            (dyadicPhaseCenteredLogDepth n 0 +
+              dyadicPhaseCenteredLogDepth n (dyadicPhaseDenom n)) := by
+          exact dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
+            n (dyadicPhaseCenteredLogDepth n)
+    _ = dyadicPhaseMeshWeight n * Real.log (2 : ℝ) := by
+      simp [dyadicPhaseCenteredLogDepth]
+      ring
+
+end
+
+end DkMath.Analysis.DkNNRealQ

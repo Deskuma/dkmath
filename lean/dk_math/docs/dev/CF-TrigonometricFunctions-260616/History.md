@@ -1,0 +1,1392 @@
+# History
+
+cid: 6a2fd4ed-1c54-83ee-9348-aadb84257cf0
+
+- 時刻の打刻は `date` コマンドを使用して時間(時分秒)まで正確に行うこと。
+- 新規履歴は **ファイル末尾** に追加すること。
+
+## History Log
+
+Archive
+
+過去ログは、以下にアーカイブしてあります。
+
+- [000](History-000.md)
+
+## Note
+
+タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
+
+※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
+
+## Template
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (作業概要の見出し)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）
+
+### 2026/06/16  1:47
+
+実装しました。
+
+追加した入口は [Rotation.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation.lean:7) です。Lean では `2D` が通常識別子ではないため、import/module 名は `DkMath.CosmicFormula.Rotation.«2D»` として扱っています。物理パスは指定どおり `DkMath/CosmicFormula/Rotation/2D/...` です。
+
+主な中身:
+
+- [Basic.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Basic.lean:32): `Vec`, `q2`, `star`, `Vec.q2_star`, `UnitKernel`, `LevelSet`
+- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Trig.lean:35): 抽象的な `KernelFamily` から `C^2 + S^2 = 1`, `C_add`, `S_add`
+- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md:1): 英語の実装結果ドキュメント
+- [CosmicFormula.lean](/lean/dk_math/DkMath/CosmicFormula.lean:17): `DkMath.CosmicFormula.Rotation` を集約 import に追加
+
+確認:
+
+- `lake build DkMath.CosmicFormula.Rotation` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+
+補足: `docs/not_implements/宇宙式で三角関数の証明.md` は作業前から未追跡の入力ファイルとして残っており、内容は変更していません。
+
+---
+
+おお。そうか `2D` は識別子とならないのか。
+アルファベットから始めなければか。
+`«2D»` → `CF2D`
+に、リファクタリングしよう。
+早い段階でやったほうが良い。
+
+---
+
+`«2D»` を `CF2D` にリファクタリングしました。
+
+変更点:
+
+- `Rotation/2D.lean` → `Rotation/CF2D.lean`
+- `Rotation/2D/Basic.lean` → `Rotation/CF2D/Basic.lean`
+- `Rotation/2D/Trig.lean` → `Rotation/CF2D/Trig.lean`
+- namespace を `DkMath.CosmicFormula.Rotation.CF2D` に変更
+- import を `DkMath.CosmicFormula.Rotation.CF2D...` に更新
+- docs も escaped identifier 前提の説明から `CF2D` 前提へ更新
+
+確認:
+
+- `rg '«2D»|Rotation\\.2D|Rotation/2D' ...` で旧名なし
+- `lake build DkMath.CosmicFormula.Rotation` 成功
+- `lake build DkMath.CosmicFormula` 成功
+- `lake build DkMath` 成功
+- `git diff --check` 成功
+
+補足: 既に index に載っていた前回追加分があるため、`git status` では旧 staged との差分として `AM` と新 `CF2D` untracked が混ざって見えています。staging は触っていません。
+
+### 2026/06/21 19:54 JST (Return to the trigonometric real-analysis route)
+
+1. 目的:
+   - `LinearOrder` と decidable comparison を独立保留課題とし、CF2D
+     Phase 2 に必要な実数解析本線へ戻る。
+   - 現場管理文書と TODO を再確認し、次の実装可能な checkpoint を定める。
+2. 実施:
+   - `DkMath.Analysis.DkReal.Semantic` を追加した。
+   - lower endpoint の実数列を定義し、単調性と上方有界性を証明した。
+   - semantic value を lower endpoint の上限として noncomputable に定義した。
+   - semantic value が全 approximation interval に属することを証明した。
+   - lower endpoint が semantic value へ単調収束することを証明した。
+   - `task-trig-real-analysis-046.md` に semantic bridge の実装順を記録した。
+3. 結論:
+   - Route B の計算可能核を変更せず、Mathlib `Real` の completeness を
+     semantic bridge にだけ導入できた。
+   - 次の主課題は `DkReal.Equiv` による semantic value の不変性である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.Semantic` 成功。
+5. 失敗事例:
+   - 最初のビルドでは `lowerReal` / `upperReal` が未展開のため
+     `exact_mod_cast` が型一致しなかった。定義を明示展開して修正した。
+6. 次の課題:
+   - 全区間に属する実数点の一意性を証明する。
+   - `Equiv x y -> semanticValue x = semanticValue y` を証明する。
+   - その後 `DkNNRealQ` へ semantic map を降ろす。
+
+### 2026/06/21 20:28 JST (Semantic uniqueness and quotient descent)
+
+1. 目的:
+   - review-trig-046 の指摘を反映し、semantic point の一意性と
+     representative independence を閉じる。
+   - `DkNNRealQ` へ semantic evaluation を降ろす。
+2. 実施:
+   - `widthReal` と `tendsto_widthReal_zero` を追加した。
+   - 全 approximation interval に属する実数点の一意性を証明した。
+   - `Equiv x y -> semanticValue x = semanticValue y` を証明した。
+   - `DkNNRealQ.semanticValue` を quotient lift として定義した。
+   - rational constants、zero、one、addition の semantic 保存を証明した。
+   - 公開 import の計算可能性説明を semantic module 付きの現状へ修正した。
+3. 結論:
+   - DkReal representation から Mathlib Real への写像が quotient-compatible
+     になった。
+   - 次の解析本線は nonnegative multiplication、power、order bridge である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.Semantic` 成功。
+5. 失敗事例:
+   - rational-to-real cast の composed function が簡約されず、関数外延性で
+     cast 前後の式を明示的に一致させた。
+   - quotient zero/one は `rfl` では閉じず、rational evaluation theorem を
+     経由した。
+6. 次の課題:
+   - semantic multiplication と natural power preservation。
+   - internal order と Mathlib Real order の保存・反映。
+   - 保存量 `q2` の semantic bridge を最初の CF2D consumer とする。
+
+### 2026/06/21 20:47 JST (Semantic semiring and order preservation)
+
+1. 目的:
+   - quotient semantic map の乗法・自然数冪保存を閉じる。
+   - canonical Gap により内部順序から Mathlib Real 順序への保存を示す。
+2. 実施:
+   - 非負 representation の semantic nonnegativity を証明した。
+   - `mulNonneg` と `powNonneg` の semantic 保存を証明した。
+   - `DkNNRealQ.semanticValue_mul` と `semanticValue_pow` を追加した。
+   - `y = x + z` という canonical Gap 分解から
+     `DkNNRealQ.semanticValue_mono` を証明した。
+   - task 046、初期層設計、公開入口の TODO を現在の到達点へ同期した。
+3. 結論:
+   - `semanticValue` は非負商半環から Mathlib Real への順序保存半環写像に
+     必要な個別法則を備えた。
+   - 順序保存には subtraction、decidable comparison、`LinearOrder` の
+     いずれも不要であり、canonical Gap が直接の証明核となった。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.Semantic` 成功 (8271 jobs)。
+5. 次の課題:
+   - semantic order reflection を証明する。
+   - CF2D の保存量 `q2` を最初の実数解析 consumer として接続する。
+
+### 2026/06/21 23:18 JST (Bundled semantics and the first CF2D consumer)
+
+1. 方針:
+   - order reflection は専用課題として保留する。
+   - 現在の半環保存則だけで到達できる CF2D bridge を先行する。
+2. 実施:
+   - `semanticValue` を `DkNNRealQ →+* ℝ` の `semanticRingHom` として束ねた。
+   - `SemanticCF2D.lean` を新設し、CF2D 依存を意味論本体から隔離した。
+   - `semanticVec` と `semanticValue_q2` を実装した。
+   - 非負 DkMath unit kernel を実数 unit kernel へ運ぶ
+     `semanticUnitKernel` を実装した。
+3. 観測:
+   - CF2D の抽象 `Semiring` 冪と DkNNRealQ の表現用 `Pow` は、型クラス上
+     異なる経路を取る。
+   - `q2` の二乗を積へ正規化すると、semantic multiplication だけで橋が
+     閉じる。追加の冪同一視や解析定理は不要だった。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 05:38 JST (Exact order four on the plane action)
+
+1. 実施:
+   - `SemanticExactActionOrderFour` を定義した。
+   - exact kernel order four と exact action order four の同値を証明した。
+   - exact action order four と semantic core zero の同値を証明した。
+2. 原理:
+   - `q2 = 1` の保存核条件が kernel を unit locus に拘束する。
+   - `star` の結合則と `act_star` が kernel 積を作用合成へ移す。
+   - action の忠実性が作用等式から kernel 等式へ戻す。
+3. 結論:
+   - 保存則単独ではなく、保存核・加法則に相当する積・忠実作用・
+     第一象限制約の組合せが、角度なしの有限位数分類を生んでいる。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+5. 次の課題:
+   - transported real `UnitKernel` を最初の CF2D 解析定理へ接続する。
+   - order reflection は subtraction や decidable comparison を導入せず、
+     独立課題として検討する。
+
+### 2026/06/21 23:29 JST (Real-side CF2D action without source subtraction)
+
+1. 方針:
+   - DkNNRealQ へ subtraction を追加せず、transport 後の `Real` 側でのみ
+     CF2D action を使う。
+2. 実施:
+   - semantic unit kernel の core / beam 非負性を証明した。
+   - semantic 座標について `C^2 + S^2 = 1` を証明した。
+   - `semanticAct` とその core / beam 座標式を追加した。
+   - 既存 `UnitKernel.q2_act` を直接消費し、`semanticAct_q2` と
+     `semanticAct_preservesQ2` を証明した。
+   - `Equiv.lean` と `RealBridge.lean` の完了済み future TODO を更新した。
+3. 結論:
+   - 非負区間世界から実数回転作用まで、source subtraction なしで接続した。
+   - subtraction は意味論輸送後の既知の `Real` 構造にだけ現れる。
+4. 境界:
+   - source-level `Vec.star` と `KernelFamily` は ring を要求するため、
+     signed DkReal 層まで保留する。
+   - order reflection も独立した重い課題として維持する。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/23 04:34 JST (Pre-geometric research consolidation)
+
+1. 判断:
+   - 完成論文へ直行せず、主定理・依存原理・非主張事項を固定する研究
+     consolidation report を先に作る段階とした。
+2. コード整理:
+   - `SemanticCF2D.lean` を semantic transport、boundary action、
+     composition/inverse、period、fixed point、low-order classification、
+     four-phase action の節へ整理した。
+3. 文書:
+   - `CF2D-PreGeometric-Boundary-Action-Report.md` を新設した。
+   - 境界判定機と作用が先にあり、円・角度は Euclidean model による後段
+     解釈であることを主軸にした。
+   - 現時点の claims / non-claims と論文化前の不足項目を明示した。
+4. 表現修正:
+   - 証明本体の段階で `(0,1)` を quarter-turn と断定せず、後段の標準
+     Euclidean 解釈でそう読める、という順序へ統一した。
+
+### 2026/06/22 17:25 JST (Boundary first, geometry later)
+
+1. 文書整理:
+   - `note-trig-064.md` の観測をコード冒頭、現場資料、論文草稿へ反映した。
+   - `q2` をまず保存 level set の境界判定機として位置付けた。
+   - 円、直交座標、角度、一周、度数法は後段の Euclidean 解釈であり、
+     Lean 証明の前提ではないことを明記した。
+2. 原理:
+   - 保存則が境界を決め、`star` が合成を決める。
+   - `act_star` が合成を作用へ移し、忠実性が戻り道を保証する。
+   - 第一象限制約が transport 可能な根を選別する。
+3. 実装:
+   - core zero の作用を `(x,y) -> (-y,x)` と座標表示した。
+   - 二回・三回作用の座標式を追加した。
+   - 非零点が 1, 2, 3 回では戻らず、最小周期が正確に 4 であることを
+     証明した。原点は固定点として区別される。
+4. 結論:
+   - 主結果は「90 度回転」ではなく、円や角度以前の
+     exact-order-four `q2` 保存作用である。
+   - 標準 Euclidean 構造へ写した後に、同じ作用を円上の quarter-turn と
+     解釈できる。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 05:27 JST (Exact order four)
+
+1. 実施:
+   - semantic core zero から beam one を導く補題を追加した。
+   - core zero から order dividing four、および order dividing one,
+     two, three の否定を個別に証明した。
+   - `SemanticExactKernelOrderFour` を定義した。
+   - exact order four と semantic core zero の同値を証明した。
+2. 結論:
+   - semantic coordinates `(0,1)` は候補ではなく、exact order four と
+     確定した。
+   - 逆に exact order four の transported first-quadrant kernel は
+     `(0,1)` に限られる。
+3. 設計上の意味:
+   - 元 kernel は第一象限にあるが、中間 power は第一象限を出られる。
+   - source 側へ積を押し込まず Real 側だけで power を扱う境界が必要である。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 05:15 JST (Order dividing four classification)
+
+1. 実施:
+   - 四乗 kernel の core / beam 座標多項式を API 化した。
+   - order dividing four と `semantic core = 1 or 0` の同値を証明した。
+2. 証明:
+   - 四乗 core 方程式と unit-square の二乗から `C^2*S^2 = 0` を得た。
+   - `S = 0` 側は `C = 1`、`C = 0` 側は非負性から `S = 1` となる。
+3. 結論:
+   - order dividing one, two, three は identity のみだった。
+   - order dividing four では初めて非 identity の `(0,1)` 分岐が残る。
+   - これは transported first quadrant 内の exact order-four 候補である。
+4. 境界:
+   - 90 度という角度解釈は使用せず、有限積の座標多項式だけで分類した。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 05:02 JST (Order dividing three classification)
+
+1. 実施:
+   - `semanticKernelFiniteOrder_three_iff_identity` を追加した。
+   - order dividing three を semantic core coordinate one とも同値にした。
+2. 証明:
+   - 三乗 beam 方程式を `S * (3*C^2 - S^2) = 0` と因数分解した。
+   - `S = 0` 分岐は unit-square と core 非負性から `C = 1`。
+   - 他方は `C^2 = 1/4`, `S^2 = 3/4`, `C = 1/2` となり、三乗 core
+     方程式と矛盾する。
+3. 結論:
+   - transported first-quadrant kernel では、order dividing one, two,
+     three のいずれも identity に潰れる。
+   - exact order three の非自明 kernel は存在しない。
+4. 境界:
+   - 平方根、角度、連続性、signed source は使用していない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:51 JST (Polynomial coordinates for powers two and three)
+
+1. 方針:
+   - order 3 の分類へ直接進む前に、低冪 kernel の座標式を公開 API として
+     分離する。
+2. 実施:
+   - 二乗の core を `C^2 - S^2`、beam を `2*C*S` と証明した。
+   - 三乗の core を `C^3 - 3*C*S^2`、beam を
+     `3*C^2*S - S^3` と証明した。
+   - order dividing two の分類を二乗 core API を利用する形へ整理した。
+3. 意味:
+   - これらは double-angle / triple-angle theorem ではなく、有限回の
+     `Vec.star` 展開から得られる多項式恒等式である。
+   - order dividing three の分類に必要な座標入力が揃った。
+4. 境界:
+   - source 側の積、角度、連続性は導入していない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:42 JST (Low-order classification: orders one and two)
+
+1. 修正:
+   - semantic bridge 全体は noncomputable 文脈にあることを明記し、前節の
+     `noncomputable` 不要という表現を限定した。
+2. 実施:
+   - kernel power one が transported kernel 自身であることを証明した。
+   - order dividing one を identity および core coordinate one と分類した。
+   - order dividing two も identity および core coordinate one と分類した。
+3. 数学的理由:
+   - 一般の Real unit kernel では `(-1, 0)` も二乗して中立核になる。
+   - 今回は DkNNRealQ からの座標別 transport により core と beam がともに
+     非負なので、この候補は排除される。
+4. 結論:
+   - transported first-quadrant kernel に非自明な order two は存在しない。
+   - 証明は unit-square 恒等式と二乗積の core 座標だけで閉じ、角度や
+     連続性を使用しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:09 JST (Minimal periods and finite-order divisibility)
+
+1. 注意点:
+   - `SemanticPeriodic r z n` の `n` は正とも最小とも限らず、角度周期でも
+     ないことを docstring に明記した。
+2. 実施:
+   - finite action order の倍数伝播を証明した。
+   - Mathlib `minimalPeriod` を包む `semanticMinimalPeriod` を追加した。
+   - periodicity と minimal period divisibility の同値を公開した。
+   - 任意の finite action order が全点の minimal period で割り切れることを
+     証明した。
+   - 正周期が存在すれば minimal period が正であることを証明した。
+3. 規約:
+   - periodic point の minimal period は最小正周期。
+   - 非周期点では Mathlib 規約により minimal period は zero。
+4. 結論:
+   - orbit return、period divisibility、finite action order が Mathlib の
+     標準周期 API 上で統一された。
+5. 次の候補:
+   - fixed point / finite-order action の分類。
+   - source-level family は signed DkReal 層まで保留。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:23 JST (Fixed-point classification without angles)
+
+1. 目的:
+   - transported action の非零 fixed point を座標的に分類する。
+2. 実施:
+   - `SemanticIdentityKernel` を real neutral kernel との等式として定義した。
+   - semantic core が one なら `C^2 + S^2 = 1` から beam zero を証明した。
+   - identity-kernel 条件と semantic core one の同値を証明した。
+   - identity kernel が全実数 vector を固定することを証明した。
+   - core が one でない kernel の fixed point 連立方程式から、行列式
+     `(C - 1)^2 + S^2` を用いて両座標 zero を導いた。
+   - 非 identity kernel の fixed point が原点と同値であることを証明した。
+3. 結論:
+   - identity kernel なら全点 fixed。
+   - nonidentity transported kernel なら fixed point は原点のみ。
+4. 使用していないもの:
+   - angle、continuity、signed DkReal source。
+5. 次の候補:
+   - 明示的 semantic coordinate 条件下での finite-order classification。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:17 JST (Fixed points and positive finite action order)
+
+1. 方針:
+   - fixed point は Mathlib `Function.IsFixedPt` を用いる。
+   - zero iterate でも成立する弱い finite order と、正の witness を持つ版を
+     分離する。
+2. 実施:
+   - `SemanticFixed` を追加した。
+   - fixed point、period one、minimal period one の同値を公開した。
+   - fixed point が任意 period の周期点になることを証明した。
+   - 原点が全 transported action の fixed point であることを証明した。
+   - `SemanticPositiveFiniteOrder` を追加した。
+   - 正有限位数の正倍数伝播と、全点の minimal period positivity を証明した。
+3. 注意:
+   - positive finite order の `n` は正だが、作用の最小正位数とは限らない。
+4. 結論:
+   - fixed / periodic / minimal-period / finite-order の基本関係が標準 API
+     上で揃った。
+5. 次の候補:
+   - 明示的 kernel 条件下での非零 fixed point の座標分類。
+   - source-level family は signed DkReal 層まで保留。
+6. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 03:50 JST (Periodic points and finite action order)
+
+1. 方針:
+   - 独自の周期点概念を作らず、Mathlib `Function.IsPeriodicPt` を用いる。
+2. 実施:
+   - `SemanticPeriodic` と orbit-return 同値を追加した。
+   - `SemanticLevelPeriodic` を定義し、underlying plane point の周期性との
+     同値を証明した。
+   - `SemanticFiniteOrder` を action iterate が恒等写像となる性質として
+     定義した。
+   - finite order と全 plane point の周期性が同値であることを証明した。
+   - finite order から任意 level-set point の周期性を導いた。
+   - 周期が倍数へ伝播することを Mathlib の `trans_dvd` で公開した。
+3. 結論:
+   - 保存 orbit から periodic dynamics まで標準 Mathlib API に接続した。
+   - 角度、連続性、signed source は依然として不要である。
+4. 次の候補:
+   - minimal period と finite-order divisibility。
+   - source-level family は signed DkReal 層まで保留。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 02:30 JST (Bundled automorphisms and finite orbits)
+
+1. 目的:
+   - transported action の可逆性を bundled equivalence として公開する。
+   - finite iterate と orbit の保存量を定理化する。
+2. 実施:
+   - `semanticActEquiv` と `semanticActLevelEquiv` を追加した。
+   - plane / level-set action の全 finite iterate が bijective と証明した。
+   - `semanticAct_iterate_q2` を帰納法で証明した。
+   - `semanticOrbit` と `semanticLevelOrbit` を定義した。
+   - orbit 全体で `q2` が初期値に等しいことを証明した。
+   - level-set orbit の underlying vector が plane orbit と一致することを
+     証明した。
+3. 結論:
+   - DkNNRealQ 由来 kernel は Real の各 `q2` level set 上に離散力学系を
+     生成する。
+   - signed source、角度復元、連続性を導入せず finite orbit まで到達した。
+4. 次の候補:
+   - periodic point / finite-order kernel の一般定理。
+   - source-level family は signed DkReal 層まで保留。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 00:59 JST (Inverse kernels and level-set automorphisms)
+
+1. 方針:
+   - inverse は source に構成せず、transport 後の Real unit kernel の共役で
+     与える。
+2. 実施:
+   - `semanticInverseKernel` と `semanticInverseAct` を追加した。
+   - 左右の inverse action law を既存 `star_conj` / `conj_star` から証明した。
+   - `semanticAct_bijective` を証明した。
+   - level set 側にも inverse action を降ろし、
+     `semanticActLevel_bijective` を証明した。
+3. 結論:
+   - DkNNRealQ 由来 kernel は Real 平面の `q2` 保存全単射を生成する。
+   - 任意の実数 `q2` level set 上でも全単射となる。
+4. 境界:
+   - 共役 inverse は一般に beam 座標が負となるため、第一象限の source
+     kernel へ戻るとは主張しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 00:49 JST (Real-side composition and level-set action)
+
+1. 方針:
+   - source-level kernel product は導入せず、二つの kernel を個別に Real へ
+     輸送した後でのみ積を取る。
+2. 実施:
+   - `semanticKernelProduct` を real unit-kernel product として定義した。
+   - `semanticAct_comp` で successive action と product action を接続した。
+   - `semanticActLevel` を追加し、任意の実数 `q2` level set 上の自己写像を
+     構成した。
+   - `semanticActLevel_comp` で level-set action の合成を証明した。
+   - `DkNNRealQ.lean` の semantic bridge TODO を実装済み状態へ更新した。
+3. 結論:
+   - DkNNRealQ 由来の kernel は、Real 上で合成可能な保存作用を生成する。
+   - source semiring に subtraction や kernel product を要求しない。
+4. 次の境界:
+   - source-level `Vec.star` / `KernelFamily` は signed DkReal 待ち。
+   - それまでは第一象限 kernel の Real 幾何 consumer を進められる。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/22 04:30 JST (Real-side kernel powers and finite-order equivalence)
+
+1. 方針:
+   - source 側の積は定義せず、transport 後の `UnitKernel Real` だけで
+     kernel の反復積を構成する。
+2. 実施:
+   - `semanticKernelPower` を real-side の n-fold product として追加した。
+   - `semanticKernelPower_act` で、その作用が `semanticAct` の n 回反復と
+     一致することを証明した。
+   - 単位ベクトルへの作用から kernel を復元する忠実性
+     `unitKernel_eq_one_of_act_eq_id` を証明した。
+   - `semanticKernelFiniteOrder_iff` により、反復積が中立核になる条件と
+     finite action order が同値であることを証明した。
+3. 結論:
+   - finite order は、作用側と kernel 積側のどちらからでも同じ条件として
+     扱える。
+   - signed source、角度、連続性は不要。
+   - semantic bridge 自体は noncomputable 文脈だが、この反復積の段階では
+     新たな解析的 noncomputable 要素を増やしていない。
+4. 境界:
+   - この積は Real 側だけに存在し、非負 source の積を主張しない。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+
+### 2026/06/23 05:10 JST (Continuous four-phase design)
+
+1. 設計:
+   - 離散四状態を一つの affine master edge と、その作用反復による四つの
+     translate として連続化する方針を定めた。
+   - 四区間の seam 接続と endpoint closure を、円や角度より先に扱う。
+2. 対称性:
+   - affine edge の `q2` profile を
+     `((1-t)^2 + t^2) * q2 z` と予測し、`t -> 1-t` の半折返し対称を
+     次の中心定理とした。
+3. 境界:
+   - affine 補間は連続な閉路を与えるが、途中では固定 `q2` 境界を離れる。
+   - piecewise-linear loop、cyclic parameter、boundary normalization、
+     Euclidean circle interpretation を別層に分離した。
+4. DkReal:
+   - nested interval completion の考え方を parameter approximation に再利用
+     するが、連続性の最初の定理は semantic Real target で行う。
+5. 文書:
+   - `task-trig-continuous-phase-065.md` を新設し、実装順と module boundary
+     を記録した。
+
+### 2026/06/23 05:49 JST (Affine phase profile and four translates)
+
+1. 実装:
+   - `SemanticCF2DPhase.lean` を新設した。
+   - `phaseDepth t = (1-t)^2 + t^2`、平方完成、正値性、端点値、半折返し
+     対称性を証明した。
+   - 一本の `semanticPhaseEdge` とその端点則を実装した。
+2. 保存境界からの離脱:
+   - core-zero 作用について affine edge の `q2` が
+     `phaseDepth t * q2 z` と厳密に一致することを証明した。
+   - 状態そのものではなく、境界深度の観測値が `t -> 1-t` で折り返すことを
+     定理化した。
+3. 四相:
+   - `semanticPhaseEdgeAt` を作用反復による唯一の master edge の translate
+     として定義した。
+   - endpoint、seam、共通 `q2` profile、位相番号の4周期性を証明した。
+4. 研究方針:
+   - `research-pregeometric-pi-program-067.md` を追加した。
+   - refinement、Gaussian limit、独立な正規化定数、`Real.pi` 同定を未証明の
+     段階として分離し、次は continuous four-edge path と定めた。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPhase` 成功 (8274 jobs)。
+
+### 2026/06/23 06:05 JST (Continuous closed four-phase path)
+
+1. レビュー補正:
+   - `phaseDepth_eq_half_iff` を追加し、midpoint が unique minimum であるという
+     module docstring の主張を定理化した。
+2. 位相 bridge:
+   - `CF2D.Topology.lean` を新設した。
+   - `Vec R` と `R × R` の座標同値、および積から誘導される topology を
+     実装した。
+   - `Vec` 値関数の連続性を2座標の連続性へ分解する API を追加した。
+3. Path:
+   - `SemanticCF2DPath.lean` を新設した。
+   - master edge と全 action translate の連続性を証明した。
+   - 各 edge を Mathlib `Path` として包装し、4本を `Path.trans` で連結した。
+   - core-zero exact order four により `Path z z` となる閉路を構成した。
+4. 境界:
+   - 得られたものは continuous piecewise-affine closed path であり、まだ
+     fixed-`q2` boundary path ではない。
+   - 次段階を `phaseDepth` による boundary normalization とした。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DPath` 成功 (8276 jobs)。
+
+### 2026/06/23 06:15 JST (Normalized boundary edge)
+
+1. 実装:
+   - `SemanticCF2DNormalize.lean` を新設した。
+   - `phaseNormalization t = 1 / sqrt (phaseDepth t)` を定義した。
+   - 平方根と補正係数の正値性、非零性、端点値、折返し対称性、連続性を
+     証明した。
+2. normalized edge:
+   - `normalizedPhaseEdge` を座標ごとのスカラー補正として定義した。
+   - affine edge と同じ始点・終点を持つことを証明した。
+   - core-zero 作用では全実数 parameter に対して
+     `q2 (normalizedPhaseEdge r z t) = q2 z` を証明した。
+   - normalized edge の連続性を証明した。
+3. 境界:
+   - 一本の edge の固定 `q2` 境界復帰までを今回の checkpoint とした。
+   - 四相 translate、seam、boundary-valued closed path は次段階とした。
+4. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:35 JST (Normalized closed four-phase path)
+
+1. レビュー補正:
+   - 一般補題 `Vec.q2_scale` を追加した。
+   - `phaseNormalization_sq_mul_phaseDepth` を追加し、平方根補正の消去則を
+     独立 API とした。
+   - normalized edge の `q2` 証明をこれらの構造的補題で整理した。
+2. 四相:
+   - `normalizedPhaseEdgeAt` を master edge の action translate として
+     定義した。
+   - endpoint、seam、固定 `q2`、phase index の4周期性を証明した。
+   - 全 translated edge の連続性を証明した。
+3. closed path:
+   - 各 normalized edge を Mathlib `Path` に包装した。
+   - 4本を連結し、core-zero exact order four により `Path z z` を構成した。
+   - 円・角度なしで fixed-`q2` continuous closed path に到達した。
+4. 次段階:
+   - path の target を `LevelSet Real (q2 z)` へ強化する候補を記録した。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:50 JST (Level-set internal closed path)
+
+1. topology:
+   - `CF2D.Topology` に `LevelSet R rho2` の subtype topology を追加した。
+   - level-set から underlying `Vec` への射影の連続性を追加した。
+2. boundary type:
+   - 離散 action state を `semanticPhaseLevelPoint` として
+     `LevelSet Real (q2 z)` に包装した。
+   - normalized edge を `normalizedPhaseLevelEdge` として同じ level set に
+     包装し、その連続性を証明した。
+3. path:
+   - 各 edge を `normalizedPhaseLevelPath` として level-set 内部の Path にした。
+   - 4本を連結し、exact order four により
+     `normalizedClosedLevelFourPhasePath` を構成した。
+4. 結論:
+   - fixed-`q2` boundary membership は外部定理だけでなく codomain の型に
+     組み込まれた。
+   - 次候補は既存 path を Euclidean circle model へ解釈する bridge。
+5. 検証:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DNormalize` 成功
+     (8277 jobs)。
+
+### 2026/06/23 06:58 JST (Euclidean coordinate-circle interpretation)
+
+1. 実装:
+   - `CF2D.EuclideanPhase.lean` を新設した。
+   - squared radius による `EuclideanCircleSq rho2` を定義した。
+   - `LevelSet Real rho2` と coordinate equation
+     `x^2 + y^2 = rho2` の homeomorphism を構成した。
+2. 境界分類:
+   - `Vec.q2_nonneg`、`Vec.q2_eq_zero_iff`、
+     `Vec.q2_pos_iff_ne_zero` を証明した。
+   - squared radius zero の circle equation が原点一つへ退化することを
+     証明した。
+3. path interpretation:
+   - 既存 `normalizedClosedLevelFourPhasePath` を homeomorphism で写し、
+     `normalizedClosedEuclideanCircleSqPath` を構成した。
+   - path は再構成せず、pre-geometric path の解釈として保持した。
+4. 境界:
+   - 標準積型の norm は L2 ではないため、単純な `Real × Real` metric sphere
+     とは同一視していない。
+   - 次候補は `EuclideanSpace Real (Fin 2)` の標準 metric sphere への bridge。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 07:08 JST (Standard Euclidean L2 sphere bridge)
+
+1. 設計:
+   - ordinary `Real × Real` product norm を使わず、
+     `EuclideanSpace Real (Fin 2)` の L2 norm へ明示的に接続した。
+2. 実装:
+   - `EuclideanPlane` と `EuclideanSphereSq rho2` を定義した。
+   - coordinate pair と Euclidean plane の相互変換を continuous linear
+     equivalence から構成した。
+   - L2 norm square が2座標の square sum に等しいことを証明した。
+   - 非負 `rho2` について coordinate circle と半径 `sqrt rho2` の metric
+     sphere の homeomorphism を構成した。
+3. path:
+   - 既存 coordinate-circle path を homeomorphism で写し、
+     `normalizedClosedEuclideanSpherePath` を構成した。
+4. 境界:
+   - `rho2 = 0` は zero-radius singleton sphere として保持した。
+   - `0 < rho2` なら radius が正であることを独立定理にした。
+   - 次候補は core-zero action と標準 quarter-turn linear isometry の同定。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 15:10 JST (Quarter-turn linear isometry interpretation)
+
+1. 実装:
+   - Euclidean plane 上の座標写像 `(x,y) -> (-y,x)` を
+     `quarterTurnLinearEquiv` として定義した。
+   - inverse、加法、scalar multiplication を座標ごとに証明した。
+   - L2 norm 保存を証明し、`quarterTurnLinearIsometry` として包装した。
+2. semantic bridge:
+   - core-zero semantic action を Euclidean plane へ写すと、
+     `quarterTurnLinearIsometry` と一致することを証明した。
+3. 意味:
+   - exact-order-four action の Euclidean 読みが、角度を仮定せず
+     quarter-turn linear isometry として確定した。
+4. 次段階:
+   - orientation を選び、Mathlib の oriented rotation `Real.pi / 2` と
+     比較する bridge を候補とした。
+5. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 15:26 JST (Oriented rotation by pi/2 bridge)
+
+1. orientation:
+   - Euclidean plane と complex plane の orthonormal-basis isometry を定義した。
+   - complex plane の標準 orientation を Euclidean plane へ引き戻した。
+2. rotation bridge:
+   - 座標 quarter-turn が complex multiplication by `I` に写ることを証明した。
+   - chosen orientation の right-angle rotation と
+     `quarterTurnLinearIsometry` を同定した。
+   - Mathlib の `rotation_pi_div_two` により、quarter-turn が oriented
+     rotation by `Real.pi / 2` に等しいことを証明した。
+3. 境界:
+   - これは既存の pre-geometric action の Euclidean 解釈であり、
+     `pi` の内在的導出ではない。refinement、Gaussian limit、
+     pi identification は独立した未実装課題として維持する。
+4. 検証:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/23 (Direct semantic rotation bridge and refinement preparation)
+
+1. bridge:
+   - core-zero semantic action を Euclidean plane へ移した結果が、chosen
+     orientation の `rotation (Real.pi / 2)` に直接等しい合成定理を追加した。
+2. refinement design:
+   - 次段階を finite dyadic nodes、reflection、one-step subdivision relation
+     に分解した。
+   - infinite product、logarithmic sum、Gaussian limit は、有限合成則が
+     証明されるまで仮定しない方針を明記した。
+
+### 2026/06/23 17:59 JST (Finite dyadic phase refinement)
+
+1. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DDyadic` を新設し、公開 Analysis
+     entry point へ追加した。
+2. finite nodes:
+   - `dyadicPhaseDenom n = 2^n` と
+     `dyadicPhaseNode n k = k / 2^n` を定義した。
+   - denominator positivity、両端点、unit interval membership を証明した。
+3. refinement:
+   - complementary index の reflection law を証明した。
+   - even child が parent と一致し、odd child が隣接 parent の midpoint
+     となることを証明した。
+   - reflected dyadic nodes で `phaseDepth` が一致することを証明した。
+4. boundary:
+   - correction product、logarithmic sum、Gaussian limit は導入していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DDyadic` 成功
+     (8275 jobs)。
+
+### 2026/06/23 18:06 JST (Exact finite depth refinement law)
+
+1. correction:
+   - odd child を parent interval として利用する場合の範囲付き
+     unit-interval theorem を追加した。
+2. module:
+   - `DkMath.Analysis.DkReal.SemanticCF2DRefinement` を新設した。
+   - dyadic mesh 上の depth と normalization observation を定義した。
+3. exact laws:
+   - reflection と even-child inheritance を両 observation で証明した。
+   - odd-child depth が adjacent-parent depth の平均から
+     `1 / (2 * (2^n)^2)` を引いた値に厳密に等しいことを証明した。
+4. boundary:
+   - aggregate correction、infinite product、log sum、Gaussian limit は
+     引き続き未選択とした。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。
+
+### 2026/06/23 19:03 JST (Finite total dyadic depth defect)
+
+1. local defect:
+   - `dyadicPhaseDepthDefect n = 1 / (2 * (2^n)^2)` を定義した。
+   - defect の厳密正値性を証明した。
+2. semantic form:
+   - mesh 内の parent interval に限定した odd-child refinement theorem を
+     追加した。
+   - genuine odd child depth が adjacent-parent average より厳密に小さい
+     ことを証明した。
+3. finite aggregation:
+   - level `n + 1` で導入される全 `2^n` odd children の defect 総和が
+     `1 / (2 * 2^n)` に厳密に等しいことを証明した。
+   - これは有限恒等式であり、収束定理とは区別した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DRefinement` 成功
+     (8279 jobs)。
+
+### 2026/06/23 19:23 JST (Dyadic depth defect limit)
+
+1. cleanup:
+   - `sum_dyadicPhaseDepthDefect` の level 引数を明示化した。
+2. finite hierarchy:
+   - per-level total defect を `totalDyadicPhaseDepthDefect` として定義した。
+   - closed form `(1/2)^(n+1)` を証明した。
+   - finite cumulative defect を定義し、
+     `1 - (1/2)^m` という厳密式を帰納法で証明した。
+3. limit layer:
+   - `SemanticCF2DLimit.lean` を新設した。
+   - per-level total defect が 0 に収束することを証明した。
+   - cumulative defect が 1 に収束することを証明した。
+4. boundary:
+   - geometric-series limit として閉じ、Gaussian、normalization
+     composition、`pi` identification とは接続していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLimit` 成功
+     (8280 jobs)。
+
+### 2026/06/23 (Computability boundary correction)
+
+1. correction:
+   - `dyadicPhaseNode` は `Real` division を使用するため noncomputable
+     であることを再確認した。
+   - `SemanticCF2DDyadic` と、その real-valued definitions に依存する
+     `SemanticCF2DRefinement` に `noncomputable section` を維持した。
+2. boundary:
+   - `SemanticCF2DLimit` は theorem のみなので section 修飾を外しても
+     ビルド可能であることを確認した。
+   - computable mesh が必要な場合は rational nodes を保持し、別 bridge
+     で `Real` へ移す設計とする。
+3. supporting API:
+   - per-level defect の正値性、cumulative defect の非負性・1未満性、
+     および残差 `(1/2)^m` の厳密式を追加した。
+
+### 2026/06/23 19:48 JST (Finite normalization composition)
+
+1. module:
+   - `SemanticCF2DComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. finite observations:
+   - 両端点を含む complete dyadic mesh index を定義した。
+   - mesh 上の depth product と normalization product を定義した。
+3. composition:
+   - 各 node で `normalization^2 * depth = 1` を証明した。
+   - finite product 全体で
+     `(normalization product)^2 * depth product = 1` を証明した。
+   - 両 finite product の厳密正値性を証明した。
+4. boundary:
+   - この定理は pointwise cancellation の有限積版であり、canonical
+     refinement observable、infinite product、log sum を選択しない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。
+
+### 2026/06/23 20:32 JST (Finite composition reciprocal API)
+
+1. API:
+   - depth product と normalization product の nonzero theorem を追加した。
+   - finite cancellation law を双方の reciprocal equation に変換した。
+   - 後続文書向けに `dyadicPhaseFiniteBoundaryCancellation` という短い
+     theorem 名を追加した。
+2. boundary:
+   - 新たな limit observable は選択していない。既存 finite identity の
+     利用形のみを整備した。
+3. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DComposition` 成功
+     (8280 jobs)。
+
+### 2026/06/23 20:49 JST (Finite logarithmic composition)
+
+1. module:
+   - `SemanticCF2DLogComposition.lean` を新設し、公開 Analysis entry point
+     へ追加した。
+2. positivity:
+   - dyadic depth と normalization の pointwise positivity wrapper を
+     追加した。
+3. finite log laws:
+   - depth / normalization の complete-mesh log sum を定義した。
+   - 各 log sum が対応する finite product の log に等しいことを証明した。
+   - pointwise および finite mesh 全体で
+     `2 * logNormalization + logDepth = 0` を証明した。
+4. boundary:
+   - log sum は finite product cancellation の加法表示に限定した。
+     raw sum、average、weighted sum のいずれも canonical limit として
+     選択していない。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:01 JST (Finite logarithmic candidate observables)
+
+1. API:
+   - complete dyadic node mesh の cardinality lemma
+     `dyadicPhaseNodeIndices_card` を追加した。
+   - uniform-average weight と mesh-width weight を定義した。
+   - average / mesh-weighted log depth と log normalization の finite
+     candidate observables を追加した。
+2. finite laws:
+   - raw log-sum cancellation を scalar multiplication で移送し、
+     average 版と mesh-weighted 版の cancellation を証明した。
+3. boundary:
+   - 追加した量はいずれも finite candidate observable に留めた。
+     canonical limit、Gaussian weight、`pi` identification はまだ選択して
+     いない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:13 JST (Weighted logarithmic cancellation)
+
+1. API:
+   - complete finite mesh 上の任意重み `w : ℕ → ℝ` に対する
+     pointwise weighted log cancellation を追加した。
+   - trapezoidal endpoint half-weight
+     `dyadicPhaseTrapezoidWeight` を定義し、positivity を証明した。
+   - trapezoidal log depth / log normalization sum を追加した。
+2. finite laws:
+   - 任意重み補題から、trapezoidal log cancellation を導出した。
+3. boundary:
+   - 台形則は closed-interval integration candidate として記録しただけで、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:23 JST (Finite weight mass comparison)
+
+1. API:
+   - pointwise weighted cancellation の短名 alias
+     `dyadicPhaseWeightedLogCancellation` を追加した。
+   - average weight、plain complete mesh-width weight、trapezoid weight の
+     total mass theorem を追加した。
+2. finite laws:
+   - average と trapezoid は total mass `1` として証明した。
+   - plain complete mesh-width は total mass `1 + h_n` として証明し、
+     endpoint overcount を Lean 上で可視化した。
+3. boundary:
+   - weight mass の比較は observable selection のための有限分類であり、
+     canonical refinement limit、Gaussian weight、`pi` identification は
+     まだ選択していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:40 JST (Endpoint log comparison)
+
+1. API:
+   - depth と normalization の left / right endpoint log が `0` になる
+     theorem を追加した。
+2. finite comparison:
+   - plain complete mesh-width log-depth sum と trapezoidal log-depth sum が
+     有限段階で一致することを証明した。
+   - plain complete mesh-width log-normalization sum と trapezoidal
+     log-normalization sum も有限段階で一致することを証明した。
+3. interpretation:
+   - weight mass としては plain mesh-width と trapezoid は異なるが、
+     discrepancy が log 値 `0` の端点にだけ載るため、現在の boundary-log
+     observables では同じ値を測ることを Lean 上で可視化した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 06:47 JST (Mesh-trapezoid endpoint correction)
+
+1. finite comparison:
+   - 任意の sampled observable `f : ℕ → ℝ` について、plain mesh-width
+     complete-node sum と trapezoidal sum の差が
+     `h_n / 2 * (f 0 + f (2^n))` になる theorem を追加した。
+2. interpretation:
+   - 前回の log-depth / log-normalization 一致は、端点 log 値が `0`
+     になるための特殊例として見えるようになった。
+   - centered log increment では端点値が一般に `0` ではなくなるため、
+     この一般補題が次段の比較面になる。
+3. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 07:02 JST (Endpoint-zero mesh-trapezoid corollary)
+
+1. API:
+   - endpoint-zero observable 用に
+     `dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero`
+     を追加した。
+2. refactor:
+   - log-depth と log-normalization の mesh-width / trapezoid 一致定理を、
+     一般 endpoint correction theorem の zero-endpoint corollary から導く
+     形へ整理した。
+3. interpretation:
+   - boundary-log observables は端点補正が消える側、centered observables
+     は端点補正が復活する側として分類できる準備が整った。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:15 JST (Centered log-depth increment)
+
+1. API:
+   - `centeredLogPhaseDepth` と dyadic sample 版
+     `dyadicPhaseCenteredLogDepth` を追加した。
+   - centered log-depth の mesh-width sum と trapezoidal sum を定義した。
+2. finite laws:
+   - centered log-depth は midpoint で `0`、左右 endpoint で `log 2`
+     になることを証明した。
+   - `centeredLogPhaseDepth t =
+     log (1 + 4 * (t - 1/2)^2)` を証明した。
+   - centered log-depth の plain mesh-width sum と trapezoidal sum の差が
+     `h_n * log 2` になることを証明した。
+3. interpretation:
+   - boundary-log では消えていた endpoint correction が、centered
+     observable では有限段階で復活することを Lean 上で可視化した。
+   - Gaussian limit や `pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:22 JST (Centered log-depth quadratic bounds)
+
+1. API:
+   - centered quadratic profile の positivity と `1 ≤ profile` theorem を
+     追加した。
+2. pointwise bounds:
+   - `0 ≤ centeredLogPhaseDepth t` を証明した。
+   - `centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` を証明した。
+3. interpretation:
+   - centered log-depth が有限段階で quadratic moment estimates へ移る
+     ための pointwise bridge になった。
+   - Gaussian limit や `pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:34 JST (Finite weighted quadratic control)
+
+1. API:
+   - dyadic centered quadratic samples
+     `dyadicPhaseCenteredQuadratic` を finite moment 用の公開対象として
+     使う形に整理した。
+   - 任意の非負有限重みで centered log-depth の非負性を保つ
+     `weighted_centeredLogDepth_nonneg` を追加した。
+   - 任意の非負有限重みで centered log-depth sum が centered quadratic
+     moment に支配される
+     `weighted_centeredLogDepth_le_weighted_centeredQuadratic` を追加した。
+2. finite candidates:
+   - mesh-width、uniform-average、trapezoidal の centered log-depth sum と
+     centered quadratic sum を比較する corollary を追加した。
+3. interpretation:
+   - pointwise な `log(1+x) ≤ x` から、有限重み付き二次モーメント制御へ
+     移行した。
+   - Gaussian limit、積分値、`pi` identification はまだ主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:42 JST (Trapezoidal quadratic moment bound)
+
+1. correction:
+   - `research-pregeometric-pi-program-067.md` の centered endpoint
+     correction 周辺に残っていた stray sentence を整理した。
+2. API:
+   - unit interval 上で centered quadratic profile が `≤ 1` である
+     `centeredQuadratic_le_one_of_mem_unit` を追加した。
+   - complete dyadic node 上の対応する点wise bound
+     `dyadicPhaseCenteredQuadratic_le_one` を追加した。
+3. finite moment:
+   - 台形重みの total mass one と点wise bound から
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_le_one` を証明した。
+   - 閉形式 `1/3 + 2/(3 * (2^n)^2)` は code TODO として残した。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 13:59 JST (Trapezoidal quadratic moment closed form)
+
+1. finite sums:
+   - `sum_range_succ_id_real` と `sum_range_succ_sq_real` を局所補助として
+     追加し、`0, ..., N` の一次和・二乗和を `ℝ` 上で閉じた。
+   - complete-node mesh-width centered quadratic moment の閉形式
+     `dyadicPhaseMeshWeightedCenteredQuadraticSum_eq` を追加した。
+2. trapezoid moment:
+   - endpoint correction を使って
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を証明した。
+   - 有限値は
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)`。
+3. interpretation:
+   - 台形 centered quadratic moment が有限段階で `1 / 3` に対する
+     explicit correction を持つことが Lean 上で見えた。
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 14:40 JST (Centered log-depth closed quadratic bound)
+
+1. API:
+   - `dyadicPhaseTrapezoidCenteredLogDepthSum_le_closedQuadraticBound` を
+     追加した。
+2. finite estimate:
+   - 既存の
+     `dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum` と
+     `dyadicPhaseTrapezoidCenteredQuadraticSum_eq` を合成し、
+     centered log-depth の台形和を
+     `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ) ^ 2)` で上から抑えた。
+3. documentation:
+   - `dyadicPhaseDenom n = 2^n` を研究メモ側に明記した。
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+4. interpretation:
+   - まだ極限、積分、Gaussian、`pi` identification は主張していない。
+     これは finite-level closed upper bound である。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogComposition` 成功
+     (8281 jobs)。
+
+### 2026/06/27 15:32 JST (DkLimit entrance and quadratic moment limit)
+
+1. API:
+   - `DkMath.Analysis.DkLimit` を新規追加した。
+   - Mathlib `Filter.Tendsto` を包む DkMath 語彙として
+     `DkTendstoAtTop`、`DkGapCollapsesTo`、
+     `DkPuncturedGapCollapsesTo` を追加した。
+2. CF2D log limit layer:
+   - `DkMath.Analysis.DkReal.SemanticCF2DLogLimit` を新規追加した。
+   - closed quadratic bound が `1 / 3` へ向かう
+     `dkTendsto_dyadicPhaseClosedQuadraticBound_one_third` と
+     Mathlib spelling の theorem を追加した。
+   - finite closed form から
+     `dkTendsto_dyadicPhaseTrapezoidCenteredQuadraticSum_one_third` と
+     Mathlib spelling の theorem を追加した。
+3. interpretation:
+   - DkLimit は現時点では自前極限型ではなく、Mathlib filter の
+     DkMath 語彙入口である。
+   - centered log-depth sum 自体の極限はまだ主張していない。
+     そこには下界評価が必要。
+4. documentation:
+   - public `DkReal.lean` comment、continuous phase task、pre-geometric
+     pi research note を同期した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2DLogLimit` 成功
+     (8283 jobs)。
+
+### 2026/06/27 16:49 JST (Semantic quarter-turn angle bridge)
+
+1. Euclidean angle bridge:
+   - `semanticQuarterTurnAngle : ℝ` を
+     `DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` に追加した。
+   - 定義値は `Real.pi / 2` だが、役割は intrinsic な `pi` 構成ではなく、
+     既存の semantic four-state action を Euclidean plane で読むための
+     angle bridge とした。
+2. theorem API:
+   - `rotation_semanticQuarterTurnAngle_eq_quarterTurn` を追加し、
+     DkMath 名の角度による rotation が explicit coordinate quarter-turn
+     であることを記録した。
+   - `pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle`
+     を追加し、core-zero semantic action が
+     `theta = semanticQuarterTurnAngle` の Euclidean rotation として読める
+     ことを記録した。
+3. interpretation:
+   - 本線は DkMath 版三角関数、`pi`、角度 `theta` の実現である。
+   - 今回はその最初の角度読み取りとして、円や polar coordinates を
+     仮定する前に得られている四状態作用を、後から Euclidean 角度
+     `pi / 2` と比較する入口を整えた。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に
+     first angle reading milestone を追加した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 17:06 JST (Half-turn and full-turn angle readings)
+
+1. angle vocabulary:
+   - `semanticPhaseAngle (k : ℕ) : ℝ` を追加し、
+     `k * semanticQuarterTurnAngle` を DkMath 名で表した。
+   - `semanticHalfTurnAngle` と `semanticFullTurnAngle` を追加した。
+2. exact angle values:
+   - `semanticHalfTurnAngle_eq_pi` により二つの semantic quarter-turn が
+     `Real.pi` として読まれることを記録した。
+   - `semanticFullTurnAngle_eq_two_pi` により四つの semantic quarter-turn が
+     `2 * Real.pi` として読まれることを記録した。
+3. rotation bridge:
+   - `rotation_semanticHalfTurnAngle_eq_neg` を追加し、半回転が Euclidean
+     plane の negation であることを記録した。
+   - `rotation_semanticFullTurnAngle_eq_refl` を追加し、全回転が identity
+     rotation であることを記録した。
+4. interpretation:
+   - 対称性ルートの本線として、
+     `k semantic actions <-> rotation by semanticPhaseAngle k`
+     へ進むための角度側 API を先に整えた。
+   - まだ反復 semantic action との一般 theorem は未実装。
+5. documentation:
+   - `research-pregeometric-pi-program-067.md` の first angle reading
+     milestone を half/full turn まで拡張した。
+
+### 2026/06/27 18:39 JST (Semantic action iteration angle bridge)
+
+1. angle API:
+   - `semanticPhaseAngle_two` と `semanticPhaseAngle_four` を追加し、
+     phase index `2` と `4` が half/full turn 名に一致することを
+     simp theorem として記録した。
+   - `semanticPhaseAngle_add` を追加し、phase index の加法が angle の
+     加法として読めることを記録した。
+2. coordinate bridge:
+   - `pairToEuclideanPlane_neg` を追加し、coordinate insertion が
+     negation と可換であることを記録した。
+3. action iteration bridge:
+   - `pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticAct_four_eq_rotation_semanticFullTurnAngle`
+     を追加した。
+4. interpretation:
+   - 既存の core-zero action law
+     `semanticAct_twice_of_core_eq_zero` を使い、二回作用は Euclidean
+     half-turn として読まれる。
+   - 四回作用は Euclidean full-turn、すなわち identity rotation として
+     読まれる。
+   - まだ一般 `k` 回作用の theorem は未実装。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 21:54 JST (Iterate API and three-quarter turn bridge)
+
+1. semantic iterate API:
+   - `semanticActIter r k z := (semanticAct r)^[k] z` を追加した。
+   - `semanticActIter_zero`、`semanticActIter_one`、
+     `semanticActIter_succ` を追加した。
+   - core-zero 境界作用の iterate 形式として
+     `semanticActIter_two_of_core_eq_zero`、
+     `semanticActIter_three_of_core_eq_zero`、
+     `semanticActIter_four_of_core_eq_zero` を追加した。
+2. four-step semantic action:
+   - `semanticAct_four_of_core_eq_zero` を semantic 層に追加し、
+     Euclidean bridge 側の四回作用証明を読みやすくした。
+3. angle bridge:
+   - `semanticPhaseAngle_three` を追加し、
+     `semanticPhaseAngle 3 = 3 * Real.pi / 2` を記録した。
+   - `rotation_semanticPhaseAngle_three` を追加し、三つの quarter-turn が
+     reverse quarter-turn として読まれることを記録した。
+4. action iteration bridge:
+   - `pairToEuclideanPlane_semanticActIter_two_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_three_eq_rotation_semanticPhaseAngle`
+     を追加した。
+   - `pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle`
+     を追加した。
+5. interpretation:
+   - `k = 0,1,2,3,4` の四状態 angle reading の土台が揃った。
+   - 次は一般 `k` または `k % 4` による分類 theorem が候補。
+6. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 22:25 JST (Period-four iterate table preparation)
+
+1. semantic periodicity:
+   - `semanticActIter_add_four_of_core_eq_zero` を追加し、
+     core-zero 境界作用の iterate が `k + 4` で同じ状態へ戻ることを
+     semantic 層で記録した。
+2. Euclidean iterate table:
+   - `pairToEuclideanPlane_semanticActIter_zero_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 0` の identity row を angle bridge として記録した。
+   - `pairToEuclideanPlane_semanticActIter_one_eq_rotation_semanticPhaseAngle`
+     を追加し、`k = 1` の quarter-turn row を iterate 形式でも
+     使えるようにした。
+3. interpretation:
+   - `k = 0,1,2,3,4` が同じ `semanticActIter` 表記で揃った。
+   - `k + 4` の周期性も semantic 層に入ったため、次は本格的な
+     `k % 4` 分類 theorem へ進める。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に period-four iterate
+     preparation を追記した。
+5. verification:
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/27 23:18 JST (Modulo-four semantic phase classifier)
+
+1. semantic modulo-four classification:
+   - `semanticActIter_add_four_mul_of_core_eq_zero` を追加し、
+     `k + 4 * q` の形で任意個の full-turn を消せるようにした。
+   - `semanticActIter_eq_mod_four_of_core_eq_zero` を追加し、
+     core-zero semantic action の iterate が `k % 4` のみに依存することを
+     記録した。
+2. Euclidean modulo-four bridge:
+   - `pairToEuclideanPlane_semanticActIter_eq_rotation_semanticPhaseAngle_mod_four`
+     を追加した。
+   - semantic 側で `k % 4` に縮約し、`0,1,2,3` の有限位相表へ分岐して
+     Euclidean angle reading に接続する。
+3. interpretation:
+   - DkMath の exact order-four action が、Euclidean 解釈では
+     `semanticPhaseAngle (k % 4)` の回転として読まれるところまで閉じた。
+   - これは `pi` の内在構成ではなく、四状態対称性の Euclidean
+     angle reading である。
+4. documentation:
+   - `research-pregeometric-pi-program-067.md` に modulo-four classifier
+     の二層構造を追記した。
+5. verification:
+   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
+   - `lake build DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase` 成功
+     (8278 jobs)。
+
+### 2026/06/28 00:00 JST (Checkpoint 103 documentation consolidation)
+
+1. code comments:
+   - `DkMath.Analysis.DkLimit` に残 TODO を追記した。
+   - import scope、cosmic derivative theorem alias、punctured Gap spelling
+     の三点を今後の軽量化・橋定理候補として明示した。
+   - public `DkReal.lean` comment に modulo-four finite phase table と
+     Euclidean angle reading の到達点を追記した。
+2. specification document:
+   - `DkMath/Analysis/docs/trigonometric-spec-103.md` を新規追加した。
+   - DkMath 版三角関数の仕様を、角度先行ではなく
+     `q2 boundary detector -> core-zero action -> exact order four ->
+     finite phase table -> continuous theta` の順序として整理した。
+3. research docs:
+   - `research-pregeometric-pi-program-067.md` に
+     continuous theta extraction milestone と、今後の三つの route
+     (map-level wrapper、continuous theta、intrinsic pi) を追記した。
+   - `task-trig-continuous-phase-065.md` に finite modulo-four phase table
+     と Euclidean angle reading を反映した。
+4. TODO status:
+   - `todo-list-103.md` を更新し、完了項目と残る解析対称構造説明を
+     分離した。
+5. scope:
+   - 今回は docs/comment consolidation が主目的で、実装 theorem は追加
+     していない。

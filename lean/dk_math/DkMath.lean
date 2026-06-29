@@ -41,6 +41,7 @@ import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theor
 import DkMath.KUS  -- KUS: coefficient-unit-blueprint kernel
 import DkMath.Sequence  -- Sequence generators and recurrence principles
 import DkMath.Kernel  -- Capacity-kernel normalization layer
+import DkMath.Analysis  -- Gap, correction-kernel, and real-analysis bridge layer
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 -- Unit Cycle Module

@@ -27,7 +27,7 @@ $$
 * `Nat.Coprime x u`
 * exceptional datum
   [
-  (d \mid x ;\land; u^{d-1}\equiv 1 \pmod{d^2})
+  (d \mid x \;\land\; u^{d-1}\equiv 1 \pmod{d^2})
   ]
 
 をまとめて受ける形にしておる。
@@ -54,7 +54,7 @@ $$
 今回それを
 
 $$
-(d \mid x ;\land; u^{d-1}\equiv 1 \pmod{d^2})
+(d \mid x \;\land\; u^{d-1}\equiv 1 \pmod{d^2})
 $$
 
 という **ひとつの exceptional datum** に束ねた。

@@ -51,7 +51,7 @@ $$
 その供給線の源、つまり concrete に
 
 $$
-\exists pkt',; pkt'.z < z \land \neg p \mid pkt'.t
+\exists pkt',\; pkt'.z < z \land \neg p \mid pkt'.t
 $$
 
 を返す restore/arithmetic theorem は、まだこれからじゃ。今回の履歴でも、次の課題としてそれが明記されておる。

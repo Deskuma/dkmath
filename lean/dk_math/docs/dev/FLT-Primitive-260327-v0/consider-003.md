@@ -75,7 +75,7 @@ INDEX の整理でも、FLT 幹線は
 
 $$
 \text{difference-of-powers primitive prime}
-;\Longrightarrow;
+\;\Longrightarrow\;
 \text{GN 側 distinguished prime}
 $$
 

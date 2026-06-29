@@ -37,7 +37,7 @@ $$
 加えて
 
 $$
-s = q s' ;\Rightarrow; s^p = q^p s'^p
+s = q s' \;\Rightarrow\; s^p = q^p s'^p
 $$
 
 も定理化され、降下 1 step ごとに \(q\)-adic 因子が \(q^p\) ずつ剥がれる算術基盤まで揃った。

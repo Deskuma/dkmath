@@ -48,7 +48,7 @@ $$
 
 $$
 \text{mod } p^3 \text{ での negation source}
-;\to;
+\;\to\;
 \text{False}
 $$
 
