@@ -243,7 +243,10 @@ proof-irrelevance helper isolate the seam proof bookkeeping. The remaining
 bridge is to commute descended semantic evaluation with the nested
 `Path.trans` and `Path.cast` structure of the canonical four-path concatenator
 for this endpoint-cast observed path, including seam proof alignment after
-mapping.
+mapping. The edge-level mapping bridge is now proved: each quotient edge path
+mapped by descended semantic evaluation is the corresponding observed
+semantic edge path after endpoint relabelling. The next target is lifting
+these edge-level comparisons through the canonical four-edge concatenator.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

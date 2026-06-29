@@ -2052,6 +2052,89 @@ theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
   rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
 
 /--
+Mapping a quotient edge by descended semantic evaluation recovers the
+observed semantic edge after endpoint relabelling.
+
+This is the edge-level bridge from quotient traversal to fixed-boundary
+observation.
+-/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    ((shiftedCyclicChartEdgePath i).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z i).symm
+        (shiftedSemanticCyclicChartEval_right hcore z i).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z i := by
+  apply Path.ext
+  funext t
+  rfl
+
+/-- Pointwise form of the mapped quotient edge comparison. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    (((shiftedCyclicChartEdgePath i).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z i).symm
+        (shiftedSemanticCyclicChartEval_right hcore z i).symm) t =
+      shiftedSemanticObservedCyclicEdgePath hcore z i t :=
+  congrFun
+    (congrArg DFunLike.coe
+      (shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z i))
+    t
+
+/-- Edge `0` mapped by semantic evaluation is the observed edge `0`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (0 : Fin 4)
+
+/-- Edge `1` mapped by semantic evaluation is the observed edge `1`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (1 : Fin 4)
+
+/-- Edge `2` mapped by semantic evaluation is the observed edge `2`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (2 : Fin 4)
+
+/-- Edge `3` mapped by semantic evaluation is the observed edge `3`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (3 : Fin 4)
+
+/--
 Canonical four-edge concatenation with explicit seam equalities.
 
 This helper fixes one standard packaging for a closed four-edge traversal.
@@ -2652,6 +2735,9 @@ Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
 packaging step. Quotient endpoint evaluation aliases, finite seam value
 alignment aliases, and a path-cast proof-irrelevance helper isolate the
 remaining seam proof alignment problem.
+Mapped quotient edge paths are now identified with their observed semantic
+edge paths after endpoint relabelling, uniformly over `Fin 4` and through
+four concrete edge aliases.
 
 [TODO: semantic-cf2d/shifted-cyclic-path-eval]
 Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -2666,7 +2752,8 @@ endpoint. The endpoint mismatch is solved; the remaining obstruction is the
 compatibility of descended semantic evaluation with the nested `Path.trans`
 and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
 proof alignment after mapping. The current stable route prefers value-level
-seam alignment over direct equality of seam proof terms.
+seam alignment over direct equality of seam proof terms. The next expected
+normalization target is the mapped canonical quotient four-edge path.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended

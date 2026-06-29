@@ -510,6 +510,12 @@ shiftedCyclicFourPath_eq_viaEdges
 shiftedCyclicFourPath_source
 shiftedCyclicFourPath_target
 shiftedSemanticCyclicChartEval_edgePath
+shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_apply
+shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
 shiftedPath_cast_apply
 shiftedPath_cast_proof_irrel
 shiftedPath_map_cast
@@ -760,6 +766,24 @@ shiftedSemanticObservedCyclicEdgePath
 shiftedSemanticObservedCyclicEdgePath_apply
 shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
 ```
+
+The mapped quotient edge form is also connected to the observed semantic edge.
+After endpoint relabelling, mapping a quotient edge path by descended semantic
+evaluation gives the corresponding observed edge path:
+
+```text
+shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_apply
+shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
+```
+
+This closes the edge-level mapping bridge. The remaining four-edge bridge is
+now a concatenator-lifting problem: transport these four mapped-edge
+comparisons through `shiftedFourPathConcatWithSeams` while aligning seam cast
+proofs.
 
 The four-edge packaging has also been standardized. The helper
 `shiftedFourPathConcatWithSeams` glues four paths by explicit endpoint seam
