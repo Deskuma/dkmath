@@ -156,6 +156,22 @@ This should remain isolated until it proves that it reduces production proof
 noise. The current phase-shift module should keep using the validated
 Mathlib-backed theorems until that prototype earns its way into the API.
 
+## Prototype Decision
+
+Do not add a production `DkPathPrototype` merely to mirror the already-closed
+phase-shift comparison.
+
+The prototype should be introduced only when a new downstream proof would
+otherwise repeat the same map/cast/trans normalization. At that point, the
+prototype must be judged by one concrete metric:
+
+```text
+Does it shorten a real proof while preserving the public theorem meaning?
+```
+
+If the answer is yes, the prototype can start as an isolated namespace. If
+the answer is no, the current Mathlib-backed helper theorems are sufficient.
+
 ## Next Step
 
 Do not start the Euclidean one-eighth reading from this note.

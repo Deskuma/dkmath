@@ -3041,26 +3041,25 @@ Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
 `Path.map`/`Path.cast` compatibility theorem is available for the next
 packaging step. Quotient endpoint evaluation aliases, finite seam value
 alignment aliases, and a path-cast proof-irrelevance helper isolate the
-remaining seam proof alignment problem.
+seam proof alignment problem.
 Mapped quotient edge paths are now identified with their observed semantic
 edge paths after endpoint relabelling, uniformly over `Fin 4` and through
 four concrete edge aliases.
 
-[TODO: semantic-cf2d/shifted-cyclic-path-eval]
-Compare evaluation of the closed quotient path with the fixed-`q2` four-level
-path after path-trans cast normalization lemmas are available.
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-eval]
+The evaluation of the closed quotient path is now compared with the fixed-`q2`
+four-level path. The generic theorem `shiftedFourPathConcatWithSeams_map`
+commutes mapping with the canonical four-edge seam concatenator, and the
+semantic specialization identifies the endpoint-cast observed quotient path
+with the existing finite four-level path. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names the closed
+checkpoint. This is a path-packaging result about `Path.map`, `Path.trans`,
+`Path.cast`, and seam proof irrelevance; it is not a Euclidean reading.
 
-[TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
-The quotient-side closed path and finite closed path match their canonical
-via-edge versions. The observed quotient path still needs a lemma commuting
-descended semantic evaluation with the canonical four-path concatenator, after
-endpoint casting from the observed quotient-left endpoint to the finite left
-endpoint. The endpoint mismatch is solved; the remaining obstruction is the
-compatibility of descended semantic evaluation with the nested `Path.trans`
-and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
-proof alignment after mapping. The current stable route prefers value-level
-seam alignment over direct equality of seam proof terms. The next expected
-normalization target is the mapped canonical quotient four-edge path.
+[TODO: semantic-cf2d/dkpath-layer]
+Extract the validated path-normalization API into a future DkMath-native path
+layer only after an isolated prototype proves that it shortens downstream
+proofs without changing theorem meanings.
 
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended
