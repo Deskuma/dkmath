@@ -330,6 +330,40 @@ theorem orbitWindowHeightCountGe_eq_window_of_forall_ge
       simp [List.range_succ, ih hprefix, hlast]
 
 /--
+The `height >= threshold` occupation count gives a direct lower bound for the
+accumulated Collatz height.
+
+If `c` entries in the window have height at least `threshold`, then those
+entries alone contribute at least `c * threshold` to `sumS`.
+-/
+theorem orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGe n k threshold * threshold ≤ sumS n k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowHeightCountGe, orbitWindowHeightSeq, sumS]
+  | succ k ih =>
+      have ih' :
+          List.countP ((fun x => decide (threshold ≤ x)) ∘ orbitWindowHeight n)
+              (List.range k) * threshold ≤ sumS n k := by
+        simpa [orbitWindowHeightCountGe, orbitWindowHeightSeq] using ih
+      by_cases hlast : threshold ≤ orbitWindowHeight n k
+      · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+        unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+        rw [List.range_succ]
+        simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+          List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
+          hlast, if_true, Nat.add_mul, one_mul]
+        exact Nat.add_le_add ih' hlast
+      · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+        unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+        rw [List.range_succ]
+        simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+          List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
+          hlast, if_false, Nat.add_zero]
+        exact Nat.le_add_right_of_le ih'
+
+/--
 Block shifts preserve the raw height when the observed height is below the
 block exponent.
 

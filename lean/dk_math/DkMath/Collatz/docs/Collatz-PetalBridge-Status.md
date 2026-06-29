@@ -116,6 +116,7 @@ orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
 orbitWindowHeightCountEq_eq_window_of_forall_eq
 orbitWindowHeightCountGe_eq_window_of_forall_ge
+orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -256,11 +257,14 @@ all heights equal h
   -> exact-height count = k
 all heights >= threshold
   -> threshold count = k
+
+height >= threshold appears c times
+  -> c * threshold <= sumS n k
 ```
 
 This is the first distribution layer.  It does not yet decompose `sumS` by
-height classes, but it gives future drift estimates a stable place to count
-how often each local height regime appears.
+height classes, but it already gives future drift estimates a direct lower
+bound from a threshold regime count.
 
 The bridge theorem
 
@@ -284,6 +288,7 @@ ordered height profile controls accumulated Collatz drift
 height-threshold hypotheses give integer lower bounds for `sumS`
 label collisions preserve the next height observation
 height occupation counts measure exact and lower-bound regimes
+threshold occupation counts give direct lower bounds for `sumS`
 ```
 
 ## Next Candidate Work
@@ -293,8 +298,8 @@ The next safe steps are:
 ```text
 1. Connect the ordered height profile to a Petal address/residue reading.
 2. Add a window occupation/address transition layer.
-3. Refine occupation counts into distribution estimates for `sumS`.
-4. Use prefix sums and threshold bounds as the Collatz-side drift input.
+3. Refine exact-height counts into distribution estimates for `sumS`.
+4. Use threshold occupation lower bounds as the Collatz-side drift input.
 5. Test whether an external label transform can turn orbit labels into carrier labels.
 6. Only after that, test whether Collatz labels can feed ABC support/rad.
 ```
