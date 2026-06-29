@@ -2847,6 +2847,23 @@ theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPat
       symm
       exact shiftedSemanticFinFourLevelPath_eq_viaEdges hcore z
 
+/--
+Public final form of the shifted cyclic path-packaging comparison.
+
+The quotient-side closed path, after endpoint casting, is the same path as the
+existing finite four-level shifted path. This is only a path-packaging theorem:
+it uses map/trans/cast normalization and seam proof irrelevance, not any
+Euclidean reading.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+      shiftedSemanticFinFourLevelPath hcore z :=
+  shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+    hcore z
+
 /-- Value-level form of the final shifted closed-path comparison. -/
 theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
     {r : UnitKernel DkNNRealQ}

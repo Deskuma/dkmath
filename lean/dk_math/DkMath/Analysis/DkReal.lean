@@ -254,7 +254,9 @@ equal to first mapping the four quotient edges and then gluing them. This
 closes the packaging comparison between the endpoint-cast observed quotient
 closed path and the existing finite four-level path. The result is entirely a
 `Path.map`/`Path.trans`/`Path.cast` theorem, not a boundary or semantic
-obstruction.
+obstruction. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names this
+closed checkpoint for downstream imports.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated

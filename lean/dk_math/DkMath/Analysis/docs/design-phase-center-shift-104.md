@@ -561,6 +561,7 @@ shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
 shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
 shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
@@ -945,6 +946,7 @@ four-level path:
 ```text
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
 ```
 
@@ -1177,8 +1179,10 @@ first-left-endpoint evaluation, and boundary-observation aliases are exposed.
 Prove the generic four-edge map theorem for the canonical seam concatenator,
 specialize it to semantic evaluation of the quotient four-path, and identify
 the endpoint-cast observed quotient path with the existing fixed-`q2`
-four-level path. This closes the path-packaging comparison before any
-Euclidean angle reading.
+four-level path. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names the closed
+checkpoint for downstream imports. This closes the path-packaging comparison
+before any Euclidean angle reading.
 ```
 
 ## Remaining TODO Tags
