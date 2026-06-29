@@ -1115,6 +1115,1842 @@ def shiftedSemanticFourLevelPath
       (p3.cast h23 rfl)).cast rfl h30.symm
 
 /-!
+## Finite cyclic index wrappers
+
+The `Fin 4` wrappers give downstream code a finite cyclic index without
+choosing a continuous quotient phase parameter.
+-/
+
+/-- Cyclic successor on the four finite indices. -/
+def finFourSucc (i : Fin 4) : Fin 4 :=
+  ⟨(i.val + 1) % 4, Nat.mod_lt _ (by norm_num)⟩
+
+@[simp]
+theorem finFourSucc_val (i : Fin 4) :
+    (finFourSucc i).val = (i.val + 1) % 4 := rfl
+
+/-- The finite successor sends `0` to `1`. -/
+@[simp]
+theorem finFourSucc_zero :
+    finFourSucc ⟨0, by norm_num⟩ = ⟨1, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `1` to `2`. -/
+@[simp]
+theorem finFourSucc_one :
+    finFourSucc ⟨1, by norm_num⟩ = ⟨2, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `2` to `3`. -/
+@[simp]
+theorem finFourSucc_two :
+    finFourSucc ⟨2, by norm_num⟩ = ⟨3, by norm_num⟩ := by
+  rfl
+
+/-- The finite successor sends `3` back to `0`. -/
+@[simp]
+theorem finFourSucc_three :
+    finFourSucc ⟨3, by norm_num⟩ = ⟨0, by norm_num⟩ := by
+  rfl
+
+/-- Applying the finite successor four times returns to the starting index. -/
+theorem finFourSucc_four_cycle (i : Fin 4) :
+    finFourSucc (finFourSucc (finFourSucc (finFourSucc i))) = i := by
+  fin_cases i <;> rfl
+
+/-- The shifted base state indexed by `Fin 4`. -/
+def shiftedSemanticFinBase
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) : Vec ℝ :=
+  shiftedSemanticIndexedBase r z i.val
+
+@[simp]
+theorem shiftedSemanticFinBase_eq_indexed
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinBase r z i =
+      shiftedSemanticIndexedBase r z i.val := rfl
+
+/-- Every finite shifted base remains on the original square-mass level. -/
+theorem shiftedSemanticFinBase_q2
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    Vec.q2 (shiftedSemanticFinBase r z i) = Vec.q2 z :=
+  shiftedSemanticIndexedBase_q2 r z i.val
+
+/-- The finite shifted base as a point of the original square-mass level set. -/
+def shiftedSemanticFinBaseLevelPoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticIndexedBaseLevelPoint r z i.val
+
+@[simp]
+theorem shiftedSemanticFinBaseLevelPoint_eq_indexed
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinBaseLevelPoint r z i =
+      shiftedSemanticIndexedBaseLevelPoint r z i.val := rfl
+
+@[simp]
+theorem shiftedSemanticFinBaseLevelPoint_val
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    (shiftedSemanticFinBaseLevelPoint r z i).1 =
+      shiftedSemanticFinBase r z i := rfl
+
+/-- The shifted normalized edge indexed by `Fin 4`. -/
+def shiftedSemanticFinEdge
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) (t : ℝ) : Vec ℝ :=
+  shiftedSemanticIndexedEdge r z i.val t
+
+@[simp]
+theorem shiftedSemanticFinEdge_eq_indexed
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) (t : ℝ) :
+    shiftedSemanticFinEdge r z i t =
+      shiftedSemanticIndexedEdge r z i.val t := rfl
+
+/-- The finite shifted edge starts at its finite left endpoint. -/
+theorem shiftedSemanticFinEdge_leftEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i 0 =
+      shiftedSemanticLeftEndpoint r (shiftedSemanticFinBase r z i) := by
+  simp [shiftedSemanticFinEdge, shiftedSemanticIndexedEdge]
+
+/-- The finite shifted edge ends at its finite right endpoint. -/
+theorem shiftedSemanticFinEdge_rightEndpoint
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i 1 =
+      shiftedSemanticRightEndpoint r (shiftedSemanticFinBase r z i) := by
+  simp [shiftedSemanticFinEdge, shiftedSemanticIndexedEdge]
+
+/-- The finite shifted edge stays on the original square-mass boundary. -/
+theorem shiftedSemanticFinEdge_q2_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : ℝ) :
+    Vec.q2 (shiftedSemanticFinEdge r z i t) = Vec.q2 z := by
+  rw [shiftedSemanticFinEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticNormalizedEdge_q2_of_core_eq_zero hcore,
+    shiftedSemanticIndexedBase_q2]
+
+/-- The finite shifted edge center reaches the next indexed base state. -/
+theorem shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i phaseCenter =
+      shiftedSemanticIndexedBase r z (i.val + 1) :=
+  shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
+
+/-- The finite shifted edge center reaches the cyclic successor base. -/
+theorem shiftedSemanticFinEdge_center_eq_succ_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinEdge r z i phaseCenter =
+      shiftedSemanticFinBase r z (finFourSucc i) := by
+  fin_cases i
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨0, by norm_num⟩
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨1, by norm_num⟩
+  · exact shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨2, by norm_num⟩
+  · calc
+      shiftedSemanticFinEdge r z ⟨3, by norm_num⟩ phaseCenter =
+          shiftedSemanticIndexedBase r z (3 + 1) :=
+        shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨3, by norm_num⟩
+      _ = shiftedSemanticFinBase r z (finFourSucc ⟨3, by norm_num⟩) := by
+        norm_num
+        exact semanticAct_four_of_core_eq_zero hcore z
+
+/-- The finite shifted normalized edge as a path. -/
+def shiftedSemanticFinPath
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
+    Path
+      (shiftedSemanticLeftEndpoint r (shiftedSemanticFinBase r z i))
+      (shiftedSemanticRightEndpoint r (shiftedSemanticFinBase r z i)) :=
+  shiftedSemanticIndexedPath r z i.val
+
+@[simp]
+theorem shiftedSemanticFinPath_apply
+    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticFinPath r z i t =
+      shiftedSemanticFinEdge r z i t := rfl
+
+/-- The finite shifted left endpoint inside the original square-mass level set. -/
+def shiftedSemanticFinLeftLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) : LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticIndexedLeftLevelEndpoint hcore z i.val
+
+/-- The finite shifted right endpoint inside the original square-mass level set. -/
+def shiftedSemanticFinRightLevelEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) : LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticIndexedRightLevelEndpoint hcore z i.val
+
+@[simp]
+theorem shiftedSemanticFinLeftLevelEndpoint_eq_indexed
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinLeftLevelEndpoint hcore z i =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z i.val := rfl
+
+@[simp]
+theorem shiftedSemanticFinRightLevelEndpoint_eq_indexed
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinRightLevelEndpoint hcore z i =
+      shiftedSemanticIndexedRightLevelEndpoint hcore z i.val := rfl
+
+/-- The finite shifted level edge inside the original square-mass boundary. -/
+def shiftedSemanticFinLevelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : ℝ) : LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticIndexedLevelEdge hcore z i.val t
+
+@[simp]
+theorem shiftedSemanticFinLevelEdge_eq_indexed
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : ℝ) :
+    shiftedSemanticFinLevelEdge hcore z i t =
+      shiftedSemanticIndexedLevelEdge hcore z i.val t := rfl
+
+@[simp]
+theorem shiftedSemanticFinLevelEdge_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : ℝ) :
+    (shiftedSemanticFinLevelEdge hcore z i t).1 =
+      shiftedSemanticFinEdge r z i t := rfl
+
+/-- The finite level edge center reaches the next indexed base level point. -/
+theorem shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinLevelEdge hcore z i phaseCenter =
+      shiftedSemanticIndexedBaseLevelPoint r z (i.val + 1) :=
+  shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
+
+/-- The finite level edge center reaches the cyclic successor base point. -/
+theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinLevelEdge hcore z i phaseCenter =
+      shiftedSemanticIndexedBaseLevelPoint r z (finFourSucc i).val := by
+  fin_cases i
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨0, by norm_num⟩
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨1, by norm_num⟩
+  · exact shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero hcore z ⟨2, by norm_num⟩
+  · apply Subtype.ext
+    calc
+      (shiftedSemanticFinLevelEdge hcore z ⟨3, by norm_num⟩ phaseCenter).1 =
+          shiftedSemanticIndexedBase r z (3 + 1) :=
+        congrArg Subtype.val
+          (shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero
+            hcore z ⟨3, by norm_num⟩)
+      _ = (shiftedSemanticIndexedBaseLevelPoint r z (finFourSucc ⟨3, by norm_num⟩).val).1 := by
+        norm_num
+        exact semanticAct_four_of_core_eq_zero hcore z
+
+/-- The finite level edge center reaches the finite successor base point. -/
+theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_level_of_core_eq_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinLevelEdge hcore z i phaseCenter =
+      shiftedSemanticFinBaseLevelPoint r z (finFourSucc i) := by
+  simpa using
+    shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero hcore z i
+
+/-- The finite shifted normalized edge as a fixed-boundary path. -/
+def shiftedSemanticFinLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    Path (shiftedSemanticFinLeftLevelEndpoint hcore z i)
+      (shiftedSemanticFinRightLevelEndpoint hcore z i) :=
+  shiftedSemanticIndexedLevelPath hcore z i.val
+
+@[simp]
+theorem shiftedSemanticFinLevelPath_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    (shiftedSemanticFinLevelPath hcore z i t).1 =
+      shiftedSemanticFinEdge r z i t := rfl
+
+/-- Applying a finite level path gives the corresponding finite level edge. -/
+@[simp]
+theorem shiftedSemanticFinLevelPath_apply_eq_levelEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticFinLevelPath hcore z i t =
+      shiftedSemanticFinLevelEdge hcore z i t := rfl
+
+/--
+Finite cyclic seam compatibility: the right endpoint of finite edge `i` is
+the left endpoint of its cyclic successor.
+-/
+theorem shiftedSemanticFinRightLevelEndpoint_eq_succ_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinRightLevelEndpoint hcore z i =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (finFourSucc i) := by
+  fin_cases i
+  · exact shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 0
+  · exact shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 1
+  · exact shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 2
+  · exact shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left hcore z
+
+/-- Finite seam compatibility from edge `0` to edge `1`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨0, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨1, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨0, by norm_num⟩
+
+/-- Finite seam compatibility from edge `1` to edge `2`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_one_eq_two_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨1, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨2, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨1, by norm_num⟩
+
+/-- Finite seam compatibility from edge `2` to edge `3`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_two_eq_three_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨2, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨3, by norm_num⟩ :=
+  shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨2, by norm_num⟩
+
+/-- Finite seam compatibility from edge `3` back to edge `0`. -/
+theorem shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z ⟨3, by norm_num⟩ =
+      shiftedSemanticFinLeftLevelEndpoint hcore z ⟨0, by norm_num⟩ :=
+  by
+    simpa using
+      shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z ⟨3, by norm_num⟩
+
+/-- Finite-index alias for the closed four shifted level path. -/
+def shiftedSemanticFinFourLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0)
+      (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0) :=
+  shiftedSemanticFourLevelPath hcore z
+
+/-- Source endpoint of the closed shifted four-level path. -/
+theorem shiftedSemanticFourLevelPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFourLevelPath hcore z 0 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  (shiftedSemanticFourLevelPath hcore z).source
+
+/-- Target endpoint of the closed shifted four-level path. -/
+theorem shiftedSemanticFourLevelPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFourLevelPath hcore z 1 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  (shiftedSemanticFourLevelPath hcore z).target
+
+/-- Source endpoint of the finite alias for the closed shifted four-level path. -/
+theorem shiftedSemanticFinFourLevelPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinFourLevelPath hcore z 0 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  shiftedSemanticFourLevelPath_source hcore z
+
+/-- Target endpoint of the finite alias for the closed shifted four-level path. -/
+theorem shiftedSemanticFinFourLevelPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinFourLevelPath hcore z 1 =
+      shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
+  shiftedSemanticFourLevelPath_target hcore z
+
+/--
+Every point of the finite closed shifted path lies on the original
+square-mass boundary.
+-/
+theorem shiftedSemanticFinFourLevelPath_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 ((shiftedSemanticFinFourLevelPath hcore z t).1) = Vec.q2 z :=
+  (shiftedSemanticFinFourLevelPath hcore z t).2
+
+/-!
+## Finite chart evaluation and seam quotient
+
+The next definitions expose the finite chart space for the shifted boundary:
+a finite edge index together with a local unit-interval parameter. The seam
+relation is first recorded directly, then closed under Mathlib's generated
+equivalence relation so chart evaluation can descend to a quotient wrapper.
+-/
+
+/-- A finite shifted chart is one of four shifted edges and a local parameter. -/
+abbrev ShiftedFiniteChart :=
+  Fin 4 × unitInterval
+
+/-- Evaluate a finite shifted chart inside the fixed square-mass boundary. -/
+def shiftedSemanticFinChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedFiniteChart) : LevelSet ℝ (Vec.q2 z) :=
+  shiftedSemanticFinLevelEdge hcore z p.1 p.2
+
+@[simp]
+theorem shiftedSemanticFinChartEval_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedFiniteChart) :
+    (shiftedSemanticFinChartEval hcore z p).1 =
+      shiftedSemanticFinEdge r z p.1 p.2 := rfl
+
+/-- Evaluating a finite chart at local `0` gives its left endpoint. -/
+theorem shiftedSemanticFinChartEval_at_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (0 : unitInterval)) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z i := by
+  apply Subtype.ext
+  simp [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge,
+    shiftedSemanticIndexedLevelEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticFinLeftLevelEndpoint,
+    shiftedSemanticIndexedLeftLevelEndpoint]
+
+/-- Evaluating a finite chart at local `1` gives its right endpoint. -/
+theorem shiftedSemanticFinChartEval_at_right
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (1 : unitInterval)) =
+      shiftedSemanticFinRightLevelEndpoint hcore z i := by
+  apply Subtype.ext
+  simp [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge,
+    shiftedSemanticIndexedLevelEdge, shiftedSemanticIndexedEdge,
+    shiftedSemanticFinRightLevelEndpoint,
+    shiftedSemanticIndexedRightLevelEndpoint]
+
+/--
+Finite seam relation between charts.
+
+It relates the right endpoint of edge `i` to the left endpoint of its finite
+successor. This is the generating relation for the later chart quotient.
+-/
+def shiftedFiniteSeamRel (p q : ShiftedFiniteChart) : Prop :=
+  ∃ i : Fin 4,
+    p = (i, (1 : unitInterval)) ∧
+      q = (finFourSucc i, (0 : unitInterval))
+
+/-- The chart evaluation has matching values across a single finite seam. -/
+theorem shiftedSemanticFinChartEval_right_eq_succ_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticFinChartEval hcore z (i, (1 : unitInterval)) =
+      shiftedSemanticFinChartEval hcore z
+        (finFourSucc i, (0 : unitInterval)) := by
+  rw [shiftedSemanticFinChartEval_at_right,
+    shiftedSemanticFinChartEval_at_left]
+  exact shiftedSemanticFinRightLevelEndpoint_eq_succ_left hcore z i
+
+/-- Chart evaluation is compatible with the finite seam relation. -/
+theorem shiftedSemanticFinChartEval_eq_of_seamRel
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    {p q : ShiftedFiniteChart}
+    (hrel : shiftedFiniteSeamRel p q) :
+    shiftedSemanticFinChartEval hcore z p =
+      shiftedSemanticFinChartEval hcore z q := by
+  rcases hrel with ⟨i, hp, hq⟩
+  subst hp
+  subst hq
+  exact shiftedSemanticFinChartEval_right_eq_succ_left hcore z i
+
+/--
+Generated equivalence relation of the finite seam relation.
+
+This is the algebraic cyclic identification of endpoint charts. It deliberately
+does not add a topology or path structure to the quotient.
+-/
+def shiftedFiniteChartRel (p q : ShiftedFiniteChart) : Prop :=
+  Relation.EqvGen shiftedFiniteSeamRel p q
+
+/-- Setoid generated by the shifted finite seam relation. -/
+def shiftedFiniteChartSetoid : Setoid ShiftedFiniteChart :=
+  Relation.EqvGen.setoid shiftedFiniteSeamRel
+
+/--
+Finite shifted chart quotient by generated seam equivalence.
+
+This is a cyclic chart parameter only in the algebraic sense: seams are
+identified, but no quotient topology, path structure, or Euclidean reading is
+selected here.
+-/
+abbrev ShiftedCyclicChart :=
+  Quot shiftedFiniteChartSetoid
+
+/-- Constructor alias for representatives of `ShiftedCyclicChart`. -/
+def shiftedCyclicChartMk (p : ShiftedFiniteChart) : ShiftedCyclicChart :=
+  Quot.mk shiftedFiniteChartSetoid p
+
+/-- The constructor alias is definitionally the quotient representative map. -/
+@[simp]
+theorem shiftedCyclicChartMk_eq_mk (p : ShiftedFiniteChart) :
+    shiftedCyclicChartMk p = Quot.mk shiftedFiniteChartSetoid p := rfl
+
+/-- Left endpoint representative of a finite shifted chart in the quotient. -/
+def shiftedCyclicChartLeft (i : Fin 4) : ShiftedCyclicChart :=
+  shiftedCyclicChartMk (i, (0 : unitInterval))
+
+/-- Right endpoint representative of a finite shifted chart in the quotient. -/
+def shiftedCyclicChartRight (i : Fin 4) : ShiftedCyclicChart :=
+  shiftedCyclicChartMk (i, (1 : unitInterval))
+
+/--
+The generating seam is an equality inside the shifted cyclic chart quotient.
+
+This is the quotient-side form of the finite seam law: the right endpoint of
+edge `i` and the left endpoint of its finite successor are the same cyclic
+chart point.
+-/
+theorem shiftedCyclicChartRight_eq_succ_left (i : Fin 4) :
+    shiftedCyclicChartRight i =
+      shiftedCyclicChartLeft (finFourSucc i) := by
+  apply Quot.sound
+  exact Relation.EqvGen.rel _ _ ⟨i, rfl, rfl⟩
+
+/-- The quotient seam sends finite edge `0` to finite edge `1`. -/
+theorem shiftedCyclicChartRight_zero_eq_one_left :
+    shiftedCyclicChartRight (0 : Fin 4) =
+      shiftedCyclicChartLeft (1 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨0, by norm_num⟩
+
+/-- The quotient seam sends finite edge `1` to finite edge `2`. -/
+theorem shiftedCyclicChartRight_one_eq_two_left :
+    shiftedCyclicChartRight (1 : Fin 4) =
+      shiftedCyclicChartLeft (2 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨1, by norm_num⟩
+
+/-- The quotient seam sends finite edge `2` to finite edge `3`. -/
+theorem shiftedCyclicChartRight_two_eq_three_left :
+    shiftedCyclicChartRight (2 : Fin 4) =
+      shiftedCyclicChartLeft (3 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨2, by norm_num⟩
+
+/-- The quotient seam sends finite edge `3` back to finite edge `0`. -/
+theorem shiftedCyclicChartRight_three_eq_zero_left :
+    shiftedCyclicChartRight (3 : Fin 4) =
+      shiftedCyclicChartLeft (0 : Fin 4) := by
+  simpa using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
+
+/--
+The representative map into the shifted cyclic chart quotient is continuous.
+
+This uses Mathlib's quotient topology on `Quot`: a subset of the quotient is
+open exactly when its preimage along the representative map is open.
+-/
+theorem continuous_shiftedCyclicChartMk :
+    Continuous shiftedCyclicChartMk := by
+  simpa [shiftedCyclicChartMk] using
+    (continuous_quot_mk :
+      Continuous (@Quot.mk ShiftedFiniteChart shiftedFiniteChartSetoid))
+
+/--
+Chart evaluation is compatible with the generated seam equivalence.
+
+The proof is pure relation induction: a generating seam is handled by
+`shiftedSemanticFinChartEval_eq_of_seamRel`, while reflexive, symmetric, and
+transitive closure steps follow from equality.
+-/
+theorem shiftedSemanticFinChartEval_eq_of_chartRel
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    {p q : ShiftedFiniteChart}
+    (hrel : shiftedFiniteChartRel p q) :
+    shiftedSemanticFinChartEval hcore z p =
+      shiftedSemanticFinChartEval hcore z q := by
+  induction hrel with
+  | rel _ _ h =>
+      exact shiftedSemanticFinChartEval_eq_of_seamRel hcore z h
+  | refl _ =>
+      rfl
+  | symm _ _ _ ih =>
+      exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ =>
+      exact ih₁.trans ih₂
+
+/--
+Finite chart evaluation is continuous on each fixed finite edge.
+
+The finite index is frozen here, so continuity is inherited from the indexed
+level edge after restricting the real parameter to `unitInterval`.
+-/
+theorem continuous_shiftedSemanticFinChartEval_of_fixed_index
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    Continuous (fun t : unitInterval =>
+      shiftedSemanticFinChartEval hcore z (i, t)) := by
+  simpa [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge]
+    using (continuous_shiftedSemanticIndexedLevelEdge hcore z i.val).comp
+      continuous_subtype_val
+
+/--
+Finite chart evaluation is continuous before quotienting.
+
+The chart domain is `Fin 4 × unitInterval`. Since `Fin 4` is discrete, it is
+enough to prove continuity on each fixed finite edge.
+-/
+theorem continuous_shiftedSemanticFinChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Continuous (fun p : ShiftedFiniteChart =>
+      shiftedSemanticFinChartEval hcore z p) := by
+  rw [continuous_prod_of_discrete_left]
+  intro i
+  exact continuous_shiftedSemanticFinChartEval_of_fixed_index hcore z i
+
+/--
+Evaluate a seam-quotiented shifted chart inside the fixed square-mass
+boundary.
+
+This is the first descended chart evaluation. It uses only the generated seam
+equivalence and remains pre-topological.
+-/
+def shiftedSemanticCyclicChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedCyclicChart) : LevelSet ℝ (Vec.q2 z) :=
+  Quot.lift
+    (shiftedSemanticFinChartEval hcore z)
+    (by
+      intro p q hrel
+      exact shiftedSemanticFinChartEval_eq_of_chartRel hcore z hrel)
+    p
+
+/-- Quotient evaluation computes to finite chart evaluation on representatives. -/
+@[simp]
+theorem shiftedSemanticCyclicChartEval_mk
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedFiniteChart) :
+    shiftedSemanticCyclicChartEval hcore z (Quot.mk _ p) =
+      shiftedSemanticFinChartEval hcore z p := rfl
+
+/-- Quotient evaluation at a left endpoint representative. -/
+theorem shiftedSemanticCyclicChartEval_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartLeft i) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z i := by
+  rw [shiftedCyclicChartLeft, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk,
+    shiftedSemanticFinChartEval_at_left]
+
+/-- Quotient evaluation at a right endpoint representative. -/
+theorem shiftedSemanticCyclicChartEval_right
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartRight i) =
+      shiftedSemanticFinRightLevelEndpoint hcore z i := by
+  rw [shiftedCyclicChartRight, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk,
+    shiftedSemanticFinChartEval_at_right]
+
+/--
+Quotient evaluation has matching values across the quotient seam.
+
+This is the evaluation-side reading of `shiftedCyclicChartRight_eq_succ_left`.
+-/
+theorem shiftedSemanticCyclicChartEval_right_eq_succ_left
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartRight i) =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (finFourSucc i)) := by
+  rw [shiftedCyclicChartRight_eq_succ_left]
+
+/--
+The descended shifted cyclic chart evaluation is continuous.
+
+The proof connects the representative-level continuity with Mathlib's
+quotient-lift continuity theorem. The codomain is already the fixed `q2`
+boundary, so no extra boundary predicate is needed.
+-/
+theorem continuous_shiftedSemanticCyclicChartEval
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Continuous (fun p : ShiftedCyclicChart =>
+      shiftedSemanticCyclicChartEval hcore z p) := by
+  simpa [shiftedSemanticCyclicChartEval] using
+    (continuous_shiftedSemanticFinChartEval hcore z).quotient_lift
+      (fun p q hrel =>
+        shiftedSemanticFinChartEval_eq_of_chartRel hcore z hrel)
+
+/--
+The quotient chart edge traversing one finite index.
+
+It is the representative path `t ↦ (i, t)` followed by the quotient map. This
+is still a path in the chart quotient, not a Euclidean geometric path.
+-/
+def shiftedCyclicChartEdgePath (i : Fin 4) :
+    Path (shiftedCyclicChartLeft i) (shiftedCyclicChartRight i) where
+  toFun t := shiftedCyclicChartMk (i, t)
+  continuous_toFun := by
+    exact continuous_shiftedCyclicChartMk.comp
+      (continuous_const.prodMk continuous_id)
+  source' := rfl
+  target' := rfl
+
+/-- Applying the quotient edge path gives its representative chart class. -/
+@[simp]
+theorem shiftedCyclicChartEdgePath_apply
+    (i : Fin 4) (t : unitInterval) :
+    shiftedCyclicChartEdgePath i t =
+      shiftedCyclicChartMk (i, t) := rfl
+
+/-- The quotient edge path starts at its left endpoint representative. -/
+theorem shiftedCyclicChartEdgePath_source (i : Fin 4) :
+    shiftedCyclicChartEdgePath i 0 = shiftedCyclicChartLeft i :=
+  (shiftedCyclicChartEdgePath i).source
+
+/-- The quotient edge path ends at its right endpoint representative. -/
+theorem shiftedCyclicChartEdgePath_target (i : Fin 4) :
+    shiftedCyclicChartEdgePath i 1 = shiftedCyclicChartRight i :=
+  (shiftedCyclicChartEdgePath i).target
+
+/--
+The first four quotient chart edges concatenated into a closed quotient path.
+
+The casts are exactly the quotient seam equalities. No geometric parameter is
+introduced; this is only traversal in the glued chart space.
+-/
+def shiftedCyclicFourPath :
+    Path (shiftedCyclicChartLeft (0 : Fin 4))
+      (shiftedCyclicChartLeft (0 : Fin 4)) := by
+  let p0 := shiftedCyclicChartEdgePath (0 : Fin 4)
+  let p1 := shiftedCyclicChartEdgePath (1 : Fin 4)
+  let p2 := shiftedCyclicChartEdgePath (2 : Fin 4)
+  let p3 := shiftedCyclicChartEdgePath (3 : Fin 4)
+  let h01 := shiftedCyclicChartRight_zero_eq_one_left
+  let h12 := shiftedCyclicChartRight_one_eq_two_left
+  let h23 := shiftedCyclicChartRight_two_eq_three_left
+  let h30 := shiftedCyclicChartRight_three_eq_zero_left
+  exact
+    (((p0.trans (p1.cast h01 rfl)).trans
+      (p2.cast h12 rfl)).trans
+      (p3.cast h23 rfl)).cast rfl h30.symm
+
+/-- The closed quotient chart path starts at the first finite left endpoint. -/
+theorem shiftedCyclicFourPath_source :
+    shiftedCyclicFourPath 0 = shiftedCyclicChartLeft (0 : Fin 4) :=
+  shiftedCyclicFourPath.source
+
+/-- The closed quotient chart path returns to the first finite left endpoint. -/
+theorem shiftedCyclicFourPath_target :
+    shiftedCyclicFourPath 1 = shiftedCyclicChartLeft (0 : Fin 4) :=
+  shiftedCyclicFourPath.target
+
+/--
+Evaluating a quotient edge path recovers the corresponding fixed-boundary
+finite level edge.
+
+This is the local comparison between quotient chart traversal and the
+semantic boundary observation.
+-/
+theorem shiftedSemanticCyclicChartEval_edgePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticCyclicChartEval hcore z (shiftedCyclicChartEdgePath i t) =
+      shiftedSemanticFinLevelEdge hcore z i t := by
+  rw [shiftedCyclicChartEdgePath_apply, shiftedCyclicChartMk_eq_mk,
+    shiftedSemanticCyclicChartEval_mk]
+  rfl
+
+/--
+Applying a casted path does not change its pointwise value.
+
+This local helper isolates the endpoint-type bookkeeping used when quotient
+seams are inserted into `Path.trans` chains.
+-/
+theorem shiftedPath_cast_apply
+    {α : Type _} [TopologicalSpace α]
+    {a b c d : α}
+    (p : Path a b) (hac : c = a) (hbd : d = b)
+    (t : unitInterval) :
+    (p.cast hac hbd) t = p t := rfl
+
+/--
+Mapping a casted path is the same pointwise as casting the mapped path.
+
+Mathlib already provides `Path.map` and `Path.map_trans`; this is the local
+companion needed for endpoint bookkeeping in seam-glued path packages.
+-/
+theorem shiftedPath_map_cast
+    {α β : Type _} [TopologicalSpace α] [TopologicalSpace β]
+    {a b c d : α}
+    (p : Path a b)
+    (f : α → β) (hf : Continuous f)
+    (hac : c = a) (hbd : d = b) :
+    (p.cast hac hbd).map hf =
+      (p.map hf).cast (by rw [hac]) (by rw [hbd]) := by
+  apply Path.ext
+  funext t
+  rfl
+
+/--
+Changing only the equality proofs used by a path cast does not change the
+path.
+
+This keeps later seam-alignment proofs from depending on the exact proof term
+chosen for an endpoint equality.
+-/
+theorem shiftedPath_cast_proof_irrel
+    {α : Type _} [TopologicalSpace α]
+    {a b c d : α}
+    (p : Path a b)
+    (h₁ h₂ : c = a)
+    (k₁ k₂ : d = b) :
+    p.cast h₁ k₁ = p.cast h₂ k₂ := by
+  apply Path.ext
+  funext t
+  rfl
+
+/--
+Mapping a concatenated path agrees with concatenating the mapped paths.
+
+This is a DkMath-named wrapper around Mathlib's `Path.map_trans`, used to keep
+the phase-shift packaging API self-contained.
+-/
+theorem shiftedPath_map_trans
+    {α β : Type _} [TopologicalSpace α] [TopologicalSpace β]
+    {a b c : α}
+    (p : Path a b) (q : Path b c)
+    (f : α → β) (hf : Continuous f) :
+    (p.trans q).map hf = (p.map hf).trans (q.map hf) :=
+  Path.map_trans p q hf
+
+/-- The source endpoint of a concatenated path is the source of the first path. -/
+theorem shiftedPath_trans_apply_source
+    {α : Type _} [TopologicalSpace α]
+    {a b c : α}
+    (p : Path a b) (q : Path b c) :
+    (p.trans q) 0 = p 0 := by
+  rw [p.source, (p.trans q).source]
+
+/-- The target endpoint of a concatenated path is the target of the second path. -/
+theorem shiftedPath_trans_apply_target
+    {α : Type _} [TopologicalSpace α]
+    {a b c : α}
+    (p : Path a b) (q : Path b c) :
+    (p.trans q) 1 = q 1 := by
+  rw [q.target, (p.trans q).target]
+
+/--
+Edge-zero specialization of quotient-edge evaluation.
+
+This is the first local comparison needed before normalizing the full
+four-edge `Path.trans` chain.
+-/
+theorem shiftedSemanticCyclicChartEval_edgePath_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartEdgePath (0 : Fin 4) t) =
+        shiftedSemanticFinLevelEdge hcore z (0 : Fin 4) t :=
+  shiftedSemanticCyclicChartEval_edgePath hcore z (0 : Fin 4) t
+
+/--
+Observe a single quotient edge inside the fixed square-mass boundary.
+
+Unlike the closed four-edge path, this object contains no nested
+`Path.trans`. It is therefore the clean local bridge between quotient chart
+traversal and the direct finite level path.
+-/
+def shiftedSemanticObservedCyclicEdgePath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z i)
+      (shiftedSemanticFinRightLevelEndpoint hcore z i) where
+  toFun t := shiftedSemanticCyclicChartEval hcore z
+    (shiftedCyclicChartEdgePath i t)
+  continuous_toFun :=
+    (continuous_shiftedSemanticCyclicChartEval hcore z).comp
+      (shiftedCyclicChartEdgePath i).continuous_toFun
+  source' := by
+    rw [shiftedCyclicChartEdgePath_source,
+      shiftedSemanticCyclicChartEval_left]
+  target' := by
+    rw [shiftedCyclicChartEdgePath_target,
+      shiftedSemanticCyclicChartEval_right]
+
+/-- Evaluating a single observed quotient edge gives the finite level edge. -/
+theorem shiftedSemanticObservedCyclicEdgePath_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    shiftedSemanticObservedCyclicEdgePath hcore z i t =
+      shiftedSemanticFinLevelEdge hcore z i t :=
+  shiftedSemanticCyclicChartEval_edgePath hcore z i t
+
+/--
+The observed single quotient edge is the direct finite fixed-boundary path.
+
+This is the edge-local comparison theorem. The remaining four-edge comparison
+is therefore a path-packaging problem about nested `Path.trans` and endpoint
+casts, not a semantic mismatch.
+-/
+theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    shiftedSemanticObservedCyclicEdgePath hcore z i =
+      shiftedSemanticFinLevelPath hcore z i := by
+  apply Path.ext
+  funext t
+  rw [shiftedSemanticObservedCyclicEdgePath_apply]
+  rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
+
+/--
+Mapping a quotient edge by descended semantic evaluation recovers the
+observed semantic edge after endpoint relabelling.
+
+This is the edge-level bridge from quotient traversal to fixed-boundary
+observation.
+-/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) :
+    ((shiftedCyclicChartEdgePath i).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z i).symm
+        (shiftedSemanticCyclicChartEval_right hcore z i).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z i := by
+  apply Path.ext
+  funext t
+  rfl
+
+/-- Pointwise form of the mapped quotient edge comparison. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (i : Fin 4) (t : unitInterval) :
+    (((shiftedCyclicChartEdgePath i).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z i).symm
+        (shiftedSemanticCyclicChartEval_right hcore z i).symm) t =
+      shiftedSemanticObservedCyclicEdgePath hcore z i t :=
+  congrFun
+    (congrArg DFunLike.coe
+      (shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z i))
+    t
+
+/-- Edge `0` mapped by semantic evaluation is the observed edge `0`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (0 : Fin 4)
+
+/-- Edge `1` mapped by semantic evaluation is the observed edge `1`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (1 : Fin 4)
+
+/-- Edge `2` mapped by semantic evaluation is the observed edge `2`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (2 : Fin 4)
+
+/-- Edge `3` mapped by semantic evaluation is the observed edge `3`. -/
+theorem shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    ((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+        (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm =
+      shiftedSemanticObservedCyclicEdgePath hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge hcore z (3 : Fin 4)
+
+/--
+Canonical four-edge concatenation with explicit seam equalities.
+
+This helper fixes one standard packaging for a closed four-edge traversal.
+It is intentionally generic and pre-geometric: it only records how four paths
+are glued by endpoint equalities.
+-/
+def shiftedFourPathConcatWithSeams
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    Path a0 a0 :=
+  (((p0.trans (p1.cast h01 rfl)).trans
+    (p2.cast h12 rfl)).trans
+    (p3.cast h23 rfl)).cast rfl h30.symm
+
+/-- The canonical four-edge concatenator starts at its first source. -/
+theorem shiftedFourPathConcatWithSeams_source
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 0 =
+      a0 :=
+  (shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30).source
+
+/-- The canonical four-edge concatenator returns to its first source. -/
+theorem shiftedFourPathConcatWithSeams_target
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 1 =
+      a0 :=
+  (shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30).target
+
+/--
+Congruence for the canonical four-edge concatenator with fixed seams.
+
+Once two edge packages use the same endpoint equalities, equality of the four
+component paths is enough to identify the closed concatenations.
+-/
+theorem shiftedFourPathConcatWithSeams_congr
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    {p0 q0 : Path a0 b0}
+    {p1 q1 : Path a1 b1}
+    {p2 q2 : Path a2 b2}
+    {p3 q3 : Path a3 b3}
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0)
+    (hp0 : p0 = q0)
+    (hp1 : p1 = q1)
+    (hp2 : p2 = q2)
+    (hp3 : p3 = q3) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 =
+      shiftedFourPathConcatWithSeams q0 q1 q2 q3 h01 h12 h23 h30 := by
+  cases hp0
+  cases hp1
+  cases hp2
+  cases hp3
+  rfl
+
+/--
+Congruence for the canonical four-edge concatenator, ignoring the exact seam
+proof terms.
+
+If the four component paths agree, then changing only the equality proofs used
+for the four seams does not change the resulting closed path.
+-/
+theorem shiftedFourPathConcatWithSeams_congr_cast_irrel
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    {p0 q0 : Path a0 b0}
+    {p1 q1 : Path a1 b1}
+    {p2 q2 : Path a2 b2}
+    {p3 q3 : Path a3 b3}
+    (h01 k01 : b0 = a1)
+    (h12 k12 : b1 = a2)
+    (h23 k23 : b2 = a3)
+    (h30 k30 : b3 = a0)
+    (hp0 : p0 = q0)
+    (hp1 : p1 = q1)
+    (hp2 : p2 = q2)
+    (hp3 : p3 = q3) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 =
+      shiftedFourPathConcatWithSeams q0 q1 q2 q3 k01 k12 k23 k30 := by
+  cases hp0
+  cases hp1
+  cases hp2
+  cases hp3
+  apply Path.ext
+  funext t
+  rfl
+
+/--
+Mapping the canonical four-edge concatenator agrees with concatenating the
+four mapped edges.
+
+This is the four-edge version of `Path.map_trans` for the local DkMath
+packaging helper. The seam equalities are transported by rewriting through
+the original seam equalities; no geometric interpretation is involved.
+-/
+theorem shiftedFourPathConcatWithSeams_map
+    {α β : Type _} [TopologicalSpace α] [TopologicalSpace β]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    (p0 : Path a0 b0)
+    (p1 : Path a1 b1)
+    (p2 : Path a2 b2)
+    (p3 : Path a3 b3)
+    (h01 : b0 = a1)
+    (h12 : b1 = a2)
+    (h23 : b2 = a3)
+    (h30 : b3 = a0)
+    (f : α → β) (hf : Continuous f) :
+    (shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30).map hf =
+      shiftedFourPathConcatWithSeams
+        (p0.map hf)
+        (p1.map hf)
+        (p2.map hf)
+        (p3.map hf)
+        (by rw [h01])
+        (by rw [h12])
+        (by rw [h23])
+        (by rw [h30]) := by
+  cases h01
+  cases h12
+  cases h23
+  cases h30
+  simp [shiftedFourPathConcatWithSeams]
+
+/--
+Canonical quotient four-edge path via the common seam concatenator.
+
+This is the quotient-chart version of the canonical via-edge packaging used
+for semantic observations below.
+-/
+def shiftedCyclicFourPathViaEdges :
+    Path (shiftedCyclicChartLeft (0 : Fin 4))
+      (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedCyclicChartEdgePath (0 : Fin 4))
+    (shiftedCyclicChartEdgePath (1 : Fin 4))
+    (shiftedCyclicChartEdgePath (2 : Fin 4))
+    (shiftedCyclicChartEdgePath (3 : Fin 4))
+    shiftedCyclicChartRight_zero_eq_one_left
+    shiftedCyclicChartRight_one_eq_two_left
+    shiftedCyclicChartRight_two_eq_three_left
+    shiftedCyclicChartRight_three_eq_zero_left
+
+/-- The older quotient closed path is definitionally the canonical via-edge path. -/
+theorem shiftedCyclicFourPath_eq_viaEdges :
+    shiftedCyclicFourPath = shiftedCyclicFourPathViaEdges := rfl
+
+/--
+Canonical four-edge path obtained by observing quotient edges individually.
+
+This avoids comparing against the older closed quotient path packaging
+directly. The four single-edge observations are first put into one standard
+concatenation shape.
+-/
+def shiftedSemanticObservedCyclicFourPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedSemanticObservedCyclicEdgePath hcore z (0 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (1 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (2 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath hcore z (3 : Fin 4))
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+
+/--
+Canonical four-edge path obtained from direct finite fixed-boundary edges.
+
+It uses the same concatenator and the same seam equalities as the observed
+quotient-edge version.
+-/
+def shiftedSemanticFinFourLevelPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  shiftedFourPathConcatWithSeams
+    (shiftedSemanticFinLevelPath hcore z (0 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (1 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (2 : Fin 4))
+    (shiftedSemanticFinLevelPath hcore z (3 : Fin 4))
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+
+/--
+The older finite four-level path is the canonical direct finite via-edge path.
+
+The `Fin 4` wrappers are thin aliases for the indexed paths and seams used by
+the older definition.
+-/
+theorem shiftedSemanticFinFourLevelPath_eq_viaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinFourLevelPath hcore z =
+      shiftedSemanticFinFourLevelPathViaEdges hcore z := rfl
+
+/--
+The canonical observed four-edge path equals the canonical direct finite path.
+
+Because both sides use the same four-path concatenator, the proof reduces to
+the four single-edge observed/direct equalities.
+-/
+theorem shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathViaEdges hcore z =
+      shiftedSemanticFinFourLevelPathViaEdges hcore z :=
+  shiftedFourPathConcatWithSeams_congr
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (0 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (1 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (2 : Fin 4))
+    (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (3 : Fin 4))
+
+/--
+The four mapped quotient edges concatenate to the canonical observed via-edge
+path.
+
+This theorem lifts the four single-edge mapping bridges through
+`shiftedFourPathConcatWithSeams`; seam proof terms are ignored by the
+cast-irrelevant congruence theorem.
+-/
+theorem shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedFourPathConcatWithSeams
+        (((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm)
+        (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z) =
+      shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+  shiftedFourPathConcatWithSeams_congr_cast_irrel
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge hcore z)
+
+/--
+The closed quotient chart path observed inside the fixed square-mass boundary.
+
+This composes the closed quotient traversal with the descended semantic
+evaluation. The codomain is already `LevelSet ℝ (Vec.q2 z)`, so fixed-boundary
+membership is carried by the type.
+-/
+def shiftedSemanticObservedCyclicFourPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)))
+      (shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4))) where
+  toFun t := shiftedSemanticCyclicChartEval hcore z (shiftedCyclicFourPath t)
+  continuous_toFun :=
+    (continuous_shiftedSemanticCyclicChartEval hcore z).comp
+      shiftedCyclicFourPath.continuous_toFun
+  source' := by
+    rw [shiftedCyclicFourPath_source]
+  target' := by
+    rw [shiftedCyclicFourPath_target]
+
+/-- The observed closed quotient path starts at the observed first left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 0 =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).source
+
+/-- The observed closed quotient path returns to the observed first left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 1 =
+      shiftedSemanticCyclicChartEval hcore z
+        (shiftedCyclicChartLeft (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).target
+
+/-- Evaluation of the first quotient left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (0 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
+
+/-- Evaluation of the first quotient right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_zero
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (0 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)
+
+/-- Evaluation of the second quotient left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_one
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (1 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)
+
+/-- Evaluation of quotient edge `1` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_one
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (1 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)
+
+/-- Evaluation of quotient edge `2` left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_two
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (2 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)
+
+/-- Evaluation of quotient edge `2` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_two
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (2 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)
+
+/-- Evaluation of quotient edge `3` left endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_left_three
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartLeft (3 : Fin 4)) =
+        shiftedSemanticFinLeftLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)
+
+/-- Evaluation of quotient edge `3` right endpoint agrees with the finite API. -/
+theorem shiftedSemanticCyclicChartEval_right_three
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticCyclicChartEval hcore z
+      (shiftedCyclicChartRight (3 : Fin 4)) =
+        shiftedSemanticFinRightLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)
+
+/--
+Semantic evaluation sends the first quotient seam to the finite seam value.
+
+The statement uses the value-level finite seam equality rather than proof-term
+equality between mapped seam proofs.
+-/
+theorem shiftedSemanticCyclicChartEval_seam_zero_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (0 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (1 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z
+
+/-- Semantic evaluation sends the second quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_one_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (1 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (2 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z
+
+/-- Semantic evaluation sends the third quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_two_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (2 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (3 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z
+
+/-- Semantic evaluation sends the closing quotient seam to the finite seam value. -/
+theorem shiftedSemanticCyclicChartEval_seam_three_value
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticFinRightLevelEndpoint hcore z (3 : Fin 4) =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z
+
+/--
+Mapping the already-glued quotient four-path agrees with gluing the four
+mapped quotient edges after endpoint relabelling.
+
+This is the global map-through-gluing normalization for the canonical
+via-edge quotient path. It turns the quotient-side closed path package into
+the edgewise mapped package used by the semantic observed via-edge bridge.
+-/
+theorem shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedCyclicFourPathViaEdges.map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm =
+      shiftedFourPathConcatWithSeams
+        (((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm)
+        (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z) := by
+  let hf := continuous_shiftedSemanticCyclicChartEval hcore z
+  let f := shiftedSemanticCyclicChartEval hcore z
+  have hmap :
+      shiftedCyclicFourPathViaEdges.map hf =
+        shiftedFourPathConcatWithSeams
+          ((shiftedCyclicChartEdgePath (0 : Fin 4)).map hf)
+          ((shiftedCyclicChartEdgePath (1 : Fin 4)).map hf)
+          ((shiftedCyclicChartEdgePath (2 : Fin 4)).map hf)
+          ((shiftedCyclicChartEdgePath (3 : Fin 4)).map hf)
+          (by rw [shiftedCyclicChartRight_zero_eq_one_left])
+          (by rw [shiftedCyclicChartRight_one_eq_two_left])
+          (by rw [shiftedCyclicChartRight_two_eq_three_left])
+          (by rw [shiftedCyclicChartRight_three_eq_zero_left]) := by
+    exact
+      shiftedFourPathConcatWithSeams_map
+        (shiftedCyclicChartEdgePath (0 : Fin 4))
+        (shiftedCyclicChartEdgePath (1 : Fin 4))
+        (shiftedCyclicChartEdgePath (2 : Fin 4))
+        (shiftedCyclicChartEdgePath (3 : Fin 4))
+        shiftedCyclicChartRight_zero_eq_one_left
+        shiftedCyclicChartRight_one_eq_two_left
+        shiftedCyclicChartRight_two_eq_three_left
+        shiftedCyclicChartRight_three_eq_zero_left
+        f hf
+  rw [hmap]
+  apply Path.ext
+  funext t
+  rfl
+
+/--
+Mapping the canonical quotient four-path and then observing it is the canonical
+observed semantic via-edge path.
+-/
+theorem shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedCyclicFourPathViaEdges.map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm =
+      shiftedSemanticObservedCyclicFourPathViaEdges hcore z := by
+  calc
+    (shiftedCyclicFourPathViaEdges.map
+      (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+        (shiftedSemanticCyclicChartEval_left_zero hcore z).symm =
+        shiftedFourPathConcatWithSeams
+          (((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+            (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+              (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+              (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm)
+          (((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+            (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+              (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+              (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm)
+          (((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+            (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+              (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+              (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm)
+          (((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+            (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+              (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+              (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm)
+          (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+          (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+          (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+          (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z) :=
+        shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+          hcore z
+    _ = shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+        shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges hcore z
+
+/--
+The older observed closed quotient path recast to finite endpoint types.
+
+The path values are unchanged; only the source and target expressions are
+relabelled from the observed quotient left endpoint to the finite left
+endpoint.
+-/
+def shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    Path
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4))
+      (shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4)) :=
+  (shiftedSemanticObservedCyclicFourPath hcore z).cast
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+
+/-- The recast observed closed path starts at the finite left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z 0 =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z).source
+
+/-- The recast observed closed path returns to the finite left endpoint. -/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z 1 =
+      shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
+  (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z).target
+
+/--
+Endpoint casting the older observed path does not change its pointwise values.
+
+This is the local bridge that separates endpoint-type bookkeeping from the
+later evaluation-concatenation compatibility problem.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z t =
+      shiftedSemanticObservedCyclicFourPath hcore z t :=
+  shiftedPath_cast_apply
+    (shiftedSemanticObservedCyclicFourPath hcore z)
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+    t
+
+/--
+The observed closed quotient path remains on the original `q2` boundary.
+
+This is a projection of the subtype proof carried by the path codomain.
+-/
+theorem shiftedSemanticObservedCyclicFourPath_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 ((shiftedSemanticObservedCyclicFourPath hcore z t).1) =
+      Vec.q2 z :=
+  (shiftedSemanticObservedCyclicFourPath hcore z t).2
+
+/--
+The endpoint-cast observed closed path remains on the original `q2` boundary.
+
+The proof reuses the pointwise cast-apply theorem, so this records that the
+endpoint relabelling does not change the boundary observation.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    Vec.q2 ((shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z t).1) =
+      Vec.q2 z := by
+  rw [shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply]
+  exact shiftedSemanticObservedCyclicFourPath_q2 hcore z t
+
+/--
+The endpoint-cast older observed quotient path is the canonical observed
+via-edge path.
+
+The proof now factors through the global map-through-gluing theorem for the
+canonical quotient via-edge path.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+      shiftedSemanticObservedCyclicFourPathViaEdges hcore z := by
+  calc
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+        (shiftedCyclicFourPathViaEdges.map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left_zero hcore z).symm
+            (shiftedSemanticCyclicChartEval_left_zero hcore z).symm := by
+      apply Path.ext
+      funext t
+      rfl
+    _ = shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+        shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+          hcore z
+
+/--
+The endpoint-cast older observed quotient path is the existing finite
+four-level shifted path.
+
+All semantic and edgewise work has already been factored out; this is the
+final packaging comparison between the older closed path and the finite
+four-edge path.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+      shiftedSemanticFinFourLevelPath hcore z := by
+  calc
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+        shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+      shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges hcore z
+    _ = shiftedSemanticFinFourLevelPathViaEdges hcore z :=
+      shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges hcore z
+    _ = shiftedSemanticFinFourLevelPath hcore z := by
+      symm
+      exact shiftedSemanticFinFourLevelPath_eq_viaEdges hcore z
+
+/--
+Public final form of the shifted cyclic path-packaging comparison.
+
+The quotient-side closed path, after endpoint casting, is the same path as the
+existing finite four-level shifted path. This is only a path-packaging theorem:
+it uses map/trans/cast normalization and seam proof irrelevance, not any
+Euclidean reading.
+-/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+      shiftedSemanticFinFourLevelPath hcore z :=
+  shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+    hcore z
+
+/-- Value-level form of the final shifted closed-path comparison. -/
+theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) (t : unitInterval) :
+    (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z t).1 =
+      (shiftedSemanticFinFourLevelPath hcore z t).1 :=
+  congrArg Subtype.val
+    (congrFun
+      (congrArg DFunLike.coe
+        (shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+          hcore z))
+      t)
+
+/--
+The observed quotient traversal and the finite four-level path have the same
+source value.
+
+This does not identify the whole paths yet; it records that both constructions
+start at the same fixed-boundary semantic state.
+-/
+theorem shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 0 =
+      shiftedSemanticFinFourLevelPath hcore z 0 := by
+  rw [shiftedSemanticObservedCyclicFourPath_source,
+    shiftedSemanticCyclicChartEval_left_zero,
+    shiftedSemanticFinFourLevelPath_source]
+  rfl
+
+/-- Value-level source comparison for the observed and finite four-level paths. -/
+theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedSemanticObservedCyclicFourPath hcore z 0).1 =
+      (shiftedSemanticFinFourLevelPath hcore z 0).1 :=
+  congrArg Subtype.val
+    (shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+      hcore z)
+
+/--
+The observed quotient traversal and the finite four-level path have the same
+target value.
+
+Both paths close at the initial fixed-boundary semantic state; later full path
+comparison can focus only on the interior `Path.trans` parameterization.
+-/
+theorem shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedSemanticObservedCyclicFourPath hcore z 1 =
+      shiftedSemanticFinFourLevelPath hcore z 1 := by
+  rw [shiftedSemanticObservedCyclicFourPath_target,
+    shiftedSemanticCyclicChartEval_left_zero,
+    shiftedSemanticFinFourLevelPath_target]
+  rfl
+
+/-- Value-level target comparison for the observed and finite four-level paths. -/
+theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    (shiftedSemanticObservedCyclicFourPath hcore z 1).1 =
+      (shiftedSemanticFinFourLevelPath hcore z 1).1 :=
+  congrArg Subtype.val
+    (shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+      hcore z)
+
+/--
+The quotiented chart evaluation still lands on the original `q2` boundary.
+
+This small observation is useful downstream because consumers of the quotient
+do not need to reopen its representative.
+-/
+theorem shiftedSemanticCyclicChartEval_q2
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ)
+    (p : ShiftedCyclicChart) :
+    Vec.q2 ((shiftedSemanticCyclicChartEval hcore z p).1) = Vec.q2 z :=
+  (shiftedSemanticCyclicChartEval hcore z p).2
+
+/-!
 [IMPLEMENTED: semantic-cf2d/shifted-semantic-edge]
 The shifted semantic edge uses the normalized center states of neighboring
 quarter edges as endpoints. Its raw affine form has the same `phaseDepth`
@@ -1138,9 +2974,96 @@ The first four indexed shifted normalized level paths are seam-compatible and
 concatenate to a closed fixed-`q2` path object. The closing seam uses the
 core-zero four-step return law, not any geometric angle reading.
 
-[TODO: semantic-cf2d/shifted-cyclic-quotient]
-Introduce a quotient phase parameter only after the four-edge closed path is
-stable enough for downstream consumers.
+[IMPLEMENTED: semantic-cf2d/shifted-fin-four]
+The shifted indexed layer now has `Fin 4` wrappers for bases, edges, paths,
+fixed-`q2` level edges, and level paths. A finite cyclic successor records the
+four-state seam law without introducing a continuous quotient parameter. The
+successor has named small-step facts and a four-cycle law, finite edges expose
+endpoint and center-to-successor facts, and the closed shifted path exposes
+source and target aliases.
+
+[IMPLEMENTED: semantic-cf2d/shifted-fin-observation]
+Finite base states are also packaged as fixed-`q2` level points. The finite
+level edge center theorem now targets the finite successor base point, and the
+finite closed shifted path exposes source, target, and boundary-observation
+facts.
+
+[IMPLEMENTED: semantic-cf2d/shifted-finite-chart]
+The finite chart space `Fin 4 × unitInterval` evaluates into the fixed `q2`
+boundary. Endpoint chart evaluations and seam-relation compatibility are
+proved.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-chart]
+The finite seam relation is closed under `Relation.EqvGen`, packaged as a
+setoid quotient `ShiftedCyclicChart`, and chart evaluation descends to the
+quotient as a fixed-`q2` boundary-valued function.
+Representative constructor aliases, left and right endpoint representatives,
+quotient seam equality, endpoint evaluation theorems, and quotient evaluation
+seam compatibility are also exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-topology]
+Mathlib's quotient topology on `Quot` is now connected to the shifted cyclic
+chart wrapper. The representative map, finite chart evaluation, and descended
+quotient evaluation are continuous. The codomain of the descended evaluation
+is already the fixed `q2` boundary.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path]
+The quotient chart edge path traverses one finite chart representative, and
+the first four quotient edge paths concatenate to a closed quotient path by
+using the quotient seam equalities. Evaluating one quotient edge recovers the
+corresponding fixed-`q2` finite level edge.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-observation]
+The closed quotient path is observed through the descended semantic
+evaluation as a fixed-`q2` path. Source, target, endpoint-evaluation, and
+boundary-observation aliases are exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-compare-prep]
+The observed quotient path and the finite four-level path now have explicit
+source and target comparison theorems. A local `Path.cast` pointwise helper
+and an edge-zero evaluation wrapper prepare the later full comparison without
+forcing `Path.trans` interval-splitting normalization yet.
+The source/target comparison is also exposed after `Subtype.val`. A single
+observed quotient edge is packaged as a fixed-boundary path and proved equal
+to the direct finite fixed-boundary edge path, so the remaining four-edge
+comparison is only nested path-packaging normalization.
+A canonical four-edge concatenator with explicit seams now packages both the
+observed-edge and direct finite-edge versions. These canonical via-edge
+closed paths are equal by the four single-edge equalities.
+The older quotient closed path is definitionally equal to its canonical
+via-edge form, and the older finite fixed-boundary four-level path is
+definitionally equal to the canonical direct finite via-edge form.
+The older observed closed path can now be endpoint-cast to the same finite
+endpoint type, with source, target, and pointwise apply aliases showing that
+only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
+by the cast.
+Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
+`Path.map`/`Path.cast` compatibility theorem is available for the next
+packaging step. Quotient endpoint evaluation aliases, finite seam value
+alignment aliases, and a path-cast proof-irrelevance helper isolate the
+seam proof alignment problem.
+Mapped quotient edge paths are now identified with their observed semantic
+edge paths after endpoint relabelling, uniformly over `Fin 4` and through
+four concrete edge aliases.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-eval]
+The evaluation of the closed quotient path is now compared with the fixed-`q2`
+four-level path. The generic theorem `shiftedFourPathConcatWithSeams_map`
+commutes mapping with the canonical four-edge seam concatenator, and the
+semantic specialization identifies the endpoint-cast observed quotient path
+with the existing finite four-level path. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names the closed
+checkpoint. This is a path-packaging result about `Path.map`, `Path.trans`,
+`Path.cast`, and seam proof irrelevance; it is not a Euclidean reading.
+
+[TODO: semantic-cf2d/dkpath-layer]
+Extract the validated path-normalization API into a future DkMath-native path
+layer only after an isolated prototype proves that it shortens downstream
+proofs without changing theorem meanings.
+
+[TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
+Develop any additional quotient-space structure only after the descended
+continuous evaluation API has downstream consumers.
 -/
 
 /-!

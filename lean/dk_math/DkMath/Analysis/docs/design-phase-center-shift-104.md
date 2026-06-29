@@ -440,6 +440,135 @@ shiftedSemanticIndexedLevelEndpoint_2_3
 shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left
 shiftedSemanticIndexedLevelEdge_add_four_of_core_eq_zero
 shiftedSemanticFourLevelPath
+finFourSucc
+finFourSucc_zero
+finFourSucc_one
+finFourSucc_two
+finFourSucc_three
+finFourSucc_four_cycle
+shiftedSemanticFinBase
+shiftedSemanticFinBaseLevelPoint
+shiftedSemanticFinEdge
+shiftedSemanticFinEdge_leftEndpoint
+shiftedSemanticFinEdge_rightEndpoint
+shiftedSemanticFinEdge_q2_of_core_eq_zero
+shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero
+shiftedSemanticFinEdge_center_eq_succ_base_of_core_eq_zero
+shiftedSemanticFinPath
+shiftedSemanticFinLevelEdge
+shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
+shiftedSemanticFinLevelEdge_center_eq_succ_base_level_of_core_eq_zero
+shiftedSemanticFinLevelPath
+shiftedSemanticFinRightLevelEndpoint_eq_succ_left
+shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left
+shiftedSemanticFinRightLevelEndpoint_one_eq_two_left
+shiftedSemanticFinRightLevelEndpoint_two_eq_three_left
+shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left
+shiftedSemanticFinFourLevelPath
+shiftedSemanticFourLevelPath_source
+shiftedSemanticFourLevelPath_target
+shiftedSemanticFinFourLevelPath_source
+shiftedSemanticFinFourLevelPath_target
+shiftedSemanticFinFourLevelPath_q2
+ShiftedFiniteChart
+shiftedSemanticFinChartEval
+shiftedSemanticFinChartEval_val
+shiftedSemanticFinChartEval_at_left
+shiftedSemanticFinChartEval_at_right
+shiftedFiniteSeamRel
+shiftedSemanticFinChartEval_right_eq_succ_left
+shiftedSemanticFinChartEval_eq_of_seamRel
+shiftedFiniteChartRel
+shiftedFiniteChartSetoid
+ShiftedCyclicChart
+shiftedCyclicChartMk
+shiftedCyclicChartMk_eq_mk
+shiftedCyclicChartLeft
+shiftedCyclicChartRight
+shiftedCyclicChartRight_eq_succ_left
+shiftedCyclicChartRight_zero_eq_one_left
+shiftedCyclicChartRight_one_eq_two_left
+shiftedCyclicChartRight_two_eq_three_left
+shiftedCyclicChartRight_three_eq_zero_left
+continuous_shiftedCyclicChartMk
+shiftedSemanticFinChartEval_eq_of_chartRel
+continuous_shiftedSemanticFinChartEval_of_fixed_index
+continuous_shiftedSemanticFinChartEval
+shiftedSemanticCyclicChartEval
+shiftedSemanticCyclicChartEval_mk
+shiftedSemanticCyclicChartEval_left
+shiftedSemanticCyclicChartEval_right
+shiftedSemanticCyclicChartEval_right_eq_succ_left
+continuous_shiftedSemanticCyclicChartEval
+shiftedCyclicChartEdgePath
+shiftedCyclicChartEdgePath_apply
+shiftedCyclicChartEdgePath_source
+shiftedCyclicChartEdgePath_target
+shiftedCyclicFourPath
+shiftedCyclicFourPathViaEdges
+shiftedCyclicFourPath_eq_viaEdges
+shiftedCyclicFourPath_source
+shiftedCyclicFourPath_target
+shiftedSemanticCyclicChartEval_edgePath
+shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_apply
+shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
+shiftedPath_cast_apply
+shiftedPath_cast_proof_irrel
+shiftedPath_map_cast
+shiftedPath_map_trans
+shiftedPath_trans_apply_source
+shiftedPath_trans_apply_target
+shiftedSemanticCyclicChartEval_edgePath_zero
+shiftedSemanticObservedCyclicEdgePath
+shiftedSemanticObservedCyclicEdgePath_apply
+shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+shiftedFourPathConcatWithSeams
+shiftedFourPathConcatWithSeams_source
+shiftedFourPathConcatWithSeams_target
+shiftedFourPathConcatWithSeams_congr
+shiftedFourPathConcatWithSeams_congr_cast_irrel
+shiftedFourPathConcatWithSeams_map
+shiftedSemanticObservedCyclicFourPathViaEdges
+shiftedSemanticFinFourLevelPathViaEdges
+shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
+shiftedSemanticFinFourLevelPath_eq_viaEdges
+shiftedSemanticObservedCyclicFourPath
+shiftedSemanticObservedCyclicFourPath_source
+shiftedSemanticObservedCyclicFourPath_target
+shiftedSemanticCyclicChartEval_left_zero
+shiftedSemanticCyclicChartEval_right_zero
+shiftedSemanticCyclicChartEval_left_one
+shiftedSemanticCyclicChartEval_right_one
+shiftedSemanticCyclicChartEval_left_two
+shiftedSemanticCyclicChartEval_right_two
+shiftedSemanticCyclicChartEval_left_three
+shiftedSemanticCyclicChartEval_right_three
+shiftedSemanticCyclicChartEval_seam_zero_value
+shiftedSemanticCyclicChartEval_seam_one_value
+shiftedSemanticCyclicChartEval_seam_two_value
+shiftedSemanticCyclicChartEval_seam_three_value
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
+shiftedSemanticObservedCyclicFourPath_q2
+shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
+shiftedSemanticCyclicChartEval_q2
 ```
 
 The shifted normalized edge starts at the left normalized center candidate,
@@ -487,6 +616,370 @@ It concatenates the first four indexed shifted normalized level paths inside
 the fixed `q2` boundary. The first three seams are adjacent endpoint
 compatibility facts, and the final seam from edge `3` back to edge `0` uses
 the core-zero four-step return law.
+
+The finite cyclic wrapper is now available through `Fin 4`. It keeps the
+Nat-indexed API as the source of truth while giving downstream code a bounded
+four-state index:
+
+```text
+shiftedSemanticFinBase r z i = shiftedSemanticIndexedBase r z i.val
+shiftedSemanticFinEdge r z i t = shiftedSemanticIndexedEdge r z i.val t
+```
+
+The finite successor `finFourSucc` is defined by `(i.val + 1) % 4`, and Lean
+proves the finite seam law:
+
+```text
+right endpoint of finite edge i = left endpoint of finite edge (finFourSucc i)
+```
+
+This is still a finite cyclic index, not a continuous quotient phase
+parameter. The successor has named values for `0 -> 1 -> 2 -> 3 -> 0` and a
+four-cycle theorem. Finite shifted edges also expose endpoint aliases and a
+center-to-successor-base theorem. The closed shifted four-level path exposes
+named source, target, and fixed-`q2` boundary-observation aliases for
+downstream observation code. Finite base states are also packaged directly as
+fixed-level points.
+
+The pre-quotient chart layer is now explicit:
+
+```text
+ShiftedFiniteChart = Fin 4 x unitInterval
+```
+
+Chart evaluation maps each chart into the fixed `q2 z` level set. The seam
+relation identifies `(i, 1)` with `(finFourSucc i, 0)`, and Lean proves that
+chart evaluation is compatible with that relation.
+
+The seam relation is now closed under Mathlib's generated equivalence
+relation:
+
+```text
+shiftedFiniteChartRel p q =
+  Relation.EqvGen shiftedFiniteSeamRel p q
+```
+
+The generated relation is packaged as a setoid quotient:
+
+```text
+ShiftedCyclicChart = Quot shiftedFiniteChartSetoid
+```
+
+Chart evaluation descends to this quotient:
+
+```text
+shiftedSemanticCyclicChartEval :
+  ShiftedCyclicChart -> LevelSet Real (Vec.q2 z)
+```
+
+The computation theorem `shiftedSemanticCyclicChartEval_mk` states that the
+quotient evaluation agrees with finite chart evaluation on representatives,
+and `shiftedSemanticCyclicChartEval_q2` records that the descended value still
+lies on the original fixed boundary. This is only an algebraic seam quotient;
+no quotient topology or quotient path structure has been selected yet.
+
+The quotient representative API is now explicit. `shiftedCyclicChartMk` names
+the representative constructor, while `shiftedCyclicChartLeft` and
+`shiftedCyclicChartRight` name the endpoint representatives. Lean proves the
+quotient seam equality:
+
+```text
+shiftedCyclicChartRight i =
+  shiftedCyclicChartLeft (finFourSucc i)
+```
+
+and also exposes the four concrete seam aliases `0 -> 1`, `1 -> 2`,
+`2 -> 3`, and `3 -> 0`. Evaluation at quotient endpoint representatives
+computes back to the finite left and right level endpoints, and quotient
+evaluation is seam-compatible by rewriting through the quotient equality.
+
+The first topological quotient layer is also implemented.
+
+```text
+Algebraic quotient:
+  identifies seam endpoints as equal chart points.
+
+Topological quotient:
+  additionally gives the glued chart space the quotient topology.
+
+Boundary evaluation:
+  is continuous after representative-level evaluation and the quotient-lift
+  theorem are connected.
+```
+
+Lean now proves continuity of `shiftedCyclicChartMk`, continuity of finite
+chart evaluation before quotienting, and continuity of the descended
+fixed-`q2` boundary evaluation. This is still not a Euclidean angle parameter.
+The quotient traversal path layer is now also available. For each finite
+index, `shiftedCyclicChartEdgePath i` traverses the representative charts
+`(i, t)` inside the quotient. The four finite quotient edges concatenate,
+using only the quotient seam equalities, into the closed path
+`shiftedCyclicFourPath`.
+
+The local evaluation comparison is proved:
+
+```text
+shiftedSemanticCyclicChartEval hcore z
+  (shiftedCyclicChartEdgePath i t)
+=
+shiftedSemanticFinLevelEdge hcore z i t
+```
+
+The closed quotient path can now be observed through the descended semantic
+evaluation:
+
+```text
+shiftedSemanticObservedCyclicFourPath hcore z
+```
+
+This is a closed `Path` in the fixed `q2 z` level set. Source, target,
+first-left-endpoint evaluation, and boundary-observation aliases are exposed.
+Thus the quotient traversal is already connected to a fixed-boundary
+observation path, even before comparing the whole concatenated path with the
+existing finite four-level path.
+
+The first comparison layer is now also formalized. The observed quotient path
+and the existing finite four-level path are proved to agree at their source
+and target values:
+
+```text
+shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
+shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
+```
+
+A small pointwise `Path.cast` helper records that endpoint-type casts do not
+change path values. Mathlib's path-map/trans compatibility is exposed through
+a local wrapper, and the local path-map/cast compatibility theorem handles
+endpoint relabelling under mapping. Source and target helpers for
+`Path.trans` record the endpoint behavior of path concatenation, and the
+edge-zero wrapper specializes the local quotient edge evaluation theorem to
+the first finite edge:
+
+```text
+shiftedPath_cast_apply
+shiftedPath_map_cast
+shiftedPath_map_trans
+shiftedPath_trans_apply_source
+shiftedPath_trans_apply_target
+shiftedSemanticCyclicChartEval_edgePath_zero
+shiftedPath_cast_proof_irrel
+```
+
+The edge-local bridge is now stronger than an endpoint comparison. A single
+quotient edge observed through the descended semantic evaluation is packaged
+as a fixed-boundary path and proved equal to the direct finite fixed-boundary
+edge path:
+
+```text
+shiftedSemanticObservedCyclicEdgePath
+shiftedSemanticObservedCyclicEdgePath_apply
+shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
+```
+
+The mapped quotient edge form is also connected to the observed semantic edge.
+After endpoint relabelling, mapping a quotient edge path by descended semantic
+evaluation gives the corresponding observed edge path:
+
+```text
+shiftedSemanticCyclicChartEval_mappedEdge_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_apply
+shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge
+shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge
+```
+
+This closes the edge-level mapping bridge. The remaining four-edge bridge is
+now a concatenator-lifting problem: transport these four mapped-edge
+comparisons through `shiftedFourPathConcatWithSeams` while aligning seam cast
+proofs.
+
+The four-edge packaging has also been standardized. The helper
+`shiftedFourPathConcatWithSeams` glues four paths by explicit endpoint seam
+equalities, exposes source and target aliases, and has a congruence theorem
+for replacing all four component paths at once:
+
+```text
+shiftedFourPathConcatWithSeams
+shiftedFourPathConcatWithSeams_source
+shiftedFourPathConcatWithSeams_target
+shiftedFourPathConcatWithSeams_congr
+```
+
+Using that common concatenator, the observed quotient-edge package and the
+direct finite-edge package are now available as canonical via-edge closed
+paths:
+
+```text
+shiftedSemanticObservedCyclicFourPathViaEdges
+shiftedSemanticFinFourLevelPathViaEdges
+shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+```
+
+The canonical via-edge equality follows from the four single-edge equalities.
+The older quotient closed path is also definitionally equal to its canonical
+via-edge quotient path, and the older finite four-level path is definitionally
+equal to the canonical direct finite via-edge path:
+
+```text
+shiftedCyclicFourPathViaEdges
+shiftedCyclicFourPath_eq_viaEdges
+shiftedSemanticFinFourLevelPath_eq_viaEdges
+```
+
+The older observed closed path is intentionally not forced into this shape
+yet. It is typed at the observed quotient left endpoint, while the canonical
+observed via-edge path is typed at the finite left endpoint. Even pointwise,
+the remaining theorem must commute descended semantic evaluation with the
+canonical four-path concatenator.
+
+The endpoint mismatch has been isolated by an endpoint-casted older observed
+path:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
+```
+
+This casted path has the same finite endpoint type as the canonical via-edge
+paths, and its apply theorem states that endpoint casting does not change the
+pointwise observed value. Thus the remaining bridge is no longer endpoint
+typing; it is the compatibility of descended semantic evaluation with the
+canonical four-path concatenator.
+The fixed-boundary observation also survives the endpoint cast:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+```
+
+Value-level source and target comparisons are also available for the closed
+four-edge paths:
+
+```text
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
+shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
+```
+
+These facts keep the comparison pre-geometric. The remaining obstruction is
+not semantic: each local edge comparison is available. The remaining task is
+normalizing the nested `Path.trans` and endpoint `Path.cast` structure used by
+the two closed four-path packages, without asserting any circle, angle, arc,
+or Euclidean one-eighth reading.
+
+More precisely, the quotient-side closed path and finite closed path now match
+their canonical via-edge versions. The observed quotient path still needs a
+lemma commuting descended semantic evaluation with the canonical four-path
+concatenator after endpoint casting from the observed quotient-left endpoint
+to the finite left endpoint. A direct value-level bridge was reduced by Lean
+to exactly this missing shape:
+
+```text
+semantic evaluation of nested Path.trans / Path.cast
+=
+nested Path.trans / Path.cast of semantic edge evaluations
+```
+
+So the endpoint mismatch is solved. The remaining obstruction is the
+compatibility of descended semantic evaluation with the nested `Path.trans`
+and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
+proof alignment after mapping.
+
+The seam alignment layer is now explicit. Quotient endpoint evaluation aliases
+identify the semantic evaluation of quotient left/right representatives with
+the finite fixed-boundary endpoint APIs, and value-level seam aliases record
+the four finite seam equalities:
+
+```text
+shiftedSemanticCyclicChartEval_right_zero
+shiftedSemanticCyclicChartEval_left_one
+shiftedSemanticCyclicChartEval_right_one
+shiftedSemanticCyclicChartEval_left_two
+shiftedSemanticCyclicChartEval_right_two
+shiftedSemanticCyclicChartEval_left_three
+shiftedSemanticCyclicChartEval_right_three
+shiftedSemanticCyclicChartEval_seam_zero_value
+shiftedSemanticCyclicChartEval_seam_one_value
+shiftedSemanticCyclicChartEval_seam_two_value
+shiftedSemanticCyclicChartEval_seam_three_value
+```
+
+The helper `shiftedPath_cast_proof_irrel` records that changing only the proof
+terms inside a path cast does not change the resulting path. The current
+stable route therefore avoids direct equality of mapped seam proof terms and
+uses value-level seam alignment plus cast proof irrelevance instead.
+
+The next seam-alignment checkpoint is now also implemented. The stronger
+four-path congruence theorem
+`shiftedFourPathConcatWithSeams_congr_cast_irrel` says that, after the four
+component paths are identified, the exact seam proof terms do not affect the
+concatenated path. Using this helper, the four mapped quotient edges lift to
+the canonical observed via-edge path:
+
+```text
+shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
+```
+
+This proves the edgewise form of "map each quotient edge, relabel endpoints,
+then glue".
+
+The global map-through-gluing comparison is now also implemented. The generic
+helper
+
+```text
+shiftedFourPathConcatWithSeams_map
+```
+
+states that mapping the canonical four-edge concatenator agrees with
+concatenating the four mapped edges. The semantic specialization then proves:
+
+```text
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+```
+
+Consequently the older endpoint-cast observed quotient path is identified
+with the canonical observed via-edge path, and then with the existing finite
+four-level path:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
+```
+
+This closes the current path-packaging comparison. The proof remains entirely
+inside Mathlib path normalization: `Path.map`, nested `Path.trans`, and
+`Path.cast`.
+
+For the future DkMath-native path layer, this suggests the following
+`DkPath` design rule. The API should separate:
+
+```text
+trace:
+  the underlying parameterized value
+
+endpoint labels:
+  the source and target names required by dependent path types
+
+seam witnesses:
+  proof terms used only to type concatenation
+```
+
+The current Mathlib bridge shows that the trace and endpoint labels carry the
+mathematical content, while seam witnesses should be proof-irrelevant at the
+public theorem surface. A DkPath wrapper can therefore expose map/trans/cast
+normalization as first-class theorems, rather than forcing each downstream
+module to rediscover the same proof-term bookkeeping.
+
+This remains pre-geometric: no circle, angle, arc, or Euclidean one-eighth
+interpretation is used. The next packaging task is no longer to compare the
+old closed path with the finite four-level path; that comparison is now
+closed. The next design task is to factor the reusable path-normalization API
+into a future DkMath-native path layer, while keeping Mathlib `Path` as the
+external topology bridge.
 
 Candidate theorem directions:
 
@@ -559,7 +1052,41 @@ depend on that reading.
 18. Implemented: package indexed shifted paths inside the fixed `q2` level set.
 19. Implemented: prove the four endpoint compatibility facts for indexed shifted level paths.
 20. Implemented: concatenate the four indexed shifted level paths into a closed fixed-`q2` path.
-21. Later: add a Euclidean bridge that reads `1/8` full-cycle
+21. Implemented: add `Fin 4` wrappers for shifted bases, edges, paths, level edges, and level paths.
+22. Implemented: prove the finite successor seam law on `Fin 4`.
+23. Implemented: add small-step and four-cycle API for `finFourSucc`.
+24. Implemented: add finite endpoint aliases and center-to-successor-base compatibility.
+25. Implemented: add source and target aliases for the closed shifted four-level path.
+26. Implemented: add finite base level-point wrappers.
+27. Implemented: add finite closed-path fixed-`q2` observation.
+28. Implemented: add finite chart evaluation into the fixed `q2` level set.
+29. Implemented: add finite seam relation and chart-evaluation seam compatibility.
+30. Implemented: close the finite seam relation under `Relation.EqvGen`.
+31. Implemented: package the generated relation as `ShiftedCyclicChart`.
+32. Implemented: descend chart evaluation to the quotient and expose its
+    representative computation theorem.
+33. Implemented: add quotient representative constructor aliases.
+34. Implemented: add quotient left/right endpoint representatives.
+35. Implemented: prove quotient seam equality and four finite seam aliases.
+36. Implemented: expose quotient evaluation at endpoint representatives and
+    quotient evaluation seam compatibility.
+37. Implemented: connect Mathlib's quotient topology to `ShiftedCyclicChart`.
+38. Implemented: prove representative-level chart evaluation continuity.
+39. Implemented: prove descended quotient evaluation continuity.
+40. Implemented: package one quotient chart edge path.
+41. Implemented: concatenate the first four quotient edge paths into a closed
+    quotient path.
+42. Implemented: prove the local edge evaluation comparison against the
+    fixed-`q2` finite level edge.
+43. Implemented: observe the closed quotient path as a closed fixed-`q2`
+    boundary path.
+44. Implemented: expose source, target, endpoint-evaluation, and `q2`
+    observation aliases for the observed closed quotient path.
+45. Implemented: prove the global map-through-gluing theorem for the canonical
+    quotient four-path.
+46. Implemented: compare the endpoint-cast observed quotient closed path with
+    the existing fixed-`q2` four-level path.
+47. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -603,14 +1130,72 @@ wrappers.
 [IMPLEMENTED: semantic-cf2d/shifted-four-level-path]
 Prove the four seam compatibility facts and concatenate the first four indexed
 shifted normalized level paths into one closed fixed-`q2` path object.
+
+[IMPLEMENTED: semantic-cf2d/shifted-fin-four]
+Expose the shifted cyclic index through `Fin 4` wrappers for bases, edges,
+paths, fixed-`q2` level edges, and fixed-`q2` level paths. Add a finite
+successor and prove the corresponding cyclic seam law. The successor has
+named small-step facts and a four-cycle law, finite edges expose endpoint and
+center-to-successor-base compatibility, and the closed shifted path has named
+source and target aliases.
+
+[IMPLEMENTED: semantic-cf2d/shifted-fin-observation]
+Package finite base states as fixed-`q2` level points. Expose the finite
+center-to-successor-base theorem at the level-point API and add source,
+target, and fixed-`q2` observation aliases for the finite closed shifted path.
+
+[IMPLEMENTED: semantic-cf2d/shifted-finite-chart]
+Expose `ShiftedFiniteChart = Fin 4 x unitInterval`, evaluate it into the
+fixed `q2` boundary, record the finite seam relation, and prove chart
+evaluation compatibility across seams.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-chart]
+Close the finite seam relation under `Relation.EqvGen`, package it as the
+setoid quotient `ShiftedCyclicChart`, and descend chart evaluation to a
+fixed-`q2` boundary-valued quotient evaluation. The computation theorem on
+representatives and the descended `q2` observation are also exposed.
+Representative constructor aliases, endpoint representatives, quotient seam
+equality, concrete seam aliases, endpoint evaluation theorems, and quotient
+evaluation seam compatibility are also exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-topology]
+Connect Mathlib's quotient topology on `Quot` to `ShiftedCyclicChart`. The
+representative map, finite chart evaluation before quotienting, and descended
+fixed-`q2` quotient evaluation are continuous. This is a quotient-topology
+statement only; it does not select a quotient path structure.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path]
+Package one quotient chart edge path, concatenate the first four quotient edge
+paths into a closed quotient path by quotient seam equalities, expose source
+and target aliases, and prove the local edge evaluation comparison with the
+fixed-`q2` finite level edge.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-observation]
+Observe the closed quotient chart path through the descended semantic
+evaluation as a closed path in the fixed `q2` boundary. Source, target,
+first-left-endpoint evaluation, and boundary-observation aliases are exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-eval]
+Prove the generic four-edge map theorem for the canonical seam concatenator,
+specialize it to semantic evaluation of the quotient four-path, and identify
+the endpoint-cast observed quotient path with the existing fixed-`q2`
+four-level path. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names the closed
+checkpoint for downstream imports. This closes the path-packaging comparison
+before any Euclidean angle reading.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-cyclic-quotient]
-Introduce a quotient phase parameter only after the four indexed path
-concatenation is stable.
+[TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
+Develop any additional quotient-space structure only after the descended
+continuous evaluation API has downstream consumers.
+
+[TODO: semantic-cf2d/dkpath-layer]
+Factor the validated path-normalization API into a future DkMath-native path
+layer: trace, endpoint labels, seam witnesses, map/cast/trans compatibility,
+and proof-irrelevant seam concatenation.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path

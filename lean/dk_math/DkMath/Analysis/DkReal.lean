@@ -200,7 +200,63 @@ four-step return holds for bases, endpoints, and edge functions. Fixed-`q2`
 indexed level-set paths expose the same compatibility inside the boundary.
 The first four indexed shifted level paths now concatenate to a closed
 fixed-`q2` path object; the closing seam is supplied by the core-zero
-four-step return law.
+four-step return law. The same finite cyclic layer is also exposed through
+`Fin 4` wrappers for bases, edges, level edges, and paths, with a finite
+successor seam law for downstream code that wants a bounded index rather than
+raw natural-number indices. The finite successor has named small-step facts
+and a four-cycle law. Finite edges expose endpoint aliases and
+center-to-successor-base compatibility, and the closed shifted path exposes
+source, target, and fixed-`q2` boundary-observation aliases. Finite base
+states are also packaged directly as points of the fixed square-mass level
+set. Finally, the finite chart layer evaluates `Fin 4 × unitInterval` into
+the same fixed boundary, closes the finite seam relation under
+`Relation.EqvGen`, packages the quotient as `ShiftedCyclicChart`, and
+descends chart evaluation to that quotient. Representative constructor
+aliases, left and right endpoint representatives, quotient seam equality, and
+endpoint evaluation theorems make the quotient readable without opening its
+representatives. Mathlib's quotient topology is now connected to this wrapper:
+the representative map, finite chart evaluation, and descended fixed-boundary
+quotient evaluation are continuous. The quotient edge path and closed
+four-edge quotient path are packaged in the glued chart space, and evaluating
+one quotient edge recovers the corresponding fixed-`q2` finite level edge.
+Observing the closed quotient path through the descended evaluation now gives
+a closed fixed-boundary path with source, target, endpoint, and `q2`
+observation aliases. The observed quotient path and the existing finite
+four-level path now have explicit source and target comparison theorems,
+together with a pointwise `Path.cast` helper and an edge-zero evaluation
+wrapper for the later full path comparison. A single observed quotient edge
+is also packaged as a fixed-boundary path and proved equal to the direct
+finite fixed-boundary edge path. The remaining four-edge comparison is
+therefore a normalization problem for nested `Path.trans` and endpoint casts,
+not a semantic obstruction. A reusable four-edge concatenator with explicit
+seams now packages canonical via-edge observed and direct finite closed
+paths, and those two canonical paths are equal by the four single-edge
+equalities. The older quotient closed path and the older finite four-level
+path are definitionally equal to their canonical via-edge versions. The
+older observed closed path is also endpoint-cast to the finite left endpoint,
+with source, target, and apply aliases proving that only endpoint labels
+changed. The casted observed path also preserves the fixed-`q2` boundary.
+Mathlib's path-map/trans compatibility and a local path-map/cast compatibility
+theorem are now exposed for this package. Quotient endpoint evaluation
+aliases, finite seam value-alignment aliases, and a path-cast
+proof-irrelevance helper isolate the seam proof bookkeeping. The remaining
+bridge is to commute descended semantic evaluation with the nested
+`Path.trans` and `Path.cast` structure of the canonical four-path concatenator
+for this endpoint-cast observed path, including seam proof alignment after
+mapping. The edge-level mapping bridge is now proved: each quotient edge path
+mapped by descended semantic evaluation is the corresponding observed
+semantic edge path after endpoint relabelling. These four edge comparisons
+now lift through the canonical four-edge concatenator: seam proof terms are
+irrelevant for the path value, so the concatenation of mapped quotient edges
+is equal to the canonical observed via-edge path. The global normalization
+theorem is now also proved: mapping the already-glued quotient four-path is
+equal to first mapping the four quotient edges and then gluing them. This
+closes the packaging comparison between the endpoint-cast observed quotient
+closed path and the existing finite four-level path. The result is entirely a
+`Path.map`/`Path.trans`/`Path.cast` theorem, not a boundary or semantic
+obstruction. The public alias
+`shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_final` names this
+closed checkpoint for downstream imports.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
