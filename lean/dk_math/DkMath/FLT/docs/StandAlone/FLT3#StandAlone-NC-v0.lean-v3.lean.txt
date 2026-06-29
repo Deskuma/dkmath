@@ -1679,6 +1679,20 @@ theorem FLT_d3_by_padicValNat_of_NoSqInput {a b c : ℕ}
   exact FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
     ha hb hc hab hBase
 
+theorem PNat.pow3_add_pow3_ne_pow3_of_coprime_and_S0
+    (x y z : ℕ+)
+    (hcop : Nat.Coprime (x : ℕ) (y : ℕ))
+    (hS0_not_sq :
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ (z : ℕ) ^ 3 - (y : ℕ) ^ 3 →
+        ¬ q ∣ (z : ℕ) - (y : ℕ) →
+        ¬ q ^ 2 ∣ S0_nat (z : ℕ) (y : ℕ)) :
+    (x : ℕ) ^ 3 + (y : ℕ) ^ 3 ≠ (z : ℕ) ^ 3 := by
+  exact FLT_d3_by_padicValNat
+    x.2 y.2 z.2
+    hcop
+    hS0_not_sq
+
 /-
 #print axioms FLT_d3_by_padicValNat
 #print axioms FLT_d3_by_padicValNat_of_NoSqOnS0
