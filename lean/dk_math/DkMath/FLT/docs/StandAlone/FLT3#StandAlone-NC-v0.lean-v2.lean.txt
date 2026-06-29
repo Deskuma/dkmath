@@ -455,15 +455,7 @@ lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
   have h_c_ne : c ≠ 0 := Nat.ne_of_gt hc_pos
   letI : Fact (Nat.Prime q) := ⟨hq⟩
   have h_val_c_ge_1 : 1 ≤ padicValNat q c := by
-    have h_ne_zero : padicValNat q c ≠ 0 := by
-      intro h
-      have : ¬ q ∣ c := by
-        rcases padicValNat.eq_zero_iff.mp h with hq1 | hc0 | hqndvd
-        · exact (hq.ne_one hq1).elim
-        · exact (h_c_ne hc0).elim
-        · exact hqndvd
-      exact this hq_dvd_c
-    omega
+    exact one_le_padicValNat_of_dvd h_c_ne hq_dvd_c
   have h_val_pow : padicValNat q (c ^ 3) = 3 * padicValNat q c :=
     padicValNat.pow (n := 3) h_c_ne
   rw [h_val_pow]
@@ -566,7 +558,7 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     have : 0 < a^2 := by positivity
     omega
   by_contra h
-  push_neg at h
+  push Not at h
   have : q^2 ∣ S0_nat a b := by
     rw [padicValNat_dvd_iff 2 (S0_nat a b)]
     right
@@ -1617,7 +1609,7 @@ def GEisensteinDescentCore_of_descentClassify_primitiveSized {c b : ℕ}
 
 lemma exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
     {c b q : ℕ}
-    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (_hDescent : DescentClassifyImpossibleOnPrimitive c b)
     (hPrim : PrimitiveOnS0 c b q)
     (size : ℕ)
     (hsize : size ≤ q) :
@@ -1627,12 +1619,15 @@ lemma exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
           (primitiveSizedCandidateGEisensteinDescentFrame c b)
           (GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize)
           n) = 0 := by
-  let hCore : GEisensteinDescentCore c b :=
-    GEisensteinDescentCore_of_descentClassify_primitiveSized hDescent
-  let s0 : hCore.frame.State :=
+  let F := primitiveSizedCandidateGEisensteinDescentFrame c b
+  let s0 : F.State :=
     GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize
-  simpa [hCore, s0] using
-    GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s0
+  refine ⟨F.measure s0, ?_⟩
+  simpa [F, s0] using
+    GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred
+      F
+      (primitiveSizedCandidate_frame_step_pred c b)
+      s0
 
 theorem GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
     {c b q size : ℕ}
