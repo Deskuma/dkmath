@@ -364,6 +364,129 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
         exact Nat.le_add_right_of_le ih'
 
 /--
+The exact-height count is bounded by the corresponding threshold count.
+
+Every entry with height exactly `h` is also an entry with height at least `h`.
+-/
+theorem orbitWindowHeightCountEq_le_countGe
+    (n : OddNat) (k h : ℕ) :
+    orbitWindowHeightCountEq n k h ≤ orbitWindowHeightCountGe n k h := by
+  unfold orbitWindowHeightCountEq orbitWindowHeightCountGe orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      have ih' :
+          List.countP ((fun x => x == h) ∘ orbitWindowHeight n) (List.range k) ≤
+            List.countP ((fun x => decide (h ≤ x)) ∘ orbitWindowHeight n)
+              (List.range k) := by
+        simpa [List.countP_map] using ih
+      by_cases hlast : orbitWindowHeight n k = h
+      · rw [List.range_succ]
+        have hself : h ≤ h := le_rfl
+        simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+          List.countP_map, List.countP_singleton, beq_iff_eq, decide_eq_true_eq,
+          ge_iff_le, hlast, hself, if_true]
+        exact Nat.add_le_add ih' le_rfl
+      · rw [List.range_succ]
+        simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+          List.countP_map, List.countP_singleton, beq_iff_eq, decide_eq_true_eq,
+          ge_iff_le, hlast, if_false]
+        exact Nat.le_add_right_of_le ih'
+
+/--
+The exact-height occupation count gives a direct lower bound for the
+accumulated Collatz height.
+
+If `c` entries in the window have height exactly `h`, then those entries alone
+contribute `c * h` to the lower-bound side.
+-/
+theorem orbitWindowHeightSeq_sum_ge_countEq_mul_height
+    (n : OddNat) (k h : ℕ) :
+    orbitWindowHeightCountEq n k h * h ≤ sumS n k := by
+  exact le_trans
+    (Nat.mul_le_mul_right h (orbitWindowHeightCountEq_le_countGe n k h))
+    (orbitWindowHeightSeq_sum_ge_countGe_mul_threshold n k h)
+
+/--
+Threshold occupation count inside a prefix of an ambient ordered window.
+
+The argument order keeps the ambient window size `k` visible, because callers
+often work inside one large observation window and then inspect a prefix.
+-/
+noncomputable def orbitWindowHeightPrefixCountGe
+    (n : OddNat) (k r threshold : ℕ) : ℕ :=
+  ((orbitWindowHeightSeq n k).take r).countP
+    (fun x => decide (threshold ≤ x))
+
+/--
+Prefix threshold occupation agrees with the standalone count for the prefix
+length, as long as the prefix lies inside the ambient window.
+-/
+theorem orbitWindowHeightPrefixCountGe_eq_countGe
+    (n : OddNat) {r k threshold : ℕ} (hr : r ≤ k) :
+    orbitWindowHeightPrefixCountGe n k r threshold =
+      orbitWindowHeightCountGe n r threshold := by
+  unfold orbitWindowHeightPrefixCountGe orbitWindowHeightCountGe
+  simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
+
+/--
+Prefix threshold occupation gives a lower bound for the corresponding partial
+Collatz accumulated height.
+-/
+theorem orbitWindowHeightPrefixCountGe_mul_le_sumS
+    (n : OddNat) {r k threshold : ℕ} (hr : r ≤ k) :
+    orbitWindowHeightPrefixCountGe n k r threshold * threshold ≤ sumS n r := by
+  rw [orbitWindowHeightPrefixCountGe_eq_countGe n hr]
+  exact orbitWindowHeightSeq_sum_ge_countGe_mul_threshold n r threshold
+
+/--
+Minimal finite layer-cake lower bound for the first two height layers.
+
+Each entry with height at least `1` contributes one unit, and each entry with
+height at least `2` contributes one more unit.  This is the first local
+occupation-measure form of the Collatz drift lower-bound engine.
+-/
+theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGe n k 1 + orbitWindowHeightCountGe n k 2 ≤
+      sumS n k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowHeightCountGe, orbitWindowHeightSeq, sumS]
+  | succ k ih =>
+      have ih' :
+          List.countP ((fun x => decide (1 ≤ x)) ∘ orbitWindowHeight n)
+              (List.range k) +
+            List.countP ((fun x => decide (2 ≤ x)) ∘ orbitWindowHeight n)
+              (List.range k) ≤ sumS n k := by
+        simpa [orbitWindowHeightCountGe, orbitWindowHeightSeq] using ih
+      by_cases htwo : 2 ≤ orbitWindowHeight n k
+      · have hone : 1 ≤ orbitWindowHeight n k := Nat.le_trans (by decide) htwo
+        rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+        unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+        rw [List.range_succ]
+        simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+          List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
+          hone, htwo, if_true]
+        omega
+      · by_cases hone : 1 ≤ orbitWindowHeight n k
+        · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+          unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+          rw [List.range_succ]
+          simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+            List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
+            hone, htwo, if_true, if_false]
+          omega
+        · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
+          unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+          rw [List.range_succ]
+          simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
+            List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
+            hone, htwo, if_false]
+          exact Nat.le_add_right_of_le ih'
+
+/--
 Block shifts preserve the raw height when the observed height is below the
 block exponent.
 

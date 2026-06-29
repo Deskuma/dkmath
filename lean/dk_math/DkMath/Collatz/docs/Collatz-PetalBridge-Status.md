@@ -117,6 +117,12 @@ orbitWindowHeightCountGe_le_window
 orbitWindowHeightCountEq_eq_window_of_forall_eq
 orbitWindowHeightCountGe_eq_window_of_forall_ge
 orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
+orbitWindowHeightCountEq_le_countGe
+orbitWindowHeightSeq_sum_ge_countEq_mul_height
+orbitWindowHeightPrefixCountGe
+orbitWindowHeightPrefixCountGe_eq_countGe
+orbitWindowHeightPrefixCountGe_mul_le_sumS
+orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -260,11 +266,36 @@ all heights >= threshold
 
 height >= threshold appears c times
   -> c * threshold <= sumS n k
+
+exact-height count is below threshold count
+  -> CountEq h <= CountGe h
+
+height = h appears c times
+  -> c * h <= sumS n k
+
+prefix threshold count in a k-window, with r <= k
+  -> prefix CountGe * threshold <= sumS n r
+
+first two layer-cake layers
+  -> CountGe 1 + CountGe 2 <= sumS n k
 ```
 
-This is the first distribution layer.  It does not yet decompose `sumS` by
-height classes, but it already gives future drift estimates a direct lower
-bound from a threshold regime count.
+This is the first distribution layer.  It still avoids importing the heavier
+ABC analytic layer-cake file, but it now has a local finite `Nat` count version
+of the same idea:
+
+```text
+height h contributes once to CountGe 1,
+again to CountGe 2,
+...
+up to CountGe h.
+```
+
+The repository already contains `DkMath.ABC.LayerCakeBasic`, but that file is
+aimed at real-power / exponential MGF estimates.  The Collatz bridge keeps the
+current API local and elementary because the data here is just a finite ordered
+list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
+the observation-window layer before a real carrier/radical bridge exists.
 
 The bridge theorem
 
