@@ -90,6 +90,15 @@ This is still an angle-reading bridge. It is not an intrinsic construction of
 transition path and normalized boundary path were constructed before this
 Euclidean reading was attached.
 
+The next scale-comparison design is recorded separately in
+`design-p-scale-sync-refinement.md`. Its rule is that `1 / k` is not compared
+with `1 / l` only by the identity `k * (1 / k) = 1`; different scales are
+compared by divisibility and common refinement. For two finite scales, the
+sync length is `Nat.lcm k l`, and coprime scales are jointly embedded into
+that larger finite sync cycle. Prime `p` scales should be treated as
+primitive finite-order unit-kernel channels, while existence of arbitrary
+primitive `p` scales belongs to a later semantic realization layer.
+
 ## Design Principle
 
 The construction should proceed in this order:
