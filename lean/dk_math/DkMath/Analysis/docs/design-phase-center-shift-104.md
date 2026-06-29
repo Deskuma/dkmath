@@ -531,6 +531,7 @@ shiftedFourPathConcatWithSeams_source
 shiftedFourPathConcatWithSeams_target
 shiftedFourPathConcatWithSeams_congr
 shiftedFourPathConcatWithSeams_congr_cast_irrel
+shiftedFourPathConcatWithSeams_map
 shiftedSemanticObservedCyclicFourPathViaEdges
 shiftedSemanticFinFourLevelPathViaEdges
 shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
@@ -556,6 +557,11 @@ shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_source
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_target
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply
 shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
 shiftedSemanticObservedCyclicFourPath_q2
 shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
 shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
@@ -915,10 +921,36 @@ shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
 ```
 
 This proves the edgewise form of "map each quotient edge, relabel endpoints,
-then glue". The remaining global comparison is narrower: prove that mapping
-the already-glued quotient four-path is equal to this edgewise mapped
-concatenation. In Mathlib terms, this is a normalization theorem for
-`Path.map`, nested `Path.trans`, and `Path.cast`.
+then glue".
+
+The global map-through-gluing comparison is now also implemented. The generic
+helper
+
+```text
+shiftedFourPathConcatWithSeams_map
+```
+
+states that mapping the canonical four-edge concatenator agrees with
+concatenating the four mapped edges. The semantic specialization then proves:
+
+```text
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_mappedEdges
+shiftedSemanticCyclicChartEval_cyclicFourPathViaEdges_map_eq_observedViaEdges
+```
+
+Consequently the older endpoint-cast observed quotient path is identified
+with the canonical observed via-edge path, and then with the existing finite
+four-level path:
+
+```text
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPath
+shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_val_eq_finFourLevelPath_val
+```
+
+This closes the current path-packaging comparison. The proof remains entirely
+inside Mathlib path normalization: `Path.map`, nested `Path.trans`, and
+`Path.cast`.
 
 For the future DkMath-native path layer, this suggests the following
 `DkPath` design rule. The API should separate:
@@ -940,16 +972,12 @@ public theorem surface. A DkPath wrapper can therefore expose map/trans/cast
 normalization as first-class theorems, rather than forcing each downstream
 module to rediscover the same proof-term bookkeeping.
 
-The full comparison between evaluation of `shiftedCyclicFourPath` and the
-existing fixed-`q2` four-level path is intentionally left as a TODO until that
-global map-through-gluing theorem is available. This remains pre-geometric:
-no circle, angle, arc, or Euclidean one-eighth interpretation is used.
-
-The next packaging task is to compare the older closed four-path definitions
-with the canonical via-edge versions via this global map-through-gluing
-normalization. That should be a pure `Path.trans` / `Path.cast` step, because
-the semantic edge comparison has already been proved locally and in canonical
-four-edge form.
+This remains pre-geometric: no circle, angle, arc, or Euclidean one-eighth
+interpretation is used. The next packaging task is no longer to compare the
+old closed path with the finite four-level path; that comparison is now
+closed. The next design task is to factor the reusable path-normalization API
+into a future DkMath-native path layer, while keeping Mathlib `Path` as the
+external topology bridge.
 
 Candidate theorem directions:
 
@@ -1052,9 +1080,11 @@ depend on that reading.
     boundary path.
 44. Implemented: expose source, target, endpoint-evaluation, and `q2`
     observation aliases for the observed closed quotient path.
-45. Later: compare the evaluated closed quotient path with the existing
-    fixed-`q2` four-level path after path-trans cast normalization lemmas.
-46. Later: add a Euclidean bridge that reads `1/8` full-cycle
+45. Implemented: prove the global map-through-gluing theorem for the canonical
+    quotient four-path.
+46. Implemented: compare the endpoint-cast observed quotient closed path with
+    the existing fixed-`q2` four-level path.
+47. Later: add a Euclidean bridge that reads `1/8` full-cycle
    displacement as the angle `Real.pi / 4`.
 
 ## Implemented Tags
@@ -1142,18 +1172,26 @@ fixed-`q2` finite level edge.
 Observe the closed quotient chart path through the descended semantic
 evaluation as a closed path in the fixed `q2` boundary. Source, target,
 first-left-endpoint evaluation, and boundary-observation aliases are exposed.
+
+[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-eval]
+Prove the generic four-edge map theorem for the canonical seam concatenator,
+specialize it to semantic evaluation of the quotient four-path, and identify
+the endpoint-cast observed quotient path with the existing fixed-`q2`
+four-level path. This closes the path-packaging comparison before any
+Euclidean angle reading.
 ```
 
 ## Remaining TODO Tags
 
 ```text
-[TODO: semantic-cf2d/shifted-cyclic-path-eval]
-Compare evaluation of the closed quotient path with the fixed-`q2` four-level
-path after path-trans cast normalization lemmas are available.
-
 [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 Develop any additional quotient-space structure only after the descended
 continuous evaluation API has downstream consumers.
+
+[TODO: semantic-cf2d/dkpath-layer]
+Factor the validated path-normalization API into a future DkMath-native path
+layer: trace, endpoint labels, seam witnesses, map/cast/trans compatibility,
+and proof-irrelevant seam concatenation.
 
 [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 After the algebraic shifted-frame theorem is closed at the semantic path

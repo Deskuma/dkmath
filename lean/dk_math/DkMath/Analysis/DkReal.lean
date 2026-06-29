@@ -248,11 +248,13 @@ mapped by descended semantic evaluation is the corresponding observed
 semantic edge path after endpoint relabelling. These four edge comparisons
 now lift through the canonical four-edge concatenator: seam proof terms are
 irrelevant for the path value, so the concatenation of mapped quotient edges
-is equal to the canonical observed via-edge path. The remaining bridge is the
-global normalization theorem saying that mapping the already-glued quotient
-four-path is equal to first mapping the four quotient edges and then gluing
-them. This is now a `Path.map`/`Path.trans`/`Path.cast` bookkeeping problem,
-not a boundary or semantic problem.
+is equal to the canonical observed via-edge path. The global normalization
+theorem is now also proved: mapping the already-glued quotient four-path is
+equal to first mapping the four quotient edges and then gluing them. This
+closes the packaging comparison between the endpoint-cast observed quotient
+closed path and the existing finite four-level path. The result is entirely a
+`Path.map`/`Path.trans`/`Path.cast` theorem, not a boundary or semantic
+obstruction.
 
 [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 coordinate-product topology from `CF2D.Topology` to package every translated
