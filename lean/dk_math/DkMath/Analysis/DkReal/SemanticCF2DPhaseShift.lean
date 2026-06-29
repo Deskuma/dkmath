@@ -2219,6 +2219,38 @@ theorem shiftedFourPathConcatWithSeams_congr
   rfl
 
 /--
+Congruence for the canonical four-edge concatenator, ignoring the exact seam
+proof terms.
+
+If the four component paths agree, then changing only the equality proofs used
+for the four seams does not change the resulting closed path.
+-/
+theorem shiftedFourPathConcatWithSeams_congr_cast_irrel
+    {α : Type _} [TopologicalSpace α]
+    {a0 b0 a1 b1 a2 b2 a3 b3 : α}
+    {p0 q0 : Path a0 b0}
+    {p1 q1 : Path a1 b1}
+    {p2 q2 : Path a2 b2}
+    {p3 q3 : Path a3 b3}
+    (h01 k01 : b0 = a1)
+    (h12 k12 : b1 = a2)
+    (h23 k23 : b2 = a3)
+    (h30 k30 : b3 = a0)
+    (hp0 : p0 = q0)
+    (hp1 : p1 = q1)
+    (hp2 : p2 = q2)
+    (hp3 : p3 = q3) :
+    shiftedFourPathConcatWithSeams p0 p1 p2 p3 h01 h12 h23 h30 =
+      shiftedFourPathConcatWithSeams q0 q1 q2 q3 k01 k12 k23 k30 := by
+  cases hp0
+  cases hp1
+  cases hp2
+  cases hp3
+  apply Path.ext
+  funext t
+  rfl
+
+/--
 Canonical quotient four-edge path via the common seam concatenator.
 
 This is the quotient-chart version of the canonical via-edge packaging used
@@ -2322,6 +2354,54 @@ theorem shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdge
     (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (1 : Fin 4))
     (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (2 : Fin 4))
     (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (3 : Fin 4))
+
+/--
+The four mapped quotient edges concatenate to the canonical observed via-edge
+path.
+
+This theorem lifts the four single-edge mapping bridges through
+`shiftedFourPathConcatWithSeams`; seam proof terms are ignored by the
+cast-irrelevant congruence theorem.
+-/
+theorem shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
+    {r : UnitKernel DkNNRealQ}
+    (hcore : semanticValue (r : Vec DkNNRealQ).core = 0)
+    (z : Vec ℝ) :
+    shiftedFourPathConcatWithSeams
+        (((shiftedCyclicChartEdgePath (0 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (0 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (1 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (1 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (1 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (2 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (2 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (2 : Fin 4)).symm)
+        (((shiftedCyclicChartEdgePath (3 : Fin 4)).map
+          (continuous_shiftedSemanticCyclicChartEval hcore z)).cast
+            (shiftedSemanticCyclicChartEval_left hcore z (3 : Fin 4)).symm
+            (shiftedSemanticCyclicChartEval_right hcore z (3 : Fin 4)).symm)
+        (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+        (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z) =
+      shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+  shiftedFourPathConcatWithSeams_congr_cast_irrel
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_one_eq_two_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_zero_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_one_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_two_eq_observedEdge hcore z)
+    (shiftedSemanticCyclicChartEval_mappedEdge_three_eq_observedEdge hcore z)
 
 /--
 The closed quotient chart path observed inside the fixed square-mass boundary.

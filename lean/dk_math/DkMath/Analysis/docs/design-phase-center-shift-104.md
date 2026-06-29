@@ -530,9 +530,11 @@ shiftedFourPathConcatWithSeams
 shiftedFourPathConcatWithSeams_source
 shiftedFourPathConcatWithSeams_target
 shiftedFourPathConcatWithSeams_congr
+shiftedFourPathConcatWithSeams_congr_cast_irrel
 shiftedSemanticObservedCyclicFourPathViaEdges
 shiftedSemanticFinFourLevelPathViaEdges
 shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
+shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
 shiftedSemanticFinFourLevelPath_eq_viaEdges
 shiftedSemanticObservedCyclicFourPath
 shiftedSemanticObservedCyclicFourPath_source
@@ -901,15 +903,53 @@ terms inside a path cast does not change the resulting path. The current
 stable route therefore avoids direct equality of mapped seam proof terms and
 uses value-level seam alignment plus cast proof irrelevance instead.
 
+The next seam-alignment checkpoint is now also implemented. The stronger
+four-path congruence theorem
+`shiftedFourPathConcatWithSeams_congr_cast_irrel` says that, after the four
+component paths are identified, the exact seam proof terms do not affect the
+concatenated path. Using this helper, the four mapped quotient edges lift to
+the canonical observed via-edge path:
+
+```text
+shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
+```
+
+This proves the edgewise form of "map each quotient edge, relabel endpoints,
+then glue". The remaining global comparison is narrower: prove that mapping
+the already-glued quotient four-path is equal to this edgewise mapped
+concatenation. In Mathlib terms, this is a normalization theorem for
+`Path.map`, nested `Path.trans`, and `Path.cast`.
+
+For the future DkMath-native path layer, this suggests the following
+`DkPath` design rule. The API should separate:
+
+```text
+trace:
+  the underlying parameterized value
+
+endpoint labels:
+  the source and target names required by dependent path types
+
+seam witnesses:
+  proof terms used only to type concatenation
+```
+
+The current Mathlib bridge shows that the trace and endpoint labels carry the
+mathematical content, while seam witnesses should be proof-irrelevant at the
+public theorem surface. A DkPath wrapper can therefore expose map/trans/cast
+normalization as first-class theorems, rather than forcing each downstream
+module to rediscover the same proof-term bookkeeping.
+
 The full comparison between evaluation of `shiftedCyclicFourPath` and the
-existing fixed-`q2` four-level path is intentionally left as a TODO because it
-requires path-trans cast normalization lemmas. This is still not a Euclidean
-angle parameter.
+existing fixed-`q2` four-level path is intentionally left as a TODO until that
+global map-through-gluing theorem is available. This remains pre-geometric:
+no circle, angle, arc, or Euclidean one-eighth interpretation is used.
 
 The next packaging task is to compare the older closed four-path definitions
-with the canonical via-edge versions. That should be a pure `Path.trans` /
-`Path.cast` normalization step, because the semantic edge comparison has
-already been proved locally and in canonical four-edge form.
+with the canonical via-edge versions via this global map-through-gluing
+normalization. That should be a pure `Path.trans` / `Path.cast` step, because
+the semantic edge comparison has already been proved locally and in canonical
+four-edge form.
 
 Candidate theorem directions:
 
