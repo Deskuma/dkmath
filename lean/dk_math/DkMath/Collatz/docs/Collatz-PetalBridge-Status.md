@@ -131,6 +131,7 @@ orbitWindowHeight_eq_of_collision
 orbitWindowHeight_eq_of_same_iterateT
 orbitWindowHeightCountEq
 orbitWindowHeightCountGe
+orbitWindowHeightCountGeTail
 orbitWindowResidueCountMod4EqOne
 orbitWindowResidueCountMod4EqThree
 orbitWindowResidueCountMod8EqOne
@@ -142,6 +143,9 @@ orbitWindowResidueCountMod4EqThreeTail
 orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
+orbitWindowHeightCountGeTail_le_window
+orbitWindowHeightCountGe_succ
+orbitWindowHeightCountGeTail_succ
 orbitWindowResidueCountMod4EqOne_le_window
 orbitWindowResidueCountMod4EqThree_le_window
 orbitWindowResidueCountMod8EqOne_le_window
@@ -153,6 +157,7 @@ orbitWindowResidueCountMod4EqThreeTail_le_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
+orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one
 orbitWindowHeightCountGe_three_eq_residueCount_mod8_eq_five
 orbitWindowHeightCountEq_eq_window_of_forall_eq
 orbitWindowHeightCountGe_eq_window_of_forall_ge
@@ -178,8 +183,11 @@ oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
 orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
+orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
+orbitWindowHeightCountGeTail_le_countGe_succ
 sumS_two_steps_ge_three_of_mod_eight_eq_three
+sumS_two_steps_ge_three_of_mod_eight_eq_three_at
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
@@ -195,6 +203,10 @@ orbitWindowHeightPrefix_sum_ge_sum_countGe_range
 orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightPrefix_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two
+orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two
+orbitWindowResidueCountMod8EqThree_delayed_drift
+orbitWindowResidueCountMod8EqThree_delayed_drift_strong
 orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
 orbitWindowHeightSeq_sum_ge_window_add_countGe_two_add_of_residue_mod8_count_ge
 orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
@@ -359,6 +371,10 @@ orbitWindowHeightCountEq n k h
 orbitWindowHeightCountGe n k threshold
   = number of entries with height at least threshold
 
+orbitWindowHeightCountGeTail n k threshold
+  = number of shifted tail entries, at times i + 1 for i < k,
+    whose height is at least threshold
+
 orbitWindowResidueCountMod4EqOne n k
   = number of odd orbit labels congruent to 1 modulo 4
 
@@ -450,6 +466,12 @@ prefix mod 4 residue occupation lower bound
 mod 8 residue occupation lower bound
   -> m <= residueCountMod8EqFive
   -> k + CountGe 2 + m <= sumS n k
+
+tail `height >= 2` lower bound
+  -> (k + 1) + tail CountGe 2 <= sumS n (k + 1)
+
+delayed `3 mod 8` drift
+  -> (k + 1) + residueCountMod8EqThree n k <= sumS n (k + 1)
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -611,6 +633,26 @@ At count level, the two exact height-one channels feed shifted tail counts:
 residueCountMod8EqThree <= tail residueCountMod4EqOne
 residueCountMod8EqSeven <= tail residueCountMod4EqThree
 ```
+
+The `3 mod 8` source channel has also been returned to the height-count side:
+
+```text
+residueCountMod8EqThree
+  <= tail CountGe 2
+```
+
+Since the tail `1..k` sits inside the ordinary `(k + 1)` window `0..k`, this
+feeds the Collatz drift budget:
+
+```text
+(k + 1) + tail CountGe 2 <= sumS n (k + 1)
+
+(k + 1) + residueCountMod8EqThree n k <= sumS n (k + 1)
+```
+
+This is the first general-window delayed-peeling theorem.  A source count in
+the current window now produces a lower bound on accumulated height one step
+later.
 
 The next higher-coordinate experiment also passed:
 

@@ -464,6 +464,17 @@ noncomputable def orbitWindowHeightCountGe (n : OddNat) (k threshold : ℕ) : �
   (orbitWindowHeightSeq n k).countP (fun x => decide (threshold ≤ x))
 
 /--
+Number of shifted-tail entries whose height is at least `threshold`.
+
+This counts the observations at times `1, 2, ..., k`, indexed as `i + 1` for
+`i < k`.  It is the height-side receiver for delayed transition counts.
+-/
+noncomputable def orbitWindowHeightCountGeTail
+    (n : OddNat) (k threshold : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (threshold ≤ orbitWindowHeight n (i + 1)))
+
+/--
 Number of in-window odd-state labels in residue class `1 mod 4`.
 
 This is the residue-address counterpart of `orbitWindowHeightCountGe n k 2`.
@@ -578,6 +589,46 @@ theorem orbitWindowHeightCountGe_le_window
   simpa [orbitWindowHeightSeq_length] using
     (List.countP_le_length
       (p := fun x => decide (threshold ≤ x)) (l := orbitWindowHeightSeq n k))
+
+/--
+The shifted-tail threshold occupation count is bounded by the tail window size.
+-/
+theorem orbitWindowHeightCountGeTail_le_window
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGeTail n k threshold ≤ k := by
+  unfold orbitWindowHeightCountGeTail
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (threshold ≤ orbitWindowHeight n (i + 1)))
+      (l := List.range k))
+
+/--
+Successor formula for ordinary threshold occupation counts.
+-/
+theorem orbitWindowHeightCountGe_succ
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGe n (k + 1) threshold =
+      orbitWindowHeightCountGe n k threshold +
+        if threshold ≤ orbitWindowHeight n k then 1 else 0 := by
+  unfold orbitWindowHeightCountGe orbitWindowHeightSeq
+  rw [List.range_succ]
+  by_cases h : threshold ≤ orbitWindowHeight n k
+  · simp [h]
+  · simp [h]
+
+/--
+Successor formula for shifted-tail threshold occupation counts.
+-/
+theorem orbitWindowHeightCountGeTail_succ
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGeTail n (k + 1) threshold =
+      orbitWindowHeightCountGeTail n k threshold +
+        if threshold ≤ orbitWindowHeight n (k + 1) then 1 else 0 := by
+  unfold orbitWindowHeightCountGeTail
+  rw [List.range_succ]
+  by_cases h : threshold ≤ orbitWindowHeight n (k + 1)
+  · simp [h]
+  · simp [h]
 
 /--
 The mod `4` residue count is bounded by the window size.
@@ -713,6 +764,29 @@ theorem orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
       · have hres : oddOrbitLabel n k % 4 = 1 := hiff.mp hheight
         simp [ih, hheight, hres]
       · have hres : oddOrbitLabel n k % 4 ≠ 1 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
+
+/--
+Tail `height >= 2` occupation is the same as shifted-tail residue occupation
+in class `1 mod 4`.
+-/
+theorem orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGeTail n k 2 =
+      orbitWindowResidueCountMod4EqOneTail n k := by
+  unfold orbitWindowHeightCountGeTail orbitWindowResidueCountMod4EqOneTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_two_le_iff_mod_four_eq_one n (k + 1)
+      by_cases hheight : 2 ≤ orbitWindowHeight n (k + 1)
+      · have hres : oddOrbitLabel n (k + 1) % 4 = 1 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n (k + 1) % 4 ≠ 1 := by
           intro h
           exact hheight (hiff.mpr h)
         simp [ih, hheight, hres]
@@ -1218,6 +1292,17 @@ theorem orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
         · simp [hsource, htail, ih]
 
 /--
+Every `3 mod 8` source label contributes a shifted-tail entry with
+height at least `2`.
+-/
+theorem orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqThree n k ≤
+      orbitWindowHeightCountGeTail n k 2 := by
+  rw [orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one]
+  exact orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne n k
+
+/--
 Every `7 mod 8` label in a window contributes a `3 mod 4` label in the
 shifted tail window.
 -/
@@ -1244,6 +1329,41 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
         · simp [hsource, htail, ih]
 
 /--
+The shifted-tail threshold count is contained in the ordinary count over the
+one-step-longer window.
+
+The tail observes times `1..k`; the ordinary `(k + 1)` window observes
+`0..k`, so it contains the same tail entries plus the initial time.
+-/
+theorem orbitWindowHeightCountGeTail_le_countGe_succ
+    (n : OddNat) (k threshold : ℕ) :
+    orbitWindowHeightCountGeTail n k threshold ≤
+      orbitWindowHeightCountGe n (k + 1) threshold := by
+  induction k with
+  | zero =>
+      unfold orbitWindowHeightCountGeTail
+      simp
+  | succ k ih =>
+      rw [orbitWindowHeightCountGeTail_succ]
+      rw [orbitWindowHeightCountGe_succ]
+      exact Nat.add_le_add ih le_rfl
+
+/--
+The zeroth natural orbit label is the initial odd state.
+-/
+theorem oddOrbitLabel_zero_eq
+    (n : OddNat) :
+    oddOrbitLabel n 0 = n.1 := rfl
+
+/--
+Restarting the orbit at `iterateT i n` makes its zeroth label equal to the
+original label at time `i`.
+-/
+theorem oddOrbitLabel_iterateT_zero_eq
+    (n : OddNat) (i : ℕ) :
+    oddOrbitLabel (iterateT i n) 0 = oddOrbitLabel n i := rfl
+
+/--
 Two-step delayed-peeling experiment.
 
 Starting at `3 mod 8`, the current step contributes height `1`, and the next
@@ -1264,6 +1384,19 @@ theorem sumS_two_steps_ge_three_of_mod_eight_eq_three
       omega
     _ = sumS n 2 := by
       simp [sumS, orbitWindowHeight_eq_s_iterateT]
+
+/--
+Localized two-step delayed-peeling experiment.
+
+The pointwise two-step theorem can be restarted at any accelerated state
+`iterateT i n`.
+-/
+theorem sumS_two_steps_ge_three_of_mod_eight_eq_three_at
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 3) :
+    3 ≤ sumS (iterateT i n) 2 := by
+  apply sumS_two_steps_ge_three_of_mod_eight_eq_three
+  simpa [oddOrbitLabel_iterateT_zero_eq] using hmod
 
 /--
 Counting exact height `1` entries is the same as counting odd-state labels in
@@ -1661,6 +1794,71 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
   exact le_trans
     (Nat.add_le_add_left hm k)
     (orbitWindowHeightSeq_sum_ge_window_add_countGe_two n k)
+
+/--
+Strong tail-count drift budget.
+
+The `(k + 1)` ordinary window supplies the base peeling layer, and the shifted
+tail `height >= 2` count supplies the delayed extra layer.
+-/
+theorem orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two
+    (n : OddNat) (k : ℕ) :
+    (k + 1) + orbitWindowHeightCountGeTail n k 2 ≤ sumS n (k + 1) := by
+  exact orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+    n (k + 1) (orbitWindowHeightCountGeTail n k 2)
+    (orbitWindowHeightCountGeTail_le_countGe_succ n k 2)
+
+/--
+Weak tail-count drift budget.
+
+The shifted-tail `height >= 2` entries contribute extra peeling inside the
+one-step-longer accumulated window.
+-/
+theorem orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two
+    (n : OddNat) (k : ℕ) :
+    k + orbitWindowHeightCountGeTail n k 2 ≤ sumS n (k + 1) := by
+  exact le_trans
+    (by
+      have h :
+          k + orbitWindowHeightCountGeTail n k 2 ≤
+            (k + 1) + orbitWindowHeightCountGeTail n k 2 := by
+        omega
+      exact h)
+    (orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two n k)
+
+/--
+Delayed-drift theorem from the `3 mod 8` source channel.
+
+Every source occurrence of `3 mod 8` feeds a shifted-tail `height >= 2` entry,
+so it contributes to the accumulated drift over the one-step-longer window.
+-/
+theorem orbitWindowResidueCountMod8EqThree_delayed_drift
+    (n : OddNat) (k : ℕ) :
+    k + orbitWindowResidueCountMod8EqThree n k ≤ sumS n (k + 1) := by
+  exact le_trans
+    (Nat.add_le_add_left
+      (orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two n k) k)
+    (orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two n k)
+
+/--
+Strong delayed-drift theorem from the `3 mod 8` source channel.
+
+This is the count-level form of delayed peeling:
+
+```text
+base layer over 0..k
+  +
+source count of 3 mod 8 over 0..k-1
+  <= sumS over 0..k
+```
+-/
+theorem orbitWindowResidueCountMod8EqThree_delayed_drift_strong
+    (n : OddNat) (k : ℕ) :
+    (k + 1) + orbitWindowResidueCountMod8EqThree n k ≤ sumS n (k + 1) := by
+  exact le_trans
+    (Nat.add_le_add_left
+      (orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two n k) (k + 1))
+    (orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two n k)
 
 /--
 Residue-address drift bridge.
