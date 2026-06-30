@@ -345,6 +345,78 @@ theorem next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone
   omega
 
 /--
+The `31 mod 64` subchannel of `31 mod 32` exits retention one level down:
+after one height-one step, the next label is `15 mod 32`.
+-/
+theorem next_mod_thirtytwo_of_mod_sixtyfour_eq_thirtyone
+    {m : ℕ} (hm : m % 64 = 31) :
+    ((3 * m + 1) / 2) % 32 = 15 := by
+  omega
+
+/--
+The `63 mod 64` subchannel of `31 mod 32` continues retention as
+`31 mod 32`.
+-/
+theorem next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree
+    {m : ℕ} (hm : m % 64 = 63) :
+    ((3 * m + 1) / 2) % 32 = 31 := by
+  omega
+
+/--
+Raw arithmetic anchor for the next recovery sibling:
+`63 mod 128` maps to `31 mod 64`.
+-/
+theorem next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_sixtythree
+    {m : ℕ} (hm : m % 128 = 63) :
+    ((3 * m + 1) / 2) % 64 = 31 := by
+  omega
+
+/--
+Raw arithmetic anchor for the next continuation sibling:
+`127 mod 128` maps to `63 mod 64`.
+-/
+theorem next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_onehundredtwentyseven
+    {m : ℕ} (hm : m % 128 = 127) :
+    ((3 * m + 1) / 2) % 64 = 63 := by
+  omega
+
+/--
+Raw arithmetic anchor for the `mod 256` recovery sibling:
+`127 mod 256` maps to `63 mod 128`.
+-/
+theorem next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_onehundredtwentyseven
+    {m : ℕ} (hm : m % 256 = 127) :
+    ((3 * m + 1) / 2) % 128 = 63 := by
+  omega
+
+/--
+Raw arithmetic anchor for the `mod 256` continuation sibling:
+`255 mod 256` maps to `127 mod 128`.
+-/
+theorem next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_twohundredfiftyfive
+    {m : ℕ} (hm : m % 256 = 255) :
+    ((3 * m + 1) / 2) % 128 = 127 := by
+  omega
+
+/--
+Raw arithmetic anchor for the `mod 512` recovery sibling:
+`255 mod 512` maps to `127 mod 256`.
+-/
+theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive
+    {m : ℕ} (hm : m % 512 = 255) :
+    ((3 * m + 1) / 2) % 256 = 127 := by
+  omega
+
+/--
+Raw arithmetic anchor for the `mod 512` continuation sibling:
+`511 mod 512` maps to `255 mod 256`.
+-/
+theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven
+    {m : ℕ} (hm : m % 512 = 511) :
+    ((3 * m + 1) / 2) % 256 = 255 := by
+  omega
+
+/--
 On the exact height-one channel, the accelerated Collatz map is the visible
 one-step expression `(3m + 1) / 2`.
 -/
@@ -1441,6 +1513,46 @@ theorem oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
   exact next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone hmod
 
 /--
+The `31 mod 64` subchannel moves to `15 mod 32` at the next label.
+
+This is the next recovery sibling inside the narrowing retention cylinder.
+-/
+theorem oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 64 = 31) :
+    oddOrbitLabel n (i + 1) % 32 = 15 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_thirtytwo_of_mod_sixtyfour_eq_thirtyone hmod
+
+/--
+The `63 mod 64` subchannel continues as `31 mod 32` at the next label.
+
+The low-peeling path survives only by entering the next thinner cylinder.
+-/
+theorem oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtythree
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 64 = 63) :
+    oddOrbitLabel n (i + 1) % 32 = 31 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree hmod
+
+/--
 Delayed peeling from the `3 mod 8` height-one channel.
 
 The current step has exact height `1`, but the next label lands in
@@ -1500,6 +1612,24 @@ theorem orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
       n i hmod
   simpa [Nat.add_assoc] using
     orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven n (i + 1) hnext
+
+/--
+The `31 mod 64` branch recovers delayed peeling after four transitions.
+
+It first moves to `15 mod 32`; the already-fixed `15 mod 32` recovery branch
+then forces an extra peeling height three transitions later.
+-/
+theorem orbitWindowNextNextNextNextHeight_two_le_of_mod_sixtyfour_eq_thirtyone
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 64 = 31) :
+    2 ≤ orbitWindowHeight n (i + 4) := by
+  have hnext :
+      oddOrbitLabel n (i + 1) % 32 = 15 :=
+    oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
+      n i hmod
+  simpa [Nat.add_assoc] using
+    orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
+      n (i + 1) hnext
 
 /--
 Every `3 mod 8` label in a window contributes a `1 mod 4` label in the
@@ -1767,6 +1897,57 @@ theorem sumS_four_steps_ge_five_of_mod_thirtytwo_eq_fifteen
         orbitWindowHeight n 2 + orbitWindowHeight n 3 := by
       omega
     _ = sumS n 4 := by
+      simp [sumS, orbitWindowHeight_eq_s_iterateT]
+
+/--
+Five-step recovery from the `31 mod 64` subchannel.
+
+This is the next rung of the verified retention ladder.  The branch moves
+through `15 mod 32`, `7 mod 16`, and `3 mod 8`, and then returns an extra
+peeling step.
+-/
+theorem sumS_five_steps_ge_six_of_mod_sixtyfour_eq_thirtyone
+    (n : OddNat)
+    (hmod : oddOrbitLabel n 0 % 64 = 31) :
+    6 ≤ sumS n 5 := by
+  have hmod8 : oddOrbitLabel n 0 % 8 = 7 := by
+    omega
+  have h0 : orbitWindowHeight n 0 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 0).mpr
+      (Or.inr hmod8)
+  have h1mod32 :
+      oddOrbitLabel n 1 % 32 = 15 :=
+    oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
+      n 0 hmod
+  have h1mod8 : oddOrbitLabel n 1 % 8 = 7 := by
+    omega
+  have h1 : orbitWindowHeight n 1 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 1).mpr
+      (Or.inr h1mod8)
+  have h2mod16 :
+      oddOrbitLabel n 2 % 16 = 7 :=
+    oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+      n 1 h1mod32
+  have h2mod8 : oddOrbitLabel n 2 % 8 = 7 := by
+    omega
+  have h2 : orbitWindowHeight n 2 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 2).mpr
+      (Or.inr h2mod8)
+  have h3mod :
+      oddOrbitLabel n 3 % 8 = 3 :=
+    oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven
+      n 2 h2mod16
+  have h3 : orbitWindowHeight n 3 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 3).mpr
+      (Or.inl h3mod)
+  have h4 : 2 ≤ orbitWindowHeight n 4 :=
+    orbitWindowNextHeight_two_le_of_mod_eight_eq_three n 3 h3mod
+  calc
+    6 ≤ orbitWindowHeight n 0 + orbitWindowHeight n 1 +
+        orbitWindowHeight n 2 + orbitWindowHeight n 3 +
+        orbitWindowHeight n 4 := by
+      omega
+    _ = sumS n 5 := by
       simp [sumS, orbitWindowHeight_eq_s_iterateT]
 
 /--

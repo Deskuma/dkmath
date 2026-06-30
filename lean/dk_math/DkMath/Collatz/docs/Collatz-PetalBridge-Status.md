@@ -185,6 +185,14 @@ next_mod_eight_of_mod_sixteen_eq_seven
 next_mod_eight_of_mod_sixteen_eq_fifteen
 next_mod_sixteen_of_mod_thirtytwo_eq_fifteen
 next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone
+next_mod_thirtytwo_of_mod_sixtyfour_eq_thirtyone
+next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree
+next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_sixtythree
+next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_onehundredtwentyseven
+next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_onehundredtwentyseven
+next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_twohundredfiftyfive
+next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive
+next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
@@ -193,10 +201,13 @@ oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven
 oddOrbitLabel_succ_mod_eight_eq_seven_of_mod_sixteen_eq_fifteen
 oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
 oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
+oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
+oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtythree
 orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
 orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
 orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
+orbitWindowNextNextNextNextHeight_two_le_of_mod_sixtyfour_eq_thirtyone
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
 orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
@@ -208,6 +219,7 @@ sumS_two_steps_ge_three_of_mod_eight_eq_three_at
 sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
 sumS_three_steps_ge_four_of_mod_sixteen_eq_seven
 sumS_four_steps_ge_five_of_mod_thirtytwo_eq_fifteen
+sumS_five_steps_ge_six_of_mod_sixtyfour_eq_thirtyone
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
@@ -777,6 +789,60 @@ At this stage the bridge has not proved the general cylinder theorem.  What is
 fixed is the verified local pattern: every time the retention branch continues,
 the residue condition moves into a thinner power-of-two cylinder; the sibling
 branch returns to a delayed-peeling recovery estimate.
+
+The `31 mod 32` retention-continuation channel has now been split at mod `64`:
+
+```text
+31 mod 64:
+  next label is 15 mod 32
+  recovery branch one level down
+
+63 mod 64:
+  next label is 31 mod 32
+  retention-continuation branch
+```
+
+Thus the `31 mod 64` subchannel recovers delayed peeling in five steps:
+
+```text
+label 0 = 31 mod 64
+  -> height at 0 is 1
+  -> label 1 = 15 mod 32
+  -> height at 1 is 1
+  -> label 2 = 7 mod 16
+  -> height at 2 is 1
+  -> label 3 = 3 mod 8
+  -> height at 3 is 1
+  -> height at 4 is at least 2
+  -> 6 <= sumS n 5
+```
+
+The raw arithmetic anchors have also been checked in Lean up to mod `512`:
+
+```text
+7 mod 16    -> 3 mod 8
+15 mod 16   -> 7 mod 8
+
+15 mod 32   -> 7 mod 16
+31 mod 32   -> 15 mod 16
+
+31 mod 64   -> 15 mod 32
+63 mod 64   -> 31 mod 32
+
+63 mod 128  -> 31 mod 64
+127 mod 128 -> 63 mod 64
+
+127 mod 256 -> 63 mod 128
+255 mod 256 -> 127 mod 128
+
+255 mod 512 -> 127 mod 256
+511 mod 512 -> 255 mod 256
+```
+
+The Lean theorem layer currently promotes the `mod 64` rung to orbit-label and
+drift form.  The `mod 128`, `mod 256`, and `mod 512` rows are raw arithmetic
+anchors, kept as evidence for the next generalization step rather than fully
+expanded orbit bridges.
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:
