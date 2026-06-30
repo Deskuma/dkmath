@@ -475,6 +475,17 @@ noncomputable def orbitWindowHeightCountGeTail
     (fun i => decide (threshold ≤ orbitWindowHeight n (i + 1)))
 
 /--
+Number of shifted-tail entries whose height is exactly `h`.
+
+This is the exact-height counterpart of `orbitWindowHeightCountGeTail`.  It is
+used to record retention channels such as `7 mod 8 -> next exact height 1`.
+-/
+noncomputable def orbitWindowHeightCountEqTail
+    (n : OddNat) (k h : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (orbitWindowHeight n (i + 1) = h))
+
+/--
 Number of in-window odd-state labels in residue class `1 mod 4`.
 
 This is the residue-address counterpart of `orbitWindowHeightCountGe n k 2`.
@@ -603,6 +614,19 @@ theorem orbitWindowHeightCountGeTail_le_window
       (l := List.range k))
 
 /--
+The shifted-tail exact-height occupation count is bounded by the tail window
+size.
+-/
+theorem orbitWindowHeightCountEqTail_le_window
+    (n : OddNat) (k h : ℕ) :
+    orbitWindowHeightCountEqTail n k h ≤ k := by
+  unfold orbitWindowHeightCountEqTail
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (orbitWindowHeight n (i + 1) = h))
+      (l := List.range k))
+
+/--
 Successor formula for ordinary threshold occupation counts.
 -/
 theorem orbitWindowHeightCountGe_succ
@@ -629,6 +653,20 @@ theorem orbitWindowHeightCountGeTail_succ
   by_cases h : threshold ≤ orbitWindowHeight n (k + 1)
   · simp [h]
   · simp [h]
+
+/--
+Successor formula for shifted-tail exact-height occupation counts.
+-/
+theorem orbitWindowHeightCountEqTail_succ
+    (n : OddNat) (k h : ℕ) :
+    orbitWindowHeightCountEqTail n (k + 1) h =
+      orbitWindowHeightCountEqTail n k h +
+        if orbitWindowHeight n (k + 1) = h then 1 else 0 := by
+  unfold orbitWindowHeightCountEqTail
+  rw [List.range_succ]
+  by_cases hlast : orbitWindowHeight n (k + 1) = h
+  · simp [hlast]
+  · simp [hlast]
 
 /--
 The mod `4` residue count is bounded by the window size.
@@ -1112,6 +1150,57 @@ theorem orbitWindowHeight_eq_one_iff_mod_four_eq_three
     omega
 
 /--
+Tail exact height `1` occupation is the same as shifted-tail residue
+occupation in class `3 mod 4`.
+-/
+theorem orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountEqTail n k 1 =
+      orbitWindowResidueCountMod4EqThreeTail n k := by
+  unfold orbitWindowHeightCountEqTail orbitWindowResidueCountMod4EqThreeTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_eq_one_iff_mod_four_eq_three n (k + 1)
+      by_cases hheight : orbitWindowHeight n (k + 1) = 1
+      · have hres : oddOrbitLabel n (k + 1) % 4 = 3 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n (k + 1) % 4 ≠ 3 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
+
+/--
+The shifted tail splits into exact height `1` and height at least `2`.
+
+Every accelerated Collatz tail state has height at least `1`, so an entry is
+either the retaining exact-height-one layer or the extra-peeling layer.
+-/
+theorem orbitWindowHeightTail_countGe_two_add_countEq_one_eq_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGeTail n k 2 +
+      orbitWindowHeightCountEqTail n k 1 = k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowHeightCountGeTail, orbitWindowHeightCountEqTail]
+  | succ k ih =>
+      rw [orbitWindowHeightCountGeTail_succ]
+      rw [orbitWindowHeightCountEqTail_succ]
+      have hone : 1 ≤ orbitWindowHeight n (k + 1) :=
+        orbitWindowHeight_one_le n (k + 1)
+      by_cases htwo : 2 ≤ orbitWindowHeight n (k + 1)
+      · have hnotOne : orbitWindowHeight n (k + 1) ≠ 1 := by
+          omega
+        simp [htwo, hnotOne]
+        omega
+      · have hOne : orbitWindowHeight n (k + 1) = 1 := by
+          omega
+        simp [hOne]
+        omega
+
+/--
 Exact height `1` is the union of the two mod `8` channels `3` and `7`.
 -/
 theorem orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
@@ -1329,6 +1418,20 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
         · simp [hsource, htail, ih]
 
 /--
+Every `7 mod 8` source label contributes a shifted-tail entry with exact
+height `1`.
+
+This is the retention-channel counterpart of the delayed-peeling theorem for
+the `3 mod 8` source channel.
+-/
+theorem orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqSeven n k ≤
+      orbitWindowHeightCountEqTail n k 1 := by
+  rw [orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three]
+  exact residueCountMod8EqSeven_le_nextResidueCountMod4EqThree n k
+
+/--
 The shifted-tail threshold count is contained in the ordinary count over the
 one-step-longer window.
 
@@ -1397,6 +1500,30 @@ theorem sumS_two_steps_ge_three_of_mod_eight_eq_three_at
     3 ≤ sumS (iterateT i n) 2 := by
   apply sumS_two_steps_ge_three_of_mod_eight_eq_three
   simpa [oddOrbitLabel_iterateT_zero_eq] using hmod
+
+/--
+Two-step retention witness for the `7 -> 7` pattern.
+
+If the first two labels both lie in residue class `7 mod 8`, then both
+observed heights are exact height `1`, so the two-step accumulated height is
+exactly `2`.
+-/
+theorem sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
+    (n : OddNat)
+    (h0 : oddOrbitLabel n 0 % 8 = 7)
+    (h1 : oddOrbitLabel n 1 % 8 = 7) :
+    sumS n 2 = 2 := by
+  have hh0 : orbitWindowHeight n 0 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 0).mpr
+      (Or.inr h0)
+  have hh1 : orbitWindowHeight n 1 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 1).mpr
+      (Or.inr h1)
+  calc
+    sumS n 2 = orbitWindowHeight n 0 + orbitWindowHeight n 1 := by
+      simp [sumS, orbitWindowHeight_eq_s_iterateT]
+    _ = 2 := by
+      omega
 
 /--
 Counting exact height `1` entries is the same as counting odd-state labels in

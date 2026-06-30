@@ -132,6 +132,7 @@ orbitWindowHeight_eq_of_same_iterateT
 orbitWindowHeightCountEq
 orbitWindowHeightCountGe
 orbitWindowHeightCountGeTail
+orbitWindowHeightCountEqTail
 orbitWindowResidueCountMod4EqOne
 orbitWindowResidueCountMod4EqThree
 orbitWindowResidueCountMod8EqOne
@@ -144,8 +145,10 @@ orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
 orbitWindowHeightCountGeTail_le_window
+orbitWindowHeightCountEqTail_le_window
 orbitWindowHeightCountGe_succ
 orbitWindowHeightCountGeTail_succ
+orbitWindowHeightCountEqTail_succ
 orbitWindowResidueCountMod4EqOne_le_window
 orbitWindowResidueCountMod4EqThree_le_window
 orbitWindowResidueCountMod8EqOne_le_window
@@ -173,6 +176,8 @@ orbitWindowHeightCountGe_one_eq_window
 orbitWindowHeightSeq_sum_ge_window_add_countGe_two
 orbitWindowHeight_eq_two_iff_mod_eight_eq_one
 orbitWindowHeight_eq_one_iff_mod_four_eq_three
+orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three
+orbitWindowHeightTail_countGe_two_add_countEq_one_eq_window
 orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
 orbitNext_mod_four_eq_one_of_mod_eight_eq_three
 orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
@@ -185,9 +190,11 @@ orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
 orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
+orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
 orbitWindowHeightCountGeTail_le_countGe_succ
 sumS_two_steps_ge_three_of_mod_eight_eq_three
 sumS_two_steps_ge_three_of_mod_eight_eq_three_at
+sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
@@ -375,6 +382,10 @@ orbitWindowHeightCountGeTail n k threshold
   = number of shifted tail entries, at times i + 1 for i < k,
     whose height is at least threshold
 
+orbitWindowHeightCountEqTail n k h
+  = number of shifted tail entries, at times i + 1 for i < k,
+    whose height is exactly h
+
 orbitWindowResidueCountMod4EqOne n k
   = number of odd orbit labels congruent to 1 modulo 4
 
@@ -472,6 +483,12 @@ tail `height >= 2` lower bound
 
 delayed `3 mod 8` drift
   -> (k + 1) + residueCountMod8EqThree n k <= sumS n (k + 1)
+
+tail first-layer partition
+  -> tail CountGe 2 + tail CountEq 1 = k
+
+retaining `7 mod 8` source
+  -> residueCountMod8EqSeven <= tail CountEq 1
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -653,6 +670,36 @@ feeds the Collatz drift budget:
 This is the first general-window delayed-peeling theorem.  A source count in
 the current window now produces a lower bound on accumulated height one step
 later.
+
+The `7 mod 8` source channel is now the retention counterpart:
+
+```text
+residueCountMod8EqSeven
+  <= tail CountEq 1
+```
+
+The shifted tail itself has the first exact/threshold partition:
+
+```text
+tail CountGe 2 + tail CountEq 1 = k
+```
+
+This records the first mod `8` transition split:
+
+```text
+3 mod 8 source:
+  next tail enters the extra-peeling side
+
+7 mod 8 source:
+  next tail remains exact height one
+```
+
+A concrete two-step witness is also available:
+
+```text
+label 0 = 7 mod 8 and label 1 = 7 mod 8
+  -> sumS n 2 = 2
+```
 
 The next higher-coordinate experiment also passed:
 
