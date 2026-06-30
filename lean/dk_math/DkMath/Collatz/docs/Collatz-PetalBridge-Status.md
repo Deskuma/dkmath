@@ -35,6 +35,7 @@ This means the implemented Collatz side is currently strongest around:
 ```text
 odd state
 2-adic height
+2-adic residue class
 accelerated transition
 orbit segment
 block-shift invariance
@@ -99,6 +100,15 @@ The first theorem set is deliberately thin:
 orbitWindow_eq_range
 rawHeightLabel_eq_s
 orbitWindowHeight_eq_s_iterateT
+two_le_v2_iff_four_dvd
+rawHeightLabel_two_le_iff_four_dvd_threeNPlusOne
+orbitWindowHeight_two_le_iff_four_dvd
+odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one
+orbitWindowHeight_two_le_iff_mod_four_eq_one
+three_le_v2_iff_eight_dvd
+rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
+odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
+orbitWindowHeight_three_le_iff_mod_eight_eq_five
 orbitWindowHeightSeq_length
 orbitWindowHeightSeq_sum_eq_sumS
 orbitWindowHeightSeq_sum_ge_of_forall_ge
@@ -112,8 +122,11 @@ orbitWindowHeight_eq_of_collision
 orbitWindowHeight_eq_of_same_iterateT
 orbitWindowHeightCountEq
 orbitWindowHeightCountGe
+orbitWindowResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
+orbitWindowResidueCountMod4EqOne_le_window
+orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
 orbitWindowHeightCountEq_eq_window_of_forall_eq
 orbitWindowHeightCountGe_eq_window_of_forall_ge
 orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
@@ -136,6 +149,7 @@ orbitWindowHeightPrefix_sum_ge_sum_countGe_range
 orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightPrefix_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
 orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
@@ -213,6 +227,36 @@ rawHeightLabel n = v2 (3n + 1)
 orbitWindowHeight n i = rawHeightLabel (oddOrbitLabel n i)
 ```
 
+The first residue-address observation is now fixed as well:
+
+```text
+height >= 2
+  <-> 4 | (3m + 1)
+  <-> m % 4 = 1          for odd m
+
+orbitWindowHeight n i >= 2
+  <-> oddOrbitLabel n i % 4 = 1
+```
+
+Thus the second Collatz height layer has a residue-count reading:
+
+```text
+orbitWindowHeightCountGe n k 2
+  = orbitWindowResidueCountMod4EqOne n k
+
+m <= orbitWindowResidueCountMod4EqOne n k
+  -> k + m <= sumS n k
+```
+
+This is the first direct route from a Petal-style residue/address occupation
+statement to the Collatz drift input.  The next pointwise residue experiment
+also passed:
+
+```text
+orbitWindowHeight n i >= 3
+  <-> oddOrbitLabel n i % 8 = 5
+```
+
 The ordered height profile is now explicitly connected to the existing
 Collatz accumulated-height API:
 
@@ -266,6 +310,9 @@ orbitWindowHeightCountEq n k h
 
 orbitWindowHeightCountGe n k threshold
   = number of entries with height at least threshold
+
+orbitWindowResidueCountMod4EqOne n k
+  = number of odd orbit labels congruent to 1 modulo 4
 ```
 
 The current count API is intentionally minimal:
@@ -319,6 +366,9 @@ finite tail layer-cake
 
 external CountGe 2 lower bound
   -> m <= CountGe 2 -> k + m <= sumS n k
+
+mod 4 residue occupation lower bound
+  -> m <= residueCountMod4EqOne -> k + m <= sumS n k
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -395,6 +445,15 @@ proving only a lower bound on the second layer:
 m <= CountGe 2 -> k + m <= sumS n k
 ```
 
+Equivalently, after the residue bridge, they may prove only:
+
+```text
+m <= orbitWindowResidueCountMod4EqOne n k
+```
+
+This changes the practical target from a valuation-count statement into a
+finite residue-class occupation statement.
+
 This is the intended bridge from a future residue/address occupation theorem
 to a Collatz drift lower bound.
 
@@ -434,6 +493,15 @@ The next safe steps are:
 4. Use threshold occupation lower bounds as the Collatz-side drift input.
 5. Test whether an external label transform can turn orbit labels into carrier labels.
 6. Only after that, test whether Collatz labels can feed ABC support/rad.
+```
+
+The immediate residue candidates are:
+
+```text
+prefix version of residueCountMod4EqOne
+height >= 3 count as a mod 8 residue occupation
+transition map between residue classes under the accelerated map T
+general 2^r residue coordinate for height >= r
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge

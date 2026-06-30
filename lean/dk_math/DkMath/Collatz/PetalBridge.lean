@@ -130,6 +130,108 @@ theorem orbitWindowHeight_eq_s_iterateT (n : OddNat) (i : ℕ) :
     orbitWindowHeight n i = s (iterateT i n) := rfl
 
 /--
+The `v2` observation is at least `2` exactly when `4` divides the observed
+nonzero natural.
+
+This is the valuation-to-divisibility bridge used to turn Collatz height
+conditions into residue/address conditions.
+-/
+theorem two_le_v2_iff_four_dvd
+    {m : ℕ} (hm : m ≠ 0) :
+    2 ≤ v2 m ↔ 4 ∣ m := by
+  simpa [v2] using
+    (DkMath.ABC.padicValNat_le_iff_dvd Nat.prime_two hm 2)
+
+/--
+Raw Collatz height is at least `2` exactly when `4` divides `3n + 1`.
+-/
+theorem rawHeightLabel_two_le_iff_four_dvd_threeNPlusOne
+    (n : ℕ) :
+    2 ≤ rawHeightLabel n ↔ 4 ∣ 3 * n + 1 := by
+  exact two_le_v2_iff_four_dvd (by omega : 3 * n + 1 ≠ 0)
+
+/--
+Orbit-window height is at least `2` exactly when `4` divides the next
+`3m + 1` value for the observed odd-state label.
+-/
+theorem orbitWindowHeight_two_le_iff_four_dvd
+    (n : OddNat) (i : ℕ) :
+    2 ≤ orbitWindowHeight n i ↔
+      4 ∣ 3 * oddOrbitLabel n i + 1 := by
+  exact rawHeightLabel_two_le_iff_four_dvd_threeNPlusOne (oddOrbitLabel n i)
+
+/--
+For an odd natural `m`, the condition `4 | 3m + 1` is the same as
+`m % 4 = 1`.
+
+This is the first residue-address reading of a Collatz height condition.
+-/
+theorem odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one
+    {m : ℕ} (hmOdd : m % 2 = 1) :
+    4 ∣ 3 * m + 1 ↔ m % 4 = 1 := by
+  constructor
+  · intro h
+    omega
+  · intro h
+    omega
+
+/--
+`height >= 2` in the Collatz observation window is the same as the current odd
+state label lying in residue class `1 mod 4`.
+-/
+theorem orbitWindowHeight_two_le_iff_mod_four_eq_one
+    (n : OddNat) (i : ℕ) :
+    2 ≤ orbitWindowHeight n i ↔ oddOrbitLabel n i % 4 = 1 := by
+  rw [orbitWindowHeight_two_le_iff_four_dvd]
+  exact odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one (iterateT i n).2
+
+/--
+The `v2` observation is at least `3` exactly when `8` divides the observed
+nonzero natural.
+
+This is the next residue-address experiment after the mod `4` bridge.
+-/
+theorem three_le_v2_iff_eight_dvd
+    {m : ℕ} (hm : m ≠ 0) :
+    3 ≤ v2 m ↔ 8 ∣ m := by
+  simpa [v2] using
+    (DkMath.ABC.padicValNat_le_iff_dvd Nat.prime_two hm 3)
+
+/--
+Raw Collatz height is at least `3` exactly when `8` divides `3n + 1`.
+-/
+theorem rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
+    (n : ℕ) :
+    3 ≤ rawHeightLabel n ↔ 8 ∣ 3 * n + 1 := by
+  exact three_le_v2_iff_eight_dvd (by omega : 3 * n + 1 ≠ 0)
+
+/--
+For an odd natural `m`, the condition `8 | 3m + 1` is the same as
+`m % 8 = 5`.
+
+This records the next residue class after the mod `4` observation.
+-/
+theorem odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
+    {m : ℕ} (hmOdd : m % 2 = 1) :
+    8 ∣ 3 * m + 1 ↔ m % 8 = 5 := by
+  constructor
+  · intro h
+    omega
+  · intro h
+    omega
+
+/--
+`height >= 3` in the Collatz observation window is the same as the current odd
+state label lying in residue class `5 mod 8`.
+-/
+theorem orbitWindowHeight_three_le_iff_mod_eight_eq_five
+    (n : OddNat) (i : ℕ) :
+    3 ≤ orbitWindowHeight n i ↔ oddOrbitLabel n i % 8 = 5 := by
+  change 3 ≤ rawHeightLabel (oddOrbitLabel n i) ↔ oddOrbitLabel n i % 8 = 5
+  rw [rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne]
+  exact odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five (iterateT i n).2
+
+/--
 The ordered height profile has length equal to the window size.
 -/
 theorem orbitWindowHeightSeq_length (n : OddNat) (k : ℕ) :
@@ -271,6 +373,16 @@ noncomputable def orbitWindowHeightCountGe (n : OddNat) (k threshold : ℕ) : �
   (orbitWindowHeightSeq n k).countP (fun x => decide (threshold ≤ x))
 
 /--
+Number of in-window odd-state labels in residue class `1 mod 4`.
+
+This is the residue-address counterpart of `orbitWindowHeightCountGe n k 2`.
+-/
+noncomputable def orbitWindowResidueCountMod4EqOne
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 4 = 1))
+
+/--
 The exact-height occupation count is bounded by the window size.
 -/
 theorem orbitWindowHeightCountEq_le_window
@@ -290,6 +402,43 @@ theorem orbitWindowHeightCountGe_le_window
   simpa [orbitWindowHeightSeq_length] using
     (List.countP_le_length
       (p := fun x => decide (threshold ≤ x)) (l := orbitWindowHeightSeq n k))
+
+/--
+The mod `4` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod4EqOne_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod4EqOne n k ≤ k := by
+  unfold orbitWindowResidueCountMod4EqOne
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 4 = 1)) (l := List.range k))
+
+/--
+Counting `height >= 2` entries is the same as counting odd-state labels in
+residue class `1 mod 4`.
+
+This turns the second Collatz height layer into a residue-address occupation
+count.
+-/
+theorem orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGe n k 2 =
+      orbitWindowResidueCountMod4EqOne n k := by
+  unfold orbitWindowHeightCountGe orbitWindowResidueCountMod4EqOne orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_two_le_iff_mod_four_eq_one n k
+      by_cases hheight : 2 ≤ orbitWindowHeight n k
+      · have hres : oddOrbitLabel n k % 4 = 1 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n k % 4 ≠ 1 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
 
 /--
 If every in-window height is exactly `h`, then the exact-height occupation
@@ -788,6 +937,20 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
   exact le_trans
     (Nat.add_le_add_left hm k)
     (orbitWindowHeightSeq_sum_ge_window_add_countGe_two n k)
+
+/--
+Residue-address drift bridge.
+
+If at least `m` labels in the window lie in residue class `1 mod 4`, then the
+second height layer has at least `m` entries, and therefore `sumS n k` is at
+least `k + m`.
+-/
+theorem orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
+    (n : OddNat) (k m : ℕ)
+    (hm : m ≤ orbitWindowResidueCountMod4EqOne n k) :
+    k + m ≤ sumS n k := by
+  rw [← orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one n k] at hm
+  exact orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge n k m hm
 
 /--
 Prefix version: a lower bound on the prefix `height >= 2` occupation gives a
