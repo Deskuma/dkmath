@@ -919,6 +919,18 @@ noncomputable def orbitWindowResidueCountMod8EqSeven
     (fun i => decide (oddOrbitLabel n i % 8 = 7))
 
 /--
+Generic residue-cell occupation count for a power-of-two modulus.
+
+This is the coordinate-count version of the concrete `mod 4` and `mod 8`
+counts above.  It counts how many labels in the window lie in a chosen residue
+class modulo `2^depth`.
+-/
+noncomputable def orbitWindowResidueCountPow2
+    (n : OddNat) (k depth residue : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % (2 ^ depth) = residue))
+
+/--
 Number of shifted-tail labels in residue class `1 mod 4`.
 
 This counts the labels at times `1, 2, ..., k`, indexed as `i + 1` for
@@ -941,6 +953,17 @@ noncomputable def orbitWindowResidueCountMod4EqThreeTail
     (n : OddNat) (k : ℕ) : ℕ :=
   (List.range k).countP
     (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3))
+
+/--
+Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
+
+This counts labels at times `1, 2, ..., k`, indexed as `i + 1`, in a chosen
+residue class modulo `2^depth`.
+-/
+noncomputable def orbitWindowResidueCountPow2Tail
+    (n : OddNat) (k depth residue : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % (2 ^ depth) = residue))
 
 /--
 Residue count inside a prefix of an ambient observation window.
@@ -1108,6 +1131,18 @@ theorem orbitWindowResidueCountMod8EqSeven_le_window
       (p := fun i => decide (oddOrbitLabel n i % 8 = 7)) (l := List.range k))
 
 /--
+The generic power-of-two residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountPow2_le_window
+    (n : OddNat) (k depth residue : ℕ) :
+    orbitWindowResidueCountPow2 n k depth residue ≤ k := by
+  unfold orbitWindowResidueCountPow2
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % (2 ^ depth) = residue))
+      (l := List.range k))
+
+/--
 The shifted-tail mod `4 = 1` residue count is bounded by the window size.
 -/
 theorem orbitWindowResidueCountMod4EqOneTail_le_window
@@ -1128,6 +1163,29 @@ theorem orbitWindowResidueCountMod4EqThreeTail_le_window
   simpa using
     (List.countP_le_length
       (p := fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3)) (l := List.range k))
+
+/--
+The generic shifted-tail power-of-two residue count is bounded by the window
+size.
+-/
+theorem orbitWindowResidueCountPow2Tail_le_window
+    (n : OddNat) (k depth residue : ℕ) :
+    orbitWindowResidueCountPow2Tail n k depth residue ≤ k := by
+  unfold orbitWindowResidueCountPow2Tail
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n (i + 1) % (2 ^ depth) = residue))
+      (l := List.range k))
+
+/--
+The named `7 mod 8` source count is the depth-`3` instance of the generic
+power-of-two residue count.
+-/
+theorem orbitWindowResidueCountMod8EqSeven_eq_pow2
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqSeven n k =
+      orbitWindowResidueCountPow2 n k 3 7 := by
+  rfl
 
 /--
 The prefix mod `4` residue count is bounded by the prefix length.
@@ -2008,6 +2066,72 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
       · have htail : oddOrbitLabel n (k + 1) % 4 = 3 := htransition hsource
         simp [hsource, htail, ih]
       · by_cases htail : oddOrbitLabel n (k + 1) % 4 = 3
+        · exact by
+            simpa [hsource, htail] using Nat.le_succ_of_le ih
+        · simp [hsource, htail, ih]
+
+/--
+Count-level recursive Petal transition for the recovery sibling.
+
+Every source-window label in the recovery sibling modulo `2^(r + 2)`
+contributes a shifted-tail label in the outward retention residue modulo
+`2^(r + 1)`.
+-/
+theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
+    (r : ℕ) (hr : 2 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountPow2 n k (r + 2) (2 ^ (r + 1) - 1) ≤
+      orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ r - 1) := by
+  unfold orbitWindowResidueCountPow2 orbitWindowResidueCountPow2Tail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have htransition :
+          oddOrbitLabel n k % (2 ^ (r + 2)) = 2 ^ (r + 1) - 1 →
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ r - 1 :=
+        oddOrbitLabel_succ_recovery_residue_of_mod r hr n k
+      by_cases hsource :
+          oddOrbitLabel n k % (2 ^ (r + 2)) = 2 ^ (r + 1) - 1
+      · have htail :
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ r - 1 :=
+          htransition hsource
+        simp [hsource, htail, ih]
+      · by_cases htail :
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ r - 1
+        · exact by
+            simpa [hsource, htail] using Nat.le_succ_of_le ih
+        · simp [hsource, htail, ih]
+
+/--
+Count-level recursive Petal transition for the continuation sibling.
+
+Every source-window label in the continuation sibling modulo `2^(r + 2)`
+contributes a shifted-tail label in the next retention cell modulo
+`2^(r + 1)`.
+-/
+theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountPow2 n k (r + 2) (2 ^ (r + 2) - 1) ≤
+      orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ (r + 1) - 1) := by
+  unfold orbitWindowResidueCountPow2 orbitWindowResidueCountPow2Tail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have htransition :
+          oddOrbitLabel n k % (2 ^ (r + 2)) = 2 ^ (r + 2) - 1 →
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ (r + 1) - 1 :=
+        oddOrbitLabel_succ_continuation_residue_of_mod r hr n k
+      by_cases hsource :
+          oddOrbitLabel n k % (2 ^ (r + 2)) = 2 ^ (r + 2) - 1
+      · have htail :
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ (r + 1) - 1 :=
+          htransition hsource
+        simp [hsource, htail, ih]
+      · by_cases htail :
+            oddOrbitLabel n (k + 1) % (2 ^ (r + 1)) = 2 ^ (r + 1) - 1
         · exact by
             simpa [hsource, htail] using Nat.le_succ_of_le ih
         · simp [hsource, htail, ih]

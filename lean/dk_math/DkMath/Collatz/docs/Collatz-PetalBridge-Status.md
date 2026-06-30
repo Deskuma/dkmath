@@ -139,8 +139,10 @@ orbitWindowResidueCountMod8EqOne
 orbitWindowResidueCountMod8EqThree
 orbitWindowResidueCountMod8EqFive
 orbitWindowResidueCountMod8EqSeven
+orbitWindowResidueCountPow2
 orbitWindowResidueCountMod4EqOneTail
 orbitWindowResidueCountMod4EqThreeTail
+orbitWindowResidueCountPow2Tail
 orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
@@ -155,8 +157,11 @@ orbitWindowResidueCountMod8EqOne_le_window
 orbitWindowResidueCountMod8EqThree_le_window
 orbitWindowResidueCountMod8EqFive_le_window
 orbitWindowResidueCountMod8EqSeven_le_window
+orbitWindowResidueCountPow2_le_window
 orbitWindowResidueCountMod4EqOneTail_le_window
 orbitWindowResidueCountMod4EqThreeTail_le_window
+orbitWindowResidueCountPow2Tail_le_window
+orbitWindowResidueCountMod8EqSeven_eq_pow2
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -229,6 +234,8 @@ orbitWindowNextNextNextNextHeight_two_le_of_mod_sixtyfour_eq_thirtyone
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
 orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
+orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
+orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
 orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
 orbitWindowResidueCountMod8EqThree_add_seven_le_tail_partition
 orbitWindowHeightCountGeTail_le_countGe_succ
@@ -448,6 +455,9 @@ orbitWindowResidueCountMod8EqFive n k
 orbitWindowResidueCountMod8EqSeven n k
   = number of odd orbit labels congruent to 7 modulo 8
 
+orbitWindowResidueCountPow2 n k depth residue
+  = number of odd orbit labels congruent to residue modulo 2^depth
+
 orbitWindowResidueCountMod4EqOneTail n k
   = number of shifted tail labels, at times i + 1 for i < k,
     congruent to 1 modulo 4
@@ -455,6 +465,10 @@ orbitWindowResidueCountMod4EqOneTail n k
 orbitWindowResidueCountMod4EqThreeTail n k
   = number of shifted tail labels, at times i + 1 for i < k,
     congruent to 3 modulo 4
+
+orbitWindowResidueCountPow2Tail n k depth residue
+  = number of shifted tail labels, at times i + 1 for i < k,
+    congruent to residue modulo 2^depth
 
 orbitWindowPrefixResidueCountMod4EqOne n k r
   = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
@@ -533,6 +547,15 @@ tail first-layer partition
 
 retaining `7 mod 8` source
   -> residueCountMod8EqSeven <= tail CountEq 1
+
+generic pow-two residue count
+  -> CountPow2 depth residue <= k
+
+generic shifted-tail pow-two residue count
+  -> TailCountPow2 depth residue <= k
+
+named `7 mod 8` source count
+  -> residueCountMod8EqSeven = CountPow2 depth 3 residue 7
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -978,6 +1001,20 @@ oddOrbitLabel n i % 2^(r+2) = 2^(r+2) - 1, 1 <= r
 This is the first general orbit-level statement of the narrowing retention
 cylinder: recovery exits one level outward, while continuation becomes the next
 retention cell.
+
+The same recursive rule is now lifted to occupation counts.  Source cells in
+the current window inject into target cells in the shifted tail window:
+
+```text
+CountPow2 depth (r+2) residue (2^(r+1)-1), 2 <= r
+  <= TailCountPow2 depth (r+1) residue (2^r - 1)
+
+CountPow2 depth (r+2) residue (2^(r+2)-1), 1 <= r
+  <= TailCountPow2 depth (r+1) residue (2^(r+1)-1)
+```
+
+This is the first count-level recursive Petal statistic: individual address
+transitions now become source-to-tail occupation inequalities.
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:
