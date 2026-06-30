@@ -130,6 +130,13 @@ orbitWindowHeightPrefixCountGe_one_eq
 orbitWindowHeightPrefix_sum_ge_window_add_countGe_two
 orbitWindowHeightCountGe_antitone
 orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three
+orbitWindowHeightSeq_sum_ge_sum_countGe_range
+orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three_add_countGe_four
+orbitWindowHeightPrefix_sum_ge_sum_countGe_range
+orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
+orbitWindowHeightPrefix_sum_ge_window_add_sum_countGe_tail
+orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -300,6 +307,18 @@ threshold monotonicity
 
 first three layer-cake layers
   -> CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
+
+finite layer-cake
+  -> Sum_{t < H} CountGe (t + 1) <= sumS n k
+
+first four layer-cake layers
+  -> CountGe 1 + CountGe 2 + CountGe 3 + CountGe 4 <= sumS n k
+
+finite tail layer-cake
+  -> k + Sum_{t < H} CountGe (t + 2) <= sumS n k
+
+external CountGe 2 lower bound
+  -> m <= CountGe 2 -> k + m <= sumS n k
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -350,8 +369,34 @@ The experimental three-layer theorem also passed:
 CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
 ```
 
-This is evidence that the next natural theorem is the general finite
-layer-cake form over `Finset.range H`.
+This evidence has now been upgraded to the general finite layer-cake theorem:
+
+```text
+Sum_{t < H} CountGe (t + 1) <= sumS n k
+```
+
+The explicit four-layer theorem is retained as a readable experiment witness,
+but it is now derived from the general theorem rather than proved by another
+hand-written induction.
+
+Since `CountGe 1 = k`, the practical Collatz-facing form is the tail budget:
+
+```text
+k + Sum_{t < H} CountGe (t + 2) <= sumS n k
+```
+
+This separates the always-present base peeling from the additional peeling
+events.  The same structure is also available for prefixes.
+
+Finally, downstream observation layers can now feed the drift estimate by
+proving only a lower bound on the second layer:
+
+```text
+m <= CountGe 2 -> k + m <= sumS n k
+```
+
+This is the intended bridge from a future residue/address occupation theorem
+to a Collatz drift lower bound.
 
 The bridge theorem
 

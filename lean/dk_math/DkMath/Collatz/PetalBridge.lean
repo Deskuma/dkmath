@@ -639,6 +639,169 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_thre
             exact Nat.le_add_right_of_le ih'
 
 /--
+Only `x` of the positive thresholds can be visible below a natural height `x`.
+
+This is the local counting fact behind the finite layer-cake theorem: among
+the thresholds `1, 2, ..., H`, at most `x` thresholds are `<= x`.
+-/
+private theorem range_threshold_count_le
+    (H x : ℕ) :
+    ((Finset.range H).filter (fun t => t + 1 ≤ x)).card ≤ x := by
+  calc
+    ((Finset.range H).filter (fun t => t + 1 ≤ x)).card
+        ≤ (Finset.range x).card := by
+          apply Finset.card_le_card
+          intro t ht
+          have htx : t + 1 ≤ x := (Finset.mem_filter.mp ht).2
+          have htlt : t < x := Nat.lt_of_succ_le htx
+          simpa using htlt
+    _ = x := by
+      simp
+
+/--
+Finite layer-cake lower bound for a list of natural heights.
+
+The sum of threshold occupations over thresholds `1, ..., H` is bounded by the
+ordinary sum of the list.  This is Collatz-independent and keeps the finite
+counting engine separate from the orbit-window vocabulary.
+-/
+private theorem list_sum_ge_sum_countGe_range
+    (l : List ℕ) (H : ℕ) :
+    (Finset.range H).sum
+        (fun t => l.countP (fun x => decide (t + 1 ≤ x)))
+      ≤ l.sum := by
+  induction l with
+  | nil =>
+      simp
+  | cons x xs ih =>
+      have hhead :
+          (Finset.range H).sum (fun t => if t + 1 ≤ x then 1 else 0) ≤ x := by
+        calc
+          (Finset.range H).sum (fun t => if t + 1 ≤ x then 1 else 0)
+              = ((Finset.range H).filter (fun t => t + 1 ≤ x)).card := by
+                simp
+          _ ≤ x := range_threshold_count_le H x
+      calc
+        (Finset.range H).sum
+            (fun t => (x :: xs).countP (fun y => decide (t + 1 ≤ y)))
+            =
+          (Finset.range H).sum (fun t => (if t + 1 ≤ x then 1 else 0) +
+              xs.countP (fun y => decide (t + 1 ≤ y))) := by
+              apply Finset.sum_congr rfl
+              intro t _ht
+              by_cases ht : t < x
+              · have ht' : t + 1 ≤ x := Nat.succ_le_iff.mpr ht
+                simp [ht, ht', Nat.add_comm]
+              · have ht' : ¬ t + 1 ≤ x := by
+                  intro h
+                  exact ht (Nat.lt_of_succ_le h)
+                simp [ht, ht']
+        _ =
+          (Finset.range H).sum (fun t => if t + 1 ≤ x then 1 else 0) +
+            (Finset.range H).sum
+              (fun t => xs.countP (fun y => decide (t + 1 ≤ y))) := by
+              rw [Finset.sum_add_distrib]
+        _ ≤ x + xs.sum := Nat.add_le_add hhead ih
+        _ = (x :: xs).sum := by
+          simp
+
+/--
+General finite layer-cake lower bound for the ordered Collatz height profile.
+
+The first `H` threshold occupation layers are jointly bounded by the accumulated
+Collatz height `sumS`.
+-/
+theorem orbitWindowHeightSeq_sum_ge_sum_countGe_range
+    (n : OddNat) (k H : ℕ) :
+    (Finset.range H).sum
+        (fun t => orbitWindowHeightCountGe n k (t + 1))
+      ≤ sumS n k := by
+  have h := list_sum_ge_sum_countGe_range (orbitWindowHeightSeq n k) H
+  rw [orbitWindowHeightSeq_sum_eq_sumS n k] at h
+  simpa [orbitWindowHeightCountGe] using h
+
+/--
+Four-layer finite layer-cake lower bound, now derived from the general theorem.
+
+This is kept as an explicit experiment witness: the fixed-depth layer lemmas no
+longer need independent induction proofs once the general finite layer-cake
+theorem is available.
+-/
+theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three_add_countGe_four
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGe n k 1 + orbitWindowHeightCountGe n k 2 +
+        orbitWindowHeightCountGe n k 3 + orbitWindowHeightCountGe n k 4 ≤
+      sumS n k := by
+  have h := orbitWindowHeightSeq_sum_ge_sum_countGe_range n k 4
+  norm_num [Finset.sum_range_succ, Nat.add_assoc] at h
+  simpa [Nat.add_assoc] using h
+
+/--
+Prefix version of the finite layer-cake lower bound.
+
+Inside an ambient `k`-window, the first `r` observations have the same finite
+layer-cake budget as the standalone `r`-window.
+-/
+theorem orbitWindowHeightPrefix_sum_ge_sum_countGe_range
+    (n : OddNat) {r k H : ℕ} (hr : r ≤ k) :
+    (Finset.range H).sum
+        (fun t => orbitWindowHeightPrefixCountGe n k r (t + 1))
+      ≤ sumS n r := by
+  have h := orbitWindowHeightSeq_sum_ge_sum_countGe_range n r H
+  simpa [orbitWindowHeightPrefixCountGe_eq_countGe n hr] using h
+
+/--
+Collatz-specific finite layer-cake tail bound.
+
+The first layer is always the full window size `k`; the remaining finite
+layers measure additional peeling events.
+-/
+theorem orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
+    (n : OddNat) (k H : ℕ) :
+    k + (Finset.range H).sum
+        (fun t => orbitWindowHeightCountGe n k (t + 2))
+      ≤ sumS n k := by
+  simpa [Finset.sum_range_succ', orbitWindowHeightCountGe_one_eq_window n k,
+    Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+    orbitWindowHeightSeq_sum_ge_sum_countGe_range n k (H + 1)
+
+/--
+Prefix version of the Collatz-specific finite layer-cake tail bound.
+-/
+theorem orbitWindowHeightPrefix_sum_ge_window_add_sum_countGe_tail
+    (n : OddNat) {r k H : ℕ} (hr : r ≤ k) :
+    r + (Finset.range H).sum
+        (fun t => orbitWindowHeightPrefixCountGe n k r (t + 2))
+      ≤ sumS n r := by
+  simpa [Finset.sum_range_succ', orbitWindowHeightPrefixCountGe_one_eq n hr,
+    Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+    orbitWindowHeightPrefix_sum_ge_sum_countGe_range n (r := r) (k := k) (H := H + 1) hr
+
+/--
+If at least `m` observations have height `>= 2`, then the accumulated height is
+at least `k + m`.
+-/
+theorem orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+    (n : OddNat) (k m : ℕ)
+    (hm : m ≤ orbitWindowHeightCountGe n k 2) :
+    k + m ≤ sumS n k := by
+  exact le_trans
+    (Nat.add_le_add_left hm k)
+    (orbitWindowHeightSeq_sum_ge_window_add_countGe_two n k)
+
+/--
+Prefix version: a lower bound on the prefix `height >= 2` occupation gives a
+local drift lower bound.
+-/
+theorem orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
+    (n : OddNat) {r k m : ℕ} (hr : r ≤ k)
+    (hm : m ≤ orbitWindowHeightPrefixCountGe n k r 2) :
+    r + m ≤ sumS n r := by
+  exact le_trans
+    (Nat.add_le_add_left hm r)
+    (orbitWindowHeightPrefix_sum_ge_window_add_countGe_two n hr)
+
+/--
 Block shifts preserve the raw height when the observed height is below the
 block exponent.
 
