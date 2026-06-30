@@ -183,15 +183,20 @@ orbitNext_mod_four_eq_one_of_mod_eight_eq_three
 orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
 next_mod_eight_of_mod_sixteen_eq_seven
 next_mod_eight_of_mod_sixteen_eq_fifteen
+next_mod_sixteen_of_mod_thirtytwo_eq_fifteen
+next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
 oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
 oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven
 oddOrbitLabel_succ_mod_eight_eq_seven_of_mod_sixteen_eq_fifteen
+oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
 orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
 orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
+orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
 orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
@@ -202,6 +207,7 @@ sumS_two_steps_ge_three_of_mod_eight_eq_three
 sumS_two_steps_ge_three_of_mod_eight_eq_three_at
 sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
 sumS_three_steps_ge_four_of_mod_sixteen_eq_seven
+sumS_four_steps_ge_five_of_mod_thirtytwo_eq_fifteen
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
@@ -731,6 +737,46 @@ label 0 = 7 mod 16
   -> height at 2 is at least 2
   -> 4 <= sumS n 3
 ```
+
+The `15 mod 16` retention-continuation channel has now been split at mod `32`:
+
+```text
+15 mod 32:
+  next label is 7 mod 16
+  recovery branch one level down
+
+31 mod 32:
+  next label is 15 mod 16
+  retention-continuation branch
+```
+
+Thus the `15 mod 32` subchannel recovers delayed peeling in four steps:
+
+```text
+label 0 = 15 mod 32
+  -> height at 0 is 1
+  -> label 1 = 7 mod 16
+  -> height at 1 is 1
+  -> label 2 = 3 mod 8
+  -> height at 2 is 1
+  -> height at 3 is at least 2
+  -> 5 <= sumS n 4
+```
+
+The complementary `31 mod 32` branch is the visible narrowing condition for a
+long low-peeling path:
+
+```text
+7 mod 8
+15 mod 16
+31 mod 32
+...
+```
+
+At this stage the bridge has not proved the general cylinder theorem.  What is
+fixed is the verified local pattern: every time the retention branch continues,
+the residue condition moves into a thinner power-of-two cylinder; the sibling
+branch returns to a delayed-peeling recovery estimate.
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:

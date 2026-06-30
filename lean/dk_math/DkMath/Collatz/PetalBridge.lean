@@ -327,6 +327,24 @@ theorem next_mod_eight_of_mod_sixteen_eq_fifteen
   omega
 
 /--
+The `15 mod 32` subchannel of `15 mod 16` exits retention one level down:
+after one height-one step, the next label is `7 mod 16`.
+-/
+theorem next_mod_sixteen_of_mod_thirtytwo_eq_fifteen
+    {m : ℕ} (hm : m % 32 = 15) :
+    ((3 * m + 1) / 2) % 16 = 7 := by
+  omega
+
+/--
+The `31 mod 32` subchannel of `15 mod 16` continues retention as
+`15 mod 16`.
+-/
+theorem next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone
+    {m : ℕ} (hm : m % 32 = 31) :
+    ((3 * m + 1) / 2) % 16 = 15 := by
+  omega
+
+/--
 On the exact height-one channel, the accelerated Collatz map is the visible
 one-step expression `(3m + 1) / 2`.
 -/
@@ -1381,6 +1399,48 @@ theorem oddOrbitLabel_succ_mod_eight_eq_seven_of_mod_sixteen_eq_fifteen
   exact next_mod_eight_of_mod_sixteen_eq_fifteen hmod
 
 /--
+The `15 mod 32` subchannel moves to `7 mod 16` at the next label.
+
+This is the recovery branch inside the `15 mod 16` retention-continuation
+channel.
+-/
+theorem oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 32 = 15) :
+    oddOrbitLabel n (i + 1) % 16 = 7 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_sixteen_of_mod_thirtytwo_eq_fifteen hmod
+
+/--
+The `31 mod 32` subchannel continues as `15 mod 16` at the next label.
+
+This is the next retention-continuation branch.  Continuing exact height-one
+motion now forces the source into a thinner 2-adic cylinder.
+-/
+theorem oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 32 = 31) :
+    oddOrbitLabel n (i + 1) % 16 = 15 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone hmod
+
+/--
 Delayed peeling from the `3 mod 8` height-one channel.
 
 The current step has exact height `1`, but the next label lands in
@@ -1423,6 +1483,23 @@ theorem orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
     oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven n i hmod
   simpa [Nat.add_assoc] using
     orbitWindowNextHeight_two_le_of_mod_eight_eq_three n (i + 1) hnext
+
+/--
+The `15 mod 32` branch recovers delayed peeling after three transitions.
+
+The first transition sends `15 mod 32` to `7 mod 16`; the existing
+`7 mod 16` recovery branch then forces an extra peeling height two steps later.
+-/
+theorem orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 32 = 15) :
+    2 ≤ orbitWindowHeight n (i + 3) := by
+  have hnext :
+      oddOrbitLabel n (i + 1) % 16 = 7 :=
+    oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+      n i hmod
+  simpa [Nat.add_assoc] using
+    orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven n (i + 1) hnext
 
 /--
 Every `3 mod 8` label in a window contributes a `1 mod 4` label in the
@@ -1649,6 +1726,47 @@ theorem sumS_three_steps_ge_four_of_mod_sixteen_eq_seven
         orbitWindowHeight n 2 := by
       omega
     _ = sumS n 3 := by
+      simp [sumS, orbitWindowHeight_eq_s_iterateT]
+
+/--
+Four-step recovery from the `15 mod 32` subchannel.
+
+The branch first continues exact height-one behavior through `7 mod 16` and
+then `3 mod 8`, but the fourth observed height is at least `2`.  Thus the
+first four heights contribute at least `1 + 1 + 1 + 2`.
+-/
+theorem sumS_four_steps_ge_five_of_mod_thirtytwo_eq_fifteen
+    (n : OddNat)
+    (hmod : oddOrbitLabel n 0 % 32 = 15) :
+    5 ≤ sumS n 4 := by
+  have hmod8 : oddOrbitLabel n 0 % 8 = 7 := by
+    omega
+  have h0 : orbitWindowHeight n 0 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 0).mpr
+      (Or.inr hmod8)
+  have h1mod16 :
+      oddOrbitLabel n 1 % 16 = 7 :=
+    oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+      n 0 hmod
+  have h1mod8 : oddOrbitLabel n 1 % 8 = 7 := by
+    omega
+  have h1 : orbitWindowHeight n 1 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 1).mpr
+      (Or.inr h1mod8)
+  have h2mod :
+      oddOrbitLabel n 2 % 8 = 3 :=
+    oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven
+      n 1 h1mod16
+  have h2 : orbitWindowHeight n 2 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 2).mpr
+      (Or.inl h2mod)
+  have h3 : 2 ≤ orbitWindowHeight n 3 :=
+    orbitWindowNextHeight_two_le_of_mod_eight_eq_three n 2 h2mod
+  calc
+    5 ≤ orbitWindowHeight n 0 + orbitWindowHeight n 1 +
+        orbitWindowHeight n 2 + orbitWindowHeight n 3 := by
+      omega
+    _ = sumS n 4 := by
       simp [sumS, orbitWindowHeight_eq_s_iterateT]
 
 /--
