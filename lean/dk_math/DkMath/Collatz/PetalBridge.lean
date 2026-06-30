@@ -194,6 +194,14 @@ theorem odd_mod_four_eq_one_or_three
   omega
 
 /--
+An odd natural number is in one of the four odd residue classes modulo `8`.
+-/
+theorem odd_mod_eight_eq_one_or_three_or_five_or_seven
+    {m : ℕ} (hmOdd : m % 2 = 1) :
+    m % 8 = 1 ∨ m % 8 = 3 ∨ m % 8 = 5 ∨ m % 8 = 7 := by
+  omega
+
+/--
 The `v2` observation is at least `3` exactly when `8` divides the observed
 nonzero natural.
 
@@ -206,12 +214,30 @@ theorem three_le_v2_iff_eight_dvd
     (DkMath.ABC.padicValNat_le_iff_dvd Nat.prime_two hm 3)
 
 /--
+The `v2` observation is at least `4` exactly when `16` divides the observed
+nonzero natural.
+-/
+theorem four_le_v2_iff_sixteen_dvd
+    {m : ℕ} (hm : m ≠ 0) :
+    4 ≤ v2 m ↔ 16 ∣ m := by
+  simpa [v2] using
+    (DkMath.ABC.padicValNat_le_iff_dvd Nat.prime_two hm 4)
+
+/--
 Raw Collatz height is at least `3` exactly when `8` divides `3n + 1`.
 -/
 theorem rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
     (n : ℕ) :
     3 ≤ rawHeightLabel n ↔ 8 ∣ 3 * n + 1 := by
   exact three_le_v2_iff_eight_dvd (by omega : 3 * n + 1 ≠ 0)
+
+/--
+Raw Collatz height is at least `4` exactly when `16` divides `3n + 1`.
+-/
+theorem rawHeightLabel_four_le_iff_sixteen_dvd_threeNPlusOne
+    (n : ℕ) :
+    4 ≤ rawHeightLabel n ↔ 16 ∣ 3 * n + 1 := by
+  exact four_le_v2_iff_sixteen_dvd (by omega : 3 * n + 1 ≠ 0)
 
 /--
 For an odd natural `m`, the condition `8 | 3m + 1` is the same as
@@ -229,6 +255,19 @@ theorem odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
     omega
 
 /--
+For an odd natural `m`, the condition `16 | 3m + 1` is the same as
+`m % 16 = 5`.
+-/
+theorem odd_sixteen_dvd_three_mul_add_one_iff_mod_sixteen_eq_five
+    {m : ℕ} (hmOdd : m % 2 = 1) :
+    16 ∣ 3 * m + 1 ↔ m % 16 = 5 := by
+  constructor
+  · intro h
+    omega
+  · intro h
+    omega
+
+/--
 `height >= 3` in the Collatz observation window is the same as the current odd
 state label lying in residue class `5 mod 8`.
 -/
@@ -238,6 +277,50 @@ theorem orbitWindowHeight_three_le_iff_mod_eight_eq_five
   change 3 ≤ rawHeightLabel (oddOrbitLabel n i) ↔ oddOrbitLabel n i % 8 = 5
   rw [rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne]
   exact odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five (iterateT i n).2
+
+/--
+`height >= 4` in the Collatz observation window is the same as the current odd
+state label lying in residue class `5 mod 16`.
+
+This fixed-coordinate experiment supports the later general `2^r` residue
+coordinate route.
+-/
+theorem orbitWindowHeight_four_le_iff_mod_sixteen_eq_five
+    (n : OddNat) (i : ℕ) :
+    4 ≤ orbitWindowHeight n i ↔ oddOrbitLabel n i % 16 = 5 := by
+  change 4 ≤ rawHeightLabel (oddOrbitLabel n i) ↔ oddOrbitLabel n i % 16 = 5
+  rw [rawHeightLabel_four_le_iff_sixteen_dvd_threeNPlusOne]
+  exact odd_sixteen_dvd_three_mul_add_one_iff_mod_sixteen_eq_five (iterateT i n).2
+
+/--
+If `m = 3 mod 8`, then the height-one Collatz branch sends
+`(3m + 1) / 2` to residue class `1 mod 4`.
+-/
+theorem next_mod_four_of_mod_eight_eq_three
+    {m : ℕ} (hm : m % 8 = 3) :
+    ((3 * m + 1) / 2) % 4 = 1 := by
+  omega
+
+/--
+If `m = 7 mod 8`, then the height-one Collatz branch sends
+`(3m + 1) / 2` to residue class `3 mod 4`.
+-/
+theorem next_mod_four_of_mod_eight_eq_seven
+    {m : ℕ} (hm : m % 8 = 7) :
+    ((3 * m + 1) / 2) % 4 = 3 := by
+  omega
+
+/--
+On the exact height-one channel, the accelerated Collatz map is the visible
+one-step expression `(3m + 1) / 2`.
+-/
+theorem T_val_eq_three_mul_add_one_div_two_of_s_eq_one
+    (n : OddNat) (h : s n = 1) :
+    (T n).1 = (3 * n.1 + 1) / 2 := by
+  have hv : v2 (3 * n.1 + 1) = 1 := by
+    simpa [s, threeNPlusOne] using h
+  unfold T
+  simp [threeNPlusOne, hv, pow2]
 
 /--
 The ordered height profile has length equal to the window size.
@@ -401,6 +484,26 @@ noncomputable def orbitWindowResidueCountMod4EqThree
     (fun i => decide (oddOrbitLabel n i % 4 = 3))
 
 /--
+Number of in-window odd-state labels in residue class `1 mod 8`.
+
+This is the residue-address counterpart of exact height `2`.
+-/
+noncomputable def orbitWindowResidueCountMod8EqOne
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 8 = 1))
+
+/--
+Number of in-window odd-state labels in residue class `3 mod 8`.
+
+This is one of the two exact height-one transition channels.
+-/
+noncomputable def orbitWindowResidueCountMod8EqThree
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 8 = 3))
+
+/--
 Number of in-window odd-state labels in residue class `5 mod 8`.
 
 This is the residue-address counterpart of `orbitWindowHeightCountGe n k 3`.
@@ -409,6 +512,16 @@ noncomputable def orbitWindowResidueCountMod8EqFive
     (n : OddNat) (k : ℕ) : ℕ :=
   (List.range k).countP
     (fun i => decide (oddOrbitLabel n i % 8 = 5))
+
+/--
+Number of in-window odd-state labels in residue class `7 mod 8`.
+
+This is one of the two exact height-one transition channels.
+-/
+noncomputable def orbitWindowResidueCountMod8EqSeven
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 8 = 7))
 
 /--
 Residue count inside a prefix of an ambient observation window.
@@ -465,6 +578,28 @@ theorem orbitWindowResidueCountMod4EqThree_le_window
       (p := fun i => decide (oddOrbitLabel n i % 4 = 3)) (l := List.range k))
 
 /--
+The mod `8 = 1` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod8EqOne_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqOne n k ≤ k := by
+  unfold orbitWindowResidueCountMod8EqOne
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 8 = 1)) (l := List.range k))
+
+/--
+The mod `8 = 3` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod8EqThree_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqThree n k ≤ k := by
+  unfold orbitWindowResidueCountMod8EqThree
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 8 = 3)) (l := List.range k))
+
+/--
 The mod `8` residue count is bounded by the window size.
 -/
 theorem orbitWindowResidueCountMod8EqFive_le_window
@@ -474,6 +609,17 @@ theorem orbitWindowResidueCountMod8EqFive_le_window
   simpa using
     (List.countP_le_length
       (p := fun i => decide (oddOrbitLabel n i % 8 = 5)) (l := List.range k))
+
+/--
+The mod `8 = 7` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod8EqSeven_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqSeven n k ≤ k := by
+  unfold orbitWindowResidueCountMod8EqSeven
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 8 = 7)) (l := List.range k))
 
 /--
 The prefix mod `4` residue count is bounded by the prefix length.
@@ -771,6 +917,50 @@ theorem orbitWindowHeight_one_le
     v2_3n_plus_1_ge_1 (iterateT i n).1 (iterateT i n).2
 
 /--
+The second exact Collatz height layer is residue class `1 mod 8`.
+
+This refines `height >= 2` by excluding the `height >= 3` residue class.
+-/
+theorem orbitWindowHeight_eq_two_iff_mod_eight_eq_one
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i = 2 ↔ oddOrbitLabel n i % 8 = 1 := by
+  constructor
+  · intro hheight
+    have htwo : 2 ≤ orbitWindowHeight n i := by omega
+    have hnotThree : ¬ 3 ≤ orbitWindowHeight n i := by omega
+    have hmod4 : oddOrbitLabel n i % 4 = 1 :=
+      (orbitWindowHeight_two_le_iff_mod_four_eq_one n i).mp htwo
+    have hnotFive : oddOrbitLabel n i % 8 ≠ 5 := by
+      intro hfive
+      exact hnotThree ((orbitWindowHeight_three_le_iff_mod_eight_eq_five n i).mpr hfive)
+    cases odd_mod_eight_eq_one_or_three_or_five_or_seven (iterateT i n).2 with
+    | inl hOne =>
+        change oddOrbitLabel n i % 8 = 1 at hOne
+        exact hOne
+    | inr hrest =>
+        cases hrest with
+        | inl hThree =>
+            change oddOrbitLabel n i % 8 = 3 at hThree
+            omega
+        | inr hrest =>
+            cases hrest with
+            | inl hFive =>
+                change oddOrbitLabel n i % 8 = 5 at hFive
+                exact (hnotFive hFive).elim
+            | inr hSeven =>
+                change oddOrbitLabel n i % 8 = 7 at hSeven
+                omega
+  · intro hmod
+    have htwo : 2 ≤ orbitWindowHeight n i := by
+      apply (orbitWindowHeight_two_le_iff_mod_four_eq_one n i).mpr
+      omega
+    have hnotThree : ¬ 3 ≤ orbitWindowHeight n i := by
+      intro hthree
+      have hfive := (orbitWindowHeight_three_le_iff_mod_eight_eq_five n i).mp hthree
+      omega
+    omega
+
+/--
 The first Collatz height layer is exact height `1` precisely on residue class
 `3 mod 4`.
 
@@ -802,6 +992,77 @@ theorem orbitWindowHeight_eq_one_iff_mod_four_eq_three
     omega
 
 /--
+Exact height `1` is the union of the two mod `8` channels `3` and `7`.
+-/
+theorem orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i = 1 ↔
+      oddOrbitLabel n i % 8 = 3 ∨ oddOrbitLabel n i % 8 = 7 := by
+  constructor
+  · intro hheight
+    have hmod4 := (orbitWindowHeight_eq_one_iff_mod_four_eq_three n i).mp hheight
+    cases odd_mod_eight_eq_one_or_three_or_five_or_seven (iterateT i n).2 with
+    | inl hOne =>
+        change oddOrbitLabel n i % 8 = 1 at hOne
+        omega
+    | inr hrest =>
+        cases hrest with
+        | inl hThree =>
+            change oddOrbitLabel n i % 8 = 3 at hThree
+            exact Or.inl hThree
+        | inr hrest =>
+            cases hrest with
+            | inl hFive =>
+                change oddOrbitLabel n i % 8 = 5 at hFive
+                omega
+            | inr hSeven =>
+                change oddOrbitLabel n i % 8 = 7 at hSeven
+                exact Or.inr hSeven
+  · intro hmod
+    apply (orbitWindowHeight_eq_one_iff_mod_four_eq_three n i).mpr
+    cases hmod with
+    | inl hThree =>
+        omega
+    | inr hSeven =>
+        omega
+
+/--
+Orbit-level transition from the `3 mod 8` height-one channel.
+
+The current odd-state label is in residue class `3 mod 8`, so the accelerated
+next state `T` lands in residue class `1 mod 4`.
+-/
+theorem orbitNext_mod_four_eq_one_of_mod_eight_eq_three
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 3) :
+    (T (iterateT i n)).1 % 4 = 1 := by
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inl hmod)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_four_of_mod_eight_eq_three hmod
+
+/--
+Orbit-level transition from the `7 mod 8` height-one channel.
+
+The current odd-state label is in residue class `7 mod 8`, so the accelerated
+next state `T` lands in residue class `3 mod 4`.
+-/
+theorem orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 7) :
+    (T (iterateT i n)).1 % 4 = 3 := by
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_four_of_mod_eight_eq_seven hmod
+
+/--
 Counting exact height `1` entries is the same as counting odd-state labels in
 residue class `3 mod 4`.
 -/
@@ -820,6 +1081,29 @@ theorem orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
       · have hres : oddOrbitLabel n k % 4 = 3 := hiff.mp hheight
         simp [ih, hheight, hres]
       · have hres : oddOrbitLabel n k % 4 ≠ 3 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
+
+/--
+Counting exact height `2` entries is the same as counting odd-state labels in
+residue class `1 mod 8`.
+-/
+theorem orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountEq n k 2 =
+      orbitWindowResidueCountMod8EqOne n k := by
+  unfold orbitWindowHeightCountEq orbitWindowResidueCountMod8EqOne orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_eq_two_iff_mod_eight_eq_one n k
+      by_cases hheight : orbitWindowHeight n k = 2
+      · have hres : oddOrbitLabel n k % 8 = 1 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n k % 8 ≠ 1 := by
           intro h
           exact hheight (hiff.mpr h)
         simp [ih, hheight, hres]
@@ -846,6 +1130,44 @@ theorem orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
           change oddOrbitLabel n k % 4 = 3 at hThree
           simp [hThree]
           omega
+
+/--
+The four odd residue classes modulo `8` fill the whole observation window.
+-/
+theorem orbitWindowResidueCountMod8_partition_eq_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqOne n k +
+      orbitWindowResidueCountMod8EqThree n k +
+      orbitWindowResidueCountMod8EqFive n k +
+      orbitWindowResidueCountMod8EqSeven n k = k := by
+  unfold orbitWindowResidueCountMod8EqOne orbitWindowResidueCountMod8EqThree
+    orbitWindowResidueCountMod8EqFive orbitWindowResidueCountMod8EqSeven
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      cases odd_mod_eight_eq_one_or_three_or_five_or_seven (iterateT k n).2 with
+      | inl hOne =>
+          change oddOrbitLabel n k % 8 = 1 at hOne
+          simp [hOne]
+          omega
+      | inr hrest =>
+          cases hrest with
+          | inl hThree =>
+              change oddOrbitLabel n k % 8 = 3 at hThree
+              simp [hThree]
+              omega
+          | inr hrest =>
+              cases hrest with
+              | inl hFive =>
+                  change oddOrbitLabel n k % 8 = 5 at hFive
+                  simp [hFive]
+                  omega
+              | inr hSeven =>
+                  change oddOrbitLabel n k % 8 = 7 at hSeven
+                  simp [hSeven]
+                  omega
 
 /--
 The `height >= 1` occupation count fills the whole observation window.

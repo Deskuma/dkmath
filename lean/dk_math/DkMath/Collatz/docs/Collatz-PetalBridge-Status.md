@@ -106,10 +106,18 @@ orbitWindowHeight_two_le_iff_four_dvd
 odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one
 orbitWindowHeight_two_le_iff_mod_four_eq_one
 odd_mod_four_eq_one_or_three
+odd_mod_eight_eq_one_or_three_or_five_or_seven
 three_le_v2_iff_eight_dvd
+four_le_v2_iff_sixteen_dvd
 rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
+rawHeightLabel_four_le_iff_sixteen_dvd_threeNPlusOne
 odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
+odd_sixteen_dvd_three_mul_add_one_iff_mod_sixteen_eq_five
 orbitWindowHeight_three_le_iff_mod_eight_eq_five
+orbitWindowHeight_four_le_iff_mod_sixteen_eq_five
+next_mod_four_of_mod_eight_eq_three
+next_mod_four_of_mod_eight_eq_seven
+T_val_eq_three_mul_add_one_div_two_of_s_eq_one
 orbitWindowHeightSeq_length
 orbitWindowHeightSeq_sum_eq_sumS
 orbitWindowHeightSeq_sum_ge_of_forall_ge
@@ -125,13 +133,19 @@ orbitWindowHeightCountEq
 orbitWindowHeightCountGe
 orbitWindowResidueCountMod4EqOne
 orbitWindowResidueCountMod4EqThree
+orbitWindowResidueCountMod8EqOne
+orbitWindowResidueCountMod8EqThree
 orbitWindowResidueCountMod8EqFive
+orbitWindowResidueCountMod8EqSeven
 orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
 orbitWindowResidueCountMod4EqOne_le_window
 orbitWindowResidueCountMod4EqThree_le_window
+orbitWindowResidueCountMod8EqOne_le_window
+orbitWindowResidueCountMod8EqThree_le_window
 orbitWindowResidueCountMod8EqFive_le_window
+orbitWindowResidueCountMod8EqSeven_le_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -148,9 +162,15 @@ orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
 orbitWindowHeight_one_le
 orbitWindowHeightCountGe_one_eq_window
 orbitWindowHeightSeq_sum_ge_window_add_countGe_two
+orbitWindowHeight_eq_two_iff_mod_eight_eq_one
 orbitWindowHeight_eq_one_iff_mod_four_eq_three
+orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
+orbitNext_mod_four_eq_one_of_mod_eight_eq_three
+orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
+orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
+orbitWindowResidueCountMod8_partition_eq_window
 orbitWindowHeightPrefixCountGe_one_eq
 orbitWindowHeightPrefixCountGe_two_eq_prefixResidueCount_mod4_eq_one
 orbitWindowHeightPrefix_sum_ge_window_add_countGe_two
@@ -332,8 +352,17 @@ orbitWindowResidueCountMod4EqOne n k
 orbitWindowResidueCountMod4EqThree n k
   = number of odd orbit labels congruent to 3 modulo 4
 
+orbitWindowResidueCountMod8EqOne n k
+  = number of odd orbit labels congruent to 1 modulo 8
+
+orbitWindowResidueCountMod8EqThree n k
+  = number of odd orbit labels congruent to 3 modulo 8
+
 orbitWindowResidueCountMod8EqFive n k
   = number of odd orbit labels congruent to 5 modulo 8
+
+orbitWindowResidueCountMod8EqSeven n k
+  = number of odd orbit labels congruent to 7 modulo 8
 
 orbitWindowPrefixResidueCountMod4EqOne n k r
   = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
@@ -509,6 +538,32 @@ m <= residueCountMod8EqFive
   -> k + CountGe 2 + m <= sumS n k
 ```
 
+The exact mod `8` height partition is now also visible:
+
+```text
+height = 2 <-> oddOrbitLabel % 8 = 1
+height = 1 <-> oddOrbitLabel % 8 = 3 or 7
+CountEq 2 = residue mod 8 = 1
+residueCountMod8EqOne + residueCountMod8EqThree
+  + residueCountMod8EqFive + residueCountMod8EqSeven = k
+```
+
+The first transition map is now fixed for the exact height-one channels:
+
+```text
+oddOrbitLabel % 8 = 3
+  -> (T current).val % 4 = 1
+
+oddOrbitLabel % 8 = 7
+  -> (T current).val % 4 = 3
+```
+
+The next higher-coordinate experiment also passed:
+
+```text
+height >= 4 <-> oddOrbitLabel % 16 = 5
+```
+
 This is the intended bridge from a future residue/address occupation theorem
 to a Collatz drift lower bound.
 
@@ -553,10 +608,10 @@ The next safe steps are:
 The immediate residue candidates are:
 
 ```text
-transition map between residue classes under the accelerated map T
 general 2^r residue coordinate for height >= r
 prefix mod 8 residue occupation
-fixed experiment for height >= 4 as a mod 16 residue occupation
+next-label formulation of the T transition using iterateT (i + 1)
+count-level transition statistics for mod 8 height-one channels
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge
