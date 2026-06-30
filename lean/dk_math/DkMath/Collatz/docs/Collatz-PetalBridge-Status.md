@@ -193,6 +193,13 @@ next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_onehundredtwentyseve
 next_mod_onehundredtwentyeight_of_mod_twohundredfiftysix_eq_twohundredfiftyfive
 next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive
 next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven
+twoAdicRetentionResidue
+twoAdicRecoverySiblingResidue
+twoAdicContinuationSiblingResidue
+twoAdicRecoverySiblingResidue_eq_retentionResidue
+twoAdicContinuationSiblingResidue_eq_retentionResidue_succ
+next_recovery_residue_expanded
+next_continuation_residue_expanded
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
@@ -843,6 +850,55 @@ The Lean theorem layer currently promotes the `mod 64` rung to orbit-label and
 drift form.  The `mod 128`, `mod 256`, and `mod 512` rows are raw arithmetic
 anchors, kept as evidence for the next generalization step rather than fully
 expanded orbit bridges.
+
+The fixed raw anchors have now been lifted to an expanded general raw theorem.
+The recursive Petal naming layer is:
+
+```text
+twoAdicRetentionResidue r
+  = 2^r - 1
+
+twoAdicRecoverySiblingResidue r
+  = 2^r - 1
+
+twoAdicContinuationSiblingResidue r
+  = 2^(r + 1) - 1
+```
+
+The two structural identities are:
+
+```text
+RecoverySibling r = RetentionResidue r
+ContinuationSibling r = RetentionResidue (r + 1)
+```
+
+The second identity is the minimal Lean statement of the nested Petal reading:
+
+```text
+continuation branch
+  = next retention cell
+```
+
+The general raw transition theorems are:
+
+```text
+expanded recovery sibling:
+  m = 2^(r+2) * t + (2^(r+1) - 1)
+  -> T-height-one raw step is 2^r - 1 mod 2^(r+1)
+
+expanded continuation sibling:
+  m = 2^(r+2) * t + (2^(r+2) - 1)
+  -> T-height-one raw step is 2^(r+1) - 1 mod 2^(r+1)
+```
+
+This confirms that the narrowing cylinder is not merely a list of fixed
+observations.  At the raw arithmetic layer, it is a recursive two-branch Petal:
+
+```text
+parent retention cell
+  -> recovery sibling
+  -> continuation sibling = next retention cell
+```
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:

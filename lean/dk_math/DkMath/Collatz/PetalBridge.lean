@@ -417,6 +417,141 @@ theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleve
   omega
 
 /--
+The central residue of the Collatz retention cylinder at 2-adic depth `r`.
+
+The visible examples are:
+
+```text
+r = 3:  7 mod 8
+r = 4: 15 mod 16
+r = 5: 31 mod 32
+```
+
+This is the residue branch converging to `-1` in the 2-adic address tree.
+-/
+def twoAdicRetentionResidue (r : ℕ) : ℕ :=
+  2 ^ r - 1
+
+/--
+The recovery sibling seen when the retention cell at depth `r` is refined to
+the next modulus.
+
+It has the same residue value as the current retention cell, but is read inside
+the finer modulus `2^(r + 1)`.
+-/
+def twoAdicRecoverySiblingResidue (r : ℕ) : ℕ :=
+  2 ^ r - 1
+
+/--
+The continuation sibling seen when the retention cell at depth `r` is refined
+to the next modulus.
+
+This is the branch that remains in exact height-one retention and becomes the
+next retention cell.
+-/
+def twoAdicContinuationSiblingResidue (r : ℕ) : ℕ :=
+  2 ^ (r + 1) - 1
+
+/--
+The recovery sibling is the current retention residue, viewed at a finer
+resolution.
+-/
+theorem twoAdicRecoverySiblingResidue_eq_retentionResidue
+    (r : ℕ) :
+    twoAdicRecoverySiblingResidue r = twoAdicRetentionResidue r := rfl
+
+/--
+The continuation sibling is exactly the next retention residue.
+
+This is the minimal Lean statement of the recursive Petal reading:
+
+```text
+ContinuationSibling r = RetentionCell (r + 1)
+```
+-/
+theorem twoAdicContinuationSiblingResidue_eq_retentionResidue_succ
+    (r : ℕ) :
+    twoAdicContinuationSiblingResidue r =
+      twoAdicRetentionResidue (r + 1) := rfl
+
+/--
+The recovery sibling in expanded power-of-two form.
+
+At depth `r`, the lower half of the current retention cell is
+`2^(r + 1) - 1` modulo `2^(r + 2)`.  One exact height-one Collatz step sends it
+to `2^r - 1` modulo `2^(r + 1)`.
+-/
+theorem next_recovery_residue_expanded
+    (r t : ℕ) :
+    ((3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 1) - 1)) + 1) / 2) %
+        (2 ^ (r + 1)) = 2 ^ r - 1 := by
+  have hpow1 : 2 ^ (r + 1) = 2 * 2 ^ r := by
+    rw [pow_succ]
+    omega
+  have hpow2 : 2 ^ (r + 2) = 2 * 2 ^ (r + 1) := by
+    rw [show r + 2 = (r + 1) + 1 by omega, pow_succ]
+    omega
+  have hpos : 0 < 2 ^ r := pow_pos (by decide) r
+  have hlt : 2 ^ r - 1 < 2 ^ (r + 1) := by
+    omega
+  have hdiv :
+      (3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 1) - 1)) + 1) / 2 =
+        (2 ^ r - 1) + (3 * t + 1) * 2 ^ (r + 1) := by
+    have hnum :
+        3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 1) - 1)) + 1 =
+          2 * ((2 ^ r - 1) + (3 * t + 1) * 2 ^ (r + 1)) := by
+      have hsplit : 2 * 2 ^ r - 1 = 2 ^ r + (2 ^ r - 1) := by
+        omega
+      rw [hpow2, hpow1]
+      rw [hsplit]
+      ring_nf
+      omega
+    rw [hnum]
+    exact Nat.mul_div_right _ (by decide : 0 < 2)
+  rw [hdiv]
+  rw [mul_comm (3 * t + 1) (2 ^ (r + 1))]
+  rw [Nat.add_mul_mod_self_left]
+  exact Nat.mod_eq_of_lt hlt
+
+/--
+The continuation sibling in expanded power-of-two form.
+
+At depth `r`, the upper half of the current retention cell is
+`2^(r + 2) - 1` modulo `2^(r + 2)`.  One exact height-one Collatz step sends it
+to `2^(r + 1) - 1` modulo `2^(r + 1)`, which is the next retention cell.
+-/
+theorem next_continuation_residue_expanded
+    (r t : ℕ) :
+    ((3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 2) - 1)) + 1) / 2) %
+        (2 ^ (r + 1)) = 2 ^ (r + 1) - 1 := by
+  have hpow : 2 ^ (r + 2) = 2 * 2 ^ (r + 1) := by
+    rw [show r + 2 = (r + 1) + 1 by omega, pow_succ]
+    omega
+  have hpos : 0 < 2 ^ (r + 1) := pow_pos (by decide) (r + 1)
+  have hlt : 2 ^ (r + 1) - 1 < 2 ^ (r + 1) := by
+    omega
+  have hdiv :
+      (3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 2) - 1)) + 1) / 2 =
+        (2 ^ (r + 1) - 1) + (3 * t + 2) * 2 ^ (r + 1) := by
+    have hnum :
+        3 * ((2 ^ (r + 2)) * t + (2 ^ (r + 2) - 1)) + 1 =
+          2 * ((2 ^ (r + 1) - 1) + (3 * t + 2) * 2 ^ (r + 1)) := by
+      have hsplit :
+          2 * 2 ^ (r + 1) - 1 =
+            2 ^ (r + 1) + (2 ^ (r + 1) - 1) := by
+        omega
+      rw [hpow]
+      rw [hsplit]
+      ring_nf
+      omega
+    rw [hnum]
+    exact Nat.mul_div_right _ (by decide : 0 < 2)
+  rw [hdiv]
+  rw [mul_comm (3 * t + 2) (2 ^ (r + 1))]
+  rw [Nat.add_mul_mod_self_left]
+  exact Nat.mod_eq_of_lt hlt
+
+/--
 On the exact height-one channel, the accelerated Collatz map is the visible
 one-step expression `(3m + 1) / 2`.
 -/
