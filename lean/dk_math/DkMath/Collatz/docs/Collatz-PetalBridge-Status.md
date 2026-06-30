@@ -123,6 +123,13 @@ orbitWindowHeightPrefixCountGe
 orbitWindowHeightPrefixCountGe_eq_countGe
 orbitWindowHeightPrefixCountGe_mul_le_sumS
 orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
+orbitWindowHeight_one_le
+orbitWindowHeightCountGe_one_eq_window
+orbitWindowHeightSeq_sum_ge_window_add_countGe_two
+orbitWindowHeightPrefixCountGe_one_eq
+orbitWindowHeightPrefix_sum_ge_window_add_countGe_two
+orbitWindowHeightCountGe_antitone
+orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -278,6 +285,21 @@ prefix threshold count in a k-window, with r <= k
 
 first two layer-cake layers
   -> CountGe 1 + CountGe 2 <= sumS n k
+
+Collatz odd-state height floor
+  -> CountGe 1 = k
+
+Collatz-specific two-layer lower bound
+  -> k + CountGe 2 <= sumS n k
+
+prefix Collatz-specific two-layer lower bound
+  -> r + prefix CountGe 2 <= sumS n r
+
+threshold monotonicity
+  -> CountGe b <= CountGe a when a <= b
+
+first three layer-cake layers
+  -> CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -296,6 +318,40 @@ aimed at real-power / exponential MGF estimates.  The Collatz bridge keeps the
 current API local and elementary because the data here is just a finite ordered
 list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
 the observation-window layer before a real carrier/radical bridge exists.
+
+The Collatz-specific floor is now also fixed:
+
+```text
+every accelerated odd state has height >= 1
+```
+
+Therefore the first layer is not merely an occupation statistic; it is the full
+window size:
+
+```text
+CountGe 1 = k
+```
+
+The two-layer lower bound becomes the practical drift estimate:
+
+```text
+k + CountGe 2 <= sumS n k
+```
+
+and the same statement is available for prefixes:
+
+```text
+r + prefix CountGe 2 <= sumS n r
+```
+
+The experimental three-layer theorem also passed:
+
+```text
+CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
+```
+
+This is evidence that the next natural theorem is the general finite
+layer-cake form over `Finset.range H`.
 
 The bridge theorem
 
