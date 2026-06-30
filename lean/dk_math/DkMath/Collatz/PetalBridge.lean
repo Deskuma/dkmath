@@ -552,6 +552,96 @@ theorem next_continuation_residue_expanded
   exact Nat.mod_eq_of_lt hlt
 
 /--
+The recovery sibling in practical residue-class form.
+
+This is the usable version of `next_recovery_residue_expanded`: if an arbitrary
+label lies in the recovery sibling modulo `2^(r + 2)`, then one visible
+height-one raw step lands in the outward residue `2^r - 1` modulo `2^(r + 1)`.
+-/
+theorem next_recovery_residue_of_mod
+    (r m : ℕ)
+    (hm : m % (2 ^ (r + 2)) = 2 ^ (r + 1) - 1) :
+    ((3 * m + 1) / 2) % (2 ^ (r + 1)) = 2 ^ r - 1 := by
+  let M := 2 ^ (r + 2)
+  have hdecomp : m = M * (m / M) + m % M := by
+    have h := Nat.mod_add_div m M
+    omega
+  rw [hdecomp]
+  dsimp [M] at hm ⊢
+  rw [hm]
+  simpa using next_recovery_residue_expanded r (m / 2 ^ (r + 2))
+
+/--
+The continuation sibling in practical residue-class form.
+
+If a label lies in the continuation sibling modulo `2^(r + 2)`, then one
+visible height-one raw step lands in `2^(r + 1) - 1` modulo `2^(r + 1)`, the
+next retention cell.
+-/
+theorem next_continuation_residue_of_mod
+    (r m : ℕ)
+    (hm : m % (2 ^ (r + 2)) = 2 ^ (r + 2) - 1) :
+    ((3 * m + 1) / 2) % (2 ^ (r + 1)) = 2 ^ (r + 1) - 1 := by
+  let M := 2 ^ (r + 2)
+  have hdecomp : m = M * (m / M) + m % M := by
+    have h := Nat.mod_add_div m M
+    omega
+  rw [hdecomp]
+  dsimp [M] at hm ⊢
+  rw [hm]
+  simpa using next_continuation_residue_expanded r (m / 2 ^ (r + 2))
+
+/--
+Usability test: the `mod 512` recovery anchor follows from the general
+residue-class theorem.
+-/
+theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive_via_general
+    {m : ℕ} (hm : m % 512 = 255) :
+    ((3 * m + 1) / 2) % 256 = 127 := by
+  simpa using next_recovery_residue_of_mod 7 m hm
+
+/--
+Usability test: the `mod 512` continuation anchor follows from the general
+residue-class theorem.
+-/
+theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven_via_general
+    {m : ℕ} (hm : m % 512 = 511) :
+    ((3 * m + 1) / 2) % 256 = 255 := by
+  simpa using next_continuation_residue_of_mod 7 m hm
+
+/--
+For depth at least `2`, a recovery sibling residue is an exact height-one
+source residue modulo `8`.
+-/
+theorem recovery_residue_mod_eight_eq_seven
+    (r : ℕ) (hr : 2 ≤ r) :
+    (2 ^ (r + 1) - 1) % 8 = 7 := by
+  rcases exists_add_of_le hr with ⟨k, rfl⟩
+  rw [show 2 + k + 1 = 3 + k by omega, pow_add]
+  norm_num
+  have hsplit : 8 * 2 ^ k - 1 = 7 + (2 ^ k - 1) * 8 := by
+    have hpos : 0 < 2 ^ k := pow_pos (by decide) k
+    omega
+  rw [hsplit]
+  rw [Nat.add_mul_mod_self_right]
+
+/--
+For depth at least `1`, a continuation sibling residue is an exact height-one
+source residue modulo `8`.
+-/
+theorem continuation_residue_mod_eight_eq_seven
+    (r : ℕ) (hr : 1 ≤ r) :
+    (2 ^ (r + 2) - 1) % 8 = 7 := by
+  rcases exists_add_of_le hr with ⟨k, rfl⟩
+  rw [show 1 + k + 2 = 3 + k by omega, pow_add]
+  norm_num
+  have hsplit : 8 * 2 ^ k - 1 = 7 + (2 ^ k - 1) * 8 := by
+    have hpos : 0 < 2 ^ k := pow_pos (by decide) k
+    omega
+  rw [hsplit]
+  rw [Nat.add_mul_mod_self_right]
+
+/--
 On the exact height-one channel, the accelerated Collatz map is the visible
 one-step expression `(3m + 1) / 2`.
 -/

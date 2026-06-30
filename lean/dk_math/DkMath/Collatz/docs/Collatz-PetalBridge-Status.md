@@ -200,6 +200,12 @@ twoAdicRecoverySiblingResidue_eq_retentionResidue
 twoAdicContinuationSiblingResidue_eq_retentionResidue_succ
 next_recovery_residue_expanded
 next_continuation_residue_expanded
+next_recovery_residue_of_mod
+next_continuation_residue_of_mod
+next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive_via_general
+next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven_via_general
+recovery_residue_mod_eight_eq_seven
+continuation_residue_mod_eight_eq_seven
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
@@ -899,6 +905,41 @@ parent retention cell
   -> recovery sibling
   -> continuation sibling = next retention cell
 ```
+
+The expanded raw theorems now also have practical residue-class forms:
+
+```text
+m % 2^(r+2) = 2^(r+1) - 1
+  -> ((3m + 1) / 2) % 2^(r+1) = 2^r - 1
+
+m % 2^(r+2) = 2^(r+2) - 1
+  -> ((3m + 1) / 2) % 2^(r+1) = 2^(r+1) - 1
+```
+
+The proof decomposes an arbitrary label by `Nat.mod_add_div`:
+
+```text
+m = 2^(r+2) * (m / 2^(r+2)) + m % 2^(r+2)
+```
+
+and then reuses the expanded theorem.  This turns the recursive Petal theorem
+from a parametric raw expression into a theorem about any label inside the
+given residue cell.  The fixed `mod 512` anchors have been rederived from this
+general theorem as usability tests.
+
+The source-entry side is also now recorded:
+
+```text
+2 <= r
+  -> (2^(r+1) - 1) % 8 = 7
+
+1 <= r
+  -> (2^(r+2) - 1) % 8 = 7
+```
+
+This is the lower-bound condition needed before promoting the practical raw
+theorem to an orbit-label theorem: the source label must be in the exact
+height-one `7 mod 8` channel so that `T` is the visible `(3m + 1) / 2` step.
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:
