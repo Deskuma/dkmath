@@ -105,6 +105,7 @@ rawHeightLabel_two_le_iff_four_dvd_threeNPlusOne
 orbitWindowHeight_two_le_iff_four_dvd
 odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one
 orbitWindowHeight_two_le_iff_mod_four_eq_one
+odd_mod_four_eq_one_or_three
 three_le_v2_iff_eight_dvd
 rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
 odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
@@ -123,10 +124,18 @@ orbitWindowHeight_eq_of_same_iterateT
 orbitWindowHeightCountEq
 orbitWindowHeightCountGe
 orbitWindowResidueCountMod4EqOne
+orbitWindowResidueCountMod4EqThree
+orbitWindowResidueCountMod8EqFive
+orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
 orbitWindowResidueCountMod4EqOne_le_window
+orbitWindowResidueCountMod4EqThree_le_window
+orbitWindowResidueCountMod8EqFive_le_window
+orbitWindowPrefixResidueCountMod4EqOne_le_prefix
+orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
+orbitWindowHeightCountGe_three_eq_residueCount_mod8_eq_five
 orbitWindowHeightCountEq_eq_window_of_forall_eq
 orbitWindowHeightCountGe_eq_window_of_forall_ge
 orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
@@ -139,7 +148,11 @@ orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
 orbitWindowHeight_one_le
 orbitWindowHeightCountGe_one_eq_window
 orbitWindowHeightSeq_sum_ge_window_add_countGe_two
+orbitWindowHeight_eq_one_iff_mod_four_eq_three
+orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
+orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
 orbitWindowHeightPrefixCountGe_one_eq
+orbitWindowHeightPrefixCountGe_two_eq_prefixResidueCount_mod4_eq_one
 orbitWindowHeightPrefix_sum_ge_window_add_countGe_two
 orbitWindowHeightCountGe_antitone
 orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three
@@ -150,7 +163,9 @@ orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightPrefix_sum_ge_window_add_sum_countGe_tail
 orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
 orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
+orbitWindowHeightSeq_sum_ge_window_add_countGe_two_add_of_residue_mod8_count_ge
 orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
+orbitWindowHeightPrefix_sum_ge_window_add_of_residue_mod4_count_ge
 rawHeightLabel_shift_eq
 oddOrbitLabel_injOn_of_pairwiseSeparated
 iterateT_eq_of_oddOrbitLabel_eq
@@ -313,6 +328,15 @@ orbitWindowHeightCountGe n k threshold
 
 orbitWindowResidueCountMod4EqOne n k
   = number of odd orbit labels congruent to 1 modulo 4
+
+orbitWindowResidueCountMod4EqThree n k
+  = number of odd orbit labels congruent to 3 modulo 4
+
+orbitWindowResidueCountMod8EqFive n k
+  = number of odd orbit labels congruent to 5 modulo 8
+
+orbitWindowPrefixResidueCountMod4EqOne n k r
+  = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
 ```
 
 The current count API is intentionally minimal:
@@ -369,6 +393,13 @@ external CountGe 2 lower bound
 
 mod 4 residue occupation lower bound
   -> m <= residueCountMod4EqOne -> k + m <= sumS n k
+
+prefix mod 4 residue occupation lower bound
+  -> m <= prefixResidueCountMod4EqOne -> r + m <= sumS n r
+
+mod 8 residue occupation lower bound
+  -> m <= residueCountMod8EqFive
+  -> k + CountGe 2 + m <= sumS n k
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -454,6 +485,30 @@ m <= orbitWindowResidueCountMod4EqOne n k
 This changes the practical target from a valuation-count statement into a
 finite residue-class occupation statement.
 
+The same reading is now available locally in prefixes:
+
+```text
+m <= orbitWindowPrefixResidueCountMod4EqOne n k r
+  -> r + m <= sumS n r
+```
+
+The first mod `4` partition is also closed at pointwise and count level:
+
+```text
+height = 1 <-> oddOrbitLabel % 4 = 3
+CountGe 2 = residue mod 4 = 1
+CountEq 1 = residue mod 4 = 3
+residueCountMod4EqOne + residueCountMod4EqThree = k
+```
+
+The mod `8` layer now has a count-level handoff:
+
+```text
+CountGe 3 = residue mod 8 = 5
+m <= residueCountMod8EqFive
+  -> k + CountGe 2 + m <= sumS n k
+```
+
 This is the intended bridge from a future residue/address occupation theorem
 to a Collatz drift lower bound.
 
@@ -498,10 +553,10 @@ The next safe steps are:
 The immediate residue candidates are:
 
 ```text
-prefix version of residueCountMod4EqOne
-height >= 3 count as a mod 8 residue occupation
 transition map between residue classes under the accelerated map T
 general 2^r residue coordinate for height >= r
+prefix mod 8 residue occupation
+fixed experiment for height >= 4 as a mod 16 residue occupation
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge

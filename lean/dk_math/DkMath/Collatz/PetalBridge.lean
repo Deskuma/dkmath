@@ -186,6 +186,14 @@ theorem orbitWindowHeight_two_le_iff_mod_four_eq_one
   exact odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one (iterateT i n).2
 
 /--
+An odd natural number is in residue class `1` or `3` modulo `4`.
+-/
+theorem odd_mod_four_eq_one_or_three
+    {m : ℕ} (hmOdd : m % 2 = 1) :
+    m % 4 = 1 ∨ m % 4 = 3 := by
+  omega
+
+/--
 The `v2` observation is at least `3` exactly when `8` divides the observed
 nonzero natural.
 
@@ -383,6 +391,37 @@ noncomputable def orbitWindowResidueCountMod4EqOne
     (fun i => decide (oddOrbitLabel n i % 4 = 1))
 
 /--
+Number of in-window odd-state labels in residue class `3 mod 4`.
+
+This is the residue-address counterpart of exact height `1`.
+-/
+noncomputable def orbitWindowResidueCountMod4EqThree
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 4 = 3))
+
+/--
+Number of in-window odd-state labels in residue class `5 mod 8`.
+
+This is the residue-address counterpart of `orbitWindowHeightCountGe n k 3`.
+-/
+noncomputable def orbitWindowResidueCountMod8EqFive
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n i % 8 = 5))
+
+/--
+Residue count inside a prefix of an ambient observation window.
+
+The ambient window size `k` is kept in the arguments to match the existing
+prefix height-count API.
+-/
+noncomputable def orbitWindowPrefixResidueCountMod4EqOne
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  ((List.range k).take r).countP
+    (fun i => decide (oddOrbitLabel n i % 4 = 1))
+
+/--
 The exact-height occupation count is bounded by the window size.
 -/
 theorem orbitWindowHeightCountEq_le_window
@@ -415,6 +454,52 @@ theorem orbitWindowResidueCountMod4EqOne_le_window
       (p := fun i => decide (oddOrbitLabel n i % 4 = 1)) (l := List.range k))
 
 /--
+The mod `4 = 3` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod4EqThree_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod4EqThree n k ≤ k := by
+  unfold orbitWindowResidueCountMod4EqThree
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 4 = 3)) (l := List.range k))
+
+/--
+The mod `8` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod8EqFive_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqFive n k ≤ k := by
+  unfold orbitWindowResidueCountMod8EqFive
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 8 = 5)) (l := List.range k))
+
+/--
+The prefix mod `4` residue count is bounded by the prefix length.
+-/
+theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowPrefixResidueCountMod4EqOne n k r ≤ r := by
+  unfold orbitWindowPrefixResidueCountMod4EqOne
+  exact le_trans
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n i % 4 = 1))
+      (l := (List.range k).take r))
+    (by simp)
+
+/--
+Prefix mod `4` residue occupation agrees with the standalone count for the
+prefix length, as long as the prefix lies inside the ambient window.
+-/
+theorem orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    orbitWindowPrefixResidueCountMod4EqOne n k r =
+      orbitWindowResidueCountMod4EqOne n r := by
+  unfold orbitWindowPrefixResidueCountMod4EqOne orbitWindowResidueCountMod4EqOne
+  simp [List.take_range, Nat.min_eq_left hr]
+
+/--
 Counting `height >= 2` entries is the same as counting odd-state labels in
 residue class `1 mod 4`.
 
@@ -436,6 +521,31 @@ theorem orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
       · have hres : oddOrbitLabel n k % 4 = 1 := hiff.mp hheight
         simp [ih, hheight, hres]
       · have hres : oddOrbitLabel n k % 4 ≠ 1 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
+
+/--
+Counting `height >= 3` entries is the same as counting odd-state labels in
+residue class `5 mod 8`.
+
+This is the mod `8` analogue of the second-layer residue occupation theorem.
+-/
+theorem orbitWindowHeightCountGe_three_eq_residueCount_mod8_eq_five
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountGe n k 3 =
+      orbitWindowResidueCountMod8EqFive n k := by
+  unfold orbitWindowHeightCountGe orbitWindowResidueCountMod8EqFive orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_three_le_iff_mod_eight_eq_five n k
+      by_cases hheight : 3 ≤ orbitWindowHeight n k
+      · have hres : oddOrbitLabel n k % 8 = 5 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n k % 8 ≠ 5 := by
           intro h
           exact hheight (hiff.mpr h)
         simp [ih, hheight, hres]
@@ -580,6 +690,18 @@ theorem orbitWindowHeightPrefixCountGe_eq_countGe
   simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
 
 /--
+Prefix `height >= 2` occupation is the same as prefix mod `4` residue
+occupation.
+-/
+theorem orbitWindowHeightPrefixCountGe_two_eq_prefixResidueCount_mod4_eq_one
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    orbitWindowHeightPrefixCountGe n k r 2 =
+      orbitWindowPrefixResidueCountMod4EqOne n k r := by
+  rw [orbitWindowHeightPrefixCountGe_eq_countGe n hr]
+  rw [orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one]
+  rw [← orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount n hr]
+
+/--
 Prefix threshold occupation gives a lower bound for the corresponding partial
 Collatz accumulated height.
 -/
@@ -647,6 +769,83 @@ theorem orbitWindowHeight_one_le
   rw [orbitWindowHeight_eq_s_iterateT]
   simpa [s, threeNPlusOne] using
     v2_3n_plus_1_ge_1 (iterateT i n).1 (iterateT i n).2
+
+/--
+The first Collatz height layer is exact height `1` precisely on residue class
+`3 mod 4`.
+
+Together with `orbitWindowHeight_two_le_iff_mod_four_eq_one`, this closes the
+first mod `4` residue partition at the pointwise level.
+-/
+theorem orbitWindowHeight_eq_one_iff_mod_four_eq_three
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i = 1 ↔ oddOrbitLabel n i % 4 = 3 := by
+  constructor
+  · intro hheight
+    have hnotTwo : ¬ 2 ≤ orbitWindowHeight n i := by omega
+    have hnotOne : oddOrbitLabel n i % 4 ≠ 1 := by
+      intro hmod
+      exact hnotTwo ((orbitWindowHeight_two_le_iff_mod_four_eq_one n i).mpr hmod)
+    cases odd_mod_four_eq_one_or_three (iterateT i n).2 with
+    | inl hmod =>
+        change oddOrbitLabel n i % 4 = 1 at hmod
+        exact (hnotOne hmod).elim
+    | inr hmod =>
+        change oddOrbitLabel n i % 4 = 3 at hmod
+        exact hmod
+  · intro hmod
+    have hOne : 1 ≤ orbitWindowHeight n i := orbitWindowHeight_one_le n i
+    have hnotTwo : ¬ 2 ≤ orbitWindowHeight n i := by
+      intro htwo
+      have hmodOne := (orbitWindowHeight_two_le_iff_mod_four_eq_one n i).mp htwo
+      omega
+    omega
+
+/--
+Counting exact height `1` entries is the same as counting odd-state labels in
+residue class `3 mod 4`.
+-/
+theorem orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountEq n k 1 =
+      orbitWindowResidueCountMod4EqThree n k := by
+  unfold orbitWindowHeightCountEq orbitWindowResidueCountMod4EqThree orbitWindowHeightSeq
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_eq_one_iff_mod_four_eq_three n k
+      by_cases hheight : orbitWindowHeight n k = 1
+      · have hres : oddOrbitLabel n k % 4 = 3 := hiff.mp hheight
+        simp [ih, hheight, hres]
+      · have hres : oddOrbitLabel n k % 4 ≠ 3 := by
+          intro h
+          exact hheight (hiff.mpr h)
+        simp [ih, hheight, hres]
+
+/--
+The two odd residue classes modulo `4` fill the whole observation window.
+-/
+theorem orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod4EqOne n k +
+      orbitWindowResidueCountMod4EqThree n k = k := by
+  unfold orbitWindowResidueCountMod4EqOne orbitWindowResidueCountMod4EqThree
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      cases odd_mod_four_eq_one_or_three (iterateT k n).2 with
+      | inl hOne =>
+          change oddOrbitLabel n k % 4 = 1 at hOne
+          simp [hOne]
+          omega
+      | inr hThree =>
+          change oddOrbitLabel n k % 4 = 3 at hThree
+          simp [hThree]
+          omega
 
 /--
 The `height >= 1` occupation count fills the whole observation window.
@@ -953,6 +1152,27 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
   exact orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge n k m hm
 
 /--
+Three-layer residue-address drift bridge.
+
+If at least `m` labels in the window lie in residue class `5 mod 8`, then the
+third height layer contributes at least `m` additional units on top of the
+base layer and the second layer.
+-/
+theorem orbitWindowHeightSeq_sum_ge_window_add_countGe_two_add_of_residue_mod8_count_ge
+    (n : OddNat) (k m : ℕ)
+    (hm : m ≤ orbitWindowResidueCountMod8EqFive n k) :
+    k + orbitWindowHeightCountGe n k 2 + m ≤ sumS n k := by
+  have htail :
+      k + orbitWindowHeightCountGe n k 2 +
+          orbitWindowHeightCountGe n k 3 ≤ sumS n k := by
+    simpa [orbitWindowHeightCountGe_one_eq_window n k, Nat.add_assoc] using
+      orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three n k
+  rw [← orbitWindowHeightCountGe_three_eq_residueCount_mod8_eq_five n k] at hm
+  exact le_trans
+    (Nat.add_le_add_left hm (k + orbitWindowHeightCountGe n k 2))
+    htail
+
+/--
 Prefix version: a lower bound on the prefix `height >= 2` occupation gives a
 local drift lower bound.
 -/
@@ -963,6 +1183,19 @@ theorem orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
   exact le_trans
     (Nat.add_le_add_left hm r)
     (orbitWindowHeightPrefix_sum_ge_window_add_countGe_two n hr)
+
+/--
+Prefix residue-address drift bridge.
+
+If at least `m` labels in the prefix lie in residue class `1 mod 4`, then the
+prefix accumulated height is at least `r + m`.
+-/
+theorem orbitWindowHeightPrefix_sum_ge_window_add_of_residue_mod4_count_ge
+    (n : OddNat) {r k m : ℕ} (hr : r ≤ k)
+    (hm : m ≤ orbitWindowPrefixResidueCountMod4EqOne n k r) :
+    r + m ≤ sumS n r := by
+  rw [← orbitWindowHeightPrefixCountGe_two_eq_prefixResidueCount_mod4_eq_one n hr] at hm
+  exact orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge n hr hm
 
 /--
 Block shifts preserve the raw height when the observed height is below the
