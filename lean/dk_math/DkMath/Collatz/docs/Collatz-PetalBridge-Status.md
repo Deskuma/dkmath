@@ -137,6 +137,8 @@ orbitWindowResidueCountMod8EqOne
 orbitWindowResidueCountMod8EqThree
 orbitWindowResidueCountMod8EqFive
 orbitWindowResidueCountMod8EqSeven
+orbitWindowResidueCountMod4EqOneTail
+orbitWindowResidueCountMod4EqThreeTail
 orbitWindowPrefixResidueCountMod4EqOne
 orbitWindowHeightCountEq_le_window
 orbitWindowHeightCountGe_le_window
@@ -146,6 +148,8 @@ orbitWindowResidueCountMod8EqOne_le_window
 orbitWindowResidueCountMod8EqThree_le_window
 orbitWindowResidueCountMod8EqFive_le_window
 orbitWindowResidueCountMod8EqSeven_le_window
+orbitWindowResidueCountMod4EqOneTail_le_window
+orbitWindowResidueCountMod4EqThreeTail_le_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -167,6 +171,15 @@ orbitWindowHeight_eq_one_iff_mod_four_eq_three
 orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
 orbitNext_mod_four_eq_one_of_mod_eight_eq_three
 orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
+iterateT_succ_eq_T_iterateT
+oddOrbitLabel_succ_eq_T_iterateT
+oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
+oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
+orbitWindowNextHeight_two_le_of_mod_eight_eq_three
+orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
+orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
+residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
+sumS_two_steps_ge_three_of_mod_eight_eq_three
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
@@ -364,6 +377,14 @@ orbitWindowResidueCountMod8EqFive n k
 orbitWindowResidueCountMod8EqSeven n k
   = number of odd orbit labels congruent to 7 modulo 8
 
+orbitWindowResidueCountMod4EqOneTail n k
+  = number of shifted tail labels, at times i + 1 for i < k,
+    congruent to 1 modulo 4
+
+orbitWindowResidueCountMod4EqThreeTail n k
+  = number of shifted tail labels, at times i + 1 for i < k,
+    congruent to 3 modulo 4
+
 orbitWindowPrefixResidueCountMod4EqOne n k r
   = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
 ```
@@ -558,6 +579,39 @@ oddOrbitLabel % 8 = 7
   -> (T current).val % 4 = 3
 ```
 
+This has now been lifted to the actual orbit-label sequence:
+
+```text
+oddOrbitLabel n i % 8 = 3
+  -> oddOrbitLabel n (i + 1) % 4 = 1
+
+oddOrbitLabel n i % 8 = 7
+  -> oddOrbitLabel n (i + 1) % 4 = 3
+```
+
+The `3 mod 8` channel is a delayed-peeling edge:
+
+```text
+current label is 3 mod 8
+  -> current height is exactly 1
+  -> next label is 1 mod 4
+  -> next height is at least 2
+```
+
+Thus the first two-step experiment is fixed:
+
+```text
+oddOrbitLabel n 0 % 8 = 3
+  -> 3 <= sumS n 2
+```
+
+At count level, the two exact height-one channels feed shifted tail counts:
+
+```text
+residueCountMod8EqThree <= tail residueCountMod4EqOne
+residueCountMod8EqSeven <= tail residueCountMod4EqThree
+```
+
 The next higher-coordinate experiment also passed:
 
 ```text
@@ -610,8 +664,8 @@ The immediate residue candidates are:
 ```text
 general 2^r residue coordinate for height >= r
 prefix mod 8 residue occupation
-next-label formulation of the T transition using iterateT (i + 1)
-count-level transition statistics for mod 8 height-one channels
+shifted-tail prefix versions of the transition-count inequalities
+2-step and 3-step delayed-peeling drift estimates
 ```
 
 The main caution is that Collatz state labels are not prime labels.  Any bridge

@@ -524,6 +524,30 @@ noncomputable def orbitWindowResidueCountMod8EqSeven
     (fun i => decide (oddOrbitLabel n i % 8 = 7))
 
 /--
+Number of shifted-tail labels in residue class `1 mod 4`.
+
+This counts the labels at times `1, 2, ..., k`, indexed as `i + 1` for
+`i < k`.  It is the receiving window for the transition
+`current mod 8 = 3 -> next mod 4 = 1`.
+-/
+noncomputable def orbitWindowResidueCountMod4EqOneTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 1))
+
+/--
+Number of shifted-tail labels in residue class `3 mod 4`.
+
+This counts the labels at times `1, 2, ..., k`, indexed as `i + 1` for
+`i < k`.  It is the receiving window for the transition
+`current mod 8 = 7 -> next mod 4 = 3`.
+-/
+noncomputable def orbitWindowResidueCountMod4EqThreeTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3))
+
+/--
 Residue count inside a prefix of an ambient observation window.
 
 The ambient window size `k` is kept in the arguments to match the existing
@@ -620,6 +644,28 @@ theorem orbitWindowResidueCountMod8EqSeven_le_window
   simpa using
     (List.countP_le_length
       (p := fun i => decide (oddOrbitLabel n i % 8 = 7)) (l := List.range k))
+
+/--
+The shifted-tail mod `4 = 1` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod4EqOneTail_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod4EqOneTail n k ≤ k := by
+  unfold orbitWindowResidueCountMod4EqOneTail
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n (i + 1) % 4 = 1)) (l := List.range k))
+
+/--
+The shifted-tail mod `4 = 3` residue count is bounded by the window size.
+-/
+theorem orbitWindowResidueCountMod4EqThreeTail_le_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod4EqThreeTail n k ≤ k := by
+  unfold orbitWindowResidueCountMod4EqThreeTail
+  simpa using
+    (List.countP_le_length
+      (p := fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3)) (l := List.range k))
 
 /--
 The prefix mod `4` residue count is bounded by the prefix length.
@@ -1061,6 +1107,163 @@ theorem orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
     simpa [orbitWindowHeight_eq_s_iterateT] using hheight
   rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
   exact next_mod_four_of_mod_eight_eq_seven hmod
+
+/--
+One-step recursion for the accelerated Collatz iterator.
+
+This repackages the recursive definition of `iterateT` in the orientation
+needed by orbit-label transition theorems: the next label is obtained by
+applying `T` to the current accelerated state.
+-/
+theorem iterateT_succ_eq_T_iterateT
+    (n : OddNat) (i : ℕ) :
+    iterateT (i + 1) n = T (iterateT i n) := by
+  induction i generalizing n with
+  | zero =>
+      rfl
+  | succ i ih =>
+      change iterateT (i + 1) (T n) = T (iterateT i (T n))
+      exact ih (T n)
+
+/--
+The next natural orbit label is the natural value of `T` applied to the
+current accelerated state.
+-/
+theorem oddOrbitLabel_succ_eq_T_iterateT
+    (n : OddNat) (i : ℕ) :
+    oddOrbitLabel n (i + 1) = (T (iterateT i n)).1 := by
+  unfold oddOrbitLabel
+  rw [iterateT_succ_eq_T_iterateT]
+
+/--
+Label-sequence transition from the `3 mod 8` height-one channel.
+
+If the current label is `3 mod 8`, then the next orbit label lies in
+residue class `1 mod 4`.
+-/
+theorem oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 3) :
+    oddOrbitLabel n (i + 1) % 4 = 1 := by
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  exact orbitNext_mod_four_eq_one_of_mod_eight_eq_three n i hmod
+
+/--
+Label-sequence transition from the `7 mod 8` height-one channel.
+
+If the current label is `7 mod 8`, then the next orbit label lies in
+residue class `3 mod 4`.
+-/
+theorem oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 7) :
+    oddOrbitLabel n (i + 1) % 4 = 3 := by
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  exact orbitNext_mod_four_eq_three_of_mod_eight_eq_seven n i hmod
+
+/--
+Delayed peeling from the `3 mod 8` height-one channel.
+
+The current step has exact height `1`, but the next label lands in
+`1 mod 4`, so the next observed height is at least `2`.
+-/
+theorem orbitWindowNextHeight_two_le_of_mod_eight_eq_three
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 3) :
+    2 ≤ orbitWindowHeight n (i + 1) := by
+  apply (orbitWindowHeight_two_le_iff_mod_four_eq_one n (i + 1)).mpr
+  exact oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three n i hmod
+
+/--
+The `7 mod 8` height-one channel remains an exact height-one channel at the
+next label.
+
+This is the complementary transition to the delayed-peeling
+`3 mod 8 -> next height >= 2` edge.
+-/
+theorem orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 8 = 7) :
+    orbitWindowHeight n (i + 1) = 1 := by
+  apply (orbitWindowHeight_eq_one_iff_mod_four_eq_three n (i + 1)).mpr
+  exact oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven n i hmod
+
+/--
+Every `3 mod 8` label in a window contributes a `1 mod 4` label in the
+shifted tail window.
+
+This is the first count-level transition statistic: the source channel is
+counted at time `i`, and the receiver channel is counted at time `i + 1`.
+-/
+theorem orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqThree n k ≤
+      orbitWindowResidueCountMod4EqOneTail n k := by
+  unfold orbitWindowResidueCountMod8EqThree orbitWindowResidueCountMod4EqOneTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have htransition :
+          oddOrbitLabel n k % 8 = 3 →
+            oddOrbitLabel n (k + 1) % 4 = 1 :=
+        oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three n k
+      by_cases hsource : oddOrbitLabel n k % 8 = 3
+      · have htail : oddOrbitLabel n (k + 1) % 4 = 1 := htransition hsource
+        simp [hsource, htail, ih]
+      · by_cases htail : oddOrbitLabel n (k + 1) % 4 = 1
+        · exact by
+            simpa [hsource, htail] using Nat.le_succ_of_le ih
+        · simp [hsource, htail, ih]
+
+/--
+Every `7 mod 8` label in a window contributes a `3 mod 4` label in the
+shifted tail window.
+-/
+theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqSeven n k ≤
+      orbitWindowResidueCountMod4EqThreeTail n k := by
+  unfold orbitWindowResidueCountMod8EqSeven orbitWindowResidueCountMod4EqThreeTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have htransition :
+          oddOrbitLabel n k % 8 = 7 →
+            oddOrbitLabel n (k + 1) % 4 = 3 :=
+        oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven n k
+      by_cases hsource : oddOrbitLabel n k % 8 = 7
+      · have htail : oddOrbitLabel n (k + 1) % 4 = 3 := htransition hsource
+        simp [hsource, htail, ih]
+      · by_cases htail : oddOrbitLabel n (k + 1) % 4 = 3
+        · exact by
+            simpa [hsource, htail] using Nat.le_succ_of_le ih
+        · simp [hsource, htail, ih]
+
+/--
+Two-step delayed-peeling experiment.
+
+Starting at `3 mod 8`, the current step contributes height `1`, and the next
+step contributes at least height `2`.  Hence the first two accelerated
+Collatz height observations sum to at least `3`.
+-/
+theorem sumS_two_steps_ge_three_of_mod_eight_eq_three
+    (n : OddNat)
+    (hmod : oddOrbitLabel n 0 % 8 = 3) :
+    3 ≤ sumS n 2 := by
+  have h0 : orbitWindowHeight n 0 = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n 0).mpr
+      (Or.inl hmod)
+  have h1 : 2 ≤ orbitWindowHeight n 1 :=
+    orbitWindowNextHeight_two_le_of_mod_eight_eq_three n 0 hmod
+  calc
+    3 ≤ orbitWindowHeight n 0 + orbitWindowHeight n 1 := by
+      omega
+    _ = sumS n 2 := by
+      simp [sumS, orbitWindowHeight_eq_s_iterateT]
 
 /--
 Counting exact height `1` entries is the same as counting odd-state labels in
