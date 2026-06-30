@@ -642,6 +642,48 @@ theorem continuation_residue_mod_eight_eq_seven
   rw [Nat.add_mul_mod_self_right]
 
 /--
+Reduce a residue through a smaller modulus.
+
+If `d` divides `M`, then reducing modulo `M` first does not change the final
+residue modulo `d`.  This is the local residue-cell bridge used to read a
+large 2-adic address through its visible `mod 8` entry channel.
+-/
+theorem mod_eq_mod_of_dvd_modulus
+    {a M d : ℕ} (hd : d ∣ M) :
+    a % d = (a % M) % d := by
+  rw [← Nat.mod_mod_of_dvd a hd]
+
+/--
+A recovery sibling cell, at depth at least `2`, starts in the exact
+height-one `7 mod 8` source channel.
+-/
+theorem mod_eight_eq_seven_of_recovery_residue_of_two_le
+    (r m : ℕ) (hr : 2 ≤ r)
+    (hm : m % (2 ^ (r + 2)) = 2 ^ (r + 1) - 1) :
+    m % 8 = 7 := by
+  have hpow : 8 ∣ 2 ^ (r + 2) := by
+    rcases exists_add_of_le hr with ⟨k, rfl⟩
+    rw [show 2 + k + 2 = 3 + (k + 1) by omega, pow_add]
+    norm_num
+  rw [mod_eq_mod_of_dvd_modulus hpow, hm]
+  exact recovery_residue_mod_eight_eq_seven r hr
+
+/--
+A continuation sibling cell, at depth at least `1`, starts in the exact
+height-one `7 mod 8` source channel.
+-/
+theorem mod_eight_eq_seven_of_continuation_residue_of_one_le
+    (r m : ℕ) (hr : 1 ≤ r)
+    (hm : m % (2 ^ (r + 2)) = 2 ^ (r + 2) - 1) :
+    m % 8 = 7 := by
+  have hpow : 8 ∣ 2 ^ (r + 2) := by
+    rcases exists_add_of_le hr with ⟨k, rfl⟩
+    rw [show 1 + k + 2 = 3 + k by omega, pow_add]
+    norm_num
+  rw [mod_eq_mod_of_dvd_modulus hpow, hm]
+  exact continuation_residue_mod_eight_eq_seven r hr
+
+/--
 On the exact height-one channel, the accelerated Collatz map is the visible
 one-step expression `(3m + 1) / 2`.
 -/
@@ -1776,6 +1818,54 @@ theorem oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtyt
   rw [oddOrbitLabel_succ_eq_T_iterateT]
   rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
   exact next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree hmod
+
+/--
+General orbit-label transition for the recovery sibling.
+
+If the current label lies in the recovery sibling modulo `2^(r + 2)` and
+`2 <= r`, then the source is in the exact height-one `7 mod 8` channel and the
+next accelerated label lands in the outward retention residue.
+-/
+theorem oddOrbitLabel_succ_recovery_residue_of_mod
+    (r : ℕ) (hr : 2 ≤ r) (n : OddNat) (i : ℕ)
+    (hmod :
+      oddOrbitLabel n i % (2 ^ (r + 2)) = 2 ^ (r + 1) - 1) :
+    oddOrbitLabel n (i + 1) % (2 ^ (r + 1)) = 2 ^ r - 1 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 :=
+    mod_eight_eq_seven_of_recovery_residue_of_two_le r (oddOrbitLabel n i) hr hmod
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_recovery_residue_of_mod r (oddOrbitLabel n i) hmod
+
+/--
+General orbit-label transition for the continuation sibling.
+
+If the current label lies in the continuation sibling modulo `2^(r + 2)` and
+`1 <= r`, then the source is in the exact height-one `7 mod 8` channel and the
+next accelerated label lands in the next retention cell.
+-/
+theorem oddOrbitLabel_succ_continuation_residue_of_mod
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (i : ℕ)
+    (hmod :
+      oddOrbitLabel n i % (2 ^ (r + 2)) = 2 ^ (r + 2) - 1) :
+    oddOrbitLabel n (i + 1) % (2 ^ (r + 1)) =
+      2 ^ (r + 1) - 1 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 :=
+    mod_eight_eq_seven_of_continuation_residue_of_one_le
+      r (oddOrbitLabel n i) hr hmod
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_continuation_residue_of_mod r (oddOrbitLabel n i) hmod
 
 /--
 Delayed peeling from the `3 mod 8` height-one channel.

@@ -206,6 +206,9 @@ next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_twohundredfiftyfive_via_
 next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleven_via_general
 recovery_residue_mod_eight_eq_seven
 continuation_residue_mod_eight_eq_seven
+mod_eq_mod_of_dvd_modulus
+mod_eight_eq_seven_of_recovery_residue_of_two_le
+mod_eight_eq_seven_of_continuation_residue_of_one_le
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
@@ -216,6 +219,8 @@ oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
 oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
 oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
 oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtythree
+oddOrbitLabel_succ_recovery_residue_of_mod
+oddOrbitLabel_succ_continuation_residue_of_mod
 orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
 orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
@@ -940,6 +945,39 @@ The source-entry side is also now recorded:
 This is the lower-bound condition needed before promoting the practical raw
 theorem to an orbit-label theorem: the source label must be in the exact
 height-one `7 mod 8` channel so that `T` is the visible `(3m + 1) / 2` step.
+
+That promotion is now closed.  The residue-cell reduction bridge is:
+
+```text
+d | M
+  -> m % d = (m % M) % d
+```
+
+In particular, when `8 | 2^(r+2)`, the large 2-adic address determines the
+visible `mod 8` source channel:
+
+```text
+m % 2^(r+2) = 2^(r+1) - 1, 2 <= r
+  -> m % 8 = 7
+
+m % 2^(r+2) = 2^(r+2) - 1, 1 <= r
+  -> m % 8 = 7
+```
+
+Therefore the recursive two-adic Petal theorem has reached the orbit-label
+layer:
+
+```text
+oddOrbitLabel n i % 2^(r+2) = 2^(r+1) - 1, 2 <= r
+  -> oddOrbitLabel n (i+1) % 2^(r+1) = 2^r - 1
+
+oddOrbitLabel n i % 2^(r+2) = 2^(r+2) - 1, 1 <= r
+  -> oddOrbitLabel n (i+1) % 2^(r+1) = 2^(r+1) - 1
+```
+
+This is the first general orbit-level statement of the narrowing retention
+cylinder: recovery exits one level outward, while continuation becomes the next
+retention cell.
 
 At count level, the two exact-height-one source channels also have a source
 mass bound:
