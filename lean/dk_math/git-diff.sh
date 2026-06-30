@@ -20,15 +20,14 @@ echo '# Git diff / Report / Review' > __git.diff
 echo '' >> __git.diff
 git log -1 --pretty=format:'## %s%n%ngch: %H%n%n%b' $LOG_COMMIT >> __git.diff
 
-echo '' >> __git.diff
 echo '## Report' >> __git.diff
 echo '' >> __git.diff
-echo '' >> __git.diff
+echo '_' >> __git.diff
 
 echo '' >> __git.diff
 echo '## Review' >> __git.diff
 echo '' >> __git.diff
-echo '' >> __git.diff
+echo '_' >> __git.diff
 
 echo '' >> __git.diff
 echo '## Diff' >> __git.diff
