@@ -181,24 +181,32 @@ orbitWindowHeightTail_countGe_two_add_countEq_one_eq_window
 orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
 orbitNext_mod_four_eq_one_of_mod_eight_eq_three
 orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
+next_mod_eight_of_mod_sixteen_eq_seven
+next_mod_eight_of_mod_sixteen_eq_fifteen
 iterateT_succ_eq_T_iterateT
 oddOrbitLabel_succ_eq_T_iterateT
 oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three
 oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
+oddOrbitLabel_succ_mod_eight_eq_three_of_mod_sixteen_eq_seven
+oddOrbitLabel_succ_mod_eight_eq_seven_of_mod_sixteen_eq_fifteen
 orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
+orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
 orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
 orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
 orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
+orbitWindowResidueCountMod8EqThree_add_seven_le_tail_partition
 orbitWindowHeightCountGeTail_le_countGe_succ
 sumS_two_steps_ge_three_of_mod_eight_eq_three
 sumS_two_steps_ge_three_of_mod_eight_eq_three_at
 sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
+sumS_three_steps_ge_four_of_mod_sixteen_eq_seven
 orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
 orbitWindowHeightCountEq_two_eq_residueCount_mod8_eq_one
 orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
 orbitWindowResidueCountMod8_partition_eq_window
+orbitWindowResidueCountMod8EqThree_add_seven_le_window
 orbitWindowHeightPrefixCountGe_one_eq
 orbitWindowHeightPrefixCountGe_two_eq_prefixResidueCount_mod4_eq_one
 orbitWindowHeightPrefix_sum_ge_window_add_countGe_two
@@ -699,6 +707,48 @@ A concrete two-step witness is also available:
 ```text
 label 0 = 7 mod 8 and label 1 = 7 mod 8
   -> sumS n 2 = 2
+```
+
+The `7 mod 8` retention channel has now been split at mod `16`:
+
+```text
+7 mod 16:
+  next label is 3 mod 8
+  recovery branch
+
+15 mod 16:
+  next label is 7 mod 8
+  retention-continuation branch
+```
+
+Thus the `7 mod 16` subchannel recovers delayed peeling in three steps:
+
+```text
+label 0 = 7 mod 16
+  -> height at 0 is 1
+  -> label 1 = 3 mod 8
+  -> height at 1 is 1
+  -> height at 2 is at least 2
+  -> 4 <= sumS n 3
+```
+
+At count level, the two exact-height-one source channels also have a source
+mass bound:
+
+```text
+residueCountMod8EqThree + residueCountMod8EqSeven <= k
+```
+
+There are two readings of this bound:
+
+```text
+mod 8 partition:
+  the two source channels are part of the four odd mod 8 classes
+
+tail partition:
+  3 source enters tail CountGe 2
+  7 source enters tail CountEq 1
+  tail CountGe 2 + tail CountEq 1 = k
 ```
 
 The next higher-coordinate experiment also passed:
