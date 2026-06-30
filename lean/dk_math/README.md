@@ -121,6 +121,7 @@ presented by D. and Wise Wolf
 - 実装報告: [IMPLEMENTATION_REPORT_20260130.md](./DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md)
 - 補助補題完成報告: [AUXILIARY_LEMMA_COMPLETION_20260130.md](./DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md)
 - sorry 解消進捗: [SORRY_CLEANUP_PROGRESS_20260130.md](./DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md)
+- Petal 接続窓口: [Collatz-PetalBridge-Status.md](./DkMath/Collatz/docs/Collatz-PetalBridge-Status.md)
 
 ---
 

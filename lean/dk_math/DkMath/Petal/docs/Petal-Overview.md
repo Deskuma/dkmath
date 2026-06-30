@@ -111,6 +111,9 @@ DkMath.Petal.EisensteinBridge
 DkMath.Petal.ZsigmondyD3Bridge
 DkMath.Petal.PrimitiveD3ValuationBridge
 DkMath.Petal.ErdosBridge
+DkMath.Petal.Obstruction
+DkMath.Petal.ABCBridge
+DkMath.Petal.RangeFamily
 ```
 
 ### `DkMath.Petal.Basic`
@@ -709,8 +712,8 @@ FLT:
   next missing input: dedicated obstruction theorem
 
 ABC:
-  target: distinct one-slot channels become support/rad lower-bound material
-  next missing input: rad/supportMass bridge for label-noncolliding channels
+  current bridge: distinct carrier labels become supportMass/rad lower bounds
+  count form: selected channel count gives 2^card <= supportMass/rad
 ```
 
 Current research target:
@@ -869,6 +872,167 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_zsigmondyPrimitivePrimeDiv
 These wrappers are the current public route from PrimitiveBeam/Zsigmondy witness
 families to the finite Erdos log-capacity provider.  The no-lift wrappers still
 require explicit local no-lift hypotheses.
+
+### Obstruction Lemmas
+
+`DkMath.Petal.Obstruction` records the first small `False` lemmas for route
+boundaries:
+
+```text
+petalAddressNoncollision_contradiction_of_same_address_ne_index
+labelRecovery_contradiction_of_same_label_ne_value
+valueInjective_contradiction_of_same_value_ne_index
+labelRecovery_valueInjective_eq_of_same_label
+petalCarrierLabelMapData_eq_of_same_label
+petalNoLiftCarrierLabelMapData_eq_of_same_label
+petalCarrierLabelMapData_label_injOn
+petalNoLiftCarrierLabelMapData_label_injOn
+petalCarrierLabelMapData_labelNoncollision
+petalNoLiftCarrierLabelMapData_labelNoncollision
+petalCarrierLabelMapData_contradiction_of_same_label_ne_index
+petalNoLiftCarrierLabelMapData_contradiction_of_same_label_ne_index
+petalCarrierLabelNoncollision_contradiction_of_same_label_ne_index
+noLift_contradiction_of_square_dvd_GN
+padicValNat_eq_one_contradiction_of_two_le
+petalNoLift_contradiction_of_padicValNat_two_le
+petalNoLift_obstruction_of_padicValNat_ge
+```
+
+These theorems do not add bad assumptions as axioms.  They name the points where
+a candidate route stops being compatible with address noncollision, finite
+prime-channel independence, or local no-lift valuation control.
+
+The packaged carrier-label map lemmas also record the positive safety chain:
+
+```text
+same label -> same value -> same selected index
+same label -> same selected index
+therefore labels are injective and duplicate-free on the finite family
+```
+
+The corresponding obstruction theorem fires when a candidate route tries to
+reuse the same selected prime label at two distinct indices.
+
+### ABC Bridge
+
+`DkMath.Petal.ABCBridge` is the first support/rad negotiation layer:
+
+```text
+PetalCarrierLabelMapData
+  -> label support primes divide GN
+  -> label support cardinality = selected index cardinality
+  -> product of label support <= supportMass GN
+  -> product of label support <= rad GN
+  -> 2^(selected index count) <= supportMass/rad GN
+  -> PrimitiveBeam/Zsigmondy families directly supply the same count bound
+```
+
+Core theorem names:
+
+```text
+petalCarrierLabelSupport
+petalCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
+petalCarrierLabelMapData_labelSupport_card_eq
+petalNoLiftCarrierLabelMapData_labelSupport_card_eq
+petal_two_pow_card_le_prod_of_two_le
+petalCarrierLabelMapData_two_pow_card_le_labelSupport_prod
+petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod
+petalCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN
+petalCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
+petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
+petalCarrierLabelMapData_two_pow_card_le_rad_GN
+petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
+petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_eq
+petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
+petalCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_le
+petalCarrierLabelMapData_two_pow_le_rad_GN_of_card_le
+petalNoLiftCarrierLabelMapData_two_pow_le_supportMass_GN_of_card_le
+petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_le
+petal_two_pow_card_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
+petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
+petal_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family_card_le
+petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_le
+petal_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
+petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
+```
+
+The `_of_card_eq` forms are convenience endpoints for concrete finite family
+constructions.  Once a caller proves `I.card = k`, the lower bound can be read
+directly as `2^k <= supportMass/rad`.
+
+The `_of_card_le` forms are the lower-bound versions.  They only require
+`k <= I.card`, which is often the first usable output of an experimental
+family construction.
+
+NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
+only needs finite prime support; NoLift remains available for valuation
+obstruction routes.
+
+### Range Family
+
+`DkMath.Petal.RangeFamily` is the first concrete finite-family construction
+layer for the Petal-to-ABC route.  It fixes the index set and selected value
+map as:
+
+```text
+I = Finset.range k
+mOf i = i + 1
+```
+
+The caller still supplies the arithmetic content: label injectivity and
+PrimitiveBeam / Zsigmondy witnesses.
+
+Important names:
+
+```text
+rangeSuccValue_injOn
+rangeLabel_injOn_of_pairwise_ne
+rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index
+petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
+petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
+petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_pairwise
+petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
+```
+
+This is the first endpoint that reads directly as:
+
+```text
+k range-indexed primitive carriers
+  -> 2^k <= supportMass/rad(GN)
+```
+
+The `_pairwise` endpoints let experiments provide label separation in the
+natural indexed form:
+
+```text
+i < k, j < k, i != j -> qOf i != qOf j
+```
+
+The helper `rangeLabel_injOn_of_pairwise_ne` converts this to the `Set.InjOn`
+hypothesis required by the core constructors.
+
+The obstruction companion
+`rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index` records the
+negative test: if two distinct in-range indices reuse the same label, the
+pairwise range route closes as `False`.  This is intentionally small; it is a
+diagnostic tool for deciding whether a proposed `qOf` can feed the independent
+carrier family.
 
 ## What This Does Not Claim Yet
 
