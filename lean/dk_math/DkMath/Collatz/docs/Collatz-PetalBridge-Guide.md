@@ -283,3 +283,22 @@ m <= count
 ```
 
 Only later should this become rational or real frequency.
+
+Checkpoint 101 starts this layer with:
+
+```lean
+AtMostHalf
+AtMostRatioNat
+```
+
+and names the retention-channel masses:
+
+```lean
+orbitWindowRetentionMassPow2
+orbitWindowRetentionMassPow2Tail
+orbitWindowRecoverySiblingMassPow2
+orbitWindowContinuationSiblingMassPow2
+```
+
+Use these names when a theorem is conceptually about low-peeling retention,
+rather than writing the raw residue-count expression every time.

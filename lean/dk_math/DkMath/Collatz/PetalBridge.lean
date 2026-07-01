@@ -1447,6 +1447,136 @@ theorem pow2ChannelFlow_of_pointwise
     n k sourceDepth sourceResidue targetDepth targetResidue h
 
 /--
+Finite natural-number witness that a count occupies at most half of a window.
+
+This intentionally avoids division: `2 * count <= k` is the finite form of
+`count / k <= 1 / 2`, with no zero-window or coercion overhead.
+-/
+def AtMostHalf (count k : ℕ) : Prop :=
+  2 * count ≤ k
+
+/--
+Finite natural-number witness for `count / k <= num / den`.
+
+The inequality is represented without division:
+
+`den * count <= num * k`.
+-/
+def AtMostRatioNat (num den count k : ℕ) : Prop :=
+  den * count ≤ num * k
+
+/-- Constructor spelling for `AtMostHalf`. -/
+theorem atMostHalf_of_count_le_half
+    (count k : ℕ)
+    (h : 2 * count ≤ k) :
+    AtMostHalf count k :=
+  h
+
+/-- Reflexive finite ratio witness in the division-free encoding. -/
+theorem atMostRatioNat_refl
+    (count k : ℕ) :
+    AtMostRatioNat k k count count := by
+  unfold AtMostRatioNat
+  rfl
+
+/-- `AtMostHalf` is the special `1/2` case of `AtMostRatioNat`. -/
+theorem atMostHalf_iff_atMostRatioNat_one_two
+    (count k : ℕ) :
+    AtMostHalf count k ↔ AtMostRatioNat 1 2 count k := by
+  unfold AtMostHalf AtMostRatioNat
+  simp
+
+/-- A plain count bound is the `1/1` finite ratio witness. -/
+theorem atMostRatioNat_one_one_of_le
+    {count k : ℕ} (h : count ≤ k) :
+    AtMostRatioNat 1 1 count k := by
+  simpa [AtMostRatioNat] using h
+
+/--
+Source retention mass at depth `r`.
+
+This is the occupation count of the all-ones residue cell `2^r - 1` in the
+source window.
+-/
+noncomputable def orbitWindowRetentionMassPow2
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2 n k r (2 ^ r - 1)
+
+/--
+Shifted-tail retention mass at depth `r`.
+
+This is the tail-window counterpart of `orbitWindowRetentionMassPow2`.
+-/
+noncomputable def orbitWindowRetentionMassPow2Tail
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2Tail n k r (2 ^ r - 1)
+
+/--
+Recovery sibling mass inside the next deeper source layer.
+
+At parent depth `r`, this is the child residue `2^r - 1` at depth `r + 1`.
+-/
+noncomputable def orbitWindowRecoverySiblingMassPow2
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2 n k (r + 1) (2 ^ r - 1)
+
+/--
+Continuation sibling mass inside the next deeper source layer.
+
+At parent depth `r`, this is the child residue `2^(r+1) - 1` at depth `r + 1`.
+-/
+noncomputable def orbitWindowContinuationSiblingMassPow2
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2 n k (r + 1) (2 ^ (r + 1) - 1)
+
+/--
+Shifted-tail recovery sibling mass at parent depth `r`.
+
+This is the tail-window child residue `2^r - 1` at depth `r + 1`.
+-/
+noncomputable def orbitWindowRecoverySiblingMassPow2Tail
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ r - 1)
+
+/--
+Shifted-tail continuation sibling mass at parent depth `r`.
+
+This is definitionally the same residue shape as tail retention at depth
+`r + 1`.
+-/
+noncomputable def orbitWindowContinuationSiblingMassPow2Tail
+    (n : OddNat) (k r : ℕ) : ℕ :=
+  orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ (r + 1) - 1)
+
+/-- Source retention mass is bounded by the window size. -/
+theorem orbitWindowRetentionMassPow2_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRetentionMassPow2 n k r ≤ k := by
+  unfold orbitWindowRetentionMassPow2
+  exact orbitWindowResidueCountPow2_le_window n k r (2 ^ r - 1)
+
+/-- Shifted-tail retention mass is bounded by the window size. -/
+theorem orbitWindowRetentionMassPow2Tail_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRetentionMassPow2Tail n k r ≤ k := by
+  unfold orbitWindowRetentionMassPow2Tail
+  exact orbitWindowResidueCountPow2Tail_le_window n k r (2 ^ r - 1)
+
+/-- Recovery sibling mass is bounded by the window size. -/
+theorem orbitWindowRecoverySiblingMassPow2_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRecoverySiblingMassPow2 n k r ≤ k := by
+  unfold orbitWindowRecoverySiblingMassPow2
+  exact orbitWindowResidueCountPow2_le_window n k (r + 1) (2 ^ r - 1)
+
+/-- Continuation sibling mass is bounded by the window size. -/
+theorem orbitWindowContinuationSiblingMassPow2_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k r ≤ k := by
+  unfold orbitWindowContinuationSiblingMassPow2
+  exact orbitWindowResidueCountPow2_le_window n k (r + 1) (2 ^ (r + 1) - 1)
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
@@ -2380,6 +2510,19 @@ theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper
   exact oddOrbitLabel_succ_recovery_residue_of_mod r hr n i hsource
 
 /--
+Mass-name spelling of the recovery channel-flow theorem.
+
+At parent depth `r + 1`, the source recovery sibling flows into the shifted-tail
+recovery sibling at parent depth `r`.
+-/
+theorem orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass
+    (r : ℕ) (hr : 2 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRecoverySiblingMassPow2Tail n k r := by
+  unfold orbitWindowRecoverySiblingMassPow2 orbitWindowRecoverySiblingMassPow2Tail
+  exact orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
+
+/--
 Count-level recursive Petal transition for the continuation sibling.
 
 Every source-window label in the continuation sibling modulo `2^(r + 2)`
@@ -2428,6 +2571,29 @@ theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_hel
   apply orbitWindowResidueCountPow2_le_tail_of_pointwise
   intro i _hi hsource
   exact oddOrbitLabel_succ_continuation_residue_of_mod r hr n i hsource
+
+/--
+Mass-name spelling of the continuation channel-flow theorem.
+
+At parent depth `r + 1`, the source continuation sibling flows into tail
+retention at depth `r + 1`.
+-/
+theorem orbitWindowContinuationSiblingMass_succ_le_tailRetentionMass
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRetentionMassPow2Tail n k (r + 1) := by
+  unfold orbitWindowContinuationSiblingMassPow2 orbitWindowRetentionMassPow2Tail
+  exact orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
+
+/--
+Tail continuation sibling mass is definitionally the same as tail retention at
+the next depth.
+-/
+theorem orbitWindowContinuationSiblingMassPow2Tail_eq_retentionMassTail_succ
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowContinuationSiblingMassPow2Tail n k r =
+      orbitWindowRetentionMassPow2Tail n k (r + 1) := by
+  rfl
 
 /--
 Every `7 mod 8` source label contributes a shifted-tail entry with exact

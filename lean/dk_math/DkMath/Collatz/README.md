@@ -133,6 +133,7 @@ Read these in order:
 docs/Collatz-Overview.md
 docs/Collatz-Package-Structure.md
 docs/Collatz-FiniteChannelFlow-100.md
+docs/Collatz-FiniteRatioRetention-101.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -200,3 +201,20 @@ m <= count
 This avoids division by zero and coercion overhead.  Rational or real
 frequencies can be introduced later if the finite inequality layer repeatedly
 needs them.
+
+Checkpoint 101 begins that layer with:
+
+```lean
+AtMostHalf
+AtMostRatioNat
+orbitWindowRetentionMassPow2
+orbitWindowRetentionMassPow2Tail
+orbitWindowRecoverySiblingMassPow2
+orbitWindowContinuationSiblingMassPow2
+```
+
+See:
+
+```text
+docs/Collatz-FiniteRatioRetention-101.md
+```

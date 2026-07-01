@@ -175,6 +175,22 @@ orbitWindowResidueCountPow2Tail_depth_three_sum_eq_window
 sourcePow2Distribution_total
 tailPow2Distribution_total
 pow2ChannelFlow_of_pointwise
+AtMostHalf
+AtMostRatioNat
+atMostHalf_of_count_le_half
+atMostRatioNat_refl
+atMostHalf_iff_atMostRatioNat_one_two
+atMostRatioNat_one_one_of_le
+orbitWindowRetentionMassPow2
+orbitWindowRetentionMassPow2Tail
+orbitWindowRecoverySiblingMassPow2
+orbitWindowContinuationSiblingMassPow2
+orbitWindowRecoverySiblingMassPow2Tail
+orbitWindowContinuationSiblingMassPow2Tail
+orbitWindowRetentionMassPow2_le_window
+orbitWindowRetentionMassPow2Tail_le_window
+orbitWindowRecoverySiblingMassPow2_le_window
+orbitWindowContinuationSiblingMassPow2_le_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -251,6 +267,9 @@ orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
 orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
 orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper
 orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper
+orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass
+orbitWindowContinuationSiblingMass_succ_le_tailRetentionMass
+orbitWindowContinuationSiblingMassPow2Tail_eq_retentionMassTail_succ
 orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
 orbitWindowResidueCountMod8EqThree_add_seven_le_tail_partition
 orbitWindowHeightCountGeTail_le_countGe_succ
@@ -613,6 +632,12 @@ No.100 finite channel-flow aliases
   -> sourcePow2Distribution_total
   -> tailPow2Distribution_total
   -> pow2ChannelFlow_of_pointwise
+
+No.101 finite ratio / retention mass layer
+  -> AtMostHalf
+  -> AtMostRatioNat
+  -> RetentionMass / RecoverySiblingMass / ContinuationSiblingMass
+  -> mass-name channel-flow corollaries
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -675,6 +700,41 @@ FiniteRatioWitness:
 
 Reason:
   avoids zero-window division and coercion overhead
+```
+
+This layer has now begun.  Checkpoint 101 adds division-free finite ratio
+witnesses and names the main retention/sibling masses:
+
+```text
+AtMostHalf:
+  2 * count <= k
+
+AtMostRatioNat:
+  den * count <= num * k
+
+RetentionMass(depth r):
+  CountPow2 r (2^r - 1)
+
+RecoverySiblingMass(parent r):
+  CountPow2 (r + 1) (2^r - 1)
+
+ContinuationSiblingMass(parent r):
+  CountPow2 (r + 1) (2^(r + 1) - 1)
+```
+
+The next theorem target is the depth-refinement split:
+
+```text
+CountPow2 depth residue
+  = CountPow2 (depth + 1) residue
+    + CountPow2 (depth + 1) (residue + 2^depth)
+```
+
+For the retention cell this becomes:
+
+```text
+RetentionMass(r)
+  = RecoverySiblingMass(r) + ContinuationSiblingMass(r)
 ```
 
 The Collatz-specific floor is now also fixed:
