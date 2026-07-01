@@ -941,6 +941,79 @@ the delayed-peeling color pays into sumS;
 the continuing color is not discarded, but carried as the next remainder.
 ```
 
+## Level-2 Remainder
+
+Checkpoint 117 fixes the next concrete tower level.
+
+The level aliases are:
+
+```lean
+TailRemainderLevel0
+TailRemainderLevel1
+TailRemainderLevel2
+TailFallingLevel1
+TailFallingLevel2
+```
+
+They name the first visible pieces of the tower:
+
+```text
+level 0 remainder:
+  tail exact height 1
+
+level 1 falling:
+  tail 3 mod 8
+
+level 1 remainder:
+  tail 7 mod 8
+
+level 2 falling:
+  tail 7 mod 16
+
+level 2 remainder:
+  tail 15 mod 16
+```
+
+The level-`2` static split is:
+
+```lean
+orbitWindowResidueCountMod32EqFifteenTail
+orbitWindowResidueCountMod32EqThirtyOneTail
+tailResidueCountMod16EqFifteen_split_mod32_fifteen_thirtyOne
+```
+
+The level-`2` recursion edge is:
+
+```lean
+tailMod16Fifteen_le_nextTailMod16Seven_add_nextTailMod16Fifteen
+```
+
+So the continuing tower now has two concrete levels:
+
+```text
+tail 7 mod 8
+  -> next tail 3 mod 8 + next tail 7 mod 8
+
+tail 15 mod 16
+  -> next tail 7 mod 16 + next tail 15 mod 16
+```
+
+Checkpoint 117 also adds the first pressure-facing entrance:
+
+```lean
+sourceContinuationMass_depth_two_pos_of_pressure_depth_two
+sourcePressureDepthTwo_delayed_budget_with_tailSeven_remainder
+```
+
+This does not yet prove that a pressure-heavy range feeds enough mass into the
+tower.  It records the local depth-`2` caller shape:
+
+```text
+MoreThanHalf continuation pressure at depth 2
+  -> positive continuation mass
+  -> delayed budget with explicit remainder
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

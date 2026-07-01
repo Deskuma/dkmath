@@ -999,6 +999,48 @@ noncomputable def orbitWindowResidueCountMod16EqFifteenTail
     (fun i => decide (oddOrbitLabel n (i + 1) % 16 = 15))
 
 /--
+Number of shifted-tail labels in residue class `15 mod 32`.
+
+This is the delayed-peeling child inside the shifted-tail `15 mod 16`
+continuing color.
+-/
+noncomputable def orbitWindowResidueCountMod32EqFifteenTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 32 = 15))
+
+/--
+Number of shifted-tail labels in residue class `31 mod 32`.
+
+This is the continuing child inside the shifted-tail `15 mod 16` continuing
+color.
+-/
+noncomputable def orbitWindowResidueCountMod32EqThirtyOneTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 32 = 31))
+
+/-- Level `0` tail remainder: the whole shifted-tail exact-height-one reservoir. -/
+noncomputable def TailRemainderLevel0 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowHeightCountEqTail n k 1
+
+/-- Level `1` tail remainder: the shifted-tail `7 mod 8` continuing color. -/
+noncomputable def TailRemainderLevel1 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod8EqSevenTail n k
+
+/-- Level `2` tail remainder: the shifted-tail `15 mod 16` continuing color. -/
+noncomputable def TailRemainderLevel2 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod16EqFifteenTail n k
+
+/-- Level `1` falling color: the shifted-tail `3 mod 8` delayed-peeling color. -/
+noncomputable def TailFallingLevel1 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod8EqThreeTail n k
+
+/-- Level `2` falling color: the shifted-tail `7 mod 16` delayed-peeling color. -/
+noncomputable def TailFallingLevel2 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod16EqSevenTail n k
+
+/--
 Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
 
 This counts labels at times `1, 2, ..., k`, indexed as `i + 1`, in a chosen
@@ -3997,8 +4039,60 @@ theorem tailResidueCountMod8EqSeven_split_mod16_seven_fifteen
             | inl h =>
                 exact hseven h
             | inr h =>
-                exact hfifteen h
+            exact hfifteen h
           simp [ih, hnotMod8, hseven, hfifteen]
+
+/--
+The shifted-tail `15 mod 16` continuing color splits into its two children
+modulo `32`: the delayed-peeling child `15 mod 32` and the continuing child
+`31 mod 32`.
+-/
+theorem tailResidueCountMod16EqFifteen_split_mod32_fifteen_thirtyOne
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod16EqFifteenTail n k =
+      orbitWindowResidueCountMod32EqFifteenTail n k +
+        orbitWindowResidueCountMod32EqThirtyOneTail n k := by
+  unfold orbitWindowResidueCountMod16EqFifteenTail
+  unfold orbitWindowResidueCountMod32EqFifteenTail
+  unfold orbitWindowResidueCountMod32EqThirtyOneTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      by_cases hfifteen : oddOrbitLabel n (k + 1) % 32 = 15
+      · have hmod16 : oddOrbitLabel n (k + 1) % 16 = 15 := by
+          omega
+        simp [ih, hmod16, hfifteen, Nat.add_assoc, Nat.add_comm]
+      · by_cases h31 : oddOrbitLabel n (k + 1) % 32 = 31
+        · have hmod16 : oddOrbitLabel n (k + 1) % 16 = 15 := by
+            omega
+          simp [ih, hmod16, h31, Nat.add_comm, Nat.add_left_comm]
+        · have hnotMod16 : oddOrbitLabel n (k + 1) % 16 ≠ 15 := by
+            intro hmod16
+            have hchild :
+                oddOrbitLabel n (k + 1) % 32 = 15 ∨
+                  oddOrbitLabel n (k + 1) % 32 = 31 := by
+              omega
+            cases hchild with
+            | inl h =>
+                exact hfifteen h
+            | inr h =>
+                exact h31 h
+          simp [ih, hnotMod16, hfifteen, h31]
+
+/--
+Level-alias version of the level-`1` static split.
+
+The level-`1` remainder is the sum of the level-`2` falling color and the
+level-`2` remainder.
+-/
+theorem tailRemainderLevel1_static_split
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel1 n k =
+      TailFallingLevel2 n k + TailRemainderLevel2 n k := by
+  unfold TailRemainderLevel1 TailFallingLevel2 TailRemainderLevel2
+  exact tailResidueCountMod8EqSeven_split_mod16_seven_fifteen n k
 
 /--
 Orbit-level transition from the `3 mod 8` height-one channel.
@@ -4368,6 +4462,78 @@ theorem tailMod8Seven_le_nextTailMod8Three_add_nextTailMod8Seven
     tailMod8Seven_le_nextTailHeightCountEq_one n k
   rw [tailHeightCountEq_one_split_mod8_three_seven] at h
   exact h
+
+/--
+Level-alias version of the level-`1` recursion edge.
+
+The level-`1` remainder enters the next tail reservoir and splits into the
+level-`1` falling color and the level-`1` remainder at the next window.
+-/
+theorem tailRemainderLevel1_step_grammar
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel1 n k ≤
+      TailFallingLevel1 n (k + 1) + TailRemainderLevel1 n (k + 1) := by
+  unfold TailRemainderLevel1 TailFallingLevel1
+  exact tailMod8Seven_le_nextTailMod8Three_add_nextTailMod8Seven n k
+
+/--
+The shifted-tail `15 mod 16` continuing color enters the next shifted-tail
+`7 mod 16 / 15 mod 16` split.
+
+This is the level-`2` recursion edge of the delayed-reservoir tower.
+-/
+theorem tailMod16Fifteen_le_nextTailMod16Seven_add_nextTailMod16Fifteen
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod16EqFifteenTail n k ≤
+      orbitWindowResidueCountMod16EqSevenTail n (k + 1) +
+        orbitWindowResidueCountMod16EqFifteenTail n (k + 1) := by
+  unfold orbitWindowResidueCountMod16EqFifteenTail
+  unfold orbitWindowResidueCountMod16EqSevenTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ, List.range_succ]
+      have htransitionSeven :
+          oddOrbitLabel n (k + 1) % 32 = 15 →
+            oddOrbitLabel n ((k + 1) + 1) % 16 = 7 :=
+        oddOrbitLabel_succ_mod_sixteen_eq_seven_of_mod_thirtytwo_eq_fifteen
+          n (k + 1)
+      have htransitionFifteen :
+          oddOrbitLabel n (k + 1) % 32 = 31 →
+            oddOrbitLabel n ((k + 1) + 1) % 16 = 15 :=
+        oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
+          n (k + 1)
+      by_cases hsource : oddOrbitLabel n (k + 1) % 16 = 15
+      · have hchild :
+            oddOrbitLabel n (k + 1) % 32 = 15 ∨
+              oddOrbitLabel n (k + 1) % 32 = 31 := by
+          omega
+        cases hchild with
+        | inl hfifteen =>
+            have htargetSeven :
+                oddOrbitLabel n ((k + 1) + 1) % 16 = 7 :=
+              htransitionSeven hfifteen
+            have htargetNotFifteen :
+                oddOrbitLabel n ((k + 1) + 1) % 16 ≠ 15 := by
+              omega
+            simp [hsource, htargetSeven]
+            omega
+        | inr h31 =>
+            have htargetFifteen :
+                oddOrbitLabel n ((k + 1) + 1) % 16 = 15 :=
+              htransitionFifteen h31
+            simp [hsource, htargetFifteen]
+            omega
+      · by_cases htargetSeven : oddOrbitLabel n ((k + 1) + 1) % 16 = 7
+        · simp [hsource, htargetSeven]
+          omega
+        · by_cases htargetFifteen :
+            oddOrbitLabel n ((k + 1) + 1) % 16 = 15
+          · simp [hsource, htargetFifteen]
+            omega
+          · simp [hsource, htargetSeven, htargetFifteen]
+            omega
 
 /--
 One-step grammar for the shifted-tail exact-height-one reservoir.
@@ -5574,6 +5740,41 @@ theorem sourceContinuationMass_depth_two_delayed_budget_with_tailSeven_remainder
         sumS n ((k + 1) + 1) :=
     tailResidueCountMod8EqThree_delayed_drift n k
   omega
+
+/--
+More-than-half pressure at depth `2` forces positive depth-two continuation
+mass.
+
+This is the first thin entrance from the pressure vocabulary into the delayed
+reservoir budget.
+-/
+theorem sourceContinuationMass_depth_two_pos_of_pressure_depth_two
+    (n : OddNat) (k : ℕ)
+    (h :
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k 2)
+        (orbitWindowRetentionMassPow2 n k 2)) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k 2 := by
+  unfold MoreThanHalf at h
+  omega
+
+/--
+Pressure-facing wrapper for the depth-two delayed-reservoir budget.
+
+The pressure hypothesis is not needed by the inequality itself; it records the
+intended caller context, where a pressure-heavy depth supplies positive
+continuation mass and then uses the delayed budget.
+-/
+theorem sourcePressureDepthTwo_delayed_budget_with_tailSeven_remainder
+    (n : OddNat) (k : ℕ)
+    (_h :
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k 2)
+        (orbitWindowRetentionMassPow2 n k 2)) :
+    (k + 1) + orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+      sumS n ((k + 1) + 1) +
+        orbitWindowResidueCountMod8EqSevenTail n k :=
+  sourceContinuationMass_depth_two_delayed_budget_with_tailSeven_remainder n k
 
 /--
 Residue-address drift bridge.
