@@ -1308,6 +1308,79 @@ theorem orbitWindowResidueCountPow2_sum_eq_window
             rw [ih, pow2_residue_indicator_sum_eq_one]
 
 /--
+At any fixed power-of-two depth, the shifted-tail residue-cell occupation
+counts partition the whole shifted observation window.
+-/
+theorem orbitWindowResidueCountPow2Tail_sum_eq_window
+    (n : OddNat) (k depth : ℕ) :
+    (Finset.range (2 ^ depth)).sum
+      (fun residue => orbitWindowResidueCountPow2Tail n k depth residue) = k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      calc
+        (Finset.range (2 ^ depth)).sum
+            (fun residue => orbitWindowResidueCountPow2Tail n (k + 1) depth residue)
+            =
+          (Finset.range (2 ^ depth)).sum
+            (fun residue =>
+              orbitWindowResidueCountPow2Tail n k depth residue +
+                if oddOrbitLabel n (k + 1) % (2 ^ depth) = residue then (1 : ℕ) else 0) := by
+            apply Finset.sum_congr rfl
+            intro residue _
+            rw [orbitWindowResidueCountPow2Tail_succ]
+        _ =
+          (Finset.range (2 ^ depth)).sum
+              (fun residue => orbitWindowResidueCountPow2Tail n k depth residue) +
+            (Finset.range (2 ^ depth)).sum
+              (fun residue =>
+                if oddOrbitLabel n (k + 1) % (2 ^ depth) = residue then (1 : ℕ) else 0) := by
+            rw [Finset.sum_add_distrib]
+        _ = k + 1 := by
+            rw [ih, pow2_residue_indicator_sum_eq_one]
+
+/--
+Lift a pointwise source-to-tail residue transition to an occupation-count
+inequality.
+
+This is the generic finite channel-flow helper: once each source residue hit
+inside the first `k` labels is known to land in a chosen shifted-tail residue
+cell, the source occupation count is bounded by the target tail occupation
+count.
+-/
+theorem orbitWindowResidueCountPow2_le_tail_of_pointwise
+    (n : OddNat) (k sourceDepth sourceResidue targetDepth targetResidue : ℕ)
+    (h :
+      ∀ i, i < k →
+        oddOrbitLabel n i % (2 ^ sourceDepth) = sourceResidue →
+          oddOrbitLabel n (i + 1) % (2 ^ targetDepth) = targetResidue) :
+    orbitWindowResidueCountPow2 n k sourceDepth sourceResidue ≤
+      orbitWindowResidueCountPow2Tail n k targetDepth targetResidue := by
+  induction k with
+  | zero =>
+      simp [orbitWindowResidueCountPow2, orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      rw [orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowResidueCountPow2Tail_succ]
+      have hprev :
+          ∀ i, i < k →
+            oddOrbitLabel n i % (2 ^ sourceDepth) = sourceResidue →
+              oddOrbitLabel n (i + 1) % (2 ^ targetDepth) = targetResidue := by
+        intro i hi
+        exact h i (Nat.lt_trans hi (Nat.lt_succ_self k))
+      have ih' := ih hprev
+      by_cases hsource : oddOrbitLabel n k % (2 ^ sourceDepth) = sourceResidue
+      · have htail :
+            oddOrbitLabel n (k + 1) % (2 ^ targetDepth) = targetResidue :=
+          h k (Nat.lt_succ_self k) hsource
+        simp [hsource, htail, ih']
+      · by_cases htail : oddOrbitLabel n (k + 1) % (2 ^ targetDepth) = targetResidue
+        · exact by
+            simpa [hsource, htail] using Nat.le_succ_of_le ih'
+        · simpa [hsource, htail] using ih'
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix

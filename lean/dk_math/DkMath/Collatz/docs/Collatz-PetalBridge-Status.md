@@ -168,6 +168,8 @@ orbitWindowResidueCountPow2_depth_zero_eq_window
 orbitWindowResidueCountPow2_eq_zero_of_modulus_le_residue
 pow2_residue_indicator_sum_eq_one
 orbitWindowResidueCountPow2_sum_eq_window
+orbitWindowResidueCountPow2Tail_sum_eq_window
+orbitWindowResidueCountPow2_le_tail_of_pointwise
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -582,6 +584,13 @@ single-label residue indicator
 
 full pow-two source residue partition
   -> Sum_{residue < 2^depth} CountPow2 depth residue = k
+
+full pow-two shifted-tail residue partition
+  -> Sum_{residue < 2^depth} TailCountPow2 depth residue = k
+
+generic pointwise-to-count channel flow
+  -> if every source cell hit lands in a target tail cell,
+     then source CountPow2 <= target TailCountPow2
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
