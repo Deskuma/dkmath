@@ -328,6 +328,31 @@ These do not prove the comparison condition.  They make the next target
 explicit: find a structural reason why continuation is no larger than recovery,
 or why recovery covers at least half of retention.
 
+## Comparison Predicates
+
+Checkpoint 105 names the missing comparison conditions:
+
+```lean
+RecoveryDominatesContinuation
+TailRecoveryDominatesContinuation
+RecoveryCoversHalfRetention
+TailRecoveryCoversHalfRetention
+RecoveryDominatesOnRange
+TailRecoveryDominatesOnRange
+```
+
+The predicate-facing half criteria are:
+
+```lean
+atMostHalf_continuation_of_recoveryDominates
+atMostHalf_tailContinuation_of_tailRecoveryDominates
+atMostHalf_continuation_of_recoveryCoversHalf
+atMostHalf_tailContinuation_of_tailRecoveryCoversHalf
+```
+
+Use these names when a later proof has produced a comparison hypothesis and
+wants to consume it without unfolding recovery/continuation counts.
+
 This is the theorem to reach for before writing a custom induction over `k`.
 
 ## Recursive Petal Residues

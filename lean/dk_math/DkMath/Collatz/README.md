@@ -139,6 +139,7 @@ docs/Collatz-FiniteRatioRetention-101.md
 docs/Collatz-DepthRefinement-102.md
 docs/Collatz-TailDepthRefinement-103.md
 docs/Collatz-FiniteHalfCriterion-104.md
+docs/Collatz-ComparisonPredicates-105.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -283,3 +284,18 @@ orbitWindowContinuationMass_tailBudget
 
 This still does not prove contraction.  It records exactly what local comparison
 is enough to obtain a finite `AtMostHalf` statement.
+
+Checkpoint 105 names that missing local comparison as a first-class predicate:
+
+```lean
+RecoveryDominatesContinuation
+TailRecoveryDominatesContinuation
+RecoveryCoversHalfRetention
+TailRecoveryCoversHalfRetention
+RecoveryDominatesOnRange
+TailRecoveryDominatesOnRange
+```
+
+These are deliberately hypothesis packages.  They mark the exact gap between
+the current finite budget calculus and a future structural contraction
+argument.

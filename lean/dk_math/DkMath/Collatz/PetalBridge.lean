@@ -1934,6 +1934,143 @@ theorem tailRecovery_atMostRatio_one_one_retention
   exact orbitWindowRecoverySiblingMassPow2Tail_le_retentionMassTail n k r
 
 /--
+Source comparison predicate: recovery mass dominates continuation mass.
+
+This names the local comparison condition that is sufficient for the source
+`AtMostHalf` criterion.  It is intentionally a hypothesis package, not an
+unconditional theorem.
+-/
+def RecoveryDominatesContinuation
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowContinuationSiblingMassPow2 n k r ≤
+    orbitWindowRecoverySiblingMassPow2 n k r
+
+/--
+Tail comparison predicate: tail recovery mass dominates tail continuation mass.
+-/
+def TailRecoveryDominatesContinuation
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowContinuationSiblingMassPow2Tail n k r ≤
+    orbitWindowRecoverySiblingMassPow2Tail n k r
+
+/--
+Source budget predicate: recovery covers at least half of retention.
+
+This is often the natural form when a later argument produces a lower bound on
+recovery rather than a direct comparison with continuation.
+-/
+def RecoveryCoversHalfRetention
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowRetentionMassPow2 n k r ≤
+    2 * orbitWindowRecoverySiblingMassPow2 n k r
+
+/-- Tail budget predicate: tail recovery covers at least half of tail retention. -/
+def TailRecoveryCoversHalfRetention
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowRetentionMassPow2Tail n k r ≤
+    2 * orbitWindowRecoverySiblingMassPow2Tail n k r
+
+/--
+Finite-depth range form of source recovery dominance.
+
+This keeps the persistent-comparison hypothesis explicit without proving it.
+-/
+def RecoveryDominatesOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  ∀ j, j < len → RecoveryDominatesContinuation n k (r + j)
+
+/-- Finite-depth range form of tail recovery dominance. -/
+def TailRecoveryDominatesOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  ∀ j, j < len → TailRecoveryDominatesContinuation n k (r + j)
+
+/--
+Failure-mode predicate: source continuation strictly outruns recovery.
+
+This is the obstruction-facing complement direction to
+`RecoveryDominatesContinuation`.
+-/
+def ContinuationOutrunsRecovery
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowRecoverySiblingMassPow2 n k r <
+    orbitWindowContinuationSiblingMassPow2 n k r
+
+/-- Tail failure-mode predicate: tail continuation strictly outruns tail recovery. -/
+def TailContinuationOutrunsRecovery
+    (n : OddNat) (k r : ℕ) : Prop :=
+  orbitWindowRecoverySiblingMassPow2Tail n k r <
+    orbitWindowContinuationSiblingMassPow2Tail n k r
+
+/-- Finite-depth range form of source continuation outrunning recovery. -/
+def ContinuationOutrunsRecoveryOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  ∀ j, j < len → ContinuationOutrunsRecovery n k (r + j)
+
+/-- Finite-depth range form of tail continuation outrunning recovery. -/
+def TailContinuationOutrunsRecoveryOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  ∀ j, j < len → TailContinuationOutrunsRecovery n k (r + j)
+
+/--
+Predicate-facing source half criterion.
+
+This is the readable version of
+`atMostHalf_continuation_of_continuation_le_recovery`.
+-/
+theorem atMostHalf_continuation_of_recoveryDominates
+    (n : OddNat) (k r : ℕ)
+    (h : RecoveryDominatesContinuation n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) :=
+  atMostHalf_continuation_of_continuation_le_recovery n k r h
+
+/-- Predicate-facing tail half criterion. -/
+theorem atMostHalf_tailContinuation_of_tailRecoveryDominates
+    (n : OddNat) (k r : ℕ)
+    (h : TailRecoveryDominatesContinuation n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) :=
+  atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery n k r h
+
+/-- Predicate-facing source half criterion from recovery budget coverage. -/
+theorem atMostHalf_continuation_of_recoveryCoversHalf
+    (n : OddNat) (k r : ℕ)
+    (h : RecoveryCoversHalfRetention n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) :=
+  atMostHalf_continuation_of_retention_le_two_recovery n k r h
+
+/-- Predicate-facing tail half criterion from tail recovery budget coverage. -/
+theorem atMostHalf_tailContinuation_of_tailRecoveryCoversHalf
+    (n : OddNat) (k r : ℕ)
+    (h : TailRecoveryCoversHalfRetention n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) :=
+  atMostHalf_tailContinuation_of_tailRetention_le_two_tailRecovery n k r h
+
+/-- A range dominance hypothesis yields the source half criterion at each depth. -/
+theorem atMostHalf_continuation_of_recoveryDominatesOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : RecoveryDominatesOnRange n k r len) (hj : j < len) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+      (orbitWindowRetentionMassPow2 n k (r + j)) :=
+  atMostHalf_continuation_of_recoveryDominates n k (r + j) (h j hj)
+
+/-- A tail range dominance hypothesis yields the tail half criterion at each depth. -/
+theorem atMostHalf_tailContinuation_of_tailRecoveryDominatesOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : TailRecoveryDominatesOnRange n k r len) (hj : j < len) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+      (orbitWindowRetentionMassPow2Tail n k (r + j)) :=
+  atMostHalf_tailContinuation_of_tailRecoveryDominates n k (r + j) (h j hj)
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
