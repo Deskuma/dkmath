@@ -145,6 +145,7 @@ docs/Collatz-PressureProfile-107.md
 docs/Collatz-MixedDepthModeDistribution-108.md
 docs/Collatz-DepthPressureFrequency-109.md
 docs/Collatz-CauseSideFailureCount-110.md
+docs/Collatz-CauseSideDepthDistribution-111.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -416,4 +417,25 @@ ContinuationOutrunsRecovery
 
 RecoveryDominatesContinuation
   <-> AtMostHalf continuation retention
+```
+
+Checkpoint 111 closes the dominance side:
+
+```lean
+sourceRecoveryDominanceDepthCount
+tailRecoveryDominanceDepthCount
+sourceRecoveryDominanceDepthCount_eq_controlledDepthCount
+tailRecoveryDominanceDepthCount_eq_controlledDepthCount
+sourceCauseSideDepthCount_add_eq_len
+tailCauseSideDepthCount_add_eq_len
+```
+
+The depth-mode distribution now has both presentations:
+
+```text
+descriptive:
+  controlledDepthCount + pressureDepthCount = len
+
+cause-side:
+  dominanceDepthCount + outrunsDepthCount = len
 ```

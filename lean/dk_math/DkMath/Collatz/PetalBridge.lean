@@ -2801,6 +2801,169 @@ theorem tailRecoveryDominates_of_atMostHalf_tailContinuation
   omega
 
 /--
+Number of depths in `[r, r + len)` where source recovery dominates
+continuation.
+
+This is the cause-side controlled count corresponding to source controlled
+depth count.
+-/
+noncomputable def sourceRecoveryDominanceDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (RecoveryDominatesContinuation n k (r + j)))
+
+/--
+Number of depths in `[r, r + len)` where tail recovery dominates tail
+continuation.
+-/
+noncomputable def tailRecoveryDominanceDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (TailRecoveryDominatesContinuation n k (r + j)))
+
+/-- Source recovery dominance is equivalent to source controlled mode. -/
+theorem recoveryDominates_iff_atMostHalf_continuation
+    (n : OddNat) (k r : ℕ) :
+    RecoveryDominatesContinuation n k r ↔
+      AtMostHalf
+        (orbitWindowContinuationSiblingMassPow2 n k r)
+        (orbitWindowRetentionMassPow2 n k r) := by
+  constructor
+  · intro h
+    exact atMostHalf_continuation_of_continuation_le_recovery n k r h
+  · exact recoveryDominates_of_atMostHalf_continuation n k r
+
+/-- Tail recovery dominance is equivalent to tail controlled mode. -/
+theorem tailRecoveryDominates_iff_atMostHalf_tailContinuation
+    (n : OddNat) (k r : ℕ) :
+    TailRecoveryDominatesContinuation n k r ↔
+      AtMostHalf
+        (orbitWindowContinuationSiblingMassPow2Tail n k r)
+        (orbitWindowRetentionMassPow2Tail n k r) := by
+  constructor
+  · intro h
+    exact atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery n k r h
+  · exact tailRecoveryDominates_of_atMostHalf_tailContinuation n k r
+
+/--
+Source cause-side dominance count equals the source controlled depth count.
+-/
+theorem sourceRecoveryDominanceDepthCount_eq_controlledDepthCount
+    (n : OddNat) (k r len : ℕ) :
+    sourceRecoveryDominanceDepthCount n k r len =
+      sourceContinuationControlledDepthCount n k r len := by
+  classical
+  unfold sourceRecoveryDominanceDepthCount
+  unfold sourceContinuationControlledDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide (RecoveryDominatesContinuation n k (r + len)) then 1 else 0) =
+            if decide
+              (AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)))
+            then 1 else 0 := by
+        by_cases h :
+            RecoveryDominatesContinuation n k (r + len)
+        · have hc :
+              AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) :=
+            (recoveryDominates_iff_atMostHalf_continuation
+              n k (r + len)).1 h
+          simp [h, hc]
+        · have hc :
+              ¬ AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) := by
+            intro hcontrolled
+            exact h
+              ((recoveryDominates_iff_atMostHalf_continuation
+                n k (r + len)).2 hcontrolled)
+          simp [h, hc]
+      rw [ih, hlast]
+
+/--
+Tail cause-side dominance count equals the tail controlled depth count.
+-/
+theorem tailRecoveryDominanceDepthCount_eq_controlledDepthCount
+    (n : OddNat) (k r len : ℕ) :
+    tailRecoveryDominanceDepthCount n k r len =
+      tailContinuationControlledDepthCount n k r len := by
+  classical
+  unfold tailRecoveryDominanceDepthCount
+  unfold tailContinuationControlledDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide (TailRecoveryDominatesContinuation n k (r + len)) then 1 else 0) =
+            if decide
+              (AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)))
+            then 1 else 0 := by
+        by_cases h :
+            TailRecoveryDominatesContinuation n k (r + len)
+        · have hc :
+              AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) :=
+            (tailRecoveryDominates_iff_atMostHalf_tailContinuation
+              n k (r + len)).1 h
+          simp [h, hc]
+        · have hc :
+              ¬ AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) := by
+            intro hcontrolled
+            exact h
+              ((tailRecoveryDominates_iff_atMostHalf_tailContinuation
+                n k (r + len)).2 hcontrolled)
+          simp [h, hc]
+      rw [ih, hlast]
+
+/--
+Cause-side source modes partition the depth range.
+-/
+theorem sourceCauseSideDepthCount_add_eq_len
+    (n : OddNat) (k r len : ℕ) :
+    sourceRecoveryDominanceDepthCount n k r len +
+      sourceContinuationOutrunsDepthCount n k r len = len := by
+  rw [sourceRecoveryDominanceDepthCount_eq_controlledDepthCount]
+  rw [sourceContinuationOutrunsDepthCount_eq_pressureDepthCount]
+  exact sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+
+/--
+Cause-side tail modes partition the depth range.
+-/
+theorem tailCauseSideDepthCount_add_eq_len
+    (n : OddNat) (k r len : ℕ) :
+    tailRecoveryDominanceDepthCount n k r len +
+      tailContinuationOutrunsDepthCount n k r len = len := by
+  rw [tailRecoveryDominanceDepthCount_eq_controlledDepthCount]
+  rw [tailContinuationOutrunsDepthCount_eq_pressureDepthCount]
+  exact tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+
+/--
 If source continuation pressure holds at every depth of the range, then the
 source pressure-depth count fills the whole range.
 -/

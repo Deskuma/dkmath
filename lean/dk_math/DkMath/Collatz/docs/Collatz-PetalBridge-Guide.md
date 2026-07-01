@@ -574,6 +574,63 @@ ContinuationOutrunsRecovery
 This is the point where the depth-mode distribution acquires both a descriptive
 reading and a cause-side reading.
 
+## Cause-Side Depth Distribution
+
+Checkpoint 111 completes the dominance side of the cause-side count layer:
+
+```lean
+sourceRecoveryDominanceDepthCount
+tailRecoveryDominanceDepthCount
+```
+
+The local bridge is now explicit in both directions:
+
+```lean
+recoveryDominates_iff_atMostHalf_continuation
+tailRecoveryDominates_iff_atMostHalf_tailContinuation
+```
+
+Therefore the dominance count is exactly the controlled count:
+
+```lean
+sourceRecoveryDominanceDepthCount_eq_controlledDepthCount
+tailRecoveryDominanceDepthCount_eq_controlledDepthCount
+```
+
+Together with the checkpoint 110 failure-count equalities, this gives the
+cause-side partition:
+
+```lean
+sourceCauseSideDepthCount_add_eq_len
+tailCauseSideDepthCount_add_eq_len
+```
+
+The same finite depth range now has two aligned presentations:
+
+```text
+descriptive:
+  controlledDepthCount + pressureDepthCount = len
+
+cause-side:
+  dominanceDepthCount + outrunsDepthCount = len
+```
+
+The bridge between the two readings is not heuristic.  It is theorem-level:
+
+```text
+dominanceDepthCount = controlledDepthCount
+outrunsDepthCount = pressureDepthCount
+```
+
+Use the descriptive presentation when the proof is about the finite
+`AtMostHalf` / `MoreThanHalf` budget.  Use the cause-side presentation when the
+proof is about the comparison mechanism:
+
+```text
+RecoveryDominatesContinuation
+ContinuationOutrunsRecovery
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
