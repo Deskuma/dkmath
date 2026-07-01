@@ -2637,6 +2637,170 @@ theorem tailContinuationOutruns_of_moreThanHalf_tailContinuation
   omega
 
 /--
+Number of depths in `[r, r + len)` where source continuation outruns recovery.
+
+This is the cause-side failure count corresponding to source pressure depth
+count.
+-/
+noncomputable def sourceContinuationOutrunsDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (ContinuationOutrunsRecovery n k (r + j)))
+
+/--
+Number of depths in `[r, r + len)` where tail continuation outruns tail
+recovery.
+-/
+noncomputable def tailContinuationOutrunsDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (TailContinuationOutrunsRecovery n k (r + j)))
+
+/-- Source outruns mode is equivalent to source more-than-half pressure. -/
+theorem continuationOutruns_iff_moreThanHalf_continuation
+    (n : OddNat) (k r : ℕ) :
+    ContinuationOutrunsRecovery n k r ↔
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k r)
+        (orbitWindowRetentionMassPow2 n k r) := by
+  constructor
+  · exact moreThanHalf_continuation_of_continuationOutruns n k r
+  · exact continuationOutruns_of_moreThanHalf_continuation n k r
+
+/-- Tail outruns mode is equivalent to tail more-than-half pressure. -/
+theorem tailContinuationOutruns_iff_moreThanHalf_tailContinuation
+    (n : OddNat) (k r : ℕ) :
+    TailContinuationOutrunsRecovery n k r ↔
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2Tail n k r)
+        (orbitWindowRetentionMassPow2Tail n k r) := by
+  constructor
+  · exact moreThanHalf_tailContinuation_of_tailContinuationOutruns n k r
+  · exact tailContinuationOutruns_of_moreThanHalf_tailContinuation n k r
+
+/--
+Source cause-side outruns count equals the source pressure depth count.
+-/
+theorem sourceContinuationOutrunsDepthCount_eq_pressureDepthCount
+    (n : OddNat) (k r len : ℕ) :
+    sourceContinuationOutrunsDepthCount n k r len =
+      sourceContinuationPressureDepthCount n k r len := by
+  classical
+  unfold sourceContinuationOutrunsDepthCount
+  unfold sourceContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide (ContinuationOutrunsRecovery n k (r + len)) then 1 else 0) =
+            if decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)))
+            then 1 else 0 := by
+        by_cases h :
+            ContinuationOutrunsRecovery n k (r + len)
+        · have hp :
+              MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) :=
+            (continuationOutruns_iff_moreThanHalf_continuation
+              n k (r + len)).1 h
+          simp [h, hp]
+        · have hp :
+              ¬ MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) := by
+            intro hpressure
+            exact h
+              ((continuationOutruns_iff_moreThanHalf_continuation
+                n k (r + len)).2 hpressure)
+          simp [h, hp]
+      rw [ih, hlast]
+
+/--
+Tail cause-side outruns count equals the tail pressure depth count.
+-/
+theorem tailContinuationOutrunsDepthCount_eq_pressureDepthCount
+    (n : OddNat) (k r len : ℕ) :
+    tailContinuationOutrunsDepthCount n k r len =
+      tailContinuationPressureDepthCount n k r len := by
+  classical
+  unfold tailContinuationOutrunsDepthCount
+  unfold tailContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide (TailContinuationOutrunsRecovery n k (r + len)) then 1 else 0) =
+            if decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)))
+            then 1 else 0 := by
+        by_cases h :
+            TailContinuationOutrunsRecovery n k (r + len)
+        · have hp :
+              MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) :=
+            (tailContinuationOutruns_iff_moreThanHalf_tailContinuation
+              n k (r + len)).1 h
+          simp [h, hp]
+        · have hp :
+              ¬ MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) := by
+            intro hpressure
+            exact h
+              ((tailContinuationOutruns_iff_moreThanHalf_tailContinuation
+                n k (r + len)).2 hpressure)
+          simp [h, hp]
+      rw [ih, hlast]
+
+/-- Source controlled mode implies source recovery dominance. -/
+theorem recoveryDominates_of_atMostHalf_continuation
+    (n : OddNat) (k r : ℕ)
+    (h :
+      AtMostHalf
+        (orbitWindowContinuationSiblingMassPow2 n k r)
+        (orbitWindowRetentionMassPow2 n k r)) :
+    RecoveryDominatesContinuation n k r := by
+  unfold AtMostHalf at h
+  unfold RecoveryDominatesContinuation
+  rw [orbitWindowRetentionMass_split] at h
+  omega
+
+/-- Tail controlled mode implies tail recovery dominance. -/
+theorem tailRecoveryDominates_of_atMostHalf_tailContinuation
+    (n : OddNat) (k r : ℕ)
+    (h :
+      AtMostHalf
+        (orbitWindowContinuationSiblingMassPow2Tail n k r)
+        (orbitWindowRetentionMassPow2Tail n k r)) :
+    TailRecoveryDominatesContinuation n k r := by
+  unfold AtMostHalf at h
+  unfold TailRecoveryDominatesContinuation
+  rw [orbitWindowRetentionMassPow2Tail_split] at h
+  omega
+
+/--
 If source continuation pressure holds at every depth of the range, then the
 source pressure-depth count fills the whole range.
 -/

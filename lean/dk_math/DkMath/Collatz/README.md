@@ -144,6 +144,7 @@ docs/Collatz-MoreThanHalfPressure-106.md
 docs/Collatz-PressureProfile-107.md
 docs/Collatz-MixedDepthModeDistribution-108.md
 docs/Collatz-DepthPressureFrequency-109.md
+docs/Collatz-CauseSideFailureCount-110.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -395,4 +396,24 @@ The checkpoint also closes the reverse local direction:
 ```lean
 continuationOutruns_of_moreThanHalf_continuation
 tailContinuationOutruns_of_moreThanHalf_tailContinuation
+```
+
+Checkpoint 110 connects descriptive pressure counts to cause-side failure
+counts:
+
+```lean
+sourceContinuationOutrunsDepthCount
+tailContinuationOutrunsDepthCount
+sourceContinuationOutrunsDepthCount_eq_pressureDepthCount
+tailContinuationOutrunsDepthCount_eq_pressureDepthCount
+```
+
+It also records local equivalences:
+
+```text
+ContinuationOutrunsRecovery
+  <-> MoreThanHalf continuation retention
+
+RecoveryDominatesContinuation
+  <-> AtMostHalf continuation retention
 ```

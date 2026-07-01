@@ -528,6 +528,52 @@ Together with the checkpoint 106 forward direction, this means the local
 `MoreThanHalf` pressure mode and the continuation-outruns-recovery mode are now
 interderivable.
 
+## Cause-Side Failure Counts
+
+Checkpoint 110 counts the cause-side failure predicate directly:
+
+```lean
+sourceContinuationOutrunsDepthCount
+tailContinuationOutrunsDepthCount
+```
+
+The bridge to the descriptive pressure count is:
+
+```lean
+sourceContinuationOutrunsDepthCount_eq_pressureDepthCount
+tailContinuationOutrunsDepthCount_eq_pressureDepthCount
+```
+
+Thus a pressure depth count can be read as:
+
+```text
+descriptive mode:
+  MoreThanHalf continuation retention
+
+cause-side mode:
+  ContinuationOutrunsRecovery
+```
+
+Checkpoint 110 also adds the controlled-side reverse direction:
+
+```lean
+recoveryDominates_of_atMostHalf_continuation
+tailRecoveryDominates_of_atMostHalf_tailContinuation
+```
+
+Together with the existing forward direction, the local modes now align:
+
+```text
+RecoveryDominatesContinuation
+  <-> AtMostHalf continuation retention
+
+ContinuationOutrunsRecovery
+  <-> MoreThanHalf continuation retention
+```
+
+This is the point where the depth-mode distribution acquires both a descriptive
+reading and a cause-side reading.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
