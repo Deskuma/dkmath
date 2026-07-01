@@ -46,6 +46,24 @@ Phase 5: Zsigmondy preparation
 It is not a replacement for the number-theory route.  It is a structured
 observation layer used before primitive prime divisors are studied directly.
 
+There is now also a Collatz-facing bridge note:
+
+```text
+DkMath/Petal/docs/Petal-CollatzBridge.md
+```
+
+That bridge uses Petal-style finite range, occupation, and channel-flow
+language to read accelerated Collatz orbit windows.  It is separate from the
+Zsigmondy route, but it tests the same observation discipline:
+
+```text
+finite labels
+residue/address cells
+occupation counts
+source/tail conservation
+pointwise transition -> count-level flow
+```
+
 ## Why Petal Counting Was Needed
 
 The long-term target includes continuous-dimensional or dimension-parametric

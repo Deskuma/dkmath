@@ -172,6 +172,9 @@ orbitWindowResidueCountPow2Tail_sum_eq_window
 orbitWindowResidueCountPow2_le_tail_of_pointwise
 orbitWindowResidueCountPow2_depth_three_sum_eq_window
 orbitWindowResidueCountPow2Tail_depth_three_sum_eq_window
+sourcePow2Distribution_total
+tailPow2Distribution_total
+pow2ChannelFlow_of_pointwise
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -605,6 +608,11 @@ depth `3` shifted-tail distribution sanity
 helper-routed recursive two-adic Petal channels
   -> recovery source <= outward-retention tail
   -> continuation source <= next-retention tail
+
+No.100 finite channel-flow aliases
+  -> sourcePow2Distribution_total
+  -> tailPow2Distribution_total
+  -> pow2ChannelFlow_of_pointwise
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -644,6 +652,17 @@ ChannelFlow:
 Recursive two-adic Petal instances:
   recovery source <= outward-retention tail
   continuation source <= next-retention tail
+```
+
+The No.100 entry documents for this layer are:
+
+```text
+README.md
+docs/Collatz-Overview.md
+docs/Collatz-Package-Structure.md
+docs/Collatz-FiniteChannelFlow-100.md
+docs/Collatz-PetalBridge-Guide.md
+../Petal/docs/Petal-CollatzBridge.md
 ```
 
 The next ratio layer should initially stay in `Nat` inequalities rather than

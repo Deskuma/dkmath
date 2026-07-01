@@ -1404,6 +1404,49 @@ theorem orbitWindowResidueCountPow2_le_tail_of_pointwise
         · simpa [hsource, htail] using ih'
 
 /--
+Conceptual alias for source-side power-of-two residue distribution
+conservation.
+
+This is the No.100 finite channel-flow spelling of
+`orbitWindowResidueCountPow2_sum_eq_window`.
+-/
+theorem sourcePow2Distribution_total
+    (n : OddNat) (k depth : ℕ) :
+    (Finset.range (2 ^ depth)).sum
+      (fun residue => orbitWindowResidueCountPow2 n k depth residue) = k :=
+  orbitWindowResidueCountPow2_sum_eq_window n k depth
+
+/--
+Conceptual alias for shifted-tail power-of-two residue distribution
+conservation.
+
+This is the No.100 finite channel-flow spelling of
+`orbitWindowResidueCountPow2Tail_sum_eq_window`.
+-/
+theorem tailPow2Distribution_total
+    (n : OddNat) (k depth : ℕ) :
+    (Finset.range (2 ^ depth)).sum
+      (fun residue => orbitWindowResidueCountPow2Tail n k depth residue) = k :=
+  orbitWindowResidueCountPow2Tail_sum_eq_window n k depth
+
+/--
+Conceptual alias for finite power-of-two channel flow.
+
+A pointwise residue transition from source labels to shifted-tail labels gives
+a count-level occupation inequality between the two channel distributions.
+-/
+theorem pow2ChannelFlow_of_pointwise
+    (n : OddNat) (k sourceDepth sourceResidue targetDepth targetResidue : ℕ)
+    (h :
+      ∀ i, i < k →
+        oddOrbitLabel n i % (2 ^ sourceDepth) = sourceResidue →
+          oddOrbitLabel n (i + 1) % (2 ^ targetDepth) = targetResidue) :
+    orbitWindowResidueCountPow2 n k sourceDepth sourceResidue ≤
+      orbitWindowResidueCountPow2Tail n k targetDepth targetResidue :=
+  orbitWindowResidueCountPow2_le_tail_of_pointwise
+    n k sourceDepth sourceResidue targetDepth targetResidue h
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
