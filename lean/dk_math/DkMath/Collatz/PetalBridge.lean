@@ -3092,6 +3092,110 @@ theorem tailDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
   omega
 
 /--
+Source cause-side outruns-heavy frequency gives descriptive source pressure
+heavy frequency.
+-/
+theorem sourcePressureMoreThanHalf_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceOutrunsMoreThanHalfOnDepthRange n k r len) :
+    SourcePressureMoreThanHalfOnDepthRange n k r len :=
+  (sourceOutrunsMoreThanHalf_iff_pressureMoreThanHalf n k r len).1 h
+
+/--
+Tail cause-side outruns-heavy frequency gives descriptive tail pressure heavy
+frequency.
+-/
+theorem tailPressureMoreThanHalf_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailOutrunsMoreThanHalfOnDepthRange n k r len) :
+    TailPressureMoreThanHalfOnDepthRange n k r len :=
+  (tailOutrunsMoreThanHalf_iff_pressureMoreThanHalf n k r len).1 h
+
+/--
+Source cause-side outruns-heavy frequency forces descriptive pressure depths to
+outnumber controlled depths.
+-/
+theorem sourceControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceOutrunsMoreThanHalfOnDepthRange n k r len) :
+    sourceContinuationControlledDepthCount n k r len <
+      sourceContinuationPressureDepthCount n k r len :=
+  sourceControlledDepthCount_lt_pressure_of_pressureMoreThanHalf
+    n k r len
+    (sourcePressureMoreThanHalf_of_outrunsMoreThanHalf n k r len h)
+
+/--
+Tail cause-side outruns-heavy frequency forces descriptive pressure depths to
+outnumber controlled depths.
+-/
+theorem tailControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailOutrunsMoreThanHalfOnDepthRange n k r len) :
+    tailContinuationControlledDepthCount n k r len <
+      tailContinuationPressureDepthCount n k r len :=
+  tailControlledDepthCount_lt_pressure_of_pressureMoreThanHalf
+    n k r len
+    (tailPressureMoreThanHalf_of_outrunsMoreThanHalf n k r len h)
+
+/--
+Source cause-side outruns-heavy frequency guarantees that at least one source
+pressure depth exists.
+-/
+theorem sourcePressureDepthCount_pos_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceOutrunsMoreThanHalfOnDepthRange n k r len) :
+    0 < sourceContinuationPressureDepthCount n k r len := by
+  have hlt :
+      sourceContinuationControlledDepthCount n k r len <
+        sourceContinuationPressureDepthCount n k r len :=
+    sourceControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf n k r len h
+  omega
+
+/--
+Tail cause-side outruns-heavy frequency guarantees that at least one tail
+pressure depth exists.
+-/
+theorem tailPressureDepthCount_pos_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailOutrunsMoreThanHalfOnDepthRange n k r len) :
+    0 < tailContinuationPressureDepthCount n k r len := by
+  have hlt :
+      tailContinuationControlledDepthCount n k r len <
+        tailContinuationPressureDepthCount n k r len :=
+    tailControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf n k r len h
+  omega
+
+/--
+If the source outruns side does not fill a nonempty range, then the source
+dominance side is present.
+
+This is a small partition-consumption lemma for later recovery-side arguments.
+-/
+theorem sourceDominanceDepthCount_pos_of_outrunsAtMostHalf_and_not_all_outruns
+    (n : OddNat) (k r len : ℕ)
+    (_h : SourceOutrunsAtMostHalfOnDepthRange n k r len)
+    (hnotAllOutruns :
+      sourceContinuationOutrunsDepthCount n k r len < len) :
+    0 < sourceRecoveryDominanceDepthCount n k r len := by
+  have hpart := sourceCauseSideDepthCount_add_eq_len n k r len
+  omega
+
+/--
+If the tail outruns side does not fill a nonempty range, then the tail
+dominance side is present.
+
+This is the shifted-tail counterpart of the source partition-consumption lemma.
+-/
+theorem tailDominanceDepthCount_pos_of_outrunsAtMostHalf_and_not_all_outruns
+    (n : OddNat) (k r len : ℕ)
+    (_h : TailOutrunsAtMostHalfOnDepthRange n k r len)
+    (hnotAllOutruns :
+      tailContinuationOutrunsDepthCount n k r len < len) :
+    0 < tailRecoveryDominanceDepthCount n k r len := by
+  have hpart := tailCauseSideDepthCount_add_eq_len n k r len
+  omega
+
+/--
 If source continuation pressure holds at every depth of the range, then the
 source pressure-depth count fills the whole range.
 -/

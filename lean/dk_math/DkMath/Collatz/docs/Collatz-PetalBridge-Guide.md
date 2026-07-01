@@ -688,6 +688,68 @@ if outruns depths occupy more than half of the depth range,
 then outruns depths strictly outnumber dominance depths.
 ```
 
+## Frequency To Height Preparation
+
+Checkpoint 113 starts the bridge from cause-side frequency toward height and
+drift data.
+
+The first step is a one-way alias from cause-side high frequency to descriptive
+pressure high frequency:
+
+```lean
+sourcePressureMoreThanHalf_of_outrunsMoreThanHalf
+tailPressureMoreThanHalf_of_outrunsMoreThanHalf
+```
+
+The next step consumes the existing pressure-frequency API and produces the
+descriptive count imbalance:
+
+```lean
+sourceControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf
+tailControlledDepthCount_lt_pressure_of_outrunsMoreThanHalf
+```
+
+For later existence-style arguments, checkpoint 113 also exposes positivity of
+the pressure count:
+
+```lean
+sourcePressureDepthCount_pos_of_outrunsMoreThanHalf
+tailPressureDepthCount_pos_of_outrunsMoreThanHalf
+```
+
+The recovery-side partition consumption test is:
+
+```lean
+sourceDominanceDepthCount_pos_of_outrunsAtMostHalf_and_not_all_outruns
+tailDominanceDepthCount_pos_of_outrunsAtMostHalf_and_not_all_outruns
+```
+
+This records a useful finite reading:
+
+```text
+if the outruns side does not fill the range,
+then the dominance side has positive count.
+```
+
+The direct height/drift hook is not yet proved from pressure frequency.
+However, the existing height API already has the likely landing points:
+
+```lean
+orbitWindowHeightSeq_sum_eq_sumS
+orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
+orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two
+orbitWindowHeightSeq_sum_ge_sum_countGe_range
+orbitWindowHeightSeq_sum_ge_window_add_sum_countGe_tail
+```
+
+So the next real bridge should convert a pressure-heavy or outruns-heavy range
+into a lower bound for a height-count object such as:
+
+```text
+orbitWindowHeightCountGe n k 2
+orbitWindowHeightCountGeTail n k 2
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
