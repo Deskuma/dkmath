@@ -148,6 +148,7 @@ docs/Collatz-CauseSideFailureCount-110.md
 docs/Collatz-CauseSideDepthDistribution-111.md
 docs/Collatz-CauseSideFrequencyAlias-112.md
 docs/Collatz-FrequencyHeightBridge-113.md
+docs/Collatz-TailFacingHeightBridge-114.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

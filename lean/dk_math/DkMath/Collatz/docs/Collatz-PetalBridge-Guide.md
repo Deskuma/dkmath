@@ -750,6 +750,50 @@ orbitWindowHeightCountGe n k 2
 orbitWindowHeightCountGeTail n k 2
 ```
 
+## Tail-Facing Height Bridge
+
+Checkpoint 114 tests the expected bridge from source continuation mass to tail
+height counts.
+
+The meaning-name aliases are:
+
+```lean
+sourceContinuationMass_le_tailRetentionMass
+sourceContinuationMass_le_tailSplitMass
+```
+
+The experiment showed an important correction.  At parent depth `2`, source
+continuation mass lands in shifted-tail retention depth `2`; this is the
+`3 mod 4` tail cell, hence exact height `1`, not height at least `2`.
+
+The theorem-level bridge is:
+
+```lean
+tailRetentionMass_depth_two_eq_heightCountEq_one
+tailRetentionMass_depth_two_le_heightCountEq_one
+sourceContinuationMass_depth_two_le_tailHeightCountEq_one
+```
+
+This rules out the tempting route:
+
+```text
+source continuation mass at depth 2
+  -> tail height >= 2
+  -> extra sumS lower bound
+```
+
+The correct reading is:
+
+```text
+source continuation mass at depth 2
+  -> tail exact height 1
+  -> base retention / no extra peeling at this layer
+```
+
+So the next height-growth attempt should inspect the recovery sibling or a
+deeper delayed branch, rather than using depth-2 continuation retention as an
+extra-peeling source.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

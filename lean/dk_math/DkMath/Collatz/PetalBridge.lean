@@ -3739,6 +3739,38 @@ theorem orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three
         simp [ih, hheight, hres]
 
 /--
+At depth `2`, shifted-tail retention is exactly the shifted-tail `3 mod 4`
+cell, hence it is the same mass as the tail exact-height-one count.
+
+This is the safe tail-facing height bridge for the continuation-retention
+channel.  It also records why the tempting `height >= 2` target is the wrong
+one at this depth.
+-/
+theorem tailRetentionMass_depth_two_eq_heightCountEq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRetentionMassPow2Tail n k 2 =
+      orbitWindowHeightCountEqTail n k 1 := by
+  have htail :
+      orbitWindowRetentionMassPow2Tail n k 2 =
+        orbitWindowResidueCountMod4EqThreeTail n k := by
+    unfold orbitWindowRetentionMassPow2Tail
+    unfold orbitWindowResidueCountPow2Tail
+    unfold orbitWindowResidueCountMod4EqThreeTail
+    simp
+  rw [htail]
+  rw [← orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three]
+
+/--
+At depth `2`, shifted-tail retention is bounded by the tail exact-height-one
+count.
+-/
+theorem tailRetentionMass_depth_two_le_heightCountEq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRetentionMassPow2Tail n k 2 ≤
+      orbitWindowHeightCountEqTail n k 1 := by
+  rw [tailRetentionMass_depth_two_eq_heightCountEq_one]
+
+/--
 The shifted tail splits into exact height `1` and height at least `2`.
 
 Every accelerated Collatz tail state has height at least `1`, so an entry is
@@ -4388,6 +4420,50 @@ theorem orbitWindowContinuationMass_tailBudget
       orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
         orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) :=
   orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation r hr n k
+
+/--
+Meaning-name alias for the continuation-to-tail-retention channel.
+
+At parent depth `r + 1`, source continuation mass lands inside shifted-tail
+retention at the same depth.
+-/
+theorem sourceContinuationMass_le_tailRetentionMass
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRetentionMassPow2Tail n k (r + 1) :=
+  orbitWindowContinuationMass_forces_tailRetention r hr n k
+
+/--
+Meaning-name alias for the shifted-tail split budget of source continuation
+mass.
+-/
+theorem sourceContinuationMass_le_tailSplitMass
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
+        orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) :=
+  orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation r hr n k
+
+/--
+Source continuation mass at parent depth `2` lands inside the shifted-tail
+exact-height-one count.
+
+This is the corrected direct source-continuation-mass to tail-height bridge:
+the continuation-retention channel feeds `3 mod 4`, not `1 mod 4`.
+-/
+theorem sourceContinuationMass_depth_two_le_tailHeightCountEq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+      orbitWindowHeightCountEqTail n k 1 := by
+  have hflow :
+      orbitWindowContinuationSiblingMassPow2 n k (1 + 1) ≤
+        orbitWindowRetentionMassPow2Tail n k (1 + 1) :=
+    sourceContinuationMass_le_tailRetentionMass 1 (by omega) n k
+  have hheight :
+      orbitWindowRetentionMassPow2Tail n k 2 ≤
+        orbitWindowHeightCountEqTail n k 1 :=
+    tailRetentionMass_depth_two_le_heightCountEq_one n k
+  simpa using le_trans hflow hheight
 
 /--
 Tail continuation sibling mass is definitionally the same as tail retention at
