@@ -1576,6 +1576,200 @@ theorem orbitWindowContinuationSiblingMassPow2_le_window
   unfold orbitWindowContinuationSiblingMassPow2
   exact orbitWindowResidueCountPow2_le_window n k (r + 1) (2 ^ (r + 1) - 1)
 
+/-- Shifted-tail recovery sibling mass is bounded by the window size. -/
+theorem orbitWindowRecoverySiblingMassPow2Tail_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k r ≤ k := by
+  unfold orbitWindowRecoverySiblingMassPow2Tail
+  exact orbitWindowResidueCountPow2Tail_le_window n k (r + 1) (2 ^ r - 1)
+
+/-- Shifted-tail continuation sibling mass is bounded by the window size. -/
+theorem orbitWindowContinuationSiblingMassPow2Tail_le_window
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowContinuationSiblingMassPow2Tail n k r ≤ k := by
+  unfold orbitWindowContinuationSiblingMassPow2Tail
+  exact orbitWindowResidueCountPow2Tail_le_window n k (r + 1) (2 ^ (r + 1) - 1)
+
+/-- The all-ones retention residue is inside its power-of-two modulus. -/
+theorem twoAdicRetentionResidue_lt_pow
+    (r : ℕ) :
+    2 ^ r - 1 < 2 ^ r := by
+  have hpos : 0 < 2 ^ r := pow_pos (by decide) r
+  omega
+
+/--
+Pointwise refinement of a power-of-two residue cell.
+
+If `residue` is a valid cell at depth `depth`, then a number in that cell has
+one of exactly two residues at depth `depth + 1`: the left child `residue` or
+the right child `residue + 2^depth`.
+-/
+theorem mod_pow2_succ_eq_left_or_right_of_mod_pow2_eq
+    (x depth residue : ℕ)
+    (_hres : residue < 2 ^ depth)
+    (h : x % (2 ^ depth) = residue) :
+    x % (2 ^ (depth + 1)) = residue ∨
+      x % (2 ^ (depth + 1)) = residue + 2 ^ depth := by
+  let m := 2 ^ depth
+  let y := x % (2 ^ (depth + 1))
+  have hmpos : 0 < m := by
+    dsimp [m]
+    exact pow_pos (by decide) depth
+  have hpow : 2 ^ (depth + 1) = 2 * m := by
+    dsimp [m]
+    rw [pow_succ]
+    ring
+  have hmod : y % m = residue := by
+    dsimp [y, m]
+    rw [← h]
+    rw [Nat.mod_mod_of_dvd]
+    · exact ⟨2, by rw [hpow, Nat.mul_comm]⟩
+  have hylt : y < 2 * m := by
+    dsimp [y]
+    rw [hpow]
+    exact Nat.mod_lt _ (Nat.mul_pos (by decide) hmpos)
+  have hdecomp : y = y % m + m * (y / m) := by
+    exact (Nat.mod_add_div y m).symm
+  have hydiv_lt : y / m < 2 := by
+    exact (Nat.div_lt_iff_lt_mul hmpos).2 hylt
+  have hydiv_cases : y / m = 0 ∨ y / m = 1 :=
+    Nat.le_one_iff_eq_zero_or_eq_one.mp (Nat.lt_succ_iff.mp hydiv_lt)
+  cases hydiv_cases with
+  | inl hzero =>
+      left
+      rw [hzero, mul_zero, add_zero, hmod] at hdecomp
+      dsimp [y] at hdecomp
+      exact hdecomp
+  | inr hone =>
+      right
+      rw [hone, mul_one, hmod] at hdecomp
+      dsimp [y, m] at hdecomp
+      exact hdecomp
+
+/--
+The two child residues at the next power-of-two depth both collapse back to
+the parent residue.
+-/
+theorem mod_pow2_eq_of_mod_pow2_succ_eq_left_or_right
+    (x depth residue : ℕ)
+    (hres : residue < 2 ^ depth)
+    (h :
+      x % (2 ^ (depth + 1)) = residue ∨
+        x % (2 ^ (depth + 1)) = residue + 2 ^ depth) :
+    x % (2 ^ depth) = residue := by
+  have hdvd : 2 ^ depth ∣ 2 ^ (depth + 1) := by
+    exact ⟨2, by rw [pow_succ, Nat.mul_comm]⟩
+  cases h with
+  | inl hleft =>
+      calc
+        x % (2 ^ depth)
+            = (x % (2 ^ (depth + 1))) % (2 ^ depth) := by
+                rw [Nat.mod_mod_of_dvd _ hdvd]
+        _ = residue % (2 ^ depth) := by rw [hleft]
+        _ = residue := Nat.mod_eq_of_lt hres
+  | inr hright =>
+      calc
+        x % (2 ^ depth)
+            = (x % (2 ^ (depth + 1))) % (2 ^ depth) := by
+                rw [Nat.mod_mod_of_dvd _ hdvd]
+        _ = (residue + 2 ^ depth) % (2 ^ depth) := by rw [hright]
+        _ = residue := by
+          rw [Nat.add_mod_right, Nat.mod_eq_of_lt hres]
+
+/--
+Pointwise `0/1` indicator split for a valid power-of-two residue cell.
+
+The parent cell at depth `depth` is the disjoint union of the left child
+`residue` and the right child `residue + 2^depth` at depth `depth + 1`.
+-/
+theorem pow2ResidueIndicator_refine_succ
+    (x depth residue : ℕ)
+    (hres : residue < 2 ^ depth) :
+    (if x % (2 ^ depth) = residue then 1 else 0) =
+      (if x % (2 ^ (depth + 1)) = residue then 1 else 0) +
+        if x % (2 ^ (depth + 1)) = residue + 2 ^ depth then 1 else 0 := by
+  by_cases hparent : x % (2 ^ depth) = residue
+  · have hsplit :=
+      mod_pow2_succ_eq_left_or_right_of_mod_pow2_eq x depth residue hres hparent
+    cases hsplit with
+    | inl hleft =>
+        simp [hparent, hleft]
+    | inr hright =>
+        simp [hparent, hright]
+  · have hleft_not : x % (2 ^ (depth + 1)) ≠ residue := by
+      intro hleft
+      exact hparent
+        (mod_pow2_eq_of_mod_pow2_succ_eq_left_or_right
+          x depth residue hres (Or.inl hleft))
+    have hright_not :
+        x % (2 ^ (depth + 1)) ≠ residue + 2 ^ depth := by
+      intro hright
+      exact hparent
+        (mod_pow2_eq_of_mod_pow2_succ_eq_left_or_right
+          x depth residue hres (Or.inr hright))
+    simp [hparent, hleft_not, hright_not]
+
+/--
+Depth refinement for generic source-window residue counts.
+
+Counting a valid parent cell at depth `depth` is the same as counting both of
+its child cells at depth `depth + 1`.
+-/
+theorem orbitWindowResidueCountPow2_refine_succ
+    (n : OddNat) (k depth residue : ℕ)
+    (hres : residue < 2 ^ depth) :
+    orbitWindowResidueCountPow2 n k depth residue =
+      orbitWindowResidueCountPow2 n k (depth + 1) residue +
+        orbitWindowResidueCountPow2 n k (depth + 1) (residue + 2 ^ depth) := by
+  induction k with
+  | zero =>
+      simp [orbitWindowResidueCountPow2]
+  | succ k ih =>
+      rw [orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowResidueCountPow2_succ]
+      rw [ih]
+      have hindicator :=
+        pow2ResidueIndicator_refine_succ (oddOrbitLabel n k) depth residue hres
+      omega
+
+/--
+Retention mass splits into the recovery and continuation sibling masses at the
+next depth.
+-/
+theorem orbitWindowRetentionMass_split
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRetentionMassPow2 n k r =
+      orbitWindowRecoverySiblingMassPow2 n k r +
+        orbitWindowContinuationSiblingMassPow2 n k r := by
+  unfold orbitWindowRetentionMassPow2
+  unfold orbitWindowRecoverySiblingMassPow2
+  unfold orbitWindowContinuationSiblingMassPow2
+  have hres : 2 ^ r - 1 < 2 ^ r := twoAdicRetentionResidue_lt_pow r
+  have hsplit :=
+    orbitWindowResidueCountPow2_refine_succ n k r (2 ^ r - 1) hres
+  have hright : 2 ^ r - 1 + 2 ^ r = 2 ^ (r + 1) - 1 := by
+    have hpos : 0 < 2 ^ r := pow_pos (by decide) r
+    rw [pow_succ]
+    omega
+  simpa [hright] using hsplit
+
+/-- Recovery sibling mass is bounded by the parent retention mass. -/
+theorem orbitWindowRecoverySiblingMassPow2_le_retentionMass
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRecoverySiblingMassPow2 n k r ≤
+      orbitWindowRetentionMassPow2 n k r := by
+  rw [orbitWindowRetentionMass_split]
+  omega
+
+/-- Continuation sibling mass is bounded by the parent retention mass. -/
+theorem orbitWindowContinuationSiblingMassPow2_le_retentionMass
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k r ≤
+      orbitWindowRetentionMassPow2 n k r := by
+  rw [orbitWindowRetentionMass_split]
+  omega
+
 /--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/

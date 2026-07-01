@@ -103,6 +103,8 @@ orbitWindowResidueCountPow2Tail
 sourcePow2Distribution_total
 tailPow2Distribution_total
 pow2ChannelFlow_of_pointwise
+orbitWindowResidueCountPow2_refine_succ
+orbitWindowRetentionMass_split
 ```
 
 The central No.100 layer is:
@@ -134,6 +136,7 @@ docs/Collatz-Overview.md
 docs/Collatz-Package-Structure.md
 docs/Collatz-FiniteChannelFlow-100.md
 docs/Collatz-FiniteRatioRetention-101.md
+docs/Collatz-DepthRefinement-102.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -218,3 +221,27 @@ See:
 ```text
 docs/Collatz-FiniteRatioRetention-101.md
 ```
+
+Checkpoint 102 then turns the named retention channels into a recursive
+two-adic decomposition:
+
+```lean
+mod_pow2_succ_eq_left_or_right_of_mod_pow2_eq
+pow2ResidueIndicator_refine_succ
+orbitWindowResidueCountPow2_refine_succ
+orbitWindowRetentionMass_split
+orbitWindowRecoverySiblingMassPow2_le_retentionMass
+orbitWindowContinuationSiblingMassPow2_le_retentionMass
+```
+
+The key reading is:
+
+```text
+retention mass at depth r
+  = recovery sibling mass at depth r+1
+    + continuation sibling mass at depth r+1
+```
+
+This is still finite `Nat` counting.  It does not use probability, limits, or
+real-valued density.  It gives the next local tool for saying that a long
+low-peeling path must keep occupying a nested retention cylinder.

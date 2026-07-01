@@ -218,6 +218,55 @@ The helper returns:
 source cell count <= target tail cell count
 ```
 
+## Depth Refinement
+
+Checkpoint 102 adds the recursive residue-cell split.
+
+The pointwise theorem is:
+
+```lean
+mod_pow2_succ_eq_left_or_right_of_mod_pow2_eq
+```
+
+It says that a valid residue cell at depth `depth` has exactly two children at
+depth `depth + 1`:
+
+```text
+residue
+residue + 2^depth
+```
+
+The count-level theorem is:
+
+```lean
+orbitWindowResidueCountPow2_refine_succ
+```
+
+It upgrades the pointwise split to finite window occupation counts:
+
+```text
+count(parent cell)
+  = count(left child) + count(right child)
+```
+
+The retention-channel specialization is:
+
+```lean
+orbitWindowRetentionMass_split
+```
+
+This reads:
+
+```text
+retention mass at depth r
+  = recovery sibling mass at depth r+1
+    + continuation sibling mass at depth r+1
+```
+
+Use this theorem when an argument needs to show that recovery and continuation
+are not independent extra mass.  They are the two subcells of the previous
+retention cylinder.
+
 This is the theorem to reach for before writing a custom induction over `k`.
 
 ## Recursive Petal Residues
