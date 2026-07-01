@@ -267,6 +267,33 @@ Use this theorem when an argument needs to show that recovery and continuation
 are not independent extra mass.  They are the two subcells of the previous
 retention cylinder.
 
+Checkpoint 103 adds the shifted-tail counterpart:
+
+```lean
+orbitWindowResidueCountPow2Tail_refine_succ
+orbitWindowRetentionMassPow2Tail_split
+```
+
+So the same reading is available in the receiving window:
+
+```text
+tail retention mass at depth r
+  = tail recovery sibling mass at depth r+1
+    + tail continuation sibling mass at depth r+1
+```
+
+The useful forcing aliases are:
+
+```lean
+orbitWindowContinuationMass_forces_tailRetention
+orbitWindowRecoveryMass_forces_tailRecovery
+orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation
+```
+
+Use these names when the argument is conceptually about mass flow from the
+source window into the shifted-tail window.  Use the split theorems when the
+argument is about decomposing a retention cylinder into its two child cells.
+
 This is the theorem to reach for before writing a custom induction over `k`.
 
 ## Recursive Petal Residues

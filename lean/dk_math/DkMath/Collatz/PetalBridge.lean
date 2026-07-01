@@ -1771,6 +1771,69 @@ theorem orbitWindowContinuationSiblingMassPow2_le_retentionMass
   omega
 
 /--
+Depth refinement for generic shifted-tail residue counts.
+
+This is the tail-window counterpart of
+`orbitWindowResidueCountPow2_refine_succ`.
+-/
+theorem orbitWindowResidueCountPow2Tail_refine_succ
+    (n : OddNat) (k depth residue : ℕ)
+    (hres : residue < 2 ^ depth) :
+    orbitWindowResidueCountPow2Tail n k depth residue =
+      orbitWindowResidueCountPow2Tail n k (depth + 1) residue +
+        orbitWindowResidueCountPow2Tail n k (depth + 1)
+          (residue + 2 ^ depth) := by
+  induction k with
+  | zero =>
+      simp [orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      rw [orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowResidueCountPow2Tail_succ]
+      rw [ih]
+      have hindicator :=
+        pow2ResidueIndicator_refine_succ
+          (oddOrbitLabel n (k + 1)) depth residue hres
+      omega
+
+/--
+Tail retention mass splits into the tail recovery and tail continuation sibling
+masses at the next depth.
+-/
+theorem orbitWindowRetentionMassPow2Tail_split
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRetentionMassPow2Tail n k r =
+      orbitWindowRecoverySiblingMassPow2Tail n k r +
+        orbitWindowContinuationSiblingMassPow2Tail n k r := by
+  unfold orbitWindowRetentionMassPow2Tail
+  unfold orbitWindowRecoverySiblingMassPow2Tail
+  unfold orbitWindowContinuationSiblingMassPow2Tail
+  have hres : 2 ^ r - 1 < 2 ^ r := twoAdicRetentionResidue_lt_pow r
+  have hsplit :=
+    orbitWindowResidueCountPow2Tail_refine_succ n k r (2 ^ r - 1) hres
+  have hright : 2 ^ r - 1 + 2 ^ r = 2 ^ (r + 1) - 1 := by
+    have hpos : 0 < 2 ^ r := pow_pos (by decide) r
+    rw [pow_succ]
+    omega
+  simpa [hright] using hsplit
+
+/-- Tail recovery sibling mass is bounded by tail retention mass. -/
+theorem orbitWindowRecoverySiblingMassPow2Tail_le_retentionMassTail
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k r ≤
+      orbitWindowRetentionMassPow2Tail n k r := by
+  rw [orbitWindowRetentionMassPow2Tail_split]
+  omega
+
+/-- Tail continuation sibling mass is bounded by tail retention mass. -/
+theorem orbitWindowContinuationSiblingMassPow2Tail_le_retentionMassTail
+    (n : OddNat) (k r : ℕ) :
+    orbitWindowContinuationSiblingMassPow2Tail n k r ≤
+      orbitWindowRetentionMassPow2Tail n k r := by
+  rw [orbitWindowRetentionMassPow2Tail_split]
+  omega
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
@@ -2717,6 +2780,18 @@ theorem orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass
   exact orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
 
 /--
+Forcing-name alias for the recovery channel-flow theorem.
+
+The source recovery mass at parent depth `r + 1` forces at least that much mass
+in the shifted-tail recovery sibling at parent depth `r`.
+-/
+theorem orbitWindowRecoveryMass_forces_tailRecovery
+    (r : ℕ) (hr : 2 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRecoverySiblingMassPow2Tail n k r :=
+  orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass r hr n k
+
+/--
 Count-level recursive Petal transition for the continuation sibling.
 
 Every source-window label in the continuation sibling modulo `2^(r + 2)`
@@ -2778,6 +2853,41 @@ theorem orbitWindowContinuationSiblingMass_succ_le_tailRetentionMass
       orbitWindowRetentionMassPow2Tail n k (r + 1) := by
   unfold orbitWindowContinuationSiblingMassPow2 orbitWindowRetentionMassPow2Tail
   exact orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
+
+/--
+Forcing-name alias for the continuation channel-flow theorem.
+
+The source continuation mass at parent depth `r + 1` must fit inside shifted-tail
+retention at the same depth.
+-/
+theorem orbitWindowContinuationMass_forces_tailRetention
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRetentionMassPow2Tail n k (r + 1) :=
+  orbitWindowContinuationSiblingMass_succ_le_tailRetentionMass r hr n k
+
+/--
+Continuation mass is bounded by the two child masses of the shifted-tail
+retention cylinder.
+
+This packages the two-step reading:
+
+`source continuation <= tail retention`
+and
+`tail retention = tail recovery + tail continuation`.
+-/
+theorem orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
+        orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) := by
+  calc
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1)
+        ≤ orbitWindowRetentionMassPow2Tail n k (r + 1) :=
+          orbitWindowContinuationMass_forces_tailRetention r hr n k
+    _ = orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
+          orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) := by
+        rw [orbitWindowRetentionMassPow2Tail_split]
 
 /--
 Tail continuation sibling mass is definitionally the same as tail retention at

@@ -137,6 +137,7 @@ docs/Collatz-Package-Structure.md
 docs/Collatz-FiniteChannelFlow-100.md
 docs/Collatz-FiniteRatioRetention-101.md
 docs/Collatz-DepthRefinement-102.md
+docs/Collatz-TailDepthRefinement-103.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -245,3 +246,24 @@ retention mass at depth r
 This is still finite `Nat` counting.  It does not use probability, limits, or
 real-valued density.  It gives the next local tool for saying that a long
 low-peeling path must keep occupying a nested retention cylinder.
+
+Checkpoint 103 closes the shifted-tail counterpart:
+
+```lean
+orbitWindowResidueCountPow2Tail_refine_succ
+orbitWindowRetentionMassPow2Tail_split
+orbitWindowRecoverySiblingMassPow2Tail_le_retentionMassTail
+orbitWindowContinuationSiblingMassPow2Tail_le_retentionMassTail
+orbitWindowContinuationMass_forces_tailRetention
+orbitWindowRecoveryMass_forces_tailRecovery
+orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation
+```
+
+The source and shifted-tail windows now both have the same recursive Petal
+split.  This makes later mass-flow statements readable as:
+
+```text
+source continuation mass
+  <= shifted-tail retention mass
+  = shifted-tail recovery mass + shifted-tail continuation mass
+```
