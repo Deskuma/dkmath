@@ -140,6 +140,7 @@ docs/Collatz-DepthRefinement-102.md
 docs/Collatz-TailDepthRefinement-103.md
 docs/Collatz-FiniteHalfCriterion-104.md
 docs/Collatz-ComparisonPredicates-105.md
+docs/Collatz-MoreThanHalfPressure-106.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -299,3 +300,29 @@ TailRecoveryDominatesOnRange
 These are deliberately hypothesis packages.  They mark the exact gap between
 the current finite budget calculus and a future structural contraction
 argument.
+
+Checkpoint 106 adds the complementary failure-pressure layer:
+
+```lean
+MoreThanHalf
+atMostHalf_or_moreThanHalf
+recoveryDominates_or_continuationOutruns
+tailRecoveryDominates_or_tailContinuationOutruns
+moreThanHalf_continuation_of_continuationOutruns
+moreThanHalf_tailContinuation_of_tailContinuationOutruns
+```
+
+This turns each local comparison into a finite case split:
+
+```text
+recovery dominates continuation
+  -> continuation is at most half of retention
+
+continuation outruns recovery
+  -> continuation is more than half of retention
+```
+
+The new layer still does not assert that either branch is globally preferred.
+It makes the failure branch measurable: if dominance fails, the obstruction is
+not vague; it is strict more-than-half continuation pressure inside the
+retention cylinder.

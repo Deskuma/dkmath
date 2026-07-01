@@ -1456,6 +1456,21 @@ def AtMostHalf (count k : ℕ) : Prop :=
   2 * count ≤ k
 
 /--
+Finite natural-number witness that a count occupies more than half of a window.
+
+This is the strict counterpart of `AtMostHalf`.
+-/
+def MoreThanHalf (count k : ℕ) : Prop :=
+  k < 2 * count
+
+/-- Every finite count is either at most half or more than half. -/
+theorem atMostHalf_or_moreThanHalf
+    (count k : ℕ) :
+    AtMostHalf count k ∨ MoreThanHalf count k := by
+  unfold AtMostHalf MoreThanHalf
+  omega
+
+/--
 Finite natural-number witness for `count / k <= num / den`.
 
 The inequality is represented without division:
@@ -2010,6 +2025,110 @@ def ContinuationOutrunsRecoveryOnRange
 def TailContinuationOutrunsRecoveryOnRange
     (n : OddNat) (k r len : ℕ) : Prop :=
   ∀ j, j < len → TailContinuationOutrunsRecovery n k (r + j)
+
+/-- Each source depth is either recovery-dominant or continuation-outrunning. -/
+theorem recoveryDominates_or_continuationOutruns
+    (n : OddNat) (k r : ℕ) :
+    RecoveryDominatesContinuation n k r ∨
+      ContinuationOutrunsRecovery n k r := by
+  unfold RecoveryDominatesContinuation ContinuationOutrunsRecovery
+  omega
+
+/-- Each tail depth is either recovery-dominant or continuation-outrunning. -/
+theorem tailRecoveryDominates_or_tailContinuationOutruns
+    (n : OddNat) (k r : ℕ) :
+    TailRecoveryDominatesContinuation n k r ∨
+      TailContinuationOutrunsRecovery n k r := by
+  unfold TailRecoveryDominatesContinuation TailContinuationOutrunsRecovery
+  omega
+
+/-- Source continuation outrunning recovery rules out recovery dominance. -/
+theorem not_recoveryDominates_of_continuationOutruns
+    (n : OddNat) (k r : ℕ)
+    (h : ContinuationOutrunsRecovery n k r) :
+    ¬ RecoveryDominatesContinuation n k r := by
+  intro hdom
+  unfold ContinuationOutrunsRecovery at h
+  unfold RecoveryDominatesContinuation at hdom
+  omega
+
+/-- Tail continuation outrunning recovery rules out tail recovery dominance. -/
+theorem not_tailRecoveryDominates_of_tailContinuationOutruns
+    (n : OddNat) (k r : ℕ)
+    (h : TailContinuationOutrunsRecovery n k r) :
+    ¬ TailRecoveryDominatesContinuation n k r := by
+  intro hdom
+  unfold TailContinuationOutrunsRecovery at h
+  unfold TailRecoveryDominatesContinuation at hdom
+  omega
+
+/-- Extract a source failure observation from a finite-depth failure range. -/
+theorem continuationOutrunsRecovery_of_onRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : ContinuationOutrunsRecoveryOnRange n k r len)
+    (hj : j < len) :
+    ContinuationOutrunsRecovery n k (r + j) :=
+  h j hj
+
+/-- Extract a tail failure observation from a finite-depth failure range. -/
+theorem tailContinuationOutrunsRecovery_of_onRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : TailContinuationOutrunsRecoveryOnRange n k r len)
+    (hj : j < len) :
+    TailContinuationOutrunsRecovery n k (r + j) :=
+  h j hj
+
+/--
+If source continuation outruns recovery, then source continuation occupies more
+than half of the parent retention mass.
+-/
+theorem moreThanHalf_continuation_of_continuationOutruns
+    (n : OddNat) (k r : ℕ)
+    (h : ContinuationOutrunsRecovery n k r) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) := by
+  unfold MoreThanHalf
+  unfold ContinuationOutrunsRecovery at h
+  rw [orbitWindowRetentionMass_split]
+  omega
+
+/--
+If tail continuation outruns tail recovery, then tail continuation occupies
+more than half of tail retention mass.
+-/
+theorem moreThanHalf_tailContinuation_of_tailContinuationOutruns
+    (n : OddNat) (k r : ℕ)
+    (h : TailContinuationOutrunsRecovery n k r) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) := by
+  unfold MoreThanHalf
+  unfold TailContinuationOutrunsRecovery at h
+  rw [orbitWindowRetentionMassPow2Tail_split]
+  omega
+
+/-- A source failure range gives more-than-half pressure at each depth. -/
+theorem moreThanHalf_continuation_of_outRunsOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : ContinuationOutrunsRecoveryOnRange n k r len)
+    (hj : j < len) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+      (orbitWindowRetentionMassPow2 n k (r + j)) :=
+  moreThanHalf_continuation_of_continuationOutruns
+    n k (r + j) (continuationOutrunsRecovery_of_onRange n k r len j h hj)
+
+/-- A tail failure range gives more-than-half pressure at each depth. -/
+theorem moreThanHalf_tailContinuation_of_outRunsOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : TailContinuationOutrunsRecoveryOnRange n k r len)
+    (hj : j < len) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+      (orbitWindowRetentionMassPow2Tail n k (r + j)) :=
+  moreThanHalf_tailContinuation_of_tailContinuationOutruns
+    n k (r + j) (tailContinuationOutrunsRecovery_of_onRange n k r len j h hj)
 
 /--
 Predicate-facing source half criterion.

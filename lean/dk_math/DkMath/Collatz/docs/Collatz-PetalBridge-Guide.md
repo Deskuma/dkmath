@@ -355,6 +355,46 @@ wants to consume it without unfolding recovery/continuation counts.
 
 This is the theorem to reach for before writing a custom induction over `k`.
 
+## More-Than-Half Pressure
+
+Checkpoint 106 adds the strict complement to `AtMostHalf`:
+
+```lean
+MoreThanHalf
+atMostHalf_or_moreThanHalf
+```
+
+The comparison predicates now split locally:
+
+```lean
+recoveryDominates_or_continuationOutruns
+tailRecoveryDominates_or_tailContinuationOutruns
+```
+
+The failure branch is not treated as a dead end.  It has a measurable
+consequence:
+
+```lean
+moreThanHalf_continuation_of_continuationOutruns
+moreThanHalf_tailContinuation_of_tailContinuationOutruns
+moreThanHalf_continuation_of_outRunsOnRange
+moreThanHalf_tailContinuation_of_outRunsOnRange
+```
+
+Read this as:
+
+```text
+recovery dominates continuation
+  -> continuation is at most half of retention
+
+continuation outruns recovery
+  -> continuation is more than half of retention
+```
+
+This gives the obstruction route a concrete finite signature.  If the desired
+dominance condition fails over a range, each failed depth carries strict
+continuation pressure inside the corresponding retention cylinder.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
