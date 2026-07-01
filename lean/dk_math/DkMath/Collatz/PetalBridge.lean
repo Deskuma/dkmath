@@ -2439,6 +2439,204 @@ theorem tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len
       omega
 
 /--
+Source depth-frequency predicate: pressure occupies at most half of the depth
+range.
+-/
+def SourcePressureAtMostHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  AtMostHalf (sourceContinuationPressureDepthCount n k r len) len
+
+/--
+Source depth-frequency predicate: pressure occupies more than half of the depth
+range.
+-/
+def SourcePressureMoreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalf (sourceContinuationPressureDepthCount n k r len) len
+
+/- Tail depth-frequency predicate: pressure occupies at most half of the depth
+range. -/
+def TailPressureAtMostHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  AtMostHalf (tailContinuationPressureDepthCount n k r len) len
+
+/- Tail depth-frequency predicate: pressure occupies more than half of the
+depth range. -/
+def TailPressureMoreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalf (tailContinuationPressureDepthCount n k r len) len
+
+/-- Source pressure frequency is either at most half or more than half. -/
+theorem sourcePressureAtMostHalf_or_moreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) :
+    SourcePressureAtMostHalfOnDepthRange n k r len ∨
+      SourcePressureMoreThanHalfOnDepthRange n k r len := by
+  unfold SourcePressureAtMostHalfOnDepthRange
+  unfold SourcePressureMoreThanHalfOnDepthRange
+  exact atMostHalf_or_moreThanHalf
+    (sourceContinuationPressureDepthCount n k r len) len
+
+/-- Tail pressure frequency is either at most half or more than half. -/
+theorem tailPressureAtMostHalf_or_moreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) :
+    TailPressureAtMostHalfOnDepthRange n k r len ∨
+      TailPressureMoreThanHalfOnDepthRange n k r len := by
+  unfold TailPressureAtMostHalfOnDepthRange
+  unfold TailPressureMoreThanHalfOnDepthRange
+  exact atMostHalf_or_moreThanHalf
+    (tailContinuationPressureDepthCount n k r len) len
+
+/--
+If source pressure is at most half of the depth range, then pressure depth
+count is bounded by controlled depth count.
+-/
+theorem sourcePressureDepthCount_le_controlled_of_atMostHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourcePressureAtMostHalfOnDepthRange n k r len) :
+    sourceContinuationPressureDepthCount n k r len ≤
+      sourceContinuationControlledDepthCount n k r len := by
+  unfold SourcePressureAtMostHalfOnDepthRange at h
+  unfold AtMostHalf at h
+  have hpart :=
+    sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/--
+If source pressure depth count is bounded by controlled depth count, then
+source pressure is at most half of the depth range.
+-/
+theorem sourcePressureAtMostHalf_of_pressureDepthCount_le_controlled
+    (n : OddNat) (k r len : ℕ)
+    (h :
+      sourceContinuationPressureDepthCount n k r len ≤
+        sourceContinuationControlledDepthCount n k r len) :
+    SourcePressureAtMostHalfOnDepthRange n k r len := by
+  unfold SourcePressureAtMostHalfOnDepthRange
+  unfold AtMostHalf
+  have hpart :=
+    sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/--
+Tail pressure at most half implies tail pressure depth count is bounded by
+tail controlled depth count.
+-/
+theorem tailPressureDepthCount_le_controlled_of_atMostHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailPressureAtMostHalfOnDepthRange n k r len) :
+    tailContinuationPressureDepthCount n k r len ≤
+      tailContinuationControlledDepthCount n k r len := by
+  unfold TailPressureAtMostHalfOnDepthRange at h
+  unfold AtMostHalf at h
+  have hpart :=
+    tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/- Tail pressure depth count bounded by controlled count gives tail pressure at
+most half. -/
+theorem tailPressureAtMostHalf_of_pressureDepthCount_le_controlled
+    (n : OddNat) (k r len : ℕ)
+    (h :
+      tailContinuationPressureDepthCount n k r len ≤
+        tailContinuationControlledDepthCount n k r len) :
+    TailPressureAtMostHalfOnDepthRange n k r len := by
+  unfold TailPressureAtMostHalfOnDepthRange
+  unfold AtMostHalf
+  have hpart :=
+    tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/--
+If source pressure occupies more than half of the depth range, then controlled
+depth count is strictly smaller than pressure depth count.
+-/
+theorem sourceControlledDepthCount_lt_pressure_of_pressureMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourcePressureMoreThanHalfOnDepthRange n k r len) :
+    sourceContinuationControlledDepthCount n k r len <
+      sourceContinuationPressureDepthCount n k r len := by
+  unfold SourcePressureMoreThanHalfOnDepthRange at h
+  unfold MoreThanHalf at h
+  have hpart :=
+    sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/--
+If source controlled depth count is strictly smaller than pressure depth count,
+then source pressure occupies more than half of the depth range.
+-/
+theorem sourcePressureMoreThanHalf_of_controlledDepthCount_lt_pressure
+    (n : OddNat) (k r len : ℕ)
+    (h :
+      sourceContinuationControlledDepthCount n k r len <
+        sourceContinuationPressureDepthCount n k r len) :
+    SourcePressureMoreThanHalfOnDepthRange n k r len := by
+  unfold SourcePressureMoreThanHalfOnDepthRange
+  unfold MoreThanHalf
+  have hpart :=
+    sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/- Tail more-than-half pressure implies tail controlled depth count is strictly
+smaller than tail pressure depth count. -/
+theorem tailControlledDepthCount_lt_pressure_of_pressureMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailPressureMoreThanHalfOnDepthRange n k r len) :
+    tailContinuationControlledDepthCount n k r len <
+      tailContinuationPressureDepthCount n k r len := by
+  unfold TailPressureMoreThanHalfOnDepthRange at h
+  unfold MoreThanHalf at h
+  have hpart :=
+    tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/- Tail controlled depth count strictly below pressure depth count gives tail
+more-than-half pressure. -/
+theorem tailPressureMoreThanHalf_of_controlledDepthCount_lt_pressure
+    (n : OddNat) (k r len : ℕ)
+    (h :
+      tailContinuationControlledDepthCount n k r len <
+        tailContinuationPressureDepthCount n k r len) :
+    TailPressureMoreThanHalfOnDepthRange n k r len := by
+  unfold TailPressureMoreThanHalfOnDepthRange
+  unfold MoreThanHalf
+  have hpart :=
+    tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
+  omega
+
+/--
+Source more-than-half continuation pressure implies source continuation
+outruns recovery.
+-/
+theorem continuationOutruns_of_moreThanHalf_continuation
+    (n : OddNat) (k r : ℕ)
+    (h :
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k r)
+        (orbitWindowRetentionMassPow2 n k r)) :
+    ContinuationOutrunsRecovery n k r := by
+  unfold MoreThanHalf at h
+  unfold ContinuationOutrunsRecovery
+  rw [orbitWindowRetentionMass_split] at h
+  omega
+
+/--
+Tail more-than-half continuation pressure implies tail continuation outruns
+tail recovery.
+-/
+theorem tailContinuationOutruns_of_moreThanHalf_tailContinuation
+    (n : OddNat) (k r : ℕ)
+    (h :
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2Tail n k r)
+        (orbitWindowRetentionMassPow2Tail n k r)) :
+    TailContinuationOutrunsRecovery n k r := by
+  unfold MoreThanHalf at h
+  unfold TailContinuationOutrunsRecovery
+  rw [orbitWindowRetentionMassPow2Tail_split] at h
+  omega
+
+/--
 If source continuation pressure holds at every depth of the range, then the
 source pressure-depth count fills the whole range.
 -/

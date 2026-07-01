@@ -143,6 +143,7 @@ docs/Collatz-ComparisonPredicates-105.md
 docs/Collatz-MoreThanHalfPressure-106.md
 docs/Collatz-PressureProfile-107.md
 docs/Collatz-MixedDepthModeDistribution-108.md
+docs/Collatz-DepthPressureFrequency-109.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -369,3 +370,29 @@ controlled depth count + pressure depth count = depth range length
 
 This is the depth-mode analogue of the finite residue distribution from
 checkpoint 100.
+
+Checkpoint 109 adds finite depth-pressure frequency predicates:
+
+```lean
+SourcePressureAtMostHalfOnDepthRange
+SourcePressureMoreThanHalfOnDepthRange
+TailPressureAtMostHalfOnDepthRange
+TailPressureMoreThanHalfOnDepthRange
+```
+
+The frequency predicates are connected back to the mixed distribution:
+
+```text
+pressure is at most half
+  <-> pressureDepthCount <= controlledDepthCount
+
+pressure is more than half
+  <-> controlledDepthCount < pressureDepthCount
+```
+
+The checkpoint also closes the reverse local direction:
+
+```lean
+continuationOutruns_of_moreThanHalf_continuation
+tailContinuationOutruns_of_moreThanHalf_tailContinuation
+```

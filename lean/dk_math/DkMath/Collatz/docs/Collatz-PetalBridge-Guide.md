@@ -486,6 +486,48 @@ MoreThanHalf mode
 This still does not prove that pressure is rare.  It provides the finite budget
 surface needed to state such a claim without leaving `Nat`.
 
+## Depth-Pressure Frequency
+
+Checkpoint 109 applies the existing finite half vocabulary to the depth-mode
+pressure count itself:
+
+```lean
+SourcePressureAtMostHalfOnDepthRange
+SourcePressureMoreThanHalfOnDepthRange
+TailPressureAtMostHalfOnDepthRange
+TailPressureMoreThanHalfOnDepthRange
+```
+
+The frequency split is:
+
+```lean
+sourcePressureAtMostHalf_or_moreThanHalfOnDepthRange
+tailPressureAtMostHalf_or_moreThanHalfOnDepthRange
+```
+
+The mixed distribution makes these predicates readable as comparisons between
+controlled depths and pressure depths:
+
+```lean
+sourcePressureDepthCount_le_controlled_of_atMostHalf
+sourcePressureAtMostHalf_of_pressureDepthCount_le_controlled
+sourceControlledDepthCount_lt_pressure_of_pressureMoreThanHalf
+sourcePressureMoreThanHalf_of_controlledDepthCount_lt_pressure
+```
+
+with shifted-tail counterparts.
+
+Checkpoint 109 also proves the reverse local pressure direction:
+
+```lean
+continuationOutruns_of_moreThanHalf_continuation
+tailContinuationOutruns_of_moreThanHalf_tailContinuation
+```
+
+Together with the checkpoint 106 forward direction, this means the local
+`MoreThanHalf` pressure mode and the continuation-outruns-recovery mode are now
+interderivable.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
