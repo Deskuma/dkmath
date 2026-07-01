@@ -1073,6 +1073,44 @@ sourceContinuationMass_depth_two_pos_of_pressureOnRange_two_one
 This is the first bridge from the range profile vocabulary to the delayed
 reservoir budget entrance.
 
+## Level-4 And Generic Pressure
+
+Checkpoint 119 extends the concrete tower to level `4`:
+
+```lean
+orbitWindowResidueCountMod128EqSixtyThreeTail
+orbitWindowResidueCountMod128EqOneHundredTwentySevenTail
+tailResidueCountMod64EqSixtyThree_split_mod128_sixtyThree_oneHundredTwentySeven
+tailMod64SixtyThree_le_nextTailMod64ThirtyOne_add_nextTailMod64SixtyThree
+```
+
+The tower edge is:
+
+```text
+tail 63 mod 64
+  -> next tail 31 mod 64 + next tail 63 mod 64
+```
+
+The alias layer is:
+
+```lean
+TailRemainderLevel4
+TailFallingLevel4
+tailRemainderLevel3_static_split
+tailRemainderLevel3_step_grammar
+```
+
+Checkpoint 119 also generalizes the pressure entrance:
+
+```lean
+sourcePressureAtDepth_of_pressureOnRange
+sourceContinuationMass_pos_of_localPressure
+sourceContinuationMass_pos_of_pressureOnRange_at
+```
+
+Use these names when a proof has a pressure profile over a depth range and
+needs a local tower-entry opportunity at a selected depth `r + j`.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

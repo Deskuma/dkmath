@@ -1042,6 +1042,28 @@ noncomputable def orbitWindowResidueCountMod64EqSixtyThreeTail
   (List.range k).countP
     (fun i => decide (oddOrbitLabel n (i + 1) % 64 = 63))
 
+/--
+Number of shifted-tail labels in residue class `63 mod 128`.
+
+This is the delayed-peeling child inside the shifted-tail `63 mod 64`
+continuing color.
+-/
+noncomputable def orbitWindowResidueCountMod128EqSixtyThreeTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 128 = 63))
+
+/--
+Number of shifted-tail labels in residue class `127 mod 128`.
+
+This is the continuing child inside the shifted-tail `63 mod 64` continuing
+color.
+-/
+noncomputable def orbitWindowResidueCountMod128EqOneHundredTwentySevenTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 128 = 127))
+
 /-- Level `0` tail remainder: the whole shifted-tail exact-height-one reservoir. -/
 noncomputable def TailRemainderLevel0 (n : OddNat) (k : ℕ) : ℕ :=
   orbitWindowHeightCountEqTail n k 1
@@ -1069,6 +1091,14 @@ noncomputable def TailRemainderLevel3 (n : OddNat) (k : ℕ) : ℕ :=
 /-- Level `3` falling color: the shifted-tail `15 mod 32` delayed-peeling color. -/
 noncomputable def TailFallingLevel3 (n : OddNat) (k : ℕ) : ℕ :=
   orbitWindowResidueCountMod32EqFifteenTail n k
+
+/-- Level `4` tail remainder: the shifted-tail `63 mod 64` continuing color. -/
+noncomputable def TailRemainderLevel4 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod64EqSixtyThreeTail n k
+
+/-- Level `4` falling color: the shifted-tail `31 mod 64` delayed-peeling color. -/
+noncomputable def TailFallingLevel4 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod64EqThirtyOneTail n k
 
 /--
 Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
@@ -4177,6 +4207,58 @@ theorem tailRemainderLevel2_static_split
   exact tailResidueCountMod16EqFifteen_split_mod32_fifteen_thirtyOne n k
 
 /--
+The shifted-tail `63 mod 64` continuing color splits into its two children
+modulo `128`: the delayed-peeling child `63 mod 128` and the continuing child
+`127 mod 128`.
+-/
+theorem tailResidueCountMod64EqSixtyThree_split_mod128_sixtyThree_oneHundredTwentySeven
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod64EqSixtyThreeTail n k =
+      orbitWindowResidueCountMod128EqSixtyThreeTail n k +
+        orbitWindowResidueCountMod128EqOneHundredTwentySevenTail n k := by
+  unfold orbitWindowResidueCountMod64EqSixtyThreeTail
+  unfold orbitWindowResidueCountMod128EqSixtyThreeTail
+  unfold orbitWindowResidueCountMod128EqOneHundredTwentySevenTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      by_cases h63 : oddOrbitLabel n (k + 1) % 128 = 63
+      · have hmod64 : oddOrbitLabel n (k + 1) % 64 = 63 := by
+          omega
+        simp [ih, hmod64, h63, Nat.add_assoc, Nat.add_comm]
+      · by_cases h127 : oddOrbitLabel n (k + 1) % 128 = 127
+        · have hmod64 : oddOrbitLabel n (k + 1) % 64 = 63 := by
+            omega
+          simp [ih, hmod64, h127, Nat.add_comm, Nat.add_left_comm]
+        · have hnotMod64 : oddOrbitLabel n (k + 1) % 64 ≠ 63 := by
+            intro hmod64
+            have hchild :
+                oddOrbitLabel n (k + 1) % 128 = 63 ∨
+                  oddOrbitLabel n (k + 1) % 128 = 127 := by
+              omega
+            cases hchild with
+            | inl h =>
+                exact h63 h
+            | inr h =>
+                exact h127 h
+          simp [ih, hnotMod64, h63, h127]
+
+/--
+Level-alias version of the level-`3` static split.
+
+The level-`3` remainder is the sum of the level-`4` falling color and the
+level-`4` remainder.
+-/
+theorem tailRemainderLevel3_static_split
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel3 n k =
+      TailFallingLevel4 n k + TailRemainderLevel4 n k := by
+  unfold TailRemainderLevel3 TailFallingLevel4 TailRemainderLevel4
+  exact tailResidueCountMod32EqThirtyOne_split_mod64_thirtyOne_sixtyThree n k
+
+/--
 Orbit-level transition from the `3 mod 8` height-one channel.
 
 The current odd-state label is in residue class `3 mod 8`, so the accelerated
@@ -4386,6 +4468,46 @@ theorem oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtyt
   rw [oddOrbitLabel_succ_eq_T_iterateT]
   rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
   exact next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree hmod
+
+/--
+The `63 mod 128` subchannel moves to `31 mod 64` at the next label.
+
+This is the level-`4` recovery sibling inside the narrowing retention cylinder.
+-/
+theorem oddOrbitLabel_succ_mod_sixtyfour_eq_thirtyone_of_mod_onehundredtwentyeight_eq_sixtythree
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 128 = 63) :
+    oddOrbitLabel n (i + 1) % 64 = 31 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_sixtythree hmod
+
+/--
+The `127 mod 128` subchannel continues as `63 mod 64` at the next label.
+
+The low-peeling path survives by entering the next thinner all-ones cylinder.
+-/
+theorem oddOrbitLabel_succ_mod64_eq63_of_mod128_eq127
+    (n : OddNat) (i : ℕ)
+    (hmod : oddOrbitLabel n i % 128 = 127) :
+    oddOrbitLabel n (i + 1) % 64 = 63 := by
+  have hmod8 : oddOrbitLabel n i % 8 = 7 := by
+    omega
+  have hheight : orbitWindowHeight n i = 1 :=
+    (orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n i).mpr
+      (Or.inr hmod8)
+  have hs : s (iterateT i n) = 1 := by
+    simpa [orbitWindowHeight_eq_s_iterateT] using hheight
+  rw [oddOrbitLabel_succ_eq_T_iterateT]
+  rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
+  exact next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_onehundredtwentyseven hmod
 
 /--
 General orbit-label transition for the recovery sibling.
@@ -4684,6 +4806,74 @@ theorem tailMod32ThirtyOne_le_nextTailMod32Fifteen_add_nextTailMod32ThirtyOne
           · simp [hsource, htargetThirtyOne]
             omega
           · simp [hsource, htargetFifteen, htargetThirtyOne]
+            omega
+
+/--
+Level-alias version of the level-`3` recursion edge.
+
+The level-`3` remainder re-enters the next level-`3` falling/remainder split.
+-/
+theorem tailRemainderLevel3_step_grammar
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel3 n k ≤
+      TailFallingLevel3 n (k + 1) + TailRemainderLevel3 n (k + 1) := by
+  unfold TailRemainderLevel3 TailFallingLevel3
+  exact tailMod32ThirtyOne_le_nextTailMod32Fifteen_add_nextTailMod32ThirtyOne n k
+
+/--
+The shifted-tail `63 mod 64` continuing color enters the next shifted-tail
+`31 mod 64 / 63 mod 64` split.
+
+This is the level-`4` recursion edge of the delayed-reservoir tower.
+-/
+theorem tailMod64SixtyThree_le_nextTailMod64ThirtyOne_add_nextTailMod64SixtyThree
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod64EqSixtyThreeTail n k ≤
+      orbitWindowResidueCountMod64EqThirtyOneTail n (k + 1) +
+        orbitWindowResidueCountMod64EqSixtyThreeTail n (k + 1) := by
+  unfold orbitWindowResidueCountMod64EqSixtyThreeTail
+  unfold orbitWindowResidueCountMod64EqThirtyOneTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ, List.range_succ]
+      have htransitionThirtyOne :
+          oddOrbitLabel n (k + 1) % 128 = 63 →
+            oddOrbitLabel n ((k + 1) + 1) % 64 = 31 :=
+        oddOrbitLabel_succ_mod_sixtyfour_eq_thirtyone_of_mod_onehundredtwentyeight_eq_sixtythree
+          n (k + 1)
+      have htransitionSixtyThree :
+          oddOrbitLabel n (k + 1) % 128 = 127 →
+            oddOrbitLabel n ((k + 1) + 1) % 64 = 63 :=
+        oddOrbitLabel_succ_mod64_eq63_of_mod128_eq127 n (k + 1)
+      by_cases hsource : oddOrbitLabel n (k + 1) % 64 = 63
+      · have hchild :
+            oddOrbitLabel n (k + 1) % 128 = 63 ∨
+              oddOrbitLabel n (k + 1) % 128 = 127 := by
+          omega
+        cases hchild with
+        | inl h63 =>
+            have htargetThirtyOne :
+                oddOrbitLabel n ((k + 1) + 1) % 64 = 31 :=
+              htransitionThirtyOne h63
+            simp [hsource, htargetThirtyOne]
+            omega
+        | inr h127 =>
+            have htargetSixtyThree :
+                oddOrbitLabel n ((k + 1) + 1) % 64 = 63 :=
+              htransitionSixtyThree h127
+            simp [hsource, htargetSixtyThree]
+            omega
+      · by_cases htargetThirtyOne :
+            oddOrbitLabel n ((k + 1) + 1) % 64 = 31
+        · simp [hsource, htargetThirtyOne]
+          omega
+        · by_cases htargetSixtyThree :
+            oddOrbitLabel n ((k + 1) + 1) % 64 = 63
+          · simp [hsource, htargetSixtyThree]
+            omega
+          · simp [hsource, htargetThirtyOne, htargetSixtyThree]
             omega
 
 /--
@@ -5908,6 +6098,48 @@ theorem sourceContinuationMass_depth_two_pos_of_pressure_depth_two
     0 < orbitWindowContinuationSiblingMassPow2 n k 2 := by
   unfold MoreThanHalf at h
   omega
+
+/--
+Meaning-name wrapper for extracting local source pressure from a finite source
+pressure profile.
+
+Use this theorem at call sites instead of the more generic internal extractor
+when the proof is conceptually moving from range pressure to a local depth.
+-/
+theorem sourcePressureAtDepth_of_pressureOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+      (orbitWindowRetentionMassPow2 n k (r + j)) :=
+  moreThanHalf_of_sourceContinuationPressure n k r len j h hj
+
+/--
+Local source pressure at any depth forces positive source continuation mass at
+that depth.
+-/
+theorem sourceContinuationMass_pos_of_localPressure
+    (n : OddNat) (k r : ℕ)
+    (h :
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k r)
+        (orbitWindowRetentionMassPow2 n k r)) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k r := by
+  unfold MoreThanHalf at h
+  omega
+
+/--
+Range pressure yields positive source continuation mass at any selected depth
+inside the range.
+-/
+theorem sourceContinuationMass_pos_of_pressureOnRange_at
+    (n : OddNat) (k r len j : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) :=
+  sourceContinuationMass_pos_of_localPressure n k (r + j)
+    (sourcePressureAtDepth_of_pressureOnRange n k r len j h hj)
 
 /--
 Extract local depth-two source pressure from the one-depth range pressure
