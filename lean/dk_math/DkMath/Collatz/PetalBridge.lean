@@ -1188,6 +1188,126 @@ theorem orbitWindowResidueCountMod8EqSeven_eq_pow2
   rfl
 
 /--
+Successor formula for the generic source-window power-of-two residue count.
+-/
+theorem orbitWindowResidueCountPow2_succ
+    (n : OddNat) (k depth residue : ℕ) :
+    orbitWindowResidueCountPow2 n (k + 1) depth residue =
+      orbitWindowResidueCountPow2 n k depth residue +
+        if oddOrbitLabel n k % (2 ^ depth) = residue then 1 else 0 := by
+  unfold orbitWindowResidueCountPow2
+  rw [List.range_succ]
+  by_cases h : oddOrbitLabel n k % (2 ^ depth) = residue
+  · simp [h]
+  · simp [h]
+
+/--
+Successor formula for the generic shifted-tail power-of-two residue count.
+-/
+theorem orbitWindowResidueCountPow2Tail_succ
+    (n : OddNat) (k depth residue : ℕ) :
+    orbitWindowResidueCountPow2Tail n (k + 1) depth residue =
+      orbitWindowResidueCountPow2Tail n k depth residue +
+        if oddOrbitLabel n (k + 1) % (2 ^ depth) = residue then 1 else 0 := by
+  unfold orbitWindowResidueCountPow2Tail
+  rw [List.range_succ]
+  by_cases h : oddOrbitLabel n (k + 1) % (2 ^ depth) = residue
+  · simp [h]
+  · simp [h]
+
+/--
+At depth `0`, every label lies in the unique residue cell `0 mod 1`.
+-/
+theorem orbitWindowResidueCountPow2_depth_zero_eq_window
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountPow2 n k 0 0 = k := by
+  induction k with
+  | zero =>
+      rfl
+  | succ k ih =>
+      rw [orbitWindowResidueCountPow2_succ, ih]
+      have hlast : oddOrbitLabel n k % 2 ^ 0 = 0 := by
+        rw [pow_zero, Nat.mod_one]
+      rw [if_pos hlast]
+
+/--
+Residues outside the modulus range have zero occupation.
+-/
+theorem orbitWindowResidueCountPow2_eq_zero_of_modulus_le_residue
+    (n : OddNat) (k depth residue : ℕ)
+    (hres : 2 ^ depth ≤ residue) :
+    orbitWindowResidueCountPow2 n k depth residue = 0 := by
+  unfold orbitWindowResidueCountPow2
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hneq :
+          oddOrbitLabel n k % (2 ^ depth) ≠ residue := by
+        have hlt : oddOrbitLabel n k % (2 ^ depth) < 2 ^ depth :=
+          Nat.mod_lt _ (pow_pos (by decide) depth)
+        omega
+      simp [ih, hneq]
+
+/--
+One label contributes to exactly one residue cell at a fixed power-of-two
+depth.
+-/
+theorem pow2_residue_indicator_sum_eq_one
+    (depth x : ℕ) :
+    (Finset.range (2 ^ depth)).sum
+      (fun residue => if x % (2 ^ depth) = residue then (1 : ℕ) else 0) = 1 := by
+  have hoff :
+      ∀ residue ∈ Finset.range (2 ^ depth), residue ≠ x % (2 ^ depth) →
+        (fun residue => if x % (2 ^ depth) = residue then (1 : ℕ) else 0) residue = 0 := by
+    intro residue _ hne
+    simp [hne.symm]
+  have hnot :
+      x % (2 ^ depth) ∉ Finset.range (2 ^ depth) →
+        (fun residue => if x % (2 ^ depth) = residue then (1 : ℕ) else 0)
+          (x % (2 ^ depth)) = 0 := by
+    intro hnot
+    exact (hnot (Finset.mem_range.mpr (Nat.mod_lt _ (pow_pos (by decide) depth)))).elim
+  simpa using Finset.sum_eq_single (s := Finset.range (2 ^ depth))
+    (a := x % (2 ^ depth))
+    (f := fun residue => if x % (2 ^ depth) = residue then (1 : ℕ) else 0)
+    hoff hnot
+
+/--
+At any fixed power-of-two depth, the residue-cell occupation counts partition
+the whole observation window.
+-/
+theorem orbitWindowResidueCountPow2_sum_eq_window
+    (n : OddNat) (k depth : ℕ) :
+    (Finset.range (2 ^ depth)).sum
+      (fun residue => orbitWindowResidueCountPow2 n k depth residue) = k := by
+  induction k with
+  | zero =>
+      simp [orbitWindowResidueCountPow2]
+  | succ k ih =>
+      calc
+        (Finset.range (2 ^ depth)).sum
+            (fun residue => orbitWindowResidueCountPow2 n (k + 1) depth residue)
+            =
+          (Finset.range (2 ^ depth)).sum
+            (fun residue =>
+              orbitWindowResidueCountPow2 n k depth residue +
+                if oddOrbitLabel n k % (2 ^ depth) = residue then (1 : ℕ) else 0) := by
+            apply Finset.sum_congr rfl
+            intro residue _
+            rw [orbitWindowResidueCountPow2_succ]
+        _ =
+          (Finset.range (2 ^ depth)).sum
+              (fun residue => orbitWindowResidueCountPow2 n k depth residue) +
+            (Finset.range (2 ^ depth)).sum
+              (fun residue =>
+                if oddOrbitLabel n k % (2 ^ depth) = residue then (1 : ℕ) else 0) := by
+            rw [Finset.sum_add_distrib]
+        _ = k + 1 := by
+            rw [ih, pow2_residue_indicator_sum_eq_one]
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix

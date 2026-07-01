@@ -162,6 +162,12 @@ orbitWindowResidueCountMod4EqOneTail_le_window
 orbitWindowResidueCountMod4EqThreeTail_le_window
 orbitWindowResidueCountPow2Tail_le_window
 orbitWindowResidueCountMod8EqSeven_eq_pow2
+orbitWindowResidueCountPow2_succ
+orbitWindowResidueCountPow2Tail_succ
+orbitWindowResidueCountPow2_depth_zero_eq_window
+orbitWindowResidueCountPow2_eq_zero_of_modulus_le_residue
+pow2_residue_indicator_sum_eq_one
+orbitWindowResidueCountPow2_sum_eq_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -556,6 +562,26 @@ generic shifted-tail pow-two residue count
 
 named `7 mod 8` source count
   -> residueCountMod8EqSeven = CountPow2 depth 3 residue 7
+
+generic pow-two source count successor
+  -> CountPow2(k + 1, depth, residue)
+     = CountPow2(k, depth, residue) + last-label indicator
+
+generic shifted-tail pow-two count successor
+  -> TailCountPow2(k + 1, depth, residue)
+     = TailCountPow2(k, depth, residue) + last-tail-label indicator
+
+depth zero sanity check
+  -> CountPow2 depth 0 residue 0 = k
+
+out-of-range residue cells
+  -> 2^depth <= residue -> CountPow2 depth residue = 0
+
+single-label residue indicator
+  -> Sum_{residue < 2^depth} indicator(label % 2^depth = residue) = 1
+
+full pow-two source residue partition
+  -> Sum_{residue < 2^depth} CountPow2 depth residue = k
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
