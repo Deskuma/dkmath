@@ -138,6 +138,7 @@ docs/Collatz-FiniteChannelFlow-100.md
 docs/Collatz-FiniteRatioRetention-101.md
 docs/Collatz-DepthRefinement-102.md
 docs/Collatz-TailDepthRefinement-103.md
+docs/Collatz-FiniteHalfCriterion-104.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -267,3 +268,18 @@ source continuation mass
   <= shifted-tail retention mass
   = shifted-tail recovery mass + shifted-tail continuation mass
 ```
+
+Checkpoint 104 adds the first finite half criterion layer:
+
+```lean
+atMostHalf_continuation_of_continuation_le_recovery
+atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery
+atMostHalf_continuation_of_retention_le_two_recovery
+atMostHalf_tailContinuation_of_tailRetention_le_two_tailRecovery
+continuation_atMostRatio_one_one_retention
+tailContinuation_atMostRatio_one_one_retention
+orbitWindowContinuationMass_tailBudget
+```
+
+This still does not prove contraction.  It records exactly what local comparison
+is enough to obtain a finite `AtMostHalf` statement.

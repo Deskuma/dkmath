@@ -294,6 +294,40 @@ Use these names when the argument is conceptually about mass flow from the
 source window into the shifted-tail window.  Use the split theorems when the
 argument is about decomposing a retention cylinder into its two child cells.
 
+## Finite Half Criteria
+
+Checkpoint 104 connects the split theorems to `AtMostHalf`.
+
+The source criterion is:
+
+```lean
+atMostHalf_continuation_of_continuation_le_recovery
+```
+
+The tail criterion is:
+
+```lean
+atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery
+```
+
+Both have the same reading:
+
+```text
+continuation <= recovery
+  -> continuation is at most half of retention
+```
+
+There are also recovery-budget variants:
+
+```lean
+atMostHalf_continuation_of_retention_le_two_recovery
+atMostHalf_tailContinuation_of_tailRetention_le_two_tailRecovery
+```
+
+These do not prove the comparison condition.  They make the next target
+explicit: find a structural reason why continuation is no larger than recovery,
+or why recovery covers at least half of retention.
+
 This is the theorem to reach for before writing a custom induction over `k`.
 
 ## Recursive Petal Residues

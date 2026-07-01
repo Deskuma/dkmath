@@ -1834,6 +1834,106 @@ theorem orbitWindowContinuationSiblingMassPow2Tail_le_retentionMassTail
   omega
 
 /--
+If source continuation mass is no larger than source recovery mass, then source
+continuation occupies at most half of the parent retention mass.
+-/
+theorem atMostHalf_continuation_of_continuation_le_recovery
+    (n : OddNat) (k r : ℕ)
+    (h :
+      orbitWindowContinuationSiblingMassPow2 n k r ≤
+        orbitWindowRecoverySiblingMassPow2 n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) := by
+  unfold AtMostHalf
+  rw [orbitWindowRetentionMass_split]
+  omega
+
+/--
+If tail continuation mass is no larger than tail recovery mass, then tail
+continuation occupies at most half of tail retention mass.
+-/
+theorem atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery
+    (n : OddNat) (k r : ℕ)
+    (h :
+      orbitWindowContinuationSiblingMassPow2Tail n k r ≤
+        orbitWindowRecoverySiblingMassPow2Tail n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) := by
+  unfold AtMostHalf
+  rw [orbitWindowRetentionMassPow2Tail_split]
+  omega
+
+/--
+If source recovery accounts for at least half of source retention, then source
+continuation is at most half of source retention.
+-/
+theorem atMostHalf_continuation_of_retention_le_two_recovery
+    (n : OddNat) (k r : ℕ)
+    (h :
+      orbitWindowRetentionMassPow2 n k r ≤
+        2 * orbitWindowRecoverySiblingMassPow2 n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) := by
+  unfold AtMostHalf
+  rw [orbitWindowRetentionMass_split] at h ⊢
+  omega
+
+/--
+If tail recovery accounts for at least half of tail retention, then tail
+continuation is at most half of tail retention.
+-/
+theorem atMostHalf_tailContinuation_of_tailRetention_le_two_tailRecovery
+    (n : OddNat) (k r : ℕ)
+    (h :
+      orbitWindowRetentionMassPow2Tail n k r ≤
+        2 * orbitWindowRecoverySiblingMassPow2Tail n k r) :
+    AtMostHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) := by
+  unfold AtMostHalf
+  rw [orbitWindowRetentionMassPow2Tail_split] at h ⊢
+  omega
+
+/-- Source continuation mass is at most the whole source retention mass. -/
+theorem continuation_atMostRatio_one_one_retention
+    (n : OddNat) (k r : ℕ) :
+    AtMostRatioNat 1 1
+      (orbitWindowContinuationSiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) := by
+  apply atMostRatioNat_one_one_of_le
+  exact orbitWindowContinuationSiblingMassPow2_le_retentionMass n k r
+
+/-- Tail continuation mass is at most the whole tail retention mass. -/
+theorem tailContinuation_atMostRatio_one_one_retention
+    (n : OddNat) (k r : ℕ) :
+    AtMostRatioNat 1 1
+      (orbitWindowContinuationSiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) := by
+  apply atMostRatioNat_one_one_of_le
+  exact orbitWindowContinuationSiblingMassPow2Tail_le_retentionMassTail n k r
+
+/-- Source recovery mass is at most the whole source retention mass. -/
+theorem recovery_atMostRatio_one_one_retention
+    (n : OddNat) (k r : ℕ) :
+    AtMostRatioNat 1 1
+      (orbitWindowRecoverySiblingMassPow2 n k r)
+      (orbitWindowRetentionMassPow2 n k r) := by
+  apply atMostRatioNat_one_one_of_le
+  exact orbitWindowRecoverySiblingMassPow2_le_retentionMass n k r
+
+/-- Tail recovery mass is at most the whole tail retention mass. -/
+theorem tailRecovery_atMostRatio_one_one_retention
+    (n : OddNat) (k r : ℕ) :
+    AtMostRatioNat 1 1
+      (orbitWindowRecoverySiblingMassPow2Tail n k r)
+      (orbitWindowRetentionMassPow2Tail n k r) := by
+  apply atMostRatioNat_one_one_of_le
+  exact orbitWindowRecoverySiblingMassPow2Tail_le_retentionMassTail n k r
+
+/--
 The prefix mod `4` residue count is bounded by the prefix length.
 -/
 theorem orbitWindowPrefixResidueCountMod4EqOne_le_prefix
@@ -2888,6 +2988,17 @@ theorem orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation
     _ = orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
           orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) := by
         rw [orbitWindowRetentionMassPow2Tail_split]
+
+/--
+Tail-budget spelling of
+`orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation`.
+-/
+theorem orbitWindowContinuationMass_tailBudget
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + 1) ≤
+      orbitWindowRecoverySiblingMassPow2Tail n k (r + 1) +
+        orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) :=
+  orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation r hr n k
 
 /--
 Tail continuation sibling mass is definitionally the same as tail retention at
