@@ -955,6 +955,28 @@ noncomputable def orbitWindowResidueCountMod4EqThreeTail
     (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3))
 
 /--
+Number of shifted-tail labels in residue class `3 mod 8`.
+
+This is one delayed-peeling color inside the shifted-tail exact-height-one
+reservoir.
+-/
+noncomputable def orbitWindowResidueCountMod8EqThreeTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 8 = 3))
+
+/--
+Number of shifted-tail labels in residue class `7 mod 8`.
+
+This is the continuing color inside the shifted-tail exact-height-one
+reservoir.
+-/
+noncomputable def orbitWindowResidueCountMod8EqSevenTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 8 = 7))
+
+/--
 Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
 
 This counts labels at times `1, 2, ..., k`, indexed as `i + 1`, in a chosen
@@ -3396,6 +3418,30 @@ theorem orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one
         simp [ih, hheight, hres]
 
 /--
+At parent depth `1`, shifted-tail recovery sibling mass is exactly the
+shifted-tail `1 mod 4` cell.
+-/
+theorem tailRecoveryMass_depth_one_eq_tailResidueCount_mod4_eq_one
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k 1 =
+      orbitWindowResidueCountMod4EqOneTail n k := by
+  unfold orbitWindowRecoverySiblingMassPow2Tail
+  unfold orbitWindowResidueCountPow2Tail
+  unfold orbitWindowResidueCountMod4EqOneTail
+  simp
+
+/--
+At parent depth `1`, shifted-tail recovery sibling mass is contained in the
+tail `height >= 2` count.
+-/
+theorem tailRecoveryMass_depth_one_le_heightCountGe_two
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k 1 ≤
+      orbitWindowHeightCountGeTail n k 2 := by
+  rw [tailRecoveryMass_depth_one_eq_tailResidueCount_mod4_eq_one]
+  rw [orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one]
+
+/--
 Counting `height >= 3` entries is the same as counting odd-state labels in
 residue class `5 mod 8`.
 
@@ -3771,6 +3817,32 @@ theorem tailRetentionMass_depth_two_le_heightCountEq_one
   rw [tailRetentionMass_depth_two_eq_heightCountEq_one]
 
 /--
+At parent depth `2`, shifted-tail recovery sibling mass is exactly the
+shifted-tail `3 mod 8` cell.
+
+Thus this channel is not immediate `height >= 2`; it is the delayed-peeling
+color inside exact height `1`.
+-/
+theorem tailRecoveryMass_depth_two_eq_tailResidueCount_mod8_eq_three
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k 2 =
+      orbitWindowResidueCountMod8EqThreeTail n k := by
+  unfold orbitWindowRecoverySiblingMassPow2Tail
+  unfold orbitWindowResidueCountPow2Tail
+  unfold orbitWindowResidueCountMod8EqThreeTail
+  simp
+
+/--
+At parent depth `2`, shifted-tail recovery sibling mass is bounded by the
+delayed-peeling `3 mod 8` tail color.
+-/
+theorem tailRecoveryMass_depth_two_le_tailResidueCount_mod8_eq_three
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2Tail n k 2 ≤
+      orbitWindowResidueCountMod8EqThreeTail n k := by
+  rw [tailRecoveryMass_depth_two_eq_tailResidueCount_mod8_eq_three]
+
+/--
 The shifted tail splits into exact height `1` and height at least `2`.
 
 Every accelerated Collatz tail state has height at least `1`, so an entry is
@@ -3832,6 +3904,38 @@ theorem orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
         omega
     | inr hSeven =>
         omega
+
+/--
+The shifted-tail exact-height-one reservoir splits into the delayed-peeling
+color `3 mod 8` and the continuing color `7 mod 8`.
+-/
+theorem tailHeightCountEq_one_split_mod8_three_seven
+    (n : OddNat) (k : ℕ) :
+    orbitWindowHeightCountEqTail n k 1 =
+      orbitWindowResidueCountMod8EqThreeTail n k +
+        orbitWindowResidueCountMod8EqSevenTail n k := by
+  unfold orbitWindowHeightCountEqTail
+  unfold orbitWindowResidueCountMod8EqThreeTail
+  unfold orbitWindowResidueCountMod8EqSevenTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      have hiff := orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven n (k + 1)
+      by_cases hheight : orbitWindowHeight n (k + 1) = 1
+      · cases hiff.mp hheight with
+        | inl hthree =>
+            simp [ih, hheight, hthree, Nat.add_assoc, Nat.add_comm]
+        | inr hseven =>
+            simp [ih, hheight, hseven, Nat.add_comm, Nat.add_left_comm]
+      · have hnotThree : oddOrbitLabel n (k + 1) % 8 ≠ 3 := by
+          intro hthree
+          exact hheight (hiff.mpr (Or.inl hthree))
+        have hnotSeven : oddOrbitLabel n (k + 1) % 8 ≠ 7 := by
+          intro hseven
+          exact hheight (hiff.mpr (Or.inr hseven))
+        simp [ih, hheight, hnotThree, hnotSeven]
 
 /--
 Orbit-level transition from the `3 mod 8` height-one channel.
@@ -4106,6 +4210,40 @@ theorem orbitWindowNextHeight_two_le_of_mod_eight_eq_three
   exact oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three n i hmod
 
 /--
+Every shifted-tail `3 mod 8` entry contributes a shifted-tail `height >= 2`
+entry one step later.
+
+The source side counts labels at times `1..k`; the target side counts heights
+at times `1..k+1`, so the delayed image fits into the one-step-longer tail
+window.
+-/
+theorem tailMod8Three_le_nextTailHeightCountGe_two
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod8EqThreeTail n k ≤
+      orbitWindowHeightCountGeTail n (k + 1) 2 := by
+  unfold orbitWindowResidueCountMod8EqThreeTail
+  unfold orbitWindowHeightCountGeTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ, List.range_succ]
+      have htransition :
+          oddOrbitLabel n (k + 1) % 8 = 3 →
+            2 ≤ orbitWindowHeight n ((k + 1) + 1) :=
+        orbitWindowNextHeight_two_le_of_mod_eight_eq_three n (k + 1)
+      by_cases hsource : oddOrbitLabel n (k + 1) % 8 = 3
+      · have htarget : 2 ≤ orbitWindowHeight n ((k + 1) + 1) :=
+          htransition hsource
+        simp [hsource, htarget]
+        omega
+      · by_cases htarget : 2 ≤ orbitWindowHeight n ((k + 1) + 1)
+        · simp [hsource, htarget]
+          omega
+        · simp [hsource, htarget]
+          omega
+
+/--
 The `7 mod 8` height-one channel remains an exact height-one channel at the
 next label.
 
@@ -4313,6 +4451,28 @@ theorem orbitWindowRecoveryMass_forces_tailRecovery
   orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass r hr n k
 
 /--
+Source recovery mass at parent depth `3` lands in the shifted-tail delayed
+`3 mod 8` color.
+
+This is the recovery-side counterpart to the continuation-retention reservoir
+result: recovery does not land directly in `height >= 2` at this depth, but it
+does land in the color that peels on the next step.
+-/
+theorem sourceRecoveryMass_depth_three_le_tailResidueCount_mod8_eq_three
+    (n : OddNat) (k : ℕ) :
+    orbitWindowRecoverySiblingMassPow2 n k 3 ≤
+      orbitWindowResidueCountMod8EqThreeTail n k := by
+  have hflow :
+      orbitWindowRecoverySiblingMassPow2 n k (2 + 1) ≤
+        orbitWindowRecoverySiblingMassPow2Tail n k 2 :=
+    orbitWindowRecoveryMass_forces_tailRecovery 2 (by omega) n k
+  have htail :
+      orbitWindowRecoverySiblingMassPow2Tail n k 2 ≤
+        orbitWindowResidueCountMod8EqThreeTail n k :=
+    tailRecoveryMass_depth_two_le_tailResidueCount_mod8_eq_three n k
+  simpa using le_trans hflow htail
+
+/--
 Count-level recursive Petal transition for the continuation sibling.
 
 Every source-window label in the continuation sibling modulo `2^(r + 2)`
@@ -4464,6 +4624,23 @@ theorem sourceContinuationMass_depth_two_le_tailHeightCountEq_one
         orbitWindowHeightCountEqTail n k 1 :=
     tailRetentionMass_depth_two_le_heightCountEq_one n k
   simpa using le_trans hflow hheight
+
+/--
+Source continuation mass at parent depth `2` enters the shifted-tail
+exact-height-one reservoir, which splits into the delayed `3 mod 8` color and
+the continuing `7 mod 8` color.
+-/
+theorem sourceContinuationMass_depth_two_le_tailMod8Three_add_tailMod8Seven
+    (n : OddNat) (k : ℕ) :
+    orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+      orbitWindowResidueCountMod8EqThreeTail n k +
+        orbitWindowResidueCountMod8EqSevenTail n k := by
+  have h :
+      orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+        orbitWindowHeightCountEqTail n k 1 :=
+    sourceContinuationMass_depth_two_le_tailHeightCountEq_one n k
+  rw [tailHeightCountEq_one_split_mod8_three_seven] at h
+  exact h
 
 /--
 Tail continuation sibling mass is definitionally the same as tail retention at
@@ -5201,6 +5378,25 @@ theorem orbitWindowResidueCountMod8EqThree_delayed_drift_strong
     (Nat.add_le_add_left
       (orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two n k) (k + 1))
     (orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two n k)
+
+/--
+Tail-facing delayed-drift theorem from the shifted-tail `3 mod 8` channel.
+
+The shifted-tail `3 mod 8` color does not represent immediate extra peeling in
+the same tail window.  It contributes a `height >= 2` tail entry one step later,
+so it supplies an extra layer over the next accumulated window.
+-/
+theorem tailResidueCountMod8EqThree_delayed_drift
+    (n : OddNat) (k : ℕ) :
+    (k + 1) + orbitWindowResidueCountMod8EqThreeTail n k ≤
+      sumS n ((k + 1) + 1) := by
+  have htail :
+      orbitWindowResidueCountMod8EqThreeTail n k ≤
+        orbitWindowHeightCountGeTail n (k + 1) 2 :=
+    tailMod8Three_le_nextTailHeightCountGe_two n k
+  exact le_trans
+    (Nat.add_le_add_left htail (k + 1))
+    (orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two n (k + 1))
 
 /--
 Residue-address drift bridge.

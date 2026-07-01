@@ -794,6 +794,82 @@ So the next height-growth attempt should inspect the recovery sibling or a
 deeper delayed branch, rather than using depth-2 continuation retention as an
 extra-peeling source.
 
+## Recovery And Delayed Branch
+
+Checkpoint 115 follows the correction from checkpoint 114 and separates two
+different recovery readings.
+
+At parent depth `1`, shifted-tail recovery is the immediate extra-height cell:
+
+```lean
+tailRecoveryMass_depth_one_eq_tailResidueCount_mod4_eq_one
+tailRecoveryMass_depth_one_le_heightCountGe_two
+```
+
+At parent depth `2`, shifted-tail recovery is not the same object.  It is the
+`3 mod 8` color inside the exact-height-one reservoir:
+
+```lean
+tailRecoveryMass_depth_two_eq_tailResidueCount_mod8_eq_three
+tailRecoveryMass_depth_two_le_tailResidueCount_mod8_eq_three
+```
+
+This is the main recovery correction:
+
+```text
+tail recovery, parent depth 1
+  -> 1 mod 4
+  -> immediate height >= 2
+
+tail recovery, parent depth 2
+  -> 3 mod 8
+  -> exact height 1 now
+  -> height >= 2 one step later
+```
+
+The exact-height-one reservoir is now split into its two visible colors:
+
+```lean
+tailHeightCountEq_one_split_mod8_three_seven
+```
+
+with reading:
+
+```text
+tail exact height 1
+  = tail 3 mod 8 delayed-peeling color
+    + tail 7 mod 8 continuing color
+```
+
+The delayed-peeling color has its own tail transition:
+
+```lean
+tailMod8Three_le_nextTailHeightCountGe_two
+tailResidueCountMod8EqThree_delayed_drift
+```
+
+Finally, the source-side checkpoint hooks are:
+
+```lean
+sourceRecoveryMass_depth_three_le_tailResidueCount_mod8_eq_three
+sourceContinuationMass_depth_two_le_tailMod8Three_add_tailMod8Seven
+```
+
+The working model is no longer:
+
+```text
+pressure-heavy -> immediate extra peeling
+```
+
+It is:
+
+```text
+pressure or recovery channel
+  -> exact-height-one reservoir
+  -> 3 mod 8 / 7 mod 8 color split
+  -> the 3 mod 8 color supplies delayed extra peeling
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
