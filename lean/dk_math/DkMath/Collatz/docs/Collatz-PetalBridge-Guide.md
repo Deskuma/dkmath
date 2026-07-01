@@ -1014,6 +1014,65 @@ MoreThanHalf continuation pressure at depth 2
   -> delayed budget with explicit remainder
 ```
 
+## Level-3 And Range Pressure Entrance
+
+Checkpoint 118 extends the concrete tower to level `3` and adds the first
+range-pressure entrance.
+
+The level-`3` residue counts are:
+
+```lean
+orbitWindowResidueCountMod64EqThirtyOneTail
+orbitWindowResidueCountMod64EqSixtyThreeTail
+```
+
+The static split is:
+
+```lean
+tailResidueCountMod32EqThirtyOne_split_mod64_thirtyOne_sixtyThree
+```
+
+with reading:
+
+```text
+tail 31 mod 32
+  = tail 31 mod 64
+    + tail 63 mod 64
+```
+
+The level-`3` recursion edge is:
+
+```lean
+tailMod32ThirtyOne_le_nextTailMod32Fifteen_add_nextTailMod32ThirtyOne
+```
+
+so the tower now has:
+
+```text
+tail 31 mod 32
+  -> next tail 15 mod 32 + next tail 31 mod 32
+```
+
+The level aliases are:
+
+```lean
+TailRemainderLevel3
+TailFallingLevel3
+tailRemainderLevel2_static_split
+tailRemainderLevel2_step_grammar
+```
+
+Checkpoint 118 also connects one-depth range pressure to local depth-`2`
+pressure:
+
+```lean
+sourcePressureDepthTwo_of_pressureOnRange_two_one
+sourceContinuationMass_depth_two_pos_of_pressureOnRange_two_one
+```
+
+This is the first bridge from the range profile vocabulary to the delayed
+reservoir budget entrance.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

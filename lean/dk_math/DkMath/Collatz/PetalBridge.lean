@@ -1020,6 +1020,28 @@ noncomputable def orbitWindowResidueCountMod32EqThirtyOneTail
   (List.range k).countP
     (fun i => decide (oddOrbitLabel n (i + 1) % 32 = 31))
 
+/--
+Number of shifted-tail labels in residue class `31 mod 64`.
+
+This is the delayed-peeling child inside the shifted-tail `31 mod 32`
+continuing color.
+-/
+noncomputable def orbitWindowResidueCountMod64EqThirtyOneTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 64 = 31))
+
+/--
+Number of shifted-tail labels in residue class `63 mod 64`.
+
+This is the continuing child inside the shifted-tail `31 mod 32` continuing
+color.
+-/
+noncomputable def orbitWindowResidueCountMod64EqSixtyThreeTail
+    (n : OddNat) (k : ℕ) : ℕ :=
+  (List.range k).countP
+    (fun i => decide (oddOrbitLabel n (i + 1) % 64 = 63))
+
 /-- Level `0` tail remainder: the whole shifted-tail exact-height-one reservoir. -/
 noncomputable def TailRemainderLevel0 (n : OddNat) (k : ℕ) : ℕ :=
   orbitWindowHeightCountEqTail n k 1
@@ -1039,6 +1061,14 @@ noncomputable def TailFallingLevel1 (n : OddNat) (k : ℕ) : ℕ :=
 /-- Level `2` falling color: the shifted-tail `7 mod 16` delayed-peeling color. -/
 noncomputable def TailFallingLevel2 (n : OddNat) (k : ℕ) : ℕ :=
   orbitWindowResidueCountMod16EqSevenTail n k
+
+/-- Level `3` tail remainder: the shifted-tail `31 mod 32` continuing color. -/
+noncomputable def TailRemainderLevel3 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod32EqThirtyOneTail n k
+
+/-- Level `3` falling color: the shifted-tail `15 mod 32` delayed-peeling color. -/
+noncomputable def TailFallingLevel3 (n : OddNat) (k : ℕ) : ℕ :=
+  orbitWindowResidueCountMod32EqFifteenTail n k
 
 /--
 Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
@@ -4095,6 +4125,58 @@ theorem tailRemainderLevel1_static_split
   exact tailResidueCountMod8EqSeven_split_mod16_seven_fifteen n k
 
 /--
+The shifted-tail `31 mod 32` continuing color splits into its two children
+modulo `64`: the delayed-peeling child `31 mod 64` and the continuing child
+`63 mod 64`.
+-/
+theorem tailResidueCountMod32EqThirtyOne_split_mod64_thirtyOne_sixtyThree
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod32EqThirtyOneTail n k =
+      orbitWindowResidueCountMod64EqThirtyOneTail n k +
+        orbitWindowResidueCountMod64EqSixtyThreeTail n k := by
+  unfold orbitWindowResidueCountMod32EqThirtyOneTail
+  unfold orbitWindowResidueCountMod64EqThirtyOneTail
+  unfold orbitWindowResidueCountMod64EqSixtyThreeTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ]
+      by_cases h31 : oddOrbitLabel n (k + 1) % 64 = 31
+      · have hmod32 : oddOrbitLabel n (k + 1) % 32 = 31 := by
+          omega
+        simp [ih, hmod32, h31, Nat.add_assoc, Nat.add_comm]
+      · by_cases h63 : oddOrbitLabel n (k + 1) % 64 = 63
+        · have hmod32 : oddOrbitLabel n (k + 1) % 32 = 31 := by
+            omega
+          simp [ih, hmod32, h63, Nat.add_comm, Nat.add_left_comm]
+        · have hnotMod32 : oddOrbitLabel n (k + 1) % 32 ≠ 31 := by
+            intro hmod32
+            have hchild :
+                oddOrbitLabel n (k + 1) % 64 = 31 ∨
+                  oddOrbitLabel n (k + 1) % 64 = 63 := by
+              omega
+            cases hchild with
+            | inl h =>
+                exact h31 h
+            | inr h =>
+                exact h63 h
+          simp [ih, hnotMod32, h31, h63]
+
+/--
+Level-alias version of the level-`2` static split.
+
+The level-`2` remainder is the sum of the level-`3` falling color and the
+level-`3` remainder.
+-/
+theorem tailRemainderLevel2_static_split
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel2 n k =
+      TailFallingLevel3 n k + TailRemainderLevel3 n k := by
+  unfold TailRemainderLevel2 TailFallingLevel3 TailRemainderLevel3
+  exact tailResidueCountMod16EqFifteen_split_mod32_fifteen_thirtyOne n k
+
+/--
 Orbit-level transition from the `3 mod 8` height-one channel.
 
 The current odd-state label is in residue class `3 mod 8`, so the accelerated
@@ -4533,6 +4615,75 @@ theorem tailMod16Fifteen_le_nextTailMod16Seven_add_nextTailMod16Fifteen
           · simp [hsource, htargetFifteen]
             omega
           · simp [hsource, htargetSeven, htargetFifteen]
+            omega
+
+/--
+Level-alias version of the level-`2` recursion edge.
+
+The level-`2` remainder re-enters the next level-`2` falling/remainder split.
+-/
+theorem tailRemainderLevel2_step_grammar
+    (n : OddNat) (k : ℕ) :
+    TailRemainderLevel2 n k ≤
+      TailFallingLevel2 n (k + 1) + TailRemainderLevel2 n (k + 1) := by
+  unfold TailRemainderLevel2 TailFallingLevel2
+  exact tailMod16Fifteen_le_nextTailMod16Seven_add_nextTailMod16Fifteen n k
+
+/--
+The shifted-tail `31 mod 32` continuing color enters the next shifted-tail
+`15 mod 32 / 31 mod 32` split.
+
+This is the level-`3` recursion edge of the delayed-reservoir tower.
+-/
+theorem tailMod32ThirtyOne_le_nextTailMod32Fifteen_add_nextTailMod32ThirtyOne
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountMod32EqThirtyOneTail n k ≤
+      orbitWindowResidueCountMod32EqFifteenTail n (k + 1) +
+        orbitWindowResidueCountMod32EqThirtyOneTail n (k + 1) := by
+  unfold orbitWindowResidueCountMod32EqThirtyOneTail
+  unfold orbitWindowResidueCountMod32EqFifteenTail
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      rw [List.range_succ, List.range_succ]
+      have htransitionFifteen :
+          oddOrbitLabel n (k + 1) % 64 = 31 →
+            oddOrbitLabel n ((k + 1) + 1) % 32 = 15 :=
+        oddOrbitLabel_succ_mod_thirtytwo_eq_fifteen_of_mod_sixtyfour_eq_thirtyone
+          n (k + 1)
+      have htransitionThirtyOne :
+          oddOrbitLabel n (k + 1) % 64 = 63 →
+            oddOrbitLabel n ((k + 1) + 1) % 32 = 31 :=
+        oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtythree
+          n (k + 1)
+      by_cases hsource : oddOrbitLabel n (k + 1) % 32 = 31
+      · have hchild :
+            oddOrbitLabel n (k + 1) % 64 = 31 ∨
+              oddOrbitLabel n (k + 1) % 64 = 63 := by
+          omega
+        cases hchild with
+        | inl h31 =>
+            have htargetFifteen :
+                oddOrbitLabel n ((k + 1) + 1) % 32 = 15 :=
+              htransitionFifteen h31
+            simp [hsource, htargetFifteen]
+            omega
+        | inr h63 =>
+            have htargetThirtyOne :
+                oddOrbitLabel n ((k + 1) + 1) % 32 = 31 :=
+              htransitionThirtyOne h63
+            simp [hsource, htargetThirtyOne]
+            omega
+      · by_cases htargetFifteen :
+            oddOrbitLabel n ((k + 1) + 1) % 32 = 15
+        · simp [hsource, htargetFifteen]
+          omega
+        · by_cases htargetThirtyOne :
+            oddOrbitLabel n ((k + 1) + 1) % 32 = 31
+          · simp [hsource, htargetThirtyOne]
+            omega
+          · simp [hsource, htargetFifteen, htargetThirtyOne]
             omega
 
 /--
@@ -5757,6 +5908,29 @@ theorem sourceContinuationMass_depth_two_pos_of_pressure_depth_two
     0 < orbitWindowContinuationSiblingMassPow2 n k 2 := by
   unfold MoreThanHalf at h
   omega
+
+/--
+Extract local depth-two source pressure from the one-depth range pressure
+profile beginning at depth `2`.
+-/
+theorem sourcePressureDepthTwo_of_pressureOnRange_two_one
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2 n k 2)
+      (orbitWindowRetentionMassPow2 n k 2) := by
+  simpa using moreThanHalf_of_sourceContinuationPressure n k 2 1 0 h (by omega)
+
+/--
+One-depth range pressure at depth `2` forces positive depth-two continuation
+mass.
+-/
+theorem sourceContinuationMass_depth_two_pos_of_pressureOnRange_two_one
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k 2 :=
+  sourceContinuationMass_depth_two_pos_of_pressure_depth_two n k
+    (sourcePressureDepthTwo_of_pressureOnRange_two_one n k h)
 
 /--
 Pressure-facing wrapper for the depth-two delayed-reservoir budget.
