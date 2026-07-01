@@ -1341,6 +1341,29 @@ theorem orbitWindowResidueCountPow2Tail_sum_eq_window
             rw [ih, pow2_residue_indicator_sum_eq_one]
 
 /--
+Depth-`3` source distribution sanity check.
+
+This is the `mod 8` instance of the generic power-of-two source partition.
+-/
+theorem orbitWindowResidueCountPow2_depth_three_sum_eq_window
+    (n : OddNat) (k : ℕ) :
+    (Finset.range 8).sum
+      (fun residue => orbitWindowResidueCountPow2 n k 3 residue) = k := by
+  simpa using orbitWindowResidueCountPow2_sum_eq_window n k 3
+
+/--
+Depth-`3` shifted-tail distribution sanity check.
+
+This is the `mod 8` instance of the generic power-of-two shifted-tail
+partition.
+-/
+theorem orbitWindowResidueCountPow2Tail_depth_three_sum_eq_window
+    (n : OddNat) (k : ℕ) :
+    (Finset.range 8).sum
+      (fun residue => orbitWindowResidueCountPow2Tail n k 3 residue) = k := by
+  simpa using orbitWindowResidueCountPow2Tail_sum_eq_window n k 3
+
+/--
 Lift a pointwise source-to-tail residue transition to an occupation-count
 inequality.
 
@@ -2297,6 +2320,23 @@ theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
         · simp [hsource, htail, ih]
 
 /--
+Helper-routed version of the recovery sibling count transition.
+
+This theorem has the same statement as
+`orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount`, but it records
+the preferred finite channel-flow route:
+
+`pointwise residue transition -> count-level source <= shifted-tail target`.
+-/
+theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper
+    (r : ℕ) (hr : 2 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountPow2 n k (r + 2) (2 ^ (r + 1) - 1) ≤
+      orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ r - 1) := by
+  apply orbitWindowResidueCountPow2_le_tail_of_pointwise
+  intro i _hi hsource
+  exact oddOrbitLabel_succ_recovery_residue_of_mod r hr n i hsource
+
+/--
 Count-level recursive Petal transition for the continuation sibling.
 
 Every source-window label in the continuation sibling modulo `2^(r + 2)`
@@ -2328,6 +2368,23 @@ theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
         · exact by
             simpa [hsource, htail] using Nat.le_succ_of_le ih
         · simp [hsource, htail, ih]
+
+/--
+Helper-routed version of the continuation sibling count transition.
+
+This theorem has the same statement as
+`orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount`, but it
+records the preferred finite channel-flow route:
+
+`pointwise residue transition -> count-level source <= shifted-tail target`.
+-/
+theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper
+    (r : ℕ) (hr : 1 ≤ r) (n : OddNat) (k : ℕ) :
+    orbitWindowResidueCountPow2 n k (r + 2) (2 ^ (r + 2) - 1) ≤
+      orbitWindowResidueCountPow2Tail n k (r + 1) (2 ^ (r + 1) - 1) := by
+  apply orbitWindowResidueCountPow2_le_tail_of_pointwise
+  intro i _hi hsource
+  exact oddOrbitLabel_succ_continuation_residue_of_mod r hr n i hsource
 
 /--
 Every `7 mod 8` source label contributes a shifted-tail entry with exact

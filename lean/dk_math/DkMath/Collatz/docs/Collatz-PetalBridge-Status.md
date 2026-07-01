@@ -170,6 +170,8 @@ pow2_residue_indicator_sum_eq_one
 orbitWindowResidueCountPow2_sum_eq_window
 orbitWindowResidueCountPow2Tail_sum_eq_window
 orbitWindowResidueCountPow2_le_tail_of_pointwise
+orbitWindowResidueCountPow2_depth_three_sum_eq_window
+orbitWindowResidueCountPow2Tail_depth_three_sum_eq_window
 orbitWindowPrefixResidueCountMod4EqOne_le_prefix
 orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
 orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
@@ -244,6 +246,8 @@ orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two
 residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
 orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
 orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
+orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper
+orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper
 orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
 orbitWindowResidueCountMod8EqThree_add_seven_le_tail_partition
 orbitWindowHeightCountGeTail_le_countGe_succ
@@ -591,6 +595,16 @@ full pow-two shifted-tail residue partition
 generic pointwise-to-count channel flow
   -> if every source cell hit lands in a target tail cell,
      then source CountPow2 <= target TailCountPow2
+
+depth `3` source distribution sanity
+  -> Sum_{residue < 8} CountPow2 depth 3 residue = k
+
+depth `3` shifted-tail distribution sanity
+  -> Sum_{residue < 8} TailCountPow2 depth 3 residue = k
+
+helper-routed recursive two-adic Petal channels
+  -> recovery source <= outward-retention tail
+  -> continuation source <= next-retention tail
 ```
 
 This is the first distribution layer.  It still avoids importing the heavier
@@ -609,6 +623,40 @@ aimed at real-power / exponential MGF estimates.  The Collatz bridge keeps the
 current API local and elementary because the data here is just a finite ordered
 list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
 the observation-window layer before a real carrier/radical bridge exists.
+
+The finite channel-flow layer is now visible as a theorem chain:
+
+```text
+SourceDistribution:
+  CountPow2 over labels 0..k-1
+
+TailDistribution:
+  TailCountPow2 over labels 1..k
+
+Conservation:
+  total source mass = k
+  total tail mass = k
+
+ChannelFlow:
+  pointwise source-to-tail transition
+    -> source occupation <= tail occupation
+
+Recursive two-adic Petal instances:
+  recovery source <= outward-retention tail
+  continuation source <= next-retention tail
+```
+
+The next ratio layer should initially stay in `Nat` inequalities rather than
+introducing `ℚ` or `ℝ` frequencies:
+
+```text
+FiniteRatioWitness:
+  use inequalities such as 2 * count <= k
+  instead of count / k at first
+
+Reason:
+  avoids zero-window division and coercion overhead
+```
 
 The Collatz-specific floor is now also fixed:
 
