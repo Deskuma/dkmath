@@ -631,6 +631,63 @@ RecoveryDominatesContinuation
 ContinuationOutrunsRecovery
 ```
 
+## Cause-Side Frequency Alias
+
+Checkpoint 112 gives the failure side its own frequency vocabulary:
+
+```lean
+SourceOutrunsAtMostHalfOnDepthRange
+SourceOutrunsMoreThanHalfOnDepthRange
+TailOutrunsAtMostHalfOnDepthRange
+TailOutrunsMoreThanHalfOnDepthRange
+```
+
+These predicates are thin aliases around the cause-side outruns counts:
+
+```text
+sourceContinuationOutrunsDepthCount
+tailContinuationOutrunsDepthCount
+```
+
+They have the same finite dichotomy as pressure frequency:
+
+```lean
+sourceOutrunsAtMostHalf_or_moreThanHalfOnDepthRange
+tailOutrunsAtMostHalf_or_moreThanHalfOnDepthRange
+```
+
+The bridge back to the descriptive pressure vocabulary is explicit:
+
+```lean
+sourceOutrunsAtMostHalf_iff_pressureAtMostHalf
+sourceOutrunsMoreThanHalf_iff_pressureMoreThanHalf
+tailOutrunsAtMostHalf_iff_pressureAtMostHalf
+tailOutrunsMoreThanHalf_iff_pressureMoreThanHalf
+```
+
+So a later proof can state a hypothesis on the mechanism side:
+
+```text
+continuation outruns recovery in more than half of the depths
+```
+
+and immediately consume the existing pressure-frequency API.
+
+Checkpoint 112 also records the direct count comparison forced by cause-side
+more-than-half:
+
+```lean
+sourceDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
+tailDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
+```
+
+This reads:
+
+```text
+if outruns depths occupy more than half of the depth range,
+then outruns depths strictly outnumber dominance depths.
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

@@ -2964,6 +2964,134 @@ theorem tailCauseSideDepthCount_add_eq_len
   exact tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
 
 /--
+Cause-side source frequency predicate: source continuation outruns recovery in
+at most half of the observed depth range.
+-/
+def SourceOutrunsAtMostHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  AtMostHalf (sourceContinuationOutrunsDepthCount n k r len) len
+
+/--
+Cause-side source frequency predicate: source continuation outruns recovery in
+more than half of the observed depth range.
+-/
+def SourceOutrunsMoreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalf (sourceContinuationOutrunsDepthCount n k r len) len
+
+/--
+Cause-side tail frequency predicate: tail continuation outruns recovery in at
+most half of the observed depth range.
+-/
+def TailOutrunsAtMostHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  AtMostHalf (tailContinuationOutrunsDepthCount n k r len) len
+
+/--
+Cause-side tail frequency predicate: tail continuation outruns recovery in
+more than half of the observed depth range.
+-/
+def TailOutrunsMoreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalf (tailContinuationOutrunsDepthCount n k r len) len
+
+/-- Source cause-side outruns frequency has the same dichotomy as pressure. -/
+theorem sourceOutrunsAtMostHalf_or_moreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) :
+    SourceOutrunsAtMostHalfOnDepthRange n k r len ∨
+      SourceOutrunsMoreThanHalfOnDepthRange n k r len := by
+  unfold SourceOutrunsAtMostHalfOnDepthRange
+  unfold SourceOutrunsMoreThanHalfOnDepthRange
+  exact atMostHalf_or_moreThanHalf
+    (sourceContinuationOutrunsDepthCount n k r len) len
+
+/-- Tail cause-side outruns frequency has the same dichotomy as pressure. -/
+theorem tailOutrunsAtMostHalf_or_moreThanHalfOnDepthRange
+    (n : OddNat) (k r len : ℕ) :
+    TailOutrunsAtMostHalfOnDepthRange n k r len ∨
+      TailOutrunsMoreThanHalfOnDepthRange n k r len := by
+  unfold TailOutrunsAtMostHalfOnDepthRange
+  unfold TailOutrunsMoreThanHalfOnDepthRange
+  exact atMostHalf_or_moreThanHalf
+    (tailContinuationOutrunsDepthCount n k r len) len
+
+/--
+Source cause-side at-most-half frequency is equivalent to descriptive source
+pressure at-most-half frequency.
+-/
+theorem sourceOutrunsAtMostHalf_iff_pressureAtMostHalf
+    (n : OddNat) (k r len : ℕ) :
+    SourceOutrunsAtMostHalfOnDepthRange n k r len ↔
+      SourcePressureAtMostHalfOnDepthRange n k r len := by
+  unfold SourceOutrunsAtMostHalfOnDepthRange
+  unfold SourcePressureAtMostHalfOnDepthRange
+  rw [sourceContinuationOutrunsDepthCount_eq_pressureDepthCount]
+
+/--
+Source cause-side more-than-half frequency is equivalent to descriptive source
+pressure more-than-half frequency.
+-/
+theorem sourceOutrunsMoreThanHalf_iff_pressureMoreThanHalf
+    (n : OddNat) (k r len : ℕ) :
+    SourceOutrunsMoreThanHalfOnDepthRange n k r len ↔
+      SourcePressureMoreThanHalfOnDepthRange n k r len := by
+  unfold SourceOutrunsMoreThanHalfOnDepthRange
+  unfold SourcePressureMoreThanHalfOnDepthRange
+  rw [sourceContinuationOutrunsDepthCount_eq_pressureDepthCount]
+
+/--
+Tail cause-side at-most-half frequency is equivalent to descriptive tail
+pressure at-most-half frequency.
+-/
+theorem tailOutrunsAtMostHalf_iff_pressureAtMostHalf
+    (n : OddNat) (k r len : ℕ) :
+    TailOutrunsAtMostHalfOnDepthRange n k r len ↔
+      TailPressureAtMostHalfOnDepthRange n k r len := by
+  unfold TailOutrunsAtMostHalfOnDepthRange
+  unfold TailPressureAtMostHalfOnDepthRange
+  rw [tailContinuationOutrunsDepthCount_eq_pressureDepthCount]
+
+/--
+Tail cause-side more-than-half frequency is equivalent to descriptive tail
+pressure more-than-half frequency.
+-/
+theorem tailOutrunsMoreThanHalf_iff_pressureMoreThanHalf
+    (n : OddNat) (k r len : ℕ) :
+    TailOutrunsMoreThanHalfOnDepthRange n k r len ↔
+      TailPressureMoreThanHalfOnDepthRange n k r len := by
+  unfold TailOutrunsMoreThanHalfOnDepthRange
+  unfold TailPressureMoreThanHalfOnDepthRange
+  rw [tailContinuationOutrunsDepthCount_eq_pressureDepthCount]
+
+/--
+If source outruns depths occupy more than half of the depth range, then they
+strictly outnumber source dominance depths.
+-/
+theorem sourceDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceOutrunsMoreThanHalfOnDepthRange n k r len) :
+    sourceRecoveryDominanceDepthCount n k r len <
+      sourceContinuationOutrunsDepthCount n k r len := by
+  unfold SourceOutrunsMoreThanHalfOnDepthRange at h
+  unfold MoreThanHalf at h
+  have hpart := sourceCauseSideDepthCount_add_eq_len n k r len
+  omega
+
+/--
+If tail outruns depths occupy more than half of the depth range, then they
+strictly outnumber tail dominance depths.
+-/
+theorem tailDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : TailOutrunsMoreThanHalfOnDepthRange n k r len) :
+    tailRecoveryDominanceDepthCount n k r len <
+      tailContinuationOutrunsDepthCount n k r len := by
+  unfold TailOutrunsMoreThanHalfOnDepthRange at h
+  unfold MoreThanHalf at h
+  have hpart := tailCauseSideDepthCount_add_eq_len n k r len
+  omega
+
+/--
 If source continuation pressure holds at every depth of the range, then the
 source pressure-depth count fills the whole range.
 -/

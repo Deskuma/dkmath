@@ -146,6 +146,7 @@ docs/Collatz-MixedDepthModeDistribution-108.md
 docs/Collatz-DepthPressureFrequency-109.md
 docs/Collatz-CauseSideFailureCount-110.md
 docs/Collatz-CauseSideDepthDistribution-111.md
+docs/Collatz-CauseSideFrequencyAlias-112.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
