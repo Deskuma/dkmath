@@ -870,6 +870,77 @@ pressure or recovery channel
   -> the 3 mod 8 color supplies delayed extra peeling
 ```
 
+## Delayed Reservoir Tower
+
+Checkpoint 116 starts the recursive tower above the checkpoint 115 split.
+
+The continuing `7 mod 8` color itself splits at the next resolution:
+
+```lean
+orbitWindowResidueCountMod16EqSevenTail
+orbitWindowResidueCountMod16EqFifteenTail
+tailResidueCountMod8EqSeven_split_mod16_seven_fifteen
+```
+
+The reading is:
+
+```text
+tail 7 mod 8
+  = tail 7 mod 16
+    + tail 15 mod 16
+```
+
+This is not only a static refinement.  The existing pointwise theorem:
+
+```lean
+orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
+```
+
+is now lifted to count level:
+
+```lean
+tailMod8Seven_le_nextTailHeightCountEq_one
+tailMod8Seven_le_nextTailMod8Three_add_nextTailMod8Seven
+```
+
+So the continuing color enters the next exact-height-one reservoir and is then
+split again:
+
+```text
+tail 7 mod 8 at this step
+  -> next tail exact height 1
+  -> next tail 3 mod 8 / next tail 7 mod 8
+```
+
+The one-step grammar is:
+
+```lean
+tailExactHeightOneReservoir_step_grammar
+```
+
+which says:
+
+```text
+current tail exact height 1
+  -> next tail height >= 2
+     or
+     next tail exact height 1
+```
+
+The budget form keeps the continuing part as an explicit remainder:
+
+```lean
+tailExactHeightOneReservoir_budget_with_remainder
+sourceContinuationMass_depth_two_delayed_budget_with_tailSeven_remainder
+```
+
+This is the current strongest finite reading:
+
+```text
+the delayed-peeling color pays into sumS;
+the continuing color is not discarded, but carried as the next remainder.
+```
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
