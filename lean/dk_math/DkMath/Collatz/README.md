@@ -141,6 +141,7 @@ docs/Collatz-TailDepthRefinement-103.md
 docs/Collatz-FiniteHalfCriterion-104.md
 docs/Collatz-ComparisonPredicates-105.md
 docs/Collatz-MoreThanHalfPressure-106.md
+docs/Collatz-PressureProfile-107.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -326,3 +327,26 @@ The new layer still does not assert that either branch is globally preferred.
 It makes the failure branch measurable: if dominance fails, the obstruction is
 not vague; it is strict more-than-half continuation pressure inside the
 retention cylinder.
+
+Checkpoint 107 packages repeated pressure over a finite depth range:
+
+```lean
+MoreThanHalfOnRange
+SourceContinuationPressureOnRange
+TailContinuationPressureOnRange
+sourceContinuationPressure_of_outRunsOnRange
+tailContinuationPressure_of_outRunsOnRange
+sourceContinuationPressureDepthCount
+tailContinuationPressureDepthCount
+```
+
+The added count theorems show that an all-pressure range fills the whole
+depth-mode count:
+
+```lean
+sourceContinuationPressureDepthCount_eq_len_of_pressureOnRange
+tailContinuationPressureDepthCount_eq_len_of_pressureOnRange
+```
+
+This moves the observation from local mass pressure to finite depth-profile
+counting.

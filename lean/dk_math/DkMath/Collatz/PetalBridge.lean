@@ -2131,6 +2131,180 @@ theorem moreThanHalf_tailContinuation_of_outRunsOnRange
     n k (r + j) (tailContinuationOutrunsRecovery_of_onRange n k r len j h hj)
 
 /--
+Generic finite range profile for strict more-than-half pressure.
+
+The functions `count` and `total` are indexed by depth.  The predicate says
+that every depth in the interval `[r, r + len)` carries `MoreThanHalf` pressure.
+-/
+def MoreThanHalfOnRange
+    (count total : ℕ → ℕ) (r len : ℕ) : Prop :=
+  ∀ j, j < len → MoreThanHalf (count (r + j)) (total (r + j))
+
+/--
+Source continuation pressure profile over a finite depth range.
+
+This packages the statement that source continuation occupies more than half
+of source retention at every depth in `[r, r + len)`.
+-/
+def SourceContinuationPressureOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalfOnRange
+    (fun d => orbitWindowContinuationSiblingMassPow2 n k d)
+    (fun d => orbitWindowRetentionMassPow2 n k d)
+    r len
+
+/--
+Tail continuation pressure profile over a finite depth range.
+
+This is the shifted-tail counterpart of
+`SourceContinuationPressureOnRange`.
+-/
+def TailContinuationPressureOnRange
+    (n : OddNat) (k r len : ℕ) : Prop :=
+  MoreThanHalfOnRange
+    (fun d => orbitWindowContinuationSiblingMassPow2Tail n k d)
+    (fun d => orbitWindowRetentionMassPow2Tail n k d)
+    r len
+
+/-- A source failure range promotes to a source continuation pressure profile. -/
+theorem sourceContinuationPressure_of_outRunsOnRange
+    (n : OddNat) (k r len : ℕ)
+    (h : ContinuationOutrunsRecoveryOnRange n k r len) :
+    SourceContinuationPressureOnRange n k r len := by
+  intro j hj
+  exact moreThanHalf_continuation_of_outRunsOnRange n k r len j h hj
+
+/-- A tail failure range promotes to a tail continuation pressure profile. -/
+theorem tailContinuationPressure_of_outRunsOnRange
+    (n : OddNat) (k r len : ℕ)
+    (h : TailContinuationOutrunsRecoveryOnRange n k r len) :
+    TailContinuationPressureOnRange n k r len := by
+  intro j hj
+  exact moreThanHalf_tailContinuation_of_outRunsOnRange n k r len j h hj
+
+/-- Extract source more-than-half pressure from a source pressure profile. -/
+theorem moreThanHalf_of_sourceContinuationPressure
+    (n : OddNat) (k r len j : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+      (orbitWindowRetentionMassPow2 n k (r + j)) :=
+  h j hj
+
+/-- Extract tail more-than-half pressure from a tail pressure profile. -/
+theorem moreThanHalf_of_tailContinuationPressure
+    (n : OddNat) (k r len j : ℕ)
+    (h : TailContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    MoreThanHalf
+      (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+      (orbitWindowRetentionMassPow2Tail n k (r + j)) :=
+  h j hj
+
+/--
+Number of depths in `[r, r + len)` where source continuation has
+more-than-half pressure.
+
+This is a finite depth-mode count, not a window-mass count.
+-/
+noncomputable def sourceContinuationPressureDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+              (orbitWindowRetentionMassPow2 n k (r + j))))
+
+/--
+Number of depths in `[r, r + len)` where tail continuation has
+more-than-half pressure.
+-/
+noncomputable def tailContinuationPressureDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+              (orbitWindowRetentionMassPow2Tail n k (r + j))))
+
+/--
+If source continuation pressure holds at every depth of the range, then the
+source pressure-depth count fills the whole range.
+-/
+theorem sourceContinuationPressureDepthCount_eq_len_of_pressureOnRange
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len) :
+    sourceContinuationPressureDepthCount n k r len = len := by
+  classical
+  unfold sourceContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_singleton]
+      have ih' :
+          (List.range len).countP
+              (fun j =>
+                decide
+                  (MoreThanHalf
+                    (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                    (orbitWindowRetentionMassPow2 n k (r + j)))) = len := by
+        apply ih
+        intro j hj
+        exact h j (Nat.lt_trans hj (Nat.lt_succ_self len))
+      have hlast :
+          decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len))) = true := by
+        exact decide_eq_true (h len (Nat.lt_succ_self len))
+      rw [ih', hlast]
+      simp
+
+/--
+If tail continuation pressure holds at every depth of the range, then the tail
+pressure-depth count fills the whole range.
+-/
+theorem tailContinuationPressureDepthCount_eq_len_of_pressureOnRange
+    (n : OddNat) (k r len : ℕ)
+    (h : TailContinuationPressureOnRange n k r len) :
+    tailContinuationPressureDepthCount n k r len = len := by
+  classical
+  unfold tailContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_singleton]
+      have ih' :
+          (List.range len).countP
+              (fun j =>
+                decide
+                  (MoreThanHalf
+                    (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+                    (orbitWindowRetentionMassPow2Tail n k (r + j)))) = len := by
+        apply ih
+        intro j hj
+        exact h j (Nat.lt_trans hj (Nat.lt_succ_self len))
+      have hlast :
+          decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len))) = true := by
+        exact decide_eq_true (h len (Nat.lt_succ_self len))
+      rw [ih', hlast]
+      simp
+
+/--
 Predicate-facing source half criterion.
 
 This is the readable version of

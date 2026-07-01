@@ -395,6 +395,53 @@ This gives the obstruction route a concrete finite signature.  If the desired
 dominance condition fails over a range, each failed depth carries strict
 continuation pressure inside the corresponding retention cylinder.
 
+## Pressure Profiles
+
+Checkpoint 107 packages repeated more-than-half pressure over a depth range:
+
+```lean
+MoreThanHalfOnRange
+SourceContinuationPressureOnRange
+TailContinuationPressureOnRange
+```
+
+The range-failure predicates from checkpoint 106 now promote directly to
+pressure profiles:
+
+```lean
+sourceContinuationPressure_of_outRunsOnRange
+tailContinuationPressure_of_outRunsOnRange
+```
+
+Use the extraction theorems when a later proof has a range profile and needs a
+single depth:
+
+```lean
+moreThanHalf_of_sourceContinuationPressure
+moreThanHalf_of_tailContinuationPressure
+```
+
+Checkpoint 107 also starts depth-mode counting:
+
+```lean
+sourceContinuationPressureDepthCount
+tailContinuationPressureDepthCount
+sourceContinuationPressureDepthCount_eq_len_of_pressureOnRange
+tailContinuationPressureDepthCount_eq_len_of_pressureOnRange
+```
+
+This is a different finite distribution from the window residue counts.  It
+counts how many depths in `[r, r + len)` are pressure depths.  The first count
+theorems only cover the all-pressure case:
+
+```text
+pressure at every depth
+  -> pressure depth count = len
+```
+
+The next natural layer is a mixed depth-mode distribution: controlled depths
+versus pressure depths.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:
@@ -427,22 +474,22 @@ For a new residue channel:
 
 1. Prove the pointwise transition:
 
-```text
-if oddOrbitLabel n i is in source cell A,
-then oddOrbitLabel n (i + 1) is in tail cell B.
-```
+    ```text
+    if oddOrbitLabel n i is in source cell A,
+    then oddOrbitLabel n (i + 1) is in tail cell B.
+    ```
 
 2. Apply:
 
-```lean
-pow2ChannelFlow_of_pointwise
-```
+    ```lean
+    pow2ChannelFlow_of_pointwise
+    ```
 
 3. State a named theorem for the channel:
 
-```text
-sourceChannelCount <= tailChannelCount
-```
+    ```text
+    sourceChannelCount <= tailChannelCount
+    ```
 
 Avoid writing a fresh count induction unless the helper does not fit.
 
