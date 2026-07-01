@@ -142,6 +142,7 @@ docs/Collatz-FiniteHalfCriterion-104.md
 docs/Collatz-ComparisonPredicates-105.md
 docs/Collatz-MoreThanHalfPressure-106.md
 docs/Collatz-PressureProfile-107.md
+docs/Collatz-MixedDepthModeDistribution-108.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```
@@ -350,3 +351,21 @@ tailContinuationPressureDepthCount_eq_len_of_pressureOnRange
 
 This moves the observation from local mass pressure to finite depth-profile
 counting.
+
+Checkpoint 108 closes the mixed depth-mode distribution:
+
+```lean
+sourceContinuationControlledDepthCount
+tailContinuationControlledDepthCount
+sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+```
+
+The reading is:
+
+```text
+controlled depth count + pressure depth count = depth range length
+```
+
+This is the depth-mode analogue of the finite residue distribution from
+checkpoint 100.

@@ -442,6 +442,50 @@ pressure at every depth
 The next natural layer is a mixed depth-mode distribution: controlled depths
 versus pressure depths.
 
+## Mixed Depth-Mode Distribution
+
+Checkpoint 108 adds the controlled side of the pressure count:
+
+```lean
+sourceContinuationControlledDepthCount
+tailContinuationControlledDepthCount
+```
+
+Both pressure and controlled counts are bounded by the range length:
+
+```lean
+sourceContinuationPressureDepthCount_le_len
+tailContinuationPressureDepthCount_le_len
+sourceContinuationControlledDepthCount_le_len
+tailContinuationControlledDepthCount_le_len
+```
+
+The main partition theorems are:
+
+```lean
+sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+```
+
+They say:
+
+```text
+controlled depth count + pressure depth count = len
+```
+
+This is the depth-mode analogue of the finite channel distribution theorem.
+Checkpoint 100 counted how orbit-window labels distribute across residue
+cells.  Checkpoint 108 counts how depth positions distribute across the two
+local modes:
+
+```text
+AtMostHalf mode
+MoreThanHalf mode
+```
+
+This still does not prove that pressure is rare.  It provides the finite budget
+surface needed to state such a claim without leaving `Nat`.
+
 ## Recursive Petal Residues
 
 The current recursive two-adic Petal channels are:

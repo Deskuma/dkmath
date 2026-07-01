@@ -2232,9 +2232,211 @@ noncomputable def tailContinuationPressureDepthCount
       (List.range len).countP
         (fun j =>
           decide
+          (MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+              (orbitWindowRetentionMassPow2Tail n k (r + j))))
+
+/--
+Number of depths in `[r, r + len)` where source continuation is controlled,
+meaning it occupies at most half of source retention.
+-/
+noncomputable def sourceContinuationControlledDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+              (orbitWindowRetentionMassPow2 n k (r + j))))
+
+/--
+Number of depths in `[r, r + len)` where tail continuation is controlled,
+meaning it occupies at most half of tail retention.
+-/
+noncomputable def tailContinuationControlledDepthCount
+    (n : OddNat) (k r len : ℕ) : ℕ :=
+  by
+    classical
+    exact
+      (List.range len).countP
+        (fun j =>
+          decide
+            (AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+              (orbitWindowRetentionMassPow2Tail n k (r + j))))
+
+/-- Source pressure-depth count is bounded by the depth-range length. -/
+theorem sourceContinuationPressureDepthCount_le_len
+    (n : OddNat) (k r len : ℕ) :
+    sourceContinuationPressureDepthCount n k r len ≤ len := by
+  classical
+  unfold sourceContinuationPressureDepthCount
+  simpa using
+    (List.countP_le_length
+      (p :=
+        fun j =>
+          decide
+            (MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+              (orbitWindowRetentionMassPow2 n k (r + j))))
+      (l := List.range len))
+
+/-- Tail pressure-depth count is bounded by the depth-range length. -/
+theorem tailContinuationPressureDepthCount_le_len
+    (n : OddNat) (k r len : ℕ) :
+    tailContinuationPressureDepthCount n k r len ≤ len := by
+  classical
+  unfold tailContinuationPressureDepthCount
+  simpa using
+    (List.countP_le_length
+      (p :=
+        fun j =>
+          decide
             (MoreThanHalf
               (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
               (orbitWindowRetentionMassPow2Tail n k (r + j))))
+      (l := List.range len))
+
+/-- Source controlled-depth count is bounded by the depth-range length. -/
+theorem sourceContinuationControlledDepthCount_le_len
+    (n : OddNat) (k r len : ℕ) :
+    sourceContinuationControlledDepthCount n k r len ≤ len := by
+  classical
+  unfold sourceContinuationControlledDepthCount
+  simpa using
+    (List.countP_le_length
+      (p :=
+        fun j =>
+          decide
+            (AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+              (orbitWindowRetentionMassPow2 n k (r + j))))
+      (l := List.range len))
+
+/-- Tail controlled-depth count is bounded by the depth-range length. -/
+theorem tailContinuationControlledDepthCount_le_len
+    (n : OddNat) (k r len : ℕ) :
+    tailContinuationControlledDepthCount n k r len ≤ len := by
+  classical
+  unfold tailContinuationControlledDepthCount
+  simpa using
+    (List.countP_le_length
+      (p :=
+        fun j =>
+          decide
+            (AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2Tail n k (r + j))
+              (orbitWindowRetentionMassPow2Tail n k (r + j))))
+      (l := List.range len))
+
+/--
+The source depth range splits into controlled depths and pressure depths.
+-/
+theorem sourceContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+    (n : OddNat) (k r len : ℕ) :
+    sourceContinuationControlledDepthCount n k r len +
+      sourceContinuationPressureDepthCount n k r len = len := by
+  classical
+  unfold sourceContinuationControlledDepthCount
+  unfold sourceContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide
+              (AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)))
+            then 1 else 0) +
+            (if decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)))
+            then 1 else 0) = 1 := by
+        by_cases hc :
+            AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+              (orbitWindowRetentionMassPow2 n k (r + len))
+        · have hnot :
+              ¬ MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) := by
+            intro hm
+            unfold AtMostHalf at hc
+            unfold MoreThanHalf at hm
+            omega
+          simp [hc, hnot]
+        · have hm :
+              MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                (orbitWindowRetentionMassPow2 n k (r + len)) := by
+            cases
+                atMostHalf_or_moreThanHalf
+                  (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+                  (orbitWindowRetentionMassPow2 n k (r + len)) with
+            | inl hcontrolled => exact False.elim (hc hcontrolled)
+            | inr hpressure => exact hpressure
+          simp [hc, hm]
+      omega
+
+/--
+The tail depth range splits into controlled depths and pressure depths.
+-/
+theorem tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len
+    (n : OddNat) (k r len : ℕ) :
+    tailContinuationControlledDepthCount n k r len +
+      tailContinuationPressureDepthCount n k r len = len := by
+  classical
+  unfold tailContinuationControlledDepthCount
+  unfold tailContinuationPressureDepthCount
+  induction len with
+  | zero =>
+      simp
+  | succ len ih =>
+      rw [List.range_succ, List.countP_append, List.countP_append,
+        List.countP_singleton, List.countP_singleton]
+      have hlast :
+          (if decide
+              (AtMostHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)))
+            then 1 else 0) +
+            (if decide
+              (MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)))
+            then 1 else 0) = 1 := by
+        by_cases hc :
+            AtMostHalf
+              (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+              (orbitWindowRetentionMassPow2Tail n k (r + len))
+        · have hnot :
+              ¬ MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) := by
+            intro hm
+            unfold AtMostHalf at hc
+            unfold MoreThanHalf at hm
+            omega
+          simp [hc, hnot]
+        · have hm :
+              MoreThanHalf
+                (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                (orbitWindowRetentionMassPow2Tail n k (r + len)) := by
+            cases
+                atMostHalf_or_moreThanHalf
+                  (orbitWindowContinuationSiblingMassPow2Tail n k (r + len))
+                  (orbitWindowRetentionMassPow2Tail n k (r + len)) with
+            | inl hcontrolled => exact False.elim (hc hcontrolled)
+            | inr hpressure => exact hpressure
+          simp [hc, hm]
+      omega
 
 /--
 If source continuation pressure holds at every depth of the range, then the
