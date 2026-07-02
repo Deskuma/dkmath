@@ -1555,3 +1555,59 @@ rows with L5 remainder: 18
 max pressure depth count: 6
 max L5 remainder: 3
 ```
+
+## Checkpoint 122: Selected Pressure Depths And Overlap Scan
+
+Checkpoint 122 packages selected local pressure depths:
+
+```lean
+IsSourcePressureDepth
+isSourcePressureDepth_of_pressureOnRange
+positive_sourceContinuationMass_of_isSourcePressureDepth
+```
+
+Positive count and positive mass witness helpers:
+
+```lean
+exists_isSourcePressureDepth_of_pressureDepthCount_pos
+exists_isSourcePressureDepth_with_positive_mass
+```
+
+Two-witness extraction:
+
+```lean
+exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+exists_two_sourcePressureDepths_of_two_le_pressureDepthCount
+```
+
+These theorems extract distinct selected pressure-depth witnesses only.  They
+make no multi-budget independence claim.
+
+Depth-two budget predicate:
+
+```lean
+HasDepthTwoDelayedBudget
+hasDepthTwoDelayedBudget_of_pressureOnRange_two_one
+```
+
+New Python overlap scan:
+
+```text
+python/Collatz/PetalBridge/selected_depth_overlap_scan.py
+python/Collatz/PetalBridge/results/selected_depth_overlap_scan.csv
+python/Collatz/PetalBridge/results/selected_depth_overlap_scan.md
+```
+
+Default observation:
+
+```text
+rows: 500
+rows with at least two selected depths: 52
+rows with a disjoint selected-depth pair: 0
+rows where every selected-depth pair overlaps: 52
+max selected depth count: 6
+max pairwise overlap: 13
+```
+
+This suggests that the next formal predicate should probably describe
+overlap/nesting control, not assume selected depths are independent.

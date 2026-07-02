@@ -6349,6 +6349,35 @@ theorem sourceContinuationMass_pos_of_pressureOnRange_at
     (sourcePressureAtDepth_of_pressureOnRange n k r len j h hj)
 
 /--
+A selected source pressure depth inside a depth range.
+
+This predicate packages the local `MoreThanHalf` statement so later accounting
+lemmas can talk about selected depths without repeating the mass expressions.
+-/
+def IsSourcePressureDepth
+    (n : OddNat) (k r : ℕ) (j : ℕ) : Prop :=
+  MoreThanHalf
+    (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+    (orbitWindowRetentionMassPow2 n k (r + j))
+
+/-- Range pressure marks every in-range depth as a selected source pressure depth. -/
+theorem isSourcePressureDepth_of_pressureOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    IsSourcePressureDepth n k r j := by
+  unfold IsSourcePressureDepth
+  exact sourcePressureAtDepth_of_pressureOnRange n k r len j h hj
+
+/-- A selected source pressure depth has positive source continuation mass. -/
+theorem positive_sourceContinuationMass_of_isSourcePressureDepth
+    (n : OddNat) (k r j : ℕ)
+    (h : IsSourcePressureDepth n k r j) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) := by
+  unfold IsSourcePressureDepth at h
+  exact sourceContinuationMass_pos_of_localPressure n k (r + j) h
+
+/--
 Positive source pressure-depth count selects at least one local pressure depth.
 
 This is intentionally only an existence theorem.  It does not claim that
@@ -6397,6 +6426,119 @@ theorem exists_positive_sourceContinuationMass_of_pressureDepthCount_pos
   rcases exists_sourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
     ⟨j, hj, hpressure⟩
   exact ⟨j, hj, sourceContinuationMass_pos_of_localPressure n k (r + j) hpressure⟩
+
+/-- Positive pressure-depth count selects a packaged pressure-depth witness. -/
+theorem exists_isSourcePressureDepth_of_pressureDepthCount_pos
+    (n : OddNat) (k r len : ℕ)
+    (hpos : 0 < sourceContinuationPressureDepthCount n k r len) :
+    ∃ j, j < len ∧ IsSourcePressureDepth n k r j := by
+  rcases exists_sourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
+    ⟨j, hj, hpressure⟩
+  exact ⟨j, hj, hpressure⟩
+
+/--
+Positive pressure-depth count selects a packaged pressure-depth witness together
+with its positive source continuation mass.
+-/
+theorem exists_isSourcePressureDepth_with_positive_mass
+    (n : OddNat) (k r len : ℕ)
+    (hpos : 0 < sourceContinuationPressureDepthCount n k r len) :
+    ∃ j, j < len ∧
+      IsSourcePressureDepth n k r j ∧
+      0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) := by
+  rcases exists_isSourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
+    ⟨j, hj, hpressure⟩
+  exact ⟨j, hj, hpressure,
+    positive_sourceContinuationMass_of_isSourcePressureDepth n k r j hpressure⟩
+
+/--
+Two selected source pressure depths exist when the pressure-depth count is at
+least two.
+
+This theorem only extracts distinct witnesses.  It intentionally does not say
+that their delayed-budget contributions are independent.
+-/
+theorem exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+    (n : OddNat) (k r len : ℕ)
+    (hcount : 2 ≤ sourceContinuationPressureDepthCount n k r len) :
+    ∃ j₁ j₂,
+      j₁ < len ∧
+      j₂ < len ∧
+      j₁ ≠ j₂ ∧
+      IsSourcePressureDepth n k r j₁ ∧
+      IsSourcePressureDepth n k r j₂ := by
+  classical
+  unfold sourceContinuationPressureDepthCount at hcount
+  induction len with
+  | zero =>
+      simp at hcount
+  | succ len ih =>
+      rw [List.range_succ] at hcount
+      by_cases hlast : IsSourcePressureDepth n k r len
+      · have hlast' :
+            MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+              (orbitWindowRetentionMassPow2 n k (r + len)) := by
+          simpa [IsSourcePressureDepth] using hlast
+        by_cases hprevpos :
+            0 <
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j))))
+        · rcases exists_isSourcePressureDepth_of_pressureDepthCount_pos
+            n k r len hprevpos with ⟨j, hj, hpressure⟩
+          exact ⟨j, len, by omega, by omega, by omega, hpressure, hlast⟩
+        · have hprevzero :
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j)))) = 0 :=
+            Nat.eq_zero_of_not_pos hprevpos
+          simp [hlast', hprevzero] at hcount
+      · have hlast' :
+            ¬ MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+              (orbitWindowRetentionMassPow2 n k (r + len)) := by
+          intro h
+          exact hlast (by simpa [IsSourcePressureDepth] using h)
+        have hprev :
+            2 ≤
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j)))) := by
+          simpa [hlast'] using hcount
+        rcases ih hprev with ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
+        exact ⟨j₁, j₂, by omega, by omega, hne, hp₁, hp₂⟩
+
+/--
+Unpack the two-witness theorem into the original `MoreThanHalf` spelling.
+
+This theorem is useful for callers that do not yet use the packaged predicate.
+-/
+theorem exists_two_sourcePressureDepths_of_two_le_pressureDepthCount
+    (n : OddNat) (k r len : ℕ)
+    (hcount : 2 ≤ sourceContinuationPressureDepthCount n k r len) :
+    ∃ j₁ j₂,
+      j₁ < len ∧
+      j₂ < len ∧
+      j₁ ≠ j₂ ∧
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k (r + j₁))
+        (orbitWindowRetentionMassPow2 n k (r + j₁)) ∧
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k (r + j₂))
+        (orbitWindowRetentionMassPow2 n k (r + j₂)) := by
+  rcases exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+    n k r len hcount with ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
+  exact ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
 
 /--
 Source cause-side outruns-heavy pressure yields a concrete positive source
@@ -6509,6 +6651,27 @@ theorem exists_depth_two_budget_of_pressureOnRange_two_one
         sumS n ((k + 1) + 1) +
           orbitWindowResidueCountMod8EqSevenTail n k :=
   depthTwoPressureRange_positive_and_budget n k h
+
+/--
+Depth-two delayed budget predicate.
+
+This packages the positive mass and delayed-budget inequality as a reusable
+property for later multi-witness accounting experiments.
+-/
+def HasDepthTwoDelayedBudget
+    (n : OddNat) (k : ℕ) : Prop :=
+  0 < orbitWindowContinuationSiblingMassPow2 n k 2 ∧
+    (k + 1) + orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+      sumS n ((k + 1) + 1) +
+        orbitWindowResidueCountMod8EqSevenTail n k
+
+/-- Depth-two one-range pressure supplies a packaged delayed budget. -/
+theorem hasDepthTwoDelayedBudget_of_pressureOnRange_two_one
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    HasDepthTwoDelayedBudget n k := by
+  unfold HasDepthTwoDelayedBudget
+  exact depthTwoPressureRange_positive_and_budget n k h
 
 /--
 Residue-address drift bridge.

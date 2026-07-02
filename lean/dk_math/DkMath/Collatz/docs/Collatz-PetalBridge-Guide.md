@@ -1262,3 +1262,39 @@ python/Collatz/PetalBridge/orbit_pressure_remainder_scan.py
 records pressure witnesses and L1..L5 delayed remainders on concrete orbit
 windows.  Its results are experimental and should be used to choose the next
 formal theorem, not as proof.
+
+## Selected Pressure Depths
+
+Checkpoint 122 packages the local pressure condition:
+
+```lean
+IsSourcePressureDepth
+```
+
+and provides witness extractors:
+
+```lean
+exists_isSourcePressureDepth_of_pressureDepthCount_pos
+exists_isSourcePressureDepth_with_positive_mass
+exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+exists_two_sourcePressureDepths_of_two_le_pressureDepthCount
+```
+
+The two-witness theorem deliberately says only:
+
+```text
+two distinct selected pressure depths exist
+```
+
+It does not add their budget contributions.
+
+The new overlap scan:
+
+```text
+python/Collatz/PetalBridge/selected_depth_overlap_scan.py
+```
+
+observed no disjoint selected-depth pair in the default finite sample.  This
+suggests that selected continuation sets are often nested or overlapping, so a
+future multi-budget theorem probably needs an explicit overlap-control or
+nested-accounting predicate before it can sum budgets.
