@@ -129,6 +129,9 @@ sourcePressurePrefixFailure_iff_margin
 not_selectedPressurePrefix_of_prefixFailure
 SourcePressureSelectedSetDownClosed
 downClosed_iff_no_prefixFailure
+SourcePressureFrontier
+sourcePressureFrontier_iff_margin
+sourcePressurePrefixFailure_of_frontier_pos
 ```
 
 These names deliberately avoid the unsafe assumption that selected pressure
@@ -140,6 +143,19 @@ depths are always prefix-shaped.  Pressure is the margin sign condition
 
 and this sign can become positive at a deeper depth while remaining
 nonpositive at a shallower depth.
+
+Checkpoint 126 also connects the finite window height to the low-level gnomon
+alignment vocabulary:
+
+```lean
+orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel
+```
+
+So a window height can now be read as:
+
+```text
+RawGnomonHeight of the observed odd label
+```
 
 The first theorem set is deliberately thin:
 

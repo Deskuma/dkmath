@@ -195,6 +195,18 @@ Use these names when selected depths form a non-prefix sign pattern.  Such a
 case is not an error in the model: it means that a deeper residual-shape
 channel has positive margin while a shallower one does not.
 
+Checkpoint 126 adds the first frontier predicate:
+
+```lean
+SourcePressureFrontier
+sourcePressureFrontier_iff_margin
+sourcePressurePrefixFailure_of_frontier_pos
+```
+
+`SourcePressureFrontier n k r j` means that `j` is the first selected pressure
+depth.  It is a first-positive-margin statement, not a claim that later depths
+continue as a prefix.
+
 ## Residue Counts
 
 Named residue counts exist for low layers:

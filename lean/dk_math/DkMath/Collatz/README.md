@@ -120,6 +120,11 @@ sum_odd_eq_square
 square_add_eq_square_add_gnomon_sum
 rawGnomonHeight_eq_s
 rawGnomonRemainderAtDepth_eq_zero_of_le_height
+rawGnomonResidualShape_eq_T_val
+rawGnomonResidualShape_odd
+rawGnomonStep_eq_pow_height_mul_residualShape
+two_pow_succ_rawGnomonHeight_not_dvd
+rawGnomonRemainderAtDepth_firstFailed_ne_zero
 ```
 
 This file is intentionally integer-valued.  It does not introduce
@@ -147,6 +152,7 @@ orbitWindowRetentionMass_split
 SourcePressureMarginInt
 SourcePressurePrefixFailure
 SourcePressureSelectedSetDownClosed
+SourcePressureFrontier
 ```
 
 The central No.100 layer is:
@@ -202,6 +208,7 @@ docs/Collatz-SelectedPressureDepths-122.md
 docs/Collatz-ContinuationNesting-123.md
 docs/Collatz-PressureMargin-124.md
 docs/Collatz-GnomonEvaluation-125.md
+docs/Collatz-GnomonResidualShape-126.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

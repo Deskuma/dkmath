@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Collatz.Accelerated
 import DkMath.Collatz.Shift
+import DkMath.Collatz.GnomonEvaluation
 import DkMath.Petal.RangeFamily
 
 #print "file: DkMath.Collatz.PetalBridge"
@@ -158,6 +159,20 @@ Raw height agrees with the existing Collatz observation `s` on odd states.
 -/
 theorem rawHeightLabel_eq_s (n : OddNat) :
     rawHeightLabel n.1 = s n := rfl
+
+/--
+Window height is the raw gnomon alignment height of the observed odd label.
+
+This is the PetalBridge lift of the checkpoint-126 residual-shape vocabulary:
+the finite window still uses `orbitWindowHeight`, but it can now be read as
+`RawGnomonHeight` pointwise.
+-/
+theorem orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i =
+      RawGnomonHeight (oddOrbitLabel n i) := by
+  unfold orbitWindowHeight rawHeightLabel RawGnomonHeight
+  rw [rawGnomonStep_eq_three_mul_add_one]
 
 /--
 The window height is the existing Collatz observation `s` applied to the
@@ -6793,6 +6808,66 @@ theorem downClosed_iff_no_prefixFailure
     by_cases hshallow : IsSourcePressureDepth n k r j₁
     · exact hshallow
     · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
+
+/--
+The first selected source-pressure depth.
+
+This is a frontier, not a prefix theorem.  It says that `j` is selected and all
+shallower depths are not selected.  Later work can decide whether the selected
+set continues, stops, or forms an island after this frontier.
+-/
+def SourcePressureFrontier
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  IsSourcePressureDepth n k r j ∧
+    ∀ i, i < j → ¬ IsSourcePressureDepth n k r i
+
+/--
+Frontier in margin language.
+
+The first selected depth is exactly the first positive source-pressure margin.
+-/
+theorem sourcePressureFrontier_iff_margin
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureFrontier n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) ∧
+        ∀ i, i < j → SourcePressureMarginInt n k (r + i) ≤ 0 := by
+  constructor
+  · intro h
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).1 h.1
+    · intro i hi
+      have hnot := h.2 i hi
+      have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + i) := by
+        intro hpos
+        exact hnot ((isSourcePressureDepth_iff_margin_pos n k r i).2 hpos)
+      omega
+  · intro h
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).2 h.1
+    · intro i hi hsel
+      have hpos :
+          0 < SourcePressureMarginInt n k (r + i) :=
+        (isSourcePressureDepth_iff_margin_pos n k r i).1 hsel
+      have hle := h.2 i hi
+      omega
+
+/--
+A positive frontier after depth `0` produces a concrete prefix-failure witness.
+
+This is the bridge from the frontier reading back to the checkpoint-125
+obstruction predicate.
+-/
+theorem sourcePressurePrefixFailure_of_frontier_pos
+    (n : OddNat) (k r j : ℕ)
+    (hfront : SourcePressureFrontier n k r j)
+    (hj : 0 < j) :
+    SourcePressurePrefixFailure n k r 0 j := by
+  constructor
+  · exact hj
+  · constructor
+    · exact hfront.2 0 hj
+    · exact hfront.1
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero

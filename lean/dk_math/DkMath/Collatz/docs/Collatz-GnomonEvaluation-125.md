@@ -162,3 +162,45 @@ continuation_drop
 
 The Lean side now has a place to store those observations as exact predicates,
 without pretending that pressure selection is automatically prefix-shaped.
+
+## Checkpoint 126 Follow-up
+
+Checkpoint 126 closes the first residual-shape bridge.
+
+New theorem:
+
+```lean
+rawGnomonResidualShape_eq_T_val
+```
+
+The residual shape is now formally identical to the value of the existing
+accelerated map:
+
+```text
+RawGnomonResidualShape n.val = (T n).val
+```
+
+Additional consequences:
+
+```lean
+rawGnomonResidualShape_odd
+rawGnomonStep_eq_pow_height_mul_residualShape
+two_pow_succ_rawGnomonHeight_not_dvd
+rawGnomonRemainderAtDepth_firstFailed_ne_zero
+```
+
+The exact alignment boundary is now:
+
+```text
+j <= RawGnomonHeight n:
+  remainder at depth j is zero
+
+j = RawGnomonHeight n + 1:
+  remainder is nonzero
+```
+
+See:
+
+```text
+Collatz-GnomonResidualShape-126.md
+```

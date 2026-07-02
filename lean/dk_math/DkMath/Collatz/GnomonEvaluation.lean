@@ -204,4 +204,92 @@ theorem rawGnomonRemainderAtDepth_eq_zero_of_le_height
     dvd_trans (pow_dvd_pow 2 hj) htop
   exact Nat.dvd_iff_mod_eq_zero.mp hdiv
 
+/--
+The residual shape is exactly the natural value of the existing accelerated
+Collatz map.
+
+This closes the checkpoint-126 bridge:
+
+```text
+RawGnomonStep      = existing `threeNPlusOne`
+RawGnomonHeight    = existing `s`
+RawGnomonResidualShape = existing `(T n).1`
+```
+
+After this theorem, the new gnomon vocabulary is not merely explanatory; it is
+definitionally connected to the core accelerated odd-state dynamics.
+-/
+theorem rawGnomonResidualShape_eq_T_val
+    (n : OddNat) :
+    RawGnomonResidualShape n.1 = (T n).1 := by
+  unfold RawGnomonResidualShape RawGnomonHeight T
+  rw [rawGnomonStep_eq_threeNPlusOne]
+  rfl
+
+/--
+The residual shape is odd.
+
+The proof intentionally uses `rawGnomonResidualShape_eq_T_val`: oddness is
+already carried by the `OddNat` result of `T`, so we do not duplicate the
+`padicValNat` maximality proof here.
+-/
+theorem rawGnomonResidualShape_odd
+    (n : OddNat) :
+    RawGnomonResidualShape n.1 % 2 = 1 := by
+  rw [rawGnomonResidualShape_eq_T_val n]
+  exact (T n).2
+
+/--
+The raw gnomon step factors into its visible power-of-two alignment and its
+residual shape.
+
+This is the multiplicative counterpart of the residual-shape bridge.
+-/
+theorem rawGnomonStep_eq_pow_height_mul_residualShape
+    (n : OddNat) :
+    RawGnomonStep n.1 =
+      2 ^ RawGnomonHeight n.1 * RawGnomonResidualShape n.1 := by
+  unfold RawGnomonResidualShape
+  have hdiv : 2 ^ RawGnomonHeight n.1 ∣ RawGnomonStep n.1 := by
+    unfold RawGnomonHeight
+    simpa [v2] using
+      (pow_padicValNat_dvd (p := 2) (n := RawGnomonStep n.1))
+  exact (Nat.mul_div_cancel' hdiv).symm
+
+/--
+The next power after the alignment height does not divide the raw gnomon step.
+
+This is the formal "first failed depth" boundary: height is maximal.
+-/
+theorem two_pow_succ_rawGnomonHeight_not_dvd
+    (n : OddNat) :
+    ¬ 2 ^ (RawGnomonHeight n.1 + 1) ∣ RawGnomonStep n.1 := by
+  have hpos : RawGnomonStep n.1 ≠ 0 := by
+    rw [rawGnomonStep_eq_three_mul_add_one]
+    omega
+  unfold RawGnomonHeight
+  simpa [v2] using
+    (pow_succ_padicValNat_not_dvd hpos)
+
+/--
+At the first failed depth, the raw gnomon remainder is nonzero.
+
+Together with `rawGnomonRemainderAtDepth_eq_zero_of_le_height`, this pins down
+the exact boundary:
+
+```text
+j <= height     -> remainder = 0
+j = height + 1  -> remainder != 0
+```
+-/
+theorem rawGnomonRemainderAtDepth_firstFailed_ne_zero
+    (n : OddNat) :
+    RawGnomonRemainderAtDepth n.1 (FirstFailedPow2Depth n.1) ≠ 0 := by
+  unfold RawGnomonRemainderAtDepth FirstFailedPow2Depth
+  intro h
+  have hdiv :
+      2 ^ (RawGnomonHeight n.1 + 1) ∣ RawGnomonStep n.1 :=
+    Nat.dvd_iff_mod_eq_zero.mpr h
+  exact two_pow_succ_rawGnomonHeight_not_dvd n hdiv
+
 end DkMath.Collatz
