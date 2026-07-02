@@ -126,6 +126,11 @@ orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
 orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels_take
 ```
 
+Checkpoint 129 implements the first-failed-depth list helpers and adds
+`orbitWindow_threeProfiles_get?_eq_some`, so the remaining residual-shape extra
+is only needed if a later proof specifically wants a prefix version of shifted
+labels.
+
 ### Route B: pressure sign-pattern statistics
 
 Use Python summary scans before adding heavier Lean names:

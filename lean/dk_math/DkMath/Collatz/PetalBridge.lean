@@ -914,6 +914,16 @@ theorem orbitWindowFirstFailedPow2DepthSeq_length
   simp [orbitWindowFirstFailedPow2DepthSeq]
 
 /--
+Reading the ordered first-failed-depth profile at an in-window time recovers
+the pointwise first-failed depth.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+      some (orbitWindowFirstFailedPow2Depth n i) := by
+  simp [orbitWindowFirstFailedPow2DepthSeq, hi]
+
+/--
 Window first-failed depth is exactly one more than the observed window height.
 -/
 theorem orbitWindowFirstFailedPow2Depth_eq_height_add_one
@@ -921,6 +931,70 @@ theorem orbitWindowFirstFailedPow2Depth_eq_height_add_one
     orbitWindowFirstFailedPow2Depth n i = orbitWindowHeight n i + 1 := by
   unfold orbitWindowFirstFailedPow2Depth FirstFailedPow2Depth
   rw [orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel]
+
+/--
+Reading the ordered first-failed-depth profile also recovers the observed height
+plus one.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+      some (orbitWindowHeight n i + 1) := by
+  rw [orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n hi]
+  rw [orbitWindowFirstFailedPow2Depth_eq_height_add_one]
+
+/--
+The prefix of length `r` in the first-failed-depth profile has length `r` when
+`r` lies inside the window.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r).length = r := by
+  simp [orbitWindowFirstFailedPow2DepthSeq_length, Nat.min_eq_left hr]
+
+/--
+Reading a prefix of the first-failed-depth profile recovers the same pointwise
+first-failed depth while the index remains inside the prefix.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r)[i]? =
+      some (orbitWindowFirstFailedPow2Depth n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n
+    (Nat.lt_of_lt_of_le hi hr)
+
+/--
+Reading a prefix of the first-failed-depth profile also recovers the observed
+height plus one.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r)[i]? =
+      some (orbitWindowHeight n i + 1) := by
+  rw [orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some n hi hr]
+  rw [orbitWindowFirstFailedPow2Depth_eq_height_add_one]
+
+/--
+The three time-profile lists are aligned at every in-window index.
+
+This is a deliberately one-dimensional observation theorem.  It keeps the time
+axis `i` separate from the pressure-depth axis `j`; a later
+`ShapePressureGrid` should combine those axes explicitly rather than hiding
+that distinction in one index.
+-/
+theorem orbitWindow_threeProfiles_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowHeightSeq n k)[i]? = some (orbitWindowHeight n i) ∧
+      (orbitWindowResidualShapeSeq n k)[i]? =
+        some (orbitWindowResidualShape n i) ∧
+      (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+        some (orbitWindowFirstFailedPow2Depth n i) := by
+  constructor
+  · exact orbitWindowHeightSeq_get?_eq_some n hi
+  constructor
+  · exact orbitWindowResidualShapeSeq_get?_eq_some n hi
+  · exact orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n hi
 
 /--
 The integer threshold lower bound also applies to prefixes.

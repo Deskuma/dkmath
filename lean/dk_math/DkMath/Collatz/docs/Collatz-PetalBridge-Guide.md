@@ -155,6 +155,36 @@ orbitWindowResidualShapeSeq_take_length
 orbitWindowResidualShapeSeq_take_get?_eq_some
 ```
 
+### `orbitWindowFirstFailedPow2DepthSeq`
+
+```lean
+orbitWindowFirstFailedPow2DepthSeq n k
+```
+
+This is the ordered list of first failed power-of-two alignment depths over the
+first `k` time positions.
+
+Checkpoint 129 adds the matching list helpers:
+
+```lean
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+orbitWindowFirstFailedPow2DepthSeq_take_length
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
+orbitWindow_threeProfiles_get?_eq_some
+```
+
+The main reading is:
+
+```text
+first_failed_i = height_i + 1
+```
+
+The `orbitWindow_threeProfiles_get?_eq_some` theorem aligns the height,
+residual-shape, and first-failed-depth profiles at the same time index.  It is
+still a one-dimensional theorem: the pressure-depth index is a separate axis.
+
 ## Separation And Collision
 
 The bridge includes a finite split:
