@@ -8,17 +8,27 @@ conjecture.  It is a structured observation program:
 
 ```text
 odd state dynamics
-  -> 2-adic height
+  -> odd gnomon correction
+  -> power-of-two alignment height
+  -> residual shape
   -> residue channels
   -> finite observation windows
   -> source/tail distributions
   -> finite channel flow
 ```
 
-The most recent milestone is the finite channel-flow layer in
-`DkMath.Collatz.PetalBridge`.  It turns pointwise residue transitions into
-count-level statements over finite windows, without using limits,
-probability, or real-valued frequencies.
+The current trajectory correction is checkpoint 125.  The low-level Collatz
+odd step is now read as
+
+```text
+n + (2n+1) = 3n+1
+```
+
+where `2n+1` is the odd square-gnomon layer.  The resulting raw value is then
+evaluated by its power-of-two alignment height and reduced to a residual odd
+shape.  The new low-level vocabulary lives in
+`DkMath.Collatz.GnomonEvaluation`; `DkMath.Collatz.PetalBridge` remains the
+finite observation and pressure/margin surface.
 
 ## Module Entry Points
 
@@ -27,6 +37,7 @@ DkMath.Collatz.Basic
 DkMath.Collatz.V2
 DkMath.Collatz.Accelerated
 DkMath.Collatz.Shift
+DkMath.Collatz.GnomonEvaluation
 DkMath.Collatz.PetalBridge
 DkMath.Collatz.Collatz2K26
 ```
@@ -86,6 +97,39 @@ n -> n + 2^k * m
 The guiding idea is that many differences do not appear everywhere; they
 concentrate around singular 2-adic ridges.
 
+### `DkMath.Collatz.GnomonEvaluation`
+
+Introduces the checkpoint-125 subject shift:
+
+```lean
+OddGnomonLayer
+RawGnomonStep
+RawGnomonHeight
+RawGnomonResidualShape
+RawGnomonRemainderAtDepth
+FirstFailedPow2Depth
+```
+
+Main bridge lemmas:
+
+```lean
+rawGnomonStep_eq_three_mul_add_one
+rawGnomonStep_eq_threeNPlusOne
+square_succ_eq_square_add_oddGnomonLayer
+sum_odd_eq_square
+square_add_eq_square_add_gnomon_sum
+rawGnomonHeight_eq_s
+rawGnomonRemainderAtDepth_eq_zero_of_le_height
+rawGnomonResidualShape_eq_T_val
+rawGnomonResidualShape_odd
+rawGnomonStep_eq_pow_height_mul_residualShape
+two_pow_succ_rawGnomonHeight_not_dvd
+rawGnomonRemainderAtDepth_firstFailed_ne_zero
+```
+
+This file is intentionally integer-valued.  It does not introduce
+`Real.log`; logarithmic drift belongs to a later translation layer.
+
 ### `DkMath.Collatz.PetalBridge`
 
 This is the current main bridge.
@@ -98,6 +142,9 @@ OrbitWindow
 oddOrbitLabel
 orbitWindowHeight
 orbitWindowHeightSeq
+orbitWindowResidualShape
+orbitWindowResidualShapeSeq
+orbitWindowFirstFailedPow2Depth
 orbitWindowResidueCountPow2
 orbitWindowResidueCountPow2Tail
 sourcePow2Distribution_total
@@ -105,6 +152,12 @@ tailPow2Distribution_total
 pow2ChannelFlow_of_pointwise
 orbitWindowResidueCountPow2_refine_succ
 orbitWindowRetentionMass_split
+SourcePressureMarginInt
+SourcePressurePrefixFailure
+SourcePressureSelectedSetDownClosed
+SourcePressureFrontier
+SourcePressureSignChangeUp
+SourcePressureLocalIsland
 ```
 
 The central No.100 layer is:
@@ -156,6 +209,12 @@ docs/Collatz-Level3PressureEntrance-118.md
 docs/Collatz-Level4GenericPressure-119.md
 docs/Collatz-Level5AndModScan-120.md
 docs/Collatz-SelectedWitnessBudget-121.md
+docs/Collatz-SelectedPressureDepths-122.md
+docs/Collatz-ContinuationNesting-123.md
+docs/Collatz-PressureMargin-124.md
+docs/Collatz-GnomonEvaluation-125.md
+docs/Collatz-GnomonResidualShape-126.md
+docs/Collatz-WindowResidualShape-127.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

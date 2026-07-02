@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Collatz.Accelerated
 import DkMath.Collatz.Shift
+import DkMath.Collatz.GnomonEvaluation
 import DkMath.Petal.RangeFamily
 
 #print "file: DkMath.Collatz.PetalBridge"
@@ -29,6 +30,43 @@ For Petal/ABC routes, a repeated label means that a proposed independent
 range-family cannot be counted as `k` independent carriers.  For Collatz
 dynamics, the same collision is not merely a failure: it is the observable
 shape of a merge, fold, or cycle candidate.
+
+## Checkpoint 125 trajectory correction
+
+This file is now treated as the finite observation and pressure/margin surface.
+Do not keep adding low-level Collatz vocabulary here by default.  The revised
+low-level subject is:
+
+```text
+Odd gnomon correction
+  n + (2n+1) = 3n+1
+
+Pow2 alignment evaluation
+  v2 (3n+1)
+
+Residual shape extraction
+  (3n+1) / 2^height
+
+Relative scale update
+  the residual odd shape becomes the next state
+```
+
+That vocabulary starts in `DkMath.Collatz.GnomonEvaluation`.  The role of this
+file is to observe finite windows of those shapes and compare retention versus
+continuation masses.
+
+Important warning for future agents: pressure selection is **not** a raw
+carrier-membership nesting statement.  The carrier sets are nested, but
+pressure compares two changing masses:
+
+```text
+retention(depth) < 2 * continuation(depth)
+```
+
+Therefore the selected pressure depths need not form an unconditional prefix.
+Checkpoint 125 adds explicit prefix-failure predicates below so those cases
+remain first-class evidence instead of being erased by an unsafe monotonicity
+assumption.
 -/
 
 namespace DkMath.Collatz
@@ -86,6 +124,34 @@ noncomputable def orbitWindowHeightSeq (n : OddNat) (k : ℕ) : List ℕ :=
   (List.range k).map (orbitWindowHeight n)
 
 /--
+Residual shape extracted at the `i`-th accelerated Collatz odd-state label.
+
+This is a window-level lift of `RawGnomonResidualShape`; the low-level gnomon
+vocabulary stays in `GnomonEvaluation`, while this definition records the
+finite-window observation.
+-/
+noncomputable def orbitWindowResidualShape (n : OddNat) (i : ℕ) : ℕ :=
+  RawGnomonResidualShape (oddOrbitLabel n i)
+
+/--
+The ordered residual-shape profile observed in the first `k` accelerated
+Collatz states.
+
+Checkpoint 127 reads the orbit window as a finite chain of residual-shape
+extractions.
+-/
+noncomputable def orbitWindowResidualShapeSeq (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowResidualShape n)
+
+/--
+First failed power-of-two alignment depth at the `i`-th observed odd label.
+
+This is the window-level version of `FirstFailedPow2Depth`.
+-/
+noncomputable def orbitWindowFirstFailedPow2Depth (n : OddNat) (i : ℕ) : ℕ :=
+  FirstFailedPow2Depth (oddOrbitLabel n i)
+
+/--
 The first `k` accelerated Collatz odd-state labels are pairwise separated.
 
 This is the Collatz-specific spelling of the RangeFamily pairwise condition:
@@ -121,6 +187,20 @@ Raw height agrees with the existing Collatz observation `s` on odd states.
 -/
 theorem rawHeightLabel_eq_s (n : OddNat) :
     rawHeightLabel n.1 = s n := rfl
+
+/--
+Window height is the raw gnomon alignment height of the observed odd label.
+
+This is the PetalBridge lift of the checkpoint-126 residual-shape vocabulary:
+the finite window still uses `orbitWindowHeight`, but it can now be read as
+`RawGnomonHeight` pointwise.
+-/
+theorem orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i =
+      RawGnomonHeight (oddOrbitLabel n i) := by
+  unfold orbitWindowHeight rawHeightLabel RawGnomonHeight
+  rw [rawGnomonStep_eq_three_mul_add_one]
 
 /--
 The window height is the existing Collatz observation `s` applied to the
@@ -1780,6 +1860,228 @@ theorem orbitWindowContinuationSiblingMassPow2Tail_le_window
     orbitWindowContinuationSiblingMassPow2Tail n k r ≤ k := by
   unfold orbitWindowContinuationSiblingMassPow2Tail
   exact orbitWindowResidueCountPow2Tail_le_window n k (r + 1) (2 ^ (r + 1) - 1)
+
+/--
+Deep all-ones power-of-two residue cells are nested inside shallow ones.
+
+If a label is `-1` modulo `2^(e+1)` and `d ≤ e`, then the same label is `-1`
+modulo `2^(d+1)`.  This is the pointwise reason selected continuation depths
+overlap: deeper continuation channels refine shallower continuation channels.
+-/
+theorem allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+    (q d e : ℕ)
+    (hde : d ≤ e)
+    (h : q % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1) :
+    q % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 := by
+  have hdvd : 2 ^ (d + 1) ∣ 2 ^ (e + 1) := by
+    exact pow_dvd_pow 2 (by omega)
+  rw [mod_eq_mod_of_dvd_modulus hdvd, h]
+  rcases exists_add_of_le hde with ⟨a, rfl⟩
+  rw [show d + a + 1 = d + 1 + a by omega, pow_add]
+  have hbase : 0 < 2 ^ (d + 1) := pow_pos (by decide) (d + 1)
+  have hscale : 0 < 2 ^ a := pow_pos (by decide) a
+  have hsplit :
+      2 ^ (d + 1) * 2 ^ a - 1 =
+        (2 ^ (d + 1) - 1) + (2 ^ a - 1) * 2 ^ (d + 1) := by
+    rw [Nat.sub_mul]
+    rw [Nat.mul_comm (2 ^ a) (2 ^ (d + 1))]
+    ring_nf
+    have hle :
+        2 ^ d * 2 ≤ 2 ^ d * 2 ^ a * 2 := by
+      have ha : 1 ≤ 2 ^ a := by omega
+      nlinarith [ha, pow_pos (by decide : 0 < 2) d]
+    omega
+  rw [hsplit]
+  rw [Nat.add_mul_mod_self_right]
+  exact Nat.mod_eq_of_lt (by omega)
+
+/--
+All-ones retention residue cells are nested by depth.
+
+This is the retention-indexed version of
+`allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le`: the visible retention layer
+uses modulus `2^d` rather than the continuation sibling modulus `2^(d+1)`.
+-/
+theorem retention_allOnes_mod_pow_two_of_le
+    (q d e : ℕ)
+    (hde : d ≤ e)
+    (h : q % (2 ^ e) = 2 ^ e - 1) :
+    q % (2 ^ d) = 2 ^ d - 1 := by
+  cases d with
+  | zero =>
+      exact Nat.mod_one q
+  | succ d =>
+      cases e with
+      | zero =>
+          omega
+      | succ e =>
+          exact allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            q d e (by omega) h
+
+/--
+Source continuation mass is anti-monotone in depth.
+
+Increasing the depth asks for a more refined all-ones residue cell, so the
+finite window count cannot increase.
+-/
+theorem sourceContinuationMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowContinuationSiblingMassPow2 n k e ≤
+      orbitWindowContinuationSiblingMassPow2 n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowContinuationSiblingMassPow2, orbitWindowResidueCountPow2]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2 n k (e + 1) (2 ^ (e + 1) - 1) ≤
+            orbitWindowResidueCountPow2 n k (d + 1) (2 ^ (d + 1) - 1) := by
+        simpa [orbitWindowContinuationSiblingMassPow2] using ih
+      rw [orbitWindowContinuationSiblingMassPow2,
+        orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowContinuationSiblingMassPow2,
+        orbitWindowResidueCountPow2_succ]
+      by_cases hdeep :
+          oddOrbitLabel n k % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1
+      · have hshallow :
+            oddOrbitLabel n k % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 :=
+          allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n k) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow :
+          oddOrbitLabel n k % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih' (Nat.le_succ
+              (orbitWindowResidueCountPow2 n k (d + 1) (2 ^ (d + 1) - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Shifted-tail continuation mass is anti-monotone in depth.
+
+This is the tail-window counterpart of
+`sourceContinuationMass_anti_mono_depth`.
+-/
+theorem tailContinuationMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowContinuationSiblingMassPow2Tail n k e ≤
+      orbitWindowContinuationSiblingMassPow2Tail n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2Tail n k (e + 1) (2 ^ (e + 1) - 1) ≤
+            orbitWindowResidueCountPow2Tail n k (d + 1) (2 ^ (d + 1) - 1) := by
+        simpa [orbitWindowContinuationSiblingMassPow2Tail] using ih
+      rw [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail_succ]
+      by_cases hdeep :
+          oddOrbitLabel n (k + 1) % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1
+      · have hshallow :
+            oddOrbitLabel n (k + 1) % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 :=
+          allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n (k + 1)) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow :
+          oddOrbitLabel n (k + 1) % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih' (Nat.le_succ
+              (orbitWindowResidueCountPow2Tail n k (d + 1) (2 ^ (d + 1) - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Selected source continuation masses are nested by selected-depth index.
+
+For a fixed base depth `r`, a later selected index asks for a deeper all-ones
+channel and therefore has no more mass than an earlier selected index.
+-/
+theorem selectedContinuationMass_nested_of_lt
+    (n : OddNat) (k r j₁ j₂ : ℕ)
+    (hlt : j₁ < j₂) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + j₂) ≤
+      orbitWindowContinuationSiblingMassPow2 n k (r + j₁) := by
+  exact sourceContinuationMass_anti_mono_depth n k (r + j₁) (r + j₂) (by omega)
+
+/--
+If the deeper selected continuation mass is positive, then the shallower one
+is positive as well.
+
+This is the count-level "overlap is automatic" observation: deeper all-ones
+hits are already shallow all-ones hits.
+-/
+theorem selectedContinuationMass_overlap_of_lt_of_deeper_pos
+    (n : OddNat) (k r j₁ j₂ : ℕ)
+    (hlt : j₁ < j₂)
+    (hpos : 0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₂)) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₁) :=
+  lt_of_lt_of_le hpos (selectedContinuationMass_nested_of_lt n k r j₁ j₂ hlt)
+
+/--
+Source retention mass is anti-monotone in depth.
+
+Deeper all-ones retention cells refine shallower all-ones retention cells, so
+their finite-window counts cannot increase with depth.
+-/
+theorem sourceRetentionMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowRetentionMassPow2 n k e ≤
+      orbitWindowRetentionMassPow2 n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2 n k e (2 ^ e - 1) ≤
+            orbitWindowResidueCountPow2 n k d (2 ^ d - 1) := by
+        simpa [orbitWindowRetentionMassPow2] using ih
+      rw [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2_succ]
+      by_cases hdeep : oddOrbitLabel n k % (2 ^ e) = 2 ^ e - 1
+      · have hshallow : oddOrbitLabel n k % (2 ^ d) = 2 ^ d - 1 :=
+          retention_allOnes_mod_pow_two_of_le (oddOrbitLabel n k) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow : oddOrbitLabel n k % (2 ^ d) = 2 ^ d - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih'
+              (Nat.le_succ (orbitWindowResidueCountPow2 n k d (2 ^ d - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Shifted-tail retention mass is anti-monotone in depth.
+
+This is the tail-window counterpart of
+`sourceRetentionMass_anti_mono_depth`.
+-/
+theorem tailRetentionMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowRetentionMassPow2Tail n k e ≤
+      orbitWindowRetentionMassPow2Tail n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2Tail n k e (2 ^ e - 1) ≤
+            orbitWindowResidueCountPow2Tail n k d (2 ^ d - 1) := by
+        simpa [orbitWindowRetentionMassPow2Tail] using ih
+      rw [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail_succ]
+      by_cases hdeep : oddOrbitLabel n (k + 1) % (2 ^ e) = 2 ^ e - 1
+      · have hshallow : oddOrbitLabel n (k + 1) % (2 ^ d) = 2 ^ d - 1 :=
+          retention_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n (k + 1)) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow : oddOrbitLabel n (k + 1) % (2 ^ d) = 2 ^ d - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih'
+              (Nat.le_succ (orbitWindowResidueCountPow2Tail n k d (2 ^ d - 1))))
+        · simpa [hdeep, hshallow] using ih'
 
 /-- The all-ones retention residue is inside its power-of-two modulus. -/
 theorem twoAdicRetentionResidue_lt_pow
@@ -4404,6 +4706,59 @@ theorem oddOrbitLabel_succ_eq_T_iterateT
   rw [iterateT_succ_eq_T_iterateT]
 
 /--
+The residual shape extracted at index `i` is the next odd orbit label.
+
+This is the checkpoint-127 window lift of
+`rawGnomonResidualShape_eq_T_val`.
+-/
+theorem orbitWindowResidualShape_eq_oddOrbitLabel_succ
+    (n : OddNat) (i : ℕ) :
+    orbitWindowResidualShape n i = oddOrbitLabel n (i + 1) := by
+  unfold orbitWindowResidualShape oddOrbitLabel
+  rw [rawGnomonResidualShape_eq_T_val (iterateT i n)]
+  rw [iterateT_succ_eq_T_iterateT]
+
+/--
+The residual-shape sequence is exactly the shifted odd-label sequence.
+
+This records that a finite orbit window is a chain of residual-shape
+extractions.
+-/
+theorem orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidualShapeSeq n k =
+      (List.range k).map (fun i => oddOrbitLabel n (i + 1)) := by
+  unfold orbitWindowResidualShapeSeq
+  apply List.map_congr_left
+  intro i _hi
+  exact orbitWindowResidualShape_eq_oddOrbitLabel_succ n i
+
+/--
+Window-level raw gnomon factorization.
+
+At each observed label, the raw gnomon step decomposes into the observed
+window height and the residual shape that becomes the next label.
+-/
+theorem orbitWindow_rawGnomonStep_factor
+    (n : OddNat) (i : ℕ) :
+    RawGnomonStep (oddOrbitLabel n i) =
+      2 ^ orbitWindowHeight n i * orbitWindowResidualShape n i := by
+  rw [orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel]
+  unfold orbitWindowResidualShape oddOrbitLabel
+  exact rawGnomonStep_eq_pow_height_mul_residualShape (iterateT i n)
+
+/--
+The first failed depth in the finite window has nonzero raw gnomon remainder.
+-/
+theorem orbitWindow_firstFailed_remainder_ne_zero
+    (n : OddNat) (i : ℕ) :
+    RawGnomonRemainderAtDepth
+        (oddOrbitLabel n i)
+        (orbitWindowFirstFailedPow2Depth n i) ≠ 0 := by
+  unfold orbitWindowFirstFailedPow2Depth oddOrbitLabel
+  exact rawGnomonRemainderAtDepth_firstFailed_ne_zero (iterateT i n)
+
+/--
 Label-sequence transition from the `3 mod 8` height-one channel.
 
 If the current label is `3 mod 8`, then the next orbit label lies in
@@ -6349,6 +6704,367 @@ theorem sourceContinuationMass_pos_of_pressureOnRange_at
     (sourcePressureAtDepth_of_pressureOnRange n k r len j h hj)
 
 /--
+A selected source pressure depth inside a depth range.
+
+This predicate packages the local `MoreThanHalf` statement so later accounting
+lemmas can talk about selected depths without repeating the mass expressions.
+-/
+def IsSourcePressureDepth
+    (n : OddNat) (k r : ℕ) (j : ℕ) : Prop :=
+  MoreThanHalf
+    (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+    (orbitWindowRetentionMassPow2 n k (r + j))
+
+/--
+Integer-valued source pressure margin at a single depth.
+
+The margin is positive exactly when source continuation occupies more than
+half of source retention.  It is intentionally integer-valued, because the
+natural-number subtraction would truncate negative margins and hide failures.
+-/
+noncomputable def SourcePressureMarginInt
+    (n : OddNat) (k r : ℕ) : ℤ :=
+  (2 * orbitWindowContinuationSiblingMassPow2 n k r : ℤ) -
+    (orbitWindowRetentionMassPow2 n k r : ℤ)
+
+/--
+Selected source pressure is exactly positive source pressure margin.
+
+This theorem is the safe algebraic bridge for later prefix/frontier work:
+pressure-prefix questions can be studied as margin-positivity questions.
+-/
+theorem isSourcePressureDepth_iff_margin_pos
+    (n : OddNat) (k r j : ℕ) :
+    IsSourcePressureDepth n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) := by
+  unfold IsSourcePressureDepth SourcePressureMarginInt MoreThanHalf
+  omega
+
+/--
+A finite selected source-pressure prefix.
+
+`SelectedPressurePrefix n k r len m` says that the first `m` depth indices in
+the range beginning at `r` are selected.  The `m ≤ len` field keeps this
+predicate tied to the finite observation range used by pressure-depth counts.
+-/
+def SelectedPressurePrefix
+    (n : OddNat) (k r len m : ℕ) : Prop :=
+  m ≤ len ∧
+    ∀ j, j < m → IsSourcePressureDepth n k r j
+
+/--
+Witness that source-pressure selection is not prefix-shaped at the given
+window.
+
+This is a diagnostic predicate, not a contradiction.  It records the situation
+
+```text
+shallow depth j₁ is not selected,
+deeper depth j₂ is selected.
+```
+
+The point of naming this obstruction is to prevent future work from assuming
+that pressure behaves like nested carrier membership.  Carrier membership is
+nested; the pressure margin `2 * continuation - retention` can change sign in
+a non-prefix pattern.
+-/
+def SourcePressurePrefixFailure
+    (n : OddNat) (k r j₁ j₂ : ℕ) : Prop :=
+  j₁ < j₂ ∧
+    ¬ IsSourcePressureDepth n k r j₁ ∧
+    IsSourcePressureDepth n k r j₂
+
+/-- Extract the shallow/deep order from a source-pressure prefix failure. -/
+theorem sourcePressurePrefixFailure_lt
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    j₁ < j₂ :=
+  h.1
+
+/-- The shallow side of a source-pressure prefix failure is not selected. -/
+theorem not_isSourcePressureDepth_of_prefixFailure_left
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    ¬ IsSourcePressureDepth n k r j₁ :=
+  h.2.1
+
+/-- The deeper side of a source-pressure prefix failure is selected. -/
+theorem isSourcePressureDepth_of_prefixFailure_right
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    IsSourcePressureDepth n k r j₂ :=
+  h.2.2
+
+/--
+Source-pressure prefix failure is exactly the margin sign pattern
+`nonpositive -> positive`.
+
+This is the preferred algebraic form for later experiments: Python can report
+the integer margins, while Lean keeps the logical predicate and the margin
+predicate equivalent.
+-/
+theorem sourcePressurePrefixFailure_iff_margin
+    (n : OddNat) (k r j₁ j₂ : ℕ) :
+    SourcePressurePrefixFailure n k r j₁ j₂ ↔
+      j₁ < j₂ ∧
+        SourcePressureMarginInt n k (r + j₁) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + j₂) := by
+  constructor
+  · intro h
+    have hleft :
+        SourcePressureMarginInt n k (r + j₁) ≤ 0 := by
+      have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + j₁) := by
+        intro hpos
+        exact h.2.1 ((isSourcePressureDepth_iff_margin_pos n k r j₁).2 hpos)
+      omega
+    have hright :
+        0 < SourcePressureMarginInt n k (r + j₂) :=
+      (isSourcePressureDepth_iff_margin_pos n k r j₂).1 h.2.2
+    exact ⟨h.1, hleft, hright⟩
+  · intro h
+    have hleft :
+        ¬ IsSourcePressureDepth n k r j₁ := by
+      intro hsel
+      have hpos :
+          0 < SourcePressureMarginInt n k (r + j₁) :=
+        (isSourcePressureDepth_iff_margin_pos n k r j₁).1 hsel
+      omega
+    have hright :
+        IsSourcePressureDepth n k r j₂ :=
+      (isSourcePressureDepth_iff_margin_pos n k r j₂).2 h.2.2
+    exact ⟨h.1, hleft, hright⟩
+
+/--
+A prefix failure inside the proposed prefix length refutes the selected-prefix
+predicate.
+
+The deeper selected witness is part of the failure data even though the proof
+only needs the shallow non-selection plus `j₁ < j₂ < m`.
+-/
+theorem not_selectedPressurePrefix_of_prefixFailure
+    (n : OddNat) (k r len m j₁ j₂ : ℕ)
+    (hfail : SourcePressurePrefixFailure n k r j₁ j₂)
+    (hj₂ : j₂ < m)
+    (_hm : m ≤ len) :
+    ¬ SelectedPressurePrefix n k r len m := by
+  intro hprefix
+  have hj₁ : j₁ < m := Nat.lt_trans hfail.1 hj₂
+  exact hfail.2.1 (hprefix.2 j₁ hj₁)
+
+/--
+Down-closed source-pressure selected set below `m`.
+
+This is weaker and safer than an unconditional prefix theorem: it states that
+if a deeper selected depth appears below `m`, then all shallower depths below
+it are selected too.
+-/
+def SourcePressureSelectedSetDownClosed
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∀ j₁ j₂,
+    j₁ < j₂ →
+    j₂ < m →
+    IsSourcePressureDepth n k r j₂ →
+      IsSourcePressureDepth n k r j₁
+
+/--
+Down-closed selected depths are equivalent to having no prefix-failure witness
+below `m`.
+
+This gives future code a clean choice: prove down-closedness by excluding
+failures, or produce a failure as a precise obstruction.
+-/
+theorem downClosed_iff_no_prefixFailure
+    (n : OddNat) (k r m : ℕ) :
+    SourcePressureSelectedSetDownClosed n k r m ↔
+      ∀ j₁ j₂,
+        j₁ < j₂ →
+        j₂ < m →
+        ¬ SourcePressurePrefixFailure n k r j₁ j₂ := by
+  constructor
+  · intro hclosed j₁ j₂ hlt hj₂ hfail
+    exact hfail.2.1 (hclosed j₁ j₂ hlt hj₂ hfail.2.2)
+  · intro hno j₁ j₂ hlt hj₂ hdeep
+    classical
+    by_cases hshallow : IsSourcePressureDepth n k r j₁
+    · exact hshallow
+    · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
+
+/--
+Upward sign change of the source-pressure margin between adjacent depths.
+
+This is a small building block for pressure-frontier and pressure-island
+classification.  It is stated directly in margin language because the
+checkpoint-125 correction is that pressure should be studied as a sign profile,
+not as raw carrier membership.
+-/
+def SourcePressureSignChangeUp
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginInt n k (r + j) ≤ 0 ∧
+    0 < SourcePressureMarginInt n k (r + j + 1)
+
+/--
+The first selected source-pressure depth.
+
+This is a frontier, not a prefix theorem.  It says that `j` is selected and all
+shallower depths are not selected.  Later work can decide whether the selected
+set continues, stops, or forms an island after this frontier.
+-/
+def SourcePressureFrontier
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  IsSourcePressureDepth n k r j ∧
+    ∀ i, i < j → ¬ IsSourcePressureDepth n k r i
+
+/--
+Frontier in margin language.
+
+The first selected depth is exactly the first positive source-pressure margin.
+-/
+theorem sourcePressureFrontier_iff_margin
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureFrontier n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) ∧
+        ∀ i, i < j → SourcePressureMarginInt n k (r + i) ≤ 0 := by
+  constructor
+  · intro h
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).1 h.1
+    · intro i hi
+      have hnot := h.2 i hi
+      have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + i) := by
+        intro hpos
+        exact hnot ((isSourcePressureDepth_iff_margin_pos n k r i).2 hpos)
+      omega
+  · intro h
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).2 h.1
+    · intro i hi hsel
+      have hpos :
+          0 < SourcePressureMarginInt n k (r + i) :=
+        (isSourcePressureDepth_iff_margin_pos n k r i).1 hsel
+      have hle := h.2 i hi
+      omega
+
+/--
+A positive frontier after depth `0` produces a concrete prefix-failure witness.
+
+This is the bridge from the frontier reading back to the checkpoint-125
+obstruction predicate.
+-/
+theorem sourcePressurePrefixFailure_of_frontier_pos
+    (n : OddNat) (k r j : ℕ)
+    (hfront : SourcePressureFrontier n k r j)
+    (hj : 0 < j) :
+    SourcePressurePrefixFailure n k r 0 j := by
+  constructor
+  · exact hj
+  · constructor
+    · exact hfront.2 0 hj
+    · exact hfront.1
+
+/--
+A positive frontier produces an upward sign change at the previous depth.
+
+This is a local margin view of
+`sourcePressurePrefixFailure_of_frontier_pos`.
+-/
+theorem sourcePressureSignChangeUp_of_frontier_pos
+    (n : OddNat) (k r j : ℕ)
+    (hfront : SourcePressureFrontier n k r j)
+    (hj : 0 < j) :
+    SourcePressureSignChangeUp n k r (j - 1) := by
+  unfold SourcePressureSignChangeUp
+  have hprev_not : ¬ IsSourcePressureDepth n k r (j - 1) := by
+    exact hfront.2 (j - 1) (Nat.sub_lt hj Nat.zero_lt_one)
+  have hprev_nonpos :
+      SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 := by
+    have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + (j - 1)) := by
+      intro hpos
+      exact hprev_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j - 1)).2 hpos)
+    omega
+  have hj_pos :
+      0 < SourcePressureMarginInt n k (r + j) :=
+    (isSourcePressureDepth_iff_margin_pos n k r j).1 hfront.1
+  constructor
+  · exact hprev_nonpos
+  · have hidx : r + (j - 1) + 1 = r + j := by omega
+    simpa [hidx] using hj_pos
+
+/--
+Local isolated positive source-pressure depth.
+
+This is deliberately only a predicate.  Margin equivalences and count theorems
+should be added after numerical scans show which island shapes actually matter.
+-/
+def SourcePressureLocalIsland
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  0 < j ∧
+    IsSourcePressureDepth n k r j ∧
+    ¬ IsSourcePressureDepth n k r (j - 1) ∧
+    ¬ IsSourcePressureDepth n k r (j + 1)
+
+/-- The empty selected-pressure prefix is always available. -/
+theorem selectedPressurePrefix_zero
+    (n : OddNat) (k r len : ℕ) :
+    SelectedPressurePrefix n k r len 0 := by
+  unfold SelectedPressurePrefix
+  constructor
+  · omega
+  · intro j hj
+    omega
+
+/-- Extract the range bound from a selected-pressure prefix. -/
+theorem selectedPressurePrefix_le_len
+    {n : OddNat} {k r len m : ℕ}
+    (h : SelectedPressurePrefix n k r len m) :
+    m ≤ len :=
+  h.1
+
+/-- Extract a selected depth from a selected-pressure prefix. -/
+theorem isSourcePressureDepth_of_selectedPressurePrefix
+    {n : OddNat} {k r len m j : ℕ}
+    (h : SelectedPressurePrefix n k r len m)
+    (hj : j < m) :
+    IsSourcePressureDepth n k r j :=
+  h.2 j hj
+
+/--
+A full pressure profile over `[r, r + len)` supplies every shorter selected
+pressure prefix.
+-/
+theorem selectedPressurePrefix_of_pressureOnRange
+    (n : OddNat) (k r len m : ℕ)
+    (hm : m ≤ len)
+    (h : SourceContinuationPressureOnRange n k r len) :
+    SelectedPressurePrefix n k r len m := by
+  unfold SelectedPressurePrefix
+  constructor
+  · exact hm
+  · intro j hj
+    unfold IsSourcePressureDepth
+    exact h j (by omega)
+
+/-- Range pressure marks every in-range depth as a selected source pressure depth. -/
+theorem isSourcePressureDepth_of_pressureOnRange
+    (n : OddNat) (k r len j : ℕ)
+    (h : SourceContinuationPressureOnRange n k r len)
+    (hj : j < len) :
+    IsSourcePressureDepth n k r j := by
+  unfold IsSourcePressureDepth
+  exact sourcePressureAtDepth_of_pressureOnRange n k r len j h hj
+
+/-- A selected source pressure depth has positive source continuation mass. -/
+theorem positive_sourceContinuationMass_of_isSourcePressureDepth
+    (n : OddNat) (k r j : ℕ)
+    (h : IsSourcePressureDepth n k r j) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) := by
+  unfold IsSourcePressureDepth at h
+  exact sourceContinuationMass_pos_of_localPressure n k (r + j) h
+
+/--
 Positive source pressure-depth count selects at least one local pressure depth.
 
 This is intentionally only an existence theorem.  It does not claim that
@@ -6397,6 +7113,119 @@ theorem exists_positive_sourceContinuationMass_of_pressureDepthCount_pos
   rcases exists_sourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
     ⟨j, hj, hpressure⟩
   exact ⟨j, hj, sourceContinuationMass_pos_of_localPressure n k (r + j) hpressure⟩
+
+/-- Positive pressure-depth count selects a packaged pressure-depth witness. -/
+theorem exists_isSourcePressureDepth_of_pressureDepthCount_pos
+    (n : OddNat) (k r len : ℕ)
+    (hpos : 0 < sourceContinuationPressureDepthCount n k r len) :
+    ∃ j, j < len ∧ IsSourcePressureDepth n k r j := by
+  rcases exists_sourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
+    ⟨j, hj, hpressure⟩
+  exact ⟨j, hj, hpressure⟩
+
+/--
+Positive pressure-depth count selects a packaged pressure-depth witness together
+with its positive source continuation mass.
+-/
+theorem exists_isSourcePressureDepth_with_positive_mass
+    (n : OddNat) (k r len : ℕ)
+    (hpos : 0 < sourceContinuationPressureDepthCount n k r len) :
+    ∃ j, j < len ∧
+      IsSourcePressureDepth n k r j ∧
+      0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) := by
+  rcases exists_isSourcePressureDepth_of_pressureDepthCount_pos n k r len hpos with
+    ⟨j, hj, hpressure⟩
+  exact ⟨j, hj, hpressure,
+    positive_sourceContinuationMass_of_isSourcePressureDepth n k r j hpressure⟩
+
+/--
+Two selected source pressure depths exist when the pressure-depth count is at
+least two.
+
+This theorem only extracts distinct witnesses.  It intentionally does not say
+that their delayed-budget contributions are independent.
+-/
+theorem exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+    (n : OddNat) (k r len : ℕ)
+    (hcount : 2 ≤ sourceContinuationPressureDepthCount n k r len) :
+    ∃ j₁ j₂,
+      j₁ < len ∧
+      j₂ < len ∧
+      j₁ ≠ j₂ ∧
+      IsSourcePressureDepth n k r j₁ ∧
+      IsSourcePressureDepth n k r j₂ := by
+  classical
+  unfold sourceContinuationPressureDepthCount at hcount
+  induction len with
+  | zero =>
+      simp at hcount
+  | succ len ih =>
+      rw [List.range_succ] at hcount
+      by_cases hlast : IsSourcePressureDepth n k r len
+      · have hlast' :
+            MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+              (orbitWindowRetentionMassPow2 n k (r + len)) := by
+          simpa [IsSourcePressureDepth] using hlast
+        by_cases hprevpos :
+            0 <
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j))))
+        · rcases exists_isSourcePressureDepth_of_pressureDepthCount_pos
+            n k r len hprevpos with ⟨j, hj, hpressure⟩
+          exact ⟨j, len, by omega, by omega, by omega, hpressure, hlast⟩
+        · have hprevzero :
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j)))) = 0 :=
+            Nat.eq_zero_of_not_pos hprevpos
+          simp [hlast', hprevzero] at hcount
+      · have hlast' :
+            ¬ MoreThanHalf
+              (orbitWindowContinuationSiblingMassPow2 n k (r + len))
+              (orbitWindowRetentionMassPow2 n k (r + len)) := by
+          intro h
+          exact hlast (by simpa [IsSourcePressureDepth] using h)
+        have hprev :
+            2 ≤
+              (List.range len).countP
+                (fun j =>
+                  decide
+                    (MoreThanHalf
+                      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
+                      (orbitWindowRetentionMassPow2 n k (r + j)))) := by
+          simpa [hlast'] using hcount
+        rcases ih hprev with ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
+        exact ⟨j₁, j₂, by omega, by omega, hne, hp₁, hp₂⟩
+
+/--
+Unpack the two-witness theorem into the original `MoreThanHalf` spelling.
+
+This theorem is useful for callers that do not yet use the packaged predicate.
+-/
+theorem exists_two_sourcePressureDepths_of_two_le_pressureDepthCount
+    (n : OddNat) (k r len : ℕ)
+    (hcount : 2 ≤ sourceContinuationPressureDepthCount n k r len) :
+    ∃ j₁ j₂,
+      j₁ < len ∧
+      j₂ < len ∧
+      j₁ ≠ j₂ ∧
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k (r + j₁))
+        (orbitWindowRetentionMassPow2 n k (r + j₁)) ∧
+      MoreThanHalf
+        (orbitWindowContinuationSiblingMassPow2 n k (r + j₂))
+        (orbitWindowRetentionMassPow2 n k (r + j₂)) := by
+  rcases exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+    n k r len hcount with ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
+  exact ⟨j₁, j₂, hj₁, hj₂, hne, hp₁, hp₂⟩
 
 /--
 Source cause-side outruns-heavy pressure yields a concrete positive source
@@ -6509,6 +7338,27 @@ theorem exists_depth_two_budget_of_pressureOnRange_two_one
         sumS n ((k + 1) + 1) +
           orbitWindowResidueCountMod8EqSevenTail n k :=
   depthTwoPressureRange_positive_and_budget n k h
+
+/--
+Depth-two delayed budget predicate.
+
+This packages the positive mass and delayed-budget inequality as a reusable
+property for later multi-witness accounting experiments.
+-/
+def HasDepthTwoDelayedBudget
+    (n : OddNat) (k : ℕ) : Prop :=
+  0 < orbitWindowContinuationSiblingMassPow2 n k 2 ∧
+    (k + 1) + orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+      sumS n ((k + 1) + 1) +
+        orbitWindowResidueCountMod8EqSevenTail n k
+
+/-- Depth-two one-range pressure supplies a packaged delayed budget. -/
+theorem hasDepthTwoDelayedBudget_of_pressureOnRange_two_one
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    HasDepthTwoDelayedBudget n k := by
+  unfold HasDepthTwoDelayedBudget
+  exact depthTwoPressureRange_positive_and_budget n k h
 
 /--
 Residue-address drift bridge.

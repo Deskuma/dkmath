@@ -26,6 +26,23 @@ finite orbit segments
 
 `PetalBridge` is the file where these languages meet.
 
+Checkpoint 125 clarifies the module boundary.  The low-level Collatz odd step
+is now read in `DkMath.Collatz.GnomonEvaluation` as:
+
+```text
+odd gnomon correction
+  n + (2n+1) = 3n+1
+
+power-of-two alignment
+  v2 (3n+1)
+
+residual shape
+  (3n+1) / 2^height
+```
+
+`PetalBridge` should not absorb that low-level vocabulary.  Its job is to
+observe finite windows of those shapes and compare finite channel masses.
+
 ## Basic Objects
 
 ### `OrbitWindow`
@@ -66,7 +83,8 @@ This is:
 v2 (3 * oddOrbitLabel n i + 1)
 ```
 
-It is the local 2-adic peeling height.
+It is the local power-of-two alignment height.  In the checkpoint-125 reading,
+this is the window-level view of `RawGnomonHeight`.
 
 ### `orbitWindowHeightSeq`
 
@@ -86,6 +104,45 @@ connects the ordered list back to the accumulated Collatz height:
 
 ```text
 (orbitWindowHeightSeq n k).sum = sumS n k
+```
+
+### `orbitWindowResidualShape`
+
+```lean
+orbitWindowResidualShape n i
+```
+
+This is the residual shape extracted from the `i`-th observed odd label:
+
+```text
+RawGnomonResidualShape (oddOrbitLabel n i)
+```
+
+Checkpoint 127 proves:
+
+```lean
+orbitWindowResidualShape_eq_oddOrbitLabel_succ
+```
+
+meaning:
+
+```text
+orbitWindowResidualShape n i = oddOrbitLabel n (i+1)
+```
+
+So the finite window can be read as a residual-shape chain.
+
+### `orbitWindowResidualShapeSeq`
+
+```lean
+orbitWindowResidualShapeSeq n k
+```
+
+This is the ordered list of residual shapes extracted in the first `k`
+positions.  It agrees with the shifted odd-label list by:
+
+```lean
+orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
 ```
 
 ## Separation And Collision
@@ -147,6 +204,58 @@ orbitWindowHeightCountGe_one_eq_window
 ```
 
 Every odd accelerated state has height at least `1`.
+
+## Pressure Margins And Prefix Failures
+
+Pressure is not raw carrier membership.  It is the strict comparison:
+
+```text
+retention < 2 * continuation
+```
+
+The integer margin surface is:
+
+```lean
+SourcePressureMarginInt
+isSourcePressureDepth_iff_margin_pos
+```
+
+Checkpoint 125 adds the diagnostic obstruction:
+
+```lean
+SourcePressurePrefixFailure
+sourcePressurePrefixFailure_iff_margin
+not_selectedPressurePrefix_of_prefixFailure
+SourcePressureSelectedSetDownClosed
+downClosed_iff_no_prefixFailure
+```
+
+Use these names when selected depths form a non-prefix sign pattern.  Such a
+case is not an error in the model: it means that a deeper residual-shape
+channel has positive margin while a shallower one does not.
+
+Checkpoint 126 adds the first frontier predicate:
+
+```lean
+SourcePressureFrontier
+sourcePressureFrontier_iff_margin
+sourcePressurePrefixFailure_of_frontier_pos
+```
+
+`SourcePressureFrontier n k r j` means that `j` is the first selected pressure
+depth.  It is a first-positive-margin statement, not a claim that later depths
+continue as a prefix.
+
+Checkpoint 127 adds:
+
+```lean
+SourcePressureSignChangeUp
+sourcePressureSignChangeUp_of_frontier_pos
+SourcePressureLocalIsland
+```
+
+These are observation predicates for margin sign profiles.  They should be
+used to classify pressure islands before proposing any new monotonicity theorem.
 
 ## Residue Counts
 
@@ -1262,3 +1371,131 @@ python/Collatz/PetalBridge/orbit_pressure_remainder_scan.py
 records pressure witnesses and L1..L5 delayed remainders on concrete orbit
 windows.  Its results are experimental and should be used to choose the next
 formal theorem, not as proof.
+
+## Selected Pressure Depths
+
+Checkpoint 122 packages the local pressure condition:
+
+```lean
+IsSourcePressureDepth
+```
+
+and provides witness extractors:
+
+```lean
+exists_isSourcePressureDepth_of_pressureDepthCount_pos
+exists_isSourcePressureDepth_with_positive_mass
+exists_two_isSourcePressureDepths_of_two_le_pressureDepthCount
+exists_two_sourcePressureDepths_of_two_le_pressureDepthCount
+```
+
+The two-witness theorem deliberately says only:
+
+```text
+two distinct selected pressure depths exist
+```
+
+It does not add their budget contributions.
+
+The new overlap scan:
+
+```text
+python/Collatz/PetalBridge/selected_depth_overlap_scan.py
+```
+
+observed no disjoint selected-depth pair in the default finite sample.  This
+suggests that selected continuation sets are often nested or overlapping, so a
+future multi-budget theorem probably needs an explicit overlap-control or
+nested-accounting predicate before it can sum budgets.
+
+## Continuation Nesting
+
+Checkpoint 123 turns the overlap observation into a theorem at the continuation
+carrier level.
+
+The pointwise residue theorem is:
+
+```lean
+allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+```
+
+It says that if a label is `-1` modulo `2^(e+1)` and `d <= e`, then the label
+is also `-1` modulo `2^(d+1)`.
+
+The finite-window mass consequences are:
+
+```lean
+sourceContinuationMass_anti_mono_depth
+tailContinuationMass_anti_mono_depth
+```
+
+Thus, deeper continuation mass cannot exceed shallower continuation mass.
+
+For selected indices, the caller-facing statements are:
+
+```lean
+selectedContinuationMass_nested_of_lt
+selectedContinuationMass_overlap_of_lt_of_deeper_pos
+```
+
+This changes the interpretation of multiple selected pressure depths.  They
+should not be read as independent budget carriers by default.  The safer
+reading is a nested tower: the deepest selected continuation core sits inside
+the earlier selected continuation channels.
+
+The updated Python scan also checks whether selected depths form a prefix.  In
+the default sample, every nonempty selected-depth row is both consecutive and a
+prefix from `r_start`.  This is not yet a theorem; it is a candidate for the
+next predicate, possibly named `SelectedPressurePrefix`.
+
+## Pressure Margin And Prefix Failure
+
+Checkpoint 124 confirms that the carrier-level story and the pressure-level
+story must be separated.
+
+Retention carriers are nested:
+
+```lean
+retention_allOnes_mod_pow_two_of_le
+sourceRetentionMass_anti_mono_depth
+tailRetentionMass_anti_mono_depth
+```
+
+Together with checkpoint 123, this says that both continuation and retention
+all-ones carriers shrink with depth.
+
+However, selected pressure is not just carrier membership.  It is the ratio
+condition:
+
+```text
+retention mass < 2 * continuation mass
+```
+
+For this reason checkpoint 124 introduces:
+
+```lean
+SourcePressureMarginInt
+isSourcePressureDepth_iff_margin_pos
+```
+
+The margin form is the recommended surface for future pressure-frontier work.
+
+The new wide Python scan:
+
+```text
+python/Collatz/PetalBridge/selected_pressure_prefix_scan.py
+```
+
+found prefix failures for `odd n <= 9999`, `steps = 128`, depths `2..11`.
+For example, `n = 1567` selects depth `3` but not depth `2` in that finite
+window.
+
+Therefore an unconditional theorem of the form
+
+```text
+deep selected pressure -> shallow selected pressure
+```
+
+should be treated as false or at least unsupported.  The next viable theorem
+should add a condition controlling pressure margins, retention growth, or a
+specific frontier regime.
