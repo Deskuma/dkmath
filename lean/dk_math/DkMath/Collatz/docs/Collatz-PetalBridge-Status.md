@@ -164,8 +164,16 @@ Checkpoint 127 lifts residual shape extraction to windows:
 ```lean
 orbitWindowResidualShape_eq_oddOrbitLabel_succ
 orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+orbitWindowResidualShapeSeq_take_length
+orbitWindowResidualShapeSeq_take_get?_eq_some
 orbitWindow_rawGnomonStep_factor
 orbitWindow_firstFailed_remainder_ne_zero
+orbitWindowFirstFailedPow2DepthSeq
+orbitWindowFirstFailedPow2DepthSeq_length
+orbitWindowFirstFailedPow2Depth_eq_height_add_one
 ```
 
 The finite window now supports the reading:
@@ -177,6 +185,15 @@ label_i
   -> orbitWindowResidualShape
   -> label_{i+1}
 ```
+
+Checkpoint 128 also adds the local-island margin bridge:
+
+```lean
+sourcePressureLocalIsland_iff_margin
+```
+
+This keeps pressure-island language on the margin-sign surface rather than
+turning it into an unsupported prefix theorem.
 
 The first theorem set is deliberately thin:
 

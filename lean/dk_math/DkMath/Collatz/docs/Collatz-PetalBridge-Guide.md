@@ -145,6 +145,16 @@ positions.  It agrees with the shifted odd-label list by:
 orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
 ```
 
+Checkpoint 128 adds list helpers:
+
+```lean
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+orbitWindowResidualShapeSeq_take_length
+orbitWindowResidualShapeSeq_take_get?_eq_some
+```
+
 ## Separation And Collision
 
 The bridge includes a finite split:
@@ -252,6 +262,7 @@ Checkpoint 127 adds:
 SourcePressureSignChangeUp
 sourcePressureSignChangeUp_of_frontier_pos
 SourcePressureLocalIsland
+sourcePressureLocalIsland_iff_margin
 ```
 
 These are observation predicates for margin sign profiles.  They should be
