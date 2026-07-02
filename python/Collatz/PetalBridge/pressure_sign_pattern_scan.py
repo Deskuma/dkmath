@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import csv
 from dataclasses import dataclass
+from collections import Counter, defaultdict
 from pathlib import Path
 
 
@@ -42,7 +43,14 @@ class PressureSignPatternRow:
     local_island_count: int
     sign_change_up_positions: str
     sign_change_up_count: int
-    first_failure_pair: str
+    first_sign_change_pair: str
+    residual_mod_16_first: int
+    residual_mod_16_last: int
+    residual_mod_16_mode: int
+    residual_mod_32_first: int
+    residual_mod_32_last: int
+    residual_mod_32_mode: int
+    max_positive_block_length: int
     max_margin_jump: int
     max_retention_drop: int
     max_continuation_drop: int
@@ -60,7 +68,19 @@ def join_pairs(values: list[tuple[int, int]]) -> str:
 
 
 def join_blocks(blocks: list[tuple[int, int]]) -> str:
-    return ";".join(f"{start}-{end}" if start != end else str(start) for start, end in blocks)
+    return ";".join(
+        f"{start}-{end}" if start != end else str(start) for start, end in blocks
+    )
+
+
+def mode_int(values: list[int]) -> int:
+    if not values:
+        return -1
+    counts = Counter(values)
+    return min(
+        counts,
+        key=lambda value: (-counts[value], value),
+    )
 
 
 def v2(n: int) -> int:
@@ -123,7 +143,7 @@ def consecutive_blocks(depths: list[int]) -> list[tuple[int, int]]:
     return blocks
 
 
-def first_failure_pair(depths: list[int], r_start: int) -> tuple[int, int] | None:
+def first_sign_change_pair(depths: list[int], r_start: int) -> tuple[int, int] | None:
     selected = set(depths)
     if not depths:
         return None
@@ -148,6 +168,9 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
     height_seq = heights_all[:steps]
     residual_shape_seq = labels[1 : steps + 1]
     first_failed_depth_seq = [height + 1 for height in height_seq]
+    residual_mod_8_seq = [value % 8 for value in residual_shape_seq]
+    residual_mod_16_seq = [value % 16 for value in residual_shape_seq]
+    residual_mod_32_seq = [value % 32 for value in residual_shape_seq]
 
     depths = list(range(r_start, r_start + depth_len))
     extended_depths = list(range(r_start, r_start + depth_len + 1))
@@ -172,7 +195,8 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         for depth in depths
         if margins[depth] <= 0 and margins[depth + 1] > 0
     ]
-    failure_pair = first_failure_pair(positive_depths, r_start)
+    sign_change_pair = first_sign_change_pair(positive_depths, r_start)
+    block_lengths = [end - start + 1 for start, end in blocks]
 
     return PressureSignPatternRow(
         n=n,
@@ -182,9 +206,9 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         height_seq=join_ints(height_seq),
         residual_shape_seq=join_ints(residual_shape_seq),
         first_failed_depth_seq=join_ints(first_failed_depth_seq),
-        residual_mod_8_seq=join_ints([value % 8 for value in residual_shape_seq]),
-        residual_mod_16_seq=join_ints([value % 16 for value in residual_shape_seq]),
-        residual_mod_32_seq=join_ints([value % 32 for value in residual_shape_seq]),
+        residual_mod_8_seq=join_ints(residual_mod_8_seq),
+        residual_mod_16_seq=join_ints(residual_mod_16_seq),
+        residual_mod_32_seq=join_ints(residual_mod_32_seq),
         positive_depths=join_ints(positive_depths),
         positive_blocks=join_blocks(blocks),
         positive_depth_count=len(positive_depths),
@@ -194,9 +218,16 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         local_island_count=len(local_islands),
         sign_change_up_positions=join_ints(sign_change_up),
         sign_change_up_count=len(sign_change_up),
-        first_failure_pair=(
-            "" if failure_pair is None else f"{failure_pair[0]}->{failure_pair[1]}"
+        first_sign_change_pair=(
+            "" if sign_change_pair is None else f"{sign_change_pair[0]}->{sign_change_pair[1]}"
         ),
+        residual_mod_16_first=residual_mod_16_seq[0] if residual_mod_16_seq else -1,
+        residual_mod_16_last=residual_mod_16_seq[-1] if residual_mod_16_seq else -1,
+        residual_mod_16_mode=mode_int(residual_mod_16_seq),
+        residual_mod_32_first=residual_mod_32_seq[0] if residual_mod_32_seq else -1,
+        residual_mod_32_last=residual_mod_32_seq[-1] if residual_mod_32_seq else -1,
+        residual_mod_32_mode=mode_int(residual_mod_32_seq),
+        max_positive_block_length=max(block_lengths, default=0),
         max_margin_jump=max_adjacent_jump(margins, depths),
         max_retention_drop=max_adjacent_drop(retentions, depths),
         max_continuation_drop=max_adjacent_drop(continuations, depths),
@@ -225,12 +256,70 @@ def write_csv(rows: list[PressureSignPatternRow], path: Path) -> None:
             writer.writerow(row.__dict__)
 
 
+def table_count_by(
+    rows: list[PressureSignPatternRow],
+    key_name: str,
+    value_name: str,
+    only_positive: bool = False,
+) -> list[tuple[int, str]]:
+    bucket: dict[int, Counter[int]] = defaultdict(Counter)
+    for row in rows:
+        if only_positive and row.positive_depth_count == 0:
+            continue
+        key = getattr(row, key_name)
+        value = getattr(row, value_name)
+        if value >= 0:
+            bucket[key][value] += 1
+    return [
+        (key, ";".join(f"{value}:{count}" for value, count in sorted(counter.items())))
+        for key, counter in sorted(bucket.items())
+    ]
+
+
+def count_list_field(rows: list[PressureSignPatternRow], field_name: str) -> Counter[int]:
+    counter: Counter[int] = Counter()
+    for row in rows:
+        raw = getattr(row, field_name)
+        if not raw:
+            continue
+        for value in raw.split(";"):
+            if value:
+                counter[int(value)] += 1
+    return counter
+
+
+def markdown_kv_counter(counter: Counter[int]) -> str:
+    return "; ".join(f"{key}:{counter[key]}" for key in sorted(counter))
+
+
+def append_distribution_table(
+    lines: list[str],
+    title: str,
+    rows: list[tuple[int, str]],
+    key_label: str,
+    value_label: str,
+) -> None:
+    lines.extend(["", f"## {title}", "", f"| {key_label} | {value_label} |", "|---:|---|"])
+    if rows:
+        for key, value in rows:
+            lines.append(f"| {key} | {value} |")
+    else:
+        lines.append("| - | none |")
+
+
 def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     nonempty = [row for row in rows if row.positive_depth_count > 0]
     with_island = [row for row in rows if row.local_island_count > 0]
     with_sign_change = [row for row in rows if row.sign_change_up_count > 0]
-    block_rows = [row for row in rows if ";" in row.positive_blocks or "-" in row.positive_blocks]
+    block_rows_len_ge_1 = [row for row in rows if row.max_positive_block_length >= 1]
+    block_rows_len_ge_2 = [row for row in rows if row.max_positive_block_length >= 2]
+    block_rows_len_ge_4 = [row for row in rows if row.max_positive_block_length >= 4]
+    block_length_counts = Counter(
+        row.max_positive_block_length
+        for row in rows
+        if row.max_positive_block_length > 0
+    )
     max_positive = max((row.positive_depth_count for row in rows), default=0)
     max_islands = max((row.local_island_count for row in rows), default=0)
     max_sign_changes = max((row.sign_change_up_count for row in rows), default=0)
@@ -254,10 +343,14 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"- rows with positive pressure depths: `{len(nonempty)}`",
         f"- rows with local islands: `{len(with_island)}`",
         f"- rows with sign-change-up positions: `{len(with_sign_change)}`",
-        f"- rows with positive blocks: `{len(block_rows)}`",
+        "- positive block definition: `maximal consecutive positive-depth run, length >= 1`",
+        f"- rows with positive blocks length >= 1: `{len(block_rows_len_ge_1)}`",
+        f"- rows with positive blocks length >= 2: `{len(block_rows_len_ge_2)}`",
+        f"- rows with positive blocks length >= 4: `{len(block_rows_len_ge_4)}`",
         f"- max positive depth count: `{max_positive}`",
         f"- max local island count: `{max_islands}`",
         f"- max sign-change-up count: `{max_sign_changes}`",
+        f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         "",
         "## Top Positive-Depth Samples",
         "",
@@ -278,7 +371,7 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             "",
             "## Local-Island Samples",
             "",
-            "| n | islands | first failure pair | sign-up | height seq | first-failed seq | residual mod 16 |",
+            "| n | islands | first sign-change pair | sign-up | height seq | first-failed seq | residual mod 16 |",
             "|---:|---|---|---|---|---|---|",
         ]
     )
@@ -286,7 +379,7 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         for row in top_islands:
             lines.append(
                 "| "
-                f"{row.n} | {row.local_islands} | {row.first_failure_pair} | "
+                f"{row.n} | {row.local_islands} | {row.first_sign_change_pair} | "
                 f"{row.sign_change_up_positions} | {row.height_seq} | "
                 f"{row.first_failed_depth_seq} | {row.residual_mod_16_seq} |"
             )
@@ -327,6 +420,71 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             "This is not evidence for an unconditional pressure-prefix theorem.  The",
             "presence of local islands and sign-change-up rows means pressure is a",
             "margin sign profile, not just carrier nesting.",
+            "",
+        ]
+    )
+    append_distribution_table(
+        lines,
+        "Frontier Depth By Residual Mod 16 First",
+        table_count_by(rows, "residual_mod_16_first", "first_frontier_depth", True),
+        "residual mod 16 first",
+        "frontier depth counts",
+    )
+    append_distribution_table(
+        lines,
+        "Frontier Depth By Residual Mod 16 Mode",
+        table_count_by(rows, "residual_mod_16_mode", "first_frontier_depth", True),
+        "residual mod 16 mode",
+        "frontier depth counts",
+    )
+    append_distribution_table(
+        lines,
+        "Frontier Depth By Residual Mod 32 First",
+        table_count_by(rows, "residual_mod_32_first", "first_frontier_depth", True),
+        "residual mod 32 first",
+        "frontier depth counts",
+    )
+    append_distribution_table(
+        lines,
+        "Frontier Depth By Residual Mod 32 Mode",
+        table_count_by(rows, "residual_mod_32_mode", "first_frontier_depth", True),
+        "residual mod 32 mode",
+        "frontier depth counts",
+    )
+    append_distribution_table(
+        lines,
+        "Positive Block Length By Residual Mod 16 First",
+        table_count_by(rows, "residual_mod_16_first", "max_positive_block_length"),
+        "residual mod 16 first",
+        "max block length counts",
+    )
+    append_distribution_table(
+        lines,
+        "Positive Block Length By Residual Mod 32 First",
+        table_count_by(rows, "residual_mod_32_first", "max_positive_block_length"),
+        "residual mod 32 first",
+        "max block length counts",
+    )
+    append_distribution_table(
+        lines,
+        "Local Island Rows By Residual Mod 16 First",
+        table_count_by(with_island, "residual_mod_16_first", "local_island_count"),
+        "residual mod 16 first",
+        "local island count rows",
+    )
+    append_distribution_table(
+        lines,
+        "Sign-Change-Up Rows By Residual Mod 16 First",
+        table_count_by(with_sign_change, "residual_mod_16_first", "sign_change_up_count"),
+        "residual mod 16 first",
+        "sign-change-up count rows",
+    )
+    lines.extend(
+        [
+            "",
+            "## Sign-Change-Up Depth Counts",
+            "",
+            f"- depth counts: `{markdown_kv_counter(count_list_field(rows, 'sign_change_up_positions'))}`",
             "",
         ]
     )

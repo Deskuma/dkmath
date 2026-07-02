@@ -4,10 +4,14 @@
 - rows with positive pressure depths: `511`
 - rows with local islands: `3`
 - rows with sign-change-up positions: `4`
-- rows with positive blocks: `132`
+- positive block definition: `maximal consecutive positive-depth run, length >= 1`
+- rows with positive blocks length >= 1: `511`
+- rows with positive blocks length >= 2: `131`
+- rows with positive blocks length >= 4: `60`
 - max positive depth count: `8`
 - max local island count: `1`
 - max sign-change-up count: `1`
+- positive block length counts: `1:380; 2:48; 3:23; 4:33; 5:20; 6:3; 7:1; 8:3`
 
 ## Top Positive-Depth Samples
 
@@ -28,7 +32,7 @@
 
 ## Local-Island Samples
 
-| n | islands | first failure pair | sign-up | height seq | first-failed seq | residual mod 16 |
+| n | islands | first sign-change pair | sign-up | height seq | first-failed seq | residual mod 16 |
 |---:|---|---|---|---|---|---|
 | 1567 | 3 | 2->3 | 2 | 1;1;1;1;2;2;2;6;3;1;2;1;4;1;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;2;2;3;3;3;7;4;2;3;2;5;2;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 15;7;11;1;1;1;5;13;11;9;3;5;3;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 | 1639 | 5 | 4->5 | 4 | 1;1;2;1;1;1;3;1;1;1;2;4;1;1;1;1;1;1;2;1;1;2;5;2;1;1;7;2;1;4;1;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;3;2;2;2;4;2;2;2;3;5;2;2;2;2;2;2;3;2;2;3;6;3;2;2;8;3;2;5;2;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 11;9;15;7;3;13;15;7;11;1;5;15;15;15;15;7;11;9;7;11;1;5;9;7;3;5;9;3;5;3;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
@@ -53,3 +57,113 @@ predicate.
 This is not evidence for an unconditional pressure-prefix theorem.  The
 presence of local islands and sign-change-up rows means pressure is a
 margin sign profile, not just carrier nesting.
+
+
+## Frontier Depth By Residual Mod 16 First
+
+| residual mod 16 first | frontier depth counts |
+|---:|---|
+| 1 | 2:57;3:1 |
+| 3 | 2:45 |
+| 5 | 2:39 |
+| 7 | 2:77 |
+| 9 | 2:62 |
+| 11 | 2:64 |
+| 13 | 2:53 |
+| 15 | 2:112;3:1 |
+
+## Frontier Depth By Residual Mod 16 Mode
+
+| residual mod 16 mode | frontier depth counts |
+|---:|---|
+| 1 | 2:493;3:2 |
+| 7 | 2:3 |
+| 15 | 2:13 |
+
+## Frontier Depth By Residual Mod 32 First
+
+| residual mod 32 first | frontier depth counts |
+|---:|---|
+| 1 | 2:32;3:1 |
+| 3 | 2:23 |
+| 5 | 2:23 |
+| 7 | 2:43 |
+| 9 | 2:42 |
+| 11 | 2:30 |
+| 13 | 2:20 |
+| 15 | 2:49;3:1 |
+| 17 | 2:25 |
+| 19 | 2:22 |
+| 21 | 2:16 |
+| 23 | 2:34 |
+| 25 | 2:20 |
+| 27 | 2:34 |
+| 29 | 2:33 |
+| 31 | 2:63 |
+
+## Frontier Depth By Residual Mod 32 Mode
+
+| residual mod 32 mode | frontier depth counts |
+|---:|---|
+| 1 | 2:493;3:2 |
+| 5 | 2:2 |
+| 7 | 2:4 |
+| 9 | 2:2 |
+| 15 | 2:2 |
+| 27 | 2:2 |
+| 31 | 2:4 |
+
+## Positive Block Length By Residual Mod 16 First
+
+| residual mod 16 first | max block length counts |
+|---:|---|
+| 1 | 0:72;1:50;2:3;3:1;4:4 |
+| 3 | 0:83;1:39;2:2;4:3;5:1 |
+| 5 | 0:89;1:34;2:1;4:4 |
+| 7 | 0:51;1:68;2:5;3:1;4:1;5:2 |
+| 9 | 0:65;1:45;2:6;3:2;4:3;5:4;8:2 |
+| 11 | 0:64;1:52;2:3;3:4;4:2;5:3 |
+| 13 | 0:75;1:43;2:4;3:3;4:2;5:1 |
+| 15 | 0:14;1:49;2:24;3:12;4:14;5:9;6:3;7:1;8:1 |
+
+## Positive Block Length By Residual Mod 32 First
+
+| residual mod 32 first | max block length counts |
+|---:|---|
+| 1 | 0:33;1:27;2:3;3:1;4:2 |
+| 3 | 0:41;1:21;4:2 |
+| 5 | 0:42;1:18;2:1;4:4 |
+| 7 | 0:21;1:38;2:3;3:1;5:1 |
+| 9 | 0:22;1:32;2:3;3:2;4:2;5:2;8:1 |
+| 11 | 0:35;1:28;4:2 |
+| 13 | 0:44;1:16;2:2;3:1;4:1 |
+| 15 | 0:14;1:36;2:10;3:1;4:1;5:2 |
+| 17 | 0:39;1:23;4:2 |
+| 19 | 0:42;1:18;2:2;4:1;5:1 |
+| 21 | 0:47;1:16 |
+| 23 | 0:30;1:30;2:2;4:1;5:1 |
+| 25 | 0:43;1:13;2:3;4:1;5:2;8:1 |
+| 27 | 0:29;1:24;2:3;3:4;5:3 |
+| 29 | 0:31;1:27;2:2;3:2;4:1;5:1 |
+| 31 | 1:13;2:14;3:11;4:13;5:7;6:3;7:1;8:1 |
+
+## Local Island Rows By Residual Mod 16 First
+
+| residual mod 16 first | local island count rows |
+|---:|---|
+| 7 | 1:1 |
+| 11 | 1:1 |
+| 15 | 1:1 |
+
+## Sign-Change-Up Rows By Residual Mod 16 First
+
+| residual mod 16 first | sign-change-up count rows |
+|---:|---|
+| 1 | 1:1 |
+| 7 | 1:1 |
+| 11 | 1:1 |
+| 15 | 1:1 |
+
+## Sign-Change-Up Depth Counts
+
+- depth counts: `2:2; 4:2`

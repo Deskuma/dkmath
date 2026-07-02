@@ -307,10 +307,24 @@ ExistsSourcePressureLocalIslandBelow
 existsSourcePressureLocalIslandBelow_iff_margin
 ExistsSourcePressureFrontierBelow
 existsSourcePressureFrontierBelow_iff_margin
+sourcePressureMargin_lt_of_signChangeUp
+sourcePressurePositiveBlock_singleton
+sourcePressurePositiveBlock_of_forall_margin_pos
+sourcePressureSignChangeUp_of_localIsland
 ```
 
 These names are for reading scan output.  They do not assert maximality,
 uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
+
+Checkpoint 131 refines the Python wording:
+
+```text
+first_sign_change_pair = adjacent nonpositive -> positive margin pair
+positive block = maximal consecutive positive-depth run, length >= 1
+```
+
+It also adds aggregate correlation tables for frontier depth, block length,
+local islands, and sign-change-up rows by residual residue class.
 
 ## Residue Counts
 

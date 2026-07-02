@@ -211,6 +211,10 @@ ExistsSourcePressureLocalIslandBelow
 existsSourcePressureLocalIslandBelow_iff_margin
 ExistsSourcePressureFrontierBelow
 existsSourcePressureFrontierBelow_iff_margin
+sourcePressureMargin_lt_of_signChangeUp
+sourcePressurePositiveBlock_singleton
+sourcePressurePositiveBlock_of_forall_margin_pos
+sourcePressureSignChangeUp_of_localIsland
 ```
 
 The scan output lives at:
@@ -232,6 +236,31 @@ max positive depth count: 8
 
 This confirms that pressure should remain a sign-pattern surface.  Prefix-like
 blocks are common, but local islands and sign-change-up rows are real.
+
+Checkpoint 131 refines the scan terminology and adds aggregate correlation
+tables:
+
+```text
+first_sign_change_pair:
+  adjacent nonpositive -> positive pressure margin pair
+
+positive block:
+  maximal consecutive positive-depth run, length >= 1
+```
+
+Observed from the same `odd n <= 2047`, `steps = 64`, depths `2..11` scan:
+
+```text
+positive block length counts:
+  1:380; 2:48; 3:23; 4:33; 5:20; 6:3; 7:1; 8:3
+
+sign-change-up depth counts:
+  2:2; 4:2
+```
+
+The aggregate tables suggest frontier depth is almost always `2`, while longer
+positive blocks are visibly concentrated in high all-ones residual classes such
+as residual `15 mod 16` and `31 mod 32`.
 
 The first theorem set is deliberately thin:
 

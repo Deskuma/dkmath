@@ -52,7 +52,7 @@ first_frontier_depth
 frontier_margin
 local_islands
 sign_change_up_positions
-first_failure_pair
+first_sign_change_pair
 margin_jump
 retention_drop
 continuation_drop
@@ -65,7 +65,9 @@ rows: 1024
 rows with positive pressure depths: 511
 rows with local islands: 3
 rows with sign-change-up positions: 4
-rows with positive blocks: 132
+rows with positive blocks length >= 1: 511
+rows with positive blocks length >= 2: 131
+rows with positive blocks length >= 4: 60
 max positive depth count: 8
 max local island count: 1
 max sign-change-up count: 1
@@ -82,6 +84,31 @@ n = 1775, island depth 5, first failure pair 4 -> 5
 These rows are the important obstruction witnesses.  They show again that
 pressure is not simply carrier nesting and does not support an unconditional
 prefix theorem.
+
+Checkpoint 131 refines this scan:
+
+```text
+first_sign_change_pair:
+  adjacent nonpositive -> positive pressure margin pair
+
+positive block:
+  maximal consecutive positive-depth run, length >= 1
+```
+
+It also adds aggregate tables by residual residue class.  The strongest visible
+pattern in the current scan is:
+
+```text
+frontier depth:
+  almost always depth 2
+
+long positive blocks:
+  concentrated in high all-ones-like residual classes,
+  especially residual 15 mod 16 and 31 mod 32
+
+sign-change-up:
+  rare, observed at depths 2 and 4
+```
 
 ## Lean Surface Added
 

@@ -7240,6 +7240,30 @@ theorem sourcePressurePositiveBlock_iff_margin
         (h.2 j hle hlt)
 
 /--
+A selected source-pressure depth is a positive block of length one.
+-/
+theorem sourcePressurePositiveBlock_singleton
+    (n : OddNat) (k r j : ℕ)
+    (h : IsSourcePressureDepth n k r j) :
+    SourcePressurePositiveBlock n k r j 1 := by
+  constructor
+  · omega
+  · intro t hle hlt
+    have ht : t = j := by omega
+    simpa [ht] using h
+
+/--
+Build a positive source-pressure block from positive margins on the interval.
+-/
+theorem sourcePressurePositiveBlock_of_forall_margin_pos
+    (n : OddNat) (k r a len : ℕ)
+    (hlen : 0 < len)
+    (hpos : ∀ j, a ≤ j → j < a + len →
+      0 < SourcePressureMarginInt n k (r + j)) :
+    SourcePressurePositiveBlock n k r a len :=
+  (sourcePressurePositiveBlock_iff_margin n k r a len).2 ⟨hlen, hpos⟩
+
+/--
 There is a local source-pressure island below a finite depth bound.
 -/
 def ExistsSourcePressureLocalIslandBelow
@@ -7268,6 +7292,16 @@ theorem existsSourcePressureLocalIslandBelow_iff_margin
     exact ⟨j, hjm, (sourcePressureLocalIsland_iff_margin n k r j).2 hjmargin⟩
 
 /--
+Build bounded local-island existence from an explicit bounded island witness.
+-/
+theorem existsSourcePressureLocalIslandBelow_of_lt
+    (n : OddNat) (k r m j : ℕ)
+    (hjm : j < m)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    ExistsSourcePressureLocalIslandBelow n k r m :=
+  ⟨j, hjm, hisland⟩
+
+/--
 There is a source-pressure frontier below a finite depth bound.
 -/
 def ExistsSourcePressureFrontierBelow
@@ -7292,6 +7326,49 @@ theorem existsSourcePressureFrontierBelow_iff_margin
   · intro h
     rcases h with ⟨j, hjm, hmargin⟩
     exact ⟨j, hjm, (sourcePressureFrontier_iff_margin n k r j).2 hmargin⟩
+
+/--
+Build bounded frontier existence from an explicit bounded frontier witness.
+-/
+theorem existsSourcePressureFrontierBelow_of_lt
+    (n : OddNat) (k r m j : ℕ)
+    (hjm : j < m)
+    (hfront : SourcePressureFrontier n k r j) :
+    ExistsSourcePressureFrontierBelow n k r m :=
+  ⟨j, hjm, hfront⟩
+
+/--
+An upward pressure sign change strictly increases the integer pressure margin.
+-/
+theorem sourcePressureMargin_lt_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureMarginInt n k (r + j) <
+      SourcePressureMarginInt n k (r + j + 1) := by
+  rcases h with ⟨hle, hpos⟩
+  omega
+
+/--
+A local pressure island produces an upward sign change at its left edge.
+-/
+theorem sourcePressureSignChangeUp_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignChangeUp n k r (j - 1) := by
+  rcases hisland with ⟨hjpos, hsel, hprev_not, _hnext_not⟩
+  unfold SourcePressureSignChangeUp
+  constructor
+  · have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + (j - 1)) := by
+      intro hpos
+      exact hprev_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j - 1)).2 hpos)
+    omega
+  · have hpos :
+        0 < SourcePressureMarginInt n k (r + j) :=
+      (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
+    have hidx : r + (j - 1) + 1 = r + j := by omega
+    simpa [hidx] using hpos
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
