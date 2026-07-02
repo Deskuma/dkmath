@@ -298,6 +298,20 @@ sourcePressureLocalIsland_iff_margin
 These are observation predicates for margin sign profiles.  They should be
 used to classify pressure islands before proposing any new monotonicity theorem.
 
+Checkpoint 130 adds thin sign-pattern classification handles:
+
+```lean
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
+```
+
+These names are for reading scan output.  They do not assert maximality,
+uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
+
 ## Residue Counts
 
 Named residue counts exist for low layers:

@@ -7202,6 +7202,97 @@ theorem sourcePressureLocalIsland_iff_margin
         (isSourcePressureDepth_iff_margin_pos n k r (j + 1)).1 hnext
       omega
 
+/--
+A consecutive block of positive source-pressure depths.
+
+Checkpoint 130 keeps this predicate intentionally thin.  The Python
+pressure-sign scan shows that positive depths often appear as blocks, while
+local islands can also occur.  This predicate records only the block condition;
+it does not assert maximality, uniqueness, or prefix behavior.
+-/
+def SourcePressurePositiveBlock
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  0 < len ∧
+    ∀ j, a ≤ j → j < a + len → IsSourcePressureDepth n k r j
+
+/--
+Positive pressure block in margin language.
+-/
+theorem sourcePressurePositiveBlock_iff_margin
+    (n : OddNat) (k r a len : ℕ) :
+    SourcePressurePositiveBlock n k r a len ↔
+      0 < len ∧
+        ∀ j, a ≤ j → j < a + len →
+          0 < SourcePressureMarginInt n k (r + j) := by
+  unfold SourcePressurePositiveBlock
+  constructor
+  · intro h
+    constructor
+    · exact h.1
+    · intro j hle hlt
+      exact (isSourcePressureDepth_iff_margin_pos n k r j).1
+        (h.2 j hle hlt)
+  · intro h
+    constructor
+    · exact h.1
+    · intro j hle hlt
+      exact (isSourcePressureDepth_iff_margin_pos n k r j).2
+        (h.2 j hle hlt)
+
+/--
+There is a local source-pressure island below a finite depth bound.
+-/
+def ExistsSourcePressureLocalIslandBelow
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∃ j, j < m ∧ SourcePressureLocalIsland n k r j
+
+/--
+Existence of a bounded local pressure island in margin language.
+-/
+theorem existsSourcePressureLocalIslandBelow_iff_margin
+    (n : OddNat) (k r m : ℕ) :
+    ExistsSourcePressureLocalIslandBelow n k r m ↔
+      ∃ j, j < m ∧
+        0 < j ∧
+        0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+        SourcePressureMarginInt n k (r + (j + 1)) ≤ 0 := by
+  unfold ExistsSourcePressureLocalIslandBelow
+  constructor
+  · intro h
+    rcases h with ⟨j, hjm, hjisland⟩
+    rw [sourcePressureLocalIsland_iff_margin] at hjisland
+    exact ⟨j, hjm, hjisland⟩
+  · intro h
+    rcases h with ⟨j, hjm, hjmargin⟩
+    exact ⟨j, hjm, (sourcePressureLocalIsland_iff_margin n k r j).2 hjmargin⟩
+
+/--
+There is a source-pressure frontier below a finite depth bound.
+-/
+def ExistsSourcePressureFrontierBelow
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∃ j, j < m ∧ SourcePressureFrontier n k r j
+
+/--
+Existence of a bounded pressure frontier in margin language.
+-/
+theorem existsSourcePressureFrontierBelow_iff_margin
+    (n : OddNat) (k r m : ℕ) :
+    ExistsSourcePressureFrontierBelow n k r m ↔
+      ∃ j, j < m ∧
+        0 < SourcePressureMarginInt n k (r + j) ∧
+        ∀ i, i < j → SourcePressureMarginInt n k (r + i) ≤ 0 := by
+  unfold ExistsSourcePressureFrontierBelow
+  constructor
+  · intro h
+    rcases h with ⟨j, hjm, hfront⟩
+    rw [sourcePressureFrontier_iff_margin] at hfront
+    exact ⟨j, hjm, hfront⟩
+  · intro h
+    rcases h with ⟨j, hjm, hmargin⟩
+    exact ⟨j, hjm, (sourcePressureFrontier_iff_margin n k r j).2 hmargin⟩
+
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
     (n : OddNat) (k r len : ℕ) :

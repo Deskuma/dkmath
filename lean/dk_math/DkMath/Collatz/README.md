@@ -167,6 +167,12 @@ SourcePressureFrontier
 SourcePressureSignChangeUp
 SourcePressureLocalIsland
 sourcePressureLocalIsland_iff_margin
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
 ```
 
 The central No.100 layer is:
@@ -225,6 +231,8 @@ docs/Collatz-GnomonEvaluation-125.md
 docs/Collatz-GnomonResidualShape-126.md
 docs/Collatz-WindowResidualShape-127.md
 docs/Collatz-ResidualShapeSequence-128.md
+docs/Collatz-FirstFailedDepthSequence-129.md
+docs/Collatz-PressureSignPatternScan-130.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

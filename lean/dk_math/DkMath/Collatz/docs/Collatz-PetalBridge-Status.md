@@ -201,6 +201,38 @@ sourcePressureLocalIsland_iff_margin
 This keeps pressure-island language on the margin-sign surface rather than
 turning it into an unsupported prefix theorem.
 
+Checkpoint 130 adds a Python pressure sign-pattern scan and thin Lean
+classification handles:
+
+```lean
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
+```
+
+The scan output lives at:
+
+```text
+python/Collatz/PetalBridge/pressure_sign_pattern_scan.py
+python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.csv
+python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md
+```
+
+Observed at `odd n <= 2047`, `steps = 64`, depths `2..11`:
+
+```text
+rows with positive pressure depths: 511 / 1024
+rows with local islands: 3
+rows with sign-change-up positions: 4
+max positive depth count: 8
+```
+
+This confirms that pressure should remain a sign-pattern surface.  Prefix-like
+blocks are common, but local islands and sign-change-up rows are real.
+
 The first theorem set is deliberately thin:
 
 ```lean
