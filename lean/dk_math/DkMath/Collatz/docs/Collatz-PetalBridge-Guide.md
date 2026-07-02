@@ -1193,3 +1193,35 @@ orbitWindowContinuationSiblingMassPow2
 
 Use these names when a theorem is conceptually about low-peeling retention,
 rather than writing the raw residue-count expression every time.
+
+## Level-5 And Mod Scan
+
+Checkpoint 120 extends the delayed-retention tower one more level and adds a
+Python observation window through `mod 1024`.
+
+The new Lean frontier is:
+
+```text
+tail 127 mod 128
+  = tail 127 mod 256 + tail 255 mod 256
+
+tail 127 mod 128
+  -> next tail 63 mod 128 + next tail 127 mod 128
+```
+
+The Python scan lives under:
+
+```text
+python/Collatz/PetalBridge/
+```
+
+and currently writes:
+
+```text
+python/Collatz/PetalBridge/results/retention_tower_mod_scan.csv
+python/Collatz/PetalBridge/results/retention_tower_mod_scan.md
+```
+
+The scan confirms the same recovery/continuation law from `mod 16` through
+`mod 1024`, which suggests that future checkpoints should prefer the generic
+power-of-two residue theorem when readability permits it.

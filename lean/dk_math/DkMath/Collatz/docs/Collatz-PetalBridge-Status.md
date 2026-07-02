@@ -1441,3 +1441,62 @@ shifted-tail prefix versions of the transition-count inequalities
 The main caution is that Collatz state labels are not prime labels.  Any bridge
 to `ABCBridge` must insert an additional label transform or carrier witness
 layer before using the Petal radical lower-bound theorems.
+
+## Checkpoint 120: Level 5 And Mod-1024 Scan
+
+Checkpoint 120 adds one more concrete delayed-retention level:
+
+```lean
+orbitWindowResidueCountMod256EqOneHundredTwentySevenTail
+orbitWindowResidueCountMod256EqTwoHundredFiftyFiveTail
+TailRemainderLevel5
+TailFallingLevel5
+```
+
+The new split theorem is:
+
+```lean
+tailResidueCountMod128EqOneHundredTwentySeven_split_mod256
+tailRemainderLevel4_static_split
+```
+
+The new orbit-label transition aliases are:
+
+```lean
+oddOrbitLabel_succ_mod128_eq63_of_mod256_eq127
+oddOrbitLabel_succ_mod128_eq127_of_mod256_eq255
+```
+
+The new count recursion edge is:
+
+```lean
+tailMod128Eq127_le_nextTailMod128Eq63_add_nextTailMod128Eq127
+tailRemainderLevel4_step_grammar
+tailRemainderLevel5_step_grammar
+```
+
+The pressure-count existence layer is now available:
+
+```lean
+exists_sourcePressureDepth_of_pressureDepthCount_pos
+exists_positive_sourceContinuationMass_of_pressureDepthCount_pos
+exists_positive_sourceContinuationMass_of_outrunsMoreThanHalf
+```
+
+This closes the first safe bridge from:
+
+```text
+positive pressure-depth count
+  -> selected local pressure depth
+  -> positive source continuation mass
+```
+
+The Python observation window:
+
+```text
+python/Collatz/PetalBridge/retention_tower_mod_scan.py
+python/Collatz/PetalBridge/results/retention_tower_mod_scan.csv
+python/Collatz/PetalBridge/results/retention_tower_mod_scan.md
+```
+
+confirms the same recovery/continuation residue law through `mod 1024`.
