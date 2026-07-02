@@ -6413,6 +6413,32 @@ theorem exists_positive_sourceContinuationMass_of_outrunsMoreThanHalf
   exact exists_positive_sourceContinuationMass_of_pressureDepthCount_pos n k r len hpos
 
 /--
+Tower-entry naming wrapper for positive pressure-depth count.
+
+The theorem only selects a positive local source continuation mass.  It does
+not assert that different selected depths are independent budget carriers.
+-/
+theorem exists_towerEntryDepth_of_pressureDepthCount_pos
+    (n : OddNat) (k r len : ℕ)
+    (hpos : 0 < sourceContinuationPressureDepthCount n k r len) :
+    ∃ j, j < len ∧
+      0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) :=
+  exists_positive_sourceContinuationMass_of_pressureDepthCount_pos n k r len hpos
+
+/--
+Tower-entry naming wrapper for source outruns-heavy pressure.
+
+This is the caller-facing name for moving from a pressure-heavy range to one
+selected local tower-entry opportunity.
+-/
+theorem exists_towerEntryDepth_of_outrunsMoreThanHalf
+    (n : OddNat) (k r len : ℕ)
+    (h : SourceOutrunsMoreThanHalfOnDepthRange n k r len) :
+    ∃ j, j < len ∧
+      0 < orbitWindowContinuationSiblingMassPow2 n k (r + j) :=
+  exists_positive_sourceContinuationMass_of_outrunsMoreThanHalf n k r len h
+
+/--
 Extract local depth-two source pressure from the one-depth range pressure
 profile beginning at depth `2`.
 -/
@@ -6452,6 +6478,37 @@ theorem sourcePressureDepthTwo_delayed_budget_with_tailSeven_remainder
       sumS n ((k + 1) + 1) +
         orbitWindowResidueCountMod8EqSevenTail n k :=
   sourceContinuationMass_depth_two_delayed_budget_with_tailSeven_remainder n k
+
+/--
+Depth-two one-range pressure gives both positive continuation mass and the
+depth-two delayed budget inequality.
+
+This is the first direct "selected witness to delayed budget" bridge.
+-/
+theorem depthTwoPressureRange_positive_and_budget
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k 2 ∧
+      (k + 1) + orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+        sumS n ((k + 1) + 1) +
+          orbitWindowResidueCountMod8EqSevenTail n k := by
+  constructor
+  · exact sourceContinuationMass_depth_two_pos_of_pressureOnRange_two_one n k h
+  · exact sourcePressureDepthTwo_delayed_budget_with_tailSeven_remainder n k
+      (sourcePressureDepthTwo_of_pressureOnRange_two_one n k h)
+
+/--
+Alias spelling for the same depth-two bridge, emphasizing existence of a
+budget opportunity rather than the pressure-profile input form.
+-/
+theorem exists_depth_two_budget_of_pressureOnRange_two_one
+    (n : OddNat) (k : ℕ)
+    (h : SourceContinuationPressureOnRange n k 2 1) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k 2 ∧
+      (k + 1) + orbitWindowContinuationSiblingMassPow2 n k 2 ≤
+        sumS n ((k + 1) + 1) +
+          orbitWindowResidueCountMod8EqSevenTail n k :=
+  depthTwoPressureRange_positive_and_budget n k h
 
 /--
 Residue-address drift bridge.

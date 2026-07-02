@@ -155,6 +155,7 @@ docs/Collatz-Level2Remainder-117.md
 docs/Collatz-Level3PressureEntrance-118.md
 docs/Collatz-Level4GenericPressure-119.md
 docs/Collatz-Level5AndModScan-120.md
+docs/Collatz-SelectedWitnessBudget-121.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

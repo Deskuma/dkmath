@@ -1500,3 +1500,58 @@ python/Collatz/PetalBridge/results/retention_tower_mod_scan.md
 ```
 
 confirms the same recovery/continuation residue law through `mod 1024`.
+
+## Checkpoint 121: Selected Witness To Delayed Budget
+
+Checkpoint 121 connects the one-witness pressure layer to a concrete delayed
+budget theorem.
+
+New caller-facing tower-entry aliases:
+
+```lean
+exists_towerEntryDepth_of_pressureDepthCount_pos
+exists_towerEntryDepth_of_outrunsMoreThanHalf
+```
+
+New depth-two budget package:
+
+```lean
+depthTwoPressureRange_positive_and_budget
+exists_depth_two_budget_of_pressureOnRange_two_one
+```
+
+Meaning:
+
+```text
+SourceContinuationPressureOnRange n k 2 1
+  -> 0 < orbitWindowContinuationSiblingMassPow2 n k 2
+  -> (k + 1) + continuationMass <= sumS n ((k + 1) + 1)
+       + tail 7 mod 8 remainder
+```
+
+This is still a one-witness theorem.  It does not claim that multiple selected
+pressure depths can be counted as independent delayed-budget carriers.
+
+New Python observation script:
+
+```text
+python/Collatz/PetalBridge/orbit_pressure_remainder_scan.py
+python/Collatz/PetalBridge/results/orbit_pressure_remainder_scan.csv
+python/Collatz/PetalBridge/results/orbit_pressure_remainder_scan.md
+```
+
+Default scan:
+
+```text
+odd n <= 999, steps = 64, depths 2..9
+```
+
+Observed summary:
+
+```text
+rows: 500
+rows with pressure witness: 237
+rows with L5 remainder: 18
+max pressure depth count: 6
+max L5 remainder: 3
+```

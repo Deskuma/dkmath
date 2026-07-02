@@ -1225,3 +1225,40 @@ python/Collatz/PetalBridge/results/retention_tower_mod_scan.md
 The scan confirms the same recovery/continuation law from `mod 16` through
 `mod 1024`, which suggests that future checkpoints should prefer the generic
 power-of-two residue theorem when readability permits it.
+
+## Selected Witness To Budget
+
+Checkpoint 121 connects the selected witness layer to the first delayed-budget
+surface.
+
+The depth-two one-range bridge is:
+
+```lean
+depthTwoPressureRange_positive_and_budget
+exists_depth_two_budget_of_pressureOnRange_two_one
+```
+
+It packages:
+
+```text
+SourceContinuationPressureOnRange n k 2 1
+  -> positive source continuation mass at depth 2
+  -> delayed budget with the tail 7 mod 8 remainder
+```
+
+The caller-facing tower-entry aliases are:
+
+```lean
+exists_towerEntryDepth_of_pressureDepthCount_pos
+exists_towerEntryDepth_of_outrunsMoreThanHalf
+```
+
+The Python observation script:
+
+```text
+python/Collatz/PetalBridge/orbit_pressure_remainder_scan.py
+```
+
+records pressure witnesses and L1..L5 delayed remainders on concrete orbit
+windows.  Its results are experimental and should be used to choose the next
+formal theorem, not as proof.
