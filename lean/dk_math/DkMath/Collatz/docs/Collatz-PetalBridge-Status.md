@@ -164,8 +164,22 @@ Checkpoint 127 lifts residual shape extraction to windows:
 ```lean
 orbitWindowResidualShape_eq_oddOrbitLabel_succ
 orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+orbitWindowResidualShapeSeq_take_length
+orbitWindowResidualShapeSeq_take_get?_eq_some
 orbitWindow_rawGnomonStep_factor
 orbitWindow_firstFailed_remainder_ne_zero
+orbitWindowFirstFailedPow2DepthSeq
+orbitWindowFirstFailedPow2DepthSeq_length
+orbitWindowFirstFailedPow2Depth_eq_height_add_one
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+orbitWindowFirstFailedPow2DepthSeq_take_length
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
+orbitWindow_threeProfiles_get?_eq_some
 ```
 
 The finite window now supports the reading:
@@ -176,6 +190,119 @@ label_i
   -> orbitWindowHeight
   -> orbitWindowResidualShape
   -> label_{i+1}
+```
+
+Checkpoint 128 also adds the local-island margin bridge:
+
+```lean
+sourcePressureLocalIsland_iff_margin
+```
+
+This keeps pressure-island language on the margin-sign surface rather than
+turning it into an unsupported prefix theorem.
+
+Checkpoint 130 adds a Python pressure sign-pattern scan and thin Lean
+classification handles:
+
+```lean
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
+sourcePressureMargin_lt_of_signChangeUp
+sourcePressurePositiveBlock_singleton
+sourcePressurePositiveBlock_of_forall_margin_pos
+sourcePressureSignChangeUp_of_localIsland
+```
+
+The scan output lives at:
+
+```text
+python/Collatz/PetalBridge/pressure_sign_pattern_scan.py
+python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.csv
+python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md
+```
+
+Observed at `odd n <= 2047`, `steps = 64`, depths `2..11`:
+
+```text
+rows with positive pressure depths: 511 / 1024
+rows with local islands: 3
+rows with sign-change-up positions: 4
+max positive depth count: 8
+```
+
+This confirms that pressure should remain a sign-pattern surface.  Prefix-like
+blocks are common, but local islands and sign-change-up rows are real.
+
+Checkpoint 131 refines the scan terminology and adds aggregate correlation
+tables:
+
+```text
+first_sign_change_pair:
+  adjacent nonpositive -> positive pressure margin pair
+
+positive block:
+  maximal consecutive positive-depth run, length >= 1
+```
+
+Observed from the same `odd n <= 2047`, `steps = 64`, depths `2..11` scan:
+
+```text
+positive block length counts:
+  1:380; 2:48; 3:23; 4:33; 5:20; 6:3; 7:1; 8:3
+
+sign-change-up depth counts:
+  2:2; 4:2
+```
+
+The aggregate tables suggest frontier depth is almost always `2`, while longer
+positive blocks are visibly concentrated in high all-ones residual classes such
+as residual `15 mod 16` and `31 mod 32`.
+
+Checkpoint 132 replaces the proxy residue-class question with the direct
+all-ones-depth observable:
+
+```text
+ResidualAllOnesDepth x = v2 (x + 1)
+orbitWindowResidualAllOnesDepth n i
+orbitWindowResidualAllOnesDepthSeq n k
+```
+
+The Python scan now records `residual_all_ones_depth_seq` plus
+first/last/mode/max summaries and all-ones-depth threshold counts.
+
+Observed from the same `odd n <= 2047`, `steps = 64`, depths `2..11` scan:
+
+```text
+all-ones depth first counts:
+  1:513; 2:256; 3:128; 4:64; 5:32; 6:16; 7:8; 8:4; 9:2; 10:1
+
+all-ones depth mode counts:
+  1:1024
+
+all-ones depth max counts:
+  1:54; 2:156; 3:240; 4:83; 5:36; 6:391; 7:34; 8:25; 9:2; 10:1; 11:2
+
+sign-change cause counts:
+  retention_drop_dominant:4
+```
+
+The main reading is now sharper:
+
+```text
+long positive pressure blocks track deep max all-ones depth
+the mode is always shallow, so first/mode alone misses the window concentration
+local sign-change-up rows are retention-drop dominated in this scan
+```
+
+This supports a two-profile route before any full `ShapePressureGrid`:
+
+```text
+ResidualAllOnesProfile
+PressureDecayProfile
 ```
 
 The first theorem set is deliberately thin:

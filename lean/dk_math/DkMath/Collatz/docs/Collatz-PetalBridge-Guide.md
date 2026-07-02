@@ -145,6 +145,46 @@ positions.  It agrees with the shifted odd-label list by:
 orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
 ```
 
+Checkpoint 128 adds list helpers:
+
+```lean
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+orbitWindowResidualShapeSeq_take_length
+orbitWindowResidualShapeSeq_take_get?_eq_some
+```
+
+### `orbitWindowFirstFailedPow2DepthSeq`
+
+```lean
+orbitWindowFirstFailedPow2DepthSeq n k
+```
+
+This is the ordered list of first failed power-of-two alignment depths over the
+first `k` time positions.
+
+Checkpoint 129 adds the matching list helpers:
+
+```lean
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+orbitWindowFirstFailedPow2DepthSeq_take_length
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
+orbitWindow_threeProfiles_get?_eq_some
+```
+
+The main reading is:
+
+```text
+first_failed_i = height_i + 1
+```
+
+The `orbitWindow_threeProfiles_get?_eq_some` theorem aligns the height,
+residual-shape, and first-failed-depth profiles at the same time index.  It is
+still a one-dimensional theorem: the pressure-depth index is a separate axis.
+
 ## Separation And Collision
 
 The bridge includes a finite split:
@@ -252,10 +292,64 @@ Checkpoint 127 adds:
 SourcePressureSignChangeUp
 sourcePressureSignChangeUp_of_frontier_pos
 SourcePressureLocalIsland
+sourcePressureLocalIsland_iff_margin
 ```
 
 These are observation predicates for margin sign profiles.  They should be
 used to classify pressure islands before proposing any new monotonicity theorem.
+
+Checkpoint 130 adds thin sign-pattern classification handles:
+
+```lean
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
+sourcePressureMargin_lt_of_signChangeUp
+sourcePressurePositiveBlock_singleton
+sourcePressurePositiveBlock_of_forall_margin_pos
+sourcePressureSignChangeUp_of_localIsland
+```
+
+These names are for reading scan output.  They do not assert maximality,
+uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
+
+Checkpoint 131 refines the Python wording:
+
+```text
+first_sign_change_pair = adjacent nonpositive -> positive margin pair
+positive block = maximal consecutive positive-depth run, length >= 1
+```
+
+It also adds aggregate correlation tables for frontier depth, block length,
+local islands, and sign-change-up rows by residual residue class.
+
+Checkpoint 132 replaces the residue-class proxy with a direct all-ones-depth
+profile:
+
+```lean
+ResidualAllOnesDepth
+orbitWindowResidualAllOnesDepth
+orbitWindowResidualAllOnesDepthSeq
+orbitWindowResidualAllOnesDepthSeq_length
+orbitWindowResidualAllOnesDepthSeq_get?_eq_some
+orbitWindowResidualAllOnesDepthSeq_take_length
+orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
+```
+
+The corresponding Python observable is:
+
+```text
+all_ones_depth residual = v2 (residual + 1)
+```
+
+This is intentionally a profile, not a grid.  The time index `i` remains the
+index of a residual shape in the orbit window, while pressure depth `j` remains
+the index of a margin comparison.  The checkpoint-132 data says that long
+positive blocks are better explained by the maximum all-ones depth seen inside
+the window than by the first or modal residue alone.
 
 ## Residue Counts
 

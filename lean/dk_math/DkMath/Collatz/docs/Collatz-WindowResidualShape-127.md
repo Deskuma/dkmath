@@ -174,3 +174,30 @@ continuation_drop
 ```
 
 Then add only the predicates that survive as useful theorem interfaces.
+
+## Checkpoint 128 Follow-up
+
+Checkpoint 128 adds list API for the residual-shape sequence:
+
+```lean
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+orbitWindowResidualShapeSeq_take_length
+orbitWindowResidualShapeSeq_take_get?_eq_some
+```
+
+It also introduces:
+
+```lean
+orbitWindowFirstFailedPow2DepthSeq
+orbitWindowFirstFailedPow2DepthSeq_length
+orbitWindowFirstFailedPow2Depth_eq_height_add_one
+sourcePressureLocalIsland_iff_margin
+```
+
+See:
+
+```text
+Collatz-ResidualShapeSequence-128.md
+```

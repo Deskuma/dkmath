@@ -144,7 +144,15 @@ orbitWindowHeight
 orbitWindowHeightSeq
 orbitWindowResidualShape
 orbitWindowResidualShapeSeq
+orbitWindowResidualShapeSeq_length
+orbitWindowResidualShapeSeq_get?_eq_some
+orbitWindowResidualShapeSeq_take_get?_eq_some
 orbitWindowFirstFailedPow2Depth
+orbitWindowFirstFailedPow2DepthSeq
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+orbitWindow_threeProfiles_get?_eq_some
 orbitWindowResidueCountPow2
 orbitWindowResidueCountPow2Tail
 sourcePow2Distribution_total
@@ -158,6 +166,21 @@ SourcePressureSelectedSetDownClosed
 SourcePressureFrontier
 SourcePressureSignChangeUp
 SourcePressureLocalIsland
+sourcePressureLocalIsland_iff_margin
+SourcePressurePositiveBlock
+sourcePressurePositiveBlock_iff_margin
+ExistsSourcePressureLocalIslandBelow
+existsSourcePressureLocalIslandBelow_iff_margin
+ExistsSourcePressureFrontierBelow
+existsSourcePressureFrontierBelow_iff_margin
+ResidualAllOnesDepth
+orbitWindowResidualAllOnesDepth
+orbitWindowResidualAllOnesDepthSeq
+orbitWindowResidualAllOnesDepthSeq_get?_eq_some
+sourcePressureMargin_lt_of_signChangeUp
+sourcePressurePositiveBlock_singleton
+sourcePressurePositiveBlock_of_forall_margin_pos
+sourcePressureSignChangeUp_of_localIsland
 ```
 
 The central No.100 layer is:
@@ -215,6 +238,11 @@ docs/Collatz-PressureMargin-124.md
 docs/Collatz-GnomonEvaluation-125.md
 docs/Collatz-GnomonResidualShape-126.md
 docs/Collatz-WindowResidualShape-127.md
+docs/Collatz-ResidualShapeSequence-128.md
+docs/Collatz-FirstFailedDepthSequence-129.md
+docs/Collatz-PressureSignPatternScan-130.md
+docs/Collatz-PressureCorrelationScan-131.md
+docs/Collatz-PressureAllOnesCorrelationScan-132.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

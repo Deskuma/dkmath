@@ -144,6 +144,42 @@ noncomputable def orbitWindowResidualShapeSeq (n : OddNat) (k : ℕ) : List ℕ 
   (List.range k).map (orbitWindowResidualShape n)
 
 /--
+Low-bit all-ones depth of a natural residual shape.
+
+This is the direct Lean counterpart of the checkpoint-132 scan observable:
+
+```text
+all_ones_depth x = v2 (x + 1)
+```
+
+It measures how long the low-bit suffix of `x` stays in the all-ones channel:
+`1`, `3`, `7`, `15`, `31`, ...
+-/
+def ResidualAllOnesDepth (x : ℕ) : ℕ :=
+  v2 (x + 1)
+
+/--
+All-ones depth of the residual shape at a window index.
+
+This keeps the time index `i` separate from pressure depth `j`.  It is an
+observable profile, not a pressure-prefix theorem.
+-/
+noncomputable def orbitWindowResidualAllOnesDepth
+    (n : OddNat) (i : ℕ) : ℕ :=
+  ResidualAllOnesDepth (orbitWindowResidualShape n i)
+
+/--
+Ordered all-ones-depth profile of the residual shapes in a finite orbit window.
+
+Checkpoint 132 adds this thin profile before introducing any heavier grid:
+the current experiment asks whether positive pressure blocks are explained by
+concentration in deep all-ones residual channels.
+-/
+noncomputable def orbitWindowResidualAllOnesDepthSeq
+    (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowResidualAllOnesDepth n)
+
+/--
 First failed power-of-two alignment depth at the `i`-th observed odd label.
 
 This is the window-level version of `FirstFailedPow2Depth`.
@@ -860,6 +896,181 @@ theorem orbitWindowHeightSeq_take_get?_eq_some
     ((orbitWindowHeightSeq n k).take r)[i]? = some (orbitWindowHeight n i) := by
   rw [List.getElem?_take_of_lt hi]
   exact orbitWindowHeightSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
+
+/--
+The ordered residual-shape profile has length equal to the window size.
+-/
+theorem orbitWindowResidualShapeSeq_length (n : OddNat) (k : ℕ) :
+    (orbitWindowResidualShapeSeq n k).length = k := by
+  simp [orbitWindowResidualShapeSeq]
+
+/--
+Reading the ordered residual-shape profile at an in-window time recovers the
+pointwise residual shape.
+-/
+theorem orbitWindowResidualShapeSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowResidualShapeSeq n k)[i]? =
+      some (orbitWindowResidualShape n i) := by
+  simp [orbitWindowResidualShapeSeq, hi]
+
+/--
+The prefix of length `r` in the residual-shape profile has length `r` when
+`r` lies inside the window.
+-/
+theorem orbitWindowResidualShapeSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowResidualShapeSeq n k).take r).length = r := by
+  simp [orbitWindowResidualShapeSeq_length, Nat.min_eq_left hr]
+
+/--
+Reading a prefix of the residual-shape profile recovers the same pointwise
+residual shape while the index remains inside the prefix.
+-/
+theorem orbitWindowResidualShapeSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowResidualShapeSeq n k).take r)[i]? =
+      some (orbitWindowResidualShape n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowResidualShapeSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
+
+/--
+The ordered all-ones-depth residual profile has length equal to the window
+size.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_length
+    (n : OddNat) (k : ℕ) :
+    (orbitWindowResidualAllOnesDepthSeq n k).length = k := by
+  simp [orbitWindowResidualAllOnesDepthSeq]
+
+/--
+Reading the all-ones-depth residual profile at an in-window time recovers the
+pointwise all-ones-depth observation.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowResidualAllOnesDepthSeq n k)[i]? =
+      some (orbitWindowResidualAllOnesDepth n i) := by
+  simp [orbitWindowResidualAllOnesDepthSeq, hi]
+
+/--
+The prefix of the all-ones-depth residual profile has length `r` when `r` lies
+inside the window.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowResidualAllOnesDepthSeq n k).take r).length = r := by
+  simp [orbitWindowResidualAllOnesDepthSeq_length, Nat.min_eq_left hr]
+
+/--
+Reading a prefix of the all-ones-depth residual profile recovers the same
+pointwise observation while the index remains inside the prefix.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowResidualAllOnesDepthSeq n k).take r)[i]? =
+      some (orbitWindowResidualAllOnesDepth n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowResidualAllOnesDepthSeq_get?_eq_some n
+    (Nat.lt_of_lt_of_le hi hr)
+
+/--
+First-failed-depth profile over the first `k` observed odd labels.
+-/
+noncomputable def orbitWindowFirstFailedPow2DepthSeq
+    (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowFirstFailedPow2Depth n)
+
+/--
+The first-failed-depth profile has length equal to the window size.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_length
+    (n : OddNat) (k : ℕ) :
+    (orbitWindowFirstFailedPow2DepthSeq n k).length = k := by
+  simp [orbitWindowFirstFailedPow2DepthSeq]
+
+/--
+Reading the ordered first-failed-depth profile at an in-window time recovers
+the pointwise first-failed depth.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+      some (orbitWindowFirstFailedPow2Depth n i) := by
+  simp [orbitWindowFirstFailedPow2DepthSeq, hi]
+
+/--
+Window first-failed depth is exactly one more than the observed window height.
+-/
+theorem orbitWindowFirstFailedPow2Depth_eq_height_add_one
+    (n : OddNat) (i : ℕ) :
+    orbitWindowFirstFailedPow2Depth n i = orbitWindowHeight n i + 1 := by
+  unfold orbitWindowFirstFailedPow2Depth FirstFailedPow2Depth
+  rw [orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel]
+
+/--
+Reading the ordered first-failed-depth profile also recovers the observed height
+plus one.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_get?_eq_some_height_add_one
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+      some (orbitWindowHeight n i + 1) := by
+  rw [orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n hi]
+  rw [orbitWindowFirstFailedPow2Depth_eq_height_add_one]
+
+/--
+The prefix of length `r` in the first-failed-depth profile has length `r` when
+`r` lies inside the window.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r).length = r := by
+  simp [orbitWindowFirstFailedPow2DepthSeq_length, Nat.min_eq_left hr]
+
+/--
+Reading a prefix of the first-failed-depth profile recovers the same pointwise
+first-failed depth while the index remains inside the prefix.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r)[i]? =
+      some (orbitWindowFirstFailedPow2Depth n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n
+    (Nat.lt_of_lt_of_le hi hr)
+
+/--
+Reading a prefix of the first-failed-depth profile also recovers the observed
+height plus one.
+-/
+theorem orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowFirstFailedPow2DepthSeq n k).take r)[i]? =
+      some (orbitWindowHeight n i + 1) := by
+  rw [orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some n hi hr]
+  rw [orbitWindowFirstFailedPow2Depth_eq_height_add_one]
+
+/--
+The three time-profile lists are aligned at every in-window index.
+
+This is a deliberately one-dimensional observation theorem.  It keeps the time
+axis `i` separate from the pressure-depth axis `j`; a later
+`ShapePressureGrid` should combine those axes explicitly rather than hiding
+that distinction in one index.
+-/
+theorem orbitWindow_threeProfiles_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowHeightSeq n k)[i]? = some (orbitWindowHeight n i) ∧
+      (orbitWindowResidualShapeSeq n k)[i]? =
+        some (orbitWindowResidualShape n i) ∧
+      (orbitWindowFirstFailedPow2DepthSeq n k)[i]? =
+        some (orbitWindowFirstFailedPow2Depth n i) := by
+  constructor
+  · exact orbitWindowHeightSeq_get?_eq_some n hi
+  constructor
+  · exact orbitWindowResidualShapeSeq_get?_eq_some n hi
+  · exact orbitWindowFirstFailedPow2DepthSeq_get?_eq_some n hi
 
 /--
 The integer threshold lower bound also applies to prefixes.
@@ -4734,6 +4945,17 @@ theorem orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
   exact orbitWindowResidualShape_eq_oddOrbitLabel_succ n i
 
 /--
+Reading the residual-shape profile at an in-window time recovers the shifted
+odd label.
+-/
+theorem orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowResidualShapeSeq n k)[i]? =
+      some (oddOrbitLabel n (i + 1)) := by
+  rw [orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels]
+  simp [hi]
+
+/--
 Window-level raw gnomon factorization.
 
 At each observed label, the raw gnomon step decomposes into the observed
@@ -7005,6 +7227,224 @@ def SourcePressureLocalIsland
     IsSourcePressureDepth n k r j ∧
     ¬ IsSourcePressureDepth n k r (j - 1) ∧
     ¬ IsSourcePressureDepth n k r (j + 1)
+
+/--
+Local pressure island in margin language.
+
+This is the first theorem interface for isolated positive pressure depths.
+-/
+theorem sourcePressureLocalIsland_iff_margin
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureLocalIsland n k r j ↔
+      0 < j ∧
+        0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+        SourcePressureMarginInt n k (r + (j + 1)) ≤ 0 := by
+  constructor
+  · intro h
+    rcases h with ⟨hj, hsel, hprev_not, hnext_not⟩
+    constructor
+    · exact hj
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
+    constructor
+    · have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + (j - 1)) := by
+        intro hpos
+        exact hprev_not
+          ((isSourcePressureDepth_iff_margin_pos n k r (j - 1)).2 hpos)
+      omega
+    · have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + (j + 1)) := by
+        intro hpos
+        exact hnext_not
+          ((isSourcePressureDepth_iff_margin_pos n k r (j + 1)).2 hpos)
+      omega
+  · intro h
+    rcases h with ⟨hj, hpos, hprev_nonpos, hnext_nonpos⟩
+    constructor
+    · exact hj
+    constructor
+    · exact (isSourcePressureDepth_iff_margin_pos n k r j).2 hpos
+    constructor
+    · intro hprev
+      have hp :
+          0 < SourcePressureMarginInt n k (r + (j - 1)) :=
+        (isSourcePressureDepth_iff_margin_pos n k r (j - 1)).1 hprev
+      omega
+    · intro hnext
+      have hp :
+          0 < SourcePressureMarginInt n k (r + (j + 1)) :=
+        (isSourcePressureDepth_iff_margin_pos n k r (j + 1)).1 hnext
+      omega
+
+/--
+A consecutive block of positive source-pressure depths.
+
+Checkpoint 130 keeps this predicate intentionally thin.  The Python
+pressure-sign scan shows that positive depths often appear as blocks, while
+local islands can also occur.  This predicate records only the block condition;
+it does not assert maximality, uniqueness, or prefix behavior.
+-/
+def SourcePressurePositiveBlock
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  0 < len ∧
+    ∀ j, a ≤ j → j < a + len → IsSourcePressureDepth n k r j
+
+/--
+Positive pressure block in margin language.
+-/
+theorem sourcePressurePositiveBlock_iff_margin
+    (n : OddNat) (k r a len : ℕ) :
+    SourcePressurePositiveBlock n k r a len ↔
+      0 < len ∧
+        ∀ j, a ≤ j → j < a + len →
+          0 < SourcePressureMarginInt n k (r + j) := by
+  unfold SourcePressurePositiveBlock
+  constructor
+  · intro h
+    constructor
+    · exact h.1
+    · intro j hle hlt
+      exact (isSourcePressureDepth_iff_margin_pos n k r j).1
+        (h.2 j hle hlt)
+  · intro h
+    constructor
+    · exact h.1
+    · intro j hle hlt
+      exact (isSourcePressureDepth_iff_margin_pos n k r j).2
+        (h.2 j hle hlt)
+
+/--
+A selected source-pressure depth is a positive block of length one.
+-/
+theorem sourcePressurePositiveBlock_singleton
+    (n : OddNat) (k r j : ℕ)
+    (h : IsSourcePressureDepth n k r j) :
+    SourcePressurePositiveBlock n k r j 1 := by
+  constructor
+  · omega
+  · intro t hle hlt
+    have ht : t = j := by omega
+    simpa [ht] using h
+
+/--
+Build a positive source-pressure block from positive margins on the interval.
+-/
+theorem sourcePressurePositiveBlock_of_forall_margin_pos
+    (n : OddNat) (k r a len : ℕ)
+    (hlen : 0 < len)
+    (hpos : ∀ j, a ≤ j → j < a + len →
+      0 < SourcePressureMarginInt n k (r + j)) :
+    SourcePressurePositiveBlock n k r a len :=
+  (sourcePressurePositiveBlock_iff_margin n k r a len).2 ⟨hlen, hpos⟩
+
+/--
+There is a local source-pressure island below a finite depth bound.
+-/
+def ExistsSourcePressureLocalIslandBelow
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∃ j, j < m ∧ SourcePressureLocalIsland n k r j
+
+/--
+Existence of a bounded local pressure island in margin language.
+-/
+theorem existsSourcePressureLocalIslandBelow_iff_margin
+    (n : OddNat) (k r m : ℕ) :
+    ExistsSourcePressureLocalIslandBelow n k r m ↔
+      ∃ j, j < m ∧
+        0 < j ∧
+        0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+        SourcePressureMarginInt n k (r + (j + 1)) ≤ 0 := by
+  unfold ExistsSourcePressureLocalIslandBelow
+  constructor
+  · intro h
+    rcases h with ⟨j, hjm, hjisland⟩
+    rw [sourcePressureLocalIsland_iff_margin] at hjisland
+    exact ⟨j, hjm, hjisland⟩
+  · intro h
+    rcases h with ⟨j, hjm, hjmargin⟩
+    exact ⟨j, hjm, (sourcePressureLocalIsland_iff_margin n k r j).2 hjmargin⟩
+
+/--
+Build bounded local-island existence from an explicit bounded island witness.
+-/
+theorem existsSourcePressureLocalIslandBelow_of_lt
+    (n : OddNat) (k r m j : ℕ)
+    (hjm : j < m)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    ExistsSourcePressureLocalIslandBelow n k r m :=
+  ⟨j, hjm, hisland⟩
+
+/--
+There is a source-pressure frontier below a finite depth bound.
+-/
+def ExistsSourcePressureFrontierBelow
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∃ j, j < m ∧ SourcePressureFrontier n k r j
+
+/--
+Existence of a bounded pressure frontier in margin language.
+-/
+theorem existsSourcePressureFrontierBelow_iff_margin
+    (n : OddNat) (k r m : ℕ) :
+    ExistsSourcePressureFrontierBelow n k r m ↔
+      ∃ j, j < m ∧
+        0 < SourcePressureMarginInt n k (r + j) ∧
+        ∀ i, i < j → SourcePressureMarginInt n k (r + i) ≤ 0 := by
+  unfold ExistsSourcePressureFrontierBelow
+  constructor
+  · intro h
+    rcases h with ⟨j, hjm, hfront⟩
+    rw [sourcePressureFrontier_iff_margin] at hfront
+    exact ⟨j, hjm, hfront⟩
+  · intro h
+    rcases h with ⟨j, hjm, hmargin⟩
+    exact ⟨j, hjm, (sourcePressureFrontier_iff_margin n k r j).2 hmargin⟩
+
+/--
+Build bounded frontier existence from an explicit bounded frontier witness.
+-/
+theorem existsSourcePressureFrontierBelow_of_lt
+    (n : OddNat) (k r m j : ℕ)
+    (hjm : j < m)
+    (hfront : SourcePressureFrontier n k r j) :
+    ExistsSourcePressureFrontierBelow n k r m :=
+  ⟨j, hjm, hfront⟩
+
+/--
+An upward pressure sign change strictly increases the integer pressure margin.
+-/
+theorem sourcePressureMargin_lt_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureMarginInt n k (r + j) <
+      SourcePressureMarginInt n k (r + j + 1) := by
+  rcases h with ⟨hle, hpos⟩
+  omega
+
+/--
+A local pressure island produces an upward sign change at its left edge.
+-/
+theorem sourcePressureSignChangeUp_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignChangeUp n k r (j - 1) := by
+  rcases hisland with ⟨hjpos, hsel, hprev_not, _hnext_not⟩
+  unfold SourcePressureSignChangeUp
+  constructor
+  · have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + (j - 1)) := by
+      intro hpos
+      exact hprev_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j - 1)).2 hpos)
+    omega
+  · have hpos :
+        0 < SourcePressureMarginInt n k (r + j) :=
+      (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
+    have hidx : r + (j - 1) + 1 = r + j := by omega
+    simpa [hidx] using hpos
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
