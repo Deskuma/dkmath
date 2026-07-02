@@ -31,6 +31,10 @@ class OverlapRow:
     depth_len: int
     selected_depths: str
     selected_count: int
+    selected_depths_are_prefix: bool
+    selected_depths_are_consecutive: bool
+    max_selected_depth: int
+    missing_selected_depths: str
     max_pairwise_overlap: int
     min_pairwise_overlap: int
     total_pair_count: int
@@ -90,10 +94,28 @@ def selected_depths(labels: list[int], r_start: int, depth_len: int) -> list[int
     return selected
 
 
+def depths_are_consecutive(depths: list[int]) -> bool:
+    return all(right == left + 1 for left, right in zip(depths, depths[1:]))
+
+
+def depths_are_prefix(depths: list[int], r_start: int) -> bool:
+    if not depths:
+        return True
+    return depths[0] == r_start and depths_are_consecutive(depths)
+
+
+def missing_depths_from_prefix(depths: list[int], r_start: int) -> list[int]:
+    if not depths:
+        return []
+    selected = set(depths)
+    return [depth for depth in range(r_start, max(depths) + 1) if depth not in selected]
+
+
 def row_for(n: int, steps: int, r_start: int, depth_len: int) -> OverlapRow:
     labels = orbit_labels(n, steps)
     depths = selected_depths(labels, r_start, depth_len)
     index_sets = {depth: continuation_indices(labels, depth) for depth in depths}
+    missing = missing_depths_from_prefix(depths, r_start)
     pair_stats: list[tuple[int, int, int]] = []
     for left, right in combinations(depths, 2):
         pair_stats.append((left, right, len(index_sets[left] & index_sets[right])))
@@ -121,6 +143,10 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> OverlapRow:
         depth_len=depth_len,
         selected_depths=";".join(str(depth) for depth in depths),
         selected_count=len(depths),
+        selected_depths_are_prefix=depths_are_prefix(depths, r_start),
+        selected_depths_are_consecutive=depths_are_consecutive(depths),
+        max_selected_depth=max(depths, default=0),
+        missing_selected_depths=";".join(str(depth) for depth in missing),
         max_pairwise_overlap=max_overlap,
         min_pairwise_overlap=min_overlap,
         total_pair_count=len(pair_stats),
@@ -140,7 +166,11 @@ def scan(max_n: int, steps: int, r_start: int, depth_len: int) -> list[OverlapRo
 def write_csv(rows: list[OverlapRow], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(OverlapRow.__dataclass_fields__))
+        writer = csv.DictWriter(
+            f,
+            fieldnames=list(OverlapRow.__dataclass_fields__),
+            lineterminator="\n",
+        )
         writer.writeheader()
         for row in rows:
             writer.writerow(row.__dict__)
@@ -151,7 +181,13 @@ def write_summary(rows: list[OverlapRow], path: Path) -> None:
     multi = [row for row in rows if row.selected_count >= 2]
     with_disjoint = [row for row in multi if row.has_disjoint_pair]
     all_overlap = [row for row in multi if not row.has_disjoint_pair]
+    prefix_rows = [row for row in rows if row.selected_depths_are_prefix]
+    consecutive_rows = [row for row in rows if row.selected_depths_are_consecutive]
+    nonempty = [row for row in rows if row.selected_count > 0]
+    nonempty_prefix = [row for row in nonempty if row.selected_depths_are_prefix]
+    nonempty_consecutive = [row for row in nonempty if row.selected_depths_are_consecutive]
     max_selected = max((row.selected_count for row in rows), default=0)
+    max_selected_depth = max((row.max_selected_depth for row in rows), default=0)
     max_overlap = max((row.max_pairwise_overlap for row in rows), default=0)
     samples = sorted(
         multi,
@@ -164,20 +200,26 @@ def write_summary(rows: list[OverlapRow], path: Path) -> None:
         f"- rows with at least two selected depths: `{len(multi)}`",
         f"- rows with a disjoint selected-depth pair: `{len(with_disjoint)}`",
         f"- rows where every selected-depth pair overlaps: `{len(all_overlap)}`",
+        f"- rows whose selected depths are a prefix from `r_start`: `{len(prefix_rows)}`",
+        f"- nonempty prefix rows: `{len(nonempty_prefix)}` / `{len(nonempty)}`",
+        f"- rows whose selected depths are consecutive: `{len(consecutive_rows)}`",
+        f"- nonempty consecutive rows: `{len(nonempty_consecutive)}` / `{len(nonempty)}`",
         f"- max selected depth count: `{max_selected}`",
+        f"- max selected depth: `{max_selected_depth}`",
         f"- max pairwise overlap: `{max_overlap}`",
         "",
         "## Top Multi-Witness Samples",
         "",
-        "| n | selected depths | pairs | disjoint pairs | max overlap | first pair | first overlap | masses |",
-        "|---:|---|---:|---:|---:|---|---:|---|",
+        "| n | selected depths | prefix | consecutive | missing | pairs | disjoint pairs | max overlap | first pair | first overlap | masses |",
+        "|---:|---|---|---|---|---:|---:|---:|---|---:|---|",
     ]
     for row in samples:
         lines.append(
             "| "
-            f"{row.n} | {row.selected_depths} | {row.total_pair_count} | "
-            f"{row.disjoint_pair_count} | {row.max_pairwise_overlap} | "
-            f"{row.first_pair} | {row.first_pair_overlap} | "
+            f"{row.n} | {row.selected_depths} | {row.selected_depths_are_prefix} | "
+            f"{row.selected_depths_are_consecutive} | {row.missing_selected_depths} | "
+            f"{row.total_pair_count} | {row.disjoint_pair_count} | "
+            f"{row.max_pairwise_overlap} | {row.first_pair} | {row.first_pair_overlap} | "
             f"{row.first_pair_left_mass}:{row.first_pair_right_mass} |"
         )
     lines.extend(
@@ -191,6 +233,10 @@ def write_summary(rows: list[OverlapRow], path: Path) -> None:
             "If disjoint pairs are common, a future Lean predicate could target",
             "`DisjointTowerTargets`.  If all selected pairs overlap, the right",
             "formal condition may need to express nested selected-depth behavior.",
+            "",
+            "The prefix/consecutive fields test the next hypothesis: selected",
+            "depths may form a visible initial tower segment.  A prefix row means",
+            "`r_start, r_start+1, ..., max_selected_depth` are all selected.",
             "",
         ]
     )

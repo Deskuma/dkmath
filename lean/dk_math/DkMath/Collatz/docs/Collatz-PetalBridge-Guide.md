@@ -1298,3 +1298,43 @@ observed no disjoint selected-depth pair in the default finite sample.  This
 suggests that selected continuation sets are often nested or overlapping, so a
 future multi-budget theorem probably needs an explicit overlap-control or
 nested-accounting predicate before it can sum budgets.
+
+## Continuation Nesting
+
+Checkpoint 123 turns the overlap observation into a theorem at the continuation
+carrier level.
+
+The pointwise residue theorem is:
+
+```lean
+allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+```
+
+It says that if a label is `-1` modulo `2^(e+1)` and `d <= e`, then the label
+is also `-1` modulo `2^(d+1)`.
+
+The finite-window mass consequences are:
+
+```lean
+sourceContinuationMass_anti_mono_depth
+tailContinuationMass_anti_mono_depth
+```
+
+Thus, deeper continuation mass cannot exceed shallower continuation mass.
+
+For selected indices, the caller-facing statements are:
+
+```lean
+selectedContinuationMass_nested_of_lt
+selectedContinuationMass_overlap_of_lt_of_deeper_pos
+```
+
+This changes the interpretation of multiple selected pressure depths.  They
+should not be read as independent budget carriers by default.  The safer
+reading is a nested tower: the deepest selected continuation core sits inside
+the earlier selected continuation channels.
+
+The updated Python scan also checks whether selected depths form a prefix.  In
+the default sample, every nonempty selected-depth row is both consecutive and a
+prefix from `r_start`.  This is not yet a theorem; it is a candidate for the
+next predicate, possibly named `SelectedPressurePrefix`.

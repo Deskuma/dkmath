@@ -1781,6 +1781,142 @@ theorem orbitWindowContinuationSiblingMassPow2Tail_le_window
   unfold orbitWindowContinuationSiblingMassPow2Tail
   exact orbitWindowResidueCountPow2Tail_le_window n k (r + 1) (2 ^ (r + 1) - 1)
 
+/--
+Deep all-ones power-of-two residue cells are nested inside shallow ones.
+
+If a label is `-1` modulo `2^(e+1)` and `d ≤ e`, then the same label is `-1`
+modulo `2^(d+1)`.  This is the pointwise reason selected continuation depths
+overlap: deeper continuation channels refine shallower continuation channels.
+-/
+theorem allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+    (q d e : ℕ)
+    (hde : d ≤ e)
+    (h : q % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1) :
+    q % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 := by
+  have hdvd : 2 ^ (d + 1) ∣ 2 ^ (e + 1) := by
+    exact pow_dvd_pow 2 (by omega)
+  rw [mod_eq_mod_of_dvd_modulus hdvd, h]
+  rcases exists_add_of_le hde with ⟨a, rfl⟩
+  rw [show d + a + 1 = d + 1 + a by omega, pow_add]
+  have hbase : 0 < 2 ^ (d + 1) := pow_pos (by decide) (d + 1)
+  have hscale : 0 < 2 ^ a := pow_pos (by decide) a
+  have hsplit :
+      2 ^ (d + 1) * 2 ^ a - 1 =
+        (2 ^ (d + 1) - 1) + (2 ^ a - 1) * 2 ^ (d + 1) := by
+    rw [Nat.sub_mul]
+    rw [Nat.mul_comm (2 ^ a) (2 ^ (d + 1))]
+    ring_nf
+    have hle :
+        2 ^ d * 2 ≤ 2 ^ d * 2 ^ a * 2 := by
+      have ha : 1 ≤ 2 ^ a := by omega
+      nlinarith [ha, pow_pos (by decide : 0 < 2) d]
+    omega
+  rw [hsplit]
+  rw [Nat.add_mul_mod_self_right]
+  exact Nat.mod_eq_of_lt (by omega)
+
+/--
+Source continuation mass is anti-monotone in depth.
+
+Increasing the depth asks for a more refined all-ones residue cell, so the
+finite window count cannot increase.
+-/
+theorem sourceContinuationMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowContinuationSiblingMassPow2 n k e ≤
+      orbitWindowContinuationSiblingMassPow2 n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowContinuationSiblingMassPow2, orbitWindowResidueCountPow2]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2 n k (e + 1) (2 ^ (e + 1) - 1) ≤
+            orbitWindowResidueCountPow2 n k (d + 1) (2 ^ (d + 1) - 1) := by
+        simpa [orbitWindowContinuationSiblingMassPow2] using ih
+      rw [orbitWindowContinuationSiblingMassPow2,
+        orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowContinuationSiblingMassPow2,
+        orbitWindowResidueCountPow2_succ]
+      by_cases hdeep :
+          oddOrbitLabel n k % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1
+      · have hshallow :
+            oddOrbitLabel n k % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 :=
+          allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n k) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow :
+          oddOrbitLabel n k % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih' (Nat.le_succ
+              (orbitWindowResidueCountPow2 n k (d + 1) (2 ^ (d + 1) - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Shifted-tail continuation mass is anti-monotone in depth.
+
+This is the tail-window counterpart of
+`sourceContinuationMass_anti_mono_depth`.
+-/
+theorem tailContinuationMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowContinuationSiblingMassPow2Tail n k e ≤
+      orbitWindowContinuationSiblingMassPow2Tail n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2Tail n k (e + 1) (2 ^ (e + 1) - 1) ≤
+            orbitWindowResidueCountPow2Tail n k (d + 1) (2 ^ (d + 1) - 1) := by
+        simpa [orbitWindowContinuationSiblingMassPow2Tail] using ih
+      rw [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowContinuationSiblingMassPow2Tail,
+        orbitWindowResidueCountPow2Tail_succ]
+      by_cases hdeep :
+          oddOrbitLabel n (k + 1) % (2 ^ (e + 1)) = 2 ^ (e + 1) - 1
+      · have hshallow :
+            oddOrbitLabel n (k + 1) % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1 :=
+          allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n (k + 1)) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow :
+          oddOrbitLabel n (k + 1) % (2 ^ (d + 1)) = 2 ^ (d + 1) - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih' (Nat.le_succ
+              (orbitWindowResidueCountPow2Tail n k (d + 1) (2 ^ (d + 1) - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Selected source continuation masses are nested by selected-depth index.
+
+For a fixed base depth `r`, a later selected index asks for a deeper all-ones
+channel and therefore has no more mass than an earlier selected index.
+-/
+theorem selectedContinuationMass_nested_of_lt
+    (n : OddNat) (k r j₁ j₂ : ℕ)
+    (hlt : j₁ < j₂) :
+    orbitWindowContinuationSiblingMassPow2 n k (r + j₂) ≤
+      orbitWindowContinuationSiblingMassPow2 n k (r + j₁) := by
+  exact sourceContinuationMass_anti_mono_depth n k (r + j₁) (r + j₂) (by omega)
+
+/--
+If the deeper selected continuation mass is positive, then the shallower one
+is positive as well.
+
+This is the count-level "overlap is automatic" observation: deeper all-ones
+hits are already shallow all-ones hits.
+-/
+theorem selectedContinuationMass_overlap_of_lt_of_deeper_pos
+    (n : OddNat) (k r j₁ j₂ : ℕ)
+    (hlt : j₁ < j₂)
+    (hpos : 0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₂)) :
+    0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₁) :=
+  lt_of_lt_of_le hpos (selectedContinuationMass_nested_of_lt n k r j₁ j₂ hlt)
+
 /-- The all-ones retention residue is inside its power-of-two modulus. -/
 theorem twoAdicRetentionResidue_lt_pow
     (r : ℕ) :

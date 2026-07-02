@@ -157,6 +157,7 @@ docs/Collatz-Level4GenericPressure-119.md
 docs/Collatz-Level5AndModScan-120.md
 docs/Collatz-SelectedWitnessBudget-121.md
 docs/Collatz-SelectedPressureDepths-122.md
+docs/Collatz-ContinuationNesting-123.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

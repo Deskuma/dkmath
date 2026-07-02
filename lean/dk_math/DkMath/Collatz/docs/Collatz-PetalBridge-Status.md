@@ -1611,3 +1611,46 @@ max pairwise overlap: 13
 
 This suggests that the next formal predicate should probably describe
 overlap/nesting control, not assume selected depths are independent.
+
+## Checkpoint 123: Continuation Nesting
+
+Checkpoint 123 proves that all-ones continuation channels are nested by depth.
+
+Pointwise residue theorem:
+
+```lean
+allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+```
+
+Count-level anti-monotonicity:
+
+```lean
+sourceContinuationMass_anti_mono_depth
+tailContinuationMass_anti_mono_depth
+```
+
+Selected-depth wrappers:
+
+```lean
+selectedContinuationMass_nested_of_lt
+selectedContinuationMass_overlap_of_lt_of_deeper_pos
+```
+
+This formally explains the checkpoint 122 observation that selected-depth
+continuation carriers were not disjoint: a deeper all-ones channel is a subset
+of every shallower all-ones channel.
+
+The overlap scan now also records prefix/consecutive fields.  In the default
+window (`odd n <= 999`, `steps = 64`, `r_start = 2`, `depth_len = 8`):
+
+```text
+rows: 500
+nonempty selected rows: 237
+nonempty prefix rows: 237 / 237
+nonempty consecutive rows: 237 / 237
+max selected depth: 7
+```
+
+The prefix observation remains experimental.  The Lean theorem currently
+proves nesting of continuation carriers, not that pressure-selected depths must
+form a prefix.
