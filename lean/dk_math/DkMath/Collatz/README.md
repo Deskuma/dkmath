@@ -173,6 +173,10 @@ ExistsSourcePressureLocalIslandBelow
 existsSourcePressureLocalIslandBelow_iff_margin
 ExistsSourcePressureFrontierBelow
 existsSourcePressureFrontierBelow_iff_margin
+ResidualAllOnesDepth
+orbitWindowResidualAllOnesDepth
+orbitWindowResidualAllOnesDepthSeq
+orbitWindowResidualAllOnesDepthSeq_get?_eq_some
 sourcePressureMargin_lt_of_signChangeUp
 sourcePressurePositiveBlock_singleton
 sourcePressurePositiveBlock_of_forall_margin_pos
@@ -238,6 +242,7 @@ docs/Collatz-ResidualShapeSequence-128.md
 docs/Collatz-FirstFailedDepthSequence-129.md
 docs/Collatz-PressureSignPatternScan-130.md
 docs/Collatz-PressureCorrelationScan-131.md
+docs/Collatz-PressureAllOnesCorrelationScan-132.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

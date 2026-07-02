@@ -262,6 +262,49 @@ The aggregate tables suggest frontier depth is almost always `2`, while longer
 positive blocks are visibly concentrated in high all-ones residual classes such
 as residual `15 mod 16` and `31 mod 32`.
 
+Checkpoint 132 replaces the proxy residue-class question with the direct
+all-ones-depth observable:
+
+```text
+ResidualAllOnesDepth x = v2 (x + 1)
+orbitWindowResidualAllOnesDepth n i
+orbitWindowResidualAllOnesDepthSeq n k
+```
+
+The Python scan now records `residual_all_ones_depth_seq` plus
+first/last/mode/max summaries and all-ones-depth threshold counts.
+
+Observed from the same `odd n <= 2047`, `steps = 64`, depths `2..11` scan:
+
+```text
+all-ones depth first counts:
+  1:513; 2:256; 3:128; 4:64; 5:32; 6:16; 7:8; 8:4; 9:2; 10:1
+
+all-ones depth mode counts:
+  1:1024
+
+all-ones depth max counts:
+  1:54; 2:156; 3:240; 4:83; 5:36; 6:391; 7:34; 8:25; 9:2; 10:1; 11:2
+
+sign-change cause counts:
+  retention_drop_dominant:4
+```
+
+The main reading is now sharper:
+
+```text
+long positive pressure blocks track deep max all-ones depth
+the mode is always shallow, so first/mode alone misses the window concentration
+local sign-change-up rows are retention-drop dominated in this scan
+```
+
+This supports a two-profile route before any full `ShapePressureGrid`:
+
+```text
+ResidualAllOnesProfile
+PressureDecayProfile
+```
+
 The first theorem set is deliberately thin:
 
 ```lean

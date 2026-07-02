@@ -326,6 +326,31 @@ positive block = maximal consecutive positive-depth run, length >= 1
 It also adds aggregate correlation tables for frontier depth, block length,
 local islands, and sign-change-up rows by residual residue class.
 
+Checkpoint 132 replaces the residue-class proxy with a direct all-ones-depth
+profile:
+
+```lean
+ResidualAllOnesDepth
+orbitWindowResidualAllOnesDepth
+orbitWindowResidualAllOnesDepthSeq
+orbitWindowResidualAllOnesDepthSeq_length
+orbitWindowResidualAllOnesDepthSeq_get?_eq_some
+orbitWindowResidualAllOnesDepthSeq_take_length
+orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
+```
+
+The corresponding Python observable is:
+
+```text
+all_ones_depth residual = v2 (residual + 1)
+```
+
+This is intentionally a profile, not a grid.  The time index `i` remains the
+index of a residual shape in the orbit window, while pressure depth `j` remains
+the index of a margin comparison.  The checkpoint-132 data says that long
+positive blocks are better explained by the maximum all-ones depth seen inside
+the window than by the first or modal residue alone.
+
 ## Residue Counts
 
 Named residue counts exist for low layers:

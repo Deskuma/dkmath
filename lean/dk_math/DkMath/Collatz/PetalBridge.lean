@@ -144,6 +144,42 @@ noncomputable def orbitWindowResidualShapeSeq (n : OddNat) (k : ℕ) : List ℕ 
   (List.range k).map (orbitWindowResidualShape n)
 
 /--
+Low-bit all-ones depth of a natural residual shape.
+
+This is the direct Lean counterpart of the checkpoint-132 scan observable:
+
+```text
+all_ones_depth x = v2 (x + 1)
+```
+
+It measures how long the low-bit suffix of `x` stays in the all-ones channel:
+`1`, `3`, `7`, `15`, `31`, ...
+-/
+def ResidualAllOnesDepth (x : ℕ) : ℕ :=
+  v2 (x + 1)
+
+/--
+All-ones depth of the residual shape at a window index.
+
+This keeps the time index `i` separate from pressure depth `j`.  It is an
+observable profile, not a pressure-prefix theorem.
+-/
+noncomputable def orbitWindowResidualAllOnesDepth
+    (n : OddNat) (i : ℕ) : ℕ :=
+  ResidualAllOnesDepth (orbitWindowResidualShape n i)
+
+/--
+Ordered all-ones-depth profile of the residual shapes in a finite orbit window.
+
+Checkpoint 132 adds this thin profile before introducing any heavier grid:
+the current experiment asks whether positive pressure blocks are explained by
+concentration in deep all-ones residual channels.
+-/
+noncomputable def orbitWindowResidualAllOnesDepthSeq
+    (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowResidualAllOnesDepth n)
+
+/--
 First failed power-of-two alignment depth at the `i`-th observed odd label.
 
 This is the window-level version of `FirstFailedPow2Depth`.
@@ -897,6 +933,46 @@ theorem orbitWindowResidualShapeSeq_take_get?_eq_some
       some (orbitWindowResidualShape n i) := by
   rw [List.getElem?_take_of_lt hi]
   exact orbitWindowResidualShapeSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
+
+/--
+The ordered all-ones-depth residual profile has length equal to the window
+size.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_length
+    (n : OddNat) (k : ℕ) :
+    (orbitWindowResidualAllOnesDepthSeq n k).length = k := by
+  simp [orbitWindowResidualAllOnesDepthSeq]
+
+/--
+Reading the all-ones-depth residual profile at an in-window time recovers the
+pointwise all-ones-depth observation.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_get?_eq_some
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowResidualAllOnesDepthSeq n k)[i]? =
+      some (orbitWindowResidualAllOnesDepth n i) := by
+  simp [orbitWindowResidualAllOnesDepthSeq, hi]
+
+/--
+The prefix of the all-ones-depth residual profile has length `r` when `r` lies
+inside the window.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_take_length
+    (n : OddNat) {r k : ℕ} (hr : r ≤ k) :
+    ((orbitWindowResidualAllOnesDepthSeq n k).take r).length = r := by
+  simp [orbitWindowResidualAllOnesDepthSeq_length, Nat.min_eq_left hr]
+
+/--
+Reading a prefix of the all-ones-depth residual profile recovers the same
+pointwise observation while the index remains inside the prefix.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
+    (n : OddNat) {i r k : ℕ} (hi : i < r) (hr : r ≤ k) :
+    ((orbitWindowResidualAllOnesDepthSeq n k).take r)[i]? =
+      some (orbitWindowResidualAllOnesDepth n i) := by
+  rw [List.getElem?_take_of_lt hi]
+  exact orbitWindowResidualAllOnesDepthSeq_get?_eq_some n
+    (Nat.lt_of_lt_of_le hi hr)
 
 /--
 First-failed-depth profile over the first `k` observed odd labels.
