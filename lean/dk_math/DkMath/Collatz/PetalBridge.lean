@@ -124,6 +124,34 @@ noncomputable def orbitWindowHeightSeq (n : OddNat) (k : ℕ) : List ℕ :=
   (List.range k).map (orbitWindowHeight n)
 
 /--
+Residual shape extracted at the `i`-th accelerated Collatz odd-state label.
+
+This is a window-level lift of `RawGnomonResidualShape`; the low-level gnomon
+vocabulary stays in `GnomonEvaluation`, while this definition records the
+finite-window observation.
+-/
+noncomputable def orbitWindowResidualShape (n : OddNat) (i : ℕ) : ℕ :=
+  RawGnomonResidualShape (oddOrbitLabel n i)
+
+/--
+The ordered residual-shape profile observed in the first `k` accelerated
+Collatz states.
+
+Checkpoint 127 reads the orbit window as a finite chain of residual-shape
+extractions.
+-/
+noncomputable def orbitWindowResidualShapeSeq (n : OddNat) (k : ℕ) : List ℕ :=
+  (List.range k).map (orbitWindowResidualShape n)
+
+/--
+First failed power-of-two alignment depth at the `i`-th observed odd label.
+
+This is the window-level version of `FirstFailedPow2Depth`.
+-/
+noncomputable def orbitWindowFirstFailedPow2Depth (n : OddNat) (i : ℕ) : ℕ :=
+  FirstFailedPow2Depth (oddOrbitLabel n i)
+
+/--
 The first `k` accelerated Collatz odd-state labels are pairwise separated.
 
 This is the Collatz-specific spelling of the RangeFamily pairwise condition:
@@ -4678,6 +4706,59 @@ theorem oddOrbitLabel_succ_eq_T_iterateT
   rw [iterateT_succ_eq_T_iterateT]
 
 /--
+The residual shape extracted at index `i` is the next odd orbit label.
+
+This is the checkpoint-127 window lift of
+`rawGnomonResidualShape_eq_T_val`.
+-/
+theorem orbitWindowResidualShape_eq_oddOrbitLabel_succ
+    (n : OddNat) (i : ℕ) :
+    orbitWindowResidualShape n i = oddOrbitLabel n (i + 1) := by
+  unfold orbitWindowResidualShape oddOrbitLabel
+  rw [rawGnomonResidualShape_eq_T_val (iterateT i n)]
+  rw [iterateT_succ_eq_T_iterateT]
+
+/--
+The residual-shape sequence is exactly the shifted odd-label sequence.
+
+This records that a finite orbit window is a chain of residual-shape
+extractions.
+-/
+theorem orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+    (n : OddNat) (k : ℕ) :
+    orbitWindowResidualShapeSeq n k =
+      (List.range k).map (fun i => oddOrbitLabel n (i + 1)) := by
+  unfold orbitWindowResidualShapeSeq
+  apply List.map_congr_left
+  intro i _hi
+  exact orbitWindowResidualShape_eq_oddOrbitLabel_succ n i
+
+/--
+Window-level raw gnomon factorization.
+
+At each observed label, the raw gnomon step decomposes into the observed
+window height and the residual shape that becomes the next label.
+-/
+theorem orbitWindow_rawGnomonStep_factor
+    (n : OddNat) (i : ℕ) :
+    RawGnomonStep (oddOrbitLabel n i) =
+      2 ^ orbitWindowHeight n i * orbitWindowResidualShape n i := by
+  rw [orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel]
+  unfold orbitWindowResidualShape oddOrbitLabel
+  exact rawGnomonStep_eq_pow_height_mul_residualShape (iterateT i n)
+
+/--
+The first failed depth in the finite window has nonzero raw gnomon remainder.
+-/
+theorem orbitWindow_firstFailed_remainder_ne_zero
+    (n : OddNat) (i : ℕ) :
+    RawGnomonRemainderAtDepth
+        (oddOrbitLabel n i)
+        (orbitWindowFirstFailedPow2Depth n i) ≠ 0 := by
+  unfold orbitWindowFirstFailedPow2Depth oddOrbitLabel
+  exact rawGnomonRemainderAtDepth_firstFailed_ne_zero (iterateT i n)
+
+/--
 Label-sequence transition from the `3 mod 8` height-one channel.
 
 If the current label is `3 mod 8`, then the next orbit label lies in
@@ -6810,6 +6891,19 @@ theorem downClosed_iff_no_prefixFailure
     · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
 
 /--
+Upward sign change of the source-pressure margin between adjacent depths.
+
+This is a small building block for pressure-frontier and pressure-island
+classification.  It is stated directly in margin language because the
+checkpoint-125 correction is that pressure should be studied as a sign profile,
+not as raw carrier membership.
+-/
+def SourcePressureSignChangeUp
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginInt n k (r + j) ≤ 0 ∧
+    0 < SourcePressureMarginInt n k (r + j + 1)
+
+/--
 The first selected source-pressure depth.
 
 This is a frontier, not a prefix theorem.  It says that `j` is selected and all
@@ -6868,6 +6962,49 @@ theorem sourcePressurePrefixFailure_of_frontier_pos
   · constructor
     · exact hfront.2 0 hj
     · exact hfront.1
+
+/--
+A positive frontier produces an upward sign change at the previous depth.
+
+This is a local margin view of
+`sourcePressurePrefixFailure_of_frontier_pos`.
+-/
+theorem sourcePressureSignChangeUp_of_frontier_pos
+    (n : OddNat) (k r j : ℕ)
+    (hfront : SourcePressureFrontier n k r j)
+    (hj : 0 < j) :
+    SourcePressureSignChangeUp n k r (j - 1) := by
+  unfold SourcePressureSignChangeUp
+  have hprev_not : ¬ IsSourcePressureDepth n k r (j - 1) := by
+    exact hfront.2 (j - 1) (Nat.sub_lt hj Nat.zero_lt_one)
+  have hprev_nonpos :
+      SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 := by
+    have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + (j - 1)) := by
+      intro hpos
+      exact hprev_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j - 1)).2 hpos)
+    omega
+  have hj_pos :
+      0 < SourcePressureMarginInt n k (r + j) :=
+    (isSourcePressureDepth_iff_margin_pos n k r j).1 hfront.1
+  constructor
+  · exact hprev_nonpos
+  · have hidx : r + (j - 1) + 1 = r + j := by omega
+    simpa [hidx] using hj_pos
+
+/--
+Local isolated positive source-pressure depth.
+
+This is deliberately only a predicate.  Margin equivalences and count theorems
+should be added after numerical scans show which island shapes actually matter.
+-/
+def SourcePressureLocalIsland
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  0 < j ∧
+    IsSourcePressureDepth n k r j ∧
+    ¬ IsSourcePressureDepth n k r (j - 1) ∧
+    ¬ IsSourcePressureDepth n k r (j + 1)
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero

@@ -116,6 +116,8 @@ OrbitWindow n k = Finset.range k
 oddOrbitLabel n i = the natural value of iterateT i n
 orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
 orbitWindowHeightSeq n k = the ordered list of the first k height labels
+orbitWindowResidualShape n i = residual shape extracted from oddOrbitLabel n i
+orbitWindowResidualShapeSeq n k = ordered residual-shape profile
 ```
 
 Checkpoint 125 adds the pressure-obstruction surface:
@@ -155,6 +157,25 @@ So a window height can now be read as:
 
 ```text
 RawGnomonHeight of the observed odd label
+```
+
+Checkpoint 127 lifts residual shape extraction to windows:
+
+```lean
+orbitWindowResidualShape_eq_oddOrbitLabel_succ
+orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+orbitWindow_rawGnomonStep_factor
+orbitWindow_firstFailed_remainder_ne_zero
+```
+
+The finite window now supports the reading:
+
+```text
+label_i
+  -> RawGnomonStep
+  -> orbitWindowHeight
+  -> orbitWindowResidualShape
+  -> label_{i+1}
 ```
 
 The first theorem set is deliberately thin:

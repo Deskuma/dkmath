@@ -106,6 +106,45 @@ connects the ordered list back to the accumulated Collatz height:
 (orbitWindowHeightSeq n k).sum = sumS n k
 ```
 
+### `orbitWindowResidualShape`
+
+```lean
+orbitWindowResidualShape n i
+```
+
+This is the residual shape extracted from the `i`-th observed odd label:
+
+```text
+RawGnomonResidualShape (oddOrbitLabel n i)
+```
+
+Checkpoint 127 proves:
+
+```lean
+orbitWindowResidualShape_eq_oddOrbitLabel_succ
+```
+
+meaning:
+
+```text
+orbitWindowResidualShape n i = oddOrbitLabel n (i+1)
+```
+
+So the finite window can be read as a residual-shape chain.
+
+### `orbitWindowResidualShapeSeq`
+
+```lean
+orbitWindowResidualShapeSeq n k
+```
+
+This is the ordered list of residual shapes extracted in the first `k`
+positions.  It agrees with the shifted odd-label list by:
+
+```lean
+orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
+```
+
 ## Separation And Collision
 
 The bridge includes a finite split:
@@ -206,6 +245,17 @@ sourcePressurePrefixFailure_of_frontier_pos
 `SourcePressureFrontier n k r j` means that `j` is the first selected pressure
 depth.  It is a first-positive-margin statement, not a claim that later depths
 continue as a prefix.
+
+Checkpoint 127 adds:
+
+```lean
+SourcePressureSignChangeUp
+sourcePressureSignChangeUp_of_frontier_pos
+SourcePressureLocalIsland
+```
+
+These are observation predicates for margin sign profiles.  They should be
+used to classify pressure islands before proposing any new monotonicity theorem.
 
 ## Residue Counts
 

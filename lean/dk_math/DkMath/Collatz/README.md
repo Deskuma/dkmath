@@ -142,6 +142,9 @@ OrbitWindow
 oddOrbitLabel
 orbitWindowHeight
 orbitWindowHeightSeq
+orbitWindowResidualShape
+orbitWindowResidualShapeSeq
+orbitWindowFirstFailedPow2Depth
 orbitWindowResidueCountPow2
 orbitWindowResidueCountPow2Tail
 sourcePow2Distribution_total
@@ -153,6 +156,8 @@ SourcePressureMarginInt
 SourcePressurePrefixFailure
 SourcePressureSelectedSetDownClosed
 SourcePressureFrontier
+SourcePressureSignChangeUp
+SourcePressureLocalIsland
 ```
 
 The central No.100 layer is:
@@ -209,6 +214,7 @@ docs/Collatz-ContinuationNesting-123.md
 docs/Collatz-PressureMargin-124.md
 docs/Collatz-GnomonEvaluation-125.md
 docs/Collatz-GnomonResidualShape-126.md
+docs/Collatz-WindowResidualShape-127.md
 docs/Collatz-PetalBridge-Guide.md
 docs/Collatz-PetalBridge-Status.md
 ```

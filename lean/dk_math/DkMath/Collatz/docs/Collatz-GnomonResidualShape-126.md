@@ -149,3 +149,34 @@ continuation drop
 
 The recommended next checkpoint depends on whether the reviewer wants more
 shape dynamics or more pressure-profile classification.
+
+## Checkpoint 127 Follow-up
+
+Checkpoint 127 takes the recommended shape-dynamics route.
+
+New window names:
+
+```lean
+orbitWindowResidualShape
+orbitWindowResidualShapeSeq
+orbitWindowFirstFailedPow2Depth
+```
+
+Main theorem:
+
+```lean
+orbitWindowResidualShape_eq_oddOrbitLabel_succ
+```
+
+Meaning:
+
+```text
+residual shape extracted at window index i
+  = odd label at window index i+1
+```
+
+This lifts the pointwise residual-shape bridge into finite orbit windows.  See:
+
+```text
+Collatz-WindowResidualShape-127.md
+```
