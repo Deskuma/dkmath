@@ -1338,3 +1338,55 @@ The updated Python scan also checks whether selected depths form a prefix.  In
 the default sample, every nonempty selected-depth row is both consecutive and a
 prefix from `r_start`.  This is not yet a theorem; it is a candidate for the
 next predicate, possibly named `SelectedPressurePrefix`.
+
+## Pressure Margin And Prefix Failure
+
+Checkpoint 124 confirms that the carrier-level story and the pressure-level
+story must be separated.
+
+Retention carriers are nested:
+
+```lean
+retention_allOnes_mod_pow_two_of_le
+sourceRetentionMass_anti_mono_depth
+tailRetentionMass_anti_mono_depth
+```
+
+Together with checkpoint 123, this says that both continuation and retention
+all-ones carriers shrink with depth.
+
+However, selected pressure is not just carrier membership.  It is the ratio
+condition:
+
+```text
+retention mass < 2 * continuation mass
+```
+
+For this reason checkpoint 124 introduces:
+
+```lean
+SourcePressureMarginInt
+isSourcePressureDepth_iff_margin_pos
+```
+
+The margin form is the recommended surface for future pressure-frontier work.
+
+The new wide Python scan:
+
+```text
+python/Collatz/PetalBridge/selected_pressure_prefix_scan.py
+```
+
+found prefix failures for `odd n <= 9999`, `steps = 128`, depths `2..11`.
+For example, `n = 1567` selects depth `3` but not depth `2` in that finite
+window.
+
+Therefore an unconditional theorem of the form
+
+```text
+deep selected pressure -> shallow selected pressure
+```
+
+should be treated as false or at least unsupported.  The next viable theorem
+should add a condition controlling pressure margins, retention growth, or a
+specific frontier regime.

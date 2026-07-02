@@ -1816,6 +1816,29 @@ theorem allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
   exact Nat.mod_eq_of_lt (by omega)
 
 /--
+All-ones retention residue cells are nested by depth.
+
+This is the retention-indexed version of
+`allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le`: the visible retention layer
+uses modulus `2^d` rather than the continuation sibling modulus `2^(d+1)`.
+-/
+theorem retention_allOnes_mod_pow_two_of_le
+    (q d e : ℕ)
+    (hde : d ≤ e)
+    (h : q % (2 ^ e) = 2 ^ e - 1) :
+    q % (2 ^ d) = 2 ^ d - 1 := by
+  cases d with
+  | zero =>
+      exact Nat.mod_one q
+  | succ d =>
+      cases e with
+      | zero =>
+          omega
+      | succ e =>
+          exact allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
+            q d e (by omega) h
+
+/--
 Source continuation mass is anti-monotone in depth.
 
 Increasing the depth asks for a more refined all-ones residue cell, so the
@@ -1916,6 +1939,69 @@ theorem selectedContinuationMass_overlap_of_lt_of_deeper_pos
     (hpos : 0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₂)) :
     0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₁) :=
   lt_of_lt_of_le hpos (selectedContinuationMass_nested_of_lt n k r j₁ j₂ hlt)
+
+/--
+Source retention mass is anti-monotone in depth.
+
+Deeper all-ones retention cells refine shallower all-ones retention cells, so
+their finite-window counts cannot increase with depth.
+-/
+theorem sourceRetentionMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowRetentionMassPow2 n k e ≤
+      orbitWindowRetentionMassPow2 n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2 n k e (2 ^ e - 1) ≤
+            orbitWindowResidueCountPow2 n k d (2 ^ d - 1) := by
+        simpa [orbitWindowRetentionMassPow2] using ih
+      rw [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2_succ]
+      rw [orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2_succ]
+      by_cases hdeep : oddOrbitLabel n k % (2 ^ e) = 2 ^ e - 1
+      · have hshallow : oddOrbitLabel n k % (2 ^ d) = 2 ^ d - 1 :=
+          retention_allOnes_mod_pow_two_of_le (oddOrbitLabel n k) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow : oddOrbitLabel n k % (2 ^ d) = 2 ^ d - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih'
+              (Nat.le_succ (orbitWindowResidueCountPow2 n k d (2 ^ d - 1))))
+        · simpa [hdeep, hshallow] using ih'
+
+/--
+Shifted-tail retention mass is anti-monotone in depth.
+
+This is the tail-window counterpart of
+`sourceRetentionMass_anti_mono_depth`.
+-/
+theorem tailRetentionMass_anti_mono_depth
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e) :
+    orbitWindowRetentionMassPow2Tail n k e ≤
+      orbitWindowRetentionMassPow2Tail n k d := by
+  induction k with
+  | zero =>
+      simp [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail]
+  | succ k ih =>
+      have ih' :
+          orbitWindowResidueCountPow2Tail n k e (2 ^ e - 1) ≤
+            orbitWindowResidueCountPow2Tail n k d (2 ^ d - 1) := by
+        simpa [orbitWindowRetentionMassPow2Tail] using ih
+      rw [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail_succ]
+      rw [orbitWindowRetentionMassPow2Tail, orbitWindowResidueCountPow2Tail_succ]
+      by_cases hdeep : oddOrbitLabel n (k + 1) % (2 ^ e) = 2 ^ e - 1
+      · have hshallow : oddOrbitLabel n (k + 1) % (2 ^ d) = 2 ^ d - 1 :=
+          retention_allOnes_mod_pow_two_of_le
+            (oddOrbitLabel n (k + 1)) d e hde hdeep
+        simpa [hdeep, hshallow] using ih'
+      · by_cases hshallow : oddOrbitLabel n (k + 1) % (2 ^ d) = 2 ^ d - 1
+        · simpa [hdeep, hshallow] using
+            (Nat.le_trans ih'
+              (Nat.le_succ (orbitWindowResidueCountPow2Tail n k d (2 ^ d - 1))))
+        · simpa [hdeep, hshallow] using ih'
 
 /-- The all-ones retention residue is inside its power-of-two modulus. -/
 theorem twoAdicRetentionResidue_lt_pow
@@ -6495,6 +6581,84 @@ def IsSourcePressureDepth
   MoreThanHalf
     (orbitWindowContinuationSiblingMassPow2 n k (r + j))
     (orbitWindowRetentionMassPow2 n k (r + j))
+
+/--
+Integer-valued source pressure margin at a single depth.
+
+The margin is positive exactly when source continuation occupies more than
+half of source retention.  It is intentionally integer-valued, because the
+natural-number subtraction would truncate negative margins and hide failures.
+-/
+noncomputable def SourcePressureMarginInt
+    (n : OddNat) (k r : ℕ) : ℤ :=
+  (2 * orbitWindowContinuationSiblingMassPow2 n k r : ℤ) -
+    (orbitWindowRetentionMassPow2 n k r : ℤ)
+
+/--
+Selected source pressure is exactly positive source pressure margin.
+
+This theorem is the safe algebraic bridge for later prefix/frontier work:
+pressure-prefix questions can be studied as margin-positivity questions.
+-/
+theorem isSourcePressureDepth_iff_margin_pos
+    (n : OddNat) (k r j : ℕ) :
+    IsSourcePressureDepth n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) := by
+  unfold IsSourcePressureDepth SourcePressureMarginInt MoreThanHalf
+  omega
+
+/--
+A finite selected source-pressure prefix.
+
+`SelectedPressurePrefix n k r len m` says that the first `m` depth indices in
+the range beginning at `r` are selected.  The `m ≤ len` field keeps this
+predicate tied to the finite observation range used by pressure-depth counts.
+-/
+def SelectedPressurePrefix
+    (n : OddNat) (k r len m : ℕ) : Prop :=
+  m ≤ len ∧
+    ∀ j, j < m → IsSourcePressureDepth n k r j
+
+/-- The empty selected-pressure prefix is always available. -/
+theorem selectedPressurePrefix_zero
+    (n : OddNat) (k r len : ℕ) :
+    SelectedPressurePrefix n k r len 0 := by
+  unfold SelectedPressurePrefix
+  constructor
+  · omega
+  · intro j hj
+    omega
+
+/-- Extract the range bound from a selected-pressure prefix. -/
+theorem selectedPressurePrefix_le_len
+    {n : OddNat} {k r len m : ℕ}
+    (h : SelectedPressurePrefix n k r len m) :
+    m ≤ len :=
+  h.1
+
+/-- Extract a selected depth from a selected-pressure prefix. -/
+theorem isSourcePressureDepth_of_selectedPressurePrefix
+    {n : OddNat} {k r len m j : ℕ}
+    (h : SelectedPressurePrefix n k r len m)
+    (hj : j < m) :
+    IsSourcePressureDepth n k r j :=
+  h.2 j hj
+
+/--
+A full pressure profile over `[r, r + len)` supplies every shorter selected
+pressure prefix.
+-/
+theorem selectedPressurePrefix_of_pressureOnRange
+    (n : OddNat) (k r len m : ℕ)
+    (hm : m ≤ len)
+    (h : SourceContinuationPressureOnRange n k r len) :
+    SelectedPressurePrefix n k r len m := by
+  unfold SelectedPressurePrefix
+  constructor
+  · exact hm
+  · intro j hj
+    unfold IsSourcePressureDepth
+    exact h j (by omega)
 
 /-- Range pressure marks every in-range depth as a selected source pressure depth. -/
 theorem isSourcePressureDepth_of_pressureOnRange

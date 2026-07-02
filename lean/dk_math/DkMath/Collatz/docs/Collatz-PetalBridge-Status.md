@@ -1654,3 +1654,64 @@ max selected depth: 7
 The prefix observation remains experimental.  The Lean theorem currently
 proves nesting of continuation carriers, not that pressure-selected depths must
 form a prefix.
+
+## Checkpoint 124: Retention Nesting And Pressure Margin
+
+Checkpoint 124 extends nesting from continuation carriers to retention
+carriers.
+
+Pointwise retention theorem:
+
+```lean
+retention_allOnes_mod_pow_two_of_le
+```
+
+Count-level retention anti-monotonicity:
+
+```lean
+sourceRetentionMass_anti_mono_depth
+tailRetentionMass_anti_mono_depth
+```
+
+The checkpoint also adds an integer pressure margin:
+
+```lean
+SourcePressureMarginInt
+isSourcePressureDepth_iff_margin_pos
+```
+
+and a thin prefix predicate:
+
+```lean
+SelectedPressurePrefix
+selectedPressurePrefix_zero
+selectedPressurePrefix_of_pressureOnRange
+```
+
+Important result from the new Python scan:
+
+```text
+python/Collatz/PetalBridge/selected_pressure_prefix_scan.py
+python/Collatz/PetalBridge/results/selected_pressure_prefix_scan.csv
+python/Collatz/PetalBridge/results/selected_pressure_prefix_scan.md
+```
+
+Wide observation (`odd n <= 9999`, `steps = 128`, depths `2..11`):
+
+```text
+rows: 5000
+nonempty selected rows: 2681
+nonempty prefix rows: 2492 / 2681
+prefix failure rows: 189
+max selected depth: 11
+```
+
+So the unconditional theorem
+
+```text
+deep selected pressure -> shallow selected pressure
+```
+
+should not be assumed.  Carrier nesting is true, but pressure selection is a
+ratio condition.  The next theorem needs an explicit margin or retention-growth
+condition.
