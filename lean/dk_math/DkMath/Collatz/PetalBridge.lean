@@ -29,6 +29,43 @@ For Petal/ABC routes, a repeated label means that a proposed independent
 range-family cannot be counted as `k` independent carriers.  For Collatz
 dynamics, the same collision is not merely a failure: it is the observable
 shape of a merge, fold, or cycle candidate.
+
+## Checkpoint 125 trajectory correction
+
+This file is now treated as the finite observation and pressure/margin surface.
+Do not keep adding low-level Collatz vocabulary here by default.  The revised
+low-level subject is:
+
+```text
+Odd gnomon correction
+  n + (2n+1) = 3n+1
+
+Pow2 alignment evaluation
+  v2 (3n+1)
+
+Residual shape extraction
+  (3n+1) / 2^height
+
+Relative scale update
+  the residual odd shape becomes the next state
+```
+
+That vocabulary starts in `DkMath.Collatz.GnomonEvaluation`.  The role of this
+file is to observe finite windows of those shapes and compare retention versus
+continuation masses.
+
+Important warning for future agents: pressure selection is **not** a raw
+carrier-membership nesting statement.  The carrier sets are nested, but
+pressure compares two changing masses:
+
+```text
+retention(depth) < 2 * continuation(depth)
+```
+
+Therefore the selected pressure depths need not form an unconditional prefix.
+Checkpoint 125 adds explicit prefix-failure predicates below so those cases
+remain first-class evidence instead of being erased by an unsafe monotonicity
+assumption.
 -/
 
 namespace DkMath.Collatz
@@ -6618,6 +6655,144 @@ def SelectedPressurePrefix
     (n : OddNat) (k r len m : ℕ) : Prop :=
   m ≤ len ∧
     ∀ j, j < m → IsSourcePressureDepth n k r j
+
+/--
+Witness that source-pressure selection is not prefix-shaped at the given
+window.
+
+This is a diagnostic predicate, not a contradiction.  It records the situation
+
+```text
+shallow depth j₁ is not selected,
+deeper depth j₂ is selected.
+```
+
+The point of naming this obstruction is to prevent future work from assuming
+that pressure behaves like nested carrier membership.  Carrier membership is
+nested; the pressure margin `2 * continuation - retention` can change sign in
+a non-prefix pattern.
+-/
+def SourcePressurePrefixFailure
+    (n : OddNat) (k r j₁ j₂ : ℕ) : Prop :=
+  j₁ < j₂ ∧
+    ¬ IsSourcePressureDepth n k r j₁ ∧
+    IsSourcePressureDepth n k r j₂
+
+/-- Extract the shallow/deep order from a source-pressure prefix failure. -/
+theorem sourcePressurePrefixFailure_lt
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    j₁ < j₂ :=
+  h.1
+
+/-- The shallow side of a source-pressure prefix failure is not selected. -/
+theorem not_isSourcePressureDepth_of_prefixFailure_left
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    ¬ IsSourcePressureDepth n k r j₁ :=
+  h.2.1
+
+/-- The deeper side of a source-pressure prefix failure is selected. -/
+theorem isSourcePressureDepth_of_prefixFailure_right
+    {n : OddNat} {k r j₁ j₂ : ℕ}
+    (h : SourcePressurePrefixFailure n k r j₁ j₂) :
+    IsSourcePressureDepth n k r j₂ :=
+  h.2.2
+
+/--
+Source-pressure prefix failure is exactly the margin sign pattern
+`nonpositive -> positive`.
+
+This is the preferred algebraic form for later experiments: Python can report
+the integer margins, while Lean keeps the logical predicate and the margin
+predicate equivalent.
+-/
+theorem sourcePressurePrefixFailure_iff_margin
+    (n : OddNat) (k r j₁ j₂ : ℕ) :
+    SourcePressurePrefixFailure n k r j₁ j₂ ↔
+      j₁ < j₂ ∧
+        SourcePressureMarginInt n k (r + j₁) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + j₂) := by
+  constructor
+  · intro h
+    have hleft :
+        SourcePressureMarginInt n k (r + j₁) ≤ 0 := by
+      have hnotpos :
+          ¬ 0 < SourcePressureMarginInt n k (r + j₁) := by
+        intro hpos
+        exact h.2.1 ((isSourcePressureDepth_iff_margin_pos n k r j₁).2 hpos)
+      omega
+    have hright :
+        0 < SourcePressureMarginInt n k (r + j₂) :=
+      (isSourcePressureDepth_iff_margin_pos n k r j₂).1 h.2.2
+    exact ⟨h.1, hleft, hright⟩
+  · intro h
+    have hleft :
+        ¬ IsSourcePressureDepth n k r j₁ := by
+      intro hsel
+      have hpos :
+          0 < SourcePressureMarginInt n k (r + j₁) :=
+        (isSourcePressureDepth_iff_margin_pos n k r j₁).1 hsel
+      omega
+    have hright :
+        IsSourcePressureDepth n k r j₂ :=
+      (isSourcePressureDepth_iff_margin_pos n k r j₂).2 h.2.2
+    exact ⟨h.1, hleft, hright⟩
+
+/--
+A prefix failure inside the proposed prefix length refutes the selected-prefix
+predicate.
+
+The deeper selected witness is part of the failure data even though the proof
+only needs the shallow non-selection plus `j₁ < j₂ < m`.
+-/
+theorem not_selectedPressurePrefix_of_prefixFailure
+    (n : OddNat) (k r len m j₁ j₂ : ℕ)
+    (hfail : SourcePressurePrefixFailure n k r j₁ j₂)
+    (hj₂ : j₂ < m)
+    (_hm : m ≤ len) :
+    ¬ SelectedPressurePrefix n k r len m := by
+  intro hprefix
+  have hj₁ : j₁ < m := Nat.lt_trans hfail.1 hj₂
+  exact hfail.2.1 (hprefix.2 j₁ hj₁)
+
+/--
+Down-closed source-pressure selected set below `m`.
+
+This is weaker and safer than an unconditional prefix theorem: it states that
+if a deeper selected depth appears below `m`, then all shallower depths below
+it are selected too.
+-/
+def SourcePressureSelectedSetDownClosed
+    (n : OddNat) (k r m : ℕ) : Prop :=
+  ∀ j₁ j₂,
+    j₁ < j₂ →
+    j₂ < m →
+    IsSourcePressureDepth n k r j₂ →
+      IsSourcePressureDepth n k r j₁
+
+/--
+Down-closed selected depths are equivalent to having no prefix-failure witness
+below `m`.
+
+This gives future code a clean choice: prove down-closedness by excluding
+failures, or produce a failure as a precise obstruction.
+-/
+theorem downClosed_iff_no_prefixFailure
+    (n : OddNat) (k r m : ℕ) :
+    SourcePressureSelectedSetDownClosed n k r m ↔
+      ∀ j₁ j₂,
+        j₁ < j₂ →
+        j₂ < m →
+        ¬ SourcePressurePrefixFailure n k r j₁ j₂ := by
+  constructor
+  · intro hclosed j₁ j₂ hlt hj₂ hfail
+    exact hfail.2.1 (hclosed j₁ j₂ hlt hj₂ hfail.2.2)
+  · intro hno j₁ j₂ hlt hj₂ hdeep
+    classical
+    by_cases hshallow : IsSourcePressureDepth n k r j₁
+    · exact hshallow
+    · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero

@@ -171,3 +171,28 @@ deeper pressure can be positive while shallower pressure margin is nonpositive
 
 Checkpoint 124 therefore redirects the path from an unconditional prefix theorem
 to margin-controlled pressure-frontier theory.
+
+## Checkpoint 125 Follow-up
+
+Checkpoint 125 implements the obstruction surface suggested here.
+
+New names:
+
+```lean
+SourcePressurePrefixFailure
+sourcePressurePrefixFailure_iff_margin
+not_selectedPressurePrefix_of_prefixFailure
+SourcePressureSelectedSetDownClosed
+downClosed_iff_no_prefixFailure
+```
+
+The intended reading is:
+
+```text
+prefix failure
+  = shallow margin <= 0 and deeper margin > 0
+```
+
+This makes non-prefix pressure profiles first-class data.  Future work should
+classify these failures by margin jump, retention drop, and continuation drop
+before proposing another monotonicity theorem.

@@ -8,6 +8,7 @@ import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
 import DkMath.Collatz.Accelerated
 import DkMath.Collatz.Shift
+import DkMath.Collatz.GnomonEvaluation
 import DkMath.Collatz.PetalBridge
 
 #print "file: DkMath.Collatz.Collatz2K26"
@@ -27,6 +28,9 @@ Structure:
   - V2.lean:          2-adic valuation v₂ and foundational lemmas
   - Accelerated.lean: Accelerated map T, observation s, and sequence sums
   - Shift.lean:       Block shift, petal conservation (v₂ invariance)
+  - GnomonEvaluation.lean:
+                       Odd gnomon correction, pow2 alignment height, and
+                       residual-shape vocabulary
   - PetalBridge.lean: Petal range-family window for orbit label separation/collision
   - This file:        Integration and higher-level properties
 -/

@@ -28,6 +28,13 @@ DkMath.Collatz.Accelerated
 DkMath.Collatz.Shift
   shift
   v2_shift_invariant
+
+DkMath.Collatz.GnomonEvaluation
+  OddGnomonLayer n = 2n + 1
+  RawGnomonStep n = n + (2n+1)
+  RawGnomonHeight n = v2 (RawGnomonStep n)
+  RawGnomonResidualShape n = RawGnomonStep n / 2^height
+  RawGnomonRemainderAtDepth n j
 ```
 
 This means the implemented Collatz side is currently strongest around:
@@ -39,6 +46,9 @@ odd state
 accelerated transition
 orbit segment
 block-shift invariance
+odd gnomon correction
+power-of-two alignment height
+residual shape extraction
 ```
 
 ## Petal Contact Point
@@ -72,6 +82,20 @@ The bridge file is:
 DkMath.Collatz.PetalBridge
 ```
 
+Checkpoint 125 clarifies the module boundary:
+
+```text
+DkMath.Collatz.GnomonEvaluation
+  low-level Collatz gnomon and residual-shape vocabulary
+
+DkMath.Collatz.PetalBridge
+  finite observation windows, residue channels, pressure/margin diagnostics
+```
+
+The reason for the split is practical.  `PetalBridge.lean` is now a large
+observation surface, so new low-level arithmetic terms should not be added
+there unless they genuinely depend on finite windows.
+
 It defines:
 
 ```lean
@@ -93,6 +117,29 @@ oddOrbitLabel n i = the natural value of iterateT i n
 orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
 orbitWindowHeightSeq n k = the ordered list of the first k height labels
 ```
+
+Checkpoint 125 adds the pressure-obstruction surface:
+
+```lean
+SourcePressurePrefixFailure
+sourcePressurePrefixFailure_lt
+not_isSourcePressureDepth_of_prefixFailure_left
+isSourcePressureDepth_of_prefixFailure_right
+sourcePressurePrefixFailure_iff_margin
+not_selectedPressurePrefix_of_prefixFailure
+SourcePressureSelectedSetDownClosed
+downClosed_iff_no_prefixFailure
+```
+
+These names deliberately avoid the unsafe assumption that selected pressure
+depths are always prefix-shaped.  Pressure is the margin sign condition
+
+```text
+0 < 2 * continuation(depth) - retention(depth)
+```
+
+and this sign can become positive at a deeper depth while remaining
+nonpositive at a shallower depth.
 
 The first theorem set is deliberately thin:
 

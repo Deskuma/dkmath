@@ -26,6 +26,23 @@ finite orbit segments
 
 `PetalBridge` is the file where these languages meet.
 
+Checkpoint 125 clarifies the module boundary.  The low-level Collatz odd step
+is now read in `DkMath.Collatz.GnomonEvaluation` as:
+
+```text
+odd gnomon correction
+  n + (2n+1) = 3n+1
+
+power-of-two alignment
+  v2 (3n+1)
+
+residual shape
+  (3n+1) / 2^height
+```
+
+`PetalBridge` should not absorb that low-level vocabulary.  Its job is to
+observe finite windows of those shapes and compare finite channel masses.
+
 ## Basic Objects
 
 ### `OrbitWindow`
@@ -66,7 +83,8 @@ This is:
 v2 (3 * oddOrbitLabel n i + 1)
 ```
 
-It is the local 2-adic peeling height.
+It is the local power-of-two alignment height.  In the checkpoint-125 reading,
+this is the window-level view of `RawGnomonHeight`.
 
 ### `orbitWindowHeightSeq`
 
@@ -147,6 +165,35 @@ orbitWindowHeightCountGe_one_eq_window
 ```
 
 Every odd accelerated state has height at least `1`.
+
+## Pressure Margins And Prefix Failures
+
+Pressure is not raw carrier membership.  It is the strict comparison:
+
+```text
+retention < 2 * continuation
+```
+
+The integer margin surface is:
+
+```lean
+SourcePressureMarginInt
+isSourcePressureDepth_iff_margin_pos
+```
+
+Checkpoint 125 adds the diagnostic obstruction:
+
+```lean
+SourcePressurePrefixFailure
+sourcePressurePrefixFailure_iff_margin
+not_selectedPressurePrefix_of_prefixFailure
+SourcePressureSelectedSetDownClosed
+downClosed_iff_no_prefixFailure
+```
+
+Use these names when selected depths form a non-prefix sign pattern.  Such a
+case is not an error in the model: it means that a deeper residual-shape
+channel has positive margin while a shallower one does not.
 
 ## Residue Counts
 
