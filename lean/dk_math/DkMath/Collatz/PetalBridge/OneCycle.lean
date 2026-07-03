@@ -21,6 +21,32 @@ It proves only that the one-step accelerated odd cycle equation
 has no positive scaled copies except the genuine boundary point `n = 1`,
 `h = 2`.  It does not rule out arbitrary nontrivial Collatz cycles and does
 not prove convergence.
+
+Interruption research note after checkpoint 151: relation to
+`DkMath.ABC.ValuationFlowBridge`.
+
+The tempting bridge is:
+
+```text
+ABC.ValuationFlowBridge:
+  non-unit diff/support produces primitive prime channels and support mass.
+
+Collatz.OneCycle:
+  a one-step return to the same odd state forces
+  3*n + 1 = 2^h*n, hence ((2^h)-3)*n = 1.
+```
+
+So this file should first expose the Collatz side as a **unit-boundary**
+statement.  Do not import the ABC bridge here yet: its main primitive-flow
+subject is `a^d - b^d`, while this file's subject is the local Collatz equation
+`3*n + 1 = 2^h*n`.  The safe common language is:
+
+```text
+closed one-step loop -> unit product -> no prime channel remains
+```
+
+This is exactly the information a later thin
+`DkMath.Collatz.PetalBridge.ValuationFlowBridge` can consume.
 -/
 
 /--
@@ -153,5 +179,112 @@ theorem one_four_two_one_petal_scaled_cycle_unique
     (hcycle : 3 * n + 1 = 2 ^ h * n) :
     n = 1 ∧ h = 2 :=
   collatz_scaled_one_cycle_eq_one hn hcycle
+
+/--
+Integer unit-product form of the scaled one-step cycle equation.
+
+This is the algebraic bridge to the valuation-flow reading: a closed one-step
+loop has no room for a non-unit support channel, because the product
+`((2^h)-3) * n` is exactly `1`.
+-/
+theorem collatz_scaled_one_cycle_int_unit_product
+    {n h : ℕ}
+    (_hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    (((2 ^ h : ℕ) : ℤ) - 3) * (n : ℤ) = 1 := by
+  have hcycle_int :
+      (3 : ℤ) * (n : ℤ) + 1 =
+        ((2 ^ h : ℕ) : ℤ) * (n : ℤ) := by
+    exact_mod_cast hcycle
+  calc
+    (((2 ^ h : ℕ) : ℤ) - 3) * (n : ℤ)
+        = ((2 ^ h : ℕ) : ℤ) * (n : ℤ) - (3 : ℤ) * (n : ℤ) := by
+          ring
+    _ = ((3 : ℤ) * (n : ℤ) + 1) - (3 : ℤ) * (n : ℤ) := by
+          rw [← hcycle_int]
+    _ = 1 := by
+          ring
+
+/--
+Natural-number unit-product form of the scaled one-step cycle equation.
+
+This uses the uniqueness theorem to avoid Nat-subtraction noise.  In the only
+positive solution, `2^h - 3 = 1` and `n = 1`.
+-/
+theorem collatz_scaled_one_cycle_nat_unit_product
+    {n h : ℕ}
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    n * (2 ^ h - 3) = 1 := by
+  have hsol := collatz_scaled_one_cycle_eq_one hn hcycle
+  rcases hsol with ⟨rfl, rfl⟩
+  norm_num
+
+/--
+Project-facing alias: the scaled one-cycle closes only at the unit boundary.
+
+The phrase "unit boundary" is intentional.  It marks the shared vocabulary with
+the valuation-flow view without importing the ABC bridge into this local file.
+-/
+theorem collatz_scaled_one_cycle_is_unit_boundary
+    {n h : ℕ}
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    n = 1 ∧ h = 2 :=
+  collatz_scaled_one_cycle_eq_one hn hcycle
+
+/--
+No prime channel can remain on the base `n` of a positive scaled one-step
+cycle.
+
+Valuation-flow reading: if the loop closes, the base support has collapsed to
+the unit `1`.
+-/
+theorem collatz_scaled_one_cycle_no_prime_channel_on_base
+    {p n h : ℕ}
+    (hp : Nat.Prime p)
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    ¬ p ∣ n := by
+  intro hpn
+  have hsol := collatz_scaled_one_cycle_eq_one hn hcycle
+  rw [hsol.1] at hpn
+  exact hp.not_dvd_one hpn
+
+/--
+No prime channel can remain on the scale gap `2^h - 3` of a positive scaled
+one-step cycle.
+
+Valuation-flow reading: the scale gap is also forced to the unit `1`.
+-/
+theorem collatz_scaled_one_cycle_no_prime_channel_on_scale_gap
+    {p n h : ℕ}
+    (hp : Nat.Prime p)
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    ¬ p ∣ 2 ^ h - 3 := by
+  intro hpgap
+  have hsol := collatz_scaled_one_cycle_eq_one hn hcycle
+  rw [hsol.2] at hpgap
+  norm_num at hpgap
+  have hp_two : 2 ≤ p := hp.two_le
+  omega
+
+/--
+No prime channel can divide the explicit unit product of a positive scaled
+one-step cycle.
+
+This is the most compact no-channel form for later bridge files.
+-/
+theorem collatz_scaled_one_cycle_no_prime_channel_on_unit_product
+    {p n h : ℕ}
+    (hp : Nat.Prime p)
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    ¬ p ∣ n * (2 ^ h - 3) := by
+  intro hpdiv
+  have hunit := collatz_scaled_one_cycle_nat_unit_product hn hcycle
+  rw [hunit] at hpdiv
+  exact hp.not_dvd_one hpdiv
 
 end DkMath.Collatz
