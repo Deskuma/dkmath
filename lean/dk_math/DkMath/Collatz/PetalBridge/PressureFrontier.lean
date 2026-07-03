@@ -95,6 +95,50 @@ noncomputable def SourcePressureMarginInt
     (orbitWindowRetentionMassPow2 n k r : ℤ)
 
 /--
+Integer-valued retention drop across adjacent pressure depths.
+
+The sign convention is `current - next`.  This is the convention used by the
+Python pressure scan and by the checkpoint-136 balance sheet.  Keeping it as
+an integer avoids truncation when a later experiment crosses a non-monotone
+edge.
+-/
+noncomputable def SourceRetentionDropInt
+    (n : OddNat) (k r j : ℕ) : ℤ :=
+  (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) -
+    (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)
+
+/--
+Integer-valued continuation drop across adjacent pressure depths.
+
+This uses the same `current - next` convention as `SourceRetentionDropInt`.
+The continuation term appears with coefficient `2` in the source pressure
+margin, so the net pressure contribution is
+`retention_drop - 2 * continuation_drop`.
+-/
+noncomputable def SourceContinuationDropInt
+    (n : OddNat) (k r j : ℕ) : ℤ :=
+  (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
+    (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
+
+/--
+Adjacent source-pressure margin accounting identity.
+
+This is the checkpoint-136 balance sheet.  A positive pressure step is exactly
+the net effect of losing retention mass faster than twice the continuation
+mass across the same adjacent pressure-depth edge.  No global pressure-prefix
+or dominance theorem is asserted here.
+-/
+theorem sourcePressureMarginStepDiff_eq
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureMarginInt n k (r + j + 1) -
+        SourcePressureMarginInt n k (r + j) =
+      SourceRetentionDropInt n k r j -
+        2 * SourceContinuationDropInt n k r j := by
+  unfold SourcePressureMarginInt
+  unfold SourceRetentionDropInt SourceContinuationDropInt
+  ring
+
+/--
 Selected source pressure is exactly positive source pressure margin.
 
 This theorem is the safe algebraic bridge for later prefix/frontier work:
@@ -332,6 +376,19 @@ def SourcePressureJumpWithDecay
   SourcePressureMarginJumpUp n k r j ∧
     SourceRetentionDropsAcross n k r j ∧
       SourceContinuationWeaklyDropsAcross n k r j
+
+/--
+Positive net integer drop across an adjacent pressure-depth edge.
+
+This is intentionally not named `RetentionDropDominant` yet.  The predicate is
+the algebraic quantity that actually appears in the margin-step identity:
+retention loss minus twice continuation loss.
+-/
+def SourcePressureNetDropPositive
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  0 <
+    SourceRetentionDropInt n k r j -
+      2 * SourceContinuationDropInt n k r j
 
 /--
 The first selected source-pressure depth.
@@ -691,6 +748,35 @@ theorem sourcePressureMarginJumpUp_of_localIsland_left
     SourcePressureMarginJumpUp n k r (j - 1) :=
   sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
     (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+Strict adjacent margin jump is equivalent to positive integer step
+difference.
+-/
+theorem sourcePressureMarginJumpUp_iff_stepDiff_pos
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureMarginJumpUp n k r j ↔
+      0 <
+        SourcePressureMarginInt n k (r + j + 1) -
+          SourcePressureMarginInt n k (r + j) := by
+  unfold SourcePressureMarginJumpUp
+  omega
+
+/--
+Positive net retention/continuation drop forces a named pressure-margin jump.
+
+This is the first Lean use of the checkpoint-136 balance sheet.  It remains a
+local adjacent-edge theorem; it does not claim any global prefix shape for
+selected pressure depths.
+-/
+theorem sourcePressureMarginJumpUp_of_netDropPositive
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureNetDropPositive n k r j) :
+    SourcePressureMarginJumpUp n k r j := by
+  rw [sourcePressureMarginJumpUp_iff_stepDiff_pos]
+  unfold SourcePressureNetDropPositive at h
+  rw [sourcePressureMarginStepDiff_eq]
+  exact h
 
 /--
 Package a named margin jump and a strict retention drop.
