@@ -1399,6 +1399,172 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_ne
       sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_neg_of_nonempty
         hsorted hF
 
+/--
+Explicit local-island witness with its pressure-depth index.
+
+The index `j` is part of the witness.  Mathematically this is the intended
+`Σ j, SourcePressureLocalIsland n k r j` carrier, but the island predicate
+lives in `Prop`, so Lean represents the executable list carrier as a
+`Subtype`.
+-/
+abbrev SourcePressureLocalIslandWitness
+    (n : OddNat) (k r : ℕ) :=
+  { j : ℕ // SourcePressureLocalIsland n k r j }
+
+/--
+Convert one explicit local-island witness to an interval-pulse address.
+
+This uses the existing singleton producer from `PressureFrontier`.  It does
+not claim that the witness is part of a complete list of all local islands.
+-/
+def sourcePressureIntervalPulseAddress_of_localIslandWitness
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureIntervalPulseAddress n k r :=
+  sourcePressureIntervalPulseAddress_of_localIsland n k r W.val W.property
+
+/--
+Convert an explicit local-island witness list to a pulse-address family.
+
+The result is only the mapped list of supplied witnesses.  It does not
+enumerate all local islands, prove coverage, or identify a canonical frontier
+producer.
+-/
+def sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  { items := L.map sourcePressureIntervalPulseAddress_of_localIslandWitness }
+
+@[simp]
+theorem sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) :
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+      L).items.length = L.length := by
+  simp [sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList]
+
+/--
+Sortedness for an explicit local-island witness list after conversion to
+interval-pulse addresses.
+-/
+def SourcePressureLocalIslandWitnessListSortedBefore
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) : Prop :=
+  SourcePressureIntervalPulseAddressFamilySortedBefore
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+
+/--
+Sorted-before failure for an explicit local-island witness list.
+
+This is still only an order obstruction after conversion.  It does not prove
+overlap and does not say that the list covers all local islands.
+-/
+def SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) : Prop :=
+  SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+
+/--
+Every explicit local-island witness list is either sorted after conversion or
+carries a sorted-before failure.
+
+This is a statement about the supplied list only; it does not enumerate all
+local islands.
+-/
+theorem sourcePressureLocalIslandWitnessList_sorted_or_failure
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) :
+    SourcePressureLocalIslandWitnessListSortedBefore L ∨
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L :=
+  sourcePressureIntervalPulseAddressFamily_sorted_or_failure
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+
+/--
+Lift a sorted explicit local-island witness list to an accounted interval
+family.
+
+The sorted hypothesis is inherited through the pulse-address family conversion.
+No coverage, maximality, or union accounting is introduced.
+-/
+def sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+    hsorted
+
+@[simp]
+theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
+      L hsorted).items.length = L.length := by
+  simp [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList]
+
+/--
+Budget wrapper for a sorted explicit local-island witness list.
+-/
+theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
+      L hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((L.length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList]
+    using
+      sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_le_neg_length
+        (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+        hsorted
+
+/--
+Nonempty budget wrapper for a sorted explicit local-island witness list.
+-/
+theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_sum_neg_of_nonempty
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hL : L ≠ []) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
+      L hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
+  have hitems :
+      (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+        L).items ≠ [] := by
+    intro h
+    apply hL
+    simpa [sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList]
+      using h
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList]
+    using
+      sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_neg_of_nonempty
+        (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L)
+        hsorted hitems
+
+/--
+Singleton pulse-address family from one local-island witness.
+-/
+def sourcePressureIntervalPulseAddressFamily_singleton_of_localIslandWitness
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  sourcePressureIntervalPulseAddressFamily_singleton
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+
+@[simp]
+theorem sourcePressureIntervalPulseAddressFamily_singleton_of_localIslandWitness_length
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    (sourcePressureIntervalPulseAddressFamily_singleton_of_localIslandWitness
+      W).items.length = 1 := by
+  rfl
+
 /-- Singleton sorted-family budget wrapper. -/
 theorem sourcePressureAccountedIntervalFamily_sorted_singleton_sum_le_neg_one
     {n : OddNat} {k r : ℕ}
