@@ -8,7 +8,7 @@ gch: 159e8d4a38893259c411f16ce00bc3fbc4e70355
 
 実装を進めました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:371) に、Collatz height profile のローカルな `Nat` count / layer-cake 系補題を追加しました。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L371) に、Collatz height profile のローカルな `Nat` count / layer-cake 系補題を追加しました。
 
 追加した主な API:
 
@@ -23,7 +23,7 @@ orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
 
 `DkMath.ABC.LayerCakeBasic` は確認しました。既存の layer-cake は real/rpow/exp/MGF 寄りなので、今回の Collatz 観測窓では import せず、有限列の `Nat` カウントとして軽量に固定しています。
 
-[Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:120) も同期し、今回の補題群と ABC layer-cake との住み分けを記録しました。
+[Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L120) も同期し、今回の補題群と ABC layer-cake との住み分けを記録しました。
 
 確認:
 

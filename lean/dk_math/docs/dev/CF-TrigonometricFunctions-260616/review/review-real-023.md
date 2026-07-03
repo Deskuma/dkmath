@@ -15,7 +15,7 @@ gch: eb4ebd917dca4b1fb852837621deca9154209f53
 - `equivSetoid`
 - 加法に対する congruence
 
-実装: [Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean:1)
+実装: [Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean#L1)
 
 `Equiv` の推移性では、中間区間の幅を含む評価
 

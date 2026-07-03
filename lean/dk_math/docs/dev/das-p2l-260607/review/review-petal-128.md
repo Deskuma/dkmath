@@ -8,13 +8,13 @@ gch: 70f0558d1428a04b6c76c6dbeaf877e7a291644f
 
 checkpoint 127 を実装しました。
 
-`PetalBridge` に window residual shape 層を追加しました。新規定義は [orbitWindowResidualShape](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:133)、`orbitWindowResidualShapeSeq`、`orbitWindowFirstFailedPow2Depth` です。主定理として [orbitWindowResidualShape_eq_oddOrbitLabel_succ](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:4714) を閉じ、有限窓で「抽出された residual shape = 次の odd label」を固定しました。
+`PetalBridge` に window residual shape 層を追加しました。新規定義は [orbitWindowResidualShape](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L133)、`orbitWindowResidualShapeSeq`、`orbitWindowFirstFailedPow2Depth` です。主定理として [orbitWindowResidualShape_eq_oddOrbitLabel_succ](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L4714) を閉じ、有限窓で「抽出された residual shape = 次の odd label」を固定しました。
 
 追加で、residual shape sequence が shifted label sequence と一致する補題、window raw factorization、first failed depth の remainder 非零も入れています。これで finite window は `label_i -> raw -> height -> residualShape -> label_{i+1}` の有限力学として読めます。
 
-おまけとして pressure 側に [SourcePressureSignChangeUp](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:6901)、frontier から sign-change を得る補題、[SourcePressureLocalIsland](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7002) も追加しました。これは prefix 主張ではなく、margin sign pattern 分類の足場です。
+おまけとして pressure 側に [SourcePressureSignChangeUp](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L6901)、frontier から sign-change を得る補題、[SourcePressureLocalIsland](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7002) も追加しました。これは prefix 主張ではなく、margin sign pattern 分類の足場です。
 
-ドキュメントは README、126 doc、PetalBridge guide/status を更新し、新規に [Collatz-WindowResidualShape-127.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md:1) と [report-petal-127.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-127.md:1) を作成しました。
+ドキュメントは README、126 doc、PetalBridge guide/status を更新し、新規に [Collatz-WindowResidualShape-127.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md#L1) と [report-petal-127.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-127.md#L1) を作成しました。
 
 検証:
 `lake build DkMath.Collatz.PetalBridge`

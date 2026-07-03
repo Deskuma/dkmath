@@ -8,7 +8,7 @@ gch: 1788fdb63ab85b23138150b68cab97d117bf544c
 
 実装しました。checkpoint `083` は、一般 finite layer-cake まで到達しています。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:650) に追加した主な定理:
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L650) に追加した主な定理:
 
 ```lean
 range_threshold_count_le
@@ -31,8 +31,8 @@ orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three_add_co
 
 ドキュメントも同期しました。
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:126)
-- [report-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L126)
+- [report-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md#L1)
 
 検証:
 

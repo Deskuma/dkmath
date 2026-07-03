@@ -10,9 +10,9 @@ Zsigmondy 契約条件を docs に明文化しました。
 
 更新したのは以下です。
 
-- [Petal-Zsigmondy-Preflight.md](/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md:59)
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:397)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1637)
+- [Petal-Zsigmondy-Preflight.md](/lean/dk_math/DkMath/Petal/docs/Petal-Zsigmondy-Preflight.md#L59)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L397)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1637)
 
 入れた内容は次です。
 

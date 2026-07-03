@@ -8,7 +8,7 @@ gch: 692c6618872260d6e4a8b1049bb49de92c5f3ae3
 
 117 進めました。`15 mod 16` の level 2 remainder まで concrete に固定できています。
 
-主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1024) です。
+主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1024) です。
 
 - `orbitWindowResidueCountMod32EqFifteenTail`
 - `orbitWindowResidueCountMod32EqThirtyOneTail`

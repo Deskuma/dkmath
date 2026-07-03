@@ -8,13 +8,13 @@ gch: 25e282a27dab4f9595183ead2155dd1e19fdfdc6
 
 Checkpoint 131 を実装・同期しました。
 
-主な変更は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7242) に軽い補題群を追加したことです。`SourcePressurePositiveBlock`、bounded island/frontier、sign-change-up 周辺を使いやすくしました。特に `sourcePressureSignChangeUp_of_localIsland` で「local island は左端に upward sign change を持つ」ことを Lean 側で固定しています。
+主な変更は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7242) に軽い補題群を追加したことです。`SourcePressurePositiveBlock`、bounded island/frontier、sign-change-up 周辺を使いやすくしました。特に `sourcePressureSignChangeUp_of_localIsland` で「local island は左端に upward sign change を持つ」ことを Lean 側で固定しています。
 
 Python 側は `first_failure_pair` を `first_sign_change_pair` に修正し、positive block を「長さ 1 以上の連続 positive-depth run」として明確化しました。さらに residual mod 16/32 と frontier depth、block length、local island、sign-change-up の集計表を追加して、結果を再生成しています。
 
-今回の観測結果は [report-petal-131.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-131.md:61) にまとめました。要点は、frontier depth はほぼ `2`、長い positive block は `15 mod 16` や `31 mod 32` のような all-ones-like residual class に集中、local island / sign-change-up は希少だが実在、という形です。
+今回の観測結果は [report-petal-131.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-131.md#L61) にまとめました。要点は、frontier depth はほぼ `2`、長い positive block は `15 mod 16` や `31 mod 32` のような all-ones-like residual class に集中、local island / sign-change-up は希少だが実在、という形です。
 
-追加ドキュメントは [Collatz-PressureCorrelationScan-131.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureCorrelationScan-131.md:1) です。README、Guide、Status、checkpoint 130 docs も同期済みです。
+追加ドキュメントは [Collatz-PressureCorrelationScan-131.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureCorrelationScan-131.md#L1) です。README、Guide、Status、checkpoint 130 docs も同期済みです。
 
 検証:
 

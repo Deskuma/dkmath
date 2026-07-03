@@ -13,7 +13,7 @@ gch: df3c8357c0a60cb76fc6939e0196099915fe9cd7
 - canonical Gap `y = x + z` による順序保存を証明
 - TODO・設計資料・履歴を同期
 
-主要実装: [Semantic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean:200)
+主要実装: [Semantic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean#L200)
 
 検証:
 

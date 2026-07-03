@@ -8,10 +8,10 @@ gch: 791a44e6623acabeeb6b9cece9efc2a946f49634
 
 節目の記録とコード整理を完了しました。
 
-- 数学原理の見出しコメントを [PowBound.lean](/lean/dk_math/DkMath/Analysis/DkReal/PowBound.lean:23) に追加
+- 数学原理の見出しコメントを [PowBound.lean](/lean/dk_math/DkMath/Analysis/DkReal/PowBound.lean#L23) に追加
 - `powNonneg` の有理数・0乗・1乗の簡約定理を追加
 - `GapInterval.ext` を基本 API として追加
-- 研究向け観測レポートを新規作成: [DkReal-Nonnegative-Power-Milestone.md](/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md:1)
+- 研究向け観測レポートを新規作成: [DkReal-Nonnegative-Power-Milestone.md](/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md#L1)
 
 重要点は、実数値そのものを選択せず、有理区間列と収束証明を操作するため、DkReal 層では `noncomputable` が不要ということです。検索でも同層に `noncomputable` が存在しないことを確認しました。
 

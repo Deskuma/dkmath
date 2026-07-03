@@ -8,12 +8,12 @@ gch: f92c977b46aed70910c6bdeca89c781634c4ac19
 
 非負 DkReal の加法・乗法を実装しました。
 
-- [Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean:24)
+- [Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean#L24)
   - 一般加法 `add`
   - 非負乗法 `mulNonneg`
   - 非負性保存
   - 有理数埋め込み、零、一の簡約定理
-- [Interval.lean](/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean:68)
+- [Interval.lean](/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean#L68)
   - 区間加法・非負乗法
   - 加法幅公式
   - 乗法幅公式 `bd - ac = b(d-c) + c(b-a)`

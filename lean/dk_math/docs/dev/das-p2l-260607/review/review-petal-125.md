@@ -8,7 +8,7 @@ gch: 32b8e440c863928f4637a24218bc235a7b728815
 
 Checkpoint 124 完了です。
 
-Lean 側では [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1825) に以下を追加しました。
+Lean 側では [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1825) に以下を追加しました。
 
 ```lean
 retention_allOnes_mod_pow_two_of_le

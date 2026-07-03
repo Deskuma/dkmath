@@ -8,7 +8,7 @@ gch: ccc295ed21d4df9f3e7bf6a43cd40f042b19753c
 
 Checkpoint 123 完了です。
 
-実装した Lean 補題は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1791) に追加しました。
+実装した Lean 補題は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1791) に追加しました。
 
 ```lean
 allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le

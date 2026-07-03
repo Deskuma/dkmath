@@ -10,9 +10,9 @@ Checkpoint 132 を実装しました。
 
 Python scan に `all_ones_depth(x) = v2(x + 1)` を追加し、`residual_all_ones_depth_seq`、first/last/mode/max、`ge_4/ge_5/ge_6` counts、sign-change-up の原因分類を出すようにしました。生成結果も再作成済みです。
 
-Lean 側には [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:158) で `ResidualAllOnesDepth`、`orbitWindowResidualAllOnesDepth`、`orbitWindowResidualAllOnesDepthSeq` を追加し、[length/get? 補題](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:941) まで通しました。重い `d ≤ depth -> x % 2^d = 2^d - 1` はまだ置いていません。
+Lean 側には [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L158) で `ResidualAllOnesDepth`、`orbitWindowResidualAllOnesDepth`、`orbitWindowResidualAllOnesDepthSeq` を追加し、[length/get? 補題](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L941) まで通しました。重い `d ≤ depth -> x % 2^d = 2^d - 1` はまだ置いていません。
 
-観測結果は [report-petal-132.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-132.md:1) と [Collatz-PressureAllOnesCorrelationScan-132.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureAllOnesCorrelationScan-132.md:1) に整理しました。要点は、`mode` は全行で浅い `1` なのに、`max all-ones depth` が positive block 長と強く連動していることです。つまり「窓全体が all-ones 的」ではなく、「窓内に深い all-ones excursion が出る」ことが圧力 block の主信号に見えます。
+観測結果は [report-petal-132.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-132.md#L1) と [Collatz-PressureAllOnesCorrelationScan-132.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureAllOnesCorrelationScan-132.md#L1) に整理しました。要点は、`mode` は全行で浅い `1` なのに、`max all-ones depth` が positive block 長と強く連動していることです。つまり「窓全体が all-ones 的」ではなく、「窓内に深い all-ones excursion が出る」ことが圧力 block の主信号に見えます。
 
 検証:
 

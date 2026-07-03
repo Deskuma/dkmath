@@ -8,11 +8,11 @@ gch: 4c1564ef116a977a34803d46c2f56e04b45a51d1
 
 実装・軌道修正を入れました。
 
-主な変更は、低層語彙を新設の [GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean:11) に分離したことです。`OddGnomonLayer`, `RawGnomonStep`, `RawGnomonHeight`, `RawGnomonResidualShape`, remainder profile まで定義し、`3n+1` を「奇数グノモン補正 → 2進整列評価 → residual shape 抽出」と読む土台を固定しました。
+主な変更は、低層語彙を新設の [GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean#L11) に分離したことです。`OddGnomonLayer`, `RawGnomonStep`, `RawGnomonHeight`, `RawGnomonResidualShape`, remainder profile まで定義し、`3n+1` を「奇数グノモン補正 → 2進整列評価 → residual shape 抽出」と読む土台を固定しました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:33) には今後の混線防止コメントを強めに追加し、さらに [SourcePressurePrefixFailure](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:6675) と margin 同値・down-closed 同値を実装しました。これで「pressure は carrier nesting ではなく margin 符号列」という checkpoint 125 の軌道修正が Lean 側にも残ります。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L33) には今後の混線防止コメントを強めに追加し、さらに [SourcePressurePrefixFailure](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L6675) と margin 同値・down-closed 同値を実装しました。これで「pressure は carrier nesting ではなく margin 符号列」という checkpoint 125 の軌道修正が Lean 側にも残ります。
 
-ドキュメントは README、PetalBridge Guide/Status、PressureMargin-124 を更新し、新規に [Collatz-GnomonEvaluation-125.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonEvaluation-125.md:1) と [report-petal-125.md](/lean_dk_math/docs/dev/das-p2l-260607/review/report-petal-125.md:1) を作成しました。
+ドキュメントは README、PetalBridge Guide/Status、PressureMargin-124 を更新し、新規に [Collatz-GnomonEvaluation-125.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonEvaluation-125.md#L1) と [report-petal-125.md](/lean_dk_math/docs/dev/das-p2l-260607/review/report-petal-125.md#L1) を作成しました。
 
 検証:
 `lake build DkMath.Collatz.GnomonEvaluation`

@@ -10,7 +10,7 @@ gch: e79124ba430a7841ab181834d907836a1fcf6181
 
 実装:
 
-- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:351)
+- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L351)
   - `31 mod 64 -> 15 mod 32`
   - `63 mod 64 -> 31 mod 32`
   - orbit label 版の `mod 64` 遷移
@@ -29,8 +29,8 @@ mod 512:  255 -> 127, 511 -> 255
 
 文書:
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:801)
-- 新規 [report-petal-092.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L801)
+- 新規 [report-petal-092.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md#L1)
 
 主要到達点:
 

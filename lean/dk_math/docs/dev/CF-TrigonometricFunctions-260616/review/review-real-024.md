@@ -8,7 +8,7 @@ gch: c766a01ae23f480105f523c4808ac96b8c4aa4a1
 
 レビュー提案の `mulNonneg` congruence を実装しました。
 
-[Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean:137) に以下を追加しています。
+[Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean#L137) に以下を追加しています。
 
 - 同値な表現の下端点差が 0 に収束
 - `equiv_mulNonneg`

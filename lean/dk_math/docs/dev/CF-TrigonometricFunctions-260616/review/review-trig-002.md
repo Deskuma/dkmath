@@ -10,11 +10,11 @@ gch: f61f7667117da3c9b92800466f3c72cd96551159
 
 変更内容:
 
-- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean:35) の `KernelFamily` を `[Add T]` から `[AddMonoid T]` に強化
+- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean#L35) の `KernelFamily` を `[Add T]` から `[AddMonoid T]` に強化
 - `map_zero` を追加して、保存単位核族が `0` を中立核 `(1,0)` に送ることを明示
 - `KernelFamily.C_zero : F.C 0 = 1`
 - `KernelFamily.S_zero : F.S 0 = 0`
-- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md:82) も新 API に更新
+- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md#L82) も新 API に更新
 
 確認:
 

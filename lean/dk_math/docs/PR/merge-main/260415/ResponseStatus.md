@@ -43,9 +43,9 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 
 理由は明確で、いまの設計は
 
-- [`IsRegularPrime`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/ClassGroupBridge.lean:96) だけは `p` を使う
-- でも [`CyclotomicClassGroupPTorsionFreeTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:4812) はまだ `∀ n`
-- さらに [`CyclotomicPTorsionAnnihilationTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:843) も `∀ n`
+- [`IsRegularPrime`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/ClassGroupBridge.lean#L96) だけは `p` を使う
+- でも [`CyclotomicClassGroupPTorsionFreeTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean#L4812) はまだ `∀ n`
+- さらに [`CyclotomicPTorsionAnnihilationTarget`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean#L843) も `∀ n`
 
 という形だからです。
 この状態で comment 7725 のように theorem だけ
@@ -60,7 +60,7 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 
 - `IsRegularPrime p` は少なくとも `p` を使う placeholder にする
 - しかし regular-prime 仮定だけから、より強い `CyclotomicClassGroupPTorsionFreeTarget` は導かない
-- そのため refined route では [`hCl`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/RegularPrimeRoute.lean:439) を明示で受ける
+- そのため refined route では [`hCl`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/RegularPrimeRoute.lean#L439) を明示で受ける
 
 つまり、comment 7725 の「`p=5` 固定はおかしい」という指摘自体は正しいですが、直し方は「theorem の `p` 一般化」ではなく、「その bridge を薄くして overclaim をやめる」が先、という状況です。
 

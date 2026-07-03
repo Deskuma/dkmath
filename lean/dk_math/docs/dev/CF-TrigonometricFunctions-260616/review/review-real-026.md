@@ -8,7 +8,7 @@ gch: 553a303884accce0679b0a12ed095de584c08602
 
 レビュー推奨の `DkNNReal` wrapper を実装しました。
 
-[DkNNReal.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean:21) に以下を追加しています。
+[DkNNReal.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean#L21) に以下を追加しています。
 
 - 非負性を内包する `DkNNReal`
 - `ofRat`, `zero`, `one`

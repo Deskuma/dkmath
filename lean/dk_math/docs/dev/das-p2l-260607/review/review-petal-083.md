@@ -8,7 +8,7 @@ gch: f1bfa49ec54219ba7a69d39342db72c7e0edcad8
 
 進めました。今回の到達点は、Collatz 固有の `height >= 1` を固定して、二層 layer-cake を実用形に落としたことです。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:495) に追加:
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L495) に追加:
 
 ```lean
 orbitWindowHeight_one_le
@@ -30,8 +30,8 @@ k + orbitWindowHeightCountGe n k 2 ≤ sumS n k
 
 docs も同期しました。
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:126)
-- [review-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-083.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L126)
+- [review-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-083.md#L1)
 - `__next_implementation_plan.md` も次回入口を一般 finite layer-cake 方針へ更新済み
 
 確認:

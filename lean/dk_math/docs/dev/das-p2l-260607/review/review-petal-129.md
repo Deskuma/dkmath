@@ -8,9 +8,9 @@ gch: dd801be6eeca51997950166b0459061c45b5365c
 
 Checkpoint 128 を閉じました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:864) に residual-shape sequence の `length/get?/take` API、first-failed-depth sequence、`height + 1` 補題を追加しました。shifted label の list indexed theorem は [同ファイル](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:4797) に置いています。pressure 側は [sourcePressureLocalIsland_iff_margin](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7081) を追加し、local island を margin 符号条件で読めるようにしました。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L864) に residual-shape sequence の `length/get?/take` API、first-failed-depth sequence、`height + 1` 補題を追加しました。shifted label の list indexed theorem は [同ファイル](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L4797) に置いています。pressure 側は [sourcePressureLocalIsland_iff_margin](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7081) を追加し、local island を margin 符号条件で読めるようにしました。
 
-Docs は `README`、Guide、Status、127 doc を同期し、新規に [Collatz-ResidualShapeSequence-128.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md:1) と [report-petal-128.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-128.md:1) を作成しました。次の推奨は、`orbitWindowFirstFailedPow2DepthSeq_get?_eq_some` などの小 API を閉じてから pressure sign-pattern scan に戻る流れです。
+Docs は `README`、Guide、Status、127 doc を同期し、新規に [Collatz-ResidualShapeSequence-128.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md#L1) と [report-petal-128.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-128.md#L1) を作成しました。次の推奨は、`orbitWindowFirstFailedPow2DepthSeq_get?_eq_some` などの小 API を閉じてから pressure sign-pattern scan に戻る流れです。
 
 検証:
 `lake build DkMath.Collatz.PetalBridge` passed

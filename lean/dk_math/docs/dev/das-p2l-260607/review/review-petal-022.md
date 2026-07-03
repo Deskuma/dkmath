@@ -8,7 +8,7 @@ gch: d374f2ff45debf3478be162d38898f4882b35949
 
 追加しました。
 
-[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:91) に以下を追加:
+[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean#L91) に以下を追加:
 
 ```lean
 theorem hasPositiveAnchorPrime_ne_zero

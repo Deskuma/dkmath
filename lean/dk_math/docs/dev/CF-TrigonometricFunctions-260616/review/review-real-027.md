@@ -8,7 +8,7 @@ gch: b6d92a6fd9000401e2a80838b22326d1df58669b
 
 quotient-backed 公開型 `DkNNRealQ` を実装しました。
 
-[DkNNRealQ.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean:23) に以下があります。
+[DkNNRealQ.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean#L23) に以下があります。
 
 - `DkNNReal.equivSetoid` による商型
 - `ofRat`, `zero`, `one`, `add`, `mul`, `pow`

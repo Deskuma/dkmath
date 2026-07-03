@@ -8,11 +8,11 @@ gch: 6806f532235d838b415fa079504ab757cfc753a9
 
 Checkpoint 130 を実装しました。
 
-pressure sign-pattern scan を追加しました: [pressure_sign_pattern_scan.py](/python/Collatz/PetalBridge/pressure_sign_pattern_scan.py:1)。`odd n <= 2047`, `steps = 64`, depths `2..11` で実行し、結果は [pressure_sign_pattern_scan.md](/python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md:1) と CSV に出しています。観測結果は、positive depth あり `511/1024`、local island `3`、sign-change-up `4`。`n = 1567, 1639, 1775` が local island の代表例です。
+pressure sign-pattern scan を追加しました: [pressure_sign_pattern_scan.py](/python/Collatz/PetalBridge/pressure_sign_pattern_scan.py:1)。`odd n <= 2047`, `steps = 64`, depths `2..11` で実行し、結果は [pressure_sign_pattern_scan.md](/python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md#L1) と CSV に出しています。観測結果は、positive depth あり `511/1024`、local island `3`、sign-change-up `4`。`n = 1567, 1639, 1775` が local island の代表例です。
 
-Lean 側は重くせず、scan を受ける薄い分類 API だけ入れました: [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7205)。追加は `SourcePressurePositiveBlock`、bounded local island/frontier predicate、それぞれの margin equivalence です。これは prefix 定理ではなく、pressure を margin sign profile として扱うための観測ハンドルです。
+Lean 側は重くせず、scan を受ける薄い分類 API だけ入れました: [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7205)。追加は `SourcePressurePositiveBlock`、bounded local island/frontier predicate、それぞれの margin equivalence です。これは prefix 定理ではなく、pressure を margin sign profile として扱うための観測ハンドルです。
 
-Docs は README、Guide、Status を同期し、新規に [Collatz-PressureSignPatternScan-130.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureSignPatternScan-130.md:1) と [report-petal-130.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-130.md:1) を追加しました。次は `residual_mod_16/32` と frontier/block/island の aggregate correlation scan が自然です。
+Docs は README、Guide、Status を同期し、新規に [Collatz-PressureSignPatternScan-130.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureSignPatternScan-130.md#L1) と [report-petal-130.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-130.md#L1) を追加しました。次は `residual_mod_16/32` と frontier/block/island の aggregate correlation scan が自然です。
 
 検証:
 `python3 ...pressure_sign_pattern_scan.py --max-n 2047 --steps 64 --r-start 2 --depth-len 10` passed

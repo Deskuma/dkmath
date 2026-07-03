@@ -8,7 +8,7 @@ gch: 34fadab576c16d5c7549ecb942e684f210997031
 
 `Petal.BezoutBridge` を拡張して、Zsigmondy との一般 handshake を追加しました。
 
-追加した主な接続は [BezoutBridge.lean](/lean/dk_math/DkMath/Petal/BezoutBridge.lean:91) です。
+追加した主な接続は [BezoutBridge.lean](/lean/dk_math/DkMath/Petal/BezoutBridge.lean#L91) です。
 
 ```lean
 primitivePrimeFactor_not_dvd_boundary

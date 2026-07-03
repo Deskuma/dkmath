@@ -6,7 +6,7 @@ gch: 1b7e98675a8b0a2d137d0039f48c4aeda13e24e4
 
 ## Report
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:302) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L302) のみです。
 
 追加した主補題は `outerPetalRemainder_valid_for_prevTotal` です。valid な one-based 入力 `1 ≤ m ≤ relPetalTotal n lap` が positive lap で読まれたとき、remainder が次の inner lap の valid value になることを `1 ≤ remainder ∧ remainder ≤ relPetalTotal n (lap - 1)` として束ねました。
 

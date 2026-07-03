@@ -8,7 +8,7 @@ gch: d1031769e7d555b19a50f6010a3986b393695aff
 
 レビュー指摘を確認し、次段階まで実装しました。
 
-[Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean:88) に interval-level の十法則を追加しています。
+[Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean#L88) に interval-level の十法則を追加しています。
 
 - 加法の結合・交換・左右単位元
 - 非負乗法の結合・交換・左右単位元

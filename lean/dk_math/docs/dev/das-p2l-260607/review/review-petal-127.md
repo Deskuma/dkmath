@@ -8,11 +8,11 @@ gch: 5bf6f3c2b3a999cadd16f404faa09614d5f46527
 
 checkpoint 126 を実装しました。
 
-Route A を優先して、[GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean:222) に `RawGnomonResidualShape = (T n).1` を固定しました。そこから `rawGnomonResidualShape_odd`、完全分解 `RawGnomonStep = 2^height * residualShape`、`height + 1` で割れない補題、first failed depth の remainder 非零まで閉じています。
+Route A を優先して、[GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean#L222) に `RawGnomonResidualShape = (T n).1` を固定しました。そこから `rawGnomonResidualShape_odd`、完全分解 `RawGnomonStep = 2^height * residualShape`、`height + 1` で割れない補題、first failed depth の remainder 非零まで閉じています。
 
-`PetalBridge` 側には、[orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:170) を追加し、window height を gnomon alignment height として読めるようにしました。さらに Route B の軽い入口として [SourcePressureFrontier](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:6819)、margin 同値、frontier から prefix failure を作る補題も入れています。
+`PetalBridge` 側には、[orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L170) を追加し、window height を gnomon alignment height として読めるようにしました。さらに Route B の軽い入口として [SourcePressureFrontier](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L6819)、margin 同値、frontier から prefix failure を作る補題も入れています。
 
-ドキュメントは `README`、`Collatz-GnomonEvaluation-125.md`、PetalBridge guide/status を更新し、新規に [Collatz-GnomonResidualShape-126.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md:1) と [report-petal-126.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md:1) を作成しました。
+ドキュメントは `README`、`Collatz-GnomonEvaluation-125.md`、PetalBridge guide/status を更新し、新規に [Collatz-GnomonResidualShape-126.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md#L1) と [report-petal-126.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md#L1) を作成しました。
 
 検証済み:
 `lake build DkMath.Collatz.GnomonEvaluation`

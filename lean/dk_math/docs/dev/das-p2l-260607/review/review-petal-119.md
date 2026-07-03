@@ -8,7 +8,7 @@ gch: 8375ebe3e5d9803ab925e8e0e06b0a7da55f5c58
 
 118 進めました。level 3 の tower 拡張と、range pressure から local depth 2 pressure への入口を両方固定できています。
 
-主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1066) です。
+主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1066) です。
 
 - `orbitWindowResidueCountMod64EqThirtyOneTail`
 - `orbitWindowResidueCountMod64EqSixtyThreeTail`

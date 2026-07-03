@@ -10,7 +10,7 @@ gch: f3ac7a174439d3adb7f7fad9addba944afe896e3
 
 実装内容:
 
-- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:333)
+- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L333)
   - `15 mod 32 -> 7 mod 16`
   - `31 mod 32 -> 15 mod 16`
   - orbit label 版の遷移補題
@@ -19,8 +19,8 @@ gch: f3ac7a174439d3adb7f7fad9addba944afe896e3
 
 文書同期:
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:744)
-- 新規レポート: [report-petal-091.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-091.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L744)
+- 新規レポート: [report-petal-091.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-091.md#L1)
 
 主結果はこれです。
 

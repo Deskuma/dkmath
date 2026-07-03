@@ -10,11 +10,11 @@ gch: 48b84c75fd096f036deb7c6423fe282c0ffb4aff
 
 追加した Lean 側の中心は以下です。
 
-- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:376)
+- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L376)
   - `outerPetalAddress_eq_value_eq`
   - 同じ `outerPetalAddress` を持つ valid one-based value は元の値も等しい、という復元補題
 
-- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:227)
+- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L227)
   - `petalAddressNoncollisionOn_of_injOn`
   - `petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq`
   - `petalAddressNoncollisionOn_outer_of_value_injOn`
@@ -30,9 +30,9 @@ mOf が selected index 上で injective
 
 docs も同期しています。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:725)
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:580)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1779)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L725)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L580)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1779)
 
 検証:
 

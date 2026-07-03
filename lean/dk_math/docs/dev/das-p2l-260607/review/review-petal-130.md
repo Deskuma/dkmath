@@ -8,9 +8,9 @@ gch: 4d0d588bc6d7dada24d3f3c8d28aa09b66878df6
 
 Checkpoint 129 を実装しました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:916) に first-failed-depth sequence の `get?/take` API を追加し、`height + 1` として読める補題も入れました。さらに [orbitWindow_threeProfiles_get?_eq_some](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:978) を追加して、`height / residual shape / first failed depth` の三つの time profile を同じ index で並べて読めるようにしました。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L916) に first-failed-depth sequence の `get?/take` API を追加し、`height + 1` として読める補題も入れました。さらに [orbitWindow_threeProfiles_get?_eq_some](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L978) を追加して、`height / residual shape / first failed depth` の三つの time profile を同じ index で並べて読めるようにしました。
 
-Docs は README、Guide、Status、128 doc を同期し、新規に [Collatz-FirstFailedDepthSequence-129.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-FirstFailedDepthSequence-129.md:1) と [report-petal-129.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md:1) を作成しました。次は Route A がほぼ閉じたので、pressure sign-pattern scan に戻る判断を書いてあります。
+Docs は README、Guide、Status、128 doc を同期し、新規に [Collatz-FirstFailedDepthSequence-129.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-FirstFailedDepthSequence-129.md#L1) と [report-petal-129.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md#L1) を作成しました。次は Route A がほぼ閉じたので、pressure sign-pattern scan に戻る判断を書いてあります。
 
 検証:
 `lake build DkMath.Collatz.PetalBridge` passed

@@ -8,7 +8,7 @@ gch: 74ba6e6fa276468c4db88bc911ba78318bb32512
 
 進めました。今回の道順どおり、`address/carrier noncollision -> label noncollision` を直接主張しすぎず、互換条件を明示した形で Lean に固定しています。
 
-追加した主な API は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:112) です。
+追加した主な API は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L112) です。
 
 ```lean
 PetalAddressNoncollisionOn
@@ -36,9 +36,9 @@ PetalAddressNoncollisionOn I addrOf
 
 docs も同期済みです。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:716)
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:576)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1766)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L716)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L576)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1766)
 
 検証:
 

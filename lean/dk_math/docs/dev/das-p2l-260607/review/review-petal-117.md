@@ -8,7 +8,7 @@ gch: 9e7b7f93241f3e9db164355c75abe441cd67d301
 
 116 進めました。`7 mod 8` continuing color を次の reservoir へ戻す再帰辺まで Lean で固定できています。
 
-主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:3967) です。
+主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L3967) です。
 
 - `orbitWindowResidueCountMod16EqSevenTail`
 - `orbitWindowResidueCountMod16EqFifteenTail`

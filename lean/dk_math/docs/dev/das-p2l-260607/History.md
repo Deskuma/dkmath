@@ -240,7 +240,7 @@ git diff --check
 
 ### 2026/06/08 20:28
 
-行けました。`UniformBeamHeight` と素数行の高さ定理を [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) に追加しました。
+行けました。`UniformBeamHeight` と素数行の高さ定理を [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean#L1) に追加しました。
 
 追加内容：
 
@@ -303,7 +303,7 @@ theorem prime_power_unitFilteredBeamHeight
 
 実装しました。これで「`p` 行が初出生ライン」という形が Lean 上でかなり明確になりました。
 
-追加した定理は [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:1) のこの2本です。
+追加した定理は [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean#L1) のこの2本です。
 
 ```lean
 theorem below_prime_uniformBeamHeight_zero
@@ -850,7 +850,7 @@ theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
 
 実装しました。
 
-[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean:377) に追加した内容は主に2つです。
+[AKSBridge.lean](/lean/dk_math/DkMath/NumberTheory/AKSBridge.lean#L377) に追加した内容は主に2つです。
 
 - `AKSBound n r` の抽象フックを追加
   - 現状は粗い placeholder として `n`
@@ -899,21 +899,21 @@ theorem not_exists_AKSCyclicFoldedFailureBelow_of_prime
 
 **使える核心定理**
 
-- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:130)
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean#L130)
   - `padicValNat_choose_prime_pow`
   - `padicValNat_choose_prime_pow_add_index`
   - `prime_power_pow_dvd_choose_of_padicValNat_index`
   - `prime_power_dvd_choose_of_not_dvd_index`
   - `prime_power_unitFilteredBeamHeight`
-- [PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean:108)
+- [PascalPrimeDial.lean](/lean/dk_math/DkMath/NumberTheory/PascalPrimeDial.lean#L108)
   - `pascalPrimeDialHeight_prime_pow_add_index`
   - `pascalPrimeDialHeight_prime_pow`
   - `prime_power_unitFilteredPrimeDialHeight`
-- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:196)
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L196)
   - `prime_power_pow_dvd_weightedBinomialTerm_of_padicValNat_index`
   - `prime_power_dvd_weightedBinomialTerm_of_not_dvd_index`
   - `weightedBodyGapKernelSplit`
-- [PrimitiveBeam.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean:18)
+- [PrimitiveBeam.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L18)
   - `PrimitivePrimeFactorOfDiffPow`
   - `exists_primitive_prime_factor_as_prop`
   - `primitive_prime_dvd_GN`
@@ -942,12 +942,12 @@ theorem prime_power_unitFilteredBeamHeight_dvd_weightedTerm
 
 追加した橋はこの2段です。
 
-- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean:61)
+- [BinomialPrimePower.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrimePower.lean#L61)
   - `FilteredBeamHeight.dvd_choose_of_height_ge`
   - `UniformBeamHeight.dvd_choose_of_height_ge`
   - `prime_power_unitFilteredBeamHeight_dvd_choose`
 
-- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:183)
+- [WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L183)
   - `FilteredBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
   - `UniformBeamHeight.dvd_weightedBinomialTerm_of_height_ge`
   - `prime_power_unitFilteredBeamHeight_dvd_weightedBinomialTerm`
@@ -978,7 +978,7 @@ p-adic height が h ある
 
 `weighted Beam/GTail` 側を進めました。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:55) に追加しています。
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L55) に追加しています。
 
 主な追加:
 
@@ -1042,7 +1042,7 @@ git diff --check
 
 ### 2026/06/09 19:08
 
-実装しました。`GN` へ直接つなぐ薄い bridge として [WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) を新設し、[DkMath.lean](/lean/dk_math/DkMath.lean:28) に import を追加しています。
+実装しました。`GN` へ直接つなぐ薄い bridge として [WeightedGNBridge.lean](/lean/dk_math/DkMath/NumberTheory/WeightedGNBridge.lean) を新設し、[DkMath.lean](/lean/dk_math/DkMath.lean#L28) に import を追加しています。
 
 入れた補題はこの 3 つです。
 
@@ -1425,7 +1425,7 @@ git diff --check
 
 ### 2026/06/11 21:05
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:336) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L336) のみです。
 
 追加内容は次の3本です。
 
@@ -1450,7 +1450,7 @@ git diff --check
 
 ### 2026/06/11 21:14
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:374) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L374) のみです。
 
 追加したのは `nestedPetalAddress` の最小基盤です。outermost lap から innermost lap へ、`outerPetalRemainder` を渡しながら `List PetalAddress` を作ります。あわせて `zero`、`succ`、`head?`、`tail`、`length` の基本補題と、五角例 `nestedPetalAddress 5 2 25 = [...]` を固定しました。
 
@@ -1467,7 +1467,7 @@ git diff --check
 
 ### 2026/06/11 21:22
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:302) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L302) のみです。
 
 追加した主補題は `outerPetalRemainder_valid_for_prevTotal` です。valid な one-based 入力 `1 ≤ m ≤ relPetalTotal n lap` が positive lap で読まれたとき、remainder が次の inner lap の valid value になることを `1 ≤ remainder ∧ remainder ≤ relPetalTotal n (lap - 1)` として束ねました。
 
@@ -1489,7 +1489,7 @@ git diff --check
 
 ### 2026/06/11 23:50
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:60) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L60) のみです。
 
 追加した中核はこの3つです。
 
@@ -1520,7 +1520,7 @@ git diff --check
 
 ### 2026/06/11 23:55
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:96) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L96) のみです。
 
 追加した内容は、Dynamic Counting の拡張応用です。
 
@@ -1550,7 +1550,7 @@ git diff --check
 
 ### 2026/06/12  0:38
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:131) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L131) のみです。
 
 追加したのは prime-base orbit の基本可除性です。
 
@@ -1851,25 +1851,25 @@ theorem IsStrictPrimeBaseSequence.ne_of_lt
 
 実装:
 
-- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean:94)
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean#L94)
   - `exists_prime_dvd_S0_nat_of_not_three_dvd_sub`
   - `PrimitiveOnS0` を知らない caller 向けに、`∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b` を直接返す projection です。
 
-- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:30)
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean#L30)
   - `HasNoPrimeBelow`
   - `HasAnchorPrime`
   - `hasAnchorPrime_prime`
   - `hasAnchorPrime_anchor_dvd`
   - `hasAnchorPrime_no_smaller_prime`
 
-- [Petal.lean](/lean/dk_math/DkMath/Petal.lean:8)
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean#L8)
   - `DkMath.Petal.ReducedSupport` を集約 import に追加。
 
 Docs:
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:216)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L216)
   - `GcdBridge / PadicBridge / PrimitiveBridge / ReducedSupport` の小総括を追加。
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:776)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L776)
   - Bridge 完了、`ReducedSupport` initial API 実装済みとして更新。
 
 確認:
@@ -1923,7 +1923,7 @@ Docs も同期しました:
 
 追加しました。
 
-[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:91) に以下を追加:
+[ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean#L91) に以下を追加:
 
 ```lean
 theorem hasPositiveAnchorPrime_ne_zero
