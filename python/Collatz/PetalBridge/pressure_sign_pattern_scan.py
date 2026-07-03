@@ -674,6 +674,12 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         1 for row in rows
         if row.positive_block_without_right_fall_count > 0
     )
+    rows_with_interval_pulse_left_crossing_failure = (
+        rows_with_positive_block_without_left_crossing
+    )
+    rows_with_interval_pulse_right_falling_failure = (
+        rows_with_positive_block_without_right_fall
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -757,6 +763,10 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"`{rows_with_positive_block_without_left_crossing}`",
         "- rows_with_positive_block_without_right_fall: "
         f"`{rows_with_positive_block_without_right_fall}`",
+        "- rows_with_interval_pulse_left_crossing_failure: "
+        f"`{rows_with_interval_pulse_left_crossing_failure}`",
+        "- rows_with_interval_pulse_right_falling_failure: "
+        f"`{rows_with_interval_pulse_right_falling_failure}`",
         "- interval-pulse convention: left crossing is checked only for blocks "
         "with `start > r_start`; blocks beginning at the observed left boundary "
         "do not expose their previous depth in this scan.",
