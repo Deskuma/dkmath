@@ -86,6 +86,9 @@ class PressureSignPatternRow:
     falling_matches_sign_change_down: str
     local_island_right_fall_failure_count: int
     sign_change_down_iff_falling_failure_count: int
+    local_pressure_pulse_positions: str
+    local_pressure_pulse_count: int
+    local_island_to_pulse_failure_count: int
     margin_profile: str
     retention_profile: str
     continuation_profile: str
@@ -307,6 +310,13 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         for depth in depths
         if margins[depth] > 0 and margins[depth + 1] <= 0
     ]
+    local_pressure_pulses = [
+        depth
+        for depth in depths
+        if depth > r_start
+        and crossing_flags[depth - 1]
+        and falling_flags[depth]
+    ]
     sign_change_details: list[str] = []
     sign_change_pressure_decay_details: list[str] = []
     sign_change_labels: list[str] = []
@@ -470,6 +480,11 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         sign_change_down_iff_falling_failure_count=sum(
             1 for depth in depths if not sign_change_down_iff_falling[depth]
         ),
+        local_pressure_pulse_positions=join_ints(local_pressure_pulses),
+        local_pressure_pulse_count=len(local_pressure_pulses),
+        local_island_to_pulse_failure_count=sum(
+            1 for depth in local_islands if depth not in local_pressure_pulses
+        ),
         margin_profile=join_pairs([(depth, margins[depth]) for depth in depths]),
         retention_profile=join_pairs([(depth, retentions[depth]) for depth in depths]),
         continuation_profile=join_pairs(
@@ -615,6 +630,12 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     rows_with_sign_change_down_iff_falling_failure = sum(
         1 for row in rows if row.sign_change_down_iff_falling_failure_count > 0
     )
+    rows_with_local_pressure_pulse = sum(
+        1 for row in rows if row.local_pressure_pulse_count > 0
+    )
+    rows_with_local_island_to_pulse_failure = sum(
+        1 for row in rows if row.local_island_to_pulse_failure_count > 0
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -690,6 +711,9 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"`{rows_with_local_island_right_fall_failure}`",
         "- rows_with_sign_change_down_iff_falling_failure: "
         f"`{rows_with_sign_change_down_iff_falling_failure}`",
+        f"- rows_with_local_pressure_pulse: `{rows_with_local_pressure_pulse}`",
+        "- rows_with_local_island_to_pulse_failure: "
+        f"`{rows_with_local_island_to_pulse_failure}`",
         f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         f"- all-ones depth first counts: `{markdown_kv_counter(all_ones_first_counts)}`",
         f"- all-ones depth mode counts: `{markdown_kv_counter(all_ones_mode_counts)}`",
