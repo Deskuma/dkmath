@@ -67,6 +67,10 @@ class PressureSignPatternRow:
     sign_change_drop_details: str
     sign_change_pressure_decay_details: str
     local_island_pressure_decay_details: str
+    margin_step_diff: str
+    retention_drop_minus_2_continuation_drop: str
+    margin_step_matches_net_drop: str
+    margin_step_identity_failure_count: int
     margin_profile: str
     retention_profile: str
     continuation_profile: str
@@ -212,6 +216,19 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
     continuations = {
         depth: continuation_mass(labels, steps, depth) for depth in extended_depths
     }
+    margin_step_diffs = {
+        depth: margins[depth + 1] - margins[depth] for depth in depths
+    }
+    retention_drop_minus_2_continuation_drops = {
+        depth: (retentions[depth] - retentions[depth + 1])
+        - 2 * (continuations[depth] - continuations[depth + 1])
+        for depth in depths
+    }
+    margin_step_matches = {
+        depth: margin_step_diffs[depth]
+        == retention_drop_minus_2_continuation_drops[depth]
+        for depth in depths
+    }
     positive_depths = [depth for depth in depths if margins[depth] > 0]
     blocks = consecutive_blocks(positive_depths)
     frontier = positive_depths[0] if positive_depths else -1
@@ -334,6 +351,21 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         local_island_pressure_decay_details=";".join(
             local_island_pressure_decay_details
         ),
+        margin_step_diff=join_pairs(
+            [(depth, margin_step_diffs[depth]) for depth in depths]
+        ),
+        retention_drop_minus_2_continuation_drop=join_pairs(
+            [
+                (depth, retention_drop_minus_2_continuation_drops[depth])
+                for depth in depths
+            ]
+        ),
+        margin_step_matches_net_drop=";".join(
+            f"{depth}:{int(margin_step_matches[depth])}" for depth in depths
+        ),
+        margin_step_identity_failure_count=sum(
+            1 for depth in depths if not margin_step_matches[depth]
+        ),
         margin_profile=join_pairs([(depth, margins[depth]) for depth in depths]),
         retention_profile=join_pairs([(depth, retentions[depth]) for depth in depths]),
         continuation_profile=join_pairs(
@@ -454,6 +486,9 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         ),
         default=0,
     )
+    rows_with_margin_step_identity_failure = sum(
+        1 for row in rows if row.margin_step_identity_failure_count > 0
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -514,6 +549,8 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"- largest continuation drop: `{max_continuation_drop}`",
         "- largest retention drop minus 2 continuation drop: "
         f"`{max_retention_drop_minus_2_continuation_drop}`",
+        "- rows_with_margin_step_identity_failure: "
+        f"`{rows_with_margin_step_identity_failure}`",
         f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         f"- all-ones depth first counts: `{markdown_kv_counter(all_ones_first_counts)}`",
         f"- all-ones depth mode counts: `{markdown_kv_counter(all_ones_mode_counts)}`",
