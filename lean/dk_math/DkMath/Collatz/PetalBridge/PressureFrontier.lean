@@ -1120,6 +1120,68 @@ theorem sourcePressureIntervalPulse_right
   h.2.2
 
 /--
+Constructor for an interval pressure pulse from its three advertised pieces.
+
+This is intentionally just packaging.  It does not assert maximality,
+uniqueness, coverage by runs, or any prefix behavior.
+-/
+theorem sourcePressureIntervalPulse_of_run_boundaries
+    {n : OddNat} {k r a len : ℕ}
+    (hrun : SourcePressureRun n k r a len)
+    (hleft : SourcePressureRunHasLeftCrossing n k r a len)
+    (hright : SourcePressureRunHasRightFall n k r a len) :
+    SourcePressureIntervalPulse n k r a len :=
+  ⟨hrun, hleft, hright⟩
+
+/-- Extract the positive left-boundary guard from an interval pulse. -/
+theorem sourcePressureIntervalPulse_left_pos
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    0 < a :=
+  (sourcePressureIntervalPulse_left h).1
+
+/-- Extract the left sign-change from an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_left_signChange
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureSignChangeUp n k r (a - 1) :=
+  (sourcePressureIntervalPulse_left h).2
+
+/-- Extract the right sign-change from an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_right_signChange
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureSignChangeDown n k r (a + len - 1) :=
+  sourcePressureIntervalPulse_right h
+
+/--
+Extract the left net-drop crossing form from an interval pressure pulse.
+-/
+theorem sourcePressureIntervalPulse_left_crossing
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureMarginInt n k (r + (a - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (a - 1)) +
+          SourcePressureNetDropInt n k r (a - 1) :=
+  (sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
+      n k r (a - 1)).1
+    (sourcePressureIntervalPulse_left_signChange h)
+
+/--
+Extract the right net-drop falling form from an interval pressure pulse.
+-/
+theorem sourcePressureIntervalPulse_right_falling
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    0 < SourcePressureMarginInt n k (r + (a + len - 1)) ∧
+      SourcePressureMarginInt n k (r + (a + len - 1)) +
+        SourcePressureNetDropInt n k r (a + len - 1) ≤ 0 :=
+  (sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls
+      n k r (a + len - 1)).1
+    (sourcePressureIntervalPulse_right_signChange h)
+
+/--
 A local pressure island is an interval pulse of length one.
 
 This is the singleton bridge from checkpoint-140 pulses to checkpoint-141
