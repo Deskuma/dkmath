@@ -89,6 +89,10 @@ class PressureSignPatternRow:
     local_pressure_pulse_positions: str
     local_pressure_pulse_count: int
     local_island_to_pulse_failure_count: int
+    interval_pulse_blocks: str
+    interval_pulse_count: int
+    positive_block_without_left_crossing_count: int
+    positive_block_without_right_fall_count: int
     margin_profile: str
     retention_profile: str
     continuation_profile: str
@@ -317,6 +321,21 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         and crossing_flags[depth - 1]
         and falling_flags[depth]
     ]
+    interval_pulse_blocks = [
+        (start, end)
+        for start, end in blocks
+        if start > r_start
+        and crossing_flags[start - 1]
+        and falling_flags[end]
+    ]
+    positive_block_without_left_crossing_count = sum(
+        1
+        for start, _end in blocks
+        if start > r_start and not crossing_flags[start - 1]
+    )
+    positive_block_without_right_fall_count = sum(
+        1 for _start, end in blocks if not falling_flags[end]
+    )
     sign_change_details: list[str] = []
     sign_change_pressure_decay_details: list[str] = []
     sign_change_labels: list[str] = []
@@ -485,6 +504,14 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         local_island_to_pulse_failure_count=sum(
             1 for depth in local_islands if depth not in local_pressure_pulses
         ),
+        interval_pulse_blocks=join_blocks(interval_pulse_blocks),
+        interval_pulse_count=len(interval_pulse_blocks),
+        positive_block_without_left_crossing_count=(
+            positive_block_without_left_crossing_count
+        ),
+        positive_block_without_right_fall_count=(
+            positive_block_without_right_fall_count
+        ),
         margin_profile=join_pairs([(depth, margins[depth]) for depth in depths]),
         retention_profile=join_pairs([(depth, retentions[depth]) for depth in depths]),
         continuation_profile=join_pairs(
@@ -636,6 +663,17 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     rows_with_local_island_to_pulse_failure = sum(
         1 for row in rows if row.local_island_to_pulse_failure_count > 0
     )
+    rows_with_interval_pulse = sum(
+        1 for row in rows if row.interval_pulse_count > 0
+    )
+    rows_with_positive_block_without_left_crossing = sum(
+        1 for row in rows
+        if row.positive_block_without_left_crossing_count > 0
+    )
+    rows_with_positive_block_without_right_fall = sum(
+        1 for row in rows
+        if row.positive_block_without_right_fall_count > 0
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -714,6 +752,14 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"- rows_with_local_pressure_pulse: `{rows_with_local_pressure_pulse}`",
         "- rows_with_local_island_to_pulse_failure: "
         f"`{rows_with_local_island_to_pulse_failure}`",
+        f"- rows_with_interval_pulse: `{rows_with_interval_pulse}`",
+        "- rows_with_positive_block_without_left_crossing: "
+        f"`{rows_with_positive_block_without_left_crossing}`",
+        "- rows_with_positive_block_without_right_fall: "
+        f"`{rows_with_positive_block_without_right_fall}`",
+        "- interval-pulse convention: left crossing is checked only for blocks "
+        "with `start > r_start`; blocks beginning at the observed left boundary "
+        "do not expose their previous depth in this scan.",
         f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         f"- all-ones depth first counts: `{markdown_kv_counter(all_ones_first_counts)}`",
         f"- all-ones depth mode counts: `{markdown_kv_counter(all_ones_mode_counts)}`",
