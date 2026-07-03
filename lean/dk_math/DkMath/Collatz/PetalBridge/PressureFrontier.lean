@@ -591,6 +591,22 @@ theorem sourcePressureSignChangeUp_of_localIsland
     have hidx : r + (j - 1) + 1 = r + j := by omega
     simpa [hidx] using hpos
 
+/--
+A local pressure island gives a strict margin jump at its left edge.
+
+Checkpoint 133 reads local islands as pressure-depth decay imbalance witnesses.
+This theorem is still margin-only: it does not yet choose a retention or
+continuation drop decomposition, but it gives the exact interface that such a
+future `PressureDecayProfile` should refine.
+-/
+theorem sourcePressureMargin_lt_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginInt n k (r + (j - 1)) <
+      SourcePressureMarginInt n k (r + (j - 1) + 1) :=
+  sourcePressureMargin_lt_of_signChangeUp n k r (j - 1)
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
     (n : OddNat) (k r len : ℕ) :
