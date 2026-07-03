@@ -320,7 +320,7 @@ index 091c2156..ef8f93ef 100644
 @@ -309,5 +309,119 @@ theorem petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
      (petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod I hdata)
      (petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN I hGN0 hdata)
- 
+
 +/--
 +Direct PrimitiveBeam-to-ABC support-mass count lower bound in body coordinates.
 +
@@ -447,7 +447,7 @@ index bd2dd1e7..a1be0647 100644
    -> 2^(selected index count) <= supportMass/rad GN
 +  -> PrimitiveBeam/Zsigmondy families directly supply the same count bound
  ```
- 
+
  Core theorem names:
 @@ -944,6 +945,10 @@ petalCarrierLabelMapData_two_pow_card_le_supportMass_GN
  petalNoLiftCarrierLabelMapData_two_pow_card_le_supportMass_GN
@@ -458,7 +458,7 @@ index bd2dd1e7..a1be0647 100644
 +petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 +petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
  ```
- 
+
  NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index d4672f1e..31dcce0d 100644
@@ -473,7 +473,7 @@ index d4672f1e..31dcce0d 100644
 +petal_two_pow_card_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family
 +petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
  ```
- 
+
  The bridge reads Petal carrier-label data as ABC finite support:
 @@ -420,3 +424,19 @@ PetalCarrierLabelMapData on I
  This is the ABC analogue of the Erdos finite-family count spine.  It gives a

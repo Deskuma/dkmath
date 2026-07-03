@@ -15,11 +15,11 @@ Lean 側は重くせず、scan を受ける薄い分類 API だけ入れまし�
 Docs は README、Guide、Status を同期し、新規に [Collatz-PressureSignPatternScan-130.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureSignPatternScan-130.md:1) と [report-petal-130.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-130.md:1) を追加しました。次は `residual_mod_16/32` と frontier/block/island の aggregate correlation scan が自然です。
 
 検証:
-`python3 ...pressure_sign_pattern_scan.py --max-n 2047 --steps 64 --r-start 2 --depth-len 10` passed  
-`lake build DkMath.Collatz.PetalBridge` passed  
-`lake build DkMath.Collatz.Collatz2K26` passed  
-対象 Collatz 2ファイルの `sorry` scan はヒットなし  
-`git diff --check` passed  
+`python3 ...pressure_sign_pattern_scan.py --max-n 2047 --steps 64 --r-start 2 --depth-len 10` passed
+`lake build DkMath.Collatz.PetalBridge` passed
+`lake build DkMath.Collatz.Collatz2K26` passed
+対象 Collatz 2ファイルの `sorry` scan はヒットなし
+`git diff --check` passed
 既存の unrelated warning として `ZsigmondyCyclotomicResearch.lean:152` の `sorry` 警告は継続しています。
 
 ## Review
@@ -569,7 +569,7 @@ index a44bd916..6f6c1cd8 100644
 @@ -7202,6 +7202,97 @@ theorem sourcePressureLocalIsland_iff_margin
          (isSourcePressureDepth_iff_margin_pos n k r (j + 1)).1 hnext
        omega
- 
+
 +/--
 +A consecutive block of positive source-pressure depths.
 +
@@ -679,7 +679,7 @@ index 4e4c5757..30d88424 100644
 +ExistsSourcePressureFrontierBelow
 +existsSourcePressureFrontierBelow_iff_margin
  ```
- 
+
  The central No.100 layer is:
 @@ -225,6 +231,8 @@ docs/Collatz-GnomonEvaluation-125.md
  docs/Collatz-GnomonResidualShape-126.md
@@ -697,7 +697,7 @@ index 145e8d86..e78ee74a 100644
 @@ -298,6 +298,20 @@ sourcePressureLocalIsland_iff_margin
  These are observation predicates for margin sign profiles.  They should be
  used to classify pressure islands before proposing any new monotonicity theorem.
- 
+
 +Checkpoint 130 adds thin sign-pattern classification handles:
 +
 +```lean
@@ -713,7 +713,7 @@ index 145e8d86..e78ee74a 100644
 +uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index ce728208..eba153f3 100644
@@ -722,7 +722,7 @@ index ce728208..eba153f3 100644
 @@ -201,6 +201,38 @@ sourcePressureLocalIsland_iff_margin
  This keeps pressure-island language on the margin-sign surface rather than
  turning it into an unsupported prefix theorem.
- 
+
 +Checkpoint 130 adds a Python pressure sign-pattern scan and thin Lean
 +classification handles:
 +
@@ -756,7 +756,7 @@ index ce728208..eba153f3 100644
 +blocks are common, but local islands and sign-change-up rows are real.
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureSignPatternScan-130.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureSignPatternScan-130.md
 new file mode 100644

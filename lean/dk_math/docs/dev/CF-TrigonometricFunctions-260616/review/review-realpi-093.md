@@ -310,7 +310,7 @@ index 05f8f24f..a107ca71 100644
 +uniform-average, and trapezoidal corollaries. Thus the centered logarithmic
 +correction is already controlled by finite centered quadratic moments, before
 +any Gaussian, integral, or `pi` interpretation is selected.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -320,7 +320,7 @@ index 096a6350..521c2948 100644
 @@ -119,6 +119,10 @@ def centeredLogPhaseDepth (t : ℝ) : ℝ :=
  def dyadicPhaseCenteredLogDepth (n k : ℕ) : ℝ :=
    centeredLogPhaseDepth (dyadicPhaseNode n k)
- 
+
 +/-- Dyadic samples of the centered quadratic upper-bound profile. -/
 +def dyadicPhaseCenteredQuadratic (n k : ℕ) : ℝ :=
 +  4 * (dyadicPhaseNode n k - (1 / 2 : ℝ)) ^ 2
@@ -331,7 +331,7 @@ index 096a6350..521c2948 100644
 @@ -197,6 +201,56 @@ theorem centeredLogPhaseDepth_le_four_sq (t : ℝ) :
    have hlog := Real.log_le_sub_one_of_pos hpos
    nlinarith
- 
+
 +/-- Dyadic centered log-depth samples are nonnegative. -/
 +theorem dyadicPhaseCenteredLogDepth_nonneg (n k : ℕ) :
 +    0 ≤ dyadicPhaseCenteredLogDepth n k :=
@@ -388,7 +388,7 @@ index 096a6350..521c2948 100644
 @@ -609,11 +663,97 @@ def dyadicPhaseMeshWeightedCenteredLogDepthSum (n : ℕ) : ℝ :=
    ∑ k ∈ dyadicPhaseNodeIndices n,
      dyadicPhaseMeshWeight n * dyadicPhaseCenteredLogDepth n k
- 
+
 +/-- Plain mesh-width finite sum of centered quadratic observations. -/
 +def dyadicPhaseMeshWeightedCenteredQuadraticSum (n : ℕ) : ℝ :=
 +  ∑ k ∈ dyadicPhaseNodeIndices n,
@@ -408,7 +408,7 @@ index 096a6350..521c2948 100644
  def dyadicPhaseTrapezoidCenteredLogDepthSum (n : ℕ) : ℝ :=
    ∑ k ∈ dyadicPhaseNodeIndices n,
      dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredLogDepth n k
- 
+
 +/-- Trapezoidal finite sum of centered quadratic observations. -/
 +def dyadicPhaseTrapezoidCenteredQuadraticSum (n : ℕ) : ℝ :=
 +  ∑ k ∈ dyadicPhaseNodeIndices n,
@@ -509,7 +509,7 @@ index 8dd70a29..78934906 100644
 +only: it prepares the next moment calculation, but it does not yet assert a
 +closed form, a limiting integral, a Gaussian law, or a `pi` identification.
  endpoint increments expose the correction term.
- 
+
  The first centered observable is now implemented. `centeredLogPhaseDepth`
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 7318c96a..2fb22a52 100644
@@ -518,7 +518,7 @@ index 7318c96a..2fb22a52 100644
 @@ -38,6 +38,14 @@ The core-zero semantic action is then identified with the standard coordinate
  quarter-turn linear isometry `(x,y) ↦ (-y,x)`. This introduces the geometric
  name only after the linear isometry model is available.
- 
+
 +`SemanticCF2DLogComposition` now supplies the finite logarithmic comparison
 +surface for dyadic phase samples. The centered log-depth increment is
 +identified with `log (1 + 4 * (t - 1/2)^2)`, is pointwise nonnegative, and is
@@ -528,7 +528,7 @@ index 7318c96a..2fb22a52 100644
 +Gaussian, integral, angle, or `pi` interpretation is selected here.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index c2c90c4d..41ea51a0 100644

@@ -915,7 +915,7 @@ index 88860ab2..f9bd59da 100644
 @@ -954,6 +954,28 @@ noncomputable def orbitWindowResidueCountMod4EqThreeTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `3 mod 8`.
 +
@@ -940,11 +940,11 @@ index 88860ab2..f9bd59da 100644
 +
  /--
  Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
- 
+
 @@ -3395,6 +3417,30 @@ theorem orbitWindowHeightCountGeTail_two_eq_tailResidueCount_mod4_eq_one
            exact hheight (hiff.mpr h)
          simp [ih, hheight, hres]
- 
+
 +/--
 +At parent depth `1`, shifted-tail recovery sibling mass is exactly the
 +shifted-tail `1 mod 4` cell.
@@ -975,7 +975,7 @@ index 88860ab2..f9bd59da 100644
 @@ -3770,6 +3816,32 @@ theorem tailRetentionMass_depth_two_le_heightCountEq_one
        orbitWindowHeightCountEqTail n k 1 := by
    rw [tailRetentionMass_depth_two_eq_heightCountEq_one]
- 
+
 +/--
 +At parent depth `2`, shifted-tail recovery sibling mass is exactly the
 +shifted-tail `3 mod 8` cell.
@@ -1004,11 +1004,11 @@ index 88860ab2..f9bd59da 100644
 +
  /--
  The shifted tail splits into exact height `1` and height at least `2`.
- 
+
 @@ -3833,6 +3905,38 @@ theorem orbitWindowHeight_eq_one_iff_mod_eight_eq_three_or_seven
      | inr hSeven =>
          omega
- 
+
 +/--
 +The shifted-tail exact-height-one reservoir splits into the delayed-peeling
 +color `3 mod 8` and the continuing color `7 mod 8`.
@@ -1043,11 +1043,11 @@ index 88860ab2..f9bd59da 100644
 +
  /--
  Orbit-level transition from the `3 mod 8` height-one channel.
- 
+
 @@ -4105,6 +4209,40 @@ theorem orbitWindowNextHeight_two_le_of_mod_eight_eq_three
    apply (orbitWindowHeight_two_le_iff_mod_four_eq_one n (i + 1)).mpr
    exact oddOrbitLabel_succ_mod_four_eq_one_of_mod_eight_eq_three n i hmod
- 
+
 +/--
 +Every shifted-tail `3 mod 8` entry contributes a shifted-tail `height >= 2`
 +entry one step later.
@@ -1088,7 +1088,7 @@ index 88860ab2..f9bd59da 100644
 @@ -4312,6 +4450,28 @@ theorem orbitWindowRecoveryMass_forces_tailRecovery
        orbitWindowRecoverySiblingMassPow2Tail n k r :=
    orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass r hr n k
- 
+
 +/--
 +Source recovery mass at parent depth `3` lands in the shifted-tail delayed
 +`3 mod 8` color.
@@ -1113,11 +1113,11 @@ index 88860ab2..f9bd59da 100644
 +
  /--
  Count-level recursive Petal transition for the continuation sibling.
- 
+
 @@ -4465,6 +4625,23 @@ theorem sourceContinuationMass_depth_two_le_tailHeightCountEq_one
      tailRetentionMass_depth_two_le_heightCountEq_one n k
    simpa using le_trans hflow hheight
- 
+
 +/--
 +Source continuation mass at parent depth `2` enters the shifted-tail
 +exact-height-one reservoir, which splits into the delayed `3 mod 8` color and
@@ -1141,7 +1141,7 @@ index 88860ab2..f9bd59da 100644
 @@ -5202,6 +5379,25 @@ theorem orbitWindowResidueCountMod8EqThree_delayed_drift_strong
        (orbitWindowResidueCountMod8EqThree_le_tailHeightCountGe_two n k) (k + 1))
      (orbitWindowHeightSeq_sum_ge_succ_window_add_tailCountGe_two n k)
- 
+
 +/--
 +Tail-facing delayed-drift theorem from the shifted-tail `3 mod 8` channel.
 +
@@ -1163,7 +1163,7 @@ index 88860ab2..f9bd59da 100644
 +
  /--
  Residue-address drift bridge.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index 9a3916b9..ffa9361e 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -1183,7 +1183,7 @@ index 241916cd..3532dbb5 100644
 @@ -794,6 +794,82 @@ So the next height-growth attempt should inspect the recovery sibling or a
  deeper delayed branch, rather than using depth-2 continuation retention as an
  extra-peeling source.
- 
+
 +## Recovery And Delayed Branch
 +
 +Checkpoint 115 follows the correction from checkpoint 114 and separates two
@@ -1261,7 +1261,7 @@ index 241916cd..3532dbb5 100644
 +```
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index ca0bf848..8b2611d6 100644

@@ -256,31 +256,31 @@ index 16978094..f35740b1 100644
 @@ -31,8 +31,9 @@ Public entry point for the complete Route B algebraic checkpoint:
  * `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
  * `DkReal.Semantic` begins the noncomputable bridge to Mathlib's `Real`.
- 
+
 -All endpoint operations in this import tree remain computable. No represented
 -limit in Mathlib's `Real` or `NNReal` is selected here.
 +All endpoint operations in the representation modules remain computable. The
 +publicly imported optional `Semantic` module selects a Mathlib `Real` value
 +noncomputably; it does not alter the computable representation operations.
- 
+
  `DkReal.Order` defines a quotient-compatible asymptotic order and installs a
  `PartialOrder` and Mathlib's semiring-level `IsOrderedRing` predicate on
 @@ -68,12 +69,12 @@ a linear order.
  decision procedure for asymptotic interval order is currently available.
  Classical comparison should therefore remain an explicit local choice.
- 
+
 -`DkReal.Semantic` now selects the lower-endpoint supremum and proves that it
 -lies in every approximation interval.
 +`DkReal.Semantic` selects the lower-endpoint supremum, proves that it is the
 +unique real point lying in every approximation interval, and proves invariance
 +under representation equivalence.
- 
+
 -[TODO: semantic-bridge] Prove that semantic evaluation is independent of
 -representatives, then lift it to `DkNNRealQ` and establish arithmetic and order
 -bridge laws.
 +[TODO: semantic-bridge] Lift semantic evaluation to `DkNNRealQ` and establish
 +arithmetic and order bridge laws.
- 
+
  [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean
@@ -290,15 +290,15 @@ index bf310158..4c39c9bf 100644
 @@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.Analysis.DkReal.Equiv
 +import DkMath.Analysis.DkReal.DkNNRealQ
- 
+
  #print "file: DkMath.Analysis.DkReal.Semantic"
- 
+
 @@ -20,14 +20,12 @@ endpoint bounds it. Consequently the supremum lies in every approximation
  interval.
- 
+
  This file deliberately stops before quotient descent and arithmetic
 -preservation. Those require representative independence of `semanticValue`.
 -
@@ -306,19 +306,19 @@ index bf310158..4c39c9bf 100644
 -`DkReal.Equiv x y -> semanticValue x = semanticValue y`.
 +preservation. Representative independence of `semanticValue` is proved here
 +as the final representation-level bridge.
- 
+
  [TODO: semantic/quotient] Lift the value through `DkNNRealQ`, then prove
 -preservation of zero, one, addition, nonnegative multiplication, powers, and
 -order.
 +preservation of nonnegative multiplication, powers, and order. Quotient
 +descent, rational constants, and addition are established below.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -42,6 +40,10 @@ def lowerReal (x : DkMath.Analysis.DkReal) (n : ℕ) : ℝ :=
  def upperReal (x : DkMath.Analysis.DkReal) (n : ℕ) : ℝ :=
    (x.interval n).hi
- 
+
 +/-- Width of an approximation interval, interpreted in Mathlib's `Real`. -/
 +def widthReal (x : DkMath.Analysis.DkReal) (n : ℕ) : ℝ :=
 +  upperReal x n - lowerReal x n
@@ -329,7 +329,7 @@ index bf310158..4c39c9bf 100644
 @@ -97,11 +99,153 @@ theorem semanticValue_mem_interval
      semanticValue x ∈ Set.Icc (lowerReal x n) (upperReal x n) :=
    ⟨lowerReal_le_semanticValue x n, semanticValue_le_upperReal x n⟩
- 
+
 +/-- Cast interval widths tend to zero. -/
 +theorem tendsto_widthReal_zero (x : DkMath.Analysis.DkReal) :
 +    Filter.Tendsto (widthReal x) Filter.atTop (nhds 0) := by
@@ -344,7 +344,7 @@ index bf310158..4c39c9bf 100644
  theorem tendsto_lowerReal_semanticValue (x : DkMath.Analysis.DkReal) :
      Filter.Tendsto (lowerReal x) Filter.atTop (nhds (semanticValue x)) := by
    exact tendsto_atTop_ciSup (lowerReal_monotone x) (bddAbove_range_lowerReal x)
- 
+
 +/--
 +The semantic value is the unique real point contained in every approximation
 +interval.
@@ -427,7 +427,7 @@ index bf310158..4c39c9bf 100644
 +  · simpa [upperReal, add_interval, addApprox] using add_le_add hx.2 hy.2
 +
  end
- 
+
  end DkMath.Analysis.DkReal
 +
 +namespace DkMath.Analysis.DkNNRealQ
@@ -485,7 +485,7 @@ index bacfe9ab..07175bac 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -123,8 +123,9 @@ Order:
- 
+
  BridgeNNReal / BridgeReal:
    semanticValue now selects the lower-endpoint supremum
 -  next prove representative independence and uniqueness
@@ -495,22 +495,22 @@ index bacfe9ab..07175bac 100644
 +  next prove multiplication, powers, and order bridge laws
    compare semantic equality with DkReal.Equiv
  ```
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
 index 55714625..40adf995 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
 @@ -36,14 +36,19 @@ DkReal representation
  ## Current Implementation Step
- 
+
  `DkMath.Analysis.DkReal.Semantic` implements the lower-endpoint supremum,
 -boundedness, interval membership, and monotone convergence.
 +boundedness, interval membership, width convergence, uniqueness, monotone
 +endpoint convergence, and invariance under `DkReal.Equiv`.
- 
+
 -The next obligation is representative independence. It should use:
 +The next obligation is quotient descent:
- 
+
  ```text
 -equiv_tendsto_lo_sub_zero
 -tendsto_lowerReal_semanticValue
@@ -523,7 +523,7 @@ index 55714625..40adf995 100644
 +map_pow
 +order preservation and reflection
  ```
- 
+
  No global decidable comparison or `LinearOrder` instance is needed.
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 42589462..281b7a14 100644

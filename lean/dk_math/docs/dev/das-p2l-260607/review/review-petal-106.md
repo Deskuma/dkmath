@@ -784,7 +784,7 @@ index b1b1f12c..2a6fef01 100644
 @@ -1933,6 +1933,143 @@ theorem tailRecovery_atMostRatio_one_one_retention
    apply atMostRatioNat_one_one_of_le
    exact orbitWindowRecoverySiblingMassPow2Tail_le_retentionMassTail n k r
- 
+
 +/--
 +Source comparison predicate: recovery mass dominates continuation mass.
 +
@@ -938,7 +938,7 @@ index 0133d74f..7651efe2 100644
  docs/Collatz-PetalBridge-Status.md
  ```
 @@ -283,3 +284,18 @@ orbitWindowContinuationMass_tailBudget
- 
+
  This still does not prove contraction.  It records exactly what local comparison
  is enough to obtain a finite `AtMostHalf` statement.
 +
@@ -1155,7 +1155,7 @@ index c6819cf8..e72ffd37 100644
 @@ -328,6 +328,31 @@ These do not prove the comparison condition.  They make the next target
  explicit: find a structural reason why continuation is no larger than recovery,
  or why recovery covers at least half of retention.
- 
+
 +## Comparison Predicates
 +
 +Checkpoint 105 names the missing comparison conditions:
@@ -1182,7 +1182,7 @@ index c6819cf8..e72ffd37 100644
 +wants to consume it without unfolding recovery/continuation counts.
 +
  This is the theorem to reach for before writing a custom induction over `k`.
- 
+
  ## Recursive Petal Residues
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 3c1dafd1..5634b157 100644

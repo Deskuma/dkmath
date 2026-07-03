@@ -468,16 +468,16 @@ index 1a88561d..9638d33d 100644
  import DkMath.Petal.ErdosBridge
  import DkMath.Petal.Obstruction
 +import DkMath.Petal.ABCBridge
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -48,6 +49,7 @@ basic forms / relative polygon vocabulary
    -> squarefree GN3 valuation bridge
    -> Erdos log-capacity bridge from GN carrier channels
    -> obstruction lemmas marking route-breaking assumptions
 +  -> ABC supportMass/rad bridge from Petal carrier-label support
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/ABCBridge.lean b/lean/dk_math/DkMath/Petal/ABCBridge.lean
 new file mode 100644
@@ -643,7 +643,7 @@ index 67f28341..19ff50ce 100644
 @@ -910,6 +910,33 @@ therefore labels are injective and duplicate-free on the finite family
  The corresponding obstruction theorem fires when a candidate route tries to
  reuse the same selected prime label at two distinct indices.
- 
+
 +### ABC Bridge
 +
 +`DkMath.Petal.ABCBridge` is the first support/rad negotiation layer:
@@ -672,14 +672,14 @@ index 67f28341..19ff50ce 100644
 +obstruction routes.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index 7ea809f1..c015cdac 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 @@ -363,3 +363,34 @@ ABC consumes distinct support/rad growth.
- 
+
  False lemmas are the guardrails.  They are not dead ends to hide; they are
  records of the assumptions that make a route impossible.
 +

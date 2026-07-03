@@ -668,7 +668,7 @@ index 8dcdb4e9..f9d74cc4 100644
 @@ -1770,6 +1770,69 @@ theorem orbitWindowContinuationSiblingMassPow2_le_retentionMass
    rw [orbitWindowRetentionMass_split]
    omega
- 
+
 +/--
 +Depth refinement for generic shifted-tail residue counts.
 +
@@ -738,7 +738,7 @@ index 8dcdb4e9..f9d74cc4 100644
 @@ -2716,6 +2779,18 @@ theorem orbitWindowRecoverySiblingMass_succ_le_tailRecoverySiblingMass
    unfold orbitWindowRecoverySiblingMassPow2 orbitWindowRecoverySiblingMassPow2Tail
    exact orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
- 
+
 +/--
 +Forcing-name alias for the recovery channel-flow theorem.
 +
@@ -753,11 +753,11 @@ index 8dcdb4e9..f9d74cc4 100644
 +
  /--
  Count-level recursive Petal transition for the continuation sibling.
- 
+
 @@ -2779,6 +2854,41 @@ theorem orbitWindowContinuationSiblingMass_succ_le_tailRetentionMass
    unfold orbitWindowContinuationSiblingMassPow2 orbitWindowRetentionMassPow2Tail
    exact orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_helper r hr n k
- 
+
 +/--
 +Forcing-name alias for the continuation channel-flow theorem.
 +
@@ -840,7 +840,7 @@ index 47c6bb71..ceaa90bb 100644
 @@ -267,6 +267,33 @@ Use this theorem when an argument needs to show that recovery and continuation
  are not independent extra mass.  They are the two subcells of the previous
  retention cylinder.
- 
+
 +Checkpoint 103 adds the shifted-tail counterpart:
 +
 +```lean
@@ -869,7 +869,7 @@ index 47c6bb71..ceaa90bb 100644
 +argument is about decomposing a retention cylinder into its two child cells.
 +
  This is the theorem to reach for before writing a custom induction over `k`.
- 
+
  ## Recursive Petal Residues
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 2b9a3743..10ec37e6 100644

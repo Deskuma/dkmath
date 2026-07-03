@@ -236,7 +236,7 @@ index 5e62e524..5a311213 100644
 @@ -754,6 +754,34 @@ theorem semanticKernelPower_three_beam (r : UnitKernel DkNNRealQ) :
      Vec.star, UnitKernel.one, Vec.one]
    ring
- 
+
 +/--
 +The core coordinate of the fourth kernel power is
 +`C^4 - 6*C^2*S^2 + S^4`.
@@ -271,7 +271,7 @@ index 5e62e524..5a311213 100644
 @@ -880,6 +908,69 @@ theorem semanticKernelFiniteOrder_three_iff_core_eq_one
    rw [semanticKernelFiniteOrder_three_iff_identity,
      semanticIdentityKernel_iff_core_eq_one]
- 
+
 +/--
 +Product order dividing four is characterized by a boundary core coordinate:
 +the transported kernel has semantic core `1` or semantic core `0`.
@@ -368,12 +368,12 @@ index 45eb2662..a5b20a82 100644
  semanticKernelFiniteOrder_three_iff_core_eq_one
 +semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -214,6 +217,22 @@ unit-square equation gives `C^2 = 1/4` and `S^2 = 3/4`; nonnegativity gives
  orders dividing one, two, or three all force semantic identity. This concerns
  order dividing the displayed integer, not an assertion of exact order.
- 
+
 +Order dividing four is the first classification with a nonidentity branch.
 +The fourth-power core polynomial, together with the square of the unit
 +equation, forces `C^2*S^2 = 0`. Coordinate nonnegativity then gives:
@@ -400,7 +400,7 @@ index 008ebf49..c450a40c 100644
 @@ -212,6 +212,23 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 05:15 JST (Order dividing four classification)
 +
 +1. 実施:
@@ -419,7 +419,7 @@ index 008ebf49..c450a40c 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 05:02 JST (Order dividing three classification)
- 
+
  1. 実施:
 ````
 `````

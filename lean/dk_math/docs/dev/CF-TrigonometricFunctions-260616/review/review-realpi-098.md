@@ -425,7 +425,7 @@ index 9809555b..8f12c33b 100644
 @@ -21,6 +21,13 @@ The intention is not to redefine `Real.pi` prematurely. It is to construct an
  independent normalization constant from the transition mechanism and
  eventually prove a bridge theorem identifying it with `Real.pi`.
- 
+
 +The Euclidean bridge now names the first external angle as
 +`semanticQuarterTurnAngle`. This value is definitionally `Real.pi / 2`, but
 +its role is deliberately interpretive: the algebraic four-state action is
@@ -434,12 +434,12 @@ index 9809555b..8f12c33b 100644
 +bridge, not a derivation of `pi`.
 +
  ## Proven Starting Point
- 
+
  For a semantic core-zero kernel, one affine transition is
 @@ -97,6 +104,22 @@ theorem, not inserted as notation.
- 
+
  ## Formal Milestones
- 
+
 +### Milestone 0: first angle reading - implemented
 +
 +`EuclideanPhase.lean` now packages the existing quarter-turn comparison as a
@@ -457,7 +457,7 @@ index 9809555b..8f12c33b 100644
 +as `theta = pi / 2`.
 +
  ### Milestone A: continuous four-edge loop - implemented
- 
+
  1. The real CF2D target carries the topology induced from `Real × Real`.
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index 27565e4d..99e7f424 100644
@@ -466,7 +466,7 @@ index 27565e4d..99e7f424 100644
 @@ -353,6 +353,35 @@ theorem rotation_pi_div_two_eq_quarterTurn :
    rw [euclideanPlaneOrientation.rotation_pi_div_two,
      rightAngleRotation_eq_quarterTurn]
- 
+
 +/--
 +The first Euclidean angle attached to the semantic four-state action.
 +
@@ -497,12 +497,12 @@ index 27565e4d..99e7f424 100644
 +  simpa [semanticQuarterTurnAngle] using rotation_pi_div_two_eq_quarterTurn
 +
  end
- 
+
  end DkMath.CosmicFormula.Rotation.CF2D
 @@ -438,6 +467,25 @@ theorem pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two
    rw [pairToEuclideanPlane_semanticAct_of_core_eq_zero hcore,
      rotation_pi_div_two_eq_quarterTurn]
- 
+
 +/--
 +Under the Euclidean coordinate bridge, one semantic core-zero action is
 +rotation by the DkMath semantic quarter-turn angle.
@@ -523,7 +523,7 @@ index 27565e4d..99e7f424 100644
 +    pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two hcore z
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index e17ea5ae..006e264c 100644

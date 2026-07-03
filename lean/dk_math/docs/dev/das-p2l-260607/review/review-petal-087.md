@@ -609,7 +609,7 @@ index 7ddacac6..70e1a039 100644
 @@ -193,6 +193,14 @@ theorem odd_mod_four_eq_one_or_three
      m % 4 = 1 ∨ m % 4 = 3 := by
    omega
- 
+
 +/--
 +An odd natural number is in one of the four odd residue classes modulo `8`.
 +-/
@@ -624,7 +624,7 @@ index 7ddacac6..70e1a039 100644
 @@ -205,6 +213,16 @@ theorem three_le_v2_iff_eight_dvd
    simpa [v2] using
      (DkMath.ABC.padicValNat_le_iff_dvd Nat.prime_two hm 3)
- 
+
 +/--
 +The `v2` observation is at least `4` exactly when `16` divides the observed
 +nonzero natural.
@@ -641,7 +641,7 @@ index 7ddacac6..70e1a039 100644
 @@ -213,6 +231,14 @@ theorem rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne
      3 ≤ rawHeightLabel n ↔ 8 ∣ 3 * n + 1 := by
    exact three_le_v2_iff_eight_dvd (by omega : 3 * n + 1 ≠ 0)
- 
+
 +/--
 +Raw Collatz height is at least `4` exactly when `16` divides `3n + 1`.
 +-/
@@ -656,7 +656,7 @@ index 7ddacac6..70e1a039 100644
 @@ -228,6 +254,19 @@ theorem odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five
    · intro h
      omega
- 
+
 +/--
 +For an odd natural `m`, the condition `16 | 3m + 1` is the same as
 +`m % 16 = 5`.
@@ -676,7 +676,7 @@ index 7ddacac6..70e1a039 100644
 @@ -239,6 +278,50 @@ theorem orbitWindowHeight_three_le_iff_mod_eight_eq_five
    rw [rawHeightLabel_three_le_iff_eight_dvd_threeNPlusOne]
    exact odd_eight_dvd_three_mul_add_one_iff_mod_eight_eq_five (iterateT i n).2
- 
+
 +/--
 +`height >= 4` in the Collatz observation window is the same as the current odd
 +state label lying in residue class `5 mod 16`.
@@ -727,7 +727,7 @@ index 7ddacac6..70e1a039 100644
 @@ -400,6 +483,26 @@ noncomputable def orbitWindowResidueCountMod4EqThree
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n i % 4 = 3))
- 
+
 +/--
 +Number of in-window odd-state labels in residue class `1 mod 8`.
 +
@@ -750,11 +750,11 @@ index 7ddacac6..70e1a039 100644
 +
  /--
  Number of in-window odd-state labels in residue class `5 mod 8`.
- 
+
 @@ -410,6 +513,16 @@ noncomputable def orbitWindowResidueCountMod8EqFive
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n i % 8 = 5))
- 
+
 +/--
 +Number of in-window odd-state labels in residue class `7 mod 8`.
 +
@@ -767,11 +767,11 @@ index 7ddacac6..70e1a039 100644
 +
  /--
  Residue count inside a prefix of an ambient observation window.
- 
+
 @@ -464,6 +577,28 @@ theorem orbitWindowResidueCountMod4EqThree_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n i % 4 = 3)) (l := List.range k))
- 
+
 +/--
 +The mod `8 = 1` residue count is bounded by the window size.
 +-/
@@ -800,7 +800,7 @@ index 7ddacac6..70e1a039 100644
 @@ -475,6 +610,17 @@ theorem orbitWindowResidueCountMod8EqFive_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n i % 8 = 5)) (l := List.range k))
- 
+
 +/--
 +The mod `8 = 7` residue count is bounded by the window size.
 +-/
@@ -818,7 +818,7 @@ index 7ddacac6..70e1a039 100644
 @@ -770,6 +916,50 @@ theorem orbitWindowHeight_one_le
    simpa [s, threeNPlusOne] using
      v2_3n_plus_1_ge_1 (iterateT i n).1 (iterateT i n).2
- 
+
 +/--
 +The second exact Collatz height layer is residue class `1 mod 8`.
 +
@@ -869,7 +869,7 @@ index 7ddacac6..70e1a039 100644
 @@ -801,6 +991,77 @@ theorem orbitWindowHeight_eq_one_iff_mod_four_eq_three
        omega
      omega
- 
+
 +/--
 +Exact height `1` is the union of the two mod `8` channels `3` and `7`.
 +-/
@@ -947,7 +947,7 @@ index 7ddacac6..70e1a039 100644
 @@ -824,6 +1085,29 @@ theorem orbitWindowHeightCountEq_one_eq_residueCount_mod4_eq_three
            exact hheight (hiff.mpr h)
          simp [ih, hheight, hres]
- 
+
 +/--
 +Counting exact height `2` entries is the same as counting odd-state labels in
 +residue class `1 mod 8`.
@@ -977,7 +977,7 @@ index 7ddacac6..70e1a039 100644
 @@ -847,6 +1131,44 @@ theorem orbitWindowResidueCountMod4EqOne_add_eqThree_eq_window
            simp [hThree]
            omega
- 
+
 +/--
 +The four odd residue classes modulo `8` fill the whole observation window.
 +-/
@@ -1018,7 +1018,7 @@ index 7ddacac6..70e1a039 100644
 +
  /--
  The `height >= 1` occupation count fills the whole observation window.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 60d5252f..97563db7 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
@@ -1081,7 +1081,7 @@ index 60d5252f..97563db7 100644
 @@ -332,9 +352,18 @@ orbitWindowResidueCountMod4EqOne n k
  orbitWindowResidueCountMod4EqThree n k
    = number of odd orbit labels congruent to 3 modulo 4
- 
+
 +orbitWindowResidueCountMod8EqOne n k
 +  = number of odd orbit labels congruent to 1 modulo 8
 +
@@ -1090,7 +1090,7 @@ index 60d5252f..97563db7 100644
 +
  orbitWindowResidueCountMod8EqFive n k
    = number of odd orbit labels congruent to 5 modulo 8
- 
+
 +orbitWindowResidueCountMod8EqSeven n k
 +  = number of odd orbit labels congruent to 7 modulo 8
 +
@@ -1100,7 +1100,7 @@ index 60d5252f..97563db7 100644
 @@ -509,6 +538,32 @@ m <= residueCountMod8EqFive
    -> k + CountGe 2 + m <= sumS n k
  ```
- 
+
 +The exact mod `8` height partition is now also visible:
 +
 +```text
@@ -1129,10 +1129,10 @@ index 60d5252f..97563db7 100644
 +
  This is the intended bridge from a future residue/address occupation theorem
  to a Collatz drift lower bound.
- 
+
 @@ -553,10 +608,10 @@ The next safe steps are:
  The immediate residue candidates are:
- 
+
  ```text
 -transition map between residue classes under the accelerated map T
  general 2^r residue coordinate for height >= r
@@ -1141,7 +1141,7 @@ index 60d5252f..97563db7 100644
 +next-label formulation of the T transition using iterateT (i + 1)
 +count-level transition statistics for mod 8 height-one channels
  ```
- 
+
  The main caution is that Collatz state labels are not prime labels.  Any bridge
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-086.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-086.md
 new file mode 100644

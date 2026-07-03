@@ -361,7 +361,7 @@ index 97998e3e..10f11512 100644
 +then supplies the standard trapezoidal endpoint half-weight candidate. No
 +logarithmic quantity is yet selected as the canonical refinement-limit
 +observable.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -376,12 +376,12 @@ index 10681be0..80e0b866 100644
 +half-weight pattern as another finite observable, again without selecting a
 +limit.
  -/
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -88,6 +91,33 @@ theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
    exact Finset.sum_eq_zero fun k hk =>
      two_mul_log_dyadicPhaseNormalization_add_log_depth n k
- 
+
 +/--
 +Pointwise weighted finite logarithmic cancellation.
 +
@@ -411,11 +411,11 @@ index 10681be0..80e0b866 100644
 +
  /--
  The complete dyadic mesh has one more node than its dyadic denominator.
- 
+
 @@ -189,6 +219,56 @@ theorem two_mul_dyadicPhaseWeightedLogNormalizationSum_add_weightedLogDepthSum
        rw [two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum]
        simp
- 
+
 +/--
 +Trapezoidal weight on the complete finite dyadic node mesh.
 +
@@ -467,7 +467,7 @@ index 10681be0..80e0b866 100644
 +    n (dyadicPhaseTrapezoidWeight n)
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index ced68f27..9ec437cb 100644
@@ -476,7 +476,7 @@ index ced68f27..9ec437cb 100644
 @@ -216,6 +216,19 @@ canonical limit choices; they only make the candidate comparison surface
  explicit before trapezoidal, midpoint, or other weighted observables are
  tested.
- 
+
 +The finite comparison surface now also contains the pointwise weighted
 +cancellation principle
 +
@@ -491,7 +491,7 @@ index ced68f27..9ec437cb 100644
 +select the Gaussian-relevant normalization.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 4d444145..25654644 100644

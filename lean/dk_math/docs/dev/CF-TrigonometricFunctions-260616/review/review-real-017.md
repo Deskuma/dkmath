@@ -343,13 +343,13 @@ index df96ed8a..6185d04d 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Analysis.DkReal.Interval
  import DkMath.Analysis.DkReal.Basic
 +import DkMath.Analysis.DkReal.Pow
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Pow.lean b/lean/dk_math/DkMath/Analysis/DkReal/Pow.lean
 new file mode 100644
 index 00000000..9320f9f8
@@ -460,7 +460,7 @@ index 55ed52b3..37de6058 100644
 +++ b/lean/dk_math/DkMath/Analysis/TaylorBridge.lean
 @@ -99,11 +99,26 @@ theorem tendsto_powerDifferenceQuotient_zero
    exact (powerDifferenceQuotient_eq_gapGN_of_ne_zero d base delta hdelta_ne).symm
- 
+
  /--
 -Mathlib derivative theorem for natural powers, exposed through the `gapGN`
 -bridge.
@@ -486,7 +486,7 @@ index 55ed52b3..37de6058 100644
      HasDerivAt (fun y : ℝ => y ^ d) ((d : ℝ) * base ^ (d - 1)) base :=
 -  DkMath.CosmicFormula.hasDerivAt_pow_cosmic d base
 +  hasDerivAt_pow_from_gapGN_limit d base
- 
+
  end DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index b54246ae..1c5ecc6f 100644
@@ -495,7 +495,7 @@ index b54246ae..1c5ecc6f 100644
 @@ -47,6 +47,9 @@ DkMath.Analysis.DkReal.Interval
  DkMath.Analysis.DkReal.Basic
    nested rational intervals with widths tending to zero
- 
+
 +DkMath.Analysis.DkReal.Pow
 +  computable pointwise power approximations for nonnegative DkReal values
 +
@@ -504,7 +504,7 @@ index b54246ae..1c5ecc6f 100644
  ```
 @@ -229,3 +232,49 @@ exact algebraic factorization
  ```
- 
+
  The derivative is not used to define the kernel.
 +
 +`hasDerivAt_pow_from_gapGN_limit` now makes the last step explicit. It passes

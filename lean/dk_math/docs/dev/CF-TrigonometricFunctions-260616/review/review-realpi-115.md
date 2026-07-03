@@ -283,7 +283,7 @@ index 569c91c7..4f862609 100644
 +The first four indexed shifted level paths now concatenate to a closed
 +fixed-`q2` path object; the closing seam is supplied by the core-zero
 +four-step return law.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -293,7 +293,7 @@ index 332445c9..1ec39ac2 100644
 @@ -1008,6 +1008,112 @@ theorem shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
    apply Subtype.ext
    exact shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z k
- 
+
 +/-!
 +## Four indexed shifted paths
 +
@@ -406,7 +406,7 @@ index 332445c9..1ec39ac2 100644
 @@ -1021,19 +1127,20 @@ path and as a path internal to the fixed `q2` level set. Adjacent shifted
  edges share endpoint states, and the center of the shifted edge is the old
  seam state under the core-zero action law.
- 
+
 -[TODO: semantic-cf2d/shifted-cyclic-parameter]
 -Package four shifted normalized paths by an explicit cyclic index once the
 -next layer needs concatenation or a quotient phase parameter.
@@ -416,7 +416,7 @@ index 332445c9..1ec39ac2 100644
  Indexed edges have adjacent seam compatibility, centers at the next indexed
  base state, four-step return under the core-zero law, and fixed-`q2`
  level-set path wrappers.
- 
+
 -[TODO: semantic-cf2d/shifted-four-path]
 -Concatenate four indexed shifted normalized paths once the next layer needs a
 -single closed path object rather than edgewise compatibility facts.
@@ -429,7 +429,7 @@ index 332445c9..1ec39ac2 100644
 +Introduce a quotient phase parameter only after the four-edge closed path is
 +stable enough for downstream consumers.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index cd374996..813e4e07 100644
@@ -446,12 +446,12 @@ index cd374996..813e4e07 100644
 +shiftedSemanticIndexedLevelEdge_add_four_of_core_eq_zero
 +shiftedSemanticFourLevelPath
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -471,6 +477,17 @@ The same indexed API is available inside the fixed `q2 z` level set, so the
  next layer can concatenate edgewise-compatible paths without re-proving
  boundary membership.
- 
+
 +The four-edge shifted path object is now also available:
 +
 +```text
@@ -464,18 +464,18 @@ index cd374996..813e4e07 100644
 +the core-zero four-step return law.
 +
  Candidate theorem directions:
- 
+
  ```text
 @@ -490,7 +507,8 @@ shifted-frame conservation
- 
+
  The shifted path definition has now been chosen in the same style as
  `normalizedPhasePath`: first a `Vec Real` path, then a fixed-`q2` level-set
 -path. Four-edge shifted concatenation remains a later packaging layer.
 +path. The first four shifted level paths are now also concatenated into a
 +closed fixed-boundary path object.
- 
+
  ## Guardrails
- 
+
 @@ -539,7 +557,9 @@ depend on that reading.
  16. Implemented: prove indexed adjacent seam compatibility and center-to-next-base compatibility.
  17. Implemented: prove core-zero four-step return for indexed bases, endpoints, and edge functions.
@@ -485,7 +485,7 @@ index cd374996..813e4e07 100644
 +20. Implemented: concatenate the four indexed shifted level paths into a closed fixed-`q2` path.
 +21. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -579,15 +599,15 @@ Index shifted normalized edges by semantic action iterates. Prove adjacent
  indexed seam compatibility, center-to-next-base compatibility, four-step
@@ -496,9 +496,9 @@ index cd374996..813e4e07 100644
 +Prove the four seam compatibility facts and concatenate the first four indexed
 +shifted normalized level paths into one closed fixed-`q2` path object.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/shifted-four-path]
 -Concatenate four indexed shifted normalized paths into one closed fixed-`q2`

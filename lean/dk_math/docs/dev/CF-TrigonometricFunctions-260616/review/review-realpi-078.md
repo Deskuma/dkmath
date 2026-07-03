@@ -482,7 +482,7 @@ index 4a7e9d6c..aa8167f7 100644
 @@ -99,6 +99,11 @@ fixed `q2` boundary by the exact factor
  of one half, and reflection about the midpoint proves the first continuous
  half-fold symmetry without introducing circles or angles.
- 
+
 +[IMPLEMENTED: semantic-cf2d-dyadic] `DkReal.SemanticCF2DDyadic` samples one
 +phase at the finite nodes `k / 2^n`. Endpoint, unit-interval, reflection,
 +even-child, odd-child midpoint, and reflected phase-depth laws are proved
@@ -605,7 +605,7 @@ index 204a8b0c..90557e2f 100644
 @@ -135,6 +135,13 @@ their reflection symmetry, and a theorem stating how one subdivision level
  refines the preceding level. No infinite product or Gaussian claim belongs
  in that checkpoint.
- 
+
 +This finite checkpoint is now implemented in `SemanticCF2DDyadic.lean`.
 +Even child indices recover their parent nodes exactly, while odd child
 +indices are the midpoints of adjacent parents. Complementary indices produce
@@ -614,7 +614,7 @@ index 204a8b0c..90557e2f 100644
 +composition law for local corrections.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 6f8e4895..89f61ed7 100644

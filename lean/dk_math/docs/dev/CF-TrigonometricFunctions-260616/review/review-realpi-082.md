@@ -461,7 +461,7 @@ index dd3d7e5d..f7b87c48 100644
 +without selecting a correction product or taking a limit. This semantic-real
 +mesh is noncomputable because its nodes use division in `Real`; a future
 +computable variant should retain rational nodes before crossing the bridge.
- 
+
  [IMPLEMENTED: semantic-cf2d-finite-refinement]
  `DkReal.SemanticCF2DRefinement` evaluates depth and normalization on the
 @@ -118,6 +120,15 @@ the per-level and cumulative scales. The total defect introduced at level
@@ -477,7 +477,7 @@ index dd3d7e5d..f7b87c48 100644
 +complete finite dyadic mesh. The squared normalization product exactly
 +cancels the depth product, and both products are strictly positive. This is a
 +finite pointwise-composition theorem, not a selected infinite-product limit.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DComposition.lean
@@ -573,38 +573,38 @@ index 6c382e86..677dd3be 100644
 +module is noncomputable. A computable mesh should instead retain rational
 +nodes and cross to `Real` through a separate bridge.
  -/
- 
+
  namespace DkMath.Analysis.DkNNRealQ
- 
+
 -noncomputable section
 +-- noncomputable section
- 
+
  /-- The number of equal subintervals in the `n`th dyadic phase partition. -/
  def dyadicPhaseDenom (n : ℕ) : ℕ :=
    2 ^ n
- 
+
  /-- The `k`th real node of the `n`th dyadic phase partition. -/
 -def dyadicPhaseNode (n k : ℕ) : ℝ :=
 +noncomputable def dyadicPhaseNode (n k : ℕ) : ℝ :=
    (k : ℝ) / (dyadicPhaseDenom n : ℝ)
- 
+
  /-- Every dyadic phase denominator is strictly positive. -/
 @@ -108,6 +113,6 @@ theorem phaseDepth_dyadic_reflect
        phaseDepth (dyadicPhaseNode n k) := by
    rw [dyadicPhaseNode_reflect hk, phaseDepth_one_sub]
- 
+
 -end
 +-- end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLimit.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLimit.lean
 index f4842799..f9dc9e30 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLimit.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLimit.lean
 @@ -23,8 +23,6 @@ normalization.
- 
+
  namespace DkMath.Analysis.DkNNRealQ
- 
+
 -noncomputable section
 -
  /-- The total depth defect introduced at one refinement level tends to zero. -/
@@ -613,7 +613,7 @@ index f4842799..f9dc9e30 100644
 @@ -56,6 +54,4 @@ theorem tendsto_cumulativeDyadicPhaseDepthDefect_one :
      exact cumulativeDyadicPhaseDepthDefect_eq m
    · norm_num
- 
+
 -end
 -
  end DkMath.Analysis.DkNNRealQ
@@ -630,12 +630,12 @@ index 53996ef1..d9519388 100644
 +and, for normalization, from real square root. Their formulas remain exact;
 +computability requires a separate rational observation layer.
  -/
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -141,6 +145,12 @@ theorem totalDyadicPhaseDepthDefect_eq_pow (n : ℕ) :
      totalDyadicPhaseDepthDefect n = (1 / 2 : ℝ) ^ (n + 1) := by
    simp [totalDyadicPhaseDepthDefect, dyadicPhaseDenom, pow_succ]
- 
+
 +/-- Every per-level total depth defect is strictly positive. -/
 +theorem totalDyadicPhaseDepthDefect_pos (n : ℕ) :
 +    0 < totalDyadicPhaseDepthDefect n := by
@@ -644,11 +644,11 @@ index 53996ef1..d9519388 100644
 +
  /--
  The cumulative depth defect through the first `m` refinement levels.
- 
+
 @@ -162,6 +172,26 @@ theorem cumulativeDyadicPhaseDepthDefect_eq (m : ℕ) :
          rfl, ih, totalDyadicPhaseDepthDefect_eq_pow]
        ring
- 
+
 +/-- The unrecovered depth after `m` levels is exactly the dyadic tail. -/
 +theorem one_sub_cumulativeDyadicPhaseDepthDefect_eq (m : ℕ) :
 +    1 - cumulativeDyadicPhaseDepthDefect m = (1 / 2 : ℝ) ^ m := by
@@ -670,7 +670,7 @@ index 53996ef1..d9519388 100644
 +  exact sub_lt_self _ (by positivity)
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 0b970de1..a78f93e5 100644
@@ -679,7 +679,7 @@ index 0b970de1..a78f93e5 100644
 @@ -177,6 +177,24 @@ structural: each new level becomes negligible, while all levels together
  retain a nonzero conserved account. No Gaussian or `pi` interpretation is
  attached to this geometric-series limit.
- 
+
 +The first finite normalization-composition theorem is now implemented in
 +`SemanticCF2DComposition.lean`. At every sampled node,
 +
@@ -699,7 +699,7 @@ index 0b970de1..a78f93e5 100644
 +it justify an infinite product or logarithmic limit.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index d73526ae..a62881b6 100644

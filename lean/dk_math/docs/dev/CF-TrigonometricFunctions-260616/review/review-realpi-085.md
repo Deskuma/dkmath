@@ -351,7 +351,7 @@ index 447d8bf9..97998e3e 100644
 +weighted variants are exposed as finite candidate observables, and the same
 +cancellation law is proved for them. No logarithmic quantity is yet selected
 +as the canonical refinement-limit observable.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -359,7 +359,7 @@ index c7ab945d..10681be0 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
 @@ -20,7 +20,9 @@ The resulting identity
- 
+
  is exactly equivalent to the previously proved finite product cancellation.
  This module still does not select a logarithmic sum as the canonical
 -refinement-limit observable.
@@ -367,12 +367,12 @@ index c7ab945d..10681be0 100644
 +therefore recorded only as finite candidate observables: the same cancellation
 +law survives scalar reweighting, but no limiting interpretation is chosen here.
  -/
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -86,6 +88,107 @@ theorem two_mul_dyadicPhaseLogNormalizationSum_add_logDepthSum
    exact Finset.sum_eq_zero fun k hk =>
      two_mul_log_dyadicPhaseNormalization_add_log_depth n k
- 
+
 +/--
 +The complete dyadic mesh has one more node than its dyadic denominator.
 +
@@ -475,7 +475,7 @@ index c7ab945d..10681be0 100644
 +      simp
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index fcce9113..ced68f27 100644
@@ -484,7 +484,7 @@ index fcce9113..ced68f27 100644
 @@ -208,6 +208,14 @@ products. This equivalence supplies a comparison surface for later limit
  selection; it does not select the raw sum, an average, or a weighted sum as
  canonical.
- 
+
 +The same module also records two scalar reweightings as finite candidate
 +observables. The uniform average divides by the number of complete-mesh nodes,
 +and the mesh-width version multiplies by `1 / 2^n`. In both cases, the
@@ -494,7 +494,7 @@ index fcce9113..ced68f27 100644
 +tested.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 4df85cc8..4d444145 100644

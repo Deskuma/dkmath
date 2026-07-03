@@ -558,7 +558,7 @@ index 3c08ee49..c7a776c2 100644
  import DkMath.Collatz.Shift
 +import DkMath.Collatz.GnomonEvaluation
  import DkMath.Collatz.PetalBridge
- 
+
  #print "file: DkMath.Collatz.Collatz2K26"
 @@ -27,6 +28,9 @@ Structure:
    - V2.lean:          2-adic valuation v₂ and foundational lemmas
@@ -829,12 +829,12 @@ index b0c03985..d37dd9a1 100644
 +remain first-class evidence instead of being erased by an unsafe monotonicity
 +assumption.
  -/
- 
+
  namespace DkMath.Collatz
 @@ -6619,6 +6656,144 @@ def SelectedPressurePrefix
    m ≤ len ∧
      ∀ j, j < m → IsSourcePressureDepth n k r j
- 
+
 +/--
 +Witness that source-pressure selection is not prefix-shaped at the given
 +window.
@@ -981,7 +981,7 @@ index 836e7f9a..8f6ca449 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
 +++ b/lean/dk_math/DkMath/Collatz/README.md
 @@ -8,17 +8,27 @@ conjecture.  It is a structured observation program:
- 
+
  ```text
  odd state dynamics
 -  -> 2-adic height
@@ -993,7 +993,7 @@ index 836e7f9a..8f6ca449 100644
    -> source/tail distributions
    -> finite channel flow
  ```
- 
+
 -The most recent milestone is the finite channel-flow layer in
 -`DkMath.Collatz.PetalBridge`.  It turns pointwise residue transitions into
 -count-level statements over finite windows, without using limits,
@@ -1010,9 +1010,9 @@ index 836e7f9a..8f6ca449 100644
 +shape.  The new low-level vocabulary lives in
 +`DkMath.Collatz.GnomonEvaluation`; `DkMath.Collatz.PetalBridge` remains the
 +finite observation and pressure/margin surface.
- 
+
  ## Module Entry Points
- 
+
 @@ -27,6 +37,7 @@ DkMath.Collatz.Basic
  DkMath.Collatz.V2
  DkMath.Collatz.Accelerated
@@ -1024,7 +1024,7 @@ index 836e7f9a..8f6ca449 100644
 @@ -86,6 +97,34 @@ n -> n + 2^k * m
  The guiding idea is that many differences do not appear everywhere; they
  concentrate around singular 2-adic ridges.
- 
+
 +### `DkMath.Collatz.GnomonEvaluation`
 +
 +Introduces the checkpoint-125 subject shift:
@@ -1054,7 +1054,7 @@ index 836e7f9a..8f6ca449 100644
 +`Real.log`; logarithmic drift belongs to a later translation layer.
 +
  ### `DkMath.Collatz.PetalBridge`
- 
+
  This is the current main bridge.
 @@ -105,6 +144,9 @@ tailPow2Distribution_total
  pow2ChannelFlow_of_pointwise
@@ -1064,7 +1064,7 @@ index 836e7f9a..8f6ca449 100644
 +SourcePressurePrefixFailure
 +SourcePressureSelectedSetDownClosed
  ```
- 
+
  The central No.100 layer is:
 @@ -159,6 +201,7 @@ docs/Collatz-SelectedWitnessBudget-121.md
  docs/Collatz-SelectedPressureDepths-122.md
@@ -1249,9 +1249,9 @@ index 2c5d2d32..93f32912 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 @@ -26,6 +26,23 @@ finite orbit segments
- 
+
  `PetalBridge` is the file where these languages meet.
- 
+
 +Checkpoint 125 clarifies the module boundary.  The low-level Collatz odd step
 +is now read in `DkMath.Collatz.GnomonEvaluation` as:
 +
@@ -1270,22 +1270,22 @@ index 2c5d2d32..93f32912 100644
 +observe finite windows of those shapes and compare finite channel masses.
 +
  ## Basic Objects
- 
+
  ### `OrbitWindow`
 @@ -66,7 +83,8 @@ This is:
  v2 (3 * oddOrbitLabel n i + 1)
  ```
- 
+
 -It is the local 2-adic peeling height.
 +It is the local power-of-two alignment height.  In the checkpoint-125 reading,
 +this is the window-level view of `RawGnomonHeight`.
- 
+
  ### `orbitWindowHeightSeq`
- 
+
 @@ -148,6 +166,35 @@ orbitWindowHeightCountGe_one_eq_window
- 
+
  Every odd accelerated state has height at least `1`.
- 
+
 +## Pressure Margins And Prefix Failures
 +
 +Pressure is not raw carrier membership.  It is the strict comparison:
@@ -1316,7 +1316,7 @@ index 2c5d2d32..93f32912 100644
 +channel has positive margin while a shallower one does not.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index d5cc5606..4867b67e 100644
@@ -1334,7 +1334,7 @@ index d5cc5606..4867b67e 100644
 +  RawGnomonResidualShape n = RawGnomonStep n / 2^height
 +  RawGnomonRemainderAtDepth n j
  ```
- 
+
  This means the implemented Collatz side is currently strongest around:
 @@ -39,6 +46,9 @@ odd state
  accelerated transition
@@ -1344,12 +1344,12 @@ index d5cc5606..4867b67e 100644
 +power-of-two alignment height
 +residual shape extraction
  ```
- 
+
  ## Petal Contact Point
 @@ -72,6 +82,20 @@ The bridge file is:
  DkMath.Collatz.PetalBridge
  ```
- 
+
 +Checkpoint 125 clarifies the module boundary:
 +
 +```text
@@ -1365,12 +1365,12 @@ index d5cc5606..4867b67e 100644
 +there unless they genuinely depend on finite windows.
 +
  It defines:
- 
+
  ```lean
 @@ -94,6 +118,29 @@ orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
  orbitWindowHeightSeq n k = the ordered list of the first k height labels
  ```
- 
+
 +Checkpoint 125 adds the pressure-obstruction surface:
 +
 +```lean
@@ -1395,14 +1395,14 @@ index d5cc5606..4867b67e 100644
 +nonpositive at a shallower depth.
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureMargin-124.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureMargin-124.md
 index 722a71a2..a66eb048 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureMargin-124.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureMargin-124.md
 @@ -171,3 +171,28 @@ deeper pressure can be positive while shallower pressure margin is nonpositive
- 
+
  Checkpoint 124 therefore redirects the path from an unconditional prefix theorem
  to margin-controlled pressure-frontier theory.
 +

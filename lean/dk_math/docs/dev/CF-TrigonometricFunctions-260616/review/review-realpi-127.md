@@ -257,7 +257,7 @@ index f0cecd6c..27c60b7f 100644
 +seams now packages canonical via-edge observed and direct finite closed
 +paths, and those two canonical paths are equal by the four single-edge
 +equalities.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -267,7 +267,7 @@ index 35396d4e..054aa5df 100644
 @@ -2001,6 +2001,159 @@ theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
    rw [shiftedSemanticObservedCyclicEdgePath_apply]
    rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
- 
+
 +/--
 +Canonical four-edge concatenation with explicit seam equalities.
 +
@@ -423,7 +423,7 @@ index 35396d4e..054aa5df 100644
 +
  /--
  The closed quotient chart path observed inside the fixed square-mass boundary.
- 
+
 @@ -2218,11 +2371,18 @@ The source/target comparison is also exposed after `Subtype.val`. A single
  observed quotient edge is packaged as a fixed-boundary path and proved equal
  to the direct finite fixed-boundary edge path, so the remaining four-edge
@@ -431,11 +431,11 @@ index 35396d4e..054aa5df 100644
 +A canonical four-edge concatenator with explicit seams now packages both the
 +observed-edge and direct finite-edge versions. These canonical via-edge
 +closed paths are equal by the four single-edge equalities.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
  path after path-trans cast normalization lemmas are available.
- 
+
 +[TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
 +Compare the older closed four-path definitions with the canonical via-edge
 +versions after the common concatenator is stable.
@@ -464,7 +464,7 @@ index c17d123d..04e0fabe 100644
 @@ -726,6 +733,32 @@ shiftedSemanticObservedCyclicEdgePath_apply
  shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
  ```
- 
+
 +The four-edge packaging has also been standardized. The helper
 +`shiftedFourPathConcatWithSeams` glues four paths by explicit endpoint seam
 +equalities, exposes source and target aliases, and has a congruence theorem
@@ -493,18 +493,18 @@ index c17d123d..04e0fabe 100644
 +
  Value-level source and target comparisons are also available for the closed
  four-edge paths:
- 
+
 @@ -745,6 +778,11 @@ existing fixed-`q2` four-level path is intentionally left as a TODO because it
  requires path-trans cast normalization lemmas. This is still not a Euclidean
  angle parameter.
- 
+
 +The next packaging task is to compare the older closed four-path definitions
 +with the canonical via-edge versions. That should be a pure `Path.trans` /
 +`Path.cast` normalization step, because the semantic edge comparison has
 +already been proved locally and in canonical four-edge form.
 +
  Candidate theorem directions:
- 
+
  ```text
 ````
 `````

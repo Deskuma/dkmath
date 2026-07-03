@@ -308,15 +308,15 @@ index ff96b6d0..38f4c842 100644
 @@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 +import DkMath.Analysis.DkReal.PowBound
  import DkMath.Analysis.DkReal.Arithmetic
- 
+
  #print "file: DkMath.Analysis.DkReal.Equiv"
 @@ -80,6 +81,14 @@ theorem equiv_of_eq
    subst y
    exact equiv_refl x
- 
+
 +/-- Pointwise equality of approximation intervals implies representation equivalence. -/
 +theorem equiv_of_interval_eq
 +    {x y : DkMath.Analysis.DkReal}
@@ -327,11 +327,11 @@ index ff96b6d0..38f4c842 100644
 +
  /-!
  ## Compatibility with addition
- 
+
 @@ -243,4 +252,61 @@ theorem equiv_mulNonneg_right
      Equiv (mulNonneg x y hx hy) (mulNonneg x y' hx hy') :=
    equiv_mulNonneg hx hx hy hy' (equiv_refl x) hyy'
- 
+
 +/-!
 +## Compatibility with natural powers
 +
@@ -397,7 +397,7 @@ index f0cdcc96..1c668042 100644
 @@ -161,4 +161,11 @@ theorem powNonneg_one_interval
      (powNonneg 1 x hx).interval n = x.interval n := by
    apply GapInterval.ext <;> simp [powNonneg, powNonnegApprox]
- 
+
 +/-- Natural powers of a nonnegative `DkReal` remain nonnegative. -/
 +theorem nonnegative_powNonneg
 +    (d : ℕ) {x : DkMath.Analysis.DkReal} (hx : Nonnegative x) :
@@ -411,12 +411,12 @@ index 55fb97e2..1d37acb2 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -59,7 +59,7 @@ DkMath.Analysis.DkReal.Arithmetic
- 
+
  DkMath.Analysis.DkReal.Equiv
    vanishing interval separation, representation setoid, endpoint convergence,
 -  and additive/nonnegative multiplicative congruence
 +  and additive, nonnegative multiplicative, and natural-power congruence
- 
+
  DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
@@ -426,7 +426,7 @@ index b3c14dd6..1ac6af4d 100644
 @@ -209,9 +209,35 @@ Finally, interval separation is bounded by the absolute difference between
  the product lower endpoints. This gives `equiv_mulNonneg` and its one-sided
  variants without evaluating either representation as a Mathlib real number.
- 
+
 -The next arithmetic congruence target is `powNonneg`. It should follow from
 -the same endpoint-convergence principle together with a uniform bound for the
 -finite `gapGN` correction factor.
@@ -459,7 +459,7 @@ index b3c14dd6..1ac6af4d 100644
 +respect the representation setoid. The next design question is whether to
 +introduce a quotient or a dedicated wrapper for the nonnegative computable
 +semiring API.
- 
+
  Persistent intersection and equality after a future evaluation into Mathlib's
  `Real` remain comparison principles. Their equivalence with vanishing
 ````

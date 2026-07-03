@@ -695,7 +695,7 @@ index e80fb837..5fd1d2a0 100644
 @@ -2130,6 +2130,180 @@ theorem moreThanHalf_tailContinuation_of_outRunsOnRange
    moreThanHalf_tailContinuation_of_tailContinuationOutruns
      n k (r + j) (tailContinuationOutrunsRecovery_of_onRange n k r len j h hj)
- 
+
 +/--
 +Generic finite range profile for strict more-than-half pressure.
 +
@@ -872,7 +872,7 @@ index e80fb837..5fd1d2a0 100644
 +
  /--
  Predicate-facing source half criterion.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index 06b26b6c..9903d1eb 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -919,7 +919,7 @@ index 7b533a6d..fee69a24 100644
 @@ -395,6 +395,53 @@ This gives the obstruction route a concrete finite signature.  If the desired
  dominance condition fails over a range, each failed depth carries strict
  continuation pressure inside the corresponding retention cylinder.
- 
+
 +## Pressure Profiles
 +
 +Checkpoint 107 packages repeated more-than-half pressure over a depth range:
@@ -968,12 +968,12 @@ index 7b533a6d..fee69a24 100644
 +versus pressure depths.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 @@ -427,22 +474,22 @@ For a new residue channel:
- 
+
  1. Prove the pointwise transition:
- 
+
 -```text
 -if oddOrbitLabel n i is in source cell A,
 -then oddOrbitLabel n (i + 1) is in tail cell B.
@@ -982,27 +982,27 @@ index 7b533a6d..fee69a24 100644
 +    if oddOrbitLabel n i is in source cell A,
 +    then oddOrbitLabel n (i + 1) is in tail cell B.
 +    ```
- 
+
  2. Apply:
- 
+
 -```lean
 -pow2ChannelFlow_of_pointwise
 -```
 +    ```lean
 +    pow2ChannelFlow_of_pointwise
 +    ```
- 
+
  3. State a named theorem for the channel:
- 
+
 -```text
 -sourceChannelCount <= tailChannelCount
 -```
 +    ```text
 +    sourceChannelCount <= tailChannelCount
 +    ```
- 
+
  Avoid writing a fresh count induction unless the helper does not fit.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 18446f1e..3e4a335c 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md

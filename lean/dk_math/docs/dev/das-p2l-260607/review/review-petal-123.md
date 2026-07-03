@@ -840,7 +840,7 @@ index 134338ee..4e39d80c 100644
 @@ -6348,6 +6348,35 @@ theorem sourceContinuationMass_pos_of_pressureOnRange_at
    sourceContinuationMass_pos_of_localPressure n k (r + j)
      (sourcePressureAtDepth_of_pressureOnRange n k r len j h hj)
- 
+
 +/--
 +A selected source pressure depth inside a depth range.
 +
@@ -872,11 +872,11 @@ index 134338ee..4e39d80c 100644
 +
  /--
  Positive source pressure-depth count selects at least one local pressure depth.
- 
+
 @@ -6398,6 +6427,119 @@ theorem exists_positive_sourceContinuationMass_of_pressureDepthCount_pos
      ⟨j, hj, hpressure⟩
    exact ⟨j, hj, sourceContinuationMass_pos_of_localPressure n k (r + j) hpressure⟩
- 
+
 +/-- Positive pressure-depth count selects a packaged pressure-depth witness. -/
 +theorem exists_isSourcePressureDepth_of_pressureDepthCount_pos
 +    (n : OddNat) (k r len : ℕ)
@@ -996,7 +996,7 @@ index 134338ee..4e39d80c 100644
 @@ -6510,6 +6652,27 @@ theorem exists_depth_two_budget_of_pressureOnRange_two_one
            orbitWindowResidueCountMod8EqSevenTail n k :=
    depthTwoPressureRange_positive_and_budget n k h
- 
+
 +/--
 +Depth-two delayed budget predicate.
 +
@@ -1020,7 +1020,7 @@ index 134338ee..4e39d80c 100644
 +
  /--
  Residue-address drift bridge.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index 0760fbe4..222d6fd9 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md

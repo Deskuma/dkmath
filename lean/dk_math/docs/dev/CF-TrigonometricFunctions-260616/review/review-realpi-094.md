@@ -307,7 +307,7 @@ index a107ca71..fa58f8c3 100644
 +finite moment estimate is also available: the trapezoidal centered quadratic
 +sum is bounded by one. The sharper closed form remains a tagged TODO in the
 +log-composition module.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -317,7 +317,7 @@ index 521c2948..fb4bb985 100644
 @@ -212,6 +212,27 @@ theorem dyadicPhaseCenteredLogDepth_le_centeredQuadratic (n k : ℕ) :
        dyadicPhaseCenteredQuadratic n k :=
    centeredLogPhaseDepth_le_four_sq (dyadicPhaseNode n k)
- 
+
 +/--
 +The centered quadratic profile is at most one on the unit interval.
 +
@@ -341,11 +341,11 @@ index 521c2948..fb4bb985 100644
 +
  /--
  Nonnegative finite weights preserve nonnegativity of centered log-depth.
- 
+
 @@ -754,6 +775,36 @@ theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
      (dyadicPhaseTrapezoidWeight n)
      (fun k hk => (dyadicPhaseTrapezoidWeight_pos n k).le)
- 
+
 +/--
 +The trapezoidal centered quadratic moment is bounded by one.
 +
@@ -388,13 +388,13 @@ index 78934906..bcee85b7 100644
  only: it prepares the next moment calculation, but it does not yet assert a
  closed form, a limiting integral, a Gaussian law, or a `pi` identification.
 -endpoint increments expose the correction term.
- 
+
  The first centered observable is now implemented. `centeredLogPhaseDepth`
  subtracts the midpoint baseline `log(1/2)` from `log(phaseDepth t)`. It
 @@ -302,6 +301,23 @@ least `1`; the second is the `log(1 + x) <= x` comparison applied to
  `x = 4 * (t - 1/2)^2`. This creates the finite bridge from logarithmic
  correction accounting to quadratic moment estimates.
- 
+
 +The first finite quadratic moment bound is also implemented. On the unit
 +interval, the centered quadratic profile satisfies
 +
@@ -413,7 +413,7 @@ index 78934906..bcee85b7 100644
 +`1/3 + 2/(3 * (2^n)^2)` is marked in code as the next finite-sum target.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 2fb22a52..18fe6678 100644
@@ -427,9 +427,9 @@ index 2fb22a52..18fe6678 100644
 +Gaussian, integral, angle, or `pi` interpretation is selected here. The first
 +trapezoidal centered quadratic moment bound is now `<= 1`; the sharper closed
 +finite formula is intentionally left as the next finite-sum target.
- 
+
  The current implementation proves a four-state return:
- 
+
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 41ea51a0..64e555b9 100644
 --- a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md

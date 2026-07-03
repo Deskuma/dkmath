@@ -822,7 +822,7 @@ index df4fa628..88860ab2 100644
 @@ -3738,6 +3738,38 @@ theorem orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three
            exact hheight (hiff.mpr h)
          simp [ih, hheight, hres]
- 
+
 +/--
 +At depth `2`, shifted-tail retention is exactly the shifted-tail `3 mod 4`
 +cell, hence it is the same mass as the tail exact-height-one count.
@@ -857,11 +857,11 @@ index df4fa628..88860ab2 100644
 +
  /--
  The shifted tail splits into exact height `1` and height at least `2`.
- 
+
 @@ -4389,6 +4421,50 @@ theorem orbitWindowContinuationMass_tailBudget
          orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) :=
    orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation r hr n k
- 
+
 +/--
 +Meaning-name alias for the continuation-to-tail-retention channel.
 +
@@ -928,7 +928,7 @@ index 460b955f..241916cd 100644
 @@ -750,6 +750,50 @@ orbitWindowHeightCountGe n k 2
  orbitWindowHeightCountGeTail n k 2
  ```
- 
+
 +## Tail-Facing Height Bridge
 +
 +Checkpoint 114 tests the expected bridge from source continuation mass to tail
@@ -974,7 +974,7 @@ index 460b955f..241916cd 100644
 +extra-peeling source.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index f3d83782..ca0bf848 100644

@@ -337,7 +337,7 @@ index 9948fb1c..c0927903 100644
 +source, target, and fixed-`q2` boundary-observation aliases. Finite base
 +states are also packaged directly as points of the fixed square-mass level
 +set.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -347,7 +347,7 @@ index b99a8388..425e142e 100644
 @@ -1175,6 +1175,24 @@ theorem shiftedSemanticFinBase_q2
      Vec.q2 (shiftedSemanticFinBase r z i) = Vec.q2 z :=
    shiftedSemanticIndexedBase_q2 r z i.val
- 
+
 +/-- The finite shifted base as a point of the original square-mass level set. -/
 +def shiftedSemanticFinBaseLevelPoint
 +    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
@@ -372,7 +372,7 @@ index b99a8388..425e142e 100644
 @@ -1336,6 +1354,16 @@ theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
          norm_num
          exact semanticAct_four_of_core_eq_zero hcore z
- 
+
 +/-- The finite level edge center reaches the finite successor base point. -/
 +theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_level_of_core_eq_zero
 +    {r : UnitKernel DkNNRealQ}
@@ -389,7 +389,7 @@ index b99a8388..425e142e 100644
 @@ -1435,6 +1463,35 @@ theorem shiftedSemanticFourLevelPath_target
        shiftedSemanticIndexedLeftLevelEndpoint hcore z 0 :=
    (shiftedSemanticFourLevelPath hcore z).target
- 
+
 +/-- Source endpoint of the finite alias for the closed shifted four-level path. -/
 +theorem shiftedSemanticFinFourLevelPath_source
 +    {r : UnitKernel DkNNRealQ}
@@ -425,7 +425,7 @@ index b99a8388..425e142e 100644
 @@ -1467,6 +1524,12 @@ successor has named small-step facts and a four-cycle law, finite edges expose
  endpoint and center-to-successor facts, and the closed shifted path exposes
  source and target aliases.
- 
+
 +[IMPLEMENTED: semantic-cf2d/shifted-fin-observation]
 +Finite base states are also packaged as fixed-`q2` level points. The finite
 +level edge center theorem now targets the finite successor base point, and the
@@ -463,7 +463,7 @@ index bdb01c6b..8a237c28 100644
 +shiftedSemanticFinFourLevelPath_target
 +shiftedSemanticFinFourLevelPath_q2
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -533,7 +538,9 @@ This is still a finite cyclic index, not a continuous quotient phase
  parameter. The successor has named values for `0 -> 1 -> 2 -> 3 -> 0` and a
@@ -473,9 +473,9 @@ index bdb01c6b..8a237c28 100644
 +named source, target, and fixed-`q2` boundary-observation aliases for
 +downstream observation code. Finite base states are also packaged directly as
 +fixed-level points.
- 
+
  Candidate theorem directions:
- 
+
 @@ -611,7 +618,9 @@ depend on that reading.
  23. Implemented: add small-step and four-cycle API for `finFourSucc`.
  24. Implemented: add finite endpoint aliases and center-to-successor-base compatibility.
@@ -485,7 +485,7 @@ index bdb01c6b..8a237c28 100644
 +27. Implemented: add finite closed-path fixed-`q2` observation.
 +28. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -663,6 +672,11 @@ successor and prove the corresponding cyclic seam law. The successor has
  named small-step facts and a four-cycle law, finite edges expose endpoint and
@@ -497,7 +497,7 @@ index bdb01c6b..8a237c28 100644
 +center-to-successor-base theorem at the level-point API and add source,
 +target, and fixed-`q2` observation aliases for the finite closed shifted path.
  ```
- 
+
  ## Remaining TODO Tags
 ````
 `````

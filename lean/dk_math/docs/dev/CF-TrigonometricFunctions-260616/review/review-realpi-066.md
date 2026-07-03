@@ -241,7 +241,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -60,6 +60,13 @@ Nothing below requires the two coordinates to have been declared orthogonal
  axes or requires a convention measuring one full turn by 360 degrees.
  -/
- 
+
 +/-
 +## Semantic transport and boundary detection
 +
@@ -255,7 +255,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -125,6 +132,13 @@ theorem semanticUnitKernel_sq_add_sq (r : UnitKernel DkNNRealQ) :
    simpa [Vec.q2, semanticVec] using
      (UnitKernel.coe_q2 (semanticUnitKernel r))
- 
+
 +/-
 +## Boundary-preserving action
 +
@@ -269,7 +269,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -164,6 +178,13 @@ theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
      PreservesQ2 (semanticAct r) :=
    semanticAct_q2 r
- 
+
 +/-
 +## Composition, inverse, and level-set actions
 +
@@ -283,7 +283,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -311,6 +332,12 @@ theorem semanticActLevelEquiv_apply
      (z : LevelSet ℝ rho2) :
      semanticActLevelEquiv r z = semanticActLevel r z := rfl
- 
+
 +/-
 +## Iteration, orbit, and point period
 +
@@ -296,7 +296,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -550,6 +577,13 @@ theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
    semanticMinimalPeriod_pos h.1
      ((semanticFiniteOrder_iff r n).mp h.2 z)
- 
+
 +/-
 +## Identity and fixed-point classification
 +
@@ -310,7 +310,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -640,6 +674,14 @@ theorem semanticFixed_iff_eq_zero_of_not_identity
    exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
      fun hz => hz ▸ semanticFixed_zero r⟩
- 
+
 +/-
 +## Real-side powers and low-order classification
 +
@@ -325,7 +325,7 @@ index 307ff47b..cdc1b5d2 100644
 @@ -1123,6 +1165,13 @@ theorem semanticExactActionOrderFour_of_core_eq_zero
      SemanticExactActionOrderFour r :=
    (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
- 
+
 +/-
 +## Pre-geometric four-phase boundary action
 +
@@ -347,13 +347,13 @@ index 7ebd2f5e..cf10edee 100644
 -the quarter-turn kernel.
 +the first nonidentity exact-order boundary kernel. Under the later standard
 +Euclidean interpretation this kernel is read as a quarter-turn.
- 
+
  Exact order four is now recorded explicitly. `SemanticExactKernelOrderFour`
  requires the fourth power to be neutral and excludes neutrality of powers
 @@ -304,9 +305,10 @@ the minimal period of each point. Again, the four-step algebraic return is the
  primary theorem; interpreting the displayed orbit as motion around a circle
  comes later.
- 
+
 +The present chapter is now at a documentation and consolidation checkpoint.
  The next structural boundary is source-level `Vec.star` and `KernelFamily`.
 -Both require signed arithmetic. They should wait for a signed DkReal layer
@@ -554,7 +554,7 @@ index bf403df7..bd8532f9 100644
 @@ -228,6 +228,24 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/23 04:34 JST (Pre-geometric research consolidation)
 +
 +1. 判断:
@@ -574,7 +574,7 @@ index bf403df7..bd8532f9 100644
 +     Euclidean 解釈でそう読める、という順序へ統一した。
 +
  ### 2026/06/22 17:25 JST (Boundary first, geometry later)
- 
+
  1. 文書整理:
 ````
 `````

@@ -322,7 +322,7 @@ index 9b90c4be..80f7f83a 100644
 @@ -18,7 +18,24 @@ import DkMath.Analysis.DkReal.DkNNRealQ
  /-!
  # DkReal approximation layer
- 
+
 -Public entry point for rational gap intervals and nested interval
 -approximations. Evaluation into Mathlib's real numbers is intentionally left to
 -a later bridge module.
@@ -352,7 +352,7 @@ index e2f2549a..2ed47280 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/Basic.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Basic.lean
 @@ -16,6 +16,10 @@ rational gap intervals whose widths converge to zero.
- 
+
  No evaluation into Mathlib's real numbers is chosen here. This keeps the
  computational approximation structure separate from its future semantic bridge.
 +
@@ -360,11 +360,11 @@ index e2f2549a..2ed47280 100644
 +type: distinct interval sequences may encode the same limiting value.
 +Extensional identification is supplied later by `DkReal.Equiv`.
  -/
- 
+
  namespace DkMath.Analysis
 @@ -25,7 +29,12 @@ A DkMath real approximation given by nested rational intervals with vanishing
  width.
- 
+
  The interval at `n + 1` is contained in the interval at `n`. The convergence
 -condition says that the remaining rational uncertainty tends to zero.
 +condition says that the remaining rational uncertainty tends to zero. This is
@@ -382,18 +382,18 @@ index aefb1c69..f019794c 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean
 @@ -16,7 +16,8 @@ nonnegativity. It removes proof arguments from the public nonnegative
  arithmetic operations while retaining the computable interval representation.
- 
+
  Algebraic laws are stated using representation equivalence, not raw structure
 -equality. A quotient can be introduced later once its public API is justified.
 +equality. `DkNNRealQ` is the quotient-backed public value type on which these
 +laws become ordinary Lean equalities.
  -/
- 
+
  namespace DkMath.Analysis
 @@ -138,9 +139,13 @@ theorem pow_one (x : DkNNReal) :
  /-!
  ## Nonnegative semiring laws modulo representation equivalence
- 
+
 -These are the algebraic laws needed by a future quotient. They intentionally
 -use `Equiv`; raw equality would distinguish different interval sequences
 +These are the algebraic laws used to construct `DkNNRealQ`. They intentionally
@@ -404,7 +404,7 @@ index aefb1c69..f019794c 100644
 +its fields expose the rational interval sequence and the nonnegativity
 +certificate needed by endpoint multiplication.
  -/
- 
+
  /-- Addition is associative modulo representation equivalence. -/
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
 index b6337b2a..f4ee9e64 100644
@@ -413,7 +413,7 @@ index b6337b2a..f4ee9e64 100644
 @@ -16,13 +16,29 @@ separation. The operations below are lifted from `DkNNReal`, so the semiring
  laws previously stated modulo representation equivalence become ordinary Lean
  equalities.
- 
+
 -This remains a computable representation layer. No evaluation into Mathlib's
 -`Real` is selected.
 +The resulting quotient is a commutative semiring. Its natural-number embedding
@@ -430,9 +430,9 @@ index b6337b2a..f4ee9e64 100644
 +bridge module and proved to preserve zero, one, addition, multiplication,
 +natural powers, and the future order.
  -/
- 
+
  namespace DkMath.Analysis
- 
+
 -/-- Nonnegative computable real approximations modulo representation equivalence. -/
 +/--
 +Nonnegative computable real approximations modulo vanishing separation.
@@ -442,50 +442,50 @@ index b6337b2a..f4ee9e64 100644
 +-/
  def DkNNRealQ :=
    Quotient DkNNReal.equivSetoid
- 
+
 @@ -68,18 +84,23 @@ def pow (x : DkNNRealQ) (d : ℕ) : DkNNRealQ :=
        intro a b hab
        exact Quotient.sound (DkNNReal.equiv_pow d hab))
- 
+
 +/-- Additive identity induced by the class of the singleton interval `[0,0]`. -/
  instance : Zero DkNNRealQ where
    zero := zero
- 
+
 +/-- Multiplicative identity induced by the class of the singleton interval `[1,1]`. -/
  instance : One DkNNRealQ where
    one := one
- 
+
 +/-- Addition induced by stagewise Minkowski addition of representatives. -/
  instance : Add DkNNRealQ where
    add := add
- 
+
 +/-- Multiplication induced by endpoint multiplication of nonnegative representatives. -/
  instance : Mul DkNNRealQ where
    mul := mul
- 
+
 +/-- Natural powers induced by stagewise nonnegative endpoint powers. -/
  instance : Pow DkNNRealQ ℕ where
    pow := pow
- 
+
 @@ -87,6 +108,7 @@ instance : Pow DkNNRealQ ℕ where
  def natCast (n : ℕ) : DkNNRealQ :=
    ofRat (n : ℚ) (by positivity)
- 
+
 +/-- Natural-number cast through constant nonnegative rational intervals. -/
  instance : NatCast DkNNRealQ where
    natCast := natCast
- 
+
 @@ -175,12 +197,14 @@ They validate the quotient design while keeping instance construction and
  natural-number coercions as a separate API decision.
  -/
- 
+
 +/-- Quotient addition is associative. -/
  theorem add_assoc (x y z : DkNNRealQ) :
      (x + y) + z = x + (y + z) := by
    refine Quotient.inductionOn₃ x y z ?_
    intro a b c
    exact Quotient.sound (DkNNReal.add_assoc a b c)
- 
+
 +/-- Quotient addition is commutative. -/
  theorem add_comm (x y : DkNNRealQ) :
      x + y = y + x := by
@@ -493,14 +493,14 @@ index b6337b2a..f4ee9e64 100644
 @@ -201,12 +225,14 @@ theorem zero_add (x : DkNNRealQ) :
    intro a
    exact Quotient.sound (DkNNReal.zero_add a)
- 
+
 +/-- Quotient multiplication is associative. -/
  theorem mul_assoc (x y z : DkNNRealQ) :
      (x * y) * z = x * (y * z) := by
    refine Quotient.inductionOn₃ x y z ?_
    intro a b c
    exact Quotient.sound (DkNNReal.mul_assoc a b c)
- 
+
 +/-- Quotient multiplication is commutative. -/
  theorem mul_comm (x y : DkNNRealQ) :
      x * y = y * x := by
@@ -508,26 +508,26 @@ index b6337b2a..f4ee9e64 100644
 @@ -241,12 +267,14 @@ theorem zero_mul (x : DkNNRealQ) :
    intro a
    exact Quotient.sound (DkNNReal.zero_mul a)
- 
+
 +/-- Multiplication distributes over quotient addition from the left. -/
  theorem left_distrib (x y z : DkNNRealQ) :
      x * (y + z) = x * y + x * z := by
    refine Quotient.inductionOn₃ x y z ?_
    intro a b c
    exact Quotient.sound (DkNNReal.left_distrib a b c)
- 
+
 +/-- Multiplication distributes over quotient addition from the right. -/
  theorem right_distrib (x y z : DkNNRealQ) :
      (x + y) * z = x * z + y * z := by
    refine Quotient.inductionOn₃ x y z ?_
 @@ -258,8 +286,18 @@ theorem right_distrib (x y z : DkNNRealQ) :
- 
+
  The natural cast is fixed to the rational singleton embedding. The standard
  algebraic hierarchy can therefore use the quotient equalities proved above.
 +The instance does not assert completeness, decidable equality, linear order,
 +or equivalence with all of Mathlib's nonnegative real numbers.
  -/
- 
+
 +/--
 +Commutative semiring structure on nonnegative computable-real values.
 +
@@ -561,9 +561,9 @@ index 38f4c842..050c65f7 100644
 +`Equiv x y → eval x = eval y` and, when justified by the representation
 +theorem, the converse.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
- 
+
  /--
  Two `DkReal` approximations represent the same value when their interval
 -separation vanishes.
@@ -574,13 +574,13 @@ index 38f4c842..050c65f7 100644
    Filter.Tendsto
 @@ -93,7 +107,8 @@ theorem equiv_of_interval_eq
  ## Compatibility with addition
- 
+
  Addition is nonexpansive for interval separation up to summing the two input
 -separations. Therefore it descends to any future quotient by `Equiv`.
 +separations. Therefore it descends to the quotient constructions defined later
 +in this package.
  -/
- 
+
  /-- Addition preserves representation equivalence in both arguments. -/
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean b/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
 index 28e0d812..22d278d3 100644
@@ -589,10 +589,10 @@ index 28e0d812..22d278d3 100644
 @@ -11,11 +11,14 @@ import DkMath.Analysis.GapGN
  /-!
  # Rational gap intervals
- 
+
 -This is the first computational substrate for a future `DkReal`.
 +This is the finite-observation substrate of `DkReal`.
- 
+
  A `GapInterval` records rational lower and upper observations. Its width and
  nonnegative power image are exact rational data; no real-number completion is
  needed at this layer.
@@ -600,11 +600,11 @@ index 28e0d812..22d278d3 100644
 +The interval is closed and ordered. This validity invariant is essential for
 +the separation estimates used by representation equivalence.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -171,7 +174,9 @@ theorem lo_sub_hi_le_separation (I J : GapInterval) :
  Triangle-type estimate for interval separation.
- 
+
  The width of the middle interval appears because a path may enter it at one
 -endpoint and leave it at the other.
 +endpoint and leave it at the other. Thus `separation` is not literally a metric
@@ -620,7 +620,7 @@ index 55805071..bb02d904 100644
 @@ -14,9 +14,17 @@ import DkMath.Analysis.DkReal.Basic
  This file lifts `GapInterval.powNonneg` pointwise to the approximation sequence
  of a nonnegative `DkReal`.
- 
+
 -The result is currently an interval sequence rather than a completed `DkReal`.
 -To construct the latter, a later checkpoint must prove that the powered widths
 -tend to zero, using suitable bounds on the exact `gapGN` factor.
@@ -636,12 +636,12 @@ index 55805071..bb02d904 100644
 +
 +before any limiting argument is applied.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -107,8 +115,9 @@ theorem powNonnegApprox_interval_subset_of_le
  /--
  Exact width formula for every powered approximation interval.
- 
+
 -This identifies the remaining obligation for a full `DkReal` power map: prove
 -that this product tends to zero.
 +This identifies the convergence obligation discharged in `PowBound`: the
@@ -653,7 +653,7 @@ index 55805071..bb02d904 100644
 @@ -142,8 +151,9 @@ theorem tendsto_powNonnegApprox_width_zero_of_gapGN_bounded
  Construct the full powered `DkReal` once boundedness of the exact correction
  kernel has been supplied.
- 
+
 -This isolates the only remaining analytic obligation from the computational
 -interval transformation.
 +This conditional constructor records the interface between finite rational
@@ -678,7 +678,7 @@ index 63622e93..59b47f16 100644
 +for example `DkMath.Analysis.DkReal.BridgeNNReal`, so importing elementary real
 +continuity does not introduce a noncomputable dependency into Route B.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/TaylorBridge.lean b/lean/dk_math/DkMath/Analysis/TaylorBridge.lean
 index 37de6058..1dfc4ea1 100644
@@ -693,7 +693,7 @@ index 37de6058..1dfc4ea1 100644
 +route. It does not affect the computability of rational interval operations,
 +`DkReal`, or `DkNNRealQ`.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 4e20f0a3..5aaa5f85 100644
@@ -701,19 +701,19 @@ index 4e20f0a3..5aaa5f85 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -14,9 +14,14 @@ Route A:
    followed by an explicit bridge to Mathlib real analysis.
- 
+
  Route B:
 -  exact rational intervals as a computational substrate for a future DkReal.
 +  nested rational interval representations, representation equivalence,
 +  and the quotient-backed nonnegative commutative semiring DkNNRealQ.
  ```
- 
+
 +Route B is an algebraic checkpoint, not a completeness theorem for all real
 +numbers. It constructs a computable representation and quotient without
 +selecting a value in Mathlib's `Real`.
 +
  ## Module Boundary
- 
+
  ```text
 @@ -76,11 +81,36 @@ DkMath.Analysis.DkReal
  The closure of nonnegative `DkReal` values under natural powers and its
@@ -721,11 +721,11 @@ index 4e20f0a3..5aaa5f85 100644
  [`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).
 +The completed quotient-semiring checkpoint is summarized in
 +[`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
- 
+
  `RealBridge` remains the home of continuity and interval mapping. The separate
  `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
  without mixing those concerns into the basic real bridge.
- 
+
 +## Next Independent Layers
 +
 +The algebraic Route B checkpoint is closed. The next layers should remain
@@ -750,16 +750,16 @@ index 4e20f0a3..5aaa5f85 100644
 +core merely to obtain an order.
 +
  ## Canonical Kernel Bridge
- 
+
  The existing cosmic-formula kernel has argument order:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index c78875ef..e794a172 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 @@ -2,7 +2,66 @@
- 
- 作成日: 2026-06-19  
- 対象: Lean `DkMath.Analysis.*` 実装準備 / Codex 作業指示用  
+
+ 作成日: 2026-06-19
+ 対象: Lean `DkMath.Analysis.*` 実装準備 / Codex 作業指示用
 -状態: Draft 0.1
 +状態: Draft 0.1 + implementation checkpoint
 +
@@ -821,9 +821,9 @@ index c78875ef..e794a172 100644
 +The earlier future-tense file lists below are retained as historical planning
 +records. The implemented module list in `Analysis-Initial-Layer.md` is the
 +current source of truth.
- 
+
  ## 0. 目的
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-CommSemiring-Checkpoint.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-CommSemiring-Checkpoint.md
 new file mode 100644
 index 00000000..22102e0e
@@ -912,7 +912,7 @@ index b7ea8914..cfd3aa68 100644
 @@ -234,10 +234,9 @@ interval separation. This implication depends on each `GapInterval` being a
  valid ordered closed interval; it is not a generic fact about arbitrary pairs
  of endpoint sequences.
- 
+
 -At this point addition, nonnegative multiplication, and natural powers all
 -respect the representation setoid. The next design question is whether to
 -introduce a quotient or a dedicated wrapper for the nonnegative computable
@@ -920,11 +920,11 @@ index b7ea8914..cfd3aa68 100644
 +At this stage of the construction, addition, nonnegative multiplication, and
 +natural powers were proved to respect the representation setoid. The following
 +sections record how the wrapper and quotient were subsequently introduced.
- 
+
  ## DkNNReal Wrapper
- 
+
 @@ -273,9 +272,8 @@ available modulo `Equiv`.
- 
+
  No `Add`, `Mul`, `Pow`, or `Semiring` instance is introduced on the raw wrapper.
  Such instances would state laws using Lean equality, whereas the established
 -laws concern representation equivalence. A later quotient of
@@ -932,8 +932,8 @@ index b7ea8914..cfd3aa68 100644
 -appropriate place for ordinary algebraic typeclasses.
 +laws concern representation equivalence. The quotient-backed `DkNNRealQ`
 +defined below is the appropriate place for ordinary algebraic typeclasses.
- 
+
  ## Quotient-Backed Public Type
- 
+
 ````
 `````

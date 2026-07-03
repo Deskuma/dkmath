@@ -420,16 +420,16 @@ index 46d5ccf6..1a88561d 100644
  import DkMath.Petal.PrimitiveD3ValuationBridge
  import DkMath.Petal.ErdosBridge
 +import DkMath.Petal.Obstruction
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -46,6 +47,7 @@ basic forms / relative polygon vocabulary
    -> Zsigmondy d = 3 primitive-divisor bridge
    -> squarefree GN3 valuation bridge
    -> Erdos log-capacity bridge from GN carrier channels
 +  -> obstruction lemmas marking route-breaking assumptions
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/Obstruction.lean b/lean/dk_math/DkMath/Petal/Obstruction.lean
 new file mode 100644
@@ -612,7 +612,7 @@ index cd42c106..60985221 100644
 @@ -870,6 +870,26 @@ These wrappers are the current public route from PrimitiveBeam/Zsigmondy witness
  families to the finite Erdos log-capacity provider.  The no-lift wrappers still
  require explicit local no-lift hypotheses.
- 
+
 +### Obstruction Lemmas
 +
 +`DkMath.Petal.Obstruction` records the first small `False` lemmas for route
@@ -634,7 +634,7 @@ index cd42c106..60985221 100644
 +prime-channel independence, or local no-lift valuation control.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index ab280fe9..de4aaba8 100644
@@ -643,7 +643,7 @@ index ab280fe9..de4aaba8 100644
 @@ -199,6 +199,37 @@ The first useful file is probably:
  DkMath/Petal/Obstruction.lean
  ```
- 
+
 +Implemented first checkpoint:
 +
 +```text
@@ -676,7 +676,7 @@ index ab280fe9..de4aaba8 100644
 +```
 +
  Potential later files:
- 
+
  ```text
 ````
 `````

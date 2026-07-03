@@ -547,7 +547,7 @@ index 3bf847b7..e91357e6 100644
 @@ -363,6 +363,129 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
            hlast, if_false, Nat.add_zero]
          exact Nat.le_add_right_of_le ih'
- 
+
 +/--
 +The exact-height count is bounded by the corresponding threshold count.
 +
@@ -692,7 +692,7 @@ index 3d76adb4..1546518b 100644
  oddOrbitLabel_injOn_of_pairwiseSeparated
  iterateT_eq_of_oddOrbitLabel_eq
 @@ -260,11 +266,36 @@ all heights >= threshold
- 
+
  height >= threshold appears c times
    -> c * threshold <= sumS n k
 +
@@ -719,7 +719,7 @@ index 3d76adb4..1546518b 100644
 +...
 +up to CountGe h.
  ```
- 
+
 -This is the first distribution layer.  It does not yet decompose `sumS` by
 -height classes, but it already gives future drift estimates a direct lower
 -bound from a threshold regime count.
@@ -728,8 +728,8 @@ index 3d76adb4..1546518b 100644
 +current API local and elementary because the data here is just a finite ordered
 +list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
 +the observation-window layer before a real carrier/radical bridge exists.
- 
+
  The bridge theorem
- 
+
 ````
 `````

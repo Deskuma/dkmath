@@ -597,7 +597,7 @@ index 70e1a039..3b51d3a7 100644
 @@ -523,6 +523,30 @@ noncomputable def orbitWindowResidueCountMod8EqSeven
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n i % 8 = 7))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `1 mod 4`.
 +
@@ -624,11 +624,11 @@ index 70e1a039..3b51d3a7 100644
 +
  /--
  Residue count inside a prefix of an ambient observation window.
- 
+
 @@ -621,6 +645,28 @@ theorem orbitWindowResidueCountMod8EqSeven_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n i % 8 = 7)) (l := List.range k))
- 
+
 +/--
 +The shifted-tail mod `4 = 1` residue count is bounded by the window size.
 +-/
@@ -657,7 +657,7 @@ index 70e1a039..3b51d3a7 100644
 @@ -1062,6 +1108,163 @@ theorem orbitNext_mod_four_eq_three_of_mod_eight_eq_seven
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_four_of_mod_eight_eq_seven hmod
- 
+
 +/--
 +One-step recursion for the accelerated Collatz iterator.
 +
@@ -859,7 +859,7 @@ index 97563db7..3f0ba9ab 100644
 @@ -364,6 +377,14 @@ orbitWindowResidueCountMod8EqFive n k
  orbitWindowResidueCountMod8EqSeven n k
    = number of odd orbit labels congruent to 7 modulo 8
- 
+
 +orbitWindowResidueCountMod4EqOneTail n k
 +  = number of shifted tail labels, at times i + 1 for i < k,
 +    congruent to 1 modulo 4
@@ -874,7 +874,7 @@ index 97563db7..3f0ba9ab 100644
 @@ -558,6 +579,39 @@ oddOrbitLabel % 8 = 7
    -> (T current).val % 4 = 3
  ```
- 
+
 +This has now been lifted to the actual orbit-label sequence:
 +
 +```text
@@ -909,7 +909,7 @@ index 97563db7..3f0ba9ab 100644
 +```
 +
  The next higher-coordinate experiment also passed:
- 
+
  ```text
 @@ -610,8 +664,8 @@ The immediate residue candidates are:
  ```text
@@ -920,7 +920,7 @@ index 97563db7..3f0ba9ab 100644
 +shifted-tail prefix versions of the transition-count inequalities
 +2-step and 3-step delayed-peeling drift estimates
  ```
- 
+
  The main caution is that Collatz state labels are not prime labels.  Any bridge
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-087.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-087.md
 new file mode 100644

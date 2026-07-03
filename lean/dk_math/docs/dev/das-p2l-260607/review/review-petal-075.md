@@ -325,9 +325,9 @@ index 659217d0..3c08ee49 100644
  import DkMath.Collatz.Accelerated
  import DkMath.Collatz.Shift
 +import DkMath.Collatz.PetalBridge
- 
+
  #print "file: DkMath.Collatz.Collatz2K26"
- 
+
 @@ -26,5 +27,6 @@ Structure:
    - V2.lean:          2-adic valuation v₂ and foundational lemmas
    - Accelerated.lean: Accelerated map T, observation s, and sequence sums
@@ -626,20 +626,20 @@ index ef5f6b5b..698f89c1 100644
 +++ b/lean/dk_math/INDEX.md
 @@ -71,6 +71,7 @@
  ### 3.3 コラッツ
- 
+
  - `DkMath.Collatz.Collatz2K26`
 +- `DkMath.Collatz.PetalBridge`
- 
+
  ### 3.4 宇宙式（Cosmic Formula）
- 
+
 @@ -470,7 +471,7 @@ graph TD
  # IV. 独立柱（SilverRatio / Collatz / UnitCycle / DHNT）
- 
+
  - SilverRatio / UniqueRepresentation は **代数的独立柱**。
 -- Collatz は **動的離散系の実験塔**。
 +- Collatz は **動的離散系の実験塔**。PetalBridge により、加速軌道の label 分離と collision を Petal RangeFamily の窓口で読める。
  - UnitCycle / DHNT は **宇宙式と接続可能な補助構造**。
- 
+
  ---
 diff --git a/lean/dk_math/README.md b/lean/dk_math/README.md
 index 0f6fcc42..3a4272aa 100644
@@ -650,8 +650,8 @@ index 0f6fcc42..3a4272aa 100644
  - 補助補題完成報告: [AUXILIARY_LEMMA_COMPLETION_20260130.md](./DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md)
  - sorry 解消進捗: [SORRY_CLEANUP_PROGRESS_20260130.md](./DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md)
 +- Petal 接続窓口: [Collatz-PetalBridge-Status.md](./DkMath/Collatz/docs/Collatz-PetalBridge-Status.md)
- 
+
  ---
- 
+
 ````
 `````

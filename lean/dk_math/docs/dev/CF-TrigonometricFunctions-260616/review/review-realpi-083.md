@@ -283,7 +283,7 @@ index f7b87c48..c8d10ce4 100644
  finite pointwise-composition theorem, not a selected infinite-product limit.
 +Nonvanishing and reciprocal forms are also exposed for downstream finite
 +algebra.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DComposition.lean
@@ -293,7 +293,7 @@ index 4d7fe237..4dd42101 100644
 @@ -68,6 +68,42 @@ theorem dyadicPhaseDepthProduct_pos (n : ℕ) :
    intro k hk
    exact phaseDepth_pos (dyadicPhaseNode n k)
- 
+
 +/-- The finite normalization product never vanishes. -/
 +theorem dyadicPhaseNormalizationProduct_ne_zero (n : ℕ) :
 +    dyadicPhaseNormalizationProduct n ≠ 0 :=
@@ -331,7 +331,7 @@ index 4d7fe237..4dd42101 100644
 +  dyadicPhaseNormalizationProduct_sq_mul_depthProduct n
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index a62881b6..70e87139 100644

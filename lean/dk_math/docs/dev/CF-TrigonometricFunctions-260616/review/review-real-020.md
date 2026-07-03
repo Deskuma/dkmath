@@ -30,9 +30,9 @@ index a59ea6d5..307fe995 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
 @@ -29,6 +29,13 @@ deriving Repr
- 
+
  namespace GapInterval
- 
+
 +/-- Two rational gap intervals are equal when both endpoints are equal. -/
 +@[ext]
 +theorem ext {I J : GapInterval} (hlo : I.lo = J.lo) (hhi : I.hi = J.hi) : I = J := by
@@ -48,9 +48,9 @@ index d4862516..f0cdcc96 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/PowBound.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/PowBound.lean
 @@ -20,6 +20,14 @@ analysis or a mean-value theorem.
- 
+
  namespace DkMath.Analysis.DkReal
- 
+
 +/-!
 +## I. Positivity and isotonicity of the exact correction kernel
 +
@@ -65,7 +65,7 @@ index d4862516..f0cdcc96 100644
 @@ -45,6 +53,14 @@ theorem gapGN_le_of_nonneg_of_le
    intro k hk
    gcongr
- 
+
 +/-!
 +## II. Order bounds supplied by nested rational intervals
 +
@@ -86,7 +86,7 @@ index d4862516..f0cdcc96 100644
    exact gapGN_le_of_nonneg_of_le d
      (hx n) (lo_le_initial_hi x n)
      (x.interval n).width_nonneg (width_le_initial_hi x hx n)
- 
+
 +/-!
 +## III. Uniform boundedness and propagation of vanishing width
 +
@@ -105,7 +105,7 @@ index d4862516..f0cdcc96 100644
 @@ -99,10 +125,40 @@ def powNonneg
    powNonnegOfGapGNBounded d x hx
      (gapGN_bounded_on_nonnegative_nested d x hx)
- 
+
 +/-!
 +## IV. Computable natural-power closure
 +
@@ -119,7 +119,7 @@ index d4862516..f0cdcc96 100644
  theorem powNonneg_interval
      (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
      (powNonneg d x hx).interval n = powNonnegApprox d x hx n := rfl
- 
+
 +/-- Natural power of an embedded nonnegative rational is its powered singleton interval. -/
 +@[simp]
 +theorem powNonneg_ofRat_interval
@@ -150,7 +150,7 @@ index 0f1f2949..b75109f2 100644
 @@ -57,6 +57,10 @@ DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
  ```
- 
+
 +The closure of nonnegative `DkReal` values under natural powers and its
 +computability significance are recorded in
 +[`DkReal-Nonnegative-Power-Milestone.md`](DkReal-Nonnegative-Power-Milestone.md).

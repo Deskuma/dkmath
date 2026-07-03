@@ -302,16 +302,16 @@ index 9638d33d..9d576822 100644
  import DkMath.Petal.Obstruction
  import DkMath.Petal.ABCBridge
 +import DkMath.Petal.RangeFamily
- 
+
  #print "file: DkMath.Petal"
- 
+
 @@ -50,6 +51,7 @@ basic forms / relative polygon vocabulary
    -> Erdos log-capacity bridge from GN carrier channels
    -> obstruction lemmas marking route-breaking assumptions
    -> ABC supportMass/rad bridge from Petal carrier-label support
 +  -> concrete range-family constructors feeding ABC count lower bounds
  ```
- 
+
  This is not a claim that every import is logically minimal.  Some files still
 diff --git a/lean/dk_math/DkMath/Petal/RangeFamily.lean b/lean/dk_math/DkMath/Petal/RangeFamily.lean
 new file mode 100644
@@ -524,12 +524,12 @@ index dec38165..6c735cd6 100644
  DkMath.Petal.ABCBridge
 +DkMath.Petal.RangeFamily
  ```
- 
+
  ### `DkMath.Petal.Basic`
 @@ -977,6 +978,39 @@ NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
  only needs finite prime support; NoLift remains available for valuation
  obstruction routes.
- 
+
 +### Range Family
 +
 +`DkMath.Petal.RangeFamily` is the first concrete finite-family construction
@@ -564,7 +564,7 @@ index dec38165..6c735cd6 100644
 +```
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index 126798b1..0e752daa 100644

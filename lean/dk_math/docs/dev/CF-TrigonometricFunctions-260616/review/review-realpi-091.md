@@ -360,7 +360,7 @@ index 9dcca3be..52618c23 100644
 +case where that correction vanishes. The centered log-depth increment is now
 +defined, identified with an explicit centered quadratic logarithm, and shown
 +to restore a finite mesh/trapezoid discrepancy of `h_n * log 2`.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -370,7 +370,7 @@ index 2345ea72..10310b45 100644
 @@ -105,6 +105,62 @@ theorem log_dyadicPhaseNormalization_right_endpoint (n : ℕ) :
      Real.log (dyadicPhaseNormalization n (dyadicPhaseDenom n)) = 0 := by
    simp [dyadicPhaseNormalization]
- 
+
 +/--
 +Centered logarithmic phase-depth increment.
 +
@@ -433,7 +433,7 @@ index 2345ea72..10310b45 100644
 @@ -512,6 +568,46 @@ theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
      (fun k => Real.log (dyadicPhaseNormalization n k))
      (by simp) (by simp)
- 
+
 +/-- Plain mesh-width finite sum of centered log-depth observations. -/
 +def dyadicPhaseMeshWeightedCenteredLogDepthSum (n : ℕ) : ℝ :=
 +  ∑ k ∈ dyadicPhaseNodeIndices n,
@@ -475,7 +475,7 @@ index 2345ea72..10310b45 100644
 +      ring
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 52891c5d..eff624d2 100644
@@ -484,7 +484,7 @@ index 52891c5d..eff624d2 100644
 @@ -260,6 +260,19 @@ future observables cleanly classified: endpoint-zero quantities inherit
  mesh/trapezoid equality immediately, while centered quantities with nonzero
  endpoint increments expose the correction term.
- 
+
 +The first centered observable is now implemented. `centeredLogPhaseDepth`
 +subtracts the midpoint baseline `log(1/2)` from `log(phaseDepth t)`. It
 +vanishes at `t = 1/2`, has endpoint value `log 2`, and is identified with
@@ -499,7 +499,7 @@ index 52891c5d..eff624d2 100644
 +It is a quadratic-profile bridge, not yet a Gaussian limit.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 22d27546..8882ac34 100644

@@ -512,7 +512,7 @@ index 388f3c3a..3bf847b7 100644
 @@ -329,6 +329,40 @@ theorem orbitWindowHeightCountGe_eq_window_of_forall_ge
        have hlast : threshold ≤ orbitWindowHeight n k := hall k (Nat.lt_succ_self k)
        simp [List.range_succ, ih hprefix, hlast]
- 
+
 +/--
 +The `height >= threshold` occupation count gives a direct lower bound for the
 +accumulated Collatz height.
@@ -570,22 +570,22 @@ index e072cbc2..3d76adb4 100644
 +height >= threshold appears c times
 +  -> c * threshold <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It does not yet decompose `sumS` by
 -height classes, but it gives future drift estimates a stable place to count
 -how often each local height regime appears.
 +height classes, but it already gives future drift estimates a direct lower
 +bound from a threshold regime count.
- 
+
  The bridge theorem
- 
+
 @@ -284,6 +288,7 @@ ordered height profile controls accumulated Collatz drift
  height-threshold hypotheses give integer lower bounds for `sumS`
  label collisions preserve the next height observation
  height occupation counts measure exact and lower-bound regimes
 +threshold occupation counts give direct lower bounds for `sumS`
  ```
- 
+
  ## Next Candidate Work
 @@ -293,8 +298,8 @@ The next safe steps are:
  ```text

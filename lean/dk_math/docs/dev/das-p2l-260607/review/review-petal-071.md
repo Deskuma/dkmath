@@ -318,7 +318,7 @@ index 2f8fd21a..4ab1726f 100644
 @@ -379,6 +379,76 @@ theorem petalNoLiftCarrierLabelMapData_two_pow_le_rad_GN_of_card_eq
    simpa [← hcard] using
      petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN I hGN0 hdata
- 
+
 +/--
 +Carrier-label map data gives an ABC support-mass lower bound from any lower
 +bound `k ≤ I.card` on the selected family size.
@@ -391,11 +391,11 @@ index 2f8fd21a..4ab1726f 100644
 +
  /--
  Direct PrimitiveBeam-to-ABC support-mass count lower bound in body coordinates.
- 
+
 @@ -466,6 +536,60 @@ theorem petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
      petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
        I d x u mOf qOf hGN0 hd hd1 hm hminj hlabel hprim
- 
+
 +/--
 +Lower-cardinality PrimitiveBeam-to-ABC support-mass count bound in body
 +coordinates.
@@ -456,7 +456,7 @@ index 2f8fd21a..4ab1726f 100644
 @@ -547,5 +671,57 @@ theorem petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
      petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
        I a b d mOf qOf hGN0 hd hd1 hab_lt hm hminj hlabel hprim
- 
+
 +/--
 +Lower-cardinality Zsigmondy-to-ABC support-mass count bound on the GN surface
 +`GN d (a - b) b`.
@@ -534,11 +534,11 @@ index 174df401..dec38165 100644
 +petal_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
 +petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
  ```
- 
+
  The `_of_card_eq` forms are convenience endpoints for concrete finite family
  constructions.  Once a caller proves `I.card = k`, the lower bound can be read
  directly as `2^k <= supportMass/rad`.
- 
+
 +The `_of_card_le` forms are the lower-bound versions.  They only require
 +`k <= I.card`, which is often the first usable output of an experimental
 +family construction.
@@ -569,7 +569,7 @@ index 65b51b23..126798b1 100644
 +petal_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
 +petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_le
  ```
- 
+
  The bridge reads Petal carrier-label data as ABC finite support:
 @@ -458,3 +466,15 @@ I.card = k
  This is the first small step toward concrete family constructions.  The

@@ -626,7 +626,7 @@ index de14db5c..8eb448e7 100644
 @@ -641,6 +641,48 @@ theorem continuation_residue_mod_eight_eq_seven
    rw [hsplit]
    rw [Nat.add_mul_mod_self_right]
- 
+
 +/--
 +Reduce a residue through a smaller modulus.
 +
@@ -675,7 +675,7 @@ index de14db5c..8eb448e7 100644
 @@ -1777,6 +1819,54 @@ theorem oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtyt
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree hmod
- 
+
 +/--
 +General orbit-label transition for the recovery sibling.
 +
@@ -726,7 +726,7 @@ index de14db5c..8eb448e7 100644
 +
  /--
  Delayed peeling from the `3 mod 8` height-one channel.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 6f62ca4c..bbbd2937 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
@@ -753,7 +753,7 @@ index 6f62ca4c..bbbd2937 100644
 @@ -941,6 +946,39 @@ This is the lower-bound condition needed before promoting the practical raw
  theorem to an orbit-label theorem: the source label must be in the exact
  height-one `7 mod 8` channel so that `T` is the visible `(3m + 1) / 2` step.
- 
+
 +That promotion is now closed.  The residue-cell reduction bridge is:
 +
 +```text
@@ -789,7 +789,7 @@ index 6f62ca4c..bbbd2937 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-095.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-095.md
 new file mode 100644
 index 00000000..e64571e4

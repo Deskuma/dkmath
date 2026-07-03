@@ -274,7 +274,7 @@ index ef8f93ef..2f8fd21a 100644
 @@ -309,6 +309,76 @@ theorem petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
      (petalNoLiftCarrierLabelMapData_two_pow_card_le_labelSupport_prod I hdata)
      (petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN I hGN0 hdata)
- 
+
 +/--
 +Carrier-label map data gives an ABC support-mass lower bound for any named
 +cardinality `k` of the selected family.
@@ -347,11 +347,11 @@ index ef8f93ef..2f8fd21a 100644
 +
  /--
  Direct PrimitiveBeam-to-ABC support-mass count lower bound in body coordinates.
- 
+
 @@ -367,6 +437,35 @@ theorem petal_two_pow_card_le_rad_GN_of_bodyPrimitivePrimeFactor_family
      (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_family
        I d x u mOf qOf hd hd1 hm hminj hlabel hprim)
- 
+
 +/--
 +Named-cardinality PrimitiveBeam-to-ABC radical count lower bound in body
 +coordinates.
@@ -387,7 +387,7 @@ index ef8f93ef..2f8fd21a 100644
 @@ -423,5 +522,30 @@ theorem petal_two_pow_card_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
      (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
        I a b d mOf qOf hd hd1 hab_lt hm hminj hlabel hprim)
- 
+
 +/--
 +Named-cardinality Zsigmondy-to-ABC radical count lower bound on the GN surface
 +`GN d (a - b) b`.
@@ -434,7 +434,7 @@ index a1be0647..174df401 100644
 +petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
 +petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
  ```
- 
+
 +The `_of_card_eq` forms are convenience endpoints for concrete finite family
 +constructions.  Once a caller proves `I.card = k`, the lower bound can be read
 +directly as `2^k <= supportMass/rad`.
@@ -461,7 +461,7 @@ index 31dcce0d..65b51b23 100644
 +petal_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family_card_eq
 +petal_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family_card_eq
  ```
- 
+
  The bridge reads Petal carrier-label data as ABC finite support:
 @@ -440,3 +446,15 @@ Zsigmondy primitive-divisor family
  These are thin wrapper theorems.  They do not add arithmetic strength beyond

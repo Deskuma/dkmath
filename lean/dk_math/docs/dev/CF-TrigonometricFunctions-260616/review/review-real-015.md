@@ -269,9 +269,9 @@ index 511c584d..c951457f 100644
  import DkMath.Analysis.RealBridge
 -import DkMath.Analysis.DkReal.Interval
 +import DkMath.Analysis.DkReal
- 
+
  #print "file: DkMath.Analysis"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 new file mode 100644
 index 00000000..df96ed8a
@@ -398,16 +398,16 @@ index 5cf38550..a59ea6d5 100644
 @@ -18,7 +18,7 @@ nonnegative power image are exact rational data; no real-number completion is
  needed at this layer.
  -/
- 
+
 -namespace DkMath.Analysis
 +namespace DkMath.Analysis.DkReal
- 
+
  /-- A closed interval with rational endpoints. -/
  structure GapInterval where
 @@ -29,10 +29,27 @@ deriving Repr
- 
+
  namespace GapInterval
- 
+
 +/-- The degenerate rational interval containing only `q`. -/
 +def singleton (q : ℚ) : GapInterval :=
 +  ⟨q, q, le_rfl⟩
@@ -423,7 +423,7 @@ index 5cf38550..a59ea6d5 100644
  /-- Exact rational width of a gap interval. -/
  def width (I : GapInterval) : ℚ :=
    I.hi - I.lo
- 
+
 +/-- A singleton interval has zero width. -/
 +@[simp]
 +theorem singleton_width (q : ℚ) : (singleton q).width = 0 := by
@@ -433,9 +433,9 @@ index 5cf38550..a59ea6d5 100644
  theorem width_nonneg (I : GapInterval) : 0 ≤ I.width :=
    sub_nonneg.mpr I.le_lo_hi
 @@ -76,4 +93,4 @@ theorem powNonneg_width_eq
- 
+
  end GapInterval
- 
+
 -end DkMath.Analysis
 +end DkMath.Analysis.DkReal
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
@@ -444,11 +444,11 @@ index 532db2b7..b68a4b03 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -36,12 +36,22 @@ DkMath.Analysis.GapFill
    affine interval scan, powered fill, endpoint identity, and real order theorem
- 
+
  DkMath.Analysis.RealBridge
 -  specialization to Real and Mathlib Continuous / Set.MapsTo
 +  first bridge to Real and Mathlib Continuous / Set.MapsTo
- 
+
  DkMath.Analysis.DkReal.Interval
 -  rational GapInterval, width, nonnegative power image, and exact width formula
 +  DkReal.GapInterval, width, nonnegative power image, and exact width formula
@@ -459,21 +459,21 @@ index 532db2b7..b68a4b03 100644
 +DkMath.Analysis.DkReal
 +  public entry point for the computable approximation layer
  ```
- 
+
 +The current `RealBridge` is intentionally only the first analytic bridge.
 +Differentiability, `HasDerivAt`, and the Taylor-facing interpretation of
 +`gapGN` are not part of this checkpoint.
 +
  ## Canonical Kernel Bridge
- 
+
  The existing cosmic-formula kernel has argument order:
 @@ -132,9 +142,11 @@ proves continuity in `t`.
- 
+
  ## Rational Interval Prototype
- 
+
 -`GapInterval` contains exact rational endpoints:
 +`DkReal.GapInterval` contains exact rational endpoints:
- 
+
  ```lean
 +namespace DkMath.Analysis.DkReal
 +
@@ -482,14 +482,14 @@ index 532db2b7..b68a4b03 100644
    hi : Rat
 @@ -145,11 +157,23 @@ For a nonnegative interval, `powNonneg` maps both endpoints through a natural
  power while preserving order. Its width satisfies:
- 
+
  ```lean
 -GapInterval.powNonneg_width_eq :
 +DkReal.GapInterval.powNonneg_width_eq :
    (I.powNonneg d hlo).width
      = I.width * gapGN d I.lo I.width
  ```
- 
+
 -This is the initial computational basis for `DkReal`. Nested interval
 -sequences, convergence, and evaluation into Mathlib's real numbers are deferred
 -to later checkpoints.

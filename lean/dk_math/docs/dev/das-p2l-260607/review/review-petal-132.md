@@ -617,7 +617,7 @@ index 6f6c1cd8..cb750c91 100644
 @@ -7239,6 +7239,30 @@ theorem sourcePressurePositiveBlock_iff_margin
        exact (isSourcePressureDepth_iff_margin_pos n k r j).2
          (h.2 j hle hlt)
- 
+
 +/--
 +A selected source-pressure depth is a positive block of length one.
 +-/
@@ -648,7 +648,7 @@ index 6f6c1cd8..cb750c91 100644
 @@ -7267,6 +7291,16 @@ theorem existsSourcePressureLocalIslandBelow_iff_margin
      rcases h with ⟨j, hjm, hjmargin⟩
      exact ⟨j, hjm, (sourcePressureLocalIsland_iff_margin n k r j).2 hjmargin⟩
- 
+
 +/--
 +Build bounded local-island existence from an explicit bounded island witness.
 +-/
@@ -665,7 +665,7 @@ index 6f6c1cd8..cb750c91 100644
 @@ -7293,6 +7327,49 @@ theorem existsSourcePressureFrontierBelow_iff_margin
      rcases h with ⟨j, hjm, hmargin⟩
      exact ⟨j, hjm, (sourcePressureFrontier_iff_margin n k r j).2 hmargin⟩
- 
+
 +/--
 +Build bounded frontier existence from an explicit bounded frontier witness.
 +-/
@@ -725,7 +725,7 @@ index 30d88424..b4a3464b 100644
 +sourcePressurePositiveBlock_of_forall_margin_pos
 +sourcePressureSignChangeUp_of_localIsland
  ```
- 
+
  The central No.100 layer is:
 @@ -233,6 +237,7 @@ docs/Collatz-WindowResidualShape-127.md
  docs/Collatz-ResidualShapeSequence-128.md
@@ -748,10 +748,10 @@ index e78ee74a..bd340c71 100644
 +sourcePressurePositiveBlock_of_forall_margin_pos
 +sourcePressureSignChangeUp_of_localIsland
  ```
- 
+
  These names are for reading scan output.  They do not assert maximality,
  uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
- 
+
 +Checkpoint 131 refines the Python wording:
 +
 +```text
@@ -763,7 +763,7 @@ index e78ee74a..bd340c71 100644
 +local islands, and sign-change-up rows by residual residue class.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index eba153f3..2c4082d6 100644
@@ -778,12 +778,12 @@ index eba153f3..2c4082d6 100644
 +sourcePressurePositiveBlock_of_forall_margin_pos
 +sourcePressureSignChangeUp_of_localIsland
  ```
- 
+
  The scan output lives at:
 @@ -233,6 +237,31 @@ max positive depth count: 8
  This confirms that pressure should remain a sign-pattern surface.  Prefix-like
  blocks are common, but local islands and sign-change-up rows are real.
- 
+
 +Checkpoint 131 refines the scan terminology and adds aggregate correlation
 +tables:
 +
@@ -810,7 +810,7 @@ index eba153f3..2c4082d6 100644
 +as residual `15 mod 16` and `31 mod 32`.
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureCorrelationScan-131.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureCorrelationScan-131.md
 new file mode 100644
@@ -1003,7 +1003,7 @@ index 22706367..9e43ee3b 100644
 @@ -83,6 +85,31 @@ These rows are the important obstruction witnesses.  They show again that
  pressure is not simply carrier nesting and does not support an unconditional
  prefix theorem.
- 
+
 +Checkpoint 131 refines this scan:
 +
 +```text
@@ -1030,7 +1030,7 @@ index 22706367..9e43ee3b 100644
 +```
 +
  ## Lean Surface Added
- 
+
  Checkpoint 130 adds only thin predicates and margin bridges:
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-131.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-131.md
 new file mode 100644
@@ -1250,8 +1250,8 @@ index 49d7395d..b59bb81d 100644
  from dataclasses import dataclass
 +from collections import Counter, defaultdict
  from pathlib import Path
- 
- 
+
+
 @@ -42,7 +43,14 @@ class PressureSignPatternRow:
      local_island_count: int
      sign_change_up_positions: str
@@ -1269,8 +1269,8 @@ index 49d7395d..b59bb81d 100644
      max_retention_drop: int
      max_continuation_drop: int
 @@ -60,7 +68,19 @@ def join_pairs(values: list[tuple[int, int]]) -> str:
- 
- 
+
+
  def join_blocks(blocks: list[tuple[int, int]]) -> str:
 -    return ";".join(f"{start}-{end}" if start != end else str(start) for start, end in blocks)
 +    return ";".join(
@@ -1286,13 +1286,13 @@ index 49d7395d..b59bb81d 100644
 +        counts,
 +        key=lambda value: (-counts[value], value),
 +    )
- 
- 
+
+
  def v2(n: int) -> int:
 @@ -123,7 +143,7 @@ def consecutive_blocks(depths: list[int]) -> list[tuple[int, int]]:
      return blocks
- 
- 
+
+
 -def first_failure_pair(depths: list[int], r_start: int) -> tuple[int, int] | None:
 +def first_sign_change_pair(depths: list[int], r_start: int) -> tuple[int, int] | None:
      selected = set(depths)
@@ -1305,7 +1305,7 @@ index 49d7395d..b59bb81d 100644
 +    residual_mod_8_seq = [value % 8 for value in residual_shape_seq]
 +    residual_mod_16_seq = [value % 16 for value in residual_shape_seq]
 +    residual_mod_32_seq = [value % 32 for value in residual_shape_seq]
- 
+
      depths = list(range(r_start, r_start + depth_len))
      extended_depths = list(range(r_start, r_start + depth_len + 1))
 @@ -172,7 +195,8 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
@@ -1315,7 +1315,7 @@ index 49d7395d..b59bb81d 100644
 -    failure_pair = first_failure_pair(positive_depths, r_start)
 +    sign_change_pair = first_sign_change_pair(positive_depths, r_start)
 +    block_lengths = [end - start + 1 for start, end in blocks]
- 
+
      return PressureSignPatternRow(
          n=n,
 @@ -182,9 +206,9 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
@@ -1352,8 +1352,8 @@ index 49d7395d..b59bb81d 100644
          max_continuation_drop=max_adjacent_drop(continuations, depths),
 @@ -225,12 +256,70 @@ def write_csv(rows: list[PressureSignPatternRow], path: Path) -> None:
              writer.writerow(row.__dict__)
- 
- 
+
+
 +def table_count_by(
 +    rows: list[PressureSignPatternRow],
 +    key_name: str,
@@ -1526,8 +1526,8 @@ index 49d7395d..b59bb81d 100644
 +        ]
 +    )
      path.write_text("\n".join(lines), encoding="utf-8")
- 
- 
+
+
 diff --git a/python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md b/python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md
 index fde15131..0aca5765 100644
 --- a/python/Collatz/PetalBridge/results/pressure_sign_pattern_scan.md
@@ -1545,13 +1545,13 @@ index fde15131..0aca5765 100644
  - max local island count: `1`
  - max sign-change-up count: `1`
 +- positive block length counts: `1:380; 2:48; 3:23; 4:33; 5:20; 6:3; 7:1; 8:3`
- 
+
  ## Top Positive-Depth Samples
- 
+
 @@ -28,7 +32,7 @@
- 
+
  ## Local-Island Samples
- 
+
 -| n | islands | first failure pair | sign-up | height seq | first-failed seq | residual mod 16 |
 +| n | islands | first sign-change pair | sign-up | height seq | first-failed seq | residual mod 16 |
  |---:|---|---|---|---|---|---|

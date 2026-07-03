@@ -323,7 +323,7 @@ index 923335c2..1768ef43 100644
 @@ -1788,6 +1788,25 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  ```
- 
+
 +The first concrete Petal-address supply theorem is also available:
 +
 +```text
@@ -344,7 +344,7 @@ index 923335c2..1768ef43 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/Address.lean b/lean/dk_math/DkMath/Petal/Address.lean
 index be91d118..1ed953b7 100644
@@ -353,7 +353,7 @@ index be91d118..1ed953b7 100644
 @@ -367,6 +367,31 @@ theorem outerPetalAddress_decompose_sub_one
    rw [Nat.mul_comm B ((m - 1) / B)]
    rw [Nat.add_comm ((m - 1) % B) (((m - 1) / B) * B)]
- 
+
 +/--
 +An outer Petal address determines its one-based value, provided the values are
 +valid one-based inputs.
@@ -389,7 +389,7 @@ index e162f8fb..7925a94a 100644
 @@ -220,6 +220,59 @@ theorem petalAddressNoncollision_label_injOn
    petalCarrierLabelNoncollisionOn_injOn I qOf
      (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
- 
+
 +/--
 +Injective selected addresses supply Petal address noncollision.
 +
@@ -453,7 +453,7 @@ index 4bafbf3b..1ca83e55 100644
 @@ -577,5 +577,19 @@ Can Petal geometry supply concrete address noncollision and
  address-to-label compatibility?
  ```
- 
+
 +The first part now has a concrete outer-address supply theorem:
 +
 +```text
@@ -477,7 +477,7 @@ index 15890ff7..26f8e9b8 100644
 @@ -735,6 +735,26 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  ```
- 
+
 +The first concrete address-construction supply theorem is:
 +
 +```text
@@ -499,7 +499,7 @@ index 15890ff7..26f8e9b8 100644
 +```
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

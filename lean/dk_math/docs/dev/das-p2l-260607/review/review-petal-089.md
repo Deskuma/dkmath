@@ -631,7 +631,7 @@ index 3b51d3a7..83890785 100644
 @@ -463,6 +463,17 @@ window profile.
  noncomputable def orbitWindowHeightCountGe (n : OddNat) (k threshold : ℕ) : ℕ :=
    (orbitWindowHeightSeq n k).countP (fun x => decide (threshold ≤ x))
- 
+
 +/--
 +Number of shifted-tail entries whose height is at least `threshold`.
 +
@@ -645,11 +645,11 @@ index 3b51d3a7..83890785 100644
 +
  /--
  Number of in-window odd-state labels in residue class `1 mod 4`.
- 
+
 @@ -579,6 +590,46 @@ theorem orbitWindowHeightCountGe_le_window
      (List.countP_le_length
        (p := fun x => decide (threshold ≤ x)) (l := orbitWindowHeightSeq n k))
- 
+
 +/--
 +The shifted-tail threshold occupation count is bounded by the tail window size.
 +-/
@@ -696,7 +696,7 @@ index 3b51d3a7..83890785 100644
 @@ -717,6 +768,29 @@ theorem orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
            exact hheight (hiff.mpr h)
          simp [ih, hheight, hres]
- 
+
 +/--
 +Tail `height >= 2` occupation is the same as shifted-tail residue occupation
 +in class `1 mod 4`.
@@ -726,7 +726,7 @@ index 3b51d3a7..83890785 100644
 @@ -1217,6 +1291,17 @@ theorem orbitWindowResidueCountMod8EqThree_le_tailMod4EqOne
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +Every `3 mod 8` source label contributes a shifted-tail entry with
 +height at least `2`.
@@ -744,7 +744,7 @@ index 3b51d3a7..83890785 100644
 @@ -1243,6 +1328,41 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +The shifted-tail threshold count is contained in the ordinary count over the
 +one-step-longer window.
@@ -782,11 +782,11 @@ index 3b51d3a7..83890785 100644
 +
  /--
  Two-step delayed-peeling experiment.
- 
+
 @@ -1265,6 +1385,19 @@ theorem sumS_two_steps_ge_three_of_mod_eight_eq_three
      _ = sumS n 2 := by
        simp [sumS, orbitWindowHeight_eq_s_iterateT]
- 
+
 +/--
 +Localized two-step delayed-peeling experiment.
 +
@@ -806,7 +806,7 @@ index 3b51d3a7..83890785 100644
 @@ -1662,6 +1795,71 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
      (Nat.add_le_add_left hm k)
      (orbitWindowHeightSeq_sum_ge_window_add_countGe_two n k)
- 
+
 +/--
 +Strong tail-count drift budget.
 +
@@ -874,7 +874,7 @@ index 3b51d3a7..83890785 100644
 +
  /--
  Residue-address drift bridge.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 3f0ba9ab..8ff3f266 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
@@ -931,14 +931,14 @@ index 3f0ba9ab..8ff3f266 100644
 @@ -359,6 +371,10 @@ orbitWindowHeightCountEq n k h
  orbitWindowHeightCountGe n k threshold
    = number of entries with height at least threshold
- 
+
 +orbitWindowHeightCountGeTail n k threshold
 +  = number of shifted tail entries, at times i + 1 for i < k,
 +    whose height is at least threshold
 +
  orbitWindowResidueCountMod4EqOne n k
    = number of odd orbit labels congruent to 1 modulo 4
- 
+
 @@ -450,6 +466,12 @@ prefix mod 4 residue occupation lower bound
  mod 8 residue occupation lower bound
    -> m <= residueCountMod8EqFive
@@ -950,12 +950,12 @@ index 3f0ba9ab..8ff3f266 100644
 +delayed `3 mod 8` drift
 +  -> (k + 1) + residueCountMod8EqThree n k <= sumS n (k + 1)
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -612,6 +634,26 @@ residueCountMod8EqThree <= tail residueCountMod4EqOne
  residueCountMod8EqSeven <= tail residueCountMod4EqThree
  ```
- 
+
 +The `3 mod 8` source channel has also been returned to the height-count side:
 +
 +```text
@@ -977,7 +977,7 @@ index 3f0ba9ab..8ff3f266 100644
 +later.
 +
  The next higher-coordinate experiment also passed:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-088.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-088.md
 new file mode 100644

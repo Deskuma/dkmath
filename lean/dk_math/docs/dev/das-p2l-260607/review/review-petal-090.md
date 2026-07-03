@@ -660,7 +660,7 @@ index 83890785..7d3a3ec0 100644
 @@ -474,6 +474,17 @@ noncomputable def orbitWindowHeightCountGeTail
    (List.range k).countP
      (fun i => decide (threshold ≤ orbitWindowHeight n (i + 1)))
- 
+
 +/--
 +Number of shifted-tail entries whose height is exactly `h`.
 +
@@ -674,11 +674,11 @@ index 83890785..7d3a3ec0 100644
 +
  /--
  Number of in-window odd-state labels in residue class `1 mod 4`.
- 
+
 @@ -602,6 +613,19 @@ theorem orbitWindowHeightCountGeTail_le_window
        (p := fun i => decide (threshold ≤ orbitWindowHeight n (i + 1)))
        (l := List.range k))
- 
+
 +/--
 +The shifted-tail exact-height occupation count is bounded by the tail window
 +size.
@@ -698,7 +698,7 @@ index 83890785..7d3a3ec0 100644
 @@ -630,6 +654,20 @@ theorem orbitWindowHeightCountGeTail_succ
    · simp [h]
    · simp [h]
- 
+
 +/--
 +Successor formula for shifted-tail exact-height occupation counts.
 +-/
@@ -719,7 +719,7 @@ index 83890785..7d3a3ec0 100644
 @@ -1111,6 +1149,57 @@ theorem orbitWindowHeight_eq_one_iff_mod_four_eq_three
        omega
      omega
- 
+
 +/--
 +Tail exact height `1` occupation is the same as shifted-tail residue
 +occupation in class `3 mod 4`.
@@ -777,7 +777,7 @@ index 83890785..7d3a3ec0 100644
 @@ -1328,6 +1417,20 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +Every `7 mod 8` source label contributes a shifted-tail entry with exact
 +height `1`.
@@ -798,7 +798,7 @@ index 83890785..7d3a3ec0 100644
 @@ -1398,6 +1501,30 @@ theorem sumS_two_steps_ge_three_of_mod_eight_eq_three_at
    apply sumS_two_steps_ge_three_of_mod_eight_eq_three
    simpa [oddOrbitLabel_iterateT_zero_eq] using hmod
- 
+
 +/--
 +Two-step retention witness for the `7 -> 7` pattern.
 +
@@ -873,16 +873,16 @@ index 8ff3f266..4fc4df3c 100644
 @@ -375,6 +382,10 @@ orbitWindowHeightCountGeTail n k threshold
    = number of shifted tail entries, at times i + 1 for i < k,
      whose height is at least threshold
- 
+
 +orbitWindowHeightCountEqTail n k h
 +  = number of shifted tail entries, at times i + 1 for i < k,
 +    whose height is exactly h
 +
  orbitWindowResidueCountMod4EqOne n k
    = number of odd orbit labels congruent to 1 modulo 4
- 
+
 @@ -472,6 +483,12 @@ tail `height >= 2` lower bound
- 
+
  delayed `3 mod 8` drift
    -> (k + 1) + residueCountMod8EqThree n k <= sumS n (k + 1)
 +
@@ -892,12 +892,12 @@ index 8ff3f266..4fc4df3c 100644
 +retaining `7 mod 8` source
 +  -> residueCountMod8EqSeven <= tail CountEq 1
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -654,6 +671,36 @@ This is the first general-window delayed-peeling theorem.  A source count in
  the current window now produces a lower bound on accumulated height one step
  later.
- 
+
 +The `7 mod 8` source channel is now the retention counterpart:
 +
 +```text
@@ -929,7 +929,7 @@ index 8ff3f266..4fc4df3c 100644
 +```
 +
  The next higher-coordinate experiment also passed:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-089.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-089.md
 new file mode 100644

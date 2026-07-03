@@ -503,7 +503,7 @@ index e91357e6..c2e61f70 100644
 @@ -486,6 +486,158 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
              hone, htwo, if_false]
            exact Nat.le_add_right_of_le ih'
- 
+
 +/--
 +Every accelerated Collatz odd state has height at least `1`.
 +
@@ -678,7 +678,7 @@ index 1546518b..62da4cf5 100644
  oddOrbitLabel_injOn_of_pairwiseSeparated
  iterateT_eq_of_oddOrbitLabel_eq
 @@ -278,6 +285,21 @@ prefix threshold count in a k-window, with r <= k
- 
+
  first two layer-cake layers
    -> CountGe 1 + CountGe 2 <= sumS n k
 +
@@ -697,12 +697,12 @@ index 1546518b..62da4cf5 100644
 +first three layer-cake layers
 +  -> CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -297,6 +319,40 @@ current API local and elementary because the data here is just a finite ordered
  list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
  the observation-window layer before a real carrier/radical bridge exists.
- 
+
 +The Collatz-specific floor is now also fixed:
 +
 +```text
@@ -738,7 +738,7 @@ index 1546518b..62da4cf5 100644
 +layer-cake form over `Finset.range H`.
 +
  The bridge theorem
- 
+
  ```lean
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/next-impl-plan-082.md b/lean/dk_math/docs/dev/das-p2l-260607/review/next-impl-plan-082.md
 new file mode 100644

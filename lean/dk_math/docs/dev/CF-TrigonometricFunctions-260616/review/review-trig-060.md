@@ -201,7 +201,7 @@ index eb095e80..445b26fd 100644
 @@ -701,6 +701,59 @@ theorem semanticKernelPower_one (r : UnitKernel DkNNRealQ) :
      semanticKernelPower r 1 = semanticUnitKernel r := by
    simp [semanticKernelPower]
- 
+
 +/--
 +The core coordinate of the second kernel power is the quadratic difference
 +`C^2 - S^2`.
@@ -304,7 +304,7 @@ index 56944edf..b10c337e 100644
 @@ -178,6 +182,21 @@ square root of the neutral kernel, but coordinatewise transport from
  `DkNNRealQ` makes both semantic coordinates nonnegative and excludes that
  case. Thus no nonidentity transported kernel has order two.
- 
+
 +Low-power coordinate formulas are now exposed as a reusable algebraic API:
 +
 +```text
@@ -330,7 +330,7 @@ index ef41a406..f388c641 100644
 @@ -212,6 +212,25 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 04:51 JST (Polynomial coordinates for powers two and three)
 +
 +1. 方針:
@@ -351,7 +351,7 @@ index ef41a406..f388c641 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 04:42 JST (Low-order classification: orders one and two)
- 
+
  1. 修正:
 ````
 `````

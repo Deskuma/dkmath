@@ -292,7 +292,7 @@ index c7d3e7c4..7e9f0b29 100644
 +mapped by descended semantic evaluation is the corresponding observed
 +semantic edge path after endpoint relabelling. The next target is lifting
 +these edge-level comparisons through the canonical four-edge concatenator.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -302,7 +302,7 @@ index 720ca2fa..51bdd199 100644
 @@ -2051,6 +2051,89 @@ theorem shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
    rw [shiftedSemanticObservedCyclicEdgePath_apply]
    rw [shiftedSemanticFinLevelPath_apply_eq_levelEdge]
- 
+
 +/--
 +Mapping a quotient edge by descended semantic evaluation recovers the
 +observed semantic edge after endpoint relabelling.
@@ -388,7 +388,7 @@ index 720ca2fa..51bdd199 100644
 +
  /--
  Canonical four-edge concatenation with explicit seam equalities.
- 
+
 @@ -2652,6 +2735,9 @@ Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
  packaging step. Quotient endpoint evaluation aliases, finite seam value
  alignment aliases, and a path-cast proof-irrelevance helper isolate the
@@ -396,7 +396,7 @@ index 720ca2fa..51bdd199 100644
 +Mapped quotient edge paths are now identified with their observed semantic
 +edge paths after endpoint relabelling, uniformly over `Fin 4` and through
 +four concrete edge aliases.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 @@ -2666,7 +2752,8 @@ endpoint. The endpoint mismatch is solved; the remaining obstruction is the
@@ -406,7 +406,7 @@ index 720ca2fa..51bdd199 100644
 -seam alignment over direct equality of seam proof terms.
 +seam alignment over direct equality of seam proof terms. The next expected
 +normalization target is the mapped canonical quotient four-edge path.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -429,7 +429,7 @@ index da8bc4f2..dc636e67 100644
 @@ -761,6 +767,24 @@ shiftedSemanticObservedCyclicEdgePath_apply
  shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath
  ```
- 
+
 +The mapped quotient edge form is also connected to the observed semantic edge.
 +After endpoint relabelling, mapping a quotient edge path by descended semantic
 +evaluation gives the corresponding observed edge path:

@@ -280,7 +280,7 @@ index fcc9359b..b05e8e2a 100644
 @@ -116,6 +116,16 @@ theorem globalQuarterCenter_eq_endpoint_add_halfQuarter (k : ℕ) :
    simp [globalQuarterCenter, globalQuarterEndpoint, phaseHalfQuarterStep]
    ring
- 
+
 +/--
 +Successive quarter endpoints differ by one quarter of the unwrapped full
 +cycle.
@@ -293,11 +293,11 @@ index fcc9359b..b05e8e2a 100644
 +
  /--
  Neighboring quarter-edge centers are separated by one full quarter step.
- 
+
 @@ -127,6 +137,16 @@ theorem globalQuarterCenter_succ_sub_center (k : ℕ) :
    simp [globalQuarterCenter]
    ring
- 
+
 +/--
 +Additive form of the center-step law, convenient for later shifted-frame
 +definitions.

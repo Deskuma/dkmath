@@ -527,9 +527,9 @@ index ff4e1d2f..83664cc0 100644
  import DkMath.Analysis.DkReal.SemanticCF2DPhase
  import DkMath.Analysis.DkReal.SemanticCF2DPath
 +import DkMath.Analysis.DkReal.SemanticCF2DNormalize
- 
+
  #print "file: DkMath.Analysis"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 index 2d329370..8b0d72f6 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
@@ -537,7 +537,7 @@ index 2d329370..8b0d72f6 100644
 @@ -105,6 +105,12 @@ affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
  closed continuous piecewise-affine path under the core-zero action. This path
  is not yet normalized to a fixed `q2` boundary.
- 
+
 +[IMPLEMENTED: semantic-cf2d-normalized-edge]
 +`DkReal.SemanticCF2DNormalize` divides one affine edge by the positive square
 +root of `phaseDepth`. The resulting edge is continuous, has the same
@@ -546,7 +546,7 @@ index 2d329370..8b0d72f6 100644
 +
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 index 785f95a3..faee5cde 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -554,7 +554,7 @@ index 785f95a3..faee5cde 100644
 @@ -1321,9 +1321,14 @@ lower bound of one half.
  packages each compatible edge as a Mathlib `Path` and concatenates four edges
  into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
- 
+
 -[TODO: semantic-cf2d-phase/boundary-normalization] In a separate analytic
 -module, normalize the affine edge by its positive `q2` profile and prove that
 -the normalized path stays on the original boundary.
@@ -566,7 +566,7 @@ index 785f95a3..faee5cde 100644
 +[TODO: semantic-cf2d-phase/normalized-four-path] Transport the normalized edge
 +through all four action phases and concatenate the resulting boundary-valued
 +paths into a closed path.
- 
+
  [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
  identify the fixed-`q2` path with the standard Euclidean circle model and
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean
@@ -725,10 +725,10 @@ index 48d2e6db..7b1e5936 100644
 @@ -105,12 +105,13 @@ theorem, not inserted as notation.
  4. Core-zero exact order four closes the endpoint without Euclidean
     terminology.
- 
+
 -### Milestone B: boundary normalization
 +### Milestone B: boundary normalization - one edge implemented
- 
+
 -1. Define the positive correction `1 / sqrt (phaseDepth t)`.
 -2. Prove that the normalized edge preserves the original `q2` value.
 -3. Prove continuity of the normalized edge.
@@ -738,13 +738,13 @@ index 48d2e6db..7b1e5936 100644
 +3. The normalized master edge is continuous and has the original endpoints.
 +4. Compatibility with all four action translates and their closed-path
 +   concatenation remains to be implemented.
- 
+
  ### Milestone C: refinement law
- 
+
 @@ -152,7 +153,6 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  ## Immediate Next Step
- 
+
 -The next implementation is boundary normalization of one affine edge. It must
 -first prove the correction factor continuous and well-defined from the strict
 -positivity of `phaseDepth`, then prove preservation of the original `q2`
@@ -759,13 +759,13 @@ index 79fb9957..242393c5 100644
 @@ -13,6 +13,10 @@ concatenation, and core-zero closed path are implemented in
  `DkMath.CosmicFormula.Rotation.CF2D.Topology` and
  `DkMath.Analysis.DkReal.SemanticCF2DPath`.
- 
+
 +The positive reciprocal-square-root correction, normalized master edge,
 +endpoint laws, continuity, and fixed-`q2` theorem are implemented in
 +`DkMath.Analysis.DkReal.SemanticCF2DNormalize`.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -329,7 +333,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/half-fold-profile]

@@ -942,7 +942,7 @@ index 5fd1d2a0..b7b6dca5 100644
 +            | inr hpressure => exact hpressure
 +          simp [hc, hm]
 +      omega
- 
+
  /--
  If source continuation pressure holds at every depth of the range, then the
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
@@ -958,7 +958,7 @@ index 9903d1eb..145980af 100644
  docs/Collatz-PetalBridge-Status.md
  ```
 @@ -350,3 +351,21 @@ tailContinuationPressureDepthCount_eq_len_of_pressureOnRange
- 
+
  This moves the observation from local mass pressure to finite depth-profile
  counting.
 +
@@ -1132,7 +1132,7 @@ index fee69a24..5a7c3dfc 100644
 @@ -442,6 +442,50 @@ pressure at every depth
  The next natural layer is a mixed depth-mode distribution: controlled depths
  versus pressure depths.
- 
+
 +## Mixed Depth-Mode Distribution
 +
 +Checkpoint 108 adds the controlled side of the pressure count:
@@ -1178,7 +1178,7 @@ index fee69a24..5a7c3dfc 100644
 +surface needed to state such a claim without leaving `Nat`.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 3e4a335c..12d34c6d 100644

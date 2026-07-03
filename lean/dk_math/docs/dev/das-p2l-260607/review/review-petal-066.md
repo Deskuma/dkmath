@@ -342,7 +342,7 @@ index 7504cef0..fb2ec2e9 100644
 @@ -90,6 +90,108 @@ theorem valueInjective_contradiction_of_same_value_ne_index
      False :=
    hne (hinj hi hj hvalue)
- 
+
 +/--
 +Label recovery followed by value injectivity turns equal labels into equal
 +selected indices.
@@ -467,7 +467,7 @@ index 60985221..f2340052 100644
 @@ -890,6 +895,15 @@ These theorems do not add bad assumptions as axioms.  They name the points where
  a candidate route stops being compatible with address noncollision, finite
  prime-channel independence, or local no-lift valuation control.
- 
+
 +The packaged carrier-label map lemmas also record the positive safety chain:
 +
 +```text
@@ -478,7 +478,7 @@ index 60985221..f2340052 100644
 +reuse the same selected prime label at two distinct indices.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index de4aaba8..6732620c 100644
@@ -499,11 +499,11 @@ index de4aaba8..6732620c 100644
 @@ -218,12 +223,14 @@ petalNoLift_contradiction_of_padicValNat_two_le
  petalNoLift_obstruction_of_padicValNat_ge
  ```
- 
+
 -This first set focuses on the smallest route-breaking witnesses:
 +This first set focuses on the smallest route-breaking witnesses and the
 +positive safety chain behind them:
- 
+
  ```text
  same address under address noncollision
  same label but different value under label recovery

@@ -388,7 +388,7 @@ index 705cc278..f9da3189 100644
 @@ -149,6 +149,32 @@ Subtraction enters only in this real-side action. It is not added to
  def semanticAct (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Vec ℝ :=
    UnitKernel.act (semanticUnitKernel r) z
- 
+
 +/--
 +Iterate the transported semantic action `k` times.
 +
@@ -421,7 +421,7 @@ index 705cc278..f9da3189 100644
 @@ -1220,6 +1246,42 @@ theorem semanticAct_thrice_of_core_eq_zero
        rw [semanticAct_twice_of_core_eq_zero hcore]
        simp
- 
+
 +/-- Four boundary actions return every vector to itself. -/
 +theorem semanticAct_four_of_core_eq_zero
 +    {r : UnitKernel DkNNRealQ}
@@ -466,13 +466,13 @@ index cd5e407d..ba804120 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -137,12 +137,19 @@ The action side is now connected for the first two special cases:
- 
+
  ```text
  two semantic actions   <->  Euclidean rotation by semanticHalfTurnAngle
 +three semantic actions <->  Euclidean rotation by semanticPhaseAngle 3
  four semantic actions  <->  Euclidean rotation by semanticFullTurnAngle
  ```
- 
+
  These theorems use the pre-existing core-zero action laws: two actions
 -negate both coordinates, while four actions return to the identity. Thus the
 -angle reading remains downstream of the algebraic order-four structure.
@@ -484,9 +484,9 @@ index cd5e407d..ba804120 100644
 +`semanticActIter r k z = (semanticAct r)^[k] z`. This is the API bridge toward
 +the eventual general theorem relating `k` semantic actions to rotation by
 +`semanticPhaseAngle k`.
- 
+
  ### Milestone A: continuous four-edge loop - implemented
- 
+
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index ead8b5e7..30e78e99 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
@@ -494,7 +494,7 @@ index ead8b5e7..30e78e99 100644
 @@ -410,6 +410,12 @@ theorem semanticPhaseAngle_two :
      semanticPhaseAngle 2 = semanticHalfTurnAngle :=
    rfl
- 
+
 +@[simp]
 +theorem semanticPhaseAngle_three :
 +    semanticPhaseAngle 3 = 3 * Real.pi / 2 := by
@@ -507,7 +507,7 @@ index ead8b5e7..30e78e99 100644
 @@ -475,6 +481,37 @@ theorem rotation_semanticFullTurnAngle_eq_refl :
    ext v
    simp [semanticFullTurnAngle_eq_two_pi]
- 
+
 +/--
 +Rotating by three semantic quarter-turns is the inverse coordinate
 +quarter-turn.
@@ -540,12 +540,12 @@ index ead8b5e7..30e78e99 100644
 +    quarterTurnLinearEquiv, pairToEuclideanPlane, euclideanPlaneToPair]
 +
  end
- 
+
  end DkMath.CosmicFormula.Rotation.CF2D
 @@ -600,6 +637,41 @@ theorem pairToEuclideanPlane_semanticAct_twice_eq_rotation_semanticHalfTurnAngle
    | mk x y =>
        exact pairToEuclideanPlane_neg (x, y)
- 
+
 +/--
 +Iterate notation for the two-action half-turn bridge.
 +-/
@@ -613,7 +613,7 @@ index ead8b5e7..30e78e99 100644
 +  rw [semanticActIter_four_of_core_eq_zero hcore,
 +    semanticPhaseAngle_four, rotation_semanticFullTurnAngle_eq_refl]
    rfl
- 
+
  end
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index d8b7f2bb..d45bd896 100644

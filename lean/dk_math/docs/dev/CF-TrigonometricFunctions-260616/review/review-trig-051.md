@@ -230,14 +230,14 @@ index ea4a369d..493bc80f 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal.lean
 @@ -80,7 +80,9 @@ comparison.
- 
+
  [IMPLEMENTED: semantic-cf2d-action] `DkReal.SemanticCF2D` transports unit
  kernels to `Real`, derives the Pythagorean coordinate identity, and applies
 -the resulting kernel as a real square-mass-preserving action.
 +the resulting kernel as a real square-mass-preserving action. Transported
 +actions compose through real-side kernel products and restrict to every real
 +square-mass level set.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
@@ -247,7 +247,7 @@ index 0f4c900f..724028dd 100644
 @@ -37,10 +37,14 @@ vanishing-width bound and exports `Std.Total (· ≤ ·)`.
  `DkReal.CanonicalOrder` subsequently proves
  `x ≤ y ↔ ∃ z, y = x + z` and installs `CanonicallyOrderedAdd`.
- 
+
 -[TODO: semantic-bridge] A semantic map to Mathlib's `NNReal` should be placed in a separate
 -bridge module and proved to preserve zero, one, addition, multiplication,
 -natural powers, and order. It should also provide an independent validation
@@ -261,7 +261,7 @@ index 0f4c900f..724028dd 100644
 +Mathlib `NNReal` only when a consumer benefits from carrying nonnegativity in
 +the target type.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 index eabf45e7..1254f04c 100644
@@ -270,7 +270,7 @@ index eabf45e7..1254f04c 100644
 @@ -139,6 +139,53 @@ theorem semanticAct_preservesQ2 (r : UnitKernel DkNNRealQ) :
      PreservesQ2 (semanticAct r) :=
    semanticAct_q2 r
- 
+
 +/--
 +Real-side product of two independently interpreted nonnegative DkMath
 +kernels.
@@ -347,11 +347,11 @@ index 2e1075c5..f35fccde 100644
 +semanticActLevel
 +semanticActLevel_comp
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
  Subtraction appears only after transport to `Real`; it is not added to the
  nonnegative source semiring.
- 
+
 +Two transported actions compose through the product of their real unit
 +kernels, and every real `q2` level set is stable under the transported action.
 +No source-level kernel product is asserted.

@@ -364,7 +364,7 @@ index c8d10ce4..447d8bf9 100644
 @@ -132,6 +132,13 @@ finite pointwise-composition theorem, not a selected infinite-product limit.
  Nonvanishing and reciprocal forms are also exposed for downstream finite
  algebra.
- 
+
 +[IMPLEMENTED: semantic-cf2d-finite-log-composition]
 +`DkReal.SemanticCF2DLogComposition` transfers the positive finite
 +cancellation law to logarithmic sums. Each log sum is identified with the
@@ -479,7 +479,7 @@ index a78f93e5..fcce9113 100644
 @@ -195,6 +195,19 @@ pointwise boundary-restoration law through finite multiplication. It does not
  yet identify either product as the canonical refinement observable, nor does
  it justify an infinite product or logarithmic limit.
- 
+
 +`SemanticCF2DLogComposition.lean` now records the equivalent finite additive
 +form. Pointwise positivity permits logarithms, and summation over the same
 +complete mesh gives
@@ -494,7 +494,7 @@ index a78f93e5..fcce9113 100644
 +canonical.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 70e87139..4df85cc8 100644

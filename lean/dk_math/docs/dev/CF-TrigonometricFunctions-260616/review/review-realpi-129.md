@@ -225,7 +225,7 @@ index 507db4d0..e82b267d 100644
 +changed. The remaining bridge is to commute descended semantic evaluation
 +with the canonical four-path concatenator for this endpoint-cast observed
 +path.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -235,7 +235,7 @@ index 7c316e21..15b6d0d0 100644
 @@ -2245,6 +2245,60 @@ theorem shiftedSemanticCyclicChartEval_left_zero
          shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
    shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
- 
+
 +/--
 +The older observed closed quotient path recast to finite endpoint types.
 +
@@ -292,7 +292,7 @@ index 7c316e21..15b6d0d0 100644
 +
  /--
  The observed closed quotient path remains on the original `q2` boundary.
- 
+
 @@ -2413,6 +2467,9 @@ closed paths are equal by the four single-edge equalities.
  The older quotient closed path is definitionally equal to its canonical
  via-edge form, and the older finite fixed-boundary four-level path is
@@ -300,7 +300,7 @@ index 7c316e21..15b6d0d0 100644
 +The older observed closed path can now be endpoint-cast to the same finite
 +endpoint type, with source, target, and pointwise apply aliases showing that
 +only endpoint labels changed.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 @@ -2421,7 +2478,9 @@ path after path-trans cast normalization lemmas are available.
@@ -311,7 +311,7 @@ index 7c316e21..15b6d0d0 100644
 +descended semantic evaluation with the canonical four-path concatenator, after
 +endpoint casting from the observed quotient-left endpoint to the finite left
 +endpoint.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -332,7 +332,7 @@ index d1d32024..32e77e2b 100644
 @@ -775,6 +779,22 @@ observed via-edge path is typed at the finite left endpoint. Even pointwise,
  the remaining theorem must commute descended semantic evaluation with the
  canonical four-path concatenator.
- 
+
 +The endpoint mismatch has been isolated by an endpoint-casted older observed
 +path:
 +
@@ -351,7 +351,7 @@ index d1d32024..32e77e2b 100644
 +
  Value-level source and target comparisons are also available for the closed
  four-edge paths:
- 
+
 @@ -792,7 +812,8 @@ or Euclidean one-eighth reading.
  More precisely, the quotient-side closed path and finite closed path now match
  their canonical via-edge versions. The observed quotient path still needs a
@@ -359,7 +359,7 @@ index d1d32024..32e77e2b 100644
 -concatenator.
 +concatenator after endpoint casting from the observed quotient-left endpoint
 +to the finite left endpoint.
- 
+
  The full comparison between evaluation of `shiftedCyclicFourPath` and the
  existing fixed-`q2` four-level path is intentionally left as a TODO because it
 ````

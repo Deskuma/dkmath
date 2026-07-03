@@ -342,7 +342,7 @@ index 4da48fa1..dd3d7e5d 100644
 @@ -113,6 +113,12 @@ is positive, so every genuine odd child lies strictly below that average.
  Summing the identical defect over all `2^n` parent intervals gives the exact
  finite total `1 / (2 * 2^n)`.
- 
+
 +[IMPLEMENTED: semantic-cf2d-depth-limit] `DkReal.SemanticCF2DLimit` separates
 +the per-level and cumulative scales. The total defect introduced at level
 +`n + 1` is `(1/2)^(n+1)` and tends to zero. The cumulative defect through
@@ -435,7 +435,7 @@ index 2f1d02ab..53996ef1 100644
 @@ -126,6 +126,42 @@ theorem sum_dyadicPhaseDepthDefect :
    simp [dyadicPhaseDepthDefect]
    field_simp
- 
+
 +/-- The total odd-child depth defect introduced at refinement level `n + 1`. -/
 +def totalDyadicPhaseDepthDefect (n : ℕ) : ℝ :=
 +  1 / (2 * (dyadicPhaseDenom n : ℝ))
@@ -473,7 +473,7 @@ index 2f1d02ab..53996ef1 100644
 +      ring
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 35a0cd26..0b970de1 100644
@@ -482,7 +482,7 @@ index 35a0cd26..0b970de1 100644
 @@ -164,6 +164,19 @@ although its closed form exposes the scale that a later limit theorem must
  analyze. The remaining task is to identify a mathematically justified
  aggregate composition law for boundary normalization.
- 
+
 +The elementary limit layer is now implemented separately in
 +`SemanticCF2DLimit.lean`. The defect introduced at one level has the exact
 +form `(1/2)^(n+1)` and tends to zero. However, the cumulative finite sum is
@@ -497,7 +497,7 @@ index 35a0cd26..0b970de1 100644
 +attached to this geometric-series limit.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 55a12ec5..d73526ae 100644

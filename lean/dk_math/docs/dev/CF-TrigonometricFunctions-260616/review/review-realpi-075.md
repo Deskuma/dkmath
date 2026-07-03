@@ -318,7 +318,7 @@ index 1f18ffbd..4a7e9d6c 100644
  of radius `sqrt (q2 z)`.
 +In that standard Euclidean plane, the semantic core-zero action is identified
 +with the coordinate quarter-turn linear isometry `(x,y) ↦ (-y,x)`.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -328,7 +328,7 @@ index 658c4290..c11bb6aa 100644
 @@ -1346,9 +1346,14 @@ coordinate circle equation is homeomorphic to the standard
  The closed path is mapped through this bridge, and positive squared radius is
  separated from the zero-radius degenerate case.
- 
+
 +[IMPLEMENTED: semantic-cf2d-phase/quarter-turn-isometry] The coordinate map
 +`(x,y) ↦ (-y,x)` is packaged as a Euclidean linear isometry equivalence, and
 +the transported core-zero semantic action is proved equal to this isometry
@@ -340,14 +340,14 @@ index 658c4290..c11bb6aa 100644
 +choose an orientation and compare the quarter-turn isometry with Mathlib's
 +oriented rotation by `Real.pi / 2`.
  -/
- 
+
  end
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index ba060c47..5d3ec974 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -157,7 +157,8 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  The coordinate-circle and standard `EuclideanSpace Real (Fin 2)` metric-sphere
  bridges are now implemented, including the degenerate zero boundary. The next
 -interpretive step may identify the core-zero action with the standard
@@ -366,13 +366,13 @@ index 21e66338..1382091a 100644
 @@ -34,6 +34,10 @@ metric sphere in `EuclideanSpace Real (Fin 2)`, of radius `sqrt rho2`.
  This avoids confusing the ordinary product norm on `Real × Real` with the
  Euclidean L2 norm.
- 
+
 +The core-zero semantic action is then identified with the standard coordinate
 +quarter-turn linear isometry `(x,y) ↦ (-y,x)`. This introduces the geometric
 +name only after the linear isometry model is available.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -355,7 +359,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/levelset-path]
@@ -391,7 +391,7 @@ index b45f6f28..e4019d1b 100644
 @@ -222,6 +222,61 @@ theorem sqrt_pos_of_sqRadius_pos {rho2 : ℝ} (hrho : 0 < rho2) :
      0 < Real.sqrt rho2 :=
    Real.sqrt_pos.2 hrho
- 
+
 +/-!
 +## Quarter-turn as a linear isometry
 +
@@ -448,12 +448,12 @@ index b45f6f28..e4019d1b 100644
 +  simp [quarterTurnLinearIsometry, quarterTurnLinearEquiv]
 +
  end
- 
+
  end DkMath.CosmicFormula.Rotation.CF2D
 @@ -267,6 +322,24 @@ def normalizedClosedEuclideanSpherePath
      (euclideanCircleSqHomeomorphSphere
        (rho2 := Vec.q2 z) (Vec.q2_nonneg z)).continuous
- 
+
 +/--
 +Under the Euclidean coordinate bridge, the semantic core-zero action is the
 +standard quarter-turn linear isometry.
@@ -473,7 +473,7 @@ index b45f6f28..e4019d1b 100644
 +      quarterTurnLinearEquiv, euclideanPlaneToPair, Vec.toProd]
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 84548d1c..f0b6744d 100644

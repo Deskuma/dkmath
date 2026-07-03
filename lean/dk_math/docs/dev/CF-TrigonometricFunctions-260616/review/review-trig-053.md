@@ -258,7 +258,7 @@ index 897213b2..6fb21311 100644
 -these maps are bijections of the plane and of each level set.
 +these maps are equivalences of the plane and of each level set. Their finite
 +iterates generate forward orbits of constant square mass.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -268,7 +268,7 @@ index 89469f80..5b7c744d 100644
 @@ -257,6 +257,87 @@ theorem semanticActLevel_bijective
      semanticInverseActLevel_semanticActLevel r,
      semanticActLevel_semanticInverseActLevel r⟩
- 
+
 +/-- The transported action bundled as an equivalence of the real CF2D plane. -/
 +def semanticActEquiv (r : UnitKernel DkNNRealQ) : Vec ℝ ≃ Vec ℝ where
 +  toFun := semanticAct r
@@ -380,12 +380,12 @@ index e020c8d7..ffdcdc2e 100644
 +semanticOrbit_q2
 +semanticLevelOrbit
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -95,8 +101,12 @@ transported action is a bijection of the real CF2D plane and restricts to a
  bijection of every `q2` level set. The inverse generally leaves the first
  quadrant and is therefore not reflected back into the nonnegative source.
- 
+
 +The actions are bundled as equivalences. Their finite iterates remain
 +bijective, and every forward orbit has constant `q2`. A level-set orbit is the
 +same plane orbit viewed with its invariant carried in the type.
@@ -404,7 +404,7 @@ index 6101a0ef..9ac4c048 100644
 @@ -212,6 +212,29 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 02:30 JST (Bundled automorphisms and finite orbits)
 +
 +1. 目的:
@@ -429,7 +429,7 @@ index 6101a0ef..9ac4c048 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 00:59 JST (Inverse kernels and level-set automorphisms)
- 
+
  1. 方針:
 ````
 `````

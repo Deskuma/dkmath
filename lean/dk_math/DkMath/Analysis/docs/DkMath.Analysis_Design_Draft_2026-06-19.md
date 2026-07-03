@@ -1,7 +1,7 @@
 # DkMath.Analysis 実数解析層 設計書ドラフト
 
-作成日: 2026-06-19  
-対象: Lean `DkMath.Analysis.*` 実装準備 / Codex 作業指示用  
+作成日: 2026-06-19
+対象: Lean `DkMath.Analysis.*` 実装準備 / Codex 作業指示用
 状態: Draft 0.1 + implementation checkpoint
 
 ## 0.1. 2026-06-19 implementation checkpoint

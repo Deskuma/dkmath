@@ -336,7 +336,7 @@ index ae434eb9..8061069f 100644
 +endpoint-overcounted complete-mesh, and closed-interval candidates. The
 +endpoint logarithms vanish, so the plain mesh-width and trapezoidal log-depth
 +and log-normalization observables agree despite their different total masses.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -346,7 +346,7 @@ index 1eb03f0b..3770ad4a 100644
 @@ -81,6 +81,30 @@ theorem log_dyadicPhaseNormalizationProduct (n : ℕ) :
    rw [dyadicPhaseNormalizationProduct, dyadicPhaseLogNormalizationSum]
    exact Real.log_prod fun k _ => (dyadicPhaseNormalization_pos n k).ne'
- 
+
 +/-- The logarithmic depth observation vanishes at the left endpoint. -/
 +@[simp]
 +theorem log_dyadicPhaseDepth_left_endpoint (n : ℕ) :
@@ -377,7 +377,7 @@ index 1eb03f0b..3770ad4a 100644
 @@ -382,6 +406,47 @@ theorem two_mul_dyadicPhaseTrapezoidLogNormalizationSum_add_trapezoidLogDepthSum
    exact two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
      n (dyadicPhaseTrapezoidWeight n)
- 
+
 +/--
 +Plain mesh-width and trapezoidal log-depth sums agree on the complete mesh.
 +
@@ -420,7 +420,7 @@ index 1eb03f0b..3770ad4a 100644
 +  · simp [dyadicPhaseTrapezoidWeight, hendpoint]
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 51d6fadd..699cb844 100644
@@ -429,7 +429,7 @@ index 51d6fadd..699cb844 100644
 @@ -235,6 +235,14 @@ mesh-width complete-node weights have total mass `1 + h_n`, exposing the
  endpoint overcount that must be considered before treating that observable as
  a closed-interval integration candidate.
- 
+
 +There is a useful finite cancellation in this comparison. At both endpoints,
 +depth and normalization are equal to `1`, so their logarithmic observations
 +are zero. Consequently, the plain mesh-width and trapezoidal log-depth sums
@@ -439,7 +439,7 @@ index 51d6fadd..699cb844 100644
 +without prematurely selecting a canonical limit.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 031a5906..9d9f9b3f 100644

@@ -258,7 +258,7 @@ index ca06207f..7919f444 100644
 +four-level path now have explicit source and target comparison theorems,
 +together with a pointwise `Path.cast` helper and an edge-zero evaluation
 +wrapper for the later full path comparison.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -268,7 +268,7 @@ index e9e3dcc5..9b194e6d 100644
 @@ -1895,6 +1895,34 @@ theorem shiftedSemanticCyclicChartEval_edgePath
      shiftedSemanticCyclicChartEval_mk]
    rfl
- 
+
 +/--
 +Applying a casted path does not change its pointwise value.
 +
@@ -299,11 +299,11 @@ index e9e3dcc5..9b194e6d 100644
 +
  /--
  The closed quotient chart path observed inside the fixed square-mass boundary.
- 
+
 @@ -1963,6 +1991,42 @@ theorem shiftedSemanticObservedCyclicFourPath_q2
        Vec.q2 z :=
    (shiftedSemanticObservedCyclicFourPath hcore z t).2
- 
+
 +/--
 +The observed quotient traversal and the finite four-level path have the same
 +source value.
@@ -342,11 +342,11 @@ index e9e3dcc5..9b194e6d 100644
 +
  /--
  The quotiented chart evaluation still lands on the original `q2` boundary.
- 
+
 @@ -2045,6 +2109,12 @@ The closed quotient path is observed through the descended semantic
  evaluation as a fixed-`q2` path. Source, target, endpoint-evaluation, and
  boundary-observation aliases are exposed.
- 
+
 +[IMPLEMENTED: semantic-cf2d/shifted-cyclic-path-compare-prep]
 +The observed quotient path and the finite four-level path now have explicit
 +source and target comparison theorems. A local `Path.cast` pointwise helper
@@ -375,11 +375,11 @@ index d562f3c3..db349515 100644
 +shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
  shiftedSemanticCyclicChartEval_q2
  ```
- 
+
 @@ -683,6 +687,28 @@ Thus the quotient traversal is already connected to a fixed-boundary
  observation path, even before comparing the whole concatenated path with the
  existing finite four-level path.
- 
+
 +The first comparison layer is now also formalized. The observed quotient path
 +and the existing finite four-level path are proved to agree at their source
 +and target values:

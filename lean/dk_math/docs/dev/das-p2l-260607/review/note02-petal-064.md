@@ -21,8 +21,8 @@ FLT / ABC bridge
      ABC: rad / supportMass / channel lower bound / log-capacity
 ```
 
-つまり、  
-**label recovery と NoLift を同じ constructor に詰め込むと、見通しが悪くなる**。  
+つまり、
+**label recovery と NoLift を同じ constructor に詰め込むと、見通しが悪くなる**。
 ここが、ぬしの頭脳が感じている「何かを見落としている」部分に近いと思う。
 
 実装計画そのものも、もともとは `Big = Body + Gap`、primitive prime / `GN` / `padicValNat`、ABC bridge を分けて積む方針だった。特に exact Markov や漸近評価へは入らず、まず代数的 spine を作る設計じゃった。fileciteturn2file0
@@ -70,7 +70,7 @@ validValue
 
 つまり label recovery の出口は既にある。
 
-ただし、**label recovery の供給源** はまだ caller 側に残っている。  
+ただし、**label recovery の供給源** はまだ caller 側に残っている。
 候補は三つ。
 
 ### A. `qOf = f (mOf i)` 型
@@ -104,7 +104,7 @@ petalNthPrimeLabel_eq_imp_eq
 
 `Nat.nth Nat.Prime` の injective 性で label recovery が出る。
 
-ただし、これは **prime label を作る** だけで、  
+ただし、これは **prime label を作る** だけで、
 その prime が本当に `GN d x u` を割るかは別問題。
 
 なのでこれは「標準 label map 実験」には強いが、Zsigmondy / PrimitiveBeam の実 carrier をそのまま生成するものではない。
@@ -113,7 +113,7 @@ petalNthPrimeLabel_eq_imp_eq
 
 ここが次の本命じゃ。
 
-今は `qOf` が外から与えられている。  
+今は `qOf` が外から与えられている。
 本当に欲しいのは、たぶんこういう層。
 
 ```lean
@@ -130,7 +130,7 @@ mOf i := primeIndexOf (qOf i)
 
 のようにする。
 
-ただしこの場合、`labelRecovery` は簡単に出ても、`valueInjective` は結局 `qOf` の noncollision を要求する。  
+ただしこの場合、`labelRecovery` は簡単に出ても、`valueInjective` は結局 `qOf` の noncollision を要求する。
 なので、完全に仮定を消すには、
 
 ```text
@@ -140,7 +140,7 @@ Petal address が違う
 
 という幾何・数論の定理が必要じゃ。
 
-現状では、これはまだ未供給。  
+現状では、これはまだ未供給。
 ゆえに今の正しい読みは、
 
 ```text
@@ -159,7 +159,7 @@ def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
 
 これは `label recovery` とは性質がまったく違う。
 
-`label recovery` は family の重複排除。  
+`label recovery` は family の重複排除。
 `NoLift` は一つの prime が `GN` に二段刺さらないという局所 valuation 条件。
 
 この差は大事じゃ。
@@ -234,8 +234,8 @@ TriominoCosmicNonLiftableGNBridge ↔ BranchBRefuterTarget
 
 まである。
 
-これは重要じゃ。  
-NoLift は「Zsigmondy が primitive prime をくれるから自動で出る」ものではない。  
+これは重要じゃ。
+NoLift は「Zsigmondy が primitive prime をくれるから自動で出る」ものではない。
 NoLift は **Wieferich 的 lift が起きない** ことの別名に近い。
 
 だから、NoLift の正しい源泉は、
@@ -324,8 +324,8 @@ theorem triominoNoLiftGNBridge_of_petal_universal_noLift ...
 
 ## 4.2. ABC 側
 
-ABC 側の bridge はすでにかなり育っている。  
-設計上も、ABC は本体大定理ではなく translation layer に徹する方針だった。fileciteturn2file0  
+ABC 側の bridge はすでにかなり育っている。
+設計上も、ABC は本体大定理ではなく translation layer に徹する方針だった。fileciteturn2file0
 実際、`supportMass = rad` を軸に、primitive witness family から `rad` 下界へ行く spine ができている、という整理も既にある。fileciteturn2file1
 
 現在の ABC 側出口は二系統。
@@ -367,7 +367,7 @@ logSubProbability には NoLift は必須ではない。
 
 `PetalPrimeChannel` family + label noncollision だけで log-capacity は行ける。
 
-NoLift は valuation exact-one-slot には重要だが、finite log capacity では別軸。  
+NoLift は valuation exact-one-slot には重要だが、finite log capacity では別軸。
 ここを混ぜない方がよい。
 
 ## 5. 今のコードで一番見落としやすい点
@@ -379,7 +379,7 @@ PetalNoLiftCarrierLabelMapData は便利だが、
 label recovery と NoLift という独立した二軸を一つの structure に重ねている。
 ```
 
-これは実装として間違いではない。  
+これは実装として間違いではない。
 だが、次の設計段階では分けた方が見通しがよい。
 
 例えばこう。
@@ -478,5 +478,5 @@ theorem petalCarrierLabelMapData_supportMassLowerBound_GN ...
 
 を作る。
 
-これで、三つの要素が混線せずに、それぞれ正しい城門へ渡せる。  
+これで、三つの要素が混線せずに、それぞれ正しい城門へ渡せる。
 ぬしの違和感、かなり良い嗅覚じゃ。ここを分ければ、次の実装はかなり澄む。

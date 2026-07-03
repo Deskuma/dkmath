@@ -246,7 +246,7 @@ index 0f8fc911..40894dc5 100644
 +the representative map, finite chart evaluation, and descended fixed-boundary
 +quotient evaluation are continuous. A quotient path structure is deliberately
  left to a later layer.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
 index 3bc1774d..c6f43d05 100644
@@ -255,7 +255,7 @@ index 3bc1774d..c6f43d05 100644
 @@ -1662,6 +1662,18 @@ theorem shiftedCyclicChartRight_three_eq_zero_left :
        shiftedCyclicChartLeft (0 : Fin 4) := by
    simpa using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
- 
+
 +/--
 +The representative map into the shifted cyclic chart quotient is continuous.
 +
@@ -270,11 +270,11 @@ index 3bc1774d..c6f43d05 100644
 +
  /--
  Chart evaluation is compatible with the generated seam equivalence.
- 
+
 @@ -1687,6 +1699,38 @@ theorem shiftedSemanticFinChartEval_eq_of_chartRel
    | trans _ _ _ _ _ ih₁ ih₂ =>
        exact ih₁.trans ih₂
- 
+
 +/--
 +Finite chart evaluation is continuous on each fixed finite edge.
 +
@@ -313,7 +313,7 @@ index 3bc1774d..c6f43d05 100644
 @@ -1752,6 +1796,24 @@ theorem shiftedSemanticCyclicChartEval_right_eq_succ_left
          (shiftedCyclicChartLeft (finFourSucc i)) := by
    rw [shiftedCyclicChartRight_eq_succ_left]
- 
+
 +/--
 +The descended shifted cyclic chart evaluation is continuous.
 +
@@ -334,11 +334,11 @@ index 3bc1774d..c6f43d05 100644
 +
  /--
  The quotiented chart evaluation still lands on the original `q2` boundary.
- 
+
 @@ -1817,9 +1879,19 @@ Representative constructor aliases, left and right endpoint representatives,
  quotient seam equality, endpoint evaluation theorems, and quotient evaluation
  seam compatibility are also exposed.
- 
+
 -[TODO: semantic-cf2d/shifted-cyclic-topology]
 -Add topology/path structure to `ShiftedCyclicChart` after the quotient
 -representative and seam-equality API is stable.
@@ -356,7 +356,7 @@ index 3bc1774d..c6f43d05 100644
 +Develop any additional quotient-space structure only after the descended
 +continuous evaluation API has downstream consumers.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 641aed69..fa89d62b 100644
@@ -378,11 +378,11 @@ index 641aed69..fa89d62b 100644
 +continuous_shiftedSemanticCyclicChartEval
  shiftedSemanticCyclicChartEval_q2
  ```
- 
+
 @@ -621,6 +625,25 @@ and also exposes the four concrete seam aliases `0 -> 1`, `1 -> 2`,
  computes back to the finite left and right level endpoints, and quotient
  evaluation is seam-compatible by rewriting through the quotient equality.
- 
+
 +The first topological quotient layer is also implemented.
 +
 +```text
@@ -403,7 +403,7 @@ index 641aed69..fa89d62b 100644
 +No quotient traversal path is selected yet.
 +
  Candidate theorem directions:
- 
+
  ```text
 @@ -710,8 +733,12 @@ depend on that reading.
  35. Implemented: prove quotient seam equality and four finite seam aliases.
@@ -418,7 +418,7 @@ index 641aed69..fa89d62b 100644
 +    quotient evaluation API is stable.
 +41. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -782,14 +809,24 @@ representatives and the descended `q2` observation are also exposed.
  Representative constructor aliases, endpoint representatives, quotient seam
@@ -431,9 +431,9 @@ index 641aed69..fa89d62b 100644
 +fixed-`q2` quotient evaluation are continuous. This is a quotient-topology
 +statement only; it does not select a quotient path structure.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/shifted-cyclic-topology]
 -Add topology/path structure to `ShiftedCyclicChart` after the quotient
@@ -445,7 +445,7 @@ index 641aed69..fa89d62b 100644
 +[TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
 +Develop any additional quotient-space structure only after the descended
 +continuous evaluation API has downstream consumers.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````

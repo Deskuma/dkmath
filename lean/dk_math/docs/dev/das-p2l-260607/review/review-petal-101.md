@@ -636,7 +636,7 @@ index 3422dabf..1f271e0c 100644
 @@ -1403,6 +1403,49 @@ theorem orbitWindowResidueCountPow2_le_tail_of_pointwise
              simpa [hsource, htail] using Nat.le_succ_of_le ih'
          · simpa [hsource, htail] using ih'
- 
+
 +/--
 +Conceptual alias for source-side power-of-two residue distribution
 +conservation.
@@ -1902,12 +1902,12 @@ index 4ed08523..9268ab69 100644
 +  -> tailPow2Distribution_total
 +  -> pow2ChannelFlow_of_pointwise
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -646,6 +654,17 @@ Recursive two-adic Petal instances:
    continuation source <= next-retention tail
  ```
- 
+
 +The No.100 entry documents for this layer are:
 +
 +```text
@@ -1921,7 +1921,7 @@ index 4ed08523..9268ab69 100644
 +
  The next ratio layer should initially stay in `Nat` inequalities rather than
  introducing `ℚ` or `ℝ` frequencies:
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-CollatzBridge.md b/lean/dk_math/DkMath/Petal/docs/Petal-CollatzBridge.md
 new file mode 100644
 index 00000000..dad8bcfd
@@ -2147,7 +2147,7 @@ index 4932fae0..6055ec8b 100644
 @@ -46,6 +46,24 @@ Phase 5: Zsigmondy preparation
  It is not a replacement for the number-theory route.  It is a structured
  observation layer used before primitive prime divisors are studied directly.
- 
+
 +There is now also a Collatz-facing bridge note:
 +
 +```text
@@ -2167,7 +2167,7 @@ index 4932fae0..6055ec8b 100644
 +```
 +
  ## Why Petal Counting Was Needed
- 
+
  The long-term target includes continuous-dimensional or dimension-parametric
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-100.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-100.md
 new file mode 100644

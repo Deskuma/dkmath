@@ -393,7 +393,7 @@ index f9da3189..805e1760 100644
 @@ -1282,6 +1282,24 @@ theorem semanticActIter_four_of_core_eq_zero
      semanticActIter r 4 z = z := by
    exact semanticAct_four_of_core_eq_zero hcore z
- 
+
 +/--
 +The boundary-action iterate is periodic with period four.
 +
@@ -422,7 +422,7 @@ index ba804120..52559f18 100644
 @@ -151,6 +151,16 @@ The semantic action now also has the explicit notation
  the eventual general theorem relating `k` semantic actions to rotation by
  `semanticPhaseAngle k`.
- 
+
 +The semantic iterate now records the period-four step directly:
 +
 +```text
@@ -434,7 +434,7 @@ index ba804120..52559f18 100644
 +one notation before moving to a full modulo-four classifier.
 +
  ### Milestone A: continuous four-edge loop - implemented
- 
+
  1. The real CF2D target carries the topology induced from `Real × Real`.
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index 30e78e99..3bbf7f6b 100644
@@ -443,7 +443,7 @@ index 30e78e99..3bbf7f6b 100644
 @@ -616,6 +616,32 @@ theorem pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle
    simpa [semanticQuarterTurnAngle] using
      pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two hcore z
- 
+
 +/--
 +Iterate notation for the zero-action identity bridge.
 +

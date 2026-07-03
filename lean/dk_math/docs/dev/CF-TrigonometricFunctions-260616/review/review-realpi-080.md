@@ -314,7 +314,7 @@ index 7149491a..4da48fa1 100644
 +is positive, so every genuine odd child lies strictly below that average.
 +Summing the identical defect over all `2^n` parent intervals gives the exact
 +finite total `1 / (2 * 2^n)`.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DRefinement.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DRefinement.lean
@@ -324,7 +324,7 @@ index 6714e021..2f1d02ab 100644
 @@ -34,6 +34,21 @@ def dyadicPhaseDepth (n k : ℕ) : ℝ :=
  def dyadicPhaseNormalization (n k : ℕ) : ℝ :=
    phaseNormalization (dyadicPhaseNode n k)
- 
+
 +/--
 +The local quadratic defect introduced at every odd child of refinement level
 +`n + 1`.
@@ -357,7 +357,7 @@ index 6714e021..2f1d02ab 100644
 +    dyadicPhaseDenom, phaseDepth, pow_succ]
    field_simp
    ring
- 
+
 +/--
 +The odd-child law restricted to an actual parent interval of the dyadic mesh.
 +-/
@@ -392,7 +392,7 @@ index 6714e021..2f1d02ab 100644
 +  field_simp
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 02a720c2..35a0cd26 100644
@@ -400,7 +400,7 @@ index 02a720c2..35a0cd26 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -151,8 +151,18 @@ child depth
  ```
- 
+
  Thus the first refinement defect is an explicit positive inverse-square mesh
 -term. The remaining task is to identify a mathematically justified aggregate
 -composition law for local corrections.
@@ -416,9 +416,9 @@ index 02a720c2..35a0cd26 100644
 +although its closed form exposes the scale that a later limit theorem must
 +analyze. The remaining task is to identify a mathematically justified
 +aggregate composition law for boundary normalization.
- 
+
  ### Milestone D: limit and Gaussian bridge
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 3908f64d..55a12ec5 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md

@@ -608,7 +608,7 @@ index ab675ef1..a3730141 100644
 @@ -326,6 +326,24 @@ theorem next_mod_eight_of_mod_sixteen_eq_fifteen
      ((3 * m + 1) / 2) % 8 = 7 := by
    omega
- 
+
 +/--
 +The `15 mod 32` subchannel of `15 mod 16` exits retention one level down:
 +after one height-one step, the next label is `7 mod 16`.
@@ -633,7 +633,7 @@ index ab675ef1..a3730141 100644
 @@ -1380,6 +1398,48 @@ theorem oddOrbitLabel_succ_mod_eight_eq_seven_of_mod_sixteen_eq_fifteen
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_eight_of_mod_sixteen_eq_fifteen hmod
- 
+
 +/--
 +The `15 mod 32` subchannel moves to `7 mod 16` at the next label.
 +
@@ -678,11 +678,11 @@ index ab675ef1..a3730141 100644
 +
  /--
  Delayed peeling from the `3 mod 8` height-one channel.
- 
+
 @@ -1424,6 +1484,23 @@ theorem orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven
    simpa [Nat.add_assoc] using
      orbitWindowNextHeight_two_le_of_mod_eight_eq_three n (i + 1) hnext
- 
+
 +/--
 +The `15 mod 32` branch recovers delayed peeling after three transitions.
 +
@@ -706,7 +706,7 @@ index ab675ef1..a3730141 100644
 @@ -1651,6 +1728,47 @@ theorem sumS_three_steps_ge_four_of_mod_sixteen_eq_seven
      _ = sumS n 3 := by
        simp [sumS, orbitWindowHeight_eq_s_iterateT]
- 
+
 +/--
 +Four-step recovery from the `15 mod 32` subchannel.
 +
@@ -787,7 +787,7 @@ index 0f60f468..bae93aa4 100644
 @@ -732,6 +738,46 @@ label 0 = 7 mod 16
    -> 4 <= sumS n 3
  ```
- 
+
 +The `15 mod 16` retention-continuation channel has now been split at mod `32`:
 +
 +```text
@@ -830,7 +830,7 @@ index 0f60f468..bae93aa4 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-091.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-091.md
 new file mode 100644
 index 00000000..279120e3

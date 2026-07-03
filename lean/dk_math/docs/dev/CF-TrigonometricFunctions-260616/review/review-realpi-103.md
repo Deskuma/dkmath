@@ -432,7 +432,7 @@ index 805e1760..c1f3da10 100644
 @@ -1300,6 +1300,50 @@ theorem semanticActIter_add_four_of_core_eq_zero
    rw [semanticActIter, semanticActIter, Function.iterate_add_apply, hfour]
    rfl
- 
+
 +/--
 +Adding any multiple of four to the iterate index does not change the
 +core-zero boundary action.
@@ -487,7 +487,7 @@ index 52559f18..bbc17128 100644
 @@ -161,6 +161,22 @@ under the same core-zero hypothesis. The Euclidean side also exposes the
  `k = 0` and `k = 1` iterate-form bridges, so the finite table is available in
  one notation before moving to a full modulo-four classifier.
- 
+
 +The modulo-four classifier is now implemented in two layers:
 +
 +```text
@@ -505,7 +505,7 @@ index 52559f18..bbc17128 100644
 +without claiming an intrinsic construction of `pi`.
 +
  ### Milestone A: continuous four-edge loop - implemented
- 
+
  1. The real CF2D target carries the topology induced from `Real × Real`.
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index 3bbf7f6b..ebaf28df 100644
@@ -514,7 +514,7 @@ index 3bbf7f6b..ebaf28df 100644
 @@ -732,6 +732,49 @@ theorem pairToEuclideanPlane_semanticActIter_four_eq_rotation_semanticPhaseAngle
      semanticPhaseAngle_four, rotation_semanticFullTurnAngle_eq_refl]
    rfl
- 
+
 +/--
 +Modulo-four Euclidean angle reading of the semantic action iterate.
 +
@@ -559,7 +559,7 @@ index 3bbf7f6b..ebaf28df 100644
 +      hcore z
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 6168be9c..cb436874 100644

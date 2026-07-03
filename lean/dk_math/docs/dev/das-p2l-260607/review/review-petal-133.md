@@ -686,7 +686,7 @@ index cb750c91..1c8fb374 100644
 @@ -143,6 +143,42 @@ extractions.
  noncomputable def orbitWindowResidualShapeSeq (n : OddNat) (k : ℕ) : List ℕ :=
    (List.range k).map (orbitWindowResidualShape n)
- 
+
 +/--
 +Low-bit all-ones depth of a natural residual shape.
 +
@@ -725,11 +725,11 @@ index cb750c91..1c8fb374 100644
 +
  /--
  First failed power-of-two alignment depth at the `i`-th observed odd label.
- 
+
 @@ -898,6 +934,46 @@ theorem orbitWindowResidualShapeSeq_take_get?_eq_some
    rw [List.getElem?_take_of_lt hi]
    exact orbitWindowResidualShapeSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
- 
+
 +/--
 +The ordered all-ones-depth residual profile has length equal to the window
 +size.
@@ -803,7 +803,7 @@ index bd340c71..043bda6f 100644
 @@ -326,6 +326,31 @@ positive block = maximal consecutive positive-depth run, length >= 1
  It also adds aggregate correlation tables for frontier depth, block length,
  local islands, and sign-change-up rows by residual residue class.
- 
+
 +Checkpoint 132 replaces the residue-class proxy with a direct all-ones-depth
 +profile:
 +
@@ -830,7 +830,7 @@ index bd340c71..043bda6f 100644
 +the window than by the first or modal residue alone.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 2c4082d6..4b5e6fd5 100644
@@ -839,7 +839,7 @@ index 2c4082d6..4b5e6fd5 100644
 @@ -262,6 +262,49 @@ The aggregate tables suggest frontier depth is almost always `2`, while longer
  positive blocks are visibly concentrated in high all-ones residual classes such
  as residual `15 mod 16` and `31 mod 32`.
- 
+
 +Checkpoint 132 replaces the proxy residue-class question with the direct
 +all-ones-depth observable:
 +
@@ -884,7 +884,7 @@ index 2c4082d6..4b5e6fd5 100644
 +```
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureAllOnesCorrelationScan-132.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PressureAllOnesCorrelationScan-132.md
 new file mode 100644
@@ -1358,8 +1358,8 @@ index b59bb81d..ea32f803 100644
      continuation_profile: str
 @@ -93,6 +103,11 @@ def v2(n: int) -> int:
      return count
- 
- 
+
+
 +def all_ones_depth(x: int) -> int:
 +    """Length of the low-bit all-ones suffix of x."""
 +    return v2(x + 1)
@@ -1370,8 +1370,8 @@ index b59bb81d..ea32f803 100644
      height = v2(value)
 @@ -163,6 +178,16 @@ def max_adjacent_jump(values: dict[int, int], depths: list[int]) -> int:
      return max(jumps, default=0)
- 
- 
+
+
 +def classify_sign_change(retention_drop: int, continuation_drop: int) -> str:
 +    if retention_drop > 2 * continuation_drop:
 +        return "retention_drop_dominant"
@@ -1392,7 +1392,7 @@ index b59bb81d..ea32f803 100644
 +    residual_all_ones_depth_seq = [
 +        all_ones_depth(value) for value in residual_shape_seq
 +    ]
- 
+
      depths = list(range(r_start, r_start + depth_len))
      extended_depths = list(range(r_start, r_start + depth_len + 1))
 @@ -195,6 +223,17 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
@@ -1412,7 +1412,7 @@ index b59bb81d..ea32f803 100644
 +        )
      sign_change_pair = first_sign_change_pair(positive_depths, r_start)
      block_lengths = [end - start + 1 for start, end in blocks]
- 
+
 @@ -209,6 +248,24 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
          residual_mod_8_seq=join_ints(residual_mod_8_seq),
          residual_mod_16_seq=join_ints(residual_mod_16_seq),
@@ -1449,8 +1449,8 @@ index b59bb81d..ea32f803 100644
          continuation_profile=join_pairs(
 @@ -288,10 +347,26 @@ def count_list_field(rows: list[PressureSignPatternRow], field_name: str) -> Cou
      return counter
- 
- 
+
+
 +def count_label_field(rows: list[PressureSignPatternRow], field_name: str) -> Counter[str]:
 +    counter: Counter[str] = Counter()
 +    for row in rows:
@@ -1465,8 +1465,8 @@ index b59bb81d..ea32f803 100644
 +
  def markdown_kv_counter(counter: Counter[int]) -> str:
      return "; ".join(f"{key}:{counter[key]}" for key in sorted(counter))
- 
- 
+
+
 +def markdown_label_counter(counter: Counter[str]) -> str:
 +    return "; ".join(f"{key}:{counter[key]}" for key in sorted(counter))
 +
@@ -1517,7 +1517,7 @@ index b59bb81d..ea32f803 100644
 +        with_sign_change,
 +        key=lambda row: (-row.max_retention_drop, -row.max_margin_jump, row.n),
 +    )[:12]
- 
+
      lines = [
 -        "# Collatz Pressure Sign Pattern Scan - Checkpoint 130",
 +        "# Collatz Pressure Sign Pattern Scan - Checkpoint 132",
@@ -1549,7 +1549,7 @@ index b59bb81d..ea32f803 100644
              f"{row.local_islands} | {row.sign_change_up_positions} | "
              f"{row.margin_profile} |"
          )
- 
+
 +    lines.extend(
 +        [
 +            "",
@@ -1596,7 +1596,7 @@ index b59bb81d..ea32f803 100644
      else:
 -        lines.append("| - | none observed | - | - | - | - | - |")
 +        lines.append("| - | none observed | - | - | - | - | - | - | - |")
- 
+
      lines.extend(
          [
              "",
@@ -1645,7 +1645,7 @@ index b59bb81d..ea32f803 100644
      else:
 -        lines.append("| - | none observed | 0 | 0 | 0 | - | - | - |")
 +        lines.append("| - | none observed | - | 0 | 0 | - | - |")
- 
+
      lines.extend(
          [
 @@ -421,6 +574,10 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
@@ -1758,7 +1758,7 @@ index 0aca5765..d376fd96 100644
 @@ -1,4 +1,4 @@
 -# Collatz Pressure Sign Pattern Scan - Checkpoint 130
 +# Collatz Pressure Sign Pattern Scan - Checkpoint 132
- 
+
  - rows: `1024`
  - rows with positive pressure depths: `511`
 @@ -12,40 +12,70 @@
@@ -1769,9 +1769,9 @@ index 0aca5765..d376fd96 100644
 +- all-ones depth mode counts: `1:1024`
 +- all-ones depth max counts: `1:54; 2:156; 3:240; 4:83; 5:36; 6:391; 7:34; 8:25; 9:2; 10:1; 11:2`
 +- sign-change cause counts: `retention_drop_dominant:4`
- 
+
  ## Top Positive-Depth Samples
- 
+
 -| n | positive depths | blocks | frontier | frontier margin | islands | sign-up | margins |
 -|---:|---|---|---:|---:|---|---|---|
 -| 2047 | 2;3;4;5;6;7;8;9 | 2-9 | 2 | 9 |  |  | 2:9;3:11;4:9;5:6;6:3;7:2;8:2;9:1;10:0;11:-1 |
@@ -1817,9 +1817,9 @@ index 0aca5765..d376fd96 100644
 +| 807 | 2;1;2;1;8;7;6;5;4;3;2;1;1;1;1;1;1;1;3;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 8 | 5/4/3 | 5 | 2-6 | 27;25;19;29;31;31;31;31;15;7;11;1;17;21;13;1;17;5;7;11;17;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 895 | 6;5;4;3;2;1;2;1;1;4;3;2;1;1;8;7;6;5;4;3;2;1;1;1;1;1;1;1;3;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 8 | 9/6/4 | 5 | 2-6 | 31;31;15;23;19;29;19;13;9;15;23;19;13;29;31;31;31;31;15;7;11;1;17;21;13;1;17;5;7;11;17;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 1007 | 3;2;1;3;2;1;1;4;3;2;1;1;8;7;6;5;4;3;2;1;1;1;1;1;1;1;3;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 8 | 6/4/3 | 5 | 2-6 | 7;27;9;23;19;13;9;15;23;19;13;29;31;31;31;31;15;7;11;1;17;21;13;1;17;5;7;11;17;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
- 
+
  ## Local-Island Samples
- 
+
 -| n | islands | first sign-change pair | sign-up | height seq | first-failed seq | residual mod 16 |
 -|---:|---|---|---|---|---|---|
 -| 1567 | 3 | 2->3 | 2 | 1;1;1;1;2;2;2;6;3;1;2;1;4;1;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;2;2;3;3;3;7;4;2;3;2;5;2;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 15;7;11;1;1;1;5;13;11;9;3;5;3;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
@@ -1830,9 +1830,9 @@ index 0aca5765..d376fd96 100644
 +| 1567 | 3 | 2->3 | 2 | retention_drop_dominant | 1;1;1;1;2;2;2;6;3;1;2;1;4;1;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;2;2;3;3;3;7;4;2;3;2;5;2;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 4;3;2;1;1;1;1;1;2;1;2;1;2;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 15;7;11;1;1;1;5;13;11;9;3;5;3;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 1639 | 5 | 4->5 | 4 | retention_drop_dominant | 1;1;2;1;1;1;3;1;1;1;2;4;1;1;1;1;1;1;2;1;1;2;5;2;1;1;7;2;1;4;1;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;3;2;2;2;4;2;2;2;3;5;2;2;2;2;2;2;3;2;2;3;6;3;2;2;8;3;2;5;2;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 2;1;4;3;2;1;4;3;2;1;1;7;6;5;4;3;2;1;3;2;1;1;1;3;2;1;1;2;1;2;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 11;9;15;7;3;13;15;7;11;1;5;15;15;15;15;7;11;9;7;11;1;5;9;7;3;5;9;3;5;3;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 1775 | 5 | 4->5 | 4 | retention_drop_dominant | 1;1;1;2;1;1;1;4;3;1;2;2;4;2;1;1;1;1;1;1;2;4;3;3;3;1;2;3;4;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2 | 2;2;2;3;2;2;2;5;4;2;3;3;5;3;2;2;2;2;2;2;3;5;4;4;4;2;3;4;5;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3 | 3;2;1;4;3;2;1;1;2;1;1;1;1;7;6;5;4;3;2;1;1;1;1;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 | 7;11;9;15;7;3;5;13;11;1;1;5;9;15;15;15;15;7;11;1;5;13;13;13;11;1;13;5;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
- 
+
  ## Sign-Change-Up Samples
- 
+
 -| n | sign-up | margin jump | retention drop | continuation drop | margins | retentions | continuations |
 -|---:|---|---:|---:|---:|---|---|---|
 -| 1567 | 2 | 3 | 5 | 1 | 2:-2;3:1;4:0;5:-1;6:0;7:0;8:0;9:0;10:0;11:0 | 2:8;3:3;4:2;5:1;6:0;7:0;8:0;9:0;10:0;11:0 | 2:3;3:2;4:1;5:0;6:0;7:0;8:0;9:0;10:0;11:0 |
@@ -1854,24 +1854,24 @@ index 0aca5765..d376fd96 100644
 +| 1567 | 2 | retention_drop_dominant | 5 | 1 | 2:ret=5,cont=1,jump=3,cause=retention_drop_dominant | 4;3;2;1;1;1;1;1;2;1;2;1;2;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 1775 | 4 | retention_drop_dominant | 5 | 3 | 4:ret=3,cont=1,jump=1,cause=retention_drop_dominant | 3;2;1;4;3;2;1;1;2;1;1;1;1;7;6;5;4;3;2;1;1;1;1;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
 +| 1899 | 2 | retention_drop_dominant | 5 | 1 | 2:ret=5,cont=1,jump=3,cause=retention_drop_dominant | 1;1;2;1;2;1;7;6;5;4;3;2;1;1;1;1;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1 |
- 
+
  ## Reading
- 
+
 @@ -58,6 +88,10 @@ This is not evidence for an unconditional pressure-prefix theorem.  The
  presence of local islands and sign-change-up rows means pressure is a
  margin sign profile, not just carrier nesting.
- 
+
 +Checkpoint 132 adds the direct all-ones-depth observable
 +`v2(residual + 1)`.  This separates the previous residue-class signal
 +from the actual low-bit all-ones concentration inside the window.
 +
- 
+
  ## Frontier Depth By Residual Mod 16 First
- 
+
 @@ -147,6 +181,72 @@ margin sign profile, not just carrier nesting.
  | 29 | 0:31;1:27;2:2;3:2;4:1;5:1 |
  | 31 | 1:13;2:14;3:11;4:13;5:7;6:3;7:1;8:1 |
- 
+
 +## Positive Block Length By All-Ones Depth First
 +
 +| all-ones depth first | max block length counts |
@@ -1939,12 +1939,12 @@ index 0aca5765..d376fd96 100644
 +| 11 | 2:2 |
 +
  ## Local Island Rows By Residual Mod 16 First
- 
+
  | residual mod 16 first | local island count rows |
 @@ -164,6 +264,38 @@ margin sign profile, not just carrier nesting.
  | 11 | 1:1 |
  | 15 | 1:1 |
- 
+
 +## Local Island Rows By All-Ones Depth First
 +
 +| all-ones depth first | local island count rows |
@@ -1977,7 +1977,7 @@ index 0aca5765..d376fd96 100644
 +| 7 | 1:3 |
 +
  ## Sign-Change-Up Depth Counts
- 
+
  - depth counts: `2:2; 4:2`
 +- cause counts: `retention_drop_dominant:4`
 ````

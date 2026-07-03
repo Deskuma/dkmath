@@ -307,7 +307,7 @@ index e88708b7..091c2156 100644
 @@ -80,6 +80,104 @@ theorem petalNoLiftCarrierLabelMapData_labelSupport_prime_dvd_GN
    exact ⟨petalNoLiftPrimeChannel_prime (hdata.carrier i hi),
      anchoredGNCarrier_dvd_GN (hdata.carrier i hi).1⟩
- 
+
 +/--
 +Carrier-label map data identifies the ABC label support cardinality with the
 +selected finite index cardinality.
@@ -412,7 +412,7 @@ index e88708b7..091c2156 100644
 @@ -147,5 +245,69 @@ theorem petalNoLiftCarrierLabelMapData_labelSupport_prod_le_rad_GN
    simpa [DkMath.ABC.supportMass_eq_abc_rad] using
      petalNoLiftCarrierLabelMapData_labelSupport_prod_le_supportMass_GN I hGN0 hdata
- 
+
 +/--
 +Carrier-label map data gives an ABC support-mass lower bound measured only by
 +the number of selected Petal channels.
@@ -490,18 +490,18 @@ index 19ff50ce..bd2dd1e7 100644
 +DkMath.Petal.Obstruction
 +DkMath.Petal.ABCBridge
  ```
- 
+
  ### `DkMath.Petal.Basic`
 @@ -709,8 +711,8 @@ FLT:
    next missing input: dedicated obstruction theorem
- 
+
  ABC:
 -  target: distinct one-slot channels become support/rad lower-bound material
 -  next missing input: rad/supportMass bridge for label-noncolliding channels
 +  current bridge: distinct carrier labels become supportMass/rad lower bounds
 +  count form: selected channel count gives 2^card <= supportMass/rad
  ```
- 
+
  Current research target:
 @@ -917,8 +919,10 @@ reuse the same selected prime label at two distinct indices.
  ```text
@@ -512,7 +512,7 @@ index 19ff50ce..bd2dd1e7 100644
    -> product of label support <= rad GN
 +  -> 2^(selected index count) <= supportMass/rad GN
  ```
- 
+
  Core theorem names:
 @@ -927,10 +931,19 @@ Core theorem names:
  petalCarrierLabelSupport
@@ -532,7 +532,7 @@ index 19ff50ce..bd2dd1e7 100644
 +petalCarrierLabelMapData_two_pow_card_le_rad_GN
 +petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
  ```
- 
+
  NoLift is deliberately not consumed by this bridge.  The ABC support/rad side
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index c015cdac..d4672f1e 100644
@@ -556,7 +556,7 @@ index c015cdac..d4672f1e 100644
 +petalCarrierLabelMapData_two_pow_card_le_rad_GN
 +petalNoLiftCarrierLabelMapData_two_pow_card_le_rad_GN
  ```
- 
+
  The bridge reads Petal carrier-label data as ABC finite support:
 @@ -389,8 +398,25 @@ The bridge reads Petal carrier-label data as ABC finite support:
  ```text
@@ -566,7 +566,7 @@ index c015cdac..d4672f1e 100644
 +  -> 2^(selected channel count) <= product of label support
    -> supportMass/rad lower bound
  ```
- 
+
  This is intentionally separate from NoLift.  ABC support/rad consumes prime
  support; NoLift is kept for p-adic valuation obstruction.
 +

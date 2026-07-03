@@ -474,7 +474,7 @@ index bfa112ef..77e2d655 100644
 +`simp`, consider replacing the current punctured neighborhood spelling with
 +`{u : ℝ | u ≠ 0}` or adding a lemma equating the two forms.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 index 502d73e6..425250ef 100644
@@ -493,7 +493,7 @@ index 502d73e6..425250ef 100644
 +`semanticPhaseAngle (k % 4)`. This closes the finite four-state phase table
 +while leaving intrinsic `pi` and continuous-angle construction as future
 +research tasks.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
@@ -503,7 +503,7 @@ index bbc17128..8b8c201f 100644
 @@ -464,6 +464,29 @@ requires a matching lower estimate.
     `Real.pi`.
  4. Only then introduce an angular interpretation.
- 
+
 +### Milestone F: continuous theta extraction
 +
 +The modulo-four table is discrete. The next trigonometric milestone is not to
@@ -528,11 +528,11 @@ index bbc17128..8b8c201f 100644
 +Euclidean angular coordinate be stated.
 +
  ## Guardrails
- 
+
  The following claims are not established by the current implementation:
 @@ -482,11 +505,25 @@ mechanism from which these theorem obligations can be investigated.
  ## Immediate Next Step
- 
+
  The coordinate-circle and standard `EuclideanSpace Real (Fin 2)` metric-sphere
 -bridges are now implemented, including the degenerate zero boundary. The next
 -interpretive step has also identified the core-zero action with the standard
@@ -571,12 +571,12 @@ index dcd47f75..e52bdd56 100644
 @@ -62,7 +62,9 @@ quadratic bound and the trapezoidal centered quadratic moment both tend to
  moment limit; the centered log-depth sum itself still needs a lower estimate
  before its limit can be identified.
- 
+
 -The current implementation proves a four-state return:
 +The finite phase table is now formalized in iterate notation. For the
 +semantic core-zero action `A`, Lean proves both the four-state return and the
 +modulo-four classifier:
- 
+
  ```text
  z
 @@ -70,10 +72,23 @@ z
@@ -595,20 +595,20 @@ index dcd47f75..e52bdd56 100644
 +  -> finite phase table
 +  -> Euclidean rotation by semanticPhaseAngle (k % 4)
  ```
- 
+
 -for the semantic core-zero action `A`. The next task is to fill each discrete
 -transition continuously without assuming a circle or angle in advance.
 +This is still an angle-reading bridge. It is not an intrinsic construction of
 +`pi`, and it does not replace the refinement-limit route. The continuous
 +transition path and normalized boundary path were constructed before this
 +Euclidean reading was attached.
- 
+
  ## Design Principle
- 
+
 @@ -352,6 +367,18 @@ introduce angle only after the circle model is available
  compare with Real.sin and Real.cos
  ```
- 
+
 +Current angle-reading responsibilities additionally include:
 +
 +```text
@@ -622,7 +622,7 @@ index dcd47f75..e52bdd56 100644
 +not yet the DkMath-intrinsic source of `pi`.
 +
  ## VIII. First Implementation Milestone
- 
+
  The next safe implementation target is deliberately smaller than the full
 @@ -385,6 +412,12 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/standard-euclidean-space]
@@ -813,9 +813,9 @@ index 1bf0439d..2eeb76bc 100644
 --- a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/todo-list-103.md
 +++ b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/todo-list-103.md
 @@ -2,19 +2,29 @@
- 
+
  ## docs
- 
+
 -- [ ] docstring 補強とコメントを主とする記述へ改善。ドキュメントは副。
 -- [ ] 現作業の到達点の記録
 -- [ ] DkLimit まわりの TODO 残案件
@@ -845,7 +845,7 @@ index 1bf0439d..2eeb76bc 100644
    - 研究テーマ research ドキュメントの見直しと今後の計画。
 +  - `research-pregeometric-pi-program-067.md` に continuous theta extraction
 +    と route 分岐を追記。
- 
+
  作業記録、差分、及びレビュー、メモなどは全て以下の場所に記録されている。
  末尾番号が作業順、同番号が作業追加資料。必要であれば参照のこと。
 ````

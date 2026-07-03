@@ -402,7 +402,7 @@ index 484b4a7e..f2652ef4 100644
 @@ -46,6 +46,10 @@ Canonical order is also constructive at the representation level. From
  `y = x + z` in the quotient. No subtraction operation is added to
  `DkNNRealQ`.
- 
+
 +The next strict-order layer should classify this known Gap: zero Gap gives
 +equality, while a positive lower Gap observed at a finite stage gives strict
 +order. This keeps the design in the same `Big = (Core + Beam) + Gap` pattern.
@@ -417,7 +417,7 @@ index 0947f08a..9c52362a 100644
 @@ -50,6 +50,16 @@ def diffNonnegInterval (I J : GapInterval) : GapInterval where
      apply max_le_max_left
      exact sub_le_sub J.le_lo_hi I.le_lo_hi
- 
+
 +/--
 +DkMath-facing name for the finite nonnegative Gap extracted inside a
 +Body--Big pair.
@@ -434,7 +434,7 @@ index 0947f08a..9c52362a 100644
 @@ -78,6 +88,11 @@ def diffNonnegApprox
      (x y : DkMath.Analysis.DkReal) (n : ℕ) : GapInterval :=
    diffNonnegInterval (x.interval n) (y.interval n)
- 
+
 +/-- DkMath-facing name for the stagewise extracted Gap observations. -/
 +abbrev gapApprox
 +    (x y : DkMath.Analysis.DkReal) (n : ℕ) : GapInterval :=
@@ -446,7 +446,7 @@ index 0947f08a..9c52362a 100644
 @@ -116,6 +131,11 @@ def diffNonneg
    nested := diffNonnegApprox_nested x y
    width_tends_zero := tendsto_diffNonnegApprox_width_zero x y
- 
+
 +/-- DkMath-facing name for the extracted nonnegative Gap representation. -/
 +abbrev gap
 +    (x y : DkMath.Analysis.DkReal) : DkMath.Analysis.DkReal :=
@@ -458,7 +458,7 @@ index 0947f08a..9c52362a 100644
 @@ -196,6 +216,15 @@ def diffOfLe (x y : DkNNReal) (_hxy : Le x y) : DkNNReal :=
    ⟨DkReal.diffNonneg x.val y.val,
      DkReal.nonnegative_diffNonneg x.val y.val⟩
- 
+
 +/--
 +The nonnegative Gap universe filling `x` to `y`.
 +
@@ -506,7 +506,7 @@ index 5918b667..c25b74b8 100644
 +finite Gap. For multiplication, require a strictly positive factor and isolate
 +the zero-factor branch before considering `IsStrictOrderedRing`.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 72974f5c..135f06f5 100644
@@ -518,7 +518,7 @@ index 72974f5c..135f06f5 100644
  [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
 +The next strict-order kernel is designed in
 +[`DkNNRealQ-StrictGap-Design.md`](DkNNRealQ-StrictGap-Design.md).
- 
+
  `RealBridge` remains the home of continuity and interval mapping. The separate
  `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
 @@ -111,7 +113,8 @@ Order:
@@ -529,7 +529,7 @@ index 72974f5c..135f06f5 100644
 +  strict order is designed as finite positivity of the extracted Gap
 +  direct linear order structure remains open
    use a semantic bridge only as an independent cross-check
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md
 new file mode 100644

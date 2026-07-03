@@ -315,7 +315,7 @@ index 744b6c07..03567132 100644
 +`Relation.EqvGen`, packages the quotient as `ShiftedCyclicChart`, and
 +descends chart evaluation to that quotient. Topology and path structure on
 +the quotient are deliberately left to a later layer.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -324,22 +324,22 @@ index 06a91264..e5254045 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
 @@ -1493,11 +1493,12 @@ theorem shiftedSemanticFinFourLevelPath_q2
    (shiftedSemanticFinFourLevelPath hcore z t).2
- 
+
  /-!
 -## Finite chart evaluation before quotienting
 +## Finite chart evaluation and seam quotient
- 
+
  The next definitions expose the finite chart space for the shifted boundary:
  a finite edge index together with a local unit-interval parameter. The seam
 -relation is recorded as a relation only; no quotient type is introduced here.
 +relation is first recorded directly, then closed under Mathlib's generated
 +equivalence relation so chart evaluation can descend to a quotient wrapper.
  -/
- 
+
  /-- A finite shifted chart is one of four shifted edges and a local parameter. -/
 @@ -1551,7 +1552,7 @@ theorem shiftedSemanticFinChartEval_at_right
  Finite seam relation between charts.
- 
+
  It relates the right endpoint of edge `i` to the left endpoint of its finite
 -successor. This is the intended input for a later quotient wrapper.
 +successor. This is the generating relation for the later chart quotient.
@@ -349,7 +349,7 @@ index 06a91264..e5254045 100644
 @@ -1584,6 +1585,97 @@ theorem shiftedSemanticFinChartEval_eq_of_seamRel
    subst hq
    exact shiftedSemanticFinChartEval_right_eq_succ_left hcore z i
- 
+
 +/--
 +Generated equivalence relation of the finite seam relation.
 +
@@ -455,7 +455,7 @@ index 06a91264..e5254045 100644
 +The finite seam relation is closed under `Relation.EqvGen`, packaged as a
 +setoid quotient `ShiftedCyclicChart`, and chart evaluation descends to the
 +quotient as a fixed-`q2` boundary-valued function.
- 
+
 -[TODO: semantic-cf2d/shifted-cyclic-quotient]
 -Use `ShiftedFiniteChart` modulo `shiftedFiniteSeamRel`, or an equivalent
 -project-specific quotient wrapper, once chart evaluation compatibility is
@@ -464,7 +464,7 @@ index 06a91264..e5254045 100644
 +Add topology/path structure to the shifted cyclic chart quotient only after
 +the quotient evaluation API is stable.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 91a40641..92bad1f5 100644
@@ -482,10 +482,10 @@ index 91a40641..92bad1f5 100644
 +shiftedSemanticCyclicChartEval_mk
 +shiftedSemanticCyclicChartEval_q2
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -558,8 +565,34 @@ ShiftedFiniteChart = Fin 4 x unitInterval
- 
+
  Chart evaluation maps each chart into the fixed `q2 z` level set. The seam
  relation identifies `(i, 1)` with `(finFourSucc i, 0)`, and Lean proves that
 -chart evaluation is compatible with that relation. This prepares a quotient
@@ -518,9 +518,9 @@ index 91a40641..92bad1f5 100644
 +and `shiftedSemanticCyclicChartEval_q2` records that the descended value still
 +lies on the original fixed boundary. This is only an algebraic seam quotient;
 +no quotient topology or quotient path structure has been selected yet.
- 
+
  Candidate theorem directions:
- 
+
 @@ -641,7 +674,12 @@ depend on that reading.
  27. Implemented: add finite closed-path fixed-`q2` observation.
  28. Implemented: add finite chart evaluation into the fixed `q2` level set.
@@ -533,7 +533,7 @@ index 91a40641..92bad1f5 100644
 +33. Later: add topology/path structure to the shifted cyclic chart quotient.
 +34. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -703,15 +741,20 @@ target, and fixed-`q2` observation aliases for the finite closed shifted path.
  Expose `ShiftedFiniteChart = Fin 4 x unitInterval`, evaluate it into the
@@ -546,9 +546,9 @@ index 91a40641..92bad1f5 100644
 +fixed-`q2` boundary-valued quotient evaluation. The computation theorem on
 +representatives and the descended `q2` observation are also exposed.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/shifted-cyclic-quotient]
 -Use `ShiftedFiniteChart` modulo `shiftedFiniteSeamRel`, or an equivalent
@@ -557,7 +557,7 @@ index 91a40641..92bad1f5 100644
 +[TODO: semantic-cf2d/shifted-cyclic-topology]
 +Add topology/path structure to the shifted cyclic chart quotient only after
 +the quotient evaluation API is stable.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````
