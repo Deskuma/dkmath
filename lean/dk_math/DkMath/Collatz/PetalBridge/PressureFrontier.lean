@@ -121,6 +121,19 @@ noncomputable def SourceContinuationDropInt
     (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
 
 /--
+Integer-valued net pressure drop across adjacent pressure depths.
+
+This is only a name for the balance quantity
+`retention_drop - 2 * continuation_drop`.  Existing predicates keep their
+current API, while later zero-crossing theorems can refer to this single
+integer expression.
+-/
+noncomputable def SourcePressureNetDropInt
+    (n : OddNat) (k r j : ℕ) : ℤ :=
+  SourceRetentionDropInt n k r j -
+    2 * SourceContinuationDropInt n k r j
+
+/--
 Adjacent source-pressure margin accounting identity.
 
 This is the checkpoint-136 balance sheet.  A positive pressure step is exactly
@@ -132,10 +145,24 @@ theorem sourcePressureMarginStepDiff_eq
     (n : OddNat) (k r j : ℕ) :
     SourcePressureMarginInt n k (r + j + 1) -
         SourcePressureMarginInt n k (r + j) =
-      SourceRetentionDropInt n k r j -
-        2 * SourceContinuationDropInt n k r j := by
+      SourcePressureNetDropInt n k r j := by
   unfold SourcePressureMarginInt
-  unfold SourceRetentionDropInt SourceContinuationDropInt
+  unfold SourcePressureNetDropInt SourceRetentionDropInt SourceContinuationDropInt
+  ring
+
+/--
+Next adjacent source-pressure margin as current margin plus net pressure drop.
+
+This is the additive zero-crossing form of the checkpoint-136 balance sheet.
+It is still local to one adjacent pressure-depth edge.
+-/
+theorem sourcePressureMargin_next_eq_current_add_netDrop
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureMarginInt n k (r + j + 1) =
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j := by
+  have h := sourcePressureMarginStepDiff_eq n k r j
+  rw [← h]
   ring
 
 /--
@@ -386,9 +413,7 @@ retention loss minus twice continuation loss.
 -/
 def SourcePressureNetDropPositive
     (n : OddNat) (k r j : ℕ) : Prop :=
-  0 <
-    SourceRetentionDropInt n k r j -
-      2 * SourceContinuationDropInt n k r j
+  0 < SourcePressureNetDropInt n k r j
 
 /--
 The first selected source-pressure depth.
@@ -828,6 +853,38 @@ theorem sourcePressureNetDropPositive_of_localIsland_left
     SourcePressureNetDropPositive n k r (j - 1) :=
   sourcePressureNetDropPositive_of_marginJumpUp n k r (j - 1)
     (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland)
+
+/--
+Upward source-pressure sign change as a local zero-crossing.
+
+The statement keeps the two axes separated: `j` is a pressure-depth edge, not a
+time index.  The theorem says that the next margin is positive exactly when
+the current nonpositive margin crosses zero after adding the local net pressure
+drop.
+-/
+theorem sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureSignChangeUp n k r j ↔
+      SourcePressureMarginInt n k (r + j) ≤ 0 ∧
+        0 <
+          SourcePressureMarginInt n k (r + j) +
+            SourcePressureNetDropInt n k r j := by
+  unfold SourcePressureSignChangeUp
+  rw [← sourcePressureMargin_next_eq_current_add_netDrop n k r j]
+
+/--
+A local pressure island gives the zero-crossing condition at its left edge.
+-/
+theorem sourcePressureCrosses_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (j - 1)) +
+          SourcePressureNetDropInt n k r (j - 1) :=
+  (sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
+      n k r (j - 1)).1
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
 
 /--
 Package a named margin jump and a strict retention drop.
