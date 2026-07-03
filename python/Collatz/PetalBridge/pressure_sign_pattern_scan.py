@@ -62,6 +62,7 @@ class PressureSignPatternRow:
     max_margin_jump: int
     max_retention_drop: int
     max_continuation_drop: int
+    max_retention_drop_minus_2_continuation_drop: int
     sign_change_cause_labels: str
     sign_change_drop_details: str
     sign_change_pressure_decay_details: str
@@ -228,14 +229,23 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
     sign_change_details: list[str] = []
     sign_change_pressure_decay_details: list[str] = []
     sign_change_labels: list[str] = []
+    retention_drop_minus_2_continuation_drop_values: list[int] = []
     for depth in sign_change_up:
         retention_drop = retentions[depth] - retentions[depth + 1]
         continuation_drop = continuations[depth] - continuations[depth + 1]
         margin_jump = margins[depth + 1] - margins[depth]
+        retention_drop_minus_2_continuation_drop = (
+            retention_drop - 2 * continuation_drop
+        )
+        retention_drop_minus_2_continuation_drop_values.append(
+            retention_drop_minus_2_continuation_drop
+        )
         label = classify_sign_change(retention_drop, continuation_drop)
         sign_change_labels.append(label)
         sign_change_details.append(
-            f"{depth}:ret={retention_drop},cont={continuation_drop},jump={margin_jump},cause={label}"
+            f"{depth}:ret={retention_drop},cont={continuation_drop},"
+            f"diff={retention_drop_minus_2_continuation_drop},"
+            f"jump={margin_jump},cause={label}"
         )
         sign_change_pressure_decay_details.append(
             f"j={depth},margin_j={margins[depth]},margin_next={margins[depth + 1]},"
@@ -243,7 +253,9 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
             f"retention_next={retentions[depth + 1]},retention_drop={retention_drop},"
             f"continuation_j={continuations[depth]},"
             f"continuation_next={continuations[depth + 1]},"
-            f"continuation_drop={continuation_drop},cause={label}"
+            f"continuation_drop={continuation_drop},"
+            f"retention_drop_minus_2_continuation_drop="
+            f"{retention_drop_minus_2_continuation_drop},cause={label}"
         )
     local_island_pressure_decay_details = [
         f"n={n},island_depth={depth},left_edge_j={depth - 1},"
@@ -311,6 +323,9 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         max_margin_jump=max_adjacent_jump(margins, depths),
         max_retention_drop=max_adjacent_drop(retentions, depths),
         max_continuation_drop=max_adjacent_drop(continuations, depths),
+        max_retention_drop_minus_2_continuation_drop=max(
+            retention_drop_minus_2_continuation_drop_values, default=0
+        ),
         sign_change_cause_labels=";".join(sign_change_labels),
         sign_change_drop_details=";".join(sign_change_details),
         sign_change_pressure_decay_details=";".join(
@@ -427,6 +442,18 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     max_positive = max((row.positive_depth_count for row in rows), default=0)
     max_islands = max((row.local_island_count for row in rows), default=0)
     max_sign_changes = max((row.sign_change_up_count for row in rows), default=0)
+    max_margin_jump = max((row.max_margin_jump for row in rows), default=0)
+    max_retention_drop = max((row.max_retention_drop for row in rows), default=0)
+    max_continuation_drop = max(
+        (row.max_continuation_drop for row in rows), default=0
+    )
+    max_retention_drop_minus_2_continuation_drop = max(
+        (
+            row.max_retention_drop_minus_2_continuation_drop
+            for row in rows
+        ),
+        default=0,
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -469,7 +496,7 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     )[:12]
 
     lines = [
-        "# Collatz Pressure Sign Pattern Scan - Checkpoint 132",
+        "# Collatz Pressure Sign Pattern Scan",
         "",
         f"- rows: `{len(rows)}`",
         f"- rows with positive pressure depths: `{len(nonempty)}`",
@@ -482,6 +509,11 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"- max positive depth count: `{max_positive}`",
         f"- max local island count: `{max_islands}`",
         f"- max sign-change-up count: `{max_sign_changes}`",
+        f"- largest margin jump: `{max_margin_jump}`",
+        f"- largest retention drop: `{max_retention_drop}`",
+        f"- largest continuation drop: `{max_continuation_drop}`",
+        "- largest retention drop minus 2 continuation drop: "
+        f"`{max_retention_drop_minus_2_continuation_drop}`",
         f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         f"- all-ones depth first counts: `{markdown_kv_counter(all_ones_first_counts)}`",
         f"- all-ones depth mode counts: `{markdown_kv_counter(all_ones_mode_counts)}`",
@@ -598,8 +630,8 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             "|---:|---|",
         ]
     )
-    if sign_samples:
-        for row in sign_samples:
+    if with_sign_change:
+        for row in with_sign_change:
             lines.append(
                 f"| {row.n} | {row.sign_change_pressure_decay_details} |"
             )
@@ -615,8 +647,8 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             "|---:|---|",
         ]
     )
-    if top_islands:
-        for row in top_islands:
+    if with_island:
+        for row in with_island:
             lines.append(
                 f"| {row.n} | {row.local_island_pressure_decay_details} |"
             )
