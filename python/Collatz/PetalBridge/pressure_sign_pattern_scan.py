@@ -71,6 +71,9 @@ class PressureSignPatternRow:
     retention_drop_minus_2_continuation_drop: str
     margin_step_matches_net_drop: str
     margin_step_identity_failure_count: int
+    net_drop_positive_count: int
+    margin_jump_count: int
+    margin_jump_iff_net_drop_failure_count: int
     margin_profile: str
     retention_profile: str
     continuation_profile: str
@@ -229,6 +232,18 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         == retention_drop_minus_2_continuation_drops[depth]
         for depth in depths
     }
+    net_drop_positive = {
+        depth: 0 < retention_drop_minus_2_continuation_drops[depth]
+        for depth in depths
+    }
+    margin_jump_flags = {
+        depth: margins[depth] < margins[depth + 1]
+        for depth in depths
+    }
+    margin_jump_iff_net_drop = {
+        depth: margin_jump_flags[depth] == net_drop_positive[depth]
+        for depth in depths
+    }
     positive_depths = [depth for depth in depths if margins[depth] > 0]
     blocks = consecutive_blocks(positive_depths)
     frontier = positive_depths[0] if positive_depths else -1
@@ -366,6 +381,13 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         margin_step_identity_failure_count=sum(
             1 for depth in depths if not margin_step_matches[depth]
         ),
+        net_drop_positive_count=sum(
+            1 for depth in depths if net_drop_positive[depth]
+        ),
+        margin_jump_count=sum(1 for depth in depths if margin_jump_flags[depth]),
+        margin_jump_iff_net_drop_failure_count=sum(
+            1 for depth in depths if not margin_jump_iff_net_drop[depth]
+        ),
         margin_profile=join_pairs([(depth, margins[depth]) for depth in depths]),
         retention_profile=join_pairs([(depth, retentions[depth]) for depth in depths]),
         continuation_profile=join_pairs(
@@ -489,6 +511,13 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     rows_with_margin_step_identity_failure = sum(
         1 for row in rows if row.margin_step_identity_failure_count > 0
     )
+    rows_with_net_drop_positive = sum(
+        1 for row in rows if row.net_drop_positive_count > 0
+    )
+    rows_with_margin_jump = sum(1 for row in rows if row.margin_jump_count > 0)
+    rows_with_margin_jump_iff_net_drop_failure = sum(
+        1 for row in rows if row.margin_jump_iff_net_drop_failure_count > 0
+    )
     all_ones_first_counts = Counter(
         row.residual_all_ones_depth_first
         for row in rows
@@ -551,6 +580,10 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         f"`{max_retention_drop_minus_2_continuation_drop}`",
         "- rows_with_margin_step_identity_failure: "
         f"`{rows_with_margin_step_identity_failure}`",
+        f"- rows_with_net_drop_positive: `{rows_with_net_drop_positive}`",
+        f"- rows_with_margin_jump: `{rows_with_margin_jump}`",
+        "- rows_with_margin_jump_iff_net_drop_failure: "
+        f"`{rows_with_margin_jump_iff_net_drop_failure}`",
         f"- positive block length counts: `{markdown_kv_counter(block_length_counts)}`",
         f"- all-ones depth first counts: `{markdown_kv_counter(all_ones_first_counts)}`",
         f"- all-ones depth mode counts: `{markdown_kv_counter(all_ones_mode_counts)}`",
