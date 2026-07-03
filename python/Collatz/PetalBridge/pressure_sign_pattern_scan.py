@@ -645,6 +645,27 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     )
     append_distribution_table(
         lines,
+        "Positive Block Length By Count All-Ones Depth Ge 4",
+        table_count_by(rows, "count_all_ones_depth_ge_4", "max_positive_block_length"),
+        "count all-ones depth ge 4",
+        "max block length counts",
+    )
+    append_distribution_table(
+        lines,
+        "Positive Block Length By Count All-Ones Depth Ge 5",
+        table_count_by(rows, "count_all_ones_depth_ge_5", "max_positive_block_length"),
+        "count all-ones depth ge 5",
+        "max block length counts",
+    )
+    append_distribution_table(
+        lines,
+        "Positive Block Length By Count All-Ones Depth Ge 6",
+        table_count_by(rows, "count_all_ones_depth_ge_6", "max_positive_block_length"),
+        "count all-ones depth ge 6",
+        "max block length counts",
+    )
+    append_distribution_table(
+        lines,
         "Frontier Depth By All-Ones Depth First",
         table_count_by(rows, "residual_all_ones_depth_first", "first_frontier_depth", True),
         "all-ones depth first",
@@ -655,6 +676,13 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
         "Frontier Depth By All-Ones Depth Max",
         table_count_by(rows, "residual_all_ones_depth_max", "first_frontier_depth", True),
         "all-ones depth max",
+        "frontier depth counts",
+    )
+    append_distribution_table(
+        lines,
+        "Frontier Depth By Count All-Ones Depth Ge 4",
+        table_count_by(rows, "count_all_ones_depth_ge_4", "first_frontier_depth", True),
+        "count all-ones depth ge 4",
         "frontier depth counts",
     )
     append_distribution_table(
@@ -687,6 +715,13 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
     )
     append_distribution_table(
         lines,
+        "Local Island Rows By Count All-Ones Depth Ge 4",
+        table_count_by(with_island, "count_all_ones_depth_ge_4", "local_island_count"),
+        "count all-ones depth ge 4",
+        "local island count rows",
+    )
+    append_distribution_table(
+        lines,
         "Sign-Change-Up Rows By All-Ones Depth First",
         table_count_by(
             with_sign_change,
@@ -705,6 +740,17 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             "sign_change_up_count",
         ),
         "all-ones depth max",
+        "sign-change-up count rows",
+    )
+    append_distribution_table(
+        lines,
+        "Sign-Change-Up Rows By Count All-Ones Depth Ge 4",
+        table_count_by(
+            with_sign_change,
+            "count_all_ones_depth_ge_4",
+            "sign_change_up_count",
+        ),
+        "count all-ones depth ge 4",
         "sign-change-up count rows",
     )
     lines.extend(
@@ -731,14 +777,19 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path("python/Collatz/PetalBridge/results"),
     )
+    parser.add_argument(
+        "--name-suffix",
+        default="",
+        help="Optional suffix for output files, for example '_8191_k64'.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     rows = scan(args.max_n, args.steps, args.r_start, args.depth_len)
-    csv_path = args.out_dir / "pressure_sign_pattern_scan.csv"
-    summary_path = args.out_dir / "pressure_sign_pattern_scan.md"
+    csv_path = args.out_dir / f"pressure_sign_pattern_scan{args.name_suffix}.csv"
+    summary_path = args.out_dir / f"pressure_sign_pattern_scan{args.name_suffix}.md"
     write_csv(rows, csv_path)
     write_summary(rows, summary_path)
     print(f"wrote {csv_path}")
