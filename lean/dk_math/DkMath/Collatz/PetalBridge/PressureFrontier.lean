@@ -779,6 +779,57 @@ theorem sourcePressureMarginJumpUp_of_netDropPositive
   exact h
 
 /--
+A named pressure-margin jump gives positive net integer pressure drop.
+
+Together with `sourcePressureMarginJumpUp_of_netDropPositive`, this closes the
+local checkpoint-137 equivalence between adjacent margin jumps and the integer
+balance sheet.  This remains strictly local to one adjacent pressure-depth
+edge.
+-/
+theorem sourcePressureNetDropPositive_of_marginJumpUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureMarginJumpUp n k r j) :
+    SourcePressureNetDropPositive n k r j := by
+  unfold SourcePressureNetDropPositive
+  rw [← sourcePressureMarginStepDiff_eq]
+  exact (sourcePressureMarginJumpUp_iff_stepDiff_pos n k r j).1 h
+
+/--
+Adjacent pressure-margin jump is exactly positive net pressure drop.
+
+This theorem is the stable local API for later pressure-decay work.  It should
+be preferred over introducing a global or dominance-sounding predicate until a
+specific downstream theorem requires that stronger vocabulary.
+-/
+theorem sourcePressureMarginJumpUp_iff_netDropPositive
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureMarginJumpUp n k r j ↔
+      SourcePressureNetDropPositive n k r j :=
+  ⟨sourcePressureNetDropPositive_of_marginJumpUp n k r j,
+    sourcePressureMarginJumpUp_of_netDropPositive n k r j⟩
+
+/--
+An upward pressure sign change has positive net integer pressure drop.
+-/
+theorem sourcePressureNetDropPositive_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureNetDropPositive n k r j :=
+  sourcePressureNetDropPositive_of_marginJumpUp n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j h)
+
+/--
+A local pressure island has positive net integer pressure drop at its left
+edge.
+-/
+theorem sourcePressureNetDropPositive_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureNetDropPositive n k r (j - 1) :=
+  sourcePressureNetDropPositive_of_marginJumpUp n k r (j - 1)
+    (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland)
+
+/--
 Package a named margin jump and a strict retention drop.
 
 This checkpoint-135 wrapper is deliberately non-quantitative: it does not say
@@ -844,6 +895,19 @@ theorem sourcePressureJumpWithDecay_of_signChangeUp_of_decay
     SourcePressureJumpWithDecay n k r j :=
   sourcePressureJumpWithDecay_of_parts n k r j
     (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret hcont
+
+/--
+Positive net pressure drop plus the two order-theoretic decay observations
+packages as `SourcePressureJumpWithDecay`.
+-/
+theorem sourcePressureJumpWithDecay_of_netDropPositive_of_decay
+    (n : OddNat) (k r j : ℕ)
+    (hnet : SourcePressureNetDropPositive n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  sourcePressureJumpWithDecay_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_netDropPositive n k r j hnet) hret hcont
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
