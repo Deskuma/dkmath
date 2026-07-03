@@ -106,4 +106,52 @@ theorem collatz_one_four_two_one_scaled_boundary_exists :
     3 * 1 + 1 = 2 ^ 2 * 1 := by
   norm_num
 
+/-- No positive scaled one-step cycle exists at a height other than `2`. -/
+theorem collatz_scaled_one_cycle_no_wrong_height
+    {n h : ℕ}
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n)
+    (hh : h ≠ 2) :
+    False := by
+  have hsol := collatz_scaled_one_cycle_eq_one hn hcycle
+  exact hh hsol.2
+
+/-- No positive scaled one-step cycle exists away from the base `n = 1`. -/
+theorem collatz_scaled_one_cycle_no_wrong_base
+    {n h : ℕ}
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n)
+    (hn1 : n ≠ 1) :
+    False := by
+  have hsol := collatz_scaled_one_cycle_eq_one hn hcycle
+  exact hn1 hsol.1
+
+/--
+Iff form of the positive scaled one-step cycle obstruction.
+
+The forward direction is `collatz_scaled_one_cycle_eq_one`; the reverse
+direction is the concrete `1 -> 4 -> 2 -> 1` boundary equation.  This remains
+only a statement about `3 * n + 1 = 2 ^ h * n`.
+-/
+theorem collatz_scaled_one_cycle_iff
+    {n h : ℕ}
+    (hn : 0 < n) :
+    3 * n + 1 = 2 ^ h * n ↔ n = 1 ∧ h = 2 := by
+  constructor
+  · exact collatz_scaled_one_cycle_eq_one hn
+  · intro hsol
+    rcases hsol with ⟨rfl, rfl⟩
+    norm_num
+
+/--
+Project-facing alias for the scaled `1 -> 4 -> 2 -> 1` Petal one-cycle
+uniqueness theorem.
+-/
+theorem one_four_two_one_petal_scaled_cycle_unique
+    {n h : ℕ}
+    (hn : 0 < n)
+    (hcycle : 3 * n + 1 = 2 ^ h * n) :
+    n = 1 ∧ h = 2 :=
+  collatz_scaled_one_cycle_eq_one hn hcycle
+
 end DkMath.Collatz

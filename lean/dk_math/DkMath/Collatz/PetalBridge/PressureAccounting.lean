@@ -713,4 +713,153 @@ def sourcePressureAccountedIntervalFamily_pair_of_before
       subst C
       exact SourcePressureAccountedIntervalsDisjoint.of_before hAB)
 
+/--
+Adjacent sortedness for an explicit accounted-interval list.
+
+This predicate only records local ordered non-overlap between neighboring
+items.  It is not a coverage, maximality, prefix, or union-accounting claim.
+-/
+def SourcePressureAccountedIntervalListSortedBefore
+    {n : OddNat} {k r : ℕ} :
+    List (SourcePressureAccountedInterval n k r) → Prop
+  | [] => True
+  | [_] => True
+  | A :: B :: rest =>
+      SourcePressureAccountedIntervalBefore A B ∧
+        SourcePressureAccountedIntervalListSortedBefore (B :: rest)
+
+/-- The empty list is sorted by adjacent ordered non-overlap. -/
+theorem sourcePressureAccountedIntervalListSortedBefore_nil
+    {n : OddNat} {k r : ℕ} :
+    SourcePressureAccountedIntervalListSortedBefore
+      ([] : List (SourcePressureAccountedInterval n k r)) :=
+  trivial
+
+/-- A singleton list is sorted by adjacent ordered non-overlap. -/
+theorem sourcePressureAccountedIntervalListSortedBefore_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    SourcePressureAccountedIntervalListSortedBefore [A] :=
+  trivial
+
+/--
+In an adjacent-sorted tail, a predecessor before the head is before every
+element of the tail.
+
+This is the local bridge from adjacent ordering to pairwise disjointness.
+-/
+theorem SourcePressureAccountedIntervalBefore.before_all_of_sorted_tail
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r}
+    {rest : List (SourcePressureAccountedInterval n k r)}
+    (hAB : SourcePressureAccountedIntervalBefore A B)
+    (hsorted :
+      SourcePressureAccountedIntervalListSortedBefore (B :: rest)) :
+    ∀ C ∈ B :: rest, SourcePressureAccountedIntervalBefore A C := by
+  induction rest generalizing A B with
+  | nil =>
+      intro C hC
+      simp only [List.mem_cons, List.not_mem_nil, or_false] at hC
+      subst C
+      exact hAB
+  | cons C rest ih =>
+      have hBC : SourcePressureAccountedIntervalBefore B C := hsorted.1
+      have htail :
+          SourcePressureAccountedIntervalListSortedBefore (C :: rest) :=
+        hsorted.2
+      intro D hD
+      simp only [List.mem_cons] at hD
+      rcases hD with hD | hD
+      · subst D
+        exact hAB
+      · have hAC :
+            SourcePressureAccountedIntervalBefore A C :=
+          SourcePressureAccountedIntervalBefore.trans_like hAB hBC
+        exact ih hAC htail D (by simpa using hD)
+
+/-- Sorted-before empty lists are pairwise disjoint. -/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_of_sortedBefore_nil
+    {n : OddNat} {k r : ℕ} :
+    SourcePressureAccountedIntervalListPairwiseDisjoint
+      ([] : List (SourcePressureAccountedInterval n k r)) :=
+  sourcePressureAccountedIntervalListPairwiseDisjoint_nil
+
+/-- Sorted-before singleton lists are pairwise disjoint. -/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_of_sortedBefore_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint [A] :=
+  sourcePressureAccountedIntervalListPairwiseDisjoint_singleton A
+
+/-- A sorted-before pair is pairwise disjoint. -/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_of_sortedBefore_pair
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r}
+    (hAB : SourcePressureAccountedIntervalBefore A B) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint [A, B] :=
+  (sourcePressureAccountedIntervalFamily_pair_of_before A B hAB).pairwiseDisjoint
+
+/--
+Adjacent sortedness implies pairwise disjointness for explicit accounted
+interval lists.
+
+The proof turns the adjacent order chain into a head-before-all-tail fact and
+then uses `before -> disjoint`.  It still does not say the list covers any
+ambient pressure region.
+-/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_of_sortedBefore
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureAccountedInterval n k r)}
+    (hsorted : SourcePressureAccountedIntervalListSortedBefore L) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint L := by
+  induction L with
+  | nil =>
+      exact sourcePressureAccountedIntervalListPairwiseDisjoint_nil
+  | cons A L ih =>
+      cases L with
+      | nil =>
+          exact sourcePressureAccountedIntervalListPairwiseDisjoint_singleton A
+      | cons B rest =>
+          have hAB : SourcePressureAccountedIntervalBefore A B := hsorted.1
+          have htailSorted :
+              SourcePressureAccountedIntervalListSortedBefore (B :: rest) :=
+            hsorted.2
+          refine sourcePressureAccountedIntervalListPairwiseDisjoint_cons ?_ ?_
+          · intro C hC
+            exact SourcePressureAccountedIntervalsDisjoint.of_before
+              (SourcePressureAccountedIntervalBefore.before_all_of_sorted_tail
+                hAB htailSorted C hC)
+          · exact ih htailSorted
+
+/--
+Family constructor from an adjacent-sorted explicit list.
+
+This only packages the list and the derived pairwise disjointness.  It is not
+a coverage or decomposition theorem.
+-/
+def sourcePressureAccountedIntervalFamily_of_sortedBefore
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureAccountedInterval n k r))
+    (hsorted : SourcePressureAccountedIntervalListSortedBefore L) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  { items := L
+    pairwiseDisjoint :=
+      sourcePressureAccountedIntervalListPairwiseDisjoint_of_sortedBefore hsorted }
+
+/--
+Budget wrapper for a family built from an adjacent-sorted list.
+
+The sorted hypothesis is used only to construct the family; the budget remains
+the explicit list budget and does not imply coverage.
+-/
+theorem sourcePressureAccountedIntervalFamily_of_sortedBefore_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureAccountedInterval n k r))
+    (hsorted : SourcePressureAccountedIntervalListSortedBefore L) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedBefore L hsorted).items).map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((L.length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedBefore] using
+    sourcePressureAccountedInterval_list_sum_le_neg_length L
+
 end DkMath.Collatz
