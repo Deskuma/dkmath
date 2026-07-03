@@ -886,6 +886,78 @@ theorem sourcePressureIntervalPulse_right_falling
     (sourcePressureIntervalPulse_right_signChange h)
 
 /--
+Address of a positive pressure run.
+
+This packages only the observed start/length witness and the run proof.  It
+does not assert that the run is maximal, unique, covering, or prefix-shaped.
+-/
+structure SourcePressureRunAddress (n : OddNat) (k r : ℕ) where
+  /-- Start depth index, relative to base pressure depth `r`. -/
+  start : ℕ
+  /-- Run length in pressure-depth indices. -/
+  len : ℕ
+  /-- The addressed positive pressure run. -/
+  hrun : SourcePressureRun n k r start len
+
+/--
+Address of an interval pressure pulse.
+
+This is the interval-pulse analogue of `SourcePressureRunAddress`: it records
+the relative start, the length, and the pulse witness, without any maximality
+or uniqueness claim.
+-/
+structure SourcePressureIntervalPulseAddress (n : OddNat) (k r : ℕ) where
+  /-- Start depth index, relative to base pressure depth `r`. -/
+  start : ℕ
+  /-- Pulse length in pressure-depth indices. -/
+  len : ℕ
+  /-- The addressed interval pressure pulse. -/
+  hpulse : SourcePressureIntervalPulse n k r start len
+
+namespace SourcePressureRunAddress
+
+/-- Absolute pressure-depth start of a run address. -/
+def depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) : ℕ :=
+  r + A.start
+
+/-- Absolute pressure-depth end of a run address. -/
+def depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) : ℕ :=
+  r + (A.start + A.len - 1)
+
+end SourcePressureRunAddress
+
+namespace SourcePressureIntervalPulseAddress
+
+/-- Forget an interval-pulse address down to its positive-run address. -/
+def toRunAddress
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunAddress n k r :=
+  { start := A.start
+    len := A.len
+    hrun := sourcePressureIntervalPulse_run A.hpulse }
+
+end SourcePressureIntervalPulseAddress
+
+/-- Extract the left sign change from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left_signChange
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureSignChangeUp n k r (A.start - 1) :=
+  sourcePressureIntervalPulse_left_signChange A.hpulse
+
+/-- Extract the right sign change from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right_signChange
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureSignChangeDown n k r (A.start + A.len - 1) :=
+  sourcePressureIntervalPulse_right_signChange A.hpulse
+
+/--
 A local pressure island is an interval pulse of length one.
 
 This is the singleton bridge from checkpoint-140 pulses to checkpoint-141
@@ -908,6 +980,17 @@ theorem sourcePressureIntervalPulse_singleton_of_localIsland
     simpa [hidx] using
       sourcePressureSignChangeDown_of_localIsland n k r j
         ⟨hjpos, hsel, hprev_not, hnext_not⟩
+
+/--
+Build an interval-pulse address from a local pressure island.
+-/
+def sourcePressureIntervalPulseAddress_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureIntervalPulseAddress n k r :=
+  { start := j
+    len := 1
+    hpulse := sourcePressureIntervalPulse_singleton_of_localIsland n k r j hisland }
 
 /--
 Package a named margin jump and a strict retention drop.
