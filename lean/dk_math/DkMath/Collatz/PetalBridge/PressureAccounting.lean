@@ -742,6 +742,16 @@ theorem sourcePressureAccountedIntervalListSortedBefore_singleton
     SourcePressureAccountedIntervalListSortedBefore [A] :=
   trivial
 
+/-- Cons constructor for adjacent sorted-before lists. -/
+theorem sourcePressureAccountedIntervalListSortedBefore_cons
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r}
+    {rest : List (SourcePressureAccountedInterval n k r)}
+    (hAB : SourcePressureAccountedIntervalBefore A B)
+    (htail : SourcePressureAccountedIntervalListSortedBefore (B :: rest)) :
+    SourcePressureAccountedIntervalListSortedBefore (A :: B :: rest) :=
+  ⟨hAB, htail⟩
+
 /--
 In an adjacent-sorted tail, a predecessor before the head is before every
 element of the tail.
@@ -861,5 +871,166 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedBefore_sum_le_neg_length
         -((L.length : ℕ) : ℤ) := by
   simpa [sourcePressureAccountedIntervalFamily_of_sortedBefore] using
     sourcePressureAccountedInterval_list_sum_le_neg_length L
+
+/-- Empty sorted-family constructor. -/
+def sourcePressureAccountedIntervalFamily_sorted_nil
+    (n : OddNat) (k r : ℕ) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_nil n k r
+
+/-- Singleton sorted-family constructor. -/
+def sourcePressureAccountedIntervalFamily_sorted_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_singleton A
+
+/--
+Cons a head interval onto an adjacent-sorted nonempty tail and package the
+result as an explicit accounted-interval family.
+
+This is still only a constructor for explicitly supplied intervals.
+-/
+def sourcePressureAccountedIntervalFamily_sorted_cons
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureAccountedInterval n k r)
+    (rest : List (SourcePressureAccountedInterval n k r))
+    (hAB : SourcePressureAccountedIntervalBefore A B)
+    (htail : SourcePressureAccountedIntervalListSortedBefore (B :: rest)) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_of_sortedBefore
+    (A :: B :: rest)
+    (sourcePressureAccountedIntervalListSortedBefore_cons hAB htail)
+
+/--
+The head of an adjacent-sorted accounted-interval list is disjoint from every
+tail item.
+
+This is the list-facing form needed by later family constructors.  It handles
+the empty-tail case directly and the nonempty-tail case through
+`before_all_of_sorted_tail`.
+-/
+theorem sourcePressureAccountedInterval_before_all_tail_of_sortedBefore
+    {n : OddNat} {k r : ℕ}
+    {A : SourcePressureAccountedInterval n k r}
+    {L : List (SourcePressureAccountedInterval n k r)}
+    (hsorted : SourcePressureAccountedIntervalListSortedBefore (A :: L)) :
+    ∀ B ∈ L, SourcePressureAccountedIntervalsDisjoint A B := by
+  cases L with
+  | nil =>
+      intro B hB
+      simp at hB
+  | cons B rest =>
+      intro C hC
+      have hAB : SourcePressureAccountedIntervalBefore A B := hsorted.1
+      have htail :
+          SourcePressureAccountedIntervalListSortedBefore (B :: rest) :=
+        hsorted.2
+      exact SourcePressureAccountedIntervalsDisjoint.of_before
+        (SourcePressureAccountedIntervalBefore.before_all_of_sorted_tail
+          hAB htail C hC)
+
+/-- Adjacent sorted-before failure for one neighboring pair. -/
+def SourcePressureAccountedIntervalListSortedBeforeFailsAt
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureAccountedInterval n k r) : Prop :=
+  ¬ SourcePressureAccountedIntervalBefore A B
+
+/--
+Existential adjacent sorted-before failure for an explicit list.
+
+This is an obstruction-style predicate: it records where adjacent sortedness
+breaks without claiming anything about coverage or dynamics.
+-/
+def SourcePressureAccountedIntervalListHasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ} :
+    List (SourcePressureAccountedInterval n k r) → Prop
+  | [] => False
+  | [_] => False
+  | A :: B :: rest =>
+      ¬ SourcePressureAccountedIntervalBefore A B ∨
+        SourcePressureAccountedIntervalListHasSortedBeforeFailure (B :: rest)
+
+/-- A failed neighboring pair gives a sorted-before failure for the pair list. -/
+theorem sourcePressureAccountedIntervalListHasSortedBeforeFailure_pair
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r}
+    (hfail : ¬ SourcePressureAccountedIntervalBefore A B) :
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure [A, B] :=
+  Or.inl hfail
+
+/-- A two-element list is sorted exactly when its neighboring pair is before. -/
+theorem sourcePressureAccountedIntervalListSortedBefore_pair_iff
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r} :
+    SourcePressureAccountedIntervalListSortedBefore [A, B] ↔
+      SourcePressureAccountedIntervalBefore A B := by
+  constructor
+  · intro h
+    exact h.1
+  · intro h
+    exact ⟨h, trivial⟩
+
+/-- Pair-level sortedness and failure are exact negations. -/
+theorem sourcePressureAccountedIntervalListHasSortedBeforeFailure_pair_iff
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r} :
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure [A, B] ↔
+      ¬ SourcePressureAccountedIntervalBefore A B := by
+  constructor
+  · intro h
+    exact h.elim id False.elim
+  · exact sourcePressureAccountedIntervalListHasSortedBeforeFailure_pair
+
+/--
+Every explicit accounted-interval list is either adjacent-sorted or carries an
+adjacent sorted-before failure.
+
+This is not a coverage dichotomy.  It is only a first-class split for the
+explicit list that a caller has already supplied.
+-/
+theorem sourcePressureAccountedIntervalList_sorted_or_failure
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureAccountedInterval n k r)) :
+    SourcePressureAccountedIntervalListSortedBefore L ∨
+      SourcePressureAccountedIntervalListHasSortedBeforeFailure L := by
+  induction L with
+  | nil =>
+      exact Or.inl trivial
+  | cons A L ih =>
+      cases L with
+      | nil =>
+          exact Or.inl trivial
+      | cons B rest =>
+          by_cases hAB : SourcePressureAccountedIntervalBefore A B
+          · rcases ih with htail | htail
+            · exact Or.inl
+                (sourcePressureAccountedIntervalListSortedBefore_cons hAB htail)
+            · exact Or.inr (Or.inr htail)
+          · exact Or.inr (Or.inl hAB)
+
+/-- Singleton sorted-family budget wrapper. -/
+theorem sourcePressureAccountedIntervalFamily_sorted_singleton_sum_le_neg_one
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    ((sourcePressureAccountedIntervalFamily_sorted_singleton A).items.map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -1 := by
+  simpa [sourcePressureAccountedIntervalFamily_sorted_singleton] using
+    sourcePressureAccountedIntervalFamily_singleton_sum_le_neg_one A
+
+/-- Sorted-cons family budget wrapper. -/
+theorem sourcePressureAccountedIntervalFamily_sorted_cons_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureAccountedInterval n k r)
+    (rest : List (SourcePressureAccountedInterval n k r))
+    (hAB : SourcePressureAccountedIntervalBefore A B)
+    (htail : SourcePressureAccountedIntervalListSortedBefore (B :: rest)) :
+    (((sourcePressureAccountedIntervalFamily_sorted_cons A B rest hAB htail).items).map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -(((A :: B :: rest).length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalFamily_sorted_cons] using
+    sourcePressureAccountedIntervalFamily_of_sortedBefore_sum_le_neg_length
+      (A :: B :: rest)
+      (sourcePressureAccountedIntervalListSortedBefore_cons hAB htail)
 
 end DkMath.Collatz
