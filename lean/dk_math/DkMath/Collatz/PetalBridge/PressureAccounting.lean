@@ -389,6 +389,27 @@ def sourcePressureAccountedInterval_of_intervalPulseAddress
         sourcePressureIntervalPulseAddress_margin_after_eq_start_add_sum_netDrop A }
 
 /--
+Map an explicit list of interval-pulse addresses to accounted intervals.
+
+This is only a carrier conversion.  It preserves the supplied list order and
+does not assert that the addresses are maximal, unique, disjoint, covering, or
+prefix-shaped.
+-/
+def sourcePressureAccountedIntervalList_of_intervalPulseAddressList
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) :
+    List (SourcePressureAccountedInterval n k r) :=
+  L.map sourcePressureAccountedInterval_of_intervalPulseAddress
+
+@[simp]
+theorem sourcePressureAccountedIntervalList_of_intervalPulseAddressList_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) :
+    (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L).length =
+      L.length := by
+  simp [sourcePressureAccountedIntervalList_of_intervalPulseAddressList]
+
+/--
 Finite-list pressure budget over explicitly provided accounted intervals.
 
 No disjointness, coverage, union accounting, or maximality is used here.  The
@@ -408,6 +429,43 @@ theorem sourcePressureAccountedInterval_list_sum_le_neg_length
       have hA := sourcePressureAccountedInterval_intervalNetDrop_le_neg_one A
       simp at ih ⊢
       omega
+
+/--
+Finite-list pressure budget over explicitly supplied interval-pulse addresses.
+
+This theorem is deliberately just a list-cost statement.  It does not require
+the supplied addresses to be sorted or disjoint, and it does not state union
+accounting for their covered depths.
+-/
+theorem sourcePressureIntervalPulseAddressList_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) :
+    ((sourcePressureAccountedIntervalList_of_intervalPulseAddressList L).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((L.length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalList_of_intervalPulseAddressList] using
+    sourcePressureAccountedInterval_list_sum_le_neg_length
+      (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L)
+
+/--
+Any nonempty explicit interval-pulse-address list has negative total listed
+net drop after conversion to accounted intervals.
+
+This is only a cost statement for the supplied witnesses; it is not union
+accounting over their geometric support.
+-/
+theorem sourcePressureIntervalPulseAddressList_sum_neg_of_nonempty
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureIntervalPulseAddress n k r)}
+    (hL : L ≠ []) :
+    ((sourcePressureAccountedIntervalList_of_intervalPulseAddressList L).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
+  have hbudget := sourcePressureIntervalPulseAddressList_sum_le_neg_length L
+  have hlen : 0 < L.length := by
+    cases L with
+    | nil => contradiction
+    | cons _ _ => simp
+  omega
 
 /--
 Any nonempty explicit list of accounted intervals has negative total net drop.
@@ -674,6 +732,27 @@ def SourcePressureAccountedIntervalBefore
     {n : OddNat} {k r : ℕ}
     (A B : SourcePressureAccountedInterval n k r) : Prop :=
   NatIntervalBefore A.start A.len B.start B.len
+
+/--
+Ordered non-overlap for two interval-pulse addresses.
+
+This is the direct pulse-address version of `SourcePressureAccountedIntervalBefore`.
+Its negation is only a sorted-before failure.  It is not, by itself, overlap
+evidence: the addresses may simply be in the reverse order.
+-/
+def SourcePressureIntervalPulseAddressBefore
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
+  A.start + A.len ≤ B.start
+
+theorem sourcePressureIntervalPulseAddressBefore_iff_accountedBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r} :
+    SourcePressureIntervalPulseAddressBefore A B ↔
+      SourcePressureAccountedIntervalBefore
+        (sourcePressureAccountedInterval_of_intervalPulseAddress A)
+        (sourcePressureAccountedInterval_of_intervalPulseAddress B) := by
+  rfl
 
 /-- Transitive-like composition for ordered accounted intervals. -/
 theorem SourcePressureAccountedIntervalBefore.trans_like
@@ -1008,6 +1087,137 @@ theorem sourcePressureAccountedIntervalList_sorted_or_failure
                 (sourcePressureAccountedIntervalListSortedBefore_cons hAB htail)
             · exact Or.inr (Or.inr htail)
           · exact Or.inr (Or.inl hAB)
+
+/--
+Adjacent sortedness for an explicit interval-pulse-address list.
+
+The predicate is defined by converting addresses to accounted intervals and
+reusing the accounted-list sortedness.  It is still only a statement about the
+explicit list supplied by the caller.
+-/
+def SourcePressureIntervalPulseAddressListSortedBefore
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) : Prop :=
+  SourcePressureAccountedIntervalListSortedBefore
+    (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L)
+
+/--
+Adjacent sorted-before failure for an explicit interval-pulse-address list.
+
+This is not overlap evidence.  It only records that the converted accounted
+list is not adjacent-sorted at some neighboring pair.
+-/
+def SourcePressureIntervalPulseAddressListHasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) : Prop :=
+  SourcePressureAccountedIntervalListHasSortedBeforeFailure
+    (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L)
+
+/--
+Every explicit interval-pulse-address list is either adjacent-sorted after
+conversion or carries an adjacent sorted-before failure.
+
+This is a list-internal dichotomy only; it is not a coverage or convergence
+statement.
+-/
+theorem sourcePressureIntervalPulseAddressList_sorted_or_failure
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r)) :
+    SourcePressureIntervalPulseAddressListSortedBefore L ∨
+      SourcePressureIntervalPulseAddressListHasSortedBeforeFailure L :=
+  sourcePressureAccountedIntervalList_sorted_or_failure
+    (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L)
+
+/-- A two-address list is sorted exactly when the first address is before the second. -/
+theorem sourcePressureIntervalPulseAddressListSortedBefore_pair_iff
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r} :
+    SourcePressureIntervalPulseAddressListSortedBefore [A, B] ↔
+      SourcePressureIntervalPulseAddressBefore A B := by
+  change
+    SourcePressureAccountedIntervalListSortedBefore
+      [sourcePressureAccountedInterval_of_intervalPulseAddress A,
+        sourcePressureAccountedInterval_of_intervalPulseAddress B] ↔
+      SourcePressureIntervalPulseAddressBefore A B
+  rw [sourcePressureAccountedIntervalListSortedBefore_pair_iff]
+  exact sourcePressureIntervalPulseAddressBefore_iff_accountedBefore.symm
+
+/--
+A two-address list has a sorted-before failure exactly when the first address
+is not before the second.
+
+Again, this does not imply overlap.  It only detects failure of this chosen
+left-to-right order.
+-/
+theorem sourcePressureIntervalPulseAddressListHasSortedBeforeFailure_pair_iff
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r} :
+    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure [A, B] ↔
+      ¬ SourcePressureIntervalPulseAddressBefore A B := by
+  change
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure
+      [sourcePressureAccountedInterval_of_intervalPulseAddress A,
+        sourcePressureAccountedInterval_of_intervalPulseAddress B] ↔
+      ¬ SourcePressureIntervalPulseAddressBefore A B
+  rw [sourcePressureAccountedIntervalListHasSortedBeforeFailure_pair_iff]
+  exact not_congr sourcePressureIntervalPulseAddressBefore_iff_accountedBefore.symm
+
+/--
+Build an accounted family from an adjacent-sorted interval-pulse-address list.
+
+The family is still the conversion of an explicitly supplied list.  The sorted
+hypothesis is only used to obtain pairwise disjointness of the converted
+intervals.
+-/
+def sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r))
+    (hsorted : SourcePressureIntervalPulseAddressListSortedBefore L) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_of_sortedBefore
+    (sourcePressureAccountedIntervalList_of_intervalPulseAddressList L)
+    hsorted
+
+@[simp]
+theorem sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r))
+    (hsorted : SourcePressureIntervalPulseAddressListSortedBefore L) :
+    (sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
+      L hsorted).items.length = L.length := by
+  simp [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList,
+    sourcePressureAccountedIntervalFamily_of_sortedBefore,
+    sourcePressureAccountedIntervalList_of_intervalPulseAddressList]
+
+/--
+Budget wrapper for a sorted interval-pulse-address family.
+
+The sorted hypothesis packages the family.  The inequality itself is still the
+explicit-list budget over the converted address witnesses.
+-/
+theorem
+    sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureIntervalPulseAddress n k r))
+    (hsorted : SourcePressureIntervalPulseAddressListSortedBefore L) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
+      L hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((L.length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
+    using sourcePressureIntervalPulseAddressList_sum_le_neg_length L
+
+theorem
+    sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_neg_of_nonempty
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureIntervalPulseAddress n k r)}
+    (hsorted : SourcePressureIntervalPulseAddressListSortedBefore L)
+    (hL : L ≠ []) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
+      L hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
+    using sourcePressureIntervalPulseAddressList_sum_neg_of_nonempty hL
 
 /-- Singleton sorted-family budget wrapper. -/
 theorem sourcePressureAccountedIntervalFamily_sorted_singleton_sum_le_neg_one
