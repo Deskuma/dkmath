@@ -916,6 +916,13 @@ structure SourcePressureIntervalPulseAddress (n : OddNat) (k r : ℕ) where
 
 namespace SourcePressureRunAddress
 
+/-- The length recorded by a run address is positive. -/
+theorem len_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) :
+    0 < A.len :=
+  A.hrun.1
+
 /-- Absolute pressure-depth start of a run address. -/
 def depthStart
     {n : OddNat} {k r : ℕ}
@@ -941,21 +948,101 @@ def toRunAddress
     len := A.len
     hrun := sourcePressureIntervalPulse_run A.hpulse }
 
+/-- The length recorded by an interval-pulse address is positive. -/
+theorem len_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < A.len :=
+  A.toRunAddress.len_pos
+
+/-- Absolute pressure-depth start of an interval-pulse address. -/
+def depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) : ℕ :=
+  r + A.start
+
+/-- Absolute pressure-depth end of an interval-pulse address. -/
+def depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) : ℕ :=
+  r + (A.start + A.len - 1)
+
 end SourcePressureIntervalPulseAddress
+
+/-- Forget an interval-pulse address down to its run address. -/
+def sourcePressureIntervalPulseAddress_toRun
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunAddress n k r :=
+  A.toRunAddress
+
+/-- The interval-pulse address and its forgotten run address have the same start depth. -/
+@[simp] theorem sourcePressureIntervalPulseAddress_toRun_depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    A.toRunAddress.depthStart = A.depthStart := by
+  rfl
+
+/-- The interval-pulse address and its forgotten run address have the same end depth. -/
+@[simp] theorem sourcePressureIntervalPulseAddress_toRun_depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    A.toRunAddress.depthEnd = A.depthEnd := by
+  rfl
+
+/-- Extract the left-boundary component from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunHasLeftCrossing n k r A.start A.len :=
+  sourcePressureIntervalPulse_left A.hpulse
+
+/-- Extract the right-boundary component from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunHasRightFall n k r A.start A.len :=
+  sourcePressureIntervalPulse_right A.hpulse
+
+/-- The start index recorded by an interval-pulse address is positive. -/
+theorem sourcePressureIntervalPulseAddress_start_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < A.start :=
+  (sourcePressureIntervalPulseAddress_left A).1
 
 /-- Extract the left sign change from an interval-pulse address. -/
 theorem sourcePressureIntervalPulseAddress_left_signChange
     {n : OddNat} {k r : ℕ}
     (A : SourcePressureIntervalPulseAddress n k r) :
     SourcePressureSignChangeUp n k r (A.start - 1) :=
-  sourcePressureIntervalPulse_left_signChange A.hpulse
+  (sourcePressureIntervalPulseAddress_left A).2
 
 /-- Extract the right sign change from an interval-pulse address. -/
 theorem sourcePressureIntervalPulseAddress_right_signChange
     {n : OddNat} {k r : ℕ}
     (A : SourcePressureIntervalPulseAddress n k r) :
     SourcePressureSignChangeDown n k r (A.start + A.len - 1) :=
-  sourcePressureIntervalPulse_right_signChange A.hpulse
+  sourcePressureIntervalPulseAddress_right A
+
+/-- Extract the left net-drop crossing form from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left_crossing
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureMarginInt n k (r + (A.start - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (A.start - 1)) +
+          SourcePressureNetDropInt n k r (A.start - 1) :=
+  sourcePressureIntervalPulse_left_crossing A.hpulse
+
+/-- Extract the right net-drop falling form from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right_falling
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < SourcePressureMarginInt n k (r + (A.start + A.len - 1)) ∧
+      SourcePressureMarginInt n k (r + (A.start + A.len - 1)) +
+        SourcePressureNetDropInt n k r (A.start + A.len - 1) ≤ 0 :=
+  sourcePressureIntervalPulse_right_falling A.hpulse
 
 /--
 A local pressure island is an interval pulse of length one.
