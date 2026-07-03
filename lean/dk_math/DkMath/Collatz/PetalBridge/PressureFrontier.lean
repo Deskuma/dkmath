@@ -1052,6 +1052,98 @@ theorem sourcePressurePulse_iff_signPulse
   rw [sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls]
 
 /--
+Meaning-name alias for a positive pressure run.
+
+The underlying predicate is the already-existing
+`SourcePressurePositiveBlock`.  This alias marks the next reading layer:
+positive pressure depths may be studied as finite runs without asserting that
+all selected depths form a prefix.
+-/
+def SourcePressureRun
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressurePositiveBlock n k r a len
+
+/--
+The left boundary of a positive pressure run crosses upward.
+
+The guard `0 < a` is part of the predicate: it prevents the address
+`a - 1` from silently collapsing to `0` at the left edge of the observation
+window.
+-/
+def SourcePressureRunHasLeftCrossing
+    (n : OddNat) (k r a _len : ℕ) : Prop :=
+  0 < a ∧ SourcePressureSignChangeUp n k r (a - 1)
+
+/--
+The right boundary of a positive pressure run falls downward.
+
+For a run beginning at `a` with length `len`, the last positive depth is
+`a + len - 1`, so the right fall is the sign change at that same depth edge.
+-/
+def SourcePressureRunHasRightFall
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressureSignChangeDown n k r (a + len - 1)
+
+/--
+A finite interval pressure pulse.
+
+This packages the three local facts that later interval accounting needs:
+there is a positive run, its left boundary crosses upward, and its right
+boundary falls back to nonpositive pressure.  It remains an observation about
+pressure-depth indices only.
+-/
+def SourcePressureIntervalPulse
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressureRun n k r a len ∧
+    SourcePressureRunHasLeftCrossing n k r a len ∧
+      SourcePressureRunHasRightFall n k r a len
+
+/-- The positive-run component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_run
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRun n k r a len :=
+  h.1
+
+/-- The left-crossing component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_left
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRunHasLeftCrossing n k r a len :=
+  h.2.1
+
+/-- The right-fall component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_right
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRunHasRightFall n k r a len :=
+  h.2.2
+
+/--
+A local pressure island is an interval pulse of length one.
+
+This is the singleton bridge from checkpoint-140 pulses to checkpoint-141
+interval pulses.  It does not say that every positive run is isolated; it only
+packages the already-proved local island boundaries into the interval API.
+-/
+theorem sourcePressureIntervalPulse_singleton_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureIntervalPulse n k r j 1 := by
+  rcases hisland with ⟨hjpos, hsel, hprev_not, hnext_not⟩
+  constructor
+  · exact sourcePressurePositiveBlock_singleton n k r j hsel
+  constructor
+  · exact ⟨hjpos,
+      sourcePressureSignChangeUp_of_localIsland n k r j
+        ⟨hjpos, hsel, hprev_not, hnext_not⟩⟩
+  · unfold SourcePressureRunHasRightFall
+    have hidx : j + 1 - 1 = j := by omega
+    simpa [hidx] using
+      sourcePressureSignChangeDown_of_localIsland n k r j
+        ⟨hjpos, hsel, hprev_not, hnext_not⟩
+
+/--
 Package a named margin jump and a strict retention drop.
 
 This checkpoint-135 wrapper is deliberately non-quantitative: it does not say
