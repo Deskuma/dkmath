@@ -320,6 +320,20 @@ def SourcePressureJumpWithRetentionDrop
     SourceRetentionDropsAcross n k r j
 
 /--
+Observed pressure jump with both retention and continuation decay information.
+
+Checkpoint 135 keeps this as a thin packaging predicate.  It still avoids any
+quantitative dominance claim; it only records that the margin jumps upward,
+retention strictly drops, and continuation weakly drops across the same
+adjacent pressure-depth edge.
+-/
+def SourcePressureJumpWithDecay
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginJumpUp n k r j ∧
+    SourceRetentionDropsAcross n k r j ∧
+      SourceContinuationWeaklyDropsAcross n k r j
+
+/--
 The first selected source-pressure depth.
 
 This is a frontier, not a prefix theorem.  It says that `j` is selected and all
@@ -677,6 +691,73 @@ theorem sourcePressureMarginJumpUp_of_localIsland_left
     SourcePressureMarginJumpUp n k r (j - 1) :=
   sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
     (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+Package a named margin jump and a strict retention drop.
+
+This checkpoint-135 wrapper is deliberately non-quantitative: it does not say
+that the retention drop dominates the continuation drop.  It only records that
+both observations are attached to the same adjacent pressure-depth edge.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_parts
+    (n : OddNat) (k r j : ℕ)
+    (hjump : SourcePressureMarginJumpUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j) :
+    SourcePressureJumpWithRetentionDrop n k r j :=
+  ⟨hjump, hret⟩
+
+/--
+An upward sign change plus a strict retention drop packages as a
+pressure-jump-with-retention-drop witness.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_signChangeUp_of_retentionDrop
+    (n : OddNat) (k r j : ℕ)
+    (hchange : SourcePressureSignChangeUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j) :
+    SourcePressureJumpWithRetentionDrop n k r j :=
+  sourcePressureJumpWithRetentionDrop_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret
+
+/--
+A local pressure island left edge plus a strict retention drop packages as a
+pressure-jump-with-retention-drop witness.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_localIsland_left_of_retentionDrop
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j)
+    (hret : SourceRetentionDropsAcross n k r (j - 1)) :
+    SourcePressureJumpWithRetentionDrop n k r (j - 1) :=
+  sourcePressureJumpWithRetentionDrop_of_parts n k r (j - 1)
+    (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland) hret
+
+/--
+Package the three thin pressure-decay observations for the same edge.
+
+This is the source-code signpost for the next refinement: once integer drop
+amounts are introduced, this predicate should be the order-theoretic input
+side of the identity
+`margin_next - margin_current = retention_drop - 2 * continuation_drop`.
+-/
+theorem sourcePressureJumpWithDecay_of_parts
+    (n : OddNat) (k r j : ℕ)
+    (hjump : SourcePressureMarginJumpUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  ⟨hjump, hret, hcont⟩
+
+/--
+An upward sign change plus retention/continuation decay packages as a
+pressure-jump-with-decay witness.
+-/
+theorem sourcePressureJumpWithDecay_of_signChangeUp_of_decay
+    (n : OddNat) (k r j : ℕ)
+    (hchange : SourcePressureSignChangeUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  sourcePressureJumpWithDecay_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret hcont
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero
