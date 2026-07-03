@@ -342,6 +342,17 @@ def SourcePressureSignChangeUp
     0 < SourcePressureMarginInt n k (r + j + 1)
 
 /--
+Downward sign change of the source-pressure margin between adjacent depths.
+
+This is the right-edge companion to `SourcePressureSignChangeUp`: the current
+depth is positive, while the next adjacent pressure depth is nonpositive.
+-/
+def SourcePressureSignChangeDown
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  0 < SourcePressureMarginInt n k (r + j) ∧
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0
+
+/--
 Named pressure-margin jump between adjacent pressure depths.
 
 Checkpoint 134 starts the thin `PressureDecayProfile` vocabulary here rather
@@ -885,6 +896,70 @@ theorem sourcePressureCrosses_of_localIsland_left
   (sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
       n k r (j - 1)).1
     (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+A local pressure island produces a downward sign change at its right edge.
+-/
+theorem sourcePressureSignChangeDown_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignChangeDown n k r j := by
+  rcases hisland with ⟨_hjpos, hsel, _hprev_not, hnext_not⟩
+  unfold SourcePressureSignChangeDown
+  constructor
+  · exact (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
+  · have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + j + 1) := by
+      intro hpos
+      exact hnext_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j + 1)).2 hpos)
+    omega
+
+/--
+Downward source-pressure sign change as a local falling condition.
+
+This is the right-edge companion to
+`sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses`: the current
+positive margin falls to a nonpositive next margin after adding the local net
+pressure drop.
+-/
+theorem sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureSignChangeDown n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + j) +
+          SourcePressureNetDropInt n k r j ≤ 0 := by
+  unfold SourcePressureSignChangeDown
+  rw [← sourcePressureMargin_next_eq_current_add_netDrop n k r j]
+
+/--
+A local pressure island gives the falling condition at its right edge.
+-/
+theorem sourcePressureFalls_of_localIsland_right
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    0 < SourcePressureMarginInt n k (r + j) ∧
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j ≤ 0 :=
+  (sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls n k r j).1
+    (sourcePressureSignChangeDown_of_localIsland n k r j hisland)
+
+/--
+A local pressure island is a local crossing pulse: it crosses upward at the
+left edge and falls back down at the right edge.
+-/
+theorem sourcePressureLocalIsland_gives_crossing_pulse
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    (SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (j - 1)) +
+          SourcePressureNetDropInt n k r (j - 1)) ∧
+      (0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + j) +
+          SourcePressureNetDropInt n k r j ≤ 0) :=
+  ⟨sourcePressureCrosses_of_localIsland_left n k r j hisland,
+    sourcePressureFalls_of_localIsland_right n k r j hisland⟩
 
 /--
 Package a named margin jump and a strict retention drop.
