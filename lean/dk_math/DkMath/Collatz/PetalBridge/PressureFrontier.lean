@@ -271,6 +271,55 @@ def SourcePressureSignChangeUp
     0 < SourcePressureMarginInt n k (r + j + 1)
 
 /--
+Named pressure-margin jump between adjacent pressure depths.
+
+Checkpoint 134 starts the thin `PressureDecayProfile` vocabulary here rather
+than introducing a full grid.  The predicate only compares adjacent pressure
+depths `r + j` and `r + j + 1`; it says nothing about time indices and does
+not assert that selected pressure depths form a prefix.
+-/
+def SourcePressureMarginJumpUp
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginInt n k (r + j) <
+    SourcePressureMarginInt n k (r + j + 1)
+
+/--
+Retention mass strictly drops across adjacent pressure depths.
+
+This is intentionally a comparison predicate instead of a natural-number
+subtraction.  The experimental scan reports numeric drops, but the Lean API
+keeps the first pressure-decay layer order-theoretic.
+-/
+def SourceRetentionDropsAcross
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  orbitWindowRetentionMassPow2 n k (r + j + 1) <
+    orbitWindowRetentionMassPow2 n k (r + j)
+
+/--
+Continuation mass weakly drops across adjacent pressure depths.
+
+The weak form is the safe default for checkpoint 134: it records monotone
+decay across the adjacent pressure depths without claiming a quantitative
+dominance relation.
+-/
+def SourceContinuationWeaklyDropsAcross
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) ≤
+    orbitWindowContinuationSiblingMassPow2 n k (r + j)
+
+/--
+Observed pressure jump equipped with a strict retention drop.
+
+The name deliberately avoids "dominant": dominance in the Python scan uses
+the quantitative inequality `retention_drop > 2 * continuation_drop`, which is
+not part of this thin Lean predicate yet.
+-/
+def SourcePressureJumpWithRetentionDrop
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginJumpUp n k r j ∧
+    SourceRetentionDropsAcross n k r j
+
+/--
 The first selected source-pressure depth.
 
 This is a frontier, not a prefix theorem.  It says that `j` is selected and all
@@ -570,6 +619,15 @@ theorem sourcePressureMargin_lt_of_signChangeUp
   omega
 
 /--
+An upward sign change is a named pressure-margin jump.
+-/
+theorem sourcePressureMarginJumpUp_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureMarginJumpUp n k r j :=
+  sourcePressureMargin_lt_of_signChangeUp n k r j h
+
+/--
 A local pressure island produces an upward sign change at its left edge.
 -/
 theorem sourcePressureSignChangeUp_of_localIsland
@@ -605,6 +663,19 @@ theorem sourcePressureMargin_lt_of_localIsland_left
     SourcePressureMarginInt n k (r + (j - 1)) <
       SourcePressureMarginInt n k (r + (j - 1) + 1) :=
   sourcePressureMargin_lt_of_signChangeUp n k r (j - 1)
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+A local pressure island gives a named pressure-margin jump at its left edge.
+
+This is the checkpoint-134 vocabulary version of
+`sourcePressureMargin_lt_of_localIsland_left`.
+-/
+theorem sourcePressureMarginJumpUp_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginJumpUp n k r (j - 1) :=
+  sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
     (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
 
 /-- The empty selected-pressure prefix is always available. -/
