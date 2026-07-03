@@ -16,6 +16,7 @@ import DkMath.Collatz.PetalBridge.HeightBudget
 import DkMath.Collatz.PetalBridge.TailSplits
 import DkMath.Collatz.PetalBridge.TailGrammar
 import DkMath.Collatz.PetalBridge.DriftBudget
+import DkMath.Collatz.PetalBridge.PressureDecay
 import DkMath.Collatz.PetalBridge.PressureFrontier
 import DkMath.Collatz.PetalBridge.Collision
 
