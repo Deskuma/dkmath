@@ -160,4 +160,114 @@ theorem sourcePressureIntervalPulseAddress_sum_netDrop_neg
   have hafter := sourcePressureIntervalPulseAddress_after_end_nonpos A
   omega
 
+/--
+The accumulated net drop is exactly the after-margin minus the start-margin.
+
+This is often the most convenient algebraic form of interval accounting:
+the finite sum is no longer just known to be negative; it is identified with
+the endpoint margin difference.
+-/
+theorem sourcePressureIntervalPulseAddress_sum_netDrop_eq_after_sub_start
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    (Finset.range A.len).sum (fun i =>
+      SourcePressureNetDropInt n k r (A.start + i)) =
+      SourcePressureMarginInt n k (r + (A.start + A.len)) -
+        SourcePressureMarginInt n k (r + A.start) := by
+  have hacc :=
+    sourcePressureIntervalPulseAddress_margin_after_eq_start_add_sum_netDrop A
+  omega
+
+/--
+The accumulated net drop is bounded above by the negative start margin.
+
+The after-margin is nonpositive, so the endpoint-difference form immediately
+shows that the interval drive must cancel at least the initial positive
+pressure margin.
+-/
+theorem sourcePressureIntervalPulseAddress_sum_netDrop_le_neg_start_margin
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    (Finset.range A.len).sum (fun i =>
+      SourcePressureNetDropInt n k r (A.start + i)) ≤
+      -SourcePressureMarginInt n k (r + A.start) := by
+  have hacc :=
+    sourcePressureIntervalPulseAddress_margin_after_eq_start_add_sum_netDrop A
+  have hafter := sourcePressureIntervalPulseAddress_after_end_nonpos A
+  omega
+
+/--
+The endpoint accounting inequality in unsolved-for form.
+
+This form is useful when a later proof wants to keep the starting margin and
+the accumulated drive on the same side instead of rewriting the sum alone.
+-/
+theorem sourcePressureIntervalPulseAddress_start_margin_add_sum_netDrop_nonpos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureMarginInt n k (r + A.start) +
+      (Finset.range A.len).sum (fun i =>
+        SourcePressureNetDropInt n k r (A.start + i)) ≤ 0 := by
+  have hacc :=
+    sourcePressureIntervalPulseAddress_margin_after_eq_start_add_sum_netDrop A
+  have hafter := sourcePressureIntervalPulseAddress_after_end_nonpos A
+  omega
+
+/--
+Integer-strength form of negative accumulated net drop.
+
+Since the accumulated drive is an integer, strict negativity is equivalent to
+being at most `-1`.  This is a convenient bridge for later finite budget
+arguments that prefer non-strict inequalities.
+-/
+theorem sourcePressureIntervalPulseAddress_sum_netDrop_le_neg_one
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    (Finset.range A.len).sum (fun i =>
+      SourcePressureNetDropInt n k r (A.start + i)) ≤ -1 := by
+  have hneg := sourcePressureIntervalPulseAddress_sum_netDrop_neg A
+  omega
+
+/--
+Endpoint profile bundled for callers that only need signs.
+
+This theorem is intentionally just packaging of local facts.  It does not say
+that the pulse is maximal, unique, covering, prefix-shaped, or convergent.
+-/
+theorem sourcePressureIntervalPulseAddress_endpoint_profile
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureMarginInt n k (r + (A.start - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + A.start) ∧
+      0 < SourcePressureMarginInt n k (r + (A.start + A.len - 1)) ∧
+      SourcePressureMarginInt n k (r + (A.start + A.len)) ≤ 0 :=
+  ⟨sourcePressureIntervalPulseAddress_before_start_nonpos A,
+    sourcePressureIntervalPulseAddress_start_margin_pos A,
+    sourcePressureIntervalPulseAddress_end_margin_pos A,
+    sourcePressureIntervalPulseAddress_after_end_nonpos A⟩
+
+/--
+Accounting profile bundled for callers that need both boundary signs and the
+finite negative drive.
+
+This is the compact observation form of checkpoint 146 plus the follow-up
+accounting consequences.
+-/
+theorem sourcePressureIntervalPulseAddress_accounting_profile
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureMarginInt n k (r + (A.start - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + A.start) ∧
+      SourcePressureMarginInt n k (r + (A.start + A.len)) ≤ 0 ∧
+      (Finset.range A.len).sum (fun i =>
+        SourcePressureNetDropInt n k r (A.start + i)) < 0 ∧
+      (Finset.range A.len).sum (fun i =>
+        SourcePressureNetDropInt n k r (A.start + i)) ≤
+        -SourcePressureMarginInt n k (r + A.start) :=
+  ⟨sourcePressureIntervalPulseAddress_before_start_nonpos A,
+    sourcePressureIntervalPulseAddress_start_margin_pos A,
+    sourcePressureIntervalPulseAddress_after_end_nonpos A,
+    sourcePressureIntervalPulseAddress_sum_netDrop_neg A,
+    sourcePressureIntervalPulseAddress_sum_netDrop_le_neg_start_margin A⟩
+
 end DkMath.Collatz
