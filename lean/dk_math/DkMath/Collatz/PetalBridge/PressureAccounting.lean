@@ -465,4 +465,137 @@ theorem SourcePressureAccountedIntervalsDisjoint.symm
     SourcePressureAccountedIntervalsDisjoint B A :=
   NatIntervalsDisjoint.symm h
 
+/--
+Pairwise-disjointness predicate for an explicit list of accounted intervals.
+
+This is only list structure.  It does not assert that the list covers a region,
+is maximal, is sorted, or gives a union accounting theorem.
+-/
+def SourcePressureAccountedIntervalListPairwiseDisjoint
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureAccountedInterval n k r)) : Prop :=
+  L.Pairwise SourcePressureAccountedIntervalsDisjoint
+
+/-- The empty accounted-interval list is pairwise disjoint. -/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_nil
+    {n : OddNat} {k r : ℕ} :
+    SourcePressureAccountedIntervalListPairwiseDisjoint
+      ([] : List (SourcePressureAccountedInterval n k r)) :=
+  List.Pairwise.nil
+
+/-- A singleton accounted-interval list is pairwise disjoint. -/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint [A] := by
+  simp [SourcePressureAccountedIntervalListPairwiseDisjoint]
+
+/--
+Cons constructor for pairwise-disjoint accounted-interval lists.
+
+The head interval must be explicitly disjoint from every tail interval.  No
+disjointness is inferred from accounting data alone.
+-/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_cons
+    {n : OddNat} {k r : ℕ}
+    {A : SourcePressureAccountedInterval n k r}
+    {L : List (SourcePressureAccountedInterval n k r)}
+    (hhead : ∀ B ∈ L, SourcePressureAccountedIntervalsDisjoint A B)
+    (htail : SourcePressureAccountedIntervalListPairwiseDisjoint L) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint (A :: L) :=
+  List.Pairwise.cons hhead htail
+
+/-- Accounted-interval disjointness can be read in either order. -/
+theorem sourcePressureAccountedIntervalsDisjoint_comm
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r} :
+    SourcePressureAccountedIntervalsDisjoint A B ↔
+      SourcePressureAccountedIntervalsDisjoint B A :=
+  ⟨SourcePressureAccountedIntervalsDisjoint.symm,
+    SourcePressureAccountedIntervalsDisjoint.symm⟩
+
+/--
+Pairwise-disjoint accounted intervals remain pairwise disjoint after reversing
+the explicit list.
+
+This uses symmetry of the disjointness relation only; it still does not say
+anything about coverage or union accounting.
+-/
+theorem sourcePressureAccountedIntervalListPairwiseDisjoint_reverse
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureAccountedInterval n k r)}
+    (h : SourcePressureAccountedIntervalListPairwiseDisjoint L) :
+    SourcePressureAccountedIntervalListPairwiseDisjoint L.reverse := by
+  unfold SourcePressureAccountedIntervalListPairwiseDisjoint at h ⊢
+  exact h.reverse.imp (fun hBA =>
+    SourcePressureAccountedIntervalsDisjoint.symm hBA)
+
+/--
+Thin carrier for an explicit family of accounted intervals.
+
+The pairwise-disjoint field is stored for later decomposition work.  The
+current budget theorem below does not use it, because the budget is only over
+the explicitly listed interval costs.
+-/
+structure SourcePressureAccountedIntervalFamily
+    (n : OddNat) (k r : ℕ) where
+  /-- Explicit accounted intervals. -/
+  items : List (SourcePressureAccountedInterval n k r)
+  /-- Explicit pairwise-disjointness hypothesis for future union/decomposition work. -/
+  pairwiseDisjoint :
+    SourcePressureAccountedIntervalListPairwiseDisjoint items
+
+/--
+Family budget inherited from the list budget.
+
+The proof does not use `pairwiseDisjoint`: disjointness is stored for later
+union/decomposition work, while this theorem only sums the explicit interval
+costs already present in the family.
+-/
+theorem sourcePressureAccountedIntervalFamily_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureAccountedIntervalFamily n k r) :
+    (F.items.map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((F.items.length : ℕ) : ℤ) :=
+  sourcePressureAccountedInterval_list_sum_le_neg_length F.items
+
+/-- A nonempty accounted-interval family has negative total explicit net drop. -/
+theorem sourcePressureAccountedIntervalFamily_sum_neg_of_nonempty
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureAccountedIntervalFamily n k r)
+    (hF : F.items ≠ []) :
+    (F.items.map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
+  sourcePressureAccountedInterval_list_sum_neg_of_nonempty hF
+
+/--
+Ordered non-overlap for two natural-number half-open intervals.
+
+This is a direction-sensitive helper for future sorted-family work.
+-/
+def NatIntervalBefore (a len b _len' : ℕ) : Prop :=
+  a + len ≤ b
+
+/-- Ordered non-overlap implies ordinary interval disjointness. -/
+theorem NatIntervalsDisjoint.of_before
+    {a len b len' : ℕ}
+    (h : NatIntervalBefore a len b len') :
+    NatIntervalsDisjoint a len b len' :=
+  Or.inl h
+
+/-- Ordered non-overlap for two accounted intervals. -/
+def SourcePressureAccountedIntervalBefore
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureAccountedInterval n k r) : Prop :=
+  NatIntervalBefore A.start A.len B.start B.len
+
+/-- Ordered accounted intervals are disjoint. -/
+theorem SourcePressureAccountedIntervalsDisjoint.of_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureAccountedInterval n k r}
+    (h : SourcePressureAccountedIntervalBefore A B) :
+    SourcePressureAccountedIntervalsDisjoint A B :=
+  NatIntervalsDisjoint.of_before h
+
 end DkMath.Collatz
