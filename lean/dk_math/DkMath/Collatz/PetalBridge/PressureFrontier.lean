@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Collatz.PetalBridge.DriftBudget
+import DkMath.Collatz.PetalBridge.PressureDecay
 
 #print "file: DkMath.Collatz.PetalBridge.PressureFrontier"
 
@@ -81,18 +81,6 @@ def IsSourcePressureDepth
   MoreThanHalf
     (orbitWindowContinuationSiblingMassPow2 n k (r + j))
     (orbitWindowRetentionMassPow2 n k (r + j))
-
-/--
-Integer-valued source pressure margin at a single depth.
-
-The margin is positive exactly when source continuation occupies more than
-half of source retention.  It is intentionally integer-valued, because the
-natural-number subtraction would truncate negative margins and hide failures.
--/
-noncomputable def SourcePressureMarginInt
-    (n : OddNat) (k r : ℕ) : ℤ :=
-  (2 * orbitWindowContinuationSiblingMassPow2 n k r : ℤ) -
-    (orbitWindowRetentionMassPow2 n k r : ℤ)
 
 /--
 Selected source pressure is exactly positive source pressure margin.
@@ -258,17 +246,54 @@ theorem downClosed_iff_no_prefixFailure
     · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
 
 /--
-Upward sign change of the source-pressure margin between adjacent depths.
+Retention mass strictly drops across adjacent pressure depths.
 
-This is a small building block for pressure-frontier and pressure-island
-classification.  It is stated directly in margin language because the
-checkpoint-125 correction is that pressure should be studied as a sign profile,
-not as raw carrier membership.
+This is intentionally a comparison predicate instead of a natural-number
+subtraction.  The experimental scan reports numeric drops, but the Lean API
+keeps the first pressure-decay layer order-theoretic.
 -/
-def SourcePressureSignChangeUp
+def SourceRetentionDropsAcross
     (n : OddNat) (k r j : ℕ) : Prop :=
-  SourcePressureMarginInt n k (r + j) ≤ 0 ∧
-    0 < SourcePressureMarginInt n k (r + j + 1)
+  orbitWindowRetentionMassPow2 n k (r + j + 1) <
+    orbitWindowRetentionMassPow2 n k (r + j)
+
+/--
+Continuation mass weakly drops across adjacent pressure depths.
+
+The weak form is the safe default for checkpoint 134: it records monotone
+decay across the adjacent pressure depths without claiming a quantitative
+dominance relation.
+-/
+def SourceContinuationWeaklyDropsAcross
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) ≤
+    orbitWindowContinuationSiblingMassPow2 n k (r + j)
+
+/--
+Observed pressure jump equipped with a strict retention drop.
+
+The name deliberately avoids "dominant": dominance in the Python scan uses
+the quantitative inequality `retention_drop > 2 * continuation_drop`, which is
+not part of this thin Lean predicate yet.
+-/
+def SourcePressureJumpWithRetentionDrop
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginJumpUp n k r j ∧
+    SourceRetentionDropsAcross n k r j
+
+/--
+Observed pressure jump with both retention and continuation decay information.
+
+Checkpoint 135 keeps this as a thin packaging predicate.  It still avoids any
+quantitative dominance claim; it only records that the margin jumps upward,
+retention strictly drops, and continuation weakly drops across the same
+adjacent pressure-depth edge.
+-/
+def SourcePressureJumpWithDecay
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureMarginJumpUp n k r j ∧
+    SourceRetentionDropsAcross n k r j ∧
+      SourceContinuationWeaklyDropsAcross n k r j
 
 /--
 The first selected source-pressure depth.
@@ -570,6 +595,15 @@ theorem sourcePressureMargin_lt_of_signChangeUp
   omega
 
 /--
+An upward sign change is a named pressure-margin jump.
+-/
+theorem sourcePressureMarginJumpUp_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureMarginJumpUp n k r j :=
+  sourcePressureMargin_lt_of_signChangeUp n k r j h
+
+/--
 A local pressure island produces an upward sign change at its left edge.
 -/
 theorem sourcePressureSignChangeUp_of_localIsland
@@ -590,6 +624,540 @@ theorem sourcePressureSignChangeUp_of_localIsland
       (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
     have hidx : r + (j - 1) + 1 = r + j := by omega
     simpa [hidx] using hpos
+
+/--
+A local pressure island gives a strict margin jump at its left edge.
+
+Checkpoint 133 reads local islands as pressure-depth decay imbalance witnesses.
+This theorem is still margin-only: it does not yet choose a retention or
+continuation drop decomposition, but it gives the exact interface that such a
+future `PressureDecayProfile` should refine.
+-/
+theorem sourcePressureMargin_lt_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginInt n k (r + (j - 1)) <
+      SourcePressureMarginInt n k (r + (j - 1) + 1) :=
+  sourcePressureMargin_lt_of_signChangeUp n k r (j - 1)
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+A local pressure island gives a named pressure-margin jump at its left edge.
+
+This is the checkpoint-134 vocabulary version of
+`sourcePressureMargin_lt_of_localIsland_left`.
+-/
+theorem sourcePressureMarginJumpUp_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginJumpUp n k r (j - 1) :=
+  sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+An upward pressure sign change has positive net integer pressure drop.
+-/
+theorem sourcePressureNetDropPositive_of_signChangeUp
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureSignChangeUp n k r j) :
+    SourcePressureNetDropPositive n k r j :=
+  sourcePressureNetDropPositive_of_marginJumpUp n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j h)
+
+/--
+A local pressure island has positive net integer pressure drop at its left
+edge.
+-/
+theorem sourcePressureNetDropPositive_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureNetDropPositive n k r (j - 1) :=
+  sourcePressureNetDropPositive_of_marginJumpUp n k r (j - 1)
+    (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland)
+
+/--
+A local pressure island gives the zero-crossing condition at its left edge.
+-/
+theorem sourcePressureCrosses_of_localIsland_left
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (j - 1)) +
+          SourcePressureNetDropInt n k r (j - 1) :=
+  (sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
+      n k r (j - 1)).1
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+A local pressure island produces a downward sign change at its right edge.
+-/
+theorem sourcePressureSignChangeDown_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignChangeDown n k r j := by
+  rcases hisland with ⟨_hjpos, hsel, _hprev_not, hnext_not⟩
+  unfold SourcePressureSignChangeDown
+  constructor
+  · exact (isSourcePressureDepth_iff_margin_pos n k r j).1 hsel
+  · have hnotpos :
+        ¬ 0 < SourcePressureMarginInt n k (r + j + 1) := by
+      intro hpos
+      exact hnext_not
+        ((isSourcePressureDepth_iff_margin_pos n k r (j + 1)).2 hpos)
+    omega
+
+/--
+A local pressure island gives the falling condition at its right edge.
+-/
+theorem sourcePressureFalls_of_localIsland_right
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    0 < SourcePressureMarginInt n k (r + j) ∧
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j ≤ 0 :=
+  (sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls n k r j).1
+    (sourcePressureSignChangeDown_of_localIsland n k r j hisland)
+
+/--
+A local pressure island is a local crossing pulse: it crosses upward at the
+left edge and falls back down at the right edge.
+-/
+theorem sourcePressureLocalIsland_gives_crossing_pulse
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    (SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (j - 1)) +
+          SourcePressureNetDropInt n k r (j - 1)) ∧
+      (0 < SourcePressureMarginInt n k (r + j) ∧
+        SourcePressureMarginInt n k (r + j) +
+          SourcePressureNetDropInt n k r j ≤ 0) :=
+  ⟨sourcePressureCrosses_of_localIsland_left n k r j hisland,
+    sourcePressureFalls_of_localIsland_right n k r j hisland⟩
+
+/--
+A local pressure island is a named source-pressure pulse.
+-/
+theorem sourcePressurePulse_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressurePulse n k r j :=
+  sourcePressureLocalIsland_gives_crossing_pulse n k r j hisland
+
+/--
+A local pressure island is also a pulse in sign-change language.
+-/
+theorem sourcePressureSignPulse_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignPulse n k r j :=
+  ⟨sourcePressureSignChangeUp_of_localIsland n k r j hisland,
+    sourcePressureSignChangeDown_of_localIsland n k r j hisland⟩
+
+/--
+Meaning-name alias for a positive pressure run.
+
+The underlying predicate is the already-existing
+`SourcePressurePositiveBlock`.  This alias marks the next reading layer:
+positive pressure depths may be studied as finite runs without asserting that
+all selected depths form a prefix.
+-/
+def SourcePressureRun
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressurePositiveBlock n k r a len
+
+/--
+The left boundary of a positive pressure run crosses upward.
+
+The guard `0 < a` is part of the predicate: it prevents the address
+`a - 1` from silently collapsing to `0` at the left edge of the observation
+window.
+-/
+def SourcePressureRunHasLeftCrossing
+    (n : OddNat) (k r a _len : ℕ) : Prop :=
+  0 < a ∧ SourcePressureSignChangeUp n k r (a - 1)
+
+/--
+The right boundary of a positive pressure run falls downward.
+
+For a run beginning at `a` with length `len`, the last positive depth is
+`a + len - 1`, so the right fall is the sign change at that same depth edge.
+-/
+def SourcePressureRunHasRightFall
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressureSignChangeDown n k r (a + len - 1)
+
+/--
+A finite interval pressure pulse.
+
+This packages the three local facts that later interval accounting needs:
+there is a positive run, its left boundary crosses upward, and its right
+boundary falls back to nonpositive pressure.  It remains an observation about
+pressure-depth indices only.
+-/
+def SourcePressureIntervalPulse
+    (n : OddNat) (k r a len : ℕ) : Prop :=
+  SourcePressureRun n k r a len ∧
+    SourcePressureRunHasLeftCrossing n k r a len ∧
+      SourcePressureRunHasRightFall n k r a len
+
+/-- The positive-run component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_run
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRun n k r a len :=
+  h.1
+
+/-- The left-crossing component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_left
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRunHasLeftCrossing n k r a len :=
+  h.2.1
+
+/-- The right-fall component of an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_right
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureRunHasRightFall n k r a len :=
+  h.2.2
+
+/--
+Constructor for an interval pressure pulse from its three advertised pieces.
+
+This is intentionally just packaging.  It does not assert maximality,
+uniqueness, coverage by runs, or any prefix behavior.
+-/
+theorem sourcePressureIntervalPulse_of_run_boundaries
+    {n : OddNat} {k r a len : ℕ}
+    (hrun : SourcePressureRun n k r a len)
+    (hleft : SourcePressureRunHasLeftCrossing n k r a len)
+    (hright : SourcePressureRunHasRightFall n k r a len) :
+    SourcePressureIntervalPulse n k r a len :=
+  ⟨hrun, hleft, hright⟩
+
+/-- Extract the positive left-boundary guard from an interval pulse. -/
+theorem sourcePressureIntervalPulse_left_pos
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    0 < a :=
+  (sourcePressureIntervalPulse_left h).1
+
+/-- Extract the left sign-change from an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_left_signChange
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureSignChangeUp n k r (a - 1) :=
+  (sourcePressureIntervalPulse_left h).2
+
+/-- Extract the right sign-change from an interval pressure pulse. -/
+theorem sourcePressureIntervalPulse_right_signChange
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureSignChangeDown n k r (a + len - 1) :=
+  sourcePressureIntervalPulse_right h
+
+/--
+Extract the left net-drop crossing form from an interval pressure pulse.
+-/
+theorem sourcePressureIntervalPulse_left_crossing
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    SourcePressureMarginInt n k (r + (a - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (a - 1)) +
+          SourcePressureNetDropInt n k r (a - 1) :=
+  (sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses
+      n k r (a - 1)).1
+    (sourcePressureIntervalPulse_left_signChange h)
+
+/--
+Extract the right net-drop falling form from an interval pressure pulse.
+-/
+theorem sourcePressureIntervalPulse_right_falling
+    {n : OddNat} {k r a len : ℕ}
+    (h : SourcePressureIntervalPulse n k r a len) :
+    0 < SourcePressureMarginInt n k (r + (a + len - 1)) ∧
+      SourcePressureMarginInt n k (r + (a + len - 1)) +
+        SourcePressureNetDropInt n k r (a + len - 1) ≤ 0 :=
+  (sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls
+      n k r (a + len - 1)).1
+    (sourcePressureIntervalPulse_right_signChange h)
+
+/--
+Address of a positive pressure run.
+
+This packages only the observed start/length witness and the run proof.  It
+does not assert that the run is maximal, unique, covering, or prefix-shaped.
+-/
+structure SourcePressureRunAddress (n : OddNat) (k r : ℕ) where
+  /-- Start depth index, relative to base pressure depth `r`. -/
+  start : ℕ
+  /-- Run length in pressure-depth indices. -/
+  len : ℕ
+  /-- The addressed positive pressure run. -/
+  hrun : SourcePressureRun n k r start len
+
+/--
+Address of an interval pressure pulse.
+
+This is the interval-pulse analogue of `SourcePressureRunAddress`: it records
+the relative start, the length, and the pulse witness, without any maximality
+or uniqueness claim.
+-/
+structure SourcePressureIntervalPulseAddress (n : OddNat) (k r : ℕ) where
+  /-- Start depth index, relative to base pressure depth `r`. -/
+  start : ℕ
+  /-- Pulse length in pressure-depth indices. -/
+  len : ℕ
+  /-- The addressed interval pressure pulse. -/
+  hpulse : SourcePressureIntervalPulse n k r start len
+
+namespace SourcePressureRunAddress
+
+/-- The length recorded by a run address is positive. -/
+theorem len_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) :
+    0 < A.len :=
+  A.hrun.1
+
+/-- Absolute pressure-depth start of a run address. -/
+def depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) : ℕ :=
+  r + A.start
+
+/-- Absolute pressure-depth end of a run address. -/
+def depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureRunAddress n k r) : ℕ :=
+  r + (A.start + A.len - 1)
+
+end SourcePressureRunAddress
+
+namespace SourcePressureIntervalPulseAddress
+
+/-- Forget an interval-pulse address down to its positive-run address. -/
+def toRunAddress
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunAddress n k r :=
+  { start := A.start
+    len := A.len
+    hrun := sourcePressureIntervalPulse_run A.hpulse }
+
+/-- The length recorded by an interval-pulse address is positive. -/
+theorem len_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < A.len :=
+  A.toRunAddress.len_pos
+
+/-- Absolute pressure-depth start of an interval-pulse address. -/
+def depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) : ℕ :=
+  r + A.start
+
+/-- Absolute pressure-depth end of an interval-pulse address. -/
+def depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) : ℕ :=
+  r + (A.start + A.len - 1)
+
+end SourcePressureIntervalPulseAddress
+
+/-- Forget an interval-pulse address down to its run address. -/
+def sourcePressureIntervalPulseAddress_toRun
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunAddress n k r :=
+  A.toRunAddress
+
+/-- The interval-pulse address and its forgotten run address have the same start depth. -/
+@[simp] theorem sourcePressureIntervalPulseAddress_toRun_depthStart
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    A.toRunAddress.depthStart = A.depthStart := by
+  rfl
+
+/-- The interval-pulse address and its forgotten run address have the same end depth. -/
+@[simp] theorem sourcePressureIntervalPulseAddress_toRun_depthEnd
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    A.toRunAddress.depthEnd = A.depthEnd := by
+  rfl
+
+/-- Extract the left-boundary component from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunHasLeftCrossing n k r A.start A.len :=
+  sourcePressureIntervalPulse_left A.hpulse
+
+/-- Extract the right-boundary component from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureRunHasRightFall n k r A.start A.len :=
+  sourcePressureIntervalPulse_right A.hpulse
+
+/-- The start index recorded by an interval-pulse address is positive. -/
+theorem sourcePressureIntervalPulseAddress_start_pos
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < A.start :=
+  (sourcePressureIntervalPulseAddress_left A).1
+
+/-- Extract the left sign change from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left_signChange
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureSignChangeUp n k r (A.start - 1) :=
+  (sourcePressureIntervalPulseAddress_left A).2
+
+/-- Extract the right sign change from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right_signChange
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureSignChangeDown n k r (A.start + A.len - 1) :=
+  sourcePressureIntervalPulseAddress_right A
+
+/-- Extract the left net-drop crossing form from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_left_crossing
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureMarginInt n k (r + (A.start - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (A.start - 1)) +
+          SourcePressureNetDropInt n k r (A.start - 1) :=
+  sourcePressureIntervalPulse_left_crossing A.hpulse
+
+/-- Extract the right net-drop falling form from an interval-pulse address. -/
+theorem sourcePressureIntervalPulseAddress_right_falling
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    0 < SourcePressureMarginInt n k (r + (A.start + A.len - 1)) ∧
+      SourcePressureMarginInt n k (r + (A.start + A.len - 1)) +
+        SourcePressureNetDropInt n k r (A.start + A.len - 1) ≤ 0 :=
+  sourcePressureIntervalPulse_right_falling A.hpulse
+
+/--
+A local pressure island is an interval pulse of length one.
+
+This is the singleton bridge from checkpoint-140 pulses to checkpoint-141
+interval pulses.  It does not say that every positive run is isolated; it only
+packages the already-proved local island boundaries into the interval API.
+-/
+theorem sourcePressureIntervalPulse_singleton_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureIntervalPulse n k r j 1 := by
+  rcases hisland with ⟨hjpos, hsel, hprev_not, hnext_not⟩
+  constructor
+  · exact sourcePressurePositiveBlock_singleton n k r j hsel
+  constructor
+  · exact ⟨hjpos,
+      sourcePressureSignChangeUp_of_localIsland n k r j
+        ⟨hjpos, hsel, hprev_not, hnext_not⟩⟩
+  · unfold SourcePressureRunHasRightFall
+    have hidx : j + 1 - 1 = j := by omega
+    simpa [hidx] using
+      sourcePressureSignChangeDown_of_localIsland n k r j
+        ⟨hjpos, hsel, hprev_not, hnext_not⟩
+
+/--
+Build an interval-pulse address from a local pressure island.
+-/
+def sourcePressureIntervalPulseAddress_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureIntervalPulseAddress n k r :=
+  { start := j
+    len := 1
+    hpulse := sourcePressureIntervalPulse_singleton_of_localIsland n k r j hisland }
+
+/--
+Package a named margin jump and a strict retention drop.
+
+This checkpoint-135 wrapper is deliberately non-quantitative: it does not say
+that the retention drop dominates the continuation drop.  It only records that
+both observations are attached to the same adjacent pressure-depth edge.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_parts
+    (n : OddNat) (k r j : ℕ)
+    (hjump : SourcePressureMarginJumpUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j) :
+    SourcePressureJumpWithRetentionDrop n k r j :=
+  ⟨hjump, hret⟩
+
+/--
+An upward sign change plus a strict retention drop packages as a
+pressure-jump-with-retention-drop witness.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_signChangeUp_of_retentionDrop
+    (n : OddNat) (k r j : ℕ)
+    (hchange : SourcePressureSignChangeUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j) :
+    SourcePressureJumpWithRetentionDrop n k r j :=
+  sourcePressureJumpWithRetentionDrop_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret
+
+/--
+A local pressure island left edge plus a strict retention drop packages as a
+pressure-jump-with-retention-drop witness.
+-/
+theorem sourcePressureJumpWithRetentionDrop_of_localIsland_left_of_retentionDrop
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j)
+    (hret : SourceRetentionDropsAcross n k r (j - 1)) :
+    SourcePressureJumpWithRetentionDrop n k r (j - 1) :=
+  sourcePressureJumpWithRetentionDrop_of_parts n k r (j - 1)
+    (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland) hret
+
+/--
+Package the three thin pressure-decay observations for the same edge.
+
+This is the source-code signpost for the next refinement: once integer drop
+amounts are introduced, this predicate should be the order-theoretic input
+side of the identity
+`margin_next - margin_current = retention_drop - 2 * continuation_drop`.
+-/
+theorem sourcePressureJumpWithDecay_of_parts
+    (n : OddNat) (k r j : ℕ)
+    (hjump : SourcePressureMarginJumpUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  ⟨hjump, hret, hcont⟩
+
+/--
+An upward sign change plus retention/continuation decay packages as a
+pressure-jump-with-decay witness.
+-/
+theorem sourcePressureJumpWithDecay_of_signChangeUp_of_decay
+    (n : OddNat) (k r j : ℕ)
+    (hchange : SourcePressureSignChangeUp n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  sourcePressureJumpWithDecay_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret hcont
+
+/--
+Positive net pressure drop plus the two order-theoretic decay observations
+packages as `SourcePressureJumpWithDecay`.
+-/
+theorem sourcePressureJumpWithDecay_of_netDropPositive_of_decay
+    (n : OddNat) (k r j : ℕ)
+    (hnet : SourcePressureNetDropPositive n k r j)
+    (hret : SourceRetentionDropsAcross n k r j)
+    (hcont : SourceContinuationWeaklyDropsAcross n k r j) :
+    SourcePressureJumpWithDecay n k r j :=
+  sourcePressureJumpWithDecay_of_parts n k r j
+    (sourcePressureMarginJumpUp_of_netDropPositive n k r j hnet) hret hcont
 
 /-- The empty selected-pressure prefix is always available. -/
 theorem selectedPressurePrefix_zero

@@ -174,6 +174,73 @@ theorem orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
   exact orbitWindowResidualAllOnesDepthSeq_get?_eq_some n
     (Nat.lt_of_lt_of_le hi hr)
 
+/-
+Checkpoint 133 keeps the post-refactor source of truth in code comments.
+
+The experimental Python scan says that positive pressure blocks are better
+predicted by a deep all-ones excursion somewhere in the residual-shape window
+than by the first or modal residual.  The following names deliberately stay on
+the time-profile axis.  They do not mention pressure depth, do not assert a
+pressure prefix theorem, and do not introduce the future ShapePressureGrid.
+-/
+
+/--
+The finite window contains a residual all-ones excursion at threshold `d`.
+
+This is the thin profile-level predicate suggested by checkpoint 133.  It is
+existential on the time axis `i`; it does not claim that any pressure-depth
+block follows without additional retention/continuation hypotheses.
+-/
+def WindowHasResidualAllOnesDepthAtLeast
+    (n : OddNat) (k d : ℕ) : Prop :=
+  ∃ i, i < k ∧ d ≤ orbitWindowResidualAllOnesDepth n i
+
+/--
+Meaning-name alias for a deep residual all-ones excursion.
+
+The alias is intentionally separate from pressure vocabulary.  Future pressure
+bridges should consume this predicate together with a decay or retention
+condition, rather than smuggling in a pressure-prefix assumption.
+-/
+def WindowHasDeepResidualAllOnesExcursion
+    (n : OddNat) (k d : ℕ) : Prop :=
+  WindowHasResidualAllOnesDepthAtLeast n k d
+
+/-- Build a window all-ones-depth witness from an explicit in-window time. -/
+theorem windowHasResidualAllOnesDepthAtLeast_of_lt
+    (n : OddNat) (k d i : ℕ)
+    (hi : i < k)
+    (hdepth : d ≤ orbitWindowResidualAllOnesDepth n i) :
+    WindowHasResidualAllOnesDepthAtLeast n k d :=
+  ⟨i, hi, hdepth⟩
+
+/--
+Lower the all-ones-depth threshold of an existing window excursion.
+-/
+theorem windowHasResidualAllOnesDepthAtLeast_of_le
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e)
+    (h : WindowHasResidualAllOnesDepthAtLeast n k e) :
+    WindowHasResidualAllOnesDepthAtLeast n k d := by
+  rcases h with ⟨i, hi, he⟩
+  exact ⟨i, hi, le_trans hde he⟩
+
+/-- Constructor spelling for the deep-excursion alias. -/
+theorem windowHasDeepResidualAllOnesExcursion_of_lt
+    (n : OddNat) (k d i : ℕ)
+    (hi : i < k)
+    (hdepth : d ≤ orbitWindowResidualAllOnesDepth n i) :
+    WindowHasDeepResidualAllOnesExcursion n k d :=
+  windowHasResidualAllOnesDepthAtLeast_of_lt n k d i hi hdepth
+
+/-- Lower the threshold of the deep-excursion alias. -/
+theorem windowHasDeepResidualAllOnesExcursion_of_le
+    (n : OddNat) (k d e : ℕ)
+    (hde : d ≤ e)
+    (h : WindowHasDeepResidualAllOnesExcursion n k e) :
+    WindowHasDeepResidualAllOnesExcursion n k d :=
+  windowHasResidualAllOnesDepthAtLeast_of_le n k d e hde h
+
 /--
 First-failed-depth profile over the first `k` observed odd labels.
 -/

@@ -88,6 +88,22 @@ theorem orbitWindowResidualShape_eq_oddOrbitLabel_succ
   rw [iterateT_succ_eq_T_iterateT]
 
 /--
+Residual all-ones depth is the all-ones depth of the next accelerated label.
+
+Checkpoint 133 treats `v2(residual + 1)` as a profile on the shifted odd-label
+orbit.  The theorem lives in `TailGrammar`, not `Profiles`, because the
+post-refactor import order places the residual-shape/next-label identity here.
+This keeps `Profiles` thin and lets downstream pressure modules consume the
+shifted-label reading without rebuilding the import graph.
+-/
+theorem orbitWindowResidualAllOnesDepth_eq_nextLabel
+    (n : OddNat) (i : ℕ) :
+    orbitWindowResidualAllOnesDepth n i =
+      ResidualAllOnesDepth (oddOrbitLabel n (i + 1)) := by
+  unfold orbitWindowResidualAllOnesDepth
+  rw [orbitWindowResidualShape_eq_oddOrbitLabel_succ]
+
+/--
 The residual-shape sequence is exactly the shifted odd-label sequence.
 
 This records that a finite orbit window is a chain of residual-shape
@@ -112,6 +128,21 @@ theorem orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
       some (oddOrbitLabel n (i + 1)) := by
   rw [orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels]
   simp [hi]
+
+/--
+Reading the all-ones-depth residual profile can be stated directly in terms of
+the next accelerated label.
+
+This is the list-level companion to
+`orbitWindowResidualAllOnesDepth_eq_nextLabel`; it is the Lean-side handle for
+the Python scan columns based on residual all-ones depth.
+-/
+theorem orbitWindowResidualAllOnesDepthSeq_get?_eq_some_nextLabel
+    (n : OddNat) {i k : ℕ} (hi : i < k) :
+    (orbitWindowResidualAllOnesDepthSeq n k)[i]? =
+      some (ResidualAllOnesDepth (oddOrbitLabel n (i + 1))) := by
+  rw [orbitWindowResidualAllOnesDepthSeq_get?_eq_some n hi]
+  rw [orbitWindowResidualAllOnesDepth_eq_nextLabel]
 
 /--
 Window-level raw gnomon factorization.

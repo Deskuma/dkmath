@@ -218,6 +218,55 @@ from the actual low-bit all-ones concentration inside the window.
 | 10 | 8:1 |
 | 11 | 8:2 |
 
+## Positive Block Length By Count All-Ones Depth Ge 4
+
+| count all-ones depth ge 4 | max block length counts |
+|---:|---|
+| 0 | 0:444;1:6 |
+| 1 | 0:62;1:12;2:2 |
+| 2 | 0:4;1:10;2:1;3:4 |
+| 3 | 0:2;1:13;2:3;3:6;4:4 |
+| 4 | 1:25;2:13;3:1;4:20;5:2 |
+| 5 | 1:64;2:10;4:1;5:6;6:2 |
+| 6 | 0:1;1:83;2:4;3:2;5:5;6:1;7:1 |
+| 7 | 1:127;2:2;3:3;5:2 |
+| 8 | 1:34;2:3;4:4;5:1 |
+| 9 | 1:6;2:1;4:2;5:2 |
+| 10 | 2:2;4:2;5:2 |
+| 11 | 2:3;3:1 |
+| 12 | 2:4;3:2 |
+| 13 | 3:4 |
+| 14 | 8:1 |
+| 15 | 8:2 |
+
+## Positive Block Length By Count All-Ones Depth Ge 5
+
+| count all-ones depth ge 5 | max block length counts |
+|---:|---|
+| 0 | 0:510;1:21;2:2 |
+| 1 | 0:2;1:21;2:4;3:4 |
+| 2 | 0:1;1:186;2:23;3:6;4:4 |
+| 3 | 1:149;2:9;3:2;4:21;5:2 |
+| 4 | 1:3;2:2;3:4;4:2;5:13;6:2 |
+| 5 | 2:3;4:3;5:1;6:1;7:1 |
+| 6 | 2:5;3:3;4:3;5:1 |
+| 7 | 3:4;5:3 |
+| 11 | 8:1 |
+| 12 | 8:2 |
+
+## Positive Block Length By Count All-Ones Depth Ge 6
+
+| count all-ones depth ge 6 | max block length counts |
+|---:|---|
+| 0 | 0:512;1:45;2:8;3:4 |
+| 1 | 0:1;1:334;2:33;3:6;4:4 |
+| 2 | 1:1;2:6;3:8;4:23;5:2 |
+| 3 | 2:1;3:5;4:3;5:14;6:2 |
+| 4 | 4:3;5:1;6:1;7:1 |
+| 5 | 5:3 |
+| 8 | 8:1 |
+| 9 | 8:2 |
+
 ## Frontier Depth By All-Ones Depth First
 
 | all-ones depth first | frontier depth counts |
@@ -246,6 +295,27 @@ from the actual low-bit all-ones concentration inside the window.
 | 9 | 2:2 |
 | 10 | 2:1 |
 | 11 | 2:2 |
+
+## Frontier Depth By Count All-Ones Depth Ge 4
+
+| count all-ones depth ge 4 | frontier depth counts |
+|---:|---|
+| 0 | 2:6 |
+| 1 | 2:13;3:1 |
+| 2 | 2:15 |
+| 3 | 2:26 |
+| 4 | 2:60;3:1 |
+| 5 | 2:83 |
+| 6 | 2:96 |
+| 7 | 2:134 |
+| 8 | 2:42 |
+| 9 | 2:11 |
+| 10 | 2:6 |
+| 11 | 2:4 |
+| 12 | 2:6 |
+| 13 | 2:4 |
+| 14 | 2:1 |
+| 15 | 2:2 |
 
 ## Local Island Rows By Residual Mod 16 First
 
@@ -279,6 +349,14 @@ from the actual low-bit all-ones concentration inside the window.
 | 4 | 1:1 |
 | 7 | 1:2 |
 
+## Local Island Rows By Count All-Ones Depth Ge 4
+
+| count all-ones depth ge 4 | local island count rows |
+|---:|---|
+| 1 | 1:1 |
+| 5 | 1:1 |
+| 6 | 1:1 |
+
 ## Sign-Change-Up Rows By All-Ones Depth First
 
 | all-ones depth first | sign-change-up count rows |
@@ -294,6 +372,15 @@ from the actual low-bit all-ones concentration inside the window.
 |---:|---|
 | 4 | 1:1 |
 | 7 | 1:3 |
+
+## Sign-Change-Up Rows By Count All-Ones Depth Ge 4
+
+| count all-ones depth ge 4 | sign-change-up count rows |
+|---:|---|
+| 1 | 1:1 |
+| 4 | 1:1 |
+| 5 | 1:1 |
+| 6 | 1:1 |
 
 ## Sign-Change-Up Depth Counts
 
