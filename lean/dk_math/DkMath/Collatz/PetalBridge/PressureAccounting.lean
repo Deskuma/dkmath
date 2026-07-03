@@ -1163,6 +1163,132 @@ theorem sourcePressureIntervalPulseAddressListHasSortedBeforeFailure_pair_iff
   exact not_congr sourcePressureIntervalPulseAddressBefore_iff_accountedBefore.symm
 
 /--
+Thin family carrier for explicit interval-pulse addresses.
+
+This wrapper intentionally stores only the supplied address list.  It has no
+coverage, maximality, uniqueness, prefix, disjointness, or union-accounting
+field.  Those properties must be supplied later by separate hypotheses.
+-/
+structure SourcePressureIntervalPulseAddressFamily
+    (n : OddNat) (k r : ℕ) where
+  /-- Explicit interval-pulse addresses. -/
+  items : List (SourcePressureIntervalPulseAddress n k r)
+
+/--
+Empty explicit interval-pulse-address family.
+
+This does not say that the ambient pressure window has no pulses.
+-/
+def sourcePressureIntervalPulseAddressFamily_nil
+    (n : OddNat) (k r : ℕ) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  { items := [] }
+
+/--
+Singleton explicit interval-pulse-address family.
+
+This packages one already supplied address and makes no maximality or coverage
+claim.
+-/
+def sourcePressureIntervalPulseAddressFamily_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  { items := [A] }
+
+/-- Alias for callers that want the producer-facing wording. -/
+def sourcePressureIntervalPulseAddressFamily_singleton_of_address
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  sourcePressureIntervalPulseAddressFamily_singleton A
+
+/--
+Singleton family produced from a local pressure island.
+
+This is the only producer bridge added in this checkpoint.  It uses the
+existing `sourcePressureIntervalPulseAddress_of_localIsland` producer from
+`PressureFrontier` and packages that one explicit address as a singleton
+family.  It does not enumerate all local islands or cover an orbit window.
+-/
+def sourcePressureIntervalPulseAddressFamily_singleton_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  sourcePressureIntervalPulseAddressFamily_singleton
+    (sourcePressureIntervalPulseAddress_of_localIsland n k r j hisland)
+
+/--
+Cons an explicit interval-pulse address onto an explicit family.
+
+This is ordinary list construction only; it does not infer sorting,
+disjointness, or union accounting.
+-/
+def sourcePressureIntervalPulseAddressFamily_cons
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (F : SourcePressureIntervalPulseAddressFamily n k r) :
+    SourcePressureIntervalPulseAddressFamily n k r :=
+  { items := A :: F.items }
+
+@[simp]
+theorem sourcePressureIntervalPulseAddressFamily_nil_length
+    (n : OddNat) (k r : ℕ) :
+    (sourcePressureIntervalPulseAddressFamily_nil n k r).items.length = 0 := by
+  rfl
+
+@[simp]
+theorem sourcePressureIntervalPulseAddressFamily_singleton_length
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    (sourcePressureIntervalPulseAddressFamily_singleton A).items.length = 1 := by
+  rfl
+
+@[simp]
+theorem sourcePressureIntervalPulseAddressFamily_cons_length
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (F : SourcePressureIntervalPulseAddressFamily n k r) :
+    (sourcePressureIntervalPulseAddressFamily_cons A F).items.length =
+      F.items.length + 1 := by
+  simp [sourcePressureIntervalPulseAddressFamily_cons]
+
+/--
+Family-level adjacent sortedness for explicit interval-pulse addresses.
+
+This is just list sortedness on `F.items`.
+-/
+def SourcePressureIntervalPulseAddressFamilySortedBefore
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r) : Prop :=
+  SourcePressureIntervalPulseAddressListSortedBefore F.items
+
+/--
+Family-level adjacent sorted-before failure.
+
+This is an order obstruction only.  It does not imply interval overlap:
+reversed order is also a sorted-before failure.
+-/
+def SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r) : Prop :=
+  SourcePressureIntervalPulseAddressListHasSortedBeforeFailure F.items
+
+/--
+Every explicit interval-pulse-address family is either adjacent-sorted or
+carries an adjacent sorted-before failure.
+
+This is not a coverage, maximality, prefix, union-accounting, or convergence
+statement.
+-/
+theorem sourcePressureIntervalPulseAddressFamily_sorted_or_failure
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r) :
+    SourcePressureIntervalPulseAddressFamilySortedBefore F ∨
+      SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure F :=
+  sourcePressureIntervalPulseAddressList_sorted_or_failure F.items
+
+/--
 Build an accounted family from an adjacent-sorted interval-pulse-address list.
 
 The family is still the conversion of an explicitly supplied list.  The sorted
@@ -1218,6 +1344,60 @@ theorem
       (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
   simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
     using sourcePressureIntervalPulseAddressList_sum_neg_of_nonempty hL
+
+/--
+Lift a sorted explicit interval-pulse-address family to an accounted interval
+family.
+
+The sorted hypothesis packages the converted intervals as pairwise disjoint.
+No coverage or union accounting is introduced.
+-/
+def sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r)
+    (hsorted : SourcePressureIntervalPulseAddressFamilySortedBefore F) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
+    F.items hsorted
+
+@[simp]
+theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_length
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r)
+    (hsorted : SourcePressureIntervalPulseAddressFamilySortedBefore F) :
+    (sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+      F hsorted).items.length = F.items.length := by
+  simp [sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily]
+
+/-- Budget wrapper for a sorted explicit interval-pulse-address family. -/
+theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r)
+    (hsorted : SourcePressureIntervalPulseAddressFamilySortedBefore F) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+      F hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((F.items.length : ℕ) : ℤ) := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily]
+    using
+      sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_le_neg_length
+        F.items hsorted
+
+/--
+Nonempty budget wrapper for a sorted explicit interval-pulse-address family.
+-/
+theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_neg_of_nonempty
+    {n : OddNat} {k r : ℕ}
+    (F : SourcePressureIntervalPulseAddressFamily n k r)
+    (hsorted : SourcePressureIntervalPulseAddressFamilySortedBefore F)
+    (hF : F.items ≠ []) :
+    (((sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+      F hsorted).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily]
+    using
+      sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_neg_of_nonempty
+        hsorted hF
 
 /-- Singleton sorted-family budget wrapper. -/
 theorem sourcePressureAccountedIntervalFamily_sorted_singleton_sum_le_neg_one
