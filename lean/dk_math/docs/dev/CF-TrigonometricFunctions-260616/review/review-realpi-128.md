@@ -264,7 +264,7 @@ index 27c60b7f..507db4d0 100644
 +path are definitionally equal to their canonical via-edge versions. The
 +remaining bridge is to commute descended semantic evaluation with the
 +canonical four-path concatenator for the older observed path.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -274,7 +274,7 @@ index 054aa5df..7c316e21 100644
 @@ -2085,6 +2085,29 @@ theorem shiftedFourPathConcatWithSeams_congr
    cases hp3
    rfl
- 
+
 +/--
 +Canonical quotient four-edge path via the common seam concatenator.
 +
@@ -300,11 +300,11 @@ index 054aa5df..7c316e21 100644
 +
  /--
  Canonical four-edge path obtained by observing quotient edges individually.
- 
+
 @@ -2132,6 +2155,19 @@ def shiftedSemanticFinFourLevelPathViaEdges
      (shiftedSemanticFinRightLevelEndpoint_two_eq_three_left hcore z)
      (shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z)
- 
+
 +/--
 +The older finite four-level path is the canonical direct finite via-edge path.
 +
@@ -320,7 +320,7 @@ index 054aa5df..7c316e21 100644
 +
  /--
  The canonical observed four-edge path equals the canonical direct finite path.
- 
+
 @@ -2374,14 +2410,18 @@ comparison is only nested path-packaging normalization.
  A canonical four-edge concatenator with explicit seams now packages both the
  observed-edge and direct finite-edge versions. These canonical via-edge
@@ -328,18 +328,18 @@ index 054aa5df..7c316e21 100644
 +The older quotient closed path is definitionally equal to its canonical
 +via-edge form, and the older finite fixed-boundary four-level path is
 +definitionally equal to the canonical direct finite via-edge form.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
  path after path-trans cast normalization lemmas are available.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-via-edge-compare]
 -Compare the older closed four-path definitions with the canonical via-edge
 -versions after the common concatenator is stable.
 +The quotient-side closed path and finite closed path match their canonical
 +via-edge versions. The observed quotient path still needs a lemma commuting
 +descended semantic evaluation with the canonical four-path concatenator.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -365,7 +365,7 @@ index 04e0fabe..d1d32024 100644
  shiftedSemanticObservedCyclicFourPath_target
 @@ -756,8 +759,21 @@ shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges
  ```
- 
+
  The canonical via-edge equality follows from the four single-edge equalities.
 -The older closed four-path definitions are intentionally not forced into this
 -shape yet.
@@ -384,13 +384,13 @@ index 04e0fabe..d1d32024 100644
 +observed via-edge path is typed at the finite left endpoint. Even pointwise,
 +the remaining theorem must commute descended semantic evaluation with the
 +canonical four-path concatenator.
- 
+
  Value-level source and target comparisons are also available for the closed
  four-edge paths:
 @@ -773,6 +789,11 @@ normalizing the nested `Path.trans` and endpoint `Path.cast` structure used by
  the two closed four-path packages, without asserting any circle, angle, arc,
  or Euclidean one-eighth reading.
- 
+
 +More precisely, the quotient-side closed path and finite closed path now match
 +their canonical via-edge versions. The observed quotient path still needs a
 +lemma commuting descended semantic evaluation with the canonical four-path

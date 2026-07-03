@@ -435,7 +435,7 @@ index 432d14a0..c372e0b5 100644
 @@ -1898,6 +1898,18 @@ This is the structure/predicate precursor to `carrierAnchorOf(m)`: it records
  finite-family carrier assignments and their recovery conditions before
  requiring a canonical choice function.
- 
+
 +Primitive/Zsigmondy family constructors now feed this carrier-label data layer:
 +
 +```text
@@ -449,7 +449,7 @@ index 432d14a0..c372e0b5 100644
 +Primitive/Zsigmondy witnesses supply carrier location, not automatic no-lift.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 3f4fe48d..c34ae7ab 100644
@@ -458,7 +458,7 @@ index 3f4fe48d..c34ae7ab 100644
 @@ -672,6 +672,116 @@ theorem zsigmondyPrimitivePrimeDivisor_natPrimeValuedOn
    exact zsigmondyPrimitivePrimeDivisor_petalPrimeChannel
      (hprim i hi) (hd i hi) (hd1 i hi) (hab_lt i hi)
- 
+
 +/--
 +PrimitiveBeam family constructor for `PetalCarrierLabelMapData` in body
 +coordinates.
@@ -579,7 +579,7 @@ index 63e3f90f..dbcb2f0c 100644
 @@ -689,5 +689,18 @@ This is the safe precursor to `carrierAnchorOf(m)`.  It lets experiments supply
  finite-family carrier labels, recovery, and GN divisibility/no-lift facts first;
  canonical choice can be added later if uniqueness becomes available.
- 
+
 +PrimitiveBeam and Zsigmondy family constructors are now available:
 +
 +```text
@@ -602,7 +602,7 @@ index 52abf0be..2f45112b 100644
 @@ -843,6 +843,19 @@ This is the predicate/structure version of the future `carrierAnchorOf` route:
  it records valid values, value injectivity, label recovery, and actual GN
  carrier facts without forcing a uniqueness or choice theorem too early.
- 
+
 +Primitive/Zsigmondy family constructors now supply this data layer:
 +
 +```text
@@ -617,7 +617,7 @@ index 52abf0be..2f45112b 100644
 +no-lift.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

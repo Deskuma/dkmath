@@ -609,7 +609,7 @@ index 1fa9cb6c..131d59ca 100644
 @@ -2800,6 +2800,169 @@ theorem tailRecoveryDominates_of_atMostHalf_tailContinuation
    rw [orbitWindowRetentionMassPow2Tail_split] at h
    omega
- 
+
 +/--
 +Number of depths in `[r, r + len)` where source recovery dominates
 +continuation.
@@ -1023,7 +1023,7 @@ index 154e7679..f3716258 100644
 @@ -574,6 +574,63 @@ ContinuationOutrunsRecovery
  This is the point where the depth-mode distribution acquires both a descriptive
  reading and a cause-side reading.
- 
+
 +## Cause-Side Depth Distribution
 +
 +Checkpoint 111 completes the dominance side of the cause-side count layer:
@@ -1082,7 +1082,7 @@ index 154e7679..f3716258 100644
 +```
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index a596aede..d14801ca 100644

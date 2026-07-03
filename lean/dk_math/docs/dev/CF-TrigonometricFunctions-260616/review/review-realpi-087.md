@@ -372,7 +372,7 @@ index 10f11512..ae434eb9 100644
 +observable. The total masses of the average, plain mesh-width, and
 +trapezoidal weights are also exposed to distinguish sample-mean,
 +endpoint-overcounted complete-mesh, and closed-interval candidates.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -382,7 +382,7 @@ index 80e0b866..1eb03f0b 100644
 @@ -118,6 +118,20 @@ theorem two_mul_weightedLogNormalizationSum_add_weightedLogDepthSum
          rw [two_mul_log_dyadicPhaseNormalization_add_log_depth n k]
          simp
- 
+
 +/--
 +Short API name for pointwise weighted logarithmic boundary cancellation.
 +
@@ -399,11 +399,11 @@ index 80e0b866..1eb03f0b 100644
 +
  /--
  The complete dyadic mesh has one more node than its dyadic denominator.
- 
+
 @@ -145,6 +159,17 @@ theorem dyadicPhaseAverageWeight_pos (n : ℕ) :
      exact Nat.succ_pos _
    exact one_div_pos.2 (by exact_mod_cast hcard)
- 
+
 +/-- The uniform average weights on the complete dyadic mesh have total mass one. -/
 +theorem sum_dyadicPhaseAverageWeight_eq_one (n : ℕ) :
 +    ∑ _k ∈ dyadicPhaseNodeIndices n, dyadicPhaseAverageWeight n = 1 := by
@@ -421,7 +421,7 @@ index 80e0b866..1eb03f0b 100644
 @@ -188,6 +213,20 @@ theorem dyadicPhaseMeshWeight_pos (n : ℕ) :
      0 < dyadicPhaseMeshWeight n := by
    exact one_div_pos.2 (by exact_mod_cast dyadicPhaseDenom_pos n)
- 
+
 +/--
 +The complete-node mesh-width weights have total mass `1 + h_n`.
 +
@@ -442,7 +442,7 @@ index 80e0b866..1eb03f0b 100644
 @@ -240,6 +279,80 @@ theorem dyadicPhaseTrapezoidWeight_pos (n k : ℕ) :
    · exact div_pos (dyadicPhaseMeshWeight_pos n) (by norm_num)
    · exact dyadicPhaseMeshWeight_pos n
- 
+
 +/--
 +The endpoint set of the complete dyadic mesh consists of the two boundary
 +indices `0` and `2^n`.
@@ -527,7 +527,7 @@ index 9ec437cb..51d6fadd 100644
 @@ -229,6 +229,12 @@ two endpoints half a mesh width and every interior node one mesh width. This
  is still a finite observable; it does not by itself prove convergence or
  select the Gaussian-relevant normalization.
- 
+
 +The weight totals are now part of the formal comparison. Uniform average and
 +trapezoidal weights both have total mass `1`. In contrast, the plain
 +mesh-width complete-node weights have total mass `1 + h_n`, exposing the
@@ -535,7 +535,7 @@ index 9ec437cb..51d6fadd 100644
 +a closed-interval integration candidate.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 25654644..031a5906 100644

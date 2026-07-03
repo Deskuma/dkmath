@@ -242,7 +242,7 @@ index 03567132..0f8fc911 100644
 +endpoint evaluation theorems make the quotient readable without opening its
 +representatives. Topology and path structure on the quotient are deliberately
 +left to a later layer.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -252,7 +252,7 @@ index e5254045..3bc1774d 100644
 @@ -1608,6 +1608,60 @@ selected here.
  abbrev ShiftedCyclicChart :=
    Quot shiftedFiniteChartSetoid
- 
+
 +/-- Constructor alias for representatives of `ShiftedCyclicChart`. -/
 +def shiftedCyclicChartMk (p : ShiftedFiniteChart) : ShiftedCyclicChart :=
 +  Quot.mk shiftedFiniteChartSetoid p
@@ -309,11 +309,11 @@ index e5254045..3bc1774d 100644
 +
  /--
  Chart evaluation is compatible with the generated seam equivalence.
- 
+
 @@ -1662,6 +1716,42 @@ theorem shiftedSemanticCyclicChartEval_mk
      shiftedSemanticCyclicChartEval hcore z (Quot.mk _ p) =
        shiftedSemanticFinChartEval hcore z p := rfl
- 
+
 +/-- Quotient evaluation at a left endpoint representative. -/
 +theorem shiftedSemanticCyclicChartEval_left
 +    {r : UnitKernel DkNNRealQ}
@@ -352,7 +352,7 @@ index e5254045..3bc1774d 100644
 +
  /--
  The quotiented chart evaluation still lands on the original `q2` boundary.
- 
+
 @@ -1723,10 +1813,13 @@ proved.
  The finite seam relation is closed under `Relation.EqvGen`, packaged as a
  setoid quotient `ShiftedCyclicChart`, and chart evaluation descends to the
@@ -360,14 +360,14 @@ index e5254045..3bc1774d 100644
 +Representative constructor aliases, left and right endpoint representatives,
 +quotient seam equality, endpoint evaluation theorems, and quotient evaluation
 +seam compatibility are also exposed.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology]
 -Add topology/path structure to the shifted cyclic chart quotient only after
 -the quotient evaluation API is stable.
 +Add topology/path structure to `ShiftedCyclicChart` after the quotient
 +representative and seam-equality API is stable.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 92bad1f5..641aed69 100644
@@ -394,11 +394,11 @@ index 92bad1f5..641aed69 100644
 +shiftedSemanticCyclicChartEval_right_eq_succ_left
  shiftedSemanticCyclicChartEval_q2
  ```
- 
+
 @@ -594,6 +606,21 @@ and `shiftedSemanticCyclicChartEval_q2` records that the descended value still
  lies on the original fixed boundary. This is only an algebraic seam quotient;
  no quotient topology or quotient path structure has been selected yet.
- 
+
 +The quotient representative API is now explicit. `shiftedCyclicChartMk` names
 +the representative constructor, while `shiftedCyclicChartLeft` and
 +`shiftedCyclicChartRight` name the endpoint representatives. Lean proves the
@@ -415,7 +415,7 @@ index 92bad1f5..641aed69 100644
 +evaluation is seam-compatible by rewriting through the quotient equality.
 +
  Candidate theorem directions:
- 
+
  ```text
 @@ -678,8 +705,13 @@ depend on that reading.
  31. Implemented: package the generated relation as `ShiftedCyclicChart`.
@@ -431,7 +431,7 @@ index 92bad1f5..641aed69 100644
 +37. Later: add topology/path structure to the shifted cyclic chart quotient.
 +38. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -747,14 +779,17 @@ Close the finite seam relation under `Relation.EqvGen`, package it as the
  setoid quotient `ShiftedCyclicChart`, and descend chart evaluation to a
@@ -441,16 +441,16 @@ index 92bad1f5..641aed69 100644
 +equality, concrete seam aliases, endpoint evaluation theorems, and quotient
 +evaluation seam compatibility are also exposed.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
  [TODO: semantic-cf2d/shifted-cyclic-topology]
 -Add topology/path structure to the shifted cyclic chart quotient only after
 -the quotient evaluation API is stable.
 +Add topology/path structure to `ShiftedCyclicChart` after the quotient
 +representative and seam-equality API is stable.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````

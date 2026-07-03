@@ -262,7 +262,7 @@ index 34de33ba..b6337b2a 100644
 @@ -83,6 +83,13 @@ instance : Mul DkNNRealQ where
  instance : Pow DkNNRealQ ℕ where
    pow := pow
- 
+
 +/-- Canonical natural-number embedding through nonnegative rationals. -/
 +def natCast (n : ℕ) : DkNNRealQ :=
 +  ofRat (n : ℚ) (by positivity)
@@ -276,7 +276,7 @@ index 34de33ba..b6337b2a 100644
 @@ -114,6 +121,38 @@ theorem ofRat_mul
      ofRat p hp * ofRat q hq = ofRat (p * q) (mul_nonneg hp hq) :=
    Quotient.sound (DkNNReal.mul_ofRat hp hq)
- 
+
 +/-- Natural-number casts are the corresponding embedded rationals. -/
 +@[simp]
 +theorem natCast_eq_ofRat (n : ℕ) :
@@ -315,7 +315,7 @@ index 34de33ba..b6337b2a 100644
 @@ -214,6 +253,33 @@ theorem right_distrib (x y z : DkNNRealQ) :
    intro a b c
    exact Quotient.sound (DkNNReal.right_distrib a b c)
- 
+
 +/-!
 +## Commutative semiring instance
 +
@@ -344,19 +344,19 @@ index 34de33ba..b6337b2a 100644
 +  nsmul_succ := by intros; rfl
 +
  end DkNNRealQ
- 
+
  end DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 016eca51..4e20f0a3 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -67,7 +67,7 @@ DkMath.Analysis.DkReal.DkNNReal
- 
+
  DkMath.Analysis.DkReal.DkNNRealQ
    quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
 -  commutative semiring laws as ordinary equalities
 +  a canonical NatCast and CommSemiring instance
- 
+
  DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
@@ -366,7 +366,7 @@ index bb094214..b7ea8914 100644
 @@ -303,10 +303,24 @@ pow_zero, pow_one
  Embedded nonnegative rationals also satisfy exact quotient equalities for
  addition and multiplication.
- 
+
 -A full `Semiring` instance is intentionally deferred. Constructing that
 -instance also commits to natural-number coercions and their public
 -normalization behavior. The current quotient establishes the mathematical
@@ -389,7 +389,7 @@ index bb094214..b7ea8914 100644
 +a later semantic bridge. Likewise, any map to Mathlib's `NNReal` or `Real`
 +should remain in a separate bridge module because selecting the represented
 +limit may require `noncomputable`.
- 
+
  Persistent intersection and equality after a future evaluation into Mathlib's
  `Real` remain comparison principles. Their equivalence with vanishing
 ````

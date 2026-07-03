@@ -327,7 +327,7 @@ index fc97de55..1f18ffbd 100644
 +one-point degenerate case. A second homeomorphism identifies the coordinate
 +circle with Mathlib's standard `EuclideanSpace Real (Fin 2)` L2 metric sphere
 +of radius `sqrt (q2 z)`.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -337,7 +337,7 @@ index a63bfb25..658c4290 100644
 @@ -1340,13 +1340,15 @@ two-coordinate Euclidean circle equation of squared radius `rho2`. It
  separates the zero one-point boundary and maps the existing closed path
  through this interpretation.
- 
+
 -[TODO: semantic-cf2d-phase/standard-euclidean-space] Relate the explicit
 -coordinate circle equation to the standard `EuclideanSpace Real (Fin 2)`
 -metric sphere, keeping the zero and positive-radius cases separate.
@@ -346,23 +346,23 @@ index a63bfb25..658c4290 100644
 +`EuclideanSpace Real (Fin 2)` L2 metric sphere of radius `sqrt rho2`.
 +The closed path is mapped through this bridge, and positive squared radius is
 +separated from the zero-radius degenerate case.
- 
+
  [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 -identify the fixed-`q2` path with the standard Euclidean circle model and
 -extract angular terminology.
 +extract angular terminology and compare the action with the standard
 +quarter-turn linear isometry.
  -/
- 
+
  end
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 83baa50e..ba060c47 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -155,9 +155,9 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  ## Immediate Next Step
- 
+
 -The next bridge may identify positive real `q2` level sets with a standard
 -Euclidean metric sphere. The coordinate-circle homeomorphism is now
 -implemented, including the degenerate zero boundary; the remaining bridge is
@@ -380,14 +380,14 @@ index e0a4bfcf..21e66338 100644
 @@ -29,6 +29,11 @@ topology, and the final closed path cannot leave the boundary by construction.
  equation `x^2 + y^2 = rho2` by a homeomorphism. The already-constructed closed
  path is mapped through that bridge; it is not reconstructed geometrically.
- 
+
 +The coordinate equation is further identified with Mathlib's standard L2
 +metric sphere in `EuclideanSpace Real (Fin 2)`, of radius `sqrt rho2`.
 +This avoids confusing the ordinary product norm on `Real × Real` with the
 +Euclidean L2 norm.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -349,7 +354,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/normalized-four-path]
@@ -405,25 +405,25 @@ index d653c0a9..b45f6f28 100644
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Analysis.DkReal.SemanticCF2DNormalize
 +import Mathlib.Analysis.InnerProductSpace.PiL2
  import Mathlib.Topology.Homeomorph.Defs
- 
+
  #print "file: DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase"
 @@ -26,6 +27,8 @@ No angle coordinate or trigonometric parametrization is introduced here.
- 
+
  namespace DkMath.CosmicFormula.Rotation.CF2D
- 
+
 +noncomputable section
 +
  /--
  The two-coordinate Euclidean circle equation with squared radius `rho2`.
- 
+
 @@ -38,6 +41,23 @@ instance (rho2 : ℝ) : TopologicalSpace (EuclideanCircleSq rho2) :=
    inferInstanceAs
      (TopologicalSpace {p : ℝ × ℝ // p.1 ^ 2 + p.2 ^ 2 = rho2})
- 
+
 +/-- The standard two-dimensional real Euclidean space. -/
 +abbrev EuclideanPlane :=
 +  EuclideanSpace ℝ (Fin 2)
@@ -442,12 +442,12 @@ index d653c0a9..b45f6f28 100644
 +      {v : EuclideanPlane // v ∈ Metric.sphere 0 (Real.sqrt rho2)})
 +
  namespace Vec
- 
+
  /-- Real CF2D square mass is always nonnegative. -/
 @@ -110,6 +130,100 @@ theorem euclideanCircleSq_zero_eq_origin
    have hy : y = 0 := by nlinarith [sq_nonneg x, sq_nonneg y]
    simp [hx, hy]
- 
+
 +/-!
 +## Standard Euclidean-space bridge
 +
@@ -543,12 +543,12 @@ index d653c0a9..b45f6f28 100644
 +end
 +
  end DkMath.CosmicFormula.Rotation.CF2D
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -134,6 +248,25 @@ def normalizedClosedEuclideanCircleSqPath
    (normalizedClosedLevelFourPhasePath hcore z).map
      (levelSetHomeomorphEuclideanCircleSq (Vec.q2 z)).continuous
- 
+
 +/--
 +The normalized closed path interpreted in Mathlib's standard two-dimensional
 +L2 metric sphere of radius `sqrt (q2 z)`.
@@ -569,7 +569,7 @@ index d653c0a9..b45f6f28 100644
 +      (rho2 := Vec.q2 z) (Vec.q2_nonneg z)).continuous
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index bf43d30b..84548d1c 100644

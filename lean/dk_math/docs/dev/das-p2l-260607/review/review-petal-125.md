@@ -8,7 +8,7 @@ gch: 32b8e440c863928f4637a24218bc235a7b728815
 
 Checkpoint 124 完了です。
 
-Lean 側では [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1825) に以下を追加しました。
+Lean 側では [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1825) に以下を追加しました。
 
 ```lean
 retention_allOnes_mod_pow_two_of_le
@@ -1241,7 +1241,7 @@ index 2eac66ad..b0c03985 100644
 @@ -1815,6 +1815,29 @@ theorem allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
    rw [Nat.add_mul_mod_self_right]
    exact Nat.mod_eq_of_lt (by omega)
- 
+
 +/--
 +All-ones retention residue cells are nested by depth.
 +
@@ -1267,11 +1267,11 @@ index 2eac66ad..b0c03985 100644
 +
  /--
  Source continuation mass is anti-monotone in depth.
- 
+
 @@ -1917,6 +1940,69 @@ theorem selectedContinuationMass_overlap_of_lt_of_deeper_pos
      0 < orbitWindowContinuationSiblingMassPow2 n k (r + j₁) :=
    lt_of_lt_of_le hpos (selectedContinuationMass_nested_of_lt n k r j₁ j₂ hlt)
- 
+
 +/--
 +Source retention mass is anti-monotone in depth.
 +
@@ -1341,7 +1341,7 @@ index 2eac66ad..b0c03985 100644
 @@ -6496,6 +6582,84 @@ def IsSourcePressureDepth
      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
      (orbitWindowRetentionMassPow2 n k (r + j))
- 
+
 +/--
 +Integer-valued source pressure margin at a single depth.
 +

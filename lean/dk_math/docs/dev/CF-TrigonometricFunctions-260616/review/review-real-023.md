@@ -15,7 +15,7 @@ gch: eb4ebd917dca4b1fb852837621deca9154209f53
 - `equivSetoid`
 - 加法に対する congruence
 
-実装: [Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean:1)
+実装: [Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean#L1)
 
 `Equiv` の推移性では、中間区間の幅を含む評価
 
@@ -314,9 +314,9 @@ index 081b7eb7..c52886d6 100644
  import DkMath.Analysis.DkReal.PowBound
  import DkMath.Analysis.DkReal.Arithmetic
 +import DkMath.Analysis.DkReal.Equiv
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean b/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean
 new file mode 100644
 index 00000000..e2647afe
@@ -454,7 +454,7 @@ index 5e51ba15..cd0bace9 100644
 @@ -133,6 +133,82 @@ theorem mulNonneg_width_eq
    simp [width]
    ring
- 
+
 +/-!
 +## Separation of closed intervals
 +
@@ -533,7 +533,7 @@ index 5e51ba15..cd0bace9 100644
 +
  /--
  Image of a nonnegative rational interval under the natural power map.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 0f418873..924cbd81 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
@@ -541,7 +541,7 @@ index 0f418873..924cbd81 100644
 @@ -57,6 +57,10 @@ DkMath.Analysis.DkReal.Arithmetic
    computable interval addition, nonnegative multiplication, and stagewise
    semiring laws
- 
+
 +DkMath.Analysis.DkReal.Equiv
 +  vanishing interval separation, representation setoid, and additive
 +  congruence
@@ -556,7 +556,7 @@ index ccbc20b9..c73af8e1 100644
 @@ -169,8 +169,32 @@ observation level, but a formal algebraic structure should wait until the
  representation equivalence has been chosen and its congruence properties have
  been proved.
- 
+
 -Candidate equivalence principles include persistent interval intersection,
 -vanishing separation between two approximations, or equality after a future
 -evaluation map into Mathlib's `Real`. These formulations are not

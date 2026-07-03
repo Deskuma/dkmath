@@ -782,7 +782,7 @@ index 1f271e0c..eeb91d2c 100644
 @@ -1446,6 +1446,136 @@ theorem pow2ChannelFlow_of_pointwise
    orbitWindowResidueCountPow2_le_tail_of_pointwise
      n k sourceDepth sourceResidue targetDepth targetResidue h
- 
+
 +/--
 +Finite natural-number witness that a count occupies at most half of a window.
 +
@@ -919,7 +919,7 @@ index 1f271e0c..eeb91d2c 100644
 @@ -2379,6 +2509,19 @@ theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount_via_helper
    intro i _hi hsource
    exact oddOrbitLabel_succ_recovery_residue_of_mod r hr n i hsource
- 
+
 +/--
 +Mass-name spelling of the recovery channel-flow theorem.
 +
@@ -935,11 +935,11 @@ index 1f271e0c..eeb91d2c 100644
 +
  /--
  Count-level recursive Petal transition for the continuation sibling.
- 
+
 @@ -2429,6 +2572,29 @@ theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount_via_hel
    intro i _hi hsource
    exact oddOrbitLabel_succ_continuation_residue_of_mod r hr n i hsource
- 
+
 +/--
 +Mass-name spelling of the continuation channel-flow theorem.
 +
@@ -1235,7 +1235,7 @@ index d7185f79..723f3aa4 100644
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 @@ -283,3 +283,22 @@ m <= count
  ```
- 
+
  Only later should this become rational or real frequency.
 +
 +Checkpoint 101 starts this layer with:
@@ -1304,12 +1304,12 @@ index 9268ab69..10d1985c 100644
 +  -> RetentionMass / RecoverySiblingMass / ContinuationSiblingMass
 +  -> mass-name channel-flow corollaries
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -677,6 +702,41 @@ Reason:
    avoids zero-window division and coercion overhead
  ```
- 
+
 +This layer has now begun.  Checkpoint 101 adds division-free finite ratio
 +witnesses and names the main retention/sibling masses:
 +
@@ -1346,7 +1346,7 @@ index 9268ab69..10d1985c 100644
 +```
 +
  The Collatz-specific floor is now also fixed:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-101.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-101.md
 new file mode 100644

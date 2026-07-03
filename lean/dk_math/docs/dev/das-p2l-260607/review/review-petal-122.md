@@ -731,7 +731,7 @@ index ff463c2d..134338ee 100644
 @@ -6412,6 +6412,32 @@ theorem exists_positive_sourceContinuationMass_of_outrunsMoreThanHalf
      sourcePressureDepthCount_pos_of_outrunsMoreThanHalf n k r len h
    exact exists_positive_sourceContinuationMass_of_pressureDepthCount_pos n k r len hpos
- 
+
 +/--
 +Tower-entry naming wrapper for positive pressure-depth count.
 +
@@ -764,7 +764,7 @@ index ff463c2d..134338ee 100644
 @@ -6453,6 +6479,37 @@ theorem sourcePressureDepthTwo_delayed_budget_with_tailSeven_remainder
          orbitWindowResidueCountMod8EqSevenTail n k :=
    sourceContinuationMass_depth_two_delayed_budget_with_tailSeven_remainder n k
- 
+
 +/--
 +Depth-two one-range pressure gives both positive continuation mass and the
 +depth-two delayed budget inequality.
@@ -798,7 +798,7 @@ index ff463c2d..134338ee 100644
 +
  /--
  Residue-address drift bridge.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index eb5fe065..0760fbe4 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -862,7 +862,7 @@ index 84353e2a..d63d9df4 100644
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 @@ -1500,3 +1500,58 @@ python/Collatz/PetalBridge/results/retention_tower_mod_scan.md
  ```
- 
+
  confirms the same recovery/continuation residue law through `mod 1024`.
 +
 +## Checkpoint 121: Selected Witness To Delayed Budget

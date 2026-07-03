@@ -230,7 +230,7 @@ index 4f6767a2..ee07dff1 100644
 @@ -202,6 +202,12 @@ theorem shiftedQuarterRightEndpoint_eq_leftEndpoint_add_quarter (k : ℕ) :
    simp [shiftedQuarterLeftEndpoint, shiftedQuarterRightEndpoint,
      globalQuarterCenter_succ_eq_center_add_quarter]
- 
+
 +/-- Difference form of the shifted-frame endpoint separation. -/
 +theorem shiftedQuarterRightEndpoint_sub_leftEndpoint (k : ℕ) :
 +    shiftedQuarterRightEndpoint k - shiftedQuarterLeftEndpoint k = 1 / 4 := by
@@ -239,11 +239,11 @@ index 4f6767a2..ee07dff1 100644
 +
  /--
  The shifted-frame center is the midpoint of its shifted endpoints.
- 
+
 @@ -217,6 +223,46 @@ theorem shiftedQuarterCenter_eq_midpoint (k : ℕ) :
      shiftedQuarterRightEndpoint_eq_next_center]
    exact (globalQuarterEndpoint_succ_is_center_between_centers k).symm
- 
+
 +/-- The shifted-frame center is a half-quarter step after its left endpoint. -/
 +theorem shiftedQuarterCenter_eq_leftEndpoint_add_halfQuarter (k : ℕ) :
 +    shiftedQuarterCenter k =
@@ -299,7 +299,7 @@ index 4f6767a2..ee07dff1 100644
    rw [shiftedQuarterCenter_eq_midpoint]
    simp [phaseCenter]
    ring
- 
+
  /-!
  [TODO: semantic-cf2d/shifted-semantic-edge]
 -Define a shifted semantic edge only after choosing the endpoint states that
@@ -315,7 +315,7 @@ index 4f6767a2..ee07dff1 100644
 +that the selected shifted edge at `phaseCenter` represents
 +`shiftedQuarterCenter`.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 3b6237f8..d40c504c 100644
@@ -336,9 +336,9 @@ index 3b6237f8..d40c504c 100644
    normalizedCycleStep
    dyadicCycleStep
 @@ -334,8 +340,10 @@ SemanticCF2DPhaseShift.lean
- 
+
  ## Boundary and Normalization Targets
- 
+
 -The scalar shifted-frame API is now implemented. The next target is to choose
 -the semantic endpoint states for a shifted semantic edge and then lift the
 +The scalar shifted-frame API is now implemented, including endpoint
@@ -346,10 +346,10 @@ index 3b6237f8..d40c504c 100644
 +`shiftedQuarterAffine`. The next target is to choose the semantic endpoint
 +states and correction law for a shifted semantic edge, then lift the
  shifted-frame scalar center theorem to that path.
- 
+
  Candidate theorem directions:
 @@ -425,7 +433,10 @@ parameter before assigning any Euclidean shape.
- 
+
  ```text
  [TODO: semantic-cf2d/shifted-semantic-edge]
 -Choose the endpoint states for the shifted semantic edge and prove its scalar
@@ -358,7 +358,7 @@ index 3b6237f8..d40c504c 100644
 +edges, but their raw affine midpoint is not generally the old seam state.
 +After selecting the shifted normalization/projection law, prove scalar
  compatibility with `shiftedQuarterCenter`.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
 ````
 `````

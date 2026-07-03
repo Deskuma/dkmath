@@ -711,7 +711,7 @@ index 2a6fef01..e80fb837 100644
 @@ -1455,6 +1455,21 @@ This intentionally avoids division: `2 * count <= k` is the finite form of
  def AtMostHalf (count k : ℕ) : Prop :=
    2 * count ≤ k
- 
+
 +/--
 +Finite natural-number witness that a count occupies more than half of a window.
 +
@@ -729,11 +729,11 @@ index 2a6fef01..e80fb837 100644
 +
  /--
  Finite natural-number witness for `count / k <= num / den`.
- 
+
 @@ -2011,6 +2026,110 @@ def TailContinuationOutrunsRecoveryOnRange
      (n : OddNat) (k r len : ℕ) : Prop :=
    ∀ j, j < len → TailContinuationOutrunsRecovery n k (r + j)
- 
+
 +/-- Each source depth is either recovery-dominant or continuation-outrunning. -/
 +theorem recoveryDominates_or_continuationOutruns
 +    (n : OddNat) (k r : ℕ) :
@@ -840,7 +840,7 @@ index 2a6fef01..e80fb837 100644
 +
  /--
  Predicate-facing source half criterion.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index 7651efe2..06b26b6c 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -1087,9 +1087,9 @@ index e72ffd37..7b533a6d 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 @@ -355,6 +355,46 @@ wants to consume it without unfolding recovery/continuation counts.
- 
+
  This is the theorem to reach for before writing a custom induction over `k`.
- 
+
 +## More-Than-Half Pressure
 +
 +Checkpoint 106 adds the strict complement to `AtMostHalf`:
@@ -1131,7 +1131,7 @@ index e72ffd37..7b533a6d 100644
 +continuation pressure inside the corresponding retention cylinder.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 5634b157..18446f1e 100644

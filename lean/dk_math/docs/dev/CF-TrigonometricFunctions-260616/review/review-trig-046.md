@@ -33,14 +33,14 @@ Build completed successfully (8565 jobs).
 
 ## 1. 総評
 
-ぬしよ、これは **正しい続行方向** じゃ。  
+ぬしよ、これは **正しい続行方向** じゃ。
 今回の `DkMath.Analysis.DkReal.Semantic` は、三角関数 CF2D Phase 1 の代数核から、実数解析 Phase 2 へ移るための最初の橋としてかなり筋が良い。
 
 過去ログ・設計書では、DkMath.Analysis は Mathlib 解析を置き換える層ではなく、Gap / Body / GN の語彙で解析対象を再解釈する層と定義されていた。さらに、Route B の `DkReal` は計算可能な区間近似核で、Mathlib `Real` への意味論写像は別層として扱う方針だった。今回の `semanticValue` は、まさにその「別層」の入口になっている。
 
 添付 diff 上では、`semanticValue : DkReal → ℝ` を lower endpoint の上限として定義し、全近似区間への所属と lower endpoint の単調収束まで閉じている。さらに build 成功も報告されている。
 
-結論として、今回の実装は **採用でよい** 。  
+結論として、今回の実装は **採用でよい** 。
 ただし、次に進む前に 2 点だけ修正・補強した方がよい。
 
 ## 2. 実装の数学的妥当性
@@ -55,8 +55,8 @@ Build completed successfully (8565 jobs).
 
 これはよい。理由は明確じゃ。
 
-`lowerReal_monotone` で lower endpoint が単調増加する。  
-`lowerReal_le_upperReal` で任意の upper endpoint が lower endpoint 全体の上界になる。  
+`lowerReal_monotone` で lower endpoint が単調増加する。
+`lowerReal_le_upperReal` で任意の upper endpoint が lower endpoint 全体の上界になる。
 したがって lower endpoint の上限が存在し、その値は全区間に入る。
 
 この流れは、入れ子有理区間から実数値を取り出す標準的で堅い方法じゃ。しかも「全区間に属する」まで証明しているので、意味論値の候補としては十分に強い。
@@ -263,21 +263,21 @@ index fe285dbc..16978094 100644
  import DkMath.Analysis.DkReal.Order
  import DkMath.Analysis.DkReal.CanonicalOrder
 +import DkMath.Analysis.DkReal.Semantic
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 @@ -28,6 +29,7 @@ Public entry point for the complete Route B algebraic checkpoint:
  * `DkNNReal` packages nonnegativity;
  * `DkNNRealQ` is the quotient-backed nonnegative ordered `CommSemiring`;
  * `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
 +* `DkReal.Semantic` begins the noncomputable bridge to Mathlib's `Real`.
- 
+
  All endpoint operations in this import tree remain computable. No represented
  limit in Mathlib's `Real` or `NNReal` is selected here.
 @@ -66,9 +68,12 @@ a linear order.
  decision procedure for asymptotic interval order is currently available.
  Classical comparison should therefore remain an explicit local choice.
- 
+
 -[TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 -chosen evaluation is independent of representatives. Such evaluation may
 -legitimately be `noncomputable`.
@@ -287,7 +287,7 @@ index fe285dbc..16978094 100644
 +[TODO: semantic-bridge] Prove that semantic evaluation is independent of
 +representatives, then lift it to `DkNNRealQ` and establish arithmetic and order
 +bridge laws.
- 
+
  [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean
@@ -410,7 +410,7 @@ index 135f06f5..bacfe9ab 100644
 @@ -82,6 +82,10 @@ DkMath.Analysis.DkReal.CanonicalOrder
    subtraction-free extraction of a nonnegative Gap representation,
    ExistsAddOfLE, and CanonicallyOrderedAdd
- 
+
 +DkMath.Analysis.DkReal.Semantic
 +  noncomputable lower-endpoint supremum in Mathlib Real, interval membership,
 +  and monotone endpoint convergence
@@ -420,7 +420,7 @@ index 135f06f5..bacfe9ab 100644
  ```
 @@ -118,8 +122,8 @@ Order:
    use a semantic bridge only as an independent cross-check
- 
+
  BridgeNNReal / BridgeReal:
 -  select the unique semantic limit
 -  prove representative independence
@@ -490,7 +490,7 @@ index 85e85f13..42589462 100644
 +++ b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 @@ -87,3 +87,30 @@ Archive
  - `git diff --check` 成功
- 
+
  補足: 既に index に載っていた前回追加分があるため、`git status` では旧 staged との差分として `AM` と新 `CF2D` untracked が混ざって見えています。staging は触っていません。
 +
 +### 2026/06/21 19:54 JST (Return to the trigonometric real-analysis route)

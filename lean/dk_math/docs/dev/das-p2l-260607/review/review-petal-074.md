@@ -422,7 +422,7 @@ index f7d0e30a..e36a1d0c 100644
 @@ -68,6 +68,25 @@ theorem rangeLabel_injOn_of_pairwise_ne
    by_contra hij
    exact hneq i (by simpa using hi) j (by simpa using hj) hij hq
- 
+
 +/--
 +Range pairwise label separation breaks as soon as two distinct in-range indices
 +reuse the same label.
@@ -444,7 +444,7 @@ index f7d0e30a..e36a1d0c 100644
 +
  /--
  Body-coordinate range-family constructor for `PetalCarrierLabelMapData`.
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index 9383d2aa..4932fae0 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
@@ -460,7 +460,7 @@ index 9383d2aa..4932fae0 100644
 @@ -1026,6 +1027,13 @@ i < k, j < k, i != j -> qOf i != qOf j
  The helper `rangeLabel_injOn_of_pairwise_ne` converts this to the `Set.InjOn`
  hypothesis required by the core constructors.
- 
+
 +The obstruction companion
 +`rangeLabel_pairwise_ne_contradiction_of_same_label_ne_index` records the
 +negative test: if two distinct in-range indices reuse the same label, the
@@ -469,7 +469,7 @@ index 9383d2aa..4932fae0 100644
 +carrier family.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index 513f262a..7b8cff67 100644
@@ -484,7 +484,7 @@ index 513f262a..7b8cff67 100644
  petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
  petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family
 @@ -537,3 +538,20 @@ i < k, j < k, i != j -> qOf i != qOf j
- 
+
  This is converted into `Set.InjOn qOf ↑(Finset.range k)`, so concrete
  experiments can avoid constructing the subtype-level injectivity proof by hand.
 +

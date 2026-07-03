@@ -385,7 +385,7 @@ index 52618c23..05f8f24f 100644
 +to restore a finite mesh/trapezoid discrepancy of `h_n * log 2`. Its centered
 +quadratic profile is positive, and the pointwise bound
 +`0 ≤ centeredLogPhaseDepth t ≤ 4 * (t - 1/2)^2` is available.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -395,7 +395,7 @@ index 10310b45..096a6350 100644
 @@ -161,6 +161,42 @@ theorem centeredLogPhaseDepth_eq_log_one_add_four_sq (t : ℝ) :
    rw [phaseDepth_eq_two_sq_add_half]
    ring
- 
+
 +/-- The centered quadratic logarithm profile is strictly positive inside `log`. -/
 +theorem centeredQuadraticProfile_pos (t : ℝ) :
 +    0 < 1 + 4 * (t - (1 / 2 : ℝ)) ^ 2 := by
@@ -442,7 +442,7 @@ index eff624d2..8dd70a29 100644
 @@ -273,6 +273,18 @@ the trapezoidal centered log-depth sum differ by exactly `h_n * log 2`. This
  is the finite point where the endpoint correction reappears after centering.
  It is a quadratic-profile bridge, not yet a Gaussian limit.
- 
+
 +The pointwise quadratic comparison is also implemented:
 +
 +```text
@@ -456,7 +456,7 @@ index eff624d2..8dd70a29 100644
 +correction accounting to quadratic moment estimates.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 8882ac34..7318c96a 100644

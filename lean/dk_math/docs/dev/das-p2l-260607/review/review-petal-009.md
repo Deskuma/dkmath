@@ -6,7 +6,7 @@ gch: 0db10141e8cf06fe9a6126157ab3ea0a17cc6336
 
 ## Report
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:96) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L96) のみです。
 
 追加した内容は、Dynamic Counting の拡張応用です。
 

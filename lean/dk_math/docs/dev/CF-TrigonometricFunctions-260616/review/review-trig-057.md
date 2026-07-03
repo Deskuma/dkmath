@@ -172,7 +172,7 @@ index cee454fa..007f21d9 100644
  separated from the weaker zero-iterate-compatible periodicity predicates.
 +Identity transported kernels fix every point; nonidentity transported kernels
 +fix exactly the origin.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -182,7 +182,7 @@ index 4aaff15e..0eff8594 100644
 @@ -525,6 +525,96 @@ theorem semanticMinimalPeriod_pos_of_positiveFiniteOrder
    semanticMinimalPeriod_pos h.1
      ((semanticFiniteOrder_iff r n).mp h.2 z)
- 
+
 +/-- The transported kernel is the neutral real unit kernel. -/
 +def SemanticIdentityKernel (r : UnitKernel DkNNRealQ) : Prop :=
 +  semanticUnitKernel r = UnitKernel.one ℝ
@@ -301,12 +301,12 @@ index 1a541361..bd0b3cd5 100644
 +semanticIdentityKernel_iff_core_eq_one
 +semanticFixed_iff_eq_zero_of_not_identity
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -133,9 +136,16 @@ points and exactly points of minimal period one. The origin is fixed by every
  transported action. `SemanticPositiveFiniteOrder` adds positivity to an
  exhibited finite action order; it does not claim minimality of that order.
- 
+
 +The first fixed-point classification is complete. For a transported
 +first-quadrant unit kernel, semantic core coordinate one forces beam zero and
 +therefore the neutral kernel. An identity kernel fixes every point; every
@@ -330,7 +330,7 @@ index 42ffca3d..877072f7 100644
 @@ -236,6 +236,28 @@ Archive
  6. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 04:23 JST (Fixed-point classification without angles)
 +
 +1. 目的:
@@ -354,7 +354,7 @@ index 42ffca3d..877072f7 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 04:17 JST (Fixed points and positive finite action order)
- 
+
  1. 方針:
 ````
 `````

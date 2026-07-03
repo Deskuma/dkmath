@@ -280,7 +280,7 @@ index c0927903..744b6c07 100644
 +set. Finally, the pre-quotient chart layer evaluates `Fin 4 × unitInterval`
 +into the same fixed boundary and proves compatibility across the finite seam
 +relation. No quotient phase parameter is introduced yet.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -290,7 +290,7 @@ index 425e142e..06a91264 100644
 @@ -1492,6 +1492,98 @@ theorem shiftedSemanticFinFourLevelPath_q2
      Vec.q2 ((shiftedSemanticFinFourLevelPath hcore z t).1) = Vec.q2 z :=
    (shiftedSemanticFinFourLevelPath hcore z t).2
- 
+
 +/-!
 +## Finite chart evaluation before quotienting
 +
@@ -389,7 +389,7 @@ index 425e142e..06a91264 100644
 @@ -1530,8 +1622,14 @@ level edge center theorem now targets the finite successor base point, and the
  finite closed shifted path exposes source, target, and boundary-observation
  facts.
- 
+
 +[IMPLEMENTED: semantic-cf2d/shifted-finite-chart]
 +The finite chart space `Fin 4 × unitInterval` evaluates into the fixed `q2`
 +boundary. Endpoint chart evaluations and seam-relation compatibility are
@@ -401,7 +401,7 @@ index 425e142e..06a91264 100644
 +project-specific quotient wrapper, once chart evaluation compatibility is
  stable enough for downstream consumers.
  -/
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 8a237c28..91a40641 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -419,12 +419,12 @@ index 8a237c28..91a40641 100644
 +shiftedSemanticFinChartEval_right_eq_succ_left
 +shiftedSemanticFinChartEval_eq_of_seamRel
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -542,6 +550,17 @@ named source, target, and fixed-`q2` boundary-observation aliases for
  downstream observation code. Finite base states are also packaged directly as
  fixed-level points.
- 
+
 +The pre-quotient chart layer is now explicit:
 +
 +```text
@@ -437,7 +437,7 @@ index 8a237c28..91a40641 100644
 +wrapper without choosing one yet.
 +
  Candidate theorem directions:
- 
+
  ```text
 @@ -620,7 +639,9 @@ depend on that reading.
  25. Implemented: add source and target aliases for the closed shifted four-level path.
@@ -448,7 +448,7 @@ index 8a237c28..91a40641 100644
 +29. Implemented: add finite seam relation and chart-evaluation seam compatibility.
 +30. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -677,14 +698,20 @@ source and target aliases.
  Package finite base states as fixed-`q2` level points. Expose the finite
@@ -460,9 +460,9 @@ index 8a237c28..91a40641 100644
 +fixed `q2` boundary, record the finite seam relation, and prove chart
 +evaluation compatibility across seams.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
  [TODO: semantic-cf2d/shifted-cyclic-quotient]
 -Introduce a quotient phase parameter only after the four indexed path
@@ -470,7 +470,7 @@ index 8a237c28..91a40641 100644
 +Use `ShiftedFiniteChart` modulo `shiftedFiniteSeamRel`, or an equivalent
 +project-specific quotient wrapper, once chart evaluation compatibility is
 +stable.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````

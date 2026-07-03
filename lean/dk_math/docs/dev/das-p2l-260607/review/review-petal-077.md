@@ -396,16 +396,16 @@ index a048d368..c61a4c6c 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Collatz.Accelerated
 +import DkMath.Collatz.Shift
  import DkMath.Petal.RangeFamily
- 
+
  #print "file: DkMath.Collatz.PetalBridge"
 @@ -32,6 +33,20 @@ shape of a merge, fold, or cycle candidate.
- 
+
  namespace DkMath.Collatz
- 
+
 +/--
 +Raw 2-adic height observation for a natural state.
 +
@@ -422,11 +422,11 @@ index a048d368..c61a4c6c 100644
 +
  /--
  The finite observation window for the first `k` accelerated Collatz states.
- 
+
 @@ -52,6 +67,14 @@ value.
  noncomputable def oddOrbitLabel (n : OddNat) (i : ℕ) : ℕ :=
    (iterateT i n).1
- 
+
 +/--
 +The 2-adic height observed at the `i`-th accelerated Collatz odd state.
 +
@@ -437,11 +437,11 @@ index a048d368..c61a4c6c 100644
 +
  /--
  The first `k` accelerated Collatz odd-state labels are pairwise separated.
- 
+
 @@ -83,6 +106,33 @@ The named Collatz observation window is definitionally the range window.
  theorem orbitWindow_eq_range (n : OddNat) (k : ℕ) :
      OrbitWindow n k = Finset.range k := rfl
- 
+
 +/--
 +Raw height agrees with the existing Collatz observation `s` on odd states.
 +-/
@@ -477,7 +477,7 @@ index d17e8324..589bf5c2 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 @@ -75,7 +75,9 @@ It defines:
- 
+
  ```lean
  OrbitWindow
 +rawHeightLabel
@@ -492,9 +492,9 @@ index d17e8324..589bf5c2 100644
  oddOrbitLabel n i = the natural value of iterateT i n
 +orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
  ```
- 
+
  The first theorem set is deliberately thin:
- 
+
  ```lean
  orbitWindow_eq_range
 +rawHeightLabel_eq_s
@@ -506,7 +506,7 @@ index d17e8324..589bf5c2 100644
 @@ -160,6 +166,24 @@ This is only a finite observation split.  It does not prove that a Collatz
  orbit converges or cycles; it merely fixes the two observation modes available
  inside a chosen finite window.
- 
+
 +The first address-like observation is now the 2-adic height:
 +
 +```text
@@ -526,7 +526,7 @@ index d17e8324..589bf5c2 100644
 +phenomenon.
 +
  This gives a clean place to attach future hypotheses:
- 
+
  ```text
 ````
 `````

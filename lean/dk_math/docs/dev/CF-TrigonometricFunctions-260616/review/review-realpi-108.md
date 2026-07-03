@@ -288,7 +288,7 @@ index 1b9052bd..528b0463 100644
 +affine center is the old seam endpoint. The affine and normalized semantic
 +edges expose their midpoint `q2` facts, while shifted semantic paths remain a
 +later definition.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -298,7 +298,7 @@ index b05e8e2a..4f6767a2 100644
 @@ -160,6 +160,85 @@ theorem globalQuarterEndpoint_succ_is_center_between_centers (k : ℕ) :
    simp [globalQuarterCenter, globalQuarterEndpoint]
    ring
- 
+
 +/-!
 +## Scalar shifted quarter frame
 +
@@ -380,7 +380,7 @@ index b05e8e2a..4f6767a2 100644
 +
  /-!
  ## Scalar return laws for normalized cycle divisions
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index c01b6be6..3b6237f8 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -402,21 +402,21 @@ index c01b6be6..3b6237f8 100644
    dyadicCycleStep
    normalizedCycleStep_mul_returnCount
 @@ -325,8 +334,9 @@ SemanticCF2DPhaseShift.lean
- 
+
  ## Boundary and Normalization Targets
- 
+
 -After the scalar shift theorem, the next target is to lift it back to the
 -semantic edge and normalized edge APIs.
 +The scalar shifted-frame API is now implemented. The next target is to choose
 +the semantic endpoint states for a shifted semantic edge and then lift the
 +shifted-frame scalar center theorem to that path.
- 
+
  Candidate theorem directions:
- 
+
 @@ -377,38 +387,49 @@ depend on that reading.
- 
+
  ## Implementation Plan
- 
+
 -1. Add scalar aliases for `phaseCenter` and `phaseHalfQuarterStep`.
 -2. Prove `phaseDepth_center_eq` and `phaseDepth_center_unique` as API aliases.
 -3. Prove `phaseDepth_centered_reflect`.
@@ -436,24 +436,24 @@ index c01b6be6..3b6237f8 100644
 +9. Next: choose a shifted semantic edge definition.
 +10. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
 -## TODO Tags
 +## Implemented Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/phase-center-alias]
 +[IMPLEMENTED: semantic-cf2d/phase-center-alias]
  Add `phaseCenter`, `phaseHalfQuarterStep`, and centered-coordinate wrappers.
- 
+
 -[TODO: semantic-cf2d/centered-reflection]
 +[IMPLEMENTED: semantic-cf2d/centered-reflection]
  Expose reflection about `phaseCenter` directly, not only as `t -> 1 - t`.
- 
+
 -[TODO: semantic-cf2d/endpoint-as-shifted-center]
 +[IMPLEMENTED: semantic-cf2d/endpoint-as-shifted-center]
  Prove that the seam endpoint between adjacent quarter edges is the midpoint
  between their centers.
- 
+
 -[TODO: semantic-cf2d/one-eighth-euclidean-reading]
 -After the algebraic shift theorem is closed, bridge the one-eighth phase
 -displacement to the Euclidean `pi / 4` reading.
@@ -462,7 +462,7 @@ index c01b6be6..3b6237f8 100644
 +[IMPLEMENTED: semantic-cf2d/dyadic-cycle-step]
  Expose the dyadic return law `2^n * (1 / 2^n) = 1` as a normalized cycle
  parameter fact, not as an angle subdivision.
- 
+
 -[TODO: semantic-cf2d/k-division-cycle-step]
 +[IMPLEMENTED: semantic-cf2d/k-division-cycle-step]
  Expose the positive `k` return law `k * (1 / k) = 1` for the normalized cycle

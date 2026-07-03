@@ -318,7 +318,7 @@ index e4e07a5a..ca06207f 100644
 +Observing the closed quotient path through the descended evaluation now gives
 +a closed fixed-boundary path with source, target, endpoint, and `q2`
 +observation aliases.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -328,7 +328,7 @@ index cb7f672e..e9e3dcc5 100644
 @@ -1895,6 +1895,74 @@ theorem shiftedSemanticCyclicChartEval_edgePath
      shiftedSemanticCyclicChartEval_mk]
    rfl
- 
+
 +/--
 +The closed quotient chart path observed inside the fixed square-mass boundary.
 +
@@ -399,11 +399,11 @@ index cb7f672e..e9e3dcc5 100644
 +
  /--
  The quotiented chart evaluation still lands on the original `q2` boundary.
- 
+
 @@ -1972,6 +2040,11 @@ the first four quotient edge paths concatenate to a closed quotient path by
  using the quotient seam equalities. Evaluating one quotient edge recovers the
  corresponding fixed-`q2` finite level edge.
- 
+
 +[IMPLEMENTED: semantic-cf2d/shifted-cyclic-observation]
 +The closed quotient path is observed through the descended semantic
 +evaluation as a fixed-`q2` path. Source, target, endpoint-evaluation, and
@@ -427,11 +427,11 @@ index 4a34ae91..d562f3c3 100644
 +shiftedSemanticObservedCyclicFourPath_q2
  shiftedSemanticCyclicChartEval_q2
  ```
- 
+
 @@ -665,6 +670,19 @@ shiftedSemanticCyclicChartEval hcore z
  shiftedSemanticFinLevelEdge hcore z i t
  ```
- 
+
 +The closed quotient path can now be observed through the descended semantic
 +evaluation:
 +
@@ -462,7 +462,7 @@ index 4a34ae91..d562f3c3 100644
 -44. Later: add a Euclidean bridge that reads `1/8` full-cycle
 +46. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -852,6 +874,11 @@ Package one quotient chart edge path, concatenate the first four quotient edge
  paths into a closed quotient path by quotient seam equalities, expose source
@@ -474,7 +474,7 @@ index 4a34ae91..d562f3c3 100644
 +evaluation as a closed path in the fixed `q2` boundary. Source, target,
 +first-left-endpoint evaluation, and boundary-observation aliases are exposed.
  ```
- 
+
  ## Remaining TODO Tags
 ````
 `````

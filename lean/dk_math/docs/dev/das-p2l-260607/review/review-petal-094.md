@@ -10,7 +10,7 @@ gch: 71c259d3b7b555f4d09d613372bd1b2d7cc3677b
 
 実装:
 
-- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:432)
+- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L432)
   - `twoAdicRetentionResidue`
   - `twoAdicRecoverySiblingResidue`
   - `twoAdicContinuationSiblingResidue`
@@ -30,8 +30,8 @@ parent retention cell
 
 文書:
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:858)
-- 新規 [report-petal-093.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-093.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L858)
+- 新規 [report-petal-093.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-093.md#L1)
 
 検証:
 
@@ -606,7 +606,7 @@ index 8a4b174b..0acbd5cc 100644
 @@ -416,6 +416,141 @@ theorem next_mod_twohundredfiftysix_of_mod_fivehundredtwelve_eq_fivehundredeleve
      ((3 * m + 1) / 2) % 256 = 255 := by
    omega
- 
+
 +/--
 +The central residue of the Collatz retention cylinder at 2-adic depth `r`.
 +
@@ -766,7 +766,7 @@ index 302e94be..9bc5a332 100644
 @@ -844,6 +851,55 @@ drift form.  The `mod 128`, `mod 256`, and `mod 512` rows are raw arithmetic
  anchors, kept as evidence for the next generalization step rather than fully
  expanded orbit bridges.
- 
+
 +The fixed raw anchors have now been lifted to an expanded general raw theorem.
 +The recursive Petal naming layer is:
 +
@@ -818,7 +818,7 @@ index 302e94be..9bc5a332 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-093.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-093.md
 new file mode 100644
 index 00000000..7a3b0ecb

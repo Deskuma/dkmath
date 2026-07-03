@@ -13,7 +13,7 @@ gch: df3c8357c0a60cb76fc6939e0196099915fe9cd7
 - canonical Gap `y = x + z` による順序保存を証明
 - TODO・設計資料・履歴を同期
 
-主要実装: [Semantic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean:200)
+主要実装: [Semantic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean#L200)
 
 検証:
 
@@ -357,17 +357,17 @@ index f35740b1..c2d91a82 100644
  * `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
 -* `DkReal.Semantic` begins the noncomputable bridge to Mathlib's `Real`.
 +* `DkReal.Semantic` gives the noncomputable bridge to Mathlib's `Real`.
- 
+
  All endpoint operations in the representation modules remain computable. The
  publicly imported optional `Semantic` module selects a Mathlib `Real` value
 @@ -71,10 +71,15 @@ Classical comparison should therefore remain an explicit local choice.
- 
+
  `DkReal.Semantic` selects the lower-endpoint supremum, proves that it is the
  unique real point lying in every approximation interval, and proves invariance
 -under representation equivalence.
 +under representation equivalence. Its quotient map preserves rational
 +constants, addition, multiplication, natural powers, and canonical order.
- 
+
 -[TODO: semantic-bridge] Lift semantic evaluation to `DkNNRealQ` and establish
 -arithmetic and order bridge laws.
 +[TODO: semantic-order-reflection] Prove that an inequality between semantic
@@ -376,7 +376,7 @@ index f35740b1..c2d91a82 100644
 +
 +[TODO: semantic-cf2d] Use the semantic map to transport the CF2D quadratic
 +invariant `q2` into the Mathlib real-analysis layer.
- 
+
  [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean
@@ -386,23 +386,23 @@ index 4c39c9bf..ebc6eb5a 100644
 @@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.Analysis.DkReal.DkNNRealQ
 +import DkMath.Analysis.DkReal.CanonicalOrder
- 
+
  #print "file: DkMath.Analysis.DkReal.Semantic"
- 
+
 @@ -19,13 +19,13 @@ them to `Real`. Nestedness makes this sequence monotone, while every upper
  endpoint bounds it. Consequently the supremum lies in every approximation
  interval.
- 
+
 -This file deliberately stops before quotient descent and arithmetic
 -preservation. Representative independence of `semanticValue` is proved here
 -as the final representation-level bridge.
 +Representative independence permits quotient descent to `DkNNRealQ`.
 +The resulting semantic map preserves rational constants, nonnegative
 +addition, multiplication, natural powers, and order.
- 
+
 -[TODO: semantic/quotient] Lift the value through `DkNNRealQ`, then prove
 -preservation of nonnegative multiplication, powers, and order. Quotient
 -descent, rational constants, and addition are established below.
@@ -410,7 +410,7 @@ index 4c39c9bf..ebc6eb5a 100644
 +canonical quotient order. This requires recovering a nonnegative canonical
 +Gap from an inequality between semantic values.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -192,8 +192,81 @@ theorem semanticValue_add
    have hx := semanticValue_mem_interval x n
@@ -493,9 +493,9 @@ index 4c39c9bf..ebc6eb5a 100644
 +          semanticValue_mulNonneg _ _ (nonnegative_powNonneg d hx) hx
 +        _ = semanticValue x ^ d * semanticValue x := by rw [ih]
 +        _ = semanticValue x ^ (d + 1) := by rw [pow_succ]
- 
+
  end
- 
+
 @@ -236,7 +309,7 @@ theorem semanticValue_zero :
  @[simp]
  theorem semanticValue_one :
@@ -503,12 +503,12 @@ index 4c39c9bf..ebc6eb5a 100644
 -  change semanticValue (ofRat 1 zero_le_one) = 1
 +  change semanticValue (ofRat 1 (by norm_num : (0 : ℚ) ≤ 1)) = 1
    simp
- 
+
  /-- Semantic evaluation preserves quotient addition. -/
 @@ -246,6 +319,42 @@ theorem semanticValue_add (x y : DkNNRealQ) :
    intro x y
    exact DkReal.semanticValue_add x.val y.val
- 
+
 +/-- Quotient semantic values are nonnegative. -/
 +theorem semanticValue_nonneg (x : DkNNRealQ) :
 +    0 ≤ semanticValue x := by
@@ -546,7 +546,7 @@ index 4c39c9bf..ebc6eb5a 100644
 +  exact le_add_of_nonneg_right (semanticValue_nonneg z)
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 07175bac..f0d76239 100644
@@ -563,7 +563,7 @@ index 07175bac..f0d76239 100644
 +  next prove order reflection and connect the CF2D quadratic invariant
    compare semantic equality with DkReal.Equiv
  ```
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
 index 40adf995..f0d19fc5 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
@@ -571,10 +571,10 @@ index 40adf995..f0d19fc5 100644
 @@ -39,16 +39,26 @@ DkReal representation
  boundedness, interval membership, width convergence, uniqueness, monotone
  endpoint convergence, and invariance under `DkReal.Equiv`.
- 
+
 -The next obligation is quotient descent:
 +Quotient descent and the first algebraic bridge are now complete:
- 
+
  ```text
  DkNNRealQ.semanticValue
 -map_zero
@@ -590,7 +590,7 @@ index 40adf995..f0d19fc5 100644
 +semanticValue_pow
 +semanticValue_mono
  ```
- 
+
  No global decidable comparison or `LinearOrder` instance is needed.
 +
 +The next semantic obligations are order reflection and the first analytic

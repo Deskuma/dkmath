@@ -281,7 +281,7 @@ index 6177cad8..f7d0e30a 100644
 @@ -46,6 +46,28 @@ theorem rangeSuccValue_injOn (k : ℕ) :
    intro i _hi j _hj h
    exact Nat.succ.inj h
- 
+
 +/--
 +Pairwise label noncollision on natural range indices gives label injectivity on
 +`Finset.range k`.
@@ -306,11 +306,11 @@ index 6177cad8..f7d0e30a 100644
 +
  /--
  Body-coordinate range-family constructor for `PetalCarrierLabelMapData`.
- 
+
 @@ -151,6 +173,50 @@ theorem petal_range_two_pow_le_rad_GN_of_bodyPrimitivePrimeFactor_family
        (petalCarrierLabelMapData_of_bodyPrimitivePrimeFactor_range_succIndex
          k d x u qOf hd hd1 hqinj hprim)
- 
+
 +/--
 +Pairwise-noncollision version of
 +`petal_range_two_pow_le_supportMass_GN_of_bodyPrimitivePrimeFactor_family`.
@@ -361,7 +361,7 @@ index 6177cad8..f7d0e30a 100644
 @@ -191,5 +257,43 @@ theorem petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_family
        (petalCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_range_succIndex
          k a b d qOf hd hd1 hab_lt hqinj hprim)
- 
+
 +/--
 +Pairwise-noncollision version of
 +`petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_family`.
@@ -407,7 +407,7 @@ index 6c735cd6..9383d2aa 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 @@ -996,12 +996,17 @@ Important names:
- 
+
  ```text
  rangeSuccValue_injOn
 +rangeLabel_injOn_of_pairwise_ne
@@ -422,12 +422,12 @@ index 6c735cd6..9383d2aa 100644
 +petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
 +petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
  ```
- 
+
  This is the first endpoint that reads directly as:
 @@ -1011,6 +1016,16 @@ k range-indexed primitive carriers
    -> 2^k <= supportMass/rad(GN)
  ```
- 
+
 +The `_pairwise` endpoints let experiments provide label separation in the
 +natural indexed form:
 +
@@ -439,14 +439,14 @@ index 6c735cd6..9383d2aa 100644
 +hypothesis required by the core constructors.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 index 0e752daa..513f262a 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/summary-petal-064.md
 @@ -498,12 +498,17 @@ Implemented theorem set:
- 
+
  ```lean
  rangeSuccValue_injOn
 +rangeLabel_injOn_of_pairwise_ne
@@ -461,7 +461,7 @@ index 0e752daa..513f262a 100644
 +petal_range_two_pow_le_supportMass_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
 +petal_range_two_pow_le_rad_GN_of_zsigmondyPrimitivePrimeDivisor_pairwise
  ```
- 
+
  The construction still leaves the serious arithmetic hypotheses explicit:
 @@ -521,3 +526,14 @@ k range-indexed primitive carriers
    -> 2^k <= supportMass(GN)

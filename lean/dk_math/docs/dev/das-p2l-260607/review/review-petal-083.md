@@ -8,7 +8,7 @@ gch: f1bfa49ec54219ba7a69d39342db72c7e0edcad8
 
 進めました。今回の到達点は、Collatz 固有の `height >= 1` を固定して、二層 layer-cake を実用形に落としたことです。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:495) に追加:
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L495) に追加:
 
 ```lean
 orbitWindowHeight_one_le
@@ -30,8 +30,8 @@ k + orbitWindowHeightCountGe n k 2 ≤ sumS n k
 
 docs も同期しました。
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:126)
-- [review-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-083.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L126)
+- [review-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-083.md#L1)
 - `__next_implementation_plan.md` も次回入口を一般 finite layer-cake 方針へ更新済み
 
 確認:
@@ -503,7 +503,7 @@ index e91357e6..c2e61f70 100644
 @@ -486,6 +486,158 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
              hone, htwo, if_false]
            exact Nat.le_add_right_of_le ih'
- 
+
 +/--
 +Every accelerated Collatz odd state has height at least `1`.
 +
@@ -678,7 +678,7 @@ index 1546518b..62da4cf5 100644
  oddOrbitLabel_injOn_of_pairwiseSeparated
  iterateT_eq_of_oddOrbitLabel_eq
 @@ -278,6 +285,21 @@ prefix threshold count in a k-window, with r <= k
- 
+
  first two layer-cake layers
    -> CountGe 1 + CountGe 2 <= sumS n k
 +
@@ -697,12 +697,12 @@ index 1546518b..62da4cf5 100644
 +first three layer-cake layers
 +  -> CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -297,6 +319,40 @@ current API local and elementary because the data here is just a finite ordered
  list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
  the observation-window layer before a real carrier/radical bridge exists.
- 
+
 +The Collatz-specific floor is now also fixed:
 +
 +```text
@@ -738,7 +738,7 @@ index 1546518b..62da4cf5 100644
 +layer-cake form over `Finset.range H`.
 +
  The bridge theorem
- 
+
  ```lean
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/next-impl-plan-082.md b/lean/dk_math/docs/dev/das-p2l-260607/review/next-impl-plan-082.md
 new file mode 100644

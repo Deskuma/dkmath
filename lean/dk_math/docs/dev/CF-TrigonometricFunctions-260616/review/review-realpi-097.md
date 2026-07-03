@@ -538,9 +538,9 @@ index 5e662057..502d73e6 100644
  import DkMath.Analysis.DkReal.CanonicalOrder
  import DkMath.Analysis.DkReal.Semantic
 +import DkMath.Analysis.DkReal.SemanticCF2DLogLimit
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 @@ -164,6 +165,11 @@ now evaluated exactly as
  `1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ)^2)`, exposing the finite correction
  to the later `1 / 3` target without taking a limit. The centered log-depth
@@ -550,7 +550,7 @@ index 5e662057..502d73e6 100644
 +tend to `1 / 3` along refinement depth. These theorems use Mathlib filters
 +through the `DkLimit` vocabulary and still do not identify the centered
 +log-depth limit.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogLimit.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogLimit.lean
@@ -661,7 +661,7 @@ index 9e7a5a28..9809555b 100644
 @@ -342,6 +342,32 @@ dyadicPhaseTrapezoidCenteredLogDepthSum n
  This is still only a finite inequality. It does not assert convergence of the
  left-hand side.
- 
+
 +The first DkMath limit vocabulary is now implemented in
 +`DkMath.Analysis.DkLimit`. It deliberately keeps Mathlib's filter semantics
 +under the hood, but gives DkMath names to the recurring collapse roles:
@@ -689,7 +689,7 @@ index 9e7a5a28..9809555b 100644
 +requires a matching lower estimate.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 125c178a..dcd47f75 100644
@@ -698,7 +698,7 @@ index 125c178a..dcd47f75 100644
 @@ -51,6 +51,17 @@ finite value is
  `dyadicPhaseDenom n = 2^n`. The trapezoidal centered log-depth sum is bounded
  above by the same closed finite expression.
- 
+
 +`DkMath.Analysis.DkLimit` now provides the first DkMath-named entrance for
 +limits. It is a thin vocabulary layer over Mathlib filters: refinement-depth
 +limits use `DkTendstoAtTop`, full Gap collapse uses `DkGapCollapsesTo`, and
@@ -711,7 +711,7 @@ index 125c178a..dcd47f75 100644
 +before its limit can be identified.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 0edcbc63..e17ea5ae 100644

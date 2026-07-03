@@ -426,7 +426,7 @@ index c61a4c6c..97258d2c 100644
 @@ -75,6 +75,16 @@ This is the first address-like label attached to the Collatz observation window.
  noncomputable def orbitWindowHeight (n : OddNat) (i : ℕ) : ℕ :=
    rawHeightLabel (oddOrbitLabel n i)
- 
+
 +/--
 +The ordered height profile observed in the first `k` accelerated Collatz
 +states.
@@ -439,11 +439,11 @@ index c61a4c6c..97258d2c 100644
 +
  /--
  The first `k` accelerated Collatz odd-state labels are pairwise separated.
- 
+
 @@ -119,6 +129,31 @@ corresponding accelerated state.
  theorem orbitWindowHeight_eq_s_iterateT (n : OddNat) (i : ℕ) :
      orbitWindowHeight n i = s (iterateT i n) := rfl
- 
+
 +/--
 +The ordered height profile has length equal to the window size.
 +-/
@@ -490,7 +490,7 @@ index 589bf5c2..6a23086d 100644
  orbitWindowHeight n i = v2 (3 * oddOrbitLabel n i + 1)
 +orbitWindowHeightSeq n k = the ordered list of the first k height labels
  ```
- 
+
  The first theorem set is deliberately thin:
 @@ -97,6 +99,8 @@ The first theorem set is deliberately thin:
  orbitWindow_eq_range
@@ -504,7 +504,7 @@ index 589bf5c2..6a23086d 100644
 @@ -173,6 +177,26 @@ rawHeightLabel n = v2 (3n + 1)
  orbitWindowHeight n i = rawHeightLabel (oddOrbitLabel n i)
  ```
- 
+
 +The ordered height profile is now explicitly connected to the existing
 +Collatz accumulated-height API:
 +
@@ -526,7 +526,7 @@ index 589bf5c2..6a23086d 100644
 +existing Collatz side used by drift and growth estimates.
 +
  The bridge theorem
- 
+
  ```lean
 @@ -191,6 +215,7 @@ orbit labels are usable carrier labels
  orbit labels are mapped to prime labels
@@ -534,11 +534,11 @@ index 589bf5c2..6a23086d 100644
  2-adic height controls Petal address movement
 +ordered height profile controls accumulated Collatz drift
  ```
- 
+
  ## Next Candidate Work
 @@ -198,10 +223,11 @@ orbit collision implies a specific fold/cycle condition
  The next safe steps are:
- 
+
  ```text
 -1. Connect v2_shift_invariant to a Petal address/residue reading.
 +1. Connect the ordered height profile to a Petal address/residue reading.
@@ -549,7 +549,7 @@ index 589bf5c2..6a23086d 100644
 +4. Test whether an external label transform can turn orbit labels into carrier labels.
 +5. Only after that, test whether Collatz labels can feed ABC support/rad.
  ```
- 
+
  The main caution is that Collatz state labels are not prime labels.  Any bridge
 ````
 `````

@@ -342,7 +342,7 @@ index 37be77b2..9dcca3be 100644
 -half-width endpoint correction.
 +half-width endpoint correction. A zero-endpoint corollary packages the common
 +case where that correction vanishes.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -352,7 +352,7 @@ index bd30669c..2345ea72 100644
 @@ -423,6 +423,33 @@ theorem dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
          simp [hdistinct]
          ring
- 
+
 +/--
 +If a sampled observable vanishes at both endpoints, then the plain mesh-width
 +sum and the trapezoidal sum agree.
@@ -397,7 +397,7 @@ index bd30669c..2345ea72 100644
 +  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
 +    (fun k => Real.log (dyadicPhaseDepth n k))
 +    (by simp) (by simp)
- 
+
  /--
  Plain mesh-width and trapezoidal log-normalization sums agree on the complete
 @@ -485,13 +508,9 @@ theorem dyadicPhaseWeightedLogNormalizationSum_eq_trapezoidLogNormalizationSum
@@ -414,9 +414,9 @@ index bd30669c..2345ea72 100644
 +  exact dyadicPhaseMeshWeight_sum_eq_trapezoid_sum_of_endpoint_zero n
 +    (fun k => Real.log (dyadicPhaseNormalization n k))
 +    (by simp) (by simp)
- 
+
  end
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index ca518856..52891c5d 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
@@ -424,14 +424,14 @@ index ca518856..52891c5d 100644
 @@ -255,6 +255,11 @@ The log-depth and log-normalization equalities are therefore special cases
  where the endpoint values vanish. This theorem is intentionally finite; it
  does not identify which weighted observable should survive refinement.
- 
+
 +The endpoint-zero case is now packaged as a separate corollary. This keeps
 +future observables cleanly classified: endpoint-zero quantities inherit
 +mesh/trapezoid equality immediately, while centered quantities with nonzero
 +endpoint increments expose the correction term.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 22e5b843..22d27546 100644

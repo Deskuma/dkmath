@@ -508,7 +508,7 @@ index 51100469..3422dabf 100644
 @@ -1340,6 +1340,29 @@ theorem orbitWindowResidueCountPow2Tail_sum_eq_window
          _ = k + 1 := by
              rw [ih, pow2_residue_indicator_sum_eq_one]
- 
+
 +/--
 +Depth-`3` source distribution sanity check.
 +
@@ -538,7 +538,7 @@ index 51100469..3422dabf 100644
 @@ -2296,6 +2319,23 @@ theorem orbitWindowRecoverySiblingCount_le_tailRetentionResidueCount
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +Helper-routed version of the recovery sibling count transition.
 +
@@ -558,11 +558,11 @@ index 51100469..3422dabf 100644
 +
  /--
  Count-level recursive Petal transition for the continuation sibling.
- 
+
 @@ -2329,6 +2369,23 @@ theorem orbitWindowContinuationSiblingCount_le_tailRetentionResidueCount
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +Helper-routed version of the continuation sibling count transition.
 +
@@ -620,12 +620,12 @@ index 364ae48d..4ed08523 100644
 +  -> recovery source <= outward-retention tail
 +  -> continuation source <= next-retention tail
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -610,6 +624,40 @@ current API local and elementary because the data here is just a finite ordered
  list of natural 2-adic heights.  This avoids pulling the ABC analytic stack into
  the observation-window layer before a real carrier/radical bridge exists.
- 
+
 +The finite channel-flow layer is now visible as a theorem chain:
 +
 +```text
@@ -661,7 +661,7 @@ index 364ae48d..4ed08523 100644
 +```
 +
  The Collatz-specific floor is now also fixed:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-099.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-099.md
 new file mode 100644

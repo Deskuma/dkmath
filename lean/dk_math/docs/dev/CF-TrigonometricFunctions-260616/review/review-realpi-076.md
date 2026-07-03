@@ -361,7 +361,7 @@ index c11bb6aa..96076fc9 100644
 @@ -1351,9 +1351,11 @@ separated from the zero-radius degenerate case.
  the transported core-zero semantic action is proved equal to this isometry
  under the coordinate bridge.
- 
+
 -[TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
 -choose an orientation and compare the quarter-turn isometry with Mathlib's
 -oriented rotation by `Real.pi / 2`.
@@ -371,7 +371,7 @@ index c11bb6aa..96076fc9 100644
 +`Real.pi / 2`. This is a Euclidean interpretation theorem; it does not yet
 +derive `pi` intrinsically from the pre-geometric phase construction.
  -/
- 
+
  end
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 5d3ec974..26692593 100644
@@ -405,24 +405,24 @@ index 1382091a..3361293f 100644
  [TODO: semantic-cf2d-phase/pi-identification]
 -[TODO: semantic-cf2d-phase/euclidean-interpretation]
  ```
- 
+
  The longer route from this local quadratic profile to a possible
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index e4019d1b..7e18dcca 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Analysis.DkReal.SemanticCF2DNormalize
  import Mathlib.Analysis.InnerProductSpace.PiL2
 +import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
  import Mathlib.Topology.Homeomorph.Defs
- 
+
  #print "file: DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase"
 @@ -277,6 +278,70 @@ theorem euclideanPlaneToPair_quarterTurn (v : EuclideanPlane) :
        (-(euclideanPlaneToPair v).2, (euclideanPlaneToPair v).1) := by
    simp [quarterTurnLinearIsometry, quarterTurnLinearEquiv]
- 
+
 +/-!
 +## Oriented angle interpretation
 +
@@ -488,7 +488,7 @@ index e4019d1b..7e18dcca 100644
 +    rightAngleRotation_eq_quarterTurn]
 +
  end
- 
+
  end DkMath.CosmicFormula.Rotation.CF2D
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index f0b6744d..c539e641 100644

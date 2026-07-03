@@ -406,7 +406,7 @@ index 97258d2c..fd387596 100644
 @@ -154,6 +154,72 @@ theorem orbitWindowHeightSeq_sum_eq_sumS (n : OddNat) (k : ℕ) :
        simp [orbitWindowHeightSeq, List.range_succ, sumS,
          orbitWindowHeight_eq_s_iterateT, ih']
- 
+
 +/--
 +If every height in the window is at least `threshold`, then the accumulated
 +Collatz height is at least `k * threshold`.
@@ -495,7 +495,7 @@ index 6a23086d..d28d3b20 100644
 @@ -197,6 +202,31 @@ accumulated drift input:
  The profile form is useful for address/window diagnostics, while `sumS` is the
  existing Collatz side used by drift and growth estimates.
- 
+
 +The next small API layer records how to use the profile:
 +
 +```text
@@ -522,7 +522,7 @@ index 6a23086d..d28d3b20 100644
 +```
 +
  The bridge theorem
- 
+
  ```lean
 @@ -216,6 +246,8 @@ orbit labels are mapped to prime labels
  orbit collision implies a specific fold/cycle condition
@@ -531,7 +531,7 @@ index 6a23086d..d28d3b20 100644
 +height-threshold hypotheses give integer lower bounds for `sumS`
 +label collisions preserve the next height observation
  ```
- 
+
  ## Next Candidate Work
 @@ -225,7 +257,7 @@ The next safe steps are:
  ```text

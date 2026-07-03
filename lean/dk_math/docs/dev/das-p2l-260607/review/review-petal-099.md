@@ -531,7 +531,7 @@ index 8e3aefe9..51100469 100644
 @@ -1307,6 +1307,79 @@ theorem orbitWindowResidueCountPow2_sum_eq_window
          _ = k + 1 := by
              rw [ih, pow2_residue_indicator_sum_eq_one]
- 
+
 +/--
 +At any fixed power-of-two depth, the shifted-tail residue-cell occupation
 +counts partition the whole shifted observation window.
@@ -622,7 +622,7 @@ index 4bcf1cd9..364ae48d 100644
  orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
  orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
 @@ -582,6 +584,13 @@ single-label residue indicator
- 
+
  full pow-two source residue partition
    -> Sum_{residue < 2^depth} CountPow2 depth residue = k
 +
@@ -633,7 +633,7 @@ index 4bcf1cd9..364ae48d 100644
 +  -> if every source cell hit lands in a target tail cell,
 +     then source CountPow2 <= target TailCountPow2
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-098.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-098.md
 new file mode 100644

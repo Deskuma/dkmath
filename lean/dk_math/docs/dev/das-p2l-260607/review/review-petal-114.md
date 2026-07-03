@@ -699,7 +699,7 @@ index 280eeb34..df4fa628 100644
 @@ -3091,6 +3091,110 @@ theorem tailDominanceDepthCount_lt_outruns_of_outrunsMoreThanHalf
    have hpart := tailCauseSideDepthCount_add_eq_len n k r len
    omega
- 
+
 +/--
 +Source cause-side outruns-heavy frequency gives descriptive source pressure
 +heavy frequency.
@@ -989,7 +989,7 @@ index 8436df62..460b955f 100644
 @@ -688,6 +688,68 @@ if outruns depths occupy more than half of the depth range,
  then outruns depths strictly outnumber dominance depths.
  ```
- 
+
 +## Frequency To Height Preparation
 +
 +Checkpoint 113 starts the bridge from cause-side frequency toward height and
@@ -1053,7 +1053,7 @@ index 8436df62..460b955f 100644
 +```
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index cbb92e9b..f3d83782 100644

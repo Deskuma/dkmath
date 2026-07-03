@@ -97,15 +97,15 @@ theorem euclid_cosmic_matches_mathlib :
 ## 証明の流れ
 
 ```
-cosmicN 定義 
+cosmicN 定義
     ↓
-基本等式確認 
+基本等式確認
     ↓
-矛盾導出戦略構築 
+矛盾導出戦略構築
     ↓
-素数集合拡張定理 
+素数集合拡張定理
     ↓
-ユークリッドの定理導出 
+ユークリッドの定理導出
     ↓
 mathlibとの突合確認
 ```

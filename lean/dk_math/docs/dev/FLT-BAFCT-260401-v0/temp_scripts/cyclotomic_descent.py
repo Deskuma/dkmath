@@ -435,8 +435,7 @@ if not found_any:
 print("\n" + "=" * 60)
 print("IMPORTANT REALIZATION")
 print("=" * 60)
-print(
-    """
+print("""
 The search for β with (1-ζ)β^5 = z - ζy finding NO results is EXACTLY
 what FLT predicts: there are no counterexamples, so no valid (z, y) pairs,
 so no β to find.
@@ -469,17 +468,17 @@ FOR THE COSMIC FORMULA APPROACH:
   GN/5 = y^4 + 2·gap·y^3 + 2·gap²·y² + gap³·y + (gap^4)/5
   Wait: C(5,1)=5, C(5,2)=10, C(5,3)=10, C(5,4)=5, C(5,5)=1
   GN/5 = y^4 + 2·gap·y^3 + 2·gap²·y² + gap³·y + gap^4/5
-  
-  But gap^4/5 needs to be integer! 
+
+  But gap^4/5 needs to be integer!
   gap = 5^4·t^5, so gap^4 = 5^{16}·t^{20}, gap^4/5 = 5^{15}·t^{20}. ✓
 
   GN/5 = y^4 + 2·(5^4·t^5)·y^3 + 2·(5^4·t^5)²·y² + (5^4·t^5)³·y + 5^{15}·t^{20}
-  
+
   For this to be s^5: requires very specific divisibility patterns.
-  
+
   The FIRST term is y^4. The LAST term is 5^{15}·t^{20}.
   If gcd(y, 5t) = 1: gcd(first, last) = 1.
-  
+
   For s^5 = (relatively prime product):
   s = A·B where A | y^{4·something} and B | t^{20·something}·5^{15·something}?
   No, this is too crude.
@@ -490,31 +489,29 @@ FOR THE COSMIC FORMULA APPROACH:
   The factor 1/5 distributes into the product:
   (1-ζ_5)^4 has norm 5 in Z[ζ_5], and
   Π (z - ζ^j y) / 5 = [Π (z - ζ^j y)] / N(1-ζ)
-  
+
   This can be written as a product of "symmetrized" factors,
   but the exact form depends on how the prime P = (1-ζ) factors.
-"""
-)
+""")
 
 print("=" * 60)
 print("CONCRETE NEXT STEP: NORM-PRODUCT DECOMPOSITION")
 print("=" * 60)
-print(
-    """
+print("""
 Instead of the full Kummer descent, prove a WEAKER result elementarily:
 
 PROPOSITION (Cyclotomic Norm-Product):
   If z^p = x^p + y^p with gcd(x,y) = 1, p ≥ 5 prime,
   and gap = z - y, GN = p·s^p:
-  
+
   Then GN = Π_{j=1}^{p-1} (z - ζ^j·y) in Z[ζ_p],
-  where z - ζ^j·y are pairwise "almost coprime" 
+  where z - ζ^j·y are pairwise "almost coprime"
   (sharing only the prime (1-ζ) above p).
 
 This can be proven ENTIRELY ELEMENTARILY:
   z^p - y^p = Π_{j=0}^{p-1} (z - ζ^j·y) is algebraic identity.
   z - ζ^0·y = gap, so Π_{j=1}^{p-1} (z - ζ^j·y) = (z^p - y^p)/gap = GN.
-  
+
   Coprimality: for j ≠ k:
     gcd(z - ζ^j·y, z - ζ^k·y) | (ζ^k - ζ^j)·y
     And |(ζ^k - ζ^j)·y| generates an ideal dividing p·(y) in Z[ζ_p]
@@ -528,5 +525,4 @@ Once formalized, it gives a CLEAN interface for:
   - The q-adic valuation analysis (§20)
   - The Hensel factorization structure
   - The descent existence question (formulated as N(β) = s)
-"""
-)
+""")

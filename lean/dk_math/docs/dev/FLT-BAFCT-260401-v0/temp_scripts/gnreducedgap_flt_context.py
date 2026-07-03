@@ -241,37 +241,35 @@ print("\n" + "=" * 60)
 print("CRITICAL: Does FLT force x'/y mod q to be 'good'?")
 print("=" * 60)
 
-print(
-    """
+print("""
 In the counterexample:
   x = q * x' = p * t * s, where q | s, s = q * s'
   x' = p * t * s'
-  
+
   x'/y mod q = (p * t * s') / y mod q
-  
+
   We need: (x'/y)^p + 1 is a p-th power mod q ??
-  
+
   From the FLT equation: z^p = (q*x')^p + y^p
   z ≡ ω^j * y mod q
-  
+
   Does this constrain x'/y mod q in any way?
-  
+
   z = gap + y = p^{p-1}*t^p + y (in BranchA)
   z mod q = (p^{p-1}*t^p + y) mod q = (p^{p-1}*t^p) mod q + y mod q
-  
+
   And z ≡ ω^j*y mod q, so:
   p^{p-1}*t^p ≡ (ω^j - 1)*y mod q
-  
+
   This gives: t^p ≡ (ω^j - 1)*y / p^{p-1} mod q
-  
+
   And x' = p*t*s' so:
-  x'^p = p^p * t^p * s'^p 
-  
-  x'^p mod q = p^p * ((ω^j-1)*y/p^{p-1})^... 
-  
+  x'^p = p^p * t^p * s'^p
+
+  x'^p mod q = p^p * ((ω^j-1)*y/p^{p-1})^...
+
   This is getting complicated. Let me just numerically check.
-"""
-)
+""")
 
 # Let's be very concrete: for q=11, p=5
 p = 5
@@ -338,20 +336,19 @@ print("\n" + "=" * 60)
 print("INTERPRETATION")
 print("=" * 60)
 
-print(
-    """
+print("""
 If FAIL cases exist, it means:
   For SOME valid combinations of (j, y, t, s') mod q,
   x'^p + y^p is NOT a p-th power mod q.
-  
+
   This would mean z' cannot exist even mod q,
   so GNReducedGap would be FALSE for those cases.
-  
+
 BUT: there's one more constraint we haven't used!
   gcd(t, s) = 1, gcd(s, y) = 1, gcd(t, y) = 1
   s' = s/q, and s' might have additional constraints.
 
-Also: s' mod q is NOT free. s = q*s', and the original s 
+Also: s' mod q is NOT free. s = q*s', and the original s
 satisfies many conditions. Specifically:
   GN(p, gap, y) = p * s^p determines s uniquely (up to sign)
   So s is determined by (p, gap, y), and s' = s/q.
@@ -360,76 +357,72 @@ Actually the constraint is even stronger:
   x = p * t * s, and x^p + y^p = z^p
   So ALL the variables are determined by the counterexample.
   s' mod q is NOT a free parameter — it's determined.
-"""
-)
+""")
 
 # Let's try another approach: does the FLT equation itself constrain things?
 print("=" * 60)
 print("FERMAT'S LITTLE THEOREM APPROACH")
 print("=" * 60)
 
-print(
-    """
+print("""
 In FLT context with q | x:
   z^p = x^p + y^p
   z^p ≡ y^p mod q
-  
+
   We want to show: z'^p = (x/q)^p + y^p has a solution z' ∈ N.
-  
+
   Key: z^p = q^p * (x/q)^p + y^p
   So z^p - y^p = q^p * (x/q)^p
-  
+
   And z'^p - y^p = (x/q)^p (the DESIRED equation)
-  
+
   Compare: z^p - y^p = q^p * (z'^p - y^p) if z' exists.
-  
+
   So z^p - y^p = q^p * z'^p - q^p * y^p
   z^p = q^p * z'^p - q^p * y^p + y^p
   z^p = q^p * z'^p - (q^p - 1) * y^p
   z^p = q^p * z'^p - (q^p - 1) * y^p ... (*)
-  
+
   This is a new Diophantine relation between z, z', y, q, p.
-  
+
   Alternatively: z^p - y^p = q^p * (z'^p - y^p)
   z^p - y^p = q^p * z'^p - q^p * y^p
   z^p + (q^p - 1)*y^p = q^p * z'^p
   z'^p = [z^p + (q^p - 1)*y^p] / q^p
   z'^p = z^p/q^p + y^p*(1 - 1/q^p)
-  
+
   For z' to exist as a natural number:
   [z^p + (q^p - 1)*y^p] must be divisible by q^p
   AND the quotient must be a perfect p-th power.
-  
-  Divisibility: 
-  z^p + (q^p-1)*y^p ≡ z^p - y^p mod q^p 
-  = gap * GN 
+
+  Divisibility:
+  z^p + (q^p-1)*y^p ≡ z^p - y^p mod q^p
+  = gap * GN
   = q^p * (x')^p (since q^p | GN in FLT context, and gap coprime to q)
   Wait: z^p - y^p = gap * GN = x^p = (q*x')^p = q^p * x'^p
   So z^p ≡ y^p mod q^p
   → z^p + (q^p-1)*y^p ≡ y^p + (q^p-1)*y^p = q^p * y^p mod q^p
   So: [z^p + (q^p-1)*y^p] / q^p ≡ y^p mod ... (not quite)
-  
+
   More carefully:
   z^p = q^p * x'^p + y^p
   z^p + (q^p-1)*y^p = q^p * x'^p + y^p + (q^p-1)*y^p = q^p * x'^p + q^p * y^p
   = q^p * (x'^p + y^p)
-  
+
   So z'^p = (x'^p + y^p) ← this is just the definition!
-  
+
   We need x'^p + y^p to be a perfect p-th power.
-  
+
   Equivalent reformulation:
   z'^p = x'^p + y^p
   where x' = x/q.
-"""
-)
+""")
 
 print("=" * 60)
 print("APPROACH: Minkowski/Hasse local-global for Fermat curves")
 print("=" * 60)
 
-print(
-    """
+print("""
 The question "does x'^p + y^p = z'^p have a solution in N" is exactly FLT again.
 If FLT is true, the answer is NO — and that's the contradiction we want!
 
@@ -462,7 +455,7 @@ THIS IS THE FUNDAMENTAL CIRCULARITY:
   In Z[ζ_p], x^p = ∏(z - ζ^i*y), and each factor is (unit)*α_i^p.
   Removing one prime from α_i gives α_i' with α_i'^p corresponding to x'.
   The KEY is that this gives INTEGERS (not just elements of Z[ζ_p]).
-  
+
   For IRREGULAR primes, this fails: the ideals are p-th powers but
   the ELEMENTS may not be. This is EXACTLY where Kummer's proof breaks down.
 
@@ -474,15 +467,13 @@ THIS IS THE FUNDAMENTAL CIRCULARITY:
   which is the class-number-one condition for Z[ζ_p].
   This is FALSE for irregular primes in general, but TRUE in the FLT context
   (since Wiles proved FLT for all primes).
-"""
-)
+""")
 
 print("=" * 60)
 print("CONSTRUCTIVE APPROACH: What Z[ζ_p] gives us")
 print("=" * 60)
 
-print(
-    """
+print("""
 In Z[ζ_p] (cyclotomic integers), for p prime:
 
 Factorization: z^p - y^p = ∏_{i=0}^{p-1} (z - ζ^i * y)
@@ -490,26 +481,26 @@ Factorization: z^p - y^p = ∏_{i=0}^{p-1} (z - ζ^i * y)
 Case 1 (p ∤ z-y, i.e., BranchB):
   The factors are pairwise coprime ideals.
   Each (z - ζ^i*y) = I_i^p for some ideal I_i.
-  
+
   If the CLASS NUMBER h of Q(ζ_p) satisfies gcd(h, p) = 1 ("regular prime"):
     I_i = (α_i) for some α_i ∈ Z[ζ_p]
     So z - ζ^i*y = ε_i * α_i^p for some unit ε_i
-    
+
     From this: z - ζ*y = ε * α^p (taking i=1)
     z - y = ε₀ * α₀^p (taking i=0)
-    
+
     Subtracting: (ζ-1)*y = ε*α^p - ε₀*α₀^p + ... ← HARD to use
-    
+
     Better: the IDEAL (z - ζ^j*y) captures all the q-power.
     If q ramifies in Z[ζ_p] as (q) = (Q₁·Q₂·...·Qₘ):
     Since p|(q-1) and q splits completely: each Q_i has norm q.
     v_{Q}(z - ζ^{j₀}*y) ≥ p where Q corresponds to the embedding ζ → ω.
-    
+
     Descent: α_{j₀} = β * (generator of Q)
     So z - ζ^{j₀}*y = ε * (β * π_Q)^p where π_Q generates Q
-    
+
     New: z' - ζ^{j₀}*y = ε' * β^p (removing π_Q^p)
-    
+
     Taking "norm down to Z": z' is an integer iff β has the right Galois-invariance.
 
 Case 2 (p | z-y, i.e., BranchA):
@@ -520,31 +511,29 @@ Case 2 (p | z-y, i.e., BranchA):
 
 THE ELEMENTARY CHALLENGE:
   Reproduce the "remove one prime ideal" step WITHOUT using:
-  - Z[ζ_p] 
+  - Z[ζ_p]
   - ideal class groups
   - Kummer theory
-  
+
   Only using: ω ∈ ZMod q, polynomial factorization of GN mod q^k,
   and elementary number theory.
-  
+
   This is essentially asking for an ELEMENTARY proof of the Kummer descent,
   which is what makes this genuinely hard.
-"""
-)
+""")
 
 # Final: Can we break down the problem into smaller sub-targets?
 print("=" * 60)
 print("SUB-TARGET DECOMPOSITION for GNReducedGap")
 print("=" * 60)
 
-print(
-    """
+print("""
 GNReducedGap: ∃ g', g'·GN(p,g',y) = C  where C = p^p·(t·s')^p
 
-This is equivalent to: 
+This is equivalent to:
   (g'+y)^p - y^p = C
   (g'+y)^p = C + y^p
-  
+
 Let W = C + y^p = p^p*(t*s')^p + y^p = x'^p + y^p
 GNReducedGap ⟺ W is a perfect p-th power
 
@@ -554,7 +543,7 @@ Sub-target decomposition:
     - For ℓ ∤ W: automatic (W is a unit, and unit p-th roots exist if p ∤ ℓ-1... no, not always)
     - For ℓ | W: need v_ℓ(W) ≡ 0 mod p
     - For ℓ = q: THIS IS WHERE ω COMES IN
-    
+
 (B) GLOBAL EXISTENCE: Local p-th powers → global p-th power
     - The Hasse-Minkowski theorem works for QUADRATIC forms but NOT for higher powers
     - So local → global fails in general for p ≥ 3
@@ -571,13 +560,12 @@ ALTERNATIVE DECOMPOSITION (more elementary):
 
 (A') ARITHMETIC CONSISTENCY: GN(p, gap, y) ≡ 0 (mod q^p) and gap ≡ (ω^j-1)y (mod q^p)
      [We know this from the structure]
-     
+
 (B') GAP TRANSFER: There exists g' with g' ≡ some value (mod q^{p-1}) such that
      v_q(g'·GN(p,g',y)) = 0 and g'·GN(p,g',y) = C
-     
+
 (C') INTEGRALITY: g' is a positive natural number (not just a p-adic number)
 
 The genuine difficulty is (C'): showing the p-adic number is actually a positive integer.
 This is where the non-archimedean (local) and archimedean (W > 0) conditions must combine.
-"""
-)
+""")

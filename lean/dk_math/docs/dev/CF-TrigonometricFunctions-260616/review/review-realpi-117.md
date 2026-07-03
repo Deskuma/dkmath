@@ -262,7 +262,7 @@ index ef84e282..9948fb1c 100644
 +and a four-cycle law. Finite edges expose endpoint aliases and
 +center-to-successor-base compatibility, and the closed shifted path exposes
 +source and target aliases.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -272,7 +272,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1129,6 +1129,35 @@ def finFourSucc (i : Fin 4) : Fin 4 :=
  theorem finFourSucc_val (i : Fin 4) :
      (finFourSucc i).val = (i.val + 1) % 4 := rfl
- 
+
 +/-- The finite successor sends `0` to `1`. -/
 +@[simp]
 +theorem finFourSucc_zero :
@@ -308,7 +308,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1157,6 +1186,20 @@ theorem shiftedSemanticFinEdge_eq_indexed
      shiftedSemanticFinEdge r z i t =
        shiftedSemanticIndexedEdge r z i.val t := rfl
- 
+
 +/-- The finite shifted edge starts at its finite left endpoint. -/
 +theorem shiftedSemanticFinEdge_leftEndpoint
 +    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (i : Fin 4) :
@@ -329,7 +329,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1176,6 +1219,25 @@ theorem shiftedSemanticFinEdge_center_eq_next_base_of_core_eq_zero
        shiftedSemanticIndexedBase r z (i.val + 1) :=
    shiftedSemanticIndexedEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
- 
+
 +/-- The finite shifted edge center reaches the cyclic successor base. -/
 +theorem shiftedSemanticFinEdge_center_eq_succ_base_of_core_eq_zero
 +    {r : UnitKernel DkNNRealQ}
@@ -355,7 +355,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1252,6 +1314,28 @@ theorem shiftedSemanticFinLevelEdge_center_eq_next_base_of_core_eq_zero
        shiftedSemanticIndexedBaseLevelPoint r z (i.val + 1) :=
    shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero hcore z i.val
- 
+
 +/-- The finite level edge center reaches the cyclic successor base point. -/
 +theorem shiftedSemanticFinLevelEdge_center_eq_succ_base_of_core_eq_zero
 +    {r : UnitKernel DkNNRealQ}
@@ -384,7 +384,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1285,6 +1369,44 @@ theorem shiftedSemanticFinRightLevelEndpoint_eq_succ_left
    · exact shiftedSemanticIndexedRightLevelEndpoint_eq_next_left hcore z 2
    · exact shiftedSemanticIndexedRightLevelEndpoint_three_eq_zero_left hcore z
- 
+
 +/-- Finite seam compatibility from edge `0` to edge `1`. -/
 +theorem shiftedSemanticFinRightLevelEndpoint_zero_eq_one_left
 +    {r : UnitKernel DkNNRealQ}
@@ -429,7 +429,7 @@ index 70c0db6f..b99a8388 100644
 @@ -1295,6 +1417,24 @@ def shiftedSemanticFinFourLevelPath
        (shiftedSemanticIndexedLeftLevelEndpoint hcore z 0) :=
    shiftedSemanticFourLevelPath hcore z
- 
+
 +/-- Source endpoint of the closed shifted four-level path. -/
 +theorem shiftedSemanticFourLevelPath_source
 +    {r : UnitKernel DkNNRealQ}
@@ -460,7 +460,7 @@ index 70c0db6f..b99a8388 100644
 +successor has named small-step facts and a four-cycle law, finite edges expose
 +endpoint and center-to-successor facts, and the closed shifted path exposes
 +source and target aliases.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-quotient]
  Introduce a quotient phase parameter only after the four-edge closed path is
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -496,20 +496,20 @@ index 93d60b8b..bdb01c6b 100644
 +shiftedSemanticFourLevelPath_source
 +shiftedSemanticFourLevelPath_target
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -515,7 +530,10 @@ right endpoint of finite edge i = left endpoint of finite edge (finFourSucc i)
  ```
- 
+
  This is still a finite cyclic index, not a continuous quotient phase
 -parameter.
 +parameter. The successor has named values for `0 -> 1 -> 2 -> 3 -> 0` and a
 +four-cycle theorem. Finite shifted edges also expose endpoint aliases and a
 +center-to-successor-base theorem. The closed shifted four-level path exposes
 +named source and target aliases for downstream observation code.
- 
+
  Candidate theorem directions:
- 
+
 @@ -590,7 +608,10 @@ depend on that reading.
  20. Implemented: concatenate the four indexed shifted level paths into a closed fixed-`q2` path.
  21. Implemented: add `Fin 4` wrappers for shifted bases, edges, paths, level edges, and level paths.
@@ -520,7 +520,7 @@ index 93d60b8b..bdb01c6b 100644
 +25. Implemented: add source and target aliases for the closed shifted four-level path.
 +26. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -638,7 +659,10 @@ shifted normalized level paths into one closed fixed-`q2` path object.
  [IMPLEMENTED: semantic-cf2d/shifted-fin-four]
@@ -532,7 +532,7 @@ index 93d60b8b..bdb01c6b 100644
 +center-to-successor-base compatibility, and the closed shifted path has named
 +source and target aliases.
  ```
- 
+
  ## Remaining TODO Tags
 ````
 `````

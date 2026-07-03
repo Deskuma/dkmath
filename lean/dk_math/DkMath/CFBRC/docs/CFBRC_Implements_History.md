@@ -1129,20 +1129,20 @@
 **事前調査結果**
 
 1. `choose` 展開の実装パターンは既に `CosmicFormula` 側にあり、`add_pow` + `Finset.sum_range_succ'` で安定して証明されています。
-   [CosmicFormulaBinom.lean:77](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:77)
-   [CosmicFormulaBinom.lean:280](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:280)
+   [CosmicFormulaBinom.lean:77](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L77)
+   [CosmicFormulaBinom.lean:280](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L280)
 
 2. `Complex` の和の実部・虚部は `Complex.re_sum` / `Complex.im_sum` が使えます。
-   [Mathlib Data/Complex/BigOperators.lean:44](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Complex/BigOperators.lean:44)
+   [Mathlib Data/Complex/BigOperators.lean:44](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Complex/BigOperators.lean#L44)
 
 3. `add_pow` の形は
    `(x + y)^n = ∑ m∈range (n+1), x^m * y^(n-m) * choose n m` です。
    このまま `cfbrcR = (X+iΘ)^d - (iΘ)^d` へ接続できます。
-   [Mathlib Data/Nat/Choose/Sum.lean:76](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Nat/Choose/Sum.lean:76)
+   [Mathlib Data/Nat/Choose/Sum.lean:76](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Nat/Choose/Sum.lean#L76)
 
 4. 現在の `TrigBridge.General` は再帰・位相評価が十分に揃っており、閉形式証明の土台は完成済みです。
-   [General.lean:166](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:166)
-   [General.lean:186](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:186)
+   [General.lean:166](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean#L166)
+   [General.lean:186](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean#L186)
 
 5. `Nat.cast_choose` は `DivisionSemiring` 要件の式なので主証明では使いません。`(Nat.choose d k : ℂ)` / `: ℝ` の直接キャストで進める方が安全です。
 

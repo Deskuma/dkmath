@@ -8,7 +8,7 @@ gch: 9e7b7f93241f3e9db164355c75abe441cd67d301
 
 116 進めました。`7 mod 8` continuing color を次の reservoir へ戻す再帰辺まで Lean で固定できています。
 
-主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:3967) です。
+主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L3967) です。
 
 - `orbitWindowResidueCountMod16EqSevenTail`
 - `orbitWindowResidueCountMod16EqFifteenTail`
@@ -1000,7 +1000,7 @@ index f9bd59da..6e1d3478 100644
 @@ -976,6 +976,28 @@ noncomputable def orbitWindowResidueCountMod8EqSevenTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 8 = 7))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `7 mod 16`.
 +
@@ -1025,11 +1025,11 @@ index f9bd59da..6e1d3478 100644
 +
  /--
  Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
- 
+
 @@ -3937,6 +3959,47 @@ theorem tailHeightCountEq_one_split_mod8_three_seven
            exact hheight (hiff.mpr (Or.inr hseven))
          simp [ih, hheight, hnotThree, hnotSeven]
- 
+
 +/--
 +The shifted-tail `7 mod 8` continuing color splits into its two children
 +modulo `16`: the delayed-peeling child `7 mod 16` and the continuing child
@@ -1073,11 +1073,11 @@ index f9bd59da..6e1d3478 100644
 +
  /--
  Orbit-level transition from the `3 mod 8` height-one channel.
- 
+
 @@ -4257,6 +4320,78 @@ theorem orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
    apply (orbitWindowHeight_eq_one_iff_mod_four_eq_three n (i + 1)).mpr
    exact oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven n i hmod
- 
+
 +/--
 +Every shifted-tail `7 mod 8` entry remains in the shifted-tail exact-height-one
 +reservoir one step later.
@@ -1152,11 +1152,11 @@ index f9bd59da..6e1d3478 100644
 +
  /--
  The `7 mod 16` branch recovers delayed peeling after two transitions.
- 
+
 @@ -5398,6 +5533,48 @@ theorem tailResidueCountMod8EqThree_delayed_drift
      (Nat.add_le_add_left htail (k + 1))
      (orbitWindowHeightSeq_sum_ge_window_add_tailCountGe_two n (k + 1))
- 
+
 +/--
 +Delayed-reservoir budget with a continuing-color remainder.
 +
@@ -1201,7 +1201,7 @@ index f9bd59da..6e1d3478 100644
 +
  /--
  Residue-address drift bridge.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index ffa9361e..c3d9e320 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -1408,7 +1408,7 @@ index 3532dbb5..a171bab9 100644
 @@ -870,6 +870,77 @@ pressure or recovery channel
    -> the 3 mod 8 color supplies delayed extra peeling
  ```
- 
+
 +## Delayed Reservoir Tower
 +
 +Checkpoint 116 starts the recursive tower above the checkpoint 115 split.
@@ -1481,7 +1481,7 @@ index 3532dbb5..a171bab9 100644
 +```
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 8b2611d6..5ba050f0 100644

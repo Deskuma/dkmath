@@ -393,18 +393,18 @@ index 8f12c33b..2b7492fe 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -111,6 +111,8 @@ DkMath-named angle bridge:
- 
+
  ```text
  semanticQuarterTurnAngle = Real.pi / 2
 +semanticHalfTurnAngle    = Real.pi
 +semanticFullTurnAngle    = 2 * Real.pi
  semantic action = Euclidean rotation by semanticQuarterTurnAngle
  ```
- 
+
 @@ -120,6 +122,17 @@ determine a transition with the same operational behavior as a Euclidean
  quarter-turn. The standard Euclidean plane supplies the later interpretation
  as `theta = pi / 2`.
- 
+
 +The same module also introduces `semanticPhaseAngle k = k * theta`. At the
 +current stage this is only Euclidean angle vocabulary, but it is deliberately
 +shaped for the next bridge:
@@ -417,7 +417,7 @@ index 8f12c33b..2b7492fe 100644
 +four quarter-turns as the identity rotation.
 +
  ### Milestone A: continuous four-edge loop - implemented
- 
+
  1. The real CF2D target carries the topology induced from `Real × Real`.
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index 99e7f424..715a0971 100644
@@ -426,7 +426,7 @@ index 99e7f424..715a0971 100644
 @@ -369,6 +369,47 @@ theorem semanticQuarterTurnAngle_eq :
      semanticQuarterTurnAngle = Real.pi / 2 :=
    rfl
- 
+
 +/--
 +The Euclidean angle read from `k` semantic quarter-turn phases.
 +
@@ -500,9 +500,9 @@ index 99e7f424..715a0971 100644
 +      LinearIsometryEquiv.refl ℝ EuclideanPlane := by
 +  ext v
 +  simp [semanticFullTurnAngle_eq_two_pi]
- 
+
  end
- 
+
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 006e264c..9bef77f2 100644
 --- a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md

@@ -262,7 +262,7 @@ index 6fb21311..1c9100eb 100644
 +iterates generate forward orbits of constant square mass. Periodic points and
 +finite action order are expressed through Mathlib's standard discrete-dynamics
 +API.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -272,7 +272,7 @@ index 5b7c744d..c1620d37 100644
 @@ -338,6 +338,81 @@ theorem semanticLevelOrbit_val
          Function.iterate_succ_apply', Function.iterate_succ_apply']
        exact congrArg (semanticAct r) ih
- 
+
 +/-- A real vector is periodic when a finite semantic orbit returns to it. -/
 +def SemanticPeriodic
 +    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) (n : ℕ) : Prop :=
@@ -377,12 +377,12 @@ index ffdcdc2e..26a53721 100644
 +SemanticFiniteOrder
 +semanticFiniteOrder_iff
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -105,8 +109,13 @@ The actions are bundled as equivalences. Their finite iterates remain
  bijective, and every forward orbit has constant `q2`. A level-set orbit is the
  same plane orbit viewed with its invariant carried in the type.
- 
+
 +Periodicity uses Mathlib's `Function.IsPeriodicPt`. Level-set periodicity is
 +equivalent to periodicity of the underlying plane point. Finite action order
 +means that one iterate is the identity on the whole plane; this makes every
@@ -401,7 +401,7 @@ index 9ac4c048..ef7c8251 100644
 @@ -212,6 +212,28 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 03:50 JST (Periodic points and finite action order)
 +
 +1. 方針:
@@ -425,7 +425,7 @@ index 9ac4c048..ef7c8251 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 02:30 JST (Bundled automorphisms and finite orbits)
- 
+
  1. 目的:
 ````
 `````

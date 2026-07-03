@@ -425,7 +425,7 @@ index fd387596..388f3c3a 100644
 @@ -188,6 +188,14 @@ theorem orbitWindowHeightSeq_take_sum_eq_sumS
    rw [← orbitWindowHeightSeq_sum_eq_sumS n r]
    simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
- 
+
 +/--
 +The prefix of length `r` has length `r` when `r` lies inside the window.
 +-/
@@ -440,7 +440,7 @@ index fd387596..388f3c3a 100644
 @@ -197,6 +205,26 @@ theorem orbitWindowHeightSeq_get?_eq_some
      (orbitWindowHeightSeq n k)[i]? = some (orbitWindowHeight n i) := by
    simp [orbitWindowHeightSeq, hi]
- 
+
 +/--
 +Reading a prefix of the ordered height profile recovers the same pointwise
 +height observation while the index remains inside the prefix.
@@ -467,7 +467,7 @@ index fd387596..388f3c3a 100644
 @@ -220,6 +248,87 @@ theorem orbitWindowHeight_eq_of_collision
      orbitWindowHeight n i = orbitWindowHeight n j :=
    orbitWindowHeight_eq_of_oddOrbitLabel_eq hlabel
- 
+
 +/--
 +Equal accelerated Collatz states have equal height observations.
 +-/
@@ -579,7 +579,7 @@ index d28d3b20..e072cbc2 100644
 @@ -227,6 +237,31 @@ local entries
    -> collision/fold height equality
  ```
- 
+
 +The bridge now also has the first occupation-count vocabulary:
 +
 +```text
@@ -606,7 +606,7 @@ index d28d3b20..e072cbc2 100644
 +how often each local height regime appears.
 +
  The bridge theorem
- 
+
  ```lean
 @@ -248,6 +283,7 @@ orbit collision implies a specific fold/cycle condition
  ordered height profile controls accumulated Collatz drift
@@ -614,7 +614,7 @@ index d28d3b20..e072cbc2 100644
  label collisions preserve the next height observation
 +height occupation counts measure exact and lower-bound regimes
  ```
- 
+
  ## Next Candidate Work
 @@ -257,9 +293,10 @@ The next safe steps are:
  ```text
@@ -628,7 +628,7 @@ index d28d3b20..e072cbc2 100644
 +5. Test whether an external label transform can turn orbit labels into carrier labels.
 +6. Only after that, test whether Collatz labels can feed ABC support/rad.
  ```
- 
+
  The main caution is that Collatz state labels are not prime labels.  Any bridge
 ````
 `````

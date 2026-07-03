@@ -614,7 +614,7 @@ index 0a4aefed..8e3aefe9 100644
 @@ -1187,6 +1187,126 @@ theorem orbitWindowResidueCountMod8EqSeven_eq_pow2
        orbitWindowResidueCountPow2 n k 3 7 := by
    rfl
- 
+
 +/--
 +Successor formula for the generic source-window power-of-two residue count.
 +-/
@@ -756,7 +756,7 @@ index 62c72e34..4bcf1cd9 100644
  orbitWindowPrefixResidueCountMod4EqOne_eq_residueCount
  orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
 @@ -556,6 +562,26 @@ generic shifted-tail pow-two residue count
- 
+
  named `7 mod 8` source count
    -> residueCountMod8EqSeven = CountPow2 depth 3 residue 7
 +
@@ -780,7 +780,7 @@ index 62c72e34..4bcf1cd9 100644
 +full pow-two source residue partition
 +  -> Sum_{residue < 2^depth} CountPow2 depth residue = k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-097.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-097.md
 new file mode 100644

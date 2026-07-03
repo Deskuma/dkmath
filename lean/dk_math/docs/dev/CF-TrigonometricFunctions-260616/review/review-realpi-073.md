@@ -242,9 +242,9 @@ index 83664cc0..0bd34133 100644
  import DkMath.Analysis.DkReal.SemanticCF2DPath
  import DkMath.Analysis.DkReal.SemanticCF2DNormalize
 +import DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase
- 
+
  #print "file: DkMath.Analysis"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 index 11b66ce8..fc97de55 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
@@ -257,7 +257,7 @@ index 11b66ce8..fc97de55 100644
 +two-coordinate Euclidean circle equation and maps the existing closed path
 +through that homeomorphism. The zero boundary is kept as a separate
 +one-point degenerate case.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -267,7 +267,7 @@ index 130a8451..a63bfb25 100644
 @@ -1334,9 +1334,15 @@ have exact seams and concatenate to a closed path.
  their closed four-phase concatenation are packaged directly in
  `LevelSet Real (q2 z)`, making boundary membership part of the target type.
- 
+
 -[TODO: semantic-cf2d-phase/euclidean-levelset-bridge] Identify the positive
 -real `q2` level sets with the corresponding Euclidean circle model without
 -changing the pre-geometric construction.
@@ -280,7 +280,7 @@ index 130a8451..a63bfb25 100644
 +[TODO: semantic-cf2d-phase/standard-euclidean-space] Relate the explicit
 +coordinate circle equation to the standard `EuclideanSpace Real (Fin 2)`
 +metric sphere, keeping the zero and positive-radius cases separate.
- 
+
  [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
  identify the fixed-`q2` path with the standard Euclidean circle model and
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
@@ -289,7 +289,7 @@ index f424183e..83baa50e 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -156,6 +156,8 @@ mechanism from which these theorem obligations can be investigated.
  ## Immediate Next Step
- 
+
  The next bridge may identify positive real `q2` level sets with a standard
 -Euclidean circle model. That bridge must remain an interpretation of the
 +Euclidean metric sphere. The coordinate-circle homeomorphism is now
@@ -304,13 +304,13 @@ index c0938864..e0a4bfcf 100644
 @@ -25,6 +25,10 @@ The same construction is now packaged directly in
  `LevelSet Real (Vec.q2 z)`. The level-set subtype carries its inherited
  topology, and the final closed path cannot leave the boundary by construction.
- 
+
 +`CF2D.EuclideanPhase` interprets this level set as the explicit coordinate
 +equation `x^2 + y^2 = rho2` by a homeomorphism. The already-constructed closed
 +path is mapped through that bridge; it is not reconstructed geometrically.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -344,7 +348,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/boundary-normalization]

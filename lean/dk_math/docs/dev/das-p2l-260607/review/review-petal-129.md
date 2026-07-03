@@ -8,15 +8,15 @@ gch: dd801be6eeca51997950166b0459061c45b5365c
 
 Checkpoint 128 を閉じました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:864) に residual-shape sequence の `length/get?/take` API、first-failed-depth sequence、`height + 1` 補題を追加しました。shifted label の list indexed theorem は [同ファイル](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:4797) に置いています。pressure 側は [sourcePressureLocalIsland_iff_margin](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7081) を追加し、local island を margin 符号条件で読めるようにしました。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L864) に residual-shape sequence の `length/get?/take` API、first-failed-depth sequence、`height + 1` 補題を追加しました。shifted label の list indexed theorem は [同ファイル](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L4797) に置いています。pressure 側は [sourcePressureLocalIsland_iff_margin](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7081) を追加し、local island を margin 符号条件で読めるようにしました。
 
-Docs は `README`、Guide、Status、127 doc を同期し、新規に [Collatz-ResidualShapeSequence-128.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md:1) と [report-petal-128.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-128.md:1) を作成しました。次の推奨は、`orbitWindowFirstFailedPow2DepthSeq_get?_eq_some` などの小 API を閉じてから pressure sign-pattern scan に戻る流れです。
+Docs は `README`、Guide、Status、127 doc を同期し、新規に [Collatz-ResidualShapeSequence-128.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md#L1) と [report-petal-128.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-128.md#L1) を作成しました。次の推奨は、`orbitWindowFirstFailedPow2DepthSeq_get?_eq_some` などの小 API を閉じてから pressure sign-pattern scan に戻る流れです。
 
 検証:
-`lake build DkMath.Collatz.PetalBridge` passed  
-`lake build DkMath.Collatz.Collatz2K26` passed  
-Collatz 対象2ファイルの `sorry` scan はヒットなし  
-`git diff --check` passed  
+`lake build DkMath.Collatz.PetalBridge` passed
+`lake build DkMath.Collatz.Collatz2K26` passed
+Collatz 対象2ファイルの `sorry` scan はヒットなし
+`git diff --check` passed
 既存の unrelated warning として `ZsigmondyCyclotomicResearch.lean:152` の `sorry` 警告は出ています。
 
 ## Review
@@ -598,7 +598,7 @@ index 323808b9..18185c2d 100644
 @@ -861,6 +861,67 @@ theorem orbitWindowHeightSeq_take_get?_eq_some
    rw [List.getElem?_take_of_lt hi]
    exact orbitWindowHeightSeq_get?_eq_some n (Nat.lt_of_lt_of_le hi hr)
- 
+
 +/--
 +The ordered residual-shape profile has length equal to the window size.
 +-/
@@ -666,7 +666,7 @@ index 323808b9..18185c2d 100644
 @@ -4733,6 +4794,17 @@ theorem orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
    intro i _hi
    exact orbitWindowResidualShape_eq_oddOrbitLabel_succ n i
- 
+
 +/--
 +Reading the residual-shape profile at an in-window time recovers the shifted
 +odd label.
@@ -680,11 +680,11 @@ index 323808b9..18185c2d 100644
 +
  /--
  Window-level raw gnomon factorization.
- 
+
 @@ -7006,6 +7078,56 @@ def SourcePressureLocalIsland
      ¬ IsSourcePressureDepth n k r (j - 1) ∧
      ¬ IsSourcePressureDepth n k r (j + 1)
- 
+
 +/--
 +Local pressure island in margin language.
 +
@@ -760,7 +760,7 @@ index abc040f3..ad33833a 100644
  SourcePressureLocalIsland
 +sourcePressureLocalIsland_iff_margin
  ```
- 
+
  The central No.100 layer is:
 @@ -215,6 +220,7 @@ docs/Collatz-PressureMargin-124.md
  docs/Collatz-GnomonEvaluation-125.md
@@ -777,7 +777,7 @@ index de72734e..f80ff0b1 100644
 @@ -145,6 +145,16 @@ positions.  It agrees with the shifted odd-label list by:
  orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels
  ```
- 
+
 +Checkpoint 128 adds list helpers:
 +
 +```lean
@@ -789,7 +789,7 @@ index de72734e..f80ff0b1 100644
 +```
 +
  ## Separation And Collision
- 
+
  The bridge includes a finite split:
 @@ -252,6 +262,7 @@ Checkpoint 127 adds:
  SourcePressureSignChangeUp
@@ -797,7 +797,7 @@ index de72734e..f80ff0b1 100644
  SourcePressureLocalIsland
 +sourcePressureLocalIsland_iff_margin
  ```
- 
+
  These are observation predicates for margin sign profiles.  They should be
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 60aaeef4..aa748855 100644
@@ -818,12 +818,12 @@ index 60aaeef4..aa748855 100644
 +orbitWindowFirstFailedPow2DepthSeq_length
 +orbitWindowFirstFailedPow2Depth_eq_height_add_one
  ```
- 
+
  The finite window now supports the reading:
 @@ -178,6 +186,15 @@ label_i
    -> label_{i+1}
  ```
- 
+
 +Checkpoint 128 also adds the local-island margin bridge:
 +
 +```lean
@@ -834,7 +834,7 @@ index 60aaeef4..aa748855 100644
 +turning it into an unsupported prefix theorem.
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md
 new file mode 100644
@@ -993,7 +993,7 @@ index d73369f2..e2e553ed 100644
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md
 @@ -174,3 +174,30 @@ continuation_drop
  ```
- 
+
  Then add only the predicates that survive as useful theorem interfaces.
 +
 +## Checkpoint 128 Follow-up

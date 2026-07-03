@@ -495,13 +495,13 @@ index 425250ef..1b9052bd 100644
  import DkMath.Analysis.DkReal.Semantic
  import DkMath.Analysis.DkReal.SemanticCF2DLogLimit
 +import DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 @@ -171,6 +172,16 @@ tend to `1 / 3` along refinement depth. These theorems use Mathlib filters
  through the `DkLimit` vocabulary and still do not identify the centered
  log-depth limit.
- 
+
 +[IMPLEMENTED: semantic-cf2d-phase-shift] `DkReal.SemanticCF2DPhaseShift`
 +exposes the endpoint-center-pole-shift skeleton before any angle vocabulary.
 +The local center `phaseCenter = 1 / 2` is recognized by the unique minimum of
@@ -741,18 +741,18 @@ index a265f8fd..414b8347 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 @@ -240,7 +240,8 @@ def centeredPhaseCoord (t : ℝ) : ℝ :=
  ```
- 
+
  The four-edge/global parameter names can live in a small new module, for
 -example `SemanticCF2DPhaseShift.lean`:
 +example `SemanticCF2DPhaseShift.lean`. These are unwrapped real
 +representatives; modulo-one cyclic wrapping is a later quotient reading:
- 
+
  ```lean
  def globalQuarterEndpoint (k : ℕ) : ℝ :=
 @@ -294,6 +295,32 @@ endpoints to neighboring centers, the old endpoint is now the midpoint.
  The cycle-step theorems are deliberately scalar. They record return laws for
  the normalized parameter before any geometric shape is assigned to the path.
- 
+
 +Implemented checkpoint:
 +
 +```text
@@ -780,7 +780,7 @@ index a265f8fd..414b8347 100644
 +```
 +
  ## Boundary and Normalization Targets
- 
+
  After the scalar shift theorem, the next target is to lift it back to the
 ````
 `````

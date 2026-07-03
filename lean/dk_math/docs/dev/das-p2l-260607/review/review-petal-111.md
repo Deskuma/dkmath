@@ -749,7 +749,7 @@ index d4172051..1fa9cb6c 100644
 @@ -2636,6 +2636,170 @@ theorem tailContinuationOutruns_of_moreThanHalf_tailContinuation
    rw [orbitWindowRetentionMassPow2Tail_split] at h
    omega
- 
+
 +/--
 +Number of depths in `[r, r + len)` where source continuation outruns recovery.
 +
@@ -1127,7 +1127,7 @@ index 0aad1bb9..154e7679 100644
 @@ -528,6 +528,52 @@ Together with the checkpoint 106 forward direction, this means the local
  `MoreThanHalf` pressure mode and the continuation-outruns-recovery mode are now
  interderivable.
- 
+
 +## Cause-Side Failure Counts
 +
 +Checkpoint 110 counts the cause-side failure predicate directly:
@@ -1175,7 +1175,7 @@ index 0aad1bb9..154e7679 100644
 +reading and a cause-side reading.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index f314b17a..a596aede 100644

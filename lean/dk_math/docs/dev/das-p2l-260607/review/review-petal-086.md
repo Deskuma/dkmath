@@ -543,7 +543,7 @@ index a2b31452..7ddacac6 100644
 @@ -185,6 +185,14 @@ theorem orbitWindowHeight_two_le_iff_mod_four_eq_one
    rw [orbitWindowHeight_two_le_iff_four_dvd]
    exact odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one (iterateT i n).2
- 
+
 +/--
 +An odd natural number is in residue class `1` or `3` modulo `4`.
 +-/
@@ -558,7 +558,7 @@ index a2b31452..7ddacac6 100644
 @@ -382,6 +390,37 @@ noncomputable def orbitWindowResidueCountMod4EqOne
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n i % 4 = 1))
- 
+
 +/--
 +Number of in-window odd-state labels in residue class `3 mod 4`.
 +
@@ -596,7 +596,7 @@ index a2b31452..7ddacac6 100644
 @@ -414,6 +453,52 @@ theorem orbitWindowResidueCountMod4EqOne_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n i % 4 = 1)) (l := List.range k))
- 
+
 +/--
 +The mod `4 = 3` residue count is bounded by the window size.
 +-/
@@ -649,7 +649,7 @@ index a2b31452..7ddacac6 100644
 @@ -440,6 +525,31 @@ theorem orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one
            exact hheight (hiff.mpr h)
          simp [ih, hheight, hres]
- 
+
 +/--
 +Counting `height >= 3` entries is the same as counting odd-state labels in
 +residue class `5 mod 8`.
@@ -681,7 +681,7 @@ index a2b31452..7ddacac6 100644
 @@ -579,6 +689,18 @@ theorem orbitWindowHeightPrefixCountGe_eq_countGe
    unfold orbitWindowHeightPrefixCountGe orbitWindowHeightCountGe
    simp [orbitWindowHeightSeq, ← List.map_take, List.take_range, Nat.min_eq_left hr]
- 
+
 +/--
 +Prefix `height >= 2` occupation is the same as prefix mod `4` residue
 +occupation.
@@ -700,7 +700,7 @@ index a2b31452..7ddacac6 100644
 @@ -648,6 +770,83 @@ theorem orbitWindowHeight_one_le
    simpa [s, threeNPlusOne] using
      v2_3n_plus_1_ge_1 (iterateT i n).1 (iterateT i n).2
- 
+
 +/--
 +The first Collatz height layer is exact height `1` precisely on residue class
 +`3 mod 4`.
@@ -780,11 +780,11 @@ index a2b31452..7ddacac6 100644
 +
  /--
  The `height >= 1` occupation count fills the whole observation window.
- 
+
 @@ -952,6 +1151,27 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_residue_mod4_count_ge
    rw [← orbitWindowHeightCountGe_two_eq_residueCount_mod4_eq_one n k] at hm
    exact orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge n k m hm
- 
+
 +/--
 +Three-layer residue-address drift bridge.
 +
@@ -812,7 +812,7 @@ index a2b31452..7ddacac6 100644
 @@ -964,6 +1184,19 @@ theorem orbitWindowHeightPrefix_sum_ge_window_add_of_countGe_two_ge
      (Nat.add_le_add_left hm r)
      (orbitWindowHeightPrefix_sum_ge_window_add_countGe_two n hr)
- 
+
 +/--
 +Prefix residue-address drift bridge.
 +
@@ -883,7 +883,7 @@ index 29970703..60d5252f 100644
  oddOrbitLabel_injOn_of_pairwiseSeparated
  iterateT_eq_of_oddOrbitLabel_eq
 @@ -313,6 +328,15 @@ orbitWindowHeightCountGe n k threshold
- 
+
  orbitWindowResidueCountMod4EqOne n k
    = number of odd orbit labels congruent to 1 modulo 4
 +
@@ -896,10 +896,10 @@ index 29970703..60d5252f 100644
 +orbitWindowPrefixResidueCountMod4EqOne n k r
 +  = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
  ```
- 
+
  The current count API is intentionally minimal:
 @@ -369,6 +393,13 @@ external CountGe 2 lower bound
- 
+
  mod 4 residue occupation lower bound
    -> m <= residueCountMod4EqOne -> k + m <= sumS n k
 +
@@ -910,12 +910,12 @@ index 29970703..60d5252f 100644
 +  -> m <= residueCountMod8EqFive
 +  -> k + CountGe 2 + m <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -454,6 +485,30 @@ m <= orbitWindowResidueCountMod4EqOne n k
  This changes the practical target from a valuation-count statement into a
  finite residue-class occupation statement.
- 
+
 +The same reading is now available locally in prefixes:
 +
 +```text
@@ -942,10 +942,10 @@ index 29970703..60d5252f 100644
 +
  This is the intended bridge from a future residue/address occupation theorem
  to a Collatz drift lower bound.
- 
+
 @@ -498,10 +553,10 @@ The next safe steps are:
  The immediate residue candidates are:
- 
+
  ```text
 -prefix version of residueCountMod4EqOne
 -height >= 3 count as a mod 8 residue occupation
@@ -954,7 +954,7 @@ index 29970703..60d5252f 100644
 +prefix mod 8 residue occupation
 +fixed experiment for height >= 4 as a mod 16 residue occupation
  ```
- 
+
  The main caution is that Collatz state labels are not prime labels.  Any bridge
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-085.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-085.md
 new file mode 100644

@@ -8,7 +8,7 @@ gch: 74ba6e6fa276468c4db88bc911ba78318bb32512
 
 進めました。今回の道順どおり、`address/carrier noncollision -> label noncollision` を直接主張しすぎず、互換条件を明示した形で Lean に固定しています。
 
-追加した主な API は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:112) です。
+追加した主な API は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L112) です。
 
 ```lean
 PetalAddressNoncollisionOn
@@ -36,9 +36,9 @@ PetalAddressNoncollisionOn I addrOf
 
 docs も同期済みです。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:716)
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:576)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1766)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L716)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L576)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1766)
 
 検証:
 
@@ -318,19 +318,19 @@ index 92336b76..923335c2 100644
 --- a/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 +++ b/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md
 @@ -1767,7 +1767,8 @@ The current research question after the first bridge is:
- 
+
  ```text
  Can Petal address / carrier noncollision supply
 -`PetalCarrierLabelNoncollisionOn I qOf`?
 +`PetalCarrierLabelNoncollisionOn I qOf`
 +through explicit address-to-label compatibility?
  ```
- 
+
  `PetalCarrierLabelNoncollisionOn` is currently the public Petal-facing wrapper
 @@ -1775,6 +1776,18 @@ around `NatPairwiseDistinctOn`.  It exists so the later address layer can target
  Petal vocabulary first, while the already-proved Erdos bridge consumes the
  underlying duplicate-free condition.
- 
+
 +The first address-facing checkpoint is now implemented by:
 +
 +```text
@@ -344,7 +344,7 @@ index 92336b76..923335c2 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 1007ff58..e162f8fb 100644
@@ -353,23 +353,23 @@ index 1007ff58..e162f8fb 100644
 @@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 +import DkMath.Petal.Address
  import DkMath.Petal.BezoutBridge
  import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
- 
+
 @@ -56,6 +57,7 @@ Current research target:
- 
+
  ```text
  Petal address / carrier noncollision
 +  + address-to-label compatibility
    -> PetalCarrierLabelNoncollisionOn I qOf
  ```
- 
+
 @@ -101,6 +103,33 @@ def PetalCarrierLabelNoncollisionOn
      (qOf : ι → ℕ) : Prop :=
    DkMath.NumberTheory.PrimitiveSet.NatPairwiseDistinctOn I qOf
- 
+
 +/--
 +Address-level noncollision for a finite Petal carrier family.
 +
@@ -403,7 +403,7 @@ index 1007ff58..e162f8fb 100644
 @@ -156,6 +185,41 @@ theorem petalCarrierLabelNoncollisionOn_injOn
      Set.InjOn qOf ↑I :=
    DkMath.NumberTheory.PrimitiveSet.natPairwiseDistinctOn_injOn I qOf h
- 
+
 +/--
 +Address noncollision plus address-to-label compatibility gives carrier-label
 +noncollision.
@@ -445,7 +445,7 @@ index 1007ff58..e162f8fb 100644
 @@ -440,6 +504,63 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
      (petalCarrierLabelNoncollisionOn_pairwiseDistinct I qOf hnoncollision)
      hcarrier
- 
+
 +/--
 +Address-facing GN multiplicity-budget bridge.
 +
@@ -505,11 +505,11 @@ index 1007ff58..e162f8fb 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -549,6 +670,42 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
      I d x u qOf hGN hnoncollision
      (fun i hi => (hcarrier i hi).1)
- 
+
 +/--
 +Address-facing finite Erdos bridge for no-lift Petal channels.
 +
@@ -554,15 +554,15 @@ index ca6e0abe..4bafbf3b 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 +++ b/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 @@ -159,7 +159,8 @@ PetalPrimeChannel family
- 
+
  `PetalCarrierLabelNoncollisionOn I qOf` is currently the Petal-facing name for
  the lower-level `NatPairwiseDistinctOn I qOf` condition.  The intended next
 -step is to derive it from Petal address/carrier geometry.
 +step is to derive it from Petal address/carrier geometry plus an explicit
 +address-to-label compatibility condition.
- 
+
  The currently implemented local no-lift route is:
- 
+
 @@ -317,7 +318,7 @@ Petal carriers automatically satisfy the Erdos multiplicity budget.
  Zsigmondy automatically supplies local NoLift.
  Zsigmondy automatically supplies padicValNat <= 1.
@@ -571,9 +571,9 @@ index ca6e0abe..4bafbf3b 100644
 +Petal address noncollision alone supplies NatPairwiseDistinctOn.
  Full analytic Erdős #1196 tail estimate.
  ```
- 
+
 @@ -468,6 +469,7 @@ Now that Step 5 is implemented, investigate:
- 
+
  ```text
  Petal address noncollision
 +  + PetalCarrierLabelCompatibleOn I addrOf qOf
@@ -581,7 +581,7 @@ index ca6e0abe..4bafbf3b 100644
    -> NatPairwiseDistinctOn I qOf
    -> base-prime multiplicity budget
 @@ -525,6 +527,7 @@ Implement the address-facing noncollision layer:
- 
+
  ```text
  Petal address / carrier noncollision
 +  + address-to-label compatibility
@@ -590,7 +590,7 @@ index ca6e0abe..4bafbf3b 100644
  ```
 @@ -532,6 +535,9 @@ Petal address / carrier noncollision
  This is now the missing input needed by:
- 
+
  ```lean
 +petalAddressNoncollision_labelNoncollision
 +petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
@@ -599,23 +599,23 @@ index ca6e0abe..4bafbf3b 100644
  petalPrimeChannelFamily_logSubProbability_GN_of_pairwiseDistinct
  ```
 @@ -540,7 +546,7 @@ The downstream signposts from this checkpoint are:
- 
+
  ```text
  Erdos:
 -  address/carrier noncollision -> finite GN log-capacity family
 +  address noncollision + label compatibility -> finite GN log-capacity family
- 
+
  FLT:
    NoLift one-slot -> d-th-power valuation obstruction
 @@ -567,7 +573,8 @@ also proves the duplicate-free GN-family route through `NatPairwiseDistinctOn`.
  The next research target is:
- 
+
  ```text
 -Can Petal address / carrier noncollision supply `NatPairwiseDistinctOn`?
 +Can Petal geometry supply concrete address noncollision and
 +address-to-label compatibility?
  ```
- 
+
  That is the point where Petal may start producing genuinely strong conditions
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md b/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md
 index aac2c3d6..15890ff7 100644
@@ -627,18 +627,18 @@ index aac2c3d6..15890ff7 100644
    finite target: selected Petal channels consume GN log capacity
 -  next missing input: address/carrier noncollision -> label noncollision
 +  current bridge: address noncollision + label compatibility -> log capacity
- 
+
  FLT:
    target: clash one-slot GN valuation with d-th-power valuation transfer
 @@ -717,10 +717,24 @@ Current research target:
- 
+
  ```text
  Petal address / carrier noncollision
 +  + PetalCarrierLabelCompatibleOn I addrOf qOf
    -> PetalCarrierLabelNoncollisionOn I qOf
    -> NatPairwiseDistinctOn I qOf
  ```
- 
+
 +The address-facing theorem implemented for this checkpoint is:
 +
 +```text
@@ -653,7 +653,7 @@ index aac2c3d6..15890ff7 100644
 +```
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 @@ -733,7 +747,7 @@ general d boundary classification
  full Zsigmondy theorem
@@ -665,7 +665,7 @@ index aac2c3d6..15890ff7 100644
  complete split of BoundaryD3 and BoundaryD3Anchor
  concrete prime enumeration / standard primorial theorem
 @@ -751,7 +765,7 @@ The next reasonable implementation directions are:
- 
+
  ```text
  1. connect BoundaryD3 / EisensteinBridge to downstream FLT or Zsigmondy inputs
 -2. connect Petal address / carrier noncollision to `NatPairwiseDistinctOn`

@@ -189,7 +189,7 @@ index 9caea3e3..cee454fa 100644
 -all known return times.
 +all known return times. Fixed points and positive finite action order are
 +separated from the weaker zero-iterate-compatible periodicity predicates.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -199,7 +199,7 @@ index 027bbcd4..4aaff15e 100644
 @@ -463,6 +463,68 @@ theorem semanticMinimalPeriod_pos
      0 < semanticMinimalPeriod r z :=
    Function.IsPeriodicPt.minimalPeriod_pos hn h
- 
+
 +/-- A fixed point of the transported real action. -/
 +def SemanticFixed
 +    (r : UnitKernel DkNNRealQ) (z : Vec ℝ) : Prop :=
@@ -290,12 +290,12 @@ index 5d8092f0..1a541361 100644
 +semanticFixed_iff_minimalPeriod_eq_one
 +SemanticPositiveFiniteOrder
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -125,8 +128,14 @@ equivalent to divisibility by this minimal period. Every point's minimal
  period divides any finite action order, and finite action order propagates to
  all multiples.
- 
+
 +Fixed points use Mathlib's `Function.IsFixedPt`: they are exactly period-one
 +points and exactly points of minimal period one. The origin is fixed by every
 +transported action. `SemanticPositiveFiniteOrder` adds positivity to an
@@ -316,7 +316,7 @@ index c5259ac3..42ffca3d 100644
 @@ -236,6 +236,30 @@ Archive
  6. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 04:17 JST (Fixed points and positive finite action order)
 +
 +1. 方針:
@@ -342,7 +342,7 @@ index c5259ac3..42ffca3d 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 03:50 JST (Periodic points and finite action order)
- 
+
  1. 方針:
 ````
 `````

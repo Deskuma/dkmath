@@ -766,7 +766,7 @@ index 0572f272..1979f025 100644
 @@ -1042,6 +1042,28 @@ noncomputable def orbitWindowResidueCountMod64EqSixtyThreeTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 64 = 63))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `63 mod 128`.
 +
@@ -795,7 +795,7 @@ index 0572f272..1979f025 100644
 @@ -1070,6 +1092,14 @@ noncomputable def TailRemainderLevel3 (n : OddNat) (k : ℕ) : ℕ :=
  noncomputable def TailFallingLevel3 (n : OddNat) (k : ℕ) : ℕ :=
    orbitWindowResidueCountMod32EqFifteenTail n k
- 
+
 +/-- Level `4` tail remainder: the shifted-tail `63 mod 64` continuing color. -/
 +noncomputable def TailRemainderLevel4 (n : OddNat) (k : ℕ) : ℕ :=
 +  orbitWindowResidueCountMod64EqSixtyThreeTail n k
@@ -806,11 +806,11 @@ index 0572f272..1979f025 100644
 +
  /--
  Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
- 
+
 @@ -4176,6 +4206,58 @@ theorem tailRemainderLevel2_static_split
    unfold TailRemainderLevel2 TailFallingLevel3 TailRemainderLevel3
    exact tailResidueCountMod16EqFifteen_split_mod32_fifteen_thirtyOne n k
- 
+
 +/--
 +The shifted-tail `63 mod 64` continuing color splits into its two children
 +modulo `128`: the delayed-peeling child `63 mod 128` and the continuing child
@@ -865,11 +865,11 @@ index 0572f272..1979f025 100644
 +
  /--
  Orbit-level transition from the `3 mod 8` height-one channel.
- 
+
 @@ -4387,6 +4469,46 @@ theorem oddOrbitLabel_succ_mod_thirtytwo_eq_thirtyone_of_mod_sixtyfour_eq_sixtyt
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_thirtytwo_of_mod_sixtyfour_eq_sixtythree hmod
- 
+
 +/--
 +The `63 mod 128` subchannel moves to `31 mod 64` at the next label.
 +
@@ -912,11 +912,11 @@ index 0572f272..1979f025 100644
 +
  /--
  General orbit-label transition for the recovery sibling.
- 
+
 @@ -4686,6 +4808,74 @@ theorem tailMod32ThirtyOne_le_nextTailMod32Fifteen_add_nextTailMod32ThirtyOne
            · simp [hsource, htargetFifteen, htargetThirtyOne]
              omega
- 
+
 +/--
 +Level-alias version of the level-`3` recursion edge.
 +
@@ -987,11 +987,11 @@ index 0572f272..1979f025 100644
 +
  /--
  One-step grammar for the shifted-tail exact-height-one reservoir.
- 
+
 @@ -5909,6 +6099,48 @@ theorem sourceContinuationMass_depth_two_pos_of_pressure_depth_two
    unfold MoreThanHalf at h
    omega
- 
+
 +/--
 +Meaning-name wrapper for extracting local source pressure from a finite source
 +pressure profile.
@@ -1226,7 +1226,7 @@ index ebbda1e9..0ce995d9 100644
 @@ -1073,6 +1073,44 @@ sourceContinuationMass_depth_two_pos_of_pressureOnRange_two_one
  This is the first bridge from the range profile vocabulary to the delayed
  reservoir budget entrance.
- 
+
 +## Level-4 And Generic Pressure
 +
 +Checkpoint 119 extends the concrete tower to level `4`:
@@ -1266,7 +1266,7 @@ index ebbda1e9..0ce995d9 100644
 +needs a local tower-entry opportunity at a selected depth `r + j`.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 7fe2834a..3e41f1b9 100644

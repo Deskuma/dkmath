@@ -726,7 +726,7 @@ index 1979f025..ff463c2d 100644
 @@ -1064,6 +1064,28 @@ noncomputable def orbitWindowResidueCountMod128EqOneHundredTwentySevenTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 128 = 127))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `127 mod 256`.
 +
@@ -755,7 +755,7 @@ index 1979f025..ff463c2d 100644
 @@ -1100,6 +1122,14 @@ noncomputable def TailRemainderLevel4 (n : OddNat) (k : ℕ) : ℕ :=
  noncomputable def TailFallingLevel4 (n : OddNat) (k : ℕ) : ℕ :=
    orbitWindowResidueCountMod64EqThirtyOneTail n k
- 
+
 +/-- Level `5` tail remainder: the shifted-tail `127 mod 128` continuing color. -/
 +noncomputable def TailRemainderLevel5 (n : OddNat) (k : ℕ) : ℕ :=
 +  orbitWindowResidueCountMod128EqOneHundredTwentySevenTail n k
@@ -766,11 +766,11 @@ index 1979f025..ff463c2d 100644
 +
  /--
  Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
- 
+
 @@ -4258,6 +4288,58 @@ theorem tailRemainderLevel3_static_split
    unfold TailRemainderLevel3 TailFallingLevel4 TailRemainderLevel4
    exact tailResidueCountMod32EqThirtyOne_split_mod64_thirtyOne_sixtyThree n k
- 
+
 +/--
 +The shifted-tail `127 mod 128` continuing color splits into its two children
 +modulo `256`: the delayed-peeling child `127 mod 256` and the continuing child
@@ -825,11 +825,11 @@ index 1979f025..ff463c2d 100644
 +
  /--
  Orbit-level transition from the `3 mod 8` height-one channel.
- 
+
 @@ -4509,6 +4591,50 @@ theorem oddOrbitLabel_succ_mod64_eq63_of_mod128_eq127
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_sixtyfour_of_mod_onehundredtwentyeight_eq_onehundredtwentyseven hmod
- 
+
 +/--
 +The `127 mod 256` subchannel moves to `63 mod 128` at the next label.
 +
@@ -876,11 +876,11 @@ index 1979f025..ff463c2d 100644
 +
  /--
  General orbit-label transition for the recovery sibling.
- 
+
 @@ -4876,6 +5002,87 @@ theorem tailMod64SixtyThree_le_nextTailMod64ThirtyOne_add_nextTailMod64SixtyThre
            · simp [hsource, htargetThirtyOne, htargetSixtyThree]
              omega
- 
+
 +/--
 +Level-alias version of the level-`4` recursion edge.
 +
@@ -964,11 +964,11 @@ index 1979f025..ff463c2d 100644
 +
  /--
  One-step grammar for the shifted-tail exact-height-one reservoir.
- 
+
 @@ -6141,6 +6348,70 @@ theorem sourceContinuationMass_pos_of_pressureOnRange_at
    sourceContinuationMass_pos_of_localPressure n k (r + j)
      (sourcePressureAtDepth_of_pressureOnRange n k r len j h hj)
- 
+
 +/--
 +Positive source pressure-depth count selects at least one local pressure depth.
 +
@@ -1255,7 +1255,7 @@ index 0ce995d9..80429a61 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 @@ -1193,3 +1193,35 @@ orbitWindowContinuationSiblingMassPow2
- 
+
  Use these names when a theorem is conceptually about low-peeling retention,
  rather than writing the raw residue-count expression every time.
 +

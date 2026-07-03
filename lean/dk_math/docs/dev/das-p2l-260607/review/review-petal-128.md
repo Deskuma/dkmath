@@ -8,13 +8,13 @@ gch: 70f0558d1428a04b6c76c6dbeaf877e7a291644f
 
 checkpoint 127 を実装しました。
 
-`PetalBridge` に window residual shape 層を追加しました。新規定義は [orbitWindowResidualShape](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:133)、`orbitWindowResidualShapeSeq`、`orbitWindowFirstFailedPow2Depth` です。主定理として [orbitWindowResidualShape_eq_oddOrbitLabel_succ](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:4714) を閉じ、有限窓で「抽出された residual shape = 次の odd label」を固定しました。
+`PetalBridge` に window residual shape 層を追加しました。新規定義は [orbitWindowResidualShape](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L133)、`orbitWindowResidualShapeSeq`、`orbitWindowFirstFailedPow2Depth` です。主定理として [orbitWindowResidualShape_eq_oddOrbitLabel_succ](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L4714) を閉じ、有限窓で「抽出された residual shape = 次の odd label」を固定しました。
 
 追加で、residual shape sequence が shifted label sequence と一致する補題、window raw factorization、first failed depth の remainder 非零も入れています。これで finite window は `label_i -> raw -> height -> residualShape -> label_{i+1}` の有限力学として読めます。
 
-おまけとして pressure 側に [SourcePressureSignChangeUp](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:6901)、frontier から sign-change を得る補題、[SourcePressureLocalIsland](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:7002) も追加しました。これは prefix 主張ではなく、margin sign pattern 分類の足場です。
+おまけとして pressure 側に [SourcePressureSignChangeUp](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L6901)、frontier から sign-change を得る補題、[SourcePressureLocalIsland](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L7002) も追加しました。これは prefix 主張ではなく、margin sign pattern 分類の足場です。
 
-ドキュメントは README、126 doc、PetalBridge guide/status を更新し、新規に [Collatz-WindowResidualShape-127.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md:1) と [report-petal-127.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-127.md:1) を作成しました。
+ドキュメントは README、126 doc、PetalBridge guide/status を更新し、新規に [Collatz-WindowResidualShape-127.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md#L1) と [report-petal-127.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-127.md#L1) を作成しました。
 
 検証:
 `lake build DkMath.Collatz.PetalBridge`
@@ -573,7 +573,7 @@ index a3a30391..323808b9 100644
 @@ -123,6 +123,34 @@ form of the sequence summed by `sumS`.
  noncomputable def orbitWindowHeightSeq (n : OddNat) (k : ℕ) : List ℕ :=
    (List.range k).map (orbitWindowHeight n)
- 
+
 +/--
 +Residual shape extracted at the `i`-th accelerated Collatz odd-state label.
 +
@@ -604,11 +604,11 @@ index a3a30391..323808b9 100644
 +
  /--
  The first `k` accelerated Collatz odd-state labels are pairwise separated.
- 
+
 @@ -4677,6 +4705,59 @@ theorem oddOrbitLabel_succ_eq_T_iterateT
    unfold oddOrbitLabel
    rw [iterateT_succ_eq_T_iterateT]
- 
+
 +/--
 +The residual shape extracted at index `i` is the next odd orbit label.
 +
@@ -664,11 +664,11 @@ index a3a30391..323808b9 100644
 +
  /--
  Label-sequence transition from the `3 mod 8` height-one channel.
- 
+
 @@ -6809,6 +6890,19 @@ theorem downClosed_iff_no_prefixFailure
      · exact hshallow
      · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
- 
+
 +/--
 +Upward sign change of the source-pressure margin between adjacent depths.
 +
@@ -684,11 +684,11 @@ index a3a30391..323808b9 100644
 +
  /--
  The first selected source-pressure depth.
- 
+
 @@ -6869,6 +6963,49 @@ theorem sourcePressurePrefixFailure_of_frontier_pos
      · exact hfront.2 0 hj
      · exact hfront.1
- 
+
 +/--
 +A positive frontier produces an upward sign change at the previous depth.
 +
@@ -756,7 +756,7 @@ index ffe4a645..abc040f3 100644
 +SourcePressureSignChangeUp
 +SourcePressureLocalIsland
  ```
- 
+
  The central No.100 layer is:
 @@ -209,6 +214,7 @@ docs/Collatz-ContinuationNesting-123.md
  docs/Collatz-PressureMargin-124.md
@@ -771,7 +771,7 @@ index 9728c161..c633dacb 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md
 @@ -149,3 +149,34 @@ continuation drop
- 
+
  The recommended next checkpoint depends on whether the reviewer wants more
  shape dynamics or more pressure-profile classification.
 +
@@ -812,7 +812,7 @@ index 9940b949..de72734e 100644
 @@ -106,6 +106,45 @@ connects the ordered list back to the accumulated Collatz height:
  (orbitWindowHeightSeq n k).sum = sumS n k
  ```
- 
+
 +### `orbitWindowResidualShape`
 +
 +```lean
@@ -853,12 +853,12 @@ index 9940b949..de72734e 100644
 +```
 +
  ## Separation And Collision
- 
+
  The bridge includes a finite split:
 @@ -207,6 +246,17 @@ sourcePressurePrefixFailure_of_frontier_pos
  depth.  It is a first-positive-margin statement, not a claim that later depths
  continue as a prefix.
- 
+
 +Checkpoint 127 adds:
 +
 +```lean
@@ -871,7 +871,7 @@ index 9940b949..de72734e 100644
 +used to classify pressure islands before proposing any new monotonicity theorem.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 8735df6b..60aaeef4 100644
@@ -884,12 +884,12 @@ index 8735df6b..60aaeef4 100644
 +orbitWindowResidualShape n i = residual shape extracted from oddOrbitLabel n i
 +orbitWindowResidualShapeSeq n k = ordered residual-shape profile
  ```
- 
+
  Checkpoint 125 adds the pressure-obstruction surface:
 @@ -157,6 +159,25 @@ So a window height can now be read as:
  RawGnomonHeight of the observed odd label
  ```
- 
+
 +Checkpoint 127 lifts residual shape extraction to windows:
 +
 +```lean
@@ -910,7 +910,7 @@ index 8735df6b..60aaeef4 100644
 +```
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-WindowResidualShape-127.md
 new file mode 100644

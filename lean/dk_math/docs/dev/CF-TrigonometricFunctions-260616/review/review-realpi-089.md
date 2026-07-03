@@ -312,7 +312,7 @@ index 8061069f..37be77b2 100644
 +The underlying general comparison theorem states that, for any finite
 +observable, the mesh-width minus trapezoid discrepancy is exactly the
 +half-width endpoint correction.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -322,7 +322,7 @@ index 3770ad4a..bd30669c 100644
 @@ -377,6 +377,52 @@ theorem sum_dyadicPhaseTrapezoidWeight_eq_one (n : ℕ) :
        rw [hmesh, hend]
        ring
- 
+
 +/--
 +Plain mesh-width and trapezoidal finite sums differ only by the half-width
 +endpoint correction.
@@ -379,7 +379,7 @@ index 699cb844..ca518856 100644
 @@ -243,6 +243,18 @@ Thus the two candidates differ as measures, but not on these particular
  boundary-log observables. This distinction keeps the finite bookkeeping sharp
  without prematurely selecting a canonical limit.
- 
+
 +The general finite comparison is now explicit: for any sampled observable
 +`f`, the difference between the plain mesh-width complete-node sum and the
 +trapezoidal sum is
@@ -393,7 +393,7 @@ index 699cb844..ca518856 100644
 +does not identify which weighted observable should survive refinement.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 9d9f9b3f..22e5b843 100644

@@ -8,11 +8,11 @@ gch: 5bf6f3c2b3a999cadd16f404faa09614d5f46527
 
 checkpoint 126 を実装しました。
 
-Route A を優先して、[GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean:222) に `RawGnomonResidualShape = (T n).1` を固定しました。そこから `rawGnomonResidualShape_odd`、完全分解 `RawGnomonStep = 2^height * residualShape`、`height + 1` で割れない補題、first failed depth の remainder 非零まで閉じています。
+Route A を優先して、[GnomonEvaluation.lean](/lean/dk_math/DkMath/Collatz/GnomonEvaluation.lean#L222) に `RawGnomonResidualShape = (T n).1` を固定しました。そこから `rawGnomonResidualShape_odd`、完全分解 `RawGnomonStep = 2^height * residualShape`、`height + 1` で割れない補題、first failed depth の remainder 非零まで閉じています。
 
-`PetalBridge` 側には、[orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:170) を追加し、window height を gnomon alignment height として読めるようにしました。さらに Route B の軽い入口として [SourcePressureFrontier](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:6819)、margin 同値、frontier から prefix failure を作る補題も入れています。
+`PetalBridge` 側には、[orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L170) を追加し、window height を gnomon alignment height として読めるようにしました。さらに Route B の軽い入口として [SourcePressureFrontier](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L6819)、margin 同値、frontier から prefix failure を作る補題も入れています。
 
-ドキュメントは `README`、`Collatz-GnomonEvaluation-125.md`、PetalBridge guide/status を更新し、新規に [Collatz-GnomonResidualShape-126.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md:1) と [report-petal-126.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md:1) を作成しました。
+ドキュメントは `README`、`Collatz-GnomonEvaluation-125.md`、PetalBridge guide/status を更新し、新規に [Collatz-GnomonResidualShape-126.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonResidualShape-126.md#L1) と [report-petal-126.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md#L1) を作成しました。
 
 検証済み:
 `lake build DkMath.Collatz.GnomonEvaluation`
@@ -594,7 +594,7 @@ index ef44f577..7c24f423 100644
 @@ -204,4 +204,92 @@ theorem rawGnomonRemainderAtDepth_eq_zero_of_le_height
      dvd_trans (pow_dvd_pow 2 hj) htop
    exact Nat.dvd_iff_mod_eq_zero.mp hdiv
- 
+
 +/--
 +The residual shape is exactly the natural value of the existing accelerated
 +Collatz map.
@@ -689,17 +689,17 @@ index d37dd9a1..a3a30391 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Collatz.Accelerated
  import DkMath.Collatz.Shift
 +import DkMath.Collatz.GnomonEvaluation
  import DkMath.Petal.RangeFamily
- 
+
  #print "file: DkMath.Collatz.PetalBridge"
 @@ -159,6 +160,20 @@ Raw height agrees with the existing Collatz observation `s` on odd states.
  theorem rawHeightLabel_eq_s (n : OddNat) :
      rawHeightLabel n.1 = s n := rfl
- 
+
 +/--
 +Window height is the raw gnomon alignment height of the observed odd label.
 +
@@ -720,7 +720,7 @@ index d37dd9a1..a3a30391 100644
 @@ -6794,6 +6809,66 @@ theorem downClosed_iff_no_prefixFailure
      · exact hshallow
      · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
- 
+
 +/--
 +The first selected source-pressure depth.
 +
@@ -798,7 +798,7 @@ index 8f6ca449..ffe4a645 100644
 +two_pow_succ_rawGnomonHeight_not_dvd
 +rawGnomonRemainderAtDepth_firstFailed_ne_zero
  ```
- 
+
  This file is intentionally integer-valued.  It does not introduce
 @@ -147,6 +152,7 @@ orbitWindowRetentionMass_split
  SourcePressureMarginInt
@@ -806,7 +806,7 @@ index 8f6ca449..ffe4a645 100644
  SourcePressureSelectedSetDownClosed
 +SourcePressureFrontier
  ```
- 
+
  The central No.100 layer is:
 @@ -202,6 +208,7 @@ docs/Collatz-SelectedPressureDepths-122.md
  docs/Collatz-ContinuationNesting-123.md
@@ -821,7 +821,7 @@ index 899d6195..4d186f27 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonEvaluation-125.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-GnomonEvaluation-125.md
 @@ -162,3 +162,45 @@ continuation_drop
- 
+
  The Lean side now has a place to store those observations as exact predicates,
  without pretending that pressure selection is automatically prefix-shaped.
 +
@@ -1030,7 +1030,7 @@ index 93f32912..9940b949 100644
 @@ -195,6 +195,18 @@ Use these names when selected depths form a non-prefix sign pattern.  Such a
  case is not an error in the model: it means that a deeper residual-shape
  channel has positive margin while a shallower one does not.
- 
+
 +Checkpoint 126 adds the first frontier predicate:
 +
 +```lean
@@ -1044,7 +1044,7 @@ index 93f32912..9940b949 100644
 +continue as a prefix.
 +
  ## Residue Counts
- 
+
  Named residue counts exist for low layers:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 4867b67e..8735df6b 100644
@@ -1058,12 +1058,12 @@ index 4867b67e..8735df6b 100644
 +sourcePressureFrontier_iff_margin
 +sourcePressurePrefixFailure_of_frontier_pos
  ```
- 
+
  These names deliberately avoid the unsafe assumption that selected pressure
 @@ -141,6 +144,19 @@ depths are always prefix-shaped.  Pressure is the margin sign condition
  and this sign can become positive at a deeper depth while remaining
  nonpositive at a shallower depth.
- 
+
 +Checkpoint 126 also connects the finite window height to the low-level gnomon
 +alignment vocabulary:
 +
@@ -1078,7 +1078,7 @@ index 4867b67e..8735df6b 100644
 +```
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-126.md
 new file mode 100644

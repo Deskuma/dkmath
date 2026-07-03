@@ -661,7 +661,7 @@ index 2b118650..a2b31452 100644
 @@ -129,6 +129,108 @@ corresponding accelerated state.
  theorem orbitWindowHeight_eq_s_iterateT (n : OddNat) (i : ℕ) :
      orbitWindowHeight n i = s (iterateT i n) := rfl
- 
+
 +/--
 +The `v2` observation is at least `2` exactly when `4` divides the observed
 +nonzero natural.
@@ -770,7 +770,7 @@ index 2b118650..a2b31452 100644
 @@ -270,6 +372,16 @@ window profile.
  noncomputable def orbitWindowHeightCountGe (n : OddNat) (k threshold : ℕ) : ℕ :=
    (orbitWindowHeightSeq n k).countP (fun x => decide (threshold ≤ x))
- 
+
 +/--
 +Number of in-window odd-state labels in residue class `1 mod 4`.
 +
@@ -787,7 +787,7 @@ index 2b118650..a2b31452 100644
 @@ -291,6 +403,43 @@ theorem orbitWindowHeightCountGe_le_window
      (List.countP_le_length
        (p := fun x => decide (threshold ≤ x)) (l := orbitWindowHeightSeq n k))
- 
+
 +/--
 +The mod `4` residue count is bounded by the window size.
 +-/
@@ -831,7 +831,7 @@ index 2b118650..a2b31452 100644
 @@ -789,6 +938,20 @@ theorem orbitWindowHeightSeq_sum_ge_window_add_of_countGe_two_ge
      (Nat.add_le_add_left hm k)
      (orbitWindowHeightSeq_sum_ge_window_add_countGe_two n k)
- 
+
 +/--
 +Residue-address drift bridge.
 +
@@ -900,7 +900,7 @@ index 58d33289..29970703 100644
 @@ -213,6 +227,36 @@ rawHeightLabel n = v2 (3n + 1)
  orbitWindowHeight n i = rawHeightLabel (oddOrbitLabel n i)
  ```
- 
+
 +The first residue-address observation is now fixed as well:
 +
 +```text
@@ -933,31 +933,31 @@ index 58d33289..29970703 100644
 +
  The ordered height profile is now explicitly connected to the existing
  Collatz accumulated-height API:
- 
+
 @@ -266,6 +310,9 @@ orbitWindowHeightCountEq n k h
- 
+
  orbitWindowHeightCountGe n k threshold
    = number of entries with height at least threshold
 +
 +orbitWindowResidueCountMod4EqOne n k
 +  = number of odd orbit labels congruent to 1 modulo 4
  ```
- 
+
  The current count API is intentionally minimal:
 @@ -319,6 +366,9 @@ finite tail layer-cake
- 
+
  external CountGe 2 lower bound
    -> m <= CountGe 2 -> k + m <= sumS n k
 +
 +mod 4 residue occupation lower bound
 +  -> m <= residueCountMod4EqOne -> k + m <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -395,6 +445,15 @@ proving only a lower bound on the second layer:
  m <= CountGe 2 -> k + m <= sumS n k
  ```
- 
+
 +Equivalently, after the residue bridge, they may prove only:
 +
 +```text
@@ -969,11 +969,11 @@ index 58d33289..29970703 100644
 +
  This is the intended bridge from a future residue/address occupation theorem
  to a Collatz drift lower bound.
- 
+
 @@ -436,6 +495,15 @@ The next safe steps are:
  6. Only after that, test whether Collatz labels can feed ABC support/rad.
  ```
- 
+
 +The immediate residue candidates are:
 +
 +```text

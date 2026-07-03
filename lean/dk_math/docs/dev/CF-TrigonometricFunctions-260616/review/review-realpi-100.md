@@ -444,7 +444,7 @@ index 2b7492fe..cd5e407d 100644
 @@ -133,6 +133,17 @@ k semantic actions  <->  Euclidean rotation by semanticPhaseAngle k
  The implemented special cases already read two quarter-turns as negation and
  four quarter-turns as the identity rotation.
- 
+
 +The action side is now connected for the first two special cases:
 +
 +```text
@@ -457,7 +457,7 @@ index 2b7492fe..cd5e407d 100644
 +angle reading remains downstream of the algebraic order-four structure.
 +
  ### Milestone A: continuous four-edge loop - implemented
- 
+
  1. The real CF2D target carries the topology induced from `Real × Real`.
 diff --git a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 index 715a0971..ead8b5e7 100644
@@ -466,7 +466,7 @@ index 715a0971..ead8b5e7 100644
 @@ -160,6 +160,13 @@ theorem pairToEuclideanPlane_euclideanPlaneToPair (v : EuclideanPlane) :
    ext i
    fin_cases i <;> rfl
- 
+
 +/-- Coordinate insertion commutes with negation. -/
 +theorem pairToEuclideanPlane_neg (p : ℝ × ℝ) :
 +    pairToEuclideanPlane (-p.1, -p.2) = -pairToEuclideanPlane p := by
@@ -480,7 +480,7 @@ index 715a0971..ead8b5e7 100644
 @@ -398,6 +405,28 @@ theorem semanticPhaseAngle_one :
      semanticPhaseAngle 1 = semanticQuarterTurnAngle := by
    simp [semanticPhaseAngle]
- 
+
 +@[simp]
 +theorem semanticPhaseAngle_two :
 +    semanticPhaseAngle 2 = semanticHalfTurnAngle :=
@@ -509,7 +509,7 @@ index 715a0971..ead8b5e7 100644
 @@ -550,6 +579,53 @@ theorem pairToEuclideanPlane_semanticAct_eq_rotation_semanticQuarterTurnAngle
    simpa [semanticQuarterTurnAngle] using
      pairToEuclideanPlane_semanticAct_eq_rotation_pi_div_two hcore z
- 
+
 +/--
 +Under the Euclidean coordinate bridge, two semantic core-zero actions are
 +rotation by the semantic half-turn angle.
@@ -558,7 +558,7 @@ index 715a0971..ead8b5e7 100644
 +  rfl
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 9bef77f2..d8b7f2bb 100644

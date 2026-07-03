@@ -705,7 +705,7 @@ index f9d74cc4..b1b1f12c 100644
 @@ -1833,6 +1833,106 @@ theorem orbitWindowContinuationSiblingMassPow2Tail_le_retentionMassTail
    rw [orbitWindowRetentionMassPow2Tail_split]
    omega
- 
+
 +/--
 +If source continuation mass is no larger than source recovery mass, then source
 +continuation occupies at most half of the parent retention mass.
@@ -812,7 +812,7 @@ index f9d74cc4..b1b1f12c 100644
 @@ -2889,6 +2989,17 @@ theorem orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation
            orbitWindowContinuationSiblingMassPow2Tail n k (r + 1) := by
          rw [orbitWindowRetentionMassPow2Tail_split]
- 
+
 +/--
 +Tail-budget spelling of
 +`orbitWindowContinuationMass_le_tailRecovery_add_tailContinuation`.
@@ -1012,7 +1012,7 @@ index ceaa90bb..c6819cf8 100644
 @@ -294,6 +294,40 @@ Use these names when the argument is conceptually about mass flow from the
  source window into the shifted-tail window.  Use the split theorems when the
  argument is about decomposing a retention cylinder into its two child cells.
- 
+
 +## Finite Half Criteria
 +
 +Checkpoint 104 connects the split theorems to `AtMostHalf`.
@@ -1048,7 +1048,7 @@ index ceaa90bb..c6819cf8 100644
 +or why recovery covers at least half of retention.
 +
  This is the theorem to reach for before writing a custom induction over `k`.
- 
+
  ## Recursive Petal Residues
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 10ec37e6..3c1dafd1 100644

@@ -10,12 +10,12 @@ gch: 48f866f95515c9589cd1ad3782e3dc94f49215dd
 
 実装内容:
 
-- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean:72) に零元まわりの `simp` 補題を追加
+- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean#L72) に零元まわりの `simp` 補題を追加
   - `KernelFamily.C_add_zero`
   - `KernelFamily.S_add_zero`
   - `KernelFamily.C_zero_add`
   - `KernelFamily.S_zero_add`
-- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md:87) の `KernelFamily` snippet を実コード型に合わせて修正
+- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md#L87) の `KernelFamily` snippet を実コード型に合わせて修正
   - `map_zero` / `map_add` を `UnitKernel R` から `Vec R` への coercion つきで記載
   - 追加した零元補題も一覧へ追記
 

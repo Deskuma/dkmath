@@ -192,7 +192,7 @@ index bc7eca3c..ea4a369d 100644
 @@ -78,9 +78,12 @@ constants, addition, multiplication, natural powers, and canonical order.
  values reconstructs the canonical quotient order, without adding decidable
  comparison.
- 
+
 -[TODO: semantic-cf2d-analysis] Use the transported real `UnitKernel` as the
 -input to the first CF2D analytic theorem. The algebraic `q2` transport is
 -implemented separately in `DkReal.SemanticCF2D`.
@@ -202,7 +202,7 @@ index bc7eca3c..ea4a369d 100644
 +
 +[TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
 +signed arithmetic. Defer them until a signed DkReal layer exists.
- 
+
  [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean b/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean
@@ -212,7 +212,7 @@ index 1af266fd..8db7d9d4 100644
 @@ -32,9 +32,12 @@ monotonicity of interval separation under refinement: once a positive
  separation appears, nestedness prevents it from returning to zero. The reverse
  direction is immediate because every stage separation is zero.
- 
+
 -[TODO: semantic-bridge] For a future semantic evaluation `eval`, prove
 -`Equiv x y → eval x = eval y` and, when justified by the representation
 -theorem, the converse.
@@ -223,7 +223,7 @@ index 1af266fd..8db7d9d4 100644
 +representation-level equality-reflection problem and should remain separate
 +from the computable definition of `Equiv`.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 index 2f260472..eabf45e7 100644
@@ -232,7 +232,7 @@ index 2f260472..eabf45e7 100644
 @@ -80,6 +80,72 @@ def semanticUnitKernel (r : UnitKernel DkNNRealQ) : UnitKernel ℝ :=
  theorem semanticUnitKernel_val (r : UnitKernel DkNNRealQ) :
      (semanticUnitKernel r : Vec ℝ) = semanticVec (r : Vec DkNNRealQ) := rfl
- 
+
 +/-- The interpreted core coordinate remains nonnegative. -/
 +theorem semanticUnitKernel_core_nonneg (r : UnitKernel DkNNRealQ) :
 +    0 ≤ (semanticUnitKernel r : Vec ℝ).core :=
@@ -300,7 +300,7 @@ index 2f260472..eabf45e7 100644
 +-/
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/RealBridge.lean b/lean/dk_math/DkMath/Analysis/RealBridge.lean
 index 59b47f16..2dd2af26 100644
@@ -309,7 +309,7 @@ index 59b47f16..2dd2af26 100644
 @@ -16,12 +16,10 @@ The definitions in `DkMath.Analysis` are algebraic and remain meaningful over
  general rings. This file records their standard real interpretation and begins
  the bridge to Mathlib's topological and analytic API.
- 
+
 -This module concerns algebraic expressions already valued in `Real`. It is not
 -the semantic evaluation bridge from `DkReal` or `DkNNRealQ`.
 -
@@ -321,7 +321,7 @@ index 59b47f16..2dd2af26 100644
 +separately in `DkMath.Analysis.DkReal.Semantic`; its CF2D consumer is isolated
 +in `DkMath.Analysis.DkReal.SemanticCF2D`.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index e1f1c363..f9425a16 100644
@@ -350,7 +350,7 @@ index 75f8b6a4..2e1075c5 100644
 +semanticAct
 +semanticAct_q2
  ```
- 
+
 -The next consumer should use the transported real `UnitKernel` in an analytic
 -CF2D theorem. Order reflection remains a separate, heavier task.
 +The transported kernel now acts on real CF2D vectors and preserves `q2`.

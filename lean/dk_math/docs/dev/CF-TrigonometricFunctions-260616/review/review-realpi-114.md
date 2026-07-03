@@ -287,7 +287,7 @@ index 9b236fcb..569c91c7 100644
 +share seams, their centers are the next indexed bases, and core-zero
 +four-step return holds for bases, endpoints, and edge functions. Fixed-`q2`
 +indexed level-set paths expose the same compatibility inside the boundary.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -297,7 +297,7 @@ index 3b4fa649..332445c9 100644
 @@ -785,6 +785,229 @@ theorem shiftedSemanticNormalizedLevelEdge_center_eq_seam
    apply Subtype.ext
    exact shiftedSemanticNormalizedEdge_center_eq_seam_of_core_eq_zero hcore z
- 
+
 +/-!
 +## Indexed shifted normalized edges
 +
@@ -539,7 +539,7 @@ index 3b4fa649..332445c9 100644
 +Concatenate four indexed shifted normalized paths once the next layer needs a
 +single closed path object rather than edgewise compatibility facts.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index 241175e3..cd374996 100644
@@ -560,12 +560,12 @@ index 241175e3..cd374996 100644
 +shiftedSemanticIndexedRightLevelEndpoint_eq_next_left
 +shiftedSemanticIndexedLevelEdge_center_eq_next_base_of_core_eq_zero
  ```
- 
+
  The shifted normalized edge starts at the left normalized center candidate,
 @@ -441,6 +451,26 @@ shiftedSemanticNormalizedEdge r (semanticAct r z) 0
  This is the seam-compatibility fact needed before four-edge shifted
  concatenation or a cyclic quotient parameter is introduced.
- 
+
 +The cyclic-index preparation is now also formalized. The `k`th shifted edge
 +uses the semantic action iterate as its base state:
 +
@@ -587,7 +587,7 @@ index 241175e3..cd374996 100644
 +boundary membership.
 +
  Candidate theorem directions:
- 
+
  ```text
 @@ -505,7 +535,11 @@ depend on that reading.
  12. Implemented: define the pointwise normalized shifted semantic edge.
@@ -600,7 +600,7 @@ index 241175e3..cd374996 100644
 +18. Implemented: package indexed shifted paths inside the fixed `q2` level set.
 +19. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -539,14 +573,24 @@ Package the shifted semantic normalized edge as a `Vec Real` path and as a
  fixed-`q2` level-set path. Endpoint aliases, adjacent seam compatibility, and
@@ -613,9 +613,9 @@ index 241175e3..cd374996 100644
 +return for bases and edge functions, and fixed-`q2` indexed level-set path
 +wrappers.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/shifted-cyclic-parameter]
 -Package four shifted normalized paths by an explicit cyclic index when the
@@ -627,7 +627,7 @@ index 241175e3..cd374996 100644
 +[TODO: semantic-cf2d/shifted-cyclic-quotient]
 +Introduce a quotient phase parameter only after the four indexed path
 +concatenation is stable.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````

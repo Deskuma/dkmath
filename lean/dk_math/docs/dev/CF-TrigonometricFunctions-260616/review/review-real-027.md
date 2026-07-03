@@ -8,7 +8,7 @@ gch: b6d92a6fd9000401e2a80838b22326d1df58669b
 
 quotient-backed 公開型 `DkNNRealQ` を実装しました。
 
-[DkNNRealQ.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean:23) に以下があります。
+[DkNNRealQ.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean#L23) に以下があります。
 
 - `DkNNReal.equivSetoid` による商型
 - `ofRat`, `zero`, `one`, `add`, `mul`, `pow`
@@ -86,7 +86,7 @@ DkNNReal.Equiv ...
 として述べていた法則を、
 
 ```lean id="v9qgq9"
-= 
+=
 ```
 
 として扱える。
@@ -329,9 +329,9 @@ index a83276f5..9b90c4be 100644
  import DkMath.Analysis.DkReal.Equiv
  import DkMath.Analysis.DkReal.DkNNReal
 +import DkMath.Analysis.DkReal.DkNNRealQ
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean
 index 3d3497cd..aefb1c69 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean
@@ -339,7 +339,7 @@ index 3d3497cd..aefb1c69 100644
 @@ -103,6 +103,38 @@ theorem equiv_pow
      Equiv (pow x d) (pow y d) :=
    DkReal.equiv_powNonneg d x.nonnegative y.nonnegative hxy
- 
+
 +/-!
 +## Exact rational and elementary power rules
 +
@@ -374,11 +374,11 @@ index 3d3497cd..aefb1c69 100644
 +
  /-!
  ## Nonnegative semiring laws modulo representation equivalence
- 
+
 @@ -157,6 +189,17 @@ theorem one_mul (x : DkNNReal) :
    DkReal.equiv_of_interval_eq
      (DkReal.one_mulNonneg_interval x.val x.nonnegative)
- 
+
 +/-- Zero absorbs multiplication on the right modulo representation equivalence. -/
 +theorem mul_zero (x : DkNNReal) :
 +    Equiv (mul x zero) zero :=
@@ -625,7 +625,7 @@ index 1b68a2e2..016eca51 100644
 @@ -65,6 +65,10 @@ DkMath.Analysis.DkReal.DkNNReal
    nonnegative wrapper with proof-free arithmetic operations and semiring laws
    modulo representation equivalence
- 
+
 +DkMath.Analysis.DkReal.DkNNRealQ
 +  quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
 +  commutative semiring laws as ordinary equalities
@@ -640,7 +640,7 @@ index 8035273b..bb094214 100644
 @@ -277,6 +277,37 @@ laws concern representation equivalence. A later quotient of
  `DkNNReal.equivSetoid`, or a dedicated quotient-backed public type, is the
  appropriate place for ordinary algebraic typeclasses.
- 
+
 +## Quotient-Backed Public Type
 +
 +`DkMath.Analysis.DkNNRealQ` is now defined as

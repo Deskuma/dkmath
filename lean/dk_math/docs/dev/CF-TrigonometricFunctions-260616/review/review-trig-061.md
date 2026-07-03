@@ -231,7 +231,7 @@ index 445b26fd..5e62e524 100644
 @@ -814,6 +814,72 @@ theorem semanticKernelFiniteOrder_two_iff_core_eq_one
    rw [semanticKernelFiniteOrder_two_iff_identity,
      semanticIdentityKernel_iff_core_eq_one]
- 
+
 +/--
 +For a transported first-quadrant kernel, product order dividing three also
 +forces the neutral kernel.
@@ -325,12 +325,12 @@ index b10c337e..45eb2662 100644
 +semanticKernelFiniteOrder_three_iff_identity
 +semanticKernelFiniteOrder_three_iff_core_eq_one
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -197,6 +199,21 @@ quadratic core formula rather than reopening the recursive product
  definition. The cubic formulas provide the next input for classifying product
  order dividing three under the transported first-quadrant constraints.
- 
+
 +Product order dividing three is now classified as well. The cubic beam
 +equation factors into:
 +
@@ -356,7 +356,7 @@ index f388c641..008ebf49 100644
 @@ -212,6 +212,25 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 05:02 JST (Order dividing three classification)
 +
 +1. 実施:
@@ -377,7 +377,7 @@ index f388c641..008ebf49 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 04:51 JST (Polynomial coordinates for powers two and three)
- 
+
  1. 方針:
 ````
 `````

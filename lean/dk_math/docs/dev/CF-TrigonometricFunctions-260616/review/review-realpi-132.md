@@ -261,7 +261,7 @@ index 2f4d672f..c7d3e7c4 100644
 +`Path.trans` and `Path.cast` structure of the canonical four-path concatenator
 +for this endpoint-cast observed path, including seam proof alignment after
 +mapping.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -271,7 +271,7 @@ index 55294fc5..720ca2fa 100644
 @@ -1935,6 +1935,24 @@ theorem shiftedPath_map_cast
    funext t
    rfl
- 
+
 +/--
 +Changing only the equality proofs used by a path cast does not change the
 +path.
@@ -292,11 +292,11 @@ index 55294fc5..720ca2fa 100644
 +
  /--
  Mapping a concatenated path agrees with concatenating the mapped paths.
- 
+
 @@ -2277,6 +2295,117 @@ theorem shiftedSemanticCyclicChartEval_left_zero
          shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
    shiftedSemanticCyclicChartEval_left hcore z (0 : Fin 4)
- 
+
 +/-- Evaluation of the first quotient right endpoint agrees with the finite API. -/
 +theorem shiftedSemanticCyclicChartEval_right_zero
 +    {r : UnitKernel DkNNRealQ}
@@ -410,7 +410,7 @@ index 55294fc5..720ca2fa 100644
 +
  /--
  The older observed closed quotient path recast to finite endpoint types.
- 
+
 @@ -2520,7 +2649,9 @@ only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
  by the cast.
  Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
@@ -419,7 +419,7 @@ index 55294fc5..720ca2fa 100644
 +packaging step. Quotient endpoint evaluation aliases, finite seam value
 +alignment aliases, and a path-cast proof-irrelevance helper isolate the
 +remaining seam proof alignment problem.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 @@ -2534,7 +2665,8 @@ endpoint casting from the observed quotient-left endpoint to the finite left
@@ -429,7 +429,7 @@ index 55294fc5..720ca2fa 100644
 -proof alignment after mapping.
 +proof alignment after mapping. The current stable route prefers value-level
 +seam alignment over direct equality of seam proof terms.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -468,12 +468,12 @@ index 88a1f66c..da8bc4f2 100644
  shiftedSemanticCyclicChartEval_edgePath_zero
 +shiftedPath_cast_proof_irrel
  ```
- 
+
  The edge-local bridge is now stronger than an endpoint comparison. A single
 @@ -840,6 +853,30 @@ compatibility of descended semantic evaluation with the nested `Path.trans`
  and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
  proof alignment after mapping.
- 
+
 +The seam alignment layer is now explicit. Quotient endpoint evaluation aliases
 +identify the semantic evaluation of quotient left/right representatives with
 +the finite fixed-boundary endpoint APIs, and value-level seam aliases record

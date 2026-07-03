@@ -413,16 +413,16 @@ index 96076fc9..705cc278 100644
 +interpretation theorem; it does not yet derive `pi` intrinsically from the
 +pre-geometric phase construction.
  -/
- 
+
  end
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 26692593..204a8b0c 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -117,10 +117,23 @@ theorem, not inserted as notation.
- 
+
  ### Milestone C: refinement law
- 
+
 -1. Define dyadic or rational subdivision of an affine phase.
 -2. Express the total correction as a finite product or sum of logarithms.
 -3. Prove compatibility under refinement.
@@ -444,9 +444,9 @@ index 26692593..204a8b0c 100644
 +their reflection symmetry, and a theorem stating how one subdivision level
 +refines the preceding level. No infinite product or Gaussian claim belongs
 +in that checkpoint.
- 
+
  ### Milestone D: limit and Gaussian bridge
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 3361293f..6f8e4895 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
@@ -470,9 +470,9 @@ index 7e18dcca..2a628787 100644
 --- a/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 +++ b/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean
 @@ -352,6 +352,10 @@ open DkMath.CosmicFormula.Rotation.CF2D
- 
+
  noncomputable section
- 
+
 +local instance euclideanPlaneFinrankTwo :
 +    Fact (Module.finrank ℝ EuclideanPlane = 2) :=
 +  ⟨finrank_euclideanSpace_fin⟩
@@ -483,7 +483,7 @@ index 7e18dcca..2a628787 100644
 @@ -405,6 +409,24 @@ theorem pairToEuclideanPlane_semanticAct_of_core_eq_zero
      simp [pairToEuclideanPlane, quarterTurnLinearIsometry,
        quarterTurnLinearEquiv, euclideanPlaneToPair, Vec.toProd]
- 
+
 +/--
 +Under the Euclidean coordinate bridge, the semantic core-zero action is
 +Mathlib's oriented rotation by `pi / 2`.
@@ -503,7 +503,7 @@ index 7e18dcca..2a628787 100644
 +    rotation_pi_div_two_eq_quarterTurn]
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index c539e641..5f2f41c0 100644

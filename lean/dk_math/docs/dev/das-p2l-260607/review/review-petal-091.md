@@ -598,7 +598,7 @@ index 7d3a3ec0..ab675ef1 100644
 @@ -310,6 +310,22 @@ theorem next_mod_four_of_mod_eight_eq_seven
      ((3 * m + 1) / 2) % 4 = 3 := by
    omega
- 
+
 +/--
 +The `7 mod 16` subchannel of `7 mod 8` exits retention toward `3 mod 8`.
 +-/
@@ -621,7 +621,7 @@ index 7d3a3ec0..ab675ef1 100644
 @@ -1324,6 +1340,46 @@ theorem oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven
    rw [oddOrbitLabel_succ_eq_T_iterateT]
    exact orbitNext_mod_four_eq_three_of_mod_eight_eq_seven n i hmod
- 
+
 +/--
 +The `7 mod 16` subchannel moves to `3 mod 8` at the next label.
 +
@@ -664,11 +664,11 @@ index 7d3a3ec0..ab675ef1 100644
 +
  /--
  Delayed peeling from the `3 mod 8` height-one channel.
- 
+
 @@ -1351,6 +1407,23 @@ theorem orbitWindowNextHeight_eq_one_of_mod_eight_eq_seven
    apply (orbitWindowHeight_eq_one_iff_mod_four_eq_three n (i + 1)).mpr
    exact oddOrbitLabel_succ_mod_four_eq_three_of_mod_eight_eq_seven n i hmod
- 
+
 +/--
 +The `7 mod 16` branch recovers delayed peeling after two transitions.
 +
@@ -692,7 +692,7 @@ index 7d3a3ec0..ab675ef1 100644
 @@ -1431,6 +1504,28 @@ theorem orbitWindowResidueCountMod8EqSeven_le_tailHeightCountEq_one
    rw [orbitWindowHeightCountEqTail_one_eq_tailResidueCount_mod4_eq_three]
    exact residueCountMod8EqSeven_le_nextResidueCountMod4EqThree n k
- 
+
 +/--
 +Source-channel sum bound through the tail partition.
 +
@@ -721,7 +721,7 @@ index 7d3a3ec0..ab675ef1 100644
 @@ -1525,6 +1620,37 @@ theorem sumS_two_steps_eq_two_of_mod_eight_eq_seven_and_next_mod_eight_eq_seven
      _ = 2 := by
        omega
- 
+
 +/--
 +Three-step recovery from the `7 mod 16` subchannel.
 +
@@ -759,7 +759,7 @@ index 7d3a3ec0..ab675ef1 100644
 @@ -1632,6 +1758,18 @@ theorem orbitWindowResidueCountMod8_partition_eq_window
                    simp [hSeven]
                    omega
- 
+
 +/--
 +The two exact-height-one source channels cannot exceed the window size.
 +
@@ -774,7 +774,7 @@ index 7d3a3ec0..ab675ef1 100644
 +
  /--
  The `height >= 1` occupation count fills the whole observation window.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 4fc4df3c..0f60f468 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
@@ -815,7 +815,7 @@ index 4fc4df3c..0f60f468 100644
 @@ -701,6 +709,48 @@ label 0 = 7 mod 8 and label 1 = 7 mod 8
    -> sumS n 2 = 2
  ```
- 
+
 +The `7 mod 8` retention channel has now been split at mod `16`:
 +
 +```text
@@ -859,7 +859,7 @@ index 4fc4df3c..0f60f468 100644
 +```
 +
  The next higher-coordinate experiment also passed:
- 
+
  ```text
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-090.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-090.md
 new file mode 100644

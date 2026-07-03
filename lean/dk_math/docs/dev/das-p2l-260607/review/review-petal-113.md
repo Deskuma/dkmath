@@ -571,7 +571,7 @@ index 131d59ca..280eeb34 100644
 @@ -2963,6 +2963,134 @@ theorem tailCauseSideDepthCount_add_eq_len
    rw [tailContinuationOutrunsDepthCount_eq_pressureDepthCount]
    exact tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len n k r len
- 
+
 +/--
 +Cause-side source frequency predicate: source continuation outruns recovery in
 +at most half of the observed depth range.
@@ -881,7 +881,7 @@ index f3716258..8436df62 100644
 @@ -631,6 +631,63 @@ RecoveryDominatesContinuation
  ContinuationOutrunsRecovery
  ```
- 
+
 +## Cause-Side Frequency Alias
 +
 +Checkpoint 112 gives the failure side its own frequency vocabulary:
@@ -940,7 +940,7 @@ index f3716258..8436df62 100644
 +```
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index d14801ca..cbb92e9b 100644

@@ -8,15 +8,15 @@ gch: 4d0d588bc6d7dada24d3f3c8d28aa09b66878df6
 
 Checkpoint 129 を実装しました。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:916) に first-failed-depth sequence の `get?/take` API を追加し、`height + 1` として読める補題も入れました。さらに [orbitWindow_threeProfiles_get?_eq_some](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:978) を追加して、`height / residual shape / first failed depth` の三つの time profile を同じ index で並べて読めるようにしました。
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L916) に first-failed-depth sequence の `get?/take` API を追加し、`height + 1` として読める補題も入れました。さらに [orbitWindow_threeProfiles_get?_eq_some](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L978) を追加して、`height / residual shape / first failed depth` の三つの time profile を同じ index で並べて読めるようにしました。
 
-Docs は README、Guide、Status、128 doc を同期し、新規に [Collatz-FirstFailedDepthSequence-129.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-FirstFailedDepthSequence-129.md:1) と [report-petal-129.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md:1) を作成しました。次は Route A がほぼ閉じたので、pressure sign-pattern scan に戻る判断を書いてあります。
+Docs は README、Guide、Status、128 doc を同期し、新規に [Collatz-FirstFailedDepthSequence-129.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-FirstFailedDepthSequence-129.md#L1) と [report-petal-129.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md#L1) を作成しました。次は Route A がほぼ閉じたので、pressure sign-pattern scan に戻る判断を書いてあります。
 
 検証:
-`lake build DkMath.Collatz.PetalBridge` passed  
-`lake build DkMath.Collatz.Collatz2K26` passed  
-対象 Collatz 2ファイルの `sorry` scan はヒットなし  
-`git diff --check` passed  
+`lake build DkMath.Collatz.PetalBridge` passed
+`lake build DkMath.Collatz.Collatz2K26` passed
+対象 Collatz 2ファイルの `sorry` scan はヒットなし
+`git diff --check` passed
 既存の unrelated warning として `ZsigmondyCyclotomicResearch.lean:152` の `sorry` 警告は継続しています。
 
 ## Review
@@ -540,7 +540,7 @@ index 18185c2d..a44bd916 100644
 @@ -913,6 +913,16 @@ theorem orbitWindowFirstFailedPow2DepthSeq_length
      (orbitWindowFirstFailedPow2DepthSeq n k).length = k := by
    simp [orbitWindowFirstFailedPow2DepthSeq]
- 
+
 +/--
 +Reading the ordered first-failed-depth profile at an in-window time recovers
 +the pointwise first-failed depth.
@@ -557,7 +557,7 @@ index 18185c2d..a44bd916 100644
 @@ -922,6 +932,70 @@ theorem orbitWindowFirstFailedPow2Depth_eq_height_add_one
    unfold orbitWindowFirstFailedPow2Depth FirstFailedPow2Depth
    rw [orbitWindowHeight_eq_rawGnomonHeight_oddOrbitLabel]
- 
+
 +/--
 +Reading the ordered first-failed-depth profile also recovers the observed height
 +plus one.
@@ -754,7 +754,7 @@ index f80ff0b1..145e8d86 100644
 @@ -155,6 +155,36 @@ orbitWindowResidualShapeSeq_take_length
  orbitWindowResidualShapeSeq_take_get?_eq_some
  ```
- 
+
 +### `orbitWindowFirstFailedPow2DepthSeq`
 +
 +```lean
@@ -786,7 +786,7 @@ index f80ff0b1..145e8d86 100644
 +still a one-dimensional theorem: the pressure-depth index is a separate axis.
 +
  ## Separation And Collision
- 
+
  The bridge includes a finite split:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index aa748855..ce728208 100644
@@ -803,7 +803,7 @@ index aa748855..ce728208 100644
 +orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some_height_add_one
 +orbitWindow_threeProfiles_get?_eq_some
  ```
- 
+
  The finite window now supports the reading:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-ResidualShapeSequence-128.md
 index bd64f2b8..03616f5e 100644
@@ -812,14 +812,14 @@ index bd64f2b8..03616f5e 100644
 @@ -126,6 +126,11 @@ orbitWindowFirstFailedPow2DepthSeq_take_get?_eq_some
  orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels_take
  ```
- 
+
 +Checkpoint 129 implements the first-failed-depth list helpers and adds
 +`orbitWindow_threeProfiles_get?_eq_some`, so the remaining residual-shape extra
 +is only needed if a later proof specifically wants a prefix version of shifted
 +labels.
 +
  ### Route B: pressure sign-pattern statistics
- 
+
  Use Python summary scans before adding heavier Lean names:
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-129.md
 new file mode 100644

@@ -635,7 +635,7 @@ index 0acbd5cc..de14db5c 100644
 @@ -551,6 +551,96 @@ theorem next_continuation_residue_expanded
    rw [Nat.add_mul_mod_self_left]
    exact Nat.mod_eq_of_lt hlt
- 
+
 +/--
 +The recovery sibling in practical residue-class form.
 +
@@ -749,7 +749,7 @@ index 9bc5a332..6f62ca4c 100644
 @@ -900,6 +906,41 @@ parent retention cell
    -> continuation sibling = next retention cell
  ```
- 
+
 +The expanded raw theorems now also have practical residue-class forms:
 +
 +```text
@@ -787,7 +787,7 @@ index 9bc5a332..6f62ca4c 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-094.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-094.md
 new file mode 100644
 index 00000000..9e798829

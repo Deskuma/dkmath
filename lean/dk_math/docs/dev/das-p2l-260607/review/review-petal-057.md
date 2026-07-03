@@ -10,11 +10,11 @@ gch: 48b84c75fd096f036deb7c6423fe282c0ffb4aff
 
 追加した Lean 側の中心は以下です。
 
-- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:376)
+- [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L376)
   - `outerPetalAddress_eq_value_eq`
   - 同じ `outerPetalAddress` を持つ valid one-based value は元の値も等しい、という復元補題
 
-- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:227)
+- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L227)
   - `petalAddressNoncollisionOn_of_injOn`
   - `petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq`
   - `petalAddressNoncollisionOn_outer_of_value_injOn`
@@ -30,9 +30,9 @@ mOf が selected index 上で injective
 
 docs も同期しています。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:725)
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:580)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1779)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L725)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L580)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1779)
 
 検証:
 
@@ -323,7 +323,7 @@ index 923335c2..1768ef43 100644
 @@ -1788,6 +1788,25 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  ```
- 
+
 +The first concrete Petal-address supply theorem is also available:
 +
 +```text
@@ -344,7 +344,7 @@ index 923335c2..1768ef43 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/Address.lean b/lean/dk_math/DkMath/Petal/Address.lean
 index be91d118..1ed953b7 100644
@@ -353,7 +353,7 @@ index be91d118..1ed953b7 100644
 @@ -367,6 +367,31 @@ theorem outerPetalAddress_decompose_sub_one
    rw [Nat.mul_comm B ((m - 1) / B)]
    rw [Nat.add_comm ((m - 1) % B) (((m - 1) / B) * B)]
- 
+
 +/--
 +An outer Petal address determines its one-based value, provided the values are
 +valid one-based inputs.
@@ -389,7 +389,7 @@ index e162f8fb..7925a94a 100644
 @@ -220,6 +220,59 @@ theorem petalAddressNoncollision_label_injOn
    petalCarrierLabelNoncollisionOn_injOn I qOf
      (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
- 
+
 +/--
 +Injective selected addresses supply Petal address noncollision.
 +
@@ -453,7 +453,7 @@ index 4bafbf3b..1ca83e55 100644
 @@ -577,5 +577,19 @@ Can Petal geometry supply concrete address noncollision and
  address-to-label compatibility?
  ```
- 
+
 +The first part now has a concrete outer-address supply theorem:
 +
 +```text
@@ -477,7 +477,7 @@ index 15890ff7..26f8e9b8 100644
 @@ -735,6 +735,26 @@ petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
  ```
- 
+
 +The first concrete address-construction supply theorem is:
 +
 +```text
@@ -499,7 +499,7 @@ index 15890ff7..26f8e9b8 100644
 +```
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

@@ -610,7 +610,7 @@ index eeb91d2c..8dcdb4e9 100644
 @@ -1576,6 +1576,200 @@ theorem orbitWindowContinuationSiblingMassPow2_le_window
    unfold orbitWindowContinuationSiblingMassPow2
    exact orbitWindowResidueCountPow2_le_window n k (r + 1) (2 ^ (r + 1) - 1)
- 
+
 +/-- Shifted-tail recovery sibling mass is bounded by the window size. -/
 +theorem orbitWindowRecoverySiblingMassPow2Tail_le_window
 +    (n : OddNat) (k r : ℕ) :
@@ -819,7 +819,7 @@ index 30ba08f2..d3b92801 100644
 +orbitWindowResidueCountPow2_refine_succ
 +orbitWindowRetentionMass_split
  ```
- 
+
  The central No.100 layer is:
 @@ -134,6 +136,7 @@ docs/Collatz-Overview.md
  docs/Collatz-Package-Structure.md
@@ -1051,7 +1051,7 @@ index 723f3aa4..47c6bb71 100644
 @@ -218,6 +218,55 @@ The helper returns:
  source cell count <= target tail cell count
  ```
- 
+
 +## Depth Refinement
 +
 +Checkpoint 102 adds the recursive residue-cell split.
@@ -1102,7 +1102,7 @@ index 723f3aa4..47c6bb71 100644
 +retention cylinder.
 +
  This is the theorem to reach for before writing a custom induction over `k`.
- 
+
  ## Recursive Petal Residues
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 10d1985c..2b9a3743 100644

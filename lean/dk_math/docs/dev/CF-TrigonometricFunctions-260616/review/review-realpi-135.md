@@ -283,7 +283,7 @@ index d99d3165..6a4fcf60 100644
 +closed path and the existing finite four-level path. The result is entirely a
 +`Path.map`/`Path.trans`/`Path.cast` theorem, not a boundary or semantic
 +obstruction.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -293,7 +293,7 @@ index b6715084..dba81758 100644
 @@ -2250,6 +2250,42 @@ theorem shiftedFourPathConcatWithSeams_congr_cast_irrel
    funext t
    rfl
- 
+
 +/--
 +Mapping the canonical four-edge concatenator agrees with concatenating the
 +four mapped edges.
@@ -332,11 +332,11 @@ index b6715084..dba81758 100644
 +
  /--
  Canonical quotient four-edge path via the common seam concatenator.
- 
+
 @@ -2569,6 +2605,116 @@ theorem shiftedSemanticCyclicChartEval_seam_three_value
        shiftedSemanticFinLeftLevelEndpoint hcore z (0 : Fin 4) :=
    shiftedSemanticFinRightLevelEndpoint_three_eq_zero_left hcore z
- 
+
 +/--
 +Mapping the already-glued quotient four-path agrees with gluing the four
 +mapped quotient edges after endpoint relabelling.
@@ -449,11 +449,11 @@ index b6715084..dba81758 100644
 +
  /--
  The older observed closed quotient path recast to finite endpoint types.
- 
+
 @@ -2651,6 +2797,70 @@ theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
    rw [shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_apply]
    exact shiftedSemanticObservedCyclicFourPath_q2 hcore z t
- 
+
 +/--
 +The endpoint-cast older observed quotient path is the canonical observed
 +via-edge path.
@@ -547,7 +547,7 @@ index 958f7970..de46d7db 100644
  shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
 @@ -915,10 +921,36 @@ shiftedSemanticCyclicChartEval_mappedEdges_eq_observedViaEdges
  ```
- 
+
  This proves the edgewise form of "map each quotient edge, relabel endpoints,
 -then glue". The remaining global comparison is narrower: prove that mapping
 -the already-glued quotient four-path is equal to this edgewise mapped
@@ -583,13 +583,13 @@ index 958f7970..de46d7db 100644
 +This closes the current path-packaging comparison. The proof remains entirely
 +inside Mathlib path normalization: `Path.map`, nested `Path.trans`, and
 +`Path.cast`.
- 
+
  For the future DkMath-native path layer, this suggests the following
  `DkPath` design rule. The API should separate:
 @@ -940,16 +972,12 @@ public theorem surface. A DkPath wrapper can therefore expose map/trans/cast
  normalization as first-class theorems, rather than forcing each downstream
  module to rediscover the same proof-term bookkeeping.
- 
+
 -The full comparison between evaluation of `shiftedCyclicFourPath` and the
 -existing fixed-`q2` four-level path is intentionally left as a TODO until that
 -global map-through-gluing theorem is available. This remains pre-geometric:
@@ -606,9 +606,9 @@ index 958f7970..de46d7db 100644
 +closed. The next design task is to factor the reusable path-normalization API
 +into a future DkMath-native path layer, while keeping Mathlib `Path` as the
 +external topology bridge.
- 
+
  Candidate theorem directions:
- 
+
 @@ -1052,9 +1080,11 @@ depend on that reading.
      boundary path.
  44. Implemented: expose source, target, endpoint-evaluation, and `q2`
@@ -622,7 +622,7 @@ index 958f7970..de46d7db 100644
 +    the existing fixed-`q2` four-level path.
 +47. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -1142,19 +1172,27 @@ fixed-`q2` finite level edge.
  Observe the closed quotient chart path through the descended semantic
@@ -636,9 +636,9 @@ index 958f7970..de46d7db 100644
 +four-level path. This closes the path-packaging comparison before any
 +Euclidean angle reading.
  ```
- 
+
  ## Remaining TODO Tags
- 
+
  ```text
 -[TODO: semantic-cf2d/shifted-cyclic-path-eval]
 -Compare evaluation of the closed quotient path with the fixed-`q2` four-level
@@ -647,7 +647,7 @@ index 958f7970..de46d7db 100644
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
  continuous evaluation API has downstream consumers.
- 
+
 +[TODO: semantic-cf2d/dkpath-layer]
 +Factor the validated path-normalization API into a future DkMath-native path
 +layer: trace, endpoint labels, seam witnesses, map/cast/trans compatibility,

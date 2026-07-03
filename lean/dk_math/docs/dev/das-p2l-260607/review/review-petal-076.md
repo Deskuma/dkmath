@@ -423,9 +423,9 @@ index 4a931b65..a048d368 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge.lean
 @@ -32,6 +32,16 @@ shape of a merge, fold, or cycle candidate.
- 
+
  namespace DkMath.Collatz
- 
+
 +/--
 +The finite observation window for the first `k` accelerated Collatz states.
 +
@@ -438,11 +438,11 @@ index 4a931b65..a048d368 100644
 +
  /--
  The natural-number label of the `i`-th accelerated Collatz odd state.
- 
+
 @@ -51,6 +61,28 @@ different in-range times have different observed odd states.
  def OddOrbitLabelsPairwiseSeparated (n : OddNat) (k : ℕ) : Prop :=
    ∀ i, i < k → ∀ j, j < k → i ≠ j → oddOrbitLabel n i ≠ oddOrbitLabel n j
- 
+
 +/--
 +Window-level spelling of pairwise separation for accelerated Collatz labels.
 +-/
@@ -471,7 +471,7 @@ index 4a931b65..a048d368 100644
 @@ -106,4 +138,55 @@ theorem same_iterateT_of_oddOrbitLabel_collision
      iterateT i n = iterateT j n :=
    iterateT_eq_of_oddOrbitLabel_eq hlabel
- 
+
 +/--
 +A window collision identifies the two accelerated Collatz states at the
 +colliding times.
@@ -530,7 +530,7 @@ index ea2f2dea..d17e8324 100644
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 @@ -74,23 +74,32 @@ DkMath.Collatz.PetalBridge
  It defines:
- 
+
  ```lean
 +OrbitWindow
  oddOrbitLabel
@@ -538,16 +538,16 @@ index ea2f2dea..d17e8324 100644
 +OrbitWindowSeparated
 +OrbitWindowCollision
  ```
- 
+
  where:
- 
+
  ```text
 +OrbitWindow n k = Finset.range k
  oddOrbitLabel n i = the natural value of iterateT i n
  ```
- 
+
  The first theorem set is deliberately thin:
- 
+
  ```lean
 +orbitWindow_eq_range
  oddOrbitLabel_injOn_of_pairwiseSeparated
@@ -559,12 +559,12 @@ index ea2f2dea..d17e8324 100644
 +orbitWindowSeparated_contradiction_of_collision
 +orbitWindowSeparated_or_collision
  ```
- 
+
  ## Interpretation
 @@ -139,6 +148,18 @@ Collatz orbit segment
    -> either separated segment or collision obstruction
  ```
- 
+
 +The current window-level split is:
 +
 +```text
@@ -578,11 +578,11 @@ index ea2f2dea..d17e8324 100644
 +inside a chosen finite window.
 +
  This gives a clean place to attach future hypotheses:
- 
+
  ```text
 @@ -153,9 +174,9 @@ orbit collision implies a specific fold/cycle condition
  The next safe steps are:
- 
+
  ```text
 -1. Define a Collatz orbit segment as a finite range family.
 -2. Add a collision-vs-separated predicate split.
@@ -592,6 +592,6 @@ index ea2f2dea..d17e8324 100644
 +3. Test whether an external label transform can turn orbit labels into carrier labels.
  4. Only after that, test whether Collatz labels can feed ABC support/rad.
  ```
- 
+
 ````
 `````

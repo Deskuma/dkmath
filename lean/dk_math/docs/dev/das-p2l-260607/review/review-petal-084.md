@@ -8,7 +8,7 @@ gch: 1788fdb63ab85b23138150b68cab97d117bf544c
 
 実装しました。checkpoint `083` は、一般 finite layer-cake まで到達しています。
 
-[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:650) に追加した主な定理:
+[PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L650) に追加した主な定理:
 
 ```lean
 range_threshold_count_le
@@ -31,8 +31,8 @@ orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_three_add_co
 
 ドキュメントも同期しました。
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:126)
-- [report-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L126)
+- [report-petal-083.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md#L1)
 
 検証:
 
@@ -659,7 +659,7 @@ index c2e61f70..2b118650 100644
 @@ -638,6 +638,169 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two_add_countGe_thre
                hone, htwo, hthree, if_false]
              exact Nat.le_add_right_of_le ih'
- 
+
 +/--
 +Only `x` of the positive thresholds can be visible below a natural height `x`.
 +
@@ -845,7 +845,7 @@ index 62da4cf5..58d33289 100644
  oddOrbitLabel_injOn_of_pairwiseSeparated
  iterateT_eq_of_oddOrbitLabel_eq
 @@ -300,6 +307,18 @@ threshold monotonicity
- 
+
  first three layer-cake layers
    -> CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
 +
@@ -861,12 +861,12 @@ index 62da4cf5..58d33289 100644
 +external CountGe 2 lower bound
 +  -> m <= CountGe 2 -> k + m <= sumS n k
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -350,8 +369,34 @@ The experimental three-layer theorem also passed:
  CountGe 1 + CountGe 2 + CountGe 3 <= sumS n k
  ```
- 
+
 -This is evidence that the next natural theorem is the general finite
 -layer-cake form over `Finset.range H`.
 +This evidence has now been upgraded to the general finite layer-cake theorem:
@@ -897,9 +897,9 @@ index 62da4cf5..58d33289 100644
 +
 +This is the intended bridge from a future residue/address occupation theorem
 +to a Collatz drift lower bound.
- 
+
  The bridge theorem
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-083.md
 new file mode 100644
 index 00000000..9d6080e8

@@ -307,7 +307,7 @@ index 33e4b575..5e662057 100644
 -to the later `1 / 3` target without taking a limit.
 +to the later `1 / 3` target without taking a limit. The centered log-depth
 +trapezoidal sum is consequently bounded above by that same closed expression.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -317,7 +317,7 @@ index 5270028a..a07d80f4 100644
 @@ -920,6 +920,24 @@ theorem dyadicPhaseTrapezoidCenteredQuadraticSum_eq (n : ℕ) :
            field_simp [hdenom]
            ring
- 
+
 +/--
 +Closed finite upper bound for the trapezoidal centered log-depth sum.
 +
@@ -346,7 +346,7 @@ index 0798f76e..9e7a5a28 100644
 @@ -322,11 +322,26 @@ dyadicPhaseTrapezoidCenteredQuadraticSum n
    = 1/3 + 2/(3 * (2^n)^2).
  ```
- 
+
 +Here `2^n` is Lean's `dyadicPhaseDenom n`. The code states the theorem with
 +`dyadicPhaseDenom n`, and the equality `dyadicPhaseDenom n = 2^n` is the
 +definition of the dyadic denominator.
@@ -355,7 +355,7 @@ index 0798f76e..9e7a5a28 100644
  quadratic moment by elementary first-power and square-sum formulas, then
  subtracts the trapezoidal endpoint correction. This exposes the finite
  correction to the later `1/3` target without invoking an integral or a limit.
- 
+
 +Combining this closed quadratic moment with the pointwise logarithmic upper
 +bound gives the finite centered log-depth estimate
 +
@@ -368,7 +368,7 @@ index 0798f76e..9e7a5a28 100644
 +left-hand side.
 +
  ### Milestone D: limit and Gaussian bridge
- 
+
  1. Prove convergence of the refinement correction.
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 4b63cb10..125c178a 100644
@@ -382,9 +382,9 @@ index 4b63cb10..125c178a 100644
 +`1/3 + 2/(3 * (dyadicPhaseDenom n : Real)^2)`. Here
 +`dyadicPhaseDenom n = 2^n`. The trapezoidal centered log-depth sum is bounded
 +above by the same closed finite expression.
- 
+
  The current implementation proves a four-state return:
- 
+
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 70428be8..0edcbc63 100644
 --- a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md

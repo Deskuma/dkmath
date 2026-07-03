@@ -255,7 +255,7 @@ index f019794c..7eae9d43 100644
 @@ -136,6 +136,12 @@ theorem pow_one (x : DkNNReal) :
    DkReal.equiv_of_interval_eq
      (DkReal.powNonneg_one_interval x.val x.nonnegative)
- 
+
 +/-- A successor power is multiplication of the preceding power by the base, modulo equivalence. -/
 +theorem pow_succ (x : DkNNReal) (d : ℕ) :
 +    Equiv (pow x (d + 1)) (mul (pow x d) x) :=
@@ -264,7 +264,7 @@ index f019794c..7eae9d43 100644
 +
  /-!
  ## Nonnegative semiring laws modulo representation equivalence
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
 index bd73a2ee..d3f50a42 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
@@ -272,20 +272,20 @@ index bd73a2ee..d3f50a42 100644
 @@ -26,9 +26,9 @@ Mathlib's `Real` is selected.
  `DkReal.Order` defines an asymptotic representative order, proves invariance
  under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
- 
+
 -Addition and multiplication are monotone for the asymptotic order. Establish
 -power monotonicity and verify the intended ordered-algebra hierarchy before
 -installing stronger typeclasses.
 +Addition, multiplication, and natural powers are monotone for the asymptotic
 +order. Prove that zero is least and verify the intended ordered-algebra
 +hierarchy before installing stronger typeclasses.
- 
+
  [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 @@ -193,6 +193,13 @@ theorem pow_one (x : DkNNRealQ) : x ^ (1 : ℕ) = x := by
    intro a
    exact Quotient.sound (DkNNReal.pow_one a)
- 
+
 +/-- Successor powers agree with multiplication by the base. -/
 +theorem pow_succ_eq (x : DkNNRealQ) (d : ℕ) :
 +    x ^ (d + 1) = x ^ d * x := by
@@ -295,7 +295,7 @@ index bd73a2ee..d3f50a42 100644
 +
  /-!
  ## Commutative semiring laws as quotient equalities
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 index 9a3ef7c6..61d3173b 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -303,7 +303,7 @@ index 9a3ef7c6..61d3173b 100644
 @@ -26,9 +26,10 @@ partial order on `DkNNRealQ`.
  [TODO] Prove totality, or identify the additional representation theorem needed
  to derive it.
- 
+
 -Addition and multiplication on nonnegative representations are monotone for
 -this order. Natural-power monotonicity remains a prerequisite for the intended
 -ordered-semiring API.
@@ -312,12 +312,12 @@ index 9a3ef7c6..61d3173b 100644
 +that zero is least and to match these theorems with the intended typeclass
 +hierarchy.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -296,4 +297,20 @@ theorem mul_le_mul
    intro c d hcd
    exact DkNNReal.mul_le_mul hab hcd
- 
+
 +/--
 +Natural powers are monotone.
 +
@@ -347,14 +347,14 @@ index c7bd4207..09c6bcd2 100644
 +  addition, multiplication, and natural-power monotonicity are proved
 +  next prove that zero is least and inspect ordered-algebra typeclass requirements
    investigate totality before any LinearOrder claim
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index d9501f47..0e91f259 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 @@ -49,9 +49,9 @@ The next independent tasks are:
- 
+
  1. **Ordered algebra.** `DkReal.Order` now defines order by vanishing positive
     lower-endpoint defect, proves invariance under `Equiv`, and installs a
 -   `PartialOrder` on `DkNNRealQ`. Addition and multiplication are monotone.
@@ -373,14 +373,14 @@ index d3c955e8..5281b7fb 100644
 @@ -60,8 +60,9 @@ The next phase defines representative order by vanishing positive
  lower-endpoint defect. It is invariant under vanishing-separation equivalence
  and yields a `PartialOrder` on `DkNNRealQ`.
- 
+
 -Addition and multiplication are monotone for this order. Remaining order work
 -is power monotonicity, together with the question of totality.
 +Addition, multiplication, and natural powers are monotone for this order.
 +Remaining ordered-algebra work includes proving that zero is least and
 +selecting the appropriate typeclass hierarchy, together with totality.
  No `LinearOrder` is claimed yet.
- 
+
  ### Semantic Bridge
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 index 72986721..c7c090dd 100644
@@ -395,7 +395,7 @@ index 72986721..c7c090dd 100644
 +remain deferred until zero-minimality and the intended hierarchy have been
 +verified; addition, multiplication, and natural-power monotonicity are now
 +available.
- 
+
  Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
  module because selecting the represented limit may require `noncomputable`.
 ````

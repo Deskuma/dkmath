@@ -218,7 +218,7 @@ index 15b1e6b9..2f4d672f 100644
 +descended semantic evaluation with the nested `Path.trans` and `Path.cast`
 +structure of the canonical four-path concatenator for this endpoint-cast
 +observed path, including seam proof alignment after mapping.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -228,7 +228,7 @@ index ac32ba6b..55294fc5 100644
 @@ -1917,6 +1917,38 @@ theorem shiftedPath_cast_apply
      (t : unitInterval) :
      (p.cast hac hbd) t = p t := rfl
- 
+
 +/--
 +Mapping a casted path is the same pointwise as casting the mapped path.
 +
@@ -271,7 +271,7 @@ index ac32ba6b..55294fc5 100644
 +Mathlib's `Path.map_trans` is exposed through a local wrapper, and a local
 +`Path.map`/`Path.cast` compatibility theorem is available for the next
 +packaging step.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 @@ -2498,7 +2533,8 @@ descended semantic evaluation with the canonical four-path concatenator, after
@@ -281,7 +281,7 @@ index ac32ba6b..55294fc5 100644
 -and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
 +and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
 +proof alignment after mapping.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -299,7 +299,7 @@ index ad3ca5f4..88a1f66c 100644
  shiftedSemanticCyclicChartEval_edgePath_zero
 @@ -719,12 +721,17 @@ shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
  ```
- 
+
  A small pointwise `Path.cast` helper records that endpoint-type casts do not
 -change path values. Source and target helpers for `Path.trans` record the
 -endpoint behavior of path concatenation, and the edge-zero wrapper specializes
@@ -310,7 +310,7 @@ index ad3ca5f4..88a1f66c 100644
 +`Path.trans` record the endpoint behavior of path concatenation, and the
 +edge-zero wrapper specializes the local quotient edge evaluation theorem to
 +the first finite edge:
- 
+
  ```text
  shiftedPath_cast_apply
 +shiftedPath_map_cast
@@ -319,13 +319,13 @@ index ad3ca5f4..88a1f66c 100644
  shiftedPath_trans_apply_target
  shiftedSemanticCyclicChartEval_edgePath_zero
 @@ -830,7 +837,8 @@ nested Path.trans / Path.cast of semantic edge evaluations
- 
+
  So the endpoint mismatch is solved. The remaining obstruction is the
  compatibility of descended semantic evaluation with the nested `Path.trans`
 -and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
 +and `Path.cast` structure of `shiftedFourPathConcatWithSeams`, including seam
 +proof alignment after mapping.
- 
+
  The full comparison between evaluation of `shiftedCyclicFourPath` and the
  existing fixed-`q2` four-level path is intentionally left as a TODO because it
 ````

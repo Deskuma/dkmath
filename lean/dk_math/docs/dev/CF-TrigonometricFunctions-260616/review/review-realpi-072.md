@@ -297,7 +297,7 @@ index a44ddff8..11b66ce8 100644
 -continuous path.
 +continuous path. The final path is also packaged directly in
 +`LevelSet Real (q2 z)`, so boundary membership is enforced by its codomain.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -307,7 +307,7 @@ index 869501d3..130a8451 100644
 @@ -1330,8 +1330,13 @@ original boundary.
  transported through all four action phases. The resulting fixed-`q2` paths
  have exact seams and concatenate to a closed path.
- 
+
 -[TODO: semantic-cf2d-phase/levelset-path] Package the normalized paths directly
 -in `LevelSet Real (q2 z)`, making boundary membership part of the target type.
 +[IMPLEMENTED: semantic-cf2d-phase/levelset-path] The normalized phases and
@@ -317,7 +317,7 @@ index 869501d3..130a8451 100644
 +[TODO: semantic-cf2d-phase/euclidean-levelset-bridge] Identify the positive
 +real `q2` level sets with the corresponding Euclidean circle model without
 +changing the pre-geometric construction.
- 
+
  [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
  identify the fixed-`q2` path with the standard Euclidean circle model and
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean
@@ -327,7 +327,7 @@ index da9850b8..f8492893 100644
 @@ -258,6 +258,108 @@ def normalizedClosedFourPhasePath
        source' := p.source
        target' := p.target.trans hclose }
- 
+
 +/-!
 +## Paths internal to the square-mass boundary
 +
@@ -431,7 +431,7 @@ index da9850b8..f8492893 100644
 +      target' := p.target.trans hclose }
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index ab6fc307..f424183e 100644
@@ -443,13 +443,13 @@ index ab6fc307..f424183e 100644
     seams, and concatenate to a closed continuous path.
 +5. The closed path is packaged in the fixed `q2` level-set subtype, so
 +   boundary membership is enforced by the target type.
- 
+
  ### Milestone C: refinement law
- 
+
 @@ -153,6 +155,7 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  ## Immediate Next Step
- 
+
 -The next implementation may package the path directly in the `q2` level-set
 -subtype before introducing any Euclidean circle terminology. Refinement and
 -limit arguments remain separate checkpoints.
@@ -464,13 +464,13 @@ index 713a092e..c0938864 100644
 @@ -21,6 +21,10 @@ That module also implements all four normalized action translates, their
  seams, common fixed-`q2` law, phase-index periodicity, continuous paths, and
  the resulting closed four-phase path.
- 
+
 +The same construction is now packaged directly in
 +`LevelSet Real (Vec.q2 z)`. The level-set subtype carries its inherited
 +topology, and the final closed path cannot leave the boundary by construction.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -339,7 +343,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/path-concatenation]
@@ -489,7 +489,7 @@ index 827b9153..5c855199 100644
 @@ -94,6 +94,24 @@ theorem Continuous.vec_mk
      Continuous (fun x => Vec.mk (f x) (g x)) :=
    continuous_vec_iff.mpr ⟨hf, hg⟩
- 
+
 +section LevelSet
 +
 +variable [Semiring R] (rho2 : R)
@@ -509,7 +509,7 @@ index 827b9153..5c855199 100644
 +end LevelSet
 +
  end Topology
- 
+
  end DkMath.CosmicFormula.Rotation.CF2D
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 640987eb..751eae0f 100644

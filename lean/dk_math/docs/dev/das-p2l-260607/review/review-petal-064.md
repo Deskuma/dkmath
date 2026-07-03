@@ -375,7 +375,7 @@ index c372e0b5..e6024ff6 100644
 @@ -1910,6 +1910,19 @@ petalNoLiftCarrierLabelMapData_of_zsigmondyPrimitivePrimeDivisor_family
  The no-lift constructors keep local no-lift as an explicit hypothesis.
  Primitive/Zsigmondy witnesses supply carrier location, not automatic no-lift.
- 
+
 +Direct log-capacity wrappers now close the constructor-to-provider route:
 +
 +```text
@@ -390,7 +390,7 @@ index c372e0b5..e6024ff6 100644
 +log-capacity route, while no-lift remains a separate local contract.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index c34ae7ab..25ef255a 100644
@@ -399,7 +399,7 @@ index c34ae7ab..25ef255a 100644
 @@ -1517,6 +1517,148 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_noLiftCarrierLabel
        I d x u n lap mOf qOf hdata)
      hdata.carrier
- 
+
 +/--
 +Direct PrimitiveBeam-to-log-capacity wrapper in body coordinates.
 +
@@ -544,7 +544,7 @@ index c34ae7ab..25ef255a 100644
 +
  /--
  Value-map form of the outer-address no-lift GN log-capacity route.
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md b/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 index dbcb2f0c..0813e896 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
@@ -552,7 +552,7 @@ index dbcb2f0c..0813e896 100644
 @@ -702,5 +702,19 @@ These constructors are the first practical supply route into
  `PetalCarrierLabelMapData`.  The no-lift versions still require explicit local
  no-lift hypotheses; they do not claim Zsigmondy alone implies no-lift.
- 
+
 +The constructor layer now has direct log-capacity wrappers:
 +
 +```text
@@ -576,7 +576,7 @@ index 2f45112b..cd42c106 100644
 @@ -856,6 +856,20 @@ The no-lift constructors deliberately keep local no-lift as an explicit
  hypothesis.  Primitive/Zsigmondy witnesses supply GN carriers, not automatic
  no-lift.
- 
+
 +Direct log-capacity wrappers now compose these constructors with the finite GN
 +route:
 +
@@ -592,7 +592,7 @@ index 2f45112b..cd42c106 100644
 +require explicit local no-lift hypotheses.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

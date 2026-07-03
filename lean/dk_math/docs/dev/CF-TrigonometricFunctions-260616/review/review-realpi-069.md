@@ -270,9 +270,9 @@ index dcdfed03..ff4e1d2f 100644
  import DkMath.Analysis.DkReal.SemanticCF2D
  import DkMath.Analysis.DkReal.SemanticCF2DPhase
 +import DkMath.Analysis.DkReal.SemanticCF2DPath
- 
+
  #print "file: DkMath.Analysis"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 index d0a7917f..2d329370 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
@@ -280,7 +280,7 @@ index d0a7917f..2d329370 100644
 @@ -99,6 +99,12 @@ fixed `q2` boundary by the exact factor
  of one half, and reflection about the midpoint proves the first continuous
  half-fold symmetry without introducing circles or angles.
- 
+
 +[IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
 +coordinate-product topology from `CF2D.Topology` to package every translated
 +affine edge as a Mathlib `Path`. Four seam-compatible edges concatenate to a
@@ -289,7 +289,7 @@ index d0a7917f..2d329370 100644
 +
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 index 2e32c5cc..785f95a3 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -297,14 +297,14 @@ index 2e32c5cc..785f95a3 100644
 @@ -1317,9 +1317,9 @@ form exact seams, and the family is four-periodic under a core-zero kernel.
  profile `((1-t)^2 + t^2) * q2 z`, symmetric under `t ↦ 1-t`, with a positive
  lower bound of one half.
- 
+
 -[TODO: semantic-cf2d-phase/path-concatenation] Package the four compatible
 -edges as a closed Mathlib `Path`. This is a piecewise-affine loop, not yet a
 -fixed-`q2` boundary path.
 +[IMPLEMENTED: semantic-cf2d-phase/path-concatenation] `SemanticCF2DPath`
 +packages each compatible edge as a Mathlib `Path` and concatenates four edges
 +into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
- 
+
  [TODO: semantic-cf2d-phase/boundary-normalization] In a separate analytic
  module, normalize the affine edge by its positive `q2` profile and prove that
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPath.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPath.lean
@@ -427,7 +427,7 @@ index 14fba55e..14a7f13d 100644
 @@ -103,6 +103,18 @@ theorem phaseDepth_half :
      phaseDepth (1 / 2 : ℝ) = 1 / 2 := by
    norm_num [phaseDepth]
- 
+
 +/-- The midpoint is the unique point at which phase depth reaches its minimum. -/
 +theorem phaseDepth_eq_half_iff (t : ℝ) :
 +    phaseDepth t = 1 / 2 ↔ t = 1 / 2 := by
@@ -442,18 +442,18 @@ index 14fba55e..14a7f13d 100644
 +
  /-!
  ## One affine master edge
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index eb33bfa2..48d2e6db 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 @@ -97,13 +97,13 @@ theorem, not inserted as notation.
- 
+
  ## Formal Milestones
- 
+
 -### Milestone A: continuous four-edge loop
 +### Milestone A: continuous four-edge loop - implemented
- 
+
 -1. Equip the real CF2D target with an explicit topology or bridge it to
 -   `Real × Real`.
 -2. Package each affine edge as a Mathlib `Path`.
@@ -464,13 +464,13 @@ index eb33bfa2..48d2e6db 100644
 +3. Four seam-compatible paths are concatenated.
 +4. Core-zero exact order four closes the endpoint without Euclidean
 +   terminology.
- 
+
  ### Milestone B: boundary normalization
- 
+
 @@ -152,7 +152,7 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  ## Immediate Next Step
- 
+
 -The next implementation should be the topological bridge for the already
 -proved affine edge family. It should stop after constructing the continuous
 -closed four-edge path. Boundary normalization and limit arguments remain
@@ -486,14 +486,14 @@ index eac3ebde..79fb9957 100644
 @@ -8,6 +8,11 @@ The scalar profile, affine master edge, endpoint laws, exact core-zero `q2`
  profile, and half-fold observation theorem are implemented in
  `DkMath.Analysis.DkReal.SemanticCF2DPhase`.
- 
+
 +The coordinate-product topology, continuous edge paths, four-edge
 +concatenation, and core-zero closed path are implemented in
 +`DkMath.CosmicFormula.Rotation.CF2D.Topology` and
 +`DkMath.Analysis.DkReal.SemanticCF2DPath`.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -322,8 +327,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/master-edge]

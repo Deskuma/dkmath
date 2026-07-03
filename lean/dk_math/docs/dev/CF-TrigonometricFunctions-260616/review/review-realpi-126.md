@@ -19,7 +19,7 @@ gch: b3fbda97477a0c3f74ad18074430f0a99aa43cfd
   - `shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath`
   - closed four-path の value-level endpoint 比較 2 本
 
-これで「semantic 側の不一致」ではなく、「nested `Path.trans` / endpoint `Path.cast` の packaging 正規化だけが残っている」とかなり明確になりました。  
+これで「semantic 側の不一致」ではなく、「nested `Path.trans` / endpoint `Path.cast` の packaging 正規化だけが残っている」とかなり明確になりました。
 [DkReal.lean](/lean/dk_math/DkMath/Analysis/DkReal.lean) と [design-phase-center-shift-104.md](/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md) も同期済みです。
 
 確認:
@@ -261,7 +261,7 @@ index 7919f444..f0cecd6c 100644
 +finite fixed-boundary edge path. The remaining four-edge comparison is
 +therefore a normalization problem for nested `Path.trans` and endpoint casts,
 +not a semantic obstruction.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -271,7 +271,7 @@ index 9b194e6d..35396d4e 100644
 @@ -1381,6 +1381,15 @@ theorem shiftedSemanticFinLevelPath_apply
      (shiftedSemanticFinLevelPath hcore z i t).1 =
        shiftedSemanticFinEdge r z i t := rfl
- 
+
 +/-- Applying a finite level path gives the corresponding finite level edge. -/
 +@[simp]
 +theorem shiftedSemanticFinLevelPath_apply_eq_levelEdge
@@ -287,7 +287,7 @@ index 9b194e6d..35396d4e 100644
 @@ -1908,6 +1917,22 @@ theorem shiftedPath_cast_apply
      (t : unitInterval) :
      (p.cast hac hbd) t = p t := rfl
- 
+
 +/-- The source endpoint of a concatenated path is the source of the first path. -/
 +theorem shiftedPath_trans_apply_source
 +    {α : Type _} [TopologicalSpace α]
@@ -306,11 +306,11 @@ index 9b194e6d..35396d4e 100644
 +
  /--
  Edge-zero specialization of quotient-edge evaluation.
- 
+
 @@ -1923,6 +1948,59 @@ theorem shiftedSemanticCyclicChartEval_edgePath_zero
          shiftedSemanticFinLevelEdge hcore z (0 : Fin 4) t :=
    shiftedSemanticCyclicChartEval_edgePath hcore z (0 : Fin 4) t
- 
+
 +/--
 +Observe a single quotient edge inside the fixed square-mass boundary.
 +
@@ -366,11 +366,11 @@ index 9b194e6d..35396d4e 100644
 +
  /--
  The closed quotient chart path observed inside the fixed square-mass boundary.
- 
+
 @@ -2009,6 +2087,17 @@ theorem shiftedSemanticObservedCyclicFourPath_source_eq_finFourLevelPath_source
      shiftedSemanticFinFourLevelPath_source]
    rfl
- 
+
 +/-- Value-level source comparison for the observed and finite four-level paths. -/
 +theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_source
 +    {r : UnitKernel DkNNRealQ}
@@ -388,7 +388,7 @@ index 9b194e6d..35396d4e 100644
 @@ -2027,6 +2116,17 @@ theorem shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
      shiftedSemanticFinFourLevelPath_target]
    rfl
- 
+
 +/-- Value-level target comparison for the observed and finite four-level paths. -/
 +theorem shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
 +    {r : UnitKernel DkNNRealQ}
@@ -402,7 +402,7 @@ index 9b194e6d..35396d4e 100644
 +
  /--
  The quotiented chart evaluation still lands on the original `q2` boundary.
- 
+
 @@ -2114,6 +2214,10 @@ The observed quotient path and the finite four-level path now have explicit
  source and target comparison theorems. A local `Path.cast` pointwise helper
  and an edge-zero evaluation wrapper prepare the later full comparison without
@@ -411,7 +411,7 @@ index 9b194e6d..35396d4e 100644
 +observed quotient edge is packaged as a fixed-boundary path and proved equal
 +to the direct finite fixed-boundary edge path, so the remaining four-edge
 +comparison is only nested path-packaging normalization.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -439,24 +439,24 @@ index db349515..c17d123d 100644
 +shiftedSemanticObservedCyclicFourPath_val_eq_finFourLevelPath_val_at_target
  shiftedSemanticCyclicChartEval_q2
  ```
- 
+
 @@ -697,17 +704,41 @@ shiftedSemanticObservedCyclicFourPath_target_eq_finFourLevelPath_target
  ```
- 
+
  A small pointwise `Path.cast` helper records that endpoint-type casts do not
 -change path values, and the edge-zero wrapper specializes the local quotient
 -edge evaluation theorem to the first finite edge:
 +change path values. Source and target helpers for `Path.trans` record the
 +endpoint behavior of path concatenation, and the edge-zero wrapper specializes
 +the local quotient edge evaluation theorem to the first finite edge:
- 
+
  ```text
  shiftedPath_cast_apply
 +shiftedPath_trans_apply_source
 +shiftedPath_trans_apply_target
  shiftedSemanticCyclicChartEval_edgePath_zero
  ```
- 
+
 -These facts keep the comparison pre-geometric. They prepare the full
 -`Path.trans` normalization step without asserting any circle, angle, arc, or
 -Euclidean one-eighth reading.
@@ -484,7 +484,7 @@ index db349515..c17d123d 100644
 +normalizing the nested `Path.trans` and endpoint `Path.cast` structure used by
 +the two closed four-path packages, without asserting any circle, angle, arc,
 +or Euclidean one-eighth reading.
- 
+
  The full comparison between evaluation of `shiftedCyclicFourPath` and the
  existing fixed-`q2` four-level path is intentionally left as a TODO because it
 ````

@@ -796,7 +796,7 @@ index b7b6dca5..d4172051 100644
 @@ -2438,6 +2438,204 @@ theorem tailContinuationControlledDepthCount_add_pressureDepthCount_eq_len
            simp [hc, hm]
        omega
- 
+
 +/--
 +Source depth-frequency predicate: pressure occupies at most half of the depth
 +range.
@@ -1011,7 +1011,7 @@ index 145980af..28b88203 100644
  docs/Collatz-PetalBridge-Status.md
  ```
 @@ -369,3 +370,29 @@ controlled depth count + pressure depth count = depth range length
- 
+
  This is the depth-mode analogue of the finite residue distribution from
  checkpoint 100.
 +
@@ -1233,7 +1233,7 @@ index 5a7c3dfc..0aad1bb9 100644
 @@ -486,6 +486,48 @@ MoreThanHalf mode
  This still does not prove that pressure is rare.  It provides the finite budget
  surface needed to state such a claim without leaving `Nat`.
- 
+
 +## Depth-Pressure Frequency
 +
 +Checkpoint 109 applies the existing finite half vocabulary to the depth-mode
@@ -1277,7 +1277,7 @@ index 5a7c3dfc..0aad1bb9 100644
 +interderivable.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 12d34c6d..f314b17a 100644

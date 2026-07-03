@@ -255,7 +255,7 @@ index aa8167f7..7149491a 100644
 @@ -104,6 +104,12 @@ phase at the finite nodes `k / 2^n`. Endpoint, unit-interval, reflection,
  even-child, odd-child midpoint, and reflected phase-depth laws are proved
  without selecting a correction product or taking a limit.
- 
+
 +[IMPLEMENTED: semantic-cf2d-finite-refinement]
 +`DkReal.SemanticCF2DRefinement` evaluates depth and normalization on the
 +dyadic mesh. Reflection and even-child inheritance hold for both observations.
@@ -272,7 +272,7 @@ index 30ca097b..6c382e86 100644
 @@ -89,6 +89,18 @@ theorem dyadicPhaseNode_child_odd_mid (n k : ℕ) :
    simp [dyadicPhaseNode, dyadicPhaseDenom, pow_succ]
    ring
- 
+
 +/--
 +For a genuine parent interval, its odd child midpoint lies in the closed
 +phase interval.
@@ -400,7 +400,7 @@ index 90557e2f..02a720c2 100644
 +Thus the first refinement defect is an explicit positive inverse-square mesh
 +term. The remaining task is to identify a mathematically justified aggregate
  composition law for local corrections.
- 
+
  ### Milestone D: limit and Gaussian bridge
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 89f61ed7..3908f64d 100644

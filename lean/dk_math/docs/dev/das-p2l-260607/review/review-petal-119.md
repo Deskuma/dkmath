@@ -8,7 +8,7 @@ gch: 8375ebe3e5d9803ab925e8e0e06b0a7da55f5c58
 
 118 進めました。level 3 の tower 拡張と、range pressure から local depth 2 pressure への入口を両方固定できています。
 
-主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1066) です。
+主な追加は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1066) です。
 
 - `orbitWindowResidueCountMod64EqThirtyOneTail`
 - `orbitWindowResidueCountMod64EqSixtyThreeTail`
@@ -880,7 +880,7 @@ index 8f4731b6..0572f272 100644
 @@ -1020,6 +1020,28 @@ noncomputable def orbitWindowResidueCountMod32EqThirtyOneTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 32 = 31))
- 
+
 +/--
 +Number of shifted-tail labels in residue class `31 mod 64`.
 +
@@ -909,7 +909,7 @@ index 8f4731b6..0572f272 100644
 @@ -1040,6 +1062,14 @@ noncomputable def TailFallingLevel1 (n : OddNat) (k : ℕ) : ℕ :=
  noncomputable def TailFallingLevel2 (n : OddNat) (k : ℕ) : ℕ :=
    orbitWindowResidueCountMod16EqSevenTail n k
- 
+
 +/-- Level `3` tail remainder: the shifted-tail `31 mod 32` continuing color. -/
 +noncomputable def TailRemainderLevel3 (n : OddNat) (k : ℕ) : ℕ :=
 +  orbitWindowResidueCountMod32EqThirtyOneTail n k
@@ -920,11 +920,11 @@ index 8f4731b6..0572f272 100644
 +
  /--
  Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
- 
+
 @@ -4094,6 +4124,58 @@ theorem tailRemainderLevel1_static_split
    unfold TailRemainderLevel1 TailFallingLevel2 TailRemainderLevel2
    exact tailResidueCountMod8EqSeven_split_mod16_seven_fifteen n k
- 
+
 +/--
 +The shifted-tail `31 mod 32` continuing color splits into its two children
 +modulo `64`: the delayed-peeling child `31 mod 64` and the continuing child
@@ -979,11 +979,11 @@ index 8f4731b6..0572f272 100644
 +
  /--
  Orbit-level transition from the `3 mod 8` height-one channel.
- 
+
 @@ -4535,6 +4617,75 @@ theorem tailMod16Fifteen_le_nextTailMod16Seven_add_nextTailMod16Fifteen
            · simp [hsource, htargetSeven, htargetFifteen]
              omega
- 
+
 +/--
 +Level-alias version of the level-`2` recursion edge.
 +
@@ -1055,11 +1055,11 @@ index 8f4731b6..0572f272 100644
 +
  /--
  One-step grammar for the shifted-tail exact-height-one reservoir.
- 
+
 @@ -5758,6 +5909,29 @@ theorem sourceContinuationMass_depth_two_pos_of_pressure_depth_two
    unfold MoreThanHalf at h
    omega
- 
+
 +/--
 +Extract local depth-two source pressure from the one-depth range pressure
 +profile beginning at depth `2`.
@@ -1085,7 +1085,7 @@ index 8f4731b6..0572f272 100644
 +
  /--
  Pressure-facing wrapper for the depth-two delayed-reservoir budget.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/README.md b/lean/dk_math/DkMath/Collatz/README.md
 index 327fc53e..c7448325 100644
 --- a/lean/dk_math/DkMath/Collatz/README.md
@@ -1260,7 +1260,7 @@ index b384b363..ebbda1e9 100644
 @@ -1014,6 +1014,65 @@ MoreThanHalf continuation pressure at depth 2
    -> delayed budget with explicit remainder
  ```
- 
+
 +## Level-3 And Range Pressure Entrance
 +
 +Checkpoint 118 extends the concrete tower to level `3` and adds the first
@@ -1321,7 +1321,7 @@ index b384b363..ebbda1e9 100644
 +reservoir budget entrance.
 +
  ## Recursive Petal Residues
- 
+
  The current recursive two-adic Petal channels are:
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index d9c8f150..7fe2834a 100644

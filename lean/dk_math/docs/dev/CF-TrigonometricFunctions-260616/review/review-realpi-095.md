@@ -346,7 +346,7 @@ index fa58f8c3..33e4b575 100644
 +now evaluated exactly as
 +`1 / 3 + 2 / (3 * (dyadicPhaseDenom n : ℝ)^2)`, exposing the finite correction
 +to the later `1 / 3` target without taking a limit.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DLogComposition.lean
@@ -356,7 +356,7 @@ index fb4bb985..5270028a 100644
 @@ -709,6 +709,82 @@ def dyadicPhaseTrapezoidCenteredQuadraticSum (n : ℕ) : ℝ :=
    ∑ k ∈ dyadicPhaseNodeIndices n,
      dyadicPhaseTrapezoidWeight n k * dyadicPhaseCenteredQuadratic n k
- 
+
 +/-- Finite closed form for the first-power sum over `0, ..., N`. -/
 +private theorem sum_range_succ_id_real (N : ℕ) :
 +    (∑ k ∈ Finset.range (N + 1), (k : ℝ)) =
@@ -439,7 +439,7 @@ index fb4bb985..5270028a 100644
 @@ -778,12 +854,9 @@ theorem dyadicPhaseTrapezoidCenteredLogDepthSum_le_centeredQuadraticSum
  /--
  The trapezoidal centered quadratic moment is bounded by one.
- 
+
 -This is the first finite moment bound: the sampled centered quadratic profile
 -is at most one on `[0,1]`, and the trapezoidal weights have total mass one.
 -
@@ -455,7 +455,7 @@ index fb4bb985..5270028a 100644
 @@ -805,6 +878,48 @@ theorem dyadicPhaseTrapezoidCenteredQuadraticSum_le_one (n : ℕ) :
      _ = 1 := by
        simpa using sum_dyadicPhaseTrapezoidWeight_eq_one n
- 
+
 +/--
 +Closed form for the trapezoidal centered quadratic moment.
 +
@@ -508,7 +508,7 @@ index bcee85b7..0798f76e 100644
 @@ -315,8 +315,17 @@ have total mass one, so Lean proves
  dyadicPhaseTrapezoidCenteredQuadraticSum n <= 1.
  ```
- 
+
 -This is deliberately a crude finite bound. The sharper expected closed form
 -`1/3 + 2/(3 * (2^n)^2)` is marked in code as the next finite-sum target.
 +The exact finite value is now also proved:
@@ -522,9 +522,9 @@ index bcee85b7..0798f76e 100644
 +quadratic moment by elementary first-power and square-sum formulas, then
 +subtracts the trapezoidal endpoint correction. This exposes the finite
 +correction to the later `1/3` target without invoking an integral or a limit.
- 
+
  ### Milestone D: limit and Gaussian bridge
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
 index 18fe6678..4b63cb10 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-continuous-phase-065.md
@@ -538,9 +538,9 @@ index 18fe6678..4b63cb10 100644
 +trapezoidal centered quadratic moment bound is now `<= 1`, and its exact
 +finite value is
 +`1/3 + 2/(3 * (dyadicPhaseDenom n : Real)^2)`.
- 
+
  The current implementation proves a four-state return:
- 
+
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
 index 64e555b9..70428be8 100644
 --- a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md

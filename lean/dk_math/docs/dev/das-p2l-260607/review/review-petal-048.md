@@ -8,7 +8,7 @@ gch: 3a9587454fa8d83979acd716ab04ba9f69730818
 
 `DkMath.Petal.ErdosBridge` を新設しました。
 
-追加ファイル: [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:1)
+追加ファイル: [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L1)
 
 今回固定したのは、Petal carrier を Erdos 側の prime-valued channel として読む最初の橋です。
 

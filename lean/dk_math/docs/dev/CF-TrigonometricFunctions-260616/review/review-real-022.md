@@ -8,7 +8,7 @@ gch: d1031769e7d555b19a50f6010a3986b393695aff
 
 レビュー指摘を確認し、次段階まで実装しました。
 
-[Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean:88) に interval-level の十法則を追加しています。
+[Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean#L88) に interval-level の十法則を追加しています。
 
 - 加法の結合・交換・左右単位元
 - 非負乗法の結合・交換・左右単位元
@@ -320,7 +320,7 @@ index 8f6d8d8f..52f57cd6 100644
 @@ -85,6 +85,32 @@ theorem add_zero_interval (x : DkMath.Analysis.DkReal) (n : ℕ) :
      (add x (DkMath.Analysis.DkReal.ofRat 0)).interval n = x.interval n := by
    apply GapInterval.ext <;> simp [add, addApprox]
- 
+
 +/-!
 +## Additive interval laws
 +
@@ -349,11 +349,11 @@ index 8f6d8d8f..52f57cd6 100644
 +
  /-!
  ## II. Multiplication on the nonnegative quadrant
- 
+
 @@ -238,4 +264,64 @@ theorem mulNonneg_one_interval
        = x.interval n := by
    apply GapInterval.ext <;> simp [mulNonneg, mulNonnegApprox]
- 
+
 +/-!
 +## III. Nonnegative semiring laws at the interval level
 +
@@ -421,12 +421,12 @@ index a40cd97a..0f418873 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -54,7 +54,8 @@ DkMath.Analysis.DkReal.PowBound
    finite-sum gapGN bounds and the completed nonnegative power map
- 
+
  DkMath.Analysis.DkReal.Arithmetic
 -  computable interval addition and nonnegative multiplication
 +  computable interval addition, nonnegative multiplication, and stagewise
 +  semiring laws
- 
+
  DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md

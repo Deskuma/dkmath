@@ -8,7 +8,7 @@ gch: ccc295ed21d4df9f3e7bf6a43cd40f042b19753c
 
 Checkpoint 123 完了です。
 
-実装した Lean 補題は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:1791) に追加しました。
+実装した Lean 補題は [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L1791) に追加しました。
 
 ```lean
 allOnes_mod_pow_two_of_allOnes_mod_pow_two_of_le
@@ -821,7 +821,7 @@ index 4e39d80c..2eac66ad 100644
 @@ -1781,6 +1781,142 @@ theorem orbitWindowContinuationSiblingMassPow2Tail_le_window
    unfold orbitWindowContinuationSiblingMassPow2Tail
    exact orbitWindowResidueCountPow2Tail_le_window n k (r + 1) (2 ^ (r + 1) - 1)
- 
+
 +/--
 +Deep all-ones power-of-two residue cells are nested inside shallow ones.
 +
@@ -1186,7 +1186,7 @@ index c4a1516d..2ffe189b 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 @@ -1611,3 +1611,46 @@ max pairwise overlap: 13
- 
+
  This suggests that the next formal predicate should probably describe
  overlap/nesting control, not assume selected depths are independent.
 +
@@ -2409,9 +2409,9 @@ index e303faca..19df078a 100644
  - max selected depth count: `6`
 +- max selected depth: `7`
  - max pairwise overlap: `13`
- 
+
  ## Top Multi-Witness Samples
- 
+
 -| n | selected depths | pairs | disjoint pairs | max overlap | first pair | first overlap | masses |
 -|---:|---|---:|---:|---:|---|---:|---|
 -| 511 | 2;3;4;5;6;7 | 15 | 0 | 6 | 2:3 | 6 | 8:6 |
@@ -2440,9 +2440,9 @@ index e303faca..19df078a 100644
 +| 169 | 2;3;4;5 | True | True |  | 6 | 0 | 4 | 2:3 | 4 | 5:4 |
 +| 225 | 2;3;4;5 | True | True |  | 6 | 0 | 4 | 2:3 | 4 | 5:4 |
 +| 383 | 2;3;4;5 | True | True |  | 6 | 0 | 4 | 2:3 | 4 | 5:4 |
- 
+
  ## Reading
- 
+
 @@ -32,3 +37,7 @@ in this finite orbit window.  This is only experimental evidence.
  If disjoint pairs are common, a future Lean predicate could target
  `DisjointTowerTargets`.  If all selected pairs overlap, the right
@@ -2468,8 +2468,8 @@ index 592ee488..c14d843b 100644
      total_pair_count: int
 @@ -90,10 +94,28 @@ def selected_depths(labels: list[int], r_start: int, depth_len: int) -> list[int
      return selected
- 
- 
+
+
 +def depths_are_consecutive(depths: list[int]) -> bool:
 +    return all(right == left + 1 for left, right in zip(depths, depths[1:]))
 +

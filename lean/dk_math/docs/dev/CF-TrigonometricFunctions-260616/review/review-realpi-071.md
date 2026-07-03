@@ -237,7 +237,7 @@ index 8b0d72f6..a44ddff8 100644
 +under the core-zero action. Its four action translates retain this boundary,
 +join at exact seams, repeat with phase index four, and concatenate to a closed
 +continuous path.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -247,7 +247,7 @@ index faee5cde..869501d3 100644
 @@ -1326,9 +1326,12 @@ into a closed piecewise-affine loop. It is not yet a fixed-`q2` boundary path.
  of its `q2` profile and proves that the resulting continuous edge stays on the
  original boundary.
- 
+
 -[TODO: semantic-cf2d-phase/normalized-four-path] Transport the normalized edge
 -through all four action phases and concatenate the resulting boundary-valued
 -paths into a closed path.
@@ -257,7 +257,7 @@ index faee5cde..869501d3 100644
 +
 +[TODO: semantic-cf2d-phase/levelset-path] Package the normalized paths directly
 +in `LevelSet Real (q2 z)`, making boundary membership part of the target type.
- 
+
  [TODO: semantic-cf2d-phase/euclidean-interpretation] Only after normalization,
  identify the fixed-`q2` path with the standard Euclidean circle model and
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean
@@ -267,7 +267,7 @@ index c0c023e9..da9850b8 100644
 @@ -80,6 +80,17 @@ theorem continuous_phaseNormalization :
      (Real.continuous_sqrt.comp continuous_phaseDepth)
      sqrt_phaseDepth_ne_zero
- 
+
 +/-- Squared normalization cancels the affine boundary-depth factor. -/
 +theorem phaseNormalization_sq_mul_phaseDepth (t : ℝ) :
 +    phaseNormalization t ^ 2 * phaseDepth t = 1 := by
@@ -305,13 +305,13 @@ index c0c023e9..da9850b8 100644
 +    _ = Vec.q2 z := by
 +      rw [phaseNormalization_sq_mul_phaseDepth]
 +      ring
- 
+
  /-- The normalized master edge is continuous. -/
  theorem continuous_normalizedPhaseEdge
 @@ -138,6 +147,117 @@ theorem continuous_normalizedPhaseEdge
    · exact continuous_phaseNormalization.mul hcore
    · exact continuous_phaseNormalization.mul hbeam
- 
+
 +/-!
 +## Four normalized phases
 +
@@ -424,7 +424,7 @@ index c0c023e9..da9850b8 100644
 +      target' := p.target.trans hclose }
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md b/lean/dk_math/DkMath/Analysis/docs/research-pregeometric-pi-program-067.md
 index 7b1e5936..ab6fc307 100644
@@ -433,10 +433,10 @@ index 7b1e5936..ab6fc307 100644
 @@ -105,13 +105,13 @@ theorem, not inserted as notation.
  4. Core-zero exact order four closes the endpoint without Euclidean
     terminology.
- 
+
 -### Milestone B: boundary normalization - one edge implemented
 +### Milestone B: boundary normalization - implemented
- 
+
  1. The positive correction `1 / sqrt (phaseDepth t)` is defined and continuous.
  2. The normalized master edge preserves the original `q2` value.
  3. The normalized master edge is continuous and has the original endpoints.
@@ -444,13 +444,13 @@ index 7b1e5936..ab6fc307 100644
 -   concatenation remains to be implemented.
 +4. All four action translates preserve the same boundary, meet at exact
 +   seams, and concatenate to a closed continuous path.
- 
+
  ### Milestone C: refinement law
- 
+
 @@ -153,6 +153,6 @@ mechanism from which these theorem obligations can be investigated.
- 
+
  ## Immediate Next Step
- 
+
 -The next implementation transports the normalized edge through all four
 -action phases and concatenates those boundary-valued paths into a closed path.
 -Refinement and limit arguments remain separate checkpoints.
@@ -464,13 +464,13 @@ index 242393c5..713a092e 100644
 @@ -17,6 +17,10 @@ The positive reciprocal-square-root correction, normalized master edge,
  endpoint laws, continuity, and fixed-`q2` theorem are implemented in
  `DkMath.Analysis.DkReal.SemanticCF2DNormalize`.
- 
+
 +That module also implements all four normalized action translates, their
 +seams, common fixed-`q2` law, phase-index periodicity, continuous paths, and
 +the resulting closed four-phase path.
 +
  The current implementation proves a four-state return:
- 
+
  ```text
 @@ -334,7 +338,8 @@ explicit.
  [IMPLEMENTED: semantic-cf2d-phase/path-topology]
@@ -489,7 +489,7 @@ index 244786b8..003565fe 100644
 @@ -61,6 +61,12 @@ def star [Ring R] (r z : Vec R) : Vec R :=
  @[simp]
  theorem q2_mk [Semiring R] (x y : R) : q2 (Vec.mk x y) = x ^ 2 + y ^ 2 := rfl
- 
+
 +/-- Scaling both coordinates scales square mass by the square of the scalar. -/
 +theorem q2_scale [CommSemiring R] (c : R) (z : Vec R) :
 +    q2 (Vec.mk (c * z.core) (c * z.beam)) = c ^ 2 * q2 z := by

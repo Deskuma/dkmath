@@ -343,7 +343,7 @@ index 528b0463..3238099a 100644
 +`q2` boundary, but their raw midpoint has square mass `1 / 2 * q2 z`, so a
 +shifted correction law is still needed before defining the final shifted
 +semantic path.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -353,7 +353,7 @@ index ee07dff1..2bd4c967 100644
 @@ -276,6 +276,136 @@ theorem shiftedQuarterAffine_center_eq_shiftedQuarterCenter (k : ℕ) :
    simp [phaseCenter]
    ring
- 
+
 +/-!
 +## Semantic shifted endpoint candidates
 +
@@ -510,7 +510,7 @@ index d40c504c..edb8d9ce 100644
    dyadicCycleStep
    normalizedCycleStep_mul_returnCount
 @@ -342,9 +353,34 @@ SemanticCF2DPhaseShift.lean
- 
+
  The scalar shifted-frame API is now implemented, including endpoint
  separation, center half-quarter formulas, and the affine interpolation helper
 -`shiftedQuarterAffine`. The next target is to choose the semantic endpoint
@@ -544,9 +544,9 @@ index d40c504c..edb8d9ce 100644
 +is exactly `1 / 2 * q2 z`. Therefore the next target is not another raw affine
 +edge; it is to choose the shifted correction or projection law that returns
 +this midpoint to the boundary seam.
- 
+
  Candidate theorem directions:
- 
+
 @@ -403,8 +439,9 @@ depend on that reading.
  6. Implemented: add scalar cycle-step facts for dyadic and positive `k` divisions.
  7. Implemented: add scalar shifted-frame endpoints, center, and affine midpoint theorem.
@@ -557,10 +557,10 @@ index d40c504c..edb8d9ce 100644
 +10. Next: choose a shifted correction/projection law.
 +11. Later: add a Euclidean bridge that reads `1/8` full-cycle
     displacement as the angle `Real.pi / 4`.
- 
+
  ## Implemented Tags
 @@ -433,11 +470,11 @@ parameter before assigning any Euclidean shape.
- 
+
  ```text
  [TODO: semantic-cf2d/shifted-semantic-edge]
 -Choose the endpoint states and correction law for the shifted semantic edge.
@@ -573,7 +573,7 @@ index d40c504c..edb8d9ce 100644
 +edges. Their raw affine midpoint has `q2 = 1 / 2 * q2 z`, so a shifted
 +normalization or projection must return it to the seam boundary before the
 +final shifted path is defined.
- 
+
  [TODO: semantic-cf2d/one-eighth-euclidean-reading]
  After the algebraic shifted-frame theorem is closed at the semantic path
 ````

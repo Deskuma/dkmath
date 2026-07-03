@@ -416,7 +416,7 @@ index c08ab26b..dd32bffa 100644
  Mapped quotient edge paths are now identified with their observed semantic
  edge paths after endpoint relabelling, uniformly over `Fin 4` and through
  four concrete edge aliases.
- 
+
 -[TODO: semantic-cf2d/shifted-cyclic-path-eval]
 -Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 -path after path-trans cast normalization lemmas are available.
@@ -446,7 +446,7 @@ index c08ab26b..dd32bffa 100644
 +Extract the validated path-normalization API into a future DkMath-native path
 +layer only after an isolated prototype proves that it shortens downstream
 +proofs without changing theorem meanings.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-dkpath-layer.md b/lean/dk_math/DkMath/Analysis/docs/design-dkpath-layer.md
@@ -456,7 +456,7 @@ index 7d748ce0..f063ed8f 100644
 @@ -156,6 +156,22 @@ This should remain isolated until it proves that it reduces production proof
  noise. The current phase-shift module should keep using the validated
  Mathlib-backed theorems until that prototype earns its way into the API.
- 
+
 +## Prototype Decision
 +
 +Do not add a production `DkPathPrototype` merely to mirror the already-closed
@@ -474,7 +474,7 @@ index 7d748ce0..f063ed8f 100644
 +the answer is no, the current Mathlib-backed helper theorems are sufficient.
 +
  ## Next Step
- 
+
  Do not start the Euclidean one-eighth reading from this note.
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/codex-report-136.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/codex-report-136.md
 new file mode 100644

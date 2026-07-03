@@ -542,7 +542,7 @@ index 8eb448e7..0a4aefed 100644
 @@ -918,6 +918,18 @@ noncomputable def orbitWindowResidueCountMod8EqSeven
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n i % 8 = 7))
- 
+
 +/--
 +Generic residue-cell occupation count for a power-of-two modulus.
 +
@@ -557,11 +557,11 @@ index 8eb448e7..0a4aefed 100644
 +
  /--
  Number of shifted-tail labels in residue class `1 mod 4`.
- 
+
 @@ -942,6 +954,17 @@ noncomputable def orbitWindowResidueCountMod4EqThreeTail
    (List.range k).countP
      (fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3))
- 
+
 +/--
 +Generic shifted-tail residue-cell occupation count for a power-of-two modulus.
 +
@@ -575,11 +575,11 @@ index 8eb448e7..0a4aefed 100644
 +
  /--
  Residue count inside a prefix of an ambient observation window.
- 
+
 @@ -1107,6 +1130,18 @@ theorem orbitWindowResidueCountMod8EqSeven_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n i % 8 = 7)) (l := List.range k))
- 
+
 +/--
 +The generic power-of-two residue count is bounded by the window size.
 +-/
@@ -598,7 +598,7 @@ index 8eb448e7..0a4aefed 100644
 @@ -1129,6 +1164,29 @@ theorem orbitWindowResidueCountMod4EqThreeTail_le_window
      (List.countP_le_length
        (p := fun i => decide (oddOrbitLabel n (i + 1) % 4 = 3)) (l := List.range k))
- 
+
 +/--
 +The generic shifted-tail power-of-two residue count is bounded by the window
 +size.
@@ -628,7 +628,7 @@ index 8eb448e7..0a4aefed 100644
 @@ -2012,6 +2070,72 @@ theorem residueCountMod8EqSeven_le_nextResidueCountMod4EqThree
              simpa [hsource, htail] using Nat.le_succ_of_le ih
          · simp [hsource, htail, ih]
- 
+
 +/--
 +Count-level recursive Petal transition for the recovery sibling.
 +
@@ -737,7 +737,7 @@ index bbbd2937..62c72e34 100644
 @@ -448,6 +455,9 @@ orbitWindowResidueCountMod8EqFive n k
  orbitWindowResidueCountMod8EqSeven n k
    = number of odd orbit labels congruent to 7 modulo 8
- 
+
 +orbitWindowResidueCountPow2 n k depth residue
 +  = number of odd orbit labels congruent to residue modulo 2^depth
 +
@@ -747,7 +747,7 @@ index bbbd2937..62c72e34 100644
 @@ -456,6 +466,10 @@ orbitWindowResidueCountMod4EqThreeTail n k
    = number of shifted tail labels, at times i + 1 for i < k,
      congruent to 3 modulo 4
- 
+
 +orbitWindowResidueCountPow2Tail n k depth residue
 +  = number of shifted tail labels, at times i + 1 for i < k,
 +    congruent to residue modulo 2^depth
@@ -756,7 +756,7 @@ index bbbd2937..62c72e34 100644
    = number of prefix labels congruent to 1 modulo 4 inside an ambient k-window
  ```
 @@ -533,6 +547,15 @@ tail first-layer partition
- 
+
  retaining `7 mod 8` source
    -> residueCountMod8EqSeven <= tail CountEq 1
 +
@@ -769,12 +769,12 @@ index bbbd2937..62c72e34 100644
 +named `7 mod 8` source count
 +  -> residueCountMod8EqSeven = CountPow2 depth 3 residue 7
  ```
- 
+
  This is the first distribution layer.  It still avoids importing the heavier
 @@ -979,6 +1002,20 @@ This is the first general orbit-level statement of the narrowing retention
  cylinder: recovery exits one level outward, while continuation becomes the next
  retention cell.
- 
+
 +The same recursive rule is now lifted to occupation counts.  Source cells in
 +the current window inject into target cells in the shifted tail window:
 +
@@ -791,7 +791,7 @@ index bbbd2937..62c72e34 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-096.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-096.md
 new file mode 100644
 index 00000000..88c46478

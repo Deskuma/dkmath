@@ -280,7 +280,7 @@ index 7e9f0b29..d99d3165 100644
 +four-path is equal to first mapping the four quotient edges and then gluing
 +them. This is now a `Path.map`/`Path.trans`/`Path.cast` bookkeeping problem,
 +not a boundary or semantic problem.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -290,7 +290,7 @@ index 51bdd199..b6715084 100644
 @@ -2218,6 +2218,38 @@ theorem shiftedFourPathConcatWithSeams_congr
    cases hp3
    rfl
- 
+
 +/--
 +Congruence for the canonical four-edge concatenator, ignoring the exact seam
 +proof terms.
@@ -325,11 +325,11 @@ index 51bdd199..b6715084 100644
 +
  /--
  Canonical quotient four-edge path via the common seam concatenator.
- 
+
 @@ -2323,6 +2355,54 @@ theorem shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdge
      (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (2 : Fin 4))
      (shiftedSemanticObservedCyclicEdgePath_eq_finLevelPath hcore z (3 : Fin 4))
- 
+
 +/--
 +The four mapped quotient edges concatenate to the canonical observed via-edge
 +path.
@@ -380,7 +380,7 @@ index 51bdd199..b6715084 100644
 +
  /--
  The closed quotient chart path observed inside the fixed square-mass boundary.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
 index dc636e67..958f7970 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -400,7 +400,7 @@ index dc636e67..958f7970 100644
 @@ -901,15 +903,53 @@ terms inside a path cast does not change the resulting path. The current
  stable route therefore avoids direct equality of mapped seam proof terms and
  uses value-level seam alignment plus cast proof irrelevance instead.
- 
+
 +The next seam-alignment checkpoint is now also implemented. The stronger
 +four-path congruence theorem
 +`shiftedFourPathConcatWithSeams_congr_cast_irrel` says that, after the four
@@ -445,7 +445,7 @@ index dc636e67..958f7970 100644
 +existing fixed-`q2` four-level path is intentionally left as a TODO until that
 +global map-through-gluing theorem is available. This remains pre-geometric:
 +no circle, angle, arc, or Euclidean one-eighth interpretation is used.
- 
+
  The next packaging task is to compare the older closed four-path definitions
 -with the canonical via-edge versions. That should be a pure `Path.trans` /
 -`Path.cast` normalization step, because the semantic edge comparison has
@@ -454,9 +454,9 @@ index dc636e67..958f7970 100644
 +normalization. That should be a pure `Path.trans` / `Path.cast` step, because
 +the semantic edge comparison has already been proved locally and in canonical
 +four-edge form.
- 
+
  Candidate theorem directions:
- 
+
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/codex-report-133.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/review/codex-report-133.md
 new file mode 100644
 index 00000000..8f176f71

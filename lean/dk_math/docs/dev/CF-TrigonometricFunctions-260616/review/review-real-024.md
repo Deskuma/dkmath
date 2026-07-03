@@ -8,7 +8,7 @@ gch: c766a01ae23f480105f523c4808ac96b8c4aa4a1
 
 レビュー提案の `mulNonneg` congruence を実装しました。
 
-[Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean:137) に以下を追加しています。
+[Equiv.lean](/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean#L137) に以下を追加しています。
 
 - 同値な表現の下端点差が 0 に収束
 - `equiv_mulNonneg`
@@ -308,7 +308,7 @@ index e2647afe..ff96b6d0 100644
 @@ -121,4 +121,126 @@ theorem equiv_add_right
      Equiv (add x y) (add x y') :=
    equiv_add (equiv_refl x) hyy'
- 
+
 +/-!
 +## Endpoint consequences
 +
@@ -439,7 +439,7 @@ index cd0bace9..28e0d812 100644
 @@ -209,6 +209,37 @@ theorem separation_add_le (I J K L : GapInterval) :
        simp only [add_lo, add_hi]
        linarith
- 
+
 +/-- Interval separation is bounded by the distance between the lower endpoints. -/
 +theorem separation_le_abs_lo_sub_lo (I J : GapInterval) :
 +    I.separation J ≤ |I.lo - J.lo| := by
@@ -473,20 +473,20 @@ index cd0bace9..28e0d812 100644
 +
  /--
  Image of a nonnegative rational interval under the natural power map.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index 924cbd81..55fb97e2 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -58,8 +58,8 @@ DkMath.Analysis.DkReal.Arithmetic
    semiring laws
- 
+
  DkMath.Analysis.DkReal.Equiv
 -  vanishing interval separation, representation setoid, and additive
 -  congruence
 +  vanishing interval separation, representation setoid, endpoint convergence,
 +  and additive/nonnegative multiplicative congruence
- 
+
  DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
@@ -495,7 +495,7 @@ index c73af8e1..b3c14dd6 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 @@ -190,10 +190,28 @@ and symmetry follow from the corresponding finite-interval identities. The
  module therefore supplies a proved `Setoid`, not merely a candidate relation.
- 
+
  Addition respects this equivalence because separation of interval sums is
 -bounded by the sum of the input separations. Nonnegative multiplication
 -congruence remains the next arithmetic obligation; it requires a bounded
@@ -523,7 +523,7 @@ index c73af8e1..b3c14dd6 100644
 +The next arithmetic congruence target is `powNonneg`. It should follow from
 +the same endpoint-convergence principle together with a uniform bound for the
 +finite `gapGN` correction factor.
- 
+
  Persistent intersection and equality after a future evaluation into Mathlib's
  `Real` remain comparison principles. Their equivalence with vanishing
 ````

@@ -223,7 +223,7 @@ index e82b267d..15b1e6b9 100644
 +The remaining bridge is to commute descended semantic evaluation with the
 +nested `Path.trans` and `Path.cast` structure of the canonical four-path
 +concatenator for this endpoint-cast observed path.
- 
+
  [IMPLEMENTED: semantic-cf2d-path] `DkReal.SemanticCF2DPath` uses the
  coordinate-product topology from `CF2D.Topology` to package every translated
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean
@@ -233,7 +233,7 @@ index 15b6d0d0..ac32ba6b 100644
 @@ -2312,6 +2312,21 @@ theorem shiftedSemanticObservedCyclicFourPath_q2
        Vec.q2 z :=
    (shiftedSemanticObservedCyclicFourPath hcore z t).2
- 
+
 +/--
 +The endpoint-cast observed closed path remains on the original `q2` boundary.
 +
@@ -259,7 +259,7 @@ index 15b6d0d0..ac32ba6b 100644
 -only endpoint labels changed.
 +only endpoint labels changed. Its fixed-`q2` boundary observation is preserved
 +by the cast.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-path-eval]
  Compare evaluation of the closed quotient path with the fixed-`q2` four-level
 @@ -2480,7 +2496,9 @@ The quotient-side closed path and finite closed path match their canonical
@@ -270,7 +270,7 @@ index 15b6d0d0..ac32ba6b 100644
 +endpoint. The endpoint mismatch is solved; the remaining obstruction is the
 +compatibility of descended semantic evaluation with the nested `Path.trans`
 +and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
- 
+
  [TODO: semantic-cf2d/shifted-cyclic-topology-extensions]
  Develop any additional quotient-space structure only after the descended
 diff --git a/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md b/lean/dk_math/DkMath/Analysis/docs/design-phase-center-shift-104.md
@@ -294,7 +294,7 @@ index 32e77e2b..ad3ca5f4 100644
 +```text
 +shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_q2
 +```
- 
+
  Value-level source and target comparisons are also available for the closed
  four-edge paths:
 @@ -813,7 +819,18 @@ More precisely, the quotient-side closed path and finite closed path now match
@@ -314,7 +314,7 @@ index 32e77e2b..ad3ca5f4 100644
 +So the endpoint mismatch is solved. The remaining obstruction is the
 +compatibility of descended semantic evaluation with the nested `Path.trans`
 +and `Path.cast` structure of `shiftedFourPathConcatWithSeams`.
- 
+
  The full comparison between evaluation of `shiftedCyclicFourPath` and the
  existing fixed-`q2` four-level path is intentionally left as a TODO because it
 ````

@@ -269,9 +269,9 @@ index b04a51d9..307ff47b 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 @@ -20,6 +20,20 @@ shows that the quadratic invariant
- 
+
  is preserved by that interpretation.
- 
+
 +The logical order of this file is deliberately pre-geometric:
 +
 +1. `q2` is a boundary detector selecting a conserved level set;
@@ -290,9 +290,9 @@ index b04a51d9..307ff47b 100644
  It does not require subtraction, decidable comparison, order reflection, or
  any analytic theorem about trigonometric functions.
 @@ -35,6 +49,17 @@ open DkMath.CosmicFormula.Rotation.CF2D
- 
+
  noncomputable section
- 
+
 +/-
 +The boundary-and-action layer comes first. Geometric terminology belongs to a
 +later interpretation layer:
@@ -320,7 +320,7 @@ index b04a51d9..307ff47b 100644
 @@ -1095,6 +1123,134 @@ theorem semanticExactActionOrderFour_of_core_eq_zero
      SemanticExactActionOrderFour r :=
    (semanticExactActionOrderFour_iff_core_eq_zero r).2 hcore
- 
+
 +/--
 +At the exact-order-four boundary, the transported action exchanges the two
 +coordinates with one sign change.
@@ -480,12 +480,12 @@ index ca908df1..7ebd2f5e 100644
 +not_semanticPeriodic_three_of_core_eq_zero_of_ne_zero
 +semanticMinimalPeriod_eq_four_of_core_eq_zero_of_ne_zero
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -272,6 +279,31 @@ The preservation law alone would not classify finite order. The classification
  comes from preservation, the addition/product law, faithful action, and the
  first-quadrant semantic boundary acting together.
- 
+
 +The conceptual order is boundary first, action second, geometry later.
 +`q2` initially acts as a boundary detector for conserved level sets; it has
 +not yet been identified with Euclidean squared radius. The exact-order-four
@@ -521,7 +521,7 @@ index ef3c0341..466893f9 100644
 @@ -94,6 +94,81 @@ Analytic task:
  Phase 1 completes the algebraic task and verifies that the standard real
  functions instantiate it.
- 
+
 +## Before Circles And Before Angles
 +
 +The strongest reading of the current result begins before Euclidean geometry.
@@ -598,20 +598,20 @@ index ef3c0341..466893f9 100644
 +Euclidean model is chosen.
 +
  ## Compass, Pin, String, And Pen
- 
+
  The construction has a classical geometric analogy.
 @@ -102,7 +177,7 @@ One does not need to solve real analysis in order to draw a circle.  A compass
  is enough.  A pin, a string, and a pen are also enough.  These devices enforce
  a constraint: the distance from the center remains fixed.
- 
+
 -The CF2D implementation does the formal analogue.  Instead of first building
 +The CF2D implementation does the formal analogue. Instead of first building
  all analytic properties of `sin` and `cos`, it installs an algebraic device:
- 
+
  ```text
 @@ -117,9 +192,10 @@ action:
  ```
- 
+
  The theorem `UnitKernel.q2_act` says that this device keeps the square mass
 -fixed.  This is the Lean version of "the string length remains fixed."  Once
 -the invariant is built into the kernel, the circle-like behavior follows from
@@ -620,7 +620,7 @@ index ef3c0341..466893f9 100644
 +precisely, the theorem first gives invariant level sets. Calling those level
 +sets circles is justified only after the standard Euclidean interpretation is
 +chosen.
- 
+
  This analogy also explains why the code is short.  The implementation is not
  simulating motion point-by-point.  It specifies the preserving mechanism.
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
@@ -630,7 +630,7 @@ index 080ae49d..bf403df7 100644
 @@ -228,6 +228,30 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 17:25 JST (Boundary first, geometry later)
 +
 +1. 文書整理:
@@ -656,7 +656,7 @@ index 080ae49d..bf403df7 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 05:27 JST (Exact order four)
- 
+
  1. 実施:
 ````
 `````

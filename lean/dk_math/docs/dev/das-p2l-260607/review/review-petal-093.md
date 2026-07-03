@@ -10,7 +10,7 @@ gch: e79124ba430a7841ab181834d907836a1fcf6181
 
 実装:
 
-- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean:351)
+- [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean#L351)
   - `31 mod 64 -> 15 mod 32`
   - `63 mod 64 -> 31 mod 32`
   - orbit label 版の `mod 64` 遷移
@@ -29,8 +29,8 @@ mod 512:  255 -> 127, 511 -> 255
 
 文書:
 
-- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md:801)
-- 新規 [report-petal-092.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md:1)
+- [Collatz-PetalBridge-Status.md](/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md#L801)
+- 新規 [report-petal-092.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md#L1)
 
 主要到達点:
 
@@ -617,7 +617,7 @@ index a3730141..8a4b174b 100644
 @@ -344,6 +344,78 @@ theorem next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone
      ((3 * m + 1) / 2) % 16 = 15 := by
    omega
- 
+
 +/--
 +The `31 mod 64` subchannel of `31 mod 32` exits retention one level down:
 +after one height-one step, the next label is `15 mod 32`.
@@ -696,7 +696,7 @@ index a3730141..8a4b174b 100644
 @@ -1440,6 +1512,46 @@ theorem oddOrbitLabel_succ_mod_sixteen_eq_fifteen_of_mod_thirtytwo_eq_thirtyone
    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one (iterateT i n) hs]
    exact next_mod_sixteen_of_mod_thirtytwo_eq_thirtyone hmod
- 
+
 +/--
 +The `31 mod 64` subchannel moves to `15 mod 32` at the next label.
 +
@@ -739,11 +739,11 @@ index a3730141..8a4b174b 100644
 +
  /--
  Delayed peeling from the `3 mod 8` height-one channel.
- 
+
 @@ -1501,6 +1613,24 @@ theorem orbitWindowNextNextNextHeight_two_le_of_mod_thirtytwo_eq_fifteen
    simpa [Nat.add_assoc] using
      orbitWindowNextNextHeight_two_le_of_mod_sixteen_eq_seven n (i + 1) hnext
- 
+
 +/--
 +The `31 mod 64` branch recovers delayed peeling after four transitions.
 +
@@ -768,7 +768,7 @@ index a3730141..8a4b174b 100644
 @@ -1769,6 +1899,57 @@ theorem sumS_four_steps_ge_five_of_mod_thirtytwo_eq_fifteen
      _ = sumS n 4 := by
        simp [sumS, orbitWindowHeight_eq_s_iterateT]
- 
+
 +/--
 +Five-step recovery from the `31 mod 64` subchannel.
 +
@@ -867,7 +867,7 @@ index bae93aa4..302e94be 100644
 @@ -778,6 +790,60 @@ fixed is the verified local pattern: every time the retention branch continues,
  the residue condition moves into a thinner power-of-two cylinder; the sibling
  branch returns to a delayed-peeling recovery estimate.
- 
+
 +The `31 mod 32` retention-continuation channel has now been split at mod `64`:
 +
 +```text
@@ -924,7 +924,7 @@ index bae93aa4..302e94be 100644
 +
  At count level, the two exact-height-one source channels also have a source
  mass bound:
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-092.md
 new file mode 100644
 index 00000000..30b3a448
