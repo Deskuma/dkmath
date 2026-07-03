@@ -962,6 +962,96 @@ theorem sourcePressureLocalIsland_gives_crossing_pulse
     sourcePressureFalls_of_localIsland_right n k r j hisland⟩
 
 /--
+Named local source-pressure pulse.
+
+`SourcePressurePulse n k r j` records the two adjacent pressure-depth edges
+around the selected depth `j`:
+
+* the left edge crosses upward from a nonpositive margin after adding the
+  local net pressure drop;
+* the right edge falls from a positive margin to a nonpositive margin after
+  adding the local net pressure drop.
+
+This is deliberately still a local pressure-depth predicate.  It does not
+claim that positive pressure depths form a prefix, an interval family, or a
+global shape theorem.
+-/
+def SourcePressurePulse
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  (SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+    0 <
+      SourcePressureMarginInt n k (r + (j - 1)) +
+        SourcePressureNetDropInt n k r (j - 1)) ∧
+    (0 < SourcePressureMarginInt n k (r + j) ∧
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j ≤ 0)
+
+/--
+A local pressure island is a named source-pressure pulse.
+-/
+theorem sourcePressurePulse_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressurePulse n k r j :=
+  sourcePressureLocalIsland_gives_crossing_pulse n k r j hisland
+
+/--
+Left-edge projection from a source-pressure pulse.
+-/
+theorem sourcePressurePulse_left
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressurePulse n k r j) :
+    SourcePressureMarginInt n k (r + (j - 1)) ≤ 0 ∧
+      0 <
+        SourcePressureMarginInt n k (r + (j - 1)) +
+          SourcePressureNetDropInt n k r (j - 1) :=
+  h.1
+
+/--
+Right-edge projection from a source-pressure pulse.
+-/
+theorem sourcePressurePulse_right
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressurePulse n k r j) :
+    0 < SourcePressureMarginInt n k (r + j) ∧
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j ≤ 0 :=
+  h.2
+
+/--
+Sign-change form of a local source-pressure pulse.
+
+This alias keeps the sign-profile reading available beside the net-drop
+reading in `SourcePressurePulse`.  It is useful when a later checkpoint wants
+only the two signs, without opening the integer balance sheet.
+-/
+def SourcePressureSignPulse
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureSignChangeUp n k r (j - 1) ∧
+    SourcePressureSignChangeDown n k r j
+
+/--
+A local pressure island is also a pulse in sign-change language.
+-/
+theorem sourcePressureSignPulse_of_localIsland
+    (n : OddNat) (k r j : ℕ)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureSignPulse n k r j :=
+  ⟨sourcePressureSignChangeUp_of_localIsland n k r j hisland,
+    sourcePressureSignChangeDown_of_localIsland n k r j hisland⟩
+
+/--
+The named net-drop pulse is equivalent to the two sign changes.
+-/
+theorem sourcePressurePulse_iff_signPulse
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressurePulse n k r j ↔
+      SourcePressureSignPulse n k r j := by
+  unfold SourcePressurePulse SourcePressureSignPulse
+  rw [sourcePressureSignChangeUp_iff_margin_nonpos_and_netDrop_crosses]
+  rw [sourcePressureSignChangeDown_iff_margin_pos_and_netDrop_falls]
+
+/--
 Package a named margin jump and a strict retention drop.
 
 This checkpoint-135 wrapper is deliberately non-quantitative: it does not say
