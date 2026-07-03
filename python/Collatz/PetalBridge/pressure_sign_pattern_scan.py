@@ -64,6 +64,8 @@ class PressureSignPatternRow:
     max_continuation_drop: int
     sign_change_cause_labels: str
     sign_change_drop_details: str
+    sign_change_pressure_decay_details: str
+    local_island_pressure_decay_details: str
     margin_profile: str
     retention_profile: str
     continuation_profile: str
@@ -224,6 +226,7 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         if margins[depth] <= 0 and margins[depth + 1] > 0
     ]
     sign_change_details: list[str] = []
+    sign_change_pressure_decay_details: list[str] = []
     sign_change_labels: list[str] = []
     for depth in sign_change_up:
         retention_drop = retentions[depth] - retentions[depth + 1]
@@ -234,6 +237,26 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         sign_change_details.append(
             f"{depth}:ret={retention_drop},cont={continuation_drop},jump={margin_jump},cause={label}"
         )
+        sign_change_pressure_decay_details.append(
+            f"j={depth},margin_j={margins[depth]},margin_next={margins[depth + 1]},"
+            f"margin_jump={margin_jump},retention_j={retentions[depth]},"
+            f"retention_next={retentions[depth + 1]},retention_drop={retention_drop},"
+            f"continuation_j={continuations[depth]},"
+            f"continuation_next={continuations[depth + 1]},"
+            f"continuation_drop={continuation_drop},cause={label}"
+        )
+    local_island_pressure_decay_details = [
+        f"n={n},island_depth={depth},left_edge_j={depth - 1},"
+        f"margin_left={margins[depth - 1]},margin_island={margins[depth]},"
+        f"margin_right={margins[depth + 1]},"
+        f"retention_left={retentions[depth - 1]},"
+        f"retention_island={retentions[depth]},"
+        f"retention_right={retentions[depth + 1]},"
+        f"continuation_left={continuations[depth - 1]},"
+        f"continuation_island={continuations[depth]},"
+        f"continuation_right={continuations[depth + 1]}"
+        for depth in local_islands
+    ]
     sign_change_pair = first_sign_change_pair(positive_depths, r_start)
     block_lengths = [end - start + 1 for start, end in blocks]
 
@@ -290,6 +313,12 @@ def row_for(n: int, steps: int, r_start: int, depth_len: int) -> PressureSignPat
         max_continuation_drop=max_adjacent_drop(continuations, depths),
         sign_change_cause_labels=";".join(sign_change_labels),
         sign_change_drop_details=";".join(sign_change_details),
+        sign_change_pressure_decay_details=";".join(
+            sign_change_pressure_decay_details
+        ),
+        local_island_pressure_decay_details=";".join(
+            local_island_pressure_decay_details
+        ),
         margin_profile=join_pairs([(depth, margins[depth]) for depth in depths]),
         retention_profile=join_pairs([(depth, retentions[depth]) for depth in depths]),
         continuation_profile=join_pairs(
@@ -559,6 +588,40 @@ def write_summary(rows: list[PressureSignPatternRow], path: Path) -> None:
             )
     else:
         lines.append("| - | none observed | - | 0 | 0 | - | - |")
+
+    lines.extend(
+        [
+            "",
+            "## PressureDecay: Sign-Change-Up Rows",
+            "",
+            "| n | sign-change-up pressure-decay details |",
+            "|---:|---|",
+        ]
+    )
+    if sign_samples:
+        for row in sign_samples:
+            lines.append(
+                f"| {row.n} | {row.sign_change_pressure_decay_details} |"
+            )
+    else:
+        lines.append("| - | none observed |")
+
+    lines.extend(
+        [
+            "",
+            "## PressureDecay: Local-Island Rows",
+            "",
+            "| n | local-island pressure-decay details |",
+            "|---:|---|",
+        ]
+    )
+    if top_islands:
+        for row in top_islands:
+            lines.append(
+                f"| {row.n} | {row.local_island_pressure_decay_details} |"
+            )
+    else:
+        lines.append("| - | none observed |")
 
     lines.extend(
         [
