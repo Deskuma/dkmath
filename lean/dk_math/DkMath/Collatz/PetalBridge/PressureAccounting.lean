@@ -546,6 +546,52 @@ structure SourcePressureAccountedIntervalFamily
     SourcePressureAccountedIntervalListPairwiseDisjoint items
 
 /--
+Empty accounted-interval family.
+
+This is only the empty explicit family.  It does not assert that there are no
+accounted intervals in the ambient pressure window.
+-/
+def sourcePressureAccountedIntervalFamily_nil
+    (n : OddNat) (k r : ℕ) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  { items := []
+    pairwiseDisjoint :=
+      sourcePressureAccountedIntervalListPairwiseDisjoint_nil }
+
+/--
+Singleton accounted-interval family.
+
+This packages one already-accounted interval as a family.  It is a local
+carrier constructor, not a maximality or coverage statement.
+-/
+def sourcePressureAccountedIntervalFamily_singleton
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  { items := [A]
+    pairwiseDisjoint :=
+      sourcePressureAccountedIntervalListPairwiseDisjoint_singleton A }
+
+/--
+Cons constructor for accounted-interval families.
+
+The new head must be explicitly disjoint from every existing family item.
+Nothing in this constructor infers disjointness from pressure accounting alone,
+and it still does not introduce coverage, prefix behavior, or union accounting.
+-/
+def sourcePressureAccountedIntervalFamily_cons
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r)
+    (F : SourcePressureAccountedIntervalFamily n k r)
+    (hhead : ∀ B ∈ F.items,
+      SourcePressureAccountedIntervalsDisjoint A B) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  { items := A :: F.items
+    pairwiseDisjoint :=
+      sourcePressureAccountedIntervalListPairwiseDisjoint_cons
+        hhead F.pairwiseDisjoint }
+
+/--
 Family budget inherited from the list budget.
 
 The proof does not use `pairwiseDisjoint`: disjointness is stored for later
@@ -569,6 +615,31 @@ theorem sourcePressureAccountedIntervalFamily_sum_neg_of_nonempty
       SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
   sourcePressureAccountedInterval_list_sum_neg_of_nonempty hF
 
+/-- The singleton-family budget is the one-interval `≤ -1` budget. -/
+theorem sourcePressureAccountedIntervalFamily_singleton_sum_le_neg_one
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r) :
+    ((sourcePressureAccountedIntervalFamily_singleton A).items.map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -1 := by
+  simpa [sourcePressureAccountedIntervalFamily_singleton] using
+    sourcePressureAccountedInterval_intervalNetDrop_le_neg_one A
+
+/--
+The cons-family budget is the general family budget specialized to the cons
+constructor.
+-/
+theorem sourcePressureAccountedIntervalFamily_cons_sum_le_neg_length
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureAccountedInterval n k r)
+    (F : SourcePressureAccountedIntervalFamily n k r)
+    (hhead : ∀ B ∈ F.items,
+      SourcePressureAccountedIntervalsDisjoint A B) :
+    (((sourcePressureAccountedIntervalFamily_cons A F hhead).items).map (fun A =>
+      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
+        -((((sourcePressureAccountedIntervalFamily_cons A F hhead).items.length : ℕ) : ℤ)) :=
+  sourcePressureAccountedIntervalFamily_sum_le_neg_length
+    (sourcePressureAccountedIntervalFamily_cons A F hhead)
+
 /--
 Ordered non-overlap for two natural-number half-open intervals.
 
@@ -584,11 +655,34 @@ theorem NatIntervalsDisjoint.of_before
     NatIntervalsDisjoint a len b len' :=
   Or.inl h
 
+/--
+Transitive-like composition for ordered non-overlap.
+
+The second interval's length is irrelevant for the conclusion because
+`NatIntervalBefore a len b len'` only records `a + len ≤ b`.
+-/
+theorem NatIntervalBefore.trans_like
+    {a len b len' c len'' : ℕ}
+    (hAB : NatIntervalBefore a len b len')
+    (hBC : NatIntervalBefore b len' c len'') :
+    NatIntervalBefore a len c len'' := by
+  unfold NatIntervalBefore at hAB hBC ⊢
+  omega
+
 /-- Ordered non-overlap for two accounted intervals. -/
 def SourcePressureAccountedIntervalBefore
     {n : OddNat} {k r : ℕ}
     (A B : SourcePressureAccountedInterval n k r) : Prop :=
   NatIntervalBefore A.start A.len B.start B.len
+
+/-- Transitive-like composition for ordered accounted intervals. -/
+theorem SourcePressureAccountedIntervalBefore.trans_like
+    {n : OddNat} {k r : ℕ}
+    {A B C : SourcePressureAccountedInterval n k r}
+    (hAB : SourcePressureAccountedIntervalBefore A B)
+    (hBC : SourcePressureAccountedIntervalBefore B C) :
+    SourcePressureAccountedIntervalBefore A C :=
+  NatIntervalBefore.trans_like hAB hBC
 
 /-- Ordered accounted intervals are disjoint. -/
 theorem SourcePressureAccountedIntervalsDisjoint.of_before
@@ -597,5 +691,26 @@ theorem SourcePressureAccountedIntervalsDisjoint.of_before
     (h : SourcePressureAccountedIntervalBefore A B) :
     SourcePressureAccountedIntervalsDisjoint A B :=
   NatIntervalsDisjoint.of_before h
+
+/--
+Two-element family constructor from ordered non-overlap.
+
+This is a sorted-family seed: `[A, B]` is accepted because `A` lies before
+`B`, hence the two intervals are disjoint.  It still says nothing about
+covering all positive pressure depths or being a maximal family.
+-/
+def sourcePressureAccountedIntervalFamily_pair_of_before
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureAccountedInterval n k r)
+    (hAB : SourcePressureAccountedIntervalBefore A B) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_cons A
+    (sourcePressureAccountedIntervalFamily_singleton B)
+    (by
+      intro C hC
+      have hCB : C = B := by
+        simpa [sourcePressureAccountedIntervalFamily_singleton] using hC
+      subst C
+      exact SourcePressureAccountedIntervalsDisjoint.of_before hAB)
 
 end DkMath.Collatz
