@@ -154,4 +154,111 @@ theorem dkTendsto_centralRatioQ_mul_mirror_pi_div_two :
       (Real.pi / 2) :=
   tendsto_centralRatioQ_mul_mirror_pi_div_two
 
+/-!
+## Conditional infinite-product surface
+
+Mathlib's plain `HasProd` uses the unconditional summation filter by default.
+That is stronger than the classical Wallis statement used here, which is a
+limit of ordered partial products over `Finset.range m`.
+
+For this module, the Lean-faithful infinite-product API is therefore
+
+`HasProd f L (SummationFilter.conditional ℕ)`.
+
+On `ℕ`, this conditional filter is definitionally the `range m` exhaustion
+filter.  The lemmas below are deliberately stated with
+`SummationFilter.conditional ℕ` to avoid accidentally claiming unordered
+unconditional multipliability.
+
+TODO: If a later layer really needs unconditional `HasProd`, prove it from a
+separate absolute/log-product summability argument.  Do not silently replace
+the conditional statements below by default `HasProd` statements.
+-/
+
+/--
+For products indexed by `ℕ`, `SummationFilter.conditional ℕ` is exactly the
+classical ordered partial-product filter over `Finset.range m`.
+-/
+theorem hasProd_conditional_nat_iff
+    {M : Type*} [CommMonoid M] [TopologicalSpace M]
+    {f : ℕ → M} {a : M} :
+    HasProd f a (SummationFilter.conditional ℕ) ↔
+      Tendsto (fun m : ℕ => ∏ k ∈ Finset.range m, f k) atTop (𝓝 a) := by
+  rw [HasProd, SummationFilter.conditional_filter_eq_map_range, tendsto_map'_iff]
+  rfl
+
+/--
+The real Wallis factors have ordered infinite product `Real.pi / 2`.
+
+This is the `HasProd`-surface version of
+`tendsto_wallisPartialQ_pi_div_two`, with the conditional `ℕ` filter made
+explicit.
+-/
+theorem hasProd_conditional_real_coe_wallisFactorQ_pi_div_two :
+    HasProd
+      (fun k : ℕ => ((wallisFactorQ k : ℚ) : ℝ))
+      (Real.pi / 2)
+      (SummationFilter.conditional ℕ) := by
+  rw [hasProd_conditional_nat_iff]
+  exact tendsto_wallisPartialQ_pi_div_two.congr' <|
+    Eventually.of_forall fun m => by
+      unfold wallisPartialQ
+      rw [Rat.cast_prod]
+
+/--
+The real cosmic factors have ordered infinite product `Real.pi / 2`.
+
+This is the infinite-product form of the cosmic gap product route:
+finite cosmic partial products are pointwise the Wallis partial products, and
+the Wallis partial products converge to `Real.pi / 2`.
+-/
+theorem hasProd_conditional_real_coe_cosmicFactorQ_pi_div_two :
+    HasProd
+      (fun k : ℕ => ((cosmicFactorQ k : ℚ) : ℝ))
+      (Real.pi / 2)
+      (SummationFilter.conditional ℕ) := by
+  rw [hasProd_conditional_nat_iff]
+  exact tendsto_cosmicPartialQ_pi_div_two.congr' <|
+    Eventually.of_forall fun m => by
+      unfold cosmicPartialQ
+      rw [Rat.cast_prod]
+
+/--
+The ordered infinite product of the cosmic gap ratios
+`1 + 1 / N_k` is `Real.pi / 2`.
+
+This is the semantic Wallis-Cosmic statement: the local factor is not merely a
+Wallis factor, but the cosmic gap ratio coming from
+`N_k = (2*k+1)*(2*k+3)`.
+-/
+theorem hasProd_conditional_real_cosmic_gap_ratio_pi_div_two :
+    HasProd
+      (fun k : ℕ => ((1 + 1 / cosmicBodyQ k : ℚ) : ℝ))
+      (Real.pi / 2)
+      (SummationFilter.conditional ℕ) := by
+  exact hasProd_conditional_real_coe_cosmicFactorQ_pi_div_two.congr_fun
+    (fun k => by
+      exact_mod_cast (cosmicFactorQ_eq_one_add_inv_body k).symm)
+
+/--
+The conditional `tprod` of the real cosmic factors is `Real.pi / 2`.
+
+This is a value-level alias for callers that want `tprod` rather than
+`HasProd`.
+-/
+theorem tprod_conditional_real_coe_cosmicFactorQ_eq_pi_div_two :
+    (∏'[SummationFilter.conditional ℕ] k : ℕ, ((cosmicFactorQ k : ℚ) : ℝ)) =
+      Real.pi / 2 :=
+  hasProd_conditional_real_coe_cosmicFactorQ_pi_div_two.tprod_eq
+
+/--
+The conditional `tprod` of the real cosmic gap ratios
+`1 + 1 / N_k` is `Real.pi / 2`.
+-/
+theorem tprod_conditional_real_cosmic_gap_ratio_eq_pi_div_two :
+    (∏'[SummationFilter.conditional ℕ] k : ℕ,
+      ((1 + 1 / cosmicBodyQ k : ℚ) : ℝ)) =
+      Real.pi / 2 :=
+  hasProd_conditional_real_cosmic_gap_ratio_pi_div_two.tprod_eq
+
 end DkMath.Pascal.WallisLimitBridge
