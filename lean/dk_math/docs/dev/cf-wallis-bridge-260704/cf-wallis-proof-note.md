@@ -15,9 +15,9 @@ $961=31^2=960+1=(2\cdot3\cdot5+1)^2$
 
 #### variation
 
-$f(x)=(x+1)^2-x(x+2)=1$
+$f(x)=(x+1)^2 - x*(x+2) = 1$
 
-$f(x;u)=(x+u)^2-x(x+2u)=u^2$
+$f(x;u)=(x+u)^2 - x*(x+2*u) = u^2$
 
 $N+u^2=(P+u)^2$
 
@@ -28,7 +28,7 @@ $$
 $$
 
 $$
-\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\,u^{k}
+\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{k}\,u^{d-1-k}
 $$
 
 > 👩‍⚕️私D.:
