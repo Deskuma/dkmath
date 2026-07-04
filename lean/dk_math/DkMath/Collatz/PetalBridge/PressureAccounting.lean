@@ -2621,6 +2621,128 @@ theorem sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlapObstruc
         hfail hoverlap)
 
 /--
+Head-pair view of the recovered-or-overlap-obstruction split.
+
+This is only a naming bridge for callers that are processing the first adjacent
+pair of a witness list.  The theorem itself remains pair-local and does not
+inspect or sort a tail list.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_overlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 :=
+  sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlapObstruction
+    h1pos h2pos hfail
+
+/--
+Embed a head-pair overlap obstruction into the adjacent-list obstruction
+predicate.
+
+The tail is merely carried by the explicit list.  No non-adjacent pair search,
+cluster construction, or interval merge is introduced.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_headPairObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      (W1 :: W2 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_of_head
+    hobs
+
+/--
+A head-pair overlap obstruction gives a sorted-before failure for the explicit
+list whose first two witnesses form that obstructed pair.
+
+This uses only the adjacent obstruction wrapper; it does not repair or merge
+the overlap branch.
+-/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.of_headPairOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      (W1 :: W2 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+    (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_headPairObstruction
+      hobs)
+
+/--
+Head-pair list-facing split: a failed first adjacent pair is either recovered
+by swapping that pair, or it embeds as an adjacent overlap obstruction in the
+explicit list.
+
+This does not classify failures deeper in the list and does not perform
+list-wide sorting.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_adjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W1 :: W2 :: rest) := by
+  rcases
+      sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_overlapObstruction
+        h1pos h2pos hfail with hrecovered | hobs
+  · exact Or.inl hrecovered
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_headPairObstruction
+        hobs)
+
+/--
+Head-pair split with the obstruction branch weakened to ordinary list
+sorted-before failure.
+
+This is useful for consumers that do not need to inspect the overlap
+obstruction itself.
+-/
+theorem sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_listFailure
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W1 :: W2 :: rest) := by
+  rcases
+      sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_adjacentOverlapObstruction
+        h1pos h2pos hfail with hrecovered | hobs
+  · exact Or.inl hrecovered
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+        hobs)
+
+/--
 Raw-argument version of the sorted pair budget.
 -/
 theorem sourcePressureLocalIsland_pair_sum_le_neg_two
