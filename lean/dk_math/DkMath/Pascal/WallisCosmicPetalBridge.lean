@@ -149,6 +149,12 @@ theorem centralOdd_mul_mirror_eq_wallisPartialQ (m : ℕ) :
   rw [← Finset.prod_mul_distrib]
   exact Finset.prod_congr rfl fun k _ => halfFactor_mul_eq_wallisFactorQ k
 
+/-- The central binomial ratio times the mirror product equals the finite Wallis product. -/
+theorem centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
+    centralRatioQ m * mirrorOddRatioPartialQ m = wallisPartialQ m := by
+  rw [centralRatioQ_eq_centralOddRatioPartialQ,
+    centralOdd_mul_mirror_eq_wallisPartialQ]
+
 /--
 The finite Wallis-Cosmic Petal bridge:
 the central odd half-product times its mirror equals the cosmic gap product.
