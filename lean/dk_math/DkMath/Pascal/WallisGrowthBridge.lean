@@ -273,9 +273,10 @@ theorem real_coe_centralRatioQ_sq_eq_odd_mul_cosmicPartialQ
   exact_mod_cast centralRatioQ_sq_eq_odd_mul_cosmicPartialQ m
 
 /-!
-TODO for the next asymptotic pass:
+## Squared normalized growth limit
 
-Prove
+The finite identity above is strong enough to extract the first genuine
+growth theorem without invoking Stirling's approximation:
 
 ```lean
 Filter.Tendsto
@@ -284,11 +285,121 @@ Filter.Tendsto
   (nhds Real.pi)
 ```
 
-from `real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ`,
-`tendsto_wallisPartialQ_pi_div_two`, and
-`(2*m+1)/m -> 2`.  This is no longer a finite algebra problem: it needs the
-standard `atTop` handling for `m ≠ 0` and the real limit of `(2*m+1)/m`.
-Keep it as a separate proof-complete checkpoint.
+The proof is deliberately routed through the Wallis finite product:
+
+```text
+centralRatioQ m ^ 2 / m
+  = ((2*m+1) / m) * wallisPartialQ m
+  -> 2 * (pi / 2)
+  = pi.
+```
+
+This keeps the growth reading independent from any Stirling theorem.  The
+remaining square-root form should be a later asymptotic-equivalence layer.
 -/
+
+/-- Algebraic normalization of the odd boundary ratio away from `m = 0`. -/
+theorem odd_boundary_div_nat_eq_two_add_inv
+    {m : ℕ} (hm : m ≠ 0) :
+    ((2 * m + 1 : ℝ) / (m : ℝ)) =
+      2 + 1 / (m : ℝ) := by
+  field_simp [Nat.cast_ne_zero.mpr hm]
+
+/-- The normalized right odd boundary tends to `2`. -/
+theorem tendsto_odd_boundary_div_nat_two :
+    Filter.Tendsto
+      (fun m : ℕ => ((2 * m + 1 : ℝ) / (m : ℝ)))
+      Filter.atTop
+      (nhds 2) := by
+  have hlim :
+      Filter.Tendsto
+        (fun m : ℕ => 2 + 1 / (m : ℝ))
+        Filter.atTop
+        (nhds (2 + 0)) := by
+    exact tendsto_const_nhds.add tendsto_one_div_atTop_nhds_zero_nat
+  have hlim' :
+      Filter.Tendsto
+        (fun m : ℕ => 2 + 1 / (m : ℝ))
+        Filter.atTop
+        (nhds 2) := by
+    simpa using hlim
+  refine hlim'.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  exact (odd_boundary_div_nat_eq_two_add_inv (Nat.ne_of_gt hm)).symm
+
+/--
+Finite rewrite for the squared normalized central ratio.
+
+The hypothesis only removes the endpoint `m = 0`; the limit theorem below
+discharges it with `eventually_gt_atTop 0`.
+-/
+theorem real_centralRatioQ_sq_div_nat_eq_odd_div_nat_mul_wallis
+    {m : ℕ} (hm : m ≠ 0) :
+    ((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ) =
+      ((2 * m + 1 : ℝ) / (m : ℝ)) *
+        ((wallisPartialQ m : ℚ) : ℝ) := by
+  rw [real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ]
+  field_simp [Nat.cast_ne_zero.mpr hm]
+
+/--
+Finite rewrite for the squared normalized central ratio through the cosmic
+partial product.
+-/
+theorem real_centralRatioQ_sq_div_nat_eq_odd_div_nat_mul_cosmic
+    {m : ℕ} (hm : m ≠ 0) :
+    ((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ) =
+      ((2 * m + 1 : ℝ) / (m : ℝ)) *
+        ((cosmicPartialQ m : ℚ) : ℝ) := by
+  rw [real_coe_centralRatioQ_sq_eq_odd_mul_cosmicPartialQ]
+  field_simp [Nat.cast_ne_zero.mpr hm]
+
+/--
+Squared normalized central-ratio growth.
+
+This is the Wallis route to the first central-binomial growth surface:
+`centralRatioQ m ^ 2 / m -> Real.pi`.  No Stirling approximation is used.
+-/
+theorem tendsto_real_centralRatioQ_sq_div_nat_pi :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)))
+      Filter.atTop
+      (nhds Real.pi) := by
+  have hprod :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          ((2 * m + 1 : ℝ) / (m : ℝ)) *
+            ((wallisPartialQ m : ℚ) : ℝ))
+        Filter.atTop
+        (nhds (2 * (Real.pi / 2))) := by
+    exact tendsto_odd_boundary_div_nat_two.mul tendsto_wallisPartialQ_pi_div_two
+  have hprod_pi :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          ((2 * m + 1 : ℝ) / (m : ℝ)) *
+            ((wallisPartialQ m : ℚ) : ℝ))
+        Filter.atTop
+        (nhds Real.pi) := by
+    convert hprod using 1
+    ring_nf
+  refine hprod_pi.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  exact (real_centralRatioQ_sq_div_nat_eq_odd_div_nat_mul_wallis
+    (Nat.ne_of_gt hm)).symm
+
+/--
+Cosmic-route alias for the same squared normalized growth theorem.
+
+The proof above already factors through the Wallis product.  This name records
+that the same surface is compatible with the cosmic partial product, via the
+finite equality `wallisPartialQ_eq_cosmicPartialQ`.
+-/
+theorem tendsto_real_centralRatioQ_sq_div_nat_pi_cosmic_route :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)))
+      Filter.atTop
+      (nhds Real.pi) :=
+  tendsto_real_centralRatioQ_sq_div_nat_pi
 
 end DkMath.Pascal.WallisGrowthBridge

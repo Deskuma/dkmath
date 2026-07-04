@@ -39,6 +39,16 @@ The limit module already proves:
 wallisPartialQ m -> pi / 2
 ```
 
+The growth module now proves the squared normalized limit:
+
+```lean
+theorem tendsto_real_centralRatioQ_sq_div_nat_pi :
+  Filter.Tendsto
+    (fun m : Nat => (((centralRatioQ m : Q) : R) ^ 2 / (m : R)))
+    Filter.atTop
+    (nhds Real.pi)
+```
+
 Therefore the squared central ratio has the growth line:
 
 ```text
@@ -63,9 +73,9 @@ inverting gives the central-binomial growth law:
 Nat.choose (2*m) m ~ 4^m / sqrt (pi * m)
 ```
 
-## Next formal checkpoint
+## Formal checkpoint just closed
 
-The next theorem should be the squared normalized limit:
+The closed theorem is:
 
 ```lean
 Filter.Tendsto
@@ -82,5 +92,20 @@ wallisPartialQ m -> pi / 2
 (2*m + 1) / m -> 2
 ```
 
-The `m = 0` issue is an `atTop` bookkeeping problem, so it should be handled
-as a separate no-sorry checkpoint.
+The `m = 0` issue is only an `atTop` bookkeeping problem.  The Lean proof
+handles it with the finite rewrite under `m ≠ 0` and the eventual fact
+`eventually_gt_atTop 0`.
+
+## Next formal checkpoint
+
+The next theorem should not jump directly to Stirling.  A clean next layer is
+an asymptotic-equivalence or square-root bridge, for example:
+
+```text
+centralRatioQ m ~ sqrt (Real.pi * m)
+```
+
+That will need a small real-analysis bridge from
+`centralRatioQ m ^ 2 / m -> Real.pi` plus positivity of `centralRatioQ m`.
+After that, the central-binomial coefficient form follows by inverting the
+definition of `centralRatioQ`.
