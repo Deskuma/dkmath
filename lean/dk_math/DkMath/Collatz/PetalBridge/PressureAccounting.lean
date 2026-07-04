@@ -706,12 +706,63 @@ This is a direction-sensitive helper for future sorted-family work.
 def NatIntervalBefore (a len b _len' : ℕ) : Prop :=
   a + len ≤ b
 
+/--
+Overlap vocabulary for two natural-number half-open intervals.
+
+This is the positive counterpart to ordered non-overlap.  The theorem API below
+is deliberately conservative: one failed `before` relation is not overlap
+evidence, because the intervals may simply be in reverse order.  Overlap is
+proved only after both ordered directions are ruled out.
+-/
+def NatIntervalsOverlap (a lenA b lenB : ℕ) : Prop :=
+  a < b + lenB ∧ b < a + lenA
+
 /-- Ordered non-overlap implies ordinary interval disjointness. -/
 theorem NatIntervalsDisjoint.of_before
     {a len b len' : ℕ}
     (h : NatIntervalBefore a len b len') :
     NatIntervalsDisjoint a len b len' :=
   Or.inl h
+
+/-- Ordered non-overlap in one direction excludes overlap. -/
+theorem NatIntervalsOverlap.not_of_before
+    {a lenA b lenB : ℕ}
+    (hbefore : NatIntervalBefore a lenA b lenB) :
+    ¬ NatIntervalsOverlap a lenA b lenB := by
+  change ¬ (a < b + lenB ∧ b < a + lenA)
+  change a + lenA ≤ b at hbefore
+  intro hoverlap
+  omega
+
+/-- Ordered non-overlap in the reverse direction also excludes overlap. -/
+theorem NatIntervalsOverlap.not_of_reverseBefore
+    {a lenA b lenB : ℕ}
+    (hbefore : NatIntervalBefore b lenB a lenA) :
+    ¬ NatIntervalsOverlap a lenA b lenB := by
+  change ¬ (a < b + lenB ∧ b < a + lenA)
+  change b + lenB ≤ a at hbefore
+  intro hoverlap
+  omega
+
+/--
+If neither ordered direction is available, the two half-open intervals overlap.
+
+The length-positivity hypotheses are kept at this API boundary for the pressure
+address use case, even though the arithmetic core is already forced by the two
+negated `before` inequalities.  Keeping them explicit prevents future callers
+from reading a single failed order test as overlap evidence.
+-/
+theorem NatIntervalsOverlap.of_not_before_not_reverseBefore
+    {a lenA b lenB : ℕ}
+    (_hApos : 0 < lenA)
+    (_hBpos : 0 < lenB)
+    (hnotAB : ¬ NatIntervalBefore a lenA b lenB)
+    (hnotBA : ¬ NatIntervalBefore b lenB a lenA) :
+    NatIntervalsOverlap a lenA b lenB := by
+  change ¬ a + lenA ≤ b at hnotAB
+  change ¬ b + lenB ≤ a at hnotBA
+  change a < b + lenB ∧ b < a + lenA
+  omega
 
 /--
 Transitive-like composition for ordered non-overlap.
@@ -744,6 +795,48 @@ def SourcePressureIntervalPulseAddressBefore
     {n : OddNat} {k r : ℕ}
     (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
   A.start + A.len ≤ B.start
+
+/--
+Overlap predicate for two interval-pulse addresses.
+
+This only compares the explicit half-open address intervals.  It does not
+merge intervals, prove union accounting, or infer coverage of a pressure
+region.
+-/
+def SourcePressureIntervalPulseAddressOverlap
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
+  NatIntervalsOverlap A.start A.len B.start B.len
+
+/-- A before relation between pulse addresses excludes address overlap. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_of_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hbefore : SourcePressureIntervalPulseAddressBefore A B) :
+    ¬ SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.not_of_before hbefore
+
+/-- A reverse before relation between pulse addresses also excludes overlap. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hbefore : SourcePressureIntervalPulseAddressBefore B A) :
+    ¬ SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.not_of_reverseBefore hbefore
+
+/--
+If neither pulse address is before the other, then their explicit half-open
+address intervals overlap.
+-/
+theorem SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len)
+    (hnotAB : ¬ SourcePressureIntervalPulseAddressBefore A B)
+    (hnotBA : ¬ SourcePressureIntervalPulseAddressBefore B A) :
+    SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.of_not_before_not_reverseBefore hApos hBpos hnotAB hnotBA
 
 theorem sourcePressureIntervalPulseAddressBefore_iff_accountedBefore
     {n : OddNat} {k r : ℕ}
@@ -1691,6 +1784,57 @@ def SourcePressureLocalIslandWitnessBefore
   SourcePressureIntervalPulseAddressBefore
     (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
     (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)
+
+/--
+Overlap predicate for two explicit local-island witnesses.
+
+This is only the address-level overlap of the intervals obtained from the
+supplied witnesses.  It is not a coverage, maximality, or union-accounting
+claim, and it is not derivable from one failed `before` relation alone.
+-/
+def SourcePressureLocalIslandWitnessOverlap
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureIntervalPulseAddressOverlap
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)
+
+/-- A witness-level before relation excludes witness-level overlap. -/
+theorem SourcePressureLocalIslandWitnessOverlap.not_of_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  SourcePressureIntervalPulseAddressOverlap.not_of_before hbefore
+
+/-- A reverse witness-level before relation also excludes witness-level overlap. -/
+theorem SourcePressureLocalIslandWitnessOverlap.not_of_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hbefore : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    ¬ SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore hbefore
+
+/--
+Two local-island witness intervals overlap once both ordered directions are
+ruled out.
+
+The length-positivity hypotheses are kept explicit because this wrapper only
+uses the converted address intervals.  The theorem remains local to the two
+supplied witnesses.
+-/
+theorem SourcePressureLocalIslandWitnessOverlap.of_not_before_not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hnot12 : ¬ SourcePressureLocalIslandWitnessBefore W1 W2)
+    (hnot21 : ¬ SourcePressureLocalIslandWitnessBefore W2 W1) :
+    SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefore
+    h1pos h2pos hnot12 hnot21
 
 theorem sourcePressureLocalIslandWitnessBefore_iff_addressBefore
     {n : OddNat} {k r : ℕ}
