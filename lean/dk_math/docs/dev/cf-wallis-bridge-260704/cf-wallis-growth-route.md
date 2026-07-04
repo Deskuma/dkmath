@@ -143,6 +143,12 @@ theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
     (fun m : Nat => (4 : R) ^ m / Real.sqrt (Real.pi * (m : R)))
 ```
 
+It also has a more explicit searchable alias:
+
+```lean
+theorem isEquivalent_real_centralBinomial_four_pow_div_sqrt_pi_mul_nat
+```
+
 This uses the finite inversion identities:
 
 ```lean
@@ -153,15 +159,26 @@ theorem real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ
 and then divides `4^m ~ 4^m` by
 `centralRatioQ m ~ sqrt (Real.pi * m)`.
 
-## Next formal checkpoint
+The fourth closed theorem packages the same statement as an operational ratio
+limit:
 
-The next theorem can package the same statement as an operational ratio limit:
-
-```text
-Nat.choose (2*m) m / (4^m / sqrt (Real.pi * m)) -> 1
+```lean
+theorem tendsto_real_centralBinomial_div_four_pow_div_sqrt_pi_mul_nat_one :
+  Filter.Tendsto
+    (fun m : Nat =>
+      ((Nat.choose (2 * m) m : Nat) : R) /
+        ((4 : R) ^ m / Real.sqrt (Real.pi * (m : R))))
+    Filter.atTop
+    (nhds 1)
 ```
 
 This is equivalent to the `IsEquivalent` theorem above, but it is often easier
-for downstream users who want a direct `Tendsto` surface.  After that, the
-remaining work is presentation: expose a conventional Stirling-style theorem
-name while keeping the proof source explicitly Wallis-derived.
+for downstream users who want a direct `Tendsto` surface.
+
+## Next formal checkpoint
+
+The remaining work is presentation and downstream usability: expose a
+conventional Stirling-style theorem name while keeping the proof source
+explicitly Wallis-derived.  A useful follow-up is also to add short aliases
+for common RHS spellings, if downstream files expect a different arrangement
+of `4^m`, division, or square root.

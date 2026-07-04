@@ -557,4 +557,41 @@ theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
     exact IsEquivalent.div IsEquivalent.refl isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat
   exact hfinite.isEquivalent.trans hratio
 
+/--
+Searchable alias for the central-binomial asymptotic.
+
+The longer name makes the denominator structure explicit:
+`4^m / sqrt (pi*m)`.
+-/
+theorem isEquivalent_real_centralBinomial_four_pow_div_sqrt_pi_mul_nat :
+    (fun m : ℕ => ((Nat.choose (2 * m) m : ℕ) : ℝ)) ~[Filter.atTop]
+      (fun m : ℕ => (4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ))) :=
+  isEquivalent_real_centralBinomial_sqrt_pi_mul_nat
+
+/--
+Operational ratio form of the central-binomial growth law.
+
+This is the same asymptotic statement as
+`isEquivalent_real_centralBinomial_four_pow_div_sqrt_pi_mul_nat`, but exposed
+as a direct `Tendsto` theorem for downstream calculations.
+-/
+theorem tendsto_real_centralBinomial_div_four_pow_div_sqrt_pi_mul_nat_one :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        ((Nat.choose (2 * m) m : ℕ) : ℝ) /
+          ((4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ))))
+      Filter.atTop
+      (nhds 1) := by
+  have hden :
+      ∀ᶠ m : ℕ in Filter.atTop,
+        (4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    filter_upwards [eventually_gt_atTop 0] with m hm
+    have hm_pos : 0 < (m : ℝ) := by exact_mod_cast hm
+    have hprod_pos : 0 < Real.pi * (m : ℝ) :=
+      mul_pos Real.pi_pos hm_pos
+    exact div_ne_zero (pow_ne_zero m (by norm_num : (4 : ℝ) ≠ 0))
+      (Real.sqrt_pos_of_pos hprod_pos).ne'
+  exact (isEquivalent_iff_tendsto_one hden).mp
+    isEquivalent_real_centralBinomial_four_pow_div_sqrt_pi_mul_nat
+
 end DkMath.Pascal.WallisGrowthBridge
