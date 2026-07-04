@@ -57,6 +57,15 @@ theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
     (fun m : Nat => Real.sqrt (Real.pi * (m : R)))
 ```
 
+Finally, the growth module now inverts the definition of `centralRatioQ` and
+proves the central-binomial coefficient form:
+
+```lean
+theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
+  (fun m : Nat => ((Nat.choose (2 * m) m : Nat) : R)) ~[Filter.atTop]
+    (fun m : Nat => (4 : R) ^ m / Real.sqrt (Real.pi * (m : R)))
+```
+
 Therefore the squared central ratio has the growth line:
 
 ```text
@@ -126,16 +135,33 @@ theorem tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one :
 The proof takes the square root of the squared normalized growth theorem and
 uses positivity of `centralRatioQ m`.
 
-## Next formal checkpoint
+The third closed theorem is:
 
-The next theorem should invert the definition of `centralRatioQ` and expose
-the central-binomial coefficient form:
-
-```text
-Nat.choose (2*m) m ~ 4^m / sqrt (Real.pi * m)
+```lean
+theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
+  (fun m : Nat => ((Nat.choose (2 * m) m : Nat) : R)) ~[Filter.atTop]
+    (fun m : Nat => (4 : R) ^ m / Real.sqrt (Real.pi * (m : R)))
 ```
 
-This should still avoid using Stirling as the source theorem.  The likely Lean
-work is a finite real-coercion identity for `centralRatioQ m =
-4^m / Nat.choose (2*m) m`, followed by an `IsEquivalent` inversion/division
-lemma with eventual nonzero denominators.
+This uses the finite inversion identities:
+
+```lean
+theorem nat_choose_two_mul_self_cast_eq_pow_four_div_centralRatioQ
+theorem real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ
+```
+
+and then divides `4^m ~ 4^m` by
+`centralRatioQ m ~ sqrt (Real.pi * m)`.
+
+## Next formal checkpoint
+
+The next theorem can package the same statement as an operational ratio limit:
+
+```text
+Nat.choose (2*m) m / (4^m / sqrt (Real.pi * m)) -> 1
+```
+
+This is equivalent to the `IsEquivalent` theorem above, but it is often easier
+for downstream users who want a direct `Tendsto` surface.  After that, the
+remaining work is presentation: expose a conventional Stirling-style theorem
+name while keeping the proof source explicitly Wallis-derived.

@@ -498,4 +498,63 @@ theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
   exact isEquivalent_of_tendsto_one
     tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
 
+/-!
+## Central binomial coefficient surface
+
+The definition of `centralRatioQ` is
+
+```text
+centralRatioQ m = 4^m / Nat.choose (2*m) m.
+```
+
+After the square-root growth surface, the central-binomial form is obtained by
+inverting this exact finite identity.  This is still a Wallis-derived route;
+no Stirling theorem is used as an input.
+-/
+
+/--
+Finite rational identity that inverts the definition of `centralRatioQ`.
+
+This is the exact bridge from the central-ratio surface to the central
+binomial coefficient surface.
+-/
+theorem nat_choose_two_mul_self_cast_eq_pow_four_div_centralRatioQ
+    (m : ℕ) :
+    (Nat.choose (2 * m) m : ℚ) =
+      (4 : ℚ) ^ m / centralRatioQ m := by
+  unfold centralRatioQ
+  have hchoose_ne_Q : (Nat.choose (2 * m) m : ℚ) ≠ 0 := by
+    exact_mod_cast (Nat.choose_pos (by omega : m ≤ 2 * m)).ne'
+  field_simp [hchoose_ne_Q]
+  norm_num [pow_mul]
+
+/--
+Finite real identity that inverts the definition of `centralRatioQ`.
+-/
+theorem real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ
+    (m : ℕ) :
+    ((Nat.choose (2 * m) m : ℕ) : ℝ) =
+      (4 : ℝ) ^ m / ((centralRatioQ m : ℚ) : ℝ) := by
+  exact_mod_cast nat_choose_two_mul_self_cast_eq_pow_four_div_centralRatioQ m
+
+/--
+Central binomial coefficient asymptotic, derived from the Wallis growth
+surface.
+
+This is the usual central-binomial growth law in DkMath's orientation:
+`choose (2*m) m ~ 4^m / sqrt (pi*m)`.
+-/
+theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
+    (fun m : ℕ => ((Nat.choose (2 * m) m : ℕ) : ℝ)) ~[Filter.atTop]
+      (fun m : ℕ => (4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ))) := by
+  have hfinite :
+      (fun m : ℕ => ((Nat.choose (2 * m) m : ℕ) : ℝ)) =ᶠ[Filter.atTop]
+        (fun m : ℕ => (4 : ℝ) ^ m / ((centralRatioQ m : ℚ) : ℝ)) :=
+    Eventually.of_forall real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ
+  have hratio :
+      (fun m : ℕ => (4 : ℝ) ^ m / ((centralRatioQ m : ℚ) : ℝ)) ~[Filter.atTop]
+        (fun m : ℕ => (4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ))) := by
+    exact IsEquivalent.div IsEquivalent.refl isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat
+  exact hfinite.isEquivalent.trans hratio
+
 end DkMath.Pascal.WallisGrowthBridge
