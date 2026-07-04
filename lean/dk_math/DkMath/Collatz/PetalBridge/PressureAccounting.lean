@@ -717,6 +717,13 @@ proved only after both ordered directions are ruled out.
 def NatIntervalsOverlap (a lenA b lenB : ℕ) : Prop :=
   a < b + lenB ∧ b < a + lenA
 
+/-- Natural interval overlap is symmetric. -/
+theorem NatIntervalsOverlap.symm
+    {a lenA b lenB : ℕ}
+    (h : NatIntervalsOverlap a lenA b lenB) :
+    NatIntervalsOverlap b lenB a lenA :=
+  ⟨h.2, h.1⟩
+
 /-- Ordered non-overlap implies ordinary interval disjointness. -/
 theorem NatIntervalsDisjoint.of_before
     {a len b len' : ℕ}
@@ -850,6 +857,14 @@ def SourcePressureIntervalPulseAddressOverlap
     (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
   NatIntervalsOverlap A.start A.len B.start B.len
 
+/-- Address-level overlap is symmetric. -/
+theorem SourcePressureIntervalPulseAddressOverlap.symm
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    SourcePressureIntervalPulseAddressOverlap B A :=
+  NatIntervalsOverlap.symm h
+
 /-- A before relation between pulse addresses excludes address overlap. -/
 theorem SourcePressureIntervalPulseAddressOverlap.not_of_before
     {n : OddNat} {k r : ℕ}
@@ -865,6 +880,24 @@ theorem SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore
     (hbefore : SourcePressureIntervalPulseAddressBefore B A) :
     ¬ SourcePressureIntervalPulseAddressOverlap A B :=
   NatIntervalsOverlap.not_of_reverseBefore hbefore
+
+/-- Address overlap excludes the forward before relation. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    ¬ SourcePressureIntervalPulseAddressBefore A B := by
+  intro hbefore
+  exact SourcePressureIntervalPulseAddressOverlap.not_of_before hbefore h
+
+/-- Address overlap excludes the reverse before relation. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    ¬ SourcePressureIntervalPulseAddressBefore B A := by
+  intro hbefore
+  exact SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore hbefore h
 
 /--
 If neither pulse address is before the other, then their explicit half-open
@@ -1868,6 +1901,14 @@ def SourcePressureLocalIslandWitnessOverlap
     (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
     (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)
 
+/-- Witness-level overlap is symmetric. -/
+theorem SourcePressureLocalIslandWitnessOverlap.symm
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessOverlap W1 W2) :
+    SourcePressureLocalIslandWitnessOverlap W2 W1 :=
+  SourcePressureIntervalPulseAddressOverlap.symm h
+
 /-- A witness-level before relation excludes witness-level overlap. -/
 theorem SourcePressureLocalIslandWitnessOverlap.not_of_before
     {n : OddNat} {k r : ℕ}
@@ -1883,6 +1924,24 @@ theorem SourcePressureLocalIslandWitnessOverlap.not_of_reverseBefore
     (hbefore : SourcePressureLocalIslandWitnessBefore W2 W1) :
     ¬ SourcePressureLocalIslandWitnessOverlap W1 W2 :=
   SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore hbefore
+
+/-- Witness overlap excludes the forward before relation. -/
+theorem SourcePressureLocalIslandWitnessOverlap.not_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessOverlap W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessBefore W1 W2 := by
+  intro hbefore
+  exact SourcePressureLocalIslandWitnessOverlap.not_of_before hbefore h
+
+/-- Witness overlap excludes the reverse before relation. -/
+theorem SourcePressureLocalIslandWitnessOverlap.not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessOverlap W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessBefore W2 W1 := by
+  intro hbefore
+  exact SourcePressureLocalIslandWitnessOverlap.not_of_reverseBefore hbefore h
 
 /--
 Two local-island witness intervals overlap once both ordered directions are
@@ -2049,6 +2108,77 @@ theorem sourcePressureLocalIslandWitnessPair_failure_reverseBefore_or_overlap
   exact
     SourcePressureLocalIslandWitnessOverlap.reverseBefore_or_overlap_of_not_before
       h1pos h2pos hnot12
+
+/--
+First-class obstruction predicate for the overlap branch of a failed witness
+pair.
+
+This packages exactly two local facts: `[W1, W2]` has sorted-before failure and
+the converted witness intervals overlap.  It does not merge intervals, produce
+coverage, or recover a union-accounting family.
+-/
+def SourcePressureLocalIslandWitnessPairOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] ∧
+    SourcePressureLocalIslandWitnessOverlap W1 W2
+
+/-- Constructor for the explicit overlap-obstruction predicate. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.mk_of_failure_overlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hoverlap : SourcePressureLocalIslandWitnessOverlap W1 W2) :
+    SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 :=
+  ⟨hfail, hoverlap⟩
+
+/-- Extract the sorted-before failure from an overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.failure
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] :=
+  h.1
+
+/-- Extract the witness overlap from an overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.overlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  h.2
+
+/-- An overlap obstruction still blocks the original order. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessBefore W1 W2 :=
+  SourcePressureLocalIslandWitnessOverlap.not_before h.overlap
+
+/-- An overlap obstruction also blocks the swapped order. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessBefore W2 W1 :=
+  SourcePressureLocalIslandWitnessOverlap.not_reverseBefore h.overlap
+
+/--
+An overlap obstruction cannot be repaired merely by swapping the two witnesses.
+
+This is the key diagnostic distinction from the reverse branch: reverse order
+is recoverable by swapping, but overlap is not.
+-/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_recoverable_by_swap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessListSortedBefore [W2, W1] := by
+  intro hsorted
+  have hrev : SourcePressureLocalIslandWitnessBefore W2 W1 :=
+    sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.1 hsorted
+  exact SourcePressureLocalIslandWitnessOverlap.not_reverseBefore hobs.overlap hrev
 
 /--
 Reverse-recovery helper for a pair whose failure reason is merely reversed
@@ -2293,6 +2423,33 @@ theorem sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlap
         sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
           W1 W2 hrev⟩
   · exact Or.inr hoverlap
+
+/--
+Recovered-or-obstruction split for a failed two-witness order.
+
+The left branch is the recovered reversed-order budget.  The right branch is a
+first-class overlap obstruction, keeping the overlap branch explicit and
+unmerged.
+-/
+theorem sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 := by
+  rcases sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlap
+      h1pos h2pos hfail with hrecovered | hoverlap
+  · exact Or.inl hrecovered
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessPairOverlapObstruction.mk_of_failure_overlap
+        hfail hoverlap)
 
 /--
 Raw-argument version of the sorted pair budget.
