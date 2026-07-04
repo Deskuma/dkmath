@@ -2070,6 +2070,68 @@ theorem sourcePressureLocalIslandWitnessPair_no_failure_of_before
   exact not_not_intro hbefore
 
 /--
+Head constructor for adjacent sorted-before failure in a witness list.
+
+This exposes the first recursive branch of the failure predicate.  It is only
+an order-failure constructor for the explicit list.
+-/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_not_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hnot : ¬ SourcePressureLocalIslandWitnessBefore W1 W2) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      (W1 :: W2 :: rest) := by
+  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+    sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
+    (Or.inl hnot)
+
+/--
+Tail constructor for adjacent sorted-before failure in a witness list.
+
+This exposes the second recursive branch of the failure predicate.  It does
+not classify the tail; it only carries an already supplied tail failure.
+-/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (htail :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      (W1 :: W2 :: rest) := by
+  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+    sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
+    (Or.inr htail)
+
+/-- Case-split constructor for head-or-tail sorted-before failure. -/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+        SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+          (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      (W1 :: W2 :: rest) := by
+  rcases h with hhead | htail
+  · exact
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_not_before
+        hhead
+  · exact SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_tail
+      htail
+
+/--
 Every explicit local-island witness pair is either sorted or carries a
 sorted-before failure.
 
@@ -2283,6 +2345,19 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_o
       (W1 :: W2 :: rest) :=
   Or.inr htail
 
+/-- Readable alias for propagating adjacent overlap obstruction from the tail. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (htail :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      (W1 :: W2 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_of_tail
+    htail
+
 /-- Adjacent overlap obstruction for a pair is symmetric. -/
 theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_symm
     {n : OddNat} {k r : ℕ}
@@ -2348,6 +2423,27 @@ theorem
     SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] :=
   SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
     hobs
+
+/--
+Tail adjacent-overlap obstruction gives sorted-before failure for the full
+explicit list.
+
+This is only propagation through a new head.  It does not inspect or repair the
+tail obstruction.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.of_tailAdjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (htail :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      (W1 :: W2 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+    (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_tail
+      htail)
 
 /--
 Reverse-recovery helper for a pair whose failure reason is merely reversed
