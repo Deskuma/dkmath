@@ -15,16 +15,16 @@ $961=31^2=960+1=(2\cdot3\cdot5+1)^2$
 
 #### variation
 
-$f(x)=(x+1)-x(x+2)=1$
+$f(x)=(x+1)^2-x(x+2)=1$
 
-$f(x;u)=(x+u)-x(x+2u)=u^2$
+$f(x;u)=(x+u)^2-x(x+2u)=u^2$
 
 $N+u^2=(P+u)^2$
 
 ### generalization
 
 $$
-(x+u)^d = x\cdot \mathrm{GN}_d(x,u) + u^d
+(x+u)^d - u^d = x\cdot \mathrm{GN}_d(x,u)
 $$
 
 $$
