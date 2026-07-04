@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Pascal.WallisCosmicPetalBridge
+import DkMath.Pascal.WallisLimitBridge
 
 #print "file: DkMath.Pascal"
 
