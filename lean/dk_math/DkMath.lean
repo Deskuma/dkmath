@@ -26,6 +26,7 @@ import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: pri
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
+import DkMath.Pascal  -- Pascal bridge modules
 import DkMath.Petal  -- Petal: relative polygon and GN bridge surface
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics

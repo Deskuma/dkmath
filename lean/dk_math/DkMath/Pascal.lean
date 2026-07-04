@@ -1,0 +1,15 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.Pascal.WallisCosmicPetalBridge
+
+#print "file: DkMath.Pascal"
+
+/-!
+# Pascal bridge modules
+
+Public entry point for Pascal-triangle and binomial-product bridge layers.
+-/
