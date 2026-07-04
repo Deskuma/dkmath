@@ -2181,6 +2181,62 @@ theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_recoverable_b
   exact SourcePressureLocalIslandWitnessOverlap.not_reverseBefore hobs.overlap hrev
 
 /--
+The swapped two-witness list also has a sorted-before failure under overlap.
+
+Overlap blocks both directions, so the obstruction is independent of which
+side of the pair is inspected first.  This is still only a two-witness local
+diagnostic and does not merge the overlapping intervals.
+-/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.swap_failure
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W2, W1] :=
+  sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff.2
+    hobs.not_reverseBefore
+
+/-- An overlap obstruction makes the original pair list not sorted. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_sorted
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessListSortedBefore [W1, W2] := by
+  intro hsorted
+  have hbefore : SourcePressureLocalIslandWitnessBefore W1 W2 :=
+    sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.1 hsorted
+  exact hobs.not_before hbefore
+
+/-- An overlap obstruction makes the swapped pair list not sorted. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_sorted_swap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    ¬ SourcePressureLocalIslandWitnessListSortedBefore [W2, W1] :=
+  hobs.not_recoverable_by_swap
+
+/--
+Overlap obstruction is symmetric in the two supplied witnesses.
+
+This packages the swapped failure together with symmetric overlap.  It still
+does not choose a repaired order, merged interval, or union-accounting family.
+-/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.symm
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessPairOverlapObstruction W2 W1 :=
+  ⟨hobs.swap_failure, SourcePressureLocalIslandWitnessOverlap.symm hobs.overlap⟩
+
+/-- Symmetric iff form for the local overlap-obstruction predicate. -/
+theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.symm_iff
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 ↔
+      SourcePressureLocalIslandWitnessPairOverlapObstruction W2 W1 :=
+  ⟨SourcePressureLocalIslandWitnessPairOverlapObstruction.symm,
+    SourcePressureLocalIslandWitnessPairOverlapObstruction.symm⟩
+
+/--
 Reverse-recovery helper for a pair whose failure reason is merely reversed
 order.
 
