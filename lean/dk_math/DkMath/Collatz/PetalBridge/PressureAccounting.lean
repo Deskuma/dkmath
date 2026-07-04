@@ -2172,6 +2172,129 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_su
         (by simp)
 
 /--
+Recovered accounted interval family for a reversed local-island witness pair.
+
+This is only a two-witness local recovery by swapping the supplied pair.  It is
+not a global sorting algorithm, not a maximal family construction, and not a
+union-accounting theorem.
+-/
+def sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r)
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    SourcePressureAccountedIntervalFamily n k r :=
+  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
+    W2 W1 hrev
+
+@[simp]
+theorem sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r)
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items.length = 2 := by
+  simp [sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair]
+
+/--
+The recovered reversed pair lists the converted intervals in swapped order.
+-/
+theorem sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_items
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r)
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items =
+      [sourcePressureAccountedInterval_of_intervalPulseAddress
+        (sourcePressureIntervalPulseAddress_of_localIslandWitness W2),
+       sourcePressureAccountedInterval_of_intervalPulseAddress
+        (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)] := by
+  rfl
+
+/- The recovered reversed-pair budget is just the sorted pair budget after swap. -/
+theorem sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r)
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2 :=
+  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_le_neg_two
+    W2 W1 hrev
+
+/-- The recovered reversed-pair family has strictly negative listed cost. -/
+theorem sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r)
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
+  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_neg
+    W2 W1 hrev
+
+/--
+Failure-use wrapper: if `[W1, W2]` failed because the witnesses are reversed,
+the swapped recovered family still has the two-interval `≤ -2` budget.
+
+The failure hypothesis is intentionally not used by the proof.  It documents
+the branch in which this theorem is meant to be applied.
+-/
+theorem sourcePressureLocalIslandWitnessPair_failure_reversed_sum_le_neg_two
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (_hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2 :=
+  sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
+    W1 W2 hrev
+
+/--
+Failure-use wrapper: the reversed recovered family has strictly negative
+listed cost.
+-/
+theorem sourcePressureLocalIslandWitnessPair_failure_reversed_sum_neg
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (_hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      W1 W2 hrev).items).map
+      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
+  sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+    W1 W2 hrev
+
+/--
+Recovered-or-overlap split for a failed two-witness order.
+
+If the pair failure is a reversed-order failure, the swapped recovered family
+has the two-interval budget.  Otherwise the obstruction is overlap.  This is
+still a local two-witness theorem: it does not merge overlapping intervals and
+does not produce union accounting.
+-/
+theorem sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail : SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessOverlap W1 W2 := by
+  rcases sourcePressureLocalIslandWitnessPair_failure_reverseBefore_or_overlap
+      h1pos h2pos hfail with hrev | hoverlap
+  · exact Or.inl
+      ⟨hrev,
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
+          W1 W2 hrev⟩
+  · exact Or.inr hoverlap
+
+/--
 Raw-argument version of the sorted pair budget.
 -/
 theorem sourcePressureLocalIsland_pair_sum_le_neg_two
