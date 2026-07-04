@@ -765,6 +765,48 @@ theorem NatIntervalsOverlap.of_not_before_not_reverseBefore
   omega
 
 /--
+Local trichotomy for two half-open natural intervals.
+
+The conclusion is intentionally local: the two supplied intervals are either
+ordered one way, ordered the other way, or overlap.  It does not say anything
+about a family of intervals, coverage, maximality, or union accounting.
+-/
+theorem NatIntervalsOverlap.before_or_reverseBefore_or_overlap
+    {a lenA b lenB : ℕ}
+    (hApos : 0 < lenA)
+    (hBpos : 0 < lenB) :
+    NatIntervalBefore a lenA b lenB ∨
+      NatIntervalBefore b lenB a lenA ∨
+        NatIntervalsOverlap a lenA b lenB := by
+  by_cases hAB : NatIntervalBefore a lenA b lenB
+  · exact Or.inl hAB
+  · by_cases hBA : NatIntervalBefore b lenB a lenA
+    · exact Or.inr (Or.inl hBA)
+    · exact Or.inr (Or.inr
+        (NatIntervalsOverlap.of_not_before_not_reverseBefore
+          hApos hBpos hAB hBA))
+
+/--
+Reason split for a failed ordered interval relation.
+
+If `a` is not before `b`, the failure is either explained by the reverse order
+or by genuine overlap.  This is the safe form of failure refinement: a single
+failed `before` is still not overlap evidence by itself.
+-/
+theorem NatIntervalsOverlap.reverseBefore_or_overlap_of_not_before
+    {a lenA b lenB : ℕ}
+    (hApos : 0 < lenA)
+    (hBpos : 0 < lenB)
+    (hnotAB : ¬ NatIntervalBefore a lenA b lenB) :
+    NatIntervalBefore b lenB a lenA ∨
+      NatIntervalsOverlap a lenA b lenB := by
+  by_cases hBA : NatIntervalBefore b lenB a lenA
+  · exact Or.inl hBA
+  · exact Or.inr
+      (NatIntervalsOverlap.of_not_before_not_reverseBefore
+        hApos hBpos hnotAB hBA)
+
+/--
 Transitive-like composition for ordered non-overlap.
 
 The second interval's length is irrelevant for the conclusion because
@@ -837,6 +879,33 @@ theorem SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefor
     (hnotBA : ¬ SourcePressureIntervalPulseAddressBefore B A) :
     SourcePressureIntervalPulseAddressOverlap A B :=
   NatIntervalsOverlap.of_not_before_not_reverseBefore hApos hBpos hnotAB hnotBA
+
+/-- Local trichotomy for two interval-pulse addresses. -/
+theorem SourcePressureIntervalPulseAddressOverlap.before_or_reverseBefore_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len) :
+    SourcePressureIntervalPulseAddressBefore A B ∨
+      SourcePressureIntervalPulseAddressBefore B A ∨
+        SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.before_or_reverseBefore_or_overlap hApos hBpos
+
+/--
+Failure-reason split for a failed address-level before relation.
+
+The failed order is either reversed, or the two supplied address intervals
+overlap.
+-/
+theorem SourcePressureIntervalPulseAddressOverlap.reverseBefore_or_overlap_of_not_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len)
+    (hnotAB : ¬ SourcePressureIntervalPulseAddressBefore A B) :
+    SourcePressureIntervalPulseAddressBefore B A ∨
+      SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.reverseBefore_or_overlap_of_not_before hApos hBpos hnotAB
 
 theorem sourcePressureIntervalPulseAddressBefore_iff_accountedBefore
     {n : OddNat} {k r : ℕ}
@@ -1836,6 +1905,40 @@ theorem SourcePressureLocalIslandWitnessOverlap.of_not_before_not_reverseBefore
   SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefore
     h1pos h2pos hnot12 hnot21
 
+/-- Local trichotomy for two explicit local-island witnesses. -/
+theorem SourcePressureLocalIslandWitnessOverlap.before_or_reverseBefore_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len) :
+    SourcePressureLocalIslandWitnessBefore W1 W2 ∨
+      SourcePressureLocalIslandWitnessBefore W2 W1 ∨
+        SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  SourcePressureIntervalPulseAddressOverlap.before_or_reverseBefore_or_overlap
+    h1pos h2pos
+
+/--
+Failure-reason split for a failed witness-level before relation.
+
+This is the local diagnostic form: the failed pair order is either explained by
+the reverse order, or the converted witness intervals overlap.  It still does
+not enumerate all local islands or create a union-accounting statement.
+-/
+theorem SourcePressureLocalIslandWitnessOverlap.reverseBefore_or_overlap_of_not_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hnot12 : ¬ SourcePressureLocalIslandWitnessBefore W1 W2) :
+    SourcePressureLocalIslandWitnessBefore W2 W1 ∨
+      SourcePressureLocalIslandWitnessOverlap W1 W2 :=
+  SourcePressureIntervalPulseAddressOverlap.reverseBefore_or_overlap_of_not_before
+    h1pos h2pos hnot12
+
 theorem sourcePressureLocalIslandWitnessBefore_iff_addressBefore
     {n : OddNat} {k r : ℕ}
     {W1 W2 : SourcePressureLocalIslandWitness n k r} :
@@ -1920,6 +2023,47 @@ theorem sourcePressureLocalIslandWitnessPair_sorted_or_failure
     SourcePressureLocalIslandWitnessListSortedBefore [W1, W2] ∨
       SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] :=
   sourcePressureLocalIslandWitnessList_sorted_or_failure [W1, W2]
+
+/--
+Refine a two-witness sorted-before failure into its local reason.
+
+For a pair, failure of `[W1, W2]` means `W1` is not before `W2`.  With positive
+converted lengths, the reason is either that the pair is reversed, or that the
+two converted witness intervals overlap.  This theorem deliberately stops
+there: it does not merge intervals or create a union-accounting family.
+-/
+theorem sourcePressureLocalIslandWitnessPair_failure_reverseBefore_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hfail :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2]) :
+    SourcePressureLocalIslandWitnessBefore W2 W1 ∨
+      SourcePressureLocalIslandWitnessOverlap W1 W2 := by
+  have hnot12 :
+      ¬ SourcePressureLocalIslandWitnessBefore W1 W2 :=
+    sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff.1 hfail
+  exact
+    SourcePressureLocalIslandWitnessOverlap.reverseBefore_or_overlap_of_not_before
+      h1pos h2pos hnot12
+
+/--
+Reverse-recovery helper for a pair whose failure reason is merely reversed
+order.
+
+If `W2` is before `W1`, then the swapped two-witness list is sorted.  This is
+not an overlap theorem and not a global reordering theorem; it only recovers
+the explicit two-element list.
+-/
+theorem sourcePressureLocalIslandWitnessPair_sorted_swap_of_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    SourcePressureLocalIslandWitnessListSortedBefore [W2, W1] :=
+  sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.2 hrev
 
 /--
 Raw-argument version of the pair sorted-before failure constructor.
