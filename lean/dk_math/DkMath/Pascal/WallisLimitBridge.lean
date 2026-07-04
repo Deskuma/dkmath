@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.Analysis.DkLimit
 import DkMath.Pascal.WallisCosmicPetalBridge
 
 #print "file: DkMath.Pascal.WallisLimitBridge"
@@ -43,5 +44,46 @@ theorem tendsto_real_coe_wallisPartialQ_nhds_pi_div_two :
     Tendsto (fun m : ℕ => ((wallisPartialQ m : ℚ) : ℝ)) atTop (𝓝 (Real.pi / 2)) := by
   exact Real.Wallis.tendsto_W_nhds_pi_div_two.congr' <|
     Eventually.of_forall fun m => (real_coe_wallisPartialQ_eq_Wallis_W m).symm
+
+/--
+The rational Wallis partial products tend to `Real.pi / 2` after coercion to `ℝ`.
+-/
+theorem tendsto_wallisPartialQ_pi_div_two :
+    Filter.Tendsto
+      (fun m : ℕ => ((wallisPartialQ m : ℚ) : ℝ))
+      Filter.atTop
+      (nhds (Real.pi / 2)) :=
+  tendsto_real_coe_wallisPartialQ_nhds_pi_div_two
+
+/--
+The rational cosmic partial products tend to `Real.pi / 2` after coercion to `ℝ`.
+-/
+theorem tendsto_cosmicPartialQ_pi_div_two :
+    Filter.Tendsto
+      (fun m : ℕ => ((cosmicPartialQ m : ℚ) : ℝ))
+      Filter.atTop
+      (nhds (Real.pi / 2)) := by
+  exact tendsto_wallisPartialQ_pi_div_two.congr' <|
+    Eventually.of_forall fun m => by
+      change ((wallisPartialQ m : ℚ) : ℝ) = ((cosmicPartialQ m : ℚ) : ℝ)
+      exact_mod_cast wallisPartialQ_eq_cosmicPartialQ m
+
+/--
+DkMath-named alias for the Wallis partial product convergence.
+-/
+theorem dkTendsto_wallisPartialQ_pi_div_two :
+    DkMath.Analysis.DkTendstoAtTop
+      (fun m : ℕ => ((wallisPartialQ m : ℚ) : ℝ))
+      (Real.pi / 2) :=
+  tendsto_wallisPartialQ_pi_div_two
+
+/--
+DkMath-named alias for the cosmic partial product convergence.
+-/
+theorem dkTendsto_cosmicPartialQ_pi_div_two :
+    DkMath.Analysis.DkTendstoAtTop
+      (fun m : ℕ => ((cosmicPartialQ m : ℚ) : ℝ))
+      (Real.pi / 2) :=
+  tendsto_cosmicPartialQ_pi_div_two
 
 end DkMath.Pascal.WallisLimitBridge
