@@ -44,11 +44,31 @@ theorem real_coe_wallisPartialQ_eq_Wallis_W (m : ℕ) :
     norm_num
     field_simp
 
+/--
+The explicit ordered Wallis-factor product, after coercion to `ℝ`, is
+Mathlib's Wallis product `Real.Wallis.W`.
+-/
+theorem real_coe_prod_wallisFactorQ_eq_Wallis_W (m : ℕ) :
+    ((∏ k ∈ Finset.range m, wallisFactorQ k : ℚ) : ℝ) =
+      Real.Wallis.W m := by
+  rw [← real_coe_wallisPartialQ_eq_Wallis_W]
+  rfl
+
 /-- The finite Wallis and cosmic partial products are pointwise equal over `ℝ`. -/
 theorem real_coe_wallisPartialQ_eq_cosmicPartialQ (m : ℕ) :
     ((wallisPartialQ m : ℚ) : ℝ) =
       ((cosmicPartialQ m : ℚ) : ℝ) := by
   exact_mod_cast wallisPartialQ_eq_cosmicPartialQ m
+
+/--
+The explicit ordered cosmic-factor product, after coercion to `ℝ`, is also
+Mathlib's Wallis product `Real.Wallis.W`.
+-/
+theorem real_coe_prod_cosmicFactorQ_eq_Wallis_W (m : ℕ) :
+    ((∏ k ∈ Finset.range m, cosmicFactorQ k : ℚ) : ℝ) =
+      Real.Wallis.W m := by
+  rw [← real_coe_wallisPartialQ_eq_Wallis_W]
+  exact_mod_cast (wallisPartialQ_eq_cosmicPartialQ m).symm
 
 /--
 The proof-note central-ratio expression is pointwise equal to the finite

@@ -23,3 +23,18 @@ central binomial ratio * mirror product
   = finite cosmic gap product
   -> Real.pi / 2
 ```
+
+## Conditional product caveat
+
+The infinite-product theorem in Lean is an ordered / conditional product:
+
+```text
+HasProd factor (Real.pi / 2) (SummationFilter.conditional Nat)
+```
+
+For `Nat`, this is exactly the classical exhaustion by `Finset.range m`.
+This matches the usual Wallis partial products.
+
+The default `HasProd` in Mathlib is unordered / unconditional.  We do not
+claim that stronger form here.  An unconditional Wallis-Cosmic product would
+require a separate absolute or log-product summability argument.

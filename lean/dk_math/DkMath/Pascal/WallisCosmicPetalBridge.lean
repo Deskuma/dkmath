@@ -309,6 +309,19 @@ theorem centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
     centralOdd_mul_mirror_eq_wallisPartialQ]
 
 /--
+The proof-note central-ratio expression is the ordered finite product of the
+Wallis factors.
+
+This is intentionally a finite theorem: `centralRatioQ m * mirrorOddRatioPartialQ m`
+is a partial-product expression, not a per-factor sequence.
+-/
+theorem centralRatioQ_mul_mirror_eq_prod_wallisFactorQ (m : ℕ) :
+    centralRatioQ m * mirrorOddRatioPartialQ m =
+      ∏ k ∈ Finset.range m, wallisFactorQ k := by
+  rw [centralRatioQ_mul_mirror_eq_wallisPartialQ]
+  rfl
+
+/--
 The finite Wallis-Cosmic Petal bridge:
 the central odd half-product times its mirror equals the cosmic gap product.
 -/
@@ -324,5 +337,18 @@ theorem centralRatioQ_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
     centralRatioQ m * mirrorOddRatioPartialQ m = cosmicPartialQ m := by
   rw [centralRatioQ_eq_centralOddRatioPartialQ,
     centralOdd_mul_mirror_eq_cosmicPartialQ]
+
+/--
+The proof-note central-ratio expression is the ordered finite product of the
+cosmic gap factors.
+
+As with `centralRatioQ_mul_mirror_eq_prod_wallisFactorQ`, this stays in the
+finite algebraic module because it does not assert an infinite product.
+-/
+theorem centralRatioQ_mul_mirror_eq_prod_cosmicFactorQ (m : ℕ) :
+    centralRatioQ m * mirrorOddRatioPartialQ m =
+      ∏ k ∈ Finset.range m, cosmicFactorQ k := by
+  rw [centralRatioQ_mul_mirror_eq_cosmicPartialQ]
+  rfl
 
 end DkMath.Pascal.WallisCosmicPetalBridge
