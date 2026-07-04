@@ -16,6 +16,14 @@ import DkMath.Pascal.WallisCosmicPetalBridge
 This module is the limit-facing layer for the finite Wallis-Cosmic Petal
 bridge.  The finite algebraic API remains in
 `DkMath.Pascal.WallisCosmicPetalBridge`.
+
+The following three real sequences are pointwise equal:
+
+* `fun m => ((wallisPartialQ m : ℚ) : ℝ)`;
+* `fun m => ((cosmicPartialQ m : ℚ) : ℝ)`;
+* `fun m => (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ))`.
+
+Mathlib's Wallis theorem then sends each of them to `Real.pi / 2`.
 -/
 
 namespace DkMath.Pascal.WallisLimitBridge
@@ -35,6 +43,30 @@ theorem real_coe_wallisPartialQ_eq_Wallis_W (m : ℕ) :
   exact Finset.prod_congr rfl fun k _ => by
     norm_num
     field_simp
+
+/-- The finite Wallis and cosmic partial products are pointwise equal over `ℝ`. -/
+theorem real_coe_wallisPartialQ_eq_cosmicPartialQ (m : ℕ) :
+    ((wallisPartialQ m : ℚ) : ℝ) =
+      ((cosmicPartialQ m : ℚ) : ℝ) := by
+  exact_mod_cast wallisPartialQ_eq_cosmicPartialQ m
+
+/--
+The proof-note central-ratio expression is pointwise equal to the finite
+Wallis product over `ℝ`.
+-/
+theorem real_coe_centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
+    (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ)) =
+      ((wallisPartialQ m : ℚ) : ℝ) := by
+  exact_mod_cast centralRatioQ_mul_mirror_eq_wallisPartialQ m
+
+/--
+The proof-note central-ratio expression is pointwise equal to the finite
+cosmic gap product over `ℝ`.
+-/
+theorem real_coe_centralRatioQ_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
+    (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ)) =
+      ((cosmicPartialQ m : ℚ) : ℝ) := by
+  exact_mod_cast centralRatioQ_mul_mirror_eq_cosmicPartialQ m
 
 /--
 The real coercion of the finite rational Wallis partial products tends to
@@ -64,9 +96,36 @@ theorem tendsto_cosmicPartialQ_pi_div_two :
       Filter.atTop
       (nhds (Real.pi / 2)) := by
   exact tendsto_wallisPartialQ_pi_div_two.congr' <|
-    Eventually.of_forall fun m => by
-      change ((wallisPartialQ m : ℚ) : ℝ) = ((cosmicPartialQ m : ℚ) : ℝ)
-      exact_mod_cast wallisPartialQ_eq_cosmicPartialQ m
+    Eventually.of_forall real_coe_wallisPartialQ_eq_cosmicPartialQ
+
+/--
+The proof-note expression
+`centralRatioQ m * mirrorOddRatioPartialQ m` tends to `Real.pi / 2`.
+
+This is the main public central-ratio route: pointwise, it is the finite
+cosmic gap product, and the cosmic partial products share the Wallis limit.
+-/
+theorem tendsto_centralRatioQ_mul_mirror_pi_div_two :
+    Filter.Tendsto
+      (fun m : ℕ => (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ)))
+      Filter.atTop
+      (nhds (Real.pi / 2)) := by
+  exact tendsto_cosmicPartialQ_pi_div_two.congr' <|
+    Eventually.of_forall fun m =>
+      (real_coe_centralRatioQ_mul_mirror_eq_cosmicPartialQ m).symm
+
+/--
+The same proof-note expression tends to `Real.pi / 2`, routed through the
+finite Wallis product stage instead of the cosmic gap product.
+-/
+theorem tendsto_centralRatioQ_mul_mirror_via_wallis_pi_div_two :
+    Filter.Tendsto
+      (fun m : ℕ => (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ)))
+      Filter.atTop
+      (nhds (Real.pi / 2)) := by
+  exact tendsto_wallisPartialQ_pi_div_two.congr' <|
+    Eventually.of_forall fun m =>
+      (real_coe_centralRatioQ_mul_mirror_eq_wallisPartialQ m).symm
 
 /--
 DkMath-named alias for the Wallis partial product convergence.
@@ -85,5 +144,14 @@ theorem dkTendsto_cosmicPartialQ_pi_div_two :
       (fun m : ℕ => ((cosmicPartialQ m : ℚ) : ℝ))
       (Real.pi / 2) :=
   tendsto_cosmicPartialQ_pi_div_two
+
+/--
+DkMath-named alias for convergence of the proof-note central-ratio expression.
+-/
+theorem dkTendsto_centralRatioQ_mul_mirror_pi_div_two :
+    DkMath.Analysis.DkTendstoAtTop
+      (fun m : ℕ => (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ)))
+      (Real.pi / 2) :=
+  tendsto_centralRatioQ_mul_mirror_pi_div_two
 
 end DkMath.Pascal.WallisLimitBridge
