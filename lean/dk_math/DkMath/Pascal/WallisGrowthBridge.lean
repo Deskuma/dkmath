@@ -156,4 +156,139 @@ theorem real_coe_centralRatioQ_eq_wallisPartialQ_div_mirrorOddRatioPartialQ
   exact_mod_cast
     centralRatioQ_eq_wallisPartialQ_div_mirrorOddRatioPartialQ m
 
+/-!
+## Telescoping mirror ratio
+
+The next finite target is the exact squared growth identity
+
+```text
+centralRatioQ m ^ 2 = (2*m + 1) * wallisPartialQ m.
+```
+
+The key is not an asymptotic theorem; it is the telescoping ratio between the
+central half-product and the mirror half-product.  We prove it by recurrence,
+which keeps the product cancellation explicit and avoids a brittle direct
+`Finset.prod_div_distrib` proof.
+-/
+
+/-- One-step recurrence for the central ratio. -/
+theorem centralRatioQ_succ_eq
+    (m : ℕ) :
+    centralRatioQ (m + 1) =
+      centralRatioQ m * ((2 * m + 2 : ℚ) / (2 * m + 1 : ℚ)) := by
+  rw [centralRatioQ_eq_centralOddRatioPartialQ (m + 1),
+    centralRatioQ_eq_centralOddRatioPartialQ m]
+  unfold centralOddRatioPartialQ evenCenterQ oddLeftQ
+  rw [Finset.prod_range_succ]
+
+/-- One-step recurrence for the mirror half-product. -/
+theorem mirrorOddRatioPartialQ_succ_eq
+    (m : ℕ) :
+    mirrorOddRatioPartialQ (m + 1) =
+      mirrorOddRatioPartialQ m * ((2 * m + 2 : ℚ) / (2 * m + 3 : ℚ)) := by
+  unfold mirrorOddRatioPartialQ evenCenterQ oddRightQ
+  rw [Finset.prod_range_succ]
+
+/--
+The quotient of the central ratio by the mirror factor telescopes to the
+right odd boundary `2*m + 1`.
+-/
+theorem centralRatioQ_div_mirrorOddRatioPartialQ_eq_two_mul_add_one
+    (m : ℕ) :
+    centralRatioQ m / mirrorOddRatioPartialQ m = (2 * m + 1 : ℚ) := by
+  induction m with
+  | zero =>
+      simp [centralRatioQ, mirrorOddRatioPartialQ]
+  | succ m ih =>
+      have hcentral :
+          centralRatioQ m =
+            (2 * m + 1 : ℚ) * mirrorOddRatioPartialQ m := by
+        calc
+          centralRatioQ m =
+              (centralRatioQ m / mirrorOddRatioPartialQ m) *
+                mirrorOddRatioPartialQ m := by
+            field_simp [mirrorOddRatioPartialQ_ne_zero m]
+          _ = (2 * m + 1 : ℚ) * mirrorOddRatioPartialQ m := by
+            rw [ih]
+      rw [centralRatioQ_succ_eq, mirrorOddRatioPartialQ_succ_eq, hcentral]
+      field_simp [mirrorOddRatioPartialQ_ne_zero m]
+      norm_num
+      ring
+
+/--
+Searchable alias: the telescoping quotient reaches the predecessor-indexed
+right odd boundary.
+-/
+theorem centralRatioQ_div_mirrorOddRatioPartialQ_eq_oddRightQ_pred
+    (m : ℕ) :
+    centralRatioQ m / mirrorOddRatioPartialQ m = (2 * m + 1 : ℚ) :=
+  centralRatioQ_div_mirrorOddRatioPartialQ_eq_two_mul_add_one m
+
+/--
+Finite squared central-ratio identity through the Wallis product.
+
+This is the exact finite growth line behind the later asymptotic reading:
+the square of the central ratio is a linear odd boundary times the Wallis
+partial product.
+-/
+theorem centralRatioQ_sq_eq_odd_mul_wallisPartialQ
+    (m : ℕ) :
+    centralRatioQ m ^ 2 =
+      (2 * m + 1 : ℚ) * wallisPartialQ m := by
+  calc
+    centralRatioQ m ^ 2 =
+        (centralRatioQ m / mirrorOddRatioPartialQ m) *
+          (centralRatioQ m * mirrorOddRatioPartialQ m) := by
+      field_simp [mirrorOddRatioPartialQ_ne_zero m]
+    _ = (2 * m + 1 : ℚ) * wallisPartialQ m := by
+      rw [centralRatioQ_div_mirrorOddRatioPartialQ_eq_two_mul_add_one,
+        centralRatioQ_mul_mirror_eq_wallisPartialQ]
+
+/--
+Finite squared central-ratio identity through the cosmic gap product.
+-/
+theorem centralRatioQ_sq_eq_odd_mul_cosmicPartialQ
+    (m : ℕ) :
+    centralRatioQ m ^ 2 =
+      (2 * m + 1 : ℚ) * cosmicPartialQ m := by
+  rw [← wallisPartialQ_eq_cosmicPartialQ]
+  exact centralRatioQ_sq_eq_odd_mul_wallisPartialQ m
+
+/--
+Real-coercion form of the squared Wallis growth identity.
+-/
+theorem real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ
+    (m : ℕ) :
+    ((centralRatioQ m : ℚ) : ℝ) ^ 2 =
+      (2 * m + 1 : ℝ) * ((wallisPartialQ m : ℚ) : ℝ) := by
+  exact_mod_cast centralRatioQ_sq_eq_odd_mul_wallisPartialQ m
+
+/--
+Real-coercion form of the squared cosmic growth identity.
+-/
+theorem real_coe_centralRatioQ_sq_eq_odd_mul_cosmicPartialQ
+    (m : ℕ) :
+    ((centralRatioQ m : ℚ) : ℝ) ^ 2 =
+      (2 * m + 1 : ℝ) * ((cosmicPartialQ m : ℚ) : ℝ) := by
+  exact_mod_cast centralRatioQ_sq_eq_odd_mul_cosmicPartialQ m
+
+/-!
+TODO for the next asymptotic pass:
+
+Prove
+
+```lean
+Filter.Tendsto
+  (fun m : ℕ => (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)))
+  Filter.atTop
+  (nhds Real.pi)
+```
+
+from `real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ`,
+`tendsto_wallisPartialQ_pi_div_two`, and
+`(2*m+1)/m -> 2`.  This is no longer a finite algebra problem: it needs the
+standard `atTop` handling for `m ≠ 0` and the real limit of `(2*m+1)/m`.
+Keep it as a separate proof-complete checkpoint.
+-/
+
 end DkMath.Pascal.WallisGrowthBridge
