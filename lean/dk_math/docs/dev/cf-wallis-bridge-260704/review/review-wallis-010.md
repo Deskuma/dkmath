@@ -29,7 +29,7 @@ centralRatioQ m ^ 2 = (2*m + 1) * cosmicPartialQ m
 
 が固定されました。
 
-あわせて [cf-wallis-growth-route.md](/lean_dk_math/docs/dev/cf-wallis-bridge-260704/cf-wallis-growth-route.md) を新規作成し、Stirling を主説明にせず、Wallis-Cosmic の exact identity から `centralRatioQ^2 ~ pi*m` へ進むルートを短く整理しました。
+あわせて [cf-wallis-growth-route.md](/lean/dk_math/docs/dev/cf-wallis-bridge-260704/cf-wallis-growth-route.md) を新規作成し、Stirling を主説明にせず、Wallis-Cosmic の exact identity から `centralRatioQ^2 ~ pi*m` へ進むルートを短く整理しました。
 
 確認済み:
 
