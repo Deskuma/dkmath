@@ -81,6 +81,7 @@ then use `Asymptotics.IsEquivalent` / `Tendsto` tools explicitly.
 namespace DkMath.Pascal.WallisGrowthBridge
 
 open Filter Topology
+open Asymptotics
 open DkMath.Pascal.WallisCosmicPetalBridge
 open DkMath.Pascal.WallisLimitBridge
 
@@ -401,5 +402,100 @@ theorem tendsto_real_centralRatioQ_sq_div_nat_pi_cosmic_route :
       Filter.atTop
       (nhds Real.pi) :=
   tendsto_real_centralRatioQ_sq_div_nat_pi
+
+/-!
+## Square-root growth surface
+
+The previous theorem proves the squared normalized limit.  The next surface is
+the square-root reading
+
+```text
+centralRatioQ m ~ sqrt (Real.pi * m).
+```
+
+Rather than appealing to Stirling's approximation, we take the square root of
+the already-proved Wallis growth surface.  The only extra bookkeeping is the
+eventual positivity of `m` and of `centralRatioQ m`.
+-/
+
+/--
+The square-root normalization of the squared central-ratio expression tends
+to `1`.
+-/
+theorem tendsto_sqrt_centralRatioQ_sq_div_pi_mul_nat_one :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        Real.sqrt
+          ((((centralRatioQ m : ℚ) : ℝ) ^ 2) /
+            (Real.pi * (m : ℝ))))
+      Filter.atTop
+      (nhds 1) := by
+  have hdiv :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)) / Real.pi)
+        Filter.atTop
+        (nhds (Real.pi / Real.pi)) := by
+    exact tendsto_real_centralRatioQ_sq_div_nat_pi.div_const Real.pi
+  have hdiv_one :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)) / Real.pi)
+        Filter.atTop
+        (nhds 1) := by
+    simpa [div_self Real.pi_ne_zero] using hdiv
+  have hsqrt :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          Real.sqrt
+            ((((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)) / Real.pi))
+        Filter.atTop
+        (nhds (Real.sqrt 1)) :=
+    hdiv_one.sqrt
+  have hsqrt_one :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          Real.sqrt
+            ((((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)) / Real.pi))
+        Filter.atTop
+        (nhds 1) := by
+    simpa [Real.sqrt_one] using hsqrt
+  refine hsqrt_one.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hm_ne : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hm_ne, Real.pi_ne_zero]
+
+/--
+The central ratio divided by `sqrt (Real.pi * m)` tends to `1`.
+
+This is the operational limit form of
+`centralRatioQ m ~ sqrt (Real.pi * m)`.
+-/
+theorem tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        ((centralRatioQ m : ℚ) : ℝ) /
+          Real.sqrt (Real.pi * (m : ℝ)))
+      Filter.atTop
+      (nhds 1) := by
+  refine tendsto_sqrt_centralRatioQ_sq_div_pi_mul_nat_one.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hc_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  rw [Real.sqrt_div (sq_nonneg ((centralRatioQ m : ℚ) : ℝ))
+    (Real.pi * (m : ℝ))]
+  rw [Real.sqrt_sq hc_pos.le]
+
+/--
+Central-ratio square-root asymptotic equivalence.
+
+This is the Wallis-derived growth surface:
+`centralRatioQ m` is asymptotic to `sqrt (Real.pi * m)`.
+-/
+theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
+    (fun m : ℕ => ((centralRatioQ m : ℚ) : ℝ)) ~[Filter.atTop]
+      (fun m : ℕ => Real.sqrt (Real.pi * (m : ℝ))) := by
+  exact isEquivalent_of_tendsto_one
+    tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
 
 end DkMath.Pascal.WallisGrowthBridge

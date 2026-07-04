@@ -49,6 +49,14 @@ theorem tendsto_real_centralRatioQ_sq_div_nat_pi :
     (nhds Real.pi)
 ```
 
+It also proves the square-root form:
+
+```lean
+theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
+  (fun m : Nat => ((centralRatioQ m : Q) : R)) ~[Filter.atTop]
+    (fun m : Nat => Real.sqrt (Real.pi * (m : R)))
+```
+
 Therefore the squared central ratio has the growth line:
 
 ```text
@@ -73,9 +81,9 @@ inverting gives the central-binomial growth law:
 Nat.choose (2*m) m ~ 4^m / sqrt (pi * m)
 ```
 
-## Formal checkpoint just closed
+## Formal checkpoints just closed
 
-The closed theorem is:
+The first closed theorem is:
 
 ```lean
 Filter.Tendsto
@@ -96,16 +104,38 @@ The `m = 0` issue is only an `atTop` bookkeeping problem.  The Lean proof
 handles it with the finite rewrite under `m ≠ 0` and the eventual fact
 `eventually_gt_atTop 0`.
 
-## Next formal checkpoint
+The second closed theorem is:
 
-The next theorem should not jump directly to Stirling.  A clean next layer is
-an asymptotic-equivalence or square-root bridge, for example:
-
-```text
-centralRatioQ m ~ sqrt (Real.pi * m)
+```lean
+theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
+  (fun m : Nat => ((centralRatioQ m : Q) : R)) ~[Filter.atTop]
+    (fun m : Nat => Real.sqrt (Real.pi * (m : R)))
 ```
 
-That will need a small real-analysis bridge from
-`centralRatioQ m ^ 2 / m -> Real.pi` plus positivity of `centralRatioQ m`.
-After that, the central-binomial coefficient form follows by inverting the
-definition of `centralRatioQ`.
+This uses the operational limit:
+
+```lean
+theorem tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one :
+  Filter.Tendsto
+    (fun m : Nat =>
+      ((centralRatioQ m : Q) : R) / Real.sqrt (Real.pi * (m : R)))
+    Filter.atTop
+    (nhds 1)
+```
+
+The proof takes the square root of the squared normalized growth theorem and
+uses positivity of `centralRatioQ m`.
+
+## Next formal checkpoint
+
+The next theorem should invert the definition of `centralRatioQ` and expose
+the central-binomial coefficient form:
+
+```text
+Nat.choose (2*m) m ~ 4^m / sqrt (Real.pi * m)
+```
+
+This should still avoid using Stirling as the source theorem.  The likely Lean
+work is a finite real-coercion identity for `centralRatioQ m =
+4^m / Nat.choose (2*m) m`, followed by an `IsEquivalent` inversion/division
+lemma with eventual nonzero denominators.
