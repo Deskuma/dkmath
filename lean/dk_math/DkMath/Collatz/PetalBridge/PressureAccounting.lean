@@ -2237,6 +2237,119 @@ theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.symm_iff
     SourcePressureLocalIslandWitnessPairOverlapObstruction.symm⟩
 
 /--
+Adjacent overlap obstruction for an explicit local-island witness list.
+
+This predicate intentionally looks only at neighboring witness pairs.  It does
+not quantify over arbitrary pairs in the list, does not construct an overlap
+cluster, and does not merge or split intervals for union accounting.
+-/
+def SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ} :
+    List (SourcePressureLocalIslandWitness n k r) → Prop
+  | [] => False
+  | [_] => False
+  | W1 :: W2 :: rest =>
+      SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 ∨
+        SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+          (W2 :: rest)
+
+/-- A two-witness list has adjacent overlap obstruction exactly at that pair. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_iff
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction [W1, W2] ↔
+      SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2 := by
+  simp [SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction]
+
+/-- Head constructor for adjacent overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_of_head
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs : SourcePressureLocalIslandWitnessPairOverlapObstruction W1 W2) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      (W1 :: W2 :: rest) :=
+  Or.inl hobs
+
+/-- Tail constructor for adjacent overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_of_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (htail :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      (W1 :: W2 :: rest) :=
+  Or.inr htail
+
+/-- Adjacent overlap obstruction for a pair is symmetric. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_symm
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        [W1, W2]) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      [W2, W1] := by
+  rw [SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_iff]
+  exact
+    SourcePressureLocalIslandWitnessPairOverlapObstruction.symm
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_iff.1 h)
+
+/--
+Adjacent overlap obstruction implies ordinary adjacent sorted-before failure.
+
+The proof follows the explicit neighboring-pair recursion.  It does not turn
+overlap into a repaired family and does not construct any merged interval.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L := by
+  induction L with
+  | nil =>
+      exact False.elim hobs
+  | cons W1 L ih =>
+      cases L with
+      | nil =>
+          exact False.elim hobs
+      | cons W2 rest =>
+          rcases hobs with hhead | htail
+          · simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+              sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+              SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+              SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+              sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+              SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
+              (Or.inl hhead.not_before)
+          · have htailFailure :
+                SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+                  (W2 :: rest) :=
+              ih htail
+            simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+              sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+              SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+              SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+              sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+              SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
+              (Or.inr htailFailure)
+
+/-- Pair specialization of adjacent obstruction implying sorted-before failure. -/
+theorem
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction_pair_hasSortedBeforeFailure
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        [W1, W2]) :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+    hobs
+
+/--
 Reverse-recovery helper for a pair whose failure reason is merely reversed
 order.
 
