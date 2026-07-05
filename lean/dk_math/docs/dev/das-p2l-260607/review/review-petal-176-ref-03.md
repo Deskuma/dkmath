@@ -28,7 +28,266 @@ pass です。Markdown のみなので Lean build は実行していません。
 
 ## Review
 
-_
+## 結論
+
+うむ、リファクタ完了確認。次は **通常の定理開発に戻ってよい** 状態じゃ。
+
+`PressureAccounting` は 2000 行未満に落ち、`PressureLocalWitnessObstruction` と `PressureAdjacentDiagnosis` に分割され、公開 `DkMath.Collatz.PetalBridge` aggregator も安定している。
+さらに docs 側も split 後の package structure に同期済みで、非主張事項も package level に記録されている。
+
+次の一手は、固定長 wrapper をさらに増やすより、ここまで整えた carrier を使って **明示 list の failure から adjacent diagnosis を得る弱い一般定理** に進むのが良い。
+
+## 次の実装方針
+
+狙う theorem はこれじゃ。
+
+```lean id="wkagp5"
+sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
+```
+
+意味は、
+
+```text id="i2jonl"
+explicit witness list に sorted-before failure がある
+  -> その list のどこかの adjacent pair に diagnosis がある
+```
+
+これは global coverage ではない。
+Collatz 収束でもない。
+任意の local island を列挙する theorem でもない。
+
+あくまで、**すでに与えられた明示 witness list の failure predicate を構文的に剥がして、隣接 pair diagnosis へ落とす** 定理じゃ。
+
+ポイントは、既存の
+
+```lean id="u4rddd"
+sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head
+SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+```
+
+を使って、list induction するだけ、というところじゃな。
+
+## 次の Codex 指示
+
+```text id="vyzmz2"
+Checkpoint 177: Main root only — explicit-list failure implies list-level adjacent diagnosis.
+
+Scope:
+Focus on the refactored Collatz/PetalBridge pressure modules.
+
+Primary target file:
+- DkMath/Collatz/PetalBridge/PressureAdjacentDiagnosis.lean
+
+Allowed supporting file, only if needed:
+- DkMath/Collatz/PetalBridge/PressureLocalWitnessObstruction.lean
+
+Do not modify:
+- OneCycle.lean
+- ValuationFlowBridge.lean
+- ABC files
+- NumberTheory files
+
+Do not change public theorem names from prior checkpoints.
+
+Context:
+The refactor split the pressure surface into:
+
+- PressureAccounting
+- PressureLocalWitnessObstruction
+- PressureAdjacentDiagnosis
+
+The public aggregator `DkMath.Collatz.PetalBridge` remains stable.
+
+Relevant existing API includes:
+
+- SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+- SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head
+- SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+- SourcePressureLocalIslandWitnessAdjacentDiagnosis
+- SourcePressureLocalIslandWitnessAdjacentPairInList
+- sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+- sourcePressureLocalIslandWitnessList_failure_three_hasAdjacentDiagnosis
+- sourcePressureLocalIslandWitnessList_failure_four_hasAdjacentDiagnosis
+- sourcePressureLocalIslandWitnessList_failure_five_hasAdjacentDiagnosis
+
+Global guardrails:
+- Do not claim global local-island coverage.
+- Do not claim maximality.
+- Do not claim uniqueness.
+- Do not claim prefix behavior.
+- Do not claim arbitrary list sorting.
+- Do not claim union accounting.
+- Do not claim overlap repair.
+- Do not claim Collatz convergence.
+- Keep all statements local to explicitly supplied witness lists.
+- Recovered budgets remain pair-local.
+- Overlap remains an adjacent obstruction on the enclosing list.
+
+Main goal:
+Prove a weak structural theorem:
+
+  if an explicit witness list has sorted-before failure,
+  then it has a list-level adjacent diagnosis.
+
+This is a structural induction over the explicit list and the existing failure
+predicate.  It is not a sorting algorithm, not coverage, and not union
+accounting.
+
+Part A: check whether witness-address length positivity is already available.
+
+Search for an existing theorem proving:
+
+  0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len
+
+for any `W : SourcePressureLocalIslandWitness n k r`.
+
+Suggested searches:
+
+  rg "sourcePressureIntervalPulseAddress_of_localIslandWitness.*len"
+  rg "LocalIslandWitness.*len.*pos"
+  rg "localIslandWitness.*len"
+
+If such theorem exists, use it.
+
+If no such theorem exists, try to prove a small lemma, preferably near the
+definition of the local witness address if that is in the current dependency
+layer:
+
+  theorem sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos
+      {n : OddNat} {k r : Nat}
+      (W : SourcePressureLocalIslandWitness n k r) :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len
+
+Expected proof may be `simp` if the local witness address has length 1.
+
+If this lemma becomes nontrivial, do not get stuck.  Use the explicit positivity
+hypothesis version in Part B instead.
+
+Part B: prove explicit positivity version first.
+
+In `PressureAdjacentDiagnosis.lean`, prove:
+
+  theorem sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis_of_forall_len_pos
+      {n : OddNat} {k r : Nat}
+      {L : List (SourcePressureLocalIslandWitness n k r)}
+      (hpos :
+        ∀ W ∈ L,
+          0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len)
+      (h :
+        SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L
+
+Suggested proof:
+- induction on L.
+- nil case:
+  use `SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false`.
+- singleton case:
+  use `SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_singleton_false`.
+- cons-cons case:
+  list is `W1 :: W2 :: rest`.
+  derive:
+    h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len
+    h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len
+  from hpos.
+- apply:
+    sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis h1pos h2pos h
+- head branch:
+  it already has the adjacent diagnosis evidence for the head pair.
+  use:
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head
+- tail branch:
+  build tail positivity:
+    ∀ W ∈ (W2 :: rest), 0 < ...
+  apply the induction hypothesis to the tail failure.
+  then lift using:
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+
+Important:
+The theorem only produces `SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L`.
+It does not enumerate all adjacent diagnoses.
+It does not choose a canonical first diagnosis.
+It does not sort the list.
+
+Part C: optional no-hpos public theorem.
+
+Only if Part A found or proved automatic witness-address length positivity,
+prove the cleaner theorem:
+
+  theorem sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
+      {n : OddNat} {k r : Nat}
+      {L : List (SourcePressureLocalIslandWitness n k r)}
+      (h :
+        SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L
+
+Suggested proof:
+- apply the Part B theorem.
+- supply hpos by the automatic per-witness length positivity theorem.
+
+If automatic positivity is not available or becomes expensive, skip Part C.
+The explicit-hpos theorem is acceptable for this checkpoint.
+
+Part D: optional bounded wrappers become corollaries.
+
+Do not delete existing length-three/four/five wrappers.
+
+If easy, add comments or small theorem notes that the existing bounded wrappers
+are special cases of the new general explicit-list theorem once hpos is supplied.
+
+Do not rewrite existing proofs in this checkpoint unless it is trivial and keeps
+the diff small.
+
+Part E: report.
+
+Create:
+
+  docs/dev/das-p2l-260607/review/report-petal-177.md
+
+Include:
+- whether automatic witness-address length positivity existed or was added;
+- the explicit-hpos theorem;
+- the clean no-hpos theorem if added;
+- proof strategy summary by list induction;
+- explicit note that this is only about explicitly supplied witness lists;
+- explicit note that the theorem does not assert coverage, maximality,
+  uniqueness, sorting, union accounting, overlap repair, or Collatz convergence;
+- verification results.
+
+Verification:
+
+  lake build DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
+  lake build DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
+  lake build DkMath.Collatz.PetalBridge.PressureAccounting
+  lake build DkMath.Collatz.PetalBridge.PressureFrontier
+  lake build DkMath.Collatz.PetalBridge
+
+Run no-sorry checks:
+
+  rg -n "\\bsorry\\b" \
+    DkMath/Collatz/PetalBridge/PressureAccounting.lean \
+    DkMath/Collatz/PetalBridge/PressureLocalWitnessObstruction.lean \
+    DkMath/Collatz/PetalBridge/PressureAdjacentDiagnosis.lean
+
+Also run:
+
+  git diff --check
+```
+
+## 補足
+
+もし `sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos` がすぐ通るなら、今回でかなり綺麗な theorem まで行ける。
+
+```lean id="uwbv9h"
+sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
+```
+
+これが通ると、今までの length-three / four / five wrapper は「観測用の固定長 theorem」から、「一般 theorem に向かう前の確認済みパターン」へ役割が移る。
+
+ただし、これはまだ **Collatz 大域の証明** ではない。
+あくまで、明示 list の sorted-before failure を、その list 内の adjacent diagnosis へ局所化する定理じゃ。
 
 ## Diff
 
