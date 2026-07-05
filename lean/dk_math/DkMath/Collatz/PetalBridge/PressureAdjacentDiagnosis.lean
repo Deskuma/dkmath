@@ -279,6 +279,35 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
   exact h
 
 /--
+In a two-element explicit witness list, the only adjacent-pair address is the
+head pair.
+
+This is a two-element normal form only.  It does not choose a canonical pair in
+longer lists and does not enumerate diagnostics.
+-/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.two_iff_head
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 A B : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessAdjacentPairInList [W1, W2] A B ↔
+      A = W1 ∧ B = W2 := by
+  constructor
+  · intro h
+    rcases h with hhead | htail
+    · exact hhead
+    · exact False.elim
+        (SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false htail)
+  · rintro ⟨rfl, rfl⟩
+    exact SourcePressureLocalIslandWitnessAdjacentPairInList.head
+
+/-- Extract the head-pair equality from a two-element adjacent-pair address. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.two_eq
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 A B : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessAdjacentPairInList [W1, W2] A B) :
+    A = W1 ∧ B = W2 :=
+  SourcePressureLocalIslandWitnessAdjacentPairInList.two_iff_head.mp h
+
+/--
 A list-level carrier for "some adjacent pair in this explicit list has an
 adjacent diagnosis".
 
@@ -966,6 +995,87 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
     (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail_tail
       h)
 
+set_option linter.style.longLine false in
+/--
+Build the bundled diagnostic directly from a reversed two-witness list.
+
+For `[W1, W2]`, the only adjacent-pair address is the head pair `W1, W2`.
+Thus a witness that `W2` is before `W1` gives the recovered pair-local
+accounted family immediately.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_two_reversed
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2] :=
+  SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+    SourcePressureLocalIslandWitnessAdjacentPairInList.head
+    hrev
+    (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
+      W1 W2 hrev)
+    (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+      W1 W2 hrev)
+    (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
+      W1 W2 hrev)
+
+set_option linter.style.longLine false in
+/--
+Extract the reversed-before witness and the bundled pair-local facts from a
+two-element diagnostic.
+
+This is a two-element explicit-list normal form only.  It does not choose a
+canonical diagnostic in longer lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_reversed_of_two
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W1, W2]) :
+    ∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          W1 W2 hrev
+      (((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+        (((F.items).map
+          (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+        F.items.length = 2 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+  rcases SourcePressureLocalIslandWitnessAdjacentPairInList.two_eq hin with
+    ⟨rfl, rfl⟩
+  exact ⟨hrev, hbudget, hneg, hlen⟩
+
+set_option linter.style.longLine false in
+/--
+Two-element normal form for the bundled diagnostic carrier.
+
+The equivalence is only for the explicit two-witness list `[W1, W2]`.  It does
+not assert uniqueness or canonical selection for arbitrary lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.two_iff
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2] ↔
+    ∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          W1 W2 hrev
+      (((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+        (((F.items).map
+          (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+        F.items.length = 2 := by
+  constructor
+  · exact
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_reversed_of_two
+  · rintro ⟨hrev, _hbudget, _hneg, _hlen⟩
+    exact
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_two_reversed
+        hrev
+
 /--
 Expose the actual pair-local accounted interval family object stored by the
 recovered adjacent-family carrier.
@@ -1151,6 +1261,34 @@ theorem
     SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L :=
   (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
     h hno).toDiagnostic
+
+set_option linter.style.longLine false in
+/--
+Two-element consumer form: failure plus named no-adjacent-overlap yields the
+reversed-before witness for the only adjacent pair.
+
+This is only the `[W1, W2]` normal form.  It does not select a canonical pair in
+longer lists.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_two_exists_reversed_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction [W1, W2]) :
+    ∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          W1 W2 hrev
+      (((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+        (((F.items).map
+          (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+        F.items.length = 2 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    h hno).exists_reversed_of_two
 
 set_option linter.style.longLine false in
 /--
