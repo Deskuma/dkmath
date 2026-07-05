@@ -2906,6 +2906,124 @@ theorem sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
   · exact Or.inr htail
 
 /--
+Tail-facing alias for one-step diagnosis.
+
+The recovered branch is still the reversed budget for the tail head pair
+`W2, W3`; this theorem only chooses names that make the tail role explicit.
+-/
+theorem sourcePressureLocalIslandWitnessList_tail_failure_oneStepDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (htail :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: W3 :: rest)) :
+    ((∃ hrev : SourcePressureLocalIslandWitnessBefore W3 W2,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W2 W3 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+      ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+          (W2 :: W3 :: rest))
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W3 :: rest) :=
+  sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+    h2pos h3pos htail
+
+/--
+Lift an adjacent-overlap obstruction in the tail under a newly supplied head.
+
+This is only propagation of the obstruction predicate.  It does not merge
+intervals, repair overlap, or create a full-list recovered budget.
+-/
+theorem sourcePressureLocalIslandWitnessList_tailDiagnosis_overlap_lift
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W2 :: W3 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+      (W1 :: W2 :: W3 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_tail
+    hobs
+
+/--
+Weakly view a tail one-step diagnosis under a new head.
+
+The left recovered branch remains the recovered budget for the tail pair
+`W2, W3`.  The new head can only carry the tail overlap obstruction forward;
+it does not turn a tail-pair recovery into accounting for the full list.
+-/
+theorem sourcePressureLocalIslandWitnessList_tailFailure_oneStepDiagnosis_under_cons
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (htail :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: W3 :: rest)) :
+    ((∃ hrev : SourcePressureLocalIslandWitnessBefore W3 W2,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W2 W3 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+      ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+          (W1 :: W2 :: W3 :: rest))
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W3 :: rest) := by
+  rcases sourcePressureLocalIslandWitnessList_tail_failure_oneStepDiagnosis
+      h2pos h3pos htail with htailDiag | hdeep
+  · rcases htailDiag with hrecovered | hobs
+    · exact Or.inl (Or.inl hrecovered)
+    · exact Or.inl (Or.inr
+        (sourcePressureLocalIslandWitnessList_tailDiagnosis_overlap_lift
+          hobs))
+  · exact Or.inr hdeep
+
+/--
+Weak tail diagnosis with the lifted overlap branch downgraded to ordinary
+full-list sorted-before failure.
+
+The recovered branch is still only the tail-pair recovered budget.  This wrapper
+is useful for callers that only need to know that the enlarged list fails, while
+the obstruction-specific theorem above keeps the sharper evidence.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_tailFailure_oneStepDiagnosis_under_cons_or_listFailure
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (htail :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: W3 :: rest)) :
+    ((∃ hrev : SourcePressureLocalIslandWitnessBefore W3 W2,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W2 W3 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+      ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+          (W1 :: W2 :: W3 :: rest))
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W3 :: rest) := by
+  rcases sourcePressureLocalIslandWitnessList_tailFailure_oneStepDiagnosis_under_cons
+      h2pos h3pos htail with hdiag | hdeep
+  · rcases hdiag with hrecovered | hobs
+    · exact Or.inl (Or.inl hrecovered)
+    · exact Or.inl (Or.inr
+        (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+          hobs))
+  · exact Or.inr hdeep
+
+/--
 Head-pair split with the obstruction branch weakened to ordinary list
 sorted-before failure.
 
