@@ -3324,6 +3324,173 @@ theorem sourcePressureLocalIslandWitnessList_failure_fourDiagnosis_carrier
           htailTail))
 
 /--
+An ordered adjacent pair occurring in an explicitly supplied witness list.
+
+This predicate recognizes neighboring entries only.  It does not express
+arbitrary pair membership, does not sort the list, and does not claim that the
+recognized pair is unique or maximal.  It is a small address layer for bounded
+diagnosis theorems, so later consumers can say "some adjacent pair in this
+list carries the local diagnosis" without introducing a recursive classifier.
+-/
+def SourcePressureLocalIslandWitnessAdjacentPairInList
+    {n : OddNat} {k r : ℕ} :
+    List (SourcePressureLocalIslandWitness n k r) →
+      SourcePressureLocalIslandWitness n k r →
+      SourcePressureLocalIslandWitness n k r →
+      Prop
+  | [], _, _ => False
+  | [_], _, _ => False
+  | W1 :: W2 :: rest, A, B =>
+      (A = W1 ∧ B = W2) ∨
+        SourcePressureLocalIslandWitnessAdjacentPairInList
+          (W2 :: rest) A B
+
+/-- The head pair of a list with at least two witnesses is adjacent in that list. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.head
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)} :
+    SourcePressureLocalIslandWitnessAdjacentPairInList
+      (W1 :: W2 :: rest) W1 W2 :=
+  Or.inl ⟨rfl, rfl⟩
+
+/--
+An adjacent pair in the tail remains an adjacent pair after adding a new head.
+-/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 A B : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        (W2 :: rest) A B) :
+    SourcePressureLocalIslandWitnessAdjacentPairInList
+      (W1 :: W2 :: rest) A B :=
+  Or.inr h
+
+/-- There is no adjacent pair in the empty witness list. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.nil_false
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureLocalIslandWitnessAdjacentPairInList
+      ([] : List (SourcePressureLocalIslandWitness n k r)) A B := by
+  intro h
+  exact h
+
+/-- There is no adjacent pair in a singleton witness list. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
+    {n : OddNat} {k r : ℕ}
+    {W A B : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureLocalIslandWitnessAdjacentPairInList [W] A B := by
+  intro h
+  exact h
+
+/--
+A list-level carrier for "some adjacent pair in this explicit list has an
+adjacent diagnosis".
+
+The diagnosis is still local to the pair `A, B`.  In particular, recovered
+budget evidence remains attached to the adjacent pair that produced it, while
+overlap evidence remains an obstruction on the enclosing list.
+-/
+def SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) : Prop :=
+  ∃ A B,
+    SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B
+
+/-- Package an adjacent-pair address and its diagnosis into the list-level carrier. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin :
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B)
+    (hdiag :
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L :=
+  ⟨A, B, hin, hdiag⟩
+
+/-- The empty witness list cannot carry a list-level adjacent diagnosis. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.nil_false
+    {n : OddNat} {k r : ℕ} :
+    ¬ SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      ([] : List (SourcePressureLocalIslandWitness n k r)) := by
+  rintro ⟨A, B, hin, _⟩
+  exact SourcePressureLocalIslandWitnessAdjacentPairInList.nil_false hin
+
+/-- A singleton witness list cannot carry a list-level adjacent diagnosis. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.singleton_false
+    {n : OddNat} {k r : ℕ}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis [W] := by
+  rintro ⟨A, B, hin, _⟩
+  exact SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false hin
+
+/--
+Length-three sorted-before failure yields a list-level adjacent diagnosis.
+
+This is only a wrapper over the bounded three-witness carrier: it records that
+the diagnosed pair is one of the adjacent pairs already present in the supplied
+list, without adding a general list classifier.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_three_hasAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2, W3]) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis [W1, W2, W3] := by
+  rcases sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_carrier
+      h1pos h2pos h3pos h with h12 | h23
+  · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+      SourcePressureLocalIslandWitnessAdjacentPairInList.head h12
+  · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+      (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+        SourcePressureLocalIslandWitnessAdjacentPairInList.head) h23
+
+/--
+Length-four sorted-before failure yields a list-level adjacent diagnosis.
+
+The result exposes only that one adjacent pair in the explicit four-witness
+list has a local diagnosis.  It intentionally avoids coverage, maximality,
+union accounting, or a recursive failure classifier.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_four_hasAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (h4pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W4).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4]) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis [W1, W2, W3, W4] := by
+  rcases sourcePressureLocalIslandWitnessList_failure_fourDiagnosis_carrier
+      h1pos h2pos h3pos h4pos h with h12 | htail
+  · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+      SourcePressureLocalIslandWitnessAdjacentPairInList.head h12
+  · rcases htail with h23 | h34
+    · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+        (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+          SourcePressureLocalIslandWitnessAdjacentPairInList.head) h23
+    · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+        (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+          (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+            SourcePressureLocalIslandWitnessAdjacentPairInList.head)) h34
+
+/--
 Head-pair split with the obstruction branch weakened to ordinary list
 sorted-before failure.
 
