@@ -432,6 +432,55 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovere
   · exact Or.inl ⟨A, B, hin, hrecovered⟩
   · exact Or.inr hobs
 
+/--
+Named no-adjacent-overlap condition for an explicitly supplied witness list.
+
+This is deliberately only a readability wrapper around the negation of the
+existing adjacent-overlap obstruction predicate.  It does not say that the list
+is globally overlap-free, canonical, maximal, sorted, complete, or repaired; it
+only says that this explicit list has no neighboring overlap obstruction in
+the sense already defined by
+`SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction`.
+-/
+def SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) : Prop :=
+  ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L
+
+/-- Project the named no-adjacent-overlap wrapper back to the raw negation. -/
+theorem SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.not_obstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L :=
+  hno
+
+/-- Construct the named no-adjacent-overlap wrapper from the raw negation. -/
+theorem SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.of_not
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L :=
+  hno
+
+/-- Empty explicit witness lists have no adjacent-overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.nil
+    {n : OddNat} {k r : ℕ} :
+    SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+      ([] : List (SourcePressureLocalIslandWitness n k r)) := by
+  intro h
+  exact h
+
+/-- Singleton explicit witness lists have no adjacent-overlap obstruction. -/
+theorem SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.singleton
+    {n : OddNat} {k r : ℕ}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction [W] := by
+  intro h
+  exact h
+
 /-- The empty witness list cannot carry a list-level adjacent diagnosis. -/
 theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.nil_false
     {n : OddNat} {k r : ℕ} :
@@ -569,6 +618,32 @@ theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_over
       with hrec | hobs
   · exact hrec
   · exact False.elim (hno hobs)
+
+/--
+Named no-adjacent-overlap version of the recovered-pair projection.
+
+This is the consumer-facing form for callers that track the no-overlap branch
+with the explicit wrapper introduced above.  The conclusion is unchanged from
+`sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_overlap`:
+one adjacent pair in the supplied list carries a pair-local recovered budget.
+No global overlap-free construction, list coverage, union accounting, or
+Collatz convergence is introduced here.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev).items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
+  sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_overlap
+    h hno.not_obstruction
 
 /--
 Length-three sorted-before failure yields a list-level adjacent diagnosis.
