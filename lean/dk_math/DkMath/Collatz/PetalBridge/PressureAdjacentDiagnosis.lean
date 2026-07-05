@@ -722,6 +722,59 @@ theorem
   rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget⟩
   exact ⟨A, B, hin, hrev, hbudget⟩
 
+set_option linter.style.longLine false in
+/--
+Expose strict negativity for the recovered pair-local accounted family.
+
+This projection uses the existing reversed-pair family theorem rather than
+deriving negativity from the stored `≤ -2` budget.  The result is still about
+one adjacent recovered pair only.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.exists_accountedFamily_sum_neg
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, _hbudget⟩
+  exact ⟨A, B, hin, hrev,
+    sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+      A B hrev⟩
+
+set_option linter.style.longLine false in
+/--
+Expose the length of the recovered pair-local accounted family.
+
+The recovered family is built from a reversed adjacent pair, so its explicit
+`items` list has length `2`.  This is a pair-local structural fact, not a
+statement about the length of the enclosing witness list.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.exists_accountedFamily_length_two
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          F.items.length = 2 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, _hbudget⟩
+  exact ⟨A, B, hin, hrev,
+    sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
+      A B hrev⟩
+
 /--
 Empty explicit witness lists cannot contain a recovered adjacent accounted
 family, because they contain no adjacent pair.
@@ -842,6 +895,59 @@ theorem
             (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
   (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
     h hno).exists_accountedFamily
+
+set_option linter.style.longLine false in
+/--
+Failure plus named no-adjacent-overlap, projected to a pair-local recovered
+accounted family with strictly negative listed cost.
+
+This is a direct consumer wrapper over the carrier-level strict-negativity
+projection.  It does not combine multiple families.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_accountedFamily_sum_neg_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_noAdjacentOverlap
+    h hno).exists_accountedFamily_sum_neg
+
+set_option linter.style.longLine false in
+/--
+Raw-negation version of the strict-negative accounted-family projection.
+
+This keeps compatibility with callers that have not yet switched to the named
+no-adjacent-overlap predicate.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_accountedFamily_sum_neg_of_no_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
+    h hno).exists_accountedFamily_sum_neg
 
 /--
 Length-three sorted-before failure yields a list-level adjacent diagnosis.
