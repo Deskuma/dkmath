@@ -124,6 +124,24 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.four_head_or_tail
       SourcePressureLocalIslandWitnessAdjacentPairInList [W2, W3, W4] A B :=
   h
 
+/--
+In a five-element explicit witness list, an adjacent-pair address is either
+the head pair or an adjacent-pair address in the four-element tail.
+
+This is a bounded five-element decomposition only.  It does not enumerate
+diagnostics in arbitrary lists.
+-/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.five_head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 W5 A B : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        [W1, W2, W3, W4, W5] A B) :
+    (A = W1 ∧ B = W2) ∨
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        [W2, W3, W4, W5] A B :=
+  h
+
 set_option linter.style.longLine false in
 /--
 Build the bundled diagnostic directly from a reversed two-witness list.
@@ -436,6 +454,68 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
 
 set_option linter.style.longLine false in
 /--
+Five-element bounded decomposition for the bundled diagnostic carrier.
+
+A diagnostic on `[W1, W2, W3, W4, W5]` is either carried by the head pair
+`W1, W2`, or it is already a diagnostic on the four-element tail
+`[W2, W3, W4, W5]`.  The head branch uses the named pair-local recovered
+predicate introduced for API compression.
+
+This theorem only decomposes the explicit five-element list; it does not
+enumerate diagnostics in arbitrary lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.five_head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 W5 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W1, W2, W3, W4, W5]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3, W4, W5] := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+  rcases SourcePressureLocalIslandWitnessAdjacentPairInList.five_head_or_tail
+      hin with hhead | htail
+  · rcases hhead with ⟨rfl, rfl⟩
+    exact Or.inl ⟨hrev, hbudget, hneg, hlen⟩
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+        htail hrev hbudget hneg hlen)
+
+set_option linter.style.longLine false in
+/--
+Iff form of the five-element diagnostic decomposition.
+
+The reverse direction either builds the head-pair diagnostic directly from the
+named pair-local recovered branch, or lifts an existing tail diagnostic.  This
+is still bounded to `[W1, W2, W3, W4, W5]`.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.five_iff_pairDiagnostic_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 W5 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2, W3, W4, W5] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3, W4, W5] := by
+  constructor
+  · exact
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.five_head_or_tail
+  · intro h
+    rcases h with hhead | htail
+    · rcases hhead with ⟨hrev, hbudget, hneg, hlen⟩
+      exact
+        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+          SourcePressureLocalIslandWitnessAdjacentPairInList.head
+          hrev hbudget hneg hlen
+    · exact
+        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
+          htail
+
+set_option linter.style.longLine false in
+/--
 Two-element consumer form: failure plus named no-adjacent-overlap yields the
 reversed-before witness for the only adjacent pair.
 
@@ -593,5 +673,30 @@ theorem
         [W2, W3, W4] :=
   sourcePressureLocalIslandWitnessList_failure_four_diagnostic_head_or_tail_of_noAdjacentOverlap
     h hno
+
+set_option linter.style.longLine false in
+/--
+Five-element consumer form: failure plus named no-adjacent-overlap yields
+either the head-pair recovered branch or a diagnostic on the four-element tail.
+
+This remains a bounded decomposition for `[W1, W2, W3, W4, W5]`; it does not
+enumerate or aggregate diagnostics in longer lists.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_five_pairDiagnostic_or_tail_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 W5 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4, W5])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+        [W1, W2, W3, W4, W5]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3, W4, W5] :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    h hno).five_head_or_tail
 
 end DkMath.Collatz
