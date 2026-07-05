@@ -380,6 +380,40 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
 
 set_option linter.style.longLine false in
 /--
+Iff form of the fully bounded three-to-pairs normalization.
+
+The reverse direction builds the diagnostic from the selected bounded
+adjacent-pair address.  This is only a fixed three-element finite disjunction;
+it does not choose or enumerate diagnostics in arbitrary lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.three_iff_pairDiagnostic_cases
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2, W3] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W2 W3 := by
+  constructor
+  · exact
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.three_pairDiagnostic_cases
+  · intro h
+    rcases h with h12 | h23
+    · rcases h12 with ⟨hrev, hbudget, hneg, hlen⟩
+      exact
+        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+          SourcePressureLocalIslandWitnessAdjacentPairInList.head
+          hrev hbudget hneg hlen
+    · rcases h23 with ⟨hrev, hbudget, hneg, hlen⟩
+      exact
+        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+          (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+            SourcePressureLocalIslandWitnessAdjacentPairInList.head)
+          hrev hbudget hneg hlen
+
+set_option linter.style.longLine false in
+/--
 Four-element bounded decomposition for the bundled diagnostic carrier.
 
 A diagnostic on `[W1, W2, W3, W4]` is either carried by the head pair `W1, W2`,
@@ -507,6 +541,50 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
           htail with h23 | h34
     · exact Or.inr (Or.inl h23)
     · exact Or.inr (Or.inr h34)
+
+set_option linter.style.longLine false in
+/--
+Iff form of the fully bounded four-to-pairs normalization.
+
+The reverse direction builds the diagnostic from exactly one selected bounded
+adjacent-pair address.  This is only a fixed four-element finite disjunction;
+it does not choose or enumerate diagnostics in arbitrary lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_iff_pairDiagnostic_cases
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2, W3, W4] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W2 W3 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W3 W4 := by
+  constructor
+  · exact
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_pairDiagnostic_cases
+  · intro h
+    rcases h with h12 | htail
+    · rcases h12 with ⟨hrev, hbudget, hneg, hlen⟩
+      exact
+        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+          SourcePressureLocalIslandWitnessAdjacentPairInList.head
+          hrev hbudget hneg hlen
+    · rcases htail with h23 | h34
+      · rcases h23 with ⟨hrev, hbudget, hneg, hlen⟩
+        exact
+          SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+            (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+              SourcePressureLocalIslandWitnessAdjacentPairInList.head)
+            hrev hbudget hneg hlen
+      · rcases h34 with ⟨hrev, hbudget, hneg, hlen⟩
+        exact
+          SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+            (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+              (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+                SourcePressureLocalIslandWitnessAdjacentPairInList.head))
+            hrev hbudget hneg hlen
 
 set_option linter.style.longLine false in
 /--
@@ -711,6 +789,25 @@ theorem
 
 set_option linter.style.longLine false in
 /--
+Two-element consumer alias matching the `pairDiagnostic_cases` naming style.
+
+For two witnesses, the finite pair-cases result is just the unique head pair.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_two_pairDiagnostic_cases_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction [W1, W2]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 :=
+  sourcePressureLocalIslandWitnessList_failure_two_pairDiagnostic_of_noAdjacentOverlap
+    h hno
+
+set_option linter.style.longLine false in
+/--
 Three-element consumer form: failure plus named no-adjacent-overlap yields
 either the head-pair recovered branch or a diagnostic on the two-element tail.
 
@@ -763,6 +860,30 @@ theorem
         [W2, W3] :=
   sourcePressureLocalIslandWitnessList_failure_three_diagnostic_head_or_tail_of_noAdjacentOverlap
     h hno
+
+set_option linter.style.longLine false in
+/--
+Three-element consumer form normalized all the way to the fixed finite
+disjunction of adjacent pair diagnostics.
+
+The theorem is bounded to `[W1, W2, W3]`; it does not aggregate branches or
+choose a canonical diagnosis in an arbitrary list.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_three_pairDiagnostic_cases_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2, W3])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+        [W1, W2, W3]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W2 W3 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    h hno).three_pairDiagnostic_cases
 
 set_option linter.style.longLine false in
 /--
@@ -820,6 +941,33 @@ theorem
         [W2, W3, W4] :=
   sourcePressureLocalIslandWitnessList_failure_four_diagnostic_head_or_tail_of_noAdjacentOverlap
     h hno
+
+set_option linter.style.longLine false in
+/--
+Four-element consumer form normalized all the way to the fixed finite
+disjunction of adjacent pair diagnostics.
+
+The theorem is bounded to `[W1, W2, W3, W4]`; it does not aggregate branches or
+choose a canonical diagnosis in an arbitrary list.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_four_pairDiagnostic_cases_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+        [W1, W2, W3, W4]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W2 W3 ∨
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W3 W4 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    h hno).four_pairDiagnostic_cases
 
 set_option linter.style.longLine false in
 /--
