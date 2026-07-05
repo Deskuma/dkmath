@@ -521,6 +521,56 @@ theorem sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
     h
 
 /--
+Project an explicit-list sorted-before failure to the two consumer-facing
+branches: either some adjacent pair has a pair-local recovered budget, or the
+enclosing explicit list has an adjacent overlap obstruction.
+
+This is the sharp projection of the general adjacent-diagnosis theorem.  It
+does not select a canonical first diagnosis, enumerate all diagnosed pairs,
+repair overlap, or perform any union accounting.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+    (∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev).items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L :=
+  SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovered_or_overlap
+    (sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis h)
+
+/--
+If a failed explicit witness list has no adjacent overlap obstruction, then
+some adjacent pair in that same list carries a pair-local recovered budget.
+
+The conclusion remains pair-local.  The theorem only removes the overlap branch
+from `sourcePressureLocalIslandWitnessList_failure_exists_recovered_or_overlap`;
+it does not sort the list or claim that all failures are recovered globally.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev).items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 := by
+  rcases sourcePressureLocalIslandWitnessList_failure_exists_recovered_or_overlap h
+      with hrec | hobs
+  · exact hrec
+  · exact False.elim (hno hobs)
+
+/--
 Length-three sorted-before failure yields a list-level adjacent diagnosis.
 
 This is only a wrapper over the bounded three-witness carrier: it records that
