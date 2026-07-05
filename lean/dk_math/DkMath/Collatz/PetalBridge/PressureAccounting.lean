@@ -3153,6 +3153,117 @@ theorem sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_or_listFailu
           hobs))
 
 /--
+Carrier predicate for a local adjacent-pair diagnosis inside an enclosing list.
+
+The recovered branch is always pair-local for `A, B`.  The overlap branch is an
+adjacent-overlap obstruction on the enclosing list `L`.  This carrier is only a
+return-type abbreviation for bounded diagnosis theorems; it does not perform
+sorting, merging, coverage, or union accounting.
+-/
+def SourcePressureLocalIslandWitnessAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (A B : SourcePressureLocalIslandWitness n k r) : Prop :=
+  (∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+    (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+      A B hrev).items).map
+      (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+  ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L
+
+/-- Constructor for the pair-local recovered branch of adjacent diagnosis. -/
+theorem SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hrev : SourcePressureLocalIslandWitnessBefore B A)
+    (hbudget :
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        A B hrev).items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B :=
+  Or.inl ⟨hrev, hbudget⟩
+
+/-- Constructor for the enclosing-list overlap branch of adjacent diagnosis. -/
+theorem SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hobs : SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B :=
+  Or.inr hobs
+
+/-- Eliminate an adjacent diagnosis by handling its two stored branches. -/
+theorem SourcePressureLocalIslandWitnessAdjacentDiagnosis.elim
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    {P : Prop}
+    (hdiag : SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B)
+    (hrecovered :
+      (∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+        (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          A B hrev).items).map
+          (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) → P)
+    (hoverlap : SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L → P) :
+    P := by
+  rcases hdiag with hrec | hobs
+  · exact hrecovered hrec
+  · exact hoverlap hobs
+
+/--
+Forget the obstruction-specific part of an adjacent diagnosis.
+
+The recovered branch remains pair-local; the overlap branch is weakened to
+ordinary sorted-before failure for the enclosing list.
+-/
+theorem SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered_or_listFailure
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hdiag : SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        A B hrev).items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L := by
+  rcases hdiag with hrec | hobs
+  · exact Or.inl hrec
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+        hobs)
+
+/--
+Length-three diagnosis with the nested branches packed into the adjacent
+diagnosis carrier.
+
+This is still bounded to `[W1, W2, W3]`.  The carrier keeps recovered budgets
+attached to the adjacent pair that produced them.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_carrier
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2, W3]) :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis [W1, W2, W3] W1 W2 ∨
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis [W1, W2, W3] W2 W3 := by
+  rcases sourcePressureLocalIslandWitnessList_failure_threeDiagnosis
+      h1pos h2pos h3pos h with hhead | htail
+  · rcases hhead with hrecovered | hobs
+    · exact Or.inl (Or.inl hrecovered)
+    · exact Or.inl
+        (SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap hobs)
+  · rcases htail with hrecovered | hobs
+    · exact Or.inr (Or.inl hrecovered)
+    · exact Or.inr
+        (SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap hobs)
+
+/--
 Head-pair split with the obstruction branch weakened to ordinary list
 sorted-before failure.
 
