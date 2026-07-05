@@ -696,6 +696,190 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.
             (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
   h
 
+set_option linter.style.longLine false in
+/--
+Bundled consumer-facing diagnostic for one recovered adjacent accounted family.
+
+This carrier intentionally stores redundant local facts about the same
+recovered reversed-pair family:
+
+* the pair occurs adjacently in the explicit witness list;
+* the pair is reversed with respect to the `Before` relation;
+* the associated pair-local accounted family has budget `≤ -2`;
+* the same listed budget is strictly negative;
+* the family has exactly two listed accounted intervals.
+
+The redundancy is deliberate.  Downstream callers often need the operational
+`< 0` and `items.length = 2` facts without reproving them from the lower-level
+carrier.  This definition is still a one-pair diagnostic.  It does not list all
+diagnoses, aggregate multiple recovered pairs, form interval unions, claim
+coverage, or repair overlaps.
+-/
+def SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r)) : Prop :=
+  ∃ A B,
+    SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+      ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+        let F :=
+          sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev
+        (((F.items).map
+          (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+          (((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+          F.items.length = 2
+
+set_option linter.style.longLine false in
+/--
+Build the bundled diagnostic from explicit pair-local evidence.
+
+This constructor only packages one recovered adjacent pair and its associated
+reversed-pair accounted family.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin :
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B)
+    (hrev : SourcePressureLocalIslandWitnessBefore B A)
+    (hbudget :
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          A B hrev
+      ((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+    (hneg :
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          A B hrev
+      ((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0)
+    (hlen :
+      let F :=
+        sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+          A B hrev
+      F.items.length = 2) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L :=
+  ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+
+set_option linter.style.longLine false in
+/--
+Upgrade the lower-level recovered accounted-family carrier to the bundled
+diagnostic carrier.
+
+The strict negativity and length-two facts come from the existing reversed-pair
+accounted-family theorems, so no list-wide accounting principle is introduced.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.toDiagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily L) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget⟩
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+      hin hrev hbudget
+      (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+        A B hrev)
+      (sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
+        A B hrev)
+
+set_option linter.style.longLine false in
+/--
+Forget the extra diagnostic fields and recover the lower-level carrier.
+
+This is useful when a caller has the bundled diagnostic but an older theorem
+expects only the recovered accounted-family carrier.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.toRecoveredAdjacentAccountedFamily
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily L := by
+  rcases h with ⟨A, B, hin, hrev, hbudget, _hneg, _hlen⟩
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.of_pair
+      hin hrev hbudget
+
+set_option linter.style.longLine false in
+/--
+Project the underlying adjacent recovered pair from the bundled diagnostic.
+
+This is a convenience projection only; it does not assert uniqueness or
+enumerate every possible diagnostic in the list.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_pair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          (((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+            (((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+            F.items.length = 2 :=
+  h
+
+set_option linter.style.longLine false in
+/--
+Project strict negativity from the bundled diagnostic.
+
+This is the same pair-local family stored in the diagnostic; the theorem only
+forgets the additional `≤ -2` and length fields.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_accountedFamily_sum_neg
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, _hbudget, hneg, _hlen⟩
+  exact ⟨A, B, hin, hrev, hneg⟩
+
+set_option linter.style.longLine false in
+/--
+Project length-two structure from the bundled diagnostic.
+
+This remains about the explicit accounted family associated with one recovered
+adjacent pair.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_accountedFamily_length_two
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          F.items.length = 2 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, _hbudget, _hneg, hlen⟩
+  exact ⟨A, B, hin, hrev, hlen⟩
+
 /--
 Expose the actual pair-local accounted interval family object stored by the
 recovered adjacent-family carrier.
@@ -841,6 +1025,46 @@ theorem
     h
     (SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.of_not
       hno)
+
+set_option linter.style.longLine false in
+/--
+Failure plus named no-adjacent-overlap, packaged as the bundled pair-local
+diagnostic carrier.
+
+This is the consumer-facing form of the recovered branch.  It bundles the
+adjacent pair, reversed-before witness, budget `≤ -2`, strict negativity, and
+length-two structure for one recovered family only.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_noAdjacentOverlap
+    h hno).toDiagnostic
+
+set_option linter.style.longLine false in
+/--
+Raw-negation version of the bundled diagnostic consumer theorem.
+
+This keeps the compatibility path for callers that still represent the
+no-adjacent-overlap branch as a raw negation.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_no_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
+    h hno).toDiagnostic
 
 set_option linter.style.longLine false in
 /--
