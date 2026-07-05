@@ -881,6 +881,92 @@ theorem
   exact ⟨A, B, hin, hrev, hlen⟩
 
 /--
+The empty explicit witness list cannot carry a recovered accounted-family
+diagnostic, because it contains no adjacent pair address.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.nil_false
+    {n : OddNat} {k r : ℕ} :
+    ¬ SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      ([] : List (SourcePressureLocalIslandWitness n k r)) := by
+  rintro ⟨A, B, hin, _⟩
+  exact SourcePressureLocalIslandWitnessAdjacentPairInList.nil_false hin
+
+set_option linter.style.longLine false in
+/--
+A singleton explicit witness list cannot carry a recovered accounted-family
+diagnostic, because it contains no adjacent pair address.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.singleton_false
+    {n : OddNat} {k r : ℕ}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic [W] := by
+  rintro ⟨A, B, hin, _⟩
+  exact SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false hin
+
+set_option linter.style.longLine false in
+/--
+Lift a recovered accounted-family diagnostic through a newly supplied head.
+
+The recovered family, reversed-before witness, and all budget facts are
+unchanged.  Only the adjacent-pair address is transported from the tail list to
+the larger enclosing list.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      (W1 :: W2 :: rest) := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pair
+      (SourcePressureLocalIslandWitnessAdjacentPairInList.tail hin)
+      hrev hbudget hneg hlen
+
+set_option linter.style.longLine false in
+/--
+Two-step bounded tail lift for a recovered accounted-family diagnostic.
+
+This is just a small composition helper; it still transports one existing
+pair-local diagnostic and does not scan the list.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        (W3 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      (W1 :: W2 :: W3 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
+    (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
+      h)
+
+set_option linter.style.longLine false in
+/--
+Three-step bounded tail lift for a recovered accounted-family diagnostic.
+
+This mirrors the older adjacent-diagnosis convenience API while staying
+bounded and pair-local.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail_tail_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        (W4 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      (W1 :: W2 :: W3 :: W4 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
+    (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail_tail
+      h)
+
+/--
 Expose the actual pair-local accounted interval family object stored by the
 recovered adjacent-family carrier.
 
