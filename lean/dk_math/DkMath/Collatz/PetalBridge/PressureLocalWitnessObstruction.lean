@@ -18,6 +18,21 @@ not prove Collatz convergence.
 -/
 
 /--
+The interval-pulse address obtained from one explicit local-island witness has
+positive length.
+
+This is the witness-facing wrapper around
+`SourcePressureIntervalPulseAddress.len_pos`.  It is intentionally local to the
+supplied witness and does not say anything about a complete list of islands.
+-/
+theorem sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len :=
+  SourcePressureIntervalPulseAddress.len_pos
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+
+/--
 Ordered non-overlap for two explicit local-island witnesses.
 
 This is defined by converting both witnesses to interval-pulse addresses and

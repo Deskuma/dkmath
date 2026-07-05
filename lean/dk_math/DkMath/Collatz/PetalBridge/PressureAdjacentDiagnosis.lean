@@ -449,6 +449,78 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.singleton_false
   exact SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false hin
 
 /--
+Any sorted-before failure in an explicitly supplied witness list has a
+list-level adjacent diagnosis, assuming the converted witness addresses have
+positive length.
+
+The proof only peels the explicit list until the existing one-step diagnosis
+finds either the head pair or a tail failure.  It does not sort the list, choose
+a canonical first diagnosis, enumerate all diagnoses, merge intervals, or claim
+that the list covers all local islands.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis_of_forall_len_pos
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hpos :
+      ∀ W ∈ L,
+        0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L := by
+  induction L with
+  | nil =>
+      exact False.elim
+        (SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false h)
+  | cons W1 tail ih =>
+      cases tail with
+      | nil =>
+          exact False.elim
+            (SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_singleton_false
+              h)
+      | cons W2 rest =>
+          have h1pos :
+              0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len :=
+            hpos W1 (by simp)
+          have h2pos :
+              0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len :=
+            hpos W2 (by simp)
+          rcases sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+              h1pos h2pos h with hhead | htail
+          · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head
+              hhead
+          · have htailpos :
+                ∀ W ∈ W2 :: rest,
+                  0 <
+                    (sourcePressureIntervalPulseAddress_of_localIslandWitness
+                      W).len := by
+              intro W hW
+              exact hpos W (List.mem_cons_of_mem W1 hW)
+            exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+              (ih htailpos htail)
+
+/--
+Any sorted-before failure in an explicitly supplied witness list has a
+list-level adjacent diagnosis.
+
+This is the clean public form of the previous theorem.  The positivity
+hypothesis is discharged by the local witness-address length lemma.  The result
+is still only local to the supplied explicit list: it is not a sorting
+algorithm, not a coverage theorem, and not a union-accounting statement.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L :=
+  sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis_of_forall_len_pos
+    (by
+      intro W _hW
+      exact sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos W)
+    h
+
+/--
 Length-three sorted-before failure yields a list-level adjacent diagnosis.
 
 This is only a wrapper over the bounded three-witness carrier: it records that
