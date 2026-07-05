@@ -3264,6 +3264,66 @@ theorem sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_carrier
         (SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap hobs)
 
 /--
+Lift an adjacent diagnosis on a tail list through a newly supplied head.
+
+Recovered evidence is unchanged and remains attached to the same adjacent pair
+`A, B`.  Only overlap evidence is transported to the larger enclosing list.
+-/
+theorem SourcePressureLocalIslandWitnessAdjacentDiagnosis.lift_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hdiag :
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis (W2 :: rest) A B) :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis (W1 :: W2 :: rest) A B := by
+  rcases hdiag with hrecovered | hobs
+  · exact Or.inl hrecovered
+  · exact Or.inr
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_tail
+        hobs)
+
+/--
+Bounded diagnosis for a four-witness sorted-before failure.
+
+The result is one adjacent diagnosis for one of the three adjacent pairs:
+`W1,W2`, `W2,W3`, or `W3,W4`.  Recovered budgets remain attached to the pair
+that produced them, and overlap evidence stays an obstruction on the enclosing
+four-witness list.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_fourDiagnosis_carrier
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (h4pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W4).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4]) :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis [W1, W2, W3, W4] W1 W2 ∨
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis [W1, W2, W3, W4] W2 W3 ∨
+        SourcePressureLocalIslandWitnessAdjacentDiagnosis [W1, W2, W3, W4] W3 W4 := by
+  rcases sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+      h1pos h2pos h with hhead | htail
+  · rcases hhead with hrecovered | hobs
+    · exact Or.inl (Or.inl hrecovered)
+    · exact Or.inl
+        (SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap hobs)
+  · rcases sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_carrier
+        h2pos h3pos h4pos htail with htailHead | htailTail
+    · exact Or.inr (Or.inl
+        (SourcePressureLocalIslandWitnessAdjacentDiagnosis.lift_tail
+          htailHead))
+    · exact Or.inr (Or.inr
+        (SourcePressureLocalIslandWitnessAdjacentDiagnosis.lift_tail
+          htailTail))
+
+/--
 Head-pair split with the obstruction branch weakened to ordinary list
 sorted-before failure.
 
