@@ -3368,6 +3368,31 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.tail
       (W1 :: W2 :: rest) A B :=
   Or.inr h
 
+/-- Decompose an adjacent-pair address in a nontrivial cons list. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 A B : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        (W1 :: W2 :: rest) A B) :
+    (A = W1 ∧ B = W2) ∨
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        (W2 :: rest) A B :=
+  h
+
+/-- Adjacent-pair address in a cons list is exactly head-pair or tail-pair. -/
+theorem SourcePressureLocalIslandWitnessAdjacentPairInList.cons_iff_head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 A B : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)} :
+    SourcePressureLocalIslandWitnessAdjacentPairInList
+      (W1 :: W2 :: rest) A B ↔
+    (A = W1 ∧ B = W2) ∨
+      SourcePressureLocalIslandWitnessAdjacentPairInList
+        (W2 :: rest) A B :=
+  Iff.rfl
+
 /-- There is no adjacent pair in the empty witness list. -/
 theorem SourcePressureLocalIslandWitnessAdjacentPairInList.nil_false
     {n : OddNat} {k r : ℕ}
@@ -3411,6 +3436,109 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
       SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B) :
     SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L :=
   ⟨A, B, hin, hdiag⟩
+
+/-- Eliminate a list-level adjacent diagnosis by exposing its addressed pair. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.elim
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {P : Prop}
+    (h : SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L)
+    (hp :
+      ∀ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B →
+        SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B →
+        P) :
+    P := by
+  rcases h with ⟨A, B, hin, hdiag⟩
+  exact hp A B hin hdiag
+
+/-- Build a list-level adjacent diagnosis from a diagnosis on the head pair. -/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hdiag :
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis
+        (W1 :: W2 :: rest) W1 W2) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      (W1 :: W2 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+    SourcePressureLocalIslandWitnessAdjacentPairInList.head hdiag
+
+/--
+Propagate a list-level adjacent diagnosis through a new head.
+
+This only transports the address and the enclosing-list obstruction branch.
+Recovered budget evidence remains attached to the same adjacent pair.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+        (W2 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      (W1 :: W2 :: rest) := by
+  rcases h with ⟨A, B, hin, hdiag⟩
+  exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
+    (SourcePressureLocalIslandWitnessAdjacentPairInList.tail hin)
+    (SourcePressureLocalIslandWitnessAdjacentDiagnosis.lift_tail hdiag)
+
+/--
+Two-step tail propagation for bounded address plumbing.
+
+This is deliberately not a general recursive classifier; it is only a named
+composition of `of_tail` for small explicit lists.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+        (W3 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      (W1 :: W2 :: W3 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+    (SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail h)
+
+/--
+Three-step tail propagation for bounded address plumbing.
+
+This helper keeps the current API bounded and explicit; it does not inspect or
+classify an arbitrary witness list.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail_tail_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+        (W4 :: rest)) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      (W1 :: W2 :: W3 :: W4 :: rest) :=
+  SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+    (SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail_tail h)
+
+/--
+Project a list-level adjacent diagnosis to either pair-local recovered budget
+evidence or ordinary sorted-before failure of the enclosing list.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovered_or_listFailure
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ((∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev).items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+        ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) := by
+  rcases h with ⟨A, B, hin, hdiag⟩
+  exact ⟨A, B, hin,
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered_or_listFailure hdiag⟩
 
 /-- The empty witness list cannot carry a list-level adjacent diagnosis. -/
 theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.nil_false
