@@ -65,6 +65,28 @@ theorem SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnosti
     sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
       W1 W2 hrev⟩
 
+set_option linter.style.longLine false in
+/--
+Project the named pair-local recovered diagnostic from a list-level recovered
+diagnostic carrier.
+
+This only repackages the pair already stored in the carrier using the named
+pair-local predicate.  It does not enumerate diagnostics, choose a canonical
+pair, aggregate recovered families, repair overlap, or prove coverage.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.exists_pairDiagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+          A B := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+  exact ⟨A, B, hin, hrev, hbudget, hneg, hlen⟩
+
 /--
 In a two-element explicit witness list, the only adjacent-pair address is the
 head pair.
@@ -766,6 +788,54 @@ theorem
         F.items.length = 2 :=
   (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
     h hno).exists_reversed_of_two
+
+set_option linter.style.longLine false in
+/--
+Failure plus named no-adjacent-overlap yields some named pair-local recovered
+diagnostic inside the explicit list.
+
+This is the arbitrary-list existential consumer surface corresponding to the
+fixed length-two through length-five pair-cases API.  It exposes one pair that
+is already stored in the recovered diagnostic carrier; it does not enumerate
+all recovered diagnostics or choose a canonical pair.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+          A B :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
+    h hno).exists_pairDiagnostic
+
+set_option linter.style.longLine false in
+/--
+Raw-negation compatibility wrapper for the named pair-local recovered
+diagnostic existential projection.
+
+This is the same result as the named no-adjacent-overlap theorem, with the
+older raw negation form of the no-overlap branch.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_of_no_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+          A B :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_no_overlap
+    h hno).exists_pairDiagnostic
 
 set_option linter.style.longLine false in
 /--
