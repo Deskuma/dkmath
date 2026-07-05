@@ -3540,6 +3540,30 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovere
   exact ⟨A, B, hin,
     SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered_or_listFailure hdiag⟩
 
+/--
+Project a list-level adjacent diagnosis without weakening the overlap branch.
+
+The recovered alternative remains explicitly tied to the addressed adjacent
+pair `A, B`.  The other alternative is still the sharp adjacent-overlap
+obstruction on the enclosing list `L`; it is not merged into ordinary failure
+and no interval union accounting is introduced.
+-/
+theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovered_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L) :
+    (∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+            A B hrev).items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L := by
+  rcases h with ⟨A, B, hin, hdiag⟩
+  rcases hdiag with hrecovered | hobs
+  · exact Or.inl ⟨A, B, hin, hrecovered⟩
+  · exact Or.inr hobs
+
 /-- The empty witness list cannot carry a list-level adjacent diagnosis. -/
 theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.nil_false
     {n : OddNat} {k r : ℕ} :
@@ -3617,6 +3641,38 @@ theorem sourcePressureLocalIslandWitnessList_failure_four_hasAdjacentDiagnosis
         (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
           (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
             SourcePressureLocalIslandWitnessAdjacentPairInList.head)) h34
+
+/--
+Length-five sorted-before failure yields a list-level adjacent diagnosis.
+
+This is a bounded wrapper: it peels the head pair once, then delegates the tail
+case to the existing four-witness wrapper and lifts that diagnosis back to the
+full list.  It is not a general recursive classifier.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_five_hasAdjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 W5 : SourcePressureLocalIslandWitness n k r}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h3pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W3).len)
+    (h4pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W4).len)
+    (h5pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W5).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4, W5]) :
+    SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis
+      [W1, W2, W3, W4, W5] := by
+  rcases sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+      h1pos h2pos h with hhead | htail
+  · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_head hhead
+  · exact SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_tail
+      (sourcePressureLocalIslandWitnessList_failure_four_hasAdjacentDiagnosis
+        h2pos h3pos h4pos h5pos htail)
 
 /--
 Head-pair split with the obstruction branch weakened to ordinary list
