@@ -105,7 +105,9 @@ height information without immediately leaving finite arithmetic.
 
 ## Observation Windows
 
-`DkMath.Collatz.PetalBridge` defines a finite observation window:
+`DkMath.Collatz.PetalBridge` is now a public aggregator over a split
+`PetalBridge/` subpackage.  The basic layer defines a finite observation
+window:
 
 ```lean
 OrbitWindow n k = Finset.range k
@@ -131,6 +133,26 @@ with:
 ```
 
 This connects the local finite profile to the existing accumulated-height API.
+
+The current implementation keeps the window language modular:
+
+```text
+Basic / Residues / Profiles / Counts
+  finite orbit labels, residues, height profiles, and occupation counts
+
+Mass / PressureCore / PressureCounts
+  retention, recovery, continuation, and pressure predicates
+
+TailSplits / TailGrammar / DriftBudget / PressureDecay
+  tail grammar and delayed budget observations
+
+PressureFrontier / PressureAccounting / PressureLocalWitnessObstruction /
+PressureAdjacentDiagnosis
+  explicit local-island witness accounting and bounded obstruction diagnosis
+```
+
+This split is refactor-only.  It does not change the theorem meanings; it
+only keeps the base accounting layer readable.
 
 ## From Counts To Distributions
 
@@ -188,6 +210,29 @@ tail occupation count.
 ```
 
 This turns pointwise residue arithmetic into count-level channel flow.
+
+## Pressure Accounting And Local Obstructions
+
+The pressure route now has a separate explicit-witness accounting surface.
+The base file:
+
+```lean
+DkMath.Collatz.PetalBridge.PressureAccounting
+```
+
+contains interval-pulse addresses, accounted intervals, sorted-before finite
+families, and singleton local-island witness wrappers.
+
+The later local obstruction files are separated:
+
+```lean
+DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
+DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
+```
+
+These layers discuss only explicitly supplied witnesses and adjacent pairs.
+They do not assert global coverage, maximality, arbitrary sorting, interval
+union accounting, or Collatz convergence.
 
 ## What This Does Not Yet Do
 
