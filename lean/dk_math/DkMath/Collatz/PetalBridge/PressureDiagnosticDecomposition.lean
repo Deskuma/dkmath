@@ -21,6 +21,50 @@ enumeration, union accounting, overlap repair, aggregation, or Collatz
 convergence.
 -/
 
+set_option linter.style.longLine false in
+/--
+Named pair-local recovered head branch used by the bounded diagnostic
+decomposition theorems.
+
+This is only a name for the long head-branch expression already used by the
+length-two, length-three, and length-four diagnostic decompositions.  It remains
+pair-local to `W1, W2`: no list-wide family, aggregation, coverage, or
+canonical arbitrary-list diagnostic is introduced here.
+-/
+def SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+    {n : OddNat} {k r : ℕ}
+    (W1 W2 : SourcePressureLocalIslandWitness n k r) : Prop :=
+  ∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+    let F :=
+      sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev
+    (((F.items).map
+      (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2) ∧
+      (((F.items).map
+        (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum < 0) ∧
+      F.items.length = 2
+
+set_option linter.style.longLine false in
+/--
+A reversed-before witness directly produces the named pair-local recovered
+diagnostic branch.
+
+The proof repackages the existing reversed-pair accounted-family facts; it does
+not add any new mathematical strength.
+-/
+theorem SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic.of_before
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (hrev : SourcePressureLocalIslandWitnessBefore W2 W1) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic W1 W2 :=
+  ⟨hrev,
+    sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_le_neg_two
+      W1 W2 hrev,
+    sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_sum_neg
+      W1 W2 hrev,
+    sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
+      W1 W2 hrev⟩
+
 /--
 In a two-element explicit witness list, the only adjacent-pair address is the
 head pair.
@@ -163,6 +207,36 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
 
 set_option linter.style.longLine false in
 /--
+Compact two-element normal form using the named pair-local recovered branch.
+
+This is definitionally the same statement as `two_iff`, with the long head
+branch named for downstream readability.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.two_iff_pairDiagnostic
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic W1 W2 := by
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.two_iff
+
+set_option linter.style.longLine false in
+/-- Build the two-element diagnostic from the named pair-local branch. -/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_pairDiagnostic_two
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+        W1 W2) :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2] :=
+  let hiff :=
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.two_iff_pairDiagnostic
+  hiff.mpr h
+
+set_option linter.style.longLine false in
+/--
 Three-element bounded decomposition for the bundled diagnostic carrier.
 
 A diagnostic on `[W1, W2, W3]` is either carried by the head pair `W1, W2`,
@@ -240,6 +314,25 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
     · exact
         SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
           htail
+
+set_option linter.style.longLine false in
+/--
+Compact three-element decomposition using the named pair-local recovered branch.
+
+This is the same bounded decomposition as `three_iff_head_or_tail`; only the
+long head branch has been named.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.three_iff_pairDiagnostic_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2, W3] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3] := by
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.three_iff_head_or_tail
 
 set_option linter.style.longLine false in
 /--
@@ -324,6 +417,25 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
 
 set_option linter.style.longLine false in
 /--
+Compact four-element decomposition using the named pair-local recovered branch.
+
+This is the same bounded decomposition as `four_iff_head_or_tail`; only the
+long head branch has been named.
+-/
+theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_iff_pairDiagnostic_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+      [W1, W2, W3, W4] ↔
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3, W4] := by
+  exact
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_iff_head_or_tail
+
+set_option linter.style.longLine false in
+/--
 Two-element consumer form: failure plus named no-adjacent-overlap yields the
 reversed-before witness for the only adjacent pair.
 
@@ -349,6 +461,26 @@ theorem
         F.items.length = 2 :=
   (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
     h hno).exists_reversed_of_two
+
+set_option linter.style.longLine false in
+/--
+Compact two-element consumer form using the named pair-local recovered branch.
+
+This is only the named form of
+`sourcePressureLocalIslandWitnessList_failure_two_exists_reversed_of_noAdjacentOverlap`.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_two_pairDiagnostic_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction [W1, W2]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 :=
+  sourcePressureLocalIslandWitnessList_failure_two_exists_reversed_of_noAdjacentOverlap
+    h hno
 
 set_option linter.style.longLine false in
 /--
@@ -384,6 +516,29 @@ theorem
 
 set_option linter.style.longLine false in
 /--
+Compact three-element consumer form using the named pair-local recovered branch.
+
+This is the same head-or-tail result as the long consumer theorem, with the
+head branch named.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_three_pairDiagnostic_or_tail_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2, W3])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+        [W1, W2, W3]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3] :=
+  sourcePressureLocalIslandWitnessList_failure_three_diagnostic_head_or_tail_of_noAdjacentOverlap
+    h hno
+
+set_option linter.style.longLine false in
+/--
 Four-element consumer form: failure plus named no-adjacent-overlap yields
 either the head-pair recovered branch or a diagnostic on the three-element tail.
 
@@ -414,5 +569,29 @@ theorem
         [W2, W3, W4] :=
   (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
     h hno).four_head_or_tail
+
+set_option linter.style.longLine false in
+/--
+Compact four-element consumer form using the named pair-local recovered branch.
+
+This is the same head-or-tail result as the long consumer theorem, with the
+head branch named.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_four_pairDiagnostic_or_tail_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 W3 W4 : SourcePressureLocalIslandWitness n k r}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        [W1, W2, W3, W4])
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction
+        [W1, W2, W3, W4]) :
+    SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+      W1 W2 ∨
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic
+        [W2, W3, W4] :=
+  sourcePressureLocalIslandWitnessList_failure_four_diagnostic_head_or_tail_of_noAdjacentOverlap
+    h hno
 
 end DkMath.Collatz
