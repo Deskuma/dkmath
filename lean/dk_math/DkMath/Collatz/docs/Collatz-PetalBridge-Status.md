@@ -82,6 +82,35 @@ The bridge file is:
 DkMath.Collatz.PetalBridge
 ```
 
+As of checkpoint `176-ref-01`, this is a public aggregator over a split
+subpackage rather than one large implementation file.  The active modules are:
+
+```text
+DkMath.Collatz.PetalBridge.Basic
+DkMath.Collatz.PetalBridge.Residues
+DkMath.Collatz.PetalBridge.Profiles
+DkMath.Collatz.PetalBridge.Counts
+DkMath.Collatz.PetalBridge.Ratios
+DkMath.Collatz.PetalBridge.Mass
+DkMath.Collatz.PetalBridge.PressureCore
+DkMath.Collatz.PetalBridge.PressureCounts
+DkMath.Collatz.PetalBridge.HeightBudget
+DkMath.Collatz.PetalBridge.TailSplits
+DkMath.Collatz.PetalBridge.TailGrammar
+DkMath.Collatz.PetalBridge.DriftBudget
+DkMath.Collatz.PetalBridge.PressureDecay
+DkMath.Collatz.PetalBridge.PressureFrontier
+DkMath.Collatz.PetalBridge.PressureAccounting
+DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
+DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
+DkMath.Collatz.PetalBridge.OneCycle
+DkMath.Collatz.PetalBridge.ValuationFlowBridge
+DkMath.Collatz.PetalBridge.Collision
+```
+
+The refactor moved theorem groups only.  It did not change the mathematical
+meaning of the pressure accounting API.
+
 Checkpoint 125 clarifies the module boundary:
 
 ```text
@@ -304,6 +333,45 @@ This supports a two-profile route before any full `ShapePressureGrid`:
 ResidualAllOnesProfile
 PressureDecayProfile
 ```
+
+Checkpoint `176-ref-01` closes the first pressure-accounting refactor target.
+The formerly oversized accounting file was split into:
+
+```text
+PressureAccounting
+  interval-pulse address accounting, accounted interval families,
+  sorted-before families, singleton local-island witness budget wrappers
+
+PressureLocalWitnessObstruction
+  witness-level before/overlap, pair failure, overlap obstruction,
+  recovered-pair budget, bounded list diagnosis
+
+PressureAdjacentDiagnosis
+  adjacent-diagnosis carriers, adjacent-pair-in-list predicates,
+  bounded three/four/five witness diagnostic wrappers
+```
+
+Current line counts after the split:
+
+```text
+1896 PressureAccounting.lean
+1376 PressureLocalWitnessObstruction.lean
+ 545 PressureAdjacentDiagnosis.lean
+```
+
+The important semantic non-claims remain explicit:
+
+```text
+no global local-island coverage
+no maximality or uniqueness
+no arbitrary list sorting theorem
+no interval union accounting
+no overlap repair without extra hypotheses
+no Collatz convergence theorem
+```
+
+Recovered budgets remain pair-local.  Overlap remains an obstruction branch
+for the explicit adjacent witness list.
 
 The first theorem set is deliberately thin:
 

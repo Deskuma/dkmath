@@ -9,7 +9,28 @@ DkMath.Collatz.Basic
 DkMath.Collatz.V2
 DkMath.Collatz.Accelerated
 DkMath.Collatz.Shift
+DkMath.Collatz.GnomonEvaluation
 DkMath.Collatz.PetalBridge
+DkMath.Collatz.PetalBridge.Basic
+DkMath.Collatz.PetalBridge.Residues
+DkMath.Collatz.PetalBridge.Profiles
+DkMath.Collatz.PetalBridge.Counts
+DkMath.Collatz.PetalBridge.Ratios
+DkMath.Collatz.PetalBridge.Mass
+DkMath.Collatz.PetalBridge.PressureCore
+DkMath.Collatz.PetalBridge.PressureCounts
+DkMath.Collatz.PetalBridge.HeightBudget
+DkMath.Collatz.PetalBridge.TailSplits
+DkMath.Collatz.PetalBridge.TailGrammar
+DkMath.Collatz.PetalBridge.DriftBudget
+DkMath.Collatz.PetalBridge.PressureDecay
+DkMath.Collatz.PetalBridge.PressureFrontier
+DkMath.Collatz.PetalBridge.PressureAccounting
+DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
+DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
+DkMath.Collatz.PetalBridge.OneCycle
+DkMath.Collatz.PetalBridge.ValuationFlowBridge
+DkMath.Collatz.PetalBridge.Collision
 DkMath.Collatz.Collatz2K26
 ```
 
@@ -89,11 +110,43 @@ theme that later appears in `PetalBridge`:
 differences concentrate around 2-adic boundaries and singular residue ridges
 ```
 
+## `GnomonEvaluation.lean`
+
+This file contains the low-level odd gnomon reading of one accelerated Collatz
+step.
+
+Important names:
+
+```lean
+OddGnomonLayer
+RawGnomonStep
+RawGnomonHeight
+RawGnomonResidualShape
+RawGnomonRemainderAtDepth
+```
+
+Its role is to keep the arithmetic shape:
+
+```text
+n + (2n + 1) = 3n + 1
+```
+
+out of the finite observation-window package.
+
 ## `PetalBridge.lean`
 
-This is the current active bridge layer.
+This is now the public aggregator for the split PetalBridge package.
 
-It packages the accelerated orbit as a Petal-style finite observation window:
+It imports the finite observation, residue, pressure, accounting, obstruction,
+one-cycle, valuation-flow, and collision modules.  Users that want the full
+surface can continue importing:
+
+```lean
+import DkMath.Collatz.PetalBridge
+```
+
+The split package packages the accelerated orbit as a Petal-style finite
+observation window:
 
 ```lean
 OrbitWindow
@@ -120,6 +173,57 @@ pow2ChannelFlow_of_pointwise
 ```
 
 This file is where Collatz dynamics are read as finite channel movement.
+
+## `PetalBridge/` Subpackage
+
+The subpackage is organized as follows:
+
+```text
+Basic
+  orbit windows, odd labels, gnomon residual-shape bridge
+
+Residues
+  residue-class and height-detection lemmas
+
+Profiles
+  ordered finite profiles: heights, residual shapes, first-failed depths
+
+Counts / Ratios
+  finite occupation counts and ratio predicates
+
+Mass
+  retention, recovery, continuation, and shifted-tail mass definitions
+
+PressureCore / PressureCounts
+  pressure predicates and depth-mode counting surfaces
+
+HeightBudget
+  finite height-count lower bounds feeding `sumS`
+
+TailSplits / TailGrammar / DriftBudget / PressureDecay
+  delayed tail grammar and budget observations
+
+PressureFrontier
+  prefix-failure, frontier, sign-change, local-island predicates
+
+PressureAccounting
+  interval-pulse addresses, accounted intervals, sorted-before families,
+  singleton local-island witness accounting
+
+PressureLocalWitnessObstruction
+  witness-level before/overlap, pair obstruction, bounded list diagnosis
+
+PressureAdjacentDiagnosis
+  adjacent-pair diagnosis carriers and small fixed-list wrappers
+
+OneCycle / ValuationFlowBridge / Collision
+  one-cycle obstruction, valuation-flow bridge, and collision interface
+```
+
+The `PressureAccounting` split at checkpoint `176-ref-01` is refactor-only.
+It moved theorem groups into downstream modules without changing theorem
+statements.  The base file is now below 2000 lines, which keeps the core
+accounting layer maintainable.
 
 ## `Collatz2K26.lean`
 

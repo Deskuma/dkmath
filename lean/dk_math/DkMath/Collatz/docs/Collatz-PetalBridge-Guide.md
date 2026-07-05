@@ -43,6 +43,39 @@ residual shape
 `PetalBridge` should not absorb that low-level vocabulary.  Its job is to
 observe finite windows of those shapes and compare finite channel masses.
 
+Checkpoint `176-ref-01` clarifies the implementation boundary further:
+`DkMath.Collatz.PetalBridge` is a public aggregator over a split subpackage.
+The split is refactor-only, but it is important for finding the right theorem
+surface.
+
+```text
+Basic / Residues / Profiles / Counts
+  finite observation windows and count surfaces
+
+Mass / PressureCore / PressureCounts
+  retention/recovery/continuation and pressure predicates
+
+TailSplits / TailGrammar / DriftBudget / PressureDecay
+  tail grammar and delayed budget surfaces
+
+PressureFrontier
+  prefix failure, frontier, sign-change, positive-block, local-island handles
+
+PressureAccounting
+  interval-pulse addresses, accounted intervals, sorted-before families,
+  singleton local-island witness wrappers
+
+PressureLocalWitnessObstruction
+  witness-level before/overlap, pair obstruction, bounded diagnosis
+
+PressureAdjacentDiagnosis
+  adjacent-pair diagnosis carriers and fixed small-list wrappers
+```
+
+When adding new pressure theorems, choose the lowest module that already owns
+the vocabulary.  In particular, do not put local-witness obstruction or
+adjacent-diagnosis facts back into `PressureAccounting`.
+
 ## Basic Objects
 
 ### `OrbitWindow`
@@ -315,6 +348,21 @@ sourcePressureSignChangeUp_of_localIsland
 
 These names are for reading scan output.  They do not assert maximality,
 uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
+
+The later accounting modules preserve the same discipline.  Explicit local
+island witnesses can be converted to interval-pulse addresses, sorted when an
+ordered non-overlap proof is supplied, or diagnosed when adjacent sortedness
+fails.  The failure branch is deliberately local:
+
+```text
+reversed adjacent pair
+or
+adjacent overlap obstruction
+```
+
+Recovered budget remains attached to the recovered adjacent pair.  An overlap
+obstruction is not repaired by swapping and is not converted into a union
+accounting theorem without additional hypotheses.
 
 Checkpoint 131 refines the Python wording:
 

@@ -706,12 +706,112 @@ This is a direction-sensitive helper for future sorted-family work.
 def NatIntervalBefore (a len b _len' : ℕ) : Prop :=
   a + len ≤ b
 
+/--
+Overlap vocabulary for two natural-number half-open intervals.
+
+This is the positive counterpart to ordered non-overlap.  The theorem API below
+is deliberately conservative: one failed `before` relation is not overlap
+evidence, because the intervals may simply be in reverse order.  Overlap is
+proved only after both ordered directions are ruled out.
+-/
+def NatIntervalsOverlap (a lenA b lenB : ℕ) : Prop :=
+  a < b + lenB ∧ b < a + lenA
+
+/-- Natural interval overlap is symmetric. -/
+theorem NatIntervalsOverlap.symm
+    {a lenA b lenB : ℕ}
+    (h : NatIntervalsOverlap a lenA b lenB) :
+    NatIntervalsOverlap b lenB a lenA :=
+  ⟨h.2, h.1⟩
+
 /-- Ordered non-overlap implies ordinary interval disjointness. -/
 theorem NatIntervalsDisjoint.of_before
     {a len b len' : ℕ}
     (h : NatIntervalBefore a len b len') :
     NatIntervalsDisjoint a len b len' :=
   Or.inl h
+
+/-- Ordered non-overlap in one direction excludes overlap. -/
+theorem NatIntervalsOverlap.not_of_before
+    {a lenA b lenB : ℕ}
+    (hbefore : NatIntervalBefore a lenA b lenB) :
+    ¬ NatIntervalsOverlap a lenA b lenB := by
+  change ¬ (a < b + lenB ∧ b < a + lenA)
+  change a + lenA ≤ b at hbefore
+  intro hoverlap
+  omega
+
+/-- Ordered non-overlap in the reverse direction also excludes overlap. -/
+theorem NatIntervalsOverlap.not_of_reverseBefore
+    {a lenA b lenB : ℕ}
+    (hbefore : NatIntervalBefore b lenB a lenA) :
+    ¬ NatIntervalsOverlap a lenA b lenB := by
+  change ¬ (a < b + lenB ∧ b < a + lenA)
+  change b + lenB ≤ a at hbefore
+  intro hoverlap
+  omega
+
+/--
+If neither ordered direction is available, the two half-open intervals overlap.
+
+The length-positivity hypotheses are kept at this API boundary for the pressure
+address use case, even though the arithmetic core is already forced by the two
+negated `before` inequalities.  Keeping them explicit prevents future callers
+from reading a single failed order test as overlap evidence.
+-/
+theorem NatIntervalsOverlap.of_not_before_not_reverseBefore
+    {a lenA b lenB : ℕ}
+    (_hApos : 0 < lenA)
+    (_hBpos : 0 < lenB)
+    (hnotAB : ¬ NatIntervalBefore a lenA b lenB)
+    (hnotBA : ¬ NatIntervalBefore b lenB a lenA) :
+    NatIntervalsOverlap a lenA b lenB := by
+  change ¬ a + lenA ≤ b at hnotAB
+  change ¬ b + lenB ≤ a at hnotBA
+  change a < b + lenB ∧ b < a + lenA
+  omega
+
+/--
+Local trichotomy for two half-open natural intervals.
+
+The conclusion is intentionally local: the two supplied intervals are either
+ordered one way, ordered the other way, or overlap.  It does not say anything
+about a family of intervals, coverage, maximality, or union accounting.
+-/
+theorem NatIntervalsOverlap.before_or_reverseBefore_or_overlap
+    {a lenA b lenB : ℕ}
+    (hApos : 0 < lenA)
+    (hBpos : 0 < lenB) :
+    NatIntervalBefore a lenA b lenB ∨
+      NatIntervalBefore b lenB a lenA ∨
+        NatIntervalsOverlap a lenA b lenB := by
+  by_cases hAB : NatIntervalBefore a lenA b lenB
+  · exact Or.inl hAB
+  · by_cases hBA : NatIntervalBefore b lenB a lenA
+    · exact Or.inr (Or.inl hBA)
+    · exact Or.inr (Or.inr
+        (NatIntervalsOverlap.of_not_before_not_reverseBefore
+          hApos hBpos hAB hBA))
+
+/--
+Reason split for a failed ordered interval relation.
+
+If `a` is not before `b`, the failure is either explained by the reverse order
+or by genuine overlap.  This is the safe form of failure refinement: a single
+failed `before` is still not overlap evidence by itself.
+-/
+theorem NatIntervalsOverlap.reverseBefore_or_overlap_of_not_before
+    {a lenA b lenB : ℕ}
+    (hApos : 0 < lenA)
+    (hBpos : 0 < lenB)
+    (hnotAB : ¬ NatIntervalBefore a lenA b lenB) :
+    NatIntervalBefore b lenB a lenA ∨
+      NatIntervalsOverlap a lenA b lenB := by
+  by_cases hBA : NatIntervalBefore b lenB a lenA
+  · exact Or.inl hBA
+  · exact Or.inr
+      (NatIntervalsOverlap.of_not_before_not_reverseBefore
+        hApos hBpos hnotAB hBA)
 
 /--
 Transitive-like composition for ordered non-overlap.
@@ -744,6 +844,101 @@ def SourcePressureIntervalPulseAddressBefore
     {n : OddNat} {k r : ℕ}
     (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
   A.start + A.len ≤ B.start
+
+/--
+Overlap predicate for two interval-pulse addresses.
+
+This only compares the explicit half-open address intervals.  It does not
+merge intervals, prove union accounting, or infer coverage of a pressure
+region.
+-/
+def SourcePressureIntervalPulseAddressOverlap
+    {n : OddNat} {k r : ℕ}
+    (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
+  NatIntervalsOverlap A.start A.len B.start B.len
+
+/-- Address-level overlap is symmetric. -/
+theorem SourcePressureIntervalPulseAddressOverlap.symm
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    SourcePressureIntervalPulseAddressOverlap B A :=
+  NatIntervalsOverlap.symm h
+
+/-- A before relation between pulse addresses excludes address overlap. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_of_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hbefore : SourcePressureIntervalPulseAddressBefore A B) :
+    ¬ SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.not_of_before hbefore
+
+/-- A reverse before relation between pulse addresses also excludes overlap. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hbefore : SourcePressureIntervalPulseAddressBefore B A) :
+    ¬ SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.not_of_reverseBefore hbefore
+
+/-- Address overlap excludes the forward before relation. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    ¬ SourcePressureIntervalPulseAddressBefore A B := by
+  intro hbefore
+  exact SourcePressureIntervalPulseAddressOverlap.not_of_before hbefore h
+
+/-- Address overlap excludes the reverse before relation. -/
+theorem SourcePressureIntervalPulseAddressOverlap.not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (h : SourcePressureIntervalPulseAddressOverlap A B) :
+    ¬ SourcePressureIntervalPulseAddressBefore B A := by
+  intro hbefore
+  exact SourcePressureIntervalPulseAddressOverlap.not_of_reverseBefore hbefore h
+
+/--
+If neither pulse address is before the other, then their explicit half-open
+address intervals overlap.
+-/
+theorem SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefore
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len)
+    (hnotAB : ¬ SourcePressureIntervalPulseAddressBefore A B)
+    (hnotBA : ¬ SourcePressureIntervalPulseAddressBefore B A) :
+    SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.of_not_before_not_reverseBefore hApos hBpos hnotAB hnotBA
+
+/-- Local trichotomy for two interval-pulse addresses. -/
+theorem SourcePressureIntervalPulseAddressOverlap.before_or_reverseBefore_or_overlap
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len) :
+    SourcePressureIntervalPulseAddressBefore A B ∨
+      SourcePressureIntervalPulseAddressBefore B A ∨
+        SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.before_or_reverseBefore_or_overlap hApos hBpos
+
+/--
+Failure-reason split for a failed address-level before relation.
+
+The failed order is either reversed, or the two supplied address intervals
+overlap.
+-/
+theorem SourcePressureIntervalPulseAddressOverlap.reverseBefore_or_overlap_of_not_before
+    {n : OddNat} {k r : ℕ}
+    {A B : SourcePressureIntervalPulseAddress n k r}
+    (hApos : 0 < A.len)
+    (hBpos : 0 < B.len)
+    (hnotAB : ¬ SourcePressureIntervalPulseAddressBefore A B) :
+    SourcePressureIntervalPulseAddressBefore B A ∨
+      SourcePressureIntervalPulseAddressOverlap A B :=
+  NatIntervalsOverlap.reverseBefore_or_overlap_of_not_before hApos hBpos hnotAB
 
 theorem sourcePressureIntervalPulseAddressBefore_iff_accountedBefore
     {n : OddNat} {k r : ℕ}
@@ -1590,6 +1785,25 @@ theorem sourcePressureLocalIslandWitnessList_no_failure_singleton
     SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
     sourcePressureAccountedIntervalList_of_intervalPulseAddressList] using h
 
+/-- The empty witness list has no adjacent sorted-before failure. -/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false
+    {n : OddNat} {k r : ℕ} :
+    ¬ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+      ([] : List (SourcePressureLocalIslandWitness n k r)) := by
+  intro h
+  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+    sourcePressureAccountedIntervalList_of_intervalPulseAddressList] using h
+
+/-- Name aligned with the failure predicate: singleton lists cannot fail. -/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_singleton_false
+    {n : OddNat} {k r : ℕ}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W] :=
+  sourcePressureLocalIslandWitnessList_no_failure_singleton W
+
 /--
 Accounted interval family generated by one explicit local-island witness.
 
@@ -1678,201 +1892,5 @@ theorem sourcePressureLocalIsland_singleton_sum_neg
       (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
   sourcePressureAccountedIntervalFamily_of_singletonLocalIslandWitness_sum_neg
     (⟨j, hisland⟩ : SourcePressureLocalIslandWitness n k r)
-
-/--
-Ordered non-overlap for two explicit local-island witnesses.
-
-This is defined by converting both witnesses to interval-pulse addresses and
-using the address-level before predicate.
--/
-def SourcePressureLocalIslandWitnessBefore
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r) : Prop :=
-  SourcePressureIntervalPulseAddressBefore
-    (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
-    (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)
-
-theorem sourcePressureLocalIslandWitnessBefore_iff_addressBefore
-    {n : OddNat} {k r : ℕ}
-    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
-    SourcePressureLocalIslandWitnessBefore W1 W2 ↔
-      SourcePressureIntervalPulseAddressBefore
-        (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
-        (sourcePressureIntervalPulseAddress_of_localIslandWitness W2) := by
-  rfl
-
-/--
-A two-witness list is sorted exactly when the first converted address lies
-before the second.
--/
-theorem sourcePressureLocalIslandWitnessListSortedBefore_pair_iff
-    {n : OddNat} {k r : ℕ}
-    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
-    SourcePressureLocalIslandWitnessListSortedBefore [W1, W2] ↔
-      SourcePressureLocalIslandWitnessBefore W1 W2 := by
-  change
-    SourcePressureIntervalPulseAddressListSortedBefore
-      [sourcePressureIntervalPulseAddress_of_localIslandWitness W1,
-        sourcePressureIntervalPulseAddress_of_localIslandWitness W2] ↔
-      SourcePressureLocalIslandWitnessBefore W1 W2
-  rw [sourcePressureIntervalPulseAddressListSortedBefore_pair_iff]
-  rfl
-
-/--
-A two-witness list has a sorted-before failure exactly when the first converted
-address is not before the second.
-
-This is only an order failure.  It is not overlap evidence without additional
-hypotheses.
--/
-theorem sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff
-    {n : OddNat} {k r : ℕ}
-    {W1 W2 : SourcePressureLocalIslandWitness n k r} :
-    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] ↔
-      ¬ SourcePressureLocalIslandWitnessBefore W1 W2 := by
-  change
-    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure
-      [sourcePressureIntervalPulseAddress_of_localIslandWitness W1,
-        sourcePressureIntervalPulseAddress_of_localIslandWitness W2] ↔
-      ¬ SourcePressureLocalIslandWitnessBefore W1 W2
-  rw [sourcePressureIntervalPulseAddressListHasSortedBeforeFailure_pair_iff]
-  rfl
-
-/--
-Accounted interval family generated by two explicitly sorted local-island
-witnesses.
-
-The `hbefore` hypothesis is just the supplied order relation.  No coverage,
-maximality, or uniqueness is inferred.
--/
-def sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r)
-    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
-    SourcePressureAccountedIntervalFamily n k r :=
-  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
-    [W1, W2]
-    (sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.2 hbefore)
-
-@[simp]
-theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_length
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r)
-    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
-    (sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      W1 W2 hbefore).items.length = 2 := by
-  simp [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair]
-
-/--
-The sorted two-witness family contains exactly the two directly converted
-accounted intervals.
--/
-theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_items
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r)
-    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
-    (sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      W1 W2 hbefore).items =
-      [sourcePressureAccountedInterval_of_intervalPulseAddress
-        (sourcePressureIntervalPulseAddress_of_localIslandWitness W1),
-       sourcePressureAccountedInterval_of_intervalPulseAddress
-        (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)] := by
-  rfl
-
-/--
-The listed cost of a sorted two-witness family is at most `-2`.
--/
-theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_le_neg_two
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r)
-    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
-    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      W1 W2 hbefore).items).map
-      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2 := by
-  simpa [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair]
-    using
-      sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_sum_le_neg_length
-        [W1, W2]
-        (sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.2 hbefore)
-
-/-- The sorted two-witness family has strictly negative listed cost. -/
-theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_neg
-    {n : OddNat} {k r : ℕ}
-    (W1 W2 : SourcePressureLocalIslandWitness n k r)
-    (hbefore : SourcePressureLocalIslandWitnessBefore W1 W2) :
-    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      W1 W2 hbefore).items).map
-      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
-  simpa [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair]
-    using
-      sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_sum_neg_of_nonempty
-        (sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.2 hbefore)
-        (by simp)
-
-/--
-Raw-argument version of the sorted pair budget.
--/
-theorem sourcePressureLocalIsland_pair_sum_le_neg_two
-    (n : OddNat) (k r j1 j2 : ℕ)
-    (h1 : SourcePressureLocalIsland n k r j1)
-    (h2 : SourcePressureLocalIsland n k r j2)
-    (hbefore :
-      SourcePressureLocalIslandWitnessBefore
-        (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-        (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)) :
-    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-      (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)
-      hbefore).items).map
-      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2 :=
-  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_le_neg_two
-    (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-    (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)
-    hbefore
-
-/--
-Raw-argument strict negative version of the sorted pair budget.
--/
-theorem sourcePressureLocalIsland_pair_sum_neg
-    (n : OddNat) (k r j1 j2 : ℕ)
-    (h1 : SourcePressureLocalIsland n k r j1)
-    (h2 : SourcePressureLocalIsland n k r j2)
-    (hbefore :
-      SourcePressureLocalIslandWitnessBefore
-        (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-        (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)) :
-    (((sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair
-      (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-      (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)
-      hbefore).items).map
-      (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
-  sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessPair_sum_neg
-    (⟨j1, h1⟩ : SourcePressureLocalIslandWitness n k r)
-    (⟨j2, h2⟩ : SourcePressureLocalIslandWitness n k r)
-    hbefore
-
-/-- Singleton sorted-family budget wrapper. -/
-theorem sourcePressureAccountedIntervalFamily_sorted_singleton_sum_le_neg_one
-    {n : OddNat} {k r : ℕ}
-    (A : SourcePressureAccountedInterval n k r) :
-    ((sourcePressureAccountedIntervalFamily_sorted_singleton A).items.map (fun A =>
-      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -1 := by
-  simpa [sourcePressureAccountedIntervalFamily_sorted_singleton] using
-    sourcePressureAccountedIntervalFamily_singleton_sum_le_neg_one A
-
-/-- Sorted-cons family budget wrapper. -/
-theorem sourcePressureAccountedIntervalFamily_sorted_cons_sum_le_neg_length
-    {n : OddNat} {k r : ℕ}
-    (A B : SourcePressureAccountedInterval n k r)
-    (rest : List (SourcePressureAccountedInterval n k r))
-    (hAB : SourcePressureAccountedIntervalBefore A B)
-    (htail : SourcePressureAccountedIntervalListSortedBefore (B :: rest)) :
-    (((sourcePressureAccountedIntervalFamily_sorted_cons A B rest hAB htail).items).map (fun A =>
-      SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
-        -(((A :: B :: rest).length : ℕ) : ℤ) := by
-  simpa [sourcePressureAccountedIntervalFamily_sorted_cons] using
-    sourcePressureAccountedIntervalFamily_of_sortedBefore_sum_le_neg_length
-      (A :: B :: rest)
-      (sourcePressureAccountedIntervalListSortedBefore_cons hAB htail)
 
 end DkMath.Collatz
