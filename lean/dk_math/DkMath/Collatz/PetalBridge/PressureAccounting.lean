@@ -2132,6 +2132,43 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_
       htail
 
 /--
+Decompose an adjacent sorted-before failure at a nontrivial witness list into
+the head pair or the tail.
+
+This is the inverse of the head/tail constructors.  It peels exactly one
+recursive layer and does not classify or repair the resulting branch.
+-/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W1 :: W2 :: rest)) :
+    (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: rest) := by
+  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
+    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
+    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
+    sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+    SourcePressureAccountedIntervalListHasSortedBeforeFailure] using h
+
+/-- Iff form of one-layer sorted-before failure decomposition. -/
+theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_iff_head_or_tail
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)} :
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W1 :: W2 :: rest) ↔
+      (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+        SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+          (W2 :: rest) :=
+  ⟨SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.head_or_tail,
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_or_tail⟩
+
+/--
 Every explicit local-island witness pair is either sorted or carries a
 sorted-before failure.
 
@@ -2807,6 +2844,66 @@ theorem
   · exact Or.inr
       (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_headPairObstruction
         hobs)
+
+/--
+Head not-before diagnosis for an explicit witness list.
+
+The head order failure is first packaged as the two-witness sorted-before
+failure, then passed to the head-pair recovered-or-obstruction split.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_headNotBefore_recovered_or_adjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (hnot : ¬ SourcePressureLocalIslandWitnessBefore W1 W2) :
+    (∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+    ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+        (W1 :: W2 :: rest) :=
+  sourcePressureLocalIslandWitnessList_headPair_failure_recovered_or_adjacentOverlapObstruction
+    h1pos h2pos
+    (sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff.2
+      hnot)
+
+/--
+One-step diagnosis for a nontrivial witness-list sorted-before failure.
+
+The theorem peels one recursive layer.  A head failure is diagnosed by the
+pair-level recovered-or-adjacent-obstruction split; a tail failure is returned
+as a tail branch.  It is not a recursive algorithm.
+-/
+theorem sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {W1 W2 : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (h1pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W1).len)
+    (h2pos :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W2).len)
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W1 :: W2 :: rest)) :
+    ((∃ hrev : SourcePressureLocalIslandWitnessBefore W2 W1,
+      (((sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+        W1 W2 hrev).items).map
+        (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤ -2)
+      ∨ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction
+          (W1 :: W2 :: rest))
+    ∨ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
+        (W2 :: rest) := by
+  rcases SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.head_or_tail h
+      with hhead | htail
+  · exact Or.inl
+      (sourcePressureLocalIslandWitnessList_headNotBefore_recovered_or_adjacentOverlapObstruction
+        h1pos h2pos hhead)
+  · exact Or.inr htail
 
 /--
 Head-pair split with the obstruction branch weakened to ordinary list
