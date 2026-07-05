@@ -697,6 +697,32 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.
   h
 
 /--
+Expose the actual pair-local accounted interval family object stored by the
+recovered adjacent-family carrier.
+
+The `let F := ...` form is deliberately consumer-facing: downstream code can
+see the `SourcePressureAccountedIntervalFamily` object and then use `F.items`.
+This is still definitionally the same pair-local recovered branch as
+`exists_pair`; no new list-wide family or aggregation is introduced.
+-/
+theorem
+    SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.exists_accountedFamily
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 := by
+  rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget⟩
+  exact ⟨A, B, hin, hrev, hbudget⟩
+
+/--
 Empty explicit witness lists cannot contain a recovered adjacent accounted
 family, because they contain no adjacent pair.
 -/
@@ -762,6 +788,60 @@ theorem
     h
     (SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.of_not
       hno)
+
+set_option linter.style.longLine false in
+/--
+Failure plus named no-adjacent-overlap, projected directly to the pair-local
+accounted interval family object.
+
+This theorem only exposes the same recovered family already provided by the
+carrier theorem.  The family is still produced from one adjacent recovered pair;
+there is no list-wide union family and no aggregation over multiple pairs.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_accountedFamily_of_noAdjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_noAdjacentOverlap
+    h hno).exists_accountedFamily
+
+set_option linter.style.longLine false in
+/--
+Raw-negation version of the direct accounted-family projection.
+
+This is a compatibility wrapper for callers that still store no-overlap as the
+raw negation of the adjacent-overlap obstruction predicate.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_accountedFamily_of_no_overlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L)
+    (hno :
+      ¬ SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        ∃ hrev : SourcePressureLocalIslandWitnessBefore B A,
+          let F :=
+            sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair
+              A B hrev
+          ((F.items).map
+            (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
+  (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
+    h hno).exists_accountedFamily
 
 /--
 Length-three sorted-before failure yields a list-level adjacent diagnosis.
