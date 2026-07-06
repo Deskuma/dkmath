@@ -2,10 +2,11 @@
 
 ## Checkpoint
 
-`petal-202` is audit-only.
+`petal-202` started as an audit-only checkpoint, then continued with the
+small implementation that the audit recommended.
 
-No Lean code was added in this checkpoint.  The purpose was to decide the
-first safe index axis for Beam transport above `PressureBeam`.
+The first safe index axis for Beam transport above `PressureBeam` was audited,
+and the resulting thin depth-indexed target was added to `PressureBeam.lean`.
 
 ## Current Beam Boundary
 
@@ -14,9 +15,12 @@ first safe index axis for Beam transport above `PressureBeam`.
 - `SourcePressureBeamSeed`
 - `sourcePressureBeamSeed_of_sortedBeforeFailure`
 - `sourcePressureBeamSeed_recovered_of_sortedBeforeFailure_of_noAdjacentOverlap`
+- `SourcePressureBeamDepthTarget`
+- `sourcePressureBeamDepthTarget_iff_margin_pos`
 
 These are Beam-facing names for the local `PressureAutomaton` state.  They do
-not propagate anything yet.
+not propagate anything yet.  `SourcePressureBeamDepthTarget` is only the
+Beam-facing depth target name for `IsSourcePressureDepth`.
 
 The import direction remains:
 
@@ -127,7 +131,7 @@ Reason:
 - A theorem would be premature because no transport target has been fixed yet.
 - A predicate gives the next checkpoint a named surface without overclaiming.
 
-Suggested definition for the next checkpoint:
+Implemented definition:
 
 ```lean
 /--
@@ -142,11 +146,11 @@ def SourcePressureBeamDepthTarget
   IsSourcePressureDepth n k r j
 ```
 
-This would require `PressureBeam` to continue importing only
+This required `PressureBeam` to continue importing only
 `PressureAutomaton`, because `IsSourcePressureDepth` is already available
 through the import chain.
 
-Then the first thin theorem to attempt should be only a naming bridge:
+Implemented thin theorem:
 
 ```lean
 theorem sourcePressureBeamDepthTarget_iff_margin_pos
@@ -218,6 +222,14 @@ The builds still replay the known unrelated warning in
 
 ## Next Checkpoint
 
-Implement `SourcePressureBeamDepthTarget` in `PressureBeam.lean`, plus the
-thin equivalence theorem to margin positivity.  Stop there unless a downstream
-statement supplies an explicit seed-to-depth relation.
+The next checkpoint should not repeat the depth-target naming work; it is now
+implemented.  The next safe step is to define an explicit seed-to-depth
+relation shape before proving any transport theorem.  In particular, avoid a
+statement of the form
+
+```text
+SourcePressureBeamSeed L -> SourcePressureBeamDepthTarget n k r j
+```
+
+until the relation between the seed list `L` and the target depth `j` is
+supplied explicitly.

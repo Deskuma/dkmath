@@ -82,4 +82,30 @@ theorem sourcePressureBeamSeed_recovered_of_sortedBeforeFailure_of_noAdjacentOve
           A B :=
   sourcePressureFailureResolution_recovered_of_noAdjacentOverlap h hno
 
+/--
+Depth-indexed Beam target for local pressure.
+
+This is the first explicit Beam-facing target axis.  It is deliberately the
+pressure-depth axis `(r + j)`, because that is the native axis of the local
+margin/net-drop machinery below this file.  The predicate only names a target
+at one explicit relative pressure depth; it does not assert that a Beam seed
+reaches the target, that targets cover a range, or that targets aggregate.
+-/
+def SourcePressureBeamDepthTarget
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  IsSourcePressureDepth n k r j
+
+/--
+Beam depth targets are exactly positive source-pressure margins.
+
+This is only the Beam-facing spelling of
+`isSourcePressureDepth_iff_margin_pos`.  It is not a transport theorem from a
+Beam seed to a target depth.
+-/
+theorem sourcePressureBeamDepthTarget_iff_margin_pos
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureBeamDepthTarget n k r j ↔
+      0 < SourcePressureMarginInt n k (r + j) :=
+  isSourcePressureDepth_iff_margin_pos n k r j
+
 end DkMath.Collatz
