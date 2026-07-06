@@ -1122,4 +1122,92 @@ theorem sourcePressureMargin_next_sign_massBalance_trichotomy_of_addressedDepthT
       (sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left haddr).2 hgt
     exact ⟨hneg, hgt⟩
 
+/-
+Upstream inequality-source bridge.
+
+Checkpoint 218 changes the question from "how do we classify an addressed
+edge once `left` and `right` are known?" to "which upstream predicates can
+supply `left < right`, equality, or the false-side comparison?"  The immediate
+source is not the aggregate drift/accounting layer: those theorems speak about
+finite intervals, sums, tails, or bounded witness lists.  The direct local
+input is the sign-change layer from `PressureDecay`/`PressureFrontier`.
+
+The lemmas below intentionally remain edge-local.  They do not transport an
+arbitrary target, aggregate recovered intervals, repair overlap, choose a
+canonical next target, or assert convergence.  They only say that an upstream
+sign change at the same addressed edge feeds the already-closed Beam
+mass-balance classifier.
+-/
+
+/--
+An upstream upward sign change supplies the True Beam mass-balance inequality.
+
+This is the first direct source of
+`SourcePressureBeamMassBalanceLeftInt < SourcePressureBeamMassBalanceRightInt`.
+The addressed target supplies the Beam reading of the edge; the sign-change
+predicate supplies positivity of the next margin at that same edge.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_signChangeUp
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hchange : SourcePressureSignChangeUp n k r j) :
+    SourcePressureBeamMassBalanceLeftInt n k r j <
+      SourcePressureBeamMassBalanceRightInt n k r j :=
+  (sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right haddr).1
+    hchange.2
+
+/--
+An upstream downward sign change supplies the False/Boundary Beam comparison.
+
+The result is non-strict because `SourcePressureSignChangeDown` records that
+the next margin is nonpositive.  The strict false branch is recovered by the
+existing theorem `sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left`
+when a strictly negative next margin is available.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_signChangeDown
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hchange : SourcePressureSignChangeDown n k r j) :
+    SourcePressureBeamMassBalanceRightInt n k r j ≤
+      SourcePressureBeamMassBalanceLeftInt n k r j :=
+  (sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left haddr).1
+    hchange.2
+
+/--
+A local pressure island supplies the True Beam inequality on its left edge.
+
+The address is deliberately for `j - 1`, the exact left edge produced by
+`sourcePressureSignChangeUp_of_localIsland`.  This is not arbitrary target
+transport.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_localIsland_left
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L (j - 1))
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureBeamMassBalanceLeftInt n k r (j - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r (j - 1) :=
+  sourcePressureBeamMassBalanceLeft_lt_right_of_signChangeUp haddr
+    (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
+
+/--
+A local pressure island supplies the False/Boundary Beam comparison on its
+right edge.
+
+The address is for the same right edge `j` as
+`sourcePressureSignChangeDown_of_localIsland`.  The theorem remains local to
+that edge and does not account for an entire island family.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_localIsland_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hisland : SourcePressureLocalIsland n k r j) :
+    SourcePressureBeamMassBalanceRightInt n k r j ≤
+      SourcePressureBeamMassBalanceLeftInt n k r j :=
+  sourcePressureBeamMassBalanceRight_le_left_of_signChangeDown haddr
+    (sourcePressureSignChangeDown_of_localIsland n k r j hisland)
+
 end DkMath.Collatz
