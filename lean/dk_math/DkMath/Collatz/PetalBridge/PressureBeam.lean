@@ -450,4 +450,68 @@ theorem exists_sourcePressureMargin_transition_of_beamSeed
       sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
         haddressed⟩
 
+/--
+Local True Beam sign preservation at an addressed depth.
+
+If the current addressed margin is positive and the local net drop is
+nonnegative, then the next adjacent margin is still positive.  This is a local
+sign-reading theorem over the already addressed pressure-depth edge; it does
+not propagate along time or choose any new target.
+-/
+theorem sourcePressureMargin_next_pos_of_addressedDepthTarget_of_netDrop_nonneg
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hdrop : 0 ≤ SourcePressureNetDropInt n k r j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  have hcur := sourcePressureMargin_pos_of_addressedDepthTarget haddr
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  omega
+
+/--
+A raw Beam seed existentially exposes an addressed depth whose next margin is
+positive, provided every addressed depth in the seed has nonnegative net drop.
+
+The quantifier over `j` is restricted by `SourcePressureBeamAddressedDepthTarget
+L j`.  This is not arbitrary next-margin positivity and not propagation.
+-/
+theorem exists_sourcePressureMargin_next_pos_of_beamSeed_of_netDrop_nonneg_at_addressed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L)
+    (hdrop :
+      ∀ j,
+        SourcePressureBeamAddressedDepthTarget L j →
+          0 ≤ SourcePressureNetDropInt n k r j) :
+    ∃ j,
+      SourcePressureBeamAddressedDepthTarget L j ∧
+        0 < SourcePressureMarginInt n k (r + j + 1) := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddr⟩
+  exact
+    ⟨j,
+      haddr,
+      sourcePressureMargin_next_pos_of_addressedDepthTarget_of_netDrop_nonneg
+        haddr (hdrop j haddr)⟩
+
+/--
+Local False Beam drop condition at an addressed depth.
+
+If the local net drop is at most the negative of the current positive margin,
+then the next adjacent margin is nonpositive.  This records a genuine local
+fall-out condition, but still only at the addressed pressure-depth edge.
+-/
+theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_netDrop_le_neg_current
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hdrop :
+      SourcePressureNetDropInt n k r j ≤
+        -SourcePressureMarginInt n k (r + j)) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 := by
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  omega
+
 end DkMath.Collatz
