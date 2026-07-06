@@ -1088,4 +1088,38 @@ theorem sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left
   rw [sourcePressureMargin_next_eq_massBalanceRight_sub_left haddr]
   omega
 
+/--
+Local three-way Beam decision surface at an addressed depth.
+
+This packages the useful information, not just the ambient linear-order
+trichotomy: each mass-balance case is paired with the corresponding next-margin
+sign.  It remains a local classifier for one addressed edge.
+-/
+theorem sourcePressureMargin_next_sign_massBalance_trichotomy_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    (0 < SourcePressureMarginInt n k (r + j + 1) ∧
+        SourcePressureBeamMassBalanceLeftInt n k r j <
+          SourcePressureBeamMassBalanceRightInt n k r j) ∨
+      (SourcePressureMarginInt n k (r + j + 1) = 0 ∧
+          SourcePressureBeamMassBalanceLeftInt n k r j =
+            SourcePressureBeamMassBalanceRightInt n k r j) ∨
+        (SourcePressureMarginInt n k (r + j + 1) < 0 ∧
+          SourcePressureBeamMassBalanceRightInt n k r j <
+            SourcePressureBeamMassBalanceLeftInt n k r j) := by
+  rcases lt_trichotomy
+      (SourcePressureBeamMassBalanceLeftInt n k r j)
+      (SourcePressureBeamMassBalanceRightInt n k r j) with hlt | heq | hgt
+  · left
+    exact ⟨sourcePressureMargin_next_pos_of_massBalanceLeft_lt_right haddr hlt, hlt⟩
+  · right
+    left
+    exact ⟨sourcePressureMargin_next_eq_zero_of_massBalanceLeft_eq_right haddr heq, heq⟩
+  · right
+    right
+    have hneg :=
+      (sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left haddr).2 hgt
+    exact ⟨hneg, hgt⟩
+
 end DkMath.Collatz
