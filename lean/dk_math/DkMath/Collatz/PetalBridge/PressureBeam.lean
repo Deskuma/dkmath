@@ -742,4 +742,80 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_ret_add_curr
       haddr
   exact hiff.2 hineq
 
+/--
+Beam-facing expansion of the retention drop at an addressed depth.
+
+This is definitionally the current retention mass minus the next retention
+mass.  The addressed hypothesis is intentionally unused by the arithmetic
+identity; it records that the expansion is being read at a Beam-selected edge.
+-/
+theorem sourceRetentionDrop_eq_current_sub_next_mass_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourceRetentionDropInt n k r j =
+      (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) -
+        (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ) := by
+  rfl
+
+/--
+Beam-facing expansion of the continuation drop at an addressed depth.
+
+This is definitionally the current continuation-sibling mass minus the next
+continuation-sibling mass.
+-/
+theorem sourceContinuationDrop_eq_current_sub_next_mass_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourceContinuationDropInt n k r j =
+      (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
+        (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ) := by
+  rfl
+
+/--
+True Beam classifier with drops opened into mass differences.
+
+At an addressed edge, the next margin is positive exactly when twice the
+continuation mass loss is smaller than the retention mass loss plus the
+current margin.
+-/
+theorem sourcePressureMargin_next_pos_iff_two_contMassDiff_lt_retMassDiff_add_current
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      2 *
+          ((orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
+            (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)) <
+        ((orbitWindowRetentionMassPow2 n k (r + j) : ℤ) -
+            (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)) +
+          SourcePressureMarginInt n k (r + j) := by
+  rw [sourcePressureMargin_next_pos_iff_two_cont_lt_ret_add_current_of_addressedDepthTarget
+    haddr]
+  rw [sourceRetentionDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
+  rw [sourceContinuationDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
+
+/--
+False Beam classifier with drops opened into mass differences.
+
+At an addressed edge, the next margin is nonpositive exactly when the retention
+mass loss plus the current margin is at most twice the continuation mass loss.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_retMassDiff_add_current_le_two_contMassDiff
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      ((orbitWindowRetentionMassPow2 n k (r + j) : ℤ) -
+          (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)) +
+        SourcePressureMarginInt n k (r + j) ≤
+          2 *
+            ((orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
+              (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)) := by
+  rw [sourcePressureMargin_next_nonpos_iff_ret_add_current_le_two_cont_of_addressedDepthTarget
+    haddr]
+  rw [sourceRetentionDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
+  rw [sourceContinuationDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
+
 end DkMath.Collatz
