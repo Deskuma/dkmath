@@ -23,7 +23,7 @@ cp202 完了です。
 
 ## Review
 
-_
+[Continue](./review-petal-203-2.md)
 
 ## Diff
 
