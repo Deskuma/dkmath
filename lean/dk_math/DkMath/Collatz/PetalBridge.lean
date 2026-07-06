@@ -22,6 +22,7 @@ import DkMath.Collatz.PetalBridge.PressureAccounting
 import DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
 import DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
 import DkMath.Collatz.PetalBridge.PressureDiagnosticDecomposition
+import DkMath.Collatz.PetalBridge.PressureAutomaton
 import DkMath.Collatz.PetalBridge.OneCycle
 import DkMath.Collatz.PetalBridge.ValuationFlowBridge
 import DkMath.Collatz.PetalBridge.Collision
