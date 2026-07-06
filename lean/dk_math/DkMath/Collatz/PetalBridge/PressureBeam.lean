@@ -353,4 +353,59 @@ theorem sourcePressureMargin_pos_of_addressedDepthTarget
   sourcePressureMargin_pos_of_beamDepthTarget n k r j
     (sourcePressureBeamDepthTarget_of_addressedDepthTarget h)
 
+/--
+A raw Beam seed existentially exposes a positive source-pressure margin.
+
+The depth is selected through the addressed carrier extracted from the seed.
+This is not arbitrary margin positivity and does not propagate the Beam to a
+new depth.
+-/
+theorem exists_sourcePressureMargin_pos_of_beamSeed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j, 0 < SourcePressureMarginInt n k (r + j) := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddressed⟩
+  exact ⟨j, sourcePressureMargin_pos_of_addressedDepthTarget haddressed⟩
+
+/--
+A raw Beam seed produces an addressed target together with positive margin at
+the same extracted depth.
+
+This keeps the address and the margin proof paired.  It is still an
+existential projection from the supplied seed data, not a canonical choice.
+-/
+theorem exists_sourcePressureBeamAddressedDepthTarget_and_margin_pos_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j,
+      SourcePressureBeamAddressedDepthTarget L j ∧
+        0 < SourcePressureMarginInt n k (r + j) := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddressed⟩
+  exact ⟨j, haddressed, sourcePressureMargin_pos_of_addressedDepthTarget haddressed⟩
+
+/--
+A raw Beam seed produces a Beam depth target together with positive margin at
+the same extracted depth.
+
+This is a thinner package for callers that do not need the list-address
+component.  It does not state positivity for arbitrary external depths.
+-/
+theorem exists_sourcePressureBeamDepthTarget_and_margin_pos_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j,
+      SourcePressureBeamDepthTarget n k r j ∧
+        0 < SourcePressureMarginInt n k (r + j) := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddressed⟩
+  exact
+    ⟨j,
+      sourcePressureBeamDepthTarget_of_addressedDepthTarget haddressed,
+      sourcePressureMargin_pos_of_addressedDepthTarget haddressed⟩
+
 end DkMath.Collatz
