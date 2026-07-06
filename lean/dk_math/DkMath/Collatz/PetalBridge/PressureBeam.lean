@@ -108,4 +108,30 @@ theorem sourcePressureBeamDepthTarget_iff_margin_pos
       0 < SourcePressureMarginInt n k (r + j) :=
   isSourcePressureDepth_iff_margin_pos n k r j
 
+/--
+Construct a Beam depth target from positive source-pressure margin.
+
+This is the True Beam constructor side of
+`sourcePressureBeamDepthTarget_iff_margin_pos`.  It remains local to one
+explicit depth and does not connect any Beam seed to that depth.
+-/
+theorem sourcePressureBeamDepthTarget_of_margin_pos
+    (n : OddNat) (k r j : ℕ)
+    (h : 0 < SourcePressureMarginInt n k (r + j)) :
+    SourcePressureBeamDepthTarget n k r j :=
+  (sourcePressureBeamDepthTarget_iff_margin_pos n k r j).2 h
+
+/--
+Project positive source-pressure margin from a Beam depth target.
+
+This is the True Beam projection side of
+`sourcePressureBeamDepthTarget_iff_margin_pos`.  It is not a propagation
+result; it only opens the target predicate at the same explicit depth.
+-/
+theorem sourcePressureMargin_pos_of_beamDepthTarget
+    (n : OddNat) (k r j : ℕ)
+    (h : SourcePressureBeamDepthTarget n k r j) :
+    0 < SourcePressureMarginInt n k (r + j) :=
+  (sourcePressureBeamDepthTarget_iff_margin_pos n k r j).1 h
+
 end DkMath.Collatz
