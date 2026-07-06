@@ -134,4 +134,36 @@ theorem sourcePressureMargin_pos_of_beamDepthTarget
     0 < SourcePressureMarginInt n k (r + j) :=
   (sourcePressureBeamDepthTarget_iff_margin_pos n k r j).1 h
 
+/--
+An explicit Beam seed witness list contains a witness at relative depth `j`.
+
+`SourcePressureLocalIslandWitness` is a subtype
+`{ j : ℕ // SourcePressureLocalIsland n k r j }`, so the actual depth field is
+`W.val`.  This relation is the first seed-to-depth connector.  It only says
+that the supplied list contains an exact-depth witness; it does not claim that
+the list is complete, sorted, maximal, or globally covering.
+-/
+def SourcePressureBeamSeedContainsDepth
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (j : ℕ) : Prop :=
+  ∃ W ∈ L, W.val = j
+
+/--
+If a supplied Beam seed witness list contains an exact-depth local-island
+witness, then that depth is a Beam depth target.
+
+This is not a real propagation theorem from `SourcePressureBeamSeed L`.
+The proof uses only the explicit containment relation and the local-island
+proof carried by the witness.
+-/
+theorem sourcePressureBeamDepthTarget_of_seedContainsDepth
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hcontains : SourcePressureBeamSeedContainsDepth L j) :
+    SourcePressureBeamDepthTarget n k r j := by
+  rcases hcontains with ⟨W, _hmem, hdepth⟩
+  subst hdepth
+  exact W.property.2.1
+
 end DkMath.Collatz
