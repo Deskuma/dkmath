@@ -166,4 +166,109 @@ theorem sourcePressureBeamDepthTarget_of_seedContainsDepth
   subst hdepth
   exact W.property.2.1
 
+/--
+An addressed adjacent pair in a witness list exposes the left witness depth as
+contained in that list.
+
+This is a list-address projection.  It does not choose a canonical adjacent
+pair and does not aggregate over all adjacent pairs.
+-/
+theorem sourcePressureBeamSeedContainsDepth_of_adjacentPairInList_left
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    SourcePressureBeamSeedContainsDepth L A.val := by
+  induction L generalizing A B with
+  | nil =>
+      exact False.elim hin
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons W2 rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨hA, _hB⟩
+            exact ⟨A, by simp [hA], rfl⟩
+          · rcases ih htail with ⟨W, hmem, hdepth⟩
+            exact ⟨W, by simp [hmem], hdepth⟩
+
+/--
+An adjacent-overlap obstruction in a witness list still exposes at least one
+explicit witness depth from that list.
+
+This is not overlap repair.  It only records that the obstruction branch is
+also list-addressed, so an existential depth can be extracted.
+-/
+theorem exists_sourcePressureBeamSeedContainsDepth_of_adjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs : SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ j, SourcePressureBeamSeedContainsDepth L j := by
+  induction L with
+  | nil =>
+      exact False.elim hobs
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hobs
+      | cons W2 rest =>
+          rcases hobs with _hhead | htail
+          · exact ⟨W1.val, W1, by simp, rfl⟩
+          · rcases ih htail with ⟨j, W, hmem, hdepth⟩
+            exact ⟨j, W, by simp [hmem], hdepth⟩
+
+/--
+A raw Beam seed contains at least one explicit witness depth.
+
+This is the first existential target-extraction fact from the Beam seed state.
+It is still not arbitrary target transport: the depth is produced
+existentially from the addressed recovered or overlap branch.
+-/
+theorem exists_sourcePressureBeamSeedContainsDepth_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j, SourcePressureBeamSeedContainsDepth L j := by
+  unfold SourcePressureBeamSeed at hseed
+  unfold SourcePressureFailureResolution at hseed
+  rcases hseed with hrecovered | hobs
+  · rcases hrecovered with ⟨A, B, hin, _hdiag⟩
+    exact ⟨A.val, sourcePressureBeamSeedContainsDepth_of_adjacentPairInList_left hin⟩
+  · exact exists_sourcePressureBeamSeedContainsDepth_of_adjacentOverlapObstruction hobs
+
+/--
+A raw Beam seed produces some Beam depth target.
+
+The target depth is existentially extracted from the seed's addressed witness
+data.  This theorem deliberately does not say that an arbitrary depth is a
+target.
+-/
+theorem exists_sourcePressureBeamDepthTarget_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j, SourcePressureBeamDepthTarget n k r j := by
+  rcases exists_sourcePressureBeamSeedContainsDepth_of_seed hseed with
+    ⟨j, hcontains⟩
+  exact ⟨j, sourcePressureBeamDepthTarget_of_seedContainsDepth hcontains⟩
+
+/--
+A raw Beam seed produces an explicit contained depth together with the
+corresponding Beam depth target.
+
+This pairs the list-address relation and the target relation for the same
+existential depth.
+-/
+theorem exists_sourcePressureBeamSeedContainsDepth_and_target_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j,
+      SourcePressureBeamSeedContainsDepth L j ∧
+        SourcePressureBeamDepthTarget n k r j := by
+  rcases exists_sourcePressureBeamSeedContainsDepth_of_seed hseed with
+    ⟨j, hcontains⟩
+  exact ⟨j, hcontains, sourcePressureBeamDepthTarget_of_seedContainsDepth hcontains⟩
+
 end DkMath.Collatz
