@@ -615,4 +615,61 @@ theorem sourcePressureMargin_next_nonpos_iff_netDrop_le_neg_current_of_addressed
     haddr]
   omega
 
+/--
+Beam-facing expansion of the local net pressure drop at an addressed depth.
+
+This is only the definition of `SourcePressureNetDropInt` read through the Beam
+addressing API.  The addressed hypothesis is intentionally unused by the
+arithmetic identity; it records that the equation is being used at a
+Beam-selected pressure-depth edge.
+-/
+theorem sourcePressureNetDrop_eq_retention_sub_two_mul_continuation_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureNetDropInt n k r j =
+      SourceRetentionDropInt n k r j -
+        2 * SourceContinuationDropInt n k r j := by
+  rfl
+
+/--
+True Beam classifier with net drop expanded into retention and continuation
+drops.
+
+At an addressed edge, the next margin is positive exactly when the expanded
+quantity `retentionDrop - 2 * continuationDrop` is larger than `-current`.
+-/
+theorem sourcePressureMargin_next_pos_iff_neg_current_lt_retCont_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      -SourcePressureMarginInt n k (r + j) <
+        SourceRetentionDropInt n k r j -
+          2 * SourceContinuationDropInt n k r j := by
+  rw [sourcePressureMargin_next_pos_iff_neg_current_lt_netDrop_of_addressedDepthTarget
+    haddr]
+  rw [sourcePressureNetDrop_eq_retention_sub_two_mul_continuation_of_addressedDepthTarget
+    haddr]
+
+/--
+False Beam classifier with net drop expanded into retention and continuation
+drops.
+
+At an addressed edge, the next margin is nonpositive exactly when the expanded
+quantity `retentionDrop - 2 * continuationDrop` is at most `-current`.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_retCont_le_neg_current_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      SourceRetentionDropInt n k r j -
+          2 * SourceContinuationDropInt n k r j
+        ≤ -SourcePressureMarginInt n k (r + j) := by
+  rw [sourcePressureMargin_next_nonpos_iff_netDrop_le_neg_current_of_addressedDepthTarget
+    haddr]
+  rw [sourcePressureNetDrop_eq_retention_sub_two_mul_continuation_of_addressedDepthTarget
+    haddr]
+
 end DkMath.Collatz
