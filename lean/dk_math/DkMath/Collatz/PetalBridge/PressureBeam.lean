@@ -672,4 +672,74 @@ theorem sourcePressureMargin_next_nonpos_iff_retCont_le_neg_current_of_addressed
   rw [sourcePressureNetDrop_eq_retention_sub_two_mul_continuation_of_addressedDepthTarget
     haddr]
 
+/--
+Normalized True Beam count inequality at an addressed depth.
+
+The local True classifier can be read as a comparison between twice the
+continuation drop and the retention drop plus the current margin.
+-/
+theorem sourcePressureMargin_next_pos_iff_two_cont_lt_ret_add_current_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      2 * SourceContinuationDropInt n k r j <
+        SourceRetentionDropInt n k r j +
+          SourcePressureMarginInt n k (r + j) := by
+  rw [sourcePressureMargin_next_pos_iff_neg_current_lt_retCont_of_addressedDepthTarget
+    haddr]
+  omega
+
+/--
+Normalized False Beam count inequality at an addressed depth.
+
+The next margin is nonpositive exactly when the retention drop plus the
+current margin is at most twice the continuation drop.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_ret_add_current_le_two_cont_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      SourceRetentionDropInt n k r j +
+          SourcePressureMarginInt n k (r + j)
+        ≤ 2 * SourceContinuationDropInt n k r j := by
+  rw [sourcePressureMargin_next_nonpos_iff_retCont_le_neg_current_of_addressedDepthTarget
+    haddr]
+  omega
+
+/--
+One-way True Beam wrapper for the normalized count inequality.
+-/
+theorem sourcePressureMargin_next_pos_of_addressedDepthTarget_of_two_cont_lt_ret_add_current
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      2 * SourceContinuationDropInt n k r j <
+        SourceRetentionDropInt n k r j +
+          SourcePressureMarginInt n k (r + j)) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  have hiff :=
+    sourcePressureMargin_next_pos_iff_two_cont_lt_ret_add_current_of_addressedDepthTarget
+      haddr
+  exact hiff.2 hineq
+
+/--
+One-way False Beam wrapper for the normalized count inequality.
+-/
+theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_ret_add_current_le_two_cont
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      SourceRetentionDropInt n k r j +
+          SourcePressureMarginInt n k (r + j)
+        ≤ 2 * SourceContinuationDropInt n k r j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 := by
+  have hiff :=
+    sourcePressureMargin_next_nonpos_iff_ret_add_current_le_two_cont_of_addressedDepthTarget
+      haddr
+  exact hiff.2 hineq
+
 end DkMath.Collatz
