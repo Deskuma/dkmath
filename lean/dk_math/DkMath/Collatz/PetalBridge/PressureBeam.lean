@@ -514,4 +514,105 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_netDrop_le_n
     haddr]
   omega
 
+/--
+Sharp local True Beam condition at an addressed depth.
+
+The next adjacent margin is positive whenever the net drop is larger than the
+negative of the current addressed margin.  This is the sharp form of the
+nonnegative-net-drop theorem: the net drop may be negative, as long as it does
+not cross the current positive margin through zero.
+-/
+theorem sourcePressureMargin_next_pos_of_addressedDepthTarget_of_neg_current_lt_netDrop
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hdrop :
+      -SourcePressureMarginInt n k (r + j) <
+        SourcePressureNetDropInt n k r j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  omega
+
+/--
+Direct local sum form of the sharp True Beam condition.
+
+This is often the most convenient shape after opening the local transition
+equation.
+-/
+theorem sourcePressureMargin_next_pos_of_addressedDepthTarget_of_current_add_netDrop_pos
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hsum :
+      0 <
+        SourcePressureMarginInt n k (r + j) +
+          SourcePressureNetDropInt n k r j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  exact hsum
+
+/--
+A raw Beam seed existentially exposes an addressed depth whose next margin is
+positive under the sharp addressed net-drop condition.
+
+The net-drop hypothesis is still restricted to addressed depths selected from
+the seed witness list.
+-/
+theorem exists_sourcePressureMargin_next_pos_of_beamSeed_of_neg_current_lt_netDrop_at_addressed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L)
+    (hdrop :
+      ∀ j,
+        SourcePressureBeamAddressedDepthTarget L j →
+          -SourcePressureMarginInt n k (r + j) <
+            SourcePressureNetDropInt n k r j) :
+    ∃ j,
+      SourcePressureBeamAddressedDepthTarget L j ∧
+        0 < SourcePressureMarginInt n k (r + j + 1) := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddr⟩
+  exact
+    ⟨j,
+      haddr,
+      sourcePressureMargin_next_pos_of_addressedDepthTarget_of_neg_current_lt_netDrop
+        haddr (hdrop j haddr)⟩
+
+/--
+Sharp local True Beam classifier at an addressed depth.
+
+This is a local arithmetic classifier for the next sign at the addressed edge:
+after opening the transition equation, next positivity is exactly
+`-current < netDrop`.
+-/
+theorem sourcePressureMargin_next_pos_iff_neg_current_lt_netDrop_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      -SourcePressureMarginInt n k (r + j) <
+        SourcePressureNetDropInt n k r j := by
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  omega
+
+/--
+Sharp local False Beam classifier at an addressed depth.
+
+The next adjacent margin is nonpositive exactly when the net drop is at most
+the negative of the current margin.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_netDrop_le_neg_current_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      SourcePressureNetDropInt n k r j ≤
+        -SourcePressureMarginInt n k (r + j) := by
+  rw [sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    haddr]
+  omega
+
 end DkMath.Collatz
