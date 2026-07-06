@@ -408,4 +408,46 @@ theorem exists_sourcePressureBeamDepthTarget_and_margin_pos_of_seed
       sourcePressureBeamDepthTarget_of_addressedDepthTarget haddressed,
       sourcePressureMargin_pos_of_addressedDepthTarget haddressed⟩
 
+/--
+An addressed Beam depth target opens the local source-pressure margin
+transition equation at the same depth.
+
+This is only the Beam-facing spelling of the local `PressureDecay` transition
+identity.  The addressed target hypothesis is intentionally unused by the
+algebraic equation; it documents that the equation is being read at a depth
+selected by the supplied witness list.  No time/orbit propagation is asserted.
+-/
+theorem sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_h : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) =
+      SourcePressureMarginInt n k (r + j) +
+        SourcePressureNetDropInt n k r j :=
+  sourcePressureMargin_next_eq_current_add_netDrop n k r j
+
+/--
+A raw Beam seed existentially exposes an addressed target together with the
+local margin transition equation at that same selected depth.
+
+The selected depth is existential.  This is not a statement that the transition
+at an arbitrary external depth belongs to the seed.
+-/
+theorem exists_sourcePressureMargin_transition_of_beamSeed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j,
+      SourcePressureBeamAddressedDepthTarget L j ∧
+        SourcePressureMarginInt n k (r + j + 1) =
+          SourcePressureMarginInt n k (r + j) +
+            SourcePressureNetDropInt n k r j := by
+  rcases exists_sourcePressureBeamAddressedDepthTarget_of_seed hseed with
+    ⟨j, haddressed⟩
+  exact
+    ⟨j,
+      haddressed,
+      sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
+        haddressed⟩
+
 end DkMath.Collatz
