@@ -893,4 +893,105 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_massBalance_
     sourcePressureMargin_next_nonpos_iff_massBalance_le_of_addressedDepthTarget haddr
   exact hiff.2 hineq
 
+/--
+Left side of the source-pressure Beam mass-balance comparison.
+
+This names the recurring expression
+`2 * contNow + retNext`.  It is kept in this Beam layer because it packages the
+local addressed-edge classifier, not a global pressure propagation principle.
+-/
+noncomputable def SourcePressureBeamMassBalanceLeftInt
+    (n : OddNat) (k r j : ℕ) : ℤ :=
+  2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+    (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)
+
+/--
+Right side of the source-pressure Beam mass-balance comparison.
+
+This names the recurring expression
+`retNow + currentMargin + 2 * contNext`.
+-/
+noncomputable def SourcePressureBeamMassBalanceRightInt
+    (n : OddNat) (k r j : ℕ) : ℤ :=
+  (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+    SourcePressureMarginInt n k (r + j) +
+      2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
+
+/--
+Expansion of the named left mass-balance side.
+-/
+theorem sourcePressureBeamMassBalanceLeftInt_eq
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureBeamMassBalanceLeftInt n k r j =
+      2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+        (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ) := by
+  rfl
+
+/--
+Expansion of the named right mass-balance side.
+-/
+theorem sourcePressureBeamMassBalanceRightInt_eq
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureBeamMassBalanceRightInt n k r j =
+      (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+        SourcePressureMarginInt n k (r + j) +
+          2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ) := by
+  rfl
+
+/--
+True Beam classifier using the named mass-balance sides.
+-/
+theorem sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      SourcePressureBeamMassBalanceLeftInt n k r j <
+        SourcePressureBeamMassBalanceRightInt n k r j := by
+  rw [sourcePressureMargin_next_pos_iff_massBalance_lt_of_addressedDepthTarget
+    haddr]
+  rfl
+
+/--
+False Beam classifier using the named mass-balance sides.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      SourcePressureBeamMassBalanceRightInt n k r j ≤
+        SourcePressureBeamMassBalanceLeftInt n k r j := by
+  rw [sourcePressureMargin_next_nonpos_iff_massBalance_le_of_addressedDepthTarget
+    haddr]
+  rfl
+
+/--
+One-way True Beam wrapper for the named mass-balance comparison.
+-/
+theorem sourcePressureMargin_next_pos_of_massBalanceLeft_lt_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      SourcePressureBeamMassBalanceLeftInt n k r j <
+        SourcePressureBeamMassBalanceRightInt n k r j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  have hiff := sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right haddr
+  exact hiff.2 hineq
+
+/--
+One-way False Beam wrapper for the named mass-balance comparison.
+-/
+theorem sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      SourcePressureBeamMassBalanceRightInt n k r j ≤
+        SourcePressureBeamMassBalanceLeftInt n k r j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 := by
+  have hiff := sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left haddr
+  exact hiff.2 hineq
+
 end DkMath.Collatz
