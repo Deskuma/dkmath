@@ -791,6 +791,39 @@ theorem
 
 set_option linter.style.longLine false in
 /--
+Branch split for sorted-before failure using the named pair-local recovered
+diagnostic predicate.
+
+This is the named-surface version of
+`sourcePressureLocalIslandWitnessList_failure_exists_recovered_or_overlap`.
+No no-overlap assumption is used here: the overlap obstruction remains the
+right-hand branch.  The recovered branch only repackages one adjacent recovered
+pair into `SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic`;
+it does not enumerate diagnostics, choose a canonical pair, aggregate families,
+repair overlap, or prove coverage.
+-/
+theorem
+    sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_or_adjacentOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h :
+      SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L) :
+    (∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic
+          A B) ∨
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L := by
+  rcases sourcePressureLocalIslandWitnessList_failure_exists_recovered_or_overlap h
+      with hrec | hoverlap
+  · rcases hrec with ⟨A, B, hin, hrev, _hbudget⟩
+    exact Or.inl
+      ⟨A, B, hin,
+        SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnostic.of_before
+          hrev⟩
+  · exact Or.inr hoverlap
+
+set_option linter.style.longLine false in
+/--
 Failure plus named no-adjacent-overlap yields some named pair-local recovered
 diagnostic inside the explicit list.
 
