@@ -994,4 +994,98 @@ theorem sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left
   have hiff := sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left haddr
   exact hiff.2 hineq
 
+/--
+Exact local relation between the next margin and the named mass-balance sides.
+
+At an addressed Beam edge, the next margin is the right side minus the left
+side.  This is stronger than the sign classifiers and explains why equality is
+the zero boundary.
+-/
+theorem sourcePressureMargin_next_eq_massBalanceRight_sub_left
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) =
+      SourcePressureBeamMassBalanceRightInt n k r j -
+        SourcePressureBeamMassBalanceLeftInt n k r j := by
+  unfold SourcePressureBeamMassBalanceLeftInt
+  unfold SourcePressureBeamMassBalanceRightInt SourcePressureMarginInt
+  ring
+
+/--
+Boundary Beam classifier: the next margin is zero exactly on the equality
+surface between the named mass-balance sides.
+-/
+theorem sourcePressureMargin_next_eq_zero_iff_massBalanceLeft_eq_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) = 0 ↔
+      SourcePressureBeamMassBalanceLeftInt n k r j =
+        SourcePressureBeamMassBalanceRightInt n k r j := by
+  rw [sourcePressureMargin_next_eq_massBalanceRight_sub_left haddr]
+  omega
+
+/--
+Boundary Beam wrapper: equality of the named mass-balance sides forces the next
+margin to be zero.
+-/
+theorem sourcePressureMargin_next_eq_zero_of_massBalanceLeft_eq_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hboundary :
+      SourcePressureBeamMassBalanceLeftInt n k r j =
+        SourcePressureBeamMassBalanceRightInt n k r j) :
+    SourcePressureMarginInt n k (r + j + 1) = 0 := by
+  have hiff :=
+    sourcePressureMargin_next_eq_zero_iff_massBalanceLeft_eq_right haddr
+  exact hiff.2 hboundary
+
+/--
+False Beam boundary wrapper: equality of the named mass-balance sides is already
+inside the nonpositive side.
+-/
+theorem sourcePressureMargin_next_nonpos_of_massBalanceLeft_eq_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hboundary :
+      SourcePressureBeamMassBalanceLeftInt n k r j =
+        SourcePressureBeamMassBalanceRightInt n k r j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 := by
+  have hzero :=
+    sourcePressureMargin_next_eq_zero_of_massBalanceLeft_eq_right haddr hboundary
+  omega
+
+/--
+Boundary obstruction wrapper: equality of the named mass-balance sides rules out
+the positive next-margin side.
+-/
+theorem not_sourcePressureMargin_next_pos_of_massBalanceLeft_eq_right
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hboundary :
+      SourcePressureBeamMassBalanceLeftInt n k r j =
+        SourcePressureBeamMassBalanceRightInt n k r j) :
+    ¬ 0 < SourcePressureMarginInt n k (r + j + 1) := by
+  have hzero :=
+    sourcePressureMargin_next_eq_zero_of_massBalanceLeft_eq_right haddr hboundary
+  omega
+
+/--
+Strict False Beam classifier: the next margin is negative exactly when the
+right mass-balance side is strictly smaller than the left side.
+-/
+theorem sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) < 0 ↔
+      SourcePressureBeamMassBalanceRightInt n k r j <
+        SourcePressureBeamMassBalanceLeftInt n k r j := by
+  rw [sourcePressureMargin_next_eq_massBalanceRight_sub_left haddr]
+  omega
+
 end DkMath.Collatz
