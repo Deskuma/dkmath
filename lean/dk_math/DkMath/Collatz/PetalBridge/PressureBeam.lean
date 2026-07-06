@@ -271,4 +271,86 @@ theorem exists_sourcePressureBeamSeedContainsDepth_and_target_of_seed
     ⟨j, hcontains⟩
   exact ⟨j, hcontains, sourcePressureBeamDepthTarget_of_seedContainsDepth hcontains⟩
 
+/--
+Named addressed carrier for a Beam depth target selected from a supplied seed
+witness list.
+
+This is packaging, not new propagation.  The carrier remembers both pieces of
+data at the same explicit depth `j`:
+
+* `L` contains a local-island witness whose depth is exactly `j`;
+* `j` is a Beam depth target.
+
+It does not choose a canonical target, transport arbitrary external depths,
+aggregate multiple diagnostics, repair overlap, or claim global coverage.
+-/
+def SourcePressureBeamAddressedDepthTarget
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (j : ℕ) : Prop :=
+  SourcePressureBeamSeedContainsDepth L j ∧
+    SourcePressureBeamDepthTarget n k r j
+
+/--
+Project the list-address containment from an addressed Beam depth target.
+-/
+theorem sourcePressureBeamSeedContainsDepth_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureBeamSeedContainsDepth L j :=
+  h.1
+
+/--
+Project the Beam target fact from an addressed Beam depth target.
+-/
+theorem sourcePressureBeamDepthTarget_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureBeamDepthTarget n k r j :=
+  h.2
+
+/--
+Construct an addressed Beam depth target from its two local components.
+-/
+theorem sourcePressureBeamAddressedDepthTarget_mk
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hcontains : SourcePressureBeamSeedContainsDepth L j)
+    (htarget : SourcePressureBeamDepthTarget n k r j) :
+    SourcePressureBeamAddressedDepthTarget L j :=
+  ⟨hcontains, htarget⟩
+
+/--
+A raw Beam seed produces some addressed Beam depth target.
+
+This is the named-carrier form of
+`exists_sourcePressureBeamSeedContainsDepth_and_target_of_seed`.  The depth is
+still existentially selected from the supplied witness list; no arbitrary depth
+transport or canonical selection is introduced.
+-/
+theorem exists_sourcePressureBeamAddressedDepthTarget_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ j, SourcePressureBeamAddressedDepthTarget L j := by
+  rcases exists_sourcePressureBeamSeedContainsDepth_and_target_of_seed hseed with
+    ⟨j, hcontains, htarget⟩
+  exact ⟨j, sourcePressureBeamAddressedDepthTarget_mk hcontains htarget⟩
+
+/--
+An addressed Beam depth target exposes positive source-pressure margin.
+
+This is only projection composition through the target component.  It is not
+transport, propagation, or a coverage theorem.
+-/
+theorem sourcePressureMargin_pos_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j) :=
+  sourcePressureMargin_pos_of_beamDepthTarget n k r j
+    (sourcePressureBeamDepthTarget_of_addressedDepthTarget h)
+
 end DkMath.Collatz
