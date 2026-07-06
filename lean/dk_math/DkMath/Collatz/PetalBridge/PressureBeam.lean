@@ -818,4 +818,79 @@ theorem sourcePressureMargin_next_nonpos_iff_retMassDiff_add_current_le_two_cont
   rw [sourceRetentionDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
   rw [sourceContinuationDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
 
+/--
+True Beam classifier in direct mass-balance form.
+
+This is only the cp213 mass-difference classifier with the linear terms moved
+across the inequality.  It does not propagate the addressed edge.
+-/
+theorem sourcePressureMargin_next_pos_iff_massBalance_lt_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+          (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ) <
+        (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+          SourcePressureMarginInt n k (r + j) +
+            2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ) := by
+  rw [sourcePressureMargin_next_pos_iff_two_contMassDiff_lt_retMassDiff_add_current
+    haddr]
+  omega
+
+/--
+False Beam classifier in direct mass-balance form.
+
+This is the nonpositive companion to the True Beam mass-balance classifier.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_massBalance_le_of_addressedDepthTarget
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+          SourcePressureMarginInt n k (r + j) +
+            2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ) ≤
+        2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+          (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ) := by
+  rw [sourcePressureMargin_next_nonpos_iff_retMassDiff_add_current_le_two_contMassDiff
+    haddr]
+  omega
+
+/--
+One-way True Beam wrapper for the direct mass-balance inequality.
+-/
+theorem sourcePressureMargin_next_pos_of_addressedDepthTarget_of_massBalance_lt
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+          (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ) <
+        (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+          SourcePressureMarginInt n k (r + j) +
+            2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)) :
+    0 < SourcePressureMarginInt n k (r + j + 1) := by
+  have hiff :=
+    sourcePressureMargin_next_pos_iff_massBalance_lt_of_addressedDepthTarget haddr
+  exact hiff.2 hineq
+
+/--
+One-way False Beam wrapper for the direct mass-balance inequality.
+-/
+theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_massBalance_le
+    {n : OddNat} {k r j : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (haddr : SourcePressureBeamAddressedDepthTarget L j)
+    (hineq :
+      (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) +
+          SourcePressureMarginInt n k (r + j) +
+            2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ) ≤
+        2 * (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) +
+          (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 := by
+  have hiff :=
+    sourcePressureMargin_next_nonpos_iff_massBalance_le_of_addressedDepthTarget haddr
+  exact hiff.2 hineq
+
 end DkMath.Collatz
