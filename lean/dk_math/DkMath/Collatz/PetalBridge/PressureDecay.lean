@@ -41,6 +41,54 @@ noncomputable def SourcePressureMarginInt
     (orbitWindowRetentionMassPow2 n k r : ℤ)
 
 /--
+Finite local Big upper bound for source pressure margin.
+
+The margin is `2 * continuation - retention`.  Since continuation mass is
+bounded by the finite observation window `k` and retention is nonnegative, the
+margin cannot exceed `2 * k`.  This is a pointwise height bound only; it does
+not propagate pressure signs or cover a family of windows.
+-/
+theorem sourcePressureMarginInt_le_two_mul_window
+    (n : OddNat) (k r : ℕ) :
+    SourcePressureMarginInt n k r ≤ 2 * (k : ℤ) := by
+  have hcont :
+      orbitWindowContinuationSiblingMassPow2 n k r ≤ k :=
+    orbitWindowContinuationSiblingMassPow2_le_window n k r
+  unfold SourcePressureMarginInt
+  omega
+
+/--
+Finite local Big lower bound for source pressure margin.
+
+The most negative case occurs when continuation contributes no positive mass
+and retention is as large as the finite window.  This is still only a
+pointwise window-height bound, not a global descent or convergence statement.
+-/
+theorem neg_window_le_sourcePressureMarginInt
+    (n : OddNat) (k r : ℕ) :
+    - (k : ℤ) ≤ SourcePressureMarginInt n k r := by
+  have hret :
+      orbitWindowRetentionMassPow2 n k r ≤ k :=
+    orbitWindowRetentionMassPow2_le_window n k r
+  unfold SourcePressureMarginInt
+  omega
+
+/--
+The source pressure margin always lies in the finite local Big box
+`[-k, 2k]`.
+
+This combines the two pointwise window bounds above.  It deliberately says
+nothing about propagation, coverage, witness aggregation, or Collatz
+convergence.
+-/
+theorem sourcePressureMarginInt_bounds_window
+    (n : OddNat) (k r : ℕ) :
+    - (k : ℤ) ≤ SourcePressureMarginInt n k r ∧
+      SourcePressureMarginInt n k r ≤ 2 * (k : ℤ) :=
+  ⟨neg_window_le_sourcePressureMarginInt n k r,
+    sourcePressureMarginInt_le_two_mul_window n k r⟩
+
+/--
 Integer-valued retention drop across adjacent pressure depths.
 
 The sign convention is `current - next`.  This is the convention used by the
