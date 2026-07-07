@@ -383,4 +383,43 @@ theorem sourcePressureOrientedNeighborDiagnosticState_of_forward
   exact
     ⟨hin, hdiag', hWentry, hWaddr, hWexit, hW'entry, hW'addr, hW'exit⟩
 
+/--
+Recovered adjacent state enters the oriented neighbor diagnostic state.
+
+This fills the first recovered-branch Gap slot:
+
+```text
+RecoveredAdjacent
+  -- attachAdjacentDiagnosis + attachForwardOrientation -->
+OrientedNeighborDiagnostic
+```
+
+The recovered state already stores both ingredients needed here:
+
+* the ordered adjacent-pair address `hin`;
+* the named pair-local recovered diagnostic `hrec`.
+
+Opening `hrec` gives the reversed-before witness and budget bound required by
+`SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered`.  The endpoint
+Beam diagnostics are then supplied by
+`sourcePressureOrientedNeighborDiagnosticState_of_forward`.
+
+No canonical pair is selected beyond the existential pair already stored in
+the recovered state, and no coverage, aggregation, transport, or convergence
+is claimed.
+-/
+theorem sourcePressureRecoveredAdjacentState_to_exists_orientedNeighborDiagnosticState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureRecoveredAdjacentState L) :
+    ∃ W W',
+      SourcePressureOrientedNeighborDiagnosticState L W W' := by
+  rcases h with ⟨A, B, hin, hrec⟩
+  rcases hrec with ⟨hrev, hbudget, _hneg, _hlen⟩
+  let hdiag : SourcePressureLocalIslandWitnessAdjacentDiagnosis L A B :=
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered hrev hbudget
+  exact
+    ⟨A, B,
+      sourcePressureOrientedNeighborDiagnosticState_of_forward hin hdiag⟩
+
 end DkMath.Collatz
