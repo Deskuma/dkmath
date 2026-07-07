@@ -807,6 +807,26 @@ theorem SourcePressureOrientedNeighborBoxState.not_val_ge_of_sorted
   not_le_of_gt (hbox.val_lt_of_sorted hsorted)
 
 /--
+A sorted witness list forbids the same box from appearing in the reverse
+orientation.
+
+The forward box gives `W.val < W'.val`; a reverse box over the same sorted list
+would give `W'.val ≤ W.val`.  The two facts are incompatible.  This is a local
+orientation exclusion only: it does not select a canonical box globally and does
+not assert coverage of all possible neighbor pairs.
+-/
+theorem SourcePressureOrientedNeighborBoxState.not_reverse_box_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    ¬ SourcePressureOrientedNeighborBoxState L W' W := by
+  intro hrev
+  exact hbox.not_val_ge_of_sorted hsorted
+    (hrev.val_le_of_sorted hsorted)
+
+/--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
 The oriented diagnostic supplies the endpoint sign patterns through
