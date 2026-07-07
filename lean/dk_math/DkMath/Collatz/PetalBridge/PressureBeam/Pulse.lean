@@ -523,6 +523,83 @@ theorem sourcePressureBeamNeighborCandidate_right_center_full_diagnostic
     (sourcePressureBeamNeighborCandidate_right_mem hneigh)
 
 /--
+Forward-oriented Beam surface for an explicit adjacent-pair diagnosis.
+
+The orientation data is part of the input:
+
+* `hin` says that `W` is immediately before `W'` in `L`;
+* `hdiag` is the existing adjacent diagnosis for that ordered pair.
+
+The theorem only re-exposes that ordered diagnostic together with the Beam
+neighbor candidate and the centered singleton diagnostics for both endpoints.
+It does not infer an orientation from a symmetric candidate, does not transport
+diagnostics across the pair, and does not classify the pair as repaired,
+overlapping, or globally covering anything.
+-/
+theorem sourcePressureBeamNeighborCandidate_forward_center_full_diagnostics_of_adjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L W W')
+    (hdiag : SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W') :
+    SourcePressureBeamNeighborCandidate L W W' ∧
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W' ∧
+        SourcePressureBeamMassBalanceLeftInt n k r (W.val - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r (W.val - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L W.val ∧
+            SourcePressureBeamMassBalanceRightInt n k r W.val ≤
+              SourcePressureBeamMassBalanceLeftInt n k r W.val ∧
+              SourcePressureBeamMassBalanceLeftInt n k r (W'.val - 1) <
+                SourcePressureBeamMassBalanceRightInt n k r (W'.val - 1) ∧
+                SourcePressureBeamAddressedDepthTarget L W'.val ∧
+                  SourcePressureBeamMassBalanceRightInt n k r W'.val ≤
+                    SourcePressureBeamMassBalanceLeftInt n k r W'.val := by
+  have hneigh : SourcePressureBeamNeighborCandidate L W W' := Or.inl hin
+  have hleft :=
+    sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center
+      (sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin)
+  have hright :=
+    sourcePressureBeamNeighborCandidate_right_center_full_diagnostic hneigh
+  exact ⟨hneigh, hdiag, hleft.1, hleft.2.1, hleft.2.2, hright⟩
+
+/--
+Reverse-oriented Beam surface for an explicit adjacent-pair diagnosis.
+
+This is the symmetric orientation case for a neighbor candidate stated as
+`SourcePressureBeamNeighborCandidate L W W'`: the actual ordered adjacent pair
+is `W'` before `W`, and the adjacent diagnosis is kept in that orientation.
+
+As in the forward theorem, this is only a packaging bridge.  It does not infer
+orientation from a box or from the symmetric candidate alone, and it does not
+claim transport, propagation, repair, aggregation, or convergence.
+-/
+theorem sourcePressureBeamNeighborCandidate_reverse_center_full_diagnostics_of_adjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L W' W)
+    (hdiag : SourcePressureLocalIslandWitnessAdjacentDiagnosis L W' W) :
+    SourcePressureBeamNeighborCandidate L W W' ∧
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L W' W ∧
+        SourcePressureBeamMassBalanceLeftInt n k r (W.val - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r (W.val - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L W.val ∧
+            SourcePressureBeamMassBalanceRightInt n k r W.val ≤
+              SourcePressureBeamMassBalanceLeftInt n k r W.val ∧
+              SourcePressureBeamMassBalanceLeftInt n k r (W'.val - 1) <
+                SourcePressureBeamMassBalanceRightInt n k r (W'.val - 1) ∧
+                SourcePressureBeamAddressedDepthTarget L W'.val ∧
+                  SourcePressureBeamMassBalanceRightInt n k r W'.val ≤
+                    SourcePressureBeamMassBalanceLeftInt n k r W'.val := by
+  have hneigh : SourcePressureBeamNeighborCandidate L W W' := Or.inr hin
+  have hleft :=
+    sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center
+      (sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hin)
+  have hright :=
+    sourcePressureBeamNeighborCandidate_right_center_full_diagnostic hneigh
+  exact ⟨hneigh, hdiag, hleft.1, hleft.2.1, hleft.2.2, hright⟩
+
+/--
 A Beam seed exposes one witness whose centered pulse is inside the finite
 local pulse box.
 
