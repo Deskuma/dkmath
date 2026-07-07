@@ -546,6 +546,64 @@ theorem SourcePressureOrientedNeighborBoxState.adjacentPair
     SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
   h.diagnostic.adjacentPair
 
+/-
+Order-projection note for the next comparison layer.
+
+`SourcePressureLocalIslandWitnessAdjacentPairInList L W W'` is the strongest
+order relation currently stored in `SourcePressureOrientedNeighborBoxState`.
+It says that `W` and `W'` occur as an ordered neighboring pair in the explicit
+list `L`.
+
+It does *not* contain either of the following stronger facts:
+
+```text
+SourcePressureLocalIslandWitnessBefore W W'
+W.val < W'.val
+```
+
+Those facts concern interval-pulse address order / numeric depth order.  They
+are not derivable from list adjacency alone without an additional invariant
+saying that the witness list is sorted by address/depth.  The comparison layer
+should therefore consume the ordered adjacent-pair address first, then add the
+required sortedness/address-order hypothesis explicitly.
+-/
+
+/--
+Project the strongest currently available ordered pair relation from a
+two-endpoint box: `W` and `W'` are adjacent in this order in the enclosing list.
+
+This is intentionally an alias of `.adjacentPair` with a more comparison-facing
+name.  It is not a witness-level `Before` theorem and not a numeric value-order
+theorem.
+-/
+theorem SourcePressureOrientedNeighborBoxState.orderedAdjacentPairInList
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.adjacentPair
+
+/-- The left endpoint of a two-endpoint box is a member of the enclosing list. -/
+theorem SourcePressureOrientedNeighborBoxState.left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    W ∈ L :=
+  sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem
+    h.orderedAdjacentPairInList
+
+/-- The right endpoint of a two-endpoint box is a member of the enclosing list. -/
+theorem SourcePressureOrientedNeighborBoxState.right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    W' ∈ L :=
+  sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
+    h.orderedAdjacentPairInList
+
 /--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
