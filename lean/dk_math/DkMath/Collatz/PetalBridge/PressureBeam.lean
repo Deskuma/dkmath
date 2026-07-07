@@ -1210,4 +1210,89 @@ theorem sourcePressureBeamMassBalanceRight_le_left_of_localIsland_right
   sourcePressureBeamMassBalanceRight_le_left_of_signChangeDown haddr
     (sourcePressureSignChangeDown_of_localIsland n k r j hisland)
 
+/-
+Interval-pulse exact-edge bridge.
+
+Checkpoint 219 connects the interval-pulse address layer back into the Beam
+classifier.  The important point is that the edge indices are not invented:
+
+* left edge  = `A.start - 1`
+* right edge = `A.start + A.len - 1`
+
+`PressureFrontier` already stores sign-change facts at exactly these edges via
+`sourcePressureIntervalPulseAddress_left_signChange` and
+`sourcePressureIntervalPulseAddress_right_signChange`.  Therefore the Beam
+bridge is only a local exact-edge composition through the cp218 sign-change
+API.  It does not assert interval coverage, family aggregation, overlap repair,
+or target transport.
+-/
+
+/--
+An interval-pulse address supplies the True Beam mass-balance inequality at
+its exact left edge.
+
+The addressed target hypothesis is for `A.start - 1`, matching the edge stored
+by `sourcePressureIntervalPulseAddress_left_signChange`.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_intervalPulse_left
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (haddr : SourcePressureBeamAddressedDepthTarget L (A.start - 1)) :
+    SourcePressureBeamMassBalanceLeftInt n k r (A.start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r (A.start - 1) :=
+  sourcePressureBeamMassBalanceLeft_lt_right_of_signChangeUp haddr
+    (sourcePressureIntervalPulseAddress_left_signChange A)
+
+/--
+An interval-pulse address supplies the False/Boundary Beam comparison at its
+exact right edge.
+
+The addressed target hypothesis is for `A.start + A.len - 1`, matching the
+edge stored by `sourcePressureIntervalPulseAddress_right_signChange`.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (haddr :
+      SourcePressureBeamAddressedDepthTarget L (A.start + A.len - 1)) :
+    SourcePressureBeamMassBalanceRightInt n k r (A.start + A.len - 1) ≤
+      SourcePressureBeamMassBalanceLeftInt n k r (A.start + A.len - 1) :=
+  sourcePressureBeamMassBalanceRight_le_left_of_signChangeDown haddr
+    (sourcePressureIntervalPulseAddress_right_signChange A)
+
+/--
+An interval-pulse address supplies next-margin positivity at its exact left
+edge.
+
+This is a caller-friendly sign statement parallel to the mass-balance form.
+It remains exact-edge only.
+-/
+theorem sourcePressureMargin_next_pos_of_intervalPulse_left
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (haddr : SourcePressureBeamAddressedDepthTarget L (A.start - 1)) :
+    0 < SourcePressureMarginInt n k (r + (A.start - 1) + 1) :=
+  sourcePressureMargin_next_pos_of_massBalanceLeft_lt_right haddr
+    (sourcePressureBeamMassBalanceLeft_lt_right_of_intervalPulse_left A haddr)
+
+/--
+An interval-pulse address supplies next-margin nonpositivity at its exact right
+edge.
+
+This is the sign-form companion of
+`sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right`.
+-/
+theorem sourcePressureMargin_next_nonpos_of_intervalPulse_right
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (A : SourcePressureIntervalPulseAddress n k r)
+    (haddr :
+      SourcePressureBeamAddressedDepthTarget L (A.start + A.len - 1)) :
+    SourcePressureMarginInt n k (r + (A.start + A.len - 1) + 1) ≤ 0 :=
+  sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr
+    (sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right A haddr)
+
 end DkMath.Collatz
