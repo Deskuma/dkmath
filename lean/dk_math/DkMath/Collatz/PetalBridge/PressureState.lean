@@ -1083,6 +1083,28 @@ theorem SourcePressureForwardPairComparisonState.center_targets_pair
   exact ⟨htargetL, htargetR, h.val_lt⟩
 
 /--
+Bundle the positive-center and addressed-target pair surfaces into one
+caller-facing theorem.
+
+This is the compact comparison surface for the forward pair branch:
+two positive centers, two addressed targets, and strict left-to-right value
+order.  It remains local to the explicit pair carried by `FPC`.
+-/
+theorem SourcePressureForwardPairComparisonState.center_pair_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    0 < SourcePressureMarginInt n k (r + W.val) ∧
+      0 < SourcePressureMarginInt n k (r + W'.val) ∧
+        SourcePressureBeamAddressedDepthTarget L W.val ∧
+          SourcePressureBeamAddressedDepthTarget L W'.val ∧
+            W.val < W'.val := by
+  rcases h.center_pos_pair with ⟨hposL, hposR, hlt⟩
+  rcases h.center_targets_pair with ⟨htargetL, htargetR, _hlt'⟩
+  exact ⟨hposL, hposR, htargetL, htargetR, hlt⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
