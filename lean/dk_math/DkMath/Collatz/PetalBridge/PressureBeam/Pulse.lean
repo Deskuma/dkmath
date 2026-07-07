@@ -209,5 +209,43 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
     ⟨hdepth, _⟩
   exact ⟨hentry, hdepth, hexitBalance⟩
 
+/--
+A Beam seed exposes one witness whose singleton pulse has the full local
+entry-depth-exit diagnostic.
+
+This is the cp227 higher-level consumer of
+`sourcePressureBeamPulse_witness_singleton_full_diagnostic`.  The seed layer
+already contains an existential witness membership; this theorem only keeps
+that witness explicit and applies the full diagnostic package to it.
+
+It is intentionally existential and local.  It does not choose a canonical
+witness, cover the whole list, aggregate witness families, repair overlaps,
+propagate the diagnostic, or assert Collatz convergence.
+-/
+theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      W ∈ L ∧
+        SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ∧
+            SourcePressureBeamMassBalanceRightInt n k r
+              ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+              SourcePressureBeamMassBalanceLeftInt n k r
+                ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                  (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
+  rcases exists_sourcePressureBeamSeedContainsDepth_of_seed hseed with
+    ⟨_, W, hmem, _⟩
+  exact
+    ⟨W, hmem,
+      sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem⟩
+
 
 end DkMath.Collatz
