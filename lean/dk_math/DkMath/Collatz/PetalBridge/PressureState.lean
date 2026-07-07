@@ -384,6 +384,87 @@ theorem sourcePressureOrientedNeighborDiagnosticState_of_forward
     ⟨hin, hdiag', hWentry, hWaddr, hWexit, hW'entry, hW'addr, hW'exit⟩
 
 /--
+Project the left endpoint margin-sign pattern from an oriented neighbor
+diagnostic state.
+
+The oriented state stores mass-balance entry/exit comparisons for `W`.
+Together with the local-island witness property, these comparisons recover the
+three-margin pattern around the native depth `W.val`:
+
+```text
+r + (W.val - 1) <= 0
+r + W.val       >  0
+r + W.val + 1   <= 0
+```
+
+This is a pure projection from state `D`; it does not add transport,
+propagation, coverage, or canonical witness selection.
+-/
+theorem sourcePressureOrientedNeighborDiagnosticState_left_center_margin_signs
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborDiagnosticState L W W') :
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureBeamAddressedDepthTarget L W.val ∧
+          SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 := by
+  rcases h with
+    ⟨_hin, _hdiag, hentry, haddr, hexit, _hentry', _haddr', _hexit'⟩
+  have hlocal :=
+    (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
+  rcases hlocal with ⟨_hWpos, _hcenterLocal, hprev, _hnextLocal⟩
+  have hcenter :
+      0 < SourcePressureMarginInt n k (r + W.val) := by
+    have hentryNext :
+        0 < SourcePressureMarginInt n k (r + (W.val - 1) + 1) :=
+      (sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right_edge
+        n k r (W.val - 1)).2 hentry
+    have hidx : r + (W.val - 1) + 1 = r + W.val := by
+      omega
+    simpa [hidx] using hentryNext
+  have hnext :
+      SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
+    sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr hexit
+  exact ⟨hprev, hcenter, haddr, hnext⟩
+
+/--
+Project the right endpoint margin-sign pattern from an oriented neighbor
+diagnostic state.
+
+This is the same projection as the left endpoint theorem, but applied to the
+oriented neighbor endpoint `W'`.  The proof deliberately reads only the local
+fields already stored in state `D`.
+-/
+theorem sourcePressureOrientedNeighborDiagnosticState_right_center_margin_signs
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborDiagnosticState L W W') :
+    SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W'.val) ∧
+        SourcePressureBeamAddressedDepthTarget L W'.val ∧
+          SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 := by
+  rcases h with
+    ⟨_hin, _hdiag, _hentry, _haddr, _hexit, hentry', haddr', hexit'⟩
+  have hlocal :=
+    (sourcePressureLocalIsland_iff_margin n k r W'.val).1 W'.property
+  rcases hlocal with ⟨_hW'pos, _hcenterLocal, hprev, _hnextLocal⟩
+  have hcenter :
+      0 < SourcePressureMarginInt n k (r + W'.val) := by
+    have hentryNext :
+        0 < SourcePressureMarginInt n k (r + (W'.val - 1) + 1) :=
+      (sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right_edge
+        n k r (W'.val - 1)).2 hentry'
+    have hidx : r + (W'.val - 1) + 1 = r + W'.val := by
+      omega
+    simpa [hidx] using hentryNext
+  have hnext :
+      SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 :=
+    sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr' hexit'
+  exact ⟨hprev, hcenter, haddr', hnext⟩
+
+/--
 Recovered adjacent state enters the oriented neighbor diagnostic state.
 
 This fills the first recovered-branch Gap slot:
