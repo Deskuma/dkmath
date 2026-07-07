@@ -460,6 +460,69 @@ theorem SourcePressureBeamCenteredLocalPulseBox.signs_of_neighborCandidate
   ⟨hneigh, hbox.signs⟩
 
 /--
+The left endpoint of an explicit Beam neighbor candidate is in the witness
+list.
+
+This is only an adjacency projection.  It does not infer a neighbor from a
+local pulse box, does not assert that either endpoint has a pulse box, and does
+not transport any diagnostic information.
+-/
+theorem sourcePressureBeamNeighborCandidate_left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hneigh : SourcePressureBeamNeighborCandidate L W W') :
+    W ∈ L := by
+  rcases hneigh with hleft | hright
+  · exact sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hleft
+  · exact sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hright
+
+/--
+The right endpoint of an explicit Beam neighbor candidate is in the witness
+list.
+
+The witness `W'` is available because it is one endpoint of the supplied
+symmetric adjacent-pair evidence.  This is not derived from
+`SourcePressureBeamCenteredLocalPulseBox`, and it does not claim propagation or
+transport from `W` to `W'`.
+-/
+theorem sourcePressureBeamNeighborCandidate_right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hneigh : SourcePressureBeamNeighborCandidate L W W') :
+    W' ∈ L := by
+  rcases hneigh with hleft | hright
+  · exact sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hleft
+  · exact sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hright
+
+/--
+An explicit Beam neighbor candidate exposes the neighboring witness's centered
+singleton diagnostic.
+
+This theorem is the safe cp241 neighbor bridge:
+
+* adjacency gives `W' ∈ L`;
+* membership lets the existing singleton theorem read the centered diagnostic
+  at `W'.val`.
+
+It deliberately does not say that `W'` has a centered local pulse box, that a
+box for `W` creates the neighbor, or that any transport/propagation succeeds.
+-/
+theorem sourcePressureBeamNeighborCandidate_right_center_full_diagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hneigh : SourcePressureBeamNeighborCandidate L W W') :
+    SourcePressureBeamMassBalanceLeftInt n k r (W'.val - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r (W'.val - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L W'.val ∧
+        SourcePressureBeamMassBalanceRightInt n k r W'.val ≤
+          SourcePressureBeamMassBalanceLeftInt n k r W'.val :=
+  sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center
+    (sourcePressureBeamNeighborCandidate_right_mem hneigh)
+
+/--
 A Beam seed exposes one witness whose centered pulse is inside the finite
 local pulse box.
 
