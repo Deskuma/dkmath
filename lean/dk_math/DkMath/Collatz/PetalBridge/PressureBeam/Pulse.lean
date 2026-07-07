@@ -213,7 +213,7 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
 A Beam seed exposes one witness whose singleton pulse has the full local
 entry-depth-exit diagnostic.
 
-This is the cp227 higher-level consumer of
+This is the cp227-r1 Branch B higher-level consumer of
 `sourcePressureBeamPulse_witness_singleton_full_diagnostic`.  The seed layer
 already contains an existential witness membership; this theorem only keeps
 that witness explicit and applies the full diagnostic package to it.
