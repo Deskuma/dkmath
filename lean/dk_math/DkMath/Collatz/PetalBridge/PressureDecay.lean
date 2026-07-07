@@ -102,6 +102,49 @@ noncomputable def SourceRetentionDropInt
     (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)
 
 /--
+Finite local upper bound for one adjacent retention drop.
+
+Both endpoint retention masses are counts inside the same finite observation
+window of size `k`, so their integer difference cannot exceed `k`.
+-/
+theorem sourceRetentionDropInt_le_window
+    (n : OddNat) (k r j : ℕ) :
+    SourceRetentionDropInt n k r j ≤ (k : ℤ) := by
+  have hcur :
+      orbitWindowRetentionMassPow2 n k (r + j) ≤ k :=
+    orbitWindowRetentionMassPow2_le_window n k (r + j)
+  unfold SourceRetentionDropInt
+  omega
+
+/--
+Finite local lower bound for one adjacent retention drop.
+
+This is the opposite endpoint case of `sourceRetentionDropInt_le_window`:
+the next retention mass is also bounded by the same finite window `k`.
+-/
+theorem neg_window_le_sourceRetentionDropInt
+    (n : OddNat) (k r j : ℕ) :
+    - (k : ℤ) ≤ SourceRetentionDropInt n k r j := by
+  have hnext :
+      orbitWindowRetentionMassPow2 n k (r + j + 1) ≤ k :=
+    orbitWindowRetentionMassPow2_le_window n k (r + j + 1)
+  unfold SourceRetentionDropInt
+  omega
+
+/--
+The adjacent retention drop lies in the finite jump box `[-k, k]`.
+
+This is a pointwise adjacent-edge bound.  It does not assert monotonicity or
+propagation of retention mass across a window family.
+-/
+theorem sourceRetentionDropInt_bounds_window
+    (n : OddNat) (k r j : ℕ) :
+    - (k : ℤ) ≤ SourceRetentionDropInt n k r j ∧
+      SourceRetentionDropInt n k r j ≤ (k : ℤ) :=
+  ⟨neg_window_le_sourceRetentionDropInt n k r j,
+    sourceRetentionDropInt_le_window n k r j⟩
+
+/--
 Integer-valued continuation drop across adjacent pressure depths.
 
 This uses the same `current - next` convention as `SourceRetentionDropInt`.
@@ -115,6 +158,46 @@ noncomputable def SourceContinuationDropInt
     (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
 
 /--
+Finite local upper bound for one adjacent continuation drop.
+
+Both endpoint continuation masses are finite window counts, so their integer
+difference cannot exceed the window size `k`.
+-/
+theorem sourceContinuationDropInt_le_window
+    (n : OddNat) (k r j : ℕ) :
+    SourceContinuationDropInt n k r j ≤ (k : ℤ) := by
+  have hcur :
+      orbitWindowContinuationSiblingMassPow2 n k (r + j) ≤ k :=
+    orbitWindowContinuationSiblingMassPow2_le_window n k (r + j)
+  unfold SourceContinuationDropInt
+  omega
+
+/--
+Finite local lower bound for one adjacent continuation drop.
+-/
+theorem neg_window_le_sourceContinuationDropInt
+    (n : OddNat) (k r j : ℕ) :
+    - (k : ℤ) ≤ SourceContinuationDropInt n k r j := by
+  have hnext :
+      orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) ≤ k :=
+    orbitWindowContinuationSiblingMassPow2_le_window n k (r + j + 1)
+  unfold SourceContinuationDropInt
+  omega
+
+/--
+The adjacent continuation drop lies in the finite jump box `[-k, k]`.
+
+This is only a local adjacent-edge bound.  It does not imply any global
+continuation trend.
+-/
+theorem sourceContinuationDropInt_bounds_window
+    (n : OddNat) (k r j : ℕ) :
+    - (k : ℤ) ≤ SourceContinuationDropInt n k r j ∧
+      SourceContinuationDropInt n k r j ≤ (k : ℤ) :=
+  ⟨neg_window_le_sourceContinuationDropInt n k r j,
+    sourceContinuationDropInt_le_window n k r j⟩
+
+/--
 Integer-valued net pressure drop across adjacent pressure depths.
 
 This is only a name for the balance quantity
@@ -126,6 +209,45 @@ noncomputable def SourcePressureNetDropInt
     (n : OddNat) (k r j : ℕ) : ℤ :=
   SourceRetentionDropInt n k r j -
     2 * SourceContinuationDropInt n k r j
+
+/--
+Finite local upper bound for one adjacent net pressure drop.
+
+The net drop is `retention_drop - 2 * continuation_drop`.  Combining the two
+`[-k, k]` jump boxes gives the coarse but uniform upper bound `3k`.
+-/
+theorem sourcePressureNetDropInt_le_three_mul_window
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureNetDropInt n k r j ≤ 3 * (k : ℤ) := by
+  have hret := sourceRetentionDropInt_le_window n k r j
+  have hcont := neg_window_le_sourceContinuationDropInt n k r j
+  unfold SourcePressureNetDropInt
+  omega
+
+/--
+Finite local lower bound for one adjacent net pressure drop.
+-/
+theorem neg_three_mul_window_le_sourcePressureNetDropInt
+    (n : OddNat) (k r j : ℕ) :
+    - (3 * (k : ℤ)) ≤ SourcePressureNetDropInt n k r j := by
+  have hret := neg_window_le_sourceRetentionDropInt n k r j
+  have hcont := sourceContinuationDropInt_le_window n k r j
+  unfold SourcePressureNetDropInt
+  omega
+
+/--
+The adjacent net pressure drop lies in the finite local jump box `[-3k, 3k]`.
+
+This is the jump analogue of the pointwise margin-height box.  It bounds one
+adjacent transition; it does not assert propagation, coverage, aggregation, or
+Collatz convergence.
+-/
+theorem sourcePressureNetDropInt_bounds_window
+    (n : OddNat) (k r j : ℕ) :
+    - (3 * (k : ℤ)) ≤ SourcePressureNetDropInt n k r j ∧
+      SourcePressureNetDropInt n k r j ≤ 3 * (k : ℤ) :=
+  ⟨neg_three_mul_window_le_sourcePressureNetDropInt n k r j,
+    sourcePressureNetDropInt_le_three_mul_window n k r j⟩
 
 /--
 Adjacent source-pressure margin accounting identity.
