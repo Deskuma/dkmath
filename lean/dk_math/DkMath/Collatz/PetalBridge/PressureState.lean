@@ -422,4 +422,35 @@ theorem sourcePressureRecoveredAdjacentState_to_exists_orientedNeighborDiagnosti
     ⟨A, B,
       sourcePressureOrientedNeighborDiagnosticState_of_forward hin hdiag⟩
 
+/--
+Failure resolution splits into either an oriented neighbor diagnostic or an
+adjacent-overlap state.
+
+This is the mnemonic automaton branch after the recovered branch has been
+upgraded to oriented local diagnostics:
+
+```text
+FailureResolution
+  -> OrientedNeighborDiagnostic
+   ∨ AdjacentOverlap
+```
+
+The recovered side uses
+`sourcePressureRecoveredAdjacentState_to_exists_orientedNeighborDiagnosticState`.
+The overlap side is kept as the explicit obstruction state.  No overlap repair,
+coverage, aggregation, transport, or convergence is claimed.
+-/
+theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_overlapState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborDiagnosticState L W W') ∨
+      SourcePressureAdjacentOverlapState L := by
+  rcases sourcePressureFailureResolutionState_cases h with hrec | hoverlap
+  · exact Or.inl
+      (sourcePressureRecoveredAdjacentState_to_exists_orientedNeighborDiagnosticState
+        hrec)
+  · exact Or.inr hoverlap
+
 end DkMath.Collatz
