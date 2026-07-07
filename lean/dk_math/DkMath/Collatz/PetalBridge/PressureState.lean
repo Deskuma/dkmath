@@ -497,4 +497,32 @@ theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pa
       (sourcePressureAdjacentOverlapState_to_exists_pairOverlapObstruction
         hoverlap)
 
+/--
+Sorted failure reaches the same refined diagnostic/obstruction split.
+
+This theorem composes the sorted-failure entry point with the existing
+failure-resolution transition, then exposes the pair-refined exit:
+
+```text
+SortedFailure
+  -> OrientedNeighborDiagnostic
+   ∨ PairOverlapObstruction
+```
+
+It is intentionally only a lift through the state automaton.  It does not add
+repair, canonical selection, global coverage, or propagation beyond the
+adjacent pair supplied by the obstruction branch.
+-/
+theorem sourcePressureSortedFailureState_to_orientedNeighborDiagnostic_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborDiagnosticState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
+    (sourcePressureSortedFailureState_to_failureResolutionState h)
+
 end DkMath.Collatz
