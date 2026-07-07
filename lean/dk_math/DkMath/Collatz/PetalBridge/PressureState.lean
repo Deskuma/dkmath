@@ -1117,4 +1117,92 @@ theorem sourcePressureBeamSeedState_to_orientedNeighborBox_or_pairOverlap
   sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap
     (sourcePressureBeamSeedState_to_failureResolutionState h)
 
+/--
+Failure resolution reaches a comparison-ready split under sortedness.
+
+The boxed branch is strengthened from a raw two-endpoint box to a forward
+comparison package:
+
+```text
+Box(W,W') + sorted(L)
+  -> W.val < W'.val
+  -> not Box(W',W)
+```
+
+The pair-overlap obstruction branch is left unchanged.  This theorem is a
+local routing surface for the next comparison layer; it does not repair
+overlap, choose a canonical pair, or assert global coverage.
+-/
+theorem sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W' ∧
+        W.val < W'.val ∧
+          ¬ SourcePressureOrientedNeighborBoxState L W' W) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap h
+      with hbox | hoverlap
+  · rcases hbox with ⟨W, W', hbox⟩
+    exact Or.inl
+      ⟨W, W', hbox, hbox.val_lt_of_sorted hsorted,
+        hbox.not_reverse_box_of_sorted hsorted⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches the comparison-ready boxed/overlap split.
+
+This is the sorted-failure entry point for the same forward-comparison surface
+provided by
+`sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap`.
+-/
+theorem sourcePressureSortedFailureState_to_forwardBoxComparison_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W' ∧
+        W.val < W'.val ∧
+          ¬ SourcePressureOrientedNeighborBoxState L W' W) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed reaches the comparison-ready boxed/overlap split.
+
+This is the Beam-facing entry point:
+
+```text
+BeamSeed + sorted(L)
+  -> ForwardBoxComparison
+   ∨ PairOverlapObstruction
+```
+
+The sortedness hypothesis is explicit because the forward value comparison is
+not a consequence of the seed state alone.
+-/
+theorem sourcePressureBeamSeedState_to_forwardBoxComparison_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W' ∧
+        W.val < W'.val ∧
+          ¬ SourcePressureOrientedNeighborBoxState L W' W) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
 end DkMath.Collatz
