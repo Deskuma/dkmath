@@ -210,6 +210,41 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
   exact ⟨hentry, hdepth, hexitBalance⟩
 
 /--
+Centered full diagnostic for one explicitly contained witness singleton.
+
+This is the cp234 native-depth surface over the interval-pulse diagnostic
+above.  A witness-generated pulse is a singleton address:
+
+* its entry edge is `W.val - 1`;
+* its center/right edge is `W.val`.
+
+The proof only normalizes coordinates using the Core alignment lemmas.  It
+does not rebuild low-level edge proofs, transport diagnostics to arbitrary
+targets, select a canonical witness, or claim coverage beyond the supplied
+membership `W ∈ L`.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r}
+    (hmem : W ∈ L) :
+    SourcePressureBeamMassBalanceLeftInt n k r (W.val - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r (W.val - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L W.val ∧
+        SourcePressureBeamMassBalanceRightInt n k r W.val ≤
+          SourcePressureBeamMassBalanceLeftInt n k r W.val := by
+  rcases sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem with
+    ⟨hentry, hdepth, hexit⟩
+  have hstart :=
+    sourcePressureIntervalPulseAddress_of_localIslandWitness_start_eq W
+  have hright :=
+    sourcePressureIntervalPulseAddress_of_localIslandWitness_rightEdge_eq W
+  exact
+    ⟨by simpa [hstart] using hentry,
+      by simpa [hright] using hdepth,
+      by simpa [hright] using hexit⟩
+
+/--
 A Beam seed exposes one witness whose singleton pulse has the full local
 entry-depth-exit diagnostic.
 
@@ -246,6 +281,33 @@ theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed
   exact
     ⟨W, hmem,
       sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem⟩
+
+/--
+A Beam seed exposes one witness whose singleton pulse has the centered full
+local diagnostic at native depth `W.val`.
+
+This is the cp234 seed bridge.  It combines the existing seed witness
+extraction with the centered singleton diagnostic above.  The witness remains
+existential: the theorem does not choose a canonical witness, cover the list,
+aggregate witnesses, repair overlap, propagate diagnostics, or assert Collatz
+convergence.
+-/
+theorem exists_sourcePressureBeamPulse_witness_center_full_diagnostic_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      W ∈ L ∧
+        SourcePressureBeamMassBalanceLeftInt n k r (W.val - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r (W.val - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L W.val ∧
+            SourcePressureBeamMassBalanceRightInt n k r W.val ≤
+              SourcePressureBeamMassBalanceLeftInt n k r W.val := by
+  rcases exists_sourcePressureBeamSeedContainsDepth_of_seed hseed with
+    ⟨_, W, hmem, _⟩
+  exact
+    ⟨W, hmem,
+      sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center hmem⟩
 
 /--
 Failure resolution also exposes one witness whose singleton pulse has the full
