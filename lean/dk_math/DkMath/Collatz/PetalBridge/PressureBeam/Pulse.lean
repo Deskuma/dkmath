@@ -310,6 +310,52 @@ theorem exists_sourcePressureBeamPulse_witness_center_full_diagnostic_of_seed
       sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center hmem⟩
 
 /--
+A Beam seed exposes one witness whose centered diagnostic also gives the local
+margin-sign transition around the native depth `W.val`.
+
+The index convention is the Beam edge convention:
+
+* mass-balance at edge `j` classifies the next margin `r + j + 1`;
+* therefore the entry comparison at `W.val - 1` gives positivity at `r + W.val`;
+* the exit comparison at `W.val` gives nonpositivity at `r + W.val + 1`.
+
+The previous margin nonpositivity at `W.val - 1` is read from the local-island
+witness itself.  This theorem remains witness-local and seed-existential: it
+does not choose a canonical witness, aggregate a family, repair overlaps,
+propagate the transition, or claim Collatz convergence.
+-/
+theorem exists_sourcePressureBeamPulse_witness_center_margin_signs_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      W ∈ L ∧
+        SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+          0 < SourcePressureMarginInt n k (r + W.val) ∧
+            SourcePressureBeamAddressedDepthTarget L W.val ∧
+              SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 := by
+  rcases exists_sourcePressureBeamPulse_witness_center_full_diagnostic_of_seed
+      hseed with
+    ⟨W, hmem, hentry, haddr, hexit⟩
+  have hlocal :=
+    (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
+  rcases hlocal with ⟨hWpos, _hcenterLocal, hprev, _hnextLocal⟩
+  have hcenterFromEntry :
+      0 < SourcePressureMarginInt n k (r + W.val) := by
+    have hentryNext :
+        0 < SourcePressureMarginInt n k (r + (W.val - 1) + 1) :=
+      (sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right_edge
+        n k r (W.val - 1)).2 hentry
+    have hidx : r + (W.val - 1) + 1 = r + W.val := by
+      omega
+    simpa [hidx] using hentryNext
+  have hnextFromExit :
+      SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
+    sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr hexit
+  exact
+    ⟨W, hmem, hprev, hcenterFromEntry, haddr, hnextFromExit⟩
+
+/--
 Failure resolution also exposes one witness whose singleton pulse has the full
 local entry-depth-exit diagnostic.
 
