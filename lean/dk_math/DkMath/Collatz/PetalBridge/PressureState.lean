@@ -453,4 +453,48 @@ theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_ov
         hrec)
   · exact Or.inr hoverlap
 
+/--
+Adjacent-overlap state exposes a concrete adjacent pair carrying the pair-level
+overlap obstruction.
+
+This refines the mnemonic overlap state from list-level obstruction to the
+addressed pair that witnesses it.  It still does not repair the overlap or
+select a canonical obstructing pair; the pair is merely the existential pair
+provided by the existing obstruction theorem.
+-/
+theorem sourcePressureAdjacentOverlapState_to_exists_pairOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureAdjacentOverlapState L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  exists_adjacentPairInList_pairOverlapObstruction_of_overlapObstruction h
+
+/--
+Failure resolution splits into either an oriented neighbor diagnostic or a
+concrete adjacent pair-level overlap obstruction.
+
+This is the pair-refined version of
+`sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_overlapState`.
+The recovered branch reaches the Beam-facing oriented diagnostic state; the
+overlap branch now exposes the addressed obstructing adjacent pair.
+-/
+theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborDiagnosticState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_overlapState
+      h with hdiag | hoverlap
+  · exact Or.inl hdiag
+  · exact Or.inr
+      (sourcePressureAdjacentOverlapState_to_exists_pairOverlapObstruction
+        hoverlap)
+
 end DkMath.Collatz
