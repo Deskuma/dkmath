@@ -489,6 +489,63 @@ def SourcePressureOrientedNeighborBoxState
     SourcePressureBeamCenteredLocalPulseBox n k r L W ∧
       SourcePressureBeamCenteredLocalPulseBox n k r L W'
 
+/-- Project the oriented diagnostic component from a two-endpoint box state. -/
+theorem SourcePressureOrientedNeighborBoxState.diagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    SourcePressureOrientedNeighborDiagnosticState L W W' := by
+  rcases h with ⟨hD, _hL, _hR⟩
+  exact hD
+
+/-- Project the left endpoint centered local pulse box from a two-endpoint box state. -/
+theorem SourcePressureOrientedNeighborBoxState.left_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W := by
+  rcases h with ⟨_hD, hL, _hR⟩
+  exact hL
+
+/-- Project the right endpoint centered local pulse box from a two-endpoint box state. -/
+theorem SourcePressureOrientedNeighborBoxState.right_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W' := by
+  rcases h with ⟨_hD, _hL, hR⟩
+  exact hR
+
+/--
+Project the ordered adjacent-pair address from an oriented diagnostic state.
+
+This is the orientation hook needed by the next comparison layer:
+
+```text
+Box -> D -> AdjacentPairInList L W W'
+```
+-/
+theorem SourcePressureOrientedNeighborDiagnosticState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborDiagnosticState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' := by
+  rcases h with ⟨hin, _hdiag, _hentry, _haddr, _hexit, _hentry', _haddr', _hexit'⟩
+  exact hin
+
+/-- Project the ordered adjacent-pair address from a two-endpoint box state. -/
+theorem SourcePressureOrientedNeighborBoxState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborBoxState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.diagnostic.adjacentPair
+
 /--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
