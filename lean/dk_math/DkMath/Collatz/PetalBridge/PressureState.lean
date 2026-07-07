@@ -710,4 +710,74 @@ theorem sourcePressureBeamSeedState_to_orientedNeighborDiagnostic_or_pairOverlap
   sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
     (sourcePressureBeamSeedState_to_failureResolutionState h)
 
+/--
+Failure resolution splits into either a two-endpoint oriented neighbor box or a
+concrete pair-level overlap obstruction.
+
+This is the boxed version of
+`sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap`.
+Only the diagnostic branch is strengthened, by packaging state `D` into
+`SourcePressureOrientedNeighborBoxState`.  The overlap branch is kept as the
+same concrete adjacent-pair obstruction.
+-/
+theorem sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
+      h with hdiag | hoverlap
+  · rcases hdiag with ⟨W, W', hD⟩
+    exact Or.inl
+      ⟨W, W',
+        sourcePressureOrientedNeighborDiagnosticState_to_boxState hD⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches the boxed diagnostic/obstruction split.
+
+This lifts the sorted-failure entry point through failure resolution and then
+through the boxed diagnostic branch.  It remains a local state-automaton
+wrapper and does not add coverage, propagation, overlap repair, or convergence.
+-/
+theorem sourcePressureSortedFailureState_to_orientedNeighborBox_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap
+    (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed reaches the boxed diagnostic/obstruction split.
+
+This is the Beam-facing entry point for the same boxed split:
+
+```text
+BeamSeed
+  -> OrientedNeighborBox
+   ∨ PairOverlapObstruction
+```
+-/
+theorem sourcePressureBeamSeedState_to_orientedNeighborBox_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborBoxState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap
+    (sourcePressureBeamSeedState_to_failureResolutionState h)
+
 end DkMath.Collatz
