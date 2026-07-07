@@ -678,6 +678,105 @@ theorem SourcePressureOrientedNeighborBoxState.before_of_sorted
     hbox.orderedAdjacentPairInList
 
 /--
+Address-level projection of `before_of_sorted`.
+
+`SourcePressureLocalIslandWitnessBefore` is definitionally the address-level
+`SourcePressureIntervalPulseAddressBefore` relation after converting both
+witnesses to singleton interval-pulse addresses.  This theorem keeps that
+definition available under a box-facing name so later comparison proofs can
+work directly with address coordinates.
+-/
+theorem SourcePressureOrientedNeighborBoxState.addressBefore_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    SourcePressureIntervalPulseAddressBefore
+      (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+      (sourcePressureIntervalPulseAddress_of_localIslandWitness W') :=
+  hbox.before_of_sorted hsorted
+
+/--
+Address-coordinate form of the ordered box comparison.
+
+The address-level before relation is `A.start + A.len ≤ B.start`.  Since
+interval-pulse addresses have positive length, this gives a strict separation
+between the left endpoint's right edge `A.start + A.len - 1` and the right
+endpoint's start.
+
+This is still only an address comparison.  It does not claim coverage,
+transport, or global monotonicity of all pressure depths.
+-/
+theorem SourcePressureOrientedNeighborBoxState.rightEdge_lt_start_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+        (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1 <
+      (sourcePressureIntervalPulseAddress_of_localIslandWitness W').start := by
+  have hbefore := hbox.addressBefore_of_sorted hsorted
+  have hlen :
+      0 < (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len :=
+    SourcePressureIntervalPulseAddress.len_pos
+      (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+  unfold SourcePressureIntervalPulseAddressBefore at hbefore
+  omega
+
+/--
+Non-strict version of `rightEdge_lt_start_of_sorted`.
+
+This wrapper is useful for callers that consume non-overlap as a weak
+inequality while the strict version remains available for depth comparison.
+-/
+theorem SourcePressureOrientedNeighborBoxState.rightEdge_le_start_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+        (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1 ≤
+      (sourcePressureIntervalPulseAddress_of_localIslandWitness W').start :=
+  le_of_lt (hbox.rightEdge_lt_start_of_sorted hsorted)
+
+/--
+Value-level comparison extracted from a sorted oriented neighbor box.
+
+For local-island witnesses, the generated interval-pulse address is a
+singleton: its start and right edge are both `W.val`.  Therefore the
+address-level strict separation becomes the native depth comparison
+`W.val < W'.val`.
+
+This theorem is the strongest direct numeric comparison available from the
+current definitions: it depends on the explicit adjacent pair inside the box
+and on the sortedness invariant for the enclosing witness list.
+-/
+theorem SourcePressureOrientedNeighborBoxState.val_lt_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    W.val < W'.val := by
+  have hsep := hbox.rightEdge_lt_start_of_sorted hsorted
+  rw [sourcePressureIntervalPulseAddress_of_localIslandWitness_rightEdge_eq,
+    sourcePressureIntervalPulseAddress_of_localIslandWitness_start_eq] at hsep
+  exact hsep
+
+/-- Non-strict value-level wrapper for callers that only need `≤`. -/
+theorem SourcePressureOrientedNeighborBoxState.val_le_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    W.val ≤ W'.val :=
+  le_of_lt (hbox.val_lt_of_sorted hsorted)
+
+/--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
 The oriented diagnostic supplies the endpoint sign patterns through
