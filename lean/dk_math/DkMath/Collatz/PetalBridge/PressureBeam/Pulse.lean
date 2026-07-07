@@ -282,5 +282,97 @@ theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_fail
                   (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
   exact exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed h
 
+/--
+An addressed adjacent pair preserves the left witness identity for the full
+local singleton diagnostic.
+
+This is the cp228 Branch A left-side bridge.  The recovered branch of
+`SourcePressureFailureResolution` exposes an adjacent pair `A B` through
+`SourcePressureLocalIslandWitnessAdjacentPairInList L A B`; this theorem keeps
+the left witness `A` rather than collapsing immediately to an arbitrary
+existential witness.
+
+The proof only extracts `A ∈ L` from the adjacent-pair address and then applies
+`sourcePressureBeamPulse_witness_singleton_full_diagnostic`.  It does not
+select a canonical pair, aggregate over pairs, or claim coverage.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPairInList_left
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness A).len - 1) ∧
+        SourcePressureBeamMassBalanceRightInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness A).len - 1) ≤
+          SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness A).len - 1) := by
+  have hmem : A ∈ L := by
+    induction L generalizing A B with
+    | nil =>
+        exact False.elim hin
+    | cons W1 rest ih =>
+        cases rest with
+        | nil =>
+            exact False.elim hin
+        | cons W2 rest =>
+            rcases hin with hhead | htail
+            · rcases hhead with ⟨hA, _hB⟩
+              simp [hA]
+            · exact List.mem_cons_of_mem W1 (ih htail)
+  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
+
+/--
+An addressed adjacent pair preserves the right witness identity for the full
+local singleton diagnostic.
+
+This is the cp228 Branch A right-side bridge.  It is symmetric in spirit to
+the left-side bridge, but it is kept as a separate theorem because downstream
+recovered-pair callers may care whether the diagnostic came from `A` or `B`.
+
+The theorem only extracts `B ∈ L` from the adjacent-pair address and applies
+the existing singleton full diagnostic.  It does not prefer this side globally
+or assert that both sides cover a larger interval.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPairInList_right
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness B).len - 1) ∧
+        SourcePressureBeamMassBalanceRightInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness B).len - 1) ≤
+          SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness B).len - 1) := by
+  have hmem : B ∈ L := by
+    induction L generalizing A B with
+    | nil =>
+        exact False.elim hin
+    | cons W1 rest ih =>
+        cases rest with
+        | nil =>
+            exact False.elim hin
+        | cons W2 rest =>
+            rcases hin with hhead | htail
+            · rcases hhead with ⟨_hA, hB⟩
+              simp [hB]
+            · exact List.mem_cons_of_mem W1 (ih htail)
+  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
+
 
 end DkMath.Collatz
