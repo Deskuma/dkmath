@@ -1432,4 +1432,157 @@ theorem not_sourcePressureBeamAddressedDepthTarget_localIslandWitness_intervalPu
   not_sourcePressureBeamAddressedDepthTarget_intervalPulse_left
     (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
 
+/-
+Beam crossing-edge target.
+
+Checkpoint 221 separates two Beam-facing notions that cp220 showed should not
+be conflated:
+
+* `SourcePressureBeamDepthTarget n k r j` means the current depth `j` is already
+  positive;
+* `SourcePressureBeamCrossingEdgeTarget n k r j` means the edge `j -> j + 1`
+  crosses from nonpositive to positive.
+
+The crossing-edge target is intentionally a Beam-facing name for the existing
+`SourcePressureSignChangeUp` predicate.  The new name is useful because the
+left edge of an interval pulse is not a positive-depth target, but it is
+exactly a crossing-edge target.  No propagation, coverage, or target transport
+is introduced here.
+-/
+
+/--
+Beam-facing target for an upward pressure crossing edge.
+
+This is a vocabulary layer over `SourcePressureSignChangeUp`.  It is not a
+positive-depth target: it records a boundary edge whose current margin is
+nonpositive and whose next margin is positive.
+-/
+def SourcePressureBeamCrossingEdgeTarget
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureSignChangeUp n k r j
+
+/-- Crossing-edge targets expose nonpositive current margin. -/
+theorem sourcePressureBeamCrossingEdgeTarget_current_nonpos
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamCrossingEdgeTarget n k r j) :
+    SourcePressureMarginInt n k (r + j) ≤ 0 :=
+  h.1
+
+/-- Crossing-edge targets expose positive next margin. -/
+theorem sourcePressureBeamCrossingEdgeTarget_next_pos
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamCrossingEdgeTarget n k r j) :
+    0 < SourcePressureMarginInt n k (r + j + 1) :=
+  h.2
+
+/--
+A crossing-edge target cannot be a positive Beam depth target at its current
+edge.
+
+This is the API-level version of the cp220 obstruction: the left edge of a
+crossing is a boundary before the positive run, not a positive selected depth.
+-/
+theorem not_sourcePressureBeamDepthTarget_of_crossingEdgeTarget
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamCrossingEdgeTarget n k r j) :
+    ¬ SourcePressureBeamDepthTarget n k r j := by
+  intro htarget
+  have hpos := sourcePressureMargin_pos_of_beamDepthTarget n k r j htarget
+  have hnonpos := sourcePressureBeamCrossingEdgeTarget_current_nonpos h
+  omega
+
+/--
+The next-margin sign is algebraically equivalent to the named mass-balance
+comparison at any edge.
+
+Unlike the older addressed-target spelling, this theorem does not require a
+positive current depth.  That is what the crossing-edge API needs: left
+crossing edges are not Beam depth targets, but their next-margin positivity
+still determines the same mass-balance inequality.
+-/
+theorem sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right_edge
+    (n : OddNat) (k r j : ℕ) :
+    0 < SourcePressureMarginInt n k (r + j + 1) ↔
+      SourcePressureBeamMassBalanceLeftInt n k r j <
+        SourcePressureBeamMassBalanceRightInt n k r j := by
+  unfold SourcePressureBeamMassBalanceLeftInt
+  unfold SourcePressureBeamMassBalanceRightInt SourcePressureMarginInt
+  omega
+
+/--
+Edge-local false/boundary mass-balance classifier without a positive-depth
+target hypothesis.
+-/
+theorem sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left_edge
+    (n : OddNat) (k r j : ℕ) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 ↔
+      SourcePressureBeamMassBalanceRightInt n k r j ≤
+        SourcePressureBeamMassBalanceLeftInt n k r j := by
+  unfold SourcePressureBeamMassBalanceLeftInt
+  unfold SourcePressureBeamMassBalanceRightInt SourcePressureMarginInt
+  omega
+
+/--
+Crossing-edge targets feed the True Beam mass-balance comparison at the same
+edge without requiring `SourcePressureBeamAddressedDepthTarget`.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_crossingEdgeTarget
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamCrossingEdgeTarget n k r j) :
+    SourcePressureBeamMassBalanceLeftInt n k r j <
+      SourcePressureBeamMassBalanceRightInt n k r j :=
+  (sourcePressureMargin_next_pos_iff_massBalanceLeft_lt_right_edge n k r j).1
+    (sourcePressureBeamCrossingEdgeTarget_next_pos h)
+
+/--
+An interval-pulse address supplies a Beam crossing-edge target at its exact
+left edge.
+-/
+theorem sourcePressureBeamCrossingEdgeTarget_of_intervalPulse_left
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamCrossingEdgeTarget n k r (A.start - 1) :=
+  sourcePressureIntervalPulseAddress_left_signChange A
+
+/--
+The left edge of an interval-pulse address supplies the True Beam
+mass-balance comparison through the crossing-edge target API.
+
+This is the corrected cp221 replacement for trying to make the left edge into
+`SourcePressureBeamAddressedDepthTarget`.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_intervalPulse_left_crossing
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamMassBalanceLeftInt n k r (A.start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r (A.start - 1) :=
+  sourcePressureBeamMassBalanceLeft_lt_right_of_crossingEdgeTarget
+    (sourcePressureBeamCrossingEdgeTarget_of_intervalPulse_left A)
+
+/--
+A local-island witness supplies a Beam crossing-edge target at the left edge
+of its generated singleton interval pulse.
+-/
+theorem sourcePressureBeamCrossingEdgeTarget_of_localIslandWitness_intervalPulse_left
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureBeamCrossingEdgeTarget n k r
+      ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) :=
+  sourcePressureBeamCrossingEdgeTarget_of_intervalPulse_left
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+
+/--
+A local-island witness supplies the True Beam mass-balance comparison at the
+left edge of its generated singleton interval pulse.
+-/
+theorem sourcePressureBeamMassBalanceLeft_lt_right_of_localIslandWitness_intervalPulse_left
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) :=
+  sourcePressureBeamMassBalanceLeft_lt_right_of_crossingEdgeTarget
+    (sourcePressureBeamCrossingEdgeTarget_of_localIslandWitness_intervalPulse_left W)
+
 end DkMath.Collatz
