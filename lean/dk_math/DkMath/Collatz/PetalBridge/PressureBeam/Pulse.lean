@@ -394,5 +394,49 @@ theorem
       sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPairInList_left
         hin⟩
 
+/--
+An adjacent-overlap obstruction exposes some listed witness with the full
+singleton pulse diagnostic.
+
+This is the intentionally weaker caller surface for users that only need an
+existential pulse diagnostic and do not care which endpoint of the obstructing
+adjacent pair produced it.  It consumes the cp230 left-witness wrapper, so it
+does not re-run the overlap recursion and does not introduce a canonical
+selection principle: the witness is merely the left endpoint supplied by one
+addressed overlap pair.
+
+The stronger pair-preserving theorem remains
+`exists_sourcePressureBeamPulse_leftWitness_full_diagnostic_of_adjacentOverlapObstruction`.
+Use this weaker theorem only when preserving `A`, `B`, and the pair-overlap
+obstruction would be caller noise.
+-/
+theorem exists_sourcePressureBeamPulse_witness_full_diagnostic_of_adjacentOverlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      W ∈ L ∧
+        SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ∧
+            SourcePressureBeamMassBalanceRightInt n k r
+              ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+              SourcePressureBeamMassBalanceLeftInt n k r
+                ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                  (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
+  rcases
+    exists_sourcePressureBeamPulse_leftWitness_full_diagnostic_of_adjacentOverlapObstruction
+      hobs with
+    ⟨A, B, hin, _hobspair, hdiag⟩
+  exact
+    ⟨A, sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin,
+      hdiag⟩
+
 
 end DkMath.Collatz
