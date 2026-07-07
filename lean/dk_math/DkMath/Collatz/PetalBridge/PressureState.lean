@@ -63,6 +63,110 @@ inductive SourcePressureStateName where
   deriving DecidableEq, Repr
 
 /--
+Mnemonic names for currently unfilled or unconfirmed regions of the
+source-pressure proof automaton.
+
+These are intentionally names only.  They are the future opcode slots for
+places where the proof-flow can get stuck because one required piece of
+evidence has not yet been supplied or derived.
+
+The key distinction is:
+
+* a Gap name is not a contradiction;
+* a Gap name is not a theorem saying that evidence is impossible;
+* a Gap name is a stable label for "this transition has no assigned proof
+  opcode yet".
+
+Future work can attach proof-producing opcodes, impossibility theorems, or
+obstruction witnesses to these names one by one.
+-/
+inductive SourcePressureGapName where
+  /-- No sorted-before failure input has been supplied yet. -/
+  | missingFailureInput
+  /-- Failure resolution has not yet been split into recovered/overlap. -/
+  | unresolvedResolutionBranch
+  /-- A Beam seed is not yet available from the current evidence. -/
+  | missingBeamSeed
+  /-- A centered pulse box has not yet been produced for the selected witness. -/
+  | missingPulseBox
+  /-- A neighbor candidate has not yet been supplied by explicit adjacency. -/
+  | missingNeighborCandidate
+  /-- A symmetric neighbor candidate is known, but no ordered orientation is fixed. -/
+  | missingOrientation
+  /-- Orientation is known, but adjacent diagnosis evidence is not yet attached. -/
+  | missingAdjacentDiagnosis
+  /-- Overlap has appeared and remains an unresolved obstruction. -/
+  | unresolvedOverlapObstruction
+  /-- A local diagnostic exists, but no transport/propagation theorem applies. -/
+  | missingTransport
+  /-- A local witness is known, but no canonical selection principle is available. -/
+  | missingCanonicalSelection
+  /-- Local evidence exists, but list-wide coverage has not been proved. -/
+  | missingCoverage
+  /-- Local families exist, but no safe aggregation theorem has been assigned. -/
+  | missingAggregation
+  deriving DecidableEq, Repr
+
+/--
+Mnemonic opcode names for proof steps that may later fill Gap slots.
+
+At this stage these are labels, not executable code.  They name the kinds of
+proof-producing moves already visible in the project:
+
+* enter a state from existing evidence;
+* split a branch;
+* project endpoint facts;
+* attach an orientation;
+* attach a lower adjacent diagnosis;
+* close a branch as obstruction.
+
+Keeping these names separate from `SourcePressureGapName` makes the intended
+table shape explicit:
+
+```text
+state bits + gap name -- assigned opcode --> next named state
+```
+-/
+inductive SourcePressureOpcodeName where
+  | enterFailureResolution
+  | splitResolution
+  | enterBeamSeed
+  | extractPulseBox
+  | projectNeighborMembership
+  | projectNeighborDiagnostic
+  | attachForwardOrientation
+  | attachReverseOrientation
+  | attachAdjacentDiagnosis
+  | closeAsOverlapObstruction
+  | markNoTransport
+  | markNoCoverage
+  | markNoCanonicalSelection
+  deriving DecidableEq, Repr
+
+/-
+Gap/opcode table notes.
+
+Current named states already cover the positive path up to oriented local
+diagnostics.  The first important unfilled cells are:
+
+```text
+NeighborCandidate alone
+  -> missingOrientation
+  -> missingAdjacentDiagnosis
+
+CenteredPulseBox alone
+  -> missingBeamSeed
+
+OrientedNeighborDiagnostic
+  -> missingTransport
+  -> missingCoverage
+```
+
+These are not Lean theorems yet.  They are the mnemonic slots that future
+formal impossibility lemmas or additional bridge theorems can target.
+-/
+
+/--
 State bit `F`: sorted-before failure has been observed for the supplied
 witness list.
 -/
