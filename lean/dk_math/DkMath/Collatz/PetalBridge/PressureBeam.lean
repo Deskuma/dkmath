@@ -1721,4 +1721,101 @@ theorem sourcePressureBeamMassBalanceRight_le_left_of_localIslandWitness_interva
   sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget
     (sourcePressureBeamFallingEdgeTarget_of_localIslandWitness_intervalPulse_right W)
 
+/-
+Local pulse-shape packaging.
+
+Checkpoint 223 keeps this as theorem packaging rather than a new predicate.
+The three target vocabularies are already precise enough:
+
+* entry edge: `SourcePressureBeamCrossingEdgeTarget`;
+* active selected depth: `SourcePressureBeamAddressedDepthTarget`;
+* exit edge: `SourcePressureBeamFallingEdgeTarget`.
+
+The paired interval theorem records only the exact two boundary edges of one
+given pulse address.  The witness theorem adds the addressed-depth target at
+the singleton pulse's right/center edge, and that part necessarily requires
+`W ∈ L`: addressed targets are list-relative carriers, while crossing/falling
+edge targets are intrinsic sign-change facts of the witness-generated pulse.
+
+This section deliberately does not claim interior coverage, family coverage,
+canonical target selection, overlap repair, or Collatz convergence.
+-/
+
+/--
+An interval-pulse address packages its two exact Beam boundary edges.
+
+The left edge is the entrance crossing at `A.start - 1`; the right edge is the
+falling exit at `A.start + A.len - 1`.
+-/
+theorem sourcePressureBeamPulse_edges_of_intervalPulseAddress
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamCrossingEdgeTarget n k r (A.start - 1) ∧
+      SourcePressureBeamFallingEdgeTarget n k r (A.start + A.len - 1) :=
+  ⟨sourcePressureBeamCrossingEdgeTarget_of_intervalPulse_left A,
+    sourcePressureBeamFallingEdgeTarget_of_intervalPulse_right A⟩
+
+/--
+An interval-pulse address packages the entry and exit mass-balance comparisons.
+
+This is the finite local pulse shape:
+entry gives the True Beam comparison `left < right`, while exit gives the
+False/Boundary comparison `right <= left`.
+-/
+theorem sourcePressureBeamPulse_massBalance_edges_of_intervalPulseAddress
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamMassBalanceLeftInt n k r (A.start - 1) <
+        SourcePressureBeamMassBalanceRightInt n k r (A.start - 1) ∧
+      SourcePressureBeamMassBalanceRightInt n k r (A.start + A.len - 1) ≤
+        SourcePressureBeamMassBalanceLeftInt n k r (A.start + A.len - 1) :=
+  ⟨sourcePressureBeamMassBalanceLeft_lt_right_of_intervalPulse_left_crossing A,
+    sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right_falling A⟩
+
+/--
+A local-island witness packages the singleton pulse shape:
+
+* crossing target at the generated pulse's left edge;
+* addressed positive depth at the generated pulse's right/center edge;
+* falling target at the same generated pulse's right edge.
+
+The addressed-depth component is list-relative, hence the `W ∈ L` hypothesis.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_shape
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r}
+    (hmem : W ∈ L) :
+    SourcePressureBeamCrossingEdgeTarget n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ∧
+        SourcePressureBeamFallingEdgeTarget n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) :=
+  ⟨sourcePressureBeamCrossingEdgeTarget_of_localIslandWitness_intervalPulse_left W,
+    sourcePressureBeamAddressedDepthTarget_of_localIslandWitness_intervalPulse_right hmem,
+    sourcePressureBeamFallingEdgeTarget_of_localIslandWitness_intervalPulse_right W⟩
+
+/--
+A local-island witness packages the singleton pulse's two edge comparisons:
+True Beam at entry and False/Boundary at exit.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_massBalance_edges
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+        SourcePressureBeamMassBalanceRightInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+      SourcePressureBeamMassBalanceRightInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+        SourcePressureBeamMassBalanceLeftInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) :=
+  ⟨sourcePressureBeamMassBalanceLeft_lt_right_of_localIslandWitness_intervalPulse_left W,
+    sourcePressureBeamMassBalanceRight_le_left_of_localIslandWitness_intervalPulse_right_falling W⟩
+
 end DkMath.Collatz
