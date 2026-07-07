@@ -247,5 +247,40 @@ theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed
     ⟨W, hmem,
       sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem⟩
 
+/--
+Failure resolution also exposes one witness whose singleton pulse has the full
+local entry-depth-exit diagnostic.
+
+This is the cp227-r1 Branch C experiment.  It is intentionally placed in the
+Beam-facing Pulse layer, not in `PressureAutomaton`: lower diagnostic and
+automaton modules must not import Beam vocabulary.
+
+The proof is deliberately thin.  `SourcePressureBeamSeed` is the Beam-facing
+name for `SourcePressureFailureResolution`, so this theorem only enters the
+seed bridge and reuses the Branch B theorem above.  It does not add a new
+failure-resolution decomposition, choose a canonical witness, repair overlap,
+or claim list coverage.
+-/
+theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_failureResolution
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureFailureResolution L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      W ∈ L ∧
+        SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+          SourcePressureBeamMassBalanceRightInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+          SourcePressureBeamAddressedDepthTarget L
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ∧
+            SourcePressureBeamMassBalanceRightInt n k r
+              ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+              SourcePressureBeamMassBalanceLeftInt n k r
+                ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+                  (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
+  exact exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed h
+
 
 end DkMath.Collatz
