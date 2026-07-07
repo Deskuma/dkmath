@@ -1046,6 +1046,43 @@ theorem SourcePressureForwardPairComparisonState.right_signs
   h.right_box.signs
 
 /--
+Both endpoint centers of a forward pair comparison state are positive, and the
+left endpoint is strictly before the right endpoint in value order.
+-/
+theorem SourcePressureForwardPairComparisonState.center_pos_pair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    0 < SourcePressureMarginInt n k (r + W.val) ∧
+      0 < SourcePressureMarginInt n k (r + W'.val) ∧
+        W.val < W'.val := by
+  rcases h.left_signs with
+    ⟨_hmemL, _hprevL, hcenterL, _htargetL, _hnextL⟩
+  rcases h.right_signs with
+    ⟨_hmemR, _hprevR, hcenterR, _htargetR, _hnextR⟩
+  exact ⟨hcenterL, hcenterR, h.val_lt⟩
+
+/--
+Both endpoint centers of a forward pair comparison state are addressed beam
+targets, and the left endpoint is strictly before the right endpoint in value
+order.
+-/
+theorem SourcePressureForwardPairComparisonState.center_targets_pair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureBeamAddressedDepthTarget L W.val ∧
+      SourcePressureBeamAddressedDepthTarget L W'.val ∧
+        W.val < W'.val := by
+  rcases h.left_signs with
+    ⟨_hmemL, _hprevL, _hcenterL, htargetL, _hnextL⟩
+  rcases h.right_signs with
+    ⟨_hmemR, _hprevR, _hcenterR, htargetR, _hnextR⟩
+  exact ⟨htargetL, htargetR, h.val_lt⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
