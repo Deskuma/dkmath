@@ -525,4 +525,31 @@ theorem sourcePressureSortedFailureState_to_orientedNeighborDiagnostic_or_pairOv
   sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
     (sourcePressureSortedFailureState_to_failureResolutionState h)
 
+/--
+Beam seed reaches the same refined diagnostic/obstruction split.
+
+This theorem exposes the Beam-seed entry point as a direct caller-facing split:
+
+```text
+BeamSeed
+  -> OrientedNeighborDiagnostic
+   ∨ PairOverlapObstruction
+```
+
+It is only the already-proved `BeamSeed -> FailureResolution` transition
+followed by the pair-refined failure-resolution split.  No stronger accounting,
+repair, propagation, or convergence statement is introduced here.
+-/
+theorem sourcePressureBeamSeedState_to_orientedNeighborDiagnostic_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W',
+      SourcePressureOrientedNeighborDiagnosticState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
+    (sourcePressureBeamSeedState_to_failureResolutionState h)
+
 end DkMath.Collatz
