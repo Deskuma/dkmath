@@ -356,6 +356,80 @@ theorem exists_sourcePressureBeamPulse_witness_center_margin_signs_of_seed
     ⟨W, hmem, hprev, hcenterFromEntry, haddr, hnextFromExit⟩
 
 /--
+Centered local pulse box for one Beam witness.
+
+This predicate is the cp238 local packaging of three already-established
+layers:
+
+* cp235 sign transition around the native witness depth `W.val`;
+* cp236 margin-height boxes at the previous, center, and next depths;
+* cp237 net-drop jump boxes at the entry and exit adjacent edges.
+
+The predicate is intentionally local and witness-relative.  It does not assert
+propagation, list-wide coverage, witness aggregation, overlap repair, canonical
+witness selection, monotone trend, global Big bounds, or Collatz convergence.
+-/
+def SourcePressureBeamCenteredLocalPulseBox
+    (n : OddNat) (k r : ℕ)
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W : SourcePressureLocalIslandWitness n k r) : Prop :=
+  W ∈ L ∧
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureBeamAddressedDepthTarget L W.val ∧
+          SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+            (- (k : ℤ) ≤ SourcePressureMarginInt n k (r + (W.val - 1)) ∧
+              SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 2 * (k : ℤ)) ∧
+              (- (k : ℤ) ≤ SourcePressureMarginInt n k (r + W.val) ∧
+                SourcePressureMarginInt n k (r + W.val) ≤ 2 * (k : ℤ)) ∧
+                (- (k : ℤ) ≤ SourcePressureMarginInt n k (r + W.val + 1) ∧
+                  SourcePressureMarginInt n k (r + W.val + 1) ≤ 2 * (k : ℤ)) ∧
+                  (- (3 * (k : ℤ)) ≤
+                      SourcePressureNetDropInt n k r (W.val - 1) ∧
+                    SourcePressureNetDropInt n k r (W.val - 1) ≤
+                      3 * (k : ℤ)) ∧
+                    (- (3 * (k : ℤ)) ≤
+                        SourcePressureNetDropInt n k r W.val ∧
+                      SourcePressureNetDropInt n k r W.val ≤
+                        3 * (k : ℤ))
+
+/--
+A Beam seed exposes one witness whose centered pulse is inside the finite
+local pulse box.
+
+This is only a thin wrapper over:
+
+* `exists_sourcePressureBeamPulse_witness_center_margin_signs_of_seed`;
+* `sourcePressureMarginInt_bounds_window`;
+* `sourcePressureNetDropInt_bounds_window`.
+
+It packages the local sign transition, three pointwise height boxes, and two
+adjacent jump boxes for the same existential witness.  No propagation or
+global behavior is claimed.
+-/
+theorem exists_sourcePressureBeamPulse_witness_center_local_box_of_seed
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hseed : SourcePressureBeamSeed L) :
+    ∃ W : SourcePressureLocalIslandWitness n k r,
+      SourcePressureBeamCenteredLocalPulseBox n k r L W := by
+  rcases exists_sourcePressureBeamPulse_witness_center_margin_signs_of_seed
+      hseed with
+    ⟨W, hmem, hprev, hcenter, haddr, hnext⟩
+  exact
+    ⟨W,
+      hmem,
+      hprev,
+      hcenter,
+      haddr,
+      hnext,
+      sourcePressureMarginInt_bounds_window n k (r + (W.val - 1)),
+      sourcePressureMarginInt_bounds_window n k (r + W.val),
+      sourcePressureMarginInt_bounds_window n k (r + W.val + 1),
+      sourcePressureNetDropInt_bounds_window n k r (W.val - 1),
+      sourcePressureNetDropInt_bounds_window n k r W.val⟩
+
+/--
 Failure resolution also exposes one witness whose singleton pulse has the full
 local entry-depth-exit diagnostic.
 
