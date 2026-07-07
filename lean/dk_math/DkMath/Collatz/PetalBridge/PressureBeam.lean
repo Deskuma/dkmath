@@ -1585,4 +1585,140 @@ theorem sourcePressureBeamMassBalanceLeft_lt_right_of_localIslandWitness_interva
   sourcePressureBeamMassBalanceLeft_lt_right_of_crossingEdgeTarget
     (sourcePressureBeamCrossingEdgeTarget_of_localIslandWitness_intervalPulse_left W)
 
+/-
+Beam falling-edge target.
+
+Checkpoint 222 completes the symmetric exact-edge vocabulary:
+
+* `SourcePressureBeamCrossingEdgeTarget` reads an entrance edge
+  `nonpositive -> positive`;
+* `SourcePressureBeamFallingEdgeTarget` reads an exit edge
+  `positive -> nonpositive`;
+* `SourcePressureBeamDepthTarget` reads a positive current depth.
+
+The falling-edge target is a Beam-facing name for the existing
+`SourcePressureSignChangeDown` predicate.  It is useful because right-edge
+false/boundary mass-balance comparisons can be read directly from the edge,
+without requiring an addressed positive-depth target carrier.  This is still
+only exact-edge vocabulary and algebra, not propagation or coverage.
+-/
+
+/--
+Beam-facing target for a downward pressure falling edge.
+
+This is a vocabulary layer over `SourcePressureSignChangeDown`: current margin
+is positive and the next margin is nonpositive.
+-/
+def SourcePressureBeamFallingEdgeTarget
+    (n : OddNat) (k r j : ℕ) : Prop :=
+  SourcePressureSignChangeDown n k r j
+
+/-- Falling-edge targets expose positive current margin. -/
+theorem sourcePressureBeamFallingEdgeTarget_current_pos
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamFallingEdgeTarget n k r j) :
+    0 < SourcePressureMarginInt n k (r + j) :=
+  h.1
+
+/-- Falling-edge targets expose nonpositive next margin. -/
+theorem sourcePressureBeamFallingEdgeTarget_next_nonpos
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamFallingEdgeTarget n k r j) :
+    SourcePressureMarginInt n k (r + j + 1) ≤ 0 :=
+  h.2
+
+/--
+A falling-edge target is a positive Beam depth target at its current edge.
+
+This is the main distinction from crossing edges: falling edges start inside a
+positive run, so the current depth is selected.
+-/
+theorem sourcePressureBeamDepthTarget_of_fallingEdgeTarget
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamFallingEdgeTarget n k r j) :
+    SourcePressureBeamDepthTarget n k r j :=
+  sourcePressureBeamDepthTarget_of_margin_pos n k r j
+    (sourcePressureBeamFallingEdgeTarget_current_pos h)
+
+/--
+A crossing edge and a falling edge cannot occur at the same pressure edge.
+
+They demand incompatible signs for the current margin.
+-/
+theorem not_crossingEdgeTarget_and_fallingEdgeTarget
+    {n : OddNat} {k r j : ℕ}
+    (hcross : SourcePressureBeamCrossingEdgeTarget n k r j) :
+    ¬ SourcePressureBeamFallingEdgeTarget n k r j := by
+  intro hfall
+  have hnonpos := sourcePressureBeamCrossingEdgeTarget_current_nonpos hcross
+  have hpos := sourcePressureBeamFallingEdgeTarget_current_pos hfall
+  omega
+
+/--
+A falling-edge target feeds the False/Boundary Beam mass-balance comparison at
+the same edge without requiring `SourcePressureBeamAddressedDepthTarget`.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget
+    {n : OddNat} {k r j : ℕ}
+    (h : SourcePressureBeamFallingEdgeTarget n k r j) :
+    SourcePressureBeamMassBalanceRightInt n k r j ≤
+      SourcePressureBeamMassBalanceLeftInt n k r j :=
+  (sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left_edge n k r j).1
+    (sourcePressureBeamFallingEdgeTarget_next_nonpos h)
+
+/--
+An interval-pulse address supplies a Beam falling-edge target at its exact
+right edge.
+-/
+theorem sourcePressureBeamFallingEdgeTarget_of_intervalPulse_right
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamFallingEdgeTarget n k r (A.start + A.len - 1) :=
+  sourcePressureIntervalPulseAddress_right_signChange A
+
+/--
+The right edge of an interval-pulse address supplies the False/Boundary
+mass-balance comparison through the falling-edge target API.
+
+Unlike the older right-edge theorem, this version does not require an
+addressed-depth target hypothesis.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right_falling
+    {n : OddNat} {k r : ℕ}
+    (A : SourcePressureIntervalPulseAddress n k r) :
+    SourcePressureBeamMassBalanceRightInt n k r (A.start + A.len - 1) ≤
+      SourcePressureBeamMassBalanceLeftInt n k r (A.start + A.len - 1) :=
+  sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget
+    (sourcePressureBeamFallingEdgeTarget_of_intervalPulse_right A)
+
+/--
+A local-island witness supplies a Beam falling-edge target at the right edge
+of its generated singleton interval pulse.
+-/
+theorem sourcePressureBeamFallingEdgeTarget_of_localIslandWitness_intervalPulse_right
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureBeamFallingEdgeTarget n k r
+      ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+        (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) :=
+  sourcePressureBeamFallingEdgeTarget_of_intervalPulse_right
+    (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
+
+/--
+A local-island witness supplies the False/Boundary Beam comparison at the
+right edge of its generated singleton interval pulse through the falling-edge
+target API.
+-/
+theorem sourcePressureBeamMassBalanceRight_le_left_of_localIslandWitness_intervalPulse_right_falling
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureBeamMassBalanceRightInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+      SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) :=
+  sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget
+    (sourcePressureBeamFallingEdgeTarget_of_localIslandWitness_intervalPulse_right W)
+
 end DkMath.Collatz
