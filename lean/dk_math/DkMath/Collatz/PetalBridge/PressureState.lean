@@ -1468,4 +1468,68 @@ theorem sourcePressureBeamSeedState_to_forwardBoxComparisonState_or_pairOverlap
   sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
 
+/--
+Failure resolution reaches the forward pair-comparison state or a concrete
+pair-overlap obstruction.
+
+This is the pair-comparison-facing lift of
+`sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap`.
+The forward branch is converted by
+`SourcePressureForwardBoxComparisonState.to_pairComparisonState`; the
+obstruction branch is unchanged.
+-/
+theorem sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureForwardPairComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
+      hsorted h with hforward | hoverlap
+  · rcases hforward with ⟨W, W', hFBC⟩
+    exact Or.inl ⟨W, W', hFBC.to_pairComparisonState⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches the forward pair-comparison state or a concrete
+pair-overlap obstruction.
+-/
+theorem sourcePressureSortedFailureState_to_forwardPairComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W',
+      SourcePressureForwardPairComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed reaches the forward pair-comparison state or a concrete pair-overlap
+obstruction.
+
+This is the Beam-facing pair-comparison entry point produced by the current
+state ladder.
+-/
+theorem sourcePressureBeamSeedState_to_forwardPairComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W',
+      SourcePressureForwardPairComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
 end DkMath.Collatz
