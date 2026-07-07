@@ -995,6 +995,56 @@ theorem SourcePressureForwardPairComparisonState.not_reverse_box
     ¬ SourcePressureOrientedNeighborBoxState L W' W :=
   h.forward.not_reverse_box
 
+/-- The left endpoint of a forward pair comparison state is a member of the list. -/
+theorem SourcePressureForwardPairComparisonState.left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W ∈ L :=
+  h.left_box.signs.1
+
+/-- The right endpoint of a forward pair comparison state is a member of the list. -/
+theorem SourcePressureForwardPairComparisonState.right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W' ∈ L :=
+  h.right_box.signs.1
+
+/--
+Project the sign-and-target surface for the left endpoint of a forward pair
+comparison state.
+-/
+theorem SourcePressureForwardPairComparisonState.left_signs
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W ∈ L ∧
+      SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W.val) ∧
+          SourcePressureBeamAddressedDepthTarget L W.val ∧
+            SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
+  h.left_box.signs
+
+/--
+Project the sign-and-target surface for the right endpoint of a forward pair
+comparison state.
+-/
+theorem SourcePressureForwardPairComparisonState.right_signs
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W' ∈ L ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W'.val) ∧
+          SourcePressureBeamAddressedDepthTarget L W'.val ∧
+            SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 :=
+  h.right_box.signs
+
 /--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
