@@ -335,6 +335,45 @@ theorem sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
           · exact List.mem_cons_of_mem W1 (ih htail)
 
 /--
+An adjacent-overlap obstruction exposes one addressed neighboring pair and its
+pair-local overlap obstruction.
+
+This is the cp230 lower-layer overlap projection.  It follows the same
+recursive address structure as
+`SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction`: the head
+case returns the head pair, while the tail case lifts the tail address through
+the newly supplied head.  It does not import Beam vocabulary, repair the
+overlap, choose a canonical pair among several possibilities, or claim list
+coverage.
+-/
+theorem exists_adjacentPairInList_pairOverlapObstruction_of_overlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  induction L with
+  | nil =>
+      exact False.elim hobs
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hobs
+      | cons W2 rest =>
+          rcases hobs with hhead | htail
+          · exact
+              ⟨W1, W2,
+                SourcePressureLocalIslandWitnessAdjacentPairInList.head,
+                hhead⟩
+          · rcases ih htail with ⟨A, B, hin, hobspair⟩
+            exact
+              ⟨A, B,
+                SourcePressureLocalIslandWitnessAdjacentPairInList.tail hin,
+                hobspair⟩
+
+/--
 A list-level carrier for "some adjacent pair in this explicit list has an
 adjacent diagnosis".
 
