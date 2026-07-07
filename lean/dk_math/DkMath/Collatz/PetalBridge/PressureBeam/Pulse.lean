@@ -171,5 +171,43 @@ theorem sourcePressureBeamPulse_witness_singleton_depth_and_exit_massBalance
     ⟨hdepth,
       sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget hexit⟩
 
+/--
+Caller-facing full diagnostic for one explicitly contained witness singleton.
+
+This is only a convenience package for one witness `W` with `W ∈ L`.  It
+combines the existing singleton edge comparisons with the list-relative
+addressed-depth fact:
+
+* entry edge: True Beam comparison `left < right`;
+* center/right edge: `SourcePressureBeamAddressedDepthTarget L ...`;
+* exit edge: False/Boundary comparison `right <= left`.
+
+No list coverage, witness-family aggregation, canonical target selection,
+overlap repair, propagation, or convergence is claimed.
+-/
+theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r}
+    (hmem : W ∈ L) :
+    SourcePressureBeamMassBalanceLeftInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) <
+      SourcePressureBeamMassBalanceRightInt n k r
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start - 1) ∧
+      SourcePressureBeamAddressedDepthTarget L
+        ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+          (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ∧
+        SourcePressureBeamMassBalanceRightInt n k r
+          ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+            (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) ≤
+          SourcePressureBeamMassBalanceLeftInt n k r
+            ((sourcePressureIntervalPulseAddress_of_localIslandWitness W).start +
+              (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
+  rcases sourcePressureBeamPulse_witness_singleton_massBalance_edges W with
+    ⟨hentry, hexitBalance⟩
+  rcases sourcePressureBeamPulse_witness_singleton_depth_and_exit_massBalance hmem with
+    ⟨hdepth, _⟩
+  exact ⟨hentry, hdepth, hexitBalance⟩
+
 
 end DkMath.Collatz
