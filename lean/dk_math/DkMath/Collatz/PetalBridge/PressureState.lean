@@ -919,6 +919,97 @@ theorem SourcePressureForwardBoxComparisonState.right_mem
   h.box.right_mem
 
 /--
+Pair-comparison-facing packaging of the forward box branch.
+
+This state keeps the forward comparison state and repeats the local pair data
+that the next layer naturally consumes:
+
+* the ordered adjacent-pair address;
+* the left endpoint's centered pulse box;
+* the right endpoint's centered pulse box.
+
+The duplicated projections are intentional.  They keep later pair-comparison
+theorems from depending on the internal shape of
+`SourcePressureForwardBoxComparisonState`.
+-/
+def SourcePressureForwardPairComparisonState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureForwardBoxComparisonState L W W' ∧
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∧
+      SourcePressureBeamCenteredLocalPulseBox n k r L W ∧
+        SourcePressureBeamCenteredLocalPulseBox n k r L W'
+
+/-- Project the underlying forward box comparison state. -/
+theorem SourcePressureForwardPairComparisonState.forward
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureForwardBoxComparisonState L W W' :=
+  h.1
+
+/-- Project the ordered adjacent-pair address from a forward pair comparison state. -/
+theorem SourcePressureForwardPairComparisonState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.2.1
+
+/-- Project the left endpoint pulse box from a forward pair comparison state. -/
+theorem SourcePressureForwardPairComparisonState.left_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W :=
+  h.2.2.1
+
+/-- Project the right endpoint pulse box from a forward pair comparison state. -/
+theorem SourcePressureForwardPairComparisonState.right_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W' :=
+  h.2.2.2
+
+/-- Project the forward value comparison from a forward pair comparison state. -/
+theorem SourcePressureForwardPairComparisonState.val_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W.val < W'.val :=
+  h.forward.val_lt
+
+/-- Project reverse-box exclusion from a forward pair comparison state. -/
+theorem SourcePressureForwardPairComparisonState.not_reverse_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    ¬ SourcePressureOrientedNeighborBoxState L W' W :=
+  h.forward.not_reverse_box
+
+/--
+Constructor from the forward box comparison state to the pair-comparison-facing
+state.
+
+All additional fields are projections already stored in the forward state.
+-/
+theorem SourcePressureForwardBoxComparisonState.to_pairComparisonState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    SourcePressureForwardPairComparisonState L W W' :=
+  ⟨h, h.adjacentPair, h.left_box, h.right_box⟩
+
+/--
 Constructor from a sorted oriented neighbor box to the named forward comparison
 state.
 
