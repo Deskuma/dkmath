@@ -777,6 +777,36 @@ theorem SourcePressureOrientedNeighborBoxState.val_le_of_sorted
   le_of_lt (hbox.val_lt_of_sorted hsorted)
 
 /--
+Sorted oriented neighbor boxes have distinct endpoint depths.
+
+This is a caller-facing corollary of `val_lt_of_sorted`, useful when later
+non-collision arguments need only inequality rather than the full order.
+-/
+theorem SourcePressureOrientedNeighborBoxState.val_ne_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    W.val ≠ W'.val :=
+  ne_of_lt (hbox.val_lt_of_sorted hsorted)
+
+/--
+Sorted oriented neighbor boxes rule out the reverse value order.
+
+This is the negative-orientation wrapper for callers that want to discharge a
+reverse comparison branch directly from the sorted box state.
+-/
+theorem SourcePressureOrientedNeighborBoxState.not_val_ge_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    ¬ W'.val ≤ W.val :=
+  not_le_of_gt (hbox.val_lt_of_sorted hsorted)
+
+/--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
 The oriented diagnostic supplies the endpoint sign patterns through
