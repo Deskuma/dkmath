@@ -465,6 +465,83 @@ theorem sourcePressureOrientedNeighborDiagnosticState_right_center_margin_signs
   exact ⟨hprev, hcenter, haddr', hnext⟩
 
 /--
+Two-endpoint box state for an oriented neighbor diagnostic.
+
+This packages state `D` together with the finite local pulse box at both
+endpoints.  Each endpoint box contains:
+
+* the three-margin sign pattern around the native depth;
+* margin-height bounds at previous, center, and next depths;
+* net-drop bounds at the entry and exit adjacent edges.
+
+Using the existing `SourcePressureBeamCenteredLocalPulseBox` keeps the
+one-endpoint box contract authoritative and prevents this two-endpoint state
+from silently drifting if the pulse-box API is refined later.
+
+This is still a local two-endpoint package.  It does not assert transport,
+propagation, coverage, aggregation, overlap repair, or convergence.
+-/
+def SourcePressureOrientedNeighborBoxState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureOrientedNeighborDiagnosticState L W W' ∧
+    SourcePressureBeamCenteredLocalPulseBox n k r L W ∧
+      SourcePressureBeamCenteredLocalPulseBox n k r L W'
+
+/--
+Package an oriented neighbor diagnostic into the two-endpoint box state.
+
+The oriented diagnostic supplies the endpoint sign patterns through
+`sourcePressureOrientedNeighborDiagnosticState_left_center_margin_signs` and
+`sourcePressureOrientedNeighborDiagnosticState_right_center_margin_signs`.
+The finite height and jump boxes are supplied pointwise by
+`sourcePressureMarginInt_bounds_window` and
+`sourcePressureNetDropInt_bounds_window`.
+-/
+theorem sourcePressureOrientedNeighborDiagnosticState_to_boxState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborDiagnosticState L W W') :
+    SourcePressureOrientedNeighborBoxState L W W' := by
+  rcases h with
+    ⟨hin, hdiag, hentry, haddr, hexit, hentry', haddr', hexit'⟩
+  let hD : SourcePressureOrientedNeighborDiagnosticState L W W' :=
+    ⟨hin, hdiag, hentry, haddr, hexit, hentry', haddr', hexit'⟩
+  rcases
+    sourcePressureOrientedNeighborDiagnosticState_left_center_margin_signs
+      hD with
+    ⟨hprev, hcenter, haddrLeft, hnext⟩
+  rcases
+    sourcePressureOrientedNeighborDiagnosticState_right_center_margin_signs
+      hD with
+    ⟨hprev', hcenter', haddrRight, hnext'⟩
+  have hboxLeft : SourcePressureBeamCenteredLocalPulseBox n k r L W :=
+    ⟨sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin,
+      hprev,
+      hcenter,
+      haddrLeft,
+      hnext,
+      sourcePressureMarginInt_bounds_window n k (r + (W.val - 1)),
+      sourcePressureMarginInt_bounds_window n k (r + W.val),
+      sourcePressureMarginInt_bounds_window n k (r + W.val + 1),
+      sourcePressureNetDropInt_bounds_window n k r (W.val - 1),
+      sourcePressureNetDropInt_bounds_window n k r W.val⟩
+  have hboxRight : SourcePressureBeamCenteredLocalPulseBox n k r L W' :=
+    ⟨sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hin,
+      hprev',
+      hcenter',
+      haddrRight,
+      hnext',
+      sourcePressureMarginInt_bounds_window n k (r + (W'.val - 1)),
+      sourcePressureMarginInt_bounds_window n k (r + W'.val),
+      sourcePressureMarginInt_bounds_window n k (r + W'.val + 1),
+      sourcePressureNetDropInt_bounds_window n k r (W'.val - 1),
+      sourcePressureNetDropInt_bounds_window n k r W'.val⟩
+  exact ⟨hD, hboxLeft, hboxRight⟩
+
+/--
 Recovered adjacent state enters the oriented neighbor diagnostic state.
 
 This fills the first recovered-branch Gap slot:
