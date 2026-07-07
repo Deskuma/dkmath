@@ -873,6 +873,51 @@ theorem SourcePressureForwardBoxComparisonState.not_reverse_box
     ¬ SourcePressureOrientedNeighborBoxState L W' W :=
   h.2.2
 
+/-- Project the left centered pulse box from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.left_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W :=
+  h.box.left_box
+
+/-- Project the right centered pulse box from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.right_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    SourcePressureBeamCenteredLocalPulseBox n k r L W' :=
+  h.box.right_box
+
+/-- Project the ordered adjacent-pair address from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.box.adjacentPair
+
+/-- The left endpoint of a forward comparison state is a member of the list. -/
+theorem SourcePressureForwardBoxComparisonState.left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    W ∈ L :=
+  h.box.left_mem
+
+/-- The right endpoint of a forward comparison state is a member of the list. -/
+theorem SourcePressureForwardBoxComparisonState.right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    W' ∈ L :=
+  h.box.right_mem
+
 /--
 Constructor from a sorted oriented neighbor box to the named forward comparison
 state.
