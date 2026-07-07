@@ -279,6 +279,62 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
   exact h
 
 /--
+The left witness of an addressed adjacent pair is a member of the addressed
+list.
+
+This is a pure address projection for
+`SourcePressureLocalIslandWitnessAdjacentPairInList`.  It does not inspect the
+pair diagnosis, does not choose a canonical pair, and does not claim coverage
+of all witnesses in the list.
+-/
+theorem sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    A ∈ L := by
+  induction L generalizing A B with
+  | nil =>
+      exact False.elim hin
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons W2 rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨hA, _hB⟩
+            simp [hA]
+          · exact List.mem_cons_of_mem W1 (ih htail)
+
+/--
+The right witness of an addressed adjacent pair is a member of the addressed
+list.
+
+This is the right-side companion to
+`sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem`.  It is still
+only an address projection; it does not make the adjacent pair canonical and
+does not aggregate diagnostics.
+-/
+theorem sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    B ∈ L := by
+  induction L generalizing A B with
+  | nil =>
+      exact False.elim hin
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons W2 rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨_hA, hB⟩
+            simp [hB]
+          · exact List.mem_cons_of_mem W1 (ih htail)
+
+/--
 A list-level carrier for "some adjacent pair in this explicit list has an
 adjacent diagnosis".
 

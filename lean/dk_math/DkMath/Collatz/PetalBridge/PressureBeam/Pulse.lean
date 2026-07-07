@@ -314,20 +314,8 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPai
           SourcePressureBeamMassBalanceLeftInt n k r
             ((sourcePressureIntervalPulseAddress_of_localIslandWitness A).start +
               (sourcePressureIntervalPulseAddress_of_localIslandWitness A).len - 1) := by
-  have hmem : A ∈ L := by
-    induction L generalizing A B with
-    | nil =>
-        exact False.elim hin
-    | cons W1 rest ih =>
-        cases rest with
-        | nil =>
-            exact False.elim hin
-        | cons W2 rest =>
-            rcases hin with hhead | htail
-            · rcases hhead with ⟨hA, _hB⟩
-              simp [hA]
-            · exact List.mem_cons_of_mem W1 (ih htail)
-  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
+  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic
+    (sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin)
 
 /--
 An addressed adjacent pair preserves the right witness identity for the full
@@ -359,20 +347,8 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPai
           SourcePressureBeamMassBalanceLeftInt n k r
             ((sourcePressureIntervalPulseAddress_of_localIslandWitness B).start +
               (sourcePressureIntervalPulseAddress_of_localIslandWitness B).len - 1) := by
-  have hmem : B ∈ L := by
-    induction L generalizing A B with
-    | nil =>
-        exact False.elim hin
-    | cons W1 rest ih =>
-        cases rest with
-        | nil =>
-            exact False.elim hin
-        | cons W2 rest =>
-            rcases hin with hhead | htail
-            · rcases hhead with ⟨_hA, hB⟩
-              simp [hB]
-            · exact List.mem_cons_of_mem W1 (ih htail)
-  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
+  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic
+    (sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hin)
 
 
 end DkMath.Collatz
