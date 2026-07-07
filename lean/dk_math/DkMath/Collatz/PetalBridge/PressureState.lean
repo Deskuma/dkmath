@@ -605,6 +605,79 @@ theorem SourcePressureOrientedNeighborBoxState.right_mem
     h.orderedAdjacentPairInList
 
 /--
+An addressed adjacent pair in a sorted witness list inherits witness-level
+`Before`.
+
+This is the missing comparison bridge found at cp256.  The sortedness
+predicate already exists as `SourcePressureLocalIslandWitnessListSortedBefore`;
+it is adjacent sortedness after converting witnesses to interval-pulse
+addresses.  Since `SourcePressureLocalIslandWitnessAdjacentPairInList` has the
+same head-or-tail recursive shape, the bridge is a structural induction over
+the enclosing list.
+
+This theorem does not prove any numeric value order such as `W.val < W'.val`.
+It only turns list adjacency plus address-sortedness into witness-level
+ordered non-overlap.
+-/
+theorem sourcePressureAdjacentPairInList_before_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
+    SourcePressureLocalIslandWitnessBefore W W' := by
+  induction L generalizing W W' with
+  | nil =>
+      exact False.elim hin
+  | cons A rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons B rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨hW, hW'⟩
+            subst W
+            subst W'
+            change
+              SourcePressureIntervalPulseAddressBefore
+                (sourcePressureIntervalPulseAddress_of_localIslandWitness A)
+                (sourcePressureIntervalPulseAddress_of_localIslandWitness B)
+            change
+              SourcePressureIntervalPulseAddressFamilySortedBefore
+                (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                  (A :: B :: rest)) at hsorted
+            exact hsorted.1
+          · have htailSorted :
+                SourcePressureLocalIslandWitnessListSortedBefore (B :: rest) := by
+              change
+                SourcePressureIntervalPulseAddressFamilySortedBefore
+                  (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                    (A :: B :: rest)) at hsorted
+              change
+                SourcePressureIntervalPulseAddressFamilySortedBefore
+                  (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                    (B :: rest))
+              exact hsorted.2
+            exact ih htailSorted htail
+
+/--
+Box-facing version of
+`sourcePressureAdjacentPairInList_before_of_sorted`.
+
+A two-endpoint box supplies the ordered adjacent-pair address; sortedness of
+the enclosing witness list supplies the mathematical address order.
+-/
+theorem SourcePressureOrientedNeighborBoxState.before_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    SourcePressureLocalIslandWitnessBefore W W' :=
+  sourcePressureAdjacentPairInList_before_of_sorted hsorted
+    hbox.orderedAdjacentPairInList
+
+/--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
 The oriented diagnostic supplies the endpoint sign patterns through
