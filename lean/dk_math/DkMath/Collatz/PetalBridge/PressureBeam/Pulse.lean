@@ -394,6 +394,32 @@ def SourcePressureBeamCenteredLocalPulseBox
                         3 * (k : ℤ))
 
 /--
+Project the sign-and-target part of a centered local pulse box.
+
+This is the cp239 Branch C consumer surface.  It exposes the part that a future
+neighbor/transport theorem will usually need first, while leaving the finite
+height and jump boxes inside `SourcePressureBeamCenteredLocalPulseBox` for
+callers that need quantitative bounds.
+
+No neighboring witness, transport, propagation, or obstruction is inferred
+from this projection.
+-/
+theorem SourcePressureBeamCenteredLocalPulseBox.signs
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureBeamCenteredLocalPulseBox n k r L W) :
+    W ∈ L ∧
+      SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W.val) ∧
+          SourcePressureBeamAddressedDepthTarget L W.val ∧
+            SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 := by
+  rcases hbox with
+    ⟨hmem, hprev, hcenter, haddr, hnext, _hprevBox, _hcenterBox,
+      _hnextBox, _hentryJumpBox, _hexitJumpBox⟩
+  exact ⟨hmem, hprev, hcenter, haddr, hnext⟩
+
+/--
 A Beam seed exposes one witness whose centered pulse is inside the finite
 local pulse box.
 
