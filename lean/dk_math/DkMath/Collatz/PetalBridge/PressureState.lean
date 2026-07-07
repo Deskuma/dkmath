@@ -827,6 +827,70 @@ theorem SourcePressureOrientedNeighborBoxState.not_reverse_box_of_sorted
     (hrev.val_le_of_sorted hsorted)
 
 /--
+Named state for the forward comparison branch of a two-endpoint box.
+
+This packages the exact payload produced under sortedness:
+
+* the oriented neighbor box itself;
+* the forward native depth comparison `W.val < W'.val`;
+* exclusion of the reverse box orientation.
+
+It is a local pair-comparison state, not a canonical-pair selector and not a
+global coverage statement.
+-/
+def SourcePressureForwardBoxComparisonState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureOrientedNeighborBoxState L W W' ∧
+    W.val < W'.val ∧
+      ¬ SourcePressureOrientedNeighborBoxState L W' W
+
+/-- Project the underlying oriented neighbor box from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    SourcePressureOrientedNeighborBoxState L W W' :=
+  h.1
+
+/-- Project the forward value comparison from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.val_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    W.val < W'.val :=
+  h.2.1
+
+/-- Project reverse-box exclusion from a forward comparison state. -/
+theorem SourcePressureForwardBoxComparisonState.not_reverse_box
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardBoxComparisonState L W W') :
+    ¬ SourcePressureOrientedNeighborBoxState L W' W :=
+  h.2.2
+
+/--
+Constructor from a sorted oriented neighbor box to the named forward comparison
+state.
+
+The sortedness hypothesis is where the value comparison and reverse-orientation
+exclusion enter; the box alone intentionally remains weaker.
+-/
+theorem SourcePressureOrientedNeighborBoxState.to_forwardComparisonState_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureOrientedNeighborBoxState L W W')
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    SourcePressureForwardBoxComparisonState L W W' :=
+  ⟨hbox, hbox.val_lt_of_sorted hsorted,
+    hbox.not_reverse_box_of_sorted hsorted⟩
+
+/--
 Package an oriented neighbor diagnostic into the two-endpoint box state.
 
 The oriented diagnostic supplies the endpoint sign patterns through
@@ -1203,6 +1267,69 @@ theorem sourcePressureBeamSeedState_to_forwardBoxComparison_or_pairOverlap
         SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
           SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
   sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
+/--
+Failure resolution reaches the named forward-comparison state or a concrete
+pair-overlap obstruction.
+
+This is the named-state wrapper over
+`sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap`.
+It removes tuple noise for callers that want to pass the forward branch into a
+pair-comparison theorem as one state object.
+-/
+theorem sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W',
+      SourcePressureForwardBoxComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
+      hsorted h with hforward | hoverlap
+  · rcases hforward with ⟨W, W', hbox, hlt, hnrev⟩
+    exact Or.inl ⟨W, W', hbox, hlt, hnrev⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches the named forward-comparison state or a concrete
+pair-overlap obstruction.
+-/
+theorem sourcePressureSortedFailureState_to_forwardBoxComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W',
+      SourcePressureForwardBoxComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed reaches the named forward-comparison state or a concrete pair-overlap
+obstruction.
+
+This is the Beam-facing named split that later pair-comparison layers should
+prefer over the raw tuple form.
+-/
+theorem sourcePressureBeamSeedState_to_forwardBoxComparisonState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W',
+      SourcePressureForwardBoxComparisonState L W W') ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
 
 end DkMath.Collatz
