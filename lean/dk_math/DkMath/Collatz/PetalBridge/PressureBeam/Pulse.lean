@@ -420,6 +420,46 @@ theorem SourcePressureBeamCenteredLocalPulseBox.signs
   exact ⟨hmem, hprev, hcenter, haddr, hnext⟩
 
 /--
+Beam-facing neighbor-candidate surface for explicit adjacent witnesses.
+
+This is only a symmetric naming wrapper around the existing list/pair address
+predicate.  It deliberately does not say that a boxed pulse produces a
+neighbor.  The neighbor candidate must come from explicit list adjacency:
+
+* either `W` is immediately before `W'` in `L`;
+* or `W'` is immediately before `W` in `L`.
+
+No propagation, transport, coverage, sorting, or overlap repair is asserted.
+-/
+def SourcePressureBeamNeighborCandidate
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∨
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W' W
+
+/--
+Consume a boxed local pulse together with an explicit neighbor candidate.
+
+The theorem only packages the supplied adjacency candidate with the sign and
+target facts projected from the box.  It does not assert that `W'` has a pulse
+box, that transport succeeds, or that a neighbor exists from the box alone.
+-/
+theorem SourcePressureBeamCenteredLocalPulseBox.signs_of_neighborCandidate
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbox : SourcePressureBeamCenteredLocalPulseBox n k r L W)
+    (hneigh : SourcePressureBeamNeighborCandidate L W W') :
+    SourcePressureBeamNeighborCandidate L W W' ∧
+      W ∈ L ∧
+        SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+          0 < SourcePressureMarginInt n k (r + W.val) ∧
+            SourcePressureBeamAddressedDepthTarget L W.val ∧
+              SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
+  ⟨hneigh, hbox.signs⟩
+
+/--
 A Beam seed exposes one witness whose centered pulse is inside the finite
 local pulse box.
 
