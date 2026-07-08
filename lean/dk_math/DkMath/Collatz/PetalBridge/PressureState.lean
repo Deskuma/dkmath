@@ -1252,6 +1252,34 @@ theorem SourcePressureForwardPairComparisonState.left_succ_lt_right_val
   omega
 
 /--
+Index-level form of the first interference theorem.
+
+The right positive center lies strictly beyond the left center's next boundary
+index.  This is the margin-index version of `left_succ_lt_right_val`.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_index_lt_right_center_index
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val + 1 < r + W'.val := by
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  omega
+
+/--
+Syntactic variant of `left_next_index_lt_right_center_index` using
+`r + (W.val + 1)` as the left boundary expression.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_boundary_lt_right_center_index
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + (W.val + 1) < r + W'.val := by
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  omega
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
