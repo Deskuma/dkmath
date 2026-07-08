@@ -1105,6 +1105,29 @@ theorem SourcePressureForwardPairComparisonState.center_pair_surface
   exact ⟨hposL, hposR, htargetL, htargetR, hlt⟩
 
 /--
+Boundary-sign pair surface for the forward pair branch.
+
+Both endpoints are local pulses with nonpositive neighboring margins and a
+positive center margin, and the left endpoint is strictly before the right
+endpoint in value order.
+-/
+theorem SourcePressureForwardPairComparisonState.boundary_sign_pair_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+          SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 ∧
+                W.val < W'.val := by
+  rcases h.left_signs with ⟨_, hprevL, hcenterL, _, hnextL⟩
+  rcases h.right_signs with ⟨_, hprevR, hcenterR, _, hnextR⟩
+  exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, h.val_lt⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
