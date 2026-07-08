@@ -1555,6 +1555,58 @@ theorem SourcePressureForwardPairComparisonState.strict_gap_value_corridor_surfa
   exact ⟨hnextL, hprevR, hvalue⟩
 
 /--
+There is a nonpositive separator strictly between the two positive centers.
+
+The separator is the left next boundary `r + W.val + 1`.  This is the first
+packing-facing consequence of the forward pair-comparison state: two positive
+centers are not consecutive at the index level, because a nonpositive boundary
+lies strictly between them.
+-/
+theorem SourcePressureForwardPairComparisonState.exists_nonpos_index_between_centers
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    ∃ m : ℕ,
+      r + W.val < m ∧
+        m < r + W'.val ∧
+          SourcePressureMarginInt n k m ≤ 0 := by
+  rcases h.left_next_boundary_nonpos_and_before_right_center with ⟨hnext, hlt⟩
+  refine ⟨r + W.val + 1, ?_, hlt, hnext⟩
+  omega
+
+/--
+Value-level two-step spacing between the two positive centers.
+
+This is a compact consumer form of `right_value_corridor_surface`: the right
+witness value is at least two steps after the left witness value.
+-/
+theorem SourcePressureForwardPairComparisonState.two_le_value_gap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W.val + 2 ≤ W'.val := by
+  rcases h.right_value_corridor_surface with ⟨_, _, heq | hlt⟩
+  · omega
+  · omega
+
+/--
+Index-level two-step spacing between the two positive centers.
+
+The common offset `r` preserves the value-level spacing, making the separation
+usable by index-based local Big / packing arguments.
+-/
+theorem SourcePressureForwardPairComparisonState.two_le_index_gap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val + 2 ≤ r + W'.val := by
+  have hgap : W.val + 2 ≤ W'.val := h.two_le_value_gap
+  omega
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
@@ -2089,6 +2141,85 @@ theorem sourcePressureBeamSeedState_to_forwardPairComparisonState_or_pairOverlap
         SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
           SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
   sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
+/--
+Failure resolution produces either a local nonpositive separator between two
+positive centers, or a concrete adjacent-pair overlap obstruction.
+
+This theorem is the first packing-facing lift from the state ladder.  The
+forward branch no longer exposes only an FPC witness; it also packages the
+separator index that lies strictly between the two centers.
+-/
+theorem sourcePressureFailureResolutionState_to_nonposSeparator_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W' m,
+      SourcePressureForwardPairComparisonState L W W' ∧
+        r + W.val < m ∧
+          m < r + W'.val ∧
+            SourcePressureMarginInt n k m ≤ 0) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
+      hsorted h with hforward | hoverlap
+  · rcases hforward with ⟨W, W', hFPC⟩
+    rcases hFPC.exists_nonpos_index_between_centers with
+      ⟨m, hleft, hright, hnonpos⟩
+    exact Or.inl ⟨W, W', m, hFPC, hleft, hright, hnonpos⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure produces either a local nonpositive separator between two
+positive centers, or a concrete adjacent-pair overlap obstruction.
+-/
+theorem sourcePressureSortedFailureState_to_nonposSeparator_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W' m,
+      SourcePressureForwardPairComparisonState L W W' ∧
+        r + W.val < m ∧
+          m < r + W'.val ∧
+            SourcePressureMarginInt n k m ≤ 0) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_nonposSeparator_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed produces either a local nonpositive separator between two positive
+centers, or a concrete adjacent-pair overlap obstruction.
+
+This is the Beam-facing packing obstruction surface:
+
+```text
+BeamSeed + sorted(L)
+  -> positive centers with a nonpositive separator
+   ∨ pair-overlap obstruction
+```
+
+The statement is intentionally local to the explicit witness list `L`.
+-/
+theorem sourcePressureBeamSeedState_to_nonposSeparator_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W' m,
+      SourcePressureForwardPairComparisonState L W W' ∧
+        r + W.val < m ∧
+          m < r + W'.val ∧
+            SourcePressureMarginInt n k m ≤ 0) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_nonposSeparator_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
 
 end DkMath.Collatz
