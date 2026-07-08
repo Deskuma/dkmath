@@ -1150,6 +1150,30 @@ theorem SourcePressureForwardPairComparisonState.center_index_ne
   ne_of_lt h.center_index_lt
 
 /--
+Boundary-sign pair surface with the order stated at the actual center indices.
+
+This is the same two-pulse boundary surface as
+`boundary_sign_pair_surface`, but the final comparison is expressed in the
+index language used by `SourcePressureMarginInt`.
+-/
+theorem SourcePressureForwardPairComparisonState.indexed_boundary_pair_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+          SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 ∧
+                r + W.val < r + W'.val := by
+  rcases h.boundary_sign_pair_surface with
+    ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, _hlt⟩
+  exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR,
+    h.center_index_lt⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
