@@ -1128,6 +1128,28 @@ theorem SourcePressureForwardPairComparisonState.boundary_sign_pair_surface
   exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, h.val_lt⟩
 
 /--
+Lift the forward value order to the actual center indices used by the margin
+function.
+-/
+theorem SourcePressureForwardPairComparisonState.center_index_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val < r + W'.val := by
+  have hlt : W.val < W'.val := h.val_lt
+  omega
+
+/-- The two center indices of a forward pair comparison state are distinct. -/
+theorem SourcePressureForwardPairComparisonState.center_index_ne
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val ≠ r + W'.val :=
+  ne_of_lt h.center_index_lt
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
