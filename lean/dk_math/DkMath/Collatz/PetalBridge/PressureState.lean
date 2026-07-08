@@ -960,6 +960,24 @@ def SourcePressureLocalPackingSeparatorState
       m < r + W'.val ∧
         SourcePressureMarginInt n k m ≤ 0
 
+/--
+Finite-window local packing separator state.
+
+This is the first finite-window carrier for the local packing obstruction.  It
+stores a local packing separator and records that both positive center indices
+are inside the explicit window `[lo, hi]`.  The separator itself is then forced
+inside the same window by the strict inequalities in the local packing state.
+-/
+def SourcePressureFiniteWindowPackingSeparatorState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ)
+    (W W' : SourcePressureLocalIslandWitness n k r)
+    (m : ℕ) : Prop :=
+  SourcePressureLocalPackingSeparatorState L W W' m ∧
+    lo ≤ r + W.val ∧
+      r + W'.val ≤ hi
+
 /-- Project the underlying forward box comparison state. -/
 theorem SourcePressureForwardPairComparisonState.forward
     {n : OddNat} {k r : ℕ}
@@ -1702,6 +1720,97 @@ theorem SourcePressureLocalPackingSeparatorState.center_separator_surface
   exact
     ⟨hcenterL, h.separator_nonpos, hcenterR, h.left_lt_separator,
       h.separator_lt_right, h.two_le_value_gap⟩
+
+/-- Project the underlying local packing separator state. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.localPacking
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    SourcePressureLocalPackingSeparatorState L W W' m :=
+  h.1
+
+/-- The left positive center lies inside the finite window lower bound. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.left_center_in_window
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    lo ≤ r + W.val :=
+  h.2.1
+
+/-- The right positive center lies inside the finite window upper bound. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.right_center_in_window
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    r + W'.val ≤ hi :=
+  h.2.2
+
+/--
+The separator lies inside the same finite window as the two centers.
+
+This is the key finite-window consequence: once both positive centers are in
+the window and the separator is strictly between them, the separator is also in
+the window.
+-/
+theorem SourcePressureFiniteWindowPackingSeparatorState.separator_in_window
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    lo ≤ m ∧ m ≤ hi := by
+  have hlo : lo ≤ r + W.val := h.left_center_in_window
+  have hleft : r + W.val < m := h.localPacking.left_lt_separator
+  have hright : m < r + W'.val := h.localPacking.separator_lt_right
+  have hhi : r + W'.val ≤ hi := h.right_center_in_window
+  omega
+
+/-- Finite-window state exposes the center/separator/center surface. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.center_separator_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    0 < SourcePressureMarginInt n k (r + W.val) ∧
+      SourcePressureMarginInt n k m ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W'.val) ∧
+          r + W.val < m ∧
+            m < r + W'.val ∧
+              W.val + 2 ≤ W'.val :=
+  h.localPacking.center_separator_surface
+
+/-- Value-level two-step spacing inherited by the finite-window state. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_value_gap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    W.val + 2 ≤ W'.val :=
+  h.localPacking.two_le_value_gap
+
+/-- Index-level two-step spacing inherited by the finite-window state. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_index_gap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    r + W.val + 2 ≤ r + W'.val :=
+  h.localPacking.two_le_index_gap
+
+/--
+Constructor from a local packing separator to the finite-window carrier under
+explicit bounds on the two positive centers.
+-/
+theorem SourcePressureLocalPackingSeparatorState.to_finiteWindowPackingSeparatorState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureLocalPackingSeparatorState L W W' m)
+    (hlo : lo ≤ r + W.val) (hhi : r + W'.val ≤ hi) :
+    SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m :=
+  ⟨h, hlo, hhi⟩
 
 /--
 Constructor from a forward pair-comparison state to the named local packing
@@ -2488,5 +2597,84 @@ theorem sourcePressureBeamSeedState_to_centerSeparatorSurface_or_pairOverlap
           SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
   sourcePressureFailureResolutionState_to_centerSeparatorSurface_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
+/--
+Failure resolution reaches a finite-window packing separator state or a
+concrete adjacent-pair overlap obstruction.
+
+The window hypotheses are deliberately explicit: every witness center in `L`
+is assumed to lie in `[lo, hi]`, so the selected forward pair and its separator
+are packaged into the finite-window carrier.
+-/
+theorem sourcePressureFailureResolutionState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_localPackingSeparatorState_or_pairOverlap
+      hsorted h with hsep | hoverlap
+  · rcases hsep with ⟨W, W', m, hpack⟩
+    have hlo : lo ≤ r + W.val := hlo_all W hpack.forward.left_mem
+    have hhi : r + W'.val ≤ hi := hhi_all W' hpack.forward.right_mem
+    exact
+      Or.inl
+        ⟨W, W', m,
+          hpack.to_finiteWindowPackingSeparatorState hlo hhi⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches a finite-window packing separator state or a concrete
+adjacent-pair overlap obstruction.
+-/
+theorem sourcePressureSortedFailureState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+    hlo_all hhi_all
+
+/--
+Beam seed reaches a finite-window packing separator state or a concrete
+adjacent-pair overlap obstruction.
+
+This is the first Beam-facing finite-window packaging theorem.  It does not
+count centers yet; it prepares the exact carrier needed before counting or
+packing-density arguments.
+-/
+theorem sourcePressureBeamSeedState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+    hlo_all hhi_all
 
 end DkMath.Collatz
