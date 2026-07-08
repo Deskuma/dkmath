@@ -1680,6 +1680,30 @@ theorem SourcePressureLocalPackingSeparatorState.two_le_index_gap
   h.forward.two_le_index_gap
 
 /--
+Center/separator/center surface of the local packing state.
+
+This is the first finite-window-packing-facing reading of the named state:
+the left center is positive, the separator is nonpositive, and the right center
+is positive, with strict index placement and two-step value spacing.
+-/
+theorem SourcePressureLocalPackingSeparatorState.center_separator_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureLocalPackingSeparatorState L W W' m) :
+    0 < SourcePressureMarginInt n k (r + W.val) ∧
+      SourcePressureMarginInt n k m ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W'.val) ∧
+          r + W.val < m ∧
+            m < r + W'.val ∧
+              W.val + 2 ≤ W'.val := by
+  rcases h.forward.center_pair_surface with
+    ⟨hcenterL, hcenterR, _htargetL, _htargetR, _hlt⟩
+  exact
+    ⟨hcenterL, h.separator_nonpos, hcenterR, h.left_lt_separator,
+      h.separator_lt_right, h.two_le_value_gap⟩
+
+/--
 Constructor from a forward pair-comparison state to the named local packing
 separator state.
 
@@ -2376,6 +2400,93 @@ theorem sourcePressureBeamSeedState_to_localPackingSeparatorState_or_pairOverlap
         SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
           SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
   sourcePressureFailureResolutionState_to_localPackingSeparatorState_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+
+/--
+Failure resolution reaches a center/separator/center local-packing surface or
+a concrete adjacent-pair overlap obstruction.
+
+The forward branch exposes the actual observed sign pattern:
+
+```text
+positive center -> nonpositive separator -> positive center
+```
+-/
+theorem sourcePressureFailureResolutionState_to_centerSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L) :
+    (∃ W W' m,
+      SourcePressureLocalPackingSeparatorState L W W' m ∧
+        0 < SourcePressureMarginInt n k (r + W.val) ∧
+          SourcePressureMarginInt n k m ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              r + W.val < m ∧
+                m < r + W'.val ∧
+                  W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_localPackingSeparatorState_or_pairOverlap
+      hsorted h with hsep | hoverlap
+  · rcases hsep with ⟨W, W', m, hpack⟩
+    rcases hpack.center_separator_surface with
+      ⟨hcenterL, hnonpos, hcenterR, hleft, hright, hgap⟩
+    exact
+      Or.inl
+        ⟨W, W', m, hpack, hcenterL, hnonpos, hcenterR, hleft, hright,
+          hgap⟩
+  · exact Or.inr hoverlap
+
+/--
+Sorted failure reaches a center/separator/center local-packing surface or a
+concrete adjacent-pair overlap obstruction.
+-/
+theorem sourcePressureSortedFailureState_to_centerSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L) :
+    (∃ W W' m,
+      SourcePressureLocalPackingSeparatorState L W W' m ∧
+        0 < SourcePressureMarginInt n k (r + W.val) ∧
+          SourcePressureMarginInt n k m ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              r + W.val < m ∧
+                m < r + W'.val ∧
+                  W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_centerSeparatorSurface_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+
+/--
+Beam seed reaches a center/separator/center local-packing surface or a concrete
+adjacent-pair overlap obstruction.
+
+This is the Beam-facing finite-window packing surface currently available from
+the state ladder.
+-/
+theorem sourcePressureBeamSeedState_to_centerSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L) :
+    (∃ W W' m,
+      SourcePressureLocalPackingSeparatorState L W W' m ∧
+        0 < SourcePressureMarginInt n k (r + W.val) ∧
+          SourcePressureMarginInt n k m ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              r + W.val < m ∧
+                m < r + W'.val ∧
+                  W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_centerSeparatorSurface_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
 
 end DkMath.Collatz
