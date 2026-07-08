@@ -1509,6 +1509,52 @@ theorem SourcePressureForwardPairComparisonState.right_value_corridor_surface
   exact ⟨hnextL, hprevR, hvalue⟩
 
 /--
+Contact branch of the value-level corridor surface.
+
+This is a thin branch-specific caller theorem: the contact equality between
+boundary indices forces the right center to be exactly two witness-value steps
+after the left center, and it carries only the two endpoint signs.  No interior
+corridor assertion is introduced here.
+-/
+theorem SourcePressureForwardPairComparisonState.contact_value_corridor_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W')
+    (hcontact : r + W.val + 1 = r + (W'.val - 1)) :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        W'.val = W.val + 2 := by
+  rcases h.contact_corridor_shared_nonpos hcontact with ⟨hnextL, hprevR⟩
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  have hvalue : W'.val = W.val + 2 := by
+    omega
+  exact ⟨hnextL, hprevR, hvalue⟩
+
+/--
+Strict-gap branch of the value-level corridor surface.
+
+This is a thin branch-specific caller theorem: when the left next boundary is
+strictly before the right previous boundary, the right center is strictly more
+than two witness-value steps after the left center.  The theorem remains
+endpoint-only.
+-/
+theorem SourcePressureForwardPairComparisonState.strict_gap_value_corridor_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W')
+    (hstrict : r + W.val + 1 < r + (W'.val - 1)) :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        W.val + 2 < W'.val := by
+  rcases h.strict_gap_corridor_endpoints_nonpos hstrict with
+    ⟨hnextL, hprevR, hgap⟩
+  have hvalue : W.val + 2 < W'.val := by
+    omega
+  exact ⟨hnextL, hprevR, hvalue⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
