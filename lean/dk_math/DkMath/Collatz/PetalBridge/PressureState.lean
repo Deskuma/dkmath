@@ -1280,6 +1280,33 @@ theorem SourcePressureForwardPairComparisonState.left_next_boundary_lt_right_cen
   omega
 
 /--
+Boundary-sign pair surface bundled with the first interference gap.
+
+This strengthens `indexed_boundary_separation_surface` by adding the fact that
+the left endpoint's next boundary index is still strictly before the right
+positive center.  It is a local pair-comparison statement, not a global
+coverage or uniqueness claim.
+-/
+theorem SourcePressureForwardPairComparisonState.indexed_boundary_gap_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+          SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 ∧
+                r + W.val < r + W'.val ∧
+                  r + W.val ≠ r + W'.val ∧
+                    r + W.val + 1 < r + W'.val := by
+  rcases h.indexed_boundary_separation_surface with
+    ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, hlt, hne⟩
+  exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR,
+    hlt, hne, h.left_next_index_lt_right_center_index⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
