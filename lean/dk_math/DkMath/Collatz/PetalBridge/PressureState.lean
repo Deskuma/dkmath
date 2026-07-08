@@ -1391,6 +1391,41 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface
   exact ⟨hnextL, hprevR, h.left_next_boundary_le_right_previous_boundary⟩
 
 /--
+The boundary corridor is either a contact corridor or a genuine gap corridor.
+
+This is the index-level split used by the next window-interference layer: the
+left next boundary either coincides with the right previous boundary, or it lies
+strictly before it.
+-/
+theorem SourcePressureForwardPairComparisonState.boundary_corridor_eq_or_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val + 1 = r + (W'.val - 1) ∨
+      r + W.val + 1 < r + (W'.val - 1) := by
+  have hle : r + W.val + 1 ≤ r + (W'.val - 1) :=
+    h.left_next_boundary_le_right_previous_boundary
+  omega
+
+set_option linter.style.longLine false in
+/--
+Value-level form of the corridor split.
+
+The right center is either exactly two value steps after the left center, or it
+is strictly farther away.  This mirrors `boundary_corridor_eq_or_lt` before the
+common offset `r` is added and before right-previous indexing is formed.
+-/
+theorem SourcePressureForwardPairComparisonState.right_val_eq_left_add_two_or_left_add_two_lt_right_val
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W'.val = W.val + 2 ∨ W.val + 2 < W'.val := by
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  omega
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
