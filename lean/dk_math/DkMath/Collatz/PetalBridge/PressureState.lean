@@ -1174,6 +1174,46 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_pair_surface
     h.center_index_lt⟩
 
 /--
+Compact separation surface for the two center indices of a forward pair.
+
+The strict order is the main payload; the non-equality projection is repeated
+because many later obstruction and interference lemmas consume `≠` directly.
+-/
+theorem SourcePressureForwardPairComparisonState.indexed_center_separation_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val < r + W'.val ∧
+      r + W.val ≠ r + W'.val :=
+  ⟨h.center_index_lt, h.center_index_ne⟩
+
+/--
+Boundary-sign pair surface with explicit center-index separation.
+
+This is the caller-facing form for local pulse comparison: both endpoints carry
+their nonpositive-positive-nonpositive sign windows, and the center indices are
+strictly ordered and distinct.
+-/
+theorem SourcePressureForwardPairComparisonState.indexed_boundary_separation_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + (W.val - 1)) ≤ 0 ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+          SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+            0 < SourcePressureMarginInt n k (r + W'.val) ∧
+              SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 ∧
+                r + W.val < r + W'.val ∧
+                  r + W.val ≠ r + W'.val := by
+  rcases h.indexed_boundary_pair_surface with
+    ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, hlt⟩
+  exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, hlt,
+    h.center_index_ne⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
