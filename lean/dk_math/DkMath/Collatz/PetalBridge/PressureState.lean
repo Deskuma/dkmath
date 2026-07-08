@@ -1337,6 +1337,26 @@ theorem SourcePressureForwardPairComparisonState.left_next_boundary_nonpos_and_b
   exact ⟨hnextL, hgap⟩
 
 /--
+Compact left-next interference surface for local window comparison.
+
+It records the left positive center, the immediate nonpositive boundary after
+that center, the right positive center, and the strict index gap from the left
+next boundary to the right center.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_interference_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    0 < SourcePressureMarginInt n k (r + W.val) ∧
+      SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+        0 < SourcePressureMarginInt n k (r + W'.val) ∧
+          r + W.val + 1 < r + W'.val := by
+  rcases h.indexed_boundary_gap_surface with
+    ⟨_, hcenterL, hnextL, _, hcenterR, _, _, _, hgap⟩
+  exact ⟨hcenterL, hnextL, hcenterR, hgap⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
