@@ -1214,6 +1214,44 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_separation_sur
     h.center_index_ne⟩
 
 /--
+First interference theorem for a forward pair comparison state.
+
+The right positive center cannot be exactly the successor of the left positive
+center.  If it were, the right endpoint's previous nonpositive boundary would
+coincide with the left endpoint's positive center.
+-/
+theorem SourcePressureForwardPairComparisonState.not_right_val_eq_left_succ
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W'.val ≠ W.val + 1 := by
+  intro hsucc
+  rcases h.boundary_sign_pair_surface with
+    ⟨_, hcenterL, _, hprevR, _, _, _⟩
+  have hidx : r + (W'.val - 1) = r + W.val := by
+    omega
+  have hle : SourcePressureMarginInt n k (r + W.val) ≤ 0 := by
+    simpa [hidx] using hprevR
+  exact (not_le_of_gt hcenterL) hle
+
+/--
+The right positive center is separated from the left positive center by more
+than one value step.
+
+This is the value-level form of the first interference theorem.
+-/
+theorem SourcePressureForwardPairComparisonState.left_succ_lt_right_val
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    W.val + 1 < W'.val := by
+  have hlt : W.val < W'.val := h.val_lt
+  have hne : W'.val ≠ W.val + 1 := h.not_right_val_eq_left_succ
+  omega
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
