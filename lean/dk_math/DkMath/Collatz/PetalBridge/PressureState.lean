@@ -1307,6 +1307,36 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_gap_surface
     hlt, hne, h.left_next_index_lt_right_center_index⟩
 
 /--
+Projection from `indexed_boundary_gap_surface`: the left next boundary index is
+strictly before the right positive center.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_boundary_before_right_center
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val + 1 < r + W'.val := by
+  rcases h.indexed_boundary_gap_surface with
+    ⟨_, _, _, _, _, _, _, _, hgap⟩
+  exact hgap
+
+/--
+Compact caller-facing projection for the next interference layer: the left next
+boundary is nonpositive and still lies strictly before the right positive
+center.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_boundary_nonpos_and_before_right_center
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      r + W.val + 1 < r + W'.val := by
+  rcases h.indexed_boundary_gap_surface with
+    ⟨_, _, hnextL, _, _, _, _, _, hgap⟩
+  exact ⟨hnextL, hgap⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
