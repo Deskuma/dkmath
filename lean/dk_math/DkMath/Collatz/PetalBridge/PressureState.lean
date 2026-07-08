@@ -1408,6 +1408,25 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_eq_or_lt
     h.left_next_boundary_le_right_previous_boundary
   omega
 
+/--
+Sign-bundled contact-or-gap split for the boundary corridor.
+
+Both corridor endpoints are nonpositive, and the corridor is either the contact
+case where those endpoints coincide, or the genuine gap case where the left
+next boundary lies strictly before the right previous boundary.
+-/
+theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface_eq_or_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        (r + W.val + 1 = r + (W'.val - 1) ∨
+          r + W.val + 1 < r + (W'.val - 1)) := by
+  rcases h.boundary_corridor_surface with ⟨hnextL, hprevR, _hle⟩
+  exact ⟨hnextL, hprevR, h.boundary_corridor_eq_or_lt⟩
+
 set_option linter.style.longLine false in
 /--
 Value-level form of the corridor split.
