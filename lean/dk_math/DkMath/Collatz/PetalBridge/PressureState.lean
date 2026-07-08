@@ -1357,6 +1357,40 @@ theorem SourcePressureForwardPairComparisonState.left_next_interference_surface
   exact ⟨hcenterL, hnextL, hcenterR, hgap⟩
 
 /--
+Index corridor between the left next boundary and the right previous boundary.
+
+The first interference theorem gives `W.val + 1 < W'.val`; at the addressed
+index level this means the left next boundary is no later than the right
+previous boundary.
+-/
+theorem SourcePressureForwardPairComparisonState.left_next_boundary_le_right_previous_boundary
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    r + W.val + 1 ≤ r + (W'.val - 1) := by
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  omega
+
+/--
+Boundary corridor surface for a forward pair comparison state.
+
+Both corridor endpoints are nonpositive boundary indices, and the left next
+boundary lies no later than the right previous boundary.
+-/
+theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        r + W.val + 1 ≤ r + (W'.val - 1) := by
+  rcases h.indexed_boundary_gap_surface with
+    ⟨_, _, hnextL, hprevR, _, _, _, _, _⟩
+  exact ⟨hnextL, hprevR, h.left_next_boundary_le_right_previous_boundary⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
