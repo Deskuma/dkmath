@@ -1482,6 +1482,33 @@ theorem SourcePressureForwardPairComparisonState.right_val_eq_left_add_two_or_le
   omega
 
 /--
+Downstream value-level reading of the boundary corridor split.
+
+This consumes the index-level contact-or-gap corridor and exports the result in
+terms of witness values: the right center is either exactly two value steps
+after the left center, or strictly farther away.  The theorem carries only the
+two endpoint signs already present in the corridor surface; it does not assert
+anything about interior indices of a strict corridor.
+-/
+theorem SourcePressureForwardPairComparisonState.right_value_corridor_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W') :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        (W'.val = W.val + 2 ∨ W.val + 2 < W'.val) := by
+  rcases h.boundary_corridor_surface_eq_or_lt with ⟨hnextL, hprevR, hsplit⟩
+  have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
+  have hvalue : W'.val = W.val + 2 ∨ W.val + 2 < W'.val := by
+    rcases hsplit with hcontact | hstrict
+    · left
+      omega
+    · right
+      omega
+  exact ⟨hnextL, hprevR, hvalue⟩
+
+/--
 Constructor from the forward box comparison state to the pair-comparison-facing
 state.
 
