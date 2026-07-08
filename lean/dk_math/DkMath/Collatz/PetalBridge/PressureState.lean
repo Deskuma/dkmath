@@ -1427,6 +1427,43 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface_eq_or
   rcases h.boundary_corridor_surface with ⟨hnextL, hprevR, _hle⟩
   exact ⟨hnextL, hprevR, h.boundary_corridor_eq_or_lt⟩
 
+/--
+Contact-corridor projection.
+
+When the corridor endpoints coincide, the shared boundary is represented by
+two syntactic index expressions, and both are nonpositive.  The contact equality
+is accepted as branch data; this theorem only projects the endpoint signs.
+-/
+theorem SourcePressureForwardPairComparisonState.contact_corridor_shared_nonpos
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W')
+    (_hcontact : r + W.val + 1 = r + (W'.val - 1)) :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 := by
+  rcases h.boundary_corridor_surface_eq_or_lt with ⟨hnextL, hprevR, _hsplit⟩
+  exact ⟨hnextL, hprevR⟩
+
+/--
+Strict-gap corridor projection.
+
+In the genuine gap branch, both corridor endpoints remain nonpositive and the
+left endpoint is strictly before the right endpoint.  This does not assert
+anything about every interior index of the corridor.
+-/
+theorem SourcePressureForwardPairComparisonState.strict_gap_corridor_endpoints_nonpos
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W')
+    (hgap : r + W.val + 1 < r + (W'.val - 1)) :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 ∧
+      SourcePressureMarginInt n k (r + (W'.val - 1)) ≤ 0 ∧
+        r + W.val + 1 < r + (W'.val - 1) := by
+  rcases h.boundary_corridor_surface_eq_or_lt with ⟨hnextL, hprevR, _hsplit⟩
+  exact ⟨hnextL, hprevR, hgap⟩
+
 set_option linter.style.longLine false in
 /--
 Value-level form of the corridor split.
