@@ -33,4 +33,4 @@ print(f"軌跡: {result}")
 
 # ビット観測窓 W_5
 for n in result:
-    print(f"%10s" % ("-" * 30 + (bin(n).replace("0b", "")))[-5:])
+    print(f"%10s" % ("-" * 30 + (bin(n).replace("0b", "")))[-5:], n)
