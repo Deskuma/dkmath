@@ -75,7 +75,20 @@ theorem cosmicProjection_gap_eq (P : ℝ) (h : P + 1 ≠ 0) :
 -/
 theorem cosmicProjection_mem_interval (P : ℝ) (h : P ≥ 0) :
   Pi P ∈ Set.Icc (-1) 0 := by
-  sorry -- ここに構成的証明を叩き込む
-
+  -- Pi P = -P / (P + 1)
+  -- 1. -1 <= -P / (P + 1)  ⇔  1 / (P + 1) >= 0
+  -- 2. -P / (P + 1) <= 0   ⇔  P / (P + 1) >= 0
+  rw [Set.mem_Icc]
+  simp [Pi]
+  constructor
+  · -- 下限: -1 <= -P / (P + 1)
+    -- 両辺に (P+1) を掛けて整理する (P+1 > 0 なので符号は変わらない)
+    have hp1 : P + 1 > 0 := by linarith
+    field_simp
+    linarith
+  · -- 上限: -P / (P + 1) <= 0
+    -- P >= 0, P+1 > 0 なので P / (P+1) >= 0
+    field_simp
+    linarith
 
 end DkMath.Cosmic
