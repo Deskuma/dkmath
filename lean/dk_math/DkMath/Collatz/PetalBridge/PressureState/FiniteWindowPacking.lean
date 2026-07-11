@@ -797,7 +797,7 @@ theorem sourcePressureCanonicalPackingUnitFamily_card
 theorem sourcePressureUnresolvedInternalLeftWitnesses_card_le_pairFamily
     {n : OddNat} {k r lo hi : ℕ}
     {L : List (SourcePressureLocalIslandWitness n k r)}
-    (_hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    :
     (sourcePressureUnresolvedInternalLeftWitnesses L lo hi).card ≤
       (sourcePressureUnresolvedInternalPairFamily L lo hi).card := by
   classical
@@ -853,5 +853,181 @@ theorem sourcePressurePositiveCoverageResidue_subset_unresolvedLeft_union_bounda
       ⟨sourcePressureAdjacentPairInList_mem_zip hpair, hleft, hhi', hnotcanon⟩, rfl⟩
   · apply Finset.mem_union_right
     exact mem_sourcePressureFiniteWindowBoundaryWitnesses.2 ⟨hpos, hboundary⟩
+
+/--
+In a sorted witness list, a non-maximal witness has an adjacent successor no
+larger than any later witness.  This is the list-order bridge needed by the
+finite-window boundary argument.
+-/
+theorem sourcePressureAdjacent_successor_exists_le_of_mem_of_val_lt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W V : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hW : W ∈ L) (hV : V ∈ L) (hval : W.val < V.val) :
+    ∃ W', SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∧
+      W'.val ≤ V.val := by
+  induction L generalizing W V with
+  | nil => simp at hW
+  | cons A rest ih =>
+      cases rest with
+      | nil =>
+          simp only [List.mem_singleton] at hW hV
+          subst W
+          subst V
+          omega
+      | cons B rest =>
+          have htailSorted :
+              SourcePressureLocalIslandWitnessListSortedBefore (B :: rest) := by
+            change SourcePressureIntervalPulseAddressFamilySortedBefore
+              (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                (A :: B :: rest)) at hsorted
+            change SourcePressureIntervalPulseAddressFamilySortedBefore
+              (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                (B :: rest))
+            exact hsorted.2
+          rcases List.mem_cons.1 hW with hWA | hWtail
+          · subst W
+            rcases List.mem_cons.1 hV with hVA | hVtail
+            · subst V
+              omega
+            have hAB : A.val < B.val :=
+              sourcePressureLocalIslandWitnessBefore_val_lt
+                (sourcePressureAdjacentPairInList_before_of_sorted hsorted
+                  SourcePressureLocalIslandWitnessAdjacentPairInList.head)
+            have hB_le : B.val ≤ V.val :=
+              sourcePressureSortedWitnessList_head_val_le_of_mem htailSorted
+                hVtail
+            exact ⟨B, SourcePressureLocalIslandWitnessAdjacentPairInList.head,
+              hB_le⟩
+          · have hVtail : V ∈ B :: rest := by
+              rcases List.mem_cons.1 hV with hVA | hVtail
+              · have hA_le_W : A.val ≤ W.val :=
+                  sourcePressureSortedWitnessList_head_val_le_of_mem hsorted
+                    (by exact List.mem_cons_of_mem A hWtail)
+                subst V
+                omega
+              · exact hVtail
+            rcases ih htailSorted hWtail hVtail hval with ⟨W', hpair, hle⟩
+            exact ⟨W', SourcePressureLocalIslandWitnessAdjacentPairInList.tail hpair,
+              hle⟩
+
+/-- The finite-window boundary carrier is subsingleton under sortedness. -/
+theorem sourcePressureFiniteWindowBoundaryWitnesses_subsingleton
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    ∀ W₁ ∈ sourcePressureFiniteWindowBoundaryWitnesses L lo hi,
+      ∀ W₂ ∈ sourcePressureFiniteWindowBoundaryWitnesses L lo hi, W₁ = W₂ := by
+  intro W₁ h₁ W₂ h₂
+  rcases mem_sourcePressureFiniteWindowBoundaryWitnesses.1 h₁ with
+    ⟨hW₁, hboundary₁⟩
+  rcases mem_sourcePressureFiniteWindowBoundaryWitnesses.1 h₂ with
+    ⟨hW₂, hboundary₂⟩
+  by_cases heq : W₁.val = W₂.val
+  · exact Subtype.ext heq
+  · rcases Nat.lt_or_gt_of_ne heq with hlt | hgt
+    · have hsucc := sourcePressureAdjacent_successor_exists_le_of_mem_of_val_lt
+        hsorted
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₁).1
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₂).1 hlt
+      rcases hsucc with ⟨W', hpair, hle⟩
+      exact False.elim (hboundary₁ ⟨W', hpair, le_trans (Nat.add_le_add_left hle r)
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₂).2.2⟩)
+    · have hsucc := sourcePressureAdjacent_successor_exists_le_of_mem_of_val_lt
+        hsorted
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₂).1
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₁).1 hgt
+      rcases hsucc with ⟨W', hpair, hle⟩
+      exact False.elim (hboundary₂ ⟨W', hpair, le_trans (Nat.add_le_add_left hle r)
+        (mem_sourcePressurePositiveWitnessesInWindow.1 hW₁).2.2⟩)
+
+theorem sourcePressureFiniteWindowBoundaryWitnesses_card_le_one
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureFiniteWindowBoundaryWitnesses L lo hi).card ≤ 1 := by
+  apply Finset.card_le_one.2
+  intro W hW V hV
+  exact sourcePressureFiniteWindowBoundaryWitnesses_subsingleton hsorted W hW V hV
+
+theorem sourcePressurePositiveCoverageResidue_card_le_unresolvedPair_add_one
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveCoverageResidue L lo hi).card ≤
+      (sourcePressureUnresolvedInternalPairFamily L lo hi).card + 1 := by
+  calc
+    _ ≤ (sourcePressureUnresolvedInternalLeftWitnesses L lo hi ∪
+          sourcePressureFiniteWindowBoundaryWitnesses L lo hi).card :=
+      Finset.card_le_card
+        (sourcePressurePositiveCoverageResidue_subset_unresolvedLeft_union_boundary)
+    _ ≤ (sourcePressureUnresolvedInternalLeftWitnesses L lo hi).card +
+          (sourcePressureFiniteWindowBoundaryWitnesses L lo hi).card :=
+      Finset.card_union_le _ _
+    _ ≤ (sourcePressureUnresolvedInternalPairFamily L lo hi).card + 1 := by
+      apply Nat.add_le_add
+      · exact sourcePressureUnresolvedInternalLeftWitnesses_card_le_pairFamily
+      · exact sourcePressureFiniteWindowBoundaryWitnesses_card_le_one hsorted
+
+theorem sourcePressurePositiveWitnesses_card_le_half_window_add_two_add_unresolvedInternal
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (hi - lo) / 2 + 2 +
+        (sourcePressureUnresolvedInternalPairFamily L lo hi).card := by
+  have hbase := sourcePressurePositiveWitnesses_card_le_half_window_add_one_add_residue
+    (L := L) (lo := lo) (hi := hi) hsorted
+  have hres := sourcePressurePositiveCoverageResidue_card_le_unresolvedPair_add_one
+    (L := L) (lo := lo) (hi := hi) hsorted
+  omega
+
+theorem sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 +
+        (sourcePressureUnresolvedInternalPairFamily L lo hi).card := by
+  have hbase := sourcePressurePositiveWitnesses_card_le_nonposPositions_add_residue
+    (L := L) (lo := lo) (hi := hi) hsorted
+  have hres := sourcePressurePositiveCoverageResidue_card_le_unresolvedPair_add_one
+    (L := L) (lo := lo) (hi := hi) hsorted
+  omega
+
+theorem sourcePressurePositiveWitnesses_localBig_with_unresolvedInternal
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (hi - lo) / 2 + 2 +
+          (sourcePressureUnresolvedInternalPairFamily L lo hi).card ∧
+      (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 +
+          (sourcePressureUnresolvedInternalPairFamily L lo hi).card :=
+  ⟨sourcePressurePositiveWitnesses_card_le_half_window_add_two_add_unresolvedInternal
+      hsorted,
+    sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal
+      hsorted⟩
+
+theorem sourcePressurePositiveWitnesses_endpointCorrectedLocalBig_of_internalCoverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hcoverage : SourcePressureCanonicalInternalPairCoverageInWindow L lo hi) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤ (hi - lo) / 2 + 2 ∧
+      (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 := by
+  have hempty :=
+    sourcePressureUnresolvedInternalPairFamily_eq_empty_of_internalCoverage hcoverage
+  have hzero := congrArg Finset.card hempty
+  constructor
+  · simpa [hempty] using
+      sourcePressurePositiveWitnesses_card_le_half_window_add_two_add_unresolvedInternal
+        (L := L) (lo := lo) (hi := hi) hsorted
+  · simpa [hempty] using
+      sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal
+        (L := L) (lo := lo) (hi := hi) hsorted
 
 end DkMath.Collatz
