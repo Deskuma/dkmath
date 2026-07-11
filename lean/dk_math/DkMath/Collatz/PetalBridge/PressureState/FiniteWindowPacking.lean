@@ -340,4 +340,344 @@ def SourcePressureCanonicalLeftCoverageInWindow
     0 < SourcePressureMarginInt n k (r + W.val) →
     ∃ W', SourcePressureCanonicalFiniteWindowPackingState L lo hi W W'
 
+/-!
+## Positive centers and the explicit coverage residue
+
+The packing family counts certified adjacent pairs, whereas the observable
+list contains individual positive centers.  The definitions below keep the
+gap between those two populations explicit.  Full coverage is used only by
+the conditional theorems; all unconditional bounds retain a finite residue.
+-/
+
+/-- Explicit in-window local-island witnesses supplied by `L`. -/
+noncomputable def sourcePressurePositiveWitnessesInWindow
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureLocalIslandWitness n k r) :=
+  L.toFinset.filter fun W => lo ≤ r + W.val ∧ r + W.val ≤ hi
+
+@[simp]
+theorem mem_sourcePressurePositiveWitnessesInWindow
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    W ∈ sourcePressurePositiveWitnessesInWindow L lo hi ↔
+      W ∈ L ∧ lo ≤ r + W.val ∧ r + W.val ≤ hi := by
+  classical
+  simp [sourcePressurePositiveWitnessesInWindow]
+
+/-- Every selected witness has positive pressure margin at its center. -/
+theorem sourcePressurePositiveWitnessesInWindow_center_margin_pos
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r}
+    (_hW : W ∈ sourcePressurePositiveWitnessesInWindow L lo hi) :
+    0 < SourcePressureMarginInt n k (r + W.val) := by
+  have hlocal := (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
+  exact hlocal.2.1
+
+/-- Left endpoints represented by the canonical adjacent-pair family. -/
+noncomputable def sourcePressureCanonicalLeftWitnessesInWindow
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureLocalIslandWitness n k r) :=
+  (sourcePressureCanonicalPackingPairFamily L lo hi).image Prod.fst
+
+/-- The recursive adjacent-pair address is exactly represented in `zip L L.tail`. -/
+theorem sourcePressureAdjacentPairInList_mem_zip
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
+    (W, W') ∈ L.zip L.tail := by
+  induction L with
+  | nil => exact False.elim h
+  | cons A rest ih =>
+      cases rest with
+      | nil => exact False.elim h
+      | cons B rest =>
+          rcases h with hhead | htail
+          · rcases hhead with ⟨rfl, rfl⟩
+            simp
+          · simp only [List.tail_cons, List.zip_cons_cons, List.mem_cons]
+            exact Or.inr (ih htail)
+
+@[simp]
+theorem mem_sourcePressureCanonicalLeftWitnessesInWindow
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    W ∈ sourcePressureCanonicalLeftWitnessesInWindow L lo hi ↔
+      ∃ W', SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' := by
+  classical
+  constructor
+  · intro hW
+    rcases Finset.mem_image.1 hW with ⟨P, hP, hfst⟩
+    rcases P with ⟨PL, PR⟩
+    change PL = W at hfst
+    subst PL
+    exact ⟨PR, (mem_sourcePressureCanonicalPackingPairFamily.1 hP).2⟩
+  · rintro ⟨W', hstate⟩
+    apply Finset.mem_image.2
+    exact ⟨(W, W'), mem_sourcePressureCanonicalPackingPairFamily.2
+      ⟨sourcePressureAdjacentPairInList_mem_zip hstate.adjacentPair, hstate⟩, rfl⟩
+
+/-- In a strictly sorted witness list, a left entry has one immediate right neighbor. -/
+theorem sourcePressureAdjacentPairInList_right_unique_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W₁' W₂' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h₁ : SourcePressureLocalIslandWitnessAdjacentPairInList L W W₁')
+    (h₂ : SourcePressureLocalIslandWitnessAdjacentPairInList L W W₂') :
+    W₁' = W₂' := by
+  rcases sourcePressureAdjacentPairs_eq_or_nonoverlap_of_sorted
+      hsorted h₁ h₂ with heq | horder
+  · exact heq.2
+  · have hlt₁ : W.val < W₁'.val :=
+      sourcePressureLocalIslandWitnessBefore_val_lt
+        (sourcePressureAdjacentPairInList_before_of_sorted hsorted h₁)
+    have hlt₂ : W.val < W₂'.val :=
+      sourcePressureLocalIslandWitnessBefore_val_lt
+        (sourcePressureAdjacentPairInList_before_of_sorted hsorted h₂)
+    rcases horder with h₁₂ | h₂₁ <;> omega
+
+/-- Projection to the left endpoint is injective on canonical adjacent pairs. -/
+theorem sourcePressureCanonicalPackingPairFamily_fst_injOn
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    Set.InjOn Prod.fst
+      (↑(sourcePressureCanonicalPackingPairFamily L lo hi) :
+        Set (SourcePressureLocalIslandWitness n k r ×
+          SourcePressureLocalIslandWitness n k r)) := by
+  intro P hP Q hQ hfst
+  have hPstate := (mem_sourcePressureCanonicalPackingPairFamily.1 hP).2
+  have hQstate := (mem_sourcePressureCanonicalPackingPairFamily.1 hQ).2
+  cases P with
+  | mk PL PR =>
+      cases Q with
+      | mk QL QR =>
+          change PL = QL at hfst
+          subst QL
+          have hright : PR = QR :=
+            sourcePressureAdjacentPairInList_right_unique_of_sorted hsorted
+              hPstate.adjacentPair hQstate.adjacentPair
+          subst QR
+          rfl
+
+/-- Canonical left endpoints and canonical pair keys have equal cardinality. -/
+theorem sourcePressureCanonicalLeftWitnesses_card_eq_pairFamily_card
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ)
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureCanonicalLeftWitnessesInWindow L lo hi).card =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).card := by
+  classical
+  exact Finset.card_image_iff.mpr
+    (sourcePressureCanonicalPackingPairFamily_fst_injOn hsorted)
+
+/-- Full canonical-left coverage includes every selected positive witness. -/
+theorem sourcePressurePositiveWitnesses_subset_canonicalLeft_of_coverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hcoverage : SourcePressureCanonicalLeftCoverageInWindow L lo hi) :
+    sourcePressurePositiveWitnessesInWindow L lo hi ⊆
+      sourcePressureCanonicalLeftWitnessesInWindow L lo hi := by
+  intro W hW
+  rcases mem_sourcePressurePositiveWitnessesInWindow.1 hW with
+    ⟨hmem, hlo, hhi⟩
+  exact mem_sourcePressureCanonicalLeftWitnessesInWindow.2
+    (hcoverage W hmem hlo hhi
+      (sourcePressurePositiveWitnessesInWindow_center_margin_pos hW))
+
+/-- Conditional all-positive half-window capacity. -/
+theorem sourcePressurePositiveWitnesses_card_le_half_window_add_one_of_coverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hcoverage : SourcePressureCanonicalLeftCoverageInWindow L lo hi) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (hi - lo) / 2 + 1 := by
+  calc
+    _ ≤ (sourcePressureCanonicalLeftWitnessesInWindow L lo hi).card :=
+      Finset.card_le_card
+        (sourcePressurePositiveWitnesses_subset_canonicalLeft_of_coverage hcoverage)
+    _ = (sourcePressureCanonicalPackingPairFamily L lo hi).card :=
+      sourcePressureCanonicalLeftWitnesses_card_eq_pairFamily_card L lo hi hsorted
+    _ ≤ _ := sourcePressureCanonicalPackingPairFamily_card_le_half_window_add_one hsorted
+
+/-- Conditional all-positive sign capacity. -/
+theorem sourcePressurePositiveWitnesses_card_le_nonposPositions_of_coverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hcoverage : SourcePressureCanonicalLeftCoverageInWindow L lo hi) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card := by
+  classical
+  let S : Finset (SourcePressureFiniteWindowPackingUnit L lo hi) :=
+    (sourcePressureCanonicalPackingPairFamily L lo hi).attach.image fun P =>
+      ⟨P.1.1, P.1.2, (mem_sourcePressureCanonicalPackingPairFamily.1 P.2).2⟩
+  have hScard : S.card =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).card := by
+    rw [show S =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).attach.image
+        (fun P => ⟨P.1.1, P.1.2,
+          (mem_sourcePressureCanonicalPackingPairFamily.1 P.2).2⟩) from rfl]
+    rw [Finset.card_image_iff.mpr]
+    · simp
+    · intro P _ Q _ h
+      apply Subtype.ext
+      apply Prod.ext
+      · exact congrArg SourcePressureFiniteWindowPackingUnit.left h
+      · exact congrArg SourcePressureFiniteWindowPackingUnit.right h
+  calc
+    _ ≤ (sourcePressureCanonicalLeftWitnessesInWindow L lo hi).card :=
+      Finset.card_le_card
+        (sourcePressurePositiveWitnesses_subset_canonicalLeft_of_coverage hcoverage)
+    _ = (sourcePressureCanonicalPackingPairFamily L lo hi).card :=
+      sourcePressureCanonicalLeftWitnesses_card_eq_pairFamily_card L lo hi hsorted
+    _ = S.card := hScard.symm
+    _ ≤ _ := sourcePressureFiniteWindowPackingUnit_card_le_nonposPositions hsorted S
+
+/-- Conditional all-positive local-Big surface. -/
+theorem sourcePressurePositiveWitnesses_localBig_of_coverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hcoverage : SourcePressureCanonicalLeftCoverageInWindow L lo hi) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (hi - lo) / 2 + 1 ∧
+      (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (sourcePressureNonposPositionsInWindow n k lo hi).card :=
+  ⟨sourcePressurePositiveWitnesses_card_le_half_window_add_one_of_coverage
+      hsorted hcoverage,
+    sourcePressurePositiveWitnesses_card_le_nonposPositions_of_coverage
+      hsorted hcoverage⟩
+
+/-- Positive witnesses not certified as canonical left endpoints. -/
+noncomputable def sourcePressurePositiveCoverageResidue
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureLocalIslandWitness n k r) :=
+  sourcePressurePositiveWitnessesInWindow L lo hi \
+    sourcePressureCanonicalLeftWitnessesInWindow L lo hi
+
+/-- Exact decomposition into certified canonical-left witnesses and residue. -/
+theorem sourcePressurePositiveWitnesses_subset_canonicalLeft_union_residue
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    sourcePressurePositiveWitnessesInWindow L lo hi ⊆
+      sourcePressureCanonicalLeftWitnessesInWindow L lo hi ∪
+        sourcePressurePositiveCoverageResidue L lo hi := by
+  classical
+  intro W hW
+  by_cases hC : W ∈ sourcePressureCanonicalLeftWitnessesInWindow L lo hi
+  · exact Finset.mem_union_left _ hC
+  · exact Finset.mem_union_right _ (Finset.mem_sdiff.2 ⟨hW, hC⟩)
+
+/-- Unconditional center count: certified pairs plus the explicit residue. -/
+theorem sourcePressurePositiveWitnesses_card_le_pairFamily_add_residue
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureCanonicalPackingPairFamily L lo hi).card +
+        (sourcePressurePositiveCoverageResidue L lo hi).card := by
+  calc
+    _ ≤ (sourcePressureCanonicalLeftWitnessesInWindow L lo hi ∪
+          sourcePressurePositiveCoverageResidue L lo hi).card :=
+      Finset.card_le_card
+        sourcePressurePositiveWitnesses_subset_canonicalLeft_union_residue
+    _ ≤ (sourcePressureCanonicalLeftWitnessesInWindow L lo hi).card +
+          (sourcePressurePositiveCoverageResidue L lo hi).card :=
+      Finset.card_union_le _ _
+    _ ≤ _ := by
+      exact Nat.add_le_add_right Finset.card_image_le _
+
+/-- Residue-corrected half-window capacity, requiring no coverage claim. -/
+theorem sourcePressurePositiveWitnesses_card_le_half_window_add_one_add_residue
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (hi - lo) / 2 + 1 +
+        (sourcePressurePositiveCoverageResidue L lo hi).card := by
+  exact le_trans sourcePressurePositiveWitnesses_card_le_pairFamily_add_residue
+    (Nat.add_le_add_right
+      (sourcePressureCanonicalPackingPairFamily_card_le_half_window_add_one hsorted) _)
+
+/-- Residue-corrected sign capacity, requiring no coverage claim. -/
+theorem sourcePressurePositiveWitnesses_card_le_nonposPositions_add_residue
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card +
+        (sourcePressurePositiveCoverageResidue L lo hi).card := by
+  classical
+  let S : Finset (SourcePressureFiniteWindowPackingUnit L lo hi) :=
+    (sourcePressureCanonicalPackingPairFamily L lo hi).attach.image fun P =>
+      ⟨P.1.1, P.1.2, (mem_sourcePressureCanonicalPackingPairFamily.1 P.2).2⟩
+  have hScard : S.card =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).card := by
+    rw [show S =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).attach.image
+        (fun P => ⟨P.1.1, P.1.2,
+          (mem_sourcePressureCanonicalPackingPairFamily.1 P.2).2⟩) from rfl]
+    rw [Finset.card_image_iff.mpr]
+    · simp
+    · intro P _ Q _ h
+      apply Subtype.ext
+      apply Prod.ext
+      · exact congrArg SourcePressureFiniteWindowPackingUnit.left h
+      · exact congrArg SourcePressureFiniteWindowPackingUnit.right h
+  calc
+    _ ≤ (sourcePressureCanonicalPackingPairFamily L lo hi).card +
+          (sourcePressurePositiveCoverageResidue L lo hi).card :=
+      sourcePressurePositiveWitnesses_card_le_pairFamily_add_residue
+    _ = S.card + (sourcePressurePositiveCoverageResidue L lo hi).card := by
+      rw [hScard]
+    _ ≤ _ := Nat.add_le_add_right
+      (sourcePressureFiniteWindowPackingUnit_card_le_nonposPositions hsorted S) _
+
+/-!
+## Boundary of the current state API
+
+The automaton states imported by this module select one diagnosed adjacent
+pair.  They do not quantify over every entry of `L.zip L.tail`.  Consequently
+they cannot, by themselves, show that every nonterminal positive witness is a
+canonical left endpoint.  The precise missing universal contract is named
+below.  Once a producer for it exists, ordinary list recursion can reduce the
+coverage residue to the terminal endpoint; without it, a `card ≤ 1` residue
+claim would silently strengthen an existential diagnosis into list coverage.
+-/
+
+/--
+Every in-window nonterminal witness pair is certified by the canonical packing
+state.  This is the exact pair-level bridge needed before the residue can be
+reduced to a terminal-list boundary.
+-/
+def SourcePressureCanonicalNonterminalPairCoverageInWindow
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Prop :=
+  ∀ W W',
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' →
+    lo ≤ r + W.val → r + W.val ≤ hi →
+    SourcePressureCanonicalFiniteWindowPackingState L lo hi W W'
+
+/-- Pair coverage immediately certifies every addressed nonterminal witness. -/
+theorem SourcePressureCanonicalNonterminalPairCoverageInWindow.certifies
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (h : SourcePressureCanonicalNonterminalPairCoverageInWindow L lo hi)
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W')
+    (hlo : lo ≤ r + W.val) (hhi : r + W.val ≤ hi) :
+    W ∈ sourcePressureCanonicalLeftWitnessesInWindow L lo hi :=
+  mem_sourcePressureCanonicalLeftWitnessesInWindow.2
+    ⟨W', h W W' hpair hlo hhi⟩
+
 end DkMath.Collatz
