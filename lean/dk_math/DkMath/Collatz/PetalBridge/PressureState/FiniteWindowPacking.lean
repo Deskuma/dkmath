@@ -376,6 +376,193 @@ theorem sourcePressurePositiveWitnessesInWindow_center_margin_pos
   have hlocal := (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
   exact hlocal.2.1
 
+/--
+Two strictly ordered local-island witnesses have centers separated by at
+least two pressure-depth positions.
+
+This is a direct consequence of the local sign pattern: the coordinate
+immediately after the left center is nonpositive, whereas the right center is
+positive.  No sorted list, adjacency relation, diagnosis carrier, canonical
+packing state, or coverage hypothesis is used.
+-/
+theorem sourcePressureLocalIslandWitness_two_le_val_gap_of_val_lt
+    {n : OddNat} {k r : ℕ}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hlt : W.val < W'.val) :
+    W.val + 2 ≤ W'.val := by
+  have hW :=
+    (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
+  have hW' :=
+    (sourcePressureLocalIsland_iff_margin n k r W'.val).1 W'.property
+  rcases hW with ⟨_hWpos, _hWcenter, _hWprev, hWnext⟩
+  rcases hW' with ⟨_hW'pos, hW'center, _hW'prev, _hW'next⟩
+  by_contra hgap
+  have heq : W'.val = W.val + 1 := by omega
+  have hnonpos :
+      SourcePressureMarginInt n k (r + W'.val) ≤ 0 := by
+    simpa [heq] using hWnext
+  omega
+
+/--
+Distinct local-island witnesses are two-separated in one of the two natural
+orders.
+
+This is the symmetric finite-set interface for the direct local-island
+packing route.
+-/
+theorem sourcePressureLocalIslandWitness_twoSeparated_of_ne
+    {n : OddNat} {k r : ℕ}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hne : W ≠ W') :
+    W.val + 2 ≤ W'.val ∨ W'.val + 2 ≤ W.val := by
+  have hvalNe : W.val ≠ W'.val := by
+    intro hval
+    exact hne (Subtype.ext hval)
+  rcases Nat.lt_or_gt_of_ne hvalNe with hlt | hgt
+  · exact Or.inl
+      (sourcePressureLocalIslandWitness_two_le_val_gap_of_val_lt hlt)
+  · exact Or.inr
+      (sourcePressureLocalIslandWitness_two_le_val_gap_of_val_lt hgt)
+
+/-- Absolute center coordinates of the supplied in-window local islands. -/
+noncomputable def sourcePressurePositiveWitnessCentersInWindow
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset ℕ :=
+  (sourcePressurePositiveWitnessesInWindow L lo hi).image
+    (fun W => r + W.val)
+
+@[simp]
+theorem mem_sourcePressurePositiveWitnessCentersInWindow
+    {n : OddNat} {k r lo hi m : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    m ∈ sourcePressurePositiveWitnessCentersInWindow L lo hi ↔
+      ∃ W ∈ sourcePressurePositiveWitnessesInWindow L lo hi,
+        r + W.val = m := by
+  classical
+  simp [sourcePressurePositiveWitnessCentersInWindow]
+
+/-- The center-coordinate image preserves the number of selected witnesses. -/
+theorem sourcePressurePositiveWitnessCentersInWindow_card_eq
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    (sourcePressurePositiveWitnessCentersInWindow L lo hi).card =
+      (sourcePressurePositiveWitnessesInWindow L lo hi).card := by
+  classical
+  apply Finset.card_image_iff.mpr
+  intro W _hW W' _hW' heq
+  apply Subtype.ext
+  exact Nat.add_left_cancel heq
+
+/-- Every selected center coordinate lies in the requested finite window. -/
+theorem sourcePressurePositiveWitnessCentersInWindow_mem_bounds
+    {n : OddNat} {k r lo hi m : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hm : m ∈ sourcePressurePositiveWitnessCentersInWindow L lo hi) :
+    lo ≤ m ∧ m ≤ hi := by
+  rcases mem_sourcePressurePositiveWitnessCentersInWindow.1 hm with
+    ⟨W, hW, rfl⟩
+  exact (mem_sourcePressurePositiveWitnessesInWindow.1 hW).2
+
+/-- Distinct ordered center coordinates are separated by at least two. -/
+theorem sourcePressurePositiveWitnessCentersInWindow_twoSeparated
+    {n : OddNat} {k r lo hi a b : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (ha : a ∈ sourcePressurePositiveWitnessCentersInWindow L lo hi)
+    (hb : b ∈ sourcePressurePositiveWitnessCentersInWindow L lo hi)
+    (hab : a < b) :
+    a + 2 ≤ b := by
+  rcases mem_sourcePressurePositiveWitnessCentersInWindow.1 ha with
+    ⟨W, _hW, rfl⟩
+  rcases mem_sourcePressurePositiveWitnessCentersInWindow.1 hb with
+    ⟨W', _hW', rfl⟩
+  have hval : W.val < W'.val := by omega
+  have hgap := sourcePressureLocalIslandWitness_two_le_val_gap_of_val_lt hval
+  omega
+
+/-- Direct half-window density bound for explicit local-island witnesses. -/
+theorem sourcePressurePositiveWitnesses_card_le_half_window_add_one_direct
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (hi - lo) / 2 + 1 := by
+  rw [← sourcePressurePositiveWitnessCentersInWindow_card_eq]
+  exact finset_card_le_half_window_add_one_of_twoSeparated
+    (sourcePressurePositiveWitnessCentersInWindow L lo hi)
+    (fun m hm => sourcePressurePositiveWitnessCentersInWindow_mem_bounds hm)
+    (fun a ha b hb hab =>
+      sourcePressurePositiveWitnessCentersInWindow_twoSeparated ha hb hab)
+
+/-- A local-island center is followed immediately by a nonpositive margin. -/
+theorem sourcePressurePositiveWitness_next_nonpos
+    {n : OddNat} {k r : ℕ}
+    (W : SourcePressureLocalIslandWitness n k r) :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 := by
+  have hlocal :=
+    (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
+  simpa [Nat.add_assoc] using hlocal.2.2.2
+
+/--
+Direct sign-capacity bound: every nonterminal center injects into its
+nonpositive successor coordinate, and at most one center can lie at `hi`.
+-/
+theorem sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_direct
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 := by
+  classical
+  let T := sourcePressurePositiveWitnessCentersInWindow L lo hi
+  let I := T.filter fun m => m < hi
+  let B := T.filter fun m => ¬ m < hi
+  have hI : I.card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card := by
+    apply Finset.card_le_card_of_injOn (fun m => m + 1)
+    · intro m hm
+      change m ∈ T.filter (fun q => q < hi) at hm
+      rcases Finset.mem_filter.1 hm with ⟨hmT, hmhi⟩
+      rcases mem_sourcePressurePositiveWitnessCentersInWindow.1 hmT with
+        ⟨W, _hW, hcenter⟩
+      subst m
+      change r + W.val + 1 ∈
+        sourcePressureNonposPositionsInWindow n k lo hi
+      apply mem_sourcePressureNonposPositionsInWindow.2
+      have hbounds := sourcePressurePositiveWitnessCentersInWindow_mem_bounds hmT
+      refine ⟨by omega, by omega, ?_⟩
+      have hnext := sourcePressurePositiveWitness_next_nonpos W
+      exact hnext
+    · intro a ha b hb hab
+      change a + 1 = b + 1 at hab
+      exact Nat.add_right_cancel hab
+  have hB : B.card ≤ 1 := by
+    apply Finset.card_le_one.2
+    intro a ha b hb
+    rcases Finset.mem_filter.1 ha with ⟨haT, haNotLt⟩
+    rcases Finset.mem_filter.1 hb with ⟨hbT, hbNotLt⟩
+    have haBound := sourcePressurePositiveWitnessCentersInWindow_mem_bounds haT
+    have hbBound := sourcePressurePositiveWitnessCentersInWindow_mem_bounds hbT
+    omega
+  have hpartition : I.card + B.card = T.card := by
+    simpa [I, B] using
+      (Finset.card_filter_add_card_filter_not (s := T) (fun m => m < hi))
+  rw [← sourcePressurePositiveWitnessCentersInWindow_card_eq]
+  change T.card ≤ _
+  omega
+
+/--
+Diagnosis-free local Big: local-island centers satisfy both geometric density
+and sign-capacity bounds in every explicit finite window.
+-/
+theorem sourcePressurePositiveWitnesses_localBig_direct
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (hi - lo) / 2 + 1 ∧
+      (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+        (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 :=
+  ⟨sourcePressurePositiveWitnesses_card_le_half_window_add_one_direct,
+    sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_direct⟩
+
 /-- Left endpoints represented by the canonical adjacent-pair family. -/
 noncomputable def sourcePressureCanonicalLeftWitnessesInWindow
     {n : OddNat} {k r : ℕ}
