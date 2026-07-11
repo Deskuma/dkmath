@@ -660,6 +660,114 @@ theorem sourcePressureAdjacentPairInList_before_of_sorted
               exact hsorted.2
             exact ih htailSorted htail
 
+/-- Witness-level `Before` gives strict order of singleton depth values. -/
+theorem sourcePressureLocalIslandWitnessBefore_val_lt
+    {n : OddNat} {k r : ℕ}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hbefore : SourcePressureLocalIslandWitnessBefore W W') :
+    W.val < W'.val :=
+  hbefore
+
+/--
+The head value of a sorted explicit witness list is no greater than every
+value occurring in that list.
+
+This small transitive bridge turns recursively adjacent sortedness into the
+non-strict endpoint order needed to compare two addressed adjacent pairs.
+-/
+theorem sourcePressureSortedWitnessList_head_val_le_of_mem
+    {n : OddNat} {k r : ℕ}
+    {A W : SourcePressureLocalIslandWitness n k r}
+    {rest : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore (A :: rest))
+    (hmem : W ∈ A :: rest) :
+    A.val ≤ W.val := by
+  induction rest generalizing A with
+  | nil =>
+      simp only [List.mem_singleton] at hmem
+      subst W
+      exact le_rfl
+  | cons B rest ih =>
+      rcases List.mem_cons.1 hmem with hWA | hWtail
+      · subst W
+        exact le_rfl
+      · have htailSorted :
+            SourcePressureLocalIslandWitnessListSortedBefore (B :: rest) := by
+          change
+            SourcePressureIntervalPulseAddressFamilySortedBefore
+              (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                (A :: B :: rest)) at hsorted
+          change
+            SourcePressureIntervalPulseAddressFamilySortedBefore
+              (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                (B :: rest))
+          exact hsorted.2
+        have hAB : A.val < B.val :=
+          sourcePressureLocalIslandWitnessBefore_val_lt
+            (sourcePressureAdjacentPairInList_before_of_sorted hsorted
+              SourcePressureLocalIslandWitnessAdjacentPairInList.head)
+        exact le_trans (le_of_lt hAB) (ih htailSorted hWtail)
+
+/--
+Two oriented adjacent pairs in one sorted witness list are equal or occur in
+non-overlapping value order.
+
+The two non-equality branches allow a shared endpoint (`≤`): consecutive
+adjacent pairs may be `(A,B)` and `(B,C)`.  This is the strongest unconditional
+value-level dichotomy supplied by list adjacency and sortedness alone.
+-/
+theorem sourcePressureAdjacentPairs_eq_or_nonoverlap_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W₁ W₁' W₂ W₂' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h₁ : SourcePressureLocalIslandWitnessAdjacentPairInList L W₁ W₁')
+    (h₂ : SourcePressureLocalIslandWitnessAdjacentPairInList L W₂ W₂') :
+    (W₁ = W₂ ∧ W₁' = W₂') ∨
+      W₁'.val ≤ W₂.val ∨
+        W₂'.val ≤ W₁.val := by
+  induction L generalizing W₁ W₁' W₂ W₂' with
+  | nil => exact False.elim h₁
+  | cons A rest ih =>
+      cases rest with
+      | nil => exact False.elim h₁
+      | cons B rest =>
+          have htailSorted :
+              SourcePressureLocalIslandWitnessListSortedBefore (B :: rest) := by
+            change
+              SourcePressureIntervalPulseAddressFamilySortedBefore
+                (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                  (A :: B :: rest)) at hsorted
+            change
+              SourcePressureIntervalPulseAddressFamilySortedBefore
+                (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList
+                  (B :: rest))
+            exact hsorted.2
+          rcases h₁ with h₁head | h₁tail
+          · rcases h₁head with ⟨hW₁, hW₁'⟩
+            subst W₁
+            subst W₁'
+            rcases h₂ with h₂head | h₂tail
+            · rcases h₂head with ⟨hW₂, hW₂'⟩
+              subst W₂
+              subst W₂'
+              exact Or.inl ⟨rfl, rfl⟩
+            · exact Or.inr (Or.inl
+                (sourcePressureSortedWitnessList_head_val_le_of_mem
+                  htailSorted
+                  (sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem
+                    h₂tail)))
+          · rcases h₂ with h₂head | h₂tail
+            · rcases h₂head with ⟨hW₂, hW₂'⟩
+              subst W₂
+              subst W₂'
+              exact Or.inr (Or.inr
+                (sourcePressureSortedWitnessList_head_val_le_of_mem
+                  htailSorted
+                  (sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem
+                    h₁tail)))
+            · exact ih htailSorted h₁tail h₂tail
+
 /--
 Box-facing version of
 `sourcePressureAdjacentPairInList_before_of_sorted`.
@@ -1003,6 +1111,40 @@ def SourcePressureFiniteWindowPackingPairComparisonState
     (m₂ : ℕ) : Prop :=
   SourcePressureFiniteWindowPackingSeparatorState L lo hi W₁ W₁' m₁ ∧
     SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂
+
+/-- Finite-window packing state with the canonical left-next separator. -/
+def SourcePressureCanonicalFiniteWindowPackingState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ)
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  SourcePressureFiniteWindowPackingSeparatorState
+    L lo hi W W' (r + W.val + 1)
+
+/-- Data carrier for finite-family counting of canonical packing units. -/
+structure SourcePressureFiniteWindowPackingUnit
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) where
+  left : SourcePressureLocalIslandWitness n k r
+  right : SourcePressureLocalIslandWitness n k r
+  state : SourcePressureCanonicalFiniteWindowPackingState L lo hi left right
+
+/-- Canonical separator attached to a finite-window packing unit. -/
+def SourcePressureFiniteWindowPackingUnit.canonicalSeparator
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (u : SourcePressureFiniteWindowPackingUnit L lo hi) : ℕ :=
+  r + u.left.val + 1
+
+/-- Oriented endpoint key attached to a finite-window packing unit. -/
+def SourcePressureFiniteWindowPackingUnit.pairKey
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (u : SourcePressureFiniteWindowPackingUnit L lo hi) :=
+  (u.left, u.right)
 
 /-- Project the underlying forward box comparison state. -/
 theorem SourcePressureForwardPairComparisonState.forward
@@ -1864,6 +2006,15 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_window_width
   rcases h.window_order_chain with ⟨hlo, hleft, hright, hhi⟩
   omega
 
+/-- Project the oriented adjacent pair underlying one finite-window packing unit. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.localPacking.forward.adjacentPair
+
 /-- Project the first finite-window packing unit. -/
 theorem SourcePressureFiniteWindowPackingPairComparisonState.left
     {n : OddNat} {k r : ℕ}
@@ -1887,6 +2038,30 @@ theorem SourcePressureFiniteWindowPackingPairComparisonState.right
       L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
     SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂ :=
   h.2
+
+/-- Project the first oriented adjacent pair. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.left_adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W₁ W₁' :=
+  h.left.adjacentPair
+
+/-- Project the second oriented adjacent pair. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.right_adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W₂ W₂' :=
+  h.right.adjacentPair
 
 /-- Ordered chain consumed by the first packing unit. -/
 theorem SourcePressureFiniteWindowPackingPairComparisonState.left_order_chain
@@ -2012,6 +2187,51 @@ theorem SourcePressureFiniteWindowPackingPairComparisonState.shared_separator_cr
   subst m₂
   exact ⟨hleft₁, hleft₂, hright₁, hright₂⟩
 
+/--
+In a sorted witness list, one separator serves at most one oriented adjacent
+pair.
+
+If the adjacent pairs were distinct, sorted adjacency places one pair wholly
+to one side of the other.  A shared strict interior point contradicts either
+non-overlap order, so the two oriented pairs must coincide.
+-/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.same_pair_of_shared_separator_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hsep : m₁ = m₂) :
+    W₁ = W₂ ∧ W₁' = W₂' := by
+  rcases sourcePressureAdjacentPairs_eq_or_nonoverlap_of_sorted
+      hsorted h.left_adjacentPair h.right_adjacentPair with hpairs | horder
+  · exact hpairs
+  · rcases h.shared_separator_cross_surface hsep with
+      ⟨hleft₁, hleft₂, hright₁, hright₂⟩
+    rcases horder with h₁₂ | h₂₁
+    · exfalso
+      omega
+    · exfalso
+      omega
+
+/-- Distinct oriented adjacent pairs have distinct separators in a sorted list. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.separators_ne_of_pairs_ne_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hpairs : ¬ (W₁ = W₂ ∧ W₁' = W₂')) :
+    m₁ ≠ m₂ := by
+  intro hsep
+  exact hpairs (h.same_pair_of_shared_separator_of_sorted hsorted hsep)
+
 /-- Distinct separators have a strict order in the finite window. -/
 theorem SourcePressureFiniteWindowPackingPairComparisonState.separator_lt_or_gt
     {n : OddNat} {k r : ℕ}
@@ -2042,6 +2262,161 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_index_gap
     (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
     r + W.val + 2 ≤ r + W'.val :=
   h.localPacking.two_le_index_gap
+
+/-- Project the underlying finite-window separator state from the canonical form. -/
+theorem SourcePressureCanonicalFiniteWindowPackingState.finiteWindow
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureCanonicalFiniteWindowPackingState L lo hi W W') :
+    SourcePressureFiniteWindowPackingSeparatorState
+      L lo hi W W' (r + W.val + 1) :=
+  h
+
+/-- The canonical left-next separator has nonpositive pressure margin. -/
+theorem SourcePressureCanonicalFiniteWindowPackingState.separator_nonpos
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureCanonicalFiniteWindowPackingState L lo hi W W') :
+    SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
+  h.finiteWindow.localPacking.separator_nonpos
+
+/-- The canonical separator lies strictly between the two positive centers. -/
+theorem SourcePressureCanonicalFiniteWindowPackingState.separator_between_centers
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureCanonicalFiniteWindowPackingState L lo hi W W') :
+    r + W.val < r + W.val + 1 ∧
+      r + W.val + 1 < r + W'.val :=
+  ⟨by omega, h.finiteWindow.localPacking.separator_lt_right⟩
+
+/-- The canonical separator lies in the finite window. -/
+theorem SourcePressureCanonicalFiniteWindowPackingState.separator_in_window
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureCanonicalFiniteWindowPackingState L lo hi W W') :
+    lo ≤ r + W.val + 1 ∧ r + W.val + 1 ≤ hi :=
+  h.finiteWindow.separator_in_window
+
+/-- The oriented adjacent pair carried by the canonical packing state. -/
+theorem SourcePressureCanonicalFiniteWindowPackingState.adjacentPair
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureCanonicalFiniteWindowPackingState L lo hi W W') :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
+  h.finiteWindow.adjacentPair
+
+/--
+Build the canonical finite-window state from a forward pair and explicit center
+bounds.  The canonical separator is the left next boundary.
+-/
+theorem SourcePressureForwardPairComparisonState.to_canonicalFiniteWindowPackingState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureForwardPairComparisonState L W W')
+    (hlo : lo ≤ r + W.val) (hhi : r + W'.val ≤ hi) :
+    SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' := by
+  rcases h.left_next_interference_surface with
+    ⟨_hcenterL, hnonpos, _hcenterR, hbetween⟩
+  exact ⟨⟨h, by omega, hbetween, hnonpos⟩, hlo, hhi⟩
+
+/-- The unit's canonical separator lies in its finite window. -/
+theorem SourcePressureFiniteWindowPackingUnit.canonicalSeparator_in_window
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (u : SourcePressureFiniteWindowPackingUnit L lo hi) :
+    lo ≤ u.canonicalSeparator ∧ u.canonicalSeparator ≤ hi :=
+  u.state.separator_in_window
+
+/-- Distinct pair keys give distinct canonical separators under sortedness. -/
+theorem SourcePressureFiniteWindowPackingUnit.canonicalSeparator_ne_of_pairKey_ne_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    {u₁ u₂ : SourcePressureFiniteWindowPackingUnit L lo hi}
+    (hpairs : u₁.pairKey ≠ u₂.pairKey) :
+    u₁.canonicalSeparator ≠ u₂.canonicalSeparator := by
+  have hcomparison :
+      SourcePressureFiniteWindowPackingPairComparisonState
+        L lo hi u₁.left u₁.right u₁.canonicalSeparator
+          u₂.left u₂.right u₂.canonicalSeparator :=
+    ⟨u₁.state, u₂.state⟩
+  apply hcomparison.separators_ne_of_pairs_ne_of_sorted hsorted
+  intro hp
+  apply hpairs
+  rcases hp with ⟨hleft, hright⟩
+  simp [SourcePressureFiniteWindowPackingUnit.pairKey, hleft, hright]
+
+/-- Canonical separators are injective on packing units in a sorted list. -/
+theorem SourcePressureFiniteWindowPackingUnit.canonicalSeparator_injective_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    Function.Injective
+      (SourcePressureFiniteWindowPackingUnit.canonicalSeparator
+        (L := L) (lo := lo) (hi := hi)) := by
+  intro u₁ u₂ hsep
+  have hcomparison :
+      SourcePressureFiniteWindowPackingPairComparisonState
+        L lo hi u₁.left u₁.right u₁.canonicalSeparator
+          u₂.left u₂.right u₂.canonicalSeparator :=
+    ⟨u₁.state, u₂.state⟩
+  rcases hcomparison.same_pair_of_shared_separator_of_sorted hsorted hsep with
+    ⟨hleft, hright⟩
+  cases u₁
+  cases u₂
+  simp_all
+
+/--
+Finite-window packing bound obtained from canonical-separator injection.
+
+Every unit maps injectively to a natural-number separator in `[lo, hi]`, so a
+finite family contains at most `hi + 1 - lo` units.
+-/
+theorem sourcePressureFiniteWindowPackingUnit_card_le_window_card
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (S : Finset (SourcePressureFiniteWindowPackingUnit L lo hi)) :
+    S.card ≤ hi + 1 - lo := by
+  classical
+  let f := SourcePressureFiniteWindowPackingUnit.canonicalSeparator
+    (L := L) (lo := lo) (hi := hi)
+  have hinj : Function.Injective f :=
+    SourcePressureFiniteWindowPackingUnit.canonicalSeparator_injective_of_sorted
+      hsorted
+  have hcard : (S.image f).card = S.card :=
+    Finset.card_image_iff.mpr hinj.injOn
+  have hsubset : S.image f ⊆ Finset.Icc lo hi := by
+    intro m hm
+    rcases Finset.mem_image.1 hm with ⟨u, hu, rfl⟩
+    exact Finset.mem_Icc.2 u.canonicalSeparator_in_window
+  rw [← hcard]
+  exact (Finset.card_le_card hsubset).trans_eq (Nat.card_Icc lo hi)
+
+/-- Nonempty-family form using the conventional window-width expression. -/
+theorem sourcePressureFiniteWindowPackingUnit_card_le_window_width_add_one
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (S : Finset (SourcePressureFiniteWindowPackingUnit L lo hi))
+    (hS : S.Nonempty) :
+    S.card ≤ hi - lo + 1 := by
+  rcases hS with ⟨u, hu⟩
+  have hwindow := u.canonicalSeparator_in_window
+  have hbound := sourcePressureFiniteWindowPackingUnit_card_le_window_card
+    hsorted S
+  omega
 
 /--
 Constructor from a local packing separator to the finite-window carrier under
