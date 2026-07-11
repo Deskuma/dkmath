@@ -1781,6 +1781,63 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.center_separator_surface
               W.val + 2 ≤ W'.val :=
   h.localPacking.center_separator_surface
 
+/--
+Finite-window center/separator/center surface used immediately before counting.
+
+Both positive centers and the forced nonpositive separator are exposed inside
+the same explicit window.  Thus every selected forward pair contributes the
+ordered in-window sign pattern `positive -> nonpositive -> positive`, together
+with the two-step spacing needed by a finite-window packing argument.
+-/
+theorem SourcePressureFiniteWindowPackingSeparatorState.window_center_separator_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    lo ≤ r + W.val ∧
+      0 < SourcePressureMarginInt n k (r + W.val) ∧
+        lo ≤ m ∧
+          m ≤ hi ∧
+            SourcePressureMarginInt n k m ≤ 0 ∧
+              r + W'.val ≤ hi ∧
+                0 < SourcePressureMarginInt n k (r + W'.val) ∧
+                  W.val + 2 ≤ W'.val := by
+  rcases h.center_separator_surface with
+    ⟨hcenterL, hnonpos, hcenterR, _hleft, _hright, hgap⟩
+  rcases h.separator_in_window with ⟨hmlo, hmhi⟩
+  exact
+    ⟨h.left_center_in_window, hcenterL, hmlo, hmhi, hnonpos,
+      h.right_center_in_window, hcenterR, hgap⟩
+
+/--
+Ordered index chain underlying the finite-window packing surface.
+
+This caller-facing form records the exact finite interval consumed by one
+selected pair: left center, separator, and right center occur strictly in that
+order inside `[lo, hi]`.
+-/
+theorem SourcePressureFiniteWindowPackingSeparatorState.window_order_chain
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    lo ≤ r + W.val ∧
+      r + W.val < m ∧
+        m < r + W'.val ∧
+          r + W'.val ≤ hi :=
+  ⟨h.left_center_in_window, h.localPacking.left_lt_separator,
+    h.localPacking.separator_lt_right, h.right_center_in_window⟩
+
+/-- The finite window contains at least the three ordered occupied indices. -/
+theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_window_width
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} {W W' : SourcePressureLocalIslandWitness n k r} {m : ℕ}
+    (h : SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m) :
+    lo + 2 ≤ hi := by
+  rcases h.window_order_chain with ⟨hlo, hleft, hright, hhi⟩
+  omega
+
 /-- Value-level two-step spacing inherited by the finite-window state. -/
 theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_value_gap
     {n : OddNat} {k r : ℕ}
@@ -2674,6 +2731,94 @@ theorem sourcePressureBeamSeedState_to_finiteWindowPackingSeparatorState_or_pair
         SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
           SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
   sourcePressureFailureResolutionState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+    hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
+    hlo_all hhi_all
+
+/--
+Failure resolution exposes an in-window positive/separator/positive surface or
+a concrete adjacent-pair overlap obstruction.
+
+This is the finite-window surface immediately preceding counting: every
+selected forward pair supplies a nonpositive separator in the same window as
+its two positive centers.
+-/
+theorem sourcePressureFailureResolutionState_to_windowCenterSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureFailureResolutionState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m ∧
+        lo ≤ r + W.val ∧
+          0 < SourcePressureMarginInt n k (r + W.val) ∧
+            lo ≤ m ∧
+              m ≤ hi ∧
+                SourcePressureMarginInt n k m ≤ 0 ∧
+                  r + W'.val ≤ hi ∧
+                    0 < SourcePressureMarginInt n k (r + W'.val) ∧
+                      W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  rcases
+    sourcePressureFailureResolutionState_to_finiteWindowPackingSeparatorState_or_pairOverlap
+      hsorted h hlo_all hhi_all with hwindow | hoverlap
+  · rcases hwindow with ⟨W, W', m, hpack⟩
+    exact Or.inl ⟨W, W', m, hpack, hpack.window_center_separator_surface⟩
+  · exact Or.inr hoverlap
+
+/-- Sorted failure inherits the finite-window sign surface or overlap split. -/
+theorem sourcePressureSortedFailureState_to_windowCenterSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureSortedFailureState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m ∧
+        lo ≤ r + W.val ∧
+          0 < SourcePressureMarginInt n k (r + W.val) ∧
+            lo ≤ m ∧
+              m ≤ hi ∧
+                SourcePressureMarginInt n k m ≤ 0 ∧
+                  r + W'.val ≤ hi ∧
+                    0 < SourcePressureMarginInt n k (r + W'.val) ∧
+                      W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_windowCenterSeparatorSurface_or_pairOverlap
+    hsorted (sourcePressureSortedFailureState_to_failureResolutionState h)
+    hlo_all hhi_all
+
+/-- Beam seed inherits the finite-window sign surface or overlap split. -/
+theorem sourcePressureBeamSeedState_to_windowCenterSeparatorSurface_or_pairOverlap
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (h : SourcePressureBeamSeedState L)
+    (hlo_all : ∀ W, W ∈ L → lo ≤ r + W.val)
+    (hhi_all : ∀ W, W ∈ L → r + W.val ≤ hi) :
+    (∃ W W' m,
+      SourcePressureFiniteWindowPackingSeparatorState L lo hi W W' m ∧
+        lo ≤ r + W.val ∧
+          0 < SourcePressureMarginInt n k (r + W.val) ∧
+            lo ≤ m ∧
+              m ≤ hi ∧
+                SourcePressureMarginInt n k m ≤ 0 ∧
+                  r + W'.val ≤ hi ∧
+                    0 < SourcePressureMarginInt n k (r + W'.val) ∧
+                      W.val + 2 ≤ W'.val) ∨
+      ∃ A B,
+        SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+          SourcePressureLocalIslandWitnessPairOverlapObstruction A B :=
+  sourcePressureFailureResolutionState_to_windowCenterSeparatorSurface_or_pairOverlap
     hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
     hlo_all hhi_all
 
