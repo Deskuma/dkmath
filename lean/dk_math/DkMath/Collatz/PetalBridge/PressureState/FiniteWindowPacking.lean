@@ -390,7 +390,7 @@ theorem sourcePressureAdjacentPairInList_mem_zip
     {W W' : SourcePressureLocalIslandWitness n k r}
     (h : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
     (W, W') ∈ L.zip L.tail := by
-  induction L with
+  induction L generalizing W W' with
   | nil => exact False.elim h
   | cons A rest ih =>
       cases rest with
@@ -679,5 +679,118 @@ theorem SourcePressureCanonicalNonterminalPairCoverageInWindow.certifies
     W ∈ sourcePressureCanonicalLeftWitnessesInWindow L lo hi :=
   mem_sourcePressureCanonicalLeftWitnessesInWindow.2
     ⟨W', h W W' hpair hlo hhi⟩
+
+/-!
+## Internal pairs and the named packing family
+-/
+
+/-- Internal coverage requires both endpoints to lie in the finite window. -/
+def SourcePressureCanonicalInternalPairCoverageInWindow
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Prop :=
+  ∀ W W',
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' →
+    lo ≤ r + W.val → r + W'.val ≤ hi →
+    SourcePressureCanonicalFiniteWindowPackingState L lo hi W W'
+
+/-- Internal adjacent pairs not yet certified as canonical. -/
+noncomputable def sourcePressureUnresolvedInternalPairFamily
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset
+      (SourcePressureLocalIslandWitness n k r ×
+        SourcePressureLocalIslandWitness n k r) :=
+  by classical exact (L.zip L.tail).toFinset.filter fun P =>
+    lo ≤ r + P.1.val ∧ r + P.2.val ≤ hi ∧
+      ¬ SourcePressureCanonicalFiniteWindowPackingState L lo hi P.1 P.2
+
+@[simp]
+theorem mem_sourcePressureUnresolvedInternalPairFamily
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {P : SourcePressureLocalIslandWitness n k r ×
+      SourcePressureLocalIslandWitness n k r} :
+    P ∈ sourcePressureUnresolvedInternalPairFamily L lo hi ↔
+      P ∈ L.zip L.tail ∧
+      lo ≤ r + P.1.val ∧ r + P.2.val ≤ hi ∧
+        ¬ SourcePressureCanonicalFiniteWindowPackingState L lo hi P.1 P.2 := by
+  classical
+  simp [sourcePressureUnresolvedInternalPairFamily]
+
+theorem sourcePressureAdjacentPairInList_of_mem_zip
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : (W, W') ∈ L.zip L.tail) :
+    SourcePressureLocalIslandWitnessAdjacentPairInList L W W' := by
+  induction L generalizing W W' with
+  | nil => simp at h
+  | cons A rest ih =>
+      cases rest with
+      | nil => simp at h
+      | cons B rest =>
+          simp only [List.tail_cons, List.zip_cons_cons, List.mem_cons] at h
+          rcases h with hhead | htail
+          · cases hhead
+            exact SourcePressureLocalIslandWitnessAdjacentPairInList.head
+          · exact SourcePressureLocalIslandWitnessAdjacentPairInList.tail
+              (ih htail)
+
+/-- Left endpoints of unresolved internal pairs. -/
+noncomputable def sourcePressureUnresolvedInternalLeftWitnesses
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureLocalIslandWitness n k r) :=
+  (sourcePressureUnresolvedInternalPairFamily L lo hi).image Prod.fst
+
+@[simp]
+theorem mem_sourcePressureUnresolvedInternalLeftWitnesses
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    W ∈ sourcePressureUnresolvedInternalLeftWitnesses L lo hi ↔
+      ∃ W', (W, W') ∈ sourcePressureUnresolvedInternalPairFamily L lo hi := by
+  classical
+  simp [sourcePressureUnresolvedInternalLeftWitnesses]
+
+/-- Internal coverage makes the unresolved pair family empty. -/
+theorem sourcePressureUnresolvedInternalPairFamily_eq_empty_of_internalCoverage
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hcoverage : SourcePressureCanonicalInternalPairCoverageInWindow L lo hi) :
+    sourcePressureUnresolvedInternalPairFamily L lo hi = ∅ := by
+  classical
+  apply Finset.eq_empty_of_forall_notMem
+  intro P hP
+  rcases mem_sourcePressureUnresolvedInternalPairFamily.1 hP with
+    ⟨hzip, hlo, hhi, hnot⟩
+  exact hnot (hcoverage P.1 P.2
+    (sourcePressureAdjacentPairInList_of_mem_zip hzip) hlo hhi)
+
+/-- A named Finset of canonical packing units, shared by counting theorems. -/
+noncomputable def sourcePressureCanonicalPackingUnitFamily
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureFiniteWindowPackingUnit L lo hi) := by
+  classical
+  exact (sourcePressureCanonicalPackingPairFamily L lo hi).attach.image fun P =>
+    ⟨P.1.1, P.1.2, (mem_sourcePressureCanonicalPackingPairFamily.1 P.2).2⟩
+
+theorem sourcePressureCanonicalPackingUnitFamily_card
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ} :
+    (sourcePressureCanonicalPackingUnitFamily L lo hi).card =
+      (sourcePressureCanonicalPackingPairFamily L lo hi).card := by
+  classical
+  unfold sourcePressureCanonicalPackingUnitFamily
+  rw [Finset.card_image_iff.mpr]
+  · simp
+  · intro P _ Q _ h
+    apply Subtype.ext
+    apply Prod.ext
+    · exact congrArg SourcePressureFiniteWindowPackingUnit.left h
+    · exact congrArg SourcePressureFiniteWindowPackingUnit.right h
 
 end DkMath.Collatz
