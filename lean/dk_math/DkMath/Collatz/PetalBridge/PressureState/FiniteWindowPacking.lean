@@ -1182,6 +1182,69 @@ theorem sourcePressureOrientedNeighborDiagnosticState_iff_adjacentDiagnosis
   · exact SourcePressureOrientedNeighborDiagnosticState.adjacentDiagnosis
   · exact sourcePressureOrientedNeighborDiagnosticState_of_forward hpair
 
+/-
+Sortedness and adjacent diagnosis have opposite purposes.  A diagnosis is a
+failure-resolution carrier: its recovered branch stores the reverse order,
+and its overlap branch stores sorted-before failure.  The following bridge is
+kept here as an explicit guardrail so that future packing statements do not
+silently use a failure carrier as if it were a sorted witness family.
+-/
+theorem sourcePressureSortedBefore_not_failure
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    ¬ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure L := by
+  induction L with
+  | nil =>
+      intro h
+      exact SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false h
+  | cons A rest ih =>
+      cases rest with
+      | nil =>
+          intro h
+          exact SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_singleton_false h
+      | cons B rest =>
+          intro hfail
+          rcases hsorted with ⟨hAB, htail⟩
+          rcases hfail with hhead | htailFail
+          · exact hhead hAB
+          · exact ih htail htailFail
+
+theorem sourcePressureAdjacentDiagnosis_not_of_sorted_adjacent
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
+    ¬ SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W' := by
+  intro hdiag
+  rcases hdiag with hrec | hobs
+  · rcases hrec with ⟨hreverse, _hbudget⟩
+    have hforward := sourcePressureAdjacentPairInList_before_of_sorted hsorted hpair
+    have hposW := sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos W
+    have hposW' := sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos W'
+    unfold SourcePressureLocalIslandWitnessBefore at hforward hreverse
+    unfold SourcePressureIntervalPulseAddressBefore at hforward hreverse
+    exact (by omega)
+  · exact sourcePressureSortedBefore_not_failure hsorted
+      (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
+        hobs)
+
+theorem sourcePressureCanonicalFiniteWindowPackingState_false_of_sorted
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W')
+    (hlo : lo ≤ r + W.val) (hhi : r + W'.val ≤ hi) :
+    ¬ SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' := by
+  intro hcanon
+  have hbox :=
+    (sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+      hsorted hlo hhi).1 hcanon
+  have hdiag := hbox.diagnostic.adjacentDiagnosis
+  exact sourcePressureAdjacentDiagnosis_not_of_sorted_adjacent hsorted hpair hdiag
+
 theorem sourcePressureCanonicalFiniteWindowPackingState_iff_adjacentDiagnosis
     {n : OddNat} {k r lo hi : ℕ}
     {L : List (SourcePressureLocalIslandWitness n k r)}
