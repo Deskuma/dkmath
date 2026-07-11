@@ -793,4 +793,65 @@ theorem sourcePressureCanonicalPackingUnitFamily_card
     · exact congrArg SourcePressureFiniteWindowPackingUnit.left h
     · exact congrArg SourcePressureFiniteWindowPackingUnit.right h
 
+/-- Unresolved left endpoints are injectively indexed by unresolved pairs. -/
+theorem sourcePressureUnresolvedInternalLeftWitnesses_card_le_pairFamily
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (_hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressureUnresolvedInternalLeftWitnesses L lo hi).card ≤
+      (sourcePressureUnresolvedInternalPairFamily L lo hi).card := by
+  classical
+  exact Finset.card_image_le
+
+/-- In-window witnesses with no in-window adjacent successor. -/
+noncomputable def sourcePressureFiniteWindowBoundaryWitnesses
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) : Finset (SourcePressureLocalIslandWitness n k r) := by
+  classical
+  exact (sourcePressurePositiveWitnessesInWindow L lo hi).filter fun W =>
+    ¬ ∃ W', SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∧
+      r + W'.val ≤ hi
+
+@[simp]
+theorem mem_sourcePressureFiniteWindowBoundaryWitnesses
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W : SourcePressureLocalIslandWitness n k r} :
+    W ∈ sourcePressureFiniteWindowBoundaryWitnesses L lo hi ↔
+      W ∈ sourcePressurePositiveWitnessesInWindow L lo hi ∧
+      ¬ ∃ W', SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∧
+        r + W'.val ≤ hi := by
+  classical
+  simp [sourcePressureFiniteWindowBoundaryWitnesses]
+
+/-- Every positive residue witness is unresolved internally or at the boundary. -/
+theorem sourcePressurePositiveCoverageResidue_subset_unresolvedLeft_union_boundary
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)} :
+    sourcePressurePositiveCoverageResidue L lo hi ⊆
+      sourcePressureUnresolvedInternalLeftWitnesses L lo hi ∪
+        sourcePressureFiniteWindowBoundaryWitnesses L lo hi := by
+  classical
+  intro W hW
+  have hpos : W ∈ sourcePressurePositiveWitnessesInWindow L lo hi :=
+    (Finset.mem_sdiff.1 hW).1
+  by_cases hboundary : ∃ W',
+      SourcePressureLocalIslandWitnessAdjacentPairInList L W W' ∧
+        r + W'.val ≤ hi
+  · rcases hboundary with ⟨W', hpair, hhi'⟩
+    have hleft : lo ≤ r + W.val :=
+      (mem_sourcePressurePositiveWitnessesInWindow.1 hpos).2.1
+    have hnotcanon :
+        ¬ SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' := by
+      intro hcanon
+      apply (Finset.mem_sdiff.1 hW).2
+      exact mem_sourcePressureCanonicalLeftWitnessesInWindow.2 ⟨W', hcanon⟩
+    apply Finset.mem_union_left
+    apply Finset.mem_image.2
+    exact ⟨(W, W'), mem_sourcePressureUnresolvedInternalPairFamily.2
+      ⟨sourcePressureAdjacentPairInList_mem_zip hpair, hleft, hhi', hnotcanon⟩, rfl⟩
+  · apply Finset.mem_union_right
+    exact mem_sourcePressureFiniteWindowBoundaryWitnesses.2 ⟨hpos, hboundary⟩
+
 end DkMath.Collatz
