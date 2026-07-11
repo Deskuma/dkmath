@@ -978,6 +978,32 @@ def SourcePressureFiniteWindowPackingSeparatorState
     lo ≤ r + W.val ∧
       r + W'.val ≤ hi
 
+/--
+Comparison carrier for two finite-window packing units in the same window.
+
+The carrier intentionally assumes no relation between the two separators.
+Its first job is to expose separator reuse as the explicit branch
+`m₁ = m₂ ∨ m₁ ≠ m₂`; later counting layers may refine either branch with an
+injectivity, disjointness, or bounded-multiplicity invariant.
+
+TODO(refactor): `PressureState.lean` now exceeds the package's preferred file
+size.  Once this comparison API stabilizes, move the finite-window packing
+definitions and theorems together into
+`DkMath.Collatz.PetalBridge.PressureState.FiniteWindowPacking`, preserving this
+module as the public re-export boundary.  Keep the move mechanical and separate
+from theorem strengthening so future agents can verify import changes locally.
+-/
+def SourcePressureFiniteWindowPackingPairComparisonState
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ)
+    (W₁ W₁' : SourcePressureLocalIslandWitness n k r)
+    (m₁ : ℕ)
+    (W₂ W₂' : SourcePressureLocalIslandWitness n k r)
+    (m₂ : ℕ) : Prop :=
+  SourcePressureFiniteWindowPackingSeparatorState L lo hi W₁ W₁' m₁ ∧
+    SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂
+
 /-- Project the underlying forward box comparison state. -/
 theorem SourcePressureForwardPairComparisonState.forward
     {n : OddNat} {k r : ℕ}
@@ -1837,6 +1863,167 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_window_width
     lo + 2 ≤ hi := by
   rcases h.window_order_chain with ⟨hlo, hleft, hright, hhi⟩
   omega
+
+/-- Project the first finite-window packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.left
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    SourcePressureFiniteWindowPackingSeparatorState L lo hi W₁ W₁' m₁ :=
+  h.1
+
+/-- Project the second finite-window packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.right
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂ :=
+  h.2
+
+/-- Ordered chain consumed by the first packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.left_order_chain
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    lo ≤ r + W₁.val ∧
+      r + W₁.val < m₁ ∧
+        m₁ < r + W₁'.val ∧
+          r + W₁'.val ≤ hi :=
+  h.left.window_order_chain
+
+/-- Ordered chain consumed by the second packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.right_order_chain
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    lo ≤ r + W₂.val ∧
+      r + W₂.val < m₂ ∧
+        m₂ < r + W₂'.val ∧
+          r + W₂'.val ≤ hi :=
+  h.right.window_order_chain
+
+/-- The common window is wide enough for the first packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.left_window_width
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    lo + 2 ≤ hi :=
+  h.left.two_le_window_width
+
+/-- The common window is wide enough for the second packing unit. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.right_window_width
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    lo + 2 ≤ hi :=
+  h.right.two_le_window_width
+
+/-- Two packing units either reuse their separator or use distinct separators. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.separator_eq_or_ne
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (_h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂) :
+    m₁ = m₂ ∨ m₁ ≠ m₂ :=
+  eq_or_ne m₁ m₂
+
+/-- Shared-separator branch with both finite-window order chains exposed. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.separator_eq_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsep : m₁ = m₂) :
+    m₁ = m₂ ∧
+      (lo ≤ r + W₁.val ∧ r + W₁.val < m₁ ∧
+        m₁ < r + W₁'.val ∧ r + W₁'.val ≤ hi) ∧
+      (lo ≤ r + W₂.val ∧ r + W₂.val < m₂ ∧
+        m₂ < r + W₂'.val ∧ r + W₂'.val ≤ hi) :=
+  ⟨hsep, h.left_order_chain, h.right_order_chain⟩
+
+/-- Distinct-separator branch with both finite-window order chains exposed. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.separator_ne_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsep : m₁ ≠ m₂) :
+    m₁ ≠ m₂ ∧
+      (lo ≤ r + W₁.val ∧ r + W₁.val < m₁ ∧
+        m₁ < r + W₁'.val ∧ r + W₁'.val ≤ hi) ∧
+      (lo ≤ r + W₂.val ∧ r + W₂.val < m₂ ∧
+        m₂ < r + W₂'.val ∧ r + W₂'.val ≤ hi) :=
+  ⟨hsep, h.left_order_chain, h.right_order_chain⟩
+
+/--
+A reused separator lies strictly between both pairs of positive centers.
+
+This is the concrete geometry of separator reuse: the two consumed open center
+intervals have the shared separator as an explicit common point.
+-/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.shared_separator_cross_surface
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsep : m₁ = m₂) :
+    r + W₁.val < m₁ ∧
+      r + W₂.val < m₁ ∧
+        m₁ < r + W₁'.val ∧
+          m₁ < r + W₂'.val := by
+  rcases h.left_order_chain with ⟨_hlo₁, hleft₁, hright₁, _hhi₁⟩
+  rcases h.right_order_chain with ⟨_hlo₂, hleft₂, hright₂, _hhi₂⟩
+  subst m₂
+  exact ⟨hleft₁, hleft₂, hright₁, hright₂⟩
+
+/-- Distinct separators have a strict order in the finite window. -/
+theorem SourcePressureFiniteWindowPackingPairComparisonState.separator_lt_or_gt
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {lo hi : ℕ}
+    {W₁ W₁' : SourcePressureLocalIslandWitness n k r} {m₁ : ℕ}
+    {W₂ W₂' : SourcePressureLocalIslandWitness n k r} {m₂ : ℕ}
+    (_h : SourcePressureFiniteWindowPackingPairComparisonState
+      L lo hi W₁ W₁' m₁ W₂ W₂' m₂)
+    (hsep : m₁ ≠ m₂) :
+    m₁ < m₂ ∨ m₂ < m₁ :=
+  Nat.lt_or_gt_of_ne hsep
 
 /-- Value-level two-step spacing inherited by the finite-window state. -/
 theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_value_gap
