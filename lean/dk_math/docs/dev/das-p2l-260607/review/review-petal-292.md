@@ -216,7 +216,7 @@ sourcePressureUnresolvedInternalLeftWitnesses
 これは最終的に、
 
 $$
-# Residue\le#UnresolvedInternalLeft+1
+\#Residue \le \#UnresolvedInternalLeft + 1
 $$
 
 へ進むための正しい carrier じゃ。
@@ -224,7 +224,7 @@ $$
 現時点では、pair family から left family への cardinality equality はまだ立てていない。ただし sorted list では一つの左端に右隣は一つなので、前 checkpoint の一意性補題を再利用すれば、
 
 $$
-# UnresolvedInternalLeft=#UnresolvedInternalPair
+\#UnresolvedInternalLeft = \#UnresolvedInternalPair
 $$
 
 まで出せるはずじゃ。
@@ -248,10 +248,7 @@ sourcePressureCanonicalPackingUnitFamily_card
 により、
 
 $$
-# CanonicalPackingUnitFamily
-===========================
-
-# CanonicalPackingPairFamily
+\#CanonicalPackingUnitFamily = \#CanonicalPackingPairFamily
 $$
 
 まで固定された。
@@ -292,13 +289,7 @@ unresolved internal Gap
 したがって、現在の local Big は概念的に、
 
 $$
-Positive
-\le
-CanonicalPacking
-+
-UnresolvedInternal
-+
-Boundary
+Positive \le CanonicalPacking + UnresolvedInternal + Boundary
 $$
 
 まで分解された。
@@ -306,13 +297,7 @@ $$
 さらに cp-290 の上界を代入すれば、目標形は、
 
 $$
-# Positive
-\le
-\frac{hi-lo}{2}+1
-+
-# UnresolvedInternal
-+
-# Boundary
+\#Positive \le \frac{hi-lo}{2}+1 + \#UnresolvedInternal + \#Boundary
 $$
 
 じゃ。
@@ -320,11 +305,7 @@ $$
 境界項を `≤ 1` で閉じれば、
 
 $$
-# Positive
-\le
-\frac{hi-lo}{2}+2
-+
-# UnresolvedInternal
+\#Positive \le \frac{hi-lo}{2}+2 + \#UnresolvedInternal
 $$
 
 となる。
@@ -332,9 +313,7 @@ $$
 internal coverage が成立すれば unresolved は空なので、
 
 $$
-# Positive
-\le
-\frac{hi-lo}{2}+2
+\#Positive \le \frac{hi-lo}{2}+2
 $$
 
 へ到達する。
@@ -409,7 +388,7 @@ W が list terminal
 strictly sorted な list では、これは窓内 witness の最大要素にしかなれないため、直接、
 
 $$
-# Boundary\le1
+\#Boundary\le1
 $$
 
 を狙える。
