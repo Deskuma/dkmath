@@ -1145,7 +1145,79 @@ theorem mem_sourcePressureUnresolvedInternalPairFamily_iff_not_orientedNeighborB
     apply mem_sourcePressureUnresolvedInternalPairFamily.2
     refine ⟨hzip, hlo, hhi, ?_⟩
     intro hcanon
-    exact hnotbox ((sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
-      hsorted hlo hhi).1 hcanon)
+    have hiff := sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+      hsorted hlo hhi
+    exact hnotbox (hiff.1 hcanon)
+
+/-- Oriented box data adds no information beyond its full diagnostic. -/
+theorem sourcePressureOrientedNeighborBoxState_iff_diagnostic
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureOrientedNeighborBoxState L W W' ↔
+      SourcePressureOrientedNeighborDiagnosticState L W W' := by
+  constructor
+  · exact SourcePressureOrientedNeighborBoxState.diagnostic
+  · exact sourcePressureOrientedNeighborDiagnosticState_to_boxState
+
+/-- Project the adjacent diagnosis carried by an oriented diagnostic state. -/
+theorem SourcePressureOrientedNeighborDiagnosticState.adjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (h : SourcePressureOrientedNeighborDiagnosticState L W W') :
+    SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W' := by
+  rcases h with ⟨_hin, hdiag, _hentry, _haddr, _hexit,
+    _hentry', _haddr', _hexit'⟩
+  exact hdiag
+
+theorem sourcePressureOrientedNeighborDiagnosticState_iff_adjacentDiagnosis
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
+    SourcePressureOrientedNeighborDiagnosticState L W W' ↔
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W' := by
+  constructor
+  · exact SourcePressureOrientedNeighborDiagnosticState.adjacentDiagnosis
+  · exact sourcePressureOrientedNeighborDiagnosticState_of_forward hpair
+
+theorem sourcePressureCanonicalFiniteWindowPackingState_iff_adjacentDiagnosis
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W')
+    (hlo : lo ≤ r + W.val) (hhi : r + W'.val ≤ hi) :
+    SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' ↔
+      SourcePressureLocalIslandWitnessAdjacentDiagnosis L W W' := by
+  rw [sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+    hsorted hlo hhi, sourcePressureOrientedNeighborBoxState_iff_diagnostic]
+  exact sourcePressureOrientedNeighborDiagnosticState_iff_adjacentDiagnosis hpair
+
+/-- Semantic alias: unresolved internal pairs are undiagnosed internal pairs. -/
+noncomputable def sourcePressureUndiagnosedInternalPairFamily
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (lo hi : ℕ) :=
+  sourcePressureUnresolvedInternalPairFamily L lo hi
+
+theorem sourcePressurePositiveWitnesses_card_le_half_window_add_two_add_undiagnosedInternal
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (hi - lo) / 2 + 2 +
+        (sourcePressureUndiagnosedInternalPairFamily L lo hi).card :=
+  sourcePressurePositiveWitnesses_card_le_half_window_add_two_add_unresolvedInternal hsorted
+
+theorem sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_undiagnosedInternal
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    (sourcePressurePositiveWitnessesInWindow L lo hi).card ≤
+      (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 +
+        (sourcePressureUndiagnosedInternalPairFamily L lo hi).card :=
+  sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal hsorted
 
 end DkMath.Collatz
