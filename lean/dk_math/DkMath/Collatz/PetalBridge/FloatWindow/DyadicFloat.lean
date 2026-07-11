@@ -55,6 +55,31 @@ structure DyadicFloatObservation where
   /-- Lower 2-adic height of `3*n+1`. -/
   height : ℕ
 
+/--
+Value-free dyadic signature.
+
+Unlike `DyadicFloatObservation`, this record does not retain the original
+state.  Equality of signatures therefore expresses observational
+compatibility, not state equality.  Any future cardinality theorem must also
+account for fixed width, window overlap, and overlap consistency; a zero Gap
+width alone is not a uniqueness proof.
+-/
+structure DyadicFloatSignature where
+  /-- Exact binary exponent/word width. -/
+  width : ℕ
+  /-- Number of requested upper bits. -/
+  upperBits : ℕ
+  /-- Number of requested lower bits. -/
+  lowerBits : ℕ
+  /-- Exact upper prefix. -/
+  upper : ℕ
+  /-- Exact lower suffix. -/
+  lower : ℕ
+  /-- Own-width carry of `3*n+1`. -/
+  carry : ℕ
+  /-- Lower 2-adic height of `3*n+1`. -/
+  height : ℕ
+
 /-- Construct the exact dyadic observation at upper/lower window sizes. -/
 noncomputable def dyadicFloatObservation (q r n : ℕ) :
     DyadicFloatObservation where
@@ -67,6 +92,72 @@ noncomputable def dyadicFloatObservation (q r n : ℕ) :
   gap := middleGapWidth q r n
   carry := stateUpperCarry n
   height := rawHeightLabel n
+
+/-- Construct the value-free dyadic signature of a state. -/
+noncomputable def dyadicFloatSignature (q r n : ℕ) :
+    DyadicFloatSignature where
+  width := bitWidth n
+  upperBits := q
+  lowerBits := r
+  upper := upperPrefix q n
+  lower := lowerSuffix r n
+  carry := stateUpperCarry n
+  height := rawHeightLabel n
+
+/-- Forget only the original value and hidden-Gap bookkeeping. -/
+def DyadicFloatObservation.signature
+    (O : DyadicFloatObservation) : DyadicFloatSignature where
+  width := O.width
+  upperBits := O.upperBits
+  lowerBits := O.lowerBits
+  upper := O.upper
+  lower := O.lower
+  carry := O.carry
+  height := O.height
+
+@[simp]
+theorem dyadicFloatObservation_signature (q r n : ℕ) :
+    (dyadicFloatObservation q r n).signature = dyadicFloatSignature q r n :=
+  rfl
+
+/-- Full observation equality implies signature equality, but not conversely. -/
+theorem DyadicFloatObservation.signature_eq_of_eq
+    {O O' : DyadicFloatObservation} (h : O = O') :
+    O.signature = O'.signature := by
+  rw [h]
+
+/-- A state is compatible with a value-free signature by exact observation. -/
+def DyadicFloatSignature.CompatibleState
+    (S : DyadicFloatSignature) (q r n : ℕ) : Prop :=
+  dyadicFloatSignature q r n = S
+
+/-- The canonical state is compatible with its own signature. -/
+@[simp]
+theorem dyadicFloatSignature_compatible_self (q r n : ℕ) :
+    (dyadicFloatSignature q r n).CompatibleState q r n :=
+  rfl
+
+/-- The requested windows are individually contained in the observed width. -/
+def DyadicFloatSignature.WindowsWithinWidth
+    (S : DyadicFloatSignature) : Prop :=
+  S.upperBits ≤ S.width ∧ S.lowerBits ≤ S.width
+
+/-- The requested upper and lower windows do not overlap. -/
+def DyadicFloatSignature.WindowsDisjoint
+    (S : DyadicFloatSignature) : Prop :=
+  S.upperBits + S.lowerBits ≤ S.width
+
+/-- The requested windows overlap inside the observed word. -/
+def DyadicFloatSignature.WindowsOverlap
+    (S : DyadicFloatSignature) : Prop :=
+  S.width < S.upperBits + S.lowerBits
+
+/-- Disjointness and overlap form the exact arithmetic case split. -/
+theorem DyadicFloatSignature.windowsDisjoint_or_windowsOverlap
+    (S : DyadicFloatSignature) :
+    S.WindowsDisjoint ∨ S.WindowsOverlap := by
+  unfold WindowsDisjoint WindowsOverlap
+  omega
 
 /-- A lower suffix is always a valid `r`-bit word. -/
 theorem lowerSuffix_lt_pow (r n : ℕ) :

@@ -119,6 +119,29 @@ theorem stateUpperCarry_mul_pow_le_threeNPlusOne_and_lt_succ_mul_pow
   · apply (Nat.div_lt_iff_lt_mul (pow_pos (by norm_num) (bitWidth n))).1
     simp [stateUpperCarry, upperCarry3n1]
 
+/--
+The own-width carry is two exactly when the raw word crosses the next binary
+boundary.  This is the exact upper-window threshold, not an approximation.
+-/
+theorem stateUpperCarry_eq_two_iff_pow_succ_le_threeNPlusOne
+    {n : ℕ} (hn : 0 < n) :
+    stateUpperCarry n = 2 ↔ 2 ^ (bitWidth n + 1) ≤ 3 * n + 1 := by
+  constructor
+  · intro hc
+    have hb :=
+      stateUpperCarry_mul_pow_le_threeNPlusOne_and_lt_succ_mul_pow n
+    rw [hc] at hb
+    simpa [pow_succ, Nat.mul_comm] using hb.1
+  · intro hcross
+    rcases stateUpperCarry_one_or_two hn with hc | hc
+    · have hb :=
+        stateUpperCarry_mul_pow_le_threeNPlusOne_and_lt_succ_mul_pow n
+      rw [hc] at hb
+      have hbelow : 3 * n + 1 < 2 ^ (bitWidth n + 1) := by
+        simpa [pow_succ, Nat.mul_comm] using hb.2
+      omega
+    · exact hc
+
 /-- Recognize an exact binary width from its enclosing powers of two. -/
 theorem bitWidth_eq_add_one_of_pow_le_lt
     {a x : ℕ} (hlo : 2 ^ a ≤ x) (hhi : x < 2 ^ (a + 1)) :

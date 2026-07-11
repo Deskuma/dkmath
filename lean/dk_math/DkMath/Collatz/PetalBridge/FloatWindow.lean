@@ -9,6 +9,7 @@ import DkMath.Collatz.PetalBridge.FloatWindow.WidthBalance
 import DkMath.Collatz.PetalBridge.FloatWindow.DyadicFloat
 import DkMath.Collatz.PetalBridge.FloatWindow.OrbitBalance
 import DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
+import DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 
