@@ -1030,4 +1030,122 @@ theorem sourcePressurePositiveWitnesses_endpointCorrectedLocalBig_of_internalCov
       sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal
         (L := L) (lo := lo) (hi := hi) hsorted
 
+/-- The duplicated pair state has exactly the forward-box payload. -/
+theorem sourcePressureForwardPairComparisonState_iff_forwardBoxComparisonState
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r} :
+    SourcePressureForwardPairComparisonState L W W' ↔
+      SourcePressureForwardBoxComparisonState L W W' := by
+  constructor
+  · exact SourcePressureForwardPairComparisonState.forward
+  · intro h
+    exact h.to_pairComparisonState
+
+/-- Under sortedness, an oriented box is precisely a forward box comparison. -/
+theorem sourcePressureForwardBoxComparisonState_iff_orientedNeighborBox_of_sorted
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (_hpair : SourcePressureLocalIslandWitnessAdjacentPairInList L W W') :
+    SourcePressureForwardBoxComparisonState L W W' ↔
+      SourcePressureOrientedNeighborBoxState L W W' := by
+  constructor
+  · exact SourcePressureForwardBoxComparisonState.box
+  · intro hbox
+    exact hbox.to_forwardComparisonState_of_sorted hsorted
+
+/-- Canonical finite-window packing is the oriented box plus window bounds. -/
+theorem sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hlo : lo ≤ r + W.val) (hhi : r + W'.val ≤ hi) :
+    SourcePressureCanonicalFiniteWindowPackingState L lo hi W W' ↔
+      SourcePressureOrientedNeighborBoxState L W W' := by
+  constructor
+  · intro h
+    have hFPC : SourcePressureForwardPairComparisonState L W W' :=
+      h.finiteWindow.localPacking.forward
+    exact hFPC.forward.box
+  · intro hbox
+    exact (hbox.to_forwardComparisonState_of_sorted hsorted).to_pairComparisonState
+      |>.to_canonicalFiniteWindowPackingState hlo hhi
+
+/-- Exact obstruction for an internal pair missing its oriented box. -/
+def SourcePressureInternalPairBoxObstruction
+    {n : OddNat} {k r : ℕ}
+    (L : List (SourcePressureLocalIslandWitness n k r))
+    (W W' : SourcePressureLocalIslandWitness n k r) : Prop :=
+  ¬ SourcePressureOrientedNeighborDiagnosticState L W W' ∨
+    ¬ SourcePressureBeamCenteredLocalPulseBox n k r L W ∨
+      ¬ SourcePressureBeamCenteredLocalPulseBox n k r L W'
+
+theorem not_orientedNeighborBox_iff_internalPairBoxObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {W W' : SourcePressureLocalIslandWitness n k r} :
+    ¬ SourcePressureOrientedNeighborBoxState L W W' ↔
+      SourcePressureInternalPairBoxObstruction L W W' := by
+  constructor
+  · intro h
+    by_cases hD : SourcePressureOrientedNeighborDiagnosticState L W W'
+    · by_cases hL : SourcePressureBeamCenteredLocalPulseBox n k r L W
+      · by_cases hR : SourcePressureBeamCenteredLocalPulseBox n k r L W'
+        · exact False.elim (h ⟨hD, hL, hR⟩)
+        · exact Or.inr (Or.inr hR)
+      · exact Or.inr (Or.inl hL)
+    · exact Or.inl hD
+  · intro h hbox
+    rcases hbox with ⟨hD, hL, hR⟩
+    rcases h with hD' | hL' | hR'
+    · exact hD' hD
+    · exact hL' hL
+    · exact hR' hR
+
+theorem sourcePressureUnresolvedInternalPairFamily_mem_obstruction
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {P : SourcePressureLocalIslandWitness n k r ×
+      SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L)
+    (hP : P ∈ sourcePressureUnresolvedInternalPairFamily L lo hi) :
+    SourcePressureInternalPairBoxObstruction L P.1 P.2 := by
+  apply not_orientedNeighborBox_iff_internalPairBoxObstruction.1
+  intro hbox
+  have hleft : lo ≤ r + P.1.val :=
+    (mem_sourcePressureUnresolvedInternalPairFamily.1 hP).2.1
+  have hright : r + P.2.val ≤ hi :=
+    (mem_sourcePressureUnresolvedInternalPairFamily.1 hP).2.2.1
+  exact (mem_sourcePressureUnresolvedInternalPairFamily.1 hP).2.2.2
+    ((sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+      hsorted hleft hright).2 hbox)
+
+/-- Sorted internal unresolved pairs are exactly the pairs missing the box. -/
+theorem mem_sourcePressureUnresolvedInternalPairFamily_iff_not_orientedNeighborBox
+    {n : OddNat} {k r lo hi : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {P : SourcePressureLocalIslandWitness n k r ×
+      SourcePressureLocalIslandWitness n k r}
+    (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
+    P ∈ sourcePressureUnresolvedInternalPairFamily L lo hi ↔
+      P ∈ L.zip L.tail ∧ lo ≤ r + P.1.val ∧ r + P.2.val ≤ hi ∧
+        ¬ SourcePressureOrientedNeighborBoxState L P.1 P.2 := by
+  constructor
+  · intro hP
+    rcases mem_sourcePressureUnresolvedInternalPairFamily.1 hP with
+      ⟨hzip, hlo, hhi, hnot⟩
+    refine ⟨hzip, hlo, hhi, ?_⟩
+    intro hbox
+    exact hnot ((sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+      hsorted hlo hhi).2 hbox)
+  · rintro ⟨hzip, hlo, hhi, hnotbox⟩
+    apply mem_sourcePressureUnresolvedInternalPairFamily.2
+    refine ⟨hzip, hlo, hhi, ?_⟩
+    intro hcanon
+    exact hnotbox ((sourcePressureCanonicalFiniteWindowPackingState_iff_orientedNeighborBox_of_sorted
+      hsorted hlo hhi).1 hcanon)
+
 end DkMath.Collatz
