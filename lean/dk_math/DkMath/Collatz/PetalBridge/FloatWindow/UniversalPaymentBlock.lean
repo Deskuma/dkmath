@@ -10,6 +10,8 @@ import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
 
 namespace DkMath.Collatz
 
+set_option linter.style.longLine false
+
 /-!
 # Universal first-payment coordinates
 
@@ -605,6 +607,313 @@ theorem universalPaymentBlockSignedDriftAt_neg_iff_claim_card_lt_capacity
     universalPaymentBlockSignedDriftAt n j < 0 ↔
       (carryTwoPaymentClaimFiberAt n j).card < extraPaymentCapacityAt n j := by
   unfold universalPaymentBlockSignedDriftAt
+  omega
+
+/-!
+## Blocks with no delayed growth debt
+
+The following classification is deliberately local to one universal payment
+block.  Empty delayed-debt support does not assert anything about later
+blocks; it only excludes carry-two events at the height-one interior points of
+this particular canonical target fiber.
+-/
+
+/--
+In a debt-free universal block, every strict interior source has upper carry
+one.  A carry of two together with the already-known height-one interior
+profile would be a delayed growth debt for the same endpoint.
+-/
+theorem stateUpperCarry_eq_one_of_mem_universalPaymentBlockInterior_of_growthDebtFiber_eq_empty
+    {n : OddNat} {j i : ℕ} {h : (orbitPaymentSourceFiberAt n j).Nonempty}
+    (hempty : floatGrowthDebtFiberAt n j = ∅)
+    (hi : i ∈ Finset.Ico (universalPaymentBlockStart n j h) j) :
+    stateUpperCarry (iterateT i n).1 = 1 := by
+  have hheight := orbitWindowHeight_eq_one_of_mem_universalPaymentBlockInterior hi
+  have hnotcarry : ¬ CarryTwoDebtAt n i := by
+    intro hcarry
+    have hdebt : FloatDebtAt n i :=
+      (floatDebtAt_iff_delayedCarryTwoDebtAt n i).mpr ⟨hcarry, hheight⟩
+    rcases Finset.mem_Ico.mp hi with ⟨hstart, hij⟩
+    have htarget : floatDebtPaymentTarget n i = j := by
+      simpa [floatDebtPaymentTarget_eq_orbitPaymentTarget] using
+        orbitPaymentTarget_eq_endpoint_of_universalStart_le_lt hstart hij
+    have hfiber : i ∈ floatGrowthDebtFiberAt n j :=
+      mem_floatGrowthDebtFiberAt_iff.mpr ⟨Nat.lt_succ_of_lt hij, hdebt, htarget⟩
+    simp [hempty] at hfiber
+  have hpos : 0 < (iterateT i n).1 := by
+    have hodd := (iterateT i n).2
+    omega
+  rcases stateUpperCarry_one_or_two hpos with hone | htwo
+  · exact hone
+  · exact False.elim (hnotcarry htwo)
+
+/--
+With no delayed debt in a nonempty universal block, a complete carry-two claim
+can occur only at the endpoint.  Thus the full claim fiber is either the
+endpoint singleton or empty.
+-/
+theorem mem_carryTwoPaymentClaimFiberAt_iff_eq_endpoint_and_carryTwo_of_growthDebtFiber_eq_empty
+    {n : OddNat} {j i : ℕ} {h : (orbitPaymentSourceFiberAt n j).Nonempty}
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    i ∈ carryTwoPaymentClaimFiberAt n j ↔ i = j ∧ CarryTwoDebtAt n j := by
+  constructor
+  · intro hi
+    rcases mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo.mp hi with
+      ⟨hblock, hcarry⟩
+    have hijle := (Finset.mem_Icc.mp hblock).2
+    by_cases hijEq : i = j
+    · exact ⟨hijEq, by simpa [hijEq] using hcarry⟩
+    · have hij : i < j := lt_of_le_of_ne hijle hijEq
+      have hinterior : i ∈ Finset.Ico (universalPaymentBlockStart n j h) j := by
+        exact Finset.mem_Ico.mpr ⟨(Finset.mem_Icc.mp hblock).1, hij⟩
+      have hone :=
+        stateUpperCarry_eq_one_of_mem_universalPaymentBlockInterior_of_growthDebtFiber_eq_empty
+          hempty hinterior
+      exfalso
+      unfold CarryTwoDebtAt at hcarry
+      omega
+  · rintro ⟨hi, hcarry⟩
+    subst i
+    apply
+      mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo
+        (h := h) |>.mpr
+    have hstartmem := universalPaymentBlockStart_mem_sourceFiber n j h
+    exact ⟨Finset.mem_Icc.mpr
+      ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1, le_rfl⟩, hcarry⟩
+
+/-- The endpoint-only candidate shape for a debt-free universal claim fiber. -/
+noncomputable def endpointCarryTwoClaimShape (n : OddNat) (j : ℕ) : Finset ℕ := by
+  classical
+  exact if CarryTwoDebtAt n j then {j} else ∅
+
+/-- Finset form: debt-free universal blocks have at most their endpoint claim. -/
+theorem carryTwoPaymentClaimFiberAt_eq_endpoint_singleton_or_empty_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    carryTwoPaymentClaimFiberAt n j = endpointCarryTwoClaimShape n j := by
+  classical
+  ext i
+  unfold endpointCarryTwoClaimShape
+  rw [mem_carryTwoPaymentClaimFiberAt_iff_eq_endpoint_and_carryTwo_of_growthDebtFiber_eq_empty
+    (h := h) hempty]
+  by_cases hcarry : CarryTwoDebtAt n j <;> simp [hcarry]
+
+/-- A debt-free universal block has at most one complete carry-two claim. -/
+theorem carryTwoPaymentClaimFiberAt_card_le_one_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    (carryTwoPaymentClaimFiberAt n j).card ≤ 1 := by
+  rw [carryTwoPaymentClaimFiberAt_eq_endpoint_singleton_or_empty_of_growthDebtFiber_eq_empty
+    n j h hempty]
+  unfold endpointCarryTwoClaimShape
+  classical
+  split <;> simp
+
+/-- Every nonempty universal endpoint has at least one unit of payment capacity. -/
+theorem one_le_extraPaymentCapacityAt_of_orbitPaymentSourceFiberAt_nonempty
+    {n : OddNat} {j : ℕ}
+    (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    1 ≤ extraPaymentCapacityAt n j := by
+  unfold extraPaymentCapacityAt
+  have hheight := two_le_orbitWindowHeight_of_orbitPaymentSourceFiberAt_nonempty h
+  omega
+
+/-- In a debt-free universal block, complete claims do not exceed endpoint capacity. -/
+theorem carryTwoPaymentClaimFiberAt_card_le_extraPaymentCapacityAt_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    (carryTwoPaymentClaimFiberAt n j).card ≤ extraPaymentCapacityAt n j := by
+  have hclaim := carryTwoPaymentClaimFiberAt_card_le_one_of_growthDebtFiber_eq_empty n j h hempty
+  have hcapacity := one_le_extraPaymentCapacityAt_of_orbitPaymentSourceFiberAt_nonempty h
+  omega
+
+/-- A debt-free universal block has nonpositive signed width drift. -/
+theorem universalPaymentBlockSignedDriftAt_nonpos_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    universalPaymentBlockSignedDriftAt n j ≤ 0 := by
+  rw [universalPaymentBlockSignedDriftAt]
+  apply sub_nonpos.mpr
+  exact_mod_cast
+    carryTwoPaymentClaimFiberAt_card_le_extraPaymentCapacityAt_of_growthDebtFiber_eq_empty
+      n j h hempty
+
+/-- Consequently, a debt-free universal block cannot increase bit width. -/
+theorem bitWidth_iterateT_le_of_universalPaymentBlock_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    bitWidth (iterateT (j + 1) n).1 ≤
+      bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 := by
+  have hdrift := universalPaymentBlockSignedDriftAt_nonpos_of_growthDebtFiber_eq_empty n j h hempty
+  rw [universalPaymentBlockSignedDriftAt_eq_bitWidth_sub n j h] at hdrift
+  omega
+
+/-- In a debt-free universal block, the complete claim count is one exactly at a carry-two endpoint. -/
+theorem carryTwoPaymentClaimFiberAt_card_eq_one_iff_carryTwoDebtAt_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    (carryTwoPaymentClaimFiberAt n j).card = 1 ↔ CarryTwoDebtAt n j := by
+  rw [carryTwoPaymentClaimFiberAt_eq_endpoint_singleton_or_empty_of_growthDebtFiber_eq_empty
+    n j h hempty]
+  unfold endpointCarryTwoClaimShape
+  classical
+  by_cases hcarry : CarryTwoDebtAt n j <;> simp [hcarry]
+
+/-- At a nonempty universal endpoint, capacity one means exact observed height two. -/
+theorem extraPaymentCapacityAt_eq_one_iff_orbitWindowHeight_eq_two_of_nonempty
+    {n : OddNat} {j : ℕ} (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    extraPaymentCapacityAt n j = 1 ↔ orbitWindowHeight n j = 2 := by
+  unfold extraPaymentCapacityAt
+  have hheight := two_le_orbitWindowHeight_of_orbitPaymentSourceFiberAt_nonempty h
+  omega
+
+/--
+For a debt-free universal block, zero drift occurs exactly when the endpoint
+contributes its sole carry-two claim and has exactly one unit of capacity.
+-/
+theorem universalPaymentBlockSignedDriftAt_eq_zero_iff_carryTwo_and_height_eq_two_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅) :
+    universalPaymentBlockSignedDriftAt n j = 0 ↔
+      CarryTwoDebtAt n j ∧ orbitWindowHeight n j = 2 := by
+  constructor
+  · intro hzero
+    have hbalance := (universalPaymentBlockSignedDriftAt_eq_zero_iff_claim_card_eq_capacity n j).mp hzero
+    have hclaim := carryTwoPaymentClaimFiberAt_card_le_one_of_growthDebtFiber_eq_empty n j h hempty
+    have hcapacity := one_le_extraPaymentCapacityAt_of_orbitPaymentSourceFiberAt_nonempty h
+    have hclaimone : (carryTwoPaymentClaimFiberAt n j).card = 1 := by omega
+    have hcapacityone : extraPaymentCapacityAt n j = 1 := by omega
+    exact ⟨(carryTwoPaymentClaimFiberAt_card_eq_one_iff_carryTwoDebtAt_of_growthDebtFiber_eq_empty
+      n j h hempty).mp hclaimone,
+      (extraPaymentCapacityAt_eq_one_iff_orbitWindowHeight_eq_two_of_nonempty h).mp hcapacityone⟩
+  · rintro ⟨hcarry, hheight⟩
+    apply (universalPaymentBlockSignedDriftAt_eq_zero_iff_claim_card_eq_capacity n j).mpr
+    rw [(carryTwoPaymentClaimFiberAt_card_eq_one_iff_carryTwoDebtAt_of_growthDebtFiber_eq_empty
+      n j h hempty).mpr hcarry,
+      (extraPaymentCapacityAt_eq_one_iff_orbitWindowHeight_eq_two_of_nonempty h).mpr hheight]
+
+/--
+Every other debt-free universal block has strictly negative signed drift.
+This is the exact complement of the equality classification, not a global
+statement about blocks with delayed-debt sources.
+-/
+theorem universalPaymentBlockSignedDriftAt_neg_of_not_carryTwo_or_height_ne_two_of_growthDebtFiber_eq_empty
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅)
+    (hneq : ¬ (CarryTwoDebtAt n j ∧ orbitWindowHeight n j = 2)) :
+    universalPaymentBlockSignedDriftAt n j < 0 := by
+  have hnonpos := universalPaymentBlockSignedDriftAt_nonpos_of_growthDebtFiber_eq_empty n j h hempty
+  have hne : universalPaymentBlockSignedDriftAt n j ≠ 0 := by
+    intro hzero
+    exact hneq ((universalPaymentBlockSignedDriftAt_eq_zero_iff_carryTwo_and_height_eq_two_of_growthDebtFiber_eq_empty
+      n j h hempty).mp hzero)
+  omega
+
+/-- Every non-equality debt-free universal block strictly decreases bit width. -/
+theorem bitWidth_iterateT_lt_of_universalPaymentBlock_not_carryTwo_or_height_ne_two
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hempty : floatGrowthDebtFiberAt n j = ∅)
+    (hneq : ¬ (CarryTwoDebtAt n j ∧ orbitWindowHeight n j = 2)) :
+    bitWidth (iterateT (j + 1) n).1 <
+      bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 := by
+  exact (universalPaymentBlockSignedDriftAt_neg_iff_bitWidth_gt n j h).mp
+    (universalPaymentBlockSignedDriftAt_neg_of_not_carryTwo_or_height_ne_two_of_growthDebtFiber_eq_empty
+      n j h hempty hneq)
+
+/-!
+## Canonical endpoint sequence
+
+The sequence records the first payment endpoint, then the target immediately
+after each endpoint.  It is defined without choosing a proof of fiber
+nonemptiness; the target map itself supplies the endpoint property.
+-/
+
+/-- Canonical successive endpoints of universal payment blocks. -/
+noncomputable def paymentEndpointSeq (n : OddNat) : ℕ → ℕ
+  | 0 => orbitPaymentTarget n 0
+  | k + 1 => orbitPaymentTarget n (paymentEndpointSeq n k + 1)
+
+/-- Every canonical sequence entry is an extra-height endpoint. -/
+theorem two_le_orbitWindowHeight_paymentEndpointSeq
+    (n : OddNat) (k : ℕ) :
+    2 ≤ orbitWindowHeight n (paymentEndpointSeq n k) := by
+  cases k with
+  | zero =>
+      simpa [paymentEndpointSeq] using two_le_orbitWindowHeight_orbitPaymentTarget n 0
+  | succ k =>
+      simpa [paymentEndpointSeq] using
+        two_le_orbitWindowHeight_orbitPaymentTarget n (paymentEndpointSeq n k + 1)
+
+/-- Each canonical sequence entry is fixed by the universal target map. -/
+theorem orbitPaymentTarget_paymentEndpointSeq
+    (n : OddNat) (k : ℕ) :
+    orbitPaymentTarget n (paymentEndpointSeq n k) = paymentEndpointSeq n k := by
+  apply orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight
+  exact two_le_orbitWindowHeight_paymentEndpointSeq n k
+
+/-- Consecutive canonical payment endpoints are strictly increasing. -/
+theorem paymentEndpointSeq_lt_succ
+    (n : OddNat) (k : ℕ) :
+    paymentEndpointSeq n k < paymentEndpointSeq n (k + 1) := by
+  rw [show paymentEndpointSeq n (k + 1) =
+    orbitPaymentTarget n (paymentEndpointSeq n k + 1) by rfl]
+  have hlt := orbitPaymentTarget_lt_succ_of_two_le_orbitWindowHeight
+    (two_le_orbitWindowHeight_paymentEndpointSeq n k)
+  rw [orbitPaymentTarget_paymentEndpointSeq] at hlt
+  exact hlt
+
+/-- Every sequence endpoint has a nonempty universal source fiber. -/
+theorem orbitPaymentSourceFiberAt_nonempty_paymentEndpointSeq
+    (n : OddNat) (k : ℕ) :
+    (orbitPaymentSourceFiberAt n (paymentEndpointSeq n k)).Nonempty :=
+  (orbitPaymentSourceFiberAt_nonempty_iff_two_le_orbitWindowHeight n
+    (paymentEndpointSeq n k)).mpr (two_le_orbitWindowHeight_paymentEndpointSeq n k)
+
+/-- The first canonical payment block starts at orbit time zero. -/
+theorem universalPaymentBlockStart_paymentEndpointSeq_zero
+    (n : OddNat) :
+    universalPaymentBlockStart n (paymentEndpointSeq n 0)
+      (orbitPaymentSourceFiberAt_nonempty_paymentEndpointSeq n 0) = 0 := by
+  have hzero : 0 ∈ orbitPaymentSourceFiberAt n (paymentEndpointSeq n 0) := by
+    rw [mem_orbitPaymentSourceFiberAt_iff_target_eq]
+    rfl
+  unfold universalPaymentBlockStart
+  exact Nat.eq_zero_of_le_zero (Finset.min'_le _ _ hzero)
+
+/--
+The next canonical block starts immediately after the previous endpoint.
+Monotonicity rules out an earlier source: every index at most the old endpoint
+still targets at most that old endpoint, whereas the next target is strictly
+larger.
+-/
+theorem universalPaymentBlockStart_paymentEndpointSeq_succ
+    (n : OddNat) (k : ℕ) :
+    universalPaymentBlockStart n (paymentEndpointSeq n (k + 1))
+      (orbitPaymentSourceFiberAt_nonempty_paymentEndpointSeq n (k + 1)) =
+        paymentEndpointSeq n k + 1 := by
+  let e := paymentEndpointSeq n k
+  let e' := paymentEndpointSeq n (k + 1)
+  let h' := orbitPaymentSourceFiberAt_nonempty_paymentEndpointSeq n (k + 1)
+  let b := universalPaymentBlockStart n e' h'
+  have hsource : e + 1 ∈ orbitPaymentSourceFiberAt n e' := by
+    rw [mem_orbitPaymentSourceFiberAt_iff_target_eq]
+    change orbitPaymentTarget n (paymentEndpointSeq n k + 1) = paymentEndpointSeq n (k + 1)
+    rfl
+  have hble : b ≤ e + 1 := Finset.min'_le _ _ hsource
+  have hbtarget : orbitPaymentTarget n b = e' :=
+    (mem_orbitPaymentSourceFiberAt_iff.mp
+      (universalPaymentBlockStart_mem_sourceFiber n e' h')).2
+  by_contra hne
+  have hblt : b < e + 1 := lt_of_le_of_ne hble hne
+  have hbe : b ≤ e := by omega
+  have hmono : orbitPaymentTarget n b ≤ orbitPaymentTarget n e :=
+    monotone_orbitPaymentTarget n hbe
+  have hefix : orbitPaymentTarget n e = e := by
+    dsimp [e]
+    exact orbitPaymentTarget_paymentEndpointSeq n k
+  have hee' : e < e' := by
+    dsimp [e, e']
+    exact paymentEndpointSeq_lt_succ n k
   omega
 
 /-- The cardinality of a universal payment block is its interval length. -/
