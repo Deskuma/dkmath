@@ -556,6 +556,57 @@ theorem universalPaymentBlockSignedDriftAt_eq_bitWidth_sub
   have hledger := bitWidth_iterateT_universalPaymentBlock_eq_claimFiber_card n j h
   omega
 
+/-- Positive universal signed drift is exactly strict block-width growth. -/
+theorem universalPaymentBlockSignedDriftAt_pos_iff_bitWidth_lt
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    0 < universalPaymentBlockSignedDriftAt n j ↔
+      bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 <
+        bitWidth (iterateT (j + 1) n).1 := by
+  rw [universalPaymentBlockSignedDriftAt_eq_bitWidth_sub n j h]
+  omega
+
+/-- Zero universal signed drift is exactly block-width preservation. -/
+theorem universalPaymentBlockSignedDriftAt_eq_zero_iff_bitWidth_eq
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    universalPaymentBlockSignedDriftAt n j = 0 ↔
+      bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 =
+        bitWidth (iterateT (j + 1) n).1 := by
+  rw [universalPaymentBlockSignedDriftAt_eq_bitWidth_sub n j h]
+  omega
+
+/-- Negative universal signed drift is exactly strict block-width decay. -/
+theorem universalPaymentBlockSignedDriftAt_neg_iff_bitWidth_gt
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    universalPaymentBlockSignedDriftAt n j < 0 ↔
+      bitWidth (iterateT (j + 1) n).1 <
+        bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 := by
+  rw [universalPaymentBlockSignedDriftAt_eq_bitWidth_sub n j h]
+  omega
+
+/-- Positive universal signed drift is exactly claim-count overload over capacity. -/
+theorem universalPaymentBlockSignedDriftAt_pos_iff_claim_card_lt
+    (n : OddNat) (j : ℕ) :
+    0 < universalPaymentBlockSignedDriftAt n j ↔
+      extraPaymentCapacityAt n j < (carryTwoPaymentClaimFiberAt n j).card := by
+  unfold universalPaymentBlockSignedDriftAt
+  omega
+
+/-- Zero universal signed drift is exactly claim/capacity balance. -/
+theorem universalPaymentBlockSignedDriftAt_eq_zero_iff_claim_card_eq_capacity
+    (n : OddNat) (j : ℕ) :
+    universalPaymentBlockSignedDriftAt n j = 0 ↔
+      (carryTwoPaymentClaimFiberAt n j).card = extraPaymentCapacityAt n j := by
+  unfold universalPaymentBlockSignedDriftAt
+  omega
+
+/-- Negative universal signed drift is exactly strict endpoint-capacity surplus. -/
+theorem universalPaymentBlockSignedDriftAt_neg_iff_claim_card_lt_capacity
+    (n : OddNat) (j : ℕ) :
+    universalPaymentBlockSignedDriftAt n j < 0 ↔
+      (carryTwoPaymentClaimFiberAt n j).card < extraPaymentCapacityAt n j := by
+  unfold universalPaymentBlockSignedDriftAt
+  omega
+
 /-- The cardinality of a universal payment block is its interval length. -/
 theorem orbitPaymentSourceFiberAt_card_eq_endpoint_sub_start_add_one
     (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
