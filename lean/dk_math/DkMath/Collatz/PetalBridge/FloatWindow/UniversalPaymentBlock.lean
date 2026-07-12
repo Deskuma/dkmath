@@ -388,6 +388,94 @@ theorem orbitPaymentSourceFiberAt_nonempty_iff_two_le_orbitWindowHeight
     rw [mem_orbitPaymentSourceFiberAt_iff]
     exact ⟨le_rfl, orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight htwo⟩
 
+/-- The finite bound in a universal source fiber is implied by target extensivity. -/
+theorem mem_orbitPaymentSourceFiberAt_iff_target_eq
+    {n : OddNat} {i j : ℕ} :
+    i ∈ orbitPaymentSourceFiberAt n j ↔ orbitPaymentTarget n i = j := by
+  constructor
+  · intro hi
+    exact (mem_orbitPaymentSourceFiberAt_iff.mp hi).2
+  · intro htarget
+    rw [mem_orbitPaymentSourceFiberAt_iff]
+    exact ⟨by rw [← htarget]; exact le_orbitPaymentTarget n i, htarget⟩
+
+/--
+The complete carry-two claim fiber at a universal endpoint is its carry-two
+filter on the full universal payment block.
+-/
+theorem mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo
+    {n : OddNat} {i j : ℕ} {h : (orbitPaymentSourceFiberAt n j).Nonempty} :
+    i ∈ carryTwoPaymentClaimFiberAt n j ↔
+      i ∈ Finset.Icc (universalPaymentBlockStart n j h) j ∧ CarryTwoDebtAt n i := by
+  constructor
+  · intro hi
+    rcases (mem_carryTwoPaymentClaimFiberAt_iff.mp hi).2 with hdelayed | himmediate
+    · rcases hdelayed with ⟨⟨hcarry, hheight⟩, htarget⟩
+      have htarget' : orbitPaymentTarget n i = j := by
+        simpa [floatDebtPaymentTarget_eq_orbitPaymentTarget] using htarget.symm
+      have hfiber := mem_orbitPaymentSourceFiberAt_iff_target_eq.mpr htarget'
+      have hblock : i ∈ Finset.Icc (universalPaymentBlockStart n j h) j := by
+        rw [← orbitPaymentSourceFiberAt_eq_Icc_universalPaymentBlockStart n j h]
+        exact hfiber
+      exact ⟨hblock, hcarry⟩
+    · rcases himmediate with ⟨⟨hcarry, _⟩, hself⟩
+      subst j
+      have hstartmem := universalPaymentBlockStart_mem_sourceFiber n i h
+      exact ⟨Finset.mem_Icc.mpr
+        ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1,
+          le_rfl⟩, hcarry⟩
+  · rintro ⟨hblock, hcarry⟩
+    rcases Finset.mem_Icc.mp hblock with ⟨hstart, hij⟩
+    apply mem_carryTwoPaymentClaimFiberAt_of_claim
+    rcases hij.eq_or_lt with rfl | hijlt
+    · right
+      exact ⟨⟨hcarry,
+        two_le_orbitWindowHeight_of_orbitPaymentSourceFiberAt_nonempty h⟩, rfl⟩
+    · left
+      have hheight : orbitWindowHeight n i = 1 :=
+        orbitWindowHeight_eq_one_of_mem_universalPaymentBlockInterior
+          (Finset.mem_Ico.mpr ⟨hstart, hijlt⟩)
+      have htarget : orbitPaymentTarget n i = j :=
+        orbitPaymentTarget_eq_endpoint_of_universalStart_le_lt hstart hijlt
+      exact ⟨⟨hcarry, hheight⟩,
+        by simpa [floatDebtPaymentTarget_eq_orbitPaymentTarget] using htarget.symm⟩
+
+/-- Finset form of the universal complete-claim/block-filter identification. -/
+theorem carryTwoPaymentClaimFiberAt_eq_filter_universalPaymentBlock_carryTwo
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    carryTwoPaymentClaimFiberAt n j =
+      carryTwoPositions n (Finset.Icc (universalPaymentBlockStart n j h) j) := by
+  ext i
+  rw [mem_carryTwoPositions_iff]
+  exact mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo
+
+/-- Cardinality form of the universal complete-claim/block-filter identification. -/
+theorem carryTwoPaymentClaimFiberAt_card_eq_universalPaymentBlock_carryTwo_card
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    (carryTwoPaymentClaimFiberAt n j).card =
+      (carryTwoPositions n (Finset.Icc (universalPaymentBlockStart n j h) j)).card :=
+  congrArg Finset.card
+    (carryTwoPaymentClaimFiberAt_eq_filter_universalPaymentBlock_carryTwo n j h)
+
+/-- All extra-height capacity in a universal payment block is concentrated at its endpoint. -/
+theorem extraPaymentCapacityOn_universalPaymentBlock_eq_endpoint_capacity
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    extraPaymentCapacityOn n (Finset.Icc (universalPaymentBlockStart n j h) j) =
+      extraPaymentCapacityAt n j := by
+  unfold extraPaymentCapacityOn extraPaymentCapacityAt
+  apply Finset.sum_eq_single j
+  · intro i hi hij
+    rcases Finset.mem_Icc.mp hi with ⟨hstart, hijle⟩
+    have hijlt : i < j := lt_of_le_of_ne hijle hij
+    have hheight := orbitWindowHeight_eq_one_of_mem_universalPaymentBlockInterior
+      (Finset.mem_Ico.mpr ⟨hstart, hijlt⟩)
+    rw [hheight]
+    rfl
+  · intro hj
+    have hstartmem := universalPaymentBlockStart_mem_sourceFiber n j h
+    exact False.elim (hj (Finset.mem_Icc.mpr
+      ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1, le_rfl⟩))
+
 /-- The cardinality of a universal payment block is its interval length. -/
 theorem orbitPaymentSourceFiberAt_card_eq_endpoint_sub_start_add_one
     (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
