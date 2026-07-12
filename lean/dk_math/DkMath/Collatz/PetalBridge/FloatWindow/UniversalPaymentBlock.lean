@@ -476,6 +476,86 @@ theorem extraPaymentCapacityOn_universalPaymentBlock_eq_endpoint_capacity
     exact False.elim (hj (Finset.mem_Icc.mpr
       ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1, le_rfl⟩))
 
+/-- Endpoint arithmetic for a nonempty universal payment block. -/
+theorem universalPaymentBlockStart_add_length_eq_endpoint_succ
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    universalPaymentBlockStart n j h +
+      (j + 1 - universalPaymentBlockStart n j h) = j + 1 := by
+  have hstart := universalPaymentBlockStart_mem_sourceFiber n j h
+  have hle := (mem_orbitPaymentSourceFiberAt_iff.mp hstart).1
+  omega
+
+/-- The shifted universal interval is exactly the endpoint-inclusive universal block. -/
+theorem universalPaymentBlock_Ico_eq_Icc
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    Finset.Ico (universalPaymentBlockStart n j h)
+      (universalPaymentBlockStart n j h +
+        (j + 1 - universalPaymentBlockStart n j h)) =
+      Finset.Icc (universalPaymentBlockStart n j h) j := by
+  rw [universalPaymentBlockStart_add_length_eq_endpoint_succ]
+  ext i
+  simp
+
+/-- Shifted carry-two count on a universal payment block is its complete claim count. -/
+theorem shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card_universal
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    shiftedOrbitCarryTwoCount n (universalPaymentBlockStart n j h)
+      (j + 1 - universalPaymentBlockStart n j h) =
+      (carryTwoPaymentClaimFiberAt n j).card := by
+  let b := universalPaymentBlockStart n j h
+  let len := j + 1 - b
+  calc
+    shiftedOrbitCarryTwoCount n b len = (shiftedCarryTwoOffsets n b len).card :=
+      shiftedOrbitCarryTwoCount_eq_offset_card n b len
+    _ = (carryTwoPositions n (Finset.Ico b (b + len))).card :=
+      shiftedCarryTwoOffsets_card_eq_carryTwoPositions_Ico_card n b len
+    _ = (carryTwoPositions n (Finset.Icc b j)).card := by
+      rw [universalPaymentBlock_Ico_eq_Icc]
+    _ = (carryTwoPaymentClaimFiberAt n j).card :=
+      (carryTwoPaymentClaimFiberAt_card_eq_universalPaymentBlock_carryTwo_card n j h).symm
+
+/-- Shifted extra-height capacity on a universal block is its endpoint capacity. -/
+theorem shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt_universal
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    shiftedExtraPaymentCapacity n (universalPaymentBlockStart n j h)
+      (j + 1 - universalPaymentBlockStart n j h) = extraPaymentCapacityAt n j := by
+  let b := universalPaymentBlockStart n j h
+  let len := j + 1 - b
+  calc
+    shiftedExtraPaymentCapacity n b len =
+        extraPaymentCapacityOn n (Finset.Ico b (b + len)) :=
+      shiftedExtraPaymentCapacity_eq_extraPaymentCapacityOn_Ico n b len
+    _ = extraPaymentCapacityOn n (Finset.Icc b j) := by
+      rw [universalPaymentBlock_Ico_eq_Icc]
+    _ = extraPaymentCapacityAt n j :=
+      extraPaymentCapacityOn_universalPaymentBlock_eq_endpoint_capacity n j h
+
+/-- Exact width ledger for every nonempty universal payment block. -/
+theorem bitWidth_iterateT_universalPaymentBlock_eq_claimFiber_card
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    bitWidth (iterateT (j + 1) n).1 + extraPaymentCapacityAt n j =
+      bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 +
+        (carryTwoPaymentClaimFiberAt n j).card := by
+  have hledger := bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
+    n (universalPaymentBlockStart n j h) (j + 1 - universalPaymentBlockStart n j h)
+  rw [shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt_universal,
+    shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card_universal] at hledger
+  simpa [universalPaymentBlockStart_add_length_eq_endpoint_succ] using hledger
+
+/-- Proof-independent signed drift at a universal payment endpoint. -/
+noncomputable def universalPaymentBlockSignedDriftAt (n : OddNat) (j : ℕ) : ℤ :=
+  (carryTwoPaymentClaimFiberAt n j).card - extraPaymentCapacityAt n j
+
+/-- Universal signed drift equals signed width drift across a nonempty block. -/
+theorem universalPaymentBlockSignedDriftAt_eq_bitWidth_sub
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    universalPaymentBlockSignedDriftAt n j =
+      (bitWidth (iterateT (j + 1) n).1 : ℤ) -
+        bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 := by
+  unfold universalPaymentBlockSignedDriftAt
+  have hledger := bitWidth_iterateT_universalPaymentBlock_eq_claimFiber_card n j h
+  omega
+
 /-- The cardinality of a universal payment block is its interval length. -/
 theorem orbitPaymentSourceFiberAt_card_eq_endpoint_sub_start_add_one
     (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
