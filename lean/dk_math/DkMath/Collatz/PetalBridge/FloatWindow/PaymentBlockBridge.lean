@@ -341,6 +341,21 @@ theorem shiftedExtraPaymentCapacity_eq_sum_range
             (orbitWindowHeight_eq_s_iterateT n (a + len)).symm
       rw [hheight]
 
+/--
+Exact shifted width ledger.
+
+This is the existing prefix ledger, based at `iterateT a n`; no new induction
+over a segment is required.
+-/
+theorem bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
+    (n : OddNat) (a len : ℕ) :
+    bitWidth (iterateT (a + len) n).1 + shiftedExtraPaymentCapacity n a len =
+      bitWidth (iterateT a n).1 + shiftedOrbitCarryTwoCount n a len := by
+  unfold shiftedExtraPaymentCapacity shiftedOrbitCarryTwoCount
+  rw [iterateT_add_eq_iterateT_from_shift]
+  exact bitWidth_iterateT_add_sumExtraHeight_eq_initial_add_countCarryTwo
+    (iterateT a n) len
+
 /-- Membership in the local carry-two offset set. -/
 theorem mem_shiftedCarryTwoOffsets_iff
     {n : OddNat} {a len t : ℕ} :
@@ -485,19 +500,8 @@ theorem bitWidth_iterateT_paymentBlock_eq_claimFiber_card
     bitWidth (iterateT (j + 1) n).1 + extraPaymentCapacityAt n j =
       bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 +
         (carryTwoPaymentClaimFiberAt n j).card := by
-  have hledger :
-      bitWidth (iterateT
-        (floatPaymentBlockStart n j h + (j + 1 - floatPaymentBlockStart n j h)) n).1 +
-          shiftedExtraPaymentCapacity n (floatPaymentBlockStart n j h)
-            (j + 1 - floatPaymentBlockStart n j h) =
-        bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 +
-          shiftedOrbitCarryTwoCount n (floatPaymentBlockStart n j h)
-            (j + 1 - floatPaymentBlockStart n j h) := by
-    unfold shiftedExtraPaymentCapacity shiftedOrbitCarryTwoCount
-    rw [iterateT_add_eq_iterateT_from_shift]
-    exact bitWidth_iterateT_add_sumExtraHeight_eq_initial_add_countCarryTwo
-      (iterateT (floatPaymentBlockStart n j h) n)
-      (j + 1 - floatPaymentBlockStart n j h)
+  have hledger := bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
+    n (floatPaymentBlockStart n j h) (j + 1 - floatPaymentBlockStart n j h)
   rw [shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt,
     shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card] at hledger
   simpa [floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ] using hledger
@@ -530,20 +534,94 @@ theorem carryTwoPaymentClaimFiber_card_lt_capacity_iff_bitWidth_paymentBlock_gt
   have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
   omega
 
-/--
-Exact shifted width ledger.
+/-- Signed claim-minus-capacity balance of a canonical payment block. -/
+noncomputable def paymentBlockSignedDrift
+    (n : OddNat) (j : ℕ) (_h : (floatGrowthDebtFiberAt n j).Nonempty) : ℤ :=
+  (carryTwoPaymentClaimFiberAt n j).card - extraPaymentCapacityAt n j
 
-This is the existing prefix ledger, based at `iterateT a n`; no new induction
-over a segment is required.
--/
-theorem bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
-    (n : OddNat) (a len : ℕ) :
-    bitWidth (iterateT (a + len) n).1 + shiftedExtraPaymentCapacity n a len =
-      bitWidth (iterateT a n).1 + shiftedOrbitCarryTwoCount n a len := by
-  unfold shiftedExtraPaymentCapacity shiftedOrbitCarryTwoCount
-  rw [iterateT_add_eq_iterateT_from_shift]
-  exact bitWidth_iterateT_add_sumExtraHeight_eq_initial_add_countCarryTwo
-    (iterateT a n) len
+/-- The signed claim balance is exactly the signed width drift across the block. -/
+theorem paymentBlockSignedDrift_eq_bitWidth_sub
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    paymentBlockSignedDrift n j h =
+      (bitWidth (iterateT (j + 1) n).1 : ℤ) -
+        bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 := by
+  unfold paymentBlockSignedDrift
+  have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
+  omega
+
+/-- Positive signed block drift is precisely complete-claim overload. -/
+theorem paymentBlockSignedDrift_pos_iff_overload
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    0 < paymentBlockSignedDrift n j h ↔ CarryTwoPaymentOverloadAt n j := by
+  unfold paymentBlockSignedDrift CarryTwoPaymentOverloadAt
+  omega
+
+/-- Zero signed block drift is precisely claim/capacity balance. -/
+theorem paymentBlockSignedDrift_eq_zero_iff_claim_card_eq_capacity
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    paymentBlockSignedDrift n j h = 0 ↔
+      (carryTwoPaymentClaimFiberAt n j).card = extraPaymentCapacityAt n j := by
+  unfold paymentBlockSignedDrift
+  omega
+
+/-- Negative signed block drift is precisely strict capacity surplus. -/
+theorem paymentBlockSignedDrift_neg_iff_claim_card_lt_capacity
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    paymentBlockSignedDrift n j h < 0 ↔
+      (carryTwoPaymentClaimFiberAt n j).card < extraPaymentCapacityAt n j := by
+  unfold paymentBlockSignedDrift
+  omega
+
+/-- Height one is exactly an all-ones exact depth of at least two. -/
+theorem orbitWindowHeight_eq_one_iff_two_le_orbitExactDepth
+    (n : OddNat) (i : ℕ) :
+    orbitWindowHeight n i = 1 ↔ 2 ≤ orbitExactDepth n i := by
+  rw [orbitWindowHeight_eq_one_iff_mod_four_eq_three]
+  unfold orbitExactDepth
+  have h := (le_residualAllOnesDepth_iff_mod_eq_allOnes (oddOrbitLabel n i) 2).symm
+  norm_num at h
+  exact h
+
+/-- An extra-height event is exactly all-ones exact depth one. -/
+theorem two_le_orbitWindowHeight_iff_orbitExactDepth_eq_one
+    (n : OddNat) (i : ℕ) :
+    2 ≤ orbitWindowHeight n i ↔ orbitExactDepth n i = 1 := by
+  rw [orbitWindowHeight_two_le_iff_mod_four_eq_one]
+  unfold orbitExactDepth
+  constructor
+  · intro hmod
+    have hmodTwo : oddOrbitLabel n i % 2 = 1 := by
+      calc
+        oddOrbitLabel n i % 2 = (oddOrbitLabel n i % 4) % 2 := by
+          symm
+          exact Nat.mod_mod_of_dvd _ (by norm_num : 2 ∣ 4)
+        _ = 1 := by rw [hmod]
+    have hle : 1 ≤ ResidualAllOnesDepth (oddOrbitLabel n i) :=
+      (le_residualAllOnesDepth_iff_mod_eq_allOnes _ 1).2 (by norm_num; exact hmodTwo)
+    by_contra hne
+    have htwo : 2 ≤ ResidualAllOnesDepth (oddOrbitLabel n i) := by omega
+    have hmodThree :=
+      (le_residualAllOnesDepth_iff_mod_eq_allOnes _ 2).1 htwo
+    norm_num at hmodThree
+    omega
+  · intro hdepth
+    have hle : 1 ≤ ResidualAllOnesDepth (oddOrbitLabel n i) := by omega
+    have hmodTwo : oddOrbitLabel n i % 2 = 1 := by
+      have hmod := (le_residualAllOnesDepth_iff_mod_eq_allOnes _ 1).1 hle
+      norm_num at hmod
+      exact hmod
+    have hnotThree : oddOrbitLabel n i % 4 ≠ 3 := by
+      intro hthree
+      have htwo : 2 ≤ ResidualAllOnesDepth (oddOrbitLabel n i) := by
+        apply (le_residualAllOnesDepth_iff_mod_eq_allOnes _ 2).2
+        norm_num
+        exact hthree
+      omega
+    have hmodLt : oddOrbitLabel n i % 4 < 4 := by omega
+    have hmodTwo' : (oddOrbitLabel n i % 4) % 2 = 1 := by
+      rw [Nat.mod_mod_of_dvd _ (by norm_num : 2 ∣ 4)]
+      exact hmodTwo
+    omega
 
 /-!
 ## Ledger frontier
