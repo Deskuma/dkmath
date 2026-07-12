@@ -821,6 +821,195 @@ theorem bitWidth_iterateT_lt_of_universalPaymentBlock_not_carryTwo_or_height_ne_
       n j h hempty hneq)
 
 /-!
+## Delayed-debt necessity and complete-claim decomposition
+-/
+
+/-- Strict positive universal block drift requires at least one delayed growth debt. -/
+theorem floatGrowthDebtFiberAt_nonempty_of_universalPaymentBlockSignedDriftAt_pos
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hpos : 0 < universalPaymentBlockSignedDriftAt n j) :
+    (floatGrowthDebtFiberAt n j).Nonempty := by
+  by_contra hnot
+  have hempty : floatGrowthDebtFiberAt n j = ∅ :=
+    Finset.not_nonempty_iff_eq_empty.mp hnot
+  have hnonpos :=
+    universalPaymentBlockSignedDriftAt_nonpos_of_growthDebtFiber_eq_empty n j h hempty
+  omega
+
+/-- Strict width growth across a universal block requires delayed growth debt support. -/
+theorem floatGrowthDebtFiberAt_nonempty_of_universalPaymentBlock_bitWidth_lt
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty)
+    (hlt : bitWidth (iterateT (universalPaymentBlockStart n j h) n).1 <
+      bitWidth (iterateT (j + 1) n).1) :
+    (floatGrowthDebtFiberAt n j).Nonempty := by
+  apply floatGrowthDebtFiberAt_nonempty_of_universalPaymentBlockSignedDriftAt_pos n j h
+  exact (universalPaymentBlockSignedDriftAt_pos_iff_bitWidth_lt n j h).mpr hlt
+
+/-- Endpoint-only immediate carry-two claim fiber. -/
+noncomputable abbrev endpointImmediateCarryTwoClaimFiberAt
+    (n : OddNat) (j : ℕ) : Finset ℕ :=
+  endpointCarryTwoClaimShape n j
+
+/-- Membership API for the endpoint immediate-claim fiber. -/
+theorem mem_endpointImmediateCarryTwoClaimFiberAt_iff
+    {n : OddNat} {i j : ℕ} :
+    i ∈ endpointImmediateCarryTwoClaimFiberAt n j ↔
+      i = j ∧ CarryTwoDebtAt n j := by
+  classical
+  unfold endpointImmediateCarryTwoClaimFiberAt endpointCarryTwoClaimShape
+  by_cases hcarry : CarryTwoDebtAt n j <;> simp [hcarry]
+
+/-- Delayed debts targeting a universal endpoint are exactly its interior carry-two sources. -/
+theorem mem_floatGrowthDebtFiberAt_iff_mem_universalPaymentBlockInterior_and_carryTwo
+    {n : OddNat} {i j : ℕ} {h : (orbitPaymentSourceFiberAt n j).Nonempty} :
+    i ∈ floatGrowthDebtFiberAt n j ↔
+      i ∈ Finset.Ico (universalPaymentBlockStart n j h) j ∧ CarryTwoDebtAt n i := by
+  constructor
+  · intro hi
+    have hblock := mem_orbitPaymentSourceFiberAt_of_mem_floatGrowthDebtFiberAt hi
+    rcases Finset.mem_Icc.mp (by
+      rw [← orbitPaymentSourceFiberAt_eq_Icc_universalPaymentBlockStart n j h]
+      exact hblock) with ⟨hstart, hij⟩
+    have hijlt := lt_of_mem_floatGrowthDebtFiberAt hi
+    have hdebt := (mem_floatGrowthDebtFiberAt_iff.mp hi).2.1
+    exact ⟨Finset.mem_Ico.mpr ⟨hstart, hijlt⟩,
+      ((floatDebtAt_iff_delayedCarryTwoDebtAt n i).mp hdebt).1⟩
+  · rintro ⟨hinterior, hcarry⟩
+    rcases Finset.mem_Ico.mp hinterior with ⟨hstart, hij⟩
+    have hheight := orbitWindowHeight_eq_one_of_mem_universalPaymentBlockInterior hinterior
+    have hdebt : FloatDebtAt n i :=
+      (floatDebtAt_iff_delayedCarryTwoDebtAt n i).mpr ⟨hcarry, hheight⟩
+    have htarget : floatDebtPaymentTarget n i = j := by
+      simpa [floatDebtPaymentTarget_eq_orbitPaymentTarget] using
+        orbitPaymentTarget_eq_endpoint_of_universalStart_le_lt hstart hij
+    exact mem_floatGrowthDebtFiberAt_iff.mpr
+      ⟨Nat.lt_succ_of_lt hij, hdebt, htarget⟩
+
+/-- Every complete claim is either delayed interior debt or the endpoint immediate claim. -/
+theorem mem_carryTwoPaymentClaimFiberAt_iff_growthDebt_or_endpointImmediate
+    {n : OddNat} {i j : ℕ} {h : (orbitPaymentSourceFiberAt n j).Nonempty} :
+    i ∈ carryTwoPaymentClaimFiberAt n j ↔
+      i ∈ floatGrowthDebtFiberAt n j ∨
+        i ∈ endpointImmediateCarryTwoClaimFiberAt n j := by
+  rw [mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo
+      (h := h),
+    mem_floatGrowthDebtFiberAt_iff_mem_universalPaymentBlockInterior_and_carryTwo
+      (h := h),
+    mem_endpointImmediateCarryTwoClaimFiberAt_iff]
+  constructor
+  · rintro ⟨hblock, hcarry⟩
+    rcases (Finset.mem_Icc.mp hblock).2.eq_or_lt with heq | hlt
+    · right
+      exact ⟨heq, by simpa [heq] using hcarry⟩
+    · left
+      exact ⟨Finset.mem_Ico.mpr ⟨(Finset.mem_Icc.mp hblock).1, hlt⟩, hcarry⟩
+  · rintro (hinteriorCarry | hendpoint)
+    · rcases hinteriorCarry with ⟨hinterior, hcarry⟩
+      exact ⟨Finset.mem_Icc.mpr
+        ⟨(Finset.mem_Ico.mp hinterior).1, (Finset.mem_Ico.mp hinterior).2.le⟩,
+        hcarry⟩
+    · rcases hendpoint with ⟨hij, hcarry⟩
+      subst i
+      have hstartmem := universalPaymentBlockStart_mem_sourceFiber n j h
+      exact ⟨Finset.mem_Icc.mpr
+        ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1, le_rfl⟩, hcarry⟩
+
+/-- Disjoint complete-claim decomposition into delayed and immediate support. -/
+theorem carryTwoPaymentClaimFiberAt_eq_growthDebt_union_endpointImmediate
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    carryTwoPaymentClaimFiberAt n j =
+      floatGrowthDebtFiberAt n j ∪ endpointImmediateCarryTwoClaimFiberAt n j := by
+  ext i
+  simp only [Finset.mem_union]
+  exact mem_carryTwoPaymentClaimFiberAt_iff_growthDebt_or_endpointImmediate
+    (h := h)
+
+/-- Delayed debt support and the endpoint immediate claim are disjoint. -/
+theorem disjoint_floatGrowthDebtFiberAt_endpointImmediateCarryTwoClaimFiberAt
+    (n : OddNat) (j : ℕ) :
+    Disjoint (floatGrowthDebtFiberAt n j) (endpointImmediateCarryTwoClaimFiberAt n j) := by
+  rw [Finset.disjoint_left]
+  intro i hidebt hiend
+  have hlt := lt_of_mem_floatGrowthDebtFiberAt hidebt
+  have heq := (mem_endpointImmediateCarryTwoClaimFiberAt_iff.mp hiend).1
+  omega
+
+/-- Exact claim-card decomposition into delayed support and one optional endpoint claim. -/
+theorem carryTwoPaymentClaimFiberAt_card_eq_growthDebt_card_add_endpoint_card
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    (carryTwoPaymentClaimFiberAt n j).card =
+      (floatGrowthDebtFiberAt n j).card +
+        (endpointImmediateCarryTwoClaimFiberAt n j).card := by
+  rw [carryTwoPaymentClaimFiberAt_eq_growthDebt_union_endpointImmediate n j h,
+    Finset.card_union_of_disjoint
+      (disjoint_floatGrowthDebtFiberAt_endpointImmediateCarryTwoClaimFiberAt n j)]
+
+/-- Refined signed drift: delayed claims plus endpoint claim minus endpoint capacity. -/
+theorem universalPaymentBlockSignedDriftAt_eq_growthDebt_add_endpoint_sub_capacity
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    universalPaymentBlockSignedDriftAt n j =
+      (floatGrowthDebtFiberAt n j).card +
+        (endpointImmediateCarryTwoClaimFiberAt n j).card -
+          extraPaymentCapacityAt n j := by
+  unfold universalPaymentBlockSignedDriftAt
+  rw [carryTwoPaymentClaimFiberAt_card_eq_growthDebt_card_add_endpoint_card n j h]
+  norm_num
+
+/-- Universal and debt-supported starts have the same bit width. -/
+theorem bitWidth_universalPaymentBlockStart_eq_floatPaymentBlockStart
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    bitWidth (iterateT (universalPaymentBlockStart n j
+      (orbitPaymentSourceFiberAt_nonempty_of_floatGrowthDebtFiberAt_nonempty h)) n).1 =
+        bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 := by
+  have hu := bitWidth_iterateT_universalPaymentBlock_eq_claimFiber_card n j
+    (orbitPaymentSourceFiberAt_nonempty_of_floatGrowthDebtFiberAt_nonempty h)
+  have hd := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
+  omega
+
+/-- The prefix between universal and debt-supported starts has observed height one. -/
+theorem orbitWindowHeight_eq_one_between_universal_and_floatPaymentBlockStart
+    {n : OddNat} {j i : ℕ} {h : (floatGrowthDebtFiberAt n j).Nonempty}
+    (hi : i ∈ Finset.Ico
+      (universalPaymentBlockStart n j
+        (orbitPaymentSourceFiberAt_nonempty_of_floatGrowthDebtFiberAt_nonempty h))
+      (floatPaymentBlockStart n j h)) :
+    orbitWindowHeight n i = 1 := by
+  rcases Finset.mem_Ico.mp hi with ⟨hstart, hib⟩
+  have hbj := floatPaymentBlockStart_lt_endpoint n j h
+  exact orbitWindowHeight_eq_one_of_mem_universalPaymentBlockInterior
+    (Finset.mem_Ico.mpr ⟨hstart, hib.trans hbj⟩)
+
+/-- The prefix between universal and debt-supported starts has upper carry one. -/
+theorem stateUpperCarry_eq_one_between_universal_and_floatPaymentBlockStart
+    {n : OddNat} {j i : ℕ} {h : (floatGrowthDebtFiberAt n j).Nonempty}
+    (hi : i ∈ Finset.Ico
+      (universalPaymentBlockStart n j
+        (orbitPaymentSourceFiberAt_nonempty_of_floatGrowthDebtFiberAt_nonempty h))
+      (floatPaymentBlockStart n j h)) :
+    stateUpperCarry (iterateT i n).1 = 1 := by
+  have hheight := orbitWindowHeight_eq_one_between_universal_and_floatPaymentBlockStart hi
+  have hnotcarry : ¬ CarryTwoDebtAt n i := by
+    intro hcarry
+    rcases Finset.mem_Ico.mp hi with ⟨hstart, hib⟩
+    have hbj := floatPaymentBlockStart_lt_endpoint n j h
+    have htarget : floatDebtPaymentTarget n i = j := by
+      simpa [floatDebtPaymentTarget_eq_orbitPaymentTarget] using
+        orbitPaymentTarget_eq_endpoint_of_universalStart_le_lt hstart (hib.trans hbj)
+    have hdebt : FloatDebtAt n i :=
+      (floatDebtAt_iff_delayedCarryTwoDebtAt n i).mpr ⟨hcarry, hheight⟩
+    have hfiber : i ∈ floatGrowthDebtFiberAt n j :=
+      mem_floatGrowthDebtFiberAt_iff.mpr
+        ⟨Nat.lt_succ_of_lt (hib.trans hbj), hdebt, htarget⟩
+    have hminle : floatPaymentBlockStart n j h ≤ i := Finset.min'_le _ _ hfiber
+    omega
+  have hpos : 0 < (iterateT i n).1 := by
+    have hodd := (iterateT i n).2
+    omega
+  rcases stateUpperCarry_one_or_two hpos with hone | htwo
+  · exact hone
+  · exact False.elim (hnotcarry htwo)
+
+/-!
 ## Canonical endpoint sequence
 
 The sequence records the first payment endpoint, then the target immediately
