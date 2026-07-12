@@ -12,6 +12,7 @@ import DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
 import DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
 import DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge
 import DkMath.Collatz.PetalBridge.FloatWindow.PaymentMultiplicityBridge
+import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 
