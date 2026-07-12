@@ -159,6 +159,20 @@ theorem DyadicFloatSignature.windowsDisjoint_or_windowsOverlap
   unfold WindowsDisjoint WindowsOverlap
   omega
 
+/--
+Semantic window case split under the validity condition needed by future
+compatible-state counting.  In the overlap branch, equality of signatures is
+not yet enough: the shared bits must additionally be proved consistent.
+-/
+theorem DyadicFloatSignature.windowsWithinWidth_cases
+    (S : DyadicFloatSignature)
+    (hwithin : S.WindowsWithinWidth) :
+    (S.WindowsDisjoint ∧ S.WindowsWithinWidth) ∨
+      (S.WindowsOverlap ∧ S.WindowsWithinWidth) := by
+  rcases S.windowsDisjoint_or_windowsOverlap with h | h
+  · exact Or.inl ⟨h, hwithin⟩
+  · exact Or.inr ⟨h, hwithin⟩
+
 /-- A lower suffix is always a valid `r`-bit word. -/
 theorem lowerSuffix_lt_pow (r n : ℕ) :
     lowerSuffix r n < 2 ^ r := by

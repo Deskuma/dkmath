@@ -10,6 +10,7 @@ import DkMath.Collatz.PetalBridge.FloatWindow.DyadicFloat
 import DkMath.Collatz.PetalBridge.FloatWindow.OrbitBalance
 import DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
 import DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
+import DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 
