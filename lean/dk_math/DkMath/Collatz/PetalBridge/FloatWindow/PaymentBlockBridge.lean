@@ -253,7 +253,7 @@ theorem orbitWindowHeight_shift_eq
 
 /-- Total extra-height capacity over an explicit finite source set. -/
 noncomputable def extraPaymentCapacityOn (n : OddNat) (S : Finset ℕ) : ℕ :=
-  ∑ i ∈ S, orbitWindowHeight n i - 1
+  S.sum fun i => orbitWindowHeight n i - 1
 
 /-- Endpoint arithmetic for a nonempty debt-supported payment block. -/
 theorem floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ
@@ -283,6 +283,253 @@ noncomputable def shiftedExtraPaymentCapacity
     (n : OddNat) (a len : ℕ) : ℕ :=
   sumExtraHeight (iterateT a n) len
 
+/-- Local offsets of carry-two sources in the shifted segment `[a, a + len)`. -/
+noncomputable def shiftedCarryTwoOffsets
+    (n : OddNat) (a len : ℕ) : Finset ℕ := by
+  classical
+  exact (Finset.range len).filter fun t => CarryTwoDebtAt n (a + t)
+
+/-- The recursive shifted carry-two count is the card of its local offset set. -/
+theorem shiftedOrbitCarryTwoCount_eq_offset_card
+    (n : OddNat) (a len : ℕ) :
+    shiftedOrbitCarryTwoCount n a len = (shiftedCarryTwoOffsets n a len).card := by
+  classical
+  induction len with
+  | zero =>
+      simp [shiftedOrbitCarryTwoCount, shiftedCarryTwoOffsets,
+        orbitWindowUpperCarryCountEqTwo]
+  | succ len ih =>
+      change orbitWindowUpperCarryCountEqTwo (iterateT a n) (len + 1) =
+        ((Finset.range (len + 1)).filter fun t => CarryTwoDebtAt n (a + t)).card
+      rw [orbitWindowUpperCarryCountEqTwo]
+      change shiftedOrbitCarryTwoCount n a len +
+          (if stateUpperCarry (iterateT len (iterateT a n)).1 = 2 then 1 else 0) = _
+      rw [ih, Finset.range_add_one]
+      change ((Finset.range len).filter fun t => CarryTwoDebtAt n (a + t)).card +
+          (if stateUpperCarry (iterateT len (iterateT a n)).1 = 2 then 1 else 0) =
+        ((insert len (Finset.range len)).filter fun t => CarryTwoDebtAt n (a + t)).card
+      by_cases hcarry : CarryTwoDebtAt n (a + len)
+      · have hstate : stateUpperCarry (iterateT len (iterateT a n)).1 = 2 := by
+          simpa [CarryTwoDebtAt, ← iterateT_add_eq_iterateT_from_shift] using hcarry
+        rw [Finset.filter_insert]
+        simp [hcarry, hstate]
+      · have hstate : stateUpperCarry (iterateT len (iterateT a n)).1 ≠ 2 := by
+          simpa [CarryTwoDebtAt, ← iterateT_add_eq_iterateT_from_shift] using hcarry
+        rw [Finset.filter_insert]
+        simp [hcarry, hstate]
+
+/-- Shifted extra-height capacity is the finite sum over local offsets. -/
+theorem shiftedExtraPaymentCapacity_eq_sum_range
+    (n : OddNat) (a len : ℕ) :
+    shiftedExtraPaymentCapacity n a len =
+      (Finset.range len).sum fun t => orbitWindowHeight n (a + t) - 1 := by
+  induction len with
+  | zero => simp [shiftedExtraPaymentCapacity, sumExtraHeight]
+  | succ len ih =>
+      change sumExtraHeight (iterateT a n) (len + 1) =
+        (Finset.range (len + 1)).sum fun t => orbitWindowHeight n (a + t) - 1
+      rw [sumExtraHeight]
+      change shiftedExtraPaymentCapacity n a len +
+          (s (iterateT len (iterateT a n)) - 1) = _
+      rw [ih, Finset.sum_range_succ]
+      have hheight : s (iterateT len (iterateT a n)) =
+          orbitWindowHeight n (a + len) := by
+        calc
+          s (iterateT len (iterateT a n)) = s (iterateT (a + len) n) := by
+            rw [iterateT_add_eq_iterateT_from_shift]
+          _ = orbitWindowHeight n (a + len) :=
+            (orbitWindowHeight_eq_s_iterateT n (a + len)).symm
+      rw [hheight]
+
+/-- Membership in the local carry-two offset set. -/
+theorem mem_shiftedCarryTwoOffsets_iff
+    {n : OddNat} {a len t : ℕ} :
+    t ∈ shiftedCarryTwoOffsets n a len ↔ t < len ∧ CarryTwoDebtAt n (a + t) := by
+  classical
+  simp [shiftedCarryTwoOffsets]
+
+/--
+The global positions represented by local carry-two offsets.
+
+The map is deliberately stated through `Finset.map`: its injectivity proof
+makes the finite transport and its cardinal preservation explicit.
+-/
+noncomputable def shiftedCarryTwoPositions
+    (n : OddNat) (a len : ℕ) : Finset ℕ := by
+  classical
+  exact (shiftedCarryTwoOffsets n a len).map
+    ⟨fun t => a + t, by
+      intro x y hxy
+      exact Nat.add_left_cancel hxy⟩
+
+/-- Local carry-two offsets are exactly the carry-two positions of the shifted interval. -/
+theorem shiftedCarryTwoPositions_eq_carryTwoPositions_Ico
+    (n : OddNat) (a len : ℕ) :
+    shiftedCarryTwoPositions n a len =
+      carryTwoPositions n (Finset.Ico a (a + len)) := by
+  classical
+  ext i
+  constructor
+  · intro hi
+    rcases Finset.mem_map.mp hi with ⟨t, ht, hti⟩
+    rw [mem_carryTwoPositions_iff]
+    rcases mem_shiftedCarryTwoOffsets_iff.mp ht with ⟨htlen, htcarry⟩
+    rw [← hti]
+    change a + t ∈ Finset.Ico a (a + len) ∧ CarryTwoDebtAt n (a + t)
+    exact ⟨Finset.mem_Ico.mpr ⟨Nat.le_add_right _ _, by omega⟩, htcarry⟩
+  · intro hi
+    rw [mem_carryTwoPositions_iff] at hi
+    rcases hi with ⟨hiIco, hcarry⟩
+    rcases Finset.mem_Ico.mp hiIco with ⟨hai, hiend⟩
+    apply Finset.mem_map.mpr
+    refine ⟨i - a, ?_, ?_⟩
+    · apply mem_shiftedCarryTwoOffsets_iff.mpr
+      constructor
+      · omega
+      · simpa [Nat.add_sub_of_le hai] using hcarry
+    · exact Nat.add_sub_of_le hai
+
+/-- Cardinality is preserved when local carry-two offsets are shifted globally. -/
+theorem shiftedCarryTwoOffsets_card_eq_carryTwoPositions_Ico_card
+    (n : OddNat) (a len : ℕ) :
+    (shiftedCarryTwoOffsets n a len).card =
+      (carryTwoPositions n (Finset.Ico a (a + len))).card := by
+  calc
+    (shiftedCarryTwoOffsets n a len).card = (shiftedCarryTwoPositions n a len).card := by
+      simp [shiftedCarryTwoPositions]
+    _ = (carryTwoPositions n (Finset.Ico a (a + len))).card :=
+      congrArg Finset.card (shiftedCarryTwoPositions_eq_carryTwoPositions_Ico n a len)
+
+/--
+On a canonical block, the shifted carry-two count is exactly the complete
+first-payment claim-fiber cardinality at its endpoint.
+-/
+theorem shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    shiftedOrbitCarryTwoCount n (floatPaymentBlockStart n j h)
+      (j + 1 - floatPaymentBlockStart n j h) =
+      (carryTwoPaymentClaimFiberAt n j).card := by
+  let a := floatPaymentBlockStart n j h
+  let len := j + 1 - a
+  calc
+    shiftedOrbitCarryTwoCount n a len = (shiftedCarryTwoOffsets n a len).card :=
+      shiftedOrbitCarryTwoCount_eq_offset_card n a len
+    _ = (carryTwoPositions n (Finset.Ico a (a + len))).card :=
+      shiftedCarryTwoOffsets_card_eq_carryTwoPositions_Ico_card n a len
+    _ = (carryTwoPositions n (floatPaymentBlockWithEndpoint n j h)).card := by
+      rw [floatPaymentBlock_Ico_eq_withEndpoint]
+    _ = (carryTwoPaymentClaimFiberAt n j).card :=
+      (carryTwoPaymentClaimFiberAt_card_eq_floatPaymentBlockWithEndpoint_carryTwo_card n j h).symm
+
+/--
+All extra-height capacity in a canonical block is concentrated at its endpoint.
+
+Every earlier point is in the height-one interior, hence contributes zero to
+`orbitWindowHeight - 1`.
+-/
+theorem extraPaymentCapacityOn_floatPaymentBlockWithEndpoint_eq_endpoint_extra
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    extraPaymentCapacityOn n (floatPaymentBlockWithEndpoint n j h) =
+      orbitWindowHeight n j - 1 := by
+  classical
+  unfold extraPaymentCapacityOn
+  apply Finset.sum_eq_single j
+  · intro i hi hij
+    have hii := Finset.mem_Icc.mp hi
+    have hijlt : i < j := lt_of_le_of_ne hii.2 hij
+    have hinterior : i ∈ floatPaymentBlockInterior n j h :=
+      Finset.mem_Ico.mpr ⟨hii.1, hijlt⟩
+    rw [orbitWindowHeight_eq_one_of_mem_floatPaymentBlockInterior hinterior]
+    rfl
+  · intro hj
+    exact False.elim (hj (Finset.mem_Icc.mpr
+      ⟨(floatPaymentBlockStart_lt_endpoint n j h).le, le_rfl⟩))
+
+/-- The shifted local extra-height sum is the capacity of its global half-open interval. -/
+theorem shiftedExtraPaymentCapacity_eq_extraPaymentCapacityOn_Ico
+    (n : OddNat) (a len : ℕ) :
+    shiftedExtraPaymentCapacity n a len =
+      extraPaymentCapacityOn n (Finset.Ico a (a + len)) := by
+  unfold extraPaymentCapacityOn
+  rw [shiftedExtraPaymentCapacity_eq_sum_range]
+  symm
+  rw [Finset.sum_Ico_eq_sum_range]
+  simp
+
+/-- The shifted extra-height capacity of a canonical block is its endpoint capacity. -/
+theorem shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    shiftedExtraPaymentCapacity n (floatPaymentBlockStart n j h)
+      (j + 1 - floatPaymentBlockStart n j h) = extraPaymentCapacityAt n j := by
+  calc
+    shiftedExtraPaymentCapacity n (floatPaymentBlockStart n j h)
+        (j + 1 - floatPaymentBlockStart n j h) =
+        extraPaymentCapacityOn n (Finset.Ico (floatPaymentBlockStart n j h)
+          (floatPaymentBlockStart n j h + (j + 1 - floatPaymentBlockStart n j h))) :=
+      shiftedExtraPaymentCapacity_eq_extraPaymentCapacityOn_Ico n
+        (floatPaymentBlockStart n j h) (j + 1 - floatPaymentBlockStart n j h)
+    _ = extraPaymentCapacityOn n (floatPaymentBlockWithEndpoint n j h) := by
+      rw [floatPaymentBlock_Ico_eq_withEndpoint]
+    _ = orbitWindowHeight n j - 1 :=
+      extraPaymentCapacityOn_floatPaymentBlockWithEndpoint_eq_endpoint_extra n j h
+    _ = extraPaymentCapacityAt n j := rfl
+
+/--
+Exact width ledger on a canonical first-payment block.
+
+The right side counts complete carry-two claims; the left side records the
+single endpoint's available extra-height capacity.
+-/
+theorem bitWidth_iterateT_paymentBlock_eq_claimFiber_card
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    bitWidth (iterateT (j + 1) n).1 + extraPaymentCapacityAt n j =
+      bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 +
+        (carryTwoPaymentClaimFiberAt n j).card := by
+  have hledger :
+      bitWidth (iterateT
+        (floatPaymentBlockStart n j h + (j + 1 - floatPaymentBlockStart n j h)) n).1 +
+          shiftedExtraPaymentCapacity n (floatPaymentBlockStart n j h)
+            (j + 1 - floatPaymentBlockStart n j h) =
+        bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 +
+          shiftedOrbitCarryTwoCount n (floatPaymentBlockStart n j h)
+            (j + 1 - floatPaymentBlockStart n j h) := by
+    unfold shiftedExtraPaymentCapacity shiftedOrbitCarryTwoCount
+    rw [iterateT_add_eq_iterateT_from_shift]
+    exact bitWidth_iterateT_add_sumExtraHeight_eq_initial_add_countCarryTwo
+      (iterateT (floatPaymentBlockStart n j h) n)
+      (j + 1 - floatPaymentBlockStart n j h)
+  rw [shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt,
+    shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card] at hledger
+  simpa [floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ] using hledger
+
+/-- A canonical block overload is exactly a strict width increase across the block. -/
+theorem carryTwoPaymentOverloadAt_iff_bitWidth_paymentBlock_lt
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    CarryTwoPaymentOverloadAt n j ↔
+      bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 <
+        bitWidth (iterateT (j + 1) n).1 := by
+  unfold CarryTwoPaymentOverloadAt
+  have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
+  omega
+
+/-- Claim capacity is balanced exactly when the canonical block preserves width. -/
+theorem carryTwoPaymentClaimFiber_card_eq_capacity_iff_bitWidth_paymentBlock_eq
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    (carryTwoPaymentClaimFiberAt n j).card = extraPaymentCapacityAt n j ↔
+      bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 =
+        bitWidth (iterateT (j + 1) n).1 := by
+  have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
+  omega
+
+/-- Claim capacity is surplus exactly when the canonical block strictly decreases width. -/
+theorem carryTwoPaymentClaimFiber_card_lt_capacity_iff_bitWidth_paymentBlock_gt
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    (carryTwoPaymentClaimFiberAt n j).card < extraPaymentCapacityAt n j ↔
+      bitWidth (iterateT (j + 1) n).1 <
+        bitWidth (iterateT (floatPaymentBlockStart n j h) n).1 := by
+  have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
+  omega
+
 /--
 Exact shifted width ledger.
 
@@ -301,14 +548,15 @@ theorem bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
 /-!
 ## Ledger frontier
 
-The block and its complete first-claim fiber are now canonical, and the
-existing prefix ledger has been repackaged as a shifted segment ledger.
-To obtain the proposed endpoint-only block identity, the remaining task is a
-reindexing theorem: identify the shifted carry count on `[a, j + 1)` with the
-canonical claim fiber, and identify its shifted extra-height sum with the
-single endpoint capacity.  The latter needs a finite-sum transport lemma from
-the interior height-one theorem.  No claim allocation or ambient pressure
-conclusion is inferred before those two exact identifications are proved.
+The local-offset transport is now complete.  On a nonempty canonical block,
+the shifted carry-two count is the complete claim-fiber cardinality and the
+shifted extra-height sum is the endpoint capacity.  Their exact ledger gives a
+three-way arithmetic classification: overload, equality, and surplus are
+respectively strict width growth, width preservation, and strict width decay.
+
+This remains a block-local accounting theorem.  It does not allocate claims to
+individual height units, assert coverage of arbitrary orbit intervals, or
+derive an ambient pressure conclusion without further hypotheses.
 -/
 
 end DkMath.Collatz
