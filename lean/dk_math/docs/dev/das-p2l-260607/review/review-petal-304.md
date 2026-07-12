@@ -33,8 +33,6 @@ git diff --check
 
 ## Review
 
-# cp-304 実装レビュー
-
 ## 結論
 
 **採用。payment-block 会計の局所幹線は完成した。**
