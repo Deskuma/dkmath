@@ -244,6 +244,35 @@ theorem iterateT_add_eq_iterateT_from_shift
         _ = iterateT len (iterateT (a + 1) n) := by
           rw [iterateT_succ_eq_T_iterateT]
 
+/-- Observation height in a shifted orbit is the global height at the shifted index. -/
+theorem orbitWindowHeight_shift_eq
+    (n : OddNat) (a t : ℕ) :
+    orbitWindowHeight (iterateT a n) t = orbitWindowHeight n (a + t) := by
+  rw [orbitWindowHeight_eq_s_iterateT, orbitWindowHeight_eq_s_iterateT,
+    ← iterateT_add_eq_iterateT_from_shift]
+
+/-- Total extra-height capacity over an explicit finite source set. -/
+noncomputable def extraPaymentCapacityOn (n : OddNat) (S : Finset ℕ) : ℕ :=
+  ∑ i ∈ S, orbitWindowHeight n i - 1
+
+/-- Endpoint arithmetic for a nonempty debt-supported payment block. -/
+theorem floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    floatPaymentBlockStart n j h + (j + 1 - floatPaymentBlockStart n j h) = j + 1 := by
+  have hlt := floatPaymentBlockStart_lt_endpoint n j h
+  omega
+
+/-- The shifted block interval is exactly the endpoint-inclusive canonical block. -/
+theorem floatPaymentBlock_Ico_eq_withEndpoint
+    (n : OddNat) (j : ℕ) (h : (floatGrowthDebtFiberAt n j).Nonempty) :
+    Finset.Ico (floatPaymentBlockStart n j h)
+      (floatPaymentBlockStart n j h + (j + 1 - floatPaymentBlockStart n j h)) =
+      floatPaymentBlockWithEndpoint n j h := by
+  rw [floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ]
+  unfold floatPaymentBlockWithEndpoint
+  ext i
+  simp
+
 /-- Carry-two count on the half-open orbit segment `[a, a + len)`. -/
 noncomputable def shiftedOrbitCarryTwoCount
     (n : OddNat) (a len : ℕ) : ℕ :=
