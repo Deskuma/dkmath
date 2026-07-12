@@ -328,17 +328,98 @@ theorem orbitExactDepth_eq_endpoint_sub_add_one_of_mem_universalPaymentBlock
     dsimp [b] at hstart hijlt hbtarget hdepthi ⊢
     omega
 
-/-!
-## Next closure requirement
+/-- Canonical payment targets are nondecreasing across one orbit step. -/
+theorem orbitPaymentTarget_le_succ
+    (n : OddNat) (i : ℕ) :
+    orbitPaymentTarget n i ≤ orbitPaymentTarget n (i + 1) := by
+  by_cases hheight : orbitWindowHeight n i = 1
+  · rw [orbitPaymentTarget_succ_eq_of_orbitWindowHeight_eq_one hheight]
+  · have htwo : 2 ≤ orbitWindowHeight n i := by
+      have hone := orbitWindowHeight_one_le n i
+      omega
+    exact (orbitPaymentTarget_lt_succ_of_two_le_orbitWindowHeight htwo).le
 
-To identify a nonempty universal source fiber with the full interval from its
-minimum to its endpoint, the missing direction is not finite-set arithmetic.
-It is an exact-depth staircase *reverse closure*: from a source targeting `j`,
-one must show that every intervening time has the corresponding decremented
-exact depth and therefore the same target.  Until that theorem is supplied,
-this module intentionally exposes membership, minima, endpoint height, and
-the debt-fiber inclusion only; it does not claim interval contiguity or
-prefix-family coverage.
+/-- The target map is monotone on natural orbit times. -/
+theorem monotone_orbitPaymentTarget (n : OddNat) :
+    Monotone (orbitPaymentTarget n) := by
+  intro a b hab
+  induction b, hab using Nat.le_induction with
+  | base => exact le_rfl
+  | succ b _ ih => exact ih.trans (orbitPaymentTarget_le_succ n b)
+
+/-- Equal successive targets occur exactly at height-one sources. -/
+theorem orbitPaymentTarget_succ_eq_iff_orbitWindowHeight_eq_one
+    (n : OddNat) (i : ℕ) :
+    orbitPaymentTarget n (i + 1) = orbitPaymentTarget n i ↔
+      orbitWindowHeight n i = 1 := by
+  constructor
+  · intro heq
+    by_contra hnot
+    have htwo : 2 ≤ orbitWindowHeight n i := by
+      have hone := orbitWindowHeight_one_le n i
+      omega
+    have hlt := orbitPaymentTarget_lt_succ_of_two_le_orbitWindowHeight htwo
+    omega
+  · exact orbitPaymentTarget_succ_eq_of_orbitWindowHeight_eq_one
+
+/-- Strict target advance occurs exactly at extra-height sources. -/
+theorem orbitPaymentTarget_lt_succ_iff_two_le_orbitWindowHeight
+    (n : OddNat) (i : ℕ) :
+    orbitPaymentTarget n i < orbitPaymentTarget n (i + 1) ↔
+      2 ≤ orbitWindowHeight n i := by
+  constructor
+  · intro hlt
+    by_contra hnot
+    have hone : orbitWindowHeight n i = 1 := by
+      have hpos := orbitWindowHeight_one_le n i
+      omega
+    have heq := orbitPaymentTarget_succ_eq_of_orbitWindowHeight_eq_one hone
+    omega
+  · exact orbitPaymentTarget_lt_succ_of_two_le_orbitWindowHeight
+
+/-- Nonempty universal source fibers are exactly the extra-height endpoints. -/
+theorem orbitPaymentSourceFiberAt_nonempty_iff_two_le_orbitWindowHeight
+    (n : OddNat) (j : ℕ) :
+    (orbitPaymentSourceFiberAt n j).Nonempty ↔ 2 ≤ orbitWindowHeight n j := by
+  constructor
+  · exact two_le_orbitWindowHeight_of_orbitPaymentSourceFiberAt_nonempty
+  · intro htwo
+    refine ⟨j, ?_⟩
+    rw [mem_orbitPaymentSourceFiberAt_iff]
+    exact ⟨le_rfl, orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight htwo⟩
+
+/-- The cardinality of a universal payment block is its interval length. -/
+theorem orbitPaymentSourceFiberAt_card_eq_endpoint_sub_start_add_one
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    (orbitPaymentSourceFiberAt n j).card =
+      j - universalPaymentBlockStart n j h + 1 := by
+  rw [orbitPaymentSourceFiberAt_eq_Icc_universalPaymentBlockStart n j h]
+  have hstart := universalPaymentBlockStart_mem_sourceFiber n j h
+  have hle : universalPaymentBlockStart n j h ≤ j :=
+    (mem_orbitPaymentSourceFiberAt_iff.mp hstart).1
+  simp
+  omega
+
+/-- The universal block cardinality is the exact depth of its earliest source. -/
+theorem orbitPaymentSourceFiberAt_card_eq_orbitExactDepth_start
+    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :
+    (orbitPaymentSourceFiberAt n j).card =
+      orbitExactDepth n (universalPaymentBlockStart n j h) := by
+  rw [orbitPaymentSourceFiberAt_card_eq_endpoint_sub_start_add_one n j h]
+  have hstart := universalPaymentBlockStart_mem_sourceFiber n j h
+  have hle : universalPaymentBlockStart n j h ≤ j :=
+    (mem_orbitPaymentSourceFiberAt_iff.mp hstart).1
+  exact (orbitExactDepth_eq_endpoint_sub_add_one_of_mem_universalPaymentBlock
+    (Finset.mem_Icc.mpr ⟨le_rfl, hle⟩)).symm
+
+/-!
+## Current frontier
+
+Universal payment-block geometry is complete: target fibers are contiguous
+intervals with a descending exact-depth profile.  The remaining work is
+accounting over universal blocks and finite families of them: identify their
+complete claim fibers and endpoint capacity, prove their direct ledger, then
+retain an explicit unfinished suffix in finite-prefix decompositions.
 -/
 
 end DkMath.Collatz
