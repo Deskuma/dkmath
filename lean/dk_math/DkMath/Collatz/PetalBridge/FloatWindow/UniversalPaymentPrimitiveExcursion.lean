@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPositiveBlock
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion"
 
@@ -43,6 +43,16 @@ def CanonicalPrimitivePositiveDriftExcursion
     canonicalOutstandingClaimQueueBefore n q = 0 ∧
       (∀ m ∈ Finset.Ico q r, 0 < canonicalWindowDriftInt n q m) ∧
         canonicalWindowDriftInt n q r ≤ 0
+
+/--
+An open positive excursion starts from an empty queue and remains positive
+through the observed block `m`; no future repayment endpoint is assumed.
+-/
+def CanonicalOpenPositiveQueueExcursion
+    (n : OddNat) (q m : ℕ) : Prop :=
+  q ≤ m ∧
+    canonicalOutstandingClaimQueueBefore n q = 0 ∧
+      ∀ t ∈ Finset.Icc q m, 0 < canonicalOutstandingClaimQueue n t
 
 /-- Number of canonical blocks in the closed excursion interval `q..r`. -/
 def canonicalPrimitiveQueueExcursionLength (q r : ℕ) : ℕ :=
@@ -217,6 +227,85 @@ theorem canonicalPrimitivePositiveQueueExcursion_right_unique
       h.2.2.2
   · exact (h.2.2.1 r' (Finset.mem_Ico.mpr ⟨Nat.le_of_lt h'.1, hgt⟩)).ne'
       h'.2.2.2
+
+/-! ## Open positive excursions -/
+
+/-- Every positive queue position has an open excursion start. -/
+theorem exists_canonicalOpenPositiveQueueExcursion_of_queue_pos
+    {n : OddNat} {m : ℕ} (hm : 0 < canonicalOutstandingClaimQueue n m) :
+    ∃ q, CanonicalOpenPositiveQueueExcursion n q m := by
+  induction m with
+  | zero =>
+      exact ⟨0, by
+        refine ⟨le_rfl, rfl, ?_⟩
+        intro t ht
+        have : t = 0 := by simpa using ht
+        simpa [this] using hm⟩
+  | succ m ih =>
+      by_cases hzero : canonicalOutstandingClaimQueue n m = 0
+      · refine ⟨m + 1, le_rfl, ?_, ?_⟩
+        · simpa [canonicalOutstandingClaimQueueBefore_succ] using hzero
+        · intro t ht
+          have htEq : t = m + 1 := by
+            rcases Finset.mem_Icc.mp ht with ⟨hlo, hhi⟩
+            omega
+          simpa [htEq] using hm
+      · have hmPos : 0 < canonicalOutstandingClaimQueue n m :=
+          Nat.pos_of_ne_zero hzero
+        rcases ih hmPos with ⟨q, hqle, hbefore, hpositive⟩
+        refine ⟨q, hqle.trans (by omega), hbefore, ?_⟩
+        intro t ht
+        rcases Finset.mem_Icc.mp ht with ⟨hqt, htm⟩
+        rcases htm.eq_or_lt with rfl | hlt
+        · exact hm
+        · exact hpositive t (Finset.mem_Icc.mpr ⟨hqt, by omega⟩)
+
+/-- Two open excursions ending at the same positive position have the same start. -/
+theorem canonicalOpenPositiveQueueExcursion_left_unique
+    {n : OddNat} {q q' m : ℕ}
+    (h : CanonicalOpenPositiveQueueExcursion n q m)
+    (h' : CanonicalOpenPositiveQueueExcursion n q' m) :
+    q = q' := by
+  have hqm := h.1
+  have hq'm := h'.1
+  by_contra hne
+  rcases lt_or_gt_of_ne hne with hlt | hgt
+  · cases q' with
+    | zero => omega
+    | succ q' =>
+        have hpos : 0 < canonicalOutstandingClaimQueue n q' :=
+          h.2.2 q' (Finset.mem_Icc.mpr ⟨by omega, by omega⟩)
+        have hzero : canonicalOutstandingClaimQueue n q' = 0 := by
+          simpa [canonicalOutstandingClaimQueueBefore_succ] using h'.2.1
+        omega
+  · cases q with
+    | zero => omega
+    | succ q =>
+        have hpos : 0 < canonicalOutstandingClaimQueue n q :=
+          h'.2.2 q (Finset.mem_Icc.mpr ⟨by omega, by omega⟩)
+        have hzero : canonicalOutstandingClaimQueue n q = 0 := by
+          simpa [canonicalOutstandingClaimQueueBefore_succ] using h.2.1
+        omega
+
+/-- Every positive queue position has a unique last-zero open-excursion start. -/
+theorem existsUnique_canonicalOpenPositiveQueueExcursion_of_queue_pos
+    {n : OddNat} {m : ℕ} (hm : 0 < canonicalOutstandingClaimQueue n m) :
+    ∃! q, CanonicalOpenPositiveQueueExcursion n q m := by
+  rcases exists_canonicalOpenPositiveQueueExcursion_of_queue_pos hm with ⟨q, hq⟩
+  exact ⟨q, hq, fun q' hq' => canonicalOpenPositiveQueueExcursion_left_unique hq' hq⟩
+
+/--
+Every positive-drift block observed inside an open excursion is either a
+dynamic-depth pressure block or the rigid saturated border exception.
+-/
+theorem CanonicalOpenPositiveQueueExcursion.positiveBlock_pressure_or_saturated
+    {n : OddNat} {q m k : ℕ}
+    (_hopen : CanonicalOpenPositiveQueueExcursion n q m)
+    (_hk : k ∈ Finset.Icc q m)
+    (hpos : 0 < endpointAccountingTerm n k) :
+    0 < blockPressureContributionInt n k (canonicalBlockTerminalValuation n k) ∨
+      CanonicalSaturatedBorderBlock n k :=
+  positive_blockPressure_or_saturatedBorder_of_endpointAccountingTerm_pos hpos
 
 /-!
 ## Exact remaining obstruction

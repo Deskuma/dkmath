@@ -338,6 +338,15 @@ theorem canonicalBlockNextStartState_eq_terminalCarrier_div_pow_valuation
       2 ^ v2 (canonicalBlockTerminalCarrier n k)
   exact Nat.mul_div_mul_left _ _ (by omega)
 
+/-- If the next canonical block starts at state one, the completed block has no
+outstanding claims.  This names the endpoint-state audit interpretation in the
+canonical-block vocabulary. -/
+theorem canonicalOutstandingClaimQueue_eq_zero_of_canonicalBlockNextStartState_eq_one
+    {n : OddNat} {k : ℕ} (hstate : canonicalBlockNextStartState n k = 1) :
+    canonicalOutstandingClaimQueue n k = 0 := by
+  apply canonicalOutstandingClaimQueue_eq_zero_of_endpointState_eq_one
+  simpa [canonicalBlockNextStartState] using hstate
+
 /-! ## Exact block-drift consequences -/
 
 /-- Complete carry-two claims form a subfamily of the canonical block. -/
@@ -554,11 +563,43 @@ theorem canonicalBlock_bitWidth_le_of_queue_and_burst_bounds
   omega
 
 /-!
-This is the precise two-coordinate conditional bound available at this layer.
-It ranges over every state *inside a named canonical block*.  Promoting it to
-an unqualified all-time orbit theorem requires a separate coverage theorem
-showing that the canonical block family covers every natural orbit index; that
-coverage statement is intentionally not smuggled into the burst argument.
+The canonical blocks form a proved partition of all orbit times.  Therefore
+the preceding block-local estimate is already sufficient for an all-time
+conditional bound; no additional coverage hypothesis belongs in the public
+statement.
+-/
+
+/-- Queue drawup and block burst bounds control the bit width at every orbit time. -/
+theorem orbit_bitWidth_le_of_queue_and_canonicalBlockBurst_bounds
+    {n : OddNat} {C D : ℕ}
+    (hqueue : CanonicalOutstandingClaimQueueUniformUpperBound n C)
+    (hburst : CanonicalBlockBurstUniformUpperBound n D)
+    (i : ℕ) :
+    bitWidth (iterateT i n).1 ≤ bitWidth n.1 + C + D := by
+  rcases existsUnique_mem_canonicalPaymentBlock n i with ⟨k, hik, _⟩
+  have hiIcc : i ∈ Finset.Icc
+      (canonicalBlockStartTime n k) (paymentEndpointSeq n k) := by
+    rw [canonicalPaymentBlock_eq_Icc_universalPaymentBlockStart] at hik
+    simpa [canonicalBlockStartTime_eq_universalPaymentBlockStart] using hik
+  rcases Finset.mem_Icc.mp hiIcc with ⟨hstart, hend⟩
+  let t := i - canonicalBlockStartTime n k
+  have hindex : canonicalBlockStartTime n k + t = i := by
+    simp [t, Nat.add_sub_of_le hstart]
+  have ht : t < canonicalBlockLength n k := by
+    rw [canonicalBlockLength,
+      canonicalPaymentBlockLength_eq_endpoint_sub_start_add_one,
+      ← canonicalBlockStartTime_eq_universalPaymentBlockStart]
+    dsimp [t]
+    omega
+  simpa [hindex] using
+    canonicalBlock_bitWidth_le_of_queue_and_burst_bounds hqueue hburst ht
+
+/-!
+The local theorem remains useful when a caller already has block coordinates.
+The all-time theorem is justified by `existsUnique_mem_canonicalPaymentBlock`:
+every natural orbit index lies in exactly one canonical block.  The result is
+still conditional on two explicit uniform bounds; it does not assert either
+bound unconditionally.
 -/
 
 /-!
