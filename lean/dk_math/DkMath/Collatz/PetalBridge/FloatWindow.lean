@@ -22,6 +22,7 @@ import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPositiveBlock
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSaturatedSuccessor
 import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"

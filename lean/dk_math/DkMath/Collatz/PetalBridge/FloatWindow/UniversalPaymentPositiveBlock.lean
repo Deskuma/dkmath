@@ -436,17 +436,13 @@ does **not** export
 
 `saturated block -> next block has nonpositive drift`.
 
-The length-two and no-consecutive-saturation patterns remain finite evidence,
-not theorems.  The exact facts proved above stop at the normal form
-
-`x + 1 = 2^L * u` and `v2 (3^L * u - 1) = L - 1`.
-
-To pass this stopping point, a new arithmetic theorem must constrain the next
-canonical block from that normal form, or rule out `L > 2` by combining all
-carry-two inequalities across the exact recurrence.  Existing tail-grammar,
-drift-budget, and delayed-reservoir APIs do not currently accept enough of this
-block-local data to prove either statement.  Adding a successor theorem from
-the finite pattern alone would therefore be an unsound strengthening.
+The former stopping point has since been crossed in
+`UniversalPaymentSaturatedSuccessor`.  The exact normal form and signed width
+ledger prove that saturation has length two and that saturated blocks cannot
+be consecutive.  That module also replaces the false unconditional successor
+rule by the exact disjunction: the successor has nonpositive drift or positive
+terminal-depth pressure.  The audit remains useful as evidence, but these two
+structural facts no longer depend on it.
 -/
 
 /-- The non-saturated positive branch carries its dynamic terminal pressure depth. -/
