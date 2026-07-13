@@ -6,6 +6,8 @@ gch: 5daa50f888e603da9a1ca4948a6c0d5b6a4f1fa3
 
 ## Report
 
+(28m2s)
+
 cp-316 の登頂アタックを完了しました。
 
 新しい [UniversalPaymentScalarQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean:230) で以下を証明しています。
