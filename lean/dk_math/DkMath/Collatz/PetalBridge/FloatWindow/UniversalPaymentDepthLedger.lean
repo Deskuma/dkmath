@@ -390,6 +390,9 @@ section SevenDepthRegression
 
 private def sevenDepthOdd : OddNat := mkOddNat 7 (by decide)
 
+/-- Public root used by the exact seven depth and scalar repayment regressions. -/
+def sevenDepthRegressionRoot : OddNat := sevenDepthOdd
+
 private lemma sevenDepth_v2_22 : v2 22 = 1 := by
   have h := (DkMath.ABC.padic_val_two_of_even 11).2 (by decide)
   simpa [v2, v2_odd 11 (by decide)] using h
@@ -564,6 +567,16 @@ theorem sevenDepthAllocation_right_card :
 /-- The concrete allocation itself has exactly three entries. -/
 theorem sevenDepthAllocation_card : sevenDepthAllocation.card = 3 := by
   decide
+
+/-- Public-root form of the first seven endpoint drift. -/
+theorem endpointAccountingTerm_sevenDepthRegressionRoot_zero :
+    endpointAccountingTerm sevenDepthRegressionRoot 0 = 1 := by
+  simpa [sevenDepthRegressionRoot, sevenDepthOdd] using endpointAccountingTerm_seven_zero
+
+/-- Public-root form of the second seven endpoint drift. -/
+theorem endpointAccountingTerm_sevenDepthRegressionRoot_one :
+    endpointAccountingTerm sevenDepthRegressionRoot 1 = -1 := by
+  simpa [sevenDepthRegressionRoot, sevenDepthOdd] using endpointAccountingTerm_seven_one
 
 end SevenDepthRegression
 
