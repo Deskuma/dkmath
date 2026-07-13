@@ -752,9 +752,11 @@ The claim and capacity sides now both have exact depth coordinates, and marked
 recovery incidence has exact cardinality. What is not proved is that a claim
 depth is eligible for a same-depth slot at its own or a later endpoint. That
 relation must encode an orbit invariant, not merely matching cardinalities.
-Accordingly no eligibility predicate is exported yet and no forward repayment
-matching is asserted. The next implementation must derive and test that local
-invariant before constructing a payment map.
+Accordingly no eligibility predicate is exported here and no forward repayment
+matching is asserted.  The cp-315 audit in `UniversalPaymentDepthLedger` tests
+the first exact-level candidate and refutes it on roots 27, 31, and 511.  A
+future relation must therefore justify cross-level payment or identify a
+different orbit-derived capacity coordinate before constructing a payment map.
 -/
 
 end DkMath.Collatz
