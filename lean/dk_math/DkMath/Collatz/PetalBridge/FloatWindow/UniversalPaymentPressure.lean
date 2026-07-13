@@ -102,8 +102,7 @@ theorem canonicalPaymentBlockRecoveryFiber_zero_eq_empty
   ext i
   simp only [mem_canonicalPaymentBlockRecoveryFiber_iff, Finset.notMem_empty,
     iff_false, not_and]
-  intro hi
-  intro hrecover
+  intro hi hrecover
   have hdepth :=
     orbitExactDepth_eq_paymentEndpoint_sub_add_one_of_mem_canonicalPaymentBlock hi
   have hrecoverDepth : orbitExactDepth n i = 0 := by
@@ -279,8 +278,7 @@ theorem canonicalPaymentBlockContinuationFiber_card
       ext i
       simp only [mem_canonicalPaymentBlockContinuationFiber_iff,
         Finset.notMem_empty, iff_false, not_and]
-      intro hiblock
-      intro hicont
+      intro hiblock hicont
       have hiIcc : i ∈ Finset.Icc b e := by
         rw [← canonicalPaymentBlock_eq_Icc_universalPaymentBlockStart n k]
         exact hiblock
