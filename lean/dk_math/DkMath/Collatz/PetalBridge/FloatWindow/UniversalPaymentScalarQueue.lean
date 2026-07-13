@@ -346,6 +346,130 @@ theorem canonicalOutstandingClaimQueue_eq_balance_sub_runningMinimum
         congr 1
         ring
 
+/-! ## Endpoint-width drawup form -/
+
+/-- Width immediately after canonical endpoint block `m`. -/
+noncomputable def canonicalEndpointWidth (n : OddNat) (m : ℕ) : ℕ :=
+  bitWidth (iterateT (paymentEndpointSeq n m + 1) n).1
+
+/-- Running minimum of the initial width and all completed endpoint widths. -/
+noncomputable def canonicalEndpointRunningWidthMinimum
+    (n : OddNat) : ℕ → ℕ
+  | 0 => min (bitWidth n.1) (canonicalEndpointWidth n 0)
+  | m + 1 => min (canonicalEndpointRunningWidthMinimum n m)
+      (canonicalEndpointWidth n (m + 1))
+
+/-- The running width minimum is no larger than the current endpoint width. -/
+theorem canonicalEndpointRunningWidthMinimum_le_width
+    (n : OddNat) (m : ℕ) :
+    canonicalEndpointRunningWidthMinimum n m ≤ canonicalEndpointWidth n m := by
+  cases m with
+  | zero => exact min_le_right _ _
+  | succ m =>
+      rw [canonicalEndpointRunningWidthMinimum]
+      exact min_le_right _ _
+
+/-- The initial width remains a candidate in every running width minimum. -/
+theorem canonicalEndpointRunningWidthMinimum_le_initial
+    (n : OddNat) (m : ℕ) :
+    canonicalEndpointRunningWidthMinimum n m ≤ bitWidth n.1 := by
+  induction m with
+  | zero => exact min_le_left _ _
+  | succ m ih =>
+      rw [canonicalEndpointRunningWidthMinimum]
+      exact (min_le_left _ _).trans ih
+
+/-- Every positive word has at least one binary digit. -/
+theorem one_le_bitWidth_of_pos {x : ℕ} (hx : 0 < x) :
+    1 ≤ bitWidth x := by
+  rw [bitWidth_eq_log_two_add_one hx.ne']
+  omega
+
+/-- Every canonical endpoint width is positive. -/
+theorem one_le_canonicalEndpointWidth (n : OddNat) (m : ℕ) :
+    1 ≤ canonicalEndpointWidth n m := by
+  unfold canonicalEndpointWidth
+  apply one_le_bitWidth_of_pos
+  have hodd := (iterateT (paymentEndpointSeq n m + 1) n).2
+  omega
+
+/-- The running width minimum remains positive. -/
+theorem one_le_canonicalEndpointRunningWidthMinimum
+    (n : OddNat) (m : ℕ) :
+    1 ≤ canonicalEndpointRunningWidthMinimum n m := by
+  induction m with
+  | zero =>
+      rw [canonicalEndpointRunningWidthMinimum]
+      apply le_min
+      · apply one_le_bitWidth_of_pos
+        have hodd := n.2
+        omega
+      · exact one_le_canonicalEndpointWidth n 0
+  | succ m ih =>
+      rw [canonicalEndpointRunningWidthMinimum]
+      exact le_min ih (one_le_canonicalEndpointWidth n (m + 1))
+
+/-- The signed running minimum is the width minimum translated by the initial width. -/
+theorem canonicalEndpointRunningBalanceMinimum_eq_widthMinimum_sub_initial
+    (n : OddNat) (m : ℕ) :
+    canonicalEndpointRunningBalanceMinimum n m =
+      (canonicalEndpointRunningWidthMinimum n m : ℤ) - bitWidth n.1 := by
+  induction m with
+  | zero =>
+      rw [canonicalEndpointRunningBalanceMinimum,
+        canonicalEndpointRunningWidthMinimum,
+        canonicalEndpointBalanceInt_eq_bitWidth_sub]
+      change min 0 ((canonicalEndpointWidth n 0 : ℤ) - bitWidth n.1) = _
+      push_cast
+      omega
+  | succ m ih =>
+      rw [canonicalEndpointRunningBalanceMinimum,
+        canonicalEndpointRunningWidthMinimum,
+        canonicalEndpointBalanceInt_eq_bitWidth_sub, ih]
+      change min
+        ((canonicalEndpointRunningWidthMinimum n m : ℤ) - bitWidth n.1)
+        ((canonicalEndpointWidth n (m + 1) : ℤ) - bitWidth n.1) = _
+      push_cast
+      omega
+
+/--
+The scalar queue is exactly endpoint-width drawup above the historical minimum
+that also includes the initial width.
+-/
+theorem canonicalOutstandingClaimQueue_eq_width_sub_runningWidthMinimum
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueue n m =
+      canonicalEndpointWidth n m - canonicalEndpointRunningWidthMinimum n m := by
+  rw [canonicalOutstandingClaimQueue_eq_balance_sub_runningMinimum,
+    canonicalEndpointBalanceInt_eq_bitWidth_sub,
+    canonicalEndpointRunningBalanceMinimum_eq_widthMinimum_sub_initial]
+  change Int.toNat
+      (((canonicalEndpointWidth n m : ℤ) - bitWidth n.1) -
+        ((canonicalEndpointRunningWidthMinimum n m : ℤ) - bitWidth n.1)) = _
+  have hle := canonicalEndpointRunningWidthMinimum_le_width n m
+  omega
+
+/-- Queue zero means that the current endpoint width attains the running minimum. -/
+theorem canonicalOutstandingClaimQueue_eq_zero_iff_width_eq_runningWidthMinimum
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueue n m = 0 ↔
+      canonicalEndpointWidth n m = canonicalEndpointRunningWidthMinimum n m := by
+  rw [canonicalOutstandingClaimQueue_eq_width_sub_runningWidthMinimum]
+  have hle := canonicalEndpointRunningWidthMinimum_le_width n m
+  omega
+
+/-- A completed endpoint whose next state is one structurally has zero queue. -/
+theorem canonicalOutstandingClaimQueue_eq_zero_of_endpointState_eq_one
+    {n : OddNat} {m : ℕ}
+    (hstate : (iterateT (paymentEndpointSeq n m + 1) n).1 = 1) :
+    canonicalOutstandingClaimQueue n m = 0 := by
+  apply (canonicalOutstandingClaimQueue_eq_zero_iff_width_eq_runningWidthMinimum
+    n m).2
+  have hminPos := one_le_canonicalEndpointRunningWidthMinimum n m
+  have hminLe := canonicalEndpointRunningWidthMinimum_le_width n m
+  simp [canonicalEndpointWidth, hstate, bitWidth] at hminLe ⊢
+  omega
+
 /-- Queue zero means that every suffix ending at `m` has nonpositive drift. -/
 theorem canonicalOutstandingClaimQueue_eq_zero_iff_all_windowDrift_nonpos
     (n : OddNat) (m : ℕ) :
@@ -839,6 +963,64 @@ theorem canonicalEndpointBalanceInt_le_outstandingClaimQueue
 def CanonicalOutstandingClaimQueueUniformUpperBound
     (n : OddNat) (C : ℕ) : Prop :=
   ∀ m, canonicalOutstandingClaimQueue n m ≤ C
+
+/-- Uniform boundedness of completed canonical endpoint widths. -/
+def CanonicalEndpointWidthUniformUpperBound
+    (n : OddNat) (B : ℕ) : Prop :=
+  ∀ m, canonicalEndpointWidth n m ≤ B
+
+/-- A queue ceiling gives the translated endpoint-width ceiling. -/
+theorem CanonicalOutstandingClaimQueueUniformUpperBound.to_endpointWidthUniformUpperBound
+    {n : OddNat} {C : ℕ}
+    (h : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
+    CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + C) := by
+  intro m
+  have hqueue := h m
+  have hdrawup := canonicalOutstandingClaimQueue_eq_width_sub_runningWidthMinimum n m
+  have hminLeWidth := canonicalEndpointRunningWidthMinimum_le_width n m
+  have hminLeInitial := canonicalEndpointRunningWidthMinimum_le_initial n m
+  omega
+
+/-- Any endpoint-width ceiling also bounds endpoint drawup and hence the queue. -/
+theorem CanonicalEndpointWidthUniformUpperBound.to_outstandingClaimQueueUniformUpperBound
+    {n : OddNat} {B : ℕ}
+    (h : CanonicalEndpointWidthUniformUpperBound n B) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n B := by
+  intro m
+  rw [canonicalOutstandingClaimQueue_eq_width_sub_runningWidthMinimum]
+  exact (Nat.sub_le _ _).trans (h m)
+
+/-- Queue boundedness and canonical endpoint-width boundedness are existentially equivalent. -/
+theorem exists_outstandingClaimQueueUniformUpperBound_iff_exists_endpointWidthUniformUpperBound
+    (n : OddNat) :
+    (∃ C, CanonicalOutstandingClaimQueueUniformUpperBound n C) ↔
+      ∃ B, CanonicalEndpointWidthUniformUpperBound n B := by
+  constructor
+  · rintro ⟨C, hC⟩
+    exact ⟨bitWidth n.1 + C, hC.to_endpointWidthUniformUpperBound⟩
+  · rintro ⟨B, hB⟩
+    exact ⟨B, hB.to_outstandingClaimQueueUniformUpperBound⟩
+
+/-!
+## Experimental initial-boundary target
+
+The following predicate deliberately names, but does not prove, the cp-317
+candidate observed by finite computation.  Keeping the candidate behind a
+`Prop` prevents the numerical audit from being mistaken for a theorem while
+still allowing its exact mathematical consequence to be used conditionally.
+-/
+
+/-- Experimental target: endpoint drawup never exceeds the root's initial width. -/
+def CanonicalOutstandingClaimQueueLeInitialWidth (n : OddNat) : Prop :=
+  ∀ m, canonicalOutstandingClaimQueue n m ≤ bitWidth n.1
+
+/-- The experimental queue target would bound endpoint width by twice the initial width. -/
+theorem CanonicalOutstandingClaimQueueLeInitialWidth.endpointWidth_le_two_mul_initial
+    {n : OddNat} (h : CanonicalOutstandingClaimQueueLeInitialWidth n) (m : ℕ) :
+    canonicalEndpointWidth n m ≤ 2 * bitWidth n.1 := by
+  have hbound : CanonicalOutstandingClaimQueueUniformUpperBound n (bitWidth n.1) := h
+  have hend := hbound.to_endpointWidthUniformUpperBound m
+  omega
 
 /--
 Uniform queue boundedness is precisely uniform control of every finite suffix

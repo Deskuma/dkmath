@@ -19,6 +19,9 @@ import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPressure
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentRepayment
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
+import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 
