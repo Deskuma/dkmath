@@ -422,9 +422,9 @@ index 0d17d099..484b4a7e 100644
  import DkMath.Analysis.DkReal.DkNNRealQ
  import DkMath.Analysis.DkReal.Order
 +import DkMath.Analysis.DkReal.CanonicalOrder
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 @@ -25,7 +26,8 @@ Public entry point for the complete Route B algebraic checkpoint:
  * `DkReal` gives nested interval sequences of vanishing width;
  * `DkReal.Equiv` identifies representations of vanishing separation;
@@ -432,13 +432,13 @@ index 0d17d099..484b4a7e 100644
 -* `DkNNRealQ` is the quotient-backed nonnegative `CommSemiring`.
 +* `DkNNRealQ` is the quotient-backed nonnegative ordered `CommSemiring`;
 +* `DkReal.CanonicalOrder` extracts nonnegative Gap universes.
- 
+
  All endpoint operations in this import tree remain computable. No represented
  limit in Mathlib's `Real` or `NNReal` is selected here.
 @@ -39,14 +41,15 @@ Totality is proved internally from nested-interval geometry. If a finite
  strict left separation is witnessed, it persists. Otherwise the reverse order
  defect is bounded by a vanishing interval width.
- 
+
 +Canonical order is also constructive at the representation level. From
 +`x ≤ y`, `CanonicalOrder` extracts a computable nonnegative Gap `z` such that
 +`y = x + z` in the quotient. No subtraction operation is added to
@@ -447,7 +447,7 @@ index 0d17d099..484b4a7e 100644
  [TODO: linear-order] Decide whether the now-proved quotient totality should be
  packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
  plus `Std.Total` so that decidable comparison remains an explicit choice.
- 
+
 -[TODO: canonical-order] Treat `x ≤ y ↔ ∃ z, y = x + z` as an independent
 -problem. It is not a consequence of the current ordered-semiring compatibility
 -alone.
@@ -729,10 +729,10 @@ index 552fdd47..0f4c900f 100644
  facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
 -strict, and linear order structures remain unclaimed.
 +strict, and linear order structures are developed in later modules.
- 
+
  `DkReal.Order` proves totality internally through finite separation or a
  vanishing-width bound and exports `Std.Total (· ≤ ·)`.
- 
+
 +`DkReal.CanonicalOrder` subsequently proves
 +`x ≤ y ↔ ∃ z, y = x + z` and installs `CanonicallyOrderedAdd`.
 +
@@ -746,7 +746,7 @@ index 99ccc471..72974f5c 100644
 @@ -78,6 +78,10 @@ DkMath.Analysis.DkReal.Order
    asymptotic lower-endpoint order, Equiv compatibility, PartialOrder,
    ordered-semiring compatibility, and totality research boundary
- 
+
 +DkMath.Analysis.DkReal.CanonicalOrder
 +  subtraction-free extraction of a nonnegative Gap representation,
 +  ExistsAddOfLE, and CanonicallyOrderedAdd
@@ -762,7 +762,7 @@ index 99ccc471..72974f5c 100644
 +  canonical additive order is proved by nonnegative Gap extraction
 +  strict and direct linear order structures remain open
    use a semantic bridge only as an independent cross-check
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index 0af4303c..d56f6377 100644
@@ -790,9 +790,9 @@ index 021e932b..8ca3e483 100644
 -- totality through `Std.Total (· ≤ ·)`.
 +- totality through `Std.Total (· ≤ ·)`;
 +- canonical additive order through `CanonicallyOrderedAdd DkNNRealQ`.
- 
+
  This checkpoint does not establish:
- 
+
  - a direct `LinearOrder` instance;
 -- canonical order by additive differences;
  - strict ordered-semiring structure;
@@ -801,7 +801,7 @@ index 021e932b..8ca3e483 100644
 @@ -96,6 +96,24 @@ evaluating into `Real`.
  See
  [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
- 
+
 +### Canonical Gap Extraction
 +
 +For `x ≤ y`, the implementation constructs stagewise intervals
@@ -821,7 +821,7 @@ index 021e932b..8ca3e483 100644
 +operation is introduced on `DkNNRealQ`.
 +
  ### Semantic Bridge
- 
+
  A separate bridge may select the unique real point represented by a nested
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md
 index 3a7700e1..6375ef03 100644
@@ -830,13 +830,13 @@ index 3a7700e1..6375ef03 100644
 @@ -177,8 +177,9 @@ Totality does not settle canonical order. The statement
  x <= y ↔ ∃ z, y = x + z
  ```
- 
+
 -requires constructing a nonnegative difference representation and should be
 -treated separately.
 +is now proved separately in `DkReal.CanonicalOrder` by constructing a
 +nonnegative Gap representation. The construction adds no subtraction
 +operation to the quotient.
- 
+
  Strict order also needs its own analysis. In particular, strict monotonicity
  and cancellation must not be inferred solely from `IsOrderedRing`.
 ````

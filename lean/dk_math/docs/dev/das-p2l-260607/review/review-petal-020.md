@@ -10,25 +10,25 @@ gch: 35e57e167ff5dae4885f8133f274e818bc8b0bb8
 
 実装:
 
-- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean:94)
+- [PrimitiveBridge.lean](/lean/dk_math/DkMath/Petal/PrimitiveBridge.lean#L94)
   - `exists_prime_dvd_S0_nat_of_not_three_dvd_sub`
   - `PrimitiveOnS0` を知らない caller 向けに、`∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b` を直接返す projection です。
 
-- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean:30)
+- [ReducedSupport.lean](/lean/dk_math/DkMath/Petal/ReducedSupport.lean#L30)
   - `HasNoPrimeBelow`
   - `HasAnchorPrime`
   - `hasAnchorPrime_prime`
   - `hasAnchorPrime_anchor_dvd`
   - `hasAnchorPrime_no_smaller_prime`
 
-- [Petal.lean](/lean/dk_math/DkMath/Petal.lean:8)
+- [Petal.lean](/lean/dk_math/DkMath/Petal.lean#L8)
   - `DkMath.Petal.ReducedSupport` を集約 import に追加。
 
 Docs:
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:216)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L216)
   - `GcdBridge / PadicBridge / PrimitiveBridge / ReducedSupport` の小総括を追加。
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:776)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L776)
   - Bridge 完了、`ReducedSupport` initial API 実装済みとして更新。
 
 確認:

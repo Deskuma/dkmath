@@ -409,7 +409,7 @@ index 7e691db9..1b3513ce 100644
 @@ -1824,6 +1824,32 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  ```
- 
+
 +A concrete value-map supply form is also implemented.  It applies when the
 +selected label is presented as:
 +
@@ -437,7 +437,7 @@ index 7e691db9..1b3513ce 100644
 +constructs prime channels.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index beb8ee28..92919635 100644
@@ -446,7 +446,7 @@ index beb8ee28..92919635 100644
 @@ -316,6 +316,66 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_injOn
      (petalCarrierLabelCompatibleOn_outer_of_label_eq_imp_value_eq
        I n lap mOf qOf hlabel)
- 
+
 +/--
 +Outer-address label compatibility from a value-indexed label map.
 +
@@ -513,7 +513,7 @@ index beb8ee28..92919635 100644
 @@ -714,6 +774,74 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
        I n lap mOf qOf hm hminj hlabel)
      hcarrier
- 
+
 +/--
 +Value-map form of the outer-address GN multiplicity-budget route.
 +
@@ -584,11 +584,11 @@ index beb8ee28..92919635 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -890,6 +1018,40 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
        I n lap mOf qOf hm hminj hlabel)
      hcarrier
- 
+
 +/--
 +Value-map form of the outer-address no-lift GN log-capacity route.
 +
@@ -633,7 +633,7 @@ index af8e44dc..0254baec 100644
 @@ -612,5 +612,32 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  ```
- 
+
 +The next experimental wrapper is also implemented.  It covers the situation
 +where labels are described by a value-indexed map:
 +
@@ -670,7 +670,7 @@ index bcd621b2..c9192284 100644
 @@ -771,6 +771,28 @@ petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
  ```
- 
+
 +There is also a concrete value-map supply form.  If the selected labels are
 +presented as
 +
@@ -694,7 +694,7 @@ index bcd621b2..c9192284 100644
 +available.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

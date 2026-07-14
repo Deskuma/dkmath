@@ -6,7 +6,7 @@ gch: 34b20e4b0b823c977ba42b6b8a33a5a6580cec79
 
 ## Report
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:131) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L131) のみです。
 
 追加したのは prime-base orbit の基本可除性です。
 

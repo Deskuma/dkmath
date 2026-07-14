@@ -275,14 +275,14 @@ index f250ccda..bd73a2ee 100644
 @@ -26,9 +26,9 @@ Mathlib's `Real` is selected.
  `DkReal.Order` defines an asymptotic representative order, proves invariance
  under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
- 
+
 -Addition is monotone for the asymptotic order. Establish monotonicity of
 -multiplication and powers before extending the algebraic hierarchy to ordered
 -semirings.
 +Addition and multiplication are monotone for the asymptotic order. Establish
 +power monotonicity and verify the intended ordered-algebra hierarchy before
 +installing stronger typeclasses.
- 
+
  [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -292,7 +292,7 @@ index 04bafb73..9a3ef7c6 100644
 @@ -26,9 +26,9 @@ partial order on `DkNNRealQ`.
  [TODO] Prove totality, or identify the additional representation theorem needed
  to derive it.
- 
+
 -Addition is monotone for this order. The corresponding results for
 -multiplication by nonnegative values and natural powers remain prerequisites
 -for ordered-semiring typeclasses.
@@ -300,12 +300,12 @@ index 04bafb73..9a3ef7c6 100644
 +this order. Natural-power monotonicity remains a prerequisite for the intended
 +ordered-semiring API.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -165,6 +165,61 @@ theorem add_le_add
            le_max_right _ _
          linarith)
- 
+
 +/--
 +Nonnegative multiplication is monotone for asymptotic order.
 +
@@ -362,12 +362,12 @@ index 04bafb73..9a3ef7c6 100644
 +        nlinarith [hx n, hw n])
 +
  end DkMath.Analysis.DkReal
- 
+
  namespace DkMath.Analysis.DkNNReal
 @@ -185,6 +240,13 @@ theorem add_le_add
      Le (add x z) (add y w) :=
    DkReal.add_le_add hxy hzw
- 
+
 +/-- Multiplication of nonnegative representatives is monotone in both arguments. -/
 +theorem mul_le_mul
 +    {x y z w : DkNNReal} (hxy : Le x y) (hzw : Le z w) :
@@ -376,12 +376,12 @@ index 04bafb73..9a3ef7c6 100644
 +    x.nonnegative y.nonnegative z.nonnegative w.nonnegative hxy hzw
 +
  end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -224,4 +286,14 @@ theorem add_le_add
    intro c d hcd
    exact DkNNReal.add_le_add hab hcd
- 
+
 +/-- Quotient multiplication is monotone in both arguments. -/
 +theorem mul_le_mul
 +    {x y z w : DkNNRealQ} (hxy : x ≤ y) (hzw : z ≤ w) :
@@ -404,14 +404,14 @@ index 9a5ab6c2..c7bd4207 100644
 -  addition monotonicity is proved; multiplication and power monotonicity remain
 +  addition and multiplication monotonicity are proved; power monotonicity remains
    investigate totality before any LinearOrder claim
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index 824642a3..d9501f47 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 @@ -49,8 +49,8 @@ The next independent tasks are:
- 
+
  1. **Ordered algebra.** `DkReal.Order` now defines order by vanishing positive
     lower-endpoint defect, proves invariance under `Equiv`, and installs a
 -   `PartialOrder` on `DkNNRealQ`. Addition is monotone. Next prove monotonicity of
@@ -428,13 +428,13 @@ index ae56c0ee..d3c955e8 100644
 @@ -60,8 +60,8 @@ The next phase defines representative order by vanishing positive
  lower-endpoint defect. It is invariant under vanishing-separation equivalence
  and yields a `PartialOrder` on `DkNNRealQ`.
- 
+
 -Addition is monotone for this order. Remaining order work is multiplication
 -and power monotonicity, together with the question of totality.
 +Addition and multiplication are monotone for this order. Remaining order work
 +is power monotonicity, together with the question of totality.
  No `LinearOrder` is claimed yet.
- 
+
  ### Semantic Bridge
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 index f905da72..72986721 100644
@@ -448,7 +448,7 @@ index f905da72..72986721 100644
 -addition monotonicity is now available.
 +remain deferred until power monotonicity and the intended hierarchy have been
 +verified; addition and multiplication monotonicity are now available.
- 
+
  Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
  module because selecting the represented limit may require `noncomputable`.
 ````

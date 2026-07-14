@@ -6,7 +6,7 @@ gch: c89067033d152daf0c89de3266a0604df239620b
 
 ## Report
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:374) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L374) のみです。
 
 追加したのは `nestedPetalAddress` の最小基盤です。outermost lap から innermost lap へ、`outerPetalRemainder` を渡しながら `List PetalAddress` を作ります。あわせて `zero`、`succ`、`head?`、`tail`、`length` の基本補題と、五角例 `nestedPetalAddress 5 2 25 = [...]` を固定しました。
 

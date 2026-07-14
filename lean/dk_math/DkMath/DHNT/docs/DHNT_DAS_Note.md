@@ -893,7 +893,7 @@ cyclotomicPrimeCore p x u =
 
 1. **虚数単位を本体から追い出せる**
    `i` は複素観測のためには使うが、core theorem は `CommSemiring` や `CommRing` 上で言える。
-   例えば [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean:61) の
+   例えば [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean#L61) の
 
    ```lean
    (x + u)^p = x * cyclotomicPrimeCore p x u + u^p
@@ -934,7 +934,7 @@ cyclotomicPrimeCore p x u =
    これは「複素っぽい現象」を、円分多項式の斉次化評価として扱えるということです。
 
 5. **Zsigmondy / valuation / primitive factor へ橋がかかる**
-   [CFBRC.Bridge](/lean/dk_math/DkMath/CFBRC/Bridge.lean:17) では、差冪を割る素数を `cyclotomicPrimeCore` 側へ移す補題が置かれています。
+   [CFBRC.Bridge](/lean/dk_math/DkMath/CFBRC/Bridge.lean#L17) では、差冪を割る素数を `cyclotomicPrimeCore` 側へ移す補題が置かれています。
    これは複素観測から数論的 core へ降りるために重要です。
 
 なので、質問への答えは：
@@ -1519,7 +1519,7 @@ roadmap に方針を追記しました。
 
 追記しました。
 
-[BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md:45) に、Pascal 三角形の開始 `1` を `u^d` という頂点単位へ持ち上げる見方を追加しています。
+[BinomialPrimeWeightedRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeightedRoadmap.md#L45) に、Pascal 三角形の開始 `1` を `u^d` という頂点単位へ持ち上げる見方を追加しています。
 
 要点はこの形です。
 

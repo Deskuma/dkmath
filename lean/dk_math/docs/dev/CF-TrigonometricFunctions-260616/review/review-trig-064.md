@@ -270,7 +270,7 @@ index 637fc790..b04a51d9 100644
 @@ -1054,6 +1054,47 @@ theorem semanticExactKernelOrderFour_iff_core_eq_zero
        not_semanticKernelFiniteOrder_two_of_core_eq_zero hzero,
        not_semanticKernelFiniteOrder_three_of_core_eq_zero hzero⟩
- 
+
 +/--
 +The transported plane action has exact order four: its fourth iterate is the
 +identity function, while none of its first three positive iterates is.
@@ -340,12 +340,12 @@ index 3765f183..ca908df1 100644
 +semanticExactActionOrderFour_iff_core_eq_zero
 +semanticExactActionOrderFour_of_core_eq_zero
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -248,6 +252,26 @@ intermediate real-side powers need not remain in the transported first
  quadrant, which is why kernel multiplication remains confined to the real
  side.
- 
+
 +The same exact-order statement now holds for the plane action. Exact kernel
 +order four is equivalent to exact action order four, and both are equivalent
 +to semantic core zero. This is where the strength of the CF2D addition law

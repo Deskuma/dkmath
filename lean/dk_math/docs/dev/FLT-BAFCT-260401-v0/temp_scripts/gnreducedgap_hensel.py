@@ -153,8 +153,7 @@ print("\n" + "=" * 60)
 print("KEY INSIGHT: SIMPLE ZEROS → UNIQUE LIFT → SUPER-WIEFERICH UNIQUENESS")
 print("=" * 60)
 
-print(
-    """
+print("""
 If Φ_p has SIMPLE zeros at ω^j mod q (i.e., Φ_p'(ω^j) ≢ 0 mod q),
 then by Hensel's lemma:
   Each zero lifts uniquely: ω^j → R_j mod q^2 → R_j mod q^3 → ... → R_j mod q^k
@@ -163,7 +162,7 @@ then by Hensel's lemma:
 BUT: in FLT context, v_q(Φ_p(z/y)) ≥ p.
   If the zeros are simple, the only way to get v_q ≥ p is if
   z/y ≡ R_j (mod q^p) where R_j is the Hensel lift.
-  
+
   Since R_j is UNIQUE mod q^p, this gives:
   z ≡ R_j · y (mod q^p)
   z - R_j·y ≡ 0 (mod q^p)
@@ -179,18 +178,17 @@ At x = ω^j (a root of Φ_p mod q):
 
   Since x = ω^j and x^{p-1} = ω^{j(p-1)} = ω^{-j} (since ω^p = 1):
   Φ_p'(ω^j) = p · ω^{-j} / (ω^j - 1)
-  
+
   This is ≢ 0 mod q iff p · ω^{-j} · (ω^j - 1)^{-1} ≢ 0 mod q
   iff p ≢ 0 mod q (since ω^{-j} and (ω^j-1) are units mod q)
   iff q ≠ p.
-  
+
   Since q ≡ 1 mod p and q ≠ p: Φ_p'(ω^j) ≢ 0 mod q. ✓
-  
+
   CONCLUSION: ALL zeros of Φ_p mod q are SIMPLE!
   → Hensel lifting gives UNIQUE R_j mod q^k for each k.
   → v_q(Φ_p(R_j)) = 1 for the lifted root.
-"""
-)
+""")
 
 # Verify the derivative formula
 print("Verification: Φ_p'(ω^j) = p·ω^{-j}/(ω^j - 1) mod q")
@@ -213,28 +211,27 @@ print("\n" + "=" * 60)
 print("THE REAL QUESTION: What does v_q(Φ_p(z/y)) ≥ p mean?")
 print("=" * 60)
 
-print(
-    """
+print("""
 Since zeros of Φ_p mod q are all SIMPLE:
   Hensel lifting gives unique R_j ∈ Z_q (q-adic integers) with Φ_p(R_j) = 0.
-  
+
   For any integer r with r ≡ ω^j mod q:
     r = R_j + (r - R_j) where r - R_j ≡ 0 mod q but might not be 0 mod q².
-    
+
     Φ_p(r) = Φ_p(R_j + (r - R_j))
             = Φ_p(R_j) + Φ_p'(R_j)·(r - R_j) + O((r-R_j)²)
-    
+
     Φ_p(R_j) = 0 (exactly, in Z_q)
     So Φ_p(r) = Φ_p'(R_j)·(r - R_j) + O((r-R_j)²)
-    
-    v_q(Φ_p(r)) = v_q(Φ_p'(R_j)) + v_q(r - R_j) + ... 
-    
+
+    v_q(Φ_p(r)) = v_q(Φ_p'(R_j)) + v_q(r - R_j) + ...
+
     Since Φ_p'(R_j) ≢ 0 mod q (simple root): v_q(Φ_p'(R_j)) = 0
-    
+
     So v_q(Φ_p(r)) = v_q(r - R_j) (for small enough r - R_j)
-    
+
     More precisely: v_q(Φ_p(r)) = v_q(r - R_j) when v_q(r - R_j) ≥ 1!
-    
+
     (The Taylor expansion error is O((r-R_j)²), which has v_q ≥ 2·v_q(r-R_j))
 
 THEREFORE (critical):
@@ -248,22 +245,22 @@ We work with z and y as integers, and GN is computed from (z-y, y).
 
 Actually: v_q(GN(p, gap, y)) where gap = z-y:
   GN(p, gap, y) = Φ_p(z/y) · y^{p-1} ... wait, this needs care.
-  
+
   GN(p, u, y) = [(u+y)^p - y^p]/u
   With u = gap, u+y = z:
   GN = (z^p - y^p)/(z-y) = Σ_{i=0}^{p-1} z^i · y^{p-1-i}
-  
+
   This is NOT exactly Φ_p(z/y) · y^{p-1}. Let me check:
   Σ z^i y^{p-1-i} = y^{p-1} Σ (z/y)^i = y^{p-1} · Φ_p(z/y)
-  
+
   YES! GN = y^{p-1} · Φ_p(z/y).
-  
+
   So v_q(GN) = (p-1)·v_q(y) + v_q(Φ_p(z/y))
   Since gcd(q, y) = 1: v_q(y) = 0
   → v_q(GN) = v_q(Φ_p(z/y))
-  
+
   And Φ_p(z/y) = Φ_p((z/y mod q^k)) in Z_q (when q ∤ y).
-  
+
   So: v_q(GN) = v_q(z/y - R_{j₀}) = v_q(z - R_{j₀}·y) (since q ∤ y)
 
   In FLT context: v_q(GN) = p·v_q(x) ≥ p
@@ -271,10 +268,9 @@ Actually: v_q(GN(p, gap, y)) where gap = z-y:
 
 THIS IS THE KEY EQUATION:
   z ≡ R_{j₀} · y (mod q^p)
-  
+
   where R_{j₀} is the unique Hensel lift of ω^{j₀} such that Φ_p(R_{j₀}) = 0 in Z_q.
-"""
-)
+""")
 
 # Let's compute R_j for q=11, p=5
 print("Computing Hensel lifts R_j for q=11, p=5:")
@@ -323,8 +319,7 @@ print("\n" + "=" * 60)
 print("THE DESCENT PLAN using Hensel lifts")
 print("=" * 60)
 
-print(
-    """
+print("""
 We have established:
 
 1. GN(p, gap, y) = y^{p-1} · Φ_p(z/y) where z = gap + y
@@ -336,21 +331,21 @@ We have established:
 4. In FLT context: v_q(GN) = p·v_q(x) ≥ p → z ≡ R_{j₀}·y mod q^p
 
 NOW FOR THE DESCENT:
-  
+
   We want g' such that g'·GN(p, g', y) = gap·GN/q^p = x^p/q^p = (x/q)^p
 
   g'·GN(p, g', y) = g' · y^{p-1} · Φ_p((g'+y)/y)
-  
+
   Let z' = g'+y. Then:
   (z'-y) · y^{p-1} · Φ_p(z'/y) = (x/q)^p
-  
+
   We need: (z'-y) · Φ_p(z'/y) = (x/q)^p / y^{p-1}
 
   Q-ADIC PERSPECTIVE:
   Original: (z-y) · Φ_p(z/y) = x^p / y^{p-1}
   Descent:  (z'-y) · Φ_p(z'/y) = x^p / (q^p · y^{p-1})
 
-  The ratio: 
+  The ratio:
   [(z-y)·Φ_p(z/y)] / [(z'-y)·Φ_p(z'/y)] = q^p
 
   v_q of left side = v_q(z-y) + v_q(Φ_p(z/y)) - v_q(z'-y) - v_q(Φ_p(z'/y))
@@ -366,14 +361,14 @@ NOW FOR THE DESCENT:
   This means z'/y ≢ R mod q, i.e., z' is NOT at the Hensel root.
   Then v_q(Φ_p(z'/y)) = 0.
   And v_q(z'-y) = ?
-  
+
   Wait: v_q(z-y) + v_q(Φ_p(z/y)) = p (from v_q(x^p) = p*v_q(x) = p for v_q(x)=1)
   v_q(z-y) = 0, v_q(Φ_p(z/y)) = p → ✓
-  
+
   For z': v_q((z'-y)·Φ_p(z'/y)) = 0 (since q ∤ (x/q)^p when v_q(x)=1)
   So v_q(z'-y) + v_q(Φ_p(z'/y)) = 0
   Both are ≥ 0, so both = 0.
-  
+
   v_q(Φ_p(z'/y)) = 0 means z'/y is NOT ≡ ω^j mod q for any j.
   This is simply: q ∤ Φ_p(z'/y).
   I.e., Σ (z'/y)^i ≢ 0 mod q.
@@ -384,19 +379,17 @@ INTERPRETATION:
   z' is NOT at any Hensel root: Φ_p(z'/y) ≢ 0 mod q
 
   This is consistent! The descent "peels off" the q-factor completely.
-  
+
   But... does z' exist? That's still the question.
   We've only characterized WHAT z' must look like mod q if it exists.
   We haven't shown it EXISTS as a natural number.
-"""
-)
+""")
 
 print("=" * 60)
 print("Deeper: The multiplicative structure")
 print("=" * 60)
 
-print(
-    """
+print("""
 In Z_q (q-adic integers), Φ_p factors completely:
   Φ_p(x) = ∏_{j=1}^{p-1} (x - R_j)
 
@@ -404,7 +397,7 @@ So: Φ_p(z/y) = ∏_{j=1}^{p-1} (z/y - R_j)
 
 And GN = y^{p-1} · ∏_{j=1}^{p-1} (z/y - R_j)
        = ∏_{j=1}^{p-1} (z - R_j·y) / y^{0}  ... wait:
-       
+
 y^{p-1} · ∏(z/y - R_j) = y^{p-1} · ∏(z - R_j·y)/y^{p-1} = ∏(z - R_j·y)
 
 So GN = ∏_{j=1}^{p-1} (z - R_j·y) in Z_q.
@@ -423,46 +416,44 @@ In FLT: v_q(z - R_{j₀}·y) = p·v_q(x) and all other factors have v_q = 0.
 
 So the q-adic factorization is:
   x^p = (z-y) · (z - R_{j₀}·y) · ∏_{j≠j₀} (z - R_j·y)
-  
+
   v_q: 0 + p·v_q(x) + 0 + ... + 0 = p·v_q(x) ✓
 
 THE q-ADIC DESCENT:
   Replace (z - R_{j₀}·y) by (z - R_{j₀}·y)/q^p:
-  
+
   (x/q)^p = (z-y) · [(z - R_{j₀}·y)/q^p] · ∏_{j≠j₀} (z - R_j·y)
-  
+
   But this should equal (z'-y) · ∏_{j=1}^{p-1} (z' - R_j·y) for some z'.
-  
+
   So the question reduces to:
-  
+
   Does there exist z' ∈ N such that:
   (z'-y) · ∏_{j=1}^{p-1} (z' - R_j·y) = (z-y) · [(z-R_{j₀}·y)/q^p] · ∏_{j≠j₀} (z-R_j·y)?
 
   In Z_q this is solvable (by p-adic analysis).
   The question is whether the q-adic solution is ALSO a positive integer.
-  
+
   This is the LOCAL-GLOBAL gap. And this is EXACTLY what makes FLT hard.
 
 HOWEVER: we have information from ALL primes q simultaneously!
   For each primitive q_i: z ≡ R_{j_i} · y mod q_i^p
   These congruences (CRT) determine z modulo ∏ q_i^p.
-  
+
   Similarly, z' must satisfy congruences from its own primitive primes.
-  
+
   The point: z' has FEWER primitive primes (we removed q).
   So z' is LESS constrained by CRT.
-  
+
   Does this help? In some sense, the descent RELAXES the constraints,
   making z' easier to exist. But this doesn't prove existence.
-"""
-)
+""")
 
 print("\n" + "=" * 60)
 print("COMPLETELY NEW APPROACH: Use Hensel factorization for embedding")
 print("=" * 60)
 
-print(
-    """
+print("""
 Instead of trying to CONSTRUCT z' directly, consider:
 
 THEOREM (if provable): The factorization
@@ -477,7 +468,7 @@ Instead of descent, derive a DIRECT contradiction from the q-adic structure.
 Specifically: for p ≥ 5, the system of congruences
   z ≡ R_{j_i}·y mod q_i^p  for ALL primitive primes q_i
   z = gap + y where gap = p^{p-1}·t^p
-  
+
   combined with SIZE constraints (z ≤ ...) might be incompatible.
 
 This is a DIRECT attack, not a descent.
@@ -499,7 +490,7 @@ So: p^{p-1}·t^p + y ≡ Z_0 mod M
 
 Since M = ∏ q_i^p ≥ ∏ q_i^5 ≥ (∏ q_i)^5 = s^5·(some)...
 
-Actually s = ∏ q_i^{a_i}, so s^p = ∏ q_i^{p·a_i} 
+Actually s = ∏ q_i^{a_i}, so s^p = ∏ q_i^{p·a_i}
 and M = ∏ q_i^p.
 If each a_i = 1: M = s^p.
 And x = p·t·s, gap = p^{p-1}·t^p, z = gap + y.
@@ -518,10 +509,9 @@ The descent tries to REDUCE s, not prove a size contradiction.
 
 Bottom line: DIRECT contradiction from CRT seems hard without more structure.
 
-Let's instead focus on what CAN be done: 
+Let's instead focus on what CAN be done:
 formalizing the Hensel factorization structure in Lean.
-"""
-)
+""")
 
 # Compute the Hensel lifts as concrete numbers
 print("\n" + "=" * 60)

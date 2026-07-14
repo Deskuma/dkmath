@@ -467,7 +467,7 @@ index f2652ef4..261cd270 100644
 @@ -46,9 +46,13 @@ Canonical order is also constructive at the representation level. From
  `y = x + z` in the quotient. No subtraction operation is added to
  `DkNNRealQ`.
- 
+
 -The next strict-order layer should classify this known Gap: zero Gap gives
 -equality, while a positive lower Gap observed at a finite stage gives strict
 -order. This keeps the design in the same `Big = (Core + Beam) + Gap` pattern.
@@ -478,7 +478,7 @@ index f2652ef4..261cd270 100644
 +
 +[TODO: strict-arithmetic] Prove preservation by addition and by multiplication
 +with a strictly positive factor before selecting a strict-order typeclass.
- 
+
  [TODO: linear-order] Decide whether the now-proved quotient totality should be
  packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean b/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean
@@ -488,7 +488,7 @@ index 9c52362a..1fc4a1cf 100644
 @@ -231,6 +231,36 @@ theorem add_diffOfLe_equiv
      Equiv (add x (diffOfLe x y hxy)) y :=
    DkReal.add_diffNonneg_equiv hxy
- 
+
 +/--
 +The extracted canonical Gap is positive at stage `n` exactly when the Body
 +and Big representatives are strictly separated there.
@@ -520,7 +520,7 @@ index 9c52362a..1fc4a1cf 100644
 +  exact exists_congr fun n => (gapOfLe_lo_pos_iff_leftSeparatedAt x y hxy n).symm
 +
  end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 index c25b74b8..d5bef04d 100644
@@ -529,25 +529,25 @@ index c25b74b8..d5bef04d 100644
 @@ -68,27 +68,24 @@ quotient therefore carries Mathlib's `IsOrderedRing` predicate, whose name is
  historical: its algebraic assumption is only `Semiring`. No canonical-order,
  strict-order, or linear-order structure is claimed.
- 
+
 -## Next difference kernel: strict Gap
 +## Strict Gap kernel
- 
+
  Canonical order fills the known frame
- 
+
  `Big = Body + Gap`
- 
+
 -by extracting a nonnegative Gap representation. Strict order should not start
 -from a new abstract `<`. Its missing kernel is whether that extracted Gap
 -collapses to zero or opens positively at finite precision:
 +by extracting a nonnegative Gap representation. Strict order does not start
 +from a new comparison mechanism. It asks whether that extracted Gap collapses
 +to zero or opens positively at finite precision:
- 
+
  * equality: `Big = Body + 0`;
  * strict orientation: at some stage `Body.hi < Big.lo`;
  * finite strict Gap: `0 < Big.lo - Body.hi`.
- 
+
 -[TODO: strict/core] Define representative strictness by
 -`Le x y ∧ ¬ Le y x`, then prove it is equivalent to
 -`∃ n, LeftSeparatedAt x y n`.
@@ -559,13 +559,13 @@ index c25b74b8..d5bef04d 100644
 +`Le x y ∧ ¬ Le y x` is equivalent to `∃ n, LeftSeparatedAt x y n`.
 +`CanonicalOrder` then identifies the same witness with a positive lower
 +endpoint of `gapOfLe`.
- 
+
  [TODO: strict/arithmetic] Derive strict addition from preservation of the
  finite Gap. For multiplication, require a strictly positive factor and isolate
 @@ -291,6 +288,43 @@ theorem le_of_rightSeparatedAt
      Le y x :=
    le_of_leftSeparatedAt hsep
- 
+
 +/--
 +A finite left separation excludes the reverse asymptotic order.
 +
@@ -609,7 +609,7 @@ index c25b74b8..d5bef04d 100644
 @@ -329,6 +363,23 @@ theorem le_of_not_exists_leftSeparatedAt
        · exact (x.interval n).width_nonneg
        · linarith)
- 
+
 +/--
 +Strict representative order is equivalent to a finite observed left
 +separation.
@@ -633,7 +633,7 @@ index c25b74b8..d5bef04d 100644
 @@ -466,6 +517,10 @@ its public order lemmas have no proof arguments.
  def Le (x y : DkNNReal) : Prop :=
    DkReal.Le x.val y.val
- 
+
 +/-- Strict wrapper order: forward order without reverse order. -/
 +def Lt (x y : DkNNReal) : Prop :=
 +  Le x y ∧ ¬ Le y x
@@ -644,14 +644,14 @@ index c25b74b8..d5bef04d 100644
 @@ -493,6 +548,11 @@ theorem mul_le_mul
  theorem le_total (x y : DkNNReal) : Le x y ∨ Le y x :=
    DkReal.le_total_repr x.val y.val
- 
+
 +/-- Wrapper strictness is exactly finite left separation of representatives. -/
 +theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
 +    Lt x y ↔ ∃ n, DkReal.LeftSeparatedAt x.val y.val n :=
 +  DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
 +
  end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md
 index 1906fe58..0a73f399 100644
@@ -660,10 +660,10 @@ index 1906fe58..0a73f399 100644
 @@ -61,22 +61,22 @@ Extracted Gap:
  The middle form is the finite Core--Gap separation. The last form says that
  the canonical Gap universe has become observably positive.
- 
+
 -## Proposed Lean Sequence
 +## Implementation Status
- 
+
  ```text
 -1. DkReal.not_le_of_leftSeparatedAt
 -2. DkReal.lt_iff_exists_leftSeparatedAt
@@ -682,15 +682,15 @@ index 1906fe58..0a73f399 100644
 +[next] strict addition
 +[next] positive-factor strict multiplication
  ```
- 
+
 -The representative theorem should precede any strict ordered-semiring
 -typeclass. It is the actual mathematical kernel; the typeclass is only its
 -later packaging.
 +The representative theorem now precedes every strict ordered-semiring
 +typeclass. It is the mathematical kernel; a typeclass will only package its
 +later quotient consequences.
- 
+
  ## Arithmetic Interpretation
- 
+
 ````
 `````

@@ -10,19 +10,19 @@ gch: 7ade82d8dd61004dabeb811501f266127a49ef79
 
 実装内容:
 
-- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean:127)
+- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Trig.lean#L127)
   - `KernelFamily.act_add`
   - `KernelFamily.C_add_self`
   - `KernelFamily.S_add_self`
   - AddGroup 層: `kernel_add_neg`, `C_neg`, `S_neg`, `C_sub`, `S_sub`
-- [Real.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean:1)
+- [Real.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/Real.lean#L1)
   - `realTrigKernelFamily : KernelFamily ℝ ℝ`
   - `realTrigKernelFamily_C`
   - `realTrigKernelFamily_S`
   - usual `Real.cos` / `Real.sin` はこの bridge 層だけで使用
-- [CF2D.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D.lean:9)
+- [CF2D.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D.lean#L9)
   - `CF2D.Real` を集約 import に追加
-- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md:1)
+- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md#L1)
   - 作用則、倍角、負角、減法公式、Real bridge を追記
 
 確認:

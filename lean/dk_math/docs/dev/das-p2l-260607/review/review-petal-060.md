@@ -352,7 +352,7 @@ index 1b3513ce..74921cfa 100644
 @@ -1850,6 +1850,18 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
  This is a label-recovery wrapper, not a theorem that a value map automatically
  constructs prime channels.
- 
+
 +The `f = id` toy case is also implemented:
 +
 +```text
@@ -366,7 +366,7 @@ index 1b3513ce..74921cfa 100644
 +values into prime-channel labels.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 92919635..591a0f61 100644
@@ -375,7 +375,7 @@ index 92919635..591a0f61 100644
 @@ -376,6 +376,26 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_map_injective
      (petalCarrierLabelCompatibleOn_outer_of_value_map_injective
        I n lap mOf qOf f hq hf)
- 
+
 +/--
 +Toy outer-address route where the selected label is the selected value itself.
 +
@@ -402,7 +402,7 @@ index 92919635..591a0f61 100644
 @@ -842,6 +862,60 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injectiv
        I n lap mOf qOf f hm hminj hq hf)
      hcarrier
- 
+
 +/--
 +Toy `qOf = mOf` form of the outer-address GN multiplicity-budget route.
 +
@@ -459,11 +459,11 @@ index 92919635..591a0f61 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -1052,6 +1126,35 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_in
        I n lap mOf qOf f hm hminj hq hf)
      hcarrier
- 
+
 +/--
 +Toy `qOf = mOf` form of the outer-address no-lift GN log-capacity route.
 +
@@ -503,7 +503,7 @@ index 0254baec..4b4f1fce 100644
 @@ -639,5 +639,18 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_map_injective
  This wrapper deliberately keeps prime-channel construction separate.  The map
  form supplies only the noncollision/recovery layer.
- 
+
 +The first toy case `f = id` is now fixed:
 +
 +```text
@@ -526,7 +526,7 @@ index c9192284..343297cc 100644
 @@ -793,6 +793,19 @@ This does not claim that `f` constructs prime channels.  It only supplies the
  label-recovery/noncollision part once the prime-channel hypotheses are already
  available.
- 
+
 +The identity map sanity check is implemented separately:
 +
 +```text
@@ -541,7 +541,7 @@ index c9192284..343297cc 100644
 +noncollision machinery composes correctly.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

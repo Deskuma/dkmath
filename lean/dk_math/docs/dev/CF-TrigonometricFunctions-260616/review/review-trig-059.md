@@ -228,7 +228,7 @@ index 08edc968..eb095e80 100644
 @@ -695,6 +695,69 @@ theorem semanticKernelFiniteOrder_iff
              simpa [semanticOrbit] using semanticKernelPower_act r n z
        _ = id z := congrFun h z
- 
+
 +/-- The first real-side kernel power is the transported kernel itself. -/
 +@[simp]
 +theorem semanticKernelPower_one (r : UnitKernel DkNNRealQ) :
@@ -321,12 +321,12 @@ index 20ca5135..56944edf 100644
 +semanticKernelFiniteOrder_two_iff_identity
 +semanticKernelFiniteOrder_two_iff_core_eq_one
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -165,6 +170,14 @@ This closes the bridge between kernel product order and finite action order
  without defining multiplication, subtraction, or inverses in the nonnegative
  source.
- 
+
 +The first low-order classification is also complete. Product order dividing
 +one is equivalent to semantic identity and to semantic core coordinate one.
 +For transported first-quadrant kernels the same is true of product order
@@ -345,7 +345,7 @@ index 187f615a..ef41a406 100644
 @@ -212,6 +212,26 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 04:42 JST (Low-order classification: orders one and two)
 +
 +1. 修正:
@@ -367,7 +367,7 @@ index 187f615a..ef41a406 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 04:09 JST (Minimal periods and finite-order divisibility)
- 
+
  1. 注意点:
 @@ -384,7 +404,9 @@ Archive
  3. 結論:

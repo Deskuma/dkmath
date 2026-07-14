@@ -214,7 +214,7 @@ index 0eff8594..08edc968 100644
 @@ -615,6 +615,86 @@ theorem semanticFixed_iff_eq_zero_of_not_identity
    exact ⟨eq_zero_of_semanticFixed_of_core_ne_one hcore,
      fun hz => hz ▸ semanticFixed_zero r⟩
- 
+
 +/--
 +The `n`-fold product of a transported kernel, formed entirely in the real
 +unit-kernel monoid.
@@ -325,12 +325,12 @@ index bd0b3cd5..20ca5135 100644
 +SemanticKernelFiniteOrder
 +semanticKernelFiniteOrder_iff
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -143,9 +148,26 @@ nonidentity transported kernel fixes exactly the origin. The proof uses only
  the Pythagorean kernel identity and the determinant of the fixed-point linear
  system.
- 
+
 +Finite-order classification now has an algebraic real-side formulation.
 +`semanticKernelPower r n` is the repeated product of the transported unit
 +kernel, formed only in `UnitKernel Real`. Its action is exactly the `n`th

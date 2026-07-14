@@ -6,7 +6,7 @@ gch: b8e67a92aece4155e14f88291032841e2cc4727a
 
 ## Report
 
-実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean:60) のみです。
+実装しました。更新は [Counting.lean](/lean/dk_math/DkMath/Petal/Counting.lean#L60) のみです。
 
 追加した中核はこの3つです。
 

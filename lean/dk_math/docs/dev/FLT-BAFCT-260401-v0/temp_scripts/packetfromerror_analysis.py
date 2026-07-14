@@ -144,14 +144,13 @@ print("\n" + "=" * 60)
 print("Peel effect on GN: Taylor expansion")
 print("=" * 60)
 
-print(
-    """
+print("""
 gap = p^{2p-1} * t1^p = p^p * gap'  where gap' = p^{p-1} * t1^p
 
 GN(p, gap, y) = Σ C(p,k+1) * gap^k * y^{p-1-k}
              = Σ C(p,k+1) * (p^p * gap')^k * y^{p-1-k}
              = Σ C(p,k+1) * p^{pk} * (gap')^k * y^{p-1-k}
-             
+
 GN(p, gap', y) = Σ C(p,k+1) * (gap')^k * y^{p-1-k}
 
 So: GN(p, gap, y) = Σ p^{pk} * [C(p,k+1) * (gap')^k * y^{p-1-k}]
@@ -161,7 +160,7 @@ Each term has a different power of p.
 
 More carefully:
 k=0: C(p,1) * y^{p-1} = p * y^{p-1}          -- p^0 factor
-k=1: C(p,2) * p^p * gap' * y^{p-2}           -- p^p factor  
+k=1: C(p,2) * p^p * gap' * y^{p-2}           -- p^p factor
 k=2: C(p,3) * p^{2p} * (gap')^2 * y^{p-3}   -- p^{2p} factor
 ...
 k=p-1: C(p,p) * p^{p(p-1)} * (gap')^{p-1}    -- p^{p(p-1)} factor
@@ -169,7 +168,7 @@ k=p-1: C(p,p) * p^{p(p-1)} * (gap')^{p-1}    -- p^{p(p-1)} factor
 For large p and gap' >> 1, the dominant term is k=p-1:
   GN ≈ p^{p(p-1)} * (gap')^{p-1}
 
-So: GN(p, gap, y) ≈ p^{p(p-1)} * GN(p, gap', y) 
+So: GN(p, gap, y) ≈ p^{p(p-1)} * GN(p, gap', y)
     ONLY if the BIG terms dominate (gap' >> y).
 
 But the key relationship is:
@@ -181,12 +180,11 @@ These are INDEPENDENT Cosmic identities. The peel doesn't directly transfer.
 THE ERROR TERM:
   x^p = gap * GN = p^p * gap' * GN(p, p^p * gap', y)
   x'^p := gap' * GN(p, gap', y)
-  
+
   x^p / x'^p = p^p * GN(p, p^p*gap', y) / GN(p, gap', y)
-  
+
   This ratio ≠ p^{pp} in general.
-"""
-)
+""")
 
 # Let's understand the error term E in the PacketFromError definition:
 # p * B = C + (p^{p-1} * t1^p) * E
@@ -310,8 +308,7 @@ print("\n" + "=" * 60)
 print("PEEL DESCENT: The actual mathematical content")
 print("=" * 60)
 
-print(
-    """
+print("""
 PacketFromError の数学:
 
 Original: x^p + y^p = z^p with t = p*t1 (p|t)
@@ -340,34 +337,34 @@ Note: gap' * GN(p, gap', y) = (gap'+y)^p - y^p = z'^p - y^p
 For this to be x'^p: z'^p = x'^p + y^p
 Which is... ANOTHER FLT EQUATION!
 
-So the peel descent also reduces to showing that 
+So the peel descent also reduces to showing that
 z'^p - y^p is a perfect p-th power.
 
 The ERROR TERM is about:
   z'^p - y^p = gap' * GN(p, gap', y)
   We need this = (x')^p for some x'.
-  
+
   From the original: gap * GN(p, gap, y) = x^p
   x^p = p^p * gap' * GN(p, gap, y)
-  
+
   If GN(p, gap, y) = p^{p(p-1)} * GN(p, gap', y) + ERROR:
   Then z'^p - y^p = gap' * GN(p, gap', y)
                   = gap' * (GN(p, gap, y) - ERROR) / p^{p(p-1)}
                   ... this doesn't simplify nicely.
 
-ALTERNATIVE VIEW: 
+ALTERNATIVE VIEW:
   The peel is fundamentally about p-adic structure.
   With t = p*t1:
     v_p(x) = v_p(p^2 * t1 * s) = 2 + v_p(t1)  (since p∤s)
-    v_p(gap) = 2p-1 + p*v_p(t1)  
+    v_p(gap) = 2p-1 + p*v_p(t1)
     v_p(z) = v_p(gap + y). If gcd(y, p) = 1: v_p(z) = 0 (since gap ≡ 0 mod p but y ≢ 0)
     Wait: z = gap + y, gap ≡ 0 mod p, y ≢ 0 mod p → z ≡ y ≢ 0 mod p → v_p(z) = 0
-    
+
     z^p = x^p + y^p
     v_p(z^p) = 0 (since v_p(z) = 0)
     v_p(x^p) = p * v_p(x) ≥ 2p ≥ 10
     v_p(y^p) = 0
-    
+
     z^p = x^p + y^p → 0 = v_p(z^p) = v_p(x^p + y^p)
     x^p ≡ 0 mod p^{2p}, y^p ≢ 0 mod p
     → z^p ≡ y^p mod p → z ≡ y mod p (by Fermat? No, that's not right for p-th powers)
@@ -377,9 +374,9 @@ ALTERNATIVE VIEW:
 
   The peel operation: reduce v_p(t) by 1.
   If t = p*t1: remove one factor of p from t.
-  gap' = p^{p-1} * t1^p 
+  gap' = p^{p-1} * t1^p
   v_p(gap') = p-1 + p*v_p(t1)
-  
+
   z' = gap' + y
   v_p(z') = 0 (same argument: gap' ≡ 0 mod p, y ≢ 0)
 
@@ -399,35 +396,33 @@ Both reduce to: (x')^p + y^p = z'^p for some x' < x, z' < z.
 
 IN BOTH CASES, the mathematical difficulty is the same:
 showing that a "reduced" FLT-like expression remains a perfect p-th power.
-"""
-)
+""")
 
 print("=" * 60)
 print("UNIFIED VIEW: Both open kernels are descent existence problems")
 print("=" * 60)
 
-print(
-    """
+print("""
 Open Kernel 1: GNReducedGap
   ∃ z', z'^p = (x/q)^p + y^p   (q: primitive prime, q ∤ gap)
 
-Open Kernel 2: PacketFromError  
+Open Kernel 2: PacketFromError
   ∃ z', z'^p = gap'/p^{p-1} * GN(p, gap', y) + y^p  where gap' = gap/p^p
-  
+
   But gap' * GN(p, gap', y) = z'^p - y^p, and if this = (x')^p:
   z'^p = (x')^p + y^p
 
   What is x'? x' = (gap' * GN(p, gap', y))^{1/p}
   In the original: x = (gap * GN)^{1/p} = (p * gap' * p^{p-1} * ... hm)
-  
+
   Actually let's be precise:
   gap * GN(p, gap, y) = x^p
   gap = p^{2p-1} * t1^p (since t = p*t1)
   x = p^2 * t1 * s
-  
+
   gap' = p^{p-1} * t1^p
   x' should satisfy: gap' * GN(p, gap', y) = x'^p
-  
+
   This x' is NOT simply x/p. It's determined by the new Cosmic identity.
 
 UNIFIED MATHEMATICAL STRUCTURE:
@@ -438,16 +433,15 @@ UNIFIED MATHEMATICAL STRUCTURE:
 
   This is INFINITE DESCENT on the Fermat equation.
   The classical obstruction is the class number of Q(ζ_p).
-  
+
   For regular primes (p ∤ h(Q(ζ_p))): descent works → FLT(p) proven (Kummer 1850)
   For irregular primes: more work needed (Vandiver, Iwasawa, ... Wiles)
 
 IMPLICATION FOR OUR CODEBASE:
   The 2 open kernels are REALLY just 1 kernel in 2 flavors:
   "descent existence" — proving that the reduced equation has a solution.
-  
+
   If we can prove descent for ONE flavor, the other likely follows by similar methods.
   The q-adic (primitive) version has more algebraic structure (via ω and Hensel),
   so it's the better attack point.
-"""
-)
+""")

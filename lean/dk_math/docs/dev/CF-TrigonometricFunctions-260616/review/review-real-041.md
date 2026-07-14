@@ -438,7 +438,7 @@ index 261cd270..0e37124b 100644
 @@ -51,8 +51,11 @@ equivalent both to finite left separation and to a positive lower endpoint of
  the canonical Gap at some stage. This keeps the design in the same
  `Big = (Core + Beam) + Gap` pattern.
- 
+
 -[TODO: strict-arithmetic] Prove preservation by addition and by multiplication
 -with a strictly positive factor before selecting a strict-order typeclass.
 +Strict order has now descended to the quotient, and addition preserves it by
@@ -446,7 +446,7 @@ index 261cd270..0e37124b 100644
 +
 +[TODO: strict-multiplication] Prove preservation by multiplication with a
 +strictly positive factor before selecting a strict-order typeclass.
- 
+
  [TODO: linear-order] Decide whether the now-proved quotient totality should be
  packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -456,7 +456,7 @@ index d5bef04d..fdbc4857 100644
 @@ -87,8 +87,10 @@ The representative and wrapper theorems below prove that
  `CanonicalOrder` then identifies the same witness with a positive lower
  endpoint of `gapOfLe`.
- 
+
 -[TODO: strict/arithmetic] Derive strict addition from preservation of the
 -finite Gap. For multiplication, require a strictly positive factor and isolate
 +Strict addition is proved below by moving to a later stage where the added
@@ -465,11 +465,11 @@ index d5bef04d..fdbc4857 100644
 +[TODO: strict-multiplication] Require a strictly positive factor and isolate
  the zero-factor branch before considering `IsStrictOrderedRing`.
  -/
- 
+
 @@ -318,7 +320,11 @@ theorem not_le_of_leftSeparatedAt
      exact hdiff.trans (le_max_right _ _)
    exact (heventually_lt.and heventually_ge).exists.elim fun _ h => (not_lt_of_ge h.2) h.1
- 
+
 -/-- A finite right separation excludes the forward asymptotic order. -/
 +/--
 +A finite right separation excludes the forward asymptotic order.
@@ -482,7 +482,7 @@ index d5bef04d..fdbc4857 100644
 @@ -553,6 +559,36 @@ theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
      Lt x y ↔ ∃ n, DkReal.LeftSeparatedAt x.val y.val n :=
    DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
- 
+
 +/--
 +Adding a fixed nonnegative approximation preserves wrapper strictness.
 +
@@ -514,12 +514,12 @@ index d5bef04d..fdbc4857 100644
 +  linarith
 +
  end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
 @@ -606,6 +642,33 @@ theorem le_total (x y : DkNNRealQ) : x ≤ y ∨ y ≤ x := by
  instance : Std.Total (α := DkNNRealQ) (· ≤ ·) where
    total := le_total
- 
+
 +/--
 +Strict quotient order is the asymmetric part of the non-strict order.
 +
@@ -553,7 +553,7 @@ index d5bef04d..fdbc4857 100644
 @@ -638,6 +701,25 @@ theorem add_le_add_right
      z + x ≤ z + y :=
    add_le_add (le_refl z) hxy
- 
+
 +/--
 +Addition by a fixed right summand preserves strict quotient order.
 +
@@ -590,24 +590,24 @@ index 0a73f399..535a5552 100644
 +[done] strict addition at a sufficiently precise later stage
  [next] positive-factor strict multiplication
  ```
- 
+
 @@ -80,12 +80,16 @@ later quotient consequences.
- 
+
  ## Arithmetic Interpretation
- 
+
 -Addition preserves the strict Gap:
 +Addition preserves the strict Gap after refinement:
- 
+
  ```text
  (x + a) + z = (y + a).
  ```
- 
+
 +At a fixed stage the interval width of `a` can hide the observed separation.
 +The proof therefore fixes a positive separation `epsilon` and advances until
 +`width(a) < epsilon`; strict separation is then visible again.
 +
  Multiplication transforms it:
- 
+
  ```text
 ````
 `````

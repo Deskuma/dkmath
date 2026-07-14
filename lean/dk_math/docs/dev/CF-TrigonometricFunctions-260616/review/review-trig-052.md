@@ -209,7 +209,7 @@ index 493bc80f..897213b2 100644
 -square-mass level set.
 +square-mass level set. Real-side conjugation supplies inverse actions, so
 +these maps are bijections of the plane and of each level set.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -219,7 +219,7 @@ index 1254f04c..89469f80 100644
 @@ -186,6 +186,77 @@ theorem semanticActLevel_comp
    apply Subtype.ext
    exact semanticAct_comp r s z.1
- 
+
 +/--
 +Real-side inverse kernel of an interpreted nonnegative DkMath kernel.
 +
@@ -321,12 +321,12 @@ index f35fccde..e020c8d7 100644
 +semanticInverseActLevel
 +semanticActLevel_bijective
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -85,8 +90,13 @@ Two transported actions compose through the product of their real unit
  kernels, and every real `q2` level set is stable under the transported action.
  No source-level kernel product is asserted.
- 
+
 +Real-side conjugation supplies an inverse kernel. Consequently each
 +transported action is a bijection of the real CF2D plane and restricts to a
 +bijection of every `q2` level set. The inverse generally leaves the first
@@ -345,7 +345,7 @@ index 1e6c4ec8..6101a0ef 100644
 @@ -212,6 +212,26 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 00:59 JST (Inverse kernels and level-set automorphisms)
 +
 +1. 方針:
@@ -367,7 +367,7 @@ index 1e6c4ec8..6101a0ef 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 00:49 JST (Real-side composition and level-set action)
- 
+
  1. 方針:
 ````
 `````

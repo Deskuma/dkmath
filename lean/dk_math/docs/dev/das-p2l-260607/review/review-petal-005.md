@@ -6,7 +6,7 @@ gch: 80424d0e3ad250c842aa899793cc9851ee7349b3
 
 ## Report
 
-実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean:336) のみです。
+実装しました。更新は [Address.lean](/lean/dk_math/DkMath/Petal/Address.lean#L336) のみです。
 
 追加内容は次の3本です。
 

@@ -8,12 +8,12 @@ gch: f92c977b46aed70910c6bdeca89c781634c4ac19
 
 非負 DkReal の加法・乗法を実装しました。
 
-- [Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean:24)
+- [Arithmetic.lean](/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean#L24)
   - 一般加法 `add`
   - 非負乗法 `mulNonneg`
   - 非負性保存
   - 有理数埋め込み、零、一の簡約定理
-- [Interval.lean](/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean:68)
+- [Interval.lean](/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean#L68)
   - 区間加法・非負乗法
   - 加法幅公式
   - 乗法幅公式 `bd - ac = b(d-c) + c(b-a)`
@@ -332,9 +332,9 @@ index da9581f0..081b7eb7 100644
  import DkMath.Analysis.DkReal.Pow
  import DkMath.Analysis.DkReal.PowBound
 +import DkMath.Analysis.DkReal.Arithmetic
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Arithmetic.lean
 new file mode 100644
 index 00000000..8f6d8d8f
@@ -589,7 +589,7 @@ index 307fe995..5e51ba15 100644
 @@ -65,6 +65,74 @@ theorem width_nonneg (I : GapInterval) : 0 ≤ I.width :=
  theorem lo_add_width (I : GapInterval) : I.lo + I.width = I.hi := by
    simp [width]
- 
+
 +/-!
 +## Interval arithmetic
 +
@@ -660,7 +660,7 @@ index 307fe995..5e51ba15 100644
 +
  /--
  Image of a nonnegative rational interval under the natural power map.
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 index b75109f2..a40cd97a 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
@@ -668,7 +668,7 @@ index b75109f2..a40cd97a 100644
 @@ -53,6 +53,9 @@ DkMath.Analysis.DkReal.Pow
  DkMath.Analysis.DkReal.PowBound
    finite-sum gapGN bounds and the completed nonnegative power map
- 
+
 +DkMath.Analysis.DkReal.Arithmetic
 +  computable interval addition and nonnegative multiplication
 +
@@ -682,7 +682,7 @@ index 82a0e33b..3030bf6f 100644
 @@ -133,7 +133,9 @@ provides precisely the finite correction factor needed to transport vanishing
  width. Real analysis appears later as an interpretation of this construction,
  not as a prerequisite for defining it.
- 
+
 -The next natural tests of the same principle are nonnegative addition and
 -multiplication. They will determine how much of an ordered semiring structure
 -can be built entirely inside the rational-interval layer before introducing a

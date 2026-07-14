@@ -386,17 +386,16 @@ print("\n" + "=" * 60)
 print("WHAT THIS MEANS")
 print("=" * 60)
 
-print(
-    """
-The CRT determination of t^p from the Hensel congruences is a 
+print("""
+The CRT determination of t^p from the Hensel congruences is a
 NECESSARY condition for a counterexample.
 
-If for a given s (primitive prime factorization), NO valid (y, j_1,...,j_k) 
+If for a given s (primitive prime factorization), NO valid (y, j_1,...,j_k)
 gives a perfect p-th power for t^p, then that s CANNOT appear in a counterexample.
 
 THIS IS A COMPUTATIONALLY VERIFIABLE OBSTRUCTION.
 
-For a proof: we need to show that for ALL possible s and ALL choices of 
+For a proof: we need to show that for ALL possible s and ALL choices of
 (y, j_1,...,j_k), the CRT value is NEVER a perfect p-th power.
 
 This seems possible if the CRT value is "generically" not a p-th power.
@@ -410,7 +409,6 @@ POSSIBLE THEORETICAL ARGUMENT:
 
   The condition "F is a perfect p-th power" imposes a polynomial relation
   on y, t, and the R_j parameters. This is an algebraic variety.
-  If the variety is 0-dimensional (finitely many solutions), 
+  If the variety is 0-dimensional (finitely many solutions),
   we could potentially enumerate and exclude all cases.
-"""
-)
+""")

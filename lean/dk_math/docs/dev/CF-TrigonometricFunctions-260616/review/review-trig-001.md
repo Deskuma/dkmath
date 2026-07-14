@@ -887,14 +887,14 @@ index 00000000..85e85f13
 +
 +実装しました。
 +
-+追加した入口は [Rotation.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation.lean:7) です。Lean では `2D` が通常識別子ではないため、import/module 名は `DkMath.CosmicFormula.Rotation.«2D»` として扱っています。物理パスは指定どおり `DkMath/CosmicFormula/Rotation/2D/...` です。
++追加した入口は [Rotation.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation.lean#L7) です。Lean では `2D` が通常識別子ではないため、import/module 名は `DkMath.CosmicFormula.Rotation.«2D»` として扱っています。物理パスは指定どおり `DkMath/CosmicFormula/Rotation/2D/...` です。
 +
 +主な中身:
 +
-+- [Basic.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Basic.lean:32): `Vec`, `q2`, `star`, `Vec.q2_star`, `UnitKernel`, `LevelSet`
-+- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Trig.lean:35): 抽象的な `KernelFamily` から `C^2 + S^2 = 1`, `C_add`, `S_add`
-+- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md:1): 英語の実装結果ドキュメント
-+- [CosmicFormula.lean](/lean/dk_math/DkMath/CosmicFormula.lean:17): `DkMath.CosmicFormula.Rotation` を集約 import に追加
++- [Basic.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Basic.lean#L32): `Vec`, `q2`, `star`, `Vec.q2_star`, `UnitKernel`, `LevelSet`
++- [Trig.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/2D/Trig.lean#L35): 抽象的な `KernelFamily` から `C^2 + S^2 = 1`, `C_add`, `S_add`
++- [Rotation2D-Implementation.md](/lean/dk_math/DkMath/CosmicFormula/Rotation/docs/Rotation2D-Implementation.md#L1): 英語の実装結果ドキュメント
++- [CosmicFormula.lean](/lean/dk_math/DkMath/CosmicFormula.lean#L17): `DkMath.CosmicFormula.Rotation` を集約 import に追加
 +
 +確認:
 +

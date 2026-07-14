@@ -237,7 +237,7 @@ index 5a311213..637fc790 100644
 @@ -971,6 +971,89 @@ theorem semanticKernelFiniteOrder_four_iff_core_eq_one_or_zero
        | mk core beam =>
            simp_all [UnitKernel.one, Vec.one]
- 
+
 +/--
 +Semantic core zero determines semantic beam one for a transported unit
 +kernel in the first quadrant.
@@ -352,7 +352,7 @@ index a5b20a82..3765f183 100644
 +SemanticExactKernelOrderFour
 +semanticExactKernelOrderFour_iff_core_eq_zero
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -230,8 +237,16 @@ C = 1 or C = 0
  The `C = 1` branch is identity. In the `C = 0` branch, the unit equation and
@@ -370,7 +370,7 @@ index a5b20a82..3765f183 100644
 +intermediate real-side powers need not remain in the transported first
 +quadrant, which is why kernel multiplication remains confined to the real
 +side.
- 
+
  The next structural boundary is source-level `Vec.star` and `KernelFamily`.
  Both require signed arithmetic. They should wait for a signed DkReal layer
 diff --git a/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md b/lean/dk_math/docs/dev/CF-TrigonometricFunctions-260616/History.md
@@ -380,7 +380,7 @@ index c450a40c..d6da45c5 100644
 @@ -212,6 +212,25 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 05:27 JST (Exact order four)
 +
 +1. 実施:
@@ -401,7 +401,7 @@ index c450a40c..d6da45c5 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 05:15 JST (Order dividing four classification)
- 
+
  1. 実施:
 ````
 `````

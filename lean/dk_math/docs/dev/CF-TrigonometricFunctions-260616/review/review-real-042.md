@@ -446,20 +446,20 @@ index 0e37124b..f4e2d929 100644
 @@ -51,11 +51,14 @@ equivalent both to finite left separation and to a positive lower endpoint of
  the canonical Gap at some stage. This keeps the design in the same
  `Big = (Core + Beam) + Gap` pattern.
- 
+
 -Strict order has now descended to the quotient, and addition preserves it by
 -moving to a sufficiently precise stage.
 +Strict order has now descended to the quotient. Addition preserves it by
 +moving to a sufficiently precise stage. Multiplication preserves it for a
 +strictly positive factor by transforming the canonical Gap from `z` to
 +`z * a`; the zero-factor branch collapses that Gap.
- 
+
 -[TODO: strict-multiplication] Prove preservation by multiplication with a
 -strictly positive factor before selecting a strict-order typeclass.
 +[TODO: strict-order-instance] Select the appropriate Mathlib strict ordered
 +semiring interface only after checking that its fields match this API without
 +adding stronger or classical structure accidentally.
- 
+
  [TODO: linear-order] Decide whether the now-proved quotient totality should be
  packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean b/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean
@@ -469,7 +469,7 @@ index 1fc4a1cf..1b977471 100644
 @@ -293,6 +293,40 @@ theorem le_iff_exists_add
      x ≤ y ↔ ∃ z : DkNNRealQ, y = x + z :=
    ⟨exists_add_of_le, le_of_exists_add⟩
- 
+
 +/--
 +Multiplication by a strictly positive right factor preserves strict order.
 +
@@ -513,24 +513,24 @@ index fdbc4857..1dc4ab5f 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 @@ -88,10 +88,12 @@ The representative and wrapper theorems below prove that
  endpoint of `gapOfLe`.
- 
+
  Strict addition is proved below by moving to a later stage where the added
 -interval width is smaller than the finite Gap.
 +interval width is smaller than the finite Gap. Strict positivity of products
 +is proved by aligning two positive lower-endpoint observations.
- 
+
 -[TODO: strict-multiplication] Require a strictly positive factor and isolate
 -the zero-factor branch before considering `IsStrictOrderedRing`.
 +`CanonicalOrder` uses these kernels to prove strict multiplication by a
 +positive factor. The zero-factor branch remains non-strict because it
 +collapses every transformed Gap.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -559,6 +561,39 @@ theorem lt_iff_exists_leftSeparatedAt (x y : DkNNReal) :
      Lt x y ↔ ∃ n, DkReal.LeftSeparatedAt x.val y.val n :=
    DkReal.le_and_not_le_iff_exists_leftSeparatedAt x.val y.val
- 
+
 +/--
 +A nonnegative wrapper is strictly positive exactly when a finite lower
 +endpoint is positive.
@@ -566,11 +566,11 @@ index fdbc4857..1dc4ab5f 100644
 +
  /--
  Adding a fixed nonnegative approximation preserves wrapper strictness.
- 
+
 @@ -679,6 +714,14 @@ theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
  theorem zero_le_one : (0 : DkNNRealQ) ≤ 1 :=
    zero_le 1
- 
+
 +/-- The product of two strictly positive quotient values is strictly positive. -/
 +theorem zero_lt_mul
 +    {x y : DkNNRealQ} (hx : 0 < x) (hy : 0 < y) :
@@ -597,11 +597,11 @@ index 535a5552..36c9b75d 100644
 +[next] strict ordered-semiring interface selection
 +[next] direct LinearOrder decision
  ```
- 
+
  The representative theorem now precedes every strict ordered-semiring
 @@ -98,8 +102,10 @@ y * a = x * a + z * a.
  ```
- 
+
  If `a = 0`, the transformed Gap collapses. If `0 < a`, positivity of the Gap
 -should persist. This is the exact branch distinction required before
 -`IsStrictOrderedRing` can be considered.
@@ -609,8 +609,8 @@ index 535a5552..36c9b75d 100644
 +later stage, so the lower endpoint of `z * a` is positive. This is the exact
 +branch distinction required before a strict ordered-semiring interface can be
 +considered.
- 
+
  ## Boundary
- 
+
 ````
 `````

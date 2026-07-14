@@ -411,20 +411,20 @@ index 53593a09..21ea0a94 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal.lean
 @@ -31,15 +31,26 @@ All endpoint operations in this import tree remain computable. No represented
  limit in Mathlib's `Real` or `NNReal` is selected here.
- 
+
  `DkReal.Order` defines a quotient-compatible asymptotic order and installs a
 -`PartialOrder` on `DkNNRealQ`.
 +`PartialOrder` and Mathlib's semiring-level `IsOrderedRing` predicate on
 +`DkNNRealQ`. Addition, nonnegative multiplication, and natural powers are
 +monotone, and zero is least.
- 
+
 -[TODO] Prove additive and multiplicative monotonicity, then determine whether
 -the quotient order is total before installing ordered-semiring typeclasses.
 +[TODO: totality] Prove totality internally from nested-interval geometry:
 +eventual strict left separation, eventual strict right separation, or
 +persistent overlap. The first two branches give one order direction; the
 +overlap branch gives `Equiv`.
- 
+
 -[TODO] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
 +[TODO: linear-order] Install no `LinearOrder` or linear ordered semiring API
 +until representative totality has been proved and lifted through the quotient.
@@ -436,7 +436,7 @@ index 53593a09..21ea0a94 100644
 +[TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
  chosen evaluation is independent of representatives. Such evaluation may
  legitimately be `noncomputable`.
- 
+
 -[TODO] General signed multiplication requires the minimum and maximum of four
 +[TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
@@ -448,7 +448,7 @@ index 2ed47280..76c7c0e8 100644
 @@ -56,14 +56,25 @@ theorem succ_hi_le_hi (x : DkReal) (n : ℕ) :
      (x.interval (n + 1)).hi ≤ (x.interval n).hi :=
    (x.nested n).2
- 
+
 -/-- Lower endpoints are monotone across arbitrary approximation stages. -/
 +/--
 +Lower endpoints are monotone across arbitrary approximation stages.
@@ -461,7 +461,7 @@ index 2ed47280..76c7c0e8 100644
    induction m, h using Nat.le_induction with
    | base => exact le_rfl
    | succ m hnm ih => exact ih.trans (x.lo_le_succ_lo m)
- 
+
 -/-- Upper endpoints are antitone across arbitrary approximation stages. -/
 +/--
 +Upper endpoints are antitone across arbitrary approximation stages.
@@ -480,7 +480,7 @@ index 56c609ee..da7a036b 100644
 @@ -31,9 +31,13 @@ order, and zero is the least quotient value. `DkReal.Order` packages these
  facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
  strict, and linear order structures remain unclaimed.
- 
+
 -[TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
 +[TODO: totality] Prefer an internal proof through persistent interval
 +separation/overlap before importing a semantic linear order.
@@ -491,7 +491,7 @@ index 56c609ee..da7a036b 100644
 +natural powers, and order. It should also provide an independent validation
 +of any future internal totality theorem.
  -/
- 
+
  namespace DkMath.Analysis
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean b/lean/dk_math/DkMath/Analysis/DkReal/Equiv.lean
 index 050c65f7..1af266fd 100644
@@ -500,14 +500,14 @@ index 050c65f7..1af266fd 100644
 @@ -26,9 +26,13 @@ The transitivity proof is a vanishing-width version of the triangle inequality:
  Consequently, shrinking uncertainty converts interval separation into an
  extensional equivalence relation on representations.
- 
+
 -[TODO] Compare this relation with persistent interval intersection.
 +[TODO: totality/overlap] Prove that `Equiv x y` is equivalent to stagewise
 +overlap of the two nested interval sequences. The forward direction should use
 +monotonicity of interval separation under refinement: once a positive
 +separation appears, nestedness prevents it from returning to zero. The reverse
 +direction is immediate because every stage separation is zero.
- 
+
 -[TODO] For a future semantic evaluation `eval`, prove
 +[TODO: semantic-bridge] For a future semantic evaluation `eval`, prove
  `Equiv x y → eval x = eval y` and, when justified by the representation
@@ -530,7 +530,7 @@ index 22d278d3..0f4dff4c 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
 @@ -19,6 +19,12 @@ needed at this layer.
- 
+
  The interval is closed and ordered. This validity invariant is essential for
  the separation estimates used by representation equivalence.
 +
@@ -540,10 +540,10 @@ index 22d278d3..0f4dff4c 100644
 +This finite geometry is the proposed basis for proving totality without
 +selecting a Mathlib real limit.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -141,7 +147,14 @@ theorem mulNonneg_width_eq
- 
+
  The separation is zero when the intervals overlap. Otherwise it is the
  positive rational gap between the interval lying on the left and the interval
 -lying on the right.
@@ -556,7 +556,7 @@ index 22d278d3..0f4dff4c 100644
 +* strict left separation and strict right separation are mutually exclusive;
 +* shrinking both intervals cannot decrease a positive separation.
  -/
- 
+
  /-- Nonnegative separation between two closed rational intervals. -/
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 index 977da526..4637bed7 100644
@@ -565,7 +565,7 @@ index 977da526..4637bed7 100644
 @@ -23,8 +23,46 @@ lower-endpoint distance and therefore implies `DkReal.Equiv`.
  The relation is invariant under `Equiv` in both arguments, so it descends to a
  partial order on `DkNNRealQ`.
- 
+
 -[TODO] Prove totality, or identify the additional representation theorem needed
 -to derive it.
 +## Cosmic comparison geometry
@@ -608,13 +608,13 @@ index 977da526..4637bed7 100644
 +
 +[TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
 +cross-check, not as a dependency of the computable order core.
- 
+
  Addition, multiplication on nonnegative representations, and natural powers
  are monotone for this order, and zero is the least quotient value. The
 @@ -35,7 +73,21 @@ strict-order, or linear-order structure is claimed.
- 
+
  namespace DkMath.Analysis.DkReal
- 
+
 -/-- Positive lower-endpoint order defect at approximation stage `n`. -/
 +/-!
 +## I. Directed Core defect
@@ -636,7 +636,7 @@ index 977da526..4637bed7 100644
    max 0 ((x.interval n).lo - (y.interval n).lo)
 @@ -44,18 +96,31 @@ def orderDefect
  Asymptotic order on interval representations.
- 
+
  `Le x y` states that any positive excess of the lower endpoint of `x` over
 -that of `y` vanishes with increasing precision.
 +that of `y` vanishes with increasing precision. It does not select a real
@@ -644,7 +644,7 @@ index 977da526..4637bed7 100644
  -/
  def Le (x y : DkMath.Analysis.DkReal) : Prop :=
    Filter.Tendsto (orderDefect x y) Filter.atTop (nhds 0)
- 
+
 +/-!
 +## II. Preorder and extensional equality
 +
@@ -657,7 +657,7 @@ index 977da526..4637bed7 100644
    unfold Le orderDefect
    simp only [sub_self, max_self]
    exact tendsto_const_nhds
- 
+
 -/-- Representation equivalence implies asymptotic order. -/
 +/--
 +Representation equivalence implies asymptotic order.
@@ -671,7 +671,7 @@ index 977da526..4637bed7 100644
 @@ -63,7 +128,12 @@ theorem equiv_le
    simpa only [Le, orderDefect, max_comm] using
      hlo.max tendsto_const_nhds
- 
+
 -/-- Asymptotic order is transitive. -/
 +/--
 +Asymptotic order is transitive.
@@ -685,7 +685,7 @@ index 977da526..4637bed7 100644
 @@ -89,7 +159,13 @@ theorem le_trans
        · exact add_nonneg (le_max_left _ _) (le_max_left _ _)
        · linarith)
- 
+
 -/-- Mutual asymptotic order implies representation equivalence. -/
 +/--
 +Mutual asymptotic order implies representation equivalence.
@@ -700,7 +700,7 @@ index 977da526..4637bed7 100644
 @@ -153,6 +229,14 @@ theorem zero_le
    rw [hzero]
    exact tendsto_const_nhds
- 
+
 +/-!
 +## III. Ordered arithmetic
 +
@@ -711,11 +711,11 @@ index 977da526..4637bed7 100644
 +
  /--
  Stagewise addition is monotone for asymptotic order.
- 
+
 @@ -244,6 +328,13 @@ end DkMath.Analysis.DkReal
- 
+
  namespace DkMath.Analysis.DkNNReal
- 
+
 +/-!
 +## IV. Nonnegative wrapper order
 +
@@ -727,9 +727,9 @@ index 977da526..4637bed7 100644
  def Le (x y : DkNNReal) : Prop :=
    DkReal.Le x.val y.val
 @@ -275,6 +366,14 @@ end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
- 
+
 +/-!
 +## V. Quotient order and Mathlib hierarchy
 +
@@ -744,11 +744,11 @@ index 977da526..4637bed7 100644
 @@ -282,10 +381,16 @@ def le (x y : DkNNRealQ) : Prop :=
        intro a a' b b' haa' hbb'
        exact propext (DkNNReal.le_congr haa' hbb'))
- 
+
 +/-- Standard `≤` notation for the quotient's asymptotic order. -/
  instance : LE DkNNRealQ where
    le := le
- 
+
 -/-- The quotient order is a partial order. -/
 +/--
 +The quotient order is a partial order.
@@ -775,13 +775,13 @@ index da120c23..032cddaa 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -75,8 +75,8 @@ DkMath.Analysis.DkReal.DkNNRealQ
    a canonical NatCast and CommSemiring instance
- 
+
  DkMath.Analysis.DkReal.Order
 -  asymptotic lower-endpoint order, Equiv compatibility, and PartialOrder on
 -  DkNNRealQ
 +  asymptotic lower-endpoint order, Equiv compatibility, PartialOrder,
 +  ordered-semiring compatibility, and totality research boundary
- 
+
  DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
 @@ -87,6 +87,8 @@ computability significance are recorded in
@@ -790,7 +790,7 @@ index da120c23..032cddaa 100644
  [`DkNNRealQ-CommSemiring-Checkpoint.md`](DkNNRealQ-CommSemiring-Checkpoint.md).
 +The internal totality route is analyzed in
 +[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
- 
+
  `RealBridge` remains the home of continuity and interval mapping. The separate
  `TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
 @@ -104,7 +106,8 @@ Order:
@@ -800,7 +800,7 @@ index da120c23..032cddaa 100644
 -  investigate totality before any LinearOrder claim
 +  investigate totality by persistent separation versus persistent overlap
 +  use a semantic bridge only as an independent cross-check
- 
+
  BridgeNNReal / BridgeReal:
    select the unique semantic limit
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
@@ -833,26 +833,26 @@ index 5f9e0ac2..fe019890 100644
 @@ -1,14 +1,15 @@
 -# DkNNRealQ CommSemiring Checkpoint
 +# DkNNRealQ Ordered Algebra Checkpoint
- 
+
  ## Result
- 
+
 -The first algebraic checkpoint of Route B is complete.
 +The first algebraic and ordered-algebra checkpoint of Route B is complete.
- 
+
  ```text
  DkNNRealQ = Quotient DkNNReal.equivSetoid
  ```
- 
+
 -is a Lean `CommSemiring`. Its representatives are nonnegative nested rational
 +is a Lean `CommSemiring` with `PartialOrder` and the semiring-level
 +`IsOrderedRing` predicate. Its representatives are nonnegative nested rational
  interval sequences of vanishing width. Two representatives are identified
  when their interval separation tends to zero.
- 
+
 @@ -41,11 +42,27 @@ interval sequence:
  n |-> class of the sequence k |-> [n,n].
  ```
- 
+
 -## Scope
 +## Established Order Surface
 +
@@ -869,9 +869,9 @@ index 5f9e0ac2..fe019890 100644
 +- monotonicity of addition and nonnegative multiplication;
 +- monotonicity of natural powers;
 +- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`.
- 
+
  This checkpoint does not establish:
- 
+
 -- an order on `DkNNRealQ`;
 +- totality or a `LinearOrder`;
 +- canonical order by additive differences;
@@ -880,9 +880,9 @@ index 5f9e0ac2..fe019890 100644
  - decidable equality;
  - representation of every `NNReal`;
 @@ -54,17 +71,29 @@ This checkpoint does not establish:
- 
+
  ## Next Independent Designs
- 
+
 -### Order
 +### Totality
 +
@@ -900,14 +900,14 @@ index 5f9e0ac2..fe019890 100644
 +Merge:
 +  neither separation occurs, so every stage overlaps and x ~ y.
 +```
- 
+
 -The next phase defines representative order by vanishing positive
 -lower-endpoint defect. It is invariant under vanishing-separation equivalence
 -and yields a `PartialOrder` on `DkNNRealQ`.
 +Nestedness makes either strict separation persistent. The Merge branch has
 +stagewise separation zero and therefore gives `Equiv`. This is the current
 +candidate for proving totality without evaluating into `Real`.
- 
+
 -Addition, multiplication, and natural powers are monotone for this order.
 -Zero is the least quotient value. These facts provide Mathlib's `IsOrderedRing`
 -predicate, which at this version requires only a semiring and partial order.
@@ -915,12 +915,12 @@ index 5f9e0ac2..fe019890 100644
 -No `LinearOrder` is claimed yet.
 +See
 +[`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
- 
+
  ### Semantic Bridge
- 
+
 @@ -80,4 +109,4 @@ eval (x * y) = eval x * eval y
  ```
- 
+
  Such a bridge may be `noncomputable`; that declaration must remain outside the
 -computable core.
 +computable core. It should validate, rather than define, the internal order.

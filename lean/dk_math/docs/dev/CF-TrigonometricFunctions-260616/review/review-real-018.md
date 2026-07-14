@@ -520,7 +520,7 @@ index 9320f9f8..55805071 100644
 @@ -25,6 +25,13 @@ namespace DkMath.Analysis.DkReal
  def Nonnegative (x : DkMath.Analysis.DkReal) : Prop :=
    ∀ n, 0 ≤ (x.interval n).lo
- 
+
 +/-- Nonnegativity of the initial lower endpoint propagates to every stage. -/
 +theorem nonnegative_of_initial_lo
 +    (x : DkMath.Analysis.DkReal) (h0 : 0 ≤ (x.interval 0).lo) :
@@ -534,7 +534,7 @@ index 9320f9f8..55805071 100644
 @@ -76,6 +83,27 @@ theorem powNonnegApprox_nested
    exact ⟨powNonnegApprox_lo_le_succ_lo d x hx n,
      powNonnegApprox_succ_hi_le_hi d x hx n⟩
- 
+
 +/-- Every powered approximation interval has nonnegative width. -/
 +theorem powNonnegApprox_width_nonneg
 +    (d : ℕ) (x : DkMath.Analysis.DkReal) (hx : Nonnegative x) (n : ℕ) :
@@ -558,11 +558,11 @@ index 9320f9f8..55805071 100644
 +
  /--
  Exact width formula for every powered approximation interval.
- 
+
 @@ -89,6 +117,58 @@ theorem powNonnegApprox_width_eq
          gapGN d (x.interval n).lo (x.interval n).width :=
    GapInterval.powNonneg_width_eq d (x.interval n) (hx n)
- 
+
 +/--
 +If the exact `gapGN` factors along a nonnegative approximation are bounded,
 +then the powered interval widths tend to zero.
@@ -624,7 +624,7 @@ index 1c5ecc6f..bdfc8bb5 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/Analysis-Initial-Layer.md
 @@ -258,9 +258,12 @@ DkReal.powNonnegApprox d x hx n
  The implementation proves:
- 
+
  ```lean
 +DkReal.nonnegative_of_initial_lo
  DkReal.powNonnegApprox_lo_le_succ_lo
@@ -634,11 +634,11 @@ index 1c5ecc6f..bdfc8bb5 100644
 +DkReal.powNonnegApprox_interval_subset_of_le
  DkReal.powNonnegApprox_width_eq
  ```
- 
+
 @@ -272,9 +275,28 @@ powered width
    = original width * gapGN d lowerEndpoint originalWidth
  ```
- 
+
 -A completed map from nonnegative `DkReal` values to `DkReal` values is
 -deliberately deferred. Its remaining mathematical obligation is to control the
 -`gapGN` factor strongly enough to prove that the powered widths tend to zero.
@@ -664,7 +664,7 @@ index 1c5ecc6f..bdfc8bb5 100644
 +is bounded for a nested nonnegative `DkReal`. This should be implemented as a
 +separate finite-polynomial bound rather than folded into the interval
 +construction.
- 
+
  `TaylorBridge` and `RealBridge` may use noncomputable real-number operations.
  The `DkReal` files remain computational and use rational interval data only.
 ````

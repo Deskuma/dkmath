@@ -385,7 +385,7 @@ index 2e86d35a..432d14a0 100644
 @@ -1881,6 +1881,23 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
  This confirms that the route works with a genuine prime-valued injective label
  map.  It does not prove that the nth prime divides a GN surface.
- 
+
 +The DkMath carrier-label route now has a packaged data layer:
 +
 +```text
@@ -404,7 +404,7 @@ index 2e86d35a..432d14a0 100644
 +requiring a canonical choice function.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 95f9c5c1..3f4fe48d 100644
@@ -413,7 +413,7 @@ index 95f9c5c1..3f4fe48d 100644
 @@ -89,6 +89,49 @@ It is deliberately weaker than asking the whole `GN` value to be squarefree.
  def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
    PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
- 
+
 +/--
 +Family data for a Petal carrier label map on one GN surface.
 +
@@ -459,11 +459,11 @@ index 95f9c5c1..3f4fe48d 100644
 +
  /--
  The standard Mathlib prime enumeration, exposed under Petal naming.
- 
+
 @@ -427,6 +470,59 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_self
      (fun _ _ => rfl)
      (fun _ _ _ _ h => h)
- 
+
 +/--
 +Carrier-label map data supplies outer-address label noncollision.
 +
@@ -519,11 +519,11 @@ index 95f9c5c1..3f4fe48d 100644
 +
  /--
  Outer-address label compatibility for the nth-prime label map.
- 
+
 @@ -883,6 +979,53 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
        I n lap mOf qOf hm hminj hlabel)
      hcarrier
- 
+
 +/--
 +Carrier-label map data supplies an Erdos multiplicity budget on one GN surface.
 +
@@ -573,11 +573,11 @@ index 95f9c5c1..3f4fe48d 100644
 +
  /--
  Value-map form of the outer-address GN multiplicity-budget route.
- 
+
 @@ -1239,6 +1382,31 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_injOn
        I n lap mOf qOf hm hminj hlabel)
      hcarrier
- 
+
 +/--
 +No-lift carrier-label map data feeds the finite GN log-capacity route.
 +
@@ -605,7 +605,7 @@ index 95f9c5c1..3f4fe48d 100644
 +
  /--
  Value-map form of the outer-address no-lift GN log-capacity route.
- 
+
 diff --git a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md b/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
 index f4a72cb5..63e3f90f 100644
 --- a/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md
@@ -613,7 +613,7 @@ index f4a72cb5..63e3f90f 100644
 @@ -671,5 +671,23 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
  This verifies the route for a genuine injective prime-valued label map.  The
  GN carrier and no-lift facts remain separate hypotheses.
- 
+
 +The first DkMath-facing carrier-label contract is now implemented as data,
 +without forcing a canonical carrier-selection function:
 +
@@ -641,7 +641,7 @@ index 5f6fa7da..52abf0be 100644
 @@ -825,6 +825,24 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_nthPrime_value_map
  This route supplies real prime labels and label recovery.  It still does not
  say that those primes divide the chosen GN surface.
- 
+
 +The DkMath-facing carrier-label contract is now packaged before choosing a
 +canonical `carrierAnchorOf` function:
 +
@@ -661,7 +661,7 @@ index 5f6fa7da..52abf0be 100644
 +carrier facts without forcing a uniqueness or choice theorem too early.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

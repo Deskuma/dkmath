@@ -224,7 +224,7 @@ index 1c9100eb..9caea3e3 100644
 -API.
 +API. Minimal periods use Mathlib's zero-for-aperiodic convention and divide
 +all known return times.
- 
+
  [TODO: semantic-cf2d-signed] Source-level `Vec.star` and `KernelFamily` require
  signed arithmetic. Defer them until a signed DkReal layer exists.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
@@ -234,7 +234,7 @@ index c1620d37..027bbcd4 100644
 @@ -338,7 +338,12 @@ theorem semanticLevelOrbit_val
          Function.iterate_succ_apply', Function.iterate_succ_apply']
        exact congrArg (semanticAct r) ih
- 
+
 -/-- A real vector is periodic when a finite semantic orbit returns to it. -/
 +/--
 +A real vector is periodic when a finite semantic orbit returns to it.
@@ -248,7 +248,7 @@ index c1620d37..027bbcd4 100644
 @@ -413,6 +418,51 @@ theorem semanticPeriodic_of_dvd
      SemanticPeriodic r z n :=
    Function.IsPeriodicPt.trans_dvd h hmn
- 
+
 +/-- Finite action order persists at every multiple. -/
 +theorem semanticFiniteOrder_of_dvd
 +    {r : UnitKernel DkNNRealQ} {m n : ℕ}
@@ -322,12 +322,12 @@ index 26a53721..5d8092f0 100644
 +semanticPeriodic_iff_minimalPeriod_dvd
 +semanticMinimalPeriod_dvd_of_finiteOrder
  ```
- 
+
  The transported kernel now acts on real CF2D vectors and preserves `q2`.
 @@ -114,8 +118,15 @@ equivalent to periodicity of the underlying plane point. Finite action order
  means that one iterate is the identity on the whole plane; this makes every
  point of every level set periodic.
- 
+
 +The period argument of `SemanticPeriodic` is neither required to be positive
 +nor minimal. `semanticMinimalPeriod` uses Mathlib's convention: it is the
 +least positive period for a periodic point and zero otherwise. Periodicity is
@@ -349,7 +349,7 @@ index ef7c8251..c5259ac3 100644
 @@ -212,6 +212,30 @@ Archive
  5. 検証:
     - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
- 
+
 +### 2026/06/22 04:09 JST (Minimal periods and finite-order divisibility)
 +
 +1. 注意点:
@@ -375,7 +375,7 @@ index ef7c8251..c5259ac3 100644
 +   - `lake build DkMath.Analysis.DkReal.SemanticCF2D` 成功 (8273 jobs)。
 +
  ### 2026/06/22 03:50 JST (Periodic points and finite action order)
- 
+
  1. 方針:
 ````
 `````

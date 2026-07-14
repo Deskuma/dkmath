@@ -340,13 +340,13 @@ index 80f7f83a..53593a09 100644
  import DkMath.Analysis.DkReal.DkNNReal
  import DkMath.Analysis.DkReal.DkNNRealQ
 +import DkMath.Analysis.DkReal.Order
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 @@ -29,8 +30,11 @@ Public entry point for the complete Route B algebraic checkpoint:
  All endpoint operations in this import tree remain computable. No represented
  limit in Mathlib's `Real` or `NNReal` is selected here.
- 
+
 -[TODO] Define a quotient-compatible order, or derive it from a separately
 -isolated semantic evaluation map.
 +`DkReal.Order` defines a quotient-compatible asymptotic order and installs a
@@ -354,7 +354,7 @@ index 80f7f83a..53593a09 100644
 +
 +[TODO] Prove additive and multiplicative monotonicity, then determine whether
 +the quotient order is total before installing ordered-semiring typeclasses.
- 
+
  [TODO] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
  chosen evaluation is independent of representatives. Such evaluation may
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
@@ -364,7 +364,7 @@ index f4ee9e64..3ba7c40a 100644
 @@ -23,8 +23,11 @@ This remains a computable representation layer. Quotient elimination is used
  only to define representation-independent operations; no evaluation into
  Mathlib's `Real` is selected.
- 
+
 -[TODO] Before adding an order instance, define an order predicate on
 -representatives and prove invariance under `DkNNReal.Equiv` in both arguments.
 +`DkReal.Order` defines an asymptotic representative order, proves invariance
@@ -372,7 +372,7 @@ index f4ee9e64..3ba7c40a 100644
 +
 +[TODO] Establish monotonicity of addition, multiplication, and powers for that
 +order before extending the algebraic hierarchy to ordered semirings.
- 
+
  [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -566,7 +566,7 @@ index 5aaa5f85..9d137dad 100644
 @@ -74,6 +74,10 @@ DkMath.Analysis.DkReal.DkNNRealQ
    quotient-backed nonnegative type with Zero / One / Add / Mul / Pow and
    a canonical NatCast and CommSemiring instance
- 
+
 +DkMath.Analysis.DkReal.Order
 +  asymptotic lower-endpoint order, Equiv compatibility, and PartialOrder on
 +  DkNNRealQ
@@ -575,7 +575,7 @@ index 5aaa5f85..9d137dad 100644
    public entry point for the computable approximation layer
  ```
 @@ -95,10 +99,9 @@ separate:
- 
+
  ```text
  Order:
 -  define a representative relation
@@ -585,7 +585,7 @@ index 5aaa5f85..9d137dad 100644
 +  PartialOrder is implemented via vanishing positive lower-endpoint defect
 +  next prove operation monotonicity
 +  investigate totality before any LinearOrder claim
- 
+
  BridgeNNReal / BridgeReal:
    select the unique semantic limit
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
@@ -593,9 +593,9 @@ index e794a172..83dec1a3 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 @@ -47,9 +47,11 @@ Semantic bridge layer:
- 
+
  The next independent tasks are:
- 
+
 -1. **Order design.** Define a relation on representatives, prove invariance
 -   under `Equiv`, then lift it to `DkNNRealQ`. Do not install an order instance
 -   before antisymmetry on quotient values is established.
@@ -613,32 +613,32 @@ index 22102e0e..d867f614 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-CommSemiring-Checkpoint.md
 @@ -24,7 +24,8 @@ The following data remain in the computable representation layer:
  - quotient operations and natural-number casts.
- 
+
  No point of Mathlib's `Real` or `NNReal` is selected. In particular, the
 -Route B import tree contains no `noncomputable` declaration.
 +`DkReal` / `DkNNRealQ` computable core contains no `noncomputable`
 +declaration.
- 
+
  ## Algebraic Meaning
- 
+
 @@ -33,10 +34,11 @@ removes representation dependence. Consequently, laws formerly stated modulo
  `DkNNReal.Equiv` become ordinary equality and support the standard Mathlib
  commutative-semiring API.
- 
+
 -The natural-number cast is the constant singleton representation:
 +The natural-number cast is the equivalence class of the constant singleton
 +interval sequence:
- 
+
  ```text
 -n |-> class([n,n], [n,n], ...).
 +n |-> class of the sequence k |-> [n,n].
  ```
- 
+
  ## Scope
 @@ -54,9 +56,12 @@ This checkpoint does not establish:
- 
+
  ### Order
- 
+
 -A representative-level order must be invariant under vanishing-separation
 -equivalence. Candidate formulations should be compared before installing
 -`LE`, `PartialOrder`, or `LinearOrder`.
@@ -648,16 +648,16 @@ index 22102e0e..d867f614 100644
 +
 +Remaining order work is operation monotonicity and the question of totality.
 +No `LinearOrder` is claimed yet.
- 
+
  ### Semantic Bridge
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 index cfd3aa68..adc207de 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 @@ -314,11 +314,13 @@ addition, multiplication, powers, and semiring lemmas are therefore available
  through Lean's algebraic hierarchy.
- 
+
  This completes the first algebraic public surface of the nonnegative
 -computable-real quotient. Order remains separate: an eventually ordered
 -representative relation must be shown compatible with `Equiv`, or derived from
@@ -671,7 +671,7 @@ index cfd3aa68..adc207de 100644
 +
 +Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
 +module because selecting the represented limit may require `noncomputable`.
- 
+
  Persistent intersection and equality after a future evaluation into Mathlib's
  `Real` remain comparison principles. Their equivalence with vanishing
 ````

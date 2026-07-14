@@ -10,21 +10,21 @@ gch: 544931ef0f1ece8fb85034a78601854fed2596ad
 
 主な変更:
 
-- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:89)
+- [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L89)
   - `PetalCarrierLabelNoncollisionOn` を追加
   - `petalCarrierLabelNoncollisionOn_pairwiseDistinct`
   - `petalCarrierLabelNoncollisionOn_injOn`
   - `petalPrimeChannelFamily_multiplicityBudget_GN_of_labelNoncollision`
   - `petalPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision`
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:647)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L647)
   - 使用手順を追加:
     `PetalPrimeChannel` を作る → `PetalCarrierLabelNoncollisionOn` を示す → log sub-probability bridge を適用
 
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:151)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L151)
   - 現在の研究目標を `PetalCarrierLabelNoncollisionOn` 経由に更新
 
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1753)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1753)
   - 本線 Roadmap 側も同じ語彙へ同期
 
 検証:

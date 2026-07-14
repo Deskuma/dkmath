@@ -364,7 +364,7 @@ index 1768ef43..7e691db9 100644
 @@ -1807,6 +1807,23 @@ contrapositive helper:
  petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
  ```
- 
+
 +For outer addresses, the compatibility side can now be supplied by a value
 +determination condition:
 +
@@ -383,7 +383,7 @@ index 1768ef43..7e691db9 100644
 +```
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 7925a94a..beb8ee28 100644
@@ -392,7 +392,7 @@ index 7925a94a..beb8ee28 100644
 @@ -273,6 +273,49 @@ theorem petalAddressNoncollisionOn_outer_of_value_injOn
    exact hinj hi hj
      (outerPetalAddress_eq_value_eq (hm i hi) (hm j hj) haddr)
- 
+
 +/--
 +Outer-address label compatibility from value determination by labels.
 +
@@ -442,7 +442,7 @@ index 7925a94a..beb8ee28 100644
 @@ -614,6 +657,63 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_addressNoncollision
      (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
      hcarrier
- 
+
 +/--
 +Outer-address value conditions supply an Erdos multiplicity budget on one GN
 +surface.
@@ -502,11 +502,11 @@ index 7925a94a..beb8ee28 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -759,6 +859,37 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_addressNoncollisio
      (petalAddressNoncollision_labelNoncollision I addrOf qOf haddr hcompat)
      hcarrier
- 
+
 +/--
 +Outer-address value conditions feed no-lift Petal channels into the finite GN
 +log-capacity route.
@@ -548,7 +548,7 @@ index 1ca83e55..af8e44dc 100644
 @@ -591,5 +591,26 @@ meaningful `PetalCarrierLabelCompatibleOn` assumptions from the actual carrier
  or label construction, rather than keeping compatibility as a permanent raw
  hypothesis.
- 
+
 +The first outer-address compatibility supply theorem is now implemented:
 +
 +```text
@@ -579,7 +579,7 @@ index 26f8e9b8..bcd621b2 100644
 @@ -755,6 +755,22 @@ contrapositive criterion:
  petalCarrierLabelCompatibleOn_of_label_eq_imp_address_eq
  ```
- 
+
 +For outer addresses, compatibility can now be supplied from value determination:
 +
 +```text
@@ -597,7 +597,7 @@ index 26f8e9b8..bcd621b2 100644
 +```
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

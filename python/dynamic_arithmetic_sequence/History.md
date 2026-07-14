@@ -137,7 +137,7 @@ lake build DkMath
 解説ドキュメントを追加しました。
 
 追加先:
-[DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md](/lean/dk_math/DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md:1)
+[DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md](/lean/dk_math/DkMath/Sequence/docs/DHNT-DAS-reinterpretation.md#L1)
 
 内容は、単なる実装履歴ではなく、
 
@@ -205,9 +205,9 @@ git diff --check
 
 軽めの補題ツールを追加しました。
 
-[BinomialPrime.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrime.lean:48) には、`AllInnerChooseDivisible` を具体的な `k` で取り出す `allInnerChooseDivisible_dvd_choose` を追加。
+[BinomialPrime.lean](/lean/dk_math/DkMath/NumberTheory/BinomialPrime.lean#L48) には、`AllInnerChooseDivisible` を具体的な `k` で取り出す `allInnerChooseDivisible_dvd_choose` を追加。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:61) には、行レベルの係数可除性を重み付き内側項へ運ぶ補題と、境界頂点 `u^d` / `x^d` での可除性補題を追加しました。
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L61) には、行レベルの係数可除性を重み付き内側項へ運ぶ補題と、境界頂点 `u^d` / `x^d` での可除性補題を追加しました。
 
 確認済みです。
 
@@ -224,7 +224,7 @@ git diff --check
 
 次の軽い層として、weighted inner row 全体を扱う API を追加しました。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:31) に追加:
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L31) に追加:
 
 - `AllInnerWeightedTermDivisible`
 - `allInnerChooseDivisible_allInnerWeightedTermDivisible`
@@ -249,7 +249,7 @@ git diff --check
 
 次の軽い補題層として、行全体を扱う API を追加しました。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:35) に追加:
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L35) に追加:
 
 - `AllWeightedTermDivisible`
 - `allWeightedTermDivisible_dvd_term`
@@ -272,7 +272,7 @@ git diff --check
 
 次の集約補題まで進めました。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:29) に追加:
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L29) に追加:
 
 - `weightedBinomialRowSum`
 - `dvd_weightedBinomialRowSum_of_allWeightedTermDivisible`
@@ -312,7 +312,7 @@ git diff --check
 
 はい。探索した結果、既にかなり使える橋があります。
 
-一番重要なのは [GTail.lean](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:50) のこれです。
+一番重要なのは [GTail.lean](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean#L50) のこれです。
 
 ```lean
 add_pow_eq_prefix_add_xpow_mul_GTail
@@ -330,15 +330,15 @@ add_pow_eq_prefix_add_xpow_mul_GTail
 
 ほかに使えそうなもの:
 
-- [GTail_zero_eq_add_pow](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:127)
+- [GTail_zero_eq_add_pow](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean#L127)
   `GTail d 0 x u = (x + u)^d`
-- [GTail_one_eq_sum](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean:211)
+- [GTail_one_eq_sum](/lean/dk_math/DkMath/Lib/Cosmic/GTail.lean#L211)
   `r = 1` の GN 形に近い和
-- [GN_eq_sum](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:328)
+- [GN_eq_sum](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L328)
   既存 GN の和表示
-- [pow_sub_pow_eq_mul_GN](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean:314)
+- [pow_sub_pow_eq_mul_GN](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean#L314)
   `(x+u)^d - u^d = x * GN d x u` 系
-- [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean:151) に GN と差商の橋
+- [CFBRC.Basic](/lean/dk_math/DkMath/CFBRC/Basic.lean#L151) に GN と差商の橋
 
 次の実装は、`WeightedBinomial.weightedBinomialRowSum` を既存 `add_pow` / `GTail_zero_eq_add_pow` 側へ合わせる小さな補題が良さそうです。重複して二項定理を証明するより、既存 `GTail` の正規形へ接続するのが自然です。
 
@@ -349,7 +349,7 @@ DkMath.Lib.* へ昇華した核心定理ですからね。このライブラリ�
 
 `DkMath.Lib.Cosmic.GTail` のコア Kernel に接続しました。
 
-[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean:222) に追加:
+[WeightedBinomial.lean](/lean/dk_math/DkMath/NumberTheory/WeightedBinomial.lean#L222) に追加:
 
 - `weightedBinomialRowSum_eq_GTail_zero`
 - `weightedBinomialRowSum_eq_add_pow`

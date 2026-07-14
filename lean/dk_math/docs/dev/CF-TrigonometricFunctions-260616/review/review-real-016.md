@@ -342,7 +342,7 @@ index c951457f..47e37d85 100644
  import DkMath.Analysis.RealBridge
 +import DkMath.Analysis.TaylorBridge
  import DkMath.Analysis.DkReal
- 
+
  #print "file: DkMath.Analysis"
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Basic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Basic.lean
 index 8e011718..e2f2549a 100644
@@ -351,7 +351,7 @@ index 8e011718..e2f2549a 100644
 @@ -47,11 +47,30 @@ theorem succ_hi_le_hi (x : DkReal) (n : ℕ) :
      (x.interval (n + 1)).hi ≤ (x.interval n).hi :=
    (x.nested n).2
- 
+
 +/-- Lower endpoints are monotone across arbitrary approximation stages. -/
 +theorem lo_mono (x : DkReal) {n m : ℕ} (h : n ≤ m) :
 +    (x.interval n).lo ≤ (x.interval m).lo := by
@@ -370,7 +370,7 @@ index 8e011718..e2f2549a 100644
  theorem width_nonneg (x : DkReal) (n : ℕ) :
      0 ≤ (x.interval n).width :=
    (x.interval n).width_nonneg
- 
+
 +/-- Nested approximation makes interval width nonincreasing at each step. -/
 +theorem width_succ_le_width (x : DkReal) (n : ℕ) :
 +    (x.interval (n + 1)).width ≤ (x.interval n).width := by
@@ -382,7 +382,7 @@ index 8e011718..e2f2549a 100644
 @@ -59,6 +78,13 @@ theorem interval_succ_subset (x : DkReal) (n : ℕ) :
    intro q hq
    exact ⟨(x.lo_le_succ_lo n).trans hq.1, hq.2.trans (x.succ_hi_le_hi n)⟩
- 
+
 +/-- Every later approximation interval is contained in every earlier one. -/
 +theorem interval_subset_of_le (x : DkReal) {n m : ℕ} (h : n ≤ m) :
 +    Set.Icc (x.interval m).lo (x.interval m).hi
@@ -515,26 +515,26 @@ index b68a4b03..b54246ae 100644
 @@ -38,6 +38,9 @@ DkMath.Analysis.GapFill
  DkMath.Analysis.RealBridge
    first bridge to Real and Mathlib Continuous / Set.MapsTo
- 
+
 +DkMath.Analysis.TaylorBridge
 +  zero-increment coefficient, difference quotient, limit, and HasDerivAt bridge
 +
  DkMath.Analysis.DkReal.Interval
    DkReal.GapInterval, width, nonnegative power image, and exact width formula
- 
+
 @@ -48,9 +51,9 @@ DkMath.Analysis.DkReal
    public entry point for the computable approximation layer
  ```
- 
+
 -The current `RealBridge` is intentionally only the first analytic bridge.
 -Differentiability, `HasDerivAt`, and the Taylor-facing interpretation of
 -`gapGN` are not part of this checkpoint.
 +`RealBridge` remains the home of continuity and interval mapping. The separate
 +`TaylorBridge` now connects `gapGN` to difference quotients and `HasDerivAt`
 +without mixing those concerns into the basic real bridge.
- 
+
  ## Canonical Kernel Bridge
- 
+
 @@ -177,3 +180,52 @@ structure DkReal where
  Rational values embed as constant singleton interval sequences through
  `DkReal.ofRat`. Evaluation into Mathlib's real numbers remains deferred to a

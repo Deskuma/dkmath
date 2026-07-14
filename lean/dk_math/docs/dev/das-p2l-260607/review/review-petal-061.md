@@ -401,7 +401,7 @@ index 74921cfa..2e86d35a 100644
 @@ -1862,6 +1862,25 @@ petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
  This is a control theorem for the wrapper.  It does not turn arbitrary Petal
  values into prime-channel labels.
- 
+
 +The standard prime-enumeration experiment is implemented through
 +`petalNthPrimeLabel`, defined as a Petal-facing alias for `Nat.nth Nat.Prime`:
 +
@@ -422,7 +422,7 @@ index 74921cfa..2e86d35a 100644
 +map.  It does not prove that the nth prime divides a GN surface.
 +
  ### Step 7: Refactor imports gradually
- 
+
  Status:
 diff --git a/lean/dk_math/DkMath/Petal/ErdosBridge.lean b/lean/dk_math/DkMath/Petal/ErdosBridge.lean
 index 591a0f61..95f9c5c1 100644
@@ -433,13 +433,13 @@ index 591a0f61..95f9c5c1 100644
  import DkMath.Petal.BezoutBridge
  import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 +import Mathlib.NumberTheory.PrimeCounting
- 
+
  #print "file: DkMath.Petal.ErdosBridge"
- 
+
 @@ -88,6 +89,16 @@ It is deliberately weaker than asking the whole `GN` value to be squarefree.
  def PetalNoLiftPrimeChannel (d x u q : ℕ) : Prop :=
    PetalPrimeChannel d x u q ∧ ¬ q ^ 2 ∣ GN d x u
- 
+
 +/--
 +The standard Mathlib prime enumeration, exposed under Petal naming.
 +
@@ -452,11 +452,11 @@ index 591a0f61..95f9c5c1 100644
 +
  /--
  Carrier-label noncollision for a finite Petal channel family.
- 
+
 @@ -158,6 +169,26 @@ theorem petalNoLiftPrimeChannel_noLift
      ¬ q ^ 2 ∣ GN d x u :=
    h.2
- 
+
 +/-- The Petal nth-prime label is prime. -/
 +theorem petalNthPrimeLabel_prime
 +    (m : Nat) :
@@ -483,7 +483,7 @@ index 591a0f61..95f9c5c1 100644
 @@ -396,6 +427,64 @@ theorem petalCarrierLabelNoncollisionOn_outer_of_value_self
      (fun _ _ => rfl)
      (fun _ _ _ _ h => h)
- 
+
 +/--
 +Outer-address label compatibility for the nth-prime label map.
 +
@@ -548,7 +548,7 @@ index 591a0f61..95f9c5c1 100644
 @@ -916,6 +1005,64 @@ theorem petalPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
        I n lap mOf hm hminj)
      hcarrier
- 
+
 +/--
 +Nth-prime label form of the outer-address GN multiplicity-budget route.
 +
@@ -609,11 +609,11 @@ index 591a0f61..95f9c5c1 100644
 +
  /--
  Local no-lift makes the observed GN surface nonzero.
- 
+
 @@ -1155,6 +1302,37 @@ theorem petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_outer_value_self
        I n lap mOf hm hminj)
      hcarrier
- 
+
 +/--
 +Nth-prime label form of the outer-address no-lift GN log-capacity route.
 +
@@ -655,7 +655,7 @@ index 4b4f1fce..f4a72cb5 100644
 @@ -652,5 +652,24 @@ This checks the value-map API without importing a prime enumeration or a choice
  function.  It still assumes the selected values are already valid
  PetalPrimeChannel / NoLift labels when the log-capacity theorem is applied.
- 
+
 +The next experiment uses Mathlib's standard prime enumeration through the
 +Petal-facing alias `petalNthPrimeLabel`:
 +
@@ -684,7 +684,7 @@ index 343297cc..5f6fa7da 100644
 @@ -806,6 +806,25 @@ This is a toy control route.  It says that if the selected values themselves
  are already assumed to be prime-channel labels, then the outer-address
  noncollision machinery composes correctly.
- 
+
 +The standard prime-enumeration experiment is also implemented through
 +`petalNthPrimeLabel`, a Petal-facing alias for `Nat.nth Nat.Prime`:
 +
@@ -705,7 +705,7 @@ index 343297cc..5f6fa7da 100644
 +say that those primes divide the chosen GN surface.
 +
  ## What This Does Not Claim Yet
- 
+
  The package does not yet prove a standard primorial theorem using a concrete
 ````
 `````

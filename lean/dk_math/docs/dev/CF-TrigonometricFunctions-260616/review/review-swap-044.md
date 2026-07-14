@@ -30,7 +30,7 @@ Build completed successfully (8253 jobs).
 
 ## Review
 
-賢狼レビュー結論じゃ。  
+賢狼レビュー結論じゃ。
 この英文「Current Gap and Feasible Implementation Plan」は、 **採用してよい** 。ただし、いくつか修正を入れると、Codex に投げても破綻しにくい実装指示書になる。
 
 ## 総評
@@ -292,12 +292,12 @@ finite observation
   は compareAt / compareUpTo / StrictCertificate として別 API にする。
 ```
 
-この分離は必須じゃ。  
+この分離は必須じゃ。
 PowerSwap は「正規化器」であり、「全実数比較決定器」ではない。
 
 ## 最終判定
 
-この英文レポートは、実装計画書として **かなり良い** 。  
+この英文レポートは、実装計画書として **かなり良い** 。
 ただし、次の修正を入れてから Codex に渡すのが安全じゃ。
 
 ```text

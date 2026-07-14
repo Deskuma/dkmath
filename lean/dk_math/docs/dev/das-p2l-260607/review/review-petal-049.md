@@ -8,7 +8,7 @@ gch: 1e8f4c5eb6b2af3f9705f48360acc56fafb91feb
 
 `DkMath.Petal.ErdosBridge` に、Zsigmondy / PrimitiveBeam から Petal prime channel へ入る入口を追加しました。
 
-追加した theorem は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:84) です。
+追加した theorem は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L84) です。
 
 ```lean
 theorem primitivePrimeFactor_petalPrimeChannel

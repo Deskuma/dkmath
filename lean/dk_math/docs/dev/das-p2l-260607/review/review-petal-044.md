@@ -8,7 +8,7 @@ gch: a07382619c5207d9d0100fc4d73172f3c1a3831b
 
 `DkMath.Petal.BezoutBridge` を追加しました。
 
-主な追加内容は [BezoutBridge.lean](/lean/dk_math/DkMath/Petal/BezoutBridge.lean:1) です。既存の根本定理を再証明せず、Petal 側から読める名前として次を置いています。
+主な追加内容は [BezoutBridge.lean](/lean/dk_math/DkMath/Petal/BezoutBridge.lean#L1) です。既存の根本定理を再証明せず、Petal 側から読める名前として次を置いています。
 
 - `cosmicBody_eq_boundary_mul_GN`
 - `primitivePrimeFactor_dvd_GN_of_cosmicBoundary`
@@ -19,7 +19,7 @@ gch: a07382619c5207d9d0100fc4d73172f3c1a3831b
 - `anchoredGNCarrier_of_primitivePrimeFactor`
 - `anchoredGNCarrier_of_bodyPrimitivePrimeFactor`
 
-また [Petal.lean](/lean/dk_math/DkMath/Petal.lean:16) に公開 import を追加しました。
+また [Petal.lean](/lean/dk_math/DkMath/Petal.lean#L16) に公開 import を追加しました。
 
 検証済みです。
 

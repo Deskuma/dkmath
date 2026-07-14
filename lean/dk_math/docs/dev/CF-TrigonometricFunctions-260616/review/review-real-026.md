@@ -8,7 +8,7 @@ gch: 553a303884accce0679b0a12ed095de584c08602
 
 レビュー推奨の `DkNNReal` wrapper を実装しました。
 
-[DkNNReal.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean:21) に以下を追加しています。
+[DkNNReal.lean](/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean#L21) に以下を追加しています。
 
 - 非負性を内包する `DkNNReal`
 - `ofRat`, `zero`, `one`
@@ -338,9 +338,9 @@ index c52886d6..a83276f5 100644
  import DkMath.Analysis.DkReal.Arithmetic
  import DkMath.Analysis.DkReal.Equiv
 +import DkMath.Analysis.DkReal.DkNNReal
- 
+
  #print "file: DkMath.Analysis.DkReal"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNReal.lean
 new file mode 100644
 index 00000000..3d3497cd
@@ -530,7 +530,7 @@ index 1d37acb2..1b68a2e2 100644
 @@ -61,6 +61,10 @@ DkMath.Analysis.DkReal.Equiv
    vanishing interval separation, representation setoid, endpoint convergence,
    and additive, nonnegative multiplicative, and natural-power congruence
- 
+
 +DkMath.Analysis.DkReal.DkNNReal
 +  nonnegative wrapper with proof-free arithmetic operations and semiring laws
 +  modulo representation equivalence
@@ -545,7 +545,7 @@ index 1ac6af4d..8035273b 100644
 @@ -239,6 +239,44 @@ respect the representation setoid. The next design question is whether to
  introduce a quotient or a dedicated wrapper for the nonnegative computable
  semiring API.
- 
+
 +## DkNNReal Wrapper
 +
 +The first public nonnegative arithmetic surface is now the wrapper

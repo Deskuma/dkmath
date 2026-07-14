@@ -460,7 +460,7 @@ index 21ea0a94..0d17d099 100644
 @@ -35,13 +35,13 @@ limit in Mathlib's `Real` or `NNReal` is selected here.
  `DkNNRealQ`. Addition, nonnegative multiplication, and natural powers are
  monotone, and zero is least.
- 
+
 -[TODO: totality] Prove totality internally from nested-interval geometry:
 -eventual strict left separation, eventual strict right separation, or
 -persistent overlap. The first two branches give one order direction; the
@@ -468,13 +468,13 @@ index 21ea0a94..0d17d099 100644
 +Totality is proved internally from nested-interval geometry. If a finite
 +strict left separation is witnessed, it persists. Otherwise the reverse order
 +defect is bounded by a vanishing interval width.
- 
+
 -[TODO: linear-order] Install no `LinearOrder` or linear ordered semiring API
 -until representative totality has been proved and lifted through the quotient.
 +[TODO: linear-order] Decide whether the now-proved quotient totality should be
 +packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 +plus `Std.Total` so that decidable comparison remains an explicit choice.
- 
+
  [TODO: canonical-order] Treat `x ≤ y ↔ ∃ z, y = x + z` as an independent
  problem. It is not a consequence of the current ordered-semiring compatibility
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
@@ -484,12 +484,12 @@ index da7a036b..552fdd47 100644
 @@ -31,8 +31,8 @@ order, and zero is the least quotient value. `DkReal.Order` packages these
  facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
  strict, and linear order structures remain unclaimed.
- 
+
 -[TODO: totality] Prefer an internal proof through persistent interval
 -separation/overlap before importing a semantic linear order.
 +`DkReal.Order` proves totality internally through finite separation or a
 +vanishing-width bound and exports `Std.Total (· ≤ ·)`.
- 
+
  [TODO: semantic-bridge] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean b/lean/dk_math/DkMath/Analysis/DkReal/Interval.lean
@@ -499,7 +499,7 @@ index 0f4dff4c..1c3f559a 100644
 @@ -150,17 +150,52 @@ positive rational gap between the interval lying on the left and the interval
  lying on the right. In the totality design this is the comparison Gap inside
  the hull, or "comparison Big", containing both intervals.
- 
+
 -[TODO: totality/interval] Prove:
 -
 -* `separation I J = 0` iff `I.lo ≤ J.hi ∧ J.lo ≤ I.hi`;
@@ -508,11 +508,11 @@ index 0f4dff4c..1c3f559a 100644
 +The overlap characterization below is the finite comparison lemma used by the
 +totality proof.
  -/
- 
+
  /-- Nonnegative separation between two closed rational intervals. -/
  def separation (I J : GapInterval) : ℚ :=
    max 0 (max (I.lo - J.hi) (J.lo - I.hi))
- 
+
 +/-- Two closed rational intervals overlap when neither lies strictly beyond the other. -/
 +def Overlaps (I J : GapInterval) : Prop :=
 +  I.lo ≤ J.hi ∧ J.lo ≤ I.hi
@@ -561,7 +561,7 @@ index 4637bed7..5918b667 100644
 @@ -50,16 +50,14 @@ representation layer. Here "comparison Big" means the hull containing the two
  stage intervals; it is an explanatory geometric construction, not the
  algebraic `DkMath.CosmicFormula.CoreBeamGap.Big`.
- 
+
 -[TODO: totality/interval] Add endpoint lemmas characterizing zero separation
 -as overlap and proving that strict left or right separation persists under
 -nested refinement.
@@ -569,7 +569,7 @@ index 4637bed7..5918b667 100644
 +and quotient totality are implemented below. Lean accepts the stronger
 +two-branch proof: either a finite left separation is witnessed, or the reverse
 +defect is bounded at every stage by the first interval's width.
- 
+
 -[TODO: totality/representation] Prove that persistent overlap implies `Equiv`,
 -and that one witnessed strict separation implies the corresponding `Le`.
 -
@@ -579,13 +579,13 @@ index 4637bed7..5918b667 100644
 +[TODO: linear-order] Decide whether to install a direct `LinearOrder` instance
 +or expose totality through `Std.Total` while keeping decidability and classical
 +comparison choices explicit.
- 
+
  [TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
  cross-check, not as a dependency of the computable order core.
 @@ -102,6 +100,16 @@ limit; it compares only rational Core observations against a shrinking Gap.
  def Le (x y : DkMath.Analysis.DkReal) : Prop :=
    Filter.Tendsto (orderDefect x y) Filter.atTop (nhds 0)
- 
+
 +/-- At stage `n`, the interval for `x` lies strictly to the left of that for `y`. -/
 +def LeftSeparatedAt
 +    (x y : DkMath.Analysis.DkReal) (n : ℕ) : Prop :=
@@ -598,11 +598,11 @@ index 4637bed7..5918b667 100644
 +
  /-!
  ## II. Preorder and extensional equality
- 
+
 @@ -211,6 +219,99 @@ theorem le_congr
      exact le_trans (equiv_le hxx')
        (le_trans hx'y' (equiv_le (equiv_symm hyy')))
- 
+
 +/-!
 +## III. Finite separation and total orientation
 +
@@ -698,47 +698,47 @@ index 4637bed7..5918b667 100644
 +
  /--
  The rational zero approximation is below every nonnegative representation.
- 
+
 @@ -230,7 +331,7 @@ theorem zero_le
    exact tendsto_const_nhds
- 
+
  /-!
 -## III. Ordered arithmetic
 +## IV. Ordered arithmetic
- 
+
  The arithmetic proofs control output defects by null input defects. Addition
  uses subadditivity; multiplication additionally uses uniform boundedness of
 @@ -329,7 +430,7 @@ end DkMath.Analysis.DkReal
  namespace DkMath.Analysis.DkNNReal
- 
+
  /-!
 -## IV. Nonnegative wrapper order
 +## V. Nonnegative wrapper order
- 
+
  The wrapper carries all nonnegativity hypotheses needed by multiplication, so
  its public order lemmas have no proof arguments.
 @@ -362,12 +463,16 @@ theorem mul_le_mul
    DkReal.mulNonneg_le_mulNonneg
      x.nonnegative y.nonnegative z.nonnegative w.nonnegative hxy hzw
- 
+
 +/-- The wrapper order is total because the underlying representation order is total. -/
 +theorem le_total (x y : DkNNReal) : Le x y ∨ Le y x :=
 +  DkReal.le_total_repr x.val y.val
 +
  end DkMath.Analysis.DkNNReal
- 
+
  namespace DkMath.Analysis.DkNNRealQ
- 
+
  /-!
 -## V. Quotient order and Mathlib hierarchy
 +## VI. Quotient order and Mathlib hierarchy
- 
+
  Congruence of representative order permits a quotient relation. Mutual order
  becomes quotient equality, while the arithmetic compatibility theorems supply
 @@ -405,6 +510,16 @@ instance : PartialOrder DkNNRealQ where
      intro a b hab hba
      exact Quotient.sound (DkReal.equiv_of_le_of_le hab hba)
- 
+
 +/-- The quotient order is total. -/
 +theorem le_total (x y : DkNNRealQ) : x ≤ y ∨ y ≤ x := by
 +  refine Quotient.inductionOn₂ x y ?_
@@ -765,7 +765,7 @@ index 032cddaa..99ccc471 100644
 +  totality is proved and exported through Std.Total
 +  canonical, strict, and direct linear order structures remain open
    use a semantic bridge only as an independent cross-check
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index fb26c285..0af4303c 100644
@@ -795,30 +795,30 @@ index fe019890..021e932b 100644
 -- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`.
 +- Mathlib's semiring-level `IsOrderedRing DkNNRealQ`;
 +- totality through `Std.Total (· ≤ ·)`.
- 
+
  This checkpoint does not establish:
- 
+
 -- totality or a `LinearOrder`;
 +- a direct `LinearOrder` instance;
  - canonical order by additive differences;
  - strict ordered-semiring structure;
  - completeness;
 @@ -73,9 +74,8 @@ This checkpoint does not establish:
- 
+
  ### Totality
- 
+
 -The preferred internal route uses the finite geometry of nested closed
 -intervals. For two representations, exactly one of the following explanatory
 -states should control the proof:
 +The internal proof uses the finite geometry of nested closed intervals.
 +The explanatory states are:
- 
+
  ```text
  SeparatedLeft:
 @@ -88,9 +88,10 @@ Merge:
    neither separation occurs, so every stage overlaps and x ~ y.
  ```
- 
+
 -Nestedness makes either strict separation persistent. The Merge branch has
 -stagewise separation zero and therefore gives `Equiv`. This is the current
 -candidate for proving totality without evaluating into `Real`.
@@ -826,7 +826,7 @@ index fe019890..021e932b 100644
 +separation exists, the reverse order defect is bounded by the first
 +representation's vanishing width. Totality is therefore proved without
 +evaluating into `Real`.
- 
+
  See
  [`DkNNRealQ-Totality-Research.md`](DkNNRealQ-Totality-Research.md).
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md
@@ -834,51 +834,51 @@ index 802ede9e..3a7700e1 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-Totality-Research.md
 @@ -2,7 +2,8 @@
- 
+
  ## Status
- 
+
 -This is a pre-implementation report. No `LinearOrder` is claimed.
 +The internal totality experiment is implemented and accepted by Lean. No
 +direct `LinearOrder` is claimed yet.
- 
+
  The current computable core already provides:
- 
+
 @@ -17,7 +18,7 @@ DkNNRealQ:
    pow_le_pow
  ```
- 
+
 -The remaining question is whether every pair satisfies
 +Every pair now satisfies
- 
+
  ```lean
  x <= y ∨ y <= x.
 @@ -53,8 +54,8 @@ this protrusion disappears as precision increases.
  ## Main Finding
- 
+
  The workspace contains a stronger route than selecting the sign of an
 -unspecified real limit. Nested interval geometry suggests the following
 -trichotomy.
 +unspecified real limit. Nested interval geometry gives the following
 +comparison.
- 
+
  ### Separated Left
- 
+
 @@ -104,40 +105,43 @@ This route uses only:
- 
+
  It does not require evaluation into Mathlib's `Real` or `NNReal`.
- 
+
 -## Proposed Lean Checkpoints
 -
 -The implementation should proceed in small lemmas.
 +## Implemented Lean Checkpoints
- 
+
  ```text
  GapInterval:
 -  separation_eq_zero_iff_overlap
 -  strict separation orientations are exclusive
 +  Overlaps
 +  separation_eq_zero_iff_overlaps
- 
+
  DkReal:
 -  leftSeparated persists under later stages
 -  rightSeparated persists under later stages
@@ -891,7 +891,7 @@ index 802ede9e..3a7700e1 100644
 +  equiv_of_forall_overlaps
 +  le_of_not_exists_leftSeparatedAt
 +  le_total_repr
- 
+
  DkNNRealQ:
 -  representative le_total
 -  quotient le_total
@@ -899,10 +899,10 @@ index 802ede9e..3a7700e1 100644
 +  le_total
 +  Std.Total (· <= ·)
  ```
- 
+
 -Suggested proposition names are provisional:
 +No abstract `HasBigGapTotality` axiom was needed.
- 
+
 -```lean
 -GapInterval.Overlaps
 -DkReal.LeftSeparatedAt
@@ -921,18 +921,18 @@ index 802ede9e..3a7700e1 100644
 +  defect(y,x,n) <= width(x,n)
 +  therefore y <= x
  ```
- 
+
 -Avoid adding an abstract `HasBigGapTotality` axiom while the concrete interval
 -proof remains available.
 +The Merge state remains useful for interpretation and is represented by
 +`equiv_of_forall_overlaps`.
- 
+
  ## Relation To The Hint
- 
+
 @@ -148,10 +152,10 @@ The hint correctly identifies:
  - positive and negative directed Core defects;
  - the Merge state.
- 
+
 -The refinement from workspace exploration is that totality may not require a
 +The refinement from workspace exploration was correct: totality requires no
  new sign-selection principle. Nestedness turns a finite witnessed separation
@@ -940,8 +940,8 @@ index 802ede9e..3a7700e1 100644
 -stagewise overlap.
 +into a permanent orientation, while absence of left separation bounds the
 +reverse defect by a vanishing width.
- 
+
  ## Semantic Cross-Check
- 
+
 ````
 `````

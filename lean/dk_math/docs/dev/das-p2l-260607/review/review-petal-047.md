@@ -10,7 +10,7 @@ gch: 78b7901d5b7810e38e0f7d09231cdbd867bce5ab
 
 新規作成:
 
-[Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:1)
+[Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L1)
 
 内容は、Petal / Zsigmondy / GN で得た「局所 primitive witness location」と、Erdos #1196 / PrimitiveSet 側の「global log-capacity control」をどう接続するかの計画です。
 
@@ -38,8 +38,8 @@ Petal carrier
 
 既存 docs への参照も追加しました。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:619)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1705)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L619)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1705)
 
 検証は docs-only として `git diff --check` を実行し、問題なしです。
 

@@ -9,7 +9,7 @@ gch: 7704f1c1de89e9b5705e03b6563624efbf54d85b
 この方針で一段進めました。
 
 - `semanticValue` を `semanticRingHom : DkNNRealQ →+* ℝ` として束ねた
-- [SemanticCF2D.lean](/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean:1) を新設
+- [SemanticCF2D.lean](/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean#L1) を新設
 - `semanticVec`、`semanticValue_q2`、`semanticUnitKernel` を実装
 - 順序反映は重い独立課題として保留
 
@@ -180,9 +180,9 @@ index 47e37d85..d7c02f44 100644
  import DkMath.Analysis.TaylorBridge
  import DkMath.Analysis.DkReal
 +import DkMath.Analysis.DkReal.SemanticCF2D
- 
+
  #print "file: DkMath.Analysis"
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal.lean b/lean/dk_math/DkMath/Analysis/DkReal.lean
 index c2d91a82..bc7eca3c 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal.lean
@@ -190,13 +190,13 @@ index c2d91a82..bc7eca3c 100644
 @@ -78,8 +78,9 @@ constants, addition, multiplication, natural powers, and canonical order.
  values reconstructs the canonical quotient order, without adding decidable
  comparison.
- 
+
 -[TODO: semantic-cf2d] Use the semantic map to transport the CF2D quadratic
 -invariant `q2` into the Mathlib real-analysis layer.
 +[TODO: semantic-cf2d-analysis] Use the transported real `UnitKernel` as the
 +input to the first CF2D analytic theorem. The algebraic `q2` transport is
 +implemented separately in `DkReal.SemanticCF2D`.
- 
+
  [TODO: signed-arithmetic] General signed multiplication requires the minimum and maximum of four
  endpoint products and belongs outside the current nonnegative API.
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean b/lean/dk_math/DkMath/Analysis/DkReal/Semantic.lean
@@ -206,7 +206,7 @@ index ebc6eb5a..d8d9a4f6 100644
 @@ -355,6 +355,26 @@ theorem semanticValue_mono
    rw [semanticValue_add]
    exact le_add_of_nonneg_right (semanticValue_nonneg z)
- 
+
 +/--
 +The semantic interpretation bundled as a semiring homomorphism into
 +Mathlib's real numbers.
@@ -228,7 +228,7 @@ index ebc6eb5a..d8d9a4f6 100644
 +    semanticRingHom x = semanticValue x := rfl
 +
  end
- 
+
  end DkMath.Analysis.DkNNRealQ
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean b/lean/dk_math/DkMath/Analysis/DkReal/SemanticCF2D.lean
 new file mode 100644
@@ -336,7 +336,7 @@ index f0d76239..e1f1c363 100644
 +  treat order reflection as a separate heavier task
    compare semantic equality with DkReal.Equiv
  ```
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md b/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
 index f0d19fc5..75f8b6a4 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/task-trig-real-analysis-046.md
@@ -344,7 +344,7 @@ index f0d19fc5..75f8b6a4 100644
 @@ -60,5 +60,15 @@ consumer. Order reflection should remain independent of decidable comparison:
  semanticValue x ≤ semanticValue y -> x ≤ y
  ```
- 
+
 -After that, the first CF2D consumer should transport the quadratic invariant
 -`q2` through semantic evaluation.
 +The first CF2D consumer is now implemented in

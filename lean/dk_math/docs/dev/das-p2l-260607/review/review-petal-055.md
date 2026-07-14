@@ -8,7 +8,7 @@ gch: 1682f5dea9b62581587dfa151cc099392966428c
 
 実装しました。交差点の標識として、`NoLift` 軸と `PetalCarrierLabelNoncollisionOn` 軸を合流させる公開 theorem を追加しています。
 
-追加した中心 theorem は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean:526) のこれです。
+追加した中心 theorem は [ErdosBridge.lean](/lean/dk_math/DkMath/Petal/ErdosBridge.lean#L526) のこれです。
 
 ```lean
 petalNoLiftPrimeChannelFamily_logSubProbability_GN_of_labelNoncollision
@@ -30,9 +30,9 @@ PetalNoLiftPrimeChannel family
 
 更新した docs は以下です。
 
-- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md:681)
-- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md:171)
-- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md:1757)
+- [Petal-Overview.md](/lean/dk_math/DkMath/Petal/docs/Petal-Overview.md#L681)
+- [Petal-ErdosBridge-ExperimentPlan.md](/lean/dk_math/DkMath/Petal/docs/Petal-ErdosBridge-ExperimentPlan.md#L171)
+- [FLGNB-PetalRoadmap.md](/lean/dk_math/DkMath/NumberTheory/docs/BinomialPrimeWeighted/FLGNB-PetalRoadmap.md#L1757)
 
 検証は通っています。
 

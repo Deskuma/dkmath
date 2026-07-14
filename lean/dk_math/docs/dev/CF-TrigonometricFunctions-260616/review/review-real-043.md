@@ -393,7 +393,7 @@ index f4e2d929..fe285dbc 100644
 @@ -56,13 +56,15 @@ moving to a sufficiently precise stage. Multiplication preserves it for a
  strictly positive factor by transforming the canonical Gap from `z` to
  `z * a`; the zero-factor branch collapses that Gap.
- 
+
 -[TODO: strict-order-instance] Select the appropriate Mathlib strict ordered
 -semiring interface only after checking that its fields match this API without
 -adding stronger or classical structure accidentally.
@@ -401,7 +401,7 @@ index f4e2d929..fe285dbc 100644
 +match the proved API: cancellative ordered addition, nontriviality, and strict
 +multiplication by positive factors. It requires neither additive inverses nor
 +a linear order.
- 
+
 -[TODO: linear-order] Decide whether the now-proved quotient totality should be
 -packaged as a direct classical `LinearOrder`, or retained as `PartialOrder`
 -plus `Std.Total` so that decidable comparison remains an explicit choice.
@@ -409,7 +409,7 @@ index f4e2d929..fe285dbc 100644
 +`LinearOrder` requires decidable comparison and equality, but no terminating
 +decision procedure for asymptotic interval order is currently available.
 +Classical comparison should therefore remain an explicit local choice.
- 
+
  [TODO: semantic-bridge] Add `BridgeNNReal.lean` / `BridgeReal.lean` only after proving that the
  chosen evaluation is independent of representatives. Such evaluation may
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean b/lean/dk_math/DkMath/Analysis/DkReal/CanonicalOrder.lean
@@ -419,7 +419,7 @@ index 1b977471..3715108f 100644
 @@ -327,6 +327,55 @@ theorem mul_lt_mul_of_pos_left
      a * x < a * y := by
    simpa only [mul_comm] using mul_lt_mul_of_pos_right hxy ha
- 
+
 +/--
 +Order can be cancelled across a common left summand.
 +
@@ -479,7 +479,7 @@ index 1dc4ab5f..7d85a32c 100644
 @@ -55,9 +55,10 @@ and quotient totality are implemented below. Lean accepts the stronger
  two-branch proof: either a finite left separation is witnessed, or the reverse
  defect is bounded at every stage by the first interval's width.
- 
+
 -[TODO: linear-order] Decide whether to install a direct `LinearOrder` instance
 -or expose totality through `Std.Total` while keeping decidability and classical
 -comparison choices explicit.
@@ -487,7 +487,7 @@ index 1dc4ab5f..7d85a32c 100644
 +installing `LinearOrder`. Mathlib's `LinearOrder` requires decidable `≤`, `<`,
 +and equality, while no terminating decision procedure for this asymptotic
 +order has been established. Classical comparison can be selected locally.
- 
+
  [TODO: totality/alternative] Keep a semantic `NNReal` proof as an independent
  cross-check, not as a dependency of the computable order core.
 @@ -65,8 +66,9 @@ cross-check, not as a dependency of the computable order core.
@@ -499,9 +499,9 @@ index 1dc4ab5f..7d85a32c 100644
 +historical: its algebraic assumption is only `Semiring`. Canonical and strict
 +ordered-semiring structures are installed by `CanonicalOrder`; no
 +`LinearOrder` is claimed.
- 
+
  ## Strict Gap kernel
- 
+
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md
 index 36c9b75d..c769f78f 100644
 --- a/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-StrictGap-Design.md
@@ -515,11 +515,11 @@ index 36c9b75d..c769f78f 100644
 +[done] `IsStrictOrderedRing` interface
 +[decision] retain `PartialOrder` plus `Std.Total`; do not install `LinearOrder`
  ```
- 
+
  The representative theorem now precedes every strict ordered-semiring
  typeclass. It is the mathematical kernel; a typeclass will only package its
  later quotient consequences.
- 
+
 +## Interface Decision
 +
 +Mathlib's `IsStrictOrderedRing` fits this quotient without adding inverses or
@@ -543,7 +543,7 @@ index 36c9b75d..c769f78f 100644
 +is not required.
 +
  ## Arithmetic Interpretation
- 
+
  Addition preserves the strict Gap after refinement:
 ````
 `````

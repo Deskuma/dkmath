@@ -265,14 +265,14 @@ index 8347dd65..56c609ee 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
 @@ -27,8 +27,9 @@ Mathlib's `Real` is selected.
  under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
- 
+
  Addition, multiplication, and natural powers are monotone for the asymptotic
 -order, and zero is the least quotient value. Verify the intended
 -ordered-algebra hierarchy before installing stronger typeclasses.
 +order, and zero is the least quotient value. `DkReal.Order` packages these
 +facts as Mathlib's semiring-level `IsOrderedRing` predicate. Canonical,
 +strict, and linear order structures remain unclaimed.
- 
+
  [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -280,7 +280,7 @@ index 879b89d2..977da526 100644
 --- a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 @@ -28,8 +28,9 @@ to derive it.
- 
+
  Addition, multiplication on nonnegative representations, and natural powers
  are monotone for this order, and zero is the least quotient value. The
 -remaining ordered-algebra work is to match these theorems with the intended
@@ -289,12 +289,12 @@ index 879b89d2..977da526 100644
 +historical: its algebraic assumption is only `Semiring`. No canonical-order,
 +strict-order, or linear-order structure is claimed.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -305,6 +306,10 @@ theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
    intro a
    exact DkNNReal.zero_le a
- 
+
 +/-- Zero is below one. -/
 +theorem zero_le_one : (0 : DkNNRealQ) ≤ 1 :=
 +  zero_le 1
@@ -305,7 +305,7 @@ index 879b89d2..977da526 100644
 @@ -315,6 +320,18 @@ theorem add_le_add
    intro c d hcd
    exact DkNNReal.add_le_add hab hcd
- 
+
 +/-- Addition by a fixed right summand preserves order. -/
 +theorem add_le_add_left
 +    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
@@ -324,7 +324,7 @@ index 879b89d2..977da526 100644
 @@ -325,6 +342,18 @@ theorem mul_le_mul
    intro c d hcd
    exact DkNNReal.mul_le_mul hab hcd
- 
+
 +/-- Multiplication by a fixed left factor preserves order. -/
 +theorem mul_le_mul_of_nonneg_left
 +    {x y : DkNNRealQ} (hxy : x ≤ y) (z : DkNNRealQ) :
@@ -339,11 +339,11 @@ index 879b89d2..977da526 100644
 +
  /--
  Natural powers are monotone.
- 
+
 @@ -341,4 +370,23 @@ theorem pow_le_pow
        rw [pow_succ_eq, pow_succ_eq]
        exact mul_le_mul ih hxy
- 
+
 +/--
 +Ordered-semiring compatibility for the quotient.
 +
@@ -376,7 +376,7 @@ index 4e864c65..da120c23 100644
 +  IsOrderedRing packages semiring-level ordered compatibility
 +  canonical, strict, and linear order structures remain open
    investigate totality before any LinearOrder claim
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index 443b7d5c..8fd5e41a 100644
@@ -401,7 +401,7 @@ index a03e2463..5f9e0ac2 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-CommSemiring-Checkpoint.md
 @@ -61,8 +61,9 @@ lower-endpoint defect. It is invariant under vanishing-separation equivalence
  and yields a `PartialOrder` on `DkNNRealQ`.
- 
+
  Addition, multiplication, and natural powers are monotone for this order.
 -Zero is the least quotient value. Remaining ordered-algebra work is selecting
 -the appropriate typeclass hierarchy, together with totality.
@@ -409,7 +409,7 @@ index a03e2463..5f9e0ac2 100644
 +predicate, which at this version requires only a semiring and partial order.
 +Canonical order and totality remain separate questions.
  No `LinearOrder` is claimed yet.
- 
+
  ### Semantic Bridge
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 index 468542dc..f72c5b0c 100644
@@ -424,7 +424,7 @@ index 468542dc..f72c5b0c 100644
 +now include the semiring-level `IsOrderedRing` predicate. Canonical, strict,
 +and linear order structures remain deferred; zero-minimality and addition,
 +multiplication, and natural-power monotonicity are available.
- 
+
  Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
  module because selecting the represented limit may require `noncomputable`.
 ````

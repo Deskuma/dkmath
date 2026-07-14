@@ -236,13 +236,13 @@ index d3f50a42..8347dd65 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/DkNNRealQ.lean
 @@ -27,8 +27,8 @@ Mathlib's `Real` is selected.
  under `DkNNReal.Equiv`, and installs a `PartialOrder` on this quotient.
- 
+
  Addition, multiplication, and natural powers are monotone for the asymptotic
 -order. Prove that zero is least and verify the intended ordered-algebra
 -hierarchy before installing stronger typeclasses.
 +order, and zero is the least quotient value. Verify the intended
 +ordered-algebra hierarchy before installing stronger typeclasses.
- 
+
  [TODO] A semantic map to Mathlib's `NNReal` should be placed in a separate
  bridge module and proved to preserve zero, one, addition, multiplication,
 diff --git a/lean/dk_math/DkMath/Analysis/DkReal/Order.lean b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
@@ -251,7 +251,7 @@ index 61d3173b..879b89d2 100644
 +++ b/lean/dk_math/DkMath/Analysis/DkReal/Order.lean
 @@ -27,9 +27,9 @@ partial order on `DkNNRealQ`.
  to derive it.
- 
+
  Addition, multiplication on nonnegative representations, and natural powers
 -are monotone for this order. The remaining ordered-algebra work is to prove
 -that zero is least and to match these theorems with the intended typeclass
@@ -260,12 +260,12 @@ index 61d3173b..879b89d2 100644
 +remaining ordered-algebra work is to match these theorems with the intended
 +typeclass hierarchy.
  -/
- 
+
  namespace DkMath.Analysis.DkReal
 @@ -134,6 +134,24 @@ theorem le_congr
      exact le_trans (equiv_le hxx')
        (le_trans hx'y' (equiv_le (equiv_symm hyy')))
- 
+
 +/--
 +The rational zero approximation is below every nonnegative representation.
 +
@@ -286,11 +286,11 @@ index 61d3173b..879b89d2 100644
 +
  /--
  Stagewise addition is monotone for asymptotic order.
- 
+
 @@ -235,6 +253,10 @@ theorem le_congr
      Le x y ↔ Le x' y' :=
    DkReal.le_congr hxx' hyy'
- 
+
 +/-- Zero is below every nonnegative representative. -/
 +theorem zero_le (x : DkNNReal) : Le zero x :=
 +  DkReal.zero_le x.nonnegative
@@ -301,7 +301,7 @@ index 61d3173b..879b89d2 100644
 @@ -277,6 +299,12 @@ instance : PartialOrder DkNNRealQ where
      intro a b hab hba
      exact Quotient.sound (DkReal.equiv_of_le_of_le hab hba)
- 
+
 +/-- Zero is the least value of the nonnegative quotient. -/
 +theorem zero_le (x : DkNNRealQ) : 0 ≤ x := by
 +  refine Quotient.inductionOn x ?_
@@ -323,7 +323,7 @@ index 09c6bcd2..4e864c65 100644
 +  zero is least
 +  next package these results into the appropriate ordered-algebra typeclass
    investigate totality before any LinearOrder claim
- 
+
  BridgeNNReal / BridgeReal:
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md b/lean/dk_math/DkMath/Analysis/docs/DkMath.Analysis_Design_Draft_2026-06-19.md
 index 0e91f259..443b7d5c 100644
@@ -347,14 +347,14 @@ index 5281b7fb..a03e2463 100644
 +++ b/lean/dk_math/DkMath/Analysis/docs/DkNNRealQ-CommSemiring-Checkpoint.md
 @@ -61,8 +61,8 @@ lower-endpoint defect. It is invariant under vanishing-separation equivalence
  and yields a `PartialOrder` on `DkNNRealQ`.
- 
+
  Addition, multiplication, and natural powers are monotone for this order.
 -Remaining ordered-algebra work includes proving that zero is least and
 -selecting the appropriate typeclass hierarchy, together with totality.
 +Zero is the least quotient value. Remaining ordered-algebra work is selecting
 +the appropriate typeclass hierarchy, together with totality.
  No `LinearOrder` is claimed yet.
- 
+
  ### Semantic Bridge
 diff --git a/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md b/lean/dk_math/DkMath/Analysis/docs/DkReal-Nonnegative-Power-Milestone.md
 index c7c090dd..468542dc 100644
@@ -369,7 +369,7 @@ index c7c090dd..468542dc 100644
 -available.
 +remain deferred until the intended hierarchy has been verified; zero-minimality
 +and addition, multiplication, and natural-power monotonicity are now available.
- 
+
  Any map to Mathlib's `NNReal` or `Real` should remain in a separate bridge
  module because selecting the represented limit may require `noncomputable`.
 ````
