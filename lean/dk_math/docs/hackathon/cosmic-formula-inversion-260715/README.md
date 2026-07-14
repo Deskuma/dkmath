@@ -1,140 +1,267 @@
 # Hackathon: OpenAI Build Week - 260715
 
-## Cosmic Formula Inversion
+# DkMath — Cosmic Formula Inversion
 
-OpenAI Build Week 向けの DkMath ハッカソン開発資料です。
+A verifiable AI-assisted mathematical research project for the OpenAI Build Week Hackathon.
 
-このプロジェクトでは、DkMath に既に存在する数論・宇宙式・実数射影の API を再利用し、次の流れを Lean 4 と可視化で提示します。
+This project demonstrates a workflow in which:
 
-```text
-有限素数宇宙
-  → coprime Gap
-  → 宇宙式による平方完成
-  → 既知宇宙外の fresh prime
-  → 反転射影
-  → Lean による検証
-  → Manim による可視化
-```
+1. a mathematical structure is proposed and refined through human–AI dialogue;
+2. Codex investigates and implements the structure inside an existing Lean 4 library;
+3. Lean verifies the resulting theorem surface;
+4. the verified mathematics is transformed into an accessible visual demonstration.
 
-本プロジェクトの目的は、新しい巨大理論をこのディレクトリ内に再実装することではありません。
+The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula and its inverse-projection program.
 
-既存の DkMath ライブラリから必要な構造を探索し、薄い Hackathon API と、審査用に理解可能な一本のデモ導線へまとめます。
+---
 
-## Repository
+## Project Goal
+
+The first public demonstration follows one short mathematical path:
 
 ```text
-repository:
-  Deskuma/dkmath
-
-base branch:
-  nightly
-
-working branch:
-  hackathon/cosmic-formula-inversion
+finite prime universe
+→ product of known primes
+→ coprime offset
+→ completed square
+→ factorization outside the known universe
+→ Lean verification
+→ visual explanation
 ```
 
-Lean 側の作業領域:
+The project is not intended to create an isolated theorem file.
 
-```text
-DkMath/Hackathon/
-  FinitePrimeEscape.lean
-  CosmicCompletion.lean
-  Demo.lean
-```
+Its purpose is to expose a clear, verifiable path through the existing DkMath library and show how an AI coding agent can:
 
-文書側の作業領域:
+- inspect a large formal mathematics codebase;
+- reuse existing abstractions;
+- isolate genuinely missing lemmas;
+- implement only the necessary bridge layer;
+- verify the result with Lean;
+- report the exact remaining mathematical obstruction.
 
-```text
-docs/hackathon/cosmic-formula-inversion-260715/
-```
+---
 
-## Core Mathematical Route
+## Core Mathematical Contract
 
-有限素数集合 $S$ に対して、
+Let `S` be a finite set of prime numbers and define:
 
 $$
 P=\prod_{p\in S}p
 $$
 
-とします。
-
-$u$ が $P$ と互いに素で、$P+u>1$ ならば、$P+u$ の任意の素因子は $S$ の外側にあります。
+Choose a positive integer `u` satisfying:
 
 $$
 \gcd(P,u)=1
 $$
 
-$$
-q\mid P+u
-$$
+Assume:
 
 $$
-q\notin S
+1<P+u
 $$
 
-この有限素数脱出を、宇宙式の平方完成と接続します。
+If a prime `q` divides `P + u`, then `q` cannot belong to the original finite prime set:
+
+$$
+q\mid P+u\Longrightarrow q\notin S
+$$
+
+The geometric completion identity is:
 
 $$
 P(P+2u)+u^2=(P+u)^2
 $$
 
-DkMath 語彙では、暫定的に次のように読みます。
+DkMath interprets this as:
 
 ```text
-Body:
-  P(P + 2u)
-
-Gap:
-  u^2
-
-Big:
-  (P + u)^2
-
-fresh prime channel:
-  prime divisor q of P + u with q not in S
+Big  = (P + u)²
+Body = P(P + 2u)
+Gap  = u²
 ```
 
-ここでいう fresh prime は、有限集合 $S$ に対して新しい素因子という意味です。
+with:
 
-数列に対する primitive prime divisor と混同しないでください。
+$$
+\mathrm{Big}=\mathrm{Body}+\mathrm{Gap}
+$$
 
-## Canonical Demo Example
+The prime factors of `P + u` therefore appear on the completed boundary, while the Body is generated from the finite known-prime universe.
 
-全レイヤーで同じ具体例を使います。
+---
+
+## Demonstration Example
+
+The initial demonstration uses:
 
 $$
 S=\{2,3,5,7\}
 $$
 
 $$
-P=210
+P=2\cdot3\cdot5\cdot7=210
 $$
 
 $$
 u=11
 $$
 
+Then:
+
 $$
 P+u=221=13\cdot17
 $$
 
-$13$ と $17$ は、どちらも $S$ に含まれません。
+Both `13` and `17` lie outside the original set `S`.
 
-平方完成は次です。
+The Cosmic Formula completion is:
 
 $$
 210\cdot232+11^2=221^2
 $$
 
+or numerically:
+
 $$
 48720+121=48841
 $$
 
-Lean theorem、Manim scene、説明文、デモ UI は、原則としてこの例を共有します。
+This single example will be shared by:
 
-## Documentation Reading Order
+- the Lean theorem demonstration;
+- the Manim animation;
+- the submission video;
+- the project documentation;
+- the final interactive or scripted demo.
 
-Codex は、作業開始前に存在する文書を次の順で読んでください。
+Using one common example prevents the formal proof, visual explanation, and submission narrative from drifting into separate mathematical stories.
+
+---
+
+## Why This Matters
+
+The elementary prime-factor argument is not the final research goal.
+
+It is the smallest verifiable example of a broader DkMath program:
+
+```text
+finite arithmetic world
+→ boundary completion
+→ new factor channel
+→ normalized projection
+→ bounded inverse representation
+→ reconstruction of an integer-scale structure
+```
+
+The larger project studies how apparently unbounded arithmetic structures can be projected into bounded interval representations and later reconstructed through formally verified inverse maps.
+
+The hackathon version deliberately begins with a theorem that is:
+
+- finite;
+- exact;
+- visually understandable;
+- inexpensive to verify;
+- connected to deeper existing DkMath infrastructure.
+
+---
+
+## Repository Branch
+
+```text
+repository: Deskuma/dkmath
+base branch: nightly
+working branch: hackathon/cosmic-formula-inversion
+```
+
+---
+
+## Lean Module Layout
+
+The hackathon-facing Lean surface is intentionally thin.
+
+```text
+DkMath/Hackathon/
+├── FinitePrimeEscape.lean
+├── CosmicCompletion.lean
+└── Demo.lean
+```
+
+### `FinitePrimeEscape.lean`
+
+Responsibilities:
+
+- finite sets of known primes;
+- their product `P`;
+- coprimality with the offset `u`;
+- existence of a prime divisor of `P + u`;
+- proof that such a divisor is outside the original finite set.
+
+### `CosmicCompletion.lean`
+
+Responsibilities:
+
+- the identity
+
+$$
+P(P+2u)+u^2=(P+u)^2
+$$
+
+- connection to existing Big / Body / Gap APIs;
+- reusable wrappers around existing DkMath Cosmic Formula theorems;
+- no duplicate parallel theory.
+
+### `Demo.lean`
+
+Responsibilities:
+
+- the concrete example `P = 210`, `u = 11`;
+- factorization `221 = 13 × 17`;
+- final public theorem surface;
+- a compact import path for the recorded demonstration.
+
+These modules must depend on existing DkMath infrastructure.
+
+Existing DkMath modules must never import the hackathon facade.
+
+---
+
+## Documentation Layout
+
+```text
+docs/hackathon/cosmic-formula-inversion-260715/
+├── README.md
+├── PROJECT.md
+├── ROADMAP.md
+├── MATHEMATICAL_CONTRACT.md
+├── ARCHITECTURE.md
+├── EXISTING_DKMATH_MAP.md
+├── VISUAL_STORYBOARD.md
+├── DEMO_CONTRACT.md
+├── CODEX_PLAN.md
+├── CHECKPOINTS.md
+├── DECISIONS.md
+├── GLOSSARY.md
+└── RISKS_AND_STOPPING_RULES.md
+```
+
+The documentation is part of the project deliverable.
+
+It records not only the final theorem, but also:
+
+- why the theorem surface was selected;
+- how the existing library was audited;
+- which definitions were reused;
+- which missing lemmas were discovered;
+- where Codex was instructed to stop;
+- how the verified theorem was converted into a visual explanation.
+
+---
+
+## Required Reading Order for Codex
+
+Before modifying source code, Codex must read the project documents in this order:
 
 ```text
 1. README.md
@@ -150,127 +277,278 @@ Codex は、作業開始前に存在する文書を次の順で読んでくだ�
 11. DEMO_CONTRACT.md
 12. CHECKPOINTS.md
 13. CODEX_PLAN.md
-14. current checkpoint instruction
+14. the current checkpoint instruction
 ```
 
-まだ存在しない文書は読み飛ばしてください。
+This order should remain stable across sessions.
 
-ディレクトリ全体を無差別に読む必要はありません。
+The stable prefix exists to preserve a consistent project interpretation and reduce repeated repository exploration.
 
-`1st_PLAN.md` はプロジェクト開始時の履歴資料です。現在の checkpoint 指示より優先しません。
+---
 
-## Source-of-Truth Priority
+## Tracking Anchor Files
 
-内容が競合した場合は、次の順で新しい情報を優先します。
+UUID-named empty files inside the hackathon documentation directory are intentional tracking anchors.
+
+Example form:
 
 ```text
-1. current checkpoint instruction
-2. CHECKPOINTS.md
-3. DECISIONS.md
-4. MATHEMATICAL_CONTRACT.md
-5. ARCHITECTURE.md
-6. ROADMAP.md
-7. PROJECT.md
-8. 1st_PLAN.md
+6a54173a-e5f8-83ee-9983-6932a7be858c
 ```
 
-数学的事実については、文書の説明より Lean が認めた theorem statement を優先します。
+They connect repository checkpoints to their originating research conversation.
 
-既存実装の有無については、推測せず、実際の DkMath source を検索してください。
+Rules:
 
-## Codex Operating Rules
+- do not delete them;
+- do not rename them;
+- do not add content to them;
+- do not inspect them after confirming that they are empty;
+- do not treat them as implementation inputs.
 
-Codex は、各 checkpoint の指示に従って次の順で作業します。
+Their filenames are metadata. Their contents are intentionally empty.
+
+---
+
+## Codex Operating Principles
+
+Codex must act as a repository-aware mathematical implementation agent, not as a code transcription tool.
+
+### Required behavior
+
+- inspect existing DkMath APIs before defining new ones;
+- prefer theorem wrappers and bridge lemmas over parallel abstractions;
+- preserve existing dependency directions;
+- verify every implementation checkpoint with Lean;
+- distinguish mathematical obstruction from API inconvenience;
+- stop at the first genuine missing invariant;
+- record exact theorem names and file locations;
+- report what was proved and what remains unproved.
+
+### Prohibited behavior
+
+- do not expand into unrelated DkMath research branches;
+- do not continue into Collatz, FLT, RH, ABC, or Erdős problems unless a direct reusable API is required;
+- do not create a second Big / Body / Gap hierarchy;
+- do not create new prime-factor terminology when an existing predicate is sufficient;
+- do not claim cryptographic security;
+- do not claim a new prime-number theorem;
+- do not infer an infinite theorem from a finite construction;
+- do not replace a formal proof obligation with numerical testing;
+- do not continue beyond the checkpoint stopping rule.
+
+---
+
+## Terminology Boundary
+
+The project distinguishes several related terms.
+
+### Fresh prime factor
+
+A prime divisor of `P + u` that is not contained in the original finite prime set.
+
+This is the preferred term for the initial demonstration.
+
+### Primitive prime divisor
+
+A sequence-relative concept stating that a prime appears at one stage and not at specified earlier stages.
+
+This stronger term must not be used unless the theorem actually includes the required sequence-relative hypotheses.
+
+### Finite prime universe
+
+The finite arithmetic world generated by the selected prime set `S`, its product `P`, and the associated residue information.
+
+This is project terminology, not a replacement for standard algebraic definitions.
+
+### Inverse projection
+
+A later project phase in which unbounded arithmetic data is normalized into a bounded interval representation and reconstructed through a verified inverse or uniqueness theorem.
+
+The initial finite-prime theorem is an entry point to this phase, not the entire inverse-projection result.
+
+---
+
+## Development Roadmap
+
+The intended phase structure is:
 
 ```text
-read
-→ audit
-→ identify reusable APIs
-→ isolate missing lemmas
-→ implement only the requested surface
-→ build
-→ report
-→ stop
+Phase 0 — Project documentation and repository scaffold
+Phase 1 — Existing DkMath API audit
+Phase 2 — Finite prime escape theorem
+Phase 3 — Cosmic Formula completion bridge
+Phase 4 — Inverse projection surface
+Phase 5 — DkReal interval and reconstruction bridge
+Phase 6 — Manim visual implementation
+Phase 7 — Unified Lean and visual demo
+Phase 8 — Submission packaging
 ```
 
-次を守ってください。
+Each phase must have:
 
-- 既存 DkMath API の再利用を優先する。
-- 同じ概念の平行定義を作らない。
-- Hackathon module は薄い facade / wrapper / bridge とする。
-- Hackathon 専用コードを既存理論の下層へ逆流させない。
-- current checkpoint にない隣接研究へ進まない。
-- 未解決問題の解決を主張しない。
-- finite theorem から infinite theorem へ飛躍しない。
-- fresh prime と primitive prime divisor を混同しない。
-- 可視化上の説明を、証明済み theorem より強くしない。
-- 真正な障害を発見した場合は、その地点で止まる。
-- 停止時には、最小の不足 theorem または API を報告する。
+- a precise theorem or artifact target;
+- an explicit file boundary;
+- a completion condition;
+- a stopping condition;
+- a report identifying the next genuine obstruction.
 
-## Tracking-Key Files
+---
 
-UUID 形式の名前を持つ空ファイルは、会話・作業履歴を接続するための追跡タグです。
+## Visual Demonstration
+
+The first animation should remain under approximately sixty seconds.
+
+Planned sequence:
 
 ```text
-example:
-  6a54173a-e5f8-83ee-9983-6932a7be858c
+1. Display the finite prime set {2, 3, 5, 7}.
+2. Combine the primes into P = 210.
+3. Construct the rectangular Body P(P + 2u).
+4. Display the missing square Gap u².
+5. Insert the Gap and complete the square (P + u)².
+6. Reveal the completed side length P + u = 221.
+7. Factor 221 into 13 × 17.
+8. Highlight that 13 and 17 are outside the original prime set.
+9. Show the corresponding Lean theorem and successful verification.
 ```
 
-これらは意図的に空です。
+The animation explains the structure.
 
-- 削除しない。
-- 名前を変更しない。
-- 内容を追加しない。
-- 中身を読む必要はない。
-- 実装対象として扱わない。
+Lean establishes the theorem.
 
-ファイル一覧上で存在を確認するだけで十分です。
+Neither layer substitutes for the other.
+
+---
+
+## Supporting Research Footage
+
+The project may include short recorded footage from the DkMath Collatz formalization branch.
+
+That footage demonstrates the same development workflow at a much larger scale:
+
+```text
+repository audit
+→ theorem design
+→ Lean implementation
+→ error correction
+→ verification
+→ isolation of a genuine mathematical obstruction
+```
+
+The Collatz work is supporting evidence of the workflow.
+
+It is not the main theorem of this hackathon submission and no Collatz convergence claim is made.
+
+---
 
 ## Current Status
 
-現在は repository scaffold の形成が完了した段階です。
+The initial repository scaffold is complete.
+
+Created Lean placeholders:
 
 ```text
-Hackathon checkpoint 000:
-  branch created
-  documentation directory created
-  Lean facade files created
-  implementation not started
+DkMath/Hackathon/FinitePrimeEscape.lean
+DkMath/Hackathon/CosmicCompletion.lean
+DkMath/Hackathon/Demo.lean
 ```
 
-現在の空 Lean ファイルは、配置を固定するための土台です。
-
-数学 API の設計と既存 DkMath の再利用調査が完了するまで、独自定義を追加しないでください。
-
-## First Development Goal
-
-第一目標は、次を一本の検証可能なデモとして閉じることです。
+Created hackathon documentation directory:
 
 ```text
-finite prime set S
-→ product P
-→ coprime offset u
-→ fresh prime divisor of P + u
-→ cosmic square completion
-→ concrete example P = 210, u = 11
-→ Lean verification
-→ Manim visualization
+docs/hackathon/cosmic-formula-inversion-260715/
 ```
 
-最初の Codex セッションでは、Lean 実装を開始せず、既存 DkMath API の再利用地図を作成します。
+The next stage is documentation completion followed by a repository-audit-only Codex session.
 
-具体的な編集範囲と停止条件は、`CODEX_PLAN.md` および current checkpoint instruction に従ってください。
+Codex must not begin theorem implementation until:
 
-## Completion Principle
+- the mathematical contract is fixed;
+- the project roadmap is fixed;
+- the existing DkMath reuse map has been audited;
+- the first checkpoint instruction has been reviewed.
 
-各 checkpoint は、次のどちらかで終了します。
+---
+
+## First Codex Audit Session
+
+The first Codex session is investigation-only.
+
+Its target is:
 
 ```text
-A. requested deliverable is complete and verified
+Read the complete hackathon documentation in the prescribed order.
 
-B. the first genuine obstruction is isolated and reported
+Do not edit Lean source files.
+
+Audit the existing DkMath repository for reusable definitions and theorems
+required by the mathematical contract.
+
+Identify:
+- APIs reusable without modification;
+- theorems requiring thin wrappers;
+- genuinely missing lemmas;
+- dangerous dependency directions;
+- the smallest viable implementation surface.
+
+Propose updates to EXISTING_DKMATH_MAP.md.
+
+Stop after producing the audit report.
 ```
 
-隣接する Phase を自動的に開始しないでください。
+The implementation checkpoint will be written only after this report has been reviewed.
 
-本プロジェクトでは、広く探索することよりも、検証済みの一本道を完成させることを優先します。
+---
+
+## Verification Policy
+
+Every implementation checkpoint must record:
+
+```text
+checkpoint identifier
+goal
+model and reasoning level
+elapsed time
+credits consumed
+files changed
+definitions added
+theorems added
+build targets
+no-sorry status
+git diff status
+genuine obstruction
+next permitted action
+session identifier
+```
+
+Lean build success is the verification gate for formal claims.
+
+Numerical examples and visual output are supplementary evidence only.
+
+---
+
+## Non-Goals
+
+The first hackathon milestone does not claim:
+
+- a proof of the Collatz conjecture;
+- a new proof of the infinitude of primes;
+- a new primitive-prime-divisor theorem;
+- a general theory of aperiodic tilings;
+- cryptographic security;
+- a complete formalization of Euclidean area;
+- a complete DkReal inversion theorem;
+- a solution to any currently open mathematical problem.
+
+The project demonstrates a verifiable research workflow and a reusable structural bridge inside DkMath.
+
+---
+
+## Authors
+
+D. and Wise Wolf
+
+The Lean source code is released under the MIT license used by the DkMath project.
+
+The project documentation records a human–AI collaborative mathematical research process.
