@@ -991,17 +991,17 @@ This table must be updated after implementation.
 
 | Demo element | Required formal anchor | Final name |
 |---|---|---|
-| finite set | definition | pending |
-| product equals `210` | theorem | pending |
-| coprimality | theorem | pending |
-| boundary equals `221` | theorem | pending |
-| factorization | theorem | pending |
-| `13` prime | theorem | pending |
-| `17` prime | theorem | pending |
-| `13` fresh | theorem | pending |
-| `17` fresh | theorem | pending |
-| Cosmic completion | theorem | pending |
-| successful verification | build gate | pending |
+| finite set | definition | `DkMath.Hackathon.demoPrimeSet` |
+| product equals `210` | theorem | `DkMath.Hackathon.demo_product` |
+| coprimality | theorem | `DkMath.Hackathon.demo_coprime` |
+| boundary equals `221` | theorem | `DkMath.Hackathon.demo_boundary` |
+| factorization | theorem | `DkMath.Hackathon.demo_factorization` |
+| `13` prime | theorem | `DkMath.Hackathon.demo_thirteen_prime` |
+| `17` prime | theorem | `DkMath.Hackathon.demo_seventeen_prime` |
+| `13` fresh | theorem | `DkMath.Hackathon.demo_thirteen_fresh` |
+| `17` fresh | theorem | `DkMath.Hackathon.demo_seventeen_fresh` |
+| Cosmic completion | theorem | `DkMath.Hackathon.demo_cosmic_completion` |
+| successful verification | build gate | `lake build DkMath.Hackathon.Demo` |
 
 No `pending` value may remain in the final demo contract.
 

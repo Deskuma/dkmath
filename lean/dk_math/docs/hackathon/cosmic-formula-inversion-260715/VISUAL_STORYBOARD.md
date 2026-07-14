@@ -1912,16 +1912,16 @@ This table must be finalized after the Lean theorem surface is accepted.
 
 | Visual element | Formal declaration | Status |
 |---|---|---|
-| `S = {2, 3, 5, 7}` | `demoPrimeSet` | pending |
-| product equals `210` | `demo_product` | pending |
-| `Coprime 210 11` | `demo_coprime` | pending |
-| Body + Gap = Big | `cosmicCompletion` | pending |
-| concrete completion | `demo_cosmic_completion` | pending |
-| boundary equals `221` | `demo_boundary` | pending |
-| `221 = 13 × 17` | `demo_factorization` | pending |
-| `13` fresh | `demo_thirteen_fresh` | pending |
-| `17` fresh | `demo_seventeen_fresh` | pending |
-| successful verification | actual build gate | pending |
+| `S = {2, 3, 5, 7}` | `demoPrimeSet` | verified |
+| product equals `210` | `demo_product` | verified |
+| `Coprime 210 11` | `demo_coprime` | verified |
+| Body + Gap = Big | `cosmicCompletion` | verified |
+| concrete completion | `demo_cosmic_completion` | verified |
+| boundary equals `221` | `demo_boundary` | verified |
+| `221 = 13 × 17` | `demo_factorization` | verified |
+| `13` fresh | `demo_thirteen_fresh` | verified |
+| `17` fresh | `demo_seventeen_fresh` | verified |
+| successful verification | `lake build DkMath.Hackathon.Demo` | passed |
 
 No row may remain `pending` in the final storyboard used for rendering.
 
