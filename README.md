@@ -2,79 +2,7 @@
 
 The result of "D." and Wise Wolf's (AI-GPT) experiment with new mathematical theories.
 
-## News
-
-> ## Verified Challenge: Infinitely Many Primes
-
-DkMath.CosmicFormula provides a Lean-formalized proof route from the Cosmic Formula boundary structure to the infinitude of primes.
-
-The proof was validated on Lean Comparator Live against the known challenge:
-
-- Challenge: "Infinitely Many Primes"
-- Theorem: `InfinitudeOfPrimes`
-- Internal route: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
-- Core structure: `cosmicN P = P * (P + 2)` and `cosmicN P + 1 = (P + 1)^2`
-
-see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
-
----
-
-## 検証済み Challenge: 素数の無限性
-
-DkMath.CosmicFormula は、宇宙式境界構造から素数の無限性へ至る Lean 形式証明ルートを含む。
-
-この証明は Lean Comparator Live の既知 Challenge “Infinitely Many Primes” に対して検証成功した。
-
-- Challenge: `Infinitely Many Primes`
-- Theorem: `InfinitudeOfPrimes`
-- 内部ルート: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
-- 中核構造: `cosmicN P = P * (P + 2)` および `cosmicN P + 1 = (P + 1)^2`
-
-see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
-
-## About Repository
-
-> [!IMPORTANT]
-> The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
->
-> The latest state is here:
-> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
->
-> Please check the following before working:
-> `git checkout nightly`
->
-> The most up-to-date live implementation is in the `develop` branch.
-
----
-
-「D.」と🐺賢狼(AI-GPT)による新しい数学理論の実験結果。
-
-> For more up-to-the-minute activity, please refer to the **develop** branch.
-
-リポジトリについて
-
-> [!IMPORTANT]
-> main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
->
-> 最新状態はこちら:
-> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
->
-> 作業前に次を確認してください:
-> `git checkout nightly`
->
-> もっと最新な実装ライブは develop branch になります。
-
-> さらにリアルタイムな活動を得るなら **develop** branch を参照してください。
-
-## Index
-
-*While Japanese is the primary communication language for this project, the README is written in both English and Japanese. The content is identical, but please note that the English and Japanese versions coexist.
-
-(Therefore, automatic translation may not function correctly in some cases.)
-
-※当プロジェクトは「日本語」が主なコミュニケーション言語ですが、README は英語と日本語の両方で書いています。内容は同一ですが、英語版と日本語版が混在していることにご注意ください。
-
-### Cosmic Formula
+## Cosmic Formula
 
 An identity designated as the "Cosmic Formula"
 
@@ -111,14 +39,82 @@ e.g.
 
 $$
 \begin{array}{lc}
-GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
+x\,GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
+x\,GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
+x\,GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
+x\,GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
 \end{array}
 $$
 
 ---
+
+## News
+
+> ## Verified Challenge: Infinitely Many Primes
+
+DkMath.CosmicFormula provides a Lean-formalized proof route from the Cosmic Formula boundary structure to the infinitude of primes.
+
+The proof was validated on Lean Comparator Live against the known challenge:
+
+- Challenge: "Infinitely Many Primes"
+- Theorem: `InfinitudeOfPrimes`
+- Internal route: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
+- Core structure: `cosmicN P = P * (P + 2)` and `cosmicN P + 1 = (P + 1)^2`
+
+see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
+
+---
+
+## About Repository
+
+> [!IMPORTANT]
+> The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
+>
+> The latest state is here:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> Please check the following before working:
+> `git checkout nightly`
+
+> For more up-to-the-minute activity, please refer to the **develop** branch.
+
+---
+
+「D.」と🐺賢狼(AI-GPT)による新しい数学理論の実験結果。
+
+## 検証済み Challenge: 素数の無限性
+
+DkMath.CosmicFormula は、宇宙式境界構造から素数の無限性へ至る Lean 形式証明ルートを含む。
+
+この証明は Lean Comparator Live の既知 Challenge “Infinitely Many Primes” に対して検証成功した。
+
+- Challenge: `Infinitely Many Primes`
+- Theorem: `InfinitudeOfPrimes`
+- 内部ルート: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
+- 中核構造: `cosmicN P = P * (P + 2)` および `cosmicN P + 1 = (P + 1)^2`
+
+see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
+
+リポジトリについて
+
+> [!IMPORTANT]
+> main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
+>
+> 最新状態はこちら:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> 作業前に次を確認してください:
+> `git checkout nightly`
+
+> さらにリアルタイムな活動を得るなら **develop** branch を参照してください。
+
+## Index
+
+*While Japanese is the primary communication language for this project, the README is written in both English and Japanese. The content is identical, but please note that the English and Japanese versions coexist.
+
+(Therefore, automatic translation may not function correctly in some cases.)
+
+※当プロジェクトは「日本語」が主なコミュニケーション言語ですが、README は英語と日本語の両方で書いています。内容は同一ですが、英語版と日本語版が混在していることにご注意ください。
 
 ### Lean
 
@@ -485,10 +481,10 @@ $$
 
 $$
 \begin{array}{lc}
-GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
+x\,GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
+x\,GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
+x\,GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
+x\,GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
 \end{array}
 $$
 
