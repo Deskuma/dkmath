@@ -27,22 +27,22 @@ A project exploring new perspectives on number-theoretic objects, taking this id
 
 $$
 \large
-(x+u)^d-u^d=x\,GN_d(x,u)
+(x+u)^d-u^d=x\ GN_d(x,u)
 $$
 
 $$
 \large
-\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\,u^{k}
+\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\ u^{k}
 $$
 
 e.g.
 
 $$
 \begin{array}{lc}
-x\,GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-x\,GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-x\,GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-x\,GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
+x\ GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
+x\ GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
+x\ GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
+x\ GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
 \end{array}
 $$
 
@@ -469,22 +469,22 @@ $$
 
 $$
 \large
-(x+u)^d-u^d=x\,GN_d(x,u)
+(x+u)^d-u^d=x\ GN_d(x,u)
 $$
 
 $$
 \large
-\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\,u^{k}
+\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\ u^{k}
 $$
 
 例:
 
 $$
 \begin{array}{lc}
-x\,GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-x\,GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-x\,GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-x\,GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
+x\ GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
+x\ GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
+x\ GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
+x\ GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
 \end{array}
 $$
 
