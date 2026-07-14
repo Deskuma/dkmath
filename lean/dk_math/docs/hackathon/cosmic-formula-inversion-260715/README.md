@@ -263,22 +263,20 @@ It records not only the final theorem, but also:
 
 Before modifying source code, Codex must read the project documents in this order:
 
-```text
-1. README.md
-2. PROJECT.md
-3. MATHEMATICAL_CONTRACT.md
-4. ROADMAP.md
-5. ARCHITECTURE.md
-6. GLOSSARY.md
-7. DECISIONS.md
-8. RISKS_AND_STOPPING_RULES.md
-9. EXISTING_DKMATH_MAP.md
-10. VISUAL_STORYBOARD.md
-11. DEMO_CONTRACT.md
-12. CHECKPOINTS.md
-13. CODEX_PLAN.md
+1. [README.md](./README.md)
+2. [PROJECT.md](./PROJECT.md)
+3. [MATHEMATICAL_CONTRACT.md](./MATHEMATICAL_CONTRACT.md)
+4. [ROADMAP.md](./ROADMAP.md)
+5. [ARCHITECTURE.md](./ARCHITECTURE.md)
+6. [GLOSSARY.md](./GLOSSARY.md)
+7. [DECISIONS.md](./DECISIONS.md)
+8. [RISKS_AND_STOPPING_RULES.md](./RISKS_AND_STOPPING_RULES.md)
+9. [EXISTING_DKMATH_MAP.md](./EXISTING_DKMATH_MAP.md)
+10. [VISUAL_STORYBOARD.md](./VISUAL_STORYBOARD.md)
+11. [DEMO_CONTRACT.md](./DEMO_CONTRACT.md)
+12. [CHECKPOINTS.md](./CHECKPOINTS.md)
+13. [CODEX_PLAN.md](./CODEX_PLAN.md)
 14. the current checkpoint instruction
-```
 
 This order should remain stable across sessions.
 
