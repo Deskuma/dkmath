@@ -34,9 +34,9 @@ import DkMath
 
 /-
 DkMath Theorems
-506113 - 498084 = 8029 件
+507970 - 498334 = 9636 件
 Lean+Mathlib Theorems
-498084 件
+498334 件
 -/
 
 set_option linter.style.longLine false

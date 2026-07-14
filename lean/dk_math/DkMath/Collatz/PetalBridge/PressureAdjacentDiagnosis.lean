@@ -279,6 +279,101 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
   exact h
 
 /--
+The left witness of an addressed adjacent pair is a member of the addressed
+list.
+
+This is a pure address projection for
+`SourcePressureLocalIslandWitnessAdjacentPairInList`.  It does not inspect the
+pair diagnosis, does not choose a canonical pair, and does not claim coverage
+of all witnesses in the list.
+-/
+theorem sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    A ∈ L := by
+  induction L generalizing A B with
+  | nil =>
+      exact False.elim hin
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons W2 rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨hA, _hB⟩
+            simp [hA]
+          · exact List.mem_cons_of_mem W1 (ih htail)
+
+/--
+The right witness of an addressed adjacent pair is a member of the addressed
+list.
+
+This is the right-side companion to
+`sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem`.  It is still
+only an address projection; it does not make the adjacent pair canonical and
+does not aggregate diagnostics.
+-/
+theorem sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    {A B : SourcePressureLocalIslandWitness n k r}
+    (hin : SourcePressureLocalIslandWitnessAdjacentPairInList L A B) :
+    B ∈ L := by
+  induction L generalizing A B with
+  | nil =>
+      exact False.elim hin
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hin
+      | cons W2 rest =>
+          rcases hin with hhead | htail
+          · rcases hhead with ⟨_hA, hB⟩
+            simp [hB]
+          · exact List.mem_cons_of_mem W1 (ih htail)
+
+/--
+An adjacent-overlap obstruction exposes one addressed neighboring pair and its
+pair-local overlap obstruction.
+
+This is the cp230 lower-layer overlap projection.  It follows the same
+recursive address structure as
+`SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction`: the head
+case returns the head pair, while the tail case lifts the tail address through
+the newly supplied head.  It does not import Beam vocabulary, repair the
+overlap, choose a canonical pair among several possibilities, or claim list
+coverage.
+-/
+theorem exists_adjacentPairInList_pairOverlapObstruction_of_overlapObstruction
+    {n : OddNat} {k r : ℕ}
+    {L : List (SourcePressureLocalIslandWitness n k r)}
+    (hobs :
+      SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction L) :
+    ∃ A B,
+      SourcePressureLocalIslandWitnessAdjacentPairInList L A B ∧
+        SourcePressureLocalIslandWitnessPairOverlapObstruction A B := by
+  induction L with
+  | nil =>
+      exact False.elim hobs
+  | cons W1 rest ih =>
+      cases rest with
+      | nil =>
+          exact False.elim hobs
+      | cons W2 rest =>
+          rcases hobs with hhead | htail
+          · exact
+              ⟨W1, W2,
+                SourcePressureLocalIslandWitnessAdjacentPairInList.head,
+                hhead⟩
+          · rcases ih htail with ⟨A, B, hin, hobspair⟩
+            exact
+              ⟨A, B,
+                SourcePressureLocalIslandWitnessAdjacentPairInList.tail hin,
+                hobspair⟩
+
+/--
 A list-level carrier for "some adjacent pair in this explicit list has an
 adjacent diagnosis".
 
