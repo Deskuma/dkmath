@@ -726,25 +726,531 @@ theorem natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_half
     (natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_saturated
       hqm).trans (Nat.add_le_add_left hsat _)
 
+/-! ## Prefix versus sliding-window pressure
+
+The following bridge fixes the endpoint interpretation precisely.  Absolute
+source pressure at a canonical block start is the contribution of all earlier
+blocks.  Consequently the pressure contributed by blocks `q..m` is the
+difference between pressure after block `m` and pressure before block `q`.
+
+This remains a relative increment.  It must not be passed to an API requiring
+an absolute `IsSourcePressureDepth` without separately proving the relevant
+prefix-pressure hypothesis.
+-/
+
+/-- The empty source window has zero pressure at every depth. -/
+theorem sourcePressureMarginInt_zero (n : OddNat) (d : ℕ) :
+    SourcePressureMarginInt n 0 d = 0 := by
+  simp [SourcePressureMarginInt, orbitWindowContinuationSiblingMassPow2,
+    orbitWindowRetentionMassPow2]
+
+/-- Pressure at the start of block `q` is the contribution of blocks strictly
+before `q`. -/
+theorem sourcePressureMarginInt_canonicalBlockStartTime_eq_sum_range
+    (n : OddNat) (q d : ℕ) :
+    SourcePressureMarginInt n (canonicalBlockStartTime n q) d =
+      ∑ k ∈ Finset.range q, blockPressureContributionInt n k d := by
+  cases q with
+  | zero =>
+      simp [canonicalBlockStartTime, canonicalEndpointBlockStart,
+        sourcePressureMarginInt_zero]
+  | succ q =>
+      simpa [canonicalBlockStartTime, canonicalEndpointBlockStart] using
+        sourcePressureMarginInt_paymentEndpointSeq_eq_sum_blockPressureContributionInt
+          n q d
+
+/-- Sliding pressure is the endpoint-prefix pressure minus the pressure already
+present at the beginning of the selected block window. -/
+theorem canonicalWindowPressureMarginAtDepth_eq_endpoint_sub_start
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) (d : ℕ) :
+    canonicalWindowPressureMarginAtDepth n q m d =
+      SourcePressureMarginInt n (paymentEndpointSeq n m + 1) d -
+        SourcePressureMarginInt n (canonicalBlockStartTime n q) d := by
+  have hsubset : Finset.range q ⊆ Finset.range (m + 1) := by
+    intro i hi
+    simp only [Finset.mem_range] at hi ⊢
+    omega
+  have hIcc : Finset.Icc q m = Finset.range (m + 1) \ Finset.range q := by
+    ext i
+    simp
+    omega
+  unfold canonicalWindowPressureMarginAtDepth
+  rw [hIcc, Finset.sum_sdiff_eq_sub hsubset,
+    ← sourcePressureMarginInt_paymentEndpointSeq_eq_sum_blockPressureContributionInt,
+    ← sourcePressureMarginInt_canonicalBlockStartTime_eq_sum_range]
+
+/-- At block zero, sliding pressure recovers the existing endpoint-prefix
+pressure theorem exactly. -/
+theorem canonicalWindowPressureMarginAtDepth_zero_eq_endpoint
+    (n : OddNat) (m d : ℕ) :
+    canonicalWindowPressureMarginAtDepth n 0 m d =
+      SourcePressureMarginInt n (paymentEndpointSeq n m + 1) d := by
+  rw [canonicalWindowPressureMarginAtDepth_eq_endpoint_sub_start n (Nat.zero_le m),
+    canonicalBlockStartTime, canonicalEndpointBlockStart,
+    sourcePressureMarginInt_zero, sub_zero]
+
+/-! ## Actual canonical block-window carrier -/
+
+/-- The actual source times belonging to canonical blocks `q..m`. -/
+noncomputable def canonicalPaymentBlockWindow
+    (n : OddNat) (q m : ℕ) : Finset ℕ :=
+  (Finset.Icc q m).biUnion (canonicalPaymentBlock n)
+
+/-- A canonical block is the interval from its proof-independent start time to
+its endpoint. -/
+theorem canonicalPaymentBlock_eq_Icc_startTime_endpoint
+    (n : OddNat) (k : ℕ) :
+    canonicalPaymentBlock n k =
+      Finset.Icc (canonicalBlockStartTime n k) (paymentEndpointSeq n k) := by
+  rw [canonicalPaymentBlock_eq_Icc_universalPaymentBlockStart,
+    canonicalBlockStartTime_eq_universalPaymentBlockStart]
+
+/-- The union of consecutive canonical blocks is one closed orbit-time
+interval. -/
+theorem canonicalPaymentBlockWindow_eq_Icc
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
+    canonicalPaymentBlockWindow n q m =
+      Finset.Icc (canonicalBlockStartTime n q) (paymentEndpointSeq n m) := by
+  classical
+  ext i
+  constructor
+  · intro hi
+    rcases Finset.mem_biUnion.mp hi with ⟨k, hk, hik⟩
+    rcases Finset.mem_Icc.mp hk with ⟨hqk, hkm⟩
+    rw [canonicalPaymentBlock_eq_Icc_startTime_endpoint] at hik
+    rcases Finset.mem_Icc.mp hik with ⟨hstart, hend⟩
+    apply Finset.mem_Icc.mpr
+    constructor
+    · cases q with
+      | zero =>
+          simp [canonicalBlockStartTime, canonicalEndpointBlockStart]
+      | succ q =>
+          cases k with
+          | zero => omega
+          | succ k =>
+              have he : paymentEndpointSeq n q ≤ paymentEndpointSeq n k :=
+                (strictMono_paymentEndpointSeq n).monotone (by omega)
+              simpa [canonicalBlockStartTime, canonicalEndpointBlockStart] using
+                (Nat.add_le_add_right he 1).trans hstart
+    · exact hend.trans ((strictMono_paymentEndpointSeq n).monotone hkm)
+  · intro hi
+    rcases Finset.mem_Icc.mp hi with ⟨hstartQ, hendM⟩
+    rcases existsUnique_mem_canonicalPaymentBlock n i with ⟨k, hik, _⟩
+    have hikBounds : canonicalBlockStartTime n k ≤ i ∧
+        i ≤ paymentEndpointSeq n k := by
+      rw [canonicalPaymentBlock_eq_Icc_startTime_endpoint] at hik
+      exact Finset.mem_Icc.mp hik
+    have hqk : q ≤ k := by
+      by_contra hnot
+      have hkq : k < q := Nat.lt_of_not_ge hnot
+      cases q with
+      | zero => omega
+      | succ q =>
+          have he : paymentEndpointSeq n k ≤ paymentEndpointSeq n q :=
+            (strictMono_paymentEndpointSeq n).monotone (by omega)
+          simp [canonicalBlockStartTime, canonicalEndpointBlockStart] at hstartQ
+          omega
+    have hkm : k ≤ m := by
+      by_contra hnot
+      have hmk : m < k := Nat.lt_of_not_ge hnot
+      cases k with
+      | zero => omega
+      | succ k =>
+          have he : paymentEndpointSeq n m ≤ paymentEndpointSeq n k :=
+            (strictMono_paymentEndpointSeq n).monotone (by omega)
+          simp [canonicalBlockStartTime, canonicalEndpointBlockStart] at hikBounds
+          omega
+    exact Finset.mem_biUnion.mpr ⟨k, Finset.mem_Icc.mpr ⟨hqk, hkm⟩, hik⟩
+
+/-- Difference-of-prefixes form of the actual block window. -/
+theorem canonicalPaymentBlockWindow_eq_range_sdiff
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
+    canonicalPaymentBlockWindow n q m =
+      Finset.range (paymentEndpointSeq n m + 1) \
+        Finset.range (canonicalBlockStartTime n q) := by
+  rw [canonicalPaymentBlockWindow_eq_Icc n hqm]
+  ext i
+  simp
+  omega
+
+/-- Filtering the actual block window decomposes into the disjoint filtered
+canonical blocks retaining their block indices. -/
+theorem card_filter_canonicalPaymentBlockWindow_eq_sum
+    (n : OddNat) {q m : ℕ} (p : ℕ → Prop) [DecidablePred p] :
+    ((canonicalPaymentBlockWindow n q m).filter p).card =
+      ∑ k ∈ Finset.Icc q m, ((canonicalPaymentBlock n k).filter p).card := by
+  classical
+  unfold canonicalPaymentBlockWindow
+  rw [Finset.filter_biUnion]
+  exact Finset.card_biUnion fun k hk l hl hne =>
+    (disjoint_canonicalPaymentBlock_of_ne n hne).mono
+      (Finset.filter_subset _ _) (Finset.filter_subset _ _)
+
+/-- Actual source incidences in the block window continuing beyond depth `d`. -/
+noncomputable def canonicalPaymentBlockWindowContinuationFiber
+    (n : OddNat) (q m d : ℕ) : Finset ℕ := by
+  classical
+  exact (canonicalPaymentBlockWindow n q m).filter fun i =>
+    OrbitDepthContinuesBeyond n i d
+
+/-- Actual source incidences in the block window recovering exactly at depth
+`d`. -/
+noncomputable def canonicalPaymentBlockWindowRecoveryFiber
+    (n : OddNat) (q m d : ℕ) : Finset ℕ := by
+  classical
+  exact (canonicalPaymentBlockWindow n q m).filter fun i =>
+    OrbitDepthRecoversExactlyAt n i d
+
+/-- Sliding continuation incidence decomposes blockwise without losing source
+coordinates. -/
+theorem card_canonicalPaymentBlockWindowContinuationFiber_eq_sum
+    (n : OddNat) (q m d : ℕ) :
+    (canonicalPaymentBlockWindowContinuationFiber n q m d).card =
+      ∑ k ∈ Finset.Icc q m,
+        (canonicalPaymentBlockContinuationFiber n k d).card := by
+  classical
+  unfold canonicalPaymentBlockWindowContinuationFiber
+  unfold canonicalPaymentBlockContinuationFiber
+  exact card_filter_canonicalPaymentBlockWindow_eq_sum n _
+
+/-- Sliding exact-recovery incidence decomposes blockwise without losing
+source coordinates. -/
+theorem card_canonicalPaymentBlockWindowRecoveryFiber_eq_sum
+    (n : OddNat) (q m d : ℕ) :
+    (canonicalPaymentBlockWindowRecoveryFiber n q m d).card =
+      ∑ k ∈ Finset.Icc q m,
+        (canonicalPaymentBlockRecoveryFiber n k d).card := by
+  classical
+  unfold canonicalPaymentBlockWindowRecoveryFiber
+  unfold canonicalPaymentBlockRecoveryFiber
+  exact card_filter_canonicalPaymentBlockWindow_eq_sum n _
+
+/-- The integer sliding pressure is the signed cardinal balance of the two
+actual source-incidence fibers. -/
+theorem canonicalWindowPressureMarginAtDepth_eq_actualFiberCard_sub
+    (n : OddNat) (q m d : ℕ) :
+    canonicalWindowPressureMarginAtDepth n q m d =
+      ((canonicalPaymentBlockWindowContinuationFiber n q m d).card : ℤ) -
+        (canonicalPaymentBlockWindowRecoveryFiber n q m d).card := by
+  rw [card_canonicalPaymentBlockWindowContinuationFiber_eq_sum,
+    card_canonicalPaymentBlockWindowRecoveryFiber_eq_sum]
+  unfold canonicalWindowPressureMarginAtDepth
+  simp_rw [blockPressureContributionInt]
+  push_cast
+  rw [Finset.sum_sub_distrib]
+
+/-! ## Selected-depth separation from exact-length blocks -/
+
+/-- An active selected depth leaves at least one continuation level after its
+selected carrier.  Hence its block length is at least `d + 2`. -/
+theorem activeSelectedPressureBlock_depth_add_two_le_length
+    {n : OddNat} {q m d k : ℕ}
+    (hk : k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d) :
+    d + 2 ≤ canonicalPaymentBlockLength n k := by
+  have hdata := mem_canonicalActiveSelectedPressureBlocksAtDepth.mp hk
+  have hnonsat := mem_canonicalNonsaturatedPositiveBlockIndices.mp hdata.1
+  have hcard := endpointAccountingTerm_le_card_selectedPressureCarrier
+    hnonsat.2.1 hnonsat.2.2
+  have hcardPos : 0 < (canonicalSelectedPressureCarrier n k).card := by
+    exact_mod_cast hnonsat.2.1.trans_le hcard
+  unfold canonicalSelectedPressureCarrier at hcardPos
+  rw [canonicalPaymentBlockContinuationFiber_card, hdata.2] at hcardPos
+  omega
+
+/-- Active selected blocks at depth `d` and exact-length blocks at depth `d`
+are disjoint.  Exact-length charge therefore always comes from another block. -/
+theorem disjoint_activeSelectedPressureBlocks_exactLengthBlocks
+    (n : OddNat) (q m d : ℕ) :
+    Disjoint (canonicalActiveSelectedPressureBlocksAtDepth n q m d)
+      (canonicalExactLengthBlockIndicesAtDepth n q m d) := by
+  classical
+  rw [Finset.disjoint_left]
+  intro k hkActive hkExact
+  have hlen := activeSelectedPressureBlock_depth_add_two_le_length hkActive
+  have heq := (Finset.mem_filter.mp hkExact).2
+  omega
+
+/-! ## Unordered residual terminology -/
+
+/-- Explicit name for the cp-322 cardinal residual.  This natural number has
+no source-time or block coordinate and makes no causal matching claim. -/
+noncomputable def canonicalUnorderedSelectedCarrierResidualCount
+    (n : OddNat) (q m d : ℕ) : ℕ :=
+  canonicalSelectedResidualCount n q m d
+
+/-- Exact cardinal-subtraction normal form of the unordered selected residual. -/
+theorem canonicalUnorderedSelectedCarrierResidualCount_eq
+    (n : OddNat) (q m d : ℕ) :
+    canonicalUnorderedSelectedCarrierResidualCount n q m d =
+      Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) -
+        (canonicalExactLengthBlockIndicesAtDepth n q m d).card := by
+  rfl
+
+/-- Max-with-zero presentation used when comparing the natural residual with
+integer positive-part formulas. -/
+theorem canonicalUnorderedSelectedCarrierResidualCount_eq_max_sub_zero
+    (n : OddNat) (q m d : ℕ) :
+    canonicalUnorderedSelectedCarrierResidualCount n q m d =
+      max (Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) -
+        (canonicalExactLengthBlockIndicesAtDepth n q m d).card) 0 := by
+  simp [canonicalUnorderedSelectedCarrierResidualCount,
+    canonicalSelectedResidualCount]
+
+/-! ## Actual selected drift-image carrier -/
+
+/-- Positive nonsaturated drift embeds directly into selected source
+incidences of the same block; no saturated summand or cross-block transport is
+used. -/
+noncomputable def canonicalSelectedPositiveDriftEmbedding
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k) :
+    Fin (Int.toNat (endpointAccountingTerm n k)) ↪
+      {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} := by
+  classical
+  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
+  apply Classical.choice
+  apply Function.Embedding.nonempty_iff_card_le.mpr
+  rw [Fintype.card_fin, Fintype.card_coe]
+  have hle := endpointAccountingTerm_le_card_selectedPressureCarrier hpos hnot
+  have hcast : ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) =
+      endpointAccountingTerm n k := by
+    exact Int.toNat_of_nonneg hpos.le
+  omega
+
+/-- The noncanonical finite image of positive drift inside the selected source
+carrier.  Its elements still carry the actual source time. -/
+noncomputable def canonicalSelectedDriftImageCarrier
+    (n : OddNat) (k : ℕ) :
+    Finset {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} := by
+  classical
+  by_cases h : 0 < endpointAccountingTerm n k ∧
+      ¬ CanonicalSaturatedBorderBlock n k
+  · exact Finset.univ.map (canonicalSelectedPositiveDriftEmbedding h.1 h.2)
+  · exact ∅
+
+/-- The selected drift image has exactly the positive drift cardinality on a
+positive nonsaturated block. -/
+theorem card_canonicalSelectedDriftImageCarrier
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k) :
+    (canonicalSelectedDriftImageCarrier n k).card =
+      Int.toNat (endpointAccountingTerm n k) := by
+  classical
+  simp [canonicalSelectedDriftImageCarrier, hpos, hnot]
+
+/-- Every drift-image element is definitionally a selected source incidence. -/
+theorem canonicalSelectedDriftImageCarrier_source_mem
+    {n : OddNat} {k : ℕ}
+    (x : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k})
+    (_hx : x ∈ canonicalSelectedDriftImageCarrier n k) :
+    x.val ∈ canonicalSelectedPressureCarrier n k :=
+  x.property
+
+/-- Outside the positive nonsaturated branch there is no selected drift
+image. -/
+theorem canonicalSelectedDriftImageCarrier_eq_empty_of_not_active
+    {n : OddNat} {k : ℕ}
+    (h : ¬ (0 < endpointAccountingTerm n k ∧
+      ¬ CanonicalSaturatedBorderBlock n k)) :
+    canonicalSelectedDriftImageCarrier n k = ∅ := by
+  classical
+  simp [canonicalSelectedDriftImageCarrier, h]
+
+/-- Actual positive-drift images bucketed by selected depth.  The sigma keeps
+the block index, while the inner subtype keeps the source time. -/
+def CanonicalSelectedDriftBucketCarrier
+    (n : OddNat) (q m d : ℕ) :=
+  Σ k : {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d},
+    {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+      i ∈ canonicalSelectedDriftImageCarrier n k.val}
+
+/-- Forgetting image membership embeds the actual drift bucket into the full
+active selected bucket without changing block or source coordinates. -/
+def selectedDriftBucketActiveSelectedEmbedding
+    (n : OddNat) (q m d : ℕ) :
+    CanonicalSelectedDriftBucketCarrier n q m d ↪
+      CanonicalActiveSelectedPressureBucketCarrier n q m d :=
+  (Function.Embedding.refl _).sigmaMap fun _ =>
+    { toFun := fun x => x.val
+      inj' := Subtype.val_injective }
+
+/-- Unordered residual of actual positive-drift images after granting all
+same-depth exact-length tokens. -/
+noncomputable def canonicalUnorderedSelectedDriftResidualCount
+    (n : OddNat) (q m d : ℕ) : ℕ :=
+  Nat.card (CanonicalSelectedDriftBucketCarrier n q m d) -
+    (canonicalExactLengthBlockIndicesAtDepth n q m d).card
+
+/-- The actual drift residual is bounded by the cp-322 selected-carrier
+residual.  The difference is precisely unused selected-carrier slack. -/
+theorem unorderedSelectedDriftResidualCount_le_selectedCarrierResidualCount
+    (n : OddNat) (q m d : ℕ) :
+    canonicalUnorderedSelectedDriftResidualCount n q m d ≤
+      canonicalUnorderedSelectedCarrierResidualCount n q m d := by
+  classical
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+        i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
+  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+    unfold CanonicalSelectedDriftBucketCarrier
+    infer_instance
+  letI : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
+    unfold CanonicalActiveSelectedPressureBucketCarrier
+    infer_instance
+  have hcard :
+      Nat.card (CanonicalSelectedDriftBucketCarrier n q m d) ≤
+        Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) :=
+    Nat.card_le_card_of_injective
+      (selectedDriftBucketActiveSelectedEmbedding n q m d)
+      (selectedDriftBucketActiveSelectedEmbedding n q m d).injective
+  unfold canonicalUnorderedSelectedDriftResidualCount
+  unfold canonicalUnorderedSelectedCarrierResidualCount
+  unfold canonicalSelectedResidualCount
+  omega
+
+/-! ## Noncanonical actual residual incidence carrier -/
+
+/-- When enough actual drift-image incidences exist, choose an unordered
+injection of exact-length tokens into them.  This choice has no temporal
+meaning. -/
+noncomputable def canonicalExactLengthToDriftBucketEmbedding
+    {n : OddNat} {q m d : ℕ}
+    (hcard : (canonicalExactLengthBlockIndicesAtDepth n q m d).card ≤
+      Nat.card (CanonicalSelectedDriftBucketCarrier n q m d)) :
+    {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ↪
+      CanonicalSelectedDriftBucketCarrier n q m d := by
+  classical
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+        i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
+  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+    unfold CanonicalSelectedDriftBucketCarrier
+    infer_instance
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
+  apply Classical.choice
+  apply Function.Embedding.nonempty_iff_card_le.mpr
+  rw [Fintype.card_coe]
+  simpa only [Nat.card_eq_fintype_card] using hcard
+
+/-- Actual unmatched drift-image incidences after a noncanonical unordered
+matching with exact-length tokens. -/
+noncomputable def canonicalActualSelectedDriftResidualFinset
+    (n : OddNat) (q m d : ℕ) :
+    Finset (CanonicalSelectedDriftBucketCarrier n q m d) := by
+  classical
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+        i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
+  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+    unfold CanonicalSelectedDriftBucketCarrier
+    infer_instance
+  by_cases hcard : (canonicalExactLengthBlockIndicesAtDepth n q m d).card ≤
+      Nat.card (CanonicalSelectedDriftBucketCarrier n q m d)
+  · exact Finset.univ \ Finset.univ.map
+      (canonicalExactLengthToDriftBucketEmbedding hcard)
+  · exact ∅
+
+/-- Source-bearing subtype of the chosen unmatched drift incidences. -/
+def CanonicalActualSelectedDriftResidualCarrier
+    (n : OddNat) (q m d : ℕ) :=
+  {x : CanonicalSelectedDriftBucketCarrier n q m d //
+    x ∈ canonicalActualSelectedDriftResidualFinset n q m d}
+
+/-- The actual residual carrier is a subtype of the drift-image bucket. -/
+def actualSelectedDriftResidualCarrierEmbedding
+    (n : OddNat) (q m d : ℕ) :
+    CanonicalActualSelectedDriftResidualCarrier n q m d ↪
+      CanonicalSelectedDriftBucketCarrier n q m d :=
+  Function.Embedding.subtype _
+
+/-- The chosen actual residual has exactly the unordered drift-residual
+cardinality. -/
+theorem natCard_actualSelectedDriftResidualCarrier
+    (n : OddNat) (q m d : ℕ) :
+    Nat.card (CanonicalActualSelectedDriftResidualCarrier n q m d) =
+      canonicalUnorderedSelectedDriftResidualCount n q m d := by
+  classical
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
+  letI (k : {k : ℕ // k ∈
+      canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
+      Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+        i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
+  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+    unfold CanonicalSelectedDriftBucketCarrier
+    infer_instance
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
+  letI : Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d) :=
+    Fintype.ofFinset (canonicalActualSelectedDriftResidualFinset n q m d) (by simp)
+  rw [Nat.card_eq_fintype_card]
+  unfold CanonicalActualSelectedDriftResidualCarrier
+  rw [Fintype.card_coe]
+  unfold canonicalActualSelectedDriftResidualFinset
+  split_ifs with hcard
+  · rw [Finset.card_sdiff_of_subset (Finset.subset_univ _), Finset.card_univ,
+      Finset.card_map, Finset.card_univ]
+    simp only [canonicalUnorderedSelectedDriftResidualCount,
+      Nat.card_eq_fintype_card, Fintype.card_coe]
+  · simp only [Finset.card_empty, canonicalUnorderedSelectedDriftResidualCount]
+    omega
+
 /-!
-## Prefix versus sliding-window pressure audit
+## Next boundary: causal depth queue
 
-`canonicalWindowPressureMarginAtDepth n q m d` is the block sum on `q..m`.
-The existing public pressure theorem identifies only the prefix sum `0..m`
-with `SourcePressureMarginInt n (paymentEndpointSeq n m + 1) d`.
+The unordered layer now ends with an actual source-bearing residual subtype.
+The next theorem cannot be obtained by reinterpreting this complement: the
+chosen injection deliberately ignores block order.
 
-The intended sliding identity therefore requires two explicit bridges that are
-not yet present as caller-facing theorems:
-
-1. split the finite block sum `0..m` into `0..q-1` and `q..m`;
-2. identify pressure at `canonicalBlockStartTime n q` with the `0..q-1`
-   prefix (with the separate base case `q = 0`).
-
-Until those bridges are proved, relative window pressure must not be treated as
-absolute `IsSourcePressureDepth`, and no level-zero pulse/packing theorem may be
-applied to its positive part.  This is the first genuine API obstruction after
-the completed finite residual reduction; it is a missing prefix-difference
-bridge, not evidence that the proposed identity is false.
+Stage H must instead introduce per-block arrivals from
+`canonicalSelectedDriftImageCarrier`, per-block exact-length service, and a
+fresh reflected queue initialized immediately before block `q`.  The existing
+`canonicalOutstandingClaimQueue` proves the required Lindley pattern only for
+the scalar claim/capacity process fixed in `UniversalPaymentScalarQueue`; it is
+not polymorphic in arrivals and service.  The safe next implementation is
+therefore to extract a generic finite Nat-valued Lindley queue API (or prove a
+parallel fixed-depth specialization) in a lower module, then instantiate it
+here.  Until that exists, neither this unordered residual nor its chosen
+matching may be called causal repayment.
 -/
 
 /-- Endpoint-prefix pressure is continuation mass one level deeper minus the
