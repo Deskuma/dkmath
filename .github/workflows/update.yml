@@ -1,0 +1,50 @@
+name: Update Dependencies
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-for-updates:
+    name: Check for updates
+    runs-on: ubuntu-latest
+
+    outputs:
+      is-update-available: ${{ steps.check-for-updates.outputs.is-update-available }}
+      new-tags: ${{ steps.check-for-updates.outputs.new-tags }}
+
+    steps:
+      - name: Check for Mathlib updates
+        id: check-for-updates
+        uses: leanprover-community/mathlib-update-action@v1
+        with:
+          intermediate_releases: latest
+          lake_package_directory: lean/dk_math
+
+  do-update:
+    name: Test update
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    needs:
+      - check-for-updates
+
+    if: ${{ needs.check-for-updates.outputs.is-update-available == 'true' }}
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        tag: ${{ fromJSON(needs.check-for-updates.outputs.new-tags) }}
+
+    steps:
+      - name: Update and build repository
+        id: update-the-repo
+        uses: leanprover-community/mathlib-update-action/do-update@v1
+        with:
+          tag: ${{ matrix.tag }}
+          lake_package_directory: lean/dk_math
+          on_update_succeeds: pr
+          on_update_fails: issue

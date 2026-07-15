@@ -1,0 +1,26 @@
+name: Lean CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build DkMath
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build Lean project
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean/dk_math
+          build: true
+          test: false
+          lint: false

@@ -1,0 +1,36 @@
+name: Create Release
+
+# Disabled:
+#
+# leanprover-community/lean-release-tag expects lean-toolchain
+# at the repository root.
+#
+# DkMath stores it at:
+#
+#   lean/dk_math/lean-toolchain
+#
+# Keep this file outside .github/workflows until a release
+# workflow for the nested Lean project is implemented.
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - lean-toolchain
+
+jobs:
+  lean-release-tag:
+    name: Add Lean release tag
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: lean-release-tag action
+        uses: leanprover-community/lean-release-tag@v1
+        with:
+          do-release: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
