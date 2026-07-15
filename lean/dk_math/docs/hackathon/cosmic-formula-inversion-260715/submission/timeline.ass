@@ -1,0 +1,43 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Title,DejaVu Sans,48,&H00F8FAFC,&H000000FF,&H000B1020,&H00000000,-1,0,0,0,100,100,0,0,1,1,0,8,70,70,70,1
+Style: Body,DejaVu Sans,30,&H00F8FAFC,&H000000FF,&H000B1020,&H00000000,0,0,0,0,100,100,0,0,1,1,0,5,100,100,40,1
+Style: Code,DejaVu Sans Mono,25,&H0067E8F9,&H000000FF,&H000B1020,&H00000000,0,0,0,0,100,100,0,0,1,1,0,5,90,90,40,1
+Style: Footer,DejaVu Sans,20,&H0094A3B8,&H000000FF,&H000B1020,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,50,50,30,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:12.00,Title,,0,0,0,,DkMath · Verifiable Research in Motion
+Dialogue: 0,0:00:00.00,0:00:12.00,Body,,0,0,0,,human direction  →  Codex  →  Lean  →  Manim
+Dialogue: 0,0:00:00.00,0:00:12.00,Footer,,0,0,0,,Cosmic Formula Inversion · final promo
+Dialogue: 0,0:00:12.00,0:00:30.00,Title,,0,0,0,,1 · A Lean research library
+Dialogue: 0,0:00:12.00,0:00:30.00,Body,,0,0,0,,DkMath is a large, evolving mathematical research repository.\NThis promo follows one small theorem path inside the real library.
+Dialogue: 0,0:00:12.00,0:00:30.00,Code,,0,0,0,,DkMath/Hackathon/FinitePrimeEscape.lean\NDkMath/Hackathon/CosmicCompletion.lean\NDkMath/Hackathon/Demo.lean
+Dialogue: 0,0:00:30.00,0:00:48.00,Title,,0,0,0,,2 · Contract before implementation
+Dialogue: 0,0:00:30.00,0:00:48.00,Body,,0,0,0,,The mathematical target was fixed first:\Na finite set S, product P, coprime offset u, and boundary P + u.
+Dialogue: 0,0:00:30.00,0:00:48.00,Code,,0,0,0,,FreshPrimeFactor S n q :=\N  Nat.Prime q ∧ q ∣ n ∧ q ∉ S
+Dialogue: 0,0:00:48.00,0:01:08.00,Title,,0,0,0,,3 · Codex audits the repository
+Dialogue: 0,0:00:48.00,0:01:08.00,Body,,0,0,0,,Existing APIs and reports were inspected.\NThe smallest missing bridge became one explicit theorem.
+Dialogue: 0,0:00:48.00,0:01:08.00,Code,,0,0,0,,prime_dvd_product_add_coprime_not_mem\N\NNat.Prime q  and  q ∣ P + u\NNat.Coprime P u   ⇒   q ∉ S
+Dialogue: 0,0:01:08.00,0:01:30.00,Title,,0,0,0,,4 · Lean verifies the general bridge
+Dialogue: 0,0:01:08.00,0:01:30.00,Code,,0,0,0,,theorem exists_fresh_prime_factor ... :\N  ∃ q, FreshPrimeFactor S (P + u) q\N\Ntheorem cosmicCompletion (P u : ℕ) :\N  P * (P + 2 * u) + u ^ 2 = (P + u) ^ 2
+Dialogue: 0,0:01:08.00,0:01:30.00,Footer,,0,0,0,,General theorem surface · checked by Lean
+Dialogue: 0,0:01:30.00,0:01:48.00,Title,,0,0,0,,5 · One accepted fixed example
+Dialogue: 0,0:01:30.00,0:01:48.00,Code,,0,0,0,,S = {2, 3, 5, 7}     P = 210     u = 11\NP + u = 221           221 = 13 × 17
+Dialogue: 0,0:01:30.00,0:01:48.00,Body,,0,0,0,,The same values are shared by Demo.lean and the visual prototype.
+Dialogue: 0,0:02:04.00,0:02:25.00,Title,,0,0,0,,6 · Explanation backed by proof
+Dialogue: 0,0:02:04.00,0:02:25.00,Code,,0,0,0,,demo_thirteen_fresh\Ndemo_seventeen_fresh\Ndemo_cosmic_completion
+Dialogue: 0,0:02:04.00,0:02:25.00,Body,,0,0,0,,Lean verifies 13 and 17 are fresh relative to {2, 3, 5, 7}.\NManim communicates the result; it is not the source of truth.
+Dialogue: 0,0:02:25.00,0:02:43.00,Title,,0,0,0,,7 · Next: bounded inverse projection
+Dialogue: 0,0:02:25.00,0:02:43.00,Body,,0,0,0,,Search backward from observable boundaries under explicit finite bounds.\NThis is the next research direction — not a theorem claimed here.
+Dialogue: 0,0:02:25.00,0:02:43.00,Code,,0,0,0,,verified finite bridge  →  bounded candidates  →  future projection
+Dialogue: 0,0:02:43.00,0:02:54.00,Title,,0,0,0,,DkMath · one research loop
+Dialogue: 0,0:02:43.00,0:02:54.00,Body,,0,0,0,,Human direction sets the contract.\NCodex investigates and implements. Lean verifies. Manim communicates.
+Dialogue: 0,0:02:43.00,0:02:54.00,Footer,,0,0,0,,Submission package · silent captioned master
+
