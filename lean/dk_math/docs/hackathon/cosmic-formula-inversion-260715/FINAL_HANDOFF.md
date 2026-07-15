@@ -56,6 +56,8 @@ Exact public declarations:
 - `DkMath.Hackathon.demo_coprime`
 - `DkMath.Hackathon.demo_boundary`
 - `DkMath.Hackathon.demo_factorization`
+- `DkMath.Hackathon.demo_thirteen_prime`
+- `DkMath.Hackathon.demo_seventeen_prime`
 - `DkMath.Hackathon.demo_thirteen_fresh`
 - `DkMath.Hackathon.demo_seventeen_fresh`
 - `DkMath.Hackathon.demo_cosmic_completion`
@@ -189,4 +191,3 @@ Before writing projection code:
 
 The accepted finite algebra and submission package are stable inputs to that
 future work, not surfaces to redesign.
-

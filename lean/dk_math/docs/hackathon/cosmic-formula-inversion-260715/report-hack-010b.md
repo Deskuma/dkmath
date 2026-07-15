@@ -6,6 +6,11 @@ Complete. The project status documents now identify the formal MVP, visual
 prototype, promo integration, and submission package as complete. The remaining
 work is explicitly limited to external human publication actions.
 
+Post-closure documentation correction `hack-010c` added the previously omitted
+`demo_thirteen_prime` and `demo_seventeen_prime` entries to the final handoff.
+The accepted public declaration inventory now contains all 17 declarations from
+the three Hackathon Lean modules. The closed implementation state is unchanged.
+
 ## Files changed
 
 Created:
@@ -125,7 +130,7 @@ upload remain external tasks, not implementation blockers.
 
 - Submission reference existence scan: passed; all nine referenced final files
   exist.
-- Declaration-name scan: passed; all 15 handoff declarations match source.
+- Declaration-name scan: passed; all 17 handoff declarations match source.
 - Trailing-whitespace scan: passed.
 - `git diff --check`: passed with no output.
 - `git status --short`: showed only the four minimal status-document edits and
