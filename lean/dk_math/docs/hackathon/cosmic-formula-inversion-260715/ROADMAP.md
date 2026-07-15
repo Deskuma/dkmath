@@ -225,7 +225,7 @@ stable project documentation prefix
 ### Status
 
 ```text
-not started
+accepted — report-hack-001.md
 ```
 
 ### Purpose
@@ -336,7 +336,7 @@ reviewed repository reuse map
 ### Status
 
 ```text
-not started
+accepted — report-hack-002.md
 ```
 
 ### Purpose
@@ -447,7 +447,7 @@ verified finite prime escape API
 ### Status
 
 ```text
-not started
+accepted — report-hack-003.md
 ```
 
 ### Purpose
@@ -574,7 +574,7 @@ verified Cosmic Formula completion facade
 ### Status
 
 ```text
-not started
+accepted — report-hack-004.md
 ```
 
 ### Purpose
@@ -1068,7 +1068,7 @@ optional verified DkReal reconstruction layer
 
 ```text
 required
-not started
+accepted — report-hack-008a.md
 ```
 
 ### Purpose
@@ -1170,7 +1170,7 @@ rendered primary visual demonstration
 
 ```text
 required
-not started
+accepted — report-hack-009a.md
 ```
 
 ### Purpose
@@ -1235,7 +1235,7 @@ integrated project demo
 
 ```text
 required
-not started
+accepted — report-hack-010a.md
 ```
 
 ### Purpose

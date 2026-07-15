@@ -442,9 +442,9 @@ It is not the main theorem of this hackathon submission and no Collatz convergen
 
 ## Current Status
 
-The initial repository scaffold is complete.
+The hackathon implementation and submission package are complete.
 
-Created Lean placeholders:
+Accepted Lean modules:
 
 ```text
 DkMath/Hackathon/FinitePrimeEscape.lean
@@ -452,20 +452,20 @@ DkMath/Hackathon/CosmicCompletion.lean
 DkMath/Hackathon/Demo.lean
 ```
 
-Created hackathon documentation directory:
+Final submission package:
 
 ```text
-docs/hackathon/cosmic-formula-inversion-260715/
+submission/output/DkMathCosmicPromoFinal.mp4
+submission/README.md
+submission/narration.srt
+submission/build_submission.sh
 ```
 
-The next stage is documentation completion followed by a repository-audit-only Codex session.
-
-Codex must not begin theorem implementation until:
-
-- the mathematical contract is fixed;
-- the project roadmap is fixed;
-- the existing DkMath reuse map has been audited;
-- the first checkpoint instruction has been reviewed.
+Formal MVP, visual prototype, promo integration, and submission packaging have
+all passed their accepted checkpoints. Only external human publication tasks
+remain: optional narration and authentic footage, upload, and platform form
+completion. See `FINAL_HANDOFF.md` for the final artifact provenance, commands,
+checksums, and the exact future inverse-projection resume point.
 
 ---
 

@@ -456,17 +456,18 @@ A stopped checkpoint does not need to be converted into a completed checkpoint b
 
 | Checkpoint | Class | Goal | Status | Report |
 |---|---|---|---|---|
-| `hack-000` | documentation | establish project scaffold and stable context | `IN_PROGRESS` | `report-hack-000.md` |
-| `hack-001` | audit | map existing DkMath and Mathlib APIs | `PLANNED` | `report-hack-001.md` |
-| `hack-002` | implementation | finite prime escape theorem | `PLANNED` | `report-hack-002.md` |
-| `hack-003` | implementation | Cosmic Formula completion bridge | `PLANNED` | `report-hack-003.md` |
-| `hack-004` | implementation | fixed concrete Lean demo | `PLANNED` | `report-hack-004.md` |
+| `hack-000` | documentation | establish project scaffold and stable context | `COMPLETED` | project documents |
+| `hack-001` | audit | map existing DkMath and Mathlib APIs | `ACCEPTED` | `report-hack-001.md` |
+| `hack-002` | implementation | finite prime escape theorem | `ACCEPTED` | `report-hack-002.md` |
+| `hack-003` | implementation | Cosmic Formula completion bridge | `ACCEPTED` | `report-hack-003.md` |
+| `hack-004` | implementation | fixed concrete Lean demo | `ACCEPTED` | `report-hack-004.md` |
 | `hack-005` | implementation | bounded projection | `DEFERRED` | `report-hack-005.md` |
 | `hack-006` | implementation | exact inverse and injectivity | `DEFERRED` | `report-hack-006.md` |
 | `hack-007a+` | implementation | DkReal reconstruction sub-bridges | `DEFERRED` | `report-hack-007*.md` |
-| `hack-008` | visual | primary Manim sequence | `PLANNED` | `report-hack-008.md` |
-| `hack-009` | integration | unified formal and visual demo | `PLANNED` | `report-hack-009.md` |
-| `hack-010` | submission | reproducible submission package | `PLANNED` | `report-hack-010.md` |
+| `hack-008a` | visual | primary Manim sequence | `ACCEPTED` | `report-hack-008a.md` |
+| `hack-009a` | integration | unified formal and visual demo | `ACCEPTED` | `report-hack-009a.md` |
+| `hack-010a` | submission | reproducible submission package | `ACCEPTED` | `report-hack-010a.md` |
+| `hack-010b` | closure | final handoff and project closure | `COMPLETED` | `report-hack-010b.md` |
 
 Statuses must be updated after each accepted review.
 

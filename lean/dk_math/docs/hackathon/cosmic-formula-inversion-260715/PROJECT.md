@@ -781,34 +781,26 @@ It is not part of the main theorem and does not claim Collatz convergence.
 Completed:
 
 ```text
-hackathon branch created
-initial Lean module scaffold created
-documentation directory created
-first project plan recorded
-README drafted
-PROJECT.md drafted
-tracking anchor preserved
+repository audit accepted
+formal MVP accepted: finite prime escape, Cosmic completion, fixed demo
+Manim visual prototype accepted
+three-minute promo integration accepted
+corrected submission package accepted
+reproducible final video verified
 ```
 
-Next:
+External publication tasks remaining:
 
 ```text
-ROADMAP.md
-MATHEMATICAL_CONTRACT.md
-ARCHITECTURE.md
-GLOSSARY.md
-DECISIONS.md
-RISKS_AND_STOPPING_RULES.md
-EXISTING_DKMATH_MAP.md
-VISUAL_STORYBOARD.md
-DEMO_CONTRACT.md
-CHECKPOINTS.md
-CODEX_PLAN.md
+record human narration if desired
+optionally add authentic collaboration footage and licensed audio
+upload the accepted final video
+complete the hackathon platform submission form
 ```
 
-After the documentation surface is stable, the first Codex session will be repository-audit-only.
-
-No theorem implementation should begin before that audit is reviewed.
+Future bounded inverse-projection research remains deferred and must begin from
+the explicit resume point recorded in `FINAL_HANDOFF.md`; it is not part of the
+completed submission MVP.
 
 ---
 
