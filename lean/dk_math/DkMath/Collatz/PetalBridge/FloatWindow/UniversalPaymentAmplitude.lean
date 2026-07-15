@@ -147,6 +147,137 @@ theorem activeSelectedPressureDepthSupport_bucketCarrier_nonempty
   exact mem_canonicalSelectedPressureBlocksAtDepth.mpr
     ⟨(Finset.mem_filter.mp hdata.1).1, hdata.2⟩
 
+/-! ## Active selected buckets and structural Fubini -/
+
+/-- Selected incidences indexed only by positive nonsaturated blocks. -/
+def CanonicalActiveSelectedPressureBucketCarrier
+    (n : OddNat) (q m d : ℕ) :=
+  Σ k : {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d},
+    {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val}
+
+/-- A selected bucket incidence proves that its block is nonsaturated: the
+selected carrier of a saturated block is empty. -/
+theorem CanonicalSelectedPressureBucketCarrier.block_not_saturated
+    {n : OddNat} {q m d : ℕ}
+    (x : CanonicalSelectedPressureBucketCarrier n q m d) :
+    ¬ CanonicalSaturatedBorderBlock n x.1.val := by
+  intro hs
+  have hempty := hs.selectedPressureCarrier_eq_empty
+  have hi := x.2.property
+  simp [hempty] at hi
+
+/-- Removing saturated blocks from a selected bucket loses no incidence. -/
+noncomputable def selectedPressureBucketEquivActive
+    (n : OddNat) (q m d : ℕ) :
+    CanonicalSelectedPressureBucketCarrier n q m d ≃
+      CanonicalActiveSelectedPressureBucketCarrier n q m d where
+  toFun x := ⟨⟨x.1.val,
+    mem_canonicalActiveSelectedPressureBlocksAtDepth.mpr
+      ⟨mem_canonicalNonsaturatedPositiveBlockIndices.mpr
+        ⟨(Finset.mem_filter.mp
+            (mem_canonicalSelectedPressureBlocksAtDepth.mp x.1.property).1).1,
+          (Finset.mem_filter.mp
+            (mem_canonicalSelectedPressureBlocksAtDepth.mp x.1.property).1).2,
+          x.block_not_saturated⟩,
+        (mem_canonicalSelectedPressureBlocksAtDepth.mp x.1.property).2⟩⟩, x.2⟩
+  invFun x := ⟨⟨x.1.val, mem_canonicalSelectedPressureBlocksAtDepth.mpr
+    ⟨Finset.mem_filter.mpr
+      ⟨(mem_canonicalNonsaturatedPositiveBlockIndices.mp
+          (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp x.1.property).1).1,
+        (mem_canonicalNonsaturatedPositiveBlockIndices.mp
+          (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp x.1.property).1).2.1⟩,
+      (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp x.1.property).2⟩⟩, x.2⟩
+  left_inv := by
+    rintro ⟨k, i⟩
+    rfl
+  right_inv := by
+    rintro ⟨k, i⟩
+    rfl
+
+/-- The global selected carrier is structurally the dependent sum of active
+depth buckets.  The equivalence preserves both block and source incidence. -/
+noncomputable def globalSelectedPressureCarrierEquivActiveBuckets
+    (n : OddNat) (q m : ℕ) :
+    CanonicalGlobalSelectedPressureCarrier n q m ≃
+      Σ d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m},
+        CanonicalActiveSelectedPressureBucketCarrier n q m d.val where
+  toFun x := by
+    have hnot : ¬ CanonicalSaturatedBorderBlock n x.1.val := by
+      intro hs
+      have hi := x.2.property
+      simp [hs.selectedPressureCarrier_eq_empty] at hi
+    have hnonsat : x.1.val ∈ canonicalNonsaturatedPositiveBlockIndices n q m :=
+      mem_canonicalNonsaturatedPositiveBlockIndices.mpr
+        ⟨(Finset.mem_filter.mp x.1.property).1,
+          (Finset.mem_filter.mp x.1.property).2, hnot⟩
+    let d := canonicalSelectedPositivePressureDepth n x.1.val
+    exact ⟨⟨d, Finset.mem_image.mpr ⟨x.1.val, hnonsat, rfl⟩⟩,
+      ⟨⟨x.1.val, mem_canonicalActiveSelectedPressureBlocksAtDepth.mpr
+        ⟨hnonsat, rfl⟩⟩, x.2⟩⟩
+  invFun x := ⟨⟨x.2.1.val,
+    Finset.mem_filter.mpr
+      ⟨(mem_canonicalNonsaturatedPositiveBlockIndices.mp
+          (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp x.2.1.property).1).1,
+        (mem_canonicalNonsaturatedPositiveBlockIndices.mp
+          (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp x.2.1.property).1).2.1⟩⟩,
+    x.2.2⟩
+  left_inv := by
+    rintro ⟨k, i⟩
+    rfl
+  right_inv := by
+    rintro ⟨⟨dv, hdv⟩, ⟨⟨kv, hkv⟩, ⟨iv, hiv⟩⟩⟩
+    have heq : canonicalSelectedPositivePressureDepth n kv = dv :=
+      (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp hkv).2
+    subst dv
+    rfl
+
+/-! ## Exact-length tokens across active depths -/
+
+/-- Blocks of exact canonical length `d` in the closed interval `q..m`. -/
+noncomputable def canonicalExactLengthBlockIndicesAtDepth
+    (n : OddNat) (q m d : ℕ) : Finset ℕ := by
+  classical
+  exact (Finset.Icc q m).filter fun k => canonicalPaymentBlockLength n k = d
+
+/-- One exact-length recovery token for each active depth/block match. -/
+def CanonicalExactLengthTokenCarrier
+    (n : OddNat) (q m : ℕ) :=
+  Σ d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m},
+    {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d.val}
+
+/-- Forget depth while retaining the block address.  Injectivity is exactly
+uniqueness of the canonical block length. -/
+noncomputable def exactLengthTokenBlockEmbedding
+    (n : OddNat) (q m : ℕ) :
+    CanonicalExactLengthTokenCarrier n q m ↪ {k : ℕ // k ∈ Finset.Icc q m} where
+  toFun x := ⟨x.2.val, (Finset.mem_filter.mp x.2.property).1⟩
+  inj' := by
+    rintro ⟨d, k⟩ ⟨e, l⟩ h
+    have hkl : k.val = l.val := congrArg Subtype.val h
+    have hd : canonicalPaymentBlockLength n k.val = d.val :=
+      (Finset.mem_filter.mp k.property).2
+    have he0 : canonicalPaymentBlockLength n l.val = e.val :=
+      (Finset.mem_filter.mp l.property).2
+    have he : canonicalPaymentBlockLength n k.val = e.val := by
+      simpa [hkl] using he0
+    have hde : d = e := Subtype.ext (hd.symm.trans he)
+    subst e
+    have hke : k = l := Subtype.ext hkl
+    subst l
+    rfl
+
+/-- Exact-length charge over active depths uses at most one token per block. -/
+theorem natCard_exactLengthTokenCarrier_le_interval
+    {n : OddNat} {q m : ℕ} (hqm : q ≤ m) :
+    Nat.card (CanonicalExactLengthTokenCarrier n q m) ≤ m - q + 1 := by
+  have hcard := Nat.card_le_card_of_injective
+    (exactLengthTokenBlockEmbedding n q m)
+    (exactLengthTokenBlockEmbedding n q m).injective
+  have hraw : Nat.card (CanonicalExactLengthTokenCarrier n q m) ≤ m + 1 - q := by
+    simpa only [Nat.card_eq_fintype_card, Fintype.card_coe,
+      Nat.card_Icc] using hcard
+  omega
+
 /-! ## Fixed-depth prefix embedding -/
 
 /-- Forgetting the canonical block sends a selected bucket incidence into the
@@ -242,12 +373,6 @@ theorem blockPressureContributionInt_eq_succCarrier_sub_exactLengthIndicator
   · have hdl : d < canonicalPaymentBlockLength n k := by omega
     simp [heq, hd, hdl.le]
     omega
-
-/-- Blocks of exact canonical length `d` in the closed interval `q..m`. -/
-noncomputable def canonicalExactLengthBlockIndicesAtDepth
-    (n : OddNat) (q m d : ℕ) : Finset ℕ := by
-  classical
-  exact (Finset.Icc q m).filter fun k => canonicalPaymentBlockLength n k = d
 
 /-- Fixed-depth pressure summed on a closed canonical block interval. -/
 noncomputable def canonicalWindowPressureMarginAtDepth
@@ -380,6 +505,247 @@ theorem exists_selectedPressureBucketEmbedding_exactLength_add_amplitude
   rw [htargetCard]
   simpa only [← Nat.card_eq_fintype_card] using
     natCard_selectedPressureBucket_le_exactLength_add_pressureAmplitude (n := n) hd
+
+/-! ## Minimal selected residual -/
+
+/-- Minimal selected mass left after the available exact-length charge. -/
+noncomputable def canonicalSelectedResidualCount
+    (n : OddNat) (q m d : ℕ) : ℕ :=
+  Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) -
+    (canonicalExactLengthBlockIndicesAtDepth n q m d).card
+
+/-- Exact-length charge plus the minimal residual always covers the active
+selected bucket. -/
+theorem natCard_activeSelectedBucket_le_exactLength_add_residual
+    (n : OddNat) (q m d : ℕ) :
+    Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) ≤
+      (canonicalExactLengthBlockIndicesAtDepth n q m d).card +
+        canonicalSelectedResidualCount n q m d := by
+  unfold canonicalSelectedResidualCount
+  omega
+
+/-- Accounting embedding into exact-length tokens plus minimal residual units. -/
+theorem exists_activeSelectedBucketEmbedding_exactLength_add_residual
+    (n : OddNat) (q m d : ℕ) :
+    Nonempty (CanonicalActiveSelectedPressureBucketCarrier n q m d ↪
+      ({k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ⊕
+        Fin (canonicalSelectedResidualCount n q m d))) := by
+  classical
+  letI : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
+    unfold CanonicalActiveSelectedPressureBucketCarrier
+    infer_instance
+  letI : Fintype {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
+    Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
+  apply Function.Embedding.nonempty_iff_card_le.mpr
+  have htargetCard :
+      Fintype.card
+          ({k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ⊕
+            Fin (canonicalSelectedResidualCount n q m d)) =
+        (canonicalExactLengthBlockIndicesAtDepth n q m d).card +
+          canonicalSelectedResidualCount n q m d := by
+    calc
+      _ = Fintype.card
+            {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} +
+          Fintype.card (Fin (canonicalSelectedResidualCount n q m d)) :=
+        Fintype.card_sum
+      _ = _ := by rw [Fintype.card_coe, Fintype.card_fin]
+  rw [htargetCard]
+  simpa only [← Nat.card_eq_fintype_card] using
+    natCard_activeSelectedBucket_le_exactLength_add_residual n q m d
+
+/-- The minimal selected residual is bounded by full fixed-depth pressure
+amplitude.  The latter may also contain unselected continuation incidence. -/
+theorem selectedResidualCount_le_pressureAmplitude
+    {n : OddNat} {q m d : ℕ} (hd : 1 ≤ d) :
+    canonicalSelectedResidualCount n q m d ≤
+      Int.toNat (canonicalWindowPressureMarginAtDepth n q m d) := by
+  have hequivCard :
+      Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) =
+        Nat.card (CanonicalSelectedPressureBucketCarrier n q m d) :=
+    Nat.card_congr (selectedPressureBucketEquivActive n q m d).symm
+  have hfull :=
+    natCard_selectedPressureBucket_le_exactLength_add_pressureAmplitude
+      (n := n) (q := q) (m := m) hd
+  unfold canonicalSelectedResidualCount
+  rw [hequivCard]
+  omega
+
+/-- Residual units embed into the coarser full pressure-amplitude capacity. -/
+noncomputable def selectedResidualPressureAmplitudeEmbedding
+    {n : OddNat} {q m d : ℕ} (hd : 1 ≤ d) :
+    Fin (canonicalSelectedResidualCount n q m d) ↪
+      Fin (Int.toNat (canonicalWindowPressureMarginAtDepth n q m d)) :=
+  Fin.castLEEmb (selectedResidualCount_le_pressureAmplitude hd)
+
+/-! ## All-depth residual and full-amplitude carriers -/
+
+/-- Minimal selected residual units over active selected depths. -/
+def CanonicalSelectedResidualCarrier
+    (n : OddNat) (q m : ℕ) :=
+  Σ d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m},
+    Fin (canonicalSelectedResidualCount n q m d.val)
+
+/-- Full window pressure-amplitude capacity over active selected depths. -/
+def CanonicalPositivePressureAmplitudeCarrier
+    (n : OddNat) (q m : ℕ) :=
+  Σ d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m},
+    Fin (Int.toNat (canonicalWindowPressureMarginAtDepth n q m d.val))
+
+/-- Assemble the depthwise residual-to-amplitude embeddings. -/
+noncomputable def selectedResidualCarrierPressureAmplitudeEmbedding
+    (n : OddNat) (q m : ℕ) :
+    CanonicalSelectedResidualCarrier n q m ↪
+      CanonicalPositivePressureAmplitudeCarrier n q m :=
+  (Function.Embedding.refl _).sigmaMap fun d =>
+    selectedResidualPressureAmplitudeEmbedding (by
+      rcases mem_activeSelectedPressureDepthSupport_iff_nonempty.mp d.property with
+        ⟨k, hk⟩
+      have hdepth :=
+        (mem_canonicalActiveSelectedPressureBlocksAtDepth.mp hk).2
+      simpa [hdepth] using one_le_canonicalSelectedPositivePressureDepth n k)
+
+/-- Cardinality of the active-depth bucket sigma. -/
+theorem natCard_activeSelectedBuckets
+    (n : OddNat) (q m : ℕ) :
+    Nat.card
+        (Σ d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m},
+        CanonicalActiveSelectedPressureBucketCarrier n q m d.val) =
+      ∑ d ∈ canonicalActiveSelectedPressureDepthSupport n q m,
+        Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
+  classical
+  letI (d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m}) :
+      Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d.val) := by
+    unfold CanonicalActiveSelectedPressureBucketCarrier
+    infer_instance
+  rw [Nat.card_sigma]
+  rw [Finset.univ_eq_attach]
+  exact Finset.sum_attach (canonicalActiveSelectedPressureDepthSupport n q m)
+    fun d => Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d)
+
+/-- Cardinality of all exact-length tokens over active depths. -/
+theorem natCard_exactLengthTokenCarrier
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalExactLengthTokenCarrier n q m) =
+      ∑ d ∈ canonicalActiveSelectedPressureDepthSupport n q m,
+        (canonicalExactLengthBlockIndicesAtDepth n q m d).card := by
+  unfold CanonicalExactLengthTokenCarrier
+  rw [Nat.card_sigma]
+  simp_rw [Nat.card_eq_fintype_card, Fintype.card_coe]
+  rw [Finset.univ_eq_attach]
+  exact Finset.sum_attach (canonicalActiveSelectedPressureDepthSupport n q m)
+    fun d => (canonicalExactLengthBlockIndicesAtDepth n q m d).card
+
+/-- Cardinality of the all-depth minimal residual carrier. -/
+theorem natCard_selectedResidualCarrier
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalSelectedResidualCarrier n q m) =
+      ∑ d ∈ canonicalActiveSelectedPressureDepthSupport n q m,
+        canonicalSelectedResidualCount n q m d := by
+  unfold CanonicalSelectedResidualCarrier
+  rw [Nat.card_sigma]
+  simp_rw [Nat.card_eq_fintype_card, Fintype.card_fin]
+  rw [Finset.univ_eq_attach]
+  exact Finset.sum_attach (canonicalActiveSelectedPressureDepthSupport n q m)
+    fun d => canonicalSelectedResidualCount n q m d
+
+/-- Primary all-depth reduction: selected incidence is paid first by unique
+exact-length block tokens, and only the minimal selected residual remains. -/
+theorem natCard_globalSelectedPressureCarrier_le_exactLength_add_residual
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) ≤
+      Nat.card (CanonicalExactLengthTokenCarrier n q m) +
+        Nat.card (CanonicalSelectedResidualCarrier n q m) := by
+  rw [Nat.card_congr (globalSelectedPressureCarrierEquivActiveBuckets n q m),
+    natCard_activeSelectedBuckets, natCard_exactLengthTokenCarrier,
+    natCard_selectedResidualCarrier, ← Finset.sum_add_distrib]
+  exact Finset.sum_le_sum fun d _ =>
+    natCard_activeSelectedBucket_le_exactLength_add_residual n q m d
+
+/-- Block-count form of the primary residual reduction. -/
+theorem natCard_globalSelectedPressureCarrier_le_interval_add_residual
+    {n : OddNat} {q m : ℕ} (hqm : q ≤ m) :
+    Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) ≤
+      m - q + 1 + Nat.card (CanonicalSelectedResidualCarrier n q m) :=
+  (natCard_globalSelectedPressureCarrier_le_exactLength_add_residual n q m).trans
+    (Nat.add_le_add_right (natCard_exactLengthTokenCarrier_le_interval hqm) _)
+
+/-- The all-depth minimal residual is bounded by the coarser full-amplitude
+capacity.  This follows from an explicit depth-preserving embedding. -/
+theorem natCard_selectedResidualCarrier_le_pressureAmplitudeCarrier
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalSelectedResidualCarrier n q m) ≤
+      Nat.card (CanonicalPositivePressureAmplitudeCarrier n q m) := by
+  classical
+  letI : Fintype
+      {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m} :=
+    Fintype.ofFinset (canonicalActiveSelectedPressureDepthSupport n q m) (by simp)
+  letI : Fintype (CanonicalSelectedResidualCarrier n q m) := by
+    unfold CanonicalSelectedResidualCarrier
+    infer_instance
+  letI : Fintype (CanonicalPositivePressureAmplitudeCarrier n q m) := by
+    unfold CanonicalPositivePressureAmplitudeCarrier
+    infer_instance
+  exact Nat.card_le_card_of_injective
+    (selectedResidualCarrierPressureAmplitudeEmbedding n q m)
+    (selectedResidualCarrierPressureAmplitudeEmbedding n q m).injective
+
+/-- Coarser amplitude corollary of the minimal residual reduction. -/
+theorem natCard_globalSelectedPressureCarrier_le_interval_add_pressureAmplitude
+    {n : OddNat} {q m : ℕ} (hqm : q ≤ m) :
+    Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) ≤
+      m - q + 1 +
+        Nat.card (CanonicalPositivePressureAmplitudeCarrier n q m) :=
+  (natCard_globalSelectedPressureCarrier_le_interval_add_residual hqm).trans
+    (Nat.add_le_add_left
+      (natCard_selectedResidualCarrier_le_pressureAmplitudeCarrier n q m) _)
+
+/-- Positive drift reduced to block count, minimal selected residual, and the
+already isolated saturated-token packing term. -/
+theorem natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_saturated
+    {n : OddNat} {q m : ℕ} (hqm : q ≤ m) :
+    Nat.card (CanonicalPositiveDriftUnitCarrier n q m) ≤
+      (m - q + 1 + Nat.card (CanonicalSelectedResidualCarrier n q m)) +
+        Nat.card {k : ℕ // k ∈ canonicalSaturatedBlockIndices n q m} := by
+  exact (natCard_positiveDriftUnitCarrier_le_global_add_saturated n q m).trans
+    (Nat.add_le_add_right
+      (natCard_globalSelectedPressureCarrier_le_interval_add_residual hqm) _)
+
+/-- Saturated packing yields a completely finite reduction whose only
+uncontrolled term is the minimal selected residual carrier. -/
+theorem natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_half
+    {n : OddNat} {q m : ℕ} (hqm : q ≤ m) :
+    Nat.card (CanonicalPositiveDriftUnitCarrier n q m) ≤
+      (m - q + 1 + Nat.card (CanonicalSelectedResidualCarrier n q m)) +
+        (m - q + 2) / 2 := by
+  have hsat :
+      Nat.card {k : ℕ // k ∈ canonicalSaturatedBlockIndices n q m} ≤
+        (m - q + 2) / 2 := by
+    simpa only [Nat.card_eq_fintype_card, Fintype.card_coe] using
+      card_canonicalSaturatedBlockIndices_le_half n q m
+  exact
+    (natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_saturated
+      hqm).trans (Nat.add_le_add_left hsat _)
+
+/-!
+## Prefix versus sliding-window pressure audit
+
+`canonicalWindowPressureMarginAtDepth n q m d` is the block sum on `q..m`.
+The existing public pressure theorem identifies only the prefix sum `0..m`
+with `SourcePressureMarginInt n (paymentEndpointSeq n m + 1) d`.
+
+The intended sliding identity therefore requires two explicit bridges that are
+not yet present as caller-facing theorems:
+
+1. split the finite block sum `0..m` into `0..q-1` and `q..m`;
+2. identify pressure at `canonicalBlockStartTime n q` with the `0..q-1`
+   prefix (with the separate base case `q = 0`).
+
+Until those bridges are proved, relative window pressure must not be treated as
+absolute `IsSourcePressureDepth`, and no level-zero pulse/packing theorem may be
+applied to its positive part.  This is the first genuine API obstruction after
+the completed finite residual reduction; it is a missing prefix-difference
+bridge, not evidence that the proposed identity is false.
+-/
 
 /-- Endpoint-prefix pressure is continuation mass one level deeper minus the
 number of exact-length recovery blocks. -/
