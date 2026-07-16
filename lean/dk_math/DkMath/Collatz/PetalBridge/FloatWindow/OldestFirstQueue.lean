@@ -259,4 +259,88 @@ theorem eraseOldestN_eq_of_subset_card_and_complement_le
     subst z
     exact hzNot hy
 
+/-! ## Threshold dominance -/
+
+/-- Among all subsets of `s` with the same cardinality, the oldest-first
+remainder retains the largest possible number of sources at or above every
+cutoff.  This is the distributional form of FIFO source-age optimality. -/
+theorem card_filter_le_card_filter_eraseOldestN
+    {c : ℕ} {s u : Finset ℕ}
+    (hu : u ⊆ s)
+    (hcard : u.card = (eraseOldestN c s).card)
+    (t : ℕ) :
+    (u.filter (fun x => t ≤ x)).card ≤
+      ((eraseOldestN c s).filter (fun x => t ≤ x)).card := by
+  let r := eraseOldestN c s
+  let upper := s.filter (fun x => t ≤ x)
+  by_cases hru : r.card ≤ upper.card
+  · have hrSub : r ⊆ upper :=
+      (eraseOldestN_subset_filter_iff_card_le c s t).2 hru
+    have hrFilter : r.filter (fun x => t ≤ x) = r := by
+      apply Finset.filter_eq_self.mpr
+      intro x hx
+      exact (Finset.mem_filter.mp (hrSub hx)).2
+    rw [show eraseOldestN c s = r by rfl, hrFilter, ← hcard]
+    exact Finset.card_le_card (Finset.filter_subset _ _)
+  · have hUpperSub : upper ⊆ r := by
+      intro x hx
+      by_contra hxr
+      have hxS := (Finset.mem_filter.mp hx).1
+      have htx := (Finset.mem_filter.mp hx).2
+      have hxConsumed : x ∈ consumedOldestN c s := by
+        have hxUnion : x ∈ consumedOldestN c s ∪ r := by
+          rw [show r = eraseOldestN c s by rfl,
+            consumedOldestN_union_eraseOldestN]
+          exact hxS
+        exact (Finset.mem_union.mp hxUnion).resolve_right hxr
+      have hex : ∃ y, y ∈ r ∧ y < t := by
+        by_contra h
+        push Not at h
+        have hrSub : r ⊆ upper := by
+          intro y hy
+          exact Finset.mem_filter.mpr
+            ⟨mem_of_mem_eraseOldestN hy, h y hy⟩
+        have := Finset.card_le_card hrSub
+        omega
+      rcases hex with ⟨y, hyR, hyt⟩
+      have hxy := consumedOldestN_le_eraseOldestN c s x hxConsumed y hyR
+      omega
+    have hUpperFilter : r.filter (fun x => t ≤ x) = upper := by
+      apply Finset.Subset.antisymm
+      · intro x hx
+        exact Finset.mem_filter.mpr
+          ⟨mem_of_mem_eraseOldestN (Finset.mem_filter.mp hx).1,
+            (Finset.mem_filter.mp hx).2⟩
+      · intro x hx
+        exact Finset.mem_filter.mpr ⟨hUpperSub hx, (Finset.mem_filter.mp hx).2⟩
+    rw [show eraseOldestN c s = r by rfl, hUpperFilter]
+    exact Finset.card_le_card fun x hx =>
+      Finset.mem_filter.mpr ⟨hu (Finset.mem_filter.mp hx).1,
+        (Finset.mem_filter.mp hx).2⟩
+
+/-! ## Cardinality does not control age in an arbitrary queue -/
+
+/-- Abstract queue retaining one source forever.  It is intentionally
+Collatz-independent and serves only as a semantic regression. -/
+def persistentSingletonQueue (_m : ℕ) : Finset ℕ :=
+  {0}
+
+@[simp] theorem card_persistentSingletonQueue (m : ℕ) :
+    (persistentSingletonQueue m).card = 1 := by
+  simp [persistentSingletonQueue]
+
+/-- The persistent singleton has a uniform cardinal bound. -/
+theorem persistentSingletonQueue_card_le_one (m : ℕ) :
+    (persistentSingletonQueue m).card ≤ 1 := by
+  simp
+
+/-- Despite its cardinality being constantly one, the source age `m - 0` is
+unbounded.  Thus uniform source age is not a generic necessary condition for
+uniform queue cardinality; additional arithmetic structure is essential. -/
+theorem not_exists_uniformAge_persistentSingletonQueue :
+    ¬ ∃ H, ∀ m i, i ∈ persistentSingletonQueue m → m - i ≤ H := by
+  rintro ⟨H, h⟩
+  have hage := h (H + 1) 0 (by simp [persistentSingletonQueue])
+  omega
+
 end DkMath
