@@ -164,6 +164,68 @@ theorem pathWeight_nonpos_of_signature_eq
 
 end RelationalFiniteSignedTransitionPotentialCertificate
 
+/-! ## Conditional canonical-block projection -/
+
+/-- A canonical signed window is the corresponding consecutive range sum. -/
+theorem canonicalWindowDriftInt_add_eq_sum_range
+    (n : OddNat) (q length : ℕ) :
+    canonicalWindowDriftInt n q (q + length) =
+      ∑ i ∈ Finset.range (length + 1), endpointAccountingTerm n (q + i) := by
+  induction length with
+  | zero => simp [canonicalWindowDriftInt_self]
+  | succ length ih =>
+      change canonicalWindowDriftInt n q ((q + length) + 1) = _
+      rw [canonicalWindowDriftInt_succ n (by omega), if_pos (by omega), ih]
+      conv_rhs => rw [Finset.sum_range_succ]
+      congr 2
+
+/-- A sound relational finite projection of all canonical successor edges
+bounds every canonical signed window. -/
+theorem relationalFiniteSignedCertificate_canonicalWindowDrift_le
+    {Signature : Type*} [Fintype Signature]
+    (n : OddNat)
+    (C : RelationalFiniteSignedTransitionPotentialCertificate ℕ Signature)
+    (hstep : ∀ k, C.Step k (k + 1))
+    (hweight : ∀ k, C.actualWeight k (k + 1) = endpointAccountingTerm n k)
+    {q m : ℕ} (hqm : q ≤ m) :
+    canonicalWindowDriftInt n q m ≤ C.bound := by
+  let length := m - q + 1
+  have hm : q + (m - q) = m := Nat.add_sub_of_le hqm
+  have hpath : C.IsPath (fun k => k) q length := by
+    intro i hi
+    simpa [length, add_assoc] using hstep (q + i)
+  have hbound := C.pathWeight_le_bound (fun k => k) q length hpath
+  unfold RelationalFiniteSignedTransitionPotentialCertificate.pathWeight at hbound
+  simp only [hweight] at hbound
+  rw [← canonicalWindowDriftInt_add_eq_sum_range n q (m - q), hm] at hbound
+  exact hbound
+
+/-- A sound canonical finite signed projection yields a uniform reflected-queue
+bound without choosing its signature from an assumed queue ceiling. -/
+theorem relationalFiniteSignedCertificate_to_queueUniformUpperBound
+    {Signature : Type*} [Fintype Signature]
+    (n : OddNat)
+    (C : RelationalFiniteSignedTransitionPotentialCertificate ℕ Signature)
+    (hstep : ∀ k, C.Step k (k + 1))
+    (hweight : ∀ k, C.actualWeight k (k + 1) = endpointAccountingTerm n k) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n C.bound := by
+  rw [canonicalOutstandingClaimQueueUniformUpperBound_iff_all_windowDrift_le]
+  intro m q hqm
+  exact relationalFiniteSignedCertificate_canonicalWindowDrift_le
+    n C hstep hweight hqm
+
+/-- The same sound finite projection gives the translated endpoint-width
+ceiling. -/
+theorem relationalFiniteSignedCertificate_to_endpointWidthUniformUpperBound
+    {Signature : Type*} [Fintype Signature]
+    (n : OddNat)
+    (C : RelationalFiniteSignedTransitionPotentialCertificate ℕ Signature)
+    (hstep : ∀ k, C.Step k (k + 1))
+    (hweight : ∀ k, C.actualWeight k (k + 1) = endpointAccountingTerm n k) :
+    CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + C.bound) :=
+  (relationalFiniteSignedCertificate_to_queueUniformUpperBound
+    n C hstep hweight).to_endpointWidthUniformUpperBound
+
 namespace FiniteSignedTransitionPotentialCertificate
 
 variable {State Signature : Type*} [Fintype Signature]

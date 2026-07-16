@@ -96,9 +96,10 @@ together with disjoint ownership, injective consumption, unique temporal
 origin, and temporal nonreuse.  Without those data, local saturated-successor
 discharge is not formally connected to global amortization.
 
-The next admissible step is therefore carrier discovery, not another scalar
-potential predicate.  Any proposed owned law must be audited against the same
-reverse construction before it is accepted.
+Carrier discovery is one admissible route, but checkpoint 331 records two
+others: a sound finite signed-transition potential and a bounded repayment-lag
+theorem.  Any proposed scalar or owned law must still be audited against the
+same reverse construction before it is accepted.
 
 ## Verification
 

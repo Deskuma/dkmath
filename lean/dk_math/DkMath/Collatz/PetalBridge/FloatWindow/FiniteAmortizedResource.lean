@@ -12,67 +12,129 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 namespace DkMath.Collatz
 
 /-!
-# Finite amortized resource telescope
+# Finite amortized balance telescope
 
-This module is deliberately independent of the Collatz observables.  It only
-records a scalar queue, a scalar potential, consumed mass, replenishment, and
-one-step conservation.  In particular, there is no phantom state carrier.
+This scalar combinator has no ownership semantics.  `inflow` and `outflow`
+are neutral accounting streams; a caller must separately prove that they come
+from concrete resources if that interpretation is required.
 -/
 
-/-- Generic finite-step amortized accounting data. -/
-structure FiniteAmortizedResource where
+/-- Generic finite-step balance data. -/
+structure FiniteAmortizedBalance where
   queue : ℕ → ℕ
   potential : ℕ → ℕ
-  consumed : ℕ → ℕ
-  replenishment : ℕ → ℕ
+  outflow : ℕ → ℕ
+  inflow : ℕ → ℕ
   step_conservation :
-    ∀ k, queue (k + 1) + potential (k + 1) + consumed k ≤
-      queue k + potential k + replenishment k
+    ∀ k, queue (k + 1) + potential (k + 1) + outflow k ≤
+      queue k + potential k + inflow k
 
-namespace FiniteAmortizedResource
+/-- Compatibility alias for the original scalar type name. -/
+abbrev FiniteAmortizedResource := FiniteAmortizedBalance
 
-/-- Iterating one-step conservation gives the finite-prefix resource ceiling. -/
-theorem queue_add_potential_le_initial_add_sum
-    (A : FiniteAmortizedResource) (m : ℕ) :
-    A.queue m + A.potential m ≤
-      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.replenishment k := by
+namespace FiniteAmortizedBalance
+
+/-- Keeping all outflow terms gives the strongest finite-prefix telescope. -/
+theorem queue_add_potential_add_sum_outflow_le_initial_add_sum_inflow
+    (A : FiniteAmortizedBalance) (m : ℕ) :
+    A.queue m + A.potential m + ∑ k ∈ Finset.range m, A.outflow k ≤
+      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.inflow k := by
   induction m with
   | zero => simp
   | succ m ih =>
       have hstep := A.step_conservation m
-      rw [Finset.sum_range_succ]
+      rw [Finset.sum_range_succ, Finset.sum_range_succ]
       omega
 
-/-- The sharp queue estimate uses only the initial potential. -/
-theorem queue_le_initial_add_potential_add_cumulativeReplenishment
-    (A : FiniteAmortizedResource) (m : ℕ) :
+/-- Dropping the nonnegative cumulative outflow gives the weaker telescope. -/
+theorem queue_add_potential_le_initial_add_sum
+    (A : FiniteAmortizedBalance) (m : ℕ) :
+    A.queue m + A.potential m ≤
+      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.inflow k := by
+  have h := A.queue_add_potential_add_sum_outflow_le_initial_add_sum_inflow m
+  omega
+
+/-- The direct queue estimate uses only the initial potential. -/
+theorem queue_le_initial_add_potential_add_cumulativeInflow
+    (A : FiniteAmortizedBalance) (m : ℕ) :
     A.queue m ≤
-      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.replenishment k := by
+      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.inflow k := by
   have h := A.queue_add_potential_le_initial_add_sum m
   omega
 
-/-- Initial potential and cumulative replenishment bounds give a queue bound. -/
-theorem queue_le_of_initialPotential_and_cumulativeReplenishment_bounds
-    (A : FiniteAmortizedResource) {P R : ℕ}
-    (hpotential : A.potential 0 ≤ P)
-    (hreplenishment : ∀ m,
-      ∑ k ∈ Finset.range m, A.replenishment k ≤ R) (m : ℕ) :
-    A.queue m ≤ A.queue 0 + P + R := by
-  have hqueue := A.queue_le_initial_add_potential_add_cumulativeReplenishment m
-  have hrepl := hreplenishment m
+/-- Bounded cumulative net inflow, rather than bounded total inflow, controls
+the queue in a stable system with ongoing throughput. -/
+theorem queue_le_of_cumulativeInflow_le_cumulativeOutflow_add
+    (A : FiniteAmortizedBalance) {B : ℕ}
+    (hnet : ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤
+      (∑ k ∈ Finset.range m, A.outflow k) + B) (m : ℕ) :
+    A.queue m ≤ A.queue 0 + A.potential 0 + B := by
+  have htel := A.queue_add_potential_add_sum_outflow_le_initial_add_sum_inflow m
+  have hm := hnet m
   omega
 
-/-- Compatibility corollary: a uniform potential bound is stronger than the
-initial bound actually used by the telescope. -/
+/-- Wrapper using an explicit upper bound for the initial potential. -/
+theorem queue_le_of_initialPotential_and_boundedNetInflow
+    (A : FiniteAmortizedBalance) {P B : ℕ}
+    (hpotential : A.potential 0 ≤ P)
+    (hnet : ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤
+      (∑ k ∈ Finset.range m, A.outflow k) + B) (m : ℕ) :
+    A.queue m ≤ A.queue 0 + P + B := by
+  have hqueue := A.queue_le_of_cumulativeInflow_le_cumulativeOutflow_add hnet m
+  omega
+
+/-- Compatibility theorem for the stronger bounded-total-inflow hypothesis. -/
+theorem queue_le_of_initialPotential_and_cumulativeReplenishment_bounds
+    (A : FiniteAmortizedBalance) {P R : ℕ}
+    (hpotential : A.potential 0 ≤ P)
+    (hinflow : ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤ R) (m : ℕ) :
+    A.queue m ≤ A.queue 0 + P + R := by
+  have hqueue := A.queue_le_initial_add_potential_add_cumulativeInflow m
+  have hm := hinflow m
+  omega
+
+/-- Compatibility corollary with an unnecessarily uniform potential bound. -/
 theorem queue_le_of_potential_and_cumulative_replenishment_bounds
-    (A : FiniteAmortizedResource) {P R : ℕ}
+    (A : FiniteAmortizedBalance) {P R : ℕ}
     (hpotential : ∀ k, A.potential k ≤ P)
-    (hreplenishment : ∀ m,
-      ∑ k ∈ Finset.range m, A.replenishment k ≤ R) (m : ℕ) :
+    (hinflow : ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤ R) (m : ℕ) :
     A.queue m ≤ A.queue 0 + P + R :=
   A.queue_le_of_initialPotential_and_cumulativeReplenishment_bounds
-    (hpotential 0) hreplenishment m
+    (hpotential 0) hinflow m
 
-end FiniteAmortizedResource
+end FiniteAmortizedBalance
+
+/-! ## Stable-throughput regression -/
+
+/-- A stable balance with one unit entering and leaving at every step. -/
+def stableUnitThroughputBalance : FiniteAmortizedBalance where
+  queue _ := 0
+  potential _ := 0
+  outflow _ := 1
+  inflow _ := 1
+  step_conservation _ := by simp
+
+/-- The stable-throughput queue is identically zero. -/
+theorem stableUnitThroughputBalance_queue (k : ℕ) :
+    stableUnitThroughputBalance.queue k = 0 := rfl
+
+/-- Conservation in the stable-throughput example is exact. -/
+theorem stableUnitThroughputBalance_step_exact (k : ℕ) :
+    stableUnitThroughputBalance.queue (k + 1) +
+        stableUnitThroughputBalance.potential (k + 1) +
+          stableUnitThroughputBalance.outflow k =
+      stableUnitThroughputBalance.queue k +
+        stableUnitThroughputBalance.potential k +
+          stableUnitThroughputBalance.inflow k := by
+  rfl
+
+/-- No finite constant bounds every cumulative inflow prefix, even though the
+queue is uniformly zero. -/
+theorem stableUnitThroughputBalance_no_cumulativeInflow_bound :
+    ¬ ∃ R, ∀ m, ∑ k ∈ Finset.range m,
+      stableUnitThroughputBalance.inflow k ≤ R := by
+  rintro ⟨R, hR⟩
+  have h := hR (R + 1)
+  simp [stableUnitThroughputBalance] at h
 
 end DkMath.Collatz

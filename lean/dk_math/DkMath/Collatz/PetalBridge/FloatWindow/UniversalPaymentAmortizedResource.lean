@@ -30,10 +30,10 @@ abbrev CanonicalAmortizedResourceTransition (_n : OddNat) :=
 canonical reflected queue.  It intentionally makes no ownership claim. -/
 def CanonicalAbstractAmortizationCertificate
     (n : OddNat) (P R : ℕ) : Prop :=
-  ∃ A : FiniteAmortizedResource,
+  ∃ A : FiniteAmortizedBalance,
     (∀ m, A.queue m = canonicalOutstandingClaimQueue n m) ∧
       A.potential 0 ≤ P ∧
-        ∀ m, ∑ k ∈ Finset.range m, A.replenishment k ≤ R
+        ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤ R
 
 /-- Deprecated compatibility alias.  Despite its historical name, this
 predicate is not noncircular; see
@@ -62,15 +62,39 @@ theorem CanonicalAbstractAmortizationCertificate.to_endpointWidthUniformUpperBou
       (bitWidth n.1 + (canonicalOutstandingClaimQueue n 0 + P + R)) :=
   h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
 
+namespace CanonicalNoncircularGlobalAmortizationLaw
+
+/-- Deprecated fully qualified wrapper for the former public theorem. -/
+@[deprecated CanonicalAbstractAmortizationCertificate.to_queueUniformUpperBound
+  (since := "2026-07-16")]
+theorem to_queueUniformUpperBound
+    {n : OddNat} {P R : ℕ}
+    (h : CanonicalAbstractAmortizationCertificate n P R) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n
+      (canonicalOutstandingClaimQueue n 0 + P + R) :=
+  CanonicalAbstractAmortizationCertificate.to_queueUniformUpperBound h
+
+/-- Deprecated fully qualified wrapper for the former public theorem. -/
+@[deprecated CanonicalAbstractAmortizationCertificate.to_endpointWidthUniformUpperBound
+  (since := "2026-07-16")]
+theorem to_endpointWidthUniformUpperBound
+    {n : OddNat} {P R : ℕ}
+    (h : CanonicalAbstractAmortizationCertificate n P R) :
+    CanonicalEndpointWidthUniformUpperBound n
+      (bitWidth n.1 + (canonicalOutstandingClaimQueue n 0 + P + R)) :=
+  CanonicalAbstractAmortizationCertificate.to_endpointWidthUniformUpperBound h
+
+end CanonicalNoncircularGlobalAmortizationLaw
+
 /-- Reverse construction exposing the circular complement potential. -/
 noncomputable def trivialAmortizedTransitionOfQueueBound
     {n : OddNat} {C : ℕ}
     (hC : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
-    FiniteAmortizedResource where
+    FiniteAmortizedBalance where
   queue k := canonicalOutstandingClaimQueue n k
   potential k := C - canonicalOutstandingClaimQueue n k
-  consumed _ := 0
-  replenishment _ := 0
+  outflow _ := 0
+  inflow _ := 0
   step_conservation k := by
     have hk := hC k
     have hks := hC (k + 1)
@@ -153,6 +177,62 @@ theorem canonicalOutstandingClaimQueue_add_consumed
               canonicalBlockCapacityCount n (k + 1) := Nat.le_of_not_ge h
         rw [Nat.min_eq_left hle, Nat.sub_eq_zero_of_le hle]
         simp
+
+/-- The queue before the initial block is empty. -/
+@[simp] theorem canonicalOutstandingClaimQueueBeforeBlock_zero (n : OddNat) :
+    canonicalOutstandingClaimQueueBeforeBlock n 0 = 0 := rfl
+
+/-- Before successor block `k+1`, the queue is the queue after block `k`. -/
+@[simp] theorem canonicalOutstandingClaimQueueBeforeBlock_succ
+    (n : OddNat) (k : ℕ) :
+    canonicalOutstandingClaimQueueBeforeBlock n (k + 1) =
+      canonicalOutstandingClaimQueue n k := rfl
+
+/-- The exact canonical reflected queue as a neutral scalar balance. -/
+noncomputable def canonicalQueueFiniteAmortizedBalance
+    (n : OddNat) : FiniteAmortizedBalance where
+  queue := canonicalOutstandingClaimQueueBeforeBlock n
+  potential _ := 0
+  outflow := canonicalQueueConsumed n
+  inflow := canonicalQueueDemand n
+  step_conservation k := by
+    simp only [canonicalOutstandingClaimQueueBeforeBlock_succ]
+    exact (canonicalOutstandingClaimQueue_add_consumed n k).le
+
+/-! ## Exact unused service -/
+
+/-- Capacity not used by the reflected queue in canonical block `k`. -/
+noncomputable def canonicalQueueUnusedService (n : OddNat) (k : ℕ) : ℕ :=
+  canonicalQueueService n k - canonicalQueueConsumed n k
+
+/-- Actual consumption never exceeds current service capacity. -/
+theorem canonicalQueueConsumed_le_service (n : OddNat) (k : ℕ) :
+    canonicalQueueConsumed n k ≤ canonicalQueueService n k := by
+  exact min_le_right _ _
+
+/-- Actual consumption never exceeds available old and new work. -/
+theorem canonicalQueueConsumed_le_available (n : OddNat) (k : ℕ) :
+    canonicalQueueConsumed n k ≤
+      canonicalOutstandingClaimQueueBeforeBlock n k + canonicalQueueDemand n k := by
+  exact min_le_left _ _
+
+/-- Service partitions exactly into consumed and unused capacity. -/
+theorem canonicalQueueService_eq_consumed_add_unusedService
+    (n : OddNat) (k : ℕ) :
+    canonicalQueueService n k =
+      canonicalQueueConsumed n k + canonicalQueueUnusedService n k := by
+  unfold canonicalQueueUnusedService
+  exact (Nat.add_sub_of_le (canonicalQueueConsumed_le_service n k)).symm
+
+/-- The post-block queue is available work minus actual consumption. -/
+theorem canonicalOutstandingClaimQueue_eq_available_sub_consumed
+    (n : OddNat) (k : ℕ) :
+    canonicalOutstandingClaimQueue n k =
+      canonicalOutstandingClaimQueueBeforeBlock n k + canonicalQueueDemand n k -
+        canonicalQueueConsumed n k := by
+  have hconserve := canonicalOutstandingClaimQueue_add_consumed n k
+  have hle := canonicalQueueConsumed_le_available n k
+  omega
 
 /-!
 ## Owned-resource frontier
