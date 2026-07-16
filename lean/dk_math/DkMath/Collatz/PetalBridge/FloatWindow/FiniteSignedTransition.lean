@@ -36,6 +36,219 @@ a positive closed-signature path whose adjacent transitions all satisfy the
 certificate's `Step` relation.
 -/
 
+/-! ## Generic coboundary reweighting -/
+
+/-- Signed weight of a finite concrete path, independent of any certificate. -/
+def finiteSignedTransitionPathWeight
+    {State : Type*} (weight : State → State → ℤ)
+    (stateAt : ℕ → State) (start length : ℕ) : ℤ :=
+  ∑ i ∈ Finset.range length,
+    weight (stateAt (start + i)) (stateAt (start + i + 1))
+
+/-- Reweight an edge by the coboundary of a state correction. -/
+def coboundaryReweight
+    {State : Type*} (weight : State → State → ℤ)
+    (correction : State → ℤ) (a b : State) : ℤ :=
+  weight a b + correction a - correction b
+
+/-- Coboundary reweighting changes every finite path only by its endpoint
+correction. -/
+theorem finiteSignedTransitionPathWeight_coboundaryReweight
+    {State : Type*} (weight : State → State → ℤ)
+    (correction : State → ℤ) (stateAt : ℕ → State)
+    (start length : ℕ) :
+    finiteSignedTransitionPathWeight
+        (coboundaryReweight weight correction) stateAt start length =
+      finiteSignedTransitionPathWeight weight stateAt start length +
+        correction (stateAt start) -
+          correction (stateAt (start + length)) := by
+  induction length with
+  | zero => simp [finiteSignedTransitionPathWeight]
+  | succ length ih =>
+      have hreweighted : finiteSignedTransitionPathWeight
+          (coboundaryReweight weight correction) stateAt start (length + 1) =
+          finiteSignedTransitionPathWeight
+            (coboundaryReweight weight correction) stateAt start length +
+            coboundaryReweight weight correction
+              (stateAt (start + length))
+              (stateAt (start + length + 1)) := by
+        simp only [finiteSignedTransitionPathWeight,
+          Finset.sum_range_succ]
+      have hbase : finiteSignedTransitionPathWeight
+          weight stateAt start (length + 1) =
+          finiteSignedTransitionPathWeight weight stateAt start length +
+            weight (stateAt (start + length))
+              (stateAt (start + length + 1)) := by
+        simp only [finiteSignedTransitionPathWeight,
+          Finset.sum_range_succ]
+      have hend : start + (length + 1) = start + length + 1 := by omega
+      rw [hreweighted, hbase, ih, hend]
+      unfold coboundaryReweight
+      ring
+
+/-- A state-closed finite path has exactly the same total weight after every
+coboundary reweighting. -/
+theorem finiteSignedTransitionPathWeight_coboundaryReweight_of_state_eq
+    {State : Type*} (weight : State → State → ℤ)
+    (correction : State → ℤ) (stateAt : ℕ → State)
+    (start length : ℕ)
+    (hclosed : stateAt (start + length) = stateAt start) :
+    finiteSignedTransitionPathWeight
+        (coboundaryReweight weight correction) stateAt start length =
+      finiteSignedTransitionPathWeight weight stateAt start length := by
+  rw [finiteSignedTransitionPathWeight_coboundaryReweight, hclosed]
+  ring
+
+/-- If the correction is determined by a projected signature, equality of the
+endpoint signatures is sufficient for exact closed-path invariance. -/
+theorem finiteSignedTransitionPathWeight_signatureCoboundary_of_signature_eq
+    {State Signature : Type*} (weight : State → State → ℤ)
+    (signature : State → Signature) (correction : Signature → ℤ)
+    (stateAt : ℕ → State) (start length : ℕ)
+    (hclosed : signature (stateAt (start + length)) =
+      signature (stateAt start)) :
+    finiteSignedTransitionPathWeight
+        (coboundaryReweight weight (correction ∘ signature))
+        stateAt start length =
+      finiteSignedTransitionPathWeight weight stateAt start length := by
+  rw [finiteSignedTransitionPathWeight_coboundaryReweight]
+  change finiteSignedTransitionPathWeight weight stateAt start length +
+      correction (signature (stateAt start)) -
+        correction (signature (stateAt (start + length))) = _
+  rw [hclosed]
+  ring
+
+/-- A positive closed-signature path remains positive after every correction
+computed only from that signature. -/
+theorem finiteSignedTransitionPathWeight_signatureCoboundary_pos
+    {State Signature : Type*} (weight : State → State → ℤ)
+    (signature : State → Signature) (correction : Signature → ℤ)
+    (stateAt : ℕ → State) (start length : ℕ)
+    (hclosed : signature (stateAt (start + length)) =
+      signature (stateAt start))
+    (hpos : 0 < finiteSignedTransitionPathWeight weight stateAt start length) :
+    0 < finiteSignedTransitionPathWeight
+      (coboundaryReweight weight (correction ∘ signature))
+      stateAt start length := by
+  rwa [finiteSignedTransitionPathWeight_signatureCoboundary_of_signature_eq
+    weight signature correction stateAt start length hclosed]
+
+/-! ## Exact recovery versus projected upper weights
+
+An ordinary collision is not a potential-certificate obstruction.  It says
+only that one projected edge does not determine one exact concrete weight.
+A nondeterministic abstraction may still assign that edge an upper weight
+covering every concrete realization.  Unbounded edge fibers or positive
+projected cycles are the stronger obstructions relevant to a potential
+certificate. -/
+
+/-- Exact recovery of every concrete edge weight from its pair of endpoint
+signatures. -/
+def FiniteSignatureDeterministicallyRecoversEdgeWeight
+    {State Signature : Type*}
+    (signature : State → Signature) (weight : State → State → ℤ) : Prop :=
+  ∀ a b a' b',
+    signature a = signature a' →
+      signature b = signature b' →
+        weight a b = weight a' b'
+
+/-- Two concrete edges with the same projected endpoints but different exact
+weights. -/
+def FiniteSignatureExactWeightCollision
+    {State Signature : Type*}
+    (signature : State → Signature) (weight : State → State → ℤ) : Prop :=
+  ∃ a b a' b',
+    signature a = signature a' ∧
+      signature b = signature b' ∧
+        weight a b ≠ weight a' b'
+
+/-- Soundness of a projected upper weight, without any claim of exact
+recovery or deterministic successor behavior. -/
+def FiniteSignatureProjectedUpperWeightSound
+    {State Signature : Type*}
+    (signature : State → Signature) (weight : State → State → ℤ)
+    (projectedUpperWeight : Signature → Signature → ℤ) : Prop :=
+  ∀ a b,
+    weight a b ≤ projectedUpperWeight (signature a) (signature b)
+
+/-- An exact-weight collision refutes deterministic weight recovery. -/
+theorem not_deterministicallyRecoversEdgeWeight_of_exactWeightCollision
+    {State Signature : Type*}
+    {signature : State → Signature} {weight : State → State → ℤ}
+    (hcollision : FiniteSignatureExactWeightCollision signature weight) :
+    ¬ FiniteSignatureDeterministicallyRecoversEdgeWeight signature weight := by
+  rintro hrecover
+  rcases hcollision with ⟨a, b, a', b', hsource, htarget, hne⟩
+  exact hne (hrecover a b a' b' hsource htarget)
+
+/-- The same collision remains compatible with a sound projected upper
+weight: both unequal realizations are bounded by the common projected edge
+weight.  Thus collision alone is not a certificate impossibility theorem. -/
+theorem exactWeightCollision_compatible_with_projectedUpperWeight
+    {State Signature : Type*}
+    {signature : State → Signature} {weight : State → State → ℤ}
+    {projectedUpperWeight : Signature → Signature → ℤ}
+    (hcollision : FiniteSignatureExactWeightCollision signature weight)
+    (hsound : FiniteSignatureProjectedUpperWeightSound
+      signature weight projectedUpperWeight) :
+    ∃ a b a' b',
+      signature a = signature a' ∧
+        signature b = signature b' ∧
+          weight a b ≠ weight a' b' ∧
+            weight a b ≤
+              projectedUpperWeight (signature a) (signature b) ∧
+              weight a' b' ≤
+                projectedUpperWeight (signature a) (signature b) := by
+  rcases hcollision with ⟨a, b, a', b', hsource, htarget, hne⟩
+  refine ⟨a, b, a', b', hsource, htarget, hne, hsound a b, ?_⟩
+  simpa [hsource, htarget] using hsound a' b'
+
+/-- Soundness of a finite projected upper-weight table for a concrete
+successor sequence. -/
+def FiniteSignatureSuccessorUpperWeightSound
+    {Signature : Type*}
+    (signature : ℕ → Signature) (weight : ℕ → ℤ)
+    (projectedUpperWeight : Signature → Signature → ℤ) : Prop :=
+  ∀ m,
+    weight m ≤ projectedUpperWeight (signature m) (signature (m + 1))
+
+/-- A finite projected successor-edge upper table exists exactly when the
+concrete successor weights have a uniform pointwise upper bound.  The forward
+direction uses the finite sum of absolute table entries as a coarse bound;
+the reverse direction uses a constant table.
+
+Consequently, changing or refining a finite signature cannot by itself evade
+an unbounded concrete edge family. -/
+theorem exists_finiteSignatureSuccessorUpperWeight_iff_uniformUpperBound
+    {Signature : Type*} [Finite Signature]
+    (signature : ℕ → Signature) (weight : ℕ → ℤ) :
+    (∃ projectedUpperWeight : Signature → Signature → ℤ,
+      FiniteSignatureSuccessorUpperWeightSound
+        signature weight projectedUpperWeight) ↔
+      ∃ B : ℤ, ∀ m, weight m ≤ B := by
+  classical
+  letI := Fintype.ofFinite Signature
+  constructor
+  · rintro ⟨upper, hupper⟩
+    refine ⟨∑ s : Signature, ∑ t : Signature, |upper s t|, ?_⟩
+    intro m
+    have hinner : |upper (signature m) (signature (m + 1))| ≤
+        ∑ t : Signature, |upper (signature m) t| := by
+      exact Finset.single_le_sum
+        (fun t _ => abs_nonneg (upper (signature m) t))
+        (Finset.mem_univ _)
+    have houter : (∑ t : Signature, |upper (signature m) t|) ≤
+        ∑ s : Signature, ∑ t : Signature, |upper s t| := by
+      exact Finset.single_le_sum
+        (fun s _ => Finset.sum_nonneg fun t _ => abs_nonneg (upper s t))
+        (Finset.mem_univ _)
+    exact (hupper m).trans
+      ((le_abs_self (upper (signature m) (signature (m + 1)))).trans
+        (hinner.trans houter))
+  · rintro ⟨B, hB⟩
+    refine ⟨fun _ _ => B, ?_⟩
+    exact hB
+
 /--
 A sound finite signed abstraction equipped with a bounded potential.  Concrete
 edge weight is bounded by projected edge weight, and projected edge weight is
