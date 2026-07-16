@@ -234,6 +234,32 @@ theorem canonicalOutstandingClaimQueue_eq_available_sub_consumed
   have hle := canonicalQueueConsumed_le_available n k
   omega
 
+/-! ## Exact canonical prefix balance -/
+
+/-- Exact telescoping equality for every prefix of canonical blocks. -/
+theorem canonicalQueueBefore_add_sum_consumed_eq_sum_demand
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueueBeforeBlock n m +
+        ∑ k ∈ Finset.range m, canonicalQueueConsumed n k =
+      ∑ k ∈ Finset.range m, canonicalQueueDemand n k := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+      rw [Finset.sum_range_succ, Finset.sum_range_succ,
+        canonicalOutstandingClaimQueueBeforeBlock_succ]
+      have hstep := canonicalOutstandingClaimQueue_add_consumed n m
+      omega
+
+/-- The queue before block `m` is cumulative demand minus cumulative actual
+consumption. -/
+theorem canonicalQueueBefore_eq_sum_demand_sub_sum_consumed
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueueBeforeBlock n m =
+      (∑ k ∈ Finset.range m, canonicalQueueDemand n k) -
+        ∑ k ∈ Finset.range m, canonicalQueueConsumed n k := by
+  have h := canonicalQueueBefore_add_sum_consumed_eq_sum_demand n m
+  omega
+
 /-!
 ## Owned-resource frontier
 

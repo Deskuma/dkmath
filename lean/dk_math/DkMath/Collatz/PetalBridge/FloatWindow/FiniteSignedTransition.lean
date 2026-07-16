@@ -226,6 +226,73 @@ theorem relationalFiniteSignedCertificate_to_endpointWidthUniformUpperBound
   (relationalFiniteSignedCertificate_to_queueUniformUpperBound
     n C hstep hweight).to_endpointWidthUniformUpperBound
 
+/-! ## Canonical finite projection wrapper -/
+
+/-- Candidate-facing finite signature certificate specialized to canonical
+block edges and their exact endpoint accounting weights. -/
+structure CanonicalFiniteSignedTransitionPotentialCertificate
+    (n : OddNat) (Signature : Type*) [Fintype Signature] where
+  signature : ℕ → Signature
+  projectedUpperWeight : Signature → Signature → ℤ
+  potential : Signature → ℤ
+  bound : ℕ
+  actual_le_projected : ∀ k,
+    endpointAccountingTerm n k ≤
+      projectedUpperWeight (signature k) (signature (k + 1))
+  projected_le_potential_diff : ∀ s t,
+    projectedUpperWeight s t ≤ potential t - potential s
+  potential_nonneg : ∀ s, 0 ≤ potential s
+  potential_le_bound : ∀ s, potential s ≤ bound
+
+namespace CanonicalFiniteSignedTransitionPotentialCertificate
+
+variable {n : OddNat} {Signature : Type*} [Fintype Signature]
+
+/-- Forgetting specialization yields the generic relational certificate. -/
+noncomputable def toRelational
+    (C : CanonicalFiniteSignedTransitionPotentialCertificate n Signature) :
+    RelationalFiniteSignedTransitionPotentialCertificate ℕ Signature where
+  Step a b := b = a + 1
+  signature := C.signature
+  actualWeight a _ := endpointAccountingTerm n a
+  projectedUpperWeight := C.projectedUpperWeight
+  potential := C.potential
+  bound := C.bound
+  actual_le_projected := by
+    intro a b hab
+    subst b
+    exact C.actual_le_projected a
+  projected_le_potential_diff := C.projected_le_potential_diff
+  potential_nonneg := C.potential_nonneg
+  potential_le_bound := C.potential_le_bound
+
+/-- A canonical finite projection directly bounds the reflected queue. -/
+theorem to_queueUniformUpperBound
+    (C : CanonicalFiniteSignedTransitionPotentialCertificate n Signature) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n C.bound := by
+  apply relationalFiniteSignedCertificate_to_queueUniformUpperBound
+    n C.toRelational
+  · intro k
+    rfl
+  · intro k
+    rfl
+
+/-- A canonical finite projection directly bounds completed endpoint widths. -/
+theorem to_endpointWidthUniformUpperBound
+    (C : CanonicalFiniteSignedTransitionPotentialCertificate n Signature) :
+    CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + C.bound) :=
+  C.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
+
+/-!
+Before searching for `potential`, a candidate signature must establish that
+all realized canonical edges sharing one signature pair have a finite common
+upper weight.  Exact drift collisions are harmless when such an upper bound
+exists; an unbounded positive collision rejects the candidate immediately.
+No currently audited low-bit signature has this edgewise theorem yet.
+-/
+
+end CanonicalFiniteSignedTransitionPotentialCertificate
+
 namespace FiniteSignedTransitionPotentialCertificate
 
 variable {State Signature : Type*} [Fintype Signature]

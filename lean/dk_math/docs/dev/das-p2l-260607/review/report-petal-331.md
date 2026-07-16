@@ -89,9 +89,11 @@ with a sound projected upper edge weight and bounded potential.  Existing
 low-bit collision evidence rules out exact deterministic recovery, but does
 not by itself rule out a nondeterministic upper-weight projection.
 
-## Bounded repayment-lag route
+## Bounded repayment-lag route (corrected by checkpoint 332)
 
-`BoundedRepaymentLag.lean` proves the generic implication:
+Checkpoint 331 introduced the route, but its shifted early-time window could
+include indices at or after the observation time.  Checkpoint 332 replaces it
+with the exact past interval `[m-L,m)` and proves the corrected implication:
 
 ```text
 all outstanding work lies among the previous L arrival slots
@@ -100,9 +102,10 @@ each slot creates at most A arrivals
 queue m <= L * A.
 ```
 
-The first missing Collatz theorem is a uniform lag for all actual canonical
-claims.  Current saturated-successor results repay selected local subclasses,
-but do not provide such a global lag.
+The route has two independent missing canonical inputs: uniform lag coverage
+and a uniform bound on demand accumulated in each recent window (or a
+per-block demand bound).  Current saturated-successor results repay selected
+local subclasses, but provide neither complete global obligation.
 
 ## Owned-carrier route
 
