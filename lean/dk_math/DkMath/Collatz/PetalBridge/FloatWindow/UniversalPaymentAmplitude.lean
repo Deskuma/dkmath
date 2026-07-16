@@ -1712,6 +1712,76 @@ theorem mem_canonicalPaymentClaimDepths_iff_stateUpperCarry_coreWord
     unfold CarryTwoDebtAt
     simpa [hstate] using hcarry
 
+/-- Exact block-core word observed at positive depth `d`. -/
+noncomputable def canonicalBlockCoreWordAtDepth
+    (n : OddNat) (k d : ℕ) : ℕ :=
+  2 ^ d * 3 ^ (canonicalBlockLength n k - d) *
+    canonicalBlockOddCore n k - 1
+
+/-- Caller-facing form of the exact source-state formula. -/
+theorem iterateT_sourceAtDepth_eq_coreWordAtDepth
+    (n : OddNat) (k d : ℕ) (hd1 : 1 ≤ d)
+    (hdL : d ≤ canonicalBlockLength n k) :
+    (iterateT (canonicalPaymentSourceAtDepth n k d) n).1 =
+      canonicalBlockCoreWordAtDepth n k d := by
+  unfold canonicalBlockCoreWordAtDepth
+  have h := canonicalPaymentSourceAtDepth_iterate_add_one_eq n k d hd1 hdL
+  omega
+
+/-- Caller-facing claim test through the exact block-core word. -/
+theorem mem_claimDepths_iff_coreWordAtDepth_carryTwo
+    (n : OddNat) (k d : ℕ) (hd1 : 1 ≤ d)
+    (hdL : d ≤ canonicalBlockLength n k) :
+    d ∈ canonicalPaymentClaimDepths n k ↔
+      stateUpperCarry (canonicalBlockCoreWordAtDepth n k d) = 2 := by
+  simpa [canonicalBlockCoreWordAtDepth] using
+    mem_canonicalPaymentClaimDepths_iff_stateUpperCarry_coreWord n k d hd1 hdL
+
+/-- Adjacent core words satisfy the exact internal `3:2` recurrence. -/
+theorem canonicalBlockCoreWordAtDepth_succ_recurrence
+    (n : OddNat) (k d : ℕ) (_hd1 : 1 ≤ d)
+    (hdL : d < canonicalBlockLength n k) :
+    3 * (canonicalBlockCoreWordAtDepth n k (d + 1) + 1) =
+      2 * (canonicalBlockCoreWordAtDepth n k d + 1) := by
+  unfold canonicalBlockCoreWordAtDepth
+  have hu := canonicalBlockOddCore_pos n k
+  have hpow : canonicalBlockLength n k - d =
+      (canonicalBlockLength n k - (d + 1)) + 1 := by omega
+  rw [hpow, pow_succ]
+  rw [pow_succ]
+  have hposS : 0 < 2 ^ d * 2 *
+      3 ^ (canonicalBlockLength n k - (d + 1)) *
+        canonicalBlockOddCore n k := by positivity
+  have hposD : 0 < 2 ^ d *
+      (3 ^ (canonicalBlockLength n k - (d + 1)) * 3) *
+        canonicalBlockOddCore n k := by positivity
+  rw [Nat.sub_add_cancel hposS, Nat.sub_add_cancel hposD]
+  ring
+
+/-- Increasing depth by one walks one source-time step backwards. -/
+theorem canonicalPaymentSourceAtDepth_succ_add_one
+    (n : OddNat) (k d : ℕ) (_hd1 : 1 ≤ d)
+    (hdL : d < canonicalBlockLength n k) :
+    canonicalPaymentSourceAtDepth n k (d + 1) + 1 =
+      canonicalPaymentSourceAtDepth n k d := by
+  unfold canonicalPaymentSourceAtDepth
+  have hend := canonicalBlockStartTime_add_length_sub_one_eq_endpoint n k
+  omega
+
+/--
+The exact adjacent recurrence alone does not make carry profiles monotone.
+The words `53, 35, 23` satisfy the same consecutive `3:2` recurrence while
+their own-width carries alternate `2, 1, 2`.  Additional canonical-block
+information is therefore required for any claim-hole density theorem.
+-/
+theorem coreWordRecurrence_carry_alternation_witness :
+    3 * (35 + 1) = 2 * (53 + 1) ∧
+      3 * (23 + 1) = 2 * (35 + 1) ∧
+        stateUpperCarry 53 = 2 ∧
+          stateUpperCarry 35 = 1 ∧
+            stateUpperCarry 23 = 2 := by
+  norm_num [stateUpperCarry, upperCarry3n1, bitWidth]
+
 /-- Positive depths in the block which do not carry a canonical payment
 claim. -/
 noncomputable def canonicalBlockClaimHoles
@@ -2174,6 +2244,114 @@ theorem exceptionalLengthTwoBalanced_claimDepths_eq_erase_missing
           (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)) :=
   canonicalPaymentClaimDepths_eq_Icc_erase_missingDepth
     (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)
+
+/-- A zero-carrier balanced successor of a saturated block is forced into the
+exceptional length-two branch; the full-balanced branch is excluded by the
+successor's mandatory deepest hole. -/
+theorem CanonicalSaturatedBorderBlock.zeroCarrierBalanced_next_exact_data
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hzero : CanonicalZeroCarrierBalancedBorderBlock n (k + 1)) :
+    canonicalBlockLength n (k + 1) = 2 ∧
+      canonicalBlockTerminalValuation n (k + 1) = 1 ∧
+        canonicalBlockClaimCount n (k + 1) = 1 := by
+  rcases (canonicalZeroCarrierBalancedBorderBlock_iff n (k + 1)).1 hzero with
+    hfull | hexceptional
+  · have hholes := claimHoles_card_eq_zero_of_full_balanced hfull.1 hfull.2
+    have hnonempty := h.one_le_next_claimHoles_card
+    omega
+  · exact ⟨hexceptional.2.1, hexceptional.1, hexceptional.2.2⟩
+
+/-- The exceptional successor holes consist exactly of its deepest depth. -/
+theorem CanonicalSaturatedBorderBlock.zeroCarrierBalanced_next_claimHoles_eq
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hzero : CanonicalZeroCarrierBalancedBorderBlock n (k + 1)) :
+    canonicalBlockClaimHoles n (k + 1) = {2} := by
+  have hdata := h.zeroCarrierBalanced_next_exact_data hzero
+  have hcard := claimHoles_card_eq_one_of_exceptional_length_two_balanced
+    hdata.1 hdata.2.2
+  obtain ⟨a, ha⟩ := Finset.card_eq_one.mp hcard
+  have hmem := h.next_length_mem_claimHoles
+  rw [hdata.1, ha] at hmem
+  simp only [Finset.mem_singleton] at hmem
+  simpa [hmem] using ha
+
+/-- The exceptional successor claim carrier is the singleton endpoint depth. -/
+theorem CanonicalSaturatedBorderBlock.zeroCarrierBalanced_next_claimDepths_eq
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hzero : CanonicalZeroCarrierBalancedBorderBlock n (k + 1)) :
+    canonicalPaymentClaimDepths n (k + 1) = {1} := by
+  classical
+  have hdata := h.zeroCarrierBalanced_next_exact_data hzero
+  have hholes := h.zeroCarrierBalanced_next_claimHoles_eq hzero
+  ext d
+  constructor
+  · intro hd
+    have hi := (mem_canonicalPaymentClaimDepths_iff.mp hd)
+    have hiL : d ≤ canonicalBlockLength n (k + 1) := by
+      simpa [canonicalBlockLength] using hi.2.1
+    have hne : d ≠ 2 := by
+      intro heq
+      have hhole : d ∈ canonicalBlockClaimHoles n (k + 1) := by
+        rw [hholes, heq]
+        simp
+      exact (Finset.mem_sdiff.mp hhole).2 hd
+    simp only [Finset.mem_singleton]
+    omega
+  · intro hd
+    simp only [Finset.mem_singleton] at hd
+    subst d
+    by_contra hnot
+    have hhole : 1 ∈ canonicalBlockClaimHoles n (k + 1) :=
+      Finset.mem_sdiff.mpr ⟨by simp [hdata.1], hnot⟩
+    rw [hholes] at hhole
+    simp at hhole
+
+/-- A tight valuation-one positive successor misses exactly its deepest depth. -/
+theorem CanonicalSaturatedBorderBlock.tightValOne_next_claimHoles_eq
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (htight : CanonicalTightValuationOnePositiveBlock n (k + 1)) :
+    canonicalBlockClaimHoles n (k + 1) =
+      {canonicalBlockLength n (k + 1)} := by
+  have hcard :=
+    ((canonicalTightValuationOnePositiveBlock_iff_claimHoles_card_eq_one
+      n (k + 1)).1 htight).2.2.2
+  obtain ⟨a, ha⟩ := Finset.card_eq_one.mp hcard
+  have hmem := h.next_length_mem_claimHoles
+  rw [ha] at hmem
+  simp only [Finset.mem_singleton] at hmem
+  simpa [hmem] using ha
+
+/-- A tight valuation-one positive successor claims every depth strictly below
+its deepest depth. -/
+theorem CanonicalSaturatedBorderBlock.tightValOne_next_claimDepths_eq
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (htight : CanonicalTightValuationOnePositiveBlock n (k + 1)) :
+    canonicalPaymentClaimDepths n (k + 1) =
+      Finset.Icc 1 (canonicalBlockLength n (k + 1) - 1) := by
+  classical
+  have hholes := h.tightValOne_next_claimHoles_eq htight
+  ext d
+  constructor
+  · intro hd
+    have hi := mem_canonicalPaymentClaimDepths_iff.mp hd
+    have hiL : d ≤ canonicalBlockLength n (k + 1) := by
+      simpa [canonicalBlockLength] using hi.2.1
+    have hne : d ≠ canonicalBlockLength n (k + 1) := by
+      intro heq
+      have hhole : d ∈ canonicalBlockClaimHoles n (k + 1) := by
+        rw [hholes, heq]
+        simp
+      exact (Finset.mem_sdiff.mp hhole).2 hd
+    simp only [Finset.mem_Icc]
+    omega
+  · intro hd
+    simp only [Finset.mem_Icc] at hd
+    by_contra hnot
+    have hhole : d ∈ canonicalBlockClaimHoles n (k + 1) :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_Icc.mpr ⟨hd.1, by omega⟩, hnot⟩
+    rw [hholes] at hhole
+    simp only [Finset.mem_singleton] at hhole
+    omega
 
 /-! ## Saturated-successor source classification
 
@@ -2652,9 +2830,13 @@ theorem canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one
     have hle := canonicalBlockClaimCount_le_length n k
     omega
 
-/-- The sole locally insufficient successor class after abstract dyadic
-discharge.  Saturation is a predecessor condition; residue and endpoint claim
-remain separate data. -/
+/--
+Compatibility-only name for the former balanced-carry exception.
+
+This predicate is impossible by
+`not_canonicalLengthOneBalancedCarrySuccessor`; new theorems must use
+`CanonicalLengthOneTerminalOneSuccessor` instead.
+-/
 def CanonicalLengthOneBalancedCarrySuccessor
     (n : OddNat) (k : ℕ) : Prop :=
   CanonicalSaturatedBorderBlock n k ∧
@@ -2982,6 +3164,99 @@ theorem abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
   have hval := congrArg Fin.val heq
   dsimp [abstractSaturatedUnitEmbeddingLowerHalf,
     abstractDyadicDemandEmbeddingUpperHalf] at hval
+  omega
+
+/-! ## Unified local saturated-successor discharge
+
+These constructors package abstract dyadic budget embeddings only.  They do
+not identify the finite slots with orbit bits, do not allocate a global root,
+and do not permit summing certificates across time.
+-/
+
+/-- Complete local abstract-discharge alternatives for one saturated
+predecessor and its immediate successor. -/
+inductive CanonicalSaturatedSuccessorAbstractDischarge
+    (n : OddNat) (k : ℕ) : Prop
+  | negative
+      (successor_neg : endpointAccountingTerm n (k + 1) < 0)
+      (combined_nonpos :
+        endpointAccountingTerm n k + endpointAccountingTerm n (k + 1) ≤ 0)
+  | zero
+      (successor_zero : endpointAccountingTerm n (k + 1) = 0)
+      (length_ge_two : 2 ≤ canonicalBlockLength n (k + 1))
+      (unitEmbedding : Fin 2 ↪ CanonicalAbstractDyadicBudgetCarrier n (k + 1))
+  | positive
+      (successor_pos : 0 < endpointAccountingTerm n (k + 1))
+      (successor_nonsaturated : ¬ CanonicalSaturatedBorderBlock n (k + 1))
+      (unitEmbedding : Fin 2 ↪ CanonicalAbstractDyadicBudgetCarrier n (k + 1))
+      (demandEmbedding : CanonicalAbstractDyadicDemandCarrier n (k + 1) ↪
+        CanonicalAbstractDyadicBudgetCarrier n (k + 1))
+      (images_disjoint : ∀ i j, unitEmbedding i ≠ demandEmbedding j)
+
+/-- Every saturated predecessor has a complete local abstract-discharge
+certificate at its immediate successor. -/
+theorem CanonicalSaturatedBorderBlock.successorAbstractDischarge
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k) :
+    CanonicalSaturatedSuccessorAbstractDischarge n k := by
+  by_cases hneg : endpointAccountingTerm n (k + 1) < 0
+  · exact .negative hneg
+      (h.drift_add_successor_drift_nonpos_of_negative hneg)
+  by_cases hzero : endpointAccountingTerm n (k + 1) = 0
+  · have hL : 2 ≤ canonicalBlockLength n (k + 1) := by
+      by_contra hnot
+      have hLone : canonicalBlockLength n (k + 1) = 1 := by
+        have hLpos := one_le_canonicalBlockLength n (k + 1)
+        omega
+      have hclaim := h.next_claimCount_eq_zero_of_length_one hLone
+      have hv := one_le_canonicalBlockTerminalValuation n (k + 1)
+      have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount
+        n (k + 1)
+      rw [canonicalBlockCapacityCount_eq_terminalValuation, hclaim, hzero] at hdrift
+      omega
+    exact .zero hzero hL (abstractZeroSuccessorUnitEmbedding hzero hL)
+  · have hpos : 0 < endpointAccountingTerm n (k + 1) := by omega
+    have hnot := h.not_succ
+    exact .positive hpos hnot
+      (abstractSaturatedUnitEmbeddingLowerHalf hpos hnot)
+      (abstractDyadicDemandEmbeddingUpperHalf hpos hnot)
+      (abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
+        hpos hnot)
+
+/-- Length-one successors repay at least the predecessor's scalar unit. -/
+theorem CanonicalSaturatedBorderBlock.lengthOne_next_scalar_repayment
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1) :
+    canonicalBlockClaimCount n (k + 1) = 0 ∧
+      endpointAccountingTerm n (k + 1) ≤ -1 ∧
+        endpointAccountingTerm n k + endpointAccountingTerm n (k + 1) ≤ 0 := by
+  have hclaim := h.next_claimCount_eq_zero_of_length_one hL
+  have hv := one_le_canonicalBlockTerminalValuation n (k + 1)
+  have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount
+    n (k + 1)
+  rw [canonicalBlockCapacityCount_eq_terminalValuation, hclaim] at hdrift
+  rw [h.netDrift_eq_one]
+  omega
+
+/-- Residue eleven modulo sixteen gives exact scalar cancellation. -/
+theorem CanonicalSaturatedBorderBlock.lengthOne_next_drift_sum_eq_zero_of_mod16_eleven
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1)
+    (hres : canonicalBlockOddCore n k % 16 = 11) :
+    endpointAccountingTerm n k + endpointAccountingTerm n (k + 1) = 0 := by
+  have hv :=
+    (h.nextTerminalValuation_eq_one_iff_core_mod_sixteen_eq_eleven hL).2 hres
+  have hterm : CanonicalLengthOneTerminalOneSuccessor n k := ⟨h, hL, hv⟩
+  exact hterm.predecessorDrift_add_successorDrift_eq_zero
+
+/-- Residue three modulo sixteen repays the predecessor with at least one
+additional scalar unit. -/
+theorem CanonicalSaturatedBorderBlock.lengthOne_next_drift_sum_le_neg_one_of_mod16_three
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1)
+    (hres : canonicalBlockOddCore n k % 16 = 3) :
+    endpointAccountingTerm n k + endpointAccountingTerm n (k + 1) ≤ -1 := by
+  have hnext := h.nextDrift_le_neg_two_of_length_one_mod16_three hL hres
+  rw [h.netDrift_eq_one]
   omega
 
 /-!
