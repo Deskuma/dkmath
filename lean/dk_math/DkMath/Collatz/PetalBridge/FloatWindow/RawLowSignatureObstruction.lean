@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
+import DkMath.Collatz.PetalBridge.FloatWindow.DyadicFloat
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction"
 
@@ -321,6 +322,268 @@ theorem rawSignedWidthWeight_rawAllOnesWitness_eq_one
   rw [bitWidth_T_rawAllOnesWitness_eq_add_one]
   omega
 
+/-- Every realized accelerated odd edge increases binary width by at most one. -/
+theorem rawSignedWidthWeight_T_le_one (x : OddNat) :
+    rawSignedWidthWeight x (T x) ≤ 1 := by
+  unfold rawSignedWidthWeight
+  have hbalance := bitWidth_T_add_height_eq_bitWidth_add_upperCarry x
+  have hheight := s_pos x
+  have hxpos : 0 < x.1 := by
+    have hodd := x.2
+    omega
+  have hcarry : stateUpperCarry x.1 ≤ 2 :=
+    upperCarry3n1_le_two_of_lt_pow (lt_pow_bitWidth hxpos)
+  omega
+
+/-! ## First strict upper-boundary enrichment -/
+
+/-- The exact normalized leading two-bit word of a positive natural. -/
+def normalizedTopTwoBits (x : ℕ) : ℕ :=
+  upperPrefix 2 x
+
+/-- The all-ones source has normalized leading word `11₂`. -/
+theorem normalizedTopTwoBits_rawAllOnesWitness_eq_three
+    {r : ℕ} (hr : 1 ≤ r) :
+    normalizedTopTwoBits (rawAllOnesWitness r).1 = 3 := by
+  unfold normalizedTopTwoBits upperPrefix
+  rw [bitWidth_rawAllOnesWitness r]
+  have hp : 0 < 2 ^ r := pow_pos (by norm_num) _
+  have hpow : 2 ^ (r + 2) = 4 * 2 ^ r := by
+    rw [pow_add]
+    norm_num [Nat.mul_comm]
+  rw [show r + 2 - 2 = r by omega]
+  apply Nat.div_eq_of_lt_le
+  · rw [rawAllOnesWitness_val, hpow]
+    omega
+  · rw [rawAllOnesWitness_val, hpow]
+    omega
+
+/-- Its height-one target has normalized leading word `10₂`. -/
+theorem normalizedTopTwoBits_T_rawAllOnesWitness_eq_two
+    {r : ℕ} (hr : 1 ≤ r) :
+    normalizedTopTwoBits (T (rawAllOnesWitness r)).1 = 2 := by
+  unfold normalizedTopTwoBits upperPrefix
+  rw [bitWidth_T_rawAllOnesWitness]
+  have hp : 0 < 2 ^ (r + 1) := pow_pos (by norm_num) _
+  rw [show r + 3 - 2 = r + 1 by omega]
+  apply Nat.div_eq_of_lt_le
+  · rw [T_rawAllOnesWitness_val]
+    unfold rawAllOnesFirstTargetValue
+    omega
+  · rw [T_rawAllOnesWitness_val]
+    unfold rawAllOnesFirstTargetValue
+    omega
+
+/-- The normalized upper-boundary coordinate separates the cp-333 positive
+closed edge.  This alone does not construct a bounded potential. -/
+theorem normalizedTopTwoBits_T_rawAllOnesWitness_ne
+    {r : ℕ} (hr : 1 ≤ r) :
+    normalizedTopTwoBits (T (rawAllOnesWitness r)).1 ≠
+      normalizedTopTwoBits (rawAllOnesWitness r).1 := by
+  rw [normalizedTopTwoBits_T_rawAllOnesWitness_eq_two hr,
+    normalizedTopTwoBits_rawAllOnesWitness_eq_three hr]
+  norm_num
+
+/-- First experimental strict refinement: fixed low data plus normalized
+leading two bits.  Reduction modulo four is representational only; the
+normalized observation is already a two-bit word on positive states. -/
+structure FixedLowUpperBoundarySignature (r : ℕ) where
+  low : FixedLowRawSignature r
+  topTwo : Fin 4
+  deriving DecidableEq, Fintype
+
+/-- Enriched finite observation used for the next projected-graph audit. -/
+noncomputable def fixedLowUpperBoundarySignature
+    (r : ℕ) (x : OddNat) : FixedLowUpperBoundarySignature r where
+  low := fixedLowRawSignature r x
+  topTwo := ⟨normalizedTopTwoBits x.1 % 4, Nat.mod_lt _ (by norm_num)⟩
+
+/-- The strict enrichment removes the known all-ones positive self-loop. -/
+theorem fixedLowUpperBoundarySignature_T_rawAllOnesWitness_ne
+    {r : ℕ} (hr : 1 ≤ r) :
+    fixedLowUpperBoundarySignature r (T (rawAllOnesWitness r)) ≠
+      fixedLowUpperBoundarySignature r (rawAllOnesWitness r) := by
+  intro h
+  have htop := congrArg FixedLowUpperBoundarySignature.topTwo h
+  apply congrArg Fin.val at htop
+  change normalizedTopTwoBits (T (rawAllOnesWitness r)).1 % 4 =
+    normalizedTopTwoBits (rawAllOnesWitness r).1 % 4 at htop
+  rw [normalizedTopTwoBits_T_rawAllOnesWitness_eq_two hr,
+    normalizedTopTwoBits_rawAllOnesWitness_eq_three hr] at htop
+  norm_num at htop
+
+/-! ## Enriched projected-cycle audit
+
+The old all-ones self-loop is gone, but the realized signature-pair graph still
+has a positive cycle.  Its two edges come from different concrete states,
+which is sufficient: projected potential inequalities are attached to
+signature pairs and therefore telescope around the projected cycle.
+-/
+
+/-- An odd state congruent to three modulo four has exact height one. -/
+theorem s_eq_one_of_mod_four_eq_three
+    {x : OddNat} (hmod : x.1 % 4 = 3) :
+    s x = 1 := by
+  have hpos := s_pos x
+  have hnot : ¬ 2 ≤ s x := by
+    intro htwo
+    have hdiv : 4 ∣ 3 * x.1 + 1 :=
+      (rawHeightLabel_two_le_iff_four_dvd_threeNPlusOne x.1).mp htwo
+    have hone :=
+      (odd_four_dvd_three_mul_add_one_iff_mod_four_eq_one x.2).mp hdiv
+    omega
+  omega
+
+/-- First exact edge identification in the enriched `r = 1` cycle audit. -/
+theorem fixedLowUpperBoundarySignature_T_55_eq_39 :
+    fixedLowUpperBoundarySignature 1 (T (⟨55, by decide⟩ : OddNat)) =
+      fixedLowUpperBoundarySignature 1 (⟨39, by decide⟩ : OddNat) := by
+  let a : OddNat := ⟨55, by decide⟩
+  let b : OddNat := ⟨83, by decide⟩
+  let c : OddNat := ⟨39, by decide⟩
+  let d : OddNat := ⟨125, by decide⟩
+  let e : OddNat := ⟨59, by decide⟩
+  have ha : s a = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hb : s b = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hc : s c = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hTa : T a = b := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one a ha]
+    norm_num [a, b]
+  have hTb : T b = d := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one b hb]
+    norm_num [b, d]
+  have hTc : T c = e := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one c hc]
+    norm_num [c, e]
+  have wb : bitWidth b.1 = 7 := by decide
+  have wc : bitWidth c.1 = 6 := by decide
+  have wd : bitWidth d.1 = 7 := by decide
+  have we : bitWidth e.1 = 6 := by decide
+  change fixedLowUpperBoundarySignature 1 (T a) =
+    fixedLowUpperBoundarySignature 1 c
+  rw [hTa]
+  unfold fixedLowUpperBoundarySignature
+  congr 1
+  · unfold fixedLowRawSignature
+    congr 1
+    · apply Fin.ext
+      norm_num [b, c]
+    · apply Fin.ext
+      norm_num [stateUpperCarry, upperCarry3n1, wb, wc, b, c]
+    · simp [hb, hc]
+    · simp [hTb, hTc, wb, wc, wd, we]
+  · apply Fin.ext
+    norm_num [normalizedTopTwoBits, upperPrefix, wb, wc, b, c]
+
+/-- Second exact edge identification closing the enriched `r = 1` cycle. -/
+theorem fixedLowUpperBoundarySignature_T_39_eq_55 :
+    fixedLowUpperBoundarySignature 1 (T (⟨39, by decide⟩ : OddNat)) =
+      fixedLowUpperBoundarySignature 1 (⟨55, by decide⟩ : OddNat) := by
+  let a : OddNat := ⟨39, by decide⟩
+  let b : OddNat := ⟨59, by decide⟩
+  let c : OddNat := ⟨55, by decide⟩
+  let d : OddNat := ⟨89, by decide⟩
+  let e : OddNat := ⟨83, by decide⟩
+  have ha : s a = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hb : s b = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hc : s c = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hTa : T a = b := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one a ha]
+    norm_num [a, b]
+  have hTb : T b = d := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one b hb]
+    norm_num [b, d]
+  have hTc : T c = e := by
+    apply Subtype.ext
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one c hc]
+    norm_num [c, e]
+  have wb : bitWidth b.1 = 6 := by decide
+  have wc : bitWidth c.1 = 6 := by decide
+  have wd : bitWidth d.1 = 7 := by decide
+  have we : bitWidth e.1 = 7 := by decide
+  change fixedLowUpperBoundarySignature 1 (T a) =
+    fixedLowUpperBoundarySignature 1 c
+  rw [hTa]
+  unfold fixedLowUpperBoundarySignature
+  congr 1
+  · unfold fixedLowRawSignature
+    congr 1
+    · apply Fin.ext
+      norm_num [b, c]
+    · apply Fin.ext
+      norm_num [stateUpperCarry, upperCarry3n1, wb, wc, b, c]
+    · simp [hb, hc]
+    · simp [hTb, hTc, wb, wc, wd, we]
+  · apply Fin.ext
+    norm_num [normalizedTopTwoBits, upperPrefix, wb, wc, b, c]
+
+/-- The `55 -> 83` realized edge has signed width `+1`. -/
+theorem rawSignedWidthWeight_55_eq_one :
+    rawSignedWidthWeight (⟨55, by decide⟩ : OddNat)
+      (T (⟨55, by decide⟩ : OddNat)) = 1 := by
+  let a : OddNat := ⟨55, by decide⟩
+  have ha : s a = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hTa : (T a).1 = 83 := by
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one a ha]
+    norm_num [a]
+  unfold rawSignedWidthWeight
+  rw [hTa]
+  decide
+
+/-- The `39 -> 59` realized edge has signed width zero. -/
+theorem rawSignedWidthWeight_39_eq_zero :
+    rawSignedWidthWeight (⟨39, by decide⟩ : OddNat)
+      (T (⟨39, by decide⟩ : OddNat)) = 0 := by
+  let a : OddNat := ⟨39, by decide⟩
+  have ha : s a = 1 := s_eq_one_of_mod_four_eq_three (by decide)
+  have hTa : (T a).1 = 59 := by
+    rw [T_val_eq_three_mul_add_one_div_two_of_s_eq_one a ha]
+    norm_num [a]
+  unfold rawSignedWidthWeight
+  rw [hTa]
+  decide
+
+/-- Global transition coverage contract for the first enriched signature. -/
+def CoversAllRawOddTransitionsWithFixedLowUpperBoundarySignature
+    (C : RelationalFiniteSignedTransitionPotentialCertificate
+      OddNat (FixedLowUpperBoundarySignature 1)) : Prop :=
+  (∀ x, C.Step x (T x)) ∧
+    (∀ x, C.signature x = fixedLowUpperBoundarySignature 1 x) ∧
+      (∀ x, C.actualWeight x (T x) = rawSignedWidthWeight x (T x))
+
+/-- The normalized top-two-bit enrichment rejects the old self-loop but still
+admits the positive projected cycle witnessed by `55 -> 83` and `39 -> 59`.
+Consequently it cannot support a global sound bounded potential. -/
+theorem not_coversAllRawOddTransitionsWithFixedLowUpperBoundarySignature
+    (C : RelationalFiniteSignedTransitionPotentialCertificate
+      OddNat (FixedLowUpperBoundarySignature 1)) :
+    ¬ CoversAllRawOddTransitionsWithFixedLowUpperBoundarySignature C := by
+  rintro ⟨hstep, hsignature, hweight⟩
+  let a : OddNat := ⟨55, by decide⟩
+  let b : OddNat := ⟨39, by decide⟩
+  have hab : C.signature (T a) = C.signature b := by
+    rw [hsignature, hsignature]
+    exact fixedLowUpperBoundarySignature_T_55_eq_39
+  have hba : C.signature (T b) = C.signature a := by
+    rw [hsignature, hsignature]
+    exact fixedLowUpperBoundarySignature_T_39_eq_55
+  have hactualAB := C.actual_le_projected a (T a) (hstep a)
+  have hactualBA := C.actual_le_projected b (T b) (hstep b)
+  have hpotentialAB := C.projected_le_potential_diff
+    (C.signature a) (C.signature b)
+  have hpotentialBA := C.projected_le_potential_diff
+    (C.signature b) (C.signature a)
+  rw [hab] at hactualAB
+  rw [hba] at hactualBA
+  rw [hweight, rawSignedWidthWeight_55_eq_one] at hactualAB
+  rw [hweight, rawSignedWidthWeight_39_eq_zero] at hactualBA
+  linarith
+
 /-!
 `CoversAllRawOddTransitionsWithFixedLowSignature` is intentionally stronger
 than observing a finite table: it requires the certificate relation and its
@@ -357,13 +620,44 @@ theorem not_coversAllRawOddTransitionsWithFixedLowSignature
   have hsig : C.signature (T x) = C.signature x := by
     rw [hsignature, hsignature]
     exact fixedLowRawSignature_T_rawAllOnesWitness_eq hr
-  have hactual := C.actual_le_projected x (T x) (hstep x)
-  have hprojected := C.projected_le_potential_diff
-    (C.signature x) (C.signature (T x))
-  rw [hsig] at hactual hprojected
-  simp only [sub_self] at hprojected
-  rw [hweight, rawSignedWidthWeight_rawAllOnesWitness_eq_one] at hactual
-  omega
+  apply C.false_of_step_of_signature_eq_of_actualWeight_pos (hstep x) hsig
+  rw [hweight, rawSignedWidthWeight_rawAllOnesWitness_eq_one]
+  norm_num
+
+/-!
+The obstruction survives every coarsening computed solely from the fixed low
+signature.  The theorem does not cover a strict refinement carrying new upper
+boundary information.
+-/
+
+/-- Coverage contract for an arbitrary finite coarsening of the audited fixed
+low signature. -/
+def CoversAllRawOddTransitionsThroughFixedLowSignature
+    {r : ℕ} {Signature : Type*} [Fintype Signature]
+    (f : FixedLowRawSignature r → Signature)
+    (C : RelationalFiniteSignedTransitionPotentialCertificate
+      OddNat Signature) : Prop :=
+  (∀ x, C.Step x (T x)) ∧
+    (∀ x, C.signature x = f (fixedLowRawSignature r x)) ∧
+      (∀ x, C.actualWeight x (T x) = rawSignedWidthWeight x (T x))
+
+/-- No finite factor of the fixed low signature can remove its positive
+closed-edge obstruction. -/
+theorem not_coversAllRawOddTransitionsThroughFixedLowSignature
+    {r : ℕ} (hr : 1 ≤ r)
+    {Signature : Type*} [Fintype Signature]
+    (f : FixedLowRawSignature r → Signature)
+    (C : RelationalFiniteSignedTransitionPotentialCertificate
+      OddNat Signature) :
+    ¬ CoversAllRawOddTransitionsThroughFixedLowSignature f C := by
+  rintro ⟨hstep, hsignature, hweight⟩
+  let x := rawAllOnesWitness r
+  have hlow := fixedLowRawSignature_T_rawAllOnesWitness_eq hr
+  have hsig : C.signature (T x) = C.signature x := by
+    rw [hsignature, hsignature, hlow]
+  apply C.false_of_step_of_signature_eq_of_actualWeight_pos (hstep x) hsig
+  rw [hweight, rawSignedWidthWeight_rawAllOnesWitness_eq_one]
+  norm_num
 
 /-- Existential form: the audited fixed low signature admits no global sound
 bounded-potential certificate. -/

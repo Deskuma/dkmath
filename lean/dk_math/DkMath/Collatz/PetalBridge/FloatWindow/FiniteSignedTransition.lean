@@ -79,6 +79,21 @@ namespace RelationalFiniteSignedTransitionPotentialCertificate
 
 variable {State Signature : Type*} [Fintype Signature]
 
+/-- A single related edge with positive concrete weight cannot close at one
+projected signature under a sound bounded-potential certificate. -/
+theorem false_of_step_of_signature_eq_of_actualWeight_pos
+    (C : RelationalFiniteSignedTransitionPotentialCertificate State Signature)
+    {a b : State}
+    (hstep : C.Step a b)
+    (hclosed : C.signature b = C.signature a)
+    (hpos : 0 < C.actualWeight a b) : False := by
+  have hactual := C.actual_le_projected a b hstep
+  have hprojected := C.projected_le_potential_diff
+    (C.signature a) (C.signature b)
+  rw [hclosed] at hactual hprojected
+  simp only [sub_self] at hprojected
+  omega
+
 /-- Concrete signed weight along a finite sequence of related transitions. -/
 def pathWeight
     (C : RelationalFiniteSignedTransitionPotentialCertificate State Signature)

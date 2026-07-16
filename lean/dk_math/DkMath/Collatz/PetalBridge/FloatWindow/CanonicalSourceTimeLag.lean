@@ -80,6 +80,13 @@ theorem recentCanonicalDemand_le_sourceTimeSpan
 
 /-! ## Exact block/source carrier identification -/
 
+/-- Carry-two claim sources born in canonical block `k`. -/
+noncomputable def canonicalBlockClaimSourceCarrier
+    (n : OddNat) (k : ℕ) : Finset ℕ :=
+  carryTwoPositions n
+    (Finset.Ico (canonicalBlockStartTime n k)
+      (canonicalBlockStartTime n (k + 1)))
+
 /-- The claims born in one canonical block are exactly its carry-two source
 addresses in the half-open block interval. -/
 theorem canonicalQueueDemand_eq_carryTwoPositions_block_card
@@ -117,6 +124,27 @@ theorem canonicalQueueDemand_eq_carryTwoPositions_block_card
       have := (Finset.mem_Ico.mp hi).2
       omega⟩, hcarry⟩
 
+/-- Named-carrier form of the exact one-block demand identity. -/
+theorem card_canonicalBlockClaimSourceCarrier
+    (n : OddNat) (k : ℕ) :
+    (canonicalBlockClaimSourceCarrier n k).card = canonicalQueueDemand n k := by
+  exact (canonicalQueueDemand_eq_carryTwoPositions_block_card n k).symm
+
+/-- Every block claim source lies in that exact half-open source-time block. -/
+theorem mem_canonicalBlockClaimSourceCarrier_interval
+    {n : OddNat} {k i : ℕ}
+    (hi : i ∈ canonicalBlockClaimSourceCarrier n k) :
+    i ∈ Finset.Ico (canonicalBlockStartTime n k)
+      (canonicalBlockStartTime n (k + 1)) := by
+  exact (mem_carryTwoPositions_iff.mp hi).1
+
+/-- Every member of a block claim carrier is an actual carry-two debt source. -/
+theorem carryTwoDebtAt_of_mem_canonicalBlockClaimSourceCarrier
+    {n : OddNat} {k i : ℕ}
+    (hi : i ∈ canonicalBlockClaimSourceCarrier n k) :
+    CarryTwoDebtAt n i := by
+  exact (mem_carryTwoPositions_iff.mp hi).2
+
 /-- Block-start time is monotone in the block index. -/
 theorem canonicalBlockStartTime_mono
     (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
@@ -126,6 +154,28 @@ theorem canonicalBlockStartTime_mono
   rw [sum_canonicalBlockLength_range_eq_startTime,
     sum_canonicalBlockLength_range_eq_startTime] at hsplit
   omega
+
+/-- Distinct canonical blocks have disjoint source-address carriers. -/
+theorem disjoint_canonicalBlockClaimSourceCarrier
+    (n : OddNat) {j k : ℕ} (hjk : j ≠ k) :
+    Disjoint (canonicalBlockClaimSourceCarrier n j)
+      (canonicalBlockClaimSourceCarrier n k) := by
+  classical
+  have disj_of_lt : ∀ {a b : ℕ}, a < b →
+      Disjoint (canonicalBlockClaimSourceCarrier n a)
+        (canonicalBlockClaimSourceCarrier n b) := by
+    intro a b hab
+    apply Finset.disjoint_left.mpr
+    intro i hia hib
+    have ha := Finset.mem_Ico.mp
+      (mem_canonicalBlockClaimSourceCarrier_interval hia)
+    have hb := Finset.mem_Ico.mp
+      (mem_canonicalBlockClaimSourceCarrier_interval hib)
+    have hstart := canonicalBlockStartTime_mono n (show a + 1 ≤ b by omega)
+    omega
+  rcases lt_or_gt_of_ne hjk with hjklt | hkjlt
+  · exact disj_of_lt hjklt
+  · exact (disj_of_lt hkjlt).symm
 
 /-- Prefix demand is exactly the number of carry-two source addresses before
 the corresponding block start. -/
@@ -279,12 +329,19 @@ theorem card_canonicalRecentSourceClaimCarrier_le
     canonicalRecentSourceClaimCarrier n 0 m = ∅ := by
   simp [canonicalRecentSourceClaimCarrier, carryTwoPositions]
 
-/-- Conditional source-age surface: every outstanding anonymous claim is
-represented by a carry-two source in the preceding `H` orbit times. -/
-def CanonicalOutstandingQueueCoveredByRecentSourceClaims
+/--
+Scalar cardinality coverage: the anonymous outstanding queue count is no
+larger than the number of recent carry-two sources.  This does not identify
+queue elements with those sources and is not itself a claim-age theorem.
+-/
+def CanonicalOutstandingQueueCardCoveredByRecentSourceClaims
     (n : OddNat) (H : ℕ) : Prop :=
   ∀ m, canonicalOutstandingClaimQueueBeforeBlock n m ≤
     (canonicalRecentSourceClaimCarrier n H m).card
+
+/-- Compatibility alias for the cp-333 cardinality-only predicate. -/
+abbrev CanonicalOutstandingQueueCoveredByRecentSourceClaims :=
+  CanonicalOutstandingQueueCardCoveredByRecentSourceClaims
 
 /-- Uniform source-age coverage immediately bounds every pre-block queue. -/
 theorem canonicalQueueBeforeBlock_le_of_recentSourceClaims
@@ -306,6 +363,20 @@ theorem is supplied. -/
 theorem CanonicalOutstandingQueueCoveredByRecentSourceClaims.to_endpointWidthUniformUpperBound
     {n : OddNat} {H : ℕ}
     (h : CanonicalOutstandingQueueCoveredByRecentSourceClaims n H) :
+    CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + H) :=
+  h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
+
+/-- Precisely named cardinal-coverage route to the scalar queue bound. -/
+theorem CanonicalOutstandingQueueCardCoveredByRecentSourceClaims.to_queueUniformUpperBound
+    {n : OddNat} {H : ℕ}
+    (h : CanonicalOutstandingQueueCardCoveredByRecentSourceClaims n H) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n H :=
+  CanonicalOutstandingQueueCoveredByRecentSourceClaims.to_queueUniformUpperBound h
+
+/-- Precisely named cardinal-coverage route to the endpoint-width bound. -/
+theorem CanonicalOutstandingQueueCardCoveredByRecentSourceClaims.to_endpointWidthUniformUpperBound
+    {n : OddNat} {H : ℕ}
+    (h : CanonicalOutstandingQueueCardCoveredByRecentSourceClaims n H) :
     CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + H) :=
   h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
 
