@@ -89,6 +89,14 @@ Lean proves:
 
 ## Genuine obstruction
 
+> **cp-328 correction.** This diagnosis is superseded.  The predicate
+> `CanonicalLengthOneBalancedCarrySuccessor` is empty: a saturated
+> predecessor forces own-width carry one at the successor start, which is the
+> deepest successor source coordinate.  Thus that depth is a claim hole, and
+> a length-one successor has claim count zero.  The modulo formulas remain
+> arithmetically useful, but their nonvacuous hypothesis is now
+> `CanonicalLengthOneTerminalOneSuccessor`.
+
 The `% 32 = 27` branch is not decided by arithmetic length data.  Saturation
 of the following block additionally needs its terminal valuation and claim
 count.  No existing theorem transports those claim facts from the predecessor
