@@ -1633,6 +1633,68 @@ noncomputable def oneEmbedding_canonicalSelectedDriftSpareCarrier
 
 /-! ## Exact no-spare classes -/
 
+/-! ### Claim-hole accounting normal form -/
+
+/-- Positive depths in the block which do not carry a canonical payment
+claim. -/
+noncomputable def canonicalBlockClaimHoles
+    (n : OddNat) (k : ℕ) : Finset ℕ :=
+  Finset.Icc 1 (canonicalBlockLength n k) \
+    canonicalPaymentClaimDepths n k
+
+/-- Claim depths and claim holes are disjoint by construction. -/
+theorem canonicalPaymentClaimDepths_disjoint_claimHoles
+    (n : OddNat) (k : ℕ) :
+    Disjoint (canonicalPaymentClaimDepths n k)
+      (canonicalBlockClaimHoles n k) := by
+  classical
+  rw [Finset.disjoint_left]
+  intro d hdClaim hdHole
+  exact (Finset.mem_sdiff.mp hdHole).2 hdClaim
+
+/-- Claims and holes partition the complete positive depth interval. -/
+theorem canonicalPaymentClaimDepths_union_claimHoles
+    (n : OddNat) (k : ℕ) :
+    canonicalPaymentClaimDepths n k ∪ canonicalBlockClaimHoles n k =
+      Finset.Icc 1 (canonicalBlockLength n k) := by
+  classical
+  ext d
+  rw [Finset.mem_union, Finset.mem_Icc]
+  constructor
+  · rintro (hd | hd)
+    · rcases mem_canonicalPaymentClaimDepths_iff.mp hd with ⟨hd1, hdL, _⟩
+      exact ⟨hd1, hdL⟩
+    · exact (Finset.mem_sdiff.mp hd).1 |> Finset.mem_Icc.mp
+  · intro hd
+    by_cases hclaim : d ∈ canonicalPaymentClaimDepths n k
+    · exact Or.inl hclaim
+    · exact Or.inr (Finset.mem_sdiff.mpr ⟨Finset.mem_Icc.mpr hd, hclaim⟩)
+
+/-- Claim count plus missing-depth count is exactly block length. -/
+theorem canonicalBlockClaimCount_add_claimHoles_card
+    (n : OddNat) (k : ℕ) :
+    canonicalBlockClaimCount n k + (canonicalBlockClaimHoles n k).card =
+      canonicalBlockLength n k := by
+  have hcard := Finset.card_union_of_disjoint
+    (canonicalPaymentClaimDepths_disjoint_claimHoles n k)
+  rw [canonicalPaymentClaimDepths_union_claimHoles,
+    ← canonicalBlockClaimCount_eq_claimDepths_card, Nat.card_Icc] at hcard
+  have hL := one_le_canonicalBlockLength n k
+  omega
+
+/-- Primary signed block-accounting normal form: drift is block length minus
+terminal capacity minus the missing claim depths. -/
+theorem endpointAccountingTerm_eq_length_sub_terminalValuation_sub_claimHoles
+    (n : OddNat) (k : ℕ) :
+    endpointAccountingTerm n k =
+      (canonicalBlockLength n k : ℤ) -
+        canonicalBlockTerminalValuation n k -
+          (canonicalBlockClaimHoles n k).card := by
+  have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
+  rw [canonicalBlockCapacityCount_eq_terminalValuation] at hdrift
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  omega
+
 /-- At terminal valuation one the selected depth is exactly one. -/
 theorem canonicalSelectedPositivePressureDepth_eq_one_of_terminalValuation_eq_one
     {n : OddNat} {k : ℕ}
@@ -1652,6 +1714,64 @@ theorem card_selectedPressureCarrier_of_terminalValuation_eq_one
   change canonicalBlockLength n k - 2 = canonicalBlockLength n k - 2
   rfl
 
+/-- At valuation one, every hole after the first one is exactly one spare
+selected incidence. -/
+theorem card_selectedDriftSpareCarrier_eq_claimHoles_card_sub_one
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k)
+    (hv : canonicalBlockTerminalValuation n k = 1) :
+    (canonicalSelectedDriftSpareCarrier n k).card =
+      (canonicalBlockClaimHoles n k).card - 1 := by
+  have himage := card_canonicalSelectedDriftImageCarrier hpos hnot
+  have hselected := card_selectedPressureCarrier_of_terminalValuation_eq_one hv
+  have hsplit := card_selectedPressureCarrier_eq_driftImage_add_spare n k
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
+  rw [canonicalBlockCapacityCount_eq_terminalValuation, hv] at hdrift
+  have hcast : ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) =
+      endpointAccountingTerm n k := Int.toNat_of_nonneg hpos.le
+  omega
+
+/-- At terminal valuation at least two, claim holes and spare selected
+incidences have exactly the same cardinality. -/
+theorem card_selectedDriftSpareCarrier_eq_claimHoles_card
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k)
+    (hv : 2 ≤ canonicalBlockTerminalValuation n k) :
+    (canonicalSelectedDriftSpareCarrier n k).card =
+      (canonicalBlockClaimHoles n k).card := by
+  have himage := card_canonicalSelectedDriftImageCarrier hpos hnot
+  have hsplit := card_selectedPressureCarrier_eq_driftImage_add_spare n k
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
+  rw [canonicalBlockCapacityCount_eq_terminalValuation] at hdrift
+  have hcast : ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) =
+      endpointAccountingTerm n k := Int.toNat_of_nonneg hpos.le
+  have hselected : (canonicalSelectedPressureCarrier n k).card =
+      canonicalBlockLength n k - canonicalBlockTerminalValuation n k := by
+    unfold canonicalSelectedPressureCarrier
+    rw [canonicalPaymentBlockContinuationFiber_card,
+      canonicalSelectedPositivePressureDepth, if_neg (by omega)]
+    change canonicalBlockLength n k -
+      (canonicalBlockTerminalValuation n k - 1 + 1) =
+        canonicalBlockLength n k - canonicalBlockTerminalValuation n k
+    omega
+  omega
+
+/-- At terminal valuation at least two, a spare incidence exists exactly when
+there is a missing claim depth. -/
+theorem selectedDriftSpareCarrier_nonempty_iff_claimHoles_nonempty_of_val_ge_two
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k)
+    (hv : 2 ≤ canonicalBlockTerminalValuation n k) :
+    (canonicalSelectedDriftSpareCarrier n k).Nonempty ↔
+      (canonicalBlockClaimHoles n k).Nonempty := by
+  rw [← Finset.card_pos, ← Finset.card_pos,
+    card_selectedDriftSpareCarrier_eq_claimHoles_card hpos hnot hv]
+
 /-- Tight positive valuation-one blocks are precisely the candidate class in
 which selected drift consumes every selected incidence. -/
 def CanonicalTightValuationOnePositiveBlock
@@ -1660,6 +1780,34 @@ def CanonicalTightValuationOnePositiveBlock
     ¬ CanonicalSaturatedBorderBlock n k ∧
       canonicalBlockTerminalValuation n k = 1 ∧
         canonicalBlockClaimCount n k = canonicalBlockLength n k - 1
+
+/-- Hole normal form of the tight valuation-one class. -/
+theorem canonicalTightValuationOnePositiveBlock_iff_claimHoles_card_eq_one
+    (n : OddNat) (k : ℕ) :
+    CanonicalTightValuationOnePositiveBlock n k ↔
+      0 < endpointAccountingTerm n k ∧
+        ¬ CanonicalSaturatedBorderBlock n k ∧
+          canonicalBlockTerminalValuation n k = 1 ∧
+            (canonicalBlockClaimHoles n k).card = 1 := by
+  unfold CanonicalTightValuationOnePositiveBlock
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  have hL := one_le_canonicalBlockLength n k
+  constructor <;> rintro ⟨hpos, hnot, hv, hcount⟩
+  · exact ⟨hpos, hnot, hv, by omega⟩
+  · exact ⟨hpos, hnot, hv, by omega⟩
+
+/-- A positive nonsaturated valuation-one block has a spare incidence exactly
+when it has at least two claim holes. -/
+theorem selectedDriftSpareCarrier_nonempty_iff_two_le_claimHoles_card_of_val_one
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k)
+    (hv : canonicalBlockTerminalValuation n k = 1) :
+    (canonicalSelectedDriftSpareCarrier n k).Nonempty ↔
+      2 ≤ (canonicalBlockClaimHoles n k).card := by
+  rw [← Finset.card_pos,
+    card_selectedDriftSpareCarrier_eq_claimHoles_card_sub_one hpos hnot hv]
+  omega
 
 /-- Under the positive nonsaturated valuation-one hypotheses, no spare source
 incidence is exactly the near-full-claims condition. -/
@@ -1760,6 +1908,157 @@ def CanonicalZeroCarrierBalancedBorderBlock
   endpointAccountingTerm n k = 0 ∧
     canonicalSelectedPressureCarrier n k = ∅
 
+/-- Exact arithmetic normal form of a zero-drift block with no selected source
+incidence. -/
+theorem canonicalZeroCarrierBalancedBorderBlock_iff
+    (n : OddNat) (k : ℕ) :
+    CanonicalZeroCarrierBalancedBorderBlock n k ↔
+      (canonicalBlockLength n k = canonicalBlockTerminalValuation n k ∧
+        canonicalBlockClaimCount n k = canonicalBlockLength n k) ∨
+      (canonicalBlockTerminalValuation n k = 1 ∧
+        canonicalBlockLength n k = 2 ∧
+        canonicalBlockClaimCount n k = 1) := by
+  constructor
+  · rintro ⟨hzero, hempty⟩
+    have hclaim := claimCount_eq_terminalValuation_of_endpointAccountingTerm_eq_zero hzero
+    have hclaimLe := canonicalBlockClaimCount_le_length n k
+    have hvpos := one_le_canonicalBlockTerminalValuation n k
+    by_cases hv : canonicalBlockTerminalValuation n k = 1
+    · have hL :=
+        (selectedPressureCarrier_eq_empty_iff_length_le_two_of_zero_val_one
+          hzero hv).1 hempty
+      by_cases hLen : canonicalBlockLength n k = 1
+      · exact Or.inl ⟨by omega, by omega⟩
+      · exact Or.inr ⟨hv, by omega, by omega⟩
+    · have hv2 : 2 ≤ canonicalBlockTerminalValuation n k := by omega
+      have hL :=
+        (selectedPressureCarrier_eq_empty_iff_length_le_terminalValuation_of_zero
+          hzero hv2).1 hempty
+      exact Or.inl ⟨by omega, by omega⟩
+  · rintro (hfull | hexceptional)
+    · rcases hfull with ⟨hLv, hclaimL⟩
+      have hzero := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
+      rw [canonicalBlockCapacityCount_eq_terminalValuation, hclaimL, hLv] at hzero
+      have hvpos := one_le_canonicalBlockTerminalValuation n k
+      by_cases hv : canonicalBlockTerminalValuation n k = 1
+      · refine ⟨by omega,
+          (selectedPressureCarrier_eq_empty_iff_length_le_two_of_zero_val_one
+            (by omega) hv).2 (by omega)⟩
+      · refine ⟨by omega,
+          (selectedPressureCarrier_eq_empty_iff_length_le_terminalValuation_of_zero
+            (by omega) (by omega)).2 (by omega)⟩
+    · rcases hexceptional with ⟨hv, hL, hclaim⟩
+      have hzero := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
+      rw [canonicalBlockCapacityCount_eq_terminalValuation, hv, hclaim] at hzero
+      exact ⟨by omega,
+        (selectedPressureCarrier_eq_empty_iff_length_le_two_of_zero_val_one
+          (by omega) hv).2 (by omega)⟩
+
+/-- The full balanced no-carrier branch has no claim holes. -/
+theorem claimHoles_card_eq_zero_of_full_balanced
+    {n : OddNat} {k : ℕ}
+    (hL : canonicalBlockLength n k = canonicalBlockTerminalValuation n k)
+    (hclaim : canonicalBlockClaimCount n k = canonicalBlockLength n k) :
+    (canonicalBlockClaimHoles n k).card = 0 := by
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  omega
+
+/-- The exceptional length-two balanced branch has one missing claim depth. -/
+theorem claimHoles_card_eq_one_of_exceptional_length_two_balanced
+    {n : OddNat} {k : ℕ}
+    (hL : canonicalBlockLength n k = 2)
+    (hclaim : canonicalBlockClaimCount n k = 1) :
+    (canonicalBlockClaimHoles n k).card = 1 := by
+  have hpartition := canonicalBlockClaimCount_add_claimHoles_card n k
+  omega
+
+/-! ### Unique missing claim depth -/
+
+/-- The unique missing depth of a block whose claim-hole carrier has
+cardinality one. -/
+noncomputable def canonicalBlockMissingClaimDepth
+    {n : OddNat} {k : ℕ}
+    (h : (canonicalBlockClaimHoles n k).card = 1) : ℕ :=
+  (Finset.card_eq_one.mp h).choose
+
+/-- The one-hole carrier is the singleton containing its chosen missing
+depth. -/
+theorem canonicalBlockClaimHoles_eq_singleton_missingDepth
+    {n : OddNat} {k : ℕ}
+    (h : (canonicalBlockClaimHoles n k).card = 1) :
+    canonicalBlockClaimHoles n k = {canonicalBlockMissingClaimDepth h} := by
+  exact (Finset.card_eq_one.mp h).choose_spec
+
+/-- With one missing depth, the claim-depth carrier is exactly the complete
+positive interval with that depth erased. -/
+theorem canonicalPaymentClaimDepths_eq_Icc_erase_missingDepth
+    {n : OddNat} {k : ℕ}
+    (h : (canonicalBlockClaimHoles n k).card = 1) :
+    canonicalPaymentClaimDepths n k =
+      (Finset.Icc 1 (canonicalBlockLength n k)).erase
+        (canonicalBlockMissingClaimDepth h) := by
+  classical
+  let missing := canonicalBlockMissingClaimDepth h
+  have hholes : canonicalBlockClaimHoles n k = {missing} :=
+    canonicalBlockClaimHoles_eq_singleton_missingDepth h
+  ext d
+  rw [Finset.mem_erase, Finset.mem_Icc]
+  constructor
+  · intro hdClaim
+    rcases mem_canonicalPaymentClaimDepths_iff.mp hdClaim with
+      ⟨hd1, hdL, _⟩
+    refine ⟨?_, hd1, hdL⟩
+    intro hdm
+    have hmHole : missing ∈ canonicalBlockClaimHoles n k := by
+      rw [hholes]
+      simp
+    exact (Finset.mem_sdiff.mp hmHole).2 (by simpa [hdm] using hdClaim)
+  · rintro ⟨hdm, hd1, hdL⟩
+    by_contra hdClaim
+    have hdHole : d ∈ canonicalBlockClaimHoles n k :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_Icc.mpr ⟨hd1, hdL⟩, hdClaim⟩
+    have : d = missing := by
+      rw [hholes] at hdHole
+      simpa using hdHole
+    exact hdm this
+
+/-- The unique missing depth is either the endpoint depth or a delayed depth. -/
+theorem canonicalBlockMissingClaimDepth_eq_one_or_gt_one
+    {n : OddNat} {k : ℕ}
+    (h : (canonicalBlockClaimHoles n k).card = 1) :
+    canonicalBlockMissingClaimDepth h = 1 ∨
+      1 < canonicalBlockMissingClaimDepth h := by
+  have hmem : canonicalBlockMissingClaimDepth h ∈ canonicalBlockClaimHoles n k := by
+    rw [canonicalBlockClaimHoles_eq_singleton_missingDepth h]
+    simp
+  have hIcc := (Finset.mem_sdiff.mp hmem).1
+  have hone := (Finset.mem_Icc.mp hIcc).1
+  omega
+
+/-- Tight valuation-one positive blocks have a unique missing claim depth. -/
+theorem CanonicalTightValuationOnePositiveBlock.claimDepths_eq_erase_missing
+    {n : OddNat} {k : ℕ} (h : CanonicalTightValuationOnePositiveBlock n k) :
+    canonicalPaymentClaimDepths n k =
+      (Finset.Icc 1 (canonicalBlockLength n k)).erase
+        (canonicalBlockMissingClaimDepth
+          ((canonicalTightValuationOnePositiveBlock_iff_claimHoles_card_eq_one
+            n k).1 h).2.2.2) :=
+  canonicalPaymentClaimDepths_eq_Icc_erase_missingDepth
+    ((canonicalTightValuationOnePositiveBlock_iff_claimHoles_card_eq_one n k).1 h).2.2.2
+
+/-- The exceptional length-two balanced branch also has a unique missing claim
+depth. -/
+theorem exceptionalLengthTwoBalanced_claimDepths_eq_erase_missing
+    {n : OddNat} {k : ℕ}
+    (hL : canonicalBlockLength n k = 2)
+    (hclaim : canonicalBlockClaimCount n k = 1) :
+    canonicalPaymentClaimDepths n k =
+      (Finset.Icc 1 (canonicalBlockLength n k)).erase
+        (canonicalBlockMissingClaimDepth
+          (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)) :=
+  canonicalPaymentClaimDepths_eq_Icc_erase_missingDepth
+    (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)
+
 /-! ## Saturated-successor source classification
 
 The five-way classification proposed at cp-325 omitted a logically possible
@@ -1789,6 +2088,29 @@ theorem exists_spareSelectedPressureSource_of_pos_of_two_le_terminalValuation
     ∃ i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k},
       i ∈ canonicalSelectedDriftSpareCarrier n k :=
   canonicalSelectedDriftSpareCarrier_nonempty hpos hnot hv
+
+/-- A successor has an immediately chargeable spare selected incidence. -/
+def CanonicalSuccessorSpareAvailable (n : OddNat) (j : ℕ) : Prop :=
+  (canonicalSelectedDriftSpareCarrier n j).Nonempty
+
+/-- With zero drift the chosen drift image is empty, so every selected source
+incidence is spare. -/
+theorem successorSpareAvailable_of_zero_of_selectedPressureCarrier_nonempty
+    {n : OddNat} {j : ℕ}
+    (hzero : endpointAccountingTerm n j = 0)
+    (hcarrier : (canonicalSelectedPressureCarrier n j).Nonempty) :
+    CanonicalSuccessorSpareAvailable n j := by
+  have himage : canonicalSelectedDriftImageCarrier n j = ∅ :=
+    canonicalSelectedDriftImageCarrier_eq_empty_of_not_active (by
+      intro hactive
+      omega)
+  have hsplit := card_selectedPressureCarrier_eq_driftImage_add_spare n j
+  rw [himage] at hsplit
+  simp only [Finset.card_empty, zero_add] at hsplit
+  apply Finset.card_pos.mp
+  have hcard : 0 < (canonicalSelectedPressureCarrier n j).card :=
+    Finset.card_pos.mpr hcarrier
+  omega
 
 /-- Exhaustive successor classification currently justified for a saturated
 predecessor.  The final disjunct is the valuation-one spare branch missing
@@ -1835,6 +2157,50 @@ theorem CanonicalSaturatedBorderBlock.successor_source_classification
             2 ≤ canonicalBlockTerminalValuation n j := ⟨hpos, hnotsat, hv2⟩
         exact Or.inr (Or.inr (Or.inr (Or.inl (by simpa [j] using hbranch))))
 
+/-- Source-level compression of the detailed six-way successor theorem. -/
+theorem CanonicalSaturatedBorderBlock.successor_negative_or_spare_or_rigid
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k) :
+    endpointAccountingTerm n (k + 1) < 0 ∨
+      CanonicalSuccessorSpareAvailable n (k + 1) ∨
+      CanonicalZeroCarrierBalancedBorderBlock n (k + 1) ∨
+      CanonicalTightValuationOnePositiveBlock n (k + 1) := by
+  rcases h.successor_source_classification with
+    hneg | hzeroSpare | hzeroRigid | hpos2 | htight | hpos1Spare
+  · exact Or.inl hneg
+  · exact Or.inr (Or.inl
+      (successorSpareAvailable_of_zero_of_selectedPressureCarrier_nonempty
+        hzeroSpare.1 hzeroSpare.2))
+  · exact Or.inr (Or.inr (Or.inl hzeroRigid))
+  · exact Or.inr (Or.inl
+      (canonicalSelectedDriftSpareCarrier_nonempty hpos2.1 hpos2.2.1 hpos2.2.2))
+  · exact Or.inr (Or.inr (Or.inr htight))
+  · exact Or.inr (Or.inl hpos1Spare.2.2.2)
+
+/-- A negative successor cancels the saturated predecessor's exact unit
+drift numerically. -/
+theorem CanonicalSaturatedBorderBlock.drift_add_successor_drift_nonpos_of_negative
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hneg : endpointAccountingTerm n (k + 1) < 0) :
+    endpointAccountingTerm n k + endpointAccountingTerm n (k + 1) ≤ 0 := by
+  rw [h.netDrift_eq_one]
+  omega
+
+/-- Every spare-available successor supplies an explicit singleton embedding
+into its actual spare source carrier. -/
+noncomputable def oneEmbedding_successorSpareCarrier
+    {n : OddNat} {j : ℕ} (h : CanonicalSuccessorSpareAvailable n j) :
+    Fin 1 ↪ {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j} //
+      i ∈ canonicalSelectedDriftSpareCarrier n j} := by
+  classical
+  letI : Fintype
+      {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j} //
+        i ∈ canonicalSelectedDriftSpareCarrier n j} :=
+    Fintype.ofFinset (canonicalSelectedDriftSpareCarrier n j) (by simp)
+  apply Classical.choice
+  apply Function.Embedding.nonempty_iff_card_le.mpr
+  rw [Fintype.card_fin, Fintype.card_coe]
+  exact Finset.one_le_card.mpr h
+
 /-! ## Experimental dyadic depth-transfer potential
 
 These inequalities compare numerical denominations only.  They do not define
@@ -1870,6 +2236,97 @@ theorem intToNat_endpointAccountingTerm_le_length_sub_depth_sub_one
   exact_mod_cast (show ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) ≤
     (L - d - 1 : ℕ) by omega)
 
+/-- Positive nonsaturated blocks have room for a positive selected depth, a
+positive gap, and an endpoint, hence length at least three. -/
+theorem three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k) :
+    3 ≤ canonicalBlockLength n k := by
+  have hbound :=
+    intToNat_endpointAccountingTerm_le_length_sub_depth_sub_one hpos hnot
+  have hcast : ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) =
+      endpointAccountingTerm n k := Int.toNat_of_nonneg hpos.le
+  have ha : 0 < Int.toNat (endpointAccountingTerm n k) := by omega
+  have hd := one_le_canonicalSelectedPositivePressureDepth n k
+  omega
+
+/-- Elementary half-budget inequality used by the dyadic denomination. -/
+theorem nat_le_two_pow_pred {gap : ℕ} (hgap : 1 ≤ gap) :
+    gap ≤ 2 ^ (gap - 1) := by
+  rcases gap with _ | gap
+  · omega
+  · rcases gap with _ | gap
+    · norm_num
+    · have hpow := (gap + 1).lt_two_pow_self
+      simpa only [Nat.add_sub_cancel, Nat.succ_eq_add_one] using hpow
+
+/-- Strengthened local dyadic potential: positive nonsaturated demand fits in
+one half of the block-width budget. -/
+theorem intToNat_endpointAccountingTerm_mul_two_pow_depth_le_two_pow_length_sub_two
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k) :
+    Int.toNat (endpointAccountingTerm n k) *
+        2 ^ canonicalSelectedPositivePressureDepth n k ≤
+      2 ^ (canonicalBlockLength n k - 2) := by
+  let a := Int.toNat (endpointAccountingTerm n k)
+  let d := canonicalSelectedPositivePressureDepth n k
+  let L := canonicalBlockLength n k
+  let gap := L - d - 1
+  have ha : a ≤ gap :=
+    intToNat_endpointAccountingTerm_le_length_sub_depth_sub_one hpos hnot
+  have hcast : ((a : ℕ) : ℤ) = endpointAccountingTerm n k :=
+    Int.toNat_of_nonneg hpos.le
+  have hapos : 0 < a := by omega
+  have hgap : 1 ≤ gap := by omega
+  have hgapPow : gap ≤ 2 ^ (gap - 1) := nat_le_two_pow_pred hgap
+  have hsum : (gap - 1) + d = L - 2 := by
+    have hdL := selectedPositivePressureDepth_lt_length_of_pos_of_not_saturated
+      hpos hnot
+    change d < L at hdL
+    dsimp [gap]
+    omega
+  calc
+    a * 2 ^ d ≤ gap * 2 ^ d := Nat.mul_le_mul_right _ ha
+    _ ≤ 2 ^ (gap - 1) * 2 ^ d := Nat.mul_le_mul_right _ hgapPow
+    _ = 2 ^ ((gap - 1) + d) := by rw [pow_add]
+    _ = 2 ^ (L - 2) := by rw [hsum]
+
+/-- A saturated unit and the positive demand of its nonsaturated successor fit
+in the successor's full local dyadic budget. -/
+theorem CanonicalSaturatedBorderBlock.two_add_successor_dyadic_demand_le
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hpos : 0 < endpointAccountingTerm n (k + 1)) :
+    2 + Int.toNat (endpointAccountingTerm n (k + 1)) *
+        2 ^ canonicalSelectedPositivePressureDepth n (k + 1) ≤
+      2 ^ (canonicalBlockLength n (k + 1) - 1) := by
+  have hnot := h.not_succ
+  have hdemand :=
+    intToNat_endpointAccountingTerm_mul_two_pow_depth_le_two_pow_length_sub_two
+      hpos hnot
+  have hL :=
+    three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
+      hpos hnot
+  have htwo : 2 ≤ 2 ^ (canonicalBlockLength n (k + 1) - 2) := by
+    have := Nat.pow_le_pow_right (by norm_num : 0 < 2) (show 1 ≤
+      canonicalBlockLength n (k + 1) - 2 by omega)
+    simpa using this
+  rw [show canonicalBlockLength n (k + 1) - 1 =
+      (canonicalBlockLength n (k + 1) - 2) + 1 by omega, pow_succ]
+  omega
+
+/-- A zero-drift successor of length at least two has enough numerical dyadic
+budget for the preceding saturated unit. -/
+theorem two_le_successor_dyadic_budget_of_two_le_length
+    {n : OddNat} {k : ℕ}
+    (_hzero : endpointAccountingTerm n (k + 1) = 0)
+    (hL : 2 ≤ canonicalBlockLength n (k + 1)) :
+    2 ≤ 2 ^ (canonicalBlockLength n (k + 1) - 1) := by
+  have := Nat.pow_le_pow_right (by norm_num : 0 < 2)
+    (show 1 ≤ canonicalBlockLength n (k + 1) - 1 by omega)
+  simpa using this
+
 /-- Local dyadic potential: the selected positive drift, denominated at depth
 `d`, is bounded by one block-width denomination `2^(L-1)`. -/
 theorem intToNat_endpointAccountingTerm_mul_two_pow_depth_le_two_pow_length_sub_one
@@ -1904,6 +2361,170 @@ theorem CanonicalSaturatedBorderBlock.dyadic_unit_budget
     {n : OddNat} {k : ℕ} (_h : CanonicalSaturatedBorderBlock n k) :
     (1 : ℕ) * 2 ^ 1 = 2 ^ (2 - 1) := by
   norm_num
+
+/-! ## Length-one successor residue audit
+
+The saturated predecessor has odd core congruent to either three or seven
+modulo eight.  A successor of length one excludes the seven class, because the
+existing successor normal form forces length at least two there.  This is the
+finite residue grammar needed before attempting a modulo-sixteen refinement.
+
+The stronger candidate
+
+`successor length = 1` and `successor terminal valuation = 1`
+`-> predecessor odd core % 16 = 11`
+
+requires an explicit normal form connecting the successor odd core (or its
+terminal carrier) to the predecessor odd core.  The current API exposes the
+successor start and successor length, but not that substituted terminal-carrier
+identity.  Do not replace this missing algebraic bridge by computation or a
+statistical residue table.
+-/
+
+/-- A length-one successor of a saturated block selects the class three
+modulo eight for the predecessor odd core. -/
+theorem CanonicalSaturatedBorderBlock.oddCore_mod_eight_eq_three_of_next_length_one
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1) :
+    canonicalBlockOddCore n k % 8 = 3 := by
+  rcases h.oddCore_mod_eight_eq_three_or_seven with hthree | hseven
+  · exact hthree
+  · have htwo := h.two_le_nextBlockLength_of_core_mod_eight_eq_seven hseven
+    omega
+
+/-- For a length-one block, the sole claim-count condition is exactly the
+carry-two condition at its endpoint source. -/
+theorem canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one
+    {n : OddNat} {k : ℕ} (hL : canonicalBlockLength n k = 1) :
+    canonicalBlockClaimCount n k = 1 ↔
+      CarryTwoDebtAt n (paymentEndpointSeq n k) := by
+  constructor
+  · intro hcount
+    have hcard : (canonicalPaymentClaimDepths n k).card = 1 := by
+      simpa [canonicalBlockClaimCount_eq_claimDepths_card] using hcount
+    obtain ⟨d, hd⟩ := Finset.card_pos.mp (by omega :
+      0 < (canonicalPaymentClaimDepths n k).card)
+    have hdepth := mem_canonicalPaymentClaimDepths_iff.mp hd
+    have hLen : canonicalPaymentBlockLength n k = canonicalBlockLength n k := rfl
+    have hdOne : d = 1 := by
+      rw [hLen, hL] at hdepth
+      omega
+    subst d
+    exact (one_mem_canonicalPaymentClaimDepths_iff n k).mp hd
+  · intro hcarry
+    have hone : 1 ∈ canonicalPaymentClaimDepths n k :=
+      (one_mem_canonicalPaymentClaimDepths_iff n k).mpr hcarry
+    have hpos : 0 < canonicalBlockClaimCount n k := by
+      rw [canonicalBlockClaimCount_eq_claimDepths_card]
+      exact Finset.card_pos.mpr ⟨1, hone⟩
+    have hle := canonicalBlockClaimCount_le_length n k
+    omega
+
+/-! ## Abstract nonduplicating dyadic carrier
+
+This section realizes the numerical half-budget as two disjoint `Fin` images.
+The low two points carry the preceding saturated unit; the positive successor
+demand is shifted into the upper half.  These are abstract potential slots.
+They are not orbit indices, binary bit positions, or upper-boundary resources.
+-/
+
+/-- Abstract block-width dyadic budget. -/
+abbrev CanonicalAbstractDyadicBudgetCarrier
+    (n : OddNat) (k : ℕ) :=
+  Fin (2 ^ (canonicalBlockLength n k - 1))
+
+/-- Abstract selected positive-drift demand at its dyadic depth. -/
+abbrev CanonicalAbstractDyadicDemandCarrier
+    (n : OddNat) (k : ℕ) :=
+  Fin (Int.toNat (endpointAccountingTerm n k) *
+    2 ^ canonicalSelectedPositivePressureDepth n k)
+
+/-- The positive nonsaturated demand embeds into the upper half of its abstract
+block budget. -/
+noncomputable def abstractDyadicDemandEmbeddingUpperHalf
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n k)
+    (hnot : ¬ CanonicalSaturatedBorderBlock n k) :
+    CanonicalAbstractDyadicDemandCarrier n k ↪
+      CanonicalAbstractDyadicBudgetCarrier n k where
+  toFun i := by
+    let half := 2 ^ (canonicalBlockLength n k - 2)
+    have hdemand :=
+      intToNat_endpointAccountingTerm_mul_two_pow_depth_le_two_pow_length_sub_two
+        hpos hnot
+    have hL :=
+      three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
+        hpos hnot
+    refine ⟨half + i.val, ?_⟩
+    rw [show canonicalBlockLength n k - 1 =
+        (canonicalBlockLength n k - 2) + 1 by omega, pow_succ]
+    omega
+  inj' := by
+    intro i j hij
+    have hval := congrArg Fin.val hij
+    change 2 ^ (canonicalBlockLength n k - 2) + i.val =
+      2 ^ (canonicalBlockLength n k - 2) + j.val at hval
+    exact Fin.ext (Nat.add_left_cancel hval)
+
+/-- The preceding saturated mass-two unit occupies the first two abstract
+slots of a positive nonsaturated successor budget. -/
+noncomputable def abstractSaturatedUnitEmbeddingLowerHalf
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n (k + 1))
+    (hnot : ¬ CanonicalSaturatedBorderBlock n (k + 1)) :
+    Fin 2 ↪ CanonicalAbstractDyadicBudgetCarrier n (k + 1) where
+  toFun i := by
+    have hL :=
+      three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
+        hpos hnot
+    refine ⟨i.val, ?_⟩
+    have hfour : 4 ≤ 2 ^ (canonicalBlockLength n (k + 1) - 1) := by
+      have := Nat.pow_le_pow_right (by norm_num : 0 < 2)
+        (show 2 ≤ canonicalBlockLength n (k + 1) - 1 by omega)
+      simpa using this
+    omega
+  inj' := by
+    intro i j hij
+    have hval := congrArg Fin.val hij
+    change i.val = j.val at hval
+    exact Fin.ext hval
+
+/-- The saturated-unit image and successor-demand image are explicitly
+disjoint in the abstract successor budget. -/
+theorem abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
+    {n : OddNat} {k : ℕ}
+    (hpos : 0 < endpointAccountingTerm n (k + 1))
+    (hnot : ¬ CanonicalSaturatedBorderBlock n (k + 1))
+    (i : Fin 2) (j : CanonicalAbstractDyadicDemandCarrier n (k + 1)) :
+    abstractSaturatedUnitEmbeddingLowerHalf hpos hnot i ≠
+      abstractDyadicDemandEmbeddingUpperHalf hpos hnot j := by
+  intro heq
+  have hL :=
+    three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
+      hpos hnot
+  have hhalf : 2 ≤ 2 ^ (canonicalBlockLength n (k + 1) - 2) := by
+    have := Nat.pow_le_pow_right (by norm_num : 0 < 2)
+      (show 1 ≤ canonicalBlockLength n (k + 1) - 2 by omega)
+    simpa using this
+  have hval := congrArg Fin.val heq
+  dsimp [abstractSaturatedUnitEmbeddingLowerHalf,
+    abstractDyadicDemandEmbeddingUpperHalf] at hval
+  omega
+
+/-!
+## Actual upper-boundary audit
+
+The existing upper-window API records scalar carries, widths, and eventually
+zero statements.  It does not expose a finite carrier of distinct upper-zero
+bit positions, nor a finite binary refinement tree whose leaves are consumed
+at most once.  Consequently the abstract embeddings above cannot yet be
+transported into a nonreusable initial-state resource.  Reusing one scalar
+upper-boundary fact for several block budgets would invalidate the accounting.
+
+This is the genuine boundary of the present branch: a future theorem must
+define an actual finite upper resource and prove a uniform nonreuse or
+multiplicity bound before any global repayment conclusion is sound.
+-/
 
 /-!
 ## Current boundary after the causal depth queue
