@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource"
@@ -11,109 +12,161 @@ import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
 namespace DkMath.Collatz
 
 /-!
-# Transition-based amortized resource interface
+# Canonical queue audit and the owned-resource frontier
 
-This module states the global resource contract without assuming a global
-injection into a pre-existing finite carrier.  A resource state evolves at
-each block.  The only accounting axiom is a one-step conservation inequality.
-
-The replenishment hypothesis below is cumulative.  A merely pointwise bound
-on replenishment would allow linear growth and cannot imply a uniform queue
-bound.  No Collatz instance of this interface is asserted here.
+The generic telescope is in `FiniteAmortizedResource`.  This module audits its
+connection to the canonical reflected queue.  The audit proves that an
+arbitrary scalar potential certificate is equivalent, existentially, to the
+desired queue bound: choosing `potential k = C - queue k` makes conservation
+tautological.  Therefore this certificate is useful algebraically but is not a
+noncircular Collatz resource construction.
 -/
 
-/-- A dynamic resource state with an explicit queue, potential, demand,
-consumption, and derived replenishment stream. -/
-structure CanonicalAmortizedResourceTransition (n : OddNat) where
-  State : ℕ → Type
-  state : (k : ℕ) → State k
-  potential : ℕ → ℕ
-  queue : ℕ → ℕ
-  demand : ℕ → ℕ
-  consumed : ℕ → ℕ
-  replenishment : ℕ → ℕ
-  demand_le_consumed_add_nextQueue :
-    ∀ k, demand k ≤ consumed k + queue (k + 1)
-  step_conservation :
-    ∀ k, queue (k + 1) + potential (k + 1) + consumed k ≤
-      queue k + potential k + replenishment k
+/-- Deprecated compatibility name for the former phantom-state structure. -/
+abbrev CanonicalAmortizedResourceTransition (_n : OddNat) :=
+  FiniteAmortizedResource
 
-namespace CanonicalAmortizedResourceTransition
-
-/-- Iterating one-step conservation gives the exact finite-prefix resource
-ceiling. -/
-theorem queue_add_potential_le_initial_add_sum
-    {n : OddNat} (A : CanonicalAmortizedResourceTransition n) (m : ℕ) :
-    A.queue m + A.potential m ≤
-      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.replenishment k := by
-  induction m with
-  | zero => simp
-  | succ m ih =>
-      have hstep := A.step_conservation m
-      rw [Finset.sum_range_succ]
-      omega
-
-/-- A uniform potential ceiling and a cumulative replenishment ceiling imply
-a uniform queue ceiling. -/
-theorem queue_le_of_potential_and_cumulative_replenishment_bounds
-    {n : OddNat} (A : CanonicalAmortizedResourceTransition n)
-    {P R : ℕ} (hpotential : ∀ k, A.potential k ≤ P)
-    (hreplenishment : ∀ m,
-      ∑ k ∈ Finset.range m, A.replenishment k ≤ R) (m : ℕ) :
-    A.queue m ≤ A.queue 0 + P + R := by
-  have hprefix := A.queue_add_potential_le_initial_add_sum m
-  have hp0 := hpotential 0
-  have hr := hreplenishment m
-  omega
-
-end CanonicalAmortizedResourceTransition
-
-/--
-Noncircular conditional interface for the canonical queue.  It asks for a
-transition law whose queue observable is the existing canonical queue, plus
-independently stated potential and cumulative-replenishment ceilings.  It does
-not include the desired queue bound as a field.
--/
-def CanonicalNoncircularGlobalAmortizationLaw
+/-- Neutral scalar certificate connecting a finite amortized telescope to the
+canonical reflected queue.  It intentionally makes no ownership claim. -/
+def CanonicalAbstractAmortizationCertificate
     (n : OddNat) (P R : ℕ) : Prop :=
-  ∃ A : CanonicalAmortizedResourceTransition n,
+  ∃ A : FiniteAmortizedResource,
     (∀ m, A.queue m = canonicalOutstandingClaimQueue n m) ∧
-      (∀ k, A.potential k ≤ P) ∧
+      A.potential 0 ≤ P ∧
         ∀ m, ∑ k ∈ Finset.range m, A.replenishment k ≤ R
 
-/-- The noncircular amortization law yields a named uniform scalar queue
-bound. -/
-theorem CanonicalNoncircularGlobalAmortizationLaw.to_queueUniformUpperBound
+/-- Deprecated compatibility alias.  Despite its historical name, this
+predicate is not noncircular; see
+`exists_abstractAmortizationCertificate_iff_exists_queueUniformUpperBound`. -/
+@[deprecated CanonicalAbstractAmortizationCertificate (since := "2026-07-16")]
+abbrev CanonicalNoncircularGlobalAmortizationLaw :=
+  CanonicalAbstractAmortizationCertificate
+
+/-- A scalar certificate gives the corresponding canonical queue bound. -/
+theorem CanonicalAbstractAmortizationCertificate.to_queueUniformUpperBound
     {n : OddNat} {P R : ℕ}
-    (h : CanonicalNoncircularGlobalAmortizationLaw n P R) :
+    (h : CanonicalAbstractAmortizationCertificate n P R) :
     CanonicalOutstandingClaimQueueUniformUpperBound n
       (canonicalOutstandingClaimQueue n 0 + P + R) := by
   rcases h with ⟨A, hqueue, hpotential, hreplenishment⟩
   intro m
   rw [← hqueue m, ← hqueue 0]
-  exact A.queue_le_of_potential_and_cumulative_replenishment_bounds
+  exact A.queue_le_of_initialPotential_and_cumulativeReplenishment_bounds
     hpotential hreplenishment m
 
-/-- Conditional challenge-facing chain from amortization to endpoint width. -/
-theorem CanonicalNoncircularGlobalAmortizationLaw.to_endpointWidthUniformUpperBound
+/-- Conditional challenge-facing consequence of the scalar certificate. -/
+theorem CanonicalAbstractAmortizationCertificate.to_endpointWidthUniformUpperBound
     {n : OddNat} {P R : ℕ}
-    (h : CanonicalNoncircularGlobalAmortizationLaw n P R) :
+    (h : CanonicalAbstractAmortizationCertificate n P R) :
     CanonicalEndpointWidthUniformUpperBound n
       (bitWidth n.1 + (canonicalOutstandingClaimQueue n 0 + P + R)) :=
   h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
 
+/-- Reverse construction exposing the circular complement potential. -/
+noncomputable def trivialAmortizedTransitionOfQueueBound
+    {n : OddNat} {C : ℕ}
+    (hC : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
+    FiniteAmortizedResource where
+  queue k := canonicalOutstandingClaimQueue n k
+  potential k := C - canonicalOutstandingClaimQueue n k
+  consumed _ := 0
+  replenishment _ := 0
+  step_conservation k := by
+    have hk := hC k
+    have hks := hC (k + 1)
+    omega
+
+/-- Any assumed canonical queue bound manufactures the neutral certificate. -/
+theorem CanonicalOutstandingClaimQueueUniformUpperBound.to_abstractAmortizationCertificate
+    {n : OddNat} {C : ℕ}
+    (hC : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
+    CanonicalAbstractAmortizationCertificate n C 0 := by
+  refine ⟨trivialAmortizedTransitionOfQueueBound hC, ?_, ?_, ?_⟩
+  · intro m
+    rfl
+  · exact Nat.sub_le _ _
+  · intro m
+    simp [trivialAmortizedTransitionOfQueueBound]
+
+/-- Mandatory semantic regression: existential scalar amortization is exactly
+as strong as an existential uniform queue bound. -/
+theorem exists_abstractAmortizationCertificate_iff_exists_queueUniformUpperBound
+    (n : OddNat) :
+    (∃ P R, CanonicalAbstractAmortizationCertificate n P R) ↔
+      ∃ C, CanonicalOutstandingClaimQueueUniformUpperBound n C := by
+  constructor
+  · rintro ⟨P, R, h⟩
+    exact ⟨canonicalOutstandingClaimQueue n 0 + P + R,
+      h.to_queueUniformUpperBound⟩
+  · rintro ⟨C, hC⟩
+    exact ⟨C, 0, hC.to_abstractAmortizationCertificate⟩
+
+/-! ## Exact canonical reflected-queue observables -/
+
+/-- Queue available immediately before canonical block `k` is served. -/
+noncomputable def canonicalOutstandingClaimQueueBeforeBlock
+    (n : OddNat) : ℕ → ℕ
+  | 0 => 0
+  | k + 1 => canonicalOutstandingClaimQueue n k
+
+/-- Claims arriving at canonical block `k`. -/
+noncomputable def canonicalQueueDemand (n : OddNat) (k : ℕ) : ℕ :=
+  canonicalBlockClaimCount n k
+
+/-- Anonymous capacity offered by canonical block `k`. -/
+noncomputable def canonicalQueueService (n : OddNat) (k : ℕ) : ℕ :=
+  canonicalBlockCapacityCount n k
+
+/-- Service actually consumed is the minimum of available work and capacity. -/
+noncomputable def canonicalQueueConsumed (n : OddNat) (k : ℕ) : ℕ :=
+  min (canonicalOutstandingClaimQueueBeforeBlock n k + canonicalQueueDemand n k)
+    (canonicalQueueService n k)
+
+/-- Exact conservation for one reflected-queue block. -/
+theorem canonicalOutstandingClaimQueue_add_consumed
+    (n : OddNat) (k : ℕ) :
+    canonicalOutstandingClaimQueue n k + canonicalQueueConsumed n k =
+      canonicalOutstandingClaimQueueBeforeBlock n k + canonicalQueueDemand n k := by
+  cases k with
+  | zero =>
+      change (canonicalBlockClaimCount n 0 - canonicalBlockCapacityCount n 0) +
+          min (0 + canonicalBlockClaimCount n 0) (canonicalBlockCapacityCount n 0) =
+        0 + canonicalBlockClaimCount n 0
+      simp only [zero_add]
+      by_cases h : canonicalBlockCapacityCount n 0 ≤ canonicalBlockClaimCount n 0
+      · rw [Nat.min_eq_right h, Nat.sub_add_cancel h]
+      · have hle : canonicalBlockClaimCount n 0 ≤ canonicalBlockCapacityCount n 0 :=
+          Nat.le_of_not_ge h
+        rw [Nat.min_eq_left hle, Nat.sub_eq_zero_of_le hle]
+        simp
+  | succ k =>
+      change ((canonicalOutstandingClaimQueue n k + canonicalBlockClaimCount n (k + 1)) -
+            canonicalBlockCapacityCount n (k + 1)) +
+          min (canonicalOutstandingClaimQueue n k + canonicalBlockClaimCount n (k + 1))
+            (canonicalBlockCapacityCount n (k + 1)) =
+        canonicalOutstandingClaimQueue n k + canonicalBlockClaimCount n (k + 1)
+      by_cases h : canonicalBlockCapacityCount n (k + 1) ≤
+          canonicalOutstandingClaimQueue n k + canonicalBlockClaimCount n (k + 1)
+      · rw [Nat.min_eq_right h, Nat.sub_add_cancel h]
+      · have hle : canonicalOutstandingClaimQueue n k +
+            canonicalBlockClaimCount n (k + 1) ≤
+              canonicalBlockCapacityCount n (k + 1) := Nat.le_of_not_ge h
+        rw [Nat.min_eq_left hle, Nat.sub_eq_zero_of_le hle]
+        simp
+
 /-!
-## Proven frontier
+## Owned-resource frontier
 
-Route 1 stops at a concrete obstruction: exact adjacent core-word recurrence
-permits carry alternation, so it supplies no monotone claim-density estimate.
+A genuine next layer must define a concrete finite carrier from `n`, together
+with consumed and replenished subcarriers and an equivalence
 
-Route 2 is now logically sound but conditional.  The first missing theorem is
-an actual Collatz construction of `CanonicalNoncircularGlobalAmortizationLaw`
-with a cumulative replenishment ceiling.  Current width decreases and negative
-local drift do not yet carry temporal ownership, so the same replenishment
-event could be reused without a proved multiplicity bound.  Replacing this
-missing construction by a queue ceiling would be circular.
+`Available (k+1) ≃ (Available k \ Consumed k) ⊕ Replenished k`.
+
+It must also prove disjoint old/new ownership, injective ownership of consumed
+atoms, and temporal nonreuse.  No such carrier has yet been identified, so no
+placeholder existence theorem is asserted.  Consequently
+`CanonicalSaturatedSuccessorAbstractDischarge` is not yet formally connected
+to this global scalar layer.
 -/
 
 end DkMath.Collatz

@@ -1782,12 +1782,119 @@ theorem coreWordRecurrence_carry_alternation_witness :
             stateUpperCarry 23 = 2 := by
   norm_num [stateUpperCarry, upperCarry3n1, bitWidth]
 
+/-! ## Canonical carry-alternation regression -/
+
+/-- Odd root whose first canonical block realizes the `53,35,23` profile. -/
+def twentyThreeCarryAlternationOdd : OddNat := ⟨23, by norm_num⟩
+
+private lemma twentyThree_v2_24 : v2 24 = 3 := by
+  have h12 := (DkMath.ABC.padic_val_two_of_even 12).2 (by decide)
+  have h6 := (DkMath.ABC.padic_val_two_of_even 6).2 (by decide)
+  have h3 := (DkMath.ABC.padic_val_two_of_even 3).2 (by decide)
+  have hv3 : v2 3 = 0 := v2_odd 3 (by decide)
+  have hv6 : v2 6 = 1 := by simpa [v2, hv3] using h3
+  have hv12 : v2 12 = 2 := by simpa [v2, hv6] using h6
+  simpa [v2, hv12] using h12
+
+private theorem twentyThree_endpoint_zero :
+    paymentEndpointSeq twentyThreeCarryAlternationOdd 0 = 2 := by
+  norm_num [paymentEndpointSeq, orbitPaymentTarget, orbitExactDepth,
+    ResidualAllOnesDepth, oddOrbitLabel, iterateT,
+    twentyThreeCarryAlternationOdd, mkOddNat, twentyThree_v2_24]
+
+private theorem twentyThree_paymentBlockLength_zero :
+    canonicalPaymentBlockLength twentyThreeCarryAlternationOdd 0 = 3 := by
+  rw [canonicalPaymentBlockLength_eq_endpoint_sub_start_add_one,
+    universalPaymentBlockStart_paymentEndpointSeq_zero,
+    twentyThree_endpoint_zero]
+
+/-- The first canonical block at odd root `23` has length three. -/
+theorem canonicalBlockLength_twentyThree_zero :
+    canonicalBlockLength twentyThreeCarryAlternationOdd 0 = 3 :=
+  twentyThree_paymentBlockLength_zero
+
+private theorem canonicalBlockStartState_twentyThree_zero :
+    canonicalBlockStartState twentyThreeCarryAlternationOdd 0 = 23 := by
+  unfold canonicalBlockStartState canonicalBlockStartTime canonicalEndpointBlockStart
+  rfl
+
+/-- The first canonical block at odd root `23` has odd core three. -/
+theorem canonicalBlockOddCore_twentyThree_zero :
+    canonicalBlockOddCore twentyThreeCarryAlternationOdd 0 = 3 := by
+  rw [canonicalBlockOddCore, canonicalBlockStartState_twentyThree_zero,
+    canonicalBlockLength_twentyThree_zero]
+  norm_num
+
+/-- Exact three-word core profile of the first canonical block at `23`. -/
+theorem canonicalBlockCoreWords_twentyThree_zero :
+    canonicalBlockCoreWordAtDepth twentyThreeCarryAlternationOdd 0 1 = 53 ∧
+      canonicalBlockCoreWordAtDepth twentyThreeCarryAlternationOdd 0 2 = 35 ∧
+        canonicalBlockCoreWordAtDepth twentyThreeCarryAlternationOdd 0 3 = 23 := by
+  simp [canonicalBlockCoreWordAtDepth, canonicalBlockLength_twentyThree_zero,
+    canonicalBlockOddCore_twentyThree_zero]
+
+private lemma twentyThree_v2_70 : v2 70 = 1 := by
+  have h := (DkMath.ABC.padic_val_two_of_even 35).2 (by decide)
+  simpa [v2, v2_odd 35 (by decide)] using h
+
+private lemma twentyThree_v2_106 : v2 106 = 1 := by
+  have h := (DkMath.ABC.padic_val_two_of_even 53).2 (by decide)
+  simpa [v2, v2_odd 53 (by decide)] using h
+
+private theorem twentyThree_carry_zero :
+    CarryTwoDebtAt twentyThreeCarryAlternationOdd 0 := by
+  norm_num [CarryTwoDebtAt, stateUpperCarry, upperCarry3n1, bitWidth,
+    iterateT, twentyThreeCarryAlternationOdd, mkOddNat]
+
+private theorem twentyThree_not_carry_one :
+    ¬ CarryTwoDebtAt twentyThreeCarryAlternationOdd 1 := by
+  norm_num [CarryTwoDebtAt, stateUpperCarry, upperCarry3n1, bitWidth,
+    iterateT, T, twentyThreeCarryAlternationOdd, mkOddNat, threeNPlusOne,
+    pow2, twentyThree_v2_70]
+
+private theorem twentyThree_carry_two :
+    CarryTwoDebtAt twentyThreeCarryAlternationOdd 2 := by
+  norm_num [CarryTwoDebtAt, stateUpperCarry, upperCarry3n1, bitWidth,
+    iterateT, T, twentyThreeCarryAlternationOdd, mkOddNat, threeNPlusOne,
+    pow2, twentyThree_v2_70, twentyThree_v2_106]
+
+/-- The canonical carry profile at `23` claims depths one and three. -/
+theorem canonicalPaymentClaimDepths_twentyThree_zero :
+    canonicalPaymentClaimDepths twentyThreeCarryAlternationOdd 0 = {1, 3} := by
+  classical
+  ext d
+  rw [mem_canonicalPaymentClaimDepths_iff,
+    twentyThree_paymentBlockLength_zero]
+  unfold canonicalPaymentSourceAtDepth
+  rw [twentyThree_endpoint_zero]
+  simp only [Finset.mem_insert, Finset.mem_singleton]
+  constructor
+  · rintro ⟨hd1, hd3, hcarry⟩
+    interval_cases d <;>
+      simp_all [twentyThree_carry_zero, twentyThree_not_carry_one]
+  · rintro (rfl | rfl) <;>
+      simp [twentyThree_carry_zero, twentyThree_carry_two]
+
+/-!
+This canonical regression proves only that adjacent recurrence does not imply
+monotone carry.  It does not rule out bounded-gap or density theorems that use
+the canonical residue class, odd core, or block width.
+-/
+
 /-- Positive depths in the block which do not carry a canonical payment
 claim. -/
 noncomputable def canonicalBlockClaimHoles
     (n : OddNat) (k : ℕ) : Finset ℕ :=
   Finset.Icc 1 (canonicalBlockLength n k) \
     canonicalPaymentClaimDepths n k
+
+/-- The unique hole in the canonical carry profile at `23` is depth two. -/
+theorem canonicalBlockClaimHoles_twentyThree_zero :
+    canonicalBlockClaimHoles twentyThreeCarryAlternationOdd 0 = {2} := by
+  classical
+  rw [canonicalBlockClaimHoles, canonicalBlockLength_twentyThree_zero,
+    canonicalPaymentClaimDepths_twentyThree_zero]
+  decide
 
 /-- Claim depths and claim holes are disjoint by construction. -/
 theorem canonicalPaymentClaimDepths_disjoint_claimHoles

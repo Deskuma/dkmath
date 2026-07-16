@@ -59,11 +59,13 @@ The adjacent recurrence does not imply monotone carries.  Lean verifies the
 exact recurrence witness `53, 35, 23`, whose own-width carries are `2, 1, 2`.
 Thus recurrence alone cannot provide the required uniform claim-hole density.
 
-## Noncircular global interface
+## Abstract global interface (corrected by checkpoint 330)
 
-`UniversalPaymentAmortizedResource.lean` introduces a transition state with
-queue, potential, demand, consumption, replenishment, and one-step
-conservation.  Finite-prefix conservation is proved by induction.
+The first version of `UniversalPaymentAmortizedResource.lean` introduced a
+scalar transition state and finite-prefix conservation.  Checkpoint 330 found
+that its potential could be chosen as `C - queue`, so the certificate was not
+noncircular.  The generic telescope remains valid, but the interpretation in
+the original checkpoint result is withdrawn.
 
 A uniform potential ceiling together with a cumulative replenishment ceiling
 implies a uniform queue bound, which then implies the existing endpoint-width
@@ -72,15 +74,16 @@ it permits linear cumulative growth.
 
 ## Genuine obstruction
 
-No Collatz instance of `CanonicalNoncircularGlobalAmortizationLaw` is asserted.
-The missing theorem must assign negative drift or width decrease to resource
-transitions with temporal ownership and prove a cumulative replenishment
-ceiling.  Existing scalar facts allow the same event to be reused across
-blocks unless a multiplicity bound is added.
+Checkpoint 330 proves that existence of the former abstract amortization law
+is equivalent to existence of a uniform queue bound.  A genuine replacement
+must assign negative drift or width decrease to concrete resource atoms with
+temporal ownership and prove a cumulative replenishment ceiling.  Existing
+scalar facts allow the same event to be reused across blocks unless a
+multiplicity bound is added.
 
-Route 1 therefore stops at carry alternation.  Route 2 stops at uncontrolled
-temporal reuse.  Replacing either missing theorem by a uniform queue or width
-bound would only rename the target and is rejected as circular.
+Route 1 therefore does not obtain monotonicity from recurrence alone, although
+additional canonical residue or width data may still support a density bound.
+Route 2 stops at the absence of a concrete owned carrier and temporal nonreuse.
 
 ## Verification
 
