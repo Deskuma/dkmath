@@ -2327,6 +2327,35 @@ theorem two_le_successor_dyadic_budget_of_two_le_length
     (show 1 ≤ canonicalBlockLength n (k + 1) - 1 by omega)
   simpa using this
 
+/-- Abstract block-width dyadic budget. -/
+abbrev CanonicalAbstractDyadicBudgetCarrier
+    (n : OddNat) (k : ℕ) :=
+  Fin (2 ^ (canonicalBlockLength n k - 1))
+
+/-- Abstract selected positive-drift demand at its dyadic depth. -/
+abbrev CanonicalAbstractDyadicDemandCarrier
+    (n : OddNat) (k : ℕ) :=
+  Fin (Int.toNat (endpointAccountingTerm n k) *
+    2 ^ canonicalSelectedPositivePressureDepth n k)
+
+/-- A zero-drift successor of length at least two carries the preceding
+saturated mass-two unit in the low two slots of its abstract budget. -/
+noncomputable def abstractZeroSuccessorUnitEmbedding
+    {n : OddNat} {k : ℕ}
+    (_hzero : endpointAccountingTerm n (k + 1) = 0)
+    (hL : 2 ≤ canonicalBlockLength n (k + 1)) :
+    Fin 2 ↪ CanonicalAbstractDyadicBudgetCarrier n (k + 1) where
+  toFun i := by
+    refine ⟨i.val, ?_⟩
+    have htwo : 2 ≤ 2 ^ (canonicalBlockLength n (k + 1) - 1) :=
+      two_le_successor_dyadic_budget_of_two_le_length _hzero hL
+    omega
+  inj' := by
+    intro i j hij
+    have hval := congrArg Fin.val hij
+    change i.val = j.val at hval
+    exact Fin.ext hval
+
 /-- Local dyadic potential: the selected positive drift, denominated at depth
 `d`, is bounded by one block-width denomination `2^(L-1)`. -/
 theorem intToNat_endpointAccountingTerm_mul_two_pow_depth_le_two_pow_length_sub_one
@@ -2374,11 +2403,10 @@ The stronger candidate
 `successor length = 1` and `successor terminal valuation = 1`
 `-> predecessor odd core % 16 = 11`
 
-requires an explicit normal form connecting the successor odd core (or its
-terminal carrier) to the predecessor odd core.  The current API exposes the
-successor start and successor length, but not that substituted terminal-carrier
-identity.  Do not replace this missing algebraic bridge by computation or a
-statistical residue table.
+is proved below by first exposing the successor odd-core and terminal-carrier
+substitutions.  The resulting modulo-thirty-two continuation grammar also
+records the next genuine boundary: predecessor residue alone does not
+transport the following block's claim count.
 -/
 
 /-- A length-one successor of a saturated block selects the class three
@@ -2391,6 +2419,94 @@ theorem CanonicalSaturatedBorderBlock.oddCore_mod_eight_eq_three_of_next_length_
   · exact hthree
   · have htwo := h.two_le_nextBlockLength_of_core_mod_eight_eq_seven hseven
     omega
+
+/-- Exact odd-core substitution for a length-one successor. -/
+theorem CanonicalSaturatedBorderBlock.nextOddCore_eq_quarter_nine_core_add_one
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1) :
+    canonicalBlockOddCore n (k + 1) =
+      (9 * canonicalBlockOddCore n k + 1) / 4 := by
+  let u := canonicalBlockOddCore n k
+  let u' := canonicalBlockOddCore n (k + 1)
+  have hstart := canonicalBlockStartState_add_one_eq_pow_mul_oddCore n (k + 1)
+  have hnext := h.nextStartState_add_one_eq
+  have hsucc := canonicalBlockStartState_succ_eq_nextStartState n k
+  have hu8 := h.oddCore_mod_eight_eq_three_of_next_length_one hL
+  have hu : u = 8 * (u / 8) + 3 := by
+    have := Nat.mod_add_div u 8
+    omega
+  rw [hL] at hstart
+  norm_num at hstart
+  have hhalf : (9 * u + 1) / 2 = 36 * (u / 8) + 14 := by
+    omega
+  have hquarter : (9 * u + 1) / 4 = 18 * (u / 8) + 7 := by
+    omega
+  dsimp [u] at hu hhalf hquarter
+  rw [hhalf] at hnext
+  rw [hquarter]
+  omega
+
+/-- The terminal carrier of a length-one successor is the exact substituted
+quarter-word `(27*u-1)/4`. -/
+theorem CanonicalSaturatedBorderBlock.nextTerminalCarrier_eq_quarter_twentySeven_core_sub_one
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1) :
+    canonicalBlockTerminalCarrier n (k + 1) =
+      (27 * canonicalBlockOddCore n k - 1) / 4 := by
+  let u := canonicalBlockOddCore n k
+  have hu8 := h.oddCore_mod_eight_eq_three_of_next_length_one hL
+  have hu : u = 8 * (u / 8) + 3 := by
+    have := Nat.mod_add_div u 8
+    omega
+  rw [canonicalBlockTerminalCarrier, hL]
+  norm_num
+  rw [h.nextOddCore_eq_quarter_nine_core_add_one hL]
+  dsimp [u] at hu ⊢
+  omega
+
+/-- For the length-one successor, terminal valuation one is exactly the
+predecessor residue class eleven modulo sixteen. -/
+theorem CanonicalSaturatedBorderBlock.nextTerminalValuation_eq_one_iff_core_mod_sixteen_eq_eleven
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
+    (hL : canonicalBlockLength n (k + 1) = 1) :
+    canonicalBlockTerminalValuation n (k + 1) = 1 ↔
+      canonicalBlockOddCore n k % 16 = 11 := by
+  let u := canonicalBlockOddCore n k
+  let c := canonicalBlockTerminalCarrier n (k + 1)
+  have hcpos := canonicalBlockTerminalCarrier_pos n (k + 1)
+  have hc := h.nextTerminalCarrier_eq_quarter_twentySeven_core_sub_one hL
+  have hu8 := h.oddCore_mod_eight_eq_three_of_next_length_one hL
+  constructor
+  · intro hv
+    have hnot4 : ¬ 4 ∣ c := by
+      intro hfour
+      have htwo := (two_le_v2_iff_four_dvd hcpos.ne').2 hfour
+      unfold canonicalBlockTerminalValuation at hv
+      omega
+    have hrem : u % 16 = 3 ∨ u % 16 = 11 := by
+      omega
+    rcases hrem with h3 | h11
+    · have hu : u = 16 * (u / 16) + 3 := by
+        have := Nat.mod_add_div u 16
+        omega
+      have hcFour : 4 ∣ c := by
+        refine ⟨27 * (u / 16) + 5, ?_⟩
+        dsimp [c, u] at hc hu ⊢
+        omega
+      exact (hnot4 hcFour).elim
+    · exact h11
+  · intro hu16
+    have hu : u = 16 * (u / 16) + 11 := by
+      have := Nat.mod_add_div u 16
+      omega
+    have hcform : c = 108 * (u / 16) + 74 := by
+      dsimp [c, u] at hc hu ⊢
+      omega
+    have hceven : c % 2 = 0 := by rw [hcform]; omega
+    have hchalfodd : (c / 2) % 2 = 1 := by rw [hcform]; omega
+    unfold canonicalBlockTerminalValuation
+    change v2 c = 1
+    rw [v2_step_of_even c hceven hcpos, v2_odd _ hchalfodd]
 
 /-- For a length-one block, the sole claim-count condition is exactly the
 carry-two condition at its endpoint source. -/
@@ -2420,6 +2536,136 @@ theorem canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one
     have hle := canonicalBlockClaimCount_le_length n k
     omega
 
+/-- The sole locally insufficient successor class after abstract dyadic
+discharge.  Saturation is a predecessor condition; residue and endpoint claim
+remain separate data. -/
+def CanonicalLengthOneBalancedCarrySuccessor
+    (n : OddNat) (k : ℕ) : Prop :=
+  CanonicalSaturatedBorderBlock n k ∧
+    canonicalBlockLength n (k + 1) = 1 ∧
+      canonicalBlockTerminalValuation n (k + 1) = 1 ∧
+        canonicalBlockClaimCount n (k + 1) = 1
+
+/-- Residue/carry presentation of the length-one balanced successor. -/
+theorem canonicalLengthOneBalancedCarrySuccessor_iff_residue_and_endpoint_carry
+    (n : OddNat) (k : ℕ) :
+    CanonicalLengthOneBalancedCarrySuccessor n k ↔
+      CanonicalSaturatedBorderBlock n k ∧
+        canonicalBlockLength n (k + 1) = 1 ∧
+          canonicalBlockOddCore n k % 16 = 11 ∧
+            CarryTwoDebtAt n (paymentEndpointSeq n (k + 1)) := by
+  constructor
+  · rintro ⟨hsat, hL, hv, hclaim⟩
+    exact ⟨hsat, hL,
+      (hsat.nextTerminalValuation_eq_one_iff_core_mod_sixteen_eq_eleven hL).1 hv,
+      (canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one hL).1
+        hclaim⟩
+  · rintro ⟨hsat, hL, hres, hcarry⟩
+    exact ⟨hsat, hL,
+      (hsat.nextTerminalValuation_eq_one_iff_core_mod_sixteen_eq_eleven hL).2 hres,
+      (canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one hL).2
+        hcarry⟩
+
+namespace CanonicalLengthOneBalancedCarrySuccessor
+
+/-- The start after the exceptional length-one successor is the exact
+eighth-word `(27*u-1)/8`. -/
+theorem followingStartState_eq
+    {n : OddNat} {k : ℕ} (h : CanonicalLengthOneBalancedCarrySuccessor n k) :
+    canonicalBlockStartState n (k + 2) =
+      (27 * canonicalBlockOddCore n k - 1) / 8 := by
+  rcases h with ⟨hsat, hL, hv, _⟩
+  have hnext := canonicalBlockNextStartState_eq_terminalCarrier_div_pow_valuation
+    n (k + 1)
+  have hsucc := canonicalBlockStartState_succ_eq_nextStartState n (k + 1)
+  have hc := hsat.nextTerminalCarrier_eq_quarter_twentySeven_core_sub_one hL
+  have hres :=
+    (hsat.nextTerminalValuation_eq_one_iff_core_mod_sixteen_eq_eleven hL).1 hv
+  let u := canonicalBlockOddCore n k
+  have hu : u = 16 * (u / 16) + 11 := by
+    have := Nat.mod_add_div u 16
+    omega
+  rw [show k + 2 = k + 1 + 1 by omega, hsucc, hnext, hv]
+  norm_num
+  dsimp [u] at hu hres ⊢
+  rw [hc]
+  omega
+
+/-- The modulo-sixteen obstruction splits into the two possible modulo-thirty-
+two continuation classes. -/
+theorem core_mod_thirtyTwo_eq_eleven_or_twentySeven
+    {n : OddNat} {k : ℕ} (h : CanonicalLengthOneBalancedCarrySuccessor n k) :
+    canonicalBlockOddCore n k % 32 = 11 ∨
+      canonicalBlockOddCore n k % 32 = 27 := by
+  have hres :=
+    (canonicalLengthOneBalancedCarrySuccessor_iff_residue_and_endpoint_carry
+      n k).1 h |>.2.2.1
+  omega
+
+/-- In residue class eleven modulo thirty-two, the following block again has
+length one. -/
+theorem followingBlockLength_eq_one_of_core_mod_thirtyTwo_eq_eleven
+    {n : OddNat} {k : ℕ} (h : CanonicalLengthOneBalancedCarrySuccessor n k)
+    (hres : canonicalBlockOddCore n k % 32 = 11) :
+    canonicalBlockLength n (k + 2) = 1 := by
+  let u := canonicalBlockOddCore n k
+  have hu : u = 32 * (u / 32) + 11 := by
+    have := Nat.mod_add_div u 32
+    omega
+  rw [canonicalBlockLength_eq_v2_startState_add_one, h.followingStartState_eq]
+  have hstart : (27 * u - 1) / 8 + 1 = 108 * (u / 32) + 38 := by
+    omega
+  dsimp [u] at hu hstart hres ⊢
+  rw [hstart]
+  have heven : (108 * (canonicalBlockOddCore n k / 32) + 38) % 2 = 0 := by
+    omega
+  have hpos : 0 < 108 * (canonicalBlockOddCore n k / 32) + 38 := by omega
+  have hhalfodd :
+      ((108 * (canonicalBlockOddCore n k / 32) + 38) / 2) % 2 = 1 := by
+    omega
+  rw [v2_step_of_even _ heven hpos, v2_odd _ hhalfodd]
+
+/-- In residue class twenty-seven modulo thirty-two, the following block has
+length at least two.  This is the first persistence branch not settled by the
+local length-one grammar. -/
+theorem two_le_followingBlockLength_of_core_mod_thirtyTwo_eq_twentySeven
+    {n : OddNat} {k : ℕ} (h : CanonicalLengthOneBalancedCarrySuccessor n k)
+    (hres : canonicalBlockOddCore n k % 32 = 27) :
+    2 ≤ canonicalBlockLength n (k + 2) := by
+  let u := canonicalBlockOddCore n k
+  have hu : u = 32 * (u / 32) + 27 := by
+    have := Nat.mod_add_div u 32
+    omega
+  rw [canonicalBlockLength_eq_v2_startState_add_one, h.followingStartState_eq]
+  have hstart : (27 * u - 1) / 8 + 1 = 108 * (u / 32) + 92 := by
+    omega
+  dsimp [u] at hu hstart hres ⊢
+  rw [hstart]
+  apply (two_le_v2_iff_four_dvd (by omega)).2
+  exact ⟨27 * (canonicalBlockOddCore n k / 32) + 23, by ring⟩
+
+/-- The length-one modulo-thirty-two continuation cannot itself be saturated,
+because saturation requires canonical length two. -/
+theorem not_following_saturated_of_core_mod_thirtyTwo_eq_eleven
+    {n : OddNat} {k : ℕ} (h : CanonicalLengthOneBalancedCarrySuccessor n k)
+    (hres : canonicalBlockOddCore n k % 32 = 11) :
+    ¬ CanonicalSaturatedBorderBlock n (k + 2) := by
+  intro hsaturated
+  have hOne := h.followingBlockLength_eq_one_of_core_mod_thirtyTwo_eq_eleven hres
+  rw [hsaturated.length_eq_two] at hOne
+  omega
+
+end CanonicalLengthOneBalancedCarrySuccessor
+
+/-!
+The modulo-thirty-two grammar is exact for one further block.  The class
+`u % 32 = 27` only yields following length at least two; deciding whether that
+block is saturated also requires its claim count and terminal valuation.
+Those are not determined by the predecessor residue currently exposed by the
+API.  A modulo-64 arithmetic split alone therefore cannot establish or exclude
+persistence without a new claim-transport theorem.
+-/
+
 /-! ## Abstract nonduplicating dyadic carrier
 
 This section realizes the numerical half-budget as two disjoint `Fin` images.
@@ -2427,17 +2673,6 @@ The low two points carry the preceding saturated unit; the positive successor
 demand is shifted into the upper half.  These are abstract potential slots.
 They are not orbit indices, binary bit positions, or upper-boundary resources.
 -/
-
-/-- Abstract block-width dyadic budget. -/
-abbrev CanonicalAbstractDyadicBudgetCarrier
-    (n : OddNat) (k : ℕ) :=
-  Fin (2 ^ (canonicalBlockLength n k - 1))
-
-/-- Abstract selected positive-drift demand at its dyadic depth. -/
-abbrev CanonicalAbstractDyadicDemandCarrier
-    (n : OddNat) (k : ℕ) :=
-  Fin (Int.toNat (endpointAccountingTerm n k) *
-    2 ^ canonicalSelectedPositivePressureDepth n k)
 
 /-- The positive nonsaturated demand embeds into the upper half of its abstract
 block budget. -/
