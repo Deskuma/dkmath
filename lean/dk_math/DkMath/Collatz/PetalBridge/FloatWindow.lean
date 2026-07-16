@@ -30,6 +30,8 @@ import DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
 import DkMath.Collatz.PetalBridge.FloatWindow.BoundedRepaymentLag
 import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
+import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceTimeLag
+import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 

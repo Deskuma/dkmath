@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition"
 
@@ -292,6 +293,63 @@ No currently audited low-bit signature has this edgewise theorem yet.
 -/
 
 end CanonicalFiniteSignedTransitionPotentialCertificate
+
+/-! ## Circular reverse construction audit -/
+
+/-- The signed canonical edge is bounded by the actual reflected-queue
+increment across that edge. -/
+theorem endpointAccountingTerm_le_queueBeforeBlock_increment
+    (n : OddNat) (k : ℕ) :
+    endpointAccountingTerm n k ≤
+      (canonicalOutstandingClaimQueueBeforeBlock n (k + 1) : ℤ) -
+        canonicalOutstandingClaimQueueBeforeBlock n k := by
+  rw [endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount]
+  change (canonicalQueueDemand n k : ℤ) - canonicalQueueService n k ≤ _
+  rw [canonicalOutstandingClaimQueueBeforeBlock_succ]
+  have hbalance := canonicalOutstandingClaimQueue_add_consumed n k
+  have hconsumed := canonicalQueueConsumed_le_service n k
+  omega
+
+/-- A queue bound can manufacture a finite signed certificate by using the
+bounded queue itself as the signature and potential.  This construction is a
+semantic circularity regression, not an arithmetic solution. -/
+noncomputable def canonicalFiniteSignedCertificateOfQueueBound
+    {n : OddNat} {C : ℕ}
+    (hC : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
+    CanonicalFiniteSignedTransitionPotentialCertificate n (Fin (C + 1)) where
+  signature k := ⟨canonicalOutstandingClaimQueueBeforeBlock n k, by
+    cases k with
+    | zero => simp
+    | succ k =>
+        simp only [canonicalOutstandingClaimQueueBeforeBlock_succ]
+        exact Nat.lt_succ_of_le (hC k)⟩
+  projectedUpperWeight s t := (t.val : ℤ) - s.val
+  potential s := s.val
+  bound := C
+  actual_le_projected k := by
+    exact endpointAccountingTerm_le_queueBeforeBlock_increment n k
+  projected_le_potential_diff _ _ := le_rfl
+  potential_nonneg _ := by omega
+  potential_le_bound s := Int.ofNat_le.mpr (Nat.le_of_lt_succ s.isLt)
+
+/-- Unrestricted existential canonical finite-certificate existence is exactly
+as strong as existential queue boundedness. -/
+theorem exists_canonicalFiniteSignedCertificate_iff_exists_queueUniformUpperBound
+    (n : OddNat) :
+    (∃ C, Nonempty
+        (CanonicalFiniteSignedTransitionPotentialCertificate n (Fin (C + 1)))) ↔
+      ∃ C, CanonicalOutstandingClaimQueueUniformUpperBound n C := by
+  constructor
+  · rintro ⟨_C, ⟨P⟩⟩
+    exact ⟨P.bound, P.to_queueUniformUpperBound⟩
+  · rintro ⟨C, hC⟩
+    exact ⟨C, ⟨canonicalFiniteSignedCertificateOfQueueBound hC⟩⟩
+
+/-!
+The reverse construction deliberately chooses its signature from `hC`.
+Therefore only a structurally predefined signature, fixed independently of an
+assumed queue ceiling, can provide a noncircular arithmetic certificate.
+-/
 
 namespace FiniteSignedTransitionPotentialCertificate
 
