@@ -156,4 +156,107 @@ theorem exists_le_of_card_eq_card_eraseOldestN
       _ < (eraseOldestN c s).card := hlt
   exact (Nat.lt_irrefl _ this)
 
+/-! ## Upper-tail characterization -/
+
+/-- The oldest-first remainder lies above a cutoff exactly when its cardinality
+fits inside the part of the original carrier above that cutoff. -/
+theorem eraseOldestN_subset_filter_iff_card_le
+    (c : ℕ) (s : Finset ℕ) (t : ℕ) :
+    eraseOldestN c s ⊆ s.filter (fun x => t ≤ x) ↔
+      (eraseOldestN c s).card ≤ (s.filter (fun x => t ≤ x)).card := by
+  constructor
+  · exact Finset.card_le_card
+  · intro hcard y hy
+    have hyS : y ∈ s := mem_of_mem_eraseOldestN hy
+    apply Finset.mem_filter.mpr
+    refine ⟨hyS, ?_⟩
+    by_contra hty
+    have hyLt : y < t := by omega
+    have hUpperSub : s.filter (fun x => t ≤ x) ⊆ eraseOldestN c s := by
+      intro x hx
+      have hxS := (Finset.mem_filter.mp hx).1
+      have htx := (Finset.mem_filter.mp hx).2
+      have hxUnion : x ∈ consumedOldestN c s ∪ eraseOldestN c s := by
+        rw [consumedOldestN_union_eraseOldestN]
+        exact hxS
+      rcases Finset.mem_union.mp hxUnion with hxConsumed | hxRemaining
+      · have hxy := consumedOldestN_le_eraseOldestN c s x hxConsumed y hy
+        omega
+      · exact hxRemaining
+    have hEq : s.filter (fun x => t ≤ x) = eraseOldestN c s :=
+      Finset.eq_of_subset_of_card_le hUpperSub hcard
+    have hyUpper : y ∈ s.filter (fun x => t ≤ x) := by
+      rw [hEq]
+      exact hy
+    exact hty (Finset.mem_filter.mp hyUpper).2
+
+/-- A same-cardinality subset is the oldest-first remainder whenever every
+discarded source is no later than every retained source.  This is the generic
+uniqueness theorem for the newest upper tail. -/
+theorem eraseOldestN_eq_of_subset_card_and_complement_le
+    {c : ℕ} {s u : Finset ℕ}
+    (hu : u ⊆ s)
+    (hcard : u.card = (eraseOldestN c s).card)
+    (horder : ∀ x ∈ s \ u, ∀ y ∈ u, x ≤ y) :
+    eraseOldestN c s = u := by
+  apply Finset.Subset.antisymm
+  · intro y hy
+    by_contra hyu
+    have hyS : y ∈ s := mem_of_mem_eraseOldestN hy
+    have hyComp : y ∈ s \ u := Finset.mem_sdiff.mpr ⟨hyS, hyu⟩
+    have hnotSub : ¬u ⊆ eraseOldestN c s := by
+      intro hsub
+      have hEq : u = eraseOldestN c s :=
+        Finset.eq_of_subset_of_card_le hsub (by omega)
+      exact hyu (by simpa [hEq] using hy)
+    have hex : ∃ z, z ∈ u ∧ z ∉ eraseOldestN c s := by
+      by_contra h
+      apply hnotSub
+      intro z hzU
+      by_contra hzNot
+      exact h ⟨z, hzU, hzNot⟩
+    rcases hex with ⟨z, hzU, hzNot⟩
+    have hzS : z ∈ s := hu hzU
+    have hzUnion : z ∈ consumedOldestN c s ∪ eraseOldestN c s := by
+      rw [consumedOldestN_union_eraseOldestN]
+      exact hzS
+    have hzConsumed : z ∈ consumedOldestN c s := by
+      rcases Finset.mem_union.mp hzUnion with hz | hz
+      · exact hz
+      · exact False.elim (hzNot hz)
+    have hzy := consumedOldestN_le_eraseOldestN c s z hzConsumed y hy
+    have hyz := horder y hyComp z hzU
+    have : y = z := Nat.le_antisymm hyz hzy
+    subst z
+    exact hzNot hy
+  · intro y hy
+    by_contra hyr
+    have hyS : y ∈ s := hu hy
+    have hyUnion : y ∈ consumedOldestN c s ∪ eraseOldestN c s := by
+      rw [consumedOldestN_union_eraseOldestN]
+      exact hyS
+    have hyConsumed : y ∈ consumedOldestN c s := by
+      rcases Finset.mem_union.mp hyUnion with hy' | hy'
+      · exact hy'
+      · exact False.elim (hyr hy')
+    have hnotSub : ¬eraseOldestN c s ⊆ u := by
+      intro hsub
+      have hEq : eraseOldestN c s = u :=
+        Finset.eq_of_subset_of_card_le hsub (by omega)
+      exact hyr (by simpa [hEq] using hy)
+    have hex : ∃ z, z ∈ eraseOldestN c s ∧ z ∉ u := by
+      by_contra h
+      apply hnotSub
+      intro z hzR
+      by_contra hzNot
+      exact h ⟨z, hzR, hzNot⟩
+    rcases hex with ⟨z, hzR, hzNot⟩
+    have hzS : z ∈ s := mem_of_mem_eraseOldestN hzR
+    have hzComp : z ∈ s \ u := Finset.mem_sdiff.mpr ⟨hzS, hzNot⟩
+    have hyz := consumedOldestN_le_eraseOldestN c s y hyConsumed z hzR
+    have hzy := horder z hzComp y hy
+    have : y = z := Nat.le_antisymm hyz hzy
+    subst z
+    exact hzNot hy
+
 end DkMath

@@ -94,6 +94,49 @@ theorem false_of_step_of_signature_eq_of_actualWeight_pos
   simp only [sub_self] at hprojected
   omega
 
+/-- Two realized edges forming a projected two-cycle with positive total
+concrete weight contradict every sound bounded-potential certificate.  The
+four concrete states need not form one concrete orbit cycle. -/
+theorem false_of_two_step_projected_cycle_of_actualWeight_add_pos
+    (C : RelationalFiniteSignedTransitionPotentialCertificate State Signature)
+    {a a' b b' : State}
+    (hstepA : C.Step a a')
+    (hstepB : C.Step b b')
+    (hcloseA : C.signature a' = C.signature b)
+    (hcloseB : C.signature b' = C.signature a)
+    (hpos : 0 < C.actualWeight a a' + C.actualWeight b b') : False := by
+  have hA := (C.actual_le_projected a a' hstepA).trans
+    (C.projected_le_potential_diff (C.signature a) (C.signature a'))
+  have hB := (C.actual_le_projected b b' hstepB).trans
+    (C.projected_le_potential_diff (C.signature b) (C.signature b'))
+  rw [hcloseA] at hA
+  rw [hcloseB] at hB
+  omega
+
+/-- Three realized edges forming a projected three-cycle with positive total
+concrete weight contradict every sound bounded-potential certificate. -/
+theorem false_of_three_step_projected_cycle_of_actualWeight_add_pos
+    (C : RelationalFiniteSignedTransitionPotentialCertificate State Signature)
+    {a a' b b' c c' : State}
+    (hstepA : C.Step a a')
+    (hstepB : C.Step b b')
+    (hstepC : C.Step c c')
+    (hcloseA : C.signature a' = C.signature b)
+    (hcloseB : C.signature b' = C.signature c)
+    (hcloseC : C.signature c' = C.signature a)
+    (hpos : 0 < C.actualWeight a a' + C.actualWeight b b' +
+      C.actualWeight c c') : False := by
+  have hA := (C.actual_le_projected a a' hstepA).trans
+    (C.projected_le_potential_diff (C.signature a) (C.signature a'))
+  have hB := (C.actual_le_projected b b' hstepB).trans
+    (C.projected_le_potential_diff (C.signature b) (C.signature b'))
+  have hC := (C.actual_le_projected c c' hstepC).trans
+    (C.projected_le_potential_diff (C.signature c) (C.signature c'))
+  rw [hcloseA] at hA
+  rw [hcloseB] at hB
+  rw [hcloseC] at hC
+  omega
+
 /-- Concrete signed weight along a finite sequence of related transitions. -/
 def pathWeight
     (C : RelationalFiniteSignedTransitionPotentialCertificate State Signature)
