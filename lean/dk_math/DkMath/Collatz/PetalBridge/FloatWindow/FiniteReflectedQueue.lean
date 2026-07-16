@@ -35,6 +35,26 @@ def finiteReflectedQueueOn
     (arrivals service : ℕ → ℕ) (q m : ℕ) : ℕ :=
   finiteReflectedQueueFrom arrivals service q (m - q + 1)
 
+/-- Total closed-interval queue.  Unlike `finiteReflectedQueueOn`, this wrapper
+treats `m < q` as the empty window and therefore processes no index. -/
+def finiteReflectedQueueOnIcc
+    (arrivals service : ℕ → ℕ) (q m : ℕ) : ℕ :=
+  if q ≤ m then finiteReflectedQueueOn arrivals service q m else 0
+
+/-- On a nonempty closed interval, the total wrapper is the compatibility
+queue. -/
+theorem finiteReflectedQueueOnIcc_eq_reflectedQueueOn
+    (arrivals service : ℕ → ℕ) {q m : ℕ} (hqm : q ≤ m) :
+    finiteReflectedQueueOnIcc arrivals service q m =
+      finiteReflectedQueueOn arrivals service q m := by
+  simp [finiteReflectedQueueOnIcc, hqm]
+
+/-- A reversed closed interval is an empty queue window. -/
+theorem finiteReflectedQueueOnIcc_eq_zero_of_lt
+    (arrivals service : ℕ → ℕ) {q m : ℕ} (hmq : m < q) :
+    finiteReflectedQueueOnIcc arrivals service q m = 0 := by
+  simp [finiteReflectedQueueOnIcc, Nat.not_le.mpr hmq]
+
 /-- Signed arrivals-minus-service balance on a closed finite window. -/
 def finiteSignedWindowBalance
     (arrivals service : ℕ → ℕ) (t m : ℕ) : ℤ :=
@@ -243,6 +263,20 @@ theorem finiteReflectedQueueOn_eq_zero_iff_all_suffix_nonpos
     apply Finset.sup_le
     intro t ht
     rw [Int.toNat_of_nonpos (hall t ht)]
+
+/-- Total zero characterization, including the empty closed interval. -/
+theorem finiteReflectedQueueOnIcc_eq_zero_iff_all_suffix_nonpos
+    (arrivals service : ℕ → ℕ) (q m : ℕ) :
+    finiteReflectedQueueOnIcc arrivals service q m = 0 ↔
+      ∀ t ∈ Finset.Icc q m,
+        finiteSignedWindowBalance arrivals service t m ≤ 0 := by
+  by_cases hqm : q ≤ m
+  · rw [finiteReflectedQueueOnIcc_eq_reflectedQueueOn arrivals service hqm]
+    exact finiteReflectedQueueOn_eq_zero_iff_all_suffix_nonpos
+      arrivals service hqm
+  · have hempty : Finset.Icc q m = ∅ := by
+      exact Finset.Icc_eq_empty hqm
+    simp [finiteReflectedQueueOnIcc, hqm, hempty]
 
 /-- Unordered positive part of total balance on the whole window. -/
 def finiteUnorderedResidual
