@@ -294,6 +294,26 @@ theorem existsUnique_canonicalOpenPositiveQueueExcursion_of_queue_pos
   rcases exists_canonicalOpenPositiveQueueExcursion_of_queue_pos hm with ⟨q, hq⟩
   exact ⟨q, hq, fun q' hq' => canonicalOpenPositiveQueueExcursion_left_unique hq' hq⟩
 
+/-- Reflection is inactive throughout an open positive excursion: the ending
+queue is the ordinary signed drift accumulated from its last-zero start. -/
+theorem CanonicalOpenPositiveQueueExcursion.queue_eq_windowDrift
+    {n : OddNat} {q m : ℕ}
+    (h : CanonicalOpenPositiveQueueExcursion n q m) :
+    (canonicalOutstandingClaimQueue n m : ℤ) =
+      canonicalWindowDriftInt n q m := by
+  have hprefix : ∀ t ∈ Finset.Ico q m,
+      0 < canonicalOutstandingClaimQueue n t := by
+    intro t ht
+    exact h.2.2 t (Finset.mem_Icc.mpr
+      ⟨(Finset.mem_Ico.mp ht).1, Nat.le_of_lt (Finset.mem_Ico.mp ht).2⟩)
+  have heq := queue_eq_intToNat_windowDrift_of_positive_prefix
+    h.1 h.2.1 hprefix
+  have hqueuePos := h.2.2 m (Finset.mem_Icc.mpr ⟨h.1, le_rfl⟩)
+  have hdriftNonneg : 0 ≤ canonicalWindowDriftInt n q m := by
+    have hself := Int.self_le_toNat (canonicalWindowDriftInt n q m)
+    omega
+  rw [heq, Int.ofNat_toNat, max_eq_left hdriftNonneg]
+
 /--
 Every positive-drift block observed inside an open excursion is either a
 dynamic-depth pressure block or the rigid saturated border exception.

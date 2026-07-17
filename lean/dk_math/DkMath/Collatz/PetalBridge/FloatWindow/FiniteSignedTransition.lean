@@ -627,9 +627,10 @@ The conservation form of one canonical edge weight is
 
 `block length - claim holes - terminal valuation`.
 
-A sound finite control state must therefore either recover these three terms
-or prove a common upper bound for every concrete edge in each projected edge
-fiber.  The currently available candidate coordinates do not yet do this:
+A sound finite projected numeric upper-weight table must therefore either
+recover these three terms or prove a common upper bound for every concrete
+edge in each projected edge fiber.  The currently available candidate
+coordinates do not yet do this:
 
 * the full carry/claim word has unbounded length;
 * block length and claim-hole count are unbounded `Nat` coordinates;
@@ -640,10 +641,13 @@ fiber.  The currently available candidate coordinates do not yet do this:
 
 Thus storing the exact ledger violates finiteness, while discarding its
 unbounded coordinates leaves the required bounded-edge-fiber theorem open.
-No canonical positive-cycle exclusion may be inferred before that theorem is
-proved.  The generic potential API below remains a valid consumer of a future
-independent finite abstraction; manufacturing its signature from an assumed
-queue bound remains intentionally classified as circular.
+This obstructs a finite *numeric edge table*, not every finite-control proof:
+a finite controller coupled to an unbounded symbolic counter or an owned
+arithmetic resource remains a valid architecture.  No canonical positive-cycle
+exclusion may be inferred from the numeric-table route before the edge-fiber
+theorem is proved.  The generic potential API below remains a valid consumer
+of a future independent finite abstraction; manufacturing its signature from
+an assumed queue bound remains intentionally classified as circular.
 -/
 
 namespace FiniteSignedTransitionPotentialCertificate

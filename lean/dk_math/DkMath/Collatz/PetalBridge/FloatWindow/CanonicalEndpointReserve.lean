@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointConservation
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.FiniteControlCounter
+import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
 
@@ -433,5 +434,37 @@ theorem not_globalCanonicalWidthReserveBound :
   have hledger := endpointAccountingTerm_eq_canonicalBlock_bitWidth_sub n 0
   rw [canonicalBlockStartState_zero_eq_root] at hledger
   omega
+
+/-! ## Universal finite numeric-table obstruction -/
+
+/-- No single finite projected numeric edge table can soundly upper-bound the
+initial canonical block drift of every odd root.  The source and target labels
+may be arbitrary finite projections; the root varies through the all-ones
+family.  This theorem does not address a fixed root or a finite controller
+coupled to an unbounded symbolic resource. -/
+theorem not_exists_globalFiniteProjectedInitialDriftUpperTable
+    {Signature : Type*} [Finite Signature]
+    (sourceSignature targetSignature : OddNat → Signature) :
+    ¬ ∃ upper : Signature → Signature → ℤ,
+      ∀ n : OddNat,
+        endpointAccountingTerm n 0 ≤
+          upper (sourceSignature n) (targetSignature n) := by
+  classical
+  letI := Fintype.ofFinite Signature
+  rintro ⟨upper, hupper⟩
+  let B : ℤ := ∑ s : Signature, ∑ t : Signature, |upper s t|
+  obtain ⟨n, hn⟩ := exists_endpointAccountingTerm_gt B
+  have hinner : |upper (sourceSignature n) (targetSignature n)| ≤
+      ∑ t : Signature, |upper (sourceSignature n) t| := by
+    exact Finset.single_le_sum
+      (fun t _ => abs_nonneg (upper (sourceSignature n) t))
+      (Finset.mem_univ _)
+  have houter : (∑ t : Signature, |upper (sourceSignature n) t|) ≤ B := by
+    exact Finset.single_le_sum
+      (fun s _ => Finset.sum_nonneg fun t _ => abs_nonneg (upper s t))
+      (Finset.mem_univ _)
+  have htable : upper (sourceSignature n) (targetSignature n) ≤ B :=
+    (le_abs_self _).trans (hinner.trans houter)
+  exact (not_lt_of_ge ((hupper n).trans htable)) hn
 
 end DkMath.Collatz

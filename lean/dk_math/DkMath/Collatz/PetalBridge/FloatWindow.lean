@@ -43,6 +43,8 @@ import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointConservation
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalHighDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve
+import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionMass
+import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionOwnership
 import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
