@@ -111,6 +111,15 @@ def audit_root(root: int) -> AuditRow:
             active_start = -1
 
         blocks_audited = block + 1
+        if queue > 0:
+            # Reflection is inactive inside the current positive excursion.
+            # Check every positive queue state, not only record-breaking ones.
+            assert active_start >= 0
+            active_length = prefix_lengths[block + 1] - prefix_lengths[active_start]
+            active_holes = prefix_holes[block + 1] - prefix_holes[active_start]
+            active_valuation = sum(terminal_valuations[active_start : block + 1])
+            assert active_length - active_holes - active_valuation == queue
+
         if queue > maximum_queue:
             assert active_start >= 0
             q = active_start
@@ -191,7 +200,8 @@ def main() -> None:
         f"- roots reaching a state-one canonical endpoint: {reached}",
         f"- roots with a positive observed queue maximum: {positive}",
         f"- largest observed queue/deficit: {max(row.maximum_queue for row in rows)}",
-        "- every positive record is attained by the displayed finite window",
+        "- every positive queue state passed its active-window deficit identity",
+        "- the CSV stores the final maximum witness for each root",
         "- no uniform bound or eventual discharge follows from this table",
         "",
         "## Maximum-Deficit Windows",

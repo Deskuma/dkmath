@@ -9,7 +9,8 @@ This is finite computational evidence, not a Lean theorem.
 - roots reaching a state-one canonical endpoint: 8192
 - roots with a positive observed queue maximum: 6709
 - largest observed queue/deficit: 8
-- every positive record is attained by the displayed finite window
+- every positive queue state passed its active-window deficit identity
+- the CSV stores the final maximum witness for each root
 - no uniform bound or eventual discharge follows from this table
 
 ## Maximum-Deficit Windows

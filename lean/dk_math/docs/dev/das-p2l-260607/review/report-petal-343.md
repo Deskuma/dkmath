@@ -211,8 +211,9 @@ The new script
 python/Collatz/PetalBridge/canonical_absorption_deficit_audit.py
 ```
 
-records, for each audited odd root, a window attaining every newly observed
-reflected-queue record.  The generated CSV includes:
+checks the active absorption window at every positive queue state.  For each
+audited odd root, the generated CSV stores the final maximum witness and
+includes:
 
 - root;
 - terminal and witness-start blocks;
@@ -232,7 +233,9 @@ exact identity
 maximum queue = length - holes - terminal valuation.
 ```
 
-These values are explicitly observational.  They prove neither a uniform
+Every record-breaking positive queue value is therefore checked when it is
+encountered, but the CSV does not store every intermediate record.  These
+values are explicitly observational.  They prove neither a uniform
 all-root bound nor eventual discharge.
 
 Generated artifacts:

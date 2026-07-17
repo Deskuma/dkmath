@@ -620,6 +620,30 @@ theorem exists_canonicalFiniteSignedCertificate_iff_exists_queueUniformUpperBoun
 The reverse construction deliberately chooses its signature from `hC`.
 Therefore only a structurally predefined signature, fixed independently of an
 assumed queue ceiling, can provide a noncircular arithmetic certificate.
+
+## cp-344 canonical-signature audit
+
+The conservation form of one canonical edge weight is
+
+`block length - claim holes - terminal valuation`.
+
+A sound finite control state must therefore either recover these three terms
+or prove a common upper bound for every concrete edge in each projected edge
+fiber.  The currently available candidate coordinates do not yet do this:
+
+* the full carry/claim word has unbounded length;
+* block length and claim-hole count are unbounded `Nat` coordinates;
+* terminal valuation is likewise unbounded unless reduced to a class, and no
+  class-level theorem bounds the omitted quotient contribution;
+* queue zero/nonzero and excursion phase are finite, but record no magnitude;
+* bounded low residues remain finite but have known exact-weight collisions.
+
+Thus storing the exact ledger violates finiteness, while discarding its
+unbounded coordinates leaves the required bounded-edge-fiber theorem open.
+No canonical positive-cycle exclusion may be inferred before that theorem is
+proved.  The generic potential API below remains a valid consumer of a future
+independent finite abstraction; manufacturing its signature from an assumed
+queue bound remains intentionally classified as circular.
 -/
 
 namespace FiniteSignedTransitionPotentialCertificate

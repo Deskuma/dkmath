@@ -8,6 +8,7 @@ import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointConservation
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.FiniteControlCounter
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
+import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve"
 
@@ -286,6 +287,131 @@ theorem canonicalAbsorptionDeficitWindowUniformUpperBound_iff_length_le_absorpti
       n q M C).mp (h q M)
   · exact (canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
       n q M C).mpr (h q M)
+
+/-! ## Same-constant queue and deficit surfaces -/
+
+/-- Uniform reflected-queue boundedness is exactly uniform absorption-deficit
+boundedness, with no change of constant.  Empty half-open windows contribute
+zero; every nonempty half-open window is one existing inclusive suffix. -/
+theorem canonicalOutstandingClaimQueueUniformUpperBound_iff_absorptionDeficitWindowUniformUpperBound
+    (n : OddNat) (C : ℕ) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n C ↔
+      CanonicalAbsorptionDeficitWindowUniformUpperBound n C := by
+  rw [canonicalOutstandingClaimQueueUniformUpperBound_iff_all_windowDrift_le]
+  constructor
+  · intro h q M
+    cases M with
+    | zero => simp
+    | succ M =>
+        have hqm : q ≤ q + M := by omega
+        have hbound := h (q + M) q hqm
+        rw [← canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+          n hqm] at hbound
+        simpa using hbound
+  · intro h m q hqm
+    have hbound := h q (m - q + 1)
+    rwa [canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+      n hqm] at hbound
+
+/-! ## Exact finite suffix maximum in conservation language -/
+
+/-- Maximum positive absorption deficit among all suffixes ending at block
+`m`.  `Int.toNat` supplies the zero candidate for nonpositive deficits. -/
+noncomputable def canonicalAbsorptionDeficitSuffixMaximum
+    (n : OddNat) (m : ℕ) : ℕ :=
+  (Finset.range (m + 1)).sup fun q =>
+    Int.toNat (canonicalAbsorptionDeficitWindow n q (m - q + 1))
+
+/-- The reflected scalar queue is exactly the conservation-facing maximum
+positive suffix deficit. -/
+theorem canonicalOutstandingClaimQueue_eq_absorptionDeficitSuffixMaximum
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueue n m =
+      canonicalAbsorptionDeficitSuffixMaximum n m := by
+  rw [canonicalOutstandingClaimQueue_eq_reflectedWindowMaximum]
+  unfold canonicalReflectedWindowMaximum canonicalAbsorptionDeficitSuffixMaximum
+  apply Finset.sup_congr rfl
+  intro q hq
+  have hqm : q ≤ m := Nat.le_of_lt_succ (Finset.mem_range.mp hq)
+  rw [canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt n hqm]
+
+/-- Queue zero means that every conservation-facing suffix deficit ending at
+`m` is nonpositive. -/
+theorem canonicalOutstandingClaimQueue_eq_zero_iff_all_absorptionDeficit_nonpos
+    (n : OddNat) (m : ℕ) :
+    canonicalOutstandingClaimQueue n m = 0 ↔
+      ∀ q, q ≤ m →
+        canonicalAbsorptionDeficitWindow n q (m - q + 1) ≤ 0 := by
+  rw [canonicalOutstandingClaimQueue_eq_zero_iff_all_windowDrift_nonpos]
+  constructor <;> intro h q hqm
+  · rw [canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt n hqm]
+    exact h q hqm
+  · rw [← canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt n hqm]
+    exact h q hqm
+
+/-- A positive queue is equivalent to the existence of a positive finite
+suffix absorption deficit ending at the same block. -/
+theorem canonicalOutstandingClaimQueue_pos_iff_exists_absorptionDeficit_pos
+    (n : OddNat) (m : ℕ) :
+    0 < canonicalOutstandingClaimQueue n m ↔
+      ∃ q, q ≤ m ∧
+        0 < canonicalAbsorptionDeficitWindow n q (m - q + 1) := by
+  constructor
+  · intro hpos
+    rcases exists_absorptionDeficitWindow_eq_outstandingClaimQueue_of_pos hpos with
+      ⟨q, hqm, hq⟩
+    refine ⟨q, hqm, ?_⟩
+    have hposInt : (0 : ℤ) < canonicalOutstandingClaimQueue n m := by
+      exact_mod_cast hpos
+    rw [hq] at hposInt
+    exact hposInt
+  · rintro ⟨q, hqm, hpos⟩
+    by_contra hnot
+    have hzero : canonicalOutstandingClaimQueue n m = 0 := Nat.eq_zero_of_not_pos hnot
+    have hall :=
+      (canonicalOutstandingClaimQueue_eq_zero_iff_all_absorptionDeficit_nonpos
+        n m).mp hzero q hqm
+    omega
+
+/-! ## Primitive absorption-deficit excursions -/
+
+/-- Conservation-facing form of a finite repaid primitive excursion.  The
+future discharge endpoint `r` is part of the hypothesis; this definition does
+not assert that such an endpoint always exists. -/
+def CanonicalPrimitivePositiveAbsorptionDeficitExcursion
+    (n : OddNat) (q r : ℕ) : Prop :=
+  q < r ∧
+    canonicalOutstandingClaimQueueBefore n q = 0 ∧
+      (∀ m ∈ Finset.Ico q r,
+        0 < canonicalAbsorptionDeficitWindow n q (m - q + 1)) ∧
+        canonicalAbsorptionDeficitWindow n q (r - q + 1) ≤ 0
+
+/-- Primitive queue excursions, signed-drift excursions, and finite
+absorption-deficit excursions carry exactly the same conditional data. -/
+theorem canonicalPrimitivePositiveQueueExcursion_iff_absorptionDeficitExcursion
+    (n : OddNat) (q r : ℕ) :
+    CanonicalPrimitivePositiveQueueExcursion n q r ↔
+      CanonicalPrimitivePositiveAbsorptionDeficitExcursion n q r := by
+  rw [canonicalPrimitivePositiveQueueExcursion_iff_driftExcursion]
+  constructor
+  · rintro ⟨hqr, hbefore, hpositive, htotal⟩
+    refine ⟨hqr, hbefore, ?_, ?_⟩
+    · intro m hm
+      have hqm : q ≤ m := (Finset.mem_Ico.mp hm).1
+      rw [canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt n hqm]
+      exact hpositive m hm
+    · rw [canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+        n (Nat.le_of_lt hqr)]
+      exact htotal
+  · rintro ⟨hqr, hbefore, hpositive, htotal⟩
+    refine ⟨hqr, hbefore, ?_, ?_⟩
+    · intro m hm
+      have hqm : q ≤ m := (Finset.mem_Ico.mp hm).1
+      rw [← canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt n hqm]
+      exact hpositive m hm
+    · rw [← canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+        n (Nat.le_of_lt hqr)]
+      exact htotal
 
 /-! ## Global reserve obstruction -/
 
