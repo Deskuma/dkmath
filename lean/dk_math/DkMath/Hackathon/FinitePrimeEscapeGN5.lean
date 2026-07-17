@@ -50,7 +50,7 @@ theorem finitePrimeEscape_hits_clean_GN5_channel :
   obtain ⟨q, hq⟩ := finitePrimeEscape_hits_GN5
   have hqEq : q = 31 := freshPrimeFactor_GN5_eq_31 hq
   subst q
-  exact ⟨hq.1, hq.2.1, hq.2.2, by decide⟩
+  exact ⟨31, hq.1, hq.2.1, hq.2.2, by decide⟩
 
 /-- A local no-lift prime channel prevents a natural number from being a fifth power. -/
 theorem not_fifth_power_of_prime_dvd_of_not_sq_dvd
