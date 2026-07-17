@@ -52,28 +52,6 @@ theorem finitePrimeEscape_hits_clean_GN5_channel :
   subst q
   exact ⟨hq.1, hq.2.1, hq.2.2, by decide⟩
 
-/--
-A prime channel which occurs without a square lift obstructs every power of
-exponent at least two.
--/
-theorem not_pow_of_prime_dvd_of_not_sq_dvd
-    {N q x d : ℕ}
-    (hqPrime : Nat.Prime q)
-    (hqDiv : q ∣ N)
-    (hqNoLift : ¬ q ^ 2 ∣ N)
-    (hd : 2 ≤ d) :
-    N ≠ x ^ d := by
-  intro hN
-  have hqDivPow : q ∣ x ^ d := by simpa [hN] using hqDiv
-  have hqDivX : q ∣ x := hqPrime.dvd_of_dvd_pow hqDivPow
-  obtain ⟨k, rfl⟩ := hqDivX
-  obtain ⟨e, rfl⟩ := Nat.exists_eq_add_of_le hd
-  apply hqNoLift
-  rw [hN]
-  use q ^ e * k ^ (2 + e)
-  rw [Nat.mul_pow, pow_add]
-  ring
-
 /-- A local no-lift prime channel prevents a natural number from being a fifth power. -/
 theorem not_fifth_power_of_prime_dvd_of_not_sq_dvd
     {N q : ℕ}
@@ -82,7 +60,13 @@ theorem not_fifth_power_of_prime_dvd_of_not_sq_dvd
     (hqNoLift : ¬ q ^ 2 ∣ N) :
     ¬ ∃ x : ℕ, N = x ^ 5 := by
   rintro ⟨x, hx⟩
-  exact not_pow_of_prime_dvd_of_not_sq_dvd hqPrime hqDiv hqNoLift (by decide) hx
+  have hqDivPow : q ∣ x ^ 5 := by simpa [hx] using hqDiv
+  have hqDivX : q ∣ x := hqPrime.dvd_of_dvd_pow hqDivPow
+  obtain ⟨k, rfl⟩ := hqDivX
+  apply hqNoLift
+  rw [hx]
+  use q ^ 3 * k ^ 5
+  ring
 
 /-- The concrete GN5 escape target cannot be a perfect fifth power. -/
 theorem GN_five_one_one_not_fifth_power :
