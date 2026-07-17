@@ -1,5 +1,13 @@
 # Hackathon: OpenAI Build Week - 260715 @ devpost
 
+> [!IMPORTANT]
+> **Explore the complete project record**
+>
+> Read the mathematical contract, Codex instructions, implementation
+> checkpoints, verification reports, visualization pipeline, and final handoff:
+>
+> **[Open the complete OpenAI Build Week project documentation](../../docs/hackathon/cosmic-formula-inversion-260715/README.md)**
+
 ## A Demonstration of AI-Assisted Learning and Verifiable Research
 
 This project demonstrates how AI can be integrated into learning, education, and mathematical research while keeping every result reproducible and verifiable.
