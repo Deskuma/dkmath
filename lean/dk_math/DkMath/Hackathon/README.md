@@ -24,6 +24,10 @@ DkMath connects human mathematical insight, GPT-5.6 review, repository-scale imp
 
 This demo presents the complete process—from learning and exploration to implementation, verification, and explanation—as one compact practical experiment.
 
+## Educational Contents
+
+![gif](../../docs/hackathon/cosmic-formula-inversion-260715/visual/media/videos/cosmic_formula_scene/720p30/CosmicFormulaPrototype.gif)
+
 ## Watch the Verified Mathematics in Motion
 
 The verified Lean example is transformed into a short animated learning
