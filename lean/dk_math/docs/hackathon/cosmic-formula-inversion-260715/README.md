@@ -232,6 +232,8 @@ Existing DkMath modules must never import the hackathon facade.
 
 ## Documentation Layout
 
+[docs/hackathon/cosmic-formula-inversion-260715/](./)
+
 ```text
 docs/hackathon/cosmic-formula-inversion-260715/
 ├── README.md

@@ -1,5 +1,13 @@
 # Hackathon: OpenAI Build Week - 260715 @ devpost
 
+> [!IMPORTANT]
+> **Explore the complete project record**
+>
+> Read the mathematical contract, Codex instructions, implementation
+> checkpoints, verification reports, visualization pipeline, and final handoff:
+>
+> **[Open the complete OpenAI Build Week project documentation](../../docs/hackathon/cosmic-formula-inversion-260715/README.md)**
+
 ## A Demonstration of AI-Assisted Learning and Verifiable Research
 
 This project demonstrates how AI can be integrated into learning, education, and mathematical research while keeping every result reproducible and verifiable.
@@ -15,6 +23,28 @@ Through a concrete development workflow and working artifacts, it explores the f
 DkMath connects human mathematical insight, GPT-5.6 review, repository-scale implementation with Codex, machine verification with Lean, and the creation of visual learning materials into a single auditable workflow.
 
 This demo presents the complete process—from learning and exploration to implementation, verification, and explanation—as one compact practical experiment.
+
+## Educational Contents
+
+![gif](../../docs/hackathon/cosmic-formula-inversion-260715/visual/media/videos/cosmic_formula_scene/720p30/CosmicFormulaPrototype.gif)
+
+## Watch the Verified Mathematics in Motion
+
+The verified Lean example is transformed into a short animated learning
+experience for students, educators, and mathematical explorers.
+
+The animation shows how the finite prime set
+
+`{2, 3, 5, 7}`
+
+forms `P = 210`, how the Body and square Gap complete the Cosmic Formula
+boundary, and how the new factors `13` and `17` appear outside the original
+finite prime universe.
+
+▶️ **[Watch the Cosmic Formula animated learning prototype (mp4)](../../docs/hackathon/cosmic-formula-inversion-260715/visual/media/videos/cosmic_formula_scene/720p30/CosmicFormulaPrototype.mp4)**
+
+The animation explains the structure visually; the Lean files in this
+directory verify the mathematical claims.
 
 ## DkMath — Verifiable AI Mathematical Research
 
