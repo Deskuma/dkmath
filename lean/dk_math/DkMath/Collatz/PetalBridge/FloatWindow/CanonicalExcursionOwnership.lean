@@ -104,6 +104,127 @@ theorem card_canonicalInternalSaturatedSpareIndices_eq_zero_add_positive
     Finset.card_union_of_disjoint
       (canonicalInternalSaturatedZeroSpare_disjoint_positiveSpare n q m)]
 
+/-! ## Zero-spare arrival carrier -/
+
+/-- Successor blocks reached by internal zero-spare predecessor tokens.  This
+is deliberately narrower than all zero-drift blocks: it only records the
+arrival sites forced by the internal spare classification. -/
+noncomputable def canonicalInternalZeroSpareSuccessorIndices
+    (n : OddNat) (q m : ℕ) : Finset ℕ :=
+  (canonicalInternalSaturatedZeroSpareIndices n q m).image fun k => k + 1
+
+@[simp] theorem mem_canonicalInternalZeroSpareSuccessorIndices
+    {n : OddNat} {q m j : ℕ} :
+    j ∈ canonicalInternalZeroSpareSuccessorIndices n q m ↔
+      ∃ k,
+        k ∈ canonicalInternalSaturatedZeroSpareIndices n q m ∧
+          j = k + 1 := by
+  simp [canonicalInternalZeroSpareSuccessorIndices, eq_comm]
+
+/-- The predecessor-to-successor shift is injective on zero-spare tokens, so
+the support cardinality is unchanged. -/
+theorem card_canonicalInternalZeroSpareSuccessorIndices_eq_zeroSpare
+    (n : OddNat) (q m : ℕ) :
+    (canonicalInternalZeroSpareSuccessorIndices n q m).card =
+      (canonicalInternalSaturatedZeroSpareIndices n q m).card := by
+  classical
+  let I := canonicalInternalSaturatedZeroSpareIndices n q m
+  let J := I.image fun k => k + 1
+  have hinj : ∀ a ∈ I, ∀ b ∈ I, a + 1 = b + 1 → a = b := by
+    intro a _ b _ hab
+    omega
+  have hcard : J.card = I.card := Finset.card_image_iff.mpr hinj
+  simpa [canonicalInternalZeroSpareSuccessorIndices, I, J] using hcard
+
+/-- Selected incidences over exactly the zero-spare successor support.  This
+carrier is an owned-arrival surface; it does not enlarge the existing
+positive-only global selected carrier. -/
+def CanonicalInternalZeroSpareSelectedCarrier
+    (n : OddNat) (q m : ℕ) :=
+  Σ j : {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m},
+    {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j.val}
+
+/-- Charge one internal zero-spare predecessor to an actual spare incidence in
+its zero-drift successor block. -/
+noncomputable def canonicalInternalZeroSpareCharge
+    (n : OddNat) (q m : ℕ) :
+    {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m} →
+      CanonicalInternalZeroSpareSelectedCarrier n q m := fun k => by
+  classical
+  have hk :=
+    (mem_canonicalInternalSaturatedZeroSpareIndices.mp k.property).1
+  have hkFull := Finset.mem_of_mem_erase hk
+  have hkClass := mem_canonicalSaturatedSpareSuccessorIndices.mp hkFull
+  let e := oneEmbedding_successorSpareCarrier hkClass.2.2
+  exact ⟨⟨k.val + 1, mem_canonicalInternalZeroSpareSuccessorIndices.mpr
+    ⟨k.val, k.property, rfl⟩⟩, (e 0).1⟩
+
+/-- The zero-spare charge keeps the successor block coordinate. -/
+@[simp] theorem canonicalInternalZeroSpareCharge_fst
+    {n : OddNat} {q m : ℕ}
+    (k : {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m}) :
+    (canonicalInternalZeroSpareCharge n q m k).1.val = k.val + 1 := by
+  simp [canonicalInternalZeroSpareCharge]
+
+/-- A charged zero-spare predecessor has zero drift at its successor. -/
+theorem canonicalInternalZeroSpareCharge_successor_endpoint_zero
+    {n : OddNat} {q m : ℕ}
+    (k : {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m}) :
+    endpointAccountingTerm n
+      (canonicalInternalZeroSpareCharge n q m k).1.val = 0 := by
+  rw [canonicalInternalZeroSpareCharge_fst]
+  exact (mem_canonicalInternalSaturatedZeroSpareIndices.mp k.property).2
+
+/-- The charged incidence lies in the selected spare carrier of the successor
+block. -/
+theorem canonicalInternalZeroSpareCharge_mem_spare
+    {n : OddNat} {q m : ℕ}
+    (k : {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m}) :
+    (canonicalInternalZeroSpareCharge n q m k).2 ∈
+      canonicalSelectedDriftSpareCarrier n (k.val + 1) := by
+  classical
+  simp only [canonicalInternalZeroSpareCharge]
+  exact (oneEmbedding_successorSpareCarrier
+    (mem_canonicalSaturatedSpareSuccessorIndices.mp
+      (Finset.mem_of_mem_erase
+        (mem_canonicalInternalSaturatedZeroSpareIndices.mp k.property).1)).2.2
+      0).property
+
+/-- Internal zero-spare predecessor tokens inject into the targeted selected
+arrival carrier.  Injectivity uses only the retained successor coordinate. -/
+noncomputable def canonicalInternalZeroSpareChargeEmbedding
+    (n : OddNat) (q m : ℕ) :
+    {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m} ↪
+      CanonicalInternalZeroSpareSelectedCarrier n q m where
+  toFun := canonicalInternalZeroSpareCharge n q m
+  inj' := by
+    intro a b hab
+    apply Subtype.ext
+    have hindex := congrArg (fun z => z.1.val) hab
+    change a.val + 1 = b.val + 1 at hindex
+    omega
+
+/-- Cardinality form of the internal zero-spare owned-arrival certificate. -/
+theorem card_canonicalInternalSaturatedZeroSpareIndices_le_zeroSpareSelectedCarrier
+    (n : OddNat) (q m : ℕ) :
+    (canonicalInternalSaturatedZeroSpareIndices n q m).card ≤
+      Nat.card (CanonicalInternalZeroSpareSelectedCarrier n q m) := by
+  classical
+  letI : Fintype {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m} :=
+    Fintype.ofFinset (canonicalInternalSaturatedZeroSpareIndices n q m) (by simp)
+  letI : Fintype {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m} :=
+    Fintype.ofFinset (canonicalInternalZeroSpareSuccessorIndices n q m) (by simp)
+  letI (j : {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n j.val) (by simp)
+  letI : Fintype (CanonicalInternalZeroSpareSelectedCarrier n q m) := by
+    unfold CanonicalInternalZeroSpareSelectedCarrier
+    infer_instance
+  have h :=
+    Nat.card_le_card_of_injective (canonicalInternalZeroSpareChargeEmbedding n q m)
+      (canonicalInternalZeroSpareChargeEmbedding n q m).injective
+  simpa only [Nat.card_eq_fintype_card, Fintype.card_coe] using h
+
 /-- Internal zero-rigid successor tokens. -/
 noncomputable def canonicalInternalSaturatedZeroRigidIndices
     (n : OddNat) (q m : ℕ) : Finset ℕ :=
