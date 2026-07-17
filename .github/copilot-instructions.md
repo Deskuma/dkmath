@@ -9,7 +9,7 @@ This is a research repository that prioritizes preserving the proof construction
 ## Tech Stack
 
 - **Primary Language**: Lean 4
-- **Mathematical Library**: Mathlib v4.26.0 (from leanprover-community)
+- **Mathematical Library**: Mathlib v4.29.0 (from leanprover-community)
 - **Build System**: Lake (Lean's build tool)
 - **Documentation**: Markdown files (Japanese and English)
 - **Version Control**: Git with special research-oriented branching strategy

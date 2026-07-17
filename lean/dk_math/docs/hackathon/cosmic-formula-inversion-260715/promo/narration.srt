@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:12,000
+DkMath asks a practical question: can human mathematical direction, AI-assisted implementation, formal verification, and visual explanation form one research workflow?
+
+2
+00:00:12,000 --> 00:00:30,000
+DkMath is a large Lean mathematical research library. This hackathon slice does not replace that library; it adds a deliberately small, reviewable bridge inside it.
+
+3
+00:00:30,000 --> 00:00:48,000
+Before implementation, the mathematical contract fixed a finite prime set, its product, a coprime offset, the boundary, and the meaning of a fresh prime factor.
+
+4
+00:00:48,000 --> 00:01:08,000
+Codex audited the existing repository and reports, then identified the smallest missing bridge: prove that a prime dividing product plus offset cannot belong to the original finite set.
+
+5
+00:01:08,000 --> 00:01:30,000
+The implementation adds a general finite prime escape theorem and the algebraic Cosmic completion identity. Lean checks the hypotheses, divisibility argument, and completed square.
+
+6
+00:01:30,000 --> 00:01:48,000
+The fixed demonstration chooses S equals two, three, five, seven; P equals two hundred ten; and u equals eleven. Their shared boundary is two hundred twenty-one.
+
+7
+00:01:48,000 --> 00:02:04,000
+Manim now presents the same accepted data visually: Body plus square Gap completes the boundary P plus u, and two hundred twenty-one factors as thirteen times seventeen.
+
+8
+00:02:04,000 --> 00:02:25,000
+Lean verifies that thirteen and seventeen are prime divisors of the boundary and are outside the starting set. The animation explains a theorem-backed result; it does not create the evidence.
+
+9
+00:02:25,000 --> 00:02:43,000
+The next research direction is bounded inverse projection: search backward from observable boundaries under explicit finite bounds. It is a direction, not a theorem claimed by this draft.
+
+10
+00:02:43,000 --> 00:02:54,000
+Human direction sets the contract. Codex investigates and implements. Lean verifies. Manim communicates. That is the DkMath research loop.
+

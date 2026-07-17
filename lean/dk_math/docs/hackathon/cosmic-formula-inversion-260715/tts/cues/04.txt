@@ -1,0 +1,1 @@
+GPT-5.6 reviewed the theorem strength and architecture. Codex audited the repository and identified the smallest missing bridge: a prime dividing product plus offset cannot belong to the original finite set.

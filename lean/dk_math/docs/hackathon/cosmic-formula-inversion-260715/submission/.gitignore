@@ -1,0 +1,3 @@
+output/*.mp4
+!output/DkMathCosmicPromoFinal.mp4
+!output/DkMathCosmicPromoFinalNarrated.mp4

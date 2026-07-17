@@ -1,0 +1,1 @@
+Lean proves that thirty-one squared does not divide this G N value. Therefore it cannot be a perfect fifth power.
