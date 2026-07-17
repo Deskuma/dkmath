@@ -11,6 +11,9 @@ models/kokoro-v1.0.onnx
 models/voices-v1.0.bin
 ```
 
+The selected final voice is `af_sarah` in `en-us`. It was accepted in the local
+smoke test.
+
 Run a smoke test from the repository root:
 
 ```bash
@@ -24,11 +27,39 @@ venv/bin/kokoro-tts \
   --voices lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/tts/models/voices-v1.0.bin
 ```
 
-For the final promo, use `submission/narration.srt` as the narration source.
-Convert its timed cues to plain text per cue before synthesis, then align the
-rendered WAV/MP3 clips to the existing 174-second video timeline. Do not use
-`--stream` in headless production; it requires a working audio device, whereas
-file output does not need playback.
+## Final narration pipeline
+
+The finalized source is retained in `dkmath-final-narration-tts.txt`; the
+English subtitle counterpart is `dkmath-final-narration-en.srt`. The timed
+speech cue files under `cues/` use spoken-number and spoken-`G N` forms to
+protect pronunciation.
+
+From the repository root, build the narration:
+
+```bash
+bash lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/tts/build_final_narration.sh
+```
+
+This generates one raw WAV per cue, then creates exact 174-second cue slots.
+When a raw cue exceeds its allotted slot it is sped up only by the measured
+`raw_duration / slot_duration` factor; otherwise it is left at native speed and
+padded with end silence. `loudnorm` then produces a 48 kHz mono master at
+`I=-16`, `TP=-1.5`, and `LRA=11`.
+
+Outputs, all excluded from git:
+
+```text
+output/raw/cue_01.wav ... cue_11.wav
+output/timed/cue_01.wav ... cue_11.wav
+output/timing.tsv
+output/dkmath-final-narration-timed.wav
+output/dkmath-final-narration-normalized.wav
+```
+
+Do not use `--stream` in headless production; it requires a working audio
+device, whereas file output does not need playback. License and model provenance
+are recorded in `LICENSE_PROVENANCE.md`. The final reproducibility report,
+including cue timing and output verification, is `FINAL_NARRATION_REPORT.md`.
 
 Official package and model sources:
 

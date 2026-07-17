@@ -1,0 +1,1 @@
+This is a verified local obstruction model, not a proof of Fermat's Last Theorem for exponent five.

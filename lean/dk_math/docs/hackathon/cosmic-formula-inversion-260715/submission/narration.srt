@@ -1,10 +1,10 @@
 1
 00:00:00,000 --> 00:00:12,000
-DkMath asks a practical question: can human mathematical direction, AI-assisted implementation, formal verification, and visual explanation form one research workflow?
+DkMath asks a practical question: can human mathematical direction, GPT-5.6 review, Codex implementation, Lean verification, and visual explanation form one research workflow?
 
 2
 00:00:12,000 --> 00:00:30,000
-DkMath is a large Lean mathematical research library. This hackathon slice does not replace that library; it adds a deliberately small, reviewable bridge inside it.
+DkMath is a large Lean 4 mathematical research library. This hackathon project adds one deliberately small, auditable theorem path inside the real repository.
 
 3
 00:00:30,000 --> 00:00:48,000
@@ -12,29 +12,32 @@ Before implementation, the mathematical contract fixed a finite prime set, its p
 
 4
 00:00:48,000 --> 00:01:08,000
-Codex audited the existing repository and its reports, then identified the smallest missing bridge: prove that a prime dividing product plus offset cannot belong to the original finite set.
+GPT-5.6 reviewed the theorem strength and architecture. Codex audited the repository and identified the smallest missing bridge: a prime dividing product plus offset cannot belong to the original finite set.
 
 5
 00:01:08,000 --> 00:01:30,000
-The implementation adds a general finite prime escape theorem and the algebraic Cosmic completion identity. Lean checks the hypotheses, divisibility argument, and completed square.
+The implementation adds a general finite-prime escape theorem and the Cosmic completion identity. Lean checks the hypotheses, the divisibility argument, and the completed square.
 
 6
 00:01:30,000 --> 00:01:48,000
-The fixed demonstration chooses S equals two, three, five, seven; P equals two hundred ten; and u equals eleven. Their shared boundary is two hundred twenty-one.
+The fixed demonstration chooses S = {2, 3, 5, 7}, P = 210, and u = 11. The shared boundary is 221.
 
 7
 00:01:48,000 --> 00:02:04,000
-Manim now presents the same accepted data visually: Body plus the square Gap completes a square whose boundary is P plus u, and two hundred twenty-one factors as thirteen times seventeen.
+Manim presents the same accepted data visually: Body plus the square Gap completes a square whose boundary is P + u, and 221 = 13 x 17.
 
 8
 00:02:04,000 --> 00:02:25,000
-Lean verifies that thirteen and seventeen are prime divisors of the boundary and are outside the starting set. The animation explains a theorem-backed result; it does not create the evidence.
+Lean verifies that 13 and 17 are prime divisors of the boundary and are outside the starting set. The animation explains a theorem-backed result; it does not create the evidence.
 
 9
-00:02:25,000 --> 00:02:43,000
-The next research direction is bounded inverse projection: search backward from observable boundaries under explicit finite bounds. It is a direction, not a theorem claimed by this draft.
+00:02:25,000 --> 00:02:40,000
+During final preparation, the same finite-prime escape theorem reached a fifth-degree GN channel: 30 + 1 = 31 = GN(5,1,1).
 
 10
-00:02:43,000 --> 00:02:54,000
-Human direction sets the contract. Codex investigates and implements. Lean verifies. Manim communicates. That is the DkMath research loop.
+00:02:40,000 --> 00:02:47,000
+Lean proves 31^2 does not divide GN(5,1,1). Therefore GN(5,1,1) cannot be a perfect fifth power.
 
+11
+00:02:47,000 --> 00:02:54,000
+This is a verified local obstruction model, not a proof of Fermat's Last Theorem for exponent 5.

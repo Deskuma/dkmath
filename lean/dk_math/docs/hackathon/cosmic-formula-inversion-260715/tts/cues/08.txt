@@ -1,0 +1,1 @@
+Lean verifies that thirteen and seventeen are prime divisors of the boundary and are outside the starting set. The animation explains a theorem-backed result; it does not create the evidence.

@@ -75,7 +75,7 @@ From this directory, run:
 bash build_submission.sh
 ```
 
-Expected output:
+Expected silent visual master:
 
 ```text
 output/DkMathCosmicPromoFinal.mp4
@@ -85,12 +85,32 @@ The build renders a 174-second, 1280x720, 30 fps H.264 silent MP4. `timeline.ass
 is the burned-in editorial timeline; `narration.srt` is the final timed narration
 and caption-authoring source.
 
+## Narrated master
+
+After the Kokoro environment has been set up, build the synchronized narrated
+master from this directory:
+
+```bash
+bash build_narrated_promo.sh
+```
+
+This regenerates the visual master, synthesizes the 11 cue narration, normalizes
+it, and muxes it as AAC audio. Output:
+
+```text
+output/DkMathCosmicPromoFinalNarrated.mp4
+```
+
+The selected voice, cue adjustment, verification metadata, and TTS provenance
+are documented in `../tts/FINAL_NARRATION_REPORT.md`.
+
 ## Package contents
 
 - `output/DkMathCosmicPromoFinal.mp4` — final silent captioned promo master
+- `output/DkMathCosmicPromoFinalNarrated.mp4` — final narrated promo master
 - `narration.srt` — final timed narration/subtitle file
 - `timeline.ass` — final burned-in editorial timeline
 - `build_submission.sh` — reproducible final build
+- `build_narrated_promo.sh` — reproducible narration and mux build
 - `ASSET_INVENTORY.md` — provenance and package inventory
 - `README.md` — submission description and reproduction guide
-
