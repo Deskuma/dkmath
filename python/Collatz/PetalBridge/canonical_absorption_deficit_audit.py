@@ -70,6 +70,18 @@ class AuditRow:
     witness_claim_holes: int
     witness_terminal_valuation: int
     witness_absorption_deficit: int
+    witness_positive_drift_mass: int
+    witness_negative_drift_mass: int
+    witness_dynamic_pressure_mass: int
+    witness_saturated_count: int
+    witness_negative_successor_count: int
+    witness_spare_successor_count: int
+    witness_zero_rigid_successor_count: int
+    witness_tight_rigid_successor_count: int
+    witness_terminal_successor_pending_count: int
+    witness_spare_carrier_count: int
+    witness_rigid_residual_count: int
+    witness_selected_depth_histogram: str
 
 
 def audit_root(root: int) -> AuditRow:
@@ -79,10 +91,13 @@ def audit_root(root: int) -> AuditRow:
     queue = 0
     active_start = -1
     maximum_queue = 0
-    record = (-1, -1, 0, 0, 0, 0, 0)
+    record = (-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
     prefix_lengths = [0]
     prefix_holes = [0]
     terminal_valuations: list[int] = []
+    drifts: list[int] = []
+    lengths: list[int] = []
+    claims_by_block: list[int] = []
     reached_one = False
 
     blocks_audited = 0
@@ -100,6 +115,9 @@ def audit_root(root: int) -> AuditRow:
         prefix_lengths.append(prefix_lengths[-1] + length)
         prefix_holes.append(prefix_holes[-1] + holes)
         terminal_valuations.append(terminal_valuation)
+        drifts.append(drift)
+        lengths.append(length)
+        claims_by_block.append(claims)
 
         candidate = queue + drift
         if candidate > 0:
@@ -119,6 +137,39 @@ def audit_root(root: int) -> AuditRow:
             active_holes = prefix_holes[block + 1] - prefix_holes[active_start]
             active_valuation = sum(terminal_valuations[active_start : block + 1])
             assert active_length - active_holes - active_valuation == queue
+            active_drifts = drifts[active_start : block + 1]
+            positive_mass = sum(max(value, 0) for value in active_drifts)
+            negative_mass = sum(max(-value, 0) for value in active_drifts)
+            saturated = [
+                index
+                for index in range(active_start, block + 1)
+                if claims_by_block[index] == lengths[index]
+                and drifts[index] > 0
+            ]
+            dynamic_depths = [
+                terminal_valuations[index]
+                if index in saturated
+                else terminal_valuations[index] - 1
+                if terminal_valuations[index] >= 2
+                else 0
+                for index in range(active_start, block + 1)
+                if drifts[index] > 0
+            ]
+            dynamic_pressure = sum(
+                max(lengths[index] - depth, 0)
+                - int(1 <= depth <= lengths[index])
+                for index, depth in zip(
+                    [
+                        index
+                        for index in range(active_start, block + 1)
+                        if drifts[index] > 0
+                    ],
+                    dynamic_depths,
+                    strict=True,
+                )
+            )
+            assert queue == positive_mass - negative_mass
+            assert positive_mass <= dynamic_pressure + len(saturated)
 
         if queue > maximum_queue:
             assert active_start >= 0
@@ -128,6 +179,84 @@ def audit_root(root: int) -> AuditRow:
             window_valuation = sum(terminal_valuations[q : block + 1])
             deficit = window_length - window_holes - window_valuation
             assert deficit == queue
+            window_indices = range(q, block + 1)
+            positive_mass = sum(max(drifts[index], 0) for index in window_indices)
+            negative_mass = sum(max(-drifts[index], 0) for index in window_indices)
+            saturated = [
+                index
+                for index in window_indices
+                if claims_by_block[index] == lengths[index] and drifts[index] > 0
+            ]
+            positive_indices = [index for index in window_indices if drifts[index] > 0]
+            dynamic_depth_by_index = {
+                index: terminal_valuations[index]
+                if index in saturated
+                else terminal_valuations[index] - 1
+                if terminal_valuations[index] >= 2
+                else 0
+                for index in positive_indices
+            }
+            dynamic_pressure = sum(
+                max(lengths[index] - depth, 0)
+                - int(1 <= depth <= lengths[index])
+                for index, depth in dynamic_depth_by_index.items()
+            )
+            depth_counts: dict[int, int] = {}
+            for depth in dynamic_depth_by_index.values():
+                depth_counts[depth] = depth_counts.get(depth, 0) + 1
+
+            negative_successors = 0
+            spare_successors = 0
+            zero_rigid_successors = 0
+            tight_rigid_successors = 0
+            spare_carrier_count = 0
+            pending = 0
+            for index in saturated:
+                if index == block:
+                    # The successor lies outside the observed window.  Keep
+                    # this temporal boundary explicit rather than fabricating
+                    # a current-window payment.
+                    pending += 1
+                    continue
+                successor = index + 1
+                successor_drift = drifts[successor]
+                selected_depth = (
+                    1
+                    if terminal_valuations[successor] == 1
+                    else terminal_valuations[successor] - 1
+                )
+                selected_card = max(lengths[successor] - (selected_depth + 1), 0)
+                successor_saturated = (
+                    claims_by_block[successor] == lengths[successor]
+                    and successor_drift > 0
+                )
+                drift_image_card = (
+                    successor_drift
+                    if successor_drift > 0 and not successor_saturated
+                    else 0
+                )
+                spare_card = selected_card - drift_image_card
+                assert spare_card >= 0
+                if successor_drift < 0:
+                    negative_successors += 1
+                elif spare_card > 0:
+                    spare_successors += 1
+                    spare_carrier_count += spare_card
+                elif successor_drift == 0 and selected_card == 0:
+                    zero_rigid_successors += 1
+                else:
+                    assert successor_drift > 0
+                    assert terminal_valuations[successor] == 1
+                    assert claims_by_block[successor] == lengths[successor] - 1
+                    tight_rigid_successors += 1
+            assert (
+                negative_successors
+                + spare_successors
+                + zero_rigid_successors
+                + tight_rigid_successors
+                + pending
+                == len(saturated)
+            )
             maximum_queue = queue
             record = (
                 block,
@@ -137,6 +266,18 @@ def audit_root(root: int) -> AuditRow:
                 window_holes,
                 window_valuation,
                 deficit,
+                positive_mass,
+                negative_mass,
+                dynamic_pressure,
+                len(saturated),
+                negative_successors,
+                spare_successors,
+                zero_rigid_successors,
+                tight_rigid_successors,
+                pending,
+                spare_carrier_count,
+                zero_rigid_successors + tight_rigid_successors,
+                ";".join(f"{depth}:{count}" for depth, count in sorted(depth_counts.items())),
             )
 
         if orbit.state(endpoint) == 1:
@@ -158,6 +299,18 @@ def audit_root(root: int) -> AuditRow:
         witness_claim_holes=record[4],
         witness_terminal_valuation=record[5],
         witness_absorption_deficit=record[6],
+        witness_positive_drift_mass=record[7],
+        witness_negative_drift_mass=record[8],
+        witness_dynamic_pressure_mass=record[9],
+        witness_saturated_count=record[10],
+        witness_negative_successor_count=record[11],
+        witness_spare_successor_count=record[12],
+        witness_zero_rigid_successor_count=record[13],
+        witness_tight_rigid_successor_count=record[14],
+        witness_terminal_successor_pending_count=record[15],
+        witness_spare_carrier_count=record[16],
+        witness_rigid_residual_count=record[17],
+        witness_selected_depth_histogram=record[18],
     )
 
 
@@ -177,8 +330,8 @@ def main() -> None:
 
     output_dir = Path(__file__).with_name("results")
     output_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = output_dir / "canonical_absorption_deficit_audit_343.csv"
-    md_path = output_dir / "canonical_absorption_deficit_audit_343.md"
+    csv_path = output_dir / "canonical_excursion_mass_audit_345.csv"
+    md_path = output_dir / "canonical_excursion_mass_audit_345.md"
 
     with csv_path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(asdict(rows[0])))
@@ -189,7 +342,7 @@ def main() -> None:
     reached = sum(row.reached_state_one_endpoint for row in rows)
     positive = sum(row.maximum_queue > 0 for row in rows)
     lines = [
-        "# Canonical Absorption-Deficit Audit (cp-343)",
+        "# Canonical Excursion-Mass Audit (cp-345)",
         "",
         f"Odd roots: `1..{ROOT_MAX}`. Block limit: `{BLOCK_LIMIT}`.",
         "This is finite computational evidence, not a Lean theorem.",
@@ -201,6 +354,10 @@ def main() -> None:
         f"- roots with a positive observed queue maximum: {positive}",
         f"- largest observed queue/deficit: {max(row.maximum_queue for row in rows)}",
         "- every positive queue state passed its active-window deficit identity",
+        "- every positive queue state passed signed-mass decomposition",
+        "- every positive queue state passed dynamic-pressure plus saturation domination",
+        "- successor classifications cover only observed internal successors",
+        "- a saturated terminal block is recorded as pending, not spent from the current window",
         "- the CSV stores the final maximum witness for each root",
         "- no uniform bound or eventual discharge follows from this table",
         "",
