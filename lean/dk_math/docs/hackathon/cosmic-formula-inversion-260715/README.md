@@ -1,6 +1,9 @@
-# Hackathon: OpenAI Build Week - 260715
+# Hackathon: OpenAI Build Week - 260715 @ devpost
 
-# DkMath — Cosmic Formula Inversion
+Date: 2026/07/18  1:19
+Author: Deskuma (D.) and AI GPT@OpenAI (Wise Wolf)
+
+## DkMath — Cosmic Formula Inversion
 
 A verifiable AI-assisted mathematical research project for the OpenAI Build Week Hackathon.
 
