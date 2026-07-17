@@ -29,39 +29,66 @@ This project demonstrates a workflow in which:
 
 The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula, finite-prime escape, and the new GN5 extension.
 
+## How GPT-5.6 and Codex accelerated this project
+
+This project was not produced by asking an AI to generate a theorem in one step.
+
+Instead, GPT-5.6 and Codex were used as two complementary reasoning and implementation partners inside a verifiable development loop.
+
+### GPT-5.6: mathematical review and research guidance
+
+GPT-5.6 was used to:
+
+- refine informal mathematical observations into explicit theorem targets;
+- review theorem strength, dependencies, and possible overclaims;
+- compare proposed structures with the existing DkMath architecture;
+- define concise implementation goals and stopping conditions for Codex;
+- review completed Lean reports and identify the next mathematical boundary;
+- prepare the public explanation, narration, and submission material.
+
+The human researcher retained control of the mathematical direction and accepted only results that were successfully checked by Lean.
+
+### Codex: repository-scale investigation and implementation
+
+Codex was used to:
+
+- inspect a large existing Lean 4 repository and its development reports;
+- locate reusable definitions and theorems instead of rebuilding parallel APIs;
+- implement the finite-prime escape theorem and Cosmic completion bridge;
+- connect the result to the concrete GN5 clean channel;
+- run Lean builds and close proof failures;
+- create the Manim visualization and FFmpeg build pipeline;
+- build a reproducible Kokoro TTS narration pipeline;
+- produce the final synchronized, narrated, sub-three-minute promo video.
+
+This significantly reduced the time normally spent on repository reconnaissance, API discovery, repetitive proof repair, media scripting, and command-line production work.
+
+### The verified result
+
+The workflow produced:
+
+- a general finite-prime escape theorem;
+- the Cosmic completion identity;
+- a fixed Lean-verified example at `221 = 13 × 17`;
+- a GN5 local obstruction proving that `GN(5,1,1)` is not a perfect fifth power;
+- a reproducible visual, subtitle, TTS, and FFmpeg publication pipeline.
+
+Lean, not the AI systems, is the final authority for the accepted mathematical declarations.
+
+### What this demonstrates
+
+The project demonstrates a practical future learning and research method:
+
+1. a human selects and understands the research question;
+2. GPT-5.6 helps refine, review, and communicate the mathematical structure;
+3. Codex investigates and implements across the real repository;
+4. Lean verifies the accepted theorem surface;
+5. the same AI-assisted workflow turns the verified result into reproducible educational material.
+
+The final narrated promo itself was completed through this same pipeline, from theorem implementation to visualization, speech synthesis, synchronization, and publication.
+
 ---
 
 detail see: [README](../../docs/hackathon/cosmic-formula-inversion-260715/README.md)
 
 ---
-
-ja:
-
-## AI と形式検証による未来の学習・研究デモ
-
-このプロジェクトは、AI を学習・教育・数学研究へどのように組み込み、成果を検証可能な形で積み上げられるかを示す実証デモです。
-
-次の問いを、一貫した開発過程と具体的な成果物を通して探究します。
-
-- AI を、学習者の思考を置き換えるのではなく、理解と探索を促進する道具としてどう活用できるか。
-- 教育者が AI を使い、説明・教材・可視化・演習をどのように構築できるか。
-- 学習から生まれた数学的着想を、再現可能な研究過程へどのように発展させるか。
-- Lean 定理証明支援系と Codex を用いて、定義・定理・証明の正確性をどのように維持し、管理できるか。
-- 継続的な学習と形式検証の蓄積が、未解決問題へ向かう新しい研究経路を生み出せるか。
-
-DkMath では、人間による数学的発想、GPT-5.6 によるレビュー、Codex によるリポジトリ規模の実装、Lean による機械検証、そして可視化教材の制作を、一つの検証可能なワークフローとして接続しました。
-
-本デモは、その学習・研究・実装・検証・説明の全過程を、コンパクトな実証例として提示します。
-
-## DkMath — 検証可能なAI数学研究
-
-OpenAI Build Weekハッカソンに向けた、AI支援による検証可能な数学研究プロジェクトです。
-
-本プロジェクトでは、以下のワークフローを実証します。
-
-1. 人間とAIの対話を通じて数学的構造を提案・洗練させる。
-2. Codexがその構造を調査し、既存のLean 4ライブラリ内に実装する。
-3. Leanが、生成された定理を検証する。
-4. 検証された数学的成果を、理解しやすい視覚的デモンストレーションへと変換する。
-
-主なテーマは、既知の素因数からなる有限の宇宙から、証明可能な「新たな素因数」へと移行することであり、これは「DkMath Cosmic Formula（宇宙の公式）」とその逆投影プログラムを通じて表現されます。
