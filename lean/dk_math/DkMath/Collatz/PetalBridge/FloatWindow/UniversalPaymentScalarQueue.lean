@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger
+import DkMath.Collatz.PetalBridge.FloatWindow.FiniteReflectedQueue
 
 #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue"
 
@@ -503,6 +504,15 @@ theorem canonicalOutstandingClaimQueue_eq_zero_iff_all_excursions_repaid
 
 /-! ## Window-local causal queue -/
 
+/-- Canonical signed drift is the generic arrivals-minus-service balance. -/
+theorem finiteSignedWindowBalance_claimCount_capacityCount_eq
+    (n : OddNat) (q m : ℕ) :
+    finiteSignedWindowBalance (canonicalBlockClaimCount n)
+        (canonicalBlockCapacityCount n) q m =
+      canonicalWindowDriftInt n q m := by
+  unfold finiteSignedWindowBalance canonicalWindowDriftInt
+  simp_rw [endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount]
+
 /--
 Outstanding queue generated only by blocks `q..r`, initialized at zero before
 block `q`.  The reflected suffix form is chosen as the public terminal value;
@@ -511,6 +521,18 @@ unlike aggregate drift, it remembers every possible release-time suffix.
 noncomputable def canonicalLocalOutstandingClaimQueue
     (n : OddNat) (q r : ℕ) : ℕ :=
   (Finset.Icc q r).sup fun t => Int.toNat (canonicalWindowDriftInt n t r)
+
+/-- The existing local scalar queue is exactly the generic reflected queue
+specialized to canonical claim arrivals and capacity service. -/
+theorem canonicalLocalOutstandingClaimQueue_eq_finiteReflectedQueueOn
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
+    canonicalLocalOutstandingClaimQueue n q m =
+      finiteReflectedQueueOn (canonicalBlockClaimCount n)
+        (canonicalBlockCapacityCount n) q m := by
+  rw [finiteReflectedQueueOn_eq_windowMaximum _ _ hqm]
+  unfold canonicalLocalOutstandingClaimQueue
+  unfold finiteReflectedWindowMaximum
+  simp_rw [finiteSignedWindowBalance_claimCount_capacityCount_eq]
 
 /-- The local causal queue is zero exactly when every release-time suffix is nonpositive. -/
 theorem canonicalLocalOutstandingClaimQueue_eq_zero_iff_all_suffixDrift_nonpos

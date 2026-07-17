@@ -226,6 +226,56 @@ theorem canonicalBlockStartState_succ_eq_nextStartState
   rw [canonicalBlockStartTime_eq_universalPaymentBlockStart,
     universalPaymentBlockStart_paymentEndpointSeq_succ]
 
+/--
+The block following a saturated block starts with own-width carry one.
+
+This is stronger than excluding a consecutive saturated block: the exact
+length-two normal form leaves the raw word `3*y+1` strictly below the next
+binary boundary at the successor start, independently of the successor
+block's length or terminal valuation.
+-/
+theorem CanonicalSaturatedBorderBlock.nextStart_stateUpperCarry_eq_one
+    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k) :
+    stateUpperCarry (canonicalBlockStartState n (k + 1)) = 1 := by
+  let u := canonicalBlockOddCore n k
+  let x := canonicalBlockStartState n k
+  let y := canonicalBlockStartState n (k + 1)
+  have hu : 0 < u := canonicalBlockOddCore_pos n k
+  have hu4 := h.oddCore_mod_four_eq_three
+  have hu3 : 3 ≤ u := by omega
+  have hx : x = 4 * u - 1 := h.startState_eq_four_mul_core_sub_one
+  have hy : y = (9 * u - 1) / 2 := by
+    dsimp [y]
+    rw [canonicalBlockStartState_succ_eq_nextStartState]
+    exact h.nextStartState_eq
+  have hdvd : 2 ∣ 9 * u - 1 := by
+    have hdvd := h.pow_length_sub_one_dvd_terminalCarrier
+    simpa [u, canonicalBlockTerminalCarrier, h.length_eq_two] using hdvd
+  have hyDouble : 2 * y = 9 * u - 1 := by
+    rw [hy]
+    have := Nat.div_mul_cancel hdvd
+    omega
+  have hraw : 3 * y + 1 < 4 * x := by omega
+  have hxpos : 0 < x := by omega
+  have hypos : 0 < y := by omega
+  have hwidth : bitWidth y = bitWidth x + 1 := by
+    simpa [x, y, canonicalBlockStartState_succ_eq_nextStartState] using
+      h.nextStart_bitWidth_eq_start_add_one
+  have hxpow := lt_pow_bitWidth hxpos
+  have hbelow : 3 * y + 1 < 2 ^ (bitWidth y + 1) := by
+    calc
+      3 * y + 1 < 4 * x := hraw
+      _ < 4 * 2 ^ bitWidth x := by omega
+      _ = 2 ^ (bitWidth y + 1) := by
+        rw [hwidth]
+        simp [pow_succ]
+        ring
+  rcases stateUpperCarry_one_or_two hypos with hone | htwo
+  · exact hone
+  · have hcross :=
+      (stateUpperCarry_eq_two_iff_pow_succ_le_threeNPlusOne hypos).1 htwo
+    omega
+
 /-- A two-bit width increase forces more than a doubling of positive words. -/
 private theorem two_mul_lt_of_bitWidth_eq_add_two
     {x y : ℕ} (hx : 0 < x) (hy : 0 < y)

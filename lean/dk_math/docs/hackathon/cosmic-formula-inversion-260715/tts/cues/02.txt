@@ -1,0 +1,1 @@
+DkMath is a large Lean 4 mathematical research library. This hackathon project adds one deliberately small, auditable theorem path inside the real repository.

@@ -1,0 +1,1 @@
+The fixed demonstration chooses S equals two, three, five, seven; P equals two hundred ten; and u equals eleven. The shared boundary is two hundred twenty-one.
