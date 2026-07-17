@@ -32,6 +32,78 @@ noncomputable def canonicalInternalSaturatedSpareIndices
     (n : OddNat) (q m : ℕ) : Finset ℕ :=
   (canonicalSaturatedSpareSuccessorIndices n q m).erase m
 
+/-- Internal spare tokens whose successor has zero signed drift. -/
+noncomputable def canonicalInternalSaturatedZeroSpareIndices
+    (n : OddNat) (q m : ℕ) : Finset ℕ :=
+  (canonicalInternalSaturatedSpareIndices n q m).filter fun k =>
+    endpointAccountingTerm n (k + 1) = 0
+
+/-- Internal spare tokens whose successor has strictly positive signed drift. -/
+noncomputable def canonicalInternalSaturatedPositiveSpareIndices
+    (n : OddNat) (q m : ℕ) : Finset ℕ :=
+  (canonicalInternalSaturatedSpareIndices n q m).filter fun k =>
+    0 < endpointAccountingTerm n (k + 1)
+
+@[simp] theorem mem_canonicalInternalSaturatedZeroSpareIndices
+    {n : OddNat} {q m k : ℕ} :
+    k ∈ canonicalInternalSaturatedZeroSpareIndices n q m ↔
+      k ∈ canonicalInternalSaturatedSpareIndices n q m ∧
+        endpointAccountingTerm n (k + 1) = 0 := by
+  simp [canonicalInternalSaturatedZeroSpareIndices]
+
+@[simp] theorem mem_canonicalInternalSaturatedPositiveSpareIndices
+    {n : OddNat} {q m k : ℕ} :
+    k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m ↔
+      k ∈ canonicalInternalSaturatedSpareIndices n q m ∧
+        0 < endpointAccountingTerm n (k + 1) := by
+  simp [canonicalInternalSaturatedPositiveSpareIndices]
+
+/-- Spare successors are exhausted by the zero and positive drift branches. -/
+theorem canonicalInternalSaturatedSpareIndices_eq_zero_union_positive
+    (n : OddNat) (q m : ℕ) :
+    canonicalInternalSaturatedSpareIndices n q m =
+      canonicalInternalSaturatedZeroSpareIndices n q m ∪
+        canonicalInternalSaturatedPositiveSpareIndices n q m := by
+  classical
+  ext k
+  constructor
+  · intro hk
+    have hkFull := Finset.mem_of_mem_erase hk
+    have hnonneg :=
+      (mem_canonicalSaturatedSpareSuccessorIndices.mp hkFull).2.1
+    by_cases hz : endpointAccountingTerm n (k + 1) = 0
+    · exact Finset.mem_union_left _
+        (mem_canonicalInternalSaturatedZeroSpareIndices.mpr ⟨hk, hz⟩)
+    · exact Finset.mem_union_right _
+        (mem_canonicalInternalSaturatedPositiveSpareIndices.mpr
+          ⟨hk, by omega⟩)
+  · intro hk
+    rcases Finset.mem_union.mp hk with hk | hk
+    · exact (mem_canonicalInternalSaturatedZeroSpareIndices.mp hk).1
+    · exact (mem_canonicalInternalSaturatedPositiveSpareIndices.mp hk).1
+
+/-- Zero- and positive-successor spare tokens are disjoint. -/
+theorem canonicalInternalSaturatedZeroSpare_disjoint_positiveSpare
+    (n : OddNat) (q m : ℕ) :
+    Disjoint (canonicalInternalSaturatedZeroSpareIndices n q m)
+      (canonicalInternalSaturatedPositiveSpareIndices n q m) := by
+  classical
+  rw [Finset.disjoint_left]
+  intro k hk0 hkp
+  have hz := (mem_canonicalInternalSaturatedZeroSpareIndices.mp hk0).2
+  have hp := (mem_canonicalInternalSaturatedPositiveSpareIndices.mp hkp).2
+  omega
+
+/-- Exact cardinality split of the internal spare class by successor drift. -/
+theorem card_canonicalInternalSaturatedSpareIndices_eq_zero_add_positive
+    (n : OddNat) (q m : ℕ) :
+    (canonicalInternalSaturatedSpareIndices n q m).card =
+      (canonicalInternalSaturatedZeroSpareIndices n q m).card +
+        (canonicalInternalSaturatedPositiveSpareIndices n q m).card := by
+  rw [canonicalInternalSaturatedSpareIndices_eq_zero_union_positive,
+    Finset.card_union_of_disjoint
+      (canonicalInternalSaturatedZeroSpare_disjoint_positiveSpare n q m)]
+
 /-- Internal zero-rigid successor tokens. -/
 noncomputable def canonicalInternalSaturatedZeroRigidIndices
     (n : OddNat) (q m : ℕ) : Finset ℕ :=
@@ -278,6 +350,233 @@ theorem card_canonicalInternalSaturatedNegativeIndices_le_negativeMass
   rw [hones, hcard] at hunit
   exact hunit.trans hwindow
 
+/-! ## Positive-spare absorption in the existing selected carrier -/
+
+/-- Actual same-block drift-image incidences over the positive blocks in the
+window.  Saturated blocks contribute an empty image. -/
+def CanonicalGlobalSelectedDriftImageCarrier
+    (n : OddNat) (q m : ℕ) :=
+  Σ k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m},
+    {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+      i ∈ canonicalSelectedDriftImageCarrier n k.val}
+
+/-- The resources charged in cp-347: existing drift images together with one
+predecessor token for each internal positive-spare successor. -/
+def CanonicalPositiveDriftImageAndInternalPositiveSpareCarrier
+    (n : OddNat) (q m : ℕ) :=
+  CanonicalGlobalSelectedDriftImageCarrier n q m ⊕
+    {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m}
+
+/-- Forget only the image-membership proof, retaining block and incidence. -/
+def canonicalGlobalSelectedDriftImageInclusion
+    (n : OddNat) (q m : ℕ) :
+    CanonicalGlobalSelectedDriftImageCarrier n q m ↪
+      CanonicalGlobalSelectedPressureCarrier n q m :=
+  (Function.Embedding.refl _).sigmaMap fun k =>
+    Function.Embedding.subtype fun i =>
+      i ∈ canonicalSelectedDriftImageCarrier n k.val
+
+/-- Charge one positive-spare predecessor to an actual spare incidence in its
+successor block. -/
+noncomputable def canonicalInternalPositiveSpareCharge
+    (n : OddNat) (q m : ℕ) :
+    {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m} →
+      CanonicalGlobalSelectedPressureCarrier n q m := fun k => by
+  classical
+  have hk :=
+    (mem_canonicalInternalSaturatedPositiveSpareIndices.mp k.property).1
+  have hkFull := Finset.mem_of_mem_erase hk
+  have hkClass := mem_canonicalSaturatedSpareSuccessorIndices.mp hkFull
+  have hkInternal : k.val < m := by
+    have hne := (Finset.mem_erase.mp hk).1
+    have hle := (Finset.mem_Icc.mp
+      (mem_canonicalSaturatedBlockIndices.mp hkClass.1).1).2
+    omega
+  have hqk := (Finset.mem_Icc.mp
+    (mem_canonicalSaturatedBlockIndices.mp hkClass.1).1).1
+  have hpos :=
+    (mem_canonicalInternalSaturatedPositiveSpareIndices.mp k.property).2
+  let e := oneEmbedding_successorSpareCarrier hkClass.2.2
+  exact ⟨⟨k.val + 1, Finset.mem_filter.mpr
+    ⟨Finset.mem_Icc.mpr ⟨by omega, by omega⟩, hpos⟩⟩, (e 0).1⟩
+
+/-- The positive-spare charge keeps the successor block coordinate. -/
+@[simp] theorem canonicalInternalPositiveSpareCharge_fst
+    {n : OddNat} {q m : ℕ}
+    (k : {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m}) :
+    (canonicalInternalPositiveSpareCharge n q m k).1.val = k.val + 1 := by
+  simp [canonicalInternalPositiveSpareCharge]
+
+/-- The charged incidence lies in the complement of the same-block drift
+image. -/
+theorem canonicalInternalPositiveSpareCharge_mem_spare
+    {n : OddNat} {q m : ℕ}
+    (k : {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m}) :
+    (canonicalInternalPositiveSpareCharge n q m k).2 ∈
+      canonicalSelectedDriftSpareCarrier n (k.val + 1) := by
+  classical
+  simp only [canonicalInternalPositiveSpareCharge]
+  exact (oneEmbedding_successorSpareCarrier
+    (mem_canonicalSaturatedSpareSuccessorIndices.mp
+      (Finset.mem_of_mem_erase
+        (mem_canonicalInternalSaturatedPositiveSpareIndices.mp k.property).1)).2.2
+      0).property
+
+/-- Drift images and predecessor positive-spare charges embed without reuse
+into the existing positive-only global selected carrier.  The sigma coordinate
+retains the successor block; the cross-summand case is impossible because the
+second summand lands in the complement of the first summand's image. -/
+noncomputable def canonicalPositiveDriftImageAndInternalPositiveSpareEmbedding
+    (n : OddNat) (q m : ℕ) :
+    CanonicalPositiveDriftImageAndInternalPositiveSpareCarrier n q m ↪
+      CanonicalGlobalSelectedPressureCarrier n q m where
+  toFun := Sum.elim (canonicalGlobalSelectedDriftImageInclusion n q m)
+    (canonicalInternalPositiveSpareCharge n q m)
+  inj' := by
+    classical
+    apply Function.Injective.sumElim
+    · exact (canonicalGlobalSelectedDriftImageInclusion n q m).injective
+    · intro a b hab
+      apply Subtype.ext
+      have hindex := congrArg (fun z => z.1.val) hab
+      change a.val + 1 = b.val + 1 at hindex
+      omega
+    · intro a b hab
+      have himage :
+          (canonicalGlobalSelectedDriftImageInclusion n q m a).2 ∈
+            canonicalSelectedDriftImageCarrier n
+              (canonicalGlobalSelectedDriftImageInclusion n q m a).1.val :=
+        a.2.property
+      rw [hab] at himage
+      have hspare : (canonicalInternalPositiveSpareCharge n q m b).2 ∈
+          canonicalSelectedDriftSpareCarrier n
+            (canonicalInternalPositiveSpareCharge n q m b).1.val := by
+        simpa only [canonicalInternalPositiveSpareCharge_fst] using
+          canonicalInternalPositiveSpareCharge_mem_spare b
+      exact (Finset.mem_sdiff.mp hspare).2 himage
+
+/-- Cardinality form of the no-reuse positive-spare absorption certificate. -/
+theorem natCard_globalSelectedDriftImage_add_internalPositiveSpare_le_globalSelected
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalGlobalSelectedDriftImageCarrier n q m) +
+        (canonicalInternalSaturatedPositiveSpareIndices n q m).card ≤
+      Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) := by
+  classical
+  letI : Fintype {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m} :=
+    Fintype.ofFinset (canonicalPositiveDriftBlockIndices n q m) (by simp)
+  letI (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
+      Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
+  letI (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
+      Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
+        i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
+    Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
+  letI : Fintype (CanonicalGlobalSelectedDriftImageCarrier n q m) := by
+    unfold CanonicalGlobalSelectedDriftImageCarrier
+    infer_instance
+  letI : Fintype
+      {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m} :=
+    Fintype.ofFinset (canonicalInternalSaturatedPositiveSpareIndices n q m)
+      (by simp)
+  letI : Fintype (CanonicalGlobalSelectedPressureCarrier n q m) := by
+    unfold CanonicalGlobalSelectedPressureCarrier
+    infer_instance
+  have hcard := Nat.card_le_card_of_injective
+    (canonicalPositiveDriftImageAndInternalPositiveSpareEmbedding n q m)
+    (canonicalPositiveDriftImageAndInternalPositiveSpareEmbedding n q m).injective
+  rw [CanonicalPositiveDriftImageAndInternalPositiveSpareCarrier,
+    Nat.card_sum] at hcard
+  simpa only [Nat.card_eq_fintype_card, Fintype.card_coe] using hcard
+
+/-- A positive block's reflected drift is exactly its chosen drift image plus
+its possible saturated unit. -/
+theorem intToNat_endpointAccountingTerm_eq_driftImage_add_saturatedToken
+    {n : OddNat} {k : ℕ} (hpos : 0 < endpointAccountingTerm n k) :
+    Int.toNat (endpointAccountingTerm n k) =
+      (canonicalSelectedDriftImageCarrier n k).card +
+        canonicalSaturatedTokenNat n k := by
+  classical
+  by_cases hs : CanonicalSaturatedBorderBlock n k
+  · rw [hs.netDrift_eq_one]
+    simp [canonicalSelectedDriftImageCarrier,
+      canonicalSaturatedTokenNat, canonicalSaturatedUnit, hs]
+  · rw [card_canonicalSelectedDriftImageCarrier hpos hs]
+    simp [canonicalSaturatedTokenNat, canonicalSaturatedUnit, hs]
+
+/-- Exact cardinality of the global chosen drift-image carrier. -/
+theorem natCard_CanonicalGlobalSelectedDriftImageCarrier
+    (n : OddNat) (q m : ℕ) :
+    Nat.card (CanonicalGlobalSelectedDriftImageCarrier n q m) =
+      ∑ k ∈ canonicalPositiveDriftBlockIndices n q m,
+        (canonicalSelectedDriftImageCarrier n k).card := by
+  classical
+  unfold CanonicalGlobalSelectedDriftImageCarrier
+  rw [Nat.card_sigma]
+  simp_rw [Nat.card_eq_fintype_card, Fintype.card_coe]
+  rw [Finset.univ_eq_attach]
+  exact Finset.sum_attach (canonicalPositiveDriftBlockIndices n q m)
+    fun k => (canonicalSelectedDriftImageCarrier n k).card
+
+/-- Saturated-token naturals sum to the saturated block count. -/
+theorem sum_canonicalSaturatedTokenNat_eq_saturatedCard
+    (n : OddNat) (q m : ℕ) :
+    (∑ k ∈ canonicalPositiveDriftBlockIndices n q m,
+        canonicalSaturatedTokenNat n k) =
+      (canonicalSaturatedBlockIndices n q m).card := by
+  classical
+  simp only [canonicalSaturatedTokenNat, canonicalSaturatedUnit]
+  have htoken (k : ℕ) :
+      (if CanonicalSaturatedBorderBlock n k then (1 : ℤ) else 0).toNat =
+        if CanonicalSaturatedBorderBlock n k then 1 else 0 := by
+    by_cases hs : CanonicalSaturatedBorderBlock n k <;> simp [hs]
+  simp_rw [htoken]
+  rw [Finset.sum_boole]
+  have hsets :
+      (canonicalPositiveDriftBlockIndices n q m).filter
+          (CanonicalSaturatedBorderBlock n) =
+        canonicalSaturatedBlockIndices n q m := by
+    ext k
+    simp only [canonicalPositiveDriftBlockIndices,
+      canonicalSaturatedBlockIndices, Finset.mem_filter]
+    constructor
+    · rintro ⟨⟨hk, _⟩, hs⟩
+      exact ⟨hk, hs⟩
+    · rintro ⟨hk, hs⟩
+      exact ⟨⟨hk, hs.drift_pos⟩, hs⟩
+  rw [hsets]
+  exact_mod_cast rfl
+
+/-- Positive reflected mass splits exactly into chosen nonsaturated images and
+the isolated saturated units. -/
+theorem sum_intToNat_positiveDrift_eq_globalDriftImage_add_saturatedCard
+    (n : OddNat) (q m : ℕ) :
+    (∑ k ∈ canonicalPositiveDriftBlockIndices n q m,
+        Int.toNat (endpointAccountingTerm n k)) =
+      Nat.card (CanonicalGlobalSelectedDriftImageCarrier n q m) +
+        (canonicalSaturatedBlockIndices n q m).card := by
+  rw [natCard_CanonicalGlobalSelectedDriftImageCarrier,
+    ← sum_canonicalSaturatedTokenNat_eq_saturatedCard,
+    ← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro k hk
+  exact intToNat_endpointAccountingTerm_eq_driftImage_add_saturatedToken
+    ((Finset.mem_filter.mp hk).2)
+
+/-- Positive drift together with internal positive-spare predecessors fits in
+the existing global selected carrier plus the isolated saturated units. -/
+theorem sum_intToNat_positiveDrift_add_internalPositiveSpare_le_global_add_saturated
+    (n : OddNat) (q m : ℕ) :
+    (∑ k ∈ canonicalPositiveDriftBlockIndices n q m,
+        Int.toNat (endpointAccountingTerm n k)) +
+        (canonicalInternalSaturatedPositiveSpareIndices n q m).card ≤
+      Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) +
+        (canonicalSaturatedBlockIndices n q m).card := by
+  have himage :=
+    natCard_globalSelectedDriftImage_add_internalPositiveSpare_le_globalSelected
+      n q m
+  rw [sum_intToNat_positiveDrift_eq_globalDriftImage_add_saturatedCard]
+  omega
+
 /-! ## Current ownership surface and remaining carrier mismatch -/
 
 /-- Current-window ownership after internal negative cancellation.  The spare
@@ -316,8 +615,48 @@ theorem CanonicalOpenPositiveQueueExcursion.queue_le_globalSelected_add_internal
   unfold canonicalSaturatedTokenCount at hsplit
   omega
 
+/-- Improved current-window ownership: positive-successor spare tokens are
+absorbed by unused incidences of their positive successor blocks.  Only the
+genuinely zero-drift spare class remains explicit. -/
+theorem CanonicalOpenPositiveQueueExcursion.queue_le_globalSelected_add_zeroSpare_rigid_terminal
+    {n : OddNat} {q m : ℕ}
+    (h : CanonicalOpenPositiveQueueExcursion n q m) :
+    (canonicalOutstandingClaimQueue n m : ℤ) ≤
+      Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) +
+        (canonicalInternalSaturatedZeroSpareIndices n q m).card +
+          canonicalInternalRigidSaturatedResidualCount n q m +
+            canonicalTerminalSaturatedIndicator n m := by
+  have hmass := h.queue_eq_positiveMass_sub_negativeMass
+  have habsorbNat :=
+    sum_intToNat_positiveDrift_add_internalPositiveSpare_le_global_add_saturated
+      n q m
+  have hpositiveCast : canonicalPositiveDriftMass n q m =
+      ((∑ k ∈ canonicalPositiveDriftBlockIndices n q m,
+        Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) := by
+    rw [canonicalPositiveDriftMass_eq_sum_positiveDriftBlockIndices]
+    push_cast
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hpos := (Finset.mem_filter.mp hk).2
+    rw [Int.toNat_of_nonneg hpos.le]
+  have habsorb : canonicalPositiveDriftMass n q m +
+      (canonicalInternalSaturatedPositiveSpareIndices n q m).card ≤
+        (Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) : ℤ) +
+          (canonicalSaturatedBlockIndices n q m).card := by
+    rw [hpositiveCast]
+    exact_mod_cast habsorbNat
+  have hsplit :=
+    canonicalSaturatedTokenCount_eq_internalClassCounts_add_terminal
+      n q m h.1
+  have hspareSplit :=
+    card_canonicalInternalSaturatedSpareIndices_eq_zero_add_positive n q m
+  have hnegative :=
+    card_canonicalInternalSaturatedNegativeIndices_le_negativeMass n q m
+  unfold canonicalSaturatedTokenCount at hsplit
+  omega
+
 /-!
-The stronger cp-346 target without `internalSpareCount` cannot be obtained by
+The stronger target without every spare residual cannot be obtained by
 the requested contribution-preserving embedding into
 `CanonicalGlobalSelectedPressureCarrier n q m` from the current APIs.
 
@@ -334,9 +673,18 @@ Therefore removing `internalSpareCount` requires one of two new contracts:
 * prove that zero-drift spare successors cannot occur in the intended open
   excursions.
 
-Neither contract is currently available.  Treating zero-spare as if it were
-in the positive-only carrier would be a type-invalid ownership claim, so this
-module stops at the theorem above.
+Neither contract is currently available.  cp-347 does absorb the strictly
+positive successor branch by its actual spare complement, but treating the
+remaining zero-spare branch as if it were in the positive-only carrier would
+still be a type-invalid ownership claim.
+
+The companion finite audit over odd roots through `16383` found zero-drift
+spare successors (the first record-window witness has root `3931`, predecessor
+block `0`, successor block `1`, and spare cardinality `1`).  This observation
+is not a theorem, but it rules out using finite evidence to motivate an
+impossibility lemma.  A later checkpoint that removes this residual must add a
+selected-arrival carrier admitting zero-drift blocks; it must not weaken the
+positive-only index contract proved here.
 -/
 
 end DkMath.Collatz

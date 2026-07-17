@@ -22,6 +22,15 @@ from pathlib import Path
 ROOT_MAX = 16383
 BLOCK_LIMIT = 4096
 
+# cp-347 diagnostic only.  These counters observe spare successors while a
+# root installs a new record window; they deliberately do not change the CSV
+# surface inherited from cp-345.
+SPARE_SIGN_DIAGNOSTIC = {
+    "zero": 0,
+    "positive": 0,
+    "first_zero": None,
+}
+
 
 def v2(value: int) -> int:
     assert value > 0
@@ -242,6 +251,21 @@ def audit_root(root: int) -> AuditRow:
                 elif spare_card > 0:
                     spare_successors += 1
                     spare_carrier_count += spare_card
+                    if successor_drift == 0:
+                        SPARE_SIGN_DIAGNOSTIC["zero"] += 1
+                        if SPARE_SIGN_DIAGNOSTIC["first_zero"] is None:
+                            SPARE_SIGN_DIAGNOSTIC["first_zero"] = {
+                                "root": root,
+                                "window_start": q,
+                                "window_end": block,
+                                "predecessor": index,
+                                "successor": successor,
+                                "successor_drift": successor_drift,
+                                "spare_card": spare_card,
+                            }
+                    else:
+                        assert successor_drift > 0
+                        SPARE_SIGN_DIAGNOSTIC["positive"] += 1
                 elif successor_drift == 0 and selected_card == 0:
                     zero_rigid_successors += 1
                 else:
@@ -379,6 +403,12 @@ def main() -> None:
         f"roots={len(rows)} reached_one={reached} positive_maximum={positive} "
         f"largest={max(row.maximum_queue for row in rows)}"
     )
+    print(
+        "record_window_internal_spare_by_successor_drift "
+        f"zero={SPARE_SIGN_DIAGNOSTIC['zero']} "
+        f"positive={SPARE_SIGN_DIAGNOSTIC['positive']}"
+    )
+    print(f"first_zero_drift_spare={SPARE_SIGN_DIAGNOSTIC['first_zero']}")
     for row in records[:10]:
         print(row)
 
