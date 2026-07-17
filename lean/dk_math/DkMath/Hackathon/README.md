@@ -27,7 +27,7 @@ This project demonstrates a workflow in which:
 3. Lean verifies the resulting theorem surface;
 4. the verified mathematics is transformed into an accessible visual demonstration.
 
-The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula and its inverse-projection program.
+The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula, finite-prime escape, and the new GN5 extension.
 
 ---
 
