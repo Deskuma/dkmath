@@ -4,10 +4,12 @@
 
 | Asset | Role | Status |
 |---|---|---|
-| `output/DkMathCosmicPromoFinal.mp4` | 2:54 final silent promo | Generated |
+| `output/DkMathCosmicPromoFinal.mp4` | 2:54 final visual promo | Generated |
+| `output/DkMathCosmicPromoFinalNarrated.mp4` | 2:54 final narrated promo | Generated |
 | `narration.srt` | Final timed narration/subtitle source | Included |
 | `timeline.ass` | Burned-in evidence-card timeline | Included |
 | `build_submission.sh` | Reproducible FFmpeg build | Included |
+| `build_narrated_promo.sh` | Reproducible Kokoro/FFmpeg narration build | Included |
 | `README.md` | Submission text and reproduction guide | Included |
 
 ## Verified source evidence
@@ -45,4 +47,3 @@ at 01:48. It has no audio stream.
 - Optional music and sound design with appropriate licensing
 - Optional authentic Codex collaboration and Lean editor recordings
 - Hackathon platform metadata and uploaded media URL
-

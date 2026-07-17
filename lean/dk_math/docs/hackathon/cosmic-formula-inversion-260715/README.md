@@ -1,6 +1,9 @@
-# Hackathon: OpenAI Build Week - 260715
+# Hackathon: OpenAI Build Week - 260715 @ devpost
 
-# DkMath — Cosmic Formula Inversion
+Date: 2026/07/18  1:19
+Author: Deskuma (D.) and AI GPT@OpenAI (Wise Wolf)
+
+## DkMath — Cosmic Formula Inversion
 
 A verifiable AI-assisted mathematical research project for the OpenAI Build Week Hackathon.
 
@@ -11,7 +14,7 @@ This project demonstrates a workflow in which:
 3. Lean verifies the resulting theorem surface;
 4. the verified mathematics is transformed into an accessible visual demonstration.
 
-The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula and its inverse-projection program.
+The main theme is the transition from a finite universe of known prime factors to a provably new prime factor, expressed through the DkMath Cosmic Formula, finite-prime escape, and the new GN5 extension.
 
 ---
 

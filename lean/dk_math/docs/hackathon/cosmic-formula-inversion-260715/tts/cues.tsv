@@ -1,0 +1,12 @@
+# cue|start_seconds|end_seconds|text_file
+01|0|12|cues/01.txt
+02|12|30|cues/02.txt
+03|30|48|cues/03.txt
+04|48|68|cues/04.txt
+05|68|90|cues/05.txt
+06|90|108|cues/06.txt
+07|108|124|cues/07.txt
+08|124|145|cues/08.txt
+09|145|160|cues/09.txt
+10|160|167|cues/10.txt
+11|167|174|cues/11.txt
