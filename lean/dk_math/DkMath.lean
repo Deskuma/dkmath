@@ -28,6 +28,8 @@ import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: w
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
 import DkMath.Pascal  -- Pascal bridge modules
 import DkMath.Petal  -- Petal: relative polygon and GN bridge surface
+-- Hackathon finite-prime escape → GN5 clean-channel demo
+import DkMath.Hackathon.FinitePrimeEscapeGN5
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
