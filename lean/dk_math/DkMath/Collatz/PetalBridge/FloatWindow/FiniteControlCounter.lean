@@ -25,8 +25,54 @@ guard has been proved independently from canonical block arithmetic; using
 the desired prefix invariant itself as that guard would be circular.
 -/
 
+/-- Core signed-counter certificate.  No finite control state is needed for
+the recurrence or invariant induction. -/
+structure SignedCounterCertificate where
+  weight : ℕ → ℤ
+  credit : ℕ → ℤ
+  initial_credit_nonneg : 0 ≤ credit 0
+  credit_succ : ∀ m, credit (m + 1) = credit m - weight m
+  preserves_nonneg : ∀ m, 0 ≤ credit m → weight m ≤ credit m
+
+namespace SignedCounterCertificate
+
+/-- Exact recurrence and the local guard preserve credit nonnegativity. -/
+theorem credit_nonneg (C : SignedCounterCertificate) (M : ℕ) :
+    0 ≤ C.credit M := by
+  induction M with
+  | zero => exact C.initial_credit_nonneg
+  | succ M ih =>
+      rw [C.credit_succ]
+      exact sub_nonneg.mpr (C.preserves_nonneg M ih)
+
+/-- The unrestricted counter recurrence telescopes exactly. -/
+theorem sum_weight_range_eq_credit_zero_sub
+    (C : SignedCounterCertificate) (M : ℕ) :
+    (∑ m ∈ Finset.range M, C.weight m) = C.credit 0 - C.credit M := by
+  induction M with
+  | zero => simp
+  | succ M ih =>
+      rw [Finset.sum_range_succ, ih, C.credit_succ]
+      ring
+
+/-- General soundness with arbitrary nonnegative initial credit. -/
+theorem sum_weight_range_le_initial_credit
+    (C : SignedCounterCertificate) (M : ℕ) :
+    (∑ m ∈ Finset.range M, C.weight m) ≤ C.credit 0 := by
+  rw [C.sum_weight_range_eq_credit_zero_sub]
+  exact sub_le_self _ (C.credit_nonneg M)
+
+/-- Zero initial credit recovers nonpositive prefixes. -/
+theorem sum_weight_range_nonpos_of_initial_credit_eq_zero
+    (C : SignedCounterCertificate) (hzero : C.credit 0 = 0) (M : ℕ) :
+    (∑ m ∈ Finset.range M, C.weight m) ≤ 0 := by
+  simpa [hzero] using C.sum_weight_range_le_initial_credit M
+
+end SignedCounterCertificate
+
 /-- A finite control sequence accompanied by an unrestricted integer counter.
-The recurrence and local guard are the arithmetic proof obligations. -/
+The finite signature is observational; soundness is delegated to the core
+signed-counter certificate. -/
 structure FiniteControlSignedCounterCertificate
     (Signature : Type*) [Finite Signature] where
   signature : ℕ → Signature
@@ -40,34 +86,43 @@ namespace FiniteControlSignedCounterCertificate
 
 variable {Signature : Type*} [Finite Signature]
 
+/-- Forget the finite diagnostic control and retain the arithmetic counter
+certificate used by the soundness proof. -/
+def toSignedCounterCertificate
+    (C : FiniteControlSignedCounterCertificate Signature) :
+    SignedCounterCertificate where
+  weight := C.weight
+  credit := C.credit
+  initial_credit_nonneg := by rw [C.initial_credit_eq_zero]
+  credit_succ := C.credit_succ
+  preserves_nonneg := C.preserves_nonneg
+
 /-- Exact counter recurrence and the local guard preserve nonnegative credit
 at every realized transition. -/
 theorem credit_nonneg
     (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
-    0 ≤ C.credit M := by
-  induction M with
-  | zero => rw [C.initial_credit_eq_zero]
-  | succ M ih =>
-      rw [C.credit_succ]
-      exact sub_nonneg.mpr (C.preserves_nonneg M ih)
+    0 ≤ C.credit M :=
+  C.toSignedCounterCertificate.credit_nonneg M
 
 /-- Counter recurrence telescopes exactly: accumulated weight is initial
 credit minus final credit. -/
 theorem sum_weight_range_eq_credit_zero_sub
     (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
-    (∑ m ∈ Finset.range M, C.weight m) = C.credit 0 - C.credit M := by
-  induction M with
-  | zero => simp
-  | succ M ih =>
-      rw [Finset.sum_range_succ, ih, C.credit_succ]
-      ring
+    (∑ m ∈ Finset.range M, C.weight m) = C.credit 0 - C.credit M :=
+  C.toSignedCounterCertificate.sum_weight_range_eq_credit_zero_sub M
+
+/-- Finite-control wrapper of the general initial-credit bound. -/
+theorem sum_weight_range_le_initial_credit
+    (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
+    (∑ m ∈ Finset.range M, C.weight m) ≤ C.credit 0 :=
+  C.toSignedCounterCertificate.sum_weight_range_le_initial_credit M
 
 /-- Soundness: every prefix weight is nonpositive. -/
 theorem sum_weight_range_nonpos
     (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
     (∑ m ∈ Finset.range M, C.weight m) ≤ 0 := by
-  rw [C.sum_weight_range_eq_credit_zero_sub, C.initial_credit_eq_zero]
-  simpa only [zero_sub] using neg_nonpos.mpr (C.credit_nonneg M)
+  exact C.toSignedCounterCertificate.sum_weight_range_nonpos_of_initial_credit_eq_zero
+    C.initial_credit_eq_zero M
 
 end FiniteControlSignedCounterCertificate
 

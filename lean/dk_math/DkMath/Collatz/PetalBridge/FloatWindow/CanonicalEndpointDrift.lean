@@ -88,6 +88,13 @@ theorem GlobalEndpointDriftBound.rootwise
 
 /-! ## Exact positive-drift normal forms -/
 
+/-- The initial canonical block starts at the odd root itself. -/
+@[simp] theorem canonicalBlockStartState_zero_eq_root (n : OddNat) :
+    canonicalBlockStartState n 0 = n.1 := by
+  unfold canonicalBlockStartState canonicalBlockStartTime
+    canonicalEndpointBlockStart
+  rfl
+
 /-- Exact claim/capacity form with terminal capacity expressed by its 2-adic
 valuation.  Positivity is not needed for the identity. -/
 theorem endpointAccountingTerm_eq_claimCount_sub_terminalValuation
@@ -107,7 +114,20 @@ theorem endpointAccountingTerm_le_length_sub_terminalValuation
   simpa [canonicalBlockCapacityCount_eq_terminalValuation] using
     endpointAccountingTerm_le_length_sub_capacity n m
 
-/-- Exact carry-word refinement: the gap between the coarse
+/-- Primary block conservation law.  Block length is partitioned exactly into
+realized endpoint drift, unrealized claim depths, and terminal 2-adic
+absorption.  All terms live in `Int`, so no natural subtraction loses
+information. -/
+theorem endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
+    (n : OddNat) (m : ℕ) :
+    endpointAccountingTerm n m +
+          ((canonicalBlockClaimHoles n m).card : ℤ) +
+        (canonicalBlockTerminalValuation n m : ℤ) =
+      (canonicalBlockLength n m : ℤ) := by
+  rw [endpointAccountingTerm_eq_length_sub_terminalValuation_sub_claimHoles]
+  ring
+
+/-- Rearranged carry-word refinement: the gap between the coarse
 `length - valuation` ceiling and actual drift is precisely the number of
 missing claim depths. -/
 theorem endpointAccountingTerm_add_claimHoles_eq_length_sub_terminalValuation
@@ -115,8 +135,10 @@ theorem endpointAccountingTerm_add_claimHoles_eq_length_sub_terminalValuation
     endpointAccountingTerm n m + (canonicalBlockClaimHoles n m).card =
       (canonicalBlockLength n m : ℤ) -
         canonicalBlockTerminalValuation n m := by
-  rw [endpointAccountingTerm_eq_length_sub_terminalValuation_sub_claimHoles]
-  ring
+  have h :=
+    endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
+      n m
+  omega
 
 /-! ## Sufficient rootwise hypotheses
 

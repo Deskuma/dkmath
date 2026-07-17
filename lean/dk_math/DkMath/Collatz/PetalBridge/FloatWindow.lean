@@ -39,6 +39,8 @@ import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFlow
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeHorizon
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointDrift
+import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointConservation
+import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalHighDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
 import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
 
