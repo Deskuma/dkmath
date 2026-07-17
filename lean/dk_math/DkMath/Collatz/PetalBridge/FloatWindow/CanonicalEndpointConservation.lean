@@ -245,9 +245,41 @@ theorem rootwiseEndpointDriftBound_iff_length_le_absorption_add
     have habsorb := hB m
     omega
 
+/-! ## Cumulative width boundedness
+
+This is deliberately stronger than pointwise endpoint-drift boundedness.  It
+controls every canonical width relative to the initial root width, rather than
+only controlling each one-step increment.  No converse implication is claimed.
+-/
+
+/-- A specified reserve bounds every canonical block-start width above the
+initial root width. -/
+def CanonicalWidthWithinReserve (n : OddNat) (B : ℕ) : Prop :=
+  ∀ M, bitWidth (canonicalBlockStartState n M) ≤ bitWidth n.1 + B
+
+/-- One fixed root admits some finite cumulative width reserve. -/
+def RootwiseCanonicalWidthBound (n : OddNat) : Prop :=
+  ∃ B : ℕ, CanonicalWidthWithinReserve n B
+
+/-- A cumulative width reserve gives a pointwise endpoint-drift ceiling.  The
+reverse implication is not available: bounded increments need not bound their
+cumulative level. -/
+theorem RootwiseCanonicalWidthBound.to_endpointDriftBound
+    {n : OddNat} (h : RootwiseCanonicalWidthBound n) :
+    RootwiseEndpointDriftBound n := by
+  rcases h with ⟨B, hB⟩
+  refine ⟨(bitWidth n.1 + B : ℕ), ?_⟩
+  intro m
+  rw [endpointAccountingTerm_eq_canonicalBlock_bitWidth_sub]
+  have hnext := hB (m + 1)
+  rw [canonicalBlockStartState_succ_eq_nextStartState] at hnext
+  omega
+
 /-! ## Scaled cumulative absorption -/
 
-/-- Scaling preserves the exact window budget over `Int`. -/
+/-- Scaling preserves the exact window budget over `Int`.  This is algebraic
+transport of the conservation identity, not a spiral-growth coefficient
+estimate. -/
 theorem canonicalEndpointWidthBudgetWindow_conservation_mul
     (n : OddNat) (q M : ℕ) (A : ℤ) :
     A * ((bitWidth (canonicalBlockStartState n (q + M)) : ℤ) -
@@ -311,12 +343,12 @@ theorem widthGrowth_nonpos_of_length_le_absorption
   apply widthGrowth_le_of_length_le_absorption_add (C := 0)
   simpa using habsorb
 
-/-! ## Canonical counter candidate
+/-! ## Zero-reserve diagnostic counter
 
-The following counter has the exact recurrence required by the generic
-counter API.  Its nonnegativity is exactly the missing width-prefix control,
-so no certificate is constructed here: proving the local guard from the
-counter invariant itself would be circular.
+The following expression has the exact counter recurrence, but it is not a
+general certificate candidate.  Positive initial endpoint drift makes its
+credit negative immediately.  It remains useful as the exact negative of
+cumulative width growth.
 -/
 
 /-- Cumulative absorbed budget minus cumulative block length. -/
@@ -359,6 +391,21 @@ theorem canonicalEndpointCounterCredit_succ
   rw [canonicalBlockStartState_succ_eq_nextStartState]
   ring
 
+/-- After one block, zero-reserve credit is exactly negative initial drift. -/
+theorem canonicalEndpointCounterCredit_one
+    (n : OddNat) :
+    canonicalEndpointCounterCredit n 1 = -endpointAccountingTerm n 0 := by
+  rw [show 1 = 0 + 1 by omega, canonicalEndpointCounterCredit_succ]
+  simp
+
+/-- Positive initial drift refutes nonnegativity of zero-reserve credit at the
+first transition. -/
+theorem canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos
+    {n : OddNat} (hpos : 0 < endpointAccountingTerm n 0) :
+    canonicalEndpointCounterCredit n 1 < 0 := by
+  rw [canonicalEndpointCounterCredit_one]
+  omega
+
 /-- The desired local guard is equivalent to nonnegativity of the next
 candidate credit.  This identifies the remaining arithmetic obligation but
 does not discharge it. -/
@@ -368,5 +415,60 @@ theorem endpointAccountingTerm_le_counterCredit_iff_next_nonneg
       0 ≤ canonicalEndpointCounterCredit n (M + 1) := by
   rw [canonicalEndpointCounterCredit_succ]
   omega
+
+/-! ## Reserved endpoint credit -/
+
+/-- Root-dependent reserve plus negative cumulative canonical width growth. -/
+noncomputable def canonicalEndpointReservedCredit
+    (n : OddNat) (B M : ℕ) : ℤ :=
+  (B : ℤ) + bitWidth n.1 - bitWidth (canonicalBlockStartState n M)
+
+/-- Reserved credit starts at the supplied reserve. -/
+@[simp] theorem canonicalEndpointReservedCredit_zero
+    (n : OddNat) (B : ℕ) :
+    canonicalEndpointReservedCredit n B 0 = B := by
+  simp [canonicalEndpointReservedCredit]
+
+/-- Reserved credit has the same exact endpoint-drift recurrence as the
+zero-reserve diagnostic. -/
+theorem canonicalEndpointReservedCredit_succ
+    (n : OddNat) (B M : ℕ) :
+    canonicalEndpointReservedCredit n B (M + 1) =
+      canonicalEndpointReservedCredit n B M - endpointAccountingTerm n M := by
+  rw [canonicalEndpointReservedCredit, canonicalEndpointReservedCredit,
+    endpointAccountingTerm_eq_canonicalBlock_bitWidth_sub,
+    canonicalBlockStartState_succ_eq_nextStartState]
+  ring
+
+/-- Reserved credit is nonnegative exactly while the current canonical width
+stays inside the supplied reserve. -/
+theorem canonicalEndpointReservedCredit_nonneg_iff
+    (n : OddNat) (B M : ℕ) :
+    0 ≤ canonicalEndpointReservedCredit n B M ↔
+      bitWidth (canonicalBlockStartState n M) ≤ bitWidth n.1 + B := by
+  rw [canonicalEndpointReservedCredit]
+  omega
+
+/-- All-time nonnegativity of reserved credit is exactly the corresponding
+cumulative width bound. -/
+theorem canonicalEndpointReservedCredit_all_nonneg_iff
+    (n : OddNat) (B : ℕ) :
+    (∀ M, 0 ≤ canonicalEndpointReservedCredit n B M) ↔
+      CanonicalWidthWithinReserve n B := by
+  constructor <;> intro h M
+  · exact (canonicalEndpointReservedCredit_nonneg_iff n B M).mp (h M)
+  · exact (canonicalEndpointReservedCredit_nonneg_iff n B M).mpr (h M)
+
+/-- Existence of a finite cumulative width reserve is equivalent to existence
+of a reserve whose endpoint credit stays nonnegative for all canonical time. -/
+theorem rootwiseCanonicalWidthBound_iff_exists_reservedCredit_nonneg
+    (n : OddNat) :
+    RootwiseCanonicalWidthBound n ↔
+      ∃ B : ℕ, ∀ M, 0 ≤ canonicalEndpointReservedCredit n B M := by
+  constructor
+  · rintro ⟨B, hB⟩
+    exact ⟨B, (canonicalEndpointReservedCredit_all_nonneg_iff n B).mpr hB⟩
+  · rintro ⟨B, hB⟩
+    exact ⟨B, (canonicalEndpointReservedCredit_all_nonneg_iff n B).mp hB⟩
 
 end DkMath.Collatz

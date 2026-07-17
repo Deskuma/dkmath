@@ -53,6 +53,34 @@ theorem mem_canonicalHighDriftBlocksUpTo_iff_budget
   ext m
   simp
 
+/-- Extending the horizon by one either inserts exactly the new terminal
+index or leaves the finite carrier unchanged. -/
+theorem canonicalHighDriftBlocksUpTo_succ
+    (n : OddNat) (K M : ℕ) :
+    canonicalHighDriftBlocksUpTo n K (M + 1) =
+      if (K : ℤ) ≤ endpointAccountingTerm n M then
+        insert M (canonicalHighDriftBlocksUpTo n K M)
+      else canonicalHighDriftBlocksUpTo n K M := by
+  unfold canonicalHighDriftBlocksUpTo
+  rw [Finset.range_add_one, Finset.filter_insert]
+
+/-- Membership at horizon `M + 1` decomposes into old membership or the new
+terminal event. -/
+theorem mem_canonicalHighDriftBlocksUpTo_succ_iff
+    {n : OddNat} {K M m : ℕ} :
+    m ∈ canonicalHighDriftBlocksUpTo n K (M + 1) ↔
+      m ∈ canonicalHighDriftBlocksUpTo n K M ∨
+        (m = M ∧ (K : ℤ) ≤ endpointAccountingTerm n M) := by
+  rw [mem_canonicalHighDriftBlocksUpTo,
+    mem_canonicalHighDriftBlocksUpTo]
+  constructor <;> intro h
+  · by_cases hm : m < M
+    · exact Or.inl ⟨hm, h.2⟩
+    · exact Or.inr ⟨by omega, by simpa [show m = M by omega] using h.2⟩
+  · rcases h with h | ⟨rfl, hK⟩
+    · exact ⟨by omega, h.2⟩
+    · exact ⟨by omega, hK⟩
+
 /-- Enlarging the observed prefix only adds possible events. -/
 theorem canonicalHighDriftBlocksUpTo_mono_prefix
     (n : OddNat) (K : ℕ) {M N : ℕ} (hMN : M ≤ N) :
@@ -76,6 +104,18 @@ theorem canonicalHighDriftBlocksUpTo_antitone_threshold
 noncomputable def canonicalHighDriftEventCount
     (n : OddNat) (K M : ℕ) : ℕ :=
   (canonicalHighDriftBlocksUpTo n K M).card
+
+/-- Exact one-step event-count update for the finite observation horizon. -/
+theorem canonicalHighDriftEventCount_succ
+    (n : OddNat) (K M : ℕ) :
+    canonicalHighDriftEventCount n K (M + 1) =
+      canonicalHighDriftEventCount n K M +
+        if (K : ℤ) ≤ endpointAccountingTerm n M then 1 else 0 := by
+  unfold canonicalHighDriftEventCount
+  rw [canonicalHighDriftBlocksUpTo_succ]
+  by_cases hnew : (K : ℤ) ≤ endpointAccountingTerm n M
+  · simp [hnew, canonicalHighDriftBlocksUpTo]
+  · simp [hnew]
 
 /-- Event count is monotone in the finite observation horizon. -/
 theorem canonicalHighDriftEventCount_mono_prefix

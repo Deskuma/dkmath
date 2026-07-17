@@ -32,18 +32,11 @@ noncomputable def allOnesOdd (L : ℕ) (hL : 0 < L) : OddNat := by
 @[simp] theorem allOnesOdd_val (L : ℕ) (hL : 0 < L) :
     (allOnesOdd L hL).1 = 2 ^ L - 1 := rfl
 
-/-- Every first canonical block starts at the root itself. -/
-theorem canonicalBlockStartState_zero (n : OddNat) :
-    canonicalBlockStartState n 0 = n.1 := by
-  unfold canonicalBlockStartState canonicalBlockStartTime
-    canonicalEndpointBlockStart
-  rfl
-
 /-- The all-ones first block starts at the expected binary word. -/
 @[simp] theorem canonicalBlockStartState_allOnesOdd_zero
     (L : ℕ) (hL : 0 < L) :
     canonicalBlockStartState (allOnesOdd L hL) 0 = 2 ^ L - 1 := by
-  rw [canonicalBlockStartState_zero]
+  rw [canonicalBlockStartState_zero_eq_root]
   rfl
 
 /-- The first canonical block of `2^L - 1` has exact length `L`. -/
