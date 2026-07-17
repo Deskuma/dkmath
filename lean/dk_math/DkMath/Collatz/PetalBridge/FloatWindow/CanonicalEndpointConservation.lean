@@ -125,6 +125,43 @@ theorem canonicalEndpointBudgetWindow_conservation_singleton
     endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
       n q
 
+/-! ## Absorption deficit -/
+
+/-- Residual block-length budget after both exact absorption channels over the
+half-open block window `[q, q + M)`. -/
+noncomputable def canonicalAbsorptionDeficitWindow
+    (n : OddNat) (q M : ℕ) : ℤ :=
+  canonicalBlockLengthWindowSum n q M -
+    canonicalClaimHolesWindowSum n q M -
+      canonicalTerminalValuationWindowSum n q M
+
+@[simp] theorem canonicalAbsorptionDeficitWindow_zero
+    (n : OddNat) (q : ℕ) :
+    canonicalAbsorptionDeficitWindow n q 0 = 0 := by
+  simp [canonicalAbsorptionDeficitWindow]
+
+/-- The singleton absorption deficit is the one-block endpoint drift. -/
+@[simp] theorem canonicalAbsorptionDeficitWindow_one
+    (n : OddNat) (q : ℕ) :
+    canonicalAbsorptionDeficitWindow n q 1 = endpointAccountingTerm n q := by
+  rw [canonicalAbsorptionDeficitWindow,
+    canonicalBlockLengthWindowSum_one, canonicalClaimHolesWindowSum_one,
+    canonicalTerminalValuationWindowSum_one]
+  have h :=
+    endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
+      n q
+  omega
+
+/-- Exact conservation form: absorption deficit is precisely signed endpoint
+drift on the same half-open window. -/
+theorem canonicalAbsorptionDeficitWindow_eq_endpointDriftWindowSum
+    (n : OddNat) (q M : ℕ) :
+    canonicalAbsorptionDeficitWindow n q M =
+      canonicalEndpointDriftWindowSum n q M := by
+  have h := canonicalEndpointBudgetWindow_conservation n q M
+  rw [canonicalAbsorptionDeficitWindow]
+  omega
+
 /-- Shifted endpoint telescope: drift on `[q, q + M)` is exactly the width
 change between the two canonical block starts. -/
 theorem canonicalEndpointDriftWindowSum_eq_startState_bitWidth_sub
@@ -141,6 +178,46 @@ theorem canonicalEndpointDriftWindowSum_eq_startState_bitWidth_sub
       rw [show q + (M + 1) = (q + M) + 1 by omega,
         canonicalBlockStartState_succ_eq_nextStartState]
       ring
+
+/-- The absorption deficit is also the exact width change between the two
+canonical block starts. -/
+theorem canonicalAbsorptionDeficitWindow_eq_startState_bitWidth_sub
+    (n : OddNat) (q M : ℕ) :
+    canonicalAbsorptionDeficitWindow n q M =
+      (bitWidth (canonicalBlockStartState n (q + M)) : ℤ) -
+        bitWidth (canonicalBlockStartState n q) := by
+  rw [canonicalAbsorptionDeficitWindow_eq_endpointDriftWindowSum,
+    canonicalEndpointDriftWindowSum_eq_startState_bitWidth_sub]
+
+/-- The inclusive scalar window `q..m` is the half-open conservation window
+of length `m - q + 1`. -/
+theorem canonicalEndpointDriftWindowSum_eq_canonicalWindowDriftInt
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
+    canonicalEndpointDriftWindowSum n q (m - q + 1) =
+      canonicalWindowDriftInt n q m := by
+  unfold canonicalEndpointDriftWindowSum canonicalWindowDriftInt
+  rw [← Finset.Ico_succ_right_eq_Icc q m, Finset.sum_Ico_eq_sum_range]
+  change (∑ i ∈ Finset.range (m - q + 1),
+      endpointAccountingTerm n (q + i)) =
+    ∑ i ∈ Finset.range (m + 1 - q), endpointAccountingTerm n (q + i)
+  have hlen : m + 1 - q = m - q + 1 := by omega
+  rw [hlen]
+
+/-- Inclusive-to-half-open transport for the exact absorption deficit. -/
+theorem canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+    (n : OddNat) {q m : ℕ} (hqm : q ≤ m) :
+    canonicalAbsorptionDeficitWindow n q (m - q + 1) =
+      canonicalWindowDriftInt n q m := by
+  rw [canonicalAbsorptionDeficitWindow_eq_endpointDriftWindowSum,
+    canonicalEndpointDriftWindowSum_eq_canonicalWindowDriftInt n hqm]
+
+/-- At an inclusive singleton endpoint, the conversion length is one. -/
+theorem canonicalAbsorptionDeficitWindow_self
+    (n : OddNat) (m : ℕ) :
+    canonicalAbsorptionDeficitWindow n m (m - m + 1) =
+      canonicalWindowDriftInt n m m := by
+  simpa using canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+    n (q := m) (m := m) le_rfl
 
 /-- Prefix telescope ending at the start of block `M`. -/
 theorem canonicalEndpointDriftPrefixSum_eq_startState_bitWidth_sub
@@ -260,6 +337,32 @@ def CanonicalWidthWithinReserve (n : OddNat) (B : ℕ) : Prop :=
 /-- One fixed root admits some finite cumulative width reserve. -/
 def RootwiseCanonicalWidthBound (n : OddNat) : Prop :=
   ∃ B : ℕ, CanonicalWidthWithinReserve n B
+
+/-- A reserve bounds every canonical width exactly when it bounds every signed
+endpoint-drift prefix. -/
+theorem canonicalWidthWithinReserve_iff_prefixEndpointDrift_le
+    (n : OddNat) (B : ℕ) :
+    CanonicalWidthWithinReserve n B ↔
+      ∀ M, canonicalEndpointDriftWindowSum n 0 M ≤ B := by
+  constructor <;> intro h M
+  · rw [canonicalEndpointDriftPrefixSum_eq_startState_bitWidth_sub]
+    have hwidth := h M
+    omega
+  · have hprefix := h M
+    rw [canonicalEndpointDriftPrefixSum_eq_startState_bitWidth_sub] at hprefix
+    omega
+
+/-- Fixed-root cumulative width boundedness is directly equivalent to a finite
+upper bound on all endpoint-drift prefixes. -/
+theorem rootwiseCanonicalWidthBound_iff_exists_prefixEndpointDrift_le
+    (n : OddNat) :
+    RootwiseCanonicalWidthBound n ↔
+      ∃ B : ℕ, ∀ M, canonicalEndpointDriftWindowSum n 0 M ≤ B := by
+  constructor
+  · rintro ⟨B, hB⟩
+    exact ⟨B, (canonicalWidthWithinReserve_iff_prefixEndpointDrift_le n B).mp hB⟩
+  · rintro ⟨B, hB⟩
+    exact ⟨B, (canonicalWidthWithinReserve_iff_prefixEndpointDrift_le n B).mpr hB⟩
 
 /-- A cumulative width reserve gives a pointwise endpoint-drift ceiling.  The
 reverse implication is not available: bounded increments need not bound their
@@ -406,9 +509,9 @@ theorem canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos
   rw [canonicalEndpointCounterCredit_one]
   omega
 
-/-- The desired local guard is equivalent to nonnegativity of the next
-candidate credit.  This identifies the remaining arithmetic obligation but
-does not discharge it. -/
+/-- The zero-reserve local guard is equivalent to nonnegativity of the next
+credit.  This equivalence is diagnostic, not an open general guard: at `M = 0`
+it is false whenever the initial endpoint drift is positive. -/
 theorem endpointAccountingTerm_le_counterCredit_iff_next_nonneg
     (n : OddNat) (M : ℕ) :
     endpointAccountingTerm n M ≤ canonicalEndpointCounterCredit n M ↔

@@ -54,17 +54,40 @@ theorem canonicalEndpointCounterCredit_allOnesOdd_odd_succ_one_neg
   omega
 
 /-- Positive initial drift excludes every core counter certificate whose
-weight and credit are definitionally the zero-reserve endpoint functions. -/
+credit is the zero-reserve endpoint function.  No weight hypothesis is needed:
+every certificate requires all credit values to be nonnegative. -/
+theorem not_exists_signedCounterCertificate_credit_eq_zeroReserve_of_initialDrift_pos
+    {n : OddNat} (hpos : 0 < endpointAccountingTerm n 0) :
+    ¬ ∃ C : SignedCounterCertificate,
+      C.credit = canonicalEndpointCounterCredit n := by
+  rintro ⟨C, hcredit⟩
+  have hnonneg := C.credit_nonneg 1
+  rw [hcredit] at hnonneg
+  have hneg := canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos hpos
+  omega
+
+/-- If a certificate did use zero-reserve credit, its exact recurrence would
+force its weight to be canonical endpoint drift. -/
+theorem SignedCounterCertificate.weight_eq_endpointAccountingTerm_of_credit_eq
+    {n : OddNat} (C : SignedCounterCertificate)
+    (hcredit : C.credit = canonicalEndpointCounterCredit n) :
+    C.weight = endpointAccountingTerm n := by
+  funext m
+  have hrec := C.credit_succ m
+  rw [hcredit] at hrec
+  have hcanonical := canonicalEndpointCounterCredit_succ n m
+  omega
+
+/-- Compatibility form retaining the previously exposed weight equality. -/
 theorem not_exists_signedCounterCertificate_zeroReserve_of_initialDrift_pos
     {n : OddNat} (hpos : 0 < endpointAccountingTerm n 0) :
     ¬ ∃ C : SignedCounterCertificate,
       C.weight = (fun m => endpointAccountingTerm n m) ∧
         C.credit = canonicalEndpointCounterCredit n := by
   rintro ⟨C, _, hcredit⟩
-  have hnonneg := C.credit_nonneg 1
-  rw [hcredit] at hnonneg
-  have hneg := canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos hpos
-  omega
+  exact
+    not_exists_signedCounterCertificate_credit_eq_zeroReserve_of_initialDrift_pos
+      hpos ⟨C, hcredit⟩
 
 /-- The positive all-ones subfamily gives an explicit symbolic obstruction to
 the zero-reserve certificate. -/
@@ -127,6 +150,31 @@ theorem canonicalEndpointWidth_eq_blockStartState_succ
   rw [canonicalBlockStartState_succ_eq_nextStartState]
   rfl
 
+/-- A width reserve `B` gives the explicit reflected-queue ceiling
+`root width + B`. -/
+theorem CanonicalWidthWithinReserve.to_queueUniformUpperBound
+    {n : OddNat} {B : ℕ} (hB : CanonicalWidthWithinReserve n B) :
+    CanonicalOutstandingClaimQueueUniformUpperBound n (bitWidth n.1 + B) := by
+  have hendpoint :
+      CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + B) := by
+    intro m
+    rw [canonicalEndpointWidth_eq_blockStartState_succ]
+    exact hB (m + 1)
+  exact hendpoint.to_outstandingClaimQueueUniformUpperBound
+
+/-- A reflected-queue ceiling `C` gives a cumulative width reserve with the
+same reserve parameter `C`. -/
+theorem CanonicalOutstandingClaimQueueUniformUpperBound.to_widthWithinReserve
+    {n : OddNat} {C : ℕ}
+    (hC : CanonicalOutstandingClaimQueueUniformUpperBound n C) :
+    CanonicalWidthWithinReserve n C := by
+  intro M
+  cases M with
+  | zero => simp
+  | succ m =>
+      rw [← canonicalEndpointWidth_eq_blockStartState_succ]
+      exact hC.to_endpointWidthUniformUpperBound m
+
 /-- A fixed-root cumulative width reserve exists exactly when the existing
 reflected scalar queue has some uniform ceiling.  This is an equivalence of
 targets, not an independent proof that either target holds. -/
@@ -136,21 +184,108 @@ theorem rootwiseCanonicalWidthBound_iff_exists_queueUniformUpperBound
       ∃ C : ℕ, CanonicalOutstandingClaimQueueUniformUpperBound n C := by
   constructor
   · rintro ⟨B, hB⟩
-    have hendpoint :
-        CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + B) := by
-      intro m
-      rw [canonicalEndpointWidth_eq_blockStartState_succ]
-      exact hB (m + 1)
-    exact ⟨bitWidth n.1 + B,
-      hendpoint.to_outstandingClaimQueueUniformUpperBound⟩
+    exact ⟨bitWidth n.1 + B, hB.to_queueUniformUpperBound⟩
   · rintro ⟨C, hC⟩
-    refine ⟨C, ?_⟩
-    intro M
-    cases M with
-    | zero => simp
-    | succ m =>
-        rw [← canonicalEndpointWidth_eq_blockStartState_succ]
-        exact hC.to_endpointWidthUniformUpperBound m
+    exact ⟨C, hC.to_widthWithinReserve⟩
+
+/-! ## Queue as maximum absorption deficit -/
+
+/-- Every positive reflected queue is attained by one inclusive suffix, and
+exact conservation identifies that suffix with a half-open absorption deficit.
+-/
+theorem exists_absorptionDeficitWindow_eq_outstandingClaimQueue_of_pos
+    {n : OddNat} {m : ℕ} (hpos : 0 < canonicalOutstandingClaimQueue n m) :
+    ∃ q, q ≤ m ∧
+      (canonicalOutstandingClaimQueue n m : ℤ) =
+        canonicalAbsorptionDeficitWindow n q (m - q + 1) := by
+  rcases outstandingClaimQueue_eq_zero_or_exists_windowDrift n m with
+    hzero | ⟨_, q, hqm, hq⟩
+  · omega
+  · refine ⟨q, hqm, ?_⟩
+    have hnonneg : 0 ≤ canonicalWindowDriftInt n q m := by
+      by_contra hneg
+      have htoNat : Int.toNat (canonicalWindowDriftInt n q m) = 0 :=
+        Int.toNat_of_nonpos (by omega)
+      rw [htoNat] at hq
+      omega
+    calc
+      (canonicalOutstandingClaimQueue n m : ℤ) =
+          (Int.toNat (canonicalWindowDriftInt n q m) : ℕ) := by
+            exact_mod_cast hq
+      _ = canonicalWindowDriftInt n q m := by
+        rw [Int.ofNat_toNat, max_eq_left hnonneg]
+      _ = canonicalAbsorptionDeficitWindow n q (m - q + 1) :=
+        (canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
+          n hqm).symm
+
+/-! ## All-window cumulative absorption target -/
+
+/-- Every finite half-open canonical block window has absorption deficit at
+most `C`. -/
+def CanonicalAbsorptionDeficitWindowUniformUpperBound
+    (n : OddNat) (C : ℕ) : Prop :=
+  ∀ q M, canonicalAbsorptionDeficitWindow n q M ≤ C
+
+/-- A rootwise width reserve `B` bounds every shifted absorption deficit by
+`root width + B`. -/
+theorem CanonicalWidthWithinReserve.to_absorptionDeficitWindowUniformUpperBound
+    {n : OddNat} {B : ℕ} (hB : CanonicalWidthWithinReserve n B) :
+    CanonicalAbsorptionDeficitWindowUniformUpperBound n (bitWidth n.1 + B) := by
+  intro q M
+  rw [canonicalAbsorptionDeficitWindow_eq_startState_bitWidth_sub]
+  have hend := hB (q + M)
+  omega
+
+/-- An all-window deficit ceiling `C`, specialized to prefixes, gives a width
+reserve with parameter `C`. -/
+theorem CanonicalAbsorptionDeficitWindowUniformUpperBound.to_widthWithinReserve
+    {n : OddNat} {C : ℕ}
+    (hC : CanonicalAbsorptionDeficitWindowUniformUpperBound n C) :
+    CanonicalWidthWithinReserve n C := by
+  intro M
+  have hprefix := hC 0 M
+  rw [canonicalAbsorptionDeficitWindow_eq_startState_bitWidth_sub] at hprefix
+  rw [zero_add, canonicalBlockStartState_zero_eq_root] at hprefix
+  omega
+
+/-- Fixed-root cumulative width boundedness is existentially equivalent to a
+uniform upper bound on every finite absorption-deficit window. -/
+theorem rootwiseCanonicalWidthBound_iff_exists_absorptionDeficitWindowUniformUpperBound
+    (n : OddNat) :
+    RootwiseCanonicalWidthBound n ↔
+      ∃ C : ℕ, CanonicalAbsorptionDeficitWindowUniformUpperBound n C := by
+  constructor
+  · rintro ⟨B, hB⟩
+    exact ⟨bitWidth n.1 + B,
+      hB.to_absorptionDeficitWindowUniformUpperBound⟩
+  · rintro ⟨C, hC⟩
+    exact ⟨C, hC.to_widthWithinReserve⟩
+
+/-- A window deficit ceiling is exactly the cumulative absorption estimate
+needed to cover block length on that window. -/
+theorem canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
+    (n : OddNat) (q M C : ℕ) :
+    canonicalAbsorptionDeficitWindow n q M ≤ C ↔
+      canonicalBlockLengthWindowSum n q M ≤
+        canonicalClaimHolesWindowSum n q M +
+          canonicalTerminalValuationWindowSum n q M + C := by
+  rw [canonicalAbsorptionDeficitWindow]
+  constructor <;> intro h <;> omega
+
+/-- Public cumulative target in block-budget form.  Unlike the one-block
+pointwise target, this controls every finite shifted window. -/
+theorem canonicalAbsorptionDeficitWindowUniformUpperBound_iff_length_le_absorption_add
+    (n : OddNat) (C : ℕ) :
+    CanonicalAbsorptionDeficitWindowUniformUpperBound n C ↔
+      ∀ q M,
+        canonicalBlockLengthWindowSum n q M ≤
+          canonicalClaimHolesWindowSum n q M +
+            canonicalTerminalValuationWindowSum n q M + C := by
+  constructor <;> intro h q M
+  · exact (canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
+      n q M C).mp (h q M)
+  · exact (canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
+      n q M C).mpr (h q M)
 
 /-! ## Global reserve obstruction -/
 
