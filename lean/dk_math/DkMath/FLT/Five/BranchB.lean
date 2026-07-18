@@ -32,7 +32,7 @@ theorem body5_eq_fifth_power_of_fermat
       exact pow_five_sub_pow_five_eq_gap_mul_GN5 hyz
     _ = x ^ 5 := fifth_sub_eq_of_add_eq hEq
 
-/--
+/-
 Next checkpoint target:
 
 A clean channel at `GN5 (z-y) y` should refute the candidate equation by a direct
