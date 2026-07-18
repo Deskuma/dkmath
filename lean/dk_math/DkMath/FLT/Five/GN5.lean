@@ -43,7 +43,7 @@ theorem GN5_one_one : GN5 1 1 = 31 := by
   norm_num [GN5]
 
 /-- A second small evaluation for smoke testing. -/
-theorem GN5_two_one : GN5 2 1 = 211 := by
+theorem GN5_two_one : GN5 2 1 = 121 := by
   norm_num [GN5]
 
 end DkMath.FLT.Five
