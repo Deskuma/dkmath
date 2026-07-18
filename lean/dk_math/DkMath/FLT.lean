@@ -9,6 +9,7 @@ import DkMath.FLT.Kummer
 import DkMath.FLT.Main
 import DkMath.FLT.PrimeProvider
 import DkMath.FLT.Samples
+import DkMath.FLT.Five
 
 #print "file: DkMath.FLT"
 
@@ -24,6 +25,7 @@ set_option linter.style.longLine false
 - `Kummer` 側の regular-prime / class-group route を公開面へ載せる
 - `PrimeProvider` 側の provider chain を同じ入口から辿れるようにする
 - `Samples` 側の discovery 用 example を同じ入口から辿れるようにする
+- `Five` 側の standalone-first FLT5 / GN5 実験塔を公開面へ載せる
 
 ## public/provider 導線の現状
 
