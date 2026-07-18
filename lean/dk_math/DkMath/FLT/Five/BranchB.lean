@@ -32,11 +32,15 @@ theorem body5_eq_fifth_power_of_fermat
       exact pow_five_sub_pow_five_eq_gap_mul_GN5 hyz
     _ = x ^ 5 := fifth_sub_eq_of_add_eq hEq
 
-/-
-Next checkpoint target:
-
-A clean channel at `GN5 (z-y) y` should refute the candidate equation by a direct
-square-divisibility argument, and then independently by a `padicValNat` argument.
--/
+/-- A clean channel on the Fermat-five gap rules out the candidate equation. -/
+theorem counterexample_false_of_clean_GN5Channel_by_dvd
+    {x y z q : ℕ}
+    (hPack : CounterexamplePack x y z)
+    (hClean : CleanGN5Channel (z - y) y q) :
+    False := by
+  have hyz : y ≤ z :=
+    Nat.le_of_lt (right_lt_of_fermat5Equation hPack.hx hPack.hEq)
+  apply not_fifth_power_body_of_clean hClean
+  exact ⟨x, body5_eq_fifth_power_of_fermat hyz hPack.hEq⟩
 
 end DkMath.FLT.Five
