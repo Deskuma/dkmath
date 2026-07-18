@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.BranchA
 import DkMath.FLT.Five.Provider
+import DkMath.FLT.Five.Reduction
 import DkMath.FLT.Five.Valuation
 
 #print "file: DkMath.FLT.Five.Main"
