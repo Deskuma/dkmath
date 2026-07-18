@@ -38,7 +38,9 @@ theorem right_lt_of_fermat5Equation
     y < z := by
   unfold Fermat5Equation at hEq
   have hx5 : 0 < x ^ 5 := pow_pos hx 5
-  omega
+  have hy5z5 : y ^ 5 < z ^ 5 := by
+    omega
+  exact (Nat.pow_lt_pow_iff_left (by decide : 5 ≠ 0)).mp hy5z5
 
 /-- The gap `z-y` is positive for a positive Fermat-five left term. -/
 theorem gap_pos_of_fermat5Equation
