@@ -1,0 +1,628 @@
+# FLT5 cp-004f+ — long-run conjugate, fifth-power, unit, and descent campaign
+
+Generated:
+  2026-07-20 00:49 JST
+
+Repository:
+  Deskuma/dkmath
+
+Working branch:
+  hackathon/feature-gn5-flt5-260719-v0
+
+Draft PR:
+  #56
+
+Base branch — do not modify:
+  hackathon/cosmic-formula-inversion-flt-gn5
+
+Head before this instruction file:
+  63ea0b6016684bb1afe9733acafa45f45f5556c3
+
+Devpost project:
+  DkMath — Verifiable AI Mathematical Research
+  slug: dkmath-verifiable-ai-mathematical-research
+  hackathon: OpenAI Build Week (`openai`)
+  current state: already published and submitted
+
+Live submission deadline:
+  2026-07-22 00:00 UTC
+  2026-07-22 09:00 JST
+
+======================================================================
+0. Execution authorization and operating mode
+======================================================================
+
+The user authorizes an extended Codex implementation campaign rather than a
+single-checkpoint task.
+
+Continue automatically across successive checkpoints.  Do not pause merely
+because one small module or checkpoint compiled.  Commit each coherent certified
+checkpoint, update the implementation report, and continue to the next attack.
+
+The user is monitoring Codex usage externally and currently authorizes intensive
+use while the remaining credit balance is above approximately 30 percent.
+Codex does not need to estimate or report the balance.  Continue until the user
+interrupts, a full Lean-certified FLT5 endpoint is reached, or an exact hard
+mathematical blocker remains after the viable routes below have been tested.
+
+Commit frequently so a usage reset or interruption cannot discard progress.
+Keep the worktree clean at every checkpoint boundary.
+
+Stop conditions:
+
+A. Full closure:
+   a public theorem inhabiting the local `FLT5Target`, with all required
+   primitive reduction and both arithmetic branches connected.
+
+B. Exact blocker:
+   all lower layers compile, and one missing theorem is stated with its full
+   Lean type, together with a report of the attempted routes and the precise
+   reason each route stops.
+
+C. User interruption.
+
+Do not stop with a vague statement such as “UFD theory is needed.”  Reduce any
+blocker to the narrowest theorem that would permit the next certified step.
+
+No `sorry`, new axiom, `native_decide`, or fabricated algebraic instance is
+allowed.  Do not claim FLT5 merely because routed Branch B is closed.
+
+======================================================================
+1. Current certified reduction tower
+======================================================================
+
+The current public tower contains:
+
+  cp-000   local exponent-five algebra spine
+  cp-001   direct clean-channel body refuter
+  cp-002   padicValNat clean-channel refuter
+  cp-003b  coprime fifth-power factor split
+  cp-003c  Branch-B fifth-power normal form
+  cp-003e  square–golden bridge
+  cp-003f  Branch-B square–golden normal form
+  cp-004a  signed difference/sum routing through mod 25
+  cp-004b  common signed five-adic packet
+  cp-004c  exact signed five-adic power split
+  cp-004d  signed square–golden exceptional packet
+  cp-004e  explicit integral golden order and exact tau stripping
+
+The most relevant modules are:
+
+  DkMath.FLT.Five.SignedFiveAdicPowerSplit
+  DkMath.FLT.Five.SignedSquareGoldenExceptional
+  DkMath.FLT.Five.GoldenOrder
+  DkMath.FLT.Five.SignedGoldenRamifierStripped
+
+The cp-004c exact split supplies positive natural numbers `a,b` with:
+
+  carrier       = 5^4 * a^5
+  residual      = 5 * b^5
+  distinguished = 5 * a * b
+
+The cp-004e stripped packet supplies golden integers `alpha,beta` and an integer
+`k` with:
+
+  alpha = tau * beta
+  Norm(tau) = 5
+  Norm(beta) = b^5
+  beta.snd = -5^7 * a^10
+  5 does not divide b
+  5 does not divide Norm(beta)
+  tau does not divide beta
+
+The published contract
+
+  SignedGoldenFifthPowerUpToUnitCore
+
+is only an abbreviation describing the desired next endpoint.  It is not a
+proved theorem and must never be used as a hypothesis unless a downstream
+receiver explicitly asks for it.
+
+First run the targeted cp-004e builds and inspect the current reports.  Preserve
+all certified APIs unless a minimal compatibility refactor is required.
+
+======================================================================
+2. Global objective hierarchy
+======================================================================
+
+Priority 1 — cp-004f:
+  prove packet-specific coprimality of `beta` and `conj beta` by showing every
+  common golden divisor is a golden unit.
+
+Priority 2 — cp-004g:
+  prove `beta = epsilon * gamma^5` for a golden unit `epsilon`, or isolate the
+  narrowest exact factorization theorem still missing.
+
+Priority 3 — cp-004h:
+  reduce the unit ambiguity modulo fifth powers to finitely many explicit unit
+  classes, and derive certified coordinate equations for each class.
+
+Priority 4 — cp-004i:
+  obtain either a direct contradiction or a strict descent packet with an
+  explicit well-founded measure.
+
+Priority 5 — final assembly:
+  close every primitive branch, lift back to arbitrary positive naturals, and
+  inhabit `FLT5Target`.
+
+Priority 6 — conditional hackathon update:
+  only if Priority 5 is genuinely Lean-certified, update the repository's
+  hackathon-facing documentation and prepare a human-reviewable Devpost delta.
+
+Do not skip directly to final assembly by adding an unproved arithmetic core.
+
+======================================================================
+3. cp-004f-a — minimal golden divisibility and unit API
+======================================================================
+
+Prefer a packet-specific API first.  Building a full UFD or Euclidean-domain
+instance is not required merely to prove conjugate coprimality.
+
+A suggested local relation is:
+
+  def GoldenDivides (d x : GoldenInt) : Prop :=
+    exists q : GoldenInt, x = goldenMul d q
+
+Names may be adjusted, but provide a coherent public API covering:
+
+  goldenMul associativity, commutativity, identities, and distributivity;
+  divisibility reflexivity and transitivity;
+  a common divisor of x and y divides x-y;
+  if d divides x, then goldenNorm d divides goldenNorm x in Int;
+  compatibility of conjugation with addition, negation, subtraction, and powers;
+  goldenPow multiplication and norm formulas needed below.
+
+You may instead install honest algebraic instances on `GoldenInt` if that is
+shorter and fully verified.  If taking that route, prove all instance laws from
+the explicit coordinates and preserve compatibility with the existing
+`goldenAdd`, `goldenMul`, `goldenConj`, and `goldenNorm` API.  Do not declare an
+`IntegralDomain`, `GCDMonoid`, `UniqueFactorizationMonoid`, or Euclidean instance
+before the corresponding nontrivial laws are actually proved.
+
+Strengthen the unit API.  The current definition is:
+
+  GoldenUnit epsilon :=
+    exists eta, epsilon*eta=1 and eta*epsilon=1.
+
+Prove at minimum:
+
+  goldenUnit_of_norm_eq_one
+  goldenUnit_of_norm_eq_neg_one
+  goldenUnit_of_norm_eq_one_or_neg_one
+
+with explicit inverses using the conjugate.  Also prove the converse if useful:
+any GoldenUnit has norm 1 or -1.
+
+Recommended file:
+
+  DkMath/FLT/Five/GoldenDivisibility.lean
+
+======================================================================
+4. cp-004f-b — recover coprime a and b
+======================================================================
+
+The exact power split currently stores `a` and `b` but does not publish their
+coprimality.  Recover it from the certified construction rather than adding it
+as a hypothesis.
+
+The underlying normalized cores satisfy:
+
+  carrierCore = 5^3 * a^5
+  residualCore = b^5
+  Coprime carrierCore residualCore
+  5 does not divide b
+
+Prove a public theorem of the shape:
+
+  theorem SignedFiveAdicPowerSplit.coprime_a_b
+      (s : SignedFiveAdicPowerSplit u v w) :
+      Nat.Coprime s.a s.b
+
+or an equivalent namespace theorem.
+
+Also publish the immediately useful consequences:
+
+  Nat.Coprime (5^15 * a^20) (b^5)
+  Nat.Coprime (b^5) (5^15 * a^20)
+
+Use existing Mathlib coprimality/power lemmas.  Do not re-prove prime
+factorization from scratch unless a precise missing API forces it.
+
+If the current private construction discarded a proof needed here, refactor the
+power-split packet or add a certified field.  Preserve the existing public
+constructor names where practical.
+
+======================================================================
+5. cp-004f-c — conjugate common divisors are units
+======================================================================
+
+For a stripped packet `p`, write:
+
+  beta = r + s*phi
+  s = beta.snd = -5^7 * a^10
+
+The explicit conjugate gives:
+
+  beta - conj(beta) = s * sqrtFive
+
+and therefore:
+
+  Norm(beta - conj(beta)) = -5 * s^2 = -5^15 * a^20.
+
+Certify these identities in the explicit `GoldenInt` model.
+
+Now take an arbitrary common divisor `delta`:
+
+  delta divides beta
+  delta divides goldenConj beta.
+
+Derive:
+
+  goldenNorm delta divides b^5
+  goldenNorm delta divides -5^15 * a^20.
+
+Handle signs through `Int.natAbs` or an equally robust route.  From the
+coprimality proved in cp-004f-b, conclude:
+
+  Int.natAbs (goldenNorm delta) = 1
+
+and hence:
+
+  goldenNorm delta = 1 or goldenNorm delta = -1.
+
+Finally conclude `GoldenUnit delta` using the explicit conjugate inverse.
+
+Publish a relation or packet such as:
+
+  GoldenRelPrime beta (goldenConj beta)
+
+or:
+
+  structure SignedGoldenConjugateCoprimePacket ...
+
+which contains the stripped packet and the theorem that every common divisor is
+a GoldenUnit.
+
+Required receivers:
+
+  constructor from SignedGoldenRamifierStrippedPacket
+  constructor from SignedBranchANormalForm
+  a Core abbreviation
+  routing back to SignedBranchARefuter
+  routing back to routed Branch B
+
+Recommended file:
+
+  DkMath/FLT/Five/SignedGoldenConjugateCoprime.lean
+
+This checkpoint is considered complete only when the common-divisor-to-unit
+statement is public and kernel-checked.
+
+======================================================================
+6. cp-004g — fifth power up to a unit
+======================================================================
+
+Goal:
+
+  for every stripped packet p,
+  exists epsilon gamma : GoldenInt,
+    GoldenUnit epsilon and
+    p.beta = epsilon * gamma^5.
+
+The mathematical input now available should be:
+
+  beta * conj(beta) = goldenOfInt (b^5)
+  equivalently beta * conj(beta) = goldenPow (goldenOfInt b) 5
+  beta and conj(beta) are relatively prime in the common-divisor sense
+  tau does not divide beta.
+
+Before implementing a large algebraic hierarchy, perform repository and Mathlib
+reconnaissance.  Search for:
+
+  quadratic integer rings;
+  ring of integers of Q(sqrt 5);
+  principal ideal / class number one results;
+  Euclidean quadratic orders;
+  generic coprime-factor-of-a-power theorems;
+  normalization/associates APIs that can be reused after a small honest ring
+  instance is installed.
+
+Important distinction:
+
+  Zsqrtd 5 models Z[sqrt 5], not the full ring of integers Z[phi].
+
+Do not silently replace the golden order with that smaller order.  A bridge is
+acceptable only if it preserves the half-integral golden integers exactly.
+
+Investigate the following routes in order and record the result of each.
+
+Route A — generic factor split after honest algebraic instances
+
+  Install the minimum correct commutative-domain / normalization infrastructure
+  for GoldenInt, then reuse a generic theorem saying that relatively prime
+  factors of a fifth power are fifth powers up to units.
+
+Route B — packet-specific prime-exponent extraction
+
+  Avoid a global UFD instance and prove only the factorization theorem needed
+  for beta and its conjugate.  This is acceptable if all factorization premises
+  are explicit and no uniqueness theorem is assumed covertly.
+
+Route C — Euclidean golden order
+
+  The ring Z[phi] is expected to admit a norm-Euclidean presentation, but a full
+  formal Euclidean algorithm may be substantial.  Attempt this route only after
+  confirming no smaller reusable API suffices.  Any Euclidean instance must
+  include an actual quotient/remainder construction and verified decrease.
+
+Route D — ideals/ring of integers
+
+  Use a number-field or ideal-theoretic route only if Mathlib already supplies a
+  sufficiently concrete certified bridge and principal-ideal result.  Do not
+  import research modules containing unfinished assumptions merely to obtain the
+  endpoint.
+
+Outcome branching:
+
+A. The fifth-power-up-to-unit theorem compiles.  Commit it and continue
+   immediately to cp-004h.
+
+B. One exact algebraic theorem remains.  State it with its full Lean type,
+   publish all certified lower infrastructure, and continue to investigate
+   whether cp-004h coordinate restrictions can bypass it.
+
+C. A proposed route is mathematically invalid for this order.  Document the
+   counterexample or precise mismatch and move to the next route.
+
+Recommended file if successful:
+
+  DkMath/FLT/Five/SignedGoldenFifthPower.lean
+
+======================================================================
+7. cp-004h — unit classes and explicit fifth-power coordinates
+======================================================================
+
+Do not leave `epsilon` as an opaque unit if a finite reduction modulo fifth
+powers is available.
+
+Prove the basic unit facts for `goldenPhi` and investigate the classification:
+
+  units of Z[phi] are expected to have the form ±phi^n.
+
+For this project it is sufficient to classify units modulo fifth powers, giving
+at most the ten signed representatives:
+
+  ±1, ±phi, ±phi^2, ±phi^3, ±phi^4.
+
+A packet-specific finite unit reduction is acceptable if a complete global unit
+group classification is unnecessarily expensive.
+
+Independently of the unit classification, prove the exact coordinate formulas
+for a fifth power.  For `gamma = p + q*phi`:
+
+  fst(gamma^5)
+    = p^5 + 10*p^3*q^2 + 10*p^2*q^3 + 10*p*q^4 + 3*q^5
+
+  snd(gamma^5)
+    = 5*q*(p^4 + 2*p^3*q + 4*p^2*q^2 + 3*p*q^3 + q^4).
+
+Certify analogous second-coordinate formulas after multiplication by each
+remaining unit representative.
+
+Combine them with:
+
+  beta.snd = -5^7*a^10
+  Norm(beta) = b^5
+  Coprime a b
+  5 does not divide b
+  tau does not divide beta.
+
+Search for exact gcd and mod-5/mod-25 restrictions on the two factors in the
+second-coordinate formula.  Finite residue classification is allowed, using
+`decide +kernel` for genuinely finite propositions.  Prefer symbolic proofs
+where practical.
+
+Useful outcomes include:
+
+  an impossible unit class;
+  a strict divisibility increase;
+  exact fifth-power splits of q and the quartic residual;
+  a new smaller pair with the same exceptional shape.
+
+Recommended files:
+
+  DkMath/FLT/Five/GoldenFifthPowerCoordinates.lean
+  DkMath/FLT/Five/SignedGoldenUnitClasses.lean
+
+Commit every certified finite unit-class elimination separately if the work is
+large, then continue automatically.
+
+======================================================================
+8. cp-004i — contradiction or strict descent
+======================================================================
+
+Prefer a direct contradiction if the unit-coordinate equations produce one.
+Otherwise construct an explicit descent packet.
+
+A valid descent must contain:
+
+  the source stripped/exceptional packet;
+  the new integer or golden data;
+  every equation needed to reconstruct the same problem class;
+  positivity/nonzero facts;
+  primitive/coprimality preservation;
+  an explicit natural-valued measure;
+  a theorem that the new measure is strictly smaller.
+
+Do not call a parameter “smaller” without a Lean theorem proving the strict
+inequality.
+
+Possible measures to investigate:
+
+  distinguished component;
+  carrier;
+  b;
+  absolute norm;
+  a lexicographic pair of positive natural coordinates.
+
+If a strict self-map is obtained, use well-founded induction or minimal
+counterexample reasoning to refute the exceptional core.
+
+Recommended file:
+
+  DkMath/FLT/Five/SignedGoldenDescent.lean
+
+Required endpoint:
+
+  a theorem refuting SignedGoldenRamifierStrippedCore,
+  or a stronger theorem directly refuting SignedBranchARefuter.
+
+======================================================================
+9. Final FLT5 assembly audit
+======================================================================
+
+Closing routed Branch B is not yet the same as proving `FLT5Target`.
+
+Before declaring success, audit:
+
+  DkMath.FLT.Five.BranchA
+  DkMath.FLT.Five.BranchB
+  DkMath.FLT.Five.Reduction
+  DkMath.FLT.Five.Main
+
+Determine exactly how an arbitrary positive solution is reduced to a primitive
+`CounterexamplePack`, and how the original case
+
+  5 divides z-y
+
+is closed in addition to the routed case
+
+  not (5 divides z-y).
+
+If a missing primitive reduction or direct Branch-A bridge remains, implement it
+as a separate certified checkpoint.  Do not hide it inside the final theorem.
+
+Only after every branch is connected, add a public theorem inhabiting:
+
+  FLT5Target
+
+Choose a stable descriptive theorem name consistent with the local namespace.
+Add it to `DkMath.FLT.Five.Main`, expose it through the public import tower, and
+add `#print axioms` coverage.
+
+The final report must list the exact theorem chain used by the assembly theorem.
+
+======================================================================
+10. Conditional OpenAI Build Week / Devpost update
+======================================================================
+
+The existing Devpost project is already submitted and remains editable until:
+
+  2026-07-22 09:00 JST.
+
+The current public description explicitly says the GN5 extension is not a proof
+of FLT5.  Do not change that wording unless a full public Lean theorem
+inhabiting `FLT5Target` has been compiled and axiom-audited.
+
+If full FLT5 closure is reached before the deadline:
+
+1. Update the repository's hackathon-facing README/documentation with a clearly
+   dated “Post-submission FLT5 extension” section.
+
+2. Include:
+     exact final theorem name;
+     exact commit SHA;
+     module path;
+     reproduction/build commands;
+     concise explanation of the human / GPT-5.6 / Codex / Lean workflow;
+     an honest distinction between the original submitted MVP and the new
+     extension.
+
+3. Create a human-review draft at a path such as:
+
+     lean/dk_math/DkMath/FLT/Five/docs/devpost-flt5-update-draft.md
+
+   Mark it prominently as:
+
+     DRAFT FOR HUMAN REVIEW — DO NOT PUBLISH AS-IS
+
+   The host explicitly asks participants to use their own voice for the project
+   description.  Therefore prepare accurate source material, not marketing
+   hyperbole.
+
+4. Do not claim priority, novelty, or a first-ever proof.  State only what the
+   repository and Lean theorem establish.
+
+5. Do not call the Devpost API or change the submitted project from this Codex
+   task.  The user will review the draft and trigger the Devpost update through
+   the connected plugin.
+
+6. Assess whether the existing sub-three-minute video still accurately
+   represents the project.  Do not replace its URL or fabricate a new video.
+   Record any recommended addendum separately.
+
+If full closure is not reached, do not modify hackathon-facing claims merely for
+partial progress.  A technical progress report inside the FLT5 docs is enough.
+
+======================================================================
+11. Commit, report, and verification discipline
+======================================================================
+
+Use one coherent commit per certified checkpoint or substantial sub-checkpoint.
+Suggested commit themes:
+
+  Certify golden conjugate coprimality
+  Add golden fifth-power extraction
+  Reduce golden unit classes
+  Add signed golden descent
+  Assemble local FLT5 theorem
+  Document post-submission FLT5 extension
+
+After each checkpoint run targeted builds.  At major boundaries run:
+
+  lake build DkMath.FLT.Five.Main
+  lake build DkMathTest.FLT.Five.CheckAxioms
+  git diff --check
+
+At the final gate run:
+
+  ./lean-build.sh
+
+New declarations must have no `sorryAx`.  Remove new warnings in the FLT5
+modules.  Ignore unrelated known research warnings outside the current tower.
+
+Maintain a rolling report, preferably:
+
+  lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004f-plus.md
+
+The report should record:
+
+  certified results;
+  failed mathematical routes and why;
+  exact remaining theorem contracts;
+  commit SHAs;
+  build commands and results;
+  the next recommended attack if the task stops before closure.
+
+======================================================================
+12. Final response format
+======================================================================
+
+Report the furthest certified endpoint, not merely the last edited file.
+
+Use one of:
+
+A. FLT5 closed:
+     state the exact public theorem, the full branch assembly, axiom audit,
+     commits, and the generated Devpost update draft.
+
+B. Advanced but not closed:
+     list every new certified checkpoint and give the single narrowest remaining
+     blocker with its full Lean type.
+
+C. Mathematical correction:
+     explain the exact invalid expectation, provide the corrected theorem, and
+     preserve all certified progress.
+
+Do not end after cp-004f merely because it compiles.  Continue through the
+priority hierarchy until a stop condition from Section 0 is reached.
