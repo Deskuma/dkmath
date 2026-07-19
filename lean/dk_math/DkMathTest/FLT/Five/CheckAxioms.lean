@@ -111,3 +111,22 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.signedGoldenFiniteUnitSectorCore_of_unitClasses
 #print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
 #print axioms DkMath.FLT.Five.branchB_false_of_unitFifthPowerExclusion
+
+#print axioms DkMath.FLT.Five.signedGoldenUnitFifthPowerExclusion_iff_strippedCore
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.gamma_norm_eq_or_eq_neg
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.five_not_dvd_gamma_norm
+#print axioms DkMath.FLT.Five.five_dvd_goldenFifthFstPoly_sub_linear
+#print axioms DkMath.FLT.Five.five_dvd_goldenNorm_sub_linear_sq
+#print axioms DkMath.FLT.Five.signedGolden_nonzero_unitSector_false
+#print axioms DkMath.FLT.Five.signedGoldenUnitFifthPowerExclusion_of_unitClasses_of_zeroSector
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.zeroSector_snd_factor_eq
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.zeroSector_five_not_dvd_sndFactor
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.zeroSector_coprime_coords
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.zeroSector_coprime_s_sndFactor
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.zeroSector_tenthPower_split
+#print axioms DkMath.FLT.Five.signedGoldenZeroSectorExclusion_of_arithmetic
+#print axioms DkMath.FLT.Five.CounterexamplePack.branchB_orientation
+#print axioms DkMath.FLT.Five.counterexamplePackRefuter_of_unitClasses_of_zeroArithmetic
+#print axioms DkMath.FLT.Five.exists_counterexamplePack_of_positive_fermat5
+#print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
+#print axioms DkMath.FLT.Five.flt5Target_of_unitClasses_of_zeroArithmetic
