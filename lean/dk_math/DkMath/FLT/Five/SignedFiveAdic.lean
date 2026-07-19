@@ -12,7 +12,7 @@ namespace DkMath.FLT.Five
 
 /-- The positive fifth-power residual for the sum factorization. -/
 def SumGN5 (u v : ℕ) : ℕ :=
-  if h : v ≤ u then
+  if v ≤ u then
     (u - v) ^ 4 +
       3 * (u - v) ^ 3 * v +
       4 * (u - v) ^ 2 * v ^ 2 +
@@ -28,17 +28,30 @@ def SumGN5 (u v : ℕ) : ℕ :=
 /-- The sum of fifth powers factors through `u+v` with positive residual `SumGN5`. -/
 theorem add_mul_sumGN5_eq_add_pow_five (u v : ℕ) :
     (u + v) * SumGN5 u v = u ^ 5 + v ^ 5 := by
-  unfold SumGN5
   by_cases h : v ≤ u
-  · simp only [if_pos h]
-    obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le h
-    simp
+  · rw [SumGN5, if_pos h]
+    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le h
+    subst u
+    simp only [Nat.add_sub_cancel_left]
     ring
-  · simp only [if_neg h]
+  · rw [SumGN5, if_neg h]
     have huv : u ≤ v := Nat.le_of_not_ge h
-    obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le huv
-    simp
+    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le huv
+    subst v
+    simp only [Nat.add_sub_cancel_left]
     ring
+
+/-- The sum residual is positive when both source coordinates are positive. -/
+theorem sumGN5_pos
+    {u v : ℕ} (hu : 0 < u) (hv : 0 < v) :
+    0 < SumGN5 u v := by
+  by_cases h : v ≤ u
+  · rw [SumGN5, if_pos h]
+    have hv4 : 0 < v ^ 4 := pow_pos hv 4
+    omega
+  · rw [SumGN5, if_neg h]
+    have hu4 : 0 < u ^ 4 := pow_pos hu 4
+    omega
 
 private theorem five_not_dvd_left_of_coprime_of_dvd_add
     {u v : ℕ} (hcop : Nat.Coprime u v) (h5sum : 5 ∣ u + v) :
@@ -62,7 +75,12 @@ private theorem fourth_power_mod_five_eq_one
   have hn0 : n % 5 ≠ 0 := by
     intro hn0
     exact h5n (Nat.dvd_of_mod_eq_zero hn0)
-  interval_cases h : n % 5 <;> norm_num [h] at hn0 ⊢
+  interval_cases h : n % 5
+  · exact (hn0 rfl).elim
+  · norm_num [h]
+  · norm_num [h]
+  · norm_num [h]
+  · norm_num [h]
 
 private theorem fourth_power_zmod25_decomposition
     {n : ℕ} (h5n : ¬ 5 ∣ n) :
@@ -85,7 +103,12 @@ private theorem GN5_cast_mod25_eq_five
   unfold GN5
   push_cast
   rw [hq]
-  ring
+  ring_nf
+  simp only [show (25 : ZMod 25) = 0 by decide,
+    show (50 : ZMod 25) = 0 by decide,
+    show (250 : ZMod 25) = 0 by decide,
+    show (625 : ZMod 25) = 0 by decide,
+    mul_zero, add_zero]
 
 private theorem SumGN5_cast_mod25_eq_five
     {u v : ℕ} (hcop : Nat.Coprime u v) (h5sum : 5 ∣ u + v) :
@@ -95,22 +118,30 @@ private theorem SumGN5_cast_mod25_eq_five
   have h5v : ¬ 5 ∣ v :=
     five_not_dvd_right_of_coprime_of_dvd_add hcop h5sum
   by_cases h : v ≤ u
-  · simp only [SumGN5, if_pos h]
+  · rw [SumGN5, if_pos h]
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le h
     subst u
     rcases h5sum with ⟨k, hk⟩
     have hcarrier : d + 2 * v = 5 * k := by omega
     have hcarrierZ :
         (d : ZMod 25) + 2 * (v : ZMod 25) = 5 * (k : ZMod 25) := by
-      exact_mod_cast hcarrier
+      have hcast := congrArg (fun n : ℕ => (n : ZMod 25)) hcarrier
+      simpa using hcast
     have hdZ : (d : ZMod 25) = 5 * (k : ZMod 25) - 2 * (v : ZMod 25) := by
       exact eq_sub_of_add_eq hcarrierZ
     rcases fourth_power_zmod25_decomposition h5v with ⟨q, hq⟩
-    simp
+    simp only [Nat.add_sub_cancel_left]
     push_cast
     rw [hdZ, hq]
-    ring
-  · simp only [SumGN5, if_neg h]
+    ring_nf
+    rw [hq]
+    ring_nf
+    simp only [show (25 : ZMod 25) = 0 by decide,
+      show (50 : ZMod 25) = 0 by decide,
+      show (250 : ZMod 25) = 0 by decide,
+      show (625 : ZMod 25) = 0 by decide,
+      mul_zero, add_zero, sub_zero]
+  · rw [SumGN5, if_neg h]
     have huv : u ≤ v := Nat.le_of_not_ge h
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le huv
     subst v
@@ -118,14 +149,22 @@ private theorem SumGN5_cast_mod25_eq_five
     have hcarrier : d + 2 * u = 5 * k := by omega
     have hcarrierZ :
         (d : ZMod 25) + 2 * (u : ZMod 25) = 5 * (k : ZMod 25) := by
-      exact_mod_cast hcarrier
+      have hcast := congrArg (fun n : ℕ => (n : ZMod 25)) hcarrier
+      simpa using hcast
     have hdZ : (d : ZMod 25) = 5 * (k : ZMod 25) - 2 * (u : ZMod 25) := by
       exact eq_sub_of_add_eq hcarrierZ
     rcases fourth_power_zmod25_decomposition h5u with ⟨q, hq⟩
-    simp
+    simp only [Nat.add_sub_cancel_left]
     push_cast
     rw [hdZ, hq]
-    ring
+    ring_nf
+    rw [hq]
+    ring_nf
+    simp only [show (25 : ZMod 25) = 0 by decide,
+      show (50 : ZMod 25) = 0 by decide,
+      show (250 : ZMod 25) = 0 by decide,
+      show (625 : ZMod 25) = 0 by decide,
+      mul_zero, add_zero, sub_zero]
 
 private theorem mod_twentyFive_eq_five_of_zmod_eq_five
     {n : ℕ} (h : (n : ZMod 25) = 5) :
@@ -228,7 +267,7 @@ inductive SignedFiveAdicSource
       SignedFiveAdicSource u v w carrier residual distinguished
 
 /-- Common five-adic packet obtained from either signed Branch-A orientation. -/
-structure SignedFiveAdicPacket (u v w : ℕ) : Prop where
+structure SignedFiveAdicPacket (u v w : ℕ) : Type where
   normal : SignedBranchANormalForm u v w
   carrier : ℕ
   residual : ℕ
@@ -246,10 +285,10 @@ structure SignedFiveAdicPacket (u v w : ℕ) : Prop where
   carrier_padicValNat_shape :
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m
 
-/-- Both signed orientations produce the same exact five-adic load packet. -/
-theorem signedFiveAdicPacket_of_normalForm
+/-- Both signed orientations admit the same exact five-adic load packet. -/
+private theorem nonempty_signedFiveAdicPacket_of_normalForm
     {u v w : ℕ} (hNF : SignedBranchANormalForm u v w) :
-    SignedFiveAdicPacket u v w := by
+    Nonempty (SignedFiveAdicPacket u v w) := by
   rcases hNF with ⟨hPack, hOrientation⟩
   cases hOrientation with
   | differenceGap h5u h5gap =>
@@ -273,12 +312,15 @@ theorem signedFiveAdicPacket_of_normalForm
         not_twentyFive_dvd_of_mod_eq_five hmod
       have hresVal : padicValNat 5 (GN5 (w - v) v) = 1 :=
         padicValNat_five_eq_one_of_dvd_not_sq h5res h25res
-      have hresPos : 0 < GN5 (w - v) v := by omega
+      have hresPos : 0 < GN5 (w - v) v := by
+        have hgap4 : 0 < (w - v) ^ 4 := pow_pos hcarrierPos 4
+        unfold GN5
+        omega
       have hcarrierShape :
           ∃ m : ℕ, padicValNat 5 (w - v) = 4 + 5 * m :=
         padicValNat_carrier_shape_of_mul_eq_fifth
           hcarrierPos.ne' hresPos.ne' hPack.hx.ne' hfactor hresVal
-      exact
+      exact ⟨
         { normal := ⟨hPack, .differenceGap h5u h5gap⟩
           carrier := w - v
           residual := GN5 (w - v) v
@@ -293,9 +335,9 @@ theorem signedFiveAdicPacket_of_normalForm
           residual_mod_twentyFive := hmod
           residual_shape := ⟨M, hshape⟩
           residual_padicValNat := hresVal
-          carrier_padicValNat_shape := hcarrierShape }
+          carrier_padicValNat_shape := hcarrierShape }⟩
   | sumGap h5w h5sum =>
-      have hcarrierPos : 0 < u + v := by omega
+      have hcarrierPos : 0 < u + v := Nat.add_pos_left hPack.hx v
       have hfactor : (u + v) * SumGN5 u v = w ^ 5 := by
         calc
           (u + v) * SumGN5 u v = u ^ 5 + v ^ 5 :=
@@ -312,12 +354,12 @@ theorem signedFiveAdicPacket_of_normalForm
         not_twentyFive_dvd_of_mod_eq_five hmod
       have hresVal : padicValNat 5 (SumGN5 u v) = 1 :=
         padicValNat_five_eq_one_of_dvd_not_sq h5res h25res
-      have hresPos : 0 < SumGN5 u v := by omega
+      have hresPos : 0 < SumGN5 u v := sumGN5_pos hPack.hx hPack.hy
       have hcarrierShape :
           ∃ m : ℕ, padicValNat 5 (u + v) = 4 + 5 * m :=
         padicValNat_carrier_shape_of_mul_eq_fifth
           hcarrierPos.ne' hresPos.ne' hPack.hz.ne' hfactor hresVal
-      exact
+      exact ⟨
         { normal := ⟨hPack, .sumGap h5w h5sum⟩
           carrier := u + v
           residual := SumGN5 u v
@@ -332,7 +374,13 @@ theorem signedFiveAdicPacket_of_normalForm
           residual_mod_twentyFive := hmod
           residual_shape := ⟨M, hshape⟩
           residual_padicValNat := hresVal
-          carrier_padicValNat_shape := hcarrierShape }
+          carrier_padicValNat_shape := hcarrierShape }⟩
+
+/-- Canonical chosen five-adic packet for a signed normal form. -/
+noncomputable def signedFiveAdicPacket_of_normalForm
+    {u v w : ℕ} (hNF : SignedBranchANormalForm u v w) :
+    SignedFiveAdicPacket u v w :=
+  Classical.choice (nonempty_signedFiveAdicPacket_of_normalForm hNF)
 
 /-- The remaining common arithmetic kernel after exact signed five-adic reduction. -/
 abbrev SignedFiveAdicCore : Prop :=

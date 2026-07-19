@@ -1,0 +1,452 @@
+# FLT5 cp-004b recovery and cp-004c continuation
+
+Repository:
+  Deskuma/dkmath
+
+Working branch:
+  hackathon/feature-gn5-flt5-260719-v0
+
+Draft PR:
+  #56
+
+Current head before this repair:
+  a107c5db39d3a94333d5a322c86a0c5e3c7a0e4f
+
+Base branch must not be modified:
+  hackathon/cosmic-formula-inversion-flt-gn5
+
+Current checkpoint status:
+
+  cp-003e  Square–Golden Bridge               complete
+  cp-003f  Square–Golden Normal Form          complete
+  cp-004a  Signed Branch-A routing            complete
+  cp-004b  Signed five-adic packet            prototype added, build failing
+
+The current failing file is:
+
+  lean/dk_math/DkMath/FLT/Five/SignedFiveAdic.lean
+
+The file was intended to establish the following common reduction for both
+signed Branch-A orientations:
+
+  carrier * residual = distinguished^5
+  5 divides carrier
+  5 divides distinguished
+  residual % 25 = 5
+  padicValNat 5 residual = 1
+  padicValNat 5 carrier = 4 + 5*m
+
+The mathematical direction is retained, but the current implementation is a
+prototype and may be substantially rewritten.
+
+Do not perform isolated line patches merely to silence the reported errors.
+Audit and rebuild SignedFiveAdic.lean as a coherent compiling module.
+
+======================================================================
+Phase 1 — Recover and complete cp-004b
+======================================================================
+
+Goal:
+
+Produce a compiling, kernel-checked implementation of the exact common
+five-adic packet for both:
+
+  DifferenceGap:
+    5 divides u
+    5 divides w-v
+    u^5 + v^5 = w^5
+
+  SumGap:
+    5 divides w
+    5 divides u+v
+    u^5 + v^5 = w^5
+
+The final public reduction must still express:
+
+  residual ≡ 5 mod 25
+  v_5(residual) = 1
+  v_5(carrier) = 4 mod 5
+
+No `sorry`, new axiom, `native_decide`, or research-only dependency is allowed.
+
+`decide +kernel` is allowed only for genuinely finite propositions, but an
+elementary algebraic proof is preferred where practical.
+
+----------------------------------------------------------------------
+A. Repair the packet universe
+----------------------------------------------------------------------
+
+The current declaration is invalid because a Prop-valued structure contains
+Nat-valued data fields.
+
+Change:
+
+  structure SignedFiveAdicPacket ... : Prop
+
+to a data-bearing type, for example:
+
+  structure SignedFiveAdicPacket (u v w : ℕ) : Type where
+
+`SignedFiveAdicSource` may remain Prop-valued if all of its fields are proofs.
+`SignedFiveAdicCore` can remain a proposition:
+
+  abbrev SignedFiveAdicCore : Prop :=
+    ∀ {u v w}, SignedFiveAdicPacket u v w → False
+
+Preserve public field names where reasonable, but correctness takes priority
+over exact prototype compatibility.
+
+----------------------------------------------------------------------
+B. Rebuild SumGN5 cleanly
+----------------------------------------------------------------------
+
+The required identity is:
+
+  (u + v) * SumGN5 u v = u^5 + v^5
+
+The current piecewise positive polynomial is mathematically valid, but its
+proof is fragile.
+
+You may either:
+
+1. retain the piecewise positive polynomial and prove each branch explicitly
+   with `by_cases`, `rw [SumGN5, if_pos ...]` / `if_neg`, explicit additive
+   witnesses, and `ring`; or
+
+2. replace it with a more robust Nat-valued definition, provided that:
+   - the exact factorization is proved,
+   - positivity under `0 < u` and `0 < v` is proved,
+   - the mod-25 residual theorem remains elementary and usable.
+
+Do not leave `simp made no progress` scripts.
+Remove the unused dependent-if binder warning.
+
+Add an explicit theorem such as:
+
+  theorem sumGN5_pos
+      {u v : ℕ} (hu : 0 < u) (hv : 0 < v) :
+      0 < SumGN5 u v
+
+Alternatively derive positivity from the factor equation and positivity of
+the product, using an exact Mathlib lemma rather than `omega` on the hidden
+piecewise definition.
+
+----------------------------------------------------------------------
+C. Repair the mod-25 proofs
+----------------------------------------------------------------------
+
+The intended facts are:
+
+Difference orientation:
+
+  5 divides g
+  not (5 divides y)
+  -> GN5 g y % 25 = 5
+
+Sum orientation:
+
+  Coprime u v
+  5 divides u+v
+  -> SumGN5 u v % 25 = 5
+
+The current ZMod proofs fail because `ring` does not automatically erase all
+visible multiples of 25 in the generated normal form.
+
+Choose the cleanest verified route:
+
+- remain in `ZMod 25`, but explicitly normalize characteristic-25 terms with
+  `ring_nf`, `norm_num`, or explicit lemmas showing `(25 : ZMod 25) = 0`; or
+- avoid ZMod and prove the `% 25 = 5` statements directly with `Nat.ModEq`,
+  divisibility, and modular identities.
+
+Do not force `exact_mod_cast` from Nat equalities into `ZMod 25`.
+When a cast equality is needed, use a shape such as:
+
+  have hcast :=
+    congrArg (fun n : ℕ => (n : ZMod 25)) hNat
+  simpa using hcast
+
+The final public theorem should preferably state the result directly in Nat:
+
+  GN5 g y % 25 = 5
+  SumGN5 u v % 25 = 5
+
+Private ZMod helpers are acceptable.
+
+Repair `fourth_power_mod_five_eq_one` without a tactic sequence that reports
+`No goals to be solved`.
+
+----------------------------------------------------------------------
+D. Preserve the exact valuation result
+----------------------------------------------------------------------
+
+Certify:
+
+  theorem padicValNat_five_eq_one_of_dvd_not_sq
+      {n : ℕ}
+      (h5 : 5 ∣ n)
+      (h25 : ¬ 25 ∣ n) :
+      padicValNat 5 n = 1
+
+and:
+
+  theorem padicValNat_carrier_shape_of_mul_eq_fifth
+      ...
+      (hEq : carrier * residual = distinguished^5)
+      (hrVal : padicValNat 5 residual = 1) :
+      ∃ m, padicValNat 5 carrier = 4 + 5*m
+
+Check every orientation-specific nonzero premise explicitly.
+
+Do not use `omega` to infer positivity through an opaque `if`.
+Use the factor equation or a dedicated positivity theorem.
+
+----------------------------------------------------------------------
+E. Reconstruct both packet branches
+----------------------------------------------------------------------
+
+Difference source:
+
+  carrier       = w-v
+  residual      = GN5 (w-v) v
+  distinguished = u
+
+Sum source:
+
+  carrier       = u+v
+  residual      = SumGN5 u v
+  distinguished = w
+
+For both constructors, populate and prove:
+
+  factor_eq
+  carrier_pos
+  residual_pos
+  distinguished_pos
+  five_dvd_carrier
+  five_dvd_distinguished
+  residual_mod_twentyFive
+  residual_shape
+  residual_padicValNat
+  carrier_padicValNat_shape
+
+Required public theorem:
+
+  signedFiveAdicPacket_of_normalForm :
+    SignedBranchANormalForm u v w →
+    SignedFiveAdicPacket u v w
+
+Retain or restore:
+
+  signedBranchARefuter_of_fiveAdicCore
+  branchB_false_of_fiveAdicCore
+
+----------------------------------------------------------------------
+F. Build and audit gates
+----------------------------------------------------------------------
+
+Run at minimum:
+
+  lake build DkMath.FLT.Five.SignedFiveAdic
+  lake build DkMath.FLT.Five
+  lake build DkMathTest.FLT.Five.CheckAxioms
+  git diff --check
+
+Run the repository build script as the final gate if available:
+
+  ./lean-build.sh
+
+Add or retain `#print axioms` entries for the main cp-004b declarations.
+
+Expected axiom output:
+  propext
+  Classical.choice
+  Quot.sound
+
+There must be no `sorryAx`.
+
+Ignore unrelated known research warnings from modules outside
+`DkMath.FLT.Five.*`. Do not spend effort repairing them.
+
+Remove all new warnings produced by SignedFiveAdic.lean, including:
+  unused variables
+  unused simp arguments
+  native_decide warnings
+
+Commit the completed cp-004b repair separately after all gates pass.
+
+Suggested commit message:
+
+  Fix and certify signed five-adic packet
+
+======================================================================
+Phase 2 — Continue automatically to cp-004c after Phase 1 passes
+======================================================================
+
+Once cp-004b builds and its axiom audit passes, continue without waiting for
+another instruction.
+
+Goal:
+
+Upgrade the valuation packet into an exact fifth-power factor split.
+
+The expected mathematical normal form is:
+
+  carrier       = 5^4 * a^5
+  residual      = 5 * b^5
+  distinguished = 5 * a * b
+
+for some positive natural numbers a and b.
+
+Do not assume this form. Derive it from the signed orientation and the
+counterexample pack.
+
+----------------------------------------------------------------------
+A. Prove the exact common gcd interface
+----------------------------------------------------------------------
+
+Investigate and prove the strongest elementary statement available, preferably:
+
+  Nat.gcd carrier residual = 5
+
+or equivalently construct:
+
+  carrier = 5 * carrierCore
+  residual = 5 * residualCore
+  Nat.Coprime carrierCore residualCore
+
+The proof must cover both sources.
+
+Difference source should use:
+
+  carrier = w-v
+  residual = GN5 (w-v) v
+  Coprime (w-v) v
+  GN5(g,v) ≡ 5*v^4 mod g
+
+Sum source should use:
+
+  carrier = u+v
+  residual = SumGN5 u v
+  Coprime (u+v) u
+  residual ≡ 5*u^4 mod (u+v)
+
+Any common prime other than 5 should be eliminated by the primitive
+coprimality data.
+
+The residual mod-25 theorem already supplies the exact single 5-layer.
+
+Do not import the old general FLT research tower. Existing files may be read
+for strategy, but reconstruct the exponent-five proof with minimal imports.
+
+----------------------------------------------------------------------
+B. Normalize the complete fifth power
+----------------------------------------------------------------------
+
+From:
+
+  carrier * residual = distinguished^5
+  carrier = 5 * carrierCore
+  residual = 5 * residualCore
+  distinguished = 5 * distinguishedCore
+  Coprime carrierCore residualCore
+  not (5 divides residualCore)
+
+derive a pure coprime fifth-power product.
+
+A useful normalization to investigate is:
+
+  (25 * carrierCore) * residualCore
+    = (5 * distinguishedCore)^5
+
+because:
+
+  carrierCore * residualCore = 5^3 * distinguishedCore^5.
+
+Then Mathlib's:
+
+  exists_eq_pow_of_mul_eq_pow
+
+may split:
+
+  25 * carrierCore = A^5
+  residualCore = b^5
+
+After proving `5 ∣ A`, write `A = 5*a` and cancel powers of five to obtain:
+
+  carrierCore = 5^3 * a^5
+
+hence:
+
+  carrier = 5^4 * a^5
+  residual = 5 * b^5
+
+Finally compare fifth powers to prove:
+
+  distinguished = 5 * a * b
+
+Use positivity or `Nat.pow_left_injective` for the final base equality.
+
+----------------------------------------------------------------------
+C. Bundle the exact split
+----------------------------------------------------------------------
+
+Create a new small module, preferably:
+
+  DkMath/FLT/Five/SignedFiveAdicPowerSplit.lean
+
+Define a packet such as:
+
+  structure SignedFiveAdicPowerSplit
+      (u v w : ℕ) : Type where
+    fiveAdic : SignedFiveAdicPacket u v w
+    a b : ℕ
+    a_pos : 0 < a
+    b_pos : 0 < b
+    carrier_eq :
+      fiveAdic.carrier = 5^4 * a^5
+    residual_eq :
+      fiveAdic.residual = 5 * b^5
+    distinguished_eq :
+      fiveAdic.distinguished = 5 * a * b
+
+Field shape may be adjusted for Lean ergonomics.
+
+Add:
+
+  signedFiveAdicPowerSplit_of_packet
+  signedFiveAdicPowerSplit_of_normalForm
+
+and a receiver:
+
+  SignedFiveAdicPowerSplitCore
+  signedBranchARefuter_of_powerSplitCore
+  branchB_false_of_powerSplitCore
+
+Expose the new module through the FLT5 public tower and add axiom checks.
+
+----------------------------------------------------------------------
+D. Outcome branching for Phase 2
+----------------------------------------------------------------------
+
+Report one of:
+
+A. Exact split compiled:
+     carrier = 5^4*a^5
+     residual = 5*b^5
+     distinguished = 5*a*b
+
+B. The split is blocked by one exact gcd/cancellation lemma.
+   State the missing theorem with its full Lean type and retain all compiling
+   progress below it.
+
+C. The expected split is mathematically too strong for one orientation.
+   Provide an explicit counterexample or exact Lean-observed obstruction and
+   propose the corrected packet.
+
+Never add a hypothesis merely to force Outcome A.
+Never use `sorry`.
+
+If Outcome A is reached, stop before constructing a smaller FLT5
+counterexample. The next checkpoint after that will be the actual descent
+measure and reconstruction.
