@@ -1,5 +1,59 @@
 FLT5 cp-004i — Golden Euclidean Division and Coprime Fifth-Power Extraction
 
+*complite*
+
+cp-004i を完遂し、Stop condition **B** まで到達しました。
+
+成果：
+
+- 黄金整数環の具体的 Euclidean division を証明
+  - 最近接格子点
+  - 鋭い収縮評価 `|N(e)| ≤ 5/16 < 1`
+  - 明示的な商・剰余
+  - 剰余の絶対ノルム減少
+  - `EuclideanDomain GoldenInt`
+- `GCDMonoid` と Mathlib の `exists_associated_pow_of_mul_eq_pow` を接続
+- `GoldenCoprimeFactorOfFifthPower` を無条件で証明
+- 全 stripped packet について
+  `beta = epsilon * gamma^5 ∧ GoldenUnit epsilon`
+  を無条件化
+- unit の5つの有限 sector への receiver と、残る算術障害の完全な型を追加
+
+残った正確な障害は：
+
+```lean
+SignedGoldenUnitFifthPowerExclusion
+```
+
+すなわち packet の `beta` が黄金 unit と第五冪の積になれないことです。この命題から stripped core、Signed Branch-A、routed Branch-B が閉じる receiver も証明済みです。もはや gcd/UFD/因数分解は障害ではありません。
+
+主要ファイル：
+
+- [GoldenEuclidean.lean](/lean/dk_math/DkMath/FLT/Five/GoldenEuclidean.lean)
+- [GoldenCoprimeFactor.lean](/lean/dk_math/DkMath/FLT/Five/GoldenCoprimeFactor.lean)
+- [SignedGoldenUnitClasses.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenUnitClasses.lean)
+- [cp-004i+ report](/lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004i-plus.md)
+
+検証結果：
+
+- 全 targeted builds 成功
+- `Main.lean` 成功
+- 拡張した `CheckAxioms.lean` 成功、`sorryAx` なし
+- `lake -Kjobs=1 build` 成功（8690 jobs）
+- `./lean-build.sh` 成功
+- `git diff --check` 成功
+- working tree clean
+
+コミット：
+
+- `36f4da61 Certify golden Euclidean division`
+- `25c9450c Close golden coprime fifth-power split`
+- `98c75167 Report FLT5 cp-004i Euclidean checkpoint`
+
+FLT5 完全閉包を装うことなく、障害を古典的な unit-sector/descent 算術まで正確に押し下げました。🎗️
+
+---
+
 Date: 2026-07-20
 Repository: Deskuma/dkmath
 Branch: hackathon/feature-gn5-flt5-260719-v0
