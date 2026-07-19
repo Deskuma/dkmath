@@ -1,5 +1,86 @@
 # FLT5 cp-004f+ — long-run conjugate, fifth-power, unit, and descent campaign
 
+*complete*
+
+可能な全ルートを進め、stop condition B「単一の正確な数学的 blocker」まで到達しました。FLT5 自体は未閉鎖です。
+
+主な成果：
+
+- `GoldenInt` の正直な `CommRing` および `IsDomain`
+- `SignedFiveAdicPowerSplit.coprime_a_b`
+- `Coprime (5^15*a^20) (b^5)`
+- `beta` と `goldenConj beta` の共通因子はすべて unit
+- `beta * conj(beta) = goldenOfInt(b)^5`
+- 第五冪の完全な二座標公式
+- `±φ^j` による第二座標公式（`0 ≤ j < 5`）
+- signed Branch A／routed Branch B への receiver
+- 全 API の axiom audit
+
+重要な到達定理：
+
+```lean
+SignedGoldenRamifierStrippedPacket.beta_relPrime_conj :
+  GoldenRelPrime beta (goldenConj beta)
+```
+
+最小の残存 blocker は次の完全な Lean 型です：
+
+```lean
+abbrev GoldenCoprimeFactorOfFifthPower : Prop :=
+  ∀ x y z : GoldenInt,
+    GoldenRelPrime x y →
+    goldenMul x y = goldenPow z 5 →
+    ∃ epsilon gamma : GoldenInt,
+      GoldenUnit epsilon ∧
+      x = goldenMul epsilon (goldenPow gamma 5)
+```
+
+これが得られれば、既に証明した
+
+```lean
+signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
+```
+
+によって、すべての stripped packet に第五冪 up to unit を供給できます。
+
+調査結果として、Mathlib の最も近い再利用定理は `exists_associated_pow_of_mul_eq_pow` ですが、正当な `GCDMonoid GoldenInt` が必要です。`IsDomain` までは倍化埋め込み
+
+```text
+a + bφ ↦ (2a+b) + b√5
+```
+
+により証明しました。この埋め込みは `ℤ[φ]` を `ℤ[√5]` と誤同一視せず、零因子の検出だけに使用しています。残る課題は実質的に、norm-Euclidean 除算または同等の GCD／factorization 構成です。
+
+成果物：
+
+- [GoldenOrder.lean](/lean/dk_math/DkMath/FLT/Five/GoldenOrder.lean)
+- [GoldenDivisibility.lean](/lean/dk_math/DkMath/FLT/Five/GoldenDivisibility.lean)
+- [SignedGoldenConjugateCoprime.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenConjugateCoprime.lean)
+- [SignedGoldenFifthPower.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenFifthPower.lean)
+- [GoldenFifthPowerCoordinates.lean](/lean/dk_math/DkMath/FLT/Five/GoldenFifthPowerCoordinates.lean)
+- [repo-flt5-cp-004f-plus.md](/lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004f-plus.md)
+
+コミット：
+
+- `c6d84ff0` Certify golden conjugate coprimality
+- `cae6e9db` Narrow golden fifth-power extraction blocker
+- `adb22aba` Certify golden order integral domain
+- `8e01aab8` Finalize FLT5 cp-004f plus report
+
+検証結果：
+
+- public `Main` 成功
+- axiom audit 成功
+- `lake -Kjobs=1 build` 成功
+- `./lean-build.sh` 成功
+- `git diff --check` 成功
+- 新規 `sorry`、`native_decide`、axiom なし
+- 作業ツリー clean
+
+cp-004h の座標公式までは無条件に進めましたが、第五冪因子の存在を証明せず unit-class 分析や descent を packet 全体へ接続することはできません。したがって `FLT5Target` は主張せず、ここを正確な hard blocker として停止しています。
+
+---
+
 Generated:
   2026-07-20 00:49 JST
 
