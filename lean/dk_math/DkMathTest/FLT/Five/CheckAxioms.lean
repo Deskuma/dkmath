@@ -92,6 +92,8 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.branchB_false_of_goldenConjugateCoprimeCore
 
 #print axioms DkMath.FLT.Five.goldenUnit_phi
+#print axioms DkMath.FLT.Five.goldenDoubleEmbedding_mul
+#print axioms DkMath.FLT.Five.GoldenInt.eq_zero_or_eq_zero_of_mul_eq_zero
 #print axioms DkMath.FLT.Five.goldenUnit_mul
 #print axioms DkMath.FLT.Five.goldenUnit_pow
 #print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.beta_mul_conj_eq_fifth

@@ -74,8 +74,11 @@ core.
 The investigated routes stop as follows:
 
 - Generic factor split: Mathlib's theorem requires genuine unique
-  factorization or equivalent normalization infrastructure.  The new honest
-  `CommRing` alone is intentionally insufficient.
+  factorization or equivalent gcd infrastructure.  The new honest
+  `CommRing` alone is intentionally insufficient.  A subsequent doubled
+  embedding `a+b*phi |-> (2a+b)+b*sqrt(5)` into `Zsqrtd 5` certifies
+  `NoZeroDivisors` and `IsDomain` without confusing the two orders.  Thus the
+  remaining missing structure is factorization/GCD, not domainhood.
 - Packet-specific prime exponents: conjugate coprimality is now available, but
   existence and uniqueness of irreducible decompositions in `Z[phi]` would be
   the same missing input in a less reusable form.
@@ -97,3 +100,10 @@ products, and their negatives are explicitly certified units.
 These formulas permit finite unit-class work after factorization, but do not
 bypass existence of `epsilon` and `gamma`.  Consequently descent and final
 assembly cannot be soundly entered from the current unconditional hypotheses.
+
+Mathlib's closest reusable endpoint is
+`exists_associated_pow_of_mul_eq_pow`, available under a genuine `GCDMonoid`.
+No `GCDMonoid GoldenInt` can be declared without constructing gcds (for
+example through a verified norm-Euclidean division algorithm).  The proposition
+`GoldenCoprimeFactorOfFifthPower` remains narrower than asking for that global
+instance and is therefore the final exact blocker for the next packet step.

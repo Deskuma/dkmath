@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Five.SquareGoldenBridge
+import Mathlib.NumberTheory.Zsqrtd.Basic
 
 #print "file: DkMath.FLT.Five.GoldenOrder"
 
@@ -114,6 +115,64 @@ instance goldenCommRing : CommRing GoldenInt := by
       mul_comm := ?_ } <;>
     intros <;> ext <;>
     simp <;> ring
+
+/-- Twice a golden integer, embedded in `Z[sqrt 5]` without changing orders. -/
+def goldenDoubleEmbedding (x : GoldenInt) : Zsqrtd 5 :=
+  ⟨2 * x.fst + x.snd, x.snd⟩
+
+instance goldenFiveNonsquare : Zsqrtd.Nonsquare 5 := by
+  refine ⟨fun n h => ?_⟩
+  have hn : n < 3 := by
+    by_contra hn
+    have h3 : 3 ≤ n := Nat.le_of_not_gt hn
+    have h9 : 9 ≤ n * n := by nlinarith
+    omega
+  interval_cases n <;> norm_num at h
+
+theorem goldenDoubleEmbedding_injective :
+    Function.Injective goldenDoubleEmbedding := by
+  intro x y h
+  have hsnd : x.snd = y.snd := congrArg Zsqrtd.im h
+  have hfst : 2 * x.fst + x.snd = 2 * y.fst + y.snd :=
+    congrArg Zsqrtd.re h
+  apply GoldenInt.ext
+  · omega
+  · exact hsnd
+
+/-- The doubled embedding converts a golden product to twice the embedded product. -/
+theorem goldenDoubleEmbedding_mul (x y : GoldenInt) :
+    goldenDoubleEmbedding x * goldenDoubleEmbedding y =
+      (2 : Zsqrtd 5) * goldenDoubleEmbedding (goldenMul x y) := by
+  ext <;> simp [goldenDoubleEmbedding, goldenMul] <;> ring
+
+theorem GoldenInt.eq_zero_or_eq_zero_of_mul_eq_zero {x y : GoldenInt}
+    (h : x * y = 0) : x = 0 ∨ y = 0 := by
+  have hemb : goldenDoubleEmbedding x * goldenDoubleEmbedding y = 0 := by
+    rw [goldenDoubleEmbedding_mul]
+    rw [show goldenMul x y = 0 by exact h]
+    rfl
+  rcases Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero hemb with hx | hy
+  · left
+    apply goldenDoubleEmbedding_injective
+    calc
+      goldenDoubleEmbedding x = 0 := hx
+      _ = goldenDoubleEmbedding 0 := by ext <;> rfl
+  · right
+    apply goldenDoubleEmbedding_injective
+    calc
+      goldenDoubleEmbedding y = 0 := hy
+      _ = goldenDoubleEmbedding 0 := by ext <;> rfl
+
+instance : NoZeroDivisors GoldenInt where
+  eq_zero_or_eq_zero_of_mul_eq_zero := GoldenInt.eq_zero_or_eq_zero_of_mul_eq_zero
+
+instance : Nontrivial GoldenInt := by
+  refine ⟨⟨0, 1, ?_⟩⟩
+  intro h
+  have := congrArg GoldenInt.fst h
+  norm_num at this
+
+instance : IsDomain GoldenInt := NoZeroDivisors.to_isDomain _
 
 @[simp] theorem golden_add_eq (x y : GoldenInt) : goldenAdd x y = x + y := rfl
 @[simp] theorem golden_neg_eq (x : GoldenInt) : goldenNeg x = -x := rfl
