@@ -1,0 +1,471 @@
+FLT5 cp-004i — Golden Euclidean Division and Coprime Fifth-Power Extraction
+
+Date: 2026-07-20
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+Base branch: hackathon/cosmic-formula-inversion-flt-gn5
+PR: #56
+
+DO NOT modify the base branch.
+DO NOT merge the pull request.
+DO NOT mark the pull request ready for review.
+Work only on the active feature branch.
+
+Read first:
+
+- README.md
+- AGENT.md
+- SUMMARY.md
+- lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004f-plus.md
+- lean/dk_math/DkMath/FLT/Five/docs/investigation-golden-euclidean-division-unit-relative-scale-260720.md
+- current source under lean/dk_math/DkMath/FLT/Five/
+
+Use `__dkmath-all.lean.txt.gz` with `zgrep` / `zcat` when repository-wide theorem reconnaissance is useful.
+
+======================================================================
+1. Mission
+======================================================================
+
+The current exact blocker is:
+
+```lean
+abbrev GoldenCoprimeFactorOfFifthPower : Prop :=
+  ∀ x y z : GoldenInt,
+    GoldenRelPrime x y →
+    goldenMul x y = goldenPow z 5 →
+    ∃ epsilon gamma : GoldenInt,
+      GoldenUnit epsilon ∧
+      x = goldenMul epsilon (goldenPow gamma 5)
+```
+
+The purpose of cp-004i is to construct an honest Euclidean division mechanism for `GoldenInt = Z[phi]` using the absolute golden norm and nearest-lattice rounding.
+
+The central quantitative fact to certify is:
+
+```text
+|u| <= 1/2
+|v| <= 1/2
+--------------------------------
+|u^2 + u*v - v^2| <= 5/16 < 1
+```
+
+Use this to prove quotient/remainder division with strict absolute-norm decrease. Then connect the weakest honest standard algebraic structure sufficient to prove `GoldenCoprimeFactorOfFifthPower`.
+
+Do not stop after merely observing that a Euclidean algorithm is required. The nearest-lattice and `5/16` contraction core must be implemented first.
+
+======================================================================
+2. Certified starting point
+======================================================================
+
+Treat the following current declarations as certified facts and reuse them.
+
+```text
+GoldenInt is a CommRing
+GoldenInt has NoZeroDivisors
+GoldenInt is an IsDomain
+
+goldenNorm_mul
+golden_mul_conj
+goldenNorm_conj
+goldenNorm_pow
+
+goldenUnit_of_norm_eq_one
+goldenUnit_of_norm_eq_neg_one
+goldenNorm_eq_one_or_neg_one_of_unit
+
+GoldenRelPrime
+GoldenCoprimeFactorOfFifthPower
+
+SignedGoldenRamifierStrippedPacket.beta_relPrime_conj
+SignedGoldenRamifierStrippedPacket.beta_mul_conj_eq_fifth
+
+SignedGoldenFifthPowerUpToUnitCore
+signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
+```
+
+Do not replace the explicit golden order with `Zsqrtd 5`.
+
+`Zsqrtd 5` represents `Z[sqrt 5]`, while `GoldenInt` represents the full order `Z[phi]`. The existing doubled embedding may be used for domain arguments only where its proved API applies.
+
+======================================================================
+3. Working discipline
+======================================================================
+
+- No `sorry`.
+- No `native_decide`.
+- No new axiom.
+- Do not fabricate `GCDMonoid`, `EuclideanDomain`, PID, or UFD instances.
+- Build and axiom-check every stable checkpoint.
+- Prefer Mathlib lemmas after proving their actual prerequisites.
+- Keep theorem statements honest and reusable.
+- Preserve the explicit `goldenMul`, `goldenPow`, and `goldenNorm` API while using standard ring notation when convenient.
+- Do not refactor unrelated FLT5 modules.
+- Do not spend review time on pre-existing unrelated repository warnings.
+
+After a small checkpoint succeeds, commit it and continue immediately. Do not wait for another instruction unless one of the stop conditions in Section 11 is reached.
+
+======================================================================
+4. cp-004i-a — Rational coordinate and rounding layer
+======================================================================
+
+Perform read-only Mathlib reconnaissance before choosing names and imports.
+
+Search for existing support for:
+
+- nearest integer to a rational;
+- `Int.floor`, `Int.ceil`, or round lemmas;
+- bounds for `x - floor (x + 1/2)`;
+- rational absolute-value casts;
+- construction helpers for `EuclideanDomain`;
+- gcd construction from a division algorithm;
+- `exists_associated_pow_of_mul_eq_pow` and its exact assumptions.
+
+Do not reprove a large generic rounding library if a small existing theorem suffices.
+
+If no direct nearest-integer theorem is convenient, use an explicit construction such as the floor of `x + 1/2` and prove:
+
+```lean
+∃ n : ℤ, |x - n| ≤ (1 : ℚ) / 2
+```
+
+Suggested module:
+
+```text
+DkMath/FLT/Five/GoldenEuclidean.lean
+```
+
+A local rational-coordinate structure is acceptable:
+
+```lean
+structure GoldenRat where
+  fst : ℚ
+  snd : ℚ
+```
+
+or a small type alias may be used if it produces a cleaner API.
+
+Required declarations, modulo naming discovered during implementation:
+
+```lean
+def goldenRatNorm (x : GoldenRat) : ℚ :=
+  x.fst ^ 2 + x.fst * x.snd - x.snd ^ 2
+```
+
+```lean
+theorem exists_int_near_rat (x : ℚ) :
+    ∃ n : ℤ, |x - n| ≤ (1 : ℚ) / 2
+```
+
+Also provide the simultaneous two-coordinate rounding result needed later.
+
+======================================================================
+5. cp-004i-b — Fundamental-cell contraction
+======================================================================
+
+Prove the exact central estimate:
+
+```lean
+theorem goldenRat_norm_abs_le_five_sixteen
+    {u v : ℚ}
+    (hu : |u| ≤ (1 : ℚ) / 2)
+    (hv : |v| ≤ (1 : ℚ) / 2) :
+    |u ^ 2 + u * v - v ^ 2| ≤ (5 : ℚ) / 16
+```
+
+Use the two square-completion identities rather than a brittle nonlinear search:
+
+```text
+u^2 + u*v - v^2
+  = 5/4*u^2 - (v - u/2)^2
+
+u^2 + u*v - v^2
+  = (u + v/2)^2 - 5/4*v^2
+```
+
+Then prove the strict corollary:
+
+```lean
+|u ^ 2 + u * v - v ^ 2| < 1
+```
+
+Keep both the sharp `5/16` theorem and the strict `< 1` theorem. The sharp theorem is reusable for Petal / lattice normalization even if later algebraic instance construction fails.
+
+Record the mathematical meaning in source comments:
+
+```text
+Every rational golden point has an integral lattice representative whose
+residual lies in a strict absolute-norm contraction cell.
+```
+
+======================================================================
+6. cp-004i-c — Explicit golden quotient coordinates
+======================================================================
+
+For
+
+```text
+x = a + b*phi
+y = c + d*phi, y != 0
+```
+
+certify the quotient coordinates:
+
+```text
+A = (a*(c+d) - b*d) / N(y)
+B = (b*c - a*d) / N(y)
+```
+
+because:
+
+```text
+x / y = x * conjugate(y) / N(y)
+```
+
+The implementation may avoid introducing a field of golden rationals by working directly with the pair `(A,B) : ℚ × ℚ`.
+
+Required supporting facts:
+
+1. `y ≠ 0 -> goldenNorm y ≠ 0`.
+2. the explicit coordinate identity for `x * conjugate y`.
+3. the rational reconstruction identity after division by `goldenNorm y`.
+4. compatibility of rational norm with integer golden norm casts.
+
+Do not assume `goldenNorm y ≠ 0` merely from syntax. Prove it from the existing domain/conjugation API.
+
+======================================================================
+7. cp-004i-d — Golden quotient and remainder
+======================================================================
+
+Round quotient coordinates `A,B` to integers `m,n` and set:
+
+```text
+q = m + n*phi
+r = x - q*y
+```
+
+Prove:
+
+```lean
+theorem exists_golden_quotient_remainder
+    (x y : GoldenInt)
+    (hy : y ≠ 0) :
+    ∃ q r : GoldenInt,
+      x = q * y + r ∧
+      (r = 0 ∨
+        Int.natAbs (goldenNorm r) <
+          Int.natAbs (goldenNorm y))
+```
+
+The proof must exhibit the actual quotient and remainder. The intended norm argument is:
+
+```text
+x / y = q + e
+r = y * e
+|N(e)| <= 5/16 < 1
+|N(r)| = |N(y)| * |N(e)| < |N(y)|
+```
+
+Be careful about the following Lean boundaries:
+
+- integer norm may be negative;
+- the Euclidean measure uses `Int.natAbs`;
+- quotient-error reasoning occurs in `ℚ`;
+- strict rational inequalities must be transported back to natural absolute values;
+- the zero remainder branch may need to be separated before positivity division arguments.
+
+Publish useful intermediate theorems rather than hiding the entire calculation in one proof.
+
+Suggested intermediate API:
+
+```lean
+def goldenEuclideanSize (x : GoldenInt) : ℕ :=
+  Int.natAbs (goldenNorm x)
+```
+
+```lean
+theorem goldenEuclideanSize_pos_of_ne_zero
+```
+
+```lean
+theorem goldenEuclideanSize_mul
+```
+
+```lean
+theorem golden_remainder_size_lt
+```
+
+Do not mark every helper public if it is implementation-specific. Preserve the conceptual public surface: size, quotient/remainder existence, and strict decrease.
+
+======================================================================
+8. cp-004i-e — Honest algebraic bridge
+======================================================================
+
+After quotient/remainder is certified, investigate the shortest honest route in this order.
+
+Route A — standard Euclidean structure
+
+- Find Mathlib's intended constructor pattern for an `EuclideanDomain` from explicit quotient, remainder, and a well-founded natural-valued size.
+- Define quotient and remainder functions using the chosen nearest-coordinate quotient.
+- Prove all required laws.
+- Install the instance only after every field is justified.
+
+Route B — gcd structure without a global EuclideanDomain
+
+- If a full `EuclideanDomain` instance is obstructed only by interface overhead, construct gcd by well-founded recursion on `goldenEuclideanSize`.
+- Prove the weakest honest `GCDMonoid` or equivalent theorem needed by Mathlib's coprime-power split.
+- Do not install an instance whose laws have not been certified.
+
+Route C — direct reusable factor theorem
+
+- If standard instance construction is disproportionately expensive, use the certified division algorithm to prove `GoldenCoprimeFactorOfFifthPower` directly.
+- The proof must be genuinely general over `x y z : GoldenInt`, not merely restate the packet-specific core.
+- A packet-specific theorem is acceptable only after the general direct route has been shown to require a strictly stronger missing fact.
+
+Do not stop at the sentence “Euclidean domains are UFDs.” Connect the concrete golden division theorem to the exact Mathlib theorem or complete the direct proof.
+
+======================================================================
+9. cp-004i-f — Close the existing blocker and continue
+======================================================================
+
+As soon as `GoldenCoprimeFactorOfFifthPower` is inhabited, connect it through:
+
+```lean
+signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
+```
+
+and certify for every stripped packet:
+
+```text
+beta = epsilon * gamma^5
+GoldenUnit epsilon
+```
+
+Then continue without waiting into the next honest attack.
+
+Audit unit classification routes:
+
+1. direct Pell/Fibonacci classification of norm `±1` solutions;
+2. existing Mathlib unit results for the golden order or quadratic integers;
+3. a packet-specific reduction modulo fifth powers;
+4. direct coordinate/valuation elimination that avoids full unit classification.
+
+The expected finite representatives modulo fifth powers are:
+
+```text
+1, phi, phi^2, phi^3, phi^4
+```
+
+because sign is itself a fifth power and `phi^(5m)` is absorbed into `gamma^5`.
+
+Do not assume this classification without proof.
+
+Reuse the existing exact coordinate formulas from:
+
+```text
+GoldenFifthPowerCoordinates.lean
+```
+
+Compare each certified unit sector against:
+
+```text
+beta.snd = -5^7 * a^10
+```
+
+Seek either:
+
+- a direct contradiction in every sector; or
+- a strict descent packet with a certified natural-valued decreasing measure.
+
+======================================================================
+10. Petal fallback deliverables
+======================================================================
+
+Even if the FLT5 factorization route encounters a new exact blocker, preserve and report the following independent results when obtained:
+
+- nearest golden lattice point;
+- finite fundamental coordinate cell;
+- `5/16` absolute-norm contraction;
+- explicit normalization residual;
+- well-founded repeated normalization;
+- separation of unit scale and contravariant coordinate;
+- any generic finite-window / scale-counter abstraction suggested by the concrete proof.
+
+Do not move these into `DkMath.Petal.*` during this checkpoint. Record precise future bridge suggestions in the report only. The concrete golden implementation comes first.
+
+======================================================================
+11. Stop conditions
+======================================================================
+
+Continue through stable commits until exactly one of these conditions is reached.
+
+A. FLT5 closure
+
+A no-sorry theorem inhabits the repository's final `FLT5Target`, all Branch-A / Branch-B / reduction assembly paths are connected, and full CI succeeds.
+
+B. Exact new blocker
+
+The nearest-lattice contraction and golden quotient/remainder theorem are certified, multiple honest algebraic routes have been attempted, and one precise missing Lean proposition or structure law remains. State its complete theorem type and prove receivers showing it is sufficient.
+
+C. User interruption
+
+The user explicitly asks the run to stop or redirect.
+
+Do not stop at a micro-checkpoint, a successful local build, or the completion of the `5/16` inequality alone.
+
+======================================================================
+12. Required verification
+======================================================================
+
+At each stable checkpoint run the narrow relevant builds. Before the final report run:
+
+```text
+lake build DkMath.FLT.Five.GoldenOrder
+lake build DkMath.FLT.Five.GoldenEuclidean
+lake build DkMath.FLT.Five.SignedGoldenFifthPower
+lake build DkMath.FLT.Five.GoldenFifthPowerCoordinates
+lake env lean DkMath/FLT/Five/Main.lean
+lake env lean DkMathTest/FLT/Five/CheckAxioms.lean
+lake -Kjobs=1 build
+./lean-build.sh
+git diff --check
+```
+
+Adjust the exact module build list if file names change, but retain equivalent coverage.
+
+Update public imports only after the new modules are stable.
+
+The final report must list:
+
+- files and declarations added;
+- the exact quotient/remainder theorem;
+- the achieved standard algebraic instances, if any;
+- the theorem used to inhabit `GoldenCoprimeFactorOfFifthPower`;
+- whether `beta = epsilon * gamma^5` is now unconditional;
+- unit-class/descent progress;
+- full build and axiom-check results;
+- whether stop condition A or B was reached;
+- Petal-reusable mathematical artifacts.
+
+Write the rolling report to:
+
+```text
+lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004i-plus.md
+```
+
+======================================================================
+13. Mathematical compass
+======================================================================
+
+The guiding interpretation is:
+
+```text
+unit change
+  -> coordinate changes contravariantly
+  -> absolute norm observes the invariant magnitude
+  -> nearest lattice normalization returns to the unit cell
+  -> the residual Gap has strictly smaller norm
+  -> repeated division terminates
+  -> gcd and fifth-power factor splitting become available
+```
+
+The red-ribbon story is not commentary external to the proof. It identifies the correct invariant observation world and the normalization operation that should generate the Euclidean algorithm.
