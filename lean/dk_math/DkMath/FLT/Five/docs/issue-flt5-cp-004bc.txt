@@ -1,5 +1,7 @@
 # FLT5 cp-004b recovery and cp-004c continuation
 
+*solved* 2026/07/19 21:04
+
 Repository:
   Deskuma/dkmath
 
@@ -450,3 +452,64 @@ Never use `sorry`.
 If Outcome A is reached, stop before constructing a smaller FLT5
 counterexample. The next checkpoint after that will be the actual descent
 measure and reconstruction.
+
+---
+
+完了しました。cp-004b を修復し、そのまま cp-004c の Outcome A まで到達しています。
+
+cp-004b:
+
+- `SignedFiveAdicPacket` を `Type` に修正
+- `SumGN5` の因数分解・正値性を再構築
+- 両 orientation の `residual % 25 = 5` を証明
+- `padicValNat 5 residual = 1`
+- `padicValNat 5 carrier = 4 + 5*m`
+- 警告・`sorry`・`native_decide` なし
+
+cp-004c:
+
+```text
+gcd carrier residual = 5
+
+carrier       = 5^4 * a^5
+residual      = 5 * b^5
+distinguished = 5 * a * b
+```
+
+を正の自然数 `a,b` について証明しました。
+
+実装:
+
+- [SignedFiveAdic.lean](/lean/dk_math/DkMath/FLT/Five/SignedFiveAdic.lean)
+- [SignedFiveAdicPowerSplit.lean](/lean/dk_math/DkMath/FLT/Five/SignedFiveAdicPowerSplit.lean)
+- [実装報告](/lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004bc.md)
+
+公開 receiver も追加済みです。
+
+```text
+signedFiveAdicPacket_gcd_eq_five
+signedFiveAdicPowerSplit_of_packet
+signedFiveAdicPowerSplit_of_normalForm
+signedBranchARefuter_of_powerSplitCore
+branchB_false_of_powerSplitCore
+```
+
+検証結果:
+
+- `lake build DkMath.FLT.Five.SignedFiveAdic` 成功
+- `lake build DkMath.FLT.Five.SignedFiveAdicPowerSplit` 成功
+- `lake build DkMath.FLT.Five` 成功
+- `lake build DkMathTest.FLT.Five.CheckAxioms` 成功
+- `./lean-build.sh` 成功
+- `git diff --check` 成功
+- `sorryAx` なし
+- 作業ツリー clean
+
+コミットは指示どおり分離しました。
+
+```text
+d08fe86e Fix and certify signed five-adic packet
+c9af7601 Certify signed five-adic power split
+```
+
+ここでは指示された停止境界を守り、より小さい FLT5 反例の構築や下降測度にはまだ踏み込んでいません。
