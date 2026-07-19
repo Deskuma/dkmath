@@ -101,3 +101,13 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.goldenPow_five_fst
 #print axioms DkMath.FLT.Five.goldenPow_five_snd
 #print axioms DkMath.FLT.Five.golden_unit_four_mul_fifth_snd
+
+#print axioms DkMath.FLT.Five.goldenRat_norm_abs_le_five_sixteen
+#print axioms DkMath.FLT.Five.golden_remainder_size_lt
+#print axioms DkMath.FLT.Five.exists_golden_quotient_remainder
+#print axioms DkMath.FLT.Five.goldenUnit_iff_isUnit
+#print axioms DkMath.FLT.Five.goldenCoprimeFactorOfFifthPower
+#print axioms DkMath.FLT.Five.signedGoldenFifthPowerUpToUnitCore
+#print axioms DkMath.FLT.Five.signedGoldenFiniteUnitSectorCore_of_unitClasses
+#print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
+#print axioms DkMath.FLT.Five.branchB_false_of_unitFifthPowerExclusion
