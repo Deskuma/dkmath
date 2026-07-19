@@ -8,6 +8,7 @@ import DkMath.FLT.Five.BranchA
 import DkMath.FLT.Five.NormalForm
 import DkMath.FLT.Five.Provider
 import DkMath.FLT.Five.Reduction
+import DkMath.FLT.Five.SignedBranchA
 import DkMath.FLT.Five.SquareGoldenBridge
 import DkMath.FLT.Five.SquareGoldenNormalForm
 import DkMath.FLT.Five.Valuation
