@@ -107,3 +107,33 @@ No `GCDMonoid GoldenInt` can be declared without constructing gcds (for
 example through a verified norm-Euclidean division algorithm).  The proposition
 `GoldenCoprimeFactorOfFifthPower` remains narrower than asking for that global
 instance and is therefore the final exact blocker for the next packet step.
+
+## Checkpoints and verification
+
+Certified commits:
+
+- `c6d84ff0` — conjugate coprimality and the recovered `Coprime a b`;
+- `cae6e9db` — exact fifth-power blocker and fifth-power coordinates;
+- `adb22aba` — doubled embedding and `IsDomain GoldenInt`.
+
+Successful gates:
+
+```text
+lake build DkMath.FLT.Five.GoldenOrder
+lake build DkMath.FLT.Five.SignedGoldenConjugateCoprime
+lake build DkMath.FLT.Five.GoldenFifthPowerCoordinates
+lake env lean DkMath/FLT/Five/Main.lean
+lake env lean DkMathTest/FLT/Five/CheckAxioms.lean
+lake -Kjobs=1 build
+./lean-build.sh
+git diff --check
+```
+
+The full build reports only the repository's previously known `sorry`
+warnings outside the new FLT5 modules.  No cp-004f+ declaration uses `sorry`,
+`native_decide`, or a new axiom.
+
+Stop condition B is reached at `GoldenCoprimeFactorOfFifthPower`.  Without an
+inhabitant of that proposition, neither the unit-class coordinate cases nor a
+strict descent packet can be connected to every stripped exceptional packet.
+No theorem inhabiting `FLT5Target` is claimed.
