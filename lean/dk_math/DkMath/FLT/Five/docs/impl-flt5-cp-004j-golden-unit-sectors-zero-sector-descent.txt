@@ -1,5 +1,67 @@
 FLT5 cp-004j — Golden Unit Sectors and Zero-Sector Descent
 
+*complite*
+
+cp-004j の実装と検証を完了しました。作業ツリーは clean です。
+
+主な成果：
+
+- 非零 golden unit sector を完全排除
+- zero sector を正確に分離
+- zero sector から
+  `|s| = 5⁶ c¹⁰`、`|H(r,s)| = d¹⁰`
+  という 10 乗分解を導出
+- primitive counterexample の正規化から `FLT5Target` までの受け渡しを構築
+- 新規定理群の公理監査を追加
+- `sorry`、`native_decide`、新規公理は不使用
+
+主要ファイル：
+
+- [SignedGoldenSectorArithmetic.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean)
+- [SignedGoldenZeroSector.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenZeroSector.lean)
+- [SignedGoldenClosure.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenClosure.lean)
+- [Main.lean](/lean/dk_math/DkMath/FLT/Five/Main.lean)
+- [CheckAxioms.lean](/lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
+
+最終的な定理境界は次です。
+
+```lean
+flt5Target_of_unitClasses_of_zeroArithmetic
+  (hClasses : GoldenUnitClassesModFifth)
+  (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+  FLT5Target
+```
+
+したがって今回は Stop B です。残る独立した数学的 blocker は正確に二つです。
+
+1. `GoldenUnitClassesModFifth`  
+   golden ring の符号付き unit を fifth powers modulo units として分類する定理。
+
+2. `GoldenZeroSectorArithmeticExclusion`  
+   導出済みの coprimality、norm 条件、`5⁶ × tenth power` 分解を用いて zero sector を排除する算術定理。
+
+単一の小さな法による単純な合同式排除も調査しましたが、生存 residue があり、zero sector には Pell/unit 分類または複数素数を組み合わせた descent が必要だと確認しました。
+
+検証結果：
+
+- `lake -Kjobs=1 build`: 8,693 jobs 成功
+- `./lean-build.sh`: 成功
+- 公理監査: 新規チェーンは標準公理のみ、`sorryAx` なし
+- `git diff --check`: 成功
+
+コミット：
+
+```text
+7b849192 Eliminate nonzero golden unit sectors
+8e16f9ce Split the golden zero sector into tenth powers
+980a89a3 Route golden sector blockers to FLT5 target
+a01699a9 Audit FLT5 golden sector frontier
+```
+
+指示どおり cp-004j の追加レポート Markdown は作成していません。🎗️
+
+---
+
 Date: 2026-07-20
 Repository: Deskuma/dkmath
 Branch: hackathon/feature-gn5-flt5-260719-v0
