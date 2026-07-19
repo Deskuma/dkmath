@@ -56,3 +56,9 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.signedFiveAdicPacket_of_normalForm
 #print axioms DkMath.FLT.Five.signedBranchARefuter_of_fiveAdicCore
 #print axioms DkMath.FLT.Five.branchB_false_of_fiveAdicCore
+
+#print axioms DkMath.FLT.Five.signedFiveAdicPacket_gcd_eq_five
+#print axioms DkMath.FLT.Five.signedFiveAdicPowerSplit_of_packet
+#print axioms DkMath.FLT.Five.signedFiveAdicPowerSplit_of_normalForm
+#print axioms DkMath.FLT.Five.signedBranchARefuter_of_powerSplitCore
+#print axioms DkMath.FLT.Five.branchB_false_of_powerSplitCore
