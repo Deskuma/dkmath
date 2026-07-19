@@ -58,7 +58,7 @@ theorem exists_branchB_squareGoldenNormalForm
     ∃ a b : ℕ, BranchBSquareGoldenNormalForm x y z a b := by
   rcases exists_branchB_fifthPowerNormalForm hPack hBranch with ⟨a, b, hNF⟩
   have hzy : a ^ 5 + y = z := by
-    omega
+    simpa [Nat.add_comm] using hNF.z_eq.symm
   have hGolden :
       GoldenNorm (SquareGoldenM z y) (SquareGoldenN z y) = (b : ℤ) ^ 5 := by
     have h := goldenNorm_eq_fifth_power_of_GN5 hNF.GN_eq
