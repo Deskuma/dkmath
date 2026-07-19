@@ -1,5 +1,52 @@
 # FLT5 cp-004e — Golden ramifier extraction and fifth-power/unit investigation
 
+*Complite* 2026/07/20  0:02
+
+cp-004e の作業を完了しました。作業ツリーは clean です。
+
+実装内容：
+
+- [GoldenOrder.lean](/lean/dk_math/DkMath/FLT/Five/GoldenOrder.lean)
+  - integral golden order の明示的演算 API
+  - 共役・ノルム・乗法性
+  - `sqrtFiveElement`、`tau`
+  - `5 ∣ 2M+N` からの明示的 `tau` 因子抽出
+
+- [SignedGoldenRamifierStripped.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenRamifierStripped.lean)
+  - `alpha = tau * beta`
+  - `Norm beta = b^5`
+  - `beta.snd = -5^7*a^10`
+  - `5 ∤ b`
+  - `5 ∤ Norm beta`
+  - `beta` はさらに `tau` で割れない
+  - signed Branch A／Branch B receiver
+  - fifth power up to unit の正確な次段契約
+
+結果は Outcome B です。`ℤ[φ]` の UFD・共役素性・単数分類が未整備なため、第五冪 up to unit は仮定せず、必要な Lean 命題を明示しました。FLT5 の証明完了は主張していません。
+
+報告書：
+
+- [repo-flt5-cp-004e.md](/lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004e.md)
+
+検証済み：
+
+- cp-004d targeted build
+- 新規両モジュール
+- 公開 `Main`
+- axiom checks
+- `git diff --check`
+- `./lean-build.sh`
+- 新規実装に `sorry` / `native_decide` なし
+
+コミット：
+
+- `599b90a5` Add integral golden order API
+- `a9a0b9ad` Add golden ramifier stripped packet
+- `50a78e15` Expose golden ramifier checkpoint
+- `70101f1b` Report FLT5 checkpoint cp-004e
+
+---
+
 Repository:
   Deskuma/dkmath
 
