@@ -69,3 +69,13 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.signedSquareGoldenExceptionalPacket_of_normalForm
 #print axioms DkMath.FLT.Five.signedBranchARefuter_of_squareGoldenExceptionalCore
 #print axioms DkMath.FLT.Five.branchB_false_of_squareGoldenExceptionalCore
+
+#print axioms DkMath.FLT.Five.goldenConj_mul
+#print axioms DkMath.FLT.Five.goldenNorm_mul
+#print axioms DkMath.FLT.Five.golden_tau_mul_conj
+#print axioms DkMath.FLT.Five.exists_goldenTau_factor_of_five_dvd
+#print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedPacket_of_exceptional
+#print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedPacket_of_powerSplit
+#print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedPacket_of_normalForm
+#print axioms DkMath.FLT.Five.signedBranchARefuter_of_goldenRamifierStrippedCore
+#print axioms DkMath.FLT.Five.branchB_false_of_goldenRamifierStrippedCore
