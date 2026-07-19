@@ -160,14 +160,14 @@ private theorem goldenRemainder_norm_rat_identity
     ring
   have hr1 : ((goldenRemainder x y).fst : ℚ) =
       y.fst * (A - m) + y.snd * (B - n) := by
-    simp [goldenRemainder, goldenMul, m, n]
-    push_cast
+    simp only [goldenRemainder, goldenMul, golden_fst_sub, Int.cast_sub, Int.cast_add, Int.cast_mul,
+      m, n]
     rw [hx1]
     ring
   have hr2 : ((goldenRemainder x y).snd : ℚ) =
       y.snd * (A - m) + y.fst * (B - n) + y.snd * (B - n) := by
-    simp [goldenRemainder, goldenMul, m, n]
-    push_cast
+    simp only [goldenRemainder, goldenMul, golden_snd_sub, Int.cast_sub, Int.cast_add, Int.cast_mul,
+      m, n]
     rw [hx2]
     ring
   dsimp only [goldenNorm, goldenRatNorm]
