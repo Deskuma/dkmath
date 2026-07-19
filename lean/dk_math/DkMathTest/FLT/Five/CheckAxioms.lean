@@ -40,3 +40,12 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.squareGolden_square_discriminant
 #print axioms DkMath.FLT.Five.exists_branchB_squareGoldenNormalForm
 #print axioms DkMath.FLT.Five.branchB_false_of_squareGoldenCore
+
+#print axioms DkMath.FLT.Five.five_not_dvd_GN5_of_five_not_dvd_gap
+#print axioms DkMath.FLT.Five.five_not_dvd_x_of_branchB
+#print axioms DkMath.FLT.Five.pow_five_mod_five
+#print axioms DkMath.FLT.Five.five_dvd_y_or_z_of_fermat5_of_five_not_dvd_x
+#print axioms DkMath.FLT.Five.five_dvd_z_sub_x_of_fermat5_of_five_dvd_y
+#print axioms DkMath.FLT.Five.five_dvd_x_add_y_of_fermat5_of_five_dvd_z
+#print axioms DkMath.FLT.Five.signedBranchA_normalForm_of_branchB
+#print axioms DkMath.FLT.Five.branchB_false_of_signedBranchARefuter
