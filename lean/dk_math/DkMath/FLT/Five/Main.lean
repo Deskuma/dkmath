@@ -8,6 +8,7 @@ import DkMath.FLT.Five.BranchA
 import DkMath.FLT.Five.GoldenOrder
 import DkMath.FLT.Five.GoldenDivisibility
 import DkMath.FLT.Five.GoldenFifthPowerCoordinates
+import DkMath.FLT.Five.GoldenCoprimeFactor
 import DkMath.FLT.Five.NormalForm
 import DkMath.FLT.Five.Provider
 import DkMath.FLT.Five.Reduction
@@ -17,6 +18,7 @@ import DkMath.FLT.Five.SignedFiveAdicPowerSplit
 import DkMath.FLT.Five.SignedGoldenRamifierStripped
 import DkMath.FLT.Five.SignedGoldenConjugateCoprime
 import DkMath.FLT.Five.SignedGoldenFifthPower
+import DkMath.FLT.Five.SignedGoldenUnitClasses
 import DkMath.FLT.Five.SignedSquareGoldenExceptional
 import DkMath.FLT.Five.SquareGoldenBridge
 import DkMath.FLT.Five.SquareGoldenNormalForm
