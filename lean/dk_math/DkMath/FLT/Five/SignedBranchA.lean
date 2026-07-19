@@ -71,7 +71,8 @@ private theorem mod25_fifth_residue_classification :
       (x.1 ^ 5 + y.1 ^ 5) % 25 = z.1 ^ 5 % 25 →
       ¬ 5 ∣ x.1 →
       5 ∣ y.1 ∨ 5 ∣ z.1 := by
-  native_decide
+  -- native_decide
+  decide +kernel
 
 /-- A fifth-power equation with `5 ∤ x` forces five into `y` or `z`. -/
 theorem five_dvd_y_or_z_of_fermat5_of_five_not_dvd_x
