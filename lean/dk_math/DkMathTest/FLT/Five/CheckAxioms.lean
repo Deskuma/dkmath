@@ -35,3 +35,8 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.GN5_eq_goldenNorm_squareLink
 #print axioms DkMath.FLT.Five.four_mul_goldenNorm_eq_discriminant_five
 #print axioms DkMath.FLT.Five.goldenNorm_eq_fifth_power_of_GN5
+
+#print axioms DkMath.FLT.Five.squareGolden_tenth_boundary_base
+#print axioms DkMath.FLT.Five.squareGolden_square_discriminant
+#print axioms DkMath.FLT.Five.exists_branchB_squareGoldenNormalForm
+#print axioms DkMath.FLT.Five.branchB_false_of_squareGoldenCore
