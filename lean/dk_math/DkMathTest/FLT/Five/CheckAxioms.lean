@@ -49,3 +49,10 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.five_dvd_x_add_y_of_fermat5_of_five_dvd_z
 #print axioms DkMath.FLT.Five.signedBranchA_normalForm_of_branchB
 #print axioms DkMath.FLT.Five.branchB_false_of_signedBranchARefuter
+
+#print axioms DkMath.FLT.Five.add_mul_sumGN5_eq_add_pow_five
+#print axioms DkMath.FLT.Five.padicValNat_five_eq_one_of_dvd_not_sq
+#print axioms DkMath.FLT.Five.padicValNat_carrier_shape_of_mul_eq_fifth
+#print axioms DkMath.FLT.Five.signedFiveAdicPacket_of_normalForm
+#print axioms DkMath.FLT.Five.signedBranchARefuter_of_fiveAdicCore
+#print axioms DkMath.FLT.Five.branchB_false_of_fiveAdicCore
