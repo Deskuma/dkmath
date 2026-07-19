@@ -1,5 +1,44 @@
 FLT5 cp-004k-a — Red Ribbon Unit Classification
 
+*complite*
+
+Stop A — 成功。
+
+主要定理：
+
+- `goldenUnit_descent`
+- `goldenUnitFifthClass_mul_phi`
+- `goldenUnitFifthClass_mul_phiInv`
+- `goldenUnitFifthClass_of_unit`
+- `goldenUnitClassesModFifth`
+- `signedGoldenFiniteUnitSectorCore`
+- `counterexamplePackRefuter_of_zeroArithmetic`
+- `positiveFermat5Refuter_of_zeroArithmetic`
+- `flt5Target_of_zeroArithmetic`
+
+残る FLT5 blocker：
+
+```lean
+GoldenZeroSectorArithmeticExclusion
+```
+
+コミット：
+
+```text
+6a2b7c1f Classify golden units modulo fifth powers
+58450945 Reduce FLT5 frontier to zero sector
+```
+
+検証結果：
+
+- `lake -Kjobs=1 build`: 8,694 jobs 成功
+- `./lean-build.sh`: 成功
+- 公理監査: `sorryAx`、新規公理なし
+- `native_decide`、`sorry` 不使用
+- 作業ツリー clean
+
+---
+
 Date: 2026-07-20
 Repository: Deskuma/dkmath
 Branch: hackathon/feature-gn5-flt5-260719-v0
