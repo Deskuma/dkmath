@@ -90,3 +90,12 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.signedGoldenConjugateCoprimePacket_of_normalForm
 #print axioms DkMath.FLT.Five.signedBranchARefuter_of_goldenConjugateCoprimeCore
 #print axioms DkMath.FLT.Five.branchB_false_of_goldenConjugateCoprimeCore
+
+#print axioms DkMath.FLT.Five.goldenUnit_phi
+#print axioms DkMath.FLT.Five.goldenUnit_mul
+#print axioms DkMath.FLT.Five.goldenUnit_pow
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.beta_mul_conj_eq_fifth
+#print axioms DkMath.FLT.Five.signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
+#print axioms DkMath.FLT.Five.goldenPow_five_fst
+#print axioms DkMath.FLT.Five.goldenPow_five_snd
+#print axioms DkMath.FLT.Five.golden_unit_four_mul_fifth_snd

@@ -125,6 +125,33 @@ theorem goldenNorm_eq_one_or_neg_one_of_unit {x : GoldenInt}
     norm_num [goldenNorm, goldenOne]
   exact Int.eq_one_or_neg_one_of_mul_eq_one hn
 
+theorem goldenUnit_phi : GoldenUnit goldenPhi := by
+  apply goldenUnit_of_norm_eq_neg_one
+  norm_num [goldenNorm, goldenPhi]
+
+theorem goldenUnit_one : GoldenUnit goldenOne := by
+  apply goldenUnit_of_norm_eq_one
+  norm_num [goldenNorm, goldenOne]
+
+theorem goldenUnit_neg {x : GoldenInt} (hx : GoldenUnit x) : GoldenUnit (-x) := by
+  apply goldenUnit_of_norm_eq_one_or_neg_one
+  rw [show goldenNorm (-x) = goldenNorm x by simp [goldenNorm]]
+  exact goldenNorm_eq_one_or_neg_one_of_unit hx
+
+theorem goldenUnit_mul {x y : GoldenInt}
+    (hx : GoldenUnit x) (hy : GoldenUnit y) : GoldenUnit (goldenMul x y) := by
+  apply goldenUnit_of_norm_eq_one_or_neg_one
+  rw [goldenNorm_mul]
+  rcases goldenNorm_eq_one_or_neg_one_of_unit hx with hx' | hx' <;>
+    rcases goldenNorm_eq_one_or_neg_one_of_unit hy with hy' | hy' <;>
+    simp [hx', hy']
+
+theorem goldenUnit_pow {x : GoldenInt} (hx : GoldenUnit x) (n : ℕ) :
+    GoldenUnit (goldenPow x n) := by
+  induction n with
+  | zero => exact goldenUnit_one
+  | succ n ih => exact goldenUnit_mul ih hx
+
 /-- Relatively prime means that every common golden divisor is a unit. -/
 def GoldenRelPrime (x y : GoldenInt) : Prop :=
   ∀ d : GoldenInt, GoldenDivides d x → GoldenDivides d y → GoldenUnit d
