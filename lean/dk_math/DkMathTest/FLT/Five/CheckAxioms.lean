@@ -130,3 +130,15 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.exists_counterexamplePack_of_positive_fermat5
 #print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
 #print axioms DkMath.FLT.Five.flt5Target_of_unitClasses_of_zeroArithmetic
+
+#print axioms DkMath.FLT.Five.golden_phi_mul_inv
+#print axioms DkMath.FLT.Five.golden_inv_mul_phi
+#print axioms DkMath.FLT.Five.goldenUnit_descent
+#print axioms DkMath.FLT.Five.goldenUnitFifthClass_mul_phi
+#print axioms DkMath.FLT.Five.goldenUnitFifthClass_mul_phiInv
+#print axioms DkMath.FLT.Five.goldenUnitFifthClass_of_unit
+#print axioms DkMath.FLT.Five.goldenUnitClassesModFifth
+#print axioms DkMath.FLT.Five.signedGoldenFiniteUnitSectorCore
+#print axioms DkMath.FLT.Five.counterexamplePackRefuter_of_zeroArithmetic
+#print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_zeroArithmetic
+#print axioms DkMath.FLT.Five.flt5Target_of_zeroArithmetic

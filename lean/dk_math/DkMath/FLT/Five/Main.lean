@@ -9,6 +9,7 @@ import DkMath.FLT.Five.GoldenOrder
 import DkMath.FLT.Five.GoldenDivisibility
 import DkMath.FLT.Five.GoldenFifthPowerCoordinates
 import DkMath.FLT.Five.GoldenCoprimeFactor
+import DkMath.FLT.Five.GoldenUnitClassification
 import DkMath.FLT.Five.NormalForm
 import DkMath.FLT.Five.Provider
 import DkMath.FLT.Five.Reduction
@@ -45,6 +46,30 @@ theorem flt5Target_of_unitClasses_of_zeroArithmetic
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
   positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic hClasses hArithmetic
 
+/-- Unit classification is unconditional, so only the zero-sector arithmetic remains. -/
+theorem flt5Target_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
+  flt5Target_of_unitClasses_of_zeroArithmetic
+    goldenUnitClassesModFifth hArithmetic
+
+/-- Every stripped golden packet is unconditionally reduced to the five sectors. -/
+theorem signedGoldenFiniteUnitSectorCore : SignedGoldenFiniteUnitSectorCore :=
+  signedGoldenFiniteUnitSectorCore_of_unitClasses goldenUnitClassesModFifth
+
+/-- The zero-sector arithmetic proposition refutes every primitive packet. -/
+theorem counterexamplePackRefuter_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+    CounterexamplePackRefuter :=
+  counterexamplePackRefuter_of_unitClasses_of_zeroArithmetic
+    goldenUnitClassesModFifth hArithmetic
+
+/-- The zero-sector arithmetic proposition refutes every positive solution. -/
+theorem positiveFermat5Refuter_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+    PositiveFermat5Refuter :=
+  positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
+    goldenUnitClassesModFifth hArithmetic
+
 /-!
 The current reduction tower routes a primitive exponent-five candidate through:
 
@@ -58,9 +83,10 @@ The current reduction tower routes a primitive exponent-five candidate through:
 - elimination of unit sectors one through four, and
 - the primitive and exact tenth-power split of the zero sector.
 
-The remaining frontier consists of the explicit `GoldenUnitClassesModFifth`
-and `GoldenZeroSectorArithmeticExclusion` propositions.  Their receiver above
-already includes orientation closure and primitive normalization.
+The golden-unit orbit is now unconditionally reduced to five classes modulo
+fifth powers.  The sole remaining frontier is the explicit
+`GoldenZeroSectorArithmeticExclusion` proposition.  Its receiver above already
+includes orientation closure and primitive normalization.
 -/
 
 end DkMath.FLT.Five

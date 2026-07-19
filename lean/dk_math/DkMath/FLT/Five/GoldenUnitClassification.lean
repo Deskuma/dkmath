@@ -46,7 +46,7 @@ theorem goldenUnitMeasure_pos {x : GoldenInt} (hx : GoldenUnit x) :
   have hb : x.snd = 0 := Int.natAbs_eq_zero.mp hbf
   rcases hn with hn | hn <;> simp [goldenNorm, ha, hb] at hn
 
-theorem goldenUnit_measure_one_cases {x : GoldenInt} (hx : GoldenUnit x)
+theorem goldenUnit_measure_one_cases {x : GoldenInt} (_hx : GoldenUnit x)
     (hm : goldenUnitMeasure x = 1) :
     x = goldenOne ∨ x = -goldenOne ∨
       x = goldenPhi ∨ x = -goldenPhi := by
@@ -138,7 +138,6 @@ theorem goldenUnit_descent {x : GoldenInt} (hx : GoldenUnit x)
       omega
     · left
       dsimp [y]
-      change x = (x * goldenPhiInv) * goldenPhi
       rw [mul_assoc, show goldenPhiInv * goldenPhi = 1 by exact golden_inv_mul_phi]
       simp
   · -- negative, positive
@@ -161,7 +160,6 @@ theorem goldenUnit_descent {x : GoldenInt} (hx : GoldenUnit x)
       omega
     · right
       dsimp [y]
-      change x = (x * goldenPhi) * goldenPhiInv
       rw [mul_assoc, show goldenPhi * goldenPhiInv = 1 by exact golden_phi_mul_inv]
       simp
   · -- positive, negative
@@ -179,7 +177,6 @@ theorem goldenUnit_descent {x : GoldenInt} (hx : GoldenUnit x)
       omega
     · right
       dsimp [y]
-      change x = (x * goldenPhi) * goldenPhiInv
       rw [mul_assoc, show goldenPhi * goldenPhiInv = 1 by exact golden_phi_mul_inv]
       simp
   · -- both coordinates are positive
@@ -196,7 +193,6 @@ theorem goldenUnit_descent {x : GoldenInt} (hx : GoldenUnit x)
       omega
     · left
       dsimp [y]
-      change x = (x * goldenPhiInv) * goldenPhi
       rw [mul_assoc, show goldenPhiInv * goldenPhi = 1 by exact golden_inv_mul_phi]
       simp
 
