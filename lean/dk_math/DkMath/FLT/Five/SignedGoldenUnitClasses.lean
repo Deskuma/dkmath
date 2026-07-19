@@ -72,6 +72,14 @@ theorem signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
     signedGoldenFifthPowerUpToUnitCore p
   exact hExclude p epsilon gamma hepsilon hbeta
 
+/-- The unit-times-fifth-power exclusion is exactly the stripped packet core. -/
+theorem signedGoldenUnitFifthPowerExclusion_iff_strippedCore :
+    SignedGoldenUnitFifthPowerExclusion ↔ SignedGoldenRamifierStrippedCore := by
+  constructor
+  · exact signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
+  · intro hCore u v w p epsilon gamma hepsilon hbeta
+    exact hCore p
+
 /-- Consequently the same exact exclusion closes both signed Branch-A orientations. -/
 theorem signedBranchARefuter_of_unitFifthPowerExclusion
     (hExclude : SignedGoldenUnitFifthPowerExclusion) : SignedBranchARefuter :=
