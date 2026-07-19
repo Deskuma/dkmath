@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.FLT.Five.GoldenOrder
+import DkMath.FLT.Five.GoldenDivisibility
 import DkMath.FLT.Five.SignedSquareGoldenExceptional
 
 #print "file: DkMath.FLT.Five.SignedGoldenRamifierStripped"
@@ -145,11 +145,6 @@ theorem branchB_false_of_goldenRamifierStrippedCore
     (hBranch : ¬ 5 ∣ z - y) : False := by
   exact branchB_false_of_signedBranchARefuter
     (signedBranchARefuter_of_goldenRamifierStrippedCore hCore) hPack hBranch
-
-/-- A two-sided unit for the explicit golden-order multiplication API. -/
-def GoldenUnit (epsilon : GoldenInt) : Prop :=
-  ∃ eta : GoldenInt,
-    goldenMul epsilon eta = goldenOne ∧ goldenMul eta epsilon = goldenOne
 
 /--
 The exact next algebraic contract: every stripped exceptional element is a

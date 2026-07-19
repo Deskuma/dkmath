@@ -77,9 +77,40 @@ structure SignedFiveAdicPowerSplit
   b : ℕ
   a_pos : 0 < a
   b_pos : 0 < b
+  coprime_a_b : Nat.Coprime a b
   carrier_eq : fiveAdic.carrier = 5 ^ 4 * a ^ 5
   residual_eq : fiveAdic.residual = 5 * b ^ 5
   distinguished_eq : fiveAdic.distinguished = 5 * a * b
+
+/-- The residual fifth-power base retains no factor of five. -/
+theorem SignedFiveAdicPowerSplit.five_not_dvd_b
+    {u v w : ℕ} (s : SignedFiveAdicPowerSplit u v w) : ¬ 5 ∣ s.b := by
+  intro h5b
+  have h25 : 25 ∣ s.fiveAdic.residual := by
+    rcases h5b with ⟨c, hc⟩
+    use 5 ^ 4 * c ^ 5
+    rw [s.residual_eq, hc]
+    ring
+  have hzero := Nat.mod_eq_zero_of_dvd h25
+  rw [s.fiveAdic.residual_mod_twentyFive] at hzero
+  omega
+
+/-- Coprimality needed after the ramifier is stripped. -/
+theorem SignedFiveAdicPowerSplit.coprime_scaled_a20_b5
+    {u v w : ℕ} (s : SignedFiveAdicPowerSplit u v w) :
+    Nat.Coprime (5 ^ 15 * s.a ^ 20) (s.b ^ 5) := by
+  have h5b : Nat.Coprime 5 s.b :=
+    (show Nat.Prime 5 by decide).coprime_iff_not_dvd.mpr s.five_not_dvd_b
+  have hscaled : Nat.Coprime (5 ^ 15) (s.b ^ 5) :=
+    (Nat.Coprime.pow_left 15 h5b).pow_right 5
+  have hab : Nat.Coprime (s.a ^ 20) (s.b ^ 5) :=
+    (Nat.Coprime.pow_left 20 s.coprime_a_b).pow_right 5
+  exact hscaled.mul_left hab
+
+theorem SignedFiveAdicPowerSplit.coprime_b5_scaled_a20
+    {u v w : ℕ} (s : SignedFiveAdicPowerSplit u v w) :
+    Nat.Coprime (s.b ^ 5) (5 ^ 15 * s.a ^ 20) :=
+  s.coprime_scaled_a20_b5.symm
 
 private theorem nonempty_signedFiveAdicPowerSplit_of_packet
     {u v w : ℕ} (p : SignedFiveAdicPacket u v w) :
@@ -156,12 +187,20 @@ private theorem nonempty_signedFiveAdicPowerSplit_of_packet
     rw [this] at hresidual
     norm_num at hresidual
     exact (Nat.ne_of_gt p.residual_pos) hresidual
+  have hcoreCoprime : Nat.Coprime (5 ^ 3 * a ^ 5) (b ^ 5) := by
+    simpa [hcExact, hb] using hcopcr
+  have hpows : Nat.Coprime (a ^ 5) (b ^ 5) :=
+    hcoreCoprime.of_dvd_left (dvd_mul_left (a ^ 5) (5 ^ 3))
+  have hab : Nat.Coprime a b := by
+    apply (Nat.coprime_pow_right_iff (by decide : 0 < 5) a b).mp
+    exact (Nat.coprime_pow_left_iff (by decide : 0 < 5) a (b ^ 5)).mp hpows
   exact ⟨{
     fiveAdic := p
     a := a
     b := b
     a_pos := haPos
     b_pos := hbPos
+    coprime_a_b := hab
     carrier_eq := hcarrier
     residual_eq := hresidual
     distinguished_eq := hdistinguished }⟩

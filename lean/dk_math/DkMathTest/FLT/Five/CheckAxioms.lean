@@ -79,3 +79,14 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedPacket_of_normalForm
 #print axioms DkMath.FLT.Five.signedBranchARefuter_of_goldenRamifierStrippedCore
 #print axioms DkMath.FLT.Five.branchB_false_of_goldenRamifierStrippedCore
+
+#print axioms DkMath.FLT.Five.goldenUnit_of_norm_eq_one
+#print axioms DkMath.FLT.Five.goldenUnit_of_norm_eq_neg_one
+#print axioms DkMath.FLT.Five.SignedFiveAdicPowerSplit.coprime_a_b
+#print axioms DkMath.FLT.Five.SignedFiveAdicPowerSplit.coprime_scaled_a20_b5
+#print axioms DkMath.FLT.Five.goldenNorm_sub_conj
+#print axioms DkMath.FLT.Five.SignedGoldenRamifierStrippedPacket.beta_relPrime_conj
+#print axioms DkMath.FLT.Five.signedGoldenConjugateCoprimePacket_of_stripped
+#print axioms DkMath.FLT.Five.signedGoldenConjugateCoprimePacket_of_normalForm
+#print axioms DkMath.FLT.Five.signedBranchARefuter_of_goldenConjugateCoprimeCore
+#print axioms DkMath.FLT.Five.branchB_false_of_goldenConjugateCoprimeCore

@@ -42,6 +42,85 @@ def goldenPow (x : GoldenInt) : ℕ → GoldenInt
   | 0 => goldenOne
   | n + 1 => goldenMul (goldenPow x n) x
 
+/-- Extensionality in the integral basis. -/
+@[ext] theorem GoldenInt.ext {x y : GoldenInt}
+    (hfst : x.fst = y.fst) (hsnd : x.snd = y.snd) : x = y := by
+  cases x
+  cases y
+  simp_all
+
+instance : Zero GoldenInt := ⟨goldenZero⟩
+instance : One GoldenInt := ⟨goldenOne⟩
+instance : Add GoldenInt := ⟨goldenAdd⟩
+instance : Neg GoldenInt := ⟨goldenNeg⟩
+instance : Sub GoldenInt := ⟨goldenSub⟩
+instance : Mul GoldenInt := ⟨goldenMul⟩
+
+@[simp] theorem golden_fst_zero : (0 : GoldenInt).fst = 0 := rfl
+@[simp] theorem golden_snd_zero : (0 : GoldenInt).snd = 0 := rfl
+@[simp] theorem golden_fst_one : (1 : GoldenInt).fst = 1 := rfl
+@[simp] theorem golden_snd_one : (1 : GoldenInt).snd = 0 := rfl
+@[simp] theorem golden_fst_add (x y : GoldenInt) :
+    (x + y).fst = x.fst + y.fst := rfl
+@[simp] theorem golden_snd_add (x y : GoldenInt) :
+    (x + y).snd = x.snd + y.snd := rfl
+@[simp] theorem golden_fst_neg (x : GoldenInt) : (-x).fst = -x.fst := rfl
+@[simp] theorem golden_snd_neg (x : GoldenInt) : (-x).snd = -x.snd := rfl
+@[simp] theorem golden_fst_sub (x y : GoldenInt) :
+    (x - y).fst = x.fst - y.fst := rfl
+@[simp] theorem golden_snd_sub (x y : GoldenInt) :
+    (x - y).snd = x.snd - y.snd := rfl
+@[simp] theorem golden_fst_mul (x y : GoldenInt) :
+    (x * y).fst = x.fst * y.fst + x.snd * y.snd := rfl
+@[simp] theorem golden_snd_mul (x y : GoldenInt) :
+    (x * y).snd = x.fst * y.snd + x.snd * y.fst + x.snd * y.snd := rfl
+
+/-- The explicit coordinate operations form the honest golden commutative ring. -/
+instance goldenAddCommGroup : AddCommGroup GoldenInt := by
+  refine
+    { sub := goldenSub
+      nsmul := @nsmulRec GoldenInt ⟨goldenZero⟩ ⟨goldenAdd⟩
+      zsmul := @zsmulRec GoldenInt ⟨goldenZero⟩ ⟨goldenAdd⟩ ⟨goldenNeg⟩
+        (@nsmulRec GoldenInt ⟨goldenZero⟩ ⟨goldenAdd⟩)
+      add_assoc := ?_
+      zero_add := ?_
+      add_zero := ?_
+      neg_add_cancel := ?_
+      add_comm := ?_ } <;>
+    intros <;> ext <;> simp [add_comm, add_left_comm]
+
+instance goldenAddGroupWithOne : AddGroupWithOne GoldenInt :=
+  { goldenAddCommGroup with
+    natCast := fun n => ⟨n, 0⟩
+    intCast := fun z => ⟨z, 0⟩ }
+
+instance goldenCommRing : CommRing GoldenInt := by
+  refine
+    { goldenAddGroupWithOne with
+      npow := fun n x => goldenPow x n
+      npow_zero := by intro x; rfl
+      npow_succ := by
+        intro n x
+        change goldenPow x (n + 1) = goldenMul (goldenPow x n) x
+        rfl
+      add_comm := ?_
+      left_distrib := ?_
+      right_distrib := ?_
+      zero_mul := ?_
+      mul_zero := ?_
+      mul_assoc := ?_
+      one_mul := ?_
+      mul_one := ?_
+      mul_comm := ?_ } <;>
+    intros <;> ext <;>
+    simp <;> ring
+
+@[simp] theorem golden_add_eq (x y : GoldenInt) : goldenAdd x y = x + y := rfl
+@[simp] theorem golden_neg_eq (x : GoldenInt) : goldenNeg x = -x := rfl
+@[simp] theorem golden_sub_eq (x y : GoldenInt) : goldenSub x y = x - y := rfl
+@[simp] theorem golden_mul_eq (x y : GoldenInt) : goldenMul x y = x * y := rfl
+@[simp] theorem golden_pow_eq (x : GoldenInt) (n : ℕ) : goldenPow x n = x ^ n := rfl
+
 /-- The basis element `phi`. -/
 def goldenPhi : GoldenInt := ⟨0, 1⟩
 
@@ -54,13 +133,6 @@ def goldenConj (x : GoldenInt) : GoldenInt := ⟨x.fst + x.snd, -x.snd⟩
 /-- The integral norm of a golden integer. -/
 def goldenNorm (x : GoldenInt) : ℤ :=
   x.fst ^ 2 + x.fst * x.snd - x.snd ^ 2
-
-/-- Extensionality in the integral basis. -/
-@[ext] theorem GoldenInt.ext {x y : GoldenInt}
-    (hfst : x.fst = y.fst) (hsnd : x.snd = y.snd) : x = y := by
-  cases x
-  cases y
-  simp_all
 
 /-- Conjugation is an involution. -/
 theorem goldenConj_invol (x : GoldenInt) :
