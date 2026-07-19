@@ -19,6 +19,9 @@ import DkMath.FLT.Five.SignedGoldenRamifierStripped
 import DkMath.FLT.Five.SignedGoldenConjugateCoprime
 import DkMath.FLT.Five.SignedGoldenFifthPower
 import DkMath.FLT.Five.SignedGoldenUnitClasses
+import DkMath.FLT.Five.SignedGoldenSectorArithmetic
+import DkMath.FLT.Five.SignedGoldenZeroSector
+import DkMath.FLT.Five.SignedGoldenClosure
 import DkMath.FLT.Five.SignedSquareGoldenExceptional
 import DkMath.FLT.Five.SquareGoldenBridge
 import DkMath.FLT.Five.SquareGoldenNormalForm
@@ -36,6 +39,12 @@ abbrev FLT5Target : Prop :=
     0 < z →
     ¬ Fermat5Equation x y z
 
+/-- The two exact remaining arithmetic propositions suffice for the final target. -/
+theorem flt5Target_of_unitClasses_of_zeroArithmetic
+    (hClasses : GoldenUnitClassesModFifth)
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
+  positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic hClasses hArithmetic
+
 /-!
 The current reduction tower routes a primitive exponent-five candidate through:
 
@@ -44,10 +53,14 @@ The current reduction tower routes a primitive exponent-five candidate through:
 - the power split `carrier = 5^4*a^5`, `residual = 5*b^5`, and
 - a signed square-golden exceptional packet, and
 - an integral golden-order packet with the visible ramifier `tau` stripped.
-- certified relative primality of the stripped element and its conjugate.
+- certified relative primality of the stripped element and its conjugate,
+- unconditional fifth-power splitting up to a unit,
+- elimination of unit sectors one through four, and
+- the primitive and exact tenth-power split of the zero sector.
 
-No final assembly theorem is declared before the remaining exceptional core is
-Lean-certified.
+The remaining frontier consists of the explicit `GoldenUnitClassesModFifth`
+and `GoldenZeroSectorArithmeticExclusion` propositions.  Their receiver above
+already includes orientation closure and primitive normalization.
 -/
 
 end DkMath.FLT.Five
