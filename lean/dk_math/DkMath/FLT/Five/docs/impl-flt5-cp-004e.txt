@@ -1,0 +1,584 @@
+# FLT5 cp-004e — Golden ramifier extraction and fifth-power/unit investigation
+
+Repository:
+  Deskuma/dkmath
+
+Working branch:
+  hackathon/feature-gn5-flt5-260719-v0
+
+Draft PR:
+  #56
+
+Base branch — do not modify:
+  hackathon/cosmic-formula-inversion-flt-gn5
+
+Head at instruction creation:
+  68c40b38c3641cb88c81be9836c982b6d1e3bd84
+
+======================================================================
+0. Current certified tower
+======================================================================
+
+The local exponent-five tower currently contains the following checkpoints.
+
+  cp-000   local FLT5 algebra spine
+  cp-001   direct clean-channel refuter
+  cp-002   padicValNat clean-channel refuter
+  cp-003b  coprime fifth-power factor split
+  cp-003c  Branch-B fifth-power normal form
+  cp-003e  square–golden bridge
+  cp-003f  Branch-B square–golden normal form
+  cp-004a  signed Branch-A routing through mod 25
+  cp-004b  common signed five-adic packet
+  cp-004c  exact signed five-adic power split
+  cp-004d  signed square–golden exceptional packet
+
+The most relevant public modules are:
+
+  DkMath.FLT.Five.SquareGoldenBridge
+  DkMath.FLT.Five.SignedFiveAdic
+  DkMath.FLT.Five.SignedFiveAdicPowerSplit
+  DkMath.FLT.Five.SignedSquareGoldenExceptional
+
+The current cp-004d packet is:
+
+  structure SignedSquareGoldenExceptionalPacket
+      (u v w : ℕ) : Type where
+    powerSplit : SignedFiveAdicPowerSplit u v w
+    M : ℤ
+    N : ℤ
+    delta : ℤ
+    source : SignedSquareGoldenSource u v w M N delta
+    golden_eq :
+      GoldenNorm M N = 5 * (powerSplit.b : ℤ)^5
+    tenth_boundary :
+      M - 2*N = (5 : ℤ)^8 * (powerSplit.a : ℤ)^10
+    square_discriminant :
+      M^2 - 4*N^2 = delta^2
+    discriminant_five_eq :
+      (2*M + N)^2 - 5*N^2 = 20 * (powerSplit.b : ℤ)^5
+
+The two signed sources have already been unified by the sign of N:
+
+  Difference source:
+    M = w^2 + v^2
+    N =  w*v
+
+  Sum source:
+    M = u^2 + v^2
+    N = -u*v
+
+The cp-004c exact split is already certified:
+
+  carrier       = 5^4 * a^5
+  residual      = 5 * b^5
+  distinguished = 5 * a * b
+
+with positive natural a and b.
+
+Before beginning cp-004e, first run the targeted cp-004d build. If the current
+head contains a local compilation defect, fix only that defect and preserve the
+mathematical packet above. Do not redesign cp-004d unless Lean exposes a real
+mathematical mismatch.
+
+======================================================================
+1. cp-004e primary goal
+======================================================================
+
+Build the integral golden-ratio order and use it to remove the single ramified
+factor above 5 from the cp-004d norm equation.
+
+The required mandatory endpoint is an explicit element beta satisfying:
+
+  alpha = tau * beta
+  Norm beta = b^5
+  beta.second = -5^7 * a^10
+
+where:
+
+  alpha = M + N*phi
+  phi^2 = phi + 1
+  tau = 2 + phi
+  Norm tau = 5
+
+The implementation must be integral. Do not model the golden order merely as a
+subtype of Real and do not prove the result by irrational-real extensionality.
+Use an exact two-integer coordinate representation or an existing Mathlib
+integral quadratic-order type if it genuinely matches Z[(1+sqrt 5)/2].
+
+No `sorry`, new axiom, or `native_decide` is allowed.
+
+======================================================================
+2. Existing DkMath asset warning
+======================================================================
+
+DkMath already contains:
+
+  namespace DkMath.SilverRatio.Unit
+
+with real-coordinate definitions:
+
+  uAg     = (1 + sqrt 2)/2
+  Ag a b  = a + b*uAg
+  AgNorm  = a^2 + a*b - b^2/4
+  Ag_mul
+  AgNorm_mul
+
+This is a sqrt-2 / silver-ratio real model. It is NOT the integral golden order
+needed here. It may be read as an API-design example only. Do not reuse its
+mathematics as though it represented Z[(1+sqrt 5)/2].
+
+The cp-004e order must instead satisfy:
+
+  phi^2 = phi + 1
+  Norm(a + b*phi) = a^2 + a*b - b^2
+
+which is exactly the existing FLT5 `GoldenNorm` polynomial.
+
+Also inspect Mathlib for a lightweight existing abstraction such as an
+appropriate quadratic algebra, adjoin-root construction, or ring of integers.
+Use it only if it gives the exact half-integral golden order without introducing
+a large unrelated number-field tower. A small local pair implementation is an
+acceptable and likely preferable solution.
+
+======================================================================
+3. Phase A — Integral golden order
+======================================================================
+
+Create a small module, preferably:
+
+  DkMath/FLT/Five/GoldenOrder.lean
+
+A suggested representation is:
+
+  structure GoldenInt where
+    fst : ℤ
+    snd : ℤ
+
+interpreted as:
+
+  fst + snd*phi
+
+with phi^2 = phi + 1.
+
+Required operations:
+
+  zero = (0,0)
+  one  = (1,0)
+  add
+  neg
+  sub
+  mul
+
+The multiplication law must be:
+
+  (a,b) * (c,d)
+    = (a*c + b*d,
+       a*d + b*c + b*d)
+
+because phi^2 = phi + 1.
+
+Provide a CommRing instance if it can be implemented cleanly. If a full
+CommRing instance causes disproportionate elaboration work, a smaller explicit
+API is acceptable for cp-004e, but multiplication, powers, conjugation, and norm
+must remain practical and theorem statements must remain readable.
+
+Required named elements and maps:
+
+  goldenPhi        := (0,1)
+  goldenOfInt z    := (z,0)
+  goldenConj (a,b) := (a+b,-b)
+  goldenNorm (a,b) := a^2 + a*b - b^2
+
+Required theorems:
+
+  goldenConj_invol
+  goldenConj_mul
+  goldenNorm_eq_existing_GoldenNorm
+  goldenNorm_mul
+  goldenNorm_conj
+  golden_mul_conj
+
+The bridge to the existing FLT5 polynomial should be explicit, for example:
+
+  goldenNorm ⟨M,N⟩ = GoldenNorm M N
+
+Do not create two unrelated norm vocabularies without a bridge theorem.
+
+======================================================================
+4. Phase B — The ramified prime above 5
+======================================================================
+
+Define the following elements in the integral golden order:
+
+  sqrtFiveElement := (-1, 2)
+  tau             := ( 2, 1)
+
+The intended identities are:
+
+  sqrtFiveElement^2 = goldenOfInt 5
+  goldenNorm sqrtFiveElement = -5
+
+  tau = goldenPhi * sqrtFiveElement
+  goldenNorm tau = 5
+  tau * goldenConj tau = goldenOfInt 5
+
+The use of tau rather than sqrtFiveElement is deliberate: tau has positive norm
+5, so after dividing alpha by tau the remaining norm is b^5 rather than -b^5.
+
+Prove all identities inside the exact coordinate ring.
+
+======================================================================
+5. Phase C — Divisibility criterion and explicit extraction
+======================================================================
+
+Let alpha = (M,N). The discriminant identity already available from cp-004d is:
+
+  (2*M + N)^2 - 5*N^2 = 20*b^5
+
+Therefore:
+
+  5 divides (2*M + N)^2
+
+and primality of 5 gives:
+
+  5 divides 2*M + N
+
+Prove this over Int without converting the whole problem back to Nat.
+
+A useful explicit extraction avoids integer division.
+
+Choose k : ℤ with:
+
+  2*M + N = 5*k
+
+Define:
+
+  beta.fst := M - k
+  beta.snd := 2*k - M
+
+Then prove directly from the multiplication law:
+
+  tau * beta = alpha
+
+because:
+
+  2*(M-k) + (2*k-M) = M
+
+and:
+
+  (M-k) + 3*(2*k-M) = 5*k - 2*M = N.
+
+Required theorem shape, adjusted for the final order API:
+
+  theorem exists_tau_factor_of_five_dvd_discriminant
+      {M N : ℤ}
+      (h5 : 5 ∣ 2*M + N) :
+      ∃ beta : GoldenInt,
+        goldenOfPair M N = tau * beta
+
+Prefer a stronger theorem returning k and the exact beta coordinates when useful.
+
+Do not use Classical.choice where an explicit witness is already available.
+
+======================================================================
+6. Phase D — Exact ramifier-stripped packet
+======================================================================
+
+Create a new module, preferably:
+
+  DkMath/FLT/Five/SignedGoldenRamifierStripped.lean
+
+Define a data-bearing packet such as:
+
+  structure SignedGoldenRamifierStrippedPacket
+      (u v w : ℕ) : Type where
+    exceptional : SignedSquareGoldenExceptionalPacket u v w
+    alpha : GoldenInt
+    beta : GoldenInt
+    k : ℤ
+    alpha_eq :
+      alpha = goldenOfPair exceptional.M exceptional.N
+    discriminant_multiple :
+      2*exceptional.M + exceptional.N = 5*k
+    factor_eq :
+      alpha = tau * beta
+    beta_fst_eq :
+      beta.fst = exceptional.M - k
+    beta_snd_eq :
+      beta.snd = 2*k - exceptional.M
+    beta_norm_eq :
+      goldenNorm beta = (exceptional.powerSplit.b : ℤ)^5
+    beta_snd_boundary :
+      beta.snd = -(5 : ℤ)^7 *
+        (exceptional.powerSplit.a : ℤ)^10
+
+Field arrangement may be changed for Lean ergonomics, but retain all the
+mathematical information above.
+
+The boundary theorem follows from:
+
+  M - 2*N = 5^8*a^10
+
+and the coordinate relation:
+
+  M - 2*N = -5 * beta.snd.
+
+Thus:
+
+  -5 * beta.snd = 5^8*a^10
+
+and cancellation over Int gives:
+
+  beta.snd = -5^7*a^10.
+
+The norm theorem follows from:
+
+  Norm alpha = 5*b^5
+  alpha = tau*beta
+  Norm tau = 5
+
+and cancellation of the nonzero integer 5.
+
+Required public constructors:
+
+  signedGoldenRamifierStripped_of_exceptional
+  signedGoldenRamifierStripped_of_powerSplit
+  signedGoldenRamifierStripped_of_normalForm
+
+If Prop-to-Type elimination again prevents direct construction from a
+Prop-valued source, use the established local pattern:
+
+  private theorem nonempty_...
+  noncomputable def ... := Classical.choice ...
+
+Use choice only at the Prop-to-Type boundary, not for explicit arithmetic
+witnesses such as k or beta.
+
+======================================================================
+7. Phase E — Prove the ramifier layer is exact
+======================================================================
+
+The cp-004b packet already has:
+
+  residual % 25 = 5
+
+and cp-004c has:
+
+  residual = 5*b^5.
+
+Derive:
+
+  not (5 divides b)
+
+because otherwise residual would be divisible by 25.
+
+Then prove:
+
+  not (5 divides goldenNorm beta)
+
+using:
+
+  goldenNorm beta = b^5.
+
+If a suitable divisibility relation is implemented in GoldenInt, prove that tau
+does not divide beta. An acceptable theorem shape is:
+
+  theorem tau_not_dvd_beta
+      (p : SignedGoldenRamifierStrippedPacket u v w) :
+      ¬ tau ∣ p.beta
+
+This should follow from norm multiplicativity: tau dividing beta would force 5
+to divide Norm beta.
+
+If defining a global `Dvd GoldenInt` interface is awkward, retain an explicit
+nonexistence theorem:
+
+  ¬ ∃ gamma, beta = tau * gamma
+
+This exactness theorem is important. It certifies that cp-004e removes exactly
+the unique exceptional ramifier layer and does not leave another hidden factor
+above 5.
+
+======================================================================
+8. Phase F — Receiver and public tower
+======================================================================
+
+Add a remaining-core receiver:
+
+  abbrev SignedGoldenRamifierStrippedCore : Prop :=
+    ∀ {u v w}, SignedGoldenRamifierStrippedPacket u v w → False
+
+and route it back through the existing tower:
+
+  signedBranchARefuter_of_goldenRamifierStrippedCore
+  branchB_false_of_goldenRamifierStrippedCore
+
+Expose the new modules through:
+
+  DkMath.FLT.Five.Main
+  DkMath.FLT.Five
+
+Update the stale explanatory comment in Main.lean so that the active route is
+accurately described as:
+
+  signed routing
+    -> exact five-adic packet
+    -> exact power split
+    -> signed square–golden exceptional packet
+    -> ramifier-stripped golden packet
+
+Do not claim FLT5 at this checkpoint.
+
+======================================================================
+9. Phase G — Investigate fifth-power up to a unit
+======================================================================
+
+After the mandatory ramifier-stripped packet builds, investigate the next
+algebraic step.
+
+The target statement is conceptually:
+
+  beta = epsilon * gamma^5
+
+where epsilon is a unit of Z[phi].
+
+A stronger normalized form would classify units as:
+
+  epsilon = sign * phi^n
+
+and reduce n modulo 5, since a phi^(5q) factor can be absorbed into gamma^5.
+
+Do not assume any of the following without proof or an imported exact theorem:
+
+  - Z[phi] is a UFD
+  - Z[phi] is a PID
+  - the class number is one
+  - every unit is ±phi^n
+  - coprime factors of a fifth power are fifth powers in this ring
+
+Search Mathlib and the repository for an exact reusable theorem. If none exists,
+identify the smallest missing interface.
+
+Useful investigation targets include:
+
+  1. conjugate-factor coprimality of beta and goldenConj beta;
+  2. support of any common divisor above the discriminant prime 5;
+  3. unit classification in the golden order;
+  4. a Euclidean norm or PID structure for the golden order;
+  5. direct coordinate descent avoiding a full UFD formalization.
+
+The mandatory cp-004e implementation is complete once the explicit tau
+extraction, beta norm, beta boundary coordinate, and exact nondivisibility by tau
+are certified. Continue into the fifth-power/unit decomposition only if the
+necessary algebra can be added without unverifiable assumptions.
+
+======================================================================
+10. Outcome branching
+======================================================================
+
+Report exactly one primary outcome.
+
+Outcome A — Full golden fifth-power decomposition
+
+  The ramifier-stripped packet is certified and Lean proves:
+
+    beta = epsilon * gamma^5
+
+  with an explicit unit packet. If unit classification is also completed,
+  normalize the unit exponent modulo 5.
+
+Outcome B — Ramifier extraction complete, one exact algebraic blocker
+
+  The mandatory packet is certified, but the fifth-power decomposition is
+  blocked. State the missing theorem with its full Lean type. Examples:
+
+    GoldenInt is a unique factorization monoid
+
+  or:
+
+    every unit of GoldenInt is ±goldenPhi^n
+
+  or an exact conjugate-coprimality theorem.
+
+  Retain all compiling results below the blocker. This is a successful cp-004e
+  outcome.
+
+Outcome C — The predicted ramifier extraction fails
+
+  Provide an exact counterexample or Lean-observed algebraic obstruction. Do not
+  add hypotheses merely to force the expected packet. Propose the corrected
+  factor or coordinate convention.
+
+The expected outcome is A or B. The explicit coordinate calculation strongly
+predicts that the mandatory ramifier extraction itself should compile.
+
+======================================================================
+11. Verification gates
+======================================================================
+
+Run at minimum:
+
+  lake build DkMath.FLT.Five.GoldenOrder
+  lake build DkMath.FLT.Five.SignedGoldenRamifierStripped
+  lake build DkMath.FLT.Five
+  lake build DkMathTest.FLT.Five.CheckAxioms
+  git diff --check
+
+Run the repository gate if available:
+
+  ./lean-build.sh
+
+Add `#print axioms` checks for the principal new declarations, including:
+
+  goldenNorm_mul
+  goldenNorm_tau
+  exists_tau_factor_of_five_dvd_discriminant
+  signedGoldenRamifierStripped_of_exceptional
+  signedGoldenRamifierStripped_of_normalForm
+  tau_not_dvd_beta
+  branchB_false_of_goldenRamifierStrippedCore
+
+Expected standard axioms are acceptable:
+
+  propext
+  Classical.choice
+  Quot.sound
+
+There must be no `sorryAx`.
+
+No `native_decide` warning is allowed. Finite `decide +kernel` is allowed only
+where it is genuinely appropriate.
+
+Ignore unrelated known research warnings outside the new FLT5 tower.
+
+======================================================================
+12. Commit and report discipline
+======================================================================
+
+Keep the work in the current branch and draft PR #56.
+
+Prefer separate commits:
+
+  1. Add integral golden order and ramifier API
+  2. Add signed golden ramifier-stripped packet
+  3. Add optional fifth-power/unit progress
+  4. Expose cp-004e and add axiom checks
+  5. Add cp-004e implementation report
+
+Suggested report path:
+
+  lean/dk_math/DkMath/FLT/Five/docs/repo-flt5-cp-004e.md
+
+The report must include:
+
+  - outcome A/B/C;
+  - exact public theorem names;
+  - exact blocker type if Outcome B;
+  - build and axiom-audit results;
+  - the next recommended checkpoint;
+  - confirmation that no smaller FLT5 counterexample was fabricated or assumed.
+
+Stop before claiming a complete infinite descent or FLT5 theorem unless Lean has
+actually certified every reconstruction and strict-decrease theorem required for
+that conclusion.
