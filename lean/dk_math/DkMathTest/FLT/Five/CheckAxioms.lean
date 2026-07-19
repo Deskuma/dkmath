@@ -29,3 +29,9 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.coprime_GN5_y_of_coprime
 #print axioms DkMath.FLT.Five.exists_branchB_fifthPowerNormalForm
 #print axioms DkMath.FLT.Five.branchB_false_of_fifthPowerCore
+
+#print axioms DkMath.FLT.Five.GN5_eq_square_cross_form
+#print axioms DkMath.FLT.Five.square_cross_coordinate_change
+#print axioms DkMath.FLT.Five.GN5_eq_goldenNorm_squareLink
+#print axioms DkMath.FLT.Five.four_mul_goldenNorm_eq_discriminant_five
+#print axioms DkMath.FLT.Five.goldenNorm_eq_fifth_power_of_GN5
