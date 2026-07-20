@@ -1,0 +1,39 @@
+[Script Info]
+Title: DkMath FLT5 post-video appendix
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+ScaledBorderAndShadow: yes
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Kicker,DejaVu Sans,26,&H00B9CFFF,&H000000FF,&H0010192E,&H000B1020,-1,0,0,0,100,100,1.5,0,1,1,0,8,60,60,54,1
+Style: Title,DejaVu Sans,50,&H00FFFFFF,&H000000FF,&H0010192E,&H000B1020,-1,0,0,0,100,100,0,0,1,2,0,8,70,70,120,1
+Style: Body,DejaVu Sans,29,&H00E8EDF7,&H000000FF,&H0010192E,&H000B1020,0,0,0,0,100,100,0,0,1,1,0,5,110,110,170,1
+Style: Formula,DejaVu Sans Mono,34,&H009FE7FF,&H000000FF,&H0010192E,&H00131B30,-1,0,0,0,100,100,0,0,3,2,0,5,150,150,250,1
+Style: Result,DejaVu Sans Mono,28,&H00C7F9CC,&H000000FF,&H0010192E,&H00131B30,-1,0,0,0,100,100,0,0,3,2,0,5,120,120,250,1
+Style: Footer,DejaVu Sans,23,&H00B8C1D9,&H000000FF,&H0010192E,&H000B1020,0,0,0,0,100,100,0,0,1,1,0,2,70,70,54,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:11.00,Kicker,,0,0,0,,{\fad(250,250)}POST-VIDEO BREAKTHROUGH
+Dialogue: 0,0:00:00.00,0:00:11.00,Title,,0,0,0,,{\fad(250,250)}GN5 → FLT5 completed in Lean
+Dialogue: 0,0:00:00.00,0:00:11.00,Body,,0,0,0,,{\fad(250,250)}The experiment shown in the video reached its final theorem\Nafter the original narration was recorded.
+Dialogue: 0,0:00:00.00,0:00:11.00,Footer,,0,0,0,,{\fad(250,250)}DkMath · GPT-5.6 review · Codex implementation · Lean verification
+
+Dialogue: 0,0:00:11.00,0:00:25.00,Kicker,,0,0,0,,{\fad(250,250)}THE GOLDEN LIFT
+Dialogue: 0,0:00:11.00,0:00:25.00,Title,,0,0,0,,{\fad(250,250)}The obstruction becomes a new state
+Dialogue: 0,0:00:11.00,0:00:25.00,Formula,,0,0,0,,{\fad(250,250)}T(r,s) = (r² + rs + s², s²)
+Dialogue: 0,0:00:11.00,0:00:25.00,Body,,0,0,0,,{\fad(250,250)\pos(640,520)}The quartic zero-sector data is reinterpreted\Nas the norm of another golden integer.
+
+Dialogue: 0,0:00:25.00,0:00:40.00,Kicker,,0,0,0,,{\fad(250,250)}RE-ENTRY WITH STRICT DESCENT
+Dialogue: 0,0:00:25.00,0:00:40.00,Title,,0,0,0,,{\fad(250,250)}Same invariant. Smaller world.
+Dialogue: 0,0:00:25.00,0:00:40.00,Formula,,0,0,0,,{\fad(250,250)}|snd(next)| < |snd(source)|
+Dialogue: 0,0:00:25.00,0:00:40.00,Body,,0,0,0,,{\fad(250,250)\pos(640,520)}The fifth-power packet reproduces itself,\Nbut its natural-number measure strictly decreases.
+
+Dialogue: 0,0:00:40.00,0:00:55.00,Kicker,,0,0,0,,{\fad(250,350)}KERNEL-CHECKED RESULT
+Dialogue: 0,0:00:40.00,0:00:55.00,Title,,0,0,0,,{\fad(250,350)}Fermat's Last Theorem — exponent 5
+Dialogue: 0,0:00:40.00,0:00:55.00,Result,,0,0,0,,{\fad(250,350)}flt5Target\NfermatFive_no_positive_solution
+Dialogue: 0,0:00:40.00,0:00:55.00,Body,,0,0,0,,{\fad(250,350)\pos(640,548)}For positive natural numbers:\Nx⁵ + y⁵ ≠ z⁵
+Dialogue: 0,0:00:40.00,0:00:55.00,Footer,,0,0,0,,{\fad(250,350)}Lean CI: PASS · no project-specific axioms · no unfinished proofs

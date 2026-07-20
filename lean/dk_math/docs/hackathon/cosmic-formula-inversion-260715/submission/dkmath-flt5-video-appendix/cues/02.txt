@@ -1,0 +1,1 @@
+Codex implemented a golden-integer lift. T of r s equals r squared plus r s plus s squared, comma s squared. GPT-5.6 reviewed the invariant and the descent architecture.

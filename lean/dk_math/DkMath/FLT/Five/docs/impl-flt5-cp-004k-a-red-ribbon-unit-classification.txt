@@ -1,0 +1,623 @@
+FLT5 cp-004k-a — Red Ribbon Unit Classification
+
+*complite*
+
+Stop A — 成功。
+
+主要定理：
+
+- `goldenUnit_descent`
+- `goldenUnitFifthClass_mul_phi`
+- `goldenUnitFifthClass_mul_phiInv`
+- `goldenUnitFifthClass_of_unit`
+- `goldenUnitClassesModFifth`
+- `signedGoldenFiniteUnitSectorCore`
+- `counterexamplePackRefuter_of_zeroArithmetic`
+- `positiveFermat5Refuter_of_zeroArithmetic`
+- `flt5Target_of_zeroArithmetic`
+
+残る FLT5 blocker：
+
+```lean
+GoldenZeroSectorArithmeticExclusion
+```
+
+コミット：
+
+```text
+6a2b7c1f Classify golden units modulo fifth powers
+58450945 Reduce FLT5 frontier to zero sector
+```
+
+検証結果：
+
+- `lake -Kjobs=1 build`: 8,694 jobs 成功
+- `./lean-build.sh`: 成功
+- 公理監査: `sorryAx`、新規公理なし
+- `native_decide`、`sorry` 不使用
+- 作業ツリー clean
+
+---
+
+Date: 2026-07-20
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+Base branch: hackathon/cosmic-formula-inversion-flt-gn5
+PR: #56
+
+DO NOT modify the base branch.
+DO NOT merge the pull request.
+DO NOT mark the pull request ready for review.
+Work only on the active feature branch.
+
+This checkpoint attacks only the first remaining FLT5 barrier:
+
+```lean
+GoldenUnitClassesModFifth
+```
+
+Do not work on `GoldenZeroSectorArithmeticExclusion` in this checkpoint.
+Do not create a research report or a rolling Markdown report. Lean declarations,
+proofs, imports, axiom checks, and commits are the report.
+
+======================================================================
+1. Mission
+======================================================================
+
+Prove the existing contract unconditionally:
+
+```lean
+abbrev GoldenUnitClassesModFifth : Prop :=
+  ∀ epsilon : GoldenInt,
+    GoldenUnit epsilon →
+    ∃ i : Fin 5, ∃ delta : GoldenInt,
+      epsilon = goldenMul (goldenPow goldenPhi i.val) (goldenPow delta 5)
+```
+
+The preferred final theorem is:
+
+```lean
+theorem goldenUnitClassesModFifth : GoldenUnitClassesModFifth
+```
+
+Then connect it to the current FLT5 receiver and reduce the final frontier to the
+single remaining zero-sector proposition:
+
+```lean
+theorem flt5Target_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
+  flt5Target_of_unitClasses_of_zeroArithmetic
+    goldenUnitClassesModFifth hArithmetic
+```
+
+The mathematical meaning is that the infinite golden-unit orbit collapses modulo
+fifth powers to the five representatives:
+
+```text
+1, phi, phi^2, phi^3, phi^4.
+```
+
+The sign is absorbed into the fifth-power base because `(-delta)^5 = -(delta^5)`.
+
+======================================================================
+2. Certified starting point
+======================================================================
+
+Read and reuse the current compiled source, especially:
+
+```text
+DkMath/FLT/Five/GoldenOrder.lean
+DkMath/FLT/Five/GoldenDivisibility.lean
+DkMath/FLT/Five/GoldenEuclidean.lean
+DkMath/FLT/Five/GoldenCoprimeFactor.lean
+DkMath/FLT/Five/SignedGoldenUnitClasses.lean
+DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean
+DkMath/FLT/Five/SignedGoldenClosure.lean
+DkMath/FLT/Five/Main.lean
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+The following declarations are already certified and should not be reproved:
+
+```text
+GoldenInt
+goldenZero
+goldenOne
+goldenMul
+goldenPow
+goldenPhi
+goldenNorm
+GoldenUnit
+
+goldenCommRing
+goldenEuclideanDomain
+goldenUnit_iff_isUnit
+
+goldenNorm_mul
+goldenNorm_pow
+goldenNorm_eq_one_or_neg_one_of_unit
+
+goldenUnit_of_norm_eq_one
+goldenUnit_of_norm_eq_neg_one
+goldenUnit_of_norm_eq_one_or_neg_one
+goldenUnit_phi
+goldenUnit_one
+goldenUnit_neg
+goldenUnit_mul
+goldenUnit_pow
+
+GoldenUnitClassesModFifth
+signedGoldenFiniteUnitSectorCore_of_unitClasses
+signedGoldenUnitFifthPowerExclusion_of_unitClasses_of_zeroSector
+flt5Target_of_unitClasses_of_zeroArithmetic
+```
+
+The explicit coordinate formulas are:
+
+```text
+(a,b) * phi = (b, a+b)
+```
+
+Define the integral inverse unit:
+
+```text
+phiInv = phi - 1 = (-1,1)
+```
+
+and certify:
+
+```text
+(a,b) * phiInv = (b-a, a)
+phi * phiInv = 1
+phiInv * phi = 1
+GoldenUnit phiInv
+```
+
+Search Mathlib and the full DkMath source database before adding helper machinery, but
+keep the proof in the explicit `GoldenInt` coordinate model. Do not replace this order by
+`Zsqrtd 5` or launch a large algebraic-number-theory refactor.
+
+======================================================================
+3. Required working discipline
+======================================================================
+
+- No `sorry`.
+- No `native_decide`.
+- No new axiom.
+- Small transparent `decide`, `norm_num`, `omega`, `linarith`, and `nlinarith`
+  proofs are acceptable.
+- Build and commit every stable checkpoint before continuing.
+- Do not modify unrelated FLT5 modules.
+- Do not work on the zero-sector Diophantine exclusion.
+- Do not stop after defining `phiInv`, proving coordinate identities, or finding a
+  promising descent rule.
+- The checkpoint succeeds only when `GoldenUnitClassesModFifth` is inhabited and the
+  one-blocker FLT5 receiver is compiled.
+- Prefer small reusable lemmas over one large proof.
+
+======================================================================
+4. Primary route — direct modulo-five coordinate descent
+======================================================================
+
+Do not first require a full integer-exponent classification `epsilon = ±phi^n` unless it
+turns out to shorten the Lean proof. The preferred route carries the five-sector witness
+directly through a well-founded coordinate descent.
+
+---------------------------------------------------------------------
+4.1 Define the inverse unit and coordinate actions
+---------------------------------------------------------------------
+
+Suggested declarations:
+
+```lean
+def goldenPhiInv : GoldenInt := ⟨-1, 1⟩
+
+theorem golden_phi_mul_inv :
+    goldenMul goldenPhi goldenPhiInv = goldenOne
+
+theorem golden_inv_mul_phi :
+    goldenMul goldenPhiInv goldenPhi = goldenOne
+
+theorem goldenUnit_phiInv : GoldenUnit goldenPhiInv
+
+theorem golden_mul_phi_coords (x : GoldenInt) :
+    goldenMul x goldenPhi = ⟨x.snd, x.fst + x.snd⟩
+
+theorem golden_mul_phiInv_coords (x : GoldenInt) :
+    goldenMul x goldenPhiInv = ⟨x.snd - x.fst, x.fst⟩
+```
+
+Choose repository-consistent names if better names emerge. Add useful simp lemmas only
+when they are stable and non-disruptive.
+
+---------------------------------------------------------------------
+4.2 Define the descent measure
+---------------------------------------------------------------------
+
+Use the natural coordinate size:
+
+```lean
+def goldenUnitMeasure (x : GoldenInt) : ℕ :=
+  x.fst.natAbs + x.snd.natAbs
+```
+
+Prove that a golden unit cannot have measure zero. More strongly, coordinate zero cases
+for a unit are base cases:
+
+```text
+b = 0  => a = 1 or a = -1
+a = 0  => b = 1 or b = -1
+```
+
+This follows from:
+
+```text
+goldenNorm(a,b) = ±1.
+```
+
+Expose a finite base lemma of the following strength:
+
+```lean
+theorem goldenUnit_measure_one_cases
+    {x : GoldenInt} (hx : GoldenUnit x)
+    (hmeasure : goldenUnitMeasure x = 1) :
+    x = goldenOne ∨ x = -goldenOne ∨
+    x = goldenPhi ∨ x = -goldenPhi
+```
+
+An equivalent four-case statement is acceptable.
+
+Each base case must be converted to a five-sector witness. Use:
+
+```text
+1      = phi^0 * 1^5
+-1     = phi^0 * (-1)^5
+phi    = phi^1 * 1^5
+-phi   = phi^1 * (-1)^5
+```
+
+---------------------------------------------------------------------
+4.3 Prove the strict descent step
+---------------------------------------------------------------------
+
+Let `x = (a,b)` be a unit with measure greater than one. Then both coordinates are
+nonzero. Split into the four sign quadrants.
+
+The unit equation is:
+
+```text
+a^2 + a*b - b^2 = 1 or -1.
+```
+
+Use it to prove the required magnitude ordering in each quadrant.
+
+Same-sign quadrants:
+
+```text
+a > 0, b > 0  => a ≤ b
+a < 0, b < 0  => |a| ≤ |b|
+```
+
+Therefore multiplication by `phiInv` gives:
+
+```text
+x * phiInv = (b-a, a)
+```
+
+with strictly smaller measure.
+
+Opposite-sign quadrants:
+
+```text
+a > 0, b < 0  => |b| ≤ a
+a < 0, b > 0  => b ≤ |a|
+```
+
+Therefore multiplication by `phi` gives:
+
+```text
+x * phi = (b, a+b)
+```
+
+with strictly smaller measure.
+
+The inequalities can be proved by contradiction with `nlinarith` from the unit norm
+being `±1`. For example, in the positive same-sign quadrant, `b < a` implies
+`a ≥ b+1`, forcing the norm to be greater than one. In the positive/negative quadrant,
+`a < |b|` forces the norm to be less than negative one.
+
+Package the result in a reusable theorem. A useful shape is:
+
+```lean
+theorem goldenUnit_descent
+    {x : GoldenInt} (hx : GoldenUnit x)
+    (hlarge : 1 < goldenUnitMeasure x) :
+    ∃ y : GoldenInt,
+      GoldenUnit y ∧
+      goldenUnitMeasure y < goldenUnitMeasure x ∧
+      (x = goldenMul y goldenPhi ∨
+       x = goldenMul y goldenPhiInv)
+```
+
+The intended witnesses are:
+
+```text
+y = x * phiInv   in the same-sign case, because y * phi = x
+y = x * phi      in the opposite-sign case, because y * phiInv = x
+```
+
+An equivalent orientation is acceptable, but keep the reconstruction equation explicit.
+Do not hide the descent behind an unproved normalization function.
+
+---------------------------------------------------------------------
+4.4 Carry sector witnesses through one inverse step
+---------------------------------------------------------------------
+
+Introduce a local predicate if helpful:
+
+```lean
+def GoldenUnitFifthClass (x : GoldenInt) : Prop :=
+  ∃ i : Fin 5, ∃ delta : GoldenInt,
+    x = goldenMul (goldenPow goldenPhi i.val) (goldenPow delta 5)
+```
+
+Prove closure under reconstruction by `phi` and `phiInv`.
+
+Suggested theorem shapes:
+
+```lean
+theorem goldenUnitFifthClass_mul_phi
+    {x : GoldenInt} (hx : GoldenUnitFifthClass x) :
+    GoldenUnitFifthClass (goldenMul x goldenPhi)
+
+theorem goldenUnitFifthClass_mul_phiInv
+    {x : GoldenInt} (hx : GoldenUnitFifthClass x) :
+    GoldenUnitFifthClass (goldenMul x goldenPhiInv)
+```
+
+Use `fin_cases i`. There are only five cases.
+
+For multiplication by `phi`:
+
+```text
+i = 0,1,2,3 : increment the representative
+i = 4       : phi^5 * delta^5 = (phi*delta)^5, return sector 0
+```
+
+For multiplication by `phiInv`:
+
+```text
+i = 1,2,3,4 : decrement the representative
+i = 0       : phiInv * delta^5
+              = phi^4 * (phiInv*delta)^5, return sector 4
+```
+
+The wrap identity in the last case follows only from:
+
+```text
+phi * phiInv = 1
+commutativity
+mul_pow
+```
+
+Prove it in the explicit ring. Do not introduce fractional or real powers.
+
+---------------------------------------------------------------------
+4.5 Complete well-founded induction
+---------------------------------------------------------------------
+
+Use strong induction or well-founded induction on `goldenUnitMeasure x`.
+
+The proof structure is:
+
+```text
+unit x
+  |
+  |-- measure = 1
+  |     finite base cases
+  |     produce sector witness directly
+  |
+  `-- measure > 1
+        obtain smaller unit y by goldenUnit_descent
+        apply induction hypothesis to y
+        transport its witness through phi or phiInv
+```
+
+Measure zero must be excluded from the unit hypothesis. The induction theorem should
+produce the global contract, not merely a normalization sequence.
+
+Preferred endpoint:
+
+```lean
+theorem goldenUnitClassesModFifth : GoldenUnitClassesModFifth := by
+  intro epsilon hepsilon
+  -- well-founded coordinate descent
+```
+
+======================================================================
+5. Secondary route — signed powers of phi
+======================================================================
+
+Use this only if the direct five-sector induction becomes substantially harder in Lean.
+
+An acceptable intermediate classification is:
+
+```text
+for every golden unit epsilon,
+there exists n : Nat such that
+  epsilon = ±phi^n
+or
+  epsilon = ±phiInv^n.
+```
+
+Then divide `n` by five and absorb:
+
+```text
+-1 = (-1)^5
+phi^(5q+r) = phi^r * (phi^q)^5
+phiInv^(5q+r) = phi^(5-r) * (phiInv^(q+1))^5   when r != 0
+```
+
+For `r = 0`, use sector zero directly.
+
+A classification using integer powers of a unit is also acceptable if Mathlib's `zpow`
+API shortens the proof and the result is translated back to the existing `goldenPow`
+contract without changing public types.
+
+Do not stop at `epsilon = ±phi^n`; finish the modulo-fifth conversion.
+
+======================================================================
+6. Fallback investigation routes
+======================================================================
+
+If the direct coordinate descent exposes a genuine obstruction, investigate in this
+order while continuing to implement all independent lemmas.
+
+Route B — Pell coordinate conversion
+------------------------------------
+
+Use the identity:
+
+```text
+(2*a+b)^2 - 5*b^2 = 4 * goldenNorm(a,b).
+```
+
+A unit gives right side `4` or `-4`. Search Mathlib and DkMath for generalized Pell,
+Fibonacci, Lucas, and metallic-unit classifications. Reuse a result only if the bridge
+back to the explicit pair `(a,b)` is shorter than the direct descent.
+
+Route C — positive real embedding
+---------------------------------
+
+The two real embeddings are:
+
+```text
+a + b*phi
+a + b*(1-phi).
+```
+
+Their product is the norm `±1`. A fundamental-domain argument using multiplication by
+`phi` may normalize one embedding into a bounded interval, after which only finitely many
+integer pairs remain. Use this only if a clean exact-order proof is available; avoid
+analysis-heavy machinery for an elementary unit theorem.
+
+If all routes stop on the same missing lemma, state that lemma exactly in Lean, prove all
+receivers around it, and use Stop B below. Do not replace it by an informal statement.
+
+======================================================================
+7. Public integration
+======================================================================
+
+Recommended module:
+
+```text
+DkMath/FLT/Five/GoldenUnitClassification.lean
+```
+
+It may import `SignedGoldenUnitClasses.lean` and prove the existing contract. Avoid an
+import cycle.
+
+After the theorem is complete:
+
+1. Import the module through the public FLT5 surface.
+2. Add the theorem to `DkMathTest/FLT/Five/CheckAxioms.lean`.
+3. Add the reduced final receiver:
+
+```lean
+theorem flt5Target_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target
+```
+
+4. Update the `Main.lean` frontier comment so that only
+   `GoldenZeroSectorArithmeticExclusion` remains open.
+5. Keep the existing two-input receiver; the one-input receiver is an additional
+   consequence, not a replacement that destroys useful theorem structure.
+
+Also consider these stable consequences when they are cheap:
+
+```lean
+theorem signedGoldenFiniteUnitSectorCore : SignedGoldenFiniteUnitSectorCore :=
+  signedGoldenFiniteUnitSectorCore_of_unitClasses goldenUnitClassesModFifth
+
+theorem counterexamplePackRefuter_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+    CounterexamplePackRefuter
+
+theorem positiveFermat5Refuter_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+    PositiveFermat5Refuter
+```
+
+Add them only when they simplify the public chain and do not duplicate large proofs.
+
+======================================================================
+8. Verification
+======================================================================
+
+Required verification:
+
+```text
+lake -Kjobs=1 build
+./lean-build.sh
+```
+
+Update the axiom audit with at least:
+
+```lean
+#print axioms DkMath.FLT.Five.goldenUnitClassesModFifth
+#print axioms DkMath.FLT.Five.flt5Target_of_zeroArithmetic
+```
+
+Also audit the central descent theorem and sector transport lemmas if they remain public.
+
+Confirm that the new chain has no `sorryAx`, no `native_decide`, and no new axiom.
+
+======================================================================
+9. Stop conditions
+======================================================================
+
+Stop A — success
+----------------
+
+Stop only after all of the following compile:
+
+```text
+goldenUnitClassesModFifth : GoldenUnitClassesModFifth
+flt5Target_of_zeroArithmetic :
+  GoldenZeroSectorArithmeticExclusion -> FLT5Target
+```
+
+The public imports and axiom audit must also be updated.
+
+Stop B — exact remaining blocker
+--------------------------------
+
+Use Stop B only if the direct descent, signed-power route, and reasonable existing-library
+search all expose the same genuine missing proposition.
+
+Before stopping, you must:
+
+1. implement `goldenPhiInv`, both inverse identities, coordinate actions, unit preservation,
+   measure, finite base cases, and every proven sign-quadrant inequality;
+2. isolate the strongest exact missing Lean proposition;
+3. connect that proposition to `GoldenUnitClassesModFifth` with a compiled receiver;
+4. state which sign quadrant or sector-wrap case remains and why the existing facts do not
+   close it;
+5. continue all independent public integration and axiom checks.
+
+Do not stop merely because the well-founded induction needs refactoring.
+
+======================================================================
+10. Completion response
+======================================================================
+
+When finished, report only:
+
+- Stop A or Stop B;
+- the principal theorem names added;
+- the exact remaining FLT5 blocker after this checkpoint;
+- commit SHAs;
+- build and axiom-audit results.
+
+Do not create a separate completion report file. Do not prepend completion prose to this
+instruction file. Keep the mathematical truth in Lean.

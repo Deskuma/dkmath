@@ -1,0 +1,698 @@
+FLT5 cp-005-01 — Certified Zero-Sector Inversion and Factorization
+
+*active*
+
+This order is Level I: implement consequences that are already forced by the current
+compiled arithmetic contract.  Do not attempt the final contradiction before the
+inversion packet and exact factor normal forms are compiled.
+
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+
+Read first:
+
+```text
+impl-flt5-cp-005-00-final-boss-master.txt
+DkMath/FLT/Five/SignedGoldenClosure.lean
+DkMath/FLT/Five/SignedGoldenZeroSector.lean
+DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean
+DkMath/FLT/Five/SquareGoldenBridge.lean
+DkMath/FLT/Five/SignedSquareGoldenExceptional.lean
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+======================================================================
+1. Mission
+======================================================================
+
+Starting from the exact hypotheses of `GoldenZeroSectorArithmeticExclusion`, prove a
+concrete positive factor packet with:
+
+```text
+A*B = 4*Q^5
+B-A = 8*d^5
+A+B = 2*U
+```
+
+and then classify the exact two-adic shapes of `A` and `B`.
+
+The deterministic mathematical route is:
+
+```text
+zero-sector quartic H
+  -> positive diagonal form
+  -> exact signs and tenth powers
+  -> discriminant-square inversion
+  -> positive factors A and B
+  -> no common odd prime
+  -> exact v2 branch
+  -> fifth-power factor packet
+```
+
+This checkpoint succeeds only when the resulting factor normal form is represented by
+compiled Lean data, not merely by independent equations in comments.
+
+======================================================================
+2. Recommended module split
+======================================================================
+
+Create thin modules similar to:
+
+```text
+DkMath/FLT/Five/SignedGoldenZeroSectorInversion.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorFactorization.lean
+```
+
+The first module should contain signs, positive forms, and the `A/B` inversion packet.
+The second should contain common-prime exclusion, two-adic classification, and the
+three fifth-power factor branches.
+
+Update the appropriate aggregators only after the focused modules build.
+
+======================================================================
+3. Local arithmetic context
+======================================================================
+
+Work under variables corresponding exactly to the arithmetic receiver:
+
+```lean
+(r s : ℤ) (a b : ℕ)
+(ha : 0 < a)
+(hb : 0 < b)
+(hab : Nat.Coprime a b)
+(h5b : ¬ 5 ∣ b)
+(hNorm : goldenNorm ⟨r, s⟩ = (b : ℤ) ∨
+  goldenNorm ⟨r, s⟩ = -(b : ℤ))
+(hProduct : s * goldenFifthSndFactor r s =
+  -(5 : ℤ) ^ 6 * (a : ℤ) ^ 10)
+(hrs : Nat.Coprime r.natAbs s.natAbs)
+(c d : ℕ)
+(hsAbs : s.natAbs = 5 ^ 6 * c ^ 10)
+(hHAbs : (goldenFifthSndFactor r s).natAbs = d ^ 10)
+```
+
+Package these hypotheses if a structure materially shortens the proof.  Do not package
+away the original fields needed by `GoldenZeroSectorArithmeticExclusion`.
+
+======================================================================
+4. Certify the positive quartic form
+======================================================================
+
+Let:
+
+```text
+H = goldenFifthSndFactor r s
+X = 2*r + s
+```
+
+Prove the exact identity:
+
+```text
+16*H = X^4 + 10*X^2*s^2 + 5*s^4.
+```
+
+Suggested theorem:
+
+```lean
+theorem sixteen_mul_goldenFifthSndFactor_eq
+    (r s : ℤ) :
+    16 * goldenFifthSndFactor r s =
+      (2 * r + s) ^ 4 +
+        10 * (2 * r + s) ^ 2 * s ^ 2 +
+        5 * s ^ 4 := by
+  unfold goldenFifthSndFactor
+  ring
+```
+
+Then prove nonnegativity for all integer coordinates and strict positivity under the
+current packet hypotheses.
+
+A robust route is:
+
+1. the right side is nonnegative;
+2. the product equation has a strictly negative, nonzero right side because `0 < a`;
+3. therefore neither `s` nor `H` is zero;
+4. nonnegative `H` and `H != 0` give `0 < H`;
+5. the negative product then gives `s < 0`.
+
+Do not rely on an unproved general statement that the quartic is positive definite.
+Prove the concrete identity and derive the signs.
+
+Expected reusable results include the strength of:
+
+```lean
+theorem goldenFifthSndFactor_nonneg (r s : ℤ) :
+    0 ≤ goldenFifthSndFactor r s
+
+theorem zeroSector_H_pos ... :
+    0 < goldenFifthSndFactor r s
+
+theorem zeroSector_s_neg ... :
+    s < 0
+```
+
+Names may follow repository style.
+
+======================================================================
+5. Remove absolute values exactly
+======================================================================
+
+From strict signs and the existing absolute-value split, prove:
+
+```text
+s = -5^6*c^10
+H = d^10
+0 < c
+0 < d
+```
+
+The positivity of `c` follows because `s != 0` and
+`|s| = 5^6*c^10`.  The positivity of `d` follows from `H > 0` and
+`|H| = d^10`.
+
+Suggested theorem strengths:
+
+```lean
+theorem zeroSector_s_eq_neg_five_pow_mul_tenth ... :
+    s = -(5 : ℤ) ^ 6 * (c : ℤ) ^ 10
+
+theorem zeroSector_H_eq_tenth ... :
+    goldenFifthSndFactor r s = (d : ℤ) ^ 10
+```
+
+Be careful about cast normalization.  Prefer separate Nat equalities and exact casts
+rather than repeated `exact_mod_cast` inside a monolithic proof.
+
+======================================================================
+6. Recover the multiplicative ownership
+======================================================================
+
+Use the product equation together with the exact signs to prove:
+
+```text
+a^10 = (c*d)^10
+```
+
+and therefore:
+
+```text
+a = c*d.
+```
+
+Use injectivity of positive natural powers or an existing Mathlib lemma.  Do not prove
+this by converting to real roots.
+
+Also derive:
+
+```text
+gcd(c,d) = 1.
+```
+
+The existing source already proves:
+
+```text
+gcd(|s|,|H|) = 1.
+```
+
+Since `c` divides `|s|` and `d` divides `|H|`, coprimality descends.  Package this as a
+reusable theorem because it controls every later factor branch.
+
+If useful also prove:
+
+```text
+Coprime c d
+Coprime (5^5*c^8) d
+```
+
+The second follows only after using the forced five-adic ownership; justify every prime
+factor rather than asking automation to guess it.
+
+======================================================================
+7. Prove the discriminant inversion
+======================================================================
+
+Define local integer coordinates:
+
+```lean
+def zeroSectorX (r s : ℤ) : ℤ := 2 * r + s
+
+def zeroSectorU (r s : ℤ) : ℤ :=
+  zeroSectorX r s ^ 2 + 5 * s ^ 2
+
+def zeroSectorW (d : ℕ) : ℤ := 4 * (d : ℤ) ^ 5
+
+def zeroSectorA (r s : ℤ) (d : ℕ) : ℤ :=
+  zeroSectorU r s - zeroSectorW d
+
+def zeroSectorB (r s : ℤ) (d : ℕ) : ℤ :=
+  zeroSectorU r s + zeroSectorW d
+```
+
+The names may be changed, but keep the formulas transparent.
+
+From the quartic identity and `H=d^10`, prove:
+
+```text
+U^2 - W^2 = 20*s^4.
+```
+
+Then obtain:
+
+```text
+A*B = 20*s^4
+B-A = 8*d^5
+A+B = 2*U.
+```
+
+After substituting `s = -5^6*c^10`, define:
+
+```text
+Q = 5^5*c^8
+```
+
+and prove the central product:
+
+```text
+A*B = 4*Q^5.
+```
+
+This exponent calculation must be proved by `ring`/normalization, not asserted:
+
+```text
+20*(5^6*c^10)^4 = 4*(5^5*c^8)^5.
+```
+
+Also preserve the square reconstruction:
+
+```text
+U - 5*s^2 = X^2.
+```
+
+======================================================================
+8. Prove positivity of the factors
+======================================================================
+
+Prove:
+
+```text
+0 < W
+0 < A
+A < B
+0 < B.
+```
+
+Do not derive `A > 0` from a Nat subtraction.  Work in `ℤ` until positivity is known.
+A clean route is:
+
+```text
+A*B = 20*s^4 > 0
+B = U+W > 0
+therefore A > 0.
+```
+
+`B > 0` follows from `W > 0` and `U ≥ 0`.
+
+After positivity, introduce natural representatives if they simplify prime
+factorization and `padicValNat`:
+
+```text
+A = (A0 : ℤ)
+B = (B0 : ℤ)
+```
+
+Do not use `natAbs` as a silent replacement for positivity.  Prove the cast equations.
+
+======================================================================
+9. Exclude every common odd prime
+======================================================================
+
+Prove a theorem of the following strength:
+
+```lean
+theorem zeroSector_no_common_odd_prime
+    (q : ℕ) (hq : Nat.Prime q) (hqOdd : q ≠ 2)
+    (hqA : q ∣ A0) (hqB : q ∣ B0) : False
+```
+
+The intended proof is deterministic.
+
+If an odd prime `q` divides both factors, then:
+
+```text
+q divides A+B = 2*U
+q divides B-A = 8*d^5
+```
+
+Since `q` is odd:
+
+```text
+q divides U
+q divides d.
+```
+
+The product identity gives:
+
+```text
+q divides 4*Q^5.
+```
+
+Since `q` is odd, `q` divides `Q = 5^5*c^8`.  Therefore `q` divides `5` or `c`.
+
+- If `q` divides `c`, contradict `Coprime c d`.
+- If `q` divides `5`, primality forces `q=5`; then `5` divides `d`, while `5` already
+  divides `s`, contradicting the established coprimality of `|s|` and `|H|=d^10`.
+
+Use whichever certified coprimality statement makes the final contradiction shortest.
+
+Consequences to expose:
+
+```text
+gcd(A0,B0) is a power of two
+no odd prime is shared by A0 and B0
+```
+
+An existential `gcd = 2^k` theorem is useful but not mandatory if the exact valuation
+classification below gives a stronger API.
+
+======================================================================
+10. Parity facts for the original coordinates
+======================================================================
+
+Derive the parity needed for exact two-adic valuation.
+
+From `Coprime |r| |s|` prove:
+
+```text
+if s is even, then r is odd.
+```
+
+Show that `H` is odd under the primitive-coordinate condition.  A direct mod-2
+calculation is acceptable.  Therefore:
+
+```text
+d is odd.
+W = 4*d^5 has exact v2 = 2.
+```
+
+Split on the parity of `c`.
+
+Case `Odd c`:
+
+```text
+s is odd
+X is odd
+U = X^2+5*s^2 is congruent to 6 modulo 8
+A and B are congruent to 2 modulo 8
+v2(A)=v2(B)=1.
+```
+
+Case `Even c`:
+
+Let:
+
+```text
+k = v2(c), with 0 < k.
+```
+
+Then:
+
+```text
+v2(s)=10*k
+r is odd
+X has exact v2 = 1
+U has exact v2 = 2
+```
+
+Write `U=4*u` and `W=4*w` with `u,w` odd.  Exactly one of `u-w`, `u+w` has valuation
+`1`; the other carries the remaining valuation.  Since:
+
+```text
+v2(A)+v2(B) = v2(4*Q^5) = 40*k+2,
+```
+
+the unordered valuation pair is:
+
+```text
+{v2(A),v2(B)} = {3, 40*k-1}.
+```
+
+Do not hard-code a branch ordering until it is proved.  Represent the result as a
+disjunction or an unordered-pair theorem.
+
+Preferred exact theorem shape, adjusted to the available valuation API:
+
+```lean
+(v2 A0 = 3 ∧ v2 B0 = 40*k-1) ∨
+(v2 A0 = 40*k-1 ∧ v2 B0 = 3)
+```
+
+The arithmetic fact:
+
+```text
+40*k-1 = 5*(8*k-1)+4
+```
+
+is the reason the high-valuation factor has the form `16*f^5`.
+
+======================================================================
+11. Split the factors into fifth powers
+======================================================================
+
+Use:
+
+```text
+A0*B0 = 4*Q^5
+no common odd prime
+exact v2(A0), v2(B0)
+```
+
+to prove the following exhaustive normal forms.
+
+Odd-`c` branch:
+
+```text
+A0 = 2*e^5
+B0 = 2*f^5
+Coprime e f
+Odd e
+Odd f
+```
+
+Even-`c`, left-low branch:
+
+```text
+A0 = 8*e^5
+B0 = 16*f^5
+Coprime e f
+Odd e
+Even f
+```
+
+Even-`c`, right-low branch:
+
+```text
+A0 = 16*e^5
+B0 = 8*f^5
+Coprime e f
+Even e
+Odd f
+```
+
+The labels `left-low` and `right-low` refer only to which of `A/B` has valuation `3`.
+They do not assert a numerical ordering beyond the already proved `A<B`.
+
+The proof may use prime factorization directly or existing perfect-power factor lemmas.
+Search before writing a custom factorization theorem.  If a local theorem is needed,
+state it generically enough to reuse in all three branches but do not launch a broad
+library refactor.
+
+======================================================================
+12. Preserve product ownership
+======================================================================
+
+Do not stop with the three coefficient forms.  Also prove the exact product ownership.
+
+Odd branch:
+
+```text
+e*f = Q = 5^5*c^8.
+```
+
+Even branches:
+
+```text
+e*f = Q/2 = 5^5*c^8/2.
+```
+
+For the even branches, prove that the division is exact and retain the more structural
+form if it is easier:
+
+```text
+2*(e*f) = Q.
+```
+
+Derive:
+
+```text
+Coprime (e*f) d
+```
+
+from `Coprime c d`, and expose pairwise coprimality with `d` where useful.
+
+Also keep the complete prime ownership consequence:
+
+```text
+e and f partition the prime-power support of Q (or Q/2),
+with no odd prime occurring in both.
+```
+
+A formal support partition theorem is optional at Level I, but do not lose the product
+and coprimality fields needed to prove it later.
+
+======================================================================
+13. Derive the three fifth-power difference equations
+======================================================================
+
+Use `B-A=8*d^5`.
+
+Odd branch:
+
+```text
+2*f^5 - 2*e^5 = 8*d^5
+f^5 = e^5 + 4*d^5.
+```
+
+Even left-low branch:
+
+```text
+16*f^5 - 8*e^5 = 8*d^5
+2*f^5 = e^5 + d^5.
+```
+
+Even right-low branch:
+
+```text
+8*f^5 - 16*e^5 = 8*d^5
+f^5 = 2*e^5 + d^5.
+```
+
+Use additive equalities over `ℕ`; avoid truncated subtraction.
+
+Do not claim these three equations alone are impossible.  The even equation
+`e^5+d^5=2*f^5` has unrelated trivial solutions.  The normal-form packet must preserve
+product ownership, parity, coprimality, and square reconstruction.
+
+======================================================================
+14. Preserve the square reconstruction in every branch
+======================================================================
+
+Introduce `x = |X|` or another natural square witness and retain:
+
+Odd branch:
+
+```text
+x^2 + 5*s.natAbs^2 = e^5 + f^5.
+```
+
+Because `s` is odd, retain oddness of `x` and `s.natAbs`.
+
+Even left-low branch:
+
+```text
+X = 2*x up to sign
+x^2 + 5*(s.natAbs/2)^2 = e^5 + 2*f^5.
+```
+
+Even right-low branch:
+
+```text
+X = 2*x up to sign
+x^2 + 5*(s.natAbs/2)^2 = 2*e^5 + f^5.
+```
+
+These follow from `U=X^2+5*s^2` and `A+B=2*U`.  Choose exact Nat/Int statements that
+avoid awkward sign handling, but keep an explicit square witness.
+
+Also preserve the source equation:
+
+```text
+X = 2*r+s
+```
+
+or enough reconstruction data to recover it when the norm equation is used later.
+
+======================================================================
+15. Required packet API
+======================================================================
+
+Create an explicit inductive or sum-type normal form.  A recommended shape is:
+
+```lean
+inductive GoldenZeroSectorFactorBranch
+  | odd
+  | evenLeftLow
+  | evenRightLow
+```
+
+and a structure containing at least:
+
+```text
+branch
+c d e f
+positive c,d,e,f
+Coprime c d
+Coprime e f
+factor equations for A and B
+factor product ownership
+fifth-power difference equation
+parity fields
+square reconstruction
+source/provenance fields linking back to r,s,H,X,U,W,A,B
+```
+
+Alternatively use three branch-specific structures under one inductive proposition.
+The data must be strong enough that the next checkpoint does not need to repeat the
+factorization proof or rediscover lost equations.
+
+Recommended receiver:
+
+```lean
+abbrev GoldenZeroSectorFactorExclusion : Prop :=
+  ∀ packet : GoldenZeroSectorFactorPacket, False
+```
+
+and a theorem:
+
+```lean
+theorem goldenZeroSectorArithmeticExclusion_of_factorExclusion
+    (h : GoldenZeroSectorFactorExclusion) :
+    GoldenZeroSectorArithmeticExclusion
+```
+
+Do not inhabit the exclusion at this checkpoint unless the contradiction becomes
+available naturally.  The required result is the unconditional construction of the
+factor packet from every arithmetic candidate.
+
+======================================================================
+16. Required verification and commit boundary
+======================================================================
+
+Before continuing to cp-005-02:
+
+```text
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorInversion
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorFactorization
+lake -Kjobs=1 build DkMath.FLT.Five.Main
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms
+git diff --check
+```
+
+Add axiom checks for the packet-construction theorem and the factor-exclusion receiver.
+Commit the inversion and factorization layers separately when practical.
+
+If an exact proposed valuation statement is false, produce a kernel-checked finite
+counterexample, weaken only that statement, and continue.  The identities, positivity,
+no-common-odd-prime result, and some exhaustive factor normal form should still be
+obtainable.
+
+Proceed to `impl-flt5-cp-005-02-ultra-inference-descent.txt` after this packet is compiled.

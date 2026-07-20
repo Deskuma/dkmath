@@ -1,0 +1,783 @@
+FLT5 cp-004j — Golden Unit Sectors and Zero-Sector Descent
+
+*complite*
+
+cp-004j の実装と検証を完了しました。作業ツリーは clean です。
+
+主な成果：
+
+- 非零 golden unit sector を完全排除
+- zero sector を正確に分離
+- zero sector から
+  `|s| = 5⁶ c¹⁰`、`|H(r,s)| = d¹⁰`
+  という 10 乗分解を導出
+- primitive counterexample の正規化から `FLT5Target` までの受け渡しを構築
+- 新規定理群の公理監査を追加
+- `sorry`、`native_decide`、新規公理は不使用
+
+主要ファイル：
+
+- [SignedGoldenSectorArithmetic.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean)
+- [SignedGoldenZeroSector.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenZeroSector.lean)
+- [SignedGoldenClosure.lean](/lean/dk_math/DkMath/FLT/Five/SignedGoldenClosure.lean)
+- [Main.lean](/lean/dk_math/DkMath/FLT/Five/Main.lean)
+- [CheckAxioms.lean](/lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
+
+最終的な定理境界は次です。
+
+```lean
+flt5Target_of_unitClasses_of_zeroArithmetic
+  (hClasses : GoldenUnitClassesModFifth)
+  (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
+  FLT5Target
+```
+
+したがって今回は Stop B です。残る独立した数学的 blocker は正確に二つです。
+
+1. `GoldenUnitClassesModFifth`  
+   golden ring の符号付き unit を fifth powers modulo units として分類する定理。
+
+2. `GoldenZeroSectorArithmeticExclusion`  
+   導出済みの coprimality、norm 条件、`5⁶ × tenth power` 分解を用いて zero sector を排除する算術定理。
+
+単一の小さな法による単純な合同式排除も調査しましたが、生存 residue があり、zero sector には Pell/unit 分類または複数素数を組み合わせた descent が必要だと確認しました。
+
+検証結果：
+
+- `lake -Kjobs=1 build`: 8,693 jobs 成功
+- `./lean-build.sh`: 成功
+- 公理監査: 新規チェーンは標準公理のみ、`sorryAx` なし
+- `git diff --check`: 成功
+
+コミット：
+
+```text
+7b849192 Eliminate nonzero golden unit sectors
+8e16f9ce Split the golden zero sector into tenth powers
+980a89a3 Route golden sector blockers to FLT5 target
+a01699a9 Audit FLT5 golden sector frontier
+```
+
+指示どおり cp-004j の追加レポート Markdown は作成していません。🎗️
+
+---
+
+Date: 2026-07-20
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+Base branch: hackathon/cosmic-formula-inversion-flt-gn5
+PR: #56
+
+DO NOT modify the base branch.
+DO NOT merge the pull request.
+DO NOT mark the pull request ready for review.
+Work only on the active feature branch.
+
+This checkpoint is Lean-first. Do not create a research report or a rolling Markdown
+report. The mathematical content must be expressed by definitions, theorem statements,
+proofs, source comments, imports, and axiom checks. Small implementation notes may be
+kept in commit messages, not added as a separate document.
+
+Read the current Lean source under:
+
+- DkMath/FLT/Five/GoldenOrder.lean
+- DkMath/FLT/Five/GoldenDivisibility.lean
+- DkMath/FLT/Five/GoldenEuclidean.lean
+- DkMath/FLT/Five/GoldenCoprimeFactor.lean
+- DkMath/FLT/Five/GoldenFifthPowerCoordinates.lean
+- DkMath/FLT/Five/SignedFiveAdicPowerSplit.lean
+- DkMath/FLT/Five/SignedGoldenRamifierStripped.lean
+- DkMath/FLT/Five/SignedGoldenFifthPower.lean
+- DkMath/FLT/Five/SignedGoldenUnitClasses.lean
+- DkMath/FLT/Five/SignedBranchA.lean
+- DkMath/FLT/Five/Main.lean
+- DkMathTest/FLT/Five/CheckAxioms.lean
+
+Use repository-wide search and `__dkmath-all.lean.txt.gz` with `zgrep` / `zcat` when
+existing DkMath or Mathlib lemmas may shorten the proof.
+
+======================================================================
+1. Mission
+======================================================================
+
+cp-004i certified, unconditionally, that every stripped packet satisfies
+
+```text
+beta = epsilon * gamma^5
+GoldenUnit epsilon
+```
+
+The exact current blocker is:
+
+```lean
+abbrev SignedGoldenUnitFifthPowerExclusion : Prop :=
+  ∀ {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w)
+    (epsilon gamma : GoldenInt),
+    GoldenUnit epsilon →
+    p.beta = goldenMul epsilon (goldenPow gamma 5) →
+    False
+```
+
+The mission of cp-004j is:
+
+1. classify golden units modulo fifth powers, or prove an equally strong packet-specific
+   substitute;
+2. reduce the unit direction to five sectors;
+3. eliminate sectors `1`, `2`, `3`, and `4` by the mod-5 norm obstruction;
+4. isolate and solve sector `0`, where `beta = gamma^5`;
+5. inhabit `SignedGoldenUnitFifthPowerExclusion`;
+6. close every `CounterexamplePack` regardless of which natural gap is divisible by five;
+7. normalize an arbitrary positive Fermat-five solution to primitive data and inhabit
+   `FLT5Target` if no new exact blocker remains.
+
+Do not stop after unit classification, finite-sector reduction, or elimination of the
+four nonzero sectors. Continue into the zero-sector arithmetic.
+
+======================================================================
+2. Certified starting point
+======================================================================
+
+Treat the current compiled declarations as certified and reuse them.
+
+```text
+EuclideanDomain GoldenInt
+goldenEuclideanDomain
+goldenCoprimeFactorOfFifthPower
+signedGoldenFifthPowerUpToUnitCore
+
+GoldenUnitClassesModFifth
+SignedGoldenFiniteUnitSectorCore
+signedGoldenFiniteUnitSectorCore_of_unitClasses
+SignedGoldenUnitFifthPowerExclusion
+signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
+signedBranchARefuter_of_unitFifthPowerExclusion
+branchB_false_of_unitFifthPowerExclusion
+
+SignedGoldenRamifierStrippedPacket.beta_norm
+SignedGoldenRamifierStrippedPacket.beta_snd
+SignedGoldenRamifierStrippedPacket.five_not_dvd_b
+SignedGoldenRamifierStrippedPacket.five_not_dvd_beta_norm
+SignedGoldenRamifierStrippedPacket.beta_relPrime_conj
+SignedGoldenRamifierStrippedPacket.beta_mul_conj_eq_fifth
+
+SignedFiveAdicPowerSplit.coprime_a_b
+SignedFiveAdicPowerSplit.five_not_dvd_b
+
+goldenPow_five_fst
+goldenPow_five_snd
+golden_unit_zero_mul_fifth_snd
+golden_unit_one_mul_fifth_snd
+golden_unit_two_mul_fifth_snd
+golden_unit_three_mul_fifth_snd
+golden_unit_four_mul_fifth_snd
+```
+
+The packet data include:
+
+```text
+goldenNorm beta = b^5
+beta.snd = -5^7 * a^10
+0 < a
+0 < b
+Coprime a b
+not (5 divides b)
+```
+
+The relevant coordinate polynomials are:
+
+```text
+F(p,q) = p^5 + 10*p^3*q^2 + 10*p^2*q^3 + 10*p*q^4 + 3*q^5
+
+S(p,q) = 5*q*H(p,q)
+
+H(p,q) = p^4 + 2*p^3*q + 4*p^2*q^2 + 3*p*q^3 + q^4
+```
+
+Do not re-prove cp-004i or replace the explicit golden order by `Zsqrtd 5`.
+
+======================================================================
+3. Working discipline
+======================================================================
+
+- No `sorry`.
+- No `native_decide`.
+- No new axiom.
+- Kernel-checked finite decisions are acceptable when small and transparent.
+- Build every stable checkpoint and commit it before continuing.
+- Do not refactor unrelated FLT5 modules.
+- Do not introduce a broad generic abstraction before the concrete golden proof closes.
+- Do not assume that every unit is `±phi^n`; prove the required classification.
+- Do not confuse a congruence class modulo `5` with equality modulo fifth powers in the
+  global unit group. A finite residue observation alone does not inhabit
+  `GoldenUnitClassesModFifth`.
+- Prefer reusable arithmetic lemmas with precise theorem statements over one monolithic
+  proof.
+- Keep the public surface focused on unit classification, sector elimination,
+  zero-sector exclusion, packet closure, and final FLT5 assembly.
+
+After a checkpoint succeeds, continue immediately. Stop only under Section 11.
+
+======================================================================
+4. cp-004j-a — Fix the exact blocker boundary and norm consequences
+======================================================================
+
+First add the exact reverse receiver so that the blocker is represented as an actual
+logical equivalence, not only a one-way implication.
+
+Suggested theorem:
+
+```lean
+theorem signedGoldenUnitFifthPowerExclusion_iff_strippedCore :
+    SignedGoldenUnitFifthPowerExclusion ↔
+      SignedGoldenRamifierStrippedCore
+```
+
+The forward direction already exists. The reverse direction applies the stripped core
+straight to the packet; the extra unit and fifth-power hypotheses are irrelevant.
+
+Next prove the norm information for every factorization witness.
+
+For a packet `p`, unit `epsilon`, and `gamma` satisfying
+
+```text
+GoldenUnit epsilon
+p.beta = epsilon * gamma^5
+```
+
+prove reusable lemmas of the following strength:
+
+```lean
+goldenNorm gamma = (p.exceptional.powerSplit.b : ℤ) ∨
+goldenNorm gamma = -(p.exceptional.powerSplit.b : ℤ)
+```
+
+and therefore
+
+```lean
+¬ (5 : ℤ) ∣ goldenNorm gamma
+```
+
+Use:
+
+```text
+N(beta) = b^5
+N(epsilon) = ±1
+N(gamma^5) = N(gamma)^5
+```
+
+and injectivity of the odd fifth-power map on integers. Search Mathlib for the cleanest
+integer odd-power injectivity theorem before writing local machinery.
+
+Also expose the mod-5 discriminant identity:
+
+```text
+p^2 + p*q - q^2 ≡ (p + 3*q)^2 (mod 5)
+```
+
+Suggested theorem forms may use `ZMod 5`, integer divisibility, or both. Choose the form
+that composes most cleanly with later coordinate lemmas.
+
+======================================================================
+5. cp-004j-b — Prove the golden unit classes modulo fifth powers
+======================================================================
+
+Target the existing contract directly:
+
+```lean
+GoldenUnitClassesModFifth
+```
+
+That is, prove for every golden unit `epsilon`:
+
+```text
+epsilon = phi^i * delta^5
+```
+
+for some `i : Fin 5` and `delta : GoldenInt`.
+
+The sign requires no extra sector because `-1 = (-1)^5`.
+
+Investigate and attempt the following routes in order. Select the shortest route that is
+fully kernel-certified.
+
+Route A — elementary unit-coordinate descent
+---------------------------------------------
+
+For `x = (a,b)`, multiplication by `phi` and `phi^-1 = phi - 1` acts explicitly on
+coordinates:
+
+```text
+(a,b) * phi      = (b, a+b)
+(a,b) * phi^-1   = (b-a, a)
+```
+
+A unit satisfies:
+
+```text
+a^2 + a*b - b^2 = ±1
+```
+
+Develop a well-founded descent on a natural coordinate measure such as
+`natAbs a + natAbs b`, proving that every non-base unit can be multiplied by one of
+`phi`, `phi^-1`, or `-1` to reach a strictly smaller unit. Classify the finite base cases.
+
+It is acceptable to first prove all units are signed integral powers of `phi`, then reduce
+the exponent modulo five. It is also acceptable to make the descent accumulate the
+exponent modulo five directly, avoiding a separate integer-exponent representation.
+
+Route B — Pell/Fibonacci classification
+---------------------------------------
+
+Use the exact identity:
+
+```text
+(2*a+b)^2 - 5*b^2 = 4 * goldenNorm(a,b)
+```
+
+A unit therefore gives the generalized Pell equations with right side `±4`. Search
+Mathlib and DkMath for Pell, Fibonacci, Lucas, metallic-ratio, and silver/golden unit
+classification lemmas. If the missing bridge is small, prove it and recover signed powers
+of `phi`.
+
+Route C — a packet-sufficient substitute
+----------------------------------------
+
+If a global classification is disproportionately expensive, prove a theorem strictly
+weaker than `GoldenUnitClassesModFifth` but sufficient to transform every packet witness
+
+```text
+beta = epsilon * gamma^5
+```
+
+into one of the five explicit representatives. The resulting theorem must produce an
+actual equality in `GoldenInt`, not merely a residue statement.
+
+Do not stop after finding a promising route. Implement it. If all three routes expose the
+same precise missing proposition, isolate that complete proposition and add receivers,
+but continue with any sector arithmetic that does not depend on it.
+
+Suggested module:
+
+```text
+DkMath/FLT/Five/GoldenUnitClassification.lean
+```
+
+Adjust the name if a better repository-local organization emerges.
+
+======================================================================
+6. cp-004j-c — Eliminate the four nonzero unit sectors modulo five
+======================================================================
+
+Prove the following polynomial congruence facts, preferably once in a small reusable API.
+For `gamma = (p,q)`:
+
+```text
+5 divides S(p,q)
+F(p,q) ≡ p + 3*q (mod 5)
+N(gamma) ≡ (p + 3*q)^2 (mod 5)
+```
+
+The existing five sector second-coordinate formulas are:
+
+```text
+i = 0: S
+i = 1: F + S
+i = 2: F + 2*S
+i = 3: 2*F + 3*S
+i = 4: 3*F + 5*S
+```
+
+For every packet, the second coordinate is divisible by five because
+
+```text
+beta.snd = -5^7 * a^10.
+```
+
+For sectors `1`, `2`, `3`, and `4`, the coefficient of `F` is respectively
+`1`, `1`, `2`, and `3`, all invertible modulo five. Therefore the sector equation forces
+
+```text
+5 divides F(p,q)
+```
+
+hence
+
+```text
+p + 3*q ≡ 0 (mod 5)
+```
+
+and then
+
+```text
+5 divides N(gamma).
+```
+
+Contradict the theorem from cp-004j-a that `5` does not divide `N(gamma)`.
+
+Add a theorem of approximately this form:
+
+```lean
+theorem signedGolden_nonzero_unitSector_false
+    {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w)
+    {i : Fin 5} (hi : i ≠ 0) (gamma : GoldenInt)
+    (hbeta : p.beta =
+      goldenMul (goldenPow goldenPhi i.val) (goldenPow gamma 5)) :
+    False
+```
+
+The exact arguments may change to reuse the norm witness API. Use `fin_cases i` or an
+explicit finite classification only after reducing to the five legal values.
+
+Define the exact remaining zero-sector contract:
+
+```lean
+abbrev SignedGoldenZeroSectorExclusion : Prop :=
+  ∀ {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w)
+    (gamma : GoldenInt),
+    p.beta = goldenPow gamma 5 →
+    False
+```
+
+Then prove a receiver of the form:
+
+```lean
+GoldenUnitClassesModFifth →
+SignedGoldenZeroSectorExclusion →
+SignedGoldenUnitFifthPowerExclusion
+```
+
+using unit classification, absorption of `delta^5` into `gamma^5`, the four nonzero
+sector contradictions, and the zero-sector hypothesis.
+
+Once this receiver is certified, the active arithmetic target becomes exactly
+`SignedGoldenZeroSectorExclusion`.
+
+======================================================================
+7. cp-004j-d — Zero-sector arithmetic kernel
+======================================================================
+
+Assume a packet `p`, `gamma = (r,s)`, and
+
+```text
+p.beta = gamma^5.
+```
+
+Use names that do not collide with the packet's existing `a` and `b` fields.
+
+Derive the exact equations:
+
+```text
+N(gamma) = ±b
+5 * s * H(r,s) = -5^7 * a^10
+s * H(r,s) = -5^6 * a^10
+```
+
+where
+
+```text
+H(r,s) = r^4 + 2*r^3*s + 4*r^2*s^2 + 3*r*s^3 + s^4.
+```
+
+Prove the congruence:
+
+```text
+H(r,s) ≡ N(gamma)^2 (mod 5).
+```
+
+Since `5` does not divide `N(gamma)`, conclude:
+
+```text
+not (5 divides H(r,s)).
+```
+
+Next prove that the two coordinates of `gamma` are primitive. A suggested prime-divisor
+argument is:
+
+1. a common prime divisor of `r` and `s` divides `N(gamma)`, hence divides `b`;
+2. its fifth power divides both coordinates of `gamma^5`, hence divides
+   `beta.snd = -5^7*a^10`;
+3. `Coprime a b` excludes every prime shared with `a`;
+4. `not (5 divides b)` excludes the exceptional prime five.
+
+Package the result in a form useful for the quartic factor, for example:
+
+```text
+Coprime (natAbs r) (natAbs s)
+```
+
+or equivalent integer gcd facts.
+
+Then prove:
+
+```text
+gcd(natAbs s, natAbs H(r,s)) = 1
+```
+
+because `H(r,s) ≡ r^4 (mod s)` and the coordinates are primitive.
+
+Transport the signed equation to a natural-number product equation, preserving all sign
+information separately:
+
+```text
+natAbs s * natAbs H(r,s) = 5^6 * a^10.
+```
+
+Use coprimality and `5 ∤ H` to extract the strongest exact power split available. The
+expected shape is:
+
+```text
+natAbs s = 5^6 * c^10
+natAbs H(r,s) = d^10
+```
+
+with the remaining factors of `a` distributed compatibly between `c` and `d`.
+
+Do not assert this shape without proving the required coprimality, prime-exponent, and
+sign lemmas. Reuse existing natural fifth/tenth-power splitting APIs where possible.
+
+Publish the useful intermediate facts. They are part of the proof, not documentation.
+
+Suggested module:
+
+```text
+DkMath/FLT/Five/SignedGoldenZeroSector.lean
+```
+
+======================================================================
+8. cp-004j-e — Close the zero sector by contradiction or strict descent
+======================================================================
+
+After the exact zero-sector split is established, continue through the strongest honest
+route.
+
+Route Z1 — finite residue obstruction
+-------------------------------------
+
+Search systematically for a modulus `5^k` or a small auxiliary prime modulus that is
+incompatible with all of:
+
+```text
+N(gamma) = ±b
+not (5 divides b)
+Coprime a b
+s * H(r,s) = -5^6*a^10
+```
+
+Use kernel-checked finite classification only after reducing variables to a genuinely
+finite residue problem. Record the mathematical reduction in theorem statements.
+
+Route Z2 — classical infinite descent
+-------------------------------------
+
+Use the exact shapes
+
+```text
+natAbs s = 5^6*c^10
+natAbs H(r,s) = d^10
+```
+
+and the norm equation to construct a new strictly smaller arithmetic packet or a new
+primitive Fermat-five candidate. The descent measure must be explicit and natural-valued,
+for example the positive norm base `b`, an absolute coordinate, or a packet field proved
+to decrease.
+
+Do not write “classical descent” as a comment and stop. Construct the descended object,
+prove all of its required fields, and prove strict decrease.
+
+Route Z3 — direct quartic/tenth-power exclusion
+-----------------------------------------------
+
+Prove directly that primitive integer coordinates with `5 ∤ N(gamma)` cannot satisfy the
+zero-sector quartic equation. Search existing DkMath GN, Petal, valuation, primitive
+prime, and power-splitting modules for a theorem that applies to `H(r,s)`.
+
+A direct theorem of the following strength is acceptable:
+
+```lean
+¬ ∃ r s a b : ℤ, <all certified zero-sector conditions>
+```
+
+but the assumptions must be no stronger than the packet facts already proved.
+
+Attempt the routes actively. If one route closes the zero sector, connect it immediately.
+If they all reduce to one new proposition, isolate its complete Lean type and add a
+receiver proving it is sufficient for `SignedGoldenZeroSectorExclusion`.
+
+======================================================================
+9. cp-004j-f — Close packet orientation and all primitive candidates
+======================================================================
+
+Once `SignedGoldenUnitFifthPowerExclusion` is inhabited, the existing receiver closes a
+`CounterexamplePack x y z` under
+
+```text
+not (5 divides z-y).
+```
+
+Do not leave the complementary orientation untreated.
+
+Prove an orientation theorem for every primitive packet:
+
+```text
+Either not (5 divides z-y),
+or after swapping x and y, not (5 divides z-x).
+```
+
+Suggested proof for the second branch:
+
+1. assume `5 divides z-y`;
+2. derive `5 divides x` from `x^5 = (z-y)*GN5(z-y,y)` or from the equation modulo five;
+3. use `Coprime x y` to obtain `not (5 divides y)`;
+4. if `5 divides z-x`, then `5` divides `z`, and together with `5 divides z-y` it divides
+   `y`, contradiction;
+5. apply the existing Branch-B receiver to `CounterexamplePack.swap`.
+
+Create an unconditional primitive refuter:
+
+```lean
+abbrev CounterexamplePackRefuter : Prop :=
+  ∀ {x y z : ℕ}, CounterexamplePack x y z → False
+```
+
+or an equivalent theorem, and inhabit it from
+`SignedGoldenUnitFifthPowerExclusion`.
+
+======================================================================
+10. cp-004j-g — Normalize arbitrary positive solutions and inhabit FLT5Target
+======================================================================
+
+`FLT5Target` quantifies over all positive natural solutions, while `CounterexamplePack`
+contains a coprimality field. If no existing local theorem performs the normalization,
+implement it.
+
+For positive `x,y,z` with
+
+```text
+x^5 + y^5 = z^5,
+```
+
+let `d = gcd x y` and divide the three coordinates by the common factor. Prove:
+
+1. `d` divides `x` and `y`;
+2. `d^5` divides `z^5`, hence `d` divides `z`;
+3. the divided coordinates remain positive;
+4. the divided left coordinates are coprime;
+5. the divided coordinates still satisfy the fifth-power equation.
+
+Use the shortest existing Mathlib or DkMath primitive-normalization theorem if one exists.
+Do not duplicate a large library proof unnecessarily.
+
+Then combine the normalized `CounterexamplePack` with the primitive refuter and prove a
+no-sorry theorem inhabiting:
+
+```lean
+FLT5Target
+```
+
+Update `Main.lean` imports and its endpoint comment to reflect the actual certified
+endpoint. Do not declare FLT5 closure before this theorem exists.
+
+======================================================================
+11. Stop conditions
+======================================================================
+
+Continue through stable commits until exactly one condition is reached.
+
+A. FLT5 closure
+---------------
+
+A no-sorry theorem inhabits `FLT5Target`, all new modules are imported through
+`DkMath.FLT.Five.Main`, the axiom audit is updated, and full CI succeeds.
+
+B. Exact new blocker
+--------------------
+
+At minimum, the following must already be certified before Stop B is valid:
+
+- the norm consequences of `beta = epsilon*gamma^5`;
+- the mod-5 polynomial API;
+- elimination of every nonzero unit sector, conditional only on an actual sector equality;
+- the finite-sector-to-zero-sector receiver;
+- the strongest achieved zero-sector arithmetic split;
+- a complete theorem type for the single remaining proposition;
+- receivers from that proposition through
+  `SignedGoldenZeroSectorExclusion`,
+  `SignedGoldenUnitFifthPowerExclusion`, primitive pack closure, and as far toward
+  `FLT5Target` as logically possible.
+
+If unit classification and zero-sector descent remain independent blockers, do not hide
+them behind one vague name. State both exact theorem types. Stop B should represent the
+narrowest honest frontier.
+
+C. User interruption
+--------------------
+
+The user explicitly asks the run to stop or redirect.
+
+Do not stop at unit classification alone, a successful local build, a residue experiment,
+or elimination of sectors `1` through `4`.
+
+======================================================================
+12. Verification and repository surface
+======================================================================
+
+At each stable checkpoint run the narrow relevant builds. Before completion run coverage
+equivalent to:
+
+```text
+lake build DkMath.FLT.Five.GoldenUnitClassification
+lake build DkMath.FLT.Five.SignedGoldenUnitClasses
+lake build DkMath.FLT.Five.SignedGoldenZeroSector
+lake env lean DkMath/FLT/Five/Main.lean
+lake env lean DkMathTest/FLT/Five/CheckAxioms.lean
+lake -Kjobs=1 build
+./lean-build.sh
+git diff --check
+```
+
+Adjust module names if implementation chooses better names.
+
+Add all stable public modules to `DkMath.FLT.Five.Main`.
+Update `DkMathTest/FLT/Five/CheckAxioms.lean` with the decisive declarations:
+
+```text
+GoldenUnitClassesModFifth inhabitant or its packet-specific replacement
+nonzero sector exclusion
+zero-sector arithmetic core
+SignedGoldenZeroSectorExclusion
+SignedGoldenUnitFifthPowerExclusion inhabitant
+unconditional CounterexamplePack refuter
+FLT5Target inhabitant, if reached
+```
+
+The audit must contain no `sorryAx` in this dependency chain.
+
+Do not create a cp-004j report document. The Lean declarations and commits are the report.
+
+======================================================================
+13. Mathematical compass
+======================================================================
+
+The intended compression is:
+
+```text
+beta = epsilon * gamma^5
+  -> unit modulo fifth powers
+  -> five explicit sectors
+  -> sectors 1..4 force 5 | N(gamma)
+  -> contradiction with N(gamma) = ±b and 5 ∤ b
+  -> sector 0: beta = gamma^5
+  -> s * H(r,s) = -5^6*a^10
+  -> primitive coordinates and coprime factors
+  -> exact tenth-power split
+  -> finite obstruction or strict descent
+  -> SignedGoldenUnitFifthPowerExclusion
+  -> every primitive packet is impossible
+  -> primitive normalization
+  -> FLT5Target
+```
+
+The distinction between operations must remain visible in the API: unit action,
+fifth-power formation, coordinate projection, norm observation, and descent are different
+operations. Equalities may connect them only after the corresponding bridge theorem is
+proved.

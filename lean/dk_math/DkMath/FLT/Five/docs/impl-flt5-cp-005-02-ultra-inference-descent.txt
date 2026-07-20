@@ -1,0 +1,607 @@
+FLT5 cp-005-02 — Ultra Inference, Re-entry, and Descent Construction
+
+*active*
+
+This order is Level II.  It begins only after the exact factor packet from cp-005-01
+compiles.  The task is not merely to simplify equations.  The task is to discover a
+strictly smaller packet or a contradiction while preserving every certified invariant.
+
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+
+======================================================================
+1. Mission
+======================================================================
+
+Starting from `GoldenZeroSectorFactorPacket`, implement the strongest true deductions
+available from:
+
+```text
+factor product ownership
+factor difference
+factor sum
+square reconstruction
+parity
+coprimality
+original golden norm
+original source coordinates
+```
+
+Run several routes in parallel when useful:
+
+```text
+Route A — integer fifth-power / GN5 descent
+Route B — square-golden re-entry in GoldenInt
+Route C — finite residue and local valuation obstructions
+Route D — a new route discovered from the compiled equations
+```
+
+The preferred outcome is a strict well-founded descent from a hypothetical zero-sector
+packet to a smaller zero-sector packet.  A direct contradiction is even better.
+
+Do not reduce the packet to one of the three fifth-power equations and then forget the
+rest of the fields.  Those equations have unrelated solutions; the extra fields are the
+actual obstruction.
+
+======================================================================
+2. First audit the factor normal form
+======================================================================
+
+Before developing a descent, prove that the factor packet exposes all of the following
+without reopening cp-005-01:
+
+```text
+positive c,d,e,f
+Coprime c d
+Coprime e f
+Coprime (e*f) d
+exact parity of e and f
+exact A/B reconstruction
+exact product ownership
+exact fifth-power difference equation
+exact square reconstruction
+source link X=2*r+s or its equivalent
+original norm N(r,s)=plus or minus b
+not (5 divides b)
+```
+
+Add projection theorems if the structure fields are difficult to use.  Do not duplicate
+the proofs.
+
+======================================================================
+3. Mandatory finite obstruction in the odd branch
+======================================================================
+
+For the odd branch:
+
+```text
+f^5 = e^5 + 4*d^5
+```
+
+prove the exact mod-11 theorem:
+
+```lean
+theorem eleven_dvd_d_of_fifth_add_four_fifth
+    {e d f : ℕ}
+    (h : e ^ 5 + 4 * d ^ 5 = f ^ 5) :
+    11 ∣ d
+```
+
+A finite `Fin 11` classification with `decide +kernel` is acceptable.  A short theorem
+using fifth-power residues modulo 11 is preferable if Mathlib already exposes the
+needed API.
+
+Then combine it with the packet fields:
+
+```text
+11 does not divide c
+11 does not divide e*f
+11 does not divide e
+11 does not divide f.
+```
+
+The reason is `Coprime c d` and the exact product `e*f=5^5*c^8`.
+
+Do not call `11 ∣ d` a contradiction.  It is a forced primitive channel and should be
+fed into the next valuation/factor analysis.
+
+======================================================================
+4. Route A — refactor the branch equations through GN5
+======================================================================
+
+For every branch, factor the fifth-power difference with the local dedicated GN5 API.
+
+Odd branch:
+
+```text
+f^5-e^5 = 4*d^5
+(f-e)*GN5(f-e,e) = 4*d^5.
+```
+
+Even-left branch:
+
+```text
+2*f^5-e^5 = d^5.
+```
+
+Even-right branch:
+
+```text
+f^5-2*e^5 = d^5.
+```
+
+The latter two are not direct ordinary differences of two fifth powers.  Explore
+whether the factor packet supplies an alternative scaling, a sum orientation, or a
+GoldenInt norm that gives an honest product split.  Do not force them into a false GN5
+identity.
+
+For the odd branch, prove the standard gcd control:
+
+```text
+gcd(f-e, GN5(f-e,e)) divides 5.
+```
+
+Reuse existing DkMath `GcdDiffPow`/GN lemmas if they match the concrete variables
+without importing a circular FLT conclusion.
+
+Since `11 != 5`, the forced 11-adic mass is owned by exactly one of:
+
+```text
+f-e
+GN5(f-e,e).
+```
+
+Derive the strongest exact valuation statement possible.  Candidate subcases include:
+
+```text
+11 divides f-e
+  -> v11(f^5-e^5)=v11(f-e) by LTE because 11 does not divide 5*e*f
+  -> 11^(5*v11(d)) divides f-e
+
+11 does not divide f-e
+  -> 11 divides GN5(f-e,e)
+  -> a clean primitive GN5 channel may be available.
+```
+
+Search existing `padicValNat`, LTE, and primitive-beam APIs.  Implement only statements
+whose hypotheses are actually established by the factor packet.
+
+The objective of Route A is one of:
+
+```text
+a smaller fifth-power factor packet
+a new clean GN5 channel contradicting a perfect fifth power
+a strict lower bound on a forced prime power that contradicts product ownership
+an exact new branch contract suitable for descent
+```
+
+======================================================================
+5. Route B — normalize the discriminant square inside GoldenInt
+======================================================================
+
+The quartic inversion gives:
+
+```text
+U^2 - 20*s^4 = (4*d^5)^2.
+```
+
+Use the integral basis `1,phi`, where `sqrt(5)=2*phi-1`.
+
+The unnormalized element is:
+
+```text
+alpha = (U-2*s^2) + (4*s^2)*phi.
+```
+
+Its golden norm is:
+
+```text
+goldenNorm alpha = (4*d^5)^2.
+```
+
+Both coordinates are divisible by four.  Prefer the normalized element:
+
+```text
+M0 = (X^2 + 3*s^2)/4
+N0 = s^2
+alpha0 = M0 + N0*phi.
+```
+
+First prove integrality:
+
+```text
+4 divides X^2+3*s^2.
+```
+
+This follows from the primitive parity split:
+
+- if `s` is odd, both squares are `1 mod 4`;
+- if `s` is even, `X` and `s` are even.
+
+Then prove exactly:
+
+```text
+goldenNorm alpha0 = d^10 = (d^5)^2.
+```
+
+Suggested transparent coordinate definition:
+
+```lean
+def zeroSectorSquareGolden (X s : ℤ) (hdiv : 4 ∣ X^2+3*s^2) : GoldenInt :=
+  ⟨(X^2+3*s^2)/4, s^2⟩
+```
+
+Choose a formulation that avoids carrying proof arguments inside data if that makes
+rewriting painful.
+
+======================================================================
+6. Control alpha0 and its conjugate
+======================================================================
+
+Prove the strongest relative-primality theorem available for `alpha0` and its golden
+conjugate.
+
+A common nonunit factor divides:
+
+```text
+alpha0
+conj(alpha0)
+alpha0-conj(alpha0), whose non-rational part is controlled by s^2
+alpha0*conj(alpha0) = d^10.
+```
+
+Because `Coprime c d`, `s` and `d` share no prime.  The normalization should also remove
+the visible factor four.  Investigate whether the normalized pair is genuinely
+relatively prime or relatively prime up to a small explicitly classified factor.
+
+Required discipline:
+
+- Do not assert relative primality from the rational gcd alone.
+- Reuse the explicit `GoldenRelPrime`, divisibility, conjugation, and Euclidean-domain
+  infrastructure already developed in cp-004f/cp-004i.
+- If an exceptional factor remains, identify it explicitly by norm and strip it before
+  applying perfect-power splitting.
+- Prove that any exceptional factor does not destroy strict descent.
+
+The preferred result is:
+
+```text
+alpha0 and conj(alpha0) are relatively prime in GoldenInt.
+```
+
+An acceptable weaker result is a packet that removes a certified finite unit/ramifier
+factor and leaves relatively prime factors.
+
+======================================================================
+7. Split a square norm into a square up to a unit
+======================================================================
+
+Once the coprime product is established, use the Euclidean-domain theorem underlying:
+
+```lean
+exists_associated_pow_of_mul_eq_pow
+```
+
+with exponent `2`, not `5`.
+
+Derive:
+
+```text
+alpha0 = epsilon * gamma^2
+GoldenUnit epsilon.
+```
+
+Do not create a new abstract factorization axiom.  The existing
+`goldenCoprimeFactorOfFifthPower` proof demonstrates the intended Euclidean-domain
+pattern; generalize locally to exponent two or call the generic Mathlib theorem
+directly.
+
+======================================================================
+8. Classify golden units modulo squares
+======================================================================
+
+The unit group has already been classified modulo fifth powers by direct coordinate
+descent.  Build only the square-class information required here.
+
+Possible routes:
+
+1. adapt `goldenUnitFifthClass_of_unit` to `Fin 2`;
+2. strengthen the existing descent to an integer exponent classification and reduce
+   modulo two;
+3. prove a packet-specific square-sector result without exposing a general theorem.
+
+A likely representative set before sign restrictions is:
+
+```text
+1, -1, phi, -phi.
+```
+
+Do not assume the sign is absorbed by a square: `(-gamma)^2=gamma^2`.  Use norm sign,
+coordinate sign, congruence, or source positivity to remove impossible signs.
+
+The desired finite sector form is:
+
+```text
+alpha0 = plus or minus gamma^2
+or
+alpha0 = plus or minus phi*gamma^2.
+```
+
+======================================================================
+9. Expand square sectors in coordinates
+======================================================================
+
+For `gamma=(m,n)`, certify the coordinate formulas.
+
+Zero square sector:
+
+```text
+gamma^2 = (m^2+n^2, n*(2*m+n)).
+```
+
+Phi square sector:
+
+```text
+phi*gamma^2 has second coordinate (m+n)^2+n^2.
+```
+
+Since `alpha0.snd=s^2`, the sector equations become, up to a certified sign:
+
+```text
+s^2 = n*(2*m+n)
+```
+
+or:
+
+```text
+s^2 = (m+n)^2+n^2.
+```
+
+Use positivity/sign information to remove the negative versions whenever valid.
+
+These equations are the main re-entry point.
+
+======================================================================
+10. Descend the zero square sector
+======================================================================
+
+For:
+
+```text
+s^2 = n*(2*m+n),
+```
+
+compute and prove the gcd of the two factors.  It divides a small explicit quantity
+controlled by the primitive coordinates of `gamma`.  Split the exact gcd cases.
+
+If the factors are coprime, use perfect-square splitting:
+
+```text
+n = plus or minus p^2
+2*m+n = plus or minus q^2.
+```
+
+If a factor two remains, use the exact parity branch:
+
+```text
+n = plus or minus 2*p^2
+2*m+n = plus or minus 2*q^2
+```
+
+or the correct alternative forced by the computed gcd.
+
+Then substitute into the first coordinate and norm equations.  Search for:
+
+```text
+a new pair with the same quartic shape
+a smaller absolute second coordinate
+a smaller c
+a smaller d
+a smaller goldenUnitMeasure
+a smaller positive factor A or B
+```
+
+The strict measure must be proved, not inferred from a diagram.
+
+======================================================================
+11. Descend the phi square sector
+======================================================================
+
+For:
+
+```text
+s^2 = (m+n)^2+n^2,
+```
+
+this is a primitive or near-primitive Pythagorean equation after gcd normalization.
+
+Compute:
+
+```text
+gcd(|m+n|,|n|) = gcd(|m|,|n|)
+```
+
+and establish the exact primitive condition supplied by the square factorization.
+Classify parity, then use an existing Mathlib primitive Pythagorean parameterization if
+it is practical.  Otherwise prove the concrete parameterization needed here:
+
+```text
+|m+n| = k*(p^2-q^2)
+|n|   = k*(2*p*q)
+|s|   = k*(p^2+q^2)
+```
+
+with exact restrictions on `k`, parity, and coprimality.
+
+Feed these formulas into:
+
+```text
+goldenNorm gamma
+alpha0 = plus or minus phi*gamma^2
+```
+
+and search for a smaller zero-sector packet or a contradiction with the already fixed
+shape `|s|=5^6*c^10`.
+
+The unusually large power structure of `s` is not optional data: every prime exponent
+outside the fixed `5^6` layer is a multiple of ten.  Exploit that in the Pythagorean
+factors.
+
+======================================================================
+12. Route C — systematic finite residue reconnaissance
+======================================================================
+
+Finite computation is authorized as a conjecture generator and false-claim detector.
+Do not stop at a Python table or a `#eval` observation.
+
+Search the complete factor packet, not only the branch equation, modulo carefully
+chosen prime powers.  Useful coordinates include:
+
+```text
+r, s
+X=2*r+s
+c,d,e,f
+N(r,s)=plus or minus b
+A,B
+```
+
+Useful moduli include:
+
+```text
+11, 31, 41, 61, 101
+25, 125, 625
+8, 16, 32, 64
+products of a small 2-power, 5-power, and one prime congruent to 1 mod 5
+```
+
+A modulus is valuable only if its obstruction can be stated as a small kernel-checked
+classification theorem.
+
+Required workflow:
+
+1. enumerate residues externally or in a scratch Lean file;
+2. include every packet equation and coprimality/parity condition representable modulo
+   the chosen modulus;
+3. identify a precise surviving or impossible class;
+4. restate it as a theorem over `Fin n` or `ZMod n`;
+5. prove it with `decide +kernel`, `norm_num`, or algebra;
+6. lift it back to the integer packet.
+
+Do not add giant opaque decision theorems without a mathematical explanation in source
+comments.  Prefer several small classifications that visibly narrow the packet.
+
+======================================================================
+13. Route D — autonomous structural inference
+======================================================================
+
+The routes above are not exhaustive.  After every new theorem, inspect whether the
+compiled equations reveal another invariant.
+
+Authorized directions include:
+
+```text
+Pell-type recurrences for U^2-5V^2=W^2
+ideal-free Euclidean-domain descent in GoldenInt
+primitive divisor creation in f^5-e^5
+comparison of the fifth-power and square decompositions of the same element
+support/valuation ownership using DkMath ValuationFlow APIs
+an infinite descent on c, d, |s|, |r|+|s|, A, B, or a golden coordinate measure
+a direct contradiction from simultaneous norm and Pythagorean parameterizations
+```
+
+The selected descent measure must be a natural number and must decrease strictly in
+Lean.
+
+Do not choose a measure only because it appears smaller in sampled data.  Derive the
+strict inequality from the reconstruction formulas.
+
+======================================================================
+14. Required theorem-driven outputs
+======================================================================
+
+This checkpoint should leave at least one of the following:
+
+Outcome A:
+
+```lean
+theorem goldenZeroSectorFactorExclusion :
+    GoldenZeroSectorFactorExclusion
+```
+
+Outcome B:
+
+```lean
+structure GoldenZeroSectorDescentPacket where
+  source : GoldenZeroSectorFactorPacket
+  next   : GoldenZeroSectorFactorPacket
+  measure_lt : measure next < measure source
+```
+
+with an unconditional constructor from every source packet.
+
+Outcome C:
+
+A smaller explicit finite branch proposition together with:
+
+```lean
+theorem goldenZeroSectorFactorExclusion_of_newCore
+    (h : NewCore) : GoldenZeroSectorFactorExclusion
+```
+
+`NewCore` must expose all variables and hypotheses.  It may not be a renamed copy of
+`GoldenZeroSectorFactorExclusion`.
+
+======================================================================
+15. Failure handling
+======================================================================
+
+If a promising route fails:
+
+- prove or record a kernel-checked counterexample to the false intermediate statement;
+- retain any true reusable identities;
+- remove dead APIs that are not part of another route;
+- continue with another route.
+
+Examples of unacceptable stops:
+
+```text
+"Pell theory is still needed."
+"A descent probably exists."
+"The remaining equation is difficult."
+"The model ran out of a known theorem."
+```
+
+Examples of acceptable exact Stop B statements:
+
+```text
+Every packet produces one of four explicit coprime parameter structures, and the
+remaining theorem is that none of those four structures satisfies a displayed pair of
+polynomial equations.
+```
+
+or:
+
+```text
+Every packet produces a GoldenInt element in a stated square unit sector; the sole
+remaining theorem is a displayed strict inequality needed to construct the smaller
+packet.
+```
+
+======================================================================
+16. Build and audit boundary
+======================================================================
+
+After each stable route layer:
+
+```text
+lake -Kjobs=1 build <focused module>
+lake -Kjobs=1 build DkMath.FLT.Five.Main
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms
+git diff --check
+```
+
+Add axiom checks for every public factorization, square-sector, and descent theorem.
+Commit deterministic re-entry separately from speculative descent work.
+
+Proceed to `impl-flt5-cp-005-03-autonomous-closure-flt5.txt` once a contradiction or
+strict descent interface is compiled.
