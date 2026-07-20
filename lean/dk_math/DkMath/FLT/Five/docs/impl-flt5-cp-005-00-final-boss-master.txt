@@ -1,6 +1,47 @@
 FLT5 cp-005 — Final Boss Master Order
 
-*active*
+*complete*
+
+Completion: Stop A — COMPLETE (2026-07-20)
+
+Final theorems:
+
+```text
+goldenZeroSectorFactorExclusion
+goldenZeroSectorArithmeticExclusion
+flt5Target
+fermatFive_no_positive_solution
+```
+
+Implementation commits:
+
+```text
+77efba99  Invert the FLT5 golden zero sector
+69d79262  Build the FLT5 golden zero-sector descent
+52b02bcb  Factor the FLT5 zero-sector fifth-power mass
+3705e35f  Close the FLT5 golden zero sector
+8834b793  Assemble and audit the FLT5 target
+```
+
+Verification:
+
+```text
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorInversion       PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorFactorization   PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorDescent         PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorFinal           PASS
+lake -Kjobs=1 build DkMath.FLT.Five.Main                                  PASS
+lake -Kjobs=1 build DkMath.FLT.Five.Standalone                            PASS
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms                       PASS
+lake -Kjobs=1 build                                                        PASS
+./lean-build.sh                                                            PASS
+git diff --check                                                           PASS
+```
+
+Axiom audit: every new decisive and final theorem depends only on `propext`,
+`Classical.choice`, and `Quot.sound`; there is no `sorryAx`, new project axiom,
+`native_decide`, or circular FLT5 dependency in the completed chain.  The full build's
+pre-existing research-module `sorry` warnings are outside this FLT5 dependency chain.
 
 Date: 2026-07-20
 Repository: Deskuma/dkmath
