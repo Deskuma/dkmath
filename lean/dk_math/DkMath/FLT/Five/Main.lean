@@ -22,7 +22,11 @@ import DkMath.FLT.Five.SignedGoldenFifthPower
 import DkMath.FLT.Five.SignedGoldenUnitClasses
 import DkMath.FLT.Five.SignedGoldenSectorArithmetic
 import DkMath.FLT.Five.SignedGoldenZeroSector
+import DkMath.FLT.Five.SignedGoldenZeroSectorInversion
+import DkMath.FLT.Five.SignedGoldenZeroSectorFactorization
+import DkMath.FLT.Five.SignedGoldenZeroSectorDescent
 import DkMath.FLT.Five.SignedGoldenClosure
+import DkMath.FLT.Five.SignedGoldenZeroSectorFinal
 import DkMath.FLT.Five.SignedSquareGoldenExceptional
 import DkMath.FLT.Five.SquareGoldenBridge
 import DkMath.FLT.Five.SquareGoldenNormalForm
@@ -51,6 +55,16 @@ theorem flt5Target_of_zeroArithmetic
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
   flt5Target_of_unitClasses_of_zeroArithmetic
     goldenUnitClassesModFifth hArithmetic
+
+/-- Fermat's equation at exponent five has no positive natural-number solution. -/
+theorem flt5Target : FLT5Target :=
+  flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+
+/-- Explicit ordinary-argument form of the closed exponent-five theorem. -/
+theorem fermatFive_no_positive_solution
+    (x y z : ℕ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
+    ¬ Fermat5Equation x y z :=
+  flt5Target x y z hx hy hz
 
 /-- Every stripped golden packet is unconditionally reduced to the five sectors. -/
 theorem signedGoldenFiniteUnitSectorCore : SignedGoldenFiniteUnitSectorCore :=
@@ -83,10 +97,12 @@ The current reduction tower routes a primitive exponent-five candidate through:
 - elimination of unit sectors one through four, and
 - the primitive and exact tenth-power split of the zero sector.
 
-The golden-unit orbit is now unconditionally reduced to five classes modulo
-fifth powers.  The sole remaining frontier is the explicit
-`GoldenZeroSectorArithmeticExclusion` proposition.  Its receiver above already
-includes orientation closure and primitive normalization.
+The golden-unit orbit is unconditionally reduced to five classes modulo fifth
+powers.  Certified inversion and factorization expose the exact zero-sector
+arithmetic, and the golden lift supplies a strictly smaller packet of the same
+shape.  Infinite descent therefore proves `goldenZeroSectorArithmeticExclusion`,
+and `flt5Target` closes the exponent-five target while the conditional receivers
+above remain available as reusable interfaces.
 -/
 
 end DkMath.FLT.Five

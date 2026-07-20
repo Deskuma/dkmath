@@ -142,3 +142,35 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.counterexamplePackRefuter_of_zeroArithmetic
 #print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_zeroArithmetic
 #print axioms DkMath.FLT.Five.flt5Target_of_zeroArithmetic
+
+-- Certified zero-sector inversion and factorization.
+#print axioms DkMath.FLT.Five.goldenZeroSectorCandidate_of_raw
+#print axioms DkMath.FLT.Five.goldenZeroSectorInversionPacket
+#print axioms DkMath.FLT.Five.GoldenZeroSectorInversionPacket.factor_product
+#print axioms DkMath.FLT.Five.GoldenZeroSectorInversionPacket.factor_difference
+#print axioms DkMath.FLT.Five.fifth_mod_eleven_cases
+#print axioms DkMath.FLT.Five.eleven_dvd_d_of_fifth_add_four_fifth
+#print axioms DkMath.FLT.Five.GoldenZeroSectorFactorData.odd_eleven_channel
+#print axioms DkMath.FLT.Five.goldenZeroSectorFactorPacket_of_inversion
+#print axioms DkMath.FLT.Five.nonempty_goldenZeroSectorFactorPacket
+#print axioms DkMath.FLT.Five.goldenZeroSectorFactorArithmeticExclusion_of_factorExclusion
+
+-- Strict golden-lift descent and unconditional closure.
+#print axioms DkMath.FLT.Five.goldenZeroSectorLift_norm
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.lift_relPrime_conj
+#print axioms DkMath.FLT.Five.five_dvd_norm_of_nonzero_goldenUnitSector
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.exists_lift_eq_fifthPower
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.fifthRoot_snd_factor_eq
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.fifthRoot_coprime_coords
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.fifthRoot_five_not_dvd_H
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.fifthRoot_power_split
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.fifthRoot_measure_lt
+#print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.strictDescent
+#print axioms DkMath.FLT.Five.goldenZeroSectorDescentPacket_false
+#print axioms DkMath.FLT.Five.goldenZeroSectorDescentPacket_of_candidate
+#print axioms DkMath.FLT.Five.goldenZeroSectorCandidate_false
+#print axioms DkMath.FLT.Five.goldenZeroSectorFactorExclusion
+#print axioms DkMath.FLT.Five.goldenZeroSectorArithmeticExclusion_of_factorExclusion
+#print axioms DkMath.FLT.Five.goldenZeroSectorArithmeticExclusion
+#print axioms DkMath.FLT.Five.flt5Target
+#print axioms DkMath.FLT.Five.fermatFive_no_positive_solution
