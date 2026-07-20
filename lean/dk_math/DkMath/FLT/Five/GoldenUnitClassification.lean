@@ -38,7 +38,8 @@ theorem golden_mul_phi_coords (x : GoldenInt) :
 
 theorem golden_mul_phiInv_coords (x : GoldenInt) :
     goldenMul x goldenPhiInv = ⟨x.snd - x.fst, x.fst⟩ := by
-  ext <;> simp [goldenMul, goldenPhiInv] <;> ring
+  ext <;> simp [goldenMul, goldenPhiInv]
+  all_goals ring
 
 /-- Coordinate size used for the elementary unit descent. -/
 def goldenUnitMeasure (x : GoldenInt) : ℕ :=

@@ -96,11 +96,13 @@ theorem five_dvd_goldenNorm_of_five_dvd_fifthFst
     (5 : ℤ) ∣ goldenNorm gamma := by
   have hdiff := five_dvd_goldenFifthFstPoly_sub_linear gamma.fst gamma.snd
   have hlinear : (5 : ℤ) ∣ gamma.fst + 3 * gamma.snd := by
-    convert dvd_sub hF hdiff using 1 <;> ring
+    convert dvd_sub hF hdiff using 1
+    all_goals ring
   have hsq : (5 : ℤ) ∣ (gamma.fst + 3 * gamma.snd) ^ 2 :=
     dvd_pow hlinear (by decide)
   have hnormDiff := five_dvd_goldenNorm_sub_linear_sq gamma
-  convert dvd_add hnormDiff hsq using 1 <;> ring
+  convert dvd_add hnormDiff hsq using 1
+  all_goals ring
 
 private theorem five_dvd_beta_snd
     {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w) :
@@ -124,18 +126,24 @@ theorem signedGolden_nonzero_unitSector_false
   fin_cases i
   · exact (hi rfl).elim
   · rw [hbeta, golden_unit_one_mul_fifth_snd] at hb
-    convert dvd_sub hb hS using 1 <;> ring
+    convert dvd_sub hb hS using 1
+    all_goals ring
   · rw [hbeta, golden_unit_two_mul_fifth_snd] at hb
-    convert dvd_sub hb (dvd_mul_of_dvd_right hS 2) using 1 <;> ring
+    convert dvd_sub hb (dvd_mul_of_dvd_right hS 2) using 1
+    all_goals ring
   · rw [hbeta, golden_unit_three_mul_fifth_snd] at hb
     have h2F : (5 : ℤ) ∣ 2 * goldenFifthFstPoly gamma.fst gamma.snd :=
-      by convert dvd_sub hb (dvd_mul_of_dvd_right hS 3) using 1 <;> ring
+      by
+        convert dvd_sub hb (dvd_mul_of_dvd_right hS 3) using 1
+        all_goals ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h2F with h52 | hF
     · norm_num at h52
     · exact hF
   · rw [hbeta, golden_unit_four_mul_fifth_snd] at hb
     have h3F : (5 : ℤ) ∣ 3 * goldenFifthFstPoly gamma.fst gamma.snd :=
-      by convert dvd_sub hb (dvd_mul_of_dvd_right hS 5) using 1 <;> ring
+      by
+        convert dvd_sub hb (dvd_mul_of_dvd_right hS 5) using 1
+        all_goals ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h3F with h53 | hF
     · norm_num at h53
     · exact hF
