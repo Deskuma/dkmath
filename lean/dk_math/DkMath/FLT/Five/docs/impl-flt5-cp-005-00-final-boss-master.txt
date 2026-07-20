@@ -1,0 +1,447 @@
+FLT5 cp-005 — Final Boss Master Order
+
+*complete*
+
+Completion: Stop A — COMPLETE (2026-07-20)
+
+Final theorems:
+
+```text
+goldenZeroSectorFactorExclusion
+goldenZeroSectorArithmeticExclusion
+flt5Target
+fermatFive_no_positive_solution
+```
+
+Implementation commits:
+
+```text
+77efba99  Invert the FLT5 golden zero sector
+69d79262  Build the FLT5 golden zero-sector descent
+52b02bcb  Factor the FLT5 zero-sector fifth-power mass
+3705e35f  Close the FLT5 golden zero sector
+8834b793  Assemble and audit the FLT5 target
+```
+
+Verification:
+
+```text
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorInversion       PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorFactorization   PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorDescent         PASS
+lake -Kjobs=1 build DkMath.FLT.Five.SignedGoldenZeroSectorFinal           PASS
+lake -Kjobs=1 build DkMath.FLT.Five.Main                                  PASS
+lake -Kjobs=1 build DkMath.FLT.Five.Standalone                            PASS
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms                       PASS
+lake -Kjobs=1 build                                                        PASS
+./lean-build.sh                                                            PASS
+git diff --check                                                           PASS
+```
+
+Axiom audit: every new decisive and final theorem depends only on `propext`,
+`Classical.choice`, and `Quot.sound`; there is no `sorryAx`, new project axiom,
+`native_decide`, or circular FLT5 dependency in the completed chain.  The full build's
+pre-existing research-module `sorry` warnings are outside this FLT5 dependency chain.
+
+Date: 2026-07-20
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+Base branch: hackathon/cosmic-formula-inversion-flt-gn5
+PR: #56
+
+Reference snapshot:
+
+```text
+2548dfdf7d84a6fbc2cce3ba6d153f1ec8b547da95c34b8675a3277efb6495c1
+__snapshot-dk_math-lean-code-260720-1615.tar.gz
+```
+git tag: `__snapshot-dk_math-lean-code-260720-1615.tar.gz`
+git commit hash: 37853010a564939e5fcbfb689f38de57bd44d3f2
+
+The snapshot hash was independently verified before this order was written.
+The active GitHub branch remains the source of truth when it is newer than the snapshot.
+
+DO NOT modify the base branch.
+DO NOT merge the pull request.
+DO NOT mark the pull request ready for review.
+Work only on the active feature branch.
+
+======================================================================
+0. Final-boss declaration
+======================================================================
+
+cp-005 replaces all remaining cp-004 subletters.  Treat this as one final-boss
+campaign split across several instruction files, not as a sequence of unrelated
+micro-checkpoints.
+
+The first red ribbon is already closed unconditionally:
+
+```lean
+theorem goldenUnitClassesModFifth : GoldenUnitClassesModFifth
+```
+
+The public FLT5 receiver has already been reduced to one arithmetic proposition:
+
+```lean
+theorem flt5Target_of_zeroArithmetic
+    (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target
+```
+
+The sole remaining formal frontier is:
+
+```lean
+GoldenZeroSectorArithmeticExclusion
+```
+
+The mission of cp-005 is to attack that proposition until one of the following occurs:
+
+Stop A — COMPLETE
+
+```lean
+theorem goldenZeroSectorArithmeticExclusion :
+    GoldenZeroSectorArithmeticExclusion
+
+theorem flt5Target : FLT5Target :=
+  flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+```
+
+Stop B — EXACT NEW FRONTIER
+
+A strictly smaller, mathematically explicit proposition has been isolated, all
+preceding reductions are proved in Lean, and the new proposition is connected by a
+compiled receiver to `GoldenZeroSectorArithmeticExclusion`.  A vague statement such as
+"an infinite descent remains" is not an acceptable Stop B.  The remaining proposition
+must be stated as a concrete Lean `abbrev`, `structure`, or theorem contract with every
+required side condition visible.
+
+Stop C — INCONSISTENT ROUTE
+
+A proposed intermediate claim is false.  In that case, leave a kernel-checked finite
+counterexample or a proved contradiction to the proposed statement, replace the false
+route by the strongest true theorem discovered, and continue through another route.
+Do not stop merely because one proposed lemma fails.
+
+======================================================================
+1. Campaign files
+======================================================================
+
+Read this file first, then execute the other cp-005 orders in numeric order:
+
+```text
+impl-flt5-cp-005-01-certified-inversion-factorization.txt
+impl-flt5-cp-005-02-ultra-inference-descent.txt
+impl-flt5-cp-005-03-autonomous-closure-flt5.txt
+```
+
+The files intentionally divide the work into three reasoning levels.
+
+Level I — certified implementation
+
+Implement consequences that follow directly from already compiled packet data,
+polynomial identities, signs, coprimality, exact powers, and elementary valuations.
+This level is expected to close unless an explicitly proposed statement is false.
+
+Level II — inference implementation
+
+Use the newly proved Level-I facts to derive the exact factor normal forms, preserve
+all reconstruction equations, and build the next descent interfaces.  This level may
+require choosing among several true formulations, but it must remain theorem-driven.
+
+Level III — autonomous Ultra reasoning
+
+Independently discover and formalize the missing descent or contradiction.  The model
+is authorized to introduce new local definitions, finite residue classifications,
+valuation packets, square-golden re-entry, Pell-type reductions, primitive
+parameterizations, or another non-circular route.  The model is not authorized to
+insert assumptions, `sorry`, hidden axioms, or a theorem equivalent to FLT5 as an
+unproved provider.
+
+======================================================================
+2. Required source reconnaissance
+======================================================================
+
+Before editing, inspect the current branch and the reference snapshot.  At minimum read:
+
+```text
+DkMath/FLT/Five/Main.lean
+DkMath/FLT/Five/SignedGoldenClosure.lean
+DkMath/FLT/Five/SignedGoldenZeroSector.lean
+DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean
+DkMath/FLT/Five/SignedGoldenUnitClasses.lean
+DkMath/FLT/Five/GoldenUnitClassification.lean
+DkMath/FLT/Five/GoldenEuclidean.lean
+DkMath/FLT/Five/GoldenCoprimeFactor.lean
+DkMath/FLT/Five/SquareGoldenBridge.lean
+DkMath/FLT/Five/SquareGoldenNormalForm.lean
+DkMath/FLT/Five/SignedSquareGoldenExceptional.lean
+DkMath/FLT/Five/SignedGoldenRamifierStripped.lean
+DkMath/FLT/Five/SignedGoldenConjugateCoprime.lean
+DkMath/FLT/Five/SignedGoldenFifthPower.lean
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+Also search the complete DkMath source database and Mathlib for existing lemmas about:
+
+```text
+Nat/Int absolute values and signs
+strict positivity of even powers
+pow injectivity
+coprime factors of a perfect power
+prime factorization and padicValNat
+exact two-adic valuation of sums and differences
+Pell equations and primitive Pythagorean triples
+Euclidean-domain coprime products that are squares or fifth powers
+associates and units
+```
+
+Do not import a broad legacy FLT theorem whose conclusion already contains exponent
+five.  Such an import would make the closure circular even if Lean accepts it.
+
+======================================================================
+3. Certified starting contract
+======================================================================
+
+Treat the following current facts as compiled and available.
+
+For every hypothetical zero-sector packet, there are integers `r s`, positive naturals
+`a b`, and naturals `c d` satisfying the exact contract represented by:
+
+```lean
+abbrev GoldenZeroSectorArithmeticExclusion : Prop :=
+  ∀ (r s : ℤ) (a b : ℕ),
+    0 < a →
+    0 < b →
+    Nat.Coprime a b →
+    ¬ 5 ∣ b →
+    (goldenNorm ⟨r, s⟩ = (b : ℤ) ∨
+      goldenNorm ⟨r, s⟩ = -(b : ℤ)) →
+    s * goldenFifthSndFactor r s = -(5 : ℤ) ^ 6 * (a : ℤ) ^ 10 →
+    Nat.Coprime r.natAbs s.natAbs →
+    (∃ c d : ℕ,
+      s.natAbs = 5 ^ 6 * c ^ 10 ∧
+      (goldenFifthSndFactor r s).natAbs = d ^ 10) →
+    False
+```
+
+The quartic is:
+
+```text
+H(r,s) = r^4 + 2*r^3*s + 4*r^2*s^2 + 3*r*s^3 + s^4.
+```
+
+The current tower already proves:
+
+```text
+N(r,s) = plus or minus b
+5 does not divide b
+gcd(|r|,|s|) = 1
+gcd(|s|,|H(r,s)|) = 1
+|s| = 5^6*c^10
+|H(r,s)| = d^10
+s*H(r,s) = -5^6*a^10
+```
+
+The zero-sector receiver, orientation routing, primitive normalization, unit-sector
+classification, and final positive-solution receiver are already compiled.  Do not
+rebuild them.
+
+======================================================================
+4. Global proof discipline
+======================================================================
+
+- No `sorry`.
+- No `native_decide`.
+- No new axiom.
+- No opaque external oracle.
+- Small `decide +kernel`, `norm_num`, `omega`, `ring`, `linarith`, `nlinarith`, and
+  finite exhaustive proofs are allowed.
+- Numerical experiments may guide conjectures, but every used result must be restated
+  and proved in Lean.
+- Commit every stable mathematical layer before attempting a riskier layer.
+- Run focused builds during development and the complete repository build before Stop A.
+- Extend `DkMathTest/FLT/Five/CheckAxioms.lean` for every new public theorem chain.
+- Keep the final target independent of any existing theorem that already proves FLT5.
+- Preserve theorem strength.  Do not discard norm, parity, coprimality, product, sum,
+  difference, square, or provenance data merely to obtain a prettier equation.
+- A derived equation that has unrelated trivial solutions is not by itself an adequate
+  replacement for the packet.  Carry enough reconstruction fields to exclude those
+  unrelated solutions later.
+
+======================================================================
+5. Preferred module boundary
+======================================================================
+
+Use thin concrete modules.  Suggested names are:
+
+```text
+DkMath/FLT/Five/SignedGoldenZeroSectorInversion.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorFactorization.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorDescent.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorFinal.lean
+```
+
+Names may be adjusted if current repository naming suggests a better split, but do not
+put the entire proof into `Main.lean` or one monolithic file.
+
+The expected dependency direction is:
+
+```text
+SignedGoldenZeroSector
+  -> SignedGoldenZeroSectorInversion
+  -> SignedGoldenZeroSectorFactorization
+  -> SignedGoldenZeroSectorDescent
+  -> SignedGoldenZeroSectorFinal
+  -> SignedGoldenClosure
+  -> Main
+```
+
+Avoid reverse imports and avoid importing `Main` into a proof module.
+
+======================================================================
+6. Mandatory intermediate Big
+======================================================================
+
+The campaign should expose an explicit inversion packet, not only a sequence of local
+lemmas.  A recommended mathematical core is obtained from:
+
+```text
+X = 2*r + s
+U = X^2 + 5*s^2
+W = 4*d^5
+A = U - W
+B = U + W
+Q = 5^5*c^8
+```
+
+After signs and positivity are certified, the intended exact identities are:
+
+```text
+0 < A
+A < B
+A*B = 4*Q^5
+B-A = 8*d^5
+A+B = 2*U
+U-5*s^2 = X^2
+```
+
+This converts the quartic/tenth-power packet into a pair of nearby factors whose
+product is four times a fifth power.  The first two cp-005 implementation orders explain
+which parts are deterministic and which require inference.
+
+======================================================================
+7. Anti-circularity checks
+======================================================================
+
+Before declaring Stop A, inspect the full import graph of every new final theorem.
+The proof must not depend on:
+
+```text
+FLT5Target
+PositiveFermat5Refuter
+CounterexamplePackRefuter
+GoldenZeroSectorArithmeticExclusion
+```
+
+except in the forward assembly direction from the newly proved arithmetic theorem to
+the existing receiver.
+
+It is acceptable for the final assembly theorem to call:
+
+```lean
+flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+```
+
+It is not acceptable for `goldenZeroSectorArithmeticExclusion` itself to depend on an
+FLT5 conclusion or on a provider that assumes the same exclusion.
+
+======================================================================
+8. Final success surface
+======================================================================
+
+A complete cp-005 should leave a small public surface similar to:
+
+```lean
+theorem goldenZeroSectorArithmeticExclusion :
+    GoldenZeroSectorArithmeticExclusion
+
+/-- Local exponent-five Fermat theorem proved by the dedicated GN5/golden tower. -/
+theorem flt5Target : FLT5Target :=
+  flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+```
+
+Optionally add an explicit theorem in ordinary arguments if it improves the public API:
+
+```lean
+theorem fermatFive_no_positive_solution
+    (x y z : ℕ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
+    ¬ Fermat5Equation x y z :=
+  flt5Target x y z hx hy hz
+```
+
+Do not rename or remove the existing receiver theorems.
+
+======================================================================
+9. Required verification before completion
+======================================================================
+
+Run and record:
+
+```text
+lake -Kjobs=1 build DkMath.FLT.Five.Main
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms
+lake -Kjobs=1 build
+./lean-build.sh
+git diff --check
+git status --short
+```
+
+Audit the printed axioms for:
+
+```text
+goldenZeroSectorArithmeticExclusion
+flt5Target
+fermatFive_no_positive_solution        -- if added
+```
+
+The accepted final chain must contain no `sorryAx` and no new project axiom.
+
+======================================================================
+10. Commit strategy
+======================================================================
+
+Use mathematical commits rather than one giant final commit.  Suggested sequence:
+
+```text
+Invert the FLT5 golden zero sector
+Factor the zero-sector fifth-power mass
+Classify the zero-sector two-adic branches
+Build the zero-sector descent
+Close the FLT5 zero sector
+Assemble and audit the FLT5 target
+```
+
+If a route fails, commit the strongest useful true theorem only when it remains a clean
+reusable part of the final campaign.  Do not commit large dead experimental APIs.
+
+======================================================================
+11. Ultra mandate
+======================================================================
+
+This is intentionally harder than a routine implementation task.
+
+Do not wait for a human to supply every next lemma.  After each proved layer:
+
+1. inspect the new exact equations;
+2. derive candidate invariants, parity restrictions, valuation restrictions, and
+   coprime factorizations;
+3. test candidate statements on finite data only to reject false claims quickly;
+4. state the strongest surviving claim in Lean;
+5. prove it;
+6. use it to generate the next packet or contradiction;
+7. continue until Stop A or an exact Stop B.
+
+The objective is not to reproduce a prewritten historical proof line by line.  The
+objective is to let the compiled DkMath structure reveal the shortest non-circular
+closure available in the current library.
+
+Proceed to `impl-flt5-cp-005-01-certified-inversion-factorization.txt`.
