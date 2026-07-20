@@ -14,6 +14,8 @@ Reference snapshot:
 2548dfdf7d84a6fbc2cce3ba6d153f1ec8b547da95c34b8675a3277efb6495c1
 __snapshot-dk_math-lean-code-260720-1615.tar.gz
 ```
+git tag: `__snapshot-dk_math-lean-code-260720-1615.tar.gz`
+git commit hash: 37853010a564939e5fcbfb689f38de57bd44d3f2
 
 The snapshot hash was independently verified before this order was written.
 The active GitHub branch remains the source of truth when it is newer than the snapshot.
