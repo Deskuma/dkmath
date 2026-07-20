@@ -36,6 +36,11 @@ def goldenZeroSectorLift (x : GoldenInt) : GoldenInt :=
 theorem goldenZeroSectorLift_snd (x : GoldenInt) :
     (goldenZeroSectorLift x).snd = x.snd ^ 2 := rfl
 
+/--
+The quadratic lift turns the quartic `H(r,s)` into a golden norm. This identity
+is the algebraic re-entry point: when `H(r,s)` is a fifth power, relative-prime
+factorization can express the lift as a unit times a golden fifth power.
+-/
 theorem goldenZeroSectorLift_norm (x : GoldenInt) :
     goldenNorm (goldenZeroSectorLift x) =
       goldenFifthSndFactor x.fst x.snd := by
@@ -342,6 +347,11 @@ theorem fifthRoot_five_not_dvd_H
   rw [hnorm] at hnormFive
   exact p.five_not_dvd_D (by exact_mod_cast hnormFive)
 
+/--
+The fifth root has strictly smaller visible coordinate: its second-coordinate
+absolute value is less than the source packet's `|s|`. This is the essential
+well-founded inequality used when the root becomes the base of the next packet.
+-/
 theorem fifthRoot_measure_lt
     (p : GoldenZeroSectorDescentPacket) (gamma : GoldenInt)
     (hroot : goldenZeroSectorLift p.base = goldenPow gamma 5) :
@@ -485,6 +495,12 @@ structure GoldenZeroSectorStrictDescent
     goldenZeroSectorDescentMeasure next <
       goldenZeroSectorDescentMeasure source
 
+/--
+Construct the next descent packet from a fifth root of the quadratic lift. The
+new visible coordinate is the root's second coordinate; coprimality, the
+fifth-power shape, and the norm condition are preserved, while
+`fifthRoot_measure_lt` proves that its `|s|` measure strictly decreases.
+-/
 theorem GoldenZeroSectorDescentPacket.strictDescent
     (p : GoldenZeroSectorDescentPacket) :
     Nonempty (GoldenZeroSectorStrictDescent p) := by
@@ -511,7 +527,13 @@ theorem GoldenZeroSectorDescentPacket.strictDescent
     lift_eq := hroot
     measure_lt := p.fifthRoot_measure_lt gamma hroot }⟩
 
-/-- Strong induction excludes every packet carrying the recursive fifth-power shape. -/
+/--
+Strong induction on the visible measure `|s|` excludes every recursive descent
+packet. `strictDescent` preserves the packet invariant and supplies a smaller
+natural measure, so `Nat.strong_induction_on` applies. The argument uses only
+the golden lift and preceding packet lemmas, never the final FLT5 theorem; hence
+the closure is non-circular.
+-/
 theorem goldenZeroSectorDescentPacket_false
     (p : GoldenZeroSectorDescentPacket) : False := by
   have noAt : ∀ n : ℕ, ∀ q : GoldenZeroSectorDescentPacket,
