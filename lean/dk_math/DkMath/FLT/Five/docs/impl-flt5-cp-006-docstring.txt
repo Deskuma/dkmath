@@ -1,0 +1,699 @@
+# FLT5 cp-006 — GN5 / FLT5 mathematician-facing docstring and explanatory API pass
+
+Date: 2026-07-21  
+Repository: `Deskuma/dkmath`  
+Working branch: `hackathon/publish-gn5-flt5-260721-v0`  
+Lean workspace: `lean/dk_math`
+
+## 0. Mission
+
+Strengthen the source-level mathematical exposition of the complete exponent-five development.
+
+The primary deliverable is not a new proof route. The current Lean declarations are already the source of truth. The task is to make the existing route readable to a mathematician who opens the Lean files directly and wants to understand:
+
+- what each object represents in standard mathematical language;
+- why each hypothesis is present;
+- how the declaration participates in the proof;
+- which statement is an algebraic identity, a reduction, a local obstruction, a packet invariant, or a final closure;
+- which surrounding mathematical interpretations are contextual only and which are formalized in Lean.
+
+Improve module documentation and declaration docstrings throughout the GN5 / FLT5 tower. Where a short canonical helper theorem would materially clarify the mathematics, add it and use it in the exposition or proof flow when appropriate.
+
+Act autonomously. Inspect the whole current implementation, identify explanatory gaps, choose the exact wording, theorem names, and file-local placement, and implement the best coherent pass.
+
+## 1. Current theorem boundary
+
+The public endpoint is the positive-natural exponent-five statement encoded in:
+
+```lean
+DkMath.FLT.Five.flt5Target
+DkMath.FLT.Five.fermatFive_no_positive_solution
+```
+
+Its exact scope is:
+
+$$x,y,z\in\mathbb N_{>0}\Longrightarrow x^5+y^5\ne z^5.$$
+
+Do not broaden this to nonzero integers or general exponents.
+
+The final unconditional public chain includes:
+
+```lean
+goldenZeroSectorFactorExclusion
+goldenZeroSectorArithmeticExclusion
+flt5Target
+fermatFive_no_positive_solution
+```
+
+The repository presents this as a Lean-checked implementation under its explicit theorem contract. Do not write that external peer review or mathematical-community acceptance has been completed.
+
+## 2. Read before editing
+
+Read the current branch, not only historical reports.
+
+Required source inspection:
+
+```text
+DkMath/FLT/Five.lean
+DkMath/FLT/Five/*.lean
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+Required project context:
+
+```text
+DkMath/FLT/Five/docs/FLT5_IMPLEMENTS_PLAN.md
+DkMath/FLT/Five/docs/flt5-cp-001-to-cp-004-summary.md
+DkMath/FLT/Five/docs/repo-flt5-cp-005-final.md
+DkMath/FLT/Five/docs/impl-flt5-cp-005-00-final-boss-master.txt
+DkMath/FLT/Five/docs/impl-flt5-cp-005-01-certified-inversion-factorization.txt
+DkMath/FLT/Five/docs/impl-flt5-cp-005-02-ultra-inference-descent.txt
+DkMath/FLT/Five/docs/impl-flt5-cp-005-03-autonomous-closure-flt5.txt
+```
+
+Also inspect PR #56 when useful for chronology and design decisions:
+
+```text
+https://github.com/Deskuma/dkmath/pull/56
+```
+
+Historical checkpoint documents explain why objects were introduced, but current Lean source decides what is actually proved.
+
+## 3. Exposition standard
+
+All new source documentation should be in English, matching the existing Lean files.
+
+For each conceptual module, add or strengthen a module doc block of the form:
+
+```lean
+/-!
+# ...
+
+...
+-/
+```
+
+A good module document should normally explain:
+
+1. the standard mathematical object represented by the module;
+2. the input inherited from the previous layer;
+3. the exact output passed to the next layer;
+4. the main formulas or invariants;
+5. why this layer is necessary;
+6. the formal scope and any important non-claims.
+
+For important public declarations, replace one-line labels with useful mathematical docstrings. A load-bearing docstring should answer some combination of:
+
+- What does this definition encode?
+- How should the coordinates be interpreted?
+- Why is this hypothesis needed?
+- What is the standard mathematical name or analogue?
+- What contradiction or reduction does the theorem provide?
+- Which later declaration consumes it?
+- Is the declaration computational, structural, existential, or a public receiver contract?
+
+Use formulas where they improve comprehension. Avoid repeating the Lean signature in prose without adding meaning.
+
+Small simp lemmas, obvious coordinate projections, internal instances, and private proof plumbing do not need large comments. Do not inflate every line with boilerplate.
+
+## 4. Mathematical language policy
+
+Lead with standard mathematics. DkMath terminology may be given as a secondary interpretation.
+
+Preferred examples:
+
+- “homogeneous fifth cyclotomic factor” before “GN5 residual”;
+- “the order `ℤ[φ]` with `φ² = φ + 1`” before “golden world”;
+- “norm, conjugation, unit class, ramified factor above five, infinite descent” before project metaphors;
+- “local valuation-one prime divisor” before “clean channel”.
+
+Do not write promotional claims such as:
+
+```text
+AI proved FLT5
+FLT5 solved by DkMath
+new proof accepted
+complete external verification
+```
+
+Do not claim that a standard identification has been formalized when it has only been used as mathematical context.
+
+In particular, `GoldenInt` is implemented as a direct coordinate model of the integral order `ℤ[φ]`, with `φ² = φ + 1`. It is mathematically the familiar golden quadratic integer ring, but the code does not currently construct a field-level isomorphism with `𝒪_{ℚ(√5)}`. State this distinction clearly if the broader identification is mentioned.
+
+## 5. Global audit requirement
+
+Audit essentially the entire public GN5 / FLT5 source surface by category rather than mechanically following the list below.
+
+At minimum, inspect every public `def`, `abbrev`, `structure`, `inductive`, and `theorem` in:
+
+```text
+Basic.lean
+GN5.lean
+CleanChannel.lean
+BranchA.lean
+BranchB.lean
+Valuation.lean
+Provider.lean
+Reduction.lean
+NormalForm.lean
+SignedBranchA.lean
+SignedFiveAdic.lean
+SignedFiveAdicPowerSplit.lean
+SquareGoldenBridge.lean
+SquareGoldenNormalForm.lean
+SignedSquareGoldenExceptional.lean
+GoldenOrder.lean
+GoldenDivisibility.lean
+GoldenEuclidean.lean
+GoldenCoprimeFactor.lean
+GoldenFifthPowerCoordinates.lean
+SignedGoldenRamifierStripped.lean
+SignedGoldenConjugateCoprime.lean
+SignedGoldenFifthPower.lean
+SignedGoldenUnitClasses.lean
+GoldenUnitClassification.lean
+SignedGoldenSectorArithmetic.lean
+SignedGoldenZeroSector.lean
+SignedGoldenZeroSectorInversion.lean
+SignedGoldenZeroSectorFactorization.lean
+SignedGoldenZeroSectorDescent.lean
+SignedGoldenZeroSectorFinal.lean
+SignedGoldenClosure.lean
+Main.lean
+Standalone.lean
+```
+
+The implementation is large enough that the expected result is a category-wide pass, not a tiny hand-selected list.
+
+## 6. Category A — GN5 foundation and local obstruction
+
+Primary files:
+
+```text
+Basic.lean
+GN5.lean
+CleanChannel.lean
+BranchB.lean
+Valuation.lean
+Provider.lean
+Reduction.lean
+NormalForm.lean
+Standalone.lean
+```
+
+The documentation should make the following mathematical route immediately visible.
+
+Let `g = z - y`. Then:
+
+$$z^5-y^5=g\,GN5(g,y),$$
+
+where the gap-coordinate polynomial is:
+
+$$GN5(g,y)=g^4+5g^3y+10g^2y^2+10gy^3+5y^4.$$
+
+Explain that this is the usual homogeneous fifth cyclotomic quotient written in the local coordinate `z = g + y`:
+
+$$\frac{z^5-y^5}{z-y}=z^4+z^3y+z^2y^2+zy^3+y^4.$$
+
+The code should help a mathematician move between these two coordinate descriptions.
+
+Explain `CleanGN5Channel g y q` as a prime `q` satisfying:
+
+```text
+q is prime
+q divides GN5(g,y)
+q does not divide g
+q² does not divide GN5(g,y)
+```
+
+The mathematical content is that `q` enters the residual with local valuation exactly one and cannot be supplied by the gap. Consequently the full product `g * GN5(g,y)` cannot be a fifth power.
+
+Explain the two independent contradiction routes:
+
+```text
+direct square-divisibility argument
+padicValNat lower-bound / upper-bound argument
+```
+
+Explain the exceptional role of the prime five in the gcd reduction and why Branch B assumes `5 ∤ g`.
+
+### Canonical helper-theorem audit for Category A
+
+Do not add all of these blindly. Investigate whether each is absent, useful, non-duplicative, and naturally placed.
+
+1. A public bridge from gap coordinates to the standard homogeneous fifth cyclotomic factor, for example a theorem equivalent to:
+
+$$GN5(g,y)=(g+y)^4+(g+y)^3y+(g+y)^2y^2+(g+y)y^3+y^4.$$
+
+2. A reusable decomposition or congruence exposing:
+
+$$GN5(g,y)\equiv 5y^4\pmod g.$$
+
+The current proof route contains this algebra inside a local proof. A named theorem may substantially clarify why five is the only exceptional common prime.
+
+3. A reusable decomposition or congruence exposing:
+
+$$GN5(g,y)\equiv g^4\pmod 5.$$
+
+This is the structural reason `5 ∤ g` implies `5 ∤ GN5(g,y)`.
+
+4. An exact valuation-one theorem for a clean channel, on `GN5` and/or the full body, if it can be stated without awkward extra assumptions and if it improves the mathematical surface beyond the existing `≤ 1` theorem.
+
+5. Positivity or nonzero lemmas for `GN5` only when they remove repeated local arithmetic or make valuation statements cleaner.
+
+6. A compact equivalence or reconstruction theorem connecting `Fermat5Equation` and the local body equation, if the existing one-way lemmas leave a genuine explanatory gap.
+
+Prefer congruence or factorization statements with standard mathematical meaning over ad hoc wrappers.
+
+## 7. Category B — signed routing and exact five-adic normal form
+
+Primary files:
+
+```text
+BranchA.lean
+SignedBranchA.lean
+SignedFiveAdic.lean
+SignedFiveAdicPowerSplit.lean
+```
+
+Update stale checkpoint-era comments. For example, comments describing a “future” Branch-A refuter are no longer current and must be rewritten to describe the completed route.
+
+Explain why a primitive positive candidate is routed into one of two signed orientations:
+
+```text
+difference gap divisible by five
+sum gap divisible by five
+```
+
+Explain the role of the mod-25 classification and why the residual has:
+
+$$v_5(\text{residual})=1.$$
+
+Explain the common packet fields in mathematical language:
+
+```text
+carrier * residual = distinguished^5
+5 divides the carrier
+5 divides the distinguished fifth-power base
+residual ≡ 5 mod 25
+v₅(residual) = 1
+v₅(carrier) ≡ 4 mod 5
+```
+
+Explain the exact power split:
+
+$$\text{carrier}=5^4a^5,\qquad \text{residual}=5b^5,$$
+
+and the coprimality retained after removing the visible factor five.
+
+`SumGN5` requires especially careful explanation: it is the positive natural residual for factoring `u^5+v^5` by `u+v`, expressed piecewise only to avoid signed natural subtraction. The piecewise implementation is representational, not a mathematical asymmetry.
+
+### Canonical helper-theorem audit for Category B
+
+Investigate:
+
+- a symmetry theorem for `SumGN5`, if absent and easy;
+- a standard signed or integer polynomial form for the sum residual, if it materially clarifies the piecewise natural definition;
+- compact packet projection theorems only where structure fields are otherwise difficult to discover;
+- removal of duplicated local decompositions by exposing canonical named lemmas.
+
+Do not redesign the packet hierarchy.
+
+## 8. Category C — square/golden bridge and the quadratic order
+
+Primary files:
+
+```text
+SquareGoldenBridge.lean
+SquareGoldenNormalForm.lean
+SignedSquareGoldenExceptional.lean
+GoldenOrder.lean
+GoldenDivisibility.lean
+GoldenEuclidean.lean
+GoldenCoprimeFactor.lean
+GoldenFifthPowerCoordinates.lean
+SignedGoldenRamifierStripped.lean
+SignedGoldenConjugateCoprime.lean
+SignedGoldenFifthPower.lean
+```
+
+The source should explain the transition from GN5 to the quadratic order in ordinary mathematical terms.
+
+Document the coordinate model:
+
+$$\varphi^2=\varphi+1,$$
+
+$$a+b\varphi\longleftrightarrow \langle a,b\rangle,$$
+
+with conjugation:
+
+$$\varphi\mapsto1-\varphi,$$
+
+and norm:
+
+$$N(a+b\varphi)=a^2+ab-b^2.$$
+
+Explain how the square-coordinate transformation rewrites the GN5 expression as this norm form, and how the discriminant-five identity enters.
+
+Explain:
+
+- why a visible ramified factor above five must be removed;
+- what `goldenSqrtFive` and `goldenTau` represent;
+- why `N(goldenTau)=5`;
+- how relative primality of an element and its conjugate is certified;
+- why coprime factors of a fifth power become fifth powers up to a unit in the Euclidean domain;
+- why the Euclidean structure is established through strict decrease of the absolute norm.
+
+The `GoldenEuclidean.lean` module should be readable as a proof that the chosen coordinate ring is norm-Euclidean, not merely as a collection of rounding lemmas.
+
+### Canonical helper-theorem audit for Category C
+
+Investigate whether a small set of standard bridge lemmas would make the ring self-explanatory:
+
+```text
+φ² = φ + 1
+conj(φ) = 1 - φ
+N(φ) = -1
+conj(integer embedding) = integer embedding
+N(integer embedding) = integer square
+```
+
+Also inspect whether `goldenTau`, `goldenSqrtFive`, their conjugates, product, and norm already expose all identities needed to explain ramification cleanly.
+
+Add only canonical facts that clarify the mathematical model or remove repeated coordinate calculations. Do not create a parallel number-field abstraction.
+
+## 9. Category D — units modulo fifth powers and sector elimination
+
+Primary files:
+
+```text
+GoldenUnitClassification.lean
+SignedGoldenUnitClasses.lean
+GoldenFifthPowerCoordinates.lean
+SignedGoldenSectorArithmetic.lean
+```
+
+Explain the elementary unit descent:
+
+- units are detected by norm `±1`;
+- multiplication by `φ` or its integral inverse changes coordinates;
+- the measure `|a|+|b|` strictly decreases outside the base cases;
+- strong induction reduces every unit to the orbit generated by `±φ`;
+- modulo fifth powers, only five representatives `φ^i`, `i ∈ Fin 5`, remain.
+
+Explain why the sign is absorbed into a fifth power because the exponent is odd.
+
+Then explain the sector argument:
+
+```text
+sector 0 remains
+sectors 1, 2, 3, 4 force five into the norm of the fifth-power base
+the packet independently says that norm is prime to five
+therefore every nonzero sector is impossible
+```
+
+Make it clear that “sector” here means a unit class modulo fifth powers, not an analytic or geometric sector.
+
+### Canonical helper-theorem audit for Category D
+
+Inspect whether the public classification theorem is easy to understand from its current signature. Add summary lemmas only if needed to expose the standard statement “every unit is `±φ^n`” or its exact implemented equivalent, without introducing a stronger claim than the code proves.
+
+Document `GoldenUnitFifthClass` and `GoldenUnitClassesModFifth` thoroughly; these are central mathematical declarations, not implementation details.
+
+## 10. Category E — zero sector, inversion, factorization, and descent
+
+Primary files:
+
+```text
+SignedGoldenZeroSector.lean
+SignedGoldenZeroSectorInversion.lean
+SignedGoldenZeroSectorFactorization.lean
+SignedGoldenZeroSectorDescent.lean
+SignedGoldenZeroSectorFinal.lean
+SignedGoldenClosure.lean
+```
+
+This category needs the strongest documentation pass. The current files contain many small docstrings, but a mathematician needs a continuous explanation of the descent.
+
+Explain the zero-sector input in a compact invariant form. At the relevant stage the packet supplies, up to the exact signs encoded in the structures:
+
+$$s\,H(r,s)=-5^6a^{10},$$
+
+$$N(r,s)=\pm b,$$
+
+$$\gcd(|r|,|s|)=1,$$
+
+$$5\nmid b.$$
+
+Explain the exact split:
+
+$$|s|=5^6c^{10},\qquad H(r,s)=d^{10},$$
+
+and the roles of positivity, parity, coprimality, and the exclusion of five.
+
+### Inversion and factorization
+
+Explain the diagonal coordinates and the difference-of-squares reconstruction. Definitions such as:
+
+```text
+zeroSectorX
+zeroSectorU
+zeroSectorW
+zeroSectorA
+zeroSectorB
+zeroSectorQ
+```
+
+need docstrings that state the actual formula, not only “upper factor” or “diagonal coordinate”.
+
+Explain what the odd/even factor branches mean and why the branch split is exhaustive.
+
+The factorization file should have a module-level roadmap from the inversion packet to `GoldenZeroSectorFactorPacket`.
+
+### Recursive descent
+
+Explain the golden lift:
+
+$$T(r,s)=(r^2+rs+s^2,s^2),$$
+
+implemented by `goldenZeroSectorLift`.
+
+State clearly:
+
+$$N(T(r,s))=H(r,s).$$
+
+Explain why this lift is chosen: it turns the quartic invariant into a norm while keeping the visible coordinate square-shaped.
+
+Explain the recursive packet invariant:
+
+$$|s|=5t^5,\qquad H(r,s)=D^5,\qquad \gcd(|r|,|s|)=1,\qquad 5\nmid N(r,s).$$
+
+Explain the re-entry sequence:
+
+```text
+lift and conjugate are relatively prime
+→ lift is a fifth power up to a unit
+→ nonzero unit sectors are impossible
+→ lift is an honest fifth power
+→ the fifth root inherits the same packet shape
+→ its second-coordinate absolute value is strictly smaller
+→ strong induction gives contradiction
+```
+
+The measure theorem is the heart of the proof. Its docstring should explain what is decreasing and why this is sufficient for well-founded descent.
+
+### Canonical helper-theorem audit for Category E
+
+Investigate whether readers need:
+
+- a single public theorem summarizing all defining identities of the lift;
+- a concise constructor/projection theorem exposing the recursive invariant created from a candidate;
+- a theorem naming the preservation of the packet shape separately from strict decrease;
+- formula-oriented docstrings for every public inversion coordinate;
+- additional branch summary lemmas in the factorization layer.
+
+Avoid adding wrappers that merely restate structure fields without improving discoverability.
+
+## 11. Category F — closure and public theorem surface
+
+Primary files:
+
+```text
+SignedGoldenClosure.lean
+SignedGoldenZeroSectorFinal.lean
+Main.lean
+DkMath/FLT/Five.lean
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+The public surface must be understandable without reading every internal packet.
+
+Strengthen the documentation of:
+
+```lean
+FLT5Target
+flt5Target_of_unitClasses_of_zeroArithmetic
+flt5Target_of_zeroArithmetic
+goldenZeroSectorFactorExclusion
+goldenZeroSectorArithmeticExclusion
+flt5Target
+fermatFive_no_positive_solution
+```
+
+Explain which declarations are conditional receiver interfaces retained for reuse and which are unconditional endpoints.
+
+Add or improve a module roadmap in `Main.lean` before the public declarations, not only a trailing comment after them.
+
+The final ordinary-argument theorem docstring must state:
+
+- domain: positive natural numbers;
+- equation excluded;
+- it is a wrapper around `flt5Target`;
+- it does not expose a general-exponent theorem.
+
+Review `DkMath/FLT/Five.lean` as the compact import surface and add a useful module doc if absent.
+
+Update `CheckAxioms.lean` only when new public helper theorems are sufficiently central to merit explicit inspection. Do not add every documentation helper to the audit list.
+
+## 12. Stale-language audit
+
+Search all source comments for checkpoint-era or future-tense wording that is now false or misleading.
+
+Examples include phrases such as:
+
+```text
+future dedicated refuter
+remaining missing theorem
+will extract
+next obstruction
+current research obligation
+conditional final target
+```
+
+Some conditional interfaces remain intentionally reusable, so do not delete them. Rewrite their docstrings to explain their present role in the completed tower.
+
+Do not erase historical information from the implementation reports. This audit concerns current Lean source comments and docstrings.
+
+## 13. Rules for adding helper lemmas
+
+A helper theorem is justified when at least one of these holds:
+
+1. it states a canonical standard identity hidden inside a local proof;
+2. it connects two coordinate systems used by mathematicians;
+3. it exposes a congruence or valuation interpretation repeatedly used later;
+4. it gives a named preservation or descent fact central to the proof narrative;
+5. it removes duplicated algebra from multiple files;
+6. it makes the module documentation link to a precise Lean declaration.
+
+A helper theorem is not justified when it:
+
+- only aliases an existing theorem under a near-duplicate name;
+- merely restates one structure field;
+- exists only to make the report longer;
+- broadens the mathematical claim;
+- causes architectural refactoring unrelated to documentation;
+- introduces a new abstraction hierarchy.
+
+Prefer short proofs using existing results. Preserve existing public names and theorem statements.
+
+## 14. Expected work style
+
+This is not a transcription task.
+
+Codex should:
+
+1. inspect the entire tower;
+2. create a coherent mathematical narrative for each layer;
+3. identify stale and underspecified comments;
+4. propose and implement useful canonical helper lemmas;
+5. update proofs to reuse those lemmas when this reduces duplication;
+6. preserve dependency direction;
+7. build and inspect the final public surface;
+8. report both changes made and explanatory gaps deliberately left untouched.
+
+Do not stop after editing only `GN5.lean` and `Main.lean`.
+
+## 15. Outcome branches
+
+### Outcome A — documentation-only closure
+
+Use this when the existing theorem surface already contains every canonical identity required for explanation.
+
+Deliver:
+
+- module docs;
+- strengthened public docstrings;
+- stale-language corrections;
+- no new mathematical declarations.
+
+### Outcome B — documentation plus thin explanatory API
+
+Use this when canonical identities or congruence bridges are currently trapped inside local proofs.
+
+Deliver:
+
+- all Outcome A work;
+- a small set of named helper theorems;
+- proof reuse where natural;
+- audit updates only for genuinely central new public lemmas.
+
+This is the expected outcome if the GN5 congruence and golden-order bridge gaps are confirmed.
+
+### Outcome C — structural documentation blocker
+
+Use this only if the source cannot be explained honestly without a nontrivial refactor or a new mathematical result.
+
+Do not perform the large refactor. Document:
+
+- the exact blocker;
+- affected files and declarations;
+- the smallest proposed future checkpoint.
+
+Continue all independent documentation work outside the blocker.
+
+## 16. Verification
+
+Run the relevant Lean targets after editing:
+
+```bash
+cd lean/dk_math
+lake build DkMath.FLT.Five
+lake build DkMath.FLT.Five.Main
+lake build DkMathTest.FLT.Five.CheckAxioms
+```
+
+Also run:
+
+```bash
+git diff --check
+```
+
+No new `sorry`, `admit`, project-specific axiom, or `native_decide`.
+
+Do not treat existing unrelated warnings outside this target as a cp-006 failure.
+
+## 17. Completion report
+
+Return a report containing:
+
+```text
+checkpoint: cp-006
+branch and commit
+files modified
+module docs added
+public docstrings strengthened
+stale comments corrected
+helper theorems added
+existing proofs refactored to use them
+public API changes
+axiom-audit changes
+build targets
+remaining explanatory gaps
+recommended next documentation checkpoint
+```
+
+Include a categorized list of helper theorems actually added, with one sentence explaining why each improves mathematical readability.
+
+The completion criterion is not “more comments”. It is:
+
+> A mathematician can start at `GN5.lean`, follow the source through the five-adic and golden-order layers, reach the strict descent and final theorem, and understand why each transition is mathematically legitimate without reconstructing the entire narrative from checkpoint reports.
