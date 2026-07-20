@@ -1,0 +1,475 @@
+FLT5 cp-005-03 — Autonomous Closure, Well-Founded Descent, and FLT5 Assembly
+
+*active*
+
+This order is Level III.  GPT-5.6 Codex Sol / Ultra is expected to reason beyond a
+fixed checklist.  The target is the actual closure of the dedicated FLT5 tower.
+
+Repository: Deskuma/dkmath
+Branch: hackathon/feature-gn5-flt5-260719-v0
+
+======================================================================
+1. Final mission
+======================================================================
+
+Prove:
+
+```lean
+theorem goldenZeroSectorArithmeticExclusion :
+    GoldenZeroSectorArithmeticExclusion
+```
+
+and assemble:
+
+```lean
+theorem flt5Target : FLT5Target :=
+  flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+```
+
+The preferred final public theorem is also allowed:
+
+```lean
+theorem fermatFive_no_positive_solution
+    (x y z : ℕ)
+    (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
+    ¬ Fermat5Equation x y z :=
+  flt5Target x y z hx hy hz
+```
+
+Do not stop after proving another one-way receiver.  Close the remaining arithmetic
+proposition or leave a genuinely smaller exact theorem boundary as defined in the
+master order.
+
+======================================================================
+2. Use the strongest compiled frontier
+======================================================================
+
+Start from the strongest theorem produced by cp-005-01 and cp-005-02.
+
+If a direct factor exclusion is available:
+
+```lean
+goldenZeroSectorFactorExclusion : GoldenZeroSectorFactorExclusion
+```
+
+then immediately assemble:
+
+```text
+factor exclusion
+  -> GoldenZeroSectorArithmeticExclusion
+  -> SignedGoldenZeroSectorExclusion
+  -> SignedGoldenUnitFifthPowerExclusion
+  -> CounterexamplePackRefuter
+  -> PositiveFermat5Refuter
+  -> FLT5Target.
+```
+
+If a strict descent packet is available, implement the well-founded closure below.
+
+======================================================================
+3. Mandatory well-founded descent pattern
+======================================================================
+
+A valid descent must contain:
+
+```text
+a concrete packet type P
+a natural-valued measure mu : P -> Nat
+a constructor next : P -> P
+a theorem mu(next p) < mu(p)
+```
+
+The next packet must satisfy the same complete invariant required by the exclusion
+receiver.  A smaller auxiliary equation that cannot be lifted back to the packet is not
+a descent.
+
+Recommended theorem shape:
+
+```lean
+structure GoldenZeroSectorStrictDescent where
+  next : GoldenZeroSectorFactorPacket
+  measure_lt : zeroSectorMeasure next < zeroSectorMeasure source
+
+abbrev GoldenZeroSectorDescentCore : Prop :=
+  ∀ source : GoldenZeroSectorFactorPacket,
+    Nonempty (GoldenZeroSectorStrictDescent source)
+```
+
+Then close by strong induction:
+
+```lean
+theorem goldenZeroSectorFactorExclusion_of_descent
+    (hDescent : GoldenZeroSectorDescentCore) :
+    GoldenZeroSectorFactorExclusion := by
+  intro p
+  generalize hm : zeroSectorMeasure p = n
+  induction n using Nat.strong_induction_on generalizing p with
+  | h n ih =>
+      obtain ⟨step⟩ := hDescent p
+      exact ih _ (by simpa [hm] using step.measure_lt) step.next rfl
+```
+
+Adjust the proof to the actual packet and measure.  Ensure the induction hypothesis is
+applied to a packet with exactly the same invariant.
+
+======================================================================
+4. Choosing the descent measure
+======================================================================
+
+Preferred candidate measures, in order of structural relevance:
+
+```text
+c
+d
+|s|
+A
+B
+|r|+|s|
+goldenUnitMeasure of a reconstructed base
+height of a Pell/golden recurrence
+```
+
+The measure must be positive on every packet and strictly decrease under the
+constructed step.
+
+Composite lexicographic measures are allowed if a single coordinate does not always
+decrease.  Encode them transparently, for example:
+
+```text
+(mu1,mu2) through a well-founded lexicographic relation
+```
+
+or by a proved bounded encoding into `Nat`.
+
+Do not hide a non-strict step inside a quotient by associates.  Choose canonical signs
+or absolute coordinates and prove strictness there.
+
+======================================================================
+5. Autonomous proof-search loop
+======================================================================
+
+Repeat the following loop until closure:
+
+1. Normalize the current packet with all existing rewrite theorems.
+2. Identify which primes and powers are owned by each factor.
+3. Compute the gcd of every new factor pair exactly.
+4. Split perfect powers using the Euclidean-domain or natural factorization API.
+5. Classify unit or parity sectors finitely.
+6. Substitute the resulting parameterization into every remaining equation.
+7. Search for either:
+   - a contradiction;
+   - a newly forced prime channel;
+   - a square/fifth-power double representation;
+   - a smaller packet.
+8. State the next true theorem in Lean and prove it.
+9. Delete or isolate false exploratory statements.
+10. Continue without waiting for a new human instruction.
+
+Use finite computation aggressively to reject false conjectures before investing in a
+long proof, but convert every surviving fact into a kernel-checked theorem.
+
+======================================================================
+6. Simultaneous-decomposition strategy
+======================================================================
+
+The current zero sector carries several decompositions of the same mass:
+
+```text
+s*H = -5^6*a^10
+|s| = 5^6*c^10
+H = d^10
+A*B = 4*Q^5
+B-A = 8*d^5
+goldenNorm alpha0 = (d^5)^2
+alpha0 = unit*square                       -- expected after re-entry
+beta = fifth power                         -- original zero sector
+```
+
+The final contradiction is likely to come from incompatibility between two complete
+power decompositions, not from one equation alone.
+
+Therefore compare:
+
+```text
+fifth-power ownership of A and B
+square ownership of alpha0 and its conjugate
+tenth-power ownership of s and H
+unit-sector ownership in GoldenInt
+```
+
+A successful route may show that the same prime support must have exponents in two
+incompatible congruence classes, or that a primitive parameter must itself have the
+same shape at a smaller scale.
+
+======================================================================
+7. Primitive-channel strategy
+======================================================================
+
+When a difference of fifth powers appears, inspect its GN5 channel.
+
+For coprime positive `u,v`:
+
+```text
+u^5-v^5 = (u-v)*GN5(u-v,v).
+```
+
+Use existing DkMath machinery to control:
+
+```text
+gcd(u-v,GN5(u-v,v))
+prime divisors not dividing u-v
+padic valuation of a clean GN5 channel
+primitive-prime congruence modulo 5
+```
+
+If the right side is a fifth power times a small coefficient, a clean prime channel
+with valuation not divisible by five is a contradiction.
+
+Do not assume a global squarefree or NoLift theorem that is known to be false.  Prove
+the local NoLift condition from the concrete packet, or split the lifted branch and
+continue.
+
+======================================================================
+8. Golden-square strategy
+======================================================================
+
+If cp-005-02 reaches:
+
+```text
+alpha0 = epsilon*gamma^2
+```
+
+complete the square-sector analysis rather than abandoning it for a historical proof.
+
+For each surviving unit sector:
+
+1. expand both coordinates exactly;
+2. compute coordinate gcds;
+3. split the square equation into coprime square factors or a primitive Pythagorean
+   triple;
+4. substitute into `goldenNorm gamma` and the source reconstruction;
+5. derive the next packet or contradiction;
+6. prove strict decrease.
+
+Use the already proved golden unit descent if a unit must be canonicalized.  Do not
+create a second unrelated unit theory.
+
+======================================================================
+9. Pell/recurrence strategy
+======================================================================
+
+If the square-golden packet naturally produces a Pell-type recurrence, formalize only
+the recurrence actually used.
+
+Acceptable concrete structure:
+
+```text
+state coordinates
+one-step transformation by phi or phi^2
+norm preservation
+congruence preservation
+strict change of the selected positive coordinate
+```
+
+The existing explicit golden multiplication formulas are preferable to transporting
+the whole proof to a different quadratic-order type.
+
+A recurrence is useful only if it proves one of:
+
+```text
+no state satisfies the required tenth-power coordinate condition;
+a solution has a strictly smaller predecessor;
+a forced residue cycle avoids every admissible packet.
+```
+
+Do not stop after proving that all solutions lie on a recurrence orbit.
+
+======================================================================
+10. Finite-state residue strategy
+======================================================================
+
+A finite-state closure is acceptable when it covers all integer packets through proved
+modular projection.
+
+For a chosen modulus `M`, define a finite state containing every residue needed for:
+
+```text
+r,s,c,d,e,f
+norm sign
+factor branch
+parity or valuation residue
+```
+
+Prove:
+
+```text
+every integer packet maps to an admissible finite state;
+all admissible states violate at least one packet equation;
+```
+
+or prove that every admissible state maps under descent to a state with a strictly
+smaller lifted measure.
+
+Use `Fin M` or `ZMod M` and kernel-checked decisions.  Avoid a giant modulus when a
+product of several transparent local lemmas gives the same result.
+
+======================================================================
+11. Exact Stop-B requirement
+======================================================================
+
+Stop B is permitted only if continued proof search leaves one explicit theorem whose
+solution requires a genuinely new mathematical idea.
+
+The final commit in a Stop-B outcome must contain:
+
+```lean
+abbrev FinalZeroSectorCore : Prop :=
+  ∀ (fully explicit variables),
+    fully explicit hypotheses →
+    False
+
+theorem goldenZeroSectorArithmeticExclusion_of_finalCore
+    (h : FinalZeroSectorCore) :
+    GoldenZeroSectorArithmeticExclusion
+```
+
+Additionally include proved lemmas showing:
+
+```text
+why every original packet reaches FinalZeroSectorCore;
+why no side condition was lost;
+why the proposition is strictly narrower than the current arithmetic exclusion.
+```
+
+Do not create a proposition whose only argument is the original packet and whose
+conclusion is `False`; that is merely renaming the blocker.
+
+======================================================================
+12. Final integration
+======================================================================
+
+When the arithmetic theorem closes:
+
+1. add the final proof module to `DkMath/FLT/Five/Main.lean`;
+2. add the final public theorem without removing existing conditional receivers;
+3. expose it through `DkMath/FLT/Five.lean` and `DkMath/FLT.lean` only in the existing
+   repository style;
+4. update `Standalone.lean` if it is the dedicated demonstration surface;
+5. extend `DkMathTest/FLT/Five/CheckAxioms.lean`;
+6. check that no import cycle was introduced.
+
+Suggested final declarations:
+
+```lean
+theorem goldenZeroSectorArithmeticExclusion :
+    GoldenZeroSectorArithmeticExclusion := by
+  ...
+
+theorem flt5Target : FLT5Target :=
+  flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
+
+theorem fermatFive_no_positive_solution
+    (x y z : ℕ)
+    (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
+    ¬ Fermat5Equation x y z :=
+  flt5Target x y z hx hy hz
+```
+
+Use repository-consistent names if a theorem with the preferred name already exists.
+
+======================================================================
+13. Final anti-circularity audit
+======================================================================
+
+Inspect the dependency chain manually and with `#print axioms`.
+
+The proof of `goldenZeroSectorArithmeticExclusion` must not depend on:
+
+```text
+flt5Target
+fermatFive_no_positive_solution
+PositiveFermat5Refuter
+CounterexamplePackRefuter
+any legacy theorem proving FLT for exponent 5 or all p>=5
+an assumed GoldenZeroSectorArithmeticExclusion provider
+```
+
+The assembly theorem may depend forward on the arithmetic theorem and existing
+receivers.
+
+Search the full transitive imports for suspicious aliases and providers.  If a generic
+theorem is used, verify that its hypotheses do not already include the target in a
+renamed form.
+
+======================================================================
+14. Full verification
+======================================================================
+
+Run:
+
+```text
+lake -Kjobs=1 build DkMath.FLT.Five.Main
+lake -Kjobs=1 build DkMath.FLT.Five.Standalone
+lake -Kjobs=1 build DkMathTest.FLT.Five.CheckAxioms
+lake -Kjobs=1 build
+./lean-build.sh
+git diff --check
+git status --short
+```
+
+Print and audit axioms for every final public theorem.
+
+Accepted result:
+
+```text
+no sorryAx
+no new axiom
+no native_decide
+no circular FLT5 dependency
+clean working tree after commits
+```
+
+======================================================================
+15. Completion update to the instruction set
+======================================================================
+
+After Stop A, prepend a concise completion block to the cp-005 master file containing:
+
+```text
+*complete*
+final theorem names
+commit hashes
+build results
+axiom-audit results
+```
+
+Do not rewrite the mathematical instructions.  Preserve them as the record of the
+final-boss campaign.
+
+After an exact Stop B, prepend:
+
+```text
+*exact frontier reached*
+strongest compiled theorem
+remaining explicit core
+commit hashes
+build and axiom results
+```
+
+Do not write a separate research essay unless explicitly requested.  Lean source,
+theorem contracts, proof comments, commits, and this concise status update are the
+report.
+
+======================================================================
+16. Final command
+======================================================================
+
+Attack the remaining arithmetic structure, not merely the existing theorem name.
+Use deterministic implementation first, inference second, and autonomous theorem
+discovery third.
+
+Continue through failed conjectures, retain only true compiled structure, construct a
+strict descent or contradiction, inhabit `GoldenZeroSectorArithmeticExclusion`, and
+close `FLT5Target`.
+
+This is the final boss.  Proceed.
