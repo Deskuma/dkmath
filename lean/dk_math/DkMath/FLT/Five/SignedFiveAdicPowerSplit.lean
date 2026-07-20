@@ -11,6 +11,18 @@ import DkMath.FLT.Five.Reduction
 
 namespace DkMath.FLT.Five
 
+/-!
+# Removing the exact five-adic load
+
+The carrier and residual have gcd exactly five.  Removing it and splitting the remaining
+coprime fifth-power product yields
+
+`carrier = 5^4*a^5`, `residual = 5*b^5`, `distinguished = 5*a*b`,
+
+with positive coprime `a,b` and `5` absent from `b`.  These retained coprimality facts
+are the input for stripping the ramified element in the quadratic order.
+-/
+
 private theorem dvd_five_mul_left_pow_four_of_dvd_sum_of_dvd_sumGN5
     {u v q : ℕ} (hqsum : q ∣ u + v) (hqres : q ∣ SumGN5 u v) :
     q ∣ 5 * u ^ 4 := by
@@ -69,7 +81,7 @@ theorem signedFiveAdicPacket_gcd_eq_five
       omega
     exact Nat.dvd_gcd p.five_dvd_carrier h5res
 
-/-- Exact fifth-power split of the signed five-adic packet. -/
+/-- Exact fifth-power split after assigning the unique common factor five. -/
 structure SignedFiveAdicPowerSplit
     (u v w : ℕ) : Type where
   fiveAdic : SignedFiveAdicPacket u v w
@@ -217,7 +229,7 @@ noncomputable def signedFiveAdicPowerSplit_of_normalForm
     SignedFiveAdicPowerSplit u v w :=
   signedFiveAdicPowerSplit_of_packet (signedFiveAdicPacket_of_normalForm hNF)
 
-/-- Remaining arithmetic kernel after the exact power split. -/
+/-- Receiver contract for contradictions stated on the exact power-split packet. -/
 abbrev SignedFiveAdicPowerSplitCore : Prop :=
   ∀ {u v w : ℕ}, SignedFiveAdicPowerSplit u v w → False
 

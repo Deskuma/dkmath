@@ -6,6 +6,17 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenZeroSectorInversion
 
+/-!
+# Exact factor packets after zero-sector inversion
+
+The positive factors `A0` and `B0` are split according to their two-adic
+content. The odd branch gives the `(2,2)` allocation; the even branches give
+`(8,16)` or `(16,8)`. Each packet retains its source candidate, exact product,
+exact difference, coprimality after removing powers of two, and fifth-power
+factor data. The odd branch also exposes a modulo-eleven channel, but that
+channel is recorded as structure rather than asserted to be a contradiction.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSectorFactorization"
 
 namespace DkMath.FLT.Five
@@ -550,8 +561,7 @@ theorem nonempty_goldenZeroSectorFactorPacket
   ⟨goldenZeroSectorFactorPacket_of_inversion
     (goldenZeroSectorInversionPacket p)⟩
 
-/-- The explicit next arithmetic frontier after certified inversion and
-factorization. -/
+/-- Exclusion of every certified exact factor branch. -/
 abbrev GoldenZeroSectorFactorExclusion : Prop :=
   GoldenZeroSectorFactorPacket → False
 

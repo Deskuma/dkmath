@@ -6,6 +6,16 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenSectorArithmetic
 
+/-!
+# Primitive arithmetic in the zero unit sector
+
+For `gamma = (r,s)` with `beta = gamma^5`, the packet supplies
+`s * H(r,s) = -5^6 * a^10`, `goldenNorm gamma = ±b`, `gcd(a,b)=1`, and
+`5 ∤ b`. Coordinate primitivity makes `s` coprime to `H(r,s)`. The product
+therefore splits as `|s| = 5^6*c^10` and `|H(r,s)| = d^10`, which is the exact
+input to the inversion and descent layers.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSector"
 
 namespace DkMath.FLT.Five

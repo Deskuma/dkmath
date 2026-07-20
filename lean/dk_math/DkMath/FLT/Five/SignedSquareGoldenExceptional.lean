@@ -11,6 +11,18 @@ import DkMath.FLT.Five.SquareGoldenBridge
 
 namespace DkMath.FLT.Five
 
+/-!
+# The common signed square-to-norm packet
+
+Both signed five-adic orientations are represented by integral coordinates `M,N` with
+
+`GoldenNorm M N = 5*b^5`, `M-2N = 5^8*a^10`,
+
+and a retained square discriminant.  The sign of `N` distinguishes difference from sum
+factorization; the norm and boundary formulas are otherwise common.  This packet is the
+input from which the unique visible ramified factor above five is removed.
+-/
+
 /-- The sum residual is the golden norm with a negative cross-beam coordinate. -/
 theorem sumGN5_eq_goldenNorm_signed (u v : ℕ) :
     GoldenNorm
@@ -180,7 +192,7 @@ noncomputable def signedSquareGoldenExceptionalPacket_of_normalForm
   signedSquareGoldenExceptionalPacket_of_powerSplit
     (signedFiveAdicPowerSplit_of_normalForm hNF)
 
-/-- Remaining kernel after the signed five-adic and square-golden reductions meet. -/
+/-- Receiver contract for contradictions stated on the common signed square/norm packet. -/
 abbrev SignedSquareGoldenExceptionalCore : Prop :=
   ∀ {u v w : ℕ}, SignedSquareGoldenExceptionalPacket u v w → False
 

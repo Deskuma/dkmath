@@ -7,6 +7,20 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Five.SignedGoldenZeroSectorInversion
 import DkMath.FLT.Five.GoldenUnitClassification
 
+/-!
+# Infinite descent for the zero sector
+
+The lift `T(r,s) = (r^2+r*s+s^2, s^2)` has norm `H(r,s)`. A descent packet
+records `|s| = 5*t^5`, `H(r,s) = D^5`, primitive coordinates, and norm prime to
+five. Relative-prime factorization makes the lift a unit times a fifth power;
+the nonzero unit sectors are impossible, so it is an honest fifth power.
+Coprime splitting then constructs a new packet whose second-coordinate
+absolute value is strictly smaller. Strong induction closes the descent.
+
+The proof does not invoke the final FLT5 theorem or its receivers, so the
+closure is acyclic rather than circular.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSectorDescent"
 
 namespace DkMath.FLT.Five
@@ -52,6 +66,7 @@ structure GoldenZeroSectorDescentPacket where
     goldenFifthSndFactor base.fst base.snd = (D : ℤ) ^ 5
   five_not_dvd_norm : ¬ (5 : ℤ) ∣ goldenNorm base
 
+/-- The positive natural measure decreased by every certified descent step. -/
 def goldenZeroSectorDescentMeasure (p : GoldenZeroSectorDescentPacket) : ℕ :=
   p.base.snd.natAbs
 
@@ -496,7 +511,7 @@ theorem GoldenZeroSectorDescentPacket.strictDescent
     lift_eq := hroot
     measure_lt := p.fifthRoot_measure_lt gamma hroot }⟩
 
-/-- Infinite descent excludes every packet carrying the recursive fifth-power shape. -/
+/-- Strong induction excludes every packet carrying the recursive fifth-power shape. -/
 theorem goldenZeroSectorDescentPacket_false
     (p : GoldenZeroSectorDescentPacket) : False := by
   have noAt : ∀ n : ℕ, ∀ q : GoldenZeroSectorDescentPacket,
@@ -510,7 +525,7 @@ theorem goldenZeroSectorDescentPacket_false
           (by simpa [hq] using step.measure_lt) step.next rfl
   exact noAt (goldenZeroSectorDescentMeasure p) p rfl
 
-/-- Every certified arithmetic candidate enters the recursive descent invariant. -/
+/-- Every certified zero-sector candidate enters the recursive descent invariant. -/
 def goldenZeroSectorDescentPacket_of_candidate
     (p : GoldenZeroSectorCandidate) : GoldenZeroSectorDescentPacket where
   base := ⟨p.r, p.s⟩

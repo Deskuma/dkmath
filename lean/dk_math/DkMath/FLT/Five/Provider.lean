@@ -10,6 +10,15 @@ import DkMath.FLT.Five.BranchB
 
 namespace DkMath.FLT.Five
 
+/-!
+# Conditional clean-channel interfaces
+
+These declarations separate the elementary local contradiction from the problem of
+supplying a suitable prime.  They remain useful public interfaces, although the final
+unconditional FLT5 route proceeds through signed five-adic normalization and golden
+descent rather than assuming a global clean-channel provider.
+-/
+
 /-- A Branch-B counterexample receives at least one existential clean GN5 channel. -/
 abbrev BranchBCleanGN5ChannelProvider : Prop :=
   ∀ {x y z : ℕ},
@@ -20,8 +29,8 @@ abbrev BranchBCleanGN5ChannelProvider : Prop :=
 /--
 The unbundled inversion-escape kernel for Branch B.
 
-This is the exact research obligation: one prime enters `GN5`, avoids the gap,
-and fails to lift to its square.
+This is the unbundled form of the local data: one prime enters `GN5`, avoids the gap,
+and fails to lift to its square.  It is retained as a conditional reusable interface.
 -/
 abbrev BranchBNoLiftEscape : Prop :=
   ∀ {x y z : ℕ},

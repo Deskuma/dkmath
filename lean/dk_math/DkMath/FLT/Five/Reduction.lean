@@ -10,6 +10,15 @@ import DkMath.FLT.Five.GN5
 
 namespace DkMath.FLT.Five
 
+/-!
+# Primitive factor separation away from five
+
+For a primitive candidate the gap `g=z-y` is coprime to `y`.  The congruence
+`GN5(g,y) ≡ 5*y^4 (mod g)` then shows that any common prime of `g` and `GN5(g,y)`
+is five.  In Branch B, where `5` does not divide the gap, the two factors are coprime
+and their fifth-power product splits into two fifth powers.
+-/
+
 /-- A counterexample pack forces the second and result coordinates to be coprime. -/
 theorem coprime_y_z_of_counterexamplePack
     {x y z : ℕ} (hPack : CounterexamplePack x y z) :
@@ -48,8 +57,7 @@ theorem dvd_five_mul_y_pow_four_of_dvd_gap_of_dvd_GN5
       GN5 g y =
         g * (g ^ 3 + 5 * g ^ 2 * y + 10 * g * y ^ 2 + 10 * y ^ 3) +
           5 * y ^ 4 := by
-    unfold GN5
-    ring
+    exact GN5_eq_gap_mul_add_five_mul_y_pow_four g y
   have hqPrefix :
       q ∣ g * (g ^ 3 + 5 * g ^ 2 * y + 10 * g * y ^ 2 + 10 * y ^ 3) :=
     dvd_mul_of_dvd_left hqg _

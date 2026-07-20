@@ -11,7 +11,7 @@ import DkMath.FLT.Five.BranchB
 namespace DkMath.FLT.Five
 
 /-!
-# Exponent-five valuation checkpoint
+# Exponent-five valuation obstruction
 
 This module carries an independent `padicValNat` proof of the clean-channel
 obstruction:
@@ -21,7 +21,8 @@ complete fifth power  -> local load at least 5
 clean GN5 channel     -> local load at most 1
 ```
 
-No research-only valuation theorem is imported here.
+This is an independent proof of the same contradiction supplied directly in
+`CleanChannel.lean`; no research-only valuation theorem is imported here.
 -/
 
 /-- A prime divisor of a positive base contributes valuation at least five to its fifth power. -/

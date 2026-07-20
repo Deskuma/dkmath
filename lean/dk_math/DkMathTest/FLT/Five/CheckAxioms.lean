@@ -8,6 +8,9 @@ import DkMath.FLT.Five
 import DkMath.FLT.Five.Standalone
 
 #print axioms DkMath.FLT.Five.add_pow_five_eq_add_mul_GN5
+#print axioms DkMath.FLT.Five.GN5_eq_homogeneous_cyclotomic
+#print axioms DkMath.FLT.Five.GN5_eq_gap_mul_add_five_mul_y_pow_four
+#print axioms DkMath.FLT.Five.GN5_eq_g_pow_four_add_five_mul
 #print axioms DkMath.FLT.Five.GN5_one_one_not_fifth_power
 #print axioms DkMath.FLT.Five.CleanGN5Channel.not_sq_dvd_body
 #print axioms DkMath.FLT.Five.body5_eq_fifth_power_of_fermat
@@ -72,6 +75,11 @@ import DkMath.FLT.Five.Standalone
 
 #print axioms DkMath.FLT.Five.goldenConj_mul
 #print axioms DkMath.FLT.Five.goldenNorm_mul
+#print axioms DkMath.FLT.Five.golden_phi_sq
+#print axioms DkMath.FLT.Five.goldenConj_phi
+#print axioms DkMath.FLT.Five.goldenNorm_phi
+#print axioms DkMath.FLT.Five.goldenConj_ofInt
+#print axioms DkMath.FLT.Five.goldenNorm_ofInt
 #print axioms DkMath.FLT.Five.golden_tau_mul_conj
 #print axioms DkMath.FLT.Five.exists_goldenTau_factor_of_five_dvd
 #print axioms DkMath.FLT.Five.signedGoldenRamifierStrippedPacket_of_exceptional

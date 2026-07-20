@@ -10,11 +10,22 @@ import Mathlib
 
 namespace DkMath.FLT.Five
 
-/-- The exponent-five Fermat equation. -/
+/-!
+# Positive natural-number data for exponent five
+
+This module fixes the exact scope of the local development: positive natural numbers
+satisfying `x^5 + y^5 = z^5`.  `CounterexamplePack` is the primitive input used by the
+later gap, five-adic, and quadratic-order reductions.  It records coprimality only for
+the two left-hand bases; the other coprimality facts are derived from the equation.
+-/
+
+/-- The equation `x^5 + y^5 = z^5` over natural numbers.  Positivity is deliberately
+kept outside this definition and supplied by `CounterexamplePack` or `FLT5Target`. -/
 def Fermat5Equation (x y z : ℕ) : Prop :=
   x ^ 5 + y ^ 5 = z ^ 5
 
-/-- Positive coprime data for a candidate exponent-five counterexample. -/
+/-- A positive primitive candidate for the exponent-five equation.  The condition
+`Coprime x y` is the normalization needed by every subsequent local factorization. -/
 structure CounterexamplePack (x y z : ℕ) : Prop where
   hx : 0 < x
   hy : 0 < y

@@ -32,11 +32,26 @@ import DkMath.FLT.Five.SquareGoldenBridge
 import DkMath.FLT.Five.SquareGoldenNormalForm
 import DkMath.FLT.Five.Valuation
 
+/-!
+# Fermat's Last Theorem at exponent five
+
+The proof route is: normalize a positive solution to a primitive packet; choose
+one of the two signed gap orientations; split the associated golden-order
+factor into a unit and a fifth power; eliminate four nonzero unit classes; and
+exclude the zero class by a certified strict infinite descent. Conditional
+receiver theorems expose the unit-class and zero-sector boundaries, while
+`flt5Target` and `fermatFive_no_positive_solution` are unconditional endpoints.
+
+The scope is exactly positive natural numbers and exponent five. This module
+does not assert the general Fermat theorem, a novel historical proof, external
+peer review, or acceptance of the development beyond Lean's kernel checks.
+-/
+
 #print "file: DkMath.FLT.Five.Main"
 
 namespace DkMath.FLT.Five
 
-/-- Local exponent-five target, independent of the legacy general-`p ≥ 5` facade. -/
+/-- No positive natural numbers satisfy `x^5 + y^5 = z^5`. -/
 abbrev FLT5Target : Prop :=
   ∀ x y z : ℕ,
     0 < x →
@@ -44,23 +59,23 @@ abbrev FLT5Target : Prop :=
     0 < z →
     ¬ Fermat5Equation x y z
 
-/-- The two exact remaining arithmetic propositions suffice for the final target. -/
+/-- Conditional receiver exposing both unit classification and zero-sector arithmetic. -/
 theorem flt5Target_of_unitClasses_of_zeroArithmetic
     (hClasses : GoldenUnitClassesModFifth)
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
   positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic hClasses hArithmetic
 
-/-- Unit classification is unconditional, so only the zero-sector arithmetic remains. -/
+/-- Conditional receiver after the proved unit classification is supplied. -/
 theorem flt5Target_of_zeroArithmetic
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) : FLT5Target :=
   flt5Target_of_unitClasses_of_zeroArithmetic
     goldenUnitClassesModFifth hArithmetic
 
-/-- Fermat's equation at exponent five has no positive natural-number solution. -/
+/-- The unconditional positive-natural exponent-five endpoint. -/
 theorem flt5Target : FLT5Target :=
   flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
 
-/-- Explicit ordinary-argument form of the closed exponent-five theorem. -/
+/-- Ordinary-argument form: positive `x`, `y`, and `z` cannot solve the equation. -/
 theorem fermatFive_no_positive_solution
     (x y z : ℕ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
     ¬ Fermat5Equation x y z :=
@@ -83,26 +98,5 @@ theorem positiveFermat5Refuter_of_zeroArithmetic
     PositiveFermat5Refuter :=
   positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
     goldenUnitClassesModFifth hArithmetic
-
-/-!
-The current reduction tower routes a primitive exponent-five candidate through:
-
-- signed difference/sum Branch-A orientations,
-- an exact common five-adic packet,
-- the power split `carrier = 5^4*a^5`, `residual = 5*b^5`, and
-- a signed square-golden exceptional packet, and
-- an integral golden-order packet with the visible ramifier `tau` stripped.
-- certified relative primality of the stripped element and its conjugate,
-- unconditional fifth-power splitting up to a unit,
-- elimination of unit sectors one through four, and
-- the primitive and exact tenth-power split of the zero sector.
-
-The golden-unit orbit is unconditionally reduced to five classes modulo fifth
-powers.  Certified inversion and factorization expose the exact zero-sector
-arithmetic, and the golden lift supplies a strictly smaller packet of the same
-shape.  Infinite descent therefore proves `goldenZeroSectorArithmeticExclusion`,
-and `flt5Target` closes the exponent-five target while the conditional receivers
-above remain available as reusable interfaces.
--/
 
 end DkMath.FLT.Five

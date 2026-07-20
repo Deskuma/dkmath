@@ -10,6 +10,16 @@ import DkMath.FLT.Five.Reduction
 
 namespace DkMath.FLT.Five
 
+/-!
+# Elementary Branch-B fifth-power normal form
+
+This packet records the output of coprime factor separation: both the gap and the
+cyclotomic residual are fifth powers, their bases multiply to the original left-hand
+base, and all positivity and coprimality needed by the square/golden bridge is retained.
+The core declaration is a receiver interface, not an additional assumption of the
+completed public theorem.
+-/
+
 /-- Coprimality passes from the gap to the GN5 residual modulo `y`. -/
 theorem coprime_GN5_y_of_coprime
     {g y : ℕ} (hgy : Nat.Coprime g y) :

@@ -6,13 +6,24 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenZeroSector
 
+/-!
+# Receiver interfaces from zero-sector arithmetic to FLT5
+
+This module packages the forward implication chain without assuming its final
+arithmetic input: a zero-sector exclusion eliminates unit-times-fifth-power
+packets; the two gap orientations eliminate primitive counterexamples; and gcd
+normalization reduces every positive solution to such a packet. The conditional
+receivers remain public even though the imported final layer later proves their
+input, making each boundary independently reusable and auditable.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenClosure"
 
 namespace DkMath.FLT.Five
 
 /--
-The exact remaining zero-sector Diophantine proposition after the certified
-primitive and tenth-power splits.
+The zero-sector Diophantine proposition exposed by the certified primitive and
+tenth-power splits.
 -/
 abbrev GoldenZeroSectorArithmeticExclusion : Prop :=
   ∀ (r s : ℤ) (a b : ℕ),
@@ -85,7 +96,7 @@ theorem counterexamplePackRefuter_of_unitFifthPowerExclusion
   · exact branchB_false_of_unitFifthPowerExclusion hExclude p hyGap
   · exact branchB_false_of_unitFifthPowerExclusion hExclude p.swap hxGap
 
-/-- The two exact remaining arithmetic inputs suffice for all primitive packets. -/
+/-- Unit classification and zero-sector arithmetic suffice for all primitive packets. -/
 theorem counterexamplePackRefuter_of_unitClasses_of_zeroArithmetic
     (hClasses : GoldenUnitClassesModFifth)
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) :
@@ -146,7 +157,7 @@ theorem positiveFermat5Refuter_of_counterexamplePackRefuter
     ⟨x', y', z', p⟩
   exact hPrimitive p
 
-/-- The two exact arithmetic inputs suffice for the full positive target. -/
+/-- Unit classification and zero-sector arithmetic suffice for the full positive target. -/
 theorem positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
     (hClasses : GoldenUnitClassesModFifth)
     (hArithmetic : GoldenZeroSectorArithmeticExclusion) :

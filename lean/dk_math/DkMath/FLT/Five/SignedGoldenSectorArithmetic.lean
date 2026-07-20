@@ -6,11 +6,20 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenUnitClasses
 
+/-!
+# Arithmetic elimination of the nonzero unit sectors
+
+The second-coordinate formula for `phi^i * gamma^5`, reduced modulo five,
+shows that each sector `i = 1, 2, 3, 4` forces `5 ∣ goldenNorm gamma`. This
+contradicts the packet invariant `5 ∤ b`, because that norm is `b` up to sign.
+Only sector zero, where `beta = gamma^5`, survives for the separate descent.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenSectorArithmetic"
 
 namespace DkMath.FLT.Five
 
-/-- The quartic factor in the second coordinate of a golden fifth power. -/
+/-- The quartic `H(r,s)` in `(r + s*phi)^5.snd = 5*s*H(r,s)`. -/
 def goldenFifthSndFactor (r s : ℤ) : ℤ :=
   r ^ 4 + 2 * r ^ 3 * s + 4 * r ^ 2 * s ^ 2 +
     3 * r * s ^ 3 + s ^ 4
@@ -131,7 +140,7 @@ theorem signedGolden_nonzero_unitSector_false
     · norm_num at h53
     · exact hF
 
-/-- The exact arithmetic contract remaining after all nonzero sectors are removed. -/
+/-- The zero-sector contract left after sectors one through four are eliminated. -/
 abbrev SignedGoldenZeroSectorExclusion : Prop :=
   ∀ {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w)
     (gamma : GoldenInt),

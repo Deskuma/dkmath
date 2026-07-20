@@ -10,6 +10,16 @@ import DkMath.FLT.Five.SignedGoldenFifthPower
 
 namespace DkMath.FLT.Five
 
+/-!
+# Fifth-power coordinates and unit sectors
+
+For `gamma=p+q*φ`, this module names the two coordinate polynomials of `gamma^5`.
+It then computes the second coordinate after multiplication by the five representatives
+`1,φ,...,φ^4`.  These formulas turn unit classes modulo fifth powers into five explicit
+arithmetic sectors; “sector” here is purely an algebraic unit class, not a geometric or
+analytic region.
+-/
+
 /-- First-coordinate polynomial of `(p + q*phi)^5`. -/
 def goldenFifthFstPoly (p q : ℤ) : ℤ :=
   p ^ 5 + 10 * p ^ 3 * q ^ 2 + 10 * p ^ 2 * q ^ 3 +
@@ -20,11 +30,13 @@ def goldenFifthSndPoly (p q : ℤ) : ℤ :=
   5 * q * (p ^ 4 + 2 * p ^ 3 * q + 4 * p ^ 2 * q ^ 2 +
     3 * p * q ^ 3 + q ^ 4)
 
+/-- Exact first coordinate of `gamma^5`. -/
 theorem goldenPow_five_fst (gamma : GoldenInt) :
     (goldenPow gamma 5).fst = goldenFifthFstPoly gamma.fst gamma.snd := by
   simp [goldenPow, goldenMul, goldenOne, goldenFifthFstPoly]
   ring
 
+/-- Exact second coordinate of `gamma^5`; it contains the visible factor `5*q`. -/
 theorem goldenPow_five_snd (gamma : GoldenInt) :
     (goldenPow gamma 5).snd = goldenFifthSndPoly gamma.fst gamma.snd := by
   simp [goldenPow, goldenMul, goldenOne, goldenFifthSndPoly]
