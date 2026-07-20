@@ -1,5 +1,52 @@
 # FLT5 cp-006 — GN5 / FLT5 mathematician-facing docstring and explanatory API pass
 
+*complite*
+
+完了しました。FLT5 cp-006 は、カテゴリ全体を横断する Outcome B として仕上げています。🎗️
+
+- コミット: `6c2c2a49 docs(flt5): document the closed exponent-five proof`
+- ブランチ: `hackathon/publish-gn5-flt5-260721-v0`
+- 変更: 36 files、496 insertions、100 deletions
+- worktree: clean、origin より 1 commit ahead
+
+主な成果:
+
+- GN5 から五進分解、GoldenInt、unit sector、zero-sector inversion、factorization、strict descent、最終定理まで、全主要モジュールへ英語 module docstring を追加
+- [Main.lean](/lean/dk_math/DkMath/FLT/Five/Main.lean) に証明経路と公開 endpoint の説明を配置
+- 正確なスコープを明記:
+  - 正の自然数
+  - 指数 5
+  - 一般 FLT、歴史的新規性、外部査読・受理は主張しない
+- `GoldenInt` は `φ² = φ + 1` による直接座標モデル `ℤ[φ]` であり、体の整数環との形式的同型は主張しないと明記
+- unit sector は幾何学的な角度ではなく、5 個の代数的 unit class であると明記
+- “future”, “remaining obstruction”, “missing theorem” など、証明完了後に不正確となった checkpoint-era 文言を更新
+- 既存証明を再利用する canonical helper theorem を 8 個追加:
+  - GN5 標準恒等式 3 個
+  - `φ`、共役、ノルム、整数埋め込みの基本式 5 個
+- [CheckAxioms.lean](/lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean) に追加 API の公理監査を登録
+- 新しい `sorry`、`admit`、`axiom`、`native_decide` はありません
+- 独自公理の混入なし。公理監査結果は既存と同じ標準的な `propext`、`Classical.choice`、`Quot.sound` の範囲です
+
+検証結果:
+
+- `lake build DkMath.FLT.Five` — 成功、8281 jobs
+- `lake build DkMath.FLT.Five.Main` — 成功、8280 jobs
+- `lake build DkMathTest.FLT.Five.CheckAxioms` — 成功、8283 jobs
+- `git diff --check` — 成功
+
+cp-006 の説明上の未解決事項はありません。次の最小ドキュメント checkpoint を設けるなら、公開 theorem/API の索引を README 形式で生成する作業になります。今回、証明本体の構造には不要な変更を加えていません。
+
+GN5_eq_homogeneous_cyclotomic
+GN5_eq_gap_mul_add_five_mul_y_pow_four
+GN5_eq_g_pow_four_add_five_mul
+golden_phi_sq
+goldenConj_phi
+goldenNorm_phi
+goldenConj_ofInt
+goldenNorm_ofInt
+
+---
+
 Date: 2026-07-21  
 Repository: `Deskuma/dkmath`  
 Working branch: `hackathon/publish-gn5-flt5-260721-v0`  
