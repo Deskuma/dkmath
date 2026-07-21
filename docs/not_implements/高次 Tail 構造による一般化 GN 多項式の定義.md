@@ -75,9 +75,7 @@ $$
 ### 4.2. \(r = 1\)（標準 GN）
 
 $$
-GN^{(1)}_d(x,u) =
-\sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}
-= GN_d(x,u)
+GN^{(1)}_d(x,u)=\sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}=GN_d(x,u)
 $$
 
 したがって

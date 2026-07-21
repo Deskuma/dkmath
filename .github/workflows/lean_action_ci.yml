@@ -2,8 +2,23 @@ name: Lean CI
 
 on:
   push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "lean/dk_math/**"
+      - ".github/workflows/lean_action_ci.yml"
+
   pull_request:
+    paths:
+      - "lean/dk_math/**"
+      - ".github/workflows/lean_action_ci.yml"
+
   workflow_dispatch:
+
+concurrency:
+  group: lean-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -24,3 +39,5 @@ jobs:
           build: true
           test: false
           lint: false
+          use-github-cache: true
+          use-mathlib-cache: true

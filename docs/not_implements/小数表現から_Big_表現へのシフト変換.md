@@ -63,21 +63,13 @@ $$
 二項展開
 
 $$
-(P+U)^d
-=
-P^d
-+
-\sum_{k=1}^{d-1}\binom{d}{k}P^{d-k}U^k
-+
-U^d
+(P+U)^d=P^d+\sum_{k=1}^{d-1}\binom{d}{k}P^{d-k}U^k+U^d
 $$
 
 において、Beam は
 
 $$
-\mathrm{Beam}(P,U;d)
-:=
-\sum_{k=1}^{d-1}\binom{d}{k}P^{d-k}U^k
+\mathrm{Beam}(P,U;d):=\sum_{k=1}^{d-1}\binom{d}{k}P^{d-k}U^k
 $$
 
 である。
