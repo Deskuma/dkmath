@@ -604,7 +604,7 @@ index 2b5e92e4..51e2d670 100644
 @@ -32,6 +32,78 @@ noncomputable def canonicalInternalSaturatedSpareIndices
      (n : OddNat) (q m : ℕ) : Finset ℕ :=
    (canonicalSaturatedSpareSuccessorIndices n q m).erase m
- 
+
 +/-- Internal spare tokens whose successor has zero signed drift. -/
 +noncomputable def canonicalInternalSaturatedZeroSpareIndices
 +    (n : OddNat) (q m : ℕ) : Finset ℕ :=
@@ -683,7 +683,7 @@ index 2b5e92e4..51e2d670 100644
 @@ -278,6 +350,233 @@ theorem card_canonicalInternalSaturatedNegativeIndices_le_negativeMass
    rw [hones, hcard] at hunit
    exact hunit.trans hwindow
- 
+
 +/-! ## Positive-spare absorption in the existing selected carrier -/
 +
 +/-- Actual same-block drift-image incidences over the positive blocks in the
@@ -912,12 +912,12 @@ index 2b5e92e4..51e2d670 100644
 +  omega
 +
  /-! ## Current ownership surface and remaining carrier mismatch -/
- 
+
  /-- Current-window ownership after internal negative cancellation.  The spare
 @@ -316,8 +615,48 @@ theorem CanonicalOpenPositiveQueueExcursion.queue_le_globalSelected_add_internal
    unfold canonicalSaturatedTokenCount at hsplit
    omega
- 
+
 +/-- Improved current-window ownership: positive-successor spare tokens are
 +absorbed by unused incidences of their positive successor blocks.  Only the
 +genuinely zero-drift spare class remains explicit. -/
@@ -963,11 +963,11 @@ index 2b5e92e4..51e2d670 100644
 +The stronger target without every spare residual cannot be obtained by
  the requested contribution-preserving embedding into
  `CanonicalGlobalSelectedPressureCarrier n q m` from the current APIs.
- 
+
 @@ -334,9 +673,18 @@ Therefore removing `internalSpareCount` requires one of two new contracts:
  * prove that zero-drift spare successors cannot occur in the intended open
    excursions.
- 
+
 -Neither contract is currently available.  Treating zero-spare as if it were
 -in the positive-only carrier would be a type-invalid ownership claim, so this
 -module stops at the theorem above.
@@ -984,7 +984,7 @@ index 2b5e92e4..51e2d670 100644
 +selected-arrival carrier admitting zero-drift blocks; it must not weaken the
 +positive-only index contract proved here.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-347.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-347.md
 new file mode 100644
@@ -1096,7 +1096,7 @@ index e95a2578..20c9e5b0 100644
 @@ -22,6 +22,15 @@ from pathlib import Path
  ROOT_MAX = 16383
  BLOCK_LIMIT = 4096
- 
+
 +# cp-347 diagnostic only.  These counters observe spare successors while a
 +# root installs a new record window; they deliberately do not change the CSV
 +# surface inherited from cp-345.
@@ -1106,7 +1106,7 @@ index e95a2578..20c9e5b0 100644
 +    "first_zero": None,
 +}
 +
- 
+
  def v2(value: int) -> int:
      assert value > 0
 @@ -242,6 +251,21 @@ def audit_root(root: int) -> AuditRow:
@@ -1143,6 +1143,6 @@ index e95a2578..20c9e5b0 100644
 +    print(f"first_zero_drift_spare={SPARE_SIGN_DIAGNOSTIC['first_zero']}")
      for row in records[:10]:
          print(row)
- 
+
 ````
 `````

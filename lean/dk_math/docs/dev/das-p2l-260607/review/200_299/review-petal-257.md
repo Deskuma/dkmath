@@ -217,7 +217,7 @@ index 0b001a6e..1ce48b95 100644
 @@ -677,6 +677,105 @@ theorem SourcePressureOrientedNeighborBoxState.before_of_sorted
    sourcePressureAdjacentPairInList_before_of_sorted hsorted
      hbox.orderedAdjacentPairInList
- 
+
 +/--
 +Address-level projection of `before_of_sorted`.
 +
@@ -319,7 +319,7 @@ index 0b001a6e..1ce48b95 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-257.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-257.md
 new file mode 100644
 index 00000000..32dea017

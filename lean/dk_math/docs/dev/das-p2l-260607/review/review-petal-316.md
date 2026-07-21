@@ -1150,17 +1150,17 @@ index 9d2f638a..2a4da15a 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentRepayment
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentDepthLedger.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentDepthLedger.lean
 index 313d15bd..3f065caf 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentDepthLedger.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentDepthLedger.lean
 @@ -390,6 +390,9 @@ section SevenDepthRegression
- 
+
  private def sevenDepthOdd : OddNat := mkOddNat 7 (by decide)
- 
+
 +/-- Public root used by the exact seven depth and scalar repayment regressions. -/
 +def sevenDepthRegressionRoot : OddNat := sevenDepthOdd
 +
@@ -1170,7 +1170,7 @@ index 313d15bd..3f065caf 100644
 @@ -565,6 +568,16 @@ theorem sevenDepthAllocation_right_card :
  theorem sevenDepthAllocation_card : sevenDepthAllocation.card = 3 := by
    decide
- 
+
 +/-- Public-root form of the first seven endpoint drift. -/
 +theorem endpointAccountingTerm_sevenDepthRegressionRoot_zero :
 +    endpointAccountingTerm sevenDepthRegressionRoot 0 = 1 := by
@@ -1182,7 +1182,7 @@ index 313d15bd..3f065caf 100644
 +  simpa [sevenDepthRegressionRoot, sevenDepthOdd] using endpointAccountingTerm_seven_one
 +
  end SevenDepthRegression
- 
+
  /-! ## Audited candidate queue and the corrected frontier
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean
 new file mode 100644

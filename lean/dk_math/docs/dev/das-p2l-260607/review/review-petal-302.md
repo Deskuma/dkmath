@@ -952,9 +952,9 @@ index 2c03783b..9c081108 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge
  import DkMath.Collatz.PetalBridge.FloatWindow.PaymentMultiplicityBridge
 +import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean
 new file mode 100644
 index 00000000..dbc3a8ef

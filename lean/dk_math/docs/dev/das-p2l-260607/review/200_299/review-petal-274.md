@@ -229,7 +229,7 @@ index 3143d18c..02c0eaac 100644
 @@ -1279,6 +1279,33 @@ theorem SourcePressureForwardPairComparisonState.left_next_boundary_lt_right_cen
    have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
    omega
- 
+
 +/--
 +Boundary-sign pair surface bundled with the first interference gap.
 +

@@ -209,7 +209,7 @@ index 6d485d5d..9981cedd 100644
 @@ -489,6 +489,63 @@ def SourcePressureOrientedNeighborBoxState
      SourcePressureBeamCenteredLocalPulseBox n k r L W ∧
        SourcePressureBeamCenteredLocalPulseBox n k r L W'
- 
+
 +/-- Project the oriented diagnostic component from a two-endpoint box state. -/
 +theorem SourcePressureOrientedNeighborBoxState.diagnostic
 +    {n : OddNat} {k r : ℕ}
@@ -269,7 +269,7 @@ index 6d485d5d..9981cedd 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-254.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-254.md
 new file mode 100644
 index 00000000..6b20795b

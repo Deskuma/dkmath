@@ -728,7 +728,7 @@ index ea835388..91fabcb9 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalAllOnesDrift.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalAllOnesDrift.lean
 index 548e633c..0df2c0a0 100644
@@ -737,7 +737,7 @@ index 548e633c..0df2c0a0 100644
 @@ -32,18 +32,11 @@ noncomputable def allOnesOdd (L : ℕ) (hL : 0 < L) : OddNat := by
  @[simp] theorem allOnesOdd_val (L : ℕ) (hL : 0 < L) :
      (allOnesOdd L hL).1 = 2 ^ L - 1 := rfl
- 
+
 -/-- Every first canonical block starts at the root itself. -/
 -theorem canonicalBlockStartState_zero (n : OddNat) :
 -    canonicalBlockStartState n 0 = n.1 := by
@@ -752,7 +752,7 @@ index 548e633c..0df2c0a0 100644
 -  rw [canonicalBlockStartState_zero]
 +  rw [canonicalBlockStartState_zero_eq_root]
    rfl
- 
+
  /-- The first canonical block of `2^L - 1` has exact length `L`. -/
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointConservation.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointConservation.lean
 index c8eec04b..55bae3bd 100644
@@ -761,7 +761,7 @@ index c8eec04b..55bae3bd 100644
 @@ -245,9 +245,41 @@ theorem rootwiseEndpointDriftBound_iff_length_le_absorption_add
      have habsorb := hB m
      omega
- 
+
 +/-! ## Cumulative width boundedness
 +
 +This is deliberately stronger than pointwise endpoint-drift boundedness.  It
@@ -793,7 +793,7 @@ index c8eec04b..55bae3bd 100644
 +  omega
 +
  /-! ## Scaled cumulative absorption -/
- 
+
 -/-- Scaling preserves the exact window budget over `Int`. -/
 +/-- Scaling preserves the exact window budget over `Int`.  This is algebraic
 +transport of the conservation identity, not a spiral-growth coefficient
@@ -804,10 +804,10 @@ index c8eec04b..55bae3bd 100644
 @@ -311,12 +343,12 @@ theorem widthGrowth_nonpos_of_length_le_absorption
    apply widthGrowth_le_of_length_le_absorption_add (C := 0)
    simpa using habsorb
- 
+
 -/-! ## Canonical counter candidate
 +/-! ## Zero-reserve diagnostic counter
- 
+
 -The following counter has the exact recurrence required by the generic
 -counter API.  Its nonnegativity is exactly the missing width-prefix control,
 -so no certificate is constructed here: proving the local guard from the
@@ -817,12 +817,12 @@ index c8eec04b..55bae3bd 100644
 +credit negative immediately.  It remains useful as the exact negative of
 +cumulative width growth.
  -/
- 
+
  /-- Cumulative absorbed budget minus cumulative block length. -/
 @@ -359,6 +391,21 @@ theorem canonicalEndpointCounterCredit_succ
    rw [canonicalBlockStartState_succ_eq_nextStartState]
    ring
- 
+
 +/-- After one block, zero-reserve credit is exactly negative initial drift. -/
 +theorem canonicalEndpointCounterCredit_one
 +    (n : OddNat) :
@@ -844,7 +844,7 @@ index c8eec04b..55bae3bd 100644
 @@ -369,4 +416,59 @@ theorem endpointAccountingTerm_le_counterCredit_iff_next_nonneg
    rw [canonicalEndpointCounterCredit_succ]
    omega
- 
+
 +/-! ## Reserved endpoint credit -/
 +
 +/-- Root-dependent reserve plus negative cumulative canonical width growth. -/
@@ -1090,7 +1090,7 @@ index 448f5a43..6db18cbd 100644
 @@ -53,6 +53,34 @@ theorem mem_canonicalHighDriftBlocksUpTo_iff_budget
    ext m
    simp
- 
+
 +/-- Extending the horizon by one either inserts exactly the new terminal
 +index or leaves the finite carrier unchanged. -/
 +theorem canonicalHighDriftBlocksUpTo_succ
@@ -1125,7 +1125,7 @@ index 448f5a43..6db18cbd 100644
 @@ -77,6 +105,18 @@ noncomputable def canonicalHighDriftEventCount
      (n : OddNat) (K M : ℕ) : ℕ :=
    (canonicalHighDriftBlocksUpTo n K M).card
- 
+
 +/-- Exact one-step event-count update for the finite observation horizon. -/
 +theorem canonicalHighDriftEventCount_succ
 +    (n : OddNat) (K M : ℕ) :

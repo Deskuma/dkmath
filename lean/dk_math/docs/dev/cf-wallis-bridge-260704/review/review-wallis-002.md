@@ -195,7 +195,7 @@ index 288964c9..965eb525 100644
 @@ -78,6 +78,64 @@ def centralOddRatioPartialQ (m : ℕ) : ℚ :=
  def mirrorOddRatioPartialQ (m : ℕ) : ℚ :=
    ∏ k ∈ Finset.range m, evenCenterQ k / oddRightQ k
- 
+
 +/-- The central binomial ratio `2^(2*m) / Nat.choose (2*m) m`, viewed in `ℚ`. -/
 +def centralRatioQ (m : ℕ) : ℚ :=
 +  (2 ^ (2 * m) : ℚ) / (Nat.choose (2 * m) m : ℚ)
@@ -260,7 +260,7 @@ index 288964c9..965eb525 100644
 @@ -99,4 +157,13 @@ theorem centralOdd_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
      centralOddRatioPartialQ m * mirrorOddRatioPartialQ m = cosmicPartialQ m := by
    rw [centralOdd_mul_mirror_eq_wallisPartialQ, wallisPartialQ_eq_cosmicPartialQ]
- 
+
 +/--
 +The proof-note form of the finite Wallis-Cosmic Petal bridge:
 +the central binomial ratio times the mirror product equals the cosmic gap product.

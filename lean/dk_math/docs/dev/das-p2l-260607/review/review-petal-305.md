@@ -1046,9 +1046,9 @@ index 9c081108..9b39edb5 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.PaymentMultiplicityBridge
  import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlock
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean
 index 9a137152..e5dafafa 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean
@@ -1056,7 +1056,7 @@ index 9a137152..e5dafafa 100644
 @@ -341,6 +341,21 @@ theorem shiftedExtraPaymentCapacity_eq_sum_range
              (orbitWindowHeight_eq_s_iterateT n (a + len)).symm
        rw [hheight]
- 
+
 +/--
 +Exact shifted width ledger.
 +
@@ -1100,14 +1100,14 @@ index 9a137152..e5dafafa 100644
 @@ -530,20 +534,94 @@ theorem carryTwoPaymentClaimFiber_card_lt_capacity_iff_bitWidth_paymentBlock_gt
    have hledger := bitWidth_iterateT_paymentBlock_eq_claimFiber_card n j h
    omega
- 
+
 -/--
 -Exact shifted width ledger.
 +/-- Signed claim-minus-capacity balance of a canonical payment block. -/
 +noncomputable def paymentBlockSignedDrift
 +    (n : OddNat) (j : ℕ) (_h : (floatGrowthDebtFiberAt n j).Nonempty) : ℤ :=
 +  (carryTwoPaymentClaimFiberAt n j).card - extraPaymentCapacityAt n j
- 
+
 -This is the existing prefix ledger, based at `iterateT a n`; no new induction
 -over a segment is required.
 --/
@@ -1202,7 +1202,7 @@ index 9a137152..e5dafafa 100644
 +      rw [Nat.mod_mod_of_dvd _ (by norm_num : 2 ∣ 4)]
 +      exact hmodTwo
 +    omega
- 
+
  /-!
  ## Ledger frontier
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean

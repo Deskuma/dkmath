@@ -641,7 +641,7 @@ index 74e8e554..704752ef 100644
 @@ -1738,6 +1738,80 @@ theorem sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff
    rw [sourcePressureIntervalPulseAddressListHasSortedBeforeFailure_pair_iff]
    rfl
- 
+
 +/--
 +Failure-facing constructor for an explicit local-island witness pair.
 +

@@ -651,7 +651,7 @@ index 50d04fee..6c608538 100644
 @@ -476,6 +476,86 @@ theorem extraPaymentCapacityOn_universalPaymentBlock_eq_endpoint_capacity
      exact False.elim (hj (Finset.mem_Icc.mpr
        ⟨(mem_orbitPaymentSourceFiberAt_iff.mp hstartmem).1, le_rfl⟩))
- 
+
 +/-- Endpoint arithmetic for a nonempty universal payment block. -/
 +theorem universalPaymentBlockStart_add_length_eq_endpoint_succ
 +    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :

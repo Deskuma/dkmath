@@ -653,7 +653,7 @@ index 4994e729..c56af501 100644
 @@ -591,6 +591,22 @@ theorem sourcePressureSignChangeUp_of_localIsland
      have hidx : r + (j - 1) + 1 = r + j := by omega
      simpa [hidx] using hpos
- 
+
 +/--
 +A local pressure island gives a strict margin jump at its left edge.
 +
@@ -680,7 +680,7 @@ index 4b1455b1..30e0ce5e 100644
 @@ -174,6 +174,73 @@ theorem orbitWindowResidualAllOnesDepthSeq_take_get?_eq_some
    exact orbitWindowResidualAllOnesDepthSeq_get?_eq_some n
      (Nat.lt_of_lt_of_le hi hr)
- 
+
 +/-
 +Checkpoint 133 keeps the post-refactor source of truth in code comments.
 +
@@ -758,7 +758,7 @@ index 03f37330..7fe5d344 100644
 @@ -87,6 +87,22 @@ theorem orbitWindowResidualShape_eq_oddOrbitLabel_succ
    rw [rawGnomonResidualShape_eq_T_val (iterateT i n)]
    rw [iterateT_succ_eq_T_iterateT]
- 
+
 +/--
 +Residual all-ones depth is the all-ones depth of the next accelerated label.
 +
@@ -777,11 +777,11 @@ index 03f37330..7fe5d344 100644
 +
  /--
  The residual-shape sequence is exactly the shifted odd-label sequence.
- 
+
 @@ -113,6 +129,21 @@ theorem orbitWindowResidualShapeSeq_get?_eq_some_shifted_label
    rw [orbitWindowResidualShapeSeq_eq_shifted_oddOrbitLabels]
    simp [hi]
- 
+
 +/--
 +Reading the all-ones-depth residual profile can be stated directly in terms of
 +the next accelerated label.
@@ -799,7 +799,7 @@ index 03f37330..7fe5d344 100644
 +
  /--
  Window-level raw gnomon factorization.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-133.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-133.md
 new file mode 100644
 index 00000000..c51a48d2

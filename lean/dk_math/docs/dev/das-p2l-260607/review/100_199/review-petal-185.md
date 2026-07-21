@@ -454,7 +454,7 @@ index ed8b4519..f41c2920 100644
 @@ -880,6 +880,92 @@ theorem
    rcases h.exists_pair with ⟨A, B, hin, hrev, _hbudget, _hneg, hlen⟩
    exact ⟨A, B, hin, hrev, hlen⟩
- 
+
 +/--
 +The empty explicit witness list cannot carry a recovered accounted-family
 +diagnostic, because it contains no adjacent pair address.

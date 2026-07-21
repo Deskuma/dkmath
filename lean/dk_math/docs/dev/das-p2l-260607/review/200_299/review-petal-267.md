@@ -206,7 +206,7 @@ index 350af6d6..c8f1d7a4 100644
 @@ -1082,6 +1082,28 @@ theorem SourcePressureForwardPairComparisonState.center_targets_pair
      ⟨_hmemR, _hprevR, _hcenterR, htargetR, _hnextR⟩
    exact ⟨htargetL, htargetR, h.val_lt⟩
- 
+
 +/--
 +Bundle the positive-center and addressed-target pair surfaces into one
 +caller-facing theorem.

@@ -454,7 +454,7 @@ index f9b27bc2..338bcc7d 100644
 @@ -645,6 +645,124 @@ theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_noAdjac
    sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_overlap
      h hno.not_obstruction
- 
+
 +/--
 +Carrier saying that an explicit witness list contains one adjacent pair whose
 +reversed order yields a pair-local accounted interval family with budget
@@ -575,7 +575,7 @@ index f9b27bc2..338bcc7d 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-180.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-180.md
 new file mode 100644
 index 00000000..d67bca19

@@ -1054,9 +1054,9 @@ index cbf51d25..b179d5d1 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.OrbitBalance
  import DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
 +import DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/Core.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/Core.lean
 index 980308a0..1de252fe 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/Core.lean
@@ -1064,7 +1064,7 @@ index 980308a0..1de252fe 100644
 @@ -119,6 +119,29 @@ theorem stateUpperCarry_mul_pow_le_threeNPlusOne_and_lt_succ_mul_pow
    · apply (Nat.div_lt_iff_lt_mul (pow_pos (by norm_num) (bitWidth n))).1
      simp [stateUpperCarry, upperCarry3n1]
- 
+
 +/--
 +The own-width carry is two exactly when the raw word crosses the next binary
 +boundary.  This is the exact upper-window threshold, not an approximation.
@@ -1307,7 +1307,7 @@ index 05455675..9c14e382 100644
 @@ -55,6 +55,31 @@ structure DyadicFloatObservation where
    /-- Lower 2-adic height of `3*n+1`. -/
    height : ℕ
- 
+
 +/--
 +Value-free dyadic signature.
 +
@@ -1339,7 +1339,7 @@ index 05455675..9c14e382 100644
 @@ -68,6 +93,72 @@ noncomputable def dyadicFloatObservation (q r n : ℕ) :
    carry := stateUpperCarry n
    height := rawHeightLabel n
- 
+
 +/-- Construct the value-free dyadic signature of a state. -/
 +noncomputable def dyadicFloatSignature (q r n : ℕ) :
 +    DyadicFloatSignature where

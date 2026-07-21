@@ -293,7 +293,7 @@ index aa05e911..9b922793 100644
 @@ -1781,6 +1781,63 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.center_separator_surface
                W.val + 2 ≤ W'.val :=
    h.localPacking.center_separator_surface
- 
+
 +/--
 +Finite-window center/separator/center surface used immediately before counting.
 +
@@ -357,7 +357,7 @@ index aa05e911..9b922793 100644
 @@ -2677,4 +2734,92 @@ theorem sourcePressureBeamSeedState_to_finiteWindowPackingSeparatorState_or_pair
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
      hlo_all hhi_all
- 
+
 +/--
 +Failure resolution exposes an in-window positive/separator/positive surface or
 +a concrete adjacent-pair overlap obstruction.

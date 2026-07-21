@@ -370,7 +370,7 @@ index 0d22b927..9e09a277 100644
 @@ -1432,4 +1432,157 @@ theorem not_sourcePressureBeamAddressedDepthTarget_localIslandWitness_intervalPu
    not_sourcePressureBeamAddressedDepthTarget_intervalPulse_left
      (sourcePressureIntervalPulseAddress_of_localIslandWitness W)
- 
+
 +/-
 +Beam crossing-edge target.
 +

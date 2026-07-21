@@ -367,7 +367,7 @@ index 886d6195..110cce1f 100644
 @@ -378,6 +378,40 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
        (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.two_iff_pairDiagnostic.mp
          htail)
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Iff form of the fully bounded three-to-pairs normalization.
@@ -408,7 +408,7 @@ index 886d6195..110cce1f 100644
 @@ -508,6 +542,50 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
      · exact Or.inr (Or.inl h23)
      · exact Or.inr (Or.inr h34)
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Iff form of the fully bounded four-to-pairs normalization.
@@ -459,7 +459,7 @@ index 886d6195..110cce1f 100644
 @@ -709,6 +787,25 @@ theorem
    sourcePressureLocalIslandWitnessList_failure_two_exists_reversed_of_noAdjacentOverlap
      h hno
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Two-element consumer alias matching the `pairDiagnostic_cases` naming style.
@@ -485,7 +485,7 @@ index 886d6195..110cce1f 100644
 @@ -764,6 +861,30 @@ theorem
    sourcePressureLocalIslandWitnessList_failure_three_diagnostic_head_or_tail_of_noAdjacentOverlap
      h hno
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Three-element consumer form normalized all the way to the fixed finite
@@ -516,7 +516,7 @@ index 886d6195..110cce1f 100644
 @@ -821,6 +942,33 @@ theorem
    sourcePressureLocalIslandWitnessList_failure_four_diagnostic_head_or_tail_of_noAdjacentOverlap
      h hno
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Four-element consumer form normalized all the way to the fixed finite

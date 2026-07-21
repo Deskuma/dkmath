@@ -633,7 +633,7 @@ index 0ff44d4a..c7691986 100644
 @@ -680,4 +680,117 @@ theorem SourcePressureCanonicalNonterminalPairCoverageInWindow.certifies
    mem_sourcePressureCanonicalLeftWitnessesInWindow.2
      ⟨W', h W W' hpair hlo hhi⟩
- 
+
 +/-!
 +## Internal pairs and the named packing family
 +-/

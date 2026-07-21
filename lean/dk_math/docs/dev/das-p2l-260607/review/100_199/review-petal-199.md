@@ -37,7 +37,7 @@ SHA256 は、ぬしの提示した値と一致しておる。
 57344b6bc175251a31f555bc2761c515aad54ce1421431399a654a6c9824dbd8  __snapshot-dk_math-lean-code-260706-1126.tar.gz
 ```
 
-手元で tar を展開し、`DkMath/Collatz/PetalBridge` 周辺を実コードとして見た。`README.md` / `AGENT.md` / `SUMMARY.md` の前提どおり、実装確認は snapshot / all.lean / summary を優先する方針で進める、という理解も改めて固定しておく。`SUMMARY.md` でも `__dkmath-all.lean.txt` は全 Lean コード参照用、`__theorems-heading.txt` や `__sorries.txt` などは補助インデックスとして位置づけられておる。  
+手元で tar を展開し、`DkMath/Collatz/PetalBridge` 周辺を実コードとして見た。`README.md` / `AGENT.md` / `SUMMARY.md` の前提どおり、実装確認は snapshot / all.lean / summary を優先する方針で進める、という理解も改めて固定しておく。`SUMMARY.md` でも `__dkmath-all.lean.txt` は全 Lean コード参照用、`__theorems-heading.txt` や `__sorries.txt` などは補助インデックスとして位置づけられておる。
 
 ## 確認した Collatz / PetalBridge の現況
 

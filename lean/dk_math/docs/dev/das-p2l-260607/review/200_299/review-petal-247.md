@@ -211,7 +211,7 @@ index 07bb129e..4d89c77e 100644
 @@ -422,4 +422,35 @@ theorem sourcePressureRecoveredAdjacentState_to_exists_orientedNeighborDiagnosti
      ⟨A, B,
        sourcePressureOrientedNeighborDiagnosticState_of_forward hin hdiag⟩
- 
+
 +/--
 +Failure resolution splits into either an oriented neighbor diagnostic or an
 +adjacent-overlap state.

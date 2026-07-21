@@ -233,7 +233,7 @@ index 90c9d983..f9ca219b 100644
 @@ -1390,6 +1390,41 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface
      ⟨_, _, hnextL, hprevR, _, _, _, _, _⟩
    exact ⟨hnextL, hprevR, h.left_next_boundary_le_right_previous_boundary⟩
- 
+
 +/--
 +The boundary corridor is either a contact corridor or a genuine gap corridor.
 +

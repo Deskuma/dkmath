@@ -321,7 +321,7 @@ index 1d65aff4..aa05e911 100644
 @@ -960,6 +960,24 @@ def SourcePressureLocalPackingSeparatorState
        m < r + W'.val ∧
          SourcePressureMarginInt n k m ≤ 0
- 
+
 +/--
 +Finite-window local packing separator state.
 +
@@ -346,7 +346,7 @@ index 1d65aff4..aa05e911 100644
 @@ -1703,6 +1721,97 @@ theorem SourcePressureLocalPackingSeparatorState.center_separator_surface
      ⟨hcenterL, h.separator_nonpos, hcenterR, h.left_lt_separator,
        h.separator_lt_right, h.two_le_value_gap⟩
- 
+
 +/-- Project the underlying local packing separator state. -/
 +theorem SourcePressureFiniteWindowPackingSeparatorState.localPacking
 +    {n : OddNat} {k r : ℕ}
@@ -444,7 +444,7 @@ index 1d65aff4..aa05e911 100644
 @@ -2489,4 +2598,83 @@ theorem sourcePressureBeamSeedState_to_centerSeparatorSurface_or_pairOverlap
    sourcePressureFailureResolutionState_to_centerSeparatorSurface_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches a finite-window packing separator state or a
 +concrete adjacent-pair overlap obstruction.

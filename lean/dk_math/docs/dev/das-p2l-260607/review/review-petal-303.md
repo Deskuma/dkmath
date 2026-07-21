@@ -1739,7 +1739,7 @@ index dbc3a8ef..964ca9c3 100644
 @@ -244,6 +244,35 @@ theorem iterateT_add_eq_iterateT_from_shift
          _ = iterateT len (iterateT (a + 1) n) := by
            rw [iterateT_succ_eq_T_iterateT]
- 
+
 +/-- Observation height in a shifted orbit is the global height at the shifted index. -/
 +theorem orbitWindowHeight_shift_eq
 +    (n : OddNat) (a t : ℕ) :

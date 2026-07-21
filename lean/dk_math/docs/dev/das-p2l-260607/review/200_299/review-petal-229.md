@@ -395,7 +395,7 @@ index 36d77a15..fa72bfcd 100644
 @@ -282,5 +282,97 @@ theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_fail
                    (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
    exact exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed h
- 
+
 +/--
 +An addressed adjacent pair preserves the left witness identity for the full
 +local singleton diagnostic.
@@ -488,7 +488,7 @@ index 36d77a15..fa72bfcd 100644
 +            · exact List.mem_cons_of_mem W1 (ih htail)
 +  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-228.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-228.md
 new file mode 100644

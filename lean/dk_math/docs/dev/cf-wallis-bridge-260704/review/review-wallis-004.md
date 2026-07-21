@@ -140,12 +140,12 @@ index f9bd1818..1bca4106 100644
 +++ b/lean/dk_math/DkMath/Pascal.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Pascal.WallisCosmicPetalBridge
 +import DkMath.Pascal.WallisLimitBridge
- 
+
  #print "file: DkMath.Pascal"
- 
+
 diff --git a/lean/dk_math/DkMath/Pascal/WallisCosmicPetalBridge.lean b/lean/dk_math/DkMath/Pascal/WallisCosmicPetalBridge.lean
 index d0530451..ed20e07d 100644
 --- a/lean/dk_math/DkMath/Pascal/WallisCosmicPetalBridge.lean
@@ -153,7 +153,7 @@ index d0530451..ed20e07d 100644
 @@ -44,6 +44,42 @@ def wallisFactorQ (k : ℕ) : ℚ :=
  def cosmicFactorQ (k : ℕ) : ℚ :=
    (cosmicBodyQ k + 1) / cosmicBodyQ k
- 
+
 +/-- The left odd factor is positive. -/
 +theorem oddLeftQ_pos (k : ℕ) : 0 < oddLeftQ k := by
 +  unfold oddLeftQ
@@ -196,7 +196,7 @@ index d0530451..ed20e07d 100644
 @@ -56,6 +92,43 @@ theorem wallisFactorQ_eq_cosmicFactorQ (k : ℕ) :
    unfold wallisFactorQ cosmicFactorQ cosmicBodyQ
    rw [cosmic_square_odd_bridge_Q]
- 
+
 +/-- The cosmic factor is the gap ratio `1 + 1/N_k`. -/
 +theorem cosmicFactorQ_eq_one_add_inv_body (k : ℕ) :
 +    cosmicFactorQ k = 1 + 1 / cosmicBodyQ k := by
@@ -240,7 +240,7 @@ index d0530451..ed20e07d 100644
 @@ -70,6 +143,66 @@ theorem wallisPartialQ_eq_cosmicPartialQ (m : ℕ) :
    unfold wallisPartialQ cosmicPartialQ
    exact Finset.prod_congr rfl fun k _ => wallisFactorQ_eq_cosmicFactorQ k
- 
+
 +/-- The finite Wallis partial product is positive. -/
 +theorem wallisPartialQ_pos (m : ℕ) :
 +    0 < wallisPartialQ m := by
@@ -307,7 +307,7 @@ index d0530451..ed20e07d 100644
 @@ -82,6 +215,26 @@ def mirrorOddRatioPartialQ (m : ℕ) : ℚ :=
  def centralRatioQ (m : ℕ) : ℚ :=
    (2 ^ (2 * m) : ℚ) / (Nat.choose (2 * m) m : ℚ)
- 
+
 +/-- The central odd half-product is positive. -/
 +theorem centralOddRatioPartialQ_pos (m : ℕ) :
 +    0 < centralOddRatioPartialQ m := by

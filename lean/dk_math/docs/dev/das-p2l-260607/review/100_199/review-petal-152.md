@@ -485,7 +485,7 @@ index 48dc302f..68e327d3 100644
 @@ -106,4 +106,52 @@ theorem collatz_one_four_two_one_scaled_boundary_exists :
      3 * 1 + 1 = 2 ^ 2 * 1 := by
    norm_num
- 
+
 +/-- No positive scaled one-step cycle exists at a height other than `2`. -/
 +theorem collatz_scaled_one_cycle_no_wrong_height
 +    {n h : ℕ}
@@ -542,7 +542,7 @@ index 051364ac..f840477c 100644
 @@ -713,4 +713,153 @@ def sourcePressureAccountedIntervalFamily_pair_of_before
        subst C
        exact SourcePressureAccountedIntervalsDisjoint.of_before hAB)
- 
+
 +/--
 +Adjacent sortedness for an explicit accounted-interval list.
 +

@@ -1,0 +1,1 @@
+These are compiled Lean declarations. The normalized certificate combines determinant one and non-injectivity. The three-point theorem records distinctness and evaluation. The audit reports propext, Classical choice, and Quot sound for the Jacobian certificate; the generic collision consequence has no axioms.

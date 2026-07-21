@@ -469,7 +469,7 @@ index 5f613584..9721501e 100644
 @@ -19,6 +19,19 @@ identities.  It does not assert maximality, uniqueness, coverage, prefix
  behavior, or Collatz convergence.
  -/
- 
+
 +/--
 +Accumulated source-pressure net drop over a finite interval.
 +
@@ -489,7 +489,7 @@ index 5f613584..9721501e 100644
 @@ -270,4 +283,186 @@ theorem sourcePressureIntervalPulseAddress_accounting_profile
      sourcePressureIntervalPulseAddress_sum_netDrop_neg A,
      sourcePressureIntervalPulseAddress_sum_netDrop_le_neg_start_margin A⟩
- 
+
 +/-- Interval-net-drop wrapper for the endpoint-difference accounting identity. -/
 +theorem sourcePressureIntervalPulseAddress_intervalNetDrop_eq_after_sub_start
 +    {n : OddNat} {k r : ℕ}

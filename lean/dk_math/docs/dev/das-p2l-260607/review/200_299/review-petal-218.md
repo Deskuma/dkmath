@@ -327,7 +327,7 @@ index 6e347e8e..3b13eac4 100644
 @@ -1088,4 +1088,38 @@ theorem sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left
    rw [sourcePressureMargin_next_eq_massBalanceRight_sub_left haddr]
    omega
- 
+
 +/--
 +Local three-way Beam decision surface at an addressed depth.
 +

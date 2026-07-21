@@ -241,7 +241,7 @@ index 84497e3a..39b8b4cb 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/CHECKPOINTS.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/CHECKPOINTS.md
 @@ -456,17 +456,18 @@ A stopped checkpoint does not need to be converted into a completed checkpoint b
- 
+
  | Checkpoint | Class | Goal | Status | Report |
  |---|---|---|---|---|
 -| `hack-000` | documentation | establish project scaffold and stable context | `IN_PROGRESS` | `report-hack-000.md` |
@@ -264,9 +264,9 @@ index 84497e3a..39b8b4cb 100644
 +| `hack-009a` | integration | unified formal and visual demo | `ACCEPTED` | `report-hack-009a.md` |
 +| `hack-010a` | submission | reproducible submission package | `ACCEPTED` | `report-hack-010a.md` |
 +| `hack-010b` | closure | final handoff and project closure | `COMPLETED` | `report-hack-010b.md` |
- 
+
  Statuses must be updated after each accepted review.
- 
+
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/FINAL_HANDOFF.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/FINAL_HANDOFF.md
 new file mode 100644
 index 00000000..3202eac3
@@ -471,7 +471,7 @@ index f841f2dc..c000901d 100644
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/PROJECT.md
 @@ -781,34 +781,26 @@ It is not part of the main theorem and does not claim Collatz convergence.
  Completed:
- 
+
  ```text
 -hackathon branch created
 -initial Lean module scaffold created
@@ -487,10 +487,10 @@ index f841f2dc..c000901d 100644
 +corrected submission package accepted
 +reproducible final video verified
  ```
- 
+
 -Next:
 +External publication tasks remaining:
- 
+
  ```text
 -ROADMAP.md
 -MATHEMATICAL_CONTRACT.md
@@ -508,39 +508,39 @@ index f841f2dc..c000901d 100644
 +upload the accepted final video
 +complete the hackathon platform submission form
  ```
- 
+
 -After the documentation surface is stable, the first Codex session will be repository-audit-only.
 -
 -No theorem implementation should begin before that audit is reviewed.
 +Future bounded inverse-projection research remains deferred and must begin from
 +the explicit resume point recorded in `FINAL_HANDOFF.md`; it is not part of the
 +completed submission MVP.
- 
+
  ---
- 
+
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md
 index 97096f84..980c9409 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md
 @@ -442,9 +442,9 @@ It is not the main theorem of this hackathon submission and no Collatz convergen
- 
+
  ## Current Status
- 
+
 -The initial repository scaffold is complete.
 +The hackathon implementation and submission package are complete.
- 
+
 -Created Lean placeholders:
 +Accepted Lean modules:
- 
+
  ```text
  DkMath/Hackathon/FinitePrimeEscape.lean
 @@ -452,20 +452,20 @@ DkMath/Hackathon/CosmicCompletion.lean
  DkMath/Hackathon/Demo.lean
  ```
- 
+
 -Created hackathon documentation directory:
 +Final submission package:
- 
+
  ```text
 -docs/hackathon/cosmic-formula-inversion-260715/
 +submission/output/DkMathCosmicPromoFinal.mp4
@@ -548,7 +548,7 @@ index 97096f84..980c9409 100644
 +submission/narration.srt
 +submission/build_submission.sh
  ```
- 
+
 -The next stage is documentation completion followed by a repository-audit-only Codex session.
 -
 -Codex must not begin theorem implementation until:
@@ -562,75 +562,75 @@ index 97096f84..980c9409 100644
 +remain: optional narration and authentic footage, upload, and platform form
 +completion. See `FINAL_HANDOFF.md` for the final artifact provenance, commands,
 +checksums, and the exact future inverse-projection resume point.
- 
+
  ---
- 
+
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/ROADMAP.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/ROADMAP.md
 index 85dfd065..b6434388 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/ROADMAP.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/ROADMAP.md
 @@ -225,7 +225,7 @@ stable project documentation prefix
  ### Status
- 
+
  ```text
 -not started
 +accepted — report-hack-001.md
  ```
- 
+
  ### Purpose
 @@ -336,7 +336,7 @@ reviewed repository reuse map
  ### Status
- 
+
  ```text
 -not started
 +accepted — report-hack-002.md
  ```
- 
+
  ### Purpose
 @@ -447,7 +447,7 @@ verified finite prime escape API
  ### Status
- 
+
  ```text
 -not started
 +accepted — report-hack-003.md
  ```
- 
+
  ### Purpose
 @@ -574,7 +574,7 @@ verified Cosmic Formula completion facade
  ### Status
- 
+
  ```text
 -not started
 +accepted — report-hack-004.md
  ```
- 
+
  ### Purpose
 @@ -1068,7 +1068,7 @@ optional verified DkReal reconstruction layer
- 
+
  ```text
  required
 -not started
 +accepted — report-hack-008a.md
  ```
- 
+
  ### Purpose
 @@ -1170,7 +1170,7 @@ rendered primary visual demonstration
- 
+
  ```text
  required
 -not started
 +accepted — report-hack-009a.md
  ```
- 
+
  ### Purpose
 @@ -1235,7 +1235,7 @@ integrated project demo
- 
+
  ```text
  required
 -not started
 +accepted — report-hack-010a.md
  ```
- 
+
  ### Purpose
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-010b.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-010b.md
 new file mode 100644

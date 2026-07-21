@@ -571,7 +571,7 @@ index 86da8e3d..cccfa93c 100644
 @@ -341,6 +341,17 @@ def SourcePressureSignChangeUp
    SourcePressureMarginInt n k (r + j) ≤ 0 ∧
      0 < SourcePressureMarginInt n k (r + j + 1)
- 
+
 +/--
 +Downward sign change of the source-pressure margin between adjacent depths.
 +
@@ -585,11 +585,11 @@ index 86da8e3d..cccfa93c 100644
 +
  /--
  Named pressure-margin jump between adjacent pressure depths.
- 
+
 @@ -886,6 +897,70 @@ theorem sourcePressureCrosses_of_localIsland_left
        n k r (j - 1)).1
      (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
- 
+
 +/--
 +A local pressure island produces a downward sign change at its right edge.
 +-/
@@ -656,7 +656,7 @@ index 86da8e3d..cccfa93c 100644
 +
  /--
  Package a named margin jump and a strict retention drop.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-139.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-139.md
 new file mode 100644
 index 00000000..706735f5

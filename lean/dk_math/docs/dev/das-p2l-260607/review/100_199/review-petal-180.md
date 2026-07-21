@@ -437,7 +437,7 @@ index ce2e4107..f9b27bc2 100644
 @@ -432,6 +432,55 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovere
    · exact Or.inl ⟨A, B, hin, hrecovered⟩
    · exact Or.inr hobs
- 
+
 +/--
 +Named no-adjacent-overlap condition for an explicitly supplied witness list.
 +
@@ -493,7 +493,7 @@ index ce2e4107..f9b27bc2 100644
 @@ -570,6 +619,32 @@ theorem sourcePressureLocalIslandWitnessList_failure_exists_recovered_of_no_over
    · exact hrec
    · exact False.elim (hno hobs)
- 
+
 +/--
 +Named no-adjacent-overlap version of the recovered-pair projection.
 +
@@ -522,7 +522,7 @@ index ce2e4107..f9b27bc2 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-179.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-179.md
 new file mode 100644
 index 00000000..eecb855c

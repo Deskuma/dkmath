@@ -665,7 +665,7 @@ index c9116481..04055305 100644
 @@ -2236,6 +2236,119 @@ theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.symm_iff
    ⟨SourcePressureLocalIslandWitnessPairOverlapObstruction.symm,
      SourcePressureLocalIslandWitnessPairOverlapObstruction.symm⟩
- 
+
 +/--
 +Adjacent overlap obstruction for an explicit local-island witness list.
 +

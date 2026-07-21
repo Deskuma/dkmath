@@ -157,7 +157,7 @@ index d254ec6c..c2b3b4de 100644
 @@ -497,4 +497,32 @@ theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pa
        (sourcePressureAdjacentOverlapState_to_exists_pairOverlapObstruction
          hoverlap)
- 
+
 +/--
 +Sorted failure reaches the same refined diagnostic/obstruction split.
 +

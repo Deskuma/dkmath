@@ -456,7 +456,7 @@ index c016eb3e..6e347e8e 100644
 @@ -994,4 +994,98 @@ theorem sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left
    have hiff := sourcePressureMargin_next_nonpos_iff_massBalanceRight_le_left haddr
    exact hiff.2 hineq
- 
+
 +/--
 +Exact local relation between the next margin and the named mass-balance sides.
 +

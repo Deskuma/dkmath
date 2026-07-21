@@ -345,7 +345,7 @@ index 6dc8096e..1d65aff4 100644
 @@ -1679,6 +1679,30 @@ theorem SourcePressureLocalPackingSeparatorState.two_le_index_gap
      r + W.val + 2 ≤ r + W'.val :=
    h.forward.two_le_index_gap
- 
+
 +/--
 +Center/separator/center surface of the local packing state.
 +
@@ -376,7 +376,7 @@ index 6dc8096e..1d65aff4 100644
 @@ -2378,4 +2402,91 @@ theorem sourcePressureBeamSeedState_to_localPackingSeparatorState_or_pairOverlap
    sourcePressureFailureResolutionState_to_localPackingSeparatorState_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches a center/separator/center local-packing surface or
 +a concrete adjacent-pair overlap obstruction.

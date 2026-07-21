@@ -706,7 +706,7 @@ index ff4acbfa..39af924c 100644
 +      (sourcePressureNonposPositionsInWindow n k lo hi).card + 1 +
 +        (sourcePressureUndiagnosedInternalPairFamily L lo hi).card :=
 +  sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal hsorted
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-296.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-296.md
 new file mode 100644

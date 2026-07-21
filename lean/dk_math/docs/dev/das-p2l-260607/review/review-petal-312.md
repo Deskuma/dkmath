@@ -839,9 +839,9 @@ index 9b39edb5..c2ac9ab8 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlock
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentFamily
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean
 index 7ded9378..ba2557d2 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean
@@ -849,7 +849,7 @@ index 7ded9378..ba2557d2 100644
 @@ -820,6 +820,195 @@ theorem bitWidth_iterateT_lt_of_universalPaymentBlock_not_carryTwo_or_height_ne_
      (universalPaymentBlockSignedDriftAt_neg_of_not_carryTwo_or_height_ne_two_of_growthDebtFiber_eq_empty
        n j h hempty hneq)
- 
+
 +/-!
 +## Delayed-debt necessity and complete-claim decomposition
 +-/
@@ -1041,7 +1041,7 @@ index 7ded9378..ba2557d2 100644
 +
  /-!
  ## Canonical endpoint sequence
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentFamily.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentFamily.lean
 new file mode 100644
 index 00000000..41ffaa27

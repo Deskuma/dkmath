@@ -605,7 +605,7 @@ index c56af501..861db9f4 100644
 @@ -270,6 +270,55 @@ def SourcePressureSignChangeUp
    SourcePressureMarginInt n k (r + j) ≤ 0 ∧
      0 < SourcePressureMarginInt n k (r + j + 1)
- 
+
 +/--
 +Named pressure-margin jump between adjacent pressure depths.
 +
@@ -657,11 +657,11 @@ index c56af501..861db9f4 100644
 +
  /--
  The first selected source-pressure depth.
- 
+
 @@ -569,6 +618,15 @@ theorem sourcePressureMargin_lt_of_signChangeUp
    rcases h with ⟨hle, hpos⟩
    omega
- 
+
 +/--
 +An upward sign change is a named pressure-margin jump.
 +-/
@@ -677,7 +677,7 @@ index c56af501..861db9f4 100644
 @@ -607,6 +665,19 @@ theorem sourcePressureMargin_lt_of_localIsland_left
    sourcePressureMargin_lt_of_signChangeUp n k r (j - 1)
      (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
- 
+
 +/--
 +A local pressure island gives a named pressure-margin jump at its left edge.
 +

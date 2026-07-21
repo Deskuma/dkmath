@@ -682,7 +682,7 @@ index de423879..68f8525e 100644
 @@ -328,17 +328,98 @@ theorem orbitExactDepth_eq_endpoint_sub_add_one_of_mem_universalPaymentBlock
      dsimp [b] at hstart hijlt hbtarget hdepthi ⊢
      omega
- 
+
 +/-- Canonical payment targets are nondecreasing across one orbit step. -/
 +theorem orbitPaymentTarget_le_succ
 +    (n : OddNat) (i : ℕ) :
@@ -786,7 +786,7 @@ index de423879..68f8525e 100644
 +complete claim fibers and endpoint capacity, prove their direct ledger, then
 +retain an explicit unfinished suffix in finite-prefix decompositions.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-307.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-307.md
 new file mode 100644

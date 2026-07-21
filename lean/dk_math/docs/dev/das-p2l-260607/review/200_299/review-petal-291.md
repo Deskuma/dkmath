@@ -653,7 +653,7 @@ index 2eb81693..0ff44d4a 100644
 @@ -340,4 +340,344 @@ def SourcePressureCanonicalLeftCoverageInWindow
      0 < SourcePressureMarginInt n k (r + W.val) →
      ∃ W', SourcePressureCanonicalFiniteWindowPackingState L lo hi W W'
- 
+
 +/-!
 +## Positive centers and the explicit coverage residue
 +

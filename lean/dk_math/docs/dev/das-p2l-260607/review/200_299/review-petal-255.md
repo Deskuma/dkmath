@@ -216,7 +216,7 @@ index 9981cedd..21fb2ed5 100644
 @@ -546,6 +546,64 @@ theorem SourcePressureOrientedNeighborBoxState.adjacentPair
      SourcePressureLocalIslandWitnessAdjacentPairInList L W W' :=
    h.diagnostic.adjacentPair
- 
+
 +/-
 +Order-projection note for the next comparison layer.
 +
@@ -277,7 +277,7 @@ index 9981cedd..21fb2ed5 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-255.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-255.md
 new file mode 100644
 index 00000000..5fde706f

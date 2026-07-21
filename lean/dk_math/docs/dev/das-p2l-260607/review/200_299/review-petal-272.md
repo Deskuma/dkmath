@@ -226,7 +226,7 @@ index 9caa0104..f80a22c7 100644
 @@ -1213,6 +1213,44 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_separation_sur
    exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, hlt,
      h.center_index_ne⟩
- 
+
 +/--
 +First interference theorem for a forward pair comparison state.
 +

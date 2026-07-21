@@ -182,7 +182,7 @@ index ac4bbc57..4d639001 100644
 @@ -995,6 +995,56 @@ theorem SourcePressureForwardPairComparisonState.not_reverse_box
      ¬ SourcePressureOrientedNeighborBoxState L W' W :=
    h.forward.not_reverse_box
- 
+
 +/-- The left endpoint of a forward pair comparison state is a member of the list. -/
 +theorem SourcePressureForwardPairComparisonState.left_mem
 +    {n : OddNat} {k r : ℕ}

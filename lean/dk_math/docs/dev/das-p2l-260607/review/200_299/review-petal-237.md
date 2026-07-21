@@ -398,7 +398,7 @@ index c1ce02e7..688be983 100644
 @@ -40,6 +40,54 @@ noncomputable def SourcePressureMarginInt
    (2 * orbitWindowContinuationSiblingMassPow2 n k r : ℤ) -
      (orbitWindowRetentionMassPow2 n k r : ℤ)
- 
+
 +/--
 +Finite local Big upper bound for source pressure margin.
 +
@@ -449,7 +449,7 @@ index c1ce02e7..688be983 100644
 +
  /--
  Integer-valued retention drop across adjacent pressure depths.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-236.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-236.md
 new file mode 100644
 index 00000000..5d0ce652

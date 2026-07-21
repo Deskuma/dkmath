@@ -298,20 +298,20 @@ index 5118810e..a1b2d041 100644
 --- a/lean/dk_math/DkMath/Collatz/docs/Collatz-Overview.md
 +++ b/lean/dk_math/DkMath/Collatz/docs/Collatz-Overview.md
 @@ -105,7 +105,9 @@ height information without immediately leaving finite arithmetic.
- 
+
  ## Observation Windows
- 
+
 -`DkMath.Collatz.PetalBridge` defines a finite observation window:
 +`DkMath.Collatz.PetalBridge` is now a public aggregator over a split
 +`PetalBridge/` subpackage.  The basic layer defines a finite observation
 +window:
- 
+
  ```lean
  OrbitWindow n k = Finset.range k
 @@ -132,6 +134,26 @@ with:
- 
+
  This connects the local finite profile to the existing accumulated-height API.
- 
+
 +The current implementation keeps the window language modular:
 +
 +```text
@@ -333,12 +333,12 @@ index 5118810e..a1b2d041 100644
 +only keeps the base accounting layer readable.
 +
  ## From Counts To Distributions
- 
+
  The file then counts how often a finite window enters a chosen residue cell:
 @@ -189,6 +211,29 @@ tail occupation count.
- 
+
  This turns pointwise residue arithmetic into count-level channel flow.
- 
+
 +## Pressure Accounting And Local Obstructions
 +
 +The pressure route now has a separate explicit-witness accounting surface.
@@ -363,7 +363,7 @@ index 5118810e..a1b2d041 100644
 +union accounting, or Collatz convergence.
 +
  ## What This Does Not Yet Do
- 
+
  This layer does not prove global convergence.
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-Package-Structure.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-Package-Structure.md
 index f3832a35..fba664e2 100644
@@ -397,11 +397,11 @@ index f3832a35..fba664e2 100644
 +DkMath.Collatz.PetalBridge.Collision
  DkMath.Collatz.Collatz2K26
  ```
- 
+
 @@ -89,11 +110,43 @@ theme that later appears in `PetalBridge`:
  differences concentrate around 2-adic boundaries and singular residue ridges
  ```
- 
+
 +## `GnomonEvaluation.lean`
 +
 +This file contains the low-level odd gnomon reading of one accelerated Collatz
@@ -426,14 +426,14 @@ index f3832a35..fba664e2 100644
 +out of the finite observation-window package.
 +
  ## `PetalBridge.lean`
- 
+
 -This is the current active bridge layer.
 +This is now the public aggregator for the split PetalBridge package.
 +
 +It imports the finite observation, residue, pressure, accounting, obstruction,
 +one-cycle, valuation-flow, and collision modules.  Users that want the full
 +surface can continue importing:
- 
+
 -It packages the accelerated orbit as a Petal-style finite observation window:
 +```lean
 +import DkMath.Collatz.PetalBridge
@@ -441,13 +441,13 @@ index f3832a35..fba664e2 100644
 +
 +The split package packages the accelerated orbit as a Petal-style finite
 +observation window:
- 
+
  ```lean
  OrbitWindow
 @@ -121,6 +174,57 @@ pow2ChannelFlow_of_pointwise
- 
+
  This file is where Collatz dynamics are read as finite channel movement.
- 
+
 +## `PetalBridge/` Subpackage
 +
 +The subpackage is organized as follows:
@@ -500,7 +500,7 @@ index f3832a35..fba664e2 100644
 +accounting layer maintainable.
 +
  ## `Collatz2K26.lean`
- 
+
  This is the integration file for the 2026 Collatz cartography route.
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Guide.md
 index 043bda6f..0b6f7cb3 100644
@@ -509,7 +509,7 @@ index 043bda6f..0b6f7cb3 100644
 @@ -43,6 +43,39 @@ residual shape
  `PetalBridge` should not absorb that low-level vocabulary.  Its job is to
  observe finite windows of those shapes and compare finite channel masses.
- 
+
 +Checkpoint `176-ref-01` clarifies the implementation boundary further:
 +`DkMath.Collatz.PetalBridge` is a public aggregator over a split subpackage.
 +The split is refactor-only, but it is important for finding the right theorem
@@ -544,12 +544,12 @@ index 043bda6f..0b6f7cb3 100644
 +adjacent-diagnosis facts back into `PressureAccounting`.
 +
  ## Basic Objects
- 
+
  ### `OrbitWindow`
 @@ -316,6 +349,21 @@ sourcePressureSignChangeUp_of_localIsland
  These names are for reading scan output.  They do not assert maximality,
  uniqueness, unconditional prefix behavior, or a global pressure shape theorem.
- 
+
 +The later accounting modules preserve the same discipline.  Explicit local
 +island witnesses can be converted to interval-pulse addresses, sorted when an
 +ordered non-overlap proof is supplied, or diagnosed when adjacent sortedness
@@ -566,7 +566,7 @@ index 043bda6f..0b6f7cb3 100644
 +accounting theorem without additional hypotheses.
 +
  Checkpoint 131 refines the Python wording:
- 
+
  ```text
 diff --git a/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md b/lean/dk_math/DkMath/Collatz/docs/Collatz-PetalBridge-Status.md
 index 4b5e6fd5..03afb89a 100644
@@ -575,7 +575,7 @@ index 4b5e6fd5..03afb89a 100644
 @@ -82,6 +82,35 @@ The bridge file is:
  DkMath.Collatz.PetalBridge
  ```
- 
+
 +As of checkpoint `176-ref-01`, this is a public aggregator over a split
 +subpackage rather than one large implementation file.  The active modules are:
 +
@@ -606,12 +606,12 @@ index 4b5e6fd5..03afb89a 100644
 +meaning of the pressure accounting API.
 +
  Checkpoint 125 clarifies the module boundary:
- 
+
  ```text
 @@ -305,6 +334,45 @@ ResidualAllOnesProfile
  PressureDecayProfile
  ```
- 
+
 +Checkpoint `176-ref-01` closes the first pressure-accounting refactor target.
 +The formerly oversized accounting file was split into:
 +
@@ -652,7 +652,7 @@ index 4b5e6fd5..03afb89a 100644
 +for the explicit adjacent witness list.
 +
  The first theorem set is deliberately thin:
- 
+
  ```lean
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-176-ref-02.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-176-ref-02.md
 new file mode 100644

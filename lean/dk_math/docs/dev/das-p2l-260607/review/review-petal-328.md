@@ -948,9 +948,9 @@ index 4d41fe3e..063715f9 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 @@ -1635,6 +1635,83 @@ noncomputable def oneEmbedding_canonicalSelectedDriftSpareCarrier
- 
+
  /-! ### Claim-hole accounting normal form -/
- 
+
 +/-- The deepest block depth is exactly the block's start time. -/
 +theorem canonicalPaymentSourceAtDepth_length_eq_startTime
 +    (n : OddNat) (k : ℕ) :
@@ -1034,7 +1034,7 @@ index 4d41fe3e..063715f9 100644
 @@ -1682,6 +1759,45 @@ theorem canonicalBlockClaimCount_add_claimHoles_card
    have hL := one_le_canonicalBlockLength n k
    omega
- 
+
 +/-- The successor of a saturated block always misses its deepest claim.
 +
 +The missing depth is structural: it is the successor start coordinate, whose
@@ -1080,7 +1080,7 @@ index 4d41fe3e..063715f9 100644
 @@ -2546,6 +2662,128 @@ def CanonicalLengthOneBalancedCarrySuccessor
        canonicalBlockTerminalValuation n (k + 1) = 1 ∧
          canonicalBlockClaimCount n (k + 1) = 1
- 
+
 +/-- A length-one successor of a saturated block has no marked claim depths. -/
 +theorem CanonicalSaturatedBorderBlock.next_claimCount_eq_zero_of_length_one
 +    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
@@ -1213,7 +1213,7 @@ index 94626a32..14cbd294 100644
 @@ -226,6 +226,56 @@ theorem canonicalBlockStartState_succ_eq_nextStartState
    rw [canonicalBlockStartTime_eq_universalPaymentBlockStart,
      universalPaymentBlockStart_paymentEndpointSeq_succ]
- 
+
 +/--
 +The block following a saturated block starts with own-width carry one.
 +
@@ -1272,9 +1272,9 @@ index ff76568f..1293f9fc 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-327.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-327.md
 @@ -89,6 +89,14 @@ Lean proves:
- 
+
  ## Genuine obstruction
- 
+
 +> **cp-328 correction.** This diagnosis is superseded.  The predicate
 +> `CanonicalLengthOneBalancedCarrySuccessor` is empty: a saturated
 +> predecessor forces own-width carry one at the successor start, which is the

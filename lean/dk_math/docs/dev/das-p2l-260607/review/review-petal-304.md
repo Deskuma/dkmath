@@ -833,18 +833,18 @@ index 964ca9c3..9a137152 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/PaymentBlockBridge.lean
 @@ -253,7 +253,7 @@ theorem orbitWindowHeight_shift_eq
- 
+
  /-- Total extra-height capacity over an explicit finite source set. -/
  noncomputable def extraPaymentCapacityOn (n : OddNat) (S : Finset ℕ) : ℕ :=
 -  ∑ i ∈ S, orbitWindowHeight n i - 1
 +  S.sum fun i => orbitWindowHeight n i - 1
- 
+
  /-- Endpoint arithmetic for a nonempty debt-supported payment block. -/
  theorem floatPaymentBlockStart_add_endpointLength_eq_endpoint_succ
 @@ -283,6 +283,253 @@ noncomputable def shiftedExtraPaymentCapacity
      (n : OddNat) (a len : ℕ) : ℕ :=
    sumExtraHeight (iterateT a n) len
- 
+
 +/-- Local offsets of carry-two sources in the shifted segment `[a, a + len)`. -/
 +noncomputable def shiftedCarryTwoOffsets
 +    (n : OddNat) (a len : ℕ) : Finset ℕ := by
@@ -1094,11 +1094,11 @@ index 964ca9c3..9a137152 100644
 +
  /--
  Exact shifted width ledger.
- 
+
 @@ -301,14 +548,15 @@ theorem bitWidth_iterateT_add_shiftedExtraPaymentCapacity_eq_shiftedCarryTwo
  /-!
  ## Ledger frontier
- 
+
 -The block and its complete first-claim fiber are now canonical, and the
 -existing prefix ledger has been repackaged as a shifted segment ledger.
 -To obtain the proposed endpoint-only block identity, the remaining task is a
@@ -1117,7 +1117,7 @@ index 964ca9c3..9a137152 100644
 +individual height units, assert coverage of arbitrary orbit intervals, or
 +derive an ambient pressure conclusion without further hypotheses.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-304.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-304.md
 new file mode 100644

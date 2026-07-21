@@ -1939,7 +1939,7 @@ index cba3919e..cc65d56e 100644
 @@ -376,6 +376,193 @@ theorem sourcePressurePositiveWitnessesInWindow_center_margin_pos
    have hlocal := (sourcePressureLocalIsland_iff_margin n k r W.val).1 W.property
    exact hlocal.2.1
- 
+
 +/--
 +Two strictly ordered local-island witnesses have centers separated by at
 +least two pressure-depth positions.

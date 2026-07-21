@@ -420,7 +420,7 @@ index 9ff320d4..15d8bbea 100644
 @@ -334,6 +334,45 @@ theorem sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
              simp [hB]
            · exact List.mem_cons_of_mem W1 (ih htail)
- 
+
 +/--
 +An adjacent-overlap obstruction exposes one addressed neighboring pair and its
 +pair-local overlap obstruction.
@@ -470,7 +470,7 @@ index b919ca09..7e88c827 100644
 @@ -350,5 +350,49 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPai
    exact sourcePressureBeamPulse_witness_singleton_full_diagnostic
      (sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hin)
- 
+
 +/--
 +An adjacent-overlap obstruction exposes a branch-specific left witness with
 +the full singleton pulse diagnostic.
@@ -515,7 +515,7 @@ index b919ca09..7e88c827 100644
 +      sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPairInList_left
 +        hin⟩
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-230.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-230.md
 new file mode 100644

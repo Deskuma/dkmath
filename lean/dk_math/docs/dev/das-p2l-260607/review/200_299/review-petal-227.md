@@ -330,7 +330,7 @@ index f0bc855d..e0ae68db 100644
 @@ -171,5 +171,43 @@ theorem sourcePressureBeamPulse_witness_singleton_depth_and_exit_massBalance
      ⟨hdepth,
        sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget hexit⟩
- 
+
 +/--
 +Caller-facing full diagnostic for one explicitly contained witness singleton.
 +
@@ -369,7 +369,7 @@ index f0bc855d..e0ae68db 100644
 +    ⟨hdepth, _⟩
 +  exact ⟨hentry, hdepth, hexitBalance⟩
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-226.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-226.md
 new file mode 100644

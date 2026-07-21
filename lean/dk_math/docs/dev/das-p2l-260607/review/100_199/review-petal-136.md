@@ -659,7 +659,7 @@ index 861db9f4..33e283a4 100644
 @@ -319,6 +319,20 @@ def SourcePressureJumpWithRetentionDrop
    SourcePressureMarginJumpUp n k r j ∧
      SourceRetentionDropsAcross n k r j
- 
+
 +/--
 +Observed pressure jump with both retention and continuation decay information.
 +
@@ -676,11 +676,11 @@ index 861db9f4..33e283a4 100644
 +
  /--
  The first selected source-pressure depth.
- 
+
 @@ -678,6 +692,73 @@ theorem sourcePressureMarginJumpUp_of_localIsland_left
    sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
      (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
- 
+
 +/--
 +Package a named margin jump and a strict retention drop.
 +

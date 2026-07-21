@@ -353,7 +353,7 @@ index f6361c54..d2a1d73a 100644
 @@ -1818,4 +1818,68 @@ theorem sourcePressureBeamPulse_witness_singleton_massBalance_edges
    ⟨sourcePressureBeamMassBalanceLeft_lt_right_of_localIslandWitness_intervalPulse_left W,
      sourcePressureBeamMassBalanceRight_le_left_of_localIslandWitness_intervalPulse_right_falling W⟩
- 
+
 +/-
 +Diagnostic-facing consumers of the local pulse-shape package.
 +

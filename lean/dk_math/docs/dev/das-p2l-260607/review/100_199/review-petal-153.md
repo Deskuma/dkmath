@@ -412,7 +412,7 @@ index 2e8e1d43..1d3bea5c 100644
  import DkMath.Collatz.PetalBridge.OneCycle
 +import DkMath.Collatz.PetalBridge.ValuationFlowBridge
  import DkMath.Collatz.PetalBridge.Collision
- 
+
  #print "file: DkMath.Collatz.PetalBridge"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureAccounting.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/PressureAccounting.lean
 index f840477c..5b9f2ee7 100644
@@ -421,7 +421,7 @@ index f840477c..5b9f2ee7 100644
 @@ -742,6 +742,16 @@ theorem sourcePressureAccountedIntervalListSortedBefore_singleton
      SourcePressureAccountedIntervalListSortedBefore [A] :=
    trivial
- 
+
 +/-- Cons constructor for adjacent sorted-before lists. -/
 +theorem sourcePressureAccountedIntervalListSortedBefore_cons
 +    {n : OddNat} {k r : ℕ}
@@ -438,7 +438,7 @@ index f840477c..5b9f2ee7 100644
 @@ -862,4 +872,165 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedBefore_sum_le_neg_length
    simpa [sourcePressureAccountedIntervalFamily_of_sortedBefore] using
      sourcePressureAccountedInterval_list_sum_le_neg_length L
- 
+
 +/-- Empty sorted-family constructor. -/
 +def sourcePressureAccountedIntervalFamily_sorted_nil
 +    (n : OddNat) (k r : ℕ) :

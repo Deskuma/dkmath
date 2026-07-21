@@ -924,7 +924,7 @@ index f4770a5f..e56c93e7 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
 +import DkMath.Collatz.PetalBridge.FloatWindow.BoundedRepaymentLag
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/BoundedRepaymentLag.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/BoundedRepaymentLag.lean
 new file mode 100644
@@ -993,11 +993,11 @@ index a2128411..5c331185 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteAmortizedResource.lean
 @@ -12,67 +12,129 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
  namespace DkMath.Collatz
- 
+
  /-!
 -# Finite amortized resource telescope
 +# Finite amortized balance telescope
- 
+
 -This module is deliberately independent of the Collatz observables.  It only
 -records a scalar queue, a scalar potential, consumed mass, replenishment, and
 -one-step conservation.  In particular, there is no phantom state carrier.
@@ -1005,7 +1005,7 @@ index a2128411..5c331185 100644
 +are neutral accounting streams; a caller must separately prove that they come
 +from concrete resources if that interpretation is required.
  -/
- 
+
 -/-- Generic finite-step amortized accounting data. -/
 -structure FiniteAmortizedResource where
 +/-- Generic finite-step balance data. -/
@@ -1021,11 +1021,11 @@ index a2128411..5c331185 100644
 -      queue k + potential k + replenishment k
 +    ∀ k, queue (k + 1) + potential (k + 1) + outflow k ≤
 +      queue k + potential k + inflow k
- 
+
 -namespace FiniteAmortizedResource
 +/-- Compatibility alias for the original scalar type name. -/
 +abbrev FiniteAmortizedResource := FiniteAmortizedBalance
- 
+
 -/-- Iterating one-step conservation gives the finite-prefix resource ceiling. -/
 -theorem queue_add_potential_le_initial_add_sum
 -    (A : FiniteAmortizedResource) (m : ℕ) :
@@ -1045,7 +1045,7 @@ index a2128411..5c331185 100644
 -      rw [Finset.sum_range_succ]
 +      rw [Finset.sum_range_succ, Finset.sum_range_succ]
        omega
- 
+
 -/-- The sharp queue estimate uses only the initial potential. -/
 -theorem queue_le_initial_add_potential_add_cumulativeReplenishment
 -    (A : FiniteAmortizedResource) (m : ℕ) :
@@ -1065,7 +1065,7 @@ index a2128411..5c331185 100644
 +      A.queue 0 + A.potential 0 + ∑ k ∈ Finset.range m, A.inflow k := by
    have h := A.queue_add_potential_le_initial_add_sum m
    omega
- 
+
 -/-- Initial potential and cumulative replenishment bounds give a queue bound. -/
 +/-- Bounded cumulative net inflow, rather than bounded total inflow, controls
 +the queue in a stable system with ongoing throughput. -/
@@ -1102,7 +1102,7 @@ index a2128411..5c331185 100644
 +  have hqueue := A.queue_le_initial_add_potential_add_cumulativeInflow m
 +  have hm := hinflow m
    omega
- 
+
 -/-- Compatibility corollary: a uniform potential bound is stronger than the
 -initial bound actually used by the telescope. -/
 +/-- Compatibility corollary with an unnecessarily uniform potential bound. -/
@@ -1143,7 +1143,7 @@ index a2128411..5c331185 100644
 +        stableUnitThroughputBalance.potential k +
 +          stableUnitThroughputBalance.inflow k := by
 +  rfl
- 
+
 -end FiniteAmortizedResource
 +/-- No finite constant bounds every cumulative inflow prefix, even though the
 +queue is uniformly zero. -/
@@ -1153,16 +1153,16 @@ index a2128411..5c331185 100644
 +  rintro ⟨R, hR⟩
 +  have h := hR (R + 1)
 +  simp [stableUnitThroughputBalance] at h
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 index e46e2e80..df465e4d 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 @@ -164,6 +164,68 @@ theorem pathWeight_nonpos_of_signature_eq
- 
+
  end RelationalFiniteSignedTransitionPotentialCertificate
- 
+
 +/-! ## Conditional canonical-block projection -/
 +
 +/-- A canonical signed window is the corresponding consecutive range sum. -/
@@ -1226,7 +1226,7 @@ index e46e2e80..df465e4d 100644
 +    n C hstep hweight).to_endpointWidthUniformUpperBound
 +
  namespace FiniteSignedTransitionPotentialCertificate
- 
+
  variable {State Signature : Type*} [Fintype Signature]
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean
 index c39e3167..a8dd9538 100644
@@ -1242,13 +1242,13 @@ index c39e3167..a8dd9538 100644
        A.potential 0 ≤ P ∧
 -        ∀ m, ∑ k ∈ Finset.range m, A.replenishment k ≤ R
 +        ∀ m, ∑ k ∈ Finset.range m, A.inflow k ≤ R
- 
+
  /-- Deprecated compatibility alias.  Despite its historical name, this
  predicate is not noncircular; see
 @@ -62,15 +62,39 @@ theorem CanonicalAbstractAmortizationCertificate.to_endpointWidthUniformUpperBou
        (bitWidth n.1 + (canonicalOutstandingClaimQueue n 0 + P + R)) :=
    h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
- 
+
 +namespace CanonicalNoncircularGlobalAmortizationLaw
 +
 +/-- Deprecated fully qualified wrapper for the former public theorem. -/
@@ -1291,7 +1291,7 @@ index c39e3167..a8dd9538 100644
 @@ -154,6 +178,62 @@ theorem canonicalOutstandingClaimQueue_add_consumed
          rw [Nat.min_eq_left hle, Nat.sub_eq_zero_of_le hle]
          simp
- 
+
 +/-- The queue before the initial block is empty. -/
 +@[simp] theorem canonicalOutstandingClaimQueueBeforeBlock_zero (n : OddNat) :
 +    canonicalOutstandingClaimQueueBeforeBlock n 0 = 0 := rfl
@@ -1350,7 +1350,7 @@ index c39e3167..a8dd9538 100644
 +
  /-!
  ## Owned-resource frontier
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-330.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-330.md
 index 4c5b261d..521acf9a 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-330.md
@@ -1358,7 +1358,7 @@ index 4c5b261d..521acf9a 100644
 @@ -96,9 +96,10 @@ together with disjoint ownership, injective consumption, unique temporal
  origin, and temporal nonreuse.  Without those data, local saturated-successor
  discharge is not formally connected to global amortization.
- 
+
 -The next admissible step is therefore carrier discovery, not another scalar
 -potential predicate.  Any proposed owned law must be audited against the same
 -reverse construction before it is accepted.
@@ -1366,9 +1366,9 @@ index 4c5b261d..521acf9a 100644
 +others: a sound finite signed-transition potential and a bounded repayment-lag
 +theorem.  Any proposed scalar or owned law must still be audited against the
 +same reverse construction before it is accepted.
- 
+
  ## Verification
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-331.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-331.md
 new file mode 100644
 index 00000000..cd3b72ad

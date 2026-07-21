@@ -381,9 +381,9 @@ index 102931fb..d76c54dd 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureFrontier.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/PressureFrontier.lean
 @@ -916,6 +916,13 @@ structure SourcePressureIntervalPulseAddress (n : OddNat) (k r : ℕ) where
- 
+
  namespace SourcePressureRunAddress
- 
+
 +/-- The length recorded by a run address is positive. -/
 +theorem len_pos
 +    {n : OddNat} {k r : ℕ}
@@ -397,7 +397,7 @@ index 102931fb..d76c54dd 100644
 @@ -941,21 +948,101 @@ def toRunAddress
      len := A.len
      hrun := sourcePressureIntervalPulse_run A.hpulse }
- 
+
 +/-- The length recorded by an interval-pulse address is positive. -/
 +theorem len_pos
 +    {n : OddNat} {k r : ℕ}
@@ -418,7 +418,7 @@ index 102931fb..d76c54dd 100644
 +  r + (A.start + A.len - 1)
 +
  end SourcePressureIntervalPulseAddress
- 
+
 +/-- Forget an interval-pulse address down to its run address. -/
 +def sourcePressureIntervalPulseAddress_toRun
 +    {n : OddNat} {k r : ℕ}
@@ -468,7 +468,7 @@ index 102931fb..d76c54dd 100644
      SourcePressureSignChangeUp n k r (A.start - 1) :=
 -  sourcePressureIntervalPulse_left_signChange A.hpulse
 +  (sourcePressureIntervalPulseAddress_left A).2
- 
+
  /-- Extract the right sign change from an interval-pulse address. -/
  theorem sourcePressureIntervalPulseAddress_right_signChange
      {n : OddNat} {k r : ℕ}
@@ -495,7 +495,7 @@ index 102931fb..d76c54dd 100644
 +      SourcePressureMarginInt n k (r + (A.start + A.len - 1)) +
 +        SourcePressureNetDropInt n k r (A.start + A.len - 1) ≤ 0 :=
 +  sourcePressureIntervalPulse_right_falling A.hpulse
- 
+
  /--
  A local pressure island is an interval pulse of length one.
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-145.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-145.md

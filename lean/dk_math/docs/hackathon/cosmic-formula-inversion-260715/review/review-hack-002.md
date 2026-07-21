@@ -618,22 +618,22 @@ index c9c66fba..110f0e20 100644
  | common divisor divides gcd | Mathlib Nat gcd | `Nat.dvd_gcd : k ∣ m → k ∣ n → k ∣ Nat.gcd m n` | DIRECT | narrow |
  | prime cannot divide one | Mathlib Nat prime | `Nat.Prime.not_dvd_one : Nat.Prime q → ¬ q ∣ 1` | DIRECT | narrow |
 @@ -28,7 +28,7 @@ needed.
- 
+
  Shortest exclusion route, entirely in `ℕ`: from `q ∈ S`, use
  `Finset.dvd_prod_of_mem id` to obtain `q ∣ P`; combine that with
 -`q ∣ P + u` via `dvd_add_right` to get `q ∣ u`; then `Nat.dvd_gcd`,
 +`q ∣ P + u` via `Nat.dvd_add_iff_right` to get `q ∣ u`; then `Nat.dvd_gcd`,
  `Nat.coprime_iff_gcd_eq_one`, and `Nat.Prime.not_dvd_one` contradict
  primality. No subtraction or `ℤ` bridge is required.
- 
+
 @@ -85,7 +85,7 @@ exclusion proof may rewrite with `Nat.coprime_iff_gcd_eq_one`.
- 
+
  ### MAP-005 — Divisor of `P + u` and `P` Divides `u`
- 
+
 -CONFIRMED / DIRECT. `dvd_add_right hqP` turns `q ∣ P + u` into `q ∣ u`.
 +CONFIRMED / DIRECT. `Nat.dvd_add_iff_right hqP` turns `q ∣ P + u` into `q ∣ u`.
  This is cleaner than the `Nat.dvd_sub` route used in the older sample.
- 
+
  ### MAP-006 — Coprimality Excludes a Prime Dividing Both Inputs
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-002.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-002.md
 new file mode 100644

@@ -390,7 +390,7 @@ index 110cce1f..c35d44f6 100644
 @@ -65,6 +65,28 @@ theorem SourcePressureLocalIslandWitnessPairHasRecoveredAccountedFamilyDiagnosti
      sourcePressureAccountedIntervalFamily_of_reversedLocalIslandWitnessPair_length
        W1 W2 hrev⟩
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Project the named pair-local recovered diagnostic from a list-level recovered
@@ -419,7 +419,7 @@ index 110cce1f..c35d44f6 100644
 @@ -767,6 +789,54 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).exists_reversed_of_two
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Failure plus named no-adjacent-overlap yields some named pair-local recovered

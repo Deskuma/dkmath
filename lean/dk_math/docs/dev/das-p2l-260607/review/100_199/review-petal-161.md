@@ -673,7 +673,7 @@ index de00185e..f95fa9e7 100644
 @@ -764,6 +764,48 @@ theorem NatIntervalsOverlap.of_not_before_not_reverseBefore
    change a < b + lenB ∧ b < a + lenA
    omega
- 
+
 +/--
 +Local trichotomy for two half-open natural intervals.
 +
@@ -718,11 +718,11 @@ index de00185e..f95fa9e7 100644
 +
  /--
  Transitive-like composition for ordered non-overlap.
- 
+
 @@ -838,6 +880,33 @@ theorem SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefor
      SourcePressureIntervalPulseAddressOverlap A B :=
    NatIntervalsOverlap.of_not_before_not_reverseBefore hApos hBpos hnotAB hnotBA
- 
+
 +/-- Local trichotomy for two interval-pulse addresses. -/
 +theorem SourcePressureIntervalPulseAddressOverlap.before_or_reverseBefore_or_overlap
 +    {n : OddNat} {k r : ℕ}
@@ -756,7 +756,7 @@ index de00185e..f95fa9e7 100644
 @@ -1836,6 +1905,40 @@ theorem SourcePressureLocalIslandWitnessOverlap.of_not_before_not_reverseBefore
    SourcePressureIntervalPulseAddressOverlap.of_not_before_not_reverseBefore
      h1pos h2pos hnot12 hnot21
- 
+
 +/-- Local trichotomy for two explicit local-island witnesses. -/
 +theorem SourcePressureLocalIslandWitnessOverlap.before_or_reverseBefore_or_overlap
 +    {n : OddNat} {k r : ℕ}
@@ -797,7 +797,7 @@ index de00185e..f95fa9e7 100644
 @@ -1921,6 +2024,47 @@ theorem sourcePressureLocalIslandWitnessPair_sorted_or_failure
        SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W1, W2] :=
    sourcePressureLocalIslandWitnessList_sorted_or_failure [W1, W2]
- 
+
 +/--
 +Refine a two-witness sorted-before failure into its local reason.
 +
@@ -841,7 +841,7 @@ index de00185e..f95fa9e7 100644
 +
  /--
  Raw-argument version of the pair sorted-before failure constructor.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-160.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-160.md
 new file mode 100644
 index 00000000..9fc4f147

@@ -69,7 +69,7 @@ Branch B が通った
 ```
 
 まで進んでいる。
-これはかなり良い。  
+これはかなり良い。
 
 ## 採用対象
 
@@ -452,7 +452,7 @@ index 414503d4..36d77a15 100644
 @@ -247,5 +247,40 @@ theorem exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed
      ⟨W, hmem,
        sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem⟩
- 
+
 +/--
 +Failure resolution also exposes one witness whose singleton pulse has the full
 +local entry-depth-exit diagnostic.
@@ -488,7 +488,7 @@ index 414503d4..36d77a15 100644
 +                  (sourcePressureIntervalPulseAddress_of_localIslandWitness W).len - 1) := by
 +  exact exists_sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_seed h
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md
 index 2721b8e5..563453cd 100644
@@ -497,19 +497,19 @@ index 2721b8e5..563453cd 100644
 @@ -24,9 +24,9 @@ and packages the local singleton pulse diagnostic:
  - center/right: `SourcePressureBeamAddressedDepthTarget L ...`;
  - exit: `right <= left`.
- 
+
 -## Branch Taken
 +## Branches Taken
- 
+
 -Branch B was taken:
 +Branch B was taken first:
- 
+
  ```text
  caller exists but only has Beam seed
 @@ -60,6 +60,15 @@ and `SourcePressureBeamSeedContainsDepth L j` unfolds to:
- 
+
  So the seed can safely feed the full diagnostic existentially.
- 
+
 +Branch C was then implemented as an experiment:
 +
 +```text
@@ -520,12 +520,12 @@ index 2721b8e5..563453cd 100644
 +Beam-facing name for `SourcePressureFailureResolution L`.
 +
  ## Added Theorem
- 
+
  Added in `DkMath.Collatz.PetalBridge.PressureBeam.Pulse`:
 @@ -87,6 +96,26 @@ It does not rebuild the pulse facts manually.  It opens the seed existential,
  keeps the extracted witness explicit, and applies the full diagnostic package
  to that witness membership.
- 
+
 +Also added:
 +
 +```lean
@@ -547,12 +547,12 @@ index 2721b8e5..563453cd 100644
 +diagnostic surface.
 +
  ## Branches Inspected But Not Taken
- 
+
  Branch A:
 @@ -95,21 +124,12 @@ Branch A:
  - The Pulse API itself has explicit-membership theorems, but adding another
    direct alias there would only duplicate the cp226 theorem.
- 
+
 -Branch C:
 -
 -- `PressureAutomaton` exposes `SourcePressureFailureResolution L`, with either
@@ -565,27 +565,27 @@ index 2721b8e5..563453cd 100644
 -  entering Beam seed vocabulary.
 -
  Branch D:
- 
+
  - Multiple possible caller surfaces exist, but the seed route is the smallest
    one with the fewest new assumptions after explicit `W ∈ L`.
 +- Branch C was still added as a caller convenience for code that has not yet
 +  switched to Beam seed vocabulary.
- 
+
  Branch E:
- 
+
 @@ -126,6 +146,8 @@ True Beam:
  - `W ∈ L -> full local singleton diagnostic` is already proved by cp226.
  - `SourcePressureBeamSeed L -> ∃ W ∈ L, full local singleton diagnostic` is now
    proved by cp227-r1.
 +- `SourcePressureFailureResolution L -> ∃ W ∈ L, full local singleton
 +  diagnostic` is also proved by the Branch C experiment.
- 
+
  Boundary:
- 
+
 @@ -140,17 +162,19 @@ False Beam:
- 
+
  Gap:
- 
+
 -- A direct automaton-level bridge from
 -  `SourcePressureFailureResolution L` to the full diagnostic may be possible,
 -  but it is currently unnecessary because `SourcePressureBeamSeed L` is exactly
@@ -595,52 +595,52 @@ index 2721b8e5..563453cd 100644
 +- The direct automaton/failure-resolution bridge is no longer missing at the
 +  existential diagnostic level.
 +- The remaining gap is more specific:
- 
+
  ```text
 -failure/obstruction branch -> explicit W ∈ L -> full diagnostic
 +recovered adjacent pair / overlap branch
 +  -> branch-specific chosen side witness
 +  -> full diagnostic
  ```
- 
+
 +That would be stronger documentation for a particular branch, but it should not
 +be added unless a caller needs the branch-specific witness identity.
 +
  ## Dependency Direction
- 
+
  No dependency inversion was introduced.
 @@ -165,7 +189,7 @@ No lower diagnostic module imports `PressureBeam`.
- 
+
  ## Guardrails
- 
+
 -The new theorem does not claim:
 +The new theorems do not claim:
- 
+
  - list-wide coverage;
  - witness-family aggregation;
 @@ -176,8 +200,8 @@ The new theorem does not claim:
  - propagation;
  - Collatz convergence.
- 
+
 -It is local explicit-witness API consumption, lifted existentially from the
 -Beam seed.
 +They are local explicit-witness API consumption, lifted existentially from the
 +Beam seed and then from the failure-resolution wrapper.
- 
+
  ## Verification
- 
+
 @@ -210,16 +234,21 @@ declaration uses `sorry`
- 
+
  ## Next Branch To Attack
- 
+
 -The next useful branch is Branch C, but only if a caller needs to remain at the
 -automaton/failure-resolution level.
 +The next useful branch is no longer the generic Branch C bridge; that now
 +exists.
- 
+
 -Candidate future theorem:
 +The next precise branch is branch-specific witness identity:
- 
+
  ```text
 -SourcePressureFailureResolution L
 -  -> exists W in L
@@ -653,7 +653,7 @@ index 2721b8e5..563453cd 100644
 +  -> one obstruction witness in L
 +  -> full diagnostic for that witness
  ```
- 
+
 -This should be added only when it removes real caller noise.  For current Beam
 -work, the seed theorem is the cleaner public surface.
 +This should only be attacked if a caller needs to preserve which side of the

@@ -533,7 +533,7 @@ index cccfa93c..868a900e 100644
 @@ -961,6 +961,96 @@ theorem sourcePressureLocalIsland_gives_crossing_pulse
    ⟨sourcePressureCrosses_of_localIsland_left n k r j hisland,
      sourcePressureFalls_of_localIsland_right n k r j hisland⟩
- 
+
 +/--
 +Named local source-pressure pulse.
 +
@@ -626,7 +626,7 @@ index cccfa93c..868a900e 100644
 +
  /--
  Package a named margin jump and a strict retention drop.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-140.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-140.md
 new file mode 100644
 index 00000000..e457fcfc

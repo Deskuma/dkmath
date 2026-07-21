@@ -14,8 +14,8 @@ cp-317 の登頂作業を、最初の真正な障害まで完了しました。
 
 - queue は canonical endpoint width の running minimum からの正確な drawup。
 - queue の一様有界性と endpoint width の一様有界性は同値。
-- canonical block は厳密に  
-  `(L, u) ↦ oddPart (3^L * u - 1)`  
+- canonical block は厳密に
+  `(L, u) ↦ oddPart (3^L * u - 1)`
   と遷移する。[UniversalPaymentBlockNormalForm.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlockNormalForm.lean:311)
 - block 内最大幅と delayed-debt burst の正確な等式を証明。
 - 有限 primitive excursion は queue 表現と partial-sum 表現が同値で、開始点を固定した返済 endpoint は一意。[UniversalPaymentPrimitiveExcursion.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPrimitiveExcursion.lean:149)
@@ -1091,9 +1091,9 @@ index 2a4da15a..63c219c6 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 new file mode 100644
 index 00000000..4aca983b
@@ -2075,7 +2075,7 @@ index 171f65af..007a0541 100644
 @@ -346,6 +346,130 @@ theorem canonicalOutstandingClaimQueue_eq_balance_sub_runningMinimum
          congr 1
          ring
- 
+
 +/-! ## Endpoint-width drawup form -/
 +
 +/-- Width immediately after canonical endpoint block `m`. -/
@@ -2206,7 +2206,7 @@ index 171f65af..007a0541 100644
 @@ -840,6 +964,64 @@ def CanonicalOutstandingClaimQueueUniformUpperBound
      (n : OddNat) (C : ℕ) : Prop :=
    ∀ m, canonicalOutstandingClaimQueue n m ≤ C
- 
+
 +/-- Uniform boundedness of completed canonical endpoint widths. -/
 +def CanonicalEndpointWidthUniformUpperBound
 +    (n : OddNat) (B : ℕ) : Prop :=
@@ -2560,13 +2560,13 @@ index e7178d0a..f3f4e15f 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-316.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/review-petal-316.md
 @@ -6,6 +6,8 @@ gch: 5daa50f888e603da9a1ca4948a6c0d5b6a4f1fa3
- 
+
  ## Report
- 
+
 +28m2s
 +
  cp-316 の登頂アタックを完了しました。
- 
+
  新しい [UniversalPaymentScalarQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean:230) で以下を証明しています。
 diff --git a/python/Collatz/PetalBridge/canonical_block_normal_form_audit.py b/python/Collatz/PetalBridge/canonical_block_normal_form_audit.py
 new file mode 100644

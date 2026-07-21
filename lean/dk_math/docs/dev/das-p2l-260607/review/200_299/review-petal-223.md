@@ -431,7 +431,7 @@ index 9e09a277..5010fb52 100644
 @@ -1585,4 +1585,140 @@ theorem sourcePressureBeamMassBalanceLeft_lt_right_of_localIslandWitness_interva
    sourcePressureBeamMassBalanceLeft_lt_right_of_crossingEdgeTarget
      (sourcePressureBeamCrossingEdgeTarget_of_localIslandWitness_intervalPulse_left W)
- 
+
 +/-
 +Beam falling-edge target.
 +

@@ -225,7 +225,7 @@ index 9a677b91..07bb129e 100644
 @@ -383,4 +383,43 @@ theorem sourcePressureOrientedNeighborDiagnosticState_of_forward
    exact
      ⟨hin, hdiag', hWentry, hWaddr, hWexit, hW'entry, hW'addr, hW'exit⟩
- 
+
 +/--
 +Recovered adjacent state enters the oriented neighbor diagnostic state.
 +

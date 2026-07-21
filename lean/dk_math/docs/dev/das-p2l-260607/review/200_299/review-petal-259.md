@@ -181,7 +181,7 @@ index 011887ec..0f7d29fd 100644
 @@ -806,6 +806,26 @@ theorem SourcePressureOrientedNeighborBoxState.not_val_ge_of_sorted
      ¬ W'.val ≤ W.val :=
    not_le_of_gt (hbox.val_lt_of_sorted hsorted)
- 
+
 +/--
 +A sorted witness list forbids the same box from appearing in the reverse
 +orientation.
@@ -204,7 +204,7 @@ index 011887ec..0f7d29fd 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-259.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-259.md
 new file mode 100644
 index 00000000..4dcc79e3

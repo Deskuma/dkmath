@@ -647,7 +647,7 @@ index e62305df..c9504ee8 100644
 @@ -2069,6 +2069,68 @@ theorem sourcePressureLocalIslandWitnessPair_no_failure_of_before
    rw [sourcePressureLocalIslandWitnessListHasSortedBeforeFailure_pair_iff]
    exact not_not_intro hbefore
- 
+
 +/--
 +Head constructor for adjacent sorted-before failure in a witness list.
 +
@@ -716,7 +716,7 @@ index e62305df..c9504ee8 100644
 @@ -2283,6 +2345,19 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.cons_o
        (W1 :: W2 :: rest) :=
    Or.inr htail
- 
+
 +/-- Readable alias for propagating adjacent overlap obstruction from the tail. -/
 +theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_tail
 +    {n : OddNat} {k r : ℕ}
@@ -736,7 +736,7 @@ index e62305df..c9504ee8 100644
 @@ -2349,6 +2424,27 @@ theorem
    SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
      hobs
- 
+
 +/--
 +Tail adjacent-overlap obstruction gives sorted-before failure for the full
 +explicit list.

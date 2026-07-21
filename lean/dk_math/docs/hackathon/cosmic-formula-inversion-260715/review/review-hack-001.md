@@ -564,9 +564,9 @@ index 163fc8df..c9c66fba 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/EXISTING_DKMATH_MAP.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/EXISTING_DKMATH_MAP.md
 @@ -2,2000 +2,394 @@
- 
+
  ## DkMath — Cosmic Formula Inversion
- 
+
 -This document records the existing DkMath and Mathlib declarations that may support the hackathon theorem surface.
 -
 -Its purpose is to prevent:
@@ -587,7 +587,7 @@ index 163fc8df..c9c66fba 100644
 ----
 -
  ## 1. Current Status
- 
+
  ```text
 -DOCUMENT STATUS:
 -  PRE-AUDIT SCAFFOLD
@@ -627,12 +627,12 @@ index 163fc8df..c9c66fba 100644
 +SOURCE EDITS: NONE
 +FINAL RECOMMENDATION: a thin Nat facade over Mathlib, with a local ring identity
  ```
- 
+
 -The stronger audit should also locate candidate APIs for:
 +The audit distinguishes finite-set freshness from sequence-relative primitive
 +divisors. `Finset ℕ` is sufficient; no new finite-prime-universe structure is
 +needed.
- 
+
 -```text
 -bounded rational projection
 -exact inverse
@@ -642,7 +642,7 @@ index 163fc8df..c9c66fba 100644
 -unique integer candidate
 -```
 +## 2. Audit Objective and Confirmed Core Route
- 
+
 -The audit must distinguish:
 +| Role | Module | Declaration and normalized type | Class | Cost |
 +|---|---|---|---|---|
@@ -652,7 +652,7 @@ index 163fc8df..c9c66fba 100644
 +| common divisor divides gcd | Mathlib Nat gcd | `Nat.dvd_gcd : k ∣ m → k ∣ n → k ∣ Nat.gcd m n` | DIRECT | narrow |
 +| prime cannot divide one | Mathlib Nat prime | `Nat.Prime.not_dvd_one : Nat.Prime q → ¬ q ∣ 1` | DIRECT | narrow |
 +| prime divisor exists | `Mathlib.Data.Nat.Prime.Basic` | `Nat.ne_one_iff_exists_prime_dvd : n ≠ 1 ↔ ∃ p, Nat.Prime p ∧ p ∣ n` | DIRECT | narrow |
- 
+
 -```text
 -what already exists
 -what only needs a wrapper
@@ -666,7 +666,7 @@ index 163fc8df..c9c66fba 100644
 +`q ∣ P + u` via `dvd_add_right` to get `q ∣ u`; then `Nat.dvd_gcd`,
 +`Nat.coprime_iff_gcd_eq_one`, and `Nat.Prime.not_dvd_one` contradict
 +primality. No subtraction or `ℤ` bridge is required.
- 
+
 ----
 +`DkMath.Samples.Prime.B` contains
 +`exists_prime_not_mem_dvd_prod_add_unit` with assumptions `0 < u`, every
@@ -674,9 +674,9 @@ index 163fc8df..c9c66fba 100644
 +not the requested Coprime API. The Coprime variant in that file,
 +`exists_prime_not_mem_dvd_prod_add_unit_of_coprime'`, contains `sorry`, so it
 +is rejected as a dependency.
- 
+
  ## 3. Reuse Classification
- 
+
 -Every audited declaration must receive exactly one primary classification.
 -
 -### `DIRECT`
@@ -776,9 +776,9 @@ index 163fc8df..c9c66fba 100644
 +The primary labels used below retain the project meanings: `DIRECT`,
 +`WRAPPER`, `COROLLARY`, `BRIDGE`, `MISSING`, `REJECTED`, `DANGEROUS`, and
 +`DEMO_ONLY`.
- 
+
  ## 4. Audit Record Format
- 
+
 -Each confirmed declaration should be recorded in this form.
 -
 -````md
@@ -831,9 +831,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +Each MAP entry records a status/classification, exact declaration where one
 +exists, hypotheses or semantic boundary, and the reuse decision.
- 
+
  ## 5. Search Sources
- 
+
 -The repository audit should use sources in this order.
 -
 -```text
@@ -858,9 +858,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +Direct source, theorem index, compressed source database, summary archive,
 +candidate modules, and Mathlib source were checked in the prescribed order.
- 
+
  ## 6. Search Rules
- 
+
 -Codex must search by both standard mathematics vocabulary and DkMath vocabulary.
 -
 -Example:
@@ -906,11 +906,11 @@ index 163fc8df..c9c66fba 100644
 ----
 +Both standard mathematical vocabulary and DkMath vocabulary were searched;
 +no declaration was accepted from its name alone.
- 
+
  ## 7. Required Discrete Arithmetic Map
- 
+
  ### MAP-001 — Finite Prime Set Representation
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -941,9 +941,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. Use `S : Finset ℕ` and, only where the public contract
 +needs it, `∀ p ∈ S, Nat.Prime p`. A wrapper structure adds no value.
- 
+
  ### MAP-002 — Finset Product of Prime Members
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -976,9 +976,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. Use `P := ∏ p ∈ S, p` and
 +`Finset.dvd_prod_of_mem (fun p => p) hqMem`.
- 
+
  ### MAP-003 — Product Positivity
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1003,9 +1003,9 @@ index 163fc8df..c9c66fba 100644
 +CONFIRMED / COROLLARY. It is not needed for divisor exclusion. If needed,
 +primality gives nonzero factors and `Finset.prod_ne_zero_iff`; the empty
 +product is already `1`, so `S.Nonempty` is unnecessary.
- 
+
  ### MAP-004 — Coprimality API
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1040,9 +1040,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. Public statements should use `Nat.Coprime P u`; the
 +exclusion proof may rewrite with `Nat.coprime_iff_gcd_eq_one`.
- 
+
  ### MAP-005 — Divisor of `P + u` and `P` Divides `u`
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1082,9 +1082,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. `dvd_add_right hqP` turns `q ∣ P + u` into `q ∣ u`.
 +This is cleaner than the `Nat.dvd_sub` route used in the older sample.
- 
+
  ### MAP-006 — Coprimality Excludes a Prime Dividing Both Inputs
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1115,9 +1115,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / COROLLARY. `Nat.dvd_gcd hqP hqu`, the gcd-one form of
 +coprimality, and `hqPrime.not_dvd_one` close the contradiction.
- 
+
  ### MAP-007 — Supplied Prime Divisor Is Fresh
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1165,12 +1165,12 @@ index 163fc8df..c9c66fba 100644
 +    (hqPrime : Nat.Prime q)
 +    (hqDiv : q ∣ (∏ p ∈ S, p) + u) : q ∉ S
  ```
- 
+
 ----
 +Notably, `∀ p ∈ S, Nat.Prime p` is not logically required for exclusion.
- 
+
  ### MAP-008 — Existence of a Prime Divisor
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1201,9 +1201,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. From `1 < n`, derive `n ≠ 1`, then apply
 +`Nat.ne_one_iff_exists_prime_dvd`. This exact theorem supplies the witness.
- 
+
  ### MAP-009 — Existence of a Fresh Prime Factor
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1233,9 +1233,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +PARTIAL / COROLLARY. Compose MAP-008 and MAP-007. Neither `S.Nonempty`,
 +`0 < u`, nor `0 < P` is needed once `1 < P + u` is assumed.
- 
+
  ### MAP-010 — Universal Freshness of All Prime Divisors
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1257,11 +1257,11 @@ index 163fc8df..c9c66fba 100644
 ----
 +PARTIAL / WRAPPER. This is the universal closure of MAP-007 and needs no new
 +mathematics.
- 
+
  ## 8. Freshness and Primitive-Factor Map
- 
+
  ### MAP-011 — Existing `FreshPrimeFactor` Predicate
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1293,9 +1293,9 @@ index 163fc8df..c9c66fba 100644
 +NOT FOUND AFTER SEARCH / MISSING. Searches covered direct source,
 +`__theorems-heading.txt`, and the compressed source database. Proposed local
 +predicate: `Nat.Prime q ∧ q ∣ n ∧ q ∉ S`.
- 
+
  ### MAP-012 — Primitive Prime Divisor APIs
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT FOR REJECTION OR OPTIONAL REUSE
@@ -1327,9 +1327,9 @@ index 163fc8df..c9c66fba 100644
 +antichain, while `PrimitivePrimeFactorOfDiffPow`, Petal/Zsigmondy bridges, and
 +`PrimitivePrimeDivisor` are sequence/exponent-relative. None means finite-set
 +freshness; their broad imports and hypotheses are also unsuitable.
- 
+
  ### MAP-013 — Finite Prime Universe Existing Structure
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1356,11 +1356,11 @@ index 163fc8df..c9c66fba 100644
 ----
 +NOT FOUND / REJECTED as unnecessary. `Finset ℕ` plus a prime-membership
 +hypothesis is the correct MVP representation.
- 
+
  ## 9. Cosmic Formula Map
- 
+
  ### MAP-014 — Core Cosmic Formula Module Family
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1396,9 +1396,9 @@ index 163fc8df..c9c66fba 100644
 +`Gap`; `DkMath.CosmicFormulaBinom` defines generic `CommRing` versions and
 +`big_is_body_and_gap`; `DkMath.CosmicFormula.CoreBeamGap` gives a generic
 +`CommSemiring` decomposition through `BigN`, `BodyN`, and `Gap`.
- 
+
  ### MAP-015 — Square Completion Identity
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1433,14 +1433,14 @@ index 163fc8df..c9c66fba 100644
 +module imports all of `Mathlib` and contains unrelated unfinished declarations.
 +For the Nat facade, the narrow and safe recommendation is a local theorem
 +proved by `ring`:
- 
+
 ----
 +```lean
 +P * (P + 2 * u) + u ^ 2 = (P + u) ^ 2
 +```
- 
+
  ### MAP-016 — Existing Big Definition
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1464,9 +1464,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / BRIDGE. `CosmicFormulaBinom.Big d x u = (x + u)^d` is generic;
 +specialize `d = 2`. The public Nat equality need not expose this definition.
- 
+
  ### MAP-017 — Existing Body Definition
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1488,9 +1488,9 @@ index 163fc8df..c9c66fba 100644
 +CONFIRMED / BRIDGE. `CosmicFormulaBinom.Body d x u = x * G d x u`; its square
 +specialization normalizes to `x * (x + 2*u)`, but that normalization lacks the
 +thin exact public theorem desired here.
- 
+
  ### MAP-018 — Existing Gap Definition
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1510,9 +1510,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. `CosmicFormulaBinom.Gap d u = u^d`; at `d = 2` it is the
 +required square Gap.
- 
+
  ### MAP-019 — Generic Exponent Cosmic Formula
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1543,9 +1543,9 @@ index 163fc8df..c9c66fba 100644
 +`Big d x u = Body d x u + Gap d u` over any `CommRing`.
 +`CoreBeamGap.big_eq_body_add_gap` provides the subtraction-free
 +`CommSemiring` analogue.
- 
+
  ### MAP-020 — GN Identity
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1574,9 +1574,9 @@ index 163fc8df..c9c66fba 100644
 +PARTIAL / DEFERRED. `Body_eq_GZ`, `mul_G_eq_GZ`, and the generic binomial
 +identity connect Body to the canonical kernel. GN/GZ naming and imports make
 +this unnecessary for the public square facade; use it only in later bridges.
- 
+
  ### MAP-021 — Gnomon / GnomonBand APIs
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1599,11 +1599,11 @@ index 163fc8df..c9c66fba 100644
 ----
 +NOT FOUND AFTER SEARCH / MISSING as a relevant stable public API. Arithmetic
 +completion suffices; no geometry should be introduced.
- 
+
  ## 10. Normalized Cosmic Formula Map
- 
+
  ### MAP-022 — Existing Normalization API
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1637,9 +1637,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +NOT FOUND AFTER SEARCH / MISSING for the stated rational Body/Gap conservation.
 +It is a small future rational corollary requiring a nonzero denominator.
- 
+
  ### MAP-023 — Linear Gap Coordinate
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1661,9 +1661,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +NOT FOUND / MISSING. Existing Units/KUS uses different semantics.
- 
+
  ### MAP-024 — Normalized Body
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1681,11 +1681,11 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +NOT FOUND / MISSING. This should remain a later `ℚ` definition/corollary.
- 
+
  ## 11. Projection Map
- 
+
  ### MAP-025 — Existing Projection Definitions
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1720,9 +1720,9 @@ index 163fc8df..c9c66fba 100644
 +NOT FOUND AFTER SEARCH / MISSING. `DkMath.Samples.Projection` is a real-valued
 +curvature/Body demo and does not define either `P/(P+u)` or `-P/(P+u)`.
 +The CF2D inverse action is matrix/level-set semantics and is unrelated.
- 
+
  ### MAP-026 — Unsigned Projection Interval Bound
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1748,9 +1748,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +PARTIAL / COROLLARY from ordered-field division lemmas; no DkMath wrapper.
 +Its image lies in `[0,1)` when `0 ≤ P` and `0 < u`.
- 
+
  ### MAP-027 — Signed Projection Interval Bound
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1768,9 +1768,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +PARTIAL / COROLLARY; no DkMath wrapper. Its image lies in `(-1,0]` under the
 +same hypotheses.
- 
+
  ### MAP-028 — Exact Unsigned Inverse
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1800,9 +1800,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +NOT FOUND / MISSING. Proposed rational formula `u*x/(1-x)` with `x ≠ 1`.
- 
+
  ### MAP-029 — Exact Signed Inverse
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1822,9 +1822,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +NOT FOUND / MISSING. Proposed rational formula `-u*x/(1+x)` with `x ≠ -1`.
- 
+
  ### MAP-030 — Projection Injectivity for Fixed `u`
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1846,9 +1846,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +NOT FOUND / COROLLARY once either exact inverse is proved.
- 
+
  ### MAP-031 — Projection Image Characterization
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1859,7 +1859,7 @@ index 163fc8df..c9c66fba 100644
 -MVP Requirement:
 -  none
 +DEFERRED. No MVP requirement; do not claim surjectivity onto a full interval.
- 
+
 -Preferred Milestone:
 -  inverse only on the image
 -
@@ -1874,11 +1874,11 @@ index 163fc8df..c9c66fba 100644
 +The unsigned convention is the better first candidate because current DkReal
 +arithmetic is explicitly nonnegative. The signed convention requires a signed
 +DkReal layer that the repository itself says is deferred.
- 
+
  ## 12. DkReal Map
- 
+
  ### MAP-032 — DkReal Core Type
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1902,9 +1902,9 @@ index 163fc8df..c9c66fba 100644
 +CONFIRMED / DIRECT. `DkMath.Analysis.DkReal.Basic` defines
 +`DkMath.Analysis.DkReal` with `interval : ℕ → GapInterval`, stepwise nesting,
 +and widths tending to zero; `DkReal.ofRat` embeds rationals.
- 
+
  ### MAP-033 — GapInterval
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1932,9 +1932,9 @@ index 163fc8df..c9c66fba 100644
 +CONFIRMED / DIRECT. `DkMath.Analysis.DkReal.Interval.GapInterval` has rational
 +`lo`, `hi`, and `lo ≤ hi`; `singleton`, interval addition, nonnegative
 +multiplication, power, and separation APIs exist.
- 
+
  ### MAP-034 — Nested Interval Theorems
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1961,9 +1961,9 @@ index 163fc8df..c9c66fba 100644
 +CONFIRMED / DIRECT. Use `DkReal.interval_succ_subset`,
 +`interval_subset_of_le`, and `tendsto_width_zero`. Semantic membership in all
 +cast intervals is supplied later by `DkReal.Semantic.semanticValue_mem_Icc`.
- 
+
  ### MAP-035 — Width Definition
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -1980,9 +1980,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +CONFIRMED / DIRECT. `GapInterval.width I = I.hi - I.lo`, with
 +`width_nonneg`, `lo_add_width`, and arithmetic width lemmas.
- 
+
  ### MAP-036 — Mapping Intervals Through a Monotone Function
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -2010,9 +2010,9 @@ index 163fc8df..c9c66fba 100644
 +NOT FOUND AFTER SEARCH / MISSING. Existing interval power is specialized to a
 +nonnegative natural power, not a fractional-linear inverse map. This is the
 +first likely DkReal representation bridge.
- 
+
  ### MAP-037 — Width Transport Through Inverse Map
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -2037,9 +2037,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +NOT FOUND AFTER SEARCH / MISSING. No fractional-linear endpoint-width bound
 +was found.
- 
+
  ### MAP-038 — Width Less Than One Implies At Most One Integer
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -2072,9 +2072,9 @@ index 163fc8df..c9c66fba 100644
 +NOT FOUND AFTER DkMath and Mathlib theorem-index/source searches / COROLLARY.
 +Basic ordered-ring facts can prove it, but an exact reusable packaged theorem
 +was not located.
- 
+
  ### MAP-039 — Integer Existence in an Interval
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -2095,9 +2095,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +PARTIAL / BRIDGE. It should come from transported membership of the original
 +`P`, not from width or floor/ceil alone.
- 
+
  ### MAP-040 — Unique Macro-Integer Reconstruction
- 
+
 -```text
 -Audit Status:
 -  TO AUDIT
@@ -2122,11 +2122,11 @@ index 163fc8df..c9c66fba 100644
 ----
 +NOT FOUND / BRIDGE. Compose inverse-map membership, MAP-037, and MAP-038;
 +this is stretch work, not MVP.
- 
+
  ## 13. Demo Arithmetic Map
- 
+
  ### MAP-041 — Demo Prime Set Evaluation
- 
+
 -```text
 -Audit Status:
 -  EXPECTED DEMO_ONLY
@@ -2145,9 +2145,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +DEMO_ONLY: prove `∏ p ∈ {2,3,5,7}, p = 210` with `norm_num`/`decide`.
- 
+
  ### MAP-042 — Demo Coprimality
- 
+
 -```text
 -Audit Status:
 -  EXPECTED DEMO_ONLY
@@ -2162,9 +2162,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +DEMO_ONLY: `Nat.Coprime 210 11` by `norm_num`/`decide`.
- 
+
  ### MAP-043 — Demo Boundary
- 
+
 -```text
 -Audit Status:
 -  EXPECTED DEMO_ONLY
@@ -2178,9 +2178,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +DEMO_ONLY: `210 + 11 = 221` by `norm_num`.
- 
+
  ### MAP-044 — Demo Factorization
- 
+
 -```text
 -Audit Status:
 -  EXPECTED DEMO_ONLY
@@ -2194,9 +2194,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +DEMO_ONLY: `221 = 13 * 17` by `norm_num`.
- 
+
  ### MAP-045 — Demo Prime Proofs
- 
+
 -```text
 -Audit Status:
 -  EXPECTED DEMO_ONLY
@@ -2212,9 +2212,9 @@ index 163fc8df..c9c66fba 100644
 -
 ----
 +DEMO_ONLY: `Nat.Prime 13` and `Nat.Prime 17` by `norm_num`/`decide`.
- 
+
  ### MAP-046 — Demo Freshness
- 
+
 -```text
 -Audit Status:
 -  GENERAL THEOREM REUSE REQUIRED
@@ -2236,9 +2236,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +WRAPPER: use the general supplied-divisor exclusion theorem for both `13` and
 +`17`; automation may discharge concrete primality/divisibility.
- 
+
  ### MAP-047 — Demo Cosmic Completion
- 
+
 -```text
 -Audit Status:
 -  GENERAL THEOREM REUSE REQUIRED
@@ -2256,9 +2256,9 @@ index 163fc8df..c9c66fba 100644
 ----
 +WRAPPER: specialize the general Nat completion theorem at `210` and `11`, then
 +normalize displayed constants.
- 
+
  ## 14. Candidate DkMath Module Families
- 
+
 -The following module families are candidates only.
 -
 -Their exact relevance must be confirmed by audit.
@@ -2314,9 +2314,9 @@ index 163fc8df..c9c66fba 100644
 +arithmetic precedents. PrimitiveSet, Petal, KUS, Units, SilverRatio, and CF2D
 +are rejected or deferred for the MVP because their meanings or dependency
 +costs do not match the contract.
- 
+
  ## 15. Mathlib Fallback Map
- 
+
 -When DkMath has no project-specific theorem, prefer standard Mathlib APIs.
 -
 -### Finset
@@ -2373,9 +2373,9 @@ index 163fc8df..c9c66fba 100644
 +The selected fallback surface is Finset product divisibility, Nat gcd/Coprime,
 +Nat prime-divisor existence, divisibility of sums, and `ring`. Ordered-field
 +and floor/ceil APIs remain later projection/reconstruction tools.
- 
+
  ## 16. Import Audit Table
- 
+
 -Codex should fill this table after locating exact declarations.
 -
 -| Hackathon module | Candidate import | Required declaration | Import cost | Decision |
@@ -2395,7 +2395,7 @@ index 163fc8df..c9c66fba 100644
 +| `Demo.lean` | the two hackathon modules | facade and concrete arithmetic | low |
 +| later projection | ordered-field Mathlib only | rational bounds/inverse | low |
 +| later DkReal bridge | `DkMath.Analysis.DkReal.Basic` plus interval module | interval representation | moderate |
- 
+
 -The audit should state when `import Mathlib` is being used temporarily rather than as the final narrow dependency.
 -
 ----
@@ -2404,9 +2404,9 @@ index 163fc8df..c9c66fba 100644
 +Petal, Zsigmondy, KUS, Units, or CF2D for the MVP. The smallest `hack-002`
 +surface is `FinitePrimeEscape.lean` only: define the exact local predicate if
 +desired, prove supplied-divisor exclusion, and derive fresh-prime existence.
- 
+
  ## 17. Proposed Minimum Implementation Surface
- 
+
 -This section is provisional until the audit is complete.
 -
 -### `FinitePrimeEscape.lean`
@@ -2510,9 +2510,9 @@ index 163fc8df..c9c66fba 100644
 +`FreshPrimeFactor` predicate if accepted, the supplied-divisor exclusion
 +theorem, and the existence corollary. Later checkpoints may add a local `ring`
 +wrapper in `CosmicCompletion.lean` and concrete facts in `Demo.lean`.
- 
+
  ## 18. Audit Questions Requiring Explicit Answers
- 
+
 -The first Codex report must answer all of the following.
 -
 -### Arithmetic
@@ -2571,9 +2571,9 @@ index 163fc8df..c9c66fba 100644
 +wrapper should be local; neither projection exists; DkReal has the carrier,
 +nesting, and width entry points but lacks inverse interval mapping and width
 +transport.
- 
+
  ## 19. First Audit Report Requirements
- 
+
 -The first audit report must be written to:
 -
 -```text
@@ -2628,7 +2628,7 @@ index 163fc8df..c9c66fba 100644
 -
 -## 21. Post-Audit Acceptance Criteria
 +The completed detailed record is `report-hack-001.md` in this directory.
- 
+
 -This map is considered audit-complete when:
 -
 -```text
@@ -2745,7 +2745,7 @@ index 163fc8df..c9c66fba 100644
 -concrete norm_num facts
 -```
 +## 20. Audit Stopping Rule and Searches Performed
- 
+
 -If the audit produces this level of clarity, the next Codex implementation session should not need to rediscover the same theorem surface.
 +Exact and semantic searches were run over `DkMath/`,
 +`logs/summary_report/__theorems-heading.txt`,
