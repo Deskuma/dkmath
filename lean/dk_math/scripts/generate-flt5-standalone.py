@@ -160,7 +160,9 @@ def generate(root: Path, sources: list[Source]) -> str:
         chunks.append(f"/-! ===== BEGIN GENERATED SOURCE: {source.path} ===== -/\n\n")
         chunks.append(flattened_body(source))
         chunks.append(f"\n/-! ===== END GENERATED SOURCE: {source.path} ===== -/\n\n")
-    generated = "".join(chunks)
+    # Generated files end with exactly one newline so repository whitespace
+    # checks remain deterministic as well as byte-for-byte regeneration.
+    generated = "".join(chunks).rstrip("\r\n") + "\n"
     counts = {name: len(pattern.findall(generated)) for name, pattern in ENDPOINT_PATTERNS.items()}
     bad = {name: count for name, count in counts.items() if count != 1}
     if bad:
