@@ -26,7 +26,7 @@ closure is acyclic rather than circular.
 namespace DkMath.FLT.Five
 
 /--
-The quadratic re-entry map used in the classical exponent-five descent.  Its
+The quadratic re-entry map used in the golden-order exponent-five descent.  Its
 norm is the quartic occurring in the second coordinate of a golden fifth
 power, while its second coordinate is a square.
 -/
