@@ -50,6 +50,40 @@ $$
 
 ## News
 
+> ## OpenAI Build Week: Breaking Math Verification
+
+DkMath's second OpenAI Build Week submission presents **Breaking Math Verification**, a developer workflow for turning newly reported mathematical claims into auditable Lean certificates with GPT-5.6 and Codex.
+
+The first case study independently formalizes a newly reported three-variable candidate counterexample to the Jacobian Conjecture over both `ℚ` and `ℂ`.
+
+Lean verifies:
+
+- the exact polynomial map `F = (P, Q, R)`;
+- the formal Jacobian determinant `det J(F) = -2`;
+- an exact output normalization with determinant `1`;
+- three pairwise-distinct inputs mapping to the common target `(1/8, 0, 0)`;
+- noninjectivity of the normalized map;
+- the absence of a set-theoretic left inverse.
+
+The project also introduces a reusable public verification API:
+
+- `DkMath.Verification.CollisionCertificate`
+- `DkMath.Verification.CollisionCertificate.notInjective`
+- `DkMath.Verification.CollisionCertificate.noLeftInverse`
+
+Focused axiom audits, provenance records, Demo contracts, and reusable verification templates are included. The complete package passed Lean CI and was integrated into `main`.
+
+Lean verifies the exact formalized formulas and their logical consequences. Historical priority, authorship, publication status, peer review, and broader community acceptance remain outside the scope of the certificate.
+
+- Project entry point: [Jacobian Counterexample Verification](./lean/dk_math/DkMath/Hackathon/JacobianCounterexample3/README.md)
+- Full verification record: [Breaking Math Verification](./lean/dk_math/docs/hackathon/jacobian-counterexample-verification-260721/README.md)
+- Generic verification API: [DkMath.Verification](./lean/dk_math/DkMath/Verification.lean)
+- Demo video: [Breaking Math Verification](https://youtu.be/IGNKJBknzrQ)
+- Devpost submission: [Breaking Math Verification](https://devpost.com/software/breaking-math-verification)
+- Main integration: [PR #63](https://github.com/Deskuma/dkmath/pull/63)
+
+---
+
 > ## OpenAI Build Week: Cosmic Formula Inversion and FLT5
 
 DkMath was submitted to OpenAI Build Week as a verifiable AI-assisted mathematical research project built with Codex and GPT-5.6.
