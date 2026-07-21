@@ -1,0 +1,5 @@
+artifact: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean.txt
+source_commit: 3aac63916dd78b15ed5aafdc16b41687d7877357
+source_branch: feature/FLT35-essence-260722-v0
+command: lake env lean /tmp/FLT5#StandAlone-v0.build.lean
+exit_status: 0
