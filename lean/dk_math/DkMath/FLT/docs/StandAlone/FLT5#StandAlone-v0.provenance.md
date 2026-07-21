@@ -39,9 +39,32 @@ Production endpoints included exactly once:
 - Result: PASS (`exit_status: 0`)
 - Saved log: `lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean.build.log`
 
+## Verified build environment
+
+The artifact was generated and built in the version-pinned project environment:
+
+- Lean toolchain: `leanprover/lean4:v4.29.0`
+- `lean-toolchain` Git blob SHA at source commit:
+  `14791d727f9a9455fb1e828c6ce6c07fae007990`
+- `lake-manifest.json` Git blob SHA at source commit:
+  `12106850f78e74c6451ae91cc91fd1597b2a1fc9`
+- Mathlib input revision: `v4.29.0`
+- Mathlib resolved Git revision:
+  `8a178386ffc0f5fef0b77738bb5449d50efeea95`
+- Version command: `lake env lean --version`
+- Version output: `Lean (version 4.29.0, x86_64-unknown-linux-gnu, commit
+  98dc76e3c0a9b856c9b98726b713fb04fab16740, Release)`
+
+The successful build applies to this pinned Lean/Mathlib v4.29.0 environment.
+No compatibility claim is made for Lean/Mathlib v4.32.0 or later. Lean
+Comparator Live compatibility is deferred to a separate standalone-only
+migration checkpoint; it will not silently redefine this v4.29.0 provenance
+artifact.
+
 The standalone artifact is archival and is not imported by any DkMath
 production module. It excludes the observational `TraceOneBridge` and the
 separate `DkMath.FLT.Five.Standalone` GN5 seed.
 
-F35-008 will separately perform public/standalone statement comparison and the
-formal axiom/trust audit. Those claims are not part of this provenance record.
+F35-008A will separately perform the v4.29.0 public/standalone statement
+comparison and formal axiom/trust audit. Those claims are not part of this
+provenance record.

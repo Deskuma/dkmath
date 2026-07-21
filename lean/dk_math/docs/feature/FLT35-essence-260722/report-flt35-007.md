@@ -16,6 +16,30 @@ one terminal newline and committed first as `3aac6391`. The worktree was then
 clean, and the complete package was regenerated from that exact source
 snapshot. Comparator equivalence and formal axiom auditing remain F35-008.
 
+## Verified runtime boundary
+
+F35-007 PASS scope: **Lean/Mathlib v4.29.0 project environment**.
+
+```text
+lean-toolchain: leanprover/lean4:v4.29.0
+lean-toolchain blob: 14791d727f9a9455fb1e828c6ce6c07fae007990
+lake-manifest.json blob: 12106850f78e74c6451ae91cc91fd1597b2a1fc9
+mathlib inputRev: v4.29.0
+mathlib rev: 8a178386ffc0f5fef0b77738bb5449d50efeea95
+```
+
+The actual executable check was:
+
+```text
+command: lake env lean --version
+output: Lean (version 4.29.0, x86_64-unknown-linux-gnu, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740, Release)
+```
+
+The exact artifact bytes were rebuilt successfully as
+`/tmp/FLT5#StandAlone-v0.v429.build.lean` in this environment. Lean/Mathlib
+v4.32.0+ status was not tested here and is not claimed. Comparator Live is
+deferred to a standalone-only compatibility checkpoint.
+
 ## Source snapshot
 
 - Source commit SHA: `3aac63916dd78b15ed5aafdc16b41687d7877357`
@@ -116,5 +140,15 @@ perform F35-008, update the main README, add p=7, or make a general-prime claim.
 
 ## Next recommended checkpoint
 
-Proceed to F35-008: compare public and standalone endpoint statements and
-perform the formal axiom/trust audit without changing the generated artifact.
+Proceed in the following sequence without changing this v4.29.0 provenance
+artifact:
+
+```text
+F35-008A: v4.29.0 public/standalone statement comparison and axiom/trust audit
+F35-008B: standalone-only Lean/Mathlib v4.32.0+ compatibility migration and Comparator Live validation
+F35-009: documentation closure
+```
+
+F35-008B must remain isolated from any repository-wide Lean upgrade. A
+Comparator-specific derivative may be patched or regenerated there, but it
+must not silently redefine the pinned v4.29.0 artifact.

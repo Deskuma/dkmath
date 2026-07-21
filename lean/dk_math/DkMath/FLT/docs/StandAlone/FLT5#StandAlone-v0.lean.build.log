@@ -1,5 +1,12 @@
 artifact: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean.txt
 source_commit: 3aac63916dd78b15ed5aafdc16b41687d7877357
 source_branch: feature/FLT35-essence-260722-v0
-command: lake env lean /tmp/FLT5#StandAlone-v0.build.lean
+lean_toolchain: leanprover/lean4:v4.29.0
+lean_toolchain_blob: 14791d727f9a9455fb1e828c6ce6c07fae007990
+lake_manifest_blob: 12106850f78e74c6451ae91cc91fd1597b2a1fc9
+mathlib_input_rev: v4.29.0
+mathlib_rev: 8a178386ffc0f5fef0b77738bb5449d50efeea95
+lean_version_command: lake env lean --version
+lean_version_output: Lean (version 4.29.0, x86_64-unknown-linux-gnu, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740, Release)
+build_command: lake env lean /tmp/FLT5#StandAlone-v0.v429.build.lean
 exit_status: 0
