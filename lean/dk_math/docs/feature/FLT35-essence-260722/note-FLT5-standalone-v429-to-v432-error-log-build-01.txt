@@ -1,0 +1,72 @@
+$ lake build '/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean'
+✖ [8655/8655] Building DkMath.FLT.docs.StandAlone.«FLT5#StandAlone-v0»
+trace: .> LEAN_PATH=/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/Cli/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/batteries/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/Qq/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/aesop/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/importGraph/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/plausible/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/packages/mathlib/.lake/build/lib/lean:/home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/build/lib/lean /home/deskuma/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean /home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean -o /home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.olean -i /home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.ilean -c /home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/build/ir/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.c --setup /home/deskuma/develop/lean/clone/PR/PR-dkmath/lean/dk_math/.lake/build/ir/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.setup.json --json
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:370:4: Type mismatch: After simplification, term
+  hcop
+ has type
+  @Eq ℕ (g.gcd n) 1
+but is expected to have type
+  @Eq ℕ (gcd g n) 1
+warning: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:1082:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:1075:46: Variable name `hd0` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3069:17: Type mismatch: After simplification, term
+  hxy
+ has type
+  @Eq GoldenInt (x * y) goldenOne
+but is expected to have type
+  @Eq GoldenInt (x * y) 1
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3072:18: Type mismatch: After simplification, term
+  hxy
+ has type
+  @Eq GoldenInt (x * y) 1
+but is expected to have type
+  @Eq GoldenInt (x * y) goldenOne
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3073:4: Type mismatch: After simplification, term
+  hxy
+ has type
+  @Eq GoldenInt (x * y) 1
+but is expected to have type
+  @Eq GoldenInt (x * y) goldenOne
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3294:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3299:12: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3324:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3327:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3332:18: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3340:18: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3437:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3507:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3552:4: Type mismatch: After simplification, term
+  hcopTH
+ has type
+  @Eq ℕ (t.gcd H) 1
+but is expected to have type
+  @Eq ℕ (gcd t H) 1
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3696:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:3808:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:4519:18: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:4579:20: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5124:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5215:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5218:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5223:16: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5231:16: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5367:14: `ring_nf` made no progress on the goal
+error: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5480:4: Type mismatch: After simplification, term
+  hcopN0H
+ has type
+  @Eq ℕ (n0.gcd (goldenFifthSndFactor gamma.fst gamma.snd).natAbs) 1
+but is expected to have type
+  @Eq ℕ (gcd n0 (goldenFifthSndFactor gamma.fst gamma.snd).natAbs) 1
+warning: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean:5838:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- DkMath.FLT.docs.StandAlone.«FLT5#StandAlone-v0»
+error: build failed
