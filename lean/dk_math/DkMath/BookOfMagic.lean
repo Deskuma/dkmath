@@ -6,5 +6,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.BookOfMagic.UniqueGapContract
 import DkMath.BookOfMagic.GapCrystal
+import DkMath.BookOfMagic.GNFiniteDifference
 
 #print "file: DkMath.BookOfMagic"
