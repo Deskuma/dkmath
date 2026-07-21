@@ -11,3 +11,4 @@ import DkMath.Hackathon.JacobianCounterexample3
 #print axioms DkMath.Hackathon.JacobianCounterexample3.jacobianCounterexampleCertificateQ
 #print axioms DkMath.Hackathon.JacobianCounterexample3.jacobianCounterexampleCertificateC
 #print axioms DkMath.Hackathon.JacobianCounterexample3.normalizedJacobianCounterexampleCertificateC
+#print axioms DkMath.Hackathon.JacobianCounterexample3.jacobianDemoCertificateC
