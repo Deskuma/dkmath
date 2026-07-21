@@ -1,0 +1,1 @@
+Lean now proves F L T five target and Fermat five no positive solution. For positive natural numbers, x to the fifth plus y to the fifth never equals z to the fifth. The final C I passed.

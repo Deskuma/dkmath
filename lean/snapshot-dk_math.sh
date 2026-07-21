@@ -17,7 +17,12 @@ tar cvzf $TAR_FILE \
     --exclude='./**/__*' \
     --exclude='./**/*.png' \
     --exclude='./**/*.jpg' \
+    --exclude='./**/*.gif' \
     --exclude='./**/*.zip' \
+    --exclude='./**/*.wav' \
+    --exclude='./**/*.onnx' \
+    --exclude='./**/*.bin' \
+    --exclude='./**/*.mp4' \
     ./dk_math
 sha256sum $TAR_FILE > $TAR_FILE.sha256
 

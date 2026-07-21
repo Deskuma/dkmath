@@ -421,8 +421,7 @@ $$
 $$
 
 $$
-\mathrm{Body}(x,u;3)=3x^2u+3xu^2+u^3
-=u(3x^2+3xu+u^2)
+\mathrm{Body}(x,u;3)=3x^2u+3xu^2+u^3=u(3x^2+3xu+u^2)
 $$
 
 $$
