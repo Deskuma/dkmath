@@ -5,5 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Hackathon.JacobianCounterexample3.Demo
+import DkMath.Hackathon.JacobianCounterexample3.VerificationBridge
 
 #print "file: DkMath.Hackathon.JacobianCounterexample3"

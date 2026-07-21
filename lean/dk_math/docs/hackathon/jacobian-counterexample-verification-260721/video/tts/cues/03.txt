@@ -1,0 +1,1 @@
+For this case study, I independently transcribed the reported three-dimensional polynomial map into Lean. Its coordinates are P, Q, and R. Their exact formulas remain visible and traceable in the source module.

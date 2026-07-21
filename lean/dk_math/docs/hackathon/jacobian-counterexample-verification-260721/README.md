@@ -2,6 +2,7 @@
 
 codex://threads/019f82f0-4f31-7950-b8c8-ed84dfca5aa3
 cid: 6a5ef0ae-de08-83ee-9e17-4c9019b09cf8
+cid: 6a5f3329-2acc-83ee-8b4b-ff2c3626f169
 date: 2026/07/21 17:31
 author: D. and Wise Wolf, Codex GPT-5.6
 
@@ -10,6 +11,12 @@ author: D. and Wise Wolf, Codex GPT-5.6
 JAC-001 through JAC-011 are complete. DkMath now exposes a Lean 4 + Mathlib
 certificate for the stated three-dimensional polynomial formulas, their
 constant Jacobian determinant, and their explicit collision.
+
+BMV-001 through BMV-006 are also complete. The reusable collision certificate
+is public as `DkMath.Verification`, and the reusable project contracts are in
+[`docs/verification`](../../verification/README.md). The separate GN5 case
+validated the engineering workflow across domains; it does not alter the
+Jacobian result or its submission narrative.
 
 ## Verified map
 

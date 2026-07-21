@@ -1,0 +1,1 @@
+Lean differentiates the multivariable polynomials symbolically and proves that the original formal Jacobian determinant is minus two. Multiplying the first output coordinate by minus one half gives a normalized map whose formal determinant is exactly one.

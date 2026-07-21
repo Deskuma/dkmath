@@ -1,0 +1,143 @@
+1
+00:00:00,000 --> 00:00:04,917
+A concrete candidate counterexample to the Jacobian Conjecture was reported.
+
+2
+00:00:04,917 --> 00:00:08,345
+But a reported formula is not yet a verified theorem.
+
+3
+00:00:08,345 --> 00:00:15,979
+Before repeating the headline, we need an exact reconstruction, explicit witnesses, and an inspectable trust boundary.
+
+4
+00:00:16,779 --> 00:00:20,938
+Breaking Math Verification is a reusable workflow for that moment.
+
+5
+00:00:20,938 --> 00:00:22,828
+Start with the reported claim.
+
+6
+00:00:22,828 --> 00:00:25,159
+Transcribe its objects independently.
+
+7
+00:00:25,159 --> 00:00:30,074
+Prove symbolic identities, check finite witnesses, and derive the consequence.
+
+8
+00:00:30,074 --> 00:00:35,808
+Then publish a small Lean certificate and its axioms, keeping provenance and scope visible.
+
+9
+00:00:36,608 --> 00:00:43,371
+For this case study, I independently transcribed the reported three-dimensional polynomial map into Lean.
+
+10
+00:00:43,371 --> 00:00:45,432
+Its coordinates are P, Q, and R.
+
+11
+00:00:45,432 --> 00:00:50,005
+Their exact formulas remain visible and traceable in the source module.
+
+12
+00:00:50,805 --> 00:00:59,406
+Lean differentiates the multivariable polynomials symbolically and proves that the original formal Jacobian determinant is minus two.
+
+13
+00:00:59,406 --> 00:01:07,232
+Multiplying the first output coordinate by minus one half gives a normalized map whose formal determinant is exactly one.
+
+14
+00:01:08,032 --> 00:01:09,985
+The global witness is finite.
+
+15
+00:01:09,985 --> 00:01:14,631
+Lean checks three pairwise-distinct inputs: p zero, p one, and p two.
+
+16
+00:01:14,631 --> 00:01:18,065
+All map to the same target: one eighth, zero, zero.
+
+17
+00:01:18,065 --> 00:01:23,115
+These are exact complex-coordinate equalities, with no numerical tolerance.
+
+18
+00:01:23,915 --> 00:01:27,798
+Two distinct inputs with one output refute injectivity.
+
+19
+00:01:27,798 --> 00:01:34,858
+DkMath packages that logic as a reusable Collision Certificate, independent of Jacobian polynomials.
+
+20
+00:01:34,858 --> 00:01:42,624
+The adapter supplies p zero and p one; generic consequences prove non-injectivity and rule out a left inverse.
+
+21
+00:01:43,424 --> 00:01:45,802
+These are compiled Lean declarations.
+
+22
+00:01:45,802 --> 00:01:50,430
+The normalized certificate combines determinant one and non-injectivity.
+
+23
+00:01:50,430 --> 00:01:54,287
+The three-point theorem records distinctness and evaluation.
+
+24
+00:01:54,287 --> 00:02:03,157
+The audit reports propext, Classical choice, and Quot sound for the Jacobian certificate; the generic collision consequence has no axioms.
+
+25
+00:02:03,957 --> 00:02:09,250
+GPT five point six helped analyze the mathematics and review theorem boundaries.
+
+26
+00:02:09,250 --> 00:02:13,087
+Codex implemented the Lean modules and ran focused builds.
+
+27
+00:02:13,087 --> 00:02:15,336
+Git carried the auditable handoff.
+
+28
+00:02:15,336 --> 00:02:20,298
+Finally, the Lean kernel checked the proof terms exposed by the public API.
+
+29
+00:02:21,098 --> 00:02:25,922
+Broader mathematical review continues; this project does not replace it.
+
+30
+00:02:25,922 --> 00:02:30,010
+Lean verifies the exact formalized formulas and consequences.
+
+31
+00:02:30,010 --> 00:02:36,576
+It does not certify historical priority, publication status, peer review, or community acceptance.
+
+32
+00:02:36,576 --> 00:02:40,127
+The repository records those distinctions explicitly.
+
+33
+00:02:40,927 --> 00:02:47,080
+Breaking Math Verification turns a fast-moving claim into a reproducible first verification layer.
+
+34
+00:02:47,080 --> 00:02:52,229
+The source is traceable, the witnesses explicit, and the trust boundary auditable.
+
+35
+00:02:52,229 --> 00:02:53,862
+Do not trust the headline.
+
+36
+00:02:53,862 --> 00:02:55,306
+Verify the certificate.

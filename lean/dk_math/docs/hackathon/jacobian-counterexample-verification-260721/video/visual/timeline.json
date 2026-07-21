@@ -1,0 +1,92 @@
+[
+  {
+    "cue": "01",
+    "start": 0.0,
+    "end": 16.779,
+    "raw_seconds": 15.978667,
+    "slot_seconds": 16.779,
+    "atempo": 1.0,
+    "text": "A concrete candidate counterexample to the Jacobian Conjecture was reported. But a reported formula is not yet a verified theorem. Before repeating the headline, we need an exact reconstruction, explicit witnesses, and an inspectable trust boundary."
+  },
+  {
+    "cue": "02",
+    "start": 16.779,
+    "end": 36.608,
+    "raw_seconds": 19.029333,
+    "slot_seconds": 19.829,
+    "atempo": 1.0,
+    "text": "Breaking Math Verification is a reusable workflow for that moment. Start with the reported claim. Transcribe its objects independently. Prove symbolic identities, check finite witnesses, and derive the consequence. Then publish a small Lean certificate and its axioms, keeping provenance and scope visible."
+  },
+  {
+    "cue": "03",
+    "start": 36.608,
+    "end": 50.805,
+    "raw_seconds": 13.397333,
+    "slot_seconds": 14.197,
+    "atempo": 1.0,
+    "text": "For this case study, I independently transcribed the reported three-dimensional polynomial map into Lean. Its coordinates are P, Q, and R. Their exact formulas remain visible and traceable in the source module."
+  },
+  {
+    "cue": "04",
+    "start": 50.805,
+    "end": 68.032,
+    "raw_seconds": 16.426667,
+    "slot_seconds": 17.227,
+    "atempo": 1.0,
+    "text": "Lean differentiates the multivariable polynomials symbolically and proves that the original formal Jacobian determinant is minus two. Multiplying the first output coordinate by minus one half gives a normalized map whose formal determinant is exactly one."
+  },
+  {
+    "cue": "05",
+    "start": 68.032,
+    "end": 83.915,
+    "raw_seconds": 15.082667,
+    "slot_seconds": 15.883,
+    "atempo": 1.0,
+    "text": "The global witness is finite. Lean checks three pairwise-distinct inputs: p zero, p one, and p two. All map to the same target: one eighth, zero, zero. These are exact complex-coordinate equalities, with no numerical tolerance."
+  },
+  {
+    "cue": "06",
+    "start": 83.915,
+    "end": 103.424,
+    "raw_seconds": 18.709333,
+    "slot_seconds": 19.509,
+    "atempo": 1.0,
+    "text": "Two distinct inputs with one output refute injectivity. DkMath packages that logic as a reusable Collision Certificate, independent of Jacobian polynomials. The adapter supplies p zero and p one; generic consequences prove non-injectivity and rule out a left inverse."
+  },
+  {
+    "cue": "07",
+    "start": 103.424,
+    "end": 123.957,
+    "raw_seconds": 19.733333,
+    "slot_seconds": 20.533,
+    "atempo": 1.0,
+    "text": "These are compiled Lean declarations. The normalized certificate combines determinant one and non-injectivity. The three-point theorem records distinctness and evaluation. The audit reports propext, Classical choice, and Quot sound for the Jacobian certificate; the generic collision consequence has no axioms."
+  },
+  {
+    "cue": "08",
+    "start": 123.957,
+    "end": 141.098,
+    "raw_seconds": 16.341333,
+    "slot_seconds": 17.141,
+    "atempo": 1.0,
+    "text": "GPT five point six helped analyze the mathematics and review theorem boundaries. Codex implemented the Lean modules and ran focused builds. Git carried the auditable handoff. Finally, the Lean kernel checked the proof terms exposed by the public API."
+  },
+  {
+    "cue": "09",
+    "start": 141.098,
+    "end": 160.927,
+    "raw_seconds": 19.029333,
+    "slot_seconds": 19.829,
+    "atempo": 1.0,
+    "text": "Broader mathematical review continues; this project does not replace it. Lean verifies the exact formalized formulas and consequences. It does not certify historical priority, publication status, peer review, or community acceptance. The repository records those distinctions explicitly."
+  },
+  {
+    "cue": "10",
+    "start": 160.927,
+    "end": 176.106,
+    "raw_seconds": 14.378667,
+    "slot_seconds": 15.179,
+    "atempo": 1.0,
+    "text": "Breaking Math Verification turns a fast-moving claim into a reproducible first verification layer. The source is traceable, the witnesses explicit, and the trust boundary auditable. Do not trust the headline. Verify the certificate."
+  }
+]
