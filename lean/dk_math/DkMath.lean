@@ -28,6 +28,7 @@ import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: w
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
 import DkMath.Pascal  -- Pascal bridge modules
 import DkMath.Petal  -- Petal: relative polygon and GN bridge surface
+import DkMath.BookOfMagic  -- Book of Magic: generic dependent Core-Gap API
 -- Hackathon finite-prime escape → GN5 clean-channel demo
 import DkMath.Hackathon.FinitePrimeEscapeGN5
 -- Hackathon Jacobian counterexample formal certificate

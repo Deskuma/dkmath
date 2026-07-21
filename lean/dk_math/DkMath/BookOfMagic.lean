@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Hackathon.JacobianCounterexample3.GapCrystalBridge
+import DkMath.BookOfMagic.UniqueGapContract
+import DkMath.BookOfMagic.GapCrystal
 
-#print "file: DkMath.Hackathon.JacobianCounterexample3"
+#print "file: DkMath.BookOfMagic"
