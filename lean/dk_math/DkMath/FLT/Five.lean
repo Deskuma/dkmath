@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Five.Main
+import DkMath.FLT.Five.TraceOneBridge
 
 #print "file: DkMath.FLT.Five"
 

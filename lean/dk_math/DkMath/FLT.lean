@@ -10,6 +10,7 @@ import DkMath.FLT.Main
 import DkMath.FLT.PrimeProvider
 import DkMath.FLT.Samples
 import DkMath.FLT.Five
+import DkMath.FLT.QuadraticEssence
 
 #print "file: DkMath.FLT"
 
