@@ -555,7 +555,7 @@ index 03d2f250..709ede8d 100644
 @@ -450,4 +450,68 @@ theorem exists_sourcePressureMargin_transition_of_beamSeed
        sourcePressureMargin_next_eq_current_add_netDrop_of_addressedDepthTarget
          haddressed⟩
- 
+
 +/--
 +Local True Beam sign preservation at an addressed depth.
 +

@@ -426,7 +426,7 @@ index 9b906d8d..70337d10 100644
 @@ -3540,6 +3540,30 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.exists_recovere
    exact ⟨A, B, hin,
      SourcePressureLocalIslandWitnessAdjacentDiagnosis.recovered_or_listFailure hdiag⟩
- 
+
 +/--
 +Project a list-level adjacent diagnosis without weakening the overlap branch.
 +
@@ -457,7 +457,7 @@ index 9b906d8d..70337d10 100644
 @@ -3618,6 +3642,38 @@ theorem sourcePressureLocalIslandWitnessList_failure_four_hasAdjacentDiagnosis
            (SourcePressureLocalIslandWitnessAdjacentPairInList.tail
              SourcePressureLocalIslandWitnessAdjacentPairInList.head)) h34
- 
+
 +/--
 +Length-five sorted-before failure yields a list-level adjacent diagnosis.
 +

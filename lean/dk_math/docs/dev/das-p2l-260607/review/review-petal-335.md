@@ -1020,7 +1020,7 @@ index 9a4ed104..4506f93a 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueue
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueueGlobal
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueueGlobal.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueueGlobal.lean
 new file mode 100644
@@ -1605,7 +1605,7 @@ index 76d3b47f..6f7035d9 100644
 @@ -94,6 +94,49 @@ theorem false_of_step_of_signature_eq_of_actualWeight_pos
    simp only [sub_self] at hprojected
    omega
- 
+
 +/-- Two realized edges forming a projected two-cycle with positive total
 +concrete weight contradict every sound bounded-potential certificate.  The
 +four concrete states need not form one concrete orbit cycle. -/
@@ -1659,7 +1659,7 @@ index a28f41e4..b5fc7804 100644
 @@ -156,4 +156,107 @@ theorem exists_le_of_card_eq_card_eraseOldestN
        _ < (eraseOldestN c s).card := hlt
    exact (Nat.lt_irrefl _ this)
- 
+
 +/-! ## Upper-tail characterization -/
 +
 +/-- The oldest-first remainder lies above a cutoff exactly when its cardinality
@@ -1771,7 +1771,7 @@ index 56d372a2..e9499d61 100644
 @@ -412,14 +412,6 @@ theorem fixedLowUpperBoundarySignature_T_rawAllOnesWitness_ne
      normalizedTopTwoBits_rawAllOnesWitness_eq_three hr] at htop
    norm_num at htop
- 
+
 -/-! ## Enriched projected-cycle audit
 -
 -The old all-ones self-loop is gone, but the realized signature-pair graph still
@@ -1786,7 +1786,7 @@ index 56d372a2..e9499d61 100644
 @@ -434,6 +426,396 @@ theorem s_eq_one_of_mod_four_eq_three
      omega
    omega
- 
+
 +/-! ## Symbolic top-two projected cycle -/
 +
 +/-- A positive coefficient times at least four, minus one, is `3 mod 4`. -/
@@ -2183,7 +2183,7 @@ index 56d372a2..e9499d61 100644
 @@ -556,6 +938,63 @@ def CoversAllRawOddTransitionsWithFixedLowUpperBoundarySignature
      (∀ x, C.signature x = fixedLowUpperBoundarySignature 1 x) ∧
        (∀ x, C.actualWeight x (T x) = rawSignedWidthWeight x (T x))
- 
+
 +/-- Depth-parametric coverage contract for the top-two enriched signature. -/
 +def CoversAllRawOddTransitionsWithFixedLowUpperBoundarySignatureAt
 +    {r : ℕ}
@@ -2270,13 +2270,13 @@ index 56d372a2..e9499d61 100644
 -  linarith
 +  exact not_coversAllRawOddTransitionsWithFixedLowUpperBoundarySignatureAt
 +    (r := 1) (by norm_num) C
- 
+
  /-!
  `CoversAllRawOddTransitionsWithFixedLowSignature` is intentionally stronger
 @@ -669,4 +1090,149 @@ theorem not_exists_fixedLowRawSignature_globalCertificate
    rintro ⟨C, hC⟩
    exact not_coversAllRawOddTransitionsWithFixedLowSignature hr C hC
- 
+
 +/-! ## Top-three audit at depth one
 +
 +The symbolic top-two cycle proves that two normalized leading bits are

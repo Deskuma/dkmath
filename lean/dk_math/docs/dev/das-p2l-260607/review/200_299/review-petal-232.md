@@ -382,7 +382,7 @@ index 7e88c827..2e9ebeee 100644
 @@ -394,5 +394,49 @@ theorem
        sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPairInList_left
          hin⟩
- 
+
 +/--
 +An adjacent-overlap obstruction exposes some listed witness with the full
 +singleton pulse diagnostic.
@@ -427,7 +427,7 @@ index 7e88c827..2e9ebeee 100644
 +    ⟨A, sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin,
 +      hdiag⟩
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-231.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-231.md
 new file mode 100644

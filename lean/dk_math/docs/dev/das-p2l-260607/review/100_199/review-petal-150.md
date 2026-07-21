@@ -411,7 +411,7 @@ index 9721501e..d9e9c18c 100644
 @@ -465,4 +465,137 @@ theorem SourcePressureAccountedIntervalsDisjoint.symm
      SourcePressureAccountedIntervalsDisjoint B A :=
    NatIntervalsDisjoint.symm h
- 
+
 +/--
 +Pairwise-disjointness predicate for an explicit list of accounted intervals.
 +

@@ -526,7 +526,7 @@ index 4725375b..9b906d8d 100644
 @@ -3368,6 +3368,31 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.tail
        (W1 :: W2 :: rest) A B :=
    Or.inr h
- 
+
 +/-- Decompose an adjacent-pair address in a nontrivial cons list. -/
 +theorem SourcePressureLocalIslandWitnessAdjacentPairInList.head_or_tail
 +    {n : OddNat} {k r : ℕ}
@@ -558,7 +558,7 @@ index 4725375b..9b906d8d 100644
 @@ -3412,6 +3437,109 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.of_adjacent
      SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis L :=
    ⟨A, B, hin, hdiag⟩
- 
+
 +/-- Eliminate a list-level adjacent diagnosis by exposing its addressed pair. -/
 +theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.elim
 +    {n : OddNat} {k r : ℕ}

@@ -737,7 +737,7 @@ index 704752ef..de00185e 100644
 @@ -706,6 +706,17 @@ This is a direction-sensitive helper for future sorted-family work.
  def NatIntervalBefore (a len b _len' : ℕ) : Prop :=
    a + len ≤ b
- 
+
 +/--
 +Overlap vocabulary for two natural-number half-open intervals.
 +
@@ -755,7 +755,7 @@ index 704752ef..de00185e 100644
 @@ -713,6 +724,46 @@ theorem NatIntervalsDisjoint.of_before
      NatIntervalsDisjoint a len b len' :=
    Or.inl h
- 
+
 +/-- Ordered non-overlap in one direction excludes overlap. -/
 +theorem NatIntervalsOverlap.not_of_before
 +    {a lenA b lenB : ℕ}
@@ -798,11 +798,11 @@ index 704752ef..de00185e 100644
 +
  /--
  Transitive-like composition for ordered non-overlap.
- 
+
 @@ -745,6 +796,48 @@ def SourcePressureIntervalPulseAddressBefore
      (A B : SourcePressureIntervalPulseAddress n k r) : Prop :=
    A.start + A.len ≤ B.start
- 
+
 +/--
 +Overlap predicate for two interval-pulse addresses.
 +
@@ -851,7 +851,7 @@ index 704752ef..de00185e 100644
 @@ -1692,6 +1785,57 @@ def SourcePressureLocalIslandWitnessBefore
      (sourcePressureIntervalPulseAddress_of_localIslandWitness W1)
      (sourcePressureIntervalPulseAddress_of_localIslandWitness W2)
- 
+
 +/--
 +Overlap predicate for two explicit local-island witnesses.
 +

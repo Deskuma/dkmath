@@ -188,7 +188,7 @@ index 8bdb83b3..4d7044d0 100644
 @@ -1336,6 +1336,26 @@ theorem SourcePressureForwardPairComparisonState.left_next_boundary_nonpos_and_b
      ⟨_, _, hnextL, _, _, _, _, _, hgap⟩
    exact ⟨hnextL, hgap⟩
- 
+
 +/--
 +Compact left-next interference surface for local window comparison.
 +

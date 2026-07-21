@@ -332,7 +332,7 @@ index 222c242e..d6df30b0 100644
 @@ -419,6 +419,46 @@ theorem SourcePressureBeamCenteredLocalPulseBox.signs
        _hnextBox, _hentryJumpBox, _hexitJumpBox⟩
    exact ⟨hmem, hprev, hcenter, haddr, hnext⟩
- 
+
 +/--
 +Beam-facing neighbor-candidate surface for explicit adjacent witnesses.
 +

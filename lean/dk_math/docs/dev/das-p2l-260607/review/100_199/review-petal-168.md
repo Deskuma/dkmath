@@ -620,7 +620,7 @@ index c9504ee8..07d8b573 100644
 @@ -2131,6 +2131,43 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_
    · exact SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_tail
        htail
- 
+
 +/--
 +Decompose an adjacent sorted-before failure at a nontrivial witness list into
 +the head pair or the tail.
@@ -664,7 +664,7 @@ index c9504ee8..07d8b573 100644
 @@ -2808,6 +2845,66 @@ theorem
        (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.of_headPairObstruction
          hobs)
- 
+
 +/--
 +Head not-before diagnosis for an explicit witness list.
 +

@@ -759,7 +759,7 @@ index 55bae3bd..a7d983cb 100644
 @@ -125,6 +125,43 @@ theorem canonicalEndpointBudgetWindow_conservation_singleton
      endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
        n q
- 
+
 +/-! ## Absorption deficit -/
 +
 +/-- Residual block-length budget after both exact absorption channels over the
@@ -803,7 +803,7 @@ index 55bae3bd..a7d983cb 100644
 @@ -142,6 +179,46 @@ theorem canonicalEndpointDriftWindowSum_eq_startState_bitWidth_sub
          canonicalBlockStartState_succ_eq_nextStartState]
        ring
- 
+
 +/-- The absorption deficit is also the exact width change between the two
 +canonical block starts. -/
 +theorem canonicalAbsorptionDeficitWindow_eq_startState_bitWidth_sub
@@ -850,7 +850,7 @@ index 55bae3bd..a7d983cb 100644
 @@ -261,6 +338,32 @@ def CanonicalWidthWithinReserve (n : OddNat) (B : ℕ) : Prop :=
  def RootwiseCanonicalWidthBound (n : OddNat) : Prop :=
    ∃ B : ℕ, CanonicalWidthWithinReserve n B
- 
+
 +/-- A reserve bounds every canonical width exactly when it bounds every signed
 +endpoint-drift prefix. -/
 +theorem canonicalWidthWithinReserve_iff_prefixEndpointDrift_le
@@ -883,7 +883,7 @@ index 55bae3bd..a7d983cb 100644
 @@ -406,9 +509,9 @@ theorem canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos
    rw [canonicalEndpointCounterCredit_one]
    omega
- 
+
 -/-- The desired local guard is equivalent to nonnegativity of the next
 -candidate credit.  This identifies the remaining arithmetic obligation but
 -does not discharge it. -/
@@ -899,7 +899,7 @@ index ab202e6c..5a559a60 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointReserve.lean
 @@ -54,18 +54,41 @@ theorem canonicalEndpointCounterCredit_allOnesOdd_odd_succ_one_neg
    omega
- 
+
  /-- Positive initial drift excludes every core counter certificate whose
 -weight and credit are definitionally the zero-reserve endpoint functions. -/
 -theorem not_exists_signedCounterCertificate_zeroReserve_of_initialDrift_pos
@@ -917,7 +917,7 @@ index ab202e6c..5a559a60 100644
    rw [hcredit] at hnonneg
    have hneg := canonicalEndpointCounterCredit_one_neg_of_initialDrift_pos hpos
    omega
- 
+
 +/-- If a certificate did use zero-reserve credit, its exact recurrence would
 +force its weight to be canonical endpoint drift. -/
 +theorem SignedCounterCertificate.weight_eq_endpointAccountingTerm_of_credit_eq
@@ -947,7 +947,7 @@ index ab202e6c..5a559a60 100644
 @@ -127,6 +150,31 @@ theorem canonicalEndpointWidth_eq_blockStartState_succ
    rw [canonicalBlockStartState_succ_eq_nextStartState]
    rfl
- 
+
 +/-- A width reserve `B` gives the explicit reflected-queue ceiling
 +`root width + B`. -/
 +theorem CanonicalWidthWithinReserve.to_queueUniformUpperBound
@@ -1095,9 +1095,9 @@ index ab202e6c..5a559a60 100644
 +      n q M C).mp (h q M)
 +  · exact (canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
 +      n q M C).mpr (h q M)
- 
+
  /-! ## Global reserve obstruction -/
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-343.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-343.md
 new file mode 100644
 index 00000000..8e402c38

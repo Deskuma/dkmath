@@ -168,7 +168,7 @@ index 70d137a2..6117b7d8 100644
 @@ -1427,6 +1427,43 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_surface_eq_or
    rcases h.boundary_corridor_surface with ⟨hnextL, hprevR, _hle⟩
    exact ⟨hnextL, hprevR, h.boundary_corridor_eq_or_lt⟩
- 
+
 +/--
 +Contact-corridor projection.
 +

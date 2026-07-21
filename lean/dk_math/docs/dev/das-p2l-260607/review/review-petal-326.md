@@ -805,9 +805,9 @@ index 23b4b59f..d97bbc01 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 @@ -1633,6 +1633,68 @@ noncomputable def oneEmbedding_canonicalSelectedDriftSpareCarrier
- 
+
  /-! ## Exact no-spare classes -/
- 
+
 +/-! ### Claim-hole accounting normal form -/
 +
 +/-- Positive depths in the block which do not carry a canonical payment
@@ -876,7 +876,7 @@ index 23b4b59f..d97bbc01 100644
 @@ -1652,6 +1714,64 @@ theorem card_selectedPressureCarrier_of_terminalValuation_eq_one
    change canonicalBlockLength n k - 2 = canonicalBlockLength n k - 2
    rfl
- 
+
 +/-- At valuation one, every hole after the first one is exactly one spare
 +selected incidence. -/
 +theorem card_selectedDriftSpareCarrier_eq_claimHoles_card_sub_one
@@ -941,7 +941,7 @@ index 23b4b59f..d97bbc01 100644
 @@ -1661,6 +1781,34 @@ def CanonicalTightValuationOnePositiveBlock
        canonicalBlockTerminalValuation n k = 1 ∧
          canonicalBlockClaimCount n k = canonicalBlockLength n k - 1
- 
+
 +/-- Hole normal form of the tight valuation-one class. -/
 +theorem canonicalTightValuationOnePositiveBlock_iff_claimHoles_card_eq_one
 +    (n : OddNat) (k : ℕ) :
@@ -976,7 +976,7 @@ index 23b4b59f..d97bbc01 100644
 @@ -1760,6 +1908,157 @@ def CanonicalZeroCarrierBalancedBorderBlock
    endpointAccountingTerm n k = 0 ∧
      canonicalSelectedPressureCarrier n k = ∅
- 
+
 +/-- Exact arithmetic normal form of a zero-drift block with no selected source
 +incidence. -/
 +theorem canonicalZeroCarrierBalancedBorderBlock_iff
@@ -1129,12 +1129,12 @@ index 23b4b59f..d97bbc01 100644
 +    (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)
 +
  /-! ## Saturated-successor source classification
- 
+
  The five-way classification proposed at cp-325 omitted a logically possible
 @@ -1790,6 +2089,29 @@ theorem exists_spareSelectedPressureSource_of_pos_of_two_le_terminalValuation
        i ∈ canonicalSelectedDriftSpareCarrier n k :=
    canonicalSelectedDriftSpareCarrier_nonempty hpos hnot hv
- 
+
 +/-- A successor has an immediately chargeable spare selected incidence. -/
 +def CanonicalSuccessorSpareAvailable (n : OddNat) (j : ℕ) : Prop :=
 +  (canonicalSelectedDriftSpareCarrier n j).Nonempty
@@ -1164,7 +1164,7 @@ index 23b4b59f..d97bbc01 100644
 @@ -1835,6 +2157,50 @@ theorem CanonicalSaturatedBorderBlock.successor_source_classification
              2 ≤ canonicalBlockTerminalValuation n j := ⟨hpos, hnotsat, hv2⟩
          exact Or.inr (Or.inr (Or.inr (Or.inl (by simpa [j] using hbranch))))
- 
+
 +/-- Source-level compression of the detailed six-way successor theorem. -/
 +theorem CanonicalSaturatedBorderBlock.successor_negative_or_spare_or_rigid
 +    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k) :
@@ -1210,12 +1210,12 @@ index 23b4b59f..d97bbc01 100644
 +  exact Finset.one_le_card.mpr h
 +
  /-! ## Experimental dyadic depth-transfer potential
- 
+
  These inequalities compare numerical denominations only.  They do not define
 @@ -1870,6 +2236,97 @@ theorem intToNat_endpointAccountingTerm_le_length_sub_depth_sub_one
    exact_mod_cast (show ((Int.toNat (endpointAccountingTerm n k) : ℕ) : ℤ) ≤
      (L - d - 1 : ℕ) by omega)
- 
+
 +/-- Positive nonsaturated blocks have room for a positive selected depth, a
 +positive gap, and an endpoint, hence length at least three. -/
 +theorem three_le_canonicalBlockLength_of_endpointAccountingTerm_pos_of_not_saturated
@@ -1313,7 +1313,7 @@ index 23b4b59f..d97bbc01 100644
 @@ -1905,6 +2362,170 @@ theorem CanonicalSaturatedBorderBlock.dyadic_unit_budget
      (1 : ℕ) * 2 ^ 1 = 2 ^ (2 - 1) := by
    norm_num
- 
+
 +/-! ## Length-one successor residue audit
 +
 +The saturated predecessor has odd core congruent to either three or seven
@@ -1480,7 +1480,7 @@ index 23b4b59f..d97bbc01 100644
 +
  /-!
  ## Current boundary after the causal depth queue
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-326.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-326.md
 new file mode 100644
 index 00000000..e57428e8

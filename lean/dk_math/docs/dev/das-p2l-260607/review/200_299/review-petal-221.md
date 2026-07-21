@@ -397,7 +397,7 @@ index 0ac72101..0d22b927 100644
 @@ -1295,4 +1295,141 @@ theorem sourcePressureMargin_next_nonpos_of_intervalPulse_right
    sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr
      (sourcePressureBeamMassBalanceRight_le_left_of_intervalPulse_right A haddr)
- 
+
 +/-
 +Witness-to-edge address alignment.
 +

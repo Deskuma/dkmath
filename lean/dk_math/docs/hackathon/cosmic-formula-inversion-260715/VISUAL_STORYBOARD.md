@@ -69,9 +69,9 @@ known finite prime set
 
 The intended viewer takeaway is:
 
-> A finite set of known primes is multiplied into `P`.  
-> A coprime offset `u` completes a Cosmic Formula square.  
-> The completed side length `P + u` has prime factors outside the original finite set.  
+> A finite set of known primes is multiplied into `P`.
+> A coprime offset `u` completes a Cosmic Formula square.
+> The completed side length `P + u` has prime factors outside the original finite set.
 > Lean verifies the arithmetic statement.
 
 The animation must not imply that the geometric rearrangement causes prime factorization.

@@ -509,7 +509,7 @@ index 58f64bff..74e8e554 100644
 @@ -1679,6 +1679,178 @@ theorem sourcePressureLocalIsland_singleton_sum_neg
    sourcePressureAccountedIntervalFamily_of_singletonLocalIslandWitness_sum_neg
      (⟨j, hisland⟩ : SourcePressureLocalIslandWitness n k r)
- 
+
 +/--
 +Ordered non-overlap for two explicit local-island witnesses.
 +

@@ -507,7 +507,7 @@ index fe8c7806..3db563e9 100644
 @@ -1162,6 +1162,132 @@ theorem sourcePressureIntervalPulseAddressListHasSortedBeforeFailure_pair_iff
    rw [sourcePressureAccountedIntervalListHasSortedBeforeFailure_pair_iff]
    exact not_congr sourcePressureIntervalPulseAddressBefore_iff_accountedBefore.symm
- 
+
 +/--
 +Thin family carrier for explicit interval-pulse addresses.
 +
@@ -636,11 +636,11 @@ index fe8c7806..3db563e9 100644
 +
  /--
  Build an accounted family from an adjacent-sorted interval-pulse-address list.
- 
+
 @@ -1219,6 +1345,60 @@ theorem
    simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
      using sourcePressureIntervalPulseAddressList_sum_neg_of_nonempty hL
- 
+
 +/--
 +Lift a sorted explicit interval-pulse-address family to an accounted interval
 +family.

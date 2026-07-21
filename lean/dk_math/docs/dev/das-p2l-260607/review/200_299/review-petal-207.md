@@ -486,7 +486,7 @@ index 66f7c7b1..70cbc51f 100644
 @@ -271,4 +271,86 @@ theorem exists_sourcePressureBeamSeedContainsDepth_and_target_of_seed
      ⟨j, hcontains⟩
    exact ⟨j, hcontains, sourcePressureBeamDepthTarget_of_seedContainsDepth hcontains⟩
- 
+
 +/--
 +Named addressed carrier for a Beam depth target selected from a supplied seed
 +witness list.

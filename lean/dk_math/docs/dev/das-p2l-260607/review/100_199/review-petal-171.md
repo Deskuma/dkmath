@@ -526,7 +526,7 @@ index 51b4b507..8a046838 100644
 @@ -3152,6 +3152,117 @@ theorem sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_or_listFailu
          (SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSortedBeforeFailure
            hobs))
- 
+
 +/--
 +Carrier predicate for a local adjacent-pair diagnosis inside an enclosing list.
 +

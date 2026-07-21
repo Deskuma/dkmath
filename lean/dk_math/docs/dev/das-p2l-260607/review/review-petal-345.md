@@ -629,7 +629,7 @@ index 91fabcb9..0c565c2b 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionMass
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointReserve.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointReserve.lean
 index 6789fcae..a55bb9f6 100644
@@ -642,11 +642,11 @@ index 6789fcae..a55bb9f6 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
- 
+
 @@ -434,4 +435,36 @@ theorem not_globalCanonicalWidthReserveBound :
    rw [canonicalBlockStartState_zero_eq_root] at hledger
    omega
- 
+
 +/-! ## Universal finite numeric-table obstruction -/
 +
 +/-- No single finite projected numeric edge table can soundly upper-bound the
@@ -1127,9 +1127,9 @@ index 0a056dea..7abfdb9c 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 @@ -627,9 +627,10 @@ The conservation form of one canonical edge weight is
- 
+
  `block length - claim holes - terminal valuation`.
- 
+
 -A sound finite control state must therefore either recover these three terms
 -or prove a common upper bound for every concrete edge in each projected edge
 -fiber.  The currently available candidate coordinates do not yet do this:
@@ -1137,11 +1137,11 @@ index 0a056dea..7abfdb9c 100644
 +recover these three terms or prove a common upper bound for every concrete
 +edge in each projected edge fiber.  The currently available candidate
 +coordinates do not yet do this:
- 
+
  * the full carry/claim word has unbounded length;
  * block length and claim-hole count are unbounded `Nat` coordinates;
 @@ -640,10 +641,13 @@ fiber.  The currently available candidate coordinates do not yet do this:
- 
+
  Thus storing the exact ledger violates finiteness, while discarding its
  unbounded coordinates leaves the required bounded-edge-fiber theorem open.
 -No canonical positive-cycle exclusion may be inferred before that theorem is
@@ -1156,7 +1156,7 @@ index 0a056dea..7abfdb9c 100644
 +of a future independent finite abstraction; manufacturing its signature from
 +an assumed queue bound remains intentionally classified as circular.
  -/
- 
+
  namespace FiniteSignedTransitionPotentialCertificate
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPrimitiveExcursion.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPrimitiveExcursion.lean
 index c5cbd429..c490f57d 100644
@@ -1165,7 +1165,7 @@ index c5cbd429..c490f57d 100644
 @@ -294,6 +294,26 @@ theorem existsUnique_canonicalOpenPositiveQueueExcursion_of_queue_pos
    rcases exists_canonicalOpenPositiveQueueExcursion_of_queue_pos hm with ⟨q, hq⟩
    exact ⟨q, hq, fun q' hq' => canonicalOpenPositiveQueueExcursion_left_unique hq' hq⟩
- 
+
 +/-- Reflection is inactive throughout an open positive excursion: the ending
 +queue is the ordinary signed drift accumulated from its last-zero start. -/
 +theorem CanonicalOpenPositiveQueueExcursion.queue_eq_windowDrift
@@ -1405,8 +1405,8 @@ index e8883f87..e95a2578 100644
 +    witness_spare_carrier_count: int
 +    witness_rigid_residual_count: int
 +    witness_selected_depth_histogram: str
- 
- 
+
+
  def audit_root(root: int) -> AuditRow:
 @@ -79,10 +91,13 @@ def audit_root(root: int) -> AuditRow:
      queue = 0
@@ -1421,7 +1421,7 @@ index e8883f87..e95a2578 100644
 +    lengths: list[int] = []
 +    claims_by_block: list[int] = []
      reached_one = False
- 
+
      blocks_audited = 0
 @@ -100,6 +115,9 @@ def audit_root(root: int) -> AuditRow:
          prefix_lengths.append(prefix_lengths[-1] + length)
@@ -1430,7 +1430,7 @@ index e8883f87..e95a2578 100644
 +        drifts.append(drift)
 +        lengths.append(length)
 +        claims_by_block.append(claims)
- 
+
          candidate = queue + drift
          if candidate > 0:
 @@ -119,6 +137,39 @@ def audit_root(root: int) -> AuditRow:
@@ -1470,7 +1470,7 @@ index e8883f87..e95a2578 100644
 +            )
 +            assert queue == positive_mass - negative_mass
 +            assert positive_mass <= dynamic_pressure + len(saturated)
- 
+
          if queue > maximum_queue:
              assert active_start >= 0
 @@ -128,6 +179,84 @@ def audit_root(root: int) -> AuditRow:
@@ -1575,7 +1575,7 @@ index e8883f87..e95a2578 100644
 +                zero_rigid_successors + tight_rigid_successors,
 +                ";".join(f"{depth}:{count}" for depth, count in sorted(depth_counts.items())),
              )
- 
+
          if orbit.state(endpoint) == 1:
 @@ -158,6 +299,18 @@ def audit_root(root: int) -> AuditRow:
          witness_claim_holes=record[4],
@@ -1594,17 +1594,17 @@ index e8883f87..e95a2578 100644
 +        witness_rigid_residual_count=record[17],
 +        witness_selected_depth_histogram=record[18],
      )
- 
- 
+
+
 @@ -177,8 +330,8 @@ def main() -> None:
- 
+
      output_dir = Path(__file__).with_name("results")
      output_dir.mkdir(parents=True, exist_ok=True)
 -    csv_path = output_dir / "canonical_absorption_deficit_audit_343.csv"
 -    md_path = output_dir / "canonical_absorption_deficit_audit_343.md"
 +    csv_path = output_dir / "canonical_excursion_mass_audit_345.csv"
 +    md_path = output_dir / "canonical_excursion_mass_audit_345.md"
- 
+
      with csv_path.open("w", newline="", encoding="utf-8") as stream:
          writer = csv.DictWriter(stream, fieldnames=list(asdict(rows[0])))
 @@ -189,7 +342,7 @@ def main() -> None:

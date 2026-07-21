@@ -335,7 +335,7 @@ index c35d44f6..1e409a10 100644
 @@ -789,6 +789,39 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).exists_reversed_of_two
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Branch split for sorted-before failure using the named pair-local recovered

@@ -382,13 +382,13 @@ index 1bca4106..c4d6dfc8 100644
 --- a/lean/dk_math/DkMath/Pascal.lean
 +++ b/lean/dk_math/DkMath/Pascal.lean
 @@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
- 
+
  import DkMath.Pascal.WallisCosmicPetalBridge
  import DkMath.Pascal.WallisLimitBridge
 +import DkMath.Pascal.WallisGrowthBridge
- 
+
  #print "file: DkMath.Pascal"
- 
+
 diff --git a/lean/dk_math/DkMath/Pascal/WallisGrowthBridge.lean b/lean/dk_math/DkMath/Pascal/WallisGrowthBridge.lean
 new file mode 100644
 index 00000000..3b7c900d

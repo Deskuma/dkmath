@@ -213,7 +213,7 @@ index c2b3b4de..bf445899 100644
 @@ -525,4 +525,31 @@ theorem sourcePressureSortedFailureState_to_orientedNeighborDiagnostic_or_pairOv
    sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
      (sourcePressureSortedFailureState_to_failureResolutionState h)
- 
+
 +/--
 +Beam seed reaches the same refined diagnostic/obstruction split.
 +

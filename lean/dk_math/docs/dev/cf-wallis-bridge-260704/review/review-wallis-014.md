@@ -61,7 +61,7 @@ index ede0bb49..ec0e95b7 100644
 @@ -557,4 +557,41 @@ theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
      exact IsEquivalent.div IsEquivalent.refl isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat
    exact hfinite.isEquivalent.trans hratio
- 
+
 +/--
 +Searchable alias for the central-binomial asymptotic.
 +
@@ -107,7 +107,7 @@ index 97cfdd2e..72d4b16d 100644
 @@ -143,6 +143,12 @@ theorem isEquivalent_real_centralBinomial_sqrt_pi_mul_nat :
      (fun m : Nat => (4 : R) ^ m / Real.sqrt (Real.pi * (m : R)))
  ```
- 
+
 +It also has a more explicit searchable alias:
 +
 +```lean
@@ -115,18 +115,18 @@ index 97cfdd2e..72d4b16d 100644
 +```
 +
  This uses the finite inversion identities:
- 
+
  ```lean
 @@ -153,15 +159,26 @@ theorem real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ
  and then divides `4^m ~ 4^m` by
  `centralRatioQ m ~ sqrt (Real.pi * m)`.
- 
+
 -## Next formal checkpoint
 -
 -The next theorem can package the same statement as an operational ratio limit:
 +The fourth closed theorem packages the same statement as an operational ratio
 +limit:
- 
+
 -```text
 -Nat.choose (2*m) m / (4^m / sqrt (Real.pi * m)) -> 1
 +```lean
@@ -138,7 +138,7 @@ index 97cfdd2e..72d4b16d 100644
 +    Filter.atTop
 +    (nhds 1)
  ```
- 
+
  This is equivalent to the `IsEquivalent` theorem above, but it is often easier
 -for downstream users who want a direct `Tendsto` surface.  After that, the
 -remaining work is presentation: expose a conventional Stirling-style theorem

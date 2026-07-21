@@ -1006,7 +1006,7 @@ index 8a3f7a20..ce03f7d0 100644
 @@ -117,6 +117,153 @@ theorem exists_canonicalSaturatedBorderBlock :
      ∃ n m, CanonicalSaturatedBorderBlock n m :=
    ⟨fiftyNineSaturatedOdd, 0, canonicalSaturatedBorderBlock_fiftyNine_zero⟩
- 
+
 +/-! ## Concrete zero-drift successor witness -/
 +
 +/-- Root 123 is the first bounded-audit witness whose saturated initial block
@@ -1159,7 +1159,7 @@ index 8a3f7a20..ce03f7d0 100644
  theorem not_forall_sourceAgeFrontierIncrement_zero_nonpos :
 @@ -167,7 +314,10 @@ previous module, this structure contains no all-time prefix field: with a
  `Fintype Signature`, `potential_le_initial` is a finite verification problem.
- 
+
  The signature, transition relation, and potential remain externally supplied.
 -Defining them from the source-age deficit would still be circular. -/
 +Defining them from the source-age deficit would still be circular.  Only the
@@ -1172,7 +1172,7 @@ index 8a3f7a20..ce03f7d0 100644
 @@ -671,32 +821,24 @@ theorem shiftedSource_mem_canonicalAgeCrossingBlockOfSource
    (Classical.choose_spec
      (existsUnique_mem_canonicalPaymentBlock n (i + H))).1
- 
+
 -/-- Subject to the exact non-underflow condition, a carry-two source belongs
 -to the age-`H` crossing carrier of the block containing its shifted source
 -time. -/
@@ -1206,13 +1206,13 @@ index 8a3f7a20..ce03f7d0 100644
 +  refine ⟨Finset.mem_Ico.mpr ⟨?_, ?_⟩, hiCarry⟩
 +  · exact Nat.sub_le_iff_le_add.mpr (by simpa [Nat.add_comm] using hiRange.1)
 +  · exact Nat.lt_sub_iff_add_lt.mpr (by simpa using hiRange.2)
- 
+
  /-! ## Short-window frontier sums -/
- 
+
 @@ -756,6 +898,488 @@ theorem CanonicalSaturatedBorderBlock.sourceAgeFrontierWindowSum_one_one
    rw [canonicalSourceAgeFrontierWindowSum_one,
      h.sourceAgeFrontierIncrement_one_eq_indicator hstart]
- 
+
 +/-! ## Exact horizon-zero reflected-frontier normal form -/
 +
 +/-- At horizon zero, actual frontier flow is the larger of the negative
@@ -1696,7 +1696,7 @@ index 8a3f7a20..ce03f7d0 100644
 +  omega
 +
  /-! ## Saturated-successor actual-consumption bridge -/
- 
+
  /-- Saturation leaves at least one queued claim for the successor, while every
 @@ -787,45 +1411,30 @@ theorem
      {n : OddNat} {m : ℕ} (h : CanonicalSaturatedBorderBlock n m)
@@ -1725,13 +1725,13 @@ index 8a3f7a20..ce03f7d0 100644
 -  omega
 +  exact h.sourceAgeFrontierWindowSum_zero_two_nonpos_of_successor_drift_neg
 +    hnegative
- 
+
  /-!
  ## Conditional challenge-facing boundary
- 
+
 -The positive route now has an exact public chain:
 +The source-age challenge is now separated into three levels:
- 
+
 -1. externally construct a noncircular
 -   `CanonicalFiniteSourceAgeFrontierPotentialCertificate n H Signature`;
 -2. obtain all nonpositive frontier prefixes;
@@ -1744,7 +1744,7 @@ index 8a3f7a20..ce03f7d0 100644
 +3. later global work: endpoint-to-all-time width transport, finite-state
 +   periodicity, nontrivial-cycle elimination, and translation to the raw
 +   challenge.
- 
+
  This module does **not** construct such a signature/certificate or prove that
 -some horizon `H` works.  The bounded audit is discovery evidence only.  The
 -saturated-successor split supplies positive successor consumption, and its
@@ -1759,7 +1759,7 @@ index 8a3f7a20..ce03f7d0 100644
 +At H1, mature saturated blocks are neutral, while successor flow is governed
 +by the explicit predecessor/demand/final-boundary/consumption balance above.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-338.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-338.md
 new file mode 100644

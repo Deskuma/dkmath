@@ -1027,7 +1027,7 @@ index c7f45140..de423879 100644
 @@ -46,6 +46,63 @@ theorem orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight
    have hdepth := (two_le_orbitWindowHeight_iff_orbitExactDepth_eq_one n i).1 hheight
    omega
- 
+
 +/-- Every canonical payment target is at or after its source time. -/
 +theorem le_orbitPaymentTarget
 +    (n : OddNat) (i : ℕ) :
@@ -1091,7 +1091,7 @@ index c7f45140..de423879 100644
 @@ -61,6 +118,13 @@ theorem two_le_orbitWindowHeight_orbitPaymentTarget
      rw [orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight htwo]
      exact htwo
- 
+
 +/-- Canonical payment targets are fixed points of the target map. -/
 +theorem orbitPaymentTarget_target
 +    (n : OddNat) (i : ℕ) :
@@ -1105,7 +1105,7 @@ index c7f45140..de423879 100644
 @@ -157,6 +221,113 @@ theorem universalPaymentBlockStart_le_floatPaymentBlockStart
    exact mem_orbitPaymentSourceFiberAt_of_mem_floatGrowthDebtFiberAt
      (floatPaymentBlockStart_mem_growthDebtFiber n j h)
- 
+
 +/--
 +Every strict interior point after a universal block start has the endpoint as
 +its canonical payment target.
@@ -1215,7 +1215,7 @@ index c7f45140..de423879 100644
 +
  /-!
  ## Next closure requirement
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-306.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-306.md
 new file mode 100644
 index 00000000..9a5d13f0

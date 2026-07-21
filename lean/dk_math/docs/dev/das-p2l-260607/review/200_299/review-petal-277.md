@@ -252,7 +252,7 @@ index 4d7044d0..90c9d983 100644
 @@ -1356,6 +1356,40 @@ theorem SourcePressureForwardPairComparisonState.left_next_interference_surface
      ⟨_, hcenterL, hnextL, _, hcenterR, _, _, _, hgap⟩
    exact ⟨hcenterL, hnextL, hcenterR, hgap⟩
- 
+
 +/--
 +Index corridor between the left next boundary and the right previous boundary.
 +

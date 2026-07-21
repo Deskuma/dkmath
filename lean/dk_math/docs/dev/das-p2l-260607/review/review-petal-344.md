@@ -891,13 +891,13 @@ index 5a559a60..6789fcae 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteControlCounter
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve"
- 
+
 @@ -287,6 +288,131 @@ theorem canonicalAbsorptionDeficitWindowUniformUpperBound_iff_length_le_absorpti
    · exact (canonicalAbsorptionDeficitWindow_le_iff_length_le_absorption_add
        n q M C).mpr (h q M)
- 
+
 +/-! ## Same-constant queue and deficit surfaces -/
 +
 +/-- Uniform reflected-queue boundedness is exactly uniform absorption-deficit
@@ -1024,7 +1024,7 @@ index 5a559a60..6789fcae 100644
 +      exact htotal
 +
  /-! ## Global reserve obstruction -/
- 
+
  /-- One natural reserve bounds every canonical width of every odd root. -/
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 index 1417788e..0a056dea 100644
@@ -1059,7 +1059,7 @@ index 1417788e..0a056dea 100644
 +independent finite abstraction; manufacturing its signature from an assumed
 +queue bound remains intentionally classified as circular.
  -/
- 
+
  namespace FiniteSignedTransitionPotentialCertificate
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-343.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-343.md
 index 8e402c38..6dfc2375 100644
@@ -1068,25 +1068,25 @@ index 8e402c38..6dfc2375 100644
 @@ -211,8 +211,9 @@ The new script
  python/Collatz/PetalBridge/canonical_absorption_deficit_audit.py
  ```
- 
+
 -records, for each audited odd root, a window attaining every newly observed
 -reflected-queue record.  The generated CSV includes:
 +checks the active absorption window at every positive queue state.  For each
 +audited odd root, the generated CSV stores the final maximum witness and
 +includes:
- 
+
  - root;
  - terminal and witness-start blocks;
 @@ -232,7 +233,9 @@ exact identity
  maximum queue = length - holes - terminal valuation.
  ```
- 
+
 -These values are explicitly observational.  They prove neither a uniform
 +Every record-breaking positive queue value is therefore checked when it is
 +encountered, but the CSV does not store every intermediate record.  These
 +values are explicitly observational.  They prove neither a uniform
  all-root bound nor eventual discharge.
- 
+
  Generated artifacts:
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-344.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-344.md
 new file mode 100644
@@ -1291,7 +1291,7 @@ index 8cc076b4..e8883f87 100644
 +++ b/python/Collatz/PetalBridge/canonical_absorption_deficit_audit.py
 @@ -111,6 +111,15 @@ def audit_root(root: int) -> AuditRow:
              active_start = -1
- 
+
          blocks_audited = block + 1
 +        if queue > 0:
 +            # Reflection is inactive inside the current positive excursion.
@@ -1327,7 +1327,7 @@ index 51864560..d8c440eb 100644
 +- every positive queue state passed its active-window deficit identity
 +- the CSV stores the final maximum witness for each root
  - no uniform bound or eventual discharge follows from this table
- 
+
  ## Maximum-Deficit Windows
 ````
 `````

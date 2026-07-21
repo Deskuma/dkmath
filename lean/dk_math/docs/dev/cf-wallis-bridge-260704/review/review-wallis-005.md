@@ -325,7 +325,7 @@ theorem dkTendsto_centralRatioQ_mul_mirror_pi_div_two :
 
 ````
 
-これで次の差分は、かなり綺麗な「三主語の極限橋」になるはずじゃ。  
+これで次の差分は、かなり綺麗な「三主語の極限橋」になるはずじゃ。
 守りはもう十分。ここからは、定理列を使いやすい形に磨いていこうぞ。
 
 ## Diff
@@ -338,16 +338,16 @@ index cb41c6db..232b04d8 100644
 +++ b/lean/dk_math/DkMath/Pascal/WallisLimitBridge.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import Mathlib
 +import DkMath.Analysis.DkLimit
  import DkMath.Pascal.WallisCosmicPetalBridge
- 
+
  #print "file: DkMath.Pascal.WallisLimitBridge"
 @@ -44,4 +45,45 @@ theorem tendsto_real_coe_wallisPartialQ_nhds_pi_div_two :
    exact Real.Wallis.tendsto_W_nhds_pi_div_two.congr' <|
      Eventually.of_forall fun m => (real_coe_wallisPartialQ_eq_Wallis_W m).symm
- 
+
 +/--
 +The rational Wallis partial products tend to `Real.pi / 2` after coercion to `ℝ`.
 +-/

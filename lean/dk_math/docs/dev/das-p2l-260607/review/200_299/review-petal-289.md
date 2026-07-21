@@ -603,7 +603,7 @@ index 0d93b78f..83a90250 100644
 @@ -660,6 +660,114 @@ theorem sourcePressureAdjacentPairInList_before_of_sorted
                exact hsorted.2
              exact ih htailSorted htail
- 
+
 +/-- Witness-level `Before` gives strict order of singleton depth values. -/
 +theorem sourcePressureLocalIslandWitnessBefore_val_lt
 +    {n : OddNat} {k r : ℕ}
@@ -718,7 +718,7 @@ index 0d93b78f..83a90250 100644
 @@ -1004,6 +1112,40 @@ def SourcePressureFiniteWindowPackingPairComparisonState
    SourcePressureFiniteWindowPackingSeparatorState L lo hi W₁ W₁' m₁ ∧
      SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂
- 
+
 +/-- Finite-window packing state with the canonical left-next separator. -/
 +def SourcePressureCanonicalFiniteWindowPackingState
 +    {n : OddNat} {k r : ℕ}
@@ -759,7 +759,7 @@ index 0d93b78f..83a90250 100644
 @@ -1864,6 +2006,15 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_window_width
    rcases h.window_order_chain with ⟨hlo, hleft, hright, hhi⟩
    omega
- 
+
 +/-- Project the oriented adjacent pair underlying one finite-window packing unit. -/
 +theorem SourcePressureFiniteWindowPackingSeparatorState.adjacentPair
 +    {n : OddNat} {k r : ℕ}
@@ -775,7 +775,7 @@ index 0d93b78f..83a90250 100644
 @@ -1888,6 +2039,30 @@ theorem SourcePressureFiniteWindowPackingPairComparisonState.right
      SourcePressureFiniteWindowPackingSeparatorState L lo hi W₂ W₂' m₂ :=
    h.2
- 
+
 +/-- Project the first oriented adjacent pair. -/
 +theorem SourcePressureFiniteWindowPackingPairComparisonState.left_adjacentPair
 +    {n : OddNat} {k r : ℕ}
@@ -806,7 +806,7 @@ index 0d93b78f..83a90250 100644
 @@ -2012,6 +2187,51 @@ theorem SourcePressureFiniteWindowPackingPairComparisonState.shared_separator_cr
    subst m₂
    exact ⟨hleft₁, hleft₂, hright₁, hright₂⟩
- 
+
 +/--
 +In a sorted witness list, one separator serves at most one oriented adjacent
 +pair.
@@ -858,7 +858,7 @@ index 0d93b78f..83a90250 100644
 @@ -2043,6 +2263,161 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_index_gap
      r + W.val + 2 ≤ r + W'.val :=
    h.localPacking.two_le_index_gap
- 
+
 +/-- Project the underlying finite-window separator state from the canonical form. -/
 +theorem SourcePressureCanonicalFiniteWindowPackingState.finiteWindow
 +    {n : OddNat} {k r : ℕ}

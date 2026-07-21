@@ -466,16 +466,16 @@ index 92d7c172..b0206640 100644
 +++ b/lean/dk_math/DkMath/Pascal/WallisGrowthBridge.lean
 @@ -81,6 +81,7 @@ then use `Asymptotics.IsEquivalent` / `Tendsto` tools explicitly.
  namespace DkMath.Pascal.WallisGrowthBridge
- 
+
  open Filter Topology
 +open Asymptotics
  open DkMath.Pascal.WallisCosmicPetalBridge
  open DkMath.Pascal.WallisLimitBridge
- 
+
 @@ -402,4 +403,99 @@ theorem tendsto_real_centralRatioQ_sq_div_nat_pi_cosmic_route :
        (nhds Real.pi) :=
    tendsto_real_centralRatioQ_sq_div_nat_pi
- 
+
 +/-!
 +## Square-root growth surface
 +
@@ -579,7 +579,7 @@ index d7117539..0fced9fc 100644
 @@ -49,6 +49,14 @@ theorem tendsto_real_centralRatioQ_sq_div_nat_pi :
      (nhds Real.pi)
  ```
- 
+
 +It also proves the square-root form:
 +
 +```lean
@@ -589,24 +589,24 @@ index d7117539..0fced9fc 100644
 +```
 +
  Therefore the squared central ratio has the growth line:
- 
+
  ```text
 @@ -73,9 +81,9 @@ inverting gives the central-binomial growth law:
  Nat.choose (2*m) m ~ 4^m / sqrt (pi * m)
  ```
- 
+
 -## Formal checkpoint just closed
 +## Formal checkpoints just closed
- 
+
 -The closed theorem is:
 +The first closed theorem is:
- 
+
  ```lean
  Filter.Tendsto
 @@ -96,16 +104,38 @@ The `m = 0` issue is only an `atTop` bookkeeping problem.  The Lean proof
  handles it with the finite rewrite under `m ≠ 0` and the eventual fact
  `eventually_gt_atTop 0`.
- 
+
 +The second closed theorem is:
 +
 +```lean
@@ -630,17 +630,17 @@ index d7117539..0fced9fc 100644
 +uses positivity of `centralRatioQ m`.
 +
  ## Next formal checkpoint
- 
+
 -The next theorem should not jump directly to Stirling.  A clean next layer is
 -an asymptotic-equivalence or square-root bridge, for example:
 +The next theorem should invert the definition of `centralRatioQ` and expose
 +the central-binomial coefficient form:
- 
+
  ```text
 -centralRatioQ m ~ sqrt (Real.pi * m)
 +Nat.choose (2*m) m ~ 4^m / sqrt (Real.pi * m)
  ```
- 
+
 -That will need a small real-analysis bridge from
 -`centralRatioQ m ^ 2 / m -> Real.pi` plus positivity of `centralRatioQ m`.
 -After that, the central-binomial coefficient form follows by inverting the

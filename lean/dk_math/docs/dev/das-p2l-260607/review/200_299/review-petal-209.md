@@ -525,7 +525,7 @@ index 11b06f41..03d2f250 100644
 @@ -408,4 +408,46 @@ theorem exists_sourcePressureBeamDepthTarget_and_margin_pos_of_seed
        sourcePressureBeamDepthTarget_of_addressedDepthTarget haddressed,
        sourcePressureMargin_pos_of_addressedDepthTarget haddressed⟩
- 
+
 +/--
 +An addressed Beam depth target opens the local source-pressure margin
 +transition equation at the same depth.

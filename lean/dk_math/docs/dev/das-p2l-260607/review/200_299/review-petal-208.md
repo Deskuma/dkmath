@@ -452,7 +452,7 @@ index 70cbc51f..11b06f41 100644
 @@ -353,4 +353,59 @@ theorem sourcePressureMargin_pos_of_addressedDepthTarget
    sourcePressureMargin_pos_of_beamDepthTarget n k r j
      (sourcePressureBeamDepthTarget_of_addressedDepthTarget h)
- 
+
 +/--
 +A raw Beam seed existentially exposes a positive source-pressure margin.
 +

@@ -1088,7 +1088,7 @@ index 4506f93a..54ef7b46 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueueGlobal
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFlow
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFlow.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFlow.lean
 new file mode 100644
@@ -1685,7 +1685,7 @@ index b5fc7804..d4033899 100644
 @@ -259,4 +259,88 @@ theorem eraseOldestN_eq_of_subset_card_and_complement_le
      subst z
      exact hzNot hy
- 
+
 +/-! ## Threshold dominance -/
 +
 +/-- Among all subsets of `s` with the same cardinality, the oldest-first

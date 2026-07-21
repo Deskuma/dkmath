@@ -401,7 +401,7 @@ index 3b7c900d..e865af0d 100644
 @@ -156,4 +156,139 @@ theorem real_coe_centralRatioQ_eq_wallisPartialQ_div_mirrorOddRatioPartialQ
    exact_mod_cast
      centralRatioQ_eq_wallisPartialQ_div_mirrorOddRatioPartialQ m
- 
+
 +/-!
 +## Telescoping mirror ratio
 +

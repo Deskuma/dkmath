@@ -199,7 +199,7 @@ index 876d46f4..993fecd1 100644
 @@ -464,6 +464,83 @@ theorem sourcePressureOrientedNeighborDiagnosticState_right_center_margin_signs
      sourcePressureMargin_next_nonpos_of_massBalanceRight_le_left haddr' hexit'
    exact ⟨hprev, hcenter, haddr', hnext⟩
- 
+
 +/--
 +Two-endpoint box state for an oriented neighbor diagnostic.
 +
@@ -279,7 +279,7 @@ index 876d46f4..993fecd1 100644
 +
  /--
  Recovered adjacent state enters the oriented neighbor diagnostic state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-252.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-252.md
 new file mode 100644
 index 00000000..cd09a2c3

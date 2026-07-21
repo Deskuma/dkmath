@@ -527,7 +527,7 @@ index 9f78672c..ce2e4107 100644
 @@ -520,6 +520,56 @@ theorem sourcePressureLocalIslandWitnessList_failure_hasAdjacentDiagnosis
        exact sourcePressureIntervalPulseAddress_of_localIslandWitness_len_pos W)
      h
- 
+
 +/--
 +Project an explicit-list sorted-before failure to the two consumer-facing
 +branches: either some adjacent pair has a pair-local recovered budget, or the
@@ -580,7 +580,7 @@ index 9f78672c..ce2e4107 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-178.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-178.md
 new file mode 100644
 index 00000000..09c85797

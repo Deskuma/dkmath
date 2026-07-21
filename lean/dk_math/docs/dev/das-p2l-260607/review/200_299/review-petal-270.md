@@ -204,7 +204,7 @@ index 9bdbae8e..da4add25 100644
 @@ -1149,6 +1149,30 @@ theorem SourcePressureForwardPairComparisonState.center_index_ne
      r + W.val ≠ r + W'.val :=
    ne_of_lt h.center_index_lt
- 
+
 +/--
 +Boundary-sign pair surface with the order stated at the actual center indices.
 +

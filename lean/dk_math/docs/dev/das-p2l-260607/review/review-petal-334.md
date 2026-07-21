@@ -10,14 +10,14 @@ gch: b9364963ac6c329dfb07c148d13c03ae84f9a7c7
 
 Checkpoint 334 を完了しました。
 
-- [CanonicalOwnedQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueue.lean)  
+- [CanonicalOwnedQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueue.lean)
   source identity を保持する再帰的 FIFO queue を実装。既存 scalar queue との cardinality が完全一致し、消費済み source が再登場しないことまで証明しました。
-- [OldestFirstQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/OldestFirstQueue.lean)  
+- [OldestFirstQueue.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/OldestFirstQueue.lean)
   Collatz 非依存の FIFO API と、同一容量の他方策より古い source を隠せない minimax 性を実装しました。
-- [RawLowSignatureObstruction.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean)  
+- [RawLowSignatureObstruction.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean)
   top-two bits は旧 all-ones 反例を区別します。しかし `r = 1` では
   `55 → 83` と `39 → 59` が署名上の閉路を形成し、重み総和が `+1` になるため、この enriched signature にも大域的 bounded potential は存在しないことを Lean で証明しました。
-- [report-petal-334.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-334.md)  
+- [report-petal-334.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-334.md)
   正の source-age 路線と、否定された signature 路線を分離して記録しました。
 
 確定した正の到達点は次です。
@@ -1296,7 +1296,7 @@ index aa888a16..9a4ed104 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceTimeLag
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueue
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueue.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalOwnedQueue.lean
 new file mode 100644
@@ -1539,9 +1539,9 @@ index 9f848969..f6f62714 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceTimeLag.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceTimeLag.lean
 @@ -80,6 +80,13 @@ theorem recentCanonicalDemand_le_sourceTimeSpan
- 
+
  /-! ## Exact block/source carrier identification -/
- 
+
 +/-- Carry-two claim sources born in canonical block `k`. -/
 +noncomputable def canonicalBlockClaimSourceCarrier
 +    (n : OddNat) (k : ℕ) : Finset ℕ :=
@@ -1555,7 +1555,7 @@ index 9f848969..f6f62714 100644
 @@ -117,6 +124,27 @@ theorem canonicalQueueDemand_eq_carryTwoPositions_block_card
        have := (Finset.mem_Ico.mp hi).2
        omega⟩, hcarry⟩
- 
+
 +/-- Named-carrier form of the exact one-block demand identity. -/
 +theorem card_canonicalBlockClaimSourceCarrier
 +    (n : OddNat) (k : ℕ) :
@@ -1583,7 +1583,7 @@ index 9f848969..f6f62714 100644
 @@ -127,6 +155,28 @@ theorem canonicalBlockStartTime_mono
      sum_canonicalBlockLength_range_eq_startTime] at hsplit
    omega
- 
+
 +/-- Distinct canonical blocks have disjoint source-address carriers. -/
 +theorem disjoint_canonicalBlockClaimSourceCarrier
 +    (n : OddNat) {j k : ℕ} (hjk : j ≠ k) :
@@ -1612,7 +1612,7 @@ index 9f848969..f6f62714 100644
 @@ -279,13 +329,20 @@ theorem card_canonicalRecentSourceClaimCarrier_le
      canonicalRecentSourceClaimCarrier n 0 m = ∅ := by
    simp [canonicalRecentSourceClaimCarrier, carryTwoPositions]
- 
+
 -/-- Conditional source-age surface: every outstanding anonymous claim is
 -represented by a carry-two source in the preceding `H` orbit times. -/
 -def CanonicalOutstandingQueueCoveredByRecentSourceClaims
@@ -1625,7 +1625,7 @@ index 9f848969..f6f62714 100644
      (n : OddNat) (H : ℕ) : Prop :=
    ∀ m, canonicalOutstandingClaimQueueBeforeBlock n m ≤
      (canonicalRecentSourceClaimCarrier n H m).card
- 
+
 +/-- Compatibility alias for the cp-333 cardinality-only predicate. -/
 +abbrev CanonicalOutstandingQueueCoveredByRecentSourceClaims :=
 +  CanonicalOutstandingQueueCardCoveredByRecentSourceClaims
@@ -1636,7 +1636,7 @@ index 9f848969..f6f62714 100644
 @@ -309,6 +366,20 @@ theorem CanonicalOutstandingQueueCoveredByRecentSourceClaims.to_endpointWidthUni
      CanonicalEndpointWidthUniformUpperBound n (bitWidth n.1 + H) :=
    h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
- 
+
 +/-- Precisely named cardinal-coverage route to the scalar queue bound. -/
 +theorem CanonicalOutstandingQueueCardCoveredByRecentSourceClaims.to_queueUniformUpperBound
 +    {n : OddNat} {H : ℕ}
@@ -1659,9 +1659,9 @@ index bbe77bcf..76d3b47f 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 @@ -79,6 +79,21 @@ namespace RelationalFiniteSignedTransitionPotentialCertificate
- 
+
  variable {State Signature : Type*} [Fintype Signature]
- 
+
 +/-- A single related edge with positive concrete weight cannot close at one
 +projected signature under a sound bounded-potential certificate. -/
 +theorem false_of_step_of_signature_eq_of_actualWeight_pos
@@ -1851,16 +1851,16 @@ index fe2fe960..56d372a2 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
 +import DkMath.Collatz.PetalBridge.FloatWindow.DyadicFloat
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction"
- 
+
 @@ -321,6 +322,268 @@ theorem rawSignedWidthWeight_rawAllOnesWitness_eq_one
    rw [bitWidth_T_rawAllOnesWitness_eq_add_one]
    omega
- 
+
 +/-- Every realized accelerated odd edge increases binary width by at most one. -/
 +theorem rawSignedWidthWeight_T_le_one (x : OddNat) :
 +    rawSignedWidthWeight x (T x) ≤ 1 := by
@@ -2175,7 +2175,7 @@ index fe2fe960..56d372a2 100644
 +  apply C.false_of_step_of_signature_eq_of_actualWeight_pos (hstep x) hsig
 +  rw [hweight, rawSignedWidthWeight_rawAllOnesWitness_eq_one]
 +  norm_num
- 
+
  /-- Existential form: the audited fixed low signature admits no global sound
  bounded-potential certificate. -/
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-334.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-334.md

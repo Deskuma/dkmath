@@ -564,7 +564,7 @@ index 3d38f8a8..3c16b35e 100644
 @@ -672,4 +672,74 @@ theorem sourcePressureMargin_next_nonpos_iff_retCont_le_neg_current_of_addressed
    rw [sourcePressureNetDrop_eq_retention_sub_two_mul_continuation_of_addressedDepthTarget
      haddr]
- 
+
 +/--
 +Normalized True Beam count inequality at an addressed depth.
 +

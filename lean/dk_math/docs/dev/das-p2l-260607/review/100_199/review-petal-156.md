@@ -473,7 +473,7 @@ index 3db563e9..6376fa84 100644
 @@ -1399,6 +1399,172 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_ne
        sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_sum_neg_of_nonempty
          hsorted hF
- 
+
 +/--
 +Explicit local-island witness with its pressure-depth index.
 +

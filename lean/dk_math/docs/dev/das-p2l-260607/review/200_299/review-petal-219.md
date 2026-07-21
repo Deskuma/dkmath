@@ -430,7 +430,7 @@ index 3b13eac4..17404aa6 100644
 @@ -1122,4 +1122,92 @@ theorem sourcePressureMargin_next_sign_massBalance_trichotomy_of_addressedDepthT
        (sourcePressureMargin_next_neg_iff_massBalanceRight_lt_left haddr).2 hgt
      exact ⟨hneg, hgt⟩
- 
+
 +/-
 +Upstream inequality-source bridge.
 +

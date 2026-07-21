@@ -66,7 +66,7 @@ index d6df30b0..21d932bc 100644
 @@ -459,6 +459,69 @@ theorem SourcePressureBeamCenteredLocalPulseBox.signs_of_neighborCandidate
                SourcePressureMarginInt n k (r + W.val + 1) ≤ 0 :=
    ⟨hneigh, hbox.signs⟩
- 
+
 +/--
 +The left endpoint of an explicit Beam neighbor candidate is in the witness
 +list.

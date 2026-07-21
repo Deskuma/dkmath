@@ -803,7 +803,7 @@ index f6a96346..da4b2d9c 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointDrift
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalAllOnesDrift.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalAllOnesDrift.lean
 new file mode 100644

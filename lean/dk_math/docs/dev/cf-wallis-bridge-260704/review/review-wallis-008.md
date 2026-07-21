@@ -412,7 +412,7 @@ index ed20e07d..b5714eab 100644
 @@ -308,6 +308,19 @@ theorem centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
    rw [centralRatioQ_eq_centralOddRatioPartialQ,
      centralOdd_mul_mirror_eq_wallisPartialQ]
- 
+
 +/--
 +The proof-note central-ratio expression is the ordered finite product of the
 +Wallis factors.
@@ -432,7 +432,7 @@ index ed20e07d..b5714eab 100644
 @@ -325,4 +338,17 @@ theorem centralRatioQ_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
    rw [centralRatioQ_eq_centralOddRatioPartialQ,
      centralOdd_mul_mirror_eq_cosmicPartialQ]
- 
+
 +/--
 +The proof-note central-ratio expression is the ordered finite product of the
 +cosmic gap factors.
@@ -454,7 +454,7 @@ index 5036f96f..4b643b11 100644
 @@ -44,12 +44,32 @@ theorem real_coe_wallisPartialQ_eq_Wallis_W (m : ℕ) :
      norm_num
      field_simp
- 
+
 +/--
 +The explicit ordered Wallis-factor product, after coercion to `ℝ`, is
 +Mathlib's Wallis product `Real.Wallis.W`.
@@ -470,7 +470,7 @@ index 5036f96f..4b643b11 100644
      ((wallisPartialQ m : ℚ) : ℝ) =
        ((cosmicPartialQ m : ℚ) : ℝ) := by
    exact_mod_cast wallisPartialQ_eq_cosmicPartialQ m
- 
+
 +/--
 +The explicit ordered cosmic-factor product, after coercion to `ℝ`, is also
 +Mathlib's Wallis product `Real.Wallis.W`.

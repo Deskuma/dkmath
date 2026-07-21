@@ -304,7 +304,7 @@ index 12348ca2..c016eb3e 100644
 @@ -893,4 +893,105 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_massBalance_
      sourcePressureMargin_next_nonpos_iff_massBalance_le_of_addressedDepthTarget haddr
    exact hiff.2 hineq
- 
+
 +/--
 +Left side of the source-pressure Beam mass-balance comparison.
 +

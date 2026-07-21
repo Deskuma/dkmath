@@ -188,7 +188,7 @@ index 4ee70e8f..9bdbae8e 100644
 @@ -1127,6 +1127,28 @@ theorem SourcePressureForwardPairComparisonState.boundary_sign_pair_surface
    rcases h.right_signs with ⟨_, hprevR, hcenterR, _, hnextR⟩
    exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR, h.val_lt⟩
- 
+
 +/--
 +Lift the forward value order to the actual center indices used by the margin
 +function.

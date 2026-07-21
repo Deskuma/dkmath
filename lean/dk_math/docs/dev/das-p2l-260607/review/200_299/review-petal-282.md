@@ -331,7 +331,7 @@ index 20f32943..a4946a78 100644
 @@ -1508,6 +1508,52 @@ theorem SourcePressureForwardPairComparisonState.right_value_corridor_surface
        omega
    exact ⟨hnextL, hprevR, hvalue⟩
- 
+
 +/--
 +Contact branch of the value-level corridor surface.
 +

@@ -426,25 +426,25 @@ index 5337c1ef..98b0fb22 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-198.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-198.md
 @@ -2,104 +2,101 @@
- 
+
  ## Checkpoint
- 
+
 -Checkpoint 198 was audit-only.
 +Checkpoint 198 revised was audit-only.
- 
+
 -No Lean theorem was added.  The downstream shape of the arbitrary-list
 -diagnostic API is already in the right module layer, and no clear consumer gap
 -was found in `PressureFrontier` or `PressureAccounting`.
 +No Lean theorem was added.  The purpose of this checkpoint was to confirm the
 +import direction and API boundary around the arbitrary-list pressure diagnostic
 +surface.
- 
+
 -## Files inspected
 +## Import Chain
- 
+
 -Primary file:
 +The current pressure stack flows upward as follows:
- 
+
  ```text
 -DkMath/Collatz/PetalBridge/PressureFrontier.lean
 +PressureFrontier
@@ -453,7 +453,7 @@ index 5337c1ef..98b0fb22 100644
 +      <- PressureAdjacentDiagnosis
 +        <- PressureDiagnosticDecomposition
  ```
- 
+
 -Supporting files inspected:
 -
 -```text
@@ -461,17 +461,17 @@ index 5337c1ef..98b0fb22 100644
 -DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean
 -```
 +The concrete imports are:
- 
+
 -## Theorems and definitions inspected
 +```lean
 +-- PressureFrontier.lean
 +import DkMath.Collatz.PetalBridge.PressureDecay
- 
+
 -In `PressureFrontier.lean`, the relevant inspected surface was the frontier and
 -local-island producer layer:
 +-- PressureAccounting.lean
 +import DkMath.Collatz.PetalBridge.PressureFrontier
- 
+
 -```lean
 -SourcePressureLocalIsland
 -sourcePressureLocalIsland_iff_margin
@@ -480,28 +480,28 @@ index 5337c1ef..98b0fb22 100644
 -```
 +-- PressureLocalWitnessObstruction.lean
 +import DkMath.Collatz.PetalBridge.PressureAccounting
- 
+
 -This file imports only:
 +-- PressureAdjacentDiagnosis.lean
 +import DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
- 
+
 -```lean
 -import DkMath.Collatz.PetalBridge.PressureDecay
 +-- PressureDiagnosticDecomposition.lean
 +import DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
  ```
- 
+
 -So it is intentionally upstream of accounting witnesses and diagnostic
 -decomposition.  Making `PressureFrontier` consume pair diagnostics would invert
 -the current dependency direction.
 +This means lower modules such as `PressureFrontier` and `PressureAccounting`
 +must not consume theorem names from `PressureDiagnosticDecomposition` unless a
 +separate refactor-only checkpoint deliberately changes the module structure.
- 
+
 -In `PressureAccounting.lean`, the relevant inspected surface was the explicit
 -witness-list and sorted-before carrier layer:
 +## Diagnostic Surface Location
- 
+
 -```lean
 -SourcePressureLocalIslandWitness
 -sourcePressureIntervalPulseAddress_of_localIslandWitness
@@ -514,15 +514,15 @@ index 5337c1ef..98b0fb22 100644
 +```text
 +DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean
  ```
- 
+
 -This file imports:
 +The exact theorem is:
- 
+
  ```lean
 -import DkMath.Collatz.PetalBridge.PressureFrontier
 +sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_or_adjacentOverlap
  ```
- 
+
 -It defines the explicit witness and sorted-before vocabulary, but it does not
 -import adjacent diagnosis or diagnostic decomposition.  Adding the requested
 -consumer here would pull a downstream diagnostic layer back into the carrier
@@ -532,39 +532,39 @@ index 5337c1ef..98b0fb22 100644
 +```text
 +DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean
 +```
- 
+
 -In `PressureDiagnosticDecomposition.lean`, the already confirmed two-stage API
 -remains:
 +The exact theorem is:
- 
+
  ```lean
 -sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_or_adjacentOverlap
  sourcePressureLocalIslandWitnessList_failure_exists_pairDiagnostic_of_noAdjacentOverlap
  ```
- 
+
 -## Audit result
 +Search result:
- 
+
 -No downstream wrapper was added.
 +```text
 +DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean:806
 +DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean:836
 +```
- 
+
 -The current layering is:
 +No lower pressure module defines or imports these names.
- 
+
 -```text
 -PressureFrontier
 -  -> pressure depths, local islands, interval pulses, pulse addresses
 +## Boundary Interpretation
- 
+
 -PressureAccounting
 -  -> explicit local-island witnesses and sorted/failure carrier vocabulary
 +`PressureFrontier` is a producer layer.  It talks about pressure depths, local
 +islands, interval pulses, and pulse addresses.  It is upstream of explicit
 +local-island witness lists and does not know about adjacent diagnostics.
- 
+
 -PressureDiagnosticDecomposition
 -  -> named recovered diagnostics and no-overlap consumers
 -```
@@ -573,26 +573,26 @@ index 5337c1ef..98b0fb22 100644
 +accounting wrappers.  It should not import diagnostic decomposition, because
 +that would pull a downstream consumer layer back into a foundational carrier
 +module.
- 
+
 -This is the intended separation.  The no-overlap pair diagnostic API should be
 -used from `PressureDiagnosticDecomposition` or later downstream modules, not
 -from `PressureFrontier` or `PressureAccounting`.
 +`PressureDiagnosticDecomposition` is the correct location for the named
 +pair-diagnostic arbitrary-list API, because it already imports the adjacent
 +diagnosis layer and sits above the carrier modules.
- 
+
 -## Two-stage API confirmed
 +## Two-Stage API Confirmed
- 
+
 -The two-stage arbitrary-list diagnostic API remains:
 +The current two-stage API remains:
- 
+
  ```text
  sorted-before failure
 @@ -109,15 +106,23 @@ sorted-before failure + no-adjacent-overlap
    -> exists pairDiagnostic
  ```
- 
+
 -The branch split keeps overlap visible.  The recovered diagnostic extraction is
 -only available once the caller supplies no-overlap.
 +In theorem names:
@@ -604,12 +604,12 @@ index 5337c1ef..98b0fb22 100644
 +
 +The first theorem keeps overlap visible as a branch.  The second theorem
 +extracts a recovered adjacent pair only after the caller supplies no-overlap.
- 
+
  ## Guardrails
- 
+
 -No theorem was added for:
 +No theorem or import was added for:
- 
+
 -- length-six decomposition,
 -- arbitrary-list recursion,
 +- downstream imports from `PressureFrontier` or `PressureAccounting` to
@@ -627,10 +627,10 @@ index 5337c1ef..98b0fb22 100644
  - overlap repair,
  - disjointness between multiple recovered families,
  - Collatz convergence.
- 
+
 -## Line-count status
 +## Line-Count Status
- 
+
  ```text
 -  1517 DkMath/Collatz/PetalBridge/PressureFrontier.lean
 -  1896 DkMath/Collatz/PetalBridge/PressureAccounting.lean
@@ -642,14 +642,14 @@ index 5337c1ef..98b0fb22 100644
 +  1517 DkMath/Collatz/PetalBridge/PressureFrontier.lean
 +  7290 total
  ```
- 
+
 -All inspected files remain under the 2,000-line split threshold.
 +All five files remain under the 2,000-line split threshold.
- 
+
  ## Verification
- 
+
 @@ -147,6 +154,8 @@ Commands run from `lean/dk_math`:
- 
+
  ```text
  lake build DkMath.Collatz.PetalBridge.PressureDiagnosticDecomposition
 +lake build DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
@@ -658,12 +658,12 @@ index 5337c1ef..98b0fb22 100644
  lake build DkMath.Collatz.PetalBridge.PressureFrontier
  lake build DkMath.Collatz.PetalBridge
 @@ -154,11 +163,13 @@ lake build DkMath.Collatz.PetalBridge
- 
+
  Result: all builds passed.
- 
+
 -No-sorry check over the requested files:
 +No-sorry check over the five requested pressure files:
- 
+
  ```text
  rg -n "\bsorry\b|admit" \
    DkMath/Collatz/PetalBridge/PressureDiagnosticDecomposition.lean \
@@ -673,12 +673,12 @@ index 5337c1ef..98b0fb22 100644
    DkMath/Collatz/PetalBridge/PressureFrontier.lean
  ```
 @@ -167,7 +178,7 @@ Result: no matches.
- 
+
  `git diff --check` passed.
- 
+
 -Known unrelated warning:
 +Known unrelated warning observed in local build logs:
- 
+
  ```text
  DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:152:6:
 ````

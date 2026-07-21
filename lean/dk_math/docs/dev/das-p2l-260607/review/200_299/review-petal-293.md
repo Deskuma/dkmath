@@ -502,7 +502,7 @@ index c7691986..7c7046da 100644
 @@ -793,4 +793,65 @@ theorem sourcePressureCanonicalPackingUnitFamily_card
      · exact congrArg SourcePressureFiniteWindowPackingUnit.left h
      · exact congrArg SourcePressureFiniteWindowPackingUnit.right h
- 
+
 +/-- Unresolved left endpoints are injectively indexed by unresolved pairs. -/
 +theorem sourcePressureUnresolvedInternalLeftWitnesses_card_le_pairFamily
 +    {n : OddNat} {k r lo hi : ℕ}

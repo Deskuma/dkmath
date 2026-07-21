@@ -437,7 +437,7 @@ index f232f711..886d6195 100644
 @@ -352,6 +352,32 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
    exact
      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.three_iff_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Fully bounded pair-case normalization for a three-element diagnostic.
@@ -470,7 +470,7 @@ index f232f711..886d6195 100644
 @@ -452,6 +478,36 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
    exact
      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_iff_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Fully bounded pair-case normalization for a four-element diagnostic.
@@ -507,7 +507,7 @@ index f232f711..886d6195 100644
 @@ -514,6 +570,97 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
          SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
            htail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Fully bounded pair-case normalization for a five-element diagnostic.
@@ -605,7 +605,7 @@ index f232f711..886d6195 100644
 @@ -699,4 +846,34 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).five_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Five-element consumer form normalized all the way to the fixed finite

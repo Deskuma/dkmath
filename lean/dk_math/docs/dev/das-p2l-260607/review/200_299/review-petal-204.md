@@ -502,7 +502,7 @@ index 9c4a2ff3..74bd5939 100644
 @@ -108,4 +108,30 @@ theorem sourcePressureBeamDepthTarget_iff_margin_pos
        0 < SourcePressureMarginInt n k (r + j) :=
    isSourcePressureDepth_iff_margin_pos n k r j
- 
+
 +/--
 +Construct a Beam depth target from positive source-pressure margin.
 +

@@ -604,7 +604,7 @@ index e685bab1..c9116481 100644
 @@ -2180,6 +2180,62 @@ theorem SourcePressureLocalIslandWitnessPairOverlapObstruction.not_recoverable_b
      sourcePressureLocalIslandWitnessListSortedBefore_pair_iff.1 hsorted
    exact SourcePressureLocalIslandWitnessOverlap.not_reverseBefore hobs.overlap hrev
- 
+
 +/--
 +The swapped two-witness list also has a sorted-before failure under overlap.
 +

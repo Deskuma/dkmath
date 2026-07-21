@@ -497,7 +497,7 @@ index 51e2d670..dfe3bc8e 100644
 @@ -104,6 +104,127 @@ theorem card_canonicalInternalSaturatedSpareIndices_eq_zero_add_positive
      Finset.card_union_of_disjoint
        (canonicalInternalSaturatedZeroSpare_disjoint_positiveSpare n q m)]
- 
+
 +/-! ## Zero-spare arrival carrier -/
 +
 +/-- Successor blocks reached by internal zero-spare predecessor tokens.  This

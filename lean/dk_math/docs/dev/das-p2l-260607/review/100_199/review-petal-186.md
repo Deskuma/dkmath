@@ -452,7 +452,7 @@ index f41c2920..4ee290c3 100644
 @@ -278,6 +278,35 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
    intro h
    exact h
- 
+
 +/--
 +In a two-element explicit witness list, the only adjacent-pair address is the
 +head pair.
@@ -488,7 +488,7 @@ index f41c2920..4ee290c3 100644
 @@ -966,6 +995,87 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
      (SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail_tail
        h)
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Build the bundled diagnostic directly from a reversed two-witness list.
@@ -576,7 +576,7 @@ index f41c2920..4ee290c3 100644
 @@ -1152,6 +1262,34 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
      h hno).toDiagnostic
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Two-element consumer form: failure plus named no-adjacent-overlap yields the

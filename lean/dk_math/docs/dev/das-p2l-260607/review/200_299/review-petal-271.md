@@ -204,7 +204,7 @@ index da4add25..9caa0104 100644
 @@ -1173,6 +1173,46 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_pair_surface
    exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR,
      h.center_index_lt⟩
- 
+
 +/--
 +Compact separation surface for the two center indices of a forward pair.
 +

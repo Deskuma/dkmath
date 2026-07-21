@@ -638,7 +638,7 @@ index 6c608538..fcf1d524 100644
 @@ -556,6 +556,57 @@ theorem universalPaymentBlockSignedDriftAt_eq_bitWidth_sub
    have hledger := bitWidth_iterateT_universalPaymentBlock_eq_claimFiber_card n j h
    omega
- 
+
 +/-- Positive universal signed drift is exactly strict block-width growth. -/
 +theorem universalPaymentBlockSignedDriftAt_pos_iff_bitWidth_lt
 +    (n : OddNat) (j : ℕ) (h : (orbitPaymentSourceFiberAt n j).Nonempty) :

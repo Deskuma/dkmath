@@ -8,7 +8,7 @@ gch: 3fa5cd9047d829d633b6b2fbb7875f640c226046
 
 軽い状態名レイヤを実装しました。
 
-新規: [PressureState.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/PressureState.lean)  
+新規: [PressureState.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/PressureState.lean)
 公開 import: [PetalBridge.lean](/lean/dk_math/DkMath/Collatz/PetalBridge.lean)
 
 入れたものは、まず mnemonic 用の名前表です。
@@ -114,7 +114,7 @@ inductive SourcePressureUnknownStateName where
   | missingTransport
 ```
 
-そして `PressureState.lean` のコメントに「Gap taxonomy」として置く。  
+そして `PressureState.lean` のコメントに「Gap taxonomy」として置く。
 証明可能なものだけ theorem にする。
 
 現時点の一番大事な Gap はたぶんこれです。
@@ -143,7 +143,7 @@ AdjacentDiagnosis L W' W
 N -> D
 ```
 
-はまだ足りない。  
+はまだ足りない。
 必要なのは orientation と diagnosis の追加証拠。
 
 ここが「未確認状態」の中心ですね。

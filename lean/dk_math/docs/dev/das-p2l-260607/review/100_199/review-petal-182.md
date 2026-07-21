@@ -413,7 +413,7 @@ index 338bcc7d..051eec79 100644
 @@ -696,6 +696,32 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.
              (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
    h
- 
+
 +/--
 +Expose the actual pair-local accounted interval family object stored by the
 +recovered adjacent-family carrier.
@@ -446,7 +446,7 @@ index 338bcc7d..051eec79 100644
 @@ -763,6 +789,60 @@ theorem
      (SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.of_not
        hno)
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Failure plus named no-adjacent-overlap, projected directly to the pair-local
@@ -503,7 +503,7 @@ index 338bcc7d..051eec79 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-181.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-181.md
 new file mode 100644
 index 00000000..4a55547a

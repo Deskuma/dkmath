@@ -709,7 +709,7 @@ index da4b2d9c..ea835388 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalHighDrift
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointConservation.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointConservation.lean
 new file mode 100644
 index 00000000..c8eec04b
@@ -1093,9 +1093,9 @@ index 90def769..8ffaebc5 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointDrift.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalEndpointDrift.lean
 @@ -88,6 +88,13 @@ theorem GlobalEndpointDriftBound.rootwise
- 
+
  /-! ## Exact positive-drift normal forms -/
- 
+
 +/-- The initial canonical block starts at the odd root itself. -/
 +@[simp] theorem canonicalBlockStartState_zero_eq_root (n : OddNat) :
 +    canonicalBlockStartState n 0 = n.1 := by
@@ -1109,7 +1109,7 @@ index 90def769..8ffaebc5 100644
 @@ -107,7 +114,20 @@ theorem endpointAccountingTerm_le_length_sub_terminalValuation
    simpa [canonicalBlockCapacityCount_eq_terminalValuation] using
      endpointAccountingTerm_le_length_sub_capacity n m
- 
+
 -/-- Exact carry-word refinement: the gap between the coarse
 +/-- Primary block conservation law.  Block length is partitioned exactly into
 +realized endpoint drift, unrealized claim depths, and terminal 2-adic
@@ -1138,9 +1138,9 @@ index 90def769..8ffaebc5 100644
 +    endpointAccountingTerm_add_claimHoles_add_terminalValuation_eq_blockLength
 +      n m
 +  omega
- 
+
  /-! ## Sufficient rootwise hypotheses
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalHighDrift.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalHighDrift.lean
 new file mode 100644
 index 00000000..448f5a43
@@ -1264,7 +1264,7 @@ index caa4f6a1..532b7c09 100644
 @@ -25,8 +25,54 @@ guard has been proved independently from canonical block arithmetic; using
  the desired prefix invariant itself as that guard would be circular.
  -/
- 
+
 +/-- Core signed-counter certificate.  No finite control state is needed for
 +the recurrence or invariant induction. -/
 +structure SignedCounterCertificate where
@@ -1318,9 +1318,9 @@ index caa4f6a1..532b7c09 100644
      (Signature : Type*) [Finite Signature] where
    signature : ℕ → Signature
 @@ -40,34 +86,43 @@ namespace FiniteControlSignedCounterCertificate
- 
+
  variable {Signature : Type*} [Finite Signature]
- 
+
 +/-- Forget the finite diagnostic control and retain the arithmetic counter
 +certificate used by the soundness proof. -/
 +def toSignedCounterCertificate
@@ -1344,7 +1344,7 @@ index caa4f6a1..532b7c09 100644
 -      exact sub_nonneg.mpr (C.preserves_nonneg M ih)
 +    0 ≤ C.credit M :=
 +  C.toSignedCounterCertificate.credit_nonneg M
- 
+
  /-- Counter recurrence telescopes exactly: accumulated weight is initial
  credit minus final credit. -/
  theorem sum_weight_range_eq_credit_zero_sub
@@ -1363,7 +1363,7 @@ index caa4f6a1..532b7c09 100644
 +    (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
 +    (∑ m ∈ Finset.range M, C.weight m) ≤ C.credit 0 :=
 +  C.toSignedCounterCertificate.sum_weight_range_le_initial_credit M
- 
+
  /-- Soundness: every prefix weight is nonpositive. -/
  theorem sum_weight_range_nonpos
      (C : FiniteControlSignedCounterCertificate Signature) (M : ℕ) :
@@ -1372,9 +1372,9 @@ index caa4f6a1..532b7c09 100644
 -  simpa only [zero_sub] using neg_nonpos.mpr (C.credit_nonneg M)
 +  exact C.toSignedCounterCertificate.sum_weight_range_nonpos_of_initial_credit_eq_zero
 +    C.initial_credit_eq_zero M
- 
+
  end FiniteControlSignedCounterCertificate
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-341.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-341.md
 new file mode 100644
 index 00000000..71cc9774

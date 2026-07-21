@@ -183,7 +183,7 @@ index c8f1d7a4..4ee70e8f 100644
 @@ -1104,6 +1104,29 @@ theorem SourcePressureForwardPairComparisonState.center_pair_surface
    rcases h.center_targets_pair with ⟨htargetL, htargetR, _hlt'⟩
    exact ⟨hposL, hposR, htargetL, htargetR, hlt⟩
- 
+
 +/--
 +Boundary-sign pair surface for the forward pair branch.
 +

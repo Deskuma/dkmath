@@ -422,7 +422,7 @@ index 1a2b81f8..194ade98 100644
 @@ -355,6 +355,80 @@ theorem exists_sourcePressureBeamPulse_witness_center_margin_signs_of_seed
    exact
      ⟨W, hmem, hprev, hcenterFromEntry, haddr, hnextFromExit⟩
- 
+
 +/--
 +Centered local pulse box for one Beam witness.
 +

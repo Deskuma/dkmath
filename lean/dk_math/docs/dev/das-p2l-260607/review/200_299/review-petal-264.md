@@ -209,7 +209,7 @@ index 96e8f5d2..ac4bbc57 100644
 @@ -1468,4 +1468,68 @@ theorem sourcePressureBeamSeedState_to_forwardBoxComparisonState_or_pairOverlap
    sourcePressureFailureResolutionState_to_forwardBoxComparisonState_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches the forward pair-comparison state or a concrete
 +pair-overlap obstruction.

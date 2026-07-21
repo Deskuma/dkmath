@@ -1107,7 +1107,7 @@ index dedd17ca..af59922b 100644
 @@ -726,25 +726,531 @@ theorem natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_half
      (natCard_positiveDriftUnitCarrier_le_interval_add_residual_add_saturated
        hqm).trans (Nat.add_le_add_left hsat _)
- 
+
 -/-!
 -## Prefix versus sliding-window pressure audit
 +/-! ## Prefix versus sliding-window pressure
@@ -1503,12 +1503,12 @@ index dedd17ca..af59922b 100644
 +  unfold canonicalUnorderedSelectedCarrierResidualCount
 +  unfold canonicalSelectedResidualCount
 +  omega
- 
+
 -`canonicalWindowPressureMarginAtDepth n q m d` is the block sum on `q..m`.
 -The existing public pressure theorem identifies only the prefix sum `0..m`
 -with `SourcePressureMarginInt n (paymentEndpointSeq n m + 1) d`.
 +/-! ## Noncanonical actual residual incidence carrier -/
- 
+
 -The intended sliding identity therefore requires two explicit bridges that are
 -not yet present as caller-facing theorems:
 +/-- When enough actual drift-image incidences exist, choose an unordered
@@ -1543,7 +1543,7 @@ index dedd17ca..af59922b 100644
 +  apply Function.Embedding.nonempty_iff_card_le.mpr
 +  rw [Fintype.card_coe]
 +  simpa only [Nat.card_eq_fintype_card] using hcard
- 
+
 -1. split the finite block sum `0..m` into `0..q-1` and `q..m`;
 -2. identify pressure at `canonicalBlockStartTime n q` with the `0..q-1`
 -   prefix (with the separate base case `q = 0`).
@@ -1625,7 +1625,7 @@ index dedd17ca..af59922b 100644
 +      Nat.card_eq_fintype_card, Fintype.card_coe]
 +  · simp only [Finset.card_empty, canonicalUnorderedSelectedDriftResidualCount]
 +    omega
- 
+
 -Until those bridges are proved, relative window pressure must not be treated as
 -absolute `IsSourcePressureDepth`, and no level-zero pulse/packing theorem may be
 -applied to its positive part.  This is the first genuine API obstruction after
@@ -1649,7 +1649,7 @@ index dedd17ca..af59922b 100644
 +here.  Until that exists, neither this unordered residual nor its chosen
 +matching may be called causal repayment.
  -/
- 
+
  /-- Endpoint-prefix pressure is continuation mass one level deeper minus the
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-323.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-323.md
 new file mode 100644

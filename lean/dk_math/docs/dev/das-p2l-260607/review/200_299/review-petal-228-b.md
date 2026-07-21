@@ -77,7 +77,7 @@ index 1a5a4036..414503d4 100644
 @@ -213,7 +213,7 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
  A Beam seed exposes one witness whose singleton pulse has the full local
  entry-depth-exit diagnostic.
- 
+
 -This is the cp227 higher-level consumer of
 +This is the cp227-r1 Branch B higher-level consumer of
  `sourcePressureBeamPulse_witness_singleton_full_diagnostic`.  The seed layer
@@ -88,20 +88,20 @@ index 8d1ff06f..2721b8e5 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md
 +++ b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md
 @@ -2,54 +2,63 @@
- 
+
  ## Checkpoint
- 
+
 -`petal-227`
 +`petal-227-revised`
- 
+
  ## Goal
- 
+
 -Investigate whether the cp226 Pulse-level full diagnostic theorem has an
 -immediate higher-level caller without forcing a broad new API.
 -
 -The theorem under inspection was:
 +Use the Pulse-level full diagnostic theorem as a strategic probe:
- 
+
  ```lean
  sourcePressureBeamPulse_witness_singleton_full_diagnostic
  ```
@@ -182,10 +182,10 @@ index 8d1ff06f..2721b8e5 100644
         diagnostic.
 
  ```
- 
+
 -This theorem consumes:
 +The theorem consumes:
- 
+
  ```lean
  sourcePressureBeamPulse_witness_singleton_full_diagnostic
  ```

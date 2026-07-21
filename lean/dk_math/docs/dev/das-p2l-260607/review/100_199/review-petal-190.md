@@ -433,7 +433,7 @@ index 41f16698..4c081266 100644
 @@ -21,6 +21,50 @@ enumeration, union accounting, overlap repair, aggregation, or Collatz
  convergence.
  -/
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Named pair-local recovered head branch used by the bounded diagnostic
@@ -484,7 +484,7 @@ index 41f16698..4c081266 100644
 @@ -161,6 +205,36 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_two_reversed
          hrev
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact two-element normal form using the named pair-local recovered branch.
@@ -521,7 +521,7 @@ index 41f16698..4c081266 100644
 @@ -241,6 +315,25 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
          SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
            htail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact three-element decomposition using the named pair-local recovered branch.
@@ -547,7 +547,7 @@ index 41f16698..4c081266 100644
 @@ -322,6 +415,25 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
          SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_tail
            htail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact four-element decomposition using the named pair-local recovered branch.
@@ -573,7 +573,7 @@ index 41f16698..4c081266 100644
 @@ -350,6 +462,26 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).exists_reversed_of_two
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact two-element consumer form using the named pair-local recovered branch.
@@ -600,7 +600,7 @@ index 41f16698..4c081266 100644
 @@ -382,6 +514,29 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).three_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact three-element consumer form using the named pair-local recovered branch.
@@ -630,7 +630,7 @@ index 41f16698..4c081266 100644
 @@ -415,4 +570,28 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).four_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Compact four-element consumer form using the named pair-local recovered branch.

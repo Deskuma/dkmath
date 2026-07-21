@@ -215,7 +215,7 @@ index 0f7d29fd..5289fd3c 100644
 @@ -1117,4 +1117,92 @@ theorem sourcePressureBeamSeedState_to_orientedNeighborBox_or_pairOverlap
    sourcePressureFailureResolutionState_to_orientedNeighborBox_or_pairOverlap
      (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches a comparison-ready split under sortedness.
 +

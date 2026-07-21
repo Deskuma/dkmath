@@ -354,7 +354,7 @@ index 5010fb52..f6361c54 100644
 @@ -1721,4 +1721,101 @@ theorem sourcePressureBeamMassBalanceRight_le_left_of_localIslandWitness_interva
    sourcePressureBeamMassBalanceRight_le_left_of_fallingEdgeTarget
      (sourcePressureBeamFallingEdgeTarget_of_localIslandWitness_intervalPulse_right W)
- 
+
 +/-
 +Local pulse-shape packaging.
 +

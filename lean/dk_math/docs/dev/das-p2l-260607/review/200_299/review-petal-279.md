@@ -252,7 +252,7 @@ index f9ca219b..70d137a2 100644
 @@ -1408,6 +1408,25 @@ theorem SourcePressureForwardPairComparisonState.boundary_corridor_eq_or_lt
      h.left_next_boundary_le_right_previous_boundary
    omega
- 
+
 +/--
 +Sign-bundled contact-or-gap split for the boundary corridor.
 +

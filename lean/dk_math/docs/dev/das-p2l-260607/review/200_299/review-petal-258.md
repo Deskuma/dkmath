@@ -173,7 +173,7 @@ index 1ce48b95..011887ec 100644
 @@ -776,6 +776,36 @@ theorem SourcePressureOrientedNeighborBoxState.val_le_of_sorted
      W.val ≤ W'.val :=
    le_of_lt (hbox.val_lt_of_sorted hsorted)
- 
+
 +/--
 +Sorted oriented neighbor boxes have distinct endpoint depths.
 +
@@ -206,7 +206,7 @@ index 1ce48b95..011887ec 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-258.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-258.md
 new file mode 100644
 index 00000000..75fb7d6a

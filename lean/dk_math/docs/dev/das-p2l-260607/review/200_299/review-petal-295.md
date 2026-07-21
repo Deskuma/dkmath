@@ -648,7 +648,7 @@ index c2c528c3..ff4acbfa 100644
 @@ -1030,4 +1030,122 @@ theorem sourcePressurePositiveWitnesses_endpointCorrectedLocalBig_of_internalCov
        sourcePressurePositiveWitnesses_card_le_nonposPositions_add_one_add_unresolvedInternal
          (L := L) (lo := lo) (hi := hi) hsorted
- 
+
 +/-- The duplicated pair state has exactly the forward-box payload. -/
 +theorem sourcePressureForwardPairComparisonState_iff_forwardBoxComparisonState
 +    {n : OddNat} {k r : ℕ}

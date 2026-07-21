@@ -777,7 +777,7 @@ index 164fc518..f6a96346 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeHorizon
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFiniteCertificate.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFiniteCertificate.lean
 new file mode 100644
@@ -1553,7 +1553,7 @@ index 6f7035d9..1417788e 100644
 @@ -36,6 +36,219 @@ a positive closed-signature path whose adjacent transitions all satisfy the
  certificate's `Step` relation.
  -/
- 
+
 +/-! ## Generic coboundary reweighting -/
 +
 +/-- Signed weight of a finite concrete path, independent of any certificate. -/

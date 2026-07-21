@@ -235,7 +235,7 @@ index 993fecd1..6d485d5d 100644
 @@ -710,4 +710,74 @@ theorem sourcePressureBeamSeedState_to_orientedNeighborDiagnostic_or_pairOverlap
    sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_pairOverlap
      (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution splits into either a two-endpoint oriented neighbor box or a
 +concrete pair-level overlap obstruction.

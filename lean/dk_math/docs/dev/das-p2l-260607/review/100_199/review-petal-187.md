@@ -510,7 +510,7 @@ index 4ee290c3..3766fc44 100644
 @@ -307,6 +307,21 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.two_eq
      A = W1 ∧ B = W2 :=
    SourcePressureLocalIslandWitnessAdjacentPairInList.two_iff_head.mp h
- 
+
 +/--
 +In a three-element explicit witness list, an adjacent-pair address is either
 +the head pair or an adjacent-pair address in the two-element tail.
@@ -532,7 +532,7 @@ index 4ee290c3..3766fc44 100644
 @@ -1076,6 +1091,86 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
        SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.of_two_reversed
          hrev
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Three-element bounded decomposition for the bundled diagnostic carrier.
@@ -619,7 +619,7 @@ index 4ee290c3..3766fc44 100644
 @@ -1290,6 +1385,38 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamilyDiagnostic_of_noAdjacentOverlap
      h hno).exists_reversed_of_two
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Three-element consumer form: failure plus named no-adjacent-overlap yields

@@ -1659,16 +1659,16 @@ index af59922b..dec50be0 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSelectedCarrier
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteReflectedQueue
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude"
- 
+
 @@ -394,51 +395,6 @@ theorem canonicalWindowPressureMarginAtDepth_eq
- 
+
  /-! ## Bucket charge versus pressure amplitude -/
- 
+
 -/-- All continuation incidences at depth `d + 1` in the closed block window. -/
 -def CanonicalWindowContinuationCarrierAtDepth
 -    (n : OddNat) (q m d : ℕ) :=
@@ -1759,7 +1759,7 @@ index af59922b..dec50be0 100644
 @@ -1067,6 +1029,216 @@ def CanonicalSelectedDriftBucketCarrier
      {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
        i ∈ canonicalSelectedDriftImageCarrier n k.val}
- 
+
 +/-! ## Proof-independent fixed-depth arrivals and service -/
 +
 +/-- Numeric selected-drift arrivals at block `k` and depth `d`.
@@ -1976,7 +1976,7 @@ index af59922b..dec50be0 100644
 @@ -1084,6 +1256,32 @@ noncomputable def canonicalUnorderedSelectedDriftResidualCount
    Nat.card (CanonicalSelectedDriftBucketCarrier n q m d) -
      (canonicalExactLengthBlockIndicesAtDepth n q m d).card
- 
+
 +/-- The old unordered cardinal subtraction is exactly the generic positive
 +part of total fixed-depth signed balance. -/
 +theorem canonicalUnorderedSelectedDriftResidualCount_eq_finiteUnorderedResidual
@@ -2009,7 +2009,7 @@ index af59922b..dec50be0 100644
 @@ -1234,23 +1432,126 @@ theorem natCard_actualSelectedDriftResidualCarrier
    · simp only [Finset.card_empty, canonicalUnorderedSelectedDriftResidualCount]
      omega
- 
+
 +/-! ## All-depth causal carrier -/
 +
 +/-- All actual unordered residual incidences, separated by active selected
@@ -2147,7 +2147,7 @@ index af59922b..dec50be0 100644
 +present carriers.  Those branches require new local structure and must not be
 +filled by reusing the unordered classical complement.
  -/
- 
+
  /-- Endpoint-prefix pressure is continuation mass one level deeper minus the
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean
 index 007a0541..f31811fc 100644
@@ -2155,16 +2155,16 @@ index 007a0541..f31811fc 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentScalarQueue.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteReflectedQueue
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue"
- 
+
 @@ -503,6 +504,15 @@ theorem canonicalOutstandingClaimQueue_eq_zero_iff_all_excursions_repaid
- 
+
  /-! ## Window-local causal queue -/
- 
+
 +/-- Canonical signed drift is the generic arrivals-minus-service balance. -/
 +theorem finiteSignedWindowBalance_claimCount_capacityCount_eq
 +    (n : OddNat) (q m : ℕ) :
@@ -2180,7 +2180,7 @@ index 007a0541..f31811fc 100644
 @@ -512,6 +522,18 @@ noncomputable def canonicalLocalOutstandingClaimQueue
      (n : OddNat) (q r : ℕ) : ℕ :=
    (Finset.Icc q r).sup fun t => Int.toNat (canonicalWindowDriftInt n t r)
- 
+
 +/-- The existing local scalar queue is exactly the generic reflected queue
 +specialized to canonical claim arrivals and capacity service. -/
 +theorem canonicalLocalOutstandingClaimQueue_eq_finiteReflectedQueueOn

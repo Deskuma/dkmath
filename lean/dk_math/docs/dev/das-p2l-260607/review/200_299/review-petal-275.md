@@ -208,7 +208,7 @@ index 02c0eaac..8bdb83b3 100644
 @@ -1306,6 +1306,36 @@ theorem SourcePressureForwardPairComparisonState.indexed_boundary_gap_surface
    exact ⟨hprevL, hcenterL, hnextL, hprevR, hcenterR, hnextR,
      hlt, hne, h.left_next_index_lt_right_center_index⟩
- 
+
 +/--
 +Projection from `indexed_boundary_gap_surface`: the left next boundary index is
 +strictly before the right positive center.

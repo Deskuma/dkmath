@@ -1214,7 +1214,7 @@ index d30edb19..dedd17ca 100644
 @@ -147,6 +147,137 @@ theorem activeSelectedPressureDepthSupport_bucketCarrier_nonempty
    exact mem_canonicalSelectedPressureBlocksAtDepth.mpr
      ⟨(Finset.mem_filter.mp hdata.1).1, hdata.2⟩
- 
+
 +/-! ## Active selected buckets and structural Fubini -/
 +
 +/-- Selected incidences indexed only by positive nonsaturated blocks. -/
@@ -1347,12 +1347,12 @@ index d30edb19..dedd17ca 100644
 +  omega
 +
  /-! ## Fixed-depth prefix embedding -/
- 
+
  /-- Forgetting the canonical block sends a selected bucket incidence into the
 @@ -243,12 +374,6 @@ theorem blockPressureContributionInt_eq_succCarrier_sub_exactLengthIndicator
      simp [heq, hd, hdl.le]
      omega
- 
+
 -/-- Blocks of exact canonical length `d` in the closed interval `q..m`. -/
 -noncomputable def canonicalExactLengthBlockIndicesAtDepth
 -    (n : OddNat) (q m d : ℕ) : Finset ℕ := by
@@ -1365,7 +1365,7 @@ index d30edb19..dedd17ca 100644
 @@ -381,6 +506,247 @@ theorem exists_selectedPressureBucketEmbedding_exactLength_add_amplitude
    simpa only [← Nat.card_eq_fintype_card] using
      natCard_selectedPressureBucket_le_exactLength_add_pressureAmplitude (n := n) hd
- 
+
 +/-! ## Minimal selected residual -/
 +
 +/-- Minimal selected mass left after the available exact-length charge. -/

@@ -24,7 +24,7 @@ lake build DkMath.Pascal
 lake build DkMath
 ```
 
-すべて成功しました。  
+すべて成功しました。
 なお `lake build DkMath` では既存ファイル由来の `sorry` warning は出ていますが、今回追加したモジュールには `sorry` はありません。
 
 ## Review

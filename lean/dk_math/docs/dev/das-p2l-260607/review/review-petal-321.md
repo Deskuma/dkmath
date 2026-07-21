@@ -1069,7 +1069,7 @@ index fa924e21..3276dcc0 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSelectedCarrier
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 new file mode 100644

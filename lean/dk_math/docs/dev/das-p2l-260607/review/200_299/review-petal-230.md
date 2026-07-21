@@ -369,7 +369,7 @@ index f41c2920..9ff320d4 100644
 @@ -278,6 +278,62 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false
    intro h
    exact h
- 
+
 +/--
 +The left witness of an addressed adjacent pair is a member of the addressed
 +list.
@@ -453,7 +453,7 @@ index fa72bfcd..b919ca09 100644
 -  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
 +  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic
 +    (sourcePressureLocalIslandWitnessAdjacentPairInList_left_mem hin)
- 
+
  /--
  An addressed adjacent pair preserves the right witness identity for the full
 @@ -359,20 +347,8 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic_of_adjacentPai
@@ -476,8 +476,8 @@ index fa72bfcd..b919ca09 100644
 -  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem
 +  exact sourcePressureBeamPulse_witness_singleton_full_diagnostic
 +    (sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem hin)
- 
- 
+
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-229.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-229.md
 new file mode 100644

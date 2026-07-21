@@ -440,7 +440,7 @@ index 45a47bcf..2e8e1d43 100644
  import DkMath.Collatz.PetalBridge.PressureAccounting
 +import DkMath.Collatz.PetalBridge.OneCycle
  import DkMath.Collatz.PetalBridge.Collision
- 
+
  #print "file: DkMath.Collatz.PetalBridge"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/OneCycle.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/OneCycle.lean
 new file mode 100644
@@ -564,7 +564,7 @@ index d9e9c18c..051364ac 100644
 @@ -545,6 +545,52 @@ structure SourcePressureAccountedIntervalFamily
    pairwiseDisjoint :
      SourcePressureAccountedIntervalListPairwiseDisjoint items
- 
+
 +/--
 +Empty accounted-interval family.
 +
@@ -613,11 +613,11 @@ index d9e9c18c..051364ac 100644
 +
  /--
  Family budget inherited from the list budget.
- 
+
 @@ -569,6 +615,31 @@ theorem sourcePressureAccountedIntervalFamily_sum_neg_of_nonempty
        SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 :=
    sourcePressureAccountedInterval_list_sum_neg_of_nonempty hF
- 
+
 +/-- The singleton-family budget is the one-interval `≤ -1` budget. -/
 +theorem sourcePressureAccountedIntervalFamily_singleton_sum_le_neg_one
 +    {n : OddNat} {k r : ℕ}
@@ -645,11 +645,11 @@ index d9e9c18c..051364ac 100644
 +
  /--
  Ordered non-overlap for two natural-number half-open intervals.
- 
+
 @@ -584,12 +655,35 @@ theorem NatIntervalsDisjoint.of_before
      NatIntervalsDisjoint a len b len' :=
    Or.inl h
- 
+
 +/--
 +Transitive-like composition for ordered non-overlap.
 +
@@ -669,7 +669,7 @@ index d9e9c18c..051364ac 100644
      {n : OddNat} {k r : ℕ}
      (A B : SourcePressureAccountedInterval n k r) : Prop :=
    NatIntervalBefore A.start A.len B.start B.len
- 
+
 +/-- Transitive-like composition for ordered accounted intervals. -/
 +theorem SourcePressureAccountedIntervalBefore.trans_like
 +    {n : OddNat} {k r : ℕ}
@@ -685,7 +685,7 @@ index d9e9c18c..051364ac 100644
 @@ -598,4 +692,25 @@ theorem SourcePressureAccountedIntervalsDisjoint.of_before
      SourcePressureAccountedIntervalsDisjoint A B :=
    NatIntervalsDisjoint.of_before h
- 
+
 +/--
 +Two-element family constructor from ordered non-overlap.
 +

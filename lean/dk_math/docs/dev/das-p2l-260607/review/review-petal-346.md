@@ -739,7 +739,7 @@ index 0c565c2b..0001ce76 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionMass
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionOwnership
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalExcursionOwnership.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalExcursionOwnership.lean
 new file mode 100644

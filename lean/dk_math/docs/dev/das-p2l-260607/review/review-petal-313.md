@@ -21,7 +21,7 @@ cp-313 を実装し、有限 pressure 計数層を閉じました。
 
 重要な結論は、**各ブロックの pressure は必ずしも非正ではない**ことです。浅い深度では長いブロックが正の pressure を持ちます。したがって残る問題は局所符号ではなく、端点間で claim を capacity slot へ割り当てる順序保存 matching です。
 
-実装: [UniversalPaymentPressure.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPressure.lean:193)  
+実装: [UniversalPaymentPressure.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPressure.lean:193)
 レポート: [report-petal-313.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-313.md:1)
 
 検証済み:
@@ -1155,9 +1155,9 @@ index c2ac9ab8..b55509e2 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlock
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentFamily
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPressure
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPressure.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPressure.lean
 new file mode 100644
 index 00000000..c0e7078a
