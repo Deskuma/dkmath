@@ -7,6 +7,16 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Five
 import DkMath.FLT.Five.Standalone
 
+/-!
+# Axiom-surface audit for the exponent-five route
+
+This file is an inspection entry point rather than a proof module. The
+declarations are ordered by the proof route from GN5 identities through the
+five-adic and golden-order layers to the final public theorem. Run or inspect
+the `#print axioms` commands to verify the dependency surface.
+-/
+
+-- GN5 foundation.
 #print axioms DkMath.FLT.Five.add_pow_five_eq_add_mul_GN5
 #print axioms DkMath.FLT.Five.GN5_eq_homogeneous_cyclotomic
 #print axioms DkMath.FLT.Five.GN5_eq_gap_mul_add_five_mul_y_pow_four
@@ -16,13 +26,16 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.body5_eq_fifth_power_of_fermat
 #print axioms DkMath.FLT.Five.padicValNat_lower_bound_d5
 #print axioms DkMath.FLT.Five.padicValNat_clean_body_upper_bound
+#print axioms DkMath.FLT.Five.padicValNat_clean_body_eq_one
 #print axioms DkMath.FLT.Five.Standalone.add_pow_five_eq_add_mul_GN5
 
+-- Clean-channel obstruction.
 #print axioms DkMath.FLT.Five.add_pow_five_sub_eq_mul_GN5
 #print axioms DkMath.FLT.Five.not_fifth_power_body_of_clean
 #print axioms DkMath.FLT.Five.counterexample_false_of_clean_GN5Channel_by_dvd
 #print axioms DkMath.FLT.Five.counterexample_false_of_clean_GN5Channel_by_padicValNat
 
+-- Five-adic routing.
 #print axioms DkMath.FLT.Five.coprime_gap_GN5_of_coprime_of_five_not_dvd
 #print axioms DkMath.FLT.Five.branchB_coprime_gap_GN5
 #print axioms DkMath.FLT.Five.fifth_power_factor_split
@@ -33,6 +46,7 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.exists_branchB_fifthPowerNormalForm
 #print axioms DkMath.FLT.Five.branchB_false_of_fifthPowerCore
 
+-- Golden order.
 #print axioms DkMath.FLT.Five.GN5_eq_square_cross_form
 #print axioms DkMath.FLT.Five.square_cross_coordinate_change
 #print axioms DkMath.FLT.Five.GN5_eq_goldenNorm_squareLink
@@ -139,6 +153,7 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_unitClasses_of_zeroArithmetic
 #print axioms DkMath.FLT.Five.flt5Target_of_unitClasses_of_zeroArithmetic
 
+-- Unit classification.
 #print axioms DkMath.FLT.Five.golden_phi_mul_inv
 #print axioms DkMath.FLT.Five.golden_inv_mul_phi
 #print axioms DkMath.FLT.Five.goldenUnit_descent
@@ -151,7 +166,7 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.positiveFermat5Refuter_of_zeroArithmetic
 #print axioms DkMath.FLT.Five.flt5Target_of_zeroArithmetic
 
--- Certified zero-sector inversion and factorization.
+-- Zero-sector descent.
 #print axioms DkMath.FLT.Five.goldenZeroSectorCandidate_of_raw
 #print axioms DkMath.FLT.Five.goldenZeroSectorInversionPacket
 #print axioms DkMath.FLT.Five.GoldenZeroSectorInversionPacket.factor_product
@@ -162,8 +177,6 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.goldenZeroSectorFactorPacket_of_inversion
 #print axioms DkMath.FLT.Five.nonempty_goldenZeroSectorFactorPacket
 #print axioms DkMath.FLT.Five.goldenZeroSectorFactorArithmeticExclusion_of_factorExclusion
-
--- Strict golden-lift descent and unconditional closure.
 #print axioms DkMath.FLT.Five.goldenZeroSectorLift_norm
 #print axioms DkMath.FLT.Five.GoldenZeroSectorDescentPacket.lift_relPrime_conj
 #print axioms DkMath.FLT.Five.five_dvd_norm_of_nonzero_goldenUnitSector
@@ -178,6 +191,8 @@ import DkMath.FLT.Five.Standalone
 #print axioms DkMath.FLT.Five.goldenZeroSectorDescentPacket_of_candidate
 #print axioms DkMath.FLT.Five.goldenZeroSectorCandidate_false
 #print axioms DkMath.FLT.Five.goldenZeroSectorFactorExclusion
+
+-- Public closure.
 #print axioms DkMath.FLT.Five.goldenZeroSectorArithmeticExclusion_of_factorExclusion
 #print axioms DkMath.FLT.Five.goldenZeroSectorArithmeticExclusion
 #print axioms DkMath.FLT.Five.flt5Target

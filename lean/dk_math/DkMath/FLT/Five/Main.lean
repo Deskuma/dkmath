@@ -71,11 +71,20 @@ theorem flt5Target_of_zeroArithmetic
   flt5Target_of_unitClasses_of_zeroArithmetic
     goldenUnitClassesModFifth hArithmetic
 
-/-- The unconditional positive-natural exponent-five endpoint. -/
+/--
+The unconditional exponent-five target for positive natural numbers. It denies
+`Fermat5Equation x y z`, namely `x^5 + y^5 = z^5`, for every positive
+`x`, `y`, and `z`. This is not a general-exponent or signed-integer theorem.
+-/
 theorem flt5Target : FLT5Target :=
   flt5Target_of_zeroArithmetic goldenZeroSectorArithmeticExclusion
 
-/-- Ordinary-argument form: positive `x`, `y`, and `z` cannot solve the equation. -/
+/--
+Ordinary-argument wrapper around `flt5Target`: for positive natural numbers
+`x`, `y`, and `z`, it proves the negation of `Fermat5Equation x y z`, i.e.
+`x^5 + y^5 = z^5`. It does not expose a general-exponent theorem or a theorem
+about arbitrary signed integers.
+-/
 theorem fermatFive_no_positive_solution
     (x y z : ℕ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
     ¬ Fermat5Equation x y z :=

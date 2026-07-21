@@ -78,3 +78,61 @@ Lean linter warning を修正した。
 
 cp-006 の docstring/API polish に加えて、同カテゴリー内で観測されていた
 `unnecessarySeqFocus` および `unnecessarySimpa` warning も除去された。
+
+---
+
+## High-value explanatory API follow-up
+
+cp-006 の付加価値作業として、数学者がエディタ上の API と公理監査だけで
+証明経路と正確な射程を読めるよう、次の三点を追加した。
+
+### Exact clean-channel valuation
+
+`Valuation.lean` に次の公開 theorem を追加した。
+
+```lean
+theorem padicValNat_clean_body_eq_one
+    {g y q : ℕ}
+    (h : CleanGN5Channel g y q) :
+    padicValNat q (g * GN5 g y) = 1
+```
+
+これは新しい証明路線ではなく、`CleanGN5Channel.dvd_body` が与える
+valuation lower bound と、`padicValNat_clean_body_upper_bound` が与える upper
+bound を束ねた canonical API である。valuation による clean-channel
+contradiction も、この theorem を再利用して `5 ≤ valuation` と
+`valuation = 1` を直接対立させる形へ更新した。
+
+### Final public theorem docstrings
+
+`Main.lean` の `flt5Target` と `fermatFive_no_positive_solution` に、次を
+theorem-level docstring として明記した。
+
+- `x`, `y`, `z` は正の自然数
+- `Fermat5Equation x y z` は `x^5 + y^5 = z^5` を表す
+- ordinary-argument theorem は `flt5Target` の wrapper
+- 一般指数版および任意の符号付き整数版ではない
+
+### CheckAxioms inspection entry point
+
+`CheckAxioms.lean` に module doc を追加し、ファイルが proof module ではなく
+axiom-surface inspection entry point であることを明記した。さらに監査項目を
+次の大見出しで整理した。
+
+- GN5 foundation
+- clean-channel obstruction
+- five-adic routing
+- golden order
+- unit classification
+- zero-sector descent
+- public closure
+
+`padicValNat_clean_body_eq_one` も `#print axioms` の監査対象へ追加した。
+
+検証:
+
+- `lake build DkMath.FLT.Five.Valuation` — 成功、8252 jobs
+- `lake build DkMath.FLT.Five` — 成功
+- `lake build DkMath.FLT.Five.Main` — 成功
+- `lake build DkMathTest.FLT.Five.CheckAxioms` — 成功
+- `git diff --check` — 成功
