@@ -770,7 +770,7 @@ index 79280af8..1fcb309e 100644
 @@ -778,6 +778,57 @@ theorem sourcePressureMarginJumpUp_of_netDropPositive
    rw [sourcePressureMarginStepDiff_eq]
    exact h
- 
+
 +/--
 +A named pressure-margin jump gives positive net integer pressure drop.
 +
@@ -824,11 +824,11 @@ index 79280af8..1fcb309e 100644
 +
  /--
  Package a named margin jump and a strict retention drop.
- 
+
 @@ -845,6 +896,19 @@ theorem sourcePressureJumpWithDecay_of_signChangeUp_of_decay
    sourcePressureJumpWithDecay_of_parts n k r j
      (sourcePressureMarginJumpUp_of_signChangeUp n k r j hchange) hret hcont
- 
+
 +/--
 +Positive net pressure drop plus the two order-theoretic decay observations
 +packages as `SourcePressureJumpWithDecay`.

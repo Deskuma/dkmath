@@ -289,7 +289,7 @@ index a4946a78..d8306154 100644
 @@ -1554,6 +1554,58 @@ theorem SourcePressureForwardPairComparisonState.strict_gap_value_corridor_surfa
      omega
    exact ⟨hnextL, hprevR, hvalue⟩
- 
+
 +/--
 +There is a nonpositive separator strictly between the two positive centers.
 +
@@ -348,7 +348,7 @@ index a4946a78..d8306154 100644
 @@ -2091,4 +2143,83 @@ theorem sourcePressureBeamSeedState_to_forwardPairComparisonState_or_pairOverlap
    sourcePressureFailureResolutionState_to_forwardPairComparisonState_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution produces either a local nonpositive separator between two
 +positive centers, or a concrete adjacent-pair overlap obstruction.

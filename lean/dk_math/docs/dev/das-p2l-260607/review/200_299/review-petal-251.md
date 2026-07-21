@@ -266,7 +266,7 @@ index bf445899..876d46f4 100644
 @@ -383,6 +383,87 @@ theorem sourcePressureOrientedNeighborDiagnosticState_of_forward
    exact
      ⟨hin, hdiag', hWentry, hWaddr, hWexit, hW'entry, hW'addr, hW'exit⟩
- 
+
 +/--
 +Project the left endpoint margin-sign pattern from an oriented neighbor
 +diagnostic state.
@@ -350,7 +350,7 @@ index bf445899..876d46f4 100644
 +
  /--
  Recovered adjacent state enters the oriented neighbor diagnostic state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-251.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-251.md
 new file mode 100644
 index 00000000..16b9bc26

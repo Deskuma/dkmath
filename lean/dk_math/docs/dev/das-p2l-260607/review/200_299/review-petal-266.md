@@ -171,7 +171,7 @@ index 4d639001..350af6d6 100644
 @@ -1045,6 +1045,43 @@ theorem SourcePressureForwardPairComparisonState.right_signs
              SourcePressureMarginInt n k (r + W'.val + 1) ≤ 0 :=
    h.right_box.signs
- 
+
 +/--
 +Both endpoint centers of a forward pair comparison state are positive, and the
 +left endpoint is strictly before the right endpoint in value order.

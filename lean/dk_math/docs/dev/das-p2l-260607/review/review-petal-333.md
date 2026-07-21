@@ -1077,9 +1077,9 @@ index e56c93e7..aa888a16 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceTimeLag
 +import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceTimeLag.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceTimeLag.lean
 new file mode 100644
 index 00000000..9f848969
@@ -1411,16 +1411,16 @@ index 3f0f8075..bbe77bcf 100644
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 @@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
  -/
- 
+
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition"
- 
+
 @@ -293,6 +294,63 @@ No currently audited low-bit signature has this edgewise theorem yet.
- 
+
  end CanonicalFiniteSignedTransitionPotentialCertificate
- 
+
 +/-! ## Circular reverse construction audit -/
 +
 +/-- The signed canonical edge is bounded by the actual reflected-queue
@@ -1479,7 +1479,7 @@ index 3f0f8075..bbe77bcf 100644
 +-/
 +
  namespace FiniteSignedTransitionPotentialCertificate
- 
+
  variable {State Signature : Type*} [Fintype Signature]
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean
 new file mode 100644

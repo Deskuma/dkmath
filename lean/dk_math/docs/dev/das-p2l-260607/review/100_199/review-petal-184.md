@@ -421,7 +421,7 @@ index cf39fada..ed8b4519 100644
 @@ -696,6 +696,190 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamily.
              (fun I => SourcePressureIntervalNetDrop n k r I.start I.len)).sum ≤ -2 :=
    h
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Bundled consumer-facing diagnostic for one recovered adjacent accounted family.
@@ -612,7 +612,7 @@ index cf39fada..ed8b4519 100644
 @@ -842,6 +1026,46 @@ theorem
      (SourcePressureLocalIslandWitnessListHasNoAdjacentOverlapObstruction.of_not
        hno)
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Failure plus named no-adjacent-overlap, packaged as the bundled pair-local

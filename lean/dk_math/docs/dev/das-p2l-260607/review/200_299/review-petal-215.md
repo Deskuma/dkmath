@@ -360,7 +360,7 @@ index 303db625..12348ca2 100644
 @@ -818,4 +818,79 @@ theorem sourcePressureMargin_next_nonpos_iff_retMassDiff_add_current_le_two_cont
    rw [sourceRetentionDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
    rw [sourceContinuationDrop_eq_current_sub_next_mass_of_addressedDepthTarget haddr]
- 
+
 +/--
 +True Beam classifier in direct mass-balance form.
 +

@@ -1,0 +1,1 @@
+Breaking Math Verification turns a fast-moving claim into a reproducible first verification layer. The source is traceable, the witnesses explicit, and the trust boundary auditable. Do not trust the headline. Verify the certificate.

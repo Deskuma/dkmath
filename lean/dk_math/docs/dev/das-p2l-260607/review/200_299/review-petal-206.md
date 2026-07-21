@@ -532,7 +532,7 @@ index 97a54952..66f7c7b1 100644
 @@ -166,4 +166,109 @@ theorem sourcePressureBeamDepthTarget_of_seedContainsDepth
    subst hdepth
    exact W.property.2.1
- 
+
 +/--
 +An addressed adjacent pair in a witness list exposes the left witness depth as
 +contained in that list.

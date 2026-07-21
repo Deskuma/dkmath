@@ -673,7 +673,7 @@ index 1fcb309e..86da8e3d 100644
 @@ -120,6 +120,19 @@ noncomputable def SourceContinuationDropInt
    (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
      (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
- 
+
 +/--
 +Integer-valued net pressure drop across adjacent pressure depths.
 +
@@ -689,7 +689,7 @@ index 1fcb309e..86da8e3d 100644
 +
  /--
  Adjacent source-pressure margin accounting identity.
- 
+
 @@ -132,10 +145,24 @@ theorem sourcePressureMarginStepDiff_eq
      (n : OddNat) (k r j : ℕ) :
      SourcePressureMarginInt n k (r + j + 1) -
@@ -716,7 +716,7 @@ index 1fcb309e..86da8e3d 100644
 +  have h := sourcePressureMarginStepDiff_eq n k r j
 +  rw [← h]
    ring
- 
+
  /--
 @@ -386,9 +413,7 @@ retention loss minus twice continuation loss.
  -/
@@ -726,13 +726,13 @@ index 1fcb309e..86da8e3d 100644
 -    SourceRetentionDropInt n k r j -
 -      2 * SourceContinuationDropInt n k r j
 +  0 < SourcePressureNetDropInt n k r j
- 
+
  /--
  The first selected source-pressure depth.
 @@ -829,6 +854,38 @@ theorem sourcePressureNetDropPositive_of_localIsland_left
    sourcePressureNetDropPositive_of_marginJumpUp n k r (j - 1)
      (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland)
- 
+
 +/--
 +Upward source-pressure sign change as a local zero-crossing.
 +
@@ -767,7 +767,7 @@ index 1fcb309e..86da8e3d 100644
 +
  /--
  Package a named margin jump and a strict retention drop.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-138.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-138.md
 new file mode 100644
 index 00000000..d039fbb7

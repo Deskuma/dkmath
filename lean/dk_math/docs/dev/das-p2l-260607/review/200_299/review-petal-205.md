@@ -467,7 +467,7 @@ index 74bd5939..97a54952 100644
 @@ -134,4 +134,36 @@ theorem sourcePressureMargin_pos_of_beamDepthTarget
      0 < SourcePressureMarginInt n k (r + j) :=
    (sourcePressureBeamDepthTarget_iff_margin_pos n k r j).1 h
- 
+
 +/--
 +An explicit Beam seed witness list contains a witness at relative depth `j`.
 +

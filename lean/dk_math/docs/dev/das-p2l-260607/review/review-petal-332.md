@@ -777,15 +777,15 @@ index d3ef1cd1..ff30b15f 100644
 @@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
  import Mathlib.Algebra.Order.BigOperators.Group.Finset
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.BoundedRepaymentLag"
 @@ -13,43 +14,126 @@ namespace DkMath.Collatz
  /-!
  # Generic bounded repayment lag
- 
+
 -The predicate below is the scalar consequence of an owned statement saying
 -that every outstanding arrival at time `m` was born in one of the preceding
 -`L` slots.  It is independent of Collatz and deliberately does not manufacture
@@ -793,7 +793,7 @@ index d3ef1cd1..ff30b15f 100644
 +The recent window is the half-open interval `[m-L,m)`.  Unlike the former
 +shifted-range formula, it never refers to arrivals after observation time `m`.
  -/
- 
+
 -/-- Outstanding work is covered by arrivals in the preceding `L` slots. -/
 +/-- Total arrivals in the at-most-`L` slots immediately preceding `m`. -/
 +def recentArrivalMass (arrivals : ℕ → ℕ) (L m : ℕ) : ℕ :=
@@ -835,7 +835,7 @@ index d3ef1cd1..ff30b15f 100644
  def OutstandingQueueHasRepaymentLag
      (queue arrivals : ℕ → ℕ) (L : ℕ) : Prop :=
    ∀ m, queue m ≤ ∑ j ∈ Finset.range L, arrivals (m - L + j)
- 
+
 -/-- A lag bound `L` and per-slot arrival bound `A` imply queue bound `L*A`. -/
 -theorem queue_le_mul_of_repaymentLag_of_arrivals_le
 -    {queue arrivals : ℕ → ℕ} {L A : ℕ}
@@ -864,7 +864,7 @@ index d3ef1cd1..ff30b15f 100644
 +      Finset.sum_le_sum fun k _ => harrivals k
 +    _ = (Finset.Ico (m - L) m).card * A := by simp
 +    _ ≤ L * A := Nat.mul_le_mul_right A (card_recentArrivalWindow_le L m)
- 
+
 -/-- Caller-facing uniform form of the generic lag theorem. -/
 -theorem repaymentLag_uniformUpperBound
 +/-- Correct lag plus per-slot arrivals yields a uniform queue bound. -/
@@ -921,7 +921,7 @@ index d3ef1cd1..ff30b15f 100644
 +    (hmass : ∀ m, recentArrivalMass (canonicalQueueDemand n) L m ≤ B) :
 +    ∀ m, canonicalOutstandingClaimQueueBeforeBlock n m ≤ B :=
 +  fun m => queue_le_of_recentArrivalMass_le hlag hmass m
- 
+
  /-!
 -For the canonical Collatz queue, the missing theorem is not the generic
 -counting argument above.  It is an owned statement that each actual claim is
@@ -932,7 +932,7 @@ index d3ef1cd1..ff30b15f 100644
 +owned claim carrier remains a possible mechanism for proving lag, but lag and
 +recent-demand mass control are logically separate obligations.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 index df465e4d..3f0f8075 100644
@@ -941,7 +941,7 @@ index df465e4d..3f0f8075 100644
 @@ -226,6 +226,73 @@ theorem relationalFiniteSignedCertificate_to_endpointWidthUniformUpperBound
    (relationalFiniteSignedCertificate_to_queueUniformUpperBound
      n C hstep hweight).to_endpointWidthUniformUpperBound
- 
+
 +/-! ## Canonical finite projection wrapper -/
 +
 +/-- Candidate-facing finite signature certificate specialized to canonical
@@ -1010,7 +1010,7 @@ index df465e4d..3f0f8075 100644
 +end CanonicalFiniteSignedTransitionPotentialCertificate
 +
  namespace FiniteSignedTransitionPotentialCertificate
- 
+
  variable {State Signature : Type*} [Fintype Signature]
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean
 index a8dd9538..e55cf1d4 100644
@@ -1019,7 +1019,7 @@ index a8dd9538..e55cf1d4 100644
 @@ -234,6 +234,32 @@ theorem canonicalOutstandingClaimQueue_eq_available_sub_consumed
    have hle := canonicalQueueConsumed_le_available n k
    omega
- 
+
 +/-! ## Exact canonical prefix balance -/
 +
 +/-- Exact telescoping equality for every prefix of canonical blocks. -/
@@ -1048,7 +1048,7 @@ index a8dd9538..e55cf1d4 100644
 +
  /-!
  ## Owned-resource frontier
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-331.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-331.md
 index cd3b72ad..aac1393c 100644
 --- a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-331.md
@@ -1056,21 +1056,21 @@ index cd3b72ad..aac1393c 100644
 @@ -89,9 +89,11 @@ with a sound projected upper edge weight and bounded potential.  Existing
  low-bit collision evidence rules out exact deterministic recovery, but does
  not by itself rule out a nondeterministic upper-weight projection.
- 
+
 -## Bounded repayment-lag route
 +## Bounded repayment-lag route (corrected by checkpoint 332)
- 
+
 -`BoundedRepaymentLag.lean` proves the generic implication:
 +Checkpoint 331 introduced the route, but its shifted early-time window could
 +include indices at or after the observation time.  Checkpoint 332 replaces it
 +with the exact past interval `[m-L,m)` and proves the corrected implication:
- 
+
  ```text
  all outstanding work lies among the previous L arrival slots
 @@ -100,9 +102,10 @@ each slot creates at most A arrivals
  queue m <= L * A.
  ```
- 
+
 -The first missing Collatz theorem is a uniform lag for all actual canonical
 -claims.  Current saturated-successor results repay selected local subclasses,
 -but do not provide such a global lag.
@@ -1078,9 +1078,9 @@ index cd3b72ad..aac1393c 100644
 +and a uniform bound on demand accumulated in each recent window (or a
 +per-block demand bound).  Current saturated-successor results repay selected
 +local subclasses, but provide neither complete global obligation.
- 
+
  ## Owned-carrier route
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-332.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-332.md
 new file mode 100644
 index 00000000..63114df0

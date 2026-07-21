@@ -701,7 +701,7 @@ index 7c7046da..c2c528c3 100644
 @@ -854,4 +854,180 @@ theorem sourcePressurePositiveCoverageResidue_subset_unresolvedLeft_union_bounda
    · apply Finset.mem_union_right
      exact mem_sourcePressureFiniteWindowBoundaryWitnesses.2 ⟨hpos, hboundary⟩
- 
+
 +/--
 +In a sorted witness list, a non-maximal witness has an adjacent successor no
 +larger than any later witness.  This is the list-order bridge needed by the

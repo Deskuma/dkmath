@@ -441,7 +441,7 @@ index 4c081266..f232f711 100644
 @@ -124,6 +124,24 @@ theorem SourcePressureLocalIslandWitnessAdjacentPairInList.four_head_or_tail
        SourcePressureLocalIslandWitnessAdjacentPairInList [W2, W3, W4] A B :=
    h
- 
+
 +/--
 +In a five-element explicit witness list, an adjacent-pair address is either
 +the head pair or an adjacent-pair address in the four-element tail.
@@ -466,7 +466,7 @@ index 4c081266..f232f711 100644
 @@ -434,6 +452,68 @@ theorem SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyD
    exact
      SourcePressureLocalIslandWitnessListHasRecoveredAdjacentAccountedFamilyDiagnostic.four_iff_head_or_tail
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Five-element bounded decomposition for the bundled diagnostic carrier.
@@ -535,7 +535,7 @@ index 4c081266..f232f711 100644
 @@ -594,4 +674,29 @@ theorem
    sourcePressureLocalIslandWitnessList_failure_four_diagnostic_head_or_tail_of_noAdjacentOverlap
      h hno
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Five-element consumer form: failure plus named no-adjacent-overlap yields

@@ -195,7 +195,7 @@ index 6117b7d8..20f32943 100644
 @@ -1481,6 +1481,33 @@ theorem SourcePressureForwardPairComparisonState.right_val_eq_left_add_two_or_le
    have hgap : W.val + 1 < W'.val := h.left_succ_lt_right_val
    omega
- 
+
 +/--
 +Downstream value-level reading of the boundary corridor split.
 +

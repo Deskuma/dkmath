@@ -779,18 +779,18 @@ index fcf1d524..7ded9378 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentBlock.lean
 @@ -10,6 +10,8 @@ import DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
- 
+
  namespace DkMath.Collatz
- 
+
 +set_option linter.style.longLine false
 +
  /-!
  # Universal first-payment coordinates
- 
+
 @@ -607,6 +609,313 @@ theorem universalPaymentBlockSignedDriftAt_neg_iff_claim_card_lt_capacity
    unfold universalPaymentBlockSignedDriftAt
    omega
- 
+
 +/-!
 +## Blocks with no delayed growth debt
 +

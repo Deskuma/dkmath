@@ -215,7 +215,7 @@ index 2da2e67a..96e8f5d2 100644
 @@ -918,6 +918,97 @@ theorem SourcePressureForwardBoxComparisonState.right_mem
      W' ∈ L :=
    h.box.right_mem
- 
+
 +/--
 +Pair-comparison-facing packaging of the forward box branch.
 +

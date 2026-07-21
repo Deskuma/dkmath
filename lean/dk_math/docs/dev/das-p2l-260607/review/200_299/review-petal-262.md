@@ -208,7 +208,7 @@ index 9544e9fd..2da2e67a 100644
 @@ -873,6 +873,51 @@ theorem SourcePressureForwardBoxComparisonState.not_reverse_box
      ¬ SourcePressureOrientedNeighborBoxState L W' W :=
    h.2.2
- 
+
 +/-- Project the left centered pulse box from a forward comparison state. -/
 +theorem SourcePressureForwardBoxComparisonState.left_box
 +    {n : OddNat} {k r : ℕ}

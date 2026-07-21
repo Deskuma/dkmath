@@ -588,7 +588,7 @@ index 04055305..e62305df 100644
 @@ -2620,6 +2620,128 @@ theorem sourcePressureLocalIslandWitnessPair_failure_recovered_or_overlapObstruc
        (SourcePressureLocalIslandWitnessPairOverlapObstruction.mk_of_failure_overlap
          hfail hoverlap)
- 
+
 +/--
 +Head-pair view of the recovered-or-overlap-obstruction split.
 +

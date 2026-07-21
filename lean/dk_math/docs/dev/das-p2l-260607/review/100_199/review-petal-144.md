@@ -564,7 +564,7 @@ index 919af434..9424a9dc 100644
 +import DkMath.Collatz.PetalBridge.PressureDecay
  import DkMath.Collatz.PetalBridge.PressureFrontier
  import DkMath.Collatz.PetalBridge.Collision
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureDecay.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/PressureDecay.lean
 new file mode 100644
 index 00000000..c1ce02e7
@@ -906,16 +906,16 @@ index 53d6cc44..fe336a2f 100644
 @@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.Collatz.PetalBridge.DriftBudget
 +import DkMath.Collatz.PetalBridge.PressureDecay
- 
+
  #print "file: DkMath.Collatz.PetalBridge.PressureFrontier"
- 
+
 @@ -82,89 +82,6 @@ def IsSourcePressureDepth
      (orbitWindowContinuationSiblingMassPow2 n k (r + j))
      (orbitWindowRetentionMassPow2 n k (r + j))
- 
+
 -/--
 -Integer-valued source pressure margin at a single depth.
 -
@@ -1001,11 +1001,11 @@ index 53d6cc44..fe336a2f 100644
 -
  /--
  Selected source pressure is exactly positive source pressure margin.
- 
+
 @@ -328,43 +245,6 @@ theorem downClosed_iff_no_prefixFailure
      · exact hshallow
      · exact False.elim (hno j₁ j₂ hlt hj₂ ⟨hlt, hshallow, hdeep⟩)
- 
+
 -/--
 -Upward sign change of the source-pressure margin between adjacent depths.
 -
@@ -1045,11 +1045,11 @@ index 53d6cc44..fe336a2f 100644
 -
  /--
  Retention mass strictly drops across adjacent pressure depths.
- 
+
 @@ -415,17 +295,6 @@ def SourcePressureJumpWithDecay
      SourceRetentionDropsAcross n k r j ∧
        SourceContinuationWeaklyDropsAcross n k r j
- 
+
 -/--
 -Positive net integer drop across an adjacent pressure-depth edge.
 -
@@ -1063,11 +1063,11 @@ index 53d6cc44..fe336a2f 100644
 -
  /--
  The first selected source-pressure depth.
- 
+
 @@ -785,65 +654,6 @@ theorem sourcePressureMarginJumpUp_of_localIsland_left
    sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
      (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
- 
+
 -/--
 -Strict adjacent margin jump is equivalent to positive integer step
 -difference.
@@ -1133,7 +1133,7 @@ index 53d6cc44..fe336a2f 100644
 @@ -865,24 +675,6 @@ theorem sourcePressureNetDropPositive_of_localIsland_left
    sourcePressureNetDropPositive_of_marginJumpUp n k r (j - 1)
      (sourcePressureMarginJumpUp_of_localIsland_left n k r j hisland)
- 
+
 -/--
 -Upward source-pressure sign change as a local zero-crossing.
 -
@@ -1158,7 +1158,7 @@ index 53d6cc44..fe336a2f 100644
 @@ -915,23 +707,6 @@ theorem sourcePressureSignChangeDown_of_localIsland
          ((isSourcePressureDepth_iff_margin_pos n k r (j + 1)).2 hpos)
      omega
- 
+
 -/--
 -Downward source-pressure sign change as a local falling condition.
 -
@@ -1182,7 +1182,7 @@ index 53d6cc44..fe336a2f 100644
 @@ -961,31 +736,6 @@ theorem sourcePressureLocalIsland_gives_crossing_pulse
    ⟨sourcePressureCrosses_of_localIsland_left n k r j hisland,
      sourcePressureFalls_of_localIsland_right n k r j hisland⟩
- 
+
 -/--
 -Named local source-pressure pulse.
 -
@@ -1214,7 +1214,7 @@ index 53d6cc44..fe336a2f 100644
 @@ -995,41 +745,6 @@ theorem sourcePressurePulse_of_localIsland
      SourcePressurePulse n k r j :=
    sourcePressureLocalIsland_gives_crossing_pulse n k r j hisland
- 
+
 -/--
 -Left-edge projection from a source-pressure pulse.
 --/
@@ -1256,7 +1256,7 @@ index 53d6cc44..fe336a2f 100644
 @@ -1040,17 +755,6 @@ theorem sourcePressureSignPulse_of_localIsland
    ⟨sourcePressureSignChangeUp_of_localIsland n k r j hisland,
      sourcePressureSignChangeDown_of_localIsland n k r j hisland⟩
- 
+
 -/--
 -The named net-drop pulse is equivalent to the two sign changes.
 --/
@@ -1270,7 +1270,7 @@ index 53d6cc44..fe336a2f 100644
 -
  /--
  Meaning-name alias for a positive pressure run.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-143.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-143.md
 new file mode 100644
 index 00000000..9e383570

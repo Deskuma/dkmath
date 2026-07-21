@@ -350,7 +350,7 @@ index 194ade98..222c242e 100644
 @@ -393,6 +393,32 @@ def SourcePressureBeamCenteredLocalPulseBox
                        SourcePressureNetDropInt n k r W.val ≤
                          3 * (k : ℤ))
- 
+
 +/--
 +Project the sign-and-target part of a centered local pulse box.
 +

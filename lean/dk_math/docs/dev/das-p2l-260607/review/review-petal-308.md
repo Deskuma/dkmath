@@ -580,7 +580,7 @@ index 68f8525e..50d04fee 100644
 @@ -388,6 +388,94 @@ theorem orbitPaymentSourceFiberAt_nonempty_iff_two_le_orbitWindowHeight
      rw [mem_orbitPaymentSourceFiberAt_iff]
      exact ⟨le_rfl, orbitPaymentTarget_eq_self_of_two_le_orbitWindowHeight htwo⟩
- 
+
 +/-- The finite bound in a universal source fiber is implied by target extensivity. -/
 +theorem mem_orbitPaymentSourceFiberAt_iff_target_eq
 +    {n : OddNat} {i j : ℕ} :

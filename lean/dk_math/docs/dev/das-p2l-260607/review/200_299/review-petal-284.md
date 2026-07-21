@@ -330,7 +330,7 @@ index d8306154..6dc8096e 100644
 @@ -941,6 +941,25 @@ def SourcePressureForwardPairComparisonState
        SourcePressureBeamCenteredLocalPulseBox n k r L W ∧
          SourcePressureBeamCenteredLocalPulseBox n k r L W'
- 
+
 +/--
 +Named local packing separator state.
 +
@@ -356,7 +356,7 @@ index d8306154..6dc8096e 100644
 @@ -1606,6 +1625,78 @@ theorem SourcePressureForwardPairComparisonState.two_le_index_gap
    have hgap : W.val + 2 ≤ W'.val := h.two_le_value_gap
    omega
- 
+
 +/-- Project the forward pair-comparison state from a local packing separator. -/
 +theorem SourcePressureLocalPackingSeparatorState.forward
 +    {n : OddNat} {k r : ℕ}
@@ -435,7 +435,7 @@ index d8306154..6dc8096e 100644
 @@ -2222,4 +2313,69 @@ theorem sourcePressureBeamSeedState_to_nonposSeparator_or_pairOverlap
    sourcePressureFailureResolutionState_to_nonposSeparator_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches the named local packing separator state or a
 +concrete adjacent-pair overlap obstruction.

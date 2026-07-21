@@ -10,10 +10,10 @@ gch: fe89197f4b0a4114a51fe459bac40e0dc66cdbaa
 
 やったことは主に 2 つです。
 
-1. `OneCycle.lean` 冒頭コメントに、`DkMath.ABC.ValuationFlowBridge` との研究メモを追加  
+1. `OneCycle.lean` 冒頭コメントに、`DkMath.ABC.ValuationFlowBridge` との研究メモを追加
    直接 import せず、まず Collatz 側を `unit boundary` として固定する方針を書いてあります。理由は、ABC 側の主語が `a^d - b^d` の primitive flow で、OneCycle 側は `3*n + 1 = 2^h*n` なので、いきなり混ぜると主語がずれるためです。
 
-2. 実装可能な事実を追加  
+2. 実装可能な事実を追加
    追加した theorem は以下です。
 
 ```lean
@@ -510,12 +510,12 @@ index 68e327d3..aa4a82bc 100644
 +This is exactly the information a later thin
 +`DkMath.Collatz.PetalBridge.ValuationFlowBridge` can consume.
  -/
- 
+
  /--
 @@ -154,4 +180,111 @@ theorem one_four_two_one_petal_scaled_cycle_unique
      n = 1 ∧ h = 2 :=
    collatz_scaled_one_cycle_eq_one hn hcycle
- 
+
 +/--
 +Integer unit-product form of the scaled one-step cycle equation.
 +

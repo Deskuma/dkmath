@@ -404,7 +404,7 @@ index 99924f99..8822aa19 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/DEMO_CONTRACT.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/DEMO_CONTRACT.md
 @@ -991,17 +991,17 @@ This table must be updated after implementation.
- 
+
  | Demo element | Required formal anchor | Final name |
  |---|---|---|
 -| finite set | definition | pending |
@@ -429,15 +429,15 @@ index 99924f99..8822aa19 100644
 +| `17` fresh | theorem | `DkMath.Hackathon.demo_seventeen_fresh` |
 +| Cosmic completion | theorem | `DkMath.Hackathon.demo_cosmic_completion` |
 +| successful verification | build gate | `lake build DkMath.Hackathon.Demo` |
- 
+
  No `pending` value may remain in the final demo contract.
- 
+
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/VISUAL_STORYBOARD.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/VISUAL_STORYBOARD.md
 index 02978897..a699755a 100644
 --- a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/VISUAL_STORYBOARD.md
 +++ b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/VISUAL_STORYBOARD.md
 @@ -1912,16 +1912,16 @@ This table must be finalized after the Lean theorem surface is accepted.
- 
+
  | Visual element | Formal declaration | Status |
  |---|---|---|
 -| `S = {2, 3, 5, 7}` | `demoPrimeSet` | pending |
@@ -460,9 +460,9 @@ index 02978897..a699755a 100644
 +| `13` fresh | `demo_thirteen_fresh` | verified |
 +| `17` fresh | `demo_seventeen_fresh` | verified |
 +| successful verification | `lake build DkMath.Hackathon.Demo` | passed |
- 
+
  No row may remain `pending` in the final storyboard used for rendering.
- 
+
 diff --git a/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-004.md b/lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/report-hack-004.md
 new file mode 100644
 index 00000000..e1184bb9

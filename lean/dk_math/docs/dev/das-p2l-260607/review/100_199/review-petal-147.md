@@ -432,7 +432,7 @@ index 9424a9dc..45a47bcf 100644
  import DkMath.Collatz.PetalBridge.PressureFrontier
 +import DkMath.Collatz.PetalBridge.PressureAccounting
  import DkMath.Collatz.PetalBridge.Collision
- 
+
  #print "file: DkMath.Collatz.PetalBridge"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureAccounting.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/PressureAccounting.lean
 new file mode 100644

@@ -610,7 +610,7 @@ index 07d8b573..daf3f5b2 100644
 @@ -2905,6 +2905,124 @@ theorem sourcePressureLocalIslandWitnessList_failure_oneStepDiagnosis
          h1pos h2pos hhead)
    · exact Or.inr htail
- 
+
 +/--
 +Tail-facing alias for one-step diagnosis.
 +

@@ -304,7 +304,7 @@ index b0206640..ede0bb49 100644
 @@ -498,4 +498,63 @@ theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
    exact isEquivalent_of_tendsto_one
      tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
- 
+
 +/-!
 +## Central binomial coefficient surface
 +
@@ -372,7 +372,7 @@ index 0fced9fc..97cfdd2e 100644
 @@ -57,6 +57,15 @@ theorem isEquivalent_real_centralRatioQ_sqrt_pi_mul_nat :
      (fun m : Nat => Real.sqrt (Real.pi * (m : R)))
  ```
- 
+
 +Finally, the growth module now inverts the definition of `centralRatioQ` and
 +proves the central-binomial coefficient form:
 +
@@ -383,12 +383,12 @@ index 0fced9fc..97cfdd2e 100644
 +```
 +
  Therefore the squared central ratio has the growth line:
- 
+
  ```text
 @@ -126,16 +135,33 @@ theorem tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one :
  The proof takes the square root of the squared normalized growth theorem and
  uses positivity of `centralRatioQ m`.
- 
+
 +The third closed theorem is:
 +
 +```lean
@@ -408,16 +408,16 @@ index 0fced9fc..97cfdd2e 100644
 +`centralRatioQ m ~ sqrt (Real.pi * m)`.
 +
  ## Next formal checkpoint
- 
+
 -The next theorem should invert the definition of `centralRatioQ` and expose
 -the central-binomial coefficient form:
 +The next theorem can package the same statement as an operational ratio limit:
- 
+
  ```text
 -Nat.choose (2*m) m ~ 4^m / sqrt (Real.pi * m)
 +Nat.choose (2*m) m / (4^m / sqrt (Real.pi * m)) -> 1
  ```
- 
+
 -This should still avoid using Stirling as the source theorem.  The likely Lean
 -work is a finite real-coercion identity for `centralRatioQ m =
 -4^m / Nat.choose (2*m) m`, followed by an `IsEquivalent` inversion/division

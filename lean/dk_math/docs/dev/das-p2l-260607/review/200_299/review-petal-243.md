@@ -133,7 +133,7 @@ theorem sourcePressureFailureResolution_to_beamSeed :
 
 これは既存で definitionally 同じなら薄く通るはずです。
 
-結論として、**書けます**。  
+結論として、**書けます**。
 ただし「実行する automaton」ではなく、今はまず **証明状態の遷移図を Lean theorem として固定する automaton** が良いです。これなら既存の `FailureResolution`, `BeamSeed`, `PulseBox`, `NeighborCandidate`, `AdjacentDiagnosis` がそのまま状態ノードになります。
 
 ---
@@ -158,7 +158,7 @@ index 21d932bc..9a8b652a 100644
 @@ -522,6 +522,83 @@ theorem sourcePressureBeamNeighborCandidate_right_center_full_diagnostic
    sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center
      (sourcePressureBeamNeighborCandidate_right_mem hneigh)
- 
+
 +/--
 +Forward-oriented Beam surface for an explicit adjacent-pair diagnosis.
 +

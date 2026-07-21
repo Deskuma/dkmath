@@ -426,7 +426,7 @@ index 163313fa..9a677b91 100644
 @@ -62,6 +62,110 @@ inductive SourcePressureStateName where
    | orientedNeighborDiagnostic
    deriving DecidableEq, Repr
- 
+
 +/--
 +Mnemonic names for currently unfilled or unconfirmed regions of the
 +source-pressure proof automaton.

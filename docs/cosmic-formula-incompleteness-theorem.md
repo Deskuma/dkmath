@@ -1,6 +1,6 @@
 # 宇宙式の不完全性定理
 
-> Cosmic Formula Incompleteness Theorem  
+> Cosmic Formula Incompleteness Theorem
 > DkMath philosophy draft — 2026-07-19
 
 ## 1. 概要

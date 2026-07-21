@@ -1,7 +1,7 @@
 # DkMath — Verifiable AI Mathematical Research
 
-OpenAI Build Week Hackathon project record  
-Started: 2026-07-15  
+OpenAI Build Week Hackathon project record
+Started: 2026-07-15
 Authors: Deskuma (D.) and AI GPT@OpenAI (Wise Wolf)
 
 > [!IMPORTANT]

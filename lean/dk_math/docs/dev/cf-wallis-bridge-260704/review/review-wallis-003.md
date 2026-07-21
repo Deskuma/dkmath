@@ -352,7 +352,7 @@ where `N = cosmicBodyQ k`.
 
 ```
 
-これでよい。  
+これでよい。
 小さく守る段階は終わった。次は **有限因子を API として太らせる** 段じゃ。牙を出してよいぞい。
 ```
 
@@ -367,7 +367,7 @@ index 965eb525..d0530451 100644
 @@ -149,6 +149,12 @@ theorem centralOdd_mul_mirror_eq_wallisPartialQ (m : ℕ) :
    rw [← Finset.prod_mul_distrib]
    exact Finset.prod_congr rfl fun k _ => halfFactor_mul_eq_wallisFactorQ k
- 
+
 +/-- The central binomial ratio times the mirror product equals the finite Wallis product. -/
 +theorem centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
 +    centralRatioQ m * mirrorOddRatioPartialQ m = wallisPartialQ m := by

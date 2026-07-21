@@ -399,7 +399,7 @@ index 024a93bc..5f613584 100644
 @@ -160,4 +160,114 @@ theorem sourcePressureIntervalPulseAddress_sum_netDrop_neg
    have hafter := sourcePressureIntervalPulseAddress_after_end_nonpos A
    omega
- 
+
 +/--
 +The accumulated net drop is exactly the after-margin minus the start-margin.
 +

@@ -278,7 +278,7 @@ index 3c16b35e..303db625 100644
 @@ -742,4 +742,80 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_ret_add_curr
        haddr
    exact hiff.2 hineq
- 
+
 +/--
 +Beam-facing expansion of the retention drop at an addressed depth.
 +

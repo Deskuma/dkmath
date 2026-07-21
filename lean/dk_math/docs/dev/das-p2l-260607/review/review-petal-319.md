@@ -1046,16 +1046,16 @@ index 5913925e..a23b64b0 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSaturatedSuccessor
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean
 index 19e4df13..f1f0d6ad 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean
 +++ b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean
 @@ -436,17 +436,13 @@ does **not** export
- 
+
  `saturated block -> next block has nonpositive drift`.
- 
+
 -The length-two and no-consecutive-saturation patterns remain finite evidence,
 -not theorems.  The exact facts proved above stop at the normal form
 -
@@ -1075,7 +1075,7 @@ index 19e4df13..f1f0d6ad 100644
 +terminal-depth pressure.  The audit remains useful as evidence, but these two
 +structural facts no longer depend on it.
  -/
- 
+
  /-- The non-saturated positive branch carries its dynamic terminal pressure depth. -/
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentSaturatedSuccessor.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentSaturatedSuccessor.lean
 new file mode 100644

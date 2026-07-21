@@ -224,7 +224,7 @@ index 5289fd3c..9544e9fd 100644
 @@ -826,6 +826,70 @@ theorem SourcePressureOrientedNeighborBoxState.not_reverse_box_of_sorted
    exact hbox.not_val_ge_of_sorted hsorted
      (hrev.val_le_of_sorted hsorted)
- 
+
 +/--
 +Named state for the forward comparison branch of a two-endpoint box.
 +
@@ -291,11 +291,11 @@ index 5289fd3c..9544e9fd 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 @@ -1205,4 +1269,67 @@ theorem sourcePressureBeamSeedState_to_forwardBoxComparison_or_pairOverlap
    sourcePressureFailureResolutionState_to_forwardBoxComparison_or_pairOverlap
      hsorted (sourcePressureBeamSeedState_to_failureResolutionState h)
- 
+
 +/--
 +Failure resolution reaches the named forward-comparison state or a concrete
 +pair-overlap obstruction.

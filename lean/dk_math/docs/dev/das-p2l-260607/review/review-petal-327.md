@@ -42,7 +42,7 @@ cp-327 の局所登頂を完了しました。
 
 したがって `mod 64` へ進むだけでは不十分です。指示の stopping rule に従い、abstract forest や global matcher へ迂回せず、この地点で止めました。
 
-実装: [UniversalPaymentAmplitude.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean)  
+実装: [UniversalPaymentAmplitude.lean](/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean)
 レポート: [report-petal-327.md](/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-327.md)
 
 検証済み:
@@ -837,7 +837,7 @@ index d97bbc01..4d41fe3e 100644
 @@ -2327,6 +2327,35 @@ theorem two_le_successor_dyadic_budget_of_two_le_length
      (show 1 ≤ canonicalBlockLength n (k + 1) - 1 by omega)
    simpa using this
- 
+
 +/-- Abstract block-width dyadic budget. -/
 +abbrev CanonicalAbstractDyadicBudgetCarrier
 +    (n : OddNat) (k : ℕ) :=
@@ -873,7 +873,7 @@ index d97bbc01..4d41fe3e 100644
 @@ -2374,11 +2403,10 @@ The stronger candidate
  `successor length = 1` and `successor terminal valuation = 1`
  `-> predecessor odd core % 16 = 11`
- 
+
 -requires an explicit normal form connecting the successor odd core (or its
 -terminal carrier) to the predecessor odd core.  The current API exposes the
 -successor start and successor length, but not that substituted terminal-carrier
@@ -884,12 +884,12 @@ index d97bbc01..4d41fe3e 100644
 +records the next genuine boundary: predecessor residue alone does not
 +transport the following block's claim count.
  -/
- 
+
  /-- A length-one successor of a saturated block selects the class three
 @@ -2392,6 +2420,94 @@ theorem CanonicalSaturatedBorderBlock.oddCore_mod_eight_eq_three_of_next_length_
    · have htwo := h.two_le_nextBlockLength_of_core_mod_eight_eq_seven hseven
      omega
- 
+
 +/-- Exact odd-core substitution for a length-one successor. -/
 +theorem CanonicalSaturatedBorderBlock.nextOddCore_eq_quarter_nine_core_add_one
 +    {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k)
@@ -984,7 +984,7 @@ index d97bbc01..4d41fe3e 100644
 @@ -2420,6 +2536,136 @@ theorem canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one
      have hle := canonicalBlockClaimCount_le_length n k
      omega
- 
+
 +/-- The sole locally insufficient successor class after abstract dyadic
 +discharge.  Saturation is a predecessor condition; residue and endpoint claim
 +remain separate data. -/
@@ -1116,12 +1116,12 @@ index d97bbc01..4d41fe3e 100644
 +-/
 +
  /-! ## Abstract nonduplicating dyadic carrier
- 
+
  This section realizes the numerical half-budget as two disjoint `Fin` images.
 @@ -2428,17 +2674,6 @@ demand is shifted into the upper half.  These are abstract potential slots.
  They are not orbit indices, binary bit positions, or upper-boundary resources.
  -/
- 
+
 -/-- Abstract block-width dyadic budget. -/
 -abbrev CanonicalAbstractDyadicBudgetCarrier
 -    (n : OddNat) (k : ℕ) :=

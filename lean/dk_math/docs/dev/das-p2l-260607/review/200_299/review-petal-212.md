@@ -526,7 +526,7 @@ index 20d30ce3..3d38f8a8 100644
 @@ -615,4 +615,61 @@ theorem sourcePressureMargin_next_nonpos_iff_netDrop_le_neg_current_of_addressed
      haddr]
    omega
- 
+
 +/--
 +Beam-facing expansion of the local net pressure drop at an addressed depth.
 +

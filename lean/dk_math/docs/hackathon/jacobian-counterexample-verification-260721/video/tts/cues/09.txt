@@ -1,0 +1,1 @@
+Broader mathematical review continues; this project does not replace it. Lean verifies the exact formalized formulas and consequences. It does not certify historical priority, publication status, peer review, or community acceptance. The repository records those distinctions explicitly.

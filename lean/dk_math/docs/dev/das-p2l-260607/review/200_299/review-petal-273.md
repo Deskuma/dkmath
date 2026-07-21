@@ -185,7 +185,7 @@ index f80a22c7..3143d18c 100644
 @@ -1251,6 +1251,34 @@ theorem SourcePressureForwardPairComparisonState.left_succ_lt_right_val
    have hne : W'.val ≠ W.val + 1 := h.not_right_val_eq_left_succ
    omega
- 
+
 +/--
 +Index-level form of the first interference theorem.
 +

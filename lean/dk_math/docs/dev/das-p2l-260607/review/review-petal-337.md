@@ -1004,7 +1004,7 @@ index 54ef7b46..164fc518 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFlow
 +import DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeHorizon
  import DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeHorizon.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeHorizon.lean
 new file mode 100644

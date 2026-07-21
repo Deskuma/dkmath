@@ -262,7 +262,7 @@ index f77d5e9c..5036f96f 100644
 @@ -154,4 +154,111 @@ theorem dkTendsto_centralRatioQ_mul_mirror_pi_div_two :
        (Real.pi / 2) :=
    tendsto_centralRatioQ_mul_mirror_pi_div_two
- 
+
 +/-!
 +## Conditional infinite-product surface
 +

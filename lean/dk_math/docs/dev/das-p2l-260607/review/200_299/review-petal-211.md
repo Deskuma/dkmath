@@ -527,7 +527,7 @@ index 709ede8d..20d30ce3 100644
 @@ -514,4 +514,105 @@ theorem sourcePressureMargin_next_nonpos_of_addressedDepthTarget_of_netDrop_le_n
      haddr]
    omega
- 
+
 +/--
 +Sharp local True Beam condition at an addressed depth.
 +

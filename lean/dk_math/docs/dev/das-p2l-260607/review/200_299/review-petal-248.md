@@ -185,7 +185,7 @@ index 4d89c77e..d254ec6c 100644
 @@ -453,4 +453,48 @@ theorem sourcePressureFailureResolutionState_to_orientedNeighborDiagnostic_or_ov
          hrec)
    · exact Or.inr hoverlap
- 
+
 +/--
 +Adjacent-overlap state exposes a concrete adjacent pair carrying the pair-level
 +overlap obstruction.

@@ -247,21 +247,21 @@ index e865af0d..92d7c172 100644
 +++ b/lean/dk_math/DkMath/Pascal/WallisGrowthBridge.lean
 @@ -273,9 +273,10 @@ theorem real_coe_centralRatioQ_sq_eq_odd_mul_cosmicPartialQ
    exact_mod_cast centralRatioQ_sq_eq_odd_mul_cosmicPartialQ m
- 
+
  /-!
 -TODO for the next asymptotic pass:
 +## Squared normalized growth limit
- 
+
 -Prove
 +The finite identity above is strong enough to extract the first genuine
 +growth theorem without invoking Stirling's approximation:
- 
+
  ```lean
  Filter.Tendsto
 @@ -284,11 +285,121 @@ Filter.Tendsto
    (nhds Real.pi)
  ```
- 
+
 -from `real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ`,
 -`tendsto_wallisPartialQ_pi_div_two`, and
 -`(2*m+1)/m -> 2`.  This is no longer a finite algebra problem: it needs the
@@ -383,7 +383,7 @@ index e865af0d..92d7c172 100644
 +      Filter.atTop
 +      (nhds Real.pi) :=
 +  tendsto_real_centralRatioQ_sq_div_nat_pi
- 
+
  end DkMath.Pascal.WallisGrowthBridge
 diff --git a/lean/dk_math/docs/dev/cf-wallis-bridge-260704/cf-wallis-growth-route.md b/lean/dk_math/docs/dev/cf-wallis-bridge-260704/cf-wallis-growth-route.md
 index 3f614eaf..d7117539 100644
@@ -392,7 +392,7 @@ index 3f614eaf..d7117539 100644
 @@ -39,6 +39,16 @@ The limit module already proves:
  wallisPartialQ m -> pi / 2
  ```
- 
+
 +The growth module now proves the squared normalized limit:
 +
 +```lean
@@ -404,24 +404,24 @@ index 3f614eaf..d7117539 100644
 +```
 +
  Therefore the squared central ratio has the growth line:
- 
+
  ```text
 @@ -63,9 +73,9 @@ inverting gives the central-binomial growth law:
  Nat.choose (2*m) m ~ 4^m / sqrt (pi * m)
  ```
- 
+
 -## Next formal checkpoint
 +## Formal checkpoint just closed
- 
+
 -The next theorem should be the squared normalized limit:
 +The closed theorem is:
- 
+
  ```lean
  Filter.Tendsto
 @@ -82,5 +92,20 @@ wallisPartialQ m -> pi / 2
  (2*m + 1) / m -> 2
  ```
- 
+
 -The `m = 0` issue is an `atTop` bookkeeping problem, so it should be handled
 -as a separate no-sorry checkpoint.
 +The `m = 0` issue is only an `atTop` bookkeeping problem.  The Lean proof

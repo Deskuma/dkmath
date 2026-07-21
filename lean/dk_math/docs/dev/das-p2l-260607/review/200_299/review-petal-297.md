@@ -785,7 +785,7 @@ index 39af924c..cba3919e 100644
 @@ -1182,6 +1182,69 @@ theorem sourcePressureOrientedNeighborDiagnosticState_iff_adjacentDiagnosis
    · exact SourcePressureOrientedNeighborDiagnosticState.adjacentDiagnosis
    · exact sourcePressureOrientedNeighborDiagnosticState_of_forward hpair
- 
+
 +/-
 +Sortedness and adjacent diagnosis have opposite purposes.  A diagnosis is a
 +failure-resolution carrier: its recovered branch stores the reverse order,

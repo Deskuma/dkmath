@@ -548,7 +548,7 @@ index 5b9f2ee7..fe8c7806 100644
 @@ -388,6 +388,27 @@ def sourcePressureAccountedInterval_of_intervalPulseAddress
        simpa [SourcePressureIntervalNetDrop] using
          sourcePressureIntervalPulseAddress_margin_after_eq_start_add_sum_netDrop A }
- 
+
 +/--
 +Map an explicit list of interval-pulse addresses to accounted intervals.
 +
@@ -572,11 +572,11 @@ index 5b9f2ee7..fe8c7806 100644
 +
  /--
  Finite-list pressure budget over explicitly provided accounted intervals.
- 
+
 @@ -409,6 +430,43 @@ theorem sourcePressureAccountedInterval_list_sum_le_neg_length
        simp at ih ⊢
        omega
- 
+
 +/--
 +Finite-list pressure budget over explicitly supplied interval-pulse addresses.
 +
@@ -616,11 +616,11 @@ index 5b9f2ee7..fe8c7806 100644
 +
  /--
  Any nonempty explicit list of accounted intervals has negative total net drop.
- 
+
 @@ -675,6 +733,27 @@ def SourcePressureAccountedIntervalBefore
      (A B : SourcePressureAccountedInterval n k r) : Prop :=
    NatIntervalBefore A.start A.len B.start B.len
- 
+
 +/--
 +Ordered non-overlap for two interval-pulse addresses.
 +
@@ -648,7 +648,7 @@ index 5b9f2ee7..fe8c7806 100644
 @@ -1009,6 +1088,137 @@ theorem sourcePressureAccountedIntervalList_sorted_or_failure
              · exact Or.inr (Or.inr htail)
            · exact Or.inr (Or.inl hAB)
- 
+
 +/--
 +Adjacent sortedness for an explicit interval-pulse-address list.
 +

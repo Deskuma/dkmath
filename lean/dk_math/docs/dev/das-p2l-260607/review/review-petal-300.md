@@ -1166,9 +1166,9 @@ index b179d5d1..947d19a8 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
  import DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
 +import DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/DyadicFloat.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/DyadicFloat.lean
 index 9c14e382..8a86f9f6 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/DyadicFloat.lean
@@ -1176,7 +1176,7 @@ index 9c14e382..8a86f9f6 100644
 @@ -159,6 +159,20 @@ theorem DyadicFloatSignature.windowsDisjoint_or_windowsOverlap
    unfold WindowsDisjoint WindowsOverlap
    omega
- 
+
 +/--
 +Semantic window case split under the validity condition needed by future
 +compatible-state counting.  In the overlap branch, equality of signatures is

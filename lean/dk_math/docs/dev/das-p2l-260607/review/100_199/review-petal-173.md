@@ -602,7 +602,7 @@ index cb412cd1..4725375b 100644
 @@ -3323,6 +3323,173 @@ theorem sourcePressureLocalIslandWitnessList_failure_fourDiagnosis_carrier
          (SourcePressureLocalIslandWitnessAdjacentDiagnosis.lift_tail
            htailTail))
- 
+
 +/--
 +An ordered adjacent pair occurring in an explicitly supplied witness list.
 +

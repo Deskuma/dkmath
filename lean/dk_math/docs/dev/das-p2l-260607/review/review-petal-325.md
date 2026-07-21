@@ -913,7 +913,7 @@ index eac49dd0..f4416a3c 100644
 @@ -35,6 +35,26 @@ def finiteReflectedQueueOn
      (arrivals service : ℕ → ℕ) (q m : ℕ) : ℕ :=
    finiteReflectedQueueFrom arrivals service q (m - q + 1)
- 
+
 +/-- Total closed-interval queue.  Unlike `finiteReflectedQueueOn`, this wrapper
 +treats `m < q` as the empty window and therefore processes no index. -/
 +def finiteReflectedQueueOnIcc
@@ -940,7 +940,7 @@ index eac49dd0..f4416a3c 100644
 @@ -244,6 +264,20 @@ theorem finiteReflectedQueueOn_eq_zero_iff_all_suffix_nonpos
      intro t ht
      rw [Int.toNat_of_nonpos (hall t ht)]
- 
+
 +/-- Total zero characterization, including the empty closed interval. -/
 +theorem finiteReflectedQueueOnIcc_eq_zero_iff_all_suffix_nonpos
 +    (arrivals service : ℕ → ℕ) (q m : ℕ) :
@@ -965,7 +965,7 @@ index dec50be0..23b4b59f 100644
 @@ -1021,6 +1021,35 @@ theorem canonicalSelectedDriftImageCarrier_eq_empty_of_not_active
    classical
    simp [canonicalSelectedDriftImageCarrier, h]
- 
+
 +/-! ## Actual spare selected incidences -/
 +
 +/-- Selected source incidences not used by the chosen same-block drift image. -/
@@ -1001,7 +1001,7 @@ index dec50be0..23b4b59f 100644
 @@ -1470,6 +1499,38 @@ theorem natCard_allDepthActualResidual_le_causalQueueCarrier
    rw [natCard_actualSelectedDriftResidualCarrier, Nat.card_fin]
    exact canonicalUnorderedSelectedDriftResidualCount_le_depthQueue n hqm
- 
+
 +/-- Explicit depthwise embedding of actual residual incidences into the
 +corresponding causal queue fiber. -/
 +noncomputable def actualSelectedDriftResidualDepthEmbedding
@@ -1040,7 +1040,7 @@ index dec50be0..23b4b59f 100644
 @@ -1533,6 +1594,317 @@ theorem intToNat_endpointAccountingTerm_add_one_le_selectedPressureCarrier_card
      canonicalBlockTerminalValuation_lt_length_of_endpointAccountingTerm_pos hpos
    omega
- 
+
 +/-- Terminal valuation at least two forces an actual spare selected source
 +incidence on every positive nonsaturated block. -/
 +theorem canonicalSelectedDriftSpareCarrier_nonempty
@@ -1354,7 +1354,7 @@ index dec50be0..23b4b59f 100644
 +
  /-!
  ## Current boundary after the causal depth queue
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-325.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-325.md
 new file mode 100644
 index 00000000..d4a4e5fb

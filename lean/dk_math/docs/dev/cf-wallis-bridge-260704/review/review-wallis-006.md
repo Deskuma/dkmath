@@ -205,12 +205,12 @@ index 232b04d8..f77d5e9c 100644
 +
 +Mathlib's Wallis theorem then sends each of them to `Real.pi / 2`.
  -/
- 
+
  namespace DkMath.Pascal.WallisLimitBridge
 @@ -36,6 +44,30 @@ theorem real_coe_wallisPartialQ_eq_Wallis_W (m : ℕ) :
      norm_num
      field_simp
- 
+
 +/-- The finite Wallis and cosmic partial products are pointwise equal over `ℝ`. -/
 +theorem real_coe_wallisPartialQ_eq_cosmicPartialQ (m : ℕ) :
 +    ((wallisPartialQ m : ℚ) : ℝ) =
@@ -275,13 +275,13 @@ index 232b04d8..f77d5e9c 100644
 +  exact tendsto_wallisPartialQ_pi_div_two.congr' <|
 +    Eventually.of_forall fun m =>
 +      (real_coe_centralRatioQ_mul_mirror_eq_wallisPartialQ m).symm
- 
+
  /--
  DkMath-named alias for the Wallis partial product convergence.
 @@ -86,4 +145,13 @@ theorem dkTendsto_cosmicPartialQ_pi_div_two :
        (Real.pi / 2) :=
    tendsto_cosmicPartialQ_pi_div_two
- 
+
 +/--
 +DkMath-named alias for convergence of the proof-note central-ratio expression.
 +-/

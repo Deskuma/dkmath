@@ -1069,7 +1069,7 @@ index bc18ca77..4c7a4327 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmortizedResource.lean
 new file mode 100644
@@ -1203,7 +1203,7 @@ index 063715f9..6251f9b2 100644
 @@ -1712,6 +1712,76 @@ theorem mem_canonicalPaymentClaimDepths_iff_stateUpperCarry_coreWord
      unfold CarryTwoDebtAt
      simpa [hstate] using hcarry
- 
+
 +/-- Exact block-core word observed at positive depth `d`. -/
 +noncomputable def canonicalBlockCoreWordAtDepth
 +    (n : OddNat) (k d : ℕ) : ℕ :=
@@ -1280,7 +1280,7 @@ index 063715f9..6251f9b2 100644
 @@ -2175,6 +2245,114 @@ theorem exceptionalLengthTwoBalanced_claimDepths_eq_erase_missing
    canonicalPaymentClaimDepths_eq_Icc_erase_missingDepth
      (claimHoles_card_eq_one_of_exceptional_length_two_balanced hL hclaim)
- 
+
 +/-- A zero-carrier balanced successor of a saturated block is forced into the
 +exceptional length-two branch; the full-balanced branch is excluded by the
 +successor's mandatory deepest hole. -/
@@ -1390,12 +1390,12 @@ index 063715f9..6251f9b2 100644
 +    omega
 +
  /-! ## Saturated-successor source classification
- 
+
  The five-way classification proposed at cp-325 omitted a logically possible
 @@ -2652,9 +2830,13 @@ theorem canonicalBlockClaimCount_eq_one_iff_endpoint_carryTwo_of_length_one
      have hle := canonicalBlockClaimCount_le_length n k
      omega
- 
+
 -/-- The sole locally insufficient successor class after abstract dyadic
 -discharge.  Saturation is a predecessor condition; residue and endpoint claim
 -remain separate data. -/
@@ -1412,7 +1412,7 @@ index 063715f9..6251f9b2 100644
 @@ -2984,6 +3166,99 @@ theorem abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
      abstractDyadicDemandEmbeddingUpperHalf] at hval
    omega
- 
+
 +/-! ## Unified local saturated-successor discharge
 +
 +These constructors package abstract dyadic budget embeddings only.  They do
@@ -1508,7 +1508,7 @@ index 063715f9..6251f9b2 100644
 +
  /-!
  ## Actual upper-boundary audit
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-329.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-329.md
 new file mode 100644
 index 00000000..927fec89

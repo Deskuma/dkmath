@@ -993,7 +993,7 @@ index 4c7a4327..f4770a5f 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteAmortizedResource.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteAmortizedResource.lean
 new file mode 100644
 index 00000000..a2128411
@@ -1085,14 +1085,14 @@ index 6a01fbfb..c39e3167 100644
 @@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 +import DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource"
 @@ -11,109 +12,161 @@ import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
  namespace DkMath.Collatz
- 
+
  /-!
 -# Transition-based amortized resource interface
 -
@@ -1112,7 +1112,7 @@ index 6a01fbfb..c39e3167 100644
 +tautological.  Therefore this certificate is useful algebraically but is not a
 +noncircular Collatz resource construction.
  -/
- 
+
 -/-- A dynamic resource state with an explicit queue, potential, demand,
 -consumption, and derived replenishment stream. -/
 -structure CanonicalAmortizedResourceTransition (n : OddNat) where
@@ -1180,7 +1180,7 @@ index 6a01fbfb..c39e3167 100644
 -      (∀ k, A.potential k ≤ P) ∧
 +      A.potential 0 ≤ P ∧
          ∀ m, ∑ k ∈ Finset.range m, A.replenishment k ≤ R
- 
+
 -/-- The noncircular amortization law yields a named uniform scalar queue
 -bound. -/
 -theorem CanonicalNoncircularGlobalAmortizationLaw.to_queueUniformUpperBound
@@ -1204,7 +1204,7 @@ index 6a01fbfb..c39e3167 100644
 -  exact A.queue_le_of_potential_and_cumulative_replenishment_bounds
 +  exact A.queue_le_of_initialPotential_and_cumulativeReplenishment_bounds
      hpotential hreplenishment m
- 
+
 -/-- Conditional challenge-facing chain from amortization to endpoint width. -/
 -theorem CanonicalNoncircularGlobalAmortizationLaw.to_endpointWidthUniformUpperBound
 +/-- Conditional challenge-facing consequence of the scalar certificate. -/
@@ -1215,7 +1215,7 @@ index 6a01fbfb..c39e3167 100644
      CanonicalEndpointWidthUniformUpperBound n
        (bitWidth n.1 + (canonicalOutstandingClaimQueue n 0 + P + R)) :=
    h.to_queueUniformUpperBound.to_endpointWidthUniformUpperBound
- 
+
 +/-- Reverse construction exposing the circular complement potential. -/
 +noncomputable def trivialAmortizedTransitionOfQueueBound
 +    {n : OddNat} {C : ℕ}
@@ -1314,11 +1314,11 @@ index 6a01fbfb..c39e3167 100644
 +
 +A genuine next layer must define a concrete finite carrier from `n`, together
 +with consumed and replenished subcarriers and an equivalence
- 
+
 -Route 1 stops at a concrete obstruction: exact adjacent core-word recurrence
 -permits carry alternation, so it supplies no monotone claim-density estimate.
 +`Available (k+1) ≃ (Available k \ Consumed k) ⊕ Replenished k`.
- 
+
 -Route 2 is now logically sound but conditional.  The first missing theorem is
 -an actual Collatz construction of `CanonicalNoncircularGlobalAmortizationLaw`
 -with a cumulative replenishment ceiling.  Current width decreases and negative
@@ -1331,7 +1331,7 @@ index 6a01fbfb..c39e3167 100644
 +`CanonicalSaturatedSuccessorAbstractDischarge` is not yet formally connected
 +to this global scalar layer.
  -/
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean
 index 6251f9b2..f3cebe00 100644
@@ -1340,7 +1340,7 @@ index 6251f9b2..f3cebe00 100644
 @@ -1782,6 +1782,105 @@ theorem coreWordRecurrence_carry_alternation_witness :
              stateUpperCarry 23 = 2 := by
    norm_num [stateUpperCarry, upperCarry3n1, bitWidth]
- 
+
 +/-! ## Canonical carry-alternation regression -/
 +
 +/-- Odd root whose first canonical block realizes the `53,35,23` profile. -/
@@ -1446,7 +1446,7 @@ index 6251f9b2..f3cebe00 100644
 @@ -1789,6 +1888,14 @@ noncomputable def canonicalBlockClaimHoles
    Finset.Icc 1 (canonicalBlockLength n k) \
      canonicalPaymentClaimDepths n k
- 
+
 +/-- The unique hole in the canonical carry profile at `23` is depth two. -/
 +theorem canonicalBlockClaimHoles_twentyThree_zero :
 +    canonicalBlockClaimHoles twentyThreeCarryAlternationOdd 0 = {2} := by
@@ -1465,10 +1465,10 @@ index 927fec89..8cf6b86d 100644
 @@ -59,11 +59,13 @@ The adjacent recurrence does not imply monotone carries.  Lean verifies the
  exact recurrence witness `53, 35, 23`, whose own-width carries are `2, 1, 2`.
  Thus recurrence alone cannot provide the required uniform claim-hole density.
- 
+
 -## Noncircular global interface
 +## Abstract global interface (corrected by checkpoint 330)
- 
+
 -`UniversalPaymentAmortizedResource.lean` introduces a transition state with
 -queue, potential, demand, consumption, replenishment, and one-step
 -conservation.  Finite-prefix conservation is proved by induction.
@@ -1477,13 +1477,13 @@ index 927fec89..8cf6b86d 100644
 +that its potential could be chosen as `C - queue`, so the certificate was not
 +noncircular.  The generic telescope remains valid, but the interpretation in
 +the original checkpoint result is withdrawn.
- 
+
  A uniform potential ceiling together with a cumulative replenishment ceiling
  implies a uniform queue bound, which then implies the existing endpoint-width
 @@ -72,15 +74,16 @@ it permits linear cumulative growth.
- 
+
  ## Genuine obstruction
- 
+
 -No Collatz instance of `CanonicalNoncircularGlobalAmortizationLaw` is asserted.
 -The missing theorem must assign negative drift or width decrease to resource
 -transitions with temporal ownership and prove a cumulative replenishment
@@ -1495,16 +1495,16 @@ index 927fec89..8cf6b86d 100644
 +temporal ownership and prove a cumulative replenishment ceiling.  Existing
 +scalar facts allow the same event to be reused across blocks unless a
 +multiplicity bound is added.
- 
+
 -Route 1 therefore stops at carry alternation.  Route 2 stops at uncontrolled
 -temporal reuse.  Replacing either missing theorem by a uniform queue or width
 -bound would only rename the target and is rejected as circular.
 +Route 1 therefore does not obtain monotonicity from recurrence alone, although
 +additional canonical residue or width data may still support a density bound.
 +Route 2 stops at the absence of a concrete owned carrier and temporal nonreuse.
- 
+
  ## Verification
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-330.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-330.md
 new file mode 100644
 index 00000000..4c5b261d

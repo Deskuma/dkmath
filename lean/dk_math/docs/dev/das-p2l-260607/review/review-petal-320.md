@@ -1034,7 +1034,7 @@ index a23b64b0..fa924e21 100644
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSaturatedSuccessor
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSelectedCarrier
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow"
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentSelectedCarrier.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentSelectedCarrier.lean
 new file mode 100644

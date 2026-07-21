@@ -1,8 +1,8 @@
 # DkMath Final Narration and YouTube Subtitle Timetable
 
-**Duration:** 02:54  
-**Language:** English  
-**Audio requirement covered:** explicit use of both GPT-5.6 and Codex  
+**Duration:** 02:54
+**Language:** English
+**Audio requirement covered:** explicit use of both GPT-5.6 and Codex
 **Final extension:** GN5 clean channel replaces the unfinished inverse-projection segment.
 
 | Cue | Time | Spoken narration | YouTube subtitle |

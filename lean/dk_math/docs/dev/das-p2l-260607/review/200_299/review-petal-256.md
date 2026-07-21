@@ -226,7 +226,7 @@ index 21fb2ed5..0b001a6e 100644
 @@ -604,6 +604,79 @@ theorem SourcePressureOrientedNeighborBoxState.right_mem
    sourcePressureLocalIslandWitnessAdjacentPairInList_right_mem
      h.orderedAdjacentPairInList
- 
+
 +/--
 +An addressed adjacent pair in a sorted witness list inherits witness-level
 +`Before`.
@@ -302,7 +302,7 @@ index 21fb2ed5..0b001a6e 100644
 +
  /--
  Package an oriented neighbor diagnostic into the two-endpoint box state.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-256.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-256.md
 new file mode 100644
 index 00000000..a5f73c19

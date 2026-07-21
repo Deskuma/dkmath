@@ -503,7 +503,7 @@ index ed40e1d1..1a2b81f8 100644
 @@ -309,6 +309,52 @@ theorem exists_sourcePressureBeamPulse_witness_center_full_diagnostic_of_seed
      ⟨W, hmem,
        sourcePressureBeamPulse_witness_singleton_full_diagnostic_at_center hmem⟩
- 
+
 +/--
 +A Beam seed exposes one witness whose centered diagnostic also gives the local
 +margin-sign transition around the native depth `W.val`.

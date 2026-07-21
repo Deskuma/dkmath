@@ -191,7 +191,7 @@ index e0ae68db..1a5a4036 100644
 @@ -209,5 +209,43 @@ theorem sourcePressureBeamPulse_witness_singleton_full_diagnostic
      ⟨hdepth, _⟩
    exact ⟨hentry, hdepth, hexitBalance⟩
- 
+
 +/--
 +A Beam seed exposes one witness whose singleton pulse has the full local
 +entry-depth-exit diagnostic.
@@ -230,7 +230,7 @@ index e0ae68db..1a5a4036 100644
 +    ⟨W, hmem,
 +      sourcePressureBeamPulse_witness_singleton_full_diagnostic hmem⟩
 +
- 
+
  end DkMath.Collatz
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-227.md
 new file mode 100644

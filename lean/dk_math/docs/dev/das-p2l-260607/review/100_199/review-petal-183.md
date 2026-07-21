@@ -467,7 +467,7 @@ index 051eec79..cf39fada 100644
 @@ -722,6 +722,59 @@ theorem
    rcases h.exists_pair with ⟨A, B, hin, hrev, hbudget⟩
    exact ⟨A, B, hin, hrev, hbudget⟩
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Expose strict negativity for the recovered pair-local accounted family.
@@ -527,7 +527,7 @@ index 051eec79..cf39fada 100644
 @@ -843,6 +896,59 @@ theorem
    (sourcePressureLocalIslandWitnessList_failure_hasRecoveredAdjacentAccountedFamily_of_no_overlap
      h hno).exists_accountedFamily
- 
+
 +set_option linter.style.longLine false in
 +/--
 +Failure plus named no-adjacent-overlap, projected to a pair-local recovered
@@ -583,7 +583,7 @@ index 051eec79..cf39fada 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-182.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-182.md
 new file mode 100644
 index 00000000..12ccdf07

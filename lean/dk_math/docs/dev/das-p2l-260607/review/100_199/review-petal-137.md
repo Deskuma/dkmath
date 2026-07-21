@@ -614,7 +614,7 @@ index 33e283a4..79280af8 100644
 @@ -94,6 +94,50 @@ noncomputable def SourcePressureMarginInt
    (2 * orbitWindowContinuationSiblingMassPow2 n k r : ℤ) -
      (orbitWindowRetentionMassPow2 n k r : ℤ)
- 
+
 +/--
 +Integer-valued retention drop across adjacent pressure depths.
 +
@@ -661,11 +661,11 @@ index 33e283a4..79280af8 100644
 +
  /--
  Selected source pressure is exactly positive source pressure margin.
- 
+
 @@ -333,6 +377,19 @@ def SourcePressureJumpWithDecay
      SourceRetentionDropsAcross n k r j ∧
        SourceContinuationWeaklyDropsAcross n k r j
- 
+
 +/--
 +Positive net integer drop across an adjacent pressure-depth edge.
 +
@@ -681,11 +681,11 @@ index 33e283a4..79280af8 100644
 +
  /--
  The first selected source-pressure depth.
- 
+
 @@ -692,6 +749,35 @@ theorem sourcePressureMarginJumpUp_of_localIsland_left
    sourcePressureMarginJumpUp_of_signChangeUp n k r (j - 1)
      (sourcePressureSignChangeUp_of_localIsland n k r j hisland)
- 
+
 +/--
 +Strict adjacent margin jump is equivalent to positive integer step
 +difference.
@@ -717,7 +717,7 @@ index 33e283a4..79280af8 100644
 +
  /--
  Package a named margin jump and a strict retention drop.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-136.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-136.md
 new file mode 100644
 index 00000000..2937b90a

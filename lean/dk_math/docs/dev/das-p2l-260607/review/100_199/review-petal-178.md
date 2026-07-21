@@ -485,7 +485,7 @@ index 84ecec13..9f78672c 100644
 @@ -448,6 +448,78 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentDiagnosis.singleton_false
    rintro ⟨A, B, hin, _⟩
    exact SourcePressureLocalIslandWitnessAdjacentPairInList.singleton_false hin
- 
+
 +/--
 +Any sorted-before failure in an explicitly supplied witness list has a
 +list-level adjacent diagnosis, assuming the converted witness addresses have
@@ -560,7 +560,7 @@ index 84ecec13..9f78672c 100644
 +
  /--
  Length-three sorted-before failure yields a list-level adjacent diagnosis.
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureLocalWitnessObstruction.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/PressureLocalWitnessObstruction.lean
 index d21e9661..b68e258f 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/PressureLocalWitnessObstruction.lean
@@ -568,7 +568,7 @@ index d21e9661..b68e258f 100644
 @@ -17,6 +17,21 @@ islands, do not sort arbitrary lists, do not merge overlapping intervals, and do
  not prove Collatz convergence.
  -/
- 
+
 +/--
 +The interval-pulse address obtained from one explicit local-island witness has
 +positive length.
@@ -586,7 +586,7 @@ index d21e9661..b68e258f 100644
 +
  /--
  Ordered non-overlap for two explicit local-island witnesses.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-177.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-177.md
 new file mode 100644
 index 00000000..d98a6df3

@@ -521,7 +521,7 @@ index 9b922793..0d93b78f 100644
 @@ -978,6 +978,32 @@ def SourcePressureFiniteWindowPackingSeparatorState
      lo ≤ r + W.val ∧
        r + W'.val ≤ hi
- 
+
 +/--
 +Comparison carrier for two finite-window packing units in the same window.
 +
@@ -554,7 +554,7 @@ index 9b922793..0d93b78f 100644
 @@ -1838,6 +1864,167 @@ theorem SourcePressureFiniteWindowPackingSeparatorState.two_le_window_width
    rcases h.window_order_chain with ⟨hlo, hleft, hright, hhi⟩
    omega
- 
+
 +/-- Project the first finite-window packing unit. -/
 +theorem SourcePressureFiniteWindowPackingPairComparisonState.left
 +    {n : OddNat} {k r : ℕ}

@@ -1093,7 +1093,7 @@ index 63c219c6..5913925e 100644
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPositiveBlock
  import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
  import DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
- 
+
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
 index 4aca983b..e46e2e80 100644
 --- a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/FiniteSignedTransition.lean
@@ -1117,12 +1117,12 @@ index 4aca983b..e46e2e80 100644
 +a positive closed-signature path whose adjacent transitions all satisfy the
 +certificate's `Step` relation.
  -/
- 
+
  /--
 @@ -40,10 +54,135 @@ structure FiniteSignedTransitionPotentialCertificate
    potential_nonneg : ∀ s, 0 ≤ potential s
    potential_le_bound : ∀ s, potential s ≤ bound
- 
+
 +/--
 +A finite signed abstraction whose soundness obligation is restricted to actual
 +transitions.  This is the appropriate surface for a nondeterministic finite
@@ -1234,9 +1234,9 @@ index 4aca983b..e46e2e80 100644
 +end RelationalFiniteSignedTransitionPotentialCertificate
 +
  namespace FiniteSignedTransitionPotentialCertificate
- 
+
  variable {State Signature : Type*} [Fintype Signature]
- 
+
 +/-- The legacy all-pairs certificate is the relational certificate with universal steps. -/
 +def toRelational
 +    (C : FiniteSignedTransitionPotentialCertificate State Signature) :
@@ -1262,7 +1262,7 @@ index 0aebdb5e..6e0135f4 100644
 @@ -338,6 +338,15 @@ theorem canonicalBlockNextStartState_eq_terminalCarrier_div_pow_valuation
        2 ^ v2 (canonicalBlockTerminalCarrier n k)
    exact Nat.mul_div_mul_left _ _ (by omega)
- 
+
 +/-- If the next canonical block starts at state one, the completed block has no
 +outstanding claims.  This names the endpoint-state audit interpretation in the
 +canonical-block vocabulary. -/
@@ -1273,11 +1273,11 @@ index 0aebdb5e..6e0135f4 100644
 +  simpa [canonicalBlockNextStartState] using hstate
 +
  /-! ## Exact block-drift consequences -/
- 
+
  /-- Complete carry-two claims form a subfamily of the canonical block. -/
 @@ -554,11 +563,43 @@ theorem canonicalBlock_bitWidth_le_of_queue_and_burst_bounds
    omega
- 
+
  /-!
 -This is the precise two-coordinate conditional bound available at this layer.
 -It ranges over every state *inside a named canonical block*.  Promoting it to
@@ -1322,7 +1322,7 @@ index 0aebdb5e..6e0135f4 100644
 +still conditional on two explicit uniform bounds; it does not assert either
 +bound unconditionally.
  -/
- 
+
  /-!
 diff --git a/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean b/lean/dk_math/DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentPositiveBlock.lean
 new file mode 100644
@@ -1806,16 +1806,16 @@ index 777b48d5..c5cbd429 100644
 @@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
  Authors: D. and Wise Wolf.
  -/
- 
+
 -import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
 +import DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPositiveBlock
- 
+
  #print "file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion"
- 
+
 @@ -44,6 +44,16 @@ def CanonicalPrimitivePositiveDriftExcursion
        (∀ m ∈ Finset.Ico q r, 0 < canonicalWindowDriftInt n q m) ∧
          canonicalWindowDriftInt n q r ≤ 0
- 
+
 +/--
 +An open positive excursion starts from an empty queue and remains positive
 +through the observed block `m`; no future repayment endpoint is assumed.
@@ -1832,7 +1832,7 @@ index 777b48d5..c5cbd429 100644
 @@ -218,6 +228,85 @@ theorem canonicalPrimitivePositiveQueueExcursion_right_unique
    · exact (h.2.2.1 r' (Finset.mem_Ico.mpr ⟨Nat.le_of_lt h'.1, hgt⟩)).ne'
        h'.2.2.2
- 
+
 +/-! ## Open positive excursions -/
 +
 +/-- Every positive queue position has an open excursion start. -/
@@ -1914,7 +1914,7 @@ index 777b48d5..c5cbd429 100644
 +
  /-!
  ## Exact remaining obstruction
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-318.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-318.md
 new file mode 100644
 index 00000000..8671943f

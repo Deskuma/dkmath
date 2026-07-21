@@ -552,7 +552,7 @@ index 8a046838..cb412cd1 100644
 @@ -3263,6 +3263,66 @@ theorem sourcePressureLocalIslandWitnessList_failure_threeDiagnosis_carrier
      · exact Or.inr
          (SourcePressureLocalIslandWitnessAdjacentDiagnosis.overlap hobs)
- 
+
 +/--
 +Lift an adjacent diagnosis on a tail list through a newly supplied head.
 +

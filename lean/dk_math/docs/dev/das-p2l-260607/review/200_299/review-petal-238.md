@@ -379,7 +379,7 @@ index 688be983..b35a3c6f 100644
 @@ -101,6 +101,49 @@ noncomputable def SourceRetentionDropInt
    (orbitWindowRetentionMassPow2 n k (r + j) : ℤ) -
      (orbitWindowRetentionMassPow2 n k (r + j + 1) : ℤ)
- 
+
 +/--
 +Finite local upper bound for one adjacent retention drop.
 +
@@ -425,11 +425,11 @@ index 688be983..b35a3c6f 100644
 +
  /--
  Integer-valued continuation drop across adjacent pressure depths.
- 
+
 @@ -114,6 +157,46 @@ noncomputable def SourceContinuationDropInt
    (orbitWindowContinuationSiblingMassPow2 n k (r + j) : ℤ) -
      (orbitWindowContinuationSiblingMassPow2 n k (r + j + 1) : ℤ)
- 
+
 +/--
 +Finite local upper bound for one adjacent continuation drop.
 +
@@ -472,11 +472,11 @@ index 688be983..b35a3c6f 100644
 +
  /--
  Integer-valued net pressure drop across adjacent pressure depths.
- 
+
 @@ -127,6 +210,45 @@ noncomputable def SourcePressureNetDropInt
    SourceRetentionDropInt n k r j -
      2 * SourceContinuationDropInt n k r j
- 
+
 +/--
 +Finite local upper bound for one adjacent net pressure drop.
 +
@@ -518,7 +518,7 @@ index 688be983..b35a3c6f 100644
 +
  /--
  Adjacent source-pressure margin accounting identity.
- 
+
 diff --git a/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-237.md b/lean/dk_math/docs/dev/das-p2l-260607/review/report-petal-237.md
 new file mode 100644
 index 00000000..075557fb

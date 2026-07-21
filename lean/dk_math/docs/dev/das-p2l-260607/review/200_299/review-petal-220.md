@@ -428,7 +428,7 @@ index 17404aa6..0ac72101 100644
 @@ -1210,4 +1210,89 @@ theorem sourcePressureBeamMassBalanceRight_le_left_of_localIsland_right
    sourcePressureBeamMassBalanceRight_le_left_of_signChangeDown haddr
      (sourcePressureSignChangeDown_of_localIsland n k r j hisland)
- 
+
 +/-
 +Interval-pulse exact-edge bridge.
 +
