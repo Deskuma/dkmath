@@ -1,0 +1,212 @@
+#!/usr/bin/env python3
+"""Validate and flatten the production FLT5 tower into one Lean source."""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+
+REPOSITORY = "Deskuma/dkmath"
+MANIFEST = Path("DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.manifest.txt")
+INTERNAL_PREFIX = "DkMath.FLT.Five."
+FORBIDDEN = {
+    Path("DkMath/FLT/Five.lean"),
+    Path("DkMath/FLT/Five/Standalone.lean"),
+}
+IMPORT_RE = re.compile(r"^import\s+([A-Za-z0-9_.]+)\s*$")
+FILE_MARKER_RE = re.compile(r'^\s*#print\s+"file:\s*[^"\n]+"\s*$')
+ENDPOINT_PATTERNS = {
+    "DkMath.FLT.Five.flt5Target": re.compile(r"^theorem\s+flt5Target\s*[:(]", re.MULTILINE),
+    "DkMath.FLT.Five.fermatFive_no_positive_solution": re.compile(
+        r"^theorem\s+fermatFive_no_positive_solution\s*[:(]", re.MULTILINE
+    ),
+}
+
+
+class ValidationError(Exception):
+    pass
+
+
+@dataclass(frozen=True)
+class Source:
+    path: Path
+    text: str
+    imports: tuple[str, ...]
+
+
+def module_to_path(module: str) -> Path:
+    return Path(*module.split(".")).with_suffix(".lean")
+
+
+def parse_manifest(root: Path) -> list[Path]:
+    path = root / MANIFEST
+    if not path.is_file():
+        raise ValidationError(f"manifest does not exist: {MANIFEST}")
+    entries: list[Path] = []
+    seen: set[Path] = set()
+    for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        entry = Path(line)
+        if entry.is_absolute() or ".." in entry.parts:
+            raise ValidationError(f"unsafe manifest path at line {line_number}: {line}")
+        if entry in seen:
+            raise ValidationError(f"duplicate manifest entry at line {line_number}: {line}")
+        if entry in FORBIDDEN or entry.parts[:1] == ("DkMathTest",):
+            raise ValidationError(f"forbidden manifest entry at line {line_number}: {line}")
+        if not (root / entry).is_file():
+            raise ValidationError(f"source does not exist at line {line_number}: {line}")
+        seen.add(entry)
+        entries.append(entry)
+    if not entries:
+        raise ValidationError("manifest is empty")
+    return entries
+
+
+def read_sources(root: Path, entries: list[Path]) -> list[Source]:
+    sources: list[Source] = []
+    for entry in entries:
+        text = (root / entry).read_text(encoding="utf-8")
+        imports = tuple(
+            match.group(1)
+            for line in text.splitlines()
+            if (match := IMPORT_RE.fullmatch(line.strip()))
+        )
+        sources.append(Source(entry, text, imports))
+    return sources
+
+
+def validate_imports(sources: list[Source]) -> list[str]:
+    positions = {source.path: index for index, source in enumerate(sources)}
+    external: set[str] = set()
+    errors: list[str] = []
+    for index, source in enumerate(sources):
+        for imported in source.imports:
+            if imported == "Mathlib" or imported.startswith("Mathlib."):
+                continue
+            dependency = module_to_path(imported)
+            if imported.startswith(INTERNAL_PREFIX):
+                if dependency not in positions:
+                    errors.append(f"{source.path}: missing internal dependency {imported}")
+                elif positions[dependency] >= index:
+                    errors.append(f"{source.path}: dependency must occur earlier: {dependency}")
+            else:
+                external.add(imported)
+                errors.append(f"{source.path}: external DkMath dependency {imported}")
+    if errors:
+        raise ValidationError("\n".join(errors))
+    return sorted(external)
+
+
+def strip_initial_copyright(text: str) -> str:
+    if not text.startswith("/-"):
+        return text
+    end = text.find("-/")
+    if end == -1 or "Copyright" not in text[: end + 2]:
+        return text
+    return text[end + 2 :].lstrip("\r\n")
+
+
+def flattened_body(source: Source) -> str:
+    text = strip_initial_copyright(source.text)
+    kept = []
+    for line in text.splitlines(keepends=True):
+        stripped = line.strip()
+        if IMPORT_RE.fullmatch(stripped) or FILE_MARKER_RE.fullmatch(stripped):
+            continue
+        kept.append(line)
+    return "".join(kept).strip("\r\n") + "\n"
+
+
+def git_value(root: Path, *args: str, fallback: str) -> str:
+    try:
+        result = subprocess.run(
+            ["git", *args], cwd=root, check=True, capture_output=True, text=True
+        )
+        value = result.stdout.strip()
+        return value or fallback
+    except (OSError, subprocess.CalledProcessError):
+        return fallback
+
+
+def make_header(root: Path, sources: list[Source]) -> str:
+    branch = git_value(root, "branch", "--show-current", fallback="unavailable")
+    commit = git_value(root, "rev-parse", "HEAD", fallback="unavailable")
+    modules = "\n".join(f"  - {source.path}" for source in sources)
+    return f"""/-
+GENERATED ARTIFACT WARNING: do not edit this file directly.
+Repository: {REPOSITORY}
+Branch: {branch}
+Source commit SHA: {commit}
+Manifest: {MANIFEST}
+Ordered source modules:
+{modules}
+-/
+
+import Mathlib
+
+"""
+
+
+def generate(root: Path, sources: list[Source]) -> str:
+    chunks = [make_header(root, sources)]
+    for source in sources:
+        chunks.append(f"/-! ===== BEGIN GENERATED SOURCE: {source.path} ===== -/\n\n")
+        chunks.append(flattened_body(source))
+        chunks.append(f"\n/-! ===== END GENERATED SOURCE: {source.path} ===== -/\n\n")
+    generated = "".join(chunks)
+    counts = {name: len(pattern.findall(generated)) for name, pattern in ENDPOINT_PATTERNS.items()}
+    bad = {name: count for name, count in counts.items() if count != 1}
+    if bad:
+        details = ", ".join(f"{name}={count}" for name, count in bad.items())
+        raise ValidationError(f"endpoint declaration count failure: {details}")
+    return generated
+
+
+def repository_root() -> Path:
+    root = Path(__file__).resolve().parent.parent
+    if not (root / "lakefile.toml").is_file():
+        raise ValidationError(f"repository root is not a Lean project: {root}")
+    return root
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--check", action="store_true", help="validate without writing")
+    mode.add_argument("--output", type=Path, help="explicit generated output path")
+    args = parser.parse_args()
+    try:
+        root = repository_root()
+        entries = parse_manifest(root)
+        sources = read_sources(root, entries)
+        external = validate_imports(sources)
+        generated = generate(root, sources)
+        print(f"manifest: {MANIFEST}")
+        print(f"modules: {len(sources)}")
+        for index, source in enumerate(sources, 1):
+            print(f"{index:02d} {source.path}")
+        print("external non-Mathlib imports: " + (", ".join(external) if external else "none"))
+        for name, pattern in ENDPOINT_PATTERNS.items():
+            print(f"endpoint declarations: {name}={len(pattern.findall(generated))}")
+        if args.output is not None:
+            output = args.output.expanduser().resolve()
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(generated, encoding="utf-8", newline="\n")
+            print(f"output: {output}")
+            print(f"bytes: {output.stat().st_size}")
+            print(f"lines: {len(generated.splitlines())}")
+        return 0
+    except (OSError, UnicodeError, ValidationError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
