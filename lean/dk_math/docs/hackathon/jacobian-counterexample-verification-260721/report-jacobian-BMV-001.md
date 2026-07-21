@@ -531,7 +531,7 @@ Non-goals:
 - `UniqueGap` との統合
 - arithmetic obstruction abstraction
 
-Difficulty: low  
+Difficulty: low
 Credit cost: low
 
 ### BMV-003 — Jacobian Adapter Validation
@@ -567,7 +567,7 @@ Non-goals:
 - Demo surface の全面改名
 - Book of Magic API との融合
 
-Difficulty: low  
+Difficulty: low
 Credit cost: low
 
 ### BMV-004 — Verification Project Contract Templates
@@ -605,7 +605,7 @@ Non-goals:
 - 動画生成
 - submission automation
 
-Difficulty: low  
+Difficulty: low
 Credit cost: low
 
 ### BMV-005 — Second-Domain Validation
@@ -639,7 +639,7 @@ Non-goals:
 -新しい数論証明
 - Jacobian との共通 bundle 作成
 
-Difficulty: medium  
+Difficulty: medium
 Credit cost: medium
 
 ### BMV-006 — Public Framework Integration
@@ -668,7 +668,7 @@ Non-goals:
 - automatic provenance audit
 - all existing counterexample modules の migration
 
-Difficulty: low  
+Difficulty: low
 Credit cost: low
 
 ---
