@@ -12,6 +12,17 @@ import Mathlib.RingTheory.EuclideanDomain
 
 namespace DkMath.FLT.Five
 
+/-!
+# Norm-Euclidean division in `ℤ[φ]`
+
+The rational quotient of two golden integers is rounded in both coordinates.  On the
+rounding cell `|u|,|v| <= 1/2`, the norm form satisfies
+`|u^2+u*v-v^2| <= 5/16 < 1`.  After clearing the denominator this gives a remainder
+whose absolute norm is strictly smaller than the divisor's.  The final instance makes
+`GoldenInt` a `EuclideanDomain`; `GoldenCoprimeFactor` then uses the resulting gcd
+theory to split coprime factors of a fifth power.
+-/
+
 /-- Rational coordinates in the basis `1, phi`. -/
 abbrev GoldenRat := ℚ × ℚ
 
@@ -212,7 +223,8 @@ theorem exists_golden_quotient_remainder
   · simp [goldenRemainder, golden_mul_eq]
   · exact Or.inr (golden_remainder_size_lt x hy)
 
-/-- The golden integer ring is Euclidean for the absolute golden norm. -/
+/-- Euclidean division for the absolute norm, with well-founded measure
+`natAbs (goldenNorm x)`. -/
 noncomputable instance goldenEuclideanDomain : EuclideanDomain GoldenInt where
   quotient := goldenQuotient
   quotient_zero := goldenQuotient_zero

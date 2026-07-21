@@ -10,13 +10,50 @@ import DkMath.FLT.Five.Basic
 
 namespace DkMath.FLT.Five
 
-/-- The exponent-five GN polynomial in gap/body coordinates. -/
+/-!
+# The homogeneous fifth cyclotomic factor in gap coordinates
+
+Write `z = g + y`.  The polynomial `GN5 g y` is the usual quotient
+
+`(z^5 - y^5) / (z - y) = z^4 + z^3*y + z^2*y^2 + z*y^3 + y^4`
+
+after substituting `z = g + y`.  Thus `(g+y)^5-y^5 = g * GN5 g y`.  The two
+decomposition theorems below expose its reductions modulo the gap and modulo five;
+these explain why five is the only exceptional common prime in the primitive route.
+-/
+
+/-- The homogeneous fifth cyclotomic quotient expressed in the local coordinates
+`z = g + y`. -/
 def GN5 (g y : ℕ) : ℕ :=
   g ^ 4
     + 5 * g ^ 3 * y
     + 10 * g ^ 2 * y ^ 2
     + 10 * g * y ^ 3
     + 5 * y ^ 4
+
+/-- Identification of `GN5` with the standard homogeneous fifth cyclotomic factor. -/
+theorem GN5_eq_homogeneous_cyclotomic (g y : ℕ) :
+    GN5 g y =
+      (g + y) ^ 4 + (g + y) ^ 3 * y + (g + y) ^ 2 * y ^ 2 +
+        (g + y) * y ^ 3 + y ^ 4 := by
+  unfold GN5
+  ring
+
+/-- Gap decomposition: `GN5(g,y) ≡ 5*y^4 (mod g)`. -/
+theorem GN5_eq_gap_mul_add_five_mul_y_pow_four (g y : ℕ) :
+    GN5 g y =
+      g * (g ^ 3 + 5 * g ^ 2 * y + 10 * g * y ^ 2 + 10 * y ^ 3) +
+        5 * y ^ 4 := by
+  unfold GN5
+  ring
+
+/-- Five-adic decomposition: `GN5(g,y) ≡ g^4 (mod 5)`. -/
+theorem GN5_eq_g_pow_four_add_five_mul (g y : ℕ) :
+    GN5 g y =
+      g ^ 4 + 5 * (g ^ 3 * y + 2 * g ^ 2 * y ^ 2 +
+        2 * g * y ^ 3 + y ^ 4) := by
+  unfold GN5
+  ring
 
 /-- The fifth-power body decomposition before subtraction. -/
 theorem add_pow_five_eq_add_mul_GN5 (g y : ℕ) :

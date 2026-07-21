@@ -11,7 +11,7 @@ import DkMath.FLT.Five.BranchB
 namespace DkMath.FLT.Five
 
 /-!
-# Exponent-five valuation checkpoint
+# Exponent-five valuation obstruction
 
 This module carries an independent `padicValNat` proof of the clean-channel
 obstruction:
@@ -21,7 +21,8 @@ complete fifth power  -> local load at least 5
 clean GN5 channel     -> local load at most 1
 ```
 
-No research-only valuation theorem is imported here.
+This is an independent proof of the same contradiction supplied directly in
+`CleanChannel.lean`; no research-only valuation theorem is imported here.
 -/
 
 /-- A prime divisor of a positive base contributes valuation at least five to its fifth power. -/
@@ -57,6 +58,24 @@ theorem padicValNat_clean_body_upper_bound
     (@padicValNat_dvd_iff_le q (Fact.mk h.prime) (g * GN5 g y) 2 hBodyNe).mpr htwo
   exact h.not_sq_dvd_body hsq
 
+/--
+A clean prime occurs in the full body with valuation exactly one. Divisibility
+of the body gives the lower bound, while `not_sq_dvd_body` gives the upper bound.
+-/
+theorem padicValNat_clean_body_eq_one
+    {g y q : ℕ}
+    (h : CleanGN5Channel g y q) :
+    padicValNat q (g * GN5 g y) = 1 := by
+  letI : Fact (Nat.Prime q) := ⟨h.prime⟩
+  have hBodyNe : g * GN5 g y ≠ 0 := by
+    intro hzero
+    apply h.not_sq_dvd_body
+    rw [hzero]
+    exact dvd_zero _
+  apply Nat.le_antisymm (padicValNat_clean_body_upper_bound h)
+  exact (@padicValNat_dvd_iff_le q (Fact.mk h.prime)
+    (g * GN5 g y) 1 hBodyNe).mp (by simpa using h.dvd_body)
+
 /-- The clean-channel contradiction, proved independently through `padicValNat`. -/
 theorem counterexample_false_of_clean_GN5Channel_by_padicValNat
     {x y z q : ℕ}
@@ -72,9 +91,9 @@ theorem counterexample_false_of_clean_GN5Channel_by_padicValNat
   have hqDivX : q ∣ x := hClean.prime.dvd_of_dvd_pow hqDivPow
   have hlower : 5 ≤ padicValNat q (x ^ 5) :=
     padicValNat_lower_bound_d5 hPack.hx hClean.prime hqDivX
-  have hupper : padicValNat q (Body5 (z - y) y) ≤ 1 := by
-    simpa [Body5] using padicValNat_clean_body_upper_bound hClean
-  rw [hBodyEq] at hupper
+  have hexact : padicValNat q (Body5 (z - y) y) = 1 := by
+    simpa [Body5] using padicValNat_clean_body_eq_one hClean
+  rw [hBodyEq] at hexact
   omega
 
 end DkMath.FLT.Five

@@ -10,6 +10,16 @@ import DkMath.FLT.Five.GoldenOrder
 
 namespace DkMath.FLT.Five
 
+/-!
+# Divisibility, units, and relative primality in `ℤ[φ]`
+
+This module connects the explicit coordinate vocabulary to ordinary commutative-ring
+divisibility.  Multiplicativity of the norm sends golden divisibility to integer
+divisibility; norm `±1` characterizes the units used later.  `GoldenRelPrime x y` is
+the Bézout-free statement that every common divisor is a unit, tailored to the
+element/conjugate factorization arising from the norm.
+-/
+
 /-- Explicit golden divisibility, definitionally compatible with ring divisibility. -/
 def GoldenDivides (d x : GoldenInt) : Prop :=
   ∃ q : GoldenInt, x = goldenMul d q
@@ -76,7 +86,8 @@ theorem goldenNorm_pow (x : GoldenInt) (n : ℕ) :
       change goldenNorm (goldenMul (x ^ n) x) = _
       rw [goldenNorm_mul, ih, pow_succ]
 
-/-- A two-sided unit for the explicit golden-order multiplication API. -/
+/-- A two-sided unit in the coordinate order.  Later theorems identify this predicate
+with Mathlib's `IsUnit` and with norm `±1`. -/
 def GoldenUnit (epsilon : GoldenInt) : Prop :=
   ∃ eta : GoldenInt,
     goldenMul epsilon eta = goldenOne ∧ goldenMul eta epsilon = goldenOne
@@ -152,7 +163,8 @@ theorem goldenUnit_pow {x : GoldenInt} (hx : GoldenUnit x) (n : ℕ) :
   | zero => exact goldenUnit_one
   | succ n ih => exact goldenUnit_mul ih hx
 
-/-- Relatively prime means that every common golden divisor is a unit. -/
+/-- Relative primality expressed by saying that every common divisor is a unit, hence
+has norm `±1`. -/
 def GoldenRelPrime (x y : GoldenInt) : Prop :=
   ∀ d : GoldenInt, GoldenDivides d x → GoldenDivides d y → GoldenUnit d
 

@@ -6,11 +6,21 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenUnitClasses
 
+/-!
+# Elementary classification of units in the golden order
+
+Multiplication by `phi` or its integral inverse strictly decreases a coordinate
+measure until a base unit is reached. Reversing that descent expresses every
+unit as a signed power of `phi`, hence as `phi^i * delta^5` for `i : Fin 5`.
+This proves existence of a fifth-power class representative; no uniqueness
+claim is needed downstream.
+-/
+
 #print "file: DkMath.FLT.Five.GoldenUnitClassification"
 
 namespace DkMath.FLT.Five
 
-/-- The integral inverse of `phi`. -/
+/-- The integral inverse `phi - 1` of `phi` in the coordinate model. -/
 def goldenPhiInv : GoldenInt := ⟨-1, 1⟩
 
 theorem golden_phi_mul_inv :
@@ -28,7 +38,8 @@ theorem golden_mul_phi_coords (x : GoldenInt) :
 
 theorem golden_mul_phiInv_coords (x : GoldenInt) :
     goldenMul x goldenPhiInv = ⟨x.snd - x.fst, x.fst⟩ := by
-  ext <;> simp [goldenMul, goldenPhiInv] <;> ring
+  ext <;> simp [goldenMul, goldenPhiInv]
+  all_goals ring
 
 /-- Coordinate size used for the elementary unit descent. -/
 def goldenUnitMeasure (x : GoldenInt) : ℕ :=
@@ -196,7 +207,7 @@ theorem goldenUnit_descent {x : GoldenInt} (hx : GoldenUnit x)
       rw [mul_assoc, show goldenPhiInv * goldenPhi = 1 by exact golden_inv_mul_phi]
       simp
 
-/-- Membership in one of the five unit sectors modulo fifth powers. -/
+/-- Existence of `i < 5` and `delta` with `x = phi^i * delta^5`. -/
 def GoldenUnitFifthClass (x : GoldenInt) : Prop :=
   ∃ i : Fin 5, ∃ delta : GoldenInt,
     x = goldenMul (goldenPow goldenPhi i.val) (goldenPow delta 5)
@@ -320,7 +331,7 @@ theorem goldenUnitFifthClass_of_unit (x : GoldenInt) (hx : GoldenUnit x) :
         · rw [hrec]
           exact goldenUnitFifthClass_mul_phiInv hyClass
 
-/-- Golden units have exactly five classes modulo fifth powers. -/
+/-- Every golden unit has a representative among five classes modulo fifth powers. -/
 theorem goldenUnitClassesModFifth : GoldenUnitClassesModFifth := by
   intro epsilon hepsilon
   exact goldenUnitFifthClass_of_unit epsilon hepsilon

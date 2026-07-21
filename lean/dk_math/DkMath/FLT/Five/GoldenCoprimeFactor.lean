@@ -11,6 +11,15 @@ import DkMath.FLT.Five.SignedGoldenFifthPower
 
 namespace DkMath.FLT.Five
 
+/-!
+# Coprime factors of a fifth power
+
+The norm-Euclidean structure supplies a gcd monoid on `GoldenInt`.  Consequently, if
+`x*y=z^5` and every common divisor of `x,y` is a unit, unique factorization gives
+`x=epsilon*gamma^5` for a unit `epsilon`.  This is the algebraic extraction consumed by
+the finite unit-class layer; it introduces no FLT-specific assumption.
+-/
+
 /-- The explicit golden-unit predicate agrees with the standard ring predicate. -/
 theorem goldenUnit_iff_isUnit {x : GoldenInt} : GoldenUnit x ↔ IsUnit x := by
   constructor
@@ -38,7 +47,7 @@ theorem goldenCoprimeFactorOfFifthPower : GoldenCoprimeFactorOfFifthPower := by
   refine ⟨(u : GoldenInt), gamma, goldenUnit_iff_isUnit.mpr u.isUnit, ?_⟩
   simpa [golden_mul_eq, golden_pow_eq, mul_comm] using hu.symm
 
-/-- The cp-004f signed golden core now follows without an extra factorization axiom. -/
+/-- Every ramifier-stripped FLT5 packet therefore factors as a unit times a fifth power. -/
 theorem signedGoldenFifthPowerUpToUnitCore : SignedGoldenFifthPowerUpToUnitCore :=
   signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
     goldenCoprimeFactorOfFifthPower

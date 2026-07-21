@@ -11,6 +11,15 @@ import DkMath.FLT.Five.BranchB
 
 namespace DkMath.FLT.Five
 
+/-!
+# Signed routing into the exceptional five-adic branch
+
+A primitive candidate with `5` absent from one natural gap is routed, after possibly
+swapping the left inputs, to exactly one of two useful orientations: a five-divisible
+difference gap or a five-divisible sum.  A kernel-checked mod-25 classification supplies
+the divisibility needed by the common packet constructed in `SignedFiveAdic.lean`.
+-/
+
 /-- Swapping the two left coordinates preserves a counterexample pack. -/
 theorem CounterexamplePack.swap
     {x y z : ℕ} (hPack : CounterexamplePack x y z) :
@@ -27,12 +36,7 @@ theorem five_not_dvd_GN5_of_five_not_dvd_gap
     {g y : ℕ} (h5g : ¬ 5 ∣ g) :
     ¬ 5 ∣ GN5 g y := by
   intro h5GN
-  have hdecomp :
-      GN5 g y =
-        g ^ 4 +
-          5 * (g ^ 3 * y + 2 * g ^ 2 * y ^ 2 + 2 * g * y ^ 3 + y ^ 4) := by
-    unfold GN5
-    ring
+  have hdecomp := GN5_eq_g_pow_four_add_five_mul g y
   have h5tail :
       5 ∣ 5 * (g ^ 3 * y + 2 * g ^ 2 * y ^ 2 + 2 * g * y ^ 3 + y ^ 4) :=
     dvd_mul_of_dvd_left (dvd_refl 5) _

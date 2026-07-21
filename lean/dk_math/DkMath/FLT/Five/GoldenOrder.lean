@@ -11,7 +11,25 @@ import Mathlib.NumberTheory.Zsqrtd.Basic
 
 namespace DkMath.FLT.Five
 
-/-- An integral pair representing `a + b * phi`, with `phi^2 = phi + 1`. -/
+/-!
+# The quadratic order `ℤ[φ]`
+
+`GoldenInt` is the direct coordinate model `a+b*φ` with `φ^2=φ+1`.  Multiplication,
+conjugation `φ |-> 1-φ`, and norm
+
+`N(a+b*φ) = a^2 + a*b - b^2`
+
+are implemented explicitly.  This is mathematically the familiar golden quadratic
+integer order.  The code does not construct a field-level isomorphism with the ring of
+integers of `ℚ(√5)`; all later arguments use only this coordinate ring and its proved
+ring, norm, divisibility, and Euclidean-domain structure.
+
+The doubled map into `Zsqrtd 5` is used only to certify absence of zero divisors.  The
+elements `sqrtFiveElement = 2φ-1` and `tau = 2+φ` expose the ramification identities
+needed in the FLT5 packet.
+-/
+
+/-- An integral pair representing `a+b*φ` in the basis `1,φ`, with `φ^2=φ+1`. -/
 structure GoldenInt where
   fst : ℤ
   snd : ℤ
@@ -186,12 +204,36 @@ def goldenPhi : GoldenInt := ⟨0, 1⟩
 /-- Embed an integer in the golden order. -/
 def goldenOfInt (a : ℤ) : GoldenInt := ⟨a, 0⟩
 
-/-- The nontrivial conjugation `phi |-> 1 - phi`. -/
+/-- The nontrivial conjugation `a+b*φ |-> (a+b)-b*φ`, induced by `φ |-> 1-φ`. -/
 def goldenConj (x : GoldenInt) : GoldenInt := ⟨x.fst + x.snd, -x.snd⟩
 
-/-- The integral norm of a golden integer. -/
+/-- The integral norm `N(a+b*φ)=a^2+a*b-b^2`. -/
 def goldenNorm (x : GoldenInt) : ℤ :=
   x.fst ^ 2 + x.fst * x.snd - x.snd ^ 2
+
+/-- The defining relation of the coordinate order: `φ^2 = φ+1`. -/
+@[simp] theorem golden_phi_sq :
+    goldenMul goldenPhi goldenPhi = goldenAdd goldenPhi goldenOne := by
+  decide
+
+/-- Conjugation sends `φ` to `1-φ`. -/
+@[simp] theorem goldenConj_phi :
+    goldenConj goldenPhi = goldenSub goldenOne goldenPhi := by
+  decide
+
+/-- The basis unit `φ` has norm `-1`. -/
+@[simp] theorem goldenNorm_phi : goldenNorm goldenPhi = -1 := by
+  norm_num [goldenNorm, goldenPhi]
+
+/-- Conjugation fixes the embedded rational integers. -/
+@[simp] theorem goldenConj_ofInt (a : ℤ) :
+    goldenConj (goldenOfInt a) = goldenOfInt a := by
+  ext <;> simp [goldenConj, goldenOfInt]
+
+/-- The norm of an embedded integer is its square. -/
+@[simp] theorem goldenNorm_ofInt (a : ℤ) :
+    goldenNorm (goldenOfInt a) = a ^ 2 := by
+  simp [goldenNorm, goldenOfInt]
 
 /-- Conjugation is an involution. -/
 theorem goldenConj_invol (x : GoldenInt) :
@@ -207,7 +249,7 @@ theorem goldenConj_mul (x y : GoldenInt) :
 theorem goldenNorm_eq_GoldenNorm (x : GoldenInt) :
     goldenNorm x = GoldenNorm x.fst x.snd := rfl
 
-/-- Compatibility alias using the checkpoint's explicit API name. -/
+/-- Compatibility between the structured norm and the earlier binary quadratic form. -/
 theorem goldenNorm_eq_existing_GoldenNorm (M N : ℤ) :
     goldenNorm (⟨M, N⟩ : GoldenInt) = GoldenNorm M N := rfl
 
@@ -234,10 +276,10 @@ def goldenSqrtFive : GoldenInt := ⟨-1, 2⟩
 /-- The distinguished ramifier `2 + phi`. -/
 def goldenTau : GoldenInt := ⟨2, 1⟩
 
-/-- Checkpoint-facing name for the square root of five. -/
+/-- Short public name for the element `2φ-1`, whose square is five. -/
 abbrev sqrtFiveElement : GoldenInt := goldenSqrtFive
 
-/-- Checkpoint-facing name for the ramified element above five. -/
+/-- Short public name for the distinguished norm-five element `2+φ`. -/
 abbrev tau : GoldenInt := goldenTau
 
 theorem goldenSqrtFive_sq :

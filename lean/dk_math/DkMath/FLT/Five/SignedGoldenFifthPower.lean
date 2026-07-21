@@ -10,6 +10,15 @@ import DkMath.FLT.Five.SignedGoldenConjugateCoprime
 
 namespace DkMath.FLT.Five
 
+/-!
+# Fifth-power extraction up to a unit
+
+The norm identity writes a stripped element and its conjugate as two relatively prime
+factors of an embedded fifth power.  This module states the exact generic algebraic
+contract needed to extract one factor as `epsilon*gamma^5`; the contract is proved from
+the norm-Euclidean domain in `GoldenCoprimeFactor.lean`.
+-/
+
 /-- Integer embedding respects fifth powers in the explicit golden API. -/
 theorem goldenOfInt_pow_five (b : ℤ) :
     goldenOfInt (b ^ 5) = goldenPow (goldenOfInt b) 5 := by
@@ -26,9 +35,8 @@ theorem SignedGoldenRamifierStrippedPacket.beta_mul_conj_eq_fifth
   rw [golden_mul_conj, p.beta_norm, goldenOfInt_pow_five]
 
 /--
-The narrow factorization theorem missing from the current library: a factor of
-a fifth power that is relatively prime to its complementary factor is itself a
-fifth power up to a unit.
+The generic factorization contract: a factor of a fifth power that is relatively prime
+to its complementary factor is itself a fifth power up to a unit.
 -/
 abbrev GoldenCoprimeFactorOfFifthPower : Prop :=
   ∀ x y z : GoldenInt,
@@ -38,7 +46,8 @@ abbrev GoldenCoprimeFactorOfFifthPower : Prop :=
       GoldenUnit epsilon ∧
       x = goldenMul epsilon (goldenPow gamma 5)
 
-/-- The generic missing factorization theorem exactly inhabits the cp-004e core. -/
+/-- Any implementation of the generic coprime-factor theorem supplies the stripped
+packet's unit-times-fifth-power representation. -/
 theorem signedGoldenFifthPowerUpToUnitCore_of_coprimeFactor
     (hFactor : GoldenCoprimeFactorOfFifthPower) :
     SignedGoldenFifthPowerUpToUnitCore := by

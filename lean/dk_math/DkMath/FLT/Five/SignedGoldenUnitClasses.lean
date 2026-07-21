@@ -7,6 +7,16 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Five.GoldenCoprimeFactor
 import DkMath.FLT.Five.GoldenFifthPowerCoordinates
 
+/-!
+# Unit classes and the five algebraic sectors
+
+The coprime-factor theorem writes the stripped golden factor as
+`beta = epsilon * gamma^5`, where `epsilon` is a unit. Classification modulo
+fifth powers reduces `epsilon` to one of `1, phi, ..., phi^4`; a sign is absorbed
+into `gamma` because the exponent is odd. These are algebraic unit classes,
+not geometric angular sectors.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenUnitClasses"
 
 namespace DkMath.FLT.Five
@@ -53,8 +63,8 @@ theorem SignedGoldenRamifierStrippedPacket.unitSector_snd_eq
   rw [← hbeta, p.beta_snd]
 
 /--
-The exact remaining packet arithmetic proposition after unconditional factor
-splitting: no packet's `beta` is a unit times a fifth power.
+The reusable packet exclusion produced by the sector arithmetic: no packet's
+`beta` can be a unit times a fifth power.
 -/
 abbrev SignedGoldenUnitFifthPowerExclusion : Prop :=
   ∀ {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w)
@@ -63,7 +73,7 @@ abbrev SignedGoldenUnitFifthPowerExclusion : Prop :=
     p.beta = goldenMul epsilon (goldenPow gamma 5) →
     False
 
-/-- The remaining unit/coordinate exclusion is sufficient for the stripped core. -/
+/-- The unit/coordinate exclusion is sufficient for the stripped core. -/
 theorem signedGoldenRamifierStrippedCore_of_unitFifthPowerExclusion
     (hExclude : SignedGoldenUnitFifthPowerExclusion) :
     SignedGoldenRamifierStrippedCore := by

@@ -13,6 +13,14 @@ import Mathlib
 
 namespace DkMath.FLT.Five.Standalone
 
+/-!
+# Mathlib-only GN5 seed
+
+This deliberately small namespace repeats the basic equation and cyclotomic
+factorization without importing any DkMath module.  It is a comparison and portability
+surface, not the public proof of `DkMath.FLT.Five.FLT5Target`.
+-/
+
 /-- The exponent-five Fermat equation. -/
 def Fermat5Equation (x y z : ℕ) : Prop :=
   x ^ 5 + y ^ 5 = z ^ 5

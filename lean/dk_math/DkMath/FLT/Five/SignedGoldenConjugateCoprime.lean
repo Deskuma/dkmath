@@ -10,6 +10,16 @@ import DkMath.FLT.Five.SignedGoldenRamifierStripped
 
 namespace DkMath.FLT.Five
 
+/-!
+# Relative primality of a stripped element and its conjugate
+
+A common divisor of `beta` and `conj(beta)` divides both `N(beta)=b^5` and the norm of
+their difference, `-5^15*a^20`.  The power-split coprimality says these integer masses
+are coprime, so the common divisor has norm `±1` and is a golden unit.  The resulting
+`GoldenRelPrime` certificate is precisely the hypothesis needed for fifth-power
+factor extraction in the Euclidean domain.
+-/
+
 /-- Subtracting the conjugate isolates the square-root-of-five direction. -/
 theorem golden_sub_conj_eq_snd_mul_sqrtFive (x : GoldenInt) :
     x - goldenConj x = goldenMul (goldenOfInt x.snd) sqrtFiveElement := by
@@ -82,7 +92,8 @@ noncomputable def signedGoldenConjugateCoprimePacket_of_normalForm
   signedGoldenConjugateCoprimePacket_of_stripped
     (signedGoldenRamifierStrippedPacket_of_normalForm hNF)
 
-/-- Remaining core after conjugate coprimality is certified. -/
+/-- Receiver contract for contradictions on packets carrying certified conjugate
+relative primality. -/
 abbrev SignedGoldenConjugateCoprimeCore : Prop :=
   ∀ {u v w : ℕ}, SignedGoldenConjugateCoprimePacket u v w → False
 

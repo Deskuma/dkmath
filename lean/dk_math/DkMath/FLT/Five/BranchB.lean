@@ -10,6 +10,14 @@ import DkMath.FLT.Five.CleanChannel
 
 namespace DkMath.FLT.Five
 
+/-!
+# The gap-times-cyclotomic body
+
+For `g = z-y`, `Body5 g y` is the exact product `g * GN5 g y` representing
+`z^5-y^5`.  A Fermat-five candidate identifies this body with `x^5`; a clean prime
+channel then contradicts perfect fifth-power divisibility.
+-/
+
 /-- The exponent-five body in local gap coordinates. -/
 def Body5 (g y : ℕ) : ℕ :=
   g * GN5 g y

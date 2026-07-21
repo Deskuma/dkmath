@@ -11,6 +11,19 @@ import DkMath.FLT.Five.SignedSquareGoldenExceptional
 
 namespace DkMath.FLT.Five
 
+/-!
+# Removing the ramified factor above five
+
+The square/norm packet gives `alpha` with norm `5*b^5`.  Divisibility of the diagonal
+coordinate extracts the explicit norm-five element `tau=2+φ`, writing
+`alpha=tau*beta`.  The stripped element satisfies
+
+`N(beta)=b^5`, `beta.snd=-5^7*a^10`, `5 ∤ N(beta)`,
+
+and is not divisible by `tau` again.  These facts isolate the unique visible ramified
+load before comparing `beta` with its conjugate.
+-/
+
 /-- The exceptional packet after removing the unique visible ramifier `tau`. -/
 structure SignedGoldenRamifierStrippedPacket (u v w : ℕ) : Type where
   exceptional : SignedSquareGoldenExceptionalPacket u v w
@@ -128,7 +141,7 @@ noncomputable def signedGoldenRamifierStrippedPacket_of_normalForm
   signedGoldenRamifierStrippedPacket_of_powerSplit
     (signedFiveAdicPowerSplit_of_normalForm hNF)
 
-/-- Remaining kernel after the visible golden ramifier has been removed. -/
+/-- Receiver contract for contradictions stated after the visible ramifier is removed. -/
 abbrev SignedGoldenRamifierStrippedCore : Prop :=
   ∀ {u v w : ℕ}, SignedGoldenRamifierStrippedPacket u v w → False
 
@@ -147,9 +160,9 @@ theorem branchB_false_of_goldenRamifierStrippedCore
     (signedBranchARefuter_of_goldenRamifierStrippedCore hCore) hPack hBranch
 
 /--
-The exact next algebraic contract: every stripped exceptional element is a
-fifth power up to a golden unit.  Establishing this requires the missing
-factorization/coprimality and unit-classification layer; it is not assumed here.
+The algebraic output requested from a stripped packet: `beta` is a fifth power up to a
+golden unit.  `GoldenCoprimeFactor.signedGoldenFifthPowerUpToUnitCore` proves this
+contract unconditionally after conjugate relative primality is certified.
 -/
 abbrev SignedGoldenFifthPowerUpToUnitCore : Prop :=
   ∀ {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w),

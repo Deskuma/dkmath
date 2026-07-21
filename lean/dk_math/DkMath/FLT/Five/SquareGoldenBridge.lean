@@ -10,7 +10,21 @@ import DkMath.FLT.Five.NormalForm
 
 namespace DkMath.FLT.Five
 
-/-- The golden-ratio norm form in the integral basis `1, φ`. -/
+/-!
+# From the fifth cyclotomic factor to a quadratic norm
+
+The endpoint-square coordinates
+
+`m = (g+y)^2 + y^2`, `n = (g+y)*y`
+
+rewrite `GN5 g y` as `m^2 + m*n - n^2`.  Diagonalizing this norm gives the
+discriminant-five identity `4N = (2m+n)^2 - 5n^2`.  This is the algebraic bridge from
+the elementary cyclotomic factorization to the coordinate order introduced in
+`GoldenOrder.lean`; no number-field identification is needed at this stage.
+-/
+
+/-- The binary quadratic form `m^2 + m*n - n^2`, later realized as the norm of
+`m+n*φ` in the coordinate order with `φ^2=φ+1`. -/
 def GoldenNorm (m n : ℤ) : ℤ :=
   m ^ 2 + m * n - n ^ 2
 

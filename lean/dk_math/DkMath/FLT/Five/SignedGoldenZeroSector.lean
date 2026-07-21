@@ -6,6 +6,16 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenSectorArithmetic
 
+/-!
+# Primitive arithmetic in the zero unit sector
+
+For `gamma = (r,s)` with `beta = gamma^5`, the packet supplies
+`s * H(r,s) = -5^6 * a^10`, `goldenNorm gamma = ±b`, `gcd(a,b)=1`, and
+`5 ∤ b`. Coordinate primitivity makes `s` coprime to `H(r,s)`. The product
+therefore splits as `|s| = 5^6*c^10` and `|H(r,s)| = d^10`, which is the exact
+input to the inversion and descent layers.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSector"
 
 namespace DkMath.FLT.Five
@@ -57,7 +67,8 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_five_not_dvd_sndFactor
   apply p.zeroSector_five_not_dvd_gamma_norm hbeta
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
-    convert dvd_sub hH hdiff using 1 <;> ring
+    convert dvd_sub hH hdiff using 1
+    all_goals ring
   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
 
 /-- Natural absolute-value form of the zero-sector product equation. -/
@@ -126,7 +137,8 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_coprime_s_sndFactor
       simp only [goldenFifthSndFactor]
       rw [hk]
       ring
-    convert dvd_sub hqHZ htail using 1 <;> ring
+    convert dvd_sub hqHZ htail using 1
+    all_goals ring
   have hqr4 : q ∣ gamma.fst.natAbs ^ 4 := by
     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
   have hqr : q ∣ gamma.fst.natAbs := hqPrime.dvd_of_dvd_pow hqr4

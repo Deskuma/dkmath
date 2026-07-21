@@ -6,6 +6,17 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenZeroSectorInversion
 
+/-!
+# Exact factor packets after zero-sector inversion
+
+The positive factors `A0` and `B0` are split according to their two-adic
+content. The odd branch gives the `(2,2)` allocation; the even branches give
+`(8,16)` or `(16,8)`. Each packet retains its source candidate, exact product,
+exact difference, coprimality after removing powers of two, and fifth-power
+factor data. The odd branch also exposes a modulo-eleven channel, but that
+channel is recorded as structure rather than asserted to be a contradiction.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSectorFactorization"
 
 namespace DkMath.FLT.Five
@@ -352,7 +363,7 @@ theorem GoldenZeroSectorInversionPacket.eight_dvd_factors
     rw [hrh, hst]
     ring
   have hEvenSub : Even (u - w) := by
-    simpa [Int.even_sub', huOdd, hwOdd]
+    simp [Int.even_sub', huOdd, hwOdd]
   have hEvenAdd : Even (u + w) := huOdd.add_odd hwOdd
   have h8AZ : (8 : ℤ) ∣ zeroSectorA p.source.r p.source.s p.source.d := by
     rcases even_iff_two_dvd.mp hEvenSub with ⟨t, ht⟩
@@ -416,7 +427,8 @@ private theorem nonempty_even_factorData
       · rw [hA8]
         exact dvd_mul_of_dvd_right hqA1 8
       · rw [hB8, hB2]
-        convert dvd_mul_of_dvd_right hqB2 16 using 1 <;> ring
+        convert dvd_mul_of_dvd_right hqB2 16 using 1
+        all_goals ring
     have hred : A1 * B2 = Q2 ^ 5 := by
       apply Nat.mul_left_cancel (show 0 < 128 by norm_num)
       calc
@@ -475,7 +487,8 @@ private theorem nonempty_even_factorData
         intro q hq hq2 hqB1 hqA2
         apply p.no_common_odd_prime q hq hq2
         · rw [hA8, hA2]
-          convert dvd_mul_of_dvd_right hqA2 16 using 1 <;> ring
+          convert dvd_mul_of_dvd_right hqA2 16 using 1
+          all_goals ring
         · rw [hB8]
           exact dvd_mul_of_dvd_right hqB1 8
       exact hcop'.symm
@@ -550,8 +563,7 @@ theorem nonempty_goldenZeroSectorFactorPacket
   ⟨goldenZeroSectorFactorPacket_of_inversion
     (goldenZeroSectorInversionPacket p)⟩
 
-/-- The explicit next arithmetic frontier after certified inversion and
-factorization. -/
+/-- Exclusion of every certified exact factor branch. -/
 abbrev GoldenZeroSectorFactorExclusion : Prop :=
   GoldenZeroSectorFactorPacket → False
 

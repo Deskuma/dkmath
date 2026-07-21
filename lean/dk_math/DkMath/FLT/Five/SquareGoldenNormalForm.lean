@@ -10,6 +10,15 @@ import DkMath.FLT.Five.SquareGoldenBridge
 
 namespace DkMath.FLT.Five
 
+/-!
+# Simultaneous square and quadratic-norm data
+
+The Branch-B fifth-power normal form is lifted to endpoint-square coordinates.  The
+packet preserves both `GoldenNorm M N = b^5` and an independent square discriminant,
+so the later signed five-adic route can enter the quadratic order without losing the
+original gap, positivity, or coprimality provenance.
+-/
+
 /-- The endpoint-square mass coordinate. -/
 def SquareGoldenM (z y : ℕ) : ℤ :=
   (z : ℤ) ^ 2 + (y : ℤ) ^ 2

@@ -6,31 +6,41 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Five.SignedGoldenZeroSector
 
+/-!
+# Certified inversion of the zero-sector equation
+
+Set `X = 2*r+s`, `U = X^2+5*s^2`, `W = 4*d^5`, and
+`A = U-W`, `B = U+W`. The diagonal quartic identity and the tenth-power split
+give `A*B = 4*Q^5` for `Q = 5^5*c^8`, while `B = A+8*d^5` records their exact
+separation. `GoldenZeroSectorCandidate` retains every positivity, coprimality,
+norm, and source equation needed to certify this transformation.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSectorInversion"
 
 namespace DkMath.FLT.Five
 
-/-- Diagonal coordinate for the quartic second-coordinate factor. -/
+/-- The diagonal coordinate `X = 2*r+s`. -/
 def zeroSectorX (r s : ℤ) : ℤ :=
   2 * r + s
 
-/-- Positive diagonal sum appearing in the zero-sector inversion. -/
+/-- The positive quadratic quantity `U = X^2+5*s^2`. -/
 def zeroSectorU (r s : ℤ) : ℤ :=
   zeroSectorX r s ^ 2 + 5 * s ^ 2
 
-/-- Square root of the tenth-power contribution after multiplying by sixteen. -/
+/-- The quantity `W = 4*d^5` supplied by `|H(r,s)| = d^10`. -/
 def zeroSectorW (d : ℕ) : ℤ :=
   4 * (d : ℤ) ^ 5
 
-/-- Lower factor produced by the discriminant-square inversion. -/
+/-- The lower inversion factor `A = U-W`. -/
 def zeroSectorA (r s : ℤ) (d : ℕ) : ℤ :=
   zeroSectorU r s - zeroSectorW d
 
-/-- Upper factor produced by the discriminant-square inversion. -/
+/-- The upper inversion factor `B = U+W`. -/
 def zeroSectorB (r s : ℤ) (d : ℕ) : ℤ :=
   zeroSectorU r s + zeroSectorW d
 
-/-- Natural fifth-power mass owned by the two inversion factors. -/
+/-- The fifth-power mass `Q = 5^5*c^8` in `A*B = 4*Q^5`. -/
 def zeroSectorQ (c : ℕ) : ℕ :=
   5 ^ 5 * c ^ 8
 
@@ -125,7 +135,8 @@ theorem coprime_natAbs_goldenFifthSndFactor_of_coprime
       simp only [goldenFifthSndFactor]
       rw [hk]
       ring
-    convert dvd_sub hqHZ htail using 1 <;> ring
+    convert dvd_sub hqHZ htail using 1
+    all_goals ring
   have hqr4 : q ∣ r.natAbs ^ 4 := by
     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
   have hqr : q ∣ r.natAbs := hqPrime.dvd_of_dvd_pow hqr4
@@ -236,7 +247,8 @@ theorem five_not_dvd_H (p : GoldenZeroSectorCandidate) :
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq
     (⟨p.r, p.s⟩ : GoldenInt)
   have hnormSq : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ ^ 2 := by
-    convert dvd_sub hH hdiff using 1 <;> ring
+    convert dvd_sub hH hdiff using 1
+    all_goals ring
   have hnorm : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ :=
     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
   apply p.five_not_dvd_b

@@ -10,7 +10,19 @@ import DkMath.FLT.Five.GN5
 
 namespace DkMath.FLT.Five
 
-/-- A prime channel that enters `GN5`, avoids the gap, and does not lift to its square. -/
+/-!
+# Local valuation-one obstructions
+
+A `CleanGN5Channel g y q` is a prime divisor of the cyclotomic factor which does not
+divide the gap and occurs only to its first power.  Hence `q` divides
+`g * GN5 g y`, while `q^2` does not.  This is incompatible with a fifth power.
+
+The module gives the direct square-divisibility contradiction.  `Valuation.lean`
+repackages the same obstruction as the incompatible bounds `v_q >= 5` and `v_q <= 1`.
+-/
+
+/-- A prime occurring with local valuation exactly one in the residual and valuation
+zero in the gap.  The fields are intentionally explicit so providers can be audited. -/
 structure CleanGN5Channel (g y q : ℕ) : Prop where
   prime : Nat.Prime q
   dvd_GN5 : q ∣ GN5 g y

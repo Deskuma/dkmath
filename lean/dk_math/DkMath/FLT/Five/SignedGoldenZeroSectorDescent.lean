@@ -7,12 +7,26 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Five.SignedGoldenZeroSectorInversion
 import DkMath.FLT.Five.GoldenUnitClassification
 
+/-!
+# Infinite descent for the zero sector
+
+The lift `T(r,s) = (r^2+r*s+s^2, s^2)` has norm `H(r,s)`. A descent packet
+records `|s| = 5*t^5`, `H(r,s) = D^5`, primitive coordinates, and norm prime to
+five. Relative-prime factorization makes the lift a unit times a fifth power;
+the nonzero unit sectors are impossible, so it is an honest fifth power.
+Coprime splitting then constructs a new packet whose second-coordinate
+absolute value is strictly smaller. Strong induction closes the descent.
+
+The proof does not invoke the final FLT5 theorem or its receivers, so the
+closure is acyclic rather than circular.
+-/
+
 #print "file: DkMath.FLT.Five.SignedGoldenZeroSectorDescent"
 
 namespace DkMath.FLT.Five
 
 /--
-The quadratic re-entry map used in the classical exponent-five descent.  Its
+The quadratic re-entry map used in the golden-order exponent-five descent.  Its
 norm is the quartic occurring in the second coordinate of a golden fifth
 power, while its second coordinate is a square.
 -/
@@ -22,6 +36,11 @@ def goldenZeroSectorLift (x : GoldenInt) : GoldenInt :=
 theorem goldenZeroSectorLift_snd (x : GoldenInt) :
     (goldenZeroSectorLift x).snd = x.snd ^ 2 := rfl
 
+/--
+The quadratic lift turns the quartic `H(r,s)` into a golden norm. This identity
+is the algebraic re-entry point: when `H(r,s)` is a fifth power, relative-prime
+factorization can express the lift as a unit times a golden fifth power.
+-/
 theorem goldenZeroSectorLift_norm (x : GoldenInt) :
     goldenNorm (goldenZeroSectorLift x) =
       goldenFifthSndFactor x.fst x.snd := by
@@ -52,6 +71,7 @@ structure GoldenZeroSectorDescentPacket where
     goldenFifthSndFactor base.fst base.snd = (D : ℤ) ^ 5
   five_not_dvd_norm : ¬ (5 : ℤ) ∣ goldenNorm base
 
+/-- The positive natural measure decreased by every certified descent step. -/
 def goldenZeroSectorDescentMeasure (p : GoldenZeroSectorDescentPacket) : ℕ :=
   p.base.snd.natAbs
 
@@ -83,7 +103,8 @@ theorem five_not_dvd_H (p : GoldenZeroSectorDescentPacket) :
   apply p.five_not_dvd_norm
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq p.base
   have hnormSq : (5 : ℤ) ∣ goldenNorm p.base ^ 2 := by
-    convert dvd_sub hH hdiff using 1 <;> ring
+    convert dvd_sub hH hdiff using 1
+    all_goals ring
   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
 
 theorem five_not_dvd_D (p : GoldenZeroSectorDescentPacket) :
@@ -173,20 +194,24 @@ theorem five_dvd_norm_of_nonzero_goldenUnitSector
   fin_cases i
   · exact (hi rfl).elim
   · rw [hAlpha, golden_unit_one_mul_fifth_snd] at hFive
-    convert dvd_sub hFive hS using 1 <;> ring
+    convert dvd_sub hFive hS using 1
+    all_goals ring
   · rw [hAlpha, golden_unit_two_mul_fifth_snd] at hFive
-    convert dvd_sub hFive (dvd_mul_of_dvd_right hS 2) using 1 <;> ring
+    convert dvd_sub hFive (dvd_mul_of_dvd_right hS 2) using 1
+    all_goals ring
   · rw [hAlpha, golden_unit_three_mul_fifth_snd] at hFive
     have h2F : (5 : ℤ) ∣
         2 * goldenFifthFstPoly gamma.fst gamma.snd := by
-      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 3) using 1 <;> ring
+      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 3) using 1
+      all_goals ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h2F with h52 | hF
     · norm_num at h52
     · exact hF
   · rw [hAlpha, golden_unit_four_mul_fifth_snd] at hFive
     have h3F : (5 : ℤ) ∣
         3 * goldenFifthFstPoly gamma.fst gamma.snd := by
-      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 5) using 1 <;> ring
+      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 5) using 1
+      all_goals ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h3F with h53 | hF
     · norm_num at h53
     · exact hF
@@ -321,12 +346,18 @@ theorem fifthRoot_five_not_dvd_H
   intro hH
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
-    convert dvd_sub hH hdiff using 1 <;> ring
+    convert dvd_sub hH hdiff using 1
+    all_goals ring
   have hnormFive : (5 : ℤ) ∣ goldenNorm gamma :=
     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
   rw [hnorm] at hnormFive
   exact p.five_not_dvd_D (by exact_mod_cast hnormFive)
 
+/--
+The fifth root has strictly smaller visible coordinate: its second-coordinate
+absolute value is less than the source packet's `|s|`. This is the essential
+well-founded inequality used when the root becomes the base of the next packet.
+-/
 theorem fifthRoot_measure_lt
     (p : GoldenZeroSectorDescentPacket) (gamma : GoldenInt)
     (hroot : goldenZeroSectorLift p.base = goldenPow gamma 5) :
@@ -470,6 +501,12 @@ structure GoldenZeroSectorStrictDescent
     goldenZeroSectorDescentMeasure next <
       goldenZeroSectorDescentMeasure source
 
+/--
+Construct the next descent packet from a fifth root of the quadratic lift. The
+new visible coordinate is the root's second coordinate; coprimality, the
+fifth-power shape, and the norm condition are preserved, while
+`fifthRoot_measure_lt` proves that its `|s|` measure strictly decreases.
+-/
 theorem GoldenZeroSectorDescentPacket.strictDescent
     (p : GoldenZeroSectorDescentPacket) :
     Nonempty (GoldenZeroSectorStrictDescent p) := by
@@ -496,7 +533,13 @@ theorem GoldenZeroSectorDescentPacket.strictDescent
     lift_eq := hroot
     measure_lt := p.fifthRoot_measure_lt gamma hroot }⟩
 
-/-- Infinite descent excludes every packet carrying the recursive fifth-power shape. -/
+/--
+Strong induction on the visible measure `|s|` excludes every recursive descent
+packet. `strictDescent` preserves the packet invariant and supplies a smaller
+natural measure, so `Nat.strong_induction_on` applies. The argument uses only
+the golden lift and preceding packet lemmas, never the final FLT5 theorem; hence
+the closure is non-circular.
+-/
 theorem goldenZeroSectorDescentPacket_false
     (p : GoldenZeroSectorDescentPacket) : False := by
   have noAt : ∀ n : ℕ, ∀ q : GoldenZeroSectorDescentPacket,
@@ -510,7 +553,7 @@ theorem goldenZeroSectorDescentPacket_false
           (by simpa [hq] using step.measure_lt) step.next rfl
   exact noAt (goldenZeroSectorDescentMeasure p) p rfl
 
-/-- Every certified arithmetic candidate enters the recursive descent invariant. -/
+/-- Every certified zero-sector candidate enters the recursive descent invariant. -/
 def goldenZeroSectorDescentPacket_of_candidate
     (p : GoldenZeroSectorCandidate) : GoldenZeroSectorDescentPacket where
   base := ⟨p.r, p.s⟩

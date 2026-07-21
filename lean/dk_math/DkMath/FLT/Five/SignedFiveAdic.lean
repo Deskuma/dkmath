@@ -10,7 +10,19 @@ import DkMath.FLT.Five.SignedBranchA
 
 namespace DkMath.FLT.Five
 
-/-- The positive fifth-power residual for the sum factorization. -/
+/-!
+# Common exact five-adic packet
+
+The difference and sum orientations are representationally different but have the same
+arithmetic output.  Their carrier times residual is a fifth power, the residual is
+`5 mod 25` and therefore has `v_5 = 1`, while the carrier valuation is `4 mod 5`.
+`SumGN5` is the positive natural quotient `(u^5+v^5)/(u+v)`; its piecewise definition
+only avoids signed subtraction in `Nat` and is not a mathematical asymmetry.
+-/
+
+/-- The positive natural residual in `(u+v) * SumGN5(u,v) = u^5+v^5`.
+The two branches choose the nonnegative difference used to write the same symmetric
+homogeneous quotient without leaving `ℕ`. -/
 def SumGN5 (u v : ℕ) : ℕ :=
   if v ≤ u then
     (u - v) ^ 4 +
@@ -266,7 +278,9 @@ inductive SignedFiveAdicSource
       distinguished = w →
       SignedFiveAdicSource u v w carrier residual distinguished
 
-/-- Common five-adic packet obtained from either signed Branch-A orientation. -/
+/-- The common exact five-adic invariant produced by either signed orientation.
+Besides the factor equation it records `residual ≡ 5 (mod 25)`, `v_5(residual)=1`,
+and `v_5(carrier) ≡ 4 (mod 5)` so later layers never reopen the residue proof. -/
 structure SignedFiveAdicPacket (u v w : ℕ) : Type where
   normal : SignedBranchANormalForm u v w
   carrier : ℕ
@@ -382,7 +396,7 @@ noncomputable def signedFiveAdicPacket_of_normalForm
     SignedFiveAdicPacket u v w :=
   Classical.choice (nonempty_signedFiveAdicPacket_of_normalForm hNF)
 
-/-- The remaining common arithmetic kernel after exact signed five-adic reduction. -/
+/-- Receiver contract for contradictions formulated on the common five-adic packet. -/
 abbrev SignedFiveAdicCore : Prop :=
   ∀ {u v w : ℕ}, SignedFiveAdicPacket u v w → False
 
