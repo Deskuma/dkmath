@@ -1,5 +1,10 @@
 # Jacobian Counterexample Verification
 
+codex://threads/019f82f0-4f31-7950-b8c8-ed84dfca5aa3
+cid: 6a5ef0ae-de08-83ee-9e17-4c9019b09cf8
+date: 2026/07/21 17:31
+author: D. and Wise Wolf, Codex GPT-5.6
+
 ## Status
 
 JAC-001 through JAC-011 are complete. DkMath now exposes a Lean 4 + Mathlib
