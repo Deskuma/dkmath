@@ -1,0 +1,1 @@
+Breaking Math Verification is a reusable workflow for that moment. Start with the reported claim. Transcribe its objects independently. Prove symbolic identities, check finite witnesses, and derive the consequence. Then publish a small Lean certificate and its axioms, keeping provenance and scope visible.

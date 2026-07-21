@@ -1,0 +1,1 @@
+The global witness is finite. Lean checks three pairwise-distinct inputs: p zero, p one, and p two. All map to the same target: one eighth, zero, zero. These are exact complex-coordinate equalities, with no numerical tolerance.

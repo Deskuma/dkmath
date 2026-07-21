@@ -1,0 +1,1 @@
+A concrete candidate counterexample to the Jacobian Conjecture was reported. But a reported formula is not yet a verified theorem. Before repeating the headline, we need an exact reconstruction, explicit witnesses, and an inspectable trust boundary.

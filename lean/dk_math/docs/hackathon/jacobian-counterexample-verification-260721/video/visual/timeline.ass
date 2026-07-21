@@ -1,0 +1,51 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Title,DejaVu Sans,46,&H00F8FAFC,&H000000FF,&H0008111F,&H00000000,-1,0,0,0,100,100,0,0,1,2,0,8,70,70,65,1
+Style: Body,DejaVu Sans,31,&H00F8FAFC,&H000000FF,&H0008111F,&H00000000,0,0,0,0,100,100,0,0,1,1,0,5,80,80,35,1
+Style: Code,DejaVu Sans Mono,25,&H00F9E267,&H000000FF,&H0008111F,&H00000000,0,0,0,0,100,100,0,0,1,1,0,5,70,70,30,1
+Style: Accent,DejaVu Sans,38,&H00C4A7FF,&H000000FF,&H0008111F,&H00000000,-1,0,0,0,100,100,0,0,1,2,0,5,50,50,30,1
+Style: Node,DejaVu Sans,34,&H00F8FAFC,&H000000FF,&H00E29D67,&H00000000,-1,0,0,0,100,100,0,0,1,3,0,5,20,20,20,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:16.78,Title,,0,0,0,,A candidate counterexample was reported.
+Dialogue: 0,0:00:00.00,0:00:16.78,Body,,0,0,0,,{\pos(640,265)}Reported is not yet verified.
+Dialogue: 0,0:00:00.00,0:00:16.78,Code,,0,0,0,,{\pos(640,415)}Breaking Math Verification
+Dialogue: 0,0:00:16.78,0:00:36.61,Title,,0,0,0,,From report to certificate
+Dialogue: 0,0:00:16.78,0:00:36.61,Body,,0,0,0,,{\pos(640,265)}reported claim  →  independent reconstruction  →  explicit witness
+Dialogue: 0,0:00:16.78,0:00:36.61,Code,,0,0,0,,{\pos(640,415)}Lean certificate  →  axiom audit
+Dialogue: 0,0:00:36.61,0:00:50.80,Title,,0,0,0,,The exact polynomial map
+Dialogue: 0,0:00:36.61,0:00:50.80,Body,,0,0,0,,{\pos(640,265)}F = (P, Q, R)
+Dialogue: 0,0:00:36.61,0:00:50.80,Code,,0,0,0,,{\pos(640,415)}P = (1 + xy)³z + y²(1 + xy)(4 + 3xy)\NQ = y + 3x(1 + xy)²z + 3xy²(4 + 3xy)\NR = 2x − 3x²y − x³z
+Dialogue: 0,0:00:50.80,0:01:08.03,Title,,0,0,0,,Formal Jacobian · exact normalization
+Dialogue: 0,0:00:50.80,0:01:08.03,Body,,0,0,0,,{\pos(640,265)}det J(F) = −2    →    F̃ = (−P/2, Q, R)
+Dialogue: 0,0:00:50.80,0:01:08.03,Code,,0,0,0,,{\pos(640,415)}det J(F̃) = 1
+Dialogue: 1,0:00:50.80,0:01:08.03,Accent,,0,0,0,,{\pos(640,520)\fad(900,500)}formal determinant = 1
+Dialogue: 0,0:01:08.03,0:01:23.92,Title,,0,0,0,,Three distinct inputs · one exact target
+Dialogue: 0,0:01:08.03,0:01:23.92,Body,,0,0,0,,{\pos(640,265)}p₀ ≠ p₁     p₀ ≠ p₂     p₁ ≠ p₂
+Dialogue: 0,0:01:08.03,0:01:23.92,Code,,0,0,0,,{\pos(640,415)}F̃(p₀) = F̃(p₁) = F̃(p₂) = (1/8, 0, 0)
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,310,520,405,800,6500)}p₀
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,405,520,405,1100,6500)}p₁
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,500,520,405,1400,6500)}p₂
+Dialogue: 2,0:01:08.03,0:01:23.92,Accent,,0,0,0,,{\pos(815,405)\fad(700,400)}(1/8, 0, 0)
+Dialogue: 0,0:01:23.92,0:01:43.42,Title,,0,0,0,,A reusable collision certificate
+Dialogue: 0,0:01:23.92,0:01:43.42,Body,,0,0,0,,{\pos(640,265)}DkMath.Verification.CollisionCertificate
+Dialogue: 0,0:01:23.92,0:01:43.42,Code,,0,0,0,,{\pos(640,415)}normalizedCollisionCertificateC_notInjective\NnormalizedCollisionCertificateC_noLeftInverse
+Dialogue: 0,0:01:43.42,0:02:03.96,Title,,0,0,0,,The compiled Lean surface
+Dialogue: 0,0:01:43.42,0:02:03.96,Body,,0,0,0,,{\pos(640,265)}normalizedJacobianCounterexampleCertificateC\Nnormalized_three_point_collision_C\NnormalizedCollisionCertificateC_notInjective
+Dialogue: 0,0:01:43.42,0:02:03.96,Code,,0,0,0,,{\pos(640,415)}Jacobian certificate: propext · Classical.choice · Quot.sound\Ngeneric collision consequence: no axioms
+Dialogue: 0,0:02:03.96,0:02:21.10,Title,,0,0,0,,Two AI workflows · one auditable handoff
+Dialogue: 0,0:02:03.96,0:02:21.10,Body,,0,0,0,,{\pos(640,265)}GPT-5.6  →  Git repository  →  Codex  →  Lean kernel
+Dialogue: 0,0:02:03.96,0:02:21.10,Code,,0,0,0,,{\pos(640,415)}BMV-001 architecture · BMV-002 certificate · BMV-003 adapter\NBMV-004 contracts · BMV-005 cross-domain validation · BMV-006 public API
+Dialogue: 0,0:02:21.10,0:02:40.93,Title,,0,0,0,,Honest scope
+Dialogue: 0,0:02:21.10,0:02:40.93,Body,,0,0,0,,{\pos(640,265)}Lean verifies the exact formalized formulas.
+Dialogue: 0,0:02:21.10,0:02:40.93,Code,,0,0,0,,{\pos(640,415)}It does not certify:\Nhistorical priority · publication status · peer review · community acceptance
+Dialogue: 0,0:02:40.93,0:02:56.11,Title,,0,0,0,,Breaking Math Verification
+Dialogue: 0,0:02:40.93,0:02:56.11,Body,,0,0,0,,{\pos(640,265)}GPT-5.6 × Codex × Lean 4
+Dialogue: 0,0:02:40.93,0:02:56.11,Code,,0,0,0,,{\pos(640,415)}Do not trust the headline.  Verify the certificate.
