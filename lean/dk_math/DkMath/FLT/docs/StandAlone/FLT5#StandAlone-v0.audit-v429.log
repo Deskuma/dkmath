@@ -1,0 +1,101 @@
+checkpoint: F35-008A
+repository: Deskuma/dkmath
+branch: feature/FLT35-essence-260722-v0
+lean_toolchain: leanprover/lean4:v4.29.0
+lean_version_output: Lean (version 4.29.0, x86_64-unknown-linux-gnu, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740, Release)
+artifact: DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean.txt
+artifact_sha256: 400935756c2468577582e6e9b87db2e5a2194a127855e3eb9bea312ff79b8dbd
+
+[normalized declaration hashes]
+Fermat5Equation: public=e0d06367d60ee6e46611f92a24cb410d9714f6d11d99437025058a220ece8fa4 standalone=e0d06367d60ee6e46611f92a24cb410d9714f6d11d99437025058a220ece8fa4
+Fermat5Equation: statement_equal=true
+FLT5Target: public=551c0c54250fefc36dc4fc4549fec98907eccdf62ef961b7cff672aedc647909 standalone=551c0c54250fefc36dc4fc4549fec98907eccdf62ef961b7cff672aedc647909
+FLT5Target: statement_equal=true
+flt5Target: public=91bb3d3ad40f573ea51cd1fac2a29e70dd32f49a628e6fe274717768bf8a7c0f standalone=91bb3d3ad40f573ea51cd1fac2a29e70dd32f49a628e6fe274717768bf8a7c0f
+flt5Target: statement_equal=true
+fermatFive_no_positive_solution: public=a5b96af9f90ca593007ec34f731eacf69075310005eff59f2d25c64f3217a1b4 standalone=a5b96af9f90ca593007ec34f731eacf69075310005eff59f2d25c64f3217a1b4
+fermatFive_no_positive_solution: statement_equal=true
+
+[public Lean audit]
+command: lake env lean /tmp/dkmath-flt5-audit-v429/public-audit.lean
+exit_status: 0
+F35_CHECK_BEGIN:Fermat5Equation
+DkMath.FLT.Five.Fermat5Equation : ℕ → ℕ → ℕ → Prop
+F35_CHECK_END:Fermat5Equation
+F35_CHECK_BEGIN:flt5Target
+DkMath.FLT.Five.flt5Target : DkMath.FLT.Five.FLT5Target
+F35_CHECK_END:flt5Target
+F35_CHECK_BEGIN:fermatFive_no_positive_solution
+DkMath.FLT.Five.fermatFive_no_positive_solution : ∀ (x y z : ℕ),
+  0 < x → 0 < y → 0 < z → ¬DkMath.FLT.Five.Fermat5Equation x y z
+F35_CHECK_END:fermatFive_no_positive_solution
+F35_AXIOM_BEGIN:flt5Target
+'DkMath.FLT.Five.flt5Target' depends on axioms: [propext, Classical.choice, Quot.sound]
+F35_AXIOM_END:flt5Target
+F35_AXIOM_BEGIN:fermatFive_no_positive_solution
+'DkMath.FLT.Five.fermatFive_no_positive_solution' depends on axioms: [propext, Classical.choice, Quot.sound]
+F35_AXIOM_END:fermatFive_no_positive_solution
+
+[standalone Lean audit]
+command: lake env lean /tmp/dkmath-flt5-audit-v429/standalone-audit.lean
+exit_status: 0
+F35_CHECK_BEGIN:Fermat5Equation
+DkMath.FLT.Five.Fermat5Equation : ℕ → ℕ → ℕ → Prop
+F35_CHECK_END:Fermat5Equation
+F35_CHECK_BEGIN:flt5Target
+DkMath.FLT.Five.flt5Target : DkMath.FLT.Five.FLT5Target
+F35_CHECK_END:flt5Target
+F35_CHECK_BEGIN:fermatFive_no_positive_solution
+DkMath.FLT.Five.fermatFive_no_positive_solution : ∀ (x y z : ℕ),
+  0 < x → 0 < y → 0 < z → ¬DkMath.FLT.Five.Fermat5Equation x y z
+F35_CHECK_END:fermatFive_no_positive_solution
+F35_AXIOM_BEGIN:flt5Target
+'DkMath.FLT.Five.flt5Target' depends on axioms: [propext, Classical.choice, Quot.sound]
+F35_AXIOM_END:flt5Target
+F35_AXIOM_BEGIN:fermatFive_no_positive_solution
+'DkMath.FLT.Five.fermatFive_no_positive_solution' depends on axioms: [propext, Classical.choice, Quot.sound]
+F35_AXIOM_END:fermatFive_no_positive_solution
+
+[normalized #check comparisons]
+DkMath.FLT.Five.Fermat5Equation: equal=true
+DkMath.FLT.Five.Fermat5Equation: public=DkMath.FLT.Five.Fermat5Equation : ℕ → ℕ → ℕ → Prop
+DkMath.FLT.Five.Fermat5Equation: standalone=DkMath.FLT.Five.Fermat5Equation : ℕ → ℕ → ℕ → Prop
+DkMath.FLT.Five.flt5Target: equal=true
+DkMath.FLT.Five.flt5Target: public=DkMath.FLT.Five.flt5Target : DkMath.FLT.Five.FLT5Target
+DkMath.FLT.Five.flt5Target: standalone=DkMath.FLT.Five.flt5Target : DkMath.FLT.Five.FLT5Target
+DkMath.FLT.Five.fermatFive_no_positive_solution: equal=true
+DkMath.FLT.Five.fermatFive_no_positive_solution: public=DkMath.FLT.Five.fermatFive_no_positive_solution : ∀ (x y z : ℕ), 0 < x → 0 < y → 0 < z → ¬DkMath.FLT.Five.Fermat5Equation x y z
+DkMath.FLT.Five.fermatFive_no_positive_solution: standalone=DkMath.FLT.Five.fermatFive_no_positive_solution : ∀ (x y z : ℕ), 0 < x → 0 < y → 0 < z → ¬DkMath.FLT.Five.Fermat5Equation x y z
+
+[endpoint axiom sets]
+DkMath.FLT.Five.flt5Target: public=['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.Five.flt5Target: standalone=['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.Five.flt5Target: equal=true
+DkMath.FLT.Five.fermatFive_no_positive_solution: public=['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.Five.fermatFive_no_positive_solution: standalone=['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.Five.fermatFive_no_positive_solution: equal=true
+
+[active token audit]
+DkMath/FLT/Five/Basic.lean: active_tokens=[]
+DkMath/FLT/Five/Main.lean: active_tokens=[]
+DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean.txt: active_tokens=[]
+
+[quadratic essence audit]
+command: lake env lean DkMathTest/FLT/QuadraticEssence.lean
+exit_status: 0
+'DkMath.NumberTheory.TraceOneQuadratic.traceOne_norm_mul' depends on axioms: [propext, Quot.sound]
+'DkMath.NumberTheory.TraceOneQuadratic.four_mul_traceOneNorm_eq_discriminant' depends on axioms: [propext, Quot.sound]
+'DkMath.FLT.S0_nat_eq_traceOneNorm_negOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.GN_three_sub_eq_traceOneNorm_negOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Five.goldenNorm_eq_traceOneNorm_one' depends on axioms: [propext]
+'DkMath.FLT.Five.GN5_eq_traceOneNorm_squareLink' depends on axioms: [propext, Quot.sound]
+
+[quadratic essence axiom sets]
+DkMath.NumberTheory.TraceOneQuadratic.traceOne_norm_mul: ['Quot.sound', 'propext']
+DkMath.NumberTheory.TraceOneQuadratic.four_mul_traceOneNorm_eq_discriminant: ['Quot.sound', 'propext']
+DkMath.FLT.S0_nat_eq_traceOneNorm_negOne: ['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.GN_three_sub_eq_traceOneNorm_negOne: ['Classical.choice', 'Quot.sound', 'propext']
+DkMath.FLT.Five.goldenNorm_eq_traceOneNorm_one: ['propext']
+DkMath.FLT.Five.GN5_eq_traceOneNorm_squareLink: ['Quot.sound', 'propext']
+
+final result: PASS
