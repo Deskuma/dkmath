@@ -12,6 +12,12 @@ JAC-001 through JAC-011 are complete. DkMath now exposes a Lean 4 + Mathlib
 certificate for the stated three-dimensional polynomial formulas, their
 constant Jacobian determinant, and their explicit collision.
 
+BMV-001 through BMV-006 are also complete. The reusable collision certificate
+is public as `DkMath.Verification`, and the reusable project contracts are in
+[`docs/verification`](../../verification/README.md). The separate GN5 case
+validated the engineering workflow across domains; it does not alter the
+Jacobian result or its submission narrative.
+
 ## Verified map
 
 For `(x,y,z) ∈ ℂ³`, the project verifies the polynomial map `F = (P,Q,R)`:

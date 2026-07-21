@@ -1,5 +1,14 @@
 # DkMath Verification Project Contracts
 
+## Status
+
+`DkMath.Verification` is public through the root `DkMath` import. Its generic
+collision certificate was validated on an explicit Jacobian collision case.
+The broader project contracts were separately validated on a finite GN5
+arithmetic obstruction case. That GN5 case is a cross-domain engineering
+validation, not a universal proof bundle and not a dependency of
+`DkMath.Verification`.
+
 This directory contains reusable contracts for independently formalizing a
 reported mathematical claim. They were extracted from a completed verification
 case, but are intentionally independent of any one mathematical domain.
