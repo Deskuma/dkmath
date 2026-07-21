@@ -100,11 +100,7 @@ $$
 Gap は単なる不足ではない。まだ真偽の分岐が固定されていない可能性空間でもある。
 
 $$
-\mathrm{Gap}
-=
-\text{無知}
-+
-\text{探索可能性}
+\mathrm{Gap}=\text{無知}+\text{探索可能性}
 $$
 
 Gap が存在するからこそ、仮説、想像、誤り、発見、驚き、新しい証明経路が生まれる。
@@ -154,13 +150,7 @@ $$
 記号的には、有限の各段階 $n$ で、原則として次を置く。
 
 $$
-\mathrm{Big}
-=
-\mathrm{Core}_{n}
-+
-\mathrm{Beam}_{n}
-+
-\mathrm{Gap}_{n}
+\mathrm{Big}=\mathrm{Core}_{n}+\mathrm{Beam}_{n}+\mathrm{Gap}_{n}
 $$
 
 $$
@@ -170,15 +160,11 @@ $$
 そして探索の向きは、
 
 $$
-\lim_{n\to\infty}\mathrm{Core}_{n}
-=
-\mathrm{Big}
+\lim_{n\to\infty}\mathrm{Core}_{n}=\mathrm{Big}
 $$
 
 $$
-\lim_{n\to\infty}\mathrm{Gap}_{n}
-=
-0
+\lim_{n\to\infty}\mathrm{Gap}_{n}=0
 $$
 
 として表す。
@@ -213,7 +199,7 @@ $$
 \forall P,
 \quad
 P\in\mathrm{Core}
-\ \lor\ 
+\ \lor\
 \neg P\in\mathrm{Core}
 $$
 
@@ -263,9 +249,7 @@ $$
 たとえば有限集合の全要素を列挙し、判定可能な命題をすべて検査できるなら、その局所世界については、
 
 $$
-\mathrm{Big}_{\mathrm{local}}
-=
-\mathrm{Core}_{\mathrm{local}}
+\mathrm{Big}_{\mathrm{local}}=\mathrm{Core}_{\mathrm{local}}
 $$
 
 が成立し得る。
@@ -296,13 +280,7 @@ $$
 同様に、認識論的な宇宙式は、
 
 $$
-\mathrm{Big}
-=
-\mathrm{Core}
-+
-\mathrm{Beam}
-+
-\mathrm{Gap}
+\mathrm{Big}=\mathrm{Core}+\mathrm{Beam}+\mathrm{Gap}
 $$
 
 として、真理総体を確定領域、判定境界、未知領域へ分解する。
@@ -310,9 +288,7 @@ $$
 代数的宇宙式が Big と Gap の差から Body を読むように、認識論的宇宙式は、絶対真理と未到達領域の差から、現在の確定知識を読む。
 
 $$
-\mathrm{Core}+\mathrm{Beam}
-=
-\mathrm{Big}-\mathrm{Gap}
+\mathrm{Core}+\mathrm{Beam}=\mathrm{Big}-\mathrm{Gap}
 $$
 
 ここで Beam の判定が完了すれば、その部分は Core に移る。
@@ -417,13 +393,7 @@ DkMath における ToT は、真理を所有する宣言ではない。
 DkMath は、未知を既知として塗りつぶさない。
 
 $$
-\mathrm{Big}
-=
-\mathrm{Core}
-+
-\mathrm{Beam}
-+
-\mathrm{Gap}
+\mathrm{Big}=\mathrm{Core}+\mathrm{Beam}+\mathrm{Gap}
 $$
 
 という分解によって、確定事実、判定中の命題、未解決領域を分離する。
