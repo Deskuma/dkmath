@@ -50,6 +50,35 @@ $$
 
 ## News
 
+> ## OpenAI Build Week: Cosmic Formula Inversion and FLT5
+
+DkMath was submitted to OpenAI Build Week as a verifiable AI-assisted mathematical research project built with Codex and GPT-5.6.
+
+The original demonstration video presents the first phase: the Cosmic Formula inversion prototype and a local fifth-degree GN obstruction. After the video and hackathon submission were completed, development continued into a second phase, extending the GN5 route into a Lean formalization of the positive-natural exponent-five case of Fermat's Last Theorem.
+
+Public Lean endpoints:
+
+- `DkMath.FLT.Five.flt5Target`
+- `DkMath.FLT.Five.fermatFive_no_positive_solution`
+
+The current theorem states:
+
+$$
+x,y,z\in\mathbb{N}_{>0}
+\quad\Longrightarrow\quad
+x^5+y^5\ne z^5
+$$
+
+This result is kernel-checked by Lean. Independent external mathematical review is still to come.
+
+- Hackathon entry point: [DkMath Hackathon](./lean/dk_math/DkMath/Hackathon/README.md)
+- Full project record: [Cosmic Formula Inversion — OpenAI Build Week](./lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md)
+- FLT5 public Lean API: [DkMath.FLT.Five](./lean/dk_math/DkMath/FLT/Five.lean)
+- Axiom audit entry point: [CheckAxioms.lean](./lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
+- Devpost submission: [DkMath — Verifiable AI Mathematical Research](https://devpost.com/software/dkmath-verifiable-ai-mathematical-research)
+
+---
+
 > ## Verified Challenge: Infinitely Many Primes
 
 DkMath.CosmicFormula provides a Lean-formalized proof route from the Cosmic Formula boundary structure to the infinitude of primes.
