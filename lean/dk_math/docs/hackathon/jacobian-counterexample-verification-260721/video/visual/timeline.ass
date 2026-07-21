@@ -29,11 +29,11 @@ Dialogue: 0,0:00:50.80,0:01:08.03,Code,,0,0,0,,{\pos(640,415)}det J(F̃) = 1
 Dialogue: 1,0:00:50.80,0:01:08.03,Accent,,0,0,0,,{\pos(640,520)\fad(900,500)}formal determinant = 1
 Dialogue: 0,0:01:08.03,0:01:23.92,Title,,0,0,0,,Three distinct inputs · one exact target
 Dialogue: 0,0:01:08.03,0:01:23.92,Body,,0,0,0,,{\pos(640,265)}p₀ ≠ p₁     p₀ ≠ p₂     p₁ ≠ p₂
-Dialogue: 0,0:01:08.03,0:01:23.92,Code,,0,0,0,,{\pos(640,415)}F̃(p₀) = F̃(p₁) = F̃(p₂) = (1/8, 0, 0)
-Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,310,520,405,800,6500)}p₀
-Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,405,520,405,1100,6500)}p₁
-Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,500,520,405,1400,6500)}p₂
-Dialogue: 2,0:01:08.03,0:01:23.92,Accent,,0,0,0,,{\pos(815,405)\fad(700,400)}(1/8, 0, 0)
+Dialogue: 0,0:01:08.03,0:01:23.92,Code,,0,0,0,,{\pos(640,500)}F̃(p₀) = F̃(p₁) = F̃(p₂) = (1/8, 0, 0)
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,300,520,360,800,6500)}p₀
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,360,520,360,1100,6500)}p₁
+Dialogue: 2,0:01:08.03,0:01:23.92,Node,,0,0,0,,{\move(220,420,520,360,1400,6500)}p₂
+Dialogue: 2,0:01:08.03,0:01:23.92,Accent,,0,0,0,,{\pos(815,360)\fad(700,400)}(1/8, 0, 0)
 Dialogue: 0,0:01:23.92,0:01:43.42,Title,,0,0,0,,A reusable collision certificate
 Dialogue: 0,0:01:23.92,0:01:43.42,Body,,0,0,0,,{\pos(640,265)}DkMath.Verification.CollisionCertificate
 Dialogue: 0,0:01:23.92,0:01:43.42,Code,,0,0,0,,{\pos(640,415)}normalizedCollisionCertificateC_notInjective\NnormalizedCollisionCertificateC_noLeftInverse

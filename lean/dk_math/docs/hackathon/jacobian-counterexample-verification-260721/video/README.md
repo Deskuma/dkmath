@@ -2,7 +2,7 @@
 
 This directory contains the reproducible source package for the English
 VIDEO-001 demo. The final video is 1280 by 720, 30 fps, H.264 with AAC audio,
-burned-in English subtitles, and no music.
+optional English SRT subtitles, and no music.
 
 ## Build
 
@@ -31,4 +31,3 @@ installing it stopped at the missing host Cairo development dependency. The
 first-pass visual is therefore rendered reproducibly with FFmpeg and libass.
 `visual/manim.cfg` retains the required canvas settings for a future Manim
 upgrade without affecting this complete render.
-

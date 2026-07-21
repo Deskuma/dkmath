@@ -4,7 +4,7 @@
 
 A complete first-pass English demo video and reproducible production package
 now live under `video/`. The final public artifact is a 176.100-second 720p
-H.264/AAC video with native-speed Kokoro narration and burned-in subtitles.
+H.264/AAC video with native-speed Kokoro narration with an optional SRT sidecar.
 
 ## Deliverables
 

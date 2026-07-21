@@ -9,7 +9,6 @@ import re
 import sys
 from pathlib import Path
 
-
 CARDS = {
     "01": (
         "A candidate counterexample was reported.",
@@ -146,9 +145,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             f"Dialogue: 0,{start},{end},Body,,0,0,0,,"
             f"{{\\pos(640,265)}}{ass_text(body)}"
         )
+        code_y = 500 if cue == "05" else 415
         events.append(
             f"Dialogue: 0,{start},{end},Code,,0,0,0,,"
-            f"{{\\pos(640,415)}}{ass_text(code)}"
+            f"{{\\pos(640,{code_y})}}{ass_text(code)}"
         )
         if cue == "04":
             events.append(
@@ -161,16 +161,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             events.extend(
                 [
                     f"Dialogue: 2,{start},{end},Node,,0,0,0,,"
-                    f"{{\\move(220,310,520,405,800,{move_end})}}p₀",
+                    f"{{\\move(220,300,520,360,800,{move_end})}}p₀",
                     f"Dialogue: 2,{start},{end},Node,,0,0,0,,"
-                    f"{{\\move(220,405,520,405,1100,{move_end})}}p₁",
+                    f"{{\\move(220,360,520,360,1100,{move_end})}}p₁",
                     f"Dialogue: 2,{start},{end},Node,,0,0,0,,"
-                    f"{{\\move(220,500,520,405,1400,{move_end})}}p₂",
+                    f"{{\\move(220,420,520,360,1400,{move_end})}}p₂",
                     f"Dialogue: 2,{start},{end},Accent,,0,0,0,,"
-                    "{\\pos(815,405)\\fad(700,400)}(1/8, 0, 0)",
+                    "{\\pos(815,360)\\fad(700,400)}(1/8, 0, 0)",
                 ]
             )
-
     ass_path.write_text(header + "\n".join(events) + "\n", encoding="utf-8")
 
     srt_blocks = []
