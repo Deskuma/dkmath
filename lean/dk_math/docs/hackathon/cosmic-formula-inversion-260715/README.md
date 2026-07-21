@@ -436,6 +436,34 @@ This project does not claim:
 The exponent-five statement exposed by the current Lean API is specifically the
 positive-natural theorem encoded in `DkMath.FLT.Five.Main`.
 
+## Acknowledgments
+
+At the time the video was produced and edited, the project had reached only a local obstruction based on GN5.
+
+After the video was published and the hackathon submission was complete, I still had a little energy left. I therefore decided to continue the implementation as a second phase, to see how far the GN5 perspective could actually take us when put into practice.
+
+What emerged from that continuation was a Lean formalization of the exponent-five case of Fermat’s Last Theorem.
+
+Several formalizations of the exponent-five case already exist. In this project, however, we proceeded directly from GN5 without consulting those implementations, following the route that arose from our own investigation. I made the decisions about the mathematical direction and about what was appropriate to publish.
+
+During the implementation, we encountered a difficult question: how could the relevant unit be identified and handled? The AI also struggled with this problem for a considerable time.
+
+The breakthrough was inspired by a comment left by a reader on one of my articles on note.
+
+“A unit is always present. However, its form changes with the space in which it appears.”
+
+I had previously explained this idea using the metaphor of a 🎗️“red ribbon.” That explanation aligned with the problem before us with surprising precision and became the key to overcoming the obstacle.
+
+Without that comment, I do not think we would have passed this particular barrier.
+
+A brief and seemingly modest comment led to an idea that helped us overcome one of the most difficult stages of the implementation. I would therefore like to record my gratitude here. Thank you very much.
+
+Independent external review of the Lean implementation begins from this point.
+
+The AI worked extraordinarily hard. Now it is time for human readers to work equally hard to understand what has been constructed.
+
+When the formal understanding certified by Lean and the mathematical understanding of human readers finally meet, I believe this work will become a genuine step toward the truth.
+
 ---
 
 ## Authors and License
