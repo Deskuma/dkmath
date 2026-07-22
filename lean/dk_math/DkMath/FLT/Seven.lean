@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Seven.QuadraticBridge
 import DkMath.FLT.Seven.AxisDivisibility
 import DkMath.FLT.Seven.AxisPowerRoll
+import DkMath.FLT.Seven.AxisDepth
 
 #print "file: DkMath.FLT.Seven"
 
