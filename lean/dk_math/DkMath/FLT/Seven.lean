@@ -13,6 +13,9 @@ import DkMath.FLT.Seven.CounterexampleRouting
 import DkMath.FLT.Seven.QuadraticResidualPacket
 import DkMath.FLT.Seven.QuadraticCoprimeFactor
 import DkMath.FLT.Seven.QuadraticSeventhPowerNormalForm
+import DkMath.FLT.Seven.SeventhPowerCoordinates
+import DkMath.FLT.Seven.CoordinateNormalForm
+import DkMath.FLT.Seven.ModSevenSectors
 
 #print "file: DkMath.FLT.Seven"
 
