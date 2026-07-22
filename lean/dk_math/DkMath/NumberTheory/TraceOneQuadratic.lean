@@ -119,4 +119,130 @@ theorem traceOneNorm_one (a b : ℤ) :
     norm (⟨a, b⟩ : TraceOneInt 1) = a ^ 2 + a * b - b ^ 2 := by
   simp [norm]
 
+/-! ## The positive-definite `s = -2` specialization -/
+
+/-- The central quadratic scale axis at discriminant `-7`.  Its norm is `7`,
+so this is deliberately not described as a ring unit. -/
+def sevenAxis : TraceOneInt (-2) :=
+  2 * tau (-2) - 1
+
+theorem sevenAxis_eq : sevenAxis = ⟨-1, 2⟩ := by
+  rfl
+
+@[simp] theorem sevenAxis_fst : sevenAxis.fst = -1 := by
+  rw [sevenAxis_eq]
+
+@[simp] theorem sevenAxis_snd : sevenAxis.snd = 2 := by
+  rw [sevenAxis_eq]
+
+/-- The scale axis squares to the embedded integer `-7`. -/
+theorem sevenAxis_sq : sevenAxis ^ 2 = (-7 : TraceOneInt (-2)) := by
+  rw [sevenAxis_eq]
+  change (⟨-1, 2⟩ : TraceOneInt (-2)) ^ 2 = ⟨-7, 0⟩
+  ext <;> norm_num [pow_two]
+
+/-- Conjugation reverses the scale axis. -/
+theorem conj_sevenAxis : conj sevenAxis = -sevenAxis := by
+  rw [sevenAxis_eq]
+  ext <;> norm_num [conj]
+
+/-- The scale axis has norm `7`, rather than unit norm. -/
+theorem sevenAxis_norm : norm sevenAxis = 7 := by
+  rw [sevenAxis_eq]
+  norm_num [norm]
+
+/-- Coordinate formula for the `s = -2` trace-one norm. -/
+theorem traceOneNorm_neg_two (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = a ^ 2 + a * b + 2 * b ^ 2 := by
+  simp [norm]
+
+/-- Completed-square form of the discriminant `-7` norm. -/
+theorem four_mul_traceOneNorm_negTwo_eq_sum_sq (a b : ℤ) :
+    4 * norm (⟨a, b⟩ : TraceOneInt (-2)) =
+      (2 * a + b) ^ 2 + 7 * b ^ 2 := by
+  rw [traceOneNorm_neg_two]
+  ring
+
+/-- The positive-definite `s = -2` norm vanishes only at zero coordinates. -/
+theorem traceOneNorm_negTwo_eq_zero_iff (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = 0 ↔ a = 0 ∧ b = 0 := by
+  constructor
+  · intro h
+    have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+    have hb_sq : b ^ 2 = 0 := by
+      nlinarith [sq_nonneg (2 * a + b), sq_nonneg b]
+    have hb : b = 0 := by nlinarith [sq_nonneg b]
+    subst b
+    have ha : a = 0 := by
+      rw [traceOneNorm_neg_two] at h
+      nlinarith [sq_nonneg a]
+    exact ⟨ha, rfl⟩
+  · rintro ⟨rfl, rfl⟩
+    norm_num [norm]
+
+/-- Structured zero-fiber form for the `s = -2` norm. -/
+theorem norm_eq_zero_iff_of_negTwo (x : TraceOneInt (-2)) :
+    norm x = 0 ↔ x = 0 := by
+  rcases x with ⟨a, b⟩
+  rw [traceOneNorm_negTwo_eq_zero_iff]
+  constructor
+  · rintro ⟨rfl, rfl⟩
+    rfl
+  · intro h
+    have hf := congrArg TraceOneInt.fst h
+    have hs := congrArg TraceOneInt.snd h
+    simpa using And.intro hf hs
+
+/-- Every nonzero integral `s = -2` core has norm at least one. -/
+theorem one_le_traceOneNorm_negTwo_of_ne_zero
+    (x : TraceOneInt (-2)) (hx : x ≠ 0) :
+    1 ≤ norm x := by
+  rcases x with ⟨a, b⟩
+  have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+  have hnonneg : 0 ≤ norm (⟨a, b⟩ : TraceOneInt (-2)) := by
+    nlinarith [sq_nonneg (2 * a + b), sq_nonneg b]
+  have hne : norm (⟨a, b⟩ : TraceOneInt (-2)) ≠ 0 := by
+    intro h
+    apply hx
+    exact (norm_eq_zero_iff_of_negTwo ⟨a, b⟩).mp h
+  omega
+
+/-- The norm-one shell consists exactly of the two embedded signs. -/
+theorem traceOneNorm_negTwo_eq_one_iff (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = 1 ↔
+      (a = 1 ∧ b = 0) ∨ (a = -1 ∧ b = 0) := by
+  constructor
+  · intro h
+    have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+    have hb_lt : b ^ 2 < 1 := by
+      nlinarith [sq_nonneg (2 * a + b)]
+    have hb_sq : b ^ 2 = 0 := by
+      have := sq_nonneg b
+      omega
+    have hb : b = 0 := by nlinarith [sq_nonneg b]
+    subst b
+    rw [traceOneNorm_neg_two] at h
+    have hfactor : (a - 1) * (a + 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp hfactor with ha | ha
+    · left
+      constructor <;> omega
+    · right
+      constructor <;> omega
+  · rintro (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩) <;> norm_num [norm]
+
+/-- Structured norm-one classification. -/
+theorem norm_eq_one_iff_of_negTwo (x : TraceOneInt (-2)) :
+    norm x = 1 ↔ x = 1 ∨ x = -1 := by
+  rcases x with ⟨a, b⟩
+  rw [traceOneNorm_negTwo_eq_one_iff]
+  constructor
+  · rintro (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+    · exact Or.inl rfl
+    · exact Or.inr rfl
+  · rintro (h | h)
+    · left
+      exact ⟨congrArg TraceOneInt.fst h, congrArg TraceOneInt.snd h⟩
+    · right
+      exact ⟨congrArg TraceOneInt.fst h, congrArg TraceOneInt.snd h⟩
+
 end DkMath.NumberTheory.TraceOneQuadratic
