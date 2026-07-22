@@ -16,6 +16,8 @@ import DkMath.FLT.Seven.QuadraticSeventhPowerNormalForm
 import DkMath.FLT.Seven.SeventhPowerCoordinates
 import DkMath.FLT.Seven.CoordinateNormalForm
 import DkMath.FLT.Seven.ModSevenSectors
+import DkMath.FLT.Seven.AwaySecondCoordinateLoad
+import DkMath.FLT.Seven.AwayValuationTransfer
 
 #print "file: DkMath.FLT.Seven"
 
