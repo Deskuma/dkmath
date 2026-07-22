@@ -24,6 +24,9 @@ import DkMath.FLT.Seven.DescentClosureAudit
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
+import DkMath.FLT.Seven.RoutingLocalSystems
+import DkMath.FLT.Seven.RoutingLocalSolubility
+import DkMath.FLT.Seven.LocalObstructionAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -31,9 +34,11 @@ import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
 # FLT7 quadratic magic core
 
 This facade exposes the proved discriminant `-7` norm, seventh cyclotomic
-coordinate bridge, cubic second-coordinate split, and the resulting coprime
-routing and first-coordinate local-prime audit.  The strict away depth drop is
-conditional on an explicit
+coordinate bridge, cubic second-coordinate split, the resulting coprime
+routing, and the first-residue local-solubility audit.  Every actual non-seven
+local witness is classified into an explicitly soluble model family; this does
+not rule out stronger local or global obstructions.  The strict away depth drop
+is conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.
 -/
