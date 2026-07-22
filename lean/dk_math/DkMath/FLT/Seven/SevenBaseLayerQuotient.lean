@@ -117,4 +117,50 @@ theorem seventhPowerFst_sub_sevenRamifiedCore_eq_seven_mul_quotient
   simp [sevenRamifiedResidualQuotient]
   ring
 
+/-- The exact row-specific endpoint identity after the unique visible factor
+seven has been extracted from the selected endpoint. -/
+def AwaySevenBaseEndpointQuotientEquation
+    (row : EndpointRoutingRow) (carrierUnit y z : ℕ) : Prop :=
+  match row with
+  | .y =>
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 =
+        7 * ((carrierUnit : ℤ) * ((z : ℤ) - (y : ℤ)) * ((z : ℤ) + (y : ℤ)))
+  | .z =>
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 =
+        7 * ((carrierUnit : ℤ) * (z : ℤ) * ((z : ℤ) + (y : ℤ)))
+  | .sum =>
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 =
+        7 * ((carrierUnit : ℤ) * (z : ℤ) ^ 2)
+
+/-- The carrier quotient supplies the exact endpoint quotient identity in each
+of the three terminal pivot rows. -/
+theorem AwaySevenBaseCarrierQuotient.endpoint_quotient_eq {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (q : AwaySevenBaseCarrierQuotient p) :
+    AwaySevenBaseEndpointQuotientEquation p.row q.carrierUnit y z := by
+  cases hrow : p.row with
+  | y =>
+      have hcarrier : (y : ℤ) = 7 * (q.carrierUnit : ℤ) := by
+        have h := congrArg (fun n : ℕ => (n : ℤ)) q.carrier_eq
+        simpa [endpointRoutingFactorNat, hrow] using h
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      rw [cyclotomicSevenFst_sub_right_cube, hcarrier]
+      ring
+  | z =>
+      have hcarrier : (z : ℤ) = 7 * (q.carrierUnit : ℤ) := by
+        have h := congrArg (fun n : ℕ => (n : ℤ)) q.carrier_eq
+        simpa [endpointRoutingFactorNat, hrow] using h
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      rw [cyclotomicSevenFst_add_left_cube, hcarrier]
+      ring
+  | sum =>
+      have hcarrier : (y : ℤ) + (z : ℤ) = 7 * (q.carrierUnit : ℤ) := by
+        have h := congrArg (fun n : ℕ => (n : ℤ)) q.carrier_eq
+        simpa [endpointRoutingFactorNat, hrow, Nat.cast_add] using h
+      have hcarrier' : (z : ℤ) + (y : ℤ) = 7 * (q.carrierUnit : ℤ) := by
+        linear_combination hcarrier
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      rw [cyclotomicSevenFst_add_left_cube, hcarrier']
+      ring
+
 end DkMath.FLT.Seven
