@@ -21,6 +21,9 @@ import DkMath.FLT.Seven.AwayValuationTransfer
 import DkMath.FLT.Seven.CubicSecondCoordinateSplit
 import DkMath.FLT.Seven.CoprimeTripleRouting
 import DkMath.FLT.Seven.DescentClosureAudit
+import DkMath.FLT.Seven.FirstCoordinateRemainders
+import DkMath.FLT.Seven.RoutingSevenPivot
+import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -29,7 +32,8 @@ import DkMath.FLT.Seven.DescentClosureAudit
 
 This facade exposes the proved discriminant `-7` norm, seventh cyclotomic
 coordinate bridge, cubic second-coordinate split, and the resulting coprime
-routing audit.  The strict away depth drop is conditional on an explicit
+routing and first-coordinate local-prime audit.  The strict away depth drop is
+conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.
 -/

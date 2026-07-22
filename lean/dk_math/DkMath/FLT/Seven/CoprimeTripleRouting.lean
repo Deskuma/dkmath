@@ -38,6 +38,7 @@ structure AwayCubicProductPacket (x y z : ℕ) : Type where
   transfer : AwayValuationTransferPacket x y z
   endpointTriple : AwayEndpointCoprimeTriple x y z
   rootTriple : AwayRootCoprimeTriple x y z
+  normal_eq : transfer.normal = rootTriple.normal
   product_eq : y * z * (y + z) =
     7 * rootTriple.vPart * rootTriple.leftPart * rootTriple.rightPart
 
@@ -45,13 +46,14 @@ theorem nonempty_awayCubicProductPacket {x y z : ℕ}
     (p : AwayCoordinateNormalForm x y z) :
     Nonempty (AwayCubicProductPacket x y z) := by
   rcases nonempty_awayValuationTransferPacket p with ⟨transfer⟩
-  let root := awayRootCoprimeTriple p
+  let root := awayRootCoprimeTriple transfer.normal
   exact ⟨{
     transfer := transfer
-    endpointTriple := awayEndpointCoprimeTriple p
+    endpointTriple := awayEndpointCoprimeTriple transfer.normal
     rootTriple := root
+    normal_eq := rfl
     product_eq := by
-      simpa [root] using away_endpoint_product_cubic_load_eq p }⟩
+      simpa [root] using away_endpoint_product_cubic_load_eq transfer.normal }⟩
 
 structure CoprimeTripleRouting
     (a₁ a₂ a₃ b₁ b₂ b₃ : ℕ) : Type where
