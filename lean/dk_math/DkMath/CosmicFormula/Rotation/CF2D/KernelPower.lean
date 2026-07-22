@@ -102,6 +102,33 @@ theorem kernel_nsmul (F : KernelFamily T R) (n : ℕ) (t : T) :
 
 end KernelFamily
 
+/--
+A unit kernel has exact order `k` when its `k`th power is neutral and no
+smaller positive power is neutral.
+
+The positivity and minimality clauses are kept explicit so a mere return count
+cannot be mistaken for the first return count.
+-/
+def ExactKernelOrder {R : Type u} [CommRing R]
+    (r : UnitKernel R) (k : ℕ) : Prop :=
+  r ^ k = 1 ∧
+    ∀ m : ℕ, 0 < m → m < k → r ^ m ≠ 1
+
+/--
+For a positive count, the explicit CF2D exact-order predicate is equivalent to
+Mathlib's standard element order.
+-/
+theorem exactKernelOrder_iff_orderOf_eq {R : Type u} [CommRing R]
+    {r : UnitKernel R} {k : ℕ} (hk : 0 < k) :
+    ExactKernelOrder r k ↔ orderOf r = k := by
+  constructor
+  · intro h
+    exact (orderOf_eq_iff hk).2
+      ⟨h.1, fun m hmk hm ↦ h.2 m hm hmk⟩
+  · intro h
+    have h' := (orderOf_eq_iff hk).1 h
+    exact ⟨h'.1, fun m hm hmk ↦ h'.2 m hmk hm⟩
+
 section InterfaceChecks
 
 #check (1 : UnitKernel ℝ)
@@ -109,6 +136,8 @@ section InterfaceChecks
 #check fun r : UnitKernel ℝ => orderOf r
 #check KernelFamily.kernel_nsmul
 #check UnitKernel.pow_act
+#check ExactKernelOrder
+#check exactKernelOrder_iff_orderOf_eq
 
 end InterfaceChecks
 

@@ -160,6 +160,65 @@ theorem regularKernel_pow_eq_one {k : ℕ} (hk : 0 < k) :
     regularPhaseStep_nsmul_eq_one hk,
     normalizedRealKernelFamily_kernel_one]
 
+/--
+No positive power below `k` of the positive `k`-division kernel is neutral.
+
+The proof reads the core coordinate after transporting the power through
+`KernelFamily.kernel_nsmul`.  Its real angle lies strictly between `0` and
+`2 * Real.pi`, where `Real.cos x = 1` would force `x = 0`.
+-/
+theorem regularKernel_pow_ne_one_of_pos_of_lt {k m : ℕ}
+    (hk : 0 < k) (hm : 0 < m) (hmk : m < k) :
+    regularKernel k ^ m ≠ 1 := by
+  intro hpow
+  have hkernel :
+      normalizedRealKernelFamily.kernel (m • regularPhaseStep k) = 1 := by
+    rw [normalizedRealKernelFamily.kernel_nsmul]
+    exact hpow
+  have hcos :
+      Real.cos (normalizedPhaseAngle (m • regularPhaseStep k)) = 1 := by
+    have hcore := congrArg
+      (fun r : UnitKernel ℝ ↦ ((r : Vec ℝ).core)) hkernel
+    simpa [normalizedRealKernelFamily, UnitKernel.one, Vec.one] using hcore
+  have hkR : (0 : ℝ) < (k : ℝ) := by exact_mod_cast hk
+  have hmR : (0 : ℝ) < (m : ℝ) := by exact_mod_cast hm
+  have hmkR : (m : ℝ) < (k : ℝ) := by exact_mod_cast hmk
+  have hphase_pos : 0 < m • regularPhaseStep k := by
+    simpa [regularPhaseStep,
+      DkMath.Analysis.DkNNRealQ.normalizedCycleStep, nsmul_eq_mul,
+      div_eq_mul_inv] using (div_pos hmR hkR)
+  have hphase_lt_one : m • regularPhaseStep k < (1 : ℝ) := by
+    simpa [regularPhaseStep,
+      DkMath.Analysis.DkNNRealQ.normalizedCycleStep, nsmul_eq_mul,
+      div_eq_mul_inv] using (div_lt_one hkR).2 hmkR
+  have hangle_pos :
+      0 < normalizedPhaseAngle (m • regularPhaseStep k) := by
+    exact mul_pos hphase_pos Real.two_pi_pos
+  have hangle_lt :
+      normalizedPhaseAngle (m • regularPhaseStep k) < 2 * Real.pi := by
+    calc
+      normalizedPhaseAngle (m • regularPhaseStep k)
+          < 1 * (2 * Real.pi) := by
+            exact mul_lt_mul_of_pos_right hphase_lt_one Real.two_pi_pos
+      _ = 2 * Real.pi := one_mul _
+  have hangle_neg_lt :
+      -(2 * Real.pi) < normalizedPhaseAngle (m • regularPhaseStep k) :=
+    (neg_lt_zero.mpr Real.two_pi_pos).trans hangle_pos
+  have hangle_zero :=
+    (Real.cos_eq_one_iff_of_lt_of_lt hangle_neg_lt hangle_lt).1 hcos
+  exact (ne_of_gt hangle_pos) hangle_zero
+
+/-- The positive normalized `k`-division kernel has exact kernel order `k`. -/
+theorem regularKernel_exactOrder {k : ℕ} (hk : 0 < k) :
+    ExactKernelOrder (regularKernel k) k := by
+  exact ⟨regularKernel_pow_eq_one hk,
+    fun m hm hmk ↦ regularKernel_pow_ne_one_of_pos_of_lt hk hm hmk⟩
+
+/-- Standard group order of the positive normalized `k`-division kernel. -/
+theorem orderOf_regularKernel {k : ℕ} (hk : 0 < k) :
+    orderOf (regularKernel k) = k :=
+  (exactKernelOrder_iff_orderOf_eq hk).1 (regularKernel_exactOrder hk)
+
 /-- Every real two-component state returns after `k` regular-kernel actions. -/
 theorem regularKernel_iterate_act_eq_id {k : ℕ} (hk : 0 < k) :
     (UnitKernel.act (regularKernel k))^[k] = id := by
@@ -191,6 +250,8 @@ section InterfaceChecks
 #check regularKernel
 #check regularPhaseStep_nsmul_eq_one
 #check regularKernel_pow_eq_one
+#check regularKernel_exactOrder
+#check orderOf_regularKernel
 #check regularKernel_iterate_act_eq_id
 #check regularKernel_iterate_actLevel_eq_id
 
