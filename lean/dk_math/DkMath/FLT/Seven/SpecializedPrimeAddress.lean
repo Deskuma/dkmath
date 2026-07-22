@@ -182,7 +182,16 @@ theorem AwayRoutingPrimeAddress.not_dvd_other_row {x y z : ℕ}
   intro h
   exact hne (a.unique row' a.column h).1
 
-private theorem routingCell_ne_zero {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+theorem AwayRoutingPrimeAddress.not_dvd_other_cell {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} (a : AwayRoutingPrimeAddress r)
+    {row' : EndpointRoutingRow} {column' : RootRoutingColumn}
+    (hne : row' ≠ a.row ∨ column' ≠ a.column) :
+    ¬ a.q ∣ routingCell r.routing row' column' := by
+  intro h
+  rcases a.unique row' column' h with ⟨hr, hc⟩
+  exact hne.elim (fun hn => hn hr) (fun hn => hn hc)
+
+theorem routingCell_ne_zero {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     (row : EndpointRoutingRow) (column : RootRoutingColumn) :
     routingCell r.routing row column ≠ 0 := by
   intro h
