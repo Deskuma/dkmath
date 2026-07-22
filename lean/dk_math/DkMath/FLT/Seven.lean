@@ -27,6 +27,7 @@ import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
 import DkMath.FLT.Seven.RoutingLocalSystems
 import DkMath.FLT.Seven.RoutingLocalSolubility
 import DkMath.FLT.Seven.LocalObstructionAudit
+import DkMath.FLT.Seven.SpecializedPrimeAddress
 
 #print "file: DkMath.FLT.Seven"
 
@@ -37,8 +38,10 @@ This facade exposes the proved discriminant `-7` norm, seventh cyclotomic
 coordinate bridge, cubic second-coordinate split, the resulting coprime
 routing, and the first-residue local-solubility audit.  Every actual non-seven
 local witness is classified into an explicitly soluble model family; this does
-not rule out stronger local or global obstructions.  The strict away depth drop
-is conditional on an explicit
+not rule out stronger local or global obstructions.  On actual away packets,
+outer factor coprimality also gives each prime a unique cell address and
+isolates its exact row and column depth.  The strict away depth drop is
+conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.
 -/
