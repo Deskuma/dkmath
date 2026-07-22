@@ -10,6 +10,7 @@ import DkMath.FLT.Seven.AxisPowerRoll
 import DkMath.FLT.Seven.AxisDepth
 import DkMath.FLT.Seven.PrimitiveCyclotomicDepth
 import DkMath.FLT.Seven.CounterexampleRouting
+import DkMath.FLT.Seven.QuadraticResidualPacket
 
 #print "file: DkMath.FLT.Seven"
 
