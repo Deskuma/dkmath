@@ -8,6 +8,7 @@ import DkMath.FLT.Seven.QuadraticBridge
 import DkMath.FLT.Seven.AxisDivisibility
 import DkMath.FLT.Seven.AxisPowerRoll
 import DkMath.FLT.Seven.AxisDepth
+import DkMath.FLT.Seven.PrimitiveCyclotomicDepth
 
 #print "file: DkMath.FLT.Seven"
 
