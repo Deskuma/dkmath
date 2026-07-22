@@ -102,4 +102,19 @@ theorem nonempty_awaySevenBaseCarrierQuotient {x y z : ℕ}
     carrierUnit_pos := carrierUnit_pos
     seven_not_dvd_carrierUnit := seven_not_dvd_carrierUnit }⟩
 
+/-- The integer quotient left after extracting the single visible factor seven
+from the ramified first-coordinate residual. -/
+def sevenRamifiedResidualQuotient (u v : ℤ) : ℤ :=
+  -2 * v ^ 2 * (u + v) * sevenRamifiedResidualPolynomial u v
+
+/-- Exact first-order residual factorization.  The factor seven is extracted in
+`ℤ`, before any reduction modulo a seven power. -/
+theorem seventhPowerFst_sub_sevenRamifiedCore_eq_seven_mul_quotient
+    (u v : ℤ) :
+    seventhPowerFst u v - (u ^ 7 + 4 * v ^ 7) =
+      7 * sevenRamifiedResidualQuotient u v := by
+  rw [seventhPowerFst_eq_sevenRamifiedCore_add_residual]
+  simp [sevenRamifiedResidualQuotient]
+  ring
+
 end DkMath.FLT.Seven
