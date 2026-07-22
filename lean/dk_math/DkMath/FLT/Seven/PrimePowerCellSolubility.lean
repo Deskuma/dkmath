@@ -10,6 +10,8 @@ import DkMath.FLT.Seven.PrimePowerCellSystems
 
 namespace DkMath.FLT.Seven
 
+set_option linter.unnecessarySeqFocus false
+
 private theorem seven_not_dvd_of_prime_ne {q : ℕ} (hq : Nat.Prime q)
     (hq7 : q ≠ 7) : ¬ q ∣ 7 := by
   intro h

@@ -28,6 +28,9 @@ import DkMath.FLT.Seven.RoutingLocalSystems
 import DkMath.FLT.Seven.RoutingLocalSolubility
 import DkMath.FLT.Seven.LocalObstructionAudit
 import DkMath.FLT.Seven.SpecializedPrimeAddress
+import DkMath.FLT.Seven.PrimePowerCellSystems
+import DkMath.FLT.Seven.PrimePowerCellSolubility
+import DkMath.FLT.Seven.PrimePowerCellAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -40,7 +43,11 @@ routing, and the first-residue local-solubility audit.  Every actual non-seven
 local witness is classified into an explicitly soluble model family; this does
 not rule out stronger local or global obstructions.  On actual away packets,
 outer factor coprimality also gives each prime a unique cell address and
-isolates its exact row and column depth.  The strict away depth drop is
+isolates its exact row and column depth.  Every such address is classified at
+its complete non-seven prime-power cell depth using unit-based
+local systems over `ZMod (q^e)` and nine explicit soluble families.  This
+prime-power classification is still local to one specialized address and does
+not provide simultaneous signed reconstruction.  The strict away depth drop is
 conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.
