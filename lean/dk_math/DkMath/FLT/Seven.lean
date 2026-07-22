@@ -11,6 +11,7 @@ import DkMath.FLT.Seven.AxisDepth
 import DkMath.FLT.Seven.PrimitiveCyclotomicDepth
 import DkMath.FLT.Seven.CounterexampleRouting
 import DkMath.FLT.Seven.QuadraticResidualPacket
+import DkMath.FLT.Seven.QuadraticCoprimeFactor
 
 #print "file: DkMath.FLT.Seven"
 
