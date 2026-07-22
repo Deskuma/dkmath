@@ -126,4 +126,11 @@ structure AwayRoutingPrimePowerSolution (M : ℕ) (row : EndpointRoutingRow)
   first_coordinate_equation :
     AwayFirstCoordinatePrimePowerEquation M row column u v y z
 
+@[ext] theorem AwayRoutingPrimePowerSolution.ext {M : ℕ} {row : EndpointRoutingRow}
+    {column : RootRoutingColumn} {a b : AwayRoutingPrimePowerSolution M row column}
+    (hu : a.u = b.u) (hv : a.v = b.v) (hy : a.y = b.y) (hz : a.z = b.z) : a = b := by
+  cases a
+  cases b
+  simp_all
+
 end DkMath.FLT.Seven

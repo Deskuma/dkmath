@@ -31,6 +31,8 @@ import DkMath.FLT.Seven.SpecializedPrimeAddress
 import DkMath.FLT.Seven.PrimePowerCellSystems
 import DkMath.FLT.Seven.PrimePowerCellSolubility
 import DkMath.FLT.Seven.PrimePowerCellAudit
+import DkMath.FLT.Seven.PrimePowerUnitOrbit
+import DkMath.FLT.Seven.PrimePowerOrbitAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -47,7 +49,10 @@ isolates its exact row and column depth.  Every such address is classified at
 its complete non-seven prime-power cell depth using unit-based
 local systems over `ZMod (q^e)` and nine explicit soluble families.  This
 prime-power classification is still local to one specialized address and does
-not provide simultaneous signed reconstruction.  The strict away depth drop is
+not provide simultaneous signed reconstruction.  Moreover, every actual
+full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
+explicit model.  Independently obtained local scales are not claimed to glue
+globally.  The strict away depth drop is
 conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.

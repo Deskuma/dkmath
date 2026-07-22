@@ -56,26 +56,26 @@ theorem rightCorrection_isUnit_of_rightCubic_eq_zero_primePower {q e : ℕ}
       ring
     _ = _ := by rw [hQ]; ring
 
-private theorem left_scaled_root_pp {M : ℕ} (t C : ZMod M)
+theorem left_scaled_root_pp {M : ℕ} (t C : ZMod M)
     (hroot : leftCubicNormalizedZMod t = 0) :
     leftCubicZMod (t * C ^ 2) (C ^ 2) = 0 := by
   rw [show leftCubicZMod (t * C ^ 2) (C ^ 2) =
       C ^ 6 * leftCubicNormalizedZMod t by
     simp [leftCubicZMod, leftCubicNormalizedZMod]; ring, hroot, mul_zero]
 
-private theorem right_scaled_root_pp {M : ℕ} (t C : ZMod M)
+theorem right_scaled_root_pp {M : ℕ} (t C : ZMod M)
     (hroot : rightCubicNormalizedZMod t = 0) :
     rightCubicZMod (t * C ^ 2) (C ^ 2) = 0 := by
   rw [show rightCubicZMod (t * C ^ 2) (C ^ 2) =
       C ^ 6 * rightCubicNormalizedZMod t by
     simp [rightCubicZMod, rightCubicNormalizedZMod]; ring, hroot, mul_zero]
 
-private theorem left_scaled_correction_pp {M : ℕ} (t C : ZMod M) :
+theorem left_scaled_correction_pp {M : ℕ} (t C : ZMod M) :
     leftCorrectionZMod (t * C ^ 2) (C ^ 2) =
       C ^ 4 * leftCorrectionNormalizedZMod t := by
   simp [leftCorrectionZMod, leftCorrectionNormalizedZMod]; ring
 
-private theorem right_scaled_correction_pp {M : ℕ} (t C : ZMod M) :
+theorem right_scaled_correction_pp {M : ℕ} (t C : ZMod M) :
     rightCorrectionZMod (t * C ^ 2) (C ^ 2) =
       C ^ 4 * rightCorrectionNormalizedZMod t := by
   simp [rightCorrectionZMod, rightCorrectionNormalizedZMod]; ring

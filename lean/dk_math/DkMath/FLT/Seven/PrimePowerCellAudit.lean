@@ -217,7 +217,7 @@ def AwayNonSevenPrimeDepthPacket.toPrimePowerSolution {x y z : ℕ}
   root_equation := root_equation_actual p
   first_coordinate_equation := first_coordinate_equation_actual p
 
-private theorem left_normalized_root_of_primePowerSolution {M : ℕ}
+theorem left_normalized_root_of_primePowerSolution {M : ℕ}
     {row : EndpointRoutingRow}
     (s : AwayRoutingPrimePowerSolution M row .leftCubic) :
     leftCubicNormalizedZMod (s.u * s.v⁻¹) = 0 := by
@@ -233,7 +233,7 @@ private theorem left_normalized_root_of_primePowerSolution {M : ℕ}
   apply (s.root_nondegenerate.pow 3).mul_left_cancel
   simpa using hid.symm
 
-private theorem right_normalized_root_of_primePowerSolution {M : ℕ}
+theorem right_normalized_root_of_primePowerSolution {M : ℕ}
     {row : EndpointRoutingRow}
     (s : AwayRoutingPrimePowerSolution M row .rightCubic) :
     rightCubicNormalizedZMod (s.u * s.v⁻¹) = 0 := by
