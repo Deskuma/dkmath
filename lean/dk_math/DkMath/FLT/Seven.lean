@@ -33,6 +33,7 @@ import DkMath.FLT.Seven.PrimePowerCellSolubility
 import DkMath.FLT.Seven.PrimePowerCellAudit
 import DkMath.FLT.Seven.PrimePowerUnitOrbit
 import DkMath.FLT.Seven.PrimePowerOrbitAudit
+import DkMath.FLT.Seven.SevenPivotDescentAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -52,7 +53,10 @@ prime-power classification is still local to one specialized address and does
 not provide simultaneous signed reconstruction.  Moreover, every actual
 full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
 explicit model.  Independently obtained local scales are not claimed to glue
-globally.  The strict away depth drop is
+globally.  The unique seven-primary cell is reduced at its complete `7^k`
+depth, including its nonzero top ramified kernel and base/lifted split.  The
+terminal arithmetic exclusion and lifted signed reconstruction remain explicit
+open obligations.  The strict away depth drop is
 conditional on an explicit
 `AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
 claimed.
