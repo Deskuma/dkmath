@@ -123,4 +123,45 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.selected_endpoint_not_dvd_cubic_
     ⟨packet.carrier.carrierUnit, packet.carrier.carrier_eq⟩
   exact packet.seven_not_dvd_cubic_root_load (hseven.trans hselected)
 
+/-- The terminal row completely separates endpoint divisibility of the cubic
+root load: the indicated unselected endpoint divides the load, while the
+seven-bearing selected endpoint does not. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_terminal_load_routing_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (p.row = .y ∧
+      z ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart ∧
+      ¬ y ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart) ∨
+    (p.row = .z ∧
+      y ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart ∧
+      ¬ z ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart) ∨
+    (p.row = .sum ∧
+      y ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart ∧
+      ¬ y + z ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart) := by
+  rcases packet.row_resolved_terminal_load_divisibility with hy | hz | hs
+  · left
+    refine ⟨hy.1, ?_, ?_⟩
+    · exact_mod_cast hy.2
+    · have hselected := packet.core.selected_endpoint_not_dvd_cubic_root_load
+      simpa [endpointRoutingFactorNat, hy.1] using hselected
+  · right
+    left
+    refine ⟨hz.1, ?_, ?_⟩
+    · exact_mod_cast hz.2
+    · have hselected := packet.core.selected_endpoint_not_dvd_cubic_root_load
+      simpa [endpointRoutingFactorNat, hz.1] using hselected
+  · right
+    right
+    refine ⟨hs.1, ?_, ?_⟩
+    · exact_mod_cast hs.2
+    · have hselected := packet.core.selected_endpoint_not_dvd_cubic_root_load
+      simpa [endpointRoutingFactorNat, hs.1] using hselected
+
 end DkMath.FLT.Seven
