@@ -103,19 +103,19 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_normal_form
   cases hrow : p.row with
   | y =>
       left
-      refine ⟨hrow, ?_, ?_⟩
+      refine ⟨rfl, ?_, ?_⟩
       · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
       · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
   | z =>
       right
       left
-      refine ⟨hrow, ?_, ?_⟩
+      refine ⟨rfl, ?_, ?_⟩
       · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
       · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
   | sum =>
       right
       right
-      refine ⟨hrow, ?_, ?_⟩
+      refine ⟨rfl, ?_, ?_⟩
       · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
       · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
 
