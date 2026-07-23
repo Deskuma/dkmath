@@ -13,8 +13,7 @@ namespace DkMath.FLT.Seven
 /-- After extracting the unique visible factor seven from the selected endpoint,
 the remaining carrier unit is still coprime to the row-sensitive unselected
 endpoint. -/
-theorem AwaySevenBaseTerminalQuotientCorePacket
-    .unselected_endpoint_coprime_carrierUnit
+theorem AwaySevenBaseTerminalQuotientCorePacket.unselected_endpoint_coprime_carrierUnit
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalQuotientCorePacket source r p) :
@@ -37,7 +36,6 @@ theorem AwaySevenBaseTerminalQuotientCorePacket
     | sum =>
         rcases hcopYZ with ⟨a, b, hab⟩
         refine ⟨a - b, b, ?_⟩
-        push_cast
         calc
           (a - b) * (y : ℤ) + b * ((y : ℤ) + (z : ℤ)) =
               a * (y : ℤ) + b * (z : ℤ) := by ring
