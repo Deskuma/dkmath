@@ -273,4 +273,17 @@ theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_eq_rowSign
   rw [packet.rootLinearUnit_eq_rowSign_mul_cube]
   simp
 
+/-- Every row sign is a two-torsion unit. -/
+theorem awaySevenBaseRowSignUnit_sq (row : EndpointRoutingRow) :
+    awaySevenBaseRowSignUnit row ^ 2 = 1 := by
+  cases row <;> simp [awaySevenBaseRowSignUnit]
+
+/-- The normalized terminal root-linear unit is always two-torsion. -/
+theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_sq_eq_one
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (packet : AwaySevenBaseUnitEquationPacket p) :
+    (packet.rootLinearUnit * (packet.endpointUnit ^ 3)⁻¹) ^ 2 = 1 := by
+  rw [packet.normalized_rootLinearUnit_eq_rowSign]
+  exact awaySevenBaseRowSignUnit_sq p.row
+
 end DkMath.FLT.Seven
