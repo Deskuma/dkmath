@@ -84,7 +84,8 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
     push_cast at hcast
     rw [show (7 : ZMod 7) = 0 by decide] at hcast
     simp only [zero_mul] at hcast
-    exact (mul_eq_zero.mp hcast).resolve_left hz
+    have hzero := (mul_eq_zero.mp hcast).resolve_left hz
+    simpa using hzero
   · right
     refine ⟨hneg.1, ?_⟩
     have hrows :=
@@ -98,6 +99,7 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
     push_cast at hcast
     rw [show (7 : ZMod 7) = 0 by decide] at hcast
     simp only [zero_mul] at hcast
-    exact (mul_eq_zero.mp hcast).resolve_left hy
+    have hzero := (mul_eq_zero.mp hcast).resolve_left hy
+    simpa using hzero
 
 end DkMath.FLT.Seven
