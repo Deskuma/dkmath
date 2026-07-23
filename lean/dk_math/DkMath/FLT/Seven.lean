@@ -37,6 +37,7 @@ import DkMath.FLT.Seven.SevenPivotDescentAudit
 import DkMath.FLT.Seven.SevenBaseLayerQuotient
 import DkMath.FLT.Seven.SevenBaseFirstOrderModSeven
 import DkMath.FLT.Seven.SevenBaseFirstOrderLinearization
+import DkMath.FLT.Seven.SevenBaseUnitSectorClassification
 import DkMath.FLT.Seven.SevenBaseLoadQuotient
 import DkMath.FLT.Seven.SevenBaseTerminalPacket
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
