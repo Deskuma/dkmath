@@ -181,4 +181,56 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.exists_terminal_residual_quotient
   rcases packet.seven_dvd_terminal_residual with ⟨q, hq⟩
   exact ⟨q, hq⟩
 
+/-- After cancelling the explicit factor seven from the weighted bridge, the
+residual quotient satisfies a row-resolved exact equation with the cubic load. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_terminal_residual_quotient_bridge
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    ∃ q : ℤ,
+      awaySevenBaseTerminalResidualInt p.row y z = 7 * q ∧
+      ((p.row = .y ∧
+          (z : ℤ) * q = ((z : ℤ) - (y : ℤ)) *
+            ((r.cubic.rootTriple.vPart : ℤ) *
+              (r.cubic.rootTriple.leftPart : ℤ) *
+              (r.cubic.rootTriple.rightPart : ℤ))) ∨
+        (p.row = .z ∧
+          (y : ℤ) * q = (z : ℤ) *
+            ((r.cubic.rootTriple.vPart : ℤ) *
+              (r.cubic.rootTriple.leftPart : ℤ) *
+              (r.cubic.rootTriple.rightPart : ℤ))) ∨
+        (p.row = .sum ∧
+          (y : ℤ) * q = (z : ℤ) *
+            ((r.cubic.rootTriple.vPart : ℤ) *
+              (r.cubic.rootTriple.leftPart : ℤ) *
+              (r.cubic.rootTriple.rightPart : ℤ)))) := by
+  rcases packet.exists_terminal_residual_quotient with ⟨q, hq⟩
+  rcases packet.endpoint_load_bridge_dichotomy with hpos | hneg
+  · have hrow :=
+      packet.unitSector.normalized_rootLinearUnit_eq_one_iff_row_y.mp hpos.1
+    have hres :
+        cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 = 7 * q := by
+      simpa [awaySevenBaseTerminalResidualInt, hrow] using hq
+    have hbridge := hpos.2
+    rw [hres] at hbridge
+    refine ⟨q, hq, Or.inl ⟨hrow, ?_⟩⟩
+    nlinarith [hbridge]
+  · have hrows :=
+      packet.unitSector.normalized_rootLinearUnit_eq_neg_one_iff_row_z_or_sum.mp hneg.1
+    rcases hrows with hrow | hrow
+    · have hres :
+          cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 = 7 * q := by
+        simpa [awaySevenBaseTerminalResidualInt, hrow] using hq
+      have hbridge := hneg.2
+      rw [hres] at hbridge
+      refine ⟨q, hq, Or.inr (Or.inl ⟨hrow, ?_⟩)⟩
+      nlinarith [hbridge]
+    · have hres :
+          cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 = 7 * q := by
+        simpa [awaySevenBaseTerminalResidualInt, hrow] using hq
+      have hbridge := hneg.2
+      rw [hres] at hbridge
+      refine ⟨q, hq, Or.inr (Or.inr ⟨hrow, ?_⟩)⟩
+      nlinarith [hbridge]
+
 end DkMath.FLT.Seven
