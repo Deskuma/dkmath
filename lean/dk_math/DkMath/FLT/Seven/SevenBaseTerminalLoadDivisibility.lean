@@ -87,7 +87,7 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.seven_not_dvd_cubic_root_load
   have hvDepth : padicValNat 7 r.cubic.rootTriple.vPart = 0 := by
     calc
       padicValNat 7 r.cubic.rootTriple.vPart = p.exponent - 1 := p.root_depth_eq
-      _ = 0 := by omega
+      _ = 0 := by simp [packet.depth_eq_one]
   have hvNot : ¬ 7 ∣ r.cubic.rootTriple.vPart := by
     intro hv
     have hvne : r.cubic.rootTriple.vPart ≠ 0 :=
