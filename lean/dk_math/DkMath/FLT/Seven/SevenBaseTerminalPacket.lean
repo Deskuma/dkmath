@@ -143,4 +143,22 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.negative_sector_load_normal_form
   · exact Or.inl ⟨hz.1, hz.2.2⟩
   · exact Or.inr ⟨hs.1, hs.2.2⟩
 
+/-- In the positive unit sector, the terminal row is exactly `Y`, with its
+corresponding cubic-load quotient after cancelling the unique factor seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.positive_sector_load_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    (hpos : packet.unitSector.rootLinearUnit *
+      (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1) :
+    p.row = .y ∧
+      packet.core.carrier.carrierUnit * z * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart := by
+  have hrow :=
+    packet.unitSector.normalized_rootLinearUnit_eq_one_iff_row_y.mp hpos
+  exact ⟨hrow, by
+    simpa [awaySevenBaseLoadQuotientValue, hrow] using
+      packet.core.load_quotient_eq⟩
+
 end DkMath.FLT.Seven
