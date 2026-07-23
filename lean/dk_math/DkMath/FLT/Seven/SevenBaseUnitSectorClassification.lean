@@ -32,8 +32,7 @@ theorem awaySevenBaseRowSignUnit_eq_neg_one_iff (row : EndpointRoutingRow) :
 
 /-- The normalized terminal unit equals negative one exactly in the two
 non-`Y` rows. -/
-theorem AwaySevenBaseUnitEquationPacket
-    .normalized_rootLinearUnit_eq_neg_one_iff_row_z_or_sum
+theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_eq_neg_one_iff_row_z_or_sum
     {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     {p : AwaySevenPivotDepthPacket r} (packet : AwaySevenBaseUnitEquationPacket p) :
     packet.rootLinearUnit * (packet.endpointUnit ^ 3)⁻¹ = -1 ↔
