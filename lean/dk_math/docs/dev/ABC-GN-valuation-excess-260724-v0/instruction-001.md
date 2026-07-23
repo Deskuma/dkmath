@@ -22,7 +22,26 @@ feature/ABC-GN-valuation-excess-260724-v0
 
 ただし、ABC 予想そのものを証明したという主張へ進まない。
 
-## 2. 最初の調査
+## 2. 並行作業の認識
+
+現在、同じ `develop` から派生した次の FLT7 branch が並行して進行している。
+
+```text
+wip/FLT7-magic-core-260722-WiseWolf
+```
+
+今回の ABC–GN checkpoint はこれと独立に進める。
+
+- `DkMath/FLT/Seven/**` と FLT7 専用 docs を変更しない。
+- FLT7 branch を merge / cherry-pick / rebase しない。
+- FLT7 側の未統合 theorem を前提にしない。
+- 共有 aggregator を触る場合は最小変更とし、変更理由を report に書く。
+- 共有ファイルに予期しない差分が見える場合は、それを消したり整理したりせず停止し、report に記録する。
+- ABC–GN の theorem が一般数論層に属する場合でも、FLT7 専用実装への依存は作らない。
+
+対象領域を守る限り、両 branch は独立に開発できる。競合解決を今回の仕事へ含めない。
+
+## 3. 最初の調査
 
 次を読み、実在する定義・定理・import 方向を確認する。
 
@@ -50,7 +69,7 @@ padicValNat の積・冪・非零条件 API
 
 既存 theorem がある場合は再証明しない。
 
-## 3. 第一 checkpoint の数学目標
+## 4. 第一 checkpoint の数学目標
 
 ABC triple `a + b = c`, `Nat.Coprime a b` と指数 `n` から、次の加法分解を ABC 側で再利用可能な形へ固定する。
 
@@ -76,7 +95,7 @@ gcd(a * GN n a b, b^n) = 1
 
 これは `gcd(a,b)=1` と、`GN n a b mod b` の既存評価から導ける可能性がある。current API を調査し、最短の証明を選ぶこと。
 
-## 4. 推奨する実装面
+## 5. 推奨する実装面
 
 第一候補:
 
@@ -92,7 +111,6 @@ API の候補は次だが、既存 `Triple` の field 名・constructor・namesp
 namespace DkMath.ABC
 
 noncomputable def Triple.gnPowerLift ... : Triple := ...
-
 theorem Triple.gnPowerLift_left_eq ...
 theorem Triple.gnPowerLift_right_eq ...
 theorem Triple.gnPowerLift_terminal_eq ...
@@ -112,7 +130,7 @@ ABC triple
   -> coprime certificate
 ```
 
-## 5. 余力がある場合のみ
+## 6. 余力がある場合のみ
 
 第一 checkpoint がきれいに閉じた場合だけ、ABC 座標で次の valuation 分解を薄い wrapper として追加してよい。
 
@@ -126,7 +144,7 @@ primitive prime の場合に境界側 valuation が消える既存 theorem が�
 
 この余力項が import や非零条件で膨らむ場合は、実装せず調査結果だけ `report-001.md` に残す。
 
-## 6. 禁止範囲
+## 7. 禁止範囲
 
 この checkpoint では次を行わない。
 
@@ -143,7 +161,7 @@ FLT module への接続
 
 新しい `axiom`、`sorry`、`native_decide` を追加しない。
 
-## 7. Public import
+## 8. Public import
 
 新 module を追加した場合、どの aggregator から公開すべきかを調査する。
 
@@ -151,7 +169,7 @@ FLT module への接続
 
 公開しない判断をした場合は、その理由を report に書く。
 
-## 8. 検証
+## 9. 検証
 
 最低限、変更対象を含む適切な `lake build` を実行する。
 
@@ -159,7 +177,7 @@ FLT module への接続
 
 既知の unrelated warning は修正対象にしない。
 
-## 9. 報告
+## 10. 報告
 
 次を作成する。
 
@@ -178,9 +196,10 @@ lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-001.md
 6. build 結果
 7. 次の最小 checkpoint 候補
 8. commit SHA
+9. 並行 FLT7 branch と共有領域を触れたか
 ```
 
-## 10. 終了条件
+## 11. 終了条件
 
 次のいずれかで停止する。
 
