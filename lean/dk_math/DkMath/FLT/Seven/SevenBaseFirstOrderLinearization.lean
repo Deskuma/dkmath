@@ -241,4 +241,36 @@ theorem nonempty_awaySevenBaseUnitEquationPacket
         awaySevenBaseRootLinearValueModSeven,
         awaySevenBaseEndpointValueModSeven, hrow] using hlinear
 
+/-- The row sign appearing in the terminal unit equation. -/
+def awaySevenBaseRowSignUnit (row : EndpointRoutingRow) : (ZMod 7)ˣ :=
+  match row with
+  | .y => 1
+  | .z | .sum => -1
+
+/-- The row-sensitive unit equation written uniformly as a signed cube. -/
+theorem AwaySevenBaseUnitEquationPacket.rootLinearUnit_eq_rowSign_mul_cube
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (packet : AwaySevenBaseUnitEquationPacket p) :
+    packet.rootLinearUnit =
+      awaySevenBaseRowSignUnit p.row * packet.endpointUnit ^ 3 := by
+  cases hrow : p.row with
+  | y =>
+      simpa [awaySevenBaseRowSignUnit, AwaySevenBaseUnitEquation, hrow] using
+        packet.unitEquation
+  | z =>
+      simpa [awaySevenBaseRowSignUnit, AwaySevenBaseUnitEquation, hrow] using
+        packet.unitEquation
+  | sum =>
+      simpa [awaySevenBaseRowSignUnit, AwaySevenBaseUnitEquation, hrow] using
+        packet.unitEquation
+
+/-- Dividing by the endpoint cube leaves exactly the row sign. -/
+theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_eq_rowSign
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (packet : AwaySevenBaseUnitEquationPacket p) :
+    packet.rootLinearUnit * (packet.endpointUnit ^ 3)⁻¹ =
+      awaySevenBaseRowSignUnit p.row := by
+  rw [packet.rootLinearUnit_eq_rowSign_mul_cube]
+  simp
+
 end DkMath.FLT.Seven
