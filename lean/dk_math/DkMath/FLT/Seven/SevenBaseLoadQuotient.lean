@@ -46,7 +46,12 @@ theorem AwaySevenBaseCarrierQuotient.load_quotient_eq {x y z : ℕ}
               r.cubic.rootTriple.rightPart := r.cubic.product_eq
           _ = 7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
               r.cubic.rootTriple.rightPart) := by ring
-      exact Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      have hcancel :
+          awaySevenBaseLoadQuotientValue p.row q.carrierUnit y z =
+            r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+              r.cubic.rootTriple.rightPart :=
+        Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      simpa [hrow] using hcancel
   | z =>
       have hcarrier : z = 7 * q.carrierUnit := by
         simpa [endpointRoutingFactorNat, hrow] using q.carrier_eq
@@ -64,7 +69,12 @@ theorem AwaySevenBaseCarrierQuotient.load_quotient_eq {x y z : ℕ}
               r.cubic.rootTriple.rightPart := r.cubic.product_eq
           _ = 7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
               r.cubic.rootTriple.rightPart) := by ring
-      exact Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      have hcancel :
+          awaySevenBaseLoadQuotientValue p.row q.carrierUnit y z =
+            r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+              r.cubic.rootTriple.rightPart :=
+        Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      simpa [hrow] using hcancel
   | sum =>
       have hcarrier : y + z = 7 * q.carrierUnit := by
         simpa [endpointRoutingFactorNat, hrow] using q.carrier_eq
@@ -82,6 +92,11 @@ theorem AwaySevenBaseCarrierQuotient.load_quotient_eq {x y z : ℕ}
               r.cubic.rootTriple.rightPart := r.cubic.product_eq
           _ = 7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
               r.cubic.rootTriple.rightPart) := by ring
-      exact Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      have hcancel :
+          awaySevenBaseLoadQuotientValue p.row q.carrierUnit y z =
+            r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+              r.cubic.rootTriple.rightPart :=
+        Nat.mul_left_cancel (by norm_num : 0 < 7) hseven
+      simpa [hrow] using hcancel
 
 end DkMath.FLT.Seven
