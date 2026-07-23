@@ -59,4 +59,51 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.endpoint_load_bridge_dichotomy
   · exact Or.inl ⟨hpos, packet.positive_sector_endpoint_load_bridge hpos⟩
   · exact Or.inr ⟨hneg, packet.negative_sector_endpoint_load_bridge hneg⟩
 
+/-- After reduction modulo seven, the selected endpoint unit cancels from the
+weighted bridge, leaving the bare cyclotomic residual equal to zero. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (packet.unitSector.rootLinearUnit *
+        (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1 ∧
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) ∨
+    (packet.unitSector.rootLinearUnit *
+        (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  rcases packet.endpoint_load_bridge_dichotomy with hpos | hneg
+  · left
+    refine ⟨hpos.1, ?_⟩
+    have hrow :=
+      packet.unitSector.normalized_rootLinearUnit_eq_one_iff_row_y.mp hpos.1
+    have hz : (z : ZMod 7) ≠ 0 := by
+      have hne := packet.core.carrier.endpoint_ne_zero_mod_seven
+      simpa [AwaySevenBaseEndpointNonzeroModSeven, hrow] using hne
+    have hcast := congrArg (fun n : ℤ => (n : ZMod 7)) hpos.2
+    push_cast at hcast
+    norm_num at hcast
+    have hmul :
+        (z : ZMod 7) *
+          ((cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 : ℤ) : ZMod 7) = 0 := by
+      simpa using hcast
+    exact (mul_eq_zero.mp hmul).resolve_left hz
+  · right
+    refine ⟨hneg.1, ?_⟩
+    have hrows :=
+      packet.unitSector.normalized_rootLinearUnit_eq_neg_one_iff_row_z_or_sum.mp hneg.1
+    have hy : (y : ZMod 7) ≠ 0 := by
+      have hne := packet.core.carrier.endpoint_ne_zero_mod_seven
+      rcases hrows with hrow | hrow
+      · simpa [AwaySevenBaseEndpointNonzeroModSeven, hrow] using hne
+      · simpa [AwaySevenBaseEndpointNonzeroModSeven, hrow] using hne
+    have hcast := congrArg (fun n : ℤ => (n : ZMod 7)) hneg.2
+    push_cast at hcast
+    norm_num at hcast
+    have hmul :
+        (y : ZMod 7) *
+          ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0 := by
+      simpa using hcast
+    exact (mul_eq_zero.mp hmul).resolve_left hy
+
 end DkMath.FLT.Seven
