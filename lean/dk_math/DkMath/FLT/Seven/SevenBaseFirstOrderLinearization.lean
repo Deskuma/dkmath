@@ -107,4 +107,40 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_isUnit_mod_seven
       AwaySevenBaseEndpointIsUnitModSeven, hrow] at hne ⊢ <;>
     exact isUnit_iff_ne_zero.mpr hne
 
+/-- The terminal depth-one unit data aligned by the linearized first-order
+equation.  This packet records the actual carrier quotient, the signed kernel,
+the root-linear unit, the row-selected endpoint unit, and their exact equality
+in `ZMod 7`. -/
+structure AwaySevenBaseLinearUnitPacket {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) : Type where
+  carrier : AwaySevenBaseCarrierQuotient p
+  signedKernel : AwaySevenBaseSignedKernel p
+  linearEquation : AwaySevenBaseLinearEquationModSeven p.row
+    r.cubic.rootTriple.normal.root.fst
+    r.cubic.rootTriple.normal.root.snd y z
+  rootLinear_isUnit_modSeven : IsUnit
+    (((r.cubic.rootTriple.normal.root.fst +
+      4 * r.cubic.rootTriple.normal.root.snd : ℤ) : ZMod 7))
+  endpoint_isUnit_modSeven : AwaySevenBaseEndpointIsUnitModSeven p.row y z
+
+/-- Every terminal carrier quotient determines the complete first-order unit
+alignment packet. -/
+theorem nonempty_awaySevenBaseLinearUnitPacket
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
+    Nonempty (AwaySevenBaseLinearUnitPacket p) := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  rcases nonempty_awaySevenBaseSignedKernel p q.depth_eq_one with ⟨kernel⟩
+  have hroot :
+      ((r.cubic.rootTriple.normal.root.fst +
+        4 * r.cubic.rootTriple.normal.root.snd : ℤ) : ZMod 7) ≠ 0 := by
+    simpa [awayRootLinearModSeven] using
+      r.cubic.rootTriple.normal.rootLinear_ne_zero
+  exact ⟨{
+    carrier := q
+    signedKernel := kernel
+    linearEquation := q.linearized_first_order_eq_mod_seven
+    rootLinear_isUnit_modSeven := isUnit_iff_ne_zero.mpr hroot
+    endpoint_isUnit_modSeven := q.endpoint_isUnit_mod_seven }⟩
+
 end DkMath.FLT.Seven
