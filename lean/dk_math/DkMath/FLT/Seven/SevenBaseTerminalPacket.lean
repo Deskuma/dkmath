@@ -119,4 +119,28 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_normal_form
       · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
       · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
 
+/-- Once the normalized unit lies in the negative sector, only the `Z` and
+`Sum` cubic-load normal forms remain. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.negative_sector_load_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    (hneg : packet.unitSector.rootLinearUnit *
+      (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1) :
+    (p.row = .z ∧
+      y * packet.core.carrier.carrierUnit * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) ∨
+    (p.row = .sum ∧
+      y * z * packet.core.carrier.carrierUnit =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) := by
+  rcases packet.row_resolved_normal_form with hy | hz | hs
+  · rcases hy with ⟨_, hpos, _⟩
+    exfalso
+    have hcontra : (1 : (ZMod 7)ˣ) = -1 := hpos.symm.trans hneg
+    exact (by decide : (1 : (ZMod 7)ˣ) ≠ -1) hcontra
+  · exact Or.inl ⟨hz.1, hz.2.2⟩
+  · exact Or.inr ⟨hs.1, hs.2.2⟩
+
 end DkMath.FLT.Seven
