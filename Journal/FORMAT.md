@@ -70,6 +70,14 @@ $$N+u^2=(x+u)^2$$
 
 Markdown 記号との衝突を避けるため、数式中の `=`、`+`、`-` を改行直後の行頭へ置かない。
 
+GitHub Markdown の数式表示では、ローマン体の名称に `\mathrm{...}` を使用する。
+
+```markdown
+$$\mathrm{Big}=\mathrm{Core}+\mathrm{Beam}+\mathrm{Gap}$$
+```
+
+GitHub Viewer が拒否するため、`\operatorname` は使用しない。
+
 ## Source anchors
 
 記事は、対象となる Lean file、definition、theorem の完全修飾名を記録する。
