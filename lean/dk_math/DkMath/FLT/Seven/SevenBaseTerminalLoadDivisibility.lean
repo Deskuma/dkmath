@@ -109,4 +109,18 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.seven_not_dvd_cubic_root_load
   · exact hvNot hv
   · exact hLRNot hLR
 
+/-- The selected endpoint factor contains the unique visible factor seven, so it
+cannot divide the seven-adic-unit cubic root load. -/
+theorem AwaySevenBaseTerminalQuotientCorePacket.selected_endpoint_not_dvd_cubic_root_load
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalQuotientCorePacket source r p) :
+    ¬ endpointRoutingFactorNat y z p.row ∣
+      r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart := by
+  intro hselected
+  have hseven : 7 ∣ endpointRoutingFactorNat y z p.row :=
+    ⟨packet.carrier.carrierUnit, packet.carrier.carrier_eq⟩
+  exact packet.seven_not_dvd_cubic_root_load (hseven.trans hselected)
+
 end DkMath.FLT.Seven
