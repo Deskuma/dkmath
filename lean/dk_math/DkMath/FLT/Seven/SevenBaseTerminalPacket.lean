@@ -248,4 +248,43 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_endpoint_quotient_nor
       refine ⟨rfl, ?_⟩
       simpa [AwaySevenBaseEndpointQuotientEquation, hrow] using hend
 
+/-- In the negative unit sector, the `Z` and `Sum` endpoint/load branches
+collapse to the same weighted terminal identity. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.negative_sector_endpoint_load_bridge
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    (hneg : packet.unitSector.rootLinearUnit *
+      (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1) :
+    (y : ℤ) * (cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3) =
+      7 * (z : ℤ) *
+        ((r.cubic.rootTriple.vPart : ℤ) *
+          (r.cubic.rootTriple.leftPart : ℤ) *
+          (r.cubic.rootTriple.rightPart : ℤ)) := by
+  have hnorm := packet.unitSector.normalized_rootLinearUnit_eq_rowSign
+  have hend := packet.core.endpoint_quotient_eq
+  have hloadNat := packet.core.load_quotient_eq
+  cases hrow : p.row with
+  | y =>
+      exfalso
+      have hpos : packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1 := by
+        simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      have hcontra : (1 : (ZMod 7)ˣ) = -1 := hpos.symm.trans hneg
+      exact (by decide : (1 : (ZMod 7)ˣ) ≠ -1) hcontra
+  | z =>
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow] at hend
+      simp only [awaySevenBaseLoadQuotientValue, hrow] at hloadNat
+      have hload := congrArg (fun n : ℕ => (n : ℤ)) hloadNat
+      push_cast at hload
+      rw [hend, ← hload]
+      ring
+  | sum =>
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow] at hend
+      simp only [awaySevenBaseLoadQuotientValue, hrow] at hloadNat
+      have hload := congrArg (fun n : ℕ => (n : ℤ)) hloadNat
+      push_cast at hload
+      rw [hend, ← hload]
+      ring
+
 end DkMath.FLT.Seven
