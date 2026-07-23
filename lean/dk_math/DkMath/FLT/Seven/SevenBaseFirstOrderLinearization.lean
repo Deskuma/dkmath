@@ -38,4 +38,32 @@ theorem AwaySevenBaseCarrierQuotient.linearized_first_order_eq_mod_seven
     simp [ZMod.pow_card] at h <;>
     linear_combination h
 
+/-- The row-selected endpoint cube appearing in the linearized base equation is
+nonzero modulo seven.  This is the direct transport of the already proved
+root-linear nonvanishing through the exact first-order linearization. -/
+def AwaySevenBaseEndpointCubeNonzeroModSeven
+    (row : EndpointRoutingRow) (y z : ℕ) : Prop :=
+  match row with
+  | .y => (z : ZMod 7) ^ 3 ≠ 0
+  | .z | .sum => -((y : ZMod 7) ^ 3) ≠ 0
+
+/-- The linearized first-order identity identifies the nonzero root-linear core
+with the row-selected endpoint cube. -/
+theorem AwaySevenBaseCarrierQuotient.endpoint_cube_ne_zero_mod_seven
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
+    AwaySevenBaseEndpointCubeNonzeroModSeven p.row y z := by
+  have hlinear := q.linearized_first_order_eq_mod_seven
+  have hroot :
+      ((r.cubic.rootTriple.normal.root.fst +
+        4 * r.cubic.rootTriple.normal.root.snd : ℤ) : ZMod 7) ≠ 0 := by
+    simpa [awayRootLinearModSeven] using
+      r.cubic.rootTriple.normal.rootLinear_ne_zero
+  push_cast at hroot
+  cases hrow : p.row <;>
+    simp only [AwaySevenBaseLinearEquationModSeven,
+      AwaySevenBaseEndpointCubeNonzeroModSeven, hrow] at hlinear ⊢ <;>
+    rw [← hlinear] <;>
+    exact hroot
+
 end DkMath.FLT.Seven
