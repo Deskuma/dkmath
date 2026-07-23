@@ -27,6 +27,9 @@ theorem AwaySevenBaseCarrierQuotient.first_order_eq_mod_seven {x y z : ℕ}
       r.cubic.rootTriple.normal.root.snd y z := by
   unfold AwaySevenBaseFirstOrderEquationModSeven
   rw [q.first_order_core_eq]
-  norm_num
+  have hseven : (7 : ZMod 7) = 0 :=
+    (ZMod.natCast_eq_zero_iff 7 7).2 dvd_rfl
+  rw [hseven]
+  simp
 
 end DkMath.FLT.Seven
