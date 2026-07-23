@@ -82,19 +82,22 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.companion_endpoint_coprime_carri
     cases hrow : p.row with
     | y =>
         rw [Int.isCoprime_iff_nat_coprime]
-        simpa [awaySevenBaseTerminalCompanionEndpointNat,
-          endpointRoutingFactorNat, hrow] using
-          r.cubic.endpointTriple.coprime_first_third.symm
+        simp only [awaySevenBaseTerminalCompanionEndpointNat,
+          endpointRoutingFactorNat]
+        change Nat.Coprime (y + z) y
+        exact r.cubic.endpointTriple.coprime_first_third.symm
     | z =>
         rw [Int.isCoprime_iff_nat_coprime]
-        simpa [awaySevenBaseTerminalCompanionEndpointNat,
-          endpointRoutingFactorNat, hrow] using
-          r.cubic.endpointTriple.coprime_second_third.symm
+        simp only [awaySevenBaseTerminalCompanionEndpointNat,
+          endpointRoutingFactorNat]
+        change Nat.Coprime (y + z) z
+        exact r.cubic.endpointTriple.coprime_second_third.symm
     | sum =>
         rw [Int.isCoprime_iff_nat_coprime]
-        simpa [awaySevenBaseTerminalCompanionEndpointNat,
-          endpointRoutingFactorNat, hrow] using
-          r.cubic.endpointTriple.coprime_second_third
+        simp only [awaySevenBaseTerminalCompanionEndpointNat,
+          endpointRoutingFactorNat]
+        change Nat.Coprime z (y + z)
+        exact r.cubic.endpointTriple.coprime_second_third
   have hcarrier := congrArg (fun n : ℕ => (n : ℤ)) packet.carrier.carrier_eq
   push_cast at hcarrier
   rcases hcopSelected with ⟨a, b, hab⟩
