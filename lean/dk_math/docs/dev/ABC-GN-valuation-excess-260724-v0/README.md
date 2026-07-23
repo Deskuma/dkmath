@@ -93,16 +93,20 @@ ABC–GN 作業では次を守る。
   ↓
 D. (User) が Codex(VS Code Codex 拡張機能) への起動トリガーを実行
   ↓
-Codex が current source を調査して実装
+Codex が current source を調査・実装・ローカル検証し、report-NNN.md を作成
   ↓
-Codex が report-NNN.md と commit を追加
+Codex が結果を User へ返して停止
   ↓
-Lean CI
+D. (User) が内容確認、commit、push、Lean CI 確認を行う
+  ↓
+D. (User) が賢狼へレビュー開始の合図を出す
   ↓
 賢狼が PR diff と数学的意味をレビュー
   ↓
-次の instruction-NNN.md を追加
+採用なら次の instruction-NNN.md を追加
 ```
+
+システム上の受け渡しトリガーは User が担当する。Codex は GitHub の commit、push、PR 操作、CI 起動・確認、次 checkpoint の開始を行わない。
 
 Codex は単なる写経担当ではない。現場の current source を読み、既存 theorem の再利用、命名、配置、依存方向を判断してよい。ただし、instruction の数学的境界を越える強い主張は追加しない。
 
@@ -110,13 +114,15 @@ Codex は単なる写経担当ではない。現場の current source を読み�
 
 GitHub current source を優先して調査する。
 
-開発経緯は、以下のドキュメント
+開発経緯は、repository 内の以下のドキュメントを参照する。
 
-`lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-001.md`
-`lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-002.md`
+```text
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-001.md
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-002.md
+```
 
-巨大な raw agent log、会話全文 dump、統合ログは開かない。冒頭部分、ファイルサイズで判断。
-必要な事実は current source、整理済み docs、対象 theorem から取得する。
+巨大な raw agent log、会話全文 dump、統合ログは開かない。冒頭部分、ファイルサイズで判断する。
+必要な事実は current source、整理済み repository docs、対象 theorem から取得する。
 
 ## 7. 主な既存資産の候補
 
@@ -141,9 +147,9 @@ DkMath.Petal.ABCBridge
 当面の登山路は次である。
 
 ```text
-ABC-GN-001  ABC triple の GN power lift
-ABC-GN-002  lift の coprime / support separation
-ABC-GN-003  ABC 座標の padic boundary–GN split
+ABC-GN-001  ABC triple の GN power lift                    完了
+ABC-GN-002  lift の coprime / support separation           001 に吸収して完了
+ABC-GN-003  ABC 座標の padic boundary–GN split             現在
 ABC-GN-004  q | n / q ∤ n の例外層分離
 ABC-GN-005  valuation excess の有限 factorization API
 ABC-GN-006  high quality -> GN excess 強制 bridge
@@ -153,7 +159,7 @@ ABC-GN-009  K_epsilon construction
 ABC-GN-010  abc_main_axiom replacement audit
 ```
 
-この番号は研究地図であり、各 checkpoint の実装量は current source に応じて分割・統合してよい。
+`instruction-NNN` の通し番号と研究地図 `ABC-GN-NNN` は一致しない場合がある。各 checkpoint の実装量は current source に応じて分割・統合してよい。
 
 ## 9. 実装規律
 
@@ -177,11 +183,12 @@ ABC-GN-010  abc_main_axiom replacement audit
 - 新規 theorem / def / structure
 - 数学的に何が閉じたか
 - 何はまだ言えていないか
-- build / CI の結果
+- ローカル build 結果
 - 次 checkpoint 候補
-- commit SHA
 - 並行 FLT7 branch と共有領域を触れたか
 ```
+
+commit SHA、push、PR、GitHub CI は User 側の受け渡し工程であり、Codex report の必須項目ではない。
 
 ## 11. 現在の起動指示
 
@@ -194,7 +201,7 @@ CODEX_START.md
 現在の指示書:
 
 ```text
-instruction-001.md
+instruction-002.md
 ```
 
 Codex の実装は、D. が明示的に起動したときだけ開始する。
