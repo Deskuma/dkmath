@@ -87,4 +87,24 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_ne_zero_mod_seven
     apply hcube <;>
     simp [hzero]
 
+/-- The endpoint selected by the terminal row is a unit modulo seven. -/
+def AwaySevenBaseEndpointIsUnitModSeven
+    (row : EndpointRoutingRow) (y z : ℕ) : Prop :=
+  match row with
+  | .y => IsUnit (z : ZMod 7)
+  | .z | .sum => IsUnit (y : ZMod 7)
+
+/-- Over the prime field `ZMod 7`, the selected endpoint nonvanishing is
+exactly the corresponding unit statement. -/
+theorem AwaySevenBaseCarrierQuotient.endpoint_isUnit_mod_seven
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
+    AwaySevenBaseEndpointIsUnitModSeven p.row y z := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  have hne := q.endpoint_ne_zero_mod_seven
+  cases hrow : p.row <;>
+    simp only [AwaySevenBaseEndpointNonzeroModSeven,
+      AwaySevenBaseEndpointIsUnitModSeven, hrow] at hne ⊢ <;>
+    exact isUnit_iff_ne_zero.mpr hne
+
 end DkMath.FLT.Seven
