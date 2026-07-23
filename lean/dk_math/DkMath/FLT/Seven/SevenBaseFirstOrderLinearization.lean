@@ -28,6 +28,7 @@ theorem AwaySevenBaseCarrierQuotient.linearized_first_order_eq_mod_seven
     AwaySevenBaseLinearEquationModSeven p.row
       r.cubic.rootTriple.normal.root.fst
       r.cubic.rootTriple.normal.root.snd y z := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have h := q.first_order_eq_mod_seven
   cases hrow : p.row <;>
     simp only [AwaySevenBaseFirstOrderEquationModSeven,
