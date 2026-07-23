@@ -161,4 +161,57 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.positive_sector_load_normal_form
     simpa [awaySevenBaseLoadQuotientValue, hrow] using
       packet.core.load_quotient_eq⟩
 
+/-- The terminal row normal forms together record the normalized unit sign, the
+exact endpoint factor `7 * carrierUnit`, and the corresponding cubic-load
+quotient. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_complete_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (p.row = .y ∧
+      y = 7 * packet.core.carrier.carrierUnit ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1 ∧
+      packet.core.carrier.carrierUnit * z * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) ∨
+    (p.row = .z ∧
+      z = 7 * packet.core.carrier.carrierUnit ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      y * packet.core.carrier.carrierUnit * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) ∨
+    (p.row = .sum ∧
+      y + z = 7 * packet.core.carrier.carrierUnit ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      y * z * packet.core.carrier.carrierUnit =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) := by
+  have hcarrier := packet.core.carrier.carrier_eq
+  have hnorm := packet.unitSector.normalized_rootLinearUnit_eq_rowSign
+  have hload := packet.core.load_quotient_eq
+  cases hrow : p.row with
+  | y =>
+      left
+      refine ⟨rfl, ?_, ?_, ?_⟩
+      · simpa [endpointRoutingFactorNat, hrow] using hcarrier
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+  | z =>
+      right
+      left
+      refine ⟨rfl, ?_, ?_, ?_⟩
+      · simpa [endpointRoutingFactorNat, hrow] using hcarrier
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+  | sum =>
+      right
+      right
+      refine ⟨rfl, ?_, ?_, ?_⟩
+      · simpa [endpointRoutingFactorNat, hrow] using hcarrier
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+
 end DkMath.FLT.Seven
