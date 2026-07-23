@@ -171,4 +171,14 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.seven_dvd_terminal_residual
   exact (ZMod.intCast_zmod_eq_zero_iff_dvd
     (awaySevenBaseTerminalResidualInt p.row y z) 7).mp hcast
 
+/-- The terminal residual has an exact integer quotient after removing the
+explicit factor seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.exists_terminal_residual_quotient
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    ∃ q : ℤ, awaySevenBaseTerminalResidualInt p.row y z = 7 * q := by
+  rcases packet.seven_dvd_terminal_residual with ⟨q, hq⟩
+  exact ⟨q, hq⟩
+
 end DkMath.FLT.Seven
