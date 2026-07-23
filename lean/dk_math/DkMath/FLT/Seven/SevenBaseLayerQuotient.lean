@@ -163,4 +163,48 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_quotient_eq {x y z : ℕ}
       rw [cyclotomicSevenFst_add_left_cube, hcarrier']
       ring
 
+/-- The row-specific endpoint quotient after removing the visible factor seven. -/
+def awaySevenBaseEndpointQuotientValue
+    (row : EndpointRoutingRow) (carrierUnit y z : ℕ) : ℤ :=
+  match row with
+  | .y => (carrierUnit : ℤ) * ((z : ℤ) - (y : ℤ)) * ((z : ℤ) + (y : ℤ))
+  | .z => (carrierUnit : ℤ) * (z : ℤ) * ((z : ℤ) + (y : ℤ))
+  | .sum => (carrierUnit : ℤ) * (z : ℤ) ^ 2
+
+/-- The first-order ramified core appearing before division by seven. -/
+def awaySevenBaseFirstOrderCore
+    (row : EndpointRoutingRow) (u v : ℤ) (y z : ℕ) : ℤ :=
+  match row with
+  | .y => u ^ 7 + 4 * v ^ 7 - (z : ℤ) ^ 3
+  | .z | .sum => u ^ 7 + 4 * v ^ 7 + (y : ℤ) ^ 3
+
+/-- Exact first-order terminal identity in `ℤ`.  It is obtained by subtracting
+the residual quotient identity from the selected endpoint quotient identity,
+without cancelling seven in `ZMod 49`. -/
+theorem AwaySevenBaseCarrierQuotient.first_order_core_eq {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (q : AwaySevenBaseCarrierQuotient p) :
+    awaySevenBaseFirstOrderCore p.row
+        r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd y z =
+      7 * (awaySevenBaseEndpointQuotientValue p.row q.carrierUnit y z -
+        sevenRamifiedResidualQuotient r.cubic.rootTriple.normal.root.fst
+          r.cubic.rootTriple.normal.root.snd) := by
+  have hend := q.endpoint_quotient_eq
+  have hres := seventhPowerFst_sub_sevenRamifiedCore_eq_seven_mul_quotient
+    r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd
+  rw [r.cubic.rootTriple.normal.fst_eq] at hend
+  cases hrow : p.row with
+  | y =>
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
+        awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      linear_combination hend - hres
+  | z =>
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
+        awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      linear_combination hend - hres
+  | sum =>
+      simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
+        awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      linear_combination hend - hres
+
 end DkMath.FLT.Seven
