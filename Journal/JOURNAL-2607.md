@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-24
 
+### 06:05
+
+[ピタゴラス平方差を Gap と Beam の積として読む](260724-0605-pythagorean-square-difference-as-gap-beam-product.md)
+
+ピタゴラスの加法形 $a^2+b^2=c^2$ を平方差 $c^2-a^2=b^2$ へ移し、さらに境界差 $c-a$ と共役和 $c+a$ の積へ因子化する Lean 構造を読む。
+
 ### 00:06
 
 [宇宙式 Gap 比の積は円周率へ到達する](260724-0006-cosmic-gap-product-converges-to-pi-over-two.md)
