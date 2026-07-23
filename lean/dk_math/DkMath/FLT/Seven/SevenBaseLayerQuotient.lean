@@ -207,4 +207,30 @@ theorem AwaySevenBaseCarrierQuotient.first_order_core_eq {x y z : ℕ}
         awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
       linear_combination hend - hres
 
+/-- Signed root-second-coordinate data specialized to the terminal seven layer. -/
+structure AwaySevenBaseSignedKernel {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) : Type where
+  depth_eq_one : p.exponent = 1
+  unitPart : ℤ
+  unitPart_not_seven_dvd : ¬ (7 : ℤ) ∣ unitPart
+  rootSnd_eq : r.cubic.rootTriple.normal.root.snd = unitPart
+  unitPart_isUnit_modSeven : IsUnit (unitPart : ZMod 7)
+
+/-- At depth one the ramified kernel has no remaining factor seven: its signed
+unit part is exactly the actual root second coordinate. -/
+theorem nonempty_awaySevenBaseSignedKernel {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r)
+    (hbase : p.exponent = 1) : Nonempty (AwaySevenBaseSignedKernel p) := by
+  rcases nonempty_awaySevenRamifiedKernelPacket p with ⟨kernel⟩
+  have hsnd : r.cubic.rootTriple.normal.root.snd = kernel.unitPart := by
+    simpa [hbase] using kernel.rootSnd_eq
+  have hunit : IsUnit (kernel.unitPart : ZMod 7) := by
+    simpa [AwaySevenPivotDepthPacket.upperModulus, hbase] using kernel.unitPart_isUnit
+  exact ⟨{
+    depth_eq_one := hbase
+    unitPart := kernel.unitPart
+    unitPart_not_seven_dvd := kernel.unitPart_not_seven_dvd
+    rootSnd_eq := hsnd
+    unitPart_isUnit_modSeven := hunit }⟩
+
 end DkMath.FLT.Seven
