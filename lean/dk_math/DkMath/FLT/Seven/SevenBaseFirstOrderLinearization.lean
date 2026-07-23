@@ -66,4 +66,25 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_cube_ne_zero_mod_seven
     rw [← hlinear] <;>
     exact hroot
 
+/-- The endpoint selected by the terminal row is itself nonzero modulo seven. -/
+def AwaySevenBaseEndpointNonzeroModSeven
+    (row : EndpointRoutingRow) (y z : ℕ) : Prop :=
+  match row with
+  | .y => (z : ZMod 7) ≠ 0
+  | .z | .sum => (y : ZMod 7) ≠ 0
+
+/-- Nonvanishing of the selected endpoint cube descends to nonvanishing of the
+selected endpoint itself. -/
+theorem AwaySevenBaseCarrierQuotient.endpoint_ne_zero_mod_seven
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
+    AwaySevenBaseEndpointNonzeroModSeven p.row y z := by
+  have hcube := q.endpoint_cube_ne_zero_mod_seven
+  cases hrow : p.row <;>
+    simp only [AwaySevenBaseEndpointCubeNonzeroModSeven,
+      AwaySevenBaseEndpointNonzeroModSeven, hrow] at hcube ⊢ <;>
+    intro hzero <;>
+    apply hcube <;>
+    simp [hzero]
+
 end DkMath.FLT.Seven
