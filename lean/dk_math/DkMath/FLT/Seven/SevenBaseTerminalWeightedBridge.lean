@@ -34,4 +34,29 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.positive_sector_endpoint_load_brid
   rw [hend, ← hload]
   ring
 
+/-- Every terminal packet satisfies exactly one of the positive and negative
+weighted endpoint/load identities selected by its normalized unit sign. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.endpoint_load_bridge_dichotomy
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (packet.unitSector.rootLinearUnit *
+        (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1 ∧
+      (z : ℤ) * (cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3) =
+        7 * ((z : ℤ) - (y : ℤ)) *
+          ((r.cubic.rootTriple.vPart : ℤ) *
+            (r.cubic.rootTriple.leftPart : ℤ) *
+            (r.cubic.rootTriple.rightPart : ℤ))) ∨
+    (packet.unitSector.rootLinearUnit *
+        (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      (y : ℤ) * (cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3) =
+        7 * (z : ℤ) *
+          ((r.cubic.rootTriple.vPart : ℤ) *
+            (r.cubic.rootTriple.leftPart : ℤ) *
+            (r.cubic.rootTriple.rightPart : ℤ))) := by
+  rcases packet.unitSector.normalized_rootLinearUnit_eq_one_or_eq_neg_one with
+    hpos | hneg
+  · exact Or.inl ⟨hpos, packet.positive_sector_endpoint_load_bridge hpos⟩
+  · exact Or.inr ⟨hneg, packet.negative_sector_endpoint_load_bridge hneg⟩
+
 end DkMath.FLT.Seven
