@@ -143,4 +143,107 @@ theorem nonempty_awaySevenBaseLinearUnitPacket
     rootLinear_isUnit_modSeven := isUnit_iff_ne_zero.mpr hroot
     endpoint_isUnit_modSeven := q.endpoint_isUnit_mod_seven }⟩
 
+/-- The root-linear value used by the terminal unit equation. -/
+def awaySevenBaseRootLinearValueModSeven (u v : ℤ) : ZMod 7 :=
+  (u : ZMod 7) + 4 * (v : ZMod 7)
+
+/-- The unsigned endpoint value selected by the terminal row. -/
+def awaySevenBaseEndpointValueModSeven
+    (row : EndpointRoutingRow) (y z : ℕ) : ZMod 7 :=
+  match row with
+  | .y => (z : ZMod 7)
+  | .z | .sum => (y : ZMod 7)
+
+/-- The first-order terminal equality lifted from field values to the unit group. -/
+def AwaySevenBaseUnitEquation
+    (row : EndpointRoutingRow) (root endpoint : (ZMod 7)ˣ) : Prop :=
+  match row with
+  | .y => root = endpoint ^ 3
+  | .z | .sum => root = -(endpoint ^ 3)
+
+/-- Actual unit representatives for the root-linear value and selected endpoint,
+together with the row-sensitive cubic equality between them. -/
+structure AwaySevenBaseUnitEquationPacket {x y z : ℕ}
+    {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) : Type where
+  linear : AwaySevenBaseLinearUnitPacket p
+  rootLinearUnit : (ZMod 7)ˣ
+  endpointUnit : (ZMod 7)ˣ
+  rootLinearUnit_val :
+    (rootLinearUnit : ZMod 7) = awaySevenBaseRootLinearValueModSeven
+      r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd
+  endpointUnit_val :
+    (endpointUnit : ZMod 7) = awaySevenBaseEndpointValueModSeven p.row y z
+  unitEquation : AwaySevenBaseUnitEquation p.row rootLinearUnit endpointUnit
+
+/-- Every terminal carrier quotient lifts the linearized value equation to an
+actual equality in the unit group of `ZMod 7`. -/
+theorem nonempty_awaySevenBaseUnitEquationPacket
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
+    Nonempty (AwaySevenBaseUnitEquationPacket p) := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  rcases nonempty_awaySevenBaseLinearUnitPacket q with ⟨linear⟩
+  have hroot : IsUnit (awaySevenBaseRootLinearValueModSeven
+      r.cubic.rootTriple.normal.root.fst
+      r.cubic.rootTriple.normal.root.snd) := by
+    have h := linear.rootLinear_isUnit_modSeven
+    push_cast at h
+    simpa [awaySevenBaseRootLinearValueModSeven] using h
+  have hend : IsUnit (awaySevenBaseEndpointValueModSeven p.row y z) := by
+    cases hrow : p.row with
+    | y =>
+        simpa [awaySevenBaseEndpointValueModSeven,
+          AwaySevenBaseEndpointIsUnitModSeven, hrow] using
+          linear.endpoint_isUnit_modSeven
+    | z =>
+        simpa [awaySevenBaseEndpointValueModSeven,
+          AwaySevenBaseEndpointIsUnitModSeven, hrow] using
+          linear.endpoint_isUnit_modSeven
+    | sum =>
+        simpa [awaySevenBaseEndpointValueModSeven,
+          AwaySevenBaseEndpointIsUnitModSeven, hrow] using
+          linear.endpoint_isUnit_modSeven
+  let rootUnit : (ZMod 7)ˣ := hroot.unit
+  let endpointUnit : (ZMod 7)ˣ := hend.unit
+  have hlinear := linear.linearEquation
+  refine ⟨{
+    linear := linear
+    rootLinearUnit := rootUnit
+    endpointUnit := endpointUnit
+    rootLinearUnit_val := by
+      dsimp [rootUnit]
+      exact hroot.unit_spec
+    endpointUnit_val := by
+      dsimp [endpointUnit]
+      exact hend.unit_spec
+    unitEquation := ?_ }⟩
+  cases hrow : p.row with
+  | y =>
+      simp only [AwaySevenBaseUnitEquation, hrow]
+      apply Units.ext
+      change (rootUnit : ZMod 7) = (endpointUnit : ZMod 7) ^ 3
+      dsimp [rootUnit, endpointUnit]
+      rw [hroot.unit_spec, hend.unit_spec]
+      simpa [AwaySevenBaseLinearEquationModSeven,
+        awaySevenBaseRootLinearValueModSeven,
+        awaySevenBaseEndpointValueModSeven, hrow] using hlinear
+  | z =>
+      simp only [AwaySevenBaseUnitEquation, hrow]
+      apply Units.ext
+      change (rootUnit : ZMod 7) = -((endpointUnit : ZMod 7) ^ 3)
+      dsimp [rootUnit, endpointUnit]
+      rw [hroot.unit_spec, hend.unit_spec]
+      simpa [AwaySevenBaseLinearEquationModSeven,
+        awaySevenBaseRootLinearValueModSeven,
+        awaySevenBaseEndpointValueModSeven, hrow] using hlinear
+  | sum =>
+      simp only [AwaySevenBaseUnitEquation, hrow]
+      apply Units.ext
+      change (rootUnit : ZMod 7) = -((endpointUnit : ZMod 7) ^ 3)
+      dsimp [rootUnit, endpointUnit]
+      rw [hroot.unit_spec, hend.unit_spec]
+      simpa [AwaySevenBaseLinearEquationModSeven,
+        awaySevenBaseRootLinearValueModSeven,
+        awaySevenBaseEndpointValueModSeven, hrow] using hlinear
+
 end DkMath.FLT.Seven
