@@ -34,6 +34,12 @@ import DkMath.FLT.Seven.PrimePowerCellAudit
 import DkMath.FLT.Seven.PrimePowerUnitOrbit
 import DkMath.FLT.Seven.PrimePowerOrbitAudit
 import DkMath.FLT.Seven.SevenPivotDescentAudit
+import DkMath.FLT.Seven.SevenBaseLayerQuotient
+import DkMath.FLT.Seven.SevenBaseFirstOrderModSeven
+import DkMath.FLT.Seven.SevenBaseFirstOrderLinearization
+import DkMath.FLT.Seven.SevenBaseLoadQuotient
+import DkMath.FLT.Seven.SevenBaseTerminalPacket
+import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -54,10 +60,13 @@ not provide simultaneous signed reconstruction.  Moreover, every actual
 full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
 explicit model.  Independently obtained local scales are not claimed to glue
 globally.  The unique seven-primary cell is reduced at its complete `7^k`
-depth, including its nonzero top ramified kernel and base/lifted split.  The
-terminal arithmetic exclusion and lifted signed reconstruction remain explicit
-open obligations.  The strict away depth drop is
-conditional on an explicit
-`AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
-claimed.
+depth, including its nonzero top ramified kernel and base/lifted split.  At
+terminal depth one, the facade also exports the exact carrier, residual,
+endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
+with their row-sensitive `ZMod 7` linearization and the checked row-`Y`
+mod-`49` shadow showing that a bare local congruence obstruction is insufficient.
+The terminal arithmetic exclusion and lifted signed reconstruction remain
+explicit open obligations.  The strict away depth drop is conditional on an
+explicit `AwayDescentClosureProvider`; no FLT7 contradiction or recursive
+closure is claimed.
 -/
