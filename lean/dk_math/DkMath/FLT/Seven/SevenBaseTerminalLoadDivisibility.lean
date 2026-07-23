@@ -172,6 +172,24 @@ def awaySevenBaseTerminalUnselectedEndpointNat
   | .y => z
   | .z | .sum => y
 
+/-- The unselected endpoint is a seven-adic unit because it divides the cubic
+root load, while the cubic root load itself carries no factor seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.seven_not_dvd_unselected_endpoint
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    ¬ 7 ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z := by
+  intro hseven
+  have hunselected :
+      awaySevenBaseTerminalUnselectedEndpointNat p.row y z ∣
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart := by
+    rcases packet.row_resolved_terminal_load_routing_normal_form with hy | hz | hs
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hy.1] using hy.2.1
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hz.1] using hz.2.1
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hs.1] using hs.2.1
+  exact packet.core.seven_not_dvd_cubic_root_load (hseven.trans hunselected)
+
 /-- Every prime carried by the unselected endpoint enters exactly one of the
 three pairwise-coprime cubic root channels. -/
 theorem AwaySevenBaseTerminalUnitSectorPacket.prime_dvd_unselected_endpoint_unique_cubic_channel
