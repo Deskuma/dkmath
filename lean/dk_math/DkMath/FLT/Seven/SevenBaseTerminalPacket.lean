@@ -73,4 +73,50 @@ theorem nonempty_awaySevenBaseTerminalUnitSectorPacket {x y z : ℕ}
   rcases nonempty_awaySevenBaseUnitEquationPacket core.carrier with ⟨unitSector⟩
   exact ⟨{ core := core, unitSector := unitSector }⟩
 
+/-- The terminal packet resolves into exactly three row normal forms.  Each form
+records both the normalized unit sign and the corresponding cubic-load quotient
+left after cancelling the unique factor seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (p.row = .y ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = 1 ∧
+      packet.core.carrier.carrierUnit * z * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) ∨
+    (p.row = .z ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      y * packet.core.carrier.carrierUnit * (y + z) =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) ∨
+    (p.row = .sum ∧
+      packet.unitSector.rootLinearUnit *
+          (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
+      y * z * packet.core.carrier.carrierUnit =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) := by
+  have hnorm := packet.unitSector.normalized_rootLinearUnit_eq_rowSign
+  have hload := packet.core.load_quotient_eq
+  cases hrow : p.row with
+  | y =>
+      left
+      refine ⟨hrow, ?_, ?_⟩
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+  | z =>
+      right
+      left
+      refine ⟨hrow, ?_, ?_⟩
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+  | sum =>
+      right
+      right
+      refine ⟨hrow, ?_, ?_⟩
+      · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
+      · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
+
 end DkMath.FLT.Seven
