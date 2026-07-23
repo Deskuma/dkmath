@@ -192,19 +192,21 @@ theorem AwaySevenBaseCarrierQuotient.first_order_core_eq {x y z : ℕ}
   have hend := q.endpoint_quotient_eq
   have hres := seventhPowerFst_sub_sevenRamifiedCore_eq_seven_mul_quotient
     r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd
-  rw [r.cubic.rootTriple.normal.fst_eq] at hend
   cases hrow : p.row with
   | y =>
       simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
         awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      rw [r.cubic.rootTriple.normal.fst_eq] at hend
       linear_combination hend - hres
   | z =>
       simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
         awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      rw [r.cubic.rootTriple.normal.fst_eq] at hend
       linear_combination hend - hres
   | sum =>
       simp only [AwaySevenBaseEndpointQuotientEquation, hrow,
         awaySevenBaseFirstOrderCore, awaySevenBaseEndpointQuotientValue] at hend ⊢
+      rw [r.cubic.rootTriple.normal.fst_eq] at hend
       linear_combination hend - hres
 
 /-- Signed root-second-coordinate data specialized to the terminal seven layer. -/
@@ -225,7 +227,8 @@ theorem nonempty_awaySevenBaseSignedKernel {x y z : ℕ}
   have hsnd : r.cubic.rootTriple.normal.root.snd = kernel.unitPart := by
     simpa [hbase] using kernel.rootSnd_eq
   have hunit : IsUnit (kernel.unitPart : ZMod 7) := by
-    simpa [AwaySevenPivotDepthPacket.upperModulus, hbase] using kernel.unitPart_isUnit
+    simpa using
+      (intCast_isUnit_zmod_sevenPower (k := 1) kernel.unitPart_not_seven_dvd)
   exact ⟨{
     depth_eq_one := hbase
     unitPart := kernel.unitPart
