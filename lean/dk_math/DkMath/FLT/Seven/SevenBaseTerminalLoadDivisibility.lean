@@ -164,4 +164,70 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_terminal_load_routing
     · have hselected := packet.core.selected_endpoint_not_dvd_cubic_root_load
       simpa [endpointRoutingFactorNat, hs.1] using hselected
 
+/-- The row-sensitive endpoint whose divisibility is forced into the cubic root
+load by the terminal weighted bridge. -/
+def awaySevenBaseTerminalUnselectedEndpointNat
+    (row : EndpointRoutingRow) (y z : ℕ) : ℕ :=
+  match row with
+  | .y => z
+  | .z | .sum => y
+
+/-- Every prime carried by the unselected endpoint enters exactly one of the
+three pairwise-coprime cubic root channels. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.prime_dvd_unselected_endpoint_unique_cubic_channel
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqunselected : q ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z) :
+    (q ∣ r.cubic.rootTriple.vPart ∧
+      ¬ q ∣ r.cubic.rootTriple.leftPart ∧
+      ¬ q ∣ r.cubic.rootTriple.rightPart) ∨
+    (q ∣ r.cubic.rootTriple.leftPart ∧
+      ¬ q ∣ r.cubic.rootTriple.vPart ∧
+      ¬ q ∣ r.cubic.rootTriple.rightPart) ∨
+    (q ∣ r.cubic.rootTriple.rightPart ∧
+      ¬ q ∣ r.cubic.rootTriple.vPart ∧
+      ¬ q ∣ r.cubic.rootTriple.leftPart) := by
+  have hunselected :
+      awaySevenBaseTerminalUnselectedEndpointNat p.row y z ∣
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart := by
+    rcases packet.row_resolved_terminal_load_routing_normal_form with hy | hz | hs
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hy.1] using hy.2.1
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hz.1] using hz.2.1
+    · simpa [awaySevenBaseTerminalUnselectedEndpointNat, hs.1] using hs.2.1
+  have hqload :
+      q ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+        r.cubic.rootTriple.rightPart :=
+    hqunselected.trans hunselected
+  have hvl :
+      ¬ (q ∣ r.cubic.rootTriple.vPart ∧ q ∣ r.cubic.rootTriple.leftPart) := by
+    rintro ⟨hqv, hql⟩
+    have hgcd := Nat.dvd_gcd hqv hql
+    rw [r.cubic.rootTriple.coprime_v_left] at hgcd
+    exact hq.not_dvd_one hgcd
+  have hvr :
+      ¬ (q ∣ r.cubic.rootTriple.vPart ∧ q ∣ r.cubic.rootTriple.rightPart) := by
+    rintro ⟨hqv, hqr⟩
+    have hgcd := Nat.dvd_gcd hqv hqr
+    rw [r.cubic.rootTriple.coprime_v_right] at hgcd
+    exact hq.not_dvd_one hgcd
+  have hlr :
+      ¬ (q ∣ r.cubic.rootTriple.leftPart ∧ q ∣ r.cubic.rootTriple.rightPart) := by
+    rintro ⟨hql, hqr⟩
+    have hgcd := Nat.dvd_gcd hql hqr
+    rw [r.cubic.rootTriple.coprime_left_right] at hgcd
+    exact hq.not_dvd_one hgcd
+  rcases (Nat.Prime.dvd_mul hq).mp hqload with hqvl | hqr
+  · rcases (Nat.Prime.dvd_mul hq).mp hqvl with hqv | hql
+    · left
+      exact ⟨hqv, fun h => hvl ⟨hqv, h⟩, fun h => hvr ⟨hqv, h⟩⟩
+    · right
+      left
+      exact ⟨hql, fun h => hvl ⟨h, hql⟩, fun h => hlr ⟨hql, h⟩⟩
+  · right
+    right
+    exact ⟨hqr, fun h => hvr ⟨h, hqr⟩, fun h => hlr ⟨h, hqr⟩⟩
+
 end DkMath.FLT.Seven
