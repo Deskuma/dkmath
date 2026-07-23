@@ -59,11 +59,11 @@ $$x(x+2u)+u^2=(x+u)^2$$
 
 Lean file `CosmicFormulaBasic.lean` は、実数上の単位宇宙式を次の差として定義している。
 
-$$\operatorname{CF}(x,u)=(x+u)^2-x(x+2u)$$
+$$\mathrm{CF}(x,u)=(x+u)^2-x(x+2u)$$
 
 定理 `cosmic_formula_unit_theorem` は、任意の実数 $x,u$ に対して次を証明する。
 
-$$\operatorname{CF}(x,u)=u^2$$
+$$\mathrm{CF}(x,u)=u^2$$
 
 同じ内容は、減算を使わない形でも形式化されている。
 `N` と `P` を先ほどの式で定義すると、定理 `cosmic_formula_add` は任意の可換半環で次を与える。
@@ -79,19 +79,19 @@ $$P(x,u)-N(x,u)=u^2$$
 DkMath は、この構造を一般の正次数 $d$ へ拡張する。
 `CoreBeamGap.lean` では、二項展開の左端、中央、右端をそれぞれ次のように分ける。
 
-$$\operatorname{Core}_d(x)=x^d$$
+$$\mathrm{Core}_d(x)=x^d$$
 
-$$\operatorname{Gap}_d(u)=u^d$$
+$$\mathrm{Gap}_d(u)=u^d$$
 
-$$\operatorname{Beam}_d(x,u)=\text{二項展開の両端を除く中間項の総和}$$
+$$\mathrm{Beam}_d(x,u)=\text{二項展開の両端を除く中間項の総和}$$
 
 定理 `big_eq_core_beam_gap` は、$0<d$ のもとで次を証明する。
 
-$$\operatorname{Big}_d(x,u)=\operatorname{Core}_d(x)+\operatorname{Beam}_d(x,u)+\operatorname{Gap}_d(u)$$
+$$\mathrm{Big}_d(x,u)=\mathrm{Core}_d(x)+\mathrm{Beam}_d(x,u)+\mathrm{Gap}_d(u)$$
 
 ここで、
 
-$$\operatorname{Big}_d(x,u)=(x+u)^d$$
+$$\mathrm{Big}_d(x,u)=(x+u)^d$$
 
 である。
 
@@ -99,7 +99,7 @@ $$\operatorname{Big}_d(x,u)=(x+u)^d$$
 
 一般数学の言葉では、これは二項定理の端点・内部項分解である。
 
-$$ (x+u)^d=x^d+\sum_{k=1}^{d-1}\binom{d}{k}x^k u^{d-k}+u^d $$
+$$(x+u)^d=x^d+\sum_{k=1}^{d-1}\binom{d}{k}x^k u^{d-k}+u^d$$
 
 DkMath の語彙との対応は単純である。
 
@@ -112,7 +112,7 @@ DkMath の語彙との対応は単純である。
 
 $d=2$ では Beam は $2xu$ となる。
 
-$$ (x+u)^2=x^2+2xu+u^2 $$
+$$(x+u)^2=x^2+2xu+u^2$$
 
 そして Core と Beam を一つにまとめると、
 
@@ -129,7 +129,7 @@ DkMath は、等式の両辺が等しいという事実だけでなく、等し�
 
 宇宙式では、$x$ が変化しても、次の差は常に $u^2$ へ戻る。
 
-$$ (x+u)^2-x(x+2u)=u^2 $$
+$$(x+u)^2-x(x+2u)=u^2$$
 
 つまり、$x$ に依存する部分を本体側へ集めた後にも、$u$ だけで決まる純粋な平方が残る。
 DkMath はこの残留成分を Gap と呼ぶ。
@@ -137,15 +137,15 @@ DkMath はこの残留成分を Gap と呼ぶ。
 ただし Gap は、単なる「誤差」ではない。
 この恒等式では、Big を完成させるために正確に必要な成分である。
 
-$$\operatorname{Big}=\operatorname{Body}+\operatorname{Gap}$$
+$$\mathrm{Big}=\mathrm{Body}+\mathrm{Gap}$$
 
 さらに Body を分けると、
 
-$$\operatorname{Body}=\operatorname{Core}+\operatorname{Beam}$$
+$$\mathrm{Body}=\mathrm{Core}+\mathrm{Beam}$$
 
 したがって、
 
-$$\operatorname{Big}=\operatorname{Core}+\operatorname{Beam}+\operatorname{Gap}$$
+$$\mathrm{Big}=\mathrm{Core}+\mathrm{Beam}+\mathrm{Gap}$$
 
 となる。
 
