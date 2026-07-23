@@ -131,7 +131,18 @@ git diff --check
 
 新 module に `axiom`, `sorry`, `native_decide` はない。
 
-GitHub Lean CI は branch push により起動する。report 作成時点では未実行。
+GitHub Lean CI:
+
+```text
+PR #67
+Lean CI run #240
+final conclusion: success
+```
+
+初回 attempt は Mathlib cache setup 中の `leantar` download が
+`curl: (35) Recv failure: Connection reset by peer` で失敗し、Lean build
+自体は skipped だった。同じ run の failed job を再実行し、full build は
+成功した。
 
 ## 7. 次の最小 checkpoint 候補
 
