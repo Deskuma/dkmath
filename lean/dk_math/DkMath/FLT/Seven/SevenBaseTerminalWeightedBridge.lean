@@ -82,12 +82,9 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
       simpa [AwaySevenBaseEndpointNonzeroModSeven, hrow] using hne
     have hcast := congrArg (fun n : ℤ => (n : ZMod 7)) hpos.2
     push_cast at hcast
-    norm_num at hcast
-    have hmul :
-        (z : ZMod 7) *
-          ((cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 : ℤ) : ZMod 7) = 0 := by
-      simpa using hcast
-    exact (mul_eq_zero.mp hmul).resolve_left hz
+    rw [show (7 : ZMod 7) = 0 by decide] at hcast
+    simp only [zero_mul] at hcast
+    exact (mul_eq_zero.mp hcast).resolve_left hz
   · right
     refine ⟨hneg.1, ?_⟩
     have hrows :=
@@ -99,11 +96,8 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
       · simpa [AwaySevenBaseEndpointNonzeroModSeven, hrow] using hne
     have hcast := congrArg (fun n : ℤ => (n : ZMod 7)) hneg.2
     push_cast at hcast
-    norm_num at hcast
-    have hmul :
-        (y : ZMod 7) *
-          ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0 := by
-      simpa using hcast
-    exact (mul_eq_zero.mp hmul).resolve_left hy
+    rw [show (7 : ZMod 7) = 0 by decide] at hcast
+    simp only [zero_mul] at hcast
+    exact (mul_eq_zero.mp hcast).resolve_left hy
 
 end DkMath.FLT.Seven
