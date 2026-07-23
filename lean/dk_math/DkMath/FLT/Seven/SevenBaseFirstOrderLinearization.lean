@@ -212,36 +212,31 @@ theorem nonempty_awaySevenBaseUnitEquationPacket
     endpointUnit := endpointUnit
     rootLinearUnit_val := by
       dsimp [rootUnit]
-      exact hroot.unit_spec
     endpointUnit_val := by
       dsimp [endpointUnit]
-      exact hend.unit_spec
     unitEquation := ?_ }⟩
   cases hrow : p.row with
   | y =>
-      simp only [AwaySevenBaseUnitEquation, hrow]
+      simp only [AwaySevenBaseUnitEquation]
       apply Units.ext
       change (rootUnit : ZMod 7) = (endpointUnit : ZMod 7) ^ 3
       dsimp [rootUnit, endpointUnit]
-      rw [hroot.unit_spec, hend.unit_spec]
       simpa [AwaySevenBaseLinearEquationModSeven,
         awaySevenBaseRootLinearValueModSeven,
         awaySevenBaseEndpointValueModSeven, hrow] using hlinear
   | z =>
-      simp only [AwaySevenBaseUnitEquation, hrow]
+      simp only [AwaySevenBaseUnitEquation]
       apply Units.ext
       change (rootUnit : ZMod 7) = -((endpointUnit : ZMod 7) ^ 3)
       dsimp [rootUnit, endpointUnit]
-      rw [hroot.unit_spec, hend.unit_spec]
       simpa [AwaySevenBaseLinearEquationModSeven,
         awaySevenBaseRootLinearValueModSeven,
         awaySevenBaseEndpointValueModSeven, hrow] using hlinear
   | sum =>
-      simp only [AwaySevenBaseUnitEquation, hrow]
+      simp only [AwaySevenBaseUnitEquation]
       apply Units.ext
       change (rootUnit : ZMod 7) = -((endpointUnit : ZMod 7) ^ 3)
       dsimp [rootUnit, endpointUnit]
-      rw [hroot.unit_spec, hend.unit_spec]
       simpa [AwaySevenBaseLinearEquationModSeven,
         awaySevenBaseRootLinearValueModSeven,
         awaySevenBaseEndpointValueModSeven, hrow] using hlinear
