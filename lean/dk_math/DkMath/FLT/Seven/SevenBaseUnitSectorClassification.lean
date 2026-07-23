@@ -40,4 +40,19 @@ theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_eq_neg_one_iff
   rw [packet.normalized_rootLinearUnit_eq_rowSign]
   exact awaySevenBaseRowSignUnit_eq_neg_one_iff p.row
 
+/-- Every terminal row sign lies in the binary unit sector `{1, -1}`. -/
+theorem awaySevenBaseRowSignUnit_eq_one_or_eq_neg_one (row : EndpointRoutingRow) :
+    awaySevenBaseRowSignUnit row = 1 ∨ awaySevenBaseRowSignUnit row = -1 := by
+  cases row <;> simp [awaySevenBaseRowSignUnit]
+
+/-- The normalized terminal root-linear unit is always either the positive or
+negative unit sector. -/
+theorem AwaySevenBaseUnitEquationPacket.normalized_rootLinearUnit_eq_one_or_eq_neg_one
+    {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
+    {p : AwaySevenPivotDepthPacket r} (packet : AwaySevenBaseUnitEquationPacket p) :
+    packet.rootLinearUnit * (packet.endpointUnit ^ 3)⁻¹ = 1 ∨
+      packet.rootLinearUnit * (packet.endpointUnit ^ 3)⁻¹ = -1 := by
+  rw [packet.normalized_rootLinearUnit_eq_rowSign]
+  exact awaySevenBaseRowSignUnit_eq_one_or_eq_neg_one p.row
+
 end DkMath.FLT.Seven
