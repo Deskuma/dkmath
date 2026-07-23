@@ -126,4 +126,26 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_residual_mod_seven_no
     · exact Or.inr (Or.inl ⟨hrow, hneg.2⟩)
     · exact Or.inr (Or.inr ⟨hrow, hneg.2⟩)
 
+/-- The row-sensitive bare cyclotomic residual at the terminal seven-primary
+layer.  The `Z` and `Sum` rows share the same negative-sector residual. -/
+def awaySevenBaseTerminalResidualModSeven
+    (row : EndpointRoutingRow) (y z : ℕ) : ZMod 7 :=
+  match row with
+  | .y =>
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 : ℤ) : ZMod 7)
+  | .z | .sum =>
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7)
+
+/-- Every terminal packet annihilates its row-selected bare residual modulo
+seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.terminal_residual_eq_zero_mod_seven
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    awaySevenBaseTerminalResidualModSeven p.row y z = 0 := by
+  rcases packet.row_resolved_residual_mod_seven_normal_form with hy | hz | hs
+  · simpa [awaySevenBaseTerminalResidualModSeven, hy.1] using hy.2
+  · simpa [awaySevenBaseTerminalResidualModSeven, hz.1] using hz.2
+  · simpa [awaySevenBaseTerminalResidualModSeven, hs.1] using hs.2
+
 end DkMath.FLT.Seven
