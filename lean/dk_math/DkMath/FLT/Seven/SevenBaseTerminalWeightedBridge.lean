@@ -102,4 +102,28 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
     have hzero := (mul_eq_zero.mp hcast).resolve_left hy
     simpa using hzero
 
+/-- The unit-sector proof is eliminated from the public arithmetic surface:
+each terminal row directly carries its corresponding bare residual equation
+modulo seven. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_residual_mod_seven_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (p.row = .y ∧
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) ∨
+    (p.row = .z ∧
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) ∨
+    (p.row = .sum ∧
+      ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) := by
+  rcases packet.residual_mod_seven_dichotomy with hpos | hneg
+  · left
+    exact ⟨
+      packet.unitSector.normalized_rootLinearUnit_eq_one_iff_row_y.mp hpos.1,
+      hpos.2⟩
+  · have hrows :=
+      packet.unitSector.normalized_rootLinearUnit_eq_neg_one_iff_row_z_or_sum.mp hneg.1
+    rcases hrows with hrow | hrow
+    · exact Or.inr (Or.inl ⟨hrow, hneg.2⟩)
+    · exact Or.inr (Or.inr ⟨hrow, hneg.2⟩)
+
 end DkMath.FLT.Seven
