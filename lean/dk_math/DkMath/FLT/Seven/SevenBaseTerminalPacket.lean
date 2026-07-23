@@ -214,4 +214,38 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_complete_normal_form
       · simpa [awaySevenBaseRowSignUnit, hrow] using hnorm
       · simpa [awaySevenBaseLoadQuotientValue, hrow] using hload
 
+/-- The exact endpoint quotient equation is exposed in each selected terminal
+row before it is combined with the ramified residual quotient. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_endpoint_quotient_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (p.row = .y ∧
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3 =
+        7 * ((packet.core.carrier.carrierUnit : ℤ) *
+          ((z : ℤ) - (y : ℤ)) * ((z : ℤ) + (y : ℤ)))) ∨
+    (p.row = .z ∧
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 =
+        7 * ((packet.core.carrier.carrierUnit : ℤ) * (z : ℤ) *
+          ((z : ℤ) + (y : ℤ)))) ∨
+    (p.row = .sum ∧
+      cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 =
+        7 * ((packet.core.carrier.carrierUnit : ℤ) * (z : ℤ) ^ 2)) := by
+  have hend := packet.core.endpoint_quotient_eq
+  cases hrow : p.row with
+  | y =>
+      left
+      refine ⟨rfl, ?_⟩
+      simpa [AwaySevenBaseEndpointQuotientEquation, hrow] using hend
+  | z =>
+      right
+      left
+      refine ⟨rfl, ?_⟩
+      simpa [AwaySevenBaseEndpointQuotientEquation, hrow] using hend
+  | sum =>
+      right
+      right
+      refine ⟨rfl, ?_⟩
+      simpa [AwaySevenBaseEndpointQuotientEquation, hrow] using hend
+
 end DkMath.FLT.Seven
