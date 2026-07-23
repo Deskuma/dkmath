@@ -13,11 +13,7 @@ namespace DkMath.FLT.Seven
 /-- The positive row sign occurs exactly in the `Y` sector. -/
 theorem awaySevenBaseRowSignUnit_eq_one_iff (row : EndpointRoutingRow) :
     awaySevenBaseRowSignUnit row = 1 ↔ row = .y := by
-  have hneg : (-1 : (ZMod 7)ˣ) ≠ 1 := by
-    intro h
-    have hval : (-1 : ZMod 7) = 1 :=
-      congrArg (fun u : (ZMod 7)ˣ => (u : ZMod 7)) h
-    norm_num at hval
+  have hneg : (-1 : (ZMod 7)ˣ) ≠ 1 := by decide
   cases row <;> simp [awaySevenBaseRowSignUnit, hneg]
 
 /-- The normalized terminal unit equals one exactly in the `Y` row. -/
