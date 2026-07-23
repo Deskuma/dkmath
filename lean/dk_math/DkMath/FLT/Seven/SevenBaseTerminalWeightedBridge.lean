@@ -148,4 +148,27 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.terminal_residual_eq_zero_mod_seve
   · simpa [awaySevenBaseTerminalResidualModSeven, hz.1] using hz.2
   · simpa [awaySevenBaseTerminalResidualModSeven, hs.1] using hs.2
 
+/-- The integer representative of the row-sensitive terminal residual. -/
+def awaySevenBaseTerminalResidualInt
+    (row : EndpointRoutingRow) (y z : ℕ) : ℤ :=
+  match row with
+  | .y => cyclotomicSevenFst (z : ℤ) (y : ℤ) - (z : ℤ) ^ 3
+  | .z | .sum => cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3
+
+/-- The terminal residual vanishing modulo seven is equivalently an integer
+seven-divisibility statement. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.seven_dvd_terminal_residual
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    (7 : ℤ) ∣ awaySevenBaseTerminalResidualInt p.row y z := by
+  have hzero := packet.terminal_residual_eq_zero_mod_seven
+  have hcast :
+      ((awaySevenBaseTerminalResidualInt p.row y z : ℤ) : ZMod 7) = 0 := by
+    cases hrow : p.row <;>
+      simpa [awaySevenBaseTerminalResidualInt,
+        awaySevenBaseTerminalResidualModSeven, hrow] using hzero
+  exact (ZMod.intCast_zmod_eq_zero_iff_dvd
+    (awaySevenBaseTerminalResidualInt p.row y z) 7).mp hcast
+
 end DkMath.FLT.Seven
