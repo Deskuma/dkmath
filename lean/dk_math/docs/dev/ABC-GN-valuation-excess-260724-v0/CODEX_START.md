@@ -9,9 +9,6 @@ wip/ABC-GN-valuation-excess-260724-Codex
 この branch を checkout し、次を順に読む。
 
 ```text
-README.md
-AGENT.md
-SUMMARY.md
 lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/README.md
 lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/instruction-001.md
 ```

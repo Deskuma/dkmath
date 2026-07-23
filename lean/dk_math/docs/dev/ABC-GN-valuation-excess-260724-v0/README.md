@@ -89,9 +89,9 @@ ABC–GN 作業では次を守る。
 ## 5. 開発サイクル
 
 ```text
-賢狼が instruction-NNN.md を追加
+賢狼(AI Agent Reviewer)が instruction-NNN.md を追加
   ↓
-D. が Codex の起動トリガーを実行
+D. (User) が Codex(VS Code Codex 拡張機能) への起動トリガーを実行
   ↓
 Codex が current source を調査して実装
   ↓
@@ -108,25 +108,15 @@ Codex は単なる写経担当ではない。現場の current source を読み�
 
 ## 6. 資料の読み順
 
-最初に次を読む。
+GitHub current source を優先して調査する。
 
-```text
-README.md
-AGENT.md
-SUMMARY.md
-```
+開発経緯は、以下のドキュメント
 
-その後、GitHub current source を優先して調査する。
+`lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-001.md`
+`lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/Note-ABC-GNval-002.md`
 
-必要に応じて以下を参照する。
-
-```text
-__dkmath-all.lean.txt.gz
-__summary_report_data.tar.gz
-__theorems-heading.txt
-```
-
-巨大な raw agent log、会話全文 dump、統合ログは開かない。必要な事実は current source、整理済み docs、対象 theorem から取得する。
+巨大な raw agent log、会話全文 dump、統合ログは開かない。冒頭部分、ファイルサイズで判断。
+必要な事実は current source、整理済み docs、対象 theorem から取得する。
 
 ## 7. 主な既存資産の候補
 
