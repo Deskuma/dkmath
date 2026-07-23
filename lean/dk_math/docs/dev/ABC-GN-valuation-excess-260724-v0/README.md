@@ -67,7 +67,26 @@ develop
 
 WIP から feature への draft PR を常設する。
 
-## 4. 開発サイクル
+## 4. 並行開発との共存
+
+同じ `develop` 系列では、現在 FLT7 の別作業が並行している。
+
+```text
+wip/FLT7-magic-core-260722-WiseWolf
+```
+
+ABC–GN 作業では次を守る。
+
+- `DkMath/FLT/Seven/**` および FLT7 専用 docs を変更しない。
+- FLT7 側の theorem・命名・import 構造を整理目的で変更しない。
+- 原則として `DkMath/ABC/**`、必要な `NumberTheory` bridge、当作業場 docs のみに変更を限定する。
+- `DkMath.lean`、`DkMath/ABC.lean`、共有 aggregator の変更が必要な場合は最小一行に限定し、report に明記する。
+- 並行 branch の成果を先取りして import しない。必要な共通 API は現在の ABC–GN branch 上に存在するものだけを使用する。
+- feature への採用時または develop への統合前に、並行変更との compare / merge-base を再確認する。
+
+両 branch が `develop` から派生しているため、対象領域を守る限り通常は独立に進められる。競合が生じた場合は、ABC–GN 側で FLT7 実装を改変して解決せず、賢狼レビューへ戻す。
+
+## 5. 開発サイクル
 
 ```text
 賢狼が instruction-NNN.md を追加
@@ -87,7 +106,7 @@ Lean CI
 
 Codex は単なる写経担当ではない。現場の current source を読み、既存 theorem の再利用、命名、配置、依存方向を判断してよい。ただし、instruction の数学的境界を越える強い主張は追加しない。
 
-## 5. 資料の読み順
+## 6. 資料の読み順
 
 最初に次を読む。
 
@@ -109,7 +128,7 @@ __theorems-heading.txt
 
 巨大な raw agent log、会話全文 dump、統合ログは開かない。必要な事実は current source、整理済み docs、対象 theorem から取得する。
 
-## 6. 主な既存資産の候補
+## 7. 主な既存資産の候補
 
 実際の import と theorem 名は current source で再確認すること。
 
@@ -127,7 +146,7 @@ DkMath.Petal.ABCBridge
 
 既存定理の wrapper で済むものを再証明しない。
 
-## 7. Checkpoint 方針
+## 8. Checkpoint 方針
 
 当面の登山路は次である。
 
@@ -146,7 +165,7 @@ ABC-GN-010  abc_main_axiom replacement audit
 
 この番号は研究地図であり、各 checkpoint の実装量は current source に応じて分割・統合してよい。
 
-## 8. 実装規律
+## 9. 実装規律
 
 - 新しい `axiom` を追加しない。
 - target module に `sorry` を追加しない。
@@ -158,7 +177,7 @@ ABC-GN-010  abc_main_axiom replacement audit
 - 既存 API と重複する場合は、新定理ではなく薄い namespace wrapper を検討する。
 - README や report では、Lean-confirmed fact、数学的解釈、未証明 Gap を分ける。
 
-## 9. 報告契約
+## 10. 報告契約
 
 各 `report-NNN.md` には最低限、次を記録する。
 
@@ -171,11 +190,18 @@ ABC-GN-010  abc_main_axiom replacement audit
 - build / CI の結果
 - 次 checkpoint 候補
 - commit SHA
+- 並行 FLT7 branch と共有領域を触れたか
 ```
 
-## 10. 現在の起動指示
+## 11. 現在の起動指示
 
-最初の指示書:
+起動入口:
+
+```text
+CODEX_START.md
+```
+
+現在の指示書:
 
 ```text
 instruction-001.md
