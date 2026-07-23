@@ -75,4 +75,38 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.row_resolved_terminal_load_divisib
       exact ⟨q, hs.2.symm⟩
     exact hcopYZ.dvd_of_dvd_mul_left hdiv
 
+/-- At terminal depth one, the cubic root load remaining after removal of the
+unique visible factor seven is itself a seven-adic unit. -/
+theorem AwaySevenBaseTerminalQuotientCorePacket.seven_not_dvd_cubic_root_load
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalQuotientCorePacket source r p) :
+    ¬ 7 ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+      r.cubic.rootTriple.rightPart := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  have hvDepth : padicValNat 7 r.cubic.rootTriple.vPart = 0 := by
+    calc
+      padicValNat 7 r.cubic.rootTriple.vPart = p.exponent - 1 := p.root_depth_eq
+      _ = 0 := by omega
+  have hvNot : ¬ 7 ∣ r.cubic.rootTriple.vPart := by
+    intro hv
+    have hvne : r.cubic.rootTriple.vPart ≠ 0 :=
+      Nat.ne_of_gt r.cubic.rootTriple.vPart_pos
+    have hle : 1 ≤ padicValNat 7 r.cubic.rootTriple.vPart :=
+      one_le_padicValNat_of_dvd hvne hv
+    omega
+  have hLRNot :
+      ¬ 7 ∣ r.cubic.rootTriple.leftPart * r.cubic.rootTriple.rightPart := by
+    rw [r.cubic.rootTriple.leftPart_eq, r.cubic.rootTriple.rightPart_eq,
+      ← Int.natAbs_mul, ← seventhPowerSndCore_factor]
+    exact r.cubic.rootTriple.normal.seven_not_dvd_natAbs_sndCore
+  intro hload
+  have hload' :
+      7 ∣ r.cubic.rootTriple.vPart *
+        (r.cubic.rootTriple.leftPart * r.cubic.rootTriple.rightPart) := by
+    simpa only [mul_assoc] using hload
+  rcases (by norm_num : Nat.Prime 7).dvd_mul.mp hload' with hv | hLR
+  · exact hvNot hv
+  · exact hLRNot hLR
+
 end DkMath.FLT.Seven
