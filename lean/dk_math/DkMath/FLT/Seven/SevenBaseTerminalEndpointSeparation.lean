@@ -142,11 +142,11 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.endpoint_carrier_root_load_norma
           awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
           awaySevenBaseTerminalCompanionEndpointNat p.row y z =
         y * z * (y + z) := by
-    cases hrow : p.row <;>
-      simp [endpointRoutingFactorNat,
+    cases p.row <;>
+      simp only [endpointRoutingFactorNat,
         awaySevenBaseTerminalUnselectedEndpointNat,
-        awaySevenBaseTerminalCompanionEndpointNat, hrow] <;>
-      ring
+        awaySevenBaseTerminalCompanionEndpointNat] <;>
+      ac_rfl
   have hsevenProduct :
       7 * (packet.carrier.carrierUnit *
           awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
@@ -167,7 +167,14 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.endpoint_carrier_root_load_norma
           r.cubic.rootTriple.rightPart := r.cubic.product_eq
       _ = 7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
           r.cubic.rootTriple.rightPart) := by ring
-  refine ⟨Nat.mul_left_cancel hsevenProduct, ?_,
+  have hloadEq :
+      packet.carrier.carrierUnit *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart :=
+    Nat.mul_left_cancel (by norm_num : 0 < 7) hsevenProduct
+  refine ⟨hloadEq, ?_,
     packet.unselected_endpoint_coprime_carrierUnit,
     packet.companion_endpoint_coprime_carrierUnit⟩
   cases hrow : p.row with
