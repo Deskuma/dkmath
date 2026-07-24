@@ -99,8 +99,11 @@ produce one product-modulus residue tuple reducing exactly to every projected
 local model; a strengthened packet keeps local orbit coherence as an explicit
 additional proof.  Combining that global residue model with the simultaneous
 unit scale gives a product-modulus weight-(3,7) coordinate candidate whose
-reduction recovers every actual local coordinate tuple.  No signed integral
-representative or integral equality is claimed.  Each local complete exponent is also
+reduction recovers every actual local coordinate tuple.  Centered signed
+integer representatives of the scale, model, and weighted tuple are available,
+with exact cast-back and local congruence theorems.  No equality between the
+independently centered integer weighted tuple and the integer weighted scaling
+of the centered model is claimed.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.

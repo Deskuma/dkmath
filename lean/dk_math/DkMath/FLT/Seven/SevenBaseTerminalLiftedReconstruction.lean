@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Seven.SevenBaseTerminalGlobalModel
+import Mathlib.Data.ZMod.ValMinAbs
 
 #print "file: DkMath.FLT.Seven.SevenBaseTerminalLiftedReconstruction"
 
@@ -116,5 +117,129 @@ theorem nonempty_awaySevenBaseTerminalProductModulusWeightedCoordinatesPacket
       (AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket
         packet.globalModelCompatibilityPacket.family) :=
   ⟨packet.globalModelCompatibilityPacket.weightedCoordinatesPacket⟩
+
+/-- The centered signed integer representative of every entry of a residue
+coordinate tuple. -/
+def AwayRoutingCoordinates.signedRepresentative {M : ℕ}
+    (coordinates : AwayRoutingCoordinates (ZMod M)) :
+    AwayRoutingCoordinates ℤ :=
+  coordinates.map ZMod.valMinAbs
+
+/-- Casting centered signed representatives back to `ZMod M` recovers the
+original coordinate tuple exactly. -/
+@[simp] theorem AwayRoutingCoordinates.cast_signedRepresentative
+    {M : ℕ} (coordinates : AwayRoutingCoordinates (ZMod M)) :
+    coordinates.signedRepresentative.map (fun a : ℤ => (a : ZMod M)) =
+      coordinates := by
+  ext <;> exact ZMod.coe_valMinAbs _
+
+/-- Every entry of an integer coordinate tuple lies in the centered
+representative interval for `ZMod M`. -/
+def AwayRoutingCoordinates.IsCentered (M : ℕ)
+    (coordinates : AwayRoutingCoordinates ℤ) : Prop :=
+  coordinates.u * 2 ∈ Set.Ioc (-(M : ℤ)) M ∧
+  coordinates.v * 2 ∈ Set.Ioc (-(M : ℤ)) M ∧
+  coordinates.y * 2 ∈ Set.Ioc (-(M : ℤ)) M ∧
+  coordinates.z * 2 ∈ Set.Ioc (-(M : ℤ)) M
+
+/-- Centered representatives satisfy the common half-open interval
+normalization coordinatewise. -/
+theorem AwayRoutingCoordinates.signedRepresentative_isCentered
+    {M : ℕ} [NeZero M]
+    (coordinates : AwayRoutingCoordinates (ZMod M)) :
+    (coordinates.signedRepresentative).IsCentered M := by
+  exact ⟨ZMod.valMinAbs_mem_Ioc _, ZMod.valMinAbs_mem_Ioc _,
+    ZMod.valMinAbs_mem_Ioc _, ZMod.valMinAbs_mem_Ioc _⟩
+
+/-- LIFT-002 signed representative and congruence packet.
+
+The three integer objects are independently chosen centered representatives
+of the modular scale, model, and weighted candidate. In particular, this
+packet does not claim the integer equality
+`weighted = model.weightedScale scale`. -/
+structure AwaySevenBaseTerminalSignedRepresentativePacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    (candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family) :
+    Type where
+  scale : ℤ
+  model : AwayRoutingCoordinates ℤ
+  weighted : AwayRoutingCoordinates ℤ
+  scale_cast :
+    (scale : ZMod family.combinedModulus) =
+      candidate.scale.combinedScale
+  model_cast :
+    model.map (fun a : ℤ => (a : ZMod family.combinedModulus)) =
+      candidate.model.globalModel
+  weighted_cast :
+    weighted.map (fun a : ℤ => (a : ZMod family.combinedModulus)) =
+      candidate.weighted
+  scale_centered :
+    scale * 2 ∈ Set.Ioc
+      (-(family.combinedModulus : ℤ)) family.combinedModulus
+  model_centered :
+    model.IsCentered family.combinedModulus
+  weighted_centered :
+    weighted.IsCentered family.combinedModulus
+
+namespace AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket
+
+/-- Choose the canonical centered representatives supplied by
+`ZMod.valMinAbs`. -/
+noncomputable def signedRepresentativePacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    (candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family) :
+    AwaySevenBaseTerminalSignedRepresentativePacket candidate := by
+  have hMpos : 0 < family.combinedModulus := by
+    rw [family.combinedModulus_eq_cubicRootLoad]
+    exact awaySevenBaseTerminalCubicRootLoad_pos r
+  letI : NeZero family.combinedModulus := ⟨hMpos.ne'⟩
+  exact {
+    scale := candidate.scale.combinedScale.valMinAbs
+    model := candidate.model.globalModel.signedRepresentative
+    weighted := candidate.weighted.signedRepresentative
+    scale_cast := ZMod.coe_valMinAbs _
+    model_cast :=
+      AwayRoutingCoordinates.cast_signedRepresentative
+        candidate.model.globalModel
+    weighted_cast :=
+      AwayRoutingCoordinates.cast_signedRepresentative candidate.weighted
+    scale_centered := ZMod.valMinAbs_mem_Ioc _
+    model_centered :=
+      candidate.model.globalModel.signedRepresentative_isCentered
+    weighted_centered :=
+      candidate.weighted.signedRepresentative_isCentered }
+
+end AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket
+
+/-- Reducing the signed weighted representative at any terminal prime
+recovers the actual local coordinate tuple. -/
+theorem AwaySevenBaseTerminalSignedRepresentativePacket.local_weighted_congruence
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate)
+    (q : AwaySevenBaseTerminalPrimeIndex r) :
+    signed.weighted.map
+        (fun a : ℤ =>
+          family.reductionHom q
+            (a : ZMod family.combinedModulus)) =
+      (family.localActual q).toCoordinates := by
+  rw [← candidate.local_actual_reduction q]
+  have h := congrArg
+    (fun coordinates =>
+      coordinates.map (family.reductionHom q))
+    signed.weighted_cast
+  simpa [AwayRoutingCoordinates.map] using h
 
 end DkMath.FLT.Seven
