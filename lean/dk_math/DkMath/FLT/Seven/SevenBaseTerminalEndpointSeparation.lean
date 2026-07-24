@@ -116,4 +116,72 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.companion_endpoint_coprime_carri
   rw [Int.isCoprime_iff_nat_coprime] at hcopCarrier
   simpa using hcopCarrier
 
+/-- Removing the unique selected factor seven leaves a product of three
+pairwise-coprime natural factors, and this product is exactly the cubic root
+load. -/
+theorem AwaySevenBaseTerminalQuotientCorePacket.endpoint_carrier_root_load_normal_form
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalQuotientCorePacket source r p) :
+    packet.carrier.carrierUnit *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z =
+        r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart ∧
+      Nat.Coprime
+        (awaySevenBaseTerminalUnselectedEndpointNat p.row y z)
+        (awaySevenBaseTerminalCompanionEndpointNat p.row y z) ∧
+      Nat.Coprime
+        (awaySevenBaseTerminalUnselectedEndpointNat p.row y z)
+        packet.carrier.carrierUnit ∧
+      Nat.Coprime
+        (awaySevenBaseTerminalCompanionEndpointNat p.row y z)
+        packet.carrier.carrierUnit := by
+  have hendpointProduct :
+      endpointRoutingFactorNat y z p.row *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z =
+        y * z * (y + z) := by
+    cases hrow : p.row <;>
+      simp [endpointRoutingFactorNat,
+        awaySevenBaseTerminalUnselectedEndpointNat,
+        awaySevenBaseTerminalCompanionEndpointNat, hrow] <;>
+      ring
+  have hsevenProduct :
+      7 * (packet.carrier.carrierUnit *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z) =
+        7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) := by
+    calc
+      7 * (packet.carrier.carrierUnit *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z) =
+        endpointRoutingFactorNat y z p.row *
+          awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+          awaySevenBaseTerminalCompanionEndpointNat p.row y z := by
+            rw [packet.carrier.carrier_eq]
+            ring
+      _ = y * z * (y + z) := hendpointProduct
+      _ = 7 * r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart := r.cubic.product_eq
+      _ = 7 * (r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
+          r.cubic.rootTriple.rightPart) := by ring
+  refine ⟨Nat.mul_left_cancel hsevenProduct, ?_,
+    packet.unselected_endpoint_coprime_carrierUnit,
+    packet.companion_endpoint_coprime_carrierUnit⟩
+  cases hrow : p.row with
+  | y =>
+      simp only [awaySevenBaseTerminalUnselectedEndpointNat,
+        awaySevenBaseTerminalCompanionEndpointNat]
+      exact r.cubic.endpointTriple.coprime_second_third
+  | z =>
+      simp only [awaySevenBaseTerminalUnselectedEndpointNat,
+        awaySevenBaseTerminalCompanionEndpointNat]
+      exact r.cubic.endpointTriple.coprime_first_third
+  | sum =>
+      simp only [awaySevenBaseTerminalUnselectedEndpointNat,
+        awaySevenBaseTerminalCompanionEndpointNat]
+      exact r.cubic.endpointTriple.coprime_first_second
+
 end DkMath.FLT.Seven
