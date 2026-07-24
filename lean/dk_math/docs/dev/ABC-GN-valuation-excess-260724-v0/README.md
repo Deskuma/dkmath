@@ -149,8 +149,8 @@ DkMath.Petal.ABCBridge
 ```text
 ABC-GN-001  ABC triple の GN power lift                    完了
 ABC-GN-002  lift の coprime / support separation           001 に吸収して完了
-ABC-GN-003  ABC 座標の padic boundary–GN split             現在
-ABC-GN-004  q | n / q ∤ n の例外層分離
+ABC-GN-003  ABC 座標の padic boundary–GN split             完了
+ABC-GN-004  q | n / q ∤ n の例外層分離                    現在
 ABC-GN-005  valuation excess の有限 factorization API
 ABC-GN-006  high quality -> GN excess 強制 bridge
 ABC-GN-007  non-exceptional high-lift obstruction
@@ -201,7 +201,7 @@ CODEX_START.md
 現在の指示書:
 
 ```text
-instruction-002.md
+instruction-003.md
 ```
 
 Codex の実装は、D. が明示的に起動したときだけ開始する。
