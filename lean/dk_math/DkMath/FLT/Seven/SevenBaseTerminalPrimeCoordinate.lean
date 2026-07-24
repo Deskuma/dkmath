@@ -123,18 +123,48 @@ theorem AwaySevenBaseTerminalRoutingPacket.existsUnique_rootColumn_of_fixedPrime
   | carrier =>
       have h := haddress
       simp only [AwaySevenBaseTerminalFixedPrimeAddress] at h
-      simpa [AwaySevenBaseTerminalFixedPrimeCoordinate] using
-        existsUnique_rootColumn_of_routed_prime h
+      change ∃! column : AwaySevenBaseTerminalRootColumn,
+        match column with
+        | .vPart =>
+            q ∣ packet.routing.c11 ∧ ¬ q ∣ packet.routing.c12 ∧
+              ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.vPart
+        | .leftPart =>
+            q ∣ packet.routing.c12 ∧ ¬ q ∣ packet.routing.c11 ∧
+              ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.leftPart
+        | .rightPart =>
+            q ∣ packet.routing.c13 ∧ ¬ q ∣ packet.routing.c11 ∧
+              ¬ q ∣ packet.routing.c12 ∧ q ∣ r.cubic.rootTriple.rightPart
+      exact existsUnique_rootColumn_of_routed_prime h
   | unselected =>
       have h := haddress
       simp only [AwaySevenBaseTerminalFixedPrimeAddress] at h
-      simpa [AwaySevenBaseTerminalFixedPrimeCoordinate] using
-        existsUnique_rootColumn_of_routed_prime h
+      change ∃! column : AwaySevenBaseTerminalRootColumn,
+        match column with
+        | .vPart =>
+            q ∣ packet.routing.c21 ∧ ¬ q ∣ packet.routing.c22 ∧
+              ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.vPart
+        | .leftPart =>
+            q ∣ packet.routing.c22 ∧ ¬ q ∣ packet.routing.c21 ∧
+              ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.leftPart
+        | .rightPart =>
+            q ∣ packet.routing.c23 ∧ ¬ q ∣ packet.routing.c21 ∧
+              ¬ q ∣ packet.routing.c22 ∧ q ∣ r.cubic.rootTriple.rightPart
+      exact existsUnique_rootColumn_of_routed_prime h
   | companion =>
       have h := haddress
       simp only [AwaySevenBaseTerminalFixedPrimeAddress] at h
-      simpa [AwaySevenBaseTerminalFixedPrimeCoordinate] using
-        existsUnique_rootColumn_of_routed_prime h
+      change ∃! column : AwaySevenBaseTerminalRootColumn,
+        match column with
+        | .vPart =>
+            q ∣ packet.routing.c31 ∧ ¬ q ∣ packet.routing.c32 ∧
+              ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.vPart
+        | .leftPart =>
+            q ∣ packet.routing.c32 ∧ ¬ q ∣ packet.routing.c31 ∧
+              ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.leftPart
+        | .rightPart =>
+            q ∣ packet.routing.c33 ∧ ¬ q ∣ packet.routing.c31 ∧
+              ¬ q ∣ packet.routing.c32 ∧ q ∣ r.cubic.rootTriple.rightPart
+      exact existsUnique_rootColumn_of_routed_prime h
 
 /-- Every prime dividing the terminal cubic root load has one unique explicit
 row/column coordinate on the fixed terminal routing board. -/
