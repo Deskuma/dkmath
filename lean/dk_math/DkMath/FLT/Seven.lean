@@ -54,6 +54,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeAddress
 import DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeDepth
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerClassification
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerOrbit
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerScaleProjection
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
