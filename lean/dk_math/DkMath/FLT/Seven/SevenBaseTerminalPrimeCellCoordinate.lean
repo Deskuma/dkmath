@@ -112,8 +112,7 @@ theorem AwaySevenBaseTerminalRoutingPacket.primeCellCoordinate_dvd_routingCell
 
 /-- Every prime dividing the terminal cubic root load has one unique flattened
 coordinate among the nine cells of the fixed terminal routing board. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .prime_dvd_cubicRootLoad_unique_global_cellCoordinate
+theorem AwaySevenBaseTerminalRoutingPacket.prime_dvd_cubicRootLoad_unique_global_cellCoordinate
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
