@@ -78,4 +78,39 @@ theorem Triple.gnPowerLift_coprime (T : Triple) (n : ℕ) :
     Nat.Coprime (T.a * GN n T.a T.b) (T.b ^ n) :=
   (T.gnPowerLift n).hcop
 
+/--
+The GN difference quotient contains at least the leading endpoint
+`c^(n-1)`.  This is the natural-coordinate return bound used by the
+quality-to-excess bridge.
+-/
+theorem Triple.pow_pred_c_le_GN
+    (T : Triple) {n : ℕ}
+    (hn : 1 ≤ n) (ha : 0 < T.a) :
+    T.c ^ (n - 1) ≤ GN n T.a T.b := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  simp only [Nat.add_sub_cancel_left]
+  have hbc : T.b ≤ T.c := by
+    rw [← T.hsum]
+    exact Nat.le_add_left T.b T.a
+  have hpow : T.b ^ k ≤ T.c ^ k :=
+    Nat.pow_le_pow_left hbc k
+  have hbpow : T.b ^ (1 + k) ≤ T.b * T.c ^ k := by
+    rw [Nat.add_comm, pow_succ']
+    exact Nat.mul_le_mul_left T.b hpow
+  have hsum := T.gnPowerLift_sum (1 + k)
+  have hleft :
+      T.a * T.c ^ k + T.b ^ (1 + k) ≤
+        (T.a + T.b) * T.c ^ k := by
+    rw [add_mul]
+    exact Nat.add_le_add_left hbpow _
+  have hmul : T.a * T.c ^ k ≤ T.a * GN (1 + k) T.a T.b := by
+    apply Nat.le_of_add_le_add_right
+    calc
+      T.a * T.c ^ k + T.b ^ (1 + k)
+          ≤ (T.a + T.b) * T.c ^ k := hleft
+      _ = T.c ^ (1 + k) := by
+        rw [T.hsum, Nat.add_comm, pow_succ']
+      _ = T.a * GN (1 + k) T.a T.b + T.b ^ (1 + k) := hsum.symm
+  exact Nat.le_of_mul_le_mul_left hmul ha
+
 end DkMath.ABC

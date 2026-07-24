@@ -37,6 +37,65 @@ def GNExceptionalHighLiftPrime (q n a b : ℕ) : Prop :=
 def GNNonExceptionalHighLiftPrime (q n a b : ℕ) : Prop :=
   GNHighLiftPrime q n a b ∧ ¬ q ∣ n
 
+/-- The finite factorization support carried by prime-square divisors. -/
+def highLiftSupport (m : ℕ) : Finset ℕ :=
+  m.factorization.support.filter (fun q => q ^ 2 ∣ m)
+
+/--
+Valuation excess is supported exactly on prime-square carriers; support
+primes of valuation one make a zero contribution.
+-/
+theorem valuationExcess_eq_sum_highLift
+    {m : ℕ} (hm : m ≠ 0) :
+    valuationExcess m =
+      ∑ q ∈ highLiftSupport m,
+        (((m.factorization q - 1 : ℕ) : ℝ) *
+          Real.log (q : ℝ)) := by
+  classical
+  unfold valuationExcess highLiftSupport
+  symm
+  apply Finset.sum_subset (Finset.filter_subset _ _)
+  intro q hq hq_filter
+  have hq_support : q ∈ m.factorization.support := hq
+  have hq_prime : Nat.Prime q :=
+    (mem_support_factorization_iff.mp hq_support).2.1
+  have hq_not_sq : ¬ q ^ 2 ∣ m := by
+    intro hsq
+    exact hq_filter (Finset.mem_filter.mpr ⟨hq_support, hsq⟩)
+  have hq_lt_two : ¬ 2 ≤ m.factorization q := by
+    intro htwo
+    exact hq_not_sq
+      ((hq_prime.pow_dvd_iff_le_factorization hm).2 htwo)
+  have hq_one : m.factorization q = 1 := by
+    have := one_le_factorization_of_mem_support hq_support
+    omega
+  simp [hq_one]
+
+/-- GN valuation excess is the exact finite sum over GN high-lift carriers. -/
+theorem GNValuationExcess_eq_sum_highLift
+    {n a b : ℕ} (hGN : GN n a b ≠ 0) :
+    GNValuationExcess n a b =
+      ∑ q ∈ highLiftSupport (GN n a b),
+        ((((GN n a b).factorization q - 1 : ℕ) : ℝ) *
+          Real.log (q : ℝ)) := by
+  simpa [GNValuationExcess] using
+    (valuationExcess_eq_sum_highLift (m := GN n a b) hGN)
+
+/-- If GN has no prime-square carrier, its valuation excess vanishes. -/
+theorem GNValuationExcess_eq_zero_of_no_highLift
+    {n a b : ℕ} (hGN : GN n a b ≠ 0)
+    (hNoLift : ∀ q, Nat.Prime q → ¬ q ^ 2 ∣ GN n a b) :
+    GNValuationExcess n a b = 0 := by
+  rw [GNValuationExcess_eq_sum_highLift hGN]
+  apply Finset.sum_eq_zero
+  intro q hq
+  have hq_support :
+      q ∈ (GN n a b).factorization.support :=
+    (Finset.mem_filter.mp hq).1
+  have hq_prime : Nat.Prime q :=
+    (mem_support_factorization_iff.mp hq_support).2.1
+  exact False.elim (hNoLift q hq_prime (Finset.mem_filter.mp hq).2)
+
 /-- Every GN high lift lies in exactly one of the two exponent layers. -/
 theorem GNHighLiftPrime.exceptional_or_nonExceptional
     {q n a b : ℕ} (h : GNHighLiftPrime q n a b) :
