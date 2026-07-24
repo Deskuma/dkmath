@@ -233,4 +233,5 @@ Outcome C:
   最薄 theorem surface と重複回避判断を report に固定した。
 ```
 
-どの Outcome でも、実装・ローカル検証・`report-003.md` 作成後に停止し、User へ結果を返す。次 checkpoint へ自動進行しない。
+どの Outcome でも、実装・ローカル検証・`report-003.md` 作成後に停止し、User へ結果を返す。
+次 checkpoint へ自動進行しない。※ただし、ユーザーの意向を最優先とする。
