@@ -24,34 +24,40 @@ def AwaySevenBaseTerminalFixedPrimeCoordinate
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
     (row : AwaySevenBaseTerminalFactorRow)
     (column : AwaySevenBaseTerminalRootColumn) (q : ℕ) : Prop :=
-  match row, column with
-  | .carrier, .vPart =>
-      q ∣ packet.routing.c11 ∧ ¬ q ∣ packet.routing.c12 ∧
-        ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.vPart
-  | .carrier, .leftPart =>
-      q ∣ packet.routing.c12 ∧ ¬ q ∣ packet.routing.c11 ∧
-        ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.leftPart
-  | .carrier, .rightPart =>
-      q ∣ packet.routing.c13 ∧ ¬ q ∣ packet.routing.c11 ∧
-        ¬ q ∣ packet.routing.c12 ∧ q ∣ r.cubic.rootTriple.rightPart
-  | .unselected, .vPart =>
-      q ∣ packet.routing.c21 ∧ ¬ q ∣ packet.routing.c22 ∧
-        ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.vPart
-  | .unselected, .leftPart =>
-      q ∣ packet.routing.c22 ∧ ¬ q ∣ packet.routing.c21 ∧
-        ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.leftPart
-  | .unselected, .rightPart =>
-      q ∣ packet.routing.c23 ∧ ¬ q ∣ packet.routing.c21 ∧
-        ¬ q ∣ packet.routing.c22 ∧ q ∣ r.cubic.rootTriple.rightPart
-  | .companion, .vPart =>
-      q ∣ packet.routing.c31 ∧ ¬ q ∣ packet.routing.c32 ∧
-        ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.vPart
-  | .companion, .leftPart =>
-      q ∣ packet.routing.c32 ∧ ¬ q ∣ packet.routing.c31 ∧
-        ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.leftPart
-  | .companion, .rightPart =>
-      q ∣ packet.routing.c33 ∧ ¬ q ∣ packet.routing.c31 ∧
-        ¬ q ∣ packet.routing.c32 ∧ q ∣ r.cubic.rootTriple.rightPart
+  match row with
+  | .carrier =>
+      match column with
+      | .vPart =>
+          q ∣ packet.routing.c11 ∧ ¬ q ∣ packet.routing.c12 ∧
+            ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.vPart
+      | .leftPart =>
+          q ∣ packet.routing.c12 ∧ ¬ q ∣ packet.routing.c11 ∧
+            ¬ q ∣ packet.routing.c13 ∧ q ∣ r.cubic.rootTriple.leftPart
+      | .rightPart =>
+          q ∣ packet.routing.c13 ∧ ¬ q ∣ packet.routing.c11 ∧
+            ¬ q ∣ packet.routing.c12 ∧ q ∣ r.cubic.rootTriple.rightPart
+  | .unselected =>
+      match column with
+      | .vPart =>
+          q ∣ packet.routing.c21 ∧ ¬ q ∣ packet.routing.c22 ∧
+            ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.vPart
+      | .leftPart =>
+          q ∣ packet.routing.c22 ∧ ¬ q ∣ packet.routing.c21 ∧
+            ¬ q ∣ packet.routing.c23 ∧ q ∣ r.cubic.rootTriple.leftPart
+      | .rightPart =>
+          q ∣ packet.routing.c23 ∧ ¬ q ∣ packet.routing.c21 ∧
+            ¬ q ∣ packet.routing.c22 ∧ q ∣ r.cubic.rootTriple.rightPart
+  | .companion =>
+      match column with
+      | .vPart =>
+          q ∣ packet.routing.c31 ∧ ¬ q ∣ packet.routing.c32 ∧
+            ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.vPart
+      | .leftPart =>
+          q ∣ packet.routing.c32 ∧ ¬ q ∣ packet.routing.c31 ∧
+            ¬ q ∣ packet.routing.c33 ∧ q ∣ r.cubic.rootTriple.leftPart
+      | .rightPart =>
+          q ∣ packet.routing.c33 ∧ ¬ q ∣ packet.routing.c31 ∧
+            ¬ q ∣ packet.routing.c32 ∧ q ∣ r.cubic.rootTriple.rightPart
 
 /-- A global prime coordinate exposes both the unique endpoint-side row and the
 unique cubic root-load column of a prime on one fixed terminal board. -/
