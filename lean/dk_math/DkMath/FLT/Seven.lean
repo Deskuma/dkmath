@@ -61,6 +61,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleReduction
 import DkMath.FLT.Seven.SevenBaseTerminalCubicRootLoadModulus
+import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinates
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -88,7 +89,10 @@ the full and partial product-modulus APIs needed for finite induction are
 available.  Finite CRT synchronizes all local scale residues into one unit
 modulo their product, with explicit local reduction maps compatible with the
 weight-three and weight-seven coordinate operations.  Compatibility of the
-local canonical models is not claimed.  Each local complete exponent is also
+local models is not claimed.  Their four residues now have a column-independent
+coordinate carrier, while an audit packet retains each model's exact
+column-indexed orbit source and its constructor-specific root data.  No
+product-modulus global model is claimed.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.
