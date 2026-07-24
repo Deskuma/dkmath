@@ -460,12 +460,19 @@ Only then add the public theorem and update the facade documentation.
 
 ## 13. Recommended checkpoint sequence
 
+complete
+
 ```text
 FLT7-CRT-001  terminal prime support
 FLT7-CRT-002  local scale family
 FLT7-CRT-003  finite modulus coprimality
 FLT7-CRT-004  finite CRT gluing packet
 FLT7-CRT-005  simultaneous local reduction
+```
+
+incomplete
+
+```txt
 FLT7-LOAD-001 exponent transport from cell to root load
 FLT7-LOAD-002 product modulus reconstruction
 FLT7-MODEL-001 local model compatibility audit
