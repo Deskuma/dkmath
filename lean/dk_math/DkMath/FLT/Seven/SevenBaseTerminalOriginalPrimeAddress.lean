@@ -140,8 +140,7 @@ def AwaySevenBaseTerminalOriginalRoutingPrimeProjection.toOriginalPrimeAddress
 
 /-- Every prime dividing the terminal cubic root load is realized as a
 non-seven specialized prime address on the original routing grid. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .exists_originalPrimeAddress_of_dvd_cubicRootLoad
+theorem AwaySevenBaseTerminalRoutingPacket.exists_originalPrimeAddress_of_dvd_cubicRootLoad
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
