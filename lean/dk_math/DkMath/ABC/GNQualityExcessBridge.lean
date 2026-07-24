@@ -17,13 +17,15 @@ set_option linter.style.emptyLine false
 # The quality-to-GN-excess interface
 
 This module records the exact deterministic interface needed to turn high ABC
-quality into GN valuation excess.  Two estimates remain visible:
+quality into GN valuation excess.  Two estimates are visible in the generic
+interface:
 
 * a return lower bound comparing `log GN` with `log c`;
 * a support budget comparing `log (rad GN)` with the ABC radical.
 
-Neither estimate is asserted globally here.  Once supplied, the finite
-factorization identity forces the claimed excess.
+The GN return estimate is discharged unconditionally below with coefficient
+`n - 1`.  Thus the specialized public bridge leaves only the GN support
+budget as a global input.
 -/
 
 namespace DkMath.ABC
