@@ -468,13 +468,13 @@ FLT7-CRT-002  local scale family
 FLT7-CRT-003  finite modulus coprimality
 FLT7-CRT-004  finite CRT gluing packet
 FLT7-CRT-005  simultaneous local reduction
+FLT7-LOAD-001 exponent transport from cell to root load
+FLT7-LOAD-002 product modulus reconstruction
 ```
 
 incomplete
 
 ```txt
-FLT7-LOAD-001 exponent transport from cell to root load
-FLT7-LOAD-002 product modulus reconstruction
 FLT7-MODEL-001 local model compatibility audit
 FLT7-MODEL-002 global model or incompatibility packet
 FLT7-LIFT-001 product-modulus weighted candidate
