@@ -1691,7 +1691,7 @@ $x\cdot G_{d-1}(x,u)$ が完全な $d$ 乗になることはない。を、証�
 
 ---
 
-VSCode Style Markdown and \(\LaTeX\) Extensions
+VS Code Style Markdown and \(\LaTeX\) Extensions
 
-This document uses VSCode style markdown with \(\LaTeX\) extensions for mathematical notation.
+This document uses VS Code Style markdown with \(\LaTeX\) extensions for mathematical notation.
 Ensure your markdown viewer supports these features for optimal readability.
