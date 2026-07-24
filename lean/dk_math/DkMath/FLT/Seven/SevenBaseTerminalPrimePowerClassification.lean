@@ -9,6 +9,8 @@ import DkMath.FLT.Seven.PrimePowerCellAudit
 
 #print "file: DkMath.FLT.Seven.SevenBaseTerminalPrimePowerClassification"
 
+set_option linter.style.longLine false
+
 namespace DkMath.FLT.Seven
 
 /-- A terminal cubic-root prime together with its complete original routing
@@ -25,8 +27,7 @@ structure AwaySevenBaseTerminalPrimePowerClassificationPacket
 /-- Every lifted terminal prime depth belongs to one of the three explicit
 prime-power column families, with its endpoint row selecting one of the nine
 routing cells. -/
-theorem AwaySevenBaseTerminalOriginalPrimeDepthPacket
-    .nonempty_primePowerClassificationPacket
+theorem AwaySevenBaseTerminalOriginalPrimeDepthPacket.nonempty_primePowerClassificationPacket
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
@@ -39,8 +40,7 @@ theorem AwaySevenBaseTerminalOriginalPrimeDepthPacket
 
 /-- Every prime dividing the terminal cubic root load reaches the existing
 complete-depth `ZMod (q^e)` classification of its unique original routing cell. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .nonempty_primePowerClassificationPacket_of_dvd_cubicRootLoad
+theorem AwaySevenBaseTerminalRoutingPacket.nonempty_primePowerClassificationPacket_of_dvd_cubicRootLoad
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
@@ -64,8 +64,7 @@ def AwaySevenBaseTerminalPrimePowerClassificationPacket.actualSolution
 
 /-- The classification modulus is the exact prime power carried by the unique
 original routing cell associated with the terminal prime. -/
-theorem AwaySevenBaseTerminalPrimePowerClassificationPacket
-    .modulus_dvd_originalRoutingCell
+theorem AwaySevenBaseTerminalPrimePowerClassificationPacket.modulus_dvd_originalRoutingCell
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
