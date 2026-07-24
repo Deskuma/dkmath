@@ -38,8 +38,7 @@ theorem AwaySevenBaseTerminalOriginalPrimeDepthPacket.nonempty_primePowerOrbitPa
 /-- Every prime dividing the terminal cubic root load reaches the existing
 complete-depth weight-(3,7) unit-orbit classification of its unique original
 routing cell. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .nonempty_primePowerOrbitPacket_of_dvd_cubicRootLoad
+theorem AwaySevenBaseTerminalRoutingPacket.nonempty_primePowerOrbitPacket_of_dvd_cubicRootLoad
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
