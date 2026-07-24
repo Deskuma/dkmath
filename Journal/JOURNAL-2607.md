@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-24
 
+### 12:00
+
+[平方距離だけで四点が同じ円に乗ることを確かめる](260724-1200-four-points-share-a-circle-by-squared-distance.md)
+
+単位正方形と $\sqrt{2}$ から定めた四点 $B,C,F,G$ について、通常の距離ではなく平方距離を比較し、明示中心からの値が等しいことで共円性を閉じる Lean 座標幾何を読む。
+
 ### 06:05
 
 [ピタゴラス平方差を Gap と Beam の積として読む](260724-0605-pythagorean-square-difference-as-gap-beam-product.md)
