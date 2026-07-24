@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
 import Mathlib.Data.Nat.GCD.BigOperators
+import Mathlib.Data.ZMod.QuotientRing
 
 #print "file: DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing"
 
@@ -103,5 +104,55 @@ theorem combinedModulus_erase_coprime_localModulus
     (Finset.univ.erase q) q (by simp)
 
 end AwaySevenBaseTerminalPrimeScaleFamily
+
+/-- All terminal local scales glued into one residue modulo the product of
+their complete local prime-power moduli.  The packet synchronizes scale
+residues only; it makes no compatibility claim about the local models. -/
+structure AwaySevenBaseTerminalPrimePowerFiniteScaleGluingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    (family : AwaySevenBaseTerminalPrimeScaleFamily packet) : Type where
+  combinedScale : ZMod family.combinedModulus
+  combinedScale_isUnit : IsUnit combinedScale
+  reductions :
+    ZMod.prodEquivPi family.localModulus family.localModuli_pairwise_coprime
+      combinedScale =
+        fun q => family.localScale q
+
+/-- Glue a canonical family of terminal local scales by the finite Chinese
+remainder equivalence. -/
+noncomputable def AwaySevenBaseTerminalPrimeScaleFamily.finiteScaleGluingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    (family : AwaySevenBaseTerminalPrimeScaleFamily packet) :
+    AwaySevenBaseTerminalPrimePowerFiniteScaleGluingPacket family := by
+  let crt :=
+    ZMod.prodEquivPi family.localModulus family.localModuli_pairwise_coprime
+  let localScales :
+      (q : AwaySevenBaseTerminalPrimeIndex r) →
+        ZMod (family.localModulus q) :=
+    fun q => family.localScale q
+  have hlocalScales : IsUnit localScales :=
+    Pi.isUnit_iff.mpr fun q => family.localScale_isUnit q
+  let combinedScale : ZMod family.combinedModulus :=
+    crt.symm localScales
+  have hcombinedScale : IsUnit combinedScale := by
+    exact hlocalScales.map crt.symm
+  exact {
+    combinedScale := combinedScale
+    combinedScale_isUnit := hcombinedScale
+    reductions := crt.apply_symm_apply localScales }
+
+/-- Every canonical terminal prime-scale family admits one simultaneous finite
+CRT scale residue modulo the product of all complete local moduli. -/
+theorem nonempty_awaySevenBaseTerminalPrimePowerFiniteScaleGluingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    (family : AwaySevenBaseTerminalPrimeScaleFamily packet) :
+    Nonempty (AwaySevenBaseTerminalPrimePowerFiniteScaleGluingPacket family) :=
+  ⟨family.finiteScaleGluingPacket⟩
 
 end DkMath.FLT.Seven
