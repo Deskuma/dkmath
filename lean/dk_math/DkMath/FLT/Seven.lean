@@ -56,6 +56,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerClassification
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerOrbit
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerScaleProjection
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerPairScaleGluing
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeSupport
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -76,7 +77,9 @@ prime-power classification is still local to one specialized address and does
 not provide simultaneous signed reconstruction.  Moreover, every actual
 full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
 explicit model.  Independently obtained local scales are not claimed to glue
-globally.  The unique seven-primary cell is reduced at its complete `7^k`
+globally.  The facade canonically indexes the finite support of primes dividing
+the terminal cubic-root load, but does not yet choose or synchronize their
+local scales.  The unique seven-primary cell is reduced at its complete `7^k`
 depth, including its nonzero top ramified kernel and base/lifted split.  At
 terminal depth one, the facade also exports the exact carrier, residual,
 endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
