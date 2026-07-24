@@ -45,6 +45,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalLoadDivisibility
 import DkMath.FLT.Seven.SevenBaseTerminalEndpointSeparation
 import DkMath.FLT.Seven.SevenBaseTerminalCarrierRouting
 import DkMath.FLT.Seven.SevenBaseTerminalFixedRouting
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeAddress
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
