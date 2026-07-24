@@ -47,6 +47,8 @@ GN multiplicity
 - 一般 `GN` の squarefree 性
 - 非例外高持ち上がり prime の一様排除
 - `rad (GN n a b) ≤ rad (a * b * c)` のような一般には成立しない輸送
+- 一様な lifted-radical growth budget
+- 一様な exceptional / non-exceptional valuation-excess budget
 - 既存の確率・密度 route が不要になったという結論
 
 Lean が認可した局所定理だけを積み、残った Gap を明示する。
@@ -152,27 +154,45 @@ ABC-GN-002  lift の coprime / support separation           001 に吸収して�
 ABC-GN-003  ABC 座標の padic boundary–GN split             完了
 ABC-GN-004  q | n / q ∤ n の例外層分離                    完了
 ABC-GN-005  valuation excess の有限 factorization API      完了
-ABC-GN-006  high quality -> GN excess bridge               条件付き reduction 完了
-ABC-GN-007  non-exceptional high-lift obstruction          有限局所 API 完了
-ABC-GN-008  finite exceptional absorption                  未着手
-ABC-GN-009  K_epsilon construction                         未着手
-ABC-GN-010  abc_main_axiom replacement audit               axiom 直結を確認
+ABC-GN-006  high quality -> GN excess bridge               完了
+ABC-GN-007  non-exceptional high-lift finite local API      完了
+ABC-GN-008  finite exceptional support absorption          完了
+ABC-GN-009  support + multiplicity budgets -> K_epsilon    現在
+ABC-GN-010  uniform budgets / abc_main_axiom replacement   待機
 ```
 
-次の review correction:
+現在の Lean-confirmed frontier:
 
 ```text
-GNReturnLowerBound
-  c^(n-1) ≤ GN_n(a,b) から無条件に閉じる見込み
+unconditional GN return
+  (n-1) * log c ≤ log GN
 
-GNSupportBudget
-  本当に残る大域的義務
+exact support / multiplicity identity
+  log GN = log(rad GN) + GNValuationExcess
 
-valuation excess
-  high-lift prime だけが非零寄与する有限 carrier identity へ接続する
+exceptional support absorption
+  exceptionalSupportProduct | rad n
+
+fresh non-exceptional support
+  rad(abc) * nonExceptionalProduct | rad(lifted abc)
+
+lifted radical growth
+  -> affine GN support budget
 ```
 
-`instruction-004.md` は、この correction を Lean theorem surface として固定する。
+次の correction:
+
+```text
+support growth alone gives a lower bound on valuation excess
+under high quality, but does not by itself prove ABC.
+
+A valuation-multiplicity upper budget is also required.
+
+support budget + excess budget
+  -> explicit K_epsilon ABC bound
+```
+
+`instruction-006.md` は、この two-budget final contract を Lean theorem surface として固定する。
 
 `instruction-NNN` の通し番号と研究地図 `ABC-GN-NNN` は一致しない場合がある。各 checkpoint の実装量は current source に応じて分割・統合してよい。
 
@@ -216,7 +236,7 @@ CODEX_START.md
 現在の指示書:
 
 ```text
-instruction-004.md
+instruction-006.md
 ```
 
 Codex の実装は、D. が明示的に起動したときだけ開始する。
