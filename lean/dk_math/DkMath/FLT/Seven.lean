@@ -58,6 +58,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerScaleProjection
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerPairScaleGluing
 import DkMath.FLT.Seven.SevenBaseTerminalPrimeSupport
 import DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -80,7 +81,9 @@ full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
 explicit model.  Independently obtained local scales are not claimed to glue
 globally.  The facade canonically indexes the finite support of primes dividing
 the terminal cubic-root load and chooses one complete local scale packet over
-every supported prime.  These scales are not yet synchronized by finite CRT.
+every supported prime.  Their complete local moduli are pairwise coprime, and
+the full and partial product-modulus APIs needed for finite induction are
+available.  The scales themselves are not yet synchronized by finite CRT.
 The unique seven-primary cell is reduced at its complete `7^k`
 depth, including its nonzero top ramified kernel and base/lifted split.  At
 terminal depth one, the facade also exports the exact carrier, residual,
