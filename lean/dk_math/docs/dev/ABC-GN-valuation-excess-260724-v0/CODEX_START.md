@@ -21,8 +21,8 @@ active instruction            none
 ## 再開時の読み順
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/README.md
 lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/FINAL_REPORT.md
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/README.md
 lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-007.md
 lean/dk_math/DkMath/ABC/GNFinalBudgetBridge.lean
 ```
