@@ -63,6 +63,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleReduction
 import DkMath.FLT.Seven.SevenBaseTerminalCubicRootLoadModulus
 import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinates
 import DkMath.FLT.Seven.SevenBaseTerminalGlobalModel
+import DkMath.FLT.Seven.SevenBaseTerminalLiftedReconstruction
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -96,7 +97,10 @@ column-indexed orbit source and its constructor-specific root data.  No
 single global polynomial system is claimed.  Coordinatewise finite CRT does
 produce one product-modulus residue tuple reducing exactly to every projected
 local model; a strengthened packet keeps local orbit coherence as an explicit
-additional proof.  Each local complete exponent is also
+additional proof.  Combining that global residue model with the simultaneous
+unit scale gives a product-modulus weight-(3,7) coordinate candidate whose
+reduction recovers every actual local coordinate tuple.  No signed integral
+representative or integral equality is claimed.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.
