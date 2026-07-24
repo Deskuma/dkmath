@@ -90,7 +90,8 @@ modulo their product, with explicit local reduction maps compatible with the
 weight-three and weight-seven coordinate operations.  Compatibility of the
 local canonical models is not claimed.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
-terminal cubic-root load.
+terminal cubic-root load, and the product of all complete local moduli is
+proved equal to that full load.
 The unique seven-primary cell is reduced at its complete `7^k`
 depth, including its nonzero top ramified kernel and base/lifted split.  At
 terminal depth one, the facade also exports the exact carrier, residual,

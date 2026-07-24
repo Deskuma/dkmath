@@ -158,4 +158,29 @@ theorem AwaySevenBaseTerminalPrimeScaleFamily.localModulus_eq_primePower_cubicRo
     _ = q.1 ^ padicValNat q.1 (awaySevenBaseTerminalCubicRootLoad r) := by
       rw [family.localExponent_eq_padicValNat_cubicRootLoad q]
 
+/-- The product of all complete terminal local moduli reconstructs the entire
+terminal cubic-root load exactly. -/
+theorem AwaySevenBaseTerminalPrimeScaleFamily.combinedModulus_eq_cubicRootLoad
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    (family : AwaySevenBaseTerminalPrimeScaleFamily packet) :
+    family.combinedModulus = awaySevenBaseTerminalCubicRootLoad r := by
+  rw [combinedModulus]
+  simp_rw [family.localModulus_eq_primePower_cubicRootLoad]
+  change
+    (∏ q : (awaySevenBaseTerminalCubicRootLoad r).primeFactors,
+      q.1 ^ padicValNat q.1 (awaySevenBaseTerminalCubicRootLoad r)) =
+        awaySevenBaseTerminalCubicRootLoad r
+  calc
+    _ = ∏ q : (awaySevenBaseTerminalCubicRootLoad r).primeFactors,
+        q.1 ^ (awaySevenBaseTerminalCubicRootLoad r).factorization q.1 := by
+      apply Fintype.prod_congr
+      intro q
+      rw [Nat.factorization_def _
+        (Nat.prime_of_mem_primeFactors q.2)]
+    _ = awaySevenBaseTerminalCubicRootLoad r :=
+      (Nat.prod_pow_primeFactors_factorization
+        (awaySevenBaseTerminalCubicRootLoad_ne_zero r)).symm
+
 end DkMath.FLT.Seven
