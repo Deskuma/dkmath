@@ -61,8 +61,7 @@ def AwaySevenBaseTerminalRoutingPacket.originalPrimeDepthPacketOfCoordinate
 
 /-- Every prime dividing the terminal cubic root load enters the existing
 non-seven prime-power depth layer at the corresponding original routing cell. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .nonempty_originalPrimeDepthPacket_of_dvd_cubicRootLoad
+theorem AwaySevenBaseTerminalRoutingPacket.nonempty_originalPrimeDepthPacket_of_dvd_cubicRootLoad
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
