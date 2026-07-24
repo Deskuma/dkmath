@@ -59,6 +59,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerPairScaleGluing
 import DkMath.FLT.Seven.SevenBaseTerminalPrimeSupport
 import DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
 import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleReduction
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -84,8 +85,9 @@ the terminal cubic-root load and chooses one complete local scale packet over
 every supported prime.  Their complete local moduli are pairwise coprime, and
 the full and partial product-modulus APIs needed for finite induction are
 available.  Finite CRT synchronizes all local scale residues into one unit
-modulo their product; compatibility of the local canonical models is not
-claimed.
+modulo their product, with explicit local reduction maps compatible with the
+weight-three and weight-seven coordinate operations.  Compatibility of the
+local canonical models is not claimed.
 The unique seven-primary cell is reduced at its complete `7^k`
 depth, including its nonzero top ramified kernel and base/lifted split.  At
 terminal depth one, the facade also exports the exact carrier, residual,
