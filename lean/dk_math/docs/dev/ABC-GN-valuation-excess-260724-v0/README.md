@@ -6,6 +6,14 @@ Status: **deterministic spine complete / research paused**
 Repository: `Deskuma/dkmath`  
 Draft PR: `#67 WIP: ABC–GN valuation excess route`
 
+## Final report
+
+The complete implementation review, theorem map, remaining mathematical cores, and restart plan are recorded in:
+
+```text
+FINAL_REPORT.md
+```
+
 ## 1. Closure summary
 
 この workbench は、一般 `GN`、`padicValNat`、factorization、`rad`、primitive-prime bridge を ABC triple 上で再接続し、次の決定論的主線を Lean theorem として完成させた。
@@ -37,7 +45,7 @@ ABC 予想そのものは未証明である。残る数学は次の三魔核へ�
 3. uniform non-exceptional valuation excess
 ```
 
-詳細は [`FINAL_REPORT.md`](./FINAL_REPORT.md) を参照する。
+詳細は `FINAL_REPORT.md` を参照する。
 
 ## 2. Final reading order
 
