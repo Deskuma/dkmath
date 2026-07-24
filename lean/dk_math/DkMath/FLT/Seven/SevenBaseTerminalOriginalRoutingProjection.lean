@@ -9,6 +9,8 @@ import DkMath.FLT.Seven.SpecializedPrimeAddress
 
 #print "file: DkMath.FLT.Seven.SevenBaseTerminalOriginalRoutingProjection"
 
+set_option linter.style.longLine false
+
 namespace DkMath.FLT.Seven
 
 /-- The original endpoint row represented by one terminal factor row.  The
@@ -46,8 +48,7 @@ def awaySevenBaseTerminalOriginalRootColumn :
 endpoint routing factor.  In the carrier row this uses the exact identity
 `selected endpoint = 7 * carrierUnit`; the other two rows are unchanged endpoint
 factors. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .primeCellCoordinate_dvd_originalEndpointFactor
+theorem AwaySevenBaseTerminalRoutingPacket.primeCellCoordinate_dvd_originalEndpointFactor
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
@@ -81,8 +82,7 @@ theorem AwaySevenBaseTerminalRoutingPacket
 /-- A terminal prime-cell coordinate projects to divisibility of its original
 root routing factor.  For the `vPart` column the prime divides `7 * vPart`; the
 left and right cubic columns are unchanged. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .primeCellCoordinate_dvd_originalRootFactor
+theorem AwaySevenBaseTerminalRoutingPacket.primeCellCoordinate_dvd_originalRootFactor
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
@@ -125,8 +125,7 @@ structure AwaySevenBaseTerminalOriginalRoutingPrimeProjection
 
 /-- Every prime dividing the terminal cubic root load produces a projection into
 one original endpoint row and one original cubic routing column. -/
-theorem AwaySevenBaseTerminalRoutingPacket
-    .nonempty_originalRoutingPrimeProjection_of_dvd_cubicRootLoad
+theorem AwaySevenBaseTerminalRoutingPacket.nonempty_originalRoutingPrimeProjection_of_dvd_cubicRootLoad
     {x y z : ℕ} {source : CounterexamplePack x y z}
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
