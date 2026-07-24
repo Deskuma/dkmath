@@ -83,4 +83,121 @@ theorem AwaySevenBaseTerminalRoutingPacket.prime_dvd_factor_row_unique_address
         AwaySevenBaseTerminalFixedPrimeAddress] using
         packet.prime_dvd_companion_endpoint_unique_cell hq hqRow
 
+/-- The complete endpoint-side product attached to one fixed terminal routing
+board.  It is equal to the cubic root load by the terminal normal form. -/
+def awaySevenBaseTerminalFactorProduct
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p) : ℕ :=
+  packet.core.carrier.carrierUnit *
+    awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+    awaySevenBaseTerminalCompanionEndpointNat p.row y z
+
+/-- A global prime address records that there is exactly one endpoint-side
+factor row carrying the prime, and that this row gives its fixed cell and cubic
+column address on the common terminal routing board. -/
+def AwaySevenBaseTerminalGlobalPrimeAddress
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
+    (q : ℕ) : Prop :=
+  ∃! row : AwaySevenBaseTerminalFactorRow,
+    q ∣ awaySevenBaseTerminalFactorRowValue packet row ∧
+      AwaySevenBaseTerminalFixedPrimeAddress packet row q
+
+/-- Every prime dividing the complete endpoint-side terminal product is
+non-seven and has one globally unique row/cell/column address on the fixed
+routing board. -/
+theorem AwaySevenBaseTerminalRoutingPacket.prime_dvd_factorProduct_unique_global_address
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalRoutingPacket (source := source) p)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqProduct : q ∣ awaySevenBaseTerminalFactorProduct packet) :
+    q ≠ 7 ∧ AwaySevenBaseTerminalGlobalPrimeAddress packet q := by
+  change q ∣ packet.core.carrier.carrierUnit *
+    awaySevenBaseTerminalUnselectedEndpointNat p.row y z *
+    awaySevenBaseTerminalCompanionEndpointNat p.row y z at hqProduct
+  have hqRows :
+      q ∣ packet.core.carrier.carrierUnit ∨
+        q ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z ∨
+        q ∣ awaySevenBaseTerminalCompanionEndpointNat p.row y z := by
+    rcases (Nat.Prime.dvd_mul hq).mp hqProduct with hqFirstTwo | hqCompanion
+    · rcases (Nat.Prime.dvd_mul hq).mp hqFirstTwo with hqCarrier | hqUnselected
+      · exact Or.inl hqCarrier
+      · exact Or.inr (Or.inl hqUnselected)
+    · exact Or.inr (Or.inr hqCompanion)
+  have hnormal := packet.core.endpoint_carrier_root_load_normal_form
+  have hcopUnselectedCompanion := hnormal.2.1
+  have hcopUnselectedCarrier := hnormal.2.2.1
+  have hcopCompanionCarrier := hnormal.2.2.2
+  rcases hqRows with hqCarrier | hqUnselected | hqCompanion
+  · have haddress :=
+      packet.prime_dvd_factor_row_unique_address .carrier hq hqCarrier
+    refine ⟨haddress.1, ?_⟩
+    refine ⟨.carrier, ⟨hqCarrier, haddress.2⟩, ?_⟩
+    intro row hrow
+    cases row with
+    | carrier => rfl
+    | unselected =>
+        exfalso
+        have hqOther :
+            q ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqOther hqCarrier
+        rw [hcopUnselectedCarrier] at hgcd
+        exact hq.not_dvd_one hgcd
+    | companion =>
+        exfalso
+        have hqOther :
+            q ∣ awaySevenBaseTerminalCompanionEndpointNat p.row y z := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqOther hqCarrier
+        rw [hcopCompanionCarrier] at hgcd
+        exact hq.not_dvd_one hgcd
+  · have haddress :=
+      packet.prime_dvd_factor_row_unique_address .unselected hq hqUnselected
+    refine ⟨haddress.1, ?_⟩
+    refine ⟨.unselected, ⟨hqUnselected, haddress.2⟩, ?_⟩
+    intro row hrow
+    cases row with
+    | carrier =>
+        exfalso
+        have hqOther : q ∣ packet.core.carrier.carrierUnit := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqUnselected hqOther
+        rw [hcopUnselectedCarrier] at hgcd
+        exact hq.not_dvd_one hgcd
+    | unselected => rfl
+    | companion =>
+        exfalso
+        have hqOther :
+            q ∣ awaySevenBaseTerminalCompanionEndpointNat p.row y z := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqUnselected hqOther
+        rw [hcopUnselectedCompanion] at hgcd
+        exact hq.not_dvd_one hgcd
+  · have haddress :=
+      packet.prime_dvd_factor_row_unique_address .companion hq hqCompanion
+    refine ⟨haddress.1, ?_⟩
+    refine ⟨.companion, ⟨hqCompanion, haddress.2⟩, ?_⟩
+    intro row hrow
+    cases row with
+    | carrier =>
+        exfalso
+        have hqOther : q ∣ packet.core.carrier.carrierUnit := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqCompanion hqOther
+        rw [hcopCompanionCarrier] at hgcd
+        exact hq.not_dvd_one hgcd
+    | unselected =>
+        exfalso
+        have hqOther :
+            q ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z := by
+          simpa [awaySevenBaseTerminalFactorRowValue] using hrow.1
+        have hgcd := Nat.dvd_gcd hqOther hqCompanion
+        rw [hcopUnselectedCompanion] at hgcd
+        exact hq.not_dvd_one hgcd
+    | companion => rfl
+
 end DkMath.FLT.Seven
