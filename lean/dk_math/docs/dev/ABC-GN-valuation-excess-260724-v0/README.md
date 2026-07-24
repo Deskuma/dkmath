@@ -144,20 +144,35 @@ DkMath.Petal.ABCBridge
 
 ## 8. Checkpoint 方針
 
-当面の登山路は次である。
+現在地:
 
 ```text
 ABC-GN-001  ABC triple の GN power lift                    完了
 ABC-GN-002  lift の coprime / support separation           001 に吸収して完了
 ABC-GN-003  ABC 座標の padic boundary–GN split             完了
-ABC-GN-004  q | n / q ∤ n の例外層分離                    現在
-ABC-GN-005  valuation excess の有限 factorization API
-ABC-GN-006  high quality -> GN excess 強制 bridge
-ABC-GN-007  non-exceptional high-lift obstruction
-ABC-GN-008  finite exceptional absorption
-ABC-GN-009  K_epsilon construction
-ABC-GN-010  abc_main_axiom replacement audit
+ABC-GN-004  q | n / q ∤ n の例外層分離                    完了
+ABC-GN-005  valuation excess の有限 factorization API      完了
+ABC-GN-006  high quality -> GN excess bridge               条件付き reduction 完了
+ABC-GN-007  non-exceptional high-lift obstruction          有限局所 API 完了
+ABC-GN-008  finite exceptional absorption                  未着手
+ABC-GN-009  K_epsilon construction                         未着手
+ABC-GN-010  abc_main_axiom replacement audit               axiom 直結を確認
 ```
+
+次の review correction:
+
+```text
+GNReturnLowerBound
+  c^(n-1) ≤ GN_n(a,b) から無条件に閉じる見込み
+
+GNSupportBudget
+  本当に残る大域的義務
+
+valuation excess
+  high-lift prime だけが非零寄与する有限 carrier identity へ接続する
+```
+
+`instruction-004.md` は、この correction を Lean theorem surface として固定する。
 
 `instruction-NNN` の通し番号と研究地図 `ABC-GN-NNN` は一致しない場合がある。各 checkpoint の実装量は current source に応じて分割・統合してよい。
 
@@ -201,7 +216,7 @@ CODEX_START.md
 現在の指示書:
 
 ```text
-instruction-003.md
+instruction-004.md
 ```
 
 Codex の実装は、D. が明示的に起動したときだけ開始する。
