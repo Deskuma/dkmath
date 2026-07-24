@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-24
 
+### 18:00
+
+[単位核作用はすべての平方質量境界を保存する](260724-1800-unit-kernel-action-preserves-square-mass-level-sets.md)
+
+二成分平方質量 $q2(x,y)=x^2+y^2$ と積 $(a,b)\star(x,y)=(ax-by,ay+bx)$ を用い、平方質量1の単位核作用が任意の `q2` level set を保存する純代数的な回転核を読む。
+
 ### 12:00
 
 [平方距離だけで四点が同じ円に乗ることを確かめる](260724-1200-four-points-share-a-circle-by-squared-distance.md)
