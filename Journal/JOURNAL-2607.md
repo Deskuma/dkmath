@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-25
 
+### 06:02
+
+[素数降下は約数制御へ忘却できる](260725-0602-prime-descent-forgets-to-divisibility-control.md)
+
+素因数で一回割る精密な降下が、降下先は元の数の約数であるという一般制御へ忘却でき、既存の原始集合 hit mass 上界へ接続される構造を読む。
+
 ### 00:00
 
 [厳密に増加する不変量は非自明な閉路を許さない](260725-0000-strictly-increasing-invariants-forbid-nontrivial-cycles.md)
