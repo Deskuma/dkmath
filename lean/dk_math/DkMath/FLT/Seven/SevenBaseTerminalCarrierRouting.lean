@@ -127,4 +127,79 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.prime_dvd_carrierUnit_unique_rou
       exact dvd_mul_of_dvd_left
         (dvd_mul_of_dvd_left hq13 routing.c23) routing.c33
 
+/-- Every prime carried by the row-sensitive unselected endpoint is different
+from seven and occupies exactly one cell of the unselected row in some exact
+terminal routing.  That cell lies in the corresponding cubic root-load column. -/
+theorem AwaySevenBaseTerminalQuotientCorePacket.prime_dvd_unselected_endpoint_unique_routing_cell
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (packet : AwaySevenBaseTerminalQuotientCorePacket source r p)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqUnselected : q ∣ awaySevenBaseTerminalUnselectedEndpointNat p.row y z) :
+    q ≠ 7 ∧
+      ∃ routing : CoprimeTripleRouting
+          packet.carrier.carrierUnit
+          (awaySevenBaseTerminalUnselectedEndpointNat p.row y z)
+          (awaySevenBaseTerminalCompanionEndpointNat p.row y z)
+          r.cubic.rootTriple.vPart
+          r.cubic.rootTriple.leftPart
+          r.cubic.rootTriple.rightPart,
+        (q ∣ routing.c21 ∧ ¬ q ∣ routing.c22 ∧ ¬ q ∣ routing.c23 ∧
+          q ∣ r.cubic.rootTriple.vPart) ∨
+        (q ∣ routing.c22 ∧ ¬ q ∣ routing.c21 ∧ ¬ q ∣ routing.c23 ∧
+          q ∣ r.cubic.rootTriple.leftPart) ∨
+        (q ∣ routing.c23 ∧ ¬ q ∣ routing.c21 ∧ ¬ q ∣ routing.c22 ∧
+          q ∣ r.cubic.rootTriple.rightPart) := by
+  refine ⟨?_, ?_⟩
+  · intro hq7
+    subst q
+    have hloadEq := packet.endpoint_carrier_root_load_normal_form.1
+    apply packet.seven_not_dvd_cubic_root_load
+    rw [← hloadEq]
+    exact dvd_mul_of_dvd_left
+      (dvd_mul_of_dvd_right hqUnselected packet.carrier.carrierUnit)
+      (awaySevenBaseTerminalCompanionEndpointNat p.row y z)
+  · rcases packet.nonempty_endpoint_carrier_root_routing with ⟨routing⟩
+    refine ⟨routing, ?_⟩
+    have hqRow : q ∣ routing.c21 * routing.c22 * routing.c23 := by
+      rw [← routing.row2]
+      exact hqUnselected
+    have h12 : ¬ (q ∣ routing.c21 ∧ q ∣ routing.c22) := by
+      rintro ⟨hq21, hq22⟩
+      have hgcd := Nat.dvd_gcd hq21 hq22
+      rw [routing.row2_coprime.1] at hgcd
+      exact hq.not_dvd_one hgcd
+    have h13 : ¬ (q ∣ routing.c21 ∧ q ∣ routing.c23) := by
+      rintro ⟨hq21, hq23⟩
+      have hgcd := Nat.dvd_gcd hq21 hq23
+      rw [routing.row2_coprime.2.1] at hgcd
+      exact hq.not_dvd_one hgcd
+    have h23 : ¬ (q ∣ routing.c22 ∧ q ∣ routing.c23) := by
+      rintro ⟨hq22, hq23⟩
+      have hgcd := Nat.dvd_gcd hq22 hq23
+      rw [routing.row2_coprime.2.2] at hgcd
+      exact hq.not_dvd_one hgcd
+    rcases (Nat.Prime.dvd_mul hq).mp hqRow with hq12 | hq23
+    · rcases (Nat.Prime.dvd_mul hq).mp hq12 with hq21 | hq22
+      · left
+        refine ⟨hq21, fun h => h12 ⟨hq21, h⟩,
+          fun h => h13 ⟨hq21, h⟩, ?_⟩
+        rw [routing.col1]
+        exact dvd_mul_of_dvd_left
+          (dvd_mul_of_dvd_right hq21 routing.c11) routing.c31
+      · right
+        left
+        refine ⟨hq22, fun h => h12 ⟨h, hq22⟩,
+          fun h => h23 ⟨hq22, h⟩, ?_⟩
+        rw [routing.col2]
+        exact dvd_mul_of_dvd_left
+          (dvd_mul_of_dvd_right hq22 routing.c12) routing.c32
+    · right
+      right
+      refine ⟨hq23, fun h => h13 ⟨h, hq23⟩,
+        fun h => h23 ⟨h, hq23⟩, ?_⟩
+      rw [routing.col3]
+      exact dvd_mul_of_dvd_left
+        (dvd_mul_of_dvd_right hq23 routing.c13) routing.c33
+
 end DkMath.FLT.Seven
