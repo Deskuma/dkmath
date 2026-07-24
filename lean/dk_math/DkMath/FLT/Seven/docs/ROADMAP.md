@@ -1,0 +1,494 @@
+# FLT7 seven-primary terminal route: implementation roadmap
+
+Updated: 2026-07-24  
+Target branch: `wip/FLT7-magic-core-260722-WiseWolf`  
+Starting implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
+
+## 1. Goal
+
+The remaining work is to determine whether the proved local prime-power orbit data can be assembled into a global terminal reconstruction or whether the assembly process itself produces the terminal obstruction.
+
+The target chain is:
+
+```text
+local exact q^e packets
+        ↓
+finite simultaneous scale
+        ↓
+complete terminal modulus
+        ↓
+model compatibility
+        ↓
+lifted signed reconstruction or exact obstruction
+        ↓
+terminal exclusion
+        ↓
+recursive descent closure
+        ↓
+FLT7
+```
+
+Each arrow is a separate proof obligation. No checkpoint may skip an arrow by strengthening a structure field into an assumption without documenting that assumption as an explicit contract.
+
+## 2. Roadmap principles
+
+1. Continue from the existing terminal packet hierarchy.
+2. Keep the fixed routing board throughout the entire construction.
+3. Use complete prime-power depths, not arbitrary lower prime powers.
+4. Treat finite CRT gluing as residue synchronization only.
+5. Treat canonical-model compatibility as a separate problem.
+6. Treat signed integral reconstruction as a separate problem.
+7. Keep terminal exclusion independent of recursive descent closure.
+8. Preserve the current WIP policy: no FLT7 claim before the exact final theorem exists.
+
+## 3. Phase map
+
+```text
+Phase A  Canonical finite terminal prime support
+Phase B  Canonical local scale family
+Phase C  Finite CRT scale gluing
+Phase D  Exact modulus coverage
+Phase E  Canonical-model compatibility audit
+Phase F  Lifted global candidate
+Phase G  Terminal arithmetic decision
+Phase H  Descent closure
+Phase I  FLT7 public target
+```
+
+## 4. Phase A: canonical finite terminal prime support
+
+### Objective
+
+Represent exactly the finite set of primes dividing:
+
+```lean
+awaySevenBaseTerminalCubicRootLoad r
+```
+
+### Required facts
+
+First expose or reuse proofs that the cubic-root load is positive and nonzero.
+
+Then define a canonical support, preferably from `Nat.primeFactors`:
+
+```lean
+terminalCubicRootPrimeSupport
+```
+
+The support API should prove:
+
+```lean
+q ∈ terminalCubicRootPrimeSupport r
+  ↔ Nat.Prime q ∧ q ∣ awaySevenBaseTerminalCubicRootLoad r
+```
+
+and:
+
+```lean
+q ∈ terminalCubicRootPrimeSupport r → q ≠ 7
+```
+
+The second theorem should be obtained from the existing terminal load facts, not inserted as a structure assumption.
+
+### Stop gate A
+
+Stop Phase A when every support member can be passed directly to:
+
+```lean
+nonempty_primePowerScaleProjectionPacket_of_dvd_cubicRootLoad
+```
+
+without manually rebuilding primality or load divisibility.
+
+## 5. Phase B: canonical local scale family
+
+### Objective
+
+Package one local scale projection packet for every prime in the canonical support.
+
+### Candidate interface
+
+```lean
+structure AwaySevenBaseTerminalPrimeScaleFamily
+    (packet : AwaySevenBaseTerminalRoutingPacket ...) : Type where
+  localPacket : ∀ q,
+    q ∈ terminalCubicRootPrimeSupport r →
+      AwaySevenBaseTerminalPrimePowerScaleProjectionPacket packet q
+```
+
+A noncomputable constructor may use `Classical.choose` on the existing `Nonempty` theorem.
+
+### Required exports
+
+For every supported prime `q`, expose:
+
+```text
+local modulus m_q = q^e_q
+local scale s_q : ZMod m_q
+IsUnit s_q
+actual_q = weightedScale(model_q, s_q)
+```
+
+### Design warning
+
+Do not define the support by collecting arbitrary chosen packets. The support comes from the terminal cubic-root load. The packets are chosen over that fixed support.
+
+### Stop gate B
+
+Stop Phase B when downstream code can quantify over one family rather than repeatedly invoke `Classical.choose`.
+
+## 6. Phase C: finite CRT scale gluing
+
+### Objective
+
+Generalize the existing two-prime packet to the entire finite terminal support.
+
+### Preferred route
+
+Use induction over the canonical finite support.
+
+At each step maintain:
+
+```text
+accumulated modulus M
+combined scale s : ZMod M
+M is the product of the included complete local moduli
+for every included prime q, s reduces to s_q
+s is a unit modulo M
+```
+
+### Required pairwise-coprime input
+
+Reuse:
+
+```lean
+AwaySevenBaseTerminalPrimePowerScaleProjectionPacket
+  .modulus_coprime_of_prime_ne
+```
+
+For the induction step, prove that the next local modulus is coprime to the product of the previously accumulated moduli.
+
+### Candidate structure
+
+```lean
+AwaySevenBaseTerminalPrimePowerFiniteScaleGluingPacket
+```
+
+It should contain at least:
+
+```text
+support
+family
+combinedModulus
+combinedScale
+combinedScale_isUnit
+modulus product identity
+all local reduction theorems
+```
+
+### Required theorems
+
+```lean
+nonempty_finiteScaleGluingPacket
+combinedScale_reduces_to_localScale
+combinedModulus_eq_product
+combinedScale_isUnit
+```
+
+### Stop gate C
+
+Stop Phase C when one theorem recovers every local scale from the combined scale.
+
+Do not proceed directly to FLT7. Finite scale synchronization alone does not synchronize the local canonical models.
+
+## 7. Phase D: exact modulus coverage
+
+### Objective
+
+Identify what the product of all complete local moduli represents arithmetically.
+
+The desired strongest theorem is:
+
+$$\prod_{q\mid L}q^{e_q}=L$$
+
+where:
+
+```text
+L = awaySevenBaseTerminalCubicRootLoad r
+```
+
+However, the current `e_q` is defined as the exact depth of the unique original routing cell. Codex must first prove that this exponent agrees with the `q`-adic depth in the complete cubic-root load.
+
+### Required bridge
+
+For a supported prime `q`, prove a theorem of the form:
+
+```lean
+terminalOriginalCellExponent_eq_padicValNat_cubicRootLoad
+```
+
+This should use:
+
+```text
+unique original cell address
+pairwise coprimality inside the relevant routing column
+pairwise coprimality of the cubic-root factors
+exact next-power nondivisibility of the cell
+```
+
+### Possible outcomes
+
+#### Outcome D-A
+
+The local exponent equals the load exponent. Then prove:
+
+```lean
+finiteScaleCombinedModulus_eq_cubicRootLoad
+```
+
+#### Outcome D-B
+
+The equality needs an additional factor or a squarefree correction. Record the exact factorization theorem instead of forcing equality.
+
+#### Outcome D-C
+
+The existing packet lacks a required coprimality theorem. Add only the missing coprimality bridge and stop for review.
+
+### Stop gate D
+
+Stop when the combined modulus has a precise arithmetic relation to the terminal cubic-root load.
+
+## 8. Phase E: canonical-model compatibility audit
+
+### Objective
+
+Determine whether the local canonical models are reductions of one global model.
+
+The current local projection stores:
+
+```text
+actual_q
+model_q
+scale_q
+actual_q = weightedScale(model_q, scale_q)
+```
+
+The pair and finite CRT packets glue only `scale_q`.
+
+The models differ by routing column and may contain local root parameters and correction terms. Therefore a global model cannot be assumed.
+
+### Required reconnaissance
+
+Codex must inspect:
+
+```text
+canonicalPrimePowerSolution_sevenV
+canonicalPrimePowerSolution_leftCubic
+canonicalPrimePowerSolution_rightCubic
+AwayNonSevenPrimePowerOrbitSource
+AwayNonSevenPrimePowerOrbitProjection
+```
+
+Then classify the situation into one of the following.
+
+#### Outcome E-A: one global model exists
+
+Define a global integral or product-modulus model and prove every `model_q` is its reduction.
+
+#### Outcome E-B: a finite family of compatible global models exists
+
+Package the remaining discrete choices explicitly. Do not erase them.
+
+#### Outcome E-C: local models are not compatible
+
+Extract an exact incompatibility predicate. This may itself be the terminal obstruction.
+
+### Candidate contract
+
+```lean
+structure AwaySevenBaseTerminalGlobalModelCompatibilityPacket ... where
+  globalModel : ...
+  local_model_eq : ∀ q ∈ support,
+    reduce globalModel q = family.localPacket q ... |>.projection.model
+```
+
+The exact global model type must be chosen only after reconnaissance.
+
+### Stop gate E
+
+Stop after one of E-A, E-B, or E-C is established. Do not hide model incompatibility behind choice.
+
+## 9. Phase F: lifted global candidate
+
+### Objective
+
+Combine a globally compatible model with the finite combined scale.
+
+The desired modular statement is:
+
+```text
+for every supported q,
+reduction of global weighted candidate
+  = actual local prime-power solution
+```
+
+### Separate subphases
+
+#### F1. Product-modulus solution
+
+Construct an `AwayRoutingPrimePowerSolution`-like object over the combined modulus if the row and column indexing can be made coherent.
+
+If the varying column prevents one object of the existing type, define a new global coordinate packet rather than coercing all columns into one type.
+
+#### F2. Integer representative
+
+Choose canonical integer representatives for the combined scale and global model coordinates.
+
+Prove only congruences at first.
+
+#### F3. Equality from congruence
+
+To turn congruence into equality, obtain explicit bounds or exact divisibility whose modulus exceeds the possible difference.
+
+Do not use “all prime powers divide the difference” as equality unless the product modulus and the size or factorization of the difference are both controlled.
+
+### Stop gate F
+
+Stop when either:
+
+```text
+one signed integral reconstruction packet exists
+```
+
+or:
+
+```text
+an exact reconstruction obstruction is isolated
+```
+
+## 10. Phase G: terminal arithmetic decision
+
+### Objective
+
+Use the exact quotient packet together with the result of Phase F to decide the terminal depth-one case.
+
+### Branch organization
+
+Keep the row/unit-sector split explicit:
+
+```text
+positive sector → row Y
+negative sector → row Z or row Sum
+```
+
+Reuse:
+
+```lean
+row_resolved_complete_normal_form
+row_resolved_endpoint_quotient_normal_form
+negative_sector_endpoint_load_bridge
+```
+
+### Expected result forms
+
+#### G-A. Direct terminal exclusion
+
+```lean
+no_awaySevenBaseTerminalRoutingPacket_at_depth_one
+```
+
+#### G-B. Strict smaller counterexample
+
+Construct an exact smaller packet satisfying the descent provider contract.
+
+#### G-C. Remaining arithmetic receiver
+
+If the proof reduces to one new arithmetic theorem, define the receiver as a named predicate and prove the terminal theorem conditionally from it. The receiver must state exactly the missing mathematics.
+
+### Stop gate G
+
+Do not proceed to recursive closure until the terminal result is unconditional or its final receiver is explicit and independently reviewable.
+
+## 11. Phase H: descent closure
+
+### Objective
+
+Discharge the existing:
+
+```lean
+AwayDescentClosureProvider
+```
+
+using the terminal result and the already proved strict away-depth drop.
+
+### Requirements
+
+```text
+preserve positivity
+preserve primitive normalization
+preserve the FLT7 equation
+produce a strictly smaller well-founded measure
+connect every nonterminal and terminal branch
+```
+
+Use a measure already present in the FLT7 route if possible. Do not introduce a new ad hoc measure unless the existing descent statement cannot consume the result.
+
+### Stop gate H
+
+Stop when the provider is constructed without assumptions specific to a hypothetical counterexample beyond the existing packet fields.
+
+## 12. Phase I: final FLT7 public target
+
+### Objective
+
+Connect the unconditional descent closure to the public FLT7 theorem.
+
+### Final audit
+
+Before exposing the target:
+
+```text
+check no new axiom or sorry
+check theorem statement is exactly exponent 7
+check positivity and natural/integer domains
+check permutation or sign normalization coverage
+check facade imports
+check axiom audit
+```
+
+Only then add the public theorem and update the facade documentation.
+
+## 13. Recommended checkpoint sequence
+
+```text
+FLT7-CRT-001  terminal prime support
+FLT7-CRT-002  local scale family
+FLT7-CRT-003  finite modulus coprimality
+FLT7-CRT-004  finite CRT gluing packet
+FLT7-CRT-005  simultaneous local reduction
+FLT7-LOAD-001 exponent transport from cell to root load
+FLT7-LOAD-002 product modulus reconstruction
+FLT7-MODEL-001 local model compatibility audit
+FLT7-MODEL-002 global model or incompatibility packet
+FLT7-LIFT-001 product-modulus weighted candidate
+FLT7-LIFT-002 integer representative and congruence packet
+FLT7-LIFT-003 signed reconstruction or exact obstruction
+FLT7-TERM-001 row-sensitive terminal decision
+FLT7-DESCENT-001 provider construction
+FLT7-FINAL-001 public FLT7 theorem and audit
+```
+
+Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
+
+## 14. Review outcomes for Codex
+
+At the end of every checkpoint, report one of:
+
+```text
+Outcome A: planned theorem completed
+Outcome B: a stronger existing theorem made the checkpoint unnecessary
+Outcome C: exact missing bridge identified
+Outcome D: proposed statement is false; counterexample or type obstruction found
+```
+
+A precise Outcome C or D is useful progress. Do not replace it with an unproved stronger assumption.
