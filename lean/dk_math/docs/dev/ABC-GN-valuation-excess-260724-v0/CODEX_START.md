@@ -10,18 +10,18 @@ wip/ABC-GN-valuation-excess-260724-Codex
 
 ```text
 lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/README.md
-lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-005.md
-lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/instruction-005.md
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-006.md
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/instruction-006.md
 ```
 
-現在の実装指示は `instruction-005.md` である。
+現在の実装指示は `instruction-006.md` である。
 
 その指示だけを実行し、current source の実在 API に合わせて現場判断すること。
 
 実装後は次を作成する。
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-006.md
+lean/dk_math/docs/dev/ABC-GN-valuation-excess-260724-v0/report-007.md
 ```
 
 対象 module のローカル build まで行い、結果を User へ返して停止する。
