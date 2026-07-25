@@ -25,14 +25,17 @@ terminal prime q
   → fixed endpoint-row/root-column solution for every cell model
   → exact cell integer carries from common signed representatives
   → proof that every cell first carry is dependent
-  → descent entry boundary
+  → exact reconstruction seed equivalent to the descent provider
+  → open integral new-counterexample reconstruction
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
 `AwaySevenBaseTerminalCellIntegerCarryPacket.firstCarry_eq` proves that the
 nine fixed-system first-coordinate carries contain no new independent
-constraint.  The carry exploration therefore stops here.  The next exact
-obligation is DESCENT-001: use the independent endpoint/root, modulus,
-unit/nondegeneracy, and canonical-orbit data to construct the descent provider.
-Terminal contradiction, construction of `AwayDescentClosureProvider`, and
-recursive descent closure remain unproved.
+constraint. The carry exploration therefore stops here.
+`AwayDescentReconstructionSeed` exposes the exact integral data needed for the
+next counterexample, and Lean proves that it is equivalent to
+`AwayDescentClosureProvider`. DESCENT-001 therefore ends with Outcome C: the
+provider construction interface and strict-drop bridge are complete, while
+inhabiting the seed remains open. Terminal contradiction, an unconditional
+provider, and recursive descent closure remain unproved.

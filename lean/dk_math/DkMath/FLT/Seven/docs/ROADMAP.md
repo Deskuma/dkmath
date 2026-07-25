@@ -437,6 +437,40 @@ Use a measure already present in the FLT7 route if possible. Do not introduce a 
 
 Stop when the provider is constructed without assumptions specific to a hypothetical counterexample beyond the existing packet fields.
 
+### DESCENT-001 audit result
+
+DESCENT-001 reached Outcome C. The exact construction-oriented receiver is:
+
+```lean
+AwayDescentReconstructionSeed p
+```
+
+It consists of a new away coordinate normal form together with proof that its
+exceptional endpoint carrier is exactly:
+
+```lean
+Int.natAbs p.normal.root.snd
+```
+
+Lean proves both directions:
+
+```lean
+AwayDescentReconstructionSeed.toClosureProvider
+AwayDescentClosureProvider.toReconstructionSeed
+nonempty_descentReconstructionSeed_iff_closureProvider
+```
+
+Thus the seed is neither an accidental strengthening nor a weaker local
+shadow: inhabiting it is equivalent to constructing the original
+`AwayDescentClosureProvider`. Once supplied, the existing strict depth drop is
+obtained by `away_depth_descent_of_reconstructionSeed`.
+
+The current terminal CRT, canonical local-orbit, fixed-system, and carry APIs
+do not construct the seed. They provide congruence and factor data for the old
+counterexample, but not a new positive primitive natural triple satisfying
+`nextX ^ 7 + nextY ^ 7 = nextZ ^ 7`. The next descent work must therefore
+target this integral reconstruction directly.
+
 ## 12. Phase I: final FLT7 public target
 
 ### Objective
@@ -475,24 +509,15 @@ FLT7-MODEL-002 global model or incompatibility packet
 FLT7-LIFT-001 product-modulus weighted candidate
 FLT7-LIFT-002 integer representative and congruence packet
 FLT7-LIFT-003 signed reconstruction or exact obstruction
-```
-
-complete
-
-```txt
 FLT7-TERM-001 row-sensitive terminal decision
 FLT7-TERM-002
 FLT7-TERM-003
 FLT7-TERM-004 universal global coordinate equations and integer carries
 FLT7-TERM-005 exact 3 x 3 cell prime partition and modulus reconstruction
-```
-
-complete
-
-```txt
 FLT7-TERM-006 cellwise universal CRT and row-resolved carry packet
 FLT7-TERM-007 fixed cell-system compatibility
 FLT7-TERM-008 cellwise fixed-system carry dependency audit
+FLT7-DESCENT-001 provider construction interface and exact receiver (Outcome C)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -514,14 +539,16 @@ constraints.  Further carry accumulation is therefore not a descent route.
 incomplete
 
 ```txt
-FLT7-DESCENT-001 provider construction
+FLT7-DESCENT-002 inhabit the integral reconstruction seed
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
 
-DESCENT-001 must start from the remaining independent structure: endpoint and
-root carries, exact modulus factorization, unit/nondegeneracy information, and
-the canonical composite orbit.  It must not assume that the dependent first
-carries supply a new obstruction.
+DESCENT-002 must construct a new `AwayCoordinateNormalForm` whose exceptional
+carrier is the old root-second-coordinate absolute value. Equivalently, it
+must inhabit `AwayDescentReconstructionSeed r.cubic.transfer`. The remaining
+endpoint/root carries, exact modulus factorization, unit/nondegeneracy
+information, and canonical composite orbit may be used, but local congruence
+compatibility alone is not an integral FLT7 counterexample reconstruction.
 
 Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
 

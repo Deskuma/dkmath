@@ -70,6 +70,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
+import DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -127,7 +128,9 @@ endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
 with their row-sensitive `ZMod 7` linearization and the checked row-`Y`
 mod-`49` shadow showing that a bare local congruence obstruction is insufficient.
 The terminal arithmetic exclusion and lifted signed reconstruction remain
-explicit open obligations.  The strict away depth drop is conditional on an
-explicit `AwayDescentClosureProvider`; no FLT7 contradiction or recursive
-closure is claimed.
+explicit open obligations.  The exact integral
+`AwayDescentReconstructionSeed` is proved equivalent to the existing
+`AwayDescentClosureProvider` contract and constructs the strict away depth
+drop when inhabited.  The seed itself, an FLT7 contradiction, and recursive
+closure remain unproved.
 -/

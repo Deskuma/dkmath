@@ -510,3 +510,46 @@ data still available for descent are the endpoint/root carries, the exact
 cell and full-modulus factorization, unit/nondegeneracy hypotheses, and their
 common origin in the canonical composite orbit.  No terminal contradiction
 and no `AwayDescentClosureProvider` has been constructed.
+
+## 19. DESCENT-001 provider-construction boundary
+
+The provider construction now factors through the exact integral seed:
+
+```lean
+AwayDescentReconstructionSeed p
+```
+
+The seed contains new natural coordinates, a new away coordinate normal form
+(hence a positive primitive exponent-seven `CounterexamplePack`), and proof
+that the old `|root.snd|` is its exceptional endpoint carrier.
+
+From this data Lean constructs the complete next valuation-transfer packet and
+the original recursive provider:
+
+```lean
+AwayDescentReconstructionSeed.nextRoute
+AwayDescentReconstructionSeed.toClosureProvider
+```
+
+The reverse conversion is also implemented. The theorem:
+
+```lean
+nonempty_descentReconstructionSeed_iff_closureProvider
+```
+
+proves that the seed is exactly equivalent to the existing provider contract.
+It immediately gives the strict seven-adic depth decrease through
+`away_depth_descent_of_reconstructionSeed`.
+
+The current unconditional result is packaged by
+`signed.descentDecisionOpen`. It retains the complete TERM-008 carry audit and
+records `Nonempty (AwayDescentReconstructionSeed r.cubic.transfer)` as the
+remaining obligation. A supplied seed closes the decision through
+`signed.descentDecisionOfSeed`.
+
+DESCENT-001 therefore has Outcome C, not an unconditional closure result.
+Neither the composite local solutions nor their carry identities construct a
+new natural Fermat triple. The remaining theorem must reconstruct a positive
+primitive `CounterexamplePack` whose away exceptional carrier is the old
+root-second-coordinate absolute value. No such seed, provider, recursive
+descent closure, or FLT7 contradiction is currently proved.
