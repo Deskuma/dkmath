@@ -492,6 +492,7 @@ complete
 ```txt
 FLT7-TERM-006 cellwise universal CRT and row-resolved carry packet
 FLT7-TERM-007 fixed cell-system compatibility
+FLT7-TERM-008 cellwise fixed-system carry dependency audit
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -504,13 +505,23 @@ Each reduced global CRT model is now proved to be the coordinate tuple of a
 solution to the fixed endpoint-row/root-column system for that exact cell
 modulus.
 
+TERM-008 proves that every fixed-system first-coordinate carry is an explicit
+linear combination of the global universal first carry and its cell's
+endpoint/root carries.  This is Outcome A of the dependency audit: the nine
+first-coordinate carries are bookkeeping rather than new independent
+constraints.  Further carry accumulation is therefore not a descent route.
+
 incomplete
 
 ```txt
-FLT7-TERM-008 integral arithmetic receiver for the nine fixed cell systems
 FLT7-DESCENT-001 provider construction
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
+
+DESCENT-001 must start from the remaining independent structure: endpoint and
+root carries, exact modulus factorization, unit/nondegeneracy information, and
+the canonical composite orbit.  It must not assume that the dependent first
+carries supply a new obstruction.
 
 Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
 

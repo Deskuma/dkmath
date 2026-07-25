@@ -23,11 +23,16 @@ terminal prime q
   → exact 3 x 3 cell prime partition
   → reduction to each exact cell modulus
   → fixed endpoint-row/root-column solution for every cell model
-  → row-resolved integral carry decision boundary
+  → exact cell integer carries from common signed representatives
+  → proof that every cell first carry is dependent
+  → descent entry boundary
 ```
 
-`AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged.  The next
-exact obligation is integral arithmetic: combine the nine fixed-system
-solutions with coordinate windings, equation carries, and row factorization.
+`AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
+`AwaySevenBaseTerminalCellIntegerCarryPacket.firstCarry_eq` proves that the
+nine fixed-system first-coordinate carries contain no new independent
+constraint.  The carry exploration therefore stops here.  The next exact
+obligation is DESCENT-001: use the independent endpoint/root, modulus,
+unit/nondegeneracy, and canonical-orbit data to construct the descent provider.
 Terminal contradiction, construction of `AwayDescentClosureProvider`, and
 recursive descent closure remain unproved.

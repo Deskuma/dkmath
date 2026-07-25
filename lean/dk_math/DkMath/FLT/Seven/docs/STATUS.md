@@ -466,3 +466,47 @@ terminal problem is now genuinely integral: use the nine proved fixed-system
 solutions together with coordinate windings, equation carries, and row modulus
 factorization to produce either a contradiction or an
 `AwayDescentClosureProvider`.
+
+## 18. TERM-008 cell-carry dependency audit
+
+The full-modulus signed representatives are now reused, without choosing new
+representatives in each cell:
+
+```lean
+signed.signedModel_cast_cell coordinate
+```
+
+For every one of the nine fixed row/column cells, Lean constructs exact
+endpoint, root, and first-coordinate integer carries in
+`AwaySevenBaseTerminalCellIntegerCarryPacket`.  The underlying polynomial
+identity is exposed independently as:
+
+```lean
+fixedFirstResidual_decomposition
+```
+
+It writes the fixed first-coordinate residual as an explicit integer linear
+combination of the universal first residual, the endpoint residual, and the
+root residual.  After substituting the corresponding carry equations and the
+factorization of the full modulus by the cell modulus, cancellation gives:
+
+```lean
+AwaySevenBaseTerminalCellIntegerCarryPacket.firstCarry_eq
+```
+
+Thus TERM-008 has Outcome A in the sense predicted by its design document:
+the first-coordinate carry of every cell is completely determined by the
+global universal first carry and that cell's endpoint and root carries.  The
+nine first-coordinate carries add no independent arithmetic constraint.
+
+The packaged audit is:
+
+```lean
+signed.cellCarryDependencyAuditPacket
+```
+
+This closes the first-carry route, not the terminal theorem.  The independent
+data still available for descent are the endpoint/root carries, the exact
+cell and full-modulus factorization, unit/nondegeneracy hypotheses, and their
+common origin in the canonical composite orbit.  No terminal contradiction
+and no `AwayDescentClosureProvider` has been constructed.
