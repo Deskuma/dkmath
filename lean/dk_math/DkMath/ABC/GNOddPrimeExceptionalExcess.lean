@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.ABC.GNValuationExcess
+import DkMath.NumberTheory.WeightedGNBridge
 
 #print "file: DkMath.ABC.GNOddPrimeExceptionalExcess"
 
@@ -12,19 +13,131 @@ set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
 /-!
-# The exceptional GN valuation at exponent five
+# The exceptional GN valuation at odd-prime exponents
 
-This module proves the local arithmetic kernel for the prime dividing the
-exponent when that exponent is five.  For coprime boundary coordinates, a
-factor of five in `GN 5 a b` occurs with valuation exactly one.
+This module proves the local arithmetic kernel for a prime dividing a GN
+kernel whose exponent is that same odd prime.  For coprime boundary
+coordinates, such a factor occurs with valuation exactly one.
 
-The finite exceptional-support sum and the general odd-prime case are outside
-the scope of this module.
+The original explicit exponent-five specialization is retained as a concrete
+local instance.  Exceptional-support finite sums remain in separate bridge
+modules.
 -/
 
 namespace DkMath.ABC
 
 open DkMath.CosmicFormulaBinom
+
+/--
+The canonical GN kernel is the geometric quotient between `(a + b)^p` and
+`b^p`.
+-/
+theorem GN_eq_geom_sum₂ (p a b : ℕ) :
+    GN p a b =
+      ∑ i ∈ Finset.range p,
+        (a + b) ^ i * b ^ (p - 1 - i) := by
+  by_cases ha : a = 0
+  · subst a
+    rw [show GN p 0 b = p * b ^ (p - 1) by
+      simpa [GN] using
+        (DkMath.CosmicFormula.GN_zero_eval (R := ℕ) p b)]
+    simpa using (geom_sum₂_self b p).symm
+  · let S :=
+      ∑ i ∈ Finset.range p,
+        (a + b) ^ i * b ^ (p - 1 - i)
+    have hGN := cosmic_id_csr p a b
+    have hGeom := geom_sum₂_mul_add a b p
+    have hEq : S * a = a * GN p a b := by
+      dsimp [BigN, BodyN, GapN] at hGN
+      dsimp [S]
+      omega
+    have hMul : a * GN p a b = a * S := by
+      simpa [Nat.mul_comm] using hEq.symm
+    exact Nat.eq_of_mul_eq_mul_left (Nat.pos_of_ne_zero ha) hMul
+
+/--
+At a prime exponent, divisibility of the GN kernel by the exponent forces
+divisibility of the boundary coordinate.
+-/
+theorem prime_dvd_boundary_of_dvd_GN_prime
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpGN : p ∣ GN p a b) :
+    p ∣ a := by
+  obtain ⟨B, hGN⟩ :=
+    DkMath.NumberTheory.prime_exists_GN_eq_mul_add_rightBoundary
+      (x := a) (u := b) hp
+  have hpPow : p ∣ a ^ (p - 1) := by
+    rw [hGN] at hpGN
+    have hpGN' : p ∣ a ^ (p - 1) + p * B := by
+      simpa [Nat.add_comm] using hpGN
+    exact (Nat.dvd_add_iff_left (dvd_mul_right p B)).mpr hpGN'
+  exact hp.dvd_of_dvd_pow hpPow
+
+/--
+For an odd prime exponent and coprime boundary coordinates, an exponent-prime
+factor in `GN` has exact p-adic valuation one.
+-/
+theorem padicValNat_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    padicValNat p (GN p a b) = 1 := by
+  have hpa : p ∣ a :=
+    prime_dvd_boundary_of_dvd_GN_prime hp hpGN
+  have hpb : ¬ p ∣ b := by
+    have hpcopb : Nat.Coprime p b :=
+      hcop.coprime_dvd_left hpa
+    exact hp.coprime_iff_not_dvd.mp hpcopb
+  have hpab : ¬ p ∣ a + b := by
+    intro hpab
+    apply hpb
+    have hpba : p ∣ b + a := by
+      simpa [Nat.add_comm] using hpab
+    exact (Nat.dvd_add_iff_left hpa).mpr hpba
+  have hpInt : Prime (p : ℤ) :=
+    Nat.prime_iff_prime_int.mp hp
+  have hxyInt : (p : ℤ) ∣ (a + b : ℕ) - (b : ℤ) := by
+    simpa using (Int.natCast_dvd_natCast.mpr hpa)
+  have hxInt : ¬ (p : ℤ) ∣ (a + b : ℕ) := by
+    intro hpabInt
+    apply hpab
+    exact Int.natCast_dvd_natCast.mp (by simpa using hpabInt)
+  have hEmultInt :
+      emultiplicity (p : ℤ)
+          (∑ i ∈ Finset.range p,
+            ((a + b : ℕ) : ℤ) ^ i * (b : ℤ) ^ (p - 1 - i)) = 1 :=
+    emultiplicity_geom_sum₂_eq_one hpInt hpOdd hxyInt hxInt
+  have hCast :
+      ((GN p a b : ℕ) : ℤ) =
+        ∑ i ∈ Finset.range p,
+          ((a + b : ℕ) : ℤ) ^ i * (b : ℤ) ^ (p - 1 - i) := by
+    rw [GN_eq_geom_sum₂]
+    norm_cast
+  have hEmultNat : emultiplicity p (GN p a b) = 1 := by
+    rw [← Int.natCast_emultiplicity, hCast]
+    exact hEmultInt
+  have hGN0 : GN p a b ≠ 0 := by
+    intro hzero
+    rw [hzero, emultiplicity_zero] at hEmultNat
+    exact WithTop.top_ne_one hEmultNat
+  letI : Fact p.Prime := ⟨hp⟩
+  simp only [← Nat.cast_inj (R := ℕ∞)]
+  rw [padicValNat_eq_emultiplicity hGN0, hEmultNat]
+  simp
+
+/-- Factorization form of the odd-prime exact local GN valuation. -/
+theorem factorization_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    (GN p a b).factorization p = 1 := by
+  rw [Nat.factorization_def (GN p a b) hp]
+  exact padicValNat_GN_prime_eq_one_of_dvd hp hpOdd hcop hpGN
 
 /-- The canonical general `GN` polynomial specialized to exponent five. -/
 theorem GN_five_eq_explicit (a b : ℕ) :
