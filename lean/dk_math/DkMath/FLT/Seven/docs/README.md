@@ -26,7 +26,8 @@ terminal prime q
   → exact cell integer carries from common signed representatives
   → proof that every cell first carry is dependent
   → exact reconstruction seed equivalent to the descent provider
-  → open integral new-counterexample reconstruction
+  → proof that a terminal-depth seed/provider is impossible
+  → direct terminal-exclusion boundary
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -37,5 +38,8 @@ constraint. The carry exploration therefore stops here.
 next counterexample, and Lean proves that it is equivalent to
 `AwayDescentClosureProvider`. DESCENT-001 therefore ends with Outcome C: the
 provider construction interface and strict-drop bridge are complete, while
-inhabiting the seed remains open. Terminal contradiction, an unconditional
-provider, and recursive descent closure remain unproved.
+inhabiting the seed remains open in general. DESCENT-002 gives Outcome D at
+terminal depth: a seed or provider would force pivot exponent at least two, so
+neither can inhabit the exponent-one branch. The next terminal obligation is
+therefore direct arithmetic exclusion. Lifted-branch provider construction,
+terminal contradiction, and recursive descent closure remain unproved.

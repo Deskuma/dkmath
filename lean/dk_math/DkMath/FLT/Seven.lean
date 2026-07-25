@@ -71,6 +71,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
 import DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
+import DkMath.FLT.Seven.SevenBaseTerminalDescentSeedExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -131,6 +132,8 @@ The terminal arithmetic exclusion and lifted signed reconstruction remain
 explicit open obligations.  The exact integral
 `AwayDescentReconstructionSeed` is proved equivalent to the existing
 `AwayDescentClosureProvider` contract and constructs the strict away depth
-drop when inhabited.  The seed itself, an FLT7 contradiction, and recursive
-closure remain unproved.
+drop when inhabited.  Such a seed or provider forces pivot exponent at least
+two and is therefore impossible in the terminal exponent-one branch.  Direct
+terminal exclusion, lifted-branch seed construction, an FLT7 contradiction,
+and recursive closure remain unproved.
 -/

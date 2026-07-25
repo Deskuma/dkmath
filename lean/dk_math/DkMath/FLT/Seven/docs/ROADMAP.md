@@ -468,8 +468,32 @@ obtained by `away_depth_descent_of_reconstructionSeed`.
 The current terminal CRT, canonical local-orbit, fixed-system, and carry APIs
 do not construct the seed. They provide congruence and factor data for the old
 counterexample, but not a new positive primitive natural triple satisfying
-`nextX ^ 7 + nextY ^ 7 = nextZ ^ 7`. The next descent work must therefore
-target this integral reconstruction directly.
+`nextX ^ 7 + nextY ^ 7 = nextZ ^ 7`. Any lifted-branch descent work must
+therefore target this integral reconstruction directly.
+
+### DESCENT-002 terminal seed decision
+
+DESCENT-002 reached Outcome D for the terminal branch. Lean proves:
+
+```lean
+AwayDescentReconstructionSeed.two_le_pivotExponent
+AwayDescentClosureProvider.two_le_pivotExponent
+```
+
+Every reconstructed next away carrier has positive seven-adic depth. Since it
+is identified with the old root second coordinate, a seed forces the old pivot
+exponent to be at least two. Consequently:
+
+```lean
+no_descentReconstructionSeed_of_exponent_eq_one
+no_descentClosureProvider_of_exponent_eq_one
+```
+
+At terminal depth one the requested seed is not merely unavailable from the
+current APIs; it is mathematically incompatible with the valuation-transfer
+contract. The terminal branch must therefore be excluded directly. Provider
+construction remains a meaningful target only for the lifted branch
+`1 < p.exponent`.
 
 ## 12. Phase I: final FLT7 public target
 
@@ -518,6 +542,7 @@ FLT7-TERM-006 cellwise universal CRT and row-resolved carry packet
 FLT7-TERM-007 fixed cell-system compatibility
 FLT7-TERM-008 cellwise fixed-system carry dependency audit
 FLT7-DESCENT-001 provider construction interface and exact receiver (Outcome C)
+FLT7-DESCENT-002 terminal reconstruction seed exclusion (Outcome D)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -539,16 +564,16 @@ constraints.  Further carry accumulation is therefore not a descent route.
 incomplete
 
 ```txt
-FLT7-DESCENT-002 inhabit the integral reconstruction seed
+FLT7-TERM-009 direct terminal arithmetic exclusion
+FLT7-DESCENT-003 inhabit the reconstruction seed in the lifted branch
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
 
-DESCENT-002 must construct a new `AwayCoordinateNormalForm` whose exceptional
-carrier is the old root-second-coordinate absolute value. Equivalently, it
-must inhabit `AwayDescentReconstructionSeed r.cubic.transfer`. The remaining
-endpoint/root carries, exact modulus factorization, unit/nondegeneracy
-information, and canonical composite orbit may be used, but local congruence
-compatibility alone is not an integral FLT7 counterexample reconstruction.
+TERM-009 must use terminal arithmetic to rule out exponent one; it cannot
+escape through `AwayDescentClosureProvider`. DESCENT-003 is separately scoped
+to `1 < p.exponent`, where the old root second coordinate still has positive
+seven-adic depth and the reconstruction-seed contract is valuation-compatible.
+The two branches must not be merged.
 
 Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
 

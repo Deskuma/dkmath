@@ -553,3 +553,48 @@ new natural Fermat triple. The remaining theorem must reconstruct a positive
 primitive `CounterexamplePack` whose away exceptional carrier is the old
 root-second-coordinate absolute value. No such seed, provider, recursive
 descent closure, or FLT7 contradiction is currently proved.
+
+## 20. DESCENT-002 terminal seed exclusion
+
+The attempt to inhabit the reconstruction seed at the terminal layer has a
+definitive negative result.
+
+For any pivot packet and any seed targeting its old root second coordinate:
+
+```lean
+AwayDescentReconstructionSeed.two_le_pivotExponent
+```
+
+proves `2 ≤ p.exponent`. The reason is exact:
+
+```text
+new AwayValuationTransferPacket
+  → new exceptional carrier has seven-adic depth at least 1
+carrier_match
+  → new carrier = old |root.snd|
+old pivot depth equation
+  → valuation(old |root.snd|) = p.exponent - 1
+```
+
+The same condition is exported directly for
+`AwayDescentClosureProvider.two_le_pivotExponent`.
+
+Therefore terminal depth one gives:
+
+```lean
+no_descentReconstructionSeed_of_exponent_eq_one
+no_descentClosureProvider_of_exponent_eq_one
+```
+
+For the DESCENT-001 open packet, Lean also proves:
+
+```lean
+AwaySevenBaseTerminalDescentOpenPacket.not_reconstructionObligation
+```
+
+Thus DESCENT-002 has Outcome D: the requested terminal seed cannot be
+inhabited. This does not yet contradict the original terminal
+`CounterexamplePack`; it proves that recursive descent is unavailable from
+this branch. The route must return to direct terminal arithmetic exclusion.
+The seed/provider construction problem remains open only for lifted pivots
+with `1 < p.exponent`.
