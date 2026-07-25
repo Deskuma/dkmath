@@ -64,6 +64,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalCubicRootLoadModulus
 import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinates
 import DkMath.FLT.Seven.SevenBaseTerminalGlobalModel
 import DkMath.FLT.Seven.SevenBaseTerminalLiftedReconstruction
+import DkMath.FLT.Seven.SevenBaseTerminalExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
@@ -107,7 +108,10 @@ of the centered model is claimed unconditionally.  Their exact four-coordinate
 defect is proved divisible by the combined modulus, and the signed lift is
 classified as either an integer reconstruction or an explicit nonzero defect
 obstruction.  Vanishing still requires a separate strict size bound.  Each
-local complete exponent is also
+terminal row is retained as an exact `Y`, `Z`, or `Sum` arithmetic profile
+together with the signed reconstruction outcome.  Excluding those three
+profiles remains an explicit arithmetic receiver; terminal exclusion is not
+claimed.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.
