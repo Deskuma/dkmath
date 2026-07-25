@@ -22,12 +22,12 @@ terminal prime q
   → universal global coordinate equations and integer equation carries
   → exact 3 x 3 cell prime partition
   → reduction to each exact cell modulus
-  → row-resolved carry decision boundary
+  → fixed endpoint-row/root-column solution for every cell model
+  → row-resolved integral carry decision boundary
 ```
 
-The next exact obligation is
-`AwaySevenBaseTerminalCellwiseFixedSystemObligation`: glue the fixed
-endpoint-row/root-column solution certificates inside each cell so that their
-coordinates equal the reduced global CRT model.  Terminal contradiction,
-construction of `AwayDescentClosureProvider`, and recursive descent closure
-remain unproved.
+`AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged.  The next
+exact obligation is integral arithmetic: combine the nine fixed-system
+solutions with coordinate windings, equation carries, and row factorization.
+Terminal contradiction, construction of `AwayDescentClosureProvider`, and
+recursive descent closure remain unproved.

@@ -422,3 +422,47 @@ Consequently no terminal contradiction and no
 `AwaySevenBaseTerminalCarryDecision` records the honest three-way boundary:
 contradiction, descent provider, or the concrete carry packet plus this exact
 open obligation.
+
+## 17. TERM-007 fixed cell-system closure
+
+`AwaySevenBaseTerminalCellwiseFixedSystemObligation` is now proved
+unconditionally.
+
+```lean
+candidate.cellwiseFixedSystemObligation
+```
+
+The proof does not rebuild a second CRT inside each cell.  It uses the fact
+that `AwayRoutingPrimePowerSolution M row column` accepts an arbitrary natural
+modulus `M`.
+
+For each whole routing cell:
+
+```text
+routing cell divides its original endpoint factor
+routing cell divides its terminal root-column factor
+  ↓
+original weighted coordinates form a fixed row/column solution
+  ↓
+universal first equation decodes to the matching one of nine local equations
+  ↓
+inverse action of the cell unit scale
+  ↓
+the reduced cell model itself is a fixed-system solution
+```
+
+The decoder is:
+
+```lean
+AwayFirstCoordinatePrimePowerEquation.of_universal
+```
+
+It derives all nine first-coordinate branches from the endpoint equation, root
+equation, and universal first coordinate equation using the exact left/right
+cubic division identities.
+
+TERM-007 closes the model-compatibility obligation only.  The remaining
+terminal problem is now genuinely integral: use the nine proved fixed-system
+solutions together with coordinate windings, equation carries, and row modulus
+factorization to produce either a contradiction or an
+`AwayDescentClosureProvider`.

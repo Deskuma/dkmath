@@ -487,26 +487,27 @@ FLT7-TERM-004 universal global coordinate equations and integer carries
 FLT7-TERM-005 exact 3 x 3 cell prime partition and modulus reconstruction
 ```
 
-WIP
+complete
 
 ```txt
 FLT7-TERM-006 cellwise universal CRT and row-resolved carry packet
+FLT7-TERM-007 fixed cell-system compatibility
 ```
 
-The exact TERM-006 stop gate is:
+TERM-007 discharges the former TERM-006 stop gate:
 
 ```lean
 AwaySevenBaseTerminalCellwiseFixedSystemObligation
 ```
 
-It asks that each reduced global CRT model be the coordinate tuple of a
+Each reduced global CRT model is now proved to be the coordinate tuple of a
 solution to the fixed endpoint-row/root-column system for that exact cell
-modulus.  Universal equations alone do not discharge this certificate-gluing
-obligation.
+modulus.
 
 incomplete
 
 ```txt
+FLT7-TERM-008 integral arithmetic receiver for the nine fixed cell systems
 FLT7-DESCENT-001 provider construction
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
