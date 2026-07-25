@@ -30,6 +30,8 @@ terminal prime q
   → terminal Row-Y / Row-Z ramified chart resolution
   → one primitive common ramified summit
   → exact root-snd depth and ramified cubic factor grid
+  → formal ramified 3 x 3 coprime routing
+  → endpoint/root-cubic gap-depth synchronization
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -47,5 +49,7 @@ and normalize Row Y and Row Z into ramified charts. RAMIFIED-001 unifies those
 charts and proves the exact root-snd depth
 `5 + 7 * padicValNat 7 gapRoot`, together with the new ramified
 linear-cubic-cubic factor grid. This does not yet construct a smaller Fermat
-solution. Lifted-branch provider construction, terminal contradiction, and
-recursive descent closure remain unproved.
+solution. RAMIFIED-002 proves both triples nonzero and pairwise coprime,
+constructs `RamifiedCubicRoutingPacket`, and synchronizes the endpoint and
+root-cubic gap depths. Lifted-branch provider construction, terminal
+contradiction, and recursive descent closure remain unproved.

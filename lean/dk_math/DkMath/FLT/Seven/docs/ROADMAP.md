@@ -636,6 +636,25 @@ endpoint-product bridge.  This is Outcome A for RAMIFIED-001.  It exposes a
 new ramified 3 x 3 routing board, but no strict descent or smaller Fermat
 solution is claimed.
 
+RAMIFIED-002 upgrades that board to a formal `CoprimeTripleRouting`.  It
+proves nonvanishing and pairwise coprimality for
+
+```text
+endpoint: |c|, |e|, |c+e|
+root:     |T|, |L|, |R|
+```
+
+and packages the resulting nine exact gcd addresses as
+`RamifiedCubicRoutingPacket`.  It also proves:
+
+```text
+v7(|R-L|) = v7(|c-e|)
+          = 6 + 7 * v7(gapRoot)
+```
+
+This is Outcome A for RAMIFIED-002.  The routing grid and self-similar gap
+depth are complete; descent construction remains a separate obligation.
+
 ## 14. Review outcomes for Codex
 
 At the end of every checkpoint, report one of:

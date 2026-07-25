@@ -758,3 +758,37 @@ endpoint-product equation are exported.
 
 RAMIFIED-001 has Outcome A.  The common summit and its exact depth invariant
 are closed, but no smaller Fermat solution or recursive descent is claimed.
+
+## 24. RAMIFIED-002 formal coprime routing and gap synchronization
+
+`SevenBaseTerminalRamifiedRouting.lean` strengthens the common summit with
+the endpoint nonvanishing and cyclotomic-coordinate coprimality needed to
+recover primitive root coordinates.  It proves:
+
+```lean
+PrimitiveRamifiedSummitPacket.root_coordinates_isCoprime
+PrimitiveRamifiedSummitPacket.coprime_linear_left
+PrimitiveRamifiedSummitPacket.coprime_linear_right
+PrimitiveRamifiedSummitPacket.coprime_left_right
+```
+
+All endpoint and root factors are nonzero.  Both triples are pairwise
+coprime, their `natAbs` products agree, and therefore:
+
+```lean
+RamifiedCubicRoutingPacket
+AwaySevenBaseTerminalUnitSectorPacket.ramifiedCubicRouting
+```
+
+inhabit the existing formal `CoprimeTripleRouting` grid.
+
+The exact depth calculations give:
+
+```lean
+PrimitiveRamifiedSummitPacket.cubicGap_padicValNat
+PrimitiveRamifiedSummitPacket.endpointGap_padicValNat
+PrimitiveRamifiedSummitPacket.cubicGap_depth_eq_endpointGap_depth
+```
+
+Both gaps have depth `6 + 7 * padicValNat 7 gapRoot`.  RAMIFIED-002 has
+Outcome A.  No smaller Fermat solution or descent provider is constructed.

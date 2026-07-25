@@ -50,6 +50,13 @@ structure PrimitiveRamifiedSummitPacket : Type where
   gapRoot_pos : 0 < gapRoot
   residualRoot_pos : 0 < residualRoot
   endpoint_coprime : IsCoprime endpointLeft endpointRight
+  endpointLeft_ne_zero : endpointLeft ≠ 0
+  endpointRight_ne_zero : endpointRight ≠ 0
+  endpointSum_ne_zero : endpointLeft + endpointRight ≠ 0
+  coordinate_coprime :
+    IsCoprime
+      (cyclotomicSevenFst endpointLeft endpointRight)
+      (cyclotomicSevenSnd endpointLeft endpointRight)
   endpointRight_not_seven_dvd : ¬ (7 : ℤ) ∣ endpointRight
   residualRoot_not_seven_dvd : ¬ 7 ∣ residualRoot
   fermat_eq :
@@ -125,6 +132,14 @@ noncomputable def AwaySevenBaseTerminalRowYProfile.ramifiedSummit
     residualRoot_pos := split.b_pos
     endpoint_coprime :=
       (coprime_y_z_of_counterexamplePack source.swapXY).symm.isCoprime
+    endpointLeft_ne_zero := by exact_mod_cast source.hz.ne'
+    endpointRight_ne_zero := by exact_mod_cast source.hx.ne'
+    endpointSum_ne_zero := by
+      have hzpos : (0 : ℤ) < z := by exact_mod_cast source.hz
+      have hxpos : (0 : ℤ) < x := by exact_mod_cast source.hx
+      omega
+    coordinate_coprime :=
+      counterexample_cyclotomicSeven_coordinates_isCoprime source.swapXY
     endpointRight_not_seven_dvd := by
       intro hx
       exact split.sevenAdic.seven_not_dvd_y (Int.ofNat_dvd.mp hx)
@@ -162,6 +177,28 @@ noncomputable def AwaySevenBaseTerminalRowZProfile.ramifiedSummit
     gapRoot_pos := split.a_pos
     residualRoot_pos := split.b_pos
     endpoint_coprime := source.hxy.isCoprime.neg_right
+    endpointLeft_ne_zero := by exact_mod_cast source.hx.ne'
+    endpointRight_ne_zero := by
+      simp only [neg_ne_zero]
+      exact_mod_cast source.hy.ne'
+    endpointSum_ne_zero := by
+      intro hsum
+      have hxy : x = y := by
+        exact_mod_cast (sub_eq_zero.mp hsum)
+      subst y
+      have hx1 : x = 1 :=
+        Nat.eq_one_of_dvd_coprimes source.hxy dvd_rfl dvd_rfl
+      subst x
+      have heq := source.hEq
+      norm_num [Fermat7Equation] at heq
+      by_cases hz1 : z = 1
+      · simp [hz1] at heq
+      · have hzpos := source.hz
+        have hz2 : 2 ≤ z := by omega
+        have hpows : 2 ^ 7 ≤ z ^ 7 := Nat.pow_le_pow_left hz2 7
+        omega
+    coordinate_coprime :=
+      rowZ_signed_cyclotomicSeven_coordinates_isCoprime source.hxy
     endpointRight_not_seven_dvd := by
       simpa only [dvd_neg] using
         (show ¬ (7 : ℤ) ∣ (y : ℤ) by
