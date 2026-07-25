@@ -11,13 +11,14 @@ wip/ABC-GN-M1-odd-p-exp-exceptional-excess-260725-v0
 ```text
 M1-000  complete
 M1-001  complete / Outcome B
-M1-002  active
+M1-002  complete
+M1-003  active
 ```
 
 Current instruction:
 
 ```text
-instruction-M1-002.md
+instruction-M1-003.md
 ```
 
 ## Read order
@@ -28,6 +29,9 @@ ABC-GN-M1-IMPLEMENTATION-DESIGN.md
 ABC-GN-M1-ROADMAP.md
 report-M1-001.md
 instruction-M1-002.md
+report-M1-002.md
+review-M1-002.md
+instruction-M1-003.md
 ```
 
 Repository paths are relative to:
@@ -36,41 +40,79 @@ Repository paths are relative to:
 lean/dk_math/docs/dev/ABC-GN-M1-odd-p-exp-exceptional-excess-260725/
 ```
 
-## Active objective
+## Completed local kernel
 
-Implement only the fixed exponent-five local kernel:
+M1-002 established:
 
 ```text
 5 ∣ GN 5 a b
   -> 5 ∣ a
-  -> Coprime a b gives 5 ∤ b
-  -> 25 ∤ GN 5 a b
+  -> Coprime a b gives 25 ∤ GN 5 a b
   -> padicValNat 5 (GN 5 a b) = 1
+  -> (GN 5 a b).factorization 5 = 1
 ```
 
-Preferred new module:
+Implementation:
 
 ```text
 lean/dk_math/DkMath/ABC/GNOddPrimeExceptionalExcess.lean
 ```
 
-## Stop boundary
-
-M1-002 ends after:
+Reviewed commit:
 
 ```text
-local valuation-one theorem
+3fa7baceb34f7b184168e68fb16b9d76bf4d122b
+```
+
+Decision:
+
+```text
+M1-002 fully accepted
+```
+
+## Active objective
+
+Connect the local factorization-one theorem to the existing exceptional filtered sum and exact zero budget.
+
+Preferred new module:
+
+```text
+lean/dk_math/DkMath/ABC/GNExceptionalExcessFive.lean
+```
+
+Required endpoints:
+
+```lean
+theorem Triple.GNExceptionalValuationExcess_five_eq_zero
+    (T : Triple) :
+    GNExceptionalValuationExcess 5 T.a T.b = 0
+
+theorem Triple.GNExceptionalExcessBudgetAffine_five_zero
+    (T : Triple) :
+    GNExceptionalExcessBudgetAffine T 5 0 0
+```
+
+No positivity assumptions should be introduced unless Lean genuinely requires them.
+
+## Stop boundary
+
+M1-003 ends after:
+
+```text
+finite exceptional sum = 0
+exact affine budget = 0
 focused build
-report-M1-002.md
+report-M1-003.md
 commit
 ```
 
 Do not automatically start:
 
 ```text
-M1-003 exceptional finite-sum closure
 M1-004 odd-prime generalization
+M1-005 odd-prime finite-sum closure
 M2 or M3 work
+aggregator/public import changes
 ```
 
 ## Forbidden scope
@@ -85,4 +127,4 @@ no axiom
 no native_decide
 ```
 
-The detailed implementation contract is `instruction-M1-002.md`.
+The detailed implementation contract is `instruction-M1-003.md`.
