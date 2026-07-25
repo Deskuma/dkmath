@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-25
 
+### 23:58
+
+[符号配置を誤ると平方質量に残差が残る](260725-2358-sign-patterns-leave-square-mass-residuals.md)
+
+CF2D の標準積に近い符号配置を比較し、平方質量の乗法性を壊す二つの積には正確に $\pm4abxy$ の残差が残る一方、共役型の符号配置は保存則を維持することを読む。
+
 ### 12:02
 
 [原始集合では可除関係が等号へ退化する](260725-1202-primitive-sets-are-divisibility-antichains.md)
