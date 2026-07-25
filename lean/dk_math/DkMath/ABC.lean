@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.ABC.Main
+import DkMath.ABC.GNExceptionalExcessOddPrime
 
 #print "file: DkMath.ABC"
 

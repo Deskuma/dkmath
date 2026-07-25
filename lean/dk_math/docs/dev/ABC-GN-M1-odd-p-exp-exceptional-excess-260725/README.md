@@ -1,7 +1,7 @@
 # ABC–GN M1: Odd-Prime Exponent Exceptional Excess
 
 作成日: 2026-07-25  
-Status: **M1-004 complete / M1-005 active / autonomous continuation enabled**
+Status: **M1 complete / odd-prime exceptional excess defeated**
 
 Repository: `Deskuma/dkmath`  
 Base branch: `feature/ABC-GN-valuation-excess-260724-v0`  
@@ -43,8 +43,8 @@ M1-001  theorem/API reconnaissance                           complete / Outcome 
 M1-002  exponent-five divisibility and no-lift kernel        complete
 M1-003  exponent-five exceptional excess = 0                 complete / minimum victory
 M1-004  odd-prime general local valuation-one theorem        complete
-M1-005  odd-prime exceptional excess = 0 and budget bridge   active
-M1-006  integration, audit, documentation closure            follows autonomously
+M1-005  odd-prime exceptional excess = 0 and budget bridge   complete
+M1-006  integration, audit, documentation closure            complete
 ```
 
 ## 3. Existing deterministic spine
@@ -156,11 +156,11 @@ theorem padicValNat_GN_prime_eq_one_of_dvd
 
 この theorem も positivity を必要としない。
 
-## 6. Active M1-005
+## 6. Completed odd-prime victory
 
-一般奇素数の local factorization-one theorem を exceptional finite sum へ接続する。
+一般奇素数の local factorization-one theorem を exceptional finite sum へ接続した。
 
-目標:
+完成 theorem:
 
 ```lean
 theorem Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
@@ -188,6 +188,15 @@ q in exceptional support
   -> summand = 0
   -> finite sum = 0
 ```
+
+さらに非例外 budget だけから full valuation budget を供給する production-facing
+wrapper も完成した。
+
+```lean
+Triple.GNValuationExcessBudgetAffine_of_oddPrime_nonExceptional
+```
+
+公開入口 `DkMath.ABC` は `GNExceptionalExcessOddPrime` を import する。
 
 ## 7. Dual-Brain campaign doctrine
 
@@ -223,7 +232,8 @@ checkpoint report
 reviewable change boundary
 ```
 
-M1-005 完了後は M1-006 integration/audit へ連続進行し、M1 閉鎖後は M2/M3 の次戦線を調査・設計する。
+M1-005 と M1-006 は完了した。M1 は閉じた Core とし、次戦線は M2/M3
+専用 campaign で扱う。
 
 ## 8. Planned implementation surface
 

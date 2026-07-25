@@ -46,8 +46,8 @@ M1-001  read-only theorem/API reconnaissance                 complete / Outcome 
 M1-002  exponent-five divisibility and no-lift kernel        complete
 M1-003  exponent-five exceptional excess = 0                 complete / minimum victory
 M1-004  odd-prime general local valuation-one theorem        complete
-M1-005  odd-prime exceptional excess = 0 and budget bridge   active
-M1-006  integration, audit, documentation closure            autonomous continuation
+M1-005  odd-prime exceptional excess = 0 and budget bridge   complete
+M1-006  integration, audit, documentation closure            complete
 ```
 
 各 checkpoint は theorem layer・focused verification・report を持つ。checkpoint は reviewable observation point であり、次 checkpoint へ進むための permission gate ではない。
@@ -192,7 +192,7 @@ positivity assumptions: **none**
 
 ## 7. M1-005: Odd-prime excess zero and budget bridge
 
-Status: **active**
+Status: **complete**
 
 Objective:
 
@@ -261,7 +261,7 @@ De = 0
 
 ## 8. M1-006: Integration and closure
 
-Status: **continue automatically after M1-005**
+Status: **complete**
 
 M1-006 is integration/audit, not a new deep arithmetic checkpoint.
 
