@@ -70,6 +70,8 @@ import DkMath.FLT.Seven.SevenBaseTerminalExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalFermatChartResolution
 import DkMath.FLT.Seven.SevenBaseTerminalRowZAlternatingPowerSplit
 import DkMath.FLT.Seven.SevenBaseTerminalRowZSignedResidualCore
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedSummit
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -125,7 +127,11 @@ the `Z` row has a primitive signed odd-power chart with seven-divisible gap.
 Its alternating natural factor now has the exact `7^6`/`7` seventh-power
 split, and its signed quadratic residual core is extracted as a seventh power.
 Thus every surviving terminal away row reaches a natural or signed ramified
-chart.  This is not yet ramified-summit closure.  Each local complete exponent is also
+chart.  Both charts now inhabit one primitive integer ramified summit.  Its
+second root coordinate has the exact depth
+`5 + 7 * padicValNat 7 gapRoot`, and its ramified second coordinate splits
+into one linear and two explicit cubic factors.  This common summit does not
+by itself supply a smaller Fermat solution.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.
@@ -135,8 +141,7 @@ terminal depth one, the facade also exports the exact carrier, residual,
 endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
 with their row-sensitive `ZMod 7` linearization and the checked row-`Y`
 mod-`49` shadow showing that a bare local congruence obstruction is insufficient.
-The common ramified summit and lifted signed reconstruction remain explicit
-open obligations.  The exact integral
+Lifted signed reconstruction remains an explicit open obligation.  The exact integral
 `AwayDescentReconstructionSeed` is proved equivalent to the existing
 `AwayDescentClosureProvider` contract and constructs the strict away depth
 drop when inhabited.  Such a seed or provider forces pivot exponent at least

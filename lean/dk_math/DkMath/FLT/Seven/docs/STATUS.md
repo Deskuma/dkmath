@@ -723,3 +723,38 @@ impossible.
 TERM-010 has Outcome A.  It does not prove a contradiction in either
 ramified chart.  The common ramified summit is the next independent proof
 boundary.
+
+## 23. RAMIFIED-001 common summit and exact second-coordinate depth
+
+`SevenBaseTerminalRamifiedSummit.lean` defines
+`PrimitiveRamifiedSummitPacket` and constructs it from both surviving
+terminal rows:
+
+```lean
+AwaySevenBaseTerminalRowYProfile.ramifiedSummit
+AwaySevenBaseTerminalRowZProfile.ramifiedSummit
+AwaySevenBaseTerminalUnitSectorPacket.ramifiedSummit
+```
+
+The common packet retains the primitive integer endpoints, Fermat equation,
+exact `7^6` gap split, exact cyclotomic residual split, distinguished factor,
+quadratic coordinate equation, root norm, and the needed seven-unit facts.
+
+`SevenBaseTerminalRamifiedDepth.lean` proves the predicted gap quotient
+identity and exact transfer:
+
+```lean
+PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
+```
+
+```text
+padicValNat 7 (Int.natAbs root.snd)
+  = 5 + 7 * padicValNat 7 gapRoot
+```
+
+The second coordinate also splits as `ramifiedLinear * ramifiedLeftCubic *
+ramifiedRightCubic`; its cubic sum and difference identities and the common
+endpoint-product equation are exported.
+
+RAMIFIED-001 has Outcome A.  The common summit and its exact depth invariant
+are closed, but no smaller Fermat solution or recursive descent is claimed.

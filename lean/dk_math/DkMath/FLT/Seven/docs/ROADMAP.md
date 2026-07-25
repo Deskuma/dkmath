@@ -566,7 +566,6 @@ constraints.  Further carry accumulation is therefore not a descent route.
 incomplete
 
 ```txt
-FLT7-RAMIFIED-001 natural ramified summit closure
 FLT7-DESCENT-003 inhabit the reconstruction seed in the lifted branch
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
@@ -616,6 +615,26 @@ seed contract is valuation-compatible.  It must not be merged with the
 terminal signed-chart or ramified-summit work.
 
 Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
+
+RAMIFIED-001 unifies both terminal charts into
+`PrimitiveRamifiedSummitPacket`.  It proves the exact gap expansion and
+second-coordinate identity
+
+```text
+seventhPowerSnd(root) = 7^6 * gapRoot^7 * ramifiedGapQuotient.snd
+```
+
+with both remaining factors seven-units.  Consequently:
+
+```text
+padicValNat 7 |root.snd| = 5 + 7 * padicValNat 7 gapRoot
+```
+
+The ramified second coordinate also has the exact linear-cubic-cubic
+factorization, together with the cubic sum and difference identities and the
+endpoint-product bridge.  This is Outcome A for RAMIFIED-001.  It exposes a
+new ramified 3 x 3 routing board, but no strict descent or smaller Fermat
+solution is claimed.
 
 ## 14. Review outcomes for Codex
 

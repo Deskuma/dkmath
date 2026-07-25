@@ -27,7 +27,9 @@ terminal prime q
   → proof that every cell first carry is dependent
   → exact reconstruction seed equivalent to the descent provider
   → proof that a terminal-depth seed/provider is impossible
-  → direct terminal-exclusion boundary
+  → terminal Row-Y / Row-Z ramified chart resolution
+  → one primitive common ramified summit
+  → exact root-snd depth and ramified cubic factor grid
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -40,6 +42,10 @@ next counterexample, and Lean proves that it is equivalent to
 provider construction interface and strict-drop bridge are complete, while
 inhabiting the seed remains open in general. DESCENT-002 gives Outcome D at
 terminal depth: a seed or provider would force pivot exponent at least two, so
-neither can inhabit the exponent-one branch. The next terminal obligation is
-therefore direct arithmetic exclusion. Lifted-branch provider construction,
-terminal contradiction, and recursive descent closure remain unproved.
+neither can inhabit the exponent-one branch. TERM-009/010 then exclude Row Sum
+and normalize Row Y and Row Z into ramified charts. RAMIFIED-001 unifies those
+charts and proves the exact root-snd depth
+`5 + 7 * padicValNat 7 gapRoot`, together with the new ramified
+linear-cubic-cubic factor grid. This does not yet construct a smaller Fermat
+solution. Lifted-branch provider construction, terminal contradiction, and
+recursive descent closure remain unproved.
