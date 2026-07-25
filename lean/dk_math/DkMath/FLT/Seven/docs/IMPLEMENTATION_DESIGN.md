@@ -727,3 +727,45 @@ canonical prime-index subtype
 Do not implement finite CRT in the same checkpoint.
 
 After this task, stop and report the exact theorem names and any mathlib API mismatch found around `Nat.primeFactors`.
+
+## 18. TERM-009 chart-resolution boundary
+
+`SevenBaseTerminalFermatChartResolution.lean` is the canonical terminal chart
+layer.  Later work should consume:
+
+```lean
+AwaySevenBaseTerminalUnitSectorPacket.fermatChartResolution
+```
+
+rather than reopening the three original row profiles independently.  Its
+meaning is deliberately asymmetric:
+
+```text
+Row Y   has an existing natural RamifiedCoordinateNormalForm
+Row Sum is impossible
+Row Z   has a proved signed chart and proved seven-divisible signed gap
+```
+
+The Row-Z continuation target is exactly:
+
+```lean
+AwaySevenBaseTerminalRowZSignedRamifiedArithmeticObligation
+```
+
+It asks only for a root satisfying
+
+```lean
+cyclotomicSevenToTraceOne (x : ℤ) (-(y : ℤ)) =
+  sevenAxis * root ^ 7
+```
+
+All nonzero, primitive, Fermat-equation, and gap-divisibility fields are
+already discharged.  A future signed extractor should prove this receiver
+without adding positivity to the signed chart and without assuming terminal
+exclusion.  Reusing the natural extractor requires a separately designed
+integer factorization layer because the current chain uses natural
+subtraction, natural `GN`, positivity, `padicValNat`, and
+`seventh_power_factor_split`.
+
+Do not claim FLT7 after inhabiting this receiver alone.  The natural ramified
+summit remains a separate closure problem.

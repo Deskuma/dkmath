@@ -598,3 +598,62 @@ inhabited. This does not yet contradict the original terminal
 this branch. The route must return to direct terminal arithmetic exclusion.
 The seed/provider construction problem remains open only for lifted pivots
 with `1 < p.exponent`.
+
+## 21. TERM-009 terminal Fermat chart resolution
+
+TERM-009 implements and checks the coordinate-chart reconstruction in
+`SevenBaseTerminalFermatChartResolution.lean`.
+
+The natural exchange API
+
+```lean
+CounterexamplePack.swapXY
+```
+
+preserves positivity, primitivity, and the Fermat-seven equation.  It gives
+the following two unconditional terminal results:
+
+```lean
+AwaySevenBaseTerminalRowYProfile.to_swapped_ramified
+AwaySevenBaseTerminalRowSumProfile.false_of_swapped_away
+```
+
+For Row Y, the mod-seven Fermat equation makes the exchanged gap `z - x`
+divisible by seven, so the existing coordinate route must be ramified.  For
+Row Sum, the exact residue sector is `awaySum`; after exchange, `x`, `z`, and
+`x + z` are all seven-units while every away chart requires
+`7 ∣ x * z * (x + z)`, a contradiction.
+
+For Row Z, Lean verifies the signed odd-power transport:
+
+```lean
+CounterexamplePack.signedOddPermutation
+AwaySevenBaseTerminalRowZProfile.seven_dvd_signed_gap
+```
+
+Thus `(z,-y,x)` is a nonzero primitive integer Fermat-seven chart and its gap
+`x - (-y)` is divisible by seven.  The complete terminal decision is:
+
+```lean
+AwaySevenBaseTerminalUnitSectorPacket.fermatChartResolution
+```
+
+Its only constructors are a natural Row-Y ramified packet and a signed Row-Z
+packet.  Row Sum has been eliminated.
+
+The attempted thin reuse of the natural ramified extractor stops at a genuine
+domain boundary.  The existing construction proceeds through natural
+subtraction and `GN`, positivity, natural coprime factor splitting, and
+`padicValNat` before building `SevenQuadraticResidualPacket`; it cannot accept
+the negative endpoint `-y`.  TERM-009 records the exact missing conclusion as:
+
+```lean
+AwaySevenBaseTerminalRowZSignedRamifiedArithmeticObligation
+```
+
+and proves that this receiver constructs
+`SignedRamifiedCoordinateNormalForm`.  TERM-009 therefore has Outcome C:
+terminal chart resolution is complete, Row Sum is excluded, and signed
+Row-Z quadratic seventh-power extraction is the sole remaining direct
+arithmetic obligation.  This does not close the natural ramified summit or
+prove FLT7.

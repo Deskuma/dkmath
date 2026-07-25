@@ -543,6 +543,7 @@ FLT7-TERM-007 fixed cell-system compatibility
 FLT7-TERM-008 cellwise fixed-system carry dependency audit
 FLT7-DESCENT-001 provider construction interface and exact receiver (Outcome C)
 FLT7-DESCENT-002 terminal reconstruction seed exclusion (Outcome D)
+FLT7-TERM-009 terminal Fermat chart resolution (Outcome C)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -564,16 +565,32 @@ constraints.  Further carry accumulation is therefore not a descent route.
 incomplete
 
 ```txt
-FLT7-TERM-009 direct terminal arithmetic exclusion
+FLT7-TERM-010 signed Row-Z ramified quadratic extraction
+FLT7-RAMIFIED-001 natural ramified summit closure
 FLT7-DESCENT-003 inhabit the reconstruction seed in the lifted branch
 FLT7-FINAL-001 public FLT7 theorem and audit
 ```
 
-TERM-009 must use terminal arithmetic to rule out exponent one; it cannot
-escape through `AwayDescentClosureProvider`. DESCENT-003 is separately scoped
-to `1 < p.exponent`, where the old root second coordinate still has positive
-seven-adic depth and the reconstruction-seed contract is valuation-compatible.
-The two branches must not be merged.
+TERM-009 proves the exact chart classification:
+
+```text
+Row Sum -> contradiction
+Row Y   -> natural swapped ramified chart
+Row Z   -> primitive signed chart with seven-divisible gap
+```
+
+The existing natural ramified extraction cannot be reused as a thin wrapper
+for Row Z: its `SevenAdicCounterexamplePacket`, `SevenAdicPowerSplit`, and
+`SevenQuadraticResidualPacket` chain is indexed by positive naturals and uses
+`z - y`, natural `GN`, positivity, `padicValNat`, and natural coprime factor
+splitting.  TERM-009 therefore reaches Outcome C and exports
+`AwaySevenBaseTerminalRowZSignedRamifiedArithmeticObligation` as the exact
+remaining signed quadratic extraction receiver.
+
+DESCENT-003 remains separately scoped to `1 < p.exponent`, where the old root
+second coordinate still has positive seven-adic depth and the reconstruction
+seed contract is valuation-compatible.  It must not be merged with the
+terminal signed-chart or ramified-summit work.
 
 Each checkpoint should add one conceptual layer. Avoid combining support, finite CRT, model compatibility, and integer reconstruction into one large commit.
 
