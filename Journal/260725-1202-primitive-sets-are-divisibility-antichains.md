@@ -43,7 +43,7 @@ $$a\mid b\iff a=b$$
 
 `DkMath.NumberTheory.PrimitiveSet.PrimitiveOn` は有限集合 `S : Finset ℕ` に対し、次で定義される。
 
-$$\mathrm{PrimitiveOn}(S)\iff orall a,b\in S,\ a\mid b\longrightarrow a=b$$
+$$\mathrm{PrimitiveOn}(S)\iff \forall a,b\in S,\ a\mid b\longrightarrow a=b$$
 
 Lean source には、この定義から次の定理が実装されている。
 
@@ -57,9 +57,7 @@ Lean source には、この定義から次の定理が実装されている。
 
 3. `PrimitiveOn.not_dvd_of_ne`
 
-   原始集合 `S` の異なる二要素 $a
-e b$ について、$a
-mid b$ である。
+   原始集合 `S` の異なる二要素 $a\ne b$ について、$a\nmid b$ である。
 
 4. `PrimitiveOn.dvd_iff_eq`
 
@@ -77,9 +75,7 @@ $$a\mid b\iff a=b$$
 
 7. `primitiveOn_pair`
 
-   $a
-mid b$ かつ $b
-mid a$ なら、二点集合 $\{a,b\}$ は原始集合である。
+   $a\nmid b$ かつ $b\nmid a$ なら、二点集合 $\{a,b\}$ は原始集合である。
 
 8. `primitiveOn_pair_two_three`
 
@@ -97,15 +93,13 @@ $$a\preceq b\iff a\mid b$$
 
 反鎖とは、異なる二要素が比較不能である集合をいう。したがって原始集合 `S` では、異なる $a,b\in S$ に対して
 
-$$a
-mid b\qquad	ext{かつ}\qquad b
-mid a$$
+$$a\nmid b\qquad\mathrm{and}\qquad b\nmid a$$
 
 が成立する。
 
 `PrimitiveOn.dvd_iff_eq` は、この反鎖性を集合内部の関係そのものとして表している。集合全体では豊かな可除構造があっても、原始集合へ制限すると、その関係は対角線だけになる。
 
-$$\{(a,b)\in S	imes S:a\mid b\}=\{(a,a):a\in S\}$$
+$$\{(a,b)\in S\times S:a\mid b\}=\{(a,a):a\in S\}$$
 
 ## 4. DkMath での読み方
 
@@ -147,9 +141,7 @@ flowchart TD
 
 ### 6.2 二点集合 `{2,3}`
 
-$2
-mid3$ かつ $3
-mid2$ なので、定理 `primitiveOn_pair` を適用できる。
+$2\nmid3$ かつ $3\nmid2$ なので、定理 `primitiveOn_pair` を適用できる。
 
 $$\mathrm{PrimitiveOn}(\{2,3\})$$
 
@@ -157,8 +149,7 @@ $$\mathrm{PrimitiveOn}(\{2,3\})$$
 
 ### 6.3 原始でない二点集合
 
-$\{2,4\}$ では $2\mid4$ かつ $2
-e4$ なので、`PrimitiveOn` の条件を満たさない。
+$\{2,4\}$ では $2\mid4$ かつ $2\ne4$ なので、`PrimitiveOn` の条件を満たさない。
 
 これは Lean source 内の個別定理ではなく、定義を用いた比較例である。
 
