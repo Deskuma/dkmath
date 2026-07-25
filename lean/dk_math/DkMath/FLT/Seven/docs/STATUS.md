@@ -657,3 +657,69 @@ terminal chart resolution is complete, Row Sum is excluded, and signed
 Row-Z quadratic seventh-power extraction is the sole remaining direct
 arithmetic obligation.  This does not close the natural ramified summit or
 prove FLT7.
+
+## 22. TERM-010 Row-Z alternating cyclotomic extraction
+
+TERM-010 closes the arithmetic receiver isolated by TERM-009.
+
+`SevenBaseTerminalRowZAlternatingPowerSplit.lean` defines
+
+```lean
+alternatingCyclotomicSeven x y = (x ^ 7 + y ^ 7) / (x + y)
+```
+
+and proves its exact factorization and signed cyclotomic interpretation:
+
+```lean
+add_mul_alternatingCyclotomicSeven
+alternatingCyclotomicSeven_intCast
+```
+
+For primitive endpoints its gcd with `x + y` divides seven; on the Row-Z
+channel it is exactly seven.  The signed terminal-core theorem excludes a
+second factor of seven.  The normalized coprime product argument then
+constructs:
+
+```lean
+AwaySevenBaseTerminalRowZAlternatingPowerSplit
+```
+
+with exact fields
+
+```text
+x + y = 7^6 * a^7
+alternatingCyclotomicSeven x y = 7 * b^7
+z = 7 * a * b
+```
+
+`SevenBaseTerminalRowZSignedResidualCore.lean` proves the signed cubic
+coordinate pair is coprime, applies `exists_cyclotomicSeven_terminal_core`,
+and identifies the peeled residual norm with `b^7`.  The residual and its
+conjugate have unit gcd, so the existing TraceOne UFD theorem produces a root
+whose seventh power is the residual core.
+
+The TERM-009 receiver is now inhabited by:
+
+```lean
+AwaySevenBaseTerminalRowZProfile.signedRamifiedArithmeticObligation
+```
+
+and the complete signed normal form is:
+
+```lean
+AwaySevenBaseTerminalRowZProfile.signedRamified
+```
+
+Finally,
+
+```lean
+AwaySevenBaseTerminalUnitSectorPacket.ramifiedChartResolution
+```
+
+states that every surviving terminal away packet reaches either the natural
+Row-Y ramified chart or the signed Row-Z ramified chart.  Row Sum remains
+impossible.
+
+TERM-010 has Outcome A.  It does not prove a contradiction in either
+ramified chart.  The common ramified summit is the next independent proof
+boundary.

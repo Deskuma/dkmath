@@ -769,3 +769,50 @@ subtraction, natural `GN`, positivity, `padicValNat`, and
 
 Do not claim FLT7 after inhabiting this receiver alone.  The natural ramified
 summit remains a separate closure problem.
+
+## 19. TERM-010 signed Row-Z extraction boundary
+
+TERM-010 discharges
+
+```lean
+AwaySevenBaseTerminalRowZSignedRamifiedArithmeticObligation
+```
+
+through two modules:
+
+```text
+SevenBaseTerminalRowZAlternatingPowerSplit.lean
+SevenBaseTerminalRowZSignedResidualCore.lean
+```
+
+The first is the canonical natural arithmetic layer for
+
+```text
+A7(x,y) = (x^7 + y^7) / (x+y).
+```
+
+It owns the exact factorization, signed integer cast, gcd-seven result,
+49-exclusion, and the `7^6`/`7` seventh-power split.  The second owns signed
+cubic-coordinate coprimality, `sevenAxis` peeling, residual norm
+identification, conjugate gcd-unit proof, and TraceOne seventh-power
+extraction.
+
+Later code should use:
+
+```lean
+AwaySevenBaseTerminalUnitSectorPacket.ramifiedChartResolution
+```
+
+as the terminal-away boundary.  It has only natural and signed ramified
+constructors.  Do not reopen Row Sum or treat signed Row Z as an outstanding
+receiver.
+
+The next common API may package both constructors as a primitive integer
+endpoint pair, a seven-divisible gap, and
+
+```lean
+cyclotomicSevenToTraceOne c b = sevenAxis * root ^ 7.
+```
+
+That common façade belongs to RAMIFIED-001.  No contradiction, recursive
+descent provider, or FLT7 theorem follows from TERM-010 alone.

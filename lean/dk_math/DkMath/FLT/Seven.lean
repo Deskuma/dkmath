@@ -68,6 +68,8 @@ import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinateEquations
 import DkMath.FLT.Seven.SevenBaseTerminalCellPrimePartition
 import DkMath.FLT.Seven.SevenBaseTerminalExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalFermatChartResolution
+import DkMath.FLT.Seven.SevenBaseTerminalRowZAlternatingPowerSplit
+import DkMath.FLT.Seven.SevenBaseTerminalRowZSignedResidualCore
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -120,8 +122,10 @@ terminal row is retained as an exact `Y`, `Z`, or `Sum` arithmetic profile
 together with the signed reconstruction outcome.  Natural chart exchange
 excludes the `Sum` row and moves the `Y` row into the existing ramified chart;
 the `Z` row has a primitive signed odd-power chart with seven-divisible gap.
-Its signed quadratic seventh-power extraction remains an explicit arithmetic
-receiver, so terminal exclusion is not claimed.  Each local complete exponent is also
+Its alternating natural factor now has the exact `7^6`/`7` seventh-power
+split, and its signed quadratic residual core is extracted as a seventh power.
+Thus every surviving terminal away row reaches a natural or signed ramified
+chart.  This is not yet ramified-summit closure.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.
@@ -131,8 +135,8 @@ terminal depth one, the facade also exports the exact carrier, residual,
 endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
 with their row-sensitive `ZMod 7` linearization and the checked row-`Y`
 mod-`49` shadow showing that a bare local congruence obstruction is insufficient.
-The signed Row-`Z` extraction, natural ramified summit, and lifted signed
-reconstruction remain explicit open obligations.  The exact integral
+The common ramified summit and lifted signed reconstruction remain explicit
+open obligations.  The exact integral
 `AwayDescentReconstructionSeed` is proved equivalent to the existing
 `AwayDescentClosureProvider` contract and constructs the strict away depth
 drop when inhabited.  Such a seed or provider forces pivot exponent at least

@@ -544,6 +544,7 @@ FLT7-TERM-008 cellwise fixed-system carry dependency audit
 FLT7-DESCENT-001 provider construction interface and exact receiver (Outcome C)
 FLT7-DESCENT-002 terminal reconstruction seed exclusion (Outcome D)
 FLT7-TERM-009 terminal Fermat chart resolution (Outcome C)
+FLT7-TERM-010 Row-Z alternating split and signed residual extraction (Outcome A)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -565,7 +566,6 @@ constraints.  Further carry accumulation is therefore not a descent route.
 incomplete
 
 ```txt
-FLT7-TERM-010 signed Row-Z ramified quadratic extraction
 FLT7-RAMIFIED-001 natural ramified summit closure
 FLT7-DESCENT-003 inhabit the reconstruction seed in the lifted branch
 FLT7-FINAL-001 public FLT7 theorem and audit
@@ -586,6 +586,29 @@ for Row Z: its `SevenAdicCounterexamplePacket`, `SevenAdicPowerSplit`, and
 splitting.  TERM-009 therefore reaches Outcome C and exports
 `AwaySevenBaseTerminalRowZSignedRamifiedArithmeticObligation` as the exact
 remaining signed quadratic extraction receiver.
+
+TERM-010 inhabits that receiver.  It constructs the exact alternating split
+
+```text
+x + y = 7^6 * a^7
+A7(x,y) = 7 * b^7
+z = 7 * a * b
+```
+
+then applies the existing integer `sevenAxis` peeling theorem to
+`cyclotomicSevenToTraceOne x (-y)`.  Signed cubic-coordinate coprimality makes
+the peeled residual core coprime to its conjugate, and its norm is `b^7`.
+The TraceOne UFD extraction therefore proves that the residual core itself is
+a seventh power.  Consequently:
+
+```lean
+AwaySevenBaseTerminalRowZProfile.signedRamified
+AwaySevenBaseTerminalUnitSectorPacket.ramifiedChartResolution
+```
+
+are now available.  Every surviving terminal away row reaches a ramified
+chart.  RAMIFIED-001 is the next separate obligation; TERM-010 does not close
+that summit or prove FLT7.
 
 DESCENT-003 remains separately scoped to `1 < p.exponent`, where the old root
 second coordinate still has positive seven-adic depth and the reconstruction
