@@ -472,14 +472,14 @@ FLT7-LOAD-001 exponent transport from cell to root load
 FLT7-LOAD-002 product modulus reconstruction
 FLT7-MODEL-001 local model compatibility audit
 FLT7-MODEL-002 global model or incompatibility packet
+FLT7-LIFT-001 product-modulus weighted candidate
+FLT7-LIFT-002 integer representative and congruence packet
+FLT7-LIFT-003 signed reconstruction or exact obstruction
 ```
 
 incomplete
 
 ```txt
-FLT7-LIFT-001 product-modulus weighted candidate
-FLT7-LIFT-002 integer representative and congruence packet
-FLT7-LIFT-003 signed reconstruction or exact obstruction
 FLT7-TERM-001 row-sensitive terminal decision
 FLT7-DESCENT-001 provider construction
 FLT7-FINAL-001 public FLT7 theorem and audit
