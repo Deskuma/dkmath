@@ -1,5 +1,11 @@
 # FLT7-RAMIFIED-002
 
+primitive root coordinates
+root triple pairwise coprime
+endpoint triple pairwise coprime
+formal CoprimeTripleRouting
+exact gap-depth synchronization
+
 ## FLT7-RAMIFIED-001 判定
 
 **Outcome A、全面採用です。重大問題・実装 blocker はありません。** 🧙‍♀️✨️

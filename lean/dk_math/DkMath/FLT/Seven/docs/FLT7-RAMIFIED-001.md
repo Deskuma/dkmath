@@ -1,5 +1,9 @@
 # FLT7-RAMIFIED-001
 
+common summit
+root-snd exact depth
+linear-cubic-cubic factorization
+
 ## TERM-010 再レビュー
 
 **Outcome A、全面採用です。blocker はありません。** 🧙‍♀️✨️
