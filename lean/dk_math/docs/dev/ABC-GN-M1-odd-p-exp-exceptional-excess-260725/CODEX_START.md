@@ -12,13 +12,14 @@ wip/ABC-GN-M1-odd-p-exp-exceptional-excess-260725-v0
 M1-000  complete
 M1-001  complete / Outcome B
 M1-002  complete
-M1-003  active
+M1-003  complete / fixed-five minimum victory
+M1-004  active
 ```
 
 Current instruction:
 
 ```text
-instruction-M1-003.md
+instruction-M1-004.md
 ```
 
 ## Read order
@@ -28,10 +29,11 @@ README.md
 ABC-GN-M1-IMPLEMENTATION-DESIGN.md
 ABC-GN-M1-ROADMAP.md
 report-M1-001.md
-instruction-M1-002.md
 report-M1-002.md
 review-M1-002.md
-instruction-M1-003.md
+report-M1-003.md
+review-M1-003.md
+instruction-M1-004.md
 ```
 
 Repository paths are relative to:
@@ -40,9 +42,9 @@ Repository paths are relative to:
 lean/dk_math/docs/dev/ABC-GN-M1-odd-p-exp-exceptional-excess-260725/
 ```
 
-## Completed local kernel
+## Completed fixed-five victory
 
-M1-002 established:
+M1-002 established the local exponent-five valuation-one theorem:
 
 ```text
 5 ∣ GN 5 a b
@@ -52,65 +54,101 @@ M1-002 established:
   -> (GN 5 a b).factorization 5 = 1
 ```
 
+M1-003 connected it to the exceptional finite sum and exact affine budget:
+
+```lean
+Triple.GNExceptionalValuationExcess_five_eq_zero
+Triple.GNExceptionalExcessBudgetAffine_five_zero
+```
+
+Thus, at exponent five:
+
+```text
+τe = 0
+De = 0
+```
+
 Implementation:
 
 ```text
 lean/dk_math/DkMath/ABC/GNOddPrimeExceptionalExcess.lean
+lean/dk_math/DkMath/ABC/GNExceptionalExcessFive.lean
 ```
 
-Reviewed commit:
+Reviewed commits:
 
 ```text
 3fa7baceb34f7b184168e68fb16b9d76bf4d122b
+8a9690b41be321fed2b15dc9d578512388322a0d
 ```
 
 Decision:
 
 ```text
 M1-002 fully accepted
+M1-003 fully accepted
 ```
 
 ## Active objective
 
-Connect the local factorization-one theorem to the existing exceptional filtered sum and exact zero budget.
-
-Preferred new module:
-
-```text
-lean/dk_math/DkMath/ABC/GNExceptionalExcessFive.lean
-```
+Generalize the local valuation-one theorem from exponent five to every odd prime exponent.
 
 Required endpoints:
 
 ```lean
-theorem Triple.GNExceptionalValuationExcess_five_eq_zero
-    (T : Triple) :
-    GNExceptionalValuationExcess 5 T.a T.b = 0
+theorem padicValNat_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    padicValNat p (GN p a b) = 1
 
-theorem Triple.GNExceptionalExcessBudgetAffine_five_zero
-    (T : Triple) :
-    GNExceptionalExcessBudgetAffine T 5 0 0
+theorem factorization_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    (GN p a b).factorization p = 1
+```
+
+Primary route:
+
+```text
+p ∣ GN -> p ∣ a
+Coprime a b -> p ∤ a+b
+GN = geometric quotient
+emultiplicity_geom_sum₂_eq_one
+transfer to padicValNat / factorization
+```
+
+Alternative route:
+
+```text
+odd-prime LTE on (a+b)^p - b^p
+plus the exact boundary * GN product split
 ```
 
 No positivity assumptions should be introduced unless Lean genuinely requires them.
 
 ## Stop boundary
 
-M1-003 ends after:
+M1-004 ends after:
 
 ```text
-finite exceptional sum = 0
-exact affine budget = 0
+odd-prime local valuation-one theorem
+odd-prime local factorization-one theorem
 focused build
-report-M1-003.md
+report-M1-004.md
 commit
 ```
 
 Do not automatically start:
 
 ```text
-M1-004 odd-prime generalization
-M1-005 odd-prime finite-sum closure
+M1-005 odd-prime exceptional finite-sum closure
+M1-006 integration/audit closure
 M2 or M3 work
 aggregator/public import changes
 ```
@@ -125,6 +163,7 @@ no unrelated refactor
 no sorry
 no axiom
 no native_decide
+no finite enumeration as general proof
 ```
 
-The detailed implementation contract is `instruction-M1-003.md`.
+The detailed implementation contract is `instruction-M1-004.md`.
