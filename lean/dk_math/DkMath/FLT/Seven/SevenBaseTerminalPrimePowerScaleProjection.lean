@@ -19,6 +19,10 @@ structure AwayNonSevenPrimePowerOrbitProjection
   scale : ZMod p.modulus
   scale_isUnit : IsUnit scale
   actual_eq : actual = scalePrimePowerSolution model scale scale_isUnit
+  actual_original_u : actual.u = p.toPrimePowerSolution.u
+  actual_original_v : actual.v = p.toPrimePowerSolution.v
+  actual_original_y : actual.y = p.toPrimePowerSolution.y
+  actual_original_z : actual.z = p.toPrimePowerSolution.z
 
 /-- Forget the column-specific root and correction data while retaining the
 actual/model pair and its common weight-(3,7) unit scale. -/
@@ -28,27 +32,41 @@ def AwayNonSevenPrimePowerOrbitSource.toProjection
     (source : AwayNonSevenPrimePowerOrbitSource p column) :
     AwayNonSevenPrimePowerOrbitProjection p column := by
   cases source with
-  | sevenV actual model scale scale_isUnit actual_eq =>
+  | sevenV actual model scale scale_isUnit actual_eq hu hv hy hz =>
       exact {
         actual := actual
         model := model
         scale := scale
         scale_isUnit := scale_isUnit
-        actual_eq := actual_eq }
-  | leftCubic t root correction_unit actual model scale scale_isUnit actual_eq =>
+        actual_eq := actual_eq
+        actual_original_u := hu
+        actual_original_v := hv
+        actual_original_y := hy
+        actual_original_z := hz }
+  | leftCubic t root correction_unit actual model scale scale_isUnit actual_eq
+      hu hv hy hz =>
       exact {
         actual := actual
         model := model
         scale := scale
         scale_isUnit := scale_isUnit
-        actual_eq := actual_eq }
-  | rightCubic t root correction_unit actual model scale scale_isUnit actual_eq =>
+        actual_eq := actual_eq
+        actual_original_u := hu
+        actual_original_v := hv
+        actual_original_y := hy
+        actual_original_z := hz }
+  | rightCubic t root correction_unit actual model scale scale_isUnit actual_eq
+      hu hv hy hz =>
       exact {
         actual := actual
         model := model
         scale := scale
         scale_isUnit := scale_isUnit
-        actual_eq := actual_eq }
+        actual_eq := actual_eq
+        actual_original_u := hu
+        actual_original_v := hv
+        actual_original_y := hy
+        actual_original_z := hz }
 
 /-- A terminal prime orbit together with its column-independent local scale
 projection. -/
@@ -111,5 +129,20 @@ theorem AwaySevenBaseTerminalPrimePowerScaleProjectionPacket.actual_eq_weightedS
     a.projection.actual = scalePrimePowerSolution a.projection.model
       a.localScale a.localScale_isUnit := by
   exact a.projection.actual_eq
+
+/-- The projected actual solution is the original integral routing solution
+reduced modulo the complete local prime power. -/
+theorem AwaySevenBaseTerminalPrimePowerScaleProjectionPacket.actual_eq_original
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {q : ℕ} (a : AwaySevenBaseTerminalPrimePowerScaleProjectionPacket packet q) :
+    a.projection.actual =
+      a.orbitPacket.depthPacket.depth.toPrimePowerSolution :=
+  AwayRoutingPrimePowerSolution.ext
+    a.projection.actual_original_u
+    a.projection.actual_original_v
+    a.projection.actual_original_y
+    a.projection.actual_original_z
 
 end DkMath.FLT.Seven

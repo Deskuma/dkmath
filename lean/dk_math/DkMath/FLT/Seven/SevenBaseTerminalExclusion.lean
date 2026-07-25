@@ -111,6 +111,60 @@ noncomputable def AwaySevenBaseTerminalSignedRepresentativePacket.rowSensitiveTe
     terminal.row_resolved_endpoint_quotient_normal_form
   reconstruction := signed.signedReconstructionOutcome
 
+/-- TERM-003 row-resolved winding data.  It keeps the exact four winding
+witnesses together with the row-specific factorization of the full CRT
+modulus.  No claim that a winding vanishes, or that a row is contradictory, is
+made here. -/
+structure AwaySevenBaseTerminalRowResolvedWindingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {routing :
+      AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily routing}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (terminal : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    Type where
+  winding : AwaySevenBaseTerminalOriginalReconstructionWindingPacket signed
+  rowModulusNormalForm :
+    (AwaySevenBaseTerminalRowYProfile terminal ∧
+      family.combinedModulus =
+        terminal.core.carrier.carrierUnit * z * (y + z)) ∨
+    (AwaySevenBaseTerminalRowZProfile terminal ∧
+      family.combinedModulus =
+        y * terminal.core.carrier.carrierUnit * (y + z)) ∨
+    (AwaySevenBaseTerminalRowSumProfile terminal ∧
+      family.combinedModulus =
+        y * z * terminal.core.carrier.carrierUnit)
+
+/-- Assemble the exact winding numbers with the corresponding terminal
+factorization of the full cubic-root-load modulus. -/
+noncomputable def
+    AwaySevenBaseTerminalSignedRepresentativePacket.rowResolvedWindingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {routing :
+      AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily routing}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (terminal : AwaySevenBaseTerminalUnitSectorPacket source r p)
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    AwaySevenBaseTerminalRowResolvedWindingPacket terminal signed := by
+  refine {
+    winding := signed.originalReconstructionWindingPacket
+    rowModulusNormalForm := ?_ }
+  rcases terminal.row_profile_decision with hy | hz | hs
+  · left
+    exact ⟨hy, family.combinedModulus_eq_cubicRootLoad.trans hy.2.2.2.symm⟩
+  · right
+    left
+    exact ⟨hz, family.combinedModulus_eq_cubicRootLoad.trans hz.2.2.2.symm⟩
+  · right
+    right
+    exact ⟨hs, family.combinedModulus_eq_cubicRootLoad.trans hs.2.2.2.symm⟩
+
 /-- The strict coordinate bounds which turn the modular weighted identity into
 an exact integer identity.  This is the first, independently reviewable,
 arithmetic obligation left by TERM-002. -/
@@ -199,8 +253,9 @@ structure AwaySevenBaseTerminalArithmeticReceiver
     {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
     (terminal : AwaySevenBaseTerminalUnitSectorPacket source r p) :
     Type where
-  routing : AwaySevenBaseTerminalRoutingPacket (source := source) p
-  family : AwaySevenBaseTerminalPrimeScaleFamily routing
+  coherentRouting : AwaySevenBaseTerminalCoherentRoutingPacket terminal
+  family :
+    AwaySevenBaseTerminalPrimeScaleFamily coherentRouting.routing
   candidate :
     AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family
   signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate

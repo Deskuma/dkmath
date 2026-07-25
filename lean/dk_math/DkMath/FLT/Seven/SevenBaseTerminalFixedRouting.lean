@@ -26,6 +26,16 @@ structure AwaySevenBaseTerminalRoutingPacket
     r.cubic.rootTriple.leftPart
     r.cubic.rootTriple.rightPart
 
+/-- A fixed routing board tied to the very same terminal quotient core, rather
+than merely to another inhabitant of the same core-packet type. -/
+structure AwaySevenBaseTerminalCoherentRoutingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (terminal : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    Type where
+  routing : AwaySevenBaseTerminalRoutingPacket (source := source) p
+  core_eq : routing.core = terminal.core
+
 /-- Every terminal quotient-core packet admits a fixed exact routing packet. -/
 theorem AwaySevenBaseTerminalQuotientCorePacket.nonempty_fixed_routing_packet
     {x y z : ℕ} {source : CounterexamplePack x y z}
@@ -36,6 +46,20 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.nonempty_fixed_routing_packet
   exact ⟨{
     core := packet
     routing := routing }⟩
+
+/-- Every terminal unit-sector packet admits a routing board whose source core
+is definitionally the terminal packet's own core. -/
+theorem AwaySevenBaseTerminalUnitSectorPacket.nonempty_coherent_routing_packet
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    (terminal : AwaySevenBaseTerminalUnitSectorPacket source r p) :
+    Nonempty (AwaySevenBaseTerminalCoherentRoutingPacket terminal) := by
+  rcases terminal.core.nonempty_endpoint_carrier_root_routing with ⟨routing⟩
+  exact ⟨{
+    routing := {
+      core := terminal.core
+      routing := routing }
+    core_eq := rfl }⟩
 
 /-- On a fixed terminal routing board, every prime carried by `carrierUnit`
 occupies exactly one cell of the carrier row and enters the corresponding cubic

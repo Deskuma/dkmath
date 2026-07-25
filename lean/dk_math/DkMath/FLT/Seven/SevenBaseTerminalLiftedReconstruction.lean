@@ -242,6 +242,115 @@ theorem AwaySevenBaseTerminalSignedRepresentativePacket.local_weighted_congruenc
     signed.weighted_cast
   simpa [AwayRoutingCoordinates.map] using h
 
+/-- The original integral root and endpoint coordinates, reduced modulo the
+complete product modulus. -/
+def awaySevenBaseTerminalOriginalCoordinates
+    {x y z : ℕ} (r : AwayCubicRoutingPacket x y z) (M : ℕ) :
+    AwayRoutingCoordinates (ZMod M) where
+  u := r.cubic.rootTriple.normal.root.fst
+  v := r.cubic.rootTriple.normal.root.snd
+  y := y
+  z := z
+
+/-- TERM-003 global actual-coordinate bridge.  The CRT weighted tuple is the
+original integral root/endpoint tuple modulo the full cubic-root load. -/
+theorem
+    AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket.weighted_eq_original
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    (candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family) :
+    candidate.weighted =
+      awaySevenBaseTerminalOriginalCoordinates r family.combinedModulus := by
+  let crt :=
+    ZMod.prodEquivPi family.localModulus family.localModuli_pairwise_coprime
+  apply AwayRoutingCoordinates.ext
+  · apply crt.injective
+    funext q
+    have h := congrArg (fun coordinates => coordinates.u)
+      (candidate.local_actual_reduction q)
+    have horiginal := congrArg (fun solution => solution.u)
+      (family.localActual_eq_original q)
+    calc
+      crt candidate.weighted.u q =
+          (family.localActual q).u := by
+        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
+          AwayRoutingCoordinates.map] using h
+      _ = (r.cubic.rootTriple.normal.root.fst :
+          ZMod (family.localModulus q)) := by
+        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+      _ = crt
+          (r.cubic.rootTriple.normal.root.fst :
+            ZMod family.combinedModulus) q := by
+        exact (congrFun
+          (map_intCast crt r.cubic.rootTriple.normal.root.fst) q).symm
+  · apply crt.injective
+    funext q
+    have h := congrArg (fun coordinates => coordinates.v)
+      (candidate.local_actual_reduction q)
+    have horiginal := congrArg (fun solution => solution.v)
+      (family.localActual_eq_original q)
+    calc
+      crt candidate.weighted.v q =
+          (family.localActual q).v := by
+        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
+          AwayRoutingCoordinates.map] using h
+      _ = (r.cubic.rootTriple.normal.root.snd :
+          ZMod (family.localModulus q)) := by
+        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+      _ = crt
+          (r.cubic.rootTriple.normal.root.snd :
+            ZMod family.combinedModulus) q := by
+        exact (congrFun
+          (map_intCast crt r.cubic.rootTriple.normal.root.snd) q).symm
+  · apply crt.injective
+    funext q
+    have h := congrArg (fun coordinates => coordinates.y)
+      (candidate.local_actual_reduction q)
+    have horiginal := congrArg (fun solution => solution.y)
+      (family.localActual_eq_original q)
+    calc
+      crt candidate.weighted.y q =
+          (family.localActual q).y := by
+        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
+          AwayRoutingCoordinates.map] using h
+      _ = (y : ZMod (family.localModulus q)) := by
+        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+      _ = crt (y : ZMod family.combinedModulus) q := by
+        exact (congrFun (map_natCast crt y) q).symm
+  · apply crt.injective
+    funext q
+    have h := congrArg (fun coordinates => coordinates.z)
+      (candidate.local_actual_reduction q)
+    have horiginal := congrArg (fun solution => solution.z)
+      (family.localActual_eq_original q)
+    calc
+      crt candidate.weighted.z q =
+          (family.localActual q).z := by
+        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
+          AwayRoutingCoordinates.map] using h
+      _ = (z : ZMod (family.localModulus q)) := by
+        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+      _ = crt (z : ZMod family.combinedModulus) q := by
+        exact (congrFun (map_natCast crt z) q).symm
+
+/-- Casting the centered signed weighted tuple recovers the original integral
+coordinates modulo the complete product modulus. -/
+theorem AwaySevenBaseTerminalSignedRepresentativePacket.cast_eq_original
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    signed.weighted.map
+        (fun a : ℤ => (a : ZMod family.combinedModulus)) =
+      awaySevenBaseTerminalOriginalCoordinates r family.combinedModulus :=
+  signed.weighted_cast.trans candidate.weighted_eq_original
+
 /-- The integer defect between the independently centered weighted tuple and
 the integer weighted scaling of the centered model. -/
 def AwaySevenBaseTerminalSignedRepresentativePacket.integerWeightedDefect
@@ -257,6 +366,107 @@ def AwaySevenBaseTerminalSignedRepresentativePacket.integerWeightedDefect
   v := signed.weighted.v - signed.model.v * signed.scale ^ 3
   y := signed.weighted.y - signed.model.y * signed.scale ^ 7
   z := signed.weighted.z - signed.model.z * signed.scale ^ 7
+
+/-- The original integral root/endpoint tuple before reduction modulo the
+terminal cubic-root load. -/
+def awaySevenBaseTerminalOriginalIntegerCoordinates
+    {x y z : ℕ} (r : AwayCubicRoutingPacket x y z) :
+    AwayRoutingCoordinates ℤ where
+  u := r.cubic.rootTriple.normal.root.fst
+  v := r.cubic.rootTriple.normal.root.snd
+  y := y
+  z := z
+
+/-- Exact integer discrepancy between the original coordinates and the
+centered global model scaled by the centered global scale. -/
+def AwaySevenBaseTerminalSignedRepresentativePacket.originalReconstructionDefect
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    AwayRoutingCoordinates ℤ where
+  u := r.cubic.rootTriple.normal.root.fst -
+    signed.model.u * signed.scale ^ 3
+  v := r.cubic.rootTriple.normal.root.snd -
+    signed.model.v * signed.scale ^ 3
+  y := (y : ℤ) - signed.model.y * signed.scale ^ 7
+  z := (z : ℤ) - signed.model.z * signed.scale ^ 7
+
+/-- The original-coordinate reconstruction discrepancy remains an exact
+multiple of the complete product modulus in all four coordinates. -/
+theorem
+    AwaySevenBaseTerminalSignedRepresentativePacket.modulus_dvd_originalReconstructionDefect
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    (family.combinedModulus : ℤ) ∣ signed.originalReconstructionDefect.u ∧
+    (family.combinedModulus : ℤ) ∣ signed.originalReconstructionDefect.v ∧
+    (family.combinedModulus : ℤ) ∣ signed.originalReconstructionDefect.y ∧
+    (family.combinedModulus : ℤ) ∣ signed.originalReconstructionDefect.z := by
+  let castCoordinates :=
+    fun coordinates : AwayRoutingCoordinates ℤ =>
+      coordinates.map
+        (fun a : ℤ => (a : ZMod family.combinedModulus))
+  have hscaled :
+      castCoordinates (signed.model.weightedScale signed.scale) =
+        candidate.weighted := by
+    calc
+      castCoordinates (signed.model.weightedScale signed.scale) =
+          (castCoordinates signed.model).weightedScale
+            (signed.scale : ZMod family.combinedModulus) :=
+        AwayRoutingCoordinates.map_weightedScale
+          (Int.castRingHom (ZMod family.combinedModulus))
+          signed.model signed.scale
+      _ = candidate.model.globalModel.weightedScale
+            candidate.scale.combinedScale := by
+        dsimp [castCoordinates]
+        rw [signed.model_cast, signed.scale_cast]
+      _ = candidate.weighted := candidate.weighted_eq.symm
+  have horiginal :
+      castCoordinates
+          (awaySevenBaseTerminalOriginalIntegerCoordinates r) =
+        candidate.weighted := by
+    rw [candidate.weighted_eq_original]
+    ext <;>
+      simp [castCoordinates, AwayRoutingCoordinates.map,
+        awaySevenBaseTerminalOriginalIntegerCoordinates,
+        awaySevenBaseTerminalOriginalCoordinates]
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    have h := congrArg (fun coordinates => coordinates.u)
+      (horiginal.trans hscaled.symm)
+    simpa [castCoordinates, originalReconstructionDefect,
+      awaySevenBaseTerminalOriginalIntegerCoordinates,
+      AwayRoutingCoordinates.weightedScale,
+      AwayRoutingCoordinates.map] using sub_eq_zero.mpr h
+  · rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    have h := congrArg (fun coordinates => coordinates.v)
+      (horiginal.trans hscaled.symm)
+    simpa [castCoordinates, originalReconstructionDefect,
+      awaySevenBaseTerminalOriginalIntegerCoordinates,
+      AwayRoutingCoordinates.weightedScale,
+      AwayRoutingCoordinates.map] using sub_eq_zero.mpr h
+  · rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    have h := congrArg (fun coordinates => coordinates.y)
+      (horiginal.trans hscaled.symm)
+    simpa [castCoordinates, originalReconstructionDefect,
+      awaySevenBaseTerminalOriginalIntegerCoordinates,
+      AwayRoutingCoordinates.weightedScale,
+      AwayRoutingCoordinates.map] using sub_eq_zero.mpr h
+  · rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    have h := congrArg (fun coordinates => coordinates.z)
+      (horiginal.trans hscaled.symm)
+    simpa [castCoordinates, originalReconstructionDefect,
+      awaySevenBaseTerminalOriginalIntegerCoordinates,
+      AwayRoutingCoordinates.weightedScale,
+      AwayRoutingCoordinates.map] using sub_eq_zero.mpr h
 
 /-- LIFT-003 exact defect packet. Every coordinate defect is a multiple of the
 complete combined modulus; vanishing is deliberately not asserted. -/
@@ -341,6 +551,135 @@ def AwaySevenBaseTerminalSignedRepresentativePacket.integerWeightedDefectPacket
     simpa [castCoordinates, defect, integerWeightedDefect,
       AwayRoutingCoordinates.weightedScale,
       AwayRoutingCoordinates.map] using sub_eq_zero.mpr h
+
+/-- Exact winding witnesses for every combined-modulus defect coordinate.  No
+smallness or vanishing assumption is used. -/
+structure AwaySevenBaseTerminalWindingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    Type where
+  ku : ℤ
+  kv : ℤ
+  ky : ℤ
+  kz : ℤ
+  defect_u_eq :
+    signed.integerWeightedDefect.u = family.combinedModulus * ku
+  defect_v_eq :
+    signed.integerWeightedDefect.v = family.combinedModulus * kv
+  defect_y_eq :
+    signed.integerWeightedDefect.y = family.combinedModulus * ky
+  defect_z_eq :
+    signed.integerWeightedDefect.z = family.combinedModulus * kz
+
+/-- Extract all four winding numbers from the already proved defect
+divisibility packet. -/
+noncomputable def AwaySevenBaseTerminalSignedRepresentativePacket.windingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    AwaySevenBaseTerminalWindingPacket signed := by
+  let defectPacket := signed.integerWeightedDefectPacket
+  let ku := Classical.choose defectPacket.modulus_dvd_u
+  let kv := Classical.choose defectPacket.modulus_dvd_v
+  let ky := Classical.choose defectPacket.modulus_dvd_y
+  let kz := Classical.choose defectPacket.modulus_dvd_z
+  have hku := Classical.choose_spec defectPacket.modulus_dvd_u
+  have hkv := Classical.choose_spec defectPacket.modulus_dvd_v
+  have hky := Classical.choose_spec defectPacket.modulus_dvd_y
+  have hkz := Classical.choose_spec defectPacket.modulus_dvd_z
+  exact {
+    ku := ku
+    kv := kv
+    ky := ky
+    kz := kz
+    defect_u_eq := by
+      rw [← defectPacket.defect_eq]
+      exact hku
+    defect_v_eq := by
+      rw [← defectPacket.defect_eq]
+      exact hkv
+    defect_y_eq := by
+      rw [← defectPacket.defect_eq]
+      exact hky
+    defect_z_eq := by
+      rw [← defectPacket.defect_eq]
+      exact hkz }
+
+/-- Winding numbers which directly express the original integral coordinates
+as scaled global-model coordinates plus multiples of the full root load. -/
+structure AwaySevenBaseTerminalOriginalReconstructionWindingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    Type where
+  ku : ℤ
+  kv : ℤ
+  ky : ℤ
+  kz : ℤ
+  rootFst_eq :
+    r.cubic.rootTriple.normal.root.fst =
+      signed.model.u * signed.scale ^ 3 + family.combinedModulus * ku
+  rootSnd_eq :
+    r.cubic.rootTriple.normal.root.snd =
+      signed.model.v * signed.scale ^ 3 + family.combinedModulus * kv
+  y_eq :
+    (y : ℤ) =
+      signed.model.y * signed.scale ^ 7 + family.combinedModulus * ky
+  z_eq :
+    (z : ℤ) =
+      signed.model.z * signed.scale ^ 7 + family.combinedModulus * kz
+
+/-- Extract the original-coordinate winding parameterization with no bound or
+vanishing hypothesis. -/
+noncomputable def
+    AwaySevenBaseTerminalSignedRepresentativePacket.originalReconstructionWindingPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    {family : AwaySevenBaseTerminalPrimeScaleFamily packet}
+    {candidate :
+      AwaySevenBaseTerminalProductModulusWeightedCoordinatesPacket family}
+    (signed : AwaySevenBaseTerminalSignedRepresentativePacket candidate) :
+    AwaySevenBaseTerminalOriginalReconstructionWindingPacket signed := by
+  have hdiv := signed.modulus_dvd_originalReconstructionDefect
+  let ku := Classical.choose hdiv.1
+  let kv := Classical.choose hdiv.2.1
+  let ky := Classical.choose hdiv.2.2.1
+  let kz := Classical.choose hdiv.2.2.2
+  have hku := Classical.choose_spec hdiv.1
+  have hkv := Classical.choose_spec hdiv.2.1
+  have hky := Classical.choose_spec hdiv.2.2.1
+  have hkz := Classical.choose_spec hdiv.2.2.2
+  exact {
+    ku := ku
+    kv := kv
+    ky := ky
+    kz := kz
+    rootFst_eq := by
+      dsimp [originalReconstructionDefect, ku] at hku ⊢
+      linear_combination hku
+    rootSnd_eq := by
+      dsimp [originalReconstructionDefect, kv] at hkv ⊢
+      linear_combination hkv
+    y_eq := by
+      dsimp [originalReconstructionDefect, ky] at hky ⊢
+      linear_combination hky
+    z_eq := by
+      dsimp [originalReconstructionDefect, kz] at hkz ⊢
+      linear_combination hkz }
 
 /-- The exact scalar criterion upgrading a modular defect to an integer
 equality. The strict absolute-value bound is an explicit input. -/

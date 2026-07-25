@@ -108,6 +108,19 @@ theorem localActual_eq_weightedScale
       (family.localScale q) (family.localScale_isUnit q) :=
   (family.localPacket q).actual_eq_weightedScale
 
+/-- The chosen local actual solution is not merely an orbit representative:
+it is exactly the original integral root/endpoint tuple reduced at the complete
+local prime-power modulus. -/
+theorem localActual_eq_original
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : AwayCubicRoutingPacket x y z} {p : AwaySevenPivotDepthPacket r}
+    {packet : AwaySevenBaseTerminalRoutingPacket (source := source) p}
+    (family : AwaySevenBaseTerminalPrimeScaleFamily packet)
+    (q : AwaySevenBaseTerminalPrimeIndex r) :
+    family.localActual q =
+      (family.localDepth q).toPrimePowerSolution :=
+  (family.localPacket q).actual_eq_original
+
 /-- Complete local moduli attached to distinct canonical prime indices are
 coprime. -/
 theorem localModulus_coprime
