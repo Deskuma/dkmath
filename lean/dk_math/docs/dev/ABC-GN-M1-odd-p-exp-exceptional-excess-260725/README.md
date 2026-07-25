@@ -1,7 +1,7 @@
 # ABC–GN M1: Odd-Prime Exponent Exceptional Excess
 
 作成日: 2026-07-25  
-Status: **WIP / campaign initialized**
+Status: **M1-004 complete / M1-005 active / autonomous continuation enabled**
 
 Repository: `Deskuma/dkmath`  
 Base branch: `feature/ABC-GN-valuation-excess-260724-v0`  
@@ -19,17 +19,14 @@ M3  uniform non-exceptional valuation excess
 
 本プロジェクトの目標は、指数を奇素数 `p` に固定したとき、指数例外 prime channel の valuation excess が完全に消えることを Lean で証明することである。
 
-最終目標は、正の ABC triple `T` と奇素数 `p` に対して次を得ること。
-
-$$GNExceptionalValuationExcess\ p\ T.a\ T.b=0$$
-
-その結果、既存の exceptional affine budget を係数・定数ともにゼロで供給する。
+最終目標:
 
 ```lean
+GNExceptionalValuationExcess p T.a T.b = 0
 GNExceptionalExcessBudgetAffine T p 0 0
 ```
 
-すなわち、最終 budget contract の第一成分を
+すなわち、最終 budget contract の第一成分を:
 
 ```text
 τe = 0
@@ -38,9 +35,21 @@ De = 0
 
 へ固定する。
 
-## 2. Existing deterministic spine
+## 2. Current campaign state
 
-基底ブランチには、次の構造が既に実装されている。
+```text
+M1-000  campaign initialization                              complete
+M1-001  theorem/API reconnaissance                           complete / Outcome B
+M1-002  exponent-five divisibility and no-lift kernel        complete
+M1-003  exponent-five exceptional excess = 0                 complete / minimum victory
+M1-004  odd-prime general local valuation-one theorem        complete
+M1-005  odd-prime exceptional excess = 0 and budget bridge   active
+M1-006  integration, audit, documentation closure            follows autonomously
+```
+
+## 3. Existing deterministic spine
+
+基底ブランチには次が実装されている。
 
 ```text
 DkMath/ABC/GNExceptionalSplit.lean
@@ -60,120 +69,205 @@ DkMath/ABC/GNFinalBudgetBridge.lean
   ABCGNFinalBudgetContract
 ```
 
-現在の `GNExceptionalValuationExcess p a b` は、`GN p a b` の factorization support のうち `q ∣ p` を満たす prime `q` に対し、
+`GNExceptionalValuationExcess p a b` は、`GN p a b` の factorization support のうち `q ∣ p` を満たす prime `q` に対し、
 
 $$\bigl(v_q(GN_p(a,b))-1\bigr)\log q$$
 
 を合計する。
 
-`p` が素数なら、例外 support は `q = p` の一箇所に潰れる。したがって M1 の核心は、`p` が GN に現れた場合の valuation が正確に一であることを示す点にある。
+`p` が素数なら exceptional support は `q = p` の一箇所に潰れる。M1 の核心は、`p` が GN に現れた場合の valuation が正確に一であることを示す点にある。
 
-## 3. Mathematical target
+## 4. Fixed-five minimum victory
 
-`T : Triple`、`p : ℕ` とし、
-
-```text
-Nat.Prime p
-2 < p
-0 < T.a
-0 < T.b
-```
-
-を仮定する。
-
-攻略核は次の連鎖である。
+M1-002 は一般 `GN` の指数 `5` を明示展開し、
 
 ```text
-p ∣ GN p T.a T.b
-  -> p ∣ T.a
-  -> p ∤ T.b                  by T.hcop
-  -> ¬ p^2 ∣ GN p T.a T.b
-  -> padicValNat p (GN p T.a T.b) = 1
-  -> factorization multiplicity = 1
-  -> exceptional summand = 0
-  -> GNExceptionalValuationExcess p T.a T.b = 0
+5 ∣ GN 5 a b
+  -> 5 ∣ a
+  -> Coprime a b gives 25 ∤ GN 5 a b
+  -> padicValNat 5 (GN 5 a b) = 1
+  -> factorization 5 = 1
 ```
 
-一般奇素数 proof では、次のいずれかを採用する。
+を証明した。
 
-1. binomial expansion modulo `p^2`;
-2. LTE on `(T.a + T.b)^p - T.b^p`, followed by the exact GN product split;
-3. existing Mathlib / DkMath valuation lemmas capable of expressing the same local statement.
+M1-003 は finite exceptional support へ接続し、positivity 無しで:
 
-実装では、最小依存・最小 theorem surface を優先する。
+```lean
+Triple.GNExceptionalValuationExcess_five_eq_zero
+Triple.GNExceptionalExcessBudgetAffine_five_zero
+```
 
-## 4. Two-stage assault
+を完成した。
 
-### Stage A: exponent five reconnaissance
+したがって固定指数 `5` では:
 
-まず `p = 5` を固定し、既存の GN5 観測と同じ算術を一般 `GN` 座標上で再現する。
+```text
+τe = 0
+De = 0
+```
+
+が確定している。
+
+## 5. General odd-prime local victory
+
+M1-004 は canonical `GN` と geometric quotient の一般 bridge を証明した。
+
+```lean
+theorem GN_eq_geom_sum₂ (p a b : ℕ) :
+    GN p a b =
+      ∑ i ∈ Finset.range p,
+        (a + b) ^ i * b ^ (p - 1 - i)
+```
+
+さらに prime-row boundary congruence から:
+
+```lean
+theorem prime_dvd_boundary_of_dvd_GN_prime
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpGN : p ∣ GN p a b) :
+    p ∣ a
+```
+
+を得た。
+
+奇素数 `p` と coprime 境界について、Mathlib の `emultiplicity_geom_sum₂_eq_one` を経由し:
+
+```lean
+theorem padicValNat_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    padicValNat p (GN p a b) = 1
+
+ theorem factorization_GN_prime_eq_one_of_dvd
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hcop : Nat.Coprime a b)
+    (hpGN : p ∣ GN p a b) :
+    (GN p a b).factorization p = 1
+```
+
+を完成した。
+
+この theorem も positivity を必要としない。
+
+## 6. Active M1-005
+
+一般奇素数の local factorization-one theorem を exceptional finite sum へ接続する。
 
 目標:
 
 ```lean
-Triple.GNExceptionalValuationExcess_five_eq_zero
+theorem Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
+    (T : Triple) {p : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p) :
+    GNExceptionalValuationExcess p T.a T.b = 0
+
+ theorem Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
+    (T : Triple) {p : ℕ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p) :
+    GNExceptionalExcessBudgetAffine T p 0 0
 ```
 
-この checkpoint は、一般化 API を先に設計しすぎず、exceptional support sum を実際にゼロへ落とせることを確認する。
+証明核:
 
-ただし production ABC module から `DkMath.FLT.Five.*` を import しない。必要な恒等式は一般 GN 側で証明するか、適切な NumberTheory / CosmicFormula 層へ置く。
-
-### Stage B: odd-prime exponent theorem
-
-Stage A の局所構造を奇素数 `p` へ一般化する。
-
-主目標:
-
-```lean
-Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
+```text
+q in exceptional support
+  -> q.Prime
+  -> q ∣ p
+  -> q = p
+  -> support gives p ∣ GN
+  -> factorization p = 1
+  -> summand = 0
+  -> finite sum = 0
 ```
 
-続いて budget wrapper を供給する。
+## 7. Dual-Brain campaign doctrine
 
-```lean
-Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
+Codex と Wise Wolf は、主従関係ではない。
+
+```text
+two peer reasoning agents
+two search paths
+one Lean kernel judge
 ```
 
-## 5. Planned implementation surface
+checkpoint は、後から相互監査するための観測点であり、次へ進む許可待ちの関所ではない。
 
-第一候補:
+checkpoint 完了後、Codex は次を自己判断する。
+
+```text
+結果の数学的意味
+新しく確定した Core
+残った Gap
+依存関係と theorem ownership
+次の最有力 route
+必要な micro-checkpoint
+```
+
+そして新しい指示を待たず、campaign 内の次 checkpoint へ進む。
+
+ただし、次は維持する。
+
+```text
+coherent theorem layer
+focused build
+checkpoint report
+reviewable change boundary
+```
+
+M1-005 完了後は M1-006 integration/audit へ連続進行し、M1 閉鎖後は M2/M3 の次戦線を調査・設計する。
+
+## 8. Planned implementation surface
+
+局所 arithmetic owner:
 
 ```text
 DkMath/ABC/GNOddPrimeExceptionalExcess.lean
 ```
 
-必要に応じて補助層を分離する。
+finite-sum / budget bridge candidate:
 
 ```text
-DkMath/NumberTheory/GN/OddPrimeExceptional.lean
-DkMath/ABC/GNOddPrimeExceptionalExcess.lean
+DkMath/ABC/GNExceptionalExcessOddPrime.lean
 ```
 
 配置原則:
 
 ```text
-一般 GN の合同・valuation 定理
-  -> NumberTheory / CosmicFormulaBinom
+一般 GN の合同・geometric quotient・valuation 定理
+  -> NumberTheory / CosmicFormula owner も候補
 
 ABC Triple wrapper と budget bridge
   -> DkMath.ABC
 ```
 
-## 6. Completion criteria
+`GN_eq_geom_sum₂` と prime boundary theorem の最終 ownership は M1-006 で監査する。再利用・依存方向の利得が churn を上回る場合だけ移動する。
 
-M1 完了条件は次のすべて。
+## 9. Completion criteria
+
+M1 完了条件:
 
 ```text
-1. odd-prime exponent の exceptional support が singleton 以下へ潰れる
-2. support 上の exceptional valuation が exact 1 と証明される
-3. GNExceptionalValuationExcess = 0 が閉じる
-4. GNExceptionalExcessBudgetAffine T p 0 0 が得られる
-5. 既存 split budget に無損失で接続される
-6. focused build が通る
-7. representative endpoint の axiom audit に新規 project axiom がない
+1. odd-prime exceptional support が singleton 以下へ潰れる
+2. support 上の exceptional valuation が exact 1
+3. GNExceptionalValuationExcess = 0
+4. GNExceptionalExcessBudgetAffine T p 0 0
+5. split budget への無損失接続
+6. focused build
+7. representative endpoint axiom audit
+8. dependency and ownership audit
+9. FINAL_REPORT
 ```
 
-## 7. Scope boundary
+## 10. Scope and trust boundary
 
 本プロジェクトは次を主張しない。
 
@@ -183,44 +277,43 @@ M2 support-growth budget is solved
 M3 non-exceptional high-lift budget is solved
 GN is generally squarefree
 all composite exponents have zero exceptional excess
-all prime exponents including p = 2 are covered
+prime exponent p = 2 is covered
 ```
 
-また、次を行わない。
+絶対境界:
 
 ```text
 no modification of abc_main_axiom
-no FLT7 dependency
+no ABC -> FLT.Five production dependency
+no FLT7 WIP dependency
 no unrelated refactor
 no new axiom
 no sorry
 no native_decide proof
+no finite enumeration as general proof
 ```
 
-## 8. Documents
+これらは主従命令ではなく、Lean trust boundary と repository dependency boundary である。
+
+## 11. Documents
 
 ```text
 README.md
 ABC-GN-M1-IMPLEMENTATION-DESIGN.md
 ABC-GN-M1-ROADMAP.md
+CODEX_START.md
+report-M1-001.md
+report-M1-002.md
+review-M1-002.md
+report-M1-003.md
+review-M1-003.md
+report-M1-004.md
+review-M1-004.md
+instruction-M1-005.md
 ```
 
-読む順序:
+現在の入口は:
 
 ```text
-README.md
-  -> ABC-GN-M1-IMPLEMENTATION-DESIGN.md
-  -> ABC-GN-M1-ROADMAP.md
+CODEX_START.md
 ```
-
-## 9. Campaign doctrine
-
-M1 は三予算のうち、指数を奇素数へ固定することで局所算術へ圧縮できる魔核である。
-
-```text
-exceptional support width = at most one prime p
-exceptional multiplicity = exactly one copy
-exceptional excess = zero
-```
-
-ここを確実に閉じ、残る戦線を M2 と M3 の二体へ縮退させる。

@@ -17,32 +17,60 @@ M1 の目的は、`n = p` が奇素数なら、この有限和が恒等的にゼ
 最終 theorem shape:
 
 ```lean
-/-- Odd-prime exponents carry no exponent-exceptional GN multiplicity. -/
 theorem Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
     (T : Triple) {p : ℕ}
-    (hp : Nat.Prime p) (hpodd : 2 < p)
-    (ha : 0 < T.a) (hb : 0 < T.b) :
-    GNExceptionalValuationExcess p T.a T.b = 0 := by
-  ...
+    (hp : Nat.Prime p) (hpOdd : Odd p) :
+    GNExceptionalValuationExcess p T.a T.b = 0
 ```
 
 Budget wrapper:
 
 ```lean
-/-- The exceptional affine budget is exactly zero at odd-prime exponent. -/
 theorem Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
     (T : Triple) {p : ℕ}
-    (hp : Nat.Prime p) (hpodd : 2 < p)
-    (ha : 0 < T.a) (hb : 0 < T.b) :
-    GNExceptionalExcessBudgetAffine T p 0 0 := by
-  ...
+    (hp : Nat.Prime p) (hpOdd : Odd p) :
+    GNExceptionalExcessBudgetAffine T p 0 0
 ```
 
-`hb` は GN nonzero や既存 API との接続に必要な場合のみ残す。不要なら theorem surface から除去する。
+M1-002〜004 の結果により positivity は不要である。
 
-## 2. Current API facts
+## 2. Mathematical reduction
 
-### 2.1. Boundary–GN overlap is exponent-supported
+Exceptional support 上の `q` は:
+
+```text
+q ∈ (GN p T.a T.b).factorization.support
+q ∣ p
+```
+
+を満たす。
+
+factorization support から `q.Prime`、さらに `p.Prime` と `q ∣ p` から:
+
+```text
+q = p
+```
+
+を得る。
+
+したがって M1 全体は次の一局所命題へ圧縮される。
+
+```text
+p ∣ GN p a b
+  -> (GN p a b).factorization p = 1
+```
+
+その後、各 exceptional summand は:
+
+```text
+((1 - 1 : ℕ) : ℝ) * Real.log p = 0
+```
+
+となる。
+
+## 3. Existing and completed API
+
+### 3.1. Boundary–GN overlap
 
 既存 theorem:
 
@@ -55,391 +83,334 @@ Triple.dvd_exp_of_dvd_boundary_of_dvd_GN
 
 $$q\mid T.a\quad\land\quad q\mid GN_n(T.a,T.b)\quad\Longrightarrow\quad q\mid n$$
 
-M1 では逆方向に近い局所事実を奇素数指数で作る。
+### 3.2. Prime-row GN congruence
 
-$$p\mid GN_p(T.a,T.b)\quad\Longrightarrow\quad p\mid T.a$$
-
-### 2.2. Exceptional excess is a filtered finite sum
-
-既存定義では、各 summand は
-
-$$\left(v_q(GN)-1\right)\log q$$
-
-である。
-
-したがって全体をゼロにする最短 route は、filtered support の各 `q` について
+`DkMath.NumberTheory.WeightedGNBridge` は:
 
 ```lean
-(GN p T.a T.b).factorization q = 1
+prime_exists_GN_eq_mul_add_rightBoundary
 ```
 
-を証明すること。
-
-### 2.3. Prime support facts
-
-`q ∈ m.factorization.support` から次が得られる。
+を供給する。
 
 ```text
-q is prime
-q ∣ m
-1 ≤ m.factorization q
+GN p a b = p * B + a^(p-1)
 ```
 
-既存補題:
-
-```lean
-one_le_factorization_of_mem_support
-```
-
-Mathlib 側の support / factorization prime lemmas を reconnaissance で確認し、独自補題を増やさない。
-
-## 3. Mathematical spine
-
-`a := T.a`、`b := T.b` と書く。
-
-一般 GN は、
-
-$$GN_p(a,b)=\frac{(a+b)^p-b^p}{a}$$
-
-に対応する。
-
-奇素数 `p` に対し、目標 chain は次。
-
-### 3.1. Exceptional support collapse
-
-`q` が exceptional support に属するなら、
+従って:
 
 ```text
-q ∈ factorization.support (GN p a b)
-q ∣ p
+p ∣ GN -> p ∣ a^(p-1) -> p ∣ a
 ```
 
-である。
-
-support から `q` は prime、`hp : Prime p` と `q ∣ p` から、
-
-$$q=p$$
-
-を得る。
-
-候補補題:
+M1-004 では次を完成した。
 
 ```lean
-theorem eq_exp_of_mem_exceptional_support_prime_exp
-    {p q a b : ℕ}
-    (hp : Nat.Prime p)
-    (hq : q ∈ (GN p a b).factorization.support)
-    (hqexp : q ∣ p) :
-    q = p
-```
-
-この補題は ABC triple に依存しない。
-
-### 3.2. Detection modulo p
-
-素数 `p` では中間二項係数が `p` で割れるため、
-
-$$GN_p(a,b)\equiv a^{p-1}\pmod p$$
-
-となる。
-
-したがって、
-
-$$p\mid GN_p(a,b)\Longrightarrow p\mid a^{p-1}\Longrightarrow p\mid a$$
-
-候補補題:
-
-```lean
-theorem prime_dvd_boundary_of_dvd_GN_prime_exp
+theorem prime_dvd_boundary_of_dvd_GN_prime
     {p a b : ℕ}
     (hp : Nat.Prime p)
     (hpGN : p ∣ GN p a b) :
     p ∣ a
 ```
 
-実装候補:
+### 3.3. GN/geometric quotient bridge
 
-1. general binomial coefficient congruence;
-2. an existing theorem about `gcd gap GN` specialized to prime exponent plus an additional nonzero argument;
-3. direct finite expansion only for the initial `p = 5` checkpoint.
-
-ここは reconnaissance の Outcome に応じて選ぶ。
-
-### 3.3. Coprime boundary removes p from b
-
-ABC triple では `T.hcop : Coprime T.a T.b` がある。
-
-$$p\mid a\quad\Longrightarrow\quad p\nmid b$$
-
-候補補題は新設せず、`Nat.Coprime` API を直接使う。
-
-### 3.4. Exact valuation one
-
-必要な局所定理は、
-
-$$p\mid GN_p(a,b)\Longrightarrow p^2\nmid GN_p(a,b)$$
-
-または同値な、
-
-$$v_p(GN_p(a,b))=1$$
-
-である。
-
-#### Route A: binomial modulo p²
-
-`p ∣ a`、`p ∤ b` とする。
-
-二項展開では、
-
-$$GN_p(a,b)=p b^{p-1}+\sum_{j=2}^{p-1}\binom pj a^{j-1}b^{p-j}+a^{p-1}$$
-
-中間項は `p` を係数に持ち、さらに `a` を一つ以上持つので `p²` で割れる。`a^{p-1}` も `p ≥ 3` より `p²` で割れる。
-
-したがって、
-
-$$GN_p(a,b)\equiv p b^{p-1}\pmod{p^2}$$
-
-`p ∤ b` より右辺は `p²` で割れず、valuation は正確に一。
-
-#### Route B: LTE
-
-`c := a+b` とする。
-
-`p ∣ a = c-b`、`p ∤ b`、`p ∤ c` より、奇素数 LTE で
-
-$$v_p(c^p-b^p)=v_p(c-b)+v_p(p)=v_p(a)+1$$
-
-一方、
-
-$$c^p-b^p=a\,GN_p(a,b)$$
-
-なので valuation の加法性から、
-
-$$v_p(GN_p(a,b))=1$$
-
-となる。
-
-#### Selection rule
-
-```text
-prefer existing trusted LTE API if theorem matching is direct
-otherwise use explicit modulo-p² binomial route
-```
-
-一般化のために巨大な cyclotomic / algebraic-number dependency を追加しない。
-
-候補 theorem:
+M1-004 は全自然数座標で:
 
 ```lean
-theorem padicValNat_GN_prime_exp_eq_one_of_dvd
+theorem GN_eq_geom_sum₂ (p a b : ℕ) :
+    GN p a b =
+      ∑ i ∈ Finset.range p,
+        (a + b)^i * b^(p - 1 - i)
+```
+
+を証明した。
+
+`a ≠ 0` では `cosmic_id_csr` と `geom_sum₂_mul_add` の cancellation、`a = 0` では `GN_zero_eval` と `geom_sum₂_self` を使う。
+
+### 3.4. Odd-prime exact valuation
+
+M1-004 の主結果:
+
+```lean
+theorem padicValNat_GN_prime_eq_one_of_dvd
     {p a b : ℕ}
-    (hp : Nat.Prime p) (hpodd : 2 < p)
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
     (hcop : Nat.Coprime a b)
     (hpGN : p ∣ GN p a b) :
     padicValNat p (GN p a b) = 1
-```
 
-または factorization へ直接着地する。
-
-```lean
-theorem factorization_GN_prime_exp_eq_one_of_mem_support
+ theorem factorization_GN_prime_eq_one_of_dvd
     {p a b : ℕ}
-    (hp : Nat.Prime p) (hpodd : 2 < p)
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
     (hcop : Nat.Coprime a b)
-    (hpGN : p ∈ (GN p a b).factorization.support) :
+    (hpGN : p ∣ GN p a b) :
     (GN p a b).factorization p = 1
 ```
 
-## 4. Fixed exponent five checkpoint
+Proof route:
 
-一般 proof の前に、指数 `5` で theorem surface と sum closure を検証する。
+```text
+p ∣ GN
+  -> p ∣ a
+  -> Coprime a b gives p ∤ a+b
+  -> GN = geometric quotient
+  -> emultiplicity_geom_sum₂_eq_one over ℤ
+  -> Int/Nat multiplicity transfer
+  -> padicValNat = 1
+  -> factorization = 1
+```
 
-### 4.1. Arithmetic shape
+## 4. Fixed exponent five certificate
 
-一般 GN の `p = 5` specialization は、局所座標で
+M1-002 は一般 theorem とは独立に、指数 `5` の明示算術 certificate を作った。
 
 $$GN_5(a,b)=a^4+5a^3b+10a^2b^2+10ab^3+5b^4$$
 
-となる。
-
-mod `5` では、
+mod `5`:
 
 $$GN_5(a,b)\equiv a^4\pmod5$$
 
-`5 ∣ GN₅` なら `5 ∣ a`。
-
-mod `25` では `5 ∣ a` のもとで、
+`5 ∣ a` の下で mod `25`:
 
 $$GN_5(a,b)\equiv5b^4\pmod{25}$$
 
-`Coprime a b` より `5 ∤ b` なので、`25 ∤ GN₅`。
-
-### 4.2. Dependency boundary
-
-FLT5 側には同じ多項式観測があるが、ABC module から FLT module を import しない。
-
-許可するもの:
+`Coprime a b` より:
 
 ```text
-read-only comparison with DkMath.FLT.Five.GN5
-reuse of a genuinely general theorem after moving it to the correct owner module
+5 ∣ GN
+25 ∤ GN
+v_5(GN) = 1
 ```
 
-禁止するもの:
+この fixed-five proof は general multiplicity proof の regression certificate として残す。
+
+## 5. M1-005 finite-sum closure
+
+Preferred module:
 
 ```text
-DkMath.ABC -> DkMath.FLT.Five dependency
-copying a large FLT5 proof tower
-using FLT5 final theorem as arithmetic input
+DkMath/ABC/GNExceptionalExcessOddPrime.lean
 ```
 
-## 5. Sum closure
+Expected imports:
 
-局所 valuation theorem が得られた後、`GNExceptionalValuationExcess` を unfold する。
+```lean
+import DkMath.ABC.GNOddPrimeExceptionalExcess
+import DkMath.ABC.GNFinalBudgetBridge
+```
+
+Target proof:
 
 ```lean
 classical
 unfold GNExceptionalValuationExcess
-refine Finset.sum_eq_zero ?_
+apply Finset.sum_eq_zero
 intro q hq
 ```
 
-`hq` を support membership と `q ∣ p` に分解し、`q = p` を得る。
-
-次に factorization multiplicity を一へ置換する。
+Then:
 
 ```text
-factorization q - 1 = 0
-real cast = 0
-summand = 0
+hq
+  -> hqSupport and hqDvdP
+  -> q.Prime
+  -> q = p
+  -> support gives p ∣ GN
+  -> factorization_GN_prime_eq_one_of_dvd hp hpOdd T.hcop hpGN
+  -> simp
 ```
 
-`Real.log q` の評価や positivity は不要。multiplicity factor 自体がゼロになる。
-
-この設計により、解析層を一切使わず有限算術だけで M1 を閉じる。
+No positivity hypotheses are required.
 
 ## 6. Budget bridge
 
-zero theorem から次を得る。
+Zero theoremから:
 
 ```lean
 Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
 ```
 
-定義を展開すると目標は、
+を thin wrapper として得る。
+
+定義展開後は:
 
 $$0\le0\cdot\log\operatorname{rad}(abc)+0$$
 
-なので `simp` で閉じる。
+となる。
 
-さらに split composition の caller-facing theorem を置く価値がある。
+Optional caller-facing wrapper:
 
 ```lean
 theorem Triple.GNValuationExcessBudgetAffine_of_oddPrime_nonExceptional
-    (hexn : GNNonExceptionalExcessBudgetAffine T p τn Dn) :
+    (T : Triple) {p : ℕ} {τn Dn : ℝ}
+    (hp : Nat.Prime p)
+    (hpOdd : Odd p)
+    (hn : GNNonExceptionalExcessBudgetAffine T p τn Dn) :
     GNValuationExcessBudgetAffine T p τn Dn
 ```
 
-これは既存 `GNValuationExcessBudgetAffine.of_split` に zero exceptional budget を投入する薄い wrapper とする。
+これは:
 
-最終 contract 全体をこの branch で再設計しない。
+```lean
+GNValuationExcessBudgetAffine.of_split
+```
 
-## 7. Proposed modules
+へ exceptional zero budget と `hn` を投入する薄い theorem に限定する。
 
-### Preferred minimal layout
+## 7. Contract consequence
+
+M1 討伐前:
+
+```text
+σ + (τe + τn)
+```
+
+M1 討伐後:
+
+```text
+τe = 0
+De = 0
+σ + τn
+```
+
+したがって残る敵は:
+
+```text
+M2 lifted-radical support growth
+M3 non-exceptional valuation excess
+```
+
+## 8. Module ownership audit
+
+Current local arithmetic owner:
 
 ```text
 DkMath/ABC/GNOddPrimeExceptionalExcess.lean
 ```
 
-役割:
+次は ABC triple を主語にしない neutral theorem である。
 
-```text
-odd-prime local valuation
-factorization multiplicity one
-exceptional finite sum zero
-zero affine budget
-split-budget wrapper
+```lean
+GN_eq_geom_sum₂
+prime_dvd_boundary_of_dvd_GN_prime
 ```
 
-### Split layout, only if general GN arithmetic becomes reusable
+M1-006 で次を自己判断する。
 
 ```text
-DkMath/NumberTheory/GN/OddPrimeExceptional.lean
-  general GN congruence and valuation-one results
-
-DkMath/ABC/GNOddPrimeExceptionalExcess.lean
-  Triple wrapper, sum zero, budget bridge
+A. 現在の ABC owner を維持
+B. NumberTheory / CosmicFormula owner へ移動し ABC 側を薄くする
 ```
 
-新しい aggregator import は M1 theorem 完成後に判断する。
+移動は、再利用・依存方向・API discoverability の利得が churn を上回る場合だけ行う。
 
-## 8. Verification
+## 9. Verification
 
-Focused build candidate:
+Focused builds:
 
 ```text
 lake build DkMath.ABC.GNOddPrimeExceptionalExcess
-```
-
-必要なら existing aggregate:
-
-```text
+lake build DkMath.ABC.GNExceptionalExcessOddPrime
 lake build DkMath.ABC.GNFinalBudgetBridge
 ```
 
-Axiom audit candidate:
+Public aggregator を変更した場合のみ broader build を追加する。
+
+Axiom audit:
 
 ```lean
 #print axioms DkMath.ABC.Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
 #print axioms DkMath.ABC.Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
 ```
 
-許容される標準依存:
+Trust boundary:
 
 ```text
-propext
-Classical.choice
-Quot.sound
+no new axiom
+no sorry
+no native_decide
 ```
 
-## 9. Stop conditions
+## 10. Dual-Brain execution model
 
-次の場合は一般化を止め、固定指数 `5` の成果を確定して設計へ戻る。
+Codex と Wise Wolf は peer reasoning agents である。
 
 ```text
-1. general LTE API requires a large unrelated dependency tower
-2. general binomial congruence causes broad refactoring
-3. theorem statement needs hidden assumptions not present in Triple
-4. p = 2 contaminates the odd-prime proof surface
-5. factorization/padic bridge is missing and requires a separate foundational module
+not master/subordinate
+not planner/transcriber
+two search paths
+one Lean kernel judge
 ```
 
-固定 `5` theorem だけでも、`ABCGNFinalBudgetContract` の候補指数を `n = 5` と選ぶ route では M1 を完全消去できる。
+設計書は地図であり、固定命令列ではない。
 
-一般奇素数化は望ましいが、M1 討伐の必須条件ではない。
-
-## 10. Non-circularity audit
-
-M1 proof は次だけを使う。
+Codex は repository evidence に基づき:
 
 ```text
-ABC triple coprimality
-GN binomial / difference-power identity
-prime divisibility
-p-adic valuation or square-divisibility
-finite factorization support
+theorem name を改善
+module owner を変更
+micro-checkpoint を挿入
+機械的に連続する checkpoint を融合
+planned route より強い route を採用
 ```
 
-使ってはならないもの:
+できる。
+
+checkpoint は report と theorem surface を固定する監査点であり、permission gate ではない。
+
+完了後は:
 
 ```text
-ABC inequality
-abc_main_axiom
-uniform valuation budget assumption
-GNExceptionalExcessBudgetAffine as an input
-FLT5 no-solution theorem
-probabilistic or density assumptions
+result evaluation
+remaining Gap analysis
+next strongest action
+implementation
+verification
+report
+continued progression
 ```
 
-これにより、zero exceptional budget は最終 ABC contract の独立した算術入力として成立する。
+を自律的に続ける。
+
+M1-005 後は M1-006 integration/audit へ直ちに進む。
+
+## 11. Post-M1 route
+
+M1 完了後、Codex は M2/M3 の現在地を調査し、次の最大 leverage route を選定する。
+
+候補:
+
+```text
+M2 support-growth reconnaissance
+M3 non-exceptional depth reconnaissance
+support-depth combined tradeoff
+shared neutral valuation/support lemma
+```
+
+元の順序ではなく数学的 leverage で決める。
+
+Branch hygiene:
+
+```text
+M1 implementation remains in M1 branch
+M2/M3 implementation belongs to a new campaign branch
+neutral prerequisites may be factored when ownership is clear
+```
+
+## 12. Absolute boundaries
+
+```text
+no abc_main_axiom modification
+no ABC -> FLT.Five production dependency
+no FLT7 WIP dependency
+no unrelated refactor
+no new axiom
+no sorry
+no native_decide proof
+no finite enumeration as general proof
+```
+
+これらは trust/dependency invariant であり、主従関係による停止命令ではない。
