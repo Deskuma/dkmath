@@ -17,7 +17,17 @@ terminal prime q
   → exact original routing depth q^e
   → explicit prime-power orbit
   → column-independent local unit scale
-  → pairwise CRT scale gluing
+  → finite CRT scale and model reconstruction
+  → original-coordinate signed winding
+  → universal global coordinate equations and integer equation carries
+  → exact 3 x 3 cell prime partition
+  → reduction to each exact cell modulus
+  → row-resolved carry decision boundary
 ```
 
-Finite scale gluing, exact modulus coverage, model compatibility, signed integral reconstruction, terminal arithmetic exclusion, and recursive descent closure remain separate proof obligations.
+The next exact obligation is
+`AwaySevenBaseTerminalCellwiseFixedSystemObligation`: glue the fixed
+endpoint-row/root-column solution certificates inside each cell so that their
+coordinates equal the reduced global CRT model.  Terminal contradiction,
+construction of `AwayDescentClosureProvider`, and recursive descent closure
+remain unproved.

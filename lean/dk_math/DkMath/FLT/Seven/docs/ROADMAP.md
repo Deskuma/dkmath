@@ -477,13 +477,32 @@ FLT7-LIFT-002 integer representative and congruence packet
 FLT7-LIFT-003 signed reconstruction or exact obstruction
 ```
 
-WIP
+complete
 
 ```txt
 FLT7-TERM-001 row-sensitive terminal decision
 FLT7-TERM-002
 FLT7-TERM-003
+FLT7-TERM-004 universal global coordinate equations and integer carries
+FLT7-TERM-005 exact 3 x 3 cell prime partition and modulus reconstruction
 ```
+
+WIP
+
+```txt
+FLT7-TERM-006 cellwise universal CRT and row-resolved carry packet
+```
+
+The exact TERM-006 stop gate is:
+
+```lean
+AwaySevenBaseTerminalCellwiseFixedSystemObligation
+```
+
+It asks that each reduced global CRT model be the coordinate tuple of a
+solution to the fixed endpoint-row/root-column system for that exact cell
+modulus.  Universal equations alone do not discharge this certificate-gluing
+obligation.
 
 incomplete
 

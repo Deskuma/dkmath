@@ -375,3 +375,50 @@ silently assuming compatibility of the local canonical models?
 ```
 
 The accompanying `ROADMAP.md` and `IMPLEMENTATION_DESIGN.md` specify the staged implementation.
+
+## 16. TERM-004--006 implementation state
+
+The terminal route now reaches three further checked layers.
+
+```text
+TERM-004
+  global universal coordinate equations
+  exact signed integer equation carries
+
+TERM-005
+  3 x 3 cell prime-support partition
+  exact reconstruction of every cell modulus
+
+TERM-006
+  reduction of the global CRT candidate to every exact cell modulus
+  row-resolved coordinate and equation carries
+  explicit final fixed-system compatibility obligation
+```
+
+The global model satisfies both universal seventh-power/cyclotomic coordinate
+equations.  Homogeneity gives the same scale weight `21` on both sides, so the
+unit combined scale can be cancelled.  Signed representatives then give exact
+integer multiples of the full modulus for both equation defects.
+
+For every cell coordinate, the product of all supported exact prime powers in
+that fiber is proved equal to the original routing cell.  The full CRT model,
+scale, weighted coordinates, and universal equations therefore reduce to each
+of the nine exact cell quotients.
+
+The remaining gap is deliberately stronger than mere local solubility:
+
+```lean
+AwaySevenBaseTerminalCellwiseFixedSystemObligation candidate
+```
+
+requires, for every cell, a solution of its fixed endpoint-row/root-column
+prime-power system whose forgotten four coordinates are exactly the reduced
+global CRT model.  Existing APIs prove the universal equations after reduction
+and prove the fixed system at each individual prime power, but do not yet glue
+all certificates in one cell while preserving this coordinate equality.
+
+Consequently no terminal contradiction and no
+`AwayDescentClosureProvider` is currently constructed.  The public
+`AwaySevenBaseTerminalCarryDecision` records the honest three-way boundary:
+contradiction, descent provider, or the concrete carry packet plus this exact
+open obligation.
