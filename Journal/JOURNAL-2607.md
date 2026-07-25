@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-25
 
+### 12:02
+
+[原始集合では可除関係が等号へ退化する](260725-1202-primitive-sets-are-divisibility-antichains.md)
+
+有限原始集合を可除半順序の反鎖として読み、集合内部では $a\mid b$ が $a=b$ と同値になること、空集合・一点集合・互いに割り合わない二点集合が原始であることを読む。
+
 ### 06:02
 
 [素数降下は約数制御へ忘却できる](260725-0602-prime-descent-forgets-to-divisibility-control.md)
