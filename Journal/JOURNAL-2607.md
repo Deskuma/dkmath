@@ -2,6 +2,14 @@
 
 Lean が確定した DkMath の構造を、一般数学の言葉で読み解く月刊記録。
 
+## 2026-07-27
+
+### 00:05
+
+[差と冪差商の公約数は指数を割る](260727-0005-the-common-divisor-of-a-difference-and-its-power-sum-divides-the-exponent.md)
+
+互いに素な整数 $a,b$ に対し、差 $a-b$ と冪差商 $S_d(a,b)$ の公約数が指数 $d$ を割り、Gap と Body の共有因子が指数の内部へ制限される構造を読む。
+
 ## 2026-07-26
 
 ### 18:02
