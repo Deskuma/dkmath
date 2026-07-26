@@ -19,6 +19,9 @@ U-001K  finite Hensel uniqueness / deep-lift count           complete
 U-001L  average valuation / finite-family depth mass         complete
 U-001M  q-sensitive average valuation excess                 complete
 U-001N  weighted depth-mass bad set                          complete
+U-001O  exact pointwise support + excess mass bridge         complete
+U-001P  simultaneous CRT depth-profile counting              complete
+U-001Q  finite CRT-profile exponential / Chernoff tail       complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -38,8 +41,8 @@ contract は正の ABC inequality を直接含む。したがってこれは tra
 Local verification:
 
 ```text
-DkMath.ABC build    success (8381 jobs)
-DkMath full build   success (8751 jobs)
+DkMath.ABC build    success (8387 jobs)
+DkMath full build   success (8754 jobs)
 new Lean sources    no sorry / axiom / native_decide
 git diff --check    clean
 ```
@@ -61,6 +64,9 @@ report-ultra-001-K.md  finite Hensel uniqueness and deep-lift count
 report-ultra-001-L.md  average valuation and finite-family depth mass
 report-ultra-001-M.md  q-sensitive average valuation excess
 report-ultra-001-N.md  weighted depth-mass bad set
+report-ultra-001-O.md  exact pointwise support/excess bridge
+report-ultra-001-P.md  simultaneous CRT depth-profile count
+report-ultra-001-Q.md  finite CRT-profile exponential tail
 ```
 
 Ultra-001K では `q ∤ p`, `q ∤ b` の非例外チャネルについて finite Hensel
@@ -78,6 +84,20 @@ finite family を構成した。Ultra-001N では weighted depth mass と bad se
 証明した。従って「bad points は少ない」は theorem になったが、指定された
 ABC coordinate がその bad set を脱出する deterministic probe/orbit 原理は
 なお open である。
+
+Ultra-001O では full GN depth mass を support mass と valuation excess に
+exact 分解し、coprime target 上で canonical interval family の mass を
+`log GNNonExceptionalPart` と同定した。Ultra-001P では任意の有限 depth
+profile を product modulus に束ね、joint residue address 数と区間 event
+数を CRT で評価した。Ultra-001Q では区間点を有限 valuation profiles に
+exact 分割し、各 fiber に P の count を代入した finite exponential-moment
+bound と Chernoff bad-set bound を得た。
+
+従って O/P/Q の有限 combinatorial layer は閉じた。残る解析 frontier は、
+finite profile sum の boundary 項と増大する prime family を同時に吸収して
+`X` に依存しない majorant を作ることである。これはまだ証明されておらず、
+M3-heavy exceptional set の summability、M2 fresh-support compensation、
+uniform joint contract、`abc_main_axiom` replacement は open である。
 
 ## 次は二体同時に倒すべきか
 
