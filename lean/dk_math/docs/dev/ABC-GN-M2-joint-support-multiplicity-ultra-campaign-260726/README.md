@@ -23,7 +23,7 @@ U-001O  exact pointwise support + excess mass bridge         complete
 U-001P  simultaneous CRT depth-profile counting              complete
 U-001Q  finite CRT-profile exponential / Chernoff tail       complete
 U-001R  excess-active small/large profile pincer              complete
-U-001S  summable Euler envelope / half local estimate         partial
+U-001S  summable Euler envelope / half local estimate         complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -71,6 +71,7 @@ report-ultra-001-P.md  simultaneous CRT depth-profile count
 report-ultra-001-Q.md  finite CRT-profile exponential tail
 report-ultra-001-R.md  excess-active small/large pincer
 report-ultra-001-S.md  summable Euler envelope and local frontier
+report-ultra-001-S2.md unconditional half-power Euler majorant
 ```
 
 Ultra-001K では `q ∤ p`, `q ∤ b` の非例外チャネルについて finite Hensel
@@ -103,17 +104,15 @@ Ultra-001R では full valuation profile を excess-active profile に圧縮し�
 large profile の exact support + excess diagnosis まで閉じた。
 
 Ultra-001S では summable local envelope から `Q,X` 非依存 Euler constant を
-得る一般 theorem、`q^(-3/2)` envelope の総和可能性、`t = 1/2` の条件付き
-moment endpoint を実装した。残る small-side obligation は単一 prime の
-finite geometric tail estimate である。これはまだ証明されていないため、
-S は partial である。
+得る一般 theorem と `q^(-3/2)` envelope の総和可能性を実装した。S2 では
+`t = 1/2` の単一 prime local tail を公比 `3/4` の有限幾何級数で評価し、
+条件付き endpoint から `htail` 仮定を除去した。従って small profile の
+Euler density と moment majorant は `p` のみに依存する定数で無条件に閉じた。
 
-従って O/P/Q/R の有限 combinatorial layer は閉じた。small profile の
-`X` 非依存 majorant は `t = 1/2` の単一局所幾何級数補題まで圧縮されたが、
-その補題はまだ open である。large boundary の joint compensation も別途
-open であり、M3-heavy exceptional set の summability、M2 fresh-support
-compensation、uniform joint contract、`abc_main_axiom` replacement は
-未証明である。
+従って O/P/Q/R/S の finite combinatorial / small analytic layer は閉じた。
+残る frontier は large boundary の joint compensation である。
+M3-heavy exceptional set の summability、M2 fresh-support compensation、
+uniform joint contract、`abc_main_axiom` replacement は未証明である。
 
 ## 次は二体同時に倒すべきか
 
