@@ -31,7 +31,9 @@ separate wrapper feeds GN p-adic depths into `exp_layer_cake`.
 
 The module constructs the canonical Hensel residue cover and proves its
 finite simple-root uniqueness in the non-exceptional `q ∤ p`, `q ∤ b`
-channel.  It does not turn the resulting density estimate into the pointwise
+channel.  It also composes those residue counts with a finite layer-cake to
+obtain fixed-prime and finite-family average GN depth-mass bounds.  It does
+not turn those average estimates into the pointwise
 `ABCGNOddPrimeJointContract`.
 -/
 
@@ -1026,6 +1028,306 @@ theorem gn_deep_lift_filter_eq_padic_depth_filter
   · intro ha
     exact ⟨ha.1,
       (padicValNat_le_iff_dvd hq (hGN a ha.1) k).1 ha.2⟩
+
+/--
+Exact finite layer-cake identity for a bounded natural-valued function.
+
+The sum of the values is the sum, over all positive depth layers, of the
+number of points reaching that layer.
+-/
+theorem sum_nat_eq_sum_card_ge
+    {α : Type*}
+    (s : Finset α) (V : α → ℕ) (K : ℕ)
+    (hV : ∀ a ∈ s, V a ≤ K) :
+    ∑ a ∈ s, V a =
+      ∑ k ∈ Finset.Icc 1 K,
+        (s.filter (fun a => k ≤ V a)).card := by
+  classical
+  calc
+    ∑ a ∈ s, V a =
+        ∑ a ∈ s, ∑ k ∈ Finset.Icc 1 K,
+          if k ≤ V a then 1 else 0 := by
+      apply Finset.sum_congr rfl
+      intro a ha
+      have hcard : (Finset.Icc 1 (V a)).card = V a := by
+        rw [Nat.card_Icc]
+        omega
+      calc
+        V a = (Finset.Icc 1 (V a)).card := hcard.symm
+        _ = ((Finset.Icc 1 K).filter (fun k => k ≤ V a)).card := by
+          congr 1
+          ext k
+          simp only [Finset.mem_Icc, Finset.mem_filter]
+          constructor
+          · intro hk
+            exact ⟨⟨hk.1, hk.2.trans (hV a ha)⟩, hk.2⟩
+          · intro hk
+            exact ⟨hk.1.1, hk.2⟩
+        _ = ∑ k ∈ Finset.Icc 1 K,
+              if k ≤ V a then 1 else 0 := by simp
+    _ = ∑ k ∈ Finset.Icc 1 K, ∑ a ∈ s,
+          if k ≤ V a then 1 else 0 := by
+      exact Finset.sum_comm
+    _ = ∑ k ∈ Finset.Icc 1 K,
+        (s.filter (fun a => k ≤ V a)).card := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      simp
+
+/--
+Uniform elementary size bound for GN on `a ∈ [0,X]`.
+
+The geometric-sum form of GN has `p` terms, each bounded by `(X+b)^p`.
+-/
+theorem GN_le_mul_interval_add_pow
+    {p a b X : ℕ}
+    (hb : 0 < b)
+    (ha : a ≤ X) :
+    GN p a b ≤ p * (X + b) ^ p := by
+  rw [GN_eq_geom_sum₂]
+  calc
+    ∑ i ∈ Finset.range p,
+        (a + b) ^ i * b ^ (p - 1 - i) ≤
+        ∑ _i ∈ Finset.range p, (X + b) ^ p := by
+      apply Finset.sum_le_sum
+      intro i hi
+      have hip : i < p := Finset.mem_range.mp hi
+      have hab : a + b ≤ X + b := Nat.add_le_add_right ha b
+      have hbX : b ≤ X + b := Nat.le_add_left b X
+      calc
+        (a + b) ^ i * b ^ (p - 1 - i) ≤
+            (X + b) ^ i * (X + b) ^ (p - 1 - i) :=
+          Nat.mul_le_mul (Nat.pow_le_pow_left hab i)
+            (Nat.pow_le_pow_left hbX (p - 1 - i))
+        _ = (X + b) ^ (p - 1) := by
+          rw [← pow_add]
+          congr 1
+          omega
+        _ ≤ (X + b) ^ p := by
+          exact Nat.pow_le_pow_right (by omega) (by omega)
+    _ = p * (X + b) ^ p := by simp
+
+/-- GN is nonzero for prime exponent and nonzero right coordinate. -/
+theorem GN_ne_zero_of_prime_of_right_ne_zero
+    {p a b : ℕ}
+    (hp : Nat.Prime p)
+    (hb : b ≠ 0) :
+    GN p a b ≠ 0 := by
+  cases a with
+  | zero =>
+      rw [show GN p 0 b = p * b ^ (p - 1) by
+        simpa [GN] using
+          (DkMath.CosmicFormula.GN_zero_eval (R := ℕ) p b)]
+      exact Nat.mul_ne_zero hp.ne_zero (pow_ne_zero _ hb)
+  | succ a =>
+      exact GN_ne_zero_nat_of_two_le
+        hp.two_le (Nat.succ_pos a) (Nat.pos_of_ne_zero hb)
+
+/--
+The sum of the integer quotients `N / q^k` over any finite positive depth
+range is at most `N`.
+
+This is a finite consequence of Legendre's formula for the valuation of
+`N!`; the auxiliary Legendre range is enlarged when necessary.
+-/
+theorem sum_div_prime_pow_Icc_le
+    {q N K : ℕ}
+    (hq : Nat.Prime q) :
+    ∑ k ∈ Finset.Icc 1 K, N / q ^ k ≤ N := by
+  let B := max (K + 1) (Nat.log q N + 1)
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hlog : Nat.log q N < B := by
+    exact (Nat.lt_succ_self _).trans_le
+      (Nat.le_max_right _ _)
+  have hsub : Finset.Icc 1 K ⊆ Finset.Ico 1 B := by
+    intro k hk
+    have hk' := Finset.mem_Icc.mp hk
+    exact Finset.mem_Ico.mpr
+      ⟨hk'.1, (Nat.lt_succ_of_le hk'.2).trans_le
+        (Nat.le_max_left _ _)⟩
+  calc
+    ∑ k ∈ Finset.Icc 1 K, N / q ^ k ≤
+        ∑ k ∈ Finset.Ico 1 B, N / q ^ k := by
+      exact Finset.sum_le_sum_of_subset_of_nonneg hsub
+        (fun i hi₁ hi₂ => Nat.zero_le _)
+    _ = padicValNat q N.factorial := by
+      symm
+      exact padicValNat_factorial hlog
+    _ ≤ N := padicValNat_factorial_le q N
+
+/--
+Layer-explicit average GN valuation bound for one non-exceptional prime.
+
+The cutoff is intrinsic and explicit: the elementary size bound on GN gives
+`v_q(GN) ≤ log_q (p (X+b)^p)`.
+-/
+theorem sum_padicValNat_GN_le_of_simpleRoot_layers
+    {p q b X : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hqp : ¬ q ∣ p)
+    (hqb : ¬ q ∣ b) :
+    ∑ a ∈ Finset.Icc 0 X, padicValNat q (GN p a b) ≤
+      (p - 1) *
+        ∑ k ∈ Finset.Icc 1 (Nat.log q (p * (X + b) ^ p)),
+          ((X + 1) / q ^ k + 1) := by
+  have hb0 : b ≠ 0 := by
+    intro hb
+    subst b
+    exact hqb (dvd_zero q)
+  have hb : 0 < b := Nat.pos_of_ne_zero hb0
+  let V := fun a => padicValNat q (GN p a b)
+  let K := Nat.log q (p * (X + b) ^ p)
+  have hGN :
+      ∀ a ∈ Finset.Icc 0 X, GN p a b ≠ 0 := by
+    intro a ha
+    exact GN_ne_zero_of_prime_of_right_ne_zero hp hb0
+  have hV :
+      ∀ a ∈ Finset.Icc 0 X, V a ≤ K := by
+    intro a ha
+    dsimp [V, K]
+    exact (padicValNat_le_nat_log (GN p a b)).trans
+      (Nat.log_mono_right
+        (GN_le_mul_interval_add_pow hb
+          (Finset.mem_Icc.mp ha).2))
+  rw [sum_nat_eq_sum_card_ge (Finset.Icc 0 X) V K hV]
+  calc
+    ∑ k ∈ Finset.Icc 1 K,
+        ((Finset.Icc 0 X).filter
+          (fun a => k ≤ V a)).card ≤
+        ∑ k ∈ Finset.Icc 1 K,
+          (p - 1) * ((X + 1) / q ^ k + 1) := by
+      apply Finset.sum_le_sum
+      intro k hk
+      have hkpos : 0 < k := (Finset.mem_Icc.mp hk).1
+      have heq :=
+        congrArg Finset.card
+          (gn_deep_lift_filter_eq_padic_depth_filter
+            (p := p) (q := q) (b := b) (k := k) (X := X)
+            hq hGN)
+      change
+        ((Finset.Icc 0 X).filter
+          (fun a => k ≤ padicValNat q (GN p a b))).card ≤
+            (p - 1) * ((X + 1) / q ^ k + 1)
+      rw [← heq]
+      exact card_gn_deep_lift_residue_classes_le_of_simpleRoot
+        hp hq hqp hqb hkpos
+    _ = (p - 1) *
+        ∑ k ∈ Finset.Icc 1 K,
+          ((X + 1) / q ^ k + 1) := by
+      rw [Finset.mul_sum]
+
+/--
+Explicit average valuation bound for a fixed non-exceptional prime:
+
+`∑_{a=0}^X v_q(GN_p(a,b))`
+is at most `(p-1) * (X+1 + log_q (p (X+b)^p))`.
+-/
+theorem sum_padicValNat_GN_le_of_simpleRoot
+    {p q b X : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hqp : ¬ q ∣ p)
+    (hqb : ¬ q ∣ b) :
+    ∑ a ∈ Finset.Icc 0 X, padicValNat q (GN p a b) ≤
+      (p - 1) *
+        ((X + 1) + Nat.log q (p * (X + b) ^ p)) := by
+  let K := Nat.log q (p * (X + b) ^ p)
+  calc
+    ∑ a ∈ Finset.Icc 0 X, padicValNat q (GN p a b) ≤
+        (p - 1) *
+          ∑ k ∈ Finset.Icc 1 K,
+            ((X + 1) / q ^ k + 1) :=
+      sum_padicValNat_GN_le_of_simpleRoot_layers
+        hp hq hqp hqb
+    _ = (p - 1) *
+        ((∑ k ∈ Finset.Icc 1 K, (X + 1) / q ^ k) +
+          (Finset.Icc 1 K).card) := by
+      congr 1
+      rw [Finset.sum_add_distrib]
+      simp
+    _ ≤ (p - 1) * ((X + 1) + K) := by
+      apply Nat.mul_le_mul_left
+      have hdiv :=
+        sum_div_prime_pow_Icc_le
+          (q := q) (N := X + 1) (K := K) hq
+      have hcard : (Finset.Icc 1 K).card = K := by
+        rw [Nat.card_Icc]
+        omega
+      rw [hcard]
+      omega
+
+/--
+Log-weighted form of the fixed-prime average valuation bound.
+
+This is the local weighted input needed before summing over non-exceptional
+primes in an averaged GN depth-mass estimate.
+-/
+theorem sum_padicValNat_GN_mul_log_le_of_simpleRoot
+    {p q b X : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hqp : ¬ q ∣ p)
+    (hqb : ¬ q ∣ b) :
+    ∑ a ∈ Finset.Icc 0 X,
+        (padicValNat q (GN p a b) : ℝ) *
+          Real.log (q : ℝ) ≤
+      (((p - 1) *
+        ((X + 1) + Nat.log q (p * (X + b) ^ p)) : ℕ) : ℝ) *
+          Real.log (q : ℝ) := by
+  have hsum :=
+    sum_padicValNat_GN_le_of_simpleRoot
+      (X := X) hp hq hqp hqb
+  have hsumR :
+      (∑ a ∈ Finset.Icc 0 X,
+        (padicValNat q (GN p a b) : ℝ)) ≤
+      (((p - 1) *
+        ((X + 1) + Nat.log q (p * (X + b) ^ p)) : ℕ) : ℝ) := by
+    exact_mod_cast hsum
+  rw [← Finset.sum_mul]
+  exact mul_le_mul_of_nonneg_right hsumR
+    (Real.log_nonneg (by exact_mod_cast hq.one_le))
+
+/--
+Finite-family weighted GN depth-mass bound.
+
+This sums the fixed-prime estimate over any finite family of primes avoiding
+both the exponent `p` and the boundary coordinate `b`.  It is the averaged
+multi-prime interface; selecting a useful family and turning this average into
+a pointwise compensation statement remain separate obligations.
+-/
+theorem sum_GN_depthMass_over_interval_le
+    {p b X : ℕ}
+    (Q : Finset ℕ)
+    (hp : Nat.Prime p)
+    (hQprime : ∀ q ∈ Q, Nat.Prime q)
+    (hQp : ∀ q ∈ Q, ¬ q ∣ p)
+    (hQb : ∀ q ∈ Q, ¬ q ∣ b) :
+    ∑ a ∈ Finset.Icc 0 X,
+        ∑ q ∈ Q,
+          (padicValNat q (GN p a b) : ℝ) *
+            Real.log (q : ℝ) ≤
+      ∑ q ∈ Q,
+        ((((p - 1) *
+          ((X + 1) + Nat.log q (p * (X + b) ^ p)) : ℕ) : ℝ) *
+            Real.log (q : ℝ)) := by
+  calc
+    ∑ a ∈ Finset.Icc 0 X,
+        ∑ q ∈ Q,
+          (padicValNat q (GN p a b) : ℝ) *
+            Real.log (q : ℝ) =
+        ∑ q ∈ Q,
+          ∑ a ∈ Finset.Icc 0 X,
+            (padicValNat q (GN p a b) : ℝ) *
+              Real.log (q : ℝ) := Finset.sum_comm
+    _ ≤ ∑ q ∈ Q,
+        ((((p - 1) *
+          ((X + 1) + Nat.log q (p * (X + b) ^ p)) : ℕ) : ℝ) *
+            Real.log (q : ℝ)) := by
+      apply Finset.sum_le_sum
+      intro q hq
+      exact sum_padicValNat_GN_mul_log_le_of_simpleRoot
+        hp (hQprime q hq) (hQp q hq) (hQb q hq)
 
 /-- Feed GN p-adic depth directly into the legacy finite exponential layer-cake. -/
 theorem exp_gn_padic_layer_cake

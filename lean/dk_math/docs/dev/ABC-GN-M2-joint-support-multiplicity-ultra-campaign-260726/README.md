@@ -16,6 +16,7 @@ U-001H  raw-variable zero/positive endpoint transport      complete
 U-001I  legacy twoTail / residue-counting bridge            complete
 U-001J  canonical residues / mod-q root count                complete
 U-001K  finite Hensel uniqueness / deep-lift count           complete
+U-001L  average valuation / finite-family depth mass         complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -55,12 +56,16 @@ report-ultra-001-H.md  raw endpoint and abc_main audit
 report-ultra-001-I.md  legacy tail and residue-counting bridge
 report-ultra-001-J.md  canonical cover and mod-q root count
 report-ultra-001-K.md  finite Hensel uniqueness and deep-lift count
+report-ultra-001-L.md  average valuation and finite-family depth mass
 ```
 
 Ultra-001K では `q ∤ p`, `q ∤ b` の非例外チャネルについて finite Hensel
 uniqueness が閉じ、各 `q^k` divisibility layer の区間 cardinality bound
-まで無条件化された。残る frontier は、この density/counting 情報を全
-triple に対する pointwise uniform joint contract へ変換する補償原理である。
+まで無条件化された。Ultra-001L では、この layer count を有限 layer-cake
+および Legendre 型の商和評価と合成し、固定 `q` の明示的平均 valuation
+bound と任意有限素数族の weighted depth-mass bound まで無条件化した。
+残る frontier は、使う素数族を算術的に選択し、この平均情報を全 triple
+に対する pointwise uniform joint contract へ変換する補償原理である。
 
 ## 次は二体同時に倒すべきか
 
