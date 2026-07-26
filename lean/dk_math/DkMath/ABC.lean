@@ -13,6 +13,7 @@ import DkMath.ABC.GNDepthMassBadSet
 import DkMath.ABC.GNJointDepthExponential
 import DkMath.ABC.GNExcessActiveProfiles
 import DkMath.ABC.GNExcessEulerMajorant
+import DkMath.ABC.GNJointContractEquivalence
 
 #print "file: DkMath.ABC"
 
