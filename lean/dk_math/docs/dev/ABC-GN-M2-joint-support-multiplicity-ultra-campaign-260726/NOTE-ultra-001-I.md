@@ -1,4 +1,4 @@
-# Memo: Review: Ultra-001-I
+# Note: Review: Ultra-001-I
 
 ## 総合判定
 
