@@ -11,6 +11,8 @@ import DkMath.ABC.GNPrimeSupportOrder
 import DkMath.ABC.GNLegacyTailCountingBridge
 import DkMath.ABC.GNDepthMassBadSet
 import DkMath.ABC.GNJointDepthExponential
+import DkMath.ABC.GNExcessActiveProfiles
+import DkMath.ABC.GNExcessEulerMajorant
 
 #print "file: DkMath.ABC"
 
