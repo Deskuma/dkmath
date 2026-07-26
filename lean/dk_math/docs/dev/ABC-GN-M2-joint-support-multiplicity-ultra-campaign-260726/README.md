@@ -15,6 +15,7 @@ U-001G  uniform joint contract                             open
 U-001H  raw-variable zero/positive endpoint transport      complete
 U-001I  legacy twoTail / residue-counting bridge            complete
 U-001J  canonical residues / mod-q root count                complete
+U-001K  finite Hensel uniqueness / deep-lift count           complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -53,7 +54,13 @@ report-ultra-001-G.md  uniform obstruction
 report-ultra-001-H.md  raw endpoint and abc_main audit
 report-ultra-001-I.md  legacy tail and residue-counting bridge
 report-ultra-001-J.md  canonical cover and mod-q root count
+report-ultra-001-K.md  finite Hensel uniqueness and deep-lift count
 ```
+
+Ultra-001K では `q ∤ p`, `q ∤ b` の非例外チャネルについて finite Hensel
+uniqueness が閉じ、各 `q^k` divisibility layer の区間 cardinality bound
+まで無条件化された。残る frontier は、この density/counting 情報を全
+triple に対する pointwise uniform joint contract へ変換する補償原理である。
 
 ## 次は二体同時に倒すべきか
 
