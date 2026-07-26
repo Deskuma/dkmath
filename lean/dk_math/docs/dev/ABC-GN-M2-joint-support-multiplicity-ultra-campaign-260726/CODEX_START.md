@@ -21,6 +21,9 @@ M3  finite layer-cake / deep-prime pincer        complete
 Order packet  q ≡ 1 mod p                        complete
 Raw-variable endpoint transport                  complete
 Legacy tail/counting bridge                      complete
+Canonical GN residue cover / mod-q root count    complete
+GN root derivative nonzero mod q                 complete
+Hensel uniqueness iteration to mod q^k           open
 Uniform joint contract                           open / exact ABC-strength frontier
 Final target                                     not reached; abc_main_axiom retained
 ```
@@ -59,14 +62,27 @@ non-exceptional valuation excess
   = log piSqRad(non-exceptional part)
   + log twoTail(non-exceptional part)
 
-finite Hensel residue cover
+canonical Hensel residue cover
   -> GN deep-lift interval count
   -> padic depth layer
   -> legacy exp_layer_cake
 ```
 
-The next arithmetic input on this lane is the construction of a residue cover
-of cardinality at most `p - 1`. This is not yet proved by the bridge module.
+The canonical cover and its mod-`q` cardinality bound are now proved.  The
+remaining arithmetic input on this lane is the simple-root Hensel uniqueness:
+
+```text
+q^k | GN(p,a,b)
+q^k | GN(p,r,b)
+a ≡ r mod q
+----------------
+a ≡ r mod q^k
+```
+
+The bridge module packages this exact frontier as
+`GNDeepLiftCongruenceUnique`.  Its simple-root derivative input is proved as
+`eval_derivative_GNPolynomial_ne_zero`; the general iteration to `q^k` is not
+yet proved.
 
 The remaining input is an unconditional construction of:
 

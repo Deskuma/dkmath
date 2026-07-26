@@ -208,17 +208,386 @@ theorem GNNonExceptionalValuationExcess_eq_log_piSqRad_add_log_twoTail
   rw [GNNonExceptionalValuationExcess_eq_log_sqTail,
     hsquare, Real.log_mul hpi htail]
 
+/-- `GN` respects congruence in its left coordinate. -/
+theorem GN_modEq_left
+    {m p a r b : ℕ}
+    (har : Nat.ModEq m a r) :
+    Nat.ModEq m (GN p a b) (GN p r b) := by
+  rw [GN_eq_sum, GN_eq_sum]
+  apply Nat.ModEq.sum
+  intro i hi
+  exact
+    ((Nat.ModEq.refl _).mul (har.pow i)).mul
+      (Nat.ModEq.refl _)
+
+/--
+The canonical residue addresses of depth-`k` GN lifts.
+
+Unlike an abstract cover, this set contains exactly the representatives in
+`[0, q^k)` on which `q^k` divides `GN`.
+-/
+def GNDeepLiftResidues (p q b k : ℕ) : Finset ℕ :=
+  (Finset.range (q ^ k)).filter
+    (fun r => q ^ k ∣ GN p r b)
+
+@[simp] theorem mem_GNDeepLiftResidues_iff
+    {p q b k r : ℕ} :
+    r ∈ GNDeepLiftResidues p q b k ↔
+      r < q ^ k ∧ q ^ k ∣ GN p r b := by
+  simp [GNDeepLiftResidues]
+
+/--
+`GN(p, X, b)` as a polynomial in the left coordinate.
+
+The coefficient formula is the same canonical binomial-tail formula as
+`GN_eq_sum`; in particular, for positive `p` this polynomial is monic and its
+degree is bounded by `p - 1`.
+-/
+noncomputable def GNPolynomial
+    (p b : ℕ) (R : Type*) [CommSemiring R] :
+    Polynomial R :=
+  ∑ i ∈ Finset.range p,
+    Polynomial.C
+      ((Nat.choose p (i + 1) *
+        b ^ (p - (i + 1)) : ℕ) : R) *
+      Polynomial.X ^ i
+
+/-- Evaluation of `GNPolynomial` recovers the natural-number GN kernel. -/
+theorem eval_GNPolynomial
+    (p a b : ℕ) (R : Type*) [CommSemiring R] :
+    Polynomial.eval (a : R) (GNPolynomial p b R) =
+      (GN p a b : ℕ) := by
+  rw [GN_eq_sum]
+  simp only [GNPolynomial, Polynomial.eval_finset_sum,
+    Polynomial.eval_mul, Polynomial.eval_C,
+    Polynomial.eval_pow, Polynomial.eval_X, Nat.cast_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hip : i < p := Finset.mem_range.mp hi
+  rw [show p - (i + 1) = p - 1 - i by omega]
+  push_cast
+  ring
+
+/-- `GNPolynomial` is the generic semiring-valued GN kernel at `X`. -/
+theorem GNPolynomial_eq_GN
+    (p b : ℕ) (R : Type*) [CommSemiring R] :
+    GNPolynomial p b R =
+      GN p (Polynomial.X : Polynomial R)
+        (Polynomial.C (b : R)) := by
+  rw [GN_eq_sum]
+  simp only [GNPolynomial]
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hip : i < p := Finset.mem_range.mp hi
+  rw [show p - (i + 1) = p - 1 - i by omega]
+  push_cast
+  simp [Polynomial.C_pow, Polynomial.C_mul]
+  ring
+
+/-- The GN polynomial is monic whenever the exponent is positive. -/
+theorem GNPolynomial_monic
+    {p b : ℕ} (hp : 0 < p)
+    (R : Type*) [CommSemiring R] :
+    (GNPolynomial p b R).Monic := by
+  apply Polynomial.monic_of_natDegree_le_of_coeff_eq_one
+    (p - 1)
+  · apply Polynomial.natDegree_sum_le_of_forall_le
+    intro i hi
+    exact (Polynomial.natDegree_C_mul_X_pow_le _ i).trans
+      (by simpa using
+        Nat.le_pred_of_lt (Finset.mem_range.mp hi))
+  · rw [GNPolynomial, Polynomial.finset_sum_coeff]
+    rw [Finset.sum_eq_single (p - 1)]
+    · have hpred : p - 1 + 1 = p := by omega
+      simp [hpred]
+    · intro i hi hne
+      change
+        (Polynomial.C
+          ((Nat.choose p (i + 1) *
+            b ^ (p - (i + 1)) : ℕ) : R) *
+            Polynomial.X ^ i).coeff (p - 1) = 0
+      rw [Polynomial.coeff_C_mul_X_pow, if_neg]
+      exact Ne.symm hne
+    · intro hnot
+      exact
+        (hnot (Finset.mem_range.mpr (by omega))).elim
+
+/-- The degree of the GN polynomial is at most `p - 1`. -/
+theorem GNPolynomial_natDegree_le
+    {p b : ℕ}
+    (R : Type*) [CommSemiring R] :
+    (GNPolynomial p b R).natDegree ≤ p - 1 := by
+  apply Polynomial.natDegree_sum_le_of_forall_le
+  intro i hi
+  exact (Polynomial.natDegree_C_mul_X_pow_le _ i).trans
+    (by simpa using
+      Nat.le_pred_of_lt (Finset.mem_range.mp hi))
+
+/--
+Every GN root modulo `q` is simple when `q` divides neither the prime exponent
+nor the boundary coordinate.
+
+This is the derivative input for the remaining Hensel uniqueness theorem.
+-/
+theorem eval_derivative_GNPolynomial_ne_zero
+    {p q b : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hqp : ¬ q ∣ p)
+    (hqb : ¬ q ∣ b)
+    {r : ZMod q}
+    (hroot :
+      Polynomial.eval r
+        (GNPolynomial p b (ZMod q)) = 0) :
+    Polynomial.eval r
+        (Polynomial.derivative
+          (GNPolynomial p b (ZMod q))) ≠ 0 := by
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hp0 : (p : ZMod q) ≠ 0 := by
+    intro h
+    exact hqp ((ZMod.natCast_eq_zero_iff p q).mp h)
+  have hb0 : (b : ZMod q) ≠ 0 := by
+    intro h
+    exact hqb ((ZMod.natCast_eq_zero_iff b q).mp h)
+  have hrb0 : r + (b : ZMod q) ≠ 0 := by
+    intro hrb
+    have hcos :=
+      cosmic_id_csr' p
+        (Polynomial.X : Polynomial (ZMod q))
+        (Polynomial.C (b : ZMod q))
+    rw [← GNPolynomial_eq_GN] at hcos
+    have heval := congrArg (Polynomial.eval r) hcos
+    simp [Polynomial.eval_add, Polynomial.eval_pow,
+      Polynomial.eval_X, hroot, hrb] at heval
+    have hbp : (b : ZMod q) ^ p = 0 := by
+      simpa [hp.ne_zero] using heval.symm
+    exact hb0 (eq_zero_of_pow_eq_zero hbp)
+  have hcos :=
+    cosmic_id_csr' p
+      (Polynomial.X : Polynomial (ZMod q))
+      (Polynomial.C (b : ZMod q))
+  rw [← GNPolynomial_eq_GN] at hcos
+  have hderiv := congrArg Polynomial.derivative hcos
+  have heval := congrArg (Polynomial.eval r) hderiv
+  intro hzero
+  have hrhs :
+      (p : ZMod q) *
+          (r + (b : ZMod q)) ^ (p - 1) ≠ 0 :=
+    mul_ne_zero hp0 (pow_ne_zero _ hrb0)
+  apply hrhs
+  simpa [Polynomial.derivative_add,
+    Polynomial.derivative_mul,
+    Polynomial.derivative_pow,
+    Polynomial.derivative_X,
+    Polynomial.derivative_C,
+    Polynomial.eval_add, Polynomial.eval_mul,
+    Polynomial.eval_pow, Polynomial.eval_X,
+    Polynomial.eval_C, hroot, hzero,
+    Nat.cast_ofNat] using heval
+
+/--
+The canonical GN roots modulo a prime `q` number at most `p - 1`.
+
+This is the base layer proposed in the memo.  It follows directly from the
+monic degree-`p - 1` polynomial `GNPolynomial`, without an affine change of
+variables or the extra assumptions `q ∤ p` and `q ∤ b`.
+-/
+theorem GNDeepLiftResidues_card_base_le
+    {p q b : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q) :
+    (GNDeepLiftResidues p q b 1).card ≤ p - 1 := by
+  classical
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let S := GNDeepLiftResidues p q b 1
+  let f := fun r : ℕ => (r : ZMod q)
+  let P := GNPolynomial p b (ZMod q)
+  have hmonic : P.Monic :=
+    GNPolynomial_monic hp.pos (ZMod q)
+  have hinj : Set.InjOn f (S : Set ℕ) := by
+    intro x hx y hy hxy
+    have hxlt : x < q := by
+      have := (mem_GNDeepLiftResidues_iff.mp hx).1
+      simpa using this
+    have hylt : y < q := by
+      have := (mem_GNDeepLiftResidues_iff.mp hy).1
+      simpa using this
+    have := congrArg ZMod.val hxy
+    simpa [f, ZMod.val_natCast,
+      Nat.mod_eq_of_lt hxlt,
+      Nat.mod_eq_of_lt hylt] using this
+  have hroots : (S.image f).val ⊆ P.roots := by
+    intro x hx
+    have hx' : x ∈ S.image f := by simpa using hx
+    obtain ⟨r, hrS, rfl⟩ := Finset.mem_image.mp hx'
+    have hrGN :=
+      (mem_GNDeepLiftResidues_iff.mp hrS).2
+    have hcast :
+        ((GN p r b : ℕ) : ZMod q) = 0 := by
+      rw [ZMod.natCast_eq_zero_iff]
+      simpa using hrGN
+    rw [Polynomial.mem_roots hmonic.ne_zero]
+    change
+      Polynomial.eval (r : ZMod q)
+        (GNPolynomial p b (ZMod q)) = 0
+    rw [eval_GNPolynomial]
+    exact hcast
+  calc
+    S.card = (S.image f).card :=
+      (Finset.card_image_iff.mpr hinj).symm
+    _ ≤ P.natDegree :=
+      Polynomial.card_le_degree_of_subset_roots hroots
+    _ ≤ p - 1 :=
+      GNPolynomial_natDegree_le (ZMod q)
+
 /--
 A finite set of residue addresses covering every deep GN lift at fixed
 `p`, `q`, `b`, and depth `k`.
 
-The Hensel/cyclotomic argument constructing a cover of size at most `p - 1`
-is deliberately a separate arithmetic obligation.
+The Hensel/cyclotomic argument proving that the canonical cover has size at
+most `p - 1` is deliberately a separate arithmetic obligation.
 -/
 def GNDeepLiftResidueCover
     (p q b k : ℕ) (R : Finset ℕ) : Prop :=
   ∀ a, q ^ k ∣ GN p a b →
     ∃ r ∈ R, Nat.ModEq (q ^ k) a r
+
+/-- The canonical depth-`k` residue set covers every depth-`k` GN lift. -/
+theorem GNDeepLiftResidues_cover
+    {p q b k : ℕ}
+    (hq : Nat.Prime q) :
+    GNDeepLiftResidueCover p q b k
+      (GNDeepLiftResidues p q b k) := by
+  intro a ha
+  let m := q ^ k
+  have hm : 0 < m := pow_pos hq.pos _
+  let r := a % m
+  have hra : Nat.ModEq m r a := Nat.mod_modEq a m
+  have hGNmod : Nat.ModEq m (GN p r b) (GN p a b) :=
+    GN_modEq_left hra
+  have hGNzero : Nat.ModEq m (GN p a b) 0 :=
+    Nat.modEq_zero_iff_dvd.mpr ha
+  have hrGN : m ∣ GN p r b :=
+    Nat.modEq_zero_iff_dvd.mp (hGNmod.trans hGNzero)
+  refine ⟨r, ?_, hra.symm⟩
+  exact mem_GNDeepLiftResidues_iff.mpr
+    ⟨Nat.mod_lt _ hm, hrGN⟩
+
+/--
+Injectivity of reduction modulo `q` on canonical depth-`k` GN residues.
+
+This is the exact finite-set form of the Hensel uniqueness obligation: two
+depth-`k` roots with the same residue modulo `q` must already be the same
+canonical representative modulo `q^k`.
+-/
+def GNDeepLiftReductionInjective
+    (p q b k : ℕ) : Prop :=
+  Set.InjOn (fun r => r % q)
+    (GNDeepLiftResidues p q b k : Set ℕ)
+
+/--
+Pointwise Hensel uniqueness in the exact congruence form suggested by the
+memo: two depth-`k` GN roots in the same mod-`q` branch coincide mod `q^k`.
+-/
+def GNDeepLiftCongruenceUnique
+    (p q b k : ℕ) : Prop :=
+  ∀ ⦃a r : ℕ⦄,
+    q ^ k ∣ GN p a b →
+    q ^ k ∣ GN p r b →
+    Nat.ModEq q a r →
+    Nat.ModEq (q ^ k) a r
+
+/-- Pointwise Hensel uniqueness implies injectivity on canonical residues. -/
+theorem GNDeepLiftReductionInjective_of_congruenceUnique
+    {p q b k : ℕ}
+    (hunique : GNDeepLiftCongruenceUnique p q b k) :
+    GNDeepLiftReductionInjective p q b k := by
+  intro a ha r hr har
+  have ha' := mem_GNDeepLiftResidues_iff.mp ha
+  have hr' := mem_GNDeepLiftResidues_iff.mp hr
+  have hmodq : Nat.ModEq q a r := by
+    change a % q = r % q
+    exact har
+  have hmodqk := hunique ha'.2 hr'.2 hmodq
+  exact hmodqk.eq_of_lt_of_lt ha'.1 hr'.1
+
+/-- At depth one the Hensel uniqueness condition is tautological. -/
+theorem GNDeepLiftCongruenceUnique_one
+    (p q b : ℕ) :
+    GNDeepLiftCongruenceUnique p q b 1 := by
+  intro a r ha hr har
+  simpa using har
+
+/--
+Hensel reduction injectivity bounds the number of depth-`k` residues by the
+number of roots modulo `q`.
+-/
+theorem GNDeepLiftResidues_card_le_base
+    {p q b k : ℕ}
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hinj : GNDeepLiftReductionInjective p q b k) :
+    (GNDeepLiftResidues p q b k).card ≤
+      (GNDeepLiftResidues p q b 1).card := by
+  classical
+  let S := GNDeepLiftResidues p q b k
+  let T := GNDeepLiftResidues p q b 1
+  let f := fun r : ℕ => r % q
+  have hmap : S.image f ⊆ T := by
+    intro r hr
+    obtain ⟨a, haS, rfl⟩ := Finset.mem_image.mp hr
+    have ha := mem_GNDeepLiftResidues_iff.mp haS
+    have hqpow : q ∣ q ^ k := by
+      obtain ⟨j, rfl⟩ :=
+        Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hk)
+      exact dvd_pow_self q (by omega)
+    have hqGN : q ∣ GN p a b := hqpow.trans ha.2
+    have hmod :
+        Nat.ModEq q (GN p (a % q) b) (GN p a b) :=
+      GN_modEq_left (Nat.mod_modEq a q)
+    have hz : Nat.ModEq q (GN p a b) 0 :=
+      Nat.modEq_zero_iff_dvd.mpr hqGN
+    apply mem_GNDeepLiftResidues_iff.mpr
+    constructor
+    · simpa using Nat.mod_lt a hq.pos
+    · simpa using
+        Nat.modEq_zero_iff_dvd.mp (hmod.trans hz)
+  calc
+    S.card = (S.image f).card := by
+      symm
+      apply Finset.card_image_iff.mpr
+      intro a ha a' ha' haa'
+      exact hinj ha ha' haa'
+    _ ≤ T.card := Finset.card_le_card hmap
+
+/--
+The two independent arithmetic obligations that imply the canonical
+depth-`k` cardinality bound: at most `p - 1` roots modulo `q`, and unique
+lifting from each such root.
+-/
+theorem GNDeepLiftResidues_card_le
+    {p q b k : ℕ}
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hbase :
+      (GNDeepLiftResidues p q b 1).card ≤ p - 1)
+    (hinj : GNDeepLiftReductionInjective p q b k) :
+    (GNDeepLiftResidues p q b k).card ≤ p - 1 :=
+  (GNDeepLiftResidues_card_le_base hq hk hinj).trans hbase
+
+/--
+For prime exponent `p`, Hensel reduction injectivity is now the only remaining
+input needed for the canonical depth-`k` cardinality bound.
+-/
+theorem GNDeepLiftResidues_card_le_of_reduction
+    {p q b k : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hinj : GNDeepLiftReductionInjective p q b k) :
+    (GNDeepLiftResidues p q b k).card ≤ p - 1 :=
+  GNDeepLiftResidues_card_le hq hk
+    (GNDeepLiftResidues_card_base_le hp hq) hinj
 
 /-- A finite residue cover gives the corresponding interval count. -/
 theorem card_gn_deep_lift_range_le_of_residueCover
@@ -292,6 +661,74 @@ theorem card_gn_deep_lift_residue_classes_le
         (p - 1) * ((X + 1) / q ^ k + 1) := by
   rw [← Nat.range_succ_eq_Icc_zero]
   exact card_gn_deep_lift_range_le hq hcard hcover
+
+/--
+Canonical-cover form of the deep-lift count.
+
+After `GNDeepLiftResidues_cover`, the only arithmetic input left here is the
+cardinality bound for the canonical residue set.
+-/
+theorem card_gn_deep_lift_residue_classes_le_of_canonical
+    {p q b k X : ℕ}
+    (hq : Nat.Prime q)
+    (hcard : (GNDeepLiftResidues p q b k).card ≤ p - 1) :
+    ((Finset.Icc 0 X).filter
+      (fun a => q ^ k ∣ GN p a b)).card ≤
+        (p - 1) * ((X + 1) / q ^ k + 1) :=
+  card_gn_deep_lift_residue_classes_le
+    hq hcard (GNDeepLiftResidues_cover hq)
+
+/--
+Deep-lift interval count from the two arithmetic frontier statements:
+the mod-`q` root count and Hensel reduction injectivity.
+-/
+theorem card_gn_deep_lift_residue_classes_le_of_base_and_reduction
+    {p q b k X : ℕ}
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hbase :
+      (GNDeepLiftResidues p q b 1).card ≤ p - 1)
+    (hinj : GNDeepLiftReductionInjective p q b k) :
+    ((Finset.Icc 0 X).filter
+      (fun a => q ^ k ∣ GN p a b)).card ≤
+        (p - 1) * ((X + 1) / q ^ k + 1) :=
+  card_gn_deep_lift_residue_classes_le_of_canonical
+    hq (GNDeepLiftResidues_card_le hq hk hbase hinj)
+
+/--
+Prime-exponent deep-lift count with only the Hensel reduction-injectivity
+frontier left explicit.
+-/
+theorem card_gn_deep_lift_residue_classes_le_of_reduction
+    {p q b k X : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hinj : GNDeepLiftReductionInjective p q b k) :
+    ((Finset.Icc 0 X).filter
+      (fun a => q ^ k ∣ GN p a b)).card ≤
+        (p - 1) * ((X + 1) / q ^ k + 1) :=
+  card_gn_deep_lift_residue_classes_le_of_canonical
+    hq (GNDeepLiftResidues_card_le_of_reduction
+      hp hq hk hinj)
+
+/--
+Final deep-lift count interface in the memo's pointwise Hensel-congruence
+vocabulary.
+-/
+theorem card_gn_deep_lift_residue_classes_le_of_congruenceUnique
+    {p q b k X : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hk : 0 < k)
+    (hunique : GNDeepLiftCongruenceUnique p q b k) :
+    ((Finset.Icc 0 X).filter
+      (fun a => q ^ k ∣ GN p a b)).card ≤
+        (p - 1) * ((X + 1) / q ^ k + 1) :=
+  card_gn_deep_lift_residue_classes_le_of_reduction
+    hp hq hk
+      (GNDeepLiftReductionInjective_of_congruenceUnique
+        hunique)
 
 /-- Divisibility layers and p-adic-depth layers are the same when GN is nonzero. -/
 theorem gn_deep_lift_filter_eq_padic_depth_filter

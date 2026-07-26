@@ -14,6 +14,7 @@ U-001F  exact order and q ≡ 1 mod p                        complete
 U-001G  uniform joint contract                             open
 U-001H  raw-variable zero/positive endpoint transport      complete
 U-001I  legacy twoTail / residue-counting bridge            complete
+U-001J  canonical residues / mod-q root count                complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -51,6 +52,7 @@ report-ultra-001-F.md  exact order and deep-lift boundary
 report-ultra-001-G.md  uniform obstruction
 report-ultra-001-H.md  raw endpoint and abc_main audit
 report-ultra-001-I.md  legacy tail and residue-counting bridge
+report-ultra-001-J.md  canonical cover and mod-q root count
 ```
 
 ## 次は二体同時に倒すべきか
