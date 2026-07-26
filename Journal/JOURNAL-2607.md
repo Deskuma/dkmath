@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-26
 
+### 18:02
+
+[冪和充填可能性は零項の追加で単調に拡張できる](260726-1802-power-sum-fillability-is-monotone-under-zero-padding.md)
+
+ちょうど $k$ 個の $d$ 次冪和表現は、$d>0$ なら零項を追加して任意の $r\ge k$ 個の exact 表現へ拡張でき、exact 表現から at-most 表現へ忘却できる構造を読む。
+
 ### 11:58
 
 [共役は単位核の逆作用になる](260726-1158-conjugation-is-the-inverse-of-a-unit-kernel.md)
