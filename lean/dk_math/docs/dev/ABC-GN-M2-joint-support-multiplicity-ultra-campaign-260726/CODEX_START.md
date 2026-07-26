@@ -16,9 +16,12 @@ lean/dk_math/docs/dev/ABC-GN-M2-joint-support-multiplicity-ultra-campaign-260726
 
 ```text
 M1  odd-prime exceptional valuation excess      complete / merged / closed Core
-M2  lifted-radical support growth                active inside joint campaign
-M3  non-exceptional valuation multiplicity       active inside joint campaign
-Final target                                     abc_main without abc_main_axiom
+M2  exact fresh support identity                 complete
+M3  finite layer-cake / deep-prime pincer        complete
+Order packet  q ≡ 1 mod p                        complete
+Raw-variable endpoint transport                  complete
+Uniform joint contract                           open / exact ABC-strength frontier
+Final target                                     not reached; abc_main_axiom retained
 ```
 
 Current instruction:
@@ -26,6 +29,41 @@ Current instruction:
 ```text
 instruction-ultra-001.md
 ```
+
+## Ultra-001 current frontier
+
+Production modules:
+
+```text
+DkMath.ABC.GNJointPressureOddPrime
+DkMath.ABC.GNDepthPressure
+DkMath.ABC.GNPrimeSupportOrder
+```
+
+Completed theorem chain:
+
+```text
+exact prime-exponent lift-radical identity
+-> exact fresh support-plus-depth channel mass
+-> odd-prime joint pressure equivalence
+-> direct logarithmic and pointwise ABC bridge
+-> positive and zero-coordinate raw-variable endpoint
+```
+
+The remaining input is an unconditional construction of:
+
+```lean
+ABCGNOddPrimeJointContract ε
+```
+
+for every `ε > 0`. This is not a bookkeeping remainder: under the exact
+identities it is the uniform arithmetic inequality that supplies ABC itself.
+The deep-lift branch cannot be eliminated from freshness and exact order
+alone; the existing kernel-clean counterexample has `GN 3 2 3 = 7^2`.
+
+Therefore `abc_main` and `abc_main_axiom` remain unchanged. Do not emit
+`ULTRA_FINAL_REPORT.md` or claim final victory unless this contract is
+constructed without a new trust assumption.
 
 ## Mission
 

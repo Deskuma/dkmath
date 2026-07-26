@@ -1,5 +1,56 @@
 # ABC-GN joint support-multiplicity Ultra campaign
 
+## Ultra-001 実装結果 — 2026-07-26
+
+決定論的な joint campaign core は production Lean として実装された。
+
+```text
+U-001A  odd-prime exact accounting                         complete
+U-001B  joint pressure / direct height bridge              complete
+U-001C  exact lift-radical identity                        complete
+U-001D  valuation-excess finite layer-cake                 complete
+U-001E  weighted pincer / deep-prime packet                complete
+U-001F  exact order and q ≡ 1 mod p                        complete
+U-001G  uniform joint contract                             open
+U-001H  raw-variable zero/positive endpoint transport      complete
+```
+
+最終 frontier は次の無条件構成である。
+
+```lean
+∀ ε, 0 < ε → ABCGNOddPrimeJointContract ε
+```
+
+exact radical identity により joint pressure は fresh support と valuation
+depth の全質量そのものになり、既存 return bridge と合わせると、この一様
+contract は正の ABC inequality を直接含む。したがってこれは transport の
+残件ではなく、予想本体の算術不等式である。
+
+`abc_main_axiom` は削除していない。公開 `abc_main` の project-axiom dependency
+が残るため、この campaign は final victory ではない。
+
+Local verification:
+
+```text
+DkMath.ABC build    success (8380 jobs)
+DkMath full build   success (8750 jobs)
+new Lean sources    no sorry / axiom / native_decide
+git diff --check    clean
+```
+
+Checkpoint reports:
+
+```text
+report-ultra-001-A.md  exact accounting
+report-ultra-001-B.md  joint pressure and direct bridge
+report-ultra-001-C.md  exact radical identity
+report-ultra-001-D.md  layer-cake
+report-ultra-001-E.md  pincer and deep packet
+report-ultra-001-F.md  exact order and deep-lift boundary
+report-ultra-001-G.md  uniform obstruction
+report-ultra-001-H.md  raw endpoint and abc_main audit
+```
+
 ## 次は二体同時に倒すべきか
 
 **判定：同時攻略で正しい。**

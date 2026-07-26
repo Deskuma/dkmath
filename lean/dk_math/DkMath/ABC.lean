@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.Main
 import DkMath.ABC.GNExceptionalExcessOddPrime
+import DkMath.ABC.GNDepthPressure
+import DkMath.ABC.GNPrimeSupportOrder
 
 #print "file: DkMath.ABC"
 
