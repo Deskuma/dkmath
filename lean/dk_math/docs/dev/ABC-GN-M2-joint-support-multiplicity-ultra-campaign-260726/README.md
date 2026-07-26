@@ -17,6 +17,8 @@ U-001I  legacy twoTail / residue-counting bridge            complete
 U-001J  canonical residues / mod-q root count                complete
 U-001K  finite Hensel uniqueness / deep-lift count           complete
 U-001L  average valuation / finite-family depth mass         complete
+U-001M  q-sensitive average valuation excess                 complete
+U-001N  weighted depth-mass bad set                          complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -57,6 +59,8 @@ report-ultra-001-I.md  legacy tail and residue-counting bridge
 report-ultra-001-J.md  canonical cover and mod-q root count
 report-ultra-001-K.md  finite Hensel uniqueness and deep-lift count
 report-ultra-001-L.md  average valuation and finite-family depth mass
+report-ultra-001-M.md  q-sensitive average valuation excess
+report-ultra-001-N.md  weighted depth-mass bad set
 ```
 
 Ultra-001K では `q ∤ p`, `q ∤ b` の非例外チャネルについて finite Hensel
@@ -66,6 +70,14 @@ uniqueness が閉じ、各 `q^k` divisibility layer の区間 cardinality bound
 bound と任意有限素数族の weighted depth-mass bound まで無条件化した。
 残る frontier は、使う素数族を算術的に選択し、この平均情報を全 triple
 に対する pointwise uniform joint contract へ変換する補償原理である。
+
+Ultra-001M では第2層以降の excess density を `q * (q - 1)` 分母まで
+保持し、区間内に現れる全 boundary-away non-exceptional prime の canonical
+finite family を構成した。Ultra-001N では weighted depth mass と bad set
+を正式化し、正の threshold に対する明示的 Markov cardinality bound を
+証明した。従って「bad points は少ない」は theorem になったが、指定された
+ABC coordinate がその bad set を脱出する deterministic probe/orbit 原理は
+なお open である。
 
 ## 次は二体同時に倒すべきか
 
