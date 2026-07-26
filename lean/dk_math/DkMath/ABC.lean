@@ -8,6 +8,7 @@ import DkMath.ABC.Main
 import DkMath.ABC.GNExceptionalExcessOddPrime
 import DkMath.ABC.GNDepthPressure
 import DkMath.ABC.GNPrimeSupportOrder
+import DkMath.ABC.GNLegacyTailCountingBridge
 
 #print "file: DkMath.ABC"
 

@@ -13,6 +13,7 @@ U-001E  weighted pincer / deep-prime packet                complete
 U-001F  exact order and q ≡ 1 mod p                        complete
 U-001G  uniform joint contract                             open
 U-001H  raw-variable zero/positive endpoint transport      complete
+U-001I  legacy twoTail / residue-counting bridge            complete
 ```
 
 最終 frontier は次の無条件構成である。
@@ -32,8 +33,8 @@ contract は正の ABC inequality を直接含む。したがってこれは tra
 Local verification:
 
 ```text
-DkMath.ABC build    success (8380 jobs)
-DkMath full build   success (8750 jobs)
+DkMath.ABC build    success (8381 jobs)
+DkMath full build   success (8751 jobs)
 new Lean sources    no sorry / axiom / native_decide
 git diff --check    clean
 ```
@@ -49,6 +50,7 @@ report-ultra-001-E.md  pincer and deep packet
 report-ultra-001-F.md  exact order and deep-lift boundary
 report-ultra-001-G.md  uniform obstruction
 report-ultra-001-H.md  raw endpoint and abc_main audit
+report-ultra-001-I.md  legacy tail and residue-counting bridge
 ```
 
 ## 次は二体同時に倒すべきか

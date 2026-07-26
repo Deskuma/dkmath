@@ -20,6 +20,7 @@ M2  exact fresh support identity                 complete
 M3  finite layer-cake / deep-prime pincer        complete
 Order packet  q ≡ 1 mod p                        complete
 Raw-variable endpoint transport                  complete
+Legacy tail/counting bridge                      complete
 Uniform joint contract                           open / exact ABC-strength frontier
 Final target                                     not reached; abc_main_axiom retained
 ```
@@ -38,6 +39,7 @@ Production modules:
 DkMath.ABC.GNJointPressureOddPrime
 DkMath.ABC.GNDepthPressure
 DkMath.ABC.GNPrimeSupportOrder
+DkMath.ABC.GNLegacyTailCountingBridge
 ```
 
 Completed theorem chain:
@@ -49,6 +51,22 @@ exact prime-exponent lift-radical identity
 -> direct logarithmic and pointwise ABC bridge
 -> positive and zero-coordinate raw-variable endpoint
 ```
+
+Recovered legacy coordinates and counting entry:
+
+```text
+non-exceptional valuation excess
+  = log piSqRad(non-exceptional part)
+  + log twoTail(non-exceptional part)
+
+finite Hensel residue cover
+  -> GN deep-lift interval count
+  -> padic depth layer
+  -> legacy exp_layer_cake
+```
+
+The next arithmetic input on this lane is the construction of a residue cover
+of cardinality at most `p - 1`. This is not yet proved by the bridge module.
 
 The remaining input is an unconditional construction of:
 
