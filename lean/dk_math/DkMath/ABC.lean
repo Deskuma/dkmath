@@ -14,6 +14,7 @@ import DkMath.ABC.GNJointDepthExponential
 import DkMath.ABC.GNExcessActiveProfiles
 import DkMath.ABC.GNExcessEulerMajorant
 import DkMath.ABC.GNJointContractEquivalence
+import DkMath.ABC.GNCubicOrientedContract
 
 #print "file: DkMath.ABC"
 
