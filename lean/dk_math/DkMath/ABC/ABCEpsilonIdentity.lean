@@ -143,4 +143,23 @@ theorem Triple.one_add_lt_quality_iff_lt_abcEpsilon
   rw [T.quality_eq_one_add_abcEpsilon ha hb]
   exact add_lt_add_iff_left 1
 
+/--
+An external threshold below the intrinsic epsilon coordinate forces the
+corresponding affine GN valuation-excess lower bound.
+-/
+theorem Triple.GNValuationExcess_gt_of_abcEpsilon_gt_pred_affine
+    (T : Triple) {n : ℕ} {ε σ C : ℝ}
+    (hn : 2 ≤ n)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b)
+    (hε : ε < T.abcEpsilon)
+    (hsupport : GNSupportBudgetAffine T n σ C) :
+    ((((n - 1 : ℕ) : ℝ) * (1 + ε) - σ) *
+          Real.log (rad (T.a * T.b * T.c) : ℝ)) - C <
+      GNValuationExcess n T.a T.b := by
+  have hquality : 1 + ε < quality T :=
+    (T.one_add_lt_quality_iff_lt_abcEpsilon ε ha hb).2 hε
+  exact T.GNValuationExcess_gt_of_quality_gt_pred_affine
+    hn ha hb hquality hsupport
+
 end DkMath.ABC
