@@ -1,5 +1,8 @@
 # ABC-SQTAIL-EPS
 
+cid: 6a674b33-11c0-83ee-b208-3940cc6bd1aa
+PR: <https://github.com/Deskuma/dkmath/pull/71>
+
 ABC sqTail Epsilon 001
 
 file: [ABCEpsilonIdentity.lean](/lean/dk_math/DkMath/ABC/ABCEpsilonIdentity.lean)
