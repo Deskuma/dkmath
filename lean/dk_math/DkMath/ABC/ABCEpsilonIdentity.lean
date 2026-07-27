@@ -103,4 +103,18 @@ theorem Triple.abcGap_eq_abcEpsilon_mul_radLog
   simpa [Triple.abcEpsilon] using
     (div_mul_cancel₀ T.abcGap hrad).symm
 
+/--
+The intrinsic epsilon coordinate is the normalized difference between output
+valuation multiplicity and the radical support supplied by the two inputs.
+-/
+theorem Triple.abcEpsilon_eq_valuationExcess_sub_log_rad_ab_div_log_rad_abc
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    T.abcEpsilon =
+      (valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ)) /
+        Real.log (rad (T.a * T.b * T.c) : ℝ) := by
+  simp only [Triple.abcEpsilon, Triple.radLog]
+  rw [T.abcGap_eq_valuationExcess_sub_log_rad_ab ha hb]
+
 end DkMath.ABC
