@@ -306,7 +306,7 @@ theorem eventually_abcEpsilon_lt_of_abc_bound
     (hεδ : ε < δ) :
     ∀ᶠ i in l, (T i).abcEpsilon < δ := by
   have hη : 0 < (δ - ε) / 2 := by
-    positivity
+    exact div_pos (sub_pos.mpr hεδ) (by norm_num)
   have hle := eventually_abcEpsilon_le_add_of_abc_bound
     T ε K ((δ - ε) / 2) ha hb hK hbound hrad hη
   have hmid : ε + (δ - ε) / 2 < δ := by
