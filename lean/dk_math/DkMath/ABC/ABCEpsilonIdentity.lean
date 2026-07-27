@@ -287,4 +287,31 @@ theorem eventually_abcEpsilon_le_add_of_abc_bound
       hai hbi hK hboundi)
     (add_le_add_right (le_of_lt hsmalli) ε)
 
+/--
+Every strict threshold above the external exponent is eventually above the
+intrinsic epsilon coordinate along the same large-radical family.
+-/
+theorem eventually_abcEpsilon_lt_of_abc_bound
+    {ι : Type*} {l : Filter ι}
+    (T : ι → Triple)
+    (ε K δ : ℝ)
+    (ha : ∀ᶠ i in l, 0 < (T i).a)
+    (hb : ∀ᶠ i in l, 0 < (T i).b)
+    (hK : 0 < K)
+    (hbound :
+      ∀ᶠ i in l,
+        ((T i).c : ℝ) ≤
+          K * (rad ((T i).a * (T i).b * (T i).c) : ℝ) ^ (1 + ε))
+    (hrad : Filter.Tendsto (fun i => (T i).radLog) l Filter.atTop)
+    (hεδ : ε < δ) :
+    ∀ᶠ i in l, (T i).abcEpsilon < δ := by
+  have hη : 0 < (δ - ε) / 2 := by
+    positivity
+  have hle := eventually_abcEpsilon_le_add_of_abc_bound
+    T ε K ((δ - ε) / 2) ha hb hK hbound hrad hη
+  have hmid : ε + (δ - ε) / 2 < δ := by
+    linarith
+  filter_upwards [hle] with i hi
+  exact lt_of_le_of_lt hi hmid
+
 end DkMath.ABC
