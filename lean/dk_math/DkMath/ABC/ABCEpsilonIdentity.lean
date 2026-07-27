@@ -130,4 +130,17 @@ theorem Triple.quality_eq_one_add_abcEpsilon
   field_simp [hrad]
   ring
 
+/--
+A quality threshold above `1 + ε` is exactly the statement that the external
+threshold `ε` lies below the triple's intrinsic epsilon coordinate.
+-/
+theorem Triple.one_add_lt_quality_iff_lt_abcEpsilon
+    (T : Triple)
+    (ε : ℝ)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    1 + ε < quality T ↔ ε < T.abcEpsilon := by
+  rw [T.quality_eq_one_add_abcEpsilon ha hb]
+  linarith
+
 end DkMath.ABC
