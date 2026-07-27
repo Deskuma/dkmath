@@ -117,4 +117,17 @@ theorem Triple.abcEpsilon_eq_valuationExcess_sub_log_rad_ab_div_log_rad_abc
   simp only [Triple.abcEpsilon, Triple.radLog]
   rw [T.abcGap_eq_valuationExcess_sub_log_rad_ab ha hb]
 
+/-- ABC quality is exactly one plus the signed intrinsic epsilon coordinate. -/
+theorem Triple.quality_eq_one_add_abcEpsilon
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    quality T = 1 + T.abcEpsilon := by
+  have hrad :
+      Real.log (rad (T.a * T.b * T.c) : ℝ) ≠ 0 :=
+    ne_of_gt (T.log_rad_abc_pos ha hb)
+  simp only [quality, Triple.abcEpsilon, Triple.abcGap, Triple.radLog]
+  field_simp [hrad]
+  ring
+
 end DkMath.ABC
