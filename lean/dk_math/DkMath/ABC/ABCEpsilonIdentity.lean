@@ -197,4 +197,36 @@ theorem Triple.abcEpsilon_le_add_div_of_abcGap_le_affine
     _ = (ε + C / T.radLog) * T.radLog := by
       rw [add_mul, div_mul_cancel₀ C (ne_of_gt hrad)]
 
+/--
+A natural ABC bound yields the corresponding affine upper bound for the
+logarithmic ABC gap.
+-/
+theorem Triple.abcGap_le_mul_radLog_add_log_of_abc_bound
+    (T : Triple) {ε K : ℝ}
+    (ha : 0 < T.a)
+    (hb : 0 < T.b)
+    (hK : 0 < K)
+    (hbound :
+      (T.c : ℝ) ≤
+        K * (rad (T.a * T.b * T.c) : ℝ) ^ (1 + ε)) :
+    T.abcGap ≤ ε * T.radLog + Real.log K := by
+  have hcNat : 0 < T.c := by
+    rw [← T.hsum]
+    omega
+  have hc : 0 < (T.c : ℝ) := by
+    exact_mod_cast hcNat
+  have habc : 0 < T.a * T.b * T.c :=
+    Nat.mul_pos (Nat.mul_pos ha hb) hcNat
+  have hrad :
+      0 < (rad (T.a * T.b * T.c) : ℝ) := by
+    exact_mod_cast rad_pos habc
+  have hrpow :
+      0 < (rad (T.a * T.b * T.c) : ℝ) ^ (1 + ε) :=
+    Real.rpow_pos_of_pos hrad _
+  have hlog := Real.log_le_log hc hbound
+  rw [Real.log_mul hK.ne' hrpow.ne',
+    Real.log_rpow hrad] at hlog
+  simp only [Triple.abcGap, Triple.radLog]
+  linarith
+
 end DkMath.ABC
