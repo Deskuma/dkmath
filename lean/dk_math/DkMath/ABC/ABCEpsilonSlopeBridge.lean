@@ -68,7 +68,7 @@ theorem Triple.abcEpsilon_le_GNEpsilon_add_correction
           (((p - 1 : ℕ) : ℝ) * T.radLog) := by
   let d : ℝ := ((p - 1 : ℕ) : ℝ)
   let B : ℝ := C + Real.log (rad p : ℝ)
-  have hdNat : 0 < p - 1 := by omega
+  have hdNat : 0 < p - 1 := Nat.sub_pos_of_lt hp.one_lt
   have hd : 0 < d := by
     dsimp [d]
     exact_mod_cast hdNat
@@ -122,7 +122,7 @@ theorem eventually_abcEpsilon_lt_of_oddPrime_jointPressure_slope
   let d : ℝ := ((p - 1 : ℕ) : ℝ)
   let B : ℝ := C + Real.log (rad p : ℝ)
   let K : ℝ := B / d
-  have hdNat : 0 < p - 1 := by omega
+  have hdNat : 0 < p - 1 := Nat.sub_pos_of_lt hp.one_lt
   have hd : 0 < d := by
     dsimp [d]
     exact_mod_cast hdNat
