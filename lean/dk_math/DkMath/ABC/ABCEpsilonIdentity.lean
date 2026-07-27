@@ -60,4 +60,24 @@ theorem Triple.squareTailDebt_eq_valuationExcess_sub_log_rad_ab
     (fun x : ℝ => x - Real.log (rad (T.a * T.b) : ℝ))
     (valuationExcess_eq_log_sqTail hc).symm
 
+/--
+The ordinary ABC gap is exactly the output valuation excess remaining after
+subtracting the radical support supplied by the two input coordinates.
+-/
+theorem Triple.abcGap_eq_valuationExcess_sub_log_rad_ab
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    T.abcGap =
+      valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ) := by
+  have hc : T.c ≠ 0 := by
+    intro hc0
+    have hab0 : T.a + T.b = 0 := by
+      simpa [hc0] using T.hsum
+    exact (Nat.ne_of_gt ha) (Nat.add_eq_zero.mp hab0).1
+  calc
+    T.abcGap = T.squareTailDebt := T.abcGap_eq_squareTailDebt ha hb
+    _ = valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ) :=
+      T.squareTailDebt_eq_valuationExcess_sub_log_rad_ab hc
+
 end DkMath.ABC
