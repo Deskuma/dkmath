@@ -16,6 +16,7 @@ import DkMath.ABC.GNExcessEulerMajorant
 import DkMath.ABC.GNJointContractEquivalence
 import DkMath.ABC.GNCubicOrientedContract
 import DkMath.ABC.ABCEpsilonJointPressureBridge
+import DkMath.ABC.ABCEpsilonSlopeBridge
 
 #print "file: DkMath.ABC"
 
