@@ -229,4 +229,20 @@ theorem Triple.abcGap_le_mul_radLog_add_log_of_abc_bound
   simp only [Triple.abcGap, Triple.radLog]
   linarith
 
+/--
+A natural ABC bound directly yields the normalized intrinsic-epsilon upper
+bound, with the multiplicative constant appearing as a vanishing log correction.
+-/
+theorem Triple.abcEpsilon_le_add_log_div_radLog_of_abc_bound
+    (T : Triple) {ε K : ℝ}
+    (ha : 0 < T.a)
+    (hb : 0 < T.b)
+    (hK : 0 < K)
+    (hbound :
+      (T.c : ℝ) ≤
+        K * (rad (T.a * T.b * T.c) : ℝ) ^ (1 + ε)) :
+    T.abcEpsilon ≤ ε + Real.log K / T.radLog := by
+  apply T.abcEpsilon_le_add_div_of_abcGap_le_affine ha hb
+  exact T.abcGap_le_mul_radLog_add_log_of_abc_bound ha hb hK hbound
+
 end DkMath.ABC
