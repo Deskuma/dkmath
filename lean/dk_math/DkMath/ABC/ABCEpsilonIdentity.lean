@@ -47,4 +47,17 @@ theorem valuationExcess_eq_log_sqTail
     rw [hdecomp, Real.log_mul hsqTail hrad]
   linarith
 
+/--
+The square-tail debt of an ABC triple is exactly its output valuation excess
+minus the logarithmic radical support already paid by the two inputs.
+-/
+theorem Triple.squareTailDebt_eq_valuationExcess_sub_log_rad_ab
+    (T : Triple)
+    (hc : T.c ≠ 0) :
+    T.squareTailDebt =
+      valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ) := by
+  simpa [Triple.squareTailDebt] using congrArg
+    (fun x : ℝ => x - Real.log (rad (T.a * T.b) : ℝ))
+    (valuationExcess_eq_log_sqTail hc).symm
+
 end DkMath.ABC
