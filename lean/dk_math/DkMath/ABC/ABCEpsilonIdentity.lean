@@ -285,6 +285,6 @@ theorem eventually_abcEpsilon_le_add_of_abc_bound
   exact le_trans
     ((T i).abcEpsilon_le_add_log_div_radLog_of_abc_bound
       hai hbi hK hboundi)
-    (add_le_add_left (le_of_lt hsmalli) ε)
+    (add_le_add_right (le_of_lt hsmalli) ε)
 
 end DkMath.ABC
