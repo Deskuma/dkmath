@@ -162,4 +162,20 @@ theorem Triple.GNValuationExcess_gt_of_abcEpsilon_gt_pred_affine
   exact T.GNValuationExcess_gt_of_quality_gt_pred_affine
     hn ha hb hquality hsupport
 
+/--
+Pure support-budget specialization of the intrinsic-epsilon GN excess bridge.
+-/
+theorem Triple.GNValuationExcess_gt_of_abcEpsilon_gt_pred
+    (T : Triple) {n : ℕ} {ε σ : ℝ}
+    (hn : 2 ≤ n)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b)
+    (hε : ε < T.abcEpsilon)
+    (hsupport : GNSupportBudget T n σ) :
+    (((n - 1 : ℕ) : ℝ) * (1 + ε) - σ) *
+        Real.log (rad (T.a * T.b * T.c) : ℝ) <
+      GNValuationExcess n T.a T.b := by
+  simpa using T.GNValuationExcess_gt_of_abcEpsilon_gt_pred_affine
+    hn ha hb hε hsupport.toAffine
+
 end DkMath.ABC
