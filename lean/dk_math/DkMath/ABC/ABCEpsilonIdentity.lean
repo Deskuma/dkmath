@@ -258,4 +258,33 @@ theorem tendsto_log_div_radLog_zero
       (fun i => Real.log K / (T i).radLog) l (nhds 0) := by
   exact tendsto_const_nhds.div_atTop hrad
 
+/--
+Along a family satisfying a fixed ABC bound and with radical-log scale tending
+to infinity, the intrinsic epsilon coordinate is eventually at most `ε + η`
+for every positive tolerance `η`.
+-/
+theorem eventually_abcEpsilon_le_add_of_abc_bound
+    {ι : Type*} {l : Filter ι}
+    (T : ι → Triple)
+    (ε K η : ℝ)
+    (ha : ∀ᶠ i in l, 0 < (T i).a)
+    (hb : ∀ᶠ i in l, 0 < (T i).b)
+    (hK : 0 < K)
+    (hbound :
+      ∀ᶠ i in l,
+        ((T i).c : ℝ) ≤
+          K * (rad ((T i).a * (T i).b * (T i).c) : ℝ) ^ (1 + ε))
+    (hrad : Filter.Tendsto (fun i => (T i).radLog) l Filter.atTop)
+    (hη : 0 < η) :
+    ∀ᶠ i in l, (T i).abcEpsilon ≤ ε + η := by
+  have hcorr := tendsto_log_div_radLog_zero T K hrad
+  have hsmall :
+      ∀ᶠ i in l, Real.log K / (T i).radLog < η :=
+    (tendsto_order.1 hcorr).2 η hη
+  filter_upwards [ha, hb, hbound, hsmall] with i hai hbi hboundi hsmalli
+  exact le_trans
+    ((T i).abcEpsilon_le_add_log_div_radLog_of_abc_bound
+      hai hbi hK hboundi)
+    (add_le_add_left (le_of_lt hsmalli) ε)
+
 end DkMath.ABC
