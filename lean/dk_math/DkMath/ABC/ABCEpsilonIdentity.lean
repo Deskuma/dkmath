@@ -178,4 +178,23 @@ theorem Triple.GNValuationExcess_gt_of_abcEpsilon_gt_pred
   simpa using T.GNValuationExcess_gt_of_abcEpsilon_gt_pred_affine
     hn ha hb hε hsupport.toAffine
 
+/--
+An affine upper bound for the logarithmic ABC gap normalizes to an upper bound
+for the intrinsic epsilon coordinate.
+-/
+theorem Triple.abcEpsilon_le_add_div_of_abcGap_le_affine
+    (T : Triple) {ε C : ℝ}
+    (ha : 0 < T.a)
+    (hb : 0 < T.b)
+    (hgap : T.abcGap ≤ ε * T.radLog + C) :
+    T.abcEpsilon ≤ ε + C / T.radLog := by
+  have hrad : 0 < T.radLog := by
+    simpa [Triple.radLog] using T.log_rad_abc_pos ha hb
+  rw [Triple.abcEpsilon]
+  apply (div_le_iff₀ hrad).2
+  calc
+    T.abcGap ≤ ε * T.radLog + C := hgap
+    _ = (ε + C / T.radLog) * T.radLog := by
+      rw [add_mul, div_mul_cancel₀ C (ne_of_gt hrad)]
+
 end DkMath.ABC
