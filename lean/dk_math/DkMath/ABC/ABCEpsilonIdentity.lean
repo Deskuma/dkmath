@@ -245,4 +245,17 @@ theorem Triple.abcEpsilon_le_add_log_div_radLog_of_abc_bound
   apply T.abcEpsilon_le_add_div_of_abcGap_le_affine ha hb
   exact T.abcGap_le_mul_radLog_add_log_of_abc_bound ha hb hK hbound
 
+/--
+Along any family of ABC triples whose radical-log scale tends to infinity, the
+fixed multiplicative constant contributes a vanishing intrinsic-epsilon term.
+-/
+theorem tendsto_log_div_radLog_zero
+    {ι : Type*} {l : Filter ι}
+    (T : ι → Triple)
+    (K : ℝ)
+    (hrad : Filter.Tendsto (fun i => (T i).radLog) l Filter.atTop) :
+    Filter.Tendsto
+      (fun i => Real.log K / (T i).radLog) l (nhds 0) := by
+  exact tendsto_const_nhds.div_atTop hrad
+
 end DkMath.ABC
