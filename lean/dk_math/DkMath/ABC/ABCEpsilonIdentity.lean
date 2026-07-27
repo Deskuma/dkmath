@@ -361,6 +361,6 @@ theorem eventually_quality_lt_one_add_of_abc_bound
     T ε K δ ha hb hK hbound hrad hεδ
   filter_upwards [ha, hb, hεlt] with i hai hbi hi
   rw [(T i).quality_eq_one_add_abcEpsilon hai hbi]
-  exact add_lt_add_left hi 1
+  exact add_lt_add_right hi 1
 
 end DkMath.ABC
