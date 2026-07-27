@@ -132,4 +132,25 @@ theorem Triple.log_abcGap_eq_log_sqTail_sub_log_rad_ab
           Real.log (rad (T.a * T.b) : ℝ) := by
       exact Real.log_div hsqTailR hrad_abR
 
+-- --------------------------------------------------------
+
+/-- The logarithmic ABC excess above the radical baseline. -/
+noncomputable def Triple.abcGap (T : Triple) : ℝ :=
+  Real.log (T.c : ℝ) -
+    Real.log (rad (T.a * T.b * T.c) : ℝ)
+
+/-- The same ABC excess viewed as output square-tail debt against input support. -/
+noncomputable def Triple.squareTailDebt (T : Triple) : ℝ :=
+  Real.log (sqTail T.c : ℝ) -
+    Real.log (rad (T.a * T.b) : ℝ)
+
+/-- The ordinary ABC gap and the square-tail debt are exactly the same quantity. -/
+theorem Triple.abcGap_eq_squareTailDebt
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    T.abcGap = T.squareTailDebt := by
+  simpa [Triple.abcGap, Triple.squareTailDebt] using
+    T.log_abcGap_eq_log_sqTail_sub_log_rad_ab ha hb
+
 end DkMath.ABC
