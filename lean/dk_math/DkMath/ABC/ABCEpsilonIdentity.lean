@@ -314,4 +314,29 @@ theorem eventually_abcEpsilon_lt_of_abc_bound
   filter_upwards [hle] with i hi
   exact lt_of_le_of_lt hi hmid
 
+/--
+No strict threshold above the external exponent can be reached frequently by
+intrinsic epsilon along the same large-radical family.
+-/
+theorem not_frequently_le_abcEpsilon_of_abc_bound
+    {ι : Type*} {l : Filter ι}
+    (T : ι → Triple)
+    (ε K δ : ℝ)
+    (ha : ∀ᶠ i in l, 0 < (T i).a)
+    (hb : ∀ᶠ i in l, 0 < (T i).b)
+    (hK : 0 < K)
+    (hbound :
+      ∀ᶠ i in l,
+        ((T i).c : ℝ) ≤
+          K * (rad ((T i).a * (T i).b * (T i).c) : ℝ) ^ (1 + ε))
+    (hrad : Filter.Tendsto (fun i => (T i).radLog) l Filter.atTop)
+    (hεδ : ε < δ) :
+    ¬ ∃ᶠ i in l, δ ≤ (T i).abcEpsilon := by
+  intro hfreq
+  apply hfreq
+  have hlt := eventually_abcEpsilon_lt_of_abc_bound
+    T ε K δ ha hb hK hbound hrad hεδ
+  filter_upwards [hlt] with i hi
+  exact not_le.mpr hi
+
 end DkMath.ABC
