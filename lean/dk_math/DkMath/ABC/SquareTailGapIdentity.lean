@@ -52,4 +52,28 @@ theorem Triple.c_mul_rad_ab_eq_sqTail_mul_rad_abc
   -- nth_rewrite 1 [nat_eq_sqTail_mul_rad T.c hc]  -- alternative
   ac_rfl
 
+-- Real ---------------------------------------------------
+
+/-- `rad n` は常に 0 ではない。`rad 0 = 1` も含む。 -/
+lemma rad_ne_zero (n : ℕ) : rad n ≠ 0 := by
+  unfold rad
+  rw [Nat.support_factorization, Finset.prod_ne_zero_iff]
+  intro p hp
+  exact (Nat.prime_of_mem_primeFactors hp).ne_zero
+
+/-- Triple.c_div_rad_abc_eq_sqTail_div_rad_ab の証明 -/
+theorem Triple.c_div_rad_abc_eq_sqTail_div_rad_ab
+    (T : Triple)
+    (hc : T.c ≠ 0) :
+    (T.c : ℝ) / (rad (T.a * T.b * T.c) : ℝ) =
+      (sqTail T.c : ℝ) / (rad (T.a * T.b) : ℝ) := by
+  apply
+    (div_eq_div_iff
+      (Nat.cast_ne_zero.mpr
+        (rad_ne_zero (T.a * T.b * T.c)))
+      (Nat.cast_ne_zero.mpr
+        (rad_ne_zero (T.a * T.b)))).2
+  exact_mod_cast
+    T.c_mul_rad_ab_eq_sqTail_mul_rad_abc hc
+
 end DkMath.ABC
