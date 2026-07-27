@@ -52,4 +52,105 @@ theorem Triple.c_mul_rad_ab_eq_sqTail_mul_rad_abc
   -- nth_rewrite 1 [nat_eq_sqTail_mul_rad T.c hc]  -- alternative
   ac_rfl
 
+-- Real ---------------------------------------------------
+
+/-- `rad n` は常に 0 ではない。`rad 0 = 1` も含む。 -/
+lemma rad_ne_zero (n : ℕ) : rad n ≠ 0 := by
+  unfold rad
+  rw [Nat.support_factorization, Finset.prod_ne_zero_iff]
+  intro p hp
+  exact (Nat.prime_of_mem_primeFactors hp).ne_zero
+
+/-- Triple.c_div_rad_abc_eq_sqTail_div_rad_ab の証明 -/
+theorem Triple.c_div_rad_abc_eq_sqTail_div_rad_ab
+    (T : Triple)
+    (hc : T.c ≠ 0) :
+    (T.c : ℝ) / (rad (T.a * T.b * T.c) : ℝ) =
+      (sqTail T.c : ℝ) / (rad (T.a * T.b) : ℝ) := by
+  apply
+    (div_eq_div_iff
+      (Nat.cast_ne_zero.mpr
+        (rad_ne_zero (T.a * T.b * T.c)))
+      (Nat.cast_ne_zero.mpr
+        (rad_ne_zero (T.a * T.b)))).2
+  exact_mod_cast
+    T.c_mul_rad_ab_eq_sqTail_mul_rad_abc hc
+
+-- log ----------------------------------------------------
+
+theorem Triple.log_abcGap_eq_log_sqTail_sub_log_rad_ab
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    Real.log (T.c : ℝ) -
+        Real.log (rad (T.a * T.b * T.c) : ℝ) =
+      Real.log (sqTail T.c : ℝ) -
+        Real.log (rad (T.a * T.b) : ℝ) := by
+  have hc : T.c ≠ 0 := by
+    rw [← T.hsum]
+    exact (add_pos ha hb).ne'
+  -- `rad n` は素数の有限積なので 0 ではない。
+  have hrad_ne (n : ℕ) : rad n ≠ 0 := by
+    unfold rad
+    rw [Nat.support_factorization]
+    exact Finset.prod_ne_zero_iff.mpr fun p hp =>
+      (Nat.prime_of_mem_primeFactors hp).ne_zero
+  -- c = sqTail(c) * rad(c) と c ≠ 0 から sqTail(c) ≠ 0。
+  have hsqTail : sqTail T.c ≠ 0 := by
+    intro hzero
+    apply hc
+    calc
+      T.c = sqTail T.c * rad T.c :=
+        nat_eq_sqTail_mul_rad T.c hc
+      _ = 0 := by simp [hzero]
+  have hcR : (T.c : ℝ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr hc
+  have hsqTailR : (sqTail T.c : ℝ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr hsqTail
+  have hrad_abcR :
+      (rad (T.a * T.b * T.c) : ℝ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (hrad_ne _)
+  have hrad_abR :
+      (rad (T.a * T.b) : ℝ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (hrad_ne _)
+  calc
+    Real.log (T.c : ℝ) -
+          Real.log (rad (T.a * T.b * T.c) : ℝ) =
+        Real.log
+          ((T.c : ℝ) /
+            (rad (T.a * T.b * T.c) : ℝ)) := by
+      symm
+      exact Real.log_div hcR hrad_abcR
+    _ =
+        Real.log
+          ((sqTail T.c : ℝ) /
+            (rad (T.a * T.b) : ℝ)) := by
+      exact congrArg Real.log
+        (T.c_div_rad_abc_eq_sqTail_div_rad_ab hc)
+    _ =
+        Real.log (sqTail T.c : ℝ) -
+          Real.log (rad (T.a * T.b) : ℝ) := by
+      exact Real.log_div hsqTailR hrad_abR
+
+-- --------------------------------------------------------
+
+/-- The logarithmic ABC excess above the radical baseline. -/
+noncomputable def Triple.abcGap (T : Triple) : ℝ :=
+  Real.log (T.c : ℝ) -
+    Real.log (rad (T.a * T.b * T.c) : ℝ)
+
+/-- The same ABC excess viewed as output square-tail debt against input support. -/
+noncomputable def Triple.squareTailDebt (T : Triple) : ℝ :=
+  Real.log (sqTail T.c : ℝ) -
+    Real.log (rad (T.a * T.b) : ℝ)
+
+/-- The ordinary ABC gap and the square-tail debt are exactly the same quantity. -/
+theorem Triple.abcGap_eq_squareTailDebt
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    T.abcGap = T.squareTailDebt := by
+  simpa [Triple.abcGap, Triple.squareTailDebt] using
+    T.log_abcGap_eq_log_sqTail_sub_log_rad_ab ha hb
+
 end DkMath.ABC
