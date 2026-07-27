@@ -74,7 +74,7 @@ theorem Triple.abcGap_eq_valuationExcess_sub_log_rad_ab
     intro hc0
     have hab0 : T.a + T.b = 0 := by
       simpa [hc0] using T.hsum
-    exact (Nat.ne_of_gt ha) (Nat.add_eq_zero.mp hab0).1
+    exact (Nat.ne_of_gt ha) (Nat.add_eq_zero_iff.mp hab0).1
   calc
     T.abcGap = T.squareTailDebt := T.abcGap_eq_squareTailDebt ha hb
     _ = valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ) :=
