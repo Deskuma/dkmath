@@ -339,4 +339,28 @@ theorem not_frequently_le_abcEpsilon_of_abc_bound
   filter_upwards [hlt] with i hi
   exact not_le.mpr hi
 
+/--
+The same large-radical ABC family has quality eventually below every strict
+threshold `1 + δ` with `ε < δ`.
+-/
+theorem eventually_quality_lt_one_add_of_abc_bound
+    {ι : Type*} {l : Filter ι}
+    (T : ι → Triple)
+    (ε K δ : ℝ)
+    (ha : ∀ᶠ i in l, 0 < (T i).a)
+    (hb : ∀ᶠ i in l, 0 < (T i).b)
+    (hK : 0 < K)
+    (hbound :
+      ∀ᶠ i in l,
+        ((T i).c : ℝ) ≤
+          K * (rad ((T i).a * (T i).b * (T i).c) : ℝ) ^ (1 + ε))
+    (hrad : Filter.Tendsto (fun i => (T i).radLog) l Filter.atTop)
+    (hεδ : ε < δ) :
+    ∀ᶠ i in l, quality (T i) < 1 + δ := by
+  have hεlt := eventually_abcEpsilon_lt_of_abc_bound
+    T ε K δ ha hb hK hbound hrad hεδ
+  filter_upwards [ha, hb, hεlt] with i hai hbi hi
+  rw [(T i).quality_eq_one_add_abcEpsilon hai hbi]
+  exact add_lt_add_left hi 1
+
 end DkMath.ABC
