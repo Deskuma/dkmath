@@ -92,7 +92,6 @@ theorem Triple.abcEpsilon_le_GNEpsilon_add_correction
       Real.log (T.c : ℝ) ≤ (ρ * T.radLog + B) / d := hdiv
       _ = (ρ / d + B / (d * T.radLog)) * T.radLog := by
         field_simp [ne_of_gt hd, ne_of_gt hrad]
-        <;> ring
   have hquality := T.quality_eq_one_add_abcEpsilon ha hb
   change Real.log (T.c : ℝ) / T.radLog =
     1 + T.abcEpsilon at hquality
@@ -146,7 +145,6 @@ theorem eventually_abcEpsilon_lt_of_oddPrime_jointPressure_slope
         K / (T i).radLog := by
     dsimp [K, B]
     field_simp [ne_of_gt hd, ne_of_gt hradI]
-    <;> ring
   change (T i).abcEpsilon ≤
     GNEpsilon p ρ +
       (C + Real.log (rad p : ℝ)) /
