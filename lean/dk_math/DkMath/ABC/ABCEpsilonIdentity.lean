@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.ABC.SquareTailGapIdentity
-import DkMath.ABC.GNValuationExcess
+import DkMath.ABC.GNQualityExcessBridge
 
 #print "file: DkMath.ABC.ABCEpsilonIdentity"
 
@@ -23,8 +23,8 @@ accounting to the intrinsic epsilon coordinate of an ABC triple.
 namespace DkMath.ABC
 
 /--
-The logarithmic valuation multiplicity beyond radical support is exactly the
-logarithm of the square-tail quotient.
+The logarithmic multiplicity discarded by the radical is exactly the logarithm
+of the square-tail quotient.
 -/
 theorem valuationExcess_eq_log_sqTail
     {m : ℕ} (hm : m ≠ 0) :
@@ -79,5 +79,28 @@ theorem Triple.abcGap_eq_valuationExcess_sub_log_rad_ab
     T.abcGap = T.squareTailDebt := T.abcGap_eq_squareTailDebt ha hb
     _ = valuationExcess T.c - Real.log (rad (T.a * T.b) : ℝ) :=
       T.squareTailDebt_eq_valuationExcess_sub_log_rad_ab hc
+
+/-- The logarithmic scale of the complete ABC radical. -/
+noncomputable def Triple.radLog (T : Triple) : ℝ :=
+  Real.log (rad (T.a * T.b * T.c) : ℝ)
+
+/--
+The signed intrinsic epsilon coordinate of an ABC triple: its exact logarithmic
+ABC gap normalized by the logarithmic scale of the complete radical.
+-/
+noncomputable def Triple.abcEpsilon (T : Triple) : ℝ :=
+  T.abcGap / T.radLog
+
+/-- The intrinsic epsilon coordinate reconstructs the exact ABC gap. -/
+theorem Triple.abcGap_eq_abcEpsilon_mul_radLog
+    (T : Triple)
+    (ha : 0 < T.a)
+    (hb : 0 < T.b) :
+    T.abcGap = T.abcEpsilon * T.radLog := by
+  have hrad : T.radLog ≠ 0 := by
+    exact ne_of_gt (by
+      simpa [Triple.radLog] using T.log_rad_abc_pos ha hb)
+  simpa [Triple.abcEpsilon] using
+    (div_mul_cancel₀ T.abcGap hrad).symm
 
 end DkMath.ABC
