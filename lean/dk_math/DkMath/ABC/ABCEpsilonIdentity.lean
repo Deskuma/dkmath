@@ -141,6 +141,6 @@ theorem Triple.one_add_lt_quality_iff_lt_abcEpsilon
     (hb : 0 < T.b) :
     1 + ε < quality T ↔ ε < T.abcEpsilon := by
   rw [T.quality_eq_one_add_abcEpsilon ha hb]
-  linarith
+  exact add_lt_add_iff_left 1
 
 end DkMath.ABC
