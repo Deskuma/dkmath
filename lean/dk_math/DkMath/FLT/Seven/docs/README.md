@@ -112,3 +112,35 @@ This is Outcome A at the advertised RAMIFIED-009 stop. The carrier has not
 been identified with the full ring of integers. Principal ideals, class number
 one, unit generators, local unit-class injection, and element-level
 seventh-power extraction remain open.
+
+RAMIFIED-010 takes the hidden Eisenstein coordinate
+`theta = alpha - 3`. Lean verifies
+
+```text
+theta^3 + 7*theta^2 + 14*theta + 7 = 0
+theta^3 = -7*(theta + 1)^2
+IsUnit (theta + 1)
+Associated pi theta.
+```
+
+The translated polynomial is irreducible and has discriminant `49`.
+Its rational root defines a cubic number field, and the Eisenstein
+prime-power argument proves that `Z[theta]` is already its full ring of
+integers. The comparison is made concrete:
+
+```text
+SevenRealCubicInt ≃+* O_K
+disc K = 49
+nrComplexPlaces K = 0
+Minkowski class bound = 14/9 < 2
+IsPrincipalIdealRing O_K
+classNumber K = 1.
+```
+
+The order-three rotation is transported to `O_K`, with
+`sigma(alpha) = alpha^2 - 2*alpha`,
+`sigma^2(alpha) = -alpha^2 + alpha + 2`, and `sigma^3 = id`.
+This is RAMIFIED-010 Outcome A. Source-conjugate ideal coprimality belongs to
+RAMIFIED-011; relative unit-class elimination belongs to RAMIFIED-011U; and
+element-level seventh-power extraction and the depth drop remain later
+obligations.

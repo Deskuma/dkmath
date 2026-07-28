@@ -80,6 +80,8 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCompensationRouting
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCanonicalSplit
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedQuadraticInnerRoot
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
+import DkMath.FLT.Seven.SevenRealCubicEisenstein
+import DkMath.FLT.Seven.SevenRealCubicNumberField
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -177,7 +179,14 @@ the extracted quadratic inner root now enters an explicit discriminant-49
 cubic order.  Its two cubic forms are determinant norms, their source
 difference is the ramified axis times the depth-four coordinate, and an
 explicit unit normalization rewrites that difference as a sixth power of the
-normalized axis times a seventh power.  Maximality of this order, class number
-one, unit-class elimination, and element-level seventh-power extraction are
-not claimed.
+normalized axis times a seventh power.  Translating by `theta = alpha - 3`
+gives a degree-three Eisenstein polynomial of discriminant `49`; the resulting
+power-basis order is proved to be the full ring of integers.  The original
+coordinate ring is explicitly ring-equivalent to that maximal order, hence is
+an integral domain.  The cubic field is totally real with discriminant `49`,
+Minkowski class bound `14/9`, principal ring of integers, and class number one.
+Its explicit order-three cyclic rotation is also transported to the maximal
+order.  Pairwise coprimality of the source conjugate ideals, relative
+unit-class elimination, and element-level seventh-power extraction are not
+claimed.
 -/

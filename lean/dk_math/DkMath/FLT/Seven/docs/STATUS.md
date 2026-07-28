@@ -1086,3 +1086,67 @@ class number is one, that the displayed units generate the full unit group,
 or that a norm which is a seventh power makes the source element itself a
 seventh power. Those are the separate RAMIFIED-010 through RAMIFIED-012
 obligations.
+
+## 32. RAMIFIED-010 Eisenstein maximal order and class number one
+
+`SevenRealCubicEisenstein.lean` introduces
+`theta = alpha - 3` and proves the exact translated identities:
+
+```text
+theta^3 + 7*theta^2 + 14*theta + 7 = 0
+theta^3 = -7*(theta + 1)^2
+IsUnit (theta + 1)
+pi = -theta*alpha*(1 + alpha)
+Associated pi theta.
+```
+
+The monic polynomial
+`X^3 + 7*X^2 + 14*X + 7` has degree three, discriminant `49`, is
+Eisenstein at `7`, and is irreducible over both `Z` and `Q`. The explicit
+cyclic rotation satisfies:
+
+```text
+sigma(alpha) = alpha^2 - 2*alpha
+sigma^2(alpha) = -alpha^2 + alpha + 2
+sigma^3 = id.
+```
+
+`SevenRealCubicNumberField.lean` constructs the corresponding cubic number
+field and its rational power basis. The power-basis discriminant is `49`.
+Using the Eisenstein prime-power membership theorem, Lean proves:
+
+```text
+IsIntegralClosure Z[theta] Z K
+Z[theta] ≃ₐ[Z] O_K.
+```
+
+The resulting integral power basis transports the discriminant calculation
+to the field:
+
+```text
+disc K = 49
+nrComplexPlaces K = 0
+IsTotallyReal K
+Minkowski class bound = 14/9 < 2
+IsPrincipalIdealRing O_K
+classNumber K = 1.
+```
+
+The original coordinate order is not merely abstractly related to this
+field. The generator map is proved bijective:
+
+```text
+modelEquivRingOfIntegers :
+  SevenRealCubicInt ≃+* O_K.
+```
+
+Consequently `SevenRealCubicInt` receives an `IsDomain` instance, and the
+order-three rotation is transported to an automorphism of `O_K` with the
+same formulas and cube equal to the identity.
+
+RAMIFIED-010 has Outcome A. No source-conjugate ideal coprimality or ideal
+seventh-power extraction is asserted here. The displayed units are not yet
+proved to generate the full unit group, and local-to-global seventh-power
+injectivity is not claimed. These are the exact RAMIFIED-011 and
+RAMIFIED-011U inputs; element-level extraction and the later ramified depth
+drop remain separate.

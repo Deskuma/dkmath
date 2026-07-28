@@ -785,18 +785,33 @@ This equation is now attached directly to every inhabited RAMIFIED-008
 receiver packet, together with signed roots `l,r` and
 `r^7-l^7 = 7*a*n*(a+n)`.
 
+RAMIFIED-010 is complete with Outcome A. Translating by
+`theta = alpha - 3` exposes the Eisenstein polynomial
+`X^3 + 7*X^2 + 14*X + 7`. Lean proves its irreducibility, its
+discriminant `49`, and that its power-basis order is the full ring of
+integers. The original three-coordinate ring is explicitly equivalent to
+that maximal order. The field is totally real, has exact Minkowski class
+bound `14/9`, and its ring of integers is principal, so its class number is
+one. The cyclic order-three automorphism is available both on the coordinate
+order and on the full ring of integers.
+
 The next independent checkpoints are:
 
 ```text
 RAMIFIED-009B  exact signed-root gap routing over Int/Nat
-RAMIFIED-010   maximality of the cubic order and class-number-one bridge
-RAMIFIED-011   unit generators and local unit-class injection
-RAMIFIED-012   element-level seventh-power extraction for etaL and etaR
+RAMIFIED-011   source-conjugate ideal coprimality and ideal seventh powers
+RAMIFIED-011U  relative unit local-to-global seventh-power injection
+RAMIFIED-012   element-level extraction and ramified depth drop
 ```
 
-Do not infer any of these from norm seventh powers alone. In particular,
-RAMIFIED-010 must first identify the explicit order with the full ring of
-integers before applying a Minkowski class-number argument.
+The maximal-order and class-group bridges are now available, but norm
+seventh powers alone still do not imply element seventh powers. RAMIFIED-011
+must transport the two source elements through
+`modelEquivRingOfIntegers`, use the transported rotation, and prove the three
+conjugate principal ideals pairwise coprime before distributing prime-ideal
+exponents. RAMIFIED-011U remains independent: neither class number one nor
+the two displayed units proves the required relative unit class is a global
+seventh power.
 
 ## 14. Review outcomes for Codex
 
