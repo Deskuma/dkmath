@@ -75,6 +75,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRouting
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedGapUnitBridge
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedUnitClassAudit
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedResidualRootClass
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -144,8 +145,14 @@ unit.  These units are coherent under adjacent seven-power reductions.  At
 the first nontrivial level `ZMod 49`, their seventh-power class is equivalent
 to the fixed-point test `U^7 = U` and hence to membership in the six-residue
 set `{1, 18, 19, 30, 31, 48}`.  The common summit does not yet determine
-which residue occurs.  This bridge still does not construct a descent provider
-or a smaller Fermat solution.  Each local complete exponent is also
+which residue occurs.  Canonical summit normalization sharpens this further:
+the bridge unit is the negative endpoint square times the inverse residual-root
+square, the residual root lies in `{1, 8, 15, 22, 29, 36, 43}` modulo `49`,
+and the bridge unit is a seventh power exactly when that residual root is `1`.
+In that branch the generic six unit residues reduce to `{19, 31, 48}`.
+Compatible seventh-root lifting through all higher `7^k` levels is not yet
+constructed.  This bridge still does not construct a descent provider or a
+smaller Fermat solution.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.

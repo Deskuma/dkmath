@@ -100,6 +100,22 @@ theorem RamifiedGapUnitBridgePacket.explicitUnit_isUnit
     IsUnit (p.explicitUnit k) := by
   exact (p.rightUnit_isUnit k).mul (Units.isUnit _)
 
+/-- Multiplying the displayed quotient unit back by its denominator recovers
+the right bridge coefficient. -/
+theorem RamifiedGapUnitBridgePacket.explicitUnit_mul_leftUnit
+    (p : RamifiedGapUnitBridgePacket) (k : ℕ) :
+    p.explicitUnit k * (p.leftUnit : ZMod (7 ^ k)) =
+      (p.rightUnit : ZMod (7 ^ k)) := by
+  rw [explicitUnit]
+  calc
+    ((p.rightUnit : ZMod (7 ^ k)) *
+        (↑((p.leftUnit_isUnit k).unit⁻¹) : ZMod (7 ^ k))) *
+        (p.leftUnit : ZMod (7 ^ k)) =
+      (p.rightUnit : ZMod (7 ^ k)) *
+        ((↑((p.leftUnit_isUnit k).unit⁻¹) : ZMod (7 ^ k)) *
+          (p.leftUnit : ZMod (7 ^ k))) := by ring
+    _ = _ := by rw [(p.leftUnit_isUnit k).val_inv_mul, mul_one]
+
 /-- Over every modulus `7^k`, the two ramified gaps differ by the displayed
 explicit unit.  The statement includes the degenerate modulus at `k = 0`. -/
 theorem RamifiedGapUnitBridgePacket.cubicGap_eq_endpointGap_mul_explicitUnit

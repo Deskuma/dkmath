@@ -34,6 +34,7 @@ terminal prime q
   → endpoint/root-cubic gap-depth synchronization
   → exact integral and ZMod(7^k) gap-unit bridge
   → coherent unit tower and finite mod-49 seventh-power classifier
+  → canonical residual-root one-digit branch selector
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -61,3 +62,7 @@ not construct a smaller Fermat solution.
 RAMIFIED-004 proves reduction coherence and classifies the seventh-power
 branch modulo `49` by the six residues `1, 18, 19, 30, 31, 48`. The common
 summit does not yet determine which branch occurs.
+RAMIFIED-005 proves that the canonical branch is selected exactly by
+`residualRoot = 1` in `ZMod 49`; otherwise the residual root is one of the six
+nontrivial principal residues. Higher compatible seventh-root lifting remains
+a separate obligation.

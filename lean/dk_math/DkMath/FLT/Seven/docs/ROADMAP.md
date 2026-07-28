@@ -549,6 +549,7 @@ FLT7-RAMIFIED-001 common summit and exact second-coordinate depth (Outcome A)
 FLT7-RAMIFIED-002 formal coprime routing and gap synchronization (Outcome A)
 FLT7-RAMIFIED-003 exact ramified gap-unit bridge (Outcome A)
 FLT7-RAMIFIED-004 coherent unit tower and mod-49 class audit (Outcome C)
+FLT7-RAMIFIED-005 canonical residual-root class reduction (Outcome A)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -689,6 +690,20 @@ This is Outcome C.  The unit-class classifier is finite and exact, while the
 common summit does not yet force either branch.  The next independent inputs
 are a canonical summit residue classifier and, for an obstruction argument,
 a receiver asserting seventh-power shape of the root-cubic gap.
+
+RAMIFIED-005 completes the canonical mod-`49` normalization.  The root second
+coordinate vanishes, the quotient/core/norm factors reduce explicitly, and:
+
+```text
+explicitUnit = -endpointRight^2 * residualRoot⁻²
+residualRoot ∈ {1, 8, 15, 22, 29, 36, 43}
+IsSeventhPowerMod49 ↔ residualRoot = 1
+```
+
+The canonical seventh-power unit residues are exactly `{19, 31, 48}`.  This is
+Outcome A.  The next independent layer is a compatible seventh-root lifting
+theorem through the coherent `7^k` tower.  Such a local lift is not an integer
+or natural seventh root and must remain separate from global reconstruction.
 
 ## 14. Review outcomes for Codex
 

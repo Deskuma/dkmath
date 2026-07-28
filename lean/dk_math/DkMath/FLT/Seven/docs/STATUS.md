@@ -855,3 +855,42 @@ RAMIFIED-004 has Outcome C.  The finite classifier is complete, but the
 current common-summit fields do not yet select one of its two branches.
 Turning a non-seventh-power branch into contradiction would additionally
 require a theorem that the root-cubic gap has seventh-power shape.
+
+## 27. RAMIFIED-005 canonical residual-root class reduction
+
+`SevenBaseTerminalRamifiedResidualRootClass.lean` proves the complete canonical
+normalization on the mod-`49` plane:
+
+```text
+root.snd = 0
+Q = -endpointRight^2
+residualRoot = root.fst^2
+sndCore = residualRoot^3
+explicitUnit = -endpointRight^2 * residualRoot⁻²
+```
+
+The inverse in the last display is implemented by the explicit unit witness
+`residualRootInverseMod49`.
+
+The first-coordinate ramified expansion additionally gives:
+
+```text
+root.fst^7 = -endpointRight^3
+residualRoot mod 7 = 1
+residualRoot^7 = 1 mod 49
+```
+
+Consequently:
+
+```text
+residualRoot ∈ {1, 8, 15, 22, 29, 36, 43}
+
+IsSeventhPowerMod49 ↔ residualRoot = 1
+```
+
+In the seventh-power branch the canonical explicit unit belongs precisely to
+the reduced candidate set `{19, 31, 48}`.
+
+RAMIFIED-005 has Outcome A.  It does not yet construct compatible seventh
+roots at every higher `7^k`, an integral seventh root, or a root-cubic
+seventh-power-shape receiver.
