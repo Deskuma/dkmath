@@ -1,6 +1,6 @@
 # FLT7 seven-primary terminal route: implementation roadmap
 
-Updated: 2026-07-24  
+Updated: 2026-07-28
 Target branch: `wip/FLT7-magic-core-260722-WiseWolf`  
 Starting implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
 
@@ -545,6 +545,9 @@ FLT7-DESCENT-001 provider construction interface and exact receiver (Outcome C)
 FLT7-DESCENT-002 terminal reconstruction seed exclusion (Outcome D)
 FLT7-TERM-009 terminal Fermat chart resolution (Outcome C)
 FLT7-TERM-010 Row-Z alternating split and signed residual extraction (Outcome A)
+FLT7-RAMIFIED-001 common summit and exact second-coordinate depth (Outcome A)
+FLT7-RAMIFIED-002 formal coprime routing and gap synchronization (Outcome A)
+FLT7-RAMIFIED-003 exact ramified gap-unit bridge (Outcome A)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -654,6 +657,23 @@ v7(|R-L|) = v7(|c-e|)
 
 This is Outcome A for RAMIFIED-002.  The routing grid and self-similar gap
 depth are complete; descent construction remains a separate obligation.
+
+RAMIFIED-003 upgrades equal gap depth to an exact unit relation.  The integral
+bridge avoids division:
+
+```text
+(R - L) * S = (c - e) * Q * norm(root)
+```
+
+where `S`, `Q`, and `norm(root)` are all seven-units.  The resulting
+`RamifiedGapUnitBridgePacket` supplies the explicit equality
+
+```text
+cubicGap = endpointGap * (rightUnit * leftUnit⁻¹)
+```
+
+over every `ZMod (7^k)`.  This is Outcome A.  The checkpoint stops at the
+local gap-unit equivalence and does not infer a smaller Fermat solution.
 
 ## 14. Review outcomes for Codex
 

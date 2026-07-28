@@ -1,6 +1,6 @@
 # FLT7 seven-primary terminal route: current status
 
-Updated: 2026-07-24  
+Updated: 2026-07-28
 Repository: `Deskuma/dkmath`  
 Pull request: `#65`  
 Base branch: `feature/FLT7-magic-core-260722-v0`  
@@ -792,3 +792,31 @@ PrimitiveRamifiedSummitPacket.cubicGap_depth_eq_endpointGap_depth
 
 Both gaps have depth `6 + 7 * padicValNat 7 gapRoot`.  RAMIFIED-002 has
 Outcome A.  No smaller Fermat solution or descent provider is constructed.
+
+## 25. RAMIFIED-003 exact ramified gap-unit bridge
+
+`SevenBaseTerminalRamifiedGapUnitBridge.lean` proves the division-free
+integer identity:
+
+```text
+(R - L) * seventhPowerSndCore
+  = (endpointLeft - endpointRight) * ramifiedGapQuotient.snd * norm(root)
+```
+
+The three bridge factors other than the gaps are proved to be seven-units and
+are packaged by:
+
+```lean
+RamifiedGapUnitBridgePacket
+PrimitiveRamifiedSummitPacket.ramifiedGapUnitBridge
+```
+
+For every natural `k`, including `k = 0`, the packet exports an explicit unit
+and the exact equality:
+
+```lean
+cubicGap = endpointGap * explicitUnit  in ZMod (7^k)
+```
+
+RAMIFIED-003 has Outcome A.  This is an exact local unit equivalence, not a
+smaller Fermat solution, reconstruction seed, or descent provider.

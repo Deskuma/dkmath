@@ -73,6 +73,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRowZSignedResidualCore
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedSummit
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRouting
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedGapUnitBridge
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -135,8 +136,11 @@ into one linear and two explicit cubic factors.  This common summit does not
 by itself supply a smaller Fermat solution.  The endpoint triple and ramified
 root triple are now nonzero and pairwise coprime, so they inhabit a formal
 `CoprimeTripleRouting`.  The endpoint gap and root-cubic gap also have equal
-complete seven-adic depth.  This routing still does not construct a descent
-provider or a smaller Fermat solution.  Each local complete exponent is also
+complete seven-adic depth.  More strongly, an exact division-free integer
+identity exhibits the two gaps as differing by explicit seven-units, and over
+every `ZMod (7^k)` the root-cubic gap is the endpoint gap times a displayed
+unit.  This bridge still does not construct a descent provider or a smaller
+Fermat solution.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.

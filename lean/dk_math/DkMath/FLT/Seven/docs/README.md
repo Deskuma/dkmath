@@ -32,6 +32,7 @@ terminal prime q
   → exact root-snd depth and ramified cubic factor grid
   → formal ramified 3 x 3 coprime routing
   → endpoint/root-cubic gap-depth synchronization
+  → exact integral and ZMod(7^k) gap-unit bridge
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -53,3 +54,6 @@ solution. RAMIFIED-002 proves both triples nonzero and pairwise coprime,
 constructs `RamifiedCubicRoutingPacket`, and synchronizes the endpoint and
 root-cubic gap depths. Lifted-branch provider construction, terminal
 contradiction, and recursive descent closure remain unproved.
+RAMIFIED-003 strengthens the depth equality to a division-free integer
+identity and an explicit unit equivalence over every `ZMod (7^k)`. It does
+not construct a smaller Fermat solution.
