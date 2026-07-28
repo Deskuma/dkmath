@@ -1202,3 +1202,68 @@ proved to be a seventh power. The proposed mod-`7` scalar criterion and the
 claim that `alpha` and `1+alpha` exhaust all `49` unit classes belong to
 RAMIFIED-011U and remain unproved. Exact element seventh powers and the
 axis-depth `6 -> 3` descent are not claimed.
+
+## 34. RAMIFIED-011U / 012 projective unit classes and exact powers
+
+`SevenRealCubicUnitClass.lean` implements the theta-coordinate reduction:
+
+```text
+A = fst + 3*snd + 9*thd
+B = snd + 6*thd
+C = thd
+```
+
+over `ZMod 7`. The multiplication laws are those of
+`F_7[tau]/(tau^3)`. For a unit, `A` is nonzero, so the normalized nilpotent
+coordinates `x = B/A`, `y = C/A` define the truncated logarithm
+
+```text
+Lambda(u) = (x, y - x^2/2).
+```
+
+Lean proves:
+
+```text
+Lambda(u*v) = Lambda(u) + Lambda(v)
+Lambda(u^7) = 0
+Lambda(-1) = 0
+Lambda(alpha) = (5,5)
+Lambda(1+alpha) = (2,5)
+5*5 - 2*5 = 1  in ZMod 7.
+```
+
+The logarithm descends through torsion and seven multiples. Dirichlet unit
+rank is computed as two, the odd-degree torsion theorem identifies torsion
+with `±1`, and:
+
+```text
+Nat.card UnitClassModSeven = 49.
+```
+
+The two displayed logarithms make the descended map surjective; equal finite
+cardinality makes it bijective. Unpacking a zero `ModN` class and absorbing
+the possible torsion sign proves the global criterion:
+
+```text
+(exists v, u = v^7) <-> Lambda(u) = 0.
+```
+
+For every primitive loaded linear source `a+b*alpha = u*root^7`, the
+seventh power has zero nilpotent theta coordinates. Primitivity and `7 | b`
+make the source scalar coordinate nonzero, so both nilpotent coordinates of
+`u` vanish. Applied to the two RAMIFIED sources, this proves both units are
+seventh powers and constructs:
+
+```text
+RamifiedRealCubicExactPowerPacket
+
+etaL = leftRoot^7
+etaR = rightRoot^7
+rightRoot^7 - leftRoot^7 =
+  normalizedAxis^6*normalizedWitness^7.
+```
+
+RAMIFIED-011U and RAMIFIED-012 have Outcome A. This is the pure real-cubic
+second-case equation, but not a terminal FLT7 contradiction. The exact
+RAMIFIED-013 depth split and axis drop, the independent signed-root-gap
+routing, and recursive descent closure remain separate obligations.

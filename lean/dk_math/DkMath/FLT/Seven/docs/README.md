@@ -40,6 +40,9 @@ terminal prime q
   → canonical 2 x 3 split and exact cubic-gap seventh-shape equivalence
   → receiver-induced quadratic root extraction and strict depth 5 to 4 drop
   → discriminant-49 cubic norm carrier and pure ramified-axis source difference
+  → maximal real-cubic order, class number one, and coprime source extraction
+  → projective mod-7 unit-class isomorphism and exact source seventh powers
+  → pure real-cubic second-case equation
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -176,3 +179,54 @@ This is RAMIFIED-011A Outcome A. The units have not been shown to be seventh
 powers. RAMIFIED-011U must still prove the proposed mod-`7` unit-class
 criterion before exact source seventh powers or the RAMIFIED-012/013 depth
 drop can be asserted.
+
+RAMIFIED-011U and RAMIFIED-012 are now complete with Outcome A in
+`SevenRealCubicUnitClass.lean`. In the translated `1, theta, theta^2` basis,
+Lean fixes the three reduction coordinates modulo seven and their truncated
+multiplication laws. For a global unit it defines
+
+```text
+Lambda(u) = (x, y - x^2/2) in F_7^2
+```
+
+and proves that this is additive under multiplication and kills seventh
+powers. The two explicit units satisfy:
+
+```text
+Lambda(alpha)     = (5,5)
+Lambda(1 + alpha) = (2,5)
+det = 1.
+```
+
+On the global side, Dirichlet's theorem gives unit rank two, odd field degree
+gives torsion units `±1`, and Mathlib's `ModN` cardinality theorem gives:
+
+```text
+Nat.card UnitClassModSeven = 49.
+```
+
+The descended logarithm is therefore bijective. Lean then proves the exact
+criterion:
+
+```text
+unit is a seventh power <-> Lambda(unit) = 0.
+```
+
+For a primitive linear source `a + b*alpha` with `7 | b`, the source is a
+nonzero scalar modulo the nilpotent direction. If it equals `u*root^7`, the
+linear and quadratic theta coordinates force `Lambda(u)=0`. Applying this
+separately to both RAMIFIED sources absorbs both units and constructs
+`RamifiedRealCubicExactPowerPacket` with:
+
+```text
+etaL = leftRoot^7
+etaR = rightRoot^7
+rightRoot^7 - leftRoot^7 =
+  normalizedAxis^6*normalizedWitness^7.
+```
+
+This is the advertised pure real-cubic second-case equation. It is not yet
+the final FLT7 contradiction: RAMIFIED-013 must prove the exact ramified
+depth split `13 = 10 + 3` and the resulting axis drop. The separate
+RAMIFIED-009B signed-root-gap routing and recursive descent closure also
+remain open.

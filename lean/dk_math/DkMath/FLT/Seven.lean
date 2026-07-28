@@ -83,6 +83,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
 import DkMath.FLT.Seven.SevenRealCubicEisenstein
 import DkMath.FLT.Seven.SevenRealCubicNumberField
 import DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
+import DkMath.FLT.Seven.SevenRealCubicUnitClass
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -192,7 +193,16 @@ primitive linear source with seven-divisible second coordinate, its three
 cyclic conjugates are pairwise coprime and their product is its determinant
 norm.  Hence each RAMIFIED real-cubic source whose norm is a signed seventh
 power is itself a seventh power up to an explicit unit.  The two remaining
-units are retained in an exact unit-weighted seventh-power difference.
-Relative unit-class elimination, exact source seventh powers, and the
-subsequent ramified depth drop are not claimed.
+units are first retained in an exact unit-weighted seventh-power difference.
+The theta-coordinate reduction modulo seven then supplies a two-coordinate
+truncated projective logarithm on global units.  The explicit units `alpha`
+and `1+alpha` have logarithms `(5,5)` and `(2,5)`, so they span the target.
+Dirichlet rank two and torsion `±1` show that the global unit quotient modulo
+torsion and seventh powers has exactly `49` elements; consequently the
+projective logarithm is a bijective class criterion.  A primitive loaded
+linear source forces its extracted unit to have zero logarithm, hence both
+RAMIFIED sources are exact seventh powers.  The facade exports the pure
+equation `rightRoot^7 - leftRoot^7 = normalizedAxis^6 *
+normalizedWitness^7`.  The subsequent exact ramified depth `13/10/3` split,
+axis drop, and recursive descent are not claimed.
 -/

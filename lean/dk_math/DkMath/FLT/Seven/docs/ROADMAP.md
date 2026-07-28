@@ -809,22 +809,38 @@ etaR = uR*xiR^7
 uR*xiR^7 - uL*xiL^7 = varpi^6*Z^7.
 ```
 
-The next independent checkpoints are:
+RAMIFIED-011U and RAMIFIED-012 are complete with Outcome A. The translated
+theta coordinates modulo seven give a multiplicative truncated logarithm
+with values in `F_7^2`. The two explicit units map to `(5,5)` and `(2,5)`,
+whose determinant is one. Dirichlet rank two and torsion `±1` make the
+global unit quotient modulo seventh powers a `49`-element group, so the
+descended logarithm is bijective. Therefore:
+
+```text
+u is a seventh power <-> projectiveLog(u) = 0.
+```
+
+The primitive loaded-source equations force the two extracted unit
+logarithms to vanish separately. After absorbing their seventh roots:
+
+```text
+etaL = XL^7
+etaR = XR^7
+XR^7 - XL^7 = varpi^6*Z^7.
+```
+
+The next independent checkpoints are now:
 
 ```text
 RAMIFIED-009B  exact signed-root gap routing over Int/Nat
-RAMIFIED-011U  mod-7 unit classes and global seventh-power criterion
-RAMIFIED-012   exact source seventh powers and pure difference equation
 RAMIFIED-013   ramified depth 13/10/3 split and axis drop
 ```
 
-The ideal/class-group obstruction is now closed, but unit elimination remains
-independent. Reduction modulo `7` should first formalize the nilpotent
-coordinate `tau = theta mod 7`, prove `tau^3 = 0`, and prove seventh powers
-reduce to scalars. Sufficiency requires more: the two displayed units must
-be shown to represent all global unit classes modulo seventh powers, or an
-equivalent cardinality/surjectivity theorem must be supplied. Class number
-one alone does not prove that unit statement.
+RAMIFIED-013 should start from `RamifiedRealCubicExactPowerPacket`, not from
+the earlier unit-weighted equation. Its precise target is an exact
+divisibility packet proving RHS depth `13`, cyclotomic quotient depth `3`,
+and root-gap depth `10`. This should remain separate from construction of a
+new Fermat counterexample or the recursive descent closure provider.
 
 ## 14. Review outcomes for Codex
 
