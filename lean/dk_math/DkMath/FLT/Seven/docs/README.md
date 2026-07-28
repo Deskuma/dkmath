@@ -144,3 +144,35 @@ This is RAMIFIED-010 Outcome A. Source-conjugate ideal coprimality belongs to
 RAMIFIED-011; relative unit-class elimination belongs to RAMIFIED-011U; and
 element-level seventh-power extraction and the depth drop remain later
 obligations.
+
+RAMIFIED-011A transports the principal-ideal property back to the concrete
+coordinate ring and replaces the longer ideal-factorization route by direct
+GCD extraction. For `x = a + b*alpha`, Lean proves:
+
+```text
+sigma(x) - x = theta*alpha*b
+x*sigma(x)*sigma^2(x) = Norm(x).
+```
+
+If `IsCoprime a b` and `7 | b`, the three cyclic conjugates are pairwise
+coprime. Consequently:
+
+```text
+Norm(x) = z^7
+  -> exists unit root, x = unit*root^7.
+```
+
+Applying this to the two RAMIFIED-009 sources gives:
+
+```text
+etaL = uL*xiL^7
+etaR = uR*xiR^7
+
+uR*xiR^7 - uL*xiL^7 =
+  normalizedAxis^6*normalizedWitness^7.
+```
+
+This is RAMIFIED-011A Outcome A. The units have not been shown to be seventh
+powers. RAMIFIED-011U must still prove the proposed mod-`7` unit-class
+criterion before exact source seventh powers or the RAMIFIED-012/013 depth
+drop can be asserted.

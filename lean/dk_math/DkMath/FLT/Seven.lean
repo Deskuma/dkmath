@@ -82,6 +82,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedQuadraticInnerRoot
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
 import DkMath.FLT.Seven.SevenRealCubicEisenstein
 import DkMath.FLT.Seven.SevenRealCubicNumberField
+import DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -186,7 +187,12 @@ coordinate ring is explicitly ring-equivalent to that maximal order, hence is
 an integral domain.  The cubic field is totally real with discriminant `49`,
 Minkowski class bound `14/9`, principal ring of integers, and class number one.
 Its explicit order-three cyclic rotation is also transported to the maximal
-order.  Pairwise coprimality of the source conjugate ideals, relative
-unit-class elimination, and element-level seventh-power extraction are not
-claimed.
+order.  The coordinate ring inherits the principal-ideal property.  For every
+primitive linear source with seven-divisible second coordinate, its three
+cyclic conjugates are pairwise coprime and their product is its determinant
+norm.  Hence each RAMIFIED real-cubic source whose norm is a signed seventh
+power is itself a seventh power up to an explicit unit.  The two remaining
+units are retained in an exact unit-weighted seventh-power difference.
+Relative unit-class elimination, exact source seventh powers, and the
+subsequent ramified depth drop are not claimed.
 -/

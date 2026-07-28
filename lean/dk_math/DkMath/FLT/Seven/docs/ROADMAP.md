@@ -795,23 +795,36 @@ bound `14/9`, and its ring of integers is principal, so its class number is
 one. The cyclic order-three automorphism is available both on the coordinate
 order and on the full ring of integers.
 
+RAMIFIED-011A is complete with Outcome A. The principal-ideal property is
+transported to `SevenRealCubicInt`, and direct element GCD arguments replace
+the planned ideal-exponent ledger. A primitive linear source with
+seven-divisible second coordinate is pairwise coprime to its two cyclic
+conjugates; the product of all three conjugates is its determinant norm.
+Mathlib's coprime-power extractor therefore proves both RAMIFIED sources are
+unit multiples of seventh powers. The resulting packet retains:
+
+```text
+etaL = uL*xiL^7
+etaR = uR*xiR^7
+uR*xiR^7 - uL*xiL^7 = varpi^6*Z^7.
+```
+
 The next independent checkpoints are:
 
 ```text
 RAMIFIED-009B  exact signed-root gap routing over Int/Nat
-RAMIFIED-011   source-conjugate ideal coprimality and ideal seventh powers
-RAMIFIED-011U  relative unit local-to-global seventh-power injection
-RAMIFIED-012   element-level extraction and ramified depth drop
+RAMIFIED-011U  mod-7 unit classes and global seventh-power criterion
+RAMIFIED-012   exact source seventh powers and pure difference equation
+RAMIFIED-013   ramified depth 13/10/3 split and axis drop
 ```
 
-The maximal-order and class-group bridges are now available, but norm
-seventh powers alone still do not imply element seventh powers. RAMIFIED-011
-must transport the two source elements through
-`modelEquivRingOfIntegers`, use the transported rotation, and prove the three
-conjugate principal ideals pairwise coprime before distributing prime-ideal
-exponents. RAMIFIED-011U remains independent: neither class number one nor
-the two displayed units proves the required relative unit class is a global
-seventh power.
+The ideal/class-group obstruction is now closed, but unit elimination remains
+independent. Reduction modulo `7` should first formalize the nilpotent
+coordinate `tau = theta mod 7`, prove `tau^3 = 0`, and prove seventh powers
+reduce to scalars. Sufficiency requires more: the two displayed units must
+be shown to represent all global unit classes modulo seventh powers, or an
+equivalent cardinality/surjectivity theorem must be supplied. Class number
+one alone does not prove that unit statement.
 
 ## 14. Review outcomes for Codex
 

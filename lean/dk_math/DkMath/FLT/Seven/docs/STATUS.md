@@ -1150,3 +1150,55 @@ proved to generate the full unit group, and local-to-global seventh-power
 injectivity is not claimed. These are the exact RAMIFIED-011 and
 RAMIFIED-011U inputs; element-level extraction and the later ramified depth
 drop remain separate.
+
+## 33. RAMIFIED-011A cyclic coprimality and extraction up to units
+
+`SevenRealCubicCoprimeExtraction.lean` first transports
+`IsPrincipalIdealRing` from the full ring of integers through
+`modelEquivRingOfIntegers`. Thus the concrete `SevenRealCubicInt` model has
+the PID/Bezout surface needed by Mathlib's coprime-power extractor.
+
+For the linear source `x = a + b*alpha`, Lean proves:
+
+```text
+sigma(x) - x = theta*alpha*b
+x*sigma(x)*sigma^2(x) = Norm(x).
+```
+
+Assuming `IsCoprime a b` and `7 | b`, a prime common divisor of `x` and
+`sigma(x)` must divide `theta*alpha*b`. The `alpha` branch is impossible
+because `alpha` is a unit. In the `theta` branch,
+`theta^3 = -7*(theta+1)^2` and `theta+1` is a unit, so the prime divides
+`7`, hence also `b`. In every surviving branch it divides both integer
+coordinates, contradicting primitivity. Applying `sigma` twice gives:
+
+```text
+IsCoprime x (sigma x)
+IsCoprime (sigma x) (sigma^2 x)
+IsCoprime x (sigma^2 x).
+```
+
+The first source is represented by coordinates `(a,-n)` and the second by
+`(a+n,n)`. The RAMIFIED-008 primitive-coordinate theorem supplies both
+coprimality hypotheses, while `n = 7^4*m^7` supplies `7 | n`. Therefore the
+two signed norm equations yield:
+
+```text
+etaL = uL*xiL^7
+etaR = uR*xiR^7.
+```
+
+These witnesses inhabit `RamifiedRealCubicUpToUnitPacket`, which also
+retains the exact equation:
+
+```text
+uR*xiR^7 - uL*xiL^7 =
+  normalizedAxis^6*normalizedWitness^7.
+```
+
+RAMIFIED-011A has Outcome A. This bypasses prime-ideal exponent bookkeeping,
+but it does not bypass units. Neither `uL` nor `uR`, nor their ratio, is
+proved to be a seventh power. The proposed mod-`7` scalar criterion and the
+claim that `alpha` and `1+alpha` exhaust all `49` unit classes belong to
+RAMIFIED-011U and remain unproved. Exact element seventh powers and the
+axis-depth `6 -> 3` descent are not claimed.
