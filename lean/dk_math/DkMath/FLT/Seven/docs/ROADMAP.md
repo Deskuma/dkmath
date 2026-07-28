@@ -770,6 +770,34 @@ cubic order, verify the two norm formulas and the ramified-axis identities,
 and stop before any ideal or unit-class extraction not justified by the new
 order API.
 
+RAMIFIED-009 is complete with Outcome A. The implemented cubic order has the
+defining relation and a multiplicative determinant norm. The left/right
+cubic factors are exactly the norms of the two source elements. The
+ramified axis `pi` has norm `-7`; its cube is `7*epsilon`; and `epsilon` is
+an explicit unit of norm `-1`. The normalized axis
+`varpi = epsilon^4*pi` removes the remaining unit coefficient:
+
+```text
+etaR - etaL = varpi^6 * Z^7.
+```
+
+This equation is now attached directly to every inhabited RAMIFIED-008
+receiver packet, together with signed roots `l,r` and
+`r^7-l^7 = 7*a*n*(a+n)`.
+
+The next independent checkpoints are:
+
+```text
+RAMIFIED-009B  exact signed-root gap routing over Int/Nat
+RAMIFIED-010   maximality of the cubic order and class-number-one bridge
+RAMIFIED-011   unit generators and local unit-class injection
+RAMIFIED-012   element-level seventh-power extraction for etaL and etaR
+```
+
+Do not infer any of these from norm seventh powers alone. In particular,
+RAMIFIED-010 must first identify the explicit order with the full ring of
+integers before applying a Minkowski class-number argument.
+
 ## 14. Review outcomes for Codex
 
 At the end of every checkpoint, report one of:

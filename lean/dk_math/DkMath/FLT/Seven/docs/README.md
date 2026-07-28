@@ -39,6 +39,7 @@ terminal prime q
   → integral ramified compensation-core receiver
   → canonical 2 x 3 split and exact cubic-gap seventh-shape equivalence
   → receiver-induced quadratic root extraction and strict depth 5 to 4 drop
+  → discriminant-49 cubic norm carrier and pure ramified-axis source difference
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -95,3 +96,19 @@ seventh power. Conditional on the receiver, it extracts
 powers. This completes the receiver branch of RAMIFIED-008 with Outcome A.
 The receiver itself is not proved unconditionally, and no smaller Fermat
 solution or recursive descent is claimed.
+RAMIFIED-009 gives the two signed cubic forms their exact determinant-norm
+interpretation in `SevenRealCubicInt`. It verifies the defining cubic
+relation, norm multiplicativity, the two source norm formulas, common
+polynomial discriminant `49`, and the ramified identities
+`Norm(pi) = -7`, `pi^3 = 7*epsilon`, and `Norm(epsilon) = -1`, with an
+explicit inverse for `epsilon`. After absorbing the sign in the depth-four
+coordinate, the receiver packet now proves
+
+```text
+etaR - etaL = normalizedAxis^6 * normalizedWitness^7.
+```
+
+This is Outcome A at the advertised RAMIFIED-009 stop. The carrier has not
+been identified with the full ring of integers. Principal ideals, class number
+one, unit generators, local unit-class injection, and element-level
+seventh-power extraction remain open.

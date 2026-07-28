@@ -1031,3 +1031,58 @@ quadratic depth drop, not yet a descent of Fermat counterexamples. The
 receiver remains a branch hypothesis; its failure is still the explicit
 residual/compensation obstruction from RAMIFIED-007. Inverse cyclotomic
 reconstruction and the real-cubic norm interpretation remain open.
+
+## 31. RAMIFIED-009 discriminant-49 real-cubic norm carrier
+
+`SevenRealCubicInt.lean` defines integral coordinates
+`a + b*alpha + c*alpha^2` with:
+
+```text
+alpha^3 = 2*alpha^2 + alpha - 1.
+```
+
+The coordinate multiplication is proved to form a commutative ring. Its
+explicit determinant norm is multiplicative and satisfies:
+
+```text
+Norm(a - alpha*n) = leftCubic(a,n)
+Norm(a + (1 + alpha)*n) = rightCubic(a,n).
+```
+
+The two defining monic cubics have discriminant `49`. For
+`pi = 1 + 2*alpha` and
+`epsilon = -1 + 2*alpha + 4*alpha^2 = alpha*(1+alpha)^2`, Lean proves:
+
+```text
+Norm(pi) = -7
+pi^3 = 7*epsilon
+Norm(epsilon) = -1
+epsilon * (-9 + 22*alpha - 8*alpha^2) = 1.
+```
+
+Writing `varpi = epsilon^4*pi`, the unit-free normalization is:
+
+```text
+pi * (7^4*m^7) =
+  varpi^6 * (epsilon^(-8)*varpi*m)^7,
+```
+
+where the negative exponent is represented by the explicit integral inverse.
+
+`SevenBaseTerminalRamifiedRealCubicNorm.lean` connects this carrier to the
+RAMIFIED-008 receiver packet. It absorbs the sign in
+`innerRoot.snd = 7^4*m^7`, retains the signed roots `l,r`, and proves:
+
+```text
+Norm(etaL) = l^7
+Norm(etaR) = r^7
+r^7 - l^7 = 7*a*n*(a+n)
+etaR - etaL = varpi^6*Z^7.
+```
+
+RAMIFIED-009 has Outcome A. This is a norm/source-difference theorem in an
+explicit cubic order. It does not prove that the order is maximal, that its
+class number is one, that the displayed units generate the full unit group,
+or that a norm which is a seventh power makes the source element itself a
+seventh power. Those are the separate RAMIFIED-010 through RAMIFIED-012
+obligations.

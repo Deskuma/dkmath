@@ -79,6 +79,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedResidualRootClass
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCompensationRouting
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCanonicalSplit
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedQuadraticInnerRoot
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -171,5 +172,12 @@ Lifted signed reconstruction remains an explicit open obligation.  The exact int
 drop when inhabited.  Such a seed or provider forces pivot exponent at least
 two and is therefore impossible in the terminal exponent-one branch.  Direct
 terminal exclusion, lifted-branch seed construction, an FLT7 contradiction,
-and recursive closure remain unproved.
+and recursive closure remain unproved.  Conditional on the ramified receiver,
+the extracted quadratic inner root now enters an explicit discriminant-49
+cubic order.  Its two cubic forms are determinant norms, their source
+difference is the ramified axis times the depth-four coordinate, and an
+explicit unit normalization rewrites that difference as a sixth power of the
+normalized axis times a seventh power.  Maximality of this order, class number
+one, unit-class elimination, and element-level seventh-power extraction are
+not claimed.
 -/
