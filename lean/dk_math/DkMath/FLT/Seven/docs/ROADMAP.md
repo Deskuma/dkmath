@@ -705,6 +705,24 @@ Outcome A.  The next independent layer is a compatible seventh-root lifting
 theorem through the coherent `7^k` tower.  Such a local lift is not an integer
 or natural seventh root and must remain separate from global reconstruction.
 
+RAMIFIED-006 follows the integer factor route before higher Kummer lifting.
+It strengthens the common summit by retaining the terminal carrier and fixes:
+
+```text
+root.snd depth = 5
+endpoint gap depth = 6
+cubic gap depth = 6
+v * sndCore = 7^5 * gapRoot^7 * gapQuotient
+```
+
+The full left/right coprimality ledger is proved and the corresponding
+`CoprimeTripleRouting |v| |sndCore| 1 7^5 gapRoot^7 |gapQuotient|` is
+inhabited. The remaining global-shape obligation is represented exactly by
+`ramifiedCompensationCore * residualRoot` being a seventh power. The next
+normalization checkpoint must identify routing cell `c13` with
+`gcd(|v|,|gapQuotient|)` and extract the two seventh-power roots in the
+`gapRoot^7` column. No descent follows before that bridge is proved.
+
 ## 14. Review outcomes for Codex
 
 At the end of every checkpoint, report one of:

@@ -35,6 +35,8 @@ terminal prime q
   → exact integral and ZMod(7^k) gap-unit bridge
   → coherent unit tower and finite mod-49 seventh-power classifier
   → canonical residual-root one-digit branch selector
+  → terminal exact depth 5/6/6 and second-coordinate 2 x 3 routing
+  → integral ramified compensation-core receiver
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -66,3 +68,10 @@ RAMIFIED-005 proves that the canonical branch is selected exactly by
 `residualRoot = 1` in `ZMod 49`; otherwise the residual root is one of the six
 nontrivial principal residues. Higher compatible seventh-root lifting remains
 a separate obligation.
+RAMIFIED-006 restores the terminal carrier forgotten by the common summit,
+proves that `gapRoot` is a seven-unit, and fixes the three ramified depths at
+`5, 6, 6`. It proves the exact integer equation `v*S = 7^5*A^7*Q`, its
+pairwise-coprime factor ledger, and constructs the resulting 2 x 3 routing
+board. The compensation core is now the explicit gcd `gcd(|v|,|Q|)`.
+Identifying this gcd with the abstract routing cell needed by the final cubic
+gap factor display remains one normalization lemma.

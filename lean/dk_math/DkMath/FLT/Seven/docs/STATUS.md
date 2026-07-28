@@ -894,3 +894,54 @@ the reduced candidate set `{19, 31, 48}`.
 RAMIFIED-005 has Outcome A.  It does not yet construct compatible seventh
 roots at every higher `7^k`, an integral seventh root, or a root-cubic
 seventh-power-shape receiver.
+
+## 28. RAMIFIED-006 terminal second-coordinate compensation routing
+
+`SevenBaseTerminalRamifiedCompensationRouting.lean` restores the selected
+terminal carrier in `TerminalPrimitiveRamifiedSummitPacket` and proves:
+
+```text
+carrierUnit = gapRoot * residualRoot
+7 ∤ gapRoot
+gcd(gapRoot, residualRoot) = 1
+
+v7(|root.snd|) = 5
+v7(|endpoint gap|) = 6
+v7(|cubic gap|) = 6
+```
+
+After cancelling the visible factor seven, Lean fixes the integer equation:
+
+```text
+v * sndCore = 7^5 * gapRoot^7 * gapQuotient
+```
+
+The polynomial certificate and gcd ledger establish:
+
+```text
+gcd(|v|, |sndCore|) = 1
+gcd(residualRoot, |v|) = 1
+gcd(residualRoot, |sndCore|) = 1
+gcd(gapRoot, |endpointRight|) = 1
+gcd(gapRoot, |gapQuotient|) = 1
+```
+
+Thus `RamifiedSecondCoordinateRoutingPacket` formally supplies the 2 x 3
+coprime routing board. The compensation core and remaining receiver are:
+
+```lean
+ramifiedCompensationCore = gcd |v| |gapQuotient|
+
+RamifiedCubicGapSeventhShapeReceiver :=
+  ∃ w, ramifiedCompensationCore * residualRoot = w^7
+```
+
+Lean also proves that if the compensation core is `1`, this receiver forces
+`residualRoot = 1` modulo `49`.
+
+RAMIFIED-006 currently has Outcome C at its last normalization step. The
+terminal depth collapse, integer equation, gcd ledger, routing board, and
+receiver are complete. To derive the advertised exact cubic-gap factor
+display from the abstract board, it remains to prove that routing cell `c13`
+is the canonical gcd above and extract seventh roots from the `gapRoot^7`
+column.
