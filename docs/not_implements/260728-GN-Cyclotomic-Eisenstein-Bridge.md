@@ -27,13 +27,13 @@ $$
 特に指数が素数 $p$ のとき、冪差商は単独の円分因子となるため、
 
 $$
-\operatorname{GN}_p(g,y)=\operatorname{HCycl}_p(g+y,y)
+\mathrm{GN}_p(g,y)=\mathrm{HCycl}_p(g+y,y)
 $$
 
 であり、$y=1$ に正規化すると、
 
 $$
-\operatorname{GN}_p(g,1)=\Phi_p(g+1)
+\mathrm{GN}_p(g,1)=\Phi_p(g+1)
 $$
 
 となる。
@@ -112,7 +112,7 @@ theorem GN5_eq_homogeneous_cyclotomic
 により、
 
 $$
-\operatorname{GN}_5(g,y)=(g+y)^4+(g+y)^3y+(g+y)^2y^2+(g+y)y^3+y^4
+\mathrm{GN}_5(g,y)=(g+y)^4+(g+y)^3y+(g+y)^2y^2+(g+y)y^3+y^4
 $$
 
 が固定されている。
@@ -126,7 +126,7 @@ theorem add_pow_five_sub_eq_mul_GN5
 により、
 
 $$
-(g+y)^5-y^5=g\operatorname{GN}_5(g,y)
+(g+y)^5-y^5=g\mathrm{GN}_5(g,y)
 $$
 
 も実装済みである。
@@ -148,7 +148,7 @@ $$
 交換半環または交換環上で、斉次等比和を
 
 $$
-\operatorname{HGeom}_n(x,y)=\sum_{i=0}^{n-1}x^i y^{n-1-i}
+\mathrm{HGeom}_n(x,y)=\sum_{i=0}^{n-1}x^i y^{n-1-i}
 $$
 
 とする。
@@ -158,7 +158,7 @@ mathlib では、この和は `geom_sum₂` 系の補題で扱われている。
 冪差との関係は、
 
 $$
-(x-y)\operatorname{HGeom}_n(x,y)=x^n-y^n
+(x-y)\mathrm{HGeom}_n(x,y)=x^n-y^n
 $$
 
 である。
@@ -166,13 +166,13 @@ $$
 Gap 座標 $x=g+y$ を代入すると、
 
 $$
-\operatorname{GN}_n(g,y):=\operatorname{HGeom}_n(g+y,y)
+\mathrm{GN}_n(g,y):=\mathrm{HGeom}_n(g+y,y)
 $$
 
 となり、
 
 $$
-g\operatorname{GN}_n(g,y)=(g+y)^n-y^n
+g\mathrm{GN}_n(g,y)=(g+y)^n-y^n
 $$
 
 を得る。
@@ -182,7 +182,7 @@ $$
 二項展開により、同じ GN は
 
 $$
-\operatorname{GN}_n(g,y)=\sum_{i=0}^{n-1}\binom{n}{i+1} g^i y^{n-1-i}
+\mathrm{GN}_n(g,y)=\sum_{i=0}^{n-1}\binom{n}{i+1} g^i y^{n-1-i}
 $$
 
 と表せる。
@@ -190,7 +190,7 @@ $$
 $n=5$ では、
 
 $$
-\operatorname{GN}_5(g,y)=g^4+5g^3y+10g^2y^2+10gy^3+5y^4
+\mathrm{GN}_5(g,y)=g^4+5g^3y+10g^2y^2+10gy^3+5y^4
 $$
 
 となり、現在の `GN5` と一致する。
@@ -224,7 +224,7 @@ $$
 正確には、
 
 $$
-\frac{X^n-1}{X-1}=\prod_{\substack{d\mid n\\d>1}}\Phi_d(X)
+\frac{X^n-1}{X-1}=\prod_{\substack{d\mid n, d>1}}\Phi_d(X)
 $$
 
 である。
@@ -242,7 +242,7 @@ $$
 よって素数指数の場合に限り、
 
 $$
-\operatorname{GN}_p(g,y)
+\mathrm{GN}_p(g,y)
 $$
 
 は単独の $p$ 次円分多項式の斉次 Gap 座標化となる。
@@ -300,7 +300,7 @@ $$
 右辺は、まさに $y=1$ とした GN である。
 
 $$
-\operatorname{GN}_p(X,1)=\Phi_p(X+1)
+\mathrm{GN}_p(X,1)=\Phi_p(X+1)
 $$
 
 ここが、DkMath の GN と
@@ -408,7 +408,7 @@ emultiplicity_geom_sum₂_eq_one
 は
 
 $$
-v_p\!\left(\operatorname{HGeom}_p(x,y)\right)=1
+v_p\!\left(\mathrm{HGeom}_p(x,y)\right)=1
 $$
 
 を与える。
@@ -464,7 +464,7 @@ $$
 と置けば $x=s-y=s+(-y)$ なので、
 
 $$
-x^p+y^p=s\operatorname{GN}_p(s,-y)
+x^p+y^p=s\mathrm{GN}_p(s,-y)
 $$
 
 となる。
@@ -472,7 +472,7 @@ $$
 よって FLT の交代和因子は、
 
 $$
-\operatorname{GN}_p(s,-y)
+\mathrm{GN}_p(s,-y)
 $$
 
 で統一できる。
@@ -696,7 +696,7 @@ theorem prime_sq_not_dvd_coeff_zero_GNPolynomial
 素数 $p$ では中間二項係数がすべて $p$ で消えるため、
 
 $$
-\operatorname{GN}_p(g,y)\equiv g^{p-1}\pmod p
+\mathrm{GN}_p(g,y)\equiv g^{p-1}\pmod p
 $$
 
 となる。
@@ -732,7 +732,7 @@ GN5_eq_g_pow_four_add_five_mul
 $g$ を法にすると、定数項だけが残るため、
 
 $$
-\operatorname{GN}_p(g,y)\equiv py^{p-1}\pmod g
+\mathrm{GN}_p(g,y)\equiv py^{p-1}\pmod g
 $$
 
 となる。
@@ -936,13 +936,13 @@ DkMath.NumberTheory.GNCyclotomicBridge
 ### $p=3$
 
 $$
-\operatorname{GN}_3(g,y)=g^2+3gy+3y^2
+\mathrm{GN}_3(g,y)=g^2+3gy+3y^2
 $$
 
 単位断面：
 
 $$
-\operatorname{GN}_3(g,1)=g^2+3g+3=\Phi_3(g+1)
+\mathrm{GN}_3(g,1)=g^2+3g+3=\Phi_3(g+1)
 $$
 
 これは $3$-Eisenstein。
@@ -950,13 +950,13 @@ $$
 ### $p=5$
 
 $$
-\operatorname{GN}_5(g,y)=g^4+5g^3y+10g^2y^2+10gy^3+5y^4
+\mathrm{GN}_5(g,y)=g^4+5g^3y+10g^2y^2+10gy^3+5y^4
 $$
 
 単位断面：
 
 $$
-\operatorname{GN}_5(g,1)=g^4+5g^3+10g^2+10g+5=\Phi_5(g+1)
+\mathrm{GN}_5(g,1)=g^4+5g^3+10g^2+10g+5=\Phi_5(g+1)
 $$
 
 これは $5$-Eisenstein。
@@ -964,13 +964,13 @@ $$
 ### $p=7$
 
 $$
-\operatorname{GN}_7(g,y)=g^6+7g^5y+21g^4y^2+35g^3y^3+35g^2y^4+21gy^5+7y^6
+\mathrm{GN}_7(g,y)=g^6+7g^5y+21g^4y^2+35g^3y^3+35g^2y^4+21gy^5+7y^6
 $$
 
 単位断面：
 
 $$
-\operatorname{GN}_7(g,1)=g^6+7g^5+21g^4+35g^3+35g^2+21g+7=\Phi_7(g+1)
+\mathrm{GN}_7(g,1)=g^6+7g^5+21g^4+35g^3+35g^2+21g+7=\Phi_7(g+1)
 $$
 
 これは $7$-Eisenstein。
@@ -978,7 +978,7 @@ $$
 FLT の冪和座標では $y\mapsto-y$ とするため、
 
 $$
-\operatorname{GN}_7(s,-y)=s^6-7s^5y+21s^4y^2-35s^3y^3+35s^2y^4-21sy^5+7y^6
+\mathrm{GN}_7(s,-y)=s^6-7s^5y+21s^4y^2-35s^3y^3+35s^2y^4-21sy^5+7y^6
 $$
 
 となり、観測された交代和型の $7$-Eisenstein 端点多項式を得る。
@@ -1016,7 +1016,7 @@ Eisenstein 性は主に `GNPolynomial p` に対して述べられる。
 しかし DkMath の FLT 実装で直接必要となる可能性が高いのは、
 
 $$
-v_p(\operatorname{GN}_p)=1
+v_p(\mathrm{GN}_p)=1
 $$
 
 という exact valuation excess である。
