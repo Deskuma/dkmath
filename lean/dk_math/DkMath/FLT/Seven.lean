@@ -74,6 +74,7 @@ import DkMath.FLT.Seven.SevenBaseTerminalRamifiedSummit
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRouting
 import DkMath.FLT.Seven.SevenBaseTerminalRamifiedGapUnitBridge
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedUnitClassAudit
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -139,8 +140,12 @@ root triple are now nonzero and pairwise coprime, so they inhabit a formal
 complete seven-adic depth.  More strongly, an exact division-free integer
 identity exhibits the two gaps as differing by explicit seven-units, and over
 every `ZMod (7^k)` the root-cubic gap is the endpoint gap times a displayed
-unit.  This bridge still does not construct a descent provider or a smaller
-Fermat solution.  Each local complete exponent is also
+unit.  These units are coherent under adjacent seven-power reductions.  At
+the first nontrivial level `ZMod 49`, their seventh-power class is equivalent
+to the fixed-point test `U^7 = U` and hence to membership in the six-residue
+set `{1, 18, 19, 30, 31, 48}`.  The common summit does not yet determine
+which residue occurs.  This bridge still does not construct a descent provider
+or a smaller Fermat solution.  Each local complete exponent is also
 identified with the corresponding prime's exact adic exponent in the full
 terminal cubic-root load, and the product of all complete local moduli is
 proved equal to that full load.

@@ -820,3 +820,38 @@ cubicGap = endpointGap * explicitUnit  in ZMod (7^k)
 
 RAMIFIED-003 has Outcome A.  This is an exact local unit equivalence, not a
 smaller Fermat solution, reconstruction seed, or descent provider.
+
+## 26. RAMIFIED-004 explicit ramified unit-class audit
+
+`SevenBaseTerminalRamifiedUnitClassAudit.lean` defines the canonical reduction
+map:
+
+```lean
+sevenPowerReductionHom k :
+  ZMod (7^(k+1)) →+* ZMod (7^k)
+```
+
+and proves that the explicit bridge units form a coherent tower:
+
+```lean
+RamifiedGapUnitBridgePacket.explicitUnit_reduction
+```
+
+At the first nontrivial classifying modulus it defines:
+
+```lean
+RamifiedGapUnitBridgePacket.IsSeventhPowerMod49
+```
+
+For every bridge packet, Lean proves:
+
+```text
+IsSeventhPowerMod49
+  ↔ U^7 = U
+  ↔ U ∈ {1, 18, 19, 30, 31, 48}  in ZMod 49
+```
+
+RAMIFIED-004 has Outcome C.  The finite classifier is complete, but the
+current common-summit fields do not yet select one of its two branches.
+Turning a non-seventh-power branch into contradiction would additionally
+require a theorem that the root-cubic gap has seventh-power shape.

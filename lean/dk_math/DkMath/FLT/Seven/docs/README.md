@@ -33,6 +33,7 @@ terminal prime q
   → formal ramified 3 x 3 coprime routing
   → endpoint/root-cubic gap-depth synchronization
   → exact integral and ZMod(7^k) gap-unit bridge
+  → coherent unit tower and finite mod-49 seventh-power classifier
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -57,3 +58,6 @@ contradiction, and recursive descent closure remain unproved.
 RAMIFIED-003 strengthens the depth equality to a division-free integer
 identity and an explicit unit equivalence over every `ZMod (7^k)`. It does
 not construct a smaller Fermat solution.
+RAMIFIED-004 proves reduction coherence and classifies the seventh-power
+branch modulo `49` by the six residues `1, 18, 19, 30, 31, 48`. The common
+summit does not yet determine which branch occurs.

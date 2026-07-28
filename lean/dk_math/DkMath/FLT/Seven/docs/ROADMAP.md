@@ -548,6 +548,7 @@ FLT7-TERM-010 Row-Z alternating split and signed residual extraction (Outcome A)
 FLT7-RAMIFIED-001 common summit and exact second-coordinate depth (Outcome A)
 FLT7-RAMIFIED-002 formal coprime routing and gap synchronization (Outcome A)
 FLT7-RAMIFIED-003 exact ramified gap-unit bridge (Outcome A)
+FLT7-RAMIFIED-004 coherent unit tower and mod-49 class audit (Outcome C)
 ```
 
 TERM-007 discharges the former TERM-006 stop gate:
@@ -674,6 +675,20 @@ cubicGap = endpointGap * (rightUnit * leftUnit⁻¹)
 
 over every `ZMod (7^k)`.  This is Outcome A.  The checkpoint stops at the
 local gap-unit equivalence and does not infer a smaller Fermat solution.
+
+RAMIFIED-004 proves adjacent-level coherence of `explicitUnit` and performs
+the first nontrivial unit-class audit:
+
+```text
+IsSeventhPowerMod49
+  ↔ explicitUnit(2)^7 = explicitUnit(2)
+  ↔ explicitUnit(2) ∈ {1, 18, 19, 30, 31, 48}.
+```
+
+This is Outcome C.  The unit-class classifier is finite and exact, while the
+common summit does not yet force either branch.  The next independent inputs
+are a canonical summit residue classifier and, for an obstruction argument,
+a receiver asserting seventh-power shape of the root-cubic gap.
 
 ## 14. Review outcomes for Codex
 
