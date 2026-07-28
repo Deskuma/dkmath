@@ -37,6 +37,7 @@ terminal prime q
   → canonical residual-root one-digit branch selector
   → terminal exact depth 5/6/6 and second-coordinate 2 x 3 routing
   → integral ramified compensation-core receiver
+  → canonical 2 x 3 split and exact cubic-gap seventh-shape equivalence
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -73,5 +74,16 @@ proves that `gapRoot` is a seven-unit, and fixes the three ramified depths at
 `5, 6, 6`. It proves the exact integer equation `v*S = 7^5*A^7*Q`, its
 pairwise-coprime factor ledger, and constructs the resulting 2 x 3 routing
 board. The compensation core is now the explicit gcd `gcd(|v|,|Q|)`.
-Identifying this gcd with the abstract routing cell needed by the final cubic
-gap factor display remains one normalization lemma.
+RAMIFIED-007 identifies every abstract routing cell with its canonical gcd
+under the source-column pairwise-coprimality hypotheses. It then constructs
+the canonical split
+`A = X*Y`, `V = 7^5*X^7*C`, `S = Y^7*D`, `Q = C*D` and proves
+
+```text
+|R-L| = 7^6 * X^7 * (C*B).
+```
+
+The former receiver is equivalent both to this exact cubic-gap seventh-power
+shape and to independent seventh powers for `C` and `B`. This is Outcome A.
+Producing an internal seventh root of `gapRoot` is the separate
+RAMIFIED-008 checkpoint; no descent is claimed here.

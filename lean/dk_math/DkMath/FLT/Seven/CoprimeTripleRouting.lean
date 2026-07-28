@@ -79,6 +79,154 @@ structure CoprimeTripleRouting
   col2_coprime : Nat.Coprime c12 c22 ∧ Nat.Coprime c12 c32 ∧ Nat.Coprime c22 c32
   col3_coprime : Nat.Coprime c13 c23 ∧ Nat.Coprime c13 c33 ∧ Nat.Coprime c23 c33
 
+private theorem routing_cell_eq_gcd
+    {a b₁ b₂ b₃ c₁ c₂ c₃ d₁ d₂ e₁ e₂ f₁ f₂ : ℕ}
+    (hrow : a = c₁ * c₂ * c₃)
+    (hcol₁ : b₁ = c₁ * d₁ * d₂)
+    (hcol₂ : b₂ = c₂ * e₁ * e₂)
+    (hcol₃ : b₃ = c₃ * f₁ * f₂)
+    (hb₁₂ : Nat.Coprime b₁ b₂)
+    (hb₁₃ : Nat.Coprime b₁ b₃) :
+    c₁ = Nat.gcd a b₁ := by
+  apply Nat.dvd_antisymm
+  · apply Nat.dvd_gcd
+    · rw [hrow]
+      exact ⟨c₂ * c₃, by ring⟩
+    · rw [hcol₁]
+      exact ⟨d₁ * d₂, by ring⟩
+  · let g := Nat.gcd a b₁
+    have hgB : g ∣ b₁ := Nat.gcd_dvd_right _ _
+    have hc₂B₂ : c₂ ∣ b₂ := by
+      rw [hcol₂]
+      exact ⟨e₁ * e₂, by ring⟩
+    have hc₃B₃ : c₃ ∣ b₃ := by
+      rw [hcol₃]
+      exact ⟨f₁ * f₂, by ring⟩
+    have hB₁Other : Nat.Coprime b₁ (c₂ * c₃) :=
+      (hb₁₂.of_dvd_right hc₂B₂).mul_right
+        (hb₁₃.of_dvd_right hc₃B₃)
+    have hgOther : Nat.Coprime g (c₂ * c₃) :=
+      hB₁Other.of_dvd_left hgB
+    apply hgOther.dvd_of_dvd_mul_left
+    have hgA : g ∣ a := Nat.gcd_dvd_left _ _
+    rw [hrow] at hgA
+    simpa [mul_comm, mul_left_comm, mul_assoc] using hgA
+
+/-- On pairwise-coprime source columns, every routing cell is its canonical
+row/column gcd address. -/
+theorem CoprimeTripleRouting.c11_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb13 : Nat.Coprime b₁ b₃) :
+    r.c11 = Nat.gcd a₁ b₁ :=
+  routing_cell_eq_gcd r.row1 r.col1 r.col2 r.col3 hb12 hb13
+
+theorem CoprimeTripleRouting.c12_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c12 = Nat.gcd a₁ b₂ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm] using r.row1)
+    r.col2 r.col1 r.col3 hb12.symm hb23
+
+theorem CoprimeTripleRouting.c13_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb13 : Nat.Coprime b₁ b₃) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c13 = Nat.gcd a₁ b₃ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm, mul_left_comm] using r.row1)
+    r.col3 r.col1 r.col2 hb13.symm hb23.symm
+
+theorem CoprimeTripleRouting.c21_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb13 : Nat.Coprime b₁ b₃) :
+    r.c21 = Nat.gcd a₂ b₁ :=
+  routing_cell_eq_gcd r.row2
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c21 * r.c11 * r.c31 := by ring)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c22 * r.c12 * r.c32 := by ring)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c23 * r.c13 * r.c33 := by ring)
+    hb12 hb13
+
+theorem CoprimeTripleRouting.c22_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c22 = Nat.gcd a₂ b₂ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm] using r.row2)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c22 * r.c12 * r.c32 := by ring)
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c21 * r.c11 * r.c31 := by ring)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c23 * r.c13 * r.c33 := by ring)
+    hb12.symm hb23
+
+theorem CoprimeTripleRouting.c23_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb13 : Nat.Coprime b₁ b₃) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c23 = Nat.gcd a₂ b₃ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm, mul_left_comm] using r.row2)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c23 * r.c13 * r.c33 := by ring)
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c21 * r.c11 * r.c31 := by ring)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c22 * r.c12 * r.c32 := by ring)
+    hb13.symm hb23.symm
+
+theorem CoprimeTripleRouting.c31_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb13 : Nat.Coprime b₁ b₃) :
+    r.c31 = Nat.gcd a₃ b₁ :=
+  routing_cell_eq_gcd r.row3
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c31 * r.c11 * r.c21 := by ring)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c32 * r.c12 * r.c22 := by ring)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c33 * r.c13 * r.c23 := by ring)
+    hb12 hb13
+
+theorem CoprimeTripleRouting.c32_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb12 : Nat.Coprime b₁ b₂) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c32 = Nat.gcd a₃ b₂ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm] using r.row3)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c32 * r.c12 * r.c22 := by ring)
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c31 * r.c11 * r.c21 := by ring)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c33 * r.c13 * r.c23 := by ring)
+    hb12.symm hb23
+
+theorem CoprimeTripleRouting.c33_eq_gcd
+    {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
+    (r : CoprimeTripleRouting a₁ a₂ a₃ b₁ b₂ b₃)
+    (hb13 : Nat.Coprime b₁ b₃) (hb23 : Nat.Coprime b₂ b₃) :
+    r.c33 = Nat.gcd a₃ b₃ :=
+  routing_cell_eq_gcd
+    (by simpa [mul_comm, mul_left_comm] using r.row3)
+    (by calc b₃ = r.c13 * r.c23 * r.c33 := r.col3
+             _ = r.c33 * r.c13 * r.c23 := by ring)
+    (by calc b₁ = r.c11 * r.c21 * r.c31 := r.col1
+             _ = r.c31 * r.c11 * r.c21 := by ring)
+    (by calc b₂ = r.c12 * r.c22 * r.c32 := r.col2
+             _ = r.c32 * r.c12 * r.c22 := by ring)
+    hb13.symm hb23.symm
+
 theorem nonempty_coprimeTripleRouting
     {a₁ a₂ a₃ b₁ b₂ b₃ : ℕ}
     (_ha_pos : 0 < a₁ ∧ 0 < a₂ ∧ 0 < a₃)

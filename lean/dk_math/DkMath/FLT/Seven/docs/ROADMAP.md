@@ -723,6 +723,27 @@ normalization checkpoint must identify routing cell `c13` with
 `gcd(|v|,|gapQuotient|)` and extract the two seventh-power roots in the
 `gapRoot^7` column. No descent follows before that bridge is proved.
 
+RAMIFIED-007 completes that normalization checkpoint. All nine cells of a
+`CoprimeTripleRouting` are identified with their canonical gcd addresses once
+the two source columns are pairwise coprime. Applied to the terminal routing
+board, this yields:
+
+```text
+gapRoot = X * Y
+|v| = 7^5 * X^7 * C
+sndCore = Y^7 * D
+|gapQuotient| = C * D
+|R-L| = 7^6 * X^7 * (C * residualRoot).
+```
+
+The compensation receiver is now equivalent to the displayed cubic-gap
+seventh-power shape, and also equivalent to `C` and `residualRoot` being
+independent seventh powers. This is Outcome A.
+
+The next checkpoint is RAMIFIED-008: determine whether the canonical split
+forces a genuine internal seventh root for `gapRoot`. That assertion is not a
+consequence of RAMIFIED-007 and must not be imported as an assumption.
+
 ## 14. Review outcomes for Codex
 
 At the end of every checkpoint, report one of:

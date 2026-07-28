@@ -939,9 +939,47 @@ RamifiedCubicGapSeventhShapeReceiver :=
 Lean also proves that if the compensation core is `1`, this receiver forces
 `residualRoot = 1` modulo `49`.
 
-RAMIFIED-006 currently has Outcome C at its last normalization step. The
-terminal depth collapse, integer equation, gcd ledger, routing board, and
-receiver are complete. To derive the advertised exact cubic-gap factor
-display from the abstract board, it remains to prove that routing cell `c13`
-is the canonical gcd above and extract seventh roots from the `gapRoot^7`
-column.
+RAMIFIED-006 had Outcome C at its last normalization step. The terminal depth
+collapse, integer equation, gcd ledger, routing board, and receiver were
+complete; RAMIFIED-007 discharges that precise normalization obligation.
+
+## 29. RAMIFIED-007 canonical routing split
+
+`CoprimeTripleRouting.lean` now exposes all nine canonical cell equations
+
+```text
+cᵢⱼ = gcd(source-leftᵢ, source-rightⱼ).
+```
+
+The API explicitly requires pairwise coprimality of both source columns;
+the routing product equations alone do not imply these equalities.
+
+`SevenBaseTerminalRamifiedCanonicalSplit.lean` applies that API to the
+terminal second-coordinate board and constructs witnesses satisfying:
+
+```text
+gapRoot = X * Y
+|v| = 7^5 * X^7 * C
+sndCore = Y^7 * D
+|gapQuotient| = C * D
+C = gcd(|v|, |gapQuotient|)
+```
+
+Together with the existing ramified cubic identity this gives:
+
+```text
+|R - L| = 7^6 * X^7 * (C * residualRoot).
+```
+
+Lean proves the exact equivalences
+
+```text
+RamifiedCubicGapSeventhShapeReceiver
+  ↔ ∃ w, |R-L| = 7^6 * (X*w)^7
+  ↔ (∃ c, C = c^7) ∧ (∃ b, residualRoot = b^7).
+```
+
+RAMIFIED-007 has Outcome A. The routing normalization and advertised
+cubic-gap factor display are complete. It does not prove that `gapRoot`
+itself has an internal seventh root, construct a smaller Fermat solution, or
+close descent. Root-internal extraction begins only at RAMIFIED-008.
