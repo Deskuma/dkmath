@@ -740,9 +740,35 @@ The compensation receiver is now equivalent to the displayed cubic-gap
 seventh-power shape, and also equivalent to `C` and `residualRoot` being
 independent seventh powers. This is Outcome A.
 
-The next checkpoint is RAMIFIED-008: determine whether the canonical split
-forces a genuine internal seventh root for `gapRoot`. That assertion is not a
-consequence of RAMIFIED-007 and must not be imported as an assumption.
+RAMIFIED-008 follows the corrected target rather than trying to make
+`gapRoot` a seventh power. On the receiver branch, the residual key makes the
+quadratic root norm a seventh power. Primitive conjugate coprimality then
+gives:
+
+```text
+root = innerRoot^7
+coordinate = sevenAxis * innerRoot^49
+norm innerRoot = residualNormRoot
+v7(|innerRoot.snd|) = 4.
+```
+
+The depth-four equation splits completely:
+
+```text
+|innerRoot.snd| = 7^4 * M^7
+|seventhPowerSndCore(innerRoot)| = N^7.
+```
+
+Both cubic factors of the inner core are coprime and become signed integer
+seventh powers. This is Outcome A, conditional on the receiver. It neither
+proves the receiver nor constructs new endpoints.
+
+The next checkpoint is RAMIFIED-009. Its input is now stronger than merely a
+sextic-core seventh power: both integer cubic forms already have signed
+seventh-power values. RAMIFIED-009 should introduce the discriminant-49 real
+cubic order, verify the two norm formulas and the ramified-axis identities,
+and stop before any ideal or unit-class extraction not justified by the new
+order API.
 
 ## 14. Review outcomes for Codex
 

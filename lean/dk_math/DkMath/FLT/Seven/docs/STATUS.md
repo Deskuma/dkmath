@@ -983,3 +983,51 @@ RAMIFIED-007 has Outcome A. The routing normalization and advertised
 cubic-gap factor display are complete. It does not prove that `gapRoot`
 itself has an internal seventh root, construct a smaller Fermat solution, or
 close descent. Root-internal extraction begins only at RAMIFIED-008.
+
+## 30. RAMIFIED-008 receiver-induced quadratic inner root
+
+`SevenBaseTerminalRamifiedQuadraticInnerRoot.lean` first proves that the
+primitive, seven-unit-norm summit root is coprime to its conjugate:
+
+```text
+IsUnit (gcd root (conj root)).
+```
+
+On the receiver branch, RAMIFIED-007 supplies
+`compensationCore = c^7` and `residualRoot = b^7`. The latter is the norm key,
+so the coprime-product extractor constructs an inner quadratic integer
+`gamma` with:
+
+```text
+root = gamma^7
+norm gamma = b
+gcd(gamma.fst, gamma.snd) = 1
+
+cyclotomicSevenToTraceOne(endpointLeft, endpointRight)
+  = sevenAxis * gamma^49.
+```
+
+Lean then transfers the outer depth-five second-coordinate equation through
+`root = gamma^7` and proves:
+
+```text
+v7(|gamma.snd|) = 4
+
+|gamma.snd| = 7^4 * M^7
+|seventhPowerSndCore(gamma)| = N^7.
+```
+
+The core factorization is also separated, including signs:
+
+```text
+seventhPowerSndLeftCubic(gamma) = l^7
+seventhPowerSndRightCubic(gamma) = r^7
+```
+
+for some integers `l` and `r`.
+
+RAMIFIED-008 has Outcome A for the receiver branch. It is a strict internal
+quadratic depth drop, not yet a descent of Fermat counterexamples. The
+receiver remains a branch hypothesis; its failure is still the explicit
+residual/compensation obstruction from RAMIFIED-007. Inverse cyclotomic
+reconstruction and the real-cubic norm interpretation remain open.

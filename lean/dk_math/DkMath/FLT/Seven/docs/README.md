@@ -38,6 +38,7 @@ terminal prime q
   → terminal exact depth 5/6/6 and second-coordinate 2 x 3 routing
   → integral ramified compensation-core receiver
   → canonical 2 x 3 split and exact cubic-gap seventh-shape equivalence
+  → receiver-induced quadratic root extraction and strict depth 5 to 4 drop
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -85,5 +86,12 @@ the canonical split
 
 The former receiver is equivalent both to this exact cubic-gap seventh-power
 shape and to independent seventh powers for `C` and `B`. This is Outcome A.
-Producing an internal seventh root of `gapRoot` is the separate
-RAMIFIED-008 checkpoint; no descent is claimed here.
+RAMIFIED-008 confirms the corrected target: it does not make `gapRoot` a
+seventh power. Conditional on the receiver, it extracts
+`summit.root = innerRoot^7`, upgrades the coordinate to
+`sevenAxis * innerRoot^49`, and proves the strict internal depth drop
+`v7(|innerRoot.snd|) = 4`. The inner second coordinate and core split as
+`7^4*M^7` and `N^7`; their two cubic factors are also signed integer seventh
+powers. This completes the receiver branch of RAMIFIED-008 with Outcome A.
+The receiver itself is not proved unconditionally, and no smaller Fermat
+solution or recursive descent is claimed.
