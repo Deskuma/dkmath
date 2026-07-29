@@ -139,7 +139,7 @@ lemma construct_HΛ_for_quality (ε : ℝ) (hε : 0 < ε) :
 
   have h_nonneg : ∀ n ∈ Finset.Icc 3 (2 * X + 1), n ∉ primesUpTo X → 0 ≤ (n : ℝ) ^ (-(2 * α)) := by
     intro n hn _
-    apply Real.rpow_nonneg_of_nonneg
+    apply Real.rpow_nonneg
     norm_cast
     linarith
   have h_le_range := Finset.sum_le_sum_of_subset_of_nonneg h_subset_range h_nonneg
@@ -162,7 +162,7 @@ lemma construct_HΛ_for_quality (ε : ℝ) (hε : 0 < ε) :
           have h_fin_le_tsum : ∑ n ∈ Finset.Icc 3 (2 * X + 1), (n : ℝ) ^ (-(2 * α)) ≤ S := by
             apply Summable.sum_le_tsum
             · intro n hn
-              apply Real.rpow_nonneg_of_nonneg
+              apply Real.rpow_nonneg
               norm_cast
               linarith
             · exact hsumm

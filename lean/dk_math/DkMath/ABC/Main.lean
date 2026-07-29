@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.Basic
 import DkMath.ABC.Square
+import DkMath.ABC.SquareTailGapIdentity
+import DkMath.ABC.ABCEpsilonIdentity
 import DkMath.ABC.ABCMainTheorem
 import DkMath.ABC.Bridge
 import DkMath.ABC.ABC038Bridge
