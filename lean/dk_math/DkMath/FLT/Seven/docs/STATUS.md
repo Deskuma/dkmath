@@ -1,6 +1,6 @@
 # FLT7 seven-primary terminal route: current status
 
-Updated: 2026-07-28
+Updated: 2026-07-29
 Repository: `Deskuma/dkmath`  
 Pull request: `#65`  
 Base branch: `feature/FLT7-magic-core-260722-v0`  
@@ -1264,6 +1264,78 @@ rightRoot^7 - leftRoot^7 =
 ```
 
 RAMIFIED-011U and RAMIFIED-012 have Outcome A. This is the pure real-cubic
-second-case equation, but not a terminal FLT7 contradiction. The exact
-RAMIFIED-013 depth split and axis drop, the independent signed-root-gap
-routing, and recursive descent closure remain separate obligations.
+second-case equation, but not a terminal FLT7 contradiction. The next
+section records the now-completed RAMIFIED-013 depth split and axis drop.
+The independent signed-root-gap routing and recursive descent closure remain
+separate obligations.
+
+## 35. RAMIFIED-013 exact depth ledger and real-cubic axis drop
+
+`SevenRealCubicAxisDrop.lean` completes both internal halves of
+RAMIFIED-013.
+
+The Eisenstein axis `theta = alpha - 3` is proved prime, and its divisibility
+is detected by the scalar theta coordinate in `ZMod 7`. Lean then fixes:
+
+```text
+HasExactThetaDepth (normalizedAxis^6 * normalizedWitness^7) 13
+HasExactThetaDepth Phi_7(XR,XL) 3
+HasExactThetaDepth (XR-XL) 10.
+```
+
+The depth-three quotient proof uses the checked expansion
+
+```text
+Phi_7(XL+d,XL)
+  = 7*XL^6 + 21*XL^5*d + ... + d^6
+```
+
+and the fact that `XL` is a theta-unit. The resulting
+`RamifiedRealCubicDepthLedgerPacket` retains explicit axis-free cores:
+
+```text
+XR - XL       = theta^10 * gapCore
+Phi_7(XR,XL)  = theta^3  * quotientCore
+theta ∤ gapCore
+theta ∤ quotientCore.
+```
+
+Lean proves the two sources, hence `XL` and `XR`, are coprime. A common prime
+of the two normalized cores would divide `7*XL^6`; root coprimality excludes
+the `XL` branch, while the remaining branch is associated to `theta` and
+contradicts axis-freeness. Therefore:
+
+```text
+IsCoprime gapCore quotientCore.
+```
+
+Their product is associated to the seventh power of the signed inner
+second-coordinate root. Mathlib's PID coprime-power extractor gives:
+
+```text
+exists T, Associated (T^7) gapCore.
+```
+
+For the resulting unit `u`, Lean uses the explicit Bezout exponent split:
+
+```text
+droppedAxis    = u^(-2) * theta
+descentWitness = u * theta * T
+
+XR - XL = droppedAxis^3 * descentWitness^7
+Associated droppedAxis theta
+Prime droppedAxis.
+```
+
+Thus RAMIFIED-013 has **Outcome A**, and the ramified algebraic phase is
+complete at its advertised boundary. The exact algebraic-root norms also
+recover the signed integer roots, but the nonlinear identity
+`Norm(XR)-Norm(XL)` is not `Norm(XR-XL)`. Consequently the proposed
+RAMIFIED-009B signed integer gap depth does not follow merely by applying
+the norm to the axis-drop equation.
+
+The next phase is reconstruction/fusion: connect this real-cubic descent seed
+back to a new primitive integer/quadratic Fermat chart with a strict global
+measure decrease. No such counterexample constructor, recursive descent
+provider, terminal contradiction, or unconditional FLT7 theorem is claimed
+here.

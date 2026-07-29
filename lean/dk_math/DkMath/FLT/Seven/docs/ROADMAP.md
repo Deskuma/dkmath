@@ -1,6 +1,6 @@
 # FLT7 seven-primary terminal route: implementation roadmap
 
-Updated: 2026-07-28
+Updated: 2026-07-29
 Target branch: `wip/FLT7-magic-core-260722-WiseWolf`  
 Starting implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
 
@@ -829,18 +829,88 @@ etaR = XR^7
 XR^7 - XL^7 = varpi^6*Z^7.
 ```
 
-The next independent checkpoints are now:
+The independent checkpoints queued at the end of RAMIFIED-012 were:
 
 ```text
 RAMIFIED-009B  exact signed-root gap routing over Int/Nat
 RAMIFIED-013   ramified depth 13/10/3 split and axis drop
 ```
 
-RAMIFIED-013 should start from `RamifiedRealCubicExactPowerPacket`, not from
-the earlier unit-weighted equation. Its precise target is an exact
-divisibility packet proving RHS depth `13`, cyclotomic quotient depth `3`,
-and root-gap depth `10`. This should remain separate from construction of a
-new Fermat counterexample or the recursive descent closure provider.
+RAMIFIED-013 is complete with Outcome A in
+`SevenRealCubicAxisDrop.lean`. Starting from
+`RamifiedRealCubicExactPowerPacket`, Lean proves the exact theta depths
+
+```text
+RHS = 13
+root gap = 10
+seventh quotient = 3.
+```
+
+It removes the displayed axis powers, proves the two remaining cores
+coprime, extracts the gap core as a seventh power up to a unit, and absorbs
+that unit using the coprime exponents three and seven. The final packet
+contains:
+
+```text
+Associated droppedAxis theta
+rootGap = droppedAxis^3 * descentWitness^7.
+```
+
+This closes the ramified algebraic axis arithmetic. It does not close the
+earlier `AwayDescentClosureProvider` and does not itself create a new
+primitive Fermat chart.
+
+## 13. Post-RAMIFIED fusion and reconstruction route
+
+The next phase must begin from `RamifiedRealCubicAxisDropPacket`, not by
+reopening the completed unit or theta-depth calculations.
+
+### FUSION-001: integer shadow compatibility
+
+Use the proved identities
+
+```text
+Norm(XL) = signedLeftRoot
+Norm(XR) = signedRightRoot
+XR - XL = droppedAxis^3 * descentWitness^7
+```
+
+to determine the exact additional data needed to reconstruct the integer or
+quadratic chart. The first audit must respect that the determinant norm is
+nonlinear:
+
+```text
+Norm(XR) - Norm(XL) != Norm(XR - XL)
+```
+
+in general. Therefore the signed-root depth-four claim cannot be inferred by
+a formal norm application. It needs a checked first-variation identity,
+coordinate expansion, or an independent integer routing proof.
+
+### FUSION-002: primitive chart constructor
+
+If FUSION-001 supplies compatible integer endpoints and coordinates, package
+a constructor returning an actual primitive counterexample chart. It must
+prove all original Fermat equation, positivity/nonzero, and coprimality
+fields; none may be added as assumptions merely to inhabit the packet.
+
+### FUSION-003: strict global drop
+
+Choose and prove an explicit well-founded measure smaller for the reconstructed
+chart. Algebraic theta depth alone is not yet that measure. Only after this
+strict-drop theorem may the result be connected to
+`AwayDescentClosureProvider`.
+
+### Stop gate
+
+Stop before claiming recursive descent or FLT7 unless all three arrows are
+inhabited:
+
+```text
+real-cubic axis drop
+  -> primitive integer/quadratic counterexample
+  -> strict well-founded decrease.
+```
 
 ## 14. Review outcomes for Codex
 

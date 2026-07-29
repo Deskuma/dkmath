@@ -43,6 +43,9 @@ terminal prime q
   → maximal real-cubic order, class number one, and coprime source extraction
   → projective mod-7 unit-class isomorphism and exact source seventh powers
   → pure real-cubic second-case equation
+  → exact theta-depth ledger 13 = 10 + 3
+  → coprime away-axis core extraction
+  → real-cubic root-gap axis drop
 ```
 
 `AwaySevenBaseTerminalCellwiseFixedSystemObligation` is discharged, and
@@ -225,8 +228,34 @@ rightRoot^7 - leftRoot^7 =
   normalizedAxis^6*normalizedWitness^7.
 ```
 
-This is the advertised pure real-cubic second-case equation. It is not yet
-the final FLT7 contradiction: RAMIFIED-013 must prove the exact ramified
-depth split `13 = 10 + 3` and the resulting axis drop. The separate
-RAMIFIED-009B signed-root-gap routing and recursive descent closure also
-remain open.
+This is the advertised pure real-cubic second-case equation.
+
+RAMIFIED-013 is complete with Outcome A in
+`SevenRealCubicAxisDrop.lean`. The right side has exact theta depth `13`,
+the homogeneous seventh quotient has exact depth `3`, and the root gap has
+exact depth `10`. The explicit normalized cores are coprime, so PID
+coprime-power extraction and the exponent identity between `3` and `7`
+produce:
+
+```text
+Associated droppedAxis theta
+XR - XL = droppedAxis^3 * descentWitness^7.
+```
+
+The dropped axis is prime and has exact theta depth one. The algebraic roots
+also satisfy:
+
+```text
+Norm(XL) = signedLeftRoot
+Norm(XR) = signedRightRoot.
+```
+
+This completes the ramified algebraic phase, but not the final FLT7
+contradiction. The norm is nonlinear, so the independent signed integer
+gap-depth routing is not automatically a corollary of the algebraic gap
+factorization. The next phase must fuse the real-cubic axis drop back into
+an actual primitive integer/quadratic counterexample and prove a strict
+well-founded decrease before the recursive descent provider can be inhabited.
+
+See [FLT7-RAMIFIED-013-REPORT.md](FLT7-RAMIFIED-013-REPORT.md) for the exact
+Lean boundary and next-phase prediction.

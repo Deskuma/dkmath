@@ -84,6 +84,7 @@ import DkMath.FLT.Seven.SevenRealCubicEisenstein
 import DkMath.FLT.Seven.SevenRealCubicNumberField
 import DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
 import DkMath.FLT.Seven.SevenRealCubicUnitClass
+import DkMath.FLT.Seven.SevenRealCubicAxisDrop
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -203,6 +204,14 @@ projective logarithm is a bijective class criterion.  A primitive loaded
 linear source forces its extracted unit to have zero logarithm, hence both
 RAMIFIED sources are exact seventh powers.  The facade exports the pure
 equation `rightRoot^7 - leftRoot^7 = normalizedAxis^6 *
-normalizedWitness^7`.  The subsequent exact ramified depth `13/10/3` split,
-axis drop, and recursive descent are not claimed.
+normalizedWitness^7`.  Its right side has exact theta depth `13`; the
+homogeneous seventh quotient has exact depth `3`; and the algebraic root gap
+has exact depth `10`.  Removing these exact theta powers leaves coprime cores,
+so PID coprime-power extraction and the coprime exponents `3` and `7` absorb
+the remaining unit.  The facade therefore exports a prime axis associate
+`droppedAxis` and witness with
+`rightRoot - leftRoot = droppedAxis^3 * descentWitness^7`.
+This completes the ramified algebraic axis drop.  It does not yet construct
+a new primitive Fermat counterexample, the independent signed-root depth-four
+routing, an inhabited recursive descent provider, or FLT7.
 -/
