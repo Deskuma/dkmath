@@ -15,6 +15,14 @@ expansion identifies the depth-four coefficient with the same signed
 a seventh power is reduced exactly to an explicit homogeneous degree-seven
 integer equation. Its integral zero-locus classification remains open.
 
+FUSION-002A/B/C and the independent integer-sector part of 002E are now
+implemented locally. Integral theta coordinates reconstruct the cubic
+integer, both nonconstant coordinates of its seventh power are divided by
+seven, and their exact triangular factors have the predicted residues
+`A^6`, `-3*A^5`, `A^6`, and `3*A^5` modulo seven. Independently,
+`quotientRoot = 1` and `gapRoot = a^2*m` modulo seven are proved. The
+packet-level exact jet depths `v7(B)=3`, `v7(C)=6` remain the next gate.
+
 ## 1. Purpose of this document
 
 This document is the handoff state for the remaining FLT7 work.

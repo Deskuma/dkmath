@@ -900,6 +900,20 @@ the integral zero-locus problem for the homogeneous degree-seven polynomial
 `seventhSourcePlaneEquation`. The expansion alone does not select Outcome
 A, B, or C; proving that arithmetic classification is the next gate.
 
+The theta-basis refinement is now formalized through FUSION-002C:
+`SevenRealCubicThetaCoordinates.lean` gives the integral change of basis, and
+`SevenRealCubicThetaSeventhPower.lean` gives the two divided seventh-power
+coordinates with corrected triangular factors. In the identities
+
+```text
+G = B*GB(A,B,C) + 7*C^2*GC(A,C)
+H = C*HC(A,B,C) + B^2*HB(A,B),
+```
+
+the dependencies displayed above are essential. Their four leading residues
+are proved. The next checkpoint is to combine these identities with the
+exact-power source equations and construct the exact `(3,6)` root-jet packet.
+
 ### FUSION-003: chart reconstruction or full cyclotomic lift
 
 Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart

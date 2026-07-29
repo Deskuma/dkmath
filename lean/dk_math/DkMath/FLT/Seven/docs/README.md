@@ -281,4 +281,13 @@ explicit homogeneous equation `seventhSourcePlaneEquation a b c = 0`.
 No implication `c = 0`, finite unit-sector classification, or full-cyclotomic
 necessity has yet been proved. Descent closure therefore remains out of scope.
 
+The next FUSION-002 refinement is now checked in the integral theta basis.
+Both nonconstant coordinates of a seventh power have explicit divided
+coordinates and triangular factor identities. Their coefficient residues
+match the predicted local model. The integer shadow also fixes
+`quotientRoot ≡ 1` and `gapRoot ≡ a²*m (mod 7)`. Exact theta-linear depth
+three and theta-square depth six have not yet been packaged; this is the
+remaining FUSION-002 jet-classification obligation.
+
 See [FLT7-FUSION-001-B-REPORT.md](FLT7-FUSION-001-B-REPORT.md).
+See [FLT7-FUSION-002-REPORT.md](FLT7-FUSION-002-REPORT.md).

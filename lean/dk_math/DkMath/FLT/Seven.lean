@@ -89,6 +89,9 @@ import DkMath.FLT.Seven.SevenRamifiedSignedRootDepth
 import DkMath.FLT.Seven.SevenRamifiedSignedRootRouting
 import DkMath.FLT.Seven.SevenRealCubicNormFirstVariation
 import DkMath.FLT.Seven.SevenRealCubicSourcePlane
+import DkMath.FLT.Seven.SevenRealCubicThetaCoordinates
+import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPower
+import DkMath.FLT.Seven.SevenRamifiedFusionUnitSector
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
