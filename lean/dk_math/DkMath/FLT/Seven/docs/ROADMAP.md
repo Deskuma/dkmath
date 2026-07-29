@@ -937,28 +937,52 @@ Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart
 directly or to prove the linear-factor Kummer packet in the full cyclotomic
 carrier.
 
-Current checkpoint (2026-07-30): the narrow pre-bridge audit is complete.
-The algebraic root gap has exact leading residue
+Current checkpoint (2026-07-30): FUSION-003C cyclic phase is complete through
+the comparison boundary. The algebraic root gap has exact leading residue
 `thetaResidue gapCore = -2*m`, and the six unit sectors are formally
-decomposed as `μ₂ × μ₃`. The signed routing board now has an explicit
-unit shadow, signed margin companion, and two `K_{2,3}` cycle ratios.
+decomposed as `μ₂ × μ₃`. The signed routing board has an explicit unit shadow,
+signed margin companion, and two `K_{2,3}` cycle ratios.
 
 The surviving away row provenance had been erased by the common summit.
 It is now retained by a thin pre-summit packet, but no equality between its
 Y/Z sign and `tau^3` has been proved. Such an equality requires an explicit
 bridge between the relevant normalized units.
 
-The current hypotheses also do not yet express either routing cycle ratio as
-a function of `tau`. Consequently no routing cell is selected. The safe next
-branch is the relative cyclotomic torsor
+The two cycle ratios are no longer treated as unrelated free parameters.
+Their quotient is fixed up to the sign erased by `Int.natAbs`:
 
 ```text
-relativeIndex(k) = k / tau.
+kappa12 / kappa23 = |m|/|a|
+(kappa12 / kappa23)^2 = tau^2.
 ```
 
-This normalization is now implemented as an equivalence. The next gate is to
-prove which relative index, if any, has the required divisibility or
-seventh-power property. Only that theorem may distinguish a Kummer factor.
+The abstract routing shadow nevertheless has both a visible ternary cycle
+action and a hidden ternary row gauge. Lean witnesses prove that margins do
+not determine cycle phase and that margins plus cycles do not determine the
+full unit board.
+
+On the cubic side,
+
+```text
+sigma(theta) = theta*(theta+4)
+thetaResidue(rotated depth-ten core) = 4*thetaResidue(core),
+```
+
+giving the orbit residues `-2*m`, `-m`, and `3*m`. The relative real index
+
+```text
+relativeRealIndex(k) = (k/tau)^2
+```
+
+has fibre one exactly `{tau,-tau}`. This selects a conjugate pair only.
+
+The next gate is a rotation-routing naturality packet: rotate the signed
+algebraic root pair, transport or reconstruct its coherent routing shadow,
+and prove whether this induces the visible cycle twist or the hidden row
+gauge. Merely identifying the two abstract three-element index sets is not
+sufficient. Only an action-level comparison may inhabit the cyclic alignment
+packet and choose between chart reconstruction up to rotation and the
+conjugate-pair-equivariant cyclotomic route.
 
 ### FUSION-004/005: primitive chart and strict global drop
 

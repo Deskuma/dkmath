@@ -49,7 +49,7 @@ def sevenTernarySectorSubgroup : Subgroup ((ZMod 7)ˣ) where
 abbrev SevenBinarySector := sevenBinarySectorSubgroup
 abbrev SevenTernarySector := sevenTernarySectorSubgroup
 
-private theorem sevenUnit_pow_six (s : (ZMod 7)ˣ) :
+theorem sevenUnit_pow_six (s : (ZMod 7)ˣ) :
     s ^ 6 = 1 := by
   apply Units.ext
   apply mul_left_cancel₀ s.ne_zero

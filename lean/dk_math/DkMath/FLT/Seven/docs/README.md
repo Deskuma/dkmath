@@ -314,12 +314,30 @@ binary rows and one common ternary column.
 `SevenRamifiedFusionRoutingAudit.lean` retains Y/Z provenance before the
 common summit, proves the signed routing third row is `(1,1,1)`, constructs
 the six active unit cells and their two cycle ratios, and records the signed
-margins lost by `natAbs`. No cycle ratio is identified with a function of
-`tau`, and no routing cell is selected.
-
-The next branch is therefore normalized without selecting a Kummer factor:
-`relativeCyclotomicIndex k = k/tau`. This is proved to be a torsor
-equivalence. A distinguished factor still requires a new divisibility or
-seventh-power theorem.
+margins lost by `natAbs`.
 
 See [FLT7-FUSION-003-PREBRIDGE-REPORT.md](FLT7-FUSION-003-PREBRIDGE-REPORT.md).
+
+FUSION-003 cyclic phase is also complete through its action-comparison
+boundary. The active-board normal form compresses the two cycles to one
+visible `mu3` phase while proving a separate hidden row gauge. On coherent
+routing data Lean proves
+
+```text
+(kappa12/kappa23)^2 = tau^2.
+```
+
+The real-cubic rotation gives the depth-ten residual orbit
+`-2*m, -m, 3*m`, and
+
+```text
+relativeRealIndex(k) = (k/tau)^2 = 1
+  iff k = tau or k = -tau.
+```
+
+The next gate is an action-level naturality theorem identifying how rotation
+of the signed roots transports the canonical routing shadow. Equality of
+abstract three-element labels alone is not sufficient to inhabit the cyclic
+alignment packet.
+
+See [FLT7-FUSION-003-CYCLIC-REPORT.md](FLT7-FUSION-003-CYCLIC-REPORT.md).

@@ -112,16 +112,43 @@ structure ActiveUnitBoard where
   u23 : (ZMod 7)ˣ
 
 def activeUnitBoard
-    (p : RamifiedSignedRootRoutingPacket) : ActiveUnitBoard := by
-  rcases p.activeCells_not_seven_dvd with
-    ⟨h11, h12, h13, h21, h22, h23⟩
-  exact {
-    u11 := natUnit p.routing.c11 h11
-    u12 := natUnit p.routing.c12 h12
-    u13 := natUnit p.routing.c13 h13
-    u21 := natUnit p.routing.c21 h21
-    u22 := natUnit p.routing.c22 h22
-    u23 := natUnit p.routing.c23 h23 }
+    (p : RamifiedSignedRootRoutingPacket) : ActiveUnitBoard := {
+  u11 := natUnit p.routing.c11 p.activeCells_not_seven_dvd.1
+  u12 := natUnit p.routing.c12 p.activeCells_not_seven_dvd.2.1
+  u13 := natUnit p.routing.c13 p.activeCells_not_seven_dvd.2.2.1
+  u21 := natUnit p.routing.c21 p.activeCells_not_seven_dvd.2.2.2.1
+  u22 := natUnit p.routing.c22 p.activeCells_not_seven_dvd.2.2.2.2.1
+  u23 := natUnit p.routing.c23 p.activeCells_not_seven_dvd.2.2.2.2.2 }
+
+@[simp] theorem activeUnitBoard_u11_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u11 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c11 := by
+  simp [activeUnitBoard, natUnit]
+
+@[simp] theorem activeUnitBoard_u12_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u12 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c12 := by
+  simp [activeUnitBoard, natUnit]
+
+@[simp] theorem activeUnitBoard_u13_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u13 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c13 := by
+  simp [activeUnitBoard, natUnit]
+
+@[simp] theorem activeUnitBoard_u21_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u21 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c21 := by
+  simp [activeUnitBoard, natUnit]
+
+@[simp] theorem activeUnitBoard_u22_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u22 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c22 := by
+  simp [activeUnitBoard, natUnit]
+
+@[simp] theorem activeUnitBoard_u23_val
+    (p : RamifiedSignedRootRoutingPacket) :
+    ((p.activeUnitBoard.u23 : (ZMod 7)ˣ) : ZMod 7) = p.routing.c23 := by
+  simp [activeUnitBoard, natUnit]
 
 /-- The signed margins erased by `Int.natAbs` in the routing construction. -/
 structure SignedMarginOrientation

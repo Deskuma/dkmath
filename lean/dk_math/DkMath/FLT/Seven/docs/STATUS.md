@@ -53,12 +53,41 @@ now preserves that label before commonization, without duplicating the summit.
 No theorem equating the retained row sign with `tau^3` is claimed: the
 required normalized-unit equality is still absent.
 
-The present packet equations do not identify the two routing cycle ratios as
-functions of `tau`. Therefore the direct cell-identification route remains an
-explicit missing bridge. The cyclotomic lift branch has begun only at the
-safe torsor level: `relativeIndex(k) = k/tau` is an equivalence, and relative
-index one is proved equivalent to `k=tau`; no factor is declared
-distinguished or a seventh power.
+FUSION-003C cyclic phase is now implemented locally. The abstract active unit
+board satisfies the three cycle/margin normal-form identities. A visible
+ternary cycle twist, a hidden ternary row twist, and the columnwise binary
+gauge are formalized, with concrete nonuniqueness witnesses proving the exact
+information boundary of the unit shadow.
+
+For a coherent routing audit, the normalized equation now gives the stronger
+bridge
+
+```text
+kappa12 / kappa23 = |m| / |a|
+(kappa12 / kappa23)^2 = tau^2.
+```
+
+The real-cubic rotation is also explicit:
+
+```text
+sigma(theta) = theta*(theta+4)
+thetaResidue(rotated depth-ten core) = 4 * thetaResidue(core),
+```
+
+and the paired gap supplies the three residues `-2*m`, `-m`, and `3*m`.
+Finally,
+
+```text
+relativeRealIndex(k) = (k/tau)^2 = 1
+  iff k = tau or k = -tau.
+```
+
+Thus the conjugate pair `{tau,-tau}` is fixed, but its signed member is not.
+The remaining gate is not another scalar identity: it is an action-level
+naturality theorem proving how real-cubic rotation transports the canonical
+signed routing shadow. Until that comparison is proved, no
+`RamifiedFusionCyclicPhasePacket` is claimed inhabited and no factor is
+declared distinguished or a seventh power.
 
 ## 1. Purpose of this document
 
