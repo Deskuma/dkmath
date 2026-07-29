@@ -259,3 +259,19 @@ well-founded decrease before the recursive descent provider can be inhabited.
 
 See [FLT7-RAMIFIED-013-REPORT.md](FLT7-RAMIFIED-013-REPORT.md) for the exact
 Lean boundary and next-phase prediction.
+
+FUSION-001 is complete with Outcome A. The symmetric RAMIFIED exit now splits
+both the algebraic root gap and its seventh quotient as an axis cube times a
+seventh power. Independently, `SevenRamifiedSignedRootDepth.lean` constructs
+the exact signed integer shadow
+
+```text
+r-l = 7^4*d,  Phi_7(r,l) = 7*E,
+d*E = a*(a+n)*m^7,  7 ∤ d*E.
+```
+
+The construction is attached to the same balanced packet and never identifies
+the norm of a difference with a difference of norms. The next reconnaissance
+is the seventh-root source-plane classification, not descent closure.
+
+See [FLT7-FUSION-001-REPORT.md](FLT7-FUSION-001-REPORT.md).

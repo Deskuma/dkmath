@@ -1339,3 +1339,32 @@ back to a new primitive integer/quadratic Fermat chart with a strict global
 measure decrease. No such counterexample constructor, recursive descent
 provider, terminal contradiction, or unconditional FLT7 theorem is claimed
 here.
+
+## 36. FUSION-001 balanced exit and signed integer depth
+
+`SevenRealCubicAxisDrop.lean` now closes the symmetric RAMIFIED epilogue:
+the quotient core is also a seventh power up to association, and
+`RamifiedRealCubicBalancedAxisSplitPacket` records
+
+```text
+XR - XL      = axis1^3 * witness1^7
+Phi_7(XR,XL) = axis2^3 * witness2^7
+axis1 ~ theta, axis2 ~ theta.
+```
+
+`SevenRamifiedSignedRootDepth.lean` independently factors the signed integer
+seventh-power difference. It proves the signed roots coprime and constructs
+7-unit cores `d,E` with
+
+```text
+r - l = 7^4*d
+Phi_7(r,l) = 7*E
+d*E = a*(a+n)*m^7
+7 ∤ d, 7 ∤ E.
+```
+
+This is the requested integer depth-four shadow on the same balanced packet;
+it does not use the false identity `Norm(XR-XL)=Norm(XR)-Norm(XL)`.
+FUSION-001 therefore has Outcome A. Coprimality of `d,E`, the proposed
+2-by-3 routing, a general norm first-variation theorem, and source-plane
+classification remain later obligations.

@@ -887,14 +887,20 @@ in general. Therefore the signed-root depth-four claim cannot be inferred by
 a formal norm application. It needs a checked first-variation identity,
 coordinate expansion, or an independent integer routing proof.
 
-### FUSION-002: primitive chart constructor
+### FUSION-002: seventh-root source-plane classification
 
-If FUSION-001 supplies compatible integer endpoints and coordinates, package
-a constructor returning an actual primitive counterexample chart. It must
-prove all original Fermat equation, positivity/nonzero, and coprimality
-fields; none may be added as assumptions merely to inhabit the packet.
+Classify real-cubic roots whose seventh powers lie in the two-dimensional
+source plane. Determine whether the roots stay in that plane, lie in finitely
+many unit-translated sectors, or require the full degree-six cyclotomic
+carrier.
 
-### FUSION-003: strict global drop
+### FUSION-003: chart reconstruction or full cyclotomic lift
+
+Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart
+directly or to prove the linear-factor Kummer packet in the full cyclotomic
+carrier.
+
+### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed
 chart. Algebraic theta depth alone is not yet that measure. Only after this
@@ -907,7 +913,7 @@ Stop before claiming recursive descent or FLT7 unless all three arrows are
 inhabited:
 
 ```text
-real-cubic axis drop
+balanced algebraic/integer fusion
   -> primitive integer/quadratic counterexample
   -> strict well-founded decrease.
 ```

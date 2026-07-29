@@ -824,6 +824,16 @@ theorem exists_gapCore_associated_pow_seven
     p.normalizedFactors_isCoprime
     p.cores_product_associated_pow_seven
 
+/-- The symmetric PID extraction places the quotient core in a seventh
+power as well. -/
+theorem exists_quotientCore_associated_pow_seven
+    (p : RamifiedRealCubicDepthLedgerPacket) :
+    ∃ t : SevenRealCubicInt,
+      Associated (t ^ 7) p.quotientCore := by
+  apply exists_associated_pow_of_associated_pow_mul
+    p.normalizedFactors_isCoprime.symm
+  simpa [mul_comm] using p.cores_product_associated_pow_seven
+
 end RamifiedRealCubicDepthLedgerPacket
 
 /-- RAMIFIED-013B output: exact depth, coprime away-axis cores, and the
@@ -842,6 +852,18 @@ structure RamifiedRealCubicAxisDropPacket : Type where
   rootGap_eq :
     depthLedger.rootGap =
       droppedAxis ^ 3 * descentWitness ^ 7
+
+/-- Symmetric RAMIFIED epilogue: both factors in the seventh-power
+difference have an axis-cube times seventh-power presentation. -/
+structure RamifiedRealCubicBalancedAxisSplitPacket : Type where
+  axisDrop : RamifiedRealCubicAxisDropPacket
+  quotientAxis : SevenRealCubicInt
+  quotientWitness : SevenRealCubicInt
+  quotientAxis_associated :
+    Associated quotientAxis SevenRealCubicInt.eisensteinAxis
+  quotient_eq :
+    axisDrop.depthLedger.quotient =
+      quotientAxis ^ 3 * quotientWitness ^ 7
 
 namespace RamifiedRealCubicDepthLedgerPacket
 
@@ -926,6 +948,98 @@ theorem nonempty_axisDrop
 
 end RamifiedRealCubicDepthLedgerPacket
 
+namespace RamifiedRealCubicAxisDropPacket
+
+open SevenRealCubicInt
+
+/-- The quotient's arbitrary extraction unit is absorbed by the same
+coprime exponents three and seven used for the root gap. -/
+theorem nonempty_balancedAxisSplit
+    (p : RamifiedRealCubicAxisDropPacket) :
+    Nonempty RamifiedRealCubicBalancedAxisSplitPacket := by
+  let ledger := p.depthLedger
+  obtain ⟨t, ht⟩ := ledger.exists_quotientCore_associated_pow_seven
+  rcases ht with ⟨u, hu⟩
+  let quotientAxis : SevenRealCubicInt :=
+    ((u⁻¹ ^ 2 : SevenRealCubicIntˣ) :
+      SevenRealCubicInt) * eisensteinAxis
+  let quotientWitness : SevenRealCubicInt :=
+    (u : SevenRealCubicInt) * t
+  have haxis :
+      Associated quotientAxis eisensteinAxis := by
+    dsimp [quotientAxis]
+    refine ⟨(u⁻¹ ^ 2)⁻¹, ?_⟩
+    have hcoefficient :
+        ((u⁻¹ : SevenRealCubicIntˣ) :
+            SevenRealCubicInt) ^ 2 *
+            (((u⁻¹ ^ 2)⁻¹ : SevenRealCubicIntˣ) :
+              SevenRealCubicInt) = 1 := by
+      exact congrArg
+        (fun v : SevenRealCubicIntˣ =>
+          (v : SevenRealCubicInt))
+        (by simp : (u⁻¹ ^ 2) * (u⁻¹ ^ 2)⁻¹ = 1)
+    calc
+      ((u⁻¹ : SevenRealCubicIntˣ) :
+            SevenRealCubicInt) ^ 2 *
+          eisensteinAxis *
+          (((u⁻¹ ^ 2)⁻¹ : SevenRealCubicIntˣ) :
+            SevenRealCubicInt) =
+          (((u⁻¹ : SevenRealCubicIntˣ) :
+              SevenRealCubicInt) ^ 2 *
+            (((u⁻¹ ^ 2)⁻¹ : SevenRealCubicIntˣ) :
+              SevenRealCubicInt)) *
+            eisensteinAxis := by ring
+      _ = eisensteinAxis := by rw [hcoefficient, one_mul]
+  have hunitUnits :
+      (u⁻¹ ^ 2) ^ 3 * u ^ 7 = u := by
+    group
+  have hunit :
+      (((u⁻¹ ^ 2 : SevenRealCubicIntˣ) :
+          SevenRealCubicInt) ^ 3) *
+          ((u : SevenRealCubicInt) ^ 7) =
+        (u : SevenRealCubicInt) := by
+    exact congrArg
+      (fun v : SevenRealCubicIntˣ =>
+        (v : SevenRealCubicInt)) hunitUnits
+  have hquotient :
+      ledger.quotient =
+        quotientAxis ^ 3 * quotientWitness ^ 7 := by
+    calc
+      ledger.quotient =
+          eisensteinAxis ^ 3 * ledger.quotientCore :=
+        ledger.quotient_eq
+      _ = eisensteinAxis ^ 3 *
+          (t ^ 7 * (u : SevenRealCubicInt)) := by
+        rw [hu]
+      _ = (((u⁻¹ ^ 2 : SevenRealCubicIntˣ) :
+              SevenRealCubicInt) ^ 3 *
+            ((u : SevenRealCubicInt) ^ 7)) *
+          eisensteinAxis ^ 3 * t ^ 7 := by
+        rw [hunit]
+        ring
+      _ = quotientAxis ^ 3 * quotientWitness ^ 7 := by
+        dsimp [quotientAxis, quotientWitness]
+        ring
+  exact ⟨{
+    axisDrop := p
+    quotientAxis := quotientAxis
+    quotientWitness := quotientWitness
+    quotientAxis_associated := haxis
+    quotient_eq := hquotient }⟩
+
+end RamifiedRealCubicAxisDropPacket
+
+namespace RamifiedRealCubicDepthLedgerPacket
+
+/-- Every depth ledger has the symmetric axis split at its RAMIFIED exit. -/
+theorem nonempty_balancedAxisSplit
+    (p : RamifiedRealCubicDepthLedgerPacket) :
+    Nonempty RamifiedRealCubicBalancedAxisSplitPacket := by
+  rcases p.nonempty_axisDrop with ⟨axisDrop⟩
+  exact axisDrop.nonempty_balancedAxisSplit
+
+end RamifiedRealCubicDepthLedgerPacket
+
 namespace RamifiedRealCubicExactPowerPacket
 
 /-- Every exact-power packet reaches the completed ramified axis-drop
@@ -979,6 +1093,10 @@ end RamifiedRealCubicNormPacket
   RamifiedRealCubicDepthLedgerPacket.normalizedFactors_isCoprime
 #print axioms
   RamifiedRealCubicDepthLedgerPacket.exists_gapCore_associated_pow_seven
+#print axioms
+  RamifiedRealCubicDepthLedgerPacket.exists_quotientCore_associated_pow_seven
+#print axioms
+  RamifiedRealCubicDepthLedgerPacket.nonempty_balancedAxisSplit
 #print axioms RamifiedRealCubicExactPowerPacket.nonempty_axisDrop
 #print axioms RamifiedRealCubicNormPacket.nonempty_axisDrop
 
