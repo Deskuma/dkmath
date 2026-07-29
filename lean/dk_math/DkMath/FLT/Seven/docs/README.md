@@ -278,16 +278,23 @@ is `7^4` times an explicit coefficient; that coefficient is exactly `d`.
 
 FUSION-002 has now reduced seventh-root source-plane classification to the
 explicit homogeneous equation `seventhSourcePlaneEquation a b c = 0`.
-No implication `c = 0`, finite unit-sector classification, or full-cyclotomic
-necessity has yet been proved. Descent closure therefore remains out of scope.
+The unrestricted equation is no longer the active boundary. A division-free
+triangular lift iterated three times constructs exact nonzero theta-linear
+and theta-square cores at integer depths `3` and `6`.
 
 The next FUSION-002 refinement is now checked in the integral theta basis.
 Both nonconstant coordinates of a seventh power have explicit divided
 coordinates and triangular factor identities. Their coefficient residues
 match the predicted local model. The integer shadow also fixes
-`quotientRoot ≡ 1` and `gapRoot ≡ a²*m (mod 7)`. Exact theta-linear depth
-three and theta-square depth six have not yet been packaged; this is the
-remaining FUSION-002 jet-classification obligation.
+`quotientRoot ≡ 1` and `gapRoot ≡ a²*m (mod 7)`.
+
+FUSION-002 is now packaged as a controlled paired theta-jet outcome. Neither
+exact root is in the source plane. Their projective linear jets are `-tau`
+and `tau`, their normalized quadratic jets are both `-3*tau^2`, and
+`tau = m/a = gapRoot/a^3` in `ZMod 7`. The pair `(tau^3,tau^2)` is recorded
+as a canonical six-sector address which reconstructs `tau`. No equality
+between this address and the existing fixed routing cells is claimed yet.
 
 See [FLT7-FUSION-001-B-REPORT.md](FLT7-FUSION-001-B-REPORT.md).
 See [FLT7-FUSION-002-REPORT.md](FLT7-FUSION-002-REPORT.md).
+See [FLT7-FUSION-002-EXACT-JET-REPORT.md](FLT7-FUSION-002-EXACT-JET-REPORT.md).

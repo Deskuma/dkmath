@@ -911,8 +911,25 @@ H = C*HC(A,B,C) + B^2*HB(A,B),
 ```
 
 the dependencies displayed above are essential. Their four leading residues
-are proved. The next checkpoint is to combine these identities with the
-exact-power source equations and construct the exact `(3,6)` root-jet packet.
+are proved. The exact-power source equations are now connected by
+`SevenRamifiedThetaJetLifting.lean` and
+`SevenRamifiedPairedThetaRootJet.lean`. FUSION-002 therefore exits with:
+
+```text
+B_left  = 7^3 * U_left,   U_left  != 0 mod 7
+B_right = 7^3 * U_right,  U_right != 0 mod 7
+C_left  = 7^6 * V_left,   V_left  != 0 mod 7
+C_right = 7^6 * V_right,  V_right != 0 mod 7
+
+U_left/A  = -tau
+U_right/A =  tau
+V_left/A = V_right/A = -3*tau^2.
+```
+
+This is the controlled finite theta-jet outcome, not unrestricted
+three-coordinate Outcome C. The next gate is an explicit identification
+between the new `(tau^3,tau^2)` unit address and either the fixed integer
+routing cells or the six cyclotomic linear factors.
 
 ### FUSION-003: chart reconstruction or full cyclotomic lift
 

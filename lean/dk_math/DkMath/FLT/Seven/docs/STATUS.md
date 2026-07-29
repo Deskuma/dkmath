@@ -20,8 +20,22 @@ implemented locally. Integral theta coordinates reconstruct the cubic
 integer, both nonconstant coordinates of its seventh power are divided by
 seven, and their exact triangular factors have the predicted residues
 `A^6`, `-3*A^5`, `A^6`, and `3*A^5` modulo seven. Independently,
-`quotientRoot = 1` and `gapRoot = a^2*m` modulo seven are proved. The
-packet-level exact jet depths `v7(B)=3`, `v7(C)=6` remain the next gate.
+`quotientRoot = 1` and `gapRoot = a^2*m` modulo seven are proved.
+
+FUSION-002 exact theta jets are now complete locally. A reusable
+division-free step advances `(k,2k)` to `(k+1,2k+2)` and three iterations
+produce exact nonzero `(3,6)` cores for both algebraic roots. The paired
+packet proves the roots are not in the source plane and identifies the common
+projective invariant
+
+```text
+tau = m/a = gapRoot/a^3,
+left jet = (-tau,-3*tau^2),
+right jet = (tau,-3*tau^2).
+```
+
+Its `(tau^3,tau^2)` address reconstructs `tau`. Connection to existing
+routing margins or cyclotomic factors remains reconnaissance only.
 
 ## 1. Purpose of this document
 

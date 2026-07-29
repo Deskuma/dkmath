@@ -68,6 +68,20 @@ theorem isSourcePlane_iff_thetaSquareInt_eq_zero
     IsSourcePlane x ↔ thetaSquareInt x = 0 :=
   Iff.rfl
 
+theorem leftSource_thetaCoordinates (a n : ℤ) :
+    thetaConstInt (leftSource a n) = a - 3 * n ∧
+      thetaLinearInt (leftSource a n) = -n ∧
+      thetaSquareInt (leftSource a n) = 0 := by
+  simp [thetaConstInt, thetaLinearInt, thetaSquareInt, leftSource]
+  ring
+
+theorem rightSource_thetaCoordinates (a n : ℤ) :
+    thetaConstInt (rightSource a n) = a + 4 * n ∧
+      thetaLinearInt (rightSource a n) = n ∧
+      thetaSquareInt (rightSource a n) = 0 := by
+  simp [thetaConstInt, thetaLinearInt, thetaSquareInt, rightSource]
+  ring
+
 #print axioms theta_coordinate_decomposition
 
 end SevenRealCubicInt
