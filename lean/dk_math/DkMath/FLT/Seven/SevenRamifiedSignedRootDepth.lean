@@ -50,6 +50,12 @@ structure RamifiedSignedRootDepthPacket : Type where
   balanced : RamifiedRealCubicBalancedAxisSplitPacket
   signedLeftRoot : ℤ
   signedRightRoot : ℤ
+  signedLeftRoot_eq :
+    signedLeftRoot =
+      balanced.axisDrop.depthLedger.exactPower.upToUnit.normPacket.leftRoot
+  signedRightRoot_eq :
+    signedRightRoot =
+      balanced.axisDrop.depthLedger.exactPower.upToUnit.normPacket.rightRoot
   signedRoots_isCoprime :
     IsCoprime signedLeftRoot signedRightRoot
   gapRoot : ℤ
@@ -300,6 +306,8 @@ theorem nonempty_signedRootDepth
     balanced := balanced
     signedLeftRoot := p.leftRoot
     signedRightRoot := p.rightRoot
+    signedLeftRoot_eq := rfl
+    signedRightRoot_eq := rfl
     signedRoots_isCoprime := p.signedRoots_isCoprime
     gapRoot := d
     quotientRoot := e
@@ -311,8 +319,58 @@ theorem nonempty_signedRootDepth
 
 end RamifiedRealCubicBalancedAxisSplitPacket
 
+namespace RamifiedSignedRootDepthPacket
+
+/-- The two axis-free signed integer factors are coprime.  A common prime
+would divide `7*l^6`; the seven branch contradicts exact gap depth, and the
+`l` branch contradicts coprimality of the signed roots. -/
+theorem gapRoot_isCoprime_quotientRoot
+    (p : RamifiedSignedRootDepthPacket) :
+    IsCoprime p.gapRoot p.quotientRoot := by
+  apply isCoprime_of_prime_dvd
+  · rintro ⟨hgap, _⟩
+    apply p.gapRoot_not_seven_dvd
+    simp [hgap]
+  · intro q hq hqgap hqquotient
+    have hqSignedGap :
+        q ∣ p.signedRightRoot - p.signedLeftRoot := by
+      rw [p.signedGap_eq]
+      exact dvd_mul_of_dvd_right hqgap _
+    have hqSignedQuotient :
+        q ∣ signedSeventhQuotient
+          p.signedRightRoot p.signedLeftRoot := by
+      rw [p.signedQuotient_eq]
+      exact dvd_mul_of_dvd_right hqquotient _
+    have hqRemainder :
+        q ∣ signedSeventhQuotient
+            p.signedRightRoot p.signedLeftRoot -
+          7 * p.signedLeftRoot ^ 6 := by
+      rw [signedSeventhQuotient_sub_seven_mul_pow_six]
+      exact dvd_mul_of_dvd_left hqSignedGap _
+    have hqSevenMul :
+        q ∣ 7 * p.signedLeftRoot ^ 6 := by
+      simpa using dvd_sub hqSignedQuotient hqRemainder
+    rcases hq.dvd_mul.mp hqSevenMul with hqSeven | hqLeftPow
+    · have hassoc :
+          Associated q (7 : ℤ) :=
+        hq.associated_of_dvd (by norm_num) hqSeven
+      exact p.gapRoot_not_seven_dvd
+        (hassoc.dvd_iff_dvd_left.mp hqgap)
+    · have hqLeft : q ∣ p.signedLeftRoot :=
+        hq.dvd_of_dvd_pow hqLeftPow
+      have hqRight : q ∣ p.signedRightRoot := by
+        have := dvd_add hqSignedGap hqLeft
+        simpa using this
+      exact hq.not_unit
+        (p.signedRoots_isCoprime.isUnit_of_dvd'
+          hqLeft hqRight)
+
+end RamifiedSignedRootDepthPacket
+
 #print axioms
   RamifiedRealCubicBalancedAxisSplitPacket.nonempty_signedRootDepth
+#print axioms
+  RamifiedSignedRootDepthPacket.gapRoot_isCoprime_quotientRoot
 
 end
 

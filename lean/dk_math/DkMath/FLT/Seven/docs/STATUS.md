@@ -2,10 +2,18 @@
 
 Updated: 2026-07-29
 Repository: `Deskuma/dkmath`  
-Pull request: `#65`  
-Base branch: `feature/FLT7-magic-core-260722-v0`  
-Work branch: `wip/FLT7-magic-core-260722-WiseWolf`  
+Pull request: `#73`
+Base branch: `feature/FLT7-magic-core-260722-v1`
+Work branch: `wip/FLT7-fusion-260729`
 Reviewed implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
+
+FUSION-001B is complete locally. The signed roots are definitionally tied
+back to the balanced norm packet, `gapRoot` and `quotientRoot` are coprime,
+their canonical `2 × 3` routing board is inhabited, and the coordinate norm
+expansion identifies the depth-four coefficient with the same signed
+`gapRoot`. FUSION-002 has begun: source-plane return of
+a seventh power is reduced exactly to an explicit homogeneous degree-seven
+integer equation. Its integral zero-locus classification remains open.
 
 ## 1. Purpose of this document
 

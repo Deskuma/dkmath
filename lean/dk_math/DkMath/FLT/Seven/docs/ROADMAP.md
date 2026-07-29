@@ -894,6 +894,12 @@ source plane. Determine whether the roots stay in that plane, lie in finitely
 many unit-translated sectors, or require the full degree-six cyclotomic
 carrier.
 
+Current checkpoint (2026-07-29): the exact third-coordinate expansion is
+proved in `SevenRealCubicSourcePlane.lean`. Thus this classification is now
+the integral zero-locus problem for the homogeneous degree-seven polynomial
+`seventhSourcePlaneEquation`. The expansion alone does not select Outcome
+A, B, or C; proving that arithmetic classification is the next gate.
+
 ### FUSION-003: chart reconstruction or full cyclotomic lift
 
 Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart

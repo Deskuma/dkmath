@@ -260,7 +260,7 @@ well-founded decrease before the recursive descent provider can be inhabited.
 See [FLT7-RAMIFIED-013-REPORT.md](FLT7-RAMIFIED-013-REPORT.md) for the exact
 Lean boundary and next-phase prediction.
 
-FUSION-001 is complete with Outcome A. The symmetric RAMIFIED exit now splits
+FUSION-001A and FUSION-001B are complete. The symmetric RAMIFIED exit now splits
 both the algebraic root gap and its seventh quotient as an axis cube times a
 seventh power. Independently, `SevenRamifiedSignedRootDepth.lean` constructs
 the exact signed integer shadow
@@ -270,8 +270,15 @@ r-l = 7^4*d,  Phi_7(r,l) = 7*E,
 d*E = a*(a+n)*m^7,  7 ∤ d*E.
 ```
 
-The construction is attached to the same balanced packet and never identifies
-the norm of a difference with a difference of norms. The next reconnaissance
-is the seventh-root source-plane classification, not descent closure.
+The construction is attached coherently to the same balanced packet and never
+identifies the norm of a difference with a difference of norms. The checked
+coordinate first variation instead rewrites the theta-depth-ten root
+perturbation as `7^3*theta*core` and proves that the resulting norm difference
+is `7^4` times an explicit coefficient; that coefficient is exactly `d`.
 
-See [FLT7-FUSION-001-REPORT.md](FLT7-FUSION-001-REPORT.md).
+FUSION-002 has now reduced seventh-root source-plane classification to the
+explicit homogeneous equation `seventhSourcePlaneEquation a b c = 0`.
+No implication `c = 0`, finite unit-sector classification, or full-cyclotomic
+necessity has yet been proved. Descent closure therefore remains out of scope.
+
+See [FLT7-FUSION-001-B-REPORT.md](FLT7-FUSION-001-B-REPORT.md).
