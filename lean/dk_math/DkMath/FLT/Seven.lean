@@ -34,6 +34,63 @@ import DkMath.FLT.Seven.PrimePowerCellAudit
 import DkMath.FLT.Seven.PrimePowerUnitOrbit
 import DkMath.FLT.Seven.PrimePowerOrbitAudit
 import DkMath.FLT.Seven.SevenPivotDescentAudit
+import DkMath.FLT.Seven.SevenBaseLayerQuotient
+import DkMath.FLT.Seven.SevenBaseFirstOrderModSeven
+import DkMath.FLT.Seven.SevenBaseFirstOrderLinearization
+import DkMath.FLT.Seven.SevenBaseUnitSectorClassification
+import DkMath.FLT.Seven.SevenBaseLoadQuotient
+import DkMath.FLT.Seven.SevenBaseTerminalPacket
+import DkMath.FLT.Seven.SevenBaseTerminalWeightedBridge
+import DkMath.FLT.Seven.SevenBaseTerminalLoadDivisibility
+import DkMath.FLT.Seven.SevenBaseTerminalEndpointSeparation
+import DkMath.FLT.Seven.SevenBaseTerminalCarrierRouting
+import DkMath.FLT.Seven.SevenBaseTerminalFixedRouting
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeAddress
+import DkMath.FLT.Seven.SevenBaseTerminalRootLoadAddress
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeCoordinate
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeCellCoordinate
+import DkMath.FLT.Seven.SevenBaseTerminalOriginalRoutingProjection
+import DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeAddress
+import DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeDepth
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerClassification
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerOrbit
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerScaleProjection
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerPairScaleGluing
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeSupport
+import DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing
+import DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleReduction
+import DkMath.FLT.Seven.SevenBaseTerminalCubicRootLoadModulus
+import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinates
+import DkMath.FLT.Seven.SevenBaseTerminalGlobalModel
+import DkMath.FLT.Seven.SevenBaseTerminalLiftedReconstruction
+import DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinateEquations
+import DkMath.FLT.Seven.SevenBaseTerminalCellPrimePartition
+import DkMath.FLT.Seven.SevenBaseTerminalExclusion
+import DkMath.FLT.Seven.SevenBaseTerminalFermatChartResolution
+import DkMath.FLT.Seven.SevenBaseTerminalRowZAlternatingPowerSplit
+import DkMath.FLT.Seven.SevenBaseTerminalRowZSignedResidualCore
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedSummit
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRouting
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedGapUnitBridge
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedUnitClassAudit
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedResidualRootClass
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCompensationRouting
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedCanonicalSplit
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedQuadraticInnerRoot
+import DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
+import DkMath.FLT.Seven.SevenRealCubicEisenstein
+import DkMath.FLT.Seven.SevenRealCubicNumberField
+import DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
+import DkMath.FLT.Seven.SevenRealCubicUnitClass
+import DkMath.FLT.Seven.SevenRealCubicAxisDrop
+import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
+import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
+import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
+import DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
+import DkMath.FLT.Seven.SevenBaseTerminalDescentSeedExclusion
+import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
 #print "file: DkMath.FLT.Seven"
 
@@ -53,11 +110,108 @@ prime-power classification is still local to one specialized address and does
 not provide simultaneous signed reconstruction.  Moreover, every actual
 full-depth solution is exactly a weight-(3,7) unit scaling of its canonical
 explicit model.  Independently obtained local scales are not claimed to glue
-globally.  The unique seven-primary cell is reduced at its complete `7^k`
-depth, including its nonzero top ramified kernel and base/lifted split.  The
-terminal arithmetic exclusion and lifted signed reconstruction remain explicit
-open obligations.  The strict away depth drop is
-conditional on an explicit
-`AwayDescentClosureProvider`; no FLT7 contradiction or recursive closure is
-claimed.
+globally.  The facade canonically indexes the finite support of primes dividing
+the terminal cubic-root load and chooses one complete local scale packet over
+every supported prime.  Their complete local moduli are pairwise coprime, and
+the full and partial product-modulus APIs needed for finite induction are
+available.  Finite CRT synchronizes all local scale residues into one unit
+modulo their product, with explicit local reduction maps compatible with the
+weight-three and weight-seven coordinate operations.  Compatibility of the
+local models is not claimed.  Their four residues now have a column-independent
+coordinate carrier, while an audit packet retains each model's exact
+column-indexed orbit source and its constructor-specific root data.  No
+single global polynomial system is claimed.  Coordinatewise finite CRT does
+produce one product-modulus residue tuple reducing exactly to every projected
+local model; a strengthened packet keeps local orbit coherence as an explicit
+additional proof.  Combining that global residue model with the simultaneous
+unit scale gives a product-modulus weight-(3,7) coordinate candidate whose
+reduction recovers every actual local coordinate tuple.  Centered signed
+integer representatives of the scale, model, and weighted tuple are available,
+with exact cast-back and local congruence theorems.  No equality between the
+independently centered integer weighted tuple and the integer weighted scaling
+of the centered model is claimed unconditionally.  Their exact four-coordinate
+defect is proved divisible by the combined modulus, and the signed lift is
+classified as either an integer reconstruction or an explicit nonzero defect
+obstruction.  Vanishing still requires a separate strict size bound.  Each
+terminal row is retained as an exact `Y`, `Z`, or `Sum` arithmetic profile
+together with the signed reconstruction outcome.  Natural chart exchange
+excludes the `Sum` row and moves the `Y` row into the existing ramified chart;
+the `Z` row has a primitive signed odd-power chart with seven-divisible gap.
+Its alternating natural factor now has the exact `7^6`/`7` seventh-power
+split, and its signed quadratic residual core is extracted as a seventh power.
+Thus every surviving terminal away row reaches a natural or signed ramified
+chart.  Both charts now inhabit one primitive integer ramified summit.  Its
+second root coordinate has the exact depth
+`5 + 7 * padicValNat 7 gapRoot`, and its ramified second coordinate splits
+into one linear and two explicit cubic factors.  This common summit does not
+by itself supply a smaller Fermat solution.  The endpoint triple and ramified
+root triple are now nonzero and pairwise coprime, so they inhabit a formal
+`CoprimeTripleRouting`.  The endpoint gap and root-cubic gap also have equal
+complete seven-adic depth.  More strongly, an exact division-free integer
+identity exhibits the two gaps as differing by explicit seven-units, and over
+every `ZMod (7^k)` the root-cubic gap is the endpoint gap times a displayed
+unit.  These units are coherent under adjacent seven-power reductions.  At
+the first nontrivial level `ZMod 49`, their seventh-power class is equivalent
+to the fixed-point test `U^7 = U` and hence to membership in the six-residue
+set `{1, 18, 19, 30, 31, 48}`.  The common summit does not yet determine
+which residue occurs.  Canonical summit normalization sharpens this further:
+the bridge unit is the negative endpoint square times the inverse residual-root
+square, the residual root lies in `{1, 8, 15, 22, 29, 36, 43}` modulo `49`,
+and the bridge unit is a seventh power exactly when that residual root is `1`.
+In that branch the generic six unit residues reduce to `{19, 31, 48}`.
+Compatible seventh-root lifting through all higher `7^k` levels is not yet
+constructed.  This bridge still does not construct a descent provider or a
+smaller Fermat solution.  Each local complete exponent is also
+identified with the corresponding prime's exact adic exponent in the full
+terminal cubic-root load, and the product of all complete local moduli is
+proved equal to that full load.
+The unique seven-primary cell is reduced at its complete `7^k`
+depth, including its nonzero top ramified kernel and base/lifted split.  At
+terminal depth one, the facade also exports the exact carrier, residual,
+endpoint, first-order, signed-kernel, and cubic-load quotient layers, together
+with their row-sensitive `ZMod 7` linearization and the checked row-`Y`
+mod-`49` shadow showing that a bare local congruence obstruction is insufficient.
+Lifted signed reconstruction remains an explicit open obligation.  The exact integral
+`AwayDescentReconstructionSeed` is proved equivalent to the existing
+`AwayDescentClosureProvider` contract and constructs the strict away depth
+drop when inhabited.  Such a seed or provider forces pivot exponent at least
+two and is therefore impossible in the terminal exponent-one branch.  Direct
+terminal exclusion, lifted-branch seed construction, an FLT7 contradiction,
+and recursive closure remain unproved.  Conditional on the ramified receiver,
+the extracted quadratic inner root now enters an explicit discriminant-49
+cubic order.  Its two cubic forms are determinant norms, their source
+difference is the ramified axis times the depth-four coordinate, and an
+explicit unit normalization rewrites that difference as a sixth power of the
+normalized axis times a seventh power.  Translating by `theta = alpha - 3`
+gives a degree-three Eisenstein polynomial of discriminant `49`; the resulting
+power-basis order is proved to be the full ring of integers.  The original
+coordinate ring is explicitly ring-equivalent to that maximal order, hence is
+an integral domain.  The cubic field is totally real with discriminant `49`,
+Minkowski class bound `14/9`, principal ring of integers, and class number one.
+Its explicit order-three cyclic rotation is also transported to the maximal
+order.  The coordinate ring inherits the principal-ideal property.  For every
+primitive linear source with seven-divisible second coordinate, its three
+cyclic conjugates are pairwise coprime and their product is its determinant
+norm.  Hence each RAMIFIED real-cubic source whose norm is a signed seventh
+power is itself a seventh power up to an explicit unit.  The two remaining
+units are first retained in an exact unit-weighted seventh-power difference.
+The theta-coordinate reduction modulo seven then supplies a two-coordinate
+truncated projective logarithm on global units.  The explicit units `alpha`
+and `1+alpha` have logarithms `(5,5)` and `(2,5)`, so they span the target.
+Dirichlet rank two and torsion `±1` show that the global unit quotient modulo
+torsion and seventh powers has exactly `49` elements; consequently the
+projective logarithm is a bijective class criterion.  A primitive loaded
+linear source forces its extracted unit to have zero logarithm, hence both
+RAMIFIED sources are exact seventh powers.  The facade exports the pure
+equation `rightRoot^7 - leftRoot^7 = normalizedAxis^6 *
+normalizedWitness^7`.  Its right side has exact theta depth `13`; the
+homogeneous seventh quotient has exact depth `3`; and the algebraic root gap
+has exact depth `10`.  Removing these exact theta powers leaves coprime cores,
+so PID coprime-power extraction and the coprime exponents `3` and `7` absorb
+the remaining unit.  The facade therefore exports a prime axis associate
+`droppedAxis` and witness with
+`rightRoot - leftRoot = droppedAxis^3 * descentWitness^7`.
+This completes the ramified algebraic axis drop.  It does not yet construct
+a new primitive Fermat counterexample, the independent signed-root depth-four
+routing, an inhabited recursive descent provider, or FLT7.
 -/
