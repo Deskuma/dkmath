@@ -114,7 +114,9 @@ theorem signedLeftRoot_not_seven_dvd
   have hsnd0 :
       (p.quadratic.innerRoot.snd : ZMod 7) = 0 :=
     (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr hsnd
-  simp [seventhPowerSndLeftCubic, hsnd0] at hcubic0
+  simp only [seventhPowerSndLeftCubic, Int.reduceNeg, Int.cast_add, Int.cast_sub, Int.cast_pow,
+    Int.cast_mul, Int.cast_ofNat, hsnd0, mul_zero, sub_zero, ne_eq, OfNat.ofNat_ne_zero,
+    not_false_eq_true, zero_pow, add_zero, pow_eq_zero_iff] at hcubic0
   exact hcubic0
 
 theorem seven_dvd_signedRootGap
