@@ -242,8 +242,26 @@ theorem nonempty_triangularThetaJetExact
       intro hd
       exact hV0 ((ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr hd) }⟩
 
+/-- Determinant of the modulo-seven Jacobian of the normalized triangular
+jet equations in the variables `(U,V)`. -/
+def triangularJetJacobianDet (A U : ZMod 7) : ZMod 7 :=
+  A ^ 6 * A ^ 6 - 0 * (6 * A ^ 5 * U)
+
+theorem triangularJetJacobianDet_eq
+    (A U : ZMod 7) :
+    triangularJetJacobianDet A U = A ^ 12 := by
+  simp [triangularJetJacobianDet]
+  ring
+
+theorem triangularJetJacobianDet_ne_zero
+    {A U : ZMod 7} (hA : A ≠ 0) :
+    triangularJetJacobianDet A U ≠ 0 := by
+  rw [triangularJetJacobianDet_eq]
+  exact pow_ne_zero 12 hA
+
 #print axioms triangularJet_depth_step
 #print axioms triangularJet_depth_three_six
 #print axioms nonempty_triangularThetaJetExact
+#print axioms triangularJetJacobianDet_ne_zero
 
 end DkMath.FLT.Seven

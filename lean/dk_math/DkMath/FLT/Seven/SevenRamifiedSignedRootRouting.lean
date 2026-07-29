@@ -31,9 +31,11 @@ structure RamifiedSignedRootRoutingPacket : Type where
 
 namespace RamifiedSignedRootDepthPacket
 
-theorem nonempty_signedRootRouting
+/-- The signed routing board together with coherence to the supplied
+signed-depth packet. -/
+theorem nonempty_coherent_signedRootRouting
     (p : RamifiedSignedRootDepthPacket) :
-    Nonempty RamifiedSignedRootRoutingPacket := by
+    Nonempty {q : RamifiedSignedRootRoutingPacket // q.signedDepth = p} := by
   let q := p.balanced.axisDrop.depthLedger.exactPower.upToUnit.normPacket
   have hAN : IsCoprime q.quadratic.innerRoot.fst
       (q.quadratic.innerRoot.fst + q.quadratic.innerRoot.snd) := by
@@ -83,10 +85,18 @@ theorem nonempty_signedRootRouting
       (Int.isCoprime_iff_nat_coprime.mp hAM7)
       (Int.isCoprime_iff_nat_coprime.mp hANM7)
       hprod with ⟨routing⟩
-  exact ⟨⟨p, by simpa [q] using routing⟩⟩
+  exact ⟨⟨⟨p, by simpa [q] using routing⟩, rfl⟩⟩
+
+theorem nonempty_signedRootRouting
+    (p : RamifiedSignedRootDepthPacket) :
+    Nonempty RamifiedSignedRootRoutingPacket := by
+  rcases p.nonempty_coherent_signedRootRouting with ⟨q⟩
+  exact ⟨q.1⟩
 
 end RamifiedSignedRootDepthPacket
 
+#print axioms
+  RamifiedSignedRootDepthPacket.nonempty_coherent_signedRootRouting
 #print axioms RamifiedSignedRootDepthPacket.nonempty_signedRootRouting
 
 end

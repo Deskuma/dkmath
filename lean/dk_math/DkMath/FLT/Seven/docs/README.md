@@ -298,3 +298,28 @@ between this address and the existing fixed routing cells is claimed yet.
 See [FLT7-FUSION-001-B-REPORT.md](FLT7-FUSION-001-B-REPORT.md).
 See [FLT7-FUSION-002-REPORT.md](FLT7-FUSION-002-REPORT.md).
 See [FLT7-FUSION-002-EXACT-JET-REPORT.md](FLT7-FUSION-002-EXACT-JET-REPORT.md).
+
+FUSION-003 pre-bridge is now complete at its controlled audit boundary.
+`SevenRamifiedPairedThetaRootJet.lean` connects the paired jet to the
+theta-depth-ten ledger and proves
+
+```text
+thetaResidue(gapCore) = -2*m.
+```
+
+`SevenRamifiedFusionSectorEquiv.lean` upgrades the finite address to the
+explicit equivalence `(ZMod 7)ˣ ≃ μ₂ × μ₃`. The paired roots occupy opposite
+binary rows and one common ternary column.
+
+`SevenRamifiedFusionRoutingAudit.lean` retains Y/Z provenance before the
+common summit, proves the signed routing third row is `(1,1,1)`, constructs
+the six active unit cells and their two cycle ratios, and records the signed
+margins lost by `natAbs`. No cycle ratio is identified with a function of
+`tau`, and no routing cell is selected.
+
+The next branch is therefore normalized without selecting a Kummer factor:
+`relativeCyclotomicIndex k = k/tau`. This is proved to be a torsor
+equivalence. A distinguished factor still requires a new divisibility or
+seventh-power theorem.
+
+See [FLT7-FUSION-003-PREBRIDGE-REPORT.md](FLT7-FUSION-003-PREBRIDGE-REPORT.md).

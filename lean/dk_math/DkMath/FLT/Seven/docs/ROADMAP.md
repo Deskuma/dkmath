@@ -937,6 +937,29 @@ Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart
 directly or to prove the linear-factor Kummer packet in the full cyclotomic
 carrier.
 
+Current checkpoint (2026-07-30): the narrow pre-bridge audit is complete.
+The algebraic root gap has exact leading residue
+`thetaResidue gapCore = -2*m`, and the six unit sectors are formally
+decomposed as `μ₂ × μ₃`. The signed routing board now has an explicit
+unit shadow, signed margin companion, and two `K_{2,3}` cycle ratios.
+
+The surviving away row provenance had been erased by the common summit.
+It is now retained by a thin pre-summit packet, but no equality between its
+Y/Z sign and `tau^3` has been proved. Such an equality requires an explicit
+bridge between the relevant normalized units.
+
+The current hypotheses also do not yet express either routing cycle ratio as
+a function of `tau`. Consequently no routing cell is selected. The safe next
+branch is the relative cyclotomic torsor
+
+```text
+relativeIndex(k) = k / tau.
+```
+
+This normalization is now implemented as an equivalence. The next gate is to
+prove which relative index, if any, has the required divisibility or
+seventh-power property. Only that theorem may distinguish a Kummer factor.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

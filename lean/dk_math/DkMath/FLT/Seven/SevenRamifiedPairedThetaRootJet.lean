@@ -214,6 +214,85 @@ end RamifiedSignedRootDepthPacket
 
 namespace RamifiedPairedThetaRootJetPacket
 
+theorem linearCore_gap_modSeven
+    (p : RamifiedPairedThetaRootJetPacket) :
+    ((p.right.thetaLinearCore -
+        p.left.thetaLinearCore : ℤ) : ZMod 7) =
+      2 *
+        (p.signedDepth.balanced.axisDrop.depthLedger.exactPower.upToUnit
+          ).normPacket.innerSndRoot := by
+  push_cast
+  rw [p.right.thetaLinearCore_modSeven,
+    p.left.thetaLinearCore_modSeven]
+  norm_num
+  ring
+
+theorem squareCore_gap_modSeven
+    (p : RamifiedPairedThetaRootJetPacket) :
+    ((p.right.thetaSquareCore -
+        p.left.thetaSquareCore : ℤ) : ZMod 7) = 0 := by
+  push_cast
+  rw [← p.squareCores_modSeven_eq]
+  ring
+
+private theorem thetaResidue_of_exact_gap_coordinates
+    (A B C : ℤ) (g : SevenRealCubicInt)
+    (h :
+      ofThetaCoordinates A (7 ^ 3 * B) (7 ^ 6 * C) =
+        eisensteinAxis ^ 10 * g) :
+    thetaResidue g = -(B : ZMod 7) := by
+  rcases g with ⟨x, y, z⟩
+  have hlin := congrArg thetaLinearInt h
+  norm_num [thetaLinearInt, ofThetaCoordinates,
+    eisensteinAxis_sq_coordinates, eisensteinAxis,
+    SevenRealCubicInt.mul, pow_succ] at hlin ⊢
+  ring_nf at hlin
+  have hB : B = 1378 * x - 1165 * y + 901 * z := by omega
+  change thetaConstModSeven { fst := x, snd := y, thd := z } = -↑B
+  simp only [thetaConstModSeven]
+  rw [← Int.cast_neg, ← sub_eq_zero, ← Int.cast_sub]
+  apply (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr
+  refine ⟨197 * x - 166 * y + 130 * z, ?_⟩
+  rw [hB]
+  ring
+
+/-- The exact leading theta residue of the depth-ten algebraic root gap.
+This is stronger than the previously known nondivisibility of `gapCore`. -/
+theorem gapCore_thetaResidue_eq
+    (p : RamifiedPairedThetaRootJetPacket) :
+    thetaResidue
+        p.signedDepth.balanced.axisDrop.depthLedger.gapCore =
+      -2 *
+        (p.signedDepth.balanced.axisDrop.depthLedger.exactPower.upToUnit
+          ).normPacket.innerSndRoot := by
+  let d := p.signedDepth.balanced.axisDrop.depthLedger
+  have hcoordinates :
+      ofThetaCoordinates
+          (p.right.thetaConst - p.left.thetaConst)
+          (7 ^ 3 *
+            (p.right.thetaLinearCore - p.left.thetaLinearCore))
+          (7 ^ 6 *
+            (p.right.thetaSquareCore - p.left.thetaSquareCore)) =
+        eisensteinAxis ^ 10 * d.gapCore := by
+    calc
+      _ = p.right.root - p.left.root := by
+        rw [p.right.root_eq, p.left.root_eq]
+        ext <;>
+          norm_num [ofThetaCoordinates,
+            eisensteinAxis_sq_coordinates] <;> ring
+      _ = d.exactPower.rightRoot - d.exactPower.leftRoot := by
+        rw [p.right_root_eq, p.left_root_eq]
+      _ = d.rootGap := d.rootGap_def.symm
+      _ = eisensteinAxis ^ 10 * d.gapCore := d.rootGap_eq
+  have hlead :=
+    thetaResidue_of_exact_gap_coordinates
+      (p.right.thetaConst - p.left.thetaConst)
+      (p.right.thetaLinearCore - p.left.thetaLinearCore)
+      (p.right.thetaSquareCore - p.left.thetaSquareCore)
+      d.gapCore hcoordinates
+  rw [hlead, p.linearCore_gap_modSeven]
+  ring
+
 theorem left_not_sourcePlane
     (p : RamifiedPairedThetaRootJetPacket) :
     ¬IsSourcePlane p.left.root := by
@@ -374,6 +453,8 @@ theorem unitGridAddress_reconstructs_slope
 end RamifiedPairedThetaRootJetPacket
 
 #print axioms RamifiedSignedRootDepthPacket.nonempty_pairedThetaRootJet
+#print axioms
+  RamifiedPairedThetaRootJetPacket.gapCore_thetaResidue_eq
 #print axioms RamifiedPairedThetaRootJetPacket.left_not_sourcePlane
 #print axioms
   RamifiedPairedThetaRootJetPacket.fusionSlope_eq_gapRoot_div_cube

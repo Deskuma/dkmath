@@ -1,6 +1,6 @@
 # FLT7 seven-primary terminal route: current status
 
-Updated: 2026-07-29
+Updated: 2026-07-30
 Repository: `Deskuma/dkmath`  
 Pull request: `#73`
 Base branch: `feature/FLT7-magic-core-260722-v1`
@@ -34,8 +34,31 @@ left jet = (-tau,-3*tau^2),
 right jet = (tau,-3*tau^2).
 ```
 
-Its `(tau^3,tau^2)` address reconstructs `tau`. Connection to existing
-routing margins or cyclotomic factors remains reconnaissance only.
+FUSION-003 pre-bridge is now implemented locally. The paired theta-root gap
+is connected back to the depth-ten ledger with the exact leading formula
+
+```text
+thetaResidue(gapCore) = -2*m.
+```
+
+The six-sector address is upgraded to the explicit group equivalence
+`(ZMod 7)ˣ ≃ μ₂ × μ₃`; the left and right roots have opposite binary
+coordinates and the same ternary coordinate. The signed routing audit proves
+its neutral third row is `(1,1,1)`, all six active cells are seven-units,
+retains signed margin orientation, and records the two independent
+`K_{2,3}` cycle ratios.
+
+The old common summit erased Row-Y/Row-Z provenance. A thin provenance packet
+now preserves that label before commonization, without duplicating the summit.
+No theorem equating the retained row sign with `tau^3` is claimed: the
+required normalized-unit equality is still absent.
+
+The present packet equations do not identify the two routing cycle ratios as
+functions of `tau`. Therefore the direct cell-identification route remains an
+explicit missing bridge. The cyclotomic lift branch has begun only at the
+safe torsor level: `relativeIndex(k) = k/tau` is an equivalence, and relative
+index one is proved equivalent to `k=tau`; no factor is declared
+distinguished or a seventh power.
 
 ## 1. Purpose of this document
 
@@ -1395,6 +1418,9 @@ d*E = a*(a+n)*m^7
 
 This is the requested integer depth-four shadow on the same balanced packet;
 it does not use the false identity `Norm(XR-XL)=Norm(XR)-Norm(XL)`.
-FUSION-001 therefore has Outcome A. Coprimality of `d,E`, the proposed
-2-by-3 routing, a general norm first-variation theorem, and source-plane
-classification remain later obligations.
+This paragraph records the boundary as it stood at FUSION-001 and is now
+**superseded**. Coprimality of `d,E`, the signed `2 × 3` routing, norm first
+variation, and controlled source-plane classification were completed in the
+subsequent FUSION-001B and FUSION-002 checkpoints. The current boundary is
+the FUSION-003 routing-cycle/cyclotomic bridge described at the top of this
+document.
