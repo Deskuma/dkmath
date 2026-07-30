@@ -1112,6 +1112,27 @@ completed oriented launchpad, it must determine exact valuation ownership in
 the two linear carriers and then prove an element-level power statement or
 record its exact obstruction before any primitive chart or strict decrease.
 
+ULTRA/U1.2 now completes that valuation-ownership checkpoint.  The prime above
+seven is the explicit uniformizer ideal and has exact multiplicity one in
+each carrier.  Every nonramified rational prime dividing the complete signed
+`quotientRoot` has exactly its ordinary `padicValNat` exponent in the selected
+oriented carrier kernel, with the conjugate result on the conjugate carrier
+and the opposite orientations excluded.  Combining all local cutoffs gives
+the exact global equalities
+
+```text
+ramifiedPrime * globalOrientedCoreHalfIdeal
+  = span {cyclotomicDegreeSixCarrier}
+ramifiedPrime * globalConjugateCoreHalfIdeal
+  = span {cyclotomicDegreeSixCarrierConj}.
+```
+
+The next U1.3 event must split each full unramified exponent into the two
+routed load exponents plus seven times the residual exponent, while retaining
+the same full support and orientations.  It must then state exactly what
+principality or unit information is still required for element-level
+extraction.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

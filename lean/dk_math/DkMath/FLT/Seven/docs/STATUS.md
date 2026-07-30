@@ -213,9 +213,25 @@ cycles all six phase-indexed primes, and preserves their exact real
 contractions and fibre powers. The finite factor product at each phase is
 exactly the principal ideal of the corresponding Galois-positioned load.
 
-The active U1.2 frontier is exact oriented-carrier valuation ownership.
-Element-level seventh-power extraction, primitive chart reconstruction, a new
-primitive counterexample, and strict global decrease remain unproved.
+ULTRA/U1.2 is complete.  The concrete degree-six carrier has a proved
+integral-domain instance.  Its ramified prime above seven is explicitly the
+span of `1-zeta`; both linear carriers lie in that prime but not its square.
+For every rational prime in the full `quotientRoot` support, the oriented or
+conjugate carrier lies in the selected kernel power exactly through exponent
+`padicValNat q |quotientRoot|`, while the competing orientation is excluded.
+The complete ramified-times-unramified factor ideals satisfy
+
+```text
+globalOrientedCarrierFactorIdeal
+  = span {cyclotomicDegreeSixCarrier}
+globalConjugateCarrierFactorIdeal
+  = span {cyclotomicDegreeSixCarrierConj}.
+```
+
+The active U1.3 frontier is load-times-seventh-power residual ideal
+extraction.  Principality of the residual half, unit control, element-level
+seventh-power extraction, primitive chart reconstruction, a new primitive
+counterexample, and strict global decrease remain separate obligations.
 
 ## 1. Purpose of this document
 

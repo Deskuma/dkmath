@@ -13,7 +13,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.1
+CURRENT_EVENT  = U1.2
 STATUS         = COMPLETE
 ```
 
@@ -55,7 +55,14 @@ and exact fibre powers. For all three Galois-positioned loads, the finite
 product is exactly the corresponding principal mapped load ideal, with the
 original support, routing provenance, and `padicValNat` exponent unchanged.
 
-Event U1.2 is the active frontier.
+Event U1.2 is complete.  The concrete degree-six carrier is now an integral
+domain; the ramified prime above seven has exact multiplicity one in each
+linear carrier; and every unramified prime on the full quotient-root support
+has exactly the inherited `padicValNat` multiplicity in its selected
+orientation.  Competing orientations are excluded.  The products of these
+ramified and unramified powers are exactly the two carrier principal ideals.
+
+Event U1.3 is the active frontier.
 
 ## 1. Strategic decision
 

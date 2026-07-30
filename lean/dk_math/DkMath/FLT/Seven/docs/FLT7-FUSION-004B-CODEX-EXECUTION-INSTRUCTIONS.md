@@ -28,12 +28,12 @@ The operator must set exactly one mode before starting a run.
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.1
+CURRENT_EVENT  = U1.2
 STATUS         = COMPLETE
 ```
 
-The operator explicitly activated ULTRA / U1. Event U1.1 is complete and the
-expedition continues at U1.2.
+The operator explicitly activated ULTRA / U1. Events U1.1 and U1.2 are
+complete and the expedition continues at U1.3.
 
 Allowed values are:
 

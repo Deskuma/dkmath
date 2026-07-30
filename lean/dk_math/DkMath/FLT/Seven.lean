@@ -119,6 +119,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicLinearPrimeAddress
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
 import DkMath.FLT.Seven.SevenRamifiedFusionDegreeSixOrientedLoadFactorization
 import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
+import DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -272,10 +273,16 @@ load factorization therefore gives an exact finite product of oriented and
 conjugate prime powers, with the original rational-prime support and
 `padicValNat` exponents unchanged; distinct supported pairs remain comaximal,
 and the product equals the principal ideal of the embedded load.  These
-ideal-level results do not yet determine the valuation ownership of the two
-linear carriers, supply an element-level seventh-power extraction, or produce
-the primitive reconstructed chart and strict global decrease required before
-descent.  The direct signed-root candidate is ruled out: its seventh-power
-difference has exact seven-adic depth five and therefore is not an integer
-seventh power.
+The valuation ownership of both linear carriers is now exact.  The ramified
+prime above seven occurs once in each carrier, every prime on the full
+quotient-root support occurs in exactly its `padicValNat` exponent on its
+selected orientation, and the competing orientation is excluded.  Multiplying
+the two predicted full factor ideals recovers the carrier-pair principal
+ideal; integral-domain cancellation then proves that each predicted factor
+ideal is exactly the corresponding carrier principal ideal.  This is still an
+ideal-level result.  Load-times-seventh-power ideal extraction, an
+element-level power equation, a primitive reconstructed chart, and the strict
+global decrease required before descent are the next separate obligations.
+The direct signed-root candidate is ruled out: its seventh-power difference
+has exact seven-adic depth five and therefore is not an integer seventh power.
 -/

@@ -464,3 +464,15 @@ oriented/conjugate primes and commutes with quadratic conjugation. Exact
 fibre powers and exact finite principal-load factorizations now hold at all
 three phases without changing support or exponents. See
 [FLT7-FUSION-004B-U1-1-GLOBAL-ORIENTED-FACTORIZATION-REPORT.md](FLT7-FUSION-004B-U1-1-GLOBAL-ORIENTED-FACTORIZATION-REPORT.md).
+
+ULTRA/U1.2 is complete.  The full support is enlarged from the two routed
+load supports to every rational prime dividing `quotientRoot`, including
+residual-only primes.  For each such non-seven prime, the oriented carrier
+belongs to precisely the first `padicValNat q |quotientRoot|` powers of its
+selected degree-six kernel and to no higher power; the conjugate carrier has
+the corresponding conjugate statement, and the opposite orientations are
+excluded.  The ramified prime above seven occurs exactly once in both
+carriers.  Pairing the two global lower factorizations and cancelling their
+nonzero principal product proves exact equality with both carrier principal
+ideals.  See
+[FLT7-FUSION-004B-U1-2-ORIENTED-CARRIER-VALUATION-OWNERSHIP-REPORT.md](FLT7-FUSION-004B-U1-2-ORIENTED-CARRIER-VALUATION-OWNERSHIP-REPORT.md).
