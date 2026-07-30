@@ -491,3 +491,22 @@ factorizations therefore split into a ramified loaded carrier ideal and the
 seventh power of an explicit oriented residual ideal, with the conjugate
 identity exchanged by quadratic conjugation.  See
 [FLT7-FUSION-004B-U1-3-SEVENTH-POWER-RESIDUAL-IDEAL-EXTRACTION-REPORT.md](FLT7-FUSION-004B-U1-3-SEVENTH-POWER-RESIDUAL-IDEAL-EXTRACTION-REPORT.md).
+
+ULTRA/U1.4 is complete.  A Minkowski-bound argument proves class number one
+for the abstract seventh cyclotomic field.  The concrete rank-six carrier is
+generated as a `ℤ`-algebra by `zeta`; the integral cyclotomic power basis
+therefore supplies a surjective map from the abstract ring of integers onto
+the concrete carrier.  Principality descends along this map, without proving
+an isomorphism with the full ring of integers.  Applying the resulting PID
+instance to U1.3 constructs exact equations
+
+```text
+carrier = orientedLoadElement * orientedResidualRoot^7
+conjugateCarrier = conjugateLoadElement * conjugateResidualRoot^7.
+```
+
+The two conjugate witnesses are literal quadratic stars.  Their principal
+ideals are exactly the loaded carrier ideals and residual ideals from U1.3.
+The associated unit is absorbed into the load generator; it is not declared
+to be a seventh power.  See
+[FLT7-FUSION-004B-U1-4-ELEMENT-LEVEL-ORIENTED-POWER-REPORT.md](FLT7-FUSION-004B-U1-4-ELEMENT-LEVEL-ORIENTED-POWER-REPORT.md).

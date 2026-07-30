@@ -121,6 +121,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionDegreeSixOrientedLoadFactorization
 import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
 import DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
 import DkMath.FLT.Seven.SevenRamifiedFusionSeventhPowerResidualIdealExtraction
+import DkMath.FLT.Seven.SevenRamifiedFusionElementLevelOrientedPower
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -285,10 +286,15 @@ quotient exponent is now split pointwise into the two routed-load exponents
 plus seven times an explicit residual exponent.  Extending the two cell
 supports by zero exponents to the full support yields exact oriented and
 conjugate carrier-ideal identities of the form
-`ramified loaded ideal * residual ideal ^ 7`.  This remains an ideal-level
-result.  Principal generators and their element-level equations, a primitive
-reconstructed chart, and the strict global decrease required before descent
-are the next separate obligations.
+`ramified loaded ideal * residual ideal ^ 7`.  The concrete carrier is now
+also proved to be a principal ideal ring via a surjective integral
+power-basis map from the abstract seventh cyclotomic ring of integers.  Its
+principal generators give exact element equations
+`carrier = loadElement * residualRoot ^ 7`; the associated unit is absorbed
+into the load generator, and conjugate witnesses are chosen by literal
+quadratic star.  The loaded factor is not proved to be a seventh power.
+A primitive reconstructed chart and the strict global decrease required
+before descent are the next separate obligations.
 The direct signed-root candidate is ruled out: its seventh-power difference
 has exact seven-adic depth five and therefore is not an integer seventh power.
 -/

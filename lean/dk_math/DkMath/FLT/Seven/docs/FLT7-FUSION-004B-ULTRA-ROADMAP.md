@@ -13,7 +13,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.3
+CURRENT_EVENT  = U1.4
 STATUS         = COMPLETE
 ```
 
@@ -69,7 +69,14 @@ phase-zero load halves, and both carrier principal ideals are a ramified
 loaded ideal times the seventh power of an explicit oriented residual ideal.
 Quadratic conjugation exchanges the two decompositions.
 
-Event U1.4 is the active frontier.
+Event U1.4 is complete.  The concrete carrier is a principal ideal ring,
+proved without a full ring-of-integers identification.  Exact oriented and
+conjugate element equations are constructed, with residual seventh roots and
+loaded elements carrying their exact principal-ideal provenance.  The
+associated unit is absorbed into the loaded element, and quadratic
+conjugation is literal on both witnesses.
+
+Event U1.5 is the active frontier.
 
 ## 1. Strategic decision
 

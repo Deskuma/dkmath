@@ -248,11 +248,27 @@ span {conjugateCarrier}
       * globalConjugateResidualIdeal^7.
 ```
 
-Quadratic conjugation exchanges the loaded and residual halves.  The active
-U1.4 frontier is element-level extraction.  A concrete principal-ideal
-instance, compatible generators, and exact element equations are still
-required before attempting a primitive additive chart.  Strict global
-decrease remains separate.
+Quadratic conjugation exchanges the loaded and residual halves.
+
+ULTRA/U1.4 is complete.  The abstract seventh cyclotomic ring of integers is
+proved principal by an explicit Minkowski class-bound calculation.  The
+concrete carrier is generated over `ℤ` by `zeta`, giving a surjective algebra
+map from that abstract ring of integers and hence a concrete
+`IsPrincipalIdealRing` instance.  Choosing generators in the two U1.3 ideal
+identities and absorbing the associated unit into the loaded generator gives
+
+```text
+carrier = orientedLoadElement * orientedResidualRoot^7
+conjugateCarrier = star(orientedLoadElement)
+  * star(orientedResidualRoot)^7.
+```
+
+All four generator ideals retain their exact U1.3 provenance.  No unit is
+assumed to be a seventh power.  The active U1.5 frontier is additive-chart
+reconstruction or its exact compatibility obstruction.  In particular, the
+loaded element is not yet a seventh power and coefficient/norm projections do
+not by themselves yield a new integer Fermat triple.  Strict global decrease
+remains separate.
 
 ## 1. Purpose of this document
 
