@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-27
 
+### 06:03
+
+[平方質量境界はユークリッド円として読める](260727-0603-square-mass-level-sets-are-euclidean-circles.md)
+
+CF2D の平方質量 level set を、同じ座標方程式を持つユークリッド円および半径 $\sqrt{\rho^2}$ の標準 L2 球面へ位相同型で移し、保存境界から通常の円を後から回収する構造を読む。
+
 ### 00:05
 
 [差と冪差商の公約数は指数を割る](260727-0005-the-common-divisor-of-a-difference-and-its-power-sum-divides-the-exponent.md)
