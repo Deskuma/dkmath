@@ -1133,6 +1133,31 @@ the same full support and orientations.  It must then state exactly what
 principality or unit information is still required for element-level
 extraction.
 
+ULTRA/U1.3 now completes this ideal extraction.  A canonical residual norm
+root gives
+
+```text
+padicValNat q |quotientRoot|
+  = padicValNat q c21 + padicValNat q c22
+      + 7 * padicValNat q row2ResidualNormRoot
+```
+
+for every prime `q`.  Zero-exponent extension proves that the full-support
+load products are exactly the routed phase-zero load halves.  Hence both
+carrier principal ideals have the exact form
+
+```text
+ramified loaded carrier ideal * oriented residual ideal^7,
+```
+
+and quadratic conjugation exchanges the two forms.  U1.4 must pass from these
+ideal identities to compatible element equations.  The selected cheapest
+route is to prove principality of the concrete carrier via a surjective map
+from the seventh cyclotomic ring of integers; no full ring-of-integers
+identification should be required.  Any associated unit must remain explicit
+or be absorbed into the chosen load generator, not assumed to be a seventh
+power.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

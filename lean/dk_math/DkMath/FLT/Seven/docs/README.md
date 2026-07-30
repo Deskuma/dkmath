@@ -476,3 +476,18 @@ carriers.  Pairing the two global lower factorizations and cancelling their
 nonzero principal product proves exact equality with both carrier principal
 ideals.  See
 [FLT7-FUSION-004B-U1-2-ORIENTED-CARRIER-VALUATION-OWNERSHIP-REPORT.md](FLT7-FUSION-004B-U1-2-ORIENTED-CARRIER-VALUATION-OWNERSHIP-REPORT.md).
+
+ULTRA/U1.3 is complete.  A canonical natural `row2ResidualNormRoot` realizes
+
+```text
+|quotientRoot| = c21*c22*row2ResidualNormRoot^7.
+```
+
+Consequently every full-support quotient exponent is the sum of the two
+routed-cell exponents and seven times a residual exponent.  Lean extends each
+cell product to the full support by zero exponents and proves that it is
+exactly the pre-existing phase-zero oriented load half.  The full carrier
+factorizations therefore split into a ramified loaded carrier ideal and the
+seventh power of an explicit oriented residual ideal, with the conjugate
+identity exchanged by quadratic conjugation.  See
+[FLT7-FUSION-004B-U1-3-SEVENTH-POWER-RESIDUAL-IDEAL-EXTRACTION-REPORT.md](FLT7-FUSION-004B-U1-3-SEVENTH-POWER-RESIDUAL-IDEAL-EXTRACTION-REPORT.md).

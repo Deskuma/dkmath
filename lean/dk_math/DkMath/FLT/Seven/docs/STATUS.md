@@ -228,10 +228,31 @@ globalConjugateCarrierFactorIdeal
   = span {cyclotomicDegreeSixCarrierConj}.
 ```
 
-The active U1.3 frontier is load-times-seventh-power residual ideal
-extraction.  Principality of the residual half, unit control, element-level
-seventh-power extraction, primitive chart reconstruction, a new primitive
-counterexample, and strict global decrease remain separate obligations.
+ULTRA/U1.3 is complete.  The natural identity
+
+```text
+|quotientRoot| = c21*c22*row2ResidualNormRoot^7
+```
+
+is transported prime by prime to the full oriented support.  The two
+routed-load support products are proved equal to their zero-extended
+full-support products.  Defining the residual oriented and conjugate halves
+with exponent `padicValNat q row2ResidualNormRoot`, Lean obtains
+
+```text
+span {carrier}
+  = globalOrientedLoadedCarrierIdeal
+      * globalOrientedResidualIdeal^7
+span {conjugateCarrier}
+  = globalConjugateLoadedCarrierIdeal
+      * globalConjugateResidualIdeal^7.
+```
+
+Quadratic conjugation exchanges the loaded and residual halves.  The active
+U1.4 frontier is element-level extraction.  A concrete principal-ideal
+instance, compatible generators, and exact element equations are still
+required before attempting a primitive additive chart.  Strict global
+decrease remains separate.
 
 ## 1. Purpose of this document
 

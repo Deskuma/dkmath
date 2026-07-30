@@ -13,7 +13,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.2
+CURRENT_EVENT  = U1.3
 STATUS         = COMPLETE
 ```
 
@@ -62,7 +62,14 @@ has exactly the inherited `padicValNat` multiplicity in its selected
 orientation.  Competing orientations are excluded.  The products of these
 ramified and unramified powers are exactly the two carrier principal ideals.
 
-Event U1.3 is the active frontier.
+Event U1.3 is complete.  The exact quotient-root exponent is split at every
+full-support prime into the two routed-load exponents plus seven times the
+residual-root exponent.  The routed products agree exactly with the existing
+phase-zero load halves, and both carrier principal ideals are a ramified
+loaded ideal times the seventh power of an explicit oriented residual ideal.
+Quadratic conjugation exchanges the two decompositions.
+
+Event U1.4 is the active frontier.
 
 ## 1. Strategic decision
 
