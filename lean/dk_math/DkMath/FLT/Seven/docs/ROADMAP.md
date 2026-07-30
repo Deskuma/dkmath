@@ -1,8 +1,10 @@
 # FLT7 seven-primary terminal route: implementation roadmap
 
 Updated: 2026-07-29
-Target branch: `wip/FLT7-magic-core-260722-WiseWolf`  
+Target branch: `wip/FLT7-magic-core-260722-WiseWolf`
+Target branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`
 Starting implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
+cid: 6a69b3a9-ebc8-83ee-8842-6b40cc0f5ba9
 
 ## 1. Goal
 

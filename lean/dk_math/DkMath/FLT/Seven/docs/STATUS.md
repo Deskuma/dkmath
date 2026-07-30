@@ -2,9 +2,12 @@
 
 Updated: 2026-07-30
 Repository: `Deskuma/dkmath`  
-Pull request: `#73`
+Pull request: `#73` `#74`
+original branch: `develop`
 Base branch: `feature/FLT7-magic-core-260722-v1`
-Work branch: `wip/FLT7-fusion-260729`
+Related branch: `wip/FLT7-magic-core-260722-WiseWolf`
+Related branch: `wip/FLT7-fusion-260729`
+Related branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`
 Reviewed implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
 
 FUSION-001B is complete locally. The signed roots are definitionally tied
