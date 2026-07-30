@@ -510,3 +510,21 @@ ideals are exactly the loaded carrier ideals and residual ideals from U1.3.
 The associated unit is absorbed into the load generator; it is not declared
 to be a seventh power.  See
 [FLT7-FUSION-004B-U1-4-ELEMENT-LEVEL-ORIENTED-POWER-REPORT.md](FLT7-FUSION-004B-U1-4-ELEMENT-LEVEL-ORIENTED-POWER-REPORT.md).
+
+ULTRA/U1.5 is complete with Outcome C.  Applying the six integral coordinate
+maps to the U1.4 equation gives exactly the sparse endpoint ledger
+`[R,0,0,-L,0,0]`; multiplying all six Galois phases gives exactly
+`7*quotientRoot = norm(load)*norm(root)^7`.  Neither operation creates an
+additive Fermat identity.  Lean also proves that coordinate projection is not
+multiplicative and that no unital ring homomorphism from the concrete
+cyclotomic carrier to `ℤ` exists.
+
+The old visible endpoint chart is formally impossible by its exact
+seven-adic depth five.  More decisively, `root` and `zeta*root` generate the
+same residual ideal, have the same seventh power, and satisfy the same carrier
+equation, but have different complete integer-coordinate vectors.  Therefore
+the current data do not canonically select chart coordinates.  The exact next
+requirement is a `mu_7`-invariant extractor or a proved phase normalization,
+together with an independent additive seventh-power identity and the
+nonzero/primitivity/provenance proofs.  See
+[FLT7-FUSION-004B-U1-5-CYCLOTOMIC-ADDITIVE-CHART-BOUNDARY-REPORT.md](FLT7-FUSION-004B-U1-5-CYCLOTOMIC-ADDITIVE-CHART-BOUNDARY-REPORT.md).

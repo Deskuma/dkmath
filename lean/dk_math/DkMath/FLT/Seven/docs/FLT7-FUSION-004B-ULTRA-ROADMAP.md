@@ -13,7 +13,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.4
+CURRENT_EVENT  = U1.5
 STATUS         = COMPLETE
 ```
 
@@ -76,7 +76,19 @@ loaded elements carrying their exact principal-ideal provenance.  The
 associated unit is absorbed into the loaded element, and quadratic
 conjugation is literal on both witnesses.
 
-Event U1.5 is the active frontier.
+Event U1.5 is complete with Outcome C.  The actual element equation yields
+the sparse six-coordinate ledger and its integral norm identity, but no
+additive Fermat identity.  The six Galois phases collapse exactly to the
+integral norm; coordinate projections are not multiplicative; and no unital
+ring homomorphism from the concrete carrier to `ℤ` exists.  The visible
+signed endpoints are excluded by the exact depth-five obstruction.  Finally,
+the chosen residual root has a nontrivial `mu_7` gauge: multiplication by
+`zeta` preserves its ideal, seventh power, and carrier equation while changing
+its complete coordinate vector.
+
+Event U1.6 is the active frontier.  No primitive additive chart was obtained,
+so this Event must state the exact strict-decrease failure boundary rather
+than infer a descent step.
 
 ## 1. Strategic decision
 

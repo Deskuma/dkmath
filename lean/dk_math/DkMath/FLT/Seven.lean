@@ -122,6 +122,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
 import DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
 import DkMath.FLT.Seven.SevenRamifiedFusionSeventhPowerResidualIdealExtraction
 import DkMath.FLT.Seven.SevenRamifiedFusionElementLevelOrientedPower
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -293,8 +294,15 @@ principal generators give exact element equations
 `carrier = loadElement * residualRoot ^ 7`; the associated unit is absorbed
 into the load generator, and conjugate witnesses are chosen by literal
 quadratic star.  The loaded factor is not proved to be a seventh power.
-A primitive reconstructed chart and the strict global decrease required
-before descent are the next separate obligations.
 The direct signed-root candidate is ruled out: its seventh-power difference
 has exact seven-adic depth five and therefore is not an integer seventh power.
+The additive-chart audit now proves that the six Galois phases recover only
+the integral norm ledger, integer coordinate projections are not
+multiplicative, and no unital ring homomorphism from the concrete carrier to
+the integers exists.  Moreover, multiplying the chosen residual root by
+`zeta` preserves its ideal, seventh power, and carrier equation while changing
+its complete coordinate vector.  Thus a primitive reconstructed chart needs
+either a `mu_7`-invariant extractor or an additional phase normalization,
+together with an independent additive seventh-power identity.  Strict global
+decrease remains a separate obligation.
 -/

@@ -1183,6 +1183,33 @@ seventh-power sum, or expose the exact extra compatibility receiver.  The
 known signed-root triple remains unavailable because its seventh-power
 difference has exact seven-adic depth five.
 
+ULTRA/U1.5 now closes that audit with Outcome C.  The element equation has
+exactly two unconditional projections:
+
+```text
+coordinates(load*root^7) = [R,0,0,-L,0,0]
+7*quotientRoot = norm(load)*norm(root)^7.
+```
+
+The all-six-phase product is precisely the second identity, not a new
+additive relation.  Coordinate projection is formally nonmultiplicative, and
+there is no unital ring homomorphism from the concrete carrier to `ℤ`.
+Moreover the U1.4 residual witness has a nontrivial `mu_7` gauge:
+
+```text
+span {zeta*root} = span {root}
+(zeta*root)^7 = root^7
+coordinates (zeta*root) != coordinates root.
+```
+
+The carrier equation therefore does not select a canonical integral
+coordinate vector.  Event U1.6 starts with no primitive reconstructed chart,
+so it must record the exact strict-decrease failure boundary.  Any future
+chart route must first prove either a `mu_7`-invariant three-coordinate
+extractor or a phase normalization and then independently prove the signed
+Fermat identity, nonvanishing, primitivity, normalization, and terminal
+provenance.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

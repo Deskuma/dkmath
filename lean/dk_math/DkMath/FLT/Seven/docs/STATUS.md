@@ -264,11 +264,23 @@ conjugateCarrier = star(orientedLoadElement)
 ```
 
 All four generator ideals retain their exact U1.3 provenance.  No unit is
-assumed to be a seventh power.  The active U1.5 frontier is additive-chart
-reconstruction or its exact compatibility obstruction.  In particular, the
-loaded element is not yet a seventh power and coefficient/norm projections do
-not by themselves yield a new integer Fermat triple.  Strict global decrease
-remains separate.
+assumed to be a seventh power.
+
+ULTRA/U1.5 is complete with Outcome C.  The actual U1.4 equation gives the
+six sparse integral coordinate equalities and the exact integral norm ledger,
+but no additive Fermat identity.  The six Galois phases collapse to that norm,
+each coordinate projection is nonmultiplicative, and there is no unital ring
+homomorphism from the concrete carrier to `ℤ`.  The visible signed-root chart
+is already impossible at exact seven-adic depth five.
+
+The chosen residual generator is also not coordinate-canonical:
+`orientedResidualRoot` and `zeta*orientedResidualRoot` generate the same
+ideal, have the same seventh power, and satisfy the same loaded carrier
+equation, but their complete integer-coordinate vectors differ.  Thus the
+active U1.6 frontier begins without a primitive additive chart.  A sound
+continuation needs a `mu_7`-invariant extractor or an extra phase
+normalization, plus an independent additive identity, before any strict
+global decrease can be formulated from these witnesses.
 
 ## 1. Purpose of this document
 
