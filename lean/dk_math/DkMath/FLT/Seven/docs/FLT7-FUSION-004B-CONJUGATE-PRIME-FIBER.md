@@ -26,7 +26,9 @@ those roots, forcing both coordinates into the common real-cubic kernel.
 
 See
 `FLT7-FUSION-004B-CONJUGATE-PRIME-FIBER-REPORT.md`.
-The additive/global N2 work has not begun.
+The subsequent global N2 launchpad is now complete; see
+`FLT7-FUSION-004B-GLOBAL-ORIENTED-LAUNCHPAD-REPORT.md`.
+ULTRA work has not begun.
 
 ## Purpose
 

@@ -194,10 +194,21 @@ oriented evaluation kernels are distinct maximal comaximal primes, with their
 common real contraction, rational contraction `(q)`, and quotient cardinality
 `q` proved.
 
-The exact remaining local obligation is the reverse containment from the
-product of those two primes into the extended common real prime. Primitive
-chart reconstruction, a new primitive counterexample, and strict global
-decrease remain unproved.
+The reverse containment is now proved by the explicit quadratic-coordinate
+calculation, so the extended common real prime equals the product of the two
+conjugate degree-one primes.
+
+NORMAL/N2 is also complete. The canonical finite real-prime support now
+selects a degree-six oriented address at every supported rational prime. Each
+exact real kernel power maps to the product of the oriented and conjugate
+kernel powers at the unchanged `padicValNat` exponent. Distinct pair powers
+are comaximal, and their finite product is exactly the principal ideal of the
+embedded zeroth load. The public packet is
+`DegreeSixOrientedLoadFactorizationPacket`.
+
+The next frontier is exact oriented-carrier valuation ownership. Element-level
+seventh-power extraction, primitive chart reconstruction, a new primitive
+counterexample, and strict global decrease remain unproved.
 
 ## 1. Purpose of this document
 

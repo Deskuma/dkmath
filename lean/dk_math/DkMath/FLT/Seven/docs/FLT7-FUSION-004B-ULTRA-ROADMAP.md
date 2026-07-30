@@ -12,7 +12,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 
 ```text
 EXECUTION_MODE = NORMAL
-ACTIVE_PHASE   = N1
+ACTIVE_PHASE   = N2
 STATUS         = COMPLETE
 ```
 
@@ -32,7 +32,21 @@ The exact local fibre is now
 Ideal.map ofReal p = P * Pbar.
 ```
 
-This run stops here. N2 is not active until the operator explicitly selects it.
+N2 is now also complete. The launchpad theorem surface is:
+
+```text
+PrimeSupport.cyclotomicAddress
+PrimeSupport.map_kernelPower_eq_orientedPairPower
+PrimeSupport.orientedPairPowers_pairwise_isCoprime
+map_globalLoadFactorIdeal_eq_orientedFactorIdeal
+globalDegreeSixOrientedFactorIdeal_eq_span_ofReal_load
+degreeSixOrientedLoadFactorizationPacket
+```
+
+The mapped load ideal is an exact finite product of oriented/conjugate
+prime-power pairs with the inherited support and `padicValNat` exponents.
+This run stops before U1.1. ULTRA is not active until the operator explicitly
+selects it.
 
 ## 1. Strategic decision
 

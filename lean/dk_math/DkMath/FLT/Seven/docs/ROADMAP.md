@@ -1078,9 +1078,15 @@ The oriented degree-six factor is now constructed in the concrete quadratic
 algebra over the real cubic order. It has explicit rank-six coordinates,
 conjugate seventh roots, all local ratio evaluations, and two distinct
 maximal comaximal degree-one kernels above each real-cubic address. The
-conjugate product formula is proved, but exact equality between the extended
-real prime and the product of the two conjugate primes still requires the
-reverse ideal containment.
+conjugate product formula and exact equality between the extended real prime
+and the product of the two conjugate primes are proved.
+
+The finite global oriented launchpad is now implemented as
+`DegreeSixOrientedLoadFactorizationPacket`. It retains the old support and
+`padicValNat` exponents, splits every mapped real-prime power into its
+oriented/conjugate pair, proves cross-prime pairwise comaximality, and
+identifies the complete finite product with the principal ideal of the
+embedded load.
 
 The direct signed-root candidate is formally impossible:
 
@@ -1091,10 +1097,10 @@ signedRightRoot^7 - signedLeftRoot^7
 ```
 
 so it cannot be an integer seventh power. The next global checkpoint must not
-reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. It must first
-discharge the conjugate-prime fibre equality (or bypass it with an equivalent
-orientation theorem), then use the constructed oriented carrier to produce a
-primitive chart before proceeding to strict decrease.
+reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. Starting from the
+completed oriented launchpad, it must determine exact valuation ownership in
+the two linear carriers and then prove an element-level power statement or
+record its exact obstruction before any primitive chart or strict decrease.
 
 ### FUSION-004/005: primitive chart and strict global drop
 
