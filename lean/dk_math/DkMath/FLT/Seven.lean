@@ -118,6 +118,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixCarrier
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicLinearPrimeAddress
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
 import DkMath.FLT.Seven.SevenRamifiedFusionDegreeSixOrientedLoadFactorization
+import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency

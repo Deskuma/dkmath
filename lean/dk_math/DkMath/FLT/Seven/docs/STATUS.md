@@ -206,9 +206,16 @@ are comaximal, and their finite product is exactly the principal ideal of the
 embedded zeroth load. The public packet is
 `DegreeSixOrientedLoadFactorizationPacket`.
 
-The next frontier is exact oriented-carrier valuation ownership. Element-level
-seventh-power extraction, primitive chart reconstruction, a new primitive
-counterexample, and strict global decrease remain unproved.
+ULTRA/U1.1 is complete. `GlobalOrientedPrimeFactorizationPacket` adds an
+explicit order-three automorphism of the degree-six carrier above the real
+rotation. It sends `zeta` to `zeta^2`, commutes with quadratic conjugation,
+cycles all six phase-indexed primes, and preserves their exact real
+contractions and fibre powers. The finite factor product at each phase is
+exactly the principal ideal of the corresponding Galois-positioned load.
+
+The active U1.2 frontier is exact oriented-carrier valuation ownership.
+Element-level seventh-power extraction, primitive chart reconstruction, a new
+primitive counterexample, and strict global decrease remain unproved.
 
 ## 1. Purpose of this document
 

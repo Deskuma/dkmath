@@ -11,8 +11,9 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ## Current execution status
 
 ```text
-EXECUTION_MODE = NORMAL
-ACTIVE_PHASE   = N2
+EXECUTION_MODE = ULTRA
+ACTIVE_PHASE   = U1
+CURRENT_EVENT  = U1.1
 STATUS         = COMPLETE
 ```
 
@@ -45,8 +46,16 @@ degreeSixOrientedLoadFactorizationPacket
 
 The mapped load ideal is an exact finite product of oriented/conjugate
 prime-power pairs with the inherited support and `padicValNat` exponents.
-This run stops before U1.1. ULTRA is not active until the operator explicitly
-selects it.
+
+The operator activated ULTRA / U1. Event U1.1 is complete. The real
+order-three rotation now has an explicit order-three lift to the concrete
+degree-six carrier, sending `zeta` to `zeta^2` and commuting with quadratic
+conjugation. The resulting six phase-indexed primes have exact contractions
+and exact fibre powers. For all three Galois-positioned loads, the finite
+product is exactly the corresponding principal mapped load ideal, with the
+original support, routing provenance, and `padicValNat` exponent unchanged.
+
+Event U1.2 is the active frontier.
 
 ## 1. Strategic decision
 

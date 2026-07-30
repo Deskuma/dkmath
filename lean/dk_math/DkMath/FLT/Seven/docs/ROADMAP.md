@@ -1088,6 +1088,16 @@ oriented/conjugate pair, proves cross-prime pairwise comaximality, and
 identifies the complete finite product with the principal ideal of the
 embedded load.
 
+ULTRA/U1.1 is now implemented as
+`GlobalOrientedPrimeFactorizationPacket`. The real order-three rotation lifts
+to an explicit order-three automorphism of the concrete degree-six carrier,
+sending `zeta` to `zeta^2` and commuting with quadratic conjugation. It cycles
+the three oriented primes and their three conjugates, preserves their exact
+real contractions and fibre powers, and identifies the complete finite
+product at every phase with the principal ideal of the corresponding
+Galois-positioned load. Support, routing provenance, and exponents are
+unchanged.
+
 The direct signed-root candidate is formally impossible:
 
 ```text

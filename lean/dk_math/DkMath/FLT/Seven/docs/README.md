@@ -457,3 +457,10 @@ Current completion report:
 N1/N2 reports:
 [FLT7-FUSION-004B-CONJUGATE-PRIME-FIBER-REPORT.md](FLT7-FUSION-004B-CONJUGATE-PRIME-FIBER-REPORT.md) and
 [FLT7-FUSION-004B-GLOBAL-ORIENTED-LAUNCHPAD-REPORT.md](FLT7-FUSION-004B-GLOBAL-ORIENTED-LAUNCHPAD-REPORT.md).
+
+ULTRA/U1.1 is complete. The real order-three rotation has been lifted
+explicitly to the degree-six carrier, where it cycles all six
+oriented/conjugate primes and commutes with quadratic conjugation. Exact
+fibre powers and exact finite principal-load factorizations now hold at all
+three phases without changing support or exponents. See
+[FLT7-FUSION-004B-U1-1-GLOBAL-ORIENTED-FACTORIZATION-REPORT.md](FLT7-FUSION-004B-U1-1-GLOBAL-ORIENTED-FACTORIZATION-REPORT.md).

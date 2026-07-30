@@ -26,14 +26,14 @@ lean/dk_math/DkMath/FLT/Seven/docs/
 The operator must set exactly one mode before starting a run.
 
 ```text
-EXECUTION_MODE = NORMAL
-ACTIVE_PHASE   = N2
+EXECUTION_MODE = ULTRA
+ACTIVE_PHASE   = U1
+CURRENT_EVENT  = U1.1
 STATUS         = COMPLETE
 ```
 
-The next mode is intentionally unselected. Do not begin U1 until the operator
-explicitly changes the selector to `EXECUTION_MODE = ULTRA`,
-`ACTIVE_PHASE = U1`.
+The operator explicitly activated ULTRA / U1. Event U1.1 is complete and the
+expedition continues at U1.2.
 
 Allowed values are:
 
