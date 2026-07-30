@@ -89,6 +89,24 @@ signed routing shadow. Until that comparison is proved, no
 `RamifiedFusionCyclicPhasePacket` is claimed inhabited and no factor is
 declared distinguished or a seventh power.
 
+FUSION-003D real-pair carrier is now implemented locally. It avoids the
+unsupported action comparison and instead factors the signed seventh quotient
+into its three real conjugate-pair carriers. Lean proves each carrier has
+exact theta depth one, reconstructs the quotient root from the three
+theta-unit cores, and derives the positive quotient sector again from that
+factor geometry.
+
+The ternary phases `1,4,2` are an explicit `Fin 3` equivalence. The phase
+`tau^2` selects the unordered pair `{tau,-tau}`, and both normalized quadratic
+jets equal three times the selected core residue. The three axis-unit
+differences are global units with norms `-1,-1,1`.
+
+The current stopping point is pairwise coprimality of the normalized cores.
+It needs an integer-to-cubic prime-divisor transport together with
+`IsCoprime (r*l) gapRoot`. No oriented factor, seventh-power association,
+primitive chart, strict decrease, descent provider, or FLT7 theorem is
+claimed.
+
 ## 1. Purpose of this document
 
 This document is the handoff state for the remaining FLT7 work.

@@ -984,6 +984,24 @@ sufficient. Only an action-level comparison may inhabit the cyclic alignment
 packet and choose between chart reconstruction up to rotation and the
 conjugate-pair-equivariant cyclotomic route.
 
+Current checkpoint (2026-07-30): FUSION-003D follows the
+conjugate-pair-equivariant route. The three real pair carriers and normalized
+cores are formalized, with
+
+```text
+P_0*P_1*P_2 = signedSeventhQuotient r l
+P_i = theta*C_i
+thetaResidue(C_i) = -pairPhase(i)
+-(theta+1)^2*C_0*C_1*C_2 = quotientRoot.
+```
+
+The explicit phase equivalence selects the core indexed by `tau^2`, and the
+left and right normalized quadratic jets both equal three times its residue.
+The next narrow gate is a real-pair core coprimality bridge: first prove
+`IsCoprime (r*l) gapRoot`, then transport common cubic prime divisors through
+the scalar terms. Only after pairwise coprimality is established should a
+selected-core seventh-power/association theorem be attempted.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

@@ -341,3 +341,18 @@ abstract three-element labels alone is not sufficient to inhabit the cyclic
 alignment packet.
 
 See [FLT7-FUSION-003-CYCLIC-REPORT.md](FLT7-FUSION-003-CYCLIC-REPORT.md).
+
+FUSION-003D now takes the conjugate-pair route without asserting a
+rotation-routing action. The three real pair carriers multiply to the signed
+seventh quotient, each has exact theta depth one, and their normalized cores
+have residues `-1,-4,-2`. The exact product of the three cores reconstructs
+`quotientRoot` and supplies a second proof that it is `1 mod 7`.
+
+The explicit equivalence `Fin 3 ≃ SevenTernarySector` selects the core with
+phase `tau^2`; both normalized quadratic jets equal three times its theta
+residue. The three pair-axis differences are global units with norms
+`-1,-1,1`. Pairwise coprimality of the full cores remains open, so no
+seventh-power extraction or descent is claimed.
+
+See
+[FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md](FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md).
