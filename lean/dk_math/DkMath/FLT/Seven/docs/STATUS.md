@@ -123,6 +123,82 @@ provenance does not force their seventh-power status. No oriented factor,
 primitive chart, strict decrease, descent provider, or FLT7 theorem is
 claimed.
 
+FUSION-003F is now complete locally with Outcome A. Every quotient prime has
+a canonical signed-root ratio of exact order seven, hence is `1 mod 14`.
+The induced real-pair coordinate defines an explicit residue-field evaluation
+which kills the zeroth pair core and does not kill the Eisenstein axis.
+
+The row-two scalar cells are no longer treated as missing seventh powers.
+They are mapped into the real cubic PID and allocated by canonical gcd
+projections:
+
+```text
+load21_i = gcd(c21,C_i)
+load22_i = gcd(c22,C_i)
+C_i = load21_i*load22_i*D_i.
+```
+
+The stripped cores are pairwise coprime and each is a seventh power up to a
+unit. Both load families multiply back to their scalar cells up to association
+and satisfy complete associated Galois cycles. The sign-preserving norm ledger
+is exact:
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22
+c21*c22*|norm(D_i)| = |quotientRoot|.
+```
+
+Consequently all `|norm(D_i)|` equal one natural seventh power. Under the old
+Branch A hypotheses that `c21,c22` are seventh powers, each individual load
+is extracted and absorbed into the residual root, recovering the existing
+three-core power split. The unconditional loaded packet itself needs no such
+hypotheses.
+
+The first post-checkpoint local refinement is also implemented.
+`QuotientPrimeGCDLoadAddress` takes `q | c21` or `q | c22`, reconstructs the
+canonical `mu_7` evaluation, and proves that the selected gcd load belongs to
+its maximal kernel while the competing coprime load does not. The kernel
+contracts to `(q)` in `ℤ` and its residue quotient has cardinality `q`.
+Because one load may contain several primes or prime powers, only
+`span(load) ≤ kernel` is claimed, not equality.
+The kernel multiplicity in that principal ideal is now defined exactly.
+The three cyclic real-cubic evaluation kernels split `(q)` completely, which
+upgrades the former upper bound to
+
+```text
+count = padicValNat q cell.
+```
+
+Over the finite support of the addressed load, the product of these exact
+kernel powers is the principal load ideal itself.
+
+The direct signed-root chart is now excluded, rather than left as a vague
+candidate:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot
+7^6 ∤ signedRightRoot^7 - signedLeftRoot^7.
+```
+
+Thus this difference is not an integer seventh power and no
+`SignedFermatSevenChart signedRightRoot (-signedLeftRoot) c` exists. This is
+Outcome D for that shortcut.
+
+The degree-six orientation layer is now implemented. A concrete quadratic
+algebra over `SevenRealCubicInt` has rank six over `ℤ`, explicit conjugate
+seventh roots, local evaluations extending every ratio address, and the
+factor identity whose conjugate product is `realPairCarrier 0`. The two
+oriented evaluation kernels are distinct maximal comaximal primes, with their
+common real contraction, rational contraction `(q)`, and quotient cardinality
+`q` proved.
+
+The exact remaining local obligation is the reverse containment from the
+product of those two primes into the extended common real prime. Primitive
+chart reconstruction, a new primitive counterexample, and strict global
+decrease remain unproved.
+
 ## 1. Purpose of this document
 
 This document is the handoff state for the remaining FLT7 work.

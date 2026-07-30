@@ -102,7 +102,8 @@ private theorem columnMargin2_eq
          p.signedDepth.balanced.axisDrop.depthLedger.exactPower.upToUnit.normPacket.quadratic.innerRoot.snd)
         p.signedDepth.balanced.axisDrop.depthLedger.exactPower.upToUnit.normPacket.innerFst_add_innerSnd_not_seven_dvd := by
   apply Units.ext
-  simp [ActiveUnitBoard.columnMargin2, natAbsUnit]
+  simp only [ActiveUnitBoard.columnMargin2, Units.val_mul, activeUnitBoard_u12_val, Int.reduceNeg,
+    activeUnitBoard_u22_val, natAbsUnit, Nat.cast_natAbs, Units.val_mk0]
   have h := congrArg (fun n : ℕ => (n : ZMod 7)) p.routing.col2
   push_cast at h
   rw [p.thirdRow_eq_one.2.1] at h
@@ -132,7 +133,8 @@ theorem cycleRatio_div_eq_absoluteFusionSlope
     p.activeUnitBoard.cycleRatio12_div_cycleRatio23_eq,
     p.rowMargin1_eq, p.rowMargin2_eq, p.columnMargin2_eq]
   apply Units.ext
-  simp [absoluteFusionSlopeUnit, natAbsUnit, q, d, e, a, n, m]
+  simp only [natAbsUnit, Nat.cast_natAbs, Int.reduceNeg, Units.val_div_eq_div_val, Units.val_mk0,
+    Units.val_pow_eq_pow_val, absoluteFusionSlopeUnit]
   have hprodNat := congrArg Int.natAbs p.signedDepth.normalizedEquation
   simp only [Int.natAbs_mul, Int.natAbs_pow] at hprodNat
   have hprod := congrArg (fun z : ℕ => (z : ZMod 7)) hprodNat
@@ -196,8 +198,9 @@ theorem cycleRatio_square_div_eq_fusionSlope_sq
         (ZMod 7)ˣ) : ZMod 7) ^ 2) =
       p.jet.fusionSlope ^ 2 := by
   rw [p.routing.cycleRatio_div_eq_absoluteFusionSlope]
-  simp [RamifiedSignedRootRoutingPacket.absoluteFusionSlopeUnit,
-    natAbsUnit, RamifiedPairedThetaRootJetPacket.fusionSlope]
+  simp only [RamifiedSignedRootRoutingPacket.absoluteFusionSlopeUnit, natAbsUnit, Nat.cast_natAbs,
+    Int.reduceNeg, Units.val_div_eq_div_val, Units.val_mk0,
+    RamifiedPairedThetaRootJetPacket.fusionSlope]
   rw [div_pow, div_pow]
   rw [abs_cast_sq_eq, abs_cast_sq_eq, p.signedDepth_eq]
 

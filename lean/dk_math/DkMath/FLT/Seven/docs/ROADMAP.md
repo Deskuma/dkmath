@@ -1022,6 +1022,80 @@ sign- and integrality-preserving loaded-core packet with a proved norm
 identity. Do not transfer `c21_eq_one` from the earlier RAMIFIED-006 board:
 that board has different margins and no comparison theorem currently exists.
 
+Current checkpoint (2026-07-30): FUSION-003F completes both proposed
+continuations. For every prime `q | quotientRoot`, the canonical signed-root
+ratio has exact order seven and gives
+
+```text
+q % 14 = 1
+beta = 1 + ratio + ratio^-1
+evalAlphaRoot(C_0) = 0
+evalAlphaRoot(theta) != 0.
+```
+
+On the integral side, the two scalar cells are allocated by PID gcd
+projections:
+
+```text
+load21_i = gcd(c21,C_i)
+load22_i = gcd(c22,C_i)
+C_i = (load21_i*load22_i)*D_i
+D_i ~ residualRoot_i^7.
+```
+
+The load families multiply back to `c21,c22`, remain coherent under the
+order-three Galois action up to association, and have the exact norm ledger
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22
+c21*c22*|norm(D_i)| = |quotientRoot|.
+```
+
+Thus the loaded residual split is unconditional even when the two scalar
+cells are not seventh powers. If they are seventh powers, their individual
+gcd loads are extracted and absorbed, recovering the earlier conditional
+three-core power packet.
+
+The immediate local refinement is also implemented. Each prime divisor of
+`c21` or `c22` now selects the corresponding gcd load in the explicit maximal
+`evalAlphaRoot` kernel. The competing coprime load is excluded, the kernel
+contracts to `(q)`, and its residue quotient has cardinality `q`. Since one
+gcd load may contain several primes or prime powers, the proved statement is
+`span(load) ≤ kernel`, not equality. The exact kernel factor count in the load
+ideal is now also formalized:
+
+```text
+kernel^k divides span(load) iff k <= count
+count = padicValNat q cell.
+```
+
+The equality follows from the complete splitting of `(q)` into the three
+cyclic real-cubic kernels. A finite-support product theorem reconstructs the
+whole principal load ideal from these exact local powers.
+
+The oriented degree-six factor is now constructed in the concrete quadratic
+algebra over the real cubic order. It has explicit rank-six coordinates,
+conjugate seventh roots, all local ratio evaluations, and two distinct
+maximal comaximal degree-one kernels above each real-cubic address. The
+conjugate product formula is proved, but exact equality between the extended
+real prime and the product of the two conjugate primes still requires the
+reverse ideal containment.
+
+The direct signed-root candidate is formally impossible:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot
+7^6 ∤ signedRightRoot^7 - signedLeftRoot^7,
+```
+
+so it cannot be an integer seventh power. The next global checkpoint must not
+reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. It must first
+discharge the conjugate-prime fibre equality (or bypass it with an equivalent
+orientation theorem), then use the constructed oriented carrier to produce a
+primitive chart before proceeding to strict decrease.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed

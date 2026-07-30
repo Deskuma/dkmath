@@ -380,3 +380,69 @@ conditions.
 
 See
 [FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md](FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md).
+
+FUSION-003F replaces the conditional two-cell gate with an unconditional
+loaded-core split. Every prime divisor of `quotientRoot` is proved to satisfy
+`q ≡ 1 (mod 14)` and carries a canonical primitive-seventh-root ratio. Its
+real coordinate gives an explicit evaluation
+`SevenRealCubicInt →+* ZMod q` killing the zeroth normalized pair core but
+not the ramified axis.
+
+The two unresolved scalar cells are allocated integrally by canonical PID gcd
+projections:
+
+```text
+C_i = (load21_i*load22_i)*D_i
+D_i ~ residualRoot_i^7.
+```
+
+Both load families multiply back to their scalar cells up to units and form
+associated Galois cycles. Their exact absolute norms are
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22,
+```
+
+while `|norm(D_i)|` is a natural seventh power. If `c21,c22` are themselves
+seventh powers, Lean absorbs their individual load roots and recovers the
+previous Branch A packet. No such seventh-power hypothesis is needed for the
+loaded residual extraction.
+
+The immediate next local step is also fixed. For `q | c21` or `q | c22`,
+`QuotientPrimeGCDLoadAddress` identifies the addressed gcd load inside the
+explicit maximal evaluation kernel above `(q)`, excludes the competing
+coprime load and the other two same-family Galois positions, and proves that
+the residue quotient has cardinality `q`.
+Only ideal containment of the generally composite load is claimed.
+Its exact kernel multiplicity is defined and, after assembling the three
+cyclic evaluation kernels into the complete splitting of `(q)`, is proved
+equal to the scalar cell's `padicValNat q`. The supported kernel powers also
+reassemble globally to the principal addressed-load ideal.
+
+The naive global shortcut is excluded exactly:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot,
+7^6 does not divide this difference.
+```
+
+Therefore it is not an integer seventh power, and the direct signed chart
+with coordinates `(signedRightRoot,-signedLeftRoot,c)` cannot exist.
+
+The required orientation carrier is now concrete. The rank-six quadratic
+algebra over `SevenRealCubicInt` contains explicit conjugate seventh roots
+`zeta,zetaInv`, realizes every canonical local ratio, and factors
+`realPairCarrier 0` into the two oriented linear carriers. Their evaluation
+kernels are distinct maximal comaximal primes with their common real-cubic
+contraction and residue cardinality proved. The remaining exact boundary is
+the reverse ideal containment identifying the extension of the common real
+prime with the product of these two conjugate primes. No primitive integer
+chart or strict decrease is claimed.
+
+See
+[FLT7-FUSION-003F-CYCLOTOMIC-PRIME-LOAD-LIFT-REPORT.md](FLT7-FUSION-003F-CYCLOTOMIC-PRIME-LOAD-LIFT-REPORT.md).
+
+Current completion report:
+[FLT7-FUSION-004A-DEGREE-SIX-ORIENTATION-REPORT.md](FLT7-FUSION-004A-DEGREE-SIX-ORIENTATION-REPORT.md).

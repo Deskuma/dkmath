@@ -111,7 +111,7 @@ theorem cyclicAlpha_sub_three_eq_axis_mul_pairAxisUnit
     · exact thd_natCast 2
   rw [hthree]
   fin_cases i <;>
-    simp [cyclicAlpha, pairAxisUnit, htwo] <;>
+    simp only [cyclicAlpha, Fin.mk_one, Fin.isValue, one_ne_zero, ↓reduceIte, htwo, pairAxisUnit] <;>
     ext <;>
     norm_num [eisensteinAxis, alpha, mul, pow_two]
 
@@ -120,7 +120,7 @@ theorem pairAxisUnit_thetaResidue
     thetaResidue (pairAxisUnit i) =
       if i = 0 then 1 else if i = 1 then 4 else 2 := by
   fin_cases i <;>
-    simp [pairAxisUnit] <;>
+    simp only [pairAxisUnit, Fin.mk_one, Fin.isValue, one_ne_zero, ↓reduceIte, map_add, map_one] <;>
     norm_num [thetaResidue, thetaConstModSeven, alpha, mul, pow_two]
   decide
 

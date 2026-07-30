@@ -36,7 +36,10 @@ theorem rotateEquiv_eisensteinAxis :
 theorem thetaResidue_rotateEquiv (x : SevenRealCubicInt) :
     thetaResidue (rotateEquiv x) = thetaResidue x := by
   rcases x with ⟨a, b, c⟩
-  simp [thetaResidue, thetaConstModSeven, rotateEquiv, rotateHom]
+  simp only [thetaResidue, rotateEquiv, rotateHom, Int.reduceNeg, neg_mul,
+    RingHom.toMonoidHom_eq_coe, RingHom.coe_monoidHom_mk, OneHom.toFun_eq_coe, OneHom.coe_mk,
+    RingHom.coe_mk, MonoidHom.coe_mk, RingEquiv.coe_mk, Equiv.coe_fn_mk, thetaConstModSeven,
+    Int.cast_add, Int.cast_mul, Int.cast_ofNat, Int.cast_sub, Int.cast_neg]
   rw [show (9 : ZMod 7) = 2 by decide]
   ring_nf
   rw [show (5 : ZMod 7) = -2 by decide,

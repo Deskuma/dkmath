@@ -89,6 +89,7 @@ def AwaySevenBaseTerminalPrimePowerOrbitPacket.toScaleProjectionPacket
   orbitPacket := a
   projection := a.orbit.toProjection
 
+set_option linter.style.longLine false in
 /-- Every terminal cubic-root prime has a complete local unit scale projection
 at its exact original routing-cell modulus. -/
 theorem AwaySevenBaseTerminalRoutingPacket.nonempty_primePowerScaleProjectionPacket_of_dvd_cubicRootLoad

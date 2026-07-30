@@ -143,14 +143,14 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_quotient_eq {x y z : ℕ}
       have hcarrier : (y : ℤ) = 7 * (q.carrierUnit : ℤ) := by
         have h := congrArg (fun n : ℕ => (n : ℤ)) q.carrier_eq
         simpa [endpointRoutingFactorNat, hrow] using h
-      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      simp only [AwaySevenBaseEndpointQuotientEquation]
       rw [cyclotomicSevenFst_sub_right_cube, hcarrier]
       ring
   | z =>
       have hcarrier : (z : ℤ) = 7 * (q.carrierUnit : ℤ) := by
         have h := congrArg (fun n : ℕ => (n : ℤ)) q.carrier_eq
         simpa [endpointRoutingFactorNat, hrow] using h
-      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      simp only [AwaySevenBaseEndpointQuotientEquation]
       rw [cyclotomicSevenFst_add_left_cube, hcarrier]
       ring
   | sum =>
@@ -159,7 +159,7 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_quotient_eq {x y z : ℕ}
         simpa [endpointRoutingFactorNat, hrow, Nat.cast_add] using h
       have hcarrier' : (z : ℤ) + (y : ℤ) = 7 * (q.carrierUnit : ℤ) := by
         linear_combination hcarrier
-      simp only [AwaySevenBaseEndpointQuotientEquation, hrow]
+      simp only [AwaySevenBaseEndpointQuotientEquation]
       rw [cyclotomicSevenFst_add_left_cube, hcarrier']
       ring
 

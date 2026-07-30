@@ -102,6 +102,21 @@ import DkMath.FLT.Seven.SevenRamifiedFusionRotationPhase
 import DkMath.FLT.Seven.SevenRamifiedFusionRelativeRealIndex
 import DkMath.FLT.Seven.SevenRamifiedFusionRealPairCarrier
 import DkMath.FLT.Seven.SevenRamifiedFusionRealPairCoprimalityNormGate
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicPrimeAddress
+import DkMath.FLT.Seven.SevenRamifiedFusionRealPairLoadAllocation
+import DkMath.FLT.Seven.SevenRamifiedFusionLoadedBranchRecovery
+import DkMath.FLT.Seven.SevenRamifiedFusionLoadNorm
+import DkMath.FLT.Seven.SevenRamifiedFusionLoadedCore
+import DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadAddress
+import DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadValuation
+import DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadGalois
+import DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadExactValuation
+import DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadGlobalFactorization
+import DkMath.FLT.Seven.SevenRamifiedFusionDirectChartObstruction
+import DkMath.FLT.Seven.SevenRamifiedFusionAdditiveChartFrontier
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixCarrier
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicLinearPrimeAddress
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -230,5 +245,30 @@ the remaining unit.  The facade therefore exports a prime axis associate
 `rightRoot - leftRoot = droppedAxis^3 * descentWitness^7`.
 This completes the ramified algebraic axis drop.  It does not yet construct
 a new primitive Fermat counterexample, the independent signed-root depth-four
-routing, an inhabited recursive descent provider, or FLT7.
+routing, an inhabited recursive descent provider, or FLT7.  The subsequent
+FUSION layer now proves that every prime divisor of the signed quotient root
+is one modulo fourteen and constructs its canonical primitive-seventh-root
+residue address.  Independently, the two unresolved scalar routing cells are
+allocated integrally among the three pair cores by PID gcd projections.
+After those loads are removed, the three pairwise-coprime residual cores are
+seventh powers up to units.  The load families form associated Galois cycles,
+and each projected load has absolute cubic norm exactly equal to its scalar
+routing cell.  If the two scalar cells are themselves seventh powers, the
+load roots are absorbed and the previous conditional core-power packet is
+recovered.  At every prime divisor of a scalar cell, the canonical residue
+evaluation places the addressed gcd load in its maximal degree-one kernel and
+excludes the competing coprime load.  The three cyclic real-cubic kernels
+split `(q)` completely, so the exact kernel factor count equals the scalar
+cell's rational adic exponent; their finite supported product reconstructs the
+principal load ideal.  A concrete rank-six quadratic carrier now supplies
+conjugate seventh roots, every local ratio evaluation, and the oriented
+factorization of the zeroth real-pair carrier.  At each address the two
+conjugate degree-one kernels are distinct maximal and comaximal ideals with
+the same real contraction and residue cardinality `q`.  The extension of the
+common real prime is contained in their product; its reverse containment,
+equivalently exact fibre-product equality, remains an explicit obligation.
+These results do not yet supply the primitive reconstructed chart or strict
+global decrease required before descent.  The direct signed-root candidate is
+ruled out: its seventh-power difference has exact seven-adic depth five and
+therefore is not an integer seventh power.
 -/
