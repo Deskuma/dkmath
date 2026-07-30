@@ -1,0 +1,1261 @@
+✔ [0/140] Ran dk_math:extraDep
+✔ [1/140] Ran mathlib:extraDep
+✔ [2/140] Ran batteries:extraDep
+✔ [221/451] Ran importGraph:extraDep
+✔ [ImportGraph.Imports.ImportGraph]
+✔ [ImportGraph.Imports.Redundant]
+✔ [ImportGraph.Lean.Environment]
+✔ [ImportGraph.Imports.RequiredModules]
+✔ [ImportGraph.Graph.TransitiveClosure]
+✔ [ImportGraph.Tools.FindHome]
+✔ [ImportGraph.Tools.ImportDiff]
+✔ [ImportGraph.Tools.MinImports]
+✔ [ImportGraph.Tools.RedundantImports]
+✔ [ImportGraph.Tools]
+✔ [316/451] Ran aesop:extraDep
+✔ [454/711] Ran Qq:extraDep
+✔ [Qq.ForLean.ReduceEval]
+✔ [Qq.ForLean.ToExpr]
+✔ [Qq.Typ]
+✔ [Qq.Macro]
+✔ [Qq.Delab]
+✔ [Qq.MetaM]
+✔ [Qq.Simp]
+✔ [Qq.ForLean.Do]
+✔ [Qq.SortLocalDecls]
+✔ [Qq.MatchImpl]
+✔ [Qq.Match]
+✔ [Qq.AssertInstancesCommute]
+✔ [Qq.Commands]
+✔ [Qq]
+✔ [562/711] Ran plausible:extraDep
+✔ [Plausible.Random]
+✔ [Plausible.Gen]
+✔ [Plausible.Arbitrary]
+✔ [Plausible.Shrinkable]
+✔ [Plausible.Sampleable]
+✔ [Plausible.Testable]
+✔ [Plausible.Functions]
+✔ [Plausible.Attr]
+✔ [Plausible.Tactic]
+✔ [Plausible.ArbitraryFueled]
+✔ [Plausible.DeriveArbitrary]
+✔ [Plausible.DeriveShrinkable]
+✔ [Plausible]
+✔ [576/711] Ran LeanSearchClient:extraDep
+✔ [LeanSearchClient.Basic]
+✔ [LeanSearchClient.Syntax]
+✔ [LeanSearchClient.LoogleSyntax]
+✔ [LeanSearchClient]
+✔ [591/711] Ran proofwidgets:extraDep
+✔ [592/711] Ran widgetJsSrcs
+✔ [593/711] Ran widgetRollupConfig
+✔ [594/711] Ran widgetTsconfig
+✔ [595/711] Ran widgetPackageJson
+ℹ [596/711] Replayed proofwidgets/widgetPackageLock
+trace: /Users/wjn/ProofWidgets4/widget> npm install
+trace: stdout:
+added 6 packages, and audited 364 packages in 5s
+67 packages are looking for funding
+  run `npm fund` for details
+10 vulnerabilities (4 moderate, 6 high)
+To address issues that do not require attention, run:
+  npm audit fix
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+Some issues need review, and may require choosing
+a different dependency.
+Run `npm audit` for details.
+trace: stderr:
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn allow-scripts
+npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+ℹ [597/711] Replayed proofwidgets/widgetJsAll
+trace: /Users/wjn/ProofWidgets4/widget> npm clean-install
+trace: stdout:
+added 363 packages, and audited 364 packages in 11s
+67 packages are looking for funding
+  run `npm fund` for details
+10 vulnerabilities (4 moderate, 6 high)
+To address issues that do not require attention, run:
+  npm audit fix
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+Some issues need review, and may require choosing
+a different dependency.
+Run `npm audit` for details.
+trace: stderr:
+npm warn deprecated glob@11.1.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated three-mesh-bvh@0.7.8: Deprecated due to three.js version incompatibility. Please use v0.8.0, instead.
+npm warn deprecated mathjax-full@3.2.2: Version 4 replaces this package with the scoped package @mathjax/src
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn allow-scripts
+npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+trace: /Users/wjn/ProofWidgets4/widget> npm run build
+trace: stdout:
+> @leanprover-community/proofwidgets4@0.2.0 build
+> npx tsc && rollup --environment NODE_ENV:production --config
+trace: stderr:
+dist/rubiks.js → ./js...
+created ./js in 11s
+dist/recharts.js → ./js...
+(!) Circular dependencies
+node_modules/d3-interpolate/src/value.js -> node_modules/d3-interpolate/src/array.js -> node_modules/d3-interpolate/src/value.js
+node_modules/d3-interpolate/src/value.js -> node_modules/d3-interpolate/src/object.js -> node_modules/d3-interpolate/src/value.js
+node_modules/recharts/es6/util/ChartUtils.js -> node_modules/recharts/es6/util/getLegendProps.js -> node_modules/recharts/es6/util/ChartUtils.js
+created ./js in 7.3s
+dist/rbTree.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 1.4s
+dist/presentSelection.js → ./js...
+created ./js in 194ms
+dist/penroseDisplay.js → ./js...
+(!) Circular dependencies
+node_modules/true-myth/dist/es/maybe.js -> node_modules/true-myth/dist/es/result.js -> node_modules/true-myth/dist/es/maybe.js
+node_modules/@penrose/core/dist/engine/EngineUtils.js -> node_modules/@penrose/core/dist/utils/Util.js -> node_modules/@penrose/core/dist/engine/EngineUtils.js
+node_modules/@penrose/core/dist/engine/BBox.js -> node_modules/@penrose/core/dist/contrib/Queries.js -> node_modules/@penrose/core/dist/engine/BBox.js
+...and 14 more
+created ./js in 14.2s
+dist/penroseCanvas.js → ./js...
+(!) Circular dependencies
+node_modules/true-myth/dist/es/maybe.js -> node_modules/true-myth/dist/es/result.js -> node_modules/true-myth/dist/es/maybe.js
+node_modules/@penrose/core/dist/engine/EngineUtils.js -> node_modules/@penrose/core/dist/utils/Util.js -> node_modules/@penrose/core/dist/engine/EngineUtils.js
+node_modules/@penrose/core/dist/engine/BBox.js -> node_modules/@penrose/core/dist/contrib/Queries.js -> node_modules/@penrose/core/dist/engine/BBox.js
+...and 14 more
+created ./js in 14.1s
+dist/ofRpcMethod.js → ./js...
+created ./js in 216ms
+dist/maximizable.js → ./js...
+created ./js in 145ms
+dist/makeEditLink.js → ./js...
+created ./js in 127ms
+dist/interactiveSvg.js → ./js...
+created ./js in 194ms
+dist/interactiveExpr.js → ./js...
+created ./js in 150ms
+dist/index.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 4.4s
+dist/htmlDisplayPanel.js → ./js...
+created ./js in 160ms
+dist/htmlDisplay.js → ./js...
+created ./js in 144ms
+dist/graphvizDisplay.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 3.5s
+dist/goalTypePanel.js → ./js...
+created ./js in 204ms
+dist/forceGraphDisplay.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 2.6s
+dist/filterDetails.js → ./js...
+created ./js in 158ms
+dist/exprPresentation.js → ./js...
+created ./js in 168ms
+dist/dotGraph.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 2.8s
+dist/d3Graph.js → ./js...
+(!) Circular dependencies
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/select.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/selectAll.js -> node_modules/d3-selection/src/selection/index.js
+node_modules/d3-selection/src/selection/index.js -> node_modules/d3-selection/src/selection/filter.js -> node_modules/d3-selection/src/selection/index.js
+...and 12 more
+created ./js in 2.5s
+dist/cancellable.js → ./js...
+created ./js in 130ms
+dist/animatedHtml.js → ./js...
+created ./js in 148ms
+dist/RefreshComponent.js → ./js...
+created ./js in 150ms
+✔ [ProofWidgets.Compat]
+✔ [ProofWidgets.Component.Basic]
+✔ [ProofWidgets.Component.MakeEditLink]
+✔ [ProofWidgets.Component.Panel.Basic]
+✔ [ProofWidgets.Util]
+✔ [ProofWidgets.Data.Html]
+✔ [ProofWidgets.Component.RefreshComponent]
+✔ [ProofWidgets.Component.FilterDetails]
+✔ [ProofWidgets.Cancellable]
+✔ [ProofWidgets.Component.OfRpcMethod]
+✔ [ProofWidgets.Component.PenroseDiagram]
+✔ [ProofWidgets.Presentation.Expr]
+✔ [ProofWidgets.Component.HtmlDisplay]
+✔ [8653/9318] Ran job computation
+ℹ [8654/9318] Built DkMath.Samples.CurryDish (661ms)
+info: DkMath/Samples/CurryDish.lean:42:0: CurryDish.chickenCurry
+info: DkMath/Samples/CurryDish.lean:49:0: false
+info: DkMath/Samples/CurryDish.lean:56:0: false
+info: DkMath/Samples/CurryDish.lean:63:0: true
+info: DkMath/Samples/CurryDish.lean:72:0: "Chicken Curry"
+ℹ [8655/9318] Built DkMath.Samples.SketchBook (558ms)
+ℹ [8656/9318] Built DkMath.Samples.Curry (676ms)
+info: DkMath/Samples/Curry.lean:39:0: 15
+ℹ [8657/9318] Built DkMath.Verification.Collision (1.4s)
+info: DkMath/Verification/Collision.lean:52:0: file: DkMath.Verification.Collision
+ℹ [8658/9318] Built DkMath.BookOfMagic.UniqueGapContract (1.6s)
+ℹ [8659/9318] Built DkMath.NumberTheory.BinomialPrime (2.6s)
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+ℹ [8660/9318] Built DkMath.RH.Basic (670ms)
+ℹ [8661/9318] Built DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource (3.3s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/FiniteAmortizedResource.lean:10:0: file: DkMath.Collatz.PetalBridge.FloatWindow.FiniteAmortizedResource
+ℹ [8662/9318] Built DkMath.Hackathon.FinitePrimeEscape (2.7s)
+ℹ [8663/9318] Built DkMath.Hackathon.JacobianCounterexample3.Basic (3.3s)
+ℹ [8665/9318] Built DkMath.NumberTheory.EuclideanGeometry.FermatForm (5.7s)
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:10:0: file: DkMath.NumberTheory.EuclideanGeometry.FermatForm
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:141:0: Nat.fermatNumber (n : ℕ) : ℕ
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:142:0: Nat.fermatNumber_injective : Function.Injective Nat.fermatNumber
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:143:0: Nat.coprime_fermatNumber_fermatNumber {m n : ℕ} (hmn : m ≠ n) : m.fermatNumber.Coprime n.fermatNumber
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:144:0: Nat.totient (n : ℕ) : ℕ
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:145:0: DkMath.NumberTheory.EuclideanGeometry.IsGaussWantzelIndex (n : ℕ) : Prop
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:146:0: DkMath.NumberTheory.EuclideanGeometry.fermatNumbers_pairwise_coprime (s : Finset ℕ) :
+  (↑s).Pairwise fun i j ↦ i.fermatNumber.Coprime j.fermatNumber
+info: DkMath/NumberTheory/EuclideanGeometry/FermatForm.lean:147:0: DkMath.NumberTheory.EuclideanGeometry.IsGaussWantzelIndex.exists_totient_eq_two_pow {n : ℕ}
+  (hn : IsGaussWantzelIndex n) : ∃ e, φ n = 2 ^ e
+⚠ [8666/9318] Built DkMath.FLT.OctagonCore (6.6s)
+info: DkMath/FLT/OctagonCore.lean:10:0: file: DkMath.FLT.OctagonCore
+ℹ [8667/9318] Built DkMath.Verification (1.9s)
+info: DkMath/Verification.lean:10:0: file: DkMath.Verification
+ℹ [8668/9318] Built DkMath.BookOfMagic.GapCrystal (1.5s)
+ℹ [8670/9318] Built DkMath.Collatz.PetalBridge.FloatWindow.FiniteReflectedQueue (9.5s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/FiniteReflectedQueue.lean:12:0: file: DkMath.Collatz.PetalBridge.FloatWindow.FiniteReflectedQueue
+ℹ [8671/9318] Built DkMath.Hackathon.JacobianCounterexample3.PolynomialMap (3.6s)
+ℹ [8672/9318] Built DkMath.CFBRC.TrigBridge.Basic (6.2s)
+info: DkMath/CFBRC/TrigBridge/Basic.lean:10:0: file: DkMath.CFBRC.TrigBridge.Basic
+✖ [8673/9318] Building DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicSevenPID (7.3s)
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:11:0: file: DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicSevenPID
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:122:8: failed to synthesize instance of type class
+  CommRing ↥P
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:125:15: unsolved goals
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : NumberField K
+hK : IsCyclotomicExtension {7} ℚ K
+this✝¹ : IsGalois ℚ K := IsCyclotomicExtension.isGalois {7} ℚ K
+hp_mem :
+  2 ∈
+    Finset.Icc 1
+      ⌊(4 / π) ^ nrComplexPlaces K *
+          (↑(Module.finrank ℚ K).factorial / ↑(Module.finrank ℚ K) ^ Module.finrank ℚ K * √|↑(discr K)|)⌋₊
+hp : Nat.Prime 2
+hp_le : 2 ≤ 4
+this✝ : Fact (Nat.Prime 2) := { out := Nat.prime_two }
+this : (Ideal.span {2}).IsPrime :=
+  (Ideal.span_singleton_prime
+    (Nat.prime_iff_prime_int.mp Nat.prime_two)
+P : Ideal (𝓞 K)
+hPprime : P.IsPrime
+hPlies : P.LiesOver (Ideal.span {2})
+⊢ ?m.240 % 2 = 1
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:129:10: failed to synthesize instance of type class
+  CommRing ↥P
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:142:8: failed to synthesize instance of type class
+  CommRing ↥P
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:145:15: unsolved goals
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : NumberField K
+hK : IsCyclotomicExtension {7} ℚ K
+this✝¹ : IsGalois ℚ K := IsCyclotomicExtension.isGalois {7} ℚ K
+hp_mem :
+  3 ∈
+    Finset.Icc 1
+      ⌊(4 / π) ^ nrComplexPlaces K *
+          (↑(Module.finrank ℚ K).factorial / ↑(Module.finrank ℚ K) ^ Module.finrank ℚ K * √|↑(discr K)|)⌋₊
+hp : Nat.Prime 3
+hp_le : 3 ≤ 4
+this✝ : Fact (Nat.Prime 3) := { out := Nat.prime_three }
+this : (Ideal.span {3}).IsPrime :=
+  (Ideal.span_singleton_prime
+    (Nat.prime_iff_prime_int.mp Nat.prime_three)
+P : Ideal (𝓞 K)
+hPprime : P.IsPrime
+hPlies : P.LiesOver (Ideal.span {3})
+⊢ ¬3 ∣ ?m.374
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:149:10: failed to synthesize instance of type class
+  CommRing ↥P
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:159:0: 'DkMath.FLT.Seven.CyclotomicSeven.minkowskiFloor_le_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:160:0: 'DkMath.FLT.Seven.CyclotomicSeven.orderOf_two_zmodSeven' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:161:0: 'DkMath.FLT.Seven.CyclotomicSeven.orderOf_three_zmodSeven' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:162:0: 'DkMath.FLT.Seven.CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:163:0: 'DkMath.FLT.Seven.CyclotomicSeven.classNumber_eq_one' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+error: Lean exited with code 1
+ℹ [8674/9318] Built DkMath.FLT.Seven.Basic (9.3s)
+info: DkMath/FLT/Seven/Basic.lean:9:0: file: DkMath.FLT.Seven.Basic
+ℹ [8675/9318] Built DkMath.RH.Defs (9.3s)
+info: DkMath/RH/Defs.lean:9:0: file: DkMath.RH.Defs
+ℹ [8676/9318] Built DkMath.FLT.Five.Basic (10s)
+info: DkMath/FLT/Five/Basic.lean:9:0: file: DkMath.FLT.Five.Basic
+ℹ [8677/9318] Built DkMath.KUS.Unit (10s)
+info: DkMath/KUS/Unit.lean:9:0: file: DkMath.KUS.Unit
+ℹ [8678/9318] Built DkMath.SilverRatio.Sqrt2Lemmas (10s)
+info: DkMath/SilverRatio/Sqrt2Lemmas.lean:9:0: file: DkMath.SilverRatio.Sqrt2Lemmas
+ℹ [8679/9318] Built DkMath.Sequence.Generator (11s)
+info: DkMath/Sequence/Generator.lean:9:0: file: DkMath.Sequence.Generator
+✖ [8680/9318] Building DkMath.DHNT.DHNT_Base (13s)
+info: DkMath/DHNT/DHNT_Base.lean:12:0: file: DkMath.DHNT.DHNT_Base
+error: DkMath/DHNT/DHNT_Base.lean:230:33: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m + ?n) • ?a
+in the target expression
+  ((n + 1) • a).x = (n • a + a).x
+u : Unit
+n : ℕ
+a : QtyT u
+⊢ ((n + 1) • a).x = (n • a + a).x
+error: Lean exited with code 1
+ℹ [8681/9318] Built DkMath.PolyominoPrototype (12s)
+info: DkMath/PolyominoPrototype.lean:9:0: file: DkMath.PolyominoPrototype
+ℹ [8682/9318] Built DkMath.Analysis.DkLimit (9.3s)
+info: DkMath/Analysis/DkLimit.lean:9:0: file: DkMath.Analysis.DkLimit
+ℹ [8683/9318] Built DkMath.UnitCycle.Core (10s)
+info: DkMath/UnitCycle/Core.lean:9:0: file: DkMath.UnitCycle.Core
+ℹ [8684/9318] Built DkMath.Polyomino (10s)
+info: DkMath/Polyomino.lean:9:0: file: DkMath.Polyomino
+ℹ [8685/9318] Built DkMath.Pascal.WallisCosmicPetalBridge (14s)
+info: DkMath/Pascal/WallisCosmicPetalBridge.lean:9:0: file: DkMath.Pascal.WallisCosmicPetalBridge
+ℹ [8686/9318] Built DkMath.CosmicFormula.CosmicFormulaExp (11s)
+info: DkMath/CosmicFormula/CosmicFormulaExp.lean:12:0: file: DkMath.CosmicFormula.CosmicFormulaExp
+ℹ [8687/9318] Built DkMath.CosmicFormula.Rotation.CF2D.Basic (15s)
+info: DkMath/CosmicFormula/Rotation/CF2D/Basic.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Basic
+ℹ [8688/9318] Built DkMath.CosmicFormula.CosmicFormulaLinear (12s)
+info: DkMath/CosmicFormula/CosmicFormulaLinear.lean:9:0: file: DkMath.CosmicFormula.CosmicFormulaLinear
+ℹ [8689/9318] Built DkMath.CosmicFormula.CosmicFormulaGeom (13s)
+info: DkMath/CosmicFormula/CosmicFormulaGeom.lean:9:0: file: DkMath.CosmicFormula.CosmicFormulaGeom
+ℹ [8690/9318] Built DkMath.CosmicFormula.CosmicDifferenceKernel (13s)
+info: DkMath/CosmicFormula/CosmicDifferenceKernel.lean:9:0: file: DkMath.CosmicFormula.CosmicDifferenceKernel
+ℹ [8691/9318] Built DkMath.Collatz.PetalBridge.FloatWindow.OldestFirstQueue (13s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/OldestFirstQueue.lean:9:0: file: DkMath.Collatz.PetalBridge.FloatWindow.OldestFirstQueue
+ℹ [8692/9318] Built DkMath.Collatz.Basic (9.0s)
+info: DkMath/Collatz/Basic.lean:9:0: file: DkMath.Collatz.Basic
+ℹ [8693/9318] Built DkMath.Units.NPUnit (11s)
+info: DkMath/Units/NPUnit.lean:9:0: file: DkMath.Units.NPUnit
+ℹ [8694/9318] Built DkMath.ABC.RpowExtras (11s)
+info: DkMath/ABC/RpowExtras.lean:9:0: file: DkMath.ABC.RpowExtras
+ℹ [8695/9318] Built DkMath.CosmicFormula.Mass.BodyGapSplit (10s)
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+ℹ [8696/9318] Built DkMath.NumberTheory.PrimitiveSet.RealWeight (9.3s)
+info: DkMath/NumberTheory/PrimitiveSet/RealWeight.lean:9:0: file: DkMath.NumberTheory.PrimitiveSet.RealWeight
+ℹ [8697/9318] Built DkMath.NumberTheory.PrimitiveSet.Basic (10s)
+info: DkMath/NumberTheory/PrimitiveSet/Basic.lean:9:0: file: DkMath.NumberTheory.PrimitiveSet.Basic
+ℹ [8698/9318] Built DkMath.Kernel.Capacity (9.9s)
+info: DkMath/Kernel/Capacity.lean:9:0: file: DkMath.Kernel.Capacity
+ℹ [8699/9318] Built DkMath.Samples.Demo (13s)
+info: DkMath/Samples/Demo.lean:9:0: file: DkMath.Samples.Demo
+ℹ [8700/9318] Built DkMath.SilverRatio.GcdAg (13s)
+info: DkMath/SilverRatio/GcdAg.lean:9:0: file: DkMath.SilverRatio.GcdAg
+ℹ [8701/9318] Built DkMath.Algebra.DiffPow (17s)
+ℹ [8702/9318] Built DkMath.Samples.Qty (16s)
+info: DkMath/Samples/Qty.lean:9:0: file: DkMath.Samples.Qty
+ℹ [8703/9318] Built DkMath.NumberTheory.PowerSums.Basic (15s)
+info: DkMath/NumberTheory/PowerSums/Basic.lean:11:0: file: DkMath.NumberTheory.PowerSums.Basic
+ℹ [8704/9318] Built DkMath.Samples.SumThreeSquaresEqSquare (19s)
+info: DkMath/Samples/SumThreeSquaresEqSquare.lean:11:0: file: DkMath.Samples.SumThreeSquaresEqSquare
+ℹ [8705/9318] Built DkMath.PowerSwap.Contours (17s)
+info: DkMath/PowerSwap/Contours.lean:11:0: file: DkMath.PowerSwap.Contours
+ℹ [8706/9318] Built DkMath.PowerSwap.Exchange (12s)
+info: DkMath/PowerSwap/Exchange.lean:11:0: file: DkMath.PowerSwap.Exchange
+ℹ [8707/9318] Built DkMath.ABC.Basic (30s)
+info: DkMath/ABC/Basic.lean:9:0: file: DkMath.ABC.Basic
+info: DkMath/ABC/Basic.lean:22:0: Real.rpow_nonneg {x : ℝ} (hx : 0 ≤ x) (y : ℝ) : 0 ≤ x ^ y
+ℹ [8708/9318] Built DkMath.PowerSwap.Branch (15s)
+info: DkMath/PowerSwap/Branch.lean:11:0: file: DkMath.PowerSwap.Branch
+ℹ [8709/9318] Built DkMath.PowerSwap.Basic (10s)
+info: DkMath/PowerSwap/Basic.lean:11:0: file: DkMath.PowerSwap.Basic
+✔ [8710/9318] Ran DkMath.DHNT.UnitNatLayers
+ℹ [8711/9318] Built DkMath.CellDim (12s)
+info: DkMath/CellDim.lean:9:0: file: DkMath.CellDim
+✖ [8712/9318] Building DkMath.ABC.PadicValNat (10s)
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+error: DkMath/ABC/PadicValNat.lean:192:26: Application type mismatch: The argument
+  ha
+has type
+  a ≠ 0
+of sort `Prop` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  padicValNat.pow d ha
+error: Lean exited with code 1
+ℹ [8713/9318] Built DkMath.Lib.Basic (11s)
+ℹ [8714/9318] Built DkMath.Basic (13s)
+info: DkMath/Basic.lean:9:0: file: DkMath.Basic
+info: DkMath/Basic.lean:24:0: "world"
+✖ [8715/9318] Building DkMath.CosmicFormula.CosmicFormulaDim (22s)
+info: DkMath/CosmicFormula/CosmicFormulaDim.lean:525:2: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+error: DkMath/CosmicFormula/CosmicFormulaDim.lean:559:2: Type mismatch: After simplification, term
+  DifferentiableAt.div hnum hden hden0
+ has type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ
+    DenselyNormedField.toNontriviallyNormedField.toDivisionRing.toAddCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ
+    DenselyNormedField.toNontriviallyNormedField.toDivisionRing.toAddCommGroup (NormedAlgebra.toNormedSpace ℂ).toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ((fun s ↦ ↑π ^ (s / 2)) / fun s ↦ Gamma (s / 2 + 1)) s
+but is expected to have type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace volConstC s
+error: DkMath/CosmicFormula/CosmicFormulaDim.lean:587:2: Type mismatch: After simplification, term
+  h
+ has type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ instNormedAddCommGroup.toAddCommGroup
+    (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ instNormedAddCommGroup.toAddCommGroup
+    (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ((fun z ↦ (Gamma z)⁻¹) ∘ fun s ↦ 2⁻¹ * s + 1) s
+but is expected to have type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace (fun s ↦ (Gamma (2⁻¹ * s + 1))⁻¹) s
+error: DkMath/CosmicFormula/CosmicFormulaDim.lean:607:2: Type mismatch: After simplification, term
+  DifferentiableAt.mul hnum hrec
+ has type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ instNormedAddCommGroup.toAddCommGroup
+    (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ instCommCStarAlgebraComplex.toCStarAlgebra.toAddCommGroup
+    (NormedAlgebra.toNormedSpace ℂ).toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    ((fun s ↦ ↑π ^ (s * 2⁻¹)) * fun s ↦ (Gamma (s * 2⁻¹ + 1))⁻¹) s
+but is expected to have type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace volConstC s
+error: DkMath/CosmicFormula/CosmicFormulaDim.lean:715:2: Type mismatch: After simplification, term
+  DifferentiableAt.mul h1 h2
+ has type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ instNormedAddCommGroup.toAddCommGroup
+    (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ instCommCStarAlgebraComplex.toCStarAlgebra.toAddCommGroup
+    (NormedAlgebra.toNormedSpace ℂ).toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (volConstC * fun s ↦ rpowPos r s) s
+but is expected to have type
+  @DifferentiableAt ℂ DenselyNormedField.toNontriviallyNormedField ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℂ addCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace (fun s ↦ volConstC s * rpowPos r s) s
+info: DkMath/CosmicFormula/CosmicFormulaDim.lean:1100:40: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+error: Lean exited with code 1
+ℹ [8716/9318] Built DkMath.Hackathon.JacobianCounterexample3.Collision (10s)
+ℹ [8717/9318] Built DkMath.CFBRC.TrigBridge.Complex (9.8s)
+info: DkMath/CFBRC/TrigBridge/Complex.lean:10:0: file: DkMath.CFBRC.TrigBridge.Complex
+ℹ [8718/9318] Built DkMath.Algebra.BinomTail (23s)
+info: DkMath/Algebra/BinomTail.lean:9:0: file: DkMath.Algebra.BinomTail
+ℹ [8719/9318] Built DkMath.Lib.Cosmic.GTail (18s)
+info: DkMath/Lib/Cosmic/GTail.lean:9:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [8720/9318] Built DkMath.CFBRC.TrigBridge.Trig (7.4s)
+info: DkMath/CFBRC/TrigBridge/Trig.lean:11:0: file: DkMath.CFBRC.TrigBridge.Trig
+ℹ [8721/9318] Built DkMath.Hackathon.JacobianCounterexample3.Jacobian (19s)
+ℹ [8722/9318] Built DkMath.FLT.Five.BranchA (11s)
+info: DkMath/FLT/Five/BranchA.lean:9:0: file: DkMath.FLT.Five.BranchA
+✖ [8723/9318] Building DkMath.RH.Lemmas (15s)
+info: DkMath/RH/Lemmas.lean:13:0: file: DkMath.RH.Lemmas
+error: DkMath/RH/Lemmas.lean:117:4: Type mismatch: After simplification, term
+  deriv_mul hf hg
+ has type
+  @Eq ℂ (deriv (f * g) t) (deriv f t * g t + f t * deriv g t)
+but is expected to have type
+  @Eq ℂ (deriv (fun u ↦ f u * g u) t) (deriv f t * g t + f t * deriv g t)
+error: Lean exited with code 1
+ℹ [8724/9318] Built DkMath.KUS.Blueprint (14s)
+info: DkMath/KUS/Blueprint.lean:9:0: file: DkMath.KUS.Blueprint
+ℹ [8725/9318] Built DkMath.FLT.Five.GN5 (17s)
+info: DkMath/FLT/Five/GN5.lean:9:0: file: DkMath.FLT.Five.GN5
+ℹ [8726/9318] Built DkMath.UniqueRepSimple (13s)
+info: DkMath/UniqueRepSimple.lean:14:0: file: DkMath.UniqueRepSimple
+ℹ [8727/9318] Built DkMath.CFBRC.TrigBridge.General (21s)
+info: DkMath/CFBRC/TrigBridge/General.lean:10:0: file: DkMath.CFBRC.TrigBridge.General
+ℹ [8728/9318] Built DkMath.SilverRatio.SilverRatioCircle (17s)
+info: DkMath/SilverRatio/SilverRatioCircle.lean:10:0: file: DkMath.SilverRatio.SilverRatioCircle
+ℹ [8729/9318] Built DkMath.SilverRatio.SilverRatioUnit (19s)
+info: DkMath/SilverRatio/SilverRatioUnit.lean:13:0: file: DkMath.SilverRatio.SilverRatioUnit
+info: DkMath/SilverRatio/SilverRatioUnit.lean:32:0: DkMath.SilverRatio.Sqrt2.sqrt2 : ℝ
+info: DkMath/SilverRatio/SilverRatioUnit.lean:33:0: DkMath.SilverRatio.Sqrt2.sigma : ℝ
+info: DkMath/SilverRatio/SilverRatioUnit.lean:34:0: DkMath.SilverRatio.Sqrt2.sqrt2_sq : sqrt2 ^ 2 = 2
+info: DkMath/SilverRatio/SilverRatioUnit.lean:35:0: DkMath.SilverRatio.Sqrt2.sqrt2_pos : 0 < sqrt2
+info: DkMath/SilverRatio/SilverRatioUnit.lean:36:0: DkMath.SilverRatio.Sqrt2.sqrt2_ne_zero : sqrt2 ≠ 0
+info: DkMath/SilverRatio/SilverRatioUnit.lean:37:0: DkMath.SilverRatio.Sqrt2.sqrt2_irrational : Irrational sqrt2
+✖ [8730/9318] Building DkMath.UnitCycle.RelPolygon (11s)
+info: DkMath/UnitCycle/RelPolygon.lean:10:0: file: DkMath.UnitCycle.RelPolygon
+error: DkMath/UnitCycle/RelPolygon.lean:158:2: Type mismatch: After simplification, term
+  h
+ has type
+  @LE.le ℕ instLENat (∑ x ∈ Finset.range 2, g (T^[x] { pos := 9, val := 0 })) (T (T { pos := 9, val := 0 })).val
+but is expected to have type
+  @LE.le ℕ instLENat 6 (T (T { pos := 9, val := 0 })).val
+error: Lean exited with code 1
+ℹ [8731/9318] Built DkMath.Sequence.Recurrence (12s)
+info: DkMath/Sequence/Recurrence.lean:9:0: file: DkMath.Sequence.Recurrence
+ℹ [8732/9318] Built DkMath.UniqueRepresentation (17s)
+info: DkMath/UniqueRepresentation.lean:10:0: file: DkMath.UniqueRepresentation
+ℹ [8733/9318] Built DkMath.Tromino (13s)
+info: DkMath/Tromino.lean:12:0: file: DkMath.Tromino
+ℹ [8734/9318] Built DkMath.CosmicFormula.Rotation.CF2D.Topology (10s)
+info: DkMath/CosmicFormula/Rotation/CF2D/Topology.lean:10:0: file: DkMath.CosmicFormula.Rotation.CF2D.Topology
+ℹ [8735/9318] Built DkMath.Pascal.WallisLimitBridge (11s)
+info: DkMath/Pascal/WallisLimitBridge.lean:11:0: file: DkMath.Pascal.WallisLimitBridge
+ℹ [8736/9318] Built DkMath.CosmicFormula.Rotation.CF2D.Failure (12s)
+info: DkMath/CosmicFormula/Rotation/CF2D/Failure.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Failure
+✖ [8737/9318] Building DkMath.CosmicFormula.CosmicDerivativeBasic (9.9s)
+info: DkMath/CosmicFormula/CosmicDerivativeBasic.lean:10:0: file: DkMath.CosmicFormula.CosmicDerivativeBasic
+error: DkMath/CosmicFormula/CosmicDerivativeBasic.lean:29:2: Type mismatch: After simplification, term
+  hasDerivAt_iff_tendsto_slope_zero
+ has type
+  Iff (HasDerivAt f L x) (Filter.Tendsto (fun t ↦ (f (x + t) - f x) * t⁻¹) (nhdsWithin 0 {0}ᶜ) (nhds L))
+but is expected to have type
+  Iff (HasDerivAt f L x) (Filter.Tendsto (fun u ↦ (f (x + u) - f x) * u⁻¹) (nhdsWithin 0 {0}.compl) (nhds L))
+error: DkMath/CosmicFormula/CosmicDerivativeBasic.lean:63:2: Type mismatch: After simplification, term
+  hasDerivAt_id x
+ has type
+  @HasDerivAt ℝ DenselyNormedField.toNontriviallyNormedField ℝ
+    DenselyNormedField.toNontriviallyNormedField.toDivisionRing.toAddCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ⋯ id 1 x
+but is expected to have type
+  @HasDerivAt ℝ DenselyNormedField.toNontriviallyNormedField ℝ Real.instAddCommGroup Semiring.toModule
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace ⋯ (fun y ↦ y) 1 x
+error: Lean exited with code 1
+ℹ [8738/9318] Built DkMath.CosmicFormula.Rotation.CF2D.Trig (15s)
+info: DkMath/CosmicFormula/Rotation/CF2D/Trig.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Trig
+✔ [8739/9318] Ran DkMath.ABC.CountPowersDividing2n1
+✔ [8740/9318] Ran DkMath.NumberTheory.BinomialPrimePower
+✔ [8741/9318] Ran DkMath.NumberTheory.WeightedBinomial
+ℹ [8742/9318] Built DkMath.FLT.PetalCoreUnit (11s)
+info: DkMath/FLT/PetalCoreUnit.lean:9:0: file: DkMath.FLT.PetalCoreUnit
+✔ [8743/9318] Ran DkMath.Collatz.V2
+✔ [8744/9318] Ran DkMath.Collatz.Accelerated
+✔ [8745/9318] Ran DkMath.Collatz.Shift
+✔ [8746/9318] Ran DkMath.Petal.RelPolygon
+✔ [8747/9318] Ran DkMath.RH.Theorems
+✔ [8748/9318] Ran DkMath.UnitCycle.Examples
+ℹ [8749/9318] Built DkMath.Kernel.Normalize (9.7s)
+info: DkMath/Kernel/Normalize.lean:9:0: file: DkMath.Kernel.Normalize
+ℹ [8750/9318] Built DkMath.NumberTheory.PrimitiveSet.Support (11s)
+info: DkMath/NumberTheory/PrimitiveSet/Support.lean:9:0: file: DkMath.NumberTheory.PrimitiveSet.Support
+ℹ [8751/9318] Built DkMath.NumberTheory.PowerSums.ObservedMin (10s)
+info: DkMath/NumberTheory/PowerSums/ObservedMin.lean:12:0: file: DkMath.NumberTheory.PowerSums.ObservedMin
+ℹ [8752/9318] Built DkMath.NumberTheory.GcdLemmas (13s)
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+ℹ [8753/9318] Built DkMath.PowerSwap.NormalForm (11s)
+info: DkMath/PowerSwap/NormalForm.lean:11:0: file: DkMath.PowerSwap.NormalForm
+ℹ [8754/9318] Built DkMath.NumberTheory.GcdDiffPow (16s)
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+ℹ [8755/9318] Built DkMath.RH.EulerZeta (10s)
+info: DkMath/RH/EulerZeta.lean:14:0: file: DkMath.RH.EulerZeta
+ℹ [8756/9318] Built DkMath.Hackathon.JacobianCounterexample3.Determinant (9.8s)
+ℹ [8757/9318] Built DkMath.Lib.Cosmic.GTailNat (13s)
+info: DkMath/Lib/Cosmic/GTailNat.lean:9:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [8758/9318] Built DkMath.ABC.ABC025_bound2 (20s)
+info: DkMath/ABC/ABC025_bound2.lean:10:0: file: DkMath.ABC.ABC025_bound2
+ℹ [8759/9318] Built DkMath.KUS.Core (10s)
+info: DkMath/KUS/Core.lean:9:0: file: DkMath.KUS.Core
+ℹ [8760/9318] Built DkMath.NumberTheory.TraceOneQuadratic (18s)
+info: DkMath/NumberTheory/TraceOneQuadratic.lean:9:0: file: DkMath.NumberTheory.TraceOneQuadratic
+✖ [8761/9318] Building DkMath.FLT.Five.Reduction (10s)
+info: DkMath/FLT/Five/Reduction.lean:9:0: file: DkMath.FLT.Five.Reduction
+error: DkMath/FLT/Five/Reduction.lean:100:4: Type mismatch: After simplification, term
+  hcop
+ has type
+  @Eq ℕ (g.gcd n) 1
+but is expected to have type
+  @Eq ℕ (gcd g n) 1
+error: Lean exited with code 1
+ℹ [8762/9318] Built DkMath.ABC.Rad (18s)
+info: DkMath/ABC/Rad.lean:3:0: file: DkMath.ABC.Rad
+ℹ [8763/9318] Built DkMath.CFBRC.TrigBridge.Main (6.3s)
+info: DkMath/CFBRC/TrigBridge/Main.lean:11:0: file: DkMath.CFBRC.TrigBridge.Main
+ℹ [8764/9318] Built DkMath.FLT.Five.CleanChannel (13s)
+info: DkMath/FLT/Five/CleanChannel.lean:9:0: file: DkMath.FLT.Five.CleanChannel
+✔ [8765/9318] Ran DkMath.Lib.Cosmic.GTailPadic
+✔ [8766/9318] Ran DkMath.ABC.PadicTelescoping
+✔ [8767/9318] Ran DkMath.Collatz.GnomonEvaluation
+✔ [8768/9318] Ran DkMath.NumberTheory.PascalPrimeDial
+✔ [8769/9318] Ran DkMath.NumberTheory.AKSBridge
+✔ [8770/9318] Ran DkMath.RH.EulerZetaLemmas
+✔ [8771/9318] Ran DkMath.FLT.Five.NormalForm
+ℹ [8772/9318] Built DkMath.CFBRC.TrigBridge.ClosedForm (10s)
+info: DkMath/CFBRC/TrigBridge/ClosedForm.lean:11:0: file: DkMath.CFBRC.TrigBridge.ClosedForm
+ℹ [8773/9318] Built DkMath.SilverRatio.Basic (10s)
+✖ [8774/9318] Building DkMath.CosmicFormula.CosmicFormulaTrominoLink (9.8s)
+info: DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean:11:0: file: DkMath.CosmicFormula.CosmicFormulaTrominoLink
+error: DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean:41:2: Type mismatch: After simplification, term
+  hZ
+ has type
+  (x + u) * (x + u) = u * u + x * (x + 2 * u)
+but is expected to have type
+  (↑x + ↑u) * (↑x + ↑u) = ↑u * ↑u + ↑x * (↑x + 2 * ↑u)
+error: Lean exited with code 1
+ℹ [8775/9318] Built DkMath.Petal.CoreUnit (8.0s)
+info: DkMath/Petal/CoreUnit.lean:9:0: file: DkMath.Petal.CoreUnit
+ℹ [8776/9318] Built DkMath.CosmicFormula.Rotation.CF2D.KernelPower (11s)
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.KernelPower
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:134:0: 1 : UnitKernel ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:135:0: fun r ↦ r ^ 5 : UnitKernel ℝ → UnitKernel ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:136:0: fun r ↦ orderOf r : UnitKernel ℝ → ℕ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:137:0: DkMath.CosmicFormula.Rotation.CF2D.KernelFamily.kernel_nsmul.{u, v} {T : Type u} {R : Type v} [AddMonoid T] [CommRing R]
+  (F : KernelFamily T R) (n : ℕ) (t : T) : F.kernel (n • t) = F.kernel t ^ n
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:138:0: DkMath.CosmicFormula.Rotation.CF2D.UnitKernel.pow_act.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (n : ℕ)
+  (z : Vec R) : (r ^ n).act z = r.act^[n] z
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:139:0: DkMath.CosmicFormula.Rotation.CF2D.ExactKernelOrder.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (k : ℕ) : Prop
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:140:0: DkMath.CosmicFormula.Rotation.CF2D.exactKernelOrder_iff_orderOf_eq.{u} {R : Type u} [CommRing R] {r : UnitKernel R}
+  {k : ℕ} (hk : 0 < k) : ExactKernelOrder r k ↔ orderOf r = k
+✔ [8777/9318] Ran DkMath.RH.EulerZetaConvergence
+ℹ [8778/9318] Built DkMath.Sequence.Arithmetic (13s)
+info: DkMath/Sequence/Arithmetic.lean:9:0: file: DkMath.Sequence.Arithmetic
+ℹ [8779/9318] Built DkMath.CosmicFormula.Rotation.CF2D.CFSinCos (14s)
+info: DkMath/CosmicFormula/Rotation/CF2D/CFSinCos.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
+ℹ [8780/9318] Built DkMath.Hackathon.JacobianCounterexample3.Counterexample (5.2s)
+✔ [8781/9318] Ran DkMath.FLT.Five.SquareGoldenBridge
+ℹ [8782/9318] Built DkMath.Pascal.WallisGrowthBridge (19s)
+info: DkMath/Pascal/WallisGrowthBridge.lean:11:0: file: DkMath.Pascal.WallisGrowthBridge
+ℹ [8783/9318] Built DkMath.PowerSwap (8.6s)
+ℹ [8784/9318] Built DkMath.NumberTheory.PowerSums.Examples (11s)
+info: DkMath/NumberTheory/PowerSums/Examples.lean:13:0: file: DkMath.NumberTheory.PowerSums.Examples
+ℹ [8785/9318] Built DkMath.NumberTheory.PowerSums.ResidualProfile (12s)
+info: DkMath/NumberTheory/PowerSums/ResidualProfile.lean:13:0: file: DkMath.NumberTheory.PowerSums.ResidualProfile
+ℹ [8786/9318] Built DkMath.NumberTheory.GcdNatAbsDivD (11s)
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+ℹ [8787/9318] Built DkMath.Lib.Cosmic.GTailCongruence (13s)
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:9:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [8788/9318] Built DkMath.KUS.NatEmbed (11s)
+info: DkMath/KUS/NatEmbed.lean:9:0: file: DkMath.KUS.NatEmbed
+✔ [8789/9318] Ran DkMath.RH.HopcInfiniteLift
+✔ [8790/9318] Ran DkMath.FLT.Five.GoldenOrder
+✔ [8791/9318] Ran DkMath.FLT.Five.SquareGoldenNormalForm
+ℹ [8792/9318] Built DkMath.ABC.RadLogBasic (9.7s)
+info: DkMath/ABC/RadLogBasic.lean:10:0: file: DkMath.ABC.RadLogBasic
+⚠ [8793/9318] Built DkMath.Basic.Nat (12s)
+info: DkMath/Basic/Nat.lean:4:0: file: DkMath.Basic.Nat
+warning: DkMath/Basic/Nat.lean:16:0: Definition `succ_sub_self` is a proposition; use `theorem` instead of `def`
+Note: This linter can be disabled with `set_option linter.defProp false`
+warning: DkMath/Basic/Nat.lean:20:0: Definition `dvd_one_iff` is a proposition; use `theorem` instead of `def`
+Note: This linter can be disabled with `set_option linter.defProp false`
+ℹ [8794/9318] Built DkMath.ABC.ABCMainTheorem (11s)
+info: DkMath/ABC/ABCMainTheorem.lean:9:0: file: DkMath.ABC.ABCMainTheorem
+✔ [8795/9318] Ran DkMath.FLT.Five.GoldenDivisibility
+ℹ [8796/9318] Built DkMath.FLT.Five.BranchB (10s)
+info: DkMath/FLT/Five/BranchB.lean:9:0: file: DkMath.FLT.Five.BranchB
+✔ [8797/9318] Ran DkMath.FLT.Five.TraceOneBridge
+ℹ [8798/9318] Built DkMath.ABC.Square (12s)
+info: DkMath/ABC/Square.lean:9:0: file: DkMath.ABC.Square
+ℹ [8799/9318] Built DkMath.SilverRatio (8.7s)
+ℹ [8800/9318] Built DkMath.Sequence.Fibonacci (10s)
+info: DkMath/Sequence/Fibonacci.lean:9:0: file: DkMath.Sequence.Fibonacci
+✔ [8801/9318] Ran DkMath.Lib
+✔ [8802/9318] Ran DkMath.CosmicFormula.GTail
+✔ [8803/9318] Ran DkMath.CosmicFormula.Defs
+✔ [8804/9318] Ran DkMath.ABC.Core
+ℹ [8805/9318] Built DkMath.Hackathon.JacobianCounterexample3.ComplexLift (7.7s)
+✔ [8806/9318] Ran DkMath.FLT.Five.GoldenEuclidean
+ℹ [8807/9318] Built DkMath.ABC.Triple (18s)
+info: DkMath/ABC/Triple.lean:9:0: file: DkMath.ABC.Triple
+ℹ [8808/9318] Built DkMath.DHNT.DynamicArithmeticSequence (10s)
+info: DkMath/DHNT/DynamicArithmeticSequence.lean:9:0: file: DkMath.DHNT.DynamicArithmeticSequence
+✔ [8809/9318] Ran DkMath.ABC.ChernoffBasic
+ℹ [8810/9318] Built DkMath.Pascal (9.4s)
+info: DkMath/Pascal.lean:11:0: file: DkMath.Pascal
+ℹ [8811/9318] Built DkMath.CosmicFormula.Rotation.CF2D.Real (11s)
+info: DkMath/CosmicFormula/Rotation/CF2D/Real.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Real
+✔ [8812/9318] Ran DkMath.CosmicFormula.CosmicFormulaBinom
+✔ [8813/9318] Ran DkMath.CosmicFormula.CoreBeamGap
+ℹ [8814/9318] Built DkMath.NumberTheory.PowerSums (9.1s)
+✔ [8815/9318] Ran DkMath.CosmicFormula.Gap
+✔ [8816/9318] Ran DkMath.ABC.GNPowerLift
+✔ [8817/9318] Ran DkMath.NumberTheory.ValuationFlow.Basic
+✔ [8818/9318] Ran DkMath.NumberTheory.WeightedGNBridge
+✔ [8819/9318] Ran DkMath.CFBRC.Defs
+✔ [8820/9318] Ran DkMath.CosmicFormula.CosmicDerivativePower
+✔ [8821/9318] Ran DkMath.CosmicFormula.CosmicFormulaBasic
+✔ [8822/9318] Ran DkMath.CosmicFormula.CosmicFormulaCellDim
+✔ [8823/9318] Ran DkMath.CosmicFormula.CosmicTheorems
+✔ [8824/9318] Ran DkMath.CosmicFormula.CosmicFormulaPythagoras
+✔ [8825/9318] Ran DkMath.CosmicFormula.PowerGapBeam
+✔ [8826/9318] Ran DkMath.Analysis.Basic
+✔ [8827/9318] Ran DkMath.BookOfMagic.GNFiniteDifference
+✔ [8828/9318] Ran DkMath.DHNT
+✔ [8829/9318] Ran DkMath.FLT.Seven.QuadraticBridge
+✔ [8830/9318] Ran DkMath.CosmicFormula.ResidualNat
+✔ [8831/9318] Ran DkMath.CosmicFormula.ResidualInt
+✔ [8832/9318] Ran DkMath.Samples.LPS
+✖ [8833/9318] Building DkMath.NumberTheory.GdcDivD (10s)
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+error: DkMath/NumberTheory/GdcDivD.lean:72:65: Type mismatch: After simplification, term
+  Eq.symm h
+ has type
+  @Eq ℕ ((a - b).natAbs.gcd (diffPowSum a b d).natAbs) ((a - b).gcd (diffPowSum a b d))
+but is expected to have type
+  @Eq ℕ ((a - b).gcd (diffPowSum a b d)) ((a - b).natAbs.gcd (diffPowSum a b d).natAbs)
+error: Lean exited with code 1
+✔ [8834/9318] Ran DkMath.NumberTheory.Gcd.Basic
+✔ [8835/9318] Ran DkMath.NumberTheory.ZsigmondyCyclotomic
+✔ [8836/9318] Ran DkMath.FLT.PetalDetect
+✔ [8837/9318] Ran DkMath.NumberTheory.GcdNext
+✔ [8838/9318] Ran DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+✔ [8839/9318] Ran DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+✔ [8840/9318] Ran DkMath.NumberTheory.PrimitiveBeam
+✔ [8841/9318] Ran DkMath.NumberTheory.Gcd.GN
+✔ [8842/9318] Ran DkMath.FLT.Core
+✔ [8843/9318] Ran DkMath.NumberTheory.UniqueFactorizationGN
+✔ [8844/9318] Ran DkMath.Samples.UniqueFactorizationGNFacade
+✔ [8845/9318] Ran DkMath.Samples
+✔ [8846/9318] Ran DkMath.ABC.GNValuationSplit
+✔ [8847/9318] Ran DkMath.ABC.GNExceptionalSplit
+✔ [8848/9318] Ran DkMath.CosmicFormula.Mass.Core
+✔ [8849/9318] Ran DkMath.CosmicFormula.Mass.Branch
+✔ [8850/9318] Ran DkMath.NumberTheory.ValuationFlow.Hitting
+✔ [8851/9318] Ran DkMath.NumberTheory.PrimitiveSet.HittingBridge
+✔ [8852/9318] Ran DkMath.NumberTheory.PrimitiveSet.BranchBridge
+✔ [8853/9318] Ran DkMath.NumberTheory.PrimitiveSet.DescentBridge
+✔ [8854/9318] Ran DkMath.NumberTheory.PrimitiveSet.PrimeDescent
+✔ [8855/9318] Ran DkMath.NumberTheory.PrimitiveSet.PrimePath
+✔ [8856/9318] Ran DkMath.NumberTheory.PrimitiveSet.PrimePathList
+✔ [8857/9318] Ran DkMath.NumberTheory.PrimitiveSet.PathFamily
+✔ [8858/9318] Ran DkMath.NumberTheory.PrimitiveSet.SubConservativeBridge
+✔ [8859/9318] Ran DkMath.NumberTheory.PrimitiveSet.BranchPathFamily
+✔ [8860/9318] Ran DkMath.NumberTheory.PrimitiveSet.ErdosFinite
+✔ [8861/9318] Ran DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily
+✔ [8862/9318] Ran DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
+✔ [8863/9318] Ran DkMath.Kernel.SubProbability
+✔ [8864/9318] Ran DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
+✔ [8865/9318] Ran DkMath.NumberTheory.PrimitiveSet.WeightProvider
+✔ [8866/9318] Ran DkMath.NumberTheory.PrimitiveSet.FiniteKernel
+✔ [8867/9318] Ran DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel
+✔ [8868/9318] Ran DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
+✔ [8869/9318] Ran DkMath.NumberTheory.PrimitiveSet.RealLog
+✔ [8870/9318] Ran DkMath.NumberTheory.PrimitiveSet.ValuationBudget
+✔ [8871/9318] Ran DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
+✔ [8872/9318] Ran DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
+✔ [8873/9318] Ran DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
+✔ [8874/9318] Ran DkMath.NumberTheory.PrimitiveSet.FullChannelSet
+✔ [8875/9318] Ran DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
+✔ [8876/9318] Ran DkMath.NumberTheory.PrimitiveSet.MarkovShadow
+✔ [8877/9318] Ran DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
+✔ [8878/9318] Ran DkMath.NumberTheory.PrimitiveSet.FullExponentSlot
+✔ [8879/9318] Ran DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum
+✔ [8880/9318] Ran DkMath.ABC.GNValuationExcess
+✔ [8881/9318] Ran DkMath.CosmicFormula.Mass.Decompose
+✔ [8882/9318] Ran DkMath.ABC.MassBridge
+✔ [8883/9318] Ran DkMath.NumberTheory.ValuationFlow.Primitive
+✔ [8884/9318] Ran DkMath.ABC.GNOddPrimeExceptionalExcess
+✔ [8885/9318] Ran DkMath.ABC.GNHighLift
+✔ [8886/9318] Ran DkMath.NumberTheory.GNWieferich
+✔ [8887/9318] Ran DkMath.Petal.Basic
+✔ [8888/9318] Ran DkMath.Petal.ReducedSupport
+✔ [8889/9318] Ran DkMath.Petal.Forms
+✔ [8890/9318] Ran DkMath.CFBRC.Basic
+✔ [8891/9318] Ran DkMath.Zsigmondy
+✔ [8892/9318] Ran DkMath.FLT.CosmicPetalBridge
+✔ [8893/9318] Ran DkMath.Petal.GNBridge
+✔ [8894/9318] Ran DkMath.Petal.GcdBridge
+✔ [8895/9318] Ran DkMath.Petal.PadicBridge
+✔ [8896/9318] Ran DkMath.FLT.PhaseLift
+✔ [8897/9318] Ran DkMath.Petal.PrimitiveBridge
+✔ [8898/9318] Ran DkMath.Petal.Anchor
+✔ [8899/9318] Ran DkMath.Petal.BoundaryD3
+✔ [8900/9318] Ran DkMath.Petal.ZsigmondyD3Bridge
+✔ [8901/9318] Ran DkMath.Petal.PrimitiveD3ValuationBridge
+✔ [8902/9318] Ran DkMath.Petal.Counting
+✔ [8903/9318] Ran DkMath.Petal.Address
+✔ [8904/9318] Ran DkMath.Petal.BezoutBridge
+✔ [8905/9318] Ran DkMath.Petal.ErdosBridge
+✔ [8906/9318] Ran DkMath.Petal.Obstruction
+✔ [8907/9318] Ran DkMath.Petal.ABCBridge
+✔ [8908/9318] Ran DkMath.Petal.RangeFamily
+✔ [8909/9318] Ran DkMath.Collatz.PetalBridge.Basic
+✔ [8910/9318] Ran DkMath.Collatz.PetalBridge.Residues
+✔ [8911/9318] Ran DkMath.Collatz.PetalBridge.Profiles
+✔ [8912/9318] Ran DkMath.Collatz.PetalBridge.Counts
+✔ [8913/9318] Ran DkMath.Collatz.PetalBridge.Ratios
+✔ [8914/9318] Ran DkMath.Collatz.PetalBridge.Mass
+✔ [8915/9318] Ran DkMath.Collatz.PetalBridge.PressureCore
+✔ [8916/9318] Ran DkMath.Collatz.PetalBridge.PressureCounts
+✔ [8917/9318] Ran DkMath.Collatz.PetalBridge.HeightBudget
+✔ [8918/9318] Ran DkMath.Collatz.PetalBridge.TailSplits
+✔ [8919/9318] Ran DkMath.Collatz.PetalBridge.TailGrammar
+✔ [8920/9318] Ran DkMath.Collatz.PetalBridge.DriftBudget
+✔ [8921/9318] Ran DkMath.Collatz.PetalBridge.PressureDecay
+✔ [8922/9318] Ran DkMath.Collatz.PetalBridge.PressureFrontier
+✔ [8923/9318] Ran DkMath.Collatz.PetalBridge.PressureAccounting
+✔ [8924/9318] Ran DkMath.Collatz.PetalBridge.PressureLocalWitnessObstruction
+✔ [8925/9318] Ran DkMath.Collatz.PetalBridge.PressureAdjacentDiagnosis
+✔ [8926/9318] Ran DkMath.Collatz.PetalBridge.PressureDiagnosticDecomposition
+✔ [8927/9318] Ran DkMath.Collatz.PetalBridge.PressureAutomaton
+✔ [8928/9318] Ran DkMath.Collatz.PetalBridge.PressureBeam.Core
+✔ [8929/9318] Ran DkMath.Collatz.PetalBridge.PressureBeam.Edge
+✔ [8930/9318] Ran DkMath.Collatz.PetalBridge.PressureBeam.Pulse
+✔ [8931/9318] Ran DkMath.Collatz.PetalBridge.PressureBeam
+✔ [8932/9318] Ran DkMath.Collatz.PetalBridge.PressureState
+✔ [8933/9318] Ran DkMath.Collatz.PetalBridge.PressureState.FiniteWindowPacking
+✔ [8934/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.Core
+✔ [8935/9318] Ran DkMath.Collatz.PetalBridge.UpperWindow
+✔ [8936/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.WidthBalance
+✔ [8937/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.DyadicFloat
+✔ [8938/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.OrbitBalance
+✔ [8939/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.PatternLedger
+✔ [8940/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.DriftBridge
+✔ [8941/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge
+✔ [8942/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.PaymentMultiplicityBridge
+✔ [8943/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.PaymentBlockBridge
+✔ [8944/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlock
+✔ [8945/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentFamily
+✔ [8946/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPressure
+✔ [8947/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentRepayment
+✔ [8948/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger
+✔ [8949/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentScalarQueue
+✔ [8950/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm
+✔ [8951/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPositiveBlock
+✔ [8952/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentPrimitiveExcursion
+✔ [8953/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSaturatedSuccessor
+✔ [8954/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentSelectedCarrier
+✔ [8955/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
+✔ [8956/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmortizedResource
+✔ [8957/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.BoundedRepaymentLag
+✔ [8958/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.FiniteSignedTransition
+✔ [8959/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.FinitePotentialIncompleteness
+✔ [8960/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.FiniteControlCounter
+✔ [8961/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceTimeLag
+✔ [8962/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueue
+✔ [8963/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalOwnedQueueGlobal
+✔ [8964/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFlow
+✔ [8965/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeHorizon
+✔ [8966/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate
+✔ [8967/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointDrift
+✔ [8968/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointConservation
+✔ [8969/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalHighDrift
+✔ [8970/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalAllOnesDrift
+✔ [8971/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalEndpointReserve
+✔ [8972/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionMass
+✔ [8973/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.CanonicalExcursionOwnership
+✔ [8974/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
+✔ [8975/9318] Ran DkMath.Collatz.PetalBridge.FloatWindow
+✔ [8976/9318] Ran DkMath.Collatz.PetalBridge.OneCycle
+✔ [8977/9318] Ran DkMath.Collatz.PetalBridge.Collision
+✔ [8978/9318] Ran DkMath.CosmicFormula.CosmicDerivativePowerLimit
+✔ [8979/9318] Ran DkMath.CosmicFormula.CosmicDerivativePolynomial
+✔ [8980/9318] Ran DkMath.CosmicFormula.CosmicFormulaDerivativeBridge
+✔ [8981/9318] Ran DkMath.CosmicFormula.Basic
+✔ [8982/9318] Ran DkMath.CosmicFormula.CosmicFormulaPythagorasExamples
+✔ [8983/9318] Ran DkMath.CosmicFormula.PowerGapBeamGcd
+✔ [8984/9318] Ran DkMath.CosmicFormula.PowerGapBeamGN
+✔ [8985/9318] Ran DkMath.CosmicFormula.PowerGapBeamPrimitive
+✔ [8986/9318] Ran DkMath.CosmicFormula.Mass
+✔ [8987/9318] Ran DkMath.Analysis.GapGN
+✔ [8988/9318] Ran DkMath.Analysis.DkReal.Interval
+✔ [8989/9318] Ran DkMath.Analysis.DkReal.Basic
+✔ [8990/9318] Ran DkMath.Analysis.DkReal.Pow
+✔ [8991/9318] Ran DkMath.Analysis.DkReal.PowBound
+✔ [8992/9318] Ran DkMath.Analysis.DkReal.Arithmetic
+✔ [8993/9318] Ran DkMath.Analysis.DkReal.Equiv
+✔ [8994/9318] Ran DkMath.Analysis.DkReal.DkNNReal
+✔ [8995/9318] Ran DkMath.Analysis.DkReal.DkNNRealQ
+✔ [8996/9318] Ran DkMath.Analysis.DkReal.Order
+✔ [8997/9318] Ran DkMath.Analysis.DkReal.CanonicalOrder
+✔ [8998/9318] Ran DkMath.Analysis.DkReal.Semantic
+✔ [8999/9318] Ran DkMath.Analysis.DkReal.SemanticCF2D
+✔ [9000/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DPhase
+✔ [9001/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DPath
+✔ [9002/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DNormalize
+✔ [9003/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
+✔ [9004/9318] Ran DkMath.CosmicFormula.Rotation.CF2D.CycleDivision
+✔ [9005/9318] Ran DkMath.CosmicFormula.Rotation.CF2D.RegularOrbit
+✔ [9006/9318] Ran DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase
+✔ [9007/9318] Ran DkMath.CosmicFormula.Rotation.CF2D.EuclideanRegularOrbit
+✔ [9008/9318] Ran DkMath.CosmicFormula.Rotation.CF2D
+✔ [9009/9318] Ran DkMath.CosmicFormula.Rotation
+✔ [9010/9318] Ran DkMath.CosmicFormula
+✔ [9011/9318] Ran DkMath.NumberTheory.EuclideanGeometry.QuadraticConstructible
+✔ [9012/9318] Ran DkMath.EuclideanGeometry
+✔ [9013/9318] Ran DkMath.FLT.CounterexamplePattern
+✔ [9014/9318] Ran DkMath.FLT.GEisensteinBridge
+✔ [9015/9318] Ran DkMath.Petal.EisensteinBridge
+✔ [9016/9318] Ran DkMath.Petal
+✔ [9017/9318] Ran DkMath.BookOfMagic
+✔ [9018/9318] Ran DkMath.NumberTheory.PrimitiveBeamExamples
+✔ [9019/9318] Ran DkMath.Hackathon.FinitePrimeEscapeGN5
+✔ [9020/9318] Ran DkMath.Kernel
+✔ [9021/9318] Ran DkMath.Analysis.CosmicResidual
+✔ [9022/9318] Ran DkMath.Analysis.ErrorKernel
+✔ [9023/9318] Ran DkMath.Analysis.GapFill
+✔ [9024/9318] Ran DkMath.Analysis.RealBridge
+✔ [9025/9318] Ran DkMath.Analysis.TaylorBridge
+✔ [9026/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DDyadic
+✔ [9027/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DRefinement
+✔ [9028/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DComposition
+✔ [9029/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DLogComposition
+✔ [9030/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DLogLimit
+✔ [9031/9318] Ran DkMath.Analysis.DkReal
+✔ [9032/9318] Ran DkMath.Analysis.DkReal.SemanticCF2DLimit
+✔ [9033/9318] Ran DkMath.Analysis
+✔ [9034/9318] Ran DkMath.CFBRC.CyclotomicProduct
+✔ [9035/9318] Ran DkMath.CFBRC.Bridge
+✔ [9036/9318] Ran DkMath.RH.CFBRCBridge
+✔ [9037/9318] Ran DkMath.RH
+✔ [9038/9318] Ran DkMath.UnitCycle.CosmicBridge
+✔ [9039/9318] Ran DkMath.UnitCycle
+✔ [9040/9318] Ran DkMath.FLT.PrimeProviderCore
+✔ [9041/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmic
+✔ [9042/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
+✔ [9043/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+✔ [9044/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
+✔ [9045/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchAFringeDescent
+✔ [9046/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchAPrimitiveStrongProvider
+✔ [9047/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestoreArithmeticStrong
+✔ [9048/9318] Ran DkMath.NumberTheory.Gcd
+✔ [9049/9318] Ran DkMath.NumberTheory.GcdNextResearch
+✔ [9050/9318] Ran DkMath.FLT.Basic
+✔ [9051/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
+✔ [9052/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
+✔ [9053/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
+✔ [9054/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichValuation
+✔ [9055/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+✔ [9056/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichDefault
+✔ [9057/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
+✔ [9058/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
+✔ [9059/9318] Ran DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
+✔ [9060/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional
+✔ [9061/9318] Ran DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
+✔ [9062/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant
+✔ [9063/9318] Ran DkMath.CFBRC.ExceptionalExistence
+✔ [9064/9318] Ran DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain
+✔ [9065/9318] Ran DkMath.FLT.Kummer.Basic
+✔ [9066/9318] Ran DkMath.FLT.Kummer.GapDivisibleBranch
+✔ [9067/9318] Ran DkMath.FLT.Kummer.CyclotomicPrincipalization
+✔ [9068/9318] Ran DkMath.FLT.Kummer.ClassGroupBridge
+✔ [9069/9318] Ran DkMath.FLT.Kummer.RegularPrimeRoute
+✔ [9070/9318] Ran DkMath.FLT.Kummer
+✔ [9071/9318] Ran DkMath.FLT.Main
+✔ [9072/9318] Ran DkMath.CosmicFormula.TriominoFLT
+✔ [9073/9318] Ran DkMath.FLT.TriominoMainBridge
+✔ [9074/9318] Ran DkMath.FLT.TriominoPrimeProvider
+✔ [9075/9318] Ran DkMath.FLT.PrimeProvider
+✔ [9076/9318] Ran DkMath.FLT.Samples
+✔ [9077/9318] Ran DkMath.FLT.Seven.AxisDivisibility
+✔ [9078/9318] Ran DkMath.FLT.Seven.AxisPowerRoll
+✔ [9079/9318] Ran DkMath.FLT.Seven.AxisDepth
+✔ [9080/9318] Ran DkMath.FLT.Seven.PrimitiveCyclotomicDepth
+✔ [9081/9318] Ran DkMath.FLT.Seven.CounterexampleRouting
+✔ [9082/9318] Ran DkMath.FLT.Seven.SevenAdicPowerSplit
+✔ [9083/9318] Ran DkMath.FLT.Seven.QuadraticResidualPacket
+✔ [9084/9318] Ran DkMath.FLT.Seven.QuadraticEuclidean
+✔ [9085/9318] Ran DkMath.FLT.Seven.QuadraticUnits
+✔ [9086/9318] Ran DkMath.FLT.Seven.QuadraticCoprimeFactor
+✔ [9087/9318] Ran DkMath.FLT.Seven.PrimitiveCoordinateCoprime
+✔ [9088/9318] Ran DkMath.FLT.Seven.QuadraticConjugateCoprime
+✔ [9089/9318] Ran DkMath.FLT.Seven.QuadraticSeventhPowerNormalForm
+✔ [9090/9318] Ran DkMath.FLT.Seven.SeventhPowerCoordinates
+✔ [9091/9318] Ran DkMath.FLT.Seven.CoordinateNormalForm
+✔ [9092/9318] Ran DkMath.FLT.Seven.ModSevenSectors
+✔ [9093/9318] Ran DkMath.FLT.Seven.AwaySecondCoordinateLoad
+✔ [9094/9318] Ran DkMath.FLT.Seven.AwayValuationTransfer
+✔ [9095/9318] Ran DkMath.FLT.Seven.CubicSecondCoordinateSplit
+✔ [9096/9318] Ran DkMath.FLT.Seven.CoprimeTripleRouting
+✔ [9097/9318] Ran DkMath.FLT.Seven.DescentClosureAudit
+✔ [9098/9318] Ran DkMath.FLT.Seven.FirstCoordinateRemainders
+✔ [9099/9318] Ran DkMath.FLT.Seven.RoutingSevenPivot
+✔ [9100/9318] Ran DkMath.FLT.Seven.FirstCoordinateRoutingAudit
+✔ [9101/9318] Ran DkMath.FLT.Seven.RoutingLocalSystems
+✔ [9102/9318] Ran DkMath.FLT.Seven.RoutingLocalSolubility
+✔ [9103/9318] Ran DkMath.FLT.Seven.LocalObstructionAudit
+✔ [9104/9318] Ran DkMath.FLT.Seven.SpecializedPrimeAddress
+✔ [9105/9318] Ran DkMath.FLT.Seven.PrimePowerCellSystems
+✔ [9106/9318] Ran DkMath.FLT.Seven.PrimePowerCellSolubility
+✔ [9107/9318] Ran DkMath.FLT.Seven.PrimePowerCellAudit
+✔ [9108/9318] Ran DkMath.FLT.Seven.PrimePowerUnitOrbit
+✔ [9109/9318] Ran DkMath.FLT.Seven.PrimePowerOrbitAudit
+✔ [9110/9318] Ran DkMath.FLT.Seven.SevenPivotDepthPacket
+✔ [9111/9318] Ran DkMath.FLT.Seven.SevenPivotPrimePowerSystem
+✔ [9112/9318] Ran DkMath.FLT.Seven.SevenPivotDescentAudit
+✔ [9113/9318] Ran DkMath.FLT.Seven.SevenBaseLayerQuotient
+✔ [9114/9318] Ran DkMath.FLT.Seven.SevenBaseFirstOrderModSeven
+✔ [9115/9318] Ran DkMath.FLT.Seven.SevenBaseFirstOrderLinearization
+✔ [9116/9318] Ran DkMath.FLT.Seven.SevenBaseUnitSectorClassification
+✔ [9117/9318] Ran DkMath.FLT.Seven.SevenBaseLoadQuotient
+✔ [9118/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPacket
+✔ [9119/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalWeightedBridge
+✔ [9120/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalLoadDivisibility
+✔ [9121/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalEndpointSeparation
+✔ [9122/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCarrierRouting
+✔ [9123/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalFixedRouting
+✔ [9124/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimeAddress
+✔ [9125/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRootLoadAddress
+✔ [9126/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimeCoordinate
+✔ [9127/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimeCellCoordinate
+✔ [9128/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalOriginalRoutingProjection
+✔ [9129/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeAddress
+✔ [9130/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalOriginalPrimeDepth
+✔ [9131/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerClassification
+✔ [9132/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerOrbit
+✔ [9133/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerScaleProjection
+✔ [9134/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerPairScaleGluing
+✔ [9135/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimeSupport
+✔ [9136/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimeScaleFamily
+✔ [9137/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleGluing
+✔ [9138/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalPrimePowerFiniteScaleReduction
+✔ [9139/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCubicRootLoadModulus
+✔ [9140/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinates
+✔ [9141/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalGlobalModel
+✔ [9142/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalLiftedReconstruction
+✔ [9143/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalGlobalCoordinateEquations
+✔ [9144/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCellPrimePartition
+✔ [9145/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalExclusion
+✔ [9146/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalFermatChartResolution
+✔ [9147/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRowZAlternatingPowerSplit
+✔ [9148/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRowZSignedResidualCore
+✔ [9149/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedSummit
+✔ [9150/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedDepth
+✔ [9151/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedRouting
+✔ [9152/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedGapUnitBridge
+✔ [9153/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedUnitClassAudit
+✔ [9154/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedResidualRootClass
+✔ [9155/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedCompensationRouting
+✔ [9156/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedCanonicalSplit
+✔ [9157/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedQuadraticInnerRoot
+✔ [9158/9318] Ran DkMath.FLT.Seven.SevenRealCubicInt
+✔ [9159/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalRamifiedRealCubicNorm
+✔ [9160/9318] Ran DkMath.FLT.Seven.SevenRealCubicEisenstein
+✔ [9161/9318] Ran DkMath.FLT.Seven.SevenRealCubicNumberField
+✔ [9162/9318] Ran DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
+✔ [9163/9318] Ran DkMath.FLT.Seven.SevenRealCubicUnitClass
+✔ [9164/9318] Ran DkMath.FLT.Seven.SevenRealCubicAxisDrop
+✔ [9165/9318] Ran DkMath.FLT.Seven.SevenRamifiedSignedRootDepth
+✔ [9166/9318] Ran DkMath.FLT.Seven.SevenRamifiedSignedRootRouting
+✔ [9167/9318] Ran DkMath.FLT.Seven.SevenRealCubicNormFirstVariation
+✔ [9168/9318] Ran DkMath.FLT.Seven.SevenRealCubicSourcePlane
+✔ [9169/9318] Ran DkMath.FLT.Seven.SevenRealCubicThetaCoordinates
+✔ [9170/9318] Ran DkMath.FLT.Seven.SevenRealCubicThetaSeventhPower
+✔ [9171/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionUnitSector
+✔ [9172/9318] Ran DkMath.FLT.Seven.SevenRamifiedThetaJetLifting
+✔ [9173/9318] Ran DkMath.FLT.Seven.SevenRamifiedPairedThetaRootJet
+✔ [9174/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionSectorEquiv
+✔ [9175/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRoutingAudit
+✔ [9176/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCycleNormalForm
+✔ [9177/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclicBridge
+✔ [9178/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRotationPhase
+✔ [9179/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRelativeRealIndex
+✔ [9180/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRealPairCarrier
+✔ [9181/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRealPairCoprimalityNormGate
+✔ [9182/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicPrimeAddress
+✔ [9183/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionRealPairLoadAllocation
+✔ [9184/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionLoadedBranchRecovery
+✔ [9185/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionLoadNorm
+✔ [9186/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionLoadedCore
+✔ [9187/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadAddress
+✔ [9188/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadValuation
+✔ [9189/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadGalois
+✔ [9190/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadExactValuation
+✔ [9191/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionPrimeLoadGlobalFactorization
+✔ [9192/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionDirectChartObstruction
+✔ [9193/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionAdditiveChartFrontier
+✔ [9194/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixCarrier
+✔ [9195/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicLinearPrimeAddress
+✔ [9196/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
+✔ [9197/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionDegreeSixOrientedLoadFactorization
+✔ [9198/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
+✔ [9199/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixDomain
+✔ [9200/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicRamifiedPrime
+✔ [9201/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
+✔ [9202/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionLoadedResidualIdealBridge
+✔ [9203/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionSeventhPowerResidualIdealExtraction
+✔ [9204/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixPID
+✔ [9205/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionElementLevelOrientedPower
+✔ [9206/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
+✔ [9207/9318] Ran DkMath.FLT.Seven.SevenRamifiedFusionStrictDescentFailureBoundary
+✔ [9208/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
+✔ [9209/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
+✔ [9210/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
+✔ [9211/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
+✔ [9212/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalDescentSeedExclusion
+✔ [9213/9318] Ran DkMath.FLT.Seven.SevenBaseTerminalAudit
+✔ [9214/9318] Ran DkMath.FLT.Seven
+✔ [9215/9318] Ran DkMath.FLT.ThreeTraceOneBridge
+✔ [9216/9318] Ran DkMath.FLT.QuadraticEssence
+✔ [9217/9318] Ran DkMath.CFBRC
+ℹ [9218/9318] Built DkMath.KUS.Extract (9.3s)
+info: DkMath/KUS/Extract.lean:9:0: file: DkMath.KUS.Extract
+⚠ [9219/9318] Built DkMath.FLT.Five.Valuation (10s)
+info: DkMath/FLT/Five/Valuation.lean:9:0: file: DkMath.FLT.Five.Valuation
+warning: DkMath/FLT/Five/Valuation.lean:39:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+ℹ [9220/9318] Built DkMath.Sequence (9.3s)
+info: DkMath/Sequence.lean:12:0: file: DkMath.Sequence
+ℹ [9221/9318] Built DkMath.FLT.Five.Provider (9.7s)
+info: DkMath/FLT/Five/Provider.lean:9:0: file: DkMath.FLT.Five.Provider
+ℹ [9222/9318] Built DkMath.Hackathon.JacobianCounterexample3.Normalized (9.8s)
+✔ [9223/9318] Ran DkMath.Hackathon.JacobianCounterexample3.GapCrystalBridge
+✔ [9224/9318] Ran DkMath.Hackathon.JacobianCounterexample3.Demo
+ℹ [9225/9318] Built DkMath.KUS.RoundTrip (8.3s)
+info: DkMath/KUS/RoundTrip.lean:9:0: file: DkMath.KUS.RoundTrip
+ℹ [9226/9318] Built DkMath.FLT.Five.SignedBranchA (16s)
+info: DkMath/FLT/Five/SignedBranchA.lean:10:0: file: DkMath.FLT.Five.SignedBranchA
+ℹ [9227/9318] Built DkMath.Hackathon.JacobianCounterexample3.VerificationBridge (4.4s)
+info: DkMath/Hackathon/JacobianCounterexample3/VerificationBridge.lean:41:0: file: DkMath.Hackathon.JacobianCounterexample3.VerificationBridge
+✔ [9228/9318] Ran DkMath.Hackathon.JacobianCounterexample3
+✖ [9229/9318] Building DkMath.ABC.RatioBound (14s)
+info: DkMath/ABC/RatioBound.lean:10:0: file: DkMath.ABC.RatioBound
+error: DkMath/ABC/RatioBound.lean:379:7: Type mismatch: After simplification, term
+  hs_mem
+ has type
+  ∃ a, ∀ (b : ℕ), a ≤ b → b ∈ s
+but is expected to have type
+  ∃ X0, Set.Ici X0 ⊆ s
+error: Lean exited with code 1
+✔ [9230/9318] Ran DkMath.ABC.AdjacentDiagonalBasic
+✔ [9231/9318] Ran DkMath.ABC.AdjacentBadDensity
+✔ [9232/9318] Ran DkMath.ABC.MiddleDyadicScaffold
+✔ [9233/9318] Ran DkMath.ABC.AdjKBasic
+✔ [9234/9318] Ran DkMath.ABC.AdjKBadDensity
+✔ [9235/9318] Ran DkMath.ABC.MiddleBandJansonSkeleton
+✔ [9236/9318] Ran DkMath.ABC.MiddleDyadicTailBound
+✔ [9237/9318] Ran DkMath.ABC.MiddleDyadicCompose
+✔ [9238/9318] Ran DkMath.ABC.MiddleZmidBasic
+✔ [9239/9318] Ran DkMath.ABC.MiddleBlockMGF
+✔ [9240/9318] Ran DkMath.ABC.MiddleBlockEvents
+✔ [9241/9318] Ran DkMath.ABC.MiddleBlockDyadicTail
+✔ [9242/9318] Ran DkMath.ABC.TailUnionBasic
+✔ [9243/9318] Ran DkMath.ABC.TailRadicalBasic
+✔ [9244/9318] Ran DkMath.ABC.AnalyticQualityBridge
+✔ [9245/9318] Ran DkMath.ABC.QualityTailBridge
+✔ [9246/9318] Ran DkMath.ABC.SquareTailBasic
+✔ [9247/9318] Ran DkMath.ABC.SquareTailGapIdentity
+✔ [9248/9318] Ran DkMath.ABC.GNQualityExcessBridge
+✔ [9249/9318] Ran DkMath.ABC.ABCEpsilonIdentity
+✔ [9250/9318] Ran DkMath.ABC.ValuationFlowBridge
+✔ [9251/9318] Ran DkMath.ABC.Bridge
+✔ [9252/9318] Ran DkMath.ABC.BorelCantelliDensity
+✔ [9253/9318] Ran DkMath.ABC.HeavyPrimeCounting
+✔ [9254/9318] Ran DkMath.ABC.FiniteChernoffBasic
+✔ [9255/9318] Ran DkMath.ABC.LayerCakeBasic
+✔ [9256/9318] Ran DkMath.ABC.ChernoffSinglePrime
+✔ [9257/9318] Ran DkMath.ABC.ChernoffUnionBound
+✔ [9258/9318] Ran DkMath.ABC.ChernoffDensity
+✔ [9259/9318] Ran DkMath.ABC.TailSquareBridge
+✔ [9260/9318] Ran DkMath.ABC.ChernoffQualityBridge
+✔ [9261/9318] Ran DkMath.ABC.ABC038Bridge
+✔ [9262/9318] Ran DkMath.ABC.Main
+✔ [9263/9318] Ran DkMath.ABC.GNSupportReturn
+✔ [9264/9318] Ran DkMath.ABC.GNFinalBudgetBridge
+✔ [9265/9318] Ran DkMath.ABC.GNExceptionalExcessOddPrime
+✔ [9266/9318] Ran DkMath.ABC.GNJointPressureOddPrime
+✔ [9267/9318] Ran DkMath.ABC.GNDepthPressure
+✔ [9268/9318] Ran DkMath.ABC.GNPrimeSupportOrder
+✔ [9269/9318] Ran DkMath.ABC.GNLegacyTailCountingBridge
+✔ [9270/9318] Ran DkMath.ABC.GNAverageExcess
+✔ [9271/9318] Ran DkMath.ABC.GNDepthMassBadSet
+✔ [9272/9318] Ran DkMath.ABC.GNJointDepthExponential
+✔ [9273/9318] Ran DkMath.ABC.GNExcessActiveProfiles
+✔ [9274/9318] Ran DkMath.ABC.GNExcessEulerMajorant
+✔ [9275/9318] Ran DkMath.ABC.GNExcessLargeBoundaryPacket
+✔ [9276/9318] Ran DkMath.ABC.GNJointContractEquivalence
+✔ [9277/9318] Ran DkMath.ABC.GNWieferichAccumulation
+✔ [9278/9318] Ran DkMath.ABC.GNCubicPetalWieferich
+✔ [9279/9318] Ran DkMath.ABC.GNCubicOrientedContract
+✔ [9280/9318] Ran DkMath.ABC.ABCEpsilonJointPressureBridge
+✔ [9281/9318] Ran DkMath.ABC.ABCEpsilonSlopeBridge
+✔ [9282/9318] Ran DkMath.ABC
+✔ [9283/9318] Ran DkMath.Collatz.PetalBridge.ValuationFlowBridge
+✔ [9284/9318] Ran DkMath.Collatz.PetalBridge
+✔ [9285/9318] Ran DkMath.Collatz.Collatz2K26
+ℹ [9286/9318] Built DkMath.KUS.Monoid (5.6s)
+info: DkMath/KUS/Monoid.lean:9:0: file: DkMath.KUS.Monoid
+⚠ [9287/9318] Built DkMath.FLT.Five.SignedFiveAdic (8.5s)
+info: DkMath/FLT/Five/SignedFiveAdic.lean:9:0: file: DkMath.FLT.Five.SignedFiveAdic
+warning: DkMath/FLT/Five/SignedFiveAdic.lean:237:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: DkMath/FLT/Five/SignedFiveAdic.lean:230:46: Variable name `hd0` is not explicitly referenced.
+The binding can be removed (if unused) or named `_` (if used implicitly).
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [9288/9318] Ran DkMath.FLT.Five.SignedFiveAdicPowerSplit
+✔ [9289/9318] Ran DkMath.FLT.Five.SignedSquareGoldenExceptional
+✔ [9290/9318] Ran DkMath.FLT.Five.SignedGoldenRamifierStripped
+✔ [9291/9318] Ran DkMath.FLT.Five.SignedGoldenConjugateCoprime
+✔ [9292/9318] Ran DkMath.FLT.Five.SignedGoldenFifthPower
+✔ [9293/9318] Ran DkMath.FLT.Five.GoldenFifthPowerCoordinates
+✔ [9294/9318] Ran DkMath.FLT.Five.GoldenCoprimeFactor
+✔ [9295/9318] Ran DkMath.FLT.Five.SignedGoldenUnitClasses
+✔ [9296/9318] Ran DkMath.FLT.Five.GoldenUnitClassification
+✔ [9297/9318] Ran DkMath.FLT.Five.SignedGoldenSectorArithmetic
+✔ [9298/9318] Ran DkMath.FLT.Five.SignedGoldenZeroSector
+✔ [9299/9318] Ran DkMath.FLT.Five.SignedGoldenZeroSectorInversion
+✔ [9300/9318] Ran DkMath.FLT.Five.SignedGoldenZeroSectorFactorization
+✔ [9301/9318] Ran DkMath.FLT.Five.SignedGoldenZeroSectorDescent
+✔ [9302/9318] Ran DkMath.FLT.Five.SignedGoldenClosure
+✔ [9303/9318] Ran DkMath.FLT.Five.SignedGoldenZeroSectorFinal
+✔ [9304/9318] Ran DkMath.FLT.Five.Main
+✔ [9305/9318] Ran DkMath.FLT.Five
+✔ [9306/9318] Ran DkMath.FLT
+ℹ [9307/9318] Built DkMath.KUS.Add (5.2s)
+info: DkMath/KUS/Add.lean:9:0: file: DkMath.KUS.Add
+✖ [9308/9318] Building DkMath.KUS.Mul (4.5s)
+info: DkMath/KUS/Mul.lean:9:0: file: DkMath.KUS.Mul
+error: DkMath/KUS/Mul.lean:104:2: Type mismatch: After simplification, term
+  Nat.mul_comm (toNat x) (toNat y)
+ has type
+  @Eq ℕ (x.coeff * y.coeff) (y.coeff * x.coeff)
+but is expected to have type
+  @Eq ℕ (kusMul x y h).coeff (kusMul y x ⋯).coeff
+error: DkMath/KUS/Mul.lean:113:2: Type mismatch: After simplification, term
+  Nat.mul_assoc (toNat x) (toNat y) (toNat z)
+ has type
+  @Eq ℕ (x.coeff * y.coeff * z.coeff) (x.coeff * (y.coeff * z.coeff))
+but is expected to have type
+  @Eq ℕ (kusMul (kusMul x y h₁₂) z h₁₂z).coeff (kusMul x (kusMul y z h₂₃) hx₂₃).coeff
+error: Lean exited with code 1
+✔ [9309/9318] Ran DkMath.KUS.Coeff
+✔ [9310/9318] Ran DkMath.KUS.Scale
+✔ [9311/9318] Ran DkMath.KUS.Transport
+✔ [9312/9318] Ran DkMath.KUS.Examples
+✔ [9313/9318] Ran DkMath.KUS.Bridge
+✔ [9314/9318] Ran DkMath.KUS.CosmicBridge
+✔ [9315/9318] Ran DkMath.KUS.DynamicArithmeticSequence
+✔ [9316/9318] Ran DkMath.KUS
+✔ [9317/9318] Ran DkMath
+✔ [9318/9318] Ran dk_math/DkMath:default
+Some required targets logged failures:
+- DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicSevenPID
+- DkMath.DHNT.DHNT_Base
+- DkMath.ABC.PadicValNat
+- DkMath.CosmicFormula.CosmicFormulaDim
+- DkMath.RH.Lemmas
+- DkMath.UnitCycle.RelPolygon
+- DkMath.CosmicFormula.CosmicDerivativeBasic
+- DkMath.FLT.Five.Reduction
+- DkMath.CosmicFormula.CosmicFormulaTrominoLink
+- DkMath.NumberTheory.GdcDivD
+- DkMath.ABC.RatioBound
+- DkMath.KUS.Mul
