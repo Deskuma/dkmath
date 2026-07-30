@@ -259,3 +259,190 @@ well-founded decrease before the recursive descent provider can be inhabited.
 
 See [FLT7-RAMIFIED-013-REPORT.md](FLT7-RAMIFIED-013-REPORT.md) for the exact
 Lean boundary and next-phase prediction.
+
+FUSION-001A and FUSION-001B are complete. The symmetric RAMIFIED exit now splits
+both the algebraic root gap and its seventh quotient as an axis cube times a
+seventh power. Independently, `SevenRamifiedSignedRootDepth.lean` constructs
+the exact signed integer shadow
+
+```text
+r-l = 7^4*d,  Phi_7(r,l) = 7*E,
+d*E = a*(a+n)*m^7,  7 ∤ d*E.
+```
+
+The construction is attached coherently to the same balanced packet and never
+identifies the norm of a difference with a difference of norms. The checked
+coordinate first variation instead rewrites the theta-depth-ten root
+perturbation as `7^3*theta*core` and proves that the resulting norm difference
+is `7^4` times an explicit coefficient; that coefficient is exactly `d`.
+
+FUSION-002 has now reduced seventh-root source-plane classification to the
+explicit homogeneous equation `seventhSourcePlaneEquation a b c = 0`.
+The unrestricted equation is no longer the active boundary. A division-free
+triangular lift iterated three times constructs exact nonzero theta-linear
+and theta-square cores at integer depths `3` and `6`.
+
+The next FUSION-002 refinement is now checked in the integral theta basis.
+Both nonconstant coordinates of a seventh power have explicit divided
+coordinates and triangular factor identities. Their coefficient residues
+match the predicted local model. The integer shadow also fixes
+`quotientRoot ≡ 1` and `gapRoot ≡ a²*m (mod 7)`.
+
+FUSION-002 is now packaged as a controlled paired theta-jet outcome. Neither
+exact root is in the source plane. Their projective linear jets are `-tau`
+and `tau`, their normalized quadratic jets are both `-3*tau^2`, and
+`tau = m/a = gapRoot/a^3` in `ZMod 7`. The pair `(tau^3,tau^2)` is recorded
+as a canonical six-sector address which reconstructs `tau`. No equality
+between this address and the existing fixed routing cells is claimed yet.
+
+See [FLT7-FUSION-001-B-REPORT.md](FLT7-FUSION-001-B-REPORT.md).
+See [FLT7-FUSION-002-REPORT.md](FLT7-FUSION-002-REPORT.md).
+See [FLT7-FUSION-002-EXACT-JET-REPORT.md](FLT7-FUSION-002-EXACT-JET-REPORT.md).
+
+FUSION-003 pre-bridge is now complete at its controlled audit boundary.
+`SevenRamifiedPairedThetaRootJet.lean` connects the paired jet to the
+theta-depth-ten ledger and proves
+
+```text
+thetaResidue(gapCore) = -2*m.
+```
+
+`SevenRamifiedFusionSectorEquiv.lean` upgrades the finite address to the
+explicit equivalence `(ZMod 7)ˣ ≃ μ₂ × μ₃`. The paired roots occupy opposite
+binary rows and one common ternary column.
+
+`SevenRamifiedFusionRoutingAudit.lean` retains Y/Z provenance before the
+common summit, proves the signed routing third row is `(1,1,1)`, constructs
+the six active unit cells and their two cycle ratios, and records the signed
+margins lost by `natAbs`.
+
+See [FLT7-FUSION-003-PREBRIDGE-REPORT.md](FLT7-FUSION-003-PREBRIDGE-REPORT.md).
+
+FUSION-003 cyclic phase is also complete through its action-comparison
+boundary. The active-board normal form compresses the two cycles to one
+visible `mu3` phase while proving a separate hidden row gauge. On coherent
+routing data Lean proves
+
+```text
+(kappa12/kappa23)^2 = tau^2.
+```
+
+The real-cubic rotation gives the depth-ten residual orbit
+`-2*m, -m, 3*m`, and
+
+```text
+relativeRealIndex(k) = (k/tau)^2 = 1
+  iff k = tau or k = -tau.
+```
+
+The next gate is an action-level naturality theorem identifying how rotation
+of the signed roots transports the canonical routing shadow. Equality of
+abstract three-element labels alone is not sufficient to inhabit the cyclic
+alignment packet.
+
+See [FLT7-FUSION-003-CYCLIC-REPORT.md](FLT7-FUSION-003-CYCLIC-REPORT.md).
+
+FUSION-003D now takes the conjugate-pair route without asserting a
+rotation-routing action. The three real pair carriers multiply to the signed
+seventh quotient, each has exact theta depth one, and their normalized cores
+have residues `-1,-4,-2`. The exact product of the three cores reconstructs
+`quotientRoot` and supplies a second proof that it is `1 mod 7`.
+
+The explicit equivalence `Fin 3 ≃ SevenTernarySector` selects the core with
+phase `tau^2`; both normalized quadratic jets equal three times its theta
+residue. The three pair-axis differences are global units with norms
+`-1,-1,1`.
+
+See
+[FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md](FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md).
+
+FUSION-003E proves the three normalized cores pairwise coprime by direct
+Bezout substitution, without a scalar-prime transport theorem. Rotation
+cycles the carriers and gives a unit-twisted orbit of the cores. Their exact
+norm is
+
+```text
+norm(C_i) = -quotientRoot.
+```
+
+The coherent routing audit splits every cell in the pure seventh-power
+column. It then isolates the exact residual gate:
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+If that gate is supplied, Lean performs the legitimate PID extraction for
+all three pair cores. The current provenance does not yet force the two cell
+conditions.
+
+See
+[FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md](FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md).
+
+FUSION-003F replaces the conditional two-cell gate with an unconditional
+loaded-core split. Every prime divisor of `quotientRoot` is proved to satisfy
+`q ≡ 1 (mod 14)` and carries a canonical primitive-seventh-root ratio. Its
+real coordinate gives an explicit evaluation
+`SevenRealCubicInt →+* ZMod q` killing the zeroth normalized pair core but
+not the ramified axis.
+
+The two unresolved scalar cells are allocated integrally by canonical PID gcd
+projections:
+
+```text
+C_i = (load21_i*load22_i)*D_i
+D_i ~ residualRoot_i^7.
+```
+
+Both load families multiply back to their scalar cells up to units and form
+associated Galois cycles. Their exact absolute norms are
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22,
+```
+
+while `|norm(D_i)|` is a natural seventh power. If `c21,c22` are themselves
+seventh powers, Lean absorbs their individual load roots and recovers the
+previous Branch A packet. No such seventh-power hypothesis is needed for the
+loaded residual extraction.
+
+The immediate next local step is also fixed. For `q | c21` or `q | c22`,
+`QuotientPrimeGCDLoadAddress` identifies the addressed gcd load inside the
+explicit maximal evaluation kernel above `(q)`, excludes the competing
+coprime load and the other two same-family Galois positions, and proves that
+the residue quotient has cardinality `q`.
+Only ideal containment of the generally composite load is claimed.
+Its exact kernel multiplicity is defined and, after assembling the three
+cyclic evaluation kernels into the complete splitting of `(q)`, is proved
+equal to the scalar cell's `padicValNat q`. The supported kernel powers also
+reassemble globally to the principal addressed-load ideal.
+
+The naive global shortcut is excluded exactly:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot,
+7^6 does not divide this difference.
+```
+
+Therefore it is not an integer seventh power, and the direct signed chart
+with coordinates `(signedRightRoot,-signedLeftRoot,c)` cannot exist.
+
+The required orientation carrier is now concrete. The rank-six quadratic
+algebra over `SevenRealCubicInt` contains explicit conjugate seventh roots
+`zeta,zetaInv`, realizes every canonical local ratio, and factors
+`realPairCarrier 0` into the two oriented linear carriers. Their evaluation
+kernels are distinct maximal comaximal primes with their common real-cubic
+contraction and residue cardinality proved. The remaining exact boundary is
+the reverse ideal containment identifying the extension of the common real
+prime with the product of these two conjugate primes. No primitive integer
+chart or strict decrease is claimed.
+
+See
+[FLT7-FUSION-003F-CYCLOTOMIC-PRIME-LOAD-LIFT-REPORT.md](FLT7-FUSION-003F-CYCLOTOMIC-PRIME-LOAD-LIFT-REPORT.md).
+
+Current completion report:
+[FLT7-FUSION-004A-DEGREE-SIX-ORIENTATION-REPORT.md](FLT7-FUSION-004A-DEGREE-SIX-ORIENTATION-REPORT.md).

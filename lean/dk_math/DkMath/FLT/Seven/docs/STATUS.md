@@ -1,11 +1,203 @@
 # FLT7 seven-primary terminal route: current status
 
-Updated: 2026-07-29
+Updated: 2026-07-30
 Repository: `Deskuma/dkmath`  
-Pull request: `#65`  
-Base branch: `feature/FLT7-magic-core-260722-v0`  
-Work branch: `wip/FLT7-magic-core-260722-WiseWolf`  
+Pull request: `#73`
+Base branch: `feature/FLT7-magic-core-260722-v1`
+Work branch: `wip/FLT7-fusion-260729`
 Reviewed implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
+
+FUSION-001B is complete locally. The signed roots are definitionally tied
+back to the balanced norm packet, `gapRoot` and `quotientRoot` are coprime,
+their canonical `2 × 3` routing board is inhabited, and the coordinate norm
+expansion identifies the depth-four coefficient with the same signed
+`gapRoot`. FUSION-002 has begun: source-plane return of
+a seventh power is reduced exactly to an explicit homogeneous degree-seven
+integer equation. Its integral zero-locus classification remains open.
+
+FUSION-002A/B/C and the independent integer-sector part of 002E are now
+implemented locally. Integral theta coordinates reconstruct the cubic
+integer, both nonconstant coordinates of its seventh power are divided by
+seven, and their exact triangular factors have the predicted residues
+`A^6`, `-3*A^5`, `A^6`, and `3*A^5` modulo seven. Independently,
+`quotientRoot = 1` and `gapRoot = a^2*m` modulo seven are proved.
+
+FUSION-002 exact theta jets are now complete locally. A reusable
+division-free step advances `(k,2k)` to `(k+1,2k+2)` and three iterations
+produce exact nonzero `(3,6)` cores for both algebraic roots. The paired
+packet proves the roots are not in the source plane and identifies the common
+projective invariant
+
+```text
+tau = m/a = gapRoot/a^3,
+left jet = (-tau,-3*tau^2),
+right jet = (tau,-3*tau^2).
+```
+
+FUSION-003 pre-bridge is now implemented locally. The paired theta-root gap
+is connected back to the depth-ten ledger with the exact leading formula
+
+```text
+thetaResidue(gapCore) = -2*m.
+```
+
+The six-sector address is upgraded to the explicit group equivalence
+`(ZMod 7)ˣ ≃ μ₂ × μ₃`; the left and right roots have opposite binary
+coordinates and the same ternary coordinate. The signed routing audit proves
+its neutral third row is `(1,1,1)`, all six active cells are seven-units,
+retains signed margin orientation, and records the two independent
+`K_{2,3}` cycle ratios.
+
+The old common summit erased Row-Y/Row-Z provenance. A thin provenance packet
+now preserves that label before commonization, without duplicating the summit.
+No theorem equating the retained row sign with `tau^3` is claimed: the
+required normalized-unit equality is still absent.
+
+FUSION-003C cyclic phase is now implemented locally. The abstract active unit
+board satisfies the three cycle/margin normal-form identities. A visible
+ternary cycle twist, a hidden ternary row twist, and the columnwise binary
+gauge are formalized, with concrete nonuniqueness witnesses proving the exact
+information boundary of the unit shadow.
+
+For a coherent routing audit, the normalized equation now gives the stronger
+bridge
+
+```text
+kappa12 / kappa23 = |m| / |a|
+(kappa12 / kappa23)^2 = tau^2.
+```
+
+The real-cubic rotation is also explicit:
+
+```text
+sigma(theta) = theta*(theta+4)
+thetaResidue(rotated depth-ten core) = 4 * thetaResidue(core),
+```
+
+and the paired gap supplies the three residues `-2*m`, `-m`, and `3*m`.
+Finally,
+
+```text
+relativeRealIndex(k) = (k/tau)^2 = 1
+  iff k = tau or k = -tau.
+```
+
+Thus the conjugate pair `{tau,-tau}` is fixed, but its signed member is not.
+The remaining gate is not another scalar identity: it is an action-level
+naturality theorem proving how real-cubic rotation transports the canonical
+signed routing shadow. Until that comparison is proved, no
+`RamifiedFusionCyclicPhasePacket` is claimed inhabited and no factor is
+declared distinguished or a seventh power.
+
+FUSION-003D real-pair carrier is now implemented locally. It avoids the
+unsupported action comparison and instead factors the signed seventh quotient
+into its three real conjugate-pair carriers. Lean proves each carrier has
+exact theta depth one, reconstructs the quotient root from the three
+theta-unit cores, and derives the positive quotient sector again from that
+factor geometry.
+
+The ternary phases `1,4,2` are an explicit `Fin 3` equivalence. The phase
+`tau^2` selects the unordered pair `{tau,-tau}`, and both normalized quadratic
+jets equal three times the selected core residue. The three axis-unit
+differences are global units with norms `-1,-1,1`.
+
+FUSION-003E closes the normalized-core coprimality gap by a direct Bezout
+route. Lean proves `IsCoprime (r*l) gapRoot`, maps it into the real cubic
+order, proves every pair core coprime to the scalar `r*l`, and then proves
+the three cores pairwise coprime from their unit-multiple differences.
+
+The carriers cycle under the cubic Galois automorphism, the cores form the
+corresponding unit-twisted orbit, and every core has exact norm
+`-quotientRoot`. The pure seventh-power routing column splits cellwise.
+The exact remaining gate is now:
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+Conditional on this gate, PID associated-power extraction is complete for
+all three cores. The two cells are canonical gcd addresses, but current
+provenance does not force their seventh-power status. No oriented factor,
+primitive chart, strict decrease, descent provider, or FLT7 theorem is
+claimed.
+
+FUSION-003F is now complete locally with Outcome A. Every quotient prime has
+a canonical signed-root ratio of exact order seven, hence is `1 mod 14`.
+The induced real-pair coordinate defines an explicit residue-field evaluation
+which kills the zeroth pair core and does not kill the Eisenstein axis.
+
+The row-two scalar cells are no longer treated as missing seventh powers.
+They are mapped into the real cubic PID and allocated by canonical gcd
+projections:
+
+```text
+load21_i = gcd(c21,C_i)
+load22_i = gcd(c22,C_i)
+C_i = load21_i*load22_i*D_i.
+```
+
+The stripped cores are pairwise coprime and each is a seventh power up to a
+unit. Both load families multiply back to their scalar cells up to association
+and satisfy complete associated Galois cycles. The sign-preserving norm ledger
+is exact:
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22
+c21*c22*|norm(D_i)| = |quotientRoot|.
+```
+
+Consequently all `|norm(D_i)|` equal one natural seventh power. Under the old
+Branch A hypotheses that `c21,c22` are seventh powers, each individual load
+is extracted and absorbed into the residual root, recovering the existing
+three-core power split. The unconditional loaded packet itself needs no such
+hypotheses.
+
+The first post-checkpoint local refinement is also implemented.
+`QuotientPrimeGCDLoadAddress` takes `q | c21` or `q | c22`, reconstructs the
+canonical `mu_7` evaluation, and proves that the selected gcd load belongs to
+its maximal kernel while the competing coprime load does not. The kernel
+contracts to `(q)` in `ℤ` and its residue quotient has cardinality `q`.
+Because one load may contain several primes or prime powers, only
+`span(load) ≤ kernel` is claimed, not equality.
+The kernel multiplicity in that principal ideal is now defined exactly.
+The three cyclic real-cubic evaluation kernels split `(q)` completely, which
+upgrades the former upper bound to
+
+```text
+count = padicValNat q cell.
+```
+
+Over the finite support of the addressed load, the product of these exact
+kernel powers is the principal load ideal itself.
+
+The direct signed-root chart is now excluded, rather than left as a vague
+candidate:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot
+7^6 ∤ signedRightRoot^7 - signedLeftRoot^7.
+```
+
+Thus this difference is not an integer seventh power and no
+`SignedFermatSevenChart signedRightRoot (-signedLeftRoot) c` exists. This is
+Outcome D for that shortcut.
+
+The degree-six orientation layer is now implemented. A concrete quadratic
+algebra over `SevenRealCubicInt` has rank six over `ℤ`, explicit conjugate
+seventh roots, local evaluations extending every ratio address, and the
+factor identity whose conjugate product is `realPairCarrier 0`. The two
+oriented evaluation kernels are distinct maximal comaximal primes, with their
+common real contraction, rational contraction `(q)`, and quotient cardinality
+`q` proved.
+
+The exact remaining local obligation is the reverse containment from the
+product of those two primes into the extended common real prime. Primitive
+chart reconstruction, a new primitive counterexample, and strict global
+decrease remain unproved.
 
 ## 1. Purpose of this document
 
@@ -1339,3 +1531,35 @@ back to a new primitive integer/quadratic Fermat chart with a strict global
 measure decrease. No such counterexample constructor, recursive descent
 provider, terminal contradiction, or unconditional FLT7 theorem is claimed
 here.
+
+## 36. FUSION-001 balanced exit and signed integer depth
+
+`SevenRealCubicAxisDrop.lean` now closes the symmetric RAMIFIED epilogue:
+the quotient core is also a seventh power up to association, and
+`RamifiedRealCubicBalancedAxisSplitPacket` records
+
+```text
+XR - XL      = axis1^3 * witness1^7
+Phi_7(XR,XL) = axis2^3 * witness2^7
+axis1 ~ theta, axis2 ~ theta.
+```
+
+`SevenRamifiedSignedRootDepth.lean` independently factors the signed integer
+seventh-power difference. It proves the signed roots coprime and constructs
+7-unit cores `d,E` with
+
+```text
+r - l = 7^4*d
+Phi_7(r,l) = 7*E
+d*E = a*(a+n)*m^7
+7 ∤ d, 7 ∤ E.
+```
+
+This is the requested integer depth-four shadow on the same balanced packet;
+it does not use the false identity `Norm(XR-XL)=Norm(XR)-Norm(XL)`.
+This paragraph records the boundary as it stood at FUSION-001 and is now
+**superseded**. Coprimality of `d,E`, the signed `2 × 3` routing, norm first
+variation, and controlled source-plane classification were completed in the
+subsequent FUSION-001B and FUSION-002 checkpoints. The current boundary is
+the FUSION-003 routing-cycle/cyclotomic bridge described at the top of this
+document.

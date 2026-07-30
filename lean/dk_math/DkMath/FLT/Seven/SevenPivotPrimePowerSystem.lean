@@ -26,7 +26,6 @@ theorem sevenRamified_residual_dvd {m : ℕ} {u v : ℤ}
   rw [seventhPowerFst_eq_sevenRamifiedCore_add_residual]
   refine ⟨-2 * (7 ^ m * c ^ 2) * (u + 7 ^ m * c) *
     sevenRamifiedResidualPolynomial u (7 ^ m * c), ?_⟩
-  push_cast
   rw [pow_succ]
   ring
 
@@ -163,15 +162,20 @@ private theorem core_first_coordinate_dvd {x y z : ℕ}
     have hrow := (Int.natCast_dvd_natCast.mpr hz).trans
       (rightEndpoint_dvd_fst_add_left_cube (z : ℤ) (y : ℤ))
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
-    convert hrow.sub hres using 1 <;> simp [hr] <;> ring
+    convert hrow.sub hres using 1
+    simp only [Int.reduceNeg, add_sub_sub_cancel]
+    ring
   · have hs : p.upperModulus ∣ y+z := by
       simpa [hr, endpointRoutingFactorNat] using hend
     have hrow := (Int.natCast_dvd_natCast.mpr hs).trans (by
-      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1 <;>
-        norm_num
-      ring)
+      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+      norm_num
+      ring
+    )
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
-    convert hrow.sub hres using 1 <;> simp [hr] <;> ring
+    convert hrow.sub hres using 1
+    simp only [Int.reduceNeg, add_sub_sub_cancel]
+    ring
 
 def toPrimePowerSolution {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     (p : AwaySevenPivotDepthPacket r) :

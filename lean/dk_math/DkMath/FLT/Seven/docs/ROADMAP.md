@@ -887,14 +887,216 @@ in general. Therefore the signed-root depth-four claim cannot be inferred by
 a formal norm application. It needs a checked first-variation identity,
 coordinate expansion, or an independent integer routing proof.
 
-### FUSION-002: primitive chart constructor
+### FUSION-002: seventh-root source-plane classification
 
-If FUSION-001 supplies compatible integer endpoints and coordinates, package
-a constructor returning an actual primitive counterexample chart. It must
-prove all original Fermat equation, positivity/nonzero, and coprimality
-fields; none may be added as assumptions merely to inhabit the packet.
+Classify real-cubic roots whose seventh powers lie in the two-dimensional
+source plane. Determine whether the roots stay in that plane, lie in finitely
+many unit-translated sectors, or require the full degree-six cyclotomic
+carrier.
 
-### FUSION-003: strict global drop
+Current checkpoint (2026-07-29): the exact third-coordinate expansion is
+proved in `SevenRealCubicSourcePlane.lean`. Thus this classification is now
+the integral zero-locus problem for the homogeneous degree-seven polynomial
+`seventhSourcePlaneEquation`. The expansion alone does not select Outcome
+A, B, or C; proving that arithmetic classification is the next gate.
+
+The theta-basis refinement is now formalized through FUSION-002C:
+`SevenRealCubicThetaCoordinates.lean` gives the integral change of basis, and
+`SevenRealCubicThetaSeventhPower.lean` gives the two divided seventh-power
+coordinates with corrected triangular factors. In the identities
+
+```text
+G = B*GB(A,B,C) + 7*C^2*GC(A,C)
+H = C*HC(A,B,C) + B^2*HB(A,B),
+```
+
+the dependencies displayed above are essential. Their four leading residues
+are proved. The exact-power source equations are now connected by
+`SevenRamifiedThetaJetLifting.lean` and
+`SevenRamifiedPairedThetaRootJet.lean`. FUSION-002 therefore exits with:
+
+```text
+B_left  = 7^3 * U_left,   U_left  != 0 mod 7
+B_right = 7^3 * U_right,  U_right != 0 mod 7
+C_left  = 7^6 * V_left,   V_left  != 0 mod 7
+C_right = 7^6 * V_right,  V_right != 0 mod 7
+
+U_left/A  = -tau
+U_right/A =  tau
+V_left/A = V_right/A = -3*tau^2.
+```
+
+This is the controlled finite theta-jet outcome, not unrestricted
+three-coordinate Outcome C. The next gate is an explicit identification
+between the new `(tau^3,tau^2)` unit address and either the fixed integer
+routing cells or the six cyclotomic linear factors.
+
+### FUSION-003: chart reconstruction or full cyclotomic lift
+
+Use the FUSION-002 outcome either to reconstruct the integer/quadratic chart
+directly or to prove the linear-factor Kummer packet in the full cyclotomic
+carrier.
+
+Current checkpoint (2026-07-30): FUSION-003C cyclic phase is complete through
+the comparison boundary. The algebraic root gap has exact leading residue
+`thetaResidue gapCore = -2*m`, and the six unit sectors are formally
+decomposed as `μ₂ × μ₃`. The signed routing board has an explicit unit shadow,
+signed margin companion, and two `K_{2,3}` cycle ratios.
+
+The surviving away row provenance had been erased by the common summit.
+It is now retained by a thin pre-summit packet, but no equality between its
+Y/Z sign and `tau^3` has been proved. Such an equality requires an explicit
+bridge between the relevant normalized units.
+
+The two cycle ratios are no longer treated as unrelated free parameters.
+Their quotient is fixed up to the sign erased by `Int.natAbs`:
+
+```text
+kappa12 / kappa23 = |m|/|a|
+(kappa12 / kappa23)^2 = tau^2.
+```
+
+The abstract routing shadow nevertheless has both a visible ternary cycle
+action and a hidden ternary row gauge. Lean witnesses prove that margins do
+not determine cycle phase and that margins plus cycles do not determine the
+full unit board.
+
+On the cubic side,
+
+```text
+sigma(theta) = theta*(theta+4)
+thetaResidue(rotated depth-ten core) = 4*thetaResidue(core),
+```
+
+giving the orbit residues `-2*m`, `-m`, and `3*m`. The relative real index
+
+```text
+relativeRealIndex(k) = (k/tau)^2
+```
+
+has fibre one exactly `{tau,-tau}`. This selects a conjugate pair only.
+
+The next gate is a rotation-routing naturality packet: rotate the signed
+algebraic root pair, transport or reconstruct its coherent routing shadow,
+and prove whether this induces the visible cycle twist or the hidden row
+gauge. Merely identifying the two abstract three-element index sets is not
+sufficient. Only an action-level comparison may inhabit the cyclic alignment
+packet and choose between chart reconstruction up to rotation and the
+conjugate-pair-equivariant cyclotomic route.
+
+FUSION-003D follows the conjugate-pair-equivariant route. The three real pair
+carriers and normalized cores are formalized, with
+
+```text
+P_0*P_1*P_2 = signedSeventhQuotient r l
+P_i = theta*C_i
+thetaResidue(C_i) = -pairPhase(i)
+-(theta+1)^2*C_0*C_1*C_2 = quotientRoot.
+```
+
+The explicit phase equivalence selects the core indexed by `tau^2`, and the
+left and right normalized quadratic jets both equal three times its residue.
+
+Current checkpoint (2026-07-30): FUSION-003E closes the real-pair
+coprimality and norm layer:
+
+```text
+Pairwise (fun i j => IsCoprime C_i C_j)
+sigma(P_0)=P_1, sigma(P_1)=P_2, sigma(P_2)=P_0
+norm(C_i) = -quotientRoot
+c13=a^7, c23=b^7, c33=1.
+```
+
+The quotient row is reduced to the exact two-cell gate
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+Once the right side is supplied, all three PID associated-power extractions
+are implemented. The next checkpoint must control these two canonical gcd
+addresses through genuine terminal provenance/coherence, or construct a
+sign- and integrality-preserving loaded-core packet with a proved norm
+identity. Do not transfer `c21_eq_one` from the earlier RAMIFIED-006 board:
+that board has different margins and no comparison theorem currently exists.
+
+Current checkpoint (2026-07-30): FUSION-003F completes both proposed
+continuations. For every prime `q | quotientRoot`, the canonical signed-root
+ratio has exact order seven and gives
+
+```text
+q % 14 = 1
+beta = 1 + ratio + ratio^-1
+evalAlphaRoot(C_0) = 0
+evalAlphaRoot(theta) != 0.
+```
+
+On the integral side, the two scalar cells are allocated by PID gcd
+projections:
+
+```text
+load21_i = gcd(c21,C_i)
+load22_i = gcd(c22,C_i)
+C_i = (load21_i*load22_i)*D_i
+D_i ~ residualRoot_i^7.
+```
+
+The load families multiply back to `c21,c22`, remain coherent under the
+order-three Galois action up to association, and have the exact norm ledger
+
+```text
+|norm(load21_i)| = c21
+|norm(load22_i)| = c22
+c21*c22*|norm(D_i)| = |quotientRoot|.
+```
+
+Thus the loaded residual split is unconditional even when the two scalar
+cells are not seventh powers. If they are seventh powers, their individual
+gcd loads are extracted and absorbed, recovering the earlier conditional
+three-core power packet.
+
+The immediate local refinement is also implemented. Each prime divisor of
+`c21` or `c22` now selects the corresponding gcd load in the explicit maximal
+`evalAlphaRoot` kernel. The competing coprime load is excluded, the kernel
+contracts to `(q)`, and its residue quotient has cardinality `q`. Since one
+gcd load may contain several primes or prime powers, the proved statement is
+`span(load) ≤ kernel`, not equality. The exact kernel factor count in the load
+ideal is now also formalized:
+
+```text
+kernel^k divides span(load) iff k <= count
+count = padicValNat q cell.
+```
+
+The equality follows from the complete splitting of `(q)` into the three
+cyclic real-cubic kernels. A finite-support product theorem reconstructs the
+whole principal load ideal from these exact local powers.
+
+The oriented degree-six factor is now constructed in the concrete quadratic
+algebra over the real cubic order. It has explicit rank-six coordinates,
+conjugate seventh roots, all local ratio evaluations, and two distinct
+maximal comaximal degree-one kernels above each real-cubic address. The
+conjugate product formula is proved, but exact equality between the extended
+real prime and the product of the two conjugate primes still requires the
+reverse ideal containment.
+
+The direct signed-root candidate is formally impossible:
+
+```text
+signedRightRoot^7 - signedLeftRoot^7
+  = 7^5*gapRoot*quotientRoot
+7^6 ∤ signedRightRoot^7 - signedLeftRoot^7,
+```
+
+so it cannot be an integer seventh power. The next global checkpoint must not
+reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. It must first
+discharge the conjugate-prime fibre equality (or bypass it with an equivalent
+orientation theorem), then use the constructed oriented carrier to produce a
+primitive chart before proceeding to strict decrease.
+
+### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed
 chart. Algebraic theta depth alone is not yet that measure. Only after this
@@ -907,7 +1109,7 @@ Stop before claiming recursive descent or FLT7 unless all three arrows are
 inhabited:
 
 ```text
-real-cubic axis drop
+balanced algebraic/integer fusion
   -> primitive integer/quadratic counterexample
   -> strict well-founded decrease.
 ```

@@ -166,7 +166,8 @@ private theorem prime_dvd_root_v_implies_root_u
       (dvd_pow hv (by decide : 2 ≠ 0)) (-15 * u)
     have h3 := dvd_mul_of_dvd_right
       (dvd_pow hv (by decide : 3 ≠ 0)) (-13)
-    convert dvd_add (dvd_add h1 h2) h3 using 1 <;> ring
+    convert dvd_add (dvd_add h1 h2) h3 using 1
+    ring
   have hu3 : (q : ℤ) ∣ u ^ 3 := by
     have := dvd_sub hL hrest
     simpa [ramifiedLeftCubic] using this
@@ -261,7 +262,8 @@ theorem PrimitiveRamifiedSummitPacket.coprime_linear_right
         exact dvd_mul_of_dvd_left
           (dvd_mul_of_dvd_right hqv 7) _
       have hd := dvd_sub hR hdiff
-      convert hd using 1 <;> ring
+      convert hd using 1
+      ring
     exact prime_dvd_root_v_implies_root_u hq
       p.root_coordinates_isCoprime hqv hLfromR
 
