@@ -85,3 +85,29 @@ checkpoint. It does not by itself provide:
 
 After the equality is proved, the additive reconstruction frontier must be
 reviewed again before the next implementation stage is selected.
+
+## Execution plan
+
+The approved budget strategy is documented in:
+
+```text
+FLT7-FUSION-004B-ULTRA-ROADMAP.md
+```
+
+The directly executable Codex contract is:
+
+```text
+FLT7-FUSION-004B-CODEX-EXECUTION-INSTRUCTIONS.md
+```
+
+The next run is fixed to:
+
+```text
+EXECUTION_MODE = NORMAL
+ACTIVE_PHASE   = N1
+```
+
+Ultra is reserved for the later global oriented/additive reconstruction
+frontier.  It must not be activated for the current local reverse-containment
+lemma unless the NORMAL run proves that the local problem hides a genuinely
+new major mathematical layer and records that exact obstruction.
