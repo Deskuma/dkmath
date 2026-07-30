@@ -97,3 +97,22 @@ The next sound checkpoint is the reverse fibre containment or an equivalent
 theorem that bypasses it while preserving the oriented local data. Only after
 that bridge yields a primitive chart may the strict-drop and descent layers
 resume.
+
+## Checkpoint integration and continuation
+
+This 004A checkpoint was integrated into `develop` by PR #73 at merge commit
+
+```text
+bac2a3b1f5881a4341138e7d47429c98ca9ca4b1
+```
+
+Further work no longer continues on `wip/FLT7-fusion-260729`. The focused
+continuation branch is
+
+```text
+wip/FLT7-fusion-004b-conjugate-fiber-260730
+```
+
+and begins from the merged `develop` checkpoint. Its sole initial frontier is
+`ConjugatePrimeFiberProductEqualityObligation` and the reverse fibre
+containment displayed above.
