@@ -351,7 +351,7 @@ GN の tail 構造（GTail）、多変数化（Cell 空間）、
 
 ---
 
-VSCode Style Markdown and \(\LaTeX\) Extensions
+VS Code Style Markdown and \(\LaTeX\) Extensions
 
-This document uses VSCode style markdown with \(\LaTeX\) extensions for mathematical notation.
+This document uses VS Code Style markdown with \(\LaTeX\) extensions for mathematical notation.
 Ensure your markdown viewer supports these features for optimal readability.

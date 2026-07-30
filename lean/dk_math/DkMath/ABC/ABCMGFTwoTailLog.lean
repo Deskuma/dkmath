@@ -348,7 +348,7 @@ lemma layercake_rhs_bound_for_layercake
       refine Finset.sum_le_sum ?_
       intro k hk
       exact mul_le_mul_of_nonneg_left (Ek_card_le k hk)
-        (Real.rpow_nonneg_of_nonneg hp_pos.le _)
+        (Real.rpow_nonneg hp_pos.le _)
     have hsplit :
         (Finset.sum (Finset.Icc 1 K) fun k =>
           (p : ℝ)^(t * ((k : ℝ) - 1)) *
@@ -421,12 +421,12 @@ lemma layercake_rhs_bound_for_layercake
               rw [← Finset.mul_sum]
     rw [hrewrite]
     refine mul_le_mul_of_nonneg_left hsum_r ?_
-    exact mul_nonneg (by positivity) (Real.rpow_nonneg_of_nonneg hp_pos.le _)
+    exact mul_nonneg (by positivity) (Real.rpow_nonneg hp_pos.le _)
 
   have hcoef_le :
       ((p : ℝ)^t - 1) * (p : ℝ)^(-2 - t) ≤ (p : ℝ)^(-2 : ℝ) := by
     have hsub : (p : ℝ)^t - 1 ≤ (p : ℝ)^t := by linarith
-    have hnonneg : 0 ≤ (p : ℝ)^(-2 - t) := Real.rpow_nonneg_of_nonneg hp_pos.le _
+    have hnonneg : 0 ≤ (p : ℝ)^(-2 - t) := Real.rpow_nonneg hp_pos.le _
     have hmul :
         ((p : ℝ)^t - 1) * (p : ℝ)^(-2 - t)
           ≤ (p : ℝ)^t * (p : ℝ)^(-2 - t) := mul_le_mul_of_nonneg_right hsub hnonneg
