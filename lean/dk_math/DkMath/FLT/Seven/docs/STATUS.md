@@ -101,9 +101,25 @@ The ternary phases `1,4,2` are an explicit `Fin 3` equivalence. The phase
 jets equal three times the selected core residue. The three axis-unit
 differences are global units with norms `-1,-1,1`.
 
-The current stopping point is pairwise coprimality of the normalized cores.
-It needs an integer-to-cubic prime-divisor transport together with
-`IsCoprime (r*l) gapRoot`. No oriented factor, seventh-power association,
+FUSION-003E closes the normalized-core coprimality gap by a direct Bezout
+route. Lean proves `IsCoprime (r*l) gapRoot`, maps it into the real cubic
+order, proves every pair core coprime to the scalar `r*l`, and then proves
+the three cores pairwise coprime from their unit-multiple differences.
+
+The carriers cycle under the cubic Galois automorphism, the cores form the
+corresponding unit-twisted orbit, and every core has exact norm
+`-quotientRoot`. The pure seventh-power routing column splits cellwise.
+The exact remaining gate is now:
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+Conditional on this gate, PID associated-power extraction is complete for
+all three cores. The two cells are canonical gcd addresses, but current
+provenance does not force their seventh-power status. No oriented factor,
 primitive chart, strict decrease, descent provider, or FLT7 theorem is
 claimed.
 

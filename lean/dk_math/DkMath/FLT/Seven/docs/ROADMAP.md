@@ -984,9 +984,8 @@ sufficient. Only an action-level comparison may inhabit the cyclic alignment
 packet and choose between chart reconstruction up to rotation and the
 conjugate-pair-equivariant cyclotomic route.
 
-Current checkpoint (2026-07-30): FUSION-003D follows the
-conjugate-pair-equivariant route. The three real pair carriers and normalized
-cores are formalized, with
+FUSION-003D follows the conjugate-pair-equivariant route. The three real pair
+carriers and normalized cores are formalized, with
 
 ```text
 P_0*P_1*P_2 = signedSeventhQuotient r l
@@ -997,10 +996,31 @@ thetaResidue(C_i) = -pairPhase(i)
 
 The explicit phase equivalence selects the core indexed by `tau^2`, and the
 left and right normalized quadratic jets both equal three times its residue.
-The next narrow gate is a real-pair core coprimality bridge: first prove
-`IsCoprime (r*l) gapRoot`, then transport common cubic prime divisors through
-the scalar terms. Only after pairwise coprimality is established should a
-selected-core seventh-power/association theorem be attempted.
+
+Current checkpoint (2026-07-30): FUSION-003E closes the real-pair
+coprimality and norm layer:
+
+```text
+Pairwise (fun i j => IsCoprime C_i C_j)
+sigma(P_0)=P_1, sigma(P_1)=P_2, sigma(P_2)=P_0
+norm(C_i) = -quotientRoot
+c13=a^7, c23=b^7, c33=1.
+```
+
+The quotient row is reduced to the exact two-cell gate
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+Once the right side is supplied, all three PID associated-power extractions
+are implemented. The next checkpoint must control these two canonical gcd
+addresses through genuine terminal provenance/coherence, or construct a
+sign- and integrality-preserving loaded-core packet with a proved norm
+identity. Do not transfer `c21_eq_one` from the earlier RAMIFIED-006 board:
+that board has different margins and no comparison theorem currently exists.
 
 ### FUSION-004/005: primitive chart and strict global drop
 

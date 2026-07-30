@@ -351,8 +351,32 @@ have residues `-1,-4,-2`. The exact product of the three cores reconstructs
 The explicit equivalence `Fin 3 ≃ SevenTernarySector` selects the core with
 phase `tau^2`; both normalized quadratic jets equal three times its theta
 residue. The three pair-axis differences are global units with norms
-`-1,-1,1`. Pairwise coprimality of the full cores remains open, so no
-seventh-power extraction or descent is claimed.
+`-1,-1,1`.
 
 See
 [FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md](FLT7-FUSION-003-REAL-PAIR-CARRIER-REPORT.md).
+
+FUSION-003E proves the three normalized cores pairwise coprime by direct
+Bezout substitution, without a scalar-prime transport theorem. Rotation
+cycles the carriers and gives a unit-twisted orbit of the cores. Their exact
+norm is
+
+```text
+norm(C_i) = -quotientRoot.
+```
+
+The coherent routing audit splits every cell in the pure seventh-power
+column. It then isolates the exact residual gate:
+
+```text
+quotientRoot is a signed seventh power
+  iff
+c21 and c22 are natural seventh powers.
+```
+
+If that gate is supplied, Lean performs the legitimate PID extraction for
+all three pair cores. The current provenance does not yet force the two cell
+conditions.
+
+See
+[FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md](FLT7-FUSION-003E-REAL-PAIR-COPRIMALITY-NORM-GATE-REPORT.md).

@@ -101,6 +101,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclicBridge
 import DkMath.FLT.Seven.SevenRamifiedFusionRotationPhase
 import DkMath.FLT.Seven.SevenRamifiedFusionRelativeRealIndex
 import DkMath.FLT.Seven.SevenRamifiedFusionRealPairCarrier
+import DkMath.FLT.Seven.SevenRamifiedFusionRealPairCoprimalityNormGate
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
