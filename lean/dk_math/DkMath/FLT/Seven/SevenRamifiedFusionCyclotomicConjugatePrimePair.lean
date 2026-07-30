@@ -221,6 +221,115 @@ theorem realPrimeFiberIdeal_le_conjugateProduct
     a.evalKernel_sup_conjugateEvalKernel]
   exact le_inf hleft hright
 
+/-- The canonical seventh-root ratio is distinct from its inverse.  Otherwise
+its square would be one, and its seventh-power identity would force the
+nontrivial ratio itself to be one. -/
+theorem ratio_val_ne_inv
+    (a : CyclotomicLinearPrimeAddress p q) :
+    (a.quotientAddress.ratio : ZMod q) ≠
+      (a.quotientAddress.ratio⁻¹ : ZMod q) := by
+  intro hratioVal
+  have hratioUnits :
+      a.quotientAddress.ratio =
+        a.quotientAddress.ratio⁻¹ :=
+    Units.ext hratioVal
+  have hsq : a.quotientAddress.ratio ^ 2 = 1 := by
+    rw [pow_two]
+    exact
+      (congrArg
+        (fun u => a.quotientAddress.ratio * u)
+        hratioUnits).trans
+        (mul_inv_cancel a.quotientAddress.ratio)
+  have hpow :
+      a.quotientAddress.ratio ^ 7 =
+        a.quotientAddress.ratio := by
+    calc
+      a.quotientAddress.ratio ^ 7 =
+          a.quotientAddress.ratio ^ (2 * 3 + 1) := by norm_num
+      _ =
+          (a.quotientAddress.ratio ^ 2) ^ 3 *
+            a.quotientAddress.ratio := by
+              rw [pow_add, pow_mul, pow_one]
+      _ = a.quotientAddress.ratio := by rw [hsq]; simp
+  apply a.quotientAddress.ratio_ne_one
+  calc
+    a.quotientAddress.ratio =
+        a.quotientAddress.ratio ^ 7 := hpow.symm
+    _ = 1 := a.quotientAddress.ratio_pow_seven
+
+/-- The product of the two conjugate degree-one primes is contained in the
+extension of their common real-cubic contraction.
+
+The proof is componentwise in the explicit quadratic pair model.  Membership
+in both kernels gives the two evaluations at `ratio` and `ratio⁻¹`; their
+difference and `ratio ≠ ratio⁻¹` force the imaginary coordinate into the
+common real kernel, and then the oriented equation forces the real coordinate
+there as well. -/
+theorem conjugatePrimeProduct_le_realPrimeFiberIdeal
+    (a : CyclotomicLinearPrimeAddress p q) :
+    a.evalKernel * a.conjugateEvalKernel ≤
+      a.realPrimeFiberIdeal := by
+  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  intro x hx
+  have horiented : x ∈ a.evalKernel :=
+    Ideal.mul_le_right hx
+  have hconjugate : x ∈ a.conjugateEvalKernel :=
+    Ideal.mul_le_left hx
+  change a.eval x = 0 at horiented
+  change a.eval (star x) = 0 at hconjugate
+  change
+    a.quotientAddress.evalAlphaRoot x.re +
+        (a.quotientAddress.ratio : ZMod q) *
+          a.quotientAddress.evalAlphaRoot x.im = 0 at horiented
+  change
+    a.quotientAddress.evalAlphaRoot (star x).re +
+        (a.quotientAddress.ratio : ZMod q) *
+          a.quotientAddress.evalAlphaRoot (star x).im = 0 at hconjugate
+  rw [QuadraticAlgebra.re_star, QuadraticAlgebra.im_star,
+    map_add, map_mul, map_sub, map_one, map_neg] at hconjugate
+  rw [a.quotientAddress.evalAlphaRoot_alpha] at hconjugate
+  simp only
+    [RamifiedSignedRootDepthPacket.QuotientPrimeMuSevenAddress.beta] at hconjugate
+  have himEq :
+      ((a.quotientAddress.ratio : ZMod q) -
+          (a.quotientAddress.ratio⁻¹ : ZMod q)) *
+        a.quotientAddress.evalAlphaRoot x.im = 0 := by
+    linear_combination horiented - hconjugate
+  have him :
+      a.quotientAddress.evalAlphaRoot x.im = 0 :=
+    (mul_eq_zero.mp himEq).resolve_left
+      (sub_ne_zero.mpr a.ratio_val_ne_inv)
+  have hre :
+      a.quotientAddress.evalAlphaRoot x.re = 0 := by
+    rw [him, mul_zero, add_zero] at horiented
+    exact horiented
+  rw [realPrimeFiberIdeal]
+  have hreMap :
+      ofReal x.re ∈
+        Ideal.map ofReal
+          (RingHom.ker a.quotientAddress.evalAlphaRoot) :=
+    Ideal.mem_map_of_mem ofReal hre
+  have himMap :
+      ofReal x.im ∈
+        Ideal.map ofReal
+          (RingHom.ker a.quotientAddress.evalAlphaRoot) :=
+    Ideal.mem_map_of_mem ofReal him
+  rw [show x = ofReal x.re + zeta * ofReal x.im by
+    ext <;> simp [ofReal, zeta]]
+  exact Ideal.add_mem _
+    hreMap
+    (Ideal.mul_mem_left _ zeta himMap)
+
+/-- Exact splitting of the extended real-cubic prime into its two conjugate
+degree-one primes in the concrete quadratic carrier. -/
+theorem realPrimeFiberIdeal_eq_conjugateProduct
+    (a : CyclotomicLinearPrimeAddress p q) :
+    a.realPrimeFiberIdeal =
+      a.evalKernel * a.conjugateEvalKernel :=
+  le_antisymm
+    a.realPrimeFiberIdeal_le_conjugateProduct
+    a.conjugatePrimeProduct_le_realPrimeFiberIdeal
+
 /-- Exact remaining ideal-fibre obligation.  The proved inclusion is the
 extension-to-product direction; the reverse inclusion requires an explicit
 description of the extended quadratic fibre or an equivalent finite-index
@@ -243,6 +352,13 @@ theorem conjugatePrimeFiberProductEqualityObligation_iff
   · intro h
     exact le_antisymm
       a.realPrimeFiberIdeal_le_conjugateProduct h
+
+/-- The exact conjugate-prime fibre obligation is discharged by the explicit
+quadratic-coordinate calculation. -/
+theorem conjugatePrimeFiberProductEqualityObligation_holds
+    (a : CyclotomicLinearPrimeAddress p q) :
+    a.ConjugatePrimeFiberProductEqualityObligation :=
+  a.realPrimeFiberIdeal_eq_conjugateProduct
 
 /-- Complete conjugate-prime-pair packet at one canonical quotient prime. -/
 theorem conjugatePrimePair_packet
@@ -294,6 +410,12 @@ end RamifiedSignedRootRoutingPacket
   RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugateEvalKernel_cardQuot
 #print axioms
   RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.realPrimeFiberIdeal_le_conjugateProduct
+#print axioms
+  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimeProduct_le_realPrimeFiberIdeal
+#print axioms
+  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.realPrimeFiberIdeal_eq_conjugateProduct
+#print axioms
+  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimeFiberProductEqualityObligation_holds
 #print axioms
   RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimePair_packet
 

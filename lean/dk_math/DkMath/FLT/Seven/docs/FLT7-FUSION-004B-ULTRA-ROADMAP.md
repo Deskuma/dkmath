@@ -8,6 +8,32 @@ Base branch: `develop`
 Work branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`  
 Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 
+## Current execution status
+
+```text
+EXECUTION_MODE = NORMAL
+ACTIVE_PHASE   = N1
+STATUS         = COMPLETE
+```
+
+N1 was completed by the explicit componentwise route (Route N1-D). The public
+theorem surface is:
+
+```text
+ratio_val_ne_inv
+conjugatePrimeProduct_le_realPrimeFiberIdeal
+realPrimeFiberIdeal_eq_conjugateProduct
+conjugatePrimeFiberProductEqualityObligation_holds
+```
+
+The exact local fibre is now
+
+```text
+Ideal.map ofReal p = P * Pbar.
+```
+
+This run stops here. N2 is not active until the operator explicitly selects it.
+
 ## 1. Strategic decision
 
 The remaining budget is not assigned uniformly.
@@ -53,14 +79,14 @@ PR #73 already established:
 - their rational contraction `(q)`;
 - residue quotient cardinality `q` for both kernels.
 
-The current exact frontier is:
+The inherited frontier at the start of N1 was:
 
 ```text
 realPrimeFiberIdeal = Ideal.map ofReal p
 realPrimeFiberIdeal <= P * Pbar
 ```
 
-and the single missing local direction is:
+and its single missing local direction was:
 
 ```text
 P * Pbar <= realPrimeFiberIdeal.

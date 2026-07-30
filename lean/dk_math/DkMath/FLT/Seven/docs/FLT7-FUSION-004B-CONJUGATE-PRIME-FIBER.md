@@ -8,6 +8,26 @@ Base branch: `develop`
 Work branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`  
 Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 
+## Completion status
+
+NORMAL / N1 is complete with Outcome A.
+
+Lean now proves:
+
+```text
+P * Pbar <= realPrimeFiberIdeal
+realPrimeFiberIdeal = P * Pbar
+ConjugatePrimeFiberProductEqualityObligation
+```
+
+The proof uses the explicit quadratic `re/im` coordinates. The two kernel
+equations are evaluation at `ratio` and `ratio⁻¹`; exact order seven separates
+those roots, forcing both coordinates into the common real-cubic kernel.
+
+See
+`FLT7-FUSION-004B-CONJUGATE-PRIME-FIBER-REPORT.md`.
+The additive/global N2 work has not begun.
+
 ## Purpose
 
 PR #73 completed the first FLT7-FUSION expedition through exact prime-load
@@ -100,7 +120,7 @@ The directly executable Codex contract is:
 FLT7-FUSION-004B-CODEX-EXECUTION-INSTRUCTIONS.md
 ```
 
-The next run is fixed to:
+The completed run was fixed to:
 
 ```text
 EXECUTION_MODE = NORMAL

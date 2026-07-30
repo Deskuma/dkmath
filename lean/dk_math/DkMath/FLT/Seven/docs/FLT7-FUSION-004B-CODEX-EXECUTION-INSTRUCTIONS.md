@@ -28,7 +28,11 @@ The operator must set exactly one mode before starting a run.
 ```text
 EXECUTION_MODE = NORMAL
 ACTIVE_PHASE   = N1
+STATUS         = COMPLETE
 ```
+
+The next phase is intentionally unselected. Do not begin N2 until the operator
+explicitly changes `ACTIVE_PHASE` to `N2`.
 
 Allowed values are:
 
@@ -40,7 +44,7 @@ EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
 ```
 
-For the next run, use:
+For the completed run, the selector was:
 
 ```text
 EXECUTION_MODE = NORMAL
