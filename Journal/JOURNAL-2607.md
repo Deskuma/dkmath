@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-31
 
+### 05:58
+
+[冪として束ねた量の反復冪乗は指数積へ戻る](260731-0558-power-compression-commutes-with-repeated-exponentiation.md)
+
+冪 $A=a^t$ を一つの粗視化された核として扱っても、さらに $m$ 乗した結果は $A^m=a^{tm}$ と元の底・指数積へ正確に戻り、自然数版・整数版と四つの具体例で確認される交換則を読む。
+
 ### 00:01
 
 [冪交換関係は対称で非自明な自然数例を持つ](260731-0001-power-swap-is-symmetric-and-has-a-nontrivial-example.md)
