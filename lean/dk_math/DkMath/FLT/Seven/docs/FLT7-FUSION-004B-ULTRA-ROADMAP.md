@@ -13,7 +13,7 @@ Starting merge checkpoint: `bac2a3b1f5881a4341138e7d47429c98ca9ca4b1`
 ```text
 EXECUTION_MODE = ULTRA
 ACTIVE_PHASE   = U1
-CURRENT_EVENT  = U1.5
+CURRENT_EVENT  = U1.6
 STATUS         = COMPLETE
 ```
 
@@ -86,9 +86,18 @@ the chosen residual root has a nontrivial `mu_7` gauge: multiplication by
 `zeta` preserves its ideal, seventh power, and carrier equation while changing
 its complete coordinate vector.
 
-Event U1.6 is the active frontier.  No primitive additive chart was obtained,
-so this Event must state the exact strict-decrease failure boundary rather
-than infer a descent step.
+Event U1.6 is complete with Outcome C.  The existing ramified extraction
+contains an exact internal seven-adic depth comparison `4 < 5`.  Lean proves
+that displaying this comparison alongside a new away counterexample is
+equivalent to reconstructing an `AwayValuationTransferPacket` whose
+exceptional carrier is the depth-four internal coordinate.  That
+reconstruction is not inhabited.  Moreover, recursive descent would still
+need an indexed ramified-to-away state/measure bridge.
+
+The ULTRA/U1 expedition is complete.  It does not claim a primitive additive
+chart, a recursive descent, a terminal contradiction, or FLT7.  The next
+selected work should be a NORMAL recovery checkpoint after explicit operator
+selection.
 
 ## 1. Strategic decision
 

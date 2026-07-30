@@ -282,6 +282,22 @@ continuation needs a `mu_7`-invariant extractor or an extra phase
 normalization, plus an independent additive identity, before any strict
 global decrease can be formulated from these witnesses.
 
+ULTRA/U1.6 is complete with Outcome C.  Independently of an additive chart,
+the inherited ramified extraction already proves that the internal quadratic
+root carrier has seven-adic depth four while the preceding summit carrier has
+depth five.  The strict depth inequality is unconditional.
+
+The exact missing receiver is
+`InternalDepthFourCounterexampleReconstructionObligation`: it asks for an
+actual `AwayValuationTransferPacket` whose exceptional carrier is the
+depth-four coordinate.  Lean proves this obligation equivalent to the same
+data plus the strict comparison and extracts the packet's positive primitive
+natural counterexample conditionally.  No inhabitant is constructed.
+Furthermore this is not `AwayDescentClosureProvider` or recursive closure:
+an indexed transition identifying successive values of one well-founded
+counterexample measure is still absent.  ULTRA/U1 therefore ends without a
+primitive additive chart, descent closure, terminal contradiction, or FLT7.
+
 ## 1. Purpose of this document
 
 This document is the handoff state for the remaining FLT7 work.

@@ -123,6 +123,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
 import DkMath.FLT.Seven.SevenRamifiedFusionSeventhPowerResidualIdealExtraction
 import DkMath.FLT.Seven.SevenRamifiedFusionElementLevelOrientedPower
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
+import DkMath.FLT.Seven.SevenRamifiedFusionStrictDescentFailureBoundary
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -304,5 +305,10 @@ the integers exists.  Moreover, multiplying the chosen residual root by
 its complete coordinate vector.  Thus a primitive reconstructed chart needs
 either a `mu_7`-invariant extractor or an additional phase normalization,
 together with an independent additive seventh-power identity.  Strict global
-decrease remains a separate obligation.
+decrease remains a separate obligation.  The final ULTRA audit identifies an
+internal seven-adic depth comparison `4 < 5`.  This inequality is already
+proved; the missing step is to reconstruct the depth-four coordinate as the
+exceptional carrier of a new `AwayValuationTransferPacket`.  Even that
+conditional route comparison is not recursive descent without an indexed
+ramified-to-away state/measure bridge.
 -/

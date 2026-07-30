@@ -528,3 +528,20 @@ requirement is a `mu_7`-invariant extractor or a proved phase normalization,
 together with an independent additive seventh-power identity and the
 nonzero/primitivity/provenance proofs.  See
 [FLT7-FUSION-004B-U1-5-CYCLOTOMIC-ADDITIVE-CHART-BOUNDARY-REPORT.md](FLT7-FUSION-004B-U1-5-CYCLOTOMIC-ADDITIVE-CHART-BOUNDARY-REPORT.md).
+
+ULTRA/U1.6 is complete with Outcome C.  The ramified packet already contains
+an exact internal seven-adic depth comparison:
+
+```text
+padicValNat 7 internalDepthFourCarrier = 4
+padicValNat 7 outerDepthFiveCarrier = 5.
+```
+
+Thus the inequality is not the missing theorem.  Lean names the exact
+remaining reconstruction: an actual `AwayValuationTransferPacket` whose
+exceptional carrier equals the internal depth-four coordinate.  This
+reconstruction is equivalent to the same candidate with `4 < 5` displayed
+and conditionally supplies a positive primitive natural FLT7 counterexample.
+It is not inhabited.  A recursive descent additionally requires an indexed
+ramified-to-away state/measure bridge.  See
+[FLT7-FUSION-004B-U1-6-STRICT-DESCENT-FAILURE-BOUNDARY-REPORT.md](FLT7-FUSION-004B-U1-6-STRICT-DESCENT-FAILURE-BOUNDARY-REPORT.md).

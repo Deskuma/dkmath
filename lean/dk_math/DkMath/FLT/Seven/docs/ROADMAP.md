@@ -1210,6 +1210,27 @@ extractor or a phase normalization and then independently prove the signed
 Fermat identity, nonvanishing, primitivity, normalization, and terminal
 provenance.
 
+ULTRA/U1.6 now records the strongest strict-decrease boundary available
+without that chart.  The older ramified extraction already contains:
+
+```text
+v7(internal quadratic-root carrier) = 4
+v7(preceding summit carrier) = 5
+v7(internal carrier) < v7(outer carrier).
+```
+
+The named `InternalDepthFourCounterexampleReconstructionObligation` asks for
+a positive primitive away counterexample packet whose exceptional carrier is
+the depth-four coordinate.  It is equivalent to the corresponding strict
+candidate because the inequality is automatic.  Therefore the missing
+mathematics is counterexample reconstruction, not another valuation bound.
+
+This conditional comparison is not yet a recursive descent step.  The
+reconstruction obligation is uninhabited, and a later development must also
+index the ramified source and new away route inside one well-founded
+state/measure transition.  ULTRA/U1 ends here with Outcome C.  NORMAL recovery
+should preserve this exact boundary rather than claim FLT7.
+
 ### FUSION-004/005: primitive chart and strict global drop
 
 Choose and prove an explicit well-founded measure smaller for the reconstructed
