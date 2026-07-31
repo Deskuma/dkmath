@@ -6,6 +6,7 @@ DkMath Journal は、Lean が確定した DkMath の定義・補題・定理を�
 
 ## Issues
 
+- [2026年8月号](JOURNAL-2608.md)
 - [2026年7月号](JOURNAL-2607.md)
 
 ## Purpose
