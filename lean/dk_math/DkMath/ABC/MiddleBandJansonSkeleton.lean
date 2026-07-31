@@ -670,7 +670,7 @@ S を有限集合（`Finset Ω`）としたとき、要素 `ω` が集合 `S` �
 この補題は、確率変数の下方大偏差の確率を指数関数的に抑えるチェルノフ型不等式の一例である。
 -/
 lemma chernoff_lower_tail
-  {Ω} [MeasurableSpace Ω] [MeasureSpace Ω]
+  {Ω} [MeasureSpace Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m A tau : ℝ)
   (hmgf : ∀ lambda ≥ 0, Integrable (fun ω => Real.exp (-lambda * (Z ω - m))) μ ∧
