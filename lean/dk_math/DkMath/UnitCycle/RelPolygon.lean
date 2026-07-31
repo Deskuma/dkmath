@@ -155,6 +155,6 @@ theorem sum_g_pos9_k2_extra : (∑ i ∈ Finset.range 2, g ((T^[i]) s0)) = 2 + 4
 theorem I_pos9_k2_ge_6 : I ((T^[2]) s0) ≥ 6 := by
   have h := I_iterate_ge_sum_fn (k := 2) (s := s0)
   -- I s0 = 0, Σg = 6 を代入
-  simpa [I, s0, sum_g_pos9_k2] using h
+  norm_num [I, s0, Finset.sum_range_succ, T, g] at h ⊢
 
 end DkMath.UnitCycle.RelPolygon
