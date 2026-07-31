@@ -15,9 +15,6 @@ open DkMath.CosmicFormulaBinom
 
 namespace DkMath.NumberTheory.GcdNext
 
-
-namespace DkMath.NumberTheory.GcdNext
-
 -- Research の残骸名を「真」に修正（squarefree 仮定を追加）
 lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
@@ -68,8 +65,6 @@ lemma squarefree_implies_padic_val_le_one_is_false :
     have hdiv : (7 : ℕ) ∣ 5 ^ 3 - 3 ^ 3 := by decide
     exact h 3 5 3 7 hd hb hab hq hdiv
   exact counterexample_padicValNat_diff_le_one h'
-
-end DkMath.NumberTheory.GcdNext
 
 /--
 public wrapper が最終的に寄せるべき honest target。
@@ -162,20 +157,6 @@ lemma squarefree_implies_padic_val_le_one_research (d a b q : ℕ)
   --        ここでやるべきことは「証明を埋める」ことではなく、必要な仮定を足すか、
   --        primitive-prime valuation のより精密な定理へ置き換えて statement を修正すること。
   sorry
-
-/--
-deprecated compatibility alias.
-
-Use `squarefree_implies_padic_val_le_one_research` for the remaining research-only dependency,
-or migrate all the way to `squarefree_implies_padic_val_le_one_honest`.
--/
-@[deprecated squarefree_implies_padic_val_le_one_honest
-  (since := "2026-04-13")]
-lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
-    (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
-    padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-  squarefree_implies_padic_val_le_one_research d a b q hd_prime hb hab hq_prime hq_div
 
 /--
 Research-only thin wrapper used by the remaining phase-15 bridge code.
