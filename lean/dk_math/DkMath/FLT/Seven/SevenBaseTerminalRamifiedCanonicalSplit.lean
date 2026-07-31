@@ -265,7 +265,8 @@ theorem receiver_iff_cubicGap_seventh_shape
     have hreceiver := (seventh_power_factor_split
       (p.vertical_coprime_compensation_residual.pow_left 7)
       hcancel).2
-    simpa [p.compensationCore_eq] using hreceiver
+    simpa [TerminalPrimitiveRamifiedSummitPacket.RamifiedCubicGapSeventhShapeReceiver,
+      p.compensationCore_eq] using hreceiver
 
 theorem compensation_coprime_residual
     (p : RamifiedSecondCoordinateCanonicalSplit) :
