@@ -236,7 +236,8 @@ theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
   refine tendsto_nhdsWithin_congr ?hEq hExt
   intro u hu
   have hu0 : u ≠ 0 := by
-    simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
+    change u ∉ ({(0 : ℝ)} : Set ℝ) at hu
+    simpa only [Set.mem_singleton_iff] using hu
   exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
 
 /--
