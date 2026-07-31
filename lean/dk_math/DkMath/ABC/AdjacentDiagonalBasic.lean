@@ -453,7 +453,7 @@ theorem eventually_heavy_sublinear
   exact final
 
 /-- If a predicate holds for all x, it eventually holds at the top (for directed, nonempty α). -/
-def eventually_of_forall {α : Type*} [Preorder α] [IsDirected α (· ≤ ·)] [Nonempty α] {p : α → Prop} :
+theorem eventually_of_forall {α : Type*} [Preorder α] [IsDirected α (· ≤ ·)] [Nonempty α] {p : α → Prop} :
   (∀ x, p x) → ∀ᶠ x in (atTop : Filter α), p x :=
   fun h => eventually_atTop.2 ⟨Nonempty.some (inferInstance : Nonempty α), fun x _ => h x⟩
 
