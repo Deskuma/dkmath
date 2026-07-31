@@ -20,6 +20,32 @@ namespace SevenRealCubicInt
 
 local instance : Fact (Nat.Prime 7) := ⟨by norm_num⟩
 
+private theorem inv_two_zmod_seven : (2 : ZMod 7)⁻¹ = 4 := by
+  exact ZMod.inv_eq_of_mul_eq_one 7 2 4 (by
+    change ((8 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide)
+private theorem inv_three_zmod_seven : (3 : ZMod 7)⁻¹ = 5 := by
+  exact ZMod.inv_eq_of_mul_eq_one 7 3 5 (by
+    change ((15 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide)
+private theorem inv_four_zmod_seven : (4 : ZMod 7)⁻¹ = 2 := by
+  exact ZMod.inv_eq_of_mul_eq_one 7 4 2 (by
+    change ((8 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide)
+private theorem inv_nine_zmod_seven : (9 : ZMod 7)⁻¹ = 4 := by
+  exact ZMod.inv_eq_of_mul_eq_one 7 9 4 (by
+    change ((36 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide)
+private theorem inv_sixteen_zmod_seven : (16 : ZMod 7)⁻¹ = 4 := by
+  exact ZMod.inv_eq_of_mul_eq_one 7 16 4 (by
+    change ((64 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide)
+
 /-- Constant coefficient in the `1, theta, theta²` basis, reduced modulo
 seven. -/
 def thetaConstModSeven (x : SevenRealCubicInt) : ZMod 7 :=
@@ -168,7 +194,7 @@ def projectiveLogMul :
     · simp only [Prod.snd_add]
       rw [unitNilpotentX_mul, unitNilpotentY_mul]
       simp only [div_eq_mul_inv]
-      rw [show (2 : ZMod 7)⁻¹ = 4 by decide]
+      rw [inv_two_zmod_seven]
       have hseven : (7 : ZMod 7) = 0 := by decide
       linear_combination
         -(unitNilpotentX u * unitNilpotentX v) * hseven
@@ -230,16 +256,24 @@ theorem projectiveLog_alpha :
   ext <;>
     norm_num [projectiveLog_apply, unitNilpotentX,
       unitNilpotentY, thetaConstModSeven, thetaLinearModSeven,
-      thetaSquareModSeven, alphaUnit, alpha] <;>
-    decide
+      thetaSquareModSeven, alphaUnit, alpha,
+      inv_two_zmod_seven, inv_three_zmod_seven, inv_nine_zmod_seven,
+      div_eq_mul_inv] <;>
+    first | (change ((-100 : ℤ) : ZMod 7) = ((5 : ℤ) : ZMod 7)
+             rw [ZMod.intCast_eq_intCast_iff]
+             norm_num)
 
 theorem projectiveLog_alphaAddOne :
     projectiveLog (Additive.ofMul alphaAddOneUnit) = (2, 5) := by
   ext <;>
     norm_num [projectiveLog_apply, unitNilpotentX,
       unitNilpotentY, thetaConstModSeven, thetaLinearModSeven,
-      thetaSquareModSeven, alphaAddOneUnit, alpha] <;>
-    decide
+      thetaSquareModSeven, alphaAddOneUnit, alpha,
+      inv_two_zmod_seven, inv_four_zmod_seven, inv_sixteen_zmod_seven,
+      div_eq_mul_inv] <;>
+    first | (change ((-16 : ℤ) : ZMod 7) = ((5 : ℤ) : ZMod 7)
+             rw [ZMod.intCast_eq_intCast_iff]
+             norm_num)
 
 theorem projectiveLog_generator_det :
     (5 : ZMod 7) * 5 - 2 * 5 = 1 := by
@@ -585,7 +619,7 @@ theorem unit_rank_eq_two :
 theorem unitClassModSeven_natCard :
     Nat.card UnitClassModSeven = 49 := by
   rw [ModN.natCard_eq,
-    NumberField.Units.rank_modTorsion,
+    NumberField.Units.finrank_modTorsion,
     unit_rank_eq_two]
   norm_num
 
@@ -641,7 +675,7 @@ private theorem exists_ringOfIntegers_unit_pow_seven_of_class_eq_zero
       simpa using hv
     apply Additive.ofMul.injective
     rw [QuotientGroup.mk_pow, ofMul_pow, hvadd]
-    simpa using hq
+    simpa only [natCast_zsmul] using hq
   have hmem :
       u / v ^ 7 ∈
         NumberField.Units.torsion Field :=
