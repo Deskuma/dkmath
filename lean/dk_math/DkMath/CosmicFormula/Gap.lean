@@ -36,7 +36,7 @@ lemma exponent_alignment_failure_of_val_eq_one
     {p x u G d : ℕ}
     (hp : Nat.Prime p)
     (hd : 2 ≤ d)
-    (hx : x ≠ 0)
+    (_hx : x ≠ 0)
     (hu0 : u ≠ 0)
     (hG0 : G ≠ 0)
     (hu : padicValNat p u = 1)
