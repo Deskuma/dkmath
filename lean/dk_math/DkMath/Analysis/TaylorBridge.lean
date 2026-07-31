@@ -99,7 +99,8 @@ theorem tendsto_powerDifferenceQuotient_zero
   refine Filter.Tendsto.congr' ?_ hgap
   filter_upwards [self_mem_nhdsWithin] with delta hdelta
   have hdelta_ne : delta ≠ 0 := by
-    simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hdelta
+    have hdelta_not_mem : delta ∉ ({(0 : ℝ)} : Set ℝ) := hdelta
+    simpa only [Set.mem_singleton_iff] using hdelta_not_mem
   exact (powerDifferenceQuotient_eq_gapGN_of_ne_zero d base delta hdelta_ne).symm
 
 /--
@@ -115,7 +116,17 @@ theorem hasDerivAt_pow_from_gapGN_limit (d : ℕ) (base : ℝ) :
   apply DkMath.CosmicFormula.hasDerivAt_of_tendsto_cosmicKernel
   simpa [DkMath.CosmicFormula.cosmicKernel, DkMath.CosmicFormula.delta,
     powerDifferenceQuotient] using
-    (tendsto_powerDifferenceQuotient_zero d base)
+    (by
+      have hset : ({(0 : ℝ)} : Set ℝ).compl = {x : ℝ | ¬x = 0} := by
+        ext x
+        change (x ∉ ({(0 : ℝ)} : Set ℝ)) ↔ ¬x = 0
+        simp only [Set.mem_singleton_iff]
+      have hlim := tendsto_powerDifferenceQuotient_zero d base
+      change Filter.Tendsto
+        (fun delta : ℝ => ((base + delta) ^ d - base ^ d) / delta)
+        (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ).compl)
+        (nhds ((d : ℝ) * base ^ (d - 1)))
+      exact hlim)
 
 /--
 Canonical public derivative theorem for powers through the Analysis `gapGN`
