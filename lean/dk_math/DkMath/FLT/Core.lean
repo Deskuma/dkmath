@@ -170,8 +170,7 @@ lemma exponent_alignment_failure_of_val_not_dvd
     (hndvd : ¬ d ∣ padicValNat p u)
     (h : x ^ d = u * G) : False := by
   letI : Fact (Nat.Prime p) := ⟨hp⟩
-  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by
-    simpa using (padicValNat.pow (p := p) (a := x) d hx)
+  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by simp
   have hdvd_left : d ∣ padicValNat p (x ^ d) := by
     -- d | (d * v_p(x))
     simp only [hpow, dvd_mul_right]
