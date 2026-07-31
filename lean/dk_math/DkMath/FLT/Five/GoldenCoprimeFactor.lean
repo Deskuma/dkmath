@@ -25,11 +25,17 @@ theorem goldenUnit_iff_isUnit {x : GoldenInt} : GoldenUnit x ↔ IsUnit x := by
   constructor
   · rintro ⟨y, hxy, _⟩
     apply isUnit_iff_exists_inv.mpr
-    exact ⟨y, by simpa using hxy⟩
+    refine ⟨y, ?_⟩
+    change goldenMul x y = goldenOne
+    exact hxy
   · intro hx
     rcases isUnit_iff_exists_inv.mp hx with ⟨y, hxy⟩
-    refine ⟨y, by simpa using hxy, ?_⟩
-    simpa [mul_comm] using hxy
+    refine ⟨y, ?_, ?_⟩
+    · change goldenMul x y = goldenOne
+      exact hxy
+    · change goldenMul y x = goldenOne
+      change y * x = 1
+      simpa [mul_comm] using hxy
 
 /-- Coprime factors of a fifth power in the golden integers are fifth powers up to a unit. -/
 theorem goldenCoprimeFactorOfFifthPower : GoldenCoprimeFactorOfFifthPower := by
