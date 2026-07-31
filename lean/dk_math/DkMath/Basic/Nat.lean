@@ -14,11 +14,11 @@ open DkMath.ABC
    ============================================================================ -/
 
 /-- (n + 1) - n = 1 であること -/
-def succ_sub_self (n : ℕ) : (n + 1) - n = 1 := by
+theorem succ_sub_self (n : ℕ) : (n + 1) - n = 1 := by
   rw [Nat.add_comm, Nat.add_sub_cancel]
 
 /-- n ∣ 1 ↔ n = 1 であること -/
-def dvd_one_iff (n : ℕ) : n ∣ 1 ↔ n = 1 := by
+theorem dvd_one_iff (n : ℕ) : n ∣ 1 ↔ n = 1 := by
   constructor
   · rintro h
     exact Nat.eq_one_of_dvd_one h
