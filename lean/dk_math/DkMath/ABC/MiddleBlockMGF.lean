@@ -751,7 +751,8 @@ theorem mgf_midblock_via_indep {Ω : Type*} [MeasurableSpace Ω] [DecidableEq Ω
         rw [this]
         rw [Real.exp_add]
     have hmul := Integrable.const_mul hraw (Real.exp (lambda * m))
-    convert hmul using 1
+    rw [this]
+    exact hmul
 
   let bnd : ∀ (l : ℝ) (h : l ≥ 0), μ[fun ω => Real.exp (-l * (Zmid (k := k) (X := X) (Smap := Smap) ω - m))] ≤ Real.exp (A * l ^ 2) :=
     fun l hl => by
@@ -767,7 +768,6 @@ theorem mgf_midblock_via_indep {Ω : Type*} [MeasurableSpace Ω] [DecidableEq Ω
       have h_integrand_eq : (fun ω => Real.exp (-l * (Zmid (k := k) (X := X) (Smap := Smap) ω - m)))
         = fun ω => Real.exp (-l * (Finset.sum s fun v => (Prob.indR (Smap v) ω - (∫ ω, Prob.indR (Smap v) ω ∂μ)))) := by
         ext ω
-        dsimp
         -- apply the pointwise equality obtained from `h_centered_def`
         have h_point := congrFun h_centered_def ω
         rw [h_point]
@@ -896,7 +896,8 @@ theorem mgf_midblock_via_indep_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSpa
       have : lambda * (Zmid (k := k) (X := X) (Smap := Smap) ω - m) = -lambda * m + lambda * Zmid (k := k) (X := X) (Smap := Smap) ω := by ring
       rw [this]; rw [Real.exp_add]
     have hmul := Integrable.const_mul hraw (Real.exp (-lambda * m))
-    convert hmul using 1
+    rw [this]
+    exact hmul
 
   let bnd : ∀ (l : ℝ) (h : l ≥ 0), μ[fun ω => Real.exp (l * (Zmid (k := k) (X := X) (Smap := Smap) ω - m))] ≤ Real.exp (A * l ^ 2) :=
     fun l hl => by
@@ -906,7 +907,7 @@ theorem mgf_midblock_via_indep_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSpa
         ext ω; dsimp [Zmid, m]; rw [Finset.sum_sub_distrib]
       have h_integrand_eq : (fun ω => Real.exp (l * (Zmid (k := k) (X := X) (Smap := Smap) ω - m)))
         = fun ω => Real.exp (l * (Finset.sum s fun v => (Prob.indR (Smap v) ω - (∫ ω, Prob.indR (Smap v) ω ∂μ)))) := by
-        ext ω; dsimp; have h_point := congrFun h_centered_def ω; rw [h_point]
+        ext ω; have h_point := congrFun h_centered_def ω; rw [h_point]
       rw [h_integrand_eq]
       have h_mgf_def :
         μ[fun ω => Real.exp (l * (Finset.sum s fun v => (Prob.indR (Smap v) ω - (∫ ω, Prob.indR (Smap v) ω ∂μ))))] =
@@ -1006,7 +1007,8 @@ theorem mgf_midblock_via_janson {Ω : Type*} [MeasurableSpace Ω] [DecidableEq �
           rw [this]
           rw [Real.exp_add]
       have hmul := Integrable.const_mul hraw (Real.exp (lambda * m))
-      convert hmul using 1
+      rw [this]
+      exact hmul
   have bnd : ∀ (lambda : ℝ) (h : lambda ≥ 0), μ[fun ω => Real.exp (-lambda * (Zmid (k := k) (X := X) (Smap := Smap) ω - m))] ≤ Real.exp (A * lambda ^ 2) :=
     fun lambda hlambda => h_logmgf lambda hlambda
   exact QuadMGF.mk intg bnd hApos
