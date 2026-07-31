@@ -133,8 +133,8 @@ theorem rootSnd_sndCore_coprime
     ring
   have hqu6 : (q : ℤ) ∣ p.summit.root.fst ^ 6 := by
     have := dvd_sub hqS hrest
-    convert this using 1
-    ring
+    convert this using 1 <;>
+      first | rfl | ring
   have hqu : (q : ℤ) ∣ p.summit.root.fst :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqu6
   exact (Nat.prime_iff_prime_int.mp hq).not_unit
@@ -199,7 +199,8 @@ theorem rootNorm_sndCore_coprime
       dvd_mul_of_dvd_left hqB _
     have := dvd_sub hqNormMul hqS
     convert this using 1
-    nlinarith [hid]
+    all_goals first | rfl | (try simp)
+    linear_combination hid
   rcases (Nat.prime_iff_prime_int.mp hq).dvd_mul.mp hq49v6 with
       hq49 | hqv6
   · have hq7 : q ∣ 7 := by
@@ -240,8 +241,8 @@ theorem gapRoot_endpointRight_coprime
     exact dvd_mul_of_dvd_right (dvd_pow hqA (by decide : 7 ≠ 0)) _
   have hqc : (q : ℤ) ∣ p.summit.endpointLeft := by
     have := dvd_add hqgap hqe
-    convert this using 1
-    ring
+    convert this using 1 <;>
+      first | rfl | ring
   exact (Nat.prime_iff_prime_int.mp hq).not_unit
     (p.summit.endpoint_coprime.isUnit_of_dvd' hqc hqe)
 
@@ -270,12 +271,13 @@ theorem gapRoot_gapQuotient_coprime
     convert dvd_add
       (dvd_mul_of_dvd_right hqh (-7 * p.summit.endpointRight))
       (dvd_mul_of_dvd_right
-        (dvd_pow hqh (by decide : 2 ≠ 0)) (-14)) using 1
+        (dvd_pow hqh (by decide : 2 ≠ 0)) (-14)) using 1 <;>
+      first | rfl | simp | ring
   have hqe2 : (q : ℤ) ∣ p.summit.endpointRight ^ 2 := by
     have := dvd_sub hqQ hqrest
     have hneg : (q : ℤ) ∣ -(p.summit.endpointRight ^ 2) := by
-      convert this using 1
-      simp [ramifiedGapQuotient]
+      convert this using 1 <;>
+        first | rfl | (try simp [ramifiedGapQuotient]) | ring
     simpa only [dvd_neg] using hneg
   have hqe : (q : ℤ) ∣ p.summit.endpointRight :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqe2
