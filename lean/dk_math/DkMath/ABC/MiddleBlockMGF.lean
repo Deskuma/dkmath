@@ -79,7 +79,7 @@ structure QuadMGFPosUpTo {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) (Z 
    This receive-port expects the caller to provide integrability on the interval [0, P.lambda0/2]
    (h_intg). In return it provides a QuadMGFPosUpTo witness valid up to L = P.lambda0/2. -/
 lemma quad_from_subgamma_upto
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω]
+  {Ω : Type*} [MeasureSpace Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m : ℝ)
   (P : SubGammaParam)
@@ -128,7 +128,7 @@ lemma quad_from_subgamma_upto
    This is the Janson/Suen receive-port: callers supply a log-MGF bound `h_sub` for Zmid
    (e.g. proven by counting overlaps / covariance control), and we return a `QuadMGFPos`.
 -/
-theorem mgf_midblock_via_janson_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω]
+theorem mgf_midblock_via_janson_pos {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω]
   [MeasurableSingletonClass Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -150,7 +150,7 @@ theorem mgf_midblock_via_janson_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSp
 
 /-- 正号版 MGF から上側 Chernoff：`P(Z ≥ m+τ) ≤ exp(-τ²/(4A))` -/
 lemma chernoff_upper_from_quad_mgf_pos
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+  {Ω : Type*} [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m A τ : ℝ)
   (H : QuadMGFPos (μ := μ) Z m A) (hτ : 0 ≤ τ) :
   μ.real {ω | Z ω ≥ m + τ} ≤ Real.exp (- τ^2 / (4*A)) := by
@@ -191,7 +191,7 @@ lemma chernoff_upper_from_quad_mgf_pos
 
 /-- 抽象 MGF から Chernoff（下側尾）を即時に得る小橋渡し。 -/
 lemma chernoff_from_quad_mgf
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+  {Ω : Type*} [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m A τ : ℝ)
   (H : QuadMGF (μ := μ) Z m A) (hτ : 0 ≤ τ) :
   μ.real {ω | Z ω ≤ m - τ} ≤ Real.exp (- τ^2 / (4*A)) := by
@@ -209,7 +209,7 @@ lemma chernoff_from_quad_mgf
     `0 ≤ lambda` かつ `E[exp(lambda (Z-m))] ≤ exp(A lambda ^ 2)` なら
     `P(Z ≥ m + τ) ≤ exp(-lambda τ) * exp(A lambda ^ 2)`. -/
 lemma chernoff_upper_from_local_mgf_pos
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω]
+  {Ω : Type*} [MeasureSpace Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m : ℝ)
   {lambda A tau : ℝ}
@@ -259,7 +259,7 @@ lemma chernoff_upper_from_local_mgf_pos
     `exp(- tau^2 / (4 A))` 形、さもなくば `lambda = L` で
     `exp(- L tau + A L^2)` 形。 -/
 lemma chernoff_upper_from_quad_mgf_upto
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω]
+  {Ω : Type*} [MeasureSpace Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m A L : ℝ)
   (H : QuadMGFPosUpTo (μ := μ) Z m A L)
@@ -300,7 +300,7 @@ lemma chernoff_upper_from_quad_mgf_upto
 -- ### Zmid 用の短い上側尾（Janson/Suen 版の受け口）
 
 theorem mid_block_upper_hp_dep
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -348,7 +348,7 @@ theorem mid_block_upper_hp_dep
 
 -- up-to 版 Chernoff を単純な `exp(AL^2) * exp(-L * tau)` に畳む安全版
 lemma chernoff_upper_from_quad_mgf_upto_linear
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω]
+  {Ω : Type*} [MeasureSpace Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Z : Ω → ℝ) (m A L : ℝ)
   (H : QuadMGFPosUpTo (μ := μ) Z m A L)
@@ -395,7 +395,7 @@ lemma chernoff_upper_from_quad_mgf_upto_linear
 
 -- mid-block 上側尾を A := 2*P.v, L := P.lambda0/2 に特化し、C * exp(-c * |MidBlock|) 形にする
 theorem mid_block_upper_hp_dep_expCard
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -434,7 +434,7 @@ theorem mid_block_upper_hp_dep_expCard
 
 /- Fold the explicit bound into a cleaner C * exp(-c * |MidBlock|) form -/
 theorem mid_block_upper_hp_dep_expCard_factor
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -471,7 +471,7 @@ theorem mid_block_upper_hp_dep_expCard_factor
 -- ---------------------------------------------------------------------------
 /- Provide an existence form: there exist C ≥ 0 and c > 0 such that the bound holds -/
 theorem mid_block_upper_hp_dep_expCard_exists
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -517,7 +517,7 @@ theorem mid_block_upper_hp_dep_expCard_exists
 
 /- Provide an existence form: there exist C ≥ 0 and c > 0 such that the bound holds -/
 theorem mid_block_upper_hp_dep_expCard_exists'
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -550,7 +550,7 @@ theorem mid_block_upper_hp_dep_expCard_exists'
 
 -- Zmid の上側尾を τ = δ * card に特化した形（Janson/Suen 受け口版）
 theorem mid_block_upper_hp_dep_card
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -865,7 +865,7 @@ theorem mgf_midblock_via_indep {Ω : Type*} [MeasurableSpace Ω] [DecidableEq Ω
 
 
 /-- Positive-side mirror: prove QuadMGFPos for Zmid using independence. -/
-theorem mgf_midblock_via_indep_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω]
+theorem mgf_midblock_via_indep_pos {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω]
   [MeasurableSingletonClass Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (hind : ProbabilityTheory.iIndepFun (fun v => Prob.indR (Smap v)) μ) :
@@ -960,7 +960,7 @@ theorem mgf_midblock_via_indep_pos {Ω : Type*} [MeasurableSpace Ω] [MeasureSpa
 
 
 /-- Use the positive-side Chernoff to get an exponential upper-tail bound for Zmid under independence. -/
-theorem mid_block_upper_hp_indep {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω]
+theorem mid_block_upper_hp_indep {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω]
   [MeasurableSingletonClass Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (hind : ProbabilityTheory.iIndepFun (fun v => Prob.indR (Smap v)) μ)
@@ -1019,7 +1019,7 @@ Given a QuadMGF witness for the mid-block sum, derive a Chernoff lower-tail
 bound via `chernoff_from_quad_mgf`. This packages the final step of the MGF→Chernoff
 chain for reuse.
 -/
-theorem mid_block_chernoff_fixed {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω]
+theorem mid_block_chernoff_fixed {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   {m A : ℝ} (H : QuadMGF (μ := μ) (Zmid (k := k) (X := X) (Smap := Smap)) m A)
