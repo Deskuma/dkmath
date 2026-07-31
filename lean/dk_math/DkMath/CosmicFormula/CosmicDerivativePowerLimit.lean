@@ -86,7 +86,9 @@ theorem hasDerivAt_pow_cosmic (d : ℕ) (x : ℝ) :
     refine tendsto_nhdsWithin_congr ?hEq hpow
     intro u hu
     have hu0 : u ≠ 0 := by
-      simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
+      change u ∉ ({(0 : ℝ)} : Set ℝ) at hu
+      have hu' : u ∉ ({(0 : ℝ)} : Set ℝ) := hu
+      simpa only [Set.mem_singleton_iff] using hu'
     exact (cosmicKernel_pow_eq_powerKernel_of_ne_zero d x u hu0).symm
   exact hasDerivAt_of_tendsto_cosmicKernel hcosmic
 
