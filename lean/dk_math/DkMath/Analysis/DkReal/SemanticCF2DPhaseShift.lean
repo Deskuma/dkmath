@@ -1651,25 +1651,25 @@ theorem shiftedCyclicChartRight_eq_succ_left (i : Fin 4) :
 theorem shiftedCyclicChartRight_zero_eq_one_left :
     shiftedCyclicChartRight (0 : Fin 4) =
       shiftedCyclicChartLeft (1 : Fin 4) := by
-  simpa using shiftedCyclicChartRight_eq_succ_left ⟨0, by norm_num⟩
+  simpa [finFourSucc] using shiftedCyclicChartRight_eq_succ_left ⟨0, by norm_num⟩
 
 /-- The quotient seam sends finite edge `1` to finite edge `2`. -/
 theorem shiftedCyclicChartRight_one_eq_two_left :
     shiftedCyclicChartRight (1 : Fin 4) =
       shiftedCyclicChartLeft (2 : Fin 4) := by
-  simpa using shiftedCyclicChartRight_eq_succ_left ⟨1, by norm_num⟩
+  simpa [finFourSucc] using shiftedCyclicChartRight_eq_succ_left ⟨1, by norm_num⟩
 
 /-- The quotient seam sends finite edge `2` to finite edge `3`. -/
 theorem shiftedCyclicChartRight_two_eq_three_left :
     shiftedCyclicChartRight (2 : Fin 4) =
       shiftedCyclicChartLeft (3 : Fin 4) := by
-  simpa using shiftedCyclicChartRight_eq_succ_left ⟨2, by norm_num⟩
+  simpa [finFourSucc] using shiftedCyclicChartRight_eq_succ_left ⟨2, by norm_num⟩
 
 /-- The quotient seam sends finite edge `3` back to finite edge `0`. -/
 theorem shiftedCyclicChartRight_three_eq_zero_left :
     shiftedCyclicChartRight (3 : Fin 4) =
       shiftedCyclicChartLeft (0 : Fin 4) := by
-  simpa using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
+  simpa [finFourSucc] using shiftedCyclicChartRight_eq_succ_left ⟨3, by norm_num⟩
 
 /--
 The representative map into the shifted cyclic chart quotient is continuous.
@@ -1679,9 +1679,8 @@ open exactly when its preimage along the representative map is open.
 -/
 theorem continuous_shiftedCyclicChartMk :
     Continuous shiftedCyclicChartMk := by
-  simpa [shiftedCyclicChartMk] using
-    (continuous_quot_mk :
-      Continuous (@Quot.mk ShiftedFiniteChart shiftedFiniteChartSetoid))
+  change Continuous (@Quot.mk ShiftedFiniteChart shiftedFiniteChartSetoid)
+  exact continuous_quot_mk
 
 /--
 Chart evaluation is compatible with the generated seam equivalence.
@@ -1720,8 +1719,9 @@ theorem continuous_shiftedSemanticFinChartEval_of_fixed_index
     (z : Vec ℝ) (i : Fin 4) :
     Continuous (fun t : unitInterval =>
       shiftedSemanticFinChartEval hcore z (i, t)) := by
-  simpa [shiftedSemanticFinChartEval, shiftedSemanticFinLevelEdge]
-    using (continuous_shiftedSemanticIndexedLevelEdge hcore z i.val).comp
+  change Continuous (fun t : unitInterval =>
+    shiftedSemanticIndexedLevelEdge hcore z i.val (t : ℝ))
+  exact (continuous_shiftedSemanticIndexedLevelEdge hcore z i.val).comp
       continuous_subtype_val
 
 /--
@@ -1818,7 +1818,8 @@ theorem continuous_shiftedSemanticCyclicChartEval
     (z : Vec ℝ) :
     Continuous (fun p : ShiftedCyclicChart =>
       shiftedSemanticCyclicChartEval hcore z p) := by
-  simpa [shiftedSemanticCyclicChartEval] using
+  change Continuous (Quot.lift (shiftedSemanticFinChartEval hcore z) _)
+  exact
     (continuous_shiftedSemanticFinChartEval hcore z).quotient_lift
       (fun p q hrel =>
         shiftedSemanticFinChartEval_eq_of_chartRel hcore z hrel)
