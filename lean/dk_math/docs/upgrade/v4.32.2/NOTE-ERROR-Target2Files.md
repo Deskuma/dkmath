@@ -1,4 +1,6 @@
-# 残る error
+# 残る２つの Error 対策
+
+**Proved**
 
 ## 現在の残敵
 
@@ -237,3 +239,185 @@ Remaining: 2
 ```
 
 へ更新できる段階じゃな。詳細報告が届いたら、`SevenRamifiedFusionCyclotomicSevenPID` の修正内容も migration pattern として正式に記録しよう。
+
+# Git diff / Report / Review
+
+## fix(upgrade): migrate cosmic dimension differentiation
+
+gch: e6861c54941c8a749b4489badd2b7715301ad6e5
+
+## Report
+
+_
+
+## Review
+
+_
+
+## Diff
+
+`````md
+````diff
+diff --git a/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean b/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean
+index e24ae7ea..e5971244 100644
+--- a/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean
++++ b/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean
+@@ -89,7 +89,7 @@ theorem cosmic_id (d : ℕ) (x u : ℝ) :
+   -- 補題1と補題2より、二つの和が相殺されて u^d のみが残る
+   rw [h1, h2]
+   simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
+-  ring
++  ring_nf
+ 
+ 
+ /-! ### C: 解析接続の橋脚（体積定数） -/
+@@ -522,7 +522,7 @@ lemma powPi_eq (s : ℂ) : powPi s = (π : ℂ)^(s/2) := by
+   -- 版によっては `Complex.cpow_def` の名前が違うので調整
+   simp [powPi, Complex.cpow_def]
+   -- π は正の実数なので log π = log |π| + 0*I が成り立つ
+-  ring
++  ring_nf
+ 
+ /-- 「Gamma 側がちゃんとしている」ことを仮定する安全な局所条件 -/
+ def VolGood (s : ℂ) : Prop :=
+@@ -556,7 +556,8 @@ theorem differentiableAt_volConstC_of_good {s : ℂ} (hs : VolGood s) :
+   have hden0 : (fun s => Complex.Gamma (s/2 + 1)) s ≠ 0 := hΓ0
+   -- いよいよ本体
+   -- `volConstC` の定義に合わせて `simp [volConstC]` を使う
+-  simpa [volConstC] using hnum.div hden hden0
++  unfold volConstC
++  exact hnum.div hden hden0
+ 
+ /-!
+ 次の一手：
+@@ -584,7 +585,9 @@ lemma differentiableAt_one_div_Gamma_affine (s : ℂ) :
+   -- 合成
+   have h := h_outer.comp s h_inner
+   -- 1/z = z⁻¹ を使って型を合わせる
+-  simpa [div_eq_inv_mul, one_mul] using h
++  convert h using 1 <;> try rfl
++  funext z
++  simp only [Function.comp_apply, one_div]
+ 
+ 
+ /-- `volConstC` は全域で正則（= entire）。 -/
+@@ -604,7 +607,10 @@ theorem differentiableAt_volConstC (s : ℂ) :
+     differentiableAt_one_div_Gamma_affine s
+   -- 仕上げ：積の正則性
+   -- `volConstC` の定義が `/` なら `div_eq_mul_inv` と `one_div` で合わせる
+-  simpa [volConstC, div_eq_mul_inv, one_div] using hnum.mul hrec
++  unfold volConstC
++  convert hnum.mul hrec using 1 <;> try rfl
++  funext z
++  simp only [div_eq_mul_inv, one_div, mul_one, one_mul, Pi.mul_apply]
+ 
+ 
+ /-- したがって `volConstC` は関数として全域で微分可能。 -/
+@@ -712,7 +718,8 @@ theorem differentiableAt_ballVolC (r : ℝ) (s : ℂ) :
+   -- volConstC は entire（既に証明済み）
+   have h1 : DifferentiableAt ℂ volConstC s := differentiableAt_volConstC s
+   have h2 : DifferentiableAt ℂ (fun s => rpowPos r s) s := differentiableAt_rpowPos r s
+-  simpa using h1.mul h2
++  change DifferentiableAt ℂ (fun s : ℂ => volConstC s * rpowPos r s) s
++  exact h1.mul h2
+ 
+ 
+ /-- r>0 かつ n : ℕ に対し、rpowPos r n = r^n （複素数冪乗） -/
+@@ -1097,7 +1104,7 @@ theorem volConstR_odd_eval_prod (m : ℕ) :
+       -- まとめ
+       calc
+         volConstR (2*(m+1) + 1)
+-            = volConstR (2*m + 3) := by ring
++            = volConstR (2*m + 3) := by ring_nf
+         _ = ((2 * Real.pi) * volConstR (2*m + 1)) / (2*m + 3 : ℝ) := by
+               simpa using hsolve
+         _ = ((2 * Real.pi) * ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m)) / (2*m + 3 : ℝ) := by
+diff --git a/lean/dk_math/DkMath/RH/EulerZetaLemmas.lean b/lean/dk_math/DkMath/RH/EulerZetaLemmas.lean
+index 68276404..c8b2c6d8 100644
+--- a/lean/dk_math/DkMath/RH/EulerZetaLemmas.lean
++++ b/lean/dk_math/DkMath/RH/EulerZetaLemmas.lean
+@@ -22,11 +22,6 @@ open DkMath.Basic
+ open scoped Real
+ open Complex
+ 
+-instance : ContinuousSMul ℝ ℂ where
+-  continuous_smul := by
+-    simpa [Algebra.smul_def] using
+-      (Complex.continuous_ofReal.comp continuous_fst).mul continuous_snd
+-
+ /-
+ 補題のモジュール：Euler-zeta の等価性と基本変形
+ 
+@@ -352,7 +347,7 @@ lemma hasDerivAt_vertical_mul_log_p
+   have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * Complex.I) Complex.I t := by
+     simpa [one_mul] using (Complex.ofRealCLM.hasDerivAt (x := t)).mul_const Complex.I
+   have hvertical : HasDerivAt (fun u : ℝ => vertical σ u) Complex.I t := by
+-    convert hmul.const_add (σ : ℂ) using 1
++    simpa [vertical] using hmul.const_add (σ : ℂ)
+   simpa [mul_assoc] using hvertical.mul_const (Real.log (p : ℝ) : ℂ)
+ 
+ /--
+@@ -370,10 +365,12 @@ lemma hasDerivAt_eulerZeta_exp_s_log_p_sub_one
+   unfold eulerZeta_exp_s_log_p_sub_one
+   have hinner :=
+     hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+-  convert
+-      (((Complex.hasDerivAt_exp
+-        (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ))
+-      using 1
++  have h :=
++    (((Complex.hasDerivAt_exp
++      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ))
++  change HasDerivAt
++    (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ)) - 1) _ t
++  simpa only [Function.comp_apply] using h
+ 
+ /--
+ `w_p` の導関数の `deriv` 版。
+@@ -450,8 +447,9 @@ lemma hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one
+       HasDerivAt
+         (fun u : ℝ => Complex.exp (vertical σ u * lp))
+         (Complex.exp (vertical σ t * lp) * (Complex.I * lp)) t := by
+-    simpa [lp] using
+-      (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
++    have h := (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
++    change HasDerivAt (fun u : ℝ => Complex.exp (vertical σ u * lp)) _ t
++    simpa [lp, Function.comp_def] using h
+   have hmul := hexp.mul_const (Complex.I * lp)
+   simpa [lp, mul_assoc] using hmul
+ 
+@@ -579,7 +577,9 @@ lemma differentiableAt_eulerZetaExpSubOneFinite
+       have hd_p :
+           DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
+         (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
+-      simpa [eulerZetaExpSubOneFinite, hp] using hd_p.mul ih
++      unfold eulerZetaExpSubOneFinite
++      convert hd_p.mul ih using 1 <;>
++        first | rfl | (funext u; simp [eulerZetaExpSubOneFinite, hp])
+ 
+ /--
+ `insert` 1ステップ版の積→和補題。
+@@ -716,7 +716,9 @@ lemma phaseVel_exp_vertical_mul_log_p_eq_log
+     have hinner :
+         HasDerivAt (fun u : ℝ => vertical σ u * lp) (Complex.I * lp) t := by
+       simpa [lp] using hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+-    simpa [lp] using ((Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner).deriv
++    have h := ((Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner).deriv
++    change deriv (fun u : ℝ => Complex.exp (vertical σ u * lp)) t = _
++    simpa [lp, Function.comp_def] using h
+   unfold DkMath.RH.phaseVel
+   change
+     (((deriv (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t) /
+@@ -807,7 +809,9 @@ lemma differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne
+       have hd_S :
+           DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t :=
+         ih hS_ne'
+-      simpa [eulerZetaFactorVerticalExpFinite, hp] using hd_p.mul hd_S
++      unfold eulerZetaFactorVerticalExpFinite
++      convert hd_p.mul hd_S using 1 <;>
++        first | rfl | (funext u; simp [eulerZetaFactorVerticalExpFinite, hp])
+ 
+ /--
+ exp 形 Euler 因子有限積の位相速度は、局所位相速度寄与の有限和に一致する。
+````
+`````
