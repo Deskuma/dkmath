@@ -57,7 +57,7 @@ noncomputable def midblockCstarIndep (δ : ℝ) : ℝ :=
 
 
 /- Simple helper: probability-measure の下で任意事象の実数化測度は ≤ 1。 -/
-lemma prob_real_le_one {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+lemma prob_real_le_one {Ω : Type*} [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   (A : Set Ω) : μ.real A ≤ 1 := by
   have hle := MeasureTheory.measure_mono (μ := μ) (Set.subset_univ A)
   have htop : μ (Set.univ : Set Ω) ≠ ⊤ := by simp [IsProbabilityMeasure.measure_univ]
