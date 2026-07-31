@@ -127,7 +127,8 @@ theorem branchRamified_gcd_gap_GN_seven
 theorem seventh_power_factor_split {a b x : ℕ}
     (hcop : Nat.Coprime a b) (hbody : a * b = x ^ 7) :
     (∃ u : ℕ, a = u ^ 7) ∧ (∃ v : ℕ, b = v ^ 7) := by
-  have hunit : IsUnit (GCDMonoid.gcd a b) := by simpa [Nat.Coprime] using hcop
+  have hunit : IsUnit (GCDMonoid.gcd a b) := by
+    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcop
   constructor
   · exact exists_eq_pow_of_mul_eq_pow hunit hbody
   · have hunit' : IsUnit (GCDMonoid.gcd b a) := by simpa [gcd_comm] using hunit
