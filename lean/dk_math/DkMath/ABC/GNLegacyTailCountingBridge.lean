@@ -340,7 +340,7 @@ theorem GNPolynomial_monic
     exact (Polynomial.natDegree_C_mul_X_pow_le _ i).trans
       (by simpa using
         Nat.le_pred_of_lt (Finset.mem_range.mp hi))
-  · rw [GNPolynomial, Polynomial.finset_sum_coeff]
+  · rw [GNPolynomial, Polynomial.finsetSum_coeff]
     rw [Finset.sum_eq_single (p - 1)]
     · have hpred : p - 1 + 1 = p := by omega
       simp [hpred]
