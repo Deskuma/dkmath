@@ -91,7 +91,7 @@ lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
   · -- n ≠ 0 の場合
     -- padicValNat.pow (n : ℕ) (ha : a ≠ 0) : padicValNat p (a ^ n) = n * padicValNat p a
     -- ここで a = n, 冪の指数 = d なので
-    have key : padicValNat p (n ^ d) = d * padicValNat p n := padicValNat.pow d hn
+    have key : padicValNat p (n ^ d) = d * padicValNat p n := padicValNat.pow n d
     rw [key]
     -- d * padicValNat p n で d ∣ ...
     exact dvd_mul_right d _
