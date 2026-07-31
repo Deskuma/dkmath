@@ -64,7 +64,6 @@ theorem fermat7Equation_modSeven_linear {x y z : ℕ}
     (hEq : Fermat7Equation x y z) :
     (x : ModSeven) + (y : ModSeven) = (z : ModSeven) := by
   have h := congrArg (fun n : ℕ => (n : ModSeven)) hEq
-  unfold Fermat7Equation at h
   push_cast at h
   simpa only [ZMod.pow_card] using h
 
