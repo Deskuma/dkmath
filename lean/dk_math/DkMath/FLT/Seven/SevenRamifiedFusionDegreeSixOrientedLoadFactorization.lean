@@ -154,7 +154,7 @@ structure DegreeSixOrientedLoadFactorizationPacket where
 
 /-- The canonical global oriented launch packet is inhabited for either
 row-two load family. -/
-def degreeSixOrientedLoadFactorizationPacket :
+theorem degreeSixOrientedLoadFactorizationPacket :
     DegreeSixOrientedLoadFactorizationPacket family p where
   localFibrePower :=
     fun s => PrimeSupport.map_kernelPower_eq_orientedPairPower s

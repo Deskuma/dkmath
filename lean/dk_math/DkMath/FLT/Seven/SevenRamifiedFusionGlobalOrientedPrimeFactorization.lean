@@ -1093,7 +1093,7 @@ structure GlobalOrientedPrimeFactorizationPacket where
       globalDegreeSixOrientedFactorIdeal family p
 
 /-- Canonical global factorization packet with both Galois coherences. -/
-def globalOrientedPrimeFactorizationPacket :
+theorem globalOrientedPrimeFactorizationPacket :
     GlobalOrientedPrimeFactorizationPacket family p where
   launchpad :=
     degreeSixOrientedLoadFactorizationPacket family p
