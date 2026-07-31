@@ -53,7 +53,8 @@ theorem nonempty_awayCubicProductPacket {x y z : ℕ}
     rootTriple := root
     normal_eq := rfl
     product_eq := by
-      simpa [root] using away_endpoint_product_cubic_load_eq transfer.normal }⟩
+      simpa [root, awayRootCoprimeTriple] using
+        away_endpoint_product_cubic_load_eq transfer.normal }⟩
 
 structure CoprimeTripleRouting
     (a₁ a₂ a₃ b₁ b₂ b₃ : ℕ) : Type where
