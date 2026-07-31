@@ -189,7 +189,7 @@ theorem sevenRoundedFst_skew_error_bound (x y : TraceOneInt (-2)) :
   have h := abs_sub_round (A + (B - n) / 2)
   dsimp [sevenRoundedFst, A, B, n] at h ⊢
   convert h using 1
-  ring_nf
+  all_goals first | rfl | ring_nf
 
 theorem seven_remainder_size_lt
     (x : TraceOneInt (-2)) {y : TraceOneInt (-2)} (hy : y ≠ 0) :
