@@ -230,7 +230,8 @@ theorem noSqPrimeOnGN_when_p_dvd_u_impl :
     (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
   have hp_pos : 0 < p := hpack.hp.pos
   have hp_not_dvd_y : ¬ p ∣ y := by
-    simpa [u, PrimeGe5CounterexamplePack.gap] using
+    simpa [u, PrimeGe5CounterexamplePack.gap,
+      PrimeCounterexamplePack.gap] using
       hpack.prime_not_dvd_right_of_prime_dvd_gap hp_dvd_u
   have hsplitBA : B + A = N := by
     let f : ℕ → ℕ := fun k =>
@@ -575,7 +576,8 @@ theorem gapInvariant_of_bodyInvariant
   intro hgap
   rcases hgap with ⟨t, htu⟩
   rcases exists_eq_pow_of_gap_eq_pow hpack.hp hu_pos hxpow htu with ⟨s, hs⟩
-  exact hBody hpack ⟨s, by simpa using hs⟩
+  exact hBody hpack ⟨s, by simpa [u, PrimeGe5CounterexamplePack.gap,
+    PrimeCounterexamplePack.gap] using hs⟩
 
 /--
 Triomino/Cosmic 本丸:
@@ -691,7 +693,8 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShare
   let u : ℕ := z - y
   let N : ℕ := GN p u y
   have hxpow : x ^ p = u * N := by
-    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [u, N, PrimeGe5CounterexamplePack.gap,
+      PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
   have hN0 : N ≠ 0 := by
     intro hN0
@@ -786,7 +789,8 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
   let u : ℕ := z - y
   let N : ℕ := GN p u y
   have hxpow : x ^ p = u * N := by
-    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [u, N, PrimeGe5CounterexamplePack.gap,
+      PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hGN : p ∣ N ∧ ¬ p ^ 2 ∣ N := by
     simpa [u, N] using p_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
   have hN0 : N ≠ 0 := by
