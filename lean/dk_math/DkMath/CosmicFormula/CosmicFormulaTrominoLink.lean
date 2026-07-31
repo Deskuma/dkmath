@@ -36,9 +36,10 @@ theorem cosmic_diff_int (x u : ℕ) :
   have h : (x+u) * (x+u) = x * (x + 2*u) + u*u :=
     cosmic_area_identity x u
   -- ℤへ：等式全体を ℤ へ写す
-  have hZ := congrArg (fun n : ℕ => (n : ℤ)) h
-  norm_cast at hZ
-  simpa [pow_two, sub_eq_iff_eq_add, add_comm] using hZ
+  rw [sub_eq_iff_eq_add]
+  have h' : (x + u) ^ 2 = u ^ 2 + x * (x + 2 * u) := by
+    nlinarith [h]
+  exact_mod_cast h'
 
 -- 宇宙式とトロミノの橋渡し
 
