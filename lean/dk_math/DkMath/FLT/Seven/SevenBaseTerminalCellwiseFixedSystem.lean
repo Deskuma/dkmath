@@ -191,12 +191,24 @@ noncomputable def
       (awaySevenBaseTerminalOriginalEndpointRow p.row coordinate.row)
       (awaySevenBaseTerminalOriginalRootColumn coordinate.column) := by
   let cell := candidate.cellwiseCRTUniversalSolution coordinate
-  let M := awaySevenBaseTerminalRoutingCell packet coordinate
-  have hendpoint :=
-    packet.routingCell_dvd_originalEndpointFactor coordinate
-  have hroot := packet.routingCell_dvd_terminalRootFactor coordinate
+  let M := cell.cellModulus
+  have hM : M = awaySevenBaseTerminalRoutingCell packet coordinate := by
+    simpa [M] using cell.cellModulus_eq
+  have hendpoint :
+      M ∣ endpointRoutingFactorNat y z
+        (awaySevenBaseTerminalOriginalEndpointRow p.row coordinate.row) := by
+    rw [hM]
+    exact packet.routingCell_dvd_originalEndpointFactor coordinate
+  have hroot :
+      M ∣ match coordinate.column with
+        | .vPart => r.cubic.rootTriple.vPart
+        | .leftPart => r.cubic.rootTriple.leftPart
+        | .rightPart => r.cubic.rootTriple.rightPart := by
+    rw [hM]
+    exact packet.routingCell_dvd_terminalRootFactor coordinate
   have hweighted := cell.weighted_eq_original
   have hfst := cell.weighted_fstEquation
+  rw [← hM]
   refine {
     u := cell.weighted.u
     v := cell.weighted.v
@@ -230,12 +242,13 @@ noncomputable def
     cases hrow :
         awaySevenBaseTerminalOriginalEndpointRow p.row coordinate.row
     · exact (ZMod.natCast_eq_zero_iff y M).2
-        (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
+            (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
     · exact (ZMod.natCast_eq_zero_iff z M).2
-        (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
+            (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
     · have hzero := (ZMod.natCast_eq_zero_iff (y + z) M).2
           (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
-      simpa [AwayEndpointPrimePowerEquation, AwayEndpointLocalEquation,
+      simpa [M, awaySevenBaseTerminalOriginalCoordinates,
+        AwayEndpointPrimePowerEquation, AwayEndpointLocalEquation,
         Nat.cast_add] using hzero
   · rw [hweighted]
     rcases coordinate with ⟨row, column⟩
@@ -263,7 +276,10 @@ noncomputable def
           r.cubic.rootTriple.normal.root.snd := by
         apply intCast_dvd_of_dvd_natAbs
         simpa [← r.cubic.rootTriple.leftPart_eq] using hroot
-      simpa [AwayRootPrimePowerEquation, AwayRootLocalEquation,
+      simpa [M,
+        awaySevenBaseTerminalOriginalRootColumn,
+        awaySevenBaseTerminalOriginalCoordinates, AwayRootPrimePowerEquation,
+        AwayRootLocalEquation,
         leftCubicZMod, seventhPowerSndLeftCubic] using
         intCast_zero_of_dvd' hi
     · have hi : (M : ℤ) ∣ seventhPowerSndRightCubic
@@ -271,7 +287,10 @@ noncomputable def
           r.cubic.rootTriple.normal.root.snd := by
         apply intCast_dvd_of_dvd_natAbs
         simpa [← r.cubic.rootTriple.rightPart_eq] using hroot
-      simpa [AwayRootPrimePowerEquation, AwayRootLocalEquation,
+      simpa [M,
+        awaySevenBaseTerminalOriginalRootColumn,
+        awaySevenBaseTerminalOriginalCoordinates, AwayRootPrimePowerEquation,
+        AwayRootLocalEquation,
         rightCubicZMod, seventhPowerSndRightCubic] using
         intCast_zero_of_dvd' hi
   · exact AwayFirstCoordinatePrimePowerEquation.of_universal _ _
@@ -283,9 +302,11 @@ noncomputable def
             (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
         · exact (ZMod.natCast_eq_zero_iff z M).2
             (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
-        · have hzero := (ZMod.natCast_eq_zero_iff (y + z) M).2
-              (by simpa [hrow, endpointRoutingFactorNat] using hendpoint)
-          simpa [AwayEndpointPrimePowerEquation, AwayEndpointLocalEquation,
+        · have hzero := (ZMod.natCast_eq_zero_iff (y + z) M).2 (by
+            simpa [hrow, endpointRoutingFactorNat] using hendpoint)
+          simpa [M,
+            awaySevenBaseTerminalOriginalCoordinates,
+            AwayEndpointPrimePowerEquation, AwayEndpointLocalEquation,
             Nat.cast_add] using hzero)
       (by
         rw [hweighted]
@@ -298,16 +319,22 @@ noncomputable def
               r.cubic.rootTriple.normal.root.fst
               r.cubic.rootTriple.normal.root.snd := by
             apply intCast_dvd_of_dvd_natAbs
-            simpa [← r.cubic.rootTriple.leftPart_eq] using hroot
-          simpa [AwayRootPrimePowerEquation, AwayRootLocalEquation,
+            simpa [M,
+              ← r.cubic.rootTriple.leftPart_eq] using hroot
+          simpa [M, awaySevenBaseTerminalOriginalRootColumn,
+            awaySevenBaseTerminalOriginalCoordinates, AwayRootPrimePowerEquation,
+            AwayRootLocalEquation,
             leftCubicZMod, seventhPowerSndLeftCubic] using
             intCast_zero_of_dvd' hi
         · have hi : (M : ℤ) ∣ seventhPowerSndRightCubic
               r.cubic.rootTriple.normal.root.fst
               r.cubic.rootTriple.normal.root.snd := by
             apply intCast_dvd_of_dvd_natAbs
-            simpa [← r.cubic.rootTriple.rightPart_eq] using hroot
-          simpa [AwayRootPrimePowerEquation, AwayRootLocalEquation,
+            simpa [M,
+              ← r.cubic.rootTriple.rightPart_eq] using hroot
+          simpa [M, awaySevenBaseTerminalOriginalRootColumn,
+            awaySevenBaseTerminalOriginalCoordinates, AwayRootPrimePowerEquation,
+            AwayRootLocalEquation,
             rightCubicZMod, seventhPowerSndRightCubic] using
             intCast_zero_of_dvd' hi)
       hfst

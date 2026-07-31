@@ -149,7 +149,7 @@ theorem PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
       (fun hd => hQ7 (Int.natCast_dvd.mpr hd))] at hval
   rw [padicValNat.self (by norm_num),
     padicValNat.prime_pow 6,
-    padicValNat.pow 7 p.gapRoot_pos.ne'] at hval
+    padicValNat.pow p.gapRoot 7] at hval
   omega
 
 #print axioms AwaySevenBaseTerminalUnitSectorPacket.ramifiedSummit
