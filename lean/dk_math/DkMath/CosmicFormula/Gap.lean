@@ -45,8 +45,7 @@ lemma exponent_alignment_failure_of_val_eq_one
   -- `padicValNat.*` の補題は `[Fact (Nat.Prime p)]` を要求する
   letI : Fact (Nat.Prime p) := ⟨hp⟩
   -- 左：v_p(x^d) = d * v_p(x)
-  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by
-    simpa using (padicValNat.pow (p := p) (a := x) d hx)
+  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by simp
   -- よって d | v_p(x^d)
   have hdvd_left : d ∣ padicValNat p (x ^ d) := by
     -- d | d * (v_p x)
