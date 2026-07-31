@@ -174,7 +174,7 @@ theorem span_conjugateLoadElement
         (starRingEnd SevenCyclotomicDegreeSixInt.Ring))
       (span_orientedLoadElement p)
   simpa only [conjugateLoadElement, Ideal.map_span,
-    Set.image_singleton,
+    Set.image_singleton, starRingEnd_apply,
     map_star_globalOrientedLoadedCarrierIdeal] using hmap
 
 /-- Expanded principal-ideal specification of the conjugate load element. -/
@@ -196,7 +196,7 @@ theorem span_conjugateResidualRoot
         (starRingEnd SevenCyclotomicDegreeSixInt.Ring))
       (span_orientedResidualRoot p)
   simpa only [conjugateResidualRoot, Ideal.map_span,
-    Set.image_singleton,
+    Set.image_singleton, starRingEnd_apply,
     map_star_globalOrientedResidualIdeal] using hmap
 
 /-- Exact conjugate carrier equation obtained from the oriented equation by
