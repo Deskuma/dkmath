@@ -160,9 +160,6 @@ theorem left_ternarySector_eq_right
 
 end RamifiedPairedThetaRootJetPacket
 
-#print axioms sevenUnitSectorEquiv
-#print axioms
-  RamifiedPairedThetaRootJetPacket.left_binarySector_eq_neg_right
 
 end
 

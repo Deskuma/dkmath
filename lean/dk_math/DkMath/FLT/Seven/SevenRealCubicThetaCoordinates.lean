@@ -82,7 +82,6 @@ theorem rightSource_thetaCoordinates (a n : ℤ) :
   simp [thetaConstInt, thetaLinearInt, thetaSquareInt, rightSource]
   ring
 
-#print axioms theta_coordinate_decomposition
 
 end SevenRealCubicInt
 

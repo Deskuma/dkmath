@@ -299,16 +299,6 @@ end QuotientPrimeSupport
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  SevenCyclotomicDegreeSixInt.exists_mul_pow_of_span_eq_mul_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.cyclotomicDegreeSixCarrier_eq_load_mul_residualRoot_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.cyclotomicDegreeSixCarrierConj_eq_load_mul_residualRoot_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.elementLevelOrientedPowerPacket
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.elementLevelOrientedConjugatePowerPacket
 
 end
 

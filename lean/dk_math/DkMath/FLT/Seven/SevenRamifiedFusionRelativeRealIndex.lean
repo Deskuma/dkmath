@@ -83,8 +83,6 @@ theorem relativeRealIndex_fiber_one
 
 end RamifiedPairedThetaRootJetPacket
 
-#print axioms
-  RamifiedPairedThetaRootJetPacket.relativeRealIndex_eq_one_iff
 
 end
 

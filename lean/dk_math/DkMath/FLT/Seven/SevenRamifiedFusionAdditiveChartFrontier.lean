@@ -308,18 +308,6 @@ end AdditiveChartFrontierPacket
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.oriented_mul_conjugate_eq_realPairCarrier
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.localEval_orientedLinearCarrier_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.localEval_conjugateLinearCarrier_ne_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.orientedPair_associated_loadedCore
-#print axioms
-  RamifiedSignedRootRoutingPacket.nonempty_additiveChartFrontierPacket
-#print axioms
-  RamifiedSignedRootRoutingPacket.AdditiveChartFrontierPacket.orientedLoadedFactor_chartReadyAt
 
 end
 

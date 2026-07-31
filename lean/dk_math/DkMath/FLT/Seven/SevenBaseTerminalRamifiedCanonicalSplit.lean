@@ -292,12 +292,6 @@ theorem receiver_iff_independent_seventh_powers
     rw [← p.compensationCore_eq, hc, hb]
     ring
 
-#print axioms RamifiedSecondCoordinateRoutingPacket.nonempty_canonicalSplit
-#print axioms RamifiedSecondCoordinateCanonicalSplit.cubicGap_natAbs_eq
-#print axioms
-  RamifiedSecondCoordinateCanonicalSplit.receiver_iff_cubicGap_seventh_shape
-#print axioms
-  RamifiedSecondCoordinateCanonicalSplit.receiver_iff_independent_seventh_powers
 
 end RamifiedSecondCoordinateCanonicalSplit
 

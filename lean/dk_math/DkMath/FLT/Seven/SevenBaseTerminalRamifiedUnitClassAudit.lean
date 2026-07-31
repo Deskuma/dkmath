@@ -104,8 +104,5 @@ theorem RamifiedGapUnitBridgePacket.seventhPowerMod49_or_not
     p.IsSeventhPowerMod49 ∨ ¬ p.IsSeventhPowerMod49 :=
   Classical.em _
 
-#print axioms RamifiedGapUnitBridgePacket.explicitUnit_reduction
-#print axioms RamifiedGapUnitBridgePacket.isSeventhPowerMod49_iff
-#print axioms RamifiedGapUnitBridgePacket.isSeventhPowerMod49_iff_residue
 
 end DkMath.FLT.Seven

@@ -179,11 +179,6 @@ theorem unitMulPowOfSpanEqPow
 #synth IsDomain Ring
 #synth IsPrincipalIdealRing Ring
 
-#print axioms zetaInv_eq_pow_six
-#print axioms adjoin_zeta_eq_top
-#print axioms ringOfIntegersToRing_surjective
-#print axioms ringIsPrincipalIdealRing
-#print axioms unitMulPowOfSpanEqPow
 
 end SevenCyclotomicDegreeSixInt
 

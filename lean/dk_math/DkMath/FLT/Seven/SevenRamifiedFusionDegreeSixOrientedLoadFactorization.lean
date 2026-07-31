@@ -167,14 +167,6 @@ theorem degreeSixOrientedLoadFactorizationPacket :
 
 end RamifiedFusionRow2LoadFamily
 
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.map_kernelPower_eq_orientedPairPower
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.orientedPairPowers_pairwise_isCoprime
-#print axioms
-  RamifiedFusionRow2LoadFamily.globalDegreeSixOrientedFactorIdeal_eq_span_ofReal_load
-#print axioms
-  RamifiedFusionRow2LoadFamily.degreeSixOrientedLoadFactorizationPacket
 
 end
 

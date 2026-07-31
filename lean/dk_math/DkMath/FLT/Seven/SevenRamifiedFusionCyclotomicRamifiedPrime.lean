@@ -435,13 +435,6 @@ theorem ramifiedPrime_ownership_packet
 
 end RamifiedSignedRootDepthPacket
 
-#print axioms SevenCyclotomicDegreeSixInt.ramifiedPrime_eq_span_uniformizer
-#print axioms
-  RamifiedSignedRootDepthPacket.cyclotomicDegreeSixCarrier_not_mem_ramifiedPrime_sq
-#print axioms
-  RamifiedSignedRootDepthPacket.cyclotomicDegreeSixCarrierConj_not_mem_ramifiedPrime_sq
-#print axioms
-  RamifiedSignedRootDepthPacket.ramifiedPrime_ownership_packet
 
 end
 

@@ -502,13 +502,5 @@ noncomputable def
     TerminalPrimitiveRamifiedSummitPacket :=
   Classical.choice terminal.nonempty_terminalRamifiedSummit
 
-#print axioms
-  AwaySevenBaseTerminalUnitSectorPacket.terminalRamifiedSummit
-#print axioms TerminalPrimitiveRamifiedSummitPacket.rootSnd_depth_eq_five
-#print axioms TerminalPrimitiveRamifiedSummitPacket.rootSnd_mul_sndCore_eq
-#print axioms
-  TerminalPrimitiveRamifiedSummitPacket.nonempty_secondCoordinateRouting
-#print axioms
-  TerminalPrimitiveRamifiedSummitPacket.receiver_of_compensationCore_eq_one
 
 end DkMath.FLT.Seven

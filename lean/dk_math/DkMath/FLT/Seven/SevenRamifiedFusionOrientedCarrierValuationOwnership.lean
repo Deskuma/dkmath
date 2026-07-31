@@ -1820,20 +1820,6 @@ end QuotientPrimeSupport
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.orientedKernelPower_dvd_span_carrier
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.conjugateKernelPower_dvd_span_conjugateCarrier
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.carrier_mem_orientedKernelPower
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.carrier_mem_orientedKernelPower_iff
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalRealCoreFactorIdeal_eq_span_realPairCore
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalCarrierFactorIdeal_pair_exact
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalCarrierValuationOwnershipPacket
 
 end
 

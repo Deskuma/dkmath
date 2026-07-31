@@ -533,16 +533,6 @@ theorem exists_inner_cubic_factor_signed_seventh_powers
   exact ⟨exists_int_seventh_root_of_natAbs_eq hleft,
     exists_int_seventh_root_of_natAbs_eq hright⟩
 
-#print axioms PrimitiveRamifiedSummitPacket.root_gcd_conj_isUnit
-#print axioms RamifiedSecondCoordinateCanonicalSplit.nonempty_quadraticInnerRoot
-#print axioms RamifiedQuadraticInnerRootPacket.coordinate_eq_fortyNine
-#print axioms RamifiedQuadraticInnerRootPacket.innerRoot_coordinates_isCoprime
-#print axioms RamifiedQuadraticInnerRootPacket.innerRoot_norm_eq
-#print axioms RamifiedQuadraticInnerRootPacket.innerRootSnd_depth_eq_four
-#print axioms
-  RamifiedQuadraticInnerRootPacket.exists_inner_secondCoordinate_split
-#print axioms
-  RamifiedQuadraticInnerRootPacket.exists_inner_cubic_factor_signed_seventh_powers
 
 end RamifiedQuadraticInnerRootPacket
 

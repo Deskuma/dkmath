@@ -307,11 +307,5 @@ theorem PrimitiveRamifiedSummitPacket.isSeventhPowerMod49_iff_three_residues
     · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h))))
     · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr h))))
 
-#print axioms PrimitiveRamifiedSummitPacket.explicitUnit_mod49_eq
-#print axioms PrimitiveRamifiedSummitPacket.residualRoot_mod49_classifier
-#print axioms
-  PrimitiveRamifiedSummitPacket.isSeventhPowerMod49_iff_residualRoot_eq_one
-#print axioms
-  PrimitiveRamifiedSummitPacket.isSeventhPowerMod49_iff_three_residues
 
 end DkMath.FLT.Seven

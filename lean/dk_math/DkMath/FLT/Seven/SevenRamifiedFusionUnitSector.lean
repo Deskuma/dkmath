@@ -84,8 +84,6 @@ theorem gapRoot_modSeven_eq
   rw [p.quotientRoot_modSeven_eq_one, mul_one, hn, add_zero] at h
   simpa [q, ZMod.pow_card, pow_two, mul_assoc] using h
 
-#print axioms quotientRoot_modSeven_eq_one
-#print axioms gapRoot_modSeven_eq
 
 end RamifiedSignedRootDepthPacket
 

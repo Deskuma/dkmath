@@ -363,16 +363,6 @@ theorem margins_and_cycles_do_not_determine_board :
 
 end RamifiedSignedRootRoutingPacket.ActiveUnitBoard
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.ActiveUnitBoard.cycleRatio12_div_cycleRatio23_eq
-#print axioms
-  RamifiedSignedRootRoutingPacket.ActiveUnitBoard.cyclePhaseTwist_cycles
-#print axioms
-  RamifiedSignedRootRoutingPacket.ActiveUnitBoard.hiddenRowTwist_cycles
-#print axioms
-  RamifiedSignedRootRoutingPacket.ActiveUnitBoard.margins_do_not_determine_cycles
-#print axioms
-  RamifiedSignedRootRoutingPacket.ActiveUnitBoard.margins_and_cycles_do_not_determine_board
 
 end
 

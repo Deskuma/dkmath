@@ -240,13 +240,6 @@ theorem relativeCyclotomicIndex_eq_one_iff
 
 end RamifiedPairedThetaRootJetPacket
 
-#print axioms
-  AwaySevenBaseTerminalUnitSectorPacket.ramifiedSummitWithProvenance
-#print axioms RamifiedSignedRootRoutingPacket.activeCells_not_seven_dvd
-#print axioms
-  RamifiedPairedThetaRootJetPacket.nonempty_fusionRoutingAudit
-#print axioms
-  RamifiedPairedThetaRootJetPacket.relativeCyclotomicIndex_eq_one_iff
 
 end
 

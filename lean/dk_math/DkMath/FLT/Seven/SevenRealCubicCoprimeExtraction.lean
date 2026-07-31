@@ -366,13 +366,6 @@ theorem unitWeightedPowerDifference_eq
 
 end RamifiedRealCubicUpToUnitPacket
 
-#print axioms SevenRealCubicInt.linearSource_isCoprime_rotateEquiv
-#print axioms SevenRealCubicInt.linearSource_cyclic_pairwiseCoprime
-#print axioms
-  SevenRealCubicInt.exists_unit_mul_pow_seven_of_linearSource_norm_eq
-#print axioms RamifiedRealCubicNormPacket.nonempty_upToUnit
-#print axioms
-  RamifiedRealCubicUpToUnitPacket.unitWeightedPowerDifference_eq
 
 end
 

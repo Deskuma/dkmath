@@ -206,10 +206,6 @@ theorem cycleRatio_square_div_eq_fusionSlope_sq
 
 end RamifiedFusionRoutingAuditPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.cycleRatio_div_eq_absoluteFusionSlope
-#print axioms
-  RamifiedFusionRoutingAuditPacket.cycleRatio_square_div_eq_fusionSlope_sq
 
 end
 

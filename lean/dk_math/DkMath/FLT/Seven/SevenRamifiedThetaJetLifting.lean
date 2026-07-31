@@ -257,9 +257,5 @@ theorem triangularJetJacobianDet_ne_zero
   rw [triangularJetJacobianDet_eq]
   exact pow_ne_zero 12 hA
 
-#print axioms triangularJet_depth_step
-#print axioms triangularJet_depth_three_six
-#print axioms nonempty_triangularThetaJetExact
-#print axioms triangularJetJacobianDet_ne_zero
 
 end DkMath.FLT.Seven

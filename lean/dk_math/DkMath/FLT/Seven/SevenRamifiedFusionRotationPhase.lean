@@ -197,9 +197,6 @@ def rotatedGapCoreResidues
 
 end RamifiedPairedThetaRootJetPacket
 
-#print axioms SevenRealCubicInt.rotate_depthTen_thetaResidue
-#print axioms
-  RamifiedPairedThetaRootJetPacket.rotatedGapCoreResidues
 
 end
 

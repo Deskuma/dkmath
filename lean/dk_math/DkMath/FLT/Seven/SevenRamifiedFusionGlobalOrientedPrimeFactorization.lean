@@ -1135,14 +1135,6 @@ theorem globalOrientedPrimeFactorizationPacket :
 
 end RamifiedFusionRow2LoadFamily
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeGCDLoadAddress.map_rotate_galoisKernel_zero_eq_one
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.map_star_evalKernel_eq_conjugateEvalKernel
-#print axioms
-  RamifiedFusionRow2LoadFamily.map_star_globalDegreeSixOrientedFactorIdeal
-#print axioms
-  RamifiedFusionRow2LoadFamily.globalOrientedPrimeFactorizationPacket
 
 end
 

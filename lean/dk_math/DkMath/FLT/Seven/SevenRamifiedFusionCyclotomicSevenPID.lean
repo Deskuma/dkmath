@@ -160,11 +160,6 @@ theorem classNumber_eq_one :
   NumberField.classNumber_eq_one_iff.mpr
     (ringOfIntegers_isPrincipalIdealRing K)
 
-#print axioms minkowskiFloor_le_four
-#print axioms orderOf_two_zmodSeven
-#print axioms orderOf_three_zmodSeven
-#print axioms ringOfIntegers_isPrincipalIdealRing
-#print axioms classNumber_eq_one
 
 end CyclotomicSeven
 

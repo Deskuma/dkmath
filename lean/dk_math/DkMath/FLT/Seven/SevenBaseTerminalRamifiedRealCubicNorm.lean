@@ -150,15 +150,6 @@ theorem sourceDifference_eq_normalizedAxis_pow_six_mul_pow_seven
     _ = _ :=
       ramifiedAxis_mul_seven_pow_four_mul_pow_seven p.innerSndRoot
 
-#print axioms
-  RamifiedQuadraticInnerRootPacket.exists_signed_innerSndRoot
-#print axioms
-  RamifiedQuadraticInnerRootPacket.nonempty_realCubicNorm
-#print axioms RamifiedRealCubicNormPacket.norm_leftSource_eq
-#print axioms RamifiedRealCubicNormPacket.norm_rightSource_eq
-#print axioms RamifiedRealCubicNormPacket.signedRootGap_seventhPower_eq
-#print axioms
-  RamifiedRealCubicNormPacket.sourceDifference_eq_normalizedAxis_pow_six_mul_pow_seven
 
 end RamifiedRealCubicNormPacket
 

@@ -464,8 +464,5 @@ theorem
         (Int.natAbs (p.endpointLeft - p.endpointRight)) := by
   rw [p.cubicGap_padicValNat, p.endpointGap_padicValNat]
 
-#print axioms AwaySevenBaseTerminalUnitSectorPacket.ramifiedCubicRouting
-#print axioms
-  PrimitiveRamifiedSummitPacket.cubicGap_depth_eq_endpointGap_depth
 
 end DkMath.FLT.Seven

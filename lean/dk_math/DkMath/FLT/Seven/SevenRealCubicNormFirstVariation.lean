@@ -219,11 +219,6 @@ theorem nonempty_normFirstVariation
 
 end RamifiedSignedRootDepthPacket
 
-#print axioms SevenRealCubicInt.norm_add_seven_cube_axis_mul
-#print axioms
-  RamifiedRealCubicDepthLedgerPacket.exists_normVariationCore
-#print axioms
-  RamifiedSignedRootDepthPacket.nonempty_normFirstVariation
 
 end
 

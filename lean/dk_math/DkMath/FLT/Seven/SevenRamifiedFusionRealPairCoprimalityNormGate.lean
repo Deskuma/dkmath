@@ -765,15 +765,6 @@ theorem nonempty_realPairCoreAssociatedPowerSplit_of_row2_cells_eq_one
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootDepthPacket.realPairCores_pairwiseCoprime
-#print axioms RamifiedSignedRootDepthPacket.norm_realPairCore
-#print axioms
-  RamifiedSignedRootDepthPacket.nonempty_realPairCoreAssociatedPowerSplit
-#print axioms
-  RamifiedSignedRootRoutingPacket.nonempty_col3SeventhPowerSplit
-#print axioms
-  RamifiedSignedRootRoutingPacket.quotientRoot_signedSeventhPower_iff_row2_cells
 
 end
 

@@ -184,20 +184,6 @@ end CyclotomicLinearPrimeAddress
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.eval_cyclotomicDegreeSixCarrier_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.eval_cyclotomicDegreeSixCarrierConj_ne_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_isMaximal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_comap_ofReal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_comap_intCast
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_cardQuot
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.linearPrimeAddress_packet
 
 end
 

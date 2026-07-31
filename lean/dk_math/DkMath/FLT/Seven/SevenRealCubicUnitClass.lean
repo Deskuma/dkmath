@@ -412,12 +412,6 @@ theorem projectiveLog_eq_zero_of_linearSource_eq_unit_mul_pow_seven
   · simp [unitNilpotentX, huB]
   · simp [unitNilpotentX, unitNilpotentY, huB, huC]
 
-#print axioms thetaConstModSeven_mul
-#print axioms projectiveLog_pow_seven
-#print axioms projectiveLog_alpha
-#print axioms projectiveLog_alphaAddOne
-#print axioms
-  projectiveLog_eq_zero_of_linearSource_eq_unit_mul_pow_seven
 
 end SevenRealCubicInt
 
@@ -716,9 +710,9 @@ theorem unit_isSeventhPower_iff_projectiveLog_eq_zero
     apply modelUnitsEquivRingOfIntegers.injective
     simp [hv]
 
-#print axioms unitClassModSeven_natCard
-#print axioms unitClassProjectiveLog_bijective
-#print axioms unit_isSeventhPower_iff_projectiveLog_eq_zero
+-- #print axioms unitClassModSeven_natCard
+-- #print axioms unitClassProjectiveLog_bijective
+-- #print axioms unit_isSeventhPower_iff_projectiveLog_eq_zero
 
 end SevenRealCubic
 
@@ -858,11 +852,6 @@ theorem nonempty_exactPower
 
 end RamifiedRealCubicNormPacket
 
-#print axioms
-  RamifiedRealCubicUpToUnitPacket.leftUnit_projectiveLog_eq_zero
-#print axioms
-  RamifiedRealCubicUpToUnitPacket.nonempty_exactPower
-#print axioms RamifiedRealCubicNormPacket.nonempty_exactPower
 
 end
 

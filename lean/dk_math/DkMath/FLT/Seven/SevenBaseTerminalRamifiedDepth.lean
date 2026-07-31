@@ -152,8 +152,5 @@ theorem PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
     padicValNat.pow p.gapRoot 7] at hval
   omega
 
-#print axioms AwaySevenBaseTerminalUnitSectorPacket.ramifiedSummit
-#print axioms PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
-#print axioms ramifiedSeventhSnd_factorization
 
 end DkMath.FLT.Seven

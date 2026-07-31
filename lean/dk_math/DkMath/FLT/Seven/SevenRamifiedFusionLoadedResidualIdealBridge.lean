@@ -370,10 +370,6 @@ end RealPairLoadedPowerSplit
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.RealPairLoadedPowerSplit.span_realPairCore_eq_loads_mul_residual_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.RealPairLoadedPowerSplit.carrierIdealPair_eq_ramified_sq_mul_loadHalves_mul_residualPair_pow
 
 end
 

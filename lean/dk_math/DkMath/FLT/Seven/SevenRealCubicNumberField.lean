@@ -476,15 +476,6 @@ theorem ringOfIntegersRotateEquiv_three (x : 𝓞 Field) :
     SevenRealCubicInt.rotateEquiv_three,
     modelEquivRingOfIntegers.apply_symm_apply]
 
-#print axioms SevenRealCubic.powerBasis_discr
-#print axioms SevenRealCubic.adjoin_isIntegralClosure
-#print axioms SevenRealCubic.field_discr
-#print axioms SevenRealCubic.nrComplexPlaces_eq_zero
-#print axioms SevenRealCubic.minkowskiClassBound_eq
-#print axioms SevenRealCubic.classNumber_eq_one
-#print axioms SevenRealCubic.modelToRingOfIntegers_surjective
-#print axioms SevenRealCubic.modelToRingOfIntegers_injective
-#print axioms SevenRealCubic.ringOfIntegersRotateEquiv_three
 
 end SevenRealCubic
 
