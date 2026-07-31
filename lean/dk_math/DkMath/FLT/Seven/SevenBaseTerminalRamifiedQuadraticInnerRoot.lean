@@ -105,7 +105,7 @@ theorem rootSnd_sndCore_coprime_of_coordinates_isCoprime
   have hqu6 : (q : ℤ) ∣ root.fst ^ 6 := by
     have := dvd_sub hqS hrest
     convert this using 1
-    ring
+    all_goals first | rfl | ring
   have hqu : (q : ℤ) ∣ root.fst :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqu6
   exact (Nat.prime_iff_prime_int.mp hq).not_unit
