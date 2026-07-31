@@ -5219,7 +5219,7 @@ non-first-case (`p ∣ z - y`) 入力を datum へ詰める canonical prepare de
 
 この段は theorem-level packaging に徹し、未解決責務を descent 側へ押し下げる。
 -/
-def cyclotomicPrincipalizationNonFirstCasePrepare :
+theorem cyclotomicPrincipalizationNonFirstCasePrepare :
     CyclotomicPrincipalizationNonFirstCasePrepareTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hpgap
   exact
@@ -5235,7 +5235,7 @@ non-first-case datum を valuation datum へ持ち上げる canonical packaging�
 
 いまは trivial packaging だが、将来 p-adic valuation 補題で必要な荷物をここへ集約する。
 -/
-def cyclotomicPrincipalizationNonFirstCaseValuation :
+theorem cyclotomicPrincipalizationNonFirstCaseValuation :
     CyclotomicPrincipalizationNonFirstCaseValuationTarget := by
   intro p x y z q data
   exact ⟨data⟩
@@ -5245,7 +5245,7 @@ valuation datum を error datum へ持ち上げる canonical packaging。
 
 いまは trivial packaging だが、将来 error-term 抽出補題で必要な荷物をここへ集約する。
 -/
-def cyclotomicPrincipalizationNonFirstCaseError :
+theorem cyclotomicPrincipalizationNonFirstCaseError :
     CyclotomicPrincipalizationNonFirstCaseErrorTarget := by
   intro p x y z q data
   exact ⟨data⟩
@@ -5255,7 +5255,7 @@ error datum を TailError datum へ持ち上げる canonical packaging。
 
 将来 error-term 抽出の詳細をここへ集約できるよう、peel 側と同名の段を置く。
 -/
-def cyclotomicPrincipalizationNonFirstCaseTailError :
+theorem cyclotomicPrincipalizationNonFirstCaseTailError :
     CyclotomicPrincipalizationNonFirstCaseTailErrorTarget := by
   intro p x y z q data
   exact ⟨data⟩
