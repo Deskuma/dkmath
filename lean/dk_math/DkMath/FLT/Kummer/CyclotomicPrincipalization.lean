@@ -1282,7 +1282,7 @@ theorem linearFactorDiffSpanEqSubOneSpan
       rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
     have hne : ζ ^ i ≠ ζ ^ j := fun h =>
       hij (hζ.pow_inj hi hj h)
-    exact (IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+    exact (IsPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
       hζ hp hηj hηi hne.symm).symm
   simp only [← sub_mul]
   exact associated_span_eq (hdiff.mul_right y)
@@ -1315,7 +1315,7 @@ theorem commonPrimeContainsSubOneY
       rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
     have hne : ζ ^ 1 ≠ ζ ^ j := fun h =>
       hj_ne1 (hζ.pow_inj h1lt hj_lt h).symm
-    have h := IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+    have h := IsPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
       hζ hp hηj hη1 hne.symm
     convert h.symm using 1; simp [pow_one]
   have h_assoc : Associated ((ζ ^ j - ζ) * y) ((ζ - 1) * y) := h_root_assoc.mul_right y
