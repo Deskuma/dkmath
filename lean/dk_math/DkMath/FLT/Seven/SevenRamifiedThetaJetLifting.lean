@@ -89,7 +89,7 @@ theorem triangularJet_depth_step
       simpa [seventhThetaLinearQuotient, GB, GC] using hG
     rw [← hsum] at hDright
     convert dvd_sub hDright hDCsquare using 1
-    ring
+    all_goals first | rfl | ring
   have hcopGB : IsCoprime ((7 : ℤ) ^ (k + 1)) GB :=
     ((show Prime (7 : ℤ) by norm_num).coprime_iff_not_dvd.mpr hGB).pow_left
   have hBnext : (7 : ℤ) ^ (k + 1) ∣ B :=
@@ -99,9 +99,7 @@ theorem triangularJet_depth_step
       (7 : ℤ) ^ (2 * (k + 1)) ∣ B ^ 2 := by
     have := pow_dvd_pow_of_dvd hBnext 2
     convert this using 1
-    rw [← pow_mul]
-    congr 1
-    omega
+    all_goals first | rfl | (rw [← pow_mul]; congr 1; omega)
   have hDCHC :
       (7 : ℤ) ^ (2 * (k + 1)) ∣ C * HC := by
     have hzero : C * HC + B ^ 2 * HB = 0 := by
