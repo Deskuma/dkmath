@@ -233,8 +233,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_fifth
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m := by
   letI : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hpow :
-      padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by
-    simpa using (padicValNat.pow (p := 5) (a := distinguished) 5 hd0)
+      padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by simp
   have hmul :
       padicValNat 5 (carrier * residual) =
         padicValNat 5 carrier + padicValNat 5 residual := by
