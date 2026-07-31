@@ -89,7 +89,7 @@ theorem cosmic_id (d : ℕ) (x u : ℝ) :
   -- 補題1と補題2より、二つの和が相殺されて u^d のみが残る
   rw [h1, h2]
   simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
-  ring
+  ring_nf
 
 
 /-! ### C: 解析接続の橋脚（体積定数） -/
@@ -522,7 +522,7 @@ lemma powPi_eq (s : ℂ) : powPi s = (π : ℂ)^(s/2) := by
   -- 版によっては `Complex.cpow_def` の名前が違うので調整
   simp [powPi, Complex.cpow_def]
   -- π は正の実数なので log π = log |π| + 0*I が成り立つ
-  ring
+  ring_nf
 
 /-- 「Gamma 側がちゃんとしている」ことを仮定する安全な局所条件 -/
 def VolGood (s : ℂ) : Prop :=
@@ -556,7 +556,8 @@ theorem differentiableAt_volConstC_of_good {s : ℂ} (hs : VolGood s) :
   have hden0 : (fun s => Complex.Gamma (s/2 + 1)) s ≠ 0 := hΓ0
   -- いよいよ本体
   -- `volConstC` の定義に合わせて `simp [volConstC]` を使う
-  simpa [volConstC] using hnum.div hden hden0
+  unfold volConstC
+  exact hnum.div hden hden0
 
 /-!
 次の一手：
@@ -584,7 +585,9 @@ lemma differentiableAt_one_div_Gamma_affine (s : ℂ) :
   -- 合成
   have h := h_outer.comp s h_inner
   -- 1/z = z⁻¹ を使って型を合わせる
-  simpa [div_eq_inv_mul, one_mul] using h
+  convert h using 1 <;> try rfl
+  funext z
+  simp only [Function.comp_apply, one_div]
 
 
 /-- `volConstC` は全域で正則（= entire）。 -/
@@ -604,7 +607,10 @@ theorem differentiableAt_volConstC (s : ℂ) :
     differentiableAt_one_div_Gamma_affine s
   -- 仕上げ：積の正則性
   -- `volConstC` の定義が `/` なら `div_eq_mul_inv` と `one_div` で合わせる
-  simpa [volConstC, div_eq_mul_inv, one_div] using hnum.mul hrec
+  unfold volConstC
+  convert hnum.mul hrec using 1 <;> try rfl
+  funext z
+  simp only [div_eq_mul_inv, one_div, mul_one, one_mul, Pi.mul_apply]
 
 
 /-- したがって `volConstC` は関数として全域で微分可能。 -/
@@ -712,7 +718,8 @@ theorem differentiableAt_ballVolC (r : ℝ) (s : ℂ) :
   -- volConstC は entire（既に証明済み）
   have h1 : DifferentiableAt ℂ volConstC s := differentiableAt_volConstC s
   have h2 : DifferentiableAt ℂ (fun s => rpowPos r s) s := differentiableAt_rpowPos r s
-  simpa using h1.mul h2
+  change DifferentiableAt ℂ (fun s : ℂ => volConstC s * rpowPos r s) s
+  exact h1.mul h2
 
 
 /-- r>0 かつ n : ℕ に対し、rpowPos r n = r^n （複素数冪乗） -/
@@ -1097,7 +1104,7 @@ theorem volConstR_odd_eval_prod (m : ℕ) :
       -- まとめ
       calc
         volConstR (2*(m+1) + 1)
-            = volConstR (2*m + 3) := by ring
+            = volConstR (2*m + 3) := by ring_nf
         _ = ((2 * Real.pi) * volConstR (2*m + 1)) / (2*m + 3 : ℝ) := by
               simpa using hsolve
         _ = ((2 * Real.pi) * ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m)) / (2*m + 3 : ℝ) := by
