@@ -1474,7 +1474,11 @@ private theorem ramifiedPrime_ne_orientedKernel
     change
       SevenCyclotomicDegreeSixInt.ramifiedEval
         (7 : SevenCyclotomicDegreeSixInt.Ring) = 0
-    simpa only [map_natCast] using ZMod.natCast_self 7
+    change SevenCyclotomicDegreeSixInt.ramifiedEval
+      (SevenCyclotomicDegreeSixInt.ofReal (7 : SevenRealCubicInt)) = 0
+    rw [SevenCyclotomicDegreeSixInt.ramifiedEval_ofReal]
+    change (7 : ZMod 7) + 3 * 0 + 9 * 0 = 0
+    simpa using (ZMod.natCast_self 7)
   have hnot :
       (7 : SevenCyclotomicDegreeSixInt.Ring) ∉
         s.orientedKernel := by
@@ -1503,7 +1507,11 @@ private theorem ramifiedPrime_ne_conjugateKernel
     change
       SevenCyclotomicDegreeSixInt.ramifiedEval
         (7 : SevenCyclotomicDegreeSixInt.Ring) = 0
-    simpa only [map_natCast] using ZMod.natCast_self 7
+    change SevenCyclotomicDegreeSixInt.ramifiedEval
+      (SevenCyclotomicDegreeSixInt.ofReal (7 : SevenRealCubicInt)) = 0
+    rw [SevenCyclotomicDegreeSixInt.ramifiedEval_ofReal]
+    change (7 : ZMod 7) + 3 * 0 + 9 * 0 = 0
+    simpa using (ZMod.natCast_self 7)
   have hnot :
       (7 : SevenCyclotomicDegreeSixInt.Ring) ∉
         s.conjugateKernel := by
