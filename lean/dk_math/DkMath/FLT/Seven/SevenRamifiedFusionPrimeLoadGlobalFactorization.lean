@@ -177,7 +177,7 @@ theorem prod_primeSupport_primePow_eq_cell :
         (Nat.prime_of_mem_primeFactors s.2)]
     _ = family.cell p := by
       simpa only [PrimeSupport] using
-        (Nat.prod_pow_primeFactors_factorization
+        (Nat.prod_primeFactors_coe_pow_factorization
           (cell_ne_zero family p)).symm
 
 /-- Pairwise comaximality combines the complete set of local kernel-power

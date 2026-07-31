@@ -1231,7 +1231,7 @@ theorem prod_quotientPrimeSupport_primePow_eq_natAbs :
         Nat.factorization_def _ s.prime]
     _ = Int.natAbs p.signedDepth.quotientRoot := by
       simpa only [RamifiedSignedRootRoutingPacket.QuotientPrimeSupport] using
-        (Nat.prod_pow_primeFactors_factorization
+        (Nat.prod_primeFactors_coe_pow_factorization
           quotientRoot_natAbs_ne_zero).symm
 
 /-- Pairwise comaximality combines all local exact lower bounds. -/
