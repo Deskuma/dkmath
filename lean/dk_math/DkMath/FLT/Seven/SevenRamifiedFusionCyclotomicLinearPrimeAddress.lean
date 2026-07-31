@@ -78,8 +78,11 @@ theorem eval_cyclotomicDegreeSixCarrierConj_ne_zero
     p.degreeSixLocalRatioProvider
       |>.localEval_conjugateLinearCarrier_ne_zero
         a.quotientAddress
-  simpa only [eval, degreeSixLocalRatioProvider,
-    provider_conjugateLinearCarrier_eq] using h
+  change
+    (SevenCyclotomicDegreeSixInt.localEval a.quotientAddress)
+        p.signedDepth.cyclotomicDegreeSixCarrierConj ≠ 0
+  rw [← provider_conjugateLinearCarrier_eq (p := p)]
+  exact h
 
 /-- Kernel-exclusion form of the conjugate-orientation theorem. -/
 theorem cyclotomicDegreeSixCarrierConj_not_mem_evalKernel
