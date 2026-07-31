@@ -213,16 +213,16 @@ theorem field_discr :
   apply (algebraMap ℤ ℚ).injective_int
   rw [← NumberField.discr_eq_discr _ pB.basis, ← hloc]
   convert powerBasis_discr using 1
-  have hdim : pB.dim = powerBasis.dim := by
-    rw [← PowerBasis.finrank, ← PowerBasis.finrank]
-    exact NumberField.RingOfIntegers.rank Field
-  rw [← Algebra.discr_reindex _ _ (finCongr hdim)]
-  congr 1
-  ext i
-  simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
-    PowerBasis.coe_basis, pB, integralPowerBasis_gen]
-  simp
-  norm_num
+  · have hdim : pB.dim = powerBasis.dim := by
+      rw [← PowerBasis.finrank, ← PowerBasis.finrank]
+      exact NumberField.RingOfIntegers.rank Field
+    rw [← Algebra.discr_reindex _ _ (finCongr hdim)]
+    congr 1
+    ext i
+    simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
+      PowerBasis.coe_basis, pB, integralPowerBasis_gen]
+    simp
+  · norm_num
 
 /-- The cubic field has no complex places.  Positivity of its discriminant
 forces an even number of complex places, while degree three bounds that
