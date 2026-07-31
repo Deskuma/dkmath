@@ -131,8 +131,8 @@ theorem linearSource_isCoprime_rotateEquiv
               q ∣ (7 : SevenRealCubicInt) :=
             prime_dvd_intCast_of_dvd_eisensteinAxis hq hqtheta
           obtain ⟨k, rfl⟩ := hseven
-          simpa only [Int.cast_mul] using
-            dvd_mul_of_dvd_left hqseven (k : SevenRealCubicInt)
+          convert dvd_mul_of_dvd_left hqseven (k : SevenRealCubicInt) using 1
+          norm_num
         · exact
             (hq.not_unit
               (isUnit_of_dvd_unit hqalpha alpha_isUnit)).elim
