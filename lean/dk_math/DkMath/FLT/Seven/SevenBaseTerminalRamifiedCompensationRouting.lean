@@ -271,13 +271,12 @@ theorem gapRoot_gapQuotient_coprime
     convert dvd_add
       (dvd_mul_of_dvd_right hqh (-7 * p.summit.endpointRight))
       (dvd_mul_of_dvd_right
-        (dvd_pow hqh (by decide : 2 ≠ 0)) (-14)) using 1 <;>
-      first | rfl | simp | ring
+        (dvd_pow hqh (by decide : 2 ≠ 0)) (-14)) using 1 <;> rfl
   have hqe2 : (q : ℤ) ∣ p.summit.endpointRight ^ 2 := by
     have := dvd_sub hqQ hqrest
     have hneg : (q : ℤ) ∣ -(p.summit.endpointRight ^ 2) := by
       convert this using 1 <;>
-        first | rfl | (try simp [ramifiedGapQuotient]) | ring
+        first | rfl | simp [ramifiedGapQuotient]
     simpa only [dvd_neg] using hneg
   have hqe : (q : ℤ) ∣ p.summit.endpointRight :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqe2
