@@ -610,7 +610,7 @@ theorem differentiableAt_volConstC (s : ℂ) :
   unfold volConstC
   convert hnum.mul hrec using 1 <;> try rfl
   funext z
-  simp only [div_eq_mul_inv, one_div, mul_one, one_mul, Pi.mul_apply]
+  simp only [div_eq_mul_inv, one_mul, Pi.mul_apply]
 
 
 /-- したがって `volConstC` は関数として全域で微分可能。 -/
