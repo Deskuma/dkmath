@@ -212,7 +212,7 @@ lemma quality_le_of_not_bad_diag
     let rhs := (rad n * rad (n + 1) : ℝ)
     -- lhs ≤ floor (rhs ^ δ) as integers
     have hnat : (lhs : ℕ) ≤ Nat.floor (rhs ^ δ) := by
-      have : ¬ ((lhs : ℕ) > Nat.floor (rhs ^ δ)) := by simpa using h_not_bad
+      have : ¬ ((lhs : ℕ) > Nat.floor (rhs ^ δ)) := by simpa [lhs, rhs] using h_not_bad
       exact not_lt.mp this
     -- cast to reals and apply Nat.floor_le
     have h1 : (lhs : ℝ) ≤ (Nat.floor (rhs ^ δ) : ℝ) := by exact_mod_cast hnat
@@ -227,8 +227,8 @@ lemma quality_le_of_not_bad_diag
 
   have hsum : n + (n + 1) = n + (n + 1) := rfl
   -- 明示的に実数化した hbound を作り、重複した refine を整理して一度だけ呼び出す
-  have hbound :  ↑(n + (n + 1)) ≤ (rad (n * (n + 1) * (n + (n + 1))) : ℝ) ^ (1 + ε) :=
-  by convert hbound_real using 1; norm_cast
+  have hbound :  ↑(n + (n + 1)) ≤ (rad (n * (n + 1) * (n + (n + 1))) : ℝ) ^ (1 + ε) := by
+    simpa using hbound_real
   exact quality_le_of_sqprod_pow_bound ε δ hε (coprime_succ n) hsum hrad_gt_one hbound Hsq
 
 
