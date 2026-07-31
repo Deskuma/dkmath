@@ -857,7 +857,7 @@ abbrev CyclotomicPrincipalIdealExtractionTarget : Prop :=
   ∀ {R : Type*} [CommRing R] [IsDomain R]
       {I : (FractionalIdeal (nonZeroDivisors R) (FractionRing R))ˣ} {I' : Ideal R},
       ((I : FractionalIdeal (nonZeroDivisors R) (FractionRing R)) = I') →
-      ClassGroup.mk I = 1 →
+      ClassGroup.mk (FractionRing R) I = 1 →
       ∃ x, x ≠ 0 ∧ I' = Ideal.span {x}
 
 /--
@@ -1954,7 +1954,8 @@ lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
   calc
     Polynomial.eval (a : E) (Polynomial.map (algebraMap ℚ E) (Polynomial.cyclotomic p ℚ))
         = Polynomial.eval₂ (algebraMap ℚ E) (a : E) (Polynomial.cyclotomic p ℚ) := by
-            simpa using (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
+            simpa [Polynomial.aeval_def] using
+              (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
     _ = (algebraMap ℚ E) (Polynomial.eval a (Polynomial.cyclotomic p ℚ)) := by
           simpa using
             (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ E) a)
@@ -3233,7 +3234,8 @@ theorem cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
     simpa [factor, cyclotomicLinearFactorInRingOfIntegers, pow_zero] using hgap_eq
   have hxpow_nat_gap :
       x ^ p = gap * GN p gap y := by
-    simpa [PrimeGe5CounterexamplePack.gap, hgap_nat] using hpack.xpow_eq_gap_mul_GN
+    simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap,
+      hgap_nat] using hpack.xpow_eq_gap_mul_GN
   have hxpow_eq_gap_mul_gn_gap :
       (x : 𝓞 K) ^ p = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by
     calc
