@@ -60,8 +60,9 @@ theorem AwaySevenPivotDepthPacket.rootFst_isUnit_of_lifted {x y z : ℕ}
   have hu : ¬ (7 : ℤ) ∣ r.cubic.rootTriple.normal.root.fst := by
     intro hu
     exact hlin (hu.add (dvd_mul_of_dvd_right hv 4))
-  simpa [AwaySevenPivotDepthPacket.upperModulus] using
-    intCast_isUnit_zmod_sevenPower (k := p.exponent) hu
+  change IsUnit ((r.cubic.rootTriple.normal.root.fst : ℤ) :
+    ZMod (7 ^ p.exponent))
+  exact intCast_isUnit_zmod_sevenPower (k := p.exponent) hu
 
 private theorem rootSnd_seventh_dvd_upper {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r)
@@ -132,8 +133,9 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
       rw [hv7] at heq'
       have hsub : s.u^7 - s.z^3 = 0 := by simpa using heq'
       exact (sub_eq_zero.mp hsub).symm
-    exact .y hy (unit_three_seven_parametrization (isUnit_one) hu hw
-      (by simpa using horbit))
+    exact .y hy (by
+      convert unit_three_seven_parametrization (isUnit_one) hu hw
+        (by simpa only [one_mul] using horbit) using 1; rfl)
   · by_cases hz : p.row = .z
     · have hw : IsUnit s.y := by
         simpa [AwayEndpointPrimePowerNondegenerate, AwayEndpointLocalNondegenerate,
@@ -144,8 +146,9 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
         rw [hv7] at heq'
         rw [show (-s.u)^7 = -s.u^7 by ring]
         linear_combination heq'
-      exact .z hz (unit_three_seven_parametrization (isUnit_one) hu.neg hw
-        (by simpa using horbit))
+      exact .z hz (by
+        convert unit_three_seven_parametrization (isUnit_one) hu.neg hw
+          (by simpa only [one_mul] using horbit) using 1; rfl)
     · have hs : p.row = .sum := by
         cases hrow : p.row with
         | y => exact False.elim (hy hrow)
@@ -162,8 +165,9 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
         rw [hv7] at heq'
         rw [show (-s.u)^7 = -s.u^7 by ring]
         linear_combination heq'
-      exact .sum hs (unit_three_seven_parametrization (isUnit_one) hu.neg hw
-        (by simpa using horbit))
+      exact .sum hs (by
+        convert unit_three_seven_parametrization (isUnit_one) hu.neg hw
+          (by simpa only [one_mul] using horbit) using 1; rfl)
 
 structure AwaySevenRamifiedKernelPacket {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) : Type where
@@ -193,8 +197,8 @@ theorem nonempty_awaySevenRamifiedKernelPacket {x y z : ℕ}
   refine ⟨⟨eta, hn, ?_, ?_⟩⟩
   · simpa [AwaySevenPivotDepthPacket.lowerModulus,
       AwaySevenPivotDepthPacket.lowerExponent] using heta
-  · simpa [AwaySevenPivotDepthPacket.upperModulus] using
-      intCast_isUnit_zmod_sevenPower (k := p.exponent) hn
+  · change IsUnit ((eta : ℤ) : ZMod (7 ^ p.exponent))
+    exact intCast_isUnit_zmod_sevenPower (k := p.exponent) hn
 
 structure AwaySevenTerminalExclusionStatement {x y z : ℕ}
     (source : CounterexamplePack x y z) {r : AwayCubicRoutingPacket x y z}

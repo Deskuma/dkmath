@@ -146,9 +146,5 @@ theorem RamifiedGapUnitBridgePacket.cubicGap_eq_endpointGap_mul_explicitUnit
       simp only [explicitUnit]
       ring
 
-#print axioms
-  PrimitiveRamifiedSummitPacket.cubicGap_mul_sndCore_eq_endpointGap_mul_bridge
-#print axioms
-  RamifiedGapUnitBridgePacket.cubicGap_eq_endpointGap_mul_explicitUnit
 
 end DkMath.FLT.Seven

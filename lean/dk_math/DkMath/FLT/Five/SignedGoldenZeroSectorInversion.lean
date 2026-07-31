@@ -136,7 +136,7 @@ theorem coprime_natAbs_goldenFifthSndFactor_of_coprime
       rw [hk]
       ring
     convert dvd_sub hqHZ htail using 1
-    all_goals ring
+    all_goals first | ring | rfl
   have hqr4 : q ∣ r.natAbs ^ 4 := by
     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
   have hqr : q ∣ r.natAbs := hqPrime.dvd_of_dvd_pow hqr4
@@ -248,7 +248,7 @@ theorem five_not_dvd_H (p : GoldenZeroSectorCandidate) :
     (⟨p.r, p.s⟩ : GoldenInt)
   have hnormSq : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ ^ 2 := by
     convert dvd_sub hH hdiff using 1
-    all_goals ring
+    all_goals first | ring | rfl
   have hnorm : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ :=
     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
   apply p.five_not_dvd_b

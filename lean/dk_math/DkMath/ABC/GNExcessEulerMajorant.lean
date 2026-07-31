@@ -218,7 +218,9 @@ theorem summable_GNExcessHalfPowerEnvelope
         (fun q : ℕ =>
           1 / (q : ℝ) ^ ((3 : ℝ) / 2)) :=
     Real.summable_one_div_nat_rpow.mpr (by norm_num)
-  simpa [GNExcessHalfPowerEnvelope, div_eq_mul_inv,
+  change Summable (fun q : ℕ =>
+    4 * ((p - 1 : ℕ) : ℝ) / (q : ℝ) ^ ((3 : ℝ) / 2))
+  simpa [div_eq_mul_inv,
     ← mul_assoc] using
       hbase.mul_left
         (4 * ((p - 1 : ℕ) : ℝ))

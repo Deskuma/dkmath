@@ -496,7 +496,11 @@ theorem quotientRoot_modSeven_eq_one_from_pairCores
     p.realPairCore_thetaResidue 2] at h
   norm_num [thetaResidue, thetaConstModSeven, eisensteinAxis,
     SevenRealCubicInt.pairPhase, SevenRealCubicInt.phaseUnit] at h
-  simpa [thetaResidue, thetaConstModSeven] using h.symm
+  have h8 : (8 : ZMod 7) = 1 := by
+    change ((8 : ℕ) : ZMod 7) = ((1 : ℕ) : ZMod 7)
+    rw [ZMod.natCast_eq_natCast_iff]
+    decide
+  simpa [thetaResidue, thetaConstModSeven, h8] using h.symm
 
 end RamifiedSignedRootDepthPacket
 

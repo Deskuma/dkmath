@@ -231,7 +231,7 @@ variable {T' : Type _} {BT' : BlueprintFamily T'}
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
     extract_g (harmonizeAdd hs x y) = extract_g (encodeLeft hs x) := by
   unfold harmonizeAdd encodeLeft encodeRight
-  simp [gOp]
+  rfl
 
 @[simp] theorem toCoeff_harmonizeAddTo [Add C]
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
@@ -261,7 +261,7 @@ variable {T' : Type _} {BT' : BlueprintFamily T'}
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
     extract_g (harmonizeMul hs x y) = extract_g (encodeLeft hs x) := by
   unfold harmonizeMul encodeLeft encodeRight
-  simp [gOp]
+  rfl
 
 @[simp] theorem toCoeff_harmonizeMulTo [Mul C]
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)

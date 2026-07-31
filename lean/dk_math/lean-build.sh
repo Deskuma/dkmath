@@ -6,6 +6,15 @@
 # escape sequence を削除して、ビルドの進行状況をわかりやすくする
 # 空行を削除する
 
+# log history
+
+cp __build.log.1 __build.log.2
+cp __build.log   __build.log.1
+
+cp __check.log.1 __check.log.2
+cp __check.log   __check.log.1
+
+
 # オプションのチェック
 
 # `-C`, `--check` オプションが指定された場合、`lake build -v --no-ansi --log-level=info | grep -B1 "file: "` を実行して、ビルドの詳細なログを表示し、エラーが発生したファイルを特定します。

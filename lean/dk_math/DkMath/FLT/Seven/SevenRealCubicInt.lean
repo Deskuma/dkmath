@@ -338,13 +338,6 @@ theorem ramifiedAxis_mul_seven_pow_four_mul_pow_seven (m : ℤ) :
         hcancel]
       simp
 
-#print axioms SevenRealCubicInt.norm_mul
-#print axioms SevenRealCubicInt.norm_leftSource
-#print axioms SevenRealCubicInt.norm_rightSource
-#print axioms SevenRealCubicInt.ramifiedAxis_cube
-#print axioms SevenRealCubicInt.ramifiedUnit_isUnit
-#print axioms
-  SevenRealCubicInt.ramifiedAxis_mul_seven_pow_four_mul_pow_seven
 
 end SevenRealCubicInt
 

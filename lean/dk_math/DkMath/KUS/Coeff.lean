@@ -258,8 +258,8 @@ theorem gAdd_assoc [AddSemigroup C]
     gAdd (gAdd x y hxy) z h₁ = gAdd x (gAdd y z hyz) h₂ := by
   apply GKUS.ext
   · simp [gOp, add_assoc]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-- 乗法交換則: 同一 support 上で `gMul x y = gMul y x`。 -/
 theorem gMul_comm [CommMonoid C] (h : GSameSupport x y) :
@@ -275,8 +275,8 @@ theorem gMul_assoc [Semigroup C]
     gMul (gMul x y hxy) z h₁ = gMul x (gMul y z hyz) h₂ := by
   apply GKUS.ext
   · simp [gOp, mul_assoc]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-- 左分配則: `x * (y + z) = x * y + x * z`（GKUS レベル）。 -/
 theorem gMul_gAdd [Distrib C]
@@ -287,8 +287,8 @@ theorem gMul_gAdd [Distrib C]
     gMul x (gAdd y z hyz) h₁ = gAdd (gMul x y hxy) (gMul x z hxz) h₂ := by
   apply GKUS.ext
   · simp [gOp, mul_add]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-- 右分配則: `(x + y) * z = x * z + y * z`（GKUS レベル）。 -/
 theorem gAdd_gMul [Distrib C]
@@ -299,8 +299,8 @@ theorem gAdd_gMul [Distrib C]
     gMul (gAdd x y hxy) z h₁ = gAdd (gMul x z hxz) (gMul y z hyz) h₂ := by
   apply GKUS.ext
   · simp [gOp, add_mul]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-! ### gDiv 代数法則 -/
 
@@ -310,8 +310,8 @@ theorem gDiv_one [DivisionRing C] (support : US U Blueprint)
     gDiv x (gOneState support) h = x := by
   apply GKUS.ext
   · simp [gOp, div_one]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-- 加算の右除算線形性: `(x + y) / z = x/z + y/z`（GKUS レベル）。
 
@@ -323,8 +323,8 @@ theorem gDiv_add_distrib [DivisionRing C]
     gDiv (gAdd x y hxy) z h₁ = gAdd (gDiv x z hxz) (gDiv y z hyz) h₂ := by
   apply GKUS.ext
   · simp [gOp, add_div]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 /-- 乗除結合性: `x * (y / z) = (x * y) / z`（GKUS レベル）。
 
@@ -336,8 +336,8 @@ theorem gMul_gDiv_assoc [DivisionRing C]
     gMul x (gDiv y z hyz) h₁ = gDiv (gMul x y hxy) z h₂ := by
   apply GKUS.ext
   · simp [gOp, ← mul_div_assoc]
-  · simp [gOp]
-  · simp [gOp]
+  · rfl
+  · rfl
 
 end Algebra
 

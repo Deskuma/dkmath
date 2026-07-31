@@ -691,7 +691,7 @@ lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
       exact this hq_dvd_c
     omega
   have h_val_pow : padicValNat q (c ^ 3) = 3 * padicValNat q c :=
-    padicValNat.pow (n := 3) h_c_ne
+    padicValNat.pow c 3
   rw [h_val_pow]
   omega
 

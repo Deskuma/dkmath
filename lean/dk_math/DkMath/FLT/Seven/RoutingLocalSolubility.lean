@@ -210,6 +210,10 @@ noncomputable def AwayRoutingPrimeWitness.toLocalSolution {x y z : ℕ}
   let zz : ZMod w.q := z
   have hendpointDvd := w.q_dvd_cell.trans
     (routingCell_dvd_endpoint r w.row w.column)
+  have hyz : (↑y + ↑z : ℤ).natAbs = y + z := by
+    have hnon : (0 : ℤ) ≤ (y : ℤ) + z := by positivity
+    have hcast := Int.natAbs_of_nonneg hnon
+    exact_mod_cast hcast
   have hendpoint : AwayEndpointLocalEquation w.row yy zz := by
     cases hr : w.row with
     | y =>
@@ -219,9 +223,10 @@ noncomputable def AwayRoutingPrimeWitness.toLocalSolution {x y z : ℕ}
         have hd : w.q ∣ z := by simpa [hr, endpointRoutingFactor] using hendpointDvd
         exact (ZMod.natCast_eq_zero_iff z w.q).2 hd
     | sum =>
-        have hd : w.q ∣ y + z := by simpa [hr, endpointRoutingFactor] using hendpointDvd
+        have hd : w.q ∣ y + z := by
+          simpa [hr, endpointRoutingFactor, hyz] using hendpointDvd
         have hz := (ZMod.natCast_eq_zero_iff (y + z) w.q).2 hd
-        simpa [yy, zz, Nat.cast_add] using hz
+        simpa [yy, zz, AwayEndpointLocalEquation, Nat.cast_add] using hz
   have hendpoint_ne : AwayEndpointLocalNondegenerate w.row yy zz := by
     cases hr : w.row with
     | y =>
@@ -240,7 +245,8 @@ noncomputable def AwayRoutingPrimeWitness.toLocalSolution {x y z : ℕ}
           r.cubic.endpointTriple.coprime_first_second hqy hqd)
     | sum =>
         simp only [AwayEndpointLocalNondegenerate]
-        have hqd : w.q ∣ y + z := by simpa [hr, endpointRoutingFactor] using hendpointDvd
+        have hqd : w.q ∣ y + z := by
+          simpa [hr, endpointRoutingFactor, hyz] using hendpointDvd
         constructor
         · intro hy0
           have hqy : w.q ∣ y := (ZMod.natCast_eq_zero_iff y w.q).1 hy0

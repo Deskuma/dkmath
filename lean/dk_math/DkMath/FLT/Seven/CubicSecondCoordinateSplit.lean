@@ -124,8 +124,7 @@ theorem AwayCoordinateNormalForm.coprime_rootSnd_leftCubic {x y z : ℕ}
   have h' := h.add_mul_right_left
     (-2 * p.root.fst ^ 2 - p.root.fst * p.root.snd + p.root.snd ^ 2)
   convert h'.symm using 1
-  all_goals simp [seventhPowerSndLeftCubic]
-  all_goals ring
+  all_goals first | rfl | (unfold seventhPowerSndLeftCubic; ring_nf)
 
 theorem AwayCoordinateNormalForm.coprime_rootSnd_rightCubic {x y z : ℕ}
     (p : AwayCoordinateNormalForm x y z) :
@@ -136,8 +135,7 @@ theorem AwayCoordinateNormalForm.coprime_rootSnd_rightCubic {x y z : ℕ}
   have h' := h.add_mul_right_left
     (5 * p.root.fst ^ 2 + 6 * p.root.fst * p.root.snd + p.root.snd ^ 2)
   convert h'.symm using 1
-  all_goals simp [seventhPowerSndRightCubic]
-  all_goals ring
+  all_goals first | rfl | (unfold seventhPowerSndRightCubic; ring_nf)
 
 theorem AwayCoordinateNormalForm.coprime_leftCubic_rightCubic {x y z : ℕ}
     (p : AwayCoordinateNormalForm x y z) :

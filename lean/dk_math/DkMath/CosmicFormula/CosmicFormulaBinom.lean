@@ -184,7 +184,7 @@ Use `Body_eq_GZ` if a downstream theorem wants the canonical `GZ` spelling. -/
 @[simp]
 theorem cosmic_formula_binom {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - (Body d x u) = u ^ d := by
-        simpa using cosmic_id d x u
+        simpa [Big, Gap] using cosmic_id d x u
 
 /-- `[GNZC]` Legacy duplicate of `cosmic_formula_binom`.
 Kept for compatibility while docstrings and theorem names are normalized. -/

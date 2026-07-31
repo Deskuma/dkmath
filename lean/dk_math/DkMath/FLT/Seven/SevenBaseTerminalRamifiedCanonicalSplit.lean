@@ -265,7 +265,8 @@ theorem receiver_iff_cubicGap_seventh_shape
     have hreceiver := (seventh_power_factor_split
       (p.vertical_coprime_compensation_residual.pow_left 7)
       hcancel).2
-    simpa [p.compensationCore_eq] using hreceiver
+    simpa [TerminalPrimitiveRamifiedSummitPacket.RamifiedCubicGapSeventhShapeReceiver,
+      p.compensationCore_eq] using hreceiver
 
 theorem compensation_coprime_residual
     (p : RamifiedSecondCoordinateCanonicalSplit) :
@@ -291,12 +292,6 @@ theorem receiver_iff_independent_seventh_powers
     rw [← p.compensationCore_eq, hc, hb]
     ring
 
-#print axioms RamifiedSecondCoordinateRoutingPacket.nonempty_canonicalSplit
-#print axioms RamifiedSecondCoordinateCanonicalSplit.cubicGap_natAbs_eq
-#print axioms
-  RamifiedSecondCoordinateCanonicalSplit.receiver_iff_cubicGap_seventh_shape
-#print axioms
-  RamifiedSecondCoordinateCanonicalSplit.receiver_iff_independent_seventh_powers
 
 end RamifiedSecondCoordinateCanonicalSplit
 

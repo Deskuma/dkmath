@@ -397,27 +397,6 @@ end CyclotomicLinearPrimeAddress
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms SevenCyclotomicDegreeSixInt.star_zeta
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_ne_conjugateEvalKernel
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_sup_conjugateEvalKernel
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugateEvalKernel_comap_ofReal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugateEvalKernel_comap_intCast
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugateEvalKernel_cardQuot
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.realPrimeFiberIdeal_le_conjugateProduct
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimeProduct_le_realPrimeFiberIdeal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.realPrimeFiberIdeal_eq_conjugateProduct
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimeFiberProductEqualityObligation_holds
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimePair_packet
 
 end
 

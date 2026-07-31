@@ -134,7 +134,9 @@ theorem sevenAxis_dvd_cyclotomicSevenToTraceOne_iff (z y : ℤ) :
     · exact hgap
     · have htwosq : (7 : ℤ) ∣ 2 * (z - y) ^ 2 := by
         convert dvd_sub hfactor (dvd_mul_right 7 (z * y)) using 1
-        ring
+        · rfl
+        · rw [mul_assoc]
+          simp
       rcases (show Prime (7 : ℤ) by norm_num).dvd_mul.mp htwosq with htwo | hsq
       · norm_num at htwo
       · exact (show Prime (7 : ℤ) by norm_num).dvd_of_dvd_pow hsq
@@ -155,7 +157,9 @@ theorem seven_dvd_cyclotomicSeven_iff (z y : ℤ) :
     · have htwosq : (7 : ℤ) ∣ 2 * (z - y) ^ 2 :=
         by
           convert dvd_sub hfactor (dvd_mul_right 7 (z * y)) using 1
-          ring
+          · rfl
+          · rw [mul_assoc]
+            simp
       rcases (show Prime (7 : ℤ) by norm_num).dvd_mul.mp htwosq with htwo | hsq
       · norm_num at htwo
       · exact (show Prime (7 : ℤ) by norm_num).dvd_of_dvd_pow hsq

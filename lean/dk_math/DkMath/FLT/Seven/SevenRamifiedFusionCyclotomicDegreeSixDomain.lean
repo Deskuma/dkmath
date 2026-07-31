@@ -173,7 +173,6 @@ noncomputable instance ringIsDomain : IsDomain Ring :=
 
 #synth IsDomain Ring
 
-#print axioms ringIsDomain
 
 end SevenCyclotomicDegreeSixInt
 

@@ -156,6 +156,7 @@ theorem map_rotate_galoisKernel_zero_eq_one
     refine ⟨rotateEquiv.symm y, ?_, ?_⟩
     · change a.galoisEval 0 (rotateEquiv.symm y) = 0
       rw [← a.galoisEval_one_rotate]
+      change a.galoisEval 1 y = 0 at hy
       simpa only [RingEquiv.apply_symm_apply] using hy
     · exact RingEquiv.apply_symm_apply rotateEquiv y
 
@@ -176,6 +177,7 @@ theorem map_rotate_galoisKernel_one_eq_two
     refine ⟨rotateEquiv.symm y, ?_, ?_⟩
     · change a.galoisEval 1 (rotateEquiv.symm y) = 0
       rw [← a.galoisEval_two_rotate]
+      change a.galoisEval 2 y = 0 at hy
       simpa only [RingEquiv.apply_symm_apply] using hy
     · exact RingEquiv.apply_symm_apply rotateEquiv y
 
@@ -196,6 +198,7 @@ theorem map_rotate_galoisKernel_two_eq_zero
     refine ⟨rotateEquiv.symm y, ?_, ?_⟩
     · change a.galoisEval 2 (rotateEquiv.symm y) = 0
       rw [← a.galoisEval_zero_rotate]
+      change a.galoisEval 0 y = 0 at hy
       simpa only [RingEquiv.apply_symm_apply] using hy
     · exact RingEquiv.apply_symm_apply rotateEquiv y
 
@@ -376,6 +379,7 @@ private theorem map_rotate_kernel_step
     change
       f (SevenCyclotomicDegreeSixInt.rotateEquiv.symm y) = 0
     rw [← h]
+    change g y = 0 at hy
     simpa only [RingEquiv.apply_symm_apply] using hy
 
 /-- Rotation sends the phase-zero oriented prime to phase one. -/
@@ -461,6 +465,7 @@ theorem map_star_evalKernel_eq_conjugateEvalKernel
   constructor
   · rintro ⟨x, hx, rfl⟩
     change a.eval (star (star x)) = 0
+    change a.eval x = 0 at hx
     simpa only [star_star] using hx
   · intro hy
     refine ⟨star y, ?_, ?_⟩
@@ -481,10 +486,12 @@ theorem map_star_conjugateEvalKernel_eq_evalKernel
   constructor
   · rintro ⟨x, hx, rfl⟩
     change a.eval (star x) = 0
+    change a.eval (star x) = 0 at hx
     exact hx
   · intro hy
     refine ⟨star y, ?_, ?_⟩
     · change a.eval (star (star y)) = 0
+      change a.eval y = 0 at hy
       simpa only [star_star] using hy
     · exact star_star y
 
@@ -502,6 +509,7 @@ theorem map_star_cyclicKernel_eq_cyclicConjugateKernel
   constructor
   · rintro ⟨x, hx, rfl⟩
     change a.cyclicEval i (star (star x)) = 0
+    change a.cyclicEval i x = 0 at hx
     simpa only [star_star] using hx
   · intro hy
     refine ⟨star y, ?_, star_star y⟩
@@ -525,6 +533,7 @@ theorem map_star_cyclicConjugateKernel_eq_cyclicKernel
   · intro hy
     refine ⟨star y, ?_, star_star y⟩
     change a.cyclicEval i (star (star y)) = 0
+    change a.cyclicEval i y = 0 at hy
     simpa only [star_star] using hy
 
 end RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress
@@ -624,12 +633,9 @@ theorem map_galoisKernel_zero_eq_cyclicPrimePair
     Ideal.map ofReal (s.address.galoisKernel 0) =
       s.cyclotomicAddress.cyclicKernel 0 *
         s.cyclotomicAddress.cyclicConjugateKernel 0 := by
-  simpa only [
-      RamifiedSignedRootRoutingPacket.QuotientPrimeGCDLoadAddress.galoisKernel_zero,
-      RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.cyclicKernel_zero,
-      RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.cyclicConjugateKernel_zero,
-      RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.realPrimeFiberIdeal] using
-    s.cyclotomicAddress.realPrimeFiberIdeal_eq_conjugateProduct
+  change Ideal.map ofReal
+      (RingHom.ker s.address.evalAlphaRoot) = _
+  exact s.cyclotomicAddress.realPrimeFiberIdeal_eq_conjugateProduct
 
 /-- Rotation transports the exact fibre equality to phase one. -/
 theorem map_galoisKernel_one_eq_cyclicPrimePair
@@ -1087,7 +1093,7 @@ structure GlobalOrientedPrimeFactorizationPacket where
       globalDegreeSixOrientedFactorIdeal family p
 
 /-- Canonical global factorization packet with both Galois coherences. -/
-def globalOrientedPrimeFactorizationPacket :
+theorem globalOrientedPrimeFactorizationPacket :
     GlobalOrientedPrimeFactorizationPacket family p where
   launchpad :=
     degreeSixOrientedLoadFactorizationPacket family p
@@ -1129,14 +1135,6 @@ def globalOrientedPrimeFactorizationPacket :
 
 end RamifiedFusionRow2LoadFamily
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeGCDLoadAddress.map_rotate_galoisKernel_zero_eq_one
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.map_star_evalKernel_eq_conjugateEvalKernel
-#print axioms
-  RamifiedFusionRow2LoadFamily.map_star_globalDegreeSixOrientedFactorIdeal
-#print axioms
-  RamifiedFusionRow2LoadFamily.globalOrientedPrimeFactorizationPacket
 
 end
 

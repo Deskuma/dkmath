@@ -261,7 +261,7 @@ theorem awaySevenBaseTerminalCellCombinedModulus_eq_routingCell
       rw [Nat.factorization_def _
         (Nat.prime_of_mem_primeFactors q.2)]
     _ = awaySevenBaseTerminalRoutingCell packet coordinate :=
-      (Nat.prod_pow_primeFactors_factorization
+      (Nat.prod_primeFactors_coe_pow_factorization
         (packet.routingCell_ne_zero coordinate)).symm
 
 /-- TERM-005 partition packet. Every prime of the full load is assigned to its

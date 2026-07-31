@@ -89,9 +89,9 @@ theorem unique_factorization_nat_via_prime_powers {m n : ℕ}
   have hfac : m.factorization = n.factorization :=
     factorization_eq_of_prime_pow_dvd_iff hm hn h
   calc
-    m = m.factorization.support.prod (fun p => p ^ m.factorization p) := by
+    m = m.factorization.prod (fun p e => p ^ e) := by
       simpa using (Nat.prod_factorization_pow_eq_self hm).symm
-    _ = n.factorization.support.prod (fun p => p ^ n.factorization p) := by
+    _ = n.factorization.prod (fun p e => p ^ e) := by
       simp [hfac]
     _ = n := by
       simpa using Nat.prod_factorization_pow_eq_self hn

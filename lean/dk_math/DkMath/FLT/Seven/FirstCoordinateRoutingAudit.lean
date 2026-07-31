@@ -86,7 +86,8 @@ private theorem left_constraint_y {x y z : ℕ}
     (leftCubic_dvd_fst_add_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hcol.sub hrow using 1 <;> ring
+  convert hcol.sub hrow using 1
+  all_goals first | rfl | ring
 
 private theorem left_constraint_z {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) : (r.routing.c22 : ℤ) ∣
@@ -101,7 +102,8 @@ private theorem left_constraint_z {x y z : ℕ}
     (leftCubic_dvd_fst_add_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hcol.sub hrow using 1 <;> ring
+  convert hcol.sub hrow using 1
+  all_goals first | rfl | ring
 
 private theorem left_constraint_sum {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) : (r.routing.c32 : ℤ) ∣
@@ -111,13 +113,16 @@ private theorem left_constraint_sum {x y z : ℕ}
   have hrow : (r.routing.c32 : ℤ) ∣
       cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 :=
     (Int.natCast_dvd_natCast.mpr r.routing.c32_dvd_row3).trans (by
-      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1 <;> norm_num
+      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+      all_goals first | rfl | ring_nf
+      norm_num
       ring)
   have hcol := (cell_dvd_leftCubic r r.routing.c32_dvd_col2).trans
     (leftCubic_dvd_fst_add_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hcol.sub hrow using 1 <;> ring
+  convert hcol.sub hrow using 1
+  all_goals first | rfl | ring
 
 private theorem right_constraint_y {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) : (r.routing.c13 : ℤ) ∣
@@ -132,7 +137,8 @@ private theorem right_constraint_y {x y z : ℕ}
     (rightCubic_dvd_fst_sub_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hcol.sub hrow using 1 <;> ring
+  convert hcol.sub hrow using 1
+  all_goals first | rfl | ring
 
 private theorem right_constraint_z {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) : (r.routing.c23 : ℤ) ∣
@@ -147,7 +153,8 @@ private theorem right_constraint_z {x y z : ℕ}
     (rightCubic_dvd_fst_sub_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hrow.sub hcol using 1 <;> ring
+  convert hrow.sub hcol using 1
+  all_goals first | rfl | ring
 
 private theorem right_constraint_sum {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) : (r.routing.c33 : ℤ) ∣
@@ -157,13 +164,16 @@ private theorem right_constraint_sum {x y z : ℕ}
   have hrow : (r.routing.c33 : ℤ) ∣
       cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 :=
     (Int.natCast_dvd_natCast.mpr r.routing.c33_dvd_row3).trans (by
-      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1 <;> norm_num
+      convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+      all_goals first | rfl | ring_nf
+      norm_num
       ring)
   have hcol := (cell_dvd_rightCubic r r.routing.c33_dvd_col3).trans
     (rightCubic_dvd_fst_sub_correction
       r.cubic.rootTriple.normal.root.fst r.cubic.rootTriple.normal.root.snd)
   rw [← fst_eq_for_routing r] at hcol
-  convert hrow.sub hcol using 1 <;> ring
+  convert hrow.sub hcol using 1
+  all_goals first | rfl | ring
 
 private theorem prime_dvd_rootSnd_of_dvd_col1 {x y z q : ℕ}
     (r : AwayCubicRoutingPacket x y z) (hq : Nat.Prime q) (hq7 : q ≠ 7)
@@ -191,7 +201,8 @@ private theorem col1_constraint_y {x y z q : ℕ}
     (Int.natCast_dvd_natCast.mpr (hqc.trans r.routing.c11_dvd_row1)).trans
       (leftEndpoint_dvd_fst_sub_right_cube (z : ℤ) (y : ℤ))
   rw [fst_eq_for_routing r] at hrow
-  convert hrow.sub hroot using 1 <;> ring
+  convert hrow.sub hroot using 1
+  all_goals first | rfl | ring
 
 private theorem col1_constraint_z {x y z q : ℕ}
     (r : AwayCubicRoutingPacket x y z) (hq : Nat.Prime q) (hq7 : q ≠ 7)
@@ -204,7 +215,8 @@ private theorem col1_constraint_z {x y z q : ℕ}
     (Int.natCast_dvd_natCast.mpr (hqc.trans r.routing.c21_dvd_row2)).trans
       (rightEndpoint_dvd_fst_add_left_cube (z : ℤ) (y : ℤ))
   rw [fst_eq_for_routing r] at hrow
-  convert hrow.sub hroot using 1 <;> ring
+  convert hrow.sub hroot using 1
+  all_goals first | rfl | ring
 
 private theorem col1_constraint_sum {x y z q : ℕ}
     (r : AwayCubicRoutingPacket x y z) (hq : Nat.Prime q) (hq7 : q ≠ 7)
@@ -216,10 +228,13 @@ private theorem col1_constraint_sum {x y z q : ℕ}
   have hrow : (q : ℤ) ∣ cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 :=
     (Int.natCast_dvd_natCast.mpr (hqc.trans r.routing.c31_dvd_row3)).trans
       (by
-        convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1 <;> norm_num
+        convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+        all_goals first | rfl | ring_nf
+        norm_num
         ring)
   rw [fst_eq_for_routing r] at hrow
-  convert hrow.sub hroot using 1 <;> ring
+  convert hrow.sub hroot using 1
+  all_goals first | rfl | ring
 
 theorem nonempty_awayFirstCoordinateRoutingConstraints {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) :
@@ -288,6 +303,10 @@ theorem routingCell_dvd_endpoint {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z)
     (row : EndpointRoutingRow) (column : RootRoutingColumn) :
     routingCell r.routing row column ∣ Int.natAbs (endpointRoutingFactor y z row) := by
+  have hyz : (↑y + ↑z : ℤ).natAbs = y + z := by
+    have hnon : (0 : ℤ) ≤ (y : ℤ) + z := by positivity
+    have hcast := Int.natAbs_of_nonneg hnon
+    exact_mod_cast hcast
   cases row <;> cases column
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c11_dvd_row1
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c12_dvd_row1
@@ -295,9 +314,12 @@ theorem routingCell_dvd_endpoint {x y z : ℕ}
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c21_dvd_row2
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c22_dvd_row2
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c23_dvd_row2
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c31_dvd_row3
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c32_dvd_row3
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c33_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c31_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c32_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c33_dvd_row3
 
 theorem routingCell_dvd_column {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z)

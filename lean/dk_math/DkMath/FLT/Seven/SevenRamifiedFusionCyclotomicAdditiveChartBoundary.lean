@@ -517,18 +517,6 @@ theorem orientedResidualRoot_muSevenGaugeBoundary
 
 end RamifiedSignedRootRoutingPacket.QuotientPrimeSupport
 
-#print axioms
-  SevenCyclotomicDegreeSixInt.sixPhaseProduct_eq_ofReal_cyclotomicNorm
-#print axioms
-  SevenCyclotomicDegreeSixInt.no_ringHom_to_int
-#print axioms
-  RamifiedSignedRootDepthPacket.cyclotomicNorm_cyclotomicDegreeSixCarrier
-#print axioms
-  RamifiedSignedRootDepthPacket.ramifiedElementEquation_boundary
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.orientedElementLevelPower_additiveBoundary
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.orientedResidualRoot_muSevenGaugeBoundary
 
 end
 

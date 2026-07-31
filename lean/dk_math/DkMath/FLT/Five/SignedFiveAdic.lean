@@ -227,14 +227,13 @@ theorem padicValNat_five_eq_one_of_dvd_not_sq
 /-- If one factor has valuation one in a fifth-power product, the other has valuation `4 mod 5`. -/
 theorem padicValNat_carrier_shape_of_mul_eq_fifth
     {carrier residual distinguished : ℕ}
-    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (hd0 : distinguished ≠ 0)
+    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (_hd0 : distinguished ≠ 0)
     (hEq : carrier * residual = distinguished ^ 5)
     (hrVal : padicValNat 5 residual = 1) :
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m := by
   letI : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hpow :
-      padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by
-    simpa using (padicValNat.pow (p := 5) (a := distinguished) 5 hd0)
+      padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by simp
   have hmul :
       padicValNat 5 (carrier * residual) =
         padicValNat 5 carrier + padicValNat 5 residual := by

@@ -250,7 +250,7 @@ theorem padicValNat_quotientRoot_eq_loads_add_seven_mul_residual
       (mul_ne_zero p.row2Cell21_ne_zero p.row2Cell22_ne_zero)
       (pow_ne_zero 7 p.row2ResidualNormRoot_ne_zero),
     padicValNat.mul p.row2Cell21_ne_zero p.row2Cell22_ne_zero,
-    padicValNat.pow 7 p.row2ResidualNormRoot_ne_zero] at hval
+    padicValNat.pow (p := q) (a := p.row2ResidualNormRoot) 7] at hval
   omega
 
 namespace RealPairLoadedPowerSplit
@@ -370,10 +370,6 @@ end RealPairLoadedPowerSplit
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.RealPairLoadedPowerSplit.span_realPairCore_eq_loads_mul_residual_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.RealPairLoadedPowerSplit.carrierIdealPair_eq_ramified_sq_mul_loadHalves_mul_residualPair_pow
 
 end
 

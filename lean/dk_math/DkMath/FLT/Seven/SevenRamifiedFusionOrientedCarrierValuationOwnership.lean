@@ -676,7 +676,7 @@ theorem realKernelPower_dvd_span_realPairCore
           {(p.signedDepth.quotientRoot :
             SevenRealCubicInt)} :=
     hPpow.trans
-      (span_singleton_dvd_span_singleton_iff_dvd.mpr
+      (Ideal.span_singleton_dvd_span_singleton_iff_dvd.mpr
         hcast)
   have hspan :
       Ideal.span
@@ -892,7 +892,7 @@ private theorem realKernel_zero_isCoprime_span_axis
 private theorem span_realPairCore_dvd_span_realPairCarrier :
     Ideal.span {p.signedDepth.realPairCore 0} ∣
       Ideal.span {p.signedDepth.realPairCarrier 0} := by
-  apply span_singleton_dvd_span_singleton_iff_dvd.mpr
+  apply Ideal.span_singleton_dvd_span_singleton_iff_dvd.mpr
   refine ⟨SevenRealCubicInt.eisensteinAxis, ?_⟩
   rw [p.signedDepth.realPairCarrier_eq_eisensteinAxis_mul_core]
   ring
@@ -1231,7 +1231,7 @@ theorem prod_quotientPrimeSupport_primePow_eq_natAbs :
         Nat.factorization_def _ s.prime]
     _ = Int.natAbs p.signedDepth.quotientRoot := by
       simpa only [RamifiedSignedRootRoutingPacket.QuotientPrimeSupport] using
-        (Nat.prod_pow_primeFactors_factorization
+        (Nat.prod_primeFactors_coe_pow_factorization
           quotientRoot_natAbs_ne_zero).symm
 
 /-- Pairwise comaximality combines all local exact lower bounds. -/
@@ -1474,7 +1474,11 @@ private theorem ramifiedPrime_ne_orientedKernel
     change
       SevenCyclotomicDegreeSixInt.ramifiedEval
         (7 : SevenCyclotomicDegreeSixInt.Ring) = 0
-    simpa only [map_natCast] using ZMod.natCast_self 7
+    change SevenCyclotomicDegreeSixInt.ramifiedEval
+      (SevenCyclotomicDegreeSixInt.ofReal (7 : SevenRealCubicInt)) = 0
+    rw [SevenCyclotomicDegreeSixInt.ramifiedEval_ofReal]
+    change (7 : ZMod 7) + 3 * 0 + 9 * 0 = 0
+    simpa using (ZMod.natCast_self 7)
   have hnot :
       (7 : SevenCyclotomicDegreeSixInt.Ring) ∉
         s.orientedKernel := by
@@ -1503,7 +1507,11 @@ private theorem ramifiedPrime_ne_conjugateKernel
     change
       SevenCyclotomicDegreeSixInt.ramifiedEval
         (7 : SevenCyclotomicDegreeSixInt.Ring) = 0
-    simpa only [map_natCast] using ZMod.natCast_self 7
+    change SevenCyclotomicDegreeSixInt.ramifiedEval
+      (SevenCyclotomicDegreeSixInt.ofReal (7 : SevenRealCubicInt)) = 0
+    rw [SevenCyclotomicDegreeSixInt.ramifiedEval_ofReal]
+    change (7 : ZMod 7) + 3 * 0 + 9 * 0 = 0
+    simpa using (ZMod.natCast_self 7)
   have hnot :
       (7 : SevenCyclotomicDegreeSixInt.Ring) ∉
         s.conjugateKernel := by
@@ -1812,20 +1820,6 @@ end QuotientPrimeSupport
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.orientedKernelPower_dvd_span_carrier
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.conjugateKernelPower_dvd_span_conjugateCarrier
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.carrier_mem_orientedKernelPower
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.carrier_mem_orientedKernelPower_iff
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalRealCoreFactorIdeal_eq_span_realPairCore
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalCarrierFactorIdeal_pair_exact
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalCarrierValuationOwnershipPacket
 
 end
 

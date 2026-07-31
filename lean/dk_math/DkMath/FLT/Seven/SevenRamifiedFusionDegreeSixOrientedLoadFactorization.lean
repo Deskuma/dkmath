@@ -154,7 +154,7 @@ structure DegreeSixOrientedLoadFactorizationPacket where
 
 /-- The canonical global oriented launch packet is inhabited for either
 row-two load family. -/
-def degreeSixOrientedLoadFactorizationPacket :
+theorem degreeSixOrientedLoadFactorizationPacket :
     DegreeSixOrientedLoadFactorizationPacket family p where
   localFibrePower :=
     fun s => PrimeSupport.map_kernelPower_eq_orientedPairPower s
@@ -167,14 +167,6 @@ def degreeSixOrientedLoadFactorizationPacket :
 
 end RamifiedFusionRow2LoadFamily
 
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.map_kernelPower_eq_orientedPairPower
-#print axioms
-  RamifiedFusionRow2LoadFamily.PrimeSupport.orientedPairPowers_pairwise_isCoprime
-#print axioms
-  RamifiedFusionRow2LoadFamily.globalDegreeSixOrientedFactorIdeal_eq_span_ofReal_load
-#print axioms
-  RamifiedFusionRow2LoadFamily.degreeSixOrientedLoadFactorizationPacket
 
 end
 

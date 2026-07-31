@@ -25,7 +25,7 @@ theorem hasDerivAt_iff_tendsto_cosmicKernel
     {f : ℝ → ℝ} {x L : ℝ} :
     HasDerivAt f L x ↔
       Filter.Tendsto (fun u : ℝ => cosmicKernel f x u)
-        (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))) (nhds L) := by
+    (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ)ᶜ) (nhds L) := by
   simpa [cosmicKernel, delta, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using
     (hasDerivAt_iff_tendsto_slope_zero (f := f) (f' := L) (x := x))
 
@@ -38,7 +38,7 @@ theorem tendsto_cosmicKernel_of_hasDerivAt
     {f : ℝ → ℝ} {x L : ℝ}
     (h : HasDerivAt f L x) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel f x u)
-      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))) (nhds L) :=
+      (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ)ᶜ) (nhds L) :=
   (hasDerivAt_iff_tendsto_cosmicKernel).1 h
 
 /--
@@ -50,7 +50,7 @@ theorem hasDerivAt_of_tendsto_cosmicKernel
     {f : ℝ → ℝ} {x L : ℝ}
     (h :
       Filter.Tendsto (fun u : ℝ => cosmicKernel f x u)
-        (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))) (nhds L)) :
+        (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ)ᶜ) (nhds L)) :
     HasDerivAt f L x :=
   (hasDerivAt_iff_tendsto_cosmicKernel).2 h
 
@@ -60,7 +60,7 @@ Identity function basic case:
 -/
 theorem hasDerivAt_id_cosmic (x : ℝ) :
     HasDerivAt (fun y : ℝ => y) 1 x := by
-  simpa using (hasDerivAt_id x)
+  exact hasDerivAt_id x
 
 /--
 Identity function in punctured-limit form:
@@ -68,7 +68,7 @@ Identity function in punctured-limit form:
 -/
 theorem tendsto_cosmicKernel_id (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => y) x u)
-      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))) (nhds (1 : ℝ)) := by
+      (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ)ᶜ) (nhds (1 : ℝ)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_id_cosmic x)
 
 /--
@@ -85,7 +85,7 @@ Constant function in punctured-limit form:
 -/
 theorem tendsto_cosmicKernel_const (x c : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun _ : ℝ => c) x u)
-      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))) (nhds (0 : ℝ)) := by
+      (nhdsWithin (0 : ℝ) ({(0 : ℝ)} : Set ℝ)ᶜ) (nhds (0 : ℝ)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_const_cosmic x c)
 
 end DkMath.CosmicFormula

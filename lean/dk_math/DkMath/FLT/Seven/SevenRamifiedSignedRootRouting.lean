@@ -95,9 +95,6 @@ theorem nonempty_signedRootRouting
 
 end RamifiedSignedRootDepthPacket
 
-#print axioms
-  RamifiedSignedRootDepthPacket.nonempty_coherent_signedRootRouting
-#print axioms RamifiedSignedRootDepthPacket.nonempty_signedRootRouting
 
 end
 

@@ -127,7 +127,8 @@ theorem branchRamified_gcd_gap_GN_seven
 theorem seventh_power_factor_split {a b x : ℕ}
     (hcop : Nat.Coprime a b) (hbody : a * b = x ^ 7) :
     (∃ u : ℕ, a = u ^ 7) ∧ (∃ v : ℕ, b = v ^ 7) := by
-  have hunit : IsUnit (GCDMonoid.gcd a b) := by simpa [Nat.Coprime] using hcop
+  have hunit : IsUnit (GCDMonoid.gcd a b) := by
+    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcop
   constructor
   · exact exists_eq_pow_of_mul_eq_pow hunit hbody
   · have hunit' : IsUnit (GCDMonoid.gcd b a) := by simpa [gcd_comm] using hunit
@@ -165,14 +166,14 @@ theorem padicValNat_GN_seven_eq_one_of_counterexample
 
 theorem padicValNat_carrier_shape_of_mul_eq_seventh
     {carrier residual distinguished : ℕ}
-    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (hd0 : distinguished ≠ 0)
+    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (_hd0 : distinguished ≠ 0)
     (hEq : carrier * residual = distinguished ^ 7)
     (hrVal : padicValNat 7 residual = 1) :
     ∃ m : ℕ, padicValNat 7 carrier = 6 + 7 * m := by
   letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hpow : padicValNat 7 (distinguished ^ 7) =
       7 * padicValNat 7 distinguished := by
-    simpa using (padicValNat.pow (p := 7) (a := distinguished) 7 hd0)
+    exact padicValNat.pow (p := 7) (a := distinguished) 7
   have hmul : padicValNat 7 (carrier * residual) =
       padicValNat 7 carrier + padicValNat 7 residual := by
     simpa using (padicValNat.mul (p := 7) hc0 hr0)

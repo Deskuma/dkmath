@@ -23,7 +23,10 @@ theorem finitePrimeEscape_hits_GN5 :
     (u := 1)
     (by decide)
     (by decide)
-  simpa using hEscape
+  have hGN : DkMath.CosmicFormulaBinom.GN 5 1 1 = 31 := by
+    norm_num [DkMath.CosmicFormulaBinom.GN, Finset.sum_range_succ, Nat.choose]
+  rw [hGN]
+  exact hEscape
 
 /-- The only prime factor reached by the concrete `GN 5 1 1 = 31` escape is `31`. -/
 theorem freshPrimeFactor_GN5_eq_31
@@ -34,7 +37,10 @@ theorem freshPrimeFactor_GN5_eq_31
       q) :
     q = 31 := by
   have hqDiv : q ∣ 31 := by
-    simpa using hq.2.1
+    have hGN : DkMath.CosmicFormulaBinom.GN 5 1 1 = 31 := by
+      norm_num [DkMath.CosmicFormulaBinom.GN, Finset.sum_range_succ, Nat.choose]
+    rw [hGN] at hq
+    exact hq.2.1
   exact (Nat.dvd_prime (by decide)).mp hqDiv |>.resolve_left hq.1.ne_one
 
 /--

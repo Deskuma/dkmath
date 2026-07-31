@@ -71,7 +71,7 @@ theorem repeatedPrimePowerPart_factorization
       (repeatedPrimePowerPart n).factorization r =
         ∑ q ∈ S, (f q).factorization r := by
     simpa only [repeatedPrimePowerPart, S, f,
-      Finsupp.coe_finset_sum, Finset.sum_apply] using hfac
+      Finsupp.coe_finsetSum, Finset.sum_apply] using hfac
   rw [hfac']
   simp only [f, Nat.factorization_pow,
     Finsupp.coe_smul, Pi.smul_apply, nsmul_eq_mul]

@@ -18,7 +18,7 @@ local instance : Fact (Nat.Prime 7) := ⟨by norm_num⟩
 namespace CounterexamplePack
 
 /-- Exchange the two positive summands of a Fermat-seven counterexample. -/
-def swapXY {x y z : ℕ} (source : CounterexamplePack x y z) :
+theorem swapXY {x y z : ℕ} (source : CounterexamplePack x y z) :
     CounterexamplePack y x z where
   hx := source.hy
   hy := source.hx
@@ -147,7 +147,7 @@ structure SignedFermatSevenChart (a b c : ℤ) : Prop where
 
 /-- TERM-009-D: the odd-power signed permutation
 `(x,y,z) ↦ (z,-y,x)` of a natural Fermat-seven counterexample. -/
-def CounterexamplePack.signedOddPermutation
+theorem CounterexamplePack.signedOddPermutation
     {x y z : ℕ} (source : CounterexamplePack x y z) :
     SignedFermatSevenChart (z : ℤ) (-(y : ℤ)) (x : ℤ) where
   a_ne_zero := by exact_mod_cast (Nat.ne_of_gt source.hz)

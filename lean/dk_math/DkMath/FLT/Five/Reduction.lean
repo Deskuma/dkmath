@@ -97,6 +97,8 @@ theorem fifth_power_factor_split
     {g n x : ℕ} (hcop : Nat.Coprime g n) (hbody : g * n = x ^ 5) :
     (∃ a : ℕ, g = a ^ 5) ∧ (∃ b : ℕ, n = b ^ 5) := by
   have hunit : IsUnit (GCDMonoid.gcd g n) := by
+    change IsUnit (Nat.gcd g n)
+    rw [isUnit_iff_dvd_one]
     simpa [Nat.Coprime] using hcop
   constructor
   · exact exists_eq_pow_of_mul_eq_pow hunit hbody

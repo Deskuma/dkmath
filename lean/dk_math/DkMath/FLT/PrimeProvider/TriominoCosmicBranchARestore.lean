@@ -1978,7 +1978,7 @@ theorem branchA_padicValNat_GN_decomp
   have hp_ne : p ≠ 0 := hBundle.padic.pack.hp.ne_zero
   have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp hs_pos
   have hsp_ne : s ^ p ≠ 0 := pow_ne_zero p hs_ne
-  rw [hsGN, padicValNat.mul hp_ne hsp_ne, padicValNat.pow p hs_ne]
+  rw [hsGN, padicValNat.mul hp_ne hsp_ne, padicValNat.pow s p]
 
 /--
 **Kummer valuation 第 2.5 段**: `v_q(p) = 0` (q ≠ p のとき)。
@@ -2666,7 +2666,8 @@ theorem branchA_local_Q_proj_eq_GN_zero_z
     dsimp [φ, δ]
     exact branchA_hensel_distinguished_proj_zero hBundle hk hLift
   have hω_proj : φ hLift.ω_k = (z : ZMod q) * ((y : ZMod q)⁻¹) := by
-    simpa [φ] using hLift.hω_k_proj
+    change hLift.ω_k.cast = (z : ZMod q) * ((y : ZMod q)⁻¹)
+    exact hLift.hω_k_proj
   have hy_ne_zero : (y : ZMod q) ≠ 0 := by
     intro hy0
     exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy0)

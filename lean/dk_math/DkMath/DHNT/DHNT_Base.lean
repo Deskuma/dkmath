@@ -227,7 +227,10 @@ instance (u : Unit) : AddCommMonoid (QtyT u) where
   add_comm a b    := by ext; exact add_comm a.x b.x
   nsmul n a       := ⟨n • a.x⟩
   nsmul_zero a    := by ext; rfl
-  nsmul_succ n a  := by ext; rw [add_nsmul, one_nsmul]; rfl
+  nsmul_succ n a  := by
+    ext
+    change (n + 1) • a.x = n • a.x + a.x
+    rw [add_nsmul, one_nsmul]
 
 /-- 単位換算（線形） -/
 noncomputable def convert {u w : Unit} (q : QtyT u) : QtyT w :=

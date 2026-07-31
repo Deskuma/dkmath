@@ -240,13 +240,9 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_head_
     (hnot : ¬ SourcePressureLocalIslandWitnessBefore W1 W2) :
     SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
       (W1 :: W2 :: rest) := by
-  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
-    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
-    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
-    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
-    sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
-    SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
-    (Or.inl hnot)
+  change (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure (W2 :: rest)
+  exact Or.inl hnot
 
 /--
 Tail constructor for adjacent sorted-before failure in a witness list.
@@ -265,9 +261,11 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_of_tail
       (W1 :: W2 :: rest) := by
   simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
     sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
+    sourcePressureIntervalPulseAddress_of_localIslandWitness,
     SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
     SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
     sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
+    sourcePressureAccountedInterval_of_intervalPulseAddress,
     SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
     (Or.inr htail)
 
@@ -305,13 +303,10 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.head_or_tail
         (W1 :: W2 :: rest)) :
     (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
       SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
-        (W2 :: rest) := by
-  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
-    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
-    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
-    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
-    sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
-    SourcePressureAccountedIntervalListHasSortedBeforeFailure] using h
+      (W2 :: rest) := by
+  change (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+    SourcePressureLocalIslandWitnessListHasSortedBeforeFailure (W2 :: rest) at h
+  exact h
 
 /-- Iff form of one-layer sorted-before failure decomposition. -/
 theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure.cons_iff_head_or_tail
@@ -588,13 +583,9 @@ theorem SourcePressureLocalIslandWitnessListHasAdjacentOverlapObstruction.hasSor
           exact False.elim hobs
       | cons W2 rest =>
           rcases hobs with hhead | htail
-          · simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
-              sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
-              SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
-              SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
-              sourcePressureAccountedIntervalList_of_intervalPulseAddressList,
-              SourcePressureAccountedIntervalListHasSortedBeforeFailure] using
-              (Or.inl hhead.not_before)
+          · change (¬ SourcePressureLocalIslandWitnessBefore W1 W2) ∨
+              SourcePressureLocalIslandWitnessListHasSortedBeforeFailure (W2 :: rest)
+            exact Or.inl hhead.not_before
           · have htailFailure :
                 SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
                   (W2 :: rest) :=

@@ -452,12 +452,6 @@ theorem unitGridAddress_reconstructs_slope
 
 end RamifiedPairedThetaRootJetPacket
 
-#print axioms RamifiedSignedRootDepthPacket.nonempty_pairedThetaRootJet
-#print axioms
-  RamifiedPairedThetaRootJetPacket.gapCore_thetaResidue_eq
-#print axioms RamifiedPairedThetaRootJetPacket.left_not_sourcePlane
-#print axioms
-  RamifiedPairedThetaRootJetPacket.fusionSlope_eq_gapRoot_div_cube
 
 end
 

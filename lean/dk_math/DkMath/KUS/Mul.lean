@@ -101,7 +101,8 @@ theorem kusMul_eq_zeroState (h : SameSupport x y) (hz : toNat x * toNat y = 0) :
 /-- 乗法の交換則（toNat レベル）。 -/
 theorem toNat_comm (h : SameSupport x y) :
     toNat (kusMul x y h) = toNat (kusMul y x (SameSupport.symm h)) := by
-  simpa [toNat_mul] using Nat.mul_comm (toNat x) (toNat y)
+  change toNat x * toNat y = toNat y * toNat x
+  exact Nat.mul_comm _ _
 
 /-- 乗法の結合則（toNat レベル）。 -/
 theorem toNat_assoc
@@ -110,7 +111,8 @@ theorem toNat_assoc
     (hx₂₃ : SameSupport x (kusMul y z h₂₃)) :
     toNat (kusMul (kusMul x y h₁₂) z h₁₂z)
       = toNat (kusMul x (kusMul y z h₂₃) hx₂₃) := by
-  simpa [toNat_mul] using Nat.mul_assoc (toNat x) (toNat y) (toNat z)
+  change (toNat x * toNat y) * toNat z = toNat x * (toNat y * toNat z)
+  exact Nat.mul_assoc _ _ _
 
 end kusMul
 
