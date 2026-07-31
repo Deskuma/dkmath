@@ -227,7 +227,7 @@ theorem padicValNat_five_eq_one_of_dvd_not_sq
 /-- If one factor has valuation one in a fifth-power product, the other has valuation `4 mod 5`. -/
 theorem padicValNat_carrier_shape_of_mul_eq_fifth
     {carrier residual distinguished : ℕ}
-    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (hd0 : distinguished ≠ 0)
+    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (_hd0 : distinguished ≠ 0)
     (hEq : carrier * residual = distinguished ^ 5)
     (hrVal : padicValNat 5 residual = 1) :
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m := by
