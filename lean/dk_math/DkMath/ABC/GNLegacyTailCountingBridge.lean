@@ -77,7 +77,7 @@ theorem GNNonExceptionalPart_factorization
       (GNNonExceptionalPart p a b).factorization r =
         (∑ q ∈ S, (f q).factorization r) := by
     simpa only [GNNonExceptionalPart, S, f,
-      Finsupp.coe_finset_sum, Finset.sum_apply] using hfac
+      Finsupp.coe_finsetSum, Finset.sum_apply] using hfac
   change
     (GNNonExceptionalPart p a b).factorization r =
       if r ∈ GNNonExceptionalSupport p a b then
