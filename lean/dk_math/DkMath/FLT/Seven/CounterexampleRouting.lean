@@ -166,14 +166,14 @@ theorem padicValNat_GN_seven_eq_one_of_counterexample
 
 theorem padicValNat_carrier_shape_of_mul_eq_seventh
     {carrier residual distinguished : ℕ}
-    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (hd0 : distinguished ≠ 0)
+    (hc0 : carrier ≠ 0) (hr0 : residual ≠ 0) (_hd0 : distinguished ≠ 0)
     (hEq : carrier * residual = distinguished ^ 7)
     (hrVal : padicValNat 7 residual = 1) :
     ∃ m : ℕ, padicValNat 7 carrier = 6 + 7 * m := by
   letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hpow : padicValNat 7 (distinguished ^ 7) =
       7 * padicValNat 7 distinguished := by
-    simpa using (padicValNat.pow (p := 7) (a := distinguished) 7 hd0)
+    exact padicValNat.pow (p := 7) (a := distinguished) 7
   have hmul : padicValNat 7 (carrier * residual) =
       padicValNat 7 carrier + padicValNat 7 residual := by
     simpa using (padicValNat.mul (p := 7) hc0 hr0)
