@@ -619,7 +619,7 @@ lemma EZmid_eq_sum_probs {Ω : Type*} [MeasurableSpace Ω] [DecidableEq Ω] [Mea
   -- rewrite integral of finite sum as finite sum of integrals, using integrability of each summand
   dsimp [Zmid]
   have fint : (∫ ω, (∑ v ∈ MidBlock k X, Prob.indR (Smap v) ω) ∂μ) = (∑ v ∈ MidBlock k X, (∫ ω, Prob.indR (Smap v) ω ∂μ)) := by
-    apply integral_finset_sum
+    apply MeasureTheory.integral_finsetSum
     intro v hv
     exact indR_integrable_each (μ := μ) (Smap := Smap) (v := v)
   have hsum : (∑ v ∈ MidBlock k X, (∫ ω, Prob.indR (Smap v) ω ∂μ)) = (∑ v ∈ MidBlock k X, (μ ↑(Smap v)).toReal) := by
