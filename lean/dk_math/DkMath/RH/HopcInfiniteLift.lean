@@ -112,7 +112,8 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_hasSum
       (fun S : Finset {p // Nat.Prime p} =>
         hopcPrimeContributionSum (S := S) σ t)
       Filter.atTop (𝓝 L) := by
-  simpa only [HasSum, hopcPrimeContributionFn, hopcPrimeContributionSum] using hHasSum
+  simpa [HasSum, SummationFilter.unconditional, hopcPrimeContributionFn,
+    hopcPrimeContributionSum] using hHasSum
 
 /-- `HopcInfiniteLiftAssumptions` 版の atTop 極限（極限値 0）。 -/
 theorem tendsto_hopcPrimeContributionSum_atTop_of_assumptions
@@ -375,9 +376,8 @@ theorem hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt
         (fun S : Finset {q // Nat.Prime q} =>
           hopcPrimeContributionSum (S := S) σ t)
         Filter.atTop (𝓝 (hopcPrimeContributionTsum σ t)) := by
-    simpa only [HasSum, hopcPrimeContributionFn, hopcPrimeContributionTsum,
-      hopcPrimeContributionSum]
-      using hSummable.hasSum
+    simpa [HasSum, SummationFilter.unconditional, hopcPrimeContributionFn,
+      hopcPrimeContributionTsum, hopcPrimeContributionSum] using hSummable.hasSum
   exact tendsto_nhds_unique hTsum hT0
 
 /--

@@ -22,11 +22,6 @@ open DkMath.Basic
 open scoped Real
 open Complex
 
-instance : ContinuousSMul ℝ ℂ where
-  continuous_smul := by
-    simpa [Algebra.smul_def] using
-      (Complex.continuous_ofReal.comp continuous_fst).mul continuous_snd
-
 /-
 補題のモジュール：Euler-zeta の等価性と基本変形
 
@@ -352,7 +347,7 @@ lemma hasDerivAt_vertical_mul_log_p
   have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * Complex.I) Complex.I t := by
     simpa [one_mul] using (Complex.ofRealCLM.hasDerivAt (x := t)).mul_const Complex.I
   have hvertical : HasDerivAt (fun u : ℝ => vertical σ u) Complex.I t := by
-    convert hmul.const_add (σ : ℂ) using 1
+    simpa [vertical] using hmul.const_add (σ : ℂ)
   simpa [mul_assoc] using hvertical.mul_const (Real.log (p : ℝ) : ℂ)
 
 /--
@@ -370,10 +365,12 @@ lemma hasDerivAt_eulerZeta_exp_s_log_p_sub_one
   unfold eulerZeta_exp_s_log_p_sub_one
   have hinner :=
     hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
-  convert
-      (((Complex.hasDerivAt_exp
-        (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ))
-      using 1
+  have h :=
+    (((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ))
+  change HasDerivAt
+    (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ)) - 1) _ t
+  simpa only [Function.comp_apply] using h
 
 /--
 `w_p` の導関数の `deriv` 版。
@@ -450,8 +447,9 @@ lemma hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one
       HasDerivAt
         (fun u : ℝ => Complex.exp (vertical σ u * lp))
         (Complex.exp (vertical σ t * lp) * (Complex.I * lp)) t := by
-    simpa [lp] using
-      (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
+    have h := (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
+    change HasDerivAt (fun u : ℝ => Complex.exp (vertical σ u * lp)) _ t
+    simpa [lp, Function.comp_def] using h
   have hmul := hexp.mul_const (Complex.I * lp)
   simpa [lp, mul_assoc] using hmul
 
@@ -579,7 +577,9 @@ lemma differentiableAt_eulerZetaExpSubOneFinite
       have hd_p :
           DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
         (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
-      simpa [eulerZetaExpSubOneFinite, hp] using hd_p.mul ih
+      unfold eulerZetaExpSubOneFinite
+      convert hd_p.mul ih using 1 <;>
+        first | rfl | (funext u; simp [eulerZetaExpSubOneFinite, hp])
 
 /--
 `insert` 1ステップ版の積→和補題。
@@ -716,7 +716,9 @@ lemma phaseVel_exp_vertical_mul_log_p_eq_log
     have hinner :
         HasDerivAt (fun u : ℝ => vertical σ u * lp) (Complex.I * lp) t := by
       simpa [lp] using hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
-    simpa [lp] using ((Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner).deriv
+    have h := ((Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner).deriv
+    change deriv (fun u : ℝ => Complex.exp (vertical σ u * lp)) t = _
+    simpa [lp, Function.comp_def] using h
   unfold DkMath.RH.phaseVel
   change
     (((deriv (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t) /
@@ -807,7 +809,9 @@ lemma differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne
       have hd_S :
           DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t :=
         ih hS_ne'
-      simpa [eulerZetaFactorVerticalExpFinite, hp] using hd_p.mul hd_S
+      unfold eulerZetaFactorVerticalExpFinite
+      convert hd_p.mul hd_S using 1 <;>
+        first | rfl | (funext u; simp [eulerZetaFactorVerticalExpFinite, hp])
 
 /--
 exp 形 Euler 因子有限積の位相速度は、局所位相速度寄与の有限和に一致する。

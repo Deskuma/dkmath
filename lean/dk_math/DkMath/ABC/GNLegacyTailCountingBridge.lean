@@ -77,7 +77,7 @@ theorem GNNonExceptionalPart_factorization
       (GNNonExceptionalPart p a b).factorization r =
         (∑ q ∈ S, (f q).factorization r) := by
     simpa only [GNNonExceptionalPart, S, f,
-      Finsupp.coe_finset_sum, Finset.sum_apply] using hfac
+      Finsupp.coe_finsetSum, Finset.sum_apply] using hfac
   change
     (GNNonExceptionalPart p a b).factorization r =
       if r ∈ GNNonExceptionalSupport p a b then
@@ -275,7 +275,7 @@ theorem eval_GNPolynomial
     Polynomial.eval (a : R) (GNPolynomial p b R) =
       (GN p a b : ℕ) := by
   rw [GN_eq_sum]
-  simp only [GNPolynomial, Polynomial.eval_finset_sum,
+  simp only [GNPolynomial, Polynomial.eval_finsetSum,
     Polynomial.eval_mul, Polynomial.eval_C,
     Polynomial.eval_pow, Polynomial.eval_X, Nat.cast_sum]
   apply Finset.sum_congr rfl
@@ -340,7 +340,7 @@ theorem GNPolynomial_monic
     exact (Polynomial.natDegree_C_mul_X_pow_le _ i).trans
       (by simpa using
         Nat.le_pred_of_lt (Finset.mem_range.mp hi))
-  · rw [GNPolynomial, Polynomial.finset_sum_coeff]
+  · rw [GNPolynomial, Polynomial.finsetSum_coeff]
     rw [Finset.sum_eq_single (p - 1)]
     · have hpred : p - 1 + 1 = p := by omega
       simp [hpred]

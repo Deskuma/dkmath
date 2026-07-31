@@ -4,6 +4,14 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- Re-export new modules as backward-compatible bridges
+import DkMath.CosmicFormula.ResidualNat
+import DkMath.CosmicFormula.ResidualInt
+import DkMath.PowerSwap
+import DkMath.NumberTheory.PowerSums
+
+set_option linter.style.longLine false
+
 /-
 LPS module: Lander, Parkin, and Selfridge conjecture research
 
@@ -14,9 +22,3 @@ NOTE: Original LPS files have been refactored into 3 main families:
 
 This file provides backward-compatible imports for the refactored structure.
 -/
-
--- Re-export new modules as backward-compatible bridges
-import DkMath.CosmicFormula.ResidualNat
-import DkMath.CosmicFormula.ResidualInt
-import DkMath.PowerSwap
-import DkMath.NumberTheory.PowerSums

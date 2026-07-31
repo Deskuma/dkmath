@@ -130,7 +130,5 @@ theorem seventhThetaSquareBFactor_modSeven (A B : ℤ) :
   push_cast
   rw [show (7 : ZMod 7) = 0 by decide, zero_mul, add_zero]
 
-#print axioms thetaLinear_pow_seven
-#print axioms thetaSquare_pow_seven
 
 end DkMath.FLT.Seven.SevenRealCubicInt

@@ -276,11 +276,10 @@ theorem
     calc
       crt candidate.weighted.u q =
           (family.localActual q).u := by
-        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
-          AwayRoutingCoordinates.map] using h
+        convert h using 1 <;> rfl
       _ = (r.cubic.rootTriple.normal.root.fst :
           ZMod (family.localModulus q)) := by
-        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+        convert horiginal using 1; rfl
       _ = crt
           (r.cubic.rootTriple.normal.root.fst :
             ZMod family.combinedModulus) q := by
@@ -295,11 +294,10 @@ theorem
     calc
       crt candidate.weighted.v q =
           (family.localActual q).v := by
-        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
-          AwayRoutingCoordinates.map] using h
+        convert h using 1 <;> rfl
       _ = (r.cubic.rootTriple.normal.root.snd :
           ZMod (family.localModulus q)) := by
-        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+        convert horiginal using 1; rfl
       _ = crt
           (r.cubic.rootTriple.normal.root.snd :
             ZMod family.combinedModulus) q := by
@@ -314,10 +312,9 @@ theorem
     calc
       crt candidate.weighted.y q =
           (family.localActual q).y := by
-        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
-          AwayRoutingCoordinates.map] using h
+        convert h using 1 <;> rfl
       _ = (y : ZMod (family.localModulus q)) := by
-        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+        convert horiginal using 1; rfl
       _ = crt (y : ZMod family.combinedModulus) q := by
         exact (congrFun (map_natCast crt y) q).symm
   · apply crt.injective
@@ -329,10 +326,9 @@ theorem
     calc
       crt candidate.weighted.z q =
           (family.localActual q).z := by
-        simpa [crt, AwaySevenBaseTerminalPrimeScaleFamily.reductionHom,
-          AwayRoutingCoordinates.map] using h
+        convert h using 1 <;> rfl
       _ = (z : ZMod (family.localModulus q)) := by
-        simpa [AwayNonSevenPrimeDepthPacket.toPrimePowerSolution] using horiginal
+        convert horiginal using 1; rfl
       _ = crt (z : ZMod family.combinedModulus) q := by
         exact (congrFun (map_natCast crt z) q).symm
 

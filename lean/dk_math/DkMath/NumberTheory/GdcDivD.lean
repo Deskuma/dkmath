@@ -69,7 +69,7 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
     -- use the basic lemma `gcd_eq_natAbs` to relate integer gcd to nat gcd
     have h := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
     have eqN : Int.gcd (a - b) (diffPowSum a b d)
-      = ((a - b).natAbs.gcd (diffPowSum a b d).natAbs : ℤ) := by simpa using h.symm
+      = ((a - b).natAbs.gcd (diffPowSum a b d).natAbs : ℤ) := by simpa using h
     obtain ⟨k, hk⟩ := h_natAbs
     use k
     have eq_nat : (Int.gcd (a - b) (diffPowSum a b d) : ℕ)

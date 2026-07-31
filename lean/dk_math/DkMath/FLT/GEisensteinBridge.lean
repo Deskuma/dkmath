@@ -1394,8 +1394,7 @@ lemma NoSqOnS0_of_numberTheoryHasLocalReduceFamily {c b : ℕ}
 /--
 `hasStep` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_hasStep
+theorem numberTheoryHasKernelFamily_of_hasStep
     (hasStep :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         PrimitiveSquareDescentStep c b) :
@@ -1407,8 +1406,7 @@ def numberTheoryHasKernelFamily_of_hasStep
 /--
 `hasReduce` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_hasReduce
+theorem numberTheoryHasKernelFamily_of_hasReduce
     (hasReduce :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NumberTheoryReduce c b) :
@@ -1420,8 +1418,7 @@ def numberTheoryHasKernelFamily_of_hasReduce
 /--
 `hasStepExists` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_hasStepExists
+theorem numberTheoryHasKernelFamily_of_hasStepExists
     (hasStepExists :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NumberTheoryDescentOn.StepExists c b) :
@@ -1433,8 +1430,7 @@ def numberTheoryHasKernelFamily_of_hasStepExists
 /--
 `hasLocalReduce` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_hasLocalReduce
+theorem numberTheoryHasKernelFamily_of_hasLocalReduce
     (hasLocalReduce :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NumberTheoryDescentOn.LocalReduce c b) :
@@ -1461,7 +1457,7 @@ noncomputable def numberTheoryHasReduceFamily_of_hasKernel
 /--
 `hasKernel` family から `hasStep` family を作る。
 -/
-noncomputable def numberTheoryHasStepFamily_of_hasKernel
+theorem numberTheoryHasStepFamily_of_hasKernel
     (hasKernel :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
@@ -1476,7 +1472,7 @@ noncomputable def numberTheoryHasStepFamily_of_hasKernel
 `hasNonLiftable` family から `hasStep` family を作る。
 各 `(c,b,q)` で平方持ち上げが起きないため、`PrimitiveSquareDescentStep` は空前提で成立する。
 -/
-def numberTheoryHasStepFamily_of_nonLiftableFamily
+theorem numberTheoryHasStepFamily_of_nonLiftableFamily
     (hasNonLift :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         ∀ q : ℕ, NonLiftableS0 c b q) :
@@ -1488,8 +1484,7 @@ def numberTheoryHasStepFamily_of_nonLiftableFamily
 /--
 `hasNonLiftable` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_nonLiftableFamily
+theorem numberTheoryHasKernelFamily_of_nonLiftableFamily
     (hasNonLift :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         ∀ q : ℕ, NonLiftableS0 c b q) :
@@ -1501,7 +1496,7 @@ def numberTheoryHasKernelFamily_of_nonLiftableFamily
 /--
 `hasNoSq` family から `hasNonLiftable` family を作る。
 -/
-def numberTheoryHasNonLiftableFamily_of_hasNoSqFamily
+theorem numberTheoryHasNonLiftableFamily_of_hasNoSqFamily
     (hasNoSq :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NoSqOnS0 c b) :
@@ -1513,7 +1508,7 @@ def numberTheoryHasNonLiftableFamily_of_hasNoSqFamily
 /--
 `hasNoSq` family から `hasStep` family を作る。
 -/
-def numberTheoryHasStepFamily_of_hasNoSqFamily
+theorem numberTheoryHasStepFamily_of_hasNoSqFamily
     (hasNoSq :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NoSqOnS0 c b) :
@@ -1525,8 +1520,7 @@ def numberTheoryHasStepFamily_of_hasNoSqFamily
 /--
 `hasNoSq` family から `hasKernel` family を作る。
 -/
-@[implicit_reducible]
-def numberTheoryHasKernelFamily_of_hasNoSqFamily
+theorem numberTheoryHasKernelFamily_of_hasNoSqFamily
     (hasNoSq :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NoSqOnS0 c b) :
@@ -1605,7 +1599,7 @@ structure NumberTheoryStepProvider where
 /--
 `hasKernel` 関数から `NumberTheoryKernelProvider` を作る。
 -/
-def numberTheoryKernelProvider_of_hasKernel
+theorem numberTheoryKernelProvider_of_hasKernel
     (hasKernel :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
@@ -1617,7 +1611,7 @@ def numberTheoryKernelProvider_of_hasKernel
 /--
 `hasStepExists` 関数から `NumberTheoryStepExistsProvider` を作る。
 -/
-def numberTheoryStepExistsProvider_of_hasStepExists
+theorem numberTheoryStepExistsProvider_of_hasStepExists
     (hasStepExists :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         NumberTheoryDescentOn.StepExists c b) :
@@ -1653,7 +1647,7 @@ def numberTheoryReduceProvider_of_hasReduce
 /--
 `hasStep` 関数から `NumberTheoryStepProvider` を作る。
 -/
-def numberTheoryStepProvider_of_hasStep
+theorem numberTheoryStepProvider_of_hasStep
     (hasStep :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
         PrimitiveSquareDescentStep c b) :
@@ -1665,7 +1659,7 @@ def numberTheoryStepProvider_of_hasStep
 /--
 `NumberTheoryLocalReduceProvider` から `NumberTheoryStepExistsProvider` を得る。
 -/
-def numberTheoryStepExistsProvider_of_localReduceProvider
+theorem numberTheoryStepExistsProvider_of_localReduceProvider
     (provLocal : NumberTheoryLocalReduceProvider) :
     NumberTheoryStepExistsProvider where
   hasStepExists := by
@@ -1676,7 +1670,7 @@ def numberTheoryStepExistsProvider_of_localReduceProvider
 /--
 `NumberTheoryLocalReduceProvider` から `NumberTheoryKernelProvider` を得る。
 -/
-def numberTheoryKernelProvider_of_localReduceProvider
+theorem numberTheoryKernelProvider_of_localReduceProvider
     (provLocal : NumberTheoryLocalReduceProvider) :
     NumberTheoryKernelProvider where
   hasKernel := by
@@ -1700,7 +1694,7 @@ def numberTheoryReduceProvider_of_localReduceProvider
 /--
 `NumberTheoryLocalReduceProvider` から `NumberTheoryStepProvider` を得る。
 -/
-def numberTheoryStepProvider_of_localReduceProvider
+theorem numberTheoryStepProvider_of_localReduceProvider
     (provLocal : NumberTheoryLocalReduceProvider) :
     NumberTheoryStepProvider where
   hasStep := by
@@ -1711,7 +1705,7 @@ def numberTheoryStepProvider_of_localReduceProvider
 /--
 `NumberTheoryStepExistsProvider` から `NumberTheoryKernelProvider` を得る。
 -/
-def numberTheoryKernelProvider_of_stepExistsProvider
+theorem numberTheoryKernelProvider_of_stepExistsProvider
     (provExists : NumberTheoryStepExistsProvider) :
     NumberTheoryKernelProvider where
   hasKernel := by
@@ -1736,7 +1730,7 @@ noncomputable def numberTheoryReduceProvider_of_stepExistsProvider
 /--
 `NumberTheoryStepExistsProvider` から `NumberTheoryStepProvider` を得る。
 -/
-noncomputable def numberTheoryStepProvider_of_stepExistsProvider
+theorem numberTheoryStepProvider_of_stepExistsProvider
     (provExists : NumberTheoryStepExistsProvider) :
     NumberTheoryStepProvider where
   hasStep := by
@@ -1757,7 +1751,7 @@ noncomputable def numberTheoryReduceProvider_of_stepProvider
 /--
 `NumberTheoryReduceProvider` から `NumberTheoryStepProvider` を得る。
 -/
-def numberTheoryStepProvider_of_reduceProvider
+theorem numberTheoryStepProvider_of_reduceProvider
     (provReduce : NumberTheoryReduceProvider) :
     NumberTheoryStepProvider where
   hasStep := by
@@ -1767,7 +1761,7 @@ def numberTheoryStepProvider_of_reduceProvider
 /--
 `NumberTheoryReduceProvider` から `NumberTheoryKernelProvider` を得る。
 -/
-def numberTheoryKernelProvider_of_reduceProvider
+theorem numberTheoryKernelProvider_of_reduceProvider
     (provReduce : NumberTheoryReduceProvider) :
     NumberTheoryKernelProvider where
   hasKernel := by
@@ -1801,7 +1795,7 @@ noncomputable def numberTheoryReduceProvider_of_kernelProvider
 /--
 `NumberTheoryKernelProvider` から `NumberTheoryStepProvider` を得る。
 -/
-noncomputable def numberTheoryStepProvider_of_kernelProvider
+theorem numberTheoryStepProvider_of_kernelProvider
     (provKernel : NumberTheoryKernelProvider) :
     NumberTheoryStepProvider where
   hasStep := by
@@ -1812,7 +1806,7 @@ noncomputable def numberTheoryStepProvider_of_kernelProvider
 /--
 `NumberTheoryStepProvider` から `NumberTheoryKernelProvider` を得る。
 -/
-def numberTheoryKernelProvider_of_stepProvider
+theorem numberTheoryKernelProvider_of_stepProvider
     (provStep : NumberTheoryStepProvider) :
     NumberTheoryKernelProvider where
   hasKernel := by
@@ -2095,7 +2089,9 @@ lemma exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
     GEisensteinDescentCore_of_descentClassify_primitiveSized hDescent
   let s0 : hCore.frame.State :=
     GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize
-  simpa [hCore, s0] using
+  simpa [hCore, s0, GEisensteinDescentCore_of_descentClassify_primitiveSized,
+    GEisensteinDescentCore_of_descentClassify_withFrame,
+    primitiveSizedCandidateGEisensteinDescentFrame, GEisensteinDescentFrame.descend] using
     GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s0
 
 /--

@@ -194,6 +194,7 @@ private theorem map_associated
     Associated (f x) (f y) := by
   rcases h with ⟨u, hu⟩
   refine ⟨Units.map f u, ?_⟩
+  change f x * f (u : A) = f y
   simpa only [map_mul] using congrArg f hu
 
 /-- The oriented pair product inherits the complete loaded-core
@@ -307,18 +308,6 @@ end AdditiveChartFrontierPacket
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.oriented_mul_conjugate_eq_realPairCarrier
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.localEval_orientedLinearCarrier_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.localEval_conjugateLinearCarrier_ne_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.DegreeSixLocalRatioProvider.orientedPair_associated_loadedCore
-#print axioms
-  RamifiedSignedRootRoutingPacket.nonempty_additiveChartFrontierPacket
-#print axioms
-  RamifiedSignedRootRoutingPacket.AdditiveChartFrontierPacket.orientedLoadedFactor_chartReadyAt
 
 end
 

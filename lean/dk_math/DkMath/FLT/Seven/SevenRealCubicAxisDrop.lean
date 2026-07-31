@@ -644,7 +644,6 @@ theorem nonempty_depthLedger
       HasExactThetaDepth rootGap 10 := by
     have := exactDepth_left_of_mul
       (m := 10) (n := 3) hproductDepth hquotientDepth
-    norm_num at this ⊢
     exact this
   rcases hgapDepth.1 with ⟨gapCore, hgapCore⟩
   have hgapCoreNot : ¬eisensteinAxis ∣ gapCore := by
@@ -1086,19 +1085,6 @@ theorem nonempty_axisDrop
 
 end RamifiedRealCubicNormPacket
 
-#print axioms SevenRealCubicInt.eisensteinAxis_prime
-#print axioms RamifiedRealCubicExactPowerPacket.roots_isCoprime
-#print axioms RamifiedRealCubicExactPowerPacket.nonempty_depthLedger
-#print axioms
-  RamifiedRealCubicDepthLedgerPacket.normalizedFactors_isCoprime
-#print axioms
-  RamifiedRealCubicDepthLedgerPacket.exists_gapCore_associated_pow_seven
-#print axioms
-  RamifiedRealCubicDepthLedgerPacket.exists_quotientCore_associated_pow_seven
-#print axioms
-  RamifiedRealCubicDepthLedgerPacket.nonempty_balancedAxisSplit
-#print axioms RamifiedRealCubicExactPowerPacket.nonempty_axisDrop
-#print axioms RamifiedRealCubicNormPacket.nonempty_axisDrop
 
 end
 

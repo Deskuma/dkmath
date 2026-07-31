@@ -148,9 +148,19 @@ private theorem first_coordinate_dvd_actual {x y z : ℕ}
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
     simpa [hr, hc, routingFirstCoordinateValue] using hrow.sub hroot
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c12_constraint)
+      rw [hr, hc]
+      change (↑r.routing.c12 : ℤ) ∣
+        (↑z : ℤ) ^ 3 + 49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+          leftFstCorrection r.cubic.rootTriple.normal.root.fst
+            r.cubic.rootTriple.normal.root.snd
+      exact c.c12_constraint)
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c13_constraint)
+      rw [hr, hc]
+      change (↑r.routing.c13 : ℤ) ∣
+        (↑z : ℤ) ^ 3 - 49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+          rightFstCorrection r.cubic.rootTriple.normal.root.fst
+            r.cubic.rootTriple.normal.root.snd
+      exact c.c13_constraint)
   · have hv := modulus_dvd_rootSnd_of_sevenV p hc
     have hv' : (p.modulus : ℤ) ∣ r.cubic.rootTriple.normal.root.snd := by
       apply intCast_dvd_of_dvd_natAbs
@@ -164,11 +174,22 @@ private theorem first_coordinate_dvd_actual {x y z : ℕ}
       (Int.natCast_dvd_natCast.mpr hend).trans
         (rightEndpoint_dvd_fst_add_left_cube (z : ℤ) (y : ℤ))
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
-    convert hrow.sub hroot using 1 <;> simp [hr, hc, routingFirstCoordinateValue] <;> ring
+    convert hrow.sub hroot using 1
+    all_goals first | rfl | (simp only [routingFirstCoordinateValue] <;> ring)
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c22_constraint)
+      rw [hr, hc]
+      change (↑r.routing.c22 : ℤ) ∣
+        49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+            leftFstCorrection r.cubic.rootTriple.normal.root.fst
+              r.cubic.rootTriple.normal.root.snd - (↑y : ℤ) ^ 3
+      exact c.c22_constraint)
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c23_constraint)
+      rw [hr, hc]
+      change (↑r.routing.c23 : ℤ) ∣
+        (↑y : ℤ) ^ 3 + 49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+          rightFstCorrection r.cubic.rootTriple.normal.root.fst
+            r.cubic.rootTriple.normal.root.snd
+      exact c.c23_constraint)
   · have hv := modulus_dvd_rootSnd_of_sevenV p hc
     have hv' : (p.modulus : ℤ) ∣ r.cubic.rootTriple.normal.root.snd := by
       apply intCast_dvd_of_dvd_natAbs
@@ -180,15 +201,29 @@ private theorem first_coordinate_dvd_actual {x y z : ℕ}
     have hrow : (p.modulus : ℤ) ∣
         cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 :=
       (Int.natCast_dvd_natCast.mpr hend).trans (by
-        convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1 <;>
-          norm_num
+        convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+        all_goals first | rfl | ring_nf
+        norm_num
         ring)
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
-    convert hrow.sub hroot using 1 <;> simp [hr, hc, routingFirstCoordinateValue] <;> ring
+    convert hrow.sub hroot using 1
+    all_goals first | rfl | (simp only [routingFirstCoordinateValue] <;> ring)
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c32_constraint)
+      rw [hr, hc]
+      dsimp [routingCell, routingFirstCoordinateValue]
+      change (↑r.routing.c32 : ℤ) ∣
+        49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+            leftFstCorrection r.cubic.rootTriple.normal.root.fst
+              r.cubic.rootTriple.normal.root.snd - (↑y : ℤ) ^ 3
+      exact c.c32_constraint)
   · exact (Int.natCast_dvd_natCast.mpr p.modulus_dvd_cell).trans (by
-      simpa [hr, hc, routingCell] using c.c33_constraint)
+      rw [hr, hc]
+      dsimp [routingCell, routingFirstCoordinateValue]
+      change (↑r.routing.c33 : ℤ) ∣
+        (↑y : ℤ) ^ 3 + 49 * r.cubic.rootTriple.normal.root.snd ^ 5 *
+          rightFstCorrection r.cubic.rootTriple.normal.root.fst
+            r.cubic.rootTriple.normal.root.snd
+      exact c.c33_constraint)
 
 private theorem first_coordinate_equation_actual {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwayNonSevenPrimeDepthPacket r) :

@@ -221,15 +221,6 @@ theorem ramifiedAxis_associated_eisensteinAxis :
   exact associated_mul_unit_left _ _
     ((alpha_isUnit.mul alphaAddOne_isUnit).neg)
 
-#print axioms SevenRealCubicInt.eisensteinAxis_relation
-#print axioms SevenRealCubicInt.eisensteinAxis_cube
-#print axioms SevenRealCubicInt.eisensteinPolynomial_isEisensteinAt
-#print axioms SevenRealCubicInt.eisensteinPolynomial_irreducible
-#print axioms SevenRealCubicInt.eisensteinAxisUnit_isUnit
-#print axioms
-  SevenRealCubicInt.ramifiedAxis_associated_eisensteinAxis
-#print axioms SevenRealCubicInt.rotateEquiv_alpha
-#print axioms SevenRealCubicInt.rotateEquiv_three
 
 end SevenRealCubicInt
 

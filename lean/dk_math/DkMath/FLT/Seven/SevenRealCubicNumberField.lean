@@ -213,15 +213,16 @@ theorem field_discr :
   apply (algebraMap ℤ ℚ).injective_int
   rw [← NumberField.discr_eq_discr _ pB.basis, ← hloc]
   convert powerBasis_discr using 1
-  have hdim : pB.dim = powerBasis.dim := by
-    rw [← PowerBasis.finrank, ← PowerBasis.finrank]
-    exact NumberField.RingOfIntegers.rank Field
-  rw [← Algebra.discr_reindex _ _ (finCongr hdim)]
-  congr 1
-  ext i
-  simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
-    PowerBasis.coe_basis, pB, integralPowerBasis_gen]
-  simp
+  · have hdim : pB.dim = powerBasis.dim := by
+      rw [← PowerBasis.finrank, ← PowerBasis.finrank]
+      exact NumberField.RingOfIntegers.rank Field
+    rw [← Algebra.discr_reindex _ _ (finCongr hdim)]
+    congr 1
+    ext i
+    simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
+      PowerBasis.coe_basis, pB, integralPowerBasis_gen]
+    simp
+  · norm_num
 
 /-- The cubic field has no complex places.  Positivity of its discriminant
 forces an even number of complex places, while degree three bounds that
@@ -475,15 +476,6 @@ theorem ringOfIntegersRotateEquiv_three (x : 𝓞 Field) :
     SevenRealCubicInt.rotateEquiv_three,
     modelEquivRingOfIntegers.apply_symm_apply]
 
-#print axioms SevenRealCubic.powerBasis_discr
-#print axioms SevenRealCubic.adjoin_isIntegralClosure
-#print axioms SevenRealCubic.field_discr
-#print axioms SevenRealCubic.nrComplexPlaces_eq_zero
-#print axioms SevenRealCubic.minkowskiClassBound_eq
-#print axioms SevenRealCubic.classNumber_eq_one
-#print axioms SevenRealCubic.modelToRingOfIntegers_surjective
-#print axioms SevenRealCubic.modelToRingOfIntegers_injective
-#print axioms SevenRealCubic.ringOfIntegersRotateEquiv_three
 
 end SevenRealCubic
 

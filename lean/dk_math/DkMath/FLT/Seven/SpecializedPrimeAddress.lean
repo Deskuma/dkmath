@@ -89,7 +89,7 @@ theorem routingCell_dvd_rootRoutingFactorNat {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z) (row : EndpointRoutingRow)
     (column : RootRoutingColumn) :
     routingCell r.routing row column ∣ rootRoutingFactorNat r column := by
-  simpa [rootRoutingFactorNat] using routingCell_dvd_column r row column
+  cases column <;> exact routingCell_dvd_column r row _
 
 private theorem prime_not_dvd_second_of_coprime {q a b : ℕ} (hq : Nat.Prime q)
     (hab : Nat.Coprime a b) (ha : q ∣ a) : ¬ q ∣ b := by

@@ -325,7 +325,7 @@ lemma tendsto_const_div_nat_rpow_atTop_0 {α K : ℝ}
   have hsmall : |K / (X : ℝ) ^ α| < eps :=
     abs_div_lt_for_large_nat α K eps hα heps_pos hK_ne' X hXge
   have h_in_ball : K / (X : ℝ) ^ α ∈ Metric.ball 0 eps := by
-    simp only [gt_iff_lt, ge_iff_le, ne_eq, abs_div, Metric.mem_ball, dist_zero_right, norm_div,
+    simp only [gt_iff_lt, ne_eq, abs_div, Metric.mem_ball, dist_zero_right, norm_div,
       norm_eq_abs] at *
     exact hsmall
   exact heps_mem h_in_ball
@@ -453,7 +453,7 @@ theorem eventually_heavy_sublinear
   exact final
 
 /-- If a predicate holds for all x, it eventually holds at the top (for directed, nonempty α). -/
-def eventually_of_forall {α : Type*} [Preorder α] [IsDirected α (· ≤ ·)] [Nonempty α] {p : α → Prop} :
+theorem eventually_of_forall {α : Type*} [Preorder α] [IsDirected α (· ≤ ·)] [Nonempty α] {p : α → Prop} :
   (∀ x, p x) → ∀ᶠ x in (atTop : Filter α), p x :=
   fun h => eventually_atTop.2 ⟨Nonempty.some (inferInstance : Nonempty α), fun x _ => h x⟩
 

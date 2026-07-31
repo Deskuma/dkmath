@@ -180,7 +180,7 @@ theorem AwaySevenBaseTerminalPrimeScaleFamily.combinedModulus_eq_cubicRootLoad
       rw [Nat.factorization_def _
         (Nat.prime_of_mem_primeFactors q.2)]
     _ = awaySevenBaseTerminalCubicRootLoad r :=
-      (Nat.prod_pow_primeFactors_factorization
+      (Nat.prod_primeFactors_coe_pow_factorization
         (awaySevenBaseTerminalCubicRootLoad_ne_zero r)).symm
 
 end DkMath.FLT.Seven

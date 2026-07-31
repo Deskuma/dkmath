@@ -199,8 +199,8 @@ theorem galoisEval_zero_rotate
 theorem galoisEval_zero_alpha
     (a : p.QuotientPrimeGCDLoadAddress q) :
     a.galoisEval 0 alpha = a.muSevenAddress.beta := by
-  simpa only [galoisEval_zero] using
-    a.muSevenAddress.evalAlphaRoot_alpha
+  change a.evalAlphaRoot alpha = a.muSevenAddress.beta
+  exact a.muSevenAddress.evalAlphaRoot_alpha
 
 /-- Explicit first conjugate of the real `mu_7` coordinate. -/
 theorem galoisEval_one_alpha

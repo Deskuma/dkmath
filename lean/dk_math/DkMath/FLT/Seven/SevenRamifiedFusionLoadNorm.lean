@@ -30,7 +30,9 @@ theorem natAbs_norm_eq_of_associated
     have hnorm :
         norm (u : SevenRealCubicInt) *
             norm (↑(u⁻¹) : SevenRealCubicInt) = 1 := by
-      simpa only [norm_mul, norm_intCast, one_pow] using
+      have hnorm_one : norm (1 : SevenRealCubicInt) = 1 := by
+        norm_num [SevenRealCubicInt.norm]
+      simpa only [norm_mul, norm_intCast, one_pow, hnorm_one] using
         congrArg norm hmul
     exact IsUnit.of_mul_eq_one
       (norm (↑(u⁻¹) : SevenRealCubicInt)) hnorm
@@ -97,8 +99,10 @@ theorem natAbs_norm_realPairLoad21_product
       p.routing.c21 ^ 3 := by
   have h := natAbs_norm_eq_of_associated
     p.realPairLoad21_product_associated
+  have hc : (p.routing.c21 : SevenRealCubicInt) = (p.routing.c21 : ℤ) := rfl
   simpa only [norm_mul, Int.natAbs_mul, row2Load21Scalar,
-    norm_intCast, Int.natAbs_pow, Int.natAbs_natCast] using h
+    norm_intCast, Int.natAbs_pow, Int.natAbs_natCast,
+    Int.cast_ofNat, hc] using h
 
 /-- Taking absolute norms of the second three-way allocation recovers the
 cube of its scalar routing cell. -/
@@ -110,8 +114,10 @@ theorem natAbs_norm_realPairLoad22_product
       p.routing.c22 ^ 3 := by
   have h := natAbs_norm_eq_of_associated
     p.realPairLoad22_product_associated
+  have hc : (p.routing.c22 : SevenRealCubicInt) = (p.routing.c22 : ℤ) := rfl
   simpa only [norm_mul, Int.natAbs_mul, row2Load22Scalar,
-    norm_intCast, Int.natAbs_pow, Int.natAbs_natCast] using h
+    norm_intCast, Int.natAbs_pow, Int.natAbs_natCast,
+    Int.cast_ofNat, hc] using h
 
 /-- Every Galois-addressed gcd projection of the first row-two cell has
 absolute determinant norm exactly equal to that cell. -/

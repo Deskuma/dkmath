@@ -536,11 +536,6 @@ end QuotientPrimeSupport
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms SevenCyclotomicDegreeSixInt.map_star_ramifiedPrime
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.span_carrier_eq_loadedCarrier_mul_residual_pow
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.globalSeventhPowerResidualIdealExtractionPacket
 
 end
 

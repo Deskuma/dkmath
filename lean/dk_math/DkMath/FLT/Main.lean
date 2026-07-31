@@ -79,7 +79,7 @@ structure DescentBaseInput (c b : ℕ) where
 /--
 `GEisensteinBaseInput` から、最小の `descentClassify` 束を回収する内部変換。
 -/
-def GEisensteinBaseInput.toDescentBaseInput {c b : ℕ}
+theorem GEisensteinBaseInput.toDescentBaseInput {c b : ℕ}
     (hIn : GEisensteinBaseInput c b) :
     DescentBaseInput c b where
   hbc := hIn.hbc
@@ -92,7 +92,7 @@ def GEisensteinBaseInput.toDescentBaseInput {c b : ℕ}
 `DescentBaseInput.hDescentClass` は、今後はこの constructor を経由して
 `GEisenstein` 側の descent kernel から供給するのを標準ルートとみなす。
 -/
-def DescentBaseInput.ofGEisensteinCore {c b : ℕ}
+theorem DescentBaseInput.ofGEisensteinCore {c b : ℕ}
     (hbc : b < c)
     (hcb_coprime : Nat.Coprime c b)
     (hCore : GEisensteinDescentCore c b) :

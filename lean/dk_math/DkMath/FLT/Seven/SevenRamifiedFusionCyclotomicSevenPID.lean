@@ -117,16 +117,18 @@ theorem ringOfIntegers_isPrincipalIdealRing :
     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
       (Ideal.span ({(2 : ℤ)} : Set ℤ)).nonempty_primesOver
         (S := 𝓞 K)
+    letI : P.IsPrime := hPprime
+    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPlies
     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
     have hdeg :
-        (Ideal.span ({(2 : ℤ)} : Set ℤ)).inertiaDeg P =
+        P.inertiaDeg ℤ =
           orderOf (2 : ZMod 7) :=
       IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
         2 K P (by norm_num)
     change
       _ <
         2 ^
-          (Ideal.span ({(2 : ℤ)} : Set ℤ)).inertiaDeg P
+          P.inertiaDeg ℤ
     rw [hdeg, orderOf_two_zmodSeven]
     exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
   · letI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
@@ -137,16 +139,18 @@ theorem ringOfIntegers_isPrincipalIdealRing :
     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
       (Ideal.span ({(3 : ℤ)} : Set ℤ)).nonempty_primesOver
         (S := 𝓞 K)
+    letI : P.IsPrime := hPprime
+    letI : P.LiesOver (Ideal.span ({(3 : ℤ)} : Set ℤ)) := hPlies
     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
     have hdeg :
-        (Ideal.span ({(3 : ℤ)} : Set ℤ)).inertiaDeg P =
+        P.inertiaDeg ℤ =
           orderOf (3 : ZMod 7) :=
       IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
         3 K P (by norm_num)
     change
       _ <
         3 ^
-          (Ideal.span ({(3 : ℤ)} : Set ℤ)).inertiaDeg P
+          P.inertiaDeg ℤ
     rw [hdeg, orderOf_three_zmodSeven]
     exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
 
@@ -156,11 +160,6 @@ theorem classNumber_eq_one :
   NumberField.classNumber_eq_one_iff.mpr
     (ringOfIntegers_isPrincipalIdealRing K)
 
-#print axioms minkowskiFloor_le_four
-#print axioms orderOf_two_zmodSeven
-#print axioms orderOf_three_zmodSeven
-#print axioms ringOfIntegers_isPrincipalIdealRing
-#print axioms classNumber_eq_one
 
 end CyclotomicSeven
 

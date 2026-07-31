@@ -416,7 +416,7 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
         simp [hsub, hsum]
       · -- ⊢ a ^ (d + 1) = (a - b + b) ^ (d + 1)
         simp [ha_eq]
-    simpa [h_ab] using (Eq.symm h')
+    simpa [GCell, a, b, h_ab] using (Eq.symm h')
 
 /-- 最終形: Body = x * GCell d x u -/
 theorem card_Body_eq_mul_G (d x u : ℕ) :
@@ -653,7 +653,7 @@ lemma card_filter_lt_fin (d : ℕ) (i : Fin d) :
     have hn_lt : n < i.val := Finset.mem_range.mp hn
     have hn_lt_d : n < d := Nat.lt_trans hn_lt hi
     refine ⟨⟨n, hn_lt_d⟩, ?_, rfl⟩
-    have : (⟨n, hn_lt_d⟩ : Fin d) < i := by simpa using hn_lt
+    have : (⟨n, hn_lt_d⟩ : Fin d) < i := Fin.mk_lt_mk.mpr hn_lt
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩
   have h_card : s.card = t.card :=
     Finset.card_bij (s := s) (t := t) (i := fun (j : Fin d) _ => j.val)
@@ -682,7 +682,7 @@ lemma card_filter_gt_fin (d : ℕ) (i : Fin d) :
     have hn_le : n ≤ i.val := Nat.lt_succ_iff.mp hn_lt
     have hn_lt_d : n < d := lt_of_le_of_lt hn_le hi
     refine ⟨⟨n, hn_lt_d⟩, ?_, rfl⟩
-    have : (⟨n, hn_lt_d⟩ : Fin d) ≤ i := by simpa using hn_le
+    have : (⟨n, hn_lt_d⟩ : Fin d) ≤ i := Fin.mk_le_mk.mpr hn_le
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩
   have h_card_le : s_le.card = t_le.card :=
     Finset.card_bij (s := s_le) (t := t_le) (i := fun (j : Fin d) _ => j.val)
@@ -787,7 +787,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
     have hp_i_from_qi : p i = Int.ofNat ri + Int.ofNat u := by
       have h0 := congrArg (fun f => f i) hpi
       dsimp [CellDim.addEmb] at h0
-      have h : qi i + slabShift (d := d) u i i = p i := by simpa using h0
+      change qi i + slabShift (d := d) u i i = p i at h0
+      have h := h0
       have h' : qi i + Int.ofNat u = p i := by simpa [slabShift] using h
       calc
         p i = qi i + Int.ofNat u := h'.symm
@@ -795,7 +796,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
     have hp_i_from_qj : p i = Int.ofNat rj := by
       have h0 := congrArg (fun f => f i) hpj
       dsimp [CellDim.addEmb] at h0
-      have h : qj i + slabShift (d := d) u j i = p i := by simpa using h0
+      change qj i + slabShift (d := d) u j i = p i at h0
+      have h := h0
       have h' : qj i = p i := by
         have : slabShift (d := d) u j i = 0 := by simp [slabShift, hij]
         simpa [this] using h
@@ -844,7 +846,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
     have hp_j_from_qj : p j = Int.ofNat rj + Int.ofNat u := by
       have h0 := congrArg (fun f => f j) hpj
       dsimp [CellDim.addEmb] at h0
-      have h : qj j + slabShift (d := d) u j j = p j := by simpa using h0
+      change qj j + slabShift (d := d) u j j = p j at h0
+      have h := h0
       have h' : qj j + Int.ofNat u = p j := by simpa [slabShift] using h
       calc
         p j = qj j + Int.ofNat u := h'.symm
@@ -852,7 +855,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
     have hp_j_from_qi : p j = Int.ofNat ri := by
       have h0 := congrArg (fun f => f j) hpi
       dsimp [CellDim.addEmb] at h0
-      have h : qi j + slabShift (d := d) u i j = p j := by simpa using h0
+      change qi j + slabShift (d := d) u i j = p j at h0
+      have h := h0
       have h' : qi j = p j := by
         have hjne : j ≠ i := Fin.ne_of_lt hgt
         have : slabShift (d := d) u i j = 0 := by simp [slabShift, hjne]

@@ -367,10 +367,6 @@ theorem gapRoot_isCoprime_quotientRoot
 
 end RamifiedSignedRootDepthPacket
 
-#print axioms
-  RamifiedRealCubicBalancedAxisSplitPacket.nonempty_signedRootDepth
-#print axioms
-  RamifiedSignedRootDepthPacket.gapRoot_isCoprime_quotientRoot
 
 end
 

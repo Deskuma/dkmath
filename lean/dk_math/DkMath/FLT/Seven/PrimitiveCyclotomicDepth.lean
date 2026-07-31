@@ -48,7 +48,7 @@ theorem not_fortyNine_dvd_cyclotomicSeven
   have hy6mul : (49 : ℤ) ∣ 7 * y ^ 6 := by
     have hsub := dvd_sub h49 hres
     convert hsub using 1
-    ring
+    all_goals first | rfl | ring
   rcases hy6mul with ⟨k, hk⟩
   have hy6 : y ^ 6 = 7 * k := by
     apply mul_left_cancel₀ (by norm_num : (7 : ℤ) ≠ 0)

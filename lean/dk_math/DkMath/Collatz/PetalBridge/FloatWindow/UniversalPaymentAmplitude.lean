@@ -1251,13 +1251,16 @@ theorem canonicalSelectedDriftForwardWindowMatching_iff_finiteForward
     refine ⟨hqm, fun claim => pay (e.symm claim), ?_, ?_⟩
     · exact hinj.comp e.symm.injective
     · intro claim
-      simpa [e, canonicalSelectedDriftArrivalWindowEquiv] using
-        hforward (e.symm claim)
+      have hfst : (e.symm claim).fst = claim.fst := by
+        rfl
+      simpa [hfst] using hforward (e.symm claim)
   · rintro ⟨hqm, pay, hinj, hforward⟩
     refine ⟨hqm, fun claim => pay (e claim), ?_, ?_⟩
     · exact hinj.comp e.injective
     · intro claim
-      simpa [e, canonicalSelectedDriftArrivalWindowEquiv] using hforward (e claim)
+      have hfst : (e claim).fst = claim.fst := by
+        rfl
+      simpa [hfst] using hforward (e claim)
 
 /-- Fixed-depth queue zero is equivalent to a forward matching that retains
 the actual claim source coordinate. -/
@@ -2660,7 +2663,8 @@ theorem nat_le_two_pow_pred {gap : ℕ} (hgap : 1 ≤ gap) :
   · rcases gap with _ | gap
     · norm_num
     · have hpow := (gap + 1).lt_two_pow_self
-      simpa only [Nat.add_sub_cancel, Nat.succ_eq_add_one] using hpow
+      have hle := Nat.succ_le_of_lt hpow
+      simpa only [Nat.add_sub_cancel, Nat.succ_eq_add_one] using hle
 
 /-- Strengthened local dyadic potential: positive nonsaturated demand fits in
 one half of the block-width budget. -/

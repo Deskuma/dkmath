@@ -151,14 +151,6 @@ theorem strictDescentFailureBoundary
 
 end RamifiedSignedRootRoutingPacket.QuotientPrimeSupport
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.internalDepthFourCarrier_strictly_decreases
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.internalDepthFourCounterexampleReconstructionObligation_iff_strictDescentCandidate
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.exists_strict_awayCounterexample_of_internalDepthFourReconstruction
-#print axioms
-  RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.strictDescentFailureBoundary
 
 end
 

@@ -58,8 +58,6 @@ theorem pow_seven_isSourcePlane_iff (x : SevenRealCubicInt) :
   · intro h
     rw [h, mul_zero]
 
-#print axioms thd_pow_seven
-#print axioms pow_seven_isSourcePlane_iff
 
 end SevenRealCubicInt
 

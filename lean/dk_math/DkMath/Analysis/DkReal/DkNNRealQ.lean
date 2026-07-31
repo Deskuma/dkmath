@@ -172,6 +172,7 @@ theorem natCast_zero : ((0 : ℕ) : DkNNRealQ) = 0 := by
 /-- Natural casts preserve successor. -/
 theorem natCast_succ (n : ℕ) :
     ((n + 1 : ℕ) : DkNNRealQ) = (n : DkNNRealQ) + 1 := by
+  rw [show (1 : DkNNRealQ) = ofRat (1 : ℚ) (by positivity) from natCast_eq_ofRat 1]
   simpa only [natCast_eq_ofRat, Nat.cast_add, Nat.cast_one] using
     (ofRat_add (show 0 ≤ (n : ℚ) by positivity) zero_le_one).symm
 
@@ -333,6 +334,8 @@ instance : CommSemiring DkNNRealQ where
   right_distrib := right_distrib
   zero_mul := zero_mul
   mul_zero := mul_zero
+  npow_zero := pow_zero
+  npow_succ := fun n x => pow_succ_eq x n
   mul_comm := mul_comm
   natCast := natCast
   natCast_zero := natCast_zero

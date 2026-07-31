@@ -78,8 +78,11 @@ theorem eval_cyclotomicDegreeSixCarrierConj_ne_zero
     p.degreeSixLocalRatioProvider
       |>.localEval_conjugateLinearCarrier_ne_zero
         a.quotientAddress
-  simpa only [eval, degreeSixLocalRatioProvider,
-    provider_conjugateLinearCarrier_eq] using h
+  change
+    (SevenCyclotomicDegreeSixInt.localEval a.quotientAddress)
+        p.signedDepth.cyclotomicDegreeSixCarrierConj ≠ 0
+  rw [← provider_conjugateLinearCarrier_eq (p := p)]
+  exact h
 
 /-- Kernel-exclusion form of the conjugate-orientation theorem. -/
 theorem cyclotomicDegreeSixCarrierConj_not_mem_evalKernel
@@ -181,20 +184,6 @@ end CyclotomicLinearPrimeAddress
 
 end RamifiedSignedRootRoutingPacket
 
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.eval_cyclotomicDegreeSixCarrier_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.eval_cyclotomicDegreeSixCarrierConj_ne_zero
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_isMaximal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_comap_ofReal
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_comap_intCast
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.evalKernel_cardQuot
-#print axioms
-  RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.linearPrimeAddress_packet
 
 end
 

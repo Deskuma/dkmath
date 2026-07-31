@@ -461,7 +461,7 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider_core
     have : N = 0 := by simp [hN_eq_cube, hb0]
     exact hN_ne this
   have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
-    simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
+    exact padicValNat.pow (p := q) (a := b) 3
   have hval_mul3 : 3 * padicValNat q b = 1 := by
     calc
       3 * padicValNat q b = padicValNat q (b ^ 3) := by simp [hpow]
@@ -861,9 +861,6 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
       -- まず h_gcd から a と y の互いに素性・3 ∤ a を回収する
       have h_gcd_a : (a ^ 3).gcd (GN 3 (a ^ 3) y) = 1 := by
         simpa [ha] using h_gcd
-      have h_gcd_sum :
-          (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) = 1 := by
-        simpa [GN_eq_sum] using h_gcd_a
       have hcop_ay : Nat.Coprime a y := by
         rw [Nat.coprime_iff_gcd_eq_one]
         apply Nat.eq_one_of_dvd_one
@@ -885,11 +882,8 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using hdiv_right_poly
         have hdiv_gcd : a.gcd y ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd hdiv_left hdiv_right
-        have hdiv_gcd_sum :
-            a.gcd y ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
-          simpa [GN_eq_sum] using hdiv_gcd
-        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd_sum
-        exact this
+        rw [h_gcd_a] at hdiv_gcd
+        exact hdiv_gcd
       have h3a : ¬ 3 ∣ a := by
         intro h3
         have h3_left : 3 ∣ a ^ 3 := dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))
@@ -904,11 +898,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using h3_right_poly
         have h3_gcd : 3 ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd h3_left h3_right
-        have h3_gcd_sum :
-            3 ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
-          simpa [GN_eq_sum] using h3_gcd
-        have : 3 ∣ 1 := by
-          simp [h_gcd_sum] at h3_gcd_sum
+        rw [h_gcd_a] at h3_gcd
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
@@ -1271,16 +1261,18 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
     exact Nat.pos_of_mul_pos_left this
 
   -- gcd(x', y') = 1
-  have h_gcd_mul : Nat.gcd (g * x') (g * y') = g * Nat.gcd x' y' :=
-    Nat.gcd_mul_left g x' y'
-  have h_gcd_eq : g = g * Nat.gcd x' y' := by
-    simp only at h_gcd_mul
-    -- Nat.gcd x y = g, と対応させる
-    have : Nat.gcd x y = g := by rfl
+  have h_gcd_mul :
+    Nat.gcd (g * x') (g * y') =
+      g * Nat.gcd x' y' :=
+  Nat.gcd_mul_left g x' y'
+
+  have h_gcd_eq :
+    g = g * Nat.gcd x' y' := by
     calc
-      g = Nat.gcd x y := by rfl
-      _ = Nat.gcd (g * x') (g * y') := by simp [hx_mul, hy_mul]
-      _ = g * Nat.gcd x' y' := by exact h_gcd_mul
+    g = Nat.gcd x y := by rfl
+    _ = Nat.gcd (g * x') (g * y') := by
+      rw [hx_mul, hy_mul]
+    _ = g * Nat.gcd x' y' := h_gcd_mul
   have h_gcd_x'y' : Nat.gcd x' y' = 1 := by
     have eq_mul' : g * 1 = g * Nat.gcd x' y' := by rw [Nat.mul_one, ← h_gcd_eq]
     have h1 := Nat.mul_left_cancel hg_pos eq_mul'

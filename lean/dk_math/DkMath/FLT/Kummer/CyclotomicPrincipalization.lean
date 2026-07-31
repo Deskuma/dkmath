@@ -76,6 +76,8 @@ universe u
 
 namespace DkMath.FLT
 
+set_option linter.overlappingInstances false
+
 /-!
 ## §1. Cyclotomic Principalization Target の 3 段分解
 
@@ -245,7 +247,7 @@ review-011 の 5.3 で必要になる finite-family ideal arithmetic の受け�
 Mathlib の `IsDedekindDomain.inf_pow_eq_prod_of_prime` を DkMath 側で明示化する。
 -/
 theorem dedekindInfPrimePowEqProd
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*}
     (s : Finset ι) (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -260,7 +262,7 @@ Dedekind 領域における finite-family Chinese remainder theorem の DkMath �
 pairwise に異なる prime-power ideals の積で割った剰余環が、各商環の直積へ分解する。
 -/
 noncomputable def dedekindQuotientEquivPiOfFinsetProdEq
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*} {s : Finset ι}
     (I : Ideal R) (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -275,7 +277,7 @@ finite family の prime-power ideals に対し、各合同条件を同時に満�
 Kummer 的には、pairwise-coprime な ideal family から具体的な元を取り直すときの入口。
 -/
 theorem dedekindExistsRepresentativeModFinset
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*} {s : Finset ι}
     (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -291,7 +293,7 @@ Dedekind 領域で、prime ideal `P` による挟み込みから ideal の facto
 review-011 の 5.3 で、prime-power exponent を数えるための最小 receiver。
 -/
 theorem dedekindIdealCountNormalizedFactorsEq
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {P I : Ideal R} [P.IsPrime] {n : ℕ}
     (hle : I ≤ P ^ n) (hlt : ¬ I ≤ P ^ (n + 1)) :
   Multiset.count P (UniqueFactorizationMonoid.normalizedFactors I) = n := by
@@ -857,7 +859,7 @@ abbrev CyclotomicPrincipalIdealExtractionTarget : Prop :=
   ∀ {R : Type*} [CommRing R] [IsDomain R]
       {I : (FractionalIdeal (nonZeroDivisors R) (FractionRing R))ˣ} {I' : Ideal R},
       ((I : FractionalIdeal (nonZeroDivisors R) (FractionRing R)) = I') →
-      ClassGroup.mk I = 1 →
+      ClassGroup.mk (FractionRing R) I = 1 →
       ∃ x, x ≠ 0 ∧ I' = Ideal.span {x}
 
 /--
@@ -1110,7 +1112,7 @@ root ideal `K` も principal になる。
 Stage 1 の存在形 boundary を explicit equality から回収する generic receiver。
 -/
 theorem principalRootIdealExistsOfEqPowAndTorsionKill
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     {I K : Ideal R} {p : ℕ}
     (hp : p ≠ 0) (hIPrincipal : I.IsPrincipal) (hI_ne : I ≠ ⊥)
     (hEq : I = K ^ p)
@@ -1200,7 +1202,7 @@ tail ideal と chosen linear factor ideal の積が `(x)^p` で、しかも両�
 chosen linear factor ideal 自体が p 乗 ideal である。
 -/
 theorem linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {tail x y z : R}
     (hX_ne : Ideal.span ({x} : Set R) ≠ ⊥)
@@ -1218,7 +1220,7 @@ chosen linear factor を左に置いた 2-factor product equality を、
 generic receiver の tail-first 形へ渡す薄い adapter。
 -/
 theorem linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {tail x y z : R}
     (hX_ne : Ideal.span ({x} : Set R) ≠ ⊥)
@@ -1282,7 +1284,7 @@ theorem linearFactorDiffSpanEqSubOneSpan
       rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
     have hne : ζ ^ i ≠ ζ ^ j := fun h =>
       hij (hζ.pow_inj hi hj h)
-    exact (IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+    exact (IsPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
       hζ hp hηj hηi hne.symm).symm
   simp only [← sub_mul]
   exact associated_span_eq (hdiff.mul_right y)
@@ -1315,7 +1317,7 @@ theorem commonPrimeContainsSubOneY
       rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
     have hne : ζ ^ 1 ≠ ζ ^ j := fun h =>
       hj_ne1 (hζ.pow_inj h1lt hj_lt h).symm
-    have h := IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+    have h := IsPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
       hζ hp hηj hη1 hne.symm
     convert h.symm using 1; simp [pow_one]
   have h_assoc : Associated ((ζ ^ j - ζ) * y) ((ζ - 1) * y) := h_root_assoc.mul_right y
@@ -1826,8 +1828,7 @@ IsPrimitiveRoot.zeta_sub_one_prime は `{p^(k+1)}` 形式を要求。
 -/
 
 /-- `{p}` を `{p^(0+1)}` として解釈するための instance。 -/
-@[implicit_reducible]
-noncomputable def IsCyclotomicExtension_p_as_pow1
+theorem IsCyclotomicExtension_p_as_pow1
     {K : Type*} [Field K] [CharZero K]
     {p : ℕ} [IsCyclotomicExtension {p} ℚ K] :
     IsCyclotomicExtension {p^(0+1)} ℚ K := by
@@ -1835,7 +1836,7 @@ noncomputable def IsCyclotomicExtension_p_as_pow1
   infer_instance
 
 /-- `IsPrimitiveRoot ζ p` を `IsPrimitiveRoot ζ (p^(0+1))` に変換。 -/
-noncomputable def IsPrimitiveRoot_p_as_pow1
+theorem IsPrimitiveRoot_p_as_pow1
     {K : Type*} [Field K]
     {p : ℕ} {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     IsPrimitiveRoot ζ (p^(0+1)) := by
@@ -1954,7 +1955,8 @@ lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
   calc
     Polynomial.eval (a : E) (Polynomial.map (algebraMap ℚ E) (Polynomial.cyclotomic p ℚ))
         = Polynomial.eval₂ (algebraMap ℚ E) (a : E) (Polynomial.cyclotomic p ℚ) := by
-            simpa using (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
+            simpa [Polynomial.aeval_def] using
+              (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
     _ = (algebraMap ℚ E) (Polynomial.eval a (Polynomial.cyclotomic p ℚ)) := by
           simpa using
             (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ E) a)
@@ -2709,7 +2711,7 @@ class-group p-torsion annihilation から principal root ideal の存在が従�
 Stage 1 の存在形 boundary theorem へ入る直前の local exact receiver。
 -/
 theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {z y : R} {K : Ideal R}
     (hp : ctx.p ≠ 0) (hlin : z - ctx.zeta * y ≠ 0)
@@ -2728,7 +2730,7 @@ theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
 Stage 1 theorem が `K ≠ ⊥` を supply する場合は、こちらが最短 receiver になる。
 -/
 theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {z y : R} {K : Ideal R}
     (hp : ctx.p ≠ 0)
@@ -3233,7 +3235,8 @@ theorem cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
     simpa [factor, cyclotomicLinearFactorInRingOfIntegers, pow_zero] using hgap_eq
   have hxpow_nat_gap :
       x ^ p = gap * GN p gap y := by
-    simpa [PrimeGe5CounterexamplePack.gap, hgap_nat] using hpack.xpow_eq_gap_mul_GN
+    simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap,
+      hgap_nat] using hpack.xpow_eq_gap_mul_GN
   have hxpow_eq_gap_mul_gn_gap :
       (x : 𝓞 K) ^ p = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by
     calc
@@ -5217,7 +5220,7 @@ non-first-case (`p ∣ z - y`) 入力を datum へ詰める canonical prepare de
 
 この段は theorem-level packaging に徹し、未解決責務を descent 側へ押し下げる。
 -/
-def cyclotomicPrincipalizationNonFirstCasePrepare :
+theorem cyclotomicPrincipalizationNonFirstCasePrepare :
     CyclotomicPrincipalizationNonFirstCasePrepareTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hpgap
   exact
@@ -5233,7 +5236,7 @@ non-first-case datum を valuation datum へ持ち上げる canonical packaging�
 
 いまは trivial packaging だが、将来 p-adic valuation 補題で必要な荷物をここへ集約する。
 -/
-def cyclotomicPrincipalizationNonFirstCaseValuation :
+theorem cyclotomicPrincipalizationNonFirstCaseValuation :
     CyclotomicPrincipalizationNonFirstCaseValuationTarget := by
   intro p x y z q data
   exact ⟨data⟩
@@ -5243,7 +5246,7 @@ valuation datum を error datum へ持ち上げる canonical packaging。
 
 いまは trivial packaging だが、将来 error-term 抽出補題で必要な荷物をここへ集約する。
 -/
-def cyclotomicPrincipalizationNonFirstCaseError :
+theorem cyclotomicPrincipalizationNonFirstCaseError :
     CyclotomicPrincipalizationNonFirstCaseErrorTarget := by
   intro p x y z q data
   exact ⟨data⟩
@@ -5253,7 +5256,7 @@ error datum を TailError datum へ持ち上げる canonical packaging。
 
 将来 error-term 抽出の詳細をここへ集約できるよう、peel 側と同名の段を置く。
 -/
-def cyclotomicPrincipalizationNonFirstCaseTailError :
+theorem cyclotomicPrincipalizationNonFirstCaseTailError :
     CyclotomicPrincipalizationNonFirstCaseTailErrorTarget := by
   intro p x y z q data
   exact ⟨data⟩
@@ -5705,7 +5708,7 @@ Integral ideal 版の principal ideal extraction helper。
 `ClassGroup.mk0_eq_one_iff` をそのまま包装したもの。
 -/
 theorem idealIsPrincipal_of_classGroupMk0_eq_one
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {I : Ideal R} (hI : I ∈ nonZeroDivisors (Ideal R))
     (hClass : ClassGroup.mk0 ⟨I, hI⟩ = 1) :
     I.IsPrincipal :=

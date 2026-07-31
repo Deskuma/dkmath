@@ -234,10 +234,10 @@ theorem regularKernel_iterate_actLevel_eq_id {k : ℕ} (hk : 0 < k)
     {rho2 : ℝ} :
     (LevelSet.act (regularKernel k) : LevelSet ℝ rho2 → LevelSet ℝ rho2)^[k]
       = id := by
-  simpa [regularKernel, KernelFamily.actLevel] using
-    (normalizedRealKernelFamily.iterate_actLevel_eq_id_of_nsmul_eq_period
-      (regularPhaseStep_nsmul_eq_one hk)
-      normalizedRealKernelFamily_kernel_one (rho2 := rho2))
+  change (normalizedRealKernelFamily.actLevel (regularPhaseStep k))^[k] = id
+  exact normalizedRealKernelFamily.iterate_actLevel_eq_id_of_nsmul_eq_period
+    (regularPhaseStep_nsmul_eq_one hk)
+    normalizedRealKernelFamily_kernel_one
 
 end
 

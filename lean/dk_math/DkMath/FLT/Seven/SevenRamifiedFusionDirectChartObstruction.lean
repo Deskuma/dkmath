@@ -98,13 +98,5 @@ theorem no_direct_signedFermatSevenChart
 
 end RamifiedSignedRootDepthPacket
 
-#print axioms
-  RamifiedSignedRootDepthPacket.signedRoot_seventhPowerDifference_eq
-#print axioms
-  RamifiedSignedRootDepthPacket.sevenPowSix_not_dvd_signedRoot_seventhPowerDifference
-#print axioms
-  RamifiedSignedRootDepthPacket.not_exists_signedRoot_seventhPowerDifference_eq_pow
-#print axioms
-  RamifiedSignedRootDepthPacket.no_direct_signedFermatSevenChart
 
 end DkMath.FLT.Seven

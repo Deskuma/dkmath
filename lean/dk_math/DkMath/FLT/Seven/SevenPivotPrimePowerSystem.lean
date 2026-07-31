@@ -163,19 +163,18 @@ private theorem core_first_coordinate_dvd {x y z : ℕ}
       (rightEndpoint_dvd_fst_add_left_cube (z : ℤ) (y : ℤ))
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
     convert hrow.sub hres using 1
-    simp only [Int.reduceNeg, add_sub_sub_cancel]
-    ring
+    all_goals first | rfl | ring
   · have hs : p.upperModulus ∣ y+z := by
       simpa [hr, endpointRoutingFactorNat] using hend
     have hrow := (Int.natCast_dvd_natCast.mpr hs).trans (by
       convert endpointSum_dvd_fst_add_left_cube (z : ℤ) (y : ℤ) using 1
+      all_goals first | rfl | ring_nf
       norm_num
       ring
     )
     rw [r.cubic.rootTriple.normal.fst_eq] at hrow
     convert hrow.sub hres using 1
-    simp only [Int.reduceNeg, add_sub_sub_cancel]
-    ring
+    all_goals first | rfl | ring
 
 def toPrimePowerSolution {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     (p : AwaySevenPivotDepthPacket r) :
@@ -202,7 +201,10 @@ def toPrimePowerSolution {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
       apply intCast_dvd_of_dvd_natAbs
       simpa [← r.cubic.rootTriple.vPart_eq, Int.natAbs_mul] using
         p.upperModulus_dvd_seven_vPart
-    simpa only [Int.cast_mul, Int.cast_ofNat] using hz
+    change (7 * (r.cubic.rootTriple.normal.root.snd : ℤ) :
+      ZMod (7 ^ p.exponent)) = 0
+    norm_num [upperModulus, Int.cast_mul] at hz ⊢
+    exact hz
   rootSnd_ne_zero := by
     intro h
     apply p.upperModulus_not_dvd_vPart
@@ -211,8 +213,19 @@ def toPrimePowerSolution {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
       ((ZMod.intCast_zmod_eq_zero_iff_dvd _ _).1 h)
   first_coordinate_equation := by
     have hzero := intCast_zero_of_dvd (p.core_first_coordinate_dvd)
-    cases hr : p.row <;>
-      simpa [AwaySevenPivotFirstCoordinateEquation, hr] using hzero
+    cases hr : p.row
+    · simp only [AwaySevenPivotFirstCoordinateEquation]
+      rw [hr] at hzero
+      simp only at hzero
+      exact_mod_cast hzero
+    · simp only [AwaySevenPivotFirstCoordinateEquation]
+      rw [hr] at hzero
+      simp only at hzero
+      exact_mod_cast hzero
+    · simp only [AwaySevenPivotFirstCoordinateEquation]
+      rw [hr] at hzero
+      simp only at hzero
+      exact_mod_cast hzero
 
 end AwaySevenPivotDepthPacket
 

@@ -31,7 +31,7 @@ def Kset (X : ℕ) : Finset ℕ :=
 
 /- 中域の上側偏差イベント E_k（固定 X, δ） -/
 def Emid
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) (δ : ℝ) (k X : ℕ) : Set Ω :=
   {ω |
@@ -41,14 +41,14 @@ def Emid
 
 /- 同時良性事象（全部の k で上側偏差が起きない） -/
 def GoodX
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) (δ : ℝ) (X : ℕ) : Set Ω :=
   {ω | ∀ k ∈ Kset X, ¬ (ω ∈ Emid (μ := μ) (Smap := Smap) δ k X)}
 
 /- GoodX の補集合は k 合併そのもの。 -/
 lemma goodX_compl_eq_union
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) (δ : ℝ) (X : ℕ) :
   (GoodX (μ := μ) (Smap := Smap) δ X)ᶜ
@@ -67,7 +67,7 @@ lemma goodX_compl_eq_union
 
 /- `ω ∈ GoodX` なら全 k∈K(X) で `Zmid ≤ 期待値 + δ·card`。 -/
 lemma goodX_pointwise
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) {δ : ℝ} {X : ℕ} {ω : Ω} :
   ω ∈ GoodX (μ := μ) (Smap := Smap) δ X →
@@ -80,7 +80,7 @@ lemma goodX_pointwise
 
 /- `ω ∈ GoodX` なら `Zmid ≤ expectation + (q.toReal + δ)·card`。 -/
 lemma goodX_pointwise_qaddδ_card
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) {δ : ℝ} {X k : ℕ} {ω : Ω} (q : ENNReal)
   (hq_ne : q ≠ ⊤) (hprob : ∀ v ∈ MidBlock k X, μ ↑(Smap v) ≤ q) :
@@ -109,7 +109,7 @@ lemma goodX_pointwise_qaddδ_card
 
 /- sum-over-k version. -/
 lemma goodX_sum_over_k_qaddδ_card
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) {δ : ℝ} {X : ℕ} (q : ENNReal)
   (hq_ne : q ≠ ⊤)
@@ -142,7 +142,7 @@ lemma Kset_mono {X Y : ℕ} (hXY : X ≤ Y) : Kset X ≤ Kset Y := by
 
 /- GoodX is antitone in X, assuming monotonicity of the underlying events. -/
 lemma GoodX_antitone
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   (Smap : ℕ → Finset Ω) {δ : ℝ} {X Y : ℕ} (hXY : X ≤ Y)
   (hEmid_mono : ∀ k, k ∈ Kset X → Emid (μ := μ) (Smap := Smap) δ k X ⊆ Emid (μ := μ) (Smap := Smap) δ k Y) :

@@ -742,7 +742,7 @@ theorem unitKernel_eq_one_of_act_eq_id
     k = UnitKernel.one ℝ := by
   apply UnitKernel.ext
   have hone := congrFun h (Vec.one ℝ)
-  simpa [UnitKernel.act] using hone
+  simpa [UnitKernel.act, UnitKernel.one] using hone
 
 /--
 The transported kernel has product order dividing `n` when its `n`-fold

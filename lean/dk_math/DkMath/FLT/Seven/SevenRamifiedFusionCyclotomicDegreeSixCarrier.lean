@@ -143,8 +143,8 @@ theorem zeta_isPrimitiveRoot :
 theorem zetaUnit_pow_seven :
     zetaUnit ^ 7 = 1 := by
   apply Units.ext
-  simpa only [Units.val_pow_eq_pow_val, Units.val_one] using
-    zeta_pow_seven
+  change zeta ^ 7 = 1
+  exact zeta_pow_seven
 
 /-- Unit-valued nontriviality used by the provider contract. -/
 theorem zetaUnit_ne_one :
@@ -312,8 +312,8 @@ def degreeSixLocalRatioProvider
   zeta_pow_seven := zetaUnit_pow_seven
   zeta_ne_one := zetaUnit_ne_one
   cubicMap_alpha := by
-    simpa only [zetaUnit, Units.val_inv_eq_inv_val] using
-      ofReal_alpha
+    change ofReal alpha = 1 + zeta + zetaInv
+    exact ofReal_alpha
   localEval := fun a => SevenCyclotomicDegreeSixInt.localEval a
   localEval_cubic := fun a x =>
     SevenCyclotomicDegreeSixInt.localEval_ofReal a x
