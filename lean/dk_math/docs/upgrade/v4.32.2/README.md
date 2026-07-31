@@ -503,3 +503,11 @@ Lean4-v4_32_2-1st_build.log
 ```
 
 このログを upgrade の基準点とし、各修正 checkpoint で failure 数と内容の変化を追跡する。
+
+## 12. backlog
+
+- [ ] `TriominoCosmicBranchA` の旧 `PrimeGe5` comparison route を整理する。
+  - `primeGe5BranchANormalFormNePCoprimeKernel_default` の `sorry` 依存鎖を監査
+  - 再利用可能な GN / valuation / factorization 補題を保存
+  - legacy provider を現役 FLT facade から分離
+  - 必要なら `Research` / `Legacy` モジュールへ移動
