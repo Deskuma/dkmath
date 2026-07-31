@@ -1,8 +1,10 @@
 # FLT7 seven-primary terminal route: implementation roadmap
 
 Updated: 2026-07-29
-Target branch: `wip/FLT7-magic-core-260722-WiseWolf`  
+Target branch: `wip/FLT7-magic-core-260722-WiseWolf`
+Target branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`
 Starting implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
+cid: 6a69b3a9-ebc8-83ee-8842-6b40cc0f5ba9
 
 ## 1. Goal
 
@@ -1078,9 +1080,25 @@ The oriented degree-six factor is now constructed in the concrete quadratic
 algebra over the real cubic order. It has explicit rank-six coordinates,
 conjugate seventh roots, all local ratio evaluations, and two distinct
 maximal comaximal degree-one kernels above each real-cubic address. The
-conjugate product formula is proved, but exact equality between the extended
-real prime and the product of the two conjugate primes still requires the
-reverse ideal containment.
+conjugate product formula and exact equality between the extended real prime
+and the product of the two conjugate primes are proved.
+
+The finite global oriented launchpad is now implemented as
+`DegreeSixOrientedLoadFactorizationPacket`. It retains the old support and
+`padicValNat` exponents, splits every mapped real-prime power into its
+oriented/conjugate pair, proves cross-prime pairwise comaximality, and
+identifies the complete finite product with the principal ideal of the
+embedded load.
+
+ULTRA/U1.1 is now implemented as
+`GlobalOrientedPrimeFactorizationPacket`. The real order-three rotation lifts
+to an explicit order-three automorphism of the concrete degree-six carrier,
+sending `zeta` to `zeta^2` and commuting with quadratic conjugation. It cycles
+the three oriented primes and their three conjugates, preserves their exact
+real contractions and fibre powers, and identifies the complete finite
+product at every phase with the principal ideal of the corresponding
+Galois-positioned load. Support, routing provenance, and exponents are
+unchanged.
 
 The direct signed-root candidate is formally impossible:
 
@@ -1091,10 +1109,129 @@ signedRightRoot^7 - signedLeftRoot^7
 ```
 
 so it cannot be an integer seventh power. The next global checkpoint must not
-reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. It must first
-discharge the conjugate-prime fibre equality (or bypass it with an equivalent
-orientation theorem), then use the constructed oriented carrier to produce a
-primitive chart before proceeding to strict decrease.
+reuse `(signedRightRoot,-signedLeftRoot)` as a Fermat chart. Starting from the
+completed oriented launchpad, it must determine exact valuation ownership in
+the two linear carriers and then prove an element-level power statement or
+record its exact obstruction before any primitive chart or strict decrease.
+
+ULTRA/U1.2 now completes that valuation-ownership checkpoint.  The prime above
+seven is the explicit uniformizer ideal and has exact multiplicity one in
+each carrier.  Every nonramified rational prime dividing the complete signed
+`quotientRoot` has exactly its ordinary `padicValNat` exponent in the selected
+oriented carrier kernel, with the conjugate result on the conjugate carrier
+and the opposite orientations excluded.  Combining all local cutoffs gives
+the exact global equalities
+
+```text
+ramifiedPrime * globalOrientedCoreHalfIdeal
+  = span {cyclotomicDegreeSixCarrier}
+ramifiedPrime * globalConjugateCoreHalfIdeal
+  = span {cyclotomicDegreeSixCarrierConj}.
+```
+
+The next U1.3 event must split each full unramified exponent into the two
+routed load exponents plus seven times the residual exponent, while retaining
+the same full support and orientations.  It must then state exactly what
+principality or unit information is still required for element-level
+extraction.
+
+ULTRA/U1.3 now completes this ideal extraction.  A canonical residual norm
+root gives
+
+```text
+padicValNat q |quotientRoot|
+  = padicValNat q c21 + padicValNat q c22
+      + 7 * padicValNat q row2ResidualNormRoot
+```
+
+for every prime `q`.  Zero-exponent extension proves that the full-support
+load products are exactly the routed phase-zero load halves.  Hence both
+carrier principal ideals have the exact form
+
+```text
+ramified loaded carrier ideal * oriented residual ideal^7,
+```
+
+and quadratic conjugation exchanges the two forms.  U1.4 must pass from these
+ideal identities to compatible element equations.  The selected cheapest
+route is to prove principality of the concrete carrier via a surjective map
+from the seventh cyclotomic ring of integers; no full ring-of-integers
+identification should be required.  Any associated unit must remain explicit
+or be absorbed into the chosen load generator, not assumed to be a seventh
+power.
+
+ULTRA/U1.4 now completes this element-level passage.  The abstract seventh
+cyclotomic field has principal ring of integers by a checked Minkowski bound:
+only rational primes two and three could occur below the bound, while their
+cyclotomic residue degrees make the corresponding prime-ideal norms too
+large.  The concrete carrier is generated by `zeta`, so the abstract integral
+power basis maps onto it.  Principality therefore transports through the
+surjection without a full ring-of-integers equivalence.
+
+For each U1.3 identity, PID generators and principal-ideal association yield
+
+```text
+carrier = loadElement * residualRoot^7.
+```
+
+The associated unit is incorporated into `loadElement`, which preserves its
+principal ideal.  The conjugate load and residual witnesses are defined by
+quadratic star, giving a coherent second equation rather than a second
+independent choice.
+
+U1.5 must not mistake this multiplicative equation for an additive Fermat
+chart.  It must either construct new integer coordinates and an actual
+seventh-power sum, or expose the exact extra compatibility receiver.  The
+known signed-root triple remains unavailable because its seventh-power
+difference has exact seven-adic depth five.
+
+ULTRA/U1.5 now closes that audit with Outcome C.  The element equation has
+exactly two unconditional projections:
+
+```text
+coordinates(load*root^7) = [R,0,0,-L,0,0]
+7*quotientRoot = norm(load)*norm(root)^7.
+```
+
+The all-six-phase product is precisely the second identity, not a new
+additive relation.  Coordinate projection is formally nonmultiplicative, and
+there is no unital ring homomorphism from the concrete carrier to `ℤ`.
+Moreover the U1.4 residual witness has a nontrivial `mu_7` gauge:
+
+```text
+span {zeta*root} = span {root}
+(zeta*root)^7 = root^7
+coordinates (zeta*root) != coordinates root.
+```
+
+The carrier equation therefore does not select a canonical integral
+coordinate vector.  Event U1.6 starts with no primitive reconstructed chart,
+so it must record the exact strict-decrease failure boundary.  Any future
+chart route must first prove either a `mu_7`-invariant three-coordinate
+extractor or a phase normalization and then independently prove the signed
+Fermat identity, nonvanishing, primitivity, normalization, and terminal
+provenance.
+
+ULTRA/U1.6 now records the strongest strict-decrease boundary available
+without that chart.  The older ramified extraction already contains:
+
+```text
+v7(internal quadratic-root carrier) = 4
+v7(preceding summit carrier) = 5
+v7(internal carrier) < v7(outer carrier).
+```
+
+The named `InternalDepthFourCounterexampleReconstructionObligation` asks for
+a positive primitive away counterexample packet whose exceptional carrier is
+the depth-four coordinate.  It is equivalent to the corresponding strict
+candidate because the inequality is automatic.  Therefore the missing
+mathematics is counterexample reconstruction, not another valuation bound.
+
+This conditional comparison is not yet a recursive descent step.  The
+reconstruction obligation is uninhabited, and a later development must also
+index the ramified source and new away route inside one well-founded
+state/measure transition.  ULTRA/U1 ends here with Outcome C.  NORMAL recovery
+should preserve this exact boundary rather than claim FLT7.
 
 ### FUSION-004/005: primitive chart and strict global drop
 

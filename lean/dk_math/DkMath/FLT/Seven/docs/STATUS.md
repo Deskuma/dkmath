@@ -2,9 +2,12 @@
 
 Updated: 2026-07-30
 Repository: `Deskuma/dkmath`  
-Pull request: `#73`
+Pull request: `#73` `#74`
+original branch: `develop`
 Base branch: `feature/FLT7-magic-core-260722-v1`
-Work branch: `wip/FLT7-fusion-260729`
+Related branch: `wip/FLT7-magic-core-260722-WiseWolf`
+Related branch: `wip/FLT7-fusion-260729`
+Related branch: `wip/FLT7-fusion-004b-conjugate-fiber-260730`
 Reviewed implementation baseline: `a635593391f4444a4c75d640b784189112ca7b36`
 
 FUSION-001B is complete locally. The signed roots are definitionally tied
@@ -194,10 +197,109 @@ oriented evaluation kernels are distinct maximal comaximal primes, with their
 common real contraction, rational contraction `(q)`, and quotient cardinality
 `q` proved.
 
-The exact remaining local obligation is the reverse containment from the
-product of those two primes into the extended common real prime. Primitive
-chart reconstruction, a new primitive counterexample, and strict global
-decrease remain unproved.
+The reverse containment is now proved by the explicit quadratic-coordinate
+calculation, so the extended common real prime equals the product of the two
+conjugate degree-one primes.
+
+NORMAL/N2 is also complete. The canonical finite real-prime support now
+selects a degree-six oriented address at every supported rational prime. Each
+exact real kernel power maps to the product of the oriented and conjugate
+kernel powers at the unchanged `padicValNat` exponent. Distinct pair powers
+are comaximal, and their finite product is exactly the principal ideal of the
+embedded zeroth load. The public packet is
+`DegreeSixOrientedLoadFactorizationPacket`.
+
+ULTRA/U1.1 is complete. `GlobalOrientedPrimeFactorizationPacket` adds an
+explicit order-three automorphism of the degree-six carrier above the real
+rotation. It sends `zeta` to `zeta^2`, commutes with quadratic conjugation,
+cycles all six phase-indexed primes, and preserves their exact real
+contractions and fibre powers. The finite factor product at each phase is
+exactly the principal ideal of the corresponding Galois-positioned load.
+
+ULTRA/U1.2 is complete.  The concrete degree-six carrier has a proved
+integral-domain instance.  Its ramified prime above seven is explicitly the
+span of `1-zeta`; both linear carriers lie in that prime but not its square.
+For every rational prime in the full `quotientRoot` support, the oriented or
+conjugate carrier lies in the selected kernel power exactly through exponent
+`padicValNat q |quotientRoot|`, while the competing orientation is excluded.
+The complete ramified-times-unramified factor ideals satisfy
+
+```text
+globalOrientedCarrierFactorIdeal
+  = span {cyclotomicDegreeSixCarrier}
+globalConjugateCarrierFactorIdeal
+  = span {cyclotomicDegreeSixCarrierConj}.
+```
+
+ULTRA/U1.3 is complete.  The natural identity
+
+```text
+|quotientRoot| = c21*c22*row2ResidualNormRoot^7
+```
+
+is transported prime by prime to the full oriented support.  The two
+routed-load support products are proved equal to their zero-extended
+full-support products.  Defining the residual oriented and conjugate halves
+with exponent `padicValNat q row2ResidualNormRoot`, Lean obtains
+
+```text
+span {carrier}
+  = globalOrientedLoadedCarrierIdeal
+      * globalOrientedResidualIdeal^7
+span {conjugateCarrier}
+  = globalConjugateLoadedCarrierIdeal
+      * globalConjugateResidualIdeal^7.
+```
+
+Quadratic conjugation exchanges the loaded and residual halves.
+
+ULTRA/U1.4 is complete.  The abstract seventh cyclotomic ring of integers is
+proved principal by an explicit Minkowski class-bound calculation.  The
+concrete carrier is generated over `ℤ` by `zeta`, giving a surjective algebra
+map from that abstract ring of integers and hence a concrete
+`IsPrincipalIdealRing` instance.  Choosing generators in the two U1.3 ideal
+identities and absorbing the associated unit into the loaded generator gives
+
+```text
+carrier = orientedLoadElement * orientedResidualRoot^7
+conjugateCarrier = star(orientedLoadElement)
+  * star(orientedResidualRoot)^7.
+```
+
+All four generator ideals retain their exact U1.3 provenance.  No unit is
+assumed to be a seventh power.
+
+ULTRA/U1.5 is complete with Outcome C.  The actual U1.4 equation gives the
+six sparse integral coordinate equalities and the exact integral norm ledger,
+but no additive Fermat identity.  The six Galois phases collapse to that norm,
+each coordinate projection is nonmultiplicative, and there is no unital ring
+homomorphism from the concrete carrier to `ℤ`.  The visible signed-root chart
+is already impossible at exact seven-adic depth five.
+
+The chosen residual generator is also not coordinate-canonical:
+`orientedResidualRoot` and `zeta*orientedResidualRoot` generate the same
+ideal, have the same seventh power, and satisfy the same loaded carrier
+equation, but their complete integer-coordinate vectors differ.  Thus the
+active U1.6 frontier begins without a primitive additive chart.  A sound
+continuation needs a `mu_7`-invariant extractor or an extra phase
+normalization, plus an independent additive identity, before any strict
+global decrease can be formulated from these witnesses.
+
+ULTRA/U1.6 is complete with Outcome C.  Independently of an additive chart,
+the inherited ramified extraction already proves that the internal quadratic
+root carrier has seven-adic depth four while the preceding summit carrier has
+depth five.  The strict depth inequality is unconditional.
+
+The exact missing receiver is
+`InternalDepthFourCounterexampleReconstructionObligation`: it asks for an
+actual `AwayValuationTransferPacket` whose exceptional carrier is the
+depth-four coordinate.  Lean proves this obligation equivalent to the same
+data plus the strict comparison and extracts the packet's positive primitive
+natural counterexample conditionally.  No inhabitant is constructed.
+Furthermore this is not `AwayDescentClosureProvider` or recursive closure:
+an indexed transition identifying successive values of one well-founded
+counterexample measure is still absent.  ULTRA/U1 therefore ends without a
+primitive additive chart, descent closure, terminal contradiction, or FLT7.
 
 ## 1. Purpose of this document
 

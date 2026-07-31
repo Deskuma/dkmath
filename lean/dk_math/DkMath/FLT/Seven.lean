@@ -117,6 +117,13 @@ import DkMath.FLT.Seven.SevenRamifiedFusionAdditiveChartFrontier
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixCarrier
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicLinearPrimeAddress
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
+import DkMath.FLT.Seven.SevenRamifiedFusionDegreeSixOrientedLoadFactorization
+import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
+import DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
+import DkMath.FLT.Seven.SevenRamifiedFusionSeventhPowerResidualIdealExtraction
+import DkMath.FLT.Seven.SevenRamifiedFusionElementLevelOrientedPower
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
+import DkMath.FLT.Seven.SevenRamifiedFusionStrictDescentFailureBoundary
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
@@ -265,10 +272,43 @@ conjugate seventh roots, every local ratio evaluation, and the oriented
 factorization of the zeroth real-pair carrier.  At each address the two
 conjugate degree-one kernels are distinct maximal and comaximal ideals with
 the same real contraction and residue cardinality `q`.  The extension of the
-common real prime is contained in their product; its reverse containment,
-equivalently exact fibre-product equality, remains an explicit obligation.
-These results do not yet supply the primitive reconstructed chart or strict
-global decrease required before descent.  The direct signed-root candidate is
-ruled out: its seventh-power difference has exact seven-adic depth five and
-therefore is not an integer seventh power.
+common real prime is exactly their product.  Mapping the finite real-cubic
+load factorization therefore gives an exact finite product of oriented and
+conjugate prime powers, with the original rational-prime support and
+`padicValNat` exponents unchanged; distinct supported pairs remain comaximal,
+and the product equals the principal ideal of the embedded load.  These
+The valuation ownership of both linear carriers is now exact.  The ramified
+prime above seven occurs once in each carrier, every prime on the full
+quotient-root support occurs in exactly its `padicValNat` exponent on its
+selected orientation, and the competing orientation is excluded.  Multiplying
+the two predicted full factor ideals recovers the carrier-pair principal
+ideal; integral-domain cancellation then proves that each predicted factor
+ideal is exactly the corresponding carrier principal ideal.  The complete
+quotient exponent is now split pointwise into the two routed-load exponents
+plus seven times an explicit residual exponent.  Extending the two cell
+supports by zero exponents to the full support yields exact oriented and
+conjugate carrier-ideal identities of the form
+`ramified loaded ideal * residual ideal ^ 7`.  The concrete carrier is now
+also proved to be a principal ideal ring via a surjective integral
+power-basis map from the abstract seventh cyclotomic ring of integers.  Its
+principal generators give exact element equations
+`carrier = loadElement * residualRoot ^ 7`; the associated unit is absorbed
+into the load generator, and conjugate witnesses are chosen by literal
+quadratic star.  The loaded factor is not proved to be a seventh power.
+The direct signed-root candidate is ruled out: its seventh-power difference
+has exact seven-adic depth five and therefore is not an integer seventh power.
+The additive-chart audit now proves that the six Galois phases recover only
+the integral norm ledger, integer coordinate projections are not
+multiplicative, and no unital ring homomorphism from the concrete carrier to
+the integers exists.  Moreover, multiplying the chosen residual root by
+`zeta` preserves its ideal, seventh power, and carrier equation while changing
+its complete coordinate vector.  Thus a primitive reconstructed chart needs
+either a `mu_7`-invariant extractor or an additional phase normalization,
+together with an independent additive seventh-power identity.  Strict global
+decrease remains a separate obligation.  The final ULTRA audit identifies an
+internal seven-adic depth comparison `4 < 5`.  This inequality is already
+proved; the missing step is to reconstruct the depth-four coordinate as the
+exceptional carrier of a new `AwayValuationTransferPacket`.  Even that
+conditional route comparison is not recursive descent without an indexed
+ramified-to-away state/measure bridge.
 -/
