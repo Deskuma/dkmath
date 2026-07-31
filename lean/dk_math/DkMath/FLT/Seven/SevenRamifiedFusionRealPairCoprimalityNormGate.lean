@@ -395,8 +395,10 @@ theorem quotientRoot_signedSeventhPower_of_core_unit_mul_pow
         SevenRealCubicInt.norm (u : SevenRealCubicInt) *
             SevenRealCubicInt.norm
               (↑(u⁻¹) : SevenRealCubicInt) = 1 := by
+      have hnorm_one : SevenRealCubicInt.norm (1 : SevenRealCubicInt) = 1 := by
+        norm_num [SevenRealCubicInt.norm]
       simpa only [SevenRealCubicInt.norm_mul,
-        SevenRealCubicInt.norm_intCast, one_pow] using
+        SevenRealCubicInt.norm_intCast, one_pow, hnorm_one] using
           congrArg SevenRealCubicInt.norm hmul
     exact
       IsUnit.of_mul_eq_one
