@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-31
 
+### 11:58
+
+[冪交換の実数枝は対角点 e へ収束する](260731-1158-power-swap-branch-converges-to-e.md)
+
+実数パラメータ $t$ で表した冪交換枝 $x(t)=t^{1/(t-1)}$, $y(t)=t^{t/(t-1)}$ が常に $x(t)^{y(t)}=y(t)^{x(t)}$ を満たし、穴あき極限 $t\to1$ で $(e,e)$ へ収束する構造を読む。
+
 ### 05:58
 
 [冪として束ねた量の反復冪乗は指数積へ戻る](260731-0558-power-compression-commutes-with-repeated-exponentiation.md)
