@@ -275,7 +275,7 @@ theorem eval_GNPolynomial
     Polynomial.eval (a : R) (GNPolynomial p b R) =
       (GN p a b : ℕ) := by
   rw [GN_eq_sum]
-  simp only [GNPolynomial, Polynomial.eval_finset_sum,
+  simp only [GNPolynomial, Polynomial.eval_finsetSum,
     Polynomial.eval_mul, Polynomial.eval_C,
     Polynomial.eval_pow, Polynomial.eval_X, Nat.cast_sum]
   apply Finset.sum_congr rfl
