@@ -1826,8 +1826,7 @@ IsPrimitiveRoot.zeta_sub_one_prime は `{p^(k+1)}` 形式を要求。
 -/
 
 /-- `{p}` を `{p^(0+1)}` として解釈するための instance。 -/
-@[implicit_reducible]
-noncomputable def IsCyclotomicExtension_p_as_pow1
+theorem IsCyclotomicExtension_p_as_pow1
     {K : Type*} [Field K] [CharZero K]
     {p : ℕ} [IsCyclotomicExtension {p} ℚ K] :
     IsCyclotomicExtension {p^(0+1)} ℚ K := by
@@ -1835,7 +1834,7 @@ noncomputable def IsCyclotomicExtension_p_as_pow1
   infer_instance
 
 /-- `IsPrimitiveRoot ζ p` を `IsPrimitiveRoot ζ (p^(0+1))` に変換。 -/
-noncomputable def IsPrimitiveRoot_p_as_pow1
+theorem IsPrimitiveRoot_p_as_pow1
     {K : Type*} [Field K]
     {p : ℕ} {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     IsPrimitiveRoot ζ (p^(0+1)) := by
