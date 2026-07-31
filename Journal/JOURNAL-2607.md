@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-07-31
 
+### 17:58
+
+[冪交換 Gap は双曲線正弦形に分解できる](260731-1758-power-swap-gap-has-a-soft-hyperbolic-form.md)
+
+冪差 $F(x,y)=x^y-y^x$ を指数座標の平均 $p$ と差 $q$ に分け、$F=2e^p\sinh(q/2)$ および $q=xy(H(x)-H(y))$ と読むことで、共通スケールと反対称な調和座標差へ分解する構造を読む。
+
 ### 11:58
 
 [冪交換の実数枝は対角点 e へ収束する](260731-1158-power-swap-branch-converges-to-e.md)
