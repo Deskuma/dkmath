@@ -303,6 +303,10 @@ theorem routingCell_dvd_endpoint {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z)
     (row : EndpointRoutingRow) (column : RootRoutingColumn) :
     routingCell r.routing row column ∣ Int.natAbs (endpointRoutingFactor y z row) := by
+  have hyz : (↑y + ↑z : ℤ).natAbs = y + z := by
+    have hnon : (0 : ℤ) ≤ (y : ℤ) + z := by positivity
+    have hcast := Int.natAbs_of_nonneg hnon
+    exact_mod_cast hcast
   cases row <;> cases column
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c11_dvd_row1
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c12_dvd_row1
@@ -310,9 +314,12 @@ theorem routingCell_dvd_endpoint {x y z : ℕ}
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c21_dvd_row2
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c22_dvd_row2
   · simpa [routingCell, endpointRoutingFactor] using r.routing.c23_dvd_row2
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c31_dvd_row3
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c32_dvd_row3
-  · simpa [routingCell, endpointRoutingFactor] using r.routing.c33_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c31_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c32_dvd_row3
+  · simpa [routingCell, endpointRoutingFactor, hyz] using
+      r.routing.c33_dvd_row3
 
 theorem routingCell_dvd_column {x y z : ℕ}
     (r : AwayCubicRoutingPacket x y z)
