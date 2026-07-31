@@ -1,5 +1,7 @@
 # DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicSevenPID
 
+**Proved**
+
 Issue: Lean4+Mathlib4 v4.29.0 to v4.32.2 Upgrade
 
 対象: 補題
@@ -465,7 +467,307 @@ P.inertiaDeg ℤ
 
 最重量と思われた FLT7 PID 障害は、やはり**局所 migration で閉じる可能性が高い**。しかも今回は、エラーの `CommRing ↥P` が新 API の引数位置を正確に教えてくれていたわけですな。🐺✨
 
-## Lean v4.29.0 Code
+## Migration review
+
+## Report
+
+`Mathlib v4.32.2` における inertia degree API の変更へ、最小かつ正確に追随した Migration です。
+
+旧 API、
+
+```lean
+(Ideal.span ({(p : ℤ)} : Set ℤ)).inertiaDeg P
+```
+
+は、下側の素イデアルと上側の素イデアルを直接渡す形式でした。
+
+新 API では、
+
+```lean
+P.inertiaDeg ℤ
+```
+
+となり、上側の素イデアル `P` と基礎環 `ℤ` を指定します。下側の素イデアルは `P.under ℤ` によって内部的に復元されます。
+
+これに合わせて、`nonempty_primesOver` から取り出した、
+
+```lean
+hPprime : P.IsPrime
+hPlies  : P.LiesOver (Ideal.span {(p : ℤ)})
+```
+
+を local instance として登録しました。
+
+```lean
+letI : P.IsPrime := hPprime
+letI : P.LiesOver (Ideal.span ({(p : ℤ)} : Set ℤ)) := hPlies
+```
+
+修正は $p=2$ branch と $p=3$ branch の双方へ対称に適用されています。
+
+その結果、現行の cyclotomic inertia degree theorem、
+
+```lean
+IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
+```
+
+と、Minkowski PID 判定側が要求する、
+
+```lean
+p ^ P.inertiaDeg ℤ
+```
+
+が同じ API 上で直接接続されました。
+
+数学的な証明内容に変更はありません。
+
+```text
+Minkowski bound < 5
+prime candidates = 2 or 3
+f₂ = orderOf(2 mod 7) = 3
+f₃ = orderOf(3 mod 7) = 6
+4 < 2^3
+4 < 3^6
+```
+
+したがって、Minkowski bound 以下に非自明な ideal class を代表する素イデアルは存在せず、七次円分体の整数環が principal ideal ring であるという既存結論が保存されています。
+
+Checkpoint:
+
+```text
+3071a03d0d29a457427567d436b684af27595877
+fix(upgrade): migrate cyclotomic inertia degree API
+```
+
+## Review
+
+**承認です。修正は正確で、過不足ありません。**
+
+### 1. API の意味変更を正しく反映している
+
+最重要点は、単なる補題名の変更ではなく、
+
+```text
+old:
+  lowerPrime.inertiaDeg upperPrime
+
+new:
+  upperPrime.inertiaDeg BaseRing
+```
+
+という inertia degree の表現モデル変更です。
+
+差分はこの変更を正しく捉えています。
+
+```diff
+- (Ideal.span ({(2 : ℤ)} : Set ℤ)).inertiaDeg P
++ P.inertiaDeg ℤ
+```
+
+これにより、以前現れていた、
+
+```text
+failed to synthesize instance
+  CommRing ↥P
+```
+
+の原因も解消されています。
+
+旧引数順の式を新 API が読むと、第二引数 `P` を基礎環の型として解釈しようとするため、ideal の carrier subtype `↥P` に対する `CommRing` を探していました。
+
+今回の修正は、その一次原因を直接除去しています。
+
+### 2. local instance の位置が適切
+
+```lean
+obtain ⟨⟨P, hPprime, hPlies⟩⟩ := ...
+letI : P.IsPrime := hPprime
+letI : P.LiesOver ... := hPlies
+```
+
+という順序は適切です。
+
+`P` を取得した直後に、その prime-over witness を instance environment へ登録しているため、後続の、
+
+```lean
+inertiaDeg_eq_of_not_dvd
+```
+
+内部で必要となる、
+
+```lean
+inferInstance : P.IsPrime
+inferInstance : P.LiesOver ...
+```
+
+が安定して解決されます。
+
+`refine` の existential witness には従来どおり明示的な証明項、
+
+```lean
+⟨hPprime, hPlies⟩
+```
+
+を渡しており、構造データと instance inference の役割も混同していません。
+
+### 3. downstream goal と完全に一致した
+
+`change` も、
+
+```lean
+change _ < 2 ^ P.inertiaDeg ℤ
+```
+
+へ更新されています。
+
+これは現行の、
+
+```lean
+RingOfIntegers.isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOver_of_mem_Icc
+```
+
+が要求する norm-bound branch の形と一致します。
+
+したがって、
+
+```lean
+rw [hdeg, orderOf_two_zmodSeven]
+```
+
+によって、
+
+```text
+Minkowski floor < 2^3
+```
+
+へ直接落ちます。
+
+$p=3$ branch も同じ構造で、
+
+```text
+Minkowski floor < 3^6
+```
+
+へ落ちるため、左右対称で読みやすい実装になっています。
+
+### 4. `inertiaDegIn` へ変更しなかった判断も正しい
+
+今回必要なのは、existential に選択した具体的な prime ideal `P` に対する、
+
+```lean
+P.inertiaDeg ℤ
+```
+
+です。
+
+したがって extension 全体の共通値を述べる、
+
+```lean
+inertiaDegIn_eq_of_not_dvd
+```
+
+へ一度持ち上げる必要はありません。
+
+```text
+具体的 P
+  → pointwise inertia degree
+  → norm lower bound
+```
+
+という現在の route が最短です。
+
+### 5. 数学的意味は完全に保存されている
+
+この migration は証明の数学的内容を変更していません。
+
+変わったのは inertia degree の API 表現だけです。
+
+```text
+旧:
+  f(P / span(p))
+
+新:
+  f(P / ℤ)
+  下側 prime は P.under ℤ
+```
+
+`P.LiesOver (span {(p : ℤ)})` が登録されているため、新 API が内部的に使う `P.under ℤ` は期待する rational prime ideal と一致します。
+
+したがって、
+
+```lean
+ringOfIntegers_isPrincipalIdealRing
+```
+
+および、その直後の、
+
+```lean
+classNumber_eq_one
+```
+
+の数学的意味はそのまま維持されています。
+
+## 総評
+
+これは `v4.29.0 → v4.32.2` Migration の良い標本です。
+
+```text
+型クラス witness の明示登録
++
+inertiaDeg の引数モデル変更
+```
+
+という二つの変更だけで、数体証明本体を触らずに復旧できています。
+
+特に重要なのは、最初のエラーを単なる instance 不足として処理せず、`CommRing ↥P` から **引数位置の意味変更**まで追跡できたことです。
+
+```text
+Review result:
+  APPROVED
+
+Mathematical change:
+  none
+
+API migration:
+  exact
+
+Scope:
+  minimal
+
+Future stability:
+  good
+```
+
+今後の Migration 監査では、同じ系統として次を検索対象にするとよいです。
+
+```text
+.inertiaDeg
+inertiaDeg
+.ramificationIdx
+ramificationIdx
+```
+
+特に旧形式、
+
+```lean
+lowerIdeal.inertiaDeg upperIdeal
+lowerIdeal.ramificationIdx upperIdeal
+```
+
+が残っていれば、今回と同じ、
+
+```lean
+upperIdeal.inertiaDeg BaseRing
+upperIdeal.ramificationIdx BaseRing
+```
+
+への変更候補です。
+
+最重量候補だった FLT7 円分体 PID は、無事に局所 API Migration だけで生還しましたな。よき修復です。🐺👍️
+
+## Appendix
+
+### Lean v4.29.0 Code
 
 ```lean
 /-- The ring of integers of every seventh cyclotomic number field is a
@@ -608,3 +910,171 @@ info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean:163:0: 'DkMath
  Quot.sound]
 error: Lean exited with code 1
 ```
+
+### Lean v4.32.2 Code
+
+```lean/-- The ring of integers of every seventh cyclotomic number field is a
+principal ideal ring.
+
+The proof uses the class-group Minkowski theorem. Its bound is below five,
+while primes above two and three have norms at least `2^3` and `3^6`.
+This theorem concerns an abstract cyclotomic number field; by itself it does
+not identify the concrete rank-six carrier used by the FLT7 development with
+that ring of integers. -/
+theorem ringOfIntegers_isPrincipalIdealRing :
+    IsPrincipalIdealRing (𝓞 K) := by
+  letI : IsGalois ℚ K :=
+    IsCyclotomicExtension.isGalois {7} ℚ K
+  apply
+    RingOfIntegers.isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOver_of_mem_Icc
+  intro p hp_mem hp
+  have hp_le : p ≤ 4 :=
+    le_trans (Finset.mem_Icc.mp hp_mem).2
+      (minkowskiFloor_le_four K)
+  have hp_cases : p = 2 ∨ p = 3 := by
+    rcases hp.eq_two_or_odd with htwo | hodd
+    · exact Or.inl htwo
+    · have hp2 : 2 ≤ p := hp.two_le
+      have hp4 : p ≠ 4 := by
+        intro heq
+        subst p
+        norm_num at hodd
+      exact Or.inr (by omega)
+  rcases hp_cases with rfl | rfl
+  · letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+    letI :
+        (Ideal.span ({(2 : ℤ)} : Set ℤ)).IsPrime :=
+      (Ideal.span_singleton_prime (by norm_num)).mpr
+        (Nat.prime_iff_prime_int.mp Nat.prime_two)
+    obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
+      (Ideal.span ({(2 : ℤ)} : Set ℤ)).nonempty_primesOver
+        (S := 𝓞 K)
+    letI : P.IsPrime := hPprime
+    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPlies
+    refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
+    have hdeg :
+        P.inertiaDeg ℤ =
+          orderOf (2 : ZMod 7) :=
+      IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
+        2 K P (by norm_num)
+    change
+      _ <
+        2 ^
+          P.inertiaDeg ℤ
+    rw [hdeg, orderOf_two_zmodSeven]
+    exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
+  · letI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+    letI :
+        (Ideal.span ({(3 : ℤ)} : Set ℤ)).IsPrime :=
+      (Ideal.span_singleton_prime (by norm_num)).mpr
+        (Nat.prime_iff_prime_int.mp Nat.prime_three)
+    obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
+      (Ideal.span ({(3 : ℤ)} : Set ℤ)).nonempty_primesOver
+        (S := 𝓞 K)
+    letI : P.IsPrime := hPprime
+    letI : P.LiesOver (Ideal.span ({(3 : ℤ)} : Set ℤ)) := hPlies
+    refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
+    have hdeg :
+        P.inertiaDeg ℤ =
+          orderOf (3 : ZMod 7) :=
+      IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
+        3 K P (by norm_num)
+    change
+      _ <
+        3 ^
+          P.inertiaDeg ℤ
+    rw [hdeg, orderOf_three_zmodSeven]
+    exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
+```
+
+## Git diff / Report / Review
+
+## fix(upgrade): migrate cyclotomic inertia degree API
+
+gch: 3071a03d0d29a457427567d436b684af27595877
+
+## Report
+
+ノートの分析に基づく修正が成功しました。
+
+修正内容:
+
+* `P.IsPrime` を local instance 化
+* `P.LiesOver (...)` を local instance 化
+* 旧式 `lowerIdeal.inertiaDeg P` を新式 `P.inertiaDeg ℤ` に変更
+* $2$・$3$ 両ブランチへ適用
+
+検証:
+
+```text
+lake build DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicSevenPID
+成功
+```
+
+コミット:
+
+```text
+3071a03d fix(upgrade): migrate cyclotomic inertia degree API
+```
+
+現在、全体ビルドで残っているのは保留指定済みの2ファイルのみです。
+
+* `RH.EulerZetaLemmas`
+* `CosmicFormula.CosmicFormulaDim`
+
+## Review
+
+_
+
+## Diff
+
+`````md
+````diff
+diff --git a/lean/dk_math/DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean b/lean/dk_math/DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean
+index 3182bf65..f413a898 100644
+--- a/lean/dk_math/DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean
++++ b/lean/dk_math/DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean
+@@ -117,16 +117,18 @@ theorem ringOfIntegers_isPrincipalIdealRing :
+     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
+       (Ideal.span ({(2 : ℤ)} : Set ℤ)).nonempty_primesOver
+         (S := 𝓞 K)
++    letI : P.IsPrime := hPprime
++    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPlies
+     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
+     have hdeg :
+-        (Ideal.span ({(2 : ℤ)} : Set ℤ)).inertiaDeg P =
++        P.inertiaDeg ℤ =
+           orderOf (2 : ZMod 7) :=
+       IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
+         2 K P (by norm_num)
+     change
+       _ <
+         2 ^
+-          (Ideal.span ({(2 : ℤ)} : Set ℤ)).inertiaDeg P
++          P.inertiaDeg ℤ
+     rw [hdeg, orderOf_two_zmodSeven]
+     exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
+   · letI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+@@ -137,16 +139,18 @@ theorem ringOfIntegers_isPrincipalIdealRing :
+     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
+       (Ideal.span ({(3 : ℤ)} : Set ℤ)).nonempty_primesOver
+         (S := 𝓞 K)
++    letI : P.IsPrime := hPprime
++    letI : P.LiesOver (Ideal.span ({(3 : ℤ)} : Set ℤ)) := hPlies
+     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
+     have hdeg :
+-        (Ideal.span ({(3 : ℤ)} : Set ℤ)).inertiaDeg P =
++        P.inertiaDeg ℤ =
+           orderOf (3 : ZMod 7) :=
+       IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd
+         3 K P (by norm_num)
+     change
+       _ <
+         3 ^
+-          (Ideal.span ({(3 : ℤ)} : Set ℤ)).inertiaDeg P
++          P.inertiaDeg ℤ
+     rw [hdeg, orderOf_three_zmodSeven]
+     exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
+ 
+````
+`````
