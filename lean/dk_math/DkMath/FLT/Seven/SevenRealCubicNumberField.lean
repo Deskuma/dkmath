@@ -222,6 +222,7 @@ theorem field_discr :
   simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
     PowerBasis.coe_basis, pB, integralPowerBasis_gen]
   simp
+  norm_num
 
 /-- The cubic field has no complex places.  Positivity of its discriminant
 forces an even number of complex places, while degree three bounds that
