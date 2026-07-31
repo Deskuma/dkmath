@@ -1084,8 +1084,7 @@ lemma primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow
     (hNval : padicValNat p N = 1) :
     ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
   letI : Fact (Nat.Prime p) := ⟨hp⟩
-  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by
-    simpa using (padicValNat.pow (p := p) (a := x) p hx0)
+  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by simp
   have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
     simpa using (padicValNat.mul (p := p) hu0 hN0)
   have hvalEq : p * padicValNat p x = padicValNat p u + 1 := by
@@ -2213,7 +2212,7 @@ theorem primeGe5BranchAShapeFactorization_ne_p_of_noShared
   let u : ℕ := z - y
   let N : ℕ := GN p u y
   have hxpow : x ^ p = u * N := by
-    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [u, N, PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
   have hN0 : N ≠ 0 := by
     intro hN0
@@ -2276,7 +2275,7 @@ theorem primeGe5BranchAShapeFactorization_p_default :
   let u : ℕ := z - y
   let N : ℕ := GN p u y
   have hxpow : x ^ p = u * N := by
-    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [u, N, PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hGN : p ∣ N ∧ ¬ p ^ 2 ∣ N := by
     simpa [u, N] using primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
   have hN0 : N ≠ 0 := by
@@ -2288,7 +2287,7 @@ theorem primeGe5BranchAShapeFactorization_p_default :
   have hVal : ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
     exact primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow
       (hp := hpack.hp)
-      (hx0 := hpack.hx0)
+      (_hx0 := hpack.hx0)
       (hu0 := hu0)
       (hN0 := hN0)
       (hEq := hxpow)
@@ -2487,7 +2486,7 @@ theorem primeGe5BranchAGN_factorization_ne_p_math
   let u : ℕ := z - y
   let N : ℕ := GN p u y
   have hxpow : x ^ p = u * N := by
-    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [u, N, PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
   have hN0 : N ≠ 0 := by
     intro hN0
@@ -2591,7 +2590,7 @@ theorem primeGe5BranchANormalForm_of_witness
   rcases primeGe5BranchAGN_eq_p_mul_pow_math hpack hp_dvd_gap with ⟨s, hs⟩
   refine ⟨s, hs, ?_⟩
   have hxpow : x ^ p = (z - y) * GN p (z - y) y := by
-    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hpred : p - 1 + 1 = p := Nat.sub_add_cancel (Nat.succ_le_of_lt hpack.hp.pos)
   have hs' : GN p (p ^ (p - 1) * t ^ p) y = p * s ^ p := by
     simpa [ht] using hs
@@ -3879,7 +3878,7 @@ theorem primeGe5BranchANormalFormPowEqualityPart_default :
   let _ := hp_cop_tps_y
   let _ := hxpow_tps
   let _ := hgapGN_tps
-  simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
 
 /--
 `q = p` / `q ≠ p` の 2 部品が揃えば、factorization-part は橋だけで閉じる。

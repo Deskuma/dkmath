@@ -524,6 +524,17 @@ theorem triominoPrimeProvider_of_specs
 
 -- TODO: [DkMathTest]: #print axioms triominoPrimeProvider_of_specs  -- OK: no-`so#rryAx`
 
+namespace PrimeGe5CounterexamplePack
+
+@[simp]
+lemma gap_eq_sub
+    {p x y z : ℕ}
+    (h : PrimeGe5CounterexamplePack p x y z) :
+    h.gap = z - y := by
+  rfl
+
+end PrimeGe5CounterexamplePack
+
 /-!
 ## 実装ロードマップ（順序固定）
 
