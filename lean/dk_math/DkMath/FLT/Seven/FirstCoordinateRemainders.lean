@@ -181,6 +181,7 @@ theorem AwayCoordinateNormalForm.rootLinear_ne_zero {x y z : ℕ}
   apply p.root_norm_not_seven_dvd
   apply (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).1
   rw [traceOneNorm_mod_seven_eq_linear_sq]
-  simpa [awayRootLinearModSeven] using congrArg (fun a : ModSeven => a ^ 2) h
+  change ((p.root.fst : ModSeven) + 4 * (p.root.snd : ModSeven)) ^ 2 = 0 ^ 2
+  exact congrArg (fun a : ModSeven => a ^ 2) h
 
 end DkMath.FLT.Seven
