@@ -644,7 +644,6 @@ theorem nonempty_depthLedger
       HasExactThetaDepth rootGap 10 := by
     have := exactDepth_left_of_mul
       (m := 10) (n := 3) hproductDepth hquotientDepth
-    norm_num at this ⊢
     exact this
   rcases hgapDepth.1 with ⟨gapCore, hgapCore⟩
   have hgapCoreNot : ¬eisensteinAxis ∣ gapCore := by
