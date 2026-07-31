@@ -676,7 +676,7 @@ theorem realKernelPower_dvd_span_realPairCore
           {(p.signedDepth.quotientRoot :
             SevenRealCubicInt)} :=
     hPpow.trans
-      (span_singleton_dvd_span_singleton_iff_dvd.mpr
+      (Ideal.span_singleton_dvd_span_singleton_iff_dvd.mpr
         hcast)
   have hspan :
       Ideal.span
@@ -892,7 +892,7 @@ private theorem realKernel_zero_isCoprime_span_axis
 private theorem span_realPairCore_dvd_span_realPairCarrier :
     Ideal.span {p.signedDepth.realPairCore 0} ∣
       Ideal.span {p.signedDepth.realPairCarrier 0} := by
-  apply span_singleton_dvd_span_singleton_iff_dvd.mpr
+  apply Ideal.span_singleton_dvd_span_singleton_iff_dvd.mpr
   refine ⟨SevenRealCubicInt.eisensteinAxis, ?_⟩
   rw [p.signedDepth.realPairCarrier_eq_eisensteinAxis_mul_core]
   ring

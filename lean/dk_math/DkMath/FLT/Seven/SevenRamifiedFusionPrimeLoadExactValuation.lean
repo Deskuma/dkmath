@@ -303,7 +303,7 @@ private theorem evalKernel_pow_padicValNat_dvd_span_addressedCell
       congrArg
         (fun n : ℕ => (n : SevenRealCubicInt)) hm
   exact hPpow'.trans
-    (span_singleton_dvd_span_singleton_iff_dvd.mpr
+    (Ideal.span_singleton_dvd_span_singleton_iff_dvd.mpr
       hcast)
 
 /-- Lower bound complementary to the norm-derived upper bound: complete
