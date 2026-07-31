@@ -179,7 +179,7 @@ theorem flt_padicValNat_beam_eq_d_mul_y_of_beam_prime
     (hd : 1 ≤ d)
     (hcop : Int.gcd z x = 1)
     (hflt : x ^ d + y ^ d = z ^ d)
-    (hy_ne : y.natAbs ≠ 0)
+    (_hy_ne : y.natAbs ≠ 0)
     (hp : Nat.Prime p)
     (hpnd : ¬ p ∣ d)
     (hbeam : p ∣ (powerBeam d x z).natAbs) :
@@ -207,7 +207,7 @@ theorem flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
     (hd : 1 ≤ d)
     (hcop : Int.gcd z y = 1)
     (hflt : x ^ d + y ^ d = z ^ d)
-    (hx_ne : x.natAbs ≠ 0)
+    (_hx_ne : x.natAbs ≠ 0)
     (hp : Nat.Prime p)
     (hpnd : ¬ p ∣ d)
     (hbeam : p ∣ (powerBeam d y z).natAbs) :
