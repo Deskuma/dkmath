@@ -183,15 +183,14 @@ lemma padicValNat_eq_one_of_dvd_not_sq
 lemma padicValNat_gap_shape_of_mul_eq_pow
     {p x u N : ℕ}
     (hp : Nat.Prime p)
-    (hx0 : x ≠ 0)
+    (_hx0 : x ≠ 0)
     (hu0 : u ≠ 0)
     (hN0 : N ≠ 0)
     (hEq : x ^ p = u * N)
     (hNval : padicValNat p N = 1) :
     ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
   letI : Fact (Nat.Prime p) := ⟨hp⟩
-  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by
-    simpa using (padicValNat.pow (p := p) (a := x) p hx0)
+  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by simp
   have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
     simpa using (padicValNat.mul (p := p) hu0 hN0)
   have hvalEq : p * padicValNat p x = padicValNat p u + 1 := by
@@ -803,7 +802,7 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
   have hVal : ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
     exact padicValNat_gap_shape_of_mul_eq_pow
       (hp := hpack.hp)
-      (hx0 := hpack.hx0)
+      (_hx0 := hpack.hx0)
       (hu0 := hu0)
       (hN0 := hN0)
       (hEq := hxpow)
