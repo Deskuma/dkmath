@@ -375,8 +375,10 @@ theorem exists_X0_badcount_le_eps
   have h := eventually_badcount_le_eps (δ:=δ) (hδ:=hδ) (η:=η) hη
   have ⟨s, hs_mem, hs_forall⟩ := (Filter.eventually_iff_exists_mem.1 h)
   -- s ∈ atTop なら、∃ X0, Ici X0 ⊆ s が成り立つ（atTop の定義より）
-  have ⟨X0, hIci⟩ : ∃ X0, Set.Ici X0 ⊆ s :=
-    by simpa using hs_mem
+  have ⟨X0, hX0⟩ := (mem_atTop_sets.mp hs_mem)
+  have hIci : Set.Ici X0 ⊆ s := by
+    intro X hX
+    exact hX0 X hX
   exact ⟨X0, fun X h => hs_forall X (hIci h)⟩
 
 /- 要石の密度1版： δ=0.435 が“例外集合を除き”成立する。 -/
