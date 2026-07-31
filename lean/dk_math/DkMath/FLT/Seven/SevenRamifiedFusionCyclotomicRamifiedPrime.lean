@@ -163,7 +163,8 @@ theorem ramifiedPrime_eq_span_uniformizer :
     change ramifiedEval x = 0 at hx
     have hsum :
         thetaResidue (x.re + x.im) = 0 := by
-      simpa only [map_add, ramifiedEval] using hx
+      change thetaResidue x.re + thetaResidue x.im = 0 at hx
+      simpa only [map_add] using hx
     have hdiv :
         eisensteinAxis ∣ x.re + x.im := by
       rw [eisensteinAxis_dvd_iff_thetaConstModSeven_eq_zero]
