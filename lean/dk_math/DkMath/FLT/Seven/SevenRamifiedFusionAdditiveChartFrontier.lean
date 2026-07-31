@@ -194,6 +194,7 @@ private theorem map_associated
     Associated (f x) (f y) := by
   rcases h with ⟨u, hu⟩
   refine ⟨Units.map f u, ?_⟩
+  change f x * f (u : A) = f y
   simpa only [map_mul] using congrArg f hu
 
 /-- The oriented pair product inherits the complete loaded-core
