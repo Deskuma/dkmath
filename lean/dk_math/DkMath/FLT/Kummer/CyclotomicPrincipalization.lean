@@ -76,6 +76,8 @@ universe u
 
 namespace DkMath.FLT
 
+set_option linter.overlappingInstances false
+
 /-!
 ## §1. Cyclotomic Principalization Target の 3 段分解
 
