@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-01
 
+### 06:01
+
+[整数減算は順序仮定なしで宇宙式分解を回収する](260801-0601-integer-subtraction-recovers-the-cosmic-decomposition-without-order-assumptions.md)
+
+整数では減算が加法群の演算として情報を保持するため、大小関係を仮定せずに Big / Body / Gap と Core / Beam の全分解を復元し、residual が正確に Gap へ戻る構造を読む。
+
 ### 00:00
 
 [自然数減算でも宇宙式の残差は正確に Gap へ戻る](260801-0000-natural-subtraction-recovers-the-cosmic-gap-exactly.md)
