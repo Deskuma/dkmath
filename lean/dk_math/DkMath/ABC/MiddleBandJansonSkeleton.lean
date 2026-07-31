@@ -602,7 +602,8 @@ indR S は S 上で 1，それ以外で 0 を取る実数値の指示関数で�
   ∫ ω, indR S ω ∂μ = (μ (S : Set Ω)).toReal := by
   classical
   have hS : MeasurableSet (S : Set Ω) := Prob.measurableSet_finset S
-  simpa [Prob.indR, one_mul] using integral_indicator (s:= (S : Set Ω)) (f := fun _ : Ω => (1:ℝ)) hS
+  simpa [Prob.indR, one_mul, Measure.real] using
+    integral_indicator (s := (S : Set Ω)) (f := fun _ : Ω => (1 : ℝ)) hS
 
 
 /--
