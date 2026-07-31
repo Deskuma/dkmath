@@ -279,7 +279,7 @@ theorem
         convert h using 1 <;> rfl
       _ = (r.cubic.rootTriple.normal.root.fst :
           ZMod (family.localModulus q)) := by
-        convert horiginal using 1 <;> rfl
+        convert horiginal using 1; rfl
       _ = crt
           (r.cubic.rootTriple.normal.root.fst :
             ZMod family.combinedModulus) q := by
@@ -297,7 +297,7 @@ theorem
         convert h using 1 <;> rfl
       _ = (r.cubic.rootTriple.normal.root.snd :
           ZMod (family.localModulus q)) := by
-        convert horiginal using 1 <;> rfl
+        convert horiginal using 1; rfl
       _ = crt
           (r.cubic.rootTriple.normal.root.snd :
             ZMod family.combinedModulus) q := by
@@ -314,7 +314,7 @@ theorem
           (family.localActual q).y := by
         convert h using 1 <;> rfl
       _ = (y : ZMod (family.localModulus q)) := by
-        convert horiginal using 1 <;> rfl
+        convert horiginal using 1; rfl
       _ = crt (y : ZMod family.combinedModulus) q := by
         exact (congrFun (map_natCast crt y) q).symm
   · apply crt.injective
@@ -328,7 +328,7 @@ theorem
           (family.localActual q).z := by
         convert h using 1 <;> rfl
       _ = (z : ZMod (family.localModulus q)) := by
-        convert horiginal using 1 <;> rfl
+        convert horiginal using 1; rfl
       _ = crt (z : ZMod family.combinedModulus) q := by
         exact (congrFun (map_natCast crt z) q).symm
 

@@ -135,8 +135,7 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
       exact (sub_eq_zero.mp hsub).symm
     exact .y hy (by
       convert unit_three_seven_parametrization (isUnit_one) hu hw
-        (by simpa only [one_mul] using horbit) using 1 <;>
-        first | rfl | (unfold AwaySevenPivotDepthPacket.upperModulus; rfl))
+        (by simpa only [one_mul] using horbit) using 1; rfl)
   · by_cases hz : p.row = .z
     · have hw : IsUnit s.y := by
         simpa [AwayEndpointPrimePowerNondegenerate, AwayEndpointLocalNondegenerate,
@@ -149,8 +148,7 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
         linear_combination heq'
       exact .z hz (by
         convert unit_three_seven_parametrization (isUnit_one) hu.neg hw
-          (by simpa only [one_mul] using horbit) using 1 <;>
-          first | rfl | (unfold AwaySevenPivotDepthPacket.upperModulus; rfl))
+          (by simpa only [one_mul] using horbit) using 1; rfl)
     · have hs : p.row = .sum := by
         cases hrow : p.row with
         | y => exact False.elim (hy hrow)
@@ -169,8 +167,7 @@ def AwaySevenPivotDepthPacket.toLiftedUnitOrbitPacket {x y z : ℕ}
         linear_combination heq'
       exact .sum hs (by
         convert unit_three_seven_parametrization (isUnit_one) hu.neg hw
-          (by simpa only [one_mul] using horbit) using 1 <;>
-          first | rfl | (unfold AwaySevenPivotDepthPacket.upperModulus; rfl))
+          (by simpa only [one_mul] using horbit) using 1; rfl)
 
 structure AwaySevenRamifiedKernelPacket {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) : Type where

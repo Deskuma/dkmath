@@ -258,7 +258,7 @@ theorem projectiveLog_alpha :
       unitNilpotentY, thetaConstModSeven, thetaLinearModSeven,
       thetaSquareModSeven, alphaUnit, alpha,
       inv_two_zmod_seven, inv_three_zmod_seven, inv_nine_zmod_seven,
-      div_eq_mul_inv] <;>
+      div_eq_mul_inv] ;
     first | (change ((-100 : ℤ) : ZMod 7) = ((5 : ℤ) : ZMod 7)
              rw [ZMod.intCast_eq_intCast_iff]
              norm_num)
@@ -270,7 +270,7 @@ theorem projectiveLog_alphaAddOne :
       unitNilpotentY, thetaConstModSeven, thetaLinearModSeven,
       thetaSquareModSeven, alphaAddOneUnit, alpha,
       inv_two_zmod_seven, inv_four_zmod_seven, inv_sixteen_zmod_seven,
-      div_eq_mul_inv] <;>
+      div_eq_mul_inv] ;
     first | (change ((-16 : ℤ) : ZMod 7) = ((5 : ℤ) : ZMod 7)
              rw [ZMod.intCast_eq_intCast_iff]
              norm_num)

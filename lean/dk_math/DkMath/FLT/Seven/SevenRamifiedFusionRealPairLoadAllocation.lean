@@ -350,8 +350,8 @@ private theorem row2Load21Scalar_dvd_coreProduct
       p.row2Load21Scalar ∣
         (p.signedDepth.quotientRoot : SevenRealCubicInt) := by
     refine ⟨(k : SevenRealCubicInt), ?_⟩
-    convert congrArg (fun z : ℤ => (z : SevenRealCubicInt)) hk using 1 <;>
-      simp [row2Load21Scalar, Int.cast_mul, Int.cast_ofNat]
+    convert congrArg (fun z : ℤ => (z : SevenRealCubicInt)) hk using 1 ;
+      simp [row2Load21Scalar, Int.cast_mul]
   exact hcubic.trans
     p.signedDepth.pairCore_product_associated_quotientRoot.symm.dvd
 
@@ -374,8 +374,8 @@ private theorem row2Load22Scalar_dvd_coreProduct
       p.row2Load22Scalar ∣
         (p.signedDepth.quotientRoot : SevenRealCubicInt) := by
     refine ⟨(k : SevenRealCubicInt), ?_⟩
-    convert congrArg (fun z : ℤ => (z : SevenRealCubicInt)) hk using 1 <;>
-      simp [row2Load22Scalar, Int.cast_mul, Int.cast_ofNat]
+    convert congrArg (fun z : ℤ => (z : SevenRealCubicInt)) hk using 1 ;
+      simp [row2Load22Scalar, Int.cast_mul]
   exact hcubic.trans
     p.signedDepth.pairCore_product_associated_quotientRoot.symm.dvd
 
