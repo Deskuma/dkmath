@@ -167,7 +167,7 @@ and finite sums and scalar multiples preserve continuity.
 theorem continuous_polynomialKernelExt (p : Polynomial ℝ) (x : ℝ) :
     Continuous (fun u : ℝ => polynomialKernelExt p x u) := by
   unfold polynomialKernelExt
-  refine continuous_finset_sum (s := Finset.range (p.natDegree + 1)) ?_
+  refine continuous_finsetSum (s := Finset.range (p.natDegree + 1)) ?_
   intro n hn
   exact (continuous_const.mul (continuous_powerKernel n x))
 
