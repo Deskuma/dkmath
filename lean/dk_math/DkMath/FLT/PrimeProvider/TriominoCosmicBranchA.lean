@@ -1077,7 +1077,7 @@ lemma primeGe5BranchAPadicValNat_eq_one_of_dvd_not_sq
 lemma primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow
     {p x u N : ℕ}
     (hp : Nat.Prime p)
-    (hx0 : x ≠ 0)
+    (_hx0 : x ≠ 0)
     (hu0 : u ≠ 0)
     (hN0 : N ≠ 0)
     (hEq : x ^ p = u * N)
