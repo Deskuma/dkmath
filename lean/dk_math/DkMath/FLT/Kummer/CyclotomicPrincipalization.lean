@@ -245,7 +245,7 @@ review-011 の 5.3 で必要になる finite-family ideal arithmetic の受け�
 Mathlib の `IsDedekindDomain.inf_pow_eq_prod_of_prime` を DkMath 側で明示化する。
 -/
 theorem dedekindInfPrimePowEqProd
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*}
     (s : Finset ι) (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -260,7 +260,7 @@ Dedekind 領域における finite-family Chinese remainder theorem の DkMath �
 pairwise に異なる prime-power ideals の積で割った剰余環が、各商環の直積へ分解する。
 -/
 noncomputable def dedekindQuotientEquivPiOfFinsetProdEq
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*} {s : Finset ι}
     (I : Ideal R) (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -275,7 +275,7 @@ finite family の prime-power ideals に対し、各合同条件を同時に満�
 Kummer 的には、pairwise-coprime な ideal family から具体的な元を取り直すときの入口。
 -/
 theorem dedekindExistsRepresentativeModFinset
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {ι : Type*} {s : Finset ι}
     (P : ι → Ideal R) (e : ι → ℕ)
     (hPrime : ∀ i ∈ s, Prime (P i))
@@ -291,7 +291,7 @@ Dedekind 領域で、prime ideal `P` による挟み込みから ideal の facto
 review-011 の 5.3 で、prime-power exponent を数えるための最小 receiver。
 -/
 theorem dedekindIdealCountNormalizedFactorsEq
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {P I : Ideal R} [P.IsPrime] {n : ℕ}
     (hle : I ≤ P ^ n) (hlt : ¬ I ≤ P ^ (n + 1)) :
   Multiset.count P (UniqueFactorizationMonoid.normalizedFactors I) = n := by
@@ -1110,7 +1110,7 @@ root ideal `K` も principal になる。
 Stage 1 の存在形 boundary を explicit equality から回収する generic receiver。
 -/
 theorem principalRootIdealExistsOfEqPowAndTorsionKill
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     {I K : Ideal R} {p : ℕ}
     (hp : p ≠ 0) (hIPrincipal : I.IsPrincipal) (hI_ne : I ≠ ⊥)
     (hEq : I = K ^ p)
@@ -1200,7 +1200,7 @@ tail ideal と chosen linear factor ideal の積が `(x)^p` で、しかも両�
 chosen linear factor ideal 自体が p 乗 ideal である。
 -/
 theorem linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {tail x y z : R}
     (hX_ne : Ideal.span ({x} : Set R) ≠ ⊥)
@@ -1218,7 +1218,7 @@ chosen linear factor を左に置いた 2-factor product equality を、
 generic receiver の tail-first 形へ渡す薄い adapter。
 -/
 theorem linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {tail x y z : R}
     (hX_ne : Ideal.span ({x} : Set R) ≠ ⊥)
@@ -2709,7 +2709,7 @@ class-group p-torsion annihilation から principal root ideal の存在が従�
 Stage 1 の存在形 boundary theorem へ入る直前の local exact receiver。
 -/
 theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {z y : R} {K : Ideal R}
     (hp : ctx.p ≠ 0) (hlin : z - ctx.zeta * y ≠ 0)
@@ -2728,7 +2728,7 @@ theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
 Stage 1 theorem が `K ≠ ⊥` を supply する場合は、こちらが最短 receiver になる。
 -/
 theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot
-    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type u} [CommRing R] [IsDedekindDomain R]
     (ctx : CyclotomicLocalFactorizationContext R)
     {z y : R} {K : Ideal R}
     (hp : ctx.p ≠ 0)
@@ -5706,7 +5706,7 @@ Integral ideal 版の principal ideal extraction helper。
 `ClassGroup.mk0_eq_one_iff` をそのまま包装したもの。
 -/
 theorem idealIsPrincipal_of_classGroupMk0_eq_one
-    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
     {I : Ideal R} (hI : I ∈ nonZeroDivisors (Ideal R))
     (hClass : ClassGroup.mk0 ⟨I, hI⟩ = 1) :
     I.IsPrincipal :=
