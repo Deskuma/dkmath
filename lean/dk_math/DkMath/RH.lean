@@ -28,6 +28,7 @@ import DkMath.RH.CFBRC.EtaFiniteClosure
 import DkMath.RH.CFBRC.StandardZetaBridge
 import DkMath.RH.CFBRC.ZeroLocusFactorBridge
 import DkMath.RH.CFBRC.CompletedZetaBridge
+import DkMath.RH.CFBRC.CriticalMirrorGeometry
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
