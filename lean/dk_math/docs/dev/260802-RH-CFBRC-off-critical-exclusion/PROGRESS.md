@@ -94,9 +94,75 @@ theorem mirrorCFBRC_three_eq_zero_iff (X Θ : ℝ) :
 
 CI result: success.
 
+### Event 6B — root-of-unity witness and real branch equations
+
+Completed and Lean-checked in:
+
+```text
+DkMath.RH.CFBRC.MirrorRootOfUnity
+```
+
+For `X ≠ 0`, mirror closure produces a quotient witness `ω` with
+
+$$
+\omega^d=1
+$$
+
+and
+
+$$
+X+i\Theta
+=
+\omega(-X+i\Theta).
+$$
+
+The witness is nontrivial:
+
+$$
+\omega\ne1.
+$$
+
+Lean API:
+
+- `mirror_pow_eq_of_mirrorCFBRC_eq_zero`
+- `exists_rootOfUnity_witness_of_mirrorCFBRC_eq_zero`
+- `mirror_multiplier_ne_one_of_x_ne_zero`
+- `exists_nontrivial_rootOfUnity_witness_of_mirrorCFBRC_eq_zero`
+
+Taking real and imaginary parts gives the explicit algebraic branch equations
+
+$$
+(1+\operatorname{Re}\omega)X
++
+\operatorname{Im}\omega\,\Theta
+=0,
+$$
+
+$$
+\operatorname{Im}\omega\,X
++
+(1-\operatorname{Re}\omega)\Theta
+=0.
+$$
+
+Lean API:
+
+- `mirror_map_implies_linear_branch_equations`
+- `exists_nontrivial_rootOfUnity_linear_branch_of_mirrorCFBRC_eq_zero`
+
+The module is re-exported from `DkMath.RH`; therefore the successful full
+`lake build` genuinely traversed the public import graph.
+
+CI result: success.
+
 ## Current boundary
 
-The algebraic exclusion layer is now general in the degree. The remaining load-bearing analytic problem is unchanged:
+The standard CFBRC family has no real-input zero away from `X = 0` for any
+positive degree. The enlarged mirror family can close away from the centered
+line only through a nontrivial root-of-unity branch satisfying the two real
+branch equations above.
+
+The remaining load-bearing analytic problem is unchanged:
 
 $$
 \operatorname{NontrivialZetaZero}(s)
@@ -104,21 +170,31 @@ $$
 C_d\!\left(s.\operatorname{re}-\frac12,\Theta(s)\right)=0.
 $$
 
-Before constructing that bridge, Event 6B will classify mirror-core zeros through roots of unity. This records the complete off-critical threat model that the bridge must avoid.
+A future zeta bridge must either land directly in the standard CFBRC family or
+prove that its image cannot enter any of the nontrivial mirror branches.
 
 ## Next target
 
-Formalize a root-of-unity classification without introducing division too early:
+Parametrize the witness by a finite root-of-unity index and connect the first
+real branch equation to the half-angle slope
 
-```lean
-mirrorCFBRC d X Θ = 0
-→
-∃ ω : ℂ, ω ^ d = 1 ∧
-  (X : ℂ) + Complex.I * Θ =
-    ω * ((-X : ℂ) + Complex.I * Θ)
-```
+$$
+X
+=
+-\Theta\tan\left(\frac{\pi k}{d}\right).
+$$
 
-Then separate:
+Before introducing trigonometric parametrization, first formalize the purely
+algebraic denominator split:
 
-- `ω = 1`, forcing `X = 0`;
-- `ω ≠ 1`, the nontrivial cyclotomic threat branches.
+- `1 + ω.re = 0`, the antipodal branch;
+- `1 + ω.re ≠ 0`, giving
+
+$$
+X
+=
+-\frac{\omega.im}{1+\omega.re}\,\Theta.
+$$
+
+This preserves a simple polynomial/rational layer for later connection to
+`Complex.exp` and finite root enumeration.
