@@ -12,9 +12,11 @@ import Mathlib.Tactic
 
 namespace DkMath.RH.CFBRCProjection
 
+open ComplexConjugate
+
 /-- Reflection across the critical line while preserving the imaginary coordinate. -/
 noncomputable def criticalMirror (s : ℂ) : ℂ :=
-  1 - Complex.conj s
+  1 - conj s
 
 @[simp] theorem criticalMirror_re (s : ℂ) :
     (criticalMirror s).re = 1 - s.re := by
