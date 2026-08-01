@@ -61,7 +61,9 @@ noncomputable def centeredComplex (s : ℂ) : ℂ :=
 theorem centeredComplex_eq_mirrorLeft (s : ℂ) :
     centeredComplex s = mirrorLeft (centeredSigma s.re) s.im := by
   apply Complex.ext
-  · simp [centeredComplex, mirrorLeft, centeredSigma]
-  · simp [centeredComplex, mirrorLeft]
+  · change s.re - (1 : ℝ) / 2 = centeredSigma s.re
+    rfl
+  · change s.im = s.im
+    rfl
 
 end DkMath.RH.CFBRCProjection
