@@ -89,4 +89,40 @@ theorem exists_nontrivial_rootOfUnity_witness_of_mirrorCFBRC_eq_zero
     ⟨ω, hpow, hmap⟩
   exact ⟨ω, hpow, mirror_multiplier_ne_one_of_x_ne_zero hX hmap, hmap⟩
 
+/--
+The mirror multiplier equation is equivalent to two real linear branch
+equations.  These equations are the algebraic precursor of the later
+half-angle tangent classification.
+-/
+theorem mirror_map_implies_linear_branch_equations
+    {X Θ : ℝ} {ω : ℂ}
+    (hmap : mirrorLeft X Θ = ω * mirrorRight X Θ) :
+    (1 + ω.re) * X + ω.im * Θ = 0 ∧
+      ω.im * X + (1 - ω.re) * Θ = 0 := by
+  have hre := congrArg Complex.re hmap
+  have him := congrArg Complex.im hmap
+  constructor
+  · simp [mirrorLeft, mirrorRight, Complex.mul_re] at hre
+    linarith
+  · simp [mirrorLeft, mirrorRight, Complex.mul_im] at him
+    linarith
+
+/--
+Every off-centered mirror closure therefore lies on a nontrivial root-of-unity
+branch satisfying an explicit pair of real polynomial equations.
+-/
+theorem exists_nontrivial_rootOfUnity_linear_branch_of_mirrorCFBRC_eq_zero
+    {d : ℕ} {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    ∃ ω : ℂ,
+      ω ^ d = 1 ∧
+      ω ≠ 1 ∧
+      (1 + ω.re) * X + ω.im * Θ = 0 ∧
+      ω.im * X + (1 - ω.re) * Θ = 0 := by
+  rcases exists_nontrivial_rootOfUnity_witness_of_mirrorCFBRC_eq_zero hX hzero with
+    ⟨ω, hpow, hω, hmap⟩
+  rcases mirror_map_implies_linear_branch_equations hmap with ⟨hre, him⟩
+  exact ⟨ω, hpow, hω, hre, him⟩
+
 end DkMath.RH.CFBRCProjection
