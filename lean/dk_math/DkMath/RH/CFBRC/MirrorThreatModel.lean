@@ -53,7 +53,6 @@ theorem mirrorCFBRC_eq_boundary_mul_core
   calc
     mirrorCFBRC d X Θ = (x + u) ^ d - u ^ d := by
       rw [mirrorCFBRC, hxadd]
-      rfl
     _ = x * cyclotomicPrimeCore d x u := by
       rw [h]
       ring
@@ -88,8 +87,10 @@ The first nontrivial real mirror branch appears in degree three.
 theorem mirrorCFBRC_three (X Θ : ℝ) :
     mirrorCFBRC 3 X Θ =
       (2 * X * (X ^ 2 - 3 * Θ ^ 2) : ℝ) := by
-  simp [mirrorCFBRC, pow_succ, pow_two]
-  ring
+  simp [mirrorCFBRC, pow_succ]
+  ring_nf
+  rw [Complex.I_sq]
+  ring_nf
 
 /--
 Degree-three mirror closure splits into the centered branch and the first
@@ -110,6 +111,6 @@ theorem mirrorCFBRC_three_eq_zero_iff (X Θ : ℝ) :
     rcases h with hX | hbranch
     · subst X
       simp
-    · nlinarith
+    · rw [hbranch, sub_self, mul_zero]
 
 end DkMath.RH.CFBRCProjection

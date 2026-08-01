@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.CFBRC.TrigBridge.General
 import DkMath.RH.CFBRC.OffCriticalExclusion
 import Mathlib.Analysis.Complex.Norm
 import Mathlib.Tactic
@@ -39,13 +40,11 @@ theorem cfbrcR_eq_zero_iff_x_eq_zero
               ((Complex.I * (Θ : ℂ)) ^ d) = 0 := by
         simpa [cfbrcR, cfbrc] using h
       exact sub_eq_zero.mp h'
-
     have hnormPow :
         ‖(X : ℂ) + Complex.I * (Θ : ℂ)‖ ^ d =
           ‖Complex.I * (Θ : ℂ)‖ ^ d := by
       have hnorm := congrArg (fun z : ℂ => ‖z‖) hp
       simpa only [Complex.norm_pow] using hnorm
-
     have hnorm :
         ‖(X : ℂ) + Complex.I * (Θ : ℂ)‖ =
           ‖Complex.I * (Θ : ℂ)‖ := by
@@ -54,15 +53,12 @@ theorem cfbrcR_eq_zero_iff_x_eq_zero
           (Complex.norm_nonneg _)
           (Complex.norm_nonneg _)
           (Nat.ne_of_gt hd)).mp hnormPow
-
     have hnormSq :
         Complex.normSq ((X : ℂ) + Complex.I * (Θ : ℂ)) =
           Complex.normSq (Complex.I * (Θ : ℂ)) := by
       rw [Complex.normSq_eq_norm_sq, Complex.normSq_eq_norm_sq, hnorm]
-
     have hsq : X ^ 2 + Θ ^ 2 = Θ ^ 2 := by
       simpa [Complex.normSq_apply, pow_two] using hnormSq
-
     nlinarith
   · intro hX
     subst X
