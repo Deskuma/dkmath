@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-01
 
+### 11:58
+
+[平方根2の無理性は有理二成分表示を一意にする](260801-1158-irrationality-makes-rational-sqrt2-coordinates-unique.md)
+
+$\sqrt2$ の無理性から $1$ と $\sqrt2$ の有理一次独立性を導き、$a+b\sqrt2$ 型の実数表示では有理係数対 $(a,b)$ が一意に定まる構造を読む。
+
 ### 06:01
 
 [整数減算は順序仮定なしで宇宙式分解を回収する](260801-0601-integer-subtraction-recovers-the-cosmic-decomposition-without-order-assumptions.md)
