@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.CompletedZetaBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
+import Mathlib.Tactic
 
 #print "file: DkMath.RH.CFBRC.CriticalMirrorGeometry"
 
@@ -21,6 +22,39 @@ noncomputable def criticalMirror (s : ℂ) : ℂ :=
 
 @[simp] theorem criticalMirror_im (s : ℂ) :
     (criticalMirror s).im = s.im := by
+  rfl
+
+/-- Critical reflection is an involution. -/
+theorem criticalMirror_involutive (s : ℂ) :
+    criticalMirror (criticalMirror s) = s := by
+  apply Complex.ext
+  · simp [criticalMirror]
+  · simp [criticalMirror]
+
+/-- The fixed locus of critical reflection is exactly `re s = 1/2`. -/
+theorem criticalMirror_eq_self_iff_re_eq_half (s : ℂ) :
+    criticalMirror s = s ↔ s.re = (1 : ℝ) / 2 := by
+  constructor
+  · intro h
+    have hre := congrArg Complex.re h
+    simp [criticalMirror] at hre
+    linarith
+  · intro hre
+    apply Complex.ext
+    · simp [criticalMirror]
+      linarith
+    · simp [criticalMirror]
+
+/-- Complex coordinate centered at the critical line. -/
+noncomputable def centeredComplex (s : ℂ) : ℂ :=
+  ⟨s.re - (1 : ℝ) / 2, s.im⟩
+
+@[simp] theorem centeredComplex_re (s : ℂ) :
+    (centeredComplex s).re = s.re - (1 : ℝ) / 2 := by
+  rfl
+
+@[simp] theorem centeredComplex_im (s : ℂ) :
+    (centeredComplex s).im = s.im := by
   rfl
 
 end DkMath.RH.CFBRCProjection
