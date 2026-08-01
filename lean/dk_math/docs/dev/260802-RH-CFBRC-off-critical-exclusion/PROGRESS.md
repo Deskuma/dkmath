@@ -71,12 +71,6 @@ mirrorCFBRCCore d X Θ
 
 Exact factorization:
 
-```lean
-theorem mirrorCFBRC_eq_boundary_mul_core
-```
-
-Mathematically,
-
 $$
 M_d(X,\Theta)
 =
@@ -85,11 +79,10 @@ M_d(X,\Theta)
 2X\,K_d(X,\Theta).
 $$
 
-Away from `X = 0`, closure is exactly core vanishing:
+Lean API:
 
-```lean
-theorem mirrorCFBRC_eq_zero_iff_core_eq_zero
-```
+- `mirrorCFBRC_eq_boundary_mul_core`
+- `mirrorCFBRC_eq_zero_iff_core_eq_zero`
 
 The first explicit nontrivial branch was fixed at degree three:
 
