@@ -22,7 +22,7 @@ theorem indexedRootBranchUnit_eq_exp
     exact_mod_cast (Nat.ne_of_gt hd)
   rw [indexedRootBranchUnit, unitCircleAt, rootBranchHalfAngle]
   rw [mul_comm Complex.I (Real.sin (2 * (Real.pi * (k : ℝ) / (d : ℝ))) : ℂ)]
-  rw [← Complex.ofReal_cos, ← Complex.ofReal_sin, ← Complex.exp_mul_I]
+  rw [Complex.ofReal_cos, Complex.ofReal_sin, ← Complex.exp_mul_I]
   congr 1
   push_cast
   field_simp [hdC]
