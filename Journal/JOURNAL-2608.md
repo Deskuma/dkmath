@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-01
 
+### 23:58
+
+[有理係数の平方根2形式は加法と乗法で閉じる](260801-2358-rational-sqrt2-forms-are-closed-under-addition-and-multiplication.md)
+
+$a+b\sqrt2$ 型の実数集合が、係数対の加法と $\sqrt2^2=2$ による積の折り畳みにより、加法・乗法の双方で閉じる構造を読む。
+
 ### 17:58
 
 [GN は冪関数の差分商として読める](260801-1758-gn-is-a-divided-difference-of-a-power.md)
