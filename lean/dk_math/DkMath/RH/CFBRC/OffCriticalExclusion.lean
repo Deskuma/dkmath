@@ -18,7 +18,7 @@ The real coordinate centered at the critical line.
 
 `centeredSigma σ = 0` is exactly `σ = 1 / 2`.
 -/
-def centeredSigma (σ : ℝ) : ℝ :=
+noncomputable def centeredSigma (σ : ℝ) : ℝ :=
   σ - (1 : ℝ) / 2
 
 /--
@@ -28,7 +28,7 @@ Evaluate the standard real-input CFBRC polynomial at the coordinate centered on
 This definition contains no zeta-zero predicate; it is an ordinary CFBRC
 evaluation prepared for a later zero-preserving bridge.
 -/
-def offCriticalCFBRC (d : ℕ) (σ Θ : ℝ) : ℂ :=
+noncomputable def offCriticalCFBRC (d : ℕ) (σ Θ : ℝ) : ℂ :=
   cfbrcR d (centeredSigma σ) Θ
 
 @[simp] theorem centeredSigma_eq_zero_iff (σ : ℝ) :
