@@ -22,6 +22,7 @@ import DkMath.RH.CFBRC.MirrorAngleBranch
 import DkMath.RH.CFBRC.MirrorIndexedRoot
 import DkMath.RH.CFBRC.FiniteClosure
 import DkMath.RH.CFBRC.FiniteClosurePermutation
+import DkMath.RH.CFBRC.FiniteMassNormalization
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
