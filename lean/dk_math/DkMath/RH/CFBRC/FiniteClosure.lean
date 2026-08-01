@@ -11,12 +11,10 @@ import Mathlib.Tactic
 
 namespace DkMath.RH.CFBRCProjection
 
-open scoped BigOperators
-
 /-- Endpoint of a finite complex-vector family. -/
 noncomputable def finiteEndpoint
     {ι : Type*} (S : Finset ι) (v : ι → ℂ) : ℂ :=
-  ∑ i in S, v i
+  S.sum v
 
 /-- Endpoint after applying one common complex rotation/multiplier. -/
 noncomputable def rotatedFiniteEndpoint
@@ -26,12 +24,12 @@ noncomputable def rotatedFiniteEndpoint
 /-- Positive real-axis mass after the common rotation. -/
 noncomputable def positiveProjectedMass
     {ι : Type*} (S : Finset ι) (v : ι → ℂ) (ω : ℂ) : ℝ :=
-  ∑ i in S, max (ω * v i).re 0
+  S.sum fun i => max (ω * v i).re 0
 
 /-- Absolute negative real-axis mass after the common rotation. -/
 noncomputable def negativeProjectedMass
     {ι : Type*} (S : Finset ι) (v : ι → ℂ) (ω : ℂ) : ℝ :=
-  ∑ i in S, max (-(ω * v i).re) 0
+  S.sum fun i => max (-(ω * v i).re) 0
 
 /-- Imaginary residual of the rotated endpoint. -/
 noncomputable def transverseGap
@@ -43,6 +41,7 @@ theorem max_sub_max_neg_eq_self (x : ℝ) :
     max x 0 - max (-x) 0 = x := by
   by_cases hx : 0 ≤ x
   · rw [max_eq_left hx, max_eq_right (neg_nonpos.mpr hx)]
+    ring
   · have hx' : x ≤ 0 := le_of_not_ge hx
     rw [max_eq_right hx', max_eq_left (neg_nonneg.mpr hx')]
     ring
@@ -50,20 +49,28 @@ theorem max_sub_max_neg_eq_self (x : ℝ) :
 /-- The rotated endpoint is the sum of the individually rotated vectors. -/
 theorem rotatedFiniteEndpoint_eq_sum
     {ι : Type*} (S : Finset ι) (v : ι → ℂ) (ω : ℂ) :
-    rotatedFiniteEndpoint S v ω = ∑ i in S, ω * v i := by
-  simp [rotatedFiniteEndpoint, finiteEndpoint, Finset.mul_sum]
+    rotatedFiniteEndpoint S v ω = S.sum (fun i => ω * v i) := by
+  unfold rotatedFiniteEndpoint finiteEndpoint
+  rw [Finset.mul_sum]
 
 /-- The real endpoint is positive projected mass minus negative projected mass. -/
 theorem rotatedFiniteEndpoint_re_eq_mass_sub
     {ι : Type*} (S : Finset ι) (v : ι → ℂ) (ω : ℂ) :
     (rotatedFiniteEndpoint S v ω).re =
       positiveProjectedMass S v ω - negativeProjectedMass S v ω := by
-  rw [rotatedFiniteEndpoint_eq_sum]
-  simp only [map_sum, Complex.add_re]
-  rw [positiveProjectedMass, negativeProjectedMass, ← Finset.sum_sub_distrib]
-  apply Finset.sum_congr rfl
-  intro i hi
-  exact (max_sub_max_neg_eq_self (ω * v i).re).symm
+  calc
+    (rotatedFiniteEndpoint S v ω).re =
+        S.sum (fun i => (ω * v i).re) := by
+      rw [rotatedFiniteEndpoint_eq_sum]
+      simp
+    _ = S.sum (fun i =>
+        max (ω * v i).re 0 - max (-(ω * v i).re) 0) := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      exact (max_sub_max_neg_eq_self (ω * v i).re).symm
+    _ = positiveProjectedMass S v ω - negativeProjectedMass S v ω := by
+      rw [positiveProjectedMass, negativeProjectedMass,
+        Finset.sum_sub_distrib]
 
 /-- A nonzero common rotation preserves finite closure. -/
 theorem rotatedFiniteEndpoint_eq_zero_iff
