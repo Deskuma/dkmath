@@ -150,8 +150,62 @@ Lean API:
 - `mirror_map_implies_linear_branch_equations`
 - `exists_nontrivial_rootOfUnity_linear_branch_of_mirrorCFBRC_eq_zero`
 
-The module is re-exported from `DkMath.RH`; therefore the successful full
-`lake build` genuinely traversed the public import graph.
+CI result: success.
+
+### Event 6C — antipodal/rational branch split
+
+Completed and Lean-checked in the same public module.
+
+For positive degree, `ω^d = 1` implies
+
+$$
+|\omega|=1
+$$
+
+and hence
+
+$$
+(\operatorname{Re}\omega)^2+(\operatorname{Im}\omega)^2=1.
+$$
+
+Lean API:
+
+- `norm_eq_one_of_pow_eq_one`
+- `re_sq_add_im_sq_eq_one_of_pow_eq_one`
+
+The first branch equation is exposed as
+
+$$
+(1+\operatorname{Re}\omega)X
+=-\operatorname{Im}\omega\,\Theta.
+$$
+
+If `1 + ω.re ≠ 0`, Lean solves it as
+
+$$
+X
+=
+\frac{-\operatorname{Im}\omega\,\Theta}
+{1+\operatorname{Re}\omega}.
+$$
+
+If `1 + ω.re = 0`, the unit-circle equation forces the antipodal root
+`ω = -1`, and the second branch equation forces
+
+$$
+\Theta=0.
+$$
+
+Lean API:
+
+- `mirror_branch_slope_mul_eq`
+- `mirror_branch_x_eq_ratio_mul_theta`
+- `theta_eq_zero_of_antipodal_root_branch`
+- `exists_rootOfUnity_branch_split_of_mirrorCFBRC_eq_zero`
+
+The module is re-exported from `DkMath.RH`; therefore each successful full
+`lake build` traversed the public import graph rather than merely checking an
+unreachable file.
 
 CI result: success.
 
@@ -159,8 +213,12 @@ CI result: success.
 
 The standard CFBRC family has no real-input zero away from `X = 0` for any
 positive degree. The enlarged mirror family can close away from the centered
-line only through a nontrivial root-of-unity branch satisfying the two real
-branch equations above.
+line only through a nontrivial root-of-unity branch.
+
+Those branches are now completely reduced to two algebraic cases:
+
+1. the antipodal branch `ω = -1`, which requires `Θ = 0`;
+2. a rational-slope branch determined by `Re ω` and `Im ω`.
 
 The remaining load-bearing analytic problem is unchanged:
 
@@ -171,12 +229,31 @@ C_d\!\left(s.\operatorname{re}-\frac12,\Theta(s)\right)=0.
 $$
 
 A future zeta bridge must either land directly in the standard CFBRC family or
-prove that its image cannot enter any of the nontrivial mirror branches.
+prove that its image cannot enter any nontrivial mirror branch.
 
 ## Next target
 
-Parametrize the witness by a finite root-of-unity index and connect the first
-real branch equation to the half-angle slope
+Connect `ω^d = 1` to a finite root index `k` and the exponential form
+
+$$
+\omega
+=
+\exp\left(\frac{2\pi i k}{d}\right).
+$$
+
+On the non-antipodal branch, substitute
+
+$$
+\operatorname{Re}\omega
+=
+\cos\left(\frac{2\pi k}{d}\right),
+\qquad
+\operatorname{Im}\omega
+=
+\sin\left(\frac{2\pi k}{d}\right)
+$$
+
+into the rational slope and prove the half-angle form
 
 $$
 X
@@ -184,17 +261,5 @@ X
 -\Theta\tan\left(\frac{\pi k}{d}\right).
 $$
 
-Before introducing trigonometric parametrization, first formalize the purely
-algebraic denominator split:
-
-- `1 + ω.re = 0`, the antipodal branch;
-- `1 + ω.re ≠ 0`, giving
-
-$$
-X
-=
--\frac{\omega.im}{1+\omega.re}\,\Theta.
-$$
-
-This preserves a simple polynomial/rational layer for later connection to
-`Complex.exp` and finite root enumeration.
+This will turn the abstract threat model into a finite indexed family of
+explicit off-critical candidate lines.
