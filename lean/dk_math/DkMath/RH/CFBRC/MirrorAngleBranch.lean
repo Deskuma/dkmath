@@ -26,7 +26,7 @@ noncomputable def unitCircleAt (φ : ℝ) : ℂ :=
     (unitCircleAt φ).im = Real.sin φ := by
   simp only [unitCircleAt, Complex.add_im, Complex.mul_im,
     Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
-    zero_mul, one_mul, zero_add, add_zero]
+    zero_mul, one_mul, zero_add]
 
 /--
 When the mirror multiplier is written as `cos φ + i sin φ`, the complex map
