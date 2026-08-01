@@ -26,7 +26,6 @@ theorem indexedRootBranchUnit_eq_exp
   congr 1
   push_cast
   field_simp [hdC]
-  ring
 
 /-- Every positive-degree complex root of unity has a finite branch index. -/
 theorem exists_indexed_root_branch_unit_of_pow_eq_one
