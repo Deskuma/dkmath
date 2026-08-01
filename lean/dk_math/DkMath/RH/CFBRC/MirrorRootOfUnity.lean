@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.MirrorThreatModel
+import Mathlib.Analysis.Complex.Norm
 import Mathlib.Tactic
 
 #print "file: DkMath.RH.CFBRC.MirrorRootOfUnity"
@@ -124,5 +125,91 @@ theorem exists_nontrivial_rootOfUnity_linear_branch_of_mirrorCFBRC_eq_zero
     ⟨ω, hpow, hω, hmap⟩
   rcases mirror_map_implies_linear_branch_equations hmap with ⟨hre, him⟩
   exact ⟨ω, hpow, hω, hre, him⟩
+
+/-- A positive-degree complex root of unity has norm one. -/
+theorem norm_eq_one_of_pow_eq_one
+    {d : ℕ} (hd : 0 < d) {ω : ℂ}
+    (hpow : ω ^ d = 1) :
+    ‖ω‖ = 1 := by
+  have hnormPow := congrArg (fun z : ℂ => ‖z‖) hpow
+  have hpowReal : ‖ω‖ ^ d = (1 : ℝ) ^ d := by
+    simpa only [Complex.norm_pow, norm_one, one_pow] using hnormPow
+  exact
+    (pow_left_inj₀
+      (Complex.norm_nonneg ω)
+      (show (0 : ℝ) ≤ 1 by norm_num)
+      (Nat.ne_of_gt hd)).mp hpowReal
+
+/-- Real and imaginary components of a positive-degree root of unity lie on the unit circle. -/
+theorem re_sq_add_im_sq_eq_one_of_pow_eq_one
+    {d : ℕ} (hd : 0 < d) {ω : ℂ}
+    (hpow : ω ^ d = 1) :
+    ω.re ^ 2 + ω.im ^ 2 = 1 := by
+  have hnorm : ‖ω‖ = 1 := norm_eq_one_of_pow_eq_one hd hpow
+  have hnormSq : Complex.normSq ω = 1 := by
+    rw [Complex.normSq_eq_norm_sq, hnorm]
+    norm_num
+  simpa [Complex.normSq_apply, pow_two] using hnormSq
+
+/-- The first real branch equation in multiplicative slope form. -/
+theorem mirror_branch_slope_mul_eq
+    {X Θ : ℝ} {ω : ℂ}
+    (hmap : mirrorLeft X Θ = ω * mirrorRight X Θ) :
+    (1 + ω.re) * X = -ω.im * Θ := by
+  have hlin := (mirror_map_implies_linear_branch_equations hmap).1
+  linarith
+
+/--
+On a non-antipodal branch, solve the first real branch equation for `X`.
+-/
+theorem mirror_branch_x_eq_ratio_mul_theta
+    {X Θ : ℝ} {ω : ℂ}
+    (hmap : mirrorLeft X Θ = ω * mirrorRight X Θ)
+    (hden : 1 + ω.re ≠ 0) :
+    X = (-ω.im * Θ) / (1 + ω.re) := by
+  apply (eq_div_iff hden).2
+  have hmul := mirror_branch_slope_mul_eq hmap
+  simpa [mul_comm] using hmul
+
+/--
+The antipodal root-of-unity branch forces the phase coordinate `Θ` to vanish.
+-/
+theorem theta_eq_zero_of_antipodal_root_branch
+    {d : ℕ} (hd : 0 < d) {X Θ : ℝ} {ω : ℂ}
+    (hpow : ω ^ d = 1)
+    (hmap : mirrorLeft X Θ = ω * mirrorRight X Θ)
+    (hanti : 1 + ω.re = 0) :
+    Θ = 0 := by
+  have hcircle : ω.re ^ 2 + ω.im ^ 2 = 1 :=
+    re_sq_add_im_sq_eq_one_of_pow_eq_one hd hpow
+  have hre : ω.re = -1 := by
+    linarith
+  have him : ω.im = 0 := by
+    rw [hre] at hcircle
+    nlinarith
+  have hlin := (mirror_map_implies_linear_branch_equations hmap).2
+  rw [hre, him] at hlin
+  norm_num at hlin
+  linarith
+
+/--
+Complete algebraic split of an off-centered mirror closure into the antipodal
+branch and the ordinary rational-slope branches.
+-/
+theorem exists_rootOfUnity_branch_split_of_mirrorCFBRC_eq_zero
+    {d : ℕ} (hd : 0 < d) {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    ∃ ω : ℂ,
+      ω ^ d = 1 ∧
+      ω ≠ 1 ∧
+      ((1 + ω.re = 0 ∧ Θ = 0) ∨
+        (1 + ω.re ≠ 0 ∧ X = (-ω.im * Θ) / (1 + ω.re))) := by
+  rcases exists_nontrivial_rootOfUnity_witness_of_mirrorCFBRC_eq_zero hX hzero with
+    ⟨ω, hpow, hω, hmap⟩
+  refine ⟨ω, hpow, hω, ?_⟩
+  by_cases hden : 1 + ω.re = 0
+  · exact Or.inl ⟨hden, theta_eq_zero_of_antipodal_root_branch hd hpow hmap hden⟩
+  · exact Or.inr ⟨hden, mirror_branch_x_eq_ratio_mul_theta hmap hden⟩
 
 end DkMath.RH.CFBRCProjection
