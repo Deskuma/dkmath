@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-01
 
+### 17:58
+
+[GN は冪関数の差分商として読める](260801-1758-gn-is-a-divided-difference-of-a-power.md)
+
+冪差を境界差 $x$ と core の積へ分解し、$x>0$ のもとで GN が $((x+u)^p-u^p)/x$ という有限差分商に一致する構造を読む。
+
 ### 11:58
 
 [平方根2の無理性は有理二成分表示を一意にする](260801-1158-irrationality-makes-rational-sqrt2-coordinates-unique.md)
