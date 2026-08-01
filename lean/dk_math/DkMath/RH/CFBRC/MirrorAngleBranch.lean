@@ -18,11 +18,15 @@ noncomputable def unitCircleAt (φ : ℝ) : ℂ :=
 
 @[simp] theorem unitCircleAt_re (φ : ℝ) :
     (unitCircleAt φ).re = Real.cos φ := by
-  simp [unitCircleAt]
+  simp only [unitCircleAt, Complex.add_re, Complex.mul_re,
+    Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
+    zero_mul, one_mul, sub_zero, add_zero]
 
 @[simp] theorem unitCircleAt_im (φ : ℝ) :
     (unitCircleAt φ).im = Real.sin φ := by
-  simp [unitCircleAt]
+  simp only [unitCircleAt, Complex.add_im, Complex.mul_im,
+    Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
+    zero_mul, one_mul, zero_add, add_zero]
 
 /--
 When the mirror multiplier is written as `cos φ + i sin φ`, the complex map
@@ -33,7 +37,7 @@ theorem mirror_map_implies_trig_branch_equations
     (hmap : mirrorLeft X Θ = unitCircleAt φ * mirrorRight X Θ) :
     (1 + Real.cos φ) * X + Real.sin φ * Θ = 0 ∧
       Real.sin φ * X + (1 - Real.cos φ) * Θ = 0 := by
-  simpa using
+  simpa only [unitCircleAt_re, unitCircleAt_im] using
     (mirror_map_implies_linear_branch_equations
       (X := X) (Θ := Θ) (ω := unitCircleAt φ) hmap)
 
@@ -45,10 +49,10 @@ theorem mirror_branch_x_eq_trig_ratio
     (hmap : mirrorLeft X Θ = unitCircleAt φ * mirrorRight X Θ)
     (hden : 1 + Real.cos φ ≠ 0) :
     X = (-Real.sin φ * Θ) / (1 + Real.cos φ) := by
-  exact
-    mirror_branch_x_eq_ratio_mul_theta
+  simpa only [unitCircleAt_re, unitCircleAt_im] using
+    (mirror_branch_x_eq_ratio_mul_theta
       (X := X) (Θ := Θ) (ω := unitCircleAt φ)
-      hmap (by simpa using hden)
+      hmap (by simpa only [unitCircleAt_re] using hden))
 
 /--
 The standard half-angle identity in the exact orientation needed by the mirror
