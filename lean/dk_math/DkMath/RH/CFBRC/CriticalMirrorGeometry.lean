@@ -57,4 +57,11 @@ noncomputable def centeredComplex (s : ℂ) : ℂ :=
     (centeredComplex s).im = s.im := by
   rfl
 
+/-- The centered original point is exactly the mirror model's left state. -/
+theorem centeredComplex_eq_mirrorLeft (s : ℂ) :
+    centeredComplex s = mirrorLeft (centeredSigma s.re) s.im := by
+  apply Complex.ext
+  · simp [centeredComplex, mirrorLeft, centeredSigma]
+  · simp [centeredComplex, mirrorLeft]
+
 end DkMath.RH.CFBRCProjection
