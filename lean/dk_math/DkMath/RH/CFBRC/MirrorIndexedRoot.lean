@@ -22,7 +22,7 @@ theorem indexedRootBranchUnit_eq_exp
     exact_mod_cast (Nat.ne_of_gt hd)
   rw [indexedRootBranchUnit, unitCircleAt, rootBranchHalfAngle]
   rw [mul_comm Complex.I (Real.sin (2 * (Real.pi * (k : ℝ) / (d : ℝ))) : ℂ)]
-  rw [← Complex.exp_mul_I]
+  rw [← Complex.ofReal_cos, ← Complex.ofReal_sin, ← Complex.exp_mul_I]
   congr 1
   push_cast
   field_simp [hdC]
@@ -33,6 +33,7 @@ theorem exists_indexed_root_branch_unit_of_pow_eq_one
     {d : ℕ} (hd : 0 < d) {ω : ℂ}
     (hpow : ω ^ d = 1) :
     ∃ k < d, indexedRootBranchUnit d k = ω := by
+  letI : NeZero d := ⟨Nat.ne_of_gt hd⟩
   have hdn : d ≠ 0 := Nat.ne_of_gt hd
   obtain ⟨k, hk, hgen⟩ :=
     (Complex.isPrimitiveRoot_exp d hdn).eq_pow_of_pow_eq_one hpow
