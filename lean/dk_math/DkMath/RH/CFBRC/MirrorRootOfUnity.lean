@@ -1,0 +1,92 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.RH.CFBRC.MirrorThreatModel
+import Mathlib.Tactic
+
+#print "file: DkMath.RH.CFBRC.MirrorRootOfUnity"
+
+namespace DkMath.RH.CFBRCProjection
+
+/-- Left complex state in the mirror CFBRC model. -/
+noncomputable def mirrorLeft (X Θ : ℝ) : ℂ :=
+  (X : ℂ) + Complex.I * (Θ : ℂ)
+
+/-- Right complex state in the mirror CFBRC model. -/
+noncomputable def mirrorRight (X Θ : ℝ) : ℂ :=
+  (-X : ℂ) + Complex.I * (Θ : ℂ)
+
+/-- The right mirror state is nonzero away from the centered line. -/
+theorem mirrorRight_ne_zero_of_x_ne_zero
+    {X Θ : ℝ} (hX : X ≠ 0) :
+    mirrorRight X Θ ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  simp [mirrorRight] at hre
+  exact hX (by linarith)
+
+/--
+Mirror closure gives equality of the natural powers of the two mirror states.
+-/
+theorem mirror_pow_eq_of_mirrorCFBRC_eq_zero
+    {d : ℕ} {X Θ : ℝ}
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    mirrorLeft X Θ ^ d = mirrorRight X Θ ^ d := by
+  apply sub_eq_zero.mp
+  simpa [mirrorCFBRC, mirrorLeft, mirrorRight] using hzero
+
+/--
+Away from `X = 0`, every mirror closure produces a root-of-unity quotient
+`ω = mirrorLeft / mirrorRight` carrying the right state to the left state.
+-/
+theorem exists_rootOfUnity_witness_of_mirrorCFBRC_eq_zero
+    {d : ℕ} {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    ∃ ω : ℂ,
+      ω ^ d = 1 ∧
+      mirrorLeft X Θ = ω * mirrorRight X Θ := by
+  have hR : mirrorRight X Θ ≠ 0 :=
+    mirrorRight_ne_zero_of_x_ne_zero hX
+  have hp : mirrorLeft X Θ ^ d = mirrorRight X Θ ^ d :=
+    mirror_pow_eq_of_mirrorCFBRC_eq_zero hzero
+  refine ⟨mirrorLeft X Θ / mirrorRight X Θ, ?_, ?_⟩
+  · rw [div_pow, hp]
+    exact div_self (pow_ne_zero d hR)
+  · exact (div_mul_cancel₀ (mirrorLeft X Θ) hR).symm
+
+/--
+A mirror-state multiplier cannot be `1` away from the centered line.
+-/
+theorem mirror_multiplier_ne_one_of_x_ne_zero
+    {X Θ : ℝ} (hX : X ≠ 0) {ω : ℂ}
+    (hmap : mirrorLeft X Θ = ω * mirrorRight X Θ) :
+    ω ≠ 1 := by
+  intro hω
+  subst ω
+  have hEq : mirrorLeft X Θ = mirrorRight X Θ := by
+    simpa using hmap
+  have hre := congrArg Complex.re hEq
+  simp [mirrorLeft, mirrorRight] at hre
+  exact hX (by linarith)
+
+/--
+Every off-centered mirror closure lies on a nontrivial `d`-th root-of-unity
+branch.  This is the discrete threat model a future zeta bridge must avoid.
+-/
+theorem exists_nontrivial_rootOfUnity_witness_of_mirrorCFBRC_eq_zero
+    {d : ℕ} {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    ∃ ω : ℂ,
+      ω ^ d = 1 ∧
+      ω ≠ 1 ∧
+      mirrorLeft X Θ = ω * mirrorRight X Θ := by
+  rcases exists_rootOfUnity_witness_of_mirrorCFBRC_eq_zero hX hzero with
+    ⟨ω, hpow, hmap⟩
+  exact ⟨ω, hpow, mirror_multiplier_ne_one_of_x_ne_zero hX hmap, hmap⟩
+
+end DkMath.RH.CFBRCProjection
