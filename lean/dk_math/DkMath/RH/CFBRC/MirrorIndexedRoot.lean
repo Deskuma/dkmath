@@ -96,4 +96,62 @@ theorem exists_indexed_tangent_branch_of_mirrorCFBRC_eq_zero
   exact ⟨k, hk, hk0,
     mirror_branch_x_eq_indexed_neg_tan_mul_theta hmap (hcos k hk hk0)⟩
 
+/--
+An indexed antipodal branch, characterized by a zero half-angle cosine, forces
+`Θ = 0`.  This removes the only denominator obstruction in the tangent form.
+-/
+theorem theta_eq_zero_of_indexed_antipodal_branch
+    {d k : ℕ} {X Θ : ℝ}
+    (hmap : mirrorLeft X Θ = indexedRootBranchUnit d k * mirrorRight X Θ)
+    (hcos : Real.cos (rootBranchHalfAngle d k) = 0) :
+    Θ = 0 := by
+  have hmap' :
+      mirrorLeft X Θ =
+        unitCircleAt (2 * rootBranchHalfAngle d k) * mirrorRight X Θ := by
+    simpa [indexedRootBranchUnit] using hmap
+  have hlin :=
+    (mirror_map_implies_trig_branch_equations
+      (X := X) (Θ := Θ) (φ := 2 * rootBranchHalfAngle d k) hmap').2
+  rw [Real.sin_two_mul, Real.cos_two_mul, hcos] at hlin
+  norm_num at hlin
+  linarith
+
+/--
+Complete finite branch classification of an off-centered mirror closure.
+Either the phase coordinate vanishes on the antipodal branch, or the closure
+lies on one of the finitely many explicit tangent lines.
+-/
+theorem mirrorCFBRC_offcenter_branch_complete
+    {d : ℕ} (hd : 0 < d) {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    Θ = 0 ∨
+      ∃ k < d,
+        k ≠ 0 ∧
+        Real.cos (rootBranchHalfAngle d k) ≠ 0 ∧
+        X = -Real.tan (rootBranchHalfAngle d k) * Θ := by
+  rcases exists_nonzero_indexed_branch_of_mirrorCFBRC_eq_zero hd hX hzero with
+    ⟨k, hk, hk0, hmap⟩
+  by_cases hcos : Real.cos (rootBranchHalfAngle d k) = 0
+  · exact Or.inl (theta_eq_zero_of_indexed_antipodal_branch hmap hcos)
+  · exact Or.inr ⟨k, hk, hk0, hcos,
+      mirror_branch_x_eq_indexed_neg_tan_mul_theta hmap hcos⟩
+
+/--
+When `Θ ≠ 0`, the antipodal branch is impossible, so every off-centered mirror
+closure lies on an explicit finite tangent branch.
+-/
+theorem exists_indexed_tangent_branch_of_mirrorCFBRC_eq_zero_of_theta_ne_zero
+    {d : ℕ} (hd : 0 < d) {X Θ : ℝ}
+    (hX : X ≠ 0)
+    (hΘ : Θ ≠ 0)
+    (hzero : mirrorCFBRC d X Θ = 0) :
+    ∃ k < d,
+      k ≠ 0 ∧
+      Real.cos (rootBranchHalfAngle d k) ≠ 0 ∧
+      X = -Real.tan (rootBranchHalfAngle d k) * Θ := by
+  rcases mirrorCFBRC_offcenter_branch_complete hd hX hzero with hzeroΘ | hbranch
+  · exact (hΘ hzeroΘ).elim
+  · exact hbranch
+
 end DkMath.RH.CFBRCProjection
