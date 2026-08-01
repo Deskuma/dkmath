@@ -24,6 +24,7 @@ import DkMath.RH.CFBRC.FiniteClosure
 import DkMath.RH.CFBRC.FiniteClosurePermutation
 import DkMath.RH.CFBRC.FiniteMassNormalization
 import DkMath.RH.CFBRC.FiniteCenteredBridge
+import DkMath.RH.CFBRC.EtaFiniteClosure
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
