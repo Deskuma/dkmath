@@ -50,7 +50,11 @@ theorem normalized_pair_eq_half_of_eq
     a / (a + b) = (1 : ℝ) / 2 ∧
       b / (a + b) = (1 : ℝ) / 2 := by
   subst b
-  constructor <;> field_simp [hTotal] <;> ring
+  have ha : a ≠ 0 := by
+    intro ha
+    apply hTotal
+    simp [ha]
+  constructor <;> field_simp [ha] <;> ring
 
 /-- The two normalized finite projected masses sum to one. -/
 theorem normalizedProjectedMass_sum_eq_one
