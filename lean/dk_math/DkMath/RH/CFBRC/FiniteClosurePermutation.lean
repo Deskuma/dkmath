@@ -26,9 +26,13 @@ theorem listEndpoint_eq_of_perm
   induction h with
   | nil => rfl
   | cons z h ih =>
-      simp [listEndpoint, ih]
+      unfold listEndpoint at ih ⊢
+      simp only [List.sum_cons]
+      rw [ih]
   | swap z w L =>
-      simp [listEndpoint, add_comm]
+      unfold listEndpoint
+      simp only [List.sum_cons]
+      abel
   | trans h₁ h₂ ih₁ ih₂ =>
       exact ih₁.trans ih₂
 
@@ -55,8 +59,10 @@ theorem listEndpoint_map_neg (L : List ℂ) :
   induction L with
   | nil => simp [listEndpoint]
   | cons z L ih =>
-      simp [listEndpoint, ih]
-      ring
+      unfold listEndpoint at ih ⊢
+      simp only [List.map_cons, List.sum_cons]
+      rw [ih]
+      abel
 
 /--
 The historical control construction: follow a path and then append the
@@ -73,7 +79,7 @@ theorem forcedReverseClosure_endpoint_eq_zero (L : List ℂ) :
     listEndpoint (forcedReverseClosure L) = 0 := by
   rw [forcedReverseClosure, listEndpoint_append, listEndpoint_map_neg,
     listEndpoint_reverse]
-  ring
+  abel
 
 /-- The forced reverse-copy control path satisfies the closure predicate. -/
 theorem forcedReverseClosure_closed (L : List ℂ) :
