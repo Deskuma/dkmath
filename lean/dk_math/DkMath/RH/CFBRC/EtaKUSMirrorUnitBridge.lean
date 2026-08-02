@@ -70,9 +70,9 @@ theorem etaKUSMirrorUnitPair_product_eq_one
 theorem etaKUSMirrorUnitBig_eq_gap_add_four
     (x : GKUS ℂ EtaKUSUnit EtaKUSBlueprint) (m : ℕ) :
     etaKUSMirrorUnitBig x m = etaKUSMirrorUnitGap x m + 4 := by
-  simpa [etaKUSMirrorUnitBig, etaKUSMirrorUnitGap,
-    etaKUSMirrorUnitPair] using
-      etaMirrorUnitBig_eq_gap_add_four x.unit.point m
+  change etaMirrorUnitBig x.unit.point m =
+    etaMirrorUnitGap x.unit.point m + 4
+  exact etaMirrorUnitBig_eq_gap_add_four x.unit.point m
 
 /-- KUS-carried normalized Gap vanishes exactly at unit amplitude ratio. -/
 theorem etaKUSMirrorUnitGap_eq_zero_iff_ratio_eq_one
