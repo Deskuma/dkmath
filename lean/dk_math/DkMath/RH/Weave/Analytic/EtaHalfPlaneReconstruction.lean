@@ -37,7 +37,7 @@ theorem etaUnsignedVector_tendsto_zero_of_pos_re
     Tendsto (fun m : ℕ => etaUnsignedVector s m) atTop (nhds 0) := by
   rw [tendsto_zero_iff_norm_tendsto_zero]
   have hr := (tendsto_rpow_neg_atTop hs).comp tendsto_nat_succ_cast_atTop
-  simpa only [Function.comp_apply, norm_etaUnsignedVector] using hr
+  simpa only [norm_etaUnsignedVector, Function.comp_def] using hr
 
 /-- The even-indexed unsigned eta remainder also tends to zero. -/
 theorem etaUnsignedVector_two_mul_tendsto_zero_of_pos_re
