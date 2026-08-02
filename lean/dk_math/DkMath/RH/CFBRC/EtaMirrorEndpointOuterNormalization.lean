@@ -95,22 +95,24 @@ theorem etaMirrorEndpointOuterBig_eq_two_mul_totalEnergy
 /-- The inner Core is nonnegative. -/
 theorem etaMirrorEndpointCore_nonneg (N : ℕ) (s : ℂ) :
     0 ≤ etaMirrorEndpointCore N s := by
-  unfold etaMirrorEndpointCore etaMirrorEndpointCoreGapPair
-    etaMirrorEndpointBig
-  positivity
+  change 0 ≤ Complex.normSq
+    (etaPartialEndpoint N s + etaPartialEndpoint N (criticalMirror s))
+  exact Complex.normSq_nonneg _
 
 /-- The inner Gap core is nonnegative. -/
 theorem etaMirrorEndpointGapCore_nonneg (N : ℕ) (s : ℂ) :
     0 ≤ etaMirrorEndpointGapCore N s := by
-  unfold etaMirrorEndpointGapCore etaMirrorEndpointCoreGapPair
-    etaMirrorEndpointGap
-  positivity
+  change 0 ≤ Complex.normSq
+    (etaPartialEndpoint N s - etaPartialEndpoint N (criticalMirror s))
+  exact Complex.normSq_nonneg _
 
 /-- The shared outer Big is nonnegative. -/
 theorem etaMirrorEndpointOuterBig_nonneg (N : ℕ) (s : ℂ) :
     0 ≤ etaMirrorEndpointOuterBig N s := by
   rw [etaMirrorEndpointOuterBig_eq_core_add_gapCore]
-  positivity
+  exact add_nonneg
+    (etaMirrorEndpointCore_nonneg N s)
+    (etaMirrorEndpointGapCore_nonneg N s)
 
 /-- With a nonzero common denominator, the two shares exhaust the outer Big. -/
 theorem etaMirrorEndpointCoreShare_add_gapShare
