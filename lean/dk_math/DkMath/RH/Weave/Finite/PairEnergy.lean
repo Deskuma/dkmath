@@ -58,15 +58,16 @@ theorem pairOffset_swap (a b : ℂ) :
 /-- Equal arms are exactly the zero-offset state. -/
 theorem pairOffset_eq_zero_iff (a b : ℂ) :
     pairOffset a b = 0 ↔ a = b := by
-  unfold pairOffset
   constructor
   · intro h
-    have htwo : (2 : ℂ) ≠ 0 := by norm_num
     apply sub_eq_zero.mp
-    apply (div_eq_zero_iff).mp h |>.resolve_right htwo
+    calc
+      a - b = 2 * pairOffset a b := by
+        rw [two_mul_pairOffset]
+      _ = 0 := by simp [h]
   · intro h
     subst b
-    simp
+    simp [pairOffset]
 
 /--
 Pair-energy decomposition for two complex arms.
