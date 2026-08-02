@@ -34,14 +34,14 @@ example (N : ℕ) (s : ℂ)
       N s hOuter
 
 example (N : ℕ) (s : ℂ) :
-    Nonempty (etaMirrorEndpointCoreShareDefined N s) ↔
+    etaMirrorEndpointCoreShareDefined N s ↔
       etaMirrorEndpointOuterBig N s ≠ 0 := by
-  exact etaMirrorEndpointCoreShareDefined_nonempty_iff N s
+  exact etaMirrorEndpointCoreShareDefined_iff N s
 
 example (N : ℕ) (s : ℂ) :
-    Nonempty (etaMirrorEndpointGapShareDefined N s) ↔
+    etaMirrorEndpointGapShareDefined N s ↔
       etaMirrorEndpointOuterBig N s ≠ 0 := by
-  exact etaMirrorEndpointGapShareDefined_nonempty_iff N s
+  exact etaMirrorEndpointGapShareDefined_iff N s
 
 example (N : ℕ) (s : ℂ)
     (hOuter : etaMirrorEndpointOuterBig N s ≠ 0) :
@@ -62,8 +62,8 @@ example (N : ℕ) (s : ℂ)
 
 example (N : ℕ) (s : ℂ)
     (hOuter : etaMirrorEndpointOuterBig N s = 0) :
-    ¬ Nonempty (etaMirrorEndpointCoreShareDefined N s) ∧
-      ¬ Nonempty (etaMirrorEndpointGapShareDefined N s) := by
+    ¬ etaMirrorEndpointCoreShareDefined N s ∧
+      ¬ etaMirrorEndpointGapShareDefined N s := by
   exact etaMirrorEndpointIndividualShares_not_defined_of_outer_eq_zero N s hOuter
 
 example (N : ℕ) (s : ℂ) {ε : ℝ}
