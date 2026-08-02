@@ -135,4 +135,42 @@ theorem etaPartialEndpoint_tendsto_tsum_of_pairedSummable
     (etaPartialEndpoint_two_mul_tendsto_tsum hsum)
     (etaPartialEndpoint_two_mul_add_one_tendsto_tsum hre hsum)
 
+/--
+The paired infinite sum agrees with the analytically continued eta value at a
+selected point.  This value-identification obligation is deliberately separate
+from paired summability.
+-/
+def EtaPairedTsumIdentifiesAnalyticAt (s : ℂ) : Prop :=
+  (∑' k : ℕ, etaPairTerm s k) = analyticEta s
+
+/--
+On the open right half-plane, paired summability plus value identification
+realizes convergence of the genuine finite eta endpoint sequence.
+-/
+theorem etaPartialConvergesAt_of_pairedSummable
+    {s : ℂ} (hre : 0 < s.re)
+    (hsum : EtaPairedSummableAt s)
+    (hidentify : EtaPairedTsumIdentifiesAnalyticAt s) :
+    EtaPartialConvergesAt s := by
+  unfold EtaPairedTsumIdentifiesAnalyticAt at hidentify
+  unfold EtaPartialConvergesAt
+  rw [← hidentify]
+  exact etaPartialEndpoint_tendsto_tsum_of_pairedSummable hre hsum
+
+/--
+Under paired summability, the finite eta endpoints tend to zero exactly when
+the paired infinite sum is zero.
+-/
+theorem etaPartialEndpoint_tendsto_zero_iff_pairedTsum_eq_zero
+    {s : ℂ} (hre : 0 < s.re) (hsum : EtaPairedSummableAt s) :
+    Tendsto (fun N : ℕ => etaPartialEndpoint N s) atTop (nhds 0) ↔
+      (∑' k : ℕ, etaPairTerm s k) = 0 := by
+  constructor
+  · intro hzero
+    exact tendsto_nhds_unique
+      (etaPartialEndpoint_tendsto_tsum_of_pairedSummable hre hsum) hzero
+  · intro hzero
+    simpa [hzero] using
+      (etaPartialEndpoint_tendsto_tsum_of_pairedSummable hre hsum)
+
 end DkMath.RH.Weave.Analytic
