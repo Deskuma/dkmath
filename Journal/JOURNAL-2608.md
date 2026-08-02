@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-02
 
+### 17:58
+
+[KUS 加法は構成そのものによって support を保持する](260802-1758-kus-addition-preserves-support-by-construction.md)
+
+同一 support の証明を発動条件として、可視係数は自然数加法で合成しながら support を定義段階で固定し、係数和が零でも由来を `zeroState` として保持する構造を読む。
+
 ### 12:01
 
 [KUS 乗法は積が零でも support を保持する](260802-1201-kus-multiplication-preserves-support-even-at-zero.md)
