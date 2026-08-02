@@ -33,6 +33,7 @@ import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
 import DkMath.RH.Weave.Finite.EtaPairDecomposition
 import DkMath.RH.Weave.Analytic.EtaLimitBridge
+import DkMath.RH.Weave.Analytic.EtaEvenPairing
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
