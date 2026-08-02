@@ -9,5 +9,6 @@ import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
+import DkMathTest.RH.CFBRCEtaMirrorUnitSplit
 
 #print "file: DkMathTest"
