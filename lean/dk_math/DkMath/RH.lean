@@ -42,6 +42,7 @@ import DkMath.RH.Weave.Analytic.EtaFiniteFactorization
 import DkMath.RH.Weave.Analytic.EtaZetaIdentification
 import DkMath.RH.Weave.Analytic.EtaHalfPlaneReconstruction
 import DkMath.RH.Weave.Analytic.EtaPairedSummability
+import DkMath.RH.Weave.Analytic.EtaPairedIdentification
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
