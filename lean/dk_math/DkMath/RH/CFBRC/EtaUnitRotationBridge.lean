@@ -40,6 +40,20 @@ theorem positiveProjectedMass_eta_unitRotation_pos
   · refine ⟨0, ?_⟩
     simp
 
+/-- The zeroth eta vector gives at least one unit of positive projected mass. -/
+theorem one_le_positiveProjectedMass_eta_unitRotation
+    (N : ℕ) (s : ℂ) :
+    1 ≤ positiveProjectedMass
+      (Finset.range (N + 1)) (etaSignedVector s) 1 := by
+  unfold positiveProjectedMass
+  have hmem : 0 ∈ Finset.range (N + 1) := by
+    simp
+  calc
+    1 = max (((1 : ℂ) * etaSignedVector s 0).re) 0 := by simp
+    _ ≤ ∑ i in Finset.range (N + 1),
+          max (((1 : ℂ) * etaSignedVector s i).re) 0 := by
+      exact Finset.single_le_sum (fun i hi => le_max_right _ _) hmem
+
 /-- Every negative projected-mass summand is nonnegative. -/
 theorem negativeProjectedMass_eta_unitRotation_nonneg
     (N : ℕ) (s : ℂ) :
@@ -48,6 +62,17 @@ theorem negativeProjectedMass_eta_unitRotation_nonneg
   unfold negativeProjectedMass
   exact Finset.sum_nonneg fun i hi => le_max_right _ _
 
+/-- The unit-rotation projected total mass is uniformly bounded below by one. -/
+theorem one_le_projectedMassTotal_eta_unitRotation
+    (N : ℕ) (s : ℂ) :
+    1 ≤ projectedMassTotal
+      (Finset.range (N + 1)) (etaSignedVector s) 1 := by
+  unfold projectedMassTotal
+  exact
+    (one_le_positiveProjectedMass_eta_unitRotation N s).trans
+      (le_add_of_nonneg_right
+        (negativeProjectedMass_eta_unitRotation_nonneg N s))
+
 /--
 The unit rotation makes the projected eta total mass strictly positive at every
 finite stage `N + 1`; no eventual nonvanishing hypothesis is needed.
@@ -55,11 +80,8 @@ finite stage `N + 1`; no eventual nonvanishing hypothesis is needed.
 theorem projectedMassTotal_eta_unitRotation_pos
     (N : ℕ) (s : ℂ) :
     0 < projectedMassTotal
-      (Finset.range (N + 1)) (etaSignedVector s) 1 := by
-  unfold projectedMassTotal
-  exact add_pos_of_pos_of_nonneg
-    (positiveProjectedMass_eta_unitRotation_pos N s)
-    (negativeProjectedMass_eta_unitRotation_nonneg N s)
+      (Finset.range (N + 1)) (etaSignedVector s) 1 :=
+  zero_lt_one.trans_le (one_le_projectedMassTotal_eta_unitRotation N s)
 
 /-- The projected eta total mass under unit rotation never vanishes. -/
 theorem projectedMassTotal_eta_unitRotation_ne_zero
