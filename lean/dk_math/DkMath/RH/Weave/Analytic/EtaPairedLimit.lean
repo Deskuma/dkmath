@@ -20,9 +20,9 @@ theorem tendsto_two_mul_atTop :
     Tendsto (fun K : ℕ => 2 * K) atTop atTop := by
   refine tendsto_atTop.2 ?_
   intro b
-  refine ⟨b, ?_⟩
-  intro a ha
-  omega
+  exact eventually_atTop.2 ⟨b, by
+    intro a ha
+    omega⟩
 
 /--
 Convergence of the full finite eta endpoint sequence implies convergence of
@@ -34,7 +34,8 @@ theorem etaPairedPartial_tendsto_analyticEta
       atTop (nhds (analyticEta s)) := by
   unfold EtaPartialConvergesAt at hconv
   have heven := hconv.comp tendsto_two_mul_atTop
-  simpa only [etaPartialEndpoint_two_mul_eq_etaPairedPartial] using heven
+  simpa only [Function.comp_apply,
+    etaPartialEndpoint_two_mul_eq_etaPairedPartial] using heven
 
 /-- An analytic eta zero gives a zero limit for the paired differences. -/
 theorem etaPairedPartial_tendsto_zero_of_analyticEta_eq_zero
