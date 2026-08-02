@@ -34,6 +34,19 @@ example {x : ℝ} (hx : x ≠ 0) :
     StructuralRatioWitness.value_eq_div_of_denominator_ne
       (StructuralRatioWitness.self x) hx
 
+example {x y : ℝ} (hy : y ≠ 0) :
+    (DefinedRatioWitness.of_denominator_ne
+      (numerator := x) (denominator := y) hy).value = x / y := by
+  simp
+
+example {x y : ℝ} :
+    Nonempty (DefinedRatioWitness ℝ x y) ↔ y ≠ 0 := by
+  exact DefinedRatioWitness.nonempty_iff_denominator_ne x y
+
+example {x : ℝ} :
+    ¬ Nonempty (DefinedRatioWitness ℝ x 0) := by
+  exact DefinedRatioWitness.not_nonempty_of_denominator_eq_zero x 0 rfl
+
 example {ε : ℝ} (hε : 0 < ε) :
     regularizedSelfRatio 0 ε = 1 := by
   exact regularizedZeroSelfRatio_eq_one hε
