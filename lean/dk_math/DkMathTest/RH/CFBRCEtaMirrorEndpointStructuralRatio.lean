@@ -33,4 +33,32 @@ example (N : ℕ) (s : ℂ)
     etaMirrorEndpointTotalStructuralShare_eq_coreShare_add_gapShare
       N s hOuter
 
+example (N : ℕ) (s : ℂ) {ε : ℝ}
+    (hOuter : etaMirrorEndpointOuterBig N s = 0)
+    (hε : 0 < ε) :
+    etaMirrorEndpointRegularizedTotalShare N s ε = 1 := by
+  exact
+    etaMirrorEndpointRegularizedTotalShare_eq_one_of_outer_eq_zero_of_offset_pos
+      N s hOuter hε
+
+example (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s = 0) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin 0 ({0}ᶜ : Set ℝ))
+      (nhds 1) := by
+  exact
+    tendsto_etaMirrorEndpointRegularizedTotalShare_punctured_of_outer_eq_zero
+      N s hOuter
+
+example (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s = 0) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin 0 (Set.Ioi 0))
+      (nhds 1) := by
+  exact
+    tendsto_etaMirrorEndpointRegularizedTotalShare_right_of_outer_eq_zero
+      N s hOuter
+
 end DkMathTest.RH.CFBRCEtaMirrorEndpointStructuralRatio
