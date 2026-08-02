@@ -51,8 +51,12 @@ theorem one_le_positiveProjectedMass_eta_unitRotation
   calc
     1 = max (((1 : ℂ) * etaSignedVector s 0).re) 0 := by simp
     _ ≤ (Finset.range (N + 1)).sum
-          (fun i => max (((1 : ℂ) * etaSignedVector s i).re) 0) := by
-      exact Finset.single_le_sum (fun i hi => le_max_right _ _) hmem
+          (fun i : ℕ => max (((1 : ℂ) * etaSignedVector s i).re) 0) := by
+      exact Finset.single_le_sum
+        (s := Finset.range (N + 1))
+        (f := fun i : ℕ => max (((1 : ℂ) * etaSignedVector s i).re) 0)
+        (fun i hi => le_max_right _ _)
+        hmem
 
 /-- Every negative projected-mass summand is nonnegative. -/
 theorem negativeProjectedMass_eta_unitRotation_nonneg
