@@ -48,8 +48,9 @@ theorem etaUnsignedPartial_two_mul_tendsto_riemannZeta
     {s : ℂ} (hs : 1 < s.re) :
     Tendsto (fun K : ℕ => etaUnsignedPartial (2 * K) s)
       atTop (nhds (riemannZeta s)) := by
-  simpa only [Function.comp_apply] using
+  have hcomp :=
     (etaUnsignedPartial_tendsto_riemannZeta hs).comp tendsto_two_mul_atTop
+  exact hcomp.congr' (Eventually.of_forall fun K => rfl)
 
 /-- Algebraic normal form of the finite-factorization limit. -/
 theorem riemannZeta_sub_etaDyadicCoefficient_mul_eq_analyticEta
@@ -95,12 +96,13 @@ theorem etaTsumIdentifiesAnalyticAt_of_one_lt_re
     {s : ℂ} (hs : 1 < s.re) :
     EtaTsumIdentifiesAnalyticAt s := by
   unfold EtaTsumIdentifiesAnalyticAt
+  have hcomp :=
+    (etaPartialEndpoint_tendsto_tsum_of_one_lt_re hs).comp
+      tendsto_two_mul_atTop
   have hfullEven :
       Tendsto (fun K : ℕ => etaPartialEndpoint (2 * K) s)
         atTop (nhds (∑' m : ℕ, etaSignedVector s m)) := by
-    simpa only [Function.comp_apply] using
-      (etaPartialEndpoint_tendsto_tsum_of_one_lt_re hs).comp
-        tendsto_two_mul_atTop
+    exact hcomp.congr' (Eventually.of_forall fun K => rfl)
   exact tendsto_nhds_unique hfullEven
     (etaPartialEndpoint_two_mul_tendsto_analyticEta hs)
 
