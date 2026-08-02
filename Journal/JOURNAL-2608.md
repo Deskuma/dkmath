@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-02
 
+### 23:59
+
+[KUS の往復変換はすべての状態を再構成する](260802-2359-kus-round-trip-reconstructs-every-state.md)
+
+support と自然数係数から KUS を構成し、`extract` と `toNat` で両成分を回収して、任意の状態を完全に再構成できる往復則を読む。
+
 ### 17:58
 
 [KUS 加法は構成そのものによって support を保持する](260802-1758-kus-addition-preserves-support-by-construction.md)
