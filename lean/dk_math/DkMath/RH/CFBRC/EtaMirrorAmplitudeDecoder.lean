@@ -68,6 +68,5 @@ theorem etaMirrorAmplitudeDecoder_eq_centeredSigma
   have hlog2_ne : Real.log (2 : ℝ) ≠ 0 := ne_of_gt hlog2pos
   rw [Real.log_rpow h2pos]
   field_simp [hlog2_ne]
-  ring
 
 end DkMath.RH.CFBRCProjection
