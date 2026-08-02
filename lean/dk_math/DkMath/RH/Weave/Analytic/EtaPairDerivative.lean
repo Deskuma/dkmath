@@ -13,6 +13,8 @@ import Mathlib.Tactic
 
 namespace DkMath.RH.Weave.Analytic
 
+local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+
 open DkMath.RH.CFBRCProjection
 
 /-- Positive-real power kernel underlying every unsigned eta vector. -/
