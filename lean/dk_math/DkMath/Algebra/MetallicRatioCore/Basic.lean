@@ -138,12 +138,12 @@ def squareMass (p : UnitPair R) : R :=
 /-- Pair-level even-component decomposition. -/
 theorem big_add_gap (p : UnitPair R) :
     p.big + p.gap = 2 * p.squareMass := by
-  exact unitAttachedCore_add p.x p.u
+  simpa [big, gap, squareMass] using unitAttachedCore_add p.x p.u
 
 /-- Pair-level odd-component decomposition. -/
 theorem big_sub_gap (p : UnitPair R) :
     p.big - p.gap = 4 * p.product := by
-  exact unitAttachedCore_sub p.x p.u
+  simpa [big, gap, product] using unitAttachedCore_sub p.x p.u
 
 /-- Big is Gap plus four times the oriented product. -/
 theorem big_eq_gap_add_four_mul_product (p : UnitPair R) :
@@ -163,9 +163,7 @@ theorem big_eq_four_iff_gap_eq_zero_of_product_eq_one
     (p : UnitPair R) (hproduct : p.product = 1) :
     p.big = 4 ↔ p.gap = 0 := by
   rw [p.big_eq_gap_add_four_of_product_eq_one hproduct]
-  constructor <;> intro h
-  · exact add_left_cancel (by simpa using h)
-  · simpa [h]
+  simp
 
 end UnitPair
 
@@ -200,9 +198,9 @@ end UnitPair
 
 end Domain
 
-section LinearOrderedRing
+section LinearOrderedCommRing
 
-variable {R : Type*} [LinearOrderedRing R]
+variable {R : Type*} [LinearOrderedCommRing R]
 
 /-- Both attached-unit square cores are nonnegative. -/
 theorem unitAttachedCorePos_nonneg (x u : R) :
@@ -236,6 +234,6 @@ theorem eq_one_of_nonneg_of_product_eq_one_of_gap_eq_zero
 
 end UnitPair
 
-end LinearOrderedRing
+end LinearOrderedCommRing
 
 end DkMath.Algebra.MetallicRatioCore
