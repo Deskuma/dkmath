@@ -76,11 +76,14 @@ theorem norm_etaPairTerm_le_controlMajorant
     (hs : s ∈ etaControlRegion δ M) (k : ℕ) :
     ‖etaPairTerm s k‖ ≤
       M * (((k + 1 : ℕ) : ℝ) ^ (-δ - 1)) := by
-  have hre : 0 < s.re := hδ.trans hs.1
+  change δ < s.re ∧ ‖s‖ < M at hs
+  rcases hs with ⟨hsre, hsnorm⟩
+  have hre : 0 < s.re := hδ.trans hsre
   have hpoint := norm_etaPairTerm_le_summableMajorant hre k
-  have hnorm : ‖s‖ ≤ M := le_of_lt hs.2
+  have hnorm : ‖s‖ ≤ M := le_of_lt hsnorm
   have hM : 0 ≤ M := (norm_nonneg s).trans hnorm
-  have hbase : 1 ≤ (((k + 1 : ℕ) : ℝ)) := by positivity
+  have hbase : (1 : ℝ) ≤ (((k + 1 : ℕ) : ℝ)) := by
+    exact_mod_cast Nat.succ_le_succ (Nat.zero_le k)
   have hexp : -s.re - 1 ≤ -δ - 1 := by linarith
   have hrpow :
       (((k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) ≤
@@ -113,18 +116,19 @@ theorem etaPairedValue_differentiableOn_controlRegion
 theorem mem_etaControlRegion_self
     {s : ℂ} (hs : 0 < s.re) :
     s ∈ etaControlRegion (s.re / 2) (‖s‖ + 1) := by
-  constructor
-  · linarith
-  · linarith
+  change s.re / 2 < s.re ∧ ‖s‖ < ‖s‖ + 1
+  constructor <;> linarith
 
 /-- The paired eta infinite sum is holomorphic throughout `re s > 0`. -/
 theorem etaPairedValue_differentiableOn_rightHalfPlane :
     DifferentiableOn ℂ etaPairedValue etaRightHalfPlane := by
   intro s hs
-  have hδ : 0 < s.re / 2 := by
-    exact half_pos hs
+  change 0 < s.re at hs
+  have hδ : 0 < s.re / 2 := half_pos hs
   have hmem := mem_etaControlRegion_self hs
-  have hlocal := etaPairedValue_differentiableOn_controlRegion hδ
+  have hlocal :=
+    etaPairedValue_differentiableOn_controlRegion
+      (M := ‖s‖ + 1) hδ
   have hat : DifferentiableAt ℂ etaPairedValue s :=
     (hlocal s hmem).differentiableAt
       ((isOpen_etaControlRegion (s.re / 2) (‖s‖ + 1)).mem_nhds hmem)
