@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.CompletedZetaBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
+import DkMath.RH.CFBRC.MirrorRootOfUnity
 import Mathlib.Tactic
 
 #print "file: DkMath.RH.CFBRC.CriticalMirrorGeometry"
@@ -60,10 +61,6 @@ noncomputable def centeredComplex (s : ℂ) : ℂ :=
 /-- The centered original point is exactly the mirror model's left state. -/
 theorem centeredComplex_eq_mirrorLeft (s : ℂ) :
     centeredComplex s = mirrorLeft (centeredSigma s.re) s.im := by
-  apply Complex.ext
-  · change s.re - (1 : ℝ) / 2 = centeredSigma s.re
-    rfl
-  · change s.im = s.im
-    rfl
+  apply Complex.ext <;> simp [centeredSigma, mirrorLeft]
 
 end DkMath.RH.CFBRCProjection
