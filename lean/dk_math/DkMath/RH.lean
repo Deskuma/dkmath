@@ -38,6 +38,7 @@ import DkMath.RH.Weave.Analytic.EtaPairedLimit
 import DkMath.RH.Weave.Analytic.EtaTermDecay
 import DkMath.RH.Weave.Analytic.EtaAbsoluteConvergence
 import DkMath.RH.Weave.Analytic.EtaFiniteFactorization
+import DkMath.RH.Weave.Analytic.EtaZetaIdentification
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
@@ -65,8 +66,7 @@ theorem standardZeta_map_zero_iff_riemannHypothesis
     exact riemannHypothesis_of_standardZeta_map_zero hd phase h
   · intro hRH s hs
     apply
-      (offCriticalCFBRC_eq_zero_iff_re_eq_half
-        hd s.re (phase s)).2
+      (offCriticalCFBRC_eq_zero_iff_re_eq_half hd s.re (phase s)).2
     exact
       (riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH)
         s hs
