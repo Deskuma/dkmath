@@ -35,6 +35,7 @@ import DkMath.RH.Weave.Finite.EtaPairDecomposition
 import DkMath.RH.Weave.Analytic.EtaLimitBridge
 import DkMath.RH.Weave.Analytic.EtaEvenPairing
 import DkMath.RH.Weave.Analytic.EtaPairedLimit
+import DkMath.RH.Weave.Analytic.EtaTermDecay
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
