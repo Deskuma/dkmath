@@ -3,6 +3,7 @@
 作成日: 2026-08-02  
 状態: **未実装 / Lean 判定待ち**  
 対象: `GTail`, `GN`, 素数次数 `d = p`, 対称内部核, Fermat quotient, Wieferich depth
+cid: 6a6e84af-8fd8-83e8-89d0-a06ba5793c77
 
 ---
 
