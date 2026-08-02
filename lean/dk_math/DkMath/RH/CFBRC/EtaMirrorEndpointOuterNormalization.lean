@@ -118,6 +118,52 @@ theorem etaMirrorEndpointTotalStructuralShare_eq_div_of_outer_ne
   apply DkMath.KUS.StructuralRatioWitness.value_eq_div_of_denominator_ne
   exact hOuter
 
+/-- Offset regularization of the total endpoint self-ratio in the real value layer. -/
+noncomputable def etaMirrorEndpointRegularizedTotalShare
+    (N : ℕ) (s : ℂ) (ε : ℝ) : ℝ :=
+  DkMath.KUS.regularizedSelfRatio (etaMirrorEndpointOuterBig N s) ε
+
+/-- Whenever the lifted outer Big is nonzero, the regularized total share is one. -/
+theorem etaMirrorEndpointRegularizedTotalShare_eq_one
+    (N : ℕ) (s : ℂ) {ε : ℝ}
+    (hLift : etaMirrorEndpointOuterBig N s + ε ≠ 0) :
+    etaMirrorEndpointRegularizedTotalShare N s ε = 1 := by
+  exact DkMath.KUS.regularizedSelfRatio_eq_one hLift
+
+/-- At a collapsed outer Big, every positive offset recovers unit total share. -/
+theorem etaMirrorEndpointRegularizedTotalShare_eq_one_of_outer_eq_zero_of_offset_pos
+    (N : ℕ) (s : ℂ) {ε : ℝ}
+    (hOuter : etaMirrorEndpointOuterBig N s = 0)
+    (hε : 0 < ε) :
+    etaMirrorEndpointRegularizedTotalShare N s ε = 1 := by
+  simp only [etaMirrorEndpointRegularizedTotalShare, hOuter]
+  exact DkMath.KUS.regularizedZeroSelfRatio_eq_one hε
+
+/--
+If the endpoint outer Big has collapsed to zero, the regularized total share
+tends to the structural unit value along the full punctured neighborhood.
+-/
+theorem tendsto_etaMirrorEndpointRegularizedTotalShare_punctured_of_outer_eq_zero
+    (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s = 0) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin 0 ({0}ᶜ : Set ℝ))
+      (nhds 1) := by
+  simpa [etaMirrorEndpointRegularizedTotalShare, hOuter] using
+    DkMath.KUS.tendsto_regularizedZeroSelfRatio_punctured
+
+/-- The positive-offset regularization has the same unit limit at collapse. -/
+theorem tendsto_etaMirrorEndpointRegularizedTotalShare_right_of_outer_eq_zero
+    (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s = 0) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin 0 (Set.Ioi 0))
+      (nhds 1) := by
+  simpa [etaMirrorEndpointRegularizedTotalShare, hOuter] using
+    DkMath.KUS.tendsto_regularizedZeroSelfRatio_right
+
 /-- The outer Big is twice the total original/mirror endpoint energy. -/
 theorem etaMirrorEndpointOuterBig_eq_two_mul_totalEnergy
     (N : ℕ) (s : ℂ) :
