@@ -43,6 +43,24 @@ open DkMath.RH.Basic
 #eval printValue ident
 #eval printValue name
 
+open CFBRCProjection
+
+theorem standardZeta_map_zero_iff_riemannHypothesis
+    {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
+    (∀ {s : ℂ}, NontrivialRiemannZetaZero s →
+      offCriticalCFBRC d s.re (phase s) = 0) ↔
+      RiemannHypothesis := by
+  constructor
+  · intro h
+    exact riemannHypothesis_of_standardZeta_map_zero hd phase h
+  · intro hRH s hs
+    apply
+      (offCriticalCFBRC_eq_zero_iff_re_eq_half
+        hd s.re (phase s)).2
+    exact
+      (riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH)
+        s hs
+
 end DkMath.RH
 
 -- ============================================================================
