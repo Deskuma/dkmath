@@ -10,5 +10,6 @@ import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
 import DkMathTest.RH.CFBRCEtaMirrorUnitSplit
+import DkMathTest.RH.CFBRCEtaKUSMirrorUnitBridge
 
 #print "file: DkMathTest"
