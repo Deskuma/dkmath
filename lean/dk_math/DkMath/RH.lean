@@ -47,6 +47,7 @@ import DkMath.RH.Weave.Analytic.EtaPairedHolomorphic
 import DkMath.RH.Weave.Analytic.EtaPoleAudit
 import DkMath.RH.Weave.Analytic.EtaContinuationDomains
 import DkMath.RH.Weave.Analytic.EtaPairedContinuation
+import DkMath.RH.Weave.Analytic.EtaEnergyLimit
 import DkMath.RH.EulerZetaConvergence
 
 #print "file: DkMath.RH"
