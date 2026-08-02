@@ -200,17 +200,18 @@ end Domain
 
 section StrictOrderedRing
 
-variable {R : Type*} [CommRing R] [LinearOrder R] [IsStrictOrderedRing R]
+variable {R : Type*} [CommRing R] [LinearOrder R]
+  [IsStrictOrderedRing R] [ExistsAddOfLE R]
 
 /-- Both attached-unit square cores are nonnegative. -/
 theorem unitAttachedCorePos_nonneg (x u : R) :
     0 ≤ unitAttachedCorePos x u := by
-  simp [unitAttachedCorePos]
+  exact sq_nonneg (x + u)
 
 /-- The closure Gap is nonnegative. -/
 theorem unitAttachedCoreNeg_nonneg (x u : R) :
     0 ≤ unitAttachedCoreNeg x u := by
-  simp [unitAttachedCoreNeg]
+  exact sq_nonneg (x - u)
 
 namespace UnitPair
 
@@ -222,15 +223,17 @@ theorem eq_one_of_nonneg_of_product_eq_one_of_gap_eq_zero
     (hgap : p.gap = 0) :
     p.x = 1 ∧ p.u = 1 := by
   have hxu : p.x = p.u := (p.gap_eq_zero_iff).mp hgap
-  have hsq : p.x * p.x = 1 := by
-    simpa [UnitPair.product, hxu] using hproduct
-  have hxone : p.x = 1 := by
-    nlinarith
+  have hsqx : p.x * p.x = 1 := by
+    calc
+      p.x * p.x = p.x * p.u := congrArg (fun t => p.x * t) hxu
+      _ = 1 := hproduct
+  have hsqu : p.u * p.u = 1 := by
+    calc
+      p.u * p.u = p.x * p.u := congrArg (fun t => t * p.u) hxu.symm
+      _ = 1 := hproduct
   constructor
-  · exact hxone
-  · calc
-      p.u = p.x := hxu.symm
-      _ = 1 := hxone
+  · nlinarith
+  · nlinarith
 
 end UnitPair
 
