@@ -22,12 +22,11 @@ theorem summable_etaUnsignedVector_of_one_lt_re
   have hfull :
       Summable (fun n : ℕ => 1 / ((n : ℂ) ^ s)) :=
     (Complex.summable_one_div_nat_cpow).2 hs
-  have hinj : Function.Injective (fun m : ℕ => m + 1) := by
-    intro a b hab
-    omega
   have hshift :
       Summable (fun m : ℕ => 1 / ((((m + 1 : ℕ) : ℂ) ^ s))) := by
-    simpa only [Function.comp_apply] using hfull.comp_injective hinj
+    exact
+      (summable_nat_add_iff
+        (f := fun n : ℕ => 1 / ((n : ℂ) ^ s)) 1).2 hfull
   exact hshift.congr fun m => (etaUnsignedVector_eq_one_div_cpow s m).symm
 
 /-- Alternating eta vectors are absolutely summable for `1 < re s`. -/
