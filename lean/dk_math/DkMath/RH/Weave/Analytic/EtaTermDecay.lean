@@ -19,7 +19,7 @@ theorem etaUnsignedVector_eq_one_div_cpow
     (s : ℂ) (m : ℕ) :
     etaUnsignedVector s m = 1 / (((m + 1 : ℕ) : ℂ) ^ s) := by
   rw [etaUnsignedVector, Complex.cpow_neg]
-  rfl
+  simp [one_div]
 
 /--
 The norm of an unsigned eta vector depends only on the real part of `s`.
@@ -63,6 +63,5 @@ theorem norm_etaPairTerm_le
     _ = ((2 * k + 1 : ℕ) : ℝ) ^ (-s.re) +
           ((2 * k + 2 : ℕ) : ℝ) ^ (-s.re) := by
       rw [norm_etaUnsignedVector, norm_etaUnsignedVector]
-      congr 2 <;> omega
 
 end DkMath.RH.Weave.Analytic
