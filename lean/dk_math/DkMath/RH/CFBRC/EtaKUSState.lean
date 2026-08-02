@@ -186,11 +186,11 @@ noncomputable def etaUnitKUSZeroState (N : ℕ) (s : ℂ) :
       centeredSigma s.re := rfl
 
 /--
-Equality of structural eta zero states forces equality of their retained
-supports.  Coefficient zero alone therefore does not collapse distinct eta
-observation structures into one undifferentiated zero.
+Equality of structural eta zero states forces equality of the retained
+observation coordinates.  Thus coefficient zero does not identify distinct
+truncation stages, complex points, or rotations.
 -/
-theorem etaKUSZeroState_support_eq_of_eq
+theorem etaKUSZeroState_coordinates_eq_of_eq
     {N₁ N₂ : ℕ} {s₁ s₂ ω₁ ω₂ : ℂ}
     {hTotal₁ :
       projectedMassTotal (Finset.range N₁) (etaSignedVector s₁) ω₁ ≠ 0}
@@ -199,9 +199,16 @@ theorem etaKUSZeroState_support_eq_of_eq
     (hzero :
       etaKUSZeroState N₁ s₁ ω₁ hTotal₁ =
         etaKUSZeroState N₂ s₂ ω₂ hTotal₂) :
-    etaKUSSupport N₁ s₁ ω₁ hTotal₁ =
-      etaKUSSupport N₂ s₂ ω₂ hTotal₂ := by
-  have h := congrArg extract_g hzero
-  simpa using h
+    N₁ = N₂ ∧ s₁ = s₂ ∧ ω₁ = ω₂ := by
+  have hunit := congrArg
+    (fun x : GKUS ℂ EtaKUSUnit EtaKUSBlueprint => x.unit) hzero
+  constructor
+  · simpa [etaKUSZeroState, etaKUSSupport] using
+      congrArg EtaKUSUnit.index hunit
+  · constructor
+    · simpa [etaKUSZeroState, etaKUSSupport] using
+        congrArg EtaKUSUnit.point hunit
+    · simpa [etaKUSZeroState, etaKUSSupport] using
+        congrArg EtaKUSUnit.rotation hunit
 
 end DkMath.RH.CFBRCProjection
