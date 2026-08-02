@@ -11,14 +11,17 @@ import Mathlib.Tactic
 
 #print "file: DkMath.RH.Weave.Analytic.EtaPairDerivative"
 
+noncomputable section
+
 namespace DkMath.RH.Weave.Analytic
 
-local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+local instance (priority := 2000) : NormedSpace ℝ ℂ :=
+  NormedSpace.complexToReal
 
 open DkMath.RH.CFBRCProjection
 
 /-- Positive-real power kernel underlying every unsigned eta vector. -/
-noncomputable def etaRealKernel (s : ℂ) (x : ℝ) : ℂ :=
+def etaRealKernel (s : ℂ) (x : ℝ) : ℂ :=
   (x : ℂ) ^ (-s)
 
 /-- Natural samples of the real kernel are exactly the unsigned eta vectors. -/
