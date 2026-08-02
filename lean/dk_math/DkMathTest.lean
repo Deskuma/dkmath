@@ -12,5 +12,6 @@ import DkMathTest.KUS
 import DkMathTest.RH.CFBRCEtaMirrorUnitSplit
 import DkMathTest.RH.CFBRCEtaKUSMirrorUnitBridge
 import DkMathTest.RH.CFBRCEtaKUSMirrorGapBridgeAudit
+import DkMathTest.RH.CFBRCEtaMirrorEndpointPairEnergy
 
 #print "file: DkMathTest"
