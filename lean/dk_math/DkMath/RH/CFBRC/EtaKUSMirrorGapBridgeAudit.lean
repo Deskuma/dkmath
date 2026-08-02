@@ -54,10 +54,9 @@ noncomputable def etaUnitKUSMirrorGapTrace (s : ℂ) : ℕ → ℝ :=
 theorem etaUnitKUSMirrorGapTrace_tendsto (s : ℂ) :
     Tendsto (etaUnitKUSMirrorGapTrace s) atTop
       (nhds (etaMirrorUnitGap s 1)) := by
-  simpa only [etaUnitKUSMirrorGapTrace_apply] using
-    (tendsto_const_nhds :
-      Tendsto (fun _ : ℕ => etaMirrorUnitGap s 1) atTop
-        (nhds (etaMirrorUnitGap s 1)))
+  change Tendsto (fun _ : ℕ => etaMirrorUnitGap s 1) atTop
+    (nhds (etaMirrorUnitGap s 1))
+  exact tendsto_const_nhds
 
 /-- Gap-trace convergence to zero is exactly the critical-line condition. -/
 theorem etaUnitKUSMirrorGapTrace_tendsto_zero_iff_re_eq_half (s : ℂ) :
@@ -86,8 +85,9 @@ theorem etaUnitKUSCoefficientTrace_tendsto_zero_of_riemannZeta_zero
     {s : ℂ} (hre : 0 < s.re) (him : s.im ≠ 0)
     (hz : riemannZeta s = 0) :
     Tendsto (etaUnitKUSCoefficientTrace s) atTop (nhds 0) := by
-  simpa only [etaUnitKUSCoefficientTrace] using
-    toCoeff_etaUnitKUSTrace_tendsto_zero_of_riemannZeta_zero hre him hz
+  change Tendsto (fun N : ℕ => toCoeff (etaUnitKUSTrace s N))
+    atTop (nhds 0)
+  exact toCoeff_etaUnitKUSTrace_tendsto_zero_of_riemannZeta_zero hre him hz
 
 /--
 Load-bearing pointwise audit: at a zeta zero where coefficient convergence is
@@ -125,12 +125,12 @@ theorem riemannHypothesis_of_standardZetaEtaKUSMirrorGapZeroBridge
     (bridge.gap_tendsto_zero hs)
 
 /-- RH constructs the corresponding standard-zeta mirror-Gap bridge. -/
-noncomputable def standardZetaEtaKUSMirrorGapZeroBridge_of_riemannHypothesis
+theorem standardZetaEtaKUSMirrorGapZeroBridge_of_riemannHypothesis
     (hRH : RiemannHypothesis) :
-    StandardZetaEtaKUSMirrorGapZeroBridge where
-  gap_tendsto_zero := fun {s} hs =>
-    (etaUnitKUSMirrorGapTrace_tendsto_zero_iff_re_eq_half s).2
-      ((riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs)
+    StandardZetaEtaKUSMirrorGapZeroBridge := by
+  refine { gap_tendsto_zero := fun {s} hs => ?_ }
+  exact (etaUnitKUSMirrorGapTrace_tendsto_zero_iff_re_eq_half s).2
+    ((riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs)
 
 /--
 Exact global audit: merely inhabiting the standard mirror-Gap bridge is neither
