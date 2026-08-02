@@ -12,6 +12,7 @@ import Mathlib.Tactic
 namespace DkMath.RH.Weave.Analytic
 
 open DkMath.RH.CFBRCProjection
+open DkMath.RH.Weave.Finite
 
 /--
 One paired eta term:
@@ -74,8 +75,7 @@ theorem etaPartialEndpoint_two_mul_eq_zero_iff_etaPairedPartial_eq_zero
 /-- The even finite eta antisymmetric offset is controlled by the paired sum. -/
 theorem two_mul_etaPairOffset_two_mul_eq_etaPairedPartial
     (K : ℕ) (s : ℂ) :
-    2 * DkMath.RH.Weave.Finite.etaPairOffset (2 * K) s =
-      etaPairedPartial K s := by
+    2 * etaPairOffset (2 * K) s = etaPairedPartial K s := by
   rw [← etaPartialEndpoint_eq_two_mul_pairOffset]
   exact etaPartialEndpoint_two_mul_eq_etaPairedPartial K s
 
