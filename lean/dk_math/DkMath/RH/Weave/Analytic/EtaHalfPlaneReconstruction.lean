@@ -36,8 +36,8 @@ theorem etaUnsignedVector_tendsto_zero_of_pos_re
     {s : ℂ} (hs : 0 < s.re) :
     Tendsto (fun m : ℕ => etaUnsignedVector s m) atTop (nhds 0) := by
   rw [tendsto_zero_iff_norm_tendsto_zero]
-  have hr := (Real.tendsto_rpow_neg_atTop hs).comp tendsto_nat_succ_cast_atTop
-  simpa only [norm_etaUnsignedVector] using hr
+  have hr := (tendsto_rpow_neg_atTop hs).comp tendsto_nat_succ_cast_atTop
+  simpa only [Function.comp_apply, norm_etaUnsignedVector] using hr
 
 /-- The even-indexed unsigned eta remainder also tends to zero. -/
 theorem etaUnsignedVector_two_mul_tendsto_zero_of_pos_re
@@ -91,7 +91,11 @@ theorem etaPartialEndpoint_two_mul_add_one_tendsto_tsum
       atTop (nhds (∑' k : ℕ, etaPairTerm s k)) := by
   have hpair := etaPairedPartial_tendsto_tsum hsum
   have hrem := etaUnsignedVector_two_mul_tendsto_zero_of_pos_re hre
-  have hadd := hpair.add hrem
+  have hadd :
+      Tendsto
+        (fun K : ℕ => etaPairedPartial K s + etaUnsignedVector s (2 * K))
+        atTop (nhds (∑' k : ℕ, etaPairTerm s k)) := by
+    simpa using hpair.add hrem
   refine hadd.congr' (Eventually.of_forall fun K => ?_)
   exact (etaPartialEndpoint_two_mul_add_one K s).symm
 
