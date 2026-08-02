@@ -74,7 +74,9 @@ theorem toCoeff_etaUnitKUSTrace_tendsto_zero_of_endpoint_tendsto_zero
       Tendsto (fun N : ℕ => etaPartialEndpoint (N + 1) s)
         atTop (nhds 0) :=
     (tendsto_add_atTop_iff_nat 1).2 hzero
-  simpa using hshift
+  change Tendsto (fun N : ℕ => etaPartialEndpoint (N + 1) s)
+    atTop (nhds 0)
+  exact hshift
 
 /--
 At every nonreal right-half-plane zeta zero, the visible eta coefficient of the
@@ -125,9 +127,9 @@ noncomputable def etaKUSVanishingCertificate_of_endpoint_tendsto_zero
   trace := etaUnitKUSTrace s
   coefficient_tendsto_zero :=
     toCoeff_etaUnitKUSTrace_tendsto_zero_of_endpoint_tendsto_zero hzero
-  point_preserved := etaUnitKUSTrace_point
-  centeredCoordinate_preserved :=
-    etaUnitKUSTrace_storedCenteredCoordinate
+  point_preserved := fun N => etaUnitKUSTrace_point N s
+  centeredCoordinate_preserved := fun N =>
+    etaUnitKUSTrace_storedCenteredCoordinate N s
 
 /-- A nonreal right-half-plane zeta zero supplies a KUS vanishing certificate. -/
 noncomputable def etaKUSVanishingCertificate_of_riemannZeta_zero
