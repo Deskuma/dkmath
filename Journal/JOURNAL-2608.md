@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-02
 
+### 12:01
+
+[KUS 乗法は積が零でも support を保持する](260802-1201-kus-multiplication-preserves-support-even-at-zero.md)
+
+可視係数は通常の自然数乗法で計算しながら、積が零になっても所属する support を保持し、各 support 上の `oneState` が局所単位元として働く構造を読む。
+
 ### 06:01
 
 [実数係数の平方根2座標は一意ではない](260802-0601-real-sqrt2-coordinates-are-not-unique.md)
