@@ -143,7 +143,7 @@ theorem big_add_gap (p : UnitPair R) :
 /-- Pair-level odd-component decomposition. -/
 theorem big_sub_gap (p : UnitPair R) :
     p.big - p.gap = 4 * p.product := by
-  simpa [big, gap, product] using unitAttachedCore_sub p.x p.u
+  simpa [big, gap, product, mul_assoc] using unitAttachedCore_sub p.x p.u
 
 /-- Big is Gap plus four times the oriented product. -/
 theorem big_eq_gap_add_four_mul_product (p : UnitPair R) :
@@ -198,9 +198,9 @@ end UnitPair
 
 end Domain
 
-section LinearOrderedCommRing
+section StrictOrderedRing
 
-variable {R : Type*} [LinearOrderedCommRing R]
+variable {R : Type*} [CommRing R] [LinearOrder R] [IsStrictOrderedRing R]
 
 /-- Both attached-unit square cores are nonnegative. -/
 theorem unitAttachedCorePos_nonneg (x u : R) :
@@ -234,6 +234,6 @@ theorem eq_one_of_nonneg_of_product_eq_one_of_gap_eq_zero
 
 end UnitPair
 
-end LinearOrderedCommRing
+end StrictOrderedRing
 
 end DkMath.Algebra.MetallicRatioCore
