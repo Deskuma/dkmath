@@ -67,18 +67,18 @@ end StructuralRatioWitness
 
 /--
 Evidence that an ordinary quotient is defined in the nonzero-denominator value
-layer.  Unlike `StructuralRatioWitness`, this witness does not assign a value at
-a collapsed denominator.
+layer.  Unlike `StructuralRatioWitness`, this proposition does not assign a
+value at a collapsed denominator.
 -/
 structure DefinedRatioWitness
     (K : Type*) [Zero K]
-    (numerator denominator : K) where
+    (numerator denominator : K) : Prop where
   denominator_ne : denominator ≠ 0
 
 namespace DefinedRatioWitness
 
 /-- Construct a defined-ratio witness from a nonzero-denominator proof. -/
-def of_denominator_ne
+theorem of_denominator_ne
     {K : Type*} [Zero K]
     {numerator denominator : K}
     (hden : denominator ≠ 0) :
@@ -99,25 +99,25 @@ def value
     r.value = numerator / denominator := by
   rfl
 
-/-- A defined-ratio witness exists exactly when its denominator is nonzero. -/
-theorem nonempty_iff_denominator_ne
+/-- The ordinary quotient is defined exactly when its denominator is nonzero. -/
+theorem defined_iff_denominator_ne
     {K : Type*} [Zero K]
     (numerator denominator : K) :
-    Nonempty (DefinedRatioWitness K numerator denominator) ↔ denominator ≠ 0 := by
+    DefinedRatioWitness K numerator denominator ↔ denominator ≠ 0 := by
   constructor
-  · rintro ⟨r⟩
+  · intro r
     exact r.denominator_ne
   · intro hden
-    exact ⟨of_denominator_ne hden⟩
+    exact of_denominator_ne hden
 
-/-- A zero denominator excludes every ordinary defined-ratio witness. -/
-theorem not_nonempty_of_denominator_eq_zero
+/-- A zero denominator excludes an ordinary defined-ratio witness. -/
+theorem not_defined_of_denominator_eq_zero
     {K : Type*} [Zero K]
     (numerator denominator : K)
     (hden : denominator = 0) :
-    ¬ Nonempty (DefinedRatioWitness K numerator denominator) := by
-  intro h
-  exact ((nonempty_iff_denominator_ne numerator denominator).1 h) hden
+    ¬ DefinedRatioWitness K numerator denominator := by
+  intro r
+  exact r.denominator_ne hden
 
 end DefinedRatioWitness
 
