@@ -50,8 +50,8 @@ theorem one_le_positiveProjectedMass_eta_unitRotation
     simp
   calc
     1 = max (((1 : ℂ) * etaSignedVector s 0).re) 0 := by simp
-    _ ≤ ∑ i in Finset.range (N + 1),
-          max (((1 : ℂ) * etaSignedVector s i).re) 0 := by
+    _ ≤ (Finset.range (N + 1)).sum
+          (fun i => max (((1 : ℂ) * etaSignedVector s i).re) 0) := by
       exact Finset.single_le_sum (fun i hi => le_max_right _ _) hmem
 
 /-- Every negative projected-mass summand is nonnegative. -/
@@ -125,7 +125,7 @@ def EtaUnitRotationCFBRCBridge.toEtaProjectedEnergyCFBRCBridge
   hd := bridge.hd
   phase := bridge.phase
   rotation := fun _ _ => 1
-  projectedMassTotal_ne_zero := fun {s} hs N =>
+  projectedMassTotal_ne_zero := fun {s} _hs N =>
     projectedMassTotal_eta_unitRotation_ne_zero N s
   normalizedEnergy_tendsto_zero := bridge.normalizedEnergy_tendsto_zero
   centerOffset_tendsto_centeredSigma :=
