@@ -114,4 +114,31 @@ theorem regularizedZeroSelfRatio_eq_one
   apply regularizedSelfRatio_eq_one
   positivity
 
+/--
+Away from the removed offset `ε = 0`, the regularized zero self-ratio is
+identically one.  Hence its punctured-neighborhood limit is one from both sides.
+-/
+theorem tendsto_regularizedZeroSelfRatio_punctured :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio 0 ε)
+      (nhdsWithin 0 ({0}ᶜ : Set ℝ))
+      (nhds 1) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_mem_nhdsWithin] with ε hε
+  have hε0 : ε ≠ 0 := by
+    simpa using hε
+  symm
+  exact regularizedSelfRatio_eq_one (by simpa using hε0)
+
+/-- The positive-offset path tends to the same structural unit value. -/
+theorem tendsto_regularizedZeroSelfRatio_right :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio 0 ε)
+      (nhdsWithin 0 (Set.Ioi 0))
+      (nhds 1) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_mem_nhdsWithin] with ε hε
+  symm
+  exact regularizedZeroSelfRatio_eq_one hε
+
 end DkMath.KUS
