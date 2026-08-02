@@ -29,6 +29,7 @@ theorem normalizedEtaProjectedEnergy_unitRotation_eq
           (Finset.range (N + 1)) (etaSignedVector s) 1 ^ 2 := by
   unfold normalizedEtaProjectedEnergy
   rw [etaAntisymmetricEnergy_eq_half_normSq_endpoint]
+  norm_num [Complex.normSq_apply]
   ring
 
 /-- Unit-rotation normalized eta energy is nonnegative. -/
@@ -117,7 +118,10 @@ theorem normalizedEtaProjectedEnergy_unitRotation_tendsto_zero_of_endpoint_tends
       Tendsto
         (fun N : ℕ => Complex.normSq (etaPartialEndpoint (N + 1) s))
         atTop (nhds 0) := by
-    simpa [Function.comp_apply] using
+    change Tendsto
+      (Complex.normSq ∘ fun N : ℕ => etaPartialEndpoint (N + 1) s)
+      atTop (nhds 0)
+    simpa using
       Complex.continuous_normSq.continuousAt.tendsto.comp hshift
   exact squeeze_zero'
     (Eventually.of_forall fun N =>
