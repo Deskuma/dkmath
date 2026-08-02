@@ -118,7 +118,7 @@ theorem etaMirrorEndpointBig_tendsto_zero_of_endpoint_limits
     (Complex.normSq ∘ fun N : ℕ =>
       etaPartialEndpoint N s + etaPartialEndpoint N (criticalMirror s))
     atTop (nhds 0)
-  exact hnorm
+  simpa using hnorm
 
 /-- Both endpoint limits zero force the antisymmetric endpoint Gap to vanish. -/
 theorem etaMirrorEndpointGap_tendsto_zero_of_endpoint_limits
@@ -140,7 +140,7 @@ theorem etaMirrorEndpointGap_tendsto_zero_of_endpoint_limits
     (Complex.normSq ∘ fun N : ℕ =>
       etaPartialEndpoint N s - etaPartialEndpoint N (criticalMirror s))
     atTop (nhds 0)
-  exact hnorm
+  simpa using hnorm
 
 /-- Both endpoint limits zero force their total squared norm to vanish. -/
 theorem etaMirrorEndpointTotalEnergy_tendsto_zero_of_endpoint_limits
