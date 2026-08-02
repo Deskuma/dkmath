@@ -9,10 +9,12 @@ import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
+import DkMathTest.KUSStructuralRatio
 import DkMathTest.RH.CFBRCEtaMirrorUnitSplit
 import DkMathTest.RH.CFBRCEtaKUSMirrorUnitBridge
 import DkMathTest.RH.CFBRCEtaKUSMirrorGapBridgeAudit
 import DkMathTest.RH.CFBRCEtaMirrorEndpointPairEnergy
 import DkMathTest.RH.CFBRCEtaMirrorEndpointOuterNormalization
+import DkMathTest.RH.CFBRCEtaMirrorEndpointStructuralRatio
 
 #print "file: DkMathTest"
