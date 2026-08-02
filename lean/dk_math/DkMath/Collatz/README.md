@@ -212,6 +212,13 @@ Focused theorem note:
   its unit-boundary / no-prime-channel interpretation, and the explicit
   distinction from arbitrary Collatz cycle claims.
 
+Global research design note:
+
+- [`docs/Collatz-ArchimedeanSpiralConservation.md`](docs/Collatz-ArchimedeanSpiralConservation.md) —
+  the proposed Archimedean spiral conservation law: phase closure versus
+  radial and mass nonclosure, `Body + Gap = Big`, the successor kernel `+1`,
+  growing circumference, and the required-vs-available Gap-mass obstruction.
+
 Read these in order:
 
 ```text
