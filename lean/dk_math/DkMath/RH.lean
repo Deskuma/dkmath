@@ -48,6 +48,7 @@ open DkMath.RH.Basic
 
 open CFBRCProjection
 
+-- cid: 6a6deaaf-6240-83e8-8f97-f1ef176868b2
 theorem standardZeta_map_zero_iff_riemannHypothesis
     {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
     (∀ {s : ℂ}, NontrivialRiemannZetaZero s →

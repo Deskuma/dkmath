@@ -1,5 +1,7 @@
 # RH-WEAVE-001
 
+cid: 6a6deaaf-6240-83e8-8f97-f1ef176868b2
+
 **RH-WEAVE-001 — PHZ・位相ジャンプ・CFBRC を織り合わせる Lean 形式化計画**
 
 作成日: 2026-08-02  
