@@ -40,12 +40,12 @@ example {x y : ℝ} (hy : y ≠ 0) :
   simp
 
 example {x y : ℝ} :
-    Nonempty (DefinedRatioWitness ℝ x y) ↔ y ≠ 0 := by
-  exact DefinedRatioWitness.nonempty_iff_denominator_ne x y
+    DefinedRatioWitness ℝ x y ↔ y ≠ 0 := by
+  exact DefinedRatioWitness.defined_iff_denominator_ne x y
 
 example {x : ℝ} :
-    ¬ Nonempty (DefinedRatioWitness ℝ x 0) := by
-  exact DefinedRatioWitness.not_nonempty_of_denominator_eq_zero x 0 rfl
+    ¬ DefinedRatioWitness ℝ x 0 := by
+  exact DefinedRatioWitness.not_defined_of_denominator_eq_zero x 0 rfl
 
 example {ε : ℝ} (hε : 0 < ε) :
     regularizedSelfRatio 0 ε = 1 := by
