@@ -218,7 +218,7 @@ namespace UnitPair
 /-- A nonnegative unit-product pair with zero Gap is forced to `(1, 1)`. -/
 theorem eq_one_of_nonneg_of_product_eq_one_of_gap_eq_zero
     (p : UnitPair R)
-    (hx : 0 ≤ p.x) (hu : 0 ≤ p.u)
+    (hx : 0 ≤ p.x) (_hu : 0 ≤ p.u)
     (hproduct : p.product = 1)
     (hgap : p.gap = 0) :
     p.x = 1 ∧ p.u = 1 := by
