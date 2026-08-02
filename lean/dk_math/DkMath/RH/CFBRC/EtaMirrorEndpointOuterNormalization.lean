@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.EtaMirrorEndpointPairEnergy
+import DkMath.KUS.StructuralRatio
 import Mathlib.Tactic
 
 #print "file: DkMath.RH.CFBRC.EtaMirrorEndpointOuterNormalization"
@@ -85,6 +86,38 @@ theorem etaMirrorEndpointOuterBig_eq_core_add_gapCore
       etaMirrorEndpointCore N s + etaMirrorEndpointGapCore N s := by
   rfl
 
+/--
+The total normalized expression before ordinary real division is evaluated.
+Its numerator and denominator are the same source expression.
+-/
+noncomputable def etaMirrorEndpointTotalStructuralRatio
+    (N : ℕ) (s : ℂ) : DkMath.KUS.StructuralRatioWitness ℝ where
+  numerator := etaMirrorEndpointCore N s + etaMirrorEndpointGapCore N s
+  denominator := etaMirrorEndpointOuterBig N s
+  same_source := (etaMirrorEndpointOuterBig_eq_core_add_gapCore N s).symm
+
+/-- Structural total share.  It remains defined when the outer Big evaluates to zero. -/
+noncomputable def etaMirrorEndpointTotalStructuralShare
+    (N : ℕ) (s : ℂ) : ℝ :=
+  (etaMirrorEndpointTotalStructuralRatio N s).value
+
+/-- The structural total share is unconditionally one. -/
+@[simp] theorem etaMirrorEndpointTotalStructuralShare_eq_one
+    (N : ℕ) (s : ℂ) :
+    etaMirrorEndpointTotalStructuralShare N s = 1 := by
+  rfl
+
+/-- Away from zero, the structural total share agrees with ordinary division. -/
+theorem etaMirrorEndpointTotalStructuralShare_eq_div_of_outer_ne
+    (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s ≠ 0) :
+    etaMirrorEndpointTotalStructuralShare N s =
+      (etaMirrorEndpointCore N s + etaMirrorEndpointGapCore N s) /
+        etaMirrorEndpointOuterBig N s := by
+  unfold etaMirrorEndpointTotalStructuralShare
+  apply DkMath.KUS.StructuralRatioWitness.value_eq_div_of_denominator_ne
+  exact hOuter
+
 /-- The outer Big is twice the total original/mirror endpoint energy. -/
 theorem etaMirrorEndpointOuterBig_eq_two_mul_totalEnergy
     (N : ℕ) (s : ℂ) :
@@ -123,6 +156,15 @@ theorem etaMirrorEndpointCoreShare_add_gapShare
     ← add_div]
   rw [← etaMirrorEndpointOuterBig_eq_core_add_gapCore]
   exact div_self hOuter
+
+/-- In the nonzero value layer, structural total share equals the two numeric shares. -/
+theorem etaMirrorEndpointTotalStructuralShare_eq_coreShare_add_gapShare
+    (N : ℕ) (s : ℂ)
+    (hOuter : etaMirrorEndpointOuterBig N s ≠ 0) :
+    etaMirrorEndpointTotalStructuralShare N s =
+      etaMirrorEndpointCoreShare N s + etaMirrorEndpointGapShare N s := by
+  rw [etaMirrorEndpointTotalStructuralShare_eq_one,
+    etaMirrorEndpointCoreShare_add_gapShare N s hOuter]
 
 /-- Both normalized coordinates are nonnegative when the outer Big is positive. -/
 theorem etaMirrorEndpointShares_nonneg
