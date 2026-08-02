@@ -99,4 +99,40 @@ theorem etaPartialEndpoint_two_mul_add_one_tendsto_tsum
   refine hadd.congr' (Eventually.of_forall fun K => ?_)
   exact (etaPartialEndpoint_two_mul_add_one K s).symm
 
+/--
+A sequence converges when its even and odd subsequences converge to the same
+limit.  This is the parity gluing principle used to reconstruct the complete
+eta endpoint sequence from its paired blocks.
+-/
+theorem tendsto_atTop_of_even_odd_subsequences
+    {α : Type*} [TopologicalSpace α] {f : ℕ → α} {a : α}
+    (heven : Tendsto (fun K : ℕ => f (2 * K)) atTop (nhds a))
+    (hodd : Tendsto (fun K : ℕ => f (2 * K + 1)) atTop (nhds a)) :
+    Tendsto f atTop (nhds a) := by
+  rw [tendsto_def] at heven hodd ⊢
+  intro U hU
+  have heU := heven U hU
+  have hoU := hodd U hU
+  rcases eventually_atTop.1 heU with ⟨Ke, hKe⟩
+  rcases eventually_atTop.1 hoU with ⟨Ko, hKo⟩
+  refine eventually_atTop.2 ⟨2 * max Ke Ko + 1, ?_⟩
+  intro n hn
+  obtain ⟨K, hK | hK⟩ := n.even_or_odd'
+  · subst n
+    exact hKe K (by omega)
+  · subst n
+    exact hKo K (by omega)
+
+/--
+Paired-difference summability on `re s > 0` reconstructs convergence of the
+complete finite eta endpoint sequence to the paired `tsum`.
+-/
+theorem etaPartialEndpoint_tendsto_tsum_of_pairedSummable
+    {s : ℂ} (hre : 0 < s.re) (hsum : EtaPairedSummableAt s) :
+    Tendsto (fun N : ℕ => etaPartialEndpoint N s)
+      atTop (nhds (∑' k : ℕ, etaPairTerm s k)) := by
+  exact tendsto_atTop_of_even_odd_subsequences
+    (etaPartialEndpoint_two_mul_tendsto_tsum hsum)
+    (etaPartialEndpoint_two_mul_add_one_tendsto_tsum hre hsum)
+
 end DkMath.RH.Weave.Analytic
