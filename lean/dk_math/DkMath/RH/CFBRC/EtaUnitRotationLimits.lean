@@ -15,6 +15,7 @@ namespace DkMath.RH.CFBRCProjection
 
 open Filter
 open scoped Topology
+open DkMath.RH.Weave.Analytic
 
 /--
 Under unit rotation, normalized projected eta energy is the endpoint norm-square
@@ -27,15 +28,15 @@ theorem normalizedEtaProjectedEnergy_unitRotation_eq
         projectedMassTotal
           (Finset.range (N + 1)) (etaSignedVector s) 1 ^ 2 := by
   unfold normalizedEtaProjectedEnergy
-  rw [DkMath.RH.Weave.Analytic.etaAntisymmetricEnergy_eq_half_normSq_endpoint]
-  norm_num [Complex.normSq_apply]
+  rw [etaAntisymmetricEnergy_eq_half_normSq_endpoint]
+  ring
 
 /-- Unit-rotation normalized eta energy is nonnegative. -/
 theorem normalizedEtaProjectedEnergy_unitRotation_nonneg
     (N : ℕ) (s : ℂ) :
     0 ≤ normalizedEtaProjectedEnergy (N + 1) s 1 := by
   rw [normalizedEtaProjectedEnergy_unitRotation_eq]
-  positivity
+  exact div_nonneg (Complex.normSq_nonneg _) (sq_nonneg _)
 
 /--
 The unit-rotation normalization cannot increase endpoint norm-square because
@@ -54,9 +55,12 @@ theorem normalizedEtaProjectedEnergy_unitRotation_le_normSq
       1 ≤ projectedMassTotal
         (Finset.range (N + 1)) (etaSignedVector s) 1 ^ 2 := by
     nlinarith
-  exact div_le_self (by positivity) hTotalSq
+  exact div_le_self (Complex.normSq_nonneg _) hTotalSq
 
-/-- Under unit rotation, normalized transverse gap is endpoint imaginary part divided by total mass. -/
+/--
+Under unit rotation, normalized transverse gap is endpoint imaginary part
+divided by total mass.
+-/
 theorem normalizedEtaTransverseGap_unitRotation_eq
     (N : ℕ) (s : ℂ) :
     normalizedEtaTransverseGap (N + 1) s 1 =
@@ -113,8 +117,8 @@ theorem normalizedEtaProjectedEnergy_unitRotation_tendsto_zero_of_endpoint_tends
       Tendsto
         (fun N : ℕ => Complex.normSq (etaPartialEndpoint (N + 1) s))
         atTop (nhds 0) := by
-    have h := Complex.continuous_normSq.continuousAt.tendsto.comp hshift
-    simpa using h
+    simpa [Function.comp_apply] using
+      Complex.continuous_normSq.continuousAt.tendsto.comp hshift
   exact squeeze_zero'
     (Eventually.of_forall fun N =>
       normalizedEtaProjectedEnergy_unitRotation_nonneg N s)
@@ -158,9 +162,8 @@ theorem normalizedEtaProjectedEnergy_unitRotation_tendsto_zero_of_riemannZeta_ze
       atTop (nhds 0) := by
   exact
     normalizedEtaProjectedEnergy_unitRotation_tendsto_zero_of_endpoint_tendsto_zero
-      (DkMath.RH.Weave.Analytic.
-        etaPartialEndpoint_tendsto_zero_of_riemannZeta_eq_zero_of_pos_re_of_im_ne_zero
-          hre him hz)
+      (etaPartialEndpoint_tendsto_zero_of_riemannZeta_eq_zero_of_pos_re_of_im_ne_zero
+        hre him hz)
 
 /--
 At a nonreal right-half-plane zeta zero, normalized unit-rotation transverse
@@ -174,9 +177,8 @@ theorem normalizedEtaTransverseGap_unitRotation_tendsto_zero_of_riemannZeta_zero
       atTop (nhds 0) := by
   exact
     normalizedEtaTransverseGap_unitRotation_tendsto_zero_of_endpoint_tendsto_zero
-      (DkMath.RH.Weave.Analytic.
-        etaPartialEndpoint_tendsto_zero_of_riemannZeta_eq_zero_of_pos_re_of_im_ne_zero
-          hre him hz)
+      (etaPartialEndpoint_tendsto_zero_of_riemannZeta_eq_zero_of_pos_re_of_im_ne_zero
+        hre him hz)
 
 /--
 Reduced unit-rotation bridge.  Endpoint analysis automatically supplies the
@@ -216,14 +218,20 @@ def EtaUnitCenterIdentificationCFBRCBridge.toEtaUnitRotationCFBRCBridge
       (bridge.positive_re hs) (bridge.imaginary_ne_zero hs)
       (bridge.riemannZeta_eq_zero hs)
 
-/-- Every reduced center-identification bridge supplies the standard zero-to-CFBRC bridge. -/
+/--
+Every reduced center-identification bridge supplies the standard zero-to-CFBRC
+bridge.
+-/
 def EtaUnitCenterIdentificationCFBRCBridge.toZeroToCFBRCBridge
     {Zero : ℂ → Prop}
     (bridge : EtaUnitCenterIdentificationCFBRCBridge Zero) :
     ZeroToCFBRCBridge Zero :=
   bridge.toEtaUnitRotationCFBRCBridge.toZeroToCFBRCBridge
 
-/-- Every selected zero in the reduced center-identification model lies on the critical line. -/
+/--
+Every selected zero in the reduced center-identification model lies on the
+critical line.
+-/
 theorem re_eq_half_of_etaUnitCenterIdentificationCFBRCBridge
     {Zero : ℂ → Prop}
     (bridge : EtaUnitCenterIdentificationCFBRCBridge Zero)
