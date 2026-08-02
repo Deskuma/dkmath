@@ -114,7 +114,11 @@ theorem etaMirrorEndpointBig_tendsto_zero_of_endpoint_limits
         atTop (nhds 0) := by
     simpa using horiginal.add hmirror
   have hnorm := Complex.continuous_normSq.continuousAt.tendsto.comp hsum
-  simpa [etaMirrorEndpointBig] using hnorm
+  change Tendsto
+    (Complex.normSq ∘ fun N : ℕ =>
+      etaPartialEndpoint N s + etaPartialEndpoint N (criticalMirror s))
+    atTop (nhds 0)
+  exact hnorm
 
 /-- Both endpoint limits zero force the antisymmetric endpoint Gap to vanish. -/
 theorem etaMirrorEndpointGap_tendsto_zero_of_endpoint_limits
@@ -132,7 +136,11 @@ theorem etaMirrorEndpointGap_tendsto_zero_of_endpoint_limits
         atTop (nhds 0) := by
     simpa using horiginal.sub hmirror
   have hnorm := Complex.continuous_normSq.continuousAt.tendsto.comp hdiff
-  simpa [etaMirrorEndpointGap] using hnorm
+  change Tendsto
+    (Complex.normSq ∘ fun N : ℕ =>
+      etaPartialEndpoint N s - etaPartialEndpoint N (criticalMirror s))
+    atTop (nhds 0)
+  exact hnorm
 
 /-- Both endpoint limits zero force their total squared norm to vanish. -/
 theorem etaMirrorEndpointTotalEnergy_tendsto_zero_of_endpoint_limits
@@ -187,6 +195,25 @@ def EtaMirrorEndpointGapControlsUnitGapAt (s : ℂ) : Prop :=
   Tendsto (fun N : ℕ => etaMirrorEndpointGap N s) atTop (nhds 0) →
     etaMirrorUnitGap s 1 = 0
 
+/-- Local decoder: the term UnitGap at eta index one selects the critical line. -/
+private theorem etaMirrorUnitGap_one_eq_zero_iff_re_eq_half_local
+    (s : ℂ) :
+    etaMirrorUnitGap s 1 = 0 ↔ s.re = (1 : ℝ) / 2 := by
+  rw [etaMirrorUnitGap_eq_zero_iff_ratio_eq_one]
+  constructor
+  · intro hratio
+    have hdecoder : etaMirrorAmplitudeDecoder s = 0 := by
+      rw [etaMirrorAmplitudeDecoder, hratio]
+      norm_num
+    have hcenter : centeredSigma s.re = 0 := by
+      rwa [etaMirrorAmplitudeDecoder_eq_centeredSigma] at hdecoder
+    exact (centeredSigma_eq_zero_iff s.re).mp hcenter
+  · intro hre
+    have hcenter : centeredSigma s.re = 0 :=
+      (centeredSigma_eq_zero_iff s.re).2 hre
+    rw [etaMirrorAmplitudeRatio_one_eq_two_rpow, hcenter]
+    norm_num
+
 /--
 Once both endpoint sequences already tend to zero, controlling the term UnitGap
 from endpoint Gap is exactly the critical-line condition.
@@ -202,11 +229,11 @@ theorem etaMirrorEndpointGapControlsUnitGapAt_iff_re_eq_half
       s.re = (1 : ℝ) / 2 := by
   constructor
   · intro hcontrol
-    apply (etaMirrorUnitGap_one_eq_zero_iff_re_eq_half s).mp
+    apply (etaMirrorUnitGap_one_eq_zero_iff_re_eq_half_local s).mp
     exact hcontrol
       (etaMirrorEndpointGap_tendsto_zero_of_endpoint_limits
         horiginal hmirror)
   · intro hre _
-    exact (etaMirrorUnitGap_one_eq_zero_iff_re_eq_half s).2 hre
+    exact (etaMirrorUnitGap_one_eq_zero_iff_re_eq_half_local s).2 hre
 
 end DkMath.RH.CFBRCProjection
