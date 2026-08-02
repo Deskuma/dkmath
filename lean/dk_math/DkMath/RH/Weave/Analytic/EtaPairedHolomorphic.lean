@@ -84,6 +84,7 @@ theorem norm_etaPairTerm_le_controlMajorant
   have hM : 0 ≤ M := (norm_nonneg s).trans hnorm
   have hbase : (1 : ℝ) ≤ (((k + 1 : ℕ) : ℝ)) := by
     exact_mod_cast Nat.succ_le_succ (Nat.zero_le k)
+  have hbase0 : 0 ≤ (((k + 1 : ℕ) : ℝ)) := le_trans (by norm_num) hbase
   have hexp : -s.re - 1 ≤ -δ - 1 := by linarith
   have hrpow :
       (((k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) ≤
@@ -93,7 +94,7 @@ theorem norm_etaPairTerm_le_controlMajorant
     ‖etaPairTerm s k‖ ≤
         ‖s‖ * (((k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) := hpoint
     _ ≤ M * (((k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) :=
-      mul_le_mul_of_nonneg_right hnorm (Real.rpow_nonneg _ _)
+      mul_le_mul_of_nonneg_right hnorm (Real.rpow_nonneg hbase0 _)
     _ ≤ M * (((k + 1 : ℕ) : ℝ) ^ (-δ - 1)) :=
       mul_le_mul_of_nonneg_left hrpow hM
 
