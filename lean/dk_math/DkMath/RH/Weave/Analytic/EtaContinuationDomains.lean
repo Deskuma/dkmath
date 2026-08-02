@@ -45,7 +45,9 @@ theorem convex_etaUpperRightHalfPlane :
   intro x hx y hy a b ha hb hab
   change 0 < x.re ∧ 0 < x.im at hx
   change 0 < y.re ∧ 0 < y.im at hy
-  change 0 < a * x.re + b * y.re ∧ 0 < a * x.im + b * y.im
+  change 0 < (a • x + b • y).re ∧ 0 < (a • x + b • y).im
+  simp only [Complex.add_re, Complex.add_im, Complex.smul_re,
+    Complex.smul_im, smul_eq_mul]
   constructor
   · nlinarith
   · nlinarith
@@ -56,7 +58,9 @@ theorem convex_etaLowerRightHalfPlane :
   intro x hx y hy a b ha hb hab
   change 0 < x.re ∧ x.im < 0 at hx
   change 0 < y.re ∧ y.im < 0 at hy
-  change 0 < a * x.re + b * y.re ∧ a * x.im + b * y.im < 0
+  change 0 < (a • x + b • y).re ∧ (a • x + b • y).im < 0
+  simp only [Complex.add_re, Complex.add_im, Complex.smul_re,
+    Complex.smul_im, smul_eq_mul]
   constructor
   · nlinarith
   · nlinarith
