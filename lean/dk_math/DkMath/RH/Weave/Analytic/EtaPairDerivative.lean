@@ -15,8 +15,8 @@ noncomputable section
 
 namespace DkMath.RH.Weave.Analytic
 
-local instance (priority := 2000) : NormedSpace ℝ ℂ :=
-  NormedSpace.complexToReal
+attribute [-instance instNormedSpaceRealComplex_dkMath]
+local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
 
 open DkMath.RH.CFBRCProjection
 
