@@ -38,4 +38,18 @@ example {ε : ℝ} (hε : 0 < ε) :
     regularizedSelfRatio 0 ε = 1 := by
   exact regularizedZeroSelfRatio_eq_one hε
 
+example :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio 0 ε)
+      (nhdsWithin 0 ({0}ᶜ : Set ℝ))
+      (nhds 1) := by
+  exact tendsto_regularizedZeroSelfRatio_punctured
+
+example :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio 0 ε)
+      (nhdsWithin 0 (Set.Ioi 0))
+      (nhds 1) := by
+  exact tendsto_regularizedZeroSelfRatio_right
+
 end DkMathTest.KUSStructuralRatio
