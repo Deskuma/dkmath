@@ -31,7 +31,7 @@ theorem summable_etaPairMajorant
   have hbase :
       Summable (fun n : ℕ => (n : ℝ) ^ (-(s.re + 1))) := by
     simpa only [one_div, Real.rpow_neg (Nat.cast_nonneg _)] using
-      (summable_one_div_rpow.2 hp)
+      (Real.summable_one_div_nat_rpow.2 hp)
   have hshift :
       Summable
         (fun k : ℕ => (((k + 1 : ℕ) : ℝ) ^ (-(s.re + 1)))) := by
@@ -82,7 +82,7 @@ converges unconditionally to the paired infinite sum.
 -/
 theorem etaPartialEndpoint_tendsto_pairedTsum_of_pos_re
     {s : ℂ} (hre : 0 < s.re) :
-    Tendsto (fun N : ℕ => etaPartialEndpoint N s)
+    Tendsto (fun N : ℕ => DkMath.RH.CFBRCProjection.etaPartialEndpoint N s)
       atTop (nhds (∑' k : ℕ, etaPairTerm s k)) := by
   exact etaPartialEndpoint_tendsto_tsum_of_pairedSummable
     hre (etaPairedSummableAt_of_pos_re hre)
@@ -104,7 +104,7 @@ infinite sum is zero.
 -/
 theorem etaPartialEndpoint_tendsto_zero_iff_pairedTsum_eq_zero_of_pos_re
     {s : ℂ} (hre : 0 < s.re) :
-    Tendsto (fun N : ℕ => etaPartialEndpoint N s) atTop (nhds 0) ↔
+    Tendsto (fun N : ℕ => DkMath.RH.CFBRCProjection.etaPartialEndpoint N s) atTop (nhds 0) ↔
       (∑' k : ℕ, etaPairTerm s k) = 0 := by
   exact etaPartialEndpoint_tendsto_zero_iff_pairedTsum_eq_zero
     hre (etaPairedSummableAt_of_pos_re hre)
