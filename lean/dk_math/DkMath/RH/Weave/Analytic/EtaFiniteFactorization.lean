@@ -28,8 +28,8 @@ theorem etaUnsignedVector_two_mul_add_one_factor
     (s : ℂ) (k : ℕ) :
     etaUnsignedVector s (2 * k + 1) =
       (2 : ℂ) ^ (-s) * etaUnsignedVector s k := by
-  simpa [etaUnsignedVector, Nat.mul_add, Nat.add_assoc] using
-    (Complex.natCast_mul_natCast_cpow 2 (k + 1) (-s))
+  unfold etaUnsignedVector
+  convert (Complex.natCast_mul_natCast_cpow 2 (k + 1) (-s)) using 1 <;> ring
 
 /-- Two additional unsigned terms extend the even partial sum. -/
 theorem etaUnsignedPartial_two_mul_succ
@@ -40,9 +40,7 @@ theorem etaUnsignedPartial_two_mul_succ
         etaUnsignedVector s (2 * K + 1) := by
   rw [show 2 * (K + 1) = (2 * K + 1) + 1 by omega]
   rw [etaUnsignedPartial_succ]
-  rw [show 2 * K + 1 = 2 * K + 1 by rfl]
   rw [etaUnsignedPartial_succ]
-  abel
 
 /-- Two additional signed terms extend the even eta endpoint. -/
 theorem etaPartialEndpoint_two_mul_succ
