@@ -205,6 +205,13 @@ It imports the main Collatz files and marks the package-level surface.
 
 ## Main Documentation
 
+Focused theorem note:
+
+- [`docs/Collatz-OneStepFixedPoint.md`](docs/Collatz-OneStepFixedPoint.md) —
+  exact Lean scope of the positive accelerated one-step fixed-point theorem,
+  its unit-boundary / no-prime-channel interpretation, and the explicit
+  distinction from arbitrary Collatz cycle claims.
+
 Read these in order:
 
 ```text
@@ -377,7 +384,7 @@ Checkpoint 104 adds the first finite half criterion layer:
 
 ```lean
 atMostHalf_continuation_of_continuation_le_recovery
-atMostHalf_tailContinuation_of_tailContinuation_le_tailRecovery
+atMostHalf_tailContinuation_of_tailContinuation_le_recovery
 atMostHalf_continuation_of_retention_le_two_recovery
 atMostHalf_tailContinuation_of_tailRetention_le_two_tailRecovery
 continuation_atMostRatio_one_one_retention
