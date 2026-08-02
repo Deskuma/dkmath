@@ -40,8 +40,9 @@ theorem etaKUSMirrorAmplitudeDecoder_eq_centeredSigma
       projectedMassTotal (Finset.range N) (etaSignedVector s) ω ≠ 0) :
     etaKUSMirrorAmplitudeDecoder (etaKUSState N s ω hTotal) =
       centeredSigma s.re := by
-  simpa [etaKUSMirrorAmplitudeDecoder] using
-    etaMirrorAmplitudeDecoder_eq_centeredSigma s
+  have hpoint : (etaKUSState N s ω hTotal).unit.point = s := rfl
+  rw [etaKUSMirrorAmplitudeDecoder, hpoint]
+  exact etaMirrorAmplitudeDecoder_eq_centeredSigma s
 
 @[simp] theorem etaKUSMirrorAmplitudeDecoder_etaKUSZeroState
     (N : ℕ) (s ω : ℂ)
@@ -49,8 +50,9 @@ theorem etaKUSMirrorAmplitudeDecoder_eq_centeredSigma
       projectedMassTotal (Finset.range N) (etaSignedVector s) ω ≠ 0) :
     etaKUSMirrorAmplitudeDecoder (etaKUSZeroState N s ω hTotal) =
       centeredSigma s.re := by
-  simpa [etaKUSMirrorAmplitudeDecoder] using
-    etaMirrorAmplitudeDecoder_eq_centeredSigma s
+  have hpoint : (etaKUSZeroState N s ω hTotal).unit.point = s := rfl
+  rw [etaKUSMirrorAmplitudeDecoder, hpoint]
+  exact etaMirrorAmplitudeDecoder_eq_centeredSigma s
 
 /-- Coefficient zeroization preserves the mirror-amplitude decoder exactly. -/
 theorem etaKUSMirrorAmplitudeDecoder_state_eq_zeroState
