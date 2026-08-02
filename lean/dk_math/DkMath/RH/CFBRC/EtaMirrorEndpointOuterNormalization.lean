@@ -142,6 +142,8 @@ theorem etaMirrorEndpointRegularizedTotalShare_eq_one_of_outer_eq_zero_of_offset
 /--
 If the endpoint outer Big has collapsed to zero, the regularized total share
 tends to the structural unit value along the full punctured neighborhood.
+This is a regularized limit statement and does not assign ordinary real
+`0 / 0` the value `1`.
 -/
 theorem tendsto_etaMirrorEndpointRegularizedTotalShare_punctured_of_outer_eq_zero
     (N : ℕ) (s : ℂ)
