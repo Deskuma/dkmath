@@ -49,40 +49,50 @@ theorem norm_etaRealKernel_sub_le
     (ha : 0 < a) (hab : a ≤ b) :
     ‖etaRealKernel s b - etaRealKernel s a‖ ≤
       (‖s‖ * a ^ (-s.re - 1)) * (b - a) := by
+  letI : NormedAddCommGroup ℂ := Complex.instNormedAddCommGroup
   letI : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+  let f : ℝ → ℂ := fun x => (x : ℂ) ^ (-s)
+  let f' : ℝ → ℂ := fun x => -(s * (x : ℂ) ^ (-s - 1))
   have hs : s ≠ 0 := by
     intro hs0
-    simpa [hs0] using hre
+    simp [hs0] at hre
   have hExp : -s.re - 1 ≤ 0 := by linarith
   have hderiv :
       ∀ x ∈ Set.Icc a b,
-        HasDerivWithinAt (etaRealKernel s)
-          ((-s) * (x : ℂ) ^ (-s - 1)) (Set.Icc a b) x := by
+        HasDerivWithinAt f (f' x) (Set.Icc a b) x := by
     intro x hx
     have hxpos : 0 < x := ha.trans_le hx.1
-    simpa [etaRealKernel] using
+    simpa [f, f'] using
       (hasDerivAt_ofReal_cpow_const
         (x := x) hxpos.ne' (r := -s) (neg_ne_zero.mpr hs)).hasDerivWithinAt
   have hbound :
       ∀ x ∈ Set.Ico a b,
-        ‖(-s) * (x : ℂ) ^ (-s - 1)‖ ≤
-          ‖s‖ * a ^ (-s.re - 1) := by
+        ‖f' x‖ ≤ ‖s‖ * a ^ (-s.re - 1) := by
     intro x hx
     have hxpos : 0 < x := ha.trans_le hx.1
-    rw [norm_etaRealKernel_derivative s hxpos]
-    gcongr
-    exact
+    have hrpow :
+        x ^ (-s.re - 1) ≤ a ^ (-s.re - 1) :=
       Real.antitoneOn_rpow_Ioi_of_exponent_nonpos hExp
         ha hxpos hx.1
-  exact
+    have hnorm :
+        ‖f' x‖ = ‖s‖ * x ^ (-s.re - 1) := by
+      simp only [f', norm_neg, norm_mul]
+      rw [Complex.norm_cpow_eq_rpow_re_of_pos hxpos]
+      simp
+    rw [hnorm]
+    exact mul_le_mul_of_nonneg_left hrpow (norm_nonneg s)
+  have hraw :
+      ‖f b - f a‖ ≤
+        (‖s‖ * a ^ (-s.re - 1)) * (b - a) :=
     norm_image_sub_le_of_norm_deriv_le_segment'
       hderiv hbound b ⟨hab, le_rfl⟩
+  simpa [f, etaRealKernel] using hraw
 
 /--
 Each paired eta difference gains one full decay power compared with an
 individual unsigned eta term.
 -/
-theorem norm_etaPairTerm_le
+theorem norm_etaPairTerm_le_one_extra_decay
     {s : ℂ} (hre : 0 < s.re) (k : ℕ) :
     ‖etaPairTerm s k‖ ≤
       ‖s‖ * (((2 * k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) := by
@@ -99,7 +109,19 @@ theorem norm_etaPairTerm_le
       etaRealKernel s (((2 * k + 2 : ℕ) : ℝ)) =
         etaUnsignedVector s (2 * k + 1) := by
     simpa [Nat.add_assoc] using etaRealKernel_nat s (2 * k + 1)
-  rw [hA, hB] at h
-  simpa [etaPairTerm, norm_neg, sub_eq_add_neg, add_comm] using h
+  have hstep :
+      (((2 * k + 2 : ℕ) : ℝ)) - (((2 * k + 1 : ℕ) : ℝ)) = 1 := by
+    norm_num
+  rw [hA, hB, hstep, mul_one] at h
+  calc
+    ‖etaPairTerm s k‖ =
+        ‖etaUnsignedVector s (2 * k + 1) -
+          etaUnsignedVector s (2 * k)‖ := by
+      rw [show etaPairTerm s k =
+          -(etaUnsignedVector s (2 * k + 1) -
+            etaUnsignedVector s (2 * k)) by
+        simp [etaPairTerm]]
+      exact norm_neg _
+    _ ≤ ‖s‖ * (((2 * k + 1 : ℕ) : ℝ) ^ (-s.re - 1)) := h
 
 end DkMath.RH.Weave.Analytic
