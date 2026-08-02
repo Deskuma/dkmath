@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMathlib.Basic
+import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
