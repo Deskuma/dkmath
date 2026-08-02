@@ -41,7 +41,8 @@ theorem historicalSpiralA_endpoint
     listEndpoint (historicalSpiralA first last middle) =
       first + listEndpoint middle + last := by
   unfold historicalSpiralA listEndpoint
-  simp only [List.sum_cons, List.sum_append, List.sum_singleton]
+  simp only [List.sum_cons, List.sum_append]
+  simp
   abel
 
 /-- Endpoint displacement contributed by the truncated reverse-negated arm. -/
