@@ -33,9 +33,14 @@ theorem etaPairedPartial_tendsto_analyticEta
     Tendsto (fun K : ℕ => etaPairedPartial K s)
       atTop (nhds (analyticEta s)) := by
   unfold EtaPartialConvergesAt at hconv
-  have heven := hconv.comp tendsto_two_mul_atTop
-  simpa only [Function.comp_apply,
-    etaPartialEndpoint_two_mul_eq_etaPairedPartial] using heven
+  have heven :
+      Tendsto (fun K : ℕ => etaPartialEndpoint (2 * K) s)
+        atTop (nhds (analyticEta s)) := by
+    simpa only [Function.comp_apply] using
+      hconv.comp tendsto_two_mul_atTop
+  convert heven using 1
+  funext K
+  exact (etaPartialEndpoint_two_mul_eq_etaPairedPartial K s).symm
 
 /-- An analytic eta zero gives a zero limit for the paired differences. -/
 theorem etaPairedPartial_tendsto_zero_of_analyticEta_eq_zero
