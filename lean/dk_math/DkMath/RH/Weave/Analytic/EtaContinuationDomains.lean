@@ -17,6 +17,32 @@ namespace DkMath.RH.Weave.Analytic
 
 open Set
 
+/-- A convex combination of two positive real numbers remains positive. -/
+private theorem positive_convexCombination
+    {a b x y : ℝ}
+    (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a + b = 1)
+    (hx : 0 < x) (hy : 0 < y) :
+    0 < a * x + b * y := by
+  rcases ha.eq_or_lt with rfl | ha_pos
+  · have hb_one : b = 1 := by linarith
+    simpa [hb_one] using hy
+  · have hax : 0 < a * x := mul_pos ha_pos hx
+    have hby : 0 ≤ b * y := mul_nonneg hb hy.le
+    linarith
+
+/-- A convex combination of two negative real numbers remains negative. -/
+private theorem convexCombination_neg
+    {a b x y : ℝ}
+    (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a + b = 1)
+    (hx : x < 0) (hy : y < 0) :
+    a * x + b * y < 0 := by
+  rcases ha.eq_or_lt with rfl | ha_pos
+  · have hb_one : b = 1 := by linarith
+    simpa [hb_one] using hy
+  · have hax : a * x < 0 := mul_neg_of_pos_of_neg ha_pos hx
+    have hby : b * y ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hb hy.le
+    linarith
+
 /-- The nonreal upper part of the open right half-plane. -/
 def etaUpperRightHalfPlane : Set ℂ :=
   {s : ℂ | 0 < s.re ∧ 0 < s.im}
@@ -48,9 +74,9 @@ theorem convex_etaUpperRightHalfPlane :
   change 0 < (a • x + b • y).re ∧ 0 < (a • x + b • y).im
   simp only [Complex.add_re, Complex.add_im, Complex.smul_re,
     Complex.smul_im, smul_eq_mul]
-  constructor
-  · nlinarith
-  · nlinarith
+  exact ⟨
+    positive_convexCombination ha hb hab hx.1 hy.1,
+    positive_convexCombination ha hb hab hx.2 hy.2⟩
 
 /-- The lower-right continuation domain is convex. -/
 theorem convex_etaLowerRightHalfPlane :
@@ -61,9 +87,9 @@ theorem convex_etaLowerRightHalfPlane :
   change 0 < (a • x + b • y).re ∧ (a • x + b • y).im < 0
   simp only [Complex.add_re, Complex.add_im, Complex.smul_re,
     Complex.smul_im, smul_eq_mul]
-  constructor
-  · nlinarith
-  · nlinarith
+  exact ⟨
+    positive_convexCombination ha hb hab hx.1 hy.1,
+    convexCombination_neg ha hb hab hx.2 hy.2⟩
 
 /-- The upper-right continuation domain is preconnected. -/
 theorem isPreconnected_etaUpperRightHalfPlane :
