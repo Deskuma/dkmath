@@ -1,5 +1,7 @@
 # DkMath Collatz: Archimedean Spiral Conservation Law
 
+cid: 6a6e8ee5-a85c-83ee-a2c5-4d4e0fdbd980
+
 > **Research design note**
 >
 > This document records a proposed global conservation principle for the
