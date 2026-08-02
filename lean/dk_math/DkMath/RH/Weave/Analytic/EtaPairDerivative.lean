@@ -15,9 +15,6 @@ noncomputable section
 
 namespace DkMath.RH.Weave.Analytic
 
-attribute [-instance instNormedSpaceRealComplex_dkMath]
-local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
-
 open DkMath.RH.CFBRCProjection
 
 /-- Positive-real power kernel underlying every unsigned eta vector. -/
@@ -31,30 +28,15 @@ theorem etaRealKernel_nat
   simp [etaRealKernel, etaUnsignedVector]
 
 /--
-Away from the origin, the real-variable derivative of `x ↦ x⁻ˢ` is
-`-s * x⁻ˢ⁻¹`.
+The candidate derivative vector of `x ↦ x⁻ˢ` gains one full real decay power.
+This norm identity is independent of the implementation chosen for the real
+normed-space structure on `ℂ`.
 -/
-theorem hasDerivAt_etaRealKernel
-    {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : x ≠ 0) :
-    HasDerivAt (etaRealKernel s)
-      ((-s) * (x : ℂ) ^ (-s - 1)) x := by
-  simpa [etaRealKernel] using
-    (hasDerivAt_ofReal_cpow_const (x := x) hx (r := -s) (neg_ne_zero.mpr hs))
-
-/-- The derivative norm depends only on `re s` and gains one decay power. -/
 theorem norm_etaRealKernel_derivative
     (s : ℂ) {x : ℝ} (hx : 0 < x) :
     ‖(-s) * (x : ℂ) ^ (-s - 1)‖ =
       ‖s‖ * x ^ (-s.re - 1) := by
   rw [norm_mul, norm_neg, Complex.norm_cpow_eq_rpow_re_of_pos hx]
   simp
-
-/-- Explicit norm formula for the derivative of the eta real kernel. -/
-theorem norm_deriv_etaRealKernel
-    {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : 0 < x) :
-    ‖deriv (etaRealKernel s) x‖ =
-      ‖s‖ * x ^ (-s.re - 1) := by
-  rw [(hasDerivAt_etaRealKernel hs hx.ne').deriv]
-  exact norm_etaRealKernel_derivative s hx
 
 end DkMath.RH.Weave.Analytic
