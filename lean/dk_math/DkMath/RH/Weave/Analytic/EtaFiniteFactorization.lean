@@ -30,7 +30,8 @@ theorem etaUnsignedVector_two_mul_add_one_factor
       (2 : ℂ) ^ (-s) * etaUnsignedVector s k := by
   unfold etaUnsignedVector
   rw [show 2 * k + 1 + 1 = 2 * (k + 1) by omega]
-  exact Complex.natCast_mul_natCast_cpow 2 (k + 1) (-s)
+  simpa only [Nat.cast_mul] using
+    (Complex.natCast_mul_natCast_cpow 2 (k + 1) (-s))
 
 /-- Two additional unsigned terms extend the even partial sum. -/
 theorem etaUnsignedPartial_two_mul_succ
