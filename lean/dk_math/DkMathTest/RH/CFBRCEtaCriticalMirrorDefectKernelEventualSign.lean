@@ -8,6 +8,8 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorDefectKernelEventualSign
 
 #print "file: DkMathTest.RH.CFBRCEtaCriticalMirrorDefectKernelEventualSign"
 
+set_option linter.style.longLine false
+
 noncomputable section
 
 namespace DkMathTest.RH.CFBRCEtaCriticalMirrorDefectKernelEventualSign
