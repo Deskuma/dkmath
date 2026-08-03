@@ -2,6 +2,14 @@
 
 Lean が確定した DkMath の構造を、一般数学の言葉で読み解く月刊記録。
 
+## 2026-08-03
+
+### 18:00
+
+[単位 support は unit と従属 blueprint を一体として束ねる](260803-1800-unit-support-binds-a-unit-to-its-dependent-blueprint.md)
+
+unit ごとに型の異なる blueprint を従属成分として束ね、値を忘れた後も所属先と設計情報の整合性を型の段階で保持する KUS の最小 support 核を読む。
+
 ## 2026-08-02
 
 ### 23:59
