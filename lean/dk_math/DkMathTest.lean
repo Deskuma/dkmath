@@ -44,6 +44,7 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelProjection
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelTailMonotonicity
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelLimitSide
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelProjectionTail
+import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameVariation
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
