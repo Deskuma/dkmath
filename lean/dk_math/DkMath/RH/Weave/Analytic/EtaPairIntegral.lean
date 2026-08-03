@@ -42,6 +42,8 @@ theorem hasDerivAt_neg_etaRealKernel
       HasDerivAt (fun y : ℝ => -((y : ℂ) ^ (-s)))
         (s * (x : ℂ) ^ (-s - 1)) x := by
     convert hnegRaw using 1
+    · funext y
+      rfl
     · ring
   simpa [etaRealKernel, etaPairIntegralKernel] using hneg
 
