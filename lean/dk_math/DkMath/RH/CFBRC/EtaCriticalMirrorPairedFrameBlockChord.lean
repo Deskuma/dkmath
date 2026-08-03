@@ -61,6 +61,7 @@ theorem norm_etaPairFrameBlockRotation_sub_one_le_two_mul_blockSpan
         |(Finset.range N).sum
           (fun j : ℕ => etaPairFrameStepPhase s (K + j))| := by
     simp [z]
+    norm_cast
   rw [etaPairFrameBlockRotation_eq_exp]
   change ‖Complex.exp z - 1‖ ≤
     2 * etaPairFrameBlockSpan s K N
