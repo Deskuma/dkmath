@@ -24,6 +24,7 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorWeightedTransport
 import DkMathTest.RH.CFBRCEtaCriticalMirrorWeightPressure
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPhaseProjection
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedPhaseProjection
+import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedDefectDecay
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 
 #print "file: DkMathTest"
