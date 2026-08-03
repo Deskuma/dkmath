@@ -75,6 +75,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelProjection
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTailMonotonicity
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelLimitSide
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelProjectionTail
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameVariation
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
