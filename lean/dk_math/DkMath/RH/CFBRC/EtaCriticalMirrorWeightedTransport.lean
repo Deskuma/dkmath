@@ -154,7 +154,7 @@ theorem etaCriticalMirrorTransportDefectEndpoint_tendsto_zero_of_nontrivialRiema
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) (him : s.im ≠ 0) :
     Tendsto (fun N : ℕ => etaCriticalMirrorTransportDefectEndpoint N s)
       atTop (nhds 0) := by
-  exact
+  simpa [etaCriticalMirrorTransportDefectEndpoint] using
     (etaCriticalMirrorWeightedEndpoint_tendsto_zero_of_nontrivialRiemannZetaZero
       hs him).sub
       (etaPartialEndpoint_tendsto_zero_of_nontrivialRiemannZetaZero hs him)
