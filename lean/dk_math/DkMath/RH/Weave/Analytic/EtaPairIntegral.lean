@@ -30,9 +30,10 @@ theorem hasDerivAt_neg_etaRealKernel
     {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (fun y : ℝ => -etaRealKernel s y)
       (etaPairIntegralKernel s x) x := by
-  simpa [etaRealKernel, etaPairIntegralKernel] using
+  convert
     (hasDerivAt_ofReal_cpow_const
-      (x := x) hx.ne' (r := -s) (neg_ne_zero.mpr hs)).neg
+      (x := x) hx.ne' (r := -s) (neg_ne_zero.mpr hs)).neg using 1 <;>
+    simp [etaRealKernel, etaPairIntegralKernel]
 
 /-- The eta pair integral kernel is integrable on every positive interval. -/
 theorem etaPairIntegralKernel_intervalIntegrable
@@ -46,7 +47,10 @@ theorem etaPairIntegralKernel_intervalIntegrable
       IntervalIntegrable
         (fun x : ℝ => (x : ℂ) ^ (-s - 1)) volume a b :=
     intervalIntegral.intervalIntegrable_cpow (Or.inr hzero)
-  simpa [etaPairIntegralKernel] using hpow.const_mul s
+  change
+    IntervalIntegrable
+      (fun x : ℝ => s * (x : ℂ) ^ (-s - 1)) volume a b
+  exact hpow.const_mul s
 
 /--
 Exact integral representation of one natural eta pair:
