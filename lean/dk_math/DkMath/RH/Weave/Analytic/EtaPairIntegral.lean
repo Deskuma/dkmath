@@ -30,10 +30,18 @@ theorem hasDerivAt_neg_etaRealKernel
     {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (fun y : ℝ => -etaRealKernel s y)
       (etaPairIntegralKernel s x) x := by
-  convert
-    (hasDerivAt_ofReal_cpow_const
-      (x := x) hx.ne' (r := -s) (neg_ne_zero.mpr hs)).neg using 1 <;>
-    simp [etaRealKernel, etaPairIntegralKernel]
+  letI : NormedAddCommGroup ℂ := Complex.instNormedAddCommGroup
+  letI : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+  have hpow :
+      HasDerivAt (fun y : ℝ => (y : ℂ) ^ (-s))
+        ((-s) * (x : ℂ) ^ (-s - 1)) x :=
+    hasDerivAt_ofReal_cpow_const
+      (x := x) hx.ne' (r := -s) (neg_ne_zero.mpr hs)
+  have hneg := hpow.neg
+  convert hneg using 1
+  · rfl
+  · unfold etaPairIntegralKernel
+    ring
 
 /-- The eta pair integral kernel is integrable on every positive interval. -/
 theorem etaPairIntegralKernel_intervalIntegrable
