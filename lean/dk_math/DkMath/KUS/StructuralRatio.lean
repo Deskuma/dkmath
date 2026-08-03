@@ -162,6 +162,46 @@ theorem regularizedSelfRatio_eq_one
     regularizedSelfRatio x ε = 1 := by
   simp [regularizedSelfRatio, h]
 
+/-- An offset distinct from the collapse offset `-x` gives unit self-ratio. -/
+theorem regularizedSelfRatio_eq_one_of_offset_ne_neg
+    {x ε : ℝ}
+    (hε : ε ≠ -x) :
+    regularizedSelfRatio x ε = 1 := by
+  apply regularizedSelfRatio_eq_one
+  intro hLift
+  apply hε
+  linarith
+
+/--
+For every fixed source `x`, the only collapsed offset is `ε = -x`.  Removing
+that point gives an identically-one self-ratio, hence a two-sided limit of one
+at the collapse offset.
+-/
+theorem tendsto_regularizedSelfRatio_punctured (x : ℝ) :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio x ε)
+      (nhdsWithin (-x) ({-x}ᶜ : Set ℝ))
+      (nhds 1) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_mem_nhdsWithin] with ε hε
+  have hεne : ε ≠ -x := by
+    simpa using hε
+  symm
+  exact regularizedSelfRatio_eq_one_of_offset_ne_neg hεne
+
+/-- The right-hand path from the collapse offset has the same unit limit. -/
+theorem tendsto_regularizedSelfRatio_right (x : ℝ) :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio x ε)
+      (nhdsWithin (-x) (Set.Ioi (-x)))
+      (nhds 1) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_mem_nhdsWithin] with ε hε
+  have hLift : 0 < x + ε := by
+    linarith
+  symm
+  exact regularizedSelfRatio_eq_one (ne_of_gt hLift)
+
 /-- A positive offset lifts the zero source and gives self-ratio one. -/
 theorem regularizedZeroSelfRatio_eq_one
     {ε : ℝ}
@@ -179,12 +219,7 @@ theorem tendsto_regularizedZeroSelfRatio_punctured :
       (fun ε : ℝ => regularizedSelfRatio 0 ε)
       (nhdsWithin 0 ({0}ᶜ : Set ℝ))
       (nhds 1) := by
-  apply tendsto_const_nhds.congr'
-  filter_upwards [eventually_mem_nhdsWithin] with ε hε
-  have hε0 : ε ≠ 0 := by
-    simpa using hε
-  symm
-  exact regularizedSelfRatio_eq_one (by simpa using hε0)
+  simpa using tendsto_regularizedSelfRatio_punctured (0 : ℝ)
 
 /-- The positive-offset path tends to the same structural unit value. -/
 theorem tendsto_regularizedZeroSelfRatio_right :
@@ -192,9 +227,6 @@ theorem tendsto_regularizedZeroSelfRatio_right :
       (fun ε : ℝ => regularizedSelfRatio 0 ε)
       (nhdsWithin 0 (Set.Ioi 0))
       (nhds 1) := by
-  apply tendsto_const_nhds.congr'
-  filter_upwards [eventually_mem_nhdsWithin] with ε hε
-  symm
-  exact regularizedZeroSelfRatio_eq_one hε
+  simpa using tendsto_regularizedSelfRatio_right (0 : ℝ)
 
 end DkMath.KUS
