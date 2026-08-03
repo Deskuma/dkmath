@@ -197,6 +197,9 @@ theorem abs_etaCriticalMirrorSignedVerticalProjection_defectCoefficient_mul_resi
         2 * |s.im| * ‖etaCriticalMirrorDefectCoefficient s x‖ *
           |etaPairResidualPhase s k x| := by ring
 
+open DkMath.RH.Weave.Analytic
+
+set_option linter.style.longLine false in
 /--
 Inside one eta-pair interval, the preceding rotation error is controlled by
 the already established pair phase span.
@@ -237,7 +240,7 @@ theorem abs_etaCriticalMirrorSignedVerticalProjection_defectCoefficient_mul_resi
 /-- A positive coefficient projection survives whenever the rotation error is smaller. -/
 theorem etaCriticalMirrorSignedVerticalProjection_mul_pos_of_rotation_error_lt
     {s c r : ℂ}
-    (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
+    -- (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
     (herr :
       |etaCriticalMirrorSignedVerticalProjection s (c * r) -
         etaCriticalMirrorSignedVerticalProjection s c| <
@@ -249,7 +252,7 @@ theorem etaCriticalMirrorSignedVerticalProjection_mul_pos_of_rotation_error_lt
 /-- A negative coefficient projection survives whenever the rotation error is smaller. -/
 theorem etaCriticalMirrorSignedVerticalProjection_mul_neg_of_rotation_error_lt
     {s c r : ℂ}
-    (hbase : etaCriticalMirrorSignedVerticalProjection s c < 0)
+    -- (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
     (herr :
       |etaCriticalMirrorSignedVerticalProjection s (c * r) -
         etaCriticalMirrorSignedVerticalProjection s c| <

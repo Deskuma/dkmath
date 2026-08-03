@@ -65,6 +65,8 @@ example (s : ℂ) (k : ℕ) (x : ℝ)
   norm_etaPairResidualRotation_sub_one_le_two_mul_abs_phase
     s k x hphase
 
+open DkMath.RH.Weave.Analytic
+
 example (s : ℂ) (k : ℕ) {x : ℝ}
     (hleft : etaPairFrameLeftEndpoint k ≤ x)
     (hright : x ≤ etaPairFrameRightEndpoint k)
@@ -80,13 +82,14 @@ example (s : ℂ) (k : ℕ) {x : ℝ}
     s k hleft hright hspan
 
 example {s c r : ℂ}
-    (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
+    -- (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
     (herr :
       |etaCriticalMirrorSignedVerticalProjection s (c * r) -
         etaCriticalMirrorSignedVerticalProjection s c| <
         etaCriticalMirrorSignedVerticalProjection s c) :
     0 < etaCriticalMirrorSignedVerticalProjection s (c * r) :=
   etaCriticalMirrorSignedVerticalProjection_mul_pos_of_rotation_error_lt
-    hbase herr
+    -- hbase
+    herr
 
 end DkMathTest.RH.CFBRCEtaCriticalMirrorDefectCoefficientProjection
