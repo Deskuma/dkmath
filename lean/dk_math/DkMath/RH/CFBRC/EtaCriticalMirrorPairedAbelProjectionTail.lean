@@ -136,7 +136,8 @@ theorem etaCriticalMirrorRotatedDefectProjectionLimitGap_eq_tsum_nat_add
     ← tsum_etaCriticalMirrorRotatedDefectPairProjection_eq_limit hs him,
     etaCriticalMirrorRotatedDefectProjectionPartial_eq_sum_range]
   unfold etaCriticalMirrorRotatedDefectProjectionTail
-  linear_combination hsplit
+  -- grind  -- ok
+  exact sub_eq_of_eq_add' (id hsplit.symm)
 
 /-- Right of the critical line, every sufficiently late actual projection tail is positive. -/
 theorem eventually_etaCriticalMirrorRotatedDefectProjectionTail_pos_of_half_lt_re
