@@ -48,6 +48,8 @@ import DkMath.RH.CFBRC.EtaKUSDecoderAgreementAudit
 import DkMath.RH.CFBRC.ZeroLocusFactorBridge
 import DkMath.RH.CFBRC.CompletedZetaBridge
 import DkMath.RH.CFBRC.CriticalMirrorGeometry
+import DkMath.RH.CFBRC.CriticalMirrorZeroBridge
+import DkMath.RH.CFBRC.EtaCriticalMirrorEndpointLimits
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
 import DkMath.RH.Weave.Finite.EtaPairDecomposition
