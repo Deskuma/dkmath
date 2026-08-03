@@ -31,6 +31,7 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorContinuousWeightPressure
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedRotatingFrame
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelTransform
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedTail
+import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedTailBound
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
