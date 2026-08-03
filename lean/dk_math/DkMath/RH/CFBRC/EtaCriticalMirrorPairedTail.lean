@@ -26,8 +26,12 @@ theorem summable_etaCriticalMirrorDefectPairTerm
     exact etaPairedSummableAt_of_pos_re hm
   have hOriginal : Summable (etaPairTerm s) := by
     exact etaPairedSummableAt_of_pos_re hs
-  simpa only [etaCriticalMirrorDefectPairTerm_eq_etaPairTerm_sub] using
-    hMirror.sub hOriginal
+  rw [show etaCriticalMirrorDefectPairTerm s =
+      fun k : ℕ =>
+        etaPairTerm (criticalMirror s) k - etaPairTerm s k by
+    funext k
+    exact etaCriticalMirrorDefectPairTerm_eq_etaPairTerm_sub s k]
+  exact hMirror.sub hOriginal
 
 /-- Every nontrivial zeta zero has a summable paired critical-mirror defect series. -/
 theorem summable_etaCriticalMirrorDefectPairTerm_of_nontrivialRiemannZetaZero
