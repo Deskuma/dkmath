@@ -100,6 +100,25 @@ def EtaEndpointIncrementBalancedOnNontrivialZeros : Prop :=
   ∀ {s : ℂ}, NontrivialRiemannZetaZero s →
     etaEndpointIncrementMirrorRatio s 1 = 1
 
+/--
+The global endpoint-increment balance condition is exactly the Riemann
+hypothesis.  Hence it must not be imported as an auxiliary lemma when building
+a non-circular proof of the zero-preserving map.
+-/
+theorem etaEndpointIncrementBalancedOnNontrivialZeros_iff_riemannHypothesis :
+    EtaEndpointIncrementBalancedOnNontrivialZeros ↔ RiemannHypothesis := by
+  constructor
+  · intro hbalance
+    rw [riemannHypothesis_iff_nontrivialZero_re_eq_half]
+    intro s hs
+    exact
+      (etaEndpointIncrementMirrorRatio_one_eq_one_iff_re_eq_half s).mp
+        (hbalance hs)
+  · intro hRH s hs
+    exact
+      (etaEndpointIncrementMirrorRatio_one_eq_one_iff_re_eq_half s).2
+        ((riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs)
+
 /-- Endpoint-increment balance supplies the positive-degree standard CFBRC map. -/
 noncomputable def zeroToCFBRCBridge_of_endpointIncrementBalance
     (hbalance : EtaEndpointIncrementBalancedOnNontrivialZeros)
