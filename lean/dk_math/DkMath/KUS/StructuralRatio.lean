@@ -197,6 +197,7 @@ theorem tendsto_regularizedSelfRatio_right (x : ℝ) :
       (nhds 1) := by
   apply tendsto_const_nhds.congr'
   filter_upwards [eventually_mem_nhdsWithin] with ε hε
+  change -x < ε at hε
   have hLift : 0 < x + ε := by
     linarith
   symm
