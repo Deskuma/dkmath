@@ -132,7 +132,7 @@ theorem etaCriticalMirrorProjectedDefectEndpoint_tendsto_zero_of_nontrivialRiema
         (fun N : ℕ =>
           (ω * etaCriticalMirrorTransportDefectEndpoint N s).re)
         atTop (nhds 0) := by
-    simpa only [Function.comp_apply, mul_zero, Complex.zero_re] using
+    simpa only [Function.comp_def, mul_zero, Complex.zero_re] using
       hre.comp hmul
   simpa only [etaCriticalMirrorProjectedDefectEndpoint] using hcomp
 
