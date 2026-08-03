@@ -62,6 +62,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorContinuousWeightPressure
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedRotatingFrame
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedTail
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedTailBound
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
