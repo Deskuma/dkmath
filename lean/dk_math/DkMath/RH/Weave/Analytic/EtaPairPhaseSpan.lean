@@ -46,7 +46,7 @@ theorem etaPairDerivativePhaseSpan_nonneg
       1 ≤
         (((2 * k + 2 : ℕ) : ℝ)) /
           (((2 * k + 1 : ℕ) : ℝ)) :=
-    (le_div_iff₀ ha).2 (by simpa using hab)
+    (le_div_iff₀ ha).2 (by simp)
   exact mul_nonneg (abs_nonneg s.im) (Real.log_nonneg hratio)
 
 /--
