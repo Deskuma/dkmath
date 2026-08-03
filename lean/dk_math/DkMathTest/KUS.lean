@@ -32,20 +32,22 @@ example : extract DkMath.KUS.Examples.toyMul = support := by
   exact DkMath.KUS.Examples.toyMul_extract
 
 example :
-    toNat (kusAdd a b (by simp [SameSupport])) = 7 := by
+    toNat (kusAdd a b (by rw [SameSupport]; rfl)) = 7 := by
   simp [kusAdd]
 
 example :
-    extract (kusAdd a b (by simp [SameSupport])) = support := by
+    extract (kusAdd a b (by rw [SameSupport]; rfl)) = support := by
   simp [kusAdd]
+  rfl
 
 example :
-    toNat (kusMul a b (by simp [SameSupport])) = 12 := by
+    toNat (kusMul a b (by rw [SameSupport]; rfl)) = 12 := by
   simp [kusMul]
 
 example :
-    extract (kusMul a b (by simp [SameSupport])) = support := by
+    extract (kusMul a b (by rw [SameSupport]; rfl)) = support := by
   simp [kusMul]
+  rfl
 
 example :
     kusMul DkMath.KUS.Examples.toyX (oneState support)
@@ -85,14 +87,11 @@ abbrev grA : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBluepri
 abbrev grB : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
   mkGWith ((1 : Rat) / 3) suppR
 
-lemma hN : GSameSupport gnA gnB := by
-  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+lemma hN : GSameSupport gnA gnB := by rfl
 
-lemma hI : GSameSupport giA giB := by
-  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+lemma hI : GSameSupport giA giB := by rfl
 
-lemma hR : GSameSupport grA grB := by
-  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+lemma hR : GSameSupport grA grB := by rfl
 
 -- toCoeff_gOp で 3 + 4 = 7
 example : toCoeff (gOp (· + ·) gnA gnB hN) = 7 := by
@@ -118,8 +117,7 @@ example : toCoeff (gSub giB giA hI.symm) = (3 : Int) := by
 example : toCoeff (gSub giA giB hI) = (-3 : Int) := by
   simp [gSub, gOp, giA, giB]
 
-example : extract_g (gSub giA giB hI) = suppI := by
-  simp [gOp]
+example : extract_g (gSub giA giB hI) = suppI := by rfl
 
 -- Rat: 加算・乗算・減算の係数追跡
 example : toCoeff (gAdd grA grB hR) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
@@ -131,26 +129,21 @@ example : toCoeff (gMul grA grB hR) = (((1 : Rat) / 2) * ((1 : Rat) / 3)) := by
 example : toCoeff (gSub grA grB hR) = ((1 : Rat) / 2 - (1 : Rat) / 3) := by
   simp [gSub, gOp, grA, grB]
 
-example : extract_g (gAdd grA grB hR) = suppR := by
-  simp [gOp]
+example : extract_g (gAdd grA grB hR) = suppR := by rfl
 
-example : extract_g (gMul grA grB hR) = suppR := by
-  simp [gOp]
+example : extract_g (gMul grA grB hR) = suppR := by rfl
 
-example : extract_g (gSub grA grB hR) = suppR := by
-  simp [gOp]
+example : extract_g (gSub grA grB hR) = suppR := by rfl
 
 -- Rat: 除算テスト  (1/2) / (1/3) = 3/2
 example : toCoeff (gDiv grA grB hR) = ((1 : Rat) / 2) / ((1 : Rat) / 3) := by
   simp [gDiv, gOp, grA, grB]
 
 -- support 保持（ゼロ除算でも）
-example : extract_g (gDiv grA grB hR) = suppR := by
-  simp [gOp]
+example : extract_g (gDiv grA grB hR) = suppR := by rfl
 
 -- ゼロ除算: (1/2) / 0 の support 保持（Rat では x / 0 = 0 が定義済み）
-example : extract_g (gDiv grA (mkGWith (0 : Rat) suppR) hR) = suppR := by
-  simp [gOp]
+example : extract_g (gDiv grA (mkGWith (0 : Rat) suppR) hR) = suppR := by rfl
 
 -- KUS ↔ GKUS Nat 往復変換
 example (x : KUS DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint) :
@@ -172,8 +165,8 @@ abbrev grB : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBluepri
 abbrev grC : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
   mkGWith ((1 : Rat) / 4) suppR
 
-lemma hAB : GSameSupport grA grB := by simp [GSameSupport]
-lemma hBC : GSameSupport grB grC := by simp [GSameSupport]
+lemma hAB : GSameSupport grA grB := by rfl
+lemma hBC : GSameSupport grB grC := by rfl
 lemma hAC : GSameSupport grA grC := hAB.trans hBC
 
 -- 加法交換則
@@ -183,54 +176,39 @@ example : gAdd grA grB hAB = gAdd grB grA hAB.symm := gAdd_comm hAB
 example : gMul grA grB hAB = gMul grB grA hAB.symm := gMul_comm hAB
 
 -- 加法結合則
-example : gAdd (gAdd grA grB hAB) grC
-          (by simp [GSameSupport, gOp])
-          = gAdd grA (gAdd grB grC hBC)
-          (by simp [GSameSupport, gOp]) :=
-  gAdd_assoc hAB hBC (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+example : gAdd (gAdd grA grB hAB) grC (by rfl)
+          = gAdd grA (gAdd grB grC hBC) (by rfl) :=
+  gAdd_assoc hAB hBC (by rfl) (by rfl)
 
 -- 乗法結合則
-example : gMul (gMul grA grB hAB) grC
-          (by simp [GSameSupport, gOp])
-          = gMul grA (gMul grB grC hBC)
-          (by simp [GSameSupport, gOp]) :=
-  gMul_assoc hAB hBC (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+example : gMul (gMul grA grB hAB) grC (by rfl)
+          = gMul grA (gMul grB grC hBC) (by rfl) :=
+  gMul_assoc hAB hBC (by rfl) (by rfl)
 
 -- 左分配則: grA * (grB + grC) = grA * grB + grA * grC
-example : gMul grA (gAdd grB grC hBC)
-          (by simp [GSameSupport, gOp])
-          = gAdd (gMul grA grB hAB) (gMul grA grC hAC)
-          (by simp [GSameSupport, gOp]) :=
+example : gMul grA (gAdd grB grC hBC) (by rfl)
+          = gAdd (gMul grA grB hAB) (gMul grA grC hAC) (by rfl) :=
   gMul_gAdd hAB hBC
-    (by simp [GSameSupport, gOp]) hAC (by simp [GSameSupport, gOp])
+    (by rfl) hAC (by rfl)
 
 -- 右分配則: (grA + grB) * grC = grA * grC + grB * grC
-example : gMul (gAdd grA grB hAB) grC
-          (by simp [GSameSupport, gOp])
-          = gAdd (gMul grA grC hAC) (gMul grB grC hBC)
-          (by simp [GSameSupport, gOp]) :=
-  gAdd_gMul hAB hBC
-    (by simp [GSameSupport, gOp]) hAC (by simp [GSameSupport, gOp])
+example : gMul (gAdd grA grB hAB) grC (by rfl)
+          = gAdd (gMul grA grC hAC) (gMul grB grC hBC) (by rfl) :=
+  gAdd_gMul hAB hBC (by rfl) hAC (by rfl)
 
 -- gDiv_one: grA / 1 = grA
-example : gDiv grA (gOneState suppR) (by simp [GSameSupport]) = grA :=
-  gDiv_one suppR (by simp [GSameSupport])
+example : gDiv grA (gOneState suppR) (by rfl) = grA :=
+  gDiv_one suppR (by rfl)
 
 -- gDiv_add_distrib: (grA + grB) / grC = grA/grC + grB/grC
-example : gDiv (gAdd grA grB hAB) grC
-          (by simp [GSameSupport, gOp])
-          = gAdd (gDiv grA grC hAC) (gDiv grB grC hBC)
-          (by simp [GSameSupport, gOp]) :=
-  gDiv_add_distrib hAB hAC hBC
-    (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+example : gDiv (gAdd grA grB hAB) grC (by rfl)
+          = gAdd (gDiv grA grC hAC) (gDiv grB grC hBC) (by rfl) :=
+  gDiv_add_distrib hAB hAC hBC (by rfl) (by rfl)
 
 -- gMul_gDiv_assoc: grA * (grB / grC) = (grA * grB) / grC
-example : gMul grA (gDiv grB grC hBC)
-          (by simp [GSameSupport, gOp])
-          = gDiv (gMul grA grB hAB) grC
-          (by simp [GSameSupport, gOp]) :=
-  gMul_gDiv_assoc hAB hBC
-    (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+example : gMul grA (gDiv grB grC hBC) (by rfl)
+          = gDiv (gMul grA grB hAB) grC (by rfl) :=
+  gMul_gDiv_assoc hAB hBC (by rfl) (by rfl)
 
 end DkMathTest.GKUSAlgebra
 

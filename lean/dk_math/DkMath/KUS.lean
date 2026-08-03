@@ -16,6 +16,7 @@ import DkMath.KUS.RoundTrip
 import DkMath.KUS.Add
 import DkMath.KUS.Mul
 import DkMath.KUS.Coeff
+import DkMath.KUS.StructuralRatio
 import DkMath.KUS.Examples
 import DkMath.KUS.Bridge
 import DkMath.KUS.CosmicBridge
