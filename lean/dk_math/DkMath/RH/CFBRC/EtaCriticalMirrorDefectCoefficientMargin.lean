@@ -9,6 +9,8 @@ import Mathlib.Tactic
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientMargin"
 
+set_option linter.style.longLine false
+
 noncomputable section
 
 namespace DkMath.RH.CFBRCProjection
@@ -60,7 +62,7 @@ theorem norm_etaCriticalMirrorDefectCoefficient_le_right_linear
     _ ≤
         ‖criticalMirror s‖ * etaCriticalMirrorContinuousWeightR s x +
           ‖s‖ * etaCriticalMirrorContinuousWeightR s x :=
-      add_le_add_left hs _
+      add_le_add_right hs _
     _ =
         (‖criticalMirror s‖ + ‖s‖) *
           etaCriticalMirrorContinuousWeightR s x := by ring
@@ -84,7 +86,7 @@ theorem norm_etaCriticalMirrorDefectCoefficient_le_left_bounded
         ‖criticalMirror s‖ * etaCriticalMirrorContinuousWeightR s x +
           ‖s‖ :=
       norm_etaCriticalMirrorDefectCoefficient_le_transport s hx
-    _ ≤ ‖criticalMirror s‖ + ‖s‖ := add_le_add_right hm _
+    _ ≤ ‖criticalMirror s‖ + ‖s‖ := add_le_add_left hm _
 
 /-- If the growing transport weight is at least two, half its quadratic pressure survives. -/
 theorem etaCriticalMirrorSignedVerticalProjection_defectCoefficient_ge_right_margin
