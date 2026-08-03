@@ -19,6 +19,10 @@ example (s : ℂ) :
       s.re = (1 : ℝ) / 2 :=
   etaEndpointIncrementMirrorRatio_one_eq_one_iff_re_eq_half s
 
+example :
+    EtaEndpointIncrementBalancedOnNontrivialZeros ↔ RiemannHypothesis :=
+  etaEndpointIncrementBalancedOnNontrivialZeros_iff_riemannHypothesis
+
 example
     (hbalance : EtaEndpointIncrementBalancedOnNontrivialZeros)
     {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
