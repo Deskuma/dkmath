@@ -41,6 +41,7 @@ import DkMath.RH.CFBRC.EtaKUSMirrorGapBridgeAudit
 import DkMath.RH.CFBRC.EtaMirrorEndpointPairEnergy
 import DkMath.RH.CFBRC.EtaMirrorEndpointOuterNormalization
 import DkMath.RH.CFBRC.EtaMirrorEndpointDefinedShares
+import DkMath.RH.CFBRC.EtaMirrorEndpointRegularizedLimits
 import DkMath.RH.CFBRC.EtaKUSMirrorAmplitudeBridge
 import DkMath.RH.CFBRC.EtaKUSDecoderAgreementAudit
 import DkMath.RH.CFBRC.ZeroLocusFactorBridge
