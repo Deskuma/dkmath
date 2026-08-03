@@ -68,6 +68,7 @@ theorem etaPairDerivativePhaseSpan_le_inv
   have hstep : b = a + 1 := by
     dsimp [a, b]
     norm_num
+    ring
   have hlog : Real.log (b / a) ≤ b / a - 1 :=
     Real.log_le_sub_one_of_pos (div_pos hb ha)
   have hratio : b / a - 1 = 1 / a := by
@@ -78,7 +79,7 @@ theorem etaPairDerivativePhaseSpan_le_inv
   unfold etaPairDerivativePhaseSpan
   change
     |s.im| * Real.log (b / a) ≤ |s.im| / a
-  rw [div_eq_mul_inv]
+  rw [div_eq_mul_inv] at hlog ⊢
   exact mul_le_mul_of_nonneg_left hlog (abs_nonneg s.im)
 
 /-- The affine odd-index subsequence `k ↦ 2k+1` is cofinal. -/
@@ -100,7 +101,8 @@ theorem etaPairDerivativePhaseSpan_tendsto_zero
         (fun k : ℕ =>
           |s.im| / (((2 * k + 1 : ℕ) : ℝ)))
         atTop (nhds 0) := by
-    simpa [Function.comp_apply] using
+    simpa only [Function.comp_apply, Nat.cast_add, Nat.cast_mul,
+      Nat.cast_ofNat] using
       (tendsto_const_div_atTop_nhds_zero_nat (|s.im| : ℝ)).comp
         tendsto_two_mul_add_one_atTop
   exact
