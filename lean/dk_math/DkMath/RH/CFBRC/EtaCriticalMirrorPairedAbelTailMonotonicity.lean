@@ -105,7 +105,9 @@ theorem eventually_etaCriticalMirrorRotatedDefectProjectionPartial_lt_add_of_hal
     exists_etaCriticalMirrorRotatedDefectProjectionPartial_strictMonoOn_tail_of_half_lt_re
       hs him hre with ⟨K0, hmono⟩
   filter_upwards [eventually_ge_atTop K0] with K hK
-  exact hmono hK (by omega) (by omega)
+  exact hmono hK
+    (by exact_mod_cast (show K0 ≤ K + N by omega))
+    (by exact_mod_cast (show K < K + N by omega))
 
 /-- Every fixed positive forward block decreases the projected partial sum on the left. -/
 theorem eventually_etaCriticalMirrorRotatedDefectProjectionPartial_add_lt_of_re_lt_half
@@ -119,6 +121,8 @@ theorem eventually_etaCriticalMirrorRotatedDefectProjectionPartial_add_lt_of_re_
     exists_etaCriticalMirrorRotatedDefectProjectionPartial_strictAntiOn_tail_of_re_lt_half
       hs him hre with ⟨K0, hanti⟩
   filter_upwards [eventually_ge_atTop K0] with K hK
-  exact hanti hK (by omega) (by omega)
+  exact hanti hK
+    (by exact_mod_cast (show K0 ≤ K + N by omega))
+    (by exact_mod_cast (show K < K + N by omega))
 
 end DkMath.RH.CFBRCProjection
