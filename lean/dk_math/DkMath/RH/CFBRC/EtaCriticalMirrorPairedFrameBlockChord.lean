@@ -55,7 +55,7 @@ theorem norm_etaPairFrameBlockRotation_sub_one_le_two_mul_blockSpan
   let z : ℂ :=
     Complex.I *
       ((((Finset.range N).sum
-        (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ)
+        (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ))
   have hz :
       ‖z‖ =
         |(Finset.range N).sum
