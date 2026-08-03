@@ -96,8 +96,10 @@ theorem etaCriticalMirrorSignedVerticalProjection_intervalIntegral
       ∫ x : ℝ in a..b,
         etaCriticalMirrorSignedVerticalProjection s (f x) := by
   unfold etaCriticalMirrorSignedVerticalProjection
-  rw [← intervalIntegral.intervalIntegral_im hf]
   rw [intervalIntegral.integral_const_mul]
+  simpa using
+    congrArg (fun y : ℝ => s.im * y)
+      (intervalIntegral.intervalIntegral_im hf).symm
 
 /--
 The signed projection of one rotated defect pair is exactly the interval
