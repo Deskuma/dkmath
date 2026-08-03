@@ -58,6 +58,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedPhaseProjection
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedDefectDecay
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedDefectIntegral
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectKernelFactorization
+import DkMath.RH.CFBRC.EtaCriticalMirrorContinuousWeightPressure
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
