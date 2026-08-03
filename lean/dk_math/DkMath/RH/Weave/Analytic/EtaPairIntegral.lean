@@ -37,11 +37,13 @@ theorem hasDerivAt_neg_etaRealKernel
         ((-s) * (x : ℂ) ^ (-s - 1)) x :=
     hasDerivAt_ofReal_cpow_const
       (x := x) hx.ne' (r := -s) (neg_ne_zero.mpr hs)
-  have hneg := hpow.neg
-  convert hneg using 1
-  · rfl
-  · unfold etaPairIntegralKernel
-    ring
+  have hnegRaw := hpow.neg
+  have hneg :
+      HasDerivAt (fun y : ℝ => -((y : ℂ) ^ (-s)))
+        (s * (x : ℂ) ^ (-s - 1)) x := by
+    convert hnegRaw using 1
+    · ring
+  simpa [etaRealKernel, etaPairIntegralKernel] using hneg
 
 /-- The eta pair integral kernel is integrable on every positive interval. -/
 theorem etaPairIntegralKernel_intervalIntegrable
