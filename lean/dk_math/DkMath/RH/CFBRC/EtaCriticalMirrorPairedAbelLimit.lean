@@ -25,6 +25,15 @@ theorem tendsto_nat_succ_atTop :
     intro K hK
     omega⟩
 
+/-- Removing one from a natural index is still cofinal at `atTop`. -/
+theorem tendsto_nat_pred_atTop :
+    Tendsto (fun K : ℕ => K - 1) atTop atTop := by
+  refine tendsto_atTop.2 ?_
+  intro n
+  exact eventually_atTop.2 ⟨n + 1, by
+    intro K hK
+    omega⟩
+
 /--
 At a nonreal nontrivial zero, the Abel boundary term tends to zero because its
 rotation has unit norm and the ordinary paired defect partial sum tends to
@@ -104,5 +113,42 @@ theorem etaCriticalMirrorRotatedDefectPairedPartial_succ_tendsto_neg_correction_
   refine hlimit'.congr' (Eventually.of_forall fun K => ?_)
   simpa using
     (etaCriticalMirrorRotatedDefectPairedPartial_eq_abel (K + 1) s).symm
+
+/--
+Exact moving-frame limit for the complete natural partial-sum sequence.
+
+The finite Abel identity already uses the correction range `K - 1`; this
+range is cofinal, so no successor reindexing remains in the final theorem.
+-/
+theorem etaCriticalMirrorRotatedDefectPairedPartial_tendsto_neg_correction_tsum
+    {s : ℂ} (hs : NontrivialRiemannZetaZero s) (him : s.im ≠ 0) :
+    Tendsto
+      (fun K : ℕ =>
+        etaCriticalMirrorRotatedDefectPairedPartial K s)
+      atTop
+      (nhds
+        (-(∑' k : ℕ,
+          etaCriticalMirrorPairedFrameCorrectionTerm s k))) := by
+  have hboundary :=
+    etaCriticalMirrorPairedAbelBoundaryTerm_tendsto_zero_of_nontrivialRiemannZetaZero
+      hs him
+  have hcorrection :=
+    (etaCriticalMirrorPairedFrameCorrectionPartial_tendsto_tsum_of_nontrivialRiemannZetaZero
+      hs him).comp tendsto_nat_pred_atTop
+  have hlimit := hboundary.sub hcorrection
+  have hlimit' :
+      Tendsto
+        (fun K : ℕ =>
+          etaCriticalMirrorPairedAbelBoundaryTerm K s -
+            (Finset.range (K - 1)).sum
+              (etaCriticalMirrorPairedFrameCorrectionTerm s))
+        atTop
+        (nhds
+          (-(∑' k : ℕ,
+            etaCriticalMirrorPairedFrameCorrectionTerm s k))) := by
+    simpa using hlimit
+  refine hlimit'.congr' (Eventually.of_forall fun K => ?_)
+  exact
+    (etaCriticalMirrorRotatedDefectPairedPartial_eq_abel K s).symm
 
 end DkMath.RH.CFBRCProjection
