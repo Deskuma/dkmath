@@ -101,7 +101,7 @@ def EtaEndpointIncrementBalancedOnNontrivialZeros : Prop :=
     etaEndpointIncrementMirrorRatio s 1 = 1
 
 /-- Endpoint-increment balance supplies the positive-degree standard CFBRC map. -/
-theorem zeroToCFBRCBridge_of_endpointIncrementBalance
+noncomputable def zeroToCFBRCBridge_of_endpointIncrementBalance
     (hbalance : EtaEndpointIncrementBalancedOnNontrivialZeros)
     {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
     ZeroToCFBRCBridge NontrivialRiemannZetaZero where
