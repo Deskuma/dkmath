@@ -44,7 +44,7 @@ theorem sum_range_etaPairFrameStepPhase_nat_add
   | succ N ih =>
       rw [Finset.sum_range_succ, ih]
       unfold etaPairFrameStepPhase
-      simp only [Nat.succ_eq_add_one, Nat.add_assoc]
+      simp only [Nat.add_assoc]
       ring
 
 /--
@@ -68,7 +68,7 @@ theorem sum_range_etaPairFrameStepSpan_nat_add
       rw [Finset.sum_range_succ, ih]
       unfold etaPairFrameStepSpan
       rw [Real.log_div hb.ne' ha.ne']
-      simp only [Nat.succ_eq_add_one, Nat.add_assoc]
+      simp only [Nat.add_assoc]
       ring
 
 /-- Total adjacent-frame variation across a finite block. -/
@@ -139,7 +139,7 @@ theorem etaPairBaseRotation_add_eq
         Complex.exp
           (Complex.I *
             ((((Finset.range N).sum
-              (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ)) := by
+              (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ))) := by
   rw [etaPairBaseRotation, etaPairBaseRotation, ← Complex.exp_add]
   congr 1
   rw [sum_range_etaPairFrameStepPhase_nat_add]
@@ -159,7 +159,7 @@ theorem etaPairFrameBlockRotation_eq_exp
       Complex.exp
         (Complex.I *
           ((((Finset.range N).sum
-            (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ)) := by
+            (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ))) := by
   unfold etaPairFrameBlockRotation
   rw [etaPairBaseRotation_add_eq]
   rw [← mul_assoc,
