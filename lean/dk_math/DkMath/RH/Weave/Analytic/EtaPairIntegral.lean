@@ -30,7 +30,6 @@ theorem hasDerivAt_neg_etaRealKernel
     {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (fun y : ℝ => -etaRealKernel s y)
       (etaPairIntegralKernel s x) x := by
-  letI : NormedSpace ℝ ℂ := NormedSpace.complexToReal
   have hpow :
       HasDerivAt (fun y : ℝ => (y : ℂ) ^ (-s))
         ((-s) * (x : ℂ) ^ (-s - 1)) x :=
