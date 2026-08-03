@@ -120,7 +120,7 @@ theorem etaEndpointIncrementBalancedOnNontrivialZeros_iff_riemannHypothesis :
         ((riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs)
 
 /-- Endpoint-increment balance supplies the positive-degree standard CFBRC map. -/
-noncomputable def zeroToCFBRCBridge_of_endpointIncrementBalance
+def zeroToCFBRCBridge_of_endpointIncrementBalance
     (hbalance : EtaEndpointIncrementBalancedOnNontrivialZeros)
     {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
     ZeroToCFBRCBridge NontrivialRiemannZetaZero where
