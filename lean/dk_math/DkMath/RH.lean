@@ -80,6 +80,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGaugeAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameBlockAlignment
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameBlockChord
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameBlockProjection
+import DkMath.RH.CFBRC.EtaCriticalMirrorDefectKernelQuantitativeMargin
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
