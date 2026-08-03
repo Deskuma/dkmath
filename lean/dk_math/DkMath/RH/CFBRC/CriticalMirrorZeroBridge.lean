@@ -97,6 +97,9 @@ theorem criticalMirror_re_lt_one_of_nontrivialRiemannZetaZero
 The nontrivial-zero predicate is closed under reflection across the critical
 line.  This packages the functional equation, conjugation symmetry, and the
 open-critical-strip bounds without assuming the Riemann hypothesis.
+
+The local real-part normalization below deliberately keeps the broad `simp`
+form that is stable under the current complex numeral coercions.
 -/
 theorem criticalMirror_nontrivialRiemannZetaZero
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
