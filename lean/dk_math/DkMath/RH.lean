@@ -63,6 +63,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientProjection
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientMargin
 import DkMath.RH.CFBRC.EtaCriticalMirrorContinuousWeightThreshold
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientEventualSign
+import DkMath.RH.CFBRC.EtaCriticalMirrorDefectKernelEventualSign
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedRotatingFrame
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedTail
