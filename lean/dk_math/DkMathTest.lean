@@ -26,6 +26,7 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorPhaseProjection
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedPhaseProjection
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedDefectDecay
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedDefectIntegral
+import DkMathTest.RH.CFBRCEtaCriticalMirrorDefectKernelFactorization
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
