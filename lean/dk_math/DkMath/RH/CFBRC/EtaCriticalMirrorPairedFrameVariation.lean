@@ -85,7 +85,7 @@ theorem etaPairFrameLeftEndpoint_tendsto_atTop :
       Tendsto (fun n : ℕ => (n : ℝ)) atTop atTop :=
     tendsto_natCast_atTop_atTop
   have h := hcast.comp tendsto_two_mul_add_one_atTop
-  simpa [etaPairFrameLeftEndpoint, Function.comp_def] using h
+  simpa only
 
 /--
 At every nonreal point, the cumulative absolute pair-frame motion diverges
