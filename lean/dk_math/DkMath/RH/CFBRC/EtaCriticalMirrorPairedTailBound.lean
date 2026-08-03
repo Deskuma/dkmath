@@ -215,20 +215,7 @@ theorem norm_etaCriticalMirrorDefectPairTail_le
           (∑' j : ℕ,
             (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) :=
     (hOriginalSummable.hasSum.mul_left ‖s‖).tsum_eq
-  have hAdd :
-      (∑' j : ℕ,
-        ‖criticalMirror s‖ *
-            (((j + K + 1 : ℕ) : ℝ) ^
-              (-(criticalMirror s).re - 1)) +
-          ‖s‖ *
-            (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) =
-        (∑' j : ℕ,
-          ‖criticalMirror s‖ *
-            (((j + K + 1 : ℕ) : ℝ) ^
-              (-(criticalMirror s).re - 1))) +
-          (∑' j : ℕ,
-            ‖s‖ *
-              (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) :=
+  have hAdd :=
     (hMirrorScaled.hasSum.add hOriginalScaled.hasSum).tsum_eq
   have hmajorantTsum :
       (∑' j : ℕ,
