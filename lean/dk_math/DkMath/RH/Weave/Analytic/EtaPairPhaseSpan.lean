@@ -76,11 +76,13 @@ theorem etaPairDerivativePhaseSpan_le_inv
     field_simp [ha.ne']
     ring
   rw [hratio] at hlog
+  have hlog' : Real.log (b / a) ≤ a⁻¹ := by
+    simpa [one_div] using hlog
   unfold etaPairDerivativePhaseSpan
   change
     |s.im| * Real.log (b / a) ≤ |s.im| / a
-  rw [div_eq_mul_inv] at hlog ⊢
-  exact mul_le_mul_of_nonneg_left hlog (abs_nonneg s.im)
+  rw [div_eq_mul_inv]
+  exact mul_le_mul_of_nonneg_left hlog' (abs_nonneg s.im)
 
 /-- The affine odd-index subsequence `k ↦ 2k+1` is cofinal. -/
 theorem tendsto_two_mul_add_one_atTop :
@@ -101,10 +103,11 @@ theorem etaPairDerivativePhaseSpan_tendsto_zero
         (fun k : ℕ =>
           |s.im| / (((2 * k + 1 : ℕ) : ℝ)))
         atTop (nhds 0) := by
-    simpa only [Function.comp_apply, Nat.cast_add, Nat.cast_mul,
-      Nat.cast_ofNat] using
+    have hcomp :=
       (tendsto_const_div_atTop_nhds_zero_nat (|s.im| : ℝ)).comp
         tendsto_two_mul_add_one_atTop
+    convert hcomp using 1 <;>
+      norm_num [Function.comp_apply, Nat.cast_add, Nat.cast_mul]
   exact
     tendsto_of_tendsto_of_tendsto_of_le_of_le'
       tendsto_const_nhds hupper
