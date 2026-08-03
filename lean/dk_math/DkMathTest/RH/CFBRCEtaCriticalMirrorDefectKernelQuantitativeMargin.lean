@@ -16,6 +16,7 @@ namespace DkMathTest.RH.CFBRCEtaCriticalMirrorDefectKernelQuantitativeMargin
 
 open Filter
 open DkMath.RH.CFBRCProjection
+open DkMath.RH.Weave.Analytic
 
 example
     (s : ℂ) (k : ℕ) {x : ℝ}
