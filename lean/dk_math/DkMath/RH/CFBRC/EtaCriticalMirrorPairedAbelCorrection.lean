@@ -91,6 +91,11 @@ theorem norm_etaCriticalMirrorPairedFrameCorrectionTerm_le_majorant
     exact norm_etaCriticalMirrorDefectPairTail_le hsre hmre (by omega)
   have hframe := etaPairFrameStepSpan_le_two_mul_inv s k
   have hrecip := abs_im_div_etaPairFrameLeftEndpoint_le_succ s k
+  have hleft : 0 < etaPairFrameLeftEndpoint k :=
+    etaPairFrameLeftEndpoint_pos k
+  have hcoefficientNonneg :
+      0 ≤ 2 * (2 * (|s.im| / etaPairFrameLeftEndpoint k)) := by
+    positivity
   have htailNonneg :
       0 ≤
         ‖criticalMirror s‖ *
@@ -99,6 +104,10 @@ theorem norm_etaCriticalMirrorPairedFrameCorrectionTerm_le_majorant
           ‖s‖ *
             (((((k + 1 : ℕ) : ℝ)) ^ (-s.re)) / s.re) := by
     positivity
+  have hcoefficient :
+      2 * (2 * (|s.im| / etaPairFrameLeftEndpoint k)) ≤
+        4 * (|s.im| / (((k + 1 : ℕ) : ℝ))) := by
+    nlinarith [hrecip]
   calc
     ‖etaCriticalMirrorPairedFrameCorrectionTerm s k‖ ≤
         2 * etaPairFrameStepSpan s k *
@@ -115,7 +124,7 @@ theorem norm_etaCriticalMirrorPairedFrameCorrectionTerm_le_majorant
                 (criticalMirror s).re) +
             ‖s‖ *
               (((((k + 1 : ℕ) : ℝ)) ^ (-s.re)) / s.re)) := by
-      exact mul_le_mul_of_nonneg_left hpartial (by positivity)
+      exact mul_le_mul_of_nonneg_left hpartial hcoefficientNonneg
     _ ≤
         4 * (|s.im| / (((k + 1 : ℕ) : ℝ))) *
           (‖criticalMirror s‖ *
@@ -123,7 +132,7 @@ theorem norm_etaCriticalMirrorPairedFrameCorrectionTerm_le_majorant
                 (criticalMirror s).re) +
             ‖s‖ *
               (((((k + 1 : ℕ) : ℝ)) ^ (-s.re)) / s.re)) := by
-      nlinarith
+      exact mul_le_mul_of_nonneg_right hcoefficient htailNonneg
     _ = etaCriticalMirrorPairedFrameCorrectionMajorant s k := by
       have hpowMirror :=
         one_div_nat_succ_mul_rpow_neg_eq (criticalMirror s).re k
