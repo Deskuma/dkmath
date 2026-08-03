@@ -55,7 +55,8 @@ noncomputable def etaPairBaseRotation
 theorem norm_etaPairBaseRotation
     (s : ℂ) (k : ℕ) :
     ‖etaPairBaseRotation s k‖ = 1 := by
-  simp [etaPairBaseRotation]
+  rw [etaPairBaseRotation, Complex.norm_exp]
+  simp
 
 /--
 Residual real phase after removing the pair-left base angle.
@@ -78,14 +79,16 @@ noncomputable def etaPairResidualRotation
 theorem norm_etaPairResidualRotation
     (s : ℂ) (k : ℕ) (x : ℝ) :
     ‖etaPairResidualRotation s k x‖ = 1 := by
-  simp [etaPairResidualRotation]
+  rw [etaPairResidualRotation, Complex.norm_exp]
+  simp
 
 /-- The real projection of the residual rotation is its residual cosine. -/
 theorem etaPairResidualRotation_re
     (s : ℂ) (k : ℕ) (x : ℝ) :
     (etaPairResidualRotation s k x).re =
       Real.cos (etaPairResidualPhase s k x) := by
-  simp [etaPairResidualRotation]
+  rw [etaPairResidualRotation, Complex.exp_re]
+  simp
 
 /--
 Inside one natural eta-pair interval, the absolute residual phase is bounded
