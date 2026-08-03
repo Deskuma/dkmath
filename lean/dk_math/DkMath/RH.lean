@@ -65,6 +65,7 @@ import DkMath.RH.Weave.Analytic.EtaEvenPairing
 import DkMath.RH.Weave.Analytic.EtaPairedLimit
 import DkMath.RH.Weave.Analytic.EtaTermDecay
 import DkMath.RH.Weave.Analytic.EtaPairDerivative
+import DkMath.RH.Weave.Analytic.EtaPairIntegral
 import DkMath.RH.Weave.Analytic.EtaAbsoluteConvergence
 import DkMath.RH.Weave.Analytic.EtaFiniteFactorization
 import DkMath.RH.Weave.Analytic.EtaZetaIdentification
