@@ -54,7 +54,7 @@ example
       Complex.exp
         (Complex.I *
           ((((Finset.range N).sum
-            (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ)) :=
+            (fun j : ℕ => etaPairFrameStepPhase s (K + j)) : ℝ) : ℂ))) :=
   etaPairFrameBlockRotation_eq_exp s K N
 
 example
