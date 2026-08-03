@@ -61,13 +61,13 @@ theorem etaCriticalMirrorProjectedDefectEndpoint_succ
     Finset.sum_range_succ]
 
 /--
-A common-half-plane certificate for the projected defect terms.
+A common-half-plane witness package for the projected defect terms.
 
 Every projected term lies in the closed positive half-line and at least one
-term lies in its interior.  This is the exact phase-separation input needed to
-prevent cancellation of the one-sided mirror-weight pressure.
+term lies in its interior.  The rotation is genuine witness data, so this is a
+`Type`-valued package rather than a proof-only proposition.
 -/
-structure EtaCriticalMirrorDefectHalfPlaneCertificate (s : ℂ) : Prop where
+structure EtaCriticalMirrorDefectHalfPlaneCertificate (s : ℂ) where
   rotation : ℂ
   nonnegative :
     ∀ m : ℕ, 0 ≤ etaCriticalMirrorProjectedDefectTerm rotation s m
@@ -82,7 +82,7 @@ theorem EtaCriticalMirrorDefectHalfPlaneCertificate.eventually_pos_lowerBound
         c ≤ etaCriticalMirrorProjectedDefectEndpoint N cert.rotation s := by
   rcases cert.positive with ⟨m, hm⟩
   refine ⟨etaCriticalMirrorProjectedDefectTerm cert.rotation s m, hm, ?_⟩
-  refine eventually_atTop.2 ⟨m + 1, ?_⟩
+  refine eventually_atTop.2 ⟨(m + 1 : ℕ), ?_⟩
   intro N hN
   rw [etaCriticalMirrorProjectedDefectEndpoint_eq_sum]
   apply Finset.single_le_sum
@@ -127,7 +127,14 @@ theorem etaCriticalMirrorProjectedDefectEndpoint_tendsto_zero_of_nontrivialRiema
         atTop (nhds (ω * 0)) :=
     hω.mul hdefect
   have hre := Complex.continuous_re.tendsto (ω * 0)
-  simpa [etaCriticalMirrorProjectedDefectEndpoint] using hre.comp hmul
+  have hcomp :
+      Tendsto
+        (fun N : ℕ =>
+          (ω * etaCriticalMirrorTransportDefectEndpoint N s).re)
+        atTop (nhds 0) := by
+    simpa only [Function.comp_apply, mul_zero, Complex.zero_re] using
+      hre.comp hmul
+  simpa only [etaCriticalMirrorProjectedDefectEndpoint] using hcomp
 
 /--
 A nonreal nontrivial zeta zero cannot carry a common-half-plane defect
@@ -136,7 +143,7 @@ completed-zeta mirror relation forces the projected defect to vanish.
 -/
 theorem not_etaCriticalMirrorDefectHalfPlaneCertificate_of_nontrivialRiemannZetaZero
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) (him : s.im ≠ 0) :
-    ¬ EtaCriticalMirrorDefectHalfPlaneCertificate s := by
+    EtaCriticalMirrorDefectHalfPlaneCertificate s → False := by
   intro cert
   exact
     not_tendsto_etaCriticalMirrorProjectedDefectEndpoint_zero_of_halfPlane cert
@@ -144,11 +151,11 @@ theorem not_etaCriticalMirrorDefectHalfPlaneCertificate_of_nontrivialRiemannZeta
         hs him)
 
 /--
-Minimal off-critical phase-separation obligation.  It asserts only that an
-off-critical point supplies one common-half-plane certificate for its defect
-terms; it does not assume the critical-line conclusion.
+Minimal off-critical phase-separation witness provider.  It supplies one
+common-half-plane certificate whenever the point is off the critical line; it
+does not assume the critical-line conclusion.
 -/
-def EtaCriticalMirrorOffCriticalHalfPlaneSeparation (s : ℂ) : Prop :=
+def EtaCriticalMirrorOffCriticalHalfPlaneSeparation (s : ℂ) : Type :=
   s.re ≠ (1 : ℝ) / 2 → EtaCriticalMirrorDefectHalfPlaneCertificate s
 
 /--
