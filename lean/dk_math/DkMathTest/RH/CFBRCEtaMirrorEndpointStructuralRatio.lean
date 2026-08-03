@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.EtaMirrorEndpointDefinedShares
+import DkMath.RH.CFBRC.EtaMirrorEndpointRegularizedLimits
 
 #print "file: DkMathTest.RH.CFBRCEtaMirrorEndpointStructuralRatio"
 
@@ -65,6 +66,29 @@ example (N : ℕ) (s : ℂ)
     ¬ etaMirrorEndpointCoreShareDefined N s ∧
       ¬ etaMirrorEndpointGapShareDefined N s := by
   exact etaMirrorEndpointIndividualShares_not_defined_of_outer_eq_zero N s hOuter
+
+example (N : ℕ) (s : ℂ) {ε : ℝ}
+    (hε : ε ≠ -etaMirrorEndpointOuterBig N s) :
+    etaMirrorEndpointRegularizedTotalShare N s ε = 1 := by
+  exact etaMirrorEndpointRegularizedTotalShare_eq_one_of_offset_ne_neg N s hε
+
+example (N : ℕ) (s : ℂ) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin
+        (-etaMirrorEndpointOuterBig N s)
+        ({-etaMirrorEndpointOuterBig N s}ᶜ : Set ℝ))
+      (nhds 1) := by
+  exact tendsto_etaMirrorEndpointRegularizedTotalShare_punctured N s
+
+example (N : ℕ) (s : ℂ) :
+    Filter.Tendsto
+      (fun ε : ℝ => etaMirrorEndpointRegularizedTotalShare N s ε)
+      (nhdsWithin
+        (-etaMirrorEndpointOuterBig N s)
+        (Set.Ioi (-etaMirrorEndpointOuterBig N s)))
+      (nhds 1) := by
+  exact tendsto_etaMirrorEndpointRegularizedTotalShare_right N s
 
 example (N : ℕ) (s : ℂ) {ε : ℝ}
     (hOuter : etaMirrorEndpointOuterBig N s = 0)
