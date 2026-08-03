@@ -43,21 +43,13 @@ theorem etaCriticalMirrorRotatedDefectProjectionPartial_succ
     etaCriticalMirrorSignedVerticalProjection,
     Finset.sum_range_succ, mul_add]
 
-/-- A nontrivial zeta zero is nonzero because its real part is positive. -/
-private theorem nontrivialRiemannZetaZero_ne_zero
-    {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
-    s ≠ 0 := by
-  intro hs0
-  have hpos := nontrivialRiemannZetaZero_re_pos hs
-  simpa [hs0] using hpos
-
 /-- The critical mirror of a nontrivial zeta zero is also nonzero. -/
 private theorem criticalMirror_ne_zero_of_nontrivialRiemannZetaZero
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
     criticalMirror s ≠ 0 := by
   intro hm0
   have hpos := criticalMirror_re_pos_of_nontrivialRiemannZetaZero hs
-  simpa [hm0] using hpos
+  simp [hm0] at hpos
 
 /--
 Right of the critical line, the projected moving-frame partial sums are
@@ -126,7 +118,7 @@ theorem etaCriticalMirrorRotatedDefectProjectionPartial_tendsto_neg_correction_p
       Continuous (etaCriticalMirrorSignedVerticalProjection s) := by
     unfold etaCriticalMirrorSignedVerticalProjection
     fun_prop
-  simpa [etaCriticalMirrorRotatedDefectProjectionPartial] using
-    hcontinuous.continuousAt.comp hcomplex
+  simpa [etaCriticalMirrorRotatedDefectProjectionPartial, Function.comp_def] using
+    hcontinuous.continuousAt.tendsto.comp hcomplex
 
 end DkMath.RH.CFBRCProjection
