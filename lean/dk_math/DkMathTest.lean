@@ -46,6 +46,7 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelLimitSide
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelProjectionTail
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameVariation
 import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameGaugeAudit
+import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameBlockAlignment
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
