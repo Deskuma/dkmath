@@ -16,5 +16,6 @@ import DkMathTest.RH.CFBRCEtaKUSMirrorGapBridgeAudit
 import DkMathTest.RH.CFBRCEtaMirrorEndpointPairEnergy
 import DkMathTest.RH.CFBRCEtaMirrorEndpointOuterNormalization
 import DkMathTest.RH.CFBRCEtaMirrorEndpointStructuralRatio
+import DkMathTest.RH.CFBRCEtaMirrorEndpointNormalizationState
 
 #print "file: DkMathTest"
