@@ -33,7 +33,7 @@ example
 
 example
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) (him : s.im ≠ 0) :
-    ¬ EtaCriticalMirrorDefectHalfPlaneCertificate s :=
+    EtaCriticalMirrorDefectHalfPlaneCertificate s → False :=
   not_etaCriticalMirrorDefectHalfPlaneCertificate_of_nontrivialRiemannZetaZero
     hs him
 
