@@ -112,10 +112,10 @@ theorem etaCriticalMirrorDefectCoefficient_eq_zero_of_re_eq_half
     (centeredSigma_eq_zero_iff s.re).2 hre
   have hweight : etaCriticalMirrorContinuousWeight s x = 1 := by
     simp [etaCriticalMirrorContinuousWeight, hcenter]
+  have hmirror : criticalMirror s = s :=
+    (criticalMirror_eq_self_iff_re_eq_half s).2 hre
   unfold etaCriticalMirrorDefectCoefficient
-  rw [hweight]
-  simp only [mul_one]
-  exact (criticalMirror_eq_self_iff_re_eq_half s).2 hre |>.sub_self
+  rw [hweight, mul_one, hmirror, sub_self]
 
 /-- On the critical line the continuous paired-defect kernel vanishes pointwise. -/
 theorem etaCriticalMirrorDefectPairIntegralKernel_eq_zero_of_re_eq_half
