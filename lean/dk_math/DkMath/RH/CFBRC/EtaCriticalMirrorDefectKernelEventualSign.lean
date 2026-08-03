@@ -50,7 +50,8 @@ theorem etaPairBaseRotation_mul_cpow_eq_radial_mul_residual
   congr 1
   rw [← Complex.ofReal_log hx.le]
   rw [← Complex.re_add_im s]
-  push_cast
+  rw [Complex.I]
+  simp
   ring
 
 /--
