@@ -1,10 +1,9 @@
 # 260802 RH–CFBRC Off-Critical Exclusion
 
-- Date: 2026-08-02 / Update: 2026-08-04  4:30
+- Date: 2026-08-02 / Update: 2026/08/04  4:44
 - Authors: D. and Wise Wolf
-- Base branch: `nightly`
-- Work branch: `wip/RH-CFBRC-off-critical-exclusion-260802-v0`
-- merge branch: `wip/RH-CFBRC-off-critical-exclusion-260802-v1` (squash)
+- Base branch: `develop`
+- Work branch: `wip/RH-CFBRC-off-critical-exclusion-260802-v2`
 - Status: active
 
 ## Purpose
