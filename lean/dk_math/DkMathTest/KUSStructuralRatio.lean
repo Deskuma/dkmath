@@ -47,6 +47,24 @@ example {x : ℝ} :
     ¬ DefinedRatioWitness ℝ x 0 := by
   exact DefinedRatioWitness.not_defined_of_denominator_eq_zero x 0 rfl
 
+example {x ε : ℝ} (hε : ε ≠ -x) :
+    regularizedSelfRatio x ε = 1 := by
+  exact regularizedSelfRatio_eq_one_of_offset_ne_neg hε
+
+example (x : ℝ) :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio x ε)
+      (nhdsWithin (-x) ({-x}ᶜ : Set ℝ))
+      (nhds 1) := by
+  exact tendsto_regularizedSelfRatio_punctured x
+
+example (x : ℝ) :
+    Filter.Tendsto
+      (fun ε : ℝ => regularizedSelfRatio x ε)
+      (nhdsWithin (-x) (Set.Ioi (-x)))
+      (nhds 1) := by
+  exact tendsto_regularizedSelfRatio_right x
+
 example {ε : ℝ} (hε : 0 < ε) :
     regularizedSelfRatio 0 ε = 1 := by
   exact regularizedZeroSelfRatio_eq_one hε
