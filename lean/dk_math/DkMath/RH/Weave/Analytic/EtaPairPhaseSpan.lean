@@ -106,8 +106,15 @@ theorem etaPairDerivativePhaseSpan_tendsto_zero
     have hcomp :=
       (tendsto_const_div_atTop_nhds_zero_nat (|s.im| : ℝ)).comp
         tendsto_two_mul_add_one_atTop
-    convert hcomp using 1 <;>
-      norm_num [Function.comp_apply, Nat.cast_add, Nat.cast_mul]
+    have hfun :
+        (fun k : ℕ =>
+          |s.im| / (((2 * k + 1 : ℕ) : ℝ))) =
+          ((fun n : ℕ => |s.im| / (n : ℝ)) ∘
+            fun k : ℕ => 2 * k + 1) := by
+      funext k
+      simp [Function.comp_apply, Nat.cast_add, Nat.cast_mul]
+    rw [hfun]
+    exact hcomp
   exact
     tendsto_of_tendsto_of_tendsto_of_le_of_le'
       tendsto_const_nhds hupper
