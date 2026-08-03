@@ -184,6 +184,52 @@ theorem norm_etaCriticalMirrorDefectPairTail_le
       (summable_mul_left_iff hzero).1
         (by simpa [Nat.add_assoc] using
           (summable_nat_add_iff K).2 h)
+  have hMirrorScaled :
+      Summable
+        (fun j : ℕ =>
+          ‖criticalMirror s‖ *
+            (((j + K + 1 : ℕ) : ℝ) ^
+              (-(criticalMirror s).re - 1))) :=
+    hMirrorSummable.mul_left _
+  have hOriginalScaled :
+      Summable
+        (fun j : ℕ =>
+          ‖s‖ *
+            (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) :=
+    hOriginalSummable.mul_left _
+  have hMirrorFactor :
+      (∑' j : ℕ,
+        ‖criticalMirror s‖ *
+          (((j + K + 1 : ℕ) : ℝ) ^
+            (-(criticalMirror s).re - 1))) =
+        ‖criticalMirror s‖ *
+          (∑' j : ℕ,
+            (((j + K + 1 : ℕ) : ℝ) ^
+              (-(criticalMirror s).re - 1))) :=
+    (hMirrorSummable.hasSum.mul_left ‖criticalMirror s‖).tsum_eq
+  have hOriginalFactor :
+      (∑' j : ℕ,
+        ‖s‖ *
+          (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) =
+        ‖s‖ *
+          (∑' j : ℕ,
+            (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) :=
+    (hOriginalSummable.hasSum.mul_left ‖s‖).tsum_eq
+  have hAdd :
+      (∑' j : ℕ,
+        ‖criticalMirror s‖ *
+            (((j + K + 1 : ℕ) : ℝ) ^
+              (-(criticalMirror s).re - 1)) +
+          ‖s‖ *
+            (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) =
+        (∑' j : ℕ,
+          ‖criticalMirror s‖ *
+            (((j + K + 1 : ℕ) : ℝ) ^
+              (-(criticalMirror s).re - 1))) +
+          ∑' j : ℕ,
+            ‖s‖ *
+              (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)) :=
+    (hMirrorScaled.hasSum.add hOriginalScaled.hasSum).tsum_eq
   have hmajorantTsum :
       (∑' j : ℕ,
         etaCriticalMirrorDefectPairMajorant s (j + K)) =
@@ -195,10 +241,7 @@ theorem norm_etaCriticalMirrorDefectPairTail_le
             (∑' j : ℕ,
               (((j + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) := by
     unfold etaCriticalMirrorDefectPairMajorant
-    rw [tsum_add]
-    · rw [tsum_mul_left, tsum_mul_left]
-    · exact hMirrorSummable.mul_left _
-    · exact hOriginalSummable.mul_left _
+    rw [hAdd, hMirrorFactor, hOriginalFactor]
   rw [hmajorantTsum] at hnorm
   exact hnorm.trans <|
     add_le_add
