@@ -115,7 +115,7 @@ theorem norm_etaCriticalMirrorPairedFrameCorrectionTerm_le_majorant
                 (criticalMirror s).re) +
             ‖s‖ *
               (((((k + 1 : ℕ) : ℝ)) ^ (-s.re)) / s.re)) := by
-      gcongr
+      exact mul_le_mul_of_nonneg_left hpartial (by positivity)
     _ ≤
         4 * (|s.im| / (((k + 1 : ℕ) : ℝ))) *
           (‖criticalMirror s‖ *
