@@ -106,10 +106,16 @@ theorem criticalMirror_nontrivialRiemannZetaZero
     ?_, ?_⟩
   · rintro ⟨n, hn⟩
     have hre := congrArg Complex.re hn
-    have hn0 : 0 ≤ (n : ℝ) := Nat.cast_nonneg n
     have hpos := criticalMirror_re_pos_of_nontrivialRiemannZetaZero hs
+    have hpos' : 0 < 1 - s.re := by
+      simpa [criticalMirror] using hpos
     simp [criticalMirror] at hre
-    nlinarith
+    have hneg : -(2 * ((n : ℝ) + 1)) ≤ 0 := by
+      exact neg_nonpos.mpr (by positivity)
+    have hnonpos : 1 - s.re ≤ 0 := by
+      rw [hre]
+      exact hneg
+    exact (not_lt_of_ge hnonpos) hpos'
   · intro hone
     have hre := congrArg Complex.re hone
     have hspos := nontrivialRiemannZetaZero_re_pos hs
