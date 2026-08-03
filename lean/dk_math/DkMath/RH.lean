@@ -59,6 +59,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedDefectDecay
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedDefectIntegral
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectKernelFactorization
 import DkMath.RH.CFBRC.EtaCriticalMirrorContinuousWeightPressure
+import DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientProjection
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedRotatingFrame
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedTail
