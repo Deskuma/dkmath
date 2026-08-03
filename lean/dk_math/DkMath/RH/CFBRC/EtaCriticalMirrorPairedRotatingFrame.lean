@@ -58,6 +58,140 @@ theorem norm_etaPairBaseRotation
   rw [etaPairBaseRotation, Complex.norm_exp]
   simp
 
+/-- Real angular increment from the `k`-th pair frame to the next one. -/
+noncomputable def etaPairFrameStepPhase
+    (s : ℂ) (k : ℕ) : ℝ :=
+  s.im *
+    (Real.log (etaPairFrameLeftEndpoint (k + 1)) -
+      Real.log (etaPairFrameLeftEndpoint k))
+
+/-- Absolute angular increment between two adjacent pair frames. -/
+noncomputable def etaPairFrameStepSpan
+    (s : ℂ) (k : ℕ) : ℝ :=
+  |s.im| *
+    Real.log
+      (etaPairFrameLeftEndpoint (k + 1) /
+        etaPairFrameLeftEndpoint k)
+
+/-- The next pair frame is obtained by the exact adjacent frame-step rotation. -/
+theorem etaPairBaseRotation_succ
+    (s : ℂ) (k : ℕ) :
+    etaPairBaseRotation s (k + 1) =
+      etaPairBaseRotation s k *
+        Complex.exp
+          (Complex.I *
+            ((etaPairFrameStepPhase s k : ℝ) : ℂ)) := by
+  rw [etaPairBaseRotation, etaPairBaseRotation, ← Complex.exp_add]
+  congr 1
+  rw [etaPairFrameStepPhase]
+  push_cast
+  ring
+
+/-- The frame-step span is exactly the absolute adjacent phase increment. -/
+theorem abs_etaPairFrameStepPhase
+    (s : ℂ) (k : ℕ) :
+    |etaPairFrameStepPhase s k| =
+      etaPairFrameStepSpan s k := by
+  have ha : 0 < etaPairFrameLeftEndpoint k :=
+    etaPairFrameLeftEndpoint_pos k
+  have hb : 0 < etaPairFrameLeftEndpoint (k + 1) :=
+    etaPairFrameLeftEndpoint_pos (k + 1)
+  have hab :
+      etaPairFrameLeftEndpoint k ≤
+        etaPairFrameLeftEndpoint (k + 1) := by
+    unfold etaPairFrameLeftEndpoint
+    exact_mod_cast (by omega : 2 * k + 1 ≤ 2 * (k + 1) + 1)
+  have hlogNonneg :
+      0 ≤
+        Real.log (etaPairFrameLeftEndpoint (k + 1)) -
+          Real.log (etaPairFrameLeftEndpoint k) :=
+    sub_nonneg.mpr (Real.log_le_log ha hab)
+  rw [etaPairFrameStepPhase, etaPairFrameStepSpan, abs_mul,
+    abs_of_nonneg hlogNonneg, Real.log_div hb.ne' ha.ne']
+
+/-- The adjacent frame-step span is always nonnegative. -/
+theorem etaPairFrameStepSpan_nonneg
+    (s : ℂ) (k : ℕ) :
+    0 ≤ etaPairFrameStepSpan s k := by
+  rw [← abs_etaPairFrameStepPhase]
+  exact abs_nonneg _
+
+/--
+The adjacent pair-frame angle is bounded by twice the reciprocal left
+endpoint.  Unlike the in-pair phase width, the frame moves across two integer
+steps: `(2k+1) → (2k+3)`.
+-/
+theorem etaPairFrameStepSpan_le_two_mul_inv
+    (s : ℂ) (k : ℕ) :
+    etaPairFrameStepSpan s k ≤
+      2 *
+        (|s.im| / etaPairFrameLeftEndpoint k) := by
+  let a : ℝ := etaPairFrameLeftEndpoint k
+  let b : ℝ := etaPairFrameLeftEndpoint (k + 1)
+  have ha : 0 < a := by
+    dsimp [a]
+    exact etaPairFrameLeftEndpoint_pos k
+  have hb : 0 < b := by
+    dsimp [b]
+    exact etaPairFrameLeftEndpoint_pos (k + 1)
+  have hstep : b = a + 2 := by
+    dsimp [a, b, etaPairFrameLeftEndpoint]
+    norm_num
+    ring
+  have hlog : Real.log (b / a) ≤ b / a - 1 :=
+    Real.log_le_sub_one_of_pos (div_pos hb ha)
+  have hratio : b / a - 1 = 2 / a := by
+    rw [hstep]
+    field_simp [ha.ne']
+    ring
+  rw [hratio] at hlog
+  unfold etaPairFrameStepSpan
+  change |s.im| * Real.log (b / a) ≤ 2 * (|s.im| / a)
+  calc
+    |s.im| * Real.log (b / a) ≤
+        |s.im| * (2 / a) :=
+      mul_le_mul_of_nonneg_left hlog (abs_nonneg s.im)
+    _ = 2 * (|s.im| / a) := by ring
+
+/-- Adjacent eta-pair frame increments shrink to zero. -/
+theorem etaPairFrameStepSpan_tendsto_zero
+    (s : ℂ) :
+    Tendsto (fun k : ℕ => etaPairFrameStepSpan s k)
+      atTop (nhds 0) := by
+  have hbase :
+      Tendsto
+        (fun k : ℕ =>
+          |s.im| / etaPairFrameLeftEndpoint k)
+        atTop (nhds 0) := by
+    have hcomp :=
+      (tendsto_const_div_atTop_nhds_zero_nat (|s.im| : ℝ)).comp
+        tendsto_two_mul_add_one_atTop
+    convert hcomp using 1
+    funext k
+    norm_num [etaPairFrameLeftEndpoint, Function.comp_apply,
+      Nat.cast_add, Nat.cast_mul]
+  have hupper :
+      Tendsto
+        (fun k : ℕ =>
+          2 * (|s.im| / etaPairFrameLeftEndpoint k))
+        atTop (nhds 0) := by
+    simpa using hbase.const_mul 2
+  exact
+    tendsto_of_tendsto_of_tendsto_of_le_of_le'
+      tendsto_const_nhds hupper
+      (Eventually.of_forall fun k =>
+        etaPairFrameStepSpan_nonneg s k)
+      (Eventually.of_forall fun k =>
+        etaPairFrameStepSpan_le_two_mul_inv s k)
+
+/-- Eventually adjacent pair frames differ by less than a half-plane angle. -/
+theorem eventually_etaPairFrameStepSpan_lt_pi_div_two
+    (s : ℂ) :
+    ∀ᶠ k : ℕ in atTop,
+      etaPairFrameStepSpan s k < Real.pi / 2 :=
+  (etaPairFrameStepSpan_tendsto_zero s).eventually_lt_const
+    (by positivity)
+
 /--
 Residual real phase after removing the pair-left base angle.
 
