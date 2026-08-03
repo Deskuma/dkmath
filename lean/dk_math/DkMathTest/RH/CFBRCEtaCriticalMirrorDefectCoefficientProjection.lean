@@ -52,4 +52,41 @@ example (s : ℂ) (him : s.im ≠ 0)
   etaCriticalMirrorSignedVerticalProjection_defectCoefficient_sign_trichotomy
     s him hx
 
+example (s c r : ℂ) :
+    |etaCriticalMirrorSignedVerticalProjection s (c * r) -
+        etaCriticalMirrorSignedVerticalProjection s c| ≤
+      |s.im| * ‖c‖ * ‖r - 1‖ :=
+  abs_etaCriticalMirrorSignedVerticalProjection_mul_sub_le s c r
+
+example (s : ℂ) (k : ℕ) (x : ℝ)
+    (hphase : |etaPairResidualPhase s k x| ≤ 1) :
+    ‖etaPairResidualRotation s k x - 1‖ ≤
+      2 * |etaPairResidualPhase s k x| :=
+  norm_etaPairResidualRotation_sub_one_le_two_mul_abs_phase
+    s k x hphase
+
+example (s : ℂ) (k : ℕ) {x : ℝ}
+    (hleft : etaPairFrameLeftEndpoint k ≤ x)
+    (hright : x ≤ etaPairFrameRightEndpoint k)
+    (hspan : etaPairDerivativePhaseSpan s k ≤ 1) :
+    |etaCriticalMirrorSignedVerticalProjection s
+        (etaCriticalMirrorDefectCoefficient s x *
+          etaPairResidualRotation s k x) -
+      etaCriticalMirrorSignedVerticalProjection s
+        (etaCriticalMirrorDefectCoefficient s x)| ≤
+      2 * |s.im| * ‖etaCriticalMirrorDefectCoefficient s x‖ *
+        etaPairDerivativePhaseSpan s k :=
+  abs_etaCriticalMirrorSignedVerticalProjection_defectCoefficient_mul_residual_sub_le_phaseSpan
+    s k hleft hright hspan
+
+example {s c r : ℂ}
+    (hbase : 0 < etaCriticalMirrorSignedVerticalProjection s c)
+    (herr :
+      |etaCriticalMirrorSignedVerticalProjection s (c * r) -
+        etaCriticalMirrorSignedVerticalProjection s c| <
+        etaCriticalMirrorSignedVerticalProjection s c) :
+    0 < etaCriticalMirrorSignedVerticalProjection s (c * r) :=
+  etaCriticalMirrorSignedVerticalProjection_mul_pos_of_rotation_error_lt
+    hbase herr
+
 end DkMathTest.RH.CFBRCEtaCriticalMirrorDefectCoefficientProjection
