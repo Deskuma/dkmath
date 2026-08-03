@@ -21,6 +21,29 @@ example (s : ℂ) (k : ℕ) :
     ‖etaPairBaseRotation s k‖ = 1 :=
   norm_etaPairBaseRotation s k
 
+example (s : ℂ) (k : ℕ) :
+    etaPairBaseRotation s (k + 1) =
+      etaPairBaseRotation s k *
+        Complex.exp
+          (Complex.I *
+            ((etaPairFrameStepPhase s k : ℝ) : ℂ)) :=
+  etaPairBaseRotation_succ s k
+
+example (s : ℂ) (k : ℕ) :
+    |etaPairFrameStepPhase s k| =
+      etaPairFrameStepSpan s k :=
+  abs_etaPairFrameStepPhase s k
+
+example (s : ℂ) (k : ℕ) :
+    etaPairFrameStepSpan s k ≤
+      2 * (|s.im| / etaPairFrameLeftEndpoint k) :=
+  etaPairFrameStepSpan_le_two_mul_inv s k
+
+example (s : ℂ) :
+    Tendsto (fun k : ℕ => etaPairFrameStepSpan s k)
+      atTop (nhds 0) :=
+  etaPairFrameStepSpan_tendsto_zero s
+
 example (s : ℂ) (k : ℕ) (x : ℝ) :
     ‖etaPairResidualRotation s k x‖ = 1 :=
   norm_etaPairResidualRotation s k x
