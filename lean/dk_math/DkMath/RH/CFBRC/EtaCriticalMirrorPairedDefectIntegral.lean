@@ -83,22 +83,6 @@ theorem etaCriticalMirrorDefectPairTerm_eq_intervalIntegral
   rw [← intervalIntegral.integral_sub hmInt hsInt]
   rfl
 
-/-- A nontrivial zeta zero is nonzero as a complex number. -/
-theorem nontrivialRiemannZetaZero_ne_zero
-    {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
-    s ≠ 0 := by
-  intro hs0
-  have hre := nontrivialRiemannZetaZero_re_pos hs
-  simp [hs0] at hre
-
-/-- The critical mirror of a nontrivial zeta zero is nonzero. -/
-theorem criticalMirror_ne_zero_of_nontrivialRiemannZetaZero
-    {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
-    criticalMirror s ≠ 0 := by
-  intro hm0
-  have hre := criticalMirror_re_pos_of_nontrivialRiemannZetaZero hs
-  simp [hm0] at hre
-
 /-- Every nontrivial zeta zero has the exact paired-defect integral representation. -/
 theorem etaCriticalMirrorDefectPairTerm_eq_intervalIntegral_of_nontrivialRiemannZetaZero
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) (k : ℕ) :
@@ -108,7 +92,8 @@ theorem etaCriticalMirrorDefectPairTerm_eq_intervalIntegral_of_nontrivialRiemann
         etaCriticalMirrorDefectPairIntegralKernel s x :=
   etaCriticalMirrorDefectPairTerm_eq_intervalIntegral
     (nontrivialRiemannZetaZero_ne_zero hs)
-    (criticalMirror_ne_zero_of_nontrivialRiemannZetaZero hs)
+    (nontrivialRiemannZetaZero_ne_zero
+      (criticalMirror_nontrivialRiemannZetaZero hs))
     k
 
 end DkMath.RH.CFBRCProjection
