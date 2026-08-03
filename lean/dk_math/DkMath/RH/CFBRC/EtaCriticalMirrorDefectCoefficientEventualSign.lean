@@ -81,7 +81,8 @@ theorem eventually_etaCriticalMirrorSignedVerticalProjection_defectCoefficient_m
         (s.im ^ 2 / 2) *
           etaCriticalMirrorContinuousWeightR s x := by
     have hm := mul_lt_mul_of_pos_right hkSmall hweightPos
-    convert hm using 1 <;> ring
+    convert hm using 1
+    all_goals first | rfl | ring_nf
   exact
     etaCriticalMirrorSignedVerticalProjection_defectCoefficient_mul_residual_pos_of_right_margin
       s k hleft hright (le_of_lt hkSpan)
