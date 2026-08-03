@@ -53,6 +53,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorEndpointLimits
 import DkMath.RH.CFBRC.EtaCriticalMirrorEnergyCollapse
 import DkMath.RH.CFBRC.EtaCriticalMirrorWeightedTransport
 import DkMath.RH.CFBRC.EtaCriticalMirrorWeightPressure
+import DkMath.RH.CFBRC.EtaCriticalMirrorPhaseProjection
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
