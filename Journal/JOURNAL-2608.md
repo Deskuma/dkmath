@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-03
 
+### 23:58
+
+[KUS の零状態は係数だけを消して support を保持する](260803-2358-kus-zero-state-erases-the-coefficient-but-preserves-support.md)
+
+可視係数だけを $0$ へ差し替えながら、unit と従属 blueprint からなる support はそのまま保持し、由来の異なる零状態を区別する KUS の最小核を読む。
+
 ### 18:00
 
 [単位 support は unit と従属 blueprint を一体として束ねる](260803-1800-unit-support-binds-a-unit-to-its-dependent-blueprint.md)
