@@ -20,6 +20,10 @@ example :
     Tendsto (fun K : ℕ => K + 1) atTop atTop :=
   tendsto_nat_succ_atTop
 
+example :
+    Tendsto (fun K : ℕ => K - 1) atTop atTop :=
+  tendsto_nat_pred_atTop
+
 example {s : ℂ} (hs : NontrivialRiemannZetaZero s)
     (him : s.im ≠ 0) :
     Tendsto
@@ -51,6 +55,18 @@ example {s : ℂ} (hs : NontrivialRiemannZetaZero s)
         (-(∑' k : ℕ,
           etaCriticalMirrorPairedFrameCorrectionTerm s k))) :=
   etaCriticalMirrorRotatedDefectPairedPartial_succ_tendsto_neg_correction_tsum
+    hs him
+
+example {s : ℂ} (hs : NontrivialRiemannZetaZero s)
+    (him : s.im ≠ 0) :
+    Tendsto
+      (fun K : ℕ =>
+        etaCriticalMirrorRotatedDefectPairedPartial K s)
+      atTop
+      (nhds
+        (-(∑' k : ℕ,
+          etaCriticalMirrorPairedFrameCorrectionTerm s k))) :=
+  etaCriticalMirrorRotatedDefectPairedPartial_tendsto_neg_correction_tsum
     hs him
 
 end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedAbelLimit
