@@ -19,5 +19,6 @@ import DkMathTest.RH.CFBRCEtaMirrorEndpointStructuralRatio
 import DkMathTest.RH.CFBRCEtaMirrorEndpointNormalizationState
 import DkMathTest.RH.CFBRCCriticalMirrorZeroBridge
 import DkMathTest.RH.CFBRCEtaCriticalMirrorEndpointLimits
+import DkMathTest.RH.CFBRCEtaCriticalMirrorEnergyCollapse
 
 #print "file: DkMathTest"
