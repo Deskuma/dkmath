@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectCoefficientMargin
 import Mathlib.Tactic
+import DkMath.ABC.Basic
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorContinuousWeightThreshold"
 
@@ -31,7 +32,7 @@ private theorem eventually_two_le_etaPairFrameLeftEndpoint_rpow
   intro k hk
   have hMleN : M ≤ (N : ℝ) := by
     dsimp [N]
-    have hspec := Nat.ceil_spec M hM.le
+    have hspec := DkMath.ABC.Nat.ceil_spec M hM.le
     exact_mod_cast hspec.2
   have hNleLeft : (N : ℝ) ≤ etaPairFrameLeftEndpoint k := by
     unfold etaPairFrameLeftEndpoint
@@ -80,12 +81,13 @@ theorem eventually_etaCriticalMirrorContinuousWeightR_leftEndpoint_le_half_of_re
       1 / (etaPairFrameLeftEndpoint k ^ a) ≤ (1 : ℝ) / 2 :=
     one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 2) hk
   unfold etaCriticalMirrorContinuousWeightR
-  have hexp : 2 * centeredSigma s.re = -a := by
-    dsimp [a]
+  have hexp : 2 * centeredSigma s.re = -a :=
+    Eq.symm (InvolutiveNeg.neg_neg (2 * centeredSigma s.re))
   rw [hexp, Real.rpow_neg hleftPos.le a]
   simpa [one_div] using hinv
 
-/-- Right of the critical line, every point in every sufficiently late eta pair has weight at least two. -/
+/-- Right of the critical line,
+    every point in every sufficiently late eta pair has weight at least two. -/
 theorem eventually_two_le_etaCriticalMirrorContinuousWeightR_on_pair_of_half_lt_re
     {s : ℂ} (hre : (1 : ℝ) / 2 < s.re) :
     ∀ᶠ k : ℕ in atTop,
@@ -105,7 +107,8 @@ theorem eventually_two_le_etaCriticalMirrorContinuousWeightR_on_pair_of_half_lt_
     (Real.rpow_le_rpow
       (etaPairFrameLeftEndpoint_pos k).le hleft ha)
 
-/-- Left of the critical line, every point in every sufficiently late eta pair has weight at most one half. -/
+/-- Left of the critical line,
+    every point in every sufficiently late eta pair has weight at most one half. -/
 theorem eventually_etaCriticalMirrorContinuousWeightR_on_pair_le_half_of_re_lt_half
     {s : ℂ} (hre : s.re < (1 : ℝ) / 2) :
     ∀ᶠ k : ℕ in atTop,
