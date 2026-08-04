@@ -159,7 +159,8 @@ theorem etaCriticalMirrorSignedVerticalProjection_rotatedTail_eq_projectionTail
           (etaCriticalMirrorRotatedDefectPairTerm s (n + K)).im)
         ((etaCriticalMirrorRotatedDefectPairTail K s).im) := by
     unfold etaCriticalMirrorRotatedDefectPairTail
-    simpa using hsum.hasSum.map Complex.imCLM
+    simpa [Function.comp_apply, Function.comp_def] using
+      hsum.hasSum.map Complex.imCLM Complex.imCLM.continuous
   have hscaled := himag.mul_left s.im
   unfold etaCriticalMirrorSignedVerticalProjection
   unfold etaCriticalMirrorRotatedDefectProjectionTail
@@ -179,9 +180,8 @@ theorem etaCriticalMirrorPredecessorFrameWholeTailProjection_eq_rotatedProjectio
   unfold etaCriticalMirrorPairedFrameCorrectionProjectionTail
   rw [etaPairBaseRotation_pred_mul_defectPairTail_eq_rotatedTail_add_correctionTail
     hs him K]
+  rw [← etaCriticalMirrorSignedVerticalProjection_rotatedTail_eq_projectionTail hs K]
   unfold etaCriticalMirrorSignedVerticalProjection
   rw [Complex.add_im, mul_add]
-  rw [etaCriticalMirrorSignedVerticalProjection_rotatedTail_eq_projectionTail
-    hs K]
 
 end DkMath.RH.CFBRCProjection
