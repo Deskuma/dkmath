@@ -122,7 +122,7 @@ theorem etaCriticalMirrorRightPairMarginPowerLowerBound_le
         (s.im ^ 2 / 4) *
           etaPairFrameRightEndpoint k ^ (s.re - 2) := by
       rw [intervalIntegral.integral_const]
-      simp [etaPairFrameLeftEndpoint, etaPairFrameRightEndpoint]
+      norm_num [etaPairFrameLeftEndpoint, etaPairFrameRightEndpoint]
     _ ≤
       ∫ x : ℝ in
           (etaPairFrameLeftEndpoint k)..(etaPairFrameRightEndpoint k),
@@ -141,6 +141,7 @@ theorem etaCriticalMirrorRightPairMarginPowerLowerBound_le
         Real.antitoneOn_rpow_Ioi_of_exponent_nonpos
           (by linarith)
           hxpos (etaPairFrameRightEndpoint_pos k) hx.2
+      simp only [mul_assoc]
       rw [etaPairRadialDecay_mul_continuousWeightR_eq_rpow s hxpos]
       exact mul_le_mul_of_nonneg_left hpow (by positivity)
 
@@ -163,7 +164,7 @@ theorem etaCriticalMirrorLeftPairMarginPowerLowerBound_le
         (s.im ^ 2 / 4) *
           etaPairFrameRightEndpoint k ^ (-s.re - 1) := by
       rw [intervalIntegral.integral_const]
-      simp [etaPairFrameLeftEndpoint, etaPairFrameRightEndpoint]
+      norm_num [etaPairFrameLeftEndpoint, etaPairFrameRightEndpoint]
     _ ≤
       ∫ x : ℝ in
           (etaPairFrameLeftEndpoint k)..(etaPairFrameRightEndpoint k),
