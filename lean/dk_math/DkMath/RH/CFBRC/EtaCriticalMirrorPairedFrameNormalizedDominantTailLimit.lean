@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameEtaTailEulerHalf
+import Mathlib.Analysis.Complex.Hadamard
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Tactic
 
@@ -82,12 +83,11 @@ theorem etaPairIndexToSuccessorEndpointRatio_tendsto_half :
   unfold etaPairFrameLeftEndpoint
   have hk : 0 < (((k + 1 : ℕ) : ℝ)) := by positivity
   change
-    (((k + 1 : ℕ) : ℝ)) /
-        (((2 * (k + 1) + 1 : ℕ) : ℝ)) =
-      ((2 : ℝ) + (1 : ℝ) / (((k + 1 : ℕ) : ℝ)))⁻¹
+    ((2 : ℝ) + (1 : ℝ) / (((k + 1 : ℕ) : ℝ)))⁻¹ =
+      (((k + 1 : ℕ) : ℝ)) /
+        (((2 * (k + 1) + 1 : ℕ) : ℝ))
   norm_num [Nat.cast_add, Nat.cast_mul]
   field_simp [hk.ne']
-  ring
 
 /-- Positive-base division law for real powers. -/
 private theorem div_rpow_pos
@@ -162,8 +162,10 @@ theorem etaPairResidualRotation_nextLeft_tendsto_one
         (fun k : ℕ =>
           (((-etaPairFrameStepPhase z k : ℝ)) : ℂ))
         atTop (nhds 0) := by
-    have h := (Complex.continuous_ofReal.tendsto 0).comp hphase.neg
-    simpa using h
+    have hneg : Tendsto (fun k => -etaPairFrameStepPhase z k) atTop (nhds 0) := by
+      simpa only [neg_zero] using hphase.neg
+    have h := (Complex.continuous_ofReal.tendsto 0).comp hneg
+    simpa [Function.comp_def] using h
   have hinner :
       Tendsto
         (fun k : ℕ =>
@@ -171,7 +173,8 @@ theorem etaPairResidualRotation_nextLeft_tendsto_one
         atTop (nhds 0) := by
     simpa using tendsto_const_nhds.mul hcast
   have hexp := (Complex.continuous_exp.tendsto 0).comp hinner
-  simpa [etaPairResidualRotation, etaPairResidualPhase_nextLeft] using hexp
+  simpa [etaPairResidualRotation, etaPairResidualPhase_nextLeft,
+    Function.comp_def] using hexp
 
 /-- The normalized half-endpoint main term of one rotated eta tail. -/
 noncomputable def etaPairIndexNormalizedRotatedEulerHalfMain
@@ -255,7 +258,7 @@ theorem etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant
       (etaPairIndexNormalizedRotatedEulerHalfMain z)
       atTop (nhds (etaPairIndexNormalizedTailConstant z)) := by
   have hratio :=
-    etaPairIndexToSuccessorEndpointRatio_tendsto_half.rpow_const
+    etaPairIndexToSuccessorEndpointRatio_tendsto_half.rpow_const (p := z.re)
       (Or.inl (by norm_num : ((1 : ℝ) / 2) ≠ 0))
   have hratioC :
       Tendsto
@@ -265,9 +268,19 @@ theorem etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant
         (nhds (((((1 : ℝ) / 2) ^ z.re : ℝ) : ℂ))) := by
     have h := (Complex.continuous_ofReal.tendsto
       (((1 : ℝ) / 2) ^ z.re)).comp hratio
-    simpa using h
+    simpa [Function.comp_def] using h
   have hres := etaPairResidualRotation_nextLeft_tendsto_one z
-  have hprod0 := (tendsto_const_nhds.mul hratioC).mul hres
+  have hprod0 : Tendsto
+      (fun k : ℕ =>
+        ((1 : ℂ) / 2) *
+          (((etaPairIndexToSuccessorEndpointRatio k ^ z.re : ℝ) : ℂ)) *
+            etaPairResidualRotation z k (etaPairFrameLeftEndpoint (k + 1)))
+      atTop (nhds
+        (((1 : ℂ) / 2) * (((((1 : ℝ) / 2) ^ z.re : ℝ) : ℂ) * 1))) := by
+    simpa [mul_assoc] using
+      (((tendsto_const_nhds :
+        Tendsto (fun _ : ℕ => (1 : ℂ) / 2) atTop (nhds ((1 : ℂ) / 2))).mul
+          hratioC).mul hres)
   have hprod :
       Tendsto
         (fun k : ℕ =>
@@ -277,9 +290,9 @@ theorem etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant
                 (etaPairFrameLeftEndpoint (k + 1)))
         atTop (nhds (etaPairIndexNormalizedTailConstant z)) := by
     simpa [etaPairIndexNormalizedTailConstant] using hprod0
-  simpa only
-    [etaPairIndexNormalizedRotatedEulerHalfMain_eq_ratio_mul_residual]
-    using hprod
+  convert hprod using 1
+  funext k
+  exact etaPairIndexNormalizedRotatedEulerHalfMain_eq_ratio_mul_residual z k
 
 /-- Real power audit for the normalized Euler remainder. -/
 noncomputable def etaPairIndexNormalizedEulerRemainderPowerAudit
@@ -325,7 +338,6 @@ theorem norm_etaPairIndexNormalizedRotatedEulerRemainder_le_audit
       unfold etaPairIndexNormalizedEulerRemainderPowerAudit
       rw [← hpow]
       field_simp [show z.re + 1 ≠ 0 by linarith]
-      ring
 
 /-- The inverse-index Euler remainder audit tends to zero. -/
 theorem etaPairIndexNormalizedEulerRemainderPowerAudit_tendsto_zero
@@ -380,8 +392,13 @@ theorem etaPairIndexNormalizedRotatedTail_tendsto_constant
   have hmain := etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant z
   have hrem := etaPairIndexNormalizedRotatedEulerRemainder_tendsto_zero hzre
   have hsum := hmain.add hrem
-  simpa only [etaPairIndexNormalizedRotatedTail_eq_main_add_remainder hzre]
-    using hsum
+  have heq : etaPairIndexNormalizedRotatedTail z =
+      fun k => etaPairIndexNormalizedRotatedEulerHalfMain z k +
+        etaPairIndexNormalizedRotatedEulerRemainder z k := by
+    funext k
+    exact etaPairIndexNormalizedRotatedTail_eq_main_add_remainder hzre k
+  rw [heq]
+  simpa only [add_zero] using hsum
 
 /-- The right-side normalized rotated mirror tail converges to its positive Euler constant. -/
 theorem etaCriticalMirrorRightIndexNormalizedRotatedMirrorTail_tendsto_constant
@@ -395,8 +412,15 @@ theorem etaCriticalMirrorRightIndexNormalizedRotatedMirrorTail_tendsto_constant
   have h :=
     etaPairIndexNormalizedRotatedTail_tendsto_constant
       (criticalMirror_re_pos_of_nontrivialRiemannZetaZero hs)
-  simpa [etaPairIndexNormalizedRotatedTail,
-    etaCriticalMirrorPairFrameRotatedMirrorTail] using h
+  have heq : (fun k : ℕ =>
+      (((((k + 1 : ℕ) : ℝ)) ^ (criticalMirror s).re : ℝ) : ℂ) *
+        etaCriticalMirrorPairFrameRotatedMirrorTail s k) =
+      etaPairIndexNormalizedRotatedTail (criticalMirror s) := by
+    funext k
+    simp [etaPairIndexNormalizedRotatedTail,
+      etaCriticalMirrorPairFrameRotatedMirrorTail]
+  rw [heq]
+  exact h
 
 /-- The left-side normalized rotated original tail converges to its positive Euler constant. -/
 theorem etaCriticalMirrorLeftIndexNormalizedRotatedOriginalTail_tendsto_constant
@@ -410,8 +434,15 @@ theorem etaCriticalMirrorLeftIndexNormalizedRotatedOriginalTail_tendsto_constant
   have h :=
     etaPairIndexNormalizedRotatedTail_tendsto_constant
       (nontrivialRiemannZetaZero_re_pos hs)
-  simpa [etaPairIndexNormalizedRotatedTail,
-    etaCriticalMirrorPairFrameRotatedOriginalTail] using h
+  have heq : (fun k : ℕ =>
+      (((((k + 1 : ℕ) : ℝ)) ^ s.re : ℝ) : ℂ) *
+        etaCriticalMirrorPairFrameRotatedOriginalTail s k) =
+      etaPairIndexNormalizedRotatedTail s := by
+    funext k
+    simp [etaPairIndexNormalizedRotatedTail,
+      etaCriticalMirrorPairFrameRotatedOriginalTail]
+  rw [heq]
+  exact h
 
 /-- Right normalized defect-minus-mirror complex remainder vanishes. -/
 theorem etaCriticalMirrorRightIndexNormalizedRotatedDefectSubMirror_tendsto_zero
@@ -424,10 +455,14 @@ theorem etaCriticalMirrorRightIndexNormalizedRotatedDefectSubMirror_tendsto_zero
             etaCriticalMirrorPairFrameRotatedMirrorTail s k))
       atTop (nhds 0) := by
   rw [tendsto_zero_iff_norm_tendsto_zero]
-  simpa [norm_mul, Real.norm_eq_abs,
-    abs_of_nonneg (Real.rpow_nonneg _ _)] using
-    etaCriticalMirrorRightIndexNormalizedRotatedDefectSubMirror_norm_tendsto_zero
-      hs hre
+  convert etaCriticalMirrorRightIndexNormalizedRotatedDefectSubMirror_norm_tendsto_zero
+      hs hre using 1
+  funext k
+  rw [norm_mul]
+  change ‖(((((k + 1 : ℕ) : ℝ) ^ (criticalMirror s).re : ℝ) : ℂ))‖ * _ = _
+  simp only [Nat.cast_add, Nat.cast_one, criticalMirror_re, Complex.norm_real, Real.norm_eq_abs,
+    mul_eq_mul_right_iff, abs_eq_self, norm_eq_zero]
+  exact Or.inl (by positivity)
 
 /-- Left normalized defect-plus-original complex remainder vanishes. -/
 theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_tendsto_zero
@@ -440,10 +475,14 @@ theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_tendsto_zer
             etaCriticalMirrorPairFrameRotatedOriginalTail s k))
       atTop (nhds 0) := by
   rw [tendsto_zero_iff_norm_tendsto_zero]
-  simpa [norm_mul, Real.norm_eq_abs,
-    abs_of_nonneg (Real.rpow_nonneg _ _)] using
-    etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_norm_tendsto_zero
-      hs hre
+  convert etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_norm_tendsto_zero
+      hs hre using 1
+  funext k
+  rw [norm_mul]
+  change ‖(((((k + 1 : ℕ) : ℝ) ^ s.re : ℝ) : ℂ))‖ * _ = _
+  simp only [Nat.cast_add, Nat.cast_one, Complex.norm_real, Real.norm_eq_abs,
+    mul_eq_mul_right_iff, abs_eq_self, norm_eq_zero]
+  exact Or.inl (by positivity)
 
 /-- Right of the critical line, the normalized rotated defect tail has a positive explicit limit. -/
 theorem etaCriticalMirrorRightIndexNormalizedRotatedDefectTail_tendsto_constant
