@@ -287,7 +287,8 @@ theorem eventually_half_rightBlockMarginSum_lt_blockStartProjection
       apply sum_range_lt_sum_of_lt
       · exact hlengthK
       · intro j hj
-        convert hallK j hj using 1 <;> ring
+        convert hallK j hj using 1
+        ring
 
 /--
 Left of the critical line, one half of the total explicit left margin is a
@@ -324,7 +325,8 @@ theorem eventually_half_leftBlockMarginSum_lt_neg_blockStartProjection
       apply sum_range_lt_sum_of_lt
       · exact hlengthK
       · intro j hj
-        convert hallK j hj using 1 <;> ring
+        convert hallK j hj using 1
+        ring
     _ =
       -(Finset.range (S.blockLength K)).sum
         (fun j : ℕ =>
