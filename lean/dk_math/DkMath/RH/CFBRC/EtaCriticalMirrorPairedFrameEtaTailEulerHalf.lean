@@ -69,7 +69,7 @@ theorem etaAdjacentDifference_eq_intervalIntegral
   change etaUnsignedVector z n - etaUnsignedVector z (n + 1) =
     ∫ x : ℝ in a..b, etaPairIntegralKernel z x
   rw [hFTC, hA, hB]
-  ring
+  ring_nf
 
 /-- The eta integral kernel is the coefficient times the successor real kernel. -/
 theorem etaPairIntegralKernel_eq_mul_etaRealKernel_succ
@@ -78,7 +78,7 @@ theorem etaPairIntegralKernel_eq_mul_etaRealKernel_succ
       z * etaRealKernel (z + 1) x := by
   unfold etaPairIntegralKernel etaRealKernel
   congr 1
-  ring
+  ring_nf
 
 /-- Difference of adjacent eta differences, i.e. the discrete second difference. -/
 noncomputable def etaPairEulerSecondDifferenceTerm
@@ -112,19 +112,16 @@ theorem etaPairEulerSecondDifferenceTerm_eq_intervalIntegral
   have hshift :
       (∫ x : ℝ in a..(a + 1), etaPairIntegralKernel z (x + 1)) =
         ∫ x : ℝ in (a + 1)..(a + 2), etaPairIntegralKernel z x := by
-    simpa [add_assoc] using
-      (intervalIntegral.integral_comp_add_right
+    convert (intervalIntegral.integral_comp_add_right
         (etaPairIntegralKernel z) (1 : ℝ) :
         (∫ x : ℝ in a..(a + 1), etaPairIntegralKernel z (x + 1)) =
-          ∫ x : ℝ in (a + 1)..(a + 1 + 1), etaPairIntegralKernel z x)
+        ∫ x : ℝ in (a + 1)..(a + 1 + 1), etaPairIntegralKernel z x) using 1;
+        all_goals ring_nf
   rw [etaPairEulerSecondDifferenceTerm]
   rw [etaAdjacentDifference_eq_intervalIntegral hz]
   rw [etaAdjacentDifference_eq_intervalIntegral hz]
-  change
-    (∫ x : ℝ in a..(a + 1), etaPairIntegralKernel z x) -
-        (∫ x : ℝ in (a + 1)..(a + 2), etaPairIntegralKernel z x) = _
-  rw [← hshift]
-  exact (intervalIntegral.integral_sub hfirst hshiftInt).symm
+  convert (intervalIntegral.integral_sub hfirst hshiftInt).symm using 1 <;>
+    norm_num [a, Nat.cast_add, Nat.cast_mul, add_assoc]
 
 /-- Pointwise one-extra-power bound for the shifted eta-kernel difference. -/
 theorem norm_etaPairIntegralKernel_sub_shift_le
@@ -144,12 +141,14 @@ theorem norm_etaPairIntegralKernel_sub_shift_le
         ‖z + 1‖ * x ^ (-z.re - 2) := by
     convert hraw using 1
     · rw [norm_sub_rev]
-    · simp
+    · simp only [Complex.add_re, Complex.one_re, neg_add_rev, mul_eq_mul_left_iff, norm_eq_zero]
+      left
+      congr 1
       ring
   rw [etaPairIntegralKernel_eq_mul_etaRealKernel_succ]
   rw [etaPairIntegralKernel_eq_mul_etaRealKernel_succ]
   rw [← mul_sub, norm_mul]
-  exact mul_le_mul_of_nonneg_left hrev (norm_nonneg z)
+  simpa [mul_assoc] using mul_le_mul_of_nonneg_left hrev (norm_nonneg z)
 
 /-- The discrete second difference gains two powers locally. -/
 theorem norm_etaPairEulerSecondDifferenceTerm_le
@@ -166,9 +165,6 @@ theorem norm_etaPairEulerSecondDifferenceTerm_le
     positivity
   have hab : a ≤ a + 1 := by linarith
   rw [etaPairEulerSecondDifferenceTerm_eq_intervalIntegral hz]
-  change
-    ‖∫ x : ℝ in a..(a + 1),
-        etaPairIntegralKernel z x - etaPairIntegralKernel z (x + 1)‖ ≤ _
   have hbound :=
     intervalIntegral.norm_integral_le_of_norm_le_const
       (a := a) (b := a + 1)
@@ -187,7 +183,8 @@ theorem norm_etaPairEulerSecondDifferenceTerm_le
         exact hpoint.trans
           (mul_le_mul_of_nonneg_left hrpow
             (mul_nonneg (norm_nonneg z) (norm_nonneg (z + 1)))))
-  simpa [a] using hbound
+  convert hbound using 1 <;>
+    norm_num [a, Nat.cast_add, Nat.cast_mul, add_assoc]
 
 /-- Half of the second difference, the Euler half-endpoint remainder term. -/
 noncomputable def etaPairEulerRemainderTerm
@@ -338,7 +335,7 @@ theorem etaPairTerm_eq_eulerMainDifference_add_remainder
   unfold etaPairTerm etaPairEulerMainDifferenceTerm
   unfold etaPairEulerRemainderTerm etaPairEulerSecondDifferenceTerm
   unfold etaAdjacentDifference
-  ring
+  ring_nf
 
 /-- The shifted half-endpoint difference series is summable. -/
 theorem summable_etaPairEulerMainDifferenceTail
@@ -425,9 +422,9 @@ theorem etaPairTail_eq_half_endpoint_add_eulerRemainderTail
         (fun j : ℕ => etaPairTerm z (j + K))
         ((∑' j : ℕ, etaPairEulerMainDifferenceTerm z (j + K)) +
           ∑' j : ℕ, etaPairEulerRemainderTerm z (j + K)) := by
-    refine (hmain.hasSum.add hrem.hasSum).congr ?_
-    intro j
-    exact (etaPairTerm_eq_eulerMainDifference_add_remainder z (j + K)).symm
+    convert hmain.hasSum.add hrem.hasSum using 1
+    funext j
+    exact etaPairTerm_eq_eulerMainDifference_add_remainder z (j + K)
   unfold etaPairTail etaPairEulerRemainderTail
   rw [hsum.tsum_eq]
   rw [tsum_etaPairEulerMainDifferenceTail hzre K]
