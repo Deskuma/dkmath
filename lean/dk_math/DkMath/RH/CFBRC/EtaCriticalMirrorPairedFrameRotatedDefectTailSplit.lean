@@ -99,7 +99,7 @@ theorem etaCriticalMirrorDefectPairTail_eq_etaPairTail_sub
     _ =
         (∑' j : ℕ, etaPairTerm (criticalMirror s) (j + K)) -
           ∑' j : ℕ, etaPairTerm s (j + K) :=
-      tsum_sub hmirror horiginal
+      (hmirror.hasSum.sub horiginal.hasSum).tsum_eq
 
 /-- Mirror paired tail transported into the current pair-left frame. -/
 noncomputable def etaCriticalMirrorPairFrameRotatedMirrorTail
@@ -412,6 +412,6 @@ theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_norm_tendst
   filter_upwards with k
   rw [etaCriticalMirrorPairFrameRotatedDefectTail_eq_mirror_sub_original hs k]
   congr 1
-  ring
+  ring_nf
 
 end DkMath.RH.CFBRCProjection

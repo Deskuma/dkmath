@@ -12,6 +12,8 @@ noncomputable section
 
 namespace DkMath.RH.CFBRCProjection
 
+open Filter
+
 example
     {z : ℂ} (hz : 0 < z.re)
     {K : ℕ} (hK : 1 ≤ K) :
