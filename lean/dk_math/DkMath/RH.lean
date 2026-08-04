@@ -116,6 +116,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedAbelBalanceAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedAbelClosureDecision
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameExactGaugeObstruction
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFramePositiveDensityRotationLimit
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameTwoScaleNonresonanceAudit
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
