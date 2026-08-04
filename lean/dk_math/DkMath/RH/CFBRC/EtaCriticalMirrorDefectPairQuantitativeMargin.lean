@@ -143,10 +143,10 @@ theorem etaCriticalMirrorRightPairMargin_pos
   apply intervalIntegral.intervalIntegral_pos_of_pos_on
     (etaCriticalMirrorRightPairMarginIntegrand_intervalIntegrable s k)
   · intro x hx
-    have hle := etaPairFrameLeftEndpoint_le_rightEndpoint k
     have hx' : x ∈ Set.Icc
         (etaPairFrameLeftEndpoint k)
-        (etaPairFrameRightEndpoint k) := hx.le
+        (etaPairFrameRightEndpoint k) :=
+      ⟨le_of_lt hx.1, le_of_lt hx.2⟩
     have hxpos : 0 < x :=
       (etaPairFrameLeftEndpoint_pos k).trans_le hx'.1
     exact mul_pos
