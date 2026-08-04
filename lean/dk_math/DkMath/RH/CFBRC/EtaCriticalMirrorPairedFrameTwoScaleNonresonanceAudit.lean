@@ -28,8 +28,10 @@ def etaPairFullDensityBlockSchedule :
   blockLength := fun K : ℕ => 2 * K
   density := 1
   density_pos := by norm_num
-  blockLength_tendsto_atTop :=
-    tendsto_const_nhds.atTop_mul tendsto_id (by norm_num : 0 < 2)
+  blockLength_tendsto_atTop := by
+    apply StrictMono.tendsto_atTop
+    intro K L hKL
+    omega
   relativeLength_tendsto_density := by
     have h :=
       tendsto_add_mul_div_add_mul_atTop_nhds
