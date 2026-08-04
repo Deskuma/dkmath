@@ -42,9 +42,10 @@ theorem etaPairSuccessorIndexRatio_tendsto_one :
   have hKpos : 0 < (K : ℝ) := by
     exact_mod_cast hK
   unfold etaPairSuccessorIndexRatio
-  change ((K : ℝ) + 1) / (K : ℝ) =
-    (1 : ℝ) + 1 / (K : ℝ)
+  change (1 : ℝ) + 1 / (K : ℝ) =
+    (((K + 1 : ℕ) : ℝ) / (K : ℝ))
   field_simp [hKpos.ne']
+  norm_num [Nat.cast_add]
 
 /-- Every fixed real power of the successor/current index ratio tends to one. -/
 theorem etaPairSuccessorIndexRatio_rpow_tendsto_one
@@ -85,8 +86,8 @@ theorem etaCriticalMirrorRightSuccessorIndexNormalizedPredecessorWholeTailProjec
   have himag :
       Tendsto
         (fun K : ℕ =>
-          (((((((K + 1 : ℕ) : ℝ) ^ (criticalMirror s).re : ℝ) : ℂ) *
-            etaCriticalMirrorPairFrameRotatedDefectTail s K).im))
+          (((((K + 1 : ℕ) : ℝ) ^ (criticalMirror s).re : ℝ) : ℂ) *
+            etaCriticalMirrorPairFrameRotatedDefectTail s K).im)
         atTop (nhds 0) := by
     have h :=
       (Complex.continuous_im.tendsto
@@ -126,8 +127,8 @@ theorem etaCriticalMirrorLeftSuccessorIndexNormalizedPredecessorWholeTailProject
   have himag :
       Tendsto
         (fun K : ℕ =>
-          (((((((K + 1 : ℕ) : ℝ) ^ s.re : ℝ) : ℂ) *
-            etaCriticalMirrorPairFrameRotatedDefectTail s K).im))
+          (((((K + 1 : ℕ) : ℝ) ^ s.re : ℝ) : ℂ) *
+            etaCriticalMirrorPairFrameRotatedDefectTail s K).im)
         atTop (nhds 0) := by
     have h :=
       (Complex.continuous_im.tendsto
