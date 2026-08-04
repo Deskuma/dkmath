@@ -123,6 +123,78 @@ theorem one_add_two_mul_density_pos
     0 < 1 + 2 * S.density := by
   linarith [S.density_pos]
 
+/--
+A fixed real power of the scheduled endpoint ratio converges to the same power
+of `1 + 2ρ`. Positivity of the limiting ratio permits arbitrary real exponents.
+-/
+theorem endpointRatio_rpow_tendsto
+    (S : EtaPairPositiveDensityBlockSchedule) (q : ℝ) :
+    Tendsto
+      (fun K : ℕ => S.endpointRatio K ^ q)
+      atTop
+      (nhds ((1 + 2 * S.density) ^ q)) := by
+  exact
+    S.endpointRatio_tendsto_one_add_two_mul_density.rpow_const
+      (Or.inl S.one_add_two_mul_density_pos.ne')
+
+/--
+Right-side normalized block-power factor before identifying it with the
+normalized finite block lower bound.
+-/
+noncomputable def rightNormalizedBlockMarginPowerFactor
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) : ℝ :=
+  (s.im ^ 2 / 4) *
+    (((S.blockLength K : ℝ) /
+        etaPairFrameLeftEndpoint K) *
+      S.endpointRatio K ^ (s.re - 2))
+
+/--
+Left-side normalized block-power factor before identifying it with the
+normalized finite block lower bound.
+-/
+noncomputable def leftNormalizedBlockMarginPowerFactor
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) : ℝ :=
+  (s.im ^ 2 / 4) *
+    (((S.blockLength K : ℝ) /
+        etaPairFrameLeftEndpoint K) *
+      S.endpointRatio K ^ (-s.re - 1))
+
+/--
+The right normalized block-power factor converges to its explicit density
+constant.
+-/
+theorem rightNormalizedBlockMarginPowerFactor_tendsto
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (S.rightNormalizedBlockMarginPowerFactor s)
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (s.re - 2)))) := by
+  simpa [rightNormalizedBlockMarginPowerFactor] using
+    tendsto_const_nhds.mul
+      (S.relativeLength_tendsto_density.mul
+        (S.endpointRatio_rpow_tendsto (s.re - 2)))
+
+/--
+The left normalized block-power factor converges to its explicit density
+constant.
+-/
+theorem leftNormalizedBlockMarginPowerFactor_tendsto
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (S.leftNormalizedBlockMarginPowerFactor s)
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (-s.re - 1)))) := by
+  simpa [leftNormalizedBlockMarginPowerFactor] using
+    tendsto_const_nhds.mul
+      (S.relativeLength_tendsto_density.mul
+        (S.endpointRatio_rpow_tendsto (-s.re - 1)))
+
 end EtaPairPositiveDensityBlockSchedule
 
 end DkMath.RH.CFBRCProjection
