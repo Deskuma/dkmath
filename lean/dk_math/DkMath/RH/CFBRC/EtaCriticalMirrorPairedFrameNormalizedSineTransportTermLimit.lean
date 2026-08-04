@@ -19,6 +19,7 @@ namespace DkMath.RH.CFBRCProjection
 
 open Filter
 open scoped Topology
+open DkMath.RH.Weave.Analytic
 
 /-- Adjacent-frame logarithmic increment scaled by the successor pair index. -/
 noncomputable def etaPairFrameScaledLogStep
@@ -58,7 +59,6 @@ theorem one_le_etaPairFrameScaledLogStep
   have hratio : 1 + 2 / a = b / a := by
     rw [hstep]
     field_simp [ha.ne']
-    ring
   have hleft : 2 * (2 / a) / (2 / a + 2) = 1 / q := by
     dsimp [a, q, etaPairFrameLeftEndpoint]
     norm_num [Nat.cast_add, Nat.cast_mul]
@@ -160,12 +160,15 @@ noncomputable def etaPairFrameScaledStepPhase
 theorem etaPairFrameScaledStepPhase_tendsto_im
     (s : ℂ) :
     Tendsto (etaPairFrameScaledStepPhase s) atTop (nhds s.im) := by
-  have h := tendsto_const_nhds.mul etaPairFrameScaledLogStep_tendsto_one
+  have h :=
+    (tendsto_const_nhds :
+      Tendsto (fun _ : ℕ => s.im) atTop (nhds s.im)).mul
+      etaPairFrameScaledLogStep_tendsto_one
   have h' :
       Tendsto
         (fun k : ℕ => s.im * etaPairFrameScaledLogStep k)
         atTop (nhds s.im) := by
-    simpa using h
+    simpa [Function.comp_def] using h
   refine h'.congr' (Eventually.of_forall fun k => ?_)
   unfold etaPairFrameScaledStepPhase
   unfold etaPairFrameScaledLogStep
@@ -212,8 +215,10 @@ theorem etaCriticalMirrorPairedFrameScaledSineTransportCoefficient_tendsto_sq
         (fun k : ℕ => Real.sinc (etaPairFrameStepPhase s k))
         atTop (nhds 1) := by
     have h := (Real.continuous_sinc.tendsto 0).comp hstep0
-    simpa using h
-  have hprod := (tendsto_const_nhds.mul hphase).mul hsinc
+    simpa [Function.comp_def] using h
+  have hprod :=
+    (((tendsto_const_nhds :
+      Tendsto (fun _ : ℕ => s.im) atTop (nhds s.im)).mul hphase).mul hsinc)
   have hlimit :
       Tendsto
         (fun k : ℕ =>
@@ -221,9 +226,9 @@ theorem etaCriticalMirrorPairedFrameScaledSineTransportCoefficient_tendsto_sq
             Real.sinc (etaPairFrameStepPhase s k))
         atTop (nhds (s.im ^ 2)) := by
     simpa [pow_two] using hprod
-  simpa only
-    [etaCriticalMirrorPairedFrameScaledSineTransportCoefficient_eq]
-    using hlimit
+  convert hlimit using 1
+  funext k
+  exact etaCriticalMirrorPairedFrameScaledSineTransportCoefficient_eq s k
 
 /-- Real form of the explicit normalized eta-tail constant. -/
 noncomputable def etaPairIndexNormalizedTailConstantReal
@@ -263,7 +268,7 @@ theorem etaCriticalMirrorRightIndexNormalizedRotatedDefectTail_re_tendsto_consta
   have hreal :=
     (Complex.continuous_re.tendsto
       (etaPairIndexNormalizedTailConstant (criticalMirror s))).comp hcomplex
-  simpa [etaPairIndexNormalizedTailConstant_eq_real] using hreal
+  simpa [etaPairIndexNormalizedTailConstant_eq_real, Function.comp_def] using hreal
 
 /-- Left-side normalized rotated defect-tail real part tends to the negative constant. -/
 theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectTail_re_tendsto_neg_constant
@@ -280,7 +285,7 @@ theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectTail_re_tendsto_neg_con
   have hreal :=
     (Complex.continuous_re.tendsto
       (-etaPairIndexNormalizedTailConstant s)).comp hcomplex
-  simpa [etaPairIndexNormalizedTailConstant_eq_real] using hreal
+  simpa [etaPairIndexNormalizedTailConstant_eq_real, Function.comp_def] using hreal
 
 /-- Right-side normalized sine-transport term constant. -/
 noncomputable def etaCriticalMirrorRightNormalizedSineTransportTermConstant
@@ -344,8 +349,8 @@ theorem etaCriticalMirrorRightNormalizedSineTransportTerm_tendsto_constant
       hs hre
   have hprod := (hcoeff.mul htail).neg
   refine hprod.congr' (Eventually.of_forall fun k => ?_)
+  simp only
   rw [etaCriticalMirrorRightNormalizedSineTransportTerm_eq hs him k]
-  rfl
 
 /-- Left of the critical line, normalized sine-transport terms have a positive explicit limit. -/
 theorem etaCriticalMirrorLeftNormalizedSineTransportTerm_tendsto_constant
@@ -373,6 +378,7 @@ theorem etaCriticalMirrorLeftNormalizedSineTransportTerm_tendsto_constant
         (nhds (etaCriticalMirrorLeftNormalizedSineTransportTermConstant s)) := by
     simpa [etaCriticalMirrorLeftNormalizedSineTransportTermConstant] using hprod
   refine hlimit.congr' (Eventually.of_forall fun k => ?_)
+  simp only
   rw [etaCriticalMirrorLeftNormalizedSineTransportTerm_eq hs him k]
 
 end DkMath.RH.CFBRCProjection
