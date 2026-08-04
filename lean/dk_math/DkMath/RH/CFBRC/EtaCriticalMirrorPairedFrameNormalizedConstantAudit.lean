@@ -195,6 +195,111 @@ theorem leftNormalizedBlockMarginPowerFactor_tendsto
       (S.relativeLength_tendsto_density.mul
         (S.endpointRatio_rpow_tendsto (-s.re - 1)))
 
+/--
+For the positive pair-left endpoint, the normalizing power `-1 - q` splits
+into the reciprocal endpoint and the inverse `q`-power.
+-/
+theorem etaPairFrameLeftEndpoint_rpow_neg_one_sub
+    (K : ℕ) (q : ℝ) :
+    etaPairFrameLeftEndpoint K ^ (-1 - q) =
+      (1 / etaPairFrameLeftEndpoint K) *
+        (etaPairFrameLeftEndpoint K ^ q)⁻¹ := by
+  rw [Real.rpow_sub (etaPairFrameLeftEndpoint_pos K) (-1) q]
+  rw [Real.rpow_neg_one]
+  simp [div_eq_mul_inv]
+
+/--
+The right normalized finite block lower bound is exactly the right density
+power factor.
+-/
+theorem rightNormalizedBlockMarginPowerLowerBound_eq_factor
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) :
+    etaPairFrameLeftEndpoint K ^ (1 - s.re) *
+        etaCriticalMirrorRightBlockMarginPowerLowerBound
+          s K (S.blockLength K) =
+      S.rightNormalizedBlockMarginPowerFactor s K := by
+  have hleft : 0 < etaPairFrameLeftEndpoint K :=
+    etaPairFrameLeftEndpoint_pos K
+  have hright :
+      0 < etaPairFrameRightEndpoint (K + S.blockLength K) :=
+    etaPairFrameRightEndpoint_pos (K + S.blockLength K)
+  have hnormalization :
+      etaPairFrameLeftEndpoint K ^ (1 - s.re) =
+        (1 / etaPairFrameLeftEndpoint K) *
+          (etaPairFrameLeftEndpoint K ^ (s.re - 2))⁻¹ := by
+    rw [show 1 - s.re = -1 - (s.re - 2) by ring]
+    exact etaPairFrameLeftEndpoint_rpow_neg_one_sub K (s.re - 2)
+  unfold etaCriticalMirrorRightBlockMarginPowerLowerBound
+  unfold rightNormalizedBlockMarginPowerFactor endpointRatio
+  rw [hnormalization, Real.div_rpow hright.le hleft.le]
+  simp only [div_eq_mul_inv]
+  ring
+
+/--
+The left normalized finite block lower bound is exactly the left density
+power factor.
+-/
+theorem leftNormalizedBlockMarginPowerLowerBound_eq_factor
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) :
+    etaPairFrameLeftEndpoint K ^ s.re *
+        etaCriticalMirrorLeftBlockMarginPowerLowerBound
+          s K (S.blockLength K) =
+      S.leftNormalizedBlockMarginPowerFactor s K := by
+  have hleft : 0 < etaPairFrameLeftEndpoint K :=
+    etaPairFrameLeftEndpoint_pos K
+  have hright :
+      0 < etaPairFrameRightEndpoint (K + S.blockLength K) :=
+    etaPairFrameRightEndpoint_pos (K + S.blockLength K)
+  have hnormalization :
+      etaPairFrameLeftEndpoint K ^ s.re =
+        (1 / etaPairFrameLeftEndpoint K) *
+          (etaPairFrameLeftEndpoint K ^ (-s.re - 1))⁻¹ := by
+    rw [show s.re = -1 - (-s.re - 1) by ring]
+    exact etaPairFrameLeftEndpoint_rpow_neg_one_sub K (-s.re - 1)
+  unfold etaCriticalMirrorLeftBlockMarginPowerLowerBound
+  unfold leftNormalizedBlockMarginPowerFactor endpointRatio
+  rw [hnormalization, Real.div_rpow hright.le hleft.le]
+  simp only [div_eq_mul_inv]
+  ring
+
+/--
+The actual right finite block lower bound, normalized by the pair-left scale,
+converges to the right density constant.
+-/
+theorem rightNormalizedBlockMarginPowerLowerBound_tendsto
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (fun K : ℕ =>
+        etaPairFrameLeftEndpoint K ^ (1 - s.re) *
+          etaCriticalMirrorRightBlockMarginPowerLowerBound
+            s K (S.blockLength K))
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (s.re - 2)))) := by
+  simpa only [rightNormalizedBlockMarginPowerLowerBound_eq_factor] using
+    S.rightNormalizedBlockMarginPowerFactor_tendsto s
+
+/--
+The actual left finite block lower bound, normalized by the pair-left scale,
+converges to the left density constant.
+-/
+theorem leftNormalizedBlockMarginPowerLowerBound_tendsto
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (fun K : ℕ =>
+        etaPairFrameLeftEndpoint K ^ s.re *
+          etaCriticalMirrorLeftBlockMarginPowerLowerBound
+            s K (S.blockLength K))
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (-s.re - 1)))) := by
+  simpa only [leftNormalizedBlockMarginPowerLowerBound_eq_factor] using
+    S.leftNormalizedBlockMarginPowerFactor_tendsto s
+
 end EtaPairPositiveDensityBlockSchedule
 
 end DkMath.RH.CFBRCProjection
