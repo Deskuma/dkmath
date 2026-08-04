@@ -87,6 +87,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameBlockMarginDomination
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameFiniteBlockCertificate
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGrowingBlockGeometry
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGrowingBlockCertificate
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGrowingBlockQuantitativeCertificate
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
