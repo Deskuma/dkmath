@@ -124,9 +124,7 @@ private theorem norm_scaled_etaPairBaseRotation_mul_defectPairIntegralKernel_le_
         (s.im ^ 2 / 4) *
           (etaPairRadialDecay s x *
             ‖etaCriticalMirrorDefectCoefficient s x‖) := by
-      simp [norm_mul, norm_etaPairResidualRotation,
-        abs_of_nonneg ha, abs_of_nonneg hr]
-      ring
+      simp [norm_etaPairResidualRotation, abs_of_nonneg hr]
     _ ≤
         (s.im ^ 2 / 4) *
           (etaPairRadialDecay s x *
@@ -167,9 +165,7 @@ private theorem norm_scaled_etaPairBaseRotation_mul_defectPairIntegralKernel_le_
         (s.im ^ 2 / 4) *
           (etaPairRadialDecay s x *
             ‖etaCriticalMirrorDefectCoefficient s x‖) := by
-      simp [norm_mul, norm_etaPairResidualRotation,
-        abs_of_nonneg ha, abs_of_nonneg hr]
-      ring
+      simp [norm_etaPairResidualRotation, abs_of_nonneg hr]
     _ ≤
         (s.im ^ 2 / 4) *
           (etaPairRadialDecay s x *
@@ -225,8 +221,7 @@ theorem scaled_norm_etaCriticalMirrorDefectPairTerm_le_rightPairMargin
     rw [intervalIntegral.integral_const_mul]
     rw [← etaPairBaseRotation_mul_defectPairTerm_eq_intervalIntegral
       hs hm k]
-    simp [norm_mul, norm_etaPairBaseRotation,
-      abs_of_nonneg (show 0 ≤ s.im ^ 2 / 4 by positivity)]
+    simp [norm_etaPairBaseRotation]
   have hrightEq :
       (∫ x : ℝ in
           (etaPairFrameLeftEndpoint k)..(etaPairFrameRightEndpoint k),
@@ -283,8 +278,7 @@ theorem scaled_norm_etaCriticalMirrorDefectPairTerm_le_leftPairMargin
     rw [intervalIntegral.integral_const_mul]
     rw [← etaPairBaseRotation_mul_defectPairTerm_eq_intervalIntegral
       hs hm k]
-    simp [norm_mul, norm_etaPairBaseRotation,
-      abs_of_nonneg (show 0 ≤ s.im ^ 2 / 4 by positivity)]
+    simp [norm_etaPairBaseRotation]
   have hrightEq :
       (∫ x : ℝ in
           (etaPairFrameLeftEndpoint k)..(etaPairFrameRightEndpoint k),
