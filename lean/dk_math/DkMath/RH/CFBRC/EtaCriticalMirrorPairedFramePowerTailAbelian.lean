@@ -140,9 +140,9 @@ theorem normalized_shiftedRpowModelTail_tendsto_inv
         ((K : ℝ) ^ alpha) *
             (((((K + 1 : ℕ) : ℝ) ^ (-alpha)) / alpha)) =
           (((K : ℝ) / ((K : ℝ) + 1)) ^ alpha) / alpha := by
-      rw [div_rpow_pos_powerTail hKpos hK1pos]
-      rw [Real.rpow_neg hK1pos.le]
-      norm_num [Nat.cast_add]
+      norm_num [Nat.cast_add, Nat.cast_one]
+      rw [div_rpow_pos_powerTail hKpos (by positivity)]
+      rw [Real.rpow_neg (by positivity)]
       ring
     rw [← heq]
     exact mul_le_mul_of_nonneg_left htail hscaleNonneg
@@ -207,18 +207,25 @@ theorem powerTailResidual_scaled_tendsto_zero
       atTop (nhds 0) := by
   have hsub := hterm.sub
     (tendsto_const_nhds : Tendsto (fun _ : ℕ => D) atTop (nhds D))
-  refine hsub.congr' (Eventually.of_forall fun n => ?_)
+  -- The following could probably be reorganized a bit more, but I'll leave it as is for now... v4.32.2
+  convert hsub using 1; all_goals ring_nf
+  funext n
   unfold powerTailResidual
+  norm_num [Nat.cast_add, Nat.cast_one]
   have hcancel := successor_rpow_cancel alpha n
   calc
-    (((n + 1 : ℕ) : ℝ) ^ (alpha + 1)) *
-        (a n - D * (((n + 1 : ℕ) : ℝ) ^ (-alpha - 1))) =
-      (((n + 1 : ℕ) : ℝ) ^ (alpha + 1)) * a n -
+    ((1 + (n : ℝ)) ^ (1 + alpha)) *
+        (a n - D * (((n : ℝ) + 1) ^ (-alpha - 1))) =
+      (((n : ℝ) + 1) ^ (alpha + 1)) * a n -
         D *
-          ((((n + 1 : ℕ) : ℝ) ^ (alpha + 1)) *
-            (((n + 1 : ℕ) : ℝ) ^ (-alpha - 1))) := by ring
-    _ = (((n + 1 : ℕ) : ℝ) ^ (alpha + 1)) * a n - D := by
-      rw [hcancel, mul_one]
+          ((((n : ℝ) + 1) ^ (alpha + 1)) *
+            (((n : ℝ) + 1) ^ (-alpha - 1))) := by ring_nf
+    _ = ((1 + (n : ℝ)) ^ (1 + alpha)) * a n - D := by
+      have hcancel' :
+          ((n : ℝ) + 1) ^ (alpha + 1) * ((n : ℝ) + 1) ^ (-alpha - 1) = 1 := by
+        simpa [Nat.cast_add, Nat.cast_one] using hcancel
+      rw [hcancel']
+      ring_nf
 
 /-- Exact reconstruction of a residual from its scaled form. -/
 private theorem powerTailResidual_eq_inverse_mul_scaled
@@ -261,8 +268,9 @@ theorem eventually_abs_powerTailResidual_le
   rw [powerTailResidual_eq_inverse_mul_scaled]
   rw [abs_mul]
   rw [abs_of_nonneg (Real.rpow_nonneg (by positivity) _)]
-  exact mul_le_mul_of_nonneg_left (le_of_lt hsmall)
-    (Real.rpow_nonneg (by positivity) _)
+  simpa [mul_comm] using
+    mul_le_mul_of_nonneg_right (le_of_lt hsmall)
+      (Real.rpow_nonneg (by positivity) _)
 
 /-- The residual sequence is summable if the original sequence is summable. -/
 theorem summable_powerTailResidual
@@ -356,11 +364,11 @@ theorem normalized_powerTailResidual_tail_tendsto_zero
             epsilon *
               ((((K : ℝ) ^ alpha) * ((K : ℝ) ^ (-alpha))) / alpha) by ring]
         rw [hcancel]
+        ring
   rw [Real.dist_eq, sub_zero]
   have heq : epsilon / alpha = delta / 2 := by
     dsimp [epsilon]
     field_simp [ne_of_gt halpha]
-    ring
   rw [heq] at hbound
   exact hbound.trans_lt (by linarith)
 
@@ -372,13 +380,14 @@ theorem realSequenceTail_eq_model_add_residual
       D * shiftedRpowModelTail alpha K +
         realSequenceTail (powerTailResidual a alpha D) K := by
   have hmodelShift := summable_shiftedRpowModelTail halpha K
-  have hresSum := summable_powerTailResidual halpha ha
+  have hresSum := summable_powerTailResidual (D := D) halpha ha
   have hresShift :
       Summable
         (fun n : ℕ => powerTailResidual a alpha D (n + K)) :=
     (summable_nat_add_iff K).2 hresSum
   have hsum := (hmodelShift.mul_left D).hasSum.add hresShift.hasSum
   unfold realSequenceTail shiftedRpowModelTail
+  rw [← tsum_mul_left]
   rw [← hsum.tsum_eq]
   apply tsum_congr
   intro n
@@ -413,12 +422,19 @@ theorem normalized_realSequenceTail_tendsto
         Tendsto (fun _ : ℕ => D) atTop (nhds D)).mul hmodel
     simpa [div_eq_mul_inv, mul_assoc] using h
   have hresScaled := powerTailResidual_scaled_tendsto_zero hterm
-  have hresSum := summable_powerTailResidual halpha ha
+  have hresSum := summable_powerTailResidual (D := D) halpha ha
   have hres :=
     normalized_powerTailResidual_tail_tendsto_zero
       halpha hresSum hresScaled
   have hsum := hmain.add hres
-  refine hsum.congr' (Eventually.of_forall fun K => ?_)
+  have hsum' : Tendsto
+      (fun K : ℕ =>
+        D * (((K : ℝ) ^ alpha) * shiftedRpowModelTail alpha K) +
+          ((K : ℝ) ^ alpha) * realSequenceTail (powerTailResidual a alpha D) K)
+      atTop (nhds (D / alpha)) := by
+    simpa using hsum
+  refine hsum'.congr' (Eventually.of_forall fun K => ?_)
+  simp only
   rw [realSequenceTail_eq_model_add_residual halpha ha K]
   ring
 
