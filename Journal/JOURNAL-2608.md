@@ -2,6 +2,14 @@
 
 Lean が確定した DkMath の構造を、一般数学の言葉で読み解く月刊記録。
 
+## 2026-08-04
+
+### 11:59
+
+[床関数による離散化は順序を保ち unit を幅1に閉じ込める](260804-1159-floor-discretization-preserves-order-and-traps-unit-within-one.md)
+
+正の実数 unit を自然数床へ写す `phiUnit` が順序を保ち、元の unit 値を離散 support とその次の support の間へ幅 $1$ 未満で閉じ込める構造を読む。
+
 ## 2026-08-03
 
 ### 23:58
