@@ -111,6 +111,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDominantTailLimit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedSineTransportTermLimit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFramePowerTailAbelian
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedSineTransportTailLimit
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedCorrectionProjectionTailLimit
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
