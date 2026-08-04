@@ -11,8 +11,7 @@ example (S : EtaPairGrowingBlockSchedule)
     ∀ᶠ K : ℕ in atTop,
       ∀ j : ℕ, j < S.blockLength K →
         0 < etaCriticalMirrorBlockStartDefectPairProjection s K j :=
-  EtaPairGrowingBlockSchedule
-    .eventually_all_blockStartDefectPairProjection_pos_of_half_lt_re
+  EtaPairGrowingBlockSchedule.eventually_all_blockStartDefectPairProjection_pos_of_half_lt_re
       S hs him hre
 
 example (S : EtaPairGrowingBlockSchedule)
@@ -21,8 +20,7 @@ example (S : EtaPairGrowingBlockSchedule)
     ∀ᶠ K : ℕ in atTop,
       ∀ j : ℕ, j < S.blockLength K →
         etaCriticalMirrorBlockStartDefectPairProjection s K j < 0 :=
-  EtaPairGrowingBlockSchedule
-    .eventually_all_blockStartDefectPairProjection_neg_of_re_lt_half
+  EtaPairGrowingBlockSchedule.eventually_all_blockStartDefectPairProjection_neg_of_re_lt_half
       S hs him hre
 
 example (S : EtaPairGrowingBlockSchedule)
@@ -31,8 +29,7 @@ example (S : EtaPairGrowingBlockSchedule)
     ∀ᶠ K : ℕ in atTop,
       0 < etaCriticalMirrorBlockStartDefectBlockProjection
         s K (S.blockLength K) :=
-  EtaPairGrowingBlockSchedule
-    .eventually_blockStartDefectBlockProjection_pos_of_half_lt_re
+  EtaPairGrowingBlockSchedule.eventually_blockStartDefectBlockProjection_pos_of_half_lt_re
       S hs him hre
 
 example (S : EtaPairGrowingBlockSchedule)
@@ -41,8 +38,7 @@ example (S : EtaPairGrowingBlockSchedule)
     ∀ᶠ K : ℕ in atTop,
       etaCriticalMirrorBlockStartDefectBlockProjection
         s K (S.blockLength K) < 0 :=
-  EtaPairGrowingBlockSchedule
-    .eventually_blockStartDefectBlockProjection_neg_of_re_lt_half
+  EtaPairGrowingBlockSchedule.eventually_blockStartDefectBlockProjection_neg_of_re_lt_half
       S hs him hre
 
 end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameGrowingBlockCertificate
