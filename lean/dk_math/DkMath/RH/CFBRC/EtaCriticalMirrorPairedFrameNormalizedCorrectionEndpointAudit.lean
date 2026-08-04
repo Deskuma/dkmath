@@ -52,8 +52,7 @@ theorem etaPairFrameLeftEndpoint_succ_div_index_tendsto_two :
     exact_mod_cast hK
   unfold etaPairFrameLeftEndpoint
   norm_num [Nat.cast_add, Nat.cast_mul]
-  field_simp [hKpos.ne']
-  ring
+  field_simp [hKpos.ne'] <;> ring
 
 /-- Every fixed real power of the shifted endpoint/index ratio tends to the same power of `2`. -/
 theorem etaPairFrameLeftEndpoint_succ_div_index_rpow_tendsto
