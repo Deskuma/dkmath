@@ -46,13 +46,18 @@ theorem etaPairFrameLeftEndpoint_succ_div_index_tendsto_two :
         (fun K : ℕ => (2 : ℝ) + 3 / (K : ℝ))
         atTop (nhds ((2 : ℝ) + 0)) :=
     tendsto_const_nhds.add hinv
-  refine hsum.congr' ?_
+  have hsum' :
+      Tendsto
+        (fun K : ℕ => (2 : ℝ) + 3 / (K : ℝ))
+        atTop (nhds 2) := by
+    simpa using hsum
+  refine hsum'.congr' ?_
   filter_upwards [eventually_ge_atTop 1] with K hK
   have hKpos : 0 < (K : ℝ) := by
     exact_mod_cast hK
   unfold etaPairFrameLeftEndpoint
   norm_num [Nat.cast_add, Nat.cast_mul]
-  field_simp [hKpos.ne'] <;> ring
+  field_simp [hKpos.ne']; ring
 
 /-- Every fixed real power of the shifted endpoint/index ratio tends to the same power of `2`. -/
 theorem etaPairFrameLeftEndpoint_succ_div_index_rpow_tendsto
@@ -93,7 +98,7 @@ theorem etaCriticalMirrorRightShiftedLeftEndpointNormalizedCorrectionPowerBound_
     (Real.rpow_pos_of_pos hKpos _).ne'
   rw [Real.div_rpow
     (etaPairFrameLeftEndpoint_pos (K + 1)).le hKpos.le]
-  field_simp [hKpow] <;> ring
+  field_simp [hKpow]
 
 /--
 On the left of the critical line, shifting the pair-left endpoint by one
@@ -122,7 +127,7 @@ theorem etaCriticalMirrorLeftShiftedLeftEndpointNormalizedCorrectionPowerBound_t
     (Real.rpow_pos_of_pos hKpos _).ne'
   rw [Real.div_rpow
     (etaPairFrameLeftEndpoint_pos (K + 1)).le hKpos.le]
-  field_simp [hKpow] <;> ring
+  field_simp [hKpow]
 
 /--
 Right-side predecessor correction bound, normalized by the current pair-left
@@ -151,12 +156,13 @@ theorem etaCriticalMirrorRightPredecessorLeftEndpointNormalizedCorrectionPowerBo
         atTop
         (nhds
           (etaCriticalMirrorRightLeftEndpointNormalizedCorrectionConstant s)) := by
-    simpa only [Function.comp_apply] using
+    simpa only [Function.comp_apply, Function.comp_def, Nat.pred_eq_sub_one] using
       hshift.comp tendsto_nat_pred_atTop
   refine hpred.congr' ?_
   filter_upwards [eventually_ge_atTop 1] with K hK
-  have hsucc : Nat.pred K + 1 = K := by omega
-  have hpredEq : Nat.pred K = K - 1 := by omega
+  have hsucc : Nat.pred K + 1 = K := Nat.succ_pred_eq_of_pos hK
+  have hpredEq : Nat.pred K = K - 1 := by
+    simp only [Nat.pred_eq_sub_one]
   rw [hsucc, hpredEq]
 
 /--
@@ -185,12 +191,13 @@ theorem etaCriticalMirrorLeftPredecessorLeftEndpointNormalizedCorrectionPowerBou
         atTop
         (nhds
           (etaCriticalMirrorLeftLeftEndpointNormalizedCorrectionConstant s)) := by
-    simpa only [Function.comp_apply] using
+    simpa only [Function.comp_apply, Function.comp_def, Nat.pred_eq_sub_one] using
       hshift.comp tendsto_nat_pred_atTop
   refine hpred.congr' ?_
   filter_upwards [eventually_ge_atTop 1] with K hK
-  have hsucc : Nat.pred K + 1 = K := by omega
-  have hpredEq : Nat.pred K = K - 1 := by omega
+  have hsucc : Nat.pred K + 1 = K := Nat.succ_pred_eq_of_pos hK
+  have hpredEq : Nat.pred K = K - 1 := by
+    simp only [Nat.pred_eq_sub_one]
   rw [hsucc, hpredEq]
 
 end DkMath.RH.CFBRCProjection
