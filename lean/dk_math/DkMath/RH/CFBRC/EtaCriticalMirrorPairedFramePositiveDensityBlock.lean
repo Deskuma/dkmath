@@ -187,7 +187,8 @@ theorem eventually_all_subblock_sixteen_mul_normCoefficient_mul_span_lt_abs_im
       have hleft : 0 < etaPairFrameLeftEndpoint K :=
         etaPairFrameLeftEndpoint_pos K
       gcongr
-      exact_mod_cast hj
+      · exact mul_nonneg (by norm_num)
+          (etaCriticalMirrorDefectPairNormCoefficient_nonneg s)
     _ =
       32 * etaCriticalMirrorDefectPairNormCoefficient s *
         |s.im| *
