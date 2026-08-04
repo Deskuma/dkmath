@@ -36,8 +36,9 @@ theorem summable_etaCriticalMirrorPairedFrameCorrectionSignedProjectionTerm
           (etaCriticalMirrorPairedFrameCorrectionTerm s k).im) :=
     (hcorr.hasSum.map Complex.imCLM Complex.imCLM.continuous).summable
   have hscaled := himag.mul_left s.im
-  simpa [etaCriticalMirrorPairedFrameCorrectionSignedProjectionTerm,
-    etaCriticalMirrorSignedVerticalProjection] using hscaled
+  change Summable
+    (fun k : ℕ => s.im * (etaCriticalMirrorPairedFrameCorrectionTerm s k).im)
+  exact hscaled
 
 /--
 The first-order sine-transport series is summable.  This follows from the
