@@ -17,6 +17,7 @@ namespace DkMath.RH.CFBRCProjection
 
 open Filter
 open scoped Topology
+open DkMath.RH.Weave.Analytic
 
 /-- Explicit p-series bound for the complex Abel correction tail from `K`. -/
 noncomputable def etaCriticalMirrorPairedFrameCorrectionTailPowerBound
@@ -73,83 +74,44 @@ theorem tsum_etaCriticalMirrorPairedFrameCorrectionMajorant_nat_add_le_powerBoun
   have hMirrorScaled :
       Summable
         (fun n : ℕ =>
-          A *
-            (‖criticalMirror s‖ *
-              (((n + K + 1 : ℕ) : ℝ) ^
-                (-(criticalMirror s).re - 1)))) :=
+          A * (‖criticalMirror s‖ * (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1)))) :=
     (hMirrorSummable.mul_left ‖criticalMirror s‖).mul_left A
   have hOriginalScaled :
       Summable
         (fun n : ℕ =>
-          B *
-            (‖s‖ *
-              (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) :=
+          B * (‖s‖ * (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) :=
     (hOriginalSummable.mul_left ‖s‖).mul_left B
   have hMirrorFactor :
       (∑' n : ℕ,
-        A *
-          (‖criticalMirror s‖ *
-            (((n + K + 1 : ℕ) : ℝ) ^
-              (-(criticalMirror s).re - 1)))) =
-        A *
-          (‖criticalMirror s‖ *
-            (∑' n : ℕ,
-              (((n + K + 1 : ℕ) : ℝ) ^
-                (-(criticalMirror s).re - 1)))) :=
+        A * (‖criticalMirror s‖ *            (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1)))) =
+        A * (‖criticalMirror s‖ * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1)))) :=
     ((hMirrorSummable.hasSum.mul_left ‖criticalMirror s‖).mul_left A).tsum_eq
   have hOriginalFactor :
       (∑' n : ℕ,
-        B *
-          (‖s‖ *
-            (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) =
-        B *
-          (‖s‖ *
-            (∑' n : ℕ,
-              (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) :=
+        B * (‖s‖ *            (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) =
+        B * (‖s‖ * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) :=
     ((hOriginalSummable.hasSum.mul_left ‖s‖).mul_left B).tsum_eq
   have hAdd :=
     (hMirrorScaled.hasSum.add hOriginalScaled.hasSum).tsum_eq
   have hmajorantTsum :
-      (∑' n : ℕ,
-        etaCriticalMirrorPairedFrameCorrectionMajorant s (n + K)) =
-        A *
-            (‖criticalMirror s‖ *
-              (∑' n : ℕ,
-                (((n + K + 1 : ℕ) : ℝ) ^
-                  (-(criticalMirror s).re - 1)))) +
-          B *
-            (‖s‖ *
-              (∑' n : ℕ,
-                (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) := by
+      (∑' n : ℕ, etaCriticalMirrorPairedFrameCorrectionMajorant s (n + K)) =
+        A * (‖criticalMirror s‖ * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1)))) +
+        B * (‖s‖                * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))
+      ) := by
     unfold etaCriticalMirrorPairedFrameCorrectionMajorant
     change
       (∑' n : ℕ,
-        A *
-            (‖criticalMirror s‖ *
-              (((n + K + 1 : ℕ) : ℝ) ^
-                (-(criticalMirror s).re - 1))) +
-          B *
-            (‖s‖ *
-              (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) = _
+        (A * (‖criticalMirror s‖ *
+          (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1))) +
+          B * (‖s‖ * (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))))) = _
     rw [hAdd, hMirrorFactor, hOriginalFactor]
   rw [hmajorantTsum]
   unfold etaCriticalMirrorPairedFrameCorrectionTailPowerBound
   change
-    A *
-          (‖criticalMirror s‖ *
-            (∑' n : ℕ,
-              (((n + K + 1 : ℕ) : ℝ) ^
-                (-(criticalMirror s).re - 1)))) +
-        B *
-          (‖s‖ *
-            (∑' n : ℕ,
-              (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1))) ≤
-      A *
-          (‖criticalMirror s‖ *
-            (((K : ℝ) ^ (-(criticalMirror s).re)) /
-              (criticalMirror s).re)) +
-        B *
-          (‖s‖ * (((K : ℝ) ^ (-s.re)) / s.re))
+    A * (‖criticalMirror s‖ * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-(criticalMirror s).re - 1)))) +
+    B * (‖s‖                * (∑' n : ℕ, (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 1)))) ≤
+    A * (‖criticalMirror s‖ * (((K : ℝ) ^ (-(criticalMirror s).re)) / (criticalMirror s).re)) +
+    B * (‖s‖ * (((K : ℝ) ^ (-s.re)) / s.re))
   exact add_le_add
     (mul_le_mul_of_nonneg_left
       (mul_le_mul_of_nonneg_left hMirrorTail (norm_nonneg _))
@@ -249,7 +211,7 @@ theorem eventually_predecessorFrameWholeTailProjection_pos_of_rightAbelCorrectio
       ∀ᶠ K : ℕ in atTop,
         |etaCriticalMirrorPairedFrameCorrectionProjectionTail (K - 1) s| ≤
           etaCriticalMirrorPairedFrameCorrectionProjectionTailPowerBound s (K - 1) :=
-    hcorr.comp_tendsto tendsto_nat_pred_atTop
+    tendsto_nat_pred_atTop.eventually hcorr
   have htail :=
     eventually_etaCriticalMirrorRotatedDefectProjectionTail_pos_of_half_lt_re
       hs him hre
@@ -277,7 +239,7 @@ theorem eventually_predecessorFrameWholeTailProjection_neg_of_leftAbelCorrection
       ∀ᶠ K : ℕ in atTop,
         |etaCriticalMirrorPairedFrameCorrectionProjectionTail (K - 1) s| ≤
           etaCriticalMirrorPairedFrameCorrectionProjectionTailPowerBound s (K - 1) :=
-    hcorr.comp_tendsto tendsto_nat_pred_atTop
+    tendsto_nat_pred_atTop.eventually hcorr
   have htail :=
     eventually_etaCriticalMirrorRotatedDefectProjectionTail_neg_of_re_lt_half
       hs him hre
