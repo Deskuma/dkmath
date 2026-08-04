@@ -63,7 +63,7 @@ private theorem transferError_lt_margin_of_scaledNorm_le
       _ ≤ 8 * S * (C * M) := hmul
       _ = (8 * C * S) * M := by ring
       _ < |t| * M := hangleM
-  exact (mul_lt_mul_left habsPos).mp hcombined
+  exact (mul_lt_mul_iff_of_pos_left habsPos).mp hcombined
 
 /-- Every fixed-offset late block eventually has span at most one. -/
 theorem eventually_etaPairFrameBlockSpan_le_one
