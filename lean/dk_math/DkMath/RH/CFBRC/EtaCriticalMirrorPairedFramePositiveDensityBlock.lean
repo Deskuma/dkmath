@@ -19,6 +19,16 @@ namespace DkMath.RH.CFBRCProjection
 open Filter
 open scoped BigOperators Topology
 
+/-- Lift one eventual pair-index statement uniformly beyond every late start. -/
+private theorem eventually_all_nat_add_positiveDensityBlock
+    {P : ℕ → Prop}
+    (hP : ∀ᶠ k : ℕ in atTop, P k) :
+    ∀ᶠ K : ℕ in atTop, ∀ j : ℕ, P (K + j) := by
+  rcases eventually_atTop.1 hP with ⟨K₀, hK₀⟩
+  exact eventually_atTop.2 ⟨K₀, by
+    intro K hK j
+    exact hK₀ (K + j) (by omega)⟩
+
 /--
 A block schedule whose length has a strictly positive asymptotic ratio to the
 pair-left endpoint `2K+1`.
@@ -198,11 +208,11 @@ theorem eventually_rightBlockMarginSum_lt_rotatedDefectProjectionTail
           s K (S.blockLength K) <
         etaCriticalMirrorRotatedDefectProjectionTail K s := by
   have hlocal :=
-    eventually_all_nat_add_movingProjectionTailMargin
+    eventually_all_nat_add_positiveDensityBlock
       (eventually_etaCriticalMirrorRightPairMargin_le_rotatedDefectPairProjection
         hs him hre)
   have htail :=
-    eventually_all_nat_add_movingProjectionTailMargin
+    eventually_all_nat_add_positiveDensityBlock
       (eventually_etaCriticalMirrorRotatedDefectProjectionTail_pos_of_half_lt_re
         hs him hre)
   filter_upwards [hlocal, htail] with K hlocalK htailK
@@ -234,11 +244,11 @@ theorem eventually_leftBlockMarginSum_lt_neg_rotatedDefectProjectionTail
           s K (S.blockLength K) <
         -etaCriticalMirrorRotatedDefectProjectionTail K s := by
   have hlocal :=
-    eventually_all_nat_add_movingProjectionTailMargin
+    eventually_all_nat_add_positiveDensityBlock
       (eventually_etaCriticalMirrorLeftPairMargin_le_neg_rotatedDefectPairProjection
         hs him hre)
   have htail :=
-    eventually_all_nat_add_movingProjectionTailMargin
+    eventually_all_nat_add_positiveDensityBlock
       (eventually_etaCriticalMirrorRotatedDefectProjectionTail_neg_of_re_lt_half
         hs him hre)
   filter_upwards [hlocal, htail] with K hlocalK htailK
