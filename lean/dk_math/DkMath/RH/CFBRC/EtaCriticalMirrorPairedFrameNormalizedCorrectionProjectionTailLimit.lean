@@ -63,6 +63,7 @@ theorem etaCriticalMirrorRightNormalizedCorrectionProjectionTail_tendsto_constan
     simpa [etaCriticalMirrorRightNormalizedCorrectionProjectionTailConstant]
       using hsum
   refine hlimit.congr' (Eventually.of_forall fun K => ?_)
+  simp only
   rw [etaCriticalMirrorPairedFrameCorrectionProjectionTail_eq_sineTransportTail_add_cosineLossTail
     hs him K]
   ring
@@ -101,6 +102,7 @@ theorem etaCriticalMirrorLeftNormalizedCorrectionProjectionTail_tendsto_constant
     simpa [etaCriticalMirrorLeftNormalizedCorrectionProjectionTailConstant]
       using hsum
   refine hlimit.congr' (Eventually.of_forall fun K => ?_)
+  simp only
   rw [etaCriticalMirrorPairedFrameCorrectionProjectionTail_eq_sineTransportTail_add_cosineLossTail
     hs him K]
   ring
