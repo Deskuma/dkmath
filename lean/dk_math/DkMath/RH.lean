@@ -102,6 +102,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedCoarseCorrectionObs
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameSignedCorrectionDecomposition
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCosineLossBound
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedCosineLossAudit
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameSineTransportReduction
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
