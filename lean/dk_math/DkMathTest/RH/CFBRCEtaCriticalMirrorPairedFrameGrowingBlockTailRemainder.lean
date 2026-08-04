@@ -1,5 +1,7 @@
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGrowingBlockTailRemainder
 
+set_option linter.style.longLine false
+
 namespace DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameGrowingBlockTailRemainder
 
 open Filter
