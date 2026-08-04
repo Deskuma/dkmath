@@ -66,7 +66,7 @@ theorem rightNormalizedAbelCorrectionConstantDominates_iff_gap_pos
       0 < S.rightNormalizedAbelCorrectionDominationGap s := by
   unfold RightNormalizedAbelCorrectionConstantDominates
   unfold rightNormalizedAbelCorrectionDominationGap
-  linarith
+  constructor <;> intro h <;> linarith
 
 /-- The left constant gate is exactly positivity of the left constant gap. -/
 theorem leftNormalizedAbelCorrectionConstantDominates_iff_gap_pos
@@ -75,7 +75,7 @@ theorem leftNormalizedAbelCorrectionConstantDominates_iff_gap_pos
       0 < S.leftNormalizedAbelCorrectionDominationGap s := by
   unfold LeftNormalizedAbelCorrectionConstantDominates
   unfold leftNormalizedAbelCorrectionDominationGap
-  linarith
+  constructor <;> intro h <;> linarith
 
 /--
 A strict right constant gap eventually places the predecessor correction power
@@ -139,10 +139,9 @@ theorem eventually_correctionPowerBound_lt_rightBlockMarginPowerLowerBound
           etaCriticalMirrorRightBlockMarginPowerLowerBound
             s K (S.blockLength K) :=
     hcorrK.trans hblockK
-  exact
-    (mul_lt_mul_left
-      (Real.rpow_pos_of_pos (etaPairFrameLeftEndpoint_pos K) _)).mp
-      hnormalized
+  have hscale : 0 < etaPairFrameLeftEndpoint K ^ (criticalMirror s).re :=
+    Real.rpow_pos_of_pos (etaPairFrameLeftEndpoint_pos K) _
+  exact lt_of_mul_lt_mul_left hnormalized hscale.le
 
 /--
 A strict left constant gap eventually places the predecessor correction power
@@ -206,10 +205,9 @@ theorem eventually_correctionPowerBound_lt_leftBlockMarginPowerLowerBound
           etaCriticalMirrorLeftBlockMarginPowerLowerBound
             s K (S.blockLength K) :=
     hcorrK.trans hblockK
-  exact
-    (mul_lt_mul_left
-      (Real.rpow_pos_of_pos (etaPairFrameLeftEndpoint_pos K) _)).mp
-      hnormalized
+  have hscale : 0 < etaPairFrameLeftEndpoint K ^ s.re :=
+    Real.rpow_pos_of_pos (etaPairFrameLeftEndpoint_pos K) _
+  exact lt_of_mul_lt_mul_left hnormalized hscale.le
 
 /-- A strict right constant gap supplies the earlier right Abel domination gate. -/
 theorem rightAbelCorrectionTailDominated_of_normalizedConstantDomination
