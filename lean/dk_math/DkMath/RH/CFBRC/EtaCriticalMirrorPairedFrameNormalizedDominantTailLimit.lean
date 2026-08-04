@@ -71,7 +71,13 @@ theorem etaPairIndexToSuccessorEndpointRatio_tendsto_half :
         atTop (nhds 2) := by
     simpa using tendsto_const_nhds.add hsmall
   have hinv := hden.inv₀ (by norm_num : (2 : ℝ) ≠ 0)
-  refine hinv.congr' (Eventually.of_forall fun k => ?_)
+  have hinvHalf :
+      Tendsto
+        (fun k : ℕ =>
+          ((2 : ℝ) + (1 : ℝ) / (((k + 1 : ℕ) : ℝ)))⁻¹)
+        atTop (nhds ((1 : ℝ) / 2)) := by
+    simpa using hinv
+  refine hinvHalf.congr' (Eventually.of_forall fun k => ?_)
   unfold etaPairIndexToSuccessorEndpointRatio
   unfold etaPairFrameLeftEndpoint
   have hk : 0 < (((k + 1 : ℕ) : ℝ)) := by positivity
@@ -205,11 +211,42 @@ theorem etaPairIndexNormalizedRotatedEulerHalfMain_eq_ratio_mul_residual
     etaPairFrameLeftEndpoint_pos (k + 1)
   unfold etaPairIndexNormalizedRotatedEulerHalfMain
   rw [etaUnsignedVector_two_mul_succ_eq_etaRealKernel_nextLeft]
-  rw [etaPairBaseRotation_mul_etaRealKernel_factor z k hL]
-  have hscale := etaPairIndexScale_mul_successorRadial_eq_ratio_rpow z k
-  push_cast
-  rw [← hscale]
-  ring
+  calc
+    ((((k + 1 : ℕ) : ℝ) ^ z.re : ℝ) : ℂ) *
+        (etaPairBaseRotation z k *
+          (((1 : ℂ) / 2) *
+            etaRealKernel z (etaPairFrameLeftEndpoint (k + 1)))) =
+      ((1 : ℂ) / 2) *
+        (((((k + 1 : ℕ) : ℝ) ^ z.re : ℝ) : ℂ) *
+          (etaPairBaseRotation z k *
+            etaRealKernel z (etaPairFrameLeftEndpoint (k + 1)))) := by
+      ring
+    _ = ((1 : ℂ) / 2) *
+        (((etaPairIndexToSuccessorEndpointRatio k ^ z.re : ℝ) : ℂ)) *
+          etaPairResidualRotation z k
+            (etaPairFrameLeftEndpoint (k + 1)) := by
+      rw [etaPairBaseRotation_mul_etaRealKernel_factor z k hL]
+      have hscale :=
+        etaPairIndexScale_mul_successorRadial_eq_ratio_rpow z k
+      calc
+        ((1 : ℂ) / 2) *
+            (((((k + 1 : ℕ) : ℝ) ^ z.re : ℝ) : ℂ) *
+              ((((etaPairFrameLeftEndpoint (k + 1) ^ (-z.re) : ℝ) : ℂ)) *
+                etaPairResidualRotation z k
+                  (etaPairFrameLeftEndpoint (k + 1)))) =
+          ((1 : ℂ) / 2) *
+            ((((((k + 1 : ℕ) : ℝ) ^ z.re) *
+              (etaPairFrameLeftEndpoint (k + 1) ^ (-z.re)) : ℝ) : ℂ) *
+                etaPairResidualRotation z k
+                  (etaPairFrameLeftEndpoint (k + 1))) := by
+            congr 1
+            rw [← mul_assoc, ← Complex.ofReal_mul]
+        _ = ((1 : ℂ) / 2) *
+            (((etaPairIndexToSuccessorEndpointRatio k ^ z.re : ℝ) : ℂ)) *
+              etaPairResidualRotation z k
+                (etaPairFrameLeftEndpoint (k + 1)) := by
+          rw [hscale]
+          ring
 
 /-- The normalized half-endpoint main term converges to its explicit constant. -/
 theorem etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant
@@ -230,10 +267,19 @@ theorem etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant
       (((1 : ℝ) / 2) ^ z.re)).comp hratio
     simpa using h
   have hres := etaPairResidualRotation_nextLeft_tendsto_one z
-  have hprod := (tendsto_const_nhds.mul hratioC).mul hres
-  refine hprod.congr' (Eventually.of_forall fun k => ?_)
-  rw [etaPairIndexNormalizedRotatedEulerHalfMain_eq_ratio_mul_residual]
-  rfl
+  have hprod0 := (tendsto_const_nhds.mul hratioC).mul hres
+  have hprod :
+      Tendsto
+        (fun k : ℕ =>
+          ((1 : ℂ) / 2) *
+            (((etaPairIndexToSuccessorEndpointRatio k ^ z.re : ℝ) : ℂ)) *
+              etaPairResidualRotation z k
+                (etaPairFrameLeftEndpoint (k + 1)))
+        atTop (nhds (etaPairIndexNormalizedTailConstant z)) := by
+    simpa [etaPairIndexNormalizedTailConstant] using hprod0
+  simpa only
+    [etaPairIndexNormalizedRotatedEulerHalfMain_eq_ratio_mul_residual]
+    using hprod
 
 /-- Real power audit for the normalized Euler remainder. -/
 noncomputable def etaPairIndexNormalizedEulerRemainderPowerAudit
@@ -333,8 +379,9 @@ theorem etaPairIndexNormalizedRotatedTail_tendsto_constant
       atTop (nhds (etaPairIndexNormalizedTailConstant z)) := by
   have hmain := etaPairIndexNormalizedRotatedEulerHalfMain_tendsto_constant z
   have hrem := etaPairIndexNormalizedRotatedEulerRemainder_tendsto_zero hzre
-  refine (hmain.add hrem).congr' (Eventually.of_forall fun k => ?_)
-  exact (etaPairIndexNormalizedRotatedTail_eq_main_add_remainder hzre k).symm
+  have hsum := hmain.add hrem
+  simpa only [etaPairIndexNormalizedRotatedTail_eq_main_add_remainder hzre]
+    using hsum
 
 /-- The right-side normalized rotated mirror tail converges to its positive Euler constant. -/
 theorem etaCriticalMirrorRightIndexNormalizedRotatedMirrorTail_tendsto_constant
@@ -412,7 +459,18 @@ theorem etaCriticalMirrorRightIndexNormalizedRotatedDefectTail_tendsto_constant
     etaCriticalMirrorRightIndexNormalizedRotatedMirrorTail_tendsto_constant hs
   have hrem :=
     etaCriticalMirrorRightIndexNormalizedRotatedDefectSubMirror_tendsto_zero hs hre
-  refine (hmain.add hrem).congr' (Eventually.of_forall fun k => ?_)
+  have hsum :
+      Tendsto
+        (fun k : ℕ =>
+          (((((k + 1 : ℕ) : ℝ)) ^ (criticalMirror s).re : ℝ) : ℂ) *
+              etaCriticalMirrorPairFrameRotatedMirrorTail s k +
+            (((((k + 1 : ℕ) : ℝ)) ^ (criticalMirror s).re : ℝ) : ℂ) *
+              (etaCriticalMirrorPairFrameRotatedDefectTail s k -
+                etaCriticalMirrorPairFrameRotatedMirrorTail s k))
+        atTop
+        (nhds (etaPairIndexNormalizedTailConstant (criticalMirror s))) := by
+    simpa using hmain.add hrem
+  refine hsum.congr' (Eventually.of_forall fun k => ?_)
   ring
 
 /-- Left of the critical line, the normalized rotated defect tail has the negative explicit limit. -/
@@ -429,7 +487,18 @@ theorem etaCriticalMirrorLeftIndexNormalizedRotatedDefectTail_tendsto_neg_consta
     (etaCriticalMirrorLeftIndexNormalizedRotatedOriginalTail_tendsto_constant hs).neg
   have hrem :=
     etaCriticalMirrorLeftIndexNormalizedRotatedDefectAddOriginal_tendsto_zero hs hre
-  refine (hmain.add hrem).congr' (Eventually.of_forall fun k => ?_)
+  have hsum :
+      Tendsto
+        (fun k : ℕ =>
+          -(((((k + 1 : ℕ) : ℝ)) ^ s.re : ℝ) : ℂ) *
+              etaCriticalMirrorPairFrameRotatedOriginalTail s k +
+            (((((k + 1 : ℕ) : ℝ)) ^ s.re : ℝ) : ℂ) *
+              (etaCriticalMirrorPairFrameRotatedDefectTail s k +
+                etaCriticalMirrorPairFrameRotatedOriginalTail s k))
+        atTop
+        (nhds (-etaPairIndexNormalizedTailConstant s)) := by
+    simpa using hmain.add hrem
+  refine hsum.congr' (Eventually.of_forall fun k => ?_)
   ring
 
 end DkMath.RH.CFBRCProjection
