@@ -48,4 +48,34 @@ example
     0 < 1 + 2 * S.density :=
   S.one_add_two_mul_density_pos
 
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (q : ℝ) :
+    Tendsto
+      (fun K : ℕ => S.endpointRatio K ^ q)
+      atTop
+      (nhds ((1 + 2 * S.density) ^ q)) :=
+  S.endpointRatio_rpow_tendsto q
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (S.rightNormalizedBlockMarginPowerFactor s)
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (s.re - 2)))) :=
+  S.rightNormalizedBlockMarginPowerFactor_tendsto s
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (S.leftNormalizedBlockMarginPowerFactor s)
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (-s.re - 1)))) :=
+  S.leftNormalizedBlockMarginPowerFactor_tendsto s
+
 end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameNormalizedConstantAudit
