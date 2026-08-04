@@ -78,4 +78,54 @@ example
             (1 + 2 * S.density) ^ (-s.re - 1)))) :=
   S.leftNormalizedBlockMarginPowerFactor_tendsto s
 
+example (K : ℕ) (q : ℝ) :
+    etaPairFrameLeftEndpoint K ^ (-1 - q) =
+      (1 / etaPairFrameLeftEndpoint K) *
+        (etaPairFrameLeftEndpoint K ^ q)⁻¹ :=
+  EtaPairPositiveDensityBlockSchedule.etaPairFrameLeftEndpoint_rpow_neg_one_sub K q
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) :
+    etaPairFrameLeftEndpoint K ^ (1 - s.re) *
+        etaCriticalMirrorRightBlockMarginPowerLowerBound
+          s K (S.blockLength K) =
+      S.rightNormalizedBlockMarginPowerFactor s K :=
+  S.rightNormalizedBlockMarginPowerLowerBound_eq_factor s K
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) (K : ℕ) :
+    etaPairFrameLeftEndpoint K ^ s.re *
+        etaCriticalMirrorLeftBlockMarginPowerLowerBound
+          s K (S.blockLength K) =
+      S.leftNormalizedBlockMarginPowerFactor s K :=
+  S.leftNormalizedBlockMarginPowerLowerBound_eq_factor s K
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (fun K : ℕ =>
+        etaPairFrameLeftEndpoint K ^ (1 - s.re) *
+          etaCriticalMirrorRightBlockMarginPowerLowerBound
+            s K (S.blockLength K))
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (s.re - 2)))) :=
+  S.rightNormalizedBlockMarginPowerLowerBound_tendsto s
+
+example
+    (S : EtaPairPositiveDensityBlockSchedule) (s : ℂ) :
+    Tendsto
+      (fun K : ℕ =>
+        etaPairFrameLeftEndpoint K ^ s.re *
+          etaCriticalMirrorLeftBlockMarginPowerLowerBound
+            s K (S.blockLength K))
+      atTop
+      (nhds
+        ((s.im ^ 2 / 4) *
+          (S.density *
+            (1 + 2 * S.density) ^ (-s.re - 1)))) :=
+  S.leftNormalizedBlockMarginPowerLowerBound_tendsto s
+
 end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameNormalizedConstantAudit
