@@ -87,8 +87,8 @@ private theorem eight_mul_sq_lt_coarse_endpoint_correction_constant
       _ = (2 : ℝ) ^ a * (‖z‖ / a ^ 2) := by ring
   have habsPos : 0 < |t| := abs_pos.mpr ht
   have habsSq : |t| ^ 2 = t ^ 2 := sq_abs t
-  have hfourAbsSqPos : 0 < 4 * |t| ^ 2 := by
-    positivity
+  have hfourAbsSqPos : 0 < 4 * |t| ^ 2 :=
+    mul_pos (by norm_num) (sq_pos_of_pos habsPos)
   have hscaled :=
     mul_lt_mul_of_pos_left hcombined hfourAbsSqPos
   have hrearrange :
@@ -121,8 +121,8 @@ theorem rightNormalizedBlockMarginConstant_lt_im_sq_div_eight
           (1 + 2 * S.density) ^ (s.re - 2) <
         (1 : ℝ) / 2 := by
     convert hfactor using 1 <;> ring
-  have hcoeff : 0 < s.im ^ 2 / 4 := by
-    positivity
+  have hcoeff : 0 < s.im ^ 2 / 4 :=
+    div_pos (sq_pos_of_ne_zero him) (by norm_num)
   unfold rightNormalizedBlockMarginConstant
   calc
     (s.im ^ 2 / 4) *
@@ -146,8 +146,8 @@ theorem leftNormalizedBlockMarginConstant_lt_im_sq_div_eight
           (1 + 2 * S.density) ^ (-s.re - 1) <
         (1 : ℝ) / 2 := by
     convert hfactor using 1 <;> ring
-  have hcoeff : 0 < s.im ^ 2 / 4 := by
-    positivity
+  have hcoeff : 0 < s.im ^ 2 / 4 :=
+    div_pos (sq_pos_of_ne_zero him) (by norm_num)
   unfold leftNormalizedBlockMarginConstant
   calc
     (s.im ^ 2 / 4) *
