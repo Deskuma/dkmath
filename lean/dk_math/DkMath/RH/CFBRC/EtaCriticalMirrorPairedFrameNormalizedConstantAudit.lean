@@ -172,7 +172,11 @@ theorem rightNormalizedBlockMarginPowerFactor_tendsto
         ((s.im ^ 2 / 4) *
           (S.density *
             (1 + 2 * S.density) ^ (s.re - 2)))) := by
-  simpa [rightNormalizedBlockMarginPowerFactor] using
+  change Tendsto
+    (fun K : ℕ => (s.im ^ 2 / 4) *
+      (((S.blockLength K : ℝ) / etaPairFrameLeftEndpoint K) *
+        S.endpointRatio K ^ (s.re - 2))) atTop _
+  simpa [Function.comp_def] using
     tendsto_const_nhds.mul
       (S.relativeLength_tendsto_density.mul
         (S.endpointRatio_rpow_tendsto (s.re - 2)))
@@ -190,7 +194,11 @@ theorem leftNormalizedBlockMarginPowerFactor_tendsto
         ((s.im ^ 2 / 4) *
           (S.density *
             (1 + 2 * S.density) ^ (-s.re - 1)))) := by
-  simpa [leftNormalizedBlockMarginPowerFactor] using
+  change Tendsto
+    (fun K : ℕ => (s.im ^ 2 / 4) *
+      (((S.blockLength K : ℝ) / etaPairFrameLeftEndpoint K) *
+        S.endpointRatio K ^ (-s.re - 1))) atTop _
+  simpa [Function.comp_def] using
     tendsto_const_nhds.mul
       (S.relativeLength_tendsto_density.mul
         (S.endpointRatio_rpow_tendsto (-s.re - 1)))
@@ -255,7 +263,8 @@ theorem leftNormalizedBlockMarginPowerLowerBound_eq_factor
         (1 / etaPairFrameLeftEndpoint K) *
           (etaPairFrameLeftEndpoint K ^ (-s.re - 1))⁻¹ := by
     rw [show s.re = -1 - (-s.re - 1) by ring]
-    exact etaPairFrameLeftEndpoint_rpow_neg_one_sub K (-s.re - 1)
+    convert etaPairFrameLeftEndpoint_rpow_neg_one_sub K (-s.re - 1) using 1
+    all_goals ring_nf
   unfold etaCriticalMirrorLeftBlockMarginPowerLowerBound
   unfold leftNormalizedBlockMarginPowerFactor endpointRatio
   rw [hnormalization, Real.div_rpow hright.le hleft.le]
