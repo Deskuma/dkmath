@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorDefectPairMarginPowerLowerBound
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameVariation
+import DkMath.RH.Weave.Analytic.EtaPairPhaseSpan
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Tactic
 
@@ -67,7 +69,6 @@ theorem endpointRatio_eq_one_add_two_mul_relativeLength_add_inv
   have hleft : etaPairFrameLeftEndpoint K ≠ 0 :=
     (etaPairFrameLeftEndpoint_pos K).ne'
   field_simp [hleft]
-  ring
 
 /-- The reciprocal pair-left endpoint tends to zero. -/
 theorem tendsto_one_div_etaPairFrameLeftEndpoint_zero :
@@ -76,7 +77,7 @@ theorem tendsto_one_div_etaPairFrameLeftEndpoint_zero :
       atTop (nhds 0) := by
   have hcomp :=
     (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).comp
-      tendsto_two_mul_add_one_atTop
+      DkMath.RH.Weave.Analytic.tendsto_two_mul_add_one_atTop
   convert hcomp using 1
   funext K
   norm_num [etaPairFrameLeftEndpoint, Function.comp_apply,
@@ -114,7 +115,7 @@ theorem endpointRatio_tendsto_one_add_two_mul_density
   · funext K
     exact
       endpointRatio_eq_one_add_two_mul_relativeLength_add_inv S K
-  · ring
+  · ring_nf
 
 /-- The endpoint-ratio limit is strictly positive. -/
 theorem one_add_two_mul_density_pos
