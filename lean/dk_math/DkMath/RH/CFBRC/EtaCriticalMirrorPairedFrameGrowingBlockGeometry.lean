@@ -202,7 +202,10 @@ theorem eventually_all_subblock_eight_mul_normCoefficient_mul_span_lt_abs_im
           etaPairFrameBlockSpan s K (S.blockLength K) :=
     mul_le_mul_of_nonneg_left
       (etaPairFrameBlockSpan_mono_length s K hj)
-      (by positivity)
+      (by
+        have hc : 0 ≤ etaCriticalMirrorDefectPairNormCoefficient s :=
+          etaCriticalMirrorDefectPairNormCoefficient_nonneg s
+        positivity)
   exact hmono.trans_lt hK
 
 end EtaPairGrowingBlockSchedule
