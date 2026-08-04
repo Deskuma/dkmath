@@ -27,6 +27,8 @@ example
       (nhds (S.scheduledBlockRotationLimit s)) :=
   S.scheduledBlockRotation_tendsto s
 
+open EtaPairPositiveDensityBlockSchedule
+
 example (s : ℂ) :
     Tendsto
       (etaPairHalfDensityBlockSchedule.scheduledBlockPhase s)

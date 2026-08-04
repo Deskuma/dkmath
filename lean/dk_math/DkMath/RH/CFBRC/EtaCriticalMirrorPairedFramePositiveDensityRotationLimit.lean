@@ -49,7 +49,6 @@ theorem leftEndpointRatio_eq_one_add_two_mul_relativeLength
   have hleft : etaPairFrameLeftEndpoint K ≠ 0 :=
     (etaPairFrameLeftEndpoint_pos K).ne'
   field_simp [hleft]
-  ring
 
 /-- Every positive-density schedule has pair-left endpoint ratio `1 + 2ρ`. -/
 theorem leftEndpointRatio_tendsto_one_add_two_mul_density
@@ -107,9 +106,14 @@ theorem scheduledBlockPhase_tendsto
         (s.im * Real.log (1 + 2 * S.density))) := by
   have hratio := S.leftEndpointRatio_tendsto_one_add_two_mul_density
   have hlog := hratio.log S.one_add_two_mul_density_pos.ne'
-  have hmul := tendsto_const_nhds.mul hlog
-  simpa only [S.scheduledBlockPhase_eq_im_mul_log_leftEndpointRatio]
-    using hmul
+  have hmul :=
+    (tendsto_const_nhds :
+      Tendsto (fun _ : ℕ => s.im) atTop (nhds s.im)).mul hlog
+  rw [show S.scheduledBlockPhase s =
+      (fun K : ℕ => s.im * Real.log (S.leftEndpointRatio K)) by
+        funext K
+        exact S.scheduledBlockPhase_eq_im_mul_log_leftEndpointRatio s K]
+  exact hmul
 
 /-- Relative frame rotation across the scheduled positive-density block. -/
 noncomputable def scheduledBlockRotation
@@ -158,6 +162,9 @@ theorem scheduledBlockRotation_tendsto
       (Complex.I *
         (((s.im * Real.log (1 + 2 * S.density) : ℝ) : ℂ)))).comp
       hinner
+  change Tendsto
+    (fun K : ℕ => etaPairFrameBlockRotation s K (S.blockLength K))
+    atTop (nhds (S.scheduledBlockRotationLimit s))
   simpa [scheduledBlockRotation, scheduledBlockRotationLimit,
     etaPairFrameBlockRotation_eq_exp, scheduledBlockPhase,
     Function.comp_def] using hexp
@@ -169,7 +176,8 @@ theorem etaPairHalfDensityBlockSchedule_scheduledBlockPhase_tendsto
       (etaPairHalfDensityBlockSchedule.scheduledBlockPhase s)
       atTop
       (nhds (s.im * Real.log 2)) := by
-  simpa using etaPairHalfDensityBlockSchedule.scheduledBlockPhase_tendsto s
+  convert etaPairHalfDensityBlockSchedule.scheduledBlockPhase_tendsto s using 1;
+    norm_num [etaPairHalfDensityBlockSchedule]
 
 /-- For the canonical block `N(K)=K`, the relative rotation tends to `exp(I * s.im * log 2)`. -/
 theorem etaPairHalfDensityBlockSchedule_scheduledBlockRotation_tendsto
@@ -180,8 +188,8 @@ theorem etaPairHalfDensityBlockSchedule_scheduledBlockRotation_tendsto
       (nhds
         (Complex.exp
           (Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ))))) := by
-  simpa [scheduledBlockRotationLimit] using
-    etaPairHalfDensityBlockSchedule.scheduledBlockRotation_tendsto s
+  convert etaPairHalfDensityBlockSchedule.scheduledBlockRotation_tendsto s using 1;
+    norm_num [etaPairHalfDensityBlockSchedule, scheduledBlockRotationLimit]
 
 end EtaPairPositiveDensityBlockSchedule
 
