@@ -92,6 +92,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameGrowingBlockTailRemainder
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameAbelTailIdentity
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameAbelCorrectionTailBound
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingProjectionTailMargin
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFramePositiveDensityBlock
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
