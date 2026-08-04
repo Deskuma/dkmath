@@ -104,7 +104,6 @@ theorem abs_etaCriticalMirrorPairedFrameCosineLossCoefficient_le
       mul_le_mul_of_nonneg_left hhalf (abs_nonneg s.im)
     _ = 2 * |s.im| ^ 3 / x ^ 2 := by
       field_simp [hx.ne']
-      ring
     _ = 2 * |s.im| ^ 3 / ((((k + 1 : ℕ) : ℝ)) ^ 2) := by
       rfl
 
@@ -115,8 +114,8 @@ private theorem inv_sq_mul_rpow_neg_eq_two_extra
         ((((k + 1 : ℕ) : ℝ)) ^ (-a)) =
       (((k + 1 : ℕ) : ℝ)) ^ (-a - 2) := by
   have hx : 0 < (((k + 1 : ℕ) : ℝ)) := by positivity
-  rw [Real.rpow_sub_natCast hx.ne' (-a) 2]
-  ring
+  convert (Real.rpow_sub_natCast hx.ne' (-a) 2).symm using 1 <;>
+    field_simp; ring
 
 /-- Explicit two-extra-power majorant for one cosine-loss term. -/
 noncomputable def etaCriticalMirrorPairedFrameCosineLossMajorant
@@ -177,7 +176,6 @@ theorem abs_etaCriticalMirrorPairedFrameCorrectionCosineLossTerm_le_majorant
       unfold etaCriticalMirrorPairedFrameCosineLossMajorant
       rw [← hmirror, ← horiginal]
       field_simp [hsre.ne', hmre.ne']
-      ring
 
 /-- A shifted rpow with two extra powers is summable for every positive exponent. -/
 private theorem summable_shifted_rpow_two_extra
@@ -258,13 +256,20 @@ theorem tsum_etaCriticalMirrorPairedFrameCosineLossMajorant_nat_add_le_powerBoun
           (-(criticalMirror s).re - 2))) ≤
         ((K : ℝ) ^ (-(criticalMirror s).re - 1)) /
           ((criticalMirror s).re + 1) := by
-    simpa [show -((criticalMirror s).re + 1) - 1 =
-      -(criticalMirror s).re - 2 by ring] using hMirrorTail
+    convert hMirrorTail using 1
+    · apply tsum_congr
+      intro n
+      congr 1; ring
+    · ring_nf
   have hOriginalTail' :
       (∑' n : ℕ,
         (((n + K + 1 : ℕ) : ℝ) ^ (-s.re - 2))) ≤
         ((K : ℝ) ^ (-s.re - 1)) / (s.re + 1) := by
-    simpa [show -(s.re + 1) - 1 = -s.re - 2 by ring] using hOriginalTail
+    convert hOriginalTail using 1
+    · apply tsum_congr
+      intro n
+      congr 1; ring
+    · ring_nf
   have hMirrorSummable :
       Summable
         (fun n : ℕ =>
