@@ -28,6 +28,8 @@ example
     S.leftNormalizedBlockMarginConstant s < s.im ^ 2 / 8 :=
   S.leftNormalizedBlockMarginConstant_lt_im_sq_div_eight hs him
 
+open EtaPairPositiveDensityBlockSchedule
+
 example
     {s : ℂ} (hs : NontrivialRiemannZetaZero s)
     (him : s.im ≠ 0) (hre : (1 : ℝ) / 2 < s.re) :

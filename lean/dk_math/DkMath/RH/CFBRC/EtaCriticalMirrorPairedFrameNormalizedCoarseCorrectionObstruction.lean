@@ -96,7 +96,7 @@ private theorem eight_mul_sq_lt_coarse_endpoint_correction_constant
           (|t| * ((4 * |t| / a) * (‖z‖ / a))) =
         (4 * |t| ^ 2) *
           ((2 : ℝ) ^ a * (‖z‖ / a ^ 2)) := by
-    field_simp [ha.ne'] <;> ring
+    field_simp [ha.ne']
   calc
     8 * t ^ 2 = (4 * |t| ^ 2) * 2 := by
       rw [habsSq]
@@ -120,7 +120,8 @@ theorem rightNormalizedBlockMarginConstant_lt_im_sq_div_eight
       S.density *
           (1 + 2 * S.density) ^ (s.re - 2) <
         (1 : ℝ) / 2 := by
-    convert hfactor using 1 <;> ring
+    convert hfactor using 1
+    ring_nf
   have hcoeff : 0 < s.im ^ 2 / 4 :=
     div_pos (sq_pos_of_ne_zero him) (by norm_num)
   unfold rightNormalizedBlockMarginConstant
@@ -145,7 +146,8 @@ theorem leftNormalizedBlockMarginConstant_lt_im_sq_div_eight
       S.density *
           (1 + 2 * S.density) ^ (-s.re - 1) <
         (1 : ℝ) / 2 := by
-    convert hfactor using 1 <;> ring
+    convert hfactor using 1
+    ring_nf
   have hcoeff : 0 < s.im ^ 2 / 4 :=
     div_pos (sq_pos_of_ne_zero him) (by norm_num)
   unfold leftNormalizedBlockMarginConstant
@@ -232,8 +234,8 @@ theorem not_rightNormalizedAbelCorrectionConstantDominates
     ¬ S.RightNormalizedAbelCorrectionConstantDominates s := by
   intro hdom
   unfold RightNormalizedAbelCorrectionConstantDominates at hdom
-  exact (S.rightNormalizedBlockMarginConstant_lt_coarseCorrectionConstant
-    hs him hre).not_lt hdom
+  exact not_lt_of_ge (S.rightNormalizedBlockMarginConstant_lt_coarseCorrectionConstant
+    hs him hre).le hdom
 
 /-- The current coarse left constant domination gate is impossible. -/
 theorem not_leftNormalizedAbelCorrectionConstantDominates
@@ -243,8 +245,8 @@ theorem not_leftNormalizedAbelCorrectionConstantDominates
     ¬ S.LeftNormalizedAbelCorrectionConstantDominates s := by
   intro hdom
   unfold LeftNormalizedAbelCorrectionConstantDominates at hdom
-  exact (S.leftNormalizedBlockMarginConstant_lt_coarseCorrectionConstant
-    hs him hre).not_lt hdom
+  exact not_lt_of_ge (S.leftNormalizedBlockMarginConstant_lt_coarseCorrectionConstant
+    hs him hre).le hdom
 
 /-- The right block-minus-coarse-correction constant gap is strictly negative. -/
 theorem rightNormalizedAbelCorrectionDominationGap_neg
