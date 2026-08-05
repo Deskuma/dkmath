@@ -76,7 +76,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_eq_finiteEtaCarrier
       etaCriticalMirrorDominantFiniteEtaCarrier,
       etaCriticalMirrorDominantIndexPower,
       etaCriticalMirrorFinitePairedEtaDefect,
-      hside, hside',
+      hside,
       etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_eq_indexPow_mul_etaPairedPartial_sub]
   · have hside' : ¬ s.re ≤ (1 : ℝ) / 2 := by
       simpa using hside
@@ -84,7 +84,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_eq_finiteEtaCarrier
       etaCriticalMirrorDominantFiniteEtaCarrier,
       etaCriticalMirrorDominantIndexPower,
       etaCriticalMirrorFinitePairedEtaDefect,
-      hside, hside',
+      hside,
       etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_eq_indexPow_mul_etaPairedPartial_sub]
 
 /-- The dominant index power is unchanged by complex conjugation. -/
@@ -95,12 +95,10 @@ theorem etaCriticalMirrorDominantIndexPower_conj
   by_cases hside : s.re ≤ (2 : ℝ)⁻¹
   · have hsideConj : (conj s).re ≤ (2 : ℝ)⁻¹ := by
       simpa using hside
-    simp [etaCriticalMirrorDominantIndexPower, hside, hsideConj,
-      criticalMirror_conj]
+    simp [etaCriticalMirrorDominantIndexPower, hside]
   · have hsideConj : ¬ (conj s).re ≤ (2 : ℝ)⁻¹ := by
       simpa using hside
-    simp [etaCriticalMirrorDominantIndexPower, hside, hsideConj,
-      criticalMirror_conj]
+    simp [etaCriticalMirrorDominantIndexPower, hside, criticalMirror_conj]
 
 /-- The finite paired eta defect commutes exactly with conjugation. -/
 theorem etaCriticalMirrorFinitePairedEtaDefect_conj
@@ -189,6 +187,9 @@ theorem etaCriticalMirrorEndpointCompletedZetaSameTruncationOrbitResidualCollaps
   · intro hfinite s hs him
     have h := hfinite hs him
     refine h.congr' (Eventually.of_forall fun k => ?_)
+    change etaCriticalMirrorDominantIndexPower k s *
+        etaCriticalMirrorEndpointCompletedZetaUnweightedFiniteEtaOrbitResidual k s =
+      etaCriticalMirrorEndpointCompletedZetaSameTruncationOrbitResidual k s
     rw [etaCriticalMirrorEndpointCompletedZetaSameTruncationOrbitResidual_eq_finiteEtaOrbitResidual]
     rw [etaCriticalMirrorEndpointCompletedZetaFiniteEtaOrbitResidual_eq_indexPower_mul_unweighted]
 
