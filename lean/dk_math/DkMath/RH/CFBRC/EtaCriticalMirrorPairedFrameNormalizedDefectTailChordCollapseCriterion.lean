@@ -7,9 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailTwoScaleChord
 import Mathlib.Tactic
 
-#print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailChordCollapseCriterion"
-
 set_option linter.style.longLine false
+
+#print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailChordCollapseCriterion"
 
 noncomputable section
 
