@@ -22,11 +22,10 @@ noncomputable def etaPairBaseRotationSpectralPhaseRate
 
 /-- At positive pair index, the pair-left endpoint is strictly larger than one. -/
 theorem one_lt_etaPairFrameLeftEndpoint_of_pos
-    {k : ℕ} (hk : 0 < k) :
+  {k : ℕ} (hk : 0 < k) :
     1 < etaPairFrameLeftEndpoint k := by
   unfold etaPairFrameLeftEndpoint
-  norm_num
-  exact_mod_cast (by omega : 1 < 2 * k + 1)
+  exact_mod_cast (show 1 < 2 * k + 1 by omega)
 
 /-- The spectral phase rate is strictly positive away from the initial pair. -/
 theorem etaPairBaseRotationSpectralPhaseRate_pos
@@ -59,7 +58,6 @@ theorem etaPairBaseRotation_add_imag
   rw [← Complex.exp_add]
   congr 1
   simp
-  push_cast
   ring
 
 /-- Finite real-direction spectral increment of the moving gauge. -/
