@@ -213,14 +213,35 @@ structure EtaCriticalMirrorGlobalZeroLineLock
         atTop (nhds 0)
 
 /--
-Local moving-line lock marker for the concrete dominant endpoint carrier.
-The target should follow from the rotated endpoint tending to a real nonzero
-constant on each off-critical side.
+The concrete dominant endpoint carrier approaches its local pair-left moving
+real line.  On each off-critical side, the existing rotated-endpoint
+asymptotic converges to a real constant, so its imaginary part tends to zero.
 -/
 theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock :
     EtaCriticalMirrorOffCriticalLocalMovingLineLock
       etaCriticalMirrorDominantNormalizedEndpointCarrier := by
-  sorry
+  intro s hs him hre
+  rcases lt_or_gt_of_ne hre with hleft | hright
+  · have hrotated :=
+      (etaCriticalMirrorLeftNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
+        hs him hleft).rotated_endpoint_tendsto
+    have himaginary :=
+      (Complex.continuous_im.tendsto
+        (-(-etaPairIndexNormalizedTailConstant s))).comp hrotated
+    simpa [etaPairMovingRealLineDefect, complexRealAxisDefect,
+      etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
+      if_pos hleft.le, etaPairIndexNormalizedTailConstant] using himaginary
+  · have hrotated :=
+      (etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
+        hs him hright).rotated_endpoint_tendsto
+    have himaginary :=
+      (Complex.continuous_im.tendsto
+        (-etaPairIndexNormalizedTailConstant (criticalMirror s))).comp hrotated
+    simpa [etaPairMovingRealLineDefect, complexRealAxisDefect,
+      etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
+      if_neg (not_le.mpr hright), etaPairIndexNormalizedTailConstant] using himaginary
 
 /--
 Noncollapse marker for the concrete dominant endpoint carrier.
