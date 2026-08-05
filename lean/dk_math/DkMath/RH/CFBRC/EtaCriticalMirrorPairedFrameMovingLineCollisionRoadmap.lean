@@ -239,9 +239,8 @@ This theorem is deliberately left with `sorry`: its type is the fifth-stage
 completed-zeta / Hardy-frame obligation.  The provider must not be built from
 the endpoint carrier itself or from an RH-equivalent premise.
 -/
-theorem etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
-    EtaCriticalMirrorGlobalZeroLineLock
-      etaCriticalMirrorDominantNormalizedEndpointCarrier := by
+def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
+    EtaCriticalMirrorGlobalZeroLineLock etaCriticalMirrorDominantNormalizedEndpointCarrier := by
   sorry
 
 /--

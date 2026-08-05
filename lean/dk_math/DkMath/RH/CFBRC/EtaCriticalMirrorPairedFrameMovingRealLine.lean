@@ -51,7 +51,7 @@ noncomputable def etaPairMovingRealLineDefect
 theorem zero_mem_complexRealLine (direction : ℂ) :
     0 ∈ complexRealLine direction := by
   refine ⟨0, ?_⟩
-  simp [complexRealLine]
+  simp
 
 @[simp]
 theorem zero_mem_etaPairMovingRealLine
@@ -67,10 +67,9 @@ theorem mem_complexRealAxis_iff_im_eq_zero
   · rintro ⟨r, hr⟩
     change z = (1 : ℂ) * (r : ℂ) at hr
     rw [one_mul] at hr
-    simpa [hr]
+    simp [hr]
   · intro him
     refine ⟨z.re, ?_⟩
-    change z = (1 : ℂ) * ((z.re : ℝ) : ℂ)
     rw [one_mul]
     apply Complex.ext
     · simp
@@ -87,13 +86,10 @@ theorem etaPairMovingRealLine_mem_iff_baseRotation_mul_mem_realAxis
   constructor
   · rintro ⟨r, hr⟩
     refine ⟨r, ?_⟩
-    change etaPairBaseRotation s k * z =
-      (1 : ℂ) * (r : ℂ)
     rw [hr, ← mul_assoc,
-      etaPairBaseRotation_mul_counterRotation, one_mul, one_mul]
+      etaPairBaseRotation_mul_counterRotation, one_mul]
   · rintro ⟨r, hr⟩
     refine ⟨r, ?_⟩
-    change z = etaPairBaseCounterRotation s k * (r : ℂ)
     calc
       z = 1 * z := by simp
       _ = (etaPairBaseCounterRotation s k *
