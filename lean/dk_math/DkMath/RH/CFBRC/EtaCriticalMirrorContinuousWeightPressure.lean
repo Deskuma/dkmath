@@ -131,6 +131,6 @@ theorem etaCriticalMirrorDefectCoefficient_ne_zero_of_im_ne_zero_of_re_ne_half
     exact mul_ne_zero him (sub_ne_zero.mpr hweight)
   intro hzero
   apply himCoeff
-  simpa [hzero]
+  simp [hzero]
 
 end DkMath.RH.CFBRCProjection

@@ -106,7 +106,7 @@ theorem etaCriticalMirrorDefectCoefficient_im
 /-- On the critical line the continuous defect coefficient vanishes identically. -/
 theorem etaCriticalMirrorDefectCoefficient_eq_zero_of_re_eq_half
     {s : ℂ} (hre : s.re = (1 : ℝ) / 2)
-    {x : ℝ} (hx : 0 < x) :
+    {x : ℝ} (_hx : 0 < x) :
     etaCriticalMirrorDefectCoefficient s x = 0 := by
   have hcenter : centeredSigma s.re = 0 :=
     (centeredSigma_eq_zero_iff s.re).2 hre

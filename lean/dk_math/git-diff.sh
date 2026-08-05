@@ -11,9 +11,15 @@ if [[ "$1" == "-H" ]]; then
   COMMIT="HEAD~1"
   LOG_COMMIT="HEAD"
 else
+# -H2 ２つ前からの差分に対応（暫定改良）
+if [[ "$1" == "-H2" ]]; then
+  shift
+  COMMIT="HEAD~2"
+  LOG_COMMIT="HEAD"
+else
   COMMIT=""
   LOG_COMMIT="HEAD"
-
+fi
 fi
 
 echo '# Git diff / Report / Review' > __git.diff

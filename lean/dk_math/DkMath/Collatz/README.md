@@ -205,6 +205,20 @@ It imports the main Collatz files and marks the package-level surface.
 
 ## Main Documentation
 
+Focused theorem note:
+
+- [`docs/Collatz-OneStepFixedPoint.md`](docs/Collatz-OneStepFixedPoint.md) —
+  exact Lean scope of the positive accelerated one-step fixed-point theorem,
+  its unit-boundary / no-prime-channel interpretation, and the explicit
+  distinction from arbitrary Collatz cycle claims.
+
+Global research design note:
+
+- [`docs/Collatz-ArchimedeanSpiralConservation.md`](docs/Collatz-ArchimedeanSpiralConservation.md) —
+  the proposed Archimedean spiral conservation law: phase closure versus
+  radial and mass nonclosure, `Body + Gap = Big`, the successor kernel `+1`,
+  growing circumference, and the required-vs-available Gap-mass obstruction.
+
 Read these in order:
 
 ```text
