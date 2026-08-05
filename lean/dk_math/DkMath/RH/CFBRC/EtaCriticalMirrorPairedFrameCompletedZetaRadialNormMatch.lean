@@ -59,10 +59,19 @@ theorem etaCriticalMirrorDominantRadialAmplitude_tendsto_neg_radius_of_left
     simpa using
       (show Tendsto (fun _ : ℕ => (1 : ℝ) / 2) atTop
           (nhds ((1 : ℝ) / 2)) from tendsto_const_nhds).mul hratio
-  have hneg := hscaled.neg
+  have hneg :
+      Tendsto
+        (fun k : ℕ => (-((1 : ℝ) / 2)) *
+          (etaPairIndexToSuccessorEndpointRatio k ^ s.re))
+        atTop
+        (nhds ((-((1 : ℝ) / 2)) * (((1 : ℝ) / 2) ^ s.re))) := by
+    exact
+      (show Tendsto (fun _ : ℕ => (-((1 : ℝ) / 2))) atTop
+          (nhds (-((1 : ℝ) / 2))) from tendsto_const_nhds).mul hratio
   have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
+  have hle' : s.re ≤ 2⁻¹ := by simpa using hle
   simpa [etaCriticalMirrorDominantRadialAmplitude,
-    etaPairIndexNormalizedTailRadius, hle] using hneg
+    etaPairIndexNormalizedTailRadius, hle, hle'] using hneg
 
 /-- On the right side, the explicit radial amplitude tends to the mirror eta radius. -/
 theorem etaCriticalMirrorDominantRadialAmplitude_tendsto_radius_of_right
@@ -89,8 +98,9 @@ theorem etaCriticalMirrorDominantRadialAmplitude_tendsto_radius_of_right
       (show Tendsto (fun _ : ℕ => (1 : ℝ) / 2) atTop
           (nhds ((1 : ℝ) / 2)) from tendsto_const_nhds).mul hratio
   have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
+  have hnotle' : ¬ s.re ≤ 2⁻¹ := by simpa using hnotle
   simpa [etaCriticalMirrorDominantRadialAmplitude,
-    etaPairIndexNormalizedTailRadius, hnotle] using hscaled
+    etaPairIndexNormalizedTailRadius, hnotle, hnotle'] using hscaled
 
 /-- The left radial-ray model norm tends to the same eta radius as the endpoint norm. -/
 theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_left
@@ -112,8 +122,8 @@ theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_left
       abs_of_nonneg (etaPairIndexNormalizedTailRadius_nonneg s)] using habs0
   rw [norm_etaPairIndexNormalizedTailConstant_eq_radius]
   refine habs.congr' (Eventually.of_forall fun k => ?_)
-  rw [norm_completedZetaCanonicalSlopeRayModel]
-  rfl
+  simp [etaCriticalMirrorCompletedZetaDominantRadialRayModel,
+    completedZetaCanonicalSlopeRayModel, norm_completedZetaCanonicalSlopeUnitDirection]
 
 /-- The right radial-ray model norm tends to the same mirror eta radius as the endpoint norm. -/
 theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_right
@@ -139,8 +149,8 @@ theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_right
         (etaPairIndexNormalizedTailRadius_nonneg (criticalMirror s))] using habs0
   rw [norm_etaPairIndexNormalizedTailConstant_eq_radius]
   refine habs.congr' (Eventually.of_forall fun k => ?_)
-  rw [norm_completedZetaCanonicalSlopeRayModel]
-  rfl
+  simp [etaCriticalMirrorCompletedZetaDominantRadialRayModel,
+    completedZetaCanonicalSlopeRayModel, norm_completedZetaCanonicalSlopeUnitDirection]
 
 /--
 At every nonreal off-critical zero, endpoint norm and explicit ray-model norm
@@ -164,8 +174,9 @@ theorem etaCriticalMirrorDominantEndpoint_sub_rayModel_norm_tendsto_zero_of_offC
             ‖etaCriticalMirrorDominantNormalizedEndpointCarrier k s‖)
           atTop (nhds ‖etaPairIndexNormalizedTailConstant s‖) := by
       have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
+      have hle' : s.re ≤ 2⁻¹ := by simpa using hle
       simpa [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-        hle, norm_neg] using hendpoint
+        hle, hle', norm_neg] using hendpoint
     have hmodel :=
       norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_left
         hleft
@@ -180,8 +191,9 @@ theorem etaCriticalMirrorDominantEndpoint_sub_rayModel_norm_tendsto_zero_of_offC
           atTop
           (nhds ‖etaPairIndexNormalizedTailConstant (criticalMirror s)‖) := by
       have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
+      have hnotle' : ¬ s.re ≤ 2⁻¹ := by simpa using hnotle
       simpa [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-        hnotle] using hendpoint
+        hnotle, hnotle'] using hendpoint
     have hmodel :=
       norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_right
         hright

@@ -7,9 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantRadialRayModel
 import Mathlib.Tactic
 
-#print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRadialTransverseDecomposition"
-
 set_option linter.style.longLine false
+
+#print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRadialTransverseDecomposition"
 
 noncomputable section
 
@@ -60,21 +60,40 @@ theorem completedZetaCanonicalSlope_eq_projection_add_transverse
       completedZetaCanonicalSlopeUnitDirection s *
         (Complex.I *
           ((completedZetaCanonicalSlopeTransverseCoordinate s z : ℝ) : ℂ)) := by
-  rw [← completedZetaCanonicalSlopeUnitDirection_mul_unitCoordinate s z]
-  unfold completedZetaCanonicalSlopeRealProjection
-  unfold completedZetaCanonicalSlopeTransverseCoordinate
-  rw [completedZetaCanonicalSlopeUnitCoordinate_eq_re_add_im]
-  ring
+  calc
+    z = completedZetaCanonicalSlopeUnitDirection s *
+        completedZetaCanonicalSlopeUnitCoordinate s z :=
+      (completedZetaCanonicalSlopeUnitDirection_mul_unitCoordinate s z).symm
+    _ = completedZetaCanonicalSlopeRealProjection s z +
+        completedZetaCanonicalSlopeUnitDirection s *
+          (Complex.I *
+            ((completedZetaCanonicalSlopeTransverseCoordinate s z : ℝ) : ℂ)) := by
+      unfold completedZetaCanonicalSlopeRealProjection
+      unfold completedZetaCanonicalSlopeTransverseCoordinate
+      rw [← mul_add]
+      exact congrArg (fun w : ℂ => completedZetaCanonicalSlopeUnitDirection s * w)
+        (completedZetaCanonicalSlopeUnitCoordinate_eq_re_add_im s z)
 
 /-- Distance to the completed-zeta fixed line is exactly the absolute transverse coordinate. -/
 theorem norm_sub_completedZetaCanonicalSlopeRealProjection
     (s z : ℂ) :
     ‖z - completedZetaCanonicalSlopeRealProjection s z‖ =
       |completedZetaCanonicalSlopeTransverseCoordinate s z| := by
-  rw [completedZetaCanonicalSlope_eq_projection_add_transverse]
-  ring_nf
-  rw [norm_mul, norm_completedZetaCanonicalSlopeUnitDirection]
-  simp [completedZetaCanonicalSlopeTransverseCoordinate]
+  calc
+    ‖z - completedZetaCanonicalSlopeRealProjection s z‖ =
+        ‖(completedZetaCanonicalSlopeRealProjection s z +
+            completedZetaCanonicalSlopeUnitDirection s *
+              (Complex.I *
+                ((completedZetaCanonicalSlopeTransverseCoordinate s z : ℝ) : ℂ))) -
+          completedZetaCanonicalSlopeRealProjection s z‖ := by
+      congr 1
+      exact congrArg
+        (fun w : ℂ => w - completedZetaCanonicalSlopeRealProjection s z)
+        (completedZetaCanonicalSlope_eq_projection_add_transverse s z)
+    _ = |completedZetaCanonicalSlopeTransverseCoordinate s z| := by
+      ring_nf
+      rw [norm_mul, norm_mul, norm_completedZetaCanonicalSlopeUnitDirection]
+      simp [completedZetaCanonicalSlopeTransverseCoordinate]
 
 /-- Signed radial-coordinate error against the explicit dominant ray amplitude. -/
 noncomputable def etaCriticalMirrorCompletedZetaDominantRadialCoordinateError
@@ -190,7 +209,7 @@ theorem etaCriticalMirrorCompletedZetaDominantRayApproximation_tendsto_iff
                 Complex.I *
                   ((etaCriticalMirrorCompletedZetaDominantTransverseCoordinate k s : ℝ) : ℂ)))
           atTop (nhds 0) := by
-      simpa only [mul_zero] using
+      simpa only [add_zero, mul_zero] using
         (show Tendsto
             (fun _ : ℕ => completedZetaCanonicalSlopeUnitDirection s)
             atTop (nhds (completedZetaCanonicalSlopeUnitDirection s)) from
