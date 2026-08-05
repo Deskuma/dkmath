@@ -8,6 +8,10 @@ Build status
     ./lean-build.sh && ./lean-test.sh
     Green
 
+  GitHub Actions:
+    Lean CI #868
+    Green
+
   Initial generation environment:
     toolchain unavailable; static audit only
 
@@ -34,7 +38,7 @@ Mathlib revision:
 ```
 
 Comparison with the `260805-0819` snapshot found no material change in the
-non-RH CFBRC implementation surface.  Outside `DkMath/RH` and
+non-RH CFBRC implementation surface. Outside `DkMath/RH` and
 `DkMathTest/RH`, the only unrelated additions were Pow design documents and
 root import changes caused by newer RH modules.
 
@@ -59,7 +63,7 @@ DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
 ## Dependency boundary
 
 The native finite-difference and Abel modules do not import any `DkMath.RH`
-module.  The finite-difference Core does not use standard zeta, Hurwitz zeta,
+module. The finite-difference Core does not use standard zeta, Hurwitz zeta,
 or analytic continuation.
 
 The standard comparison is isolated in:
@@ -102,34 +106,32 @@ zetaFD(3) =  1/120
 The implemented ordinary convergent series is:
 
 $$
-\sum_{n=0}^{\infty} -n(-r)^n=\frac{r}{(1+r)^2},
-\qquad |r|<1.
+\sum_{n=0}^{\infty}-n(-r)^n=\frac{r}{(1+r)^2},\qquad |r|<1.
 $$
 
-The closed form tends to `1/4` as `r` approaches `1` from below.  The dual
+The closed form tends to `1/4` as `r` approaches `1` from below. The dual
 audit identifies this boundary value with `etaNegNatFiniteDifference 1`.
 
-## Static verification completed
+## Verification completed
 
 ```text
 - expected snapshot SHA-256 matched
-- no sorry
+- no sorry in the new audit modules
 - no admit
 - no explicit axiom declaration
-- no DkMath.RH import in the new modules
+- no DkMath.RH import in the new native modules
 - native arithmetic independently recomputed with exact rational arithmetic
 - public CFBRC and test exports updated
+- user workspace full build and tests Green
+- GitHub Lean CI #868 Green
 ```
 
-## Build status
+The initial generation environment did not contain `lake`, `lean`, `elan`, or
+the snapshot's `.lake` dependency cache, so only static verification was
+possible there. Final elaboration and regression verification were completed
+in the user's normal workspace and by GitHub Actions.
 
-This execution environment did not contain `lake`, `lean`, `elan`, or the
-snapshot's `.lake` dependency cache.  Network access was unavailable, so Lean
-elaboration and full Green verification could not be executed here.
-
-The code is therefore a build-ready WIP, not yet a claimed Green checkpoint.
-
-Run in the user's normal workspace:
+Validated commands:
 
 ```bash
 cd lean/dk_math
@@ -145,14 +147,4 @@ lake build DkMathTest.CFBRC.Regularization.AbelLinear
 lake build DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
 
 ./lean-build.sh && ./lean-test.sh
-```
-
-If elaboration exposes a small API mismatch, preserve the definitions and
-mathematical statements.  Adjust only proof engineering around:
-
-```text
-fwdDiff_iter_pow_eq_zero_of_lt
-hasSum_coe_mul_geometric_of_norm_lt_one
-ContinuousAt.continuousWithinAt
-riemannZeta_neg_nat_eq_bernoulli
 ```
