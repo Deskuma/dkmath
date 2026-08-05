@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTransverseClosure
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
 
@@ -30,11 +31,20 @@ The historical research beacons have now been reduced as follows.
 * full ray-model approximation is split exactly into signed radial and
   transverse coordinates;
 * the transverse coordinate alone supplies the concrete global zero-line lock,
-  so signed radial orientation is not an RH premise.
+  so signed radial orientation is not an RH premise;
+* at a hypothetical off-critical zero, transverse collapse is equivalent to the
+  completed-zeta / pair-left relative counter-rotation becoming asymptotically
+  real;
+* that relative phase lock is impossible at every nonzero height by the proved
+  doubling / tripling projective nonresonance collision.
 
-Exactly one analytic bridge remains below.  This file is intentionally the only
-research-beacon layer and must not be imported by the clean collision Core or by
-stable analytic modules.
+The relative-phase condition is therefore a closure audit, not an independent
+research premise: using it as a `sorry` would merely restate off-critical zero
+exclusion.  The sole analytic bridge remains the endpoint-derived transverse
+collapse below.
+
+This file is intentionally the only research-beacon layer and must not be
+imported by the clean collision Core or by stable analytic modules.
 -/
 
 /--
@@ -45,6 +55,10 @@ the nontrivial zero locus.
 Equivalently, the endpoint approaches the fixed real line selected by the
 completed-zeta canonical slope direction.  No radial magnitude or orientation
 condition is included in this contract.
+
+This must be discharged from an independent completed-zeta / eta-tail analytic
+identity or estimate.  The already proved relative-phase contradiction is the
+consumer of this bridge, not a replacement assumption for it.
 -/
 theorem etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal :
     EtaCriticalMirrorCompletedZetaDominantTransverseCollapse := by
