@@ -45,6 +45,34 @@ theorem etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError_eq_diff
   simp [etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError,
     complexRealLineDefect, mul_sub]
 
+/-- At a nontrivial zero, the slope carrier is the normalized nearby completed-zeta value. -/
+theorem completedZetaCanonicalSlopeCarrier_eq_normalizedNearbyValue_of_zero
+    {s : ℂ} (hs : NontrivialRiemannZetaZero s) (k : ℕ) :
+    completedZetaCanonicalSlopeCarrier k s =
+      (completedZetaCanonicalDisplacement k)⁻¹ *
+        completedRiemannZeta
+          (s + completedZetaCanonicalDisplacement k) := by
+  unfold completedZetaCanonicalSlopeCarrier
+  rw [completedRiemannZeta_eq_zero_of_nontrivialRiemannZetaZero hs, sub_zero]
+
+/--
+On the zero locus, the scalar bridge is the completed-zeta slope-frame defect
+of one explicit finite difference: dominant eta endpoint minus normalized
+nearby completed-zeta value.
+-/
+theorem etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError_eq_nearbyValueDefect_of_zero
+    {s : ℂ} (hs : NontrivialRiemannZetaZero s) (k : ℕ) :
+    etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError k s =
+      complexRealLineDefect
+        (completedZetaCanonicalSlopeDirection s)
+        (etaCriticalMirrorDominantNormalizedEndpointCarrier k s -
+          (completedZetaCanonicalDisplacement k)⁻¹ *
+            completedRiemannZeta
+              (s + completedZetaCanonicalDisplacement k)) := by
+  rw [
+    etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError_eq_differenceDefect,
+    completedZetaCanonicalSlopeCarrier_eq_normalizedNearbyValue_of_zero hs]
+
 /--
 The remaining scalar analytic bridge: endpoint and canonical completed-zeta
 slope carrier have asymptotically the same transverse coordinate on the
@@ -108,6 +136,8 @@ theorem riemannHypothesis_of_endpointCompletedZetaSlopeTransverseBridgeCollapse
       hbridge)
 
 #print axioms etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError_eq_differenceDefect
+#print axioms completedZetaCanonicalSlopeCarrier_eq_normalizedNearbyValue_of_zero
+#print axioms etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeError_eq_nearbyValueDefect_of_zero
 #print axioms etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_iff_lineCompatibility
 #print axioms riemannHypothesis_of_endpointCompletedZetaSlopeTransverseBridgeCollapse
 
