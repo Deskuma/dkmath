@@ -51,8 +51,8 @@ The native modules do not import or use:
 - any infinite sum assigned to `1 - 2 + 3 - 4 + ⋯`.
 
 The first Core proves only a finite-difference regularization result.
-A separate module compares it with an Abel boundary value, and a quarantined oracle module compares it with Mathlib's standard value.
-And another quarantined oracle module will compare it with Mathlib's standard `riemannZeta` value.
+A separate module compares it with an Abel boundary value, and a quarantined
+oracle module compares it with Mathlib's standard `riemannZeta` value.
 
 ## Current guarantee
 
