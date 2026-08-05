@@ -50,6 +50,7 @@ theorem etaPairHalfDensityBlockSchedule_scheduledBlockRotation_tendsto_one_of_ba
       Tendsto (fun K : ℕ => K + K) atTop atTop := by
     apply StrictMono.tendsto_atTop
     intro K M hKM
+    change K + K < M + M
     omega
   have hterminal :
       Tendsto
@@ -61,18 +62,22 @@ theorem etaPairHalfDensityBlockSchedule_scheduledBlockRotation_tendsto_one_of_ba
         (fun K : ℕ =>
           etaPairBaseRotation s (K + K) - etaPairBaseRotation s K)
         atTop (nhds 0) := by
-    convert hterminal.sub hbase using 1 <;> simp
+    convert hterminal.sub hbase using 1; simp
   have hnorm :
       Tendsto
         (fun K : ℕ =>
           ‖etaPairBaseRotation s (K + K) - etaPairBaseRotation s K‖)
         atTop (nhds 0) := by
-    simpa using (continuous_norm.tendsto 0).comp hdiff
+    change Tendsto
+      ((fun z : ℂ => ‖z‖) ∘ fun K : ℕ =>
+        etaPairBaseRotation s (K + K) - etaPairBaseRotation s K)
+      atTop (nhds 0)
+    simpa only [norm_zero] using (continuous_norm.tendsto 0).comp hdiff
   rw [tendsto_iff_norm_sub_tendsto_zero]
   refine hnorm.congr' (Eventually.of_forall fun K => ?_)
   simpa [EtaPairPositiveDensityBlockSchedule.scheduledBlockRotation,
     etaPairHalfDensityBlockSchedule] using
-    norm_etaPairFrameBlockRotation_sub_one_eq_baseRotation_chord s K K
+    (norm_etaPairFrameBlockRotation_sub_one_eq_baseRotation_chord s K K).symm
 
 /--
 If the base frames had a fixed limit, then the relative rotation from `K` to
@@ -88,6 +93,7 @@ theorem etaPairFullDensityBlockSchedule_scheduledBlockRotation_tendsto_one_of_ba
       Tendsto (fun K : ℕ => K + 2 * K) atTop atTop := by
     apply StrictMono.tendsto_atTop
     intro K M hKM
+    change K + 2 * K < M + 2 * M
     omega
   have hterminal :
       Tendsto
@@ -99,18 +105,22 @@ theorem etaPairFullDensityBlockSchedule_scheduledBlockRotation_tendsto_one_of_ba
         (fun K : ℕ =>
           etaPairBaseRotation s (K + 2 * K) - etaPairBaseRotation s K)
         atTop (nhds 0) := by
-    convert hterminal.sub hbase using 1 <;> simp
+    convert hterminal.sub hbase using 1; simp
   have hnorm :
       Tendsto
         (fun K : ℕ =>
           ‖etaPairBaseRotation s (K + 2 * K) - etaPairBaseRotation s K‖)
         atTop (nhds 0) := by
-    simpa using (continuous_norm.tendsto 0).comp hdiff
+    change Tendsto
+      ((fun z : ℂ => ‖z‖) ∘ fun K : ℕ =>
+        etaPairBaseRotation s (K + 2 * K) - etaPairBaseRotation s K)
+      atTop (nhds 0)
+    simpa only [norm_zero] using (continuous_norm.tendsto 0).comp hdiff
   rw [tendsto_iff_norm_sub_tendsto_zero]
   refine hnorm.congr' (Eventually.of_forall fun K => ?_)
   simpa [EtaPairPositiveDensityBlockSchedule.scheduledBlockRotation,
     etaPairFullDensityBlockSchedule] using
-    norm_etaPairFrameBlockRotation_sub_one_eq_baseRotation_chord s K (2 * K)
+    (norm_etaPairFrameBlockRotation_sub_one_eq_baseRotation_chord s K (2 * K)).symm
 
 /--
 At every nonzero imaginary height, the pair-left base rotation sequence has no
