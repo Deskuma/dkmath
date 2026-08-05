@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionClosure
 
 namespace DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
 
@@ -29,19 +29,17 @@ example
       EtaCriticalMirrorGlobalZeroLineLock
         etaCriticalMirrorDominantNormalizedEndpointCarrier)
     {s : ℂ}
-    (hs : NontrivialRiemannZetaZero s)
-    (him : s.im ≠ 0) :
+    (hs : NontrivialRiemannZetaZero s) :
     s.re = (1 : ℝ) / 2 := by
-  exact etaCriticalMirror_nonrealZero_re_eq_half_of_endpointGlobalZeroLineLock
-    hglobal hs him
+  exact
+    etaCriticalMirror_nontrivialZero_re_eq_half_of_endpointGlobalZeroLineLock
+      hglobal hs
 
 example
     (hglobal :
       EtaCriticalMirrorGlobalZeroLineLock
-        etaCriticalMirrorDominantNormalizedEndpointCarrier)
-    (hreal : StandardZetaRealAxisClosure) :
+        etaCriticalMirrorDominantNormalizedEndpointCarrier) :
     RiemannHypothesis := by
-  exact riemannHypothesis_of_endpointGlobalZeroLineLock_and_realAxisClosure
-    hglobal hreal
+  exact riemannHypothesis_of_endpointGlobalZeroLineLock hglobal
 
 end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
