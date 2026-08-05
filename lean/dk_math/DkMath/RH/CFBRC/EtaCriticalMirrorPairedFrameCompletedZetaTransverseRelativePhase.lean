@@ -150,10 +150,16 @@ theorem etaCriticalMirrorDominantLocalRotatedCarrier_exists_real_nonzero_limit
         hs him hleft).rotated_endpoint_tendsto
     have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
     have hle' : s.re ≤ 2⁻¹ := by simpa using hle
+    have hrotated' :
+        Tendsto
+          (fun k : ℕ =>
+            etaPairBaseRotation s k *
+              etaCriticalMirrorIndexNormalizedEvenDefectEndpoint s.re s k)
+          atTop (nhds L) := by
+      unfold etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint at hrotated
+      simpa [L] using hrotated
     simpa [etaCriticalMirrorDominantLocalRotatedCarrier,
-      etaCriticalMirrorDominantNormalizedEndpointCarrier,
-      etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      L, hle, hle'] using hrotated
+      etaCriticalMirrorDominantNormalizedEndpointCarrier, L, hle, hle'] using hrotated'
   · let L : ℂ := -etaPairIndexNormalizedTailConstant (criticalMirror s)
     have hLim : L.im = 0 := by
       simp [L, etaPairIndexNormalizedTailConstant]
@@ -172,10 +178,16 @@ theorem etaCriticalMirrorDominantLocalRotatedCarrier_exists_real_nonzero_limit
         hs him hright).rotated_endpoint_tendsto
     have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
     have hnotle' : ¬ s.re ≤ 2⁻¹ := by simpa using hnotle
+    have hrotated' :
+        Tendsto
+          (fun k : ℕ =>
+            etaPairBaseRotation s k *
+              etaCriticalMirrorIndexNormalizedEvenDefectEndpoint (1 - s.re) s k)
+          atTop (nhds L) := by
+      unfold etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint at hrotated
+      exact hrotated
     simpa [etaCriticalMirrorDominantLocalRotatedCarrier,
-      etaCriticalMirrorDominantNormalizedEndpointCarrier,
-      etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      L, hnotle, hnotle'] using hrotated
+      etaCriticalMirrorDominantNormalizedEndpointCarrier, L, hnotle, hnotle'] using hrotated'
 
 /--
 At a hypothetical off-critical zero, transverse collapse is equivalent to the
@@ -261,11 +273,27 @@ theorem etaCriticalMirrorCompletedZetaDominantTransverse_tendsto_zero_iff_relati
       intro hzero
       rw [hzero, zero_sub, norm_neg] at hk
       exact (lt_irrefl _ hk)
-    have hinv := hlocalRe.inv₀ hLre
-    have hquot := hsecond.mul hinv
-    refine hquot.congr' ?_
+    have hquot := hsecond.div hlocalRe hLre
+    have hquot' : Tendsto
+        (fun k : ℕ =>
+          ((etaCriticalMirrorCompletedZetaRelativeCounterRotation k s).im *
+            (etaCriticalMirrorDominantLocalRotatedCarrier k s).re) /
+            (etaCriticalMirrorDominantLocalRotatedCarrier k s).re)
+        atTop (nhds 0) := by
+      have hquot0 :
+          Tendsto
+            ((fun k : ℕ =>
+              (etaCriticalMirrorCompletedZetaRelativeCounterRotation k s).im *
+                (etaCriticalMirrorDominantLocalRotatedCarrier k s).re) /
+              (fun k : ℕ =>
+                (etaCriticalMirrorDominantLocalRotatedCarrier k s).re))
+            atTop (nhds 0) := by
+        simpa [hLre] using hquot
+      refine hquot0.congr' (Eventually.of_forall fun k => ?_)
+      rfl
+    refine hquot'.congr' ?_
     filter_upwards [hlocalReNe] with k hk
-    rw [mul_assoc, mul_inv_cancel₀ hk, mul_one]
+    rw [mul_div_assoc, div_self hk, mul_one]
   · intro hphase
     have hsecond :
         Tendsto
@@ -275,7 +303,15 @@ theorem etaCriticalMirrorCompletedZetaDominantTransverse_tendsto_zero_iff_relati
           atTop (nhds 0) := by
       simpa only [zero_mul] using hphase.mul hlocalRe
     have hsum := hfirst.add hsecond
-    refine hsum.congr' (Eventually.of_forall fun k => ?_)
+    have hsum' : Tendsto
+        (fun k : ℕ =>
+          (etaCriticalMirrorCompletedZetaRelativeCounterRotation k s).re *
+              (etaCriticalMirrorDominantLocalRotatedCarrier k s).im +
+            (etaCriticalMirrorCompletedZetaRelativeCounterRotation k s).im *
+              (etaCriticalMirrorDominantLocalRotatedCarrier k s).re)
+        atTop (nhds 0) := by
+      simpa only [add_zero] using hsum
+    refine hsum'.congr' (Eventually.of_forall fun k => ?_)
     exact
       (etaCriticalMirrorCompletedZetaDominantTransverseCoordinate_eq_relativePhase_split
         k s).symm
