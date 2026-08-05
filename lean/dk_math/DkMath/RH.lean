@@ -127,6 +127,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMirrorInvolutionAsymptoticAud
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameConjugationAsymptoticAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameFunctionalEquationOrbitAsymptoticAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaFirstOrderOrbitAudit
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameSpectralGaugeDirectionAudit
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
