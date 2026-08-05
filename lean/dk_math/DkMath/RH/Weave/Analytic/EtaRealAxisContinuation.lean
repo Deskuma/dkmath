@@ -31,7 +31,8 @@ noncomputable def etaRealAxisUpperApproach
     (σ : ℝ) (n : ℕ) :
     (etaRealAxisUpperApproach σ n).im =
       (1 : ℝ) / (((n + 1 : ℕ) : ℝ)) := by
-  simp [etaRealAxisUpperApproach]
+  unfold etaRealAxisUpperApproach
+  simp [Complex.inv_re, Complex.normSq_apply]
 
 /-- The canonical upper approach converges to the corresponding real point. -/
 theorem etaRealAxisUpperApproach_tendsto
@@ -43,7 +44,10 @@ theorem etaRealAxisUpperApproach_tendsto
         atTop (nhds 0) := by
     have h :=
       (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).comp
-        tendsto_nat_succ_atTop
+        (show Tendsto (fun n : ℕ => n + 1) atTop atTop from by
+          refine tendsto_atTop.2 ?_
+          intro b
+          exact eventually_atTop.2 ⟨b, by omega⟩)
     simpa [Function.comp_def] using h
   have hcast :
       Tendsto
@@ -61,7 +65,14 @@ theorem etaRealAxisUpperApproach_tendsto
   have hadd :=
     (show Tendsto (fun _ : ℕ => (σ : ℂ)) atTop (nhds (σ : ℂ)) from
       tendsto_const_nhds).add himag
-  simpa [etaRealAxisUpperApproach] using hadd
+  have hadd' : Tendsto
+      (fun x : ℕ => (σ : ℂ) +
+        (((1 : ℝ) / (((x + 1 : ℕ) : ℝ)) : ℝ) : ℂ) * Complex.I)
+      atTop (nhds (σ : ℂ)) := by
+    simpa only [add_zero] using hadd
+  refine hadd'.congr' (Eventually.of_forall fun n => ?_)
+  simp [etaRealAxisUpperApproach, Complex.ofReal_inv, Nat.cast_add,
+    div_eq_mul_inv]
 
 /-- Every point of the canonical upper approach remains in the right half-plane. -/
 theorem etaRealAxisUpperApproach_pos_re
@@ -81,7 +92,7 @@ theorem etaRealAxisUpperApproach_im_ne_zero
 
 /-- The raw analytic eta product is differentiable at every real point in `(0,1)`. -/
 theorem analyticEta_differentiableAt_of_real_mem_Ioo_zero_one
-    {σ : ℝ} (hσ0 : 0 < σ) (hσ1 : σ < 1) :
+    {σ : ℝ} (_hσ0 : 0 < σ) (hσ1 : σ < 1) :
     DifferentiableAt ℂ analyticEta (σ : ℂ) := by
   have hs1 : (σ : ℂ) ≠ 1 := by
     intro h

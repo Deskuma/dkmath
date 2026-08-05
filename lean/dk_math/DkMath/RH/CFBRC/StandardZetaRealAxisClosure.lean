@@ -28,7 +28,8 @@ theorem nontrivialRiemannZetaZero_im_ne_zero
     · simp
     · simpa using him
   have hzreal : riemannZeta (s.re : ℂ) = 0 := by
-    simpa [hsreal] using hs.1
+    rw [← hsreal]
+    exact hs.1
   exact
     (riemannZeta_ne_zero_of_real_mem_openCriticalInterval
       hstrip.1 hstrip.2) hzreal

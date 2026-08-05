@@ -36,7 +36,8 @@ theorem etaPairTerm_real_eq_ofReal
   unfold etaPairTerm
   rw [etaUnsignedVector_real_eq_ofReal,
     etaUnsignedVector_real_eq_ofReal]
-  congr 2 <;> norm_num [Nat.cast_add, Nat.cast_mul]
+  norm_num [Nat.cast_add, Nat.cast_mul]
+  ring_nf
 
 /-- Every real eta pair has strictly positive real part for a positive exponent. -/
 theorem etaPairTerm_re_pos_of_pos_real
