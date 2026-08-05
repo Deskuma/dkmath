@@ -198,7 +198,12 @@ theorem etaCriticalMirror_re_eq_half_of_movingLine_globalLine_collision_core
             conj (etaPairBaseRotation s k * carrier k s))
         atTop (nhds 0) := by
     have h := hlocalCast.mul_const Complex.I
-    refine h.congr' (Eventually.of_forall fun k => ?_)
+    have h' : Tendsto
+        (fun k : ℕ =>
+          ((2 * (etaPairBaseRotation s k * carrier k s).im : ℝ) : ℂ) * Complex.I)
+        atTop (nhds 0) := by
+      simpa using h
+    refine h'.congr' (Eventually.of_forall fun k => ?_)
     simpa using (Complex.sub_conj
       (etaPairBaseRotation s k * carrier k s)).symm
   have hlocalRotatedSkew :
@@ -250,7 +255,12 @@ theorem etaCriticalMirror_re_eq_half_of_movingLine_globalLine_collision_core
             conj (direction⁻¹ * carrier k s))
         atTop (nhds 0) := by
     have h := hglobalCast.mul_const Complex.I
-    refine h.congr' (Eventually.of_forall fun k => ?_)
+    have h' : Tendsto
+        (fun k : ℕ =>
+          ((2 * (direction⁻¹ * carrier k s).im : ℝ) : ℂ) * Complex.I)
+        atTop (nhds 0) := by
+      simpa using h
+    refine h'.congr' (Eventually.of_forall fun k => ?_)
     simpa using
       (Complex.sub_conj (direction⁻¹ * carrier k s)).symm
   have hglobalRotatedSkew :
@@ -260,7 +270,10 @@ theorem etaCriticalMirror_re_eq_half_of_movingLine_globalLine_collision_core
             (direction⁻¹ * carrier k s -
               conj (direction⁻¹ * carrier k s)))
         atTop (nhds 0) :=
-    tendsto_const_nhds.mul hglobalSkew
+    by
+      simpa only [mul_zero] using
+        (show Tendsto (fun _ : ℕ => direction) atTop (nhds direction) from
+          tendsto_const_nhds).mul hglobalSkew
   have hglobalPhaseResidual :
       Tendsto
         (fun k : ℕ =>
@@ -279,7 +292,10 @@ theorem etaCriticalMirror_re_eq_half_of_movingLine_globalLine_collision_core
             (etaPairBaseRotation s k * etaPairBaseRotation s k * carrier k s -
               conj (carrier k s)))
         atTop (nhds 0) :=
-    tendsto_const_nhds.mul hlocalPhaseResidual
+    by
+      simpa only [mul_zero] using
+        (show Tendsto (fun _ : ℕ => phase) atTop (nhds phase) from
+          tendsto_const_nhds).mul hlocalPhaseResidual
   have hcoefficientProduct :
       Tendsto
         (fun k : ℕ =>
@@ -287,7 +303,14 @@ theorem etaCriticalMirror_re_eq_half_of_movingLine_globalLine_collision_core
             carrier k s)
         atTop (nhds 0) := by
     have hsum := hphaseLocalResidual.add hglobalPhaseResidual.neg
-    refine hsum.congr' (Eventually.of_forall fun k => ?_)
+    have hsum' : Tendsto
+        (fun x : ℕ =>
+          phase * (etaPairBaseRotation s x * etaPairBaseRotation s x * carrier x s -
+            conj (carrier x s)) -
+            (carrier x s - phase * conj (carrier x s)))
+        atTop (nhds 0) := by
+      simpa only [sub_eq_add_neg, add_zero, neg_zero] using hsum
+    refine hsum'.congr' (Eventually.of_forall fun k => ?_)
     ring
   rcases hnoncollapse hs him hre with ⟨c, hc, hlower⟩
   have hphaseSquare :
