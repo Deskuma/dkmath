@@ -88,6 +88,8 @@ theorem not_exists_etaPairBaseRotation_predicate_characterizing_criticalLine
     not_characterizes_criticalLine_of_realShiftInvariant
       (P := fun s => Q (etaPairBaseRotation s k))
   · intro s r
+    change Q (etaPairBaseRotation (s + (r : ℂ)) k) ↔
+      Q (etaPairBaseRotation s k)
     rw [etaPairBaseRotation_add_real]
   · exact hQ
 
