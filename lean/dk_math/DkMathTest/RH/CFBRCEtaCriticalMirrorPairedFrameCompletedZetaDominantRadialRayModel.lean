@@ -14,6 +14,10 @@ namespace DkMathTest.RH.CFBRCProjection
 
 open DkMath.RH.CFBRCProjection
 
+example (s : ℂ) :
+    ‖completedZetaCanonicalSlopeUnitDirection s‖ = 1 := by
+  exact norm_completedZetaCanonicalSlopeUnitDirection s
+
 example
     (amplitude : ℕ → ℂ → ℝ) (k : ℕ) (s : ℂ) :
     complexRealLineDefect
@@ -22,6 +26,12 @@ example
   exact
     completedZetaCanonicalSlopeRayModel_realLineDefect_eq_zero
       amplitude k s
+
+example
+    (amplitude : ℕ → ℂ → ℝ) (k : ℕ) (s : ℂ) :
+    ‖completedZetaCanonicalSlopeRayModel amplitude k s‖ =
+      |amplitude k s| := by
+  exact norm_completedZetaCanonicalSlopeRayModel amplitude k s
 
 example :
     EtaCriticalMirrorCompletedZetaModelOrbitResidualCollapse
@@ -37,6 +47,7 @@ example
     riemannHypothesis_of_completedZetaDominantRadialRayModelApproximation
       happrox
 
+#print axioms norm_completedZetaCanonicalSlopeUnitDirection
 #print axioms completedZetaCanonicalSlopeRayModel_orbitResidualCollapse
 #print axioms etaCriticalMirrorCompletedZetaDominantRadialRayModel_orbitResidualCollapse
 #print axioms riemannHypothesis_of_completedZetaDominantRadialRayModelApproximation
