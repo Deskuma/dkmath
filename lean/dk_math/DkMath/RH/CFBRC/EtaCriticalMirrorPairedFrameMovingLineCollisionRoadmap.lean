@@ -75,7 +75,10 @@ theorem etaPairHalf_or_fullDensityBlockSchedule_rotationLimit_not_projectively_t
             Complex.exp
               (Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ))) := by
                 rw [Complex.exp_add]
-      _ = 1 := hprojectiveSquare _ hboth.1
+      _ = 1 := by
+        simpa [Complex.ofReal_log] using
+          hprojectiveSquare
+            (Complex.exp (Complex.I * (↑s.im * Complex.log 2))) hboth.1
   have h3 :
       Complex.exp
           (Complex.I * (((s2.im * Real.log 3 : ℝ) : ℂ))) = 1 := by
@@ -95,7 +98,10 @@ theorem etaPairHalf_or_fullDensityBlockSchedule_rotationLimit_not_projectively_t
             Complex.exp
               (Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ))) := by
                 rw [Complex.exp_add]
-      _ = 1 := hprojectiveSquare _ hboth.2
+      _ = 1 := by
+        simpa [Complex.ofReal_log] using
+          hprojectiveSquare
+            (Complex.exp (Complex.I * (↑s.im * Complex.log 3))) hboth.2
   rcases etaPairTwoScaleRotation_nonresonant (s := s2) hs2im with h2ne | h3ne
   · exact h2ne h2
   · exact h3ne h3
