@@ -76,11 +76,14 @@ private theorem normalizedDefectTail_limit_ne_zero_of_rotated_limit_ne_zero
   subst L
   have hDnorm :
       Tendsto (fun k : ℕ => ‖D k‖) atTop (nhds 0) := by
-    simpa using (continuous_norm.tendsto (0 : ℂ)).comp hD
+    change Tendsto ((fun z : ℂ => ‖z‖) ∘ D) atTop (nhds 0)
+    simpa only [norm_zero] using (continuous_norm.tendsto (0 : ℂ)).comp hD
   have hZnorm :
       Tendsto (fun k : ℕ => ‖Z k‖) atTop (nhds 0) := by
     refine hDnorm.congr' (Eventually.of_forall fun k => ?_)
-    rw [hfactor k, norm_mul, hunit k, one_mul]
+    calc
+      ‖D k‖ = ‖B k * D k‖ := by rw [norm_mul, hunit k, one_mul]
+      _ = ‖Z k‖ := by rw [hfactor k]
   have hZzero : Tendsto Z atTop (nhds 0) := by
     rw [tendsto_zero_iff_norm_tendsto_zero]
     exact hZnorm
@@ -153,13 +156,14 @@ theorem not_tendsto_etaCriticalMirrorRightIndexNormalizedDefectTail
           (criticalMirror s).re s)
         atTop
         (nhds (etaPairIndexNormalizedTailConstant (criticalMirror s))) := by
-    simpa [etaCriticalMirrorIndexNormalizedRotatedDefectTail] using
-      etaCriticalMirrorRightIndexNormalizedRotatedDefectTail_tendsto_constant
-        hs hre
-  simpa [etaCriticalMirrorRightIndexNormalizedDefectTail] using
-    not_tendsto_etaCriticalMirrorIndexNormalizedDefectTail_of_rotated_limit
-      (s := s) (L := L) him hrot
-      (etaPairIndexNormalizedTailConstant_ne_zero (criticalMirror s))
+    convert etaCriticalMirrorRightIndexNormalizedRotatedDefectTail_tendsto_constant
+      hs hre using 1; rfl
+  change ¬ Tendsto
+    (etaCriticalMirrorIndexNormalizedDefectTail (criticalMirror s).re s)
+    atTop (nhds L)
+  exact not_tendsto_etaCriticalMirrorIndexNormalizedDefectTail_of_rotated_limit
+    (s := s) (L := L) him hrot
+    (etaPairIndexNormalizedTailConstant_ne_zero (criticalMirror s))
 
 /-- Left of the critical line, the normalized unrotated defect tail has no fixed limit. -/
 theorem not_tendsto_etaCriticalMirrorLeftIndexNormalizedDefectTail
@@ -173,13 +177,14 @@ theorem not_tendsto_etaCriticalMirrorLeftIndexNormalizedDefectTail
         (etaCriticalMirrorIndexNormalizedRotatedDefectTail s.re s)
         atTop
         (nhds (-etaPairIndexNormalizedTailConstant s)) := by
-    simpa [etaCriticalMirrorIndexNormalizedRotatedDefectTail] using
-      etaCriticalMirrorLeftIndexNormalizedRotatedDefectTail_tendsto_neg_constant
-        hs hre
-  simpa [etaCriticalMirrorLeftIndexNormalizedDefectTail] using
-    not_tendsto_etaCriticalMirrorIndexNormalizedDefectTail_of_rotated_limit
-      (s := s) (L := L) him hrot
-      (neg_ne_zero.mpr (etaPairIndexNormalizedTailConstant_ne_zero s))
+    convert etaCriticalMirrorLeftIndexNormalizedRotatedDefectTail_tendsto_neg_constant
+      hs hre using 1; rfl
+  change ¬ Tendsto
+    (etaCriticalMirrorIndexNormalizedDefectTail s.re s)
+    atTop (nhds L)
+  exact not_tendsto_etaCriticalMirrorIndexNormalizedDefectTail_of_rotated_limit
+    (s := s) (L := L) him hrot
+    (neg_ne_zero.mpr (etaPairIndexNormalizedTailConstant_ne_zero s))
 
 /-- The right normalized unrotated defect tail has no fixed complex limit. -/
 theorem not_exists_etaCriticalMirrorRightIndexNormalizedDefectTail_limit
