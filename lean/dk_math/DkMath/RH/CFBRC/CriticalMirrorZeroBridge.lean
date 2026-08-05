@@ -109,7 +109,9 @@ theorem criticalMirror_nontrivialRiemannZetaZero
     have hpos := criticalMirror_re_pos_of_nontrivialRiemannZetaZero hs
     have hpos' : 0 < 1 - s.re := by
       simpa [criticalMirror] using hpos
-    simp [criticalMirror] at hre
+    simp only [criticalMirror, neg_mul, Complex.neg_re, Complex.mul_re, Complex.re_ofNat,
+      Complex.add_re, Complex.natCast_re, Complex.one_re, Complex.im_ofNat, Complex.add_im,
+      Complex.natCast_im, Complex.one_im, add_zero, mul_zero, sub_zero] at hre
     have hneg : -(2 * ((n : ℝ) + 1)) ≤ 0 := by
       exact neg_nonpos.mpr (by positivity)
     have hnonpos : 1 - s.re ≤ 0 := by
