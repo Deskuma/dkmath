@@ -25,12 +25,14 @@ theorem nontrivialRiemannZetaZero_conj
     {s : ℂ} (hs : NontrivialRiemannZetaZero s) :
     NontrivialRiemannZetaZero (conj s) := by
   refine ⟨?_, ?_, ?_⟩
-  · simpa [hs.1] using riemannZeta_conj s
+  · simp only [riemannZeta_conj, hs.1, map_zero]
   · rintro ⟨n, hn⟩
     apply hs.2.1
     refine ⟨n, ?_⟩
     have h := congrArg (conj : ℂ → ℂ) hn
-    simpa using h
+    simp only [starRingEnd_apply, star_star, map_neg, map_mul] at h
+    norm_num [Complex.star_def] at h
+    simpa [neg_mul] using h
   · intro h
     apply hs.2.2
     have h' := congrArg (conj : ℂ → ℂ) h
@@ -49,7 +51,12 @@ theorem etaUnsignedVector_conj
       conj (etaUnsignedVector s m) := by
   unfold etaUnsignedVector
   have harg : ((((m + 1 : ℕ) : ℂ))).arg ≠ Real.pi := by
-    simp
+    have hm : (0 : ℝ) ≤ ((m + 1 : ℕ) : ℝ) := by positivity
+    intro hpi
+    have hzero : ((((m + 1 : ℕ) : ℂ))).arg = 0 :=
+      Complex.arg_ofReal_of_nonneg hm
+    rw [hzero] at hpi
+    exact (ne_of_gt Real.pi_pos) hpi.symm
   simpa using
     (Complex.cpow_conj ((((m + 1 : ℕ) : ℂ))) (-s) harg)
 
@@ -107,7 +114,6 @@ theorem etaPairBaseRotation_conj
   rw [← Complex.exp_conj]
   congr 1
   simp
-  ring
 
 /-- Dominant-power normalized even defect endpoints commute with conjugation. -/
 theorem etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_conj
@@ -137,7 +143,9 @@ theorem etaPairIndexNormalizedTailConstant_conj
     (z : ℂ) :
     etaPairIndexNormalizedTailConstant (conj z) =
       conj (etaPairIndexNormalizedTailConstant z) := by
-  simp [etaPairIndexNormalizedTailConstant]
+  norm_num [etaPairIndexNormalizedTailConstant]
+  left
+  norm_num [starRingEnd_apply]
 
 /-- Conjugation transports every rotating endpoint limit to the conjugate limit. -/
 theorem etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint_conj_tendsto
