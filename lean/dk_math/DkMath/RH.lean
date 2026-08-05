@@ -124,6 +124,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailChordColl
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailChordRateAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedEvenDefectEndpointAsymptotic
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMirrorInvolutionAsymptoticAudit
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameConjugationAsymptoticAudit
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
