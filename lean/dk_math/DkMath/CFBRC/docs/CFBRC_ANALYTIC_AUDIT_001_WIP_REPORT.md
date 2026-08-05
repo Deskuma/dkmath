@@ -1,5 +1,7 @@
 # CFBRC Analytic Continuation Audit 001 — WIP report
 
+cid: `6a731866-0700-83e8-9940-ad80f55a294d`
+
 Date: 2026-08-05
 
 ## Snapshot checkpoint

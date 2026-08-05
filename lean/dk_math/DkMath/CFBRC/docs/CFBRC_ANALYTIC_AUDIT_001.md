@@ -1,5 +1,7 @@
 # CFBRC Analytic Continuation Audit 001
 
+cid: `6a731866-0700-83e8-9940-ad80f55a294d`
+
 ## Native finite-difference recovery of `ζ(-1) = -1/12`
 
 This audit begins with a deliberately small and non-circular Core.
