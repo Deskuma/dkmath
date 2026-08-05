@@ -63,7 +63,6 @@ theorem etaCriticalMirrorEndpointCompletedZetaUnweightedFiniteEtaOrbitResidual_e
   rw [etaCriticalMirrorFinitePairedEtaDefect_eq_neg_tail_of_zero hs him]
   unfold etaCriticalMirrorEndpointCompletedZetaUnweightedTailOrbitResidual
   simp
-  ring
 
 /-- The dominant-weighted complete-tail projective residual. -/
 noncomputable def etaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidual
