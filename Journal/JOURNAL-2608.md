@@ -4,6 +4,12 @@ Lean が確定した DkMath の構造を、一般数学の言葉で読み解く�
 
 ## 2026-08-05
 
+### 12:00
+
+[Qty 埋め込みは係数を保存し support を離散化する](260805-1200-qty-embedding-preserves-coefficient-and-discretizes-support.md)
+
+連続スケールの `Qty` を KUS へ埋め込む際、実数係数はそのまま保存し、正の実数 unit だけを自然数床による support unit へ離散化する最小橋を読む。
+
 ### 06:03
 
 [有理平方根2拡大の各元は一意な座標対を持つ](260805-0603-rational-sqrt2-elements-have-a-unique-coordinate-pair.md)
