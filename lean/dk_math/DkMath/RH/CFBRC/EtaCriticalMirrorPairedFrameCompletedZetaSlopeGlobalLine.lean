@@ -66,7 +66,13 @@ theorem completedZetaCanonicalDisplacement_tendsto_zero :
           exact eventually_atTop.2 ⟨b, by omega⟩)
     simpa [Function.comp_def] using h
   have hcast := (Complex.continuous_ofReal.tendsto 0).comp hreal
-  simpa [completedZetaCanonicalDisplacement, Function.comp_def] using hcast
+  have hcast' : Tendsto
+      (fun k : ℕ =>
+        (((1 : ℝ) / (((k + 1 : ℕ) : ℝ)) : ℝ) : ℂ))
+      atTop (nhds 0) := by
+    simpa only [Function.comp_def, Complex.ofReal_zero] using hcast
+  refine hcast'.congr' (Eventually.of_forall fun k => ?_)
+  simp [completedZetaCanonicalDisplacement]
 
 /-- Every canonical displacement is nonzero. -/
 theorem completedZetaCanonicalDisplacement_ne_zero
@@ -96,15 +102,15 @@ theorem completedZetaCanonicalSlopeCarrier_tendsto_deriv
     (differentiableAt_completedZeta hs0 hs1).hasDerivAt.tendsto_slope_zero
   have hcomp :=
     hslope.comp completedZetaCanonicalDisplacement_tendsto_punctured
-  simpa [completedZetaCanonicalSlopeCarrier, smul_eq_mul] using hcomp
+  simpa only [completedZetaCanonicalSlopeCarrier, smul_eq_mul,
+    Function.comp_def, Function.comp_apply] using hcomp
 
 /-- The canonical completed-zeta direction never vanishes. -/
 theorem completedZetaCanonicalSlopeDirection_ne_zero
     (s : ℂ) :
     completedZetaCanonicalSlopeDirection s ≠ 0 := by
-  by_cases hderiv : deriv completedRiemannZeta s = 0
-  · simp [completedZetaCanonicalSlopeDirection, hderiv]
-  · simpa [completedZetaCanonicalSlopeDirection, hderiv] using hderiv
+  by_cases hderiv : deriv completedRiemannZeta s = 0 <;>
+    simp [completedZetaCanonicalSlopeDirection, hderiv]
 
 /-- The derivative lies on the real line selected by the canonical direction. -/
 theorem completedZetaCanonicalSlopeDirection_inv_mul_deriv_im_eq_zero
@@ -153,9 +159,20 @@ theorem completedZetaCanonicalSlopeCarrier_tendsto_global_line
     (Complex.continuous_im.tendsto
       ((completedZetaCanonicalSlopeDirection s)⁻¹ *
         deriv completedRiemannZeta s)).comp hrotated
+  have himaginary' : Tendsto
+      (fun k : ℕ =>
+        ((completedZetaCanonicalSlopeDirection s)⁻¹ *
+          (completedZetaCanonicalSlopeCarrier k s)).im)
+      atTop (nhds 0) := by
+    have hzero :
+        ((completedZetaCanonicalSlopeDirection s)⁻¹ *
+          deriv completedRiemannZeta s).im = 0 :=
+      completedZetaCanonicalSlopeDirection_inv_mul_deriv_im_eq_zero s
+    simpa only [Function.comp_def, hzero] using himaginary
   simpa [complexRealLineDefect, Function.comp_def,
+    completedZetaCanonicalSlopeCarrier,
     completedZetaCanonicalSlopeDirection_inv_mul_deriv_im_eq_zero] using
-      himaginary
+      himaginary'
 
 /-- The canonical completed-zeta slope carrier has an unconditional global lock. -/
 noncomputable def completedZetaCanonicalSlopeGlobalZeroLineLock :
@@ -183,7 +200,7 @@ def EtaCriticalMirrorZeroLocusCarrierAsymptoticEquivalent
       atTop (nhds 0)
 
 /-- A global zero-line lock transfers across zero-locus asymptotic equivalence. -/
-theorem EtaCriticalMirrorGlobalZeroLineLock.of_asymptoticEquivalent
+def EtaCriticalMirrorGlobalZeroLineLock.of_asymptoticEquivalent
     {carrier target : ℕ → ℂ → ℂ}
     (hglobal : EtaCriticalMirrorGlobalZeroLineLock target)
     (heq :
@@ -212,7 +229,13 @@ theorem EtaCriticalMirrorGlobalZeroLineLock.of_asymptoticEquivalent
       have h := (Complex.continuous_im.tendsto 0).comp hrotatedDiff
       simpa [Function.comp_def] using h
     have hsum := htarget.add himaginaryDiff
-    refine hsum.congr' (Eventually.of_forall fun k => ?_)
+    have hsum' : Tendsto
+        (fun k : ℕ =>
+          complexRealLineDefect (hglobal.globalDirection s) (target k s) +
+            (direction⁻¹ * (carrier k s - target k s)).im)
+        atTop (nhds 0) := by
+      simpa only [add_zero] using hsum
+    refine hsum'.congr' (Eventually.of_forall fun k => ?_)
     unfold complexRealLineDefect
     dsimp [direction]
     have hidentity :
@@ -237,7 +260,7 @@ def EtaCriticalMirrorEndpointCompletedZetaSlopeCompatibility : Prop :=
     completedZetaCanonicalSlopeCarrier
 
 /-- Endpoint/slope compatibility supplies the genuine endpoint global-line lock. -/
-theorem etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaSlopeCompatibility
+def etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaSlopeCompatibility
     (hcompat : EtaCriticalMirrorEndpointCompletedZetaSlopeCompatibility) :
     EtaCriticalMirrorGlobalZeroLineLock
       etaCriticalMirrorDominantNormalizedEndpointCarrier :=
