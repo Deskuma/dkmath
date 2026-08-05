@@ -97,7 +97,7 @@ flowchart LR
 
 $q.x=7/2$、$q.u.val=3.8$ とする。このとき、
 
-$$\mathrm{phiUnit}(q.u)=\lfloor3.8\rfloor_{ \mathbb N}=3$$
+$$\mathrm{phiUnit}(q.u)=\lfloor3.8\rfloor_{\mathbb N}=3$$
 
 埋め込み後の係数はそのまま $7/2$ であり、support unit は $3$ となる。
 
