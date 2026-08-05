@@ -38,7 +38,7 @@ theorem norm_completedZetaCanonicalSlopeUnitDirection
     completedZetaCanonicalSlopeDirection_ne_zero s
   have hnorm : ‖completedZetaCanonicalSlopeDirection s‖ ≠ 0 :=
     norm_ne_zero_iff.mpr hdirection
-  simp [completedZetaCanonicalSlopeUnitDirection, norm_mul, hnorm]
+  simp [completedZetaCanonicalSlopeUnitDirection, hnorm]
 
 /-- The unit-normalized completed-zeta slope direction remains nonzero. -/
 theorem completedZetaCanonicalSlopeUnitDirection_ne_zero
@@ -46,7 +46,7 @@ theorem completedZetaCanonicalSlopeUnitDirection_ne_zero
     completedZetaCanonicalSlopeUnitDirection s ≠ 0 := by
   intro hzero
   have hnorm := congrArg norm hzero
-  simpa [norm_completedZetaCanonicalSlopeUnitDirection] using hnorm
+  simp [norm_completedZetaCanonicalSlopeUnitDirection] at hnorm
 
 /--
 A unit-normalized completed-zeta slope ray with an arbitrary real amplitude.
@@ -104,10 +104,8 @@ theorem completedZetaCanonicalSlopeRayModel_orbitResidualCollapse
             (completedZetaCanonicalSlopeDirection s)
             (completedZetaCanonicalSlopeRayModel amplitude k s))
         atTop (nhds 0) := by
-    simpa [completedZetaCanonicalSlopeRayModel_realLineDefect_eq_zero]
-      using
-        (tendsto_const_nhds :
-          Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0))
+    simp [completedZetaCanonicalSlopeRayModel_realLineDefect_eq_zero,
+      (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0))]
   have hresidual :=
     tendsto_phaseResidual_zero_of_complexRealLineDefect_tendsto_zero
       (completedZetaCanonicalSlopeDirection_ne_zero s) hline
