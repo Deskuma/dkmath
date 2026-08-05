@@ -225,24 +225,48 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock :
   · have hrotated :=
       (etaCriticalMirrorLeftNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hleft).rotated_endpoint_tendsto
-    have himaginary :=
-      (Complex.continuous_im.tendsto
-        (-(-etaPairIndexNormalizedTailConstant s))).comp hrotated
-    simpa [etaPairMovingRealLineDefect, complexRealAxisDefect,
+    have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
+    have himaginary :
+        Tendsto
+          (fun k : ℕ =>
+            (etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint
+              s.re s k).im)
+          atTop (nhds 0) := by
+      have h :=
+        (Complex.continuous_im.tendsto
+          (-(-etaPairIndexNormalizedTailConstant s))).comp hrotated
+      have hzero : (-(-etaPairIndexNormalizedTailConstant s)).im = 0 := by
+        simp [etaPairIndexNormalizedTailConstant]
+      simpa only [Function.comp_def, hzero, criticalMirror] using h
+    simpa only [etaPairMovingRealLineDefect,
+      complexRealAxisDefect,
       etaCriticalMirrorDominantNormalizedEndpointCarrier,
       etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      if_pos hleft.le, etaPairIndexNormalizedTailConstant] using himaginary
+      if_pos hle, Function.comp_apply] using himaginary
   · have hrotated :=
       (etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hright).rotated_endpoint_tendsto
-    have himaginary :=
-      (Complex.continuous_im.tendsto
-        (-etaPairIndexNormalizedTailConstant (criticalMirror s))).comp hrotated
-    simpa [etaPairMovingRealLineDefect, complexRealAxisDefect,
+    have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
+    have himaginary :
+        Tendsto
+          (fun k : ℕ =>
+            (etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint
+              (1 - s.re) s k).im)
+          atTop (nhds 0) := by
+      have h :=
+        (Complex.continuous_im.tendsto
+          (-etaPairIndexNormalizedTailConstant (criticalMirror s))).comp
+            hrotated
+      have hzero :
+          (-etaPairIndexNormalizedTailConstant
+            ({ re := 1 - s.re, im := s.im } : ℂ)).im = 0 := by
+        simp [etaPairIndexNormalizedTailConstant]
+      simpa only [Function.comp_def, hzero, criticalMirror] using h
+    simpa only [etaPairMovingRealLineDefect,
+      complexRealAxisDefect,
       etaCriticalMirrorDominantNormalizedEndpointCarrier,
       etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      if_neg (not_le.mpr hright), etaPairIndexNormalizedTailConstant] using himaginary
-
+      if_neg hnotle, Function.comp_apply, criticalMirror] using himaginary
 /--
 Noncollapse marker for the concrete dominant endpoint carrier.
 The target should follow from the positive endpoint norm limits already proved.
