@@ -130,7 +130,6 @@ theorem completedZetaCanonicalSlopeUnitSquarePhase_mul_baseRotation_sq_tendsto_o
   unfold completedZetaCanonicalSlopeUnitSquarePhase
   unfold etaPairBaseCounterRotation
   field_simp [hu, hrotation]
-  ring
 
 /-- At every nonzero height, the relative completed-zeta / pair-left phase cannot become asymptotically real. -/
 theorem not_etaCriticalMirrorCompletedZetaRelativeCounterRotation_im_tendsto_zero
