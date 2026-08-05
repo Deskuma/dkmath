@@ -19,16 +19,47 @@ open Filter
 open scoped Topology
 
 /--
-A completed-zeta slope ray with an arbitrary real amplitude.
+Unit normalization of the nonzero canonical completed-zeta slope direction.
+
+The positive real normalization changes neither the represented real line nor
+its projective phase, but removes an otherwise spurious derivative-norm factor
+from radial comparisons with the eta endpoint.
+-/
+noncomputable def completedZetaCanonicalSlopeUnitDirection
+    (s : ℂ) : ℂ :=
+  completedZetaCanonicalSlopeDirection s *
+    (((‖completedZetaCanonicalSlopeDirection s‖)⁻¹ : ℝ) : ℂ)
+
+/-- The normalized completed-zeta slope direction has unit norm. -/
+theorem norm_completedZetaCanonicalSlopeUnitDirection
+    (s : ℂ) :
+    ‖completedZetaCanonicalSlopeUnitDirection s‖ = 1 := by
+  have hdirection : completedZetaCanonicalSlopeDirection s ≠ 0 :=
+    completedZetaCanonicalSlopeDirection_ne_zero s
+  have hnorm : ‖completedZetaCanonicalSlopeDirection s‖ ≠ 0 :=
+    norm_ne_zero_iff.mpr hdirection
+  simp [completedZetaCanonicalSlopeUnitDirection, norm_mul, hnorm]
+
+/-- The unit-normalized completed-zeta slope direction remains nonzero. -/
+theorem completedZetaCanonicalSlopeUnitDirection_ne_zero
+    (s : ℂ) :
+    completedZetaCanonicalSlopeUnitDirection s ≠ 0 := by
+  intro hzero
+  have hnorm := congrArg norm hzero
+  simpa [norm_completedZetaCanonicalSlopeUnitDirection] using hnorm
+
+/--
+A unit-normalized completed-zeta slope ray with an arbitrary real amplitude.
 
 The direction is supplied entirely by completed zeta.  The amplitude may depend
 on the truncation index and the observation point, but remains real, so every
 value lies exactly on the fixed projective line selected by the canonical
-completed-zeta slope direction.
+completed-zeta slope direction.  Unit normalization makes the model norm equal
+to the absolute radial amplitude.
 -/
 noncomputable def completedZetaCanonicalSlopeRayModel
     (amplitude : ℕ → ℂ → ℝ) (k : ℕ) (s : ℂ) : ℂ :=
-  completedZetaCanonicalSlopeDirection s *
+  completedZetaCanonicalSlopeUnitDirection s *
     ((amplitude k s : ℝ) : ℂ)
 
 /-- Every real-amplitude slope-ray value has zero completed-zeta line defect. -/
@@ -37,10 +68,23 @@ theorem completedZetaCanonicalSlopeRayModel_realLineDefect_eq_zero
     complexRealLineDefect
         (completedZetaCanonicalSlopeDirection s)
         (completedZetaCanonicalSlopeRayModel amplitude k s) = 0 := by
+  have hdirection : completedZetaCanonicalSlopeDirection s ≠ 0 :=
+    completedZetaCanonicalSlopeDirection_ne_zero s
   unfold complexRealLineDefect
   unfold completedZetaCanonicalSlopeRayModel
+  unfold completedZetaCanonicalSlopeUnitDirection
   rw [← mul_assoc]
-  rw [inv_mul_cancel₀ (completedZetaCanonicalSlopeDirection_ne_zero s)]
+  rw [← mul_assoc]
+  rw [inv_mul_cancel₀ hdirection]
+  simp
+
+/-- The norm of a slope-ray value is exactly the absolute radial amplitude. -/
+theorem norm_completedZetaCanonicalSlopeRayModel
+    (amplitude : ℕ → ℂ → ℝ) (k : ℕ) (s : ℂ) :
+    ‖completedZetaCanonicalSlopeRayModel amplitude k s‖ =
+      |amplitude k s| := by
+  unfold completedZetaCanonicalSlopeRayModel
+  rw [norm_mul, norm_completedZetaCanonicalSlopeUnitDirection]
   simp
 
 /--
@@ -90,8 +134,8 @@ noncomputable def etaCriticalMirrorDominantRadialAmplitude
 Canonical completed-zeta / eta-tail hybrid model.
 
 Its radial magnitude is the explicit same-index dominant Euler half-tail
-coefficient, while its direction is the fixed canonical completed-zeta slope
-ray.  It does not inspect or copy the endpoint carrier.
+coefficient, while its unit direction is the fixed canonical completed-zeta
+slope ray.  It does not inspect or copy the endpoint carrier.
 -/
 noncomputable def etaCriticalMirrorCompletedZetaDominantRadialRayModel
     (k : ℕ) (s : ℂ) : ℂ :=
@@ -123,6 +167,7 @@ theorem riemannHypothesis_of_completedZetaDominantRadialRayModelApproximation
     happrox
     etaCriticalMirrorCompletedZetaDominantRadialRayModel_orbitResidualCollapse
 
+#print axioms norm_completedZetaCanonicalSlopeUnitDirection
 #print axioms completedZetaCanonicalSlopeRayModel_orbitResidualCollapse
 #print axioms etaCriticalMirrorCompletedZetaDominantRadialRayModel_orbitResidualCollapse
 #print axioms riemannHypothesis_of_completedZetaDominantRadialRayModelApproximation
