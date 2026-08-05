@@ -156,9 +156,11 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_conj
     etaCriticalMirrorDominantNormalizedEndpointCarrier k (conj s) =
       conj (etaCriticalMirrorDominantNormalizedEndpointCarrier k s) := by
   by_cases hside : s.re ≤ (1 : ℝ) / 2
-  · simp [etaCriticalMirrorDominantNormalizedEndpointCarrier, hside,
+  · simp [etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      show s.re ≤ 2⁻¹ by simpa using hside,
       etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_conj]
-  · simp [etaCriticalMirrorDominantNormalizedEndpointCarrier, hside,
+  · simp [etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      show ¬ s.re ≤ 2⁻¹ by simpa using hside,
       criticalMirror_conj,
       etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_conj]
 
