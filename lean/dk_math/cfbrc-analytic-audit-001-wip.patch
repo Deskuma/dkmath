@@ -1,0 +1,622 @@
+--- a/DkMath/CFBRC.lean
++++ b/DkMath/CFBRC.lean
+@@ -11,6 +11,11 @@
+ import DkMath.CFBRC.TrigBridge.General
+ import DkMath.CFBRC.TrigBridge.ClosedForm
+ import DkMath.CFBRC.TrigBridge.Main
++import DkMath.CFBRC.Regularization.ForwardDifference
++import DkMath.CFBRC.Regularization.NegativeInteger
++import DkMath.CFBRC.Regularization.AbelLinear
++import DkMath.CFBRC.Regularization.DualAudit
++import DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
+ 
+ #print "file: DkMath.CFBRC"
+ 
+--- a/DkMathTest/CFBRC.lean
++++ b/DkMathTest/CFBRC.lean
+@@ -5,6 +5,9 @@
+ -/
+ 
+ import DkMath.CFBRC
++import DkMathTest.CFBRC.Regularization.NegativeInteger
++import DkMathTest.CFBRC.Regularization.AbelLinear
++import DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
+ 
+ #print "file: DkMathTest.CFBRC"
+ 
+--- /dev/null
++++ b/DkMath/CFBRC/Regularization/ForwardDifference.lean
+@@ -0,0 +1,55 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import Mathlib.Algebra.Group.ForwardDiff
++
++#print "file: DkMath.CFBRC.Regularization.ForwardDifference"
++
++/-!
++# CFBRC finite forward-difference regularization
++
++This module contains the zeta-independent finite kernel used by the first
++CFBRC analytic-continuation audit.  It does not import the Riemann zeta
++function, Dirichlet eta, or any RH module.
++
++For the polynomial moment `x ↦ x^m`, every forward difference of order
++strictly greater than `m` vanishes.  Hence the Euler-transformed alternating
++value at a non-positive integer is represented by a genuinely finite sum.
++-/
++
++namespace DkMath.CFBRC.Regularization
++
++open scoped BigOperators fwdDiff
++
++/-- Euler's coefficient for the `j`-th forward difference. -/
++def eulerForwardWeight (j : ℕ) : ℚ :=
++  (-1 : ℚ) ^ j / (2 : ℚ) ^ (j + 1)
++
++/--
++The `j`-th unit forward difference of `x ↦ x^m`, evaluated at `x = 1`.
++-/
++def powerMomentForwardDifference (m j : ℕ) : ℚ :=
++  (Δ_[(1 : ℚ)]^[j] (fun x : ℚ ↦ x ^ m)) 1
++
++@[simp] theorem powerMomentForwardDifference_zero_order (m : ℕ) :
++    powerMomentForwardDifference m 0 = 1 := by
++  simp [powerMomentForwardDifference]
++
++/-- A polynomial moment has no forward differences above its degree. -/
++theorem powerMomentForwardDifference_eq_zero_of_lt
++    {m j : ℕ} (h : m < j) :
++    powerMomentForwardDifference m j = 0 := by
++  have hzero := congrFun
++    (fwdDiff_iter_pow_eq_zero_of_lt (R := ℚ) h) 1
++  simpa [powerMomentForwardDifference] using hzero
++
++/-- Only the first `m + 1` Euler coefficients can contribute to degree `m`. -/
++theorem powerMomentForwardDifference_eq_zero_of_add_one_le
++    {m j : ℕ} (h : m + 1 ≤ j) :
++    powerMomentForwardDifference m j = 0 :=
++  powerMomentForwardDifference_eq_zero_of_lt (Nat.lt_of_succ_le h)
++
++end DkMath.CFBRC.Regularization
+--- /dev/null
++++ b/DkMath/CFBRC/Regularization/NegativeInteger.lean
+@@ -0,0 +1,78 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.ForwardDifference
++
++#print "file: DkMath.CFBRC.Regularization.NegativeInteger"
++
++/-!
++# Native CFBRC values at non-positive integers
++
++The definitions in this file are finite.  No divergent series is assigned a
++usual sum, and no theorem about the analytically continued Riemann zeta
++function is used.
++-/
++
++namespace DkMath.CFBRC.Regularization
++
++open scoped BigOperators
++
++/--
++Finite Euler--forward-difference value corresponding to `η(-m)`.
++
++The range stops at `m` because all higher forward differences of `x^m`
++vanish.
++-/
++def etaNegNatFiniteDifference (m : ℕ) : ℚ :=
++  ∑ j ∈ Finset.range (m + 1),
++    eulerForwardWeight j * powerMomentForwardDifference m j
++
++/--
++Parity-normalized finite value corresponding to `ζ(-m)`.
++
++This is a CFBRC-native definition; it does not refer to `riemannZeta`.
++-/
++def zetaNegNatFiniteDifference (m : ℕ) : ℚ :=
++  etaNegNatFiniteDifference m / (1 - (2 : ℚ) ^ (m + 1))
++
++@[simp] theorem etaNegNatFiniteDifference_zero :
++    etaNegNatFiniteDifference 0 = 1 / 2 := by
++  decide
++
++@[simp] theorem etaNegNatFiniteDifference_one :
++    etaNegNatFiniteDifference 1 = 1 / 4 := by
++  decide
++
++@[simp] theorem etaNegNatFiniteDifference_two :
++    etaNegNatFiniteDifference 2 = 0 := by
++  decide
++
++@[simp] theorem etaNegNatFiniteDifference_three :
++    etaNegNatFiniteDifference 3 = -1 / 8 := by
++  decide
++
++@[simp] theorem zetaNegNatFiniteDifference_zero :
++    zetaNegNatFiniteDifference 0 = -1 / 2 := by
++  decide
++
++@[simp] theorem zetaNegNatFiniteDifference_one :
++    zetaNegNatFiniteDifference 1 = -1 / 12 := by
++  decide
++
++@[simp] theorem zetaNegNatFiniteDifference_two :
++    zetaNegNatFiniteDifference 2 = 0 := by
++  decide
++
++@[simp] theorem zetaNegNatFiniteDifference_three :
++    zetaNegNatFiniteDifference 3 = 1 / 120 := by
++  decide
++
++/-- Audit 001 headline: the native finite kernel recovers `-1/12`. -/
++theorem cfbrcNative_zeta_neg_one_eq_neg_one_div_twelve :
++    zetaNegNatFiniteDifference 1 = -1 / 12 :=
++  zetaNegNatFiniteDifference_one
++
++end DkMath.CFBRC.Regularization
+--- /dev/null
++++ b/DkMath/CFBRC/Regularization/AbelLinear.lean
+@@ -0,0 +1,62 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import Mathlib.Analysis.SpecificLimits.Normed
++import Mathlib.Tactic
++
++#print "file: DkMath.CFBRC.Regularization.AbelLinear"
++
++/-!
++# Abel regularization of the alternating linear moment
++
++Inside the open unit interval, the damped series is an ordinary absolutely
++convergent series.  Its boundary value at `r = 1` is then obtained from the
++closed rational function; the divergent undamped series is never passed to
++`tsum`.
++-/
++
++namespace DkMath.CFBRC.Regularization
++
++open Filter Set Topology
++
++/-- The damped alternating linear moment. -/
++def alternatingLinearAbelTerm (r : ℝ) (n : ℕ) : ℝ :=
++  -(n : ℝ) * (-r) ^ n
++
++/-- Closed form of the damped alternating linear moment. -/
++def alternatingLinearAbelClosed (r : ℝ) : ℝ :=
++  r / (1 + r) ^ 2
++
++/-- Ordinary convergence and closed form throughout the open unit disc. -/
++theorem hasSum_alternatingLinearAbelTerm
++    {r : ℝ} (hr : |r| < 1) :
++    HasSum
++      (alternatingLinearAbelTerm r)
++      (alternatingLinearAbelClosed r) := by
++  have hr' : ‖(-r : ℝ)‖ < 1 := by
++    simpa [Real.norm_eq_abs] using hr
++  have hsum :=
++    (hasSum_coe_mul_geometric_of_norm_lt_one
++      (r := (-r : ℝ)) hr').neg
++  convert hsum using 1 <;>
++    simp [alternatingLinearAbelTerm, alternatingLinearAbelClosed] <;>
++    ring
++
++/-- The rational closed form is continuous at the Abel boundary. -/
++theorem continuousAt_alternatingLinearAbelClosed_one :
++    ContinuousAt alternatingLinearAbelClosed 1 := by
++  unfold alternatingLinearAbelClosed
++  fun_prop
++
++/-- The Abel boundary value of `1 - 2 + 3 - 4 + ⋯` is `1/4`. -/
++theorem alternatingLinearAbelClosed_tendsto_quarter :
++    Tendsto alternatingLinearAbelClosed
++      (nhdsWithin 1 (Iio 1))
++      (nhds (1 / 4 : ℝ)) := by
++  simpa [alternatingLinearAbelClosed] using
++    continuousAt_alternatingLinearAbelClosed_one.continuousWithinAt
++
++end DkMath.CFBRC.Regularization
+--- /dev/null
++++ b/DkMath/CFBRC/Regularization/DualAudit.lean
+@@ -0,0 +1,43 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.NegativeInteger
++import DkMath.CFBRC.Regularization.AbelLinear
++
++#print "file: DkMath.CFBRC.Regularization.DualAudit"
++
++/-!
++# CFBRC regularization dual audit
++
++The finite forward-difference route and the Abel-boundary route are kept
++independent until this module.  Their common value is `1/4`.
++-/
++
++namespace DkMath.CFBRC.Regularization
++
++open Filter Set Topology
++
++/-- The Abel boundary agrees with the native finite-difference value. -/
++theorem alternatingLinearAbelClosed_tendsto_etaNegOneFiniteDifference :
++    Tendsto alternatingLinearAbelClosed
++      (nhdsWithin 1 (Iio 1))
++      (nhds (((etaNegNatFiniteDifference 1 : ℚ) : ℝ))) := by
++  simpa using alternatingLinearAbelClosed_tendsto_quarter
++
++/--
++Audit 001: two independent regularization routes recover the same finite
++eta value, and the native parity normalization is `-1/12`.
++-/
++theorem cfbrcAnalyticAudit001 :
++    Tendsto alternatingLinearAbelClosed
++      (nhdsWithin 1 (Iio 1))
++      (nhds (((etaNegNatFiniteDifference 1 : ℚ) : ℝ))) ∧
++    zetaNegNatFiniteDifference 1 = -1 / 12 := by
++  exact ⟨
++    alternatingLinearAbelClosed_tendsto_etaNegOneFiniteDifference,
++    zetaNegNatFiniteDifference_one⟩
++
++end DkMath.CFBRC.Regularization
+--- /dev/null
++++ b/DkMath/CFBRC/Regularization/RiemannZetaOracleAudit.lean
+@@ -0,0 +1,30 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.DualAudit
++import Mathlib.NumberTheory.LSeries.HurwitzZetaValues
++
++#print "file: DkMath.CFBRC.Regularization.RiemannZetaOracleAudit"
++
++/-!
++# Standard-zeta oracle comparison
++
++This module is deliberately quarantined from the native CFBRC proof.  It uses
++Mathlib's analytically continued `riemannZeta` only to compare the already
++computed native value with the standard special value.
++-/
++
++namespace DkMath.CFBRC.Regularization
++
++/-- The native Audit 001 value agrees with Mathlib's standard `ζ(-1)`. -/
++theorem cfbrcNative_zetaNegOne_eq_riemannZeta :
++    ((zetaNegNatFiniteDifference 1 : ℚ) : ℂ) =
++      riemannZeta (-(1 : ℂ)) := by
++  have hz := riemannZeta_neg_nat_eq_bernoulli 1
++  norm_num [bernoulli] at hz ⊢
++  exact hz.symm
++
++end DkMath.CFBRC.Regularization
+--- /dev/null
++++ b/DkMathTest/CFBRC/Regularization/NegativeInteger.lean
+@@ -0,0 +1,27 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.NegativeInteger
++
++#print "file: DkMathTest.CFBRC.Regularization.NegativeInteger"
++
++namespace DkMathTest.CFBRC.Regularization
++
++open DkMath.CFBRC.Regularization
++
++example : etaNegNatFiniteDifference 0 = 1 / 2 := by simp
++example : etaNegNatFiniteDifference 1 = 1 / 4 := by simp
++example : etaNegNatFiniteDifference 2 = 0 := by simp
++example : etaNegNatFiniteDifference 3 = -1 / 8 := by simp
++
++example : zetaNegNatFiniteDifference 0 = -1 / 2 := by simp
++example : zetaNegNatFiniteDifference 1 = -1 / 12 := by simp
++example : zetaNegNatFiniteDifference 2 = 0 := by simp
++example : zetaNegNatFiniteDifference 3 = 1 / 120 := by simp
++
++#print axioms cfbrcNative_zeta_neg_one_eq_neg_one_div_twelve
++
++end DkMathTest.CFBRC.Regularization
+--- /dev/null
++++ b/DkMathTest/CFBRC/Regularization/AbelLinear.lean
+@@ -0,0 +1,37 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.DualAudit
++
++#print "file: DkMathTest.CFBRC.Regularization.AbelLinear"
++
++namespace DkMathTest.CFBRC.Regularization
++
++open DkMath.CFBRC.Regularization
++open Filter Set Topology
++
++example {r : ℝ} (hr : |r| < 1) :
++    HasSum
++      (alternatingLinearAbelTerm r)
++      (alternatingLinearAbelClosed r) :=
++  hasSum_alternatingLinearAbelTerm hr
++
++example :
++    Tendsto alternatingLinearAbelClosed
++      (nhdsWithin 1 (Iio 1))
++      (nhds (1 / 4 : ℝ)) :=
++  alternatingLinearAbelClosed_tendsto_quarter
++
++example :
++    Tendsto alternatingLinearAbelClosed
++      (nhdsWithin 1 (Iio 1))
++      (nhds (((etaNegNatFiniteDifference 1 : ℚ) : ℝ))) ∧
++    zetaNegNatFiniteDifference 1 = -1 / 12 :=
++  cfbrcAnalyticAudit001
++
++#print axioms cfbrcAnalyticAudit001
++
++end DkMathTest.CFBRC.Regularization
+--- /dev/null
++++ b/DkMathTest/CFBRC/Regularization/RiemannZetaOracleAudit.lean
+@@ -0,0 +1,22 @@
++/-
++Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
++Released under MIT license as described in the file LICENSE.
++Authors: D. and Wise Wolf.
++-/
++
++import DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
++
++#print "file: DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit"
++
++namespace DkMathTest.CFBRC.Regularization
++
++open DkMath.CFBRC.Regularization
++
++example :
++    ((zetaNegNatFiniteDifference 1 : ℚ) : ℂ) =
++      riemannZeta (-(1 : ℂ)) :=
++  cfbrcNative_zetaNegOne_eq_riemannZeta
++
++#print axioms cfbrcNative_zetaNegOne_eq_riemannZeta
++
++end DkMathTest.CFBRC.Regularization
+--- /dev/null
++++ b/DkMath/CFBRC/docs/CFBRC_ANALYTIC_AUDIT_001.md
+@@ -0,0 +1,69 @@
++# CFBRC Analytic Continuation Audit 001
++
++## Native finite-difference recovery of `ζ(-1) = -1/12`
++
++This audit begins with a deliberately small and non-circular Core.
++
++```text
++polynomial moment x^m
++→ finite forward differences
++→ finite Euler transform
++→ parity normalization
++→ native value at -m
++```
++
++For `m = 1`, the only nonzero forward differences are
++
++```text
++f(1) = 1
++Δf(1) = 1
++Δ²f = 0
++```
++
++Therefore the finite Euler value is
++
++$$
++\eta_{\mathrm{FD}}(-1)=\frac12-\frac14=\frac14.
++$$
++
++The parity normalization is
++
++$$
++1-2^{1-(-1)}=1-2^2=-3,
++$$
++
++so the native CFBRC value is
++
++$$
++\zeta_{\mathrm{FD}}(-1)=\frac{1/4}{-3}=-\frac1{12}.
++$$
++
++## Independence boundary
++
++The native modules do not import or use:
++
++- `riemannZeta`;
++- Hurwitz zeta;
++- the analytic continuation of zeta;
++- any RH or RH-CFBRC theorem;
++- any infinite sum assigned to `1 - 2 + 3 - 4 + ⋯`.
++
++The first Core proves only a finite-difference regularization result.  A later,
++separate module will compare it with an Abel boundary value, and another
++quarantined oracle module will compare it with Mathlib's standard
++`riemannZeta` value.
++
++## Current guarantee
++
++The finite CFBRC regularization distinguishes both branches of the negative
++integer pattern in the first small cases:
++
++```text
++ζFD( 0) = -1/2
++ζFD(-1) = -1/12
++ζFD(-2) = 0
++ζFD(-3) = 1/120
++```
++
++This is an audit of finite regularization structure, not yet a construction of
++a holomorphic continuation on the full complex plane.
+--- /dev/null
++++ b/DkMath/CFBRC/docs/CFBRC_ANALYTIC_AUDIT_001_WIP_REPORT.md
+@@ -0,0 +1,143 @@
++# CFBRC Analytic Continuation Audit 001 — WIP report
++
++Date: 2026-08-05
++
++## Snapshot checkpoint
++
++```text
++source snapshot:
++  __snapshot-dk_math-lean-code-260805-2004.tar.gz
++
++verified sha256:
++  57d4f53dd831561ae8cd5abbae7a517e359f169e853a5d8d13e0b33d99532d21
++
++Lean toolchain:
++  leanprover/lean4:v4.32.2
++
++Mathlib revision:
++  v4.32.2
++```
++
++Comparison with the `260805-0819` snapshot found no material change in the
++non-RH CFBRC implementation surface.  Outside `DkMath/RH` and
++`DkMathTest/RH`, the only unrelated additions were Pow design documents and
++root import changes caused by newer RH modules.
++
++## Implemented packet
++
++```text
++DkMath.CFBRC.Regularization.ForwardDifference
++DkMath.CFBRC.Regularization.NegativeInteger
++DkMath.CFBRC.Regularization.AbelLinear
++DkMath.CFBRC.Regularization.DualAudit
++DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
++```
++
++Regression tests were added below:
++
++```text
++DkMathTest.CFBRC.Regularization.NegativeInteger
++DkMathTest.CFBRC.Regularization.AbelLinear
++DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
++```
++
++## Dependency boundary
++
++The native finite-difference and Abel modules do not import any `DkMath.RH`
++module.  The finite-difference Core does not use standard zeta, Hurwitz zeta,
++or analytic continuation.
++
++The standard comparison is isolated in:
++
++```text
++DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
++```
++
++## Native computed values
++
++For the polynomial moments `x^m`, the forward differences at `x = 1` are:
++
++```text
++m = 0: [1]
++m = 1: [1, 1]
++m = 2: [1, 3, 2]
++m = 3: [1, 7, 12, 6]
++```
++
++The resulting finite Euler values are:
++
++```text
++etaFD(0) =  1/2
++etaFD(1) =  1/4
++etaFD(2) =  0
++etaFD(3) = -1/8
++```
++
++After parity normalization:
++
++```text
++zetaFD(0) = -1/2
++zetaFD(1) = -1/12
++zetaFD(2) =  0
++zetaFD(3) =  1/120
++```
++
++## Abel route
++
++The implemented ordinary convergent series is:
++
++$$
++\sum_{n=0}^{\infty} -n(-r)^n=\frac{r}{(1+r)^2},
++\qquad |r|<1.
++$$
++
++The closed form tends to `1/4` as `r` approaches `1` from below.  The dual
++audit identifies this boundary value with `etaNegNatFiniteDifference 1`.
++
++## Static verification completed
++
++```text
++- expected snapshot SHA-256 matched
++- no sorry
++- no admit
++- no explicit axiom declaration
++- no DkMath.RH import in the new modules
++- native arithmetic independently recomputed with exact rational arithmetic
++- public CFBRC and test exports updated
++```
++
++## Build status
++
++This execution environment did not contain `lake`, `lean`, `elan`, or the
++snapshot's `.lake` dependency cache.  Network access was unavailable, so Lean
++elaboration and full Green verification could not be executed here.
++
++The code is therefore a build-ready WIP, not yet a claimed Green checkpoint.
++
++Run in the user's normal workspace:
++
++```bash
++cd lean/dk_math
++
++lake build DkMath.CFBRC.Regularization.ForwardDifference
++lake build DkMath.CFBRC.Regularization.NegativeInteger
++lake build DkMath.CFBRC.Regularization.AbelLinear
++lake build DkMath.CFBRC.Regularization.DualAudit
++lake build DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
++
++lake build DkMathTest.CFBRC.Regularization.NegativeInteger
++lake build DkMathTest.CFBRC.Regularization.AbelLinear
++lake build DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
++
++./lean-build.sh && ./lean-test.sh
++```
++
++If elaboration exposes a small API mismatch, preserve the definitions and
++mathematical statements.  Adjust only proof engineering around:
++
++```text
++fwdDiff_iter_pow_eq_zero_of_lt
++hasSum_coe_mul_geometric_of_norm_lt_one
++ContinuousAt.continuousWithinAt
++riemannZeta_neg_nat_eq_bernoulli
++```
