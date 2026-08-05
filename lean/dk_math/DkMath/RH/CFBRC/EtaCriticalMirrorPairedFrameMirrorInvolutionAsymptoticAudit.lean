@@ -17,14 +17,7 @@ namespace DkMath.RH.CFBRCProjection
 
 open Filter
 open scoped Topology
-
-/-- Critical reflection preserves every pair-left base rotation. -/
-theorem etaPairBaseRotation_criticalMirror
-    (s : ℂ) (k : ℕ) :
-    etaPairBaseRotation (criticalMirror s) k =
-      etaPairBaseRotation s k := by
-  unfold etaPairBaseRotation
-  rw [criticalMirror_im]
+open DkMath.RH.Weave.Analytic
 
 /-- One paired critical-mirror defect changes sign under critical reflection. -/
 theorem etaCriticalMirrorDefectPairTerm_criticalMirror_eq_neg
@@ -82,8 +75,7 @@ theorem etaCriticalMirrorIndexNormalizedDefectTail_criticalMirror_eq_neg
     etaCriticalMirrorIndexNormalizedDefectTail a (criticalMirror s) k =
       -etaCriticalMirrorIndexNormalizedDefectTail a s k := by
   unfold etaCriticalMirrorIndexNormalizedDefectTail
-  rw [etaCriticalMirrorDefectPairTail_criticalMirror_eq_neg]
-  ring
+  simp [etaCriticalMirrorDefectPairTail_criticalMirror_eq_neg]
 
 /-- The normalized even finite defect endpoint changes sign under reflection. -/
 theorem etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_criticalMirror_eq_neg
@@ -91,21 +83,18 @@ theorem etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_criticalMirror_eq_neg
     etaCriticalMirrorIndexNormalizedEvenDefectEndpoint a (criticalMirror s) k =
       -etaCriticalMirrorIndexNormalizedEvenDefectEndpoint a s k := by
   unfold etaCriticalMirrorIndexNormalizedEvenDefectEndpoint
-  rw [etaCriticalMirrorTransportDefectEndpoint_two_mul_eq_pairedPartial,
+  simp [etaCriticalMirrorTransportDefectEndpoint_two_mul_eq_pairedPartial,
     etaCriticalMirrorTransportDefectEndpoint_two_mul_eq_pairedPartial,
     etaCriticalMirrorDefectPairedPartial_criticalMirror_eq_neg]
-  ring
 
 /-- The rotating-frame normalized defect tail also changes sign exactly. -/
 theorem etaCriticalMirrorIndexNormalizedRotatedDefectTail_criticalMirror_eq_neg
     (a : ℝ) (s : ℂ) (k : ℕ) :
     etaCriticalMirrorIndexNormalizedRotatedDefectTail a (criticalMirror s) k =
       -etaCriticalMirrorIndexNormalizedRotatedDefectTail a s k := by
-  rw [etaCriticalMirrorIndexNormalizedRotatedDefectTail_eq_baseRotation_mul,
+  simp [etaCriticalMirrorIndexNormalizedRotatedDefectTail_eq_baseRotation_mul,
     etaCriticalMirrorIndexNormalizedRotatedDefectTail_eq_baseRotation_mul,
-    etaPairBaseRotation_criticalMirror,
     etaCriticalMirrorIndexNormalizedDefectTail_criticalMirror_eq_neg]
-  ring
 
 /-- The rotating-frame normalized even endpoint changes sign exactly. -/
 theorem etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint_criticalMirror_eq_neg
@@ -114,9 +103,7 @@ theorem etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint_criticalMirror
         a (criticalMirror s) k =
       -etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint a s k := by
   unfold etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint
-  rw [etaPairBaseRotation_criticalMirror,
-    etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_criticalMirror_eq_neg]
-  ring
+  simp [etaCriticalMirrorIndexNormalizedEvenDefectEndpoint_criticalMirror_eq_neg]
 
 /-- Mirror reflection transports every rotating endpoint limit to its negative. -/
 theorem etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint_criticalMirror_tendsto_neg
