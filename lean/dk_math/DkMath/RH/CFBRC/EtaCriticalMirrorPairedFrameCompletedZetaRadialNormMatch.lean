@@ -110,6 +110,7 @@ theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_left
         atTop (nhds (etaPairIndexNormalizedTailRadius s)) := by
     simpa [Function.comp_def, Real.norm_eq_abs,
       abs_of_nonneg (etaPairIndexNormalizedTailRadius_nonneg s)] using habs0
+  rw [norm_etaPairIndexNormalizedTailConstant_eq_radius]
   refine habs.congr' (Eventually.of_forall fun k => ?_)
   rw [norm_completedZetaCanonicalSlopeRayModel]
   rfl
@@ -136,6 +137,7 @@ theorem norm_etaCriticalMirrorCompletedZetaDominantRadialRayModel_tendsto_right
     simpa [Function.comp_def, Real.norm_eq_abs,
       abs_of_nonneg
         (etaPairIndexNormalizedTailRadius_nonneg (criticalMirror s))] using habs0
+  rw [norm_etaPairIndexNormalizedTailConstant_eq_radius]
   refine habs.congr' (Eventually.of_forall fun k => ?_)
   rw [norm_completedZetaCanonicalSlopeRayModel]
   rfl
