@@ -25,12 +25,12 @@ def EtaPairProjectiveUnitRotation (z : ℂ) : Prop :=
   z = 1 ∨ z = -1
 
 /--
-Projective two-scale nonresonance research marker.
+Projective two-scale nonresonance.
 
-Because a real line identifies opposite directions, the ordinary nonresonance
-statement must be strengthened from `≠ 1` to `≠ ±1`.  The intended proof
-squares simultaneous projective resonances and reuses the existing doubling /
-tripling nonresonance theorem.
+Because a real line identifies opposite directions, ordinary nonresonance is
+strengthened from `≠ 1` to `≠ ±1`.  Simultaneous projective resonance at
+height `s.im` would square to simultaneous ordinary resonance at height
+`2 * s.im`, contradicting the existing doubling / tripling theorem.
 -/
 theorem etaPairHalf_or_fullDensityBlockSchedule_rotationLimit_not_projectively_trivial
     {s : ℂ} (him : s.im ≠ 0) :
@@ -38,7 +38,67 @@ theorem etaPairHalf_or_fullDensityBlockSchedule_rotationLimit_not_projectively_t
         (etaPairHalfDensityBlockSchedule.scheduledBlockRotationLimit s) ∨
       ¬ EtaPairProjectiveUnitRotation
         (etaPairFullDensityBlockSchedule.scheduledBlockRotationLimit s) := by
-  sorry
+  by_contra hboth
+  push Not at hboth
+  norm_num
+    [EtaPairPositiveDensityBlockSchedule.scheduledBlockRotationLimit,
+      etaPairHalfDensityBlockSchedule, etaPairFullDensityBlockSchedule]
+    at hboth
+  have hprojectiveSquare :
+      ∀ z : ℂ, EtaPairProjectiveUnitRotation z → z * z = 1 := by
+    intro z hz
+    rcases hz with hz | hz
+    · rw [hz]
+      norm_num
+    · rw [hz]
+      norm_num
+  let s2 : ℂ := ⟨s.re, 2 * s.im⟩
+  have hs2im : s2.im ≠ 0 := by
+    dsimp [s2]
+    exact mul_ne_zero (by norm_num) him
+  have h2 :
+      Complex.exp
+          (Complex.I * (((s2.im * Real.log 2 : ℝ) : ℂ))) = 1 := by
+    calc
+      Complex.exp
+          (Complex.I * (((s2.im * Real.log 2 : ℝ) : ℂ))) =
+          Complex.exp
+            ((Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ))) +
+              (Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ)))) := by
+                congr 1
+                dsimp [s2]
+                push_cast
+                ring
+      _ =
+          Complex.exp
+              (Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ))) *
+            Complex.exp
+              (Complex.I * (((s.im * Real.log 2 : ℝ) : ℂ))) := by
+                rw [Complex.exp_add]
+      _ = 1 := hprojectiveSquare _ hboth.1
+  have h3 :
+      Complex.exp
+          (Complex.I * (((s2.im * Real.log 3 : ℝ) : ℂ))) = 1 := by
+    calc
+      Complex.exp
+          (Complex.I * (((s2.im * Real.log 3 : ℝ) : ℂ))) =
+          Complex.exp
+            ((Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ))) +
+              (Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ)))) := by
+                congr 1
+                dsimp [s2]
+                push_cast
+                ring
+      _ =
+          Complex.exp
+              (Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ))) *
+            Complex.exp
+              (Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ))) := by
+                rw [Complex.exp_add]
+      _ = 1 := hprojectiveSquare _ hboth.2
+  rcases etaPairTwoScaleRotation_nonresonant (s := s2) hs2im with h2ne | h3ne
+  · exact h2ne h2
+  · exact h3ne h3
 
 /-- Certificate for the projective two-scale nonresonance stage. -/
 structure EtaPairProjectiveTwoScaleNonresonanceCertificate
