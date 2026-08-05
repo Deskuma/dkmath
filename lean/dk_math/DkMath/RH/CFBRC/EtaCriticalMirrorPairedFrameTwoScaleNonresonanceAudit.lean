@@ -31,11 +31,12 @@ def etaPairFullDensityBlockSchedule :
   blockLength_tendsto_atTop := by
     apply StrictMono.tendsto_atTop
     intro K L hKL
+    change 2 * K < 2 * L
     omega
   relativeLength_tendsto_density := by
     have h :=
       tendsto_add_mul_div_add_mul_atTop_nhds
-        (𝕜 := ℝ) 0 2 1 (d := 2) (by norm_num)
+        (𝕜 := ℝ) 0 1 2 (d := 2) (by norm_num)
     simpa [etaPairFrameLeftEndpoint, add_comm, add_left_comm,
       add_assoc, mul_comm, mul_left_comm, mul_assoc,
       Nat.cast_add, Nat.cast_mul] using h
@@ -104,36 +105,37 @@ private theorem positive_twoScaleRotation_nonresonant
   rintro ⟨h2, h3⟩
   rcases Complex.exp_eq_one_iff.mp h2 with ⟨a, ha⟩
   rcases Complex.exp_eq_one_iff.mp h3 with ⟨b, hb⟩
-
   have haReal :
       t * Real.log 2 = (a : ℝ) * (2 * Real.pi) := by
-    simpa [Complex.mul_im, mul_assoc] using congrArg Complex.im ha
+    have h := congrArg Complex.im ha
+    norm_num [Complex.mul_im, mul_assoc] at h
+    rw [Complex.log_re] at h
+    norm_num at h
+    exact h
   have hbReal :
       t * Real.log 3 = (b : ℝ) * (2 * Real.pi) := by
-    simpa [Complex.mul_im, mul_assoc] using congrArg Complex.im hb
-
+    have h := congrArg Complex.im hb
+    norm_num [Complex.mul_im, mul_assoc] at h
+    rw [Complex.log_re] at h
+    norm_num at h
+    exact h
   have hlog2 : 0 < Real.log 2 :=
     Real.log_pos (by norm_num)
   have hlog3 : 0 < Real.log 3 :=
     Real.log_pos (by norm_num)
   have htwoPi : 0 < 2 * Real.pi := by positivity
-
   have haCastPos : 0 < (a : ℝ) := by
     apply pos_of_mul_pos_right
-    · rw [← haReal]
-      exact mul_pos ht hlog2
-    · exact htwoPi.le
+    · nlinarith [haReal, htwoPi]
+    · positivity
   have hbCastPos : 0 < (b : ℝ) := by
     apply pos_of_mul_pos_right
-    · rw [← hbReal]
-      exact mul_pos ht hlog3
-    · exact htwoPi.le
+    · nlinarith [hbReal, htwoPi]
+    · positivity
   have haPos : 0 < a := by exact_mod_cast haCastPos
   have hbPos : 0 < b := by exact_mod_cast hbCastPos
-
   let m : ℕ := b.toNat
   let n : ℕ := a.toNat
-
   have hbToNat : (m : ℤ) = b := by
     dsimp [m]
     exact Int.toNat_of_nonneg hbPos.le
@@ -147,7 +149,6 @@ private theorem positive_twoScaleRotation_nonresonant
     have hzero : b.toNat = 0 := Nat.eq_zero_of_not_pos hnot
     rw [hzero] at hcast
     omega
-
   have hcrossInt :
       (b : ℝ) * Real.log 2 =
         (a : ℝ) * Real.log 3 := by
@@ -161,7 +162,6 @@ private theorem positive_twoScaleRotation_nonresonant
       _ = (a : ℝ) * (t * Real.log 3) := by
         rw [hbReal]
       _ = t * ((a : ℝ) * Real.log 3) := by ring
-
   have hbCast : (m : ℝ) = (b : ℝ) := by
     exact_mod_cast hbToNat
   have haCast : (n : ℝ) = (a : ℝ) := by
@@ -171,7 +171,6 @@ private theorem positive_twoScaleRotation_nonresonant
         (n : ℝ) * Real.log 3 := by
     rw [hbCast, haCast]
     exact hcrossInt
-
   have hpowReal :
       (2 : ℝ) ^ m = (3 : ℝ) ^ n := by
     calc
@@ -201,7 +200,7 @@ theorem etaPairTwoScaleRotation_nonresonant
       Complex.exp
           (Complex.I * (((s.im * Real.log 3 : ℝ) : ℂ))) ≠ 1 := by
   by_contra hboth
-  push_neg at hboth
+  push Not at hboth
   rcases lt_or_gt_of_ne him with hneg | hpos
   · apply positive_twoScaleRotation_nonresonant (neg_pos.mpr hneg)
     constructor
@@ -238,9 +237,10 @@ theorem etaPairHalf_or_fullDensityBlockSchedule_rotationLimit_ne_one
     {s : ℂ} (him : s.im ≠ 0) :
     etaPairHalfDensityBlockSchedule.scheduledBlockRotationLimit s ≠ 1 ∨
       etaPairFullDensityBlockSchedule.scheduledBlockRotationLimit s ≠ 1 := by
-  simpa [EtaPairPositiveDensityBlockSchedule.scheduledBlockRotationLimit,
-    etaPairHalfDensityBlockSchedule, etaPairFullDensityBlockSchedule] using
-    etaPairTwoScaleRotation_nonresonant him
+  convert etaPairTwoScaleRotation_nonresonant him using 1 <;>
+    norm_num [EtaPairPositiveDensityBlockSchedule.scheduledBlockRotationLimit,
+      etaPairHalfDensityBlockSchedule, etaPairFullDensityBlockSchedule,
+      Complex.ofReal_log]
 
 /--
 Certificate collecting the two explicit scale limits and their nonresonance.
