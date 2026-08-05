@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantRadialRayModel
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTransverseClosure
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
 
@@ -23,10 +23,14 @@ The historical research beacons have now been reduced as follows.
   `EtaCriticalMirrorPairedFrameMovingLineCollisionCore`;
 * the real-axis branch is closed in `StandardZetaRealAxisClosure`;
 * the weighted finite-eta and complete-tail forms are equivalent;
-* the Ultra phase-lock collision from weighted-tail residual collapse is proved;
-* the explicit completed-zeta dominant radial ray model is constructed;
-* the model's fixed completed-zeta projective orbit collapse is exact and
-  unconditional because its amplitude is real.
+* the Ultra phase-lock collision from a genuine fixed global line is proved;
+* the completed-zeta canonical slope direction is constructed and normalized;
+* the dominant radial ray model and its exact projective orbit are constructed;
+* endpoint and ray-model norms have the same off-critical asymptotic radius;
+* full ray-model approximation is split exactly into signed radial and
+  transverse coordinates;
+* the transverse coordinate alone supplies the concrete global zero-line lock,
+  so signed radial orientation is not an RH premise.
 
 Exactly one analytic bridge remains below.  This file is intentionally the only
 research-beacon layer and must not be imported by the clean collision Core or by
@@ -34,36 +38,36 @@ stable analytic modules.
 -/
 
 /--
-The sole remaining research Gap: prove that the dominant endpoint,
-equivalently the dominant-weighted complete tail on the zero locus, is
-asymptotic to the explicit completed-zeta dominant radial ray model.
+The sole remaining research Gap: prove that the dominant endpoint's transverse
+coordinate in the unit-normalized completed-zeta slope frame tends to zero on
+the nontrivial zero locus.
 
-The model does not inspect or copy the endpoint.  Its real radial coefficient
-is the explicit same-index Euler half-tail coefficient, and its fixed direction
-is the canonical completed-zeta slope direction.
+Equivalently, the endpoint approaches the fixed real line selected by the
+completed-zeta canonical slope direction.  No radial magnitude or orientation
+condition is included in this contract.
 -/
-theorem etaCriticalMirrorCompletedZetaDominantRadialRayModel_approximation_research_goal :
-    EtaCriticalMirrorCompletedZetaDominantRadialRayModelApproximation := by
+theorem etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal :
+    EtaCriticalMirrorCompletedZetaDominantTransverseCollapse := by
   sorry
 
-/-- The current weighted-tail residual collapse follows from the sole bridge. -/
-theorem etaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidualCollapse_research_goal :
-    EtaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidualCollapse :=
-  etaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidualCollapse_of_model
-    etaCriticalMirrorCompletedZetaDominantRadialRayModel_approximation_research_goal
-    etaCriticalMirrorCompletedZetaDominantRadialRayModel_orbitResidualCollapse
+/-- The concrete completed-zeta global-line provider follows from the sole Gap. -/
+theorem etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
+    EtaCriticalMirrorGlobalZeroLineLock
+      etaCriticalMirrorDominantNormalizedEndpointCarrier :=
+  etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaTransverseCollapse
+    etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
 
 /--
 Top-level laboratory beacon.  Its only research axiom should be the single
-radial-ray approximation declaration above.
+transverse-collapse declaration above.
 -/
 theorem riemannHypothesis_movingLineCollision_research_goal :
     RiemannHypothesis :=
-  riemannHypothesis_of_completedZetaDominantRadialRayModelApproximation
-    etaCriticalMirrorCompletedZetaDominantRadialRayModel_approximation_research_goal
+  riemannHypothesis_of_completedZetaDominantTransverseCollapse
+    etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
 
-#print axioms etaCriticalMirrorCompletedZetaDominantRadialRayModel_approximation_research_goal
-#print axioms etaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidualCollapse_research_goal
+#print axioms etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
+#print axioms etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal
 #print axioms riemannHypothesis_movingLineCollision_research_goal
 
 end DkMath.RH.CFBRCProjection
