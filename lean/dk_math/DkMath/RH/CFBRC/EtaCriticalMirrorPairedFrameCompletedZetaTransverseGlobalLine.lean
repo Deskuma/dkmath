@@ -24,7 +24,7 @@ theorem complexRealLineDefect_completedZetaCanonicalSlopeUnitDirection_eq_transv
   rfl
 
 /-- Transverse collapse supplies a fixed global line lock for the endpoint. -/
-theorem etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaTransverseCollapse
+def etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaTransverseCollapse
     (htransverse :
       EtaCriticalMirrorCompletedZetaDominantTransverseCollapse) :
     EtaCriticalMirrorGlobalZeroLineLock

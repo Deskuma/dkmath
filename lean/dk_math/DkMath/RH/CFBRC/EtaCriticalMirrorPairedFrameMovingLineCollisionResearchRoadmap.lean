@@ -51,7 +51,7 @@ theorem etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal :
   sorry
 
 /-- The concrete completed-zeta global-line provider follows from the sole Gap. -/
-theorem etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
+def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
     EtaCriticalMirrorGlobalZeroLineLock
       etaCriticalMirrorDominantNormalizedEndpointCarrier :=
   etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaTransverseCollapse
