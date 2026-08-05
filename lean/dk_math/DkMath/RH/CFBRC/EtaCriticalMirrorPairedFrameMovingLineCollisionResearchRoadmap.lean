@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTransverseClosure
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTransverseBridge
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
@@ -25,62 +25,67 @@ The historical research beacons have now been reduced as follows.
 * the real-axis branch is closed in `StandardZetaRealAxisClosure`;
 * the weighted finite-eta and complete-tail forms are equivalent;
 * the Ultra phase-lock collision from a genuine fixed global line is proved;
-* the completed-zeta canonical slope direction is constructed and normalized;
+* the completed-zeta canonical slope direction and slope carrier are explicit;
+* the canonical slope carrier already approaches its own fixed slope line on
+  every standard nontrivial zero;
 * the dominant radial ray model and its exact projective orbit are constructed;
 * endpoint and ray-model norms have the same off-critical asymptotic radius;
 * full ray-model approximation is split exactly into signed radial and
   transverse coordinates;
-* the transverse coordinate alone supplies the concrete global zero-line lock,
-  so signed radial orientation is not an RH premise;
-* at a hypothetical off-critical zero, transverse collapse is equivalent to the
-  completed-zeta / pair-left relative counter-rotation becoming asymptotically
-  real;
+* the endpoint line condition is equivalent to one scalar transverse bridge:
+  endpoint slope-frame defect minus canonical slope-carrier defect;
+* on the zero locus, that scalar bridge is the slope-frame defect of the finite
+  difference between the dominant eta endpoint and the normalized nearby value
+  `completedRiemannZeta (s + 1 / (k + 1)) / (1 / (k + 1))`;
+* at a hypothetical off-critical zero, endpoint transverse collapse is
+  equivalent to the completed-zeta / pair-left relative counter-rotation
+  becoming asymptotically real;
 * that relative phase lock is impossible at every nonzero height by the proved
   doubling / tripling projective nonresonance collision.
 
 The relative-phase condition is therefore a closure audit, not an independent
-research premise: using it as a `sorry` would merely restate off-critical zero
-exclusion.  The sole analytic bridge remains the endpoint-derived transverse
-collapse below.
+research premise.  The sole analytic bridge is the scalar endpoint/slope
+transverse comparison below.
 
 This file is intentionally the only research-beacon layer and must not be
 imported by the clean collision Core or by stable analytic modules.
 -/
 
 /--
-The sole remaining research Gap: prove that the dominant endpoint's transverse
-coordinate in the unit-normalized completed-zeta slope frame tends to zero on
-the nontrivial zero locus.
+The sole remaining research Gap: prove that the dominant eta endpoint and the
+canonical completed-zeta slope carrier have asymptotically the same transverse
+coordinate in the fixed completed-zeta slope frame.
 
-Equivalently, the endpoint approaches the fixed real line selected by the
-completed-zeta canonical slope direction.  No radial magnitude or orientation
-condition is included in this contract.
+Only one real coordinate is asserted.  No equality of complex carrier values,
+no radial magnitude equality, no zero simplicity, and no critical-line
+conclusion is included in this contract.
 
-This must be discharged from an independent completed-zeta / eta-tail analytic
-identity or estimate.  The already proved relative-phase contradiction is the
-consumer of this bridge, not a replacement assumption for it.
+On the zero locus the bridge is an explicit finite-index comparison with the
+normalized nearby completed-zeta value.  It must be discharged by an
+independent completed-zeta / eta-tail identity or estimate.
 -/
-theorem etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal :
-    EtaCriticalMirrorCompletedZetaDominantTransverseCollapse := by
+theorem etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_research_goal :
+    EtaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse := by
   sorry
 
 /-- The concrete completed-zeta global-line provider follows from the sole Gap. -/
 def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
     EtaCriticalMirrorGlobalZeroLineLock
       etaCriticalMirrorDominantNormalizedEndpointCarrier :=
-  etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaTransverseCollapse
-    etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
+  etaCriticalMirrorEndpointGlobalZeroLineLock_of_completedZetaSlopeLineCompatibility
+    (etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_iff_lineCompatibility.mp
+      etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_research_goal)
 
 /--
 Top-level laboratory beacon.  Its only research axiom should be the single
-transverse-collapse declaration above.
+scalar transverse-bridge declaration above.
 -/
 theorem riemannHypothesis_movingLineCollision_research_goal :
     RiemannHypothesis :=
-  riemannHypothesis_of_completedZetaDominantTransverseCollapse
-    etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
+  riemannHypothesis_of_endpointCompletedZetaSlopeTransverseBridgeCollapse
+    etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_research_goal
 
-#print axioms etaCriticalMirrorCompletedZetaDominantTransverseCollapse_research_goal
+#print axioms etaCriticalMirrorEndpointCompletedZetaSlopeTransverseBridgeCollapse_research_goal
 #print axioms etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal
 #print axioms riemannHypothesis_movingLineCollision_research_goal
 
