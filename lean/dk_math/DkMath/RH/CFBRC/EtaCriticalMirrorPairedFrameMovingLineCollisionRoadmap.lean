@@ -267,14 +267,58 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock :
       etaCriticalMirrorDominantNormalizedEndpointCarrier,
       etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
       if_neg hnotle, Function.comp_apply, criticalMirror] using himaginary
+
 /--
-Noncollapse marker for the concrete dominant endpoint carrier.
-The target should follow from the positive endpoint norm limits already proved.
+The concrete dominant endpoint carrier does not collapse.  On each
+off-critical side, its norm converges to a nonzero constant, so half that
+constant is an eventual positive lower bound.
 -/
 theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_noncollapse :
     EtaCriticalMirrorOffCriticalCarrierNoncollapse
       etaCriticalMirrorDominantNormalizedEndpointCarrier := by
-  sorry
+  intro s hs him hre
+  rcases lt_or_gt_of_ne hre with hleft | hright
+  · have cert :=
+      etaCriticalMirrorLeftNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
+        hs him hleft
+    have hlimitPos :
+        0 < ‖-etaPairIndexNormalizedTailConstant s‖ := by
+      exact lt_of_le_of_ne
+        (norm_nonneg _)
+        (Ne.symm cert.norm_limit_ne_zero)
+    refine ⟨‖-etaPairIndexNormalizedTailConstant s‖ / 2, by linarith, ?_⟩
+    have heventually :
+        ∀ᶠ k : ℕ in atTop,
+          ‖-etaPairIndexNormalizedTailConstant s‖ / 2 <
+            ‖etaCriticalMirrorIndexNormalizedEvenDefectEndpoint s.re s k‖ := by
+      exact cert.endpoint_norm_tendsto.eventually
+        (Ioi_mem_nhds (by linarith))
+    filter_upwards [heventually] with k hk
+    have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
+    simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      if_pos hle] using le_of_lt hk
+  · have cert :=
+      etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
+        hs him hright
+    have hlimitPos :
+        0 < ‖etaPairIndexNormalizedTailConstant (criticalMirror s)‖ := by
+      exact lt_of_le_of_ne
+        (norm_nonneg _)
+        (Ne.symm cert.norm_limit_ne_zero)
+    refine
+      ⟨‖etaPairIndexNormalizedTailConstant (criticalMirror s)‖ / 2,
+        by linarith, ?_⟩
+    have heventually :
+        ∀ᶠ k : ℕ in atTop,
+          ‖etaPairIndexNormalizedTailConstant (criticalMirror s)‖ / 2 <
+            ‖etaCriticalMirrorIndexNormalizedEvenDefectEndpoint
+              (criticalMirror s).re s k‖ := by
+      exact cert.endpoint_norm_tendsto.eventually
+        (Ioi_mem_nhds (by linarith))
+    filter_upwards [heventually] with k hk
+    have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
+    simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
+      if_neg hnotle] using le_of_lt hk
 
 /--
 Conditional same-carrier collision theorem.
@@ -346,7 +390,7 @@ theorem riemannHypothesis_of_endpointGlobalZeroLineLock_and_realAxisClosure
 /--
 Global-line provider research beacon.
 
-This theorem is deliberately left with `sorry`: its type is the fifth-stage
+This definition is deliberately left with `sorry`: its type is the fifth-stage
 completed-zeta / Hardy-frame obligation.  The provider must not be built from
 the endpoint carrier itself or from an RH-equivalent premise.
 -/
