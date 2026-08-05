@@ -266,12 +266,11 @@ theorem riemannHypothesis_of_completedZetaWeightedTailPhaseLockCollision
     (htail :
       EtaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidualCollapse) :
     RiemannHypothesis := by
+  rw [riemannHypothesis_iff_nontrivialZero_re_eq_half]
   intro s hs
-  by_cases him : s.im = 0
-  · exact standardZetaRealAxisClosure s hs him
-  · exact
-      etaCriticalMirror_re_eq_half_of_completedZetaWeightedTailOrbitResidualCollapse
-        htail hs him
+  exact
+    etaCriticalMirror_re_eq_half_of_completedZetaWeightedTailOrbitResidualCollapse
+      htail hs (nontrivialRiemannZetaZero_im_ne_zero hs)
 
 #print axioms etaCriticalMirrorEndpointCompletedZetaWeightedTailOrbitResidual_eq_endpointPhaseResidual_of_zero
 #print axioms etaCriticalMirrorCompletedZetaTailMovingPhase_tendsto_one_of_residualCollapse
