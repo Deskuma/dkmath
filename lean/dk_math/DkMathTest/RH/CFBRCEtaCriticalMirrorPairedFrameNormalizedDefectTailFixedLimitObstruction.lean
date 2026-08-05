@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailFixedLimitObstruction
 
+set_option linter.style.longLine false
+
 #print "file: DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameNormalizedDefectTailFixedLimitObstruction"
 
 noncomputable section

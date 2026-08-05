@@ -16,7 +16,7 @@ open Filter
 open scoped Topology
 open DkMath.RH.Weave.Analytic
 
-example (z : ℂ) :
+example (_z : ℂ) :
     Tendsto etaPairIndexToSuccessorEndpointRatio atTop
       (nhds ((1 : ℝ) / 2)) :=
   etaPairIndexToSuccessorEndpointRatio_tendsto_half

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameNormalizedDefectTailChordCollapseCriterion
 
+set_option linter.style.longLine false
+
 #print "file: DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameNormalizedDefectTailChordCollapseCriterion"
 
 noncomputable section
