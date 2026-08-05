@@ -155,8 +155,12 @@ theorem scheduledNormalizedDefectTailChord_tendsto_zero_of_tail_tendsto_zero
       atTop (nhds 0)
     simpa only [norm_zero] using
       (continuous_norm.tendsto (0 : ℂ)).comp hdiff
-  simpa [scheduledNormalizedDefectTailChord,
-    etaCriticalMirrorIndexNormalizedDefectTailChord] using hnorm
+  change Tendsto
+    (fun K : ℕ =>
+      ‖etaCriticalMirrorIndexNormalizedDefectTail a s (K + S.blockLength K) -
+        etaCriticalMirrorIndexNormalizedDefectTail a s K‖)
+    atTop (nhds 0)
+  exact hnorm
 
 end EtaPairPositiveDensityBlockSchedule
 
@@ -173,11 +177,9 @@ theorem etaCriticalMirrorTwoScaleNormalizedDefectTailChordCollapse_of_evenEndpoi
     etaCriticalMirrorIndexNormalizedDefectTail_tendsto_zero_of_evenEndpointRateCollapse
       hs him hrate
   exact
-    ⟨etaPairHalfDensityBlockSchedule.
-        scheduledNormalizedDefectTailChord_tendsto_zero_of_tail_tendsto_zero
+    ⟨etaPairHalfDensityBlockSchedule.scheduledNormalizedDefectTailChord_tendsto_zero_of_tail_tendsto_zero
           htail,
-      etaPairFullDensityBlockSchedule.
-        scheduledNormalizedDefectTailChord_tendsto_zero_of_tail_tendsto_zero
+      etaPairFullDensityBlockSchedule.scheduledNormalizedDefectTailChord_tendsto_zero_of_tail_tendsto_zero
           htail⟩
 
 /--
