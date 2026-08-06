@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantEulerHalfRHEquivalenceAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameThreeElementAssimilationBridge
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
 
@@ -49,6 +50,12 @@ The historical research beacons have now been reduced as follows.
   doubling / tripling projective nonresonance collision;
 * the final critical-safe dominant-half contract is proved logically equivalent
   to `RiemannHypothesis` itself.
+* the general three-element assimilation Core is now instantiated on the
+  explicit local dominant CF2D carrier; pair-whole assimilation and target
+  noncollapse follow from the existing local endpoint asymptotic;
+* the remaining interaction-assimilation provider, equivalently the collapse
+  of the difference whole `(core - beam)^2`, is proved logically equivalent to
+  `RiemannHypothesis` itself.
 
 The formal reduction has therefore reached a logical fixed point.  The final
 beacon below is not a weaker independent premise and must not be described as
@@ -84,6 +91,24 @@ therefore the unresolved theorem itself in a normalized explicit form.
 theorem etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal :
     EtaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse := by
   sorry
+
+/--
+Three-element audit of the same research boundary.  The explicit local carrier
+already supplies pair-whole assimilation and a nonzero target.  What remains
+is exactly the interaction magic-core provider, and this provider is RH-equivalent.
+-/
+theorem etaCriticalMirrorThreeElementInteractionAssimilationProvider_research_boundary_iff :
+    EtaCriticalMirrorThreeElementInteractionAssimilationProvider ↔
+      RiemannHypothesis :=
+  etaCriticalMirrorThreeElementInteractionAssimilationProvider_iff_riemannHypothesis
+
+/--
+Equivalent difference-whole formulation of the three-element research boundary.
+-/
+theorem etaCriticalMirrorThreeElementDifferenceWholeCollapseProvider_research_boundary_iff :
+    EtaCriticalMirrorThreeElementDifferenceWholeCollapseProvider ↔
+      RiemannHypothesis :=
+  etaCriticalMirrorThreeElementDifferenceWholeCollapseProvider_iff_riemannHypothesis
 
 /-- The full Euler-main carrier line condition follows from the research boundary. -/
 theorem etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal :
@@ -124,6 +149,8 @@ theorem riemannHypothesis_movingLineCollision_research_goal :
     etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 
 #print axioms etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_iff_riemannHypothesis
+#print axioms etaCriticalMirrorThreeElementInteractionAssimilationProvider_research_boundary_iff
+#print axioms etaCriticalMirrorThreeElementDifferenceWholeCollapseProvider_research_boundary_iff
 #print axioms etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
