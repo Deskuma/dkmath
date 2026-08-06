@@ -32,11 +32,11 @@ Layer C:
 集合として書けば、次の三つを考える。
 
 $$
-Z_{\mathrm{nt}}:=\{s\in\mathbb C\mid \operatorname{NontrivialRiemannZetaZero}(s)\}
+Z_{\mathrm{nt}}:=\{s\in\mathbb C\mid \mathrm{NontrivialRiemannZetaZero}(s)\}
 $$
 
 $$
-Z_{\mathrm{CFBRC}}:=\{s\in\mathbb C\mid \operatorname{offCriticalCFBRC}(d,s.re,\phi(s))=0\}
+Z_{\mathrm{CFBRC}}:=\{s\in\mathbb C\mid \mathrm{offCriticalCFBRC}(d,s.re,\phi(s))=0\}
 $$
 
 $$
@@ -52,7 +52,7 @@ $$
 Mathlib のリーマン予想は、DkMath の局所 predicate を使えば次と同値である。
 
 $$
-\operatorname{RiemannHypothesis}
+\mathrm{RiemannHypothesis}
 \iff
 Z_{\mathrm{nt}}\subseteq L_{1/2}
 $$
@@ -84,7 +84,7 @@ offCriticalCFBRC_eq_zero_iff_re_eq_half
 `cfbrcR_eq_zero_iff_x_eq_zero` は、任意の正次数 `d` に対して次を証明する。
 
 $$
-\operatorname{cfbrcR}(d,X,\Theta)=0
+\mathrm{cfbrcR}(d,X,\Theta)=0
 \iff
 X=0
 $$
@@ -126,7 +126,7 @@ $$
 そのため、一般零点 theorem と中心化零点 theorem を合成すると次が得られる。
 
 $$
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)=0
+\mathrm{offCriticalCFBRC}(d,\sigma,\Theta)=0
 \iff
 \sigma=\frac12
 $$
@@ -223,7 +223,7 @@ riemannHypothesis_iff_nontrivialZero_re_eq_half
 数学的には次を与える。
 
 $$
-\operatorname{RiemannHypothesis}
+\mathrm{RiemannHypothesis}
 \iff
 \forall s\in Z_{\mathrm{nt}},\ s.re=\frac12
 $$
@@ -289,7 +289,7 @@ theorem riemannHypothesis_of_standardZeta_map_zero
 
 $$
 \forall s\in Z_{\mathrm{nt}},\quad
-\operatorname{offCriticalCFBRC}(d,s.re,\phi(s))=0
+\mathrm{offCriticalCFBRC}(d,s.re,\phi(s))=0
 $$
 
 を供給すれば RH が得られる。
@@ -354,7 +354,7 @@ criticalMirror_eq_self_iff_re_eq_half
 特に固定点集合は臨界線と一致する。
 
 $$
-\operatorname{criticalMirror}(s)=s
+\mathrm{criticalMirror}(s)=s
 \iff
 s.re=\frac12
 $$
@@ -457,9 +457,9 @@ Gap A:
 数式では次である。
 
 $$
-\operatorname{NontrivialRiemannZetaZero}(s)
+\mathrm{NontrivialRiemannZetaZero}(s)
 \Longrightarrow
-\operatorname{offCriticalCFBRC}(d,s.re,\phi(s))=0
+\mathrm{offCriticalCFBRC}(d,s.re,\phi(s))=0
 $$
 
 この implication は現在の Framework では RH と同値である。
