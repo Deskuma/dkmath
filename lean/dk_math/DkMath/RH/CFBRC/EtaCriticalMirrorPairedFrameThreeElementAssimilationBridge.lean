@@ -140,20 +140,22 @@ theorem pairWholeAssimilation_of_complex_tendsto_real_limit
     have h := (Complex.continuous_im.tendsto L).comp hz
     simpa [Function.comp_def, hLIm] using h
   constructor
-  · have hsum :
+  · change Tendsto
+      (fun k : ℕ => ((z k).re + (z k).im) ^ 2)
+      atTop (nhds (L.re ^ 2))
+    have hsum :
         Tendsto (fun k : ℕ => (z k).re + (z k).im)
           atTop (nhds (L.re + 0)) :=
       hre.add him
-    have hsq := hsum.mul hsum
-    simpa [cf2dThreeElementFlow, quadraticFlow, etaComplexCF2DState,
-      cf2dPlusWhole, plusWhole, pow_two] using hsq
-  · have hsub :
+    simpa [pow_two] using hsum.mul hsum
+  · change Tendsto
+      (fun k : ℕ => ((z k).re - (z k).im) ^ 2)
+      atTop (nhds (L.re ^ 2))
+    have hsub :
         Tendsto (fun k : ℕ => (z k).re - (z k).im)
           atTop (nhds (L.re - 0)) :=
       hre.sub him
-    have hsq := hsub.mul hsub
-    simpa [cf2dThreeElementFlow, quadraticFlow, etaComplexCF2DState,
-      cf2dMinusWhole, minusWhole, pow_two] using hsq
+    simpa [pow_two] using hsub.mul hsub
 
 /--
 The same real-limit input forces the interaction observation to converge to
@@ -175,12 +177,13 @@ theorem interaction_tendsto_zero_of_complex_tendsto_real_limit
   have him : Tendsto (fun k : ℕ => (z k).im) atTop (nhds 0) := by
     have h := (Complex.continuous_im.tendsto L).comp hz
     simpa [Function.comp_def, hLIm] using h
+  change Tendsto
+    (fun k : ℕ => 2 * (z k).re * (z k).im)
+    atTop (nhds 0)
   have htwore :
       Tendsto (fun k : ℕ => 2 * (z k).re) atTop (nhds (2 * L.re)) :=
     hre.const_mul 2
-  have hproduct := htwore.mul him
-  simpa [cf2dThreeElementFlow, quadraticFlow, etaComplexCF2DState,
-    cf2dInteractionBeam, interactionBeam] using hproduct
+  simpa using htwore.mul him
 
 /--
 The pair-whole assimilation provider is unconditional on every nonreal
@@ -276,13 +279,15 @@ theorem etaCriticalMirrorDominantLocalThreeElementFlow_squareMass_tendsto_target
         (etaCriticalMirrorDominantLocalCarrierLimit s)).comp hlocal
     simpa [Function.comp_def,
       etaCriticalMirrorDominantLocalCarrierLimit_im_eq_zero] using h
+  change Tendsto
+    (fun k : ℕ =>
+      (etaCriticalMirrorDominantLocalRotatedCarrier k s).re ^ 2 +
+        (etaCriticalMirrorDominantLocalRotatedCarrier k s).im ^ 2)
+    atTop
+    (nhds ((etaCriticalMirrorDominantLocalCarrierLimit s).re ^ 2))
   have hcore := hreLim.mul hreLim
   have hgap := himLim.mul himLim
-  have hsum := hcore.add hgap
-  simpa [etaCriticalMirrorDominantLocalThreeElementFlow,
-    etaCriticalMirrorDominantLocalCF2DCarrier, etaComplexCF2DState,
-    cf2dThreeElementFlow, quadraticFlow, squareMass, coreTerm, gapTerm,
-    etaCriticalMirrorDominantLocalThreeElementTarget, pow_two] using hsum
+  simpa [pow_two] using hcore.add hgap
 
 /-- Difference-whole collapse supplies the missing interaction assimilation. -/
 theorem etaCriticalMirrorThreeElementInteractionAssimilationProvider_of_differenceWholeCollapse
@@ -294,7 +299,13 @@ theorem etaCriticalMirrorThreeElementInteractionAssimilationProvider_of_differen
     etaCriticalMirrorDominantLocalThreeElementFlow_squareMass_tendsto_target
       hs him hre
   have hminus := hdiff hs him hre
-  have hinteraction := hmass.sub hminus
+  have hinteraction :
+      Tendsto
+        (fun k : ℕ =>
+          (etaCriticalMirrorDominantLocalThreeElementFlow s).squareMass k -
+            (etaCriticalMirrorDominantLocalThreeElementFlow s).minusWhole k)
+        atTop (nhds (etaCriticalMirrorDominantLocalThreeElementTarget s)) := by
+    simpa only [sub_zero] using hmass.sub hminus
   refine hinteraction.congr' (Eventually.of_forall fun k => ?_)
   rw [(etaCriticalMirrorDominantLocalThreeElementFlow s).minusWhole_eq]
   ring
