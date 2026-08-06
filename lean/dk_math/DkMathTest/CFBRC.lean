@@ -5,6 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC
+import DkMathTest.CFBRC.Regularization.NegativeInteger
+import DkMathTest.CFBRC.Regularization.AbelLinear
+import DkMathTest.CFBRC.Regularization.RiemannZetaOracleAudit
 
 #print "file: DkMathTest.CFBRC"
 
