@@ -28,7 +28,7 @@ namespace DkMath.RH.CFBRCProjection
 /-- Finite weighted sum of mirror-offset Gaps. -/
 noncomputable def primeMirrorEnergy
     (S : Finset ℕ) (weight : ℕ → ℝ) (δ : ℝ) : ℝ :=
-  ∑ n in S, weight n * primeMirrorOffsetGap n δ
+  ∑ n ∈ S, weight n * primeMirrorOffsetGap n δ
 
 /-- Finite weighted mirror energy evaluated at the centered coordinate of `s`. -/
 noncomputable def primeMirrorEnergyAt

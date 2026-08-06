@@ -86,8 +86,8 @@ theorem primeMirrorAmplitude_mul_eq_one (n : ℕ) (δ : ℝ) :
         Real.exp
           ((-δ * Real.log (n : ℝ)) +
             (δ * Real.log (n : ℝ))) := by
-      simp [primeMirrorLeftAmplitude, primeMirrorRightAmplitude,
-        Real.exp_add]
+      simp only [primeMirrorLeftAmplitude, primeMirrorRightAmplitude]
+      rw [← Real.exp_add]
     _ = 1 := by
       ring_nf
       simp
