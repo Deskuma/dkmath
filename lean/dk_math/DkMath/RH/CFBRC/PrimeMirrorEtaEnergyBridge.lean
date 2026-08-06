@@ -15,17 +15,27 @@ namespace DkMath.RH.CFBRCProjection
 
 open DkMath.RH.Weave.Analytic
 
+/-!
+# Eta ratio-gap energy bridge
+
+This layer reconstructs the prime-mirror offset Gap from the exact ratio of
+adjacent eta endpoint increments.  It also lifts the pointwise identity to
+finite weighted energies.  No zeta-zero or RH hypothesis is used here.
+-/
+
 /-- The ratio-only gap reconstructed from an eta endpoint increment. -/
 noncomputable def etaEndpointIncrementMirrorGap (s : ℂ) (N : ℕ) : ℝ :=
   etaEndpointIncrementMirrorRatio s N +
     (etaEndpointIncrementMirrorRatio s N)⁻¹ - 2
 
+/-- The endpoint ratio is strictly positive because both amplitudes are positive. -/
 theorem etaEndpointIncrementMirrorRatio_pos (s : ℂ) (N : ℕ) :
     0 < etaEndpointIncrementMirrorRatio s N := by
   rw [etaEndpointIncrementMirrorRatio_eq_primeMirrorAmplitudeRatio]
   exact div_pos (primeMirrorRightAmplitude_pos _ _)
     (primeMirrorLeftAmplitude_pos _ _)
 
+/-- The endpoint ratio-gap is exactly the prime-mirror square Gap. -/
 theorem etaEndpointIncrementMirrorGap_eq_primeMirrorOffsetGap
     (s : ℂ) (N : ℕ) :
     etaEndpointIncrementMirrorGap s N =
@@ -41,11 +51,13 @@ theorem etaEndpointIncrementMirrorGap_eq_primeMirrorOffsetGap
   field_simp [ne_of_gt ha]
   nlinarith
 
+/-- The reconstructed endpoint Gap is nonnegative. -/
 theorem etaEndpointIncrementMirrorGap_nonneg (s : ℂ) (N : ℕ) :
     0 ≤ etaEndpointIncrementMirrorGap s N := by
   rw [etaEndpointIncrementMirrorGap_eq_primeMirrorOffsetGap]
   exact primeMirrorOffsetGap_nonneg _ _
 
+/-- At every nonconstant eta index, zero Gap is equivalent to the critical line. -/
 theorem etaEndpointIncrementMirrorGap_eq_zero_iff_re_eq_half
     {N : ℕ} (hN : 0 < N) (s : ℂ) :
     etaEndpointIncrementMirrorGap s N = 0 ↔
@@ -54,6 +66,7 @@ theorem etaEndpointIncrementMirrorGap_eq_zero_iff_re_eq_half
   rw [primeMirrorOffsetGap_eq_zero_iff_delta_eq_zero (by omega)]
   exact centeredSigma_eq_zero_iff s.re
 
+/-- A noncritical real coordinate gives a strictly positive endpoint Gap. -/
 theorem etaEndpointIncrementMirrorGap_pos_of_re_ne_half
     {N : ℕ} (hN : 0 < N) {s : ℂ}
     (hre : s.re ≠ (1 : ℝ) / 2) :
@@ -62,15 +75,18 @@ theorem etaEndpointIncrementMirrorGap_pos_of_re_ne_half
   exact primeMirrorOffsetGap_pos_of_delta_ne_zero (by omega)
     ((centeredSigma_eq_zero_iff s.re).not.mpr hre)
 
+/-- Finite weighted energy of endpoint ratio-Gaps through cutoff `M`. -/
 noncomputable def etaEndpointIncrementMirrorEnergyUpTo
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) : ℝ :=
   ∑ m ∈ Finset.range M, weight m * etaEndpointIncrementMirrorGap s m
 
+/-- The same finite energy written directly in prime-mirror coordinates. -/
 noncomputable def etaIndexedPrimeMirrorEnergyUpTo
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) : ℝ :=
   ∑ m ∈ Finset.range M,
     weight m * primeMirrorOffsetGap (m + 1) (centeredSigma s.re)
 
+/-- The eta-indexed and prime-mirror finite energies agree term by term. -/
 theorem etaEndpointIncrementMirrorEnergyUpTo_eq_primeMirrorEnergy
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) :
     etaEndpointIncrementMirrorEnergyUpTo weight M s =
@@ -81,6 +97,7 @@ theorem etaEndpointIncrementMirrorEnergyUpTo_eq_primeMirrorEnergy
   intro m hm
   rw [etaEndpointIncrementMirrorGap_eq_primeMirrorOffsetGap]
 
+/-- A consecutive cutoff difference recovers the newly added eta mode. -/
 @[simp] theorem etaEndpointIncrementMirrorEnergyUpTo_succ_sub
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) :
     etaEndpointIncrementMirrorEnergyUpTo weight (M + 1) s -
@@ -89,6 +106,7 @@ theorem etaEndpointIncrementMirrorEnergyUpTo_eq_primeMirrorEnergy
   simp only [etaEndpointIncrementMirrorEnergyUpTo, Finset.sum_range_succ]
   ring
 
+/-- Successor cutoff energy is the previous energy plus one mode. -/
 @[simp] theorem etaEndpointIncrementMirrorEnergyUpTo_succ_eq
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) :
     etaEndpointIncrementMirrorEnergyUpTo weight (M + 1) s =
@@ -98,6 +116,7 @@ theorem etaEndpointIncrementMirrorEnergyUpTo_eq_primeMirrorEnergy
   simp only [etaEndpointIncrementMirrorEnergyUpTo, Finset.sum_range_succ]
   ring
 
+/-- The base-two mode gives a lower bound for every nonnegative cutoff energy. -/
 theorem etaEndpointIncrementMirrorEnergy_mode_one_le
     {weight : ℕ → ℝ} {M : ℕ} {s : ℂ}
     (hM : 2 ≤ M)
@@ -111,6 +130,7 @@ theorem etaEndpointIncrementMirrorEnergy_mode_one_le
       (etaEndpointIncrementMirrorGap_nonneg s m)
   · exact Finset.mem_range.mpr (by omega)
 
+/-- A positive base-two weight forces finite energy positivity off the line. -/
 theorem etaEndpointIncrementMirrorEnergy_pos_of_re_ne_half
     {weight : ℕ → ℝ} {M : ℕ} {s : ℂ}
     (hM : 2 ≤ M)

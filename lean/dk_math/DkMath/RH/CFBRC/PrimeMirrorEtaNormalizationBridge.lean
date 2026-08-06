@@ -20,6 +20,15 @@ open scoped Topology
 open DkMath.Algebra.MetallicRatioCore
 open DkMath.RH.Weave.Analytic
 
+/-!
+# Eta unit-Gap normalization bridge
+
+This module identifies the endpoint ratio-Gap with the existing reciprocal
+unit split, then records the exact factor `m + 1` relating normalized and raw
+eta amplitude Gaps.  The final decay theorem is deliberately only a raw
+open-strip theorem; it does not promote raw decay to normalized decay.
+-/
+
 theorem etaEndpointIncrementMirrorGap_eq_etaMirrorUnitGap
     (s : ℂ) (m : ℕ) :
     etaEndpointIncrementMirrorGap s m = etaMirrorUnitGap s m := by
@@ -42,6 +51,7 @@ theorem etaEndpointIncrementMirrorGap_eq_etaMirrorUnitGap
   rw [hsq]
   ring
 
+/-- The genuine mirror and original eta magnitudes have product `1 / (m+1)`. -/
 theorem etaMirrorAmplitudeProduct_eq_inv_succ
     (s : ℂ) (m : ℕ) :
     etaMirrorAmplitudeProduct s m = (((m + 1 : ℕ) : ℝ))⁻¹ := by
@@ -54,6 +64,7 @@ theorem etaMirrorAmplitudeProduct_eq_inv_succ
   have hexp : (-(1 - s.re) + -s.re) = (-1 : ℝ) := by ring
   rw [hexp, Real.rpow_neg_one]
 
+/-- Exact normalization: endpoint/unit Gap equals `(m+1)` times raw Gap. -/
 theorem etaEndpointIncrementMirrorGap_eq_succ_mul_amplitudeGap
     (s : ℂ) (m : ℕ) :
     etaEndpointIncrementMirrorGap s m =
@@ -98,6 +109,7 @@ theorem etaEndpointIncrementMirrorGap_eq_succ_mul_amplitudeGap
   field_simp [ne_of_gt (norm_etaSignedVector_pos s m),
     ne_of_gt (norm_etaSignedVector_pos (criticalMirror s) m)]
 
+/-- Inverse form of the raw/normalized Gap scaling identity. -/
 theorem etaMirrorAmplitudeGap_eq_inv_succ_mul_endpointGap
     (s : ℂ) (m : ℕ) :
     etaMirrorAmplitudeGap s m =
@@ -106,10 +118,12 @@ theorem etaMirrorAmplitudeGap_eq_inv_succ_mul_endpointGap
   have hpos : 0 < (((m + 1 : ℕ) : ℝ)) := by positivity
   field_simp
 
+/-- Finite weighted energy built from the unnormalized eta amplitude Gap. -/
 noncomputable def etaMirrorAmplitudeGapEnergyUpTo
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) : ℝ :=
   ∑ m ∈ Finset.range M, weight m * etaMirrorAmplitudeGap s m
 
+/-- Endpoint energy equals raw amplitude energy with the `(m+1)` rescaling. -/
 theorem etaEndpointIncrementMirrorEnergyUpTo_eq_rescaledAmplitudeGapEnergy
     (weight : ℕ → ℝ) (M : ℕ) (s : ℂ) :
     etaEndpointIncrementMirrorEnergyUpTo weight M s =
@@ -122,6 +136,7 @@ theorem etaEndpointIncrementMirrorEnergyUpTo_eq_rescaledAmplitudeGapEnergy
   rw [etaEndpointIncrementMirrorGap_eq_succ_mul_amplitudeGap]
   ring
 
+/-- Raw amplitude Gap decays on the open strip, without a zero hypothesis. -/
 theorem etaMirrorAmplitudeGap_tendsto_zero_of_openStrip
     {s : ℂ} (hleft : 0 < s.re) (hright : s.re < 1) :
     Tendsto (fun m : ℕ => etaMirrorAmplitudeGap s m) atTop (nhds 0) := by
