@@ -45,7 +45,7 @@ example : interactionBeam (Real.sqrt 2) (Real.sqrt 2) = 4 :=
 An explicit Core chart: the first coordinate is constantly `sqrt B` and the
 second coordinate is constantly zero.
 -/
-private def coreChartFlow (B : ℝ) : ThreeElementFlow ℕ :=
+private noncomputable def coreChartFlow (B : ℝ) : ThreeElementFlow ℕ :=
   quadraticFlow
     (fun _ => Real.sqrt B)
     (fun _ => 0)
@@ -56,10 +56,10 @@ private theorem coreChart_core_tendsto
       (coreChartFlow B).core
       Filter.atTop
       (nhds B) := by
-  simpa [coreChartFlow, quadraticFlow, coreTerm,
-    Real.sq_sqrt hB] using
+  simp [coreChartFlow, quadraticFlow, coreTerm,
+    Real.sq_sqrt hB,
     (tendsto_const_nhds :
-      Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))
+      Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))]
 
 private theorem coreChart_interaction_tendsto_zero
     (B : ℝ) :
@@ -67,9 +67,9 @@ private theorem coreChart_interaction_tendsto_zero
       (coreChartFlow B).interaction
       Filter.atTop
       (nhds 0) := by
-  simpa [coreChartFlow, quadraticFlow, interactionBeam] using
+  simp [coreChartFlow, quadraticFlow, interactionBeam,
     (tendsto_const_nhds :
-      Filter.Tendsto (fun _ : ℕ => (0 : ℝ)) Filter.atTop (nhds 0))
+      Filter.Tendsto (fun _ : ℕ => (0 : ℝ)) Filter.atTop (nhds 0))]
 
 private theorem coreChart_gap_tendsto_zero
     (B : ℝ) :
@@ -77,9 +77,9 @@ private theorem coreChart_gap_tendsto_zero
       (coreChartFlow B).gap
       Filter.atTop
       (nhds 0) := by
-  simpa [coreChartFlow, quadraticFlow, gapTerm] using
+  simp [coreChartFlow, quadraticFlow, gapTerm,
     (tendsto_const_nhds :
-      Filter.Tendsto (fun _ : ℕ => (0 : ℝ)) Filter.atTop (nhds 0))
+      Filter.Tendsto (fun _ : ℕ => (0 : ℝ)) Filter.atTop (nhds 0))]
 
 private theorem coreChart_squareMass_tendsto
     {B : ℝ} (hB : 0 ≤ B) :
@@ -87,24 +87,21 @@ private theorem coreChart_squareMass_tendsto
       (coreChartFlow B).squareMass
       Filter.atTop
       (nhds B) := by
-  simpa [coreChartFlow, quadraticFlow, squareMass, coreTerm, gapTerm,
-    Real.sq_sqrt hB] using
+  simp [coreChartFlow, quadraticFlow, squareMass, coreTerm, gapTerm, Real.sq_sqrt hB,
     (tendsto_const_nhds :
-      Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))
+      Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))]
 
 private theorem coreChart_pairWholeAssimilation
     {B : ℝ} (hB : 0 ≤ B) :
     PairWholeAssimilation (coreChartFlow B) Filter.atTop B where
   plus_tendsto := by
-    simpa [coreChartFlow, quadraticFlow, plusWhole,
-      Real.sq_sqrt hB] using
+    simp [coreChartFlow, quadraticFlow, plusWhole, Real.sq_sqrt hB,
       (tendsto_const_nhds :
-        Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))
+        Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))]
   minus_tendsto := by
-    simpa [coreChartFlow, quadraticFlow, minusWhole,
-      Real.sq_sqrt hB] using
+    simp [coreChartFlow, quadraticFlow, minusWhole, Real.sq_sqrt hB,
       (tendsto_const_nhds :
-        Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))
+        Filter.Tendsto (fun _ : ℕ => B) Filter.atTop (nhds B))]
 
 example {B : ℝ} (hB : 0 ≤ B) :
     Filter.Tendsto
@@ -143,7 +140,7 @@ A static symmetric interaction realization equipped with an explicit constant
 schedule. Its interaction tends to `4`, but it cannot also provide pair-whole
 assimilation to the same nonzero target.
 -/
-private def symmetricInteractionChartFlow : ThreeElementFlow ℕ :=
+private noncomputable def symmetricInteractionChartFlow : ThreeElementFlow ℕ :=
   quadraticFlow
     (fun _ => Real.sqrt 2)
     (fun _ => Real.sqrt 2)
@@ -154,10 +151,9 @@ private theorem symmetricInteractionChartAssimilation :
       Filter.atTop
       4 where
   interaction_tendsto := by
-    simpa [symmetricInteractionChartFlow, quadraticFlow,
-      sqrtTwo_interaction_eq_four] using
+    simp [symmetricInteractionChartFlow, quadraticFlow, sqrtTwo_interaction_eq_four,
       (tendsto_const_nhds :
-        Filter.Tendsto (fun _ : ℕ => (4 : ℝ)) Filter.atTop (nhds 4))
+        Filter.Tendsto (fun _ : ℕ => (4 : ℝ)) Filter.atTop (nhds 4))]
 
 example :
     InteractionAssimilation
