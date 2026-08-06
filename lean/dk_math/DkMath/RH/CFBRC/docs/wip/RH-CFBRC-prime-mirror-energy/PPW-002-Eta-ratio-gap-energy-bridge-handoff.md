@@ -70,19 +70,19 @@ $$
 したがって eta endpoint increment ratio だけから、prime mirror offset Gap を復元できる。
 
 $$
-\operatorname{EtaGap}_N(s):=R_N(s)+R_N(s)^{-1}-2
+\mathrm{EtaGap}_N(s):=R_N(s)+R_N(s)^{-1}-2
 $$
 
 ここで、
 
 $$
-R_N(s):=\operatorname{etaEndpointIncrementMirrorRatio}(s,N)
+R_N(s):=\mathrm{etaEndpointIncrementMirrorRatio}(s,N)
 $$
 
 目標 identity は次である。
 
 $$
-\operatorname{EtaGap}_N(s)=\operatorname{primeMirrorOffsetGap}(N+1,\operatorname{centeredSigma}(s.re))
+\mathrm{EtaGap}_N(s)=\mathrm{primeMirrorOffsetGap}(N+1,\mathrm{centeredSigma}(s.re))
 $$
 
 これにより ratio decoder から、CF2D の difference whole と同じ非負 energy へ進める。

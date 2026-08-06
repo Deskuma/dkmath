@@ -196,8 +196,7 @@ $$
 `c_n` は後述する非負 weight の平方根である。位相因子の norm は `1` なので、
 
 $$
-\lVert M_n(\delta,t)\rVert^2
-=c_n^2G_n(\delta)
+\lVert M_n(\delta,t)\rVert^2=c_n^2G_n(\delta)
 $$
 
 となり、各 mode の energy から `t` が消える。
@@ -379,9 +378,7 @@ noncomputable def primeMirrorCoordinate
 有限集合 `S` に対する energy を座標 norm-square の和として定義する。
 
 $$
-E_S(\delta,t)
-:=\sum_{p\in S}w_p
-\bigl(a_p(\delta)-b_p(\delta)\bigr)^2
+E_S(\delta,t):=\sum_{p\in S}w_p\bigl(a_p(\delta)-b_p(\delta)\bigr)^2
 $$
 
 全 weight が非負なら、
@@ -431,10 +428,7 @@ CFBRC local/global frame decoder
 load-bearing theorem 候補は次である。
 
 $$
-\left\|\operatorname{CFBRCWindowResidual}_N(s)\right\|^2
-=
-\sum_{p\in S_N}w_{N,p}
-\bigl(a_p(\delta(s))-b_p(\delta(s))\bigr)^2
+\left\|\mathrm{CFBRCWindowResidual}_N(s)\right\|^2=\sum_{p\in S_N}w_{N,p}\bigl(a_p(\delta(s))-b_p(\delta(s))\bigr)^2
 $$
 
 ここで左辺の norm は、複素総和への射影後の norm ではなく、prime coordinate vector の Hilbert norm または有限 Euclidean norm である。
@@ -512,7 +506,7 @@ theorem primeMirrorEnergy_pos_of_centeredSigma_ne_zero
 または極限 route では、ある固定素数 `p` の項だけを下界に用いる。
 
 $$
-0<w_pG_p(\delta)\le E_S(\delta,t)
+0 < w_pG_p(\delta)\le E_S(\delta,t)
 $$
 
 これにより energy が零へ収束することと `δ ≠ 0` が衝突する。
