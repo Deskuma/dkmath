@@ -38,9 +38,9 @@ theorem norm_etaPairIndexScaledEulerRemainder_le_normalized
         (((k + 1 : ℕ) : ℝ) ^ z.re) :=
     Real.rpow_le_rpow_of_exponent_le hbase ha
   have hscaleA : 0 ≤ (((k + 1 : ℕ) : ℝ) ^ a) :=
-    Real.rpow_nonneg _ _
+    Real.rpow_nonneg (by positivity) _
   have hscaleZ : 0 ≤ (((k + 1 : ℕ) : ℝ) ^ z.re) :=
-    Real.rpow_nonneg _ _
+    Real.rpow_nonneg (by positivity) _
   unfold etaPairIndexScaledEulerRemainder
   unfold etaPairIndexNormalizedRotatedEulerRemainder
   simp only [norm_mul, Complex.norm_real, Real.norm_eq_abs,
@@ -98,7 +98,14 @@ theorem etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier_tendsto_zero
           atTop (nhds 0) :=
       etaPairIndexScaledEulerRemainder_tendsto_zero hmre hmirror
     have hdiff := hsTail.sub hmTail
-    refine hdiff.congr' (Eventually.of_forall fun k => ?_)
+    have hdiff' :
+        Tendsto
+          (fun k : ℕ =>
+            etaPairIndexScaledEulerRemainder s.re s k -
+              etaPairIndexScaledEulerRemainder s.re (criticalMirror s) k)
+          atTop (nhds 0) := by
+      simpa only [sub_zero] using hdiff
+    refine hdiff'.congr' (Eventually.of_forall fun k => ?_)
     unfold etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier
     unfold etaCriticalMirrorDominantIndexPower
     unfold etaPairIndexScaledEulerRemainder
@@ -122,7 +129,15 @@ theorem etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier_tendsto_zero
           atTop (nhds 0) :=
       etaPairIndexScaledEulerRemainder_tendsto_zero hmre le_rfl
     have hdiff := hsTail.sub hmTail
-    refine hdiff.congr' (Eventually.of_forall fun k => ?_)
+    have hdiff' :
+        Tendsto
+          (fun k : ℕ =>
+            etaPairIndexScaledEulerRemainder (criticalMirror s).re s k -
+              etaPairIndexScaledEulerRemainder (criticalMirror s).re
+                (criticalMirror s) k)
+          atTop (nhds 0) := by
+      simpa only [sub_zero] using hdiff
+    refine hdiff'.congr' (Eventually.of_forall fun k => ?_)
     unfold etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier
     unfold etaCriticalMirrorDominantIndexPower
     unfold etaPairIndexScaledEulerRemainder
