@@ -51,7 +51,7 @@ Core であることは、その命題が最終目的を達成したことを意
 例えば、次の定理が Lean で証明されているとする。
 
 $$
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)=0\iff\sigma=\frac12
+\mathrm{offCriticalCFBRC}(d,\sigma,\Theta)=0\iff\sigma=\frac12
 $$
 
 これは CFBRC 零点集合の構造に関する強い Core である。
