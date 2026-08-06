@@ -26,7 +26,7 @@ example {B : ℝ} (hB : 0 ≤ B) :
       (Real.sqrt (B / 2)) = B := by
   exact symmetric_interaction_sqrt_realizes hB
 
-example (B : ℝ) (hB : 0 ≤ B) :
+noncomputable example (B : ℝ) (hB : 0 ≤ B) :
     SymmetricMagicCoreRealization B :=
   symmetricMagicCoreRealization B hB
 

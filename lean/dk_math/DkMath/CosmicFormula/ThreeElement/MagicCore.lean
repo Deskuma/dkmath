@@ -87,7 +87,7 @@ The canonical symmetric static realization of a nonnegative target `B`.
 This definition packages only algebraic witnesses. It does not infer dynamic
 assimilation from the square-root construction.
 -/
-def symmetricMagicCoreRealization
+noncomputable def symmetricMagicCoreRealization
     (B : ℝ) (hB : 0 ≤ B) :
     SymmetricMagicCoreRealization B where
   coreRoot := Real.sqrt B
