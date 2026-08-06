@@ -10,9 +10,7 @@ base: wip/RH-CFBRC-moving-line-collision-260805-v2
 
 設計正本は次である。
 
-```text
-0003-Pascal-prime-wave-CFBRC-energy-bridge-design.md
-```
+[PPW-000-Pascal-prime-wave-CFBRC-energy-bridge-design.md](./PPW-000-Pascal-prime-wave-CFBRC-energy-bridge-design.md)
 
 本 checkpoint では設計の Phase A と Phase B を先行実装した。
 
