@@ -336,10 +336,42 @@ theorem riemannHypothesis_of_threeElementDifferenceWholeCollapse
     (etaCriticalMirrorThreeElementInteractionAssimilationProvider_of_differenceWholeCollapse
       hdiff)
 
+/--
+Audit: the missing interaction-assimilation provider is logically equivalent
+to RH.  The three-element bridge isolates the provider but does not weaken the
+remaining mathematical obligation.
+-/
+theorem etaCriticalMirrorThreeElementInteractionAssimilationProvider_iff_riemannHypothesis :
+    EtaCriticalMirrorThreeElementInteractionAssimilationProvider ↔
+      RiemannHypothesis := by
+  constructor
+  · exact riemannHypothesis_of_threeElementInteractionAssimilation
+  · intro hRH s hs _him hre
+    have hhalf : s.re = (1 : ℝ) / 2 :=
+      (riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs
+    exact (hre hhalf).elim
+
+/--
+Audit: the difference-whole collapse provider is likewise exactly RH-equivalent.
+It is therefore a normalized research boundary, not an independently proved
+consequence of the current local asymptotic package.
+-/
+theorem etaCriticalMirrorThreeElementDifferenceWholeCollapseProvider_iff_riemannHypothesis :
+    EtaCriticalMirrorThreeElementDifferenceWholeCollapseProvider ↔
+      RiemannHypothesis := by
+  constructor
+  · exact riemannHypothesis_of_threeElementDifferenceWholeCollapse
+  · intro hRH s hs _him hre
+    have hhalf : s.re = (1 : ℝ) / 2 :=
+      (riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs
+    exact (hre hhalf).elim
+
 #print axioms etaCriticalMirrorThreeElementPairAssimilationProvider
 #print axioms etaCriticalMirrorThreeElementNonzeroTargetProvider
 #print axioms etaCriticalMirrorThreeElementInteractionAssimilationProvider_of_differenceWholeCollapse
 #print axioms riemannHypothesis_of_threeElementInteractionAssimilation
 #print axioms riemannHypothesis_of_threeElementDifferenceWholeCollapse
+#print axioms etaCriticalMirrorThreeElementInteractionAssimilationProvider_iff_riemannHypothesis
+#print axioms etaCriticalMirrorThreeElementDifferenceWholeCollapseProvider_iff_riemannHypothesis
 
 end DkMath.RH.CFBRCProjection
