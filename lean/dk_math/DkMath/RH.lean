@@ -131,6 +131,7 @@ import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameSpectralGaugeDirectionAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameSpectralGaugeClosureDecision
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingRealLine
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameThreeElementAssimilationBridge
 import DkMath.RH.CFBRC.EtaEndpointIncrementDecoder
 import DkMath.RH.Weave.Control.IndexShiftAudit
 import DkMath.RH.Weave.Finite.PairEnergy
