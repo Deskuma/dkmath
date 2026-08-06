@@ -14,6 +14,7 @@ import DkMath.CosmicFormula.PowerGapBeamGN  -- Bridge from Power Beam to GN
 import DkMath.CosmicFormula.PowerGapBeamPrimitive  -- Primitive Power Beam bridge
 import DkMath.CosmicFormula.Mass  -- Cosmic mass and Body/Gap split layer
 import DkMath.CosmicFormula.ThreeElement.Basic  -- Core/interaction-Beam/Gap exact decomposition
+import DkMath.CosmicFormula.ThreeElement.MagicCore  -- Static nonnegative-Big realizations
 import DkMath.CosmicFormula.Rotation  -- Cosmic Formula rotation layer
 
 #print "file: DkMath.CosmicFormula"
