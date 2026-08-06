@@ -4,12 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTailNearbyTransverseBridge
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaTailNearbyEulerRemainderCollapse
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
-
-set_option linter.style.longLine false
 
 noncomputable section
 
@@ -28,48 +26,51 @@ The historical research beacons have now been reduced as follows.
 * the completed-zeta canonical slope direction and slope carrier are explicit;
 * the canonical slope carrier already approaches its own fixed slope line on
   every standard nontrivial zero;
-* the dominant radial ray model and its exact projective orbit are constructed;
-* endpoint and ray-model norms have the same off-critical asymptotic radius;
-* full ray-model approximation is split exactly into signed radial and
-  transverse coordinates;
 * the endpoint line condition is equivalent to one scalar transverse bridge;
 * on the zero locus, the dominant endpoint is exactly the side-aware dominant
   index power times the negative complete paired defect tail;
-* therefore the sole scalar bridge is an explicit finite-index comparison
-  between that dominant weighted complete eta tail and the normalized nearby
-  completed-zeta value
-  `completedRiemannZeta (s + 1 / (k + 1)) / (1 / (k + 1))`;
+* the normalized nearby completed-zeta value is exactly its positive-half-plane
+  `GammaR * riemannZeta` factorization;
+* the dominant weighted complete eta tail splits exactly into an Euler
+  half-endpoint main carrier and an Euler remainder carrier;
+* the weighted Euler remainder carrier tends to zero after the side-aware
+  dominant normalization, so its transverse contribution is unconditional;
+* therefore the full tail / nearby-completed-zeta bridge is equivalent to the
+  Euler-main / nearby-`GammaR * riemannZeta` transverse mismatch alone;
 * at a hypothetical off-critical zero, endpoint transverse collapse is
   equivalent to the completed-zeta / pair-left relative counter-rotation
   becoming asymptotically real;
 * that relative phase lock is impossible at every nonzero height by the proved
   doubling / tripling projective nonresonance collision.
 
-The relative-phase condition is therefore a closure audit, not an independent
-research premise.  The sole analytic bridge is now the explicit weighted-tail /
-nearby-completed-zeta transverse comparison below.
+The relative-phase condition is a closure audit, not an independent research
+premise.  The sole analytic bridge is now the Euler-main / nearby-completed-zeta
+transverse comparison below.
 
 This file is intentionally the only research-beacon layer and must not be
 imported by the clean collision Core or by stable analytic modules.
 -/
 
 /--
-The sole remaining research Gap: prove that the side-aware dominant weighted
-complete eta tail and the normalized nearby completed-zeta value have
-asymptotically the same transverse coordinate in the fixed completed-zeta slope
-frame.
+The sole remaining research Gap: prove that the explicit dominant Euler
+half-endpoint main carrier and the normalized nearby
+`GammaR * riemannZeta` value have asymptotically the same transverse coordinate
+in the fixed completed-zeta slope frame.
 
-Only one real coordinate is asserted.  No equality of complex carrier values,
-no radial magnitude equality, no zero simplicity, and no critical-line
-conclusion is included in this contract.
-
-Both compared terms are explicit at every retained finite index.  This bridge
-must be discharged by an independent completed-zeta / eta-tail identity or
-estimate.
+Only one real coordinate is asserted.  The complete-tail Euler remainder is
+already closed unconditionally.  No equality of complex carrier values, no
+radial magnitude equality, no zero simplicity, and no critical-line conclusion
+is included in this contract.
 -/
-theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal :
-    EtaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse := by
+theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal :
+    EtaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse := by
   sorry
+
+/-- The complete weighted-tail bridge follows from the sole Euler-main Gap. -/
+theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal :
+    EtaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse :=
+  etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_iff_eulerMain.mpr
+    etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
 
 /-- The concrete completed-zeta global-line provider follows from the sole Gap. -/
 def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
@@ -84,13 +85,14 @@ def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
 
 /--
 Top-level laboratory beacon.  Its only research axiom should be the single
-weighted-tail / nearby-completed-zeta transverse bridge above.
+Euler-main / nearby-completed-zeta transverse bridge above.
 -/
 theorem riemannHypothesis_movingLineCollision_research_goal :
     RiemannHypothesis :=
-  riemannHypothesis_of_weightedTailCompletedZetaNearbyTransverseBridgeCollapse
-    etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal
+  riemannHypothesis_of_weightedTailCompletedZetaNearbyEulerMainTransverseCollapse
+    etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
 
+#print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal
 #print axioms etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal
 #print axioms riemannHypothesis_movingLineCollision_research_goal
