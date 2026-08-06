@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CosmicFormula.ThreeElement.Assimilation
+import DkMathTest.CosmicFormula.ThreeElement.Collision
 
 #print "file: DkMathTest.CosmicFormula.ThreeElement.Assimilation"
 
