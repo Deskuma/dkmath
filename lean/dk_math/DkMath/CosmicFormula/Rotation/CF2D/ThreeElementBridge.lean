@@ -107,21 +107,22 @@ theorem cf2dInteractionBeam_conj (z : Vec ℝ) :
     cf2dInteractionBeam (Vec.conj z) =
       -cf2dInteractionBeam z := by
   simp [cf2dInteractionBeam, interactionBeam]
-  ring
 
 /-- Conjugation exchanges the plus whole with the minus whole. -/
 @[simp]
 theorem cf2dPlusWhole_conj_eq_minusWhole (z : Vec ℝ) :
     cf2dPlusWhole (Vec.conj z) =
       cf2dMinusWhole z := by
-  simp [cf2dPlusWhole, cf2dMinusWhole, plusWhole, minusWhole]
+  simp [cf2dPlusWhole, cf2dMinusWhole, plusWhole, minusWhole,
+    sub_eq_add_neg]
 
 /-- Conjugation exchanges the minus whole with the plus whole. -/
 @[simp]
 theorem cf2dMinusWhole_conj_eq_plusWhole (z : Vec ℝ) :
     cf2dMinusWhole (Vec.conj z) =
       cf2dPlusWhole z := by
-  simp [cf2dPlusWhole, cf2dMinusWhole, plusWhole, minusWhole]
+  simp [cf2dPlusWhole, cf2dMinusWhole, plusWhole, minusWhole,
+    sub_eq_add_neg]
 
 /-- Build the general three-element flow from a sequence of CF2D states. -/
 def cf2dThreeElementFlow
