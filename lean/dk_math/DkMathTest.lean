@@ -8,6 +8,7 @@ import DkMathlib.Basic
 import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.CosmicFormula.ThreeElement.Basic
 import DkMathTest.CosmicFormula.ThreeElement.MagicCore
+import DkMathTest.CosmicFormula.ThreeElement.Assimilation
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
