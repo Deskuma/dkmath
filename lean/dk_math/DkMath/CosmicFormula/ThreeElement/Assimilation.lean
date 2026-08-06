@@ -116,7 +116,9 @@ theorem squareMass_tendsto_of_core_gap
     (hcore : Filter.Tendsto F.core l (nhds C))
     (hgap : Filter.Tendsto F.gap l (nhds G)) :
     Filter.Tendsto F.squareMass l (nhds (C + G)) := by
-  simpa only [F.squareMass_eq] using hcore.add hgap
+  convert hcore.add hgap using 1
+  funext i
+  exact F.squareMass_eq i
 
 /-- Square mass and interaction limits combine into the plus-whole limit. -/
 theorem plusWhole_tendsto_of_squareMass_interaction
@@ -127,7 +129,9 @@ theorem plusWhole_tendsto_of_squareMass_interaction
     (hmass : Filter.Tendsto F.squareMass l (nhds M))
     (hinteraction : Filter.Tendsto F.interaction l (nhds I)) :
     Filter.Tendsto F.plusWhole l (nhds (M + I)) := by
-  simpa only [F.plusWhole_eq] using hmass.add hinteraction
+  convert hmass.add hinteraction using 1
+  funext i
+  exact F.plusWhole_eq i
 
 /-- Square mass and interaction limits combine into the minus-whole limit. -/
 theorem minusWhole_tendsto_of_squareMass_interaction
@@ -138,7 +142,9 @@ theorem minusWhole_tendsto_of_squareMass_interaction
     (hmass : Filter.Tendsto F.squareMass l (nhds M))
     (hinteraction : Filter.Tendsto F.interaction l (nhds I)) :
     Filter.Tendsto F.minusWhole l (nhds (M - I)) := by
-  simpa only [F.minusWhole_eq] using hmass.sub hinteraction
+  convert hmass.sub hinteraction using 1
+  funext i
+  exact F.minusWhole_eq i
 
 /-- If square mass tends to `B` and Gap collapses, Core assimilates to `B`. -/
 theorem core_tendsto_big_of_squareMass_and_gap_zero
@@ -182,7 +188,7 @@ theorem interaction_tendsto_zero_of_pairWholeAssimilation
   convert htwice.const_mul (1 / 2 : ℝ) using 1
   · funext i
     ring
-  · ring
+  · ring_nf
 
 end ThreeElement
 end CosmicFormula
