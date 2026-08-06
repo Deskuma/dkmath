@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CosmicFormula.Rotation.CF2D.Basic
+import DkMath.CosmicFormula.Rotation.CF2D.ThreeElementBridge
 import DkMath.CosmicFormula.Rotation.CF2D.KernelPower
 import DkMath.CosmicFormula.Rotation.CF2D.CycleDivision
 import DkMath.CosmicFormula.Rotation.CF2D.RegularOrbit
