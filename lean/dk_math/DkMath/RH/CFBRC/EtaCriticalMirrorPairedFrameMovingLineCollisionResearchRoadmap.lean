@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantEulerHalfReduction
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantEulerHalfRHEquivalenceAudit
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
@@ -46,18 +46,25 @@ The historical research beacons have now been reduced as follows.
   equivalent to the completed-zeta / pair-left relative counter-rotation
   becoming asymptotically real;
 * that relative phase lock is impossible at every nonzero height by the proved
-  doubling / tripling projective nonresonance collision.
+  doubling / tripling projective nonresonance collision;
+* the final critical-safe dominant-half contract is proved logically equivalent
+  to `RiemannHypothesis` itself.
 
-The relative-phase condition is a closure audit, not an independent research
-premise.  The sole analytic bridge is now direct slope-line alignment of one
-explicit dominant Euler half-endpoint carrier.
+The formal reduction has therefore reached a logical fixed point.  The final
+beacon below is not a weaker independent premise and must not be described as
+an almost-completed proof: it is an exact reformulation of RH in the explicit
+Euler-half / completed-zeta slope language developed by this framework.
+
+Further mathematical progress requires an independent analytic identity or
+estimate proving this contract from zero-locus data.  Producing such a theorem
+would constitute the unresolved RH step rather than routine closure plumbing.
 
 This file is intentionally the only research-beacon layer and must not be
 imported by the clean collision Core or by stable analytic modules.
 -/
 
 /--
-The sole remaining research Gap: prove that the critical-safe single dominant
+The remaining research boundary: prove that the critical-safe single dominant
 Euler half-endpoint carrier approaches the fixed real line selected by the
 canonical completed-zeta slope direction on the nontrivial zero locus.
 
@@ -67,33 +74,36 @@ term on the left and the negative mirror term on the right.
 
 The nearby completed-zeta quotient, complete-tail Euler remainder, and
 suppressed half-endpoint have already been removed unconditionally.  Only one
-real transverse coordinate is asserted.  No equality of complex carrier
-values, no radial magnitude equality, no zero simplicity, and no critical-line
-conclusion is included.
+real transverse coordinate remains.
+
+Audit warning: the clean theorem
+`etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_iff_riemannHypothesis`
+proves that this declaration is exactly RH-equivalent.  The `sorry` below is
+therefore the unresolved theorem itself in a normalized explicit form.
 -/
 theorem etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal :
     EtaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse := by
   sorry
 
-/-- The full Euler-main carrier line condition follows from the sole Gap. -/
+/-- The full Euler-main carrier line condition follows from the research boundary. -/
 theorem etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal :
     EtaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse :=
   etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_iff_dominantHalfEndpoint.mpr
     etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 
-/-- The former Euler-main / nearby-value bridge follows from the sole Gap. -/
+/-- The former Euler-main / nearby-value bridge follows from the research boundary. -/
 theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal :
     EtaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse :=
   etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_iff_mainCarrier.mpr
     etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
 
-/-- The complete weighted-tail bridge follows from the sole dominant-half Gap. -/
+/-- The complete weighted-tail bridge follows from the research boundary. -/
 theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal :
     EtaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse :=
   etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_iff_eulerMain.mpr
     etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
 
-/-- The concrete completed-zeta global-line provider follows from the sole Gap. -/
+/-- The concrete completed-zeta global-line provider follows from the research boundary. -/
 def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
     EtaCriticalMirrorGlobalZeroLineLock
       etaCriticalMirrorDominantNormalizedEndpointCarrier := by
@@ -105,14 +115,15 @@ def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
         etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal)
 
 /--
-Top-level laboratory beacon.  Its only research axiom should be the single
-dominant Euler half-endpoint slope-line declaration above.
+Top-level laboratory beacon.  Its only research axiom is the RH-equivalent
+single dominant Euler half-endpoint slope-line declaration above.
 -/
 theorem riemannHypothesis_movingLineCollision_research_goal :
     RiemannHypothesis :=
   riemannHypothesis_of_dominantEulerHalfEndpointCarrierTransverseCollapse
     etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 
+#print axioms etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_iff_riemannHypothesis
 #print axioms etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
