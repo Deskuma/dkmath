@@ -34,7 +34,7 @@ theorem target_eq_zero_of_pairWhole_and_interaction_assimilation
     {ι : Type*}
     {F : ThreeElementFlow ι}
     {l : Filter ι}
-    [NeBot l]
+    [Filter.NeBot l]
     {B : ℝ}
     (hpair : PairWholeAssimilation F l B)
     (hint : InteractionAssimilation F l B) :
@@ -51,7 +51,7 @@ theorem false_of_nonzero_pairWhole_and_interaction_assimilation
     {ι : Type*}
     {F : ThreeElementFlow ι}
     {l : Filter ι}
-    [NeBot l]
+    [Filter.NeBot l]
     {B : ℝ}
     (hpair : PairWholeAssimilation F l B)
     (hint : InteractionAssimilation F l B)
@@ -80,7 +80,7 @@ theorem false_of_sameObjectCollisionObstruction
     {ι : Type*}
     {F : ThreeElementFlow ι}
     {l : Filter ι}
-    [NeBot l]
+    [Filter.NeBot l]
     {B : ℝ}
     (h : SameObjectCollisionObstruction F l B) :
     False :=

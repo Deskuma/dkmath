@@ -49,7 +49,7 @@ example
     {ι : Type*}
     {F : ThreeElementFlow ι}
     {l : Filter ι}
-    [NeBot l]
+    [Filter.NeBot l]
     {B : ℝ}
     (hpair : PairWholeAssimilation F l B)
     (hint : InteractionAssimilation F l B)
@@ -61,7 +61,7 @@ example
     {ι : Type*}
     {F : ThreeElementFlow ι}
     {l : Filter ι}
-    [NeBot l]
+    [Filter.NeBot l]
     {B : ℝ}
     (h : SameObjectCollisionObstruction F l B) :
     False :=
