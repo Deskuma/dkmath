@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaEulerMainLineReduction
+import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaDominantEulerHalfReduction
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameCompletedZetaRelativePhaseCollision
 
 #print "file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionResearchRoadmap"
@@ -29,18 +29,19 @@ The historical research beacons have now been reduced as follows.
 * the endpoint line condition is equivalent to one scalar transverse bridge;
 * on the zero locus, the dominant endpoint is exactly the side-aware dominant
   index power times the negative complete paired defect tail;
-* the normalized nearby completed-zeta value is exactly its positive-half-plane
-  `GammaR * riemannZeta` factorization;
 * the dominant weighted complete eta tail splits exactly into an Euler
   half-endpoint main carrier and an Euler remainder carrier;
 * the weighted Euler remainder carrier tends to zero after the side-aware
   dominant normalization, so its transverse contribution is unconditional;
 * the nearby `GammaR * riemannZeta` quotient is exactly the canonical slope
-  carrier on the zero locus and therefore already approaches the fixed
-  completed-zeta slope line;
-* consequently the former Euler-main / nearby-value mismatch condition is
-  equivalent to line collapse of the explicit Euler half-endpoint main carrier
-  itself;
+  carrier on the zero locus and is already slope-line locked;
+* the Euler half-endpoint main carrier splits exactly into one critical-safe
+  dominant half-endpoint and one suppressed half-endpoint;
+* on the critical line the suppressed term is exactly zero, while off the
+  critical line it decays by the strict exponent gap
+  `abs (1 - 2 * re s)`;
+* consequently the Euler-main line condition is equivalent to line collapse of
+  the single dominant half-endpoint carrier;
 * at a hypothetical off-critical zero, endpoint transverse collapse is
   equivalent to the completed-zeta / pair-left relative counter-rotation
   becoming asymptotically real;
@@ -48,26 +49,37 @@ The historical research beacons have now been reduced as follows.
   doubling / tripling projective nonresonance collision.
 
 The relative-phase condition is a closure audit, not an independent research
-premise.  The sole analytic bridge is now direct slope-line alignment of the
-explicit Euler half-endpoint main carrier below.
+premise.  The sole analytic bridge is now direct slope-line alignment of one
+explicit dominant Euler half-endpoint carrier.
 
 This file is intentionally the only research-beacon layer and must not be
 imported by the clean collision Core or by stable analytic modules.
 -/
 
 /--
-The sole remaining research Gap: prove that the explicit side-aware dominant
-Euler half-endpoint main carrier approaches the fixed real line selected by the
+The sole remaining research Gap: prove that the critical-safe single dominant
+Euler half-endpoint carrier approaches the fixed real line selected by the
 canonical completed-zeta slope direction on the nontrivial zero locus.
 
-The nearby completed-zeta quotient and the complete-tail Euler remainder have
-already been removed unconditionally.  Only one real transverse coordinate is
-asserted.  No equality of complex carrier values, no radial magnitude equality,
-no zero simplicity, and no critical-line conclusion is included.
+On the critical line this carrier is the full Euler main term, which is exactly
+zero.  Off the critical line it is one explicit half-endpoint only: the original
+term on the left and the negative mirror term on the right.
+
+The nearby completed-zeta quotient, complete-tail Euler remainder, and
+suppressed half-endpoint have already been removed unconditionally.  Only one
+real transverse coordinate is asserted.  No equality of complex carrier
+values, no radial magnitude equality, no zero simplicity, and no critical-line
+conclusion is included.
 -/
-theorem etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal :
-    EtaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse := by
+theorem etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal :
+    EtaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse := by
   sorry
+
+/-- The full Euler-main carrier line condition follows from the sole Gap. -/
+theorem etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal :
+    EtaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse :=
+  etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_iff_dominantHalfEndpoint.mpr
+    etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 
 /-- The former Euler-main / nearby-value bridge follows from the sole Gap. -/
 theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal :
@@ -75,7 +87,7 @@ theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseColla
   etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_iff_mainCarrier.mpr
     etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
 
-/-- The complete weighted-tail bridge follows from the sole Euler-main Gap. -/
+/-- The complete weighted-tail bridge follows from the sole dominant-half Gap. -/
 theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal :
     EtaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse :=
   etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_iff_eulerMain.mpr
@@ -94,13 +106,14 @@ def etaCriticalMirrorEndpointGlobalZeroLineLock_research_goal :
 
 /--
 Top-level laboratory beacon.  Its only research axiom should be the single
-Euler-main carrier slope-line declaration above.
+dominant Euler half-endpoint slope-line declaration above.
 -/
 theorem riemannHypothesis_movingLineCollision_research_goal :
     RiemannHypothesis :=
-  riemannHypothesis_of_weightedTailEulerMainCarrierTransverseCollapse
-    etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
+  riemannHypothesis_of_dominantEulerHalfEndpointCarrierTransverseCollapse
+    etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 
+#print axioms etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailEulerMainCarrierTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse_research_goal
 #print axioms etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse_research_goal
