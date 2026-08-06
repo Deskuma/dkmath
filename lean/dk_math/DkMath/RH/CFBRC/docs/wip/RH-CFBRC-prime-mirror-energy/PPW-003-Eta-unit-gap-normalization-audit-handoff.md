@@ -1,5 +1,7 @@
 # Eta unit-Gap 正規化 bridge と obstruction audit 実装指示
 
+cid: `6a7469f9-7968-83e8-bd4d-a5f044d2ee1a`
+
 ## 1. 対象
 
 ```text
@@ -121,7 +123,7 @@ x_m(s):=\lVert\eta_m(s)\rVert
 $$
 
 $$
-y_m(s):=\lVert\eta_m(\operatorname{criticalMirror}(s))\rVert
+y_m(s):=\lVert\eta_m(\mathrm{criticalMirror}(s))\rVert
 $$
 
 $$

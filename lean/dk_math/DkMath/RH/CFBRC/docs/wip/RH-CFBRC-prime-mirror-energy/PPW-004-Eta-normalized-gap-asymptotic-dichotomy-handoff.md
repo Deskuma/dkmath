@@ -1,5 +1,7 @@
 # Eta normalized-Gap 漸近二分岐 audit 実装指示
 
+cid: `6a7469f9-7968-83e8-bd4d-a5f044d2ee1a`
+
 ## 1. 対象
 
 ```text
@@ -40,17 +42,17 @@ prime mirror offset Gap
 実装により、有限 index ごとに次が成立する。
 
 $$
-\operatorname{etaEndpointIncrementMirrorGap}(s,m)
+\mathrm{etaEndpointIncrementMirrorGap}(s,m)
 =
-\operatorname{etaMirrorUnitGap}(s,m)
+\mathrm{etaMirrorUnitGap}(s,m)
 $$
 
 さらに、eta index `m` の底を `q = m + 1` とすると、raw amplitude Gap との関係は次である。
 
 $$
-\operatorname{etaEndpointIncrementMirrorGap}(s,m)
+\mathrm{etaEndpointIncrementMirrorGap}(s,m)
 =
-q\,\operatorname{etaMirrorAmplitudeGap}(s,m)
+q\,\mathrm{etaMirrorAmplitudeGap}(s,m)
 $$
 
 近似ではなく exact identity である。
@@ -61,7 +63,7 @@ original と critical mirror の eta 一項 magnitude の積は、
 
 $$
 \lVert\eta_m(s)\rVert
-\lVert\eta_m(\operatorname{criticalMirror}(s))\rVert
+\lVert\eta_m(\mathrm{criticalMirror}(s))\rVert
 =
 \frac1{m+1}
 $$
@@ -75,7 +77,7 @@ $$
 `0 < s.re < 1` では、original と mirror の一項 magnitude はともに零へ収束するため、
 
 $$
-\operatorname{etaMirrorAmplitudeGap}(s,m)\longrightarrow0
+\mathrm{etaMirrorAmplitudeGap}(s,m)\longrightarrow0
 $$
 
 となる。
@@ -102,7 +104,7 @@ PPW-004 では、この二分岐を exact な漸近 theorem として固定す�
 複素数 `s` の centered coordinate を、
 
 $$
-\delta:=\operatorname{centeredSigma}(s.re)
+\delta:=\mathrm{centeredSigma}(s.re)
 $$
 
 とする。

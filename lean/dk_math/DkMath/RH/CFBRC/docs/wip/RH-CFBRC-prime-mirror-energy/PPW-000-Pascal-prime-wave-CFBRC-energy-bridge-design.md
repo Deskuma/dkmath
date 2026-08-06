@@ -1,5 +1,7 @@
 # Pascal 素数波と CFBRC 観測窓エネルギー橋の設計
 
+cid: `6a7469f9-7968-83e8-bd4d-a5f044d2ee1a`
+
 ## 1. 文書の目的
 
 この文書は、`DkMath.RH.CFBRC` に残る RH-equivalent な研究境界を、Pascal の二項係数、素数ごとの振動 mode、Euler-zeta、Prime Harmony Zeta（PHZ）、critical mirror、CFBRC 観測窓を一本の形式化経路へ統合するための設計書である。
