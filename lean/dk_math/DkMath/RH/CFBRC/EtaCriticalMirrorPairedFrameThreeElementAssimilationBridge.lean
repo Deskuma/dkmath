@@ -56,8 +56,9 @@ noncomputable def etaCriticalMirrorDominantLocalCarrierLimit
 theorem etaCriticalMirrorDominantLocalCarrierLimit_im_eq_zero
     (s : ℂ) :
     (etaCriticalMirrorDominantLocalCarrierLimit s).im = 0 := by
-  simp [etaCriticalMirrorDominantLocalCarrierLimit,
-    etaPairIndexNormalizedTailConstant]
+  unfold etaCriticalMirrorDominantLocalCarrierLimit
+  split_ifs <;>
+    simp [etaPairIndexNormalizedTailConstant, Complex.mul_im]
 
 /-- The local carrier limit is nonzero. -/
 theorem etaCriticalMirrorDominantLocalCarrierLimit_ne_zero
@@ -107,6 +108,7 @@ theorem etaCriticalMirrorDominantLocalRotatedCarrier_tendsto_explicit_limit
   · have hrotated :=
       (etaCriticalMirrorLeftNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hleft).rotated_endpoint_tendsto
+    unfold etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint at hrotated
     have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
     have hle' : s.re ≤ 2⁻¹ := by simpa using hle
     simpa [etaCriticalMirrorDominantLocalRotatedCarrier,
@@ -115,6 +117,7 @@ theorem etaCriticalMirrorDominantLocalRotatedCarrier_tendsto_explicit_limit
   · have hrotated :=
       (etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hright).rotated_endpoint_tendsto
+    unfold etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint at hrotated
     have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
     have hnotle' : ¬ s.re ≤ 2⁻¹ := by simpa using hnotle
     simpa [etaCriticalMirrorDominantLocalRotatedCarrier,
