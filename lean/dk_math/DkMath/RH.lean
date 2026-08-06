@@ -16,6 +16,7 @@ import DkMath.RH.HopcInfiniteLift
 import DkMath.RH.CFBRCBridge
 import DkMath.RH.CFBRC.OffCriticalExclusion
 import DkMath.RH.CFBRC.OffCriticalExclusionGeneral
+import DkMath.RH.CFBRC.PrimeMirrorEnergy
 import DkMath.RH.CFBRC.MirrorThreatModel
 import DkMath.RH.CFBRC.MirrorRootOfUnity
 import DkMath.RH.CFBRC.MirrorAngleBranch
