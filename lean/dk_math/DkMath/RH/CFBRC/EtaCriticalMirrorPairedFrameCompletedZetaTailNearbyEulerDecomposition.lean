@@ -137,7 +137,7 @@ theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeError_eq
   unfold etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseError
   unfold etaCriticalMirrorWeightedTailEulerRemainderTransverseError
   unfold etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainMismatchCarrier
-  simp [complexRealLineDefect, mul_add]
+  simp [complexRealLineDefect, mul_add]; ring
 
 /-- Main transverse mismatch collapse. -/
 def EtaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseCollapse : Prop :=
@@ -168,7 +168,14 @@ theorem etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse
     EtaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeCollapse := by
   intro s hs him
   have hsum := (hmain hs him).add (hrem hs him)
-  refine hsum.congr' (Eventually.of_forall fun k => ?_)
+  have hsum' :
+      Tendsto
+        (fun k : ℕ =>
+          etaCriticalMirrorWeightedTailCompletedZetaNearbyEulerMainTransverseError k s +
+            etaCriticalMirrorWeightedTailEulerRemainderTransverseError k s)
+        atTop (nhds 0) := by
+    simpa only [add_zero] using hsum
+  refine hsum'.congr' (Eventually.of_forall fun k => ?_)
   exact
     (etaCriticalMirrorWeightedTailCompletedZetaNearbyTransverseBridgeError_eq_eulerMain_add_remainder
       hs k).symm
