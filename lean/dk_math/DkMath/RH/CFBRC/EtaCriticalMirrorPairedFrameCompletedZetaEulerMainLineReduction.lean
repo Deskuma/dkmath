@@ -48,7 +48,7 @@ theorem etaCriticalMirrorNormalizedNearbyGammaZetaCarrier_tendsto_global_line
       atTop (nhds 0) := by
   have h := completedZetaCanonicalSlopeCarrier_tendsto_global_line hs
   refine h.congr' (Eventually.of_forall fun k => ?_)
-  rw [etaCriticalMirrorNormalizedNearbyGammaZetaCarrier_eq_slopeCarrier_of_zero hs]
+  simp [etaCriticalMirrorNormalizedNearbyGammaZetaCarrier_eq_slopeCarrier_of_zero hs]
 
 /-- Transverse defect of the explicit dominant Euler half-endpoint main carrier. -/
 noncomputable def etaCriticalMirrorWeightedTailEulerMainCarrierTransverseError
