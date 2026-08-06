@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.CosmicFormula.ThreeElement.Assimilation
 import DkMathTest.CosmicFormula.ThreeElement.Collision
+import DkMathTest.CosmicFormula.Rotation.CF2D.ThreeElementBridge
 
 #print "file: DkMathTest.CosmicFormula.ThreeElement.Assimilation"
 
