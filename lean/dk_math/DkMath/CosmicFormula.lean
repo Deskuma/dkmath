@@ -16,6 +16,7 @@ import DkMath.CosmicFormula.Mass  -- Cosmic mass and Body/Gap split layer
 import DkMath.CosmicFormula.ThreeElement.Basic  -- Core/interaction-Beam/Gap exact decomposition
 import DkMath.CosmicFormula.ThreeElement.MagicCore  -- Static nonnegative-Big realizations
 import DkMath.CosmicFormula.ThreeElement.Assimilation  -- Dynamic same-target assimilation limits
+import DkMath.CosmicFormula.ThreeElement.Collision  -- Same-object nonzero-target obstruction
 import DkMath.CosmicFormula.Rotation  -- Cosmic Formula rotation layer
 
 #print "file: DkMath.CosmicFormula"
