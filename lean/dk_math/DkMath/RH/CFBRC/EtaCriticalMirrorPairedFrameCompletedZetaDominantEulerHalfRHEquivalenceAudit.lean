@@ -38,6 +38,7 @@ theorem etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseError_eq_zero
     {s : ℂ} (hcritical : s.re = (1 : ℝ) / 2) (k : ℕ) :
     etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseError k s = 0 := by
   simp [etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseError,
+    complexRealLineDefect,
     etaCriticalMirrorDominantEulerHalfEndpointCarrier_eq_zero_of_re_eq_half
       hcritical]
 
@@ -48,10 +49,8 @@ theorem etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseCollapse_of_r
   intro s hs _him
   have hcritical : s.re = (1 : ℝ) / 2 :=
     (riemannHypothesis_iff_nontrivialZero_re_eq_half.mp hRH) s hs
-  simpa [etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseError_eq_zero_of_re_eq_half
-    hcritical] using
-      (tendsto_const_nhds :
-        Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0))
+  simp [etaCriticalMirrorDominantEulerHalfEndpointCarrierTransverseError_eq_zero_of_re_eq_half
+    hcritical, (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0))]
 
 /--
 Audit boundary: the final critical-safe dominant-half contract is exactly
