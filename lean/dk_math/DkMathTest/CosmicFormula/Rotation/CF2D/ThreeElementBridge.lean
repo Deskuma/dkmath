@@ -70,7 +70,7 @@ example :
 
 example (z : ℕ → Vec ℝ) (i : ℕ) :
     (cf2dThreeElementFlow z).squareMass i = Vec.q2 (z i) := by
-  simp
+  simp [cf2d_squareMass_eq_q2]
 
 example (z : ℕ → Vec ℝ) (i : ℕ) :
     (cf2dThreeElementFlow z).interaction i =
