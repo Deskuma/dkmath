@@ -21,6 +21,7 @@ import DkMath.RH.CFBRC.PrimeMirrorEtaBridge
 import DkMath.RH.CFBRC.PrimeMirrorEtaEnergyBridge
 import DkMath.RH.CFBRC.PrimeMirrorEtaNormalizationBridge
 import DkMath.RH.CFBRC.PrimeMirrorEtaAsymptoticDichotomy
+import DkMath.RH.CFBRC.PascalPrimeEulerEnergyBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
 import DkMath.RH.CFBRC.MirrorRootOfUnity
 import DkMath.RH.CFBRC.MirrorAngleBranch
