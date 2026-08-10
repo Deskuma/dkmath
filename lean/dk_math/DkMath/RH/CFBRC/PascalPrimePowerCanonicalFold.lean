@@ -68,22 +68,22 @@ noncomputable def canonicalPrimePowerShadowCost (q : ℕ) : ℝ :=
 
 /-! ### Canonical exponent and finite supports -/
 
-/- The positive exponent selected together with `primePowerBaseShadow`. -/
+/-- The positive exponent selected together with `primePowerBaseShadow`. -/
 noncomputable def primePowerExponentShadow (q : ℕ) : ℕ :=
   if hq : IsPrimePowerLabel q then
     Classical.choose (Classical.choose_spec hq)
   else 0
 
-/- The finite `(prime, exponent-index)` support used by the PPW pair sum. -/
+/-- The finite `(prime, exponent-index)` support used by the PPW pair sum. -/
 def pascalPrimePowerPairSupportUpTo (X : ℕ) : Finset (ℕ × ℕ) :=
   ((pascalPrimeCoordinateSupportUpTo X).product (Finset.range X)).filter
     (fun pk => pk.1 ^ (pk.2 + 1) ≤ X)
 
-/- The finite canonical natural-label support below the cutoff. -/
+/-- The finite canonical natural-label support below the cutoff. -/
 noncomputable def canonicalPrimePowerSupportUpTo (X : ℕ) : Finset ℕ :=
   (Finset.range (X + 1)).filter IsPrimePowerLabel
 
-/- The natural label represented by a PPW pair. -/
+/-- The natural label represented by a PPW pair. -/
 def primePowerPairLabel (pk : ℕ × ℕ) : ℕ := pk.1 ^ (pk.2 + 1)
 
 /-- The finite canonical `q`-indexed Dirichlet polynomial. -/
