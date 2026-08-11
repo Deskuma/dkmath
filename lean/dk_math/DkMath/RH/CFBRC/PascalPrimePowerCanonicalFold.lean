@@ -170,7 +170,6 @@ theorem image_primePowerPairLabel_support_eq_canonicalSupport
   · intro hq
     rcases Finset.mem_image.mp hq with ⟨pk, hpk, rfl⟩
     have hsupport := mem_pascalPrimePowerPairSupportUpTo_iff.mp hpk
-    have hpX := (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hsupport.1).2
     have hprime := (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hsupport.1).1
     have hpow : pk.1 ^ (pk.2 + 1) ≤ X := hsupport.2.2
     have hlabel : IsPrimePowerLabel (primePowerPairLabel pk) :=
