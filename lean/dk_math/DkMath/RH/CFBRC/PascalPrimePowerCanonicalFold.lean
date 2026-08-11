@@ -86,6 +86,20 @@ noncomputable def canonicalPrimePowerSupportUpTo (X : ℕ) : Finset ℕ :=
 /-- The natural label represented by a PPW pair. -/
 def primePowerPairLabel (pk : ℕ × ℕ) : ℕ := pk.1 ^ (pk.2 + 1)
 
+/-- The canonical base and exponent form a valid prime-power witness. -/
+theorem primePowerShadow_spec
+    {q : ℕ} (hq : IsPrimePowerLabel q) :
+    Nat.Prime (primePowerBaseShadow q) ∧
+      0 < primePowerExponentShadow q ∧
+      q = primePowerBaseShadow q ^ primePowerExponentShadow q := by
+  unfold primePowerBaseShadow primePowerExponentShadow
+  rw [dif_pos hq, dif_pos hq]
+  let p := Classical.choose hq
+  have hp := Classical.choose_spec hq
+  let k := Classical.choose hp
+  have hk := Classical.choose_spec hp
+  exact ⟨hk.1, hk.2.1, hk.2.2⟩
+
 /-- The finite canonical `q`-indexed Dirichlet polynomial. -/
 noncomputable def pascalPrimePowerPHZCanonicalUpTo
     (X : ℕ) (s : ℂ) : ℂ :=
