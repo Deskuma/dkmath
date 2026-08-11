@@ -31,6 +31,7 @@ import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge
 import DkMath.RH.CFBRC.PascalZetaZeroMultiplicityBridge
 import DkMath.RH.CFBRC.PascalZetaLocalCircleChargeBridge
+import DkMath.RH.CFBRC.PascalZetaWeightedSecondMomentBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
 import DkMath.RH.CFBRC.MirrorRootOfUnity
 import DkMath.RH.CFBRC.MirrorAngleBranch
