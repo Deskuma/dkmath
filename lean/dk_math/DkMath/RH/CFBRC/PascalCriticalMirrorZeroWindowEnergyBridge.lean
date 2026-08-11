@@ -85,6 +85,15 @@ theorem image_criticalMirror_pascalCriticalMirrorZeroWindowFinset (R : ℝ) :
     rw [mem_pascalCriticalMirrorZeroWindowFinset_iff]
     exact criticalMirror_mem_pascalCriticalMirrorZeroWindow_iff.mpr hs
 
+@[simp] theorem primeMirrorOffsetGapAt_criticalMirror
+    (n : ℕ) (s : ℂ) :
+    primeMirrorOffsetGapAt n (criticalMirror s) =
+      primeMirrorOffsetGapAt n s := by
+  unfold primeMirrorOffsetGapAt primeMirrorOffsetGap
+  simp only [criticalMirror_re]
+  unfold centeredSigma primeMirrorLeftAmplitude primeMirrorRightAmplitude
+  ring_nf
+
 noncomputable def pascalCriticalMirrorZeroWindowEnergy (n : ℕ) (R : ℝ) : ℝ :=
   (pascalCriticalMirrorZeroWindowFinset R).sum (primeMirrorOffsetGapAt n)
 
@@ -102,6 +111,23 @@ theorem pascalCriticalMirrorZeroWindowEnergy_eq_zero_iff
     (f := primeMirrorOffsetGapAt n) (s := pascalCriticalMirrorZeroWindowFinset R)
     (fun ρ _ => primeMirrorOffsetGap_nonneg n (centeredSigma ρ.re))).trans ?_
   simp_rw [primeMirrorOffsetGapAt_eq_zero_iff_re_eq_half hn]
+
+theorem pascalCriticalMirrorZeroWindowEnergy_pos_iff
+    {n : ℕ} (hn : 1 < n) (R : ℝ) :
+    0 < pascalCriticalMirrorZeroWindowEnergy n R ↔
+      ∃ ρ ∈ pascalCriticalMirrorZeroWindowFinset R,
+        ρ.re ≠ (1 : ℝ) / 2 := by
+  constructor
+  · intro hpos
+    by_contra h
+    push Not at h
+    have hzero := (pascalCriticalMirrorZeroWindowEnergy_eq_zero_iff hn R).mpr h
+    linarith
+  · rintro ⟨ρ, hρ, hre⟩
+    have hne : pascalCriticalMirrorZeroWindowEnergy n R ≠ 0 := by
+      intro hzero
+      exact hre ((pascalCriticalMirrorZeroWindowEnergy_eq_zero_iff hn R).mp hzero ρ hρ)
+    exact lt_of_le_of_ne (pascalCriticalMirrorZeroWindowEnergy_nonneg n R) (Ne.symm hne)
 
 theorem tendsto_mul_pascalZetaNegLogDeriv_simpleZero_of_mem_window
     {R : ℝ} {ρ : ℂ} (hρ : ρ ∈ pascalCriticalMirrorZeroWindow R)
