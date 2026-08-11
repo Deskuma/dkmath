@@ -171,6 +171,7 @@ import DkMath.RH.Weave.Analytic.EtaContinuationDomains
 import DkMath.RH.Weave.Analytic.EtaPairedContinuation
 import DkMath.RH.Weave.Analytic.EtaEnergyLimit
 import DkMath.RH.EulerZetaConvergence
+import DkMath.RH.CFBRC.PascalCriticalMirrorRadialContourCF2DBridge
 
 #print "file: DkMath.RH"
 
