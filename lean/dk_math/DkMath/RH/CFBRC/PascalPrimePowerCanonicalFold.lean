@@ -56,6 +56,20 @@ theorem primePower_witness_unique
   apply prime_pow_exponent_injective hp
   simpa [hbase] using hpw.symm.trans hqw
 
+/-- The powered primitive mode is the complex power of its natural label. -/
+theorem eulerPrimePowerMode_eq_primePower_cpow_neg
+    {p j : ℕ} (hp : Nat.Prime p) (s : ℂ) :
+    eulerPrimePowerMode p j s = (((p ^ j : ℕ) : ℂ) ^ (-s)) := by
+  rw [eulerPrimePowerMode, eulerPrimePrimitiveMode_eq_cpow_neg hp]
+  calc
+    ((p : ℂ) ^ (-s)) ^ j = (p : ℂ) ^ ((j : ℂ) * (-s)) := by
+      symm
+      exact Complex.cpow_nat_mul (p : ℂ) j (-s)
+    _ = ((p : ℂ) ^ j) ^ (-s) := by
+      exact Complex.natCast_cpow_natCast_mul p j (-s)
+    _ = (((p ^ j : ℕ) : ℂ) ^ (-s)) := by
+      simp only [Nat.cast_pow]
+
 /-- The chosen base prime of a positive prime-power natural number. -/
 noncomputable def primePowerBaseShadow (q : ℕ) : ℕ :=
   if hq : IsPrimePowerLabel q then Classical.choose hq else 1
@@ -115,6 +129,15 @@ theorem primePowerShadow_spec
   let k := Classical.choose hp
   have hk := Classical.choose_spec hp
   exact ⟨hk.1, hk.2.1, hk.2.2⟩
+
+/-- The canonical shadow cost reads `log p` on any prime-power witness. -/
+theorem canonicalPrimePowerShadowCost_eq_log_of_witness
+    {q p j : ℕ} (hp : Nat.Prime p) (hj : 0 < j) (hq : q = p ^ j) :
+    canonicalPrimePowerShadowCost q = Real.log (p : ℝ) := by
+  have hs := primePowerShadow_spec (q := q) ⟨p, j, hp, hj, hq⟩
+  have hu := primePower_witness_unique hs.1 hp hs.2.1 hj hs.2.2 hq
+  unfold canonicalPrimePowerShadowCost
+  rw [dif_pos ⟨p, j, hp, hj, hq⟩, hu.1]
 
 /-- The pair label is injective on one finite prime-power support. -/
 theorem primePowerPairLabel_injOn (X : ℕ) :
@@ -193,6 +216,21 @@ theorem image_primePowerPairLabel_support_eq_canonicalSupport
     rw [Nat.sub_add_cancel hj]
     exact hqpow.symm
 
+/-- A pair-support summand agrees with the canonical summand at its label. -/
+theorem primePowerPair_summand_eq_canonical
+    {X : ℕ} {pk : ℕ × ℕ}
+    (hpk : pk ∈ pascalPrimePowerPairSupportUpTo X) (s : ℂ) :
+    (Real.log (pk.1 : ℝ) : ℂ) *
+        eulerPrimePowerMode pk.1 (pk.2 + 1) s =
+      (canonicalPrimePowerShadowCost (primePowerPairLabel pk) : ℂ) *
+        (((primePowerPairLabel pk : ℕ) : ℂ) ^ (-s)) := by
+  have hs := mem_pascalPrimePowerPairSupportUpTo_iff.mp hpk
+  have hp := (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hs.1).1
+  have hcost := canonicalPrimePowerShadowCost_eq_log_of_witness hp (by omega)
+    (q := primePowerPairLabel pk) (p := pk.1) (j := pk.2 + 1) rfl
+  rw [hcost, eulerPrimePowerMode_eq_primePower_cpow_neg hp]
+  simp [primePowerPairLabel, Nat.cast_pow]
+
 /-- The finite canonical `q`-indexed Dirichlet polynomial. -/
 noncomputable def pascalPrimePowerPHZCanonicalUpTo
     (X : ℕ) (s : ℂ) : ℂ :=
@@ -207,5 +245,53 @@ noncomputable def pascalPrimePowerPHZCanonicalUpTo
     have : 0 < p ^ k := pow_pos hp.pos k
     omega
   simp [pascalPrimePowerPHZCanonicalUpTo, canonicalPrimePowerShadowCost, hzero]
+
+/-- The canonical range sum restricted to its prime-power support. -/
+theorem pascalPrimePowerPHZCanonicalUpTo_eq_support_sum
+    (X : ℕ) (s : ℂ) :
+    pascalPrimePowerPHZCanonicalUpTo X s =
+      ∑ q ∈ canonicalPrimePowerSupportUpTo X,
+        (canonicalPrimePowerShadowCost q : ℂ) * ((q : ℂ) ^ (-s)) := by
+  classical
+  unfold pascalPrimePowerPHZCanonicalUpTo canonicalPrimePowerSupportUpTo
+  rw [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro q hq
+  by_cases h : IsPrimePowerLabel q <;> simp [canonicalPrimePowerShadowCost, h]
+
+/-- The original nested finite PHZ sum, packaged over its actual pair support. -/
+theorem pascalPrimePowerPHZFiniteUpTo_eq_pairSupport_sum
+    (X : ℕ) (s : ℂ) :
+    pascalPrimePowerPHZFiniteUpTo X s =
+      ∑ pk ∈ pascalPrimePowerPairSupportUpTo X,
+        (Real.log (pk.1 : ℝ) : ℂ) *
+          eulerPrimePowerMode pk.1 (pk.2 + 1) s := by
+  classical
+  unfold pascalPrimePowerPHZFiniteUpTo pascalPrimePowerPairSupportUpTo
+  rw [Finset.sum_filter]
+  exact (Finset.sum_product'
+    (pascalPrimeCoordinateSupportUpTo X) (Finset.range X)
+    (fun p k => if p ^ (k + 1) ≤ X then
+      (Real.log (p : ℝ) : ℂ) * eulerPrimePowerMode p (k + 1) s else 0)).symm
+
+/-- The PPW finite prime-power polynomial is the canonical finite `q` fold. -/
+theorem pascalPrimePowerPHZFiniteUpTo_eq_canonical
+    (X : ℕ) (s : ℂ) :
+    pascalPrimePowerPHZFiniteUpTo X s =
+      pascalPrimePowerPHZCanonicalUpTo X s := by
+  classical
+  rw [pascalPrimePowerPHZFiniteUpTo_eq_pairSupport_sum,
+    pascalPrimePowerPHZCanonicalUpTo_eq_support_sum,
+    ← image_primePowerPairLabel_support_eq_canonicalSupport]
+  apply Finset.sum_bij (fun pk _ => primePowerPairLabel pk)
+  · intro pk hpk
+    exact Finset.mem_image.mpr ⟨pk, hpk, rfl⟩
+  · intro a ha b hb hab
+    exact primePowerPairLabel_injOn X ha hb hab
+  · intro q hq
+    rcases Finset.mem_image.mp hq with ⟨pk, hpk, rfl⟩
+    exact ⟨pk, hpk, rfl⟩
+  · intro pk hpk
+    exact primePowerPair_summand_eq_canonical hpk s
 
 end DkMath.RH.CFBRCProjection
