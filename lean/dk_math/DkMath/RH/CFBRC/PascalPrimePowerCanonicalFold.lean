@@ -86,6 +86,15 @@ noncomputable def canonicalPrimePowerSupportUpTo (X : ℕ) : Finset ℕ :=
 /-- The natural label represented by a PPW pair. -/
 def primePowerPairLabel (pk : ℕ × ℕ) : ℕ := pk.1 ^ (pk.2 + 1)
 
+/-- Membership in the finite prime/exponent support with the natural cutoff. -/
+@[simp] theorem mem_pascalPrimePowerPairSupportUpTo_iff
+    {X : ℕ} {pk : ℕ × ℕ} :
+    pk ∈ pascalPrimePowerPairSupportUpTo X ↔
+      pk.1 ∈ pascalPrimeCoordinateSupportUpTo X ∧
+        pk.2 < X ∧ pk.1 ^ (pk.2 + 1) ≤ X := by
+  simp [pascalPrimePowerPairSupportUpTo, Finset.mem_product]
+  tauto
+
 /-- Membership in the canonical prime-power support below `X`. -/
 @[simp] theorem mem_canonicalPrimePowerSupportUpTo_iff
     {X q : ℕ} :
@@ -106,6 +115,27 @@ theorem primePowerShadow_spec
   let k := Classical.choose hp
   have hk := Classical.choose_spec hp
   exact ⟨hk.1, hk.2.1, hk.2.2⟩
+
+/-- The pair label is injective on one finite prime-power support. -/
+theorem primePowerPairLabel_injOn (X : ℕ) :
+    Set.InjOn primePowerPairLabel
+      (↑(pascalPrimePowerPairSupportUpTo X) : Set (ℕ × ℕ)) := by
+  intro a ha b hb hab
+  have ha' := mem_pascalPrimePowerPairSupportUpTo_iff.mp ha
+  have hb' := mem_pascalPrimePowerPairSupportUpTo_iff.mp hb
+  have hpa : Nat.Prime a.1 :=
+    (mem_pascalPrimeCoordinateSupportUpTo_iff.mp ha'.1).1
+  have hpb : Nat.Prime b.1 :=
+    (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hb'.1).1
+  have haexp : 0 < a.2 + 1 := by omega
+  have hbexp : 0 < b.2 + 1 := by omega
+  have hw := primePower_witness_unique hpa hpb haexp hbexp
+    (by rfl) (by simpa [primePowerPairLabel] using hab)
+  have hbase : a.1 = b.1 := hw.1
+  have hexp : a.2 + 1 = b.2 + 1 := hw.2
+  apply Prod.ext
+  · exact hbase
+  · omega
 
 /-- The finite canonical `q`-indexed Dirichlet polynomial. -/
 noncomputable def pascalPrimePowerPHZCanonicalUpTo
