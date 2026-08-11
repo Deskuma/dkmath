@@ -35,6 +35,7 @@ import DkMath.RH.CFBRC.PascalZetaWeightedSecondMomentBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorRadialContourCF2DBridge
 import DkMath.RH.CFBRC.PascalCanonicalXiFixedObservableBridge
 import DkMath.RH.CFBRC.PascalCenteredXiMultiplicityLocalChargeBridge
+import DkMath.RH.CFBRC.PascalCenteredXiGlobalZeroDiskBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
 import DkMath.RH.CFBRC.MirrorRootOfUnity
 import DkMath.RH.CFBRC.MirrorAngleBranch
