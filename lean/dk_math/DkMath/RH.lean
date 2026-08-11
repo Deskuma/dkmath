@@ -39,6 +39,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiGlobalZeroDiskBridge
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
+import DkMath.RH.CFBRC.PascalCenteredXiWeilMirrorDefectBridge
 import DkMath.RH.CFBRC.MirrorThreatModel
 import DkMath.RH.CFBRC.MirrorRootOfUnity
 import DkMath.RH.CFBRC.MirrorAngleBranch
