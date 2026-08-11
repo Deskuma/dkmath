@@ -86,6 +86,13 @@ noncomputable def canonicalPrimePowerSupportUpTo (X : ℕ) : Finset ℕ :=
 /-- The natural label represented by a PPW pair. -/
 def primePowerPairLabel (pk : ℕ × ℕ) : ℕ := pk.1 ^ (pk.2 + 1)
 
+/-- Membership in the canonical prime-power support below `X`. -/
+@[simp] theorem mem_canonicalPrimePowerSupportUpTo_iff
+    {X q : ℕ} :
+    q ∈ canonicalPrimePowerSupportUpTo X ↔
+      q ≤ X ∧ IsPrimePowerLabel q := by
+  simp [canonicalPrimePowerSupportUpTo]
+
 /-- The canonical base and exponent form a valid prime-power witness. -/
 theorem primePowerShadow_spec
     {q : ℕ} (hq : IsPrimePowerLabel q) :
