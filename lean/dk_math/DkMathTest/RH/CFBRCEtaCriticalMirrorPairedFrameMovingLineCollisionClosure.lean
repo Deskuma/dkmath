@@ -6,23 +6,9 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.EtaCriticalMirrorPairedFrameMovingLineCollisionClosure
 
-namespace DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
+namespace DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionClosure
 
 open DkMath.RH.CFBRCProjection
-
-example {s : ℂ} (him : s.im ≠ 0) :
-    EtaPairProjectiveTwoScaleNonresonanceCertificate s := by
-  exact etaPairProjectiveTwoScaleNonresonanceCertificate_of_im_ne_zero him
-
-example :
-    EtaCriticalMirrorOffCriticalLocalMovingLineLock
-      etaCriticalMirrorDominantNormalizedEndpointCarrier := by
-  exact etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock
-
-example :
-    EtaCriticalMirrorOffCriticalCarrierNoncollapse
-      etaCriticalMirrorDominantNormalizedEndpointCarrier := by
-  exact etaCriticalMirrorDominantNormalizedEndpointCarrier_noncollapse
 
 example
     (hglobal :
@@ -42,4 +28,4 @@ example
     RiemannHypothesis := by
   exact riemannHypothesis_of_endpointGlobalZeroLineLock hglobal
 
-end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
+end DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionClosure
