@@ -137,6 +137,62 @@ theorem primePowerPairLabel_injOn (X : ℕ) :
   · exact hbase
   · omega
 
+/-- The pair-label image is exactly the canonical support below `X`. -/
+theorem image_primePowerPairLabel_support_eq_canonicalSupport
+    (X : ℕ) :
+    (pascalPrimePowerPairSupportUpTo X).image primePowerPairLabel =
+      canonicalPrimePowerSupportUpTo X := by
+  ext q
+  constructor
+  · intro hq
+    rcases Finset.mem_image.mp hq with ⟨pk, hpk, rfl⟩
+    have hsupport := mem_pascalPrimePowerPairSupportUpTo_iff.mp hpk
+    have hpX := (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hsupport.1).2
+    have hprime := (mem_pascalPrimeCoordinateSupportUpTo_iff.mp hsupport.1).1
+    have hpow : pk.1 ^ (pk.2 + 1) ≤ X := hsupport.2.2
+    have hlabel : IsPrimePowerLabel (primePowerPairLabel pk) :=
+      ⟨pk.1, pk.2 + 1, hprime, by omega, rfl⟩
+    exact mem_canonicalPrimePowerSupportUpTo_iff.mpr ⟨hpow, hlabel⟩
+  · intro hq
+    have hcanon := mem_canonicalPrimePowerSupportUpTo_iff.mp hq
+    rcases primePowerShadow_spec hcanon.2 with ⟨hp, hj, hqpow⟩
+    let pk : ℕ × ℕ := (primePowerBaseShadow q,
+      primePowerExponentShadow q - 1)
+    have hqpos : 0 < q := by
+      rw [hqpow]
+      exact pow_pos hp.pos _
+    have hp_dvd : primePowerBaseShadow q ∣ q := by
+      calc
+        primePowerBaseShadow q ∣
+            primePowerBaseShadow q ^ primePowerExponentShadow q :=
+          dvd_pow_self _ (Nat.ne_of_gt hj)
+        _ = q := hqpow.symm
+    have hpX : primePowerBaseShadow q ≤ X := by
+      exact (Nat.le_of_dvd (by omega) hp_dvd).trans hcanon.1
+    have hjlt : primePowerExponentShadow q < q := by
+      calc
+        primePowerExponentShadow q <
+            primePowerBaseShadow q ^ primePowerExponentShadow q :=
+          Nat.lt_pow_self hp.one_lt
+        _ = q := hqpow.symm
+    have hpk : pk ∈ pascalPrimePowerPairSupportUpTo X := by
+      dsimp [pk]
+      apply mem_pascalPrimePowerPairSupportUpTo_iff.mpr
+      refine ⟨?_, ?_, ?_⟩
+      · exact mem_pascalPrimeCoordinateSupportUpTo_iff.mpr ⟨hp, hpX⟩
+      · omega
+      · calc
+          primePowerBaseShadow q ^
+              (primePowerExponentShadow q - 1 + 1) = q := by
+            rw [Nat.sub_add_cancel hj]
+            exact hqpow.symm
+          _ ≤ X := hcanon.1
+    refine Finset.mem_image.mpr ⟨pk, hpk, ?_⟩
+    change primePowerBaseShadow q ^
+      (primePowerExponentShadow q - 1 + 1) = q
+    rw [Nat.sub_add_cancel hj]
+    exact hqpow.symm
+
 /-- The finite canonical `q`-indexed Dirichlet polynomial. -/
 noncomputable def pascalPrimePowerPHZCanonicalUpTo
     (X : ℕ) (s : ℂ) : ℂ :=
