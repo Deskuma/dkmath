@@ -18,8 +18,9 @@ namespace Chernoff
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- ==========================================
 -- Bad Set Definitions
@@ -114,7 +115,7 @@ lemma bad_set_density_bound_param
     have hp_in_range : p < 2 * X + 2 := Finset.mem_range.mp hp_in_range_mem
     have hpPrime : p.Prime := hpPrime_prop
     have hp3 : 3 ≤ p := hp3_prop
-    haveI : Fact p.Prime := ⟨hpPrime⟩
+    have : Fact p.Prime := ⟨hpPrime⟩
     exact chernoff_single_prime_uniform_rpow hp3 (γ_values p) (hγ_values p) α hαpos
       (le_of_eq rfl) X hX
   have h_sum_le := Finset.sum_le_sum h_each
@@ -159,7 +160,7 @@ lemma bad_set_density_bound'
       ∑ p ∈ primesUpTo N, ((p : ℕ) : ℝ) ^ (-(Real.log 2 / (2 * Real.log 3)) * (γ_values p + 2)) ≤ 1) :
     ∃ C > 0, ∀ (X : ℕ), X ≥ const_X →
       ((Finset.filter (fun n => Bad_ε n γ_values) (Finset.Icc 0 X)).card : ℝ) ≤ C * (X : ℝ) := by
-  haveI := decidable_Bad_ε γ_values
+  have := decidable_Bad_ε γ_values
   let Λ := (1 : ℝ)
   have hΛ_nonneg : 0 ≤ Λ := by norm_num
   have HΛ : ∀ X, X ≥ const_X →

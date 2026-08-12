@@ -147,7 +147,7 @@ theorem prime_pow_modEq_self
     {p u : ℕ} (hp : p.Prime) :
     u ^ p ≡ u [MOD p] := by
   rw [← ZMod.natCast_eq_natCast_iff]
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   simp [Nat.cast_pow, ZMod.pow_card]
 
 /--
@@ -200,7 +200,7 @@ Gap compression inside the prime field itself.
 theorem prime_zmod_gap_compress
     {p : ℕ} (hp : p.Prime) (u : ZMod p) :
     u ^ p = u := by
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   exact ZMod.pow_card u
 
 /--
@@ -212,7 +212,7 @@ moving fully into `F_p = ZMod p`.
 theorem prime_zmod_congruent_cosmic_formula
     {p : ℕ} (hp : p.Prime) (x u : ZMod p) :
     (x + u) ^ p = x ^ p + u := by
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   have h := add_pow_char x u p
   have hu : u ^ p = u := ZMod.pow_card u
   rw [hu] at h
@@ -538,7 +538,7 @@ theorem prime_polynomial_X_add_C_pow_eq
     {p a : ℕ} (hp : p.Prime) :
     ((X : (ZMod p)[X]) + C (a : ZMod p)) ^ p =
       X ^ p + C (a : ZMod p) := by
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   have h :=
     (add_pow_char (X : (ZMod p)[X]) (C (a : ZMod p)) p)
   have hC : (C (a : ZMod p) : (ZMod p)[X]) ^ p = C (a : ZMod p) := by
@@ -553,7 +553,7 @@ theorem prime_polynomial_X_add_C_pow_eq_pow_C
     {p a : ℕ} (hp : p.Prime) :
     ((X : (ZMod p)[X]) + C (a : ZMod p)) ^ p =
       X ^ p + (C (a : ZMod p)) ^ p := by
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   exact add_pow_char (X : (ZMod p)[X]) (C (a : ZMod p)) p
 
 /--

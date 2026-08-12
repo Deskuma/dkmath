@@ -23,8 +23,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 #check div_le_iff
 
@@ -229,7 +230,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
       ((Finset.filter (fun n => n ≤ X ∧ k ≤ V n) (Finset.Icc 0 X)).card : ℝ)
         ≤ ((X + 1 : ℝ) / (p : ℝ) ^ k) + 1 := by
     intro k hk_mem
-    haveI : Fact (Nat.Prime p) := ⟨hp⟩
+    have : Fact (Nat.Prime p) := ⟨hp⟩
     -- The key is: #{n ≤ X : V(n) ≥ k} counts n where p^k | (2n+1)
     -- This is bounded by count_powers_dividing_2n1 p k X ≤ ⌈(X+1)/p^k⌉₊
     have h_filter_eq : Finset.filter (fun n => n ≤ X ∧ k ≤ V n) (Finset.Icc 0 X) =
@@ -351,7 +352,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
       -- hceil : (card : ℝ) ≤ ((X+1)/p^k) + 1
       simpa [hk_small] using hceil
     · -- large: card = 0
-      haveI : Fact (Nat.Prime p) := ⟨hp⟩
+      have : Fact (Nat.Prime p) := ⟨hp⟩
       have h_filter_eq : Finset.filter (fun n => n ≤ X ∧ k ≤ V n) (Finset.Icc 0 X)
                        = Finset.filter (fun n => n ≤ X ∧ p^k ∣ (2*n+1)) (Finset.Icc 0 X) := by
         ext n

@@ -523,7 +523,7 @@ theorem primeGe5BranchAPrimitiveRestoreQAdicLift_default :
   have hq_not_dvd_y := hData.hq_not_dvd_y
   have hq_not_dvd_z := hData.hq_not_dvd_z
   have hq_not_dvd_gap := hData.hq_not_dvd_gap
-  haveI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have : Fact (Nat.Prime q) := ⟨hq_prime⟩
   have hy_ne_zero : (y : ZMod q) ≠ 0 := by
     intro hy_zero
     exact hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy_zero)
@@ -777,7 +777,7 @@ theorem primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq :
     have hp_dvd_mul : p ∣ q * hR.x' := ⟨t * s, h_eq⟩
     exact hcop_pq.dvd_of_dvd_mul_left hp_dvd_mul
   -- Step 2: ZMod p で Frobenius (フェルマーの小定理)
-  haveI : Fact (Nat.Prime p) := ⟨hpack.hp⟩
+  have : Fact (Nat.Prime p) := ⟨hpack.hp⟩
   have frobenius : ∀ (a : ZMod p), a ^ p = a := fun a => by
     by_cases ha : a = 0
     · exact ha ▸ zero_pow hpack.hp.ne_zero
@@ -1725,7 +1725,7 @@ theorem branchA_omega_pow_eq_one
     ω ^ p = 1 := by
   intro _inst ω
   change ((z : ZMod q) * (↑y : ZMod q)⁻¹) ^ p = 1
-  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  have : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
   -- y ≠ 0 in ZMod q
   have hy_ne_zero : (y : ZMod q) ≠ 0 := by
     intro heq
@@ -1792,7 +1792,7 @@ theorem branchA_omega_order_eq_p
     let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
     orderOf ω = p := by
   intro _inst ω
-  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  have : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
   exact orderOf_eq_prime
     (branchA_omega_pow_eq_one hBundle)
     (branchA_omega_ne_one hBundle)
@@ -1971,7 +1971,7 @@ theorem branchA_padicValNat_GN_decomp
     padicValNat q (GN p (z - y) y) =
       padicValNat q p + p * padicValNat q s := by
   have hsGN := hBundle.padic.hsGN  -- GN p (z-y) y = p * s^p
-  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
   have hp_pos := hBundle.padic.pack.hp.pos
   have hs_pos := branchA_s_pos hBundle.padic.pack hBundle.padic.hsx
   -- GN = p * s^p ≠ 0
@@ -2015,7 +2015,7 @@ theorem branchA_padicValNat_s_ge_one
     {p x y z t s q : ℕ}
     (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
     1 ≤ padicValNat q s := by
-  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
   have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
   exact one_le_padicValNat_of_dvd hs_ne hBundle.witness.hqs
 
@@ -2041,7 +2041,7 @@ theorem branchA_descent_padicValNat_s
     {p x y z t s q : ℕ}
     (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
     padicValNat q s = 1 + padicValNat q (s / q) := by
-  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
   have hs_ne := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
   set s' := s / q with hs'_def
   have hs_eq : s = q * s' := (Nat.mul_div_cancel' hBundle.witness.hqs).symm
@@ -2164,7 +2164,7 @@ noncomputable def branchA_hensel_lift_exists
   classical
   let f : (ZMod (q ^ k))ˣ →* (ZMod q)ˣ :=
     ZMod.unitsMap (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk))
-  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  have : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
   have hω_ne_zero : ω ≠ 0 := by
     change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 0
     have hz_ne_zero : (z : ZMod q) ≠ 0 := by
@@ -2390,7 +2390,7 @@ theorem branchA_hensel_lift_isPrimitiveRoot
     let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
     IsPrimitiveRoot hLift.ω_k p := by
   intro _inst
-  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  have : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
   rw [IsPrimitiveRoot.iff_orderOf]
   exact orderOf_eq_prime
     hLift.hω_k_pow
@@ -2454,7 +2454,7 @@ theorem branchA_castHom_zero_implies_dvd_val
     (δ : ZMod (q ^ k))
     (hzero : ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q) δ = 0) :
     q ∣ δ.val := by
-  haveI : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
+  have : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
   rw [ZMod.castHom_apply, ZMod.cast_eq_val] at hzero
   exact (ZMod.natCast_eq_zero_iff δ.val q).mp hzero
 
@@ -2467,7 +2467,7 @@ theorem branchA_castHom_ne_zero_implies_not_dvd_val
     (δ : ZMod (q ^ k))
     (hne : ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q) δ ≠ 0) :
     ¬ q ∣ δ.val := by
-  haveI : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
+  have : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
   intro hdvd
   exact hne (by rwa [ZMod.castHom_apply, ZMod.cast_eq_val, ZMod.natCast_eq_zero_iff])
 
@@ -2532,7 +2532,7 @@ theorem branchA_distinguished_padicValNat_ge_one
   by_cases hval : δ.val = 0
   · left; exact hval
   · right
-    haveI : Fact (Nat.Prime q) := _inst
+    have : Fact (Nat.Prime q) := _inst
     exact one_le_padicValNat_of_dvd hval
       (branchA_distinguished_dvd_val hBundle hk hLift)
 
@@ -2564,7 +2564,7 @@ v_q(ZMod.val(z - ω_k * y))            [ℕ]  = p * v_q(s)
 theorem branchA_padicValNat_mod_pow_eq
     {q k N : ℕ} (hq : Nat.Prime q) (hN : N ≠ 0) (hk : padicValNat q N < k) :
     padicValNat q (N % q ^ k) = padicValNat q N := by
-  haveI : Fact (Nat.Prime q) := ⟨hq⟩
+  have : Fact (Nat.Prime q) := ⟨hq⟩
   have hqk_dvd_N_false : ¬ q ^ k ∣ N := by
     intro hqk_dvd_N
     exact (not_le_of_gt hk) ((padicValNat_dvd_iff_le (p := q) (a := N) (n := k) hN).1 hqk_dvd_N)
@@ -2630,7 +2630,7 @@ theorem branchA_GN_zmod_padicValNat
   -- `branchA_padicValNat_mod_pow_eq` (so#rry あり) を経由
   have hGN_val : padicValNat q (DkMath.CosmicFormulaBinom.GN p (z - y) y) =
       p * padicValNat q s := by
-    haveI : Fact (Nat.Prime q) := _inst
+    have : Fact (Nat.Prime q) := _inst
     have := branchA_kummer_valuation hBundle
     rwa [branchA_padicValNat_sub_pow_eq_GN hBundle] at this
   have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
@@ -2703,7 +2703,7 @@ theorem branchA_local_Q_isUnit
     let Q : R := DkMath.CosmicFormulaBinom.GN p δ (hLift.ω_k * (y : R))
     IsUnit Q := by
   intro _inst R δ Q
-  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  have : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
   let φ : R →+* ZMod q :=
     ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
   have hz_ne_zero : (z : ZMod q) ≠ 0 := by
@@ -2779,7 +2779,7 @@ theorem branchA_local_GN_eq_distinguished_mul_unit
     ∃ U : R, IsUnit U ∧
       (DkMath.CosmicFormulaBinom.GN p (z - y) y : R) = δ * U := by
   intro _inst R δ
-  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  have : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
   let Q : R := DkMath.CosmicFormulaBinom.GN p δ (hLift.ω_k * (y : R))
   have hgap_coprime_q : Nat.Coprime (z - y) q := by
     exact ((Nat.Prime.coprime_iff_not_dvd hBundle.witness.hqprime).2 hBundle.witness.hq_not_dvd_gap).symm
@@ -2869,7 +2869,7 @@ theorem branchA_distinguished_factor_valuation_eq_kummer
     {p x y z t s q : ℕ}
     (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
     {k : ℕ} (hk : 0 < k)
-    (hk_large : p * padicValNat q (by haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩; exact s) < k)
+    (hk_large : p * padicValNat q (by have : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩; exact s) < k)
     (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
              let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
              BranchAHenselLiftData p q k hk ω) :
@@ -2878,8 +2878,8 @@ theorem branchA_distinguished_factor_valuation_eq_kummer
     padicValNat q δ.val = p * padicValNat q s := by
   intro _inst δ
   let R := ZMod (q ^ k)
-  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
-  haveI : Fact (1 < q ^ k) := by
+  have : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  have : Fact (1 < q ^ k) := by
     refine ⟨lt_of_lt_of_le hBundle.witness.hqprime.one_lt ?_⟩
     have hk_one : 1 ≤ k := Nat.succ_le_iff.mp hk
     simpa [pow_one] using (Nat.pow_le_pow_right hBundle.witness.hqprime.one_lt.le hk_one)

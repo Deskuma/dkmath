@@ -24,7 +24,7 @@ structure Unit where
 
 noncomputable instance : DecidableEq Unit := by
   intros u₁ u₂
-  haveI := Real.decidableEq
+  have := Real.decidableEq
   cases u₁ with | mk val₁ pos₁
   cases u₂ with | mk val₂ pos₂
   apply decidable_of_iff (val₁ = val₂)
@@ -61,7 +61,7 @@ structure Qty where
 
 noncomputable instance : DecidableEq Qty := by
   intros q₁ q₂
-  haveI := Real.decidableEq
+  have := Real.decidableEq
   cases q₁ with | mk u₁ x₁
   cases q₂ with | mk u₂ x₂
   apply decidable_of_iff (u₁ = u₂ ∧ x₁ = x₂)

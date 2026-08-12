@@ -62,7 +62,7 @@ private theorem signedLeftRoot_cast_ne_zero
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (p.signedLeftRoot : ZMod q) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   intro hl
   have hquot := p.signedSeventhQuotient_cast_eq_zero hqe
   have hrpow :
@@ -83,7 +83,7 @@ private theorem signedRightRoot_cast_ne_zero
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (p.signedRightRoot : ZMod q) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   intro hr
   have hquot := p.signedSeventhQuotient_cast_eq_zero hqe
   have hlpow :
@@ -104,7 +104,7 @@ private def quotientPrimeRatioVal
     (hq : Nat.Prime q)
     (_hqe : (q : ℤ) ∣ p.quotientRoot) :
     ZMod q := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   exact
     (p.signedRightRoot : ZMod q) /
       (p.signedLeftRoot : ZMod q)
@@ -115,7 +115,7 @@ private theorem quotientPrimeRatioVal_ne_zero
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     p.quotientPrimeRatioVal hq hqe ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   exact div_ne_zero
     (p.signedRightRoot_cast_ne_zero hq hqe)
     (p.signedLeftRoot_cast_ne_zero hq hqe)
@@ -128,7 +128,7 @@ private def quotientPrimeRatio
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (ZMod q)ˣ := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   exact
     Units.mk0 (p.quotientPrimeRatioVal hq hqe)
       (p.quotientPrimeRatioVal_ne_zero hq hqe)
@@ -153,7 +153,7 @@ private theorem quotientPrimeRatio_pow_seven
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     p.quotientPrimeRatio hq hqe ^ 7 = 1 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   apply Units.ext
   simp only [quotientPrimeRatio, Units.val_pow_eq_pow_val,
     Units.val_mk0, Units.val_one]
@@ -170,7 +170,7 @@ private theorem gapRoot_cast_ne_zero
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (p.gapRoot : ZMod q) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   intro hgap
   rcases p.gapRoot_isCoprime_quotientRoot with ⟨a, b, hab⟩
   have habq := congrArg (fun z : ℤ => (z : ZMod q)) hab
@@ -185,7 +185,7 @@ private theorem seven_cast_ne_zero_at_quotientPrime
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (7 : ZMod q) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   intro hseven
   have hdivNat : q ∣ 7 :=
     (ZMod.natCast_eq_zero_iff 7 q).mp hseven
@@ -201,7 +201,7 @@ private theorem signedRootGap_cast_ne_zero
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     (p.signedRightRoot : ZMod q) -
       (p.signedLeftRoot : ZMod q) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hgap := congrArg (fun z : ℤ => (z : ZMod q))
     p.signedGap_eq
   push_cast at hgap
@@ -218,7 +218,7 @@ private theorem quotientPrimeRatio_ne_one
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     p.quotientPrimeRatio hq hqe ≠ 1 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   intro ht
   have htval := congrArg Units.val ht
   simp only [quotientPrimeRatio, Units.val_mk0,
@@ -240,7 +240,7 @@ theorem prime_dvd_quotientRoot_modSeven_eq_one
     (hq : Nat.Prime q)
     (hqe : (q : ℤ) ∣ p.quotientRoot) :
     q % 7 = 1 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   let t := p.quotientPrimeRatio hq hqe
   have ht7 : t ^ 7 = 1 :=
     p.quotientPrimeRatio_pow_seven hq hqe
@@ -310,7 +310,7 @@ theorem ratio_mul_signedLeftRoot
     (a.ratio : ZMod q) *
         (p.signedLeftRoot : ZMod q) =
       (p.signedRightRoot : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   change
     ((p.signedRightRoot : ZMod q) /
         (p.signedLeftRoot : ZMod q)) *
@@ -335,7 +335,7 @@ theorem ratio_ne_one
 theorem ratio_orderOf
     (a : QuotientPrimeMuSevenAddress p q) :
     orderOf a.ratio = 7 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   exact orderOf_eq_prime a.ratio_pow_seven a.ratio_ne_one
 
 theorem prime_ne_seven
@@ -355,7 +355,7 @@ discriminant-49 cubic. -/
 theorem beta_cubic_relation
     (a : QuotientPrimeMuSevenAddress p q) :
     a.beta ^ 3 - 2 * a.beta ^ 2 - a.beta + 1 = 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   let t : ZMod q := (a.ratio : ZMod q)
   have ht0 : t ≠ 0 := a.ratio.ne_zero
   have ht7 : t ^ 7 = 1 := by
@@ -387,7 +387,7 @@ the cubic there would make seven vanish at a non-seven prime. -/
 theorem beta_ne_three
     (a : QuotientPrimeMuSevenAddress p q) :
     a.beta ≠ 3 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro hbeta
   have hrel := a.beta_cubic_relation
   rw [hbeta] at hrel
@@ -458,7 +458,7 @@ by the signed-root ratio. -/
 theorem evalAlphaRoot_realPairCarrier_zero
     (a : QuotientPrimeMuSevenAddress p q) :
     a.evalAlphaRoot (p.realPairCarrier 0) = 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   let r : ZMod q := (p.signedRightRoot : ZMod q)
   let l : ZMod q := (p.signedLeftRoot : ZMod q)
   let t : ZMod q := (a.ratio : ZMod q)
@@ -501,7 +501,7 @@ real-pair core. -/
 theorem evalAlphaRoot_realPairCore_zero
     (a : QuotientPrimeMuSevenAddress p q) :
     a.evalAlphaRoot (p.realPairCore 0) = 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   have hfactor := congrArg a.evalAlphaRoot
     (p.realPairCarrier_eq_eisensteinAxis_mul_core 0)
   rw [map_mul, a.evalAlphaRoot_realPairCarrier_zero,

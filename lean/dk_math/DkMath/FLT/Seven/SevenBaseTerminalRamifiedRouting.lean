@@ -57,7 +57,7 @@ theorem PrimitiveRamifiedSummitPacket.root_coordinates_isCoprime
   rw [Int.isCoprime_iff_gcd_eq_one]
   by_contra hg
   rcases Nat.exists_prime_and_dvd hg with ⟨q, hq, hqg⟩
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hqu : (q : ℤ) ∣ p.root.fst :=
     (Int.natCast_dvd_natCast.mpr hqg).trans (Int.gcd_dvd_left _ _)
   have hqv : (q : ℤ) ∣ p.root.snd :=
@@ -172,7 +172,7 @@ private theorem prime_dvd_root_v_implies_root_u
     have := dvd_sub hL hrest
     simpa [ramifiedLeftCubic] using this
   have hu := (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hu3
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (hprimitive.isUnit_of_dvd' hu hv)
 
 theorem PrimitiveRamifiedSummitPacket.coprime_linear_left

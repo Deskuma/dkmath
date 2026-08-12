@@ -119,7 +119,7 @@ theorem padicValNat_tail_exact_of_head_unit
     intro hxpow0
     apply htail_ne
     rw [hfactor, hxpow0, zero_mul]
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   rw [hfactor]
   rw [padicValNat.mul hxpow_ne hgtail_ne]
   rw [DkMath.ABC.padicValNat_pow' hp r hxpow_ne]

@@ -53,7 +53,7 @@ theorem GNDepthMassAt_eq_support_add_excess
   rw [← Finset.sum_add_distrib]
   apply Finset.sum_congr rfl
   intro q hq
-  letI : Fact (Nat.Prime q) := ⟨hQprime q hq⟩
+  let : Fact (Nat.Prime q) := ⟨hQprime q hq⟩
   by_cases hqdvd : q ∣ GN p a b
   · have hvone : 1 ≤ padicValNat q (GN p a b) :=
       one_le_padicValNat_of_dvd hGN hqdvd

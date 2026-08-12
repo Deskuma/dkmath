@@ -206,7 +206,7 @@ theorem evalKernelMultiplicity_le_padicValNat_addressedCell
     (a : RamifiedSignedRootRoutingPacket.QuotientPrimeGCDLoadAddress p q) :
     a.evalKernelMultiplicity ≤
       padicValNat q (a.family.cell p) := by
-  letI : Fact q.Prime := ⟨a.prime⟩
+  let : Fact q.Prime := ⟨a.prime⟩
   exact
     (padicValNat_dvd_iff_le a.addressedCell_ne_zero).mp
       a.prime_pow_evalKernelMultiplicity_dvd_addressedCell
@@ -223,7 +223,7 @@ theorem evalKernelMultiplicity_eq_padicValNat_addressedCell_iff
         padicValNat q (a.family.cell p) ↔
       ¬q ^ (a.evalKernelMultiplicity + 1) ∣
         a.family.cell p := by
-  letI : Fact q.Prime := ⟨a.prime⟩
+  let : Fact q.Prime := ⟨a.prime⟩
   rw [padicValNat_dvd_iff_le a.addressedCell_ne_zero]
   constructor
   · intro heq hsucc

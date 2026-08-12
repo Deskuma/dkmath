@@ -32,7 +32,7 @@ theorem primeFactors_cell_subset_quotientRoot
       (Nat.dvd_of_mem_primeFactors hq).trans
         (family.cell_dvd_quotientRoot_natAbs p),
       Int.natAbs_ne_zero.mpr <| by
-        letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+        let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
         intro hzero
         have hmod :=
           p.signedDepth.quotientRoot_modSeven_eq_one

@@ -95,7 +95,7 @@ integer constants already cover `ZMod q`. -/
 theorem eval_surjective
     (a : CyclotomicLinearPrimeAddress p q) :
     Function.Surjective a.eval := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   intro z
   refine
     ⟨SevenCyclotomicDegreeSixInt.ofReal
@@ -107,7 +107,7 @@ theorem eval_surjective
 theorem evalKernel_isMaximal
     (a : CyclotomicLinearPrimeAddress p q) :
     a.evalKernel.IsMaximal := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   exact RingHom.ker_isMaximal_of_surjective
     a.eval a.eval_surjective
 
@@ -146,7 +146,7 @@ quotient contains exactly `q` elements. -/
 theorem evalKernel_cardQuot
     (a : CyclotomicLinearPrimeAddress p q) :
     Submodule.cardQuot a.evalKernel = q := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   rw [Submodule.cardQuot_apply]
   calc
     Nat.card

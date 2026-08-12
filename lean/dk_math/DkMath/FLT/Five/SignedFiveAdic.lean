@@ -209,7 +209,7 @@ private theorem not_twentyFive_dvd_of_mod_eq_five
 theorem padicValNat_five_eq_one_of_dvd_not_sq
     {n : ℕ} (h5 : 5 ∣ n) (h25 : ¬ 25 ∣ n) :
     padicValNat 5 n = 1 := by
-  letI : Fact (Nat.Prime 5) := ⟨by decide⟩
+  let : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hnz : n ≠ 0 := by
     intro hn0
     apply h25
@@ -231,7 +231,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_fifth
     (hEq : carrier * residual = distinguished ^ 5)
     (hrVal : padicValNat 5 residual = 1) :
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m := by
-  letI : Fact (Nat.Prime 5) := ⟨by decide⟩
+  let : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hpow :
       padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by simp
   have hmul :

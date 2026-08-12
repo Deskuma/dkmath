@@ -18,8 +18,9 @@ namespace Chernoff
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- ==========================================
 -- Layer D: Explicit Specialization
@@ -191,7 +192,7 @@ lemma union_bound_chernoff_pow
         ≤ const_C * (X : ℝ) * (p : ℝ) ^ (-α * (γ_values p + 2)) := by
     intro p hp
     let ⟨hp_in, ⟨hpPrime, hp3⟩⟩ := Finset.mem_filter.1 hp
-    haveI : Fact p.Prime := ⟨hpPrime⟩
+    have : Fact p.Prime := ⟨hpPrime⟩
     have hαpos : 0 < α := by
       have : 1 < (3 : ℝ) := by norm_num
       exact div_pos (Real.log_pos (by norm_num)) (Real.log_pos this)
@@ -226,7 +227,7 @@ lemma union_bound_chernoff_pow'
     intro p hp
     simp only [Finset.mem_filter, Finset.mem_range] at hp
     have ⟨hp_in, ⟨hpPrime, hp3⟩⟩ := hp
-    haveI : Fact p.Prime := ⟨hpPrime⟩
+    have : Fact p.Prime := ⟨hpPrime⟩
     have hαpos : 0 < α := by
       have : 1 < (3 : ℝ) := by norm_num
       exact div_pos (Real.log_pos (by norm_num)) (Real.log_pos this)

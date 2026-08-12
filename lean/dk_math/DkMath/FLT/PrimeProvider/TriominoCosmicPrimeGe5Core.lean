@@ -110,7 +110,7 @@ lemma exists_primeFactor_factorization_not_dvd_of_not_isPow
 lemma padicValNat_eq_factorization {q u : ℕ} (hq : Nat.Prime q) (hu0 : u ≠ 0) :
     padicValNat q u = u.factorization q := by
   classical
-  haveI : Fact q.Prime := ⟨hq⟩
+  have : Fact q.Prime := ⟨hq⟩
   apply Nat.le_antisymm
   · have hdiv : q ^ padicValNat q u ∣ u := by
       simpa using (pow_padicValNat_dvd (p := q) (n := u))

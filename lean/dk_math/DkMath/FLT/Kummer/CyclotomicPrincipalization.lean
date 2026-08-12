@@ -1854,7 +1854,7 @@ lemma zeta_sub_one_prime_of_p
     {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     Prime (hζ.toInteger - 1) := by
-  haveI : IsCyclotomicExtension {p^(0+1)} ℚ K := IsCyclotomicExtension_p_as_pow1
+  have : IsCyclotomicExtension {p^(0+1)} ℚ K := IsCyclotomicExtension_p_as_pow1
   have hζ' : IsPrimitiveRoot ζ (p^(0+1)) := IsPrimitiveRoot_p_as_pow1 hζ
   have h := IsPrimitiveRoot.zeta_sub_one_prime (k := 0) hζ'
   have heq : hζ'.toInteger = hζ.toInteger := by
@@ -1883,7 +1883,7 @@ lemma norm_zeta_sub_one_eq_p_rat
     {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2) :
     Algebra.norm ℚ ((hζ.toInteger - 1 : 𝓞 K) : K) = (p : ℚ) := by
-  haveI hcyc : IsCyclotomicExtension {p^(0+1)} ℚ K := by
+  have hcyc : IsCyclotomicExtension {p^(0+1)} ℚ K := by
     simp only [zero_add, pow_one]; exact inferInstance
   have hζ' : IsPrimitiveRoot ζ (p^(0+1)) := by simp only [zero_add, pow_one]; exact hζ
   have hirr : Irreducible (Polynomial.cyclotomic (p^(0+1)) ℚ) := by
@@ -1925,15 +1925,15 @@ lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
   {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : ℚ) :
     Algebra.norm ℚ ((a : K) - ζ) = Polynomial.eval a (Polynomial.cyclotomic p ℚ) := by
   let E := AlgebraicClosure K
-  haveI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  have : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   obtain ⟨z, hz⟩ := IsAlgClosed.exists_root
     (Polynomial.cyclotomic p E)
     (Polynomial.degree_cyclotomic_pos p E (NeZero.pos _)).ne.symm
   have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
     Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
   apply (algebraMap ℚ E).injective
-  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
-  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  let := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  let := IsCyclotomicExtension.isGalois {p} ℚ K
   rw [Algebra.norm_eq_prod_embeddings]
   conv_lhs =>
     congr
@@ -3078,8 +3078,8 @@ theorem chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin
   let x : 𝓞 K := chosenCyclotomicLinearFactorInRingOfIntegers hζ y z
   have hcoe : ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := by
     exact congrArg (algebraMap ℚ K) (Algebra.coe_norm_int x)
-  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
-  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  let := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  let := IsCyclotomicExtension.isGalois {p} ℚ K
   calc
     ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := hcoe
     _ = ∏ σ : Gal(K/ℚ), σ (((x : 𝓞 K) : K)) := by
@@ -3097,7 +3097,7 @@ theorem gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_th
     σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) =
       ((cyclotomicLinearFactorInRingOfIntegers hζ y z
         (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val : 𝓞 K) : K) := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   let k : ℕ := (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val
   have hsigma_base : σ ζ = ζ ^ k := by
     simpa [k] using
@@ -3132,7 +3132,7 @@ theorem chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thi
     (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
       ∏ u : (ZMod p)ˣ,
         ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K) := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   rw [chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin hζ]
   simpa using
     (Fintype.prod_equiv
@@ -3156,7 +3156,7 @@ theorem prod_units_zmod_eq_prod_range_erase_zero
     {p : ℕ} [hp : Fact p.Prime]
     {M : Type*} [CommMonoid M] (f : ℕ → M) :
     ∏ u : (ZMod p)ˣ, f u.val.val = ∏ j ∈ (Finset.range p).erase 0, f j := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   apply Finset.prod_nbij (fun u : (ZMod p)ˣ => u.val.val)
   · -- hi: image lands in (Finset.range p).erase 0
     intro u _
@@ -4497,7 +4497,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_
     have hp_dvd_mul : p ∣ q * (x / q) := ⟨t * s, h_eq⟩
     exact hcop_pq.dvd_of_dvd_mul_left hp_dvd_mul
   have hp_dvd_gap' : p ∣ (z' - y) := by
-    haveI : Fact (Nat.Prime p) := ⟨hpack.hp⟩
+    have : Fact (Nat.Prime p) := ⟨hpack.hp⟩
     have frobenius : ∀ a : ZMod p, a ^ p = a := fun a => ZMod.pow_card a
     have hxq_zmod : ((x / q : ℕ) : ZMod p) = 0 :=
       (ZMod.natCast_eq_zero_iff (x / q) p).mpr hp_dvd_xq
@@ -5196,9 +5196,9 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
         ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
     bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  haveI : Fact p.Prime := ⟨hpack.hp⟩
-  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
-  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+  have : Fact p.Prime := ⟨hpack.hp⟩
+  have : NeZero p := ⟨hpack.hp.ne_zero⟩
+  have : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
     CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
@@ -5539,9 +5539,9 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLif
     (hNoLift : TriominoCosmicNonLiftableGNBridge) :
     CyclotomicPrincipalizationFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  haveI : Fact p.Prime := ⟨hpack.hp⟩
-  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
-  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+  have : Fact p.Prime := ⟨hpack.hp⟩
+  have : NeZero p := ⟨hpack.hp.ne_zero⟩
+  have : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
     CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
@@ -5566,9 +5566,9 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_square
     (hSqProv : TriominoSquarefreeGNBridgeProvider) :
     CyclotomicPrincipalizationFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  haveI : Fact p.Prime := ⟨hpack.hp⟩
-  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
-  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+  have : Fact p.Prime := ⟨hpack.hp⟩
+  have : NeZero p := ⟨hpack.hp.ne_zero⟩
+  have : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
     CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
@@ -5987,9 +5987,9 @@ theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
     (hRecv : CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget.{0}) :
     CyclotomicPrincipalizationNonFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hpgap
-  haveI : Fact p.Prime := ⟨hpack.hp⟩
-  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
-  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+  have : Fact p.Prime := ⟨hpack.hp⟩
+  have : NeZero p := ⟨hpack.hp.ne_zero⟩
+  have : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
     CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)

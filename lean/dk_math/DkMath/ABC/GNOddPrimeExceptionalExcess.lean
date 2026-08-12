@@ -123,7 +123,7 @@ theorem padicValNat_GN_prime_eq_one_of_dvd
     intro hzero
     rw [hzero, emultiplicity_zero] at hEmultNat
     exact WithTop.top_ne_one hEmultNat
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   simp only [← Nat.cast_inj (R := ℕ∞)]
   rw [padicValNat_eq_emultiplicity hGN0, hEmultNat]
   simp

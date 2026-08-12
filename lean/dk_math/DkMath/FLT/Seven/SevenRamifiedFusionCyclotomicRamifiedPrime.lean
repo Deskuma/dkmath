@@ -151,7 +151,7 @@ def ramifiedPrime : Ideal Ring :=
 /-- The ramified kernel is maximal. -/
 theorem ramifiedPrime_isMaximal :
     ramifiedPrime.IsMaximal := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   exact RingHom.ker_isMaximal_of_surjective
     ramifiedEval ramifiedEval_surjective
 

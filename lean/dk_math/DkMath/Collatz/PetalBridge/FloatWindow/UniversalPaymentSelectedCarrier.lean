@@ -498,17 +498,17 @@ theorem exists_positiveDriftUnitEmbedding_global_add_saturated
       (CanonicalGlobalSelectedPressureCarrier n q m ⊕
         {k : ℕ // k ∈ canonicalSaturatedBlockIndices n q m})) := by
   classical
-  letI : Fintype {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m} :=
+  let : Fintype {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m} :=
     Fintype.ofFinset (canonicalPositiveDriftBlockIndices n q m) (by simp)
-  letI : Fintype (CanonicalPositiveDriftUnitCarrier n q m) := by
+  let : Fintype (CanonicalPositiveDriftUnitCarrier n q m) := by
     unfold CanonicalPositiveDriftUnitCarrier
     infer_instance
-  letI : Fintype {k : ℕ // k ∈ canonicalSaturatedBlockIndices n q m} :=
+  let : Fintype {k : ℕ // k ∈ canonicalSaturatedBlockIndices n q m} :=
     Fintype.ofFinset (canonicalSaturatedBlockIndices n q m) (by simp)
-  letI (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
+  let (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalGlobalSelectedPressureCarrier n q m) := by
+  let : Fintype (CanonicalGlobalSelectedPressureCarrier n q m) := by
     unfold CanonicalGlobalSelectedPressureCarrier
     infer_instance
   apply Function.Embedding.nonempty_iff_card_le.mpr

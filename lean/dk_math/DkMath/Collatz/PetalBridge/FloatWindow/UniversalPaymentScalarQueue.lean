@@ -621,7 +621,7 @@ theorem CanonicalEndpointForwardWindowMatching.to_suffixClaims_le_capacity
     constructor
     · exact Subtype.ext (congrArg (fun slot => slot.1.val) hab)
     · exact (Sigma.ext_iff.mp hab).2
-  letI : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
+  let : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective suffixPay suffixPay_injective
@@ -638,16 +638,16 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
   classical
   let Claim := CanonicalEndpointClaimWindowCarrier n q r
   let Capacity := CanonicalEndpointCapacityWindowCarrier n q r
-  letI : Finite Claim := by
+  let : Finite Claim := by
     dsimp [Claim]
     unfold CanonicalEndpointClaimWindowCarrier
     infer_instance
-  letI : Finite Capacity := by
+  let : Finite Capacity := by
     dsimp [Capacity]
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
-  letI : Fintype Claim := Fintype.ofFinite Claim
-  letI : Fintype Capacity := Fintype.ofFinite Capacity
+  let : Fintype Claim := Fintype.ofFinite Claim
+  let : Fintype Capacity := Fintype.ofFinite Capacity
   let eligible : Claim → Capacity → Prop := fun claim slot => claim.1.val ≤ slot.1.val
   have hallSubsets : ∀ A : Finset Claim,
       A.card ≤ ({slot : Capacity | ∃ claim ∈ A, eligible claim slot} : Finset Capacity).card := by
@@ -679,10 +679,10 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
         · exact Subtype.ext (congrArg (fun claim => claim.1.val) hab)
         · exact (Sigma.ext_iff.mp hab).2
       have hAClaims : A.card ≤ canonicalEndpointWindowClaims n t r := by
-        letI : Finite (CanonicalEndpointClaimWindowCarrier n t r) := by
+        let : Finite (CanonicalEndpointClaimWindowCarrier n t r) := by
           unfold CanonicalEndpointClaimWindowCarrier
           infer_instance
-        letI : Fintype (CanonicalEndpointClaimWindowCarrier n t r) :=
+        let : Fintype (CanonicalEndpointClaimWindowCarrier n t r) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective claimsFromT claimsFromT_injective
         rw [← natCard_canonicalEndpointClaimWindowCarrier n t r]
@@ -711,10 +711,10 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
           exact (Sigma.ext_iff.mp hsigma).2
       have hCapacityEligible : canonicalEndpointWindowCapacity n t r ≤
           ({slot : Capacity | ∃ claim ∈ A, eligible claim slot} : Finset Capacity).card := by
-        letI : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
+        let : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
           unfold CanonicalEndpointCapacityWindowCarrier
           infer_instance
-        letI : Fintype (CanonicalEndpointCapacityWindowCarrier n t r) :=
+        let : Fintype (CanonicalEndpointCapacityWindowCarrier n t r) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective capacityToEligible
           capacityToEligible_injective

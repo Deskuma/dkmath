@@ -83,7 +83,7 @@ theorem AwaySevenBaseTerminalQuotientCorePacket.seven_not_dvd_cubic_root_load
     (packet : AwaySevenBaseTerminalQuotientCorePacket source r p) :
     ¬ 7 ∣ r.cubic.rootTriple.vPart * r.cubic.rootTriple.leftPart *
       r.cubic.rootTriple.rightPart := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hvDepth : padicValNat 7 r.cubic.rootTriple.vPart = 0 := by
     calc
       padicValNat 7 r.cubic.rootTriple.vPart = p.exponent - 1 := p.root_depth_eq

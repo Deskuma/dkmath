@@ -145,7 +145,7 @@ theorem AwayCoordinateNormalForm.coprime_leftCubic_rightCubic {x y z : ℕ}
   rw [Nat.coprime_iff_gcd_eq_one]
   by_contra hg
   rcases Nat.exists_prime_and_dvd hg with ⟨q, hq, hqg⟩
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   let u : ZMod q := p.root.fst
   let v : ZMod q := p.root.snd
   have hqL : (q : ℤ) ∣ seventhPowerSndLeftCubic p.root.fst p.root.snd :=
@@ -191,7 +191,7 @@ theorem AwayCoordinateNormalForm.coprime_leftCubic_rightCubic {x y z : ℕ}
         exact eq_zero_of_pow_eq_zero (neg_eq_zero.mp hL)
       exact False.elim (hprimitive ⟨by simp [hu, hv0], hv0⟩)
   subst q
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hnorm0 :
       (norm p.root : ZMod 7) = 0 := by
     have hadd :

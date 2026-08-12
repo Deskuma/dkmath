@@ -169,7 +169,7 @@ lemma padicValNat_le_iff_dvd {p n : ℕ} (hp : p.Prime) (hn : n ≠ 0) (k : ℕ)
 
 **証明のポイント:**
 - Mathlib の `padicValNat.pow` を使用
-- `[Fact p.Prime]` インスタンスを `haveI` で提供
+- `[Fact p.Prime]` インスタンスを `have` で提供
 - `a = 0` の場合と `a ≠ 0` の場合を分けて処理
 
 **使用例:**
@@ -186,7 +186,7 @@ p が素因数として a に k 回現れるなら、a^d には d*k 回現れま
 lemma padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (_ha : a ≠ 0) :
     padicValNat p (a ^ d) = d * padicValNat p a := by
   -- Fact インスタンスを用意
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   -- Mathlib の padicValNat.pow を適用
   -- v4.32.2 の `padicValNat.pow` は底と指数を明示的に受け取り、非零仮定を要求しない。
   exact padicValNat.pow a d

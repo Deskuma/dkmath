@@ -36,9 +36,9 @@ noncomputable def canonicalLocalPositiveDriftEmbedding
     Fin (Int.toNat (endpointAccountingTerm n k)) ↪
       CanonicalLocalSelectedOrSaturatedCarrier n k := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
-  letI : Fintype (CanonicalLocalSelectedOrSaturatedCarrier n k) := by
+  let : Fintype (CanonicalLocalSelectedOrSaturatedCarrier n k) := by
     unfold CanonicalLocalSelectedOrSaturatedCarrier
     infer_instance
   have htargetCard :
@@ -445,10 +445,10 @@ theorem exists_selectedPressureBucketEmbedding_exactLength_add_amplitude
       ({k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ⊕
         Fin (Int.toNat (canonicalWindowPressureMarginAtDepth n q m d)))) := by
   classical
-  letI : Fintype (CanonicalSelectedPressureBucketCarrier n q m d) := by
+  let : Fintype (CanonicalSelectedPressureBucketCarrier n q m d) := by
     unfold CanonicalSelectedPressureBucketCarrier
     infer_instance
-  letI : Fintype {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
+  let : Fintype {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
     Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
   apply Function.Embedding.nonempty_iff_card_le.mpr
   have htargetCard :
@@ -493,10 +493,10 @@ theorem exists_activeSelectedBucketEmbedding_exactLength_add_residual
       ({k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ⊕
         Fin (canonicalSelectedResidualCount n q m d))) := by
   classical
-  letI : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
+  let : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
     unfold CanonicalActiveSelectedPressureBucketCarrier
     infer_instance
-  letI : Fintype {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
+  let : Fintype {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
     Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
   apply Function.Embedding.nonempty_iff_card_le.mpr
   have htargetCard :
@@ -575,7 +575,7 @@ theorem natCard_activeSelectedBuckets
       ∑ d ∈ canonicalActiveSelectedPressureDepthSupport n q m,
         Nat.card (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
   classical
-  letI (d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m}) :
+  let (d : {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m}) :
       Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d.val) := by
     unfold CanonicalActiveSelectedPressureBucketCarrier
     infer_instance
@@ -638,13 +638,13 @@ theorem natCard_selectedResidualCarrier_le_pressureAmplitudeCarrier
     Nat.card (CanonicalSelectedResidualCarrier n q m) ≤
       Nat.card (CanonicalPositivePressureAmplitudeCarrier n q m) := by
   classical
-  letI : Fintype
+  let : Fintype
       {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureDepthSupport n q m) (by simp)
-  letI : Fintype (CanonicalSelectedResidualCarrier n q m) := by
+  let : Fintype (CanonicalSelectedResidualCarrier n q m) := by
     unfold CanonicalSelectedResidualCarrier
     infer_instance
-  letI : Fintype (CanonicalPositivePressureAmplitudeCarrier n q m) := by
+  let : Fintype (CanonicalPositivePressureAmplitudeCarrier n q m) := by
     unfold CanonicalPositivePressureAmplitudeCarrier
     infer_instance
   exact Nat.card_le_card_of_injective
@@ -970,7 +970,7 @@ noncomputable def canonicalSelectedPositiveDriftEmbedding
     Fin (Int.toNat (endpointAccountingTerm n k)) ↪
       {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
   apply Classical.choice
   apply Function.Embedding.nonempty_iff_card_le.mpr
@@ -1028,7 +1028,7 @@ noncomputable def canonicalSelectedDriftSpareCarrier
     (n : OddNat) (k : ℕ) :
     Finset {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
   exact Finset.univ \ canonicalSelectedDriftImageCarrier n k
 
@@ -1040,7 +1040,7 @@ theorem card_selectedPressureCarrier_eq_driftImage_add_spare
       (canonicalSelectedDriftImageCarrier n k).card +
         (canonicalSelectedDriftSpareCarrier n k).card := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
   have hsplit := Finset.card_sdiff_add_card_eq_card
     (show canonicalSelectedDriftImageCarrier n k ⊆
@@ -1216,9 +1216,9 @@ noncomputable def canonicalSelectedDriftArrivalFiberEquiv
       i ∈ canonicalSelectedDriftImageCarrierAtDepth n k d} ≃
       Fin (canonicalSelectedDriftArrivalCountAtDepth n k d) := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
-  letI : Fintype
+  let : Fintype
       {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} //
         i ∈ canonicalSelectedDriftImageCarrierAtDepth n k d} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrierAtDepth n k d) (by simp)
@@ -1321,22 +1321,22 @@ theorem unorderedSelectedDriftResidualCount_le_selectedCarrierResidualCount
     canonicalUnorderedSelectedDriftResidualCount n q m d ≤
       canonicalUnorderedSelectedCarrierResidualCount n q m d := by
   classical
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
         i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+  let : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
     unfold CanonicalSelectedDriftBucketCarrier
     infer_instance
-  letI : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
+  let : Fintype (CanonicalActiveSelectedPressureBucketCarrier n q m d) := by
     unfold CanonicalActiveSelectedPressureBucketCarrier
     infer_instance
   have hcard :
@@ -1362,22 +1362,22 @@ noncomputable def canonicalExactLengthToDriftBucketEmbedding
     {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} ↪
       CanonicalSelectedDriftBucketCarrier n q m d := by
   classical
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
         i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+  let : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
     unfold CanonicalSelectedDriftBucketCarrier
     infer_instance
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
     Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
   apply Classical.choice
@@ -1391,19 +1391,19 @@ noncomputable def canonicalActualSelectedDriftResidualFinset
     (n : OddNat) (q m d : ℕ) :
     Finset (CanonicalSelectedDriftBucketCarrier n q m d) := by
   classical
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
         i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+  let : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
     unfold CanonicalSelectedDriftBucketCarrier
     infer_instance
   by_cases hcard : (canonicalExactLengthBlockIndicesAtDepth n q m d).card ≤
@@ -1432,25 +1432,25 @@ theorem natCard_actualSelectedDriftResidualCarrier
     Nat.card (CanonicalActualSelectedDriftResidualCarrier n q m d) =
       canonicalUnorderedSelectedDriftResidualCount n q m d := by
   classical
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalActiveSelectedPressureBlocksAtDepth n q m d} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureBlocksAtDepth n q m d) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI (k : {k : ℕ // k ∈
+  let (k : {k : ℕ // k ∈
       canonicalActiveSelectedPressureBlocksAtDepth n q m d}) :
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
         i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
+  let : Fintype (CanonicalSelectedDriftBucketCarrier n q m d) := by
     unfold CanonicalSelectedDriftBucketCarrier
     infer_instance
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalExactLengthBlockIndicesAtDepth n q m d} :=
     Fintype.ofFinset (canonicalExactLengthBlockIndicesAtDepth n q m d) (by simp)
-  letI : Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d) :=
+  let : Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d) :=
     Fintype.ofFinset (canonicalActualSelectedDriftResidualFinset n q m d) (by simp)
   rw [Nat.card_eq_fintype_card]
   unfold CanonicalActualSelectedDriftResidualCarrier
@@ -1487,10 +1487,10 @@ theorem natCard_allDepthActualResidual_le_causalQueueCarrier
     Nat.card (CanonicalAllDepthActualSelectedDriftResidualCarrier n q m) ≤
       Nat.card (CanonicalAllDepthSelectedDriftCausalQueueCarrier n q m) := by
   classical
-  letI : Fintype
+  let : Fintype
       {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureDepthSupport n q m) (by simp)
-  letI (d : {d : ℕ // d ∈
+  let (d : {d : ℕ // d ∈
       canonicalActiveSelectedPressureDepthSupport n q m}) :
       Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d.val) :=
     Fintype.ofFinset (canonicalActualSelectedDriftResidualFinset n q m d.val) (by simp)
@@ -1509,7 +1509,7 @@ noncomputable def actualSelectedDriftResidualDepthEmbedding
     CanonicalActualSelectedDriftResidualCarrier n q m d ↪
       Fin (canonicalSelectedDriftDepthQueue n q m d) := by
   classical
-  letI : Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d) :=
+  let : Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d) :=
     Fintype.ofFinset (canonicalActualSelectedDriftResidualFinset n q m d) (by simp)
   apply Classical.choice
   apply Function.Embedding.nonempty_iff_card_le.mpr
@@ -1541,17 +1541,17 @@ theorem exists_allDepthActualResidualEmbedding_causalQueueCarrier
     Nonempty (CanonicalAllDepthActualSelectedDriftResidualCarrier n q m ↪
       CanonicalAllDepthSelectedDriftCausalQueueCarrier n q m) := by
   classical
-  letI : Fintype
+  let : Fintype
       {d : ℕ // d ∈ canonicalActiveSelectedPressureDepthSupport n q m} :=
     Fintype.ofFinset (canonicalActiveSelectedPressureDepthSupport n q m) (by simp)
-  letI (d : {d : ℕ // d ∈
+  let (d : {d : ℕ // d ∈
       canonicalActiveSelectedPressureDepthSupport n q m}) :
       Fintype (CanonicalActualSelectedDriftResidualCarrier n q m d.val) :=
     Fintype.ofFinset (canonicalActualSelectedDriftResidualFinset n q m d.val) (by simp)
-  letI : Fintype (CanonicalAllDepthActualSelectedDriftResidualCarrier n q m) := by
+  let : Fintype (CanonicalAllDepthActualSelectedDriftResidualCarrier n q m) := by
     unfold CanonicalAllDepthActualSelectedDriftResidualCarrier
     infer_instance
-  letI : Fintype (CanonicalAllDepthSelectedDriftCausalQueueCarrier n q m) := by
+  let : Fintype (CanonicalAllDepthSelectedDriftCausalQueueCarrier n q m) := by
     unfold CanonicalAllDepthSelectedDriftCausalQueueCarrier
     infer_instance
   apply Function.Embedding.nonempty_iff_card_le.mpr
@@ -1622,9 +1622,9 @@ noncomputable def oneEmbedding_canonicalSelectedDriftSpareCarrier
     Fin 1 ↪ {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} //
       i ∈ canonicalSelectedDriftSpareCarrier n k} := by
   classical
-  letI : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
+  let : Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k) (by simp)
-  letI : Fintype
+  let : Fintype
       {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k} //
         i ∈ canonicalSelectedDriftSpareCarrier n k} :=
     Fintype.ofFinset (canonicalSelectedDriftSpareCarrier n k) (by simp)
@@ -2596,7 +2596,7 @@ noncomputable def oneEmbedding_successorSpareCarrier
     Fin 1 ↪ {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j} //
       i ∈ canonicalSelectedDriftSpareCarrier n j} := by
   classical
-  letI : Fintype
+  let : Fintype
       {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j} //
         i ∈ canonicalSelectedDriftSpareCarrier n j} :=
     Fintype.ofFinset (canonicalSelectedDriftSpareCarrier n j) (by simp)

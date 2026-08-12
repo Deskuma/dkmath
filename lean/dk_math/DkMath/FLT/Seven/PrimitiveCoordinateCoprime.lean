@@ -20,7 +20,7 @@ theorem prime_dvd_both_cyclotomicSeven_coordinates
     (hA : (q : ℤ) ∣ cyclotomicSevenFst (z : ℤ) (y : ℤ))
     (hB : (q : ℤ) ∣ cyclotomicSevenSnd (z : ℤ) (y : ℤ)) :
     q ∣ z ∧ q ∣ y := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hAZ : (cyclotomicSevenFst (z : ℤ) (y : ℤ) : ZMod q) = 0 :=
     (CharP.intCast_eq_zero_iff (ZMod q) q _).2 hA
   have hBZ : (cyclotomicSevenSnd (z : ℤ) (y : ℤ) : ZMod q) = 0 :=

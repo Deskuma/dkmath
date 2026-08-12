@@ -119,7 +119,7 @@ theorem localEval_conjugateLinearCarrier_ne_zero
     {q : ℕ}
     (a : p.signedDepth.QuotientPrimeMuSevenAddress q) :
     d.localEval a d.conjugateLinearCarrier ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro hzero
   have hconjugate :
       ((a.ratio⁻¹ : (ZMod q)ˣ) : ZMod q) *

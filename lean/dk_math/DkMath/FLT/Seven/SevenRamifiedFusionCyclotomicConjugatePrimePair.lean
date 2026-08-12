@@ -108,7 +108,7 @@ the embedded constants used by the first evaluation's surjectivity proof. -/
 theorem conjugateEval_surjective
     (a : CyclotomicLinearPrimeAddress p q) :
     Function.Surjective a.conjugateEval := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   intro z
   refine
     ⟨SevenCyclotomicDegreeSixInt.ofReal
@@ -126,7 +126,7 @@ theorem conjugateEval_surjective
 theorem conjugateEvalKernel_isMaximal
     (a : CyclotomicLinearPrimeAddress p q) :
     a.conjugateEvalKernel.IsMaximal := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   exact RingHom.ker_isMaximal_of_surjective
     a.conjugateEval a.conjugateEval_surjective
 
@@ -184,7 +184,7 @@ theorem conjugateEvalKernel_comap_intCast
 theorem conjugateEvalKernel_cardQuot
     (a : CyclotomicLinearPrimeAddress p q) :
     Submodule.cardQuot a.conjugateEvalKernel = q := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   rw [Submodule.cardQuot_apply]
   calc
     Nat.card
@@ -269,7 +269,7 @@ theorem conjugatePrimeProduct_le_realPrimeFiberIdeal
     (a : CyclotomicLinearPrimeAddress p q) :
     a.evalKernel * a.conjugateEvalKernel ≤
       a.realPrimeFiberIdeal := by
-  letI : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
   intro x hx
   have horiented : x ∈ a.evalKernel :=
     Ideal.mul_le_right hx

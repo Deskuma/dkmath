@@ -196,7 +196,7 @@ theorem exceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight
     ∀ q k : ℕ, Nat.Prime q → q ∣ d →
       (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) := by
   intro q k hqP hq_dvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
@@ -222,7 +222,7 @@ theorem nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight
     ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
       (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) := by
   intro q k hqP hq_ndvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
@@ -248,7 +248,7 @@ theorem exceptionalPowComparison_of_padicValNat_eq
       padicValNat q a = padicValNat q b) :
     ∀ q k : ℕ, Nat.Prime q → q ∣ d → (q ^ k ∣ a ↔ q ^ k ∣ b) := by
   intro q k hqP hq_dvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hval : padicValNat q a = padicValNat q b := hExcVal q hqP hq_dvd_d
   calc
     q ^ k ∣ a ↔ k ≤ padicValNat q a :=
@@ -268,7 +268,7 @@ theorem nonExceptionalPowComparison_of_padicValNat_eq
       padicValNat q a = padicValNat q b) :
     ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d → (q ^ k ∣ a ↔ q ^ k ∣ b) := by
   intro q k hqP hq_ndvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hval : padicValNat q a = padicValNat q b := hNonExcVal q hqP hq_ndvd_d
   calc
     q ^ k ∣ a ↔ k ≤ padicValNat q a :=
@@ -352,7 +352,7 @@ theorem exceptionalBK_fwd_of_padicValNat_le_boundaryProd_kernelRight
     ∀ q k : ℕ, Nat.Prime q → q ∣ d →
       (q ^ k ∣ boundaryProd x u → q ^ k ∣ kernelRight d x u) := by
   intro q k hqP hq_dvd_d hqk_dvd_boundary
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
@@ -374,7 +374,7 @@ theorem exceptionalBK_rev_of_padicValNat_le_kernelRight_boundaryProd
     ∀ q k : ℕ, Nat.Prime q → q ∣ d →
       (q ^ k ∣ kernelRight d x u → q ^ k ∣ boundaryProd x u) := by
   intro q k hqP hq_dvd_d hqk_dvd_kernel
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
@@ -419,7 +419,7 @@ theorem nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight
     ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
       (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) := by
   intro q k hqP hq_ndvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
@@ -775,7 +775,7 @@ theorem nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd
     ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
       padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) := by
   intro q hqP hq_ndvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
       (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
@@ -850,7 +850,7 @@ theorem nonExceptionalNotDvd_kernelRight_of_padicValNat_le_boundaryProd_and_not_
         hNonExcLeRev q hqP hq_ndvd_d
       _ = 0 := hBz
   have hKz : padicValNat q (kernelRight d x u) = 0 := Nat.le_zero.mp hK_le_zero
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hK0 : kernelRight d x u ≠ 0 := by
     simpa [kernelRight] using
       (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
@@ -1721,7 +1721,7 @@ theorem padicValNat_mul_boundaryRight_kernelRight_eq_add
     padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp
       (d := d) (x := x) (u := u) (q := q)
       (Nat.le_trans (by decide : 1 ≤ 2) hd2) hx hcop hqP hq_ndvd_d
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hx0 : x ≠ 0 := Nat.ne_of_gt hx
   have hGN0 : GN d x u ≠ 0 :=
     GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu
@@ -1736,7 +1736,7 @@ theorem padicValNat_mul_boundaryProd_kernelRight_eq_add
     (hqP : Nat.Prime q) :
     padicValNat q (x * u * GN d x u) =
       padicValNat q x + padicValNat q u + padicValNat q (GN d x u) := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hx0 : x ≠ 0 := Nat.ne_of_gt hx
   have hu0 : u ≠ 0 := Nat.ne_of_gt hu
   have hxu0 : x * u ≠ 0 := Nat.mul_ne_zero hx0 hu0
@@ -1791,7 +1791,7 @@ theorem primePow_dvd_boundaryProd_iff_exists_split
     {x u q k : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
     q ^ k ∣ boundaryProd x u ↔
       ∃ i j : ℕ, i + j = k ∧ q ^ i ∣ x ∧ q ^ j ∣ u := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hx0 : x ≠ 0 := Nat.ne_of_gt hx
   have hu0 : u ≠ 0 := Nat.ne_of_gt hu
   have hxu0 : x * u ≠ 0 := Nat.mul_ne_zero hx0 hu0
@@ -2133,7 +2133,7 @@ theorem padicValNat_kernelRight_eq_zero_of_pos_le_padicVal_boundaryProd_of_copri
     (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
     (hk : 0 < k) (hk_le_boundary : k ≤ padicValNat q (boundaryProd x u)) :
     padicValNat q (kernelRight d x u) = 0 := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hqk_dvd_boundary : q ^ k ∣ boundaryProd x u :=
     (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hB0).2 hk_le_boundary
@@ -2202,7 +2202,7 @@ theorem padicValNat_boundaryProd_eq_add
     {x u q : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
     padicValNat q (boundaryProd x u) =
       padicValNat q x + padicValNat q u := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hx0 : x ≠ 0 := Nat.ne_of_gt hx
   have hu0 : u ≠ 0 := Nat.ne_of_gt hu
   simpa [boundaryProd] using (padicValNat.mul (p := q) (a := x) (b := u) hx0 hu0)
@@ -2216,7 +2216,7 @@ theorem primePow_dvd_boundaryProd_iff_le_padicVal_sum
     {x u q k : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
     q ^ k ∣ boundaryProd x u ↔
       k ≤ padicValNat q x + padicValNat q u := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hmul : padicValNat q (x * u) = padicValNat q x + padicValNat q u := by
     simpa [boundaryProd] using (padicValNat_boundaryProd_eq_add (q := q) hqP hx hu)
   have hA0 : boundaryProd x u ≠ 0 := by
@@ -2235,7 +2235,7 @@ theorem padicValNat_mul_boundaryProd_kernelRight_eq_add_wrapper
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hqP : Nat.Prime q) :
     padicValNat q (boundaryProd x u * kernelRight d x u) =
       padicValNat q (boundaryProd x u) + padicValNat q (kernelRight d x u) := by
-  haveI : Fact q.Prime := ⟨hqP⟩
+  have : Fact q.Prime := ⟨hqP⟩
   have hA0 : boundaryProd x u ≠ 0 := by
     exact Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
   have hK0 : kernelRight d x u ≠ 0 := by
