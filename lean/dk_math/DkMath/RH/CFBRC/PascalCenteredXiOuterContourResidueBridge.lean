@@ -296,6 +296,33 @@ theorem pascalCenteredXiKernel_ne_zero_of_mem_closedBall_not_mem_disk
   rw [mem_pascalCenteredXiZeroDiskFinset_iff]
   exact ⟨hw, mem_pascalCenteredXiZeros.mpr hzero⟩
 
+/-- The raw finite-pole regularizer is differentiable at any point where the
+Xi kernel is nonzero and which is not one of the selected disk zeros.
+
+This version separates the analytic nonvanishing input from the geometric
+closed-ball argument used by the outer-circle proof.  It is the reusable
+helper needed when a different contour, such as the finite rectangle, has
+its own boundary/nonvanishing contract. -/
+theorem differentiableAt_pascalCenteredXiDiskWeightedRawRegularizer_of_kernel_ne_zero
+    {h : ℂ → ℂ} (hh : Differentiable ℂ h)
+    {R : ℝ} {w : ℂ}
+    (hXi : pascalCenteredRiemannXiKernel w ≠ 0)
+    (hwS : w ∉ pascalCenteredXiZeroDiskFinset R) :
+    DifferentiableAt ℂ (pascalCenteredXiDiskWeightedRawRegularizer h R) w := by
+  have hlog : DifferentiableAt ℂ pascalCenteredXiNegLogDeriv w := by
+    change DifferentiableAt ℂ (fun u => -logDeriv pascalCenteredRiemannXiKernel u) w
+    exact (((analyticAt_pascalCenteredRiemannXiKernel w).deriv.differentiableAt.div
+      (analyticAt_pascalCenteredRiemannXiKernel w).differentiableAt hXi).neg)
+  have hsum : DifferentiableAt ℂ
+      (pascalCenteredXiDiskWeightedPrincipalPartSum h R) w := by
+    unfold pascalCenteredXiDiskWeightedPrincipalPartSum
+    apply DifferentiableAt.fun_sum
+    intro a ha
+    exact differentiableAt_pascalCenteredXiWeightedPrincipalPart_of_ne
+      (by intro hwa; exact hwS (by simpa [hwa] using ha))
+  unfold pascalCenteredXiDiskWeightedRawRegularizer
+  exact (hh w).mul hlog |>.sub hsum
+
 theorem differentiableAt_pascalCenteredXiDiskWeightedRawRegularizer
     {h : ℂ → ℂ} (hh : Differentiable ℂ h)
     {R : ℝ} {w : ℂ} (hw : w ∈ Metric.closedBall 0 R)
