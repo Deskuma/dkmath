@@ -137,7 +137,7 @@ theorem rootSnd_sndCore_coprime
       first | rfl | ring
   have hqu : (q : ℤ) ∣ p.summit.root.fst :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqu6
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (p.summit.root_coordinates_isCoprime.isUnit_of_dvd' hqu hqv)
 
 theorem rootNorm_rootSnd_coprime
@@ -165,7 +165,7 @@ theorem rootNorm_rootSnd_coprime
     simpa [DkMath.NumberTheory.TraceOneQuadratic.norm] using this
   have hqu : (q : ℤ) ∣ p.summit.root.fst :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqu2
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (p.summit.root_coordinates_isCoprime.isUnit_of_dvd' hqu hqv)
 
 theorem rootNorm_sndCore_coprime
@@ -243,7 +243,7 @@ theorem gapRoot_endpointRight_coprime
     have := dvd_add hqgap hqe
     convert this using 1 <;>
       first | rfl | ring
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (p.summit.endpoint_coprime.isUnit_of_dvd' hqc hqe)
 
 theorem gapRoot_gapQuotient_coprime
