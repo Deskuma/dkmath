@@ -158,3 +158,30 @@ git diff --check
 
 新規 XDP-012 source には `sorry`, `admit`, `axiom`, `native_decide` の宣言を
 追加していない。
+
+## 13. XDP-013 migration addendum
+
+XDP-013 の Gate 0 に合わせ、principal-part provider の境界関数を
+`fun s => pascalCenteredXiWeightedPrincipalPart h a
+(pascalOrdinaryToCentered s)` と明示して、ordinary boundary coordinate と
+centered pole coordinate の混同を除去した。この修正は既存 provider の型を
+座標安全な形へ狭めるものであり、circle 側の theorem は変更していない。
+
+XDP-013 では Gate A の ordinary-pole bridge、矩形境界の Mathlib adapter、有限
+vertical/horizontal subdivision、square の内部包含半径、ならびに pole-free
+rectangle の Cauchy--Goursat 消滅までを実装した。これらは
+`PascalCenteredXiRectangleCauchyCharge.lean` に収録している。
+
+ただし Gate E2/E3 の最終 charge
+
+```lean
+pascalRectangleBoundaryIntegral (fun z => z⁻¹)
+  (-δ) δ (-δ) δ = 2 * Real.pi * Complex.I
+```
+
+は未閉鎖である。未解決部分は一般の residue/homotopy 理論ではなく、四辺の
+複素区間積分を `integral_inv_sq_add_sq` と arctangent の正規化へ正確に還元する
+局所的な proof term である。したがって provider の存在、有限 principal-part
+sum、rectangle residue formula、circle=rectangle transport、XDP-011 との合成は
+この checkpoint では意図的に追加していない。数学的に閉じられない境界を
+`sorry` や axiom で隠していない点を明記して、XDP-013 は Partial Green とする。

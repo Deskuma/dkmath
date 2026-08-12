@@ -311,7 +311,8 @@ structure PascalCenteredXiRectanglePrincipalPartChargeProvider
   principalPart_boundary_eq : ∀ {a : ℂ},
     a ∈ pascalCenteredXiZeroDiskFinset W.R →
     pascalSymmetricRectangleBoundaryIntegral
-      (pascalCenteredXiWeightedPrincipalPart h a)
+      (fun s => pascalCenteredXiWeightedPrincipalPart h a
+        (pascalOrdinaryToCentered s))
       W.rectangle.σ W.rectangle.T =
       -(2 * Real.pi * Complex.I) *
         (pascalCenteredXiZeroMultiplicity a : ℂ) * h a
