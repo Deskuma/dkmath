@@ -125,11 +125,22 @@ theorem pascalOrdinaryToCentered_leftEdge_neg_eq_neg_rightEdge
 /-- The horizontal edges are exchanged by `s ↦ 1 - s` together with reversal
 of the horizontal parameter. -/
 theorem pascalSymmetricRectangleBottomEdge_eq_one_sub_topEdge
-    (u _σ T : ℝ) :
+    (u T : ℝ) :
     pascalSymmetricRectangleBottomEdge (1 - u) T =
       1 - pascalSymmetricRectangleTopEdge u T := by
   apply Complex.ext <;>
     simp [pascalSymmetricRectangleBottomEdge, pascalSymmetricRectangleTopEdge]
+
+/-- After translation to centered coordinates, the reflected bottom edge is the
+negative of the top edge. -/
+theorem pascalOrdinaryToCentered_bottomEdge_reflected_eq_neg_topEdge
+    (u T : ℝ) :
+    pascalOrdinaryToCentered
+        (pascalSymmetricRectangleBottomEdge (1 - u) T) =
+      -pascalOrdinaryToCentered (pascalSymmetricRectangleTopEdge u T) := by
+  rw [pascalSymmetricRectangleBottomEdge_eq_one_sub_topEdge]
+  simp [pascalOrdinaryToCentered, criticalLineCenter]
+  ring
 
 /-- The rectangle interior is invariant under the critical reflection. -/
 theorem mem_pascalSymmetricRectangleInterior_one_sub_iff
