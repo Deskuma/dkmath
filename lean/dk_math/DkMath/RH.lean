@@ -50,6 +50,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiExplicitFormulaHorizontalPairing
 import DkMath.RH.CFBRC.PascalCenteredXiExplicitFormulaRectangleResidueTransport
 import DkMath.RH.CFBRC.PascalCenteredXiRectangleCauchyCharge
 import DkMath.RH.CFBRC.PascalCenteredXiFiniteRectangleResidueAssembly
+import DkMath.RH.CFBRC.PascalCenteredXiPrimeRightEdgeTransport
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
