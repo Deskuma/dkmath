@@ -104,10 +104,11 @@ noncomputable def addViaSpec (w : DHNT.Unit) :
 @[simp] theorem addVia_unit (w : DHNT.Unit) (a b : Qty) :
     (extract_g (HarmonizeSpec.harmonizeAdd (addViaSpec w) (embedQty a) (embedQty b))).unit
       = phiUnit w := by
-  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft,
-    ScaleSpec.scaleGKUS, ScaleSpec.scaleUS, gOp, addViaSpec,
-    HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize,
-    encConst, embedQty, mkGWith, extract_g]
+  exact
+    Nat.add_zero
+      (match ⌊w.val⌋ with
+      | Int.ofNat n => n
+      | Int.negSucc a => 0)
 
 /-! ## addVia_natural の KUS 対応 -/
 
@@ -162,10 +163,11 @@ noncomputable def mulViaSpec (w : DHNT.Unit) :
 @[simp] theorem mulVia_unit (w : DHNT.Unit) (a b : Qty) :
     (extract_g (HarmonizeSpec.harmonizeMul (mulViaSpec w) (embedQty a) (embedQty b))).unit
       = phiUnit w := by
-  simp [HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft,
-    ScaleSpec.scaleGKUS, ScaleSpec.scaleUS, gOp, mulViaSpec, addViaSpec,
-    HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize,
-    encConst, embedQty, mkGWith, extract_g]
+  exact
+    Nat.add_zero
+      (match ⌊w.val⌋ with
+      | Int.ofNat n => n
+      | Int.negSucc a => 0)
 
 /-! ## KUS 実体値（absVal 対応） -/
 

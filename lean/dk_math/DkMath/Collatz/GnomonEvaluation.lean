@@ -99,7 +99,8 @@ theorem sum_oddGnomonLayer_eq_square
     (Finset.range n).sum OddGnomonLayer = n ^ 2 := by
   induction n with
   | zero =>
-      simp [OddGnomonLayer]
+      simp only [Finset.range_zero, Finset.sum_empty, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+        zero_pow]
   | succ n ih =>
       rw [Finset.sum_range_succ, ih]
       unfold OddGnomonLayer
