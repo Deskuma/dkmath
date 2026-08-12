@@ -129,6 +129,21 @@ RH、critical-line concentration、defect vanishing、horizontal energy vanishin
 Weil/Li positivity、prime cutoff limit、`T → ∞` は仮定・結論に含めていない。
 finite window の存在も主張していない。
 
+## XDP-014 normalization addendum
+
+XDP-014 により、XDP-013 で `Blocked` としていた局所 square normalization は
+次の actual theorem として閉じた。
+
+```lean
+pascalRectangleBoundaryIntegral_inv_centeredSquare
+pascalRectangleBoundaryIntegral_cauchyKernel_centeredSquare
+```
+
+証明は `integral_inv_sq_add_sq`、`Real.arctan_one`、`Real.arctan_neg` と、四辺の
+complex inverse の rational normal form を使用する。したがって、旧記録の
+「E3 が未閉鎖」という判定は XDP-014 適用前の状態であり、現在の next blocker
+は一般 interior-pole rectangle の 3×3 finite subdivision である。
+
 ## Validation
 
 次を実行し、成功した。

@@ -12,12 +12,12 @@ import Mathlib.Tactic
 # One-pole Cauchy charge for finite rectangles
 
 This module supplies the coordinate bridge, finite four-edge subdivision
-algebra, pole-free rectangle lemma, and strict-inside square geometry needed
-for the XDP-013 micro-checkpoint.  The explicit complex square normalization
-`∮ dz / z = 2 * π * I` is intentionally not axiomatized: it remains the
-documented frontier when the pinned interval-integral normal forms do not
-close the four complex side calculations.  No residue provider is introduced
-under the guise of a theorem.
+algebra, pole-free rectangle lemma, strict-inside square geometry, and the
+explicit square normalization `∮ dz / z = 2 * π * I` for XDP-013/XDP-014.
+The normalization is proved by rational complex inverse identities, opposite
+edge pairing, and the pinned real arctangent integral.  Its translated-square
+companion is proved by four real interval translations.  No general residue,
+winding, homotopy, or contour-deformation framework is introduced.
 -/
 
 noncomputable section
@@ -177,6 +177,272 @@ theorem exists_pascalRectangle_square_radius
     le_trans (min_le_right _ _) (min_le_right _ _)
   refine ⟨δ, by dsimp [δ]; linarith, ?_, ?_, ?_, ?_⟩ <;>
     dsimp [δ] <;> linarith
+
+/-! ## Gate C/D: real scalar normalization -/
+
+/-- The real integral occurring after pairing opposite sides of a centered
+square.  This is the pinned `integral_inv_sq_add_sq` theorem specialized to
+the symmetric interval `[-δ, δ]`, with the arctangent values normalized. -/
+theorem integral_inv_sq_add_sq_neg_delta_delta
+    {δ : ℝ} (hδ : 0 < δ) :
+    (∫ t in (-δ)..δ, (t ^ 2 + δ ^ 2)⁻¹) =
+      Real.pi / (2 * δ) := by
+  calc
+    (∫ t in (-δ)..δ, (t ^ 2 + δ ^ 2)⁻¹) =
+        δ⁻¹ * (Real.arctan (δ / δ) - Real.arctan (-δ / δ)) := by
+      have hfun : (fun t : ℝ => (t ^ 2 + δ ^ 2)⁻¹) =
+          (fun t : ℝ => (δ ^ 2 + t ^ 2)⁻¹) := by
+        funext t
+        congr 1
+        ring
+      rw [hfun]
+      exact integral_inv_sq_add_sq (a := -δ) (b := δ) hδ.ne'
+    _ = Real.pi / (2 * δ) := by
+      rw [div_self hδ.ne', neg_div, div_self hδ.ne']
+      rw [Real.arctan_one, Real.arctan_neg, Real.arctan_one]
+      field_simp
+      ring
+
+/-- Pointwise bottom/top pairing for the inverse on a centered square. -/
+theorem pascalSquare_inv_bottom_top_pointwise
+    {δ x : ℝ} (hδ : 0 < δ) :
+    ((x : ℂ) - δ * Complex.I)⁻¹ - ((x : ℂ) + δ * Complex.I)⁻¹ =
+      (2 * δ * Complex.I) * (((x ^ 2 + δ ^ 2)⁻¹ : ℝ) : ℂ) := by
+  have hden : x ^ 2 + δ ^ 2 ≠ 0 := by
+    nlinarith [sq_nonneg x, sq_nonneg δ]
+  have hdenC : ((x ^ 2 + δ ^ 2 : ℝ) : ℂ) ≠ 0 :=
+    Complex.ofReal_ne_zero.mpr hden
+  have hminus : (x : ℂ) - δ * Complex.I ≠ 0 := by
+    intro h
+    have him := congrArg Complex.im h
+    simp at him
+    linarith
+  have hplus : (x : ℂ) + δ * Complex.I ≠ 0 := by
+    intro h
+    have him := congrArg Complex.im h
+    simp at him
+    linarith
+  rw [Complex.ofReal_inv]
+  field_simp [hminus, hplus, hden, hdenC]
+  ring_nf
+  simp [Complex.ofReal_pow]
+  ring
+
+/-- The paired bottom/top interval is the constant imaginary factor times the
+real scalar integral used in the square normalization. -/
+theorem pascalSquare_inv_bottom_top_integral
+    {δ : ℝ} (hδ : 0 < δ) :
+    (∫ x in (-δ)..δ, ((x : ℂ) - δ * Complex.I)⁻¹) -
+        (∫ x in (-δ)..δ, ((x : ℂ) + δ * Complex.I)⁻¹) =
+      (2 * δ * Complex.I) *
+        (((∫ x in (-δ)..δ, (x ^ 2 + δ ^ 2)⁻¹) : ℝ) : ℂ) := by
+  have hminus : IntervalIntegrable
+      (fun x : ℝ => ((x : ℂ) - δ * Complex.I)⁻¹) volume (-δ) δ := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.inv₀
+    · fun_prop
+    · intro x hx hzero
+      have him := congrArg Complex.im hzero
+      simp at him
+      linarith
+  have hplus : IntervalIntegrable
+      (fun x : ℝ => ((x : ℂ) + δ * Complex.I)⁻¹) volume (-δ) δ := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.inv₀
+    · fun_prop
+    · intro x hx hzero
+      have him := congrArg Complex.im hzero
+      simp at him
+      linarith
+  rw [← intervalIntegral.integral_sub hminus hplus]
+  rw [intervalIntegral.integral_congr (fun x hx =>
+    pascalSquare_inv_bottom_top_pointwise hδ)]
+  rw [intervalIntegral.integral_const_mul, intervalIntegral.integral_ofReal]
+
+/-- Pointwise right/left pairing, including the positive-orientation factor
+`I` carried by the vertical edges. -/
+theorem pascalSquare_inv_right_left_pointwise
+    {δ y : ℝ} (hδ : 0 < δ) :
+    Complex.I * ((δ : ℂ) + y * Complex.I)⁻¹ -
+        Complex.I * ((-δ : ℂ) + y * Complex.I)⁻¹ =
+      (2 * δ * Complex.I) * (((y ^ 2 + δ ^ 2)⁻¹ : ℝ) : ℂ) := by
+  have hden : y ^ 2 + δ ^ 2 ≠ 0 := by
+    nlinarith [sq_nonneg y, sq_nonneg δ]
+  have hdenC : ((y ^ 2 + δ ^ 2 : ℝ) : ℂ) ≠ 0 :=
+    Complex.ofReal_ne_zero.mpr hden
+  have hright : (δ : ℂ) + y * Complex.I ≠ 0 := by
+    intro h
+    have hre := congrArg Complex.re h
+    simp at hre
+    linarith
+  have hleft : (-δ : ℂ) + y * Complex.I ≠ 0 := by
+    intro h
+    have hre := congrArg Complex.re h
+    simp at hre
+    linarith
+  have hright' : (δ : ℂ) + Complex.I * y ≠ 0 := by
+    intro h
+    have hre := congrArg Complex.re h
+    simp at hre
+    linarith
+  have hleft' : (-δ : ℂ) + Complex.I * y ≠ 0 := by
+    intro h
+    have hre := congrArg Complex.re h
+    simp at hre
+    linarith
+  rw [Complex.ofReal_inv]
+  field_simp [hright, hleft, hright', hleft', hden, hdenC]
+  ring_nf
+  simp [Complex.ofReal_pow]
+  ring
+
+/-- The unweighted right/left inverse difference used before applying the
+vertical-edge orientation factor. -/
+theorem pascalSquare_inv_right_left_unweighted_pointwise
+    {δ y : ℝ} (hδ : 0 < δ) :
+    ((δ : ℂ) + y * Complex.I)⁻¹ - ((-δ : ℂ) + y * Complex.I)⁻¹ =
+      (2 * δ) * (((y ^ 2 + δ ^ 2)⁻¹ : ℝ) : ℂ) := by
+  have h := pascalSquare_inv_right_left_pointwise (y := y) hδ
+  apply (mul_left_cancel₀ (by simp : Complex.I ≠ 0))
+  calc
+    Complex.I * (((δ : ℂ) + y * Complex.I)⁻¹ -
+        ((-δ : ℂ) + y * Complex.I)⁻¹) =
+        Complex.I * ((δ : ℂ) + y * Complex.I)⁻¹ -
+          Complex.I * ((-δ : ℂ) + y * Complex.I)⁻¹ := by ring
+    _ = (2 * δ * Complex.I) * (((y ^ 2 + δ ^ 2)⁻¹ : ℝ) : ℂ) := h
+    _ = Complex.I * ((2 * δ) * (((y ^ 2 + δ ^ 2)⁻¹ : ℝ) : ℂ)) := by ring
+
+/-- The paired right/left interval is the same constant imaginary factor
+as the bottom/top pair. -/
+theorem pascalSquare_inv_right_left_integral
+    {δ : ℝ} (hδ : 0 < δ) :
+    Complex.I • (∫ y in (-δ)..δ, ((δ : ℂ) + y * Complex.I)⁻¹) -
+        Complex.I • (∫ y in (-δ)..δ, ((-δ : ℂ) + y * Complex.I)⁻¹) =
+      (2 * δ * Complex.I) *
+        (((∫ y in (-δ)..δ, (y ^ 2 + δ ^ 2)⁻¹) : ℝ) : ℂ) := by
+  have hright : IntervalIntegrable
+      (fun y : ℝ => ((δ : ℂ) + y * Complex.I)⁻¹) volume (-δ) δ := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.inv₀
+    · fun_prop
+    · intro y hy hzero
+      have hre := congrArg Complex.re hzero
+      simp at hre
+      linarith
+  have hleft : IntervalIntegrable
+      (fun y : ℝ => ((-δ : ℂ) + y * Complex.I)⁻¹) volume (-δ) δ := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.inv₀
+    · fun_prop
+    · intro y hy hzero
+      have hre := congrArg Complex.re hzero
+      simp at hre
+      linarith
+  rw [smul_eq_mul, smul_eq_mul]
+  rw [← mul_sub, ← intervalIntegral.integral_sub hright hleft]
+  rw [intervalIntegral.integral_congr (fun y hy =>
+    pascalSquare_inv_right_left_unweighted_pointwise hδ)]
+  rw [intervalIntegral.integral_const_mul, intervalIntegral.integral_ofReal]
+  ring
+
+/-- The principal square normalization: the positively oriented boundary
+integral of the totalized inverse around a square centered at the origin is
+`2 * π * I`. -/
+theorem pascalRectangleBoundaryIntegral_inv_centeredSquare
+    {δ : ℝ} (hδ : 0 < δ) :
+    pascalRectangleBoundaryIntegral (fun z : ℂ => z⁻¹)
+      (-δ) δ (-δ) δ = 2 * Real.pi * Complex.I := by
+  unfold pascalRectangleBoundaryIntegral
+  simp only [Complex.ofReal_neg]
+  simp only [neg_mul, ← sub_eq_add_neg]
+  change
+    ((∫ x in (-δ)..δ, ((x : ℂ) - δ * Complex.I)⁻¹) -
+        (∫ x in (-δ)..δ, ((x : ℂ) + δ * Complex.I)⁻¹)) +
+      Complex.I • (∫ y in (-δ)..δ, ((δ : ℂ) + y * Complex.I)⁻¹) -
+      Complex.I • (∫ y in (-δ)..δ, ((-δ : ℂ) + y * Complex.I)⁻¹) =
+    2 * Real.pi * Complex.I
+  rw [pascalSquare_inv_bottom_top_integral hδ]
+  rw [add_sub_assoc]
+  rw [pascalSquare_inv_right_left_integral hδ]
+  rw [integral_inv_sq_add_sq_neg_delta_delta hδ]
+  field_simp [hδ.ne']
+  norm_num [Complex.ofReal_mul, Complex.ofReal_inv]
+  field_simp [Complex.ofReal_ne_zero.mpr hδ.ne']
+
+/-- Translation of the square normalization to an arbitrary complex pole.
+The proof uses only the four real interval translation identities; no general
+contour-translation or residue framework is introduced. -/
+theorem pascalRectangleBoundaryIntegral_cauchyKernel_centeredSquare
+    {p : ℂ} {δ : ℝ} (hδ : 0 < δ) :
+    pascalRectangleBoundaryIntegral (fun z : ℂ => (z - p)⁻¹)
+      (p.re - δ) (p.re + δ) (p.im - δ) (p.im + δ) =
+      2 * Real.pi * Complex.I := by
+  unfold pascalRectangleBoundaryIntegral
+  simp only [Complex.ofReal_sub, Complex.ofReal_add]
+  have hbottom :
+      (∫ x in (p.re - δ)..(p.re + δ),
+        ((x : ℂ) + (p.im - δ) * Complex.I - p)⁻¹) =
+      ∫ x in (-δ)..δ, ((x : ℂ) - δ * Complex.I)⁻¹ := by
+    have hfun : (fun x : ℝ =>
+        ((x : ℂ) + (p.im - δ) * Complex.I - p)⁻¹) =
+        (fun x : ℝ => (((x - p.re : ℝ) : ℂ) - δ * Complex.I)⁻¹) := by
+      funext x
+      apply congrArg (fun z : ℂ => z⁻¹)
+      apply Complex.ext <;> simp
+    rw [hfun]
+    have h := intervalIntegral.integral_comp_sub_right
+      (f := fun x : ℝ => ((x : ℂ) - δ * Complex.I)⁻¹)
+      (a := p.re - δ) (b := p.re + δ) p.re
+    simpa using h
+  have htop :
+      (∫ x in (p.re - δ)..(p.re + δ),
+        ((x : ℂ) + (p.im + δ) * Complex.I - p)⁻¹) =
+      ∫ x in (-δ)..δ, ((x : ℂ) + δ * Complex.I)⁻¹ := by
+    have hfun : (fun x : ℝ =>
+        ((x : ℂ) + (p.im + δ) * Complex.I - p)⁻¹) =
+        (fun x : ℝ => (((x - p.re : ℝ) : ℂ) + δ * Complex.I)⁻¹) := by
+      funext x
+      apply congrArg (fun z : ℂ => z⁻¹)
+      apply Complex.ext <;> simp
+    rw [hfun]
+    have h := intervalIntegral.integral_comp_sub_right
+      (f := fun x : ℝ => ((x : ℂ) + δ * Complex.I)⁻¹)
+      (a := p.re - δ) (b := p.re + δ) p.re
+    simpa using h
+  have hright :
+      (∫ y in (p.im - δ)..(p.im + δ),
+        ((p.re + δ : ℂ) + y * Complex.I - p)⁻¹) =
+      ∫ y in (-δ)..δ, ((δ : ℂ) + y * Complex.I)⁻¹ := by
+    have hfun : (fun y : ℝ =>
+        ((p.re + δ : ℂ) + y * Complex.I - p)⁻¹) =
+        (fun y : ℝ => ((δ : ℂ) + (y - p.im) * Complex.I)⁻¹) := by
+      funext y
+      apply congrArg (fun z : ℂ => z⁻¹)
+      apply Complex.ext <;> simp
+    rw [hfun]
+    have h := intervalIntegral.integral_comp_sub_right
+      (f := fun y : ℝ => ((δ : ℂ) + y * Complex.I)⁻¹)
+      (a := p.im - δ) (b := p.im + δ) p.im
+    simpa using h
+  have hleft :
+      (∫ y in (p.im - δ)..(p.im + δ),
+        ((p.re - δ : ℂ) + y * Complex.I - p)⁻¹) =
+      ∫ y in (-δ)..δ, ((-δ : ℂ) + y * Complex.I)⁻¹ := by
+    have hfun : (fun y : ℝ =>
+        ((p.re - δ : ℂ) + y * Complex.I - p)⁻¹) =
+        (fun y : ℝ => ((-δ : ℂ) + (y - p.im) * Complex.I)⁻¹) := by
+      funext y
+      apply congrArg (fun z : ℂ => z⁻¹)
+      apply Complex.ext <;> simp
+    rw [hfun]
+    have h := intervalIntegral.integral_comp_sub_right
+      (f := fun y : ℝ => ((-δ : ℂ) + y * Complex.I)⁻¹)
+      (a := p.im - δ) (b := p.im + δ) p.im
+    simpa using h
+  rw [hbottom, htop, hright, hleft]
+  simpa only [pascalRectangleBoundaryIntegral, Complex.ofReal_neg, neg_mul,
+    ← sub_eq_add_neg] using
+    (pascalRectangleBoundaryIntegral_inv_centeredSquare (δ := δ) hδ)
 
 /-! ## Gate E1: pole-free rectangle -/
 
