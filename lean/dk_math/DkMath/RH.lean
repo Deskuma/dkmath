@@ -33,6 +33,7 @@ import DkMath.RH.CFBRC.PascalZetaZeroMultiplicityBridge
 import DkMath.RH.CFBRC.PascalZetaLocalCircleChargeBridge
 import DkMath.RH.CFBRC.PascalZetaWeightedSecondMomentBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorRadialContourCF2DBridge
+import DkMath.RH.CFBRC.MellinCenteredMirrorAdapter
 import DkMath.RH.CFBRC.PascalCanonicalXiFixedObservableBridge
 import DkMath.RH.CFBRC.PascalCenteredXiMultiplicityLocalChargeBridge
 import DkMath.RH.CFBRC.PascalCenteredXiGlobalZeroDiskBridge
