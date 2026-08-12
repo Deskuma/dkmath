@@ -185,3 +185,12 @@ pascalRectangleBoundaryIntegral (fun z => z⁻¹)
 sum、rectangle residue formula、circle=rectangle transport、XDP-011 との合成は
 この checkpoint では意図的に追加していない。数学的に閉じられない境界を
 `sorry` や axiom で隠していない点を明記して、XDP-013 は Partial Green とする。
+
+## XDP-016 follow-up
+
+XDP-016 で、この report で未閉鎖としていた finite rectangle bridge は
+`PascalCenteredXiFiniteRectangleResidueAssembly.lean` により閉じた。有限
+principal-part sum charge、raw decomposition assembly、fixed-Xi rectangle
+formula、circle = rectangle、および XDP-011 finite skeleton が actual theorem
+となっている。有限高さのままの closure であり、極限・horizontal decay・prime
+cutoff exchange・defect vanishing・RH は引き続き対象外である。

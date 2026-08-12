@@ -126,3 +126,21 @@ git diff --check
 
 新規 theorem 群は pinned Lean / Mathlib でコンパイルする。新規実装に
 `sorry`、`admit`、`axiom`、`native_decide` は追加していない。
+
+## XDP-016 follow-up
+
+XDP-016 により、ここで OPEN としていた Gates H–K の finite-height 部分は
+次の actual theorem として閉じた。
+
+```lean
+pascalCenteredXiRectangleIntegral_diskWeightedPrincipalPartSum_eq
+pascalCenteredXiWeightedRectangleContribution_eq
+pascalCenteredXiWeightedRectangleContribution_eq_outerContourMass
+pascalCenteredXiFiniteExplicitFormulaSkeleton
+```
+
+有限和の rectangle edge-integrability、raw decomposition、fixed-Xi residue
+assemblyを実際に証明しており、circle theoremの読み替えは行っていない。
+XDP-016 の結果判定は `Ideal Green through Gate H` である。なお `T → ∞`、
+horizontal decay、prime cutoff exchange、defect vanishing、RH は引き続き未導入
+である。

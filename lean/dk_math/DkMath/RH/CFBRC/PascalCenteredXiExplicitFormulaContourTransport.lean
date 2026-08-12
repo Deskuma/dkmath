@@ -109,7 +109,8 @@ structure PascalExplicitFormulaContourTransportProvider
       pascalCenteredToOrdinary z ∈
         pascalSymmetricRectangleInterior W.rectangle.σ W.rectangle.T
   boundary_integrable :
-    PascalSymmetricRectangleBoundaryIntegrable F
+    PascalSymmetricRectangleBoundaryIntegrable
+      (fun s => F (pascalOrdinaryToCentered s))
       W.rectangle.σ W.rectangle.T
   circle_integrable : CircleIntegrable F 0 W.R
   crossed_local_charge : ℂ
