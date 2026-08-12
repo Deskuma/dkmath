@@ -48,10 +48,30 @@ def pascalExplicitFormulaElementaryTerm
     (h : ℂ → ℂ) (z : ℂ) : ℂ :=
   h z * pascalXiElementaryLogDerivCorrection (criticalLineCenter + z)
 
-/-- The four-edge rectangle contribution of a function. -/
-def pascalExplicitFormulaRectangleContribution
+/-- The raw four-edge rectangle contribution of a function whose argument is
+already in ordinary coordinates.  This low-level form is retained only for
+geometric callers; centered observables must use the translated wrapper below.
+-/
+def pascalExplicitFormulaOrdinaryRectangleContribution
     (F : ℂ → ℂ) (W : PascalCenteredXiContourTransportWindow) : ℂ :=
   pascalSymmetricRectangleBoundaryIntegral F W.rectangle.σ W.rectangle.T
+
+/-- The four-edge rectangle contribution of a centered-coordinate function.
+
+Every ordinary edge point is translated by `s ↦ s - 1/2` before `F` is
+evaluated.  This is the canonical rectangle contribution used by the XDP-009
+transport ledger and prevents the type-invisible centered/ordinary mismatch.
+-/
+def pascalExplicitFormulaCenteredRectangleContribution
+    (F : ℂ → ℂ) (W : PascalCenteredXiContourTransportWindow) : ℂ :=
+  pascalExplicitFormulaOrdinaryRectangleContribution
+    (fun s => F (pascalOrdinaryToCentered s)) W
+
+/-- Compatibility name for the transport ledger: its function argument is
+centered, so the rectangle is translated before evaluation. -/
+def pascalExplicitFormulaRectangleContribution
+    (F : ℂ → ℂ) (W : PascalCenteredXiContourTransportWindow) : ℂ :=
+  pascalExplicitFormulaCenteredRectangleContribution F W
 
 /-- The centered-circle contribution of a function. -/
 def pascalExplicitFormulaCircleContribution

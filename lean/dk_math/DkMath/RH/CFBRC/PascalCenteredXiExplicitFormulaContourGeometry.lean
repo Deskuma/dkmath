@@ -39,6 +39,20 @@ open scoped Interval Topology
 noncomputable def pascalCenteredToOrdinary (z : ℂ) : ℂ :=
   criticalLineCenter + z
 
+/-- The centered coordinate associated with an ordinary coordinate. -/
+noncomputable def pascalOrdinaryToCentered (s : ℂ) : ℂ :=
+  s - criticalLineCenter
+
+/-- The ordinary-to-centered map is a left inverse of the centered map. -/
+theorem pascalOrdinaryToCentered_pascalCenteredToOrdinary (z : ℂ) :
+    pascalOrdinaryToCentered (pascalCenteredToOrdinary z) = z := by
+  simp [pascalOrdinaryToCentered, pascalCenteredToOrdinary]
+
+/-- The centered-to-ordinary map is a left inverse of the ordinary map. -/
+theorem pascalCenteredToOrdinary_pascalOrdinaryToCentered (s : ℂ) :
+    pascalCenteredToOrdinary (pascalOrdinaryToCentered s) = s := by
+  simp [pascalOrdinaryToCentered, pascalCenteredToOrdinary]
+
 /-- The ordinary critical circle of radius `R`. -/
 def pascalOrdinaryCriticalCircle (R : ℝ) : Set ℂ :=
   Metric.sphere criticalLineCenter R
@@ -97,6 +111,16 @@ theorem pascalSymmetricRectangleLeftEdge_eq_one_sub_rightEdge
       1 - pascalSymmetricRectangleRightEdge σ t := by
   apply Complex.ext <;>
     simp [pascalSymmetricRectangleLeftEdge, pascalSymmetricRectangleRightEdge]
+
+/-- After translation to centered coordinates, the reflected left edge is the
+negative of the right edge. -/
+theorem pascalOrdinaryToCentered_leftEdge_neg_eq_neg_rightEdge
+    (σ t : ℝ) :
+    pascalOrdinaryToCentered (pascalSymmetricRectangleLeftEdge σ (-t)) =
+      -pascalOrdinaryToCentered (pascalSymmetricRectangleRightEdge σ t) := by
+  rw [pascalSymmetricRectangleLeftEdge_eq_one_sub_rightEdge]
+  simp [pascalOrdinaryToCentered, criticalLineCenter]
+  ring
 
 /-- The horizontal edges are exchanged by `s ↦ 1 - s` together with reversal
 of the horizontal parameter. -/

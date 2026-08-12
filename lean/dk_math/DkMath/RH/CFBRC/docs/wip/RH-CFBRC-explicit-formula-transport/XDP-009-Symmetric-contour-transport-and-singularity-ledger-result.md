@@ -64,6 +64,17 @@ prime-power endpoint を、critical-line symmetric rectangle の契約へ接続�
 従って本 checkpoint は provider を仮定した ledger transport までであり、
 provider の存在を偽装する `sorry`、axiom、`native_decide` は追加していない。
 
+## XDP-010 coordinate migration addendum
+
+XDP-009 の初版では、centered-coordinate named term を ordinary rectangle
+edge に直接渡せる型上の mismatch が残っていた。XDP-010 で
+`pascalOrdinaryToCentered` とその相互逆写像を追加し、
+`pascalExplicitFormulaCenteredRectangleContribution` を canonical wrapper
+とした。従って transport ledger の rectangle contribution は ordinary edge
+point を `s - criticalLineCenter` で centered coordinate に戻してから named
+term を評価する。raw ordinary-coordinate contribution は低レベル監査用に
+別名で保持している。
+
 ## 検証
 
 `lean/dk_math` から次を実行し、成功した。
