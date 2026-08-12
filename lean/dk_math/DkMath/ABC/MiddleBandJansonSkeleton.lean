@@ -22,8 +22,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- -------------------------------------------------------
 
@@ -472,7 +473,7 @@ theorem hoeffding_downward_indep01
     simp [phi, X, Finset.sum_sub_distrib]
   have sets_eq : {ω | t ≤ ∑ i, ((fun x => -x) ∘ phi i ∘ fun ω => indR (S i) ω) ω} = {ω | t ≤ ∑ i, - X i ω} := by
     ext ω
-    simp only [Set.mem_setOf_eq]
+    simp only [Set.mem_ofPred_eq]
     rw [sums_eq ω]
 
   -- Rewrite the RHS exponential first (needs sum_val and c_eq) and then apply the set equality

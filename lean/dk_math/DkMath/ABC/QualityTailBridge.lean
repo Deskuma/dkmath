@@ -23,8 +23,9 @@ namespace DkMath.ABC
 open DkMath.Basic.Nat
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- Final delta = 0.435 composition wrapper -/
 theorem delta_0435_final {a b c : ℕ} (_ : a + b = c)

@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 lemma pow_two_mono {a b : ℕ} (h : a ≤ b) : 2 ^ a ≤ 2 ^ b := by
   apply Nat.pow_le_pow_right

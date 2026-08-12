@@ -23,8 +23,9 @@ namespace DkMath.ABC
 open DkMath.Basic.Nat
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- `adjBadCount` は対角 `diagBadCount` に 2 倍スケールで抑え込める -/
 lemma adjBadCount_le_diag (δ : ℝ) (X : ℕ) :
@@ -56,7 +57,7 @@ lemma adjBadCount_le_diag (δ : ℝ) (X : ℕ) :
           2 * n + 1 = (2 * n) + 1 := by rw [add_comm]
           _ ≤ (2 * X) + 1 := by
             have h2 : 2 * n ≤ 2 * X := Nat.mul_le_mul_left 2 (by linarith)
-            exact add_le_add h2 (by linarith)
+            exact Nat.add_le_add h2 (by linarith)
           _ = 2 * X + 1 := by rw [add_comm]
       have : n + 1 ≤ 2 * n + 1 := by nlinarith
       exact le_trans this h2n1_le

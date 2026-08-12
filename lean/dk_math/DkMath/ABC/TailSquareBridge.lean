@@ -17,8 +17,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- TailBound γ for triple (a,b,c): twoTail c ≤ (rad (a * b)) ^ γ (in ℝ). -/
 def TailBound (γ : ℝ) (a b c : ℕ) : Prop :=

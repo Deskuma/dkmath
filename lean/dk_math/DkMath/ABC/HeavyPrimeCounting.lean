@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- For a given prime p and threshold k, count n ≤ X where v_p(n(n+1)) ≥ k.
     Such n must satisfy either n ≡ 0 (mod p^k) or n+1 ≡ 0 (mod p^k).

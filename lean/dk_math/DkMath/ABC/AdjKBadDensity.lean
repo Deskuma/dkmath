@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- k = 1 の場合の安全なデモ
 進めること：いまわっちがやった変更の要点と次の作業を手短に報告するぞ。

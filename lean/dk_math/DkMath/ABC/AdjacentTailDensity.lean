@@ -26,8 +26,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- Union bound over non-heavy primes
    Sum Chernoff bounds over all primes not in S_heavy -/

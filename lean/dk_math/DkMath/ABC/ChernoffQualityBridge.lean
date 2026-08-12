@@ -20,8 +20,9 @@ namespace Chernoff
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 lemma abc_c_pos {a b c : ℕ} (hrel : a + b = c)
     (hcoprime : IsCoprime a b)

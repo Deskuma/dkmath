@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- **Dyadic composition lemma (abstract form).**
 -- If every block ad#mits a bound of the shape `C · (2^k)^(α+ε)`, then

@@ -16,8 +16,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 lemma markov_card_bound
   (X : ℕ) (Y : ℕ → ℝ) (hY : ∀ n ≤ X, 0 ≤ Y n) {A : ℝ} (hA : 0 < A) :

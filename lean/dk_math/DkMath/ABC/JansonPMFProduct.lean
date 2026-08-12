@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- Use Mathlib's PMF (probability mass function) utilities to construct discrete product measures
 -- We'll import the PMF modules needed for Bernoulli distributions and constructions
