@@ -159,3 +159,12 @@ git diff --check
 `[propext, Classical.choice, Quot.sound]` の範囲である。wrapper build には
 既存 unrelated warning として `DkMath.NumberTheory.ZsigmondyCyclotomicResearch`
 の `declaration uses sorry` が残るが、XDP-013 source 自身には該当宣言がない。
+
+## XDP-015 follow-up
+
+後続 XDP-015 で、旧記録の Gate F blocker は actual theorem として閉じた。
+任意の interior-pole rectangle charge、ordinary pole localization、
+coordinate-safe principal-part provider の三つが Green である。finite
+principal-part sum 以降の rectangle transport と explicit-formula skeleton は、
+既存の circle-only finite-sum API と rectangle edge-integrability/raw-decomposition
+bridge の不足を理由に、未証明のまま明示的に保留している。

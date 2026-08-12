@@ -151,3 +151,13 @@ git diff --check
 新規 source の禁止宣言検索結果は空である。wrapper build に残る既存 unrelated
 warning は `DkMath.NumberTheory.ZsigmondyCyclotomicResearch` の
 `declaration uses sorry` のみであり、XDP-014 source から分離されている。
+
+## XDP-015 follow-up
+
+後続 XDP-015 で、ここに記録した 3×3 subdivision blocker は解消された。
+任意の strictly interior pole に対する
+`pascalRectangleBoundaryIntegral_cauchyKernel_eq_two_pi_I_of_mem_open` と、
+coordinate-safe principal-part provider の existence theorem が
+`PascalCenteredXiRectangleCauchyCharge.lean` に追加されている。XDP-015 の
+結果判定は `Strong Green through Gate G` であり、finite principal-part sum の
+rectangle transport 以降は別の未閉鎖 API として記録されている。
