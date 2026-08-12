@@ -265,6 +265,50 @@ private theorem pascalRightEdgeCutoff_norm_le_majorant
         (norm_pascalPrimePowerPHZFiniteUpTo_rightEdge_le_verticalMajorant hσ X t)
         (norm_nonneg _)
 
+/-- The ordinary-zeta right-edge limit integrand is interval-integrable.
+
+This companion to the cutoff convergence theorem records the limit-side
+integrability supplied by the same finite-interval dominated-convergence data.
+It is proved by taking the almost-everywhere measurable pointwise limit and
+using the majorant with `IntervalIntegrable.mono_fun'`; interval integrals are
+therefore never treated as integrable merely because they are totalized.
+-/
+theorem intervalIntegrable_pascalXiOrdinaryZetaRightEdgeIntegrand
+    {h : ℂ → ℂ} (hh : Differentiable ℂ h)
+    {σ T : ℝ} (hσ : 1 < σ) :
+    IntervalIntegrable
+      (pascalXiOrdinaryZetaRightEdgeIntegrand h σ)
+      volume (-T) T := by
+  let bound : ℝ → ℝ := fun t =>
+    ‖h (pascalOrdinaryToCentered
+      (pascalSymmetricRectangleRightEdge σ t))‖ *
+      pascalVonMangoldtVerticalMajorant σ
+  have hbound : IntervalIntegrable bound volume (-T) T := by
+    apply (continuous_pascalCenteredRightEdgeWeight hh σ).norm.mul
+      continuous_const |>.intervalIntegrable
+  let μ : Measure ℝ := volume.restrict (Ι (-T) T)
+  have hmeas : ∀ X : ℕ,
+      AEStronglyMeasurable
+        (fun t : ℝ => pascalPrimePowerRightEdgeCutoffIntegrand h σ X t) μ := by
+    intro X
+    exact (continuous_pascalPrimePowerRightEdgeCutoffIntegrand hh σ X).aestronglyMeasurable
+  have hlim : ∀ᵐ t : ℝ ∂μ,
+      Tendsto (fun X => pascalPrimePowerRightEdgeCutoffIntegrand h σ X t) atTop
+        (nhds (pascalXiOrdinaryZetaRightEdgeIntegrand h σ t)) := by
+    filter_upwards [] with t
+    exact tendsto_pascalPrimePowerRightEdgeCutoffIntegrand hσ
+  have htarget : AEStronglyMeasurable
+      (pascalXiOrdinaryZetaRightEdgeIntegrand h σ) μ := by
+    exact aestronglyMeasurable_of_tendsto_ae atTop hmeas hlim
+  have hnorm : ∀ᵐ t : ℝ ∂μ,
+      ‖pascalXiOrdinaryZetaRightEdgeIntegrand h σ t‖ ≤ bound t := by
+    filter_upwards [] with t
+    apply le_of_tendsto
+      (tendsto_norm.comp (tendsto_pascalPrimePowerRightEdgeCutoffIntegrand hσ))
+    exact Eventually.of_forall fun X =>
+      pascalRightEdgeCutoff_norm_le_majorant hσ X t
+  exact hbound.mono_fun' htarget hnorm
+
 /-! ## Gate E: finite interval dominated convergence -/
 
 /-- Finite right-edge cutoff integrals converge to the ordinary-zeta right-edge
