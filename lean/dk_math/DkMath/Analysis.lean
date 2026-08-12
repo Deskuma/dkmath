@@ -16,6 +16,7 @@ import DkMath.Analysis.MellinCriticalMirror
 import DkMath.Analysis.MellinCompactSupport
 import DkMath.Analysis.MellinCompactSupportHolomorphic
 import DkMath.Analysis.MellinCenteredDilation
+import DkMath.Analysis.MellinMultiplicativeApproxIdentity
 import DkMath.Analysis.DkReal
 import DkMath.Analysis.DkReal.SemanticCF2D
 import DkMath.Analysis.DkReal.SemanticCF2DPhase

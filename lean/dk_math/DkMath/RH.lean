@@ -40,6 +40,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiGlobalZeroDiskBridge
 import DkMath.RH.CFBRC.PascalCenteredXiSafeRadiusAnnulusBridge
 import DkMath.RH.CFBRC.PascalCenteredXiMellinWeightedOuterContourBridge
 import DkMath.RH.CFBRC.PascalCenteredXiMellinSecondDifferenceBridge
+import DkMath.RH.CFBRC.PascalCenteredXiMellinQuadraticRealizationBridge
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
