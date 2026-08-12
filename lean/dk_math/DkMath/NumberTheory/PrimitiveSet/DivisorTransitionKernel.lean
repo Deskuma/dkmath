@@ -1847,9 +1847,8 @@ theorem sampleTenWitnessProviderWeight_hitMass_le_one :
         change
           sampleTenWitnessProviderWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
-        simp [sampleTenWitnessProviderWeightChannelProvider,
-          sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+        change sampleTenDivisorTransitionKernel.index 10 = ({2, 5} : Finset ℕ)
+        exact sampleTenDivisorTransitionKernel_index_ten)).weightedHitMass
       ({2, 5} : Finset ℕ) ≤ 1 := by
   exact sampleTenWitnessProviderWeightChannelProvider
     |>.weightedHitMass_le_const_applyAtToSourceControlled 10
@@ -1858,9 +1857,8 @@ theorem sampleTenWitnessProviderWeight_hitMass_le_one :
         change
           sampleTenWitnessProviderWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
-        simp [sampleTenWitnessProviderWeightChannelProvider,
-          sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenToyWeightSourceControlledFamily])
+        change sampleTenDivisorTransitionKernel.index 10 = ({2, 5} : Finset ℕ)
+        exact sampleTenDivisorTransitionKernel_index_ten)
       (primitiveOn_pair (by norm_num) (by norm_num))
       (by norm_num)
       (by
@@ -1878,9 +1876,8 @@ theorem sampleTenRatioBaseWeight_hitMass_le_one :
         change
           sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
-        simp [sampleTenRatioWeightChannelProvider,
-          sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+        change sampleTenDivisorTransitionKernel.index 10 = ({2, 5} : Finset ℕ)
+        exact sampleTenDivisorTransitionKernel_index_ten)).weightedHitMass
       ({2, 5} : Finset ℕ) ≤ 1 := by
   exact sampleTenPrimePowerWitnessProvider
     |>.ratioBaseWeight_hitMass_le_const
@@ -1892,9 +1889,8 @@ theorem sampleTenRatioBaseWeight_hitMass_le_one :
         change
           sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
-        simp [sampleTenRatioWeightChannelProvider,
-          sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenToyWeightSourceControlledFamily])
+        change sampleTenDivisorTransitionKernel.index 10 = ({2, 5} : Finset ℕ)
+        exact sampleTenDivisorTransitionKernel_index_ten)
       (primitiveOn_pair (by norm_num) (by norm_num))
       (by norm_num)
       (by
@@ -1913,9 +1909,8 @@ theorem sampleTenRatioBaseWeight_route_summary :
         change
           sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
-        simp [sampleTenRatioWeightChannelProvider,
-          sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+        change sampleTenDivisorTransitionKernel.index 10 = ({2, 5} : Finset ℕ)
+        exact sampleTenDivisorTransitionKernel_index_ten)).weightedHitMass
       ({2, 5} : Finset ℕ) ≤ 1 :=
   sampleTenRatioBaseWeight_hitMass_le_one
 

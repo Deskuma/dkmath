@@ -115,7 +115,8 @@ This alias is useful for callers that do not want the named
 theorem sum_odd_eq_square
     (n : ℕ) :
     (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2 := by
-  simpa [OddGnomonLayer] using sum_oddGnomonLayer_eq_square n
+  convert sum_oddGnomonLayer_eq_square n using 1
+  rfl
 
 /--
 A shifted gnomon band from `P` of length `u`.

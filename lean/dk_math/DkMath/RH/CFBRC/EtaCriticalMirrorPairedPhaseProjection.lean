@@ -86,7 +86,11 @@ theorem etaCriticalMirrorProjectedDefectPairedPartial_eq_sum
   unfold etaCriticalMirrorProjectedDefectPairedPartial
   unfold etaCriticalMirrorDefectPairedPartial
   rw [Finset.mul_sum]
-  simp [etaCriticalMirrorProjectedDefectPairTerm]
+  induction K with
+  | zero => simp
+  | succ K ih =>
+      simp only [Finset.sum_range_succ, Complex.add_re, ih]
+      exact (add_left_inj (ω * etaCriticalMirrorDefectPairTerm s K).re).mpr rfl
 
 /-- The projected even defect endpoint is exactly the projected paired partial sum. -/
 theorem etaCriticalMirrorProjectedDefectEndpoint_two_mul_eq_pairedPartial

@@ -410,8 +410,7 @@ theorem
   refine ⟨solution, ?_⟩
   apply unscalePrimePowerSolution_toCoordinates
   change actual.toCoordinates = cell.model.weightedScale cell.scale
-  calc
-    actual.toCoordinates = cell.weighted := rfl
-    _ = cell.model.weightedScale cell.scale := cell.weighted_eq
+  change cell.weighted = cell.model.weightedScale cell.scale
+  exact cell.weighted_eq
 
 end DkMath.FLT.Seven

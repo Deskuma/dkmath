@@ -327,9 +327,11 @@ lemma toyNat_measure_descend_eq_zero (c b : ℕ) :
   intro n
   exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred
     (F := toyNatGEisensteinDescentFrame c b)
-    (hpred := by
+    (
+      hpred := by
       intro s hs
-      simp [toyNatGEisensteinDescentFrame])
+      simp only [toyNatGEisensteinDescentFrame, id]
+    )
     n
 
 /-- `primitiveSized` フレームは `measure` 回の反復で測度 0 に到達する。 -/
@@ -1113,7 +1115,8 @@ lemma not_primitiveSquareWitness_of_descentStep {c b : ℕ}
   have hq0_min :
       ∀ q : ℕ, PrimitiveOnS0 c b q ∧ q ^ 2 ∣ S0_nat c b → q0 ≤ q := by
     intro q hq
-    simpa [q0] using (Nat.find_min' hWitness hq)
+    dsimp [q0]
+    exact Nat.find_min' hWitness hq
   rcases hStep (q := q0) hq0.1 hq0.2 with ⟨q1, hq1Prim, hq1Sq, hq1Lt⟩
   have hq0_le_q1 : q0 ≤ q1 := hq0_min q1 ⟨hq1Prim, hq1Sq⟩
   exact (Nat.not_lt_of_ge hq0_le_q1) hq1Lt

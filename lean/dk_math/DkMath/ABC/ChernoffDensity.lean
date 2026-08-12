@@ -68,7 +68,7 @@ lemma bad_set_density_bound_param
         Finset.filter (fun n => n ≤ X ∧ Excess p (γ_values p) n) (Finset.Icc 0 X) := by
     intro n hn
     simp only [Finset.mem_filter, Finset.mem_Icc, zero_le, true_and, Finset.mem_biUnion,
-      and_self_left] at hn ⊢
+      _root_.and_self_left] at hn ⊢
     rcases hn with ⟨hnIcc, hbad⟩
     unfold Bad_ε at hbad
     rcases hbad with ⟨p, hpge3, hpPrime, hExcess⟩

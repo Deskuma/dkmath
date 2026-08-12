@@ -68,8 +68,9 @@ theorem normalizedWeight_subProbability
     (a : α)
     (hcap : 0 < K.capacity a) :
     (K.children a).sum (fun b => K.cost a b / K.capacity a) ≤ 1 := by
-  simpa [normalizedOutgoing, normalizedWeight] using
-    K.normalizedOutgoing_le_one a hcap
+  rw [← Finset.sum_div]
+  apply (div_le_iff₀ hcap).mpr
+  simpa [outgoingCost] using K.outgoingCost_le_capacity a
 
 end CapacityKernel
 

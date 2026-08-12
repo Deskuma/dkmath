@@ -83,9 +83,12 @@ theorem pascalPrimeEulerProductUpTo_eq_eulerZetaFinite
       eulerZetaFinite (pascalPrimeEulerSubtypeSupportUpTo N) s := by
   simp only [pascalPrimeEulerProductUpTo, eulerZetaFinite,
     pascalPrimeEulerSubtypeSupportUpTo]
-  simpa using
-    (Finset.prod_attach (pascalPrimeCoordinateSupportUpTo N)
-      (fun p : ℕ => eulerZetaFactor p s)).symm
+  rw [Finset.prod_map]
+  convert (Finset.prod_attach (pascalPrimeCoordinateSupportUpTo N)
+      (fun p : ℕ => eulerZetaFactor p s)).symm using 1
+  apply Finset.prod_congr rfl
+  intro x hx
+  rfl
 
 /-- Finite prime-mirror log energy on the same Pascal-born support. -/
 noncomputable def pascalPrimeMirrorLogEnergyUpTo (N : ℕ) (s : ℂ) : ℝ :=

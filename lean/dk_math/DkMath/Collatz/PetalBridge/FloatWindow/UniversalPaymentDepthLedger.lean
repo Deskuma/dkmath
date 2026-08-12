@@ -497,9 +497,10 @@ theorem canonicalEndpointCapacityLevelSlots_seven_zero :
   classical
   rw [canonicalEndpointCapacityLevelSlots, canonicalEndpointCapacityDepthSlots,
     sevenDepth_endpoint_zero]
+  rw [orbitWindowHeight_eq_s_iterateT]
   norm_num [orbitWindowHeight_eq_s_iterateT, s, iterateT, T, sevenDepthOdd,
     mkOddNat, threeNPlusOne, pow2, sevenDepth_v2_22, sevenDepth_v2_34,
-    sevenDepth_v2_52]
+    sevenDepth_v2_52, sevenDepth_v2_8, sevenDepth_v2_14, sevenDepth_v2_40]
 
 /-- The second seven-regression block has only its immediate depth-one claim. -/
 theorem canonicalPaymentClaimDepths_seven_one :
@@ -523,9 +524,10 @@ theorem canonicalEndpointCapacityLevelSlots_seven_one :
   classical
   rw [canonicalEndpointCapacityLevelSlots, canonicalEndpointCapacityDepthSlots,
     sevenDepth_endpoint_one]
+  rw [orbitWindowHeight_eq_s_iterateT]
   norm_num [orbitWindowHeight_eq_s_iterateT, s, iterateT, T, sevenDepthOdd,
     mkOddNat, threeNPlusOne, pow2, sevenDepth_v2_22, sevenDepth_v2_34,
-    sevenDepth_v2_52, sevenDepth_v2_40]
+    sevenDepth_v2_52, sevenDepth_v2_40, sevenDepth_v2_8, sevenDepth_v2_14]
   ext d
   simp
   omega

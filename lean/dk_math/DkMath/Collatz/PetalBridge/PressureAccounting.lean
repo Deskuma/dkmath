@@ -1564,7 +1564,9 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_length
     (hsorted : SourcePressureIntervalPulseAddressFamilySortedBefore F) :
     (sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
       F hsorted).items.length = F.items.length := by
-  simp [sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily]
+  unfold sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily
+  exact sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList_length
+    F.items hsorted
 
 /-- Budget wrapper for a sorted explicit interval-pulse-address family. -/
 theorem sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_sum_le_neg_length
@@ -1701,7 +1703,11 @@ theorem sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList_le
     (hsorted : SourcePressureLocalIslandWitnessListSortedBefore L) :
     (sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
       L hsorted).items.length = L.length := by
-  simp [sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList]
+  unfold sourcePressureAccountedIntervalFamily_of_sortedLocalIslandWitnessList
+  change SourcePressureIntervalPulseAddressFamilySortedBefore
+    (sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList L) at hsorted
+  rw [sourcePressureAccountedIntervalFamily_of_sortedPulseAddressFamily_length]
+  exact sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList_length L
 
 /--
 Budget wrapper for a sorted explicit local-island witness list.

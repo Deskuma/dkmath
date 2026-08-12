@@ -36,8 +36,8 @@ theorem etaCriticalMirrorTransportDefectEndpoint_eq_sum_defectTerm
     (N : ℕ) (s : ℂ) :
     etaCriticalMirrorTransportDefectEndpoint N s =
       (Finset.range N).sum (etaCriticalMirrorDefectTerm s) := by
-  simpa [etaCriticalMirrorDefectTerm] using
-    etaCriticalMirrorTransportDefectEndpoint_eq_sum N s
+  convert etaCriticalMirrorTransportDefectEndpoint_eq_sum N s using 1
+  rfl
 
 /-- Common rotation and real projection commute with the finite defect sum. -/
 theorem etaCriticalMirrorProjectedDefectEndpoint_eq_sum
@@ -48,7 +48,12 @@ theorem etaCriticalMirrorProjectedDefectEndpoint_eq_sum
   unfold etaCriticalMirrorProjectedDefectEndpoint
   rw [etaCriticalMirrorTransportDefectEndpoint_eq_sum_defectTerm]
   rw [Finset.mul_sum]
-  simp [etaCriticalMirrorProjectedDefectTerm]
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [Finset.sum_range_succ]
+      simp only [Complex.add_re, ih]
+      exact (add_left_inj (ω * etaCriticalMirrorDefectTerm s N).re).mpr rfl
 
 /-- Adding one index appends exactly one projected defect term. -/
 theorem etaCriticalMirrorProjectedDefectEndpoint_succ
