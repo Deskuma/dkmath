@@ -57,6 +57,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiMellinQuadraticArithmeticLimit
 import DkMath.RH.CFBRC.PascalCenteredXiArithmeticDefectRepresentation
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideSignAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideWholeSurfaceEnergyAudit
+import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideMirrorAudit
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
