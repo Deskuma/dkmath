@@ -282,4 +282,32 @@ theorem mellinQuadraticBoxGramQuadraticForm_re_nonneg
   rw [mellinQuadraticBoxGramQuadraticForm_re_eq_energy hε]
   exact mellinQuadraticBoxGramEnergy_nonneg hε z c
 
+theorem mellinQuadraticBoxMultiplier_conj
+    {ε : ℝ} (hε : 0 < ε) (u : ℂ) :
+    mellinQuadraticBoxMultiplier ε (starRingEnd ℂ u) =
+      starRingEnd ℂ (mellinQuadraticBoxMultiplier ε u) := by
+  rw [mellinQuadraticBoxMultiplier_eq_logAverage hε,
+    mellinQuadraticBoxMultiplier_eq_logAverage hε]
+  simp only [map_mul, map_inv₀, Complex.conj_ofReal]
+  simp only [intervalIntegral.intervalIntegral_eq_integral_uIoc]
+  have hne : -ε ≤ ε := by linarith
+  simp only [if_pos hne, one_smul]
+  rw [← integral_conj]
+  apply congrArg (fun x : ℂ => ((2 * ε : ℝ)⁻¹ : ℂ) * x)
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards [] with t
+  rw [← Complex.exp_conj]
+  congr 1
+  simp [Complex.conj_ofReal, mul_comm]
+
+theorem mellinQuadraticBoxGramKernel_conj_symm
+    {ε : ℝ} (hε : 0 < ε) (z w : ℂ) :
+    mellinQuadraticBoxGramKernel ε w z =
+      starRingEnd ℂ (mellinQuadraticBoxGramKernel ε z w) := by
+  unfold mellinQuadraticBoxGramKernel
+  simp only [map_mul]
+  rw [← mellinQuadraticBoxMultiplier_conj hε (z + starRingEnd ℂ w)]
+  simp only [map_add, starRingEnd_apply, star_star]
+  ring_nf
+
 end DkMath.Analysis
