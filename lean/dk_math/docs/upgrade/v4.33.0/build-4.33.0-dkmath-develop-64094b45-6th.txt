@@ -1,0 +1,10 @@
+⚠ [8832/9584] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+⚠ [9284/9584] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+⚠ [9290/9584] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [9308/9584] Replayed DkMath.FLT.Kummer.CyclotomicPrincipalization
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+⚠ [9313/9584] Replayed DkMath.CosmicFormula.TriominoFLT
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`

@@ -1,0 +1,121 @@
+⚠ [8855/9584] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+⚠ [9198/9584] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+⚠ [9204/9584] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [9450/9584] Built DkMath.CosmicFormula.TriominoFLT (56s)
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+⚠ [9454/9584] Built DkMath.FLT.Kummer.CyclotomicPrincipalization (63s)
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+✖ [9478/9584] Building DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction (20s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean:10:0: file: DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
+error: DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean:265:24: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  @Membership.mem ?m.6 (Finset ?m.6) SetLike.instMembership { val := ?m.8, nodup := ?m.9 } ?m.7
+in the target expression
+  @Membership.mem RawLowHeightClass (Finset RawLowHeightClass) SetLike.instMembership
+    { val := ↑RawLowHeightClass.enumList, nodup := RawLowHeightClass.enumList_nodup } x✝
+x✝ : RawLowHeightClass
+⊢ x✝ ∈ { val := ↑RawLowHeightClass.enumList, nodup := RawLowHeightClass.enumList_nodup }
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    RawLowHeightClass.enumList_nodup
+  has type
+    RawLowHeightClass.enumList.Nodup
+  but is expected to have type
+    (↑RawLowHeightClass.enumList).Nodup
+  in the application
+    { val := ↑RawLowHeightClass.enumList, nodup := RawLowHeightClass.enumList_nodup }
+error: DkMath/Collatz/PetalBridge/FloatWindow/RawLowSignatureObstruction.lean:1220:32: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  C.signature ?x
+in the target expression
+  C.signature ⟨67, ⋯⟩ = fixedLowUpperBoundaryThreeSignature 1 b
+case hcloseA
+C : RelationalFiniteSignedTransitionPotentialCertificate OddNat (FixedLowUpperBoundaryThreeSignature 1)
+hstep : ∀ (x : OddNat), C.Step x (T x)
+hsignature : ∀ (x : OddNat), C.signature x = fixedLowUpperBoundaryThreeSignature 1 x
+hweight : ∀ (x : OddNat), C.actualWeight x (T x) = rawSignedWidthWeight x (T x)
+a : OddNat := ⟨89, ⋯⟩
+b : OddNat := ⟨39, ⋯⟩
+c : OddNat := ⟨59, ⋯⟩
+⊢ C.signature ⟨67, ⋯⟩ = fixedLowUpperBoundaryThreeSignature 1 b
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨67, ⋯⟩
+  has type
+    { n // n % 2 = 1 }
+  but is expected to have type
+    OddNat
+  in the application
+    C.signature ⟨67, ⋯⟩
+error: Lean exited with code 1
+✖ [9484/9584] Building DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelProjectionTail (8.3s)
+info: DkMath/RH/CFBRC/EtaCriticalMirrorPairedAbelProjectionTail.lean:11:0: file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelProjectionTail
+error: DkMath/RH/CFBRC/EtaCriticalMirrorPairedAbelProjectionTail.lean:88:60: unsolved goals
+K : ℕ
+s : ℂ
+⊢ ∑ i ∈ Finset.range K, s.im * (etaCriticalMirrorRotatedDefectPairTerm s i).im =
+    (Finset.range K).sum (etaCriticalMirrorRotatedDefectPairProjection s)
+error: Lean exited with code 1
+✖ [9557/9584] Building DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership (15s)
+info: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:11:0: file: DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:221:8: typeclass instance problem is stuck
+  Semiring ?m.39
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Semiring` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:235:8: typeclass instance problem is stuck
+  Semiring ?m.39
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Semiring` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:984:8: typeclass instance problem is stuck
+  Semiring ?m.35
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Semiring` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:996:8: typeclass instance problem is stuck
+  Semiring ?m.35
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Semiring` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:1773:10: typeclass instance problem is stuck
+  Semiring ?m.198
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Semiring` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: DkMath/FLT/Seven/SevenRamifiedFusionOrientedCarrierValuationOwnership.lean:1777:4: Type mismatch
+  Ideal.mul_le_left
+has type
+  ?m.216 * ?m.217 ≤ ?m.216
+but is expected to have type
+  J * K ≤ K
+error: Lean exited with code 1
+✖ [9570/9584] Building DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate (7.9s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFiniteCertificate.lean:9:0: file: DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate
+error: DkMath/Collatz/PetalBridge/FloatWindow/CanonicalSourceAgeFiniteCertificate.lean:703:22: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  @Membership.mem ?m.6 (Finset ?m.6) SetLike.instMembership { val := ?m.8, nodup := ?m.9 } ?m.7
+in the target expression
+  @Membership.mem CanonicalSourceAgeFrontierDriftClass (Finset CanonicalSourceAgeFrontierDriftClass)
+    SetLike.instMembership
+    { val := ↑CanonicalSourceAgeFrontierDriftClass.enumList,
+      nodup := CanonicalSourceAgeFrontierDriftClass.enumList_nodup }
+    x✝
+x✝ : CanonicalSourceAgeFrontierDriftClass
+⊢ x✝ ∈
+    { val := ↑CanonicalSourceAgeFrontierDriftClass.enumList,
+      nodup := CanonicalSourceAgeFrontierDriftClass.enumList_nodup }
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    CanonicalSourceAgeFrontierDriftClass.enumList_nodup
+  has type
+    CanonicalSourceAgeFrontierDriftClass.enumList.Nodup
+  but is expected to have type
+    (↑CanonicalSourceAgeFrontierDriftClass.enumList).Nodup
+  in the application
+    { val := ↑CanonicalSourceAgeFrontierDriftClass.enumList,
+      nodup := CanonicalSourceAgeFrontierDriftClass.enumList_nodup }
+error: Lean exited with code 1
+Some required targets logged failures:
+- DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction
+- DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelProjectionTail
+- DkMath.FLT.Seven.SevenRamifiedFusionOrientedCarrierValuationOwnership
+- DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeFiniteCertificate
