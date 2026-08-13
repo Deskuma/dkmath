@@ -75,11 +75,24 @@ def conjugateEval
   a.eval.comp
     (starRingEnd SevenCyclotomicDegreeSixInt.Ring)
 
+@[simp] theorem conjugateEval_apply
+    (a : CyclotomicLinearPrimeAddress p q)
+    (x : SevenCyclotomicDegreeSixInt.Ring) :
+    a.conjugateEval x = a.eval (star x) := by
+  rfl
+
 /-- The second degree-one prime above the same real-cubic address. -/
 def conjugateEvalKernel
     (a : CyclotomicLinearPrimeAddress p q) :
     Ideal SevenCyclotomicDegreeSixInt.Ring :=
   RingHom.ker a.conjugateEval
+
+@[simp] theorem mem_conjugateEvalKernel_iff
+    (a : CyclotomicLinearPrimeAddress p q)
+    (x : SevenCyclotomicDegreeSixInt.Ring) :
+    x ∈ a.conjugateEvalKernel ↔ a.eval (star x) = 0 := by
+  change x ∈ RingHom.ker a.conjugateEval ↔ _
+  rw [RingHom.mem_ker, conjugateEval_apply]
 
 /-- The conjugate linear factor belongs to the second kernel. -/
 theorem conjugateCarrier_mem_conjugateEvalKernel
@@ -270,39 +283,46 @@ theorem conjugatePrimeProduct_le_realPrimeFiberIdeal
     a.evalKernel * a.conjugateEvalKernel ≤
       a.realPrimeFiberIdeal := by
   let : Fact (Nat.Prime q) := ⟨a.quotientAddress.prime⟩
+  rw [Ideal.mul_eq_inf_of_coprime
+    a.evalKernel_sup_conjugateEvalKernel]
   intro x hx
-  have horiented : x ∈ a.evalKernel :=
-    Ideal.mul_le_right hx
-  have hconjugate : x ∈ a.conjugateEvalKernel :=
-    Ideal.mul_le_left hx
-  change a.eval x = 0 at horiented
-  change a.eval (star x) = 0 at hconjugate
-  change
-    a.quotientAddress.evalAlphaRoot x.re +
-        (a.quotientAddress.ratio : ZMod q) *
-          a.quotientAddress.evalAlphaRoot x.im = 0 at horiented
-  change
-    a.quotientAddress.evalAlphaRoot (star x).re +
-        (a.quotientAddress.ratio : ZMod q) *
-          a.quotientAddress.evalAlphaRoot (star x).im = 0 at hconjugate
+  have horiented : x ∈ a.evalKernel := hx.1
+  have hconjugate : x ∈ a.conjugateEvalKernel := hx.2
+  have horiented' : a.eval x = 0 := by
+    exact (a.mem_evalKernel_iff x).mp horiented
+  have hconjugate' : a.eval (star x) = 0 := by
+    exact (a.mem_conjugateEvalKernel_iff x).mp hconjugate
+  rw [a.eval_apply] at horiented'
+  rw [a.eval_apply] at hconjugate'
   rw [QuadraticAlgebra.re_star, QuadraticAlgebra.im_star,
-    map_add, map_mul, map_sub, map_one, map_neg] at hconjugate
-  rw [a.quotientAddress.evalAlphaRoot_alpha] at hconjugate
+    map_add, map_mul, map_sub, map_one, map_neg] at hconjugate'
+  rw [a.quotientAddress.evalAlphaRoot_alpha] at hconjugate'
   simp only
-    [RamifiedSignedRootDepthPacket.QuotientPrimeMuSevenAddress.beta] at hconjugate
+      [RamifiedSignedRootDepthPacket.QuotientPrimeMuSevenAddress.beta] at hconjugate'
+  have hconjugate'' :
+      a.quotientAddress.evalAlphaRoot x.re +
+          (a.quotientAddress.ratio⁻¹ : ZMod q) *
+            a.quotientAddress.evalAlphaRoot x.im = 0 := by
+    convert hconjugate' using 1; ring
   have himEq :
       ((a.quotientAddress.ratio : ZMod q) -
           (a.quotientAddress.ratio⁻¹ : ZMod q)) *
         a.quotientAddress.evalAlphaRoot x.im = 0 := by
-    linear_combination horiented - hconjugate
+    have hmul :
+        (a.quotientAddress.ratio : ZMod q) *
+            a.quotientAddress.evalAlphaRoot x.im =
+          (a.quotientAddress.ratio⁻¹ : ZMod q) *
+            a.quotientAddress.evalAlphaRoot x.im := by
+      exact add_left_cancel (horiented'.trans hconjugate''.symm)
+    rw [sub_mul, hmul, sub_self]
   have him :
       a.quotientAddress.evalAlphaRoot x.im = 0 :=
     (mul_eq_zero.mp himEq).resolve_left
       (sub_ne_zero.mpr a.ratio_val_ne_inv)
   have hre :
       a.quotientAddress.evalAlphaRoot x.re = 0 := by
-    rw [him, mul_zero, add_zero] at horiented
-    exact horiented
+    rw [him, mul_zero, add_zero] at horiented'
+    exact horiented'
   rw [realPrimeFiberIdeal]
   have hreMap :
       ofReal x.re ∈
