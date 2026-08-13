@@ -124,6 +124,100 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude
     pascalXiElementaryLogDerivCorrection
       (pascalSymmetricRectangleRightEdge W.rectangle.σ t)
 
+private theorem continuous_pascalCenteredXiPrimeSideQuadraticizationPHZ
+    (σ : ℝ) (X : ℕ) :
+    Continuous (fun t : ℝ =>
+      pascalPrimePowerPHZFiniteUpTo X
+        (pascalSymmetricRectangleRightEdge σ t)) := by
+  have hpath : Continuous (fun t : ℝ =>
+      pascalSymmetricRectangleRightEdge σ t) := by
+    change Continuous (fun t : ℝ => (σ : ℂ) + (t : ℂ) * Complex.I)
+    fun_prop
+  have hterm : ∀ n : ℕ, Continuous (fun t : ℝ =>
+      LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
+        (pascalSymmetricRectangleRightEdge σ t) n) := by
+    intro n
+    by_cases hn : n = 0
+    · subst n
+      have hz : (fun t : ℝ =>
+          LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
+            (pascalSymmetricRectangleRightEdge σ t) 0) =
+        (fun _ : ℝ => 0) := by
+        funext t
+        rw [vonMangoldt_LSeries_term_eq]
+        simp
+      rw [hz]
+      exact continuous_const
+    · letI : NeZero (n : ℂ) := ⟨by
+        exact_mod_cast hn⟩
+      have hnterm : (fun t : ℝ =>
+          LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
+            (pascalSymmetricRectangleRightEdge σ t) n) =
+        (fun t : ℝ =>
+          (ArithmeticFunction.vonMangoldt n : ℂ) *
+            ((n : ℂ) ^
+              (-(pascalSymmetricRectangleRightEdge σ t)))) := by
+        funext t
+        rw [vonMangoldt_LSeries_term_eq]
+      rw [hnterm]
+      convert continuous_const.mul
+          ((continuous_const_cpow (n : ℂ)).comp
+            (continuous_neg.comp hpath)) using 1
+      all_goals (ext t; rfl)
+  have hsum : Continuous (fun t : ℝ =>
+      ∑ n ∈ Finset.range (X + 1),
+        LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
+          (pascalSymmetricRectangleRightEdge σ t) n) := by
+    apply continuous_finsetSum
+    intro n hn
+    exact hterm n
+  have heq : (fun t : ℝ =>
+      pascalPrimePowerPHZFiniteUpTo X
+        (pascalSymmetricRectangleRightEdge σ t)) =
+      (fun t : ℝ => ∑ n ∈ Finset.range (X + 1),
+        LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
+          (pascalSymmetricRectangleRightEdge σ t) n) := by
+    funext t
+    exact pascalPrimePowerPHZFiniteUpTo_eq_LSeries_partialSum X _
+  rw [heq]
+  exact hsum
+
+theorem pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude_intervalIntegrable
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X)
+      volume (-W.rectangle.T) W.rectangle.T := by
+  have hprime : IntervalIntegrable
+      (fun t : ℝ =>
+        pascalPrimePowerPHZFiniteUpTo X
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t))
+      volume (-W.rectangle.T) W.rectangle.T :=
+    (continuous_pascalCenteredXiPrimeSideQuadraticizationPHZ
+      W.rectangle.σ X).intervalIntegrable (μ := volume)
+        (-W.rectangle.T) W.rectangle.T
+  have hnonprime :=
+    intervalIntegrable_pascalXiNonPrimeRightEdgeIntegrand
+      (h := fun _ : ℂ => (1 : ℂ)) (by fun_prop) W
+  have hcorrection : IntervalIntegrable
+      (fun t : ℝ =>
+        pascalXiArchimedeanLogDeriv
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t) +
+        pascalXiElementaryLogDerivCorrection
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t))
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have hscaled := hnonprime.mul_const (-Complex.I)
+    apply hscaled.congr
+    intro t ht
+    simp only [pascalXiNonPrimeRightEdgeIntegrand,
+      pascalXiArchimedeanRightEdgeIntegrand,
+      pascalXiElementaryRightEdgeIntegrand]
+    ring_nf
+    simp [Complex.I_sq]
+  apply hprime.add hcorrection |>.congr
+  intro t ht
+  simp only [pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude]
+  ring
+
 /-- The deoriented vertical source surface before the differential factor
 `Complex.I` is inserted. -/
 noncomputable def pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand
@@ -185,6 +279,48 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationBoxFeature
     Complex.exp
       ((u : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
     pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t
+
+/-- The continuous part of the box feature.  The source amplitude is kept
+separate so that its finite-rectangle integrability can be supplied by the
+right-edge explicit-formula API. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationBoxKernel
+    (W : PascalCenteredXiResidueTransportWindow) (t u : ℝ) : ℂ :=
+  (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) ^ 2 *
+    Complex.exp
+      ((u : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)
+
+theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_eq_kernel_mul_amplitude
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u =
+      pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t := by
+  rfl
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel
+    (W : PascalCenteredXiResidueTransportWindow) :
+    Continuous (Function.uncurry
+      (pascalCenteredXiPrimeSideQuadraticizationBoxKernel W)) := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
+      pascalOrdinaryToCentered
+    change Continuous (fun t : ℝ =>
+      ((W.rectangle.σ : ℂ) + (t : ℂ) * Complex.I) - criticalLineCenter)
+    fun_prop
+  have hnode' : Continuous (fun p : ℝ × ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W p.1) :=
+    hnode.comp continuous_fst
+  have hu : Continuous (fun p : ℝ × ℝ => (p.2 : ℂ)) :=
+    Complex.continuous_ofReal.comp continuous_snd
+  have hexp : Continuous (fun p : ℝ × ℝ =>
+      Complex.exp
+        ((p.2 : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W p.1)) :=
+    Complex.continuous_exp.comp (hu.mul hnode')
+  change Continuous (fun p : ℝ × ℝ =>
+    (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W p.1) ^ 2 *
+      Complex.exp
+        ((p.2 : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W p.1))
+  exact (hnode'.pow 2).mul hexp
 
 /-- Exact logarithmic-box expansion of the linear source surface. -/
 theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_integral_eq_weight_mul_amplitude
@@ -672,11 +808,230 @@ theorem pascalCenteredXiPrimeSideQuadraticization_weighted_source_eq_normalized_
           pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
           rfl
 
-/-! The remaining linear-source bridge needs an actual finite-rectangle
-integrability/Fubini certificate.  This marker records that the product and
-polarization results above do not silently provide that exchange. -/
-inductive PascalCenteredXiPrimeSideQuadraticizationLinearAggregateExchangeGap : Prop
-  | currentFiniteRectangleIntegrability :
-      PascalCenteredXiPrimeSideQuadraticizationLinearAggregateExchangeGap
+/-! ## Gate P2-A: finite rectangle certificate -/
+
+/-- The `t`-only source amplitude lifts to the finite product rectangle. -/
+theorem pascalCenteredXiPrimeSideQuadraticization_verticalAmplitude_product_integrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X p.1 *
+          (1 : ℂ))
+      (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
+      volume := by
+  have ht : Integrable
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X)
+      (volume.restrict (Set.uIoc (-W.rectangle.T) W.rectangle.T)) :=
+    (intervalIntegrable_iff.mp
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude_intervalIntegrable W X))
+  have hu : Integrable (fun _ : ℝ => (1 : ℂ))
+      (volume.restrict (Set.uIoc (-ε) ε)) := by
+    exact intervalIntegrable_iff.mp
+      (intervalIntegrable_const (μ := volume) (a := -ε) (b := ε) :
+        IntervalIntegrable (fun _ : ℝ => (1 : ℂ)) volume (-ε) ε)
+  change Integrable
+    (fun p : ℝ × ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X p.1 *
+        (1 : ℂ))
+    (volume.restrict
+      (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε))
+  rw [Measure.volume_eq_prod, ← Measure.prod_restrict]
+  exact ht.mul_prod hu
+
+/-- The complete box feature is integrable on every finite rectangle.  The
+kernel is continuous on a compact closed rectangle, while the source
+amplitude is supplied by the finite right-edge interval certificate above. -/
+theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_integrableOn_rectangle
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntegrableOn
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X))
+      (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
+      volume := by
+  let A : Set ℝ := Set.uIoc (-W.rectangle.T) W.rectangle.T
+  let B : Set ℝ := Set.uIoc (-ε) ε
+  let K : Set (ℝ × ℝ) :=
+    Set.uIcc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIcc (-ε) ε
+  have hamp : IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X p.1 *
+          (1 : ℂ))
+      (A ×ˢ B) volume := by
+    simpa only [A, B] using
+      pascalCenteredXiPrimeSideQuadraticization_verticalAmplitude_product_integrable
+        ε W X
+  have hK : IsCompact K := by
+    exact (isCompact_uIcc.prod isCompact_uIcc)
+  have hABK : A ×ˢ B ⊆ K := by
+    exact Set.prod_mono Set.uIoc_subset_uIcc Set.uIoc_subset_uIcc
+  have hmul : IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationBoxKernel W p.1 p.2 *
+          (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X p.1 *
+            (1 : ℂ)))
+      (A ×ˢ B) volume :=
+    IntegrableOn.continuousOn_mul_of_subset
+      (continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel W).continuousOn
+      hamp hK (measurableSet_uIoc.prod measurableSet_uIoc) hABK
+  have heq :
+      Function.uncurry
+          (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X) =
+        (fun p : ℝ × ℝ =>
+          pascalCenteredXiPrimeSideQuadraticizationBoxKernel W p.1 p.2 *
+            pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X p.1) := by
+    funext p
+    rfl
+  rw [heq]
+  simpa only [A, B, mul_one] using hmul
+
+theorem pascalCenteredXiPrimeSideQuadraticization_weighted_source_eq_normalized_aggregate
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
+  exact
+    pascalCenteredXiPrimeSideQuadraticization_weighted_source_eq_normalized_aggregate_of_rectangle_integrable
+      hε W X
+      (pascalCenteredXiPrimeSideQuadraticization_boxFeature_integrableOn_rectangle
+        ε W X)
+
+theorem pascalCenteredXiPrimeSideQuadraticization_deorientedVerticalIntegrand_eq_legacy
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand ε W X t =
+      pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand ε W X t := by
+  rw [pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand,
+    pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand_eq_weight_mul_decomposed
+      ε W X t,
+    ← pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+  simp only [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode,
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude]
+
+theorem pascalCenteredXiMellinQuadraticComplexVerticalSurface_eq_normalized_aggregate
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
+      pascalOrdinaryToCentered
+    change Continuous (fun t : ℝ =>
+      ((W.rectangle.σ : ℂ) + (t : ℂ) * Complex.I) - criticalLineCenter)
+    fun_prop
+  have hweight : Continuous (fun t : ℝ =>
+      mellinQuadraticBoxWeight ε
+        (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+    have hlegacy : Continuous
+        (pascalCenteredXiMellinSecondDifferenceWeight ε 0) :=
+      (pascalCenteredXiMellinSecondDifferenceWeight_differentiable hε).continuous
+    have heq : (fun t : ℝ =>
+        mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) =
+        (fun t : ℝ =>
+          pascalCenteredXiMellinSecondDifferenceWeight ε 0
+            (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+      funext t
+      rw [pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+    rw [heq]
+    exact hlegacy.comp hnode
+  have hprime : IntervalIntegrable
+      (pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand ε W X)
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have hphz :=
+      (continuous_pascalCenteredXiPrimeSideQuadraticizationPHZ
+        W.rectangle.σ X).intervalIntegrable (μ := volume)
+          (-W.rectangle.T) W.rectangle.T
+    have hmul := hphz.continuousOn_mul hweight.continuousOn
+    apply hmul.congr
+    intro t ht
+    dsimp
+    rw [← pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+    simpa only [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode] using
+      (pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand_eq ε W X t).symm
+  have harchAmplitude : IntervalIntegrable
+      (fun t : ℝ =>
+        pascalXiArchimedeanLogDeriv
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t))
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have harch := intervalIntegrable_pascalXiArchimedeanRightEdgeIntegrand
+      (h := fun _ : ℂ => (1 : ℂ)) (by fun_prop) W
+    have hscaled := harch.mul_const (-Complex.I)
+    apply hscaled.congr
+    intro t ht
+    simp only [pascalXiArchimedeanRightEdgeIntegrand]
+    ring_nf
+    simp [Complex.I_sq]
+  have helemAmplitude : IntervalIntegrable
+      (fun t : ℝ =>
+        pascalXiElementaryLogDerivCorrection
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t))
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have helem := intervalIntegrable_pascalXiElementaryRightEdgeIntegrand
+      (h := fun _ : ℂ => (1 : ℂ)) (by fun_prop) W
+    have hscaled := helem.mul_const (-Complex.I)
+    apply hscaled.congr
+    intro t ht
+    simp only [pascalXiElementaryRightEdgeIntegrand]
+    ring_nf
+    simp [Complex.I_sq]
+  have harch : IntervalIntegrable
+      (pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand ε W)
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have hmul := harchAmplitude.continuousOn_mul hweight.continuousOn
+    apply hmul.congr
+    intro t ht
+    dsimp
+    rw [← pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+    simpa only [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode] using
+      (pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand_eq ε W t).symm
+  have helem : IntervalIntegrable
+      (pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand ε W)
+      volume (-W.rectangle.T) W.rectangle.T := by
+    have hmul := helemAmplitude.continuousOn_mul hweight.continuousOn
+    apply hmul.congr
+    intro t ht
+    dsimp
+    rw [← pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+    simpa only [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode] using
+      (pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand_eq ε W t).symm
+  calc
+    pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X =
+        pascalCenteredXiMellinQuadraticPrimeDeorientedSurface ε W X +
+            pascalCenteredXiMellinQuadraticArchimedeanDeorientedSurface ε W +
+          pascalCenteredXiMellinQuadraticElementaryDeorientedSurface ε W := by
+      symm
+      exact pascalCenteredXiMellinQuadraticDeorientedSurfaces_eq_complexVerticalSurface
+        ε W X
+    _ = ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand ε W X t := by
+      unfold pascalCenteredXiMellinQuadraticPrimeDeorientedSurface
+        pascalCenteredXiMellinQuadraticArchimedeanDeorientedSurface
+        pascalCenteredXiMellinQuadraticElementaryDeorientedSurface
+        pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand
+      rw [← intervalIntegral.integral_add hprime harch,
+        ← intervalIntegral.integral_add (hprime.add harch) helem]
+    _ = ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand ε W X t := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with t ht
+      exact (pascalCenteredXiPrimeSideQuadraticization_deorientedVerticalIntegrand_eq_legacy
+        hε W X t).symm
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
+      exact pascalCenteredXiPrimeSideQuadraticization_weighted_source_eq_normalized_aggregate
+        hε W X
+
+/-! P2-A and the finite vertical aggregate bridge are now concrete.  The
+top-horizontal and radial terms remain outside this vertical identity, and no
+prime-side sign or RH consequence is asserted. -/
 
 end DkMath.RH.CFBRCProjection
