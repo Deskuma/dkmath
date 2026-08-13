@@ -502,8 +502,9 @@ lemma card_filter_range_sub_mod3_toNat_eq_of_dvd (m c k₁ k₂ : ℕ)
       =
     ((Finset.range m).filter
       (fun b : ℕ => ((((b : ℤ) - (c : ℤ)) % 3).toNat) = k₂)).card := by
-  simpa [Nat.ModEq, sub_toNat_eq_iff_mod, hk₁, hk₂] using
-    (card_filter_range_mod3_eq_of_dvd m (c + k₁) (c + k₂) hm)
+  set_option backward.isDefEq.respectTransparency.types false in
+    simpa [Nat.ModEq, sub_toNat_eq_iff_mod, hk₁, hk₂] using
+      (card_filter_range_mod3_eq_of_dvd m (c + k₁) (c + k₂) hm)
 
 /-- 添字付き `biUnion` に対する filter card 分解。 -/
 lemma card_biUnion_filter_eq_sum_card_filter_indexed
@@ -1216,9 +1217,10 @@ lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :
     (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val
       = ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) := by
-  simpa [piCoord, piCoordOn, axis0, axis1,
-    DkMath.CellDim.ofNatCellEmb, DkMath.CellDim.piToFunEmb] using
-    color3_val hd (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)
+  convert color3_val hd
+      (((DkMath.CellDim.piToFunEmb d).trans
+        (DkMath.CellDim.ofNatCellEmb d)) f) using 1
+  rfl
 
 /-- `pi` 側での `color3 = k` filter card を、座標差 mod3 条件へ変換。 -/
 lemma card_filter_color3_eq_piCoord {d : ℕ} (hd : 2 ≤ d)

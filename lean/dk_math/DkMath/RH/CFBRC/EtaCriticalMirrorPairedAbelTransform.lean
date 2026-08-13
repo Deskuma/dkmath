@@ -54,15 +54,15 @@ theorem etaCriticalMirrorRotatedDefectPairedPartial_eq_abel
       etaCriticalMirrorPairedAbelBoundaryTerm K s -
         (Finset.range (K - 1)).sum
           (etaCriticalMirrorPairedFrameCorrectionTerm s) := by
-  simpa [etaCriticalMirrorRotatedDefectPairedPartial,
-    etaCriticalMirrorRotatedDefectPairTerm,
-    etaCriticalMirrorPairedAbelBoundaryTerm,
-    etaCriticalMirrorPairedFrameCorrectionTerm,
-    etaCriticalMirrorDefectPairedPartial, smul_eq_mul] using
-    (Finset.sum_range_by_parts
+  convert (Finset.sum_range_by_parts
       (etaPairBaseRotation s)
       (etaCriticalMirrorDefectPairTerm s)
-      K)
+      K) using 1 <;>
+    simp only [etaCriticalMirrorPairedAbelBoundaryTerm, etaCriticalMirrorDefectPairedPartial,
+      etaCriticalMirrorPairedFrameCorrectionTerm, smul_eq_mul, sub_right_inj] <;>
+    apply Finset.sum_congr rfl <;>
+      intro x hx <;>
+      rfl
 
 /-- The Abel boundary rotation does not change the defect-partial norm. -/
 theorem norm_etaCriticalMirrorPairedAbelBoundaryTerm

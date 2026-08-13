@@ -704,7 +704,7 @@ prefix-pressure hypothesis.
 theorem sourcePressureMarginInt_zero (n : OddNat) (d : ℕ) :
     SourcePressureMarginInt n 0 d = 0 := by
   simp [SourcePressureMarginInt, orbitWindowContinuationSiblingMassPow2,
-    orbitWindowRetentionMassPow2]
+    orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2]
 
 /-- Pressure at the start of block `q` is the contribution of blocks strictly
 before `q`. -/
@@ -1048,7 +1048,7 @@ theorem card_selectedPressureCarrier_eq_driftImage_add_spare
         i ∈ canonicalSelectedPressureCarrier n k}) from Finset.subset_univ _)
   rw [Finset.card_univ, Fintype.card_coe] at hsplit
   unfold canonicalSelectedDriftSpareCarrier
-  omega
+  simpa [Nat.add_comm] using hsplit.symm
 
 /-- Actual positive-drift images bucketed by selected depth.  The sigma keeps
 the block index, while the inner subtype keeps the source time. -/
@@ -3275,6 +3275,8 @@ theorem abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
   have hval := congrArg Fin.val heq
   dsimp [abstractSaturatedUnitEmbeddingLowerHalf,
     abstractDyadicDemandEmbeddingUpperHalf] at hval
+  change i.val = 2 ^ (canonicalBlockLength n (k + 1) - 2) + j.val at hval
+  have hi : i.val < 2 := i.isLt
   omega
 
 /-! ## Unified local saturated-successor discharge

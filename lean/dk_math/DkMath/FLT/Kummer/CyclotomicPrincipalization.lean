@@ -1859,7 +1859,7 @@ lemma zeta_sub_one_prime_of_p
   have h := IsPrimitiveRoot.zeta_sub_one_prime (k := 0) hζ'
   have heq : hζ'.toInteger = hζ.toInteger := by
     unfold IsPrimitiveRoot.toInteger
-    simp only
+    exact RingOfIntegers.eq_iff.mp rfl
   rw [← heq]
   exact h
 
@@ -2086,10 +2086,11 @@ theorem chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct
         (y : K) * (z : K) * (y : K)⁻¹ = (z : K) * ((y : K) * (y : K)⁻¹) := by ring
         _ = (z : K) * 1 := by rw [mul_inv_cancel₀ hyK]
         _ = (z : K) := by ring
+    have hcast : (hζ.toInteger : K) = ζ := IsPrimitiveRoot.coe_toInteger hζ
     calc
       ((lin : 𝓞 K) : K)
           = (z : K) - ζ * (y : K) := by
-            simp [lin]
+            simp [lin, hcast]
       _ = (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K) - ζ) := by
             rw [mul_sub, hdiv]
             ring
