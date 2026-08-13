@@ -188,4 +188,98 @@ theorem mellinQuadraticBoxGramEnergy_eq_normalized_double_sum_integral
   intro _
   exact mellinQuadraticBoxGram_feature_normSq_eq_double_sum z c t
 
+theorem intervalIntegral_sum_univ_eq_sum_intervalIntegral
+    {ι : Type*} [Fintype ι] {f : ι → ℝ → ℂ} {a b : ℝ}
+    (hf : ∀ i, IntervalIntegrable (f i) volume a b) :
+    (∫ t in a..b, ∑ i, f i t) = ∑ i, ∫ t in a..b, f i t := by
+  simpa using
+    (intervalIntegral.integral_finsetSum (s := (Finset.univ : Finset ι))
+      (f := f) (fun i hi => hf i))
+
+theorem sum_intervalIntegral_univ_eq_intervalIntegral_sum
+    {ι : Type*} [Fintype ι] {f : ι → ℝ → ℂ} {a b : ℝ}
+    (hf : ∀ i, IntervalIntegrable (f i) volume a b) :
+    (∑ i, ∫ t in a..b, f i t) = ∫ t in a..b, ∑ i, f i t := by
+  symm
+  exact intervalIntegral_sum_univ_eq_sum_intervalIntegral hf
+
+theorem mellinQuadraticBoxGramQuadraticForm_eq_normalized_double_sum_integral
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε) (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    mellinQuadraticBoxGramQuadraticForm ε z c =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ t in (-ε)..ε,
+          ∑ i, ∑ j,
+            c i * starRingEnd ℂ (c j) * z i * starRingEnd ℂ (z j) *
+              Complex.exp ((t : ℂ) * (z i + starRingEnd ℂ (z j))) := by
+  classical
+  let f : Fin n → Fin n → ℝ → ℂ := fun i j t =>
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+      mellinQuadraticBoxGramPairIntegrand (z i) (z j) (c i) (c j) t
+  have hf : ∀ i j, IntervalIntegrable (f i j) volume (-ε) ε := by
+    intro i j
+    exact (mellinQuadraticBoxGramPairIntegrand_intervalIntegrable
+      (ε := ε) (z i) (z j) (c i) (c j)).const_mul _
+  unfold mellinQuadraticBoxGramQuadraticForm
+  calc
+    ∑ i, ∑ j, c i * starRingEnd ℂ (c j) *
+        mellinQuadraticBoxGramKernel ε (z i) (z j) =
+      ∑ i, ∑ j, ∫ t in (-ε)..ε, f i j t := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        apply Finset.sum_congr rfl
+        intro j hj
+        exact mellinQuadraticBoxGram_pair_eq_integral hε
+          (z i) (z j) (c i) (c j)
+    _ = ∑ i, ∫ t in (-ε)..ε, ∑ j, f i j t := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      symm
+      exact intervalIntegral_sum_univ_eq_sum_intervalIntegral (hf i)
+    _ = ∫ t in (-ε)..ε, ∑ i, ∑ j, f i j t := by
+      symm
+      apply intervalIntegral_sum_univ_eq_sum_intervalIntegral
+      intro i
+      have heq : (∑ j, f i j) = fun t => ∑ j, f i j t :=
+        Finset.sum_fn (Finset.univ : Finset (Fin n)) (fun j => f i j)
+      rw [← heq]
+      exact IntervalIntegrable.sum Finset.univ (fun j hj => hf i j)
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ t in (-ε)..ε,
+          ∑ i, ∑ j,
+            c i * starRingEnd ℂ (c j) * z i * starRingEnd ℂ (z j) *
+              Complex.exp ((t : ℂ) * (z i + starRingEnd ℂ (z j))) := by
+      rw [← intervalIntegral.integral_const_mul]
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with t
+      intro _
+      simp only [f, mellinQuadraticBoxGramPairIntegrand]
+      simp [mul_comm]
+      simp only [Finset.mul_sum]
+
+theorem mellinQuadraticBoxGramQuadraticForm_eq_energy
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε) (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    mellinQuadraticBoxGramQuadraticForm ε z c =
+      (mellinQuadraticBoxGramEnergy ε z c : ℂ) := by
+  rw [mellinQuadraticBoxGramQuadraticForm_eq_normalized_double_sum_integral hε,
+    mellinQuadraticBoxGramEnergy_eq_normalized_double_sum_integral]
+
+theorem mellinQuadraticBoxGramQuadraticForm_im_eq_zero
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε) (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    (mellinQuadraticBoxGramQuadraticForm ε z c).im = 0 := by
+  rw [mellinQuadraticBoxGramQuadraticForm_eq_energy hε]
+  simp
+
+theorem mellinQuadraticBoxGramQuadraticForm_re_eq_energy
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε) (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    (mellinQuadraticBoxGramQuadraticForm ε z c).re =
+      mellinQuadraticBoxGramEnergy ε z c := by
+  rw [mellinQuadraticBoxGramQuadraticForm_eq_energy hε]
+  simp
+
+theorem mellinQuadraticBoxGramQuadraticForm_re_nonneg
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε) (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    0 ≤ (mellinQuadraticBoxGramQuadraticForm ε z c).re := by
+  rw [mellinQuadraticBoxGramQuadraticForm_re_eq_energy hε]
+  exact mellinQuadraticBoxGramEnergy_nonneg hε z c
+
 end DkMath.Analysis
