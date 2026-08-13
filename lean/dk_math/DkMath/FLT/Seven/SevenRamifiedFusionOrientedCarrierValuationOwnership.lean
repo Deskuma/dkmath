@@ -218,7 +218,7 @@ theorem carrier_mem_orientedKernelPower
       s.orientedKernelPower).mp
   rw [hJ]
   change s.orientedKernelPower * J ≤ s.orientedKernelPower
-  exact Ideal.mul_le_right
+  exact Ideal.mul_le_left
 
 /-- Conjugate element-membership form of the routed-load lower bound. -/
 theorem conjugateCarrier_mem_conjugateKernelPower
@@ -232,7 +232,7 @@ theorem conjugateCarrier_mem_conjugateKernelPower
       s.conjugateKernelPower).mp
   rw [hJ]
   change s.conjugateKernelPower * J ≤ s.conjugateKernelPower
-  exact Ideal.mul_le_right
+  exact Ideal.mul_le_left
 
 end PrimeSupport
 
@@ -981,7 +981,7 @@ theorem carrier_mem_orientedKernelPower
     (Ideal.span_singleton_le_iff_mem
       (s.orientedKernel ^ s.quotientExponent)).mp
   rw [hJ]
-  exact Ideal.mul_le_right
+  exact Ideal.mul_le_left
 
 theorem conjugateCarrier_mem_conjugateKernelPower
     (s : p.QuotientPrimeSupport) :
@@ -993,7 +993,7 @@ theorem conjugateCarrier_mem_conjugateKernelPower
     (Ideal.span_singleton_le_iff_mem
       (s.conjugateKernel ^ s.quotientExponent)).mp
   rw [hJ]
-  exact Ideal.mul_le_right
+  exact Ideal.mul_le_left
 
 private theorem star_mem_conjugateKernelPower_of_mem_oriented
     (s : p.QuotientPrimeSupport) {k : ℕ}
@@ -1770,11 +1770,11 @@ theorem globalCarrierFactorIdeal_pair_exact :
   have hJtop : J = ⊤ := by
     apply top_unique
     rw [← hJKtop]
-    exact Ideal.mul_le_right
+    exact Ideal.mul_le_left
   have hKtop : K = ⊤ := by
     apply top_unique
     rw [← hJKtop]
-    exact Ideal.mul_le_left
+    exact Ideal.mul_le_right
   constructor
   · rw [hJtop, Ideal.mul_top] at hJ
     exact hJ.symm
