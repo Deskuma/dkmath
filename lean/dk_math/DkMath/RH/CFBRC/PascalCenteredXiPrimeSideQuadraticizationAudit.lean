@@ -371,6 +371,266 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
   ∫ t in (-W.rectangle.T)..W.rectangle.T,
     pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u
 
+/-! ## Gate 4B.4: fixed-Xi top-horizontal box feature -/
+
+/-- The centered top horizontal node.  This is a fixed-Xi source point, not a
+right-edge ordinary-zeta point. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationTopNode
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) : ℂ :=
+  pascalOrdinaryToCentered
+    (pascalSymmetricRectangleTopEdge x W.rectangle.T)
+
+/-- The totalized fixed-Xi negative logarithmic derivative on the top edge. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationTopAmplitude
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) : ℂ :=
+  pascalCenteredXiNegLogDeriv
+    (pascalCenteredXiPrimeSideQuadraticizationTopNode W x)
+
+/-- The continuous Mellin kernel carried by the top horizontal node. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
+    (W : PascalCenteredXiResidueTransportWindow) (x v : ℝ) : ℂ :=
+  (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) ^ 2 *
+    Complex.exp
+      ((v : ℂ) * pascalCenteredXiPrimeSideQuadraticizationTopNode W x)
+
+/-- The fixed-Xi top horizontal source transported into the Mellin box. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (x v : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v *
+    pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x
+
+/-- The top horizontal feature aggregated over the finite horizontal edge. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) : ℂ :=
+  ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+    pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopAmplitude_intervalIntegrable
+    (W : PascalCenteredXiResidueTransportWindow) :
+    IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W)
+      volume W.rectangle.σ (1 - W.rectangle.σ) := by
+  have hboundary :=
+    pascalCenteredXiRectangleBoundaryIntegrable_weightedNegLogDeriv
+      (h := fun _ : ℂ => (1 : ℂ))
+      (differentiable_const (c := (1 : ℂ))) W
+  apply hboundary.2.1.congr
+  intro x hx
+  simp [pascalCenteredXiPrimeSideQuadraticizationTopAmplitude,
+    pascalCenteredXiPrimeSideQuadraticizationTopNode,
+    pascalCenteredXiWeightedNegLogDeriv]
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationTopNode
+    (W : PascalCenteredXiResidueTransportWindow) :
+    Continuous (pascalCenteredXiPrimeSideQuadraticizationTopNode W) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopNode
+    pascalSymmetricRectangleTopEdge pascalOrdinaryToCentered
+  fun_prop
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
+    (W : PascalCenteredXiResidueTransportWindow) :
+    Continuous (Function.uncurry
+      (pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W)) := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationTopNode W) :=
+    continuous_pascalCenteredXiPrimeSideQuadraticizationTopNode W
+  have hnode' : Continuous (fun p : ℝ × ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationTopNode W p.1) :=
+    hnode.comp continuous_fst
+  have hv : Continuous (fun p : ℝ × ℝ => (p.2 : ℂ)) :=
+    Complex.continuous_ofReal.comp continuous_snd
+  have hexp : Continuous (fun p : ℝ × ℝ =>
+      Complex.exp ((p.2 : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationTopNode W p.1)) :=
+    Complex.continuous_exp.comp (hv.mul hnode')
+  change Continuous (fun p : ℝ × ℝ =>
+    (pascalCenteredXiPrimeSideQuadraticizationTopNode W p.1) ^ 2 *
+      Complex.exp ((p.2 : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationTopNode W p.1))
+  exact (hnode'.pow 2).mul hexp
+
+theorem pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_integrableOn_rectangle
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) :
+    IntegrableOn
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W))
+      (Set.uIoc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ
+        Set.uIoc (-ε) ε)
+      volume := by
+  let A : Set ℝ := Set.uIoc W.rectangle.σ (1 - W.rectangle.σ)
+  let B : Set ℝ := Set.uIoc (-ε) ε
+  let K : Set (ℝ × ℝ) :=
+    Set.uIcc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ Set.uIcc (-ε) ε
+  have hamp : IntegrableOn
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W) A volume := by
+    exact intervalIntegrable_iff.mp
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude_intervalIntegrable W)
+  have hone : IntegrableOn (fun _ : ℝ => (1 : ℂ)) B volume := by
+    exact intervalIntegrable_iff.mp
+      (intervalIntegrable_const (μ := volume) (a := -ε) (b := ε))
+  have hampProd : IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W p.1 * (1 : ℂ))
+      (A ×ˢ B) volume := by
+    change Integrable
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W p.1 * (1 : ℂ))
+      (volume.restrict (A ×ˢ B))
+    rw [Measure.volume_eq_prod, ← Measure.prod_restrict]
+    exact hamp.mul_prod hone
+  have hampLift : IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W p.1)
+      (A ×ˢ B) volume := by
+    simpa using hampProd
+  have hK : IsCompact K := by
+    exact isCompact_uIcc.prod isCompact_uIcc
+  have hAK : A ×ˢ B ⊆ K := by
+    exact Set.prod_mono Set.uIoc_subset_uIcc Set.uIoc_subset_uIcc
+  have hkernel : ContinuousOn
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W)) K :=
+    (continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W).continuousOn
+  have hmul : IntegrableOn
+      (fun p : ℝ × ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W p.1 p.2 *
+          pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W p.1)
+      (A ×ˢ B) volume :=
+    IntegrableOn.continuousOn_mul_of_subset hkernel hampLift
+      hK (measurableSet_uIoc.prod measurableSet_uIoc) hAK
+  have heq :
+      Function.uncurry
+          (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W) =
+        (fun p : ℝ × ℝ =>
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W p.1 p.2 *
+            pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W p.1) := by
+    funext p
+    rfl
+  rw [heq]
+  simpa [A, B] using hmul
+
+theorem pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_intervalIntegral_swap
+    {ε : ℝ} (W : PascalCenteredXiResidueTransportWindow)
+    (hbox :
+      IntegrableOn
+        (Function.uncurry
+          (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W))
+        (Set.uIoc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ
+          Set.uIoc (-ε) ε)
+        volume) :
+    (∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+      ∫ v in (-ε)..ε,
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) =
+      ∫ v in (-ε)..ε,
+        ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v := by
+  exact intervalIntegral_intervalIntegral_swap hbox
+
+theorem pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_integral_eq_weight_mul_amplitude
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) :
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) =
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x := by
+  rw [mellinQuadraticBoxWeight_eq_quadratic_mul_multiplier]
+  rw [mellinQuadraticBoxMultiplier_eq_logAverage hε]
+  simp only [pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature,
+    pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel]
+  rw [← intervalIntegral.integral_const_mul]
+  conv_rhs =>
+    rw [← intervalIntegral.integral_const_mul]
+    rw [← intervalIntegral.integral_const_mul]
+    rw [← intervalIntegral.integral_mul_const]
+  apply intervalIntegral.integral_congr_ae
+  filter_upwards [] with v
+  intro _
+  ring_nf
+
+theorem pascalCenteredXiPrimeSideQuadraticization_horizontalBase_eq_normalized_topAggregate
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) :
+    pascalCenteredXiMellinQuadraticHorizontalBase ε W =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W v := by
+  have hbox :=
+    pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_integrableOn_rectangle
+      ε W
+  have hweight : ∀ x : ℝ,
+      pascalCenteredXiMellinSecondDifferenceWeight ε 0
+          (pascalOrdinaryToCentered
+            (pascalSymmetricRectangleTopEdge x W.rectangle.T)) =
+        mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) := by
+    intro x
+    exact pascalCenteredXiMellinQuadraticWeight_eq_generic hε
+      (pascalCenteredXiPrimeSideQuadraticizationTopNode W x)
+  unfold pascalCenteredXiMellinQuadraticHorizontalBase
+    pascalCenteredXiTopHorizontalContribution
+  calc
+    (∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiMellinSecondDifferenceWeight ε 0
+            (pascalOrdinaryToCentered
+              (pascalSymmetricRectangleTopEdge x W.rectangle.T)) *
+          pascalCenteredXiNegLogDeriv
+            (pascalOrdinaryToCentered
+              (pascalSymmetricRectangleTopEdge x W.rectangle.T))) =
+      ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        mellinQuadraticBoxWeight ε
+            (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+          pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with x
+      rw [hweight]
+      simp [pascalCenteredXiPrimeSideQuadraticizationTopAmplitude,
+        pascalCenteredXiPrimeSideQuadraticizationTopNode]
+    _ = ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with x
+      rw [pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_integral_eq_weight_mul_amplitude
+        hε W x]
+      intro hx
+      rfl
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v := by
+      rw [intervalIntegral.integral_const_mul]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+            pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v := by
+      rw [pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_intervalIntegral_swap
+        W hbox]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W v := by
+      rfl
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopNode_one_sub_eq_neg_conj
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationTopNode W (1 - x) =
+      -starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) := by
+  apply Complex.ext <;>
+    simp [pascalCenteredXiPrimeSideQuadraticizationTopNode,
+      pascalSymmetricRectangleTopEdge, pascalOrdinaryToCentered,
+      criticalLineCenter]
+  all_goals ring
+
+/-! The fixed-Xi top amplitude still needs a conjugation theorem for the
+completed Xi kernel/log-derivative.  The finite source and box bridge above
+do not provide that theorem, so this remains an explicit Q2-E boundary. -/
+inductive PascalCenteredXiPrimeSideQuadraticizationHorizontalConjugationGap : Prop
+  | fixedXiConjugationNotYetAvailable :
+      PascalCenteredXiPrimeSideQuadraticizationHorizontalConjugationGap
+
 theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_left
     (W : PascalCenteredXiResidueTransportWindow) (u : ℝ) :
     Continuous (fun t : ℝ =>
