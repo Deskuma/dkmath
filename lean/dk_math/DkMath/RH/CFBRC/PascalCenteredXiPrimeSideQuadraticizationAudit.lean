@@ -303,9 +303,7 @@ theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel
   have hnode : Continuous
       (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W) := by
     unfold pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
-      pascalOrdinaryToCentered
-    change Continuous (fun t : ℝ =>
-      ((W.rectangle.σ : ℂ) + (t : ℂ) * Complex.I) - criticalLineCenter)
+      pascalOrdinaryToCentered pascalSymmetricRectangleRightEdge
     fun_prop
   have hnode' : Continuous (fun p : ℝ × ℝ =>
       pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W p.1) :=
@@ -372,6 +370,186 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
     (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) : ℂ :=
   ∫ t in (-W.rectangle.T)..W.rectangle.T,
     pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_left
+    (W : PascalCenteredXiResidueTransportWindow) (u : ℝ) :
+    Continuous (fun t : ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u) := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
+      pascalOrdinaryToCentered pascalSymmetricRectangleRightEdge
+    fun_prop
+  have hexp : Continuous (fun t : ℝ =>
+      Complex.exp ((u : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+    exact Complex.continuous_exp.comp (continuous_const.mul hnode)
+  unfold pascalCenteredXiPrimeSideQuadraticizationBoxKernel
+  exact (hnode.pow 2).mul hexp
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_right
+    (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) :
+    Continuous (fun u : ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u) := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
+      pascalOrdinaryToCentered pascalSymmetricRectangleRightEdge
+    fun_prop
+  have hexp : Continuous (fun u : ℝ =>
+      Complex.exp ((u : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+    exact Complex.continuous_exp.comp (Complex.continuous_ofReal.mul continuous_const)
+  unfold pascalCenteredXiPrimeSideQuadraticizationBoxKernel
+  exact (continuous_const.pow 2).mul hexp
+
+/-! The finite `t` integral is continuous in the box parameter.  The
+source amplitude is only used through its existing finite-interval
+integrability certificate; compactness supplies a uniform bound for the
+continuous kernel. -/
+theorem pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_continuousOn
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X)
+      (Set.uIcc (-ε) ε) := by
+  let A : Set ℝ := Set.uIoc (-W.rectangle.T) W.rectangle.T
+  let K : Set (ℝ × ℝ) :=
+    Set.uIcc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIcc (-ε) ε
+  let μ : Measure ℝ := volume.restrict A
+  have hK : IsCompact K := by
+    exact isCompact_uIcc.prod isCompact_uIcc
+  have hkernelGlobal : Continuous
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationBoxKernel W)) :=
+    continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel W
+  have hkernel : ContinuousOn
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationBoxKernel W)) K := by
+    exact hkernelGlobal.continuousOn
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hkernel
+  have hamp : Integrable
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X) μ := by
+    change Integrable
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X)
+      (volume.restrict A)
+    exact intervalIntegrable_iff.mp
+      (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude_intervalIntegrable W X)
+  have hbound : Integrable (fun t : ℝ => C *
+      ‖pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t‖) μ := by
+    exact hamp.norm.const_mul C
+  have hcont :=
+    continuousOn_of_dominated
+      (μ := μ)
+      (s := Set.uIcc (-ε) ε)
+      (F := fun u t : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u *
+          pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t)
+      (bound := fun t : ℝ => C *
+        ‖pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t‖)
+      (fun u hu => by
+        have hku : ContinuousOn
+            (fun t : ℝ => pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u)
+            (Set.uIcc (-W.rectangle.T) W.rectangle.T) := by
+          have hku' :=
+            continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_left W u
+          exact hku'.continuousOn
+        have hampOn : IntegrableOn
+            (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X)
+            A volume := by
+          exact hamp
+        have hprod : IntegrableOn
+            (fun t : ℝ =>
+              pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u *
+                pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t)
+            A volume := by
+          exact hampOn.continuousOn_mul_of_subset hku isCompact_uIcc
+            measurableSet_uIoc Set.uIoc_subset_uIcc
+        exact hprod.aestronglyMeasurable)
+      (fun u hu => by
+        filter_upwards [ae_restrict_mem measurableSet_uIoc] with t ht
+        have hpair : (t, u) ∈ K := ⟨Set.uIoc_subset_uIcc ht, hu⟩
+        calc
+          ‖pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u *
+              pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t‖ =
+              ‖pascalCenteredXiPrimeSideQuadraticizationBoxKernel W t u‖ *
+                ‖pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t‖ :=
+            norm_mul _ _
+          _ ≤ C * ‖pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t‖ := by
+            exact mul_le_mul_of_nonneg_right (hC (t, u) hpair) (norm_nonneg _))
+      hbound
+      (Filter.Eventually.of_forall (fun t => by
+        have htu :=
+          continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_right W t
+        exact (htu.mul continuous_const).continuousOn))
+  have htarget : ContinuousOn
+      (fun u : ℝ => ∫ t in A,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u)
+      (Set.uIcc (-ε) ε) := by
+    simpa [μ, A, pascalCenteredXiPrimeSideQuadraticizationBoxFeature,
+      pascalCenteredXiPrimeSideQuadraticizationBoxKernel] using hcont
+  have htarget' : ContinuousOn
+      (fun u : ℝ => ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u)
+      (Set.uIcc (-ε) ε) := by
+    have hT : -W.rectangle.T ≤ W.rectangle.T := by
+      linarith [W.rectangle.hT]
+    have heq :
+        (fun u : ℝ => ∫ t in (-W.rectangle.T)..W.rectangle.T,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) =
+        (fun u : ℝ => ∫ t in A,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) := by
+      funext u
+      rw [intervalIntegral.integral_of_le hT]
+      simp [A, Set.uIoc_of_le hT]
+    rw [heq]
+    exact htarget
+  exact htarget'
+
+theorem pascalCenteredXiPrimeSideQuadraticizationShiftedPlus_intervalIntegrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (fun u : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u + 1))
+      volume (-ε) ε := by
+  have hagg :=
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_continuousOn
+      ε W X
+  have hshift : ContinuousOn
+      (fun u : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u + 1)
+      (Set.uIcc (-ε) ε) := by
+    exact hagg.add continuousOn_const
+  have hnorm : ContinuousOn
+      (fun u : ℝ => Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u + 1))
+      (Set.uIcc (-ε) ε) := by
+    exact Complex.continuous_normSq.continuousOn.comp hshift
+      (fun _ _ => Set.mem_univ _)
+  exact hnorm.intervalIntegrable
+
+theorem pascalCenteredXiPrimeSideQuadraticizationShiftedMinus_intervalIntegrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (fun u : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u - 1))
+      volume (-ε) ε := by
+  have hagg :=
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_continuousOn
+      ε W X
+  have hshift : ContinuousOn
+      (fun u : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u - 1)
+      (Set.uIcc (-ε) ε) := by
+    exact hagg.sub continuousOn_const
+  have hnorm : ContinuousOn
+      (fun u : ℝ => Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u - 1))
+      (Set.uIcc (-ε) ε) := by
+    exact Complex.continuous_normSq.continuousOn.comp hshift
+      (fun _ _ => Set.mem_univ _)
+  exact hnorm.intervalIntegrable
 
 /-! A future source-derived adjoint must provide the following exact contract.
 The existing finite ledger does not instantiate it; defining the conjugate
@@ -1218,10 +1396,32 @@ theorem pascalCenteredXiPrimeSideQuadraticization_shiftedEnergy_order_iff_vertic
   · linarith
   · linarith
 
+theorem pascalCenteredXiPrimeSideQuadraticization_verticalSurface_eq_shiftedEnergyDifference
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (4 : ℂ) * pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X =
+      (pascalCenteredXiPrimeSideQuadraticizationShiftedPlusEnergy ε W X : ℂ) -
+        (pascalCenteredXiPrimeSideQuadraticizationShiftedMinusEnergy ε W X : ℂ) := by
+  exact pascalCenteredXiPrimeSideQuadraticization_verticalSurface_eq_shiftedEnergyDifference_of_integrable
+    hε W X
+    (pascalCenteredXiPrimeSideQuadraticizationShiftedPlus_intervalIntegrable ε W X)
+    (pascalCenteredXiPrimeSideQuadraticizationShiftedMinus_intervalIntegrable ε W X)
+
+theorem pascalCenteredXiPrimeSideQuadraticization_shiftedEnergy_order_iff_vertical_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiPrimeSideQuadraticizationShiftedMinusEnergy ε W X ≤
+        pascalCenteredXiPrimeSideQuadraticizationShiftedPlusEnergy ε W X ↔
+      0 ≤ (pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X).re := by
+  exact pascalCenteredXiPrimeSideQuadraticization_shiftedEnergy_order_iff_vertical_nonneg_of_integrable
+    hε W X
+    (pascalCenteredXiPrimeSideQuadraticizationShiftedPlus_intervalIntegrable ε W X)
+    (pascalCenteredXiPrimeSideQuadraticizationShiftedMinus_intervalIntegrable ε W X)
+
 /-! The individual shifted beams are PSD, but no independent ordering
-provider is present.  The conditional equivalence above records that the
-ordering is exactly the vertical sign once the shifted integrals are known to
-be integrable. -/
+provider is present.  The lower-level conditional equivalence and its
+unconditional wrapper record that the ordering is exactly the vertical sign;
+the interval-integrability certificates come from finite-window continuity. -/
 inductive PascalCenteredXiPrimeSideQuadraticizationShiftedEnergyOrderingGap : Prop
   | noIndependentOrderingProvider :
       PascalCenteredXiPrimeSideQuadraticizationShiftedEnergyOrderingGap
