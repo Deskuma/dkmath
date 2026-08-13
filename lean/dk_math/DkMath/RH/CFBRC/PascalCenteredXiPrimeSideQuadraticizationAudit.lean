@@ -101,4 +101,111 @@ theorem pascalCenteredXiPrimeSideQuadraticization_linear_source_boundary
         W.toContourTransportWindow :=
   pascalCenteredXiPrimeSideQuadraticization_source_ledger hε W X
 
+/-! ## Gate 4B.3c0--c2: source-index semantics and the linear box surface -/
+
+/-- The centered spectral node attached to a contour-height coordinate. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode
+    (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) : ℂ :=
+  pascalOrdinaryToCentered
+    (pascalSymmetricRectangleRightEdge W.rectangle.σ t)
+
+/-- The full finite vertical source amplitude at a fixed contour height.
+
+The arithmetic cutoff, archimedean correction, and elementary correction are
+kept in one source-derived amplitude.  The top-horizontal term is deliberately
+not folded into this vertical surface. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  pascalPrimePowerPHZFiniteUpTo X
+      (pascalSymmetricRectangleRightEdge W.rectangle.σ t) +
+    pascalXiArchimedeanLogDeriv
+      (pascalSymmetricRectangleRightEdge W.rectangle.σ t) +
+    pascalXiElementaryLogDerivCorrection
+      (pascalSymmetricRectangleRightEdge W.rectangle.σ t)
+
+/-- The deoriented vertical source surface before the differential factor
+`Complex.I` is inserted. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  mellinQuadraticBoxWeight ε
+      (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t
+
+/-- The oriented vertical source surface, with `ds = i dt`. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationVerticalIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand
+    ε W X t * Complex.I
+
+/-- Exact factorization of the complete finite vertical source into the
+generic one-variable weight and the source-derived amplitude. -/
+theorem pascalCenteredXiPrimeSideQuadraticization_deoriented_factorization
+    {ε : ℝ} (_hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand
+        ε W X t =
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t := by
+  rfl
+
+/-- The same vertical surface, expanded into its prime, archimedean, and
+elementary source terms.  This is an exact finite identity and carries no
+positivity statement. -/
+theorem pascalCenteredXiPrimeSideQuadraticization_vertical_source_expansion
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationVerticalIntegrand ε W X t =
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalPrimePowerPHZFiniteUpTo X
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) * Complex.I +
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalXiArchimedeanLogDeriv
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) * Complex.I +
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalXiElementaryLogDerivCorrection
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) * Complex.I := by
+  rw [pascalCenteredXiMellinQuadraticWeight_eq_generic hε]
+  simp only [pascalCenteredXiPrimeSideQuadraticizationVerticalIntegrand,
+    pascalCenteredXiPrimeSideQuadraticizationDeorientedVerticalIntegrand,
+    pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode,
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude]
+  ring
+
+/-- The linear two-variable box feature surface.  Here `u` is the logarithmic
+box-average variable; it is not the contour variable `t` or the arithmetic
+index `n`. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t u : ℝ) : ℂ :=
+  (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) ^ 2 *
+    Complex.exp
+      ((u : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t
+
+/-- Exact logarithmic-box expansion of the linear source surface. -/
+theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_integral_eq_weight_mul_amplitude
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) =
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t := by
+  rw [mellinQuadraticBoxWeight_eq_quadratic_mul_multiplier]
+  rw [mellinQuadraticBoxMultiplier_eq_logAverage hε]
+  simp only [pascalCenteredXiPrimeSideQuadraticizationBoxFeature]
+  rw [← intervalIntegral.integral_const_mul]
+  conv_rhs =>
+    rw [← intervalIntegral.integral_const_mul]
+    rw [← intervalIntegral.integral_const_mul]
+    rw [← intervalIntegral.integral_mul_const]
+  apply intervalIntegral.integral_congr_ae
+  filter_upwards [] with u
+  intro _
+  ring_nf
+
 end DkMath.RH.CFBRCProjection
