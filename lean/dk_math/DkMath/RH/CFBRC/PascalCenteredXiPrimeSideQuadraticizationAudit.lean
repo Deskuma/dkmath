@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Analysis.MellinQuadraticGramKernel
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideWholeSurfaceEnergyAudit
 import Mathlib.MeasureTheory.Integral.Prod
+import Mathlib.NumberTheory.Harmonic.ZetaAsymp
 import Mathlib.Tactic
 
 /-!
@@ -624,13 +625,6 @@ theorem pascalCenteredXiPrimeSideQuadraticizationTopNode_one_sub_eq_neg_conj
       criticalLineCenter]
   all_goals ring
 
-/-! The fixed-Xi top amplitude still needs a conjugation theorem for the
-completed Xi kernel/log-derivative.  The finite source and box bridge above
-do not provide that theorem, so this remains an explicit Q2-E boundary. -/
-inductive PascalCenteredXiPrimeSideQuadraticizationHorizontalConjugationGap : Prop
-  | fixedXiConjugationNotYetAvailable :
-      PascalCenteredXiPrimeSideQuadraticizationHorizontalConjugationGap
-
 theorem continuous_pascalCenteredXiPrimeSideQuadraticizationBoxKernel_left
     (W : PascalCenteredXiResidueTransportWindow) (u : ℝ) :
     Continuous (fun t : ℝ =>
@@ -907,6 +901,161 @@ theorem pascalXiArchimedeanLogDeriv_conj (s : ℂ) :
     simpa using hderiv'.symm
   rw [hderiv'', pascalXiArchimedeanGammaR_conj]
   simp
+
+theorem completedRiemannZeta_conj_of_one_lt_re
+    {s : ℂ} (hs : 1 < s.re) :
+    completedRiemannZeta (starRingEnd ℂ s) =
+      starRingEnd ℂ (completedRiemannZeta s) := by
+  have hs0 : s ≠ 0 := by
+    intro h
+    have h' := congrArg Complex.re h
+    simp at h'
+    linarith
+  have hcs0 : starRingEnd ℂ s ≠ 0 := by
+    intro h
+    apply hs0
+    simpa using congrArg (starRingEnd ℂ) h
+  have hgamma : Complex.Gammaℝ s ≠ 0 :=
+    gammaR_ne_zero_of_pos_re (lt_trans zero_lt_one hs)
+  have hcgamma : Complex.Gammaℝ (starRingEnd ℂ s) ≠ 0 := by
+    rw [pascalXiArchimedeanGammaR_conj]
+    intro h
+    apply hgamma
+    have h' := congrArg (starRingEnd ℂ) h
+    simpa using h'
+  have hz : completedRiemannZeta s =
+      Complex.Gammaℝ s * riemannZeta s := by
+    rw [riemannZeta_def_of_ne_zero hs0]
+    field_simp [hgamma]
+  have hzc : completedRiemannZeta (starRingEnd ℂ s) =
+      Complex.Gammaℝ (starRingEnd ℂ s) *
+        riemannZeta (starRingEnd ℂ s) := by
+    rw [riemannZeta_def_of_ne_zero hcs0]
+    field_simp [hcgamma]
+  rw [hzc, pascalXiArchimedeanGammaR_conj, riemannZeta_conj, hz]
+  simp
+
+theorem pascalRiemannXiKernel_conj_of_one_lt_re
+    {s : ℂ} (hs : 1 < s.re) :
+    pascalRiemannXiKernel (starRingEnd ℂ s) =
+      starRingEnd ℂ (pascalRiemannXiKernel s) := by
+  have hs0 : s ≠ 0 := by
+    intro h
+    have h' := congrArg Complex.re h
+    simp at h'
+    linarith
+  have hs1 : s ≠ 1 := by
+    intro h
+    have h' := congrArg Complex.re h
+    simp at h'
+    linarith
+  have hcs0 : starRingEnd ℂ s ≠ 0 := by
+    intro h
+    apply hs0
+    simpa using congrArg (starRingEnd ℂ) h
+  have hcs1 : starRingEnd ℂ s ≠ 1 := by
+    intro h
+    apply hs1
+    simpa using congrArg (starRingEnd ℂ) h
+  rw [pascalRiemannXiKernel_eq_mul_completedRiemannZeta hcs0 hcs1,
+    pascalRiemannXiKernel_eq_mul_completedRiemannZeta hs0 hs1,
+    completedRiemannZeta_conj_of_one_lt_re (by simpa using hs)]
+  simp [map_mul, map_sub, map_one]
+
+theorem pascalRiemannXiKernel_conj (s : ℂ) :
+    pascalRiemannXiKernel (starRingEnd ℂ s) =
+      starRingEnd ℂ (pascalRiemannXiKernel s) := by
+  have hf_an : AnalyticOnNhd ℂ pascalRiemannXiKernel Set.univ :=
+    differentiable_pascalRiemannXiKernel.differentiableOn.analyticOnNhd
+      isOpen_univ
+  have hg_an : AnalyticOnNhd ℂ
+      (fun z => starRingEnd ℂ (pascalRiemannXiKernel (starRingEnd ℂ z)))
+      Set.univ :=
+    DifferentiableOn.analyticOnNhd
+      (fun z hz =>
+        (differentiableAt_conj_conj_iff.mpr
+          differentiable_pascalRiemannXiKernel.differentiableAt).differentiableWithinAt)
+      isOpen_univ
+  have hgz (z : ℂ) (hz : 1 < z.re) :
+      starRingEnd ℂ (pascalRiemannXiKernel (starRingEnd ℂ z)) =
+        pascalRiemannXiKernel z := by
+    rw [pascalRiemannXiKernel_conj_of_one_lt_re hz]
+    simp
+  have heq := hg_an.eqOn_of_preconnected_of_eventuallyEq
+    hf_an isPreconnected_univ (Set.mem_univ (2 : ℂ))
+    (Filter.eventuallyEq_of_mem
+      ((isOpen_lt continuous_const Complex.continuous_re).mem_nhds
+        (show (1 : ℝ) < (2 : ℂ).re by norm_num))
+      hgz)
+  have h := heq (Set.mem_univ s)
+  have hc := congrArg (starRingEnd ℂ) h
+  simpa using hc
+
+theorem pascalCenteredRiemannXiKernel_conj (z : ℂ) :
+    pascalCenteredRiemannXiKernel (starRingEnd ℂ z) =
+      starRingEnd ℂ (pascalCenteredRiemannXiKernel z) := by
+  unfold pascalCenteredRiemannXiKernel
+  have harg :
+      starRingEnd ℂ (criticalLineCenter + z) =
+        criticalLineCenter + starRingEnd ℂ z := by
+    apply Complex.ext <;>
+      simp [criticalLineCenter]
+  rw [← harg, pascalRiemannXiKernel_conj]
+
+theorem pascalCenteredXiNegLogDeriv_conj (z : ℂ) :
+    pascalCenteredXiNegLogDeriv (starRingEnd ℂ z) =
+      starRingEnd ℂ (pascalCenteredXiNegLogDeriv z) := by
+  unfold pascalCenteredXiNegLogDeriv
+  rw [logDeriv_apply, logDeriv_apply]
+  have hfun :
+      (starRingEnd ℂ) ∘ pascalCenteredRiemannXiKernel ∘ (starRingEnd ℂ) =
+        pascalCenteredRiemannXiKernel := by
+    funext w
+    rw [Function.comp_apply, Function.comp_apply,
+      pascalCenteredRiemannXiKernel_conj]
+    simp only [starRingEnd_apply, star_star]
+  have hderiv := congrFun
+    (deriv_conj_conj (f := pascalCenteredRiemannXiKernel)) z
+  rw [hfun] at hderiv
+  simp only [Function.comp_apply] at hderiv
+  have hderiv' := congrArg (starRingEnd ℂ) hderiv
+  have hderiv'' :
+      deriv pascalCenteredRiemannXiKernel (starRingEnd ℂ z) =
+        starRingEnd ℂ (deriv pascalCenteredRiemannXiKernel z) := by
+    simpa using hderiv'.symm
+  rw [hderiv'', pascalCenteredRiemannXiKernel_conj]
+  simp
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopAmplitude_one_sub_eq_neg_conj
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W (1 - x) =
+      -starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopAmplitude
+  simp only [pascalCenteredXiPrimeSideQuadraticizationTopNode_one_sub_eq_neg_conj,
+    pascalCenteredXiNegLogDeriv_neg, pascalCenteredXiNegLogDeriv_conj]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature_one_sub_eq_neg_conj
+    (W : PascalCenteredXiResidueTransportWindow) (x v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W (1 - x) v =
+      -starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x (-v)) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature
+    pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
+  rw [pascalCenteredXiPrimeSideQuadraticizationTopNode_one_sub_eq_neg_conj,
+    pascalCenteredXiPrimeSideQuadraticizationTopAmplitude_one_sub_eq_neg_conj]
+  have hexp :
+      Complex.exp
+          ((v : ℂ) * -starRingEnd ℂ
+              (pascalCenteredXiPrimeSideQuadraticizationTopNode W x)) =
+        starRingEnd ℂ (Complex.exp
+          (pascalCenteredXiPrimeSideQuadraticizationTopNode W x * ((-v : ℝ) : ℂ))) := by
+    rw [← Complex.exp_conj]
+    congr 1
+    simp; ring
+  rw [hexp]
+  simp only [map_pow, map_mul]
+  ring_nf
 
 theorem pascalSymmetricRectangleRightEdge_neg_eq_conj
     (σ t : ℝ) :
