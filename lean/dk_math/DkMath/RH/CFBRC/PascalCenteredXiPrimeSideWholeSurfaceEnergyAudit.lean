@@ -405,6 +405,92 @@ theorem pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand_eq_deorient_s
     pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand,
     pascalCenteredXiVerticalDeorient, mul_add, add_assoc]
 
+theorem pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand_eq
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand ε W X t =
+      pascalCenteredXiMellinSecondDifferenceWeight ε 0
+        (pascalOrdinaryToCentered
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+        pascalPrimePowerPHZFiniteUpTo X
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t) := by
+  unfold pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand
+    pascalCenteredXiVerticalDeorient
+    pascalPrimePowerRightEdgeCutoffIntegrand
+  ring_nf
+  rw [Complex.I_sq]
+  ring
+
+theorem pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand_eq
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) :
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand ε W t =
+      pascalCenteredXiMellinSecondDifferenceWeight ε 0
+        (pascalOrdinaryToCentered
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+        pascalXiArchimedeanLogDeriv
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t) := by
+  unfold pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand
+    pascalCenteredXiVerticalDeorient
+    pascalXiArchimedeanRightEdgeIntegrand
+  ring_nf
+  rw [Complex.I_sq]
+  ring
+
+theorem pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand_eq
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) :
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand ε W t =
+      pascalCenteredXiMellinSecondDifferenceWeight ε 0
+        (pascalOrdinaryToCentered
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+        pascalXiElementaryLogDerivCorrection
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t) := by
+  unfold pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand
+    pascalCenteredXiVerticalDeorient
+    pascalXiElementaryRightEdgeIntegrand
+  ring_nf
+  rw [Complex.I_sq]
+  ring
+
+theorem pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand_eq_weight_mul_decomposed
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand ε W X t =
+      pascalCenteredXiMellinSecondDifferenceWeight ε 0
+        (pascalOrdinaryToCentered
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+        (pascalPrimePowerPHZFiniteUpTo X
+          (pascalSymmetricRectangleRightEdge W.rectangle.σ t) +
+          pascalXiArchimedeanLogDeriv
+            (pascalSymmetricRectangleRightEdge W.rectangle.σ t) +
+          pascalXiElementaryLogDerivCorrection
+            (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) := by
+  rw [pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand,
+    pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand_eq,
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand_eq,
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand_eq]
+  ring
+
+/-! ## Gate 3B.1c: algebraic bilinear / Gram obstruction -/
+
+theorem pascalCenteredXiPrimeSide_conj_pair_is_normSq (z : ℂ) :
+    (z * starRingEnd ℂ z).re = Complex.normSq z := by
+  rw [Complex.mul_conj]
+  rfl
+
+theorem pascalCenteredXiPrimeSide_neg_conj_pair_is_neg_normSq (z : ℂ) :
+    ((-z) * starRingEnd ℂ z).re = -Complex.normSq z := by
+  rw [neg_mul, Complex.mul_conj]
+  rfl
+
+theorem pascalCenteredXiPrimeSide_affine_excess_has_both_signs :
+    (∃ z q : ℂ, 0 ≤ q.re ∧ 0 < (z.re - q.re)) ∧
+      (∃ z q : ℂ, 0 ≤ q.re ∧ (z.re - q.re) < 0) := by
+  constructor
+  · exact ⟨1, 0, by norm_num, by norm_num⟩
+  · exact ⟨0, 1, by norm_num, by norm_num⟩
+
+/-! The preceding statements are only an abstract algebraic obstruction:
+reality, deorientation, and an affine subtraction do not provide a sign.
+They do not exclude a genuinely new analytic, mirror, or spectral provider. -/
+
 /-- Finite interval lift of the deoriented prime source. -/
 noncomputable def pascalCenteredXiMellinQuadraticPrimeDeorientedSurface
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
