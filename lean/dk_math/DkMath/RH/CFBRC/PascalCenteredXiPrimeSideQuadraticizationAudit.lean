@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Analysis.MellinQuadraticGramKernel
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideWholeSurfaceEnergyAudit
+import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.Tactic
 
 /-!
@@ -607,6 +608,69 @@ theorem pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_polarizati
         (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u - 1) : ℂ) := by
   apply pascalCenteredXiPrimeSideQuadraticization_polarization_pointwise
   exact pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_eq_conj W X u
+
+theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_intervalIntegral_swap
+    {ε : ℝ}
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
+    (hbox :
+      IntegrableOn
+        (Function.uncurry
+          (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X))
+        (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
+        volume) :
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+      ∫ u in (-ε)..ε,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) =
+      ∫ u in (-ε)..ε,
+        ∫ t in (-W.rectangle.T)..W.rectangle.T,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u := by
+  exact intervalIntegral_intervalIntegral_swap hbox
+
+theorem pascalCenteredXiPrimeSideQuadraticization_weighted_source_eq_normalized_aggregate_of_rectangle_integrable
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
+    (hbox :
+      IntegrableOn
+        (Function.uncurry
+          (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X))
+        (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
+        volume) :
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
+  calc
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+      mellinQuadraticBoxWeight ε
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+        pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t) =
+      ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ u in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u := by
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with t ht
+          exact
+            (pascalCenteredXiPrimeSideQuadraticization_boxFeature_integral_eq_weight_mul_amplitude
+              hε W X t).symm
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ t in (-W.rectangle.T)..W.rectangle.T,
+          ∫ u in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u := by
+          rw [intervalIntegral.integral_const_mul]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          ∫ t in (-W.rectangle.T)..W.rectangle.T,
+            pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u := by
+          rw [pascalCenteredXiPrimeSideQuadraticization_boxFeature_intervalIntegral_swap
+            W X hbox]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u := by
+          rfl
 
 /-! The remaining linear-source bridge needs an actual finite-rectangle
 integrability/Fubini certificate.  This marker records that the product and
