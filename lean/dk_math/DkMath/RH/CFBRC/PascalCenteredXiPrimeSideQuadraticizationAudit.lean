@@ -236,28 +236,6 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
   ∫ t in (-W.rectangle.T)..W.rectangle.T,
     pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u
 
-noncomputable def pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
-    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℝ :=
-  ((2 * ε)⁻¹) *
-    ∫ u in (-ε)..ε,
-      Complex.normSq
-        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
-
-theorem pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy_nonneg
-    {ε : ℝ} (hε : 0 < ε)
-    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
-    0 ≤ pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy ε W X := by
-  unfold pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
-  have hscale : 0 ≤ (2 * ε)⁻¹ := by positivity
-  have hinterval : -ε ≤ ε := by linarith
-  have hmass :
-      0 ≤ ∫ u in (-ε)..ε,
-        Complex.normSq
-          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
-    apply intervalIntegral.integral_nonneg_of_ae hinterval
-    exact Filter.Eventually.of_forall (fun u => Complex.normSq_nonneg _)
-  exact mul_nonneg hscale hmass
-
 /-! A future source-derived adjoint must provide the following exact contract.
 The existing finite ledger does not instantiate it; defining the conjugate
 function alone is not a source-derived provider. -/
@@ -511,5 +489,130 @@ noncomputable def pascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointP
     mirrored_source_eq_conj_aggregated := fun u =>
       pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature_eq_conj
         W X u }
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℝ :=
+  ((2 * ε)⁻¹) *
+    ∫ u in (-ε)..ε,
+      Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
+
+/-! ## Gate 4B.3c4: source products and polarization -/
+
+/- The product of the aggregate and its concrete reflected finite source. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u *
+    pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature W X u
+
+theorem pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation_eq_normSq
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation W X u =
+      (Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) : ℂ) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation
+  rw [pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature_eq_conj]
+  rw [Complex.normSq_eq_conj_mul_self]
+  ring
+
+theorem pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation_integral_eq_gramEnergy
+    {ε : ℝ} (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy ε W X : ℂ) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation W X u := by
+  calc
+    (pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy ε W X : ℂ) =
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ u in (-ε)..ε,
+            (Complex.normSq
+              (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) : ℂ) := by
+      unfold pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
+      push_cast
+      rw [← intervalIntegral.integral_ofReal]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation W X u := by
+      congr 1
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with u hu
+      exact (pascalCenteredXiPrimeSideQuadraticizationSourceAutocorrelation_eq_normSq
+        W X u).symm
+
+theorem pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    0 ≤ pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy ε W X := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
+  have hscale : 0 ≤ (2 * ε)⁻¹ := by positivity
+  have hinterval : -ε ≤ ε := by linarith
+  have hmass :
+      0 ≤ ∫ u in (-ε)..ε,
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
+    apply intervalIntegral.integral_nonneg_of_ae hinterval
+    exact Filter.Eventually.of_forall (fun u => Complex.normSq_nonneg _)
+  exact mul_nonneg hscale hmass
+
+/-- The zero/vacuum section paired with the constant reference feature. -/
+noncomputable def mellinQuadraticBoxZeroSection (ε : ℝ) (z : ℂ) : ℂ :=
+  z * mellinQuadraticBoxMultiplier ε z
+
+theorem mellinQuadraticBoxWeight_eq_node_mul_zeroSection
+    (ε : ℝ) (z : ℂ) :
+    mellinQuadraticBoxWeight ε z =
+      z * mellinQuadraticBoxZeroSection ε z := by
+  unfold mellinQuadraticBoxWeight mellinQuadraticBoxZeroSection
+  ring
+
+theorem mellinQuadraticBoxZeroSection_eq_normalized_exp_average
+    {ε : ℝ} (hε : 0 < ε) (z : ℂ) :
+    mellinQuadraticBoxZeroSection ε z =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε, z * Complex.exp ((u : ℂ) * z) := by
+  unfold mellinQuadraticBoxZeroSection
+  rw [mellinQuadraticBoxMultiplier_eq_logAverage hε]
+  calc
+    z * (((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε, Complex.exp ((u : ℂ) * z)) =
+      z * ∫ u in (-ε)..ε,
+        ((2 * ε : ℝ)⁻¹ : ℂ) * Complex.exp ((u : ℂ) * z) := by
+          rw [intervalIntegral.integral_const_mul]
+    _ = ∫ u in (-ε)..ε,
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          (z * Complex.exp ((u : ℂ) * z)) := by
+          rw [← intervalIntegral.integral_const_mul]
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with u hu
+          ring
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε, z * Complex.exp ((u : ℂ) * z) := by
+          rw [intervalIntegral.integral_const_mul]
+
+theorem pascalCenteredXiPrimeSideQuadraticization_polarization_pointwise
+    {F : ℂ} (hF : F = starRingEnd ℂ F) :
+    (4 : ℂ) * F =
+      (Complex.normSq (F + 1) : ℂ) - (Complex.normSq (F - 1) : ℂ) := by
+  rw [Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_conj_mul_self,
+    map_add, map_sub, map_one, ← hF]
+  ring
+
+theorem pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_polarization_pointwise
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    (4 : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u =
+      (Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u + 1) : ℂ) -
+      (Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u - 1) : ℂ) := by
+  apply pascalCenteredXiPrimeSideQuadraticization_polarization_pointwise
+  exact pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_eq_conj W X u
+
+/-! The remaining linear-source bridge needs an actual finite-rectangle
+integrability/Fubini certificate.  This marker records that the product and
+polarization results above do not silently provide that exchange. -/
+inductive PascalCenteredXiPrimeSideQuadraticizationLinearAggregateExchangeGap : Prop
+  | currentFiniteRectangleIntegrability :
+      PascalCenteredXiPrimeSideQuadraticizationLinearAggregateExchangeGap
 
 end DkMath.RH.CFBRCProjection
