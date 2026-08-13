@@ -114,4 +114,78 @@ theorem mellinQuadraticBoxGram_feature_normSq_eq_double_sum
   rw [Complex.exp_add]
   ring
 
+noncomputable def mellinQuadraticBoxGramPairIntegrand
+    (z w a b : ℂ) (t : ℝ) : ℂ :=
+  a * starRingEnd ℂ b * z * starRingEnd ℂ w *
+    Complex.exp ((t : ℂ) * (z + starRingEnd ℂ w))
+
+theorem mellinQuadraticBoxGram_pair_eq_integral
+    {ε : ℝ} (hε : 0 < ε) (z w a b : ℂ) :
+    a * starRingEnd ℂ b * mellinQuadraticBoxGramKernel ε z w =
+      ∫ t in (-ε)..ε,
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          mellinQuadraticBoxGramPairIntegrand z w a b t := by
+  unfold mellinQuadraticBoxGramPairIntegrand
+  rw [mellinQuadraticBoxGramKernel_eq_logAverage_integral hε]
+  calc
+    a * starRingEnd ℂ b *
+        (z * starRingEnd ℂ w *
+          (((2 * ε : ℝ)⁻¹ : ℂ) *
+            ∫ t in (-ε)..ε,
+              Complex.exp ((t : ℂ) * (z + starRingEnd ℂ w)))) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (a * starRingEnd ℂ b * z * starRingEnd ℂ w) *
+          ∫ t in (-ε)..ε,
+            Complex.exp ((t : ℂ) * (z + starRingEnd ℂ w)) := by ring
+    _ = ∫ t in (-ε)..ε,
+          ((2 * ε : ℝ)⁻¹ : ℂ) *
+            (a * starRingEnd ℂ b * z * starRingEnd ℂ w) *
+              Complex.exp ((t : ℂ) * (z + starRingEnd ℂ w)) := by
+      rw [intervalIntegral.integral_const_mul]
+    _ = ∫ t in (-ε)..ε,
+          ((2 * ε : ℝ)⁻¹ : ℂ) *
+            mellinQuadraticBoxGramPairIntegrand z w a b t := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with t
+      unfold mellinQuadraticBoxGramPairIntegrand
+      intro _
+      ring
+
+theorem mellinQuadraticBoxGramPairIntegrand_intervalIntegrable
+    {ε : ℝ} (z w a b : ℂ) :
+    IntervalIntegrable
+      (mellinQuadraticBoxGramPairIntegrand z w a b)
+      volume (-ε) ε := by
+  unfold mellinQuadraticBoxGramPairIntegrand
+  exact (by fun_prop : Continuous (fun t : ℝ =>
+    a * starRingEnd ℂ b * z * starRingEnd ℂ w *
+      Complex.exp ((t : ℂ) * (z + starRingEnd ℂ w))))
+    |>.intervalIntegrable _ _
+
+theorem mellinQuadraticBoxGramEnergy_eq_normalized_integral
+    {n : ℕ} {ε : ℝ} (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    (mellinQuadraticBoxGramEnergy ε z c : ℂ) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ t in (-ε)..ε,
+          (Complex.normSq
+            (∑ j, c j * (z j * Complex.exp ((t : ℂ) * z j))) : ℂ) := by
+  unfold mellinQuadraticBoxGramEnergy
+  push_cast
+  rw [← intervalIntegral.integral_ofReal]
+
+theorem mellinQuadraticBoxGramEnergy_eq_normalized_double_sum_integral
+    {n : ℕ} {ε : ℝ} (z : Fin n → ℂ) (c : Fin n → ℂ) :
+    (mellinQuadraticBoxGramEnergy ε z c : ℂ) =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ t in (-ε)..ε,
+          ∑ i, ∑ j,
+            c i * starRingEnd ℂ (c j) * z i * starRingEnd ℂ (z j) *
+              Complex.exp ((t : ℂ) * (z i + starRingEnd ℂ (z j))) := by
+  rw [mellinQuadraticBoxGramEnergy_eq_normalized_integral]
+  apply congrArg (fun x : ℂ => ((2 * ε : ℝ)⁻¹ : ℂ) * x)
+  apply intervalIntegral.integral_congr_ae
+  filter_upwards [] with t
+  intro _
+  exact mellinQuadraticBoxGram_feature_normSq_eq_double_sum z c t
+
 end DkMath.Analysis
