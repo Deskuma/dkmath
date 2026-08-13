@@ -46,11 +46,27 @@ def eval
     SevenCyclotomicDegreeSixInt.Ring →+* ZMod q :=
   SevenCyclotomicDegreeSixInt.localEval a.quotientAddress
 
+@[simp] theorem eval_apply
+    (a : CyclotomicLinearPrimeAddress p q)
+    (x : SevenCyclotomicDegreeSixInt.Ring) :
+    a.eval x =
+      a.quotientAddress.evalAlphaRoot x.re +
+        (a.quotientAddress.ratio : ZMod q) *
+          a.quotientAddress.evalAlphaRoot x.im := by
+  rfl
+
 /-- The degree-one prime ideal selected by the canonical oriented ratio. -/
 def evalKernel
     (a : CyclotomicLinearPrimeAddress p q) :
     Ideal SevenCyclotomicDegreeSixInt.Ring :=
   RingHom.ker a.eval
+
+@[simp] theorem mem_evalKernel_iff
+    (a : CyclotomicLinearPrimeAddress p q)
+    (x : SevenCyclotomicDegreeSixInt.Ring) :
+    x ∈ a.evalKernel ↔ a.eval x = 0 := by
+  change x ∈ RingHom.ker a.eval ↔ _
+  exact RingHom.mem_ker
 
 /-- The explicit oriented linear carrier vanishes at its canonical
 degree-six address. -/
