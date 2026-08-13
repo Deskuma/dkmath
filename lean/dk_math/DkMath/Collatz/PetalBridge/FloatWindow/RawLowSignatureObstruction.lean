@@ -262,7 +262,13 @@ theorem stateUpperCarry_T_rawAllOnesWitness_eq_two
 inductive RawLowHeightClass where
   | one
   | atLeastTwo
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype RawLowHeightClass where
+  elems := {RawLowHeightClass.one, RawLowHeightClass.atLeastTwo}
+  complete := by
+    intro x
+    cases x <;> simp
 
 /--
 The deliberately fixed observation under audit.  It contains only a lower
@@ -1217,8 +1223,14 @@ theorem not_coversAllRawOddTransitionsWithFixedLowUpperBoundaryThreeSignature
   let c : OddNat := ⟨59, by decide⟩
   apply C.false_of_three_step_projected_cycle_of_actualWeight_add_pos
     (hstep a) (hstep b) (hstep c)
-  · rw [T_89_eq_67, hsignature, hsignature]
-    exact fixedLowUpperBoundaryThreeSignature_67_eq_39
+  · calc
+      C.signature (T a) = C.signature (⟨67, by decide⟩ : OddNat) := by
+        exact congrArg C.signature T_89_eq_67
+      _ = fixedLowUpperBoundaryThreeSignature 1 (⟨67, by decide⟩ : OddNat) :=
+        hsignature _
+      _ = fixedLowUpperBoundaryThreeSignature 1 b :=
+        fixedLowUpperBoundaryThreeSignature_67_eq_39
+      _ = C.signature b := (hsignature b).symm
   · rw [T_39_eq_59]
   · rw [T_59_eq_89]
   · rw [hweight, hweight, hweight, T_89_eq_67, T_39_eq_59, T_59_eq_89,
