@@ -284,4 +284,232 @@ theorem pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode_neg_eq_conj
 inductive PascalCenteredXiPrimeSideQuadraticizationAdjointProviderGap : Prop
   | currentFiniteLedger : PascalCenteredXiPrimeSideQuadraticizationAdjointProviderGap
 
+theorem pascalPrimePowerPHZFiniteUpTo_conj
+    (X : ℕ) (s : ℂ) :
+    pascalPrimePowerPHZFiniteUpTo X (starRingEnd ℂ s) =
+      starRingEnd ℂ (pascalPrimePowerPHZFiniteUpTo X s) := by
+  rw [pascalPrimePowerPHZFiniteUpTo_eq_vonMangoldt_sum,
+    pascalPrimePowerPHZFiniteUpTo_eq_vonMangoldt_sum]
+  simp only [map_sum, map_mul, Complex.conj_ofReal]
+  apply Finset.sum_congr rfl
+  intro q hq
+  by_cases hq0 : q = 0
+  · subst q
+    simp
+  · have harg : ((q : ℂ).arg) ≠ Real.pi := by
+      rw [Complex.natCast_arg]
+      exact ne_of_lt Real.pi_pos
+    congr 1
+    simpa [Complex.natCast_arg] using
+      (Complex.conj_cpow (q : ℂ) (-(starRingEnd ℂ s)) harg)
+
+theorem pascalXiElementaryLogDerivCorrection_conj (s : ℂ) :
+    pascalXiElementaryLogDerivCorrection (starRingEnd ℂ s) =
+      starRingEnd ℂ (pascalXiElementaryLogDerivCorrection s) := by
+  simp [pascalXiElementaryLogDerivCorrection]
+
+theorem pascalXiArchimedeanGammaR_conj (s : ℂ) :
+    Complex.Gammaℝ (starRingEnd ℂ s) =
+      starRingEnd ℂ (Complex.Gammaℝ s) := by
+  unfold Complex.Gammaℝ
+  have hpi :
+      (Real.pi : ℂ) ^ (-(starRingEnd ℂ s) / 2) =
+        starRingEnd ℂ ((Real.pi : ℂ) ^ (-s / 2)) := by
+    convert (Complex.conj_cpow (Real.pi : ℂ) (-(starRingEnd ℂ s) / 2)
+      (by
+        rw [Complex.arg_ofReal_of_nonneg Real.pi_pos.le]
+        exact ne_of_lt Real.pi_pos)) using 1 <;>
+      simp [map_neg, map_ofNat]
+  have hgamma :
+      Complex.Gamma ((starRingEnd ℂ s) / 2) =
+        starRingEnd ℂ (Complex.Gamma (s / 2)) := by
+    have h := Complex.Gamma_conj (s / 2)
+    convert h using 1
+    congr 1
+    rw [map_div₀]
+    have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by
+      simp only [map_ofNat]
+    rw [htwo]
+  rw [hpi, hgamma, map_mul]
+
+theorem pascalXiArchimedeanLogDeriv_conj (s : ℂ) :
+    pascalXiArchimedeanLogDeriv (starRingEnd ℂ s) =
+      starRingEnd ℂ (pascalXiArchimedeanLogDeriv s) := by
+  unfold pascalXiArchimedeanLogDeriv
+  rw [logDeriv_apply, logDeriv_apply]
+  have hfun :
+      (starRingEnd ℂ) ∘ Complex.Gammaℝ ∘ (starRingEnd ℂ) =
+        Complex.Gammaℝ := by
+    funext z
+    rw [Function.comp_apply, Function.comp_apply,
+      pascalXiArchimedeanGammaR_conj]
+    simp only [starRingEnd_apply, star_star]
+  have hderiv := congrFun (deriv_conj_conj (f := Complex.Gammaℝ)) s
+  rw [hfun] at hderiv
+  simp only [Function.comp_apply] at hderiv
+  have hderiv' := congrArg (starRingEnd ℂ) hderiv
+  have hderiv'' :
+      deriv Complex.Gammaℝ (starRingEnd ℂ s) =
+        starRingEnd ℂ (deriv Complex.Gammaℝ s) := by
+    simpa using hderiv'.symm
+  rw [hderiv'', pascalXiArchimedeanGammaR_conj]
+  simp
+
+theorem pascalSymmetricRectangleRightEdge_neg_eq_conj
+    (σ t : ℝ) :
+    pascalSymmetricRectangleRightEdge σ (-t) =
+      starRingEnd ℂ (pascalSymmetricRectangleRightEdge σ t) := by
+  apply Complex.ext <;>
+    simp [pascalSymmetricRectangleRightEdge]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X (-t) =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude
+  rw [pascalSymmetricRectangleRightEdge_neg_eq_conj,
+    pascalPrimePowerPHZFiniteUpTo_conj,
+    pascalXiArchimedeanLogDeriv_conj,
+    pascalXiElementaryLogDerivCorrection_conj]
+  simp only [map_add]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity W X (-t) =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity W X t) := by
+  simp only [pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity,
+    pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode_neg_eq_conj,
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude_neg_eq_conj,
+    starRingEnd_apply, map_mul]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationGramFeature_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (t u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationGramFeature W (-t) u =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationGramFeature W t u) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationGramFeature
+  rw [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode_neg_eq_conj]
+  have hexp :
+      Complex.exp ((u : ℂ) *
+          starRingEnd ℂ
+            (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) =
+        starRingEnd ℂ
+          (Complex.exp ((u : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+    calc
+      _ = Complex.exp
+          (starRingEnd ℂ ((u : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) := by
+              congr 1
+              simp [map_mul]
+      _ = _ := by exact Complex.exp_conj _
+  rw [hexp]
+  simp only [starRingEnd_apply, map_mul]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationBoxFeature_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X (-t) u =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) := by
+  rw [pascalCenteredXiPrimeSideQuadraticizationBoxFeature_eq_coefficient_mul_feature,
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature_eq_coefficient_mul_feature,
+    pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity_neg_eq_conj,
+    pascalCenteredXiPrimeSideQuadraticizationGramFeature_neg_eq_conj]
+  simp only [starRingEnd_apply, map_mul]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
+  calc
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) =
+      ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X (-t) u := by
+          simpa only [neg_neg] using
+            (intervalIntegral.integral_comp_neg
+              (f := fun t : ℝ =>
+                pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u)
+              (a := -W.rectangle.T) (b := W.rectangle.T)).symm
+    _ = ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) := by
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with t ht
+          exact pascalCenteredXiPrimeSideQuadraticizationBoxFeature_neg_eq_conj W X t u
+    _ = starRingEnd ℂ
+        (∫ t in (-W.rectangle.T)..W.rectangle.T,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) := by
+          rw [intervalIntegral.intervalIntegral_conj]
+
+/-! A concrete mirrored source for the adjoint contract.  Its definition uses
+the finite source family itself, with the contour reflection `t ↦ -t`; it is
+not defined by applying complex conjugation to the aggregate. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X (-t) u
+
+theorem pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature W X u =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
+  calc
+    (∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X (-t) u) =
+      ∫ t in (-W.rectangle.T)..W.rectangle.T,
+        pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u := by
+          simpa only [neg_neg] using
+            (intervalIntegral.integral_comp_neg
+              (f := fun t : ℝ =>
+                pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u)
+              (a := -W.rectangle.T) (b := W.rectangle.T))
+    _ = starRingEnd ℂ
+        (∫ t in (-W.rectangle.T)..W.rectangle.T,
+          pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u) := by
+          exact pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_eq_conj
+            W X u
+
+/-! Unlike the legacy audit structure above, this contract records the
+concrete mirrored finite source and its independently proved conjugation
+identity. -/
+structure PascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointProvider
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) where
+  adjoint : ℝ → ℂ
+  adjoint_eq_mirrored_source :
+    ∀ u,
+      adjoint u =
+        pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature W X u
+  mirrored_source_eq_conj_aggregated :
+    ∀ u,
+      pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature W X u =
+        starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
+
+theorem PascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointProvider.adjoint_eq_conj_aggregated
+    {W : PascalCenteredXiResidueTransportWindow} {X : ℕ}
+    (P : PascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointProvider W X)
+    (u : ℝ) :
+    P.adjoint u =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
+  rw [P.adjoint_eq_mirrored_source, P.mirrored_source_eq_conj_aggregated]
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointProvider
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    PascalCenteredXiPrimeSideQuadraticizationSourceDerivedAdjointProvider W X :=
+  { adjoint := fun u =>
+      pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature W X u
+    adjoint_eq_mirrored_source := fun _ => rfl
+    mirrored_source_eq_conj_aggregated := fun u =>
+      pascalCenteredXiPrimeSideQuadraticizationMirroredAggregatedBoxFeature_eq_conj
+        W X u }
+
 end DkMath.RH.CFBRCProjection
