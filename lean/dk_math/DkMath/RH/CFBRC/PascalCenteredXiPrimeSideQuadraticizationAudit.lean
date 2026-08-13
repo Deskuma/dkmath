@@ -208,4 +208,67 @@ theorem pascalCenteredXiPrimeSideQuadraticization_boxFeature_integral_eq_weight_
   intro _
   ring_nf
 
+/-! ## Gate 4B.3c3: continuous coefficient and feature audit -/
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t *
+    pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationGramFeature
+    (W : PascalCenteredXiResidueTransportWindow) (t u : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t *
+    Complex.exp
+      ((u : ℂ) * pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)
+
+theorem pascalCenteredXiPrimeSideQuadraticizationBoxFeature_eq_coefficient_mul_feature
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t u : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u =
+      pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity W X t *
+        pascalCenteredXiPrimeSideQuadraticizationGramFeature W t u := by
+  simp only [pascalCenteredXiPrimeSideQuadraticizationBoxFeature,
+    pascalCenteredXiPrimeSideQuadraticizationCoefficientDensity,
+    pascalCenteredXiPrimeSideQuadraticizationGramFeature]
+  ring
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiPrimeSideQuadraticizationBoxFeature W X t u
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℝ :=
+  ((2 * ε)⁻¹) *
+    ∫ u in (-ε)..ε,
+      Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
+
+theorem pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    0 ≤ pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy ε W X := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationContinuousGramEnergy
+  have hscale : 0 ≤ (2 * ε)⁻¹ := by positivity
+  have hinterval : -ε ≤ ε := by linarith
+  have hmass :
+      0 ≤ ∫ u in (-ε)..ε,
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u) := by
+    apply intervalIntegral.integral_nonneg_of_ae hinterval
+    exact Filter.Eventually.of_forall (fun u => Complex.normSq_nonneg _)
+  exact mul_nonneg hscale hmass
+
+/-! A future source-derived adjoint must provide the following exact contract.
+The existing finite ledger does not instantiate it; defining the conjugate
+function alone is not a source-derived provider. -/
+structure PascalCenteredXiPrimeSideQuadraticizationContinuousAdjointProvider
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) where
+  adjoint : ℝ → ℂ
+  source_derived : Prop
+  adjoint_eq_conj_aggregated :
+    ∀ u,
+      adjoint u =
+        starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
+
 end DkMath.RH.CFBRCProjection
