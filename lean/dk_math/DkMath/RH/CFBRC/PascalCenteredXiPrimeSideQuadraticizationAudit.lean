@@ -271,4 +271,17 @@ structure PascalCenteredXiPrimeSideQuadraticizationContinuousAdjointProvider
         starRingEnd ℂ
           (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X u)
 
+theorem pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W (-t) =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) := by
+  apply Complex.ext <;>
+    simp [pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode,
+      pascalOrdinaryToCentered, pascalSymmetricRectangleRightEdge,
+      criticalLineCenter]
+
+inductive PascalCenteredXiPrimeSideQuadraticizationAdjointProviderGap : Prop
+  | currentFiniteLedger : PascalCenteredXiPrimeSideQuadraticizationAdjointProviderGap
+
 end DkMath.RH.CFBRCProjection
