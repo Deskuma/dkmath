@@ -86,11 +86,12 @@ theorem etaCriticalMirrorRotatedDefectProjectionPartial_eq_sum_range
     etaCriticalMirrorRotatedDefectProjectionPartial K s =
       (Finset.range K).sum
         (etaCriticalMirrorRotatedDefectPairProjection s) := by
-  simp [etaCriticalMirrorRotatedDefectProjectionPartial,
-    etaCriticalMirrorRotatedDefectPairProjection,
-    etaCriticalMirrorRotatedDefectPairedPartial,
-    etaCriticalMirrorSignedVerticalProjection,
-    Finset.mul_sum]
+  simp only [etaCriticalMirrorRotatedDefectProjectionPartial,
+    etaCriticalMirrorSignedVerticalProjection, etaCriticalMirrorRotatedDefectPairedPartial,
+    Complex.im_sum, Finset.mul_sum, etaCriticalMirrorRotatedDefectPairProjection]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rfl
 
 /--
 The complete projected pair `tsum` is the named Abel-limit coordinate.
