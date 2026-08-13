@@ -96,5 +96,22 @@ noncomputable def mellinQuadraticBoxGramQuadraticForm
     c i * starRingEnd ℂ (c j) *
       mellinQuadraticBoxGramKernel ε (z i) (z j)
 
+theorem mellinQuadraticBoxGram_feature_normSq_eq_double_sum
+    {n : ℕ} (z : Fin n → ℂ) (c : Fin n → ℂ) (t : ℝ) :
+    (Complex.normSq
+      (∑ j, c j * (z j * Complex.exp ((t : ℂ) * z j))) : ℂ) =
+      ∑ i, ∑ j,
+        c i * starRingEnd ℂ (c j) * z i * starRingEnd ℂ (z j) *
+          Complex.exp ((t : ℂ) * (z i + starRingEnd ℂ (z j))) := by
+  classical
+  simp only [Complex.normSq_eq_conj_mul_self, map_sum, map_mul,
+    Finset.mul_sum, Finset.sum_mul, ← Complex.exp_conj, Complex.conj_ofReal]
+  apply Finset.sum_congr rfl
+  intro i hi
+  apply Finset.sum_congr rfl
+  intro j hj
+  rw [mul_add]
+  rw [Complex.exp_add]
+  ring
 
 end DkMath.Analysis
