@@ -28,19 +28,25 @@ open scoped Topology Interval
 
 /-! ## Gate 3A.1: orientation-normalized vertical bases -/
 
-/-- The finite prime right-edge base with its path-orientation `I` removed. -/
+/-- Gate 3A scalar lift of the finite prime contribution.
+
+This is deliberately only a scalar-layer lift of the normalized real
+contribution.  It is not the original complex contour quantity; Gate 3B
+below reconstructs that quantity from the source right-edge integral. -/
 noncomputable def pascalCenteredXiMellinQuadraticPrimeVerticalBase
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
   (pascalCenteredXiMellinQuadraticNormalizedPrimeContribution ε W X : ℂ) *
     (Real.pi : ℂ)
 
-/-- The archimedean right-edge base with its path-orientation `I` removed. -/
+/-- Gate 3A scalar lift of the archimedean contribution; not a complex
+contour source quantity. -/
 noncomputable def pascalCenteredXiMellinQuadraticArchimedeanVerticalBase
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
   (pascalCenteredXiMellinQuadraticNormalizedArchimedeanContribution ε W : ℂ) *
     (Real.pi : ℂ)
 
-/-- The elementary right-edge base with its path-orientation `I` removed. -/
+/-- Gate 3A scalar lift of the elementary contribution; not a complex
+contour source quantity. -/
 noncomputable def pascalCenteredXiMellinQuadraticElementaryVerticalBase
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
   (pascalCenteredXiMellinQuadraticNormalizedElementaryContribution ε W : ℂ) *
@@ -186,5 +192,164 @@ theorem pascalCenteredXiMellinQuadraticScalarExcess_nonneg_iff_defect_nonpos
   rw [pascalCenteredXiMellinQuadraticScalarExcess_eq_neg_pi_mul_defect hε W X]
   have hpi : 0 < Real.pi := Real.pi_pos
   constructor <;> intro h <;> nlinarith
+
+/-! ## Gate 3B.0: source-level complex reconstruction -/
+
+/-- Remove the vertical path orientation from a genuine complex source
+quantity.  This acts on the source integral itself, not on its real part. -/
+noncomputable def pascalCenteredXiVerticalDeorient (z : ℂ) : ℂ :=
+  -Complex.I * z
+
+theorem pascalCenteredXiVerticalDeorient_re_eq_im (z : ℂ) :
+    (pascalCenteredXiVerticalDeorient z).re = z.im := by
+  simp [pascalCenteredXiVerticalDeorient, Complex.mul_re]
+
+private theorem pascalCenteredXiVerticalDeorient_re_eq_pi_mul_normalized_re
+    (z : ℂ) :
+    (pascalCenteredXiVerticalDeorient z).re =
+      Real.pi * ((2 * Real.pi * Complex.I)⁻¹ * (2 * z)).re := by
+  unfold pascalCenteredXiVerticalDeorient
+  simp only [Complex.mul_re, Complex.mul_im, Complex.inv_re, Complex.inv_im,
+    Complex.normSq, Complex.I_re, Complex.I_im,
+    Complex.ofReal_re, Complex.ofReal_im]
+  norm_num
+  field_simp [Real.pi_ne_zero]
+
+private theorem pascalCenteredXiVerticalDeorient_add_re (a b c : ℂ) :
+    (pascalCenteredXiVerticalDeorient (a + b + c)).re =
+      (pascalCenteredXiVerticalDeorient a).re +
+        (pascalCenteredXiVerticalDeorient b).re +
+        (pascalCenteredXiVerticalDeorient c).re := by
+  unfold pascalCenteredXiVerticalDeorient
+  simp only [mul_add, Complex.add_re]
+
+/-- Genuine oriented prime source surface before deorientation.  The `I` is
+retained by `pascalPrimePowerRightEdgeCutoffIntegral`. -/
+noncomputable def pascalCenteredXiMellinQuadraticOrientedPrimeSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  pascalPrimePowerRightEdgeCutoffIntegral
+    (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+    W.rectangle.σ W.rectangle.T X
+
+/-- Genuine oriented archimedean source surface before deorientation. -/
+noncomputable def pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
+  pascalXiArchimedeanRightEdgeIntegral
+    (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+    W.rectangle.σ W.rectangle.T
+
+/-- Genuine oriented elementary source surface before deorientation. -/
+noncomputable def pascalCenteredXiMellinQuadraticOrientedElementarySurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
+  pascalXiElementaryRightEdgeIntegral
+    (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+    W.rectangle.σ W.rectangle.T
+
+/-- The genuine complex vertical surface, reconstructed from the three
+source-level oriented right-edge integrals and deoriented once. -/
+noncomputable def pascalCenteredXiMellinQuadraticComplexVerticalSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  pascalCenteredXiVerticalDeorient
+    (pascalCenteredXiMellinQuadraticOrientedPrimeSurface ε W X +
+      pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface ε W +
+      pascalCenteredXiMellinQuadraticOrientedElementarySurface ε W)
+
+/-- The genuine whole complex surface: the deoriented vertical source plus
+the top horizontal source with its remaining `-I` orientation. -/
+noncomputable def pascalCenteredXiMellinQuadraticComplexWholeSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X -
+    Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W
+
+theorem pascalCenteredXiMellinQuadraticOrientedPrimeSurface_deorient_re_eq_pi_mul_normalized
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (pascalCenteredXiVerticalDeorient
+      (pascalCenteredXiMellinQuadraticOrientedPrimeSurface ε W X)).re =
+      Real.pi * pascalCenteredXiMellinQuadraticNormalizedPrimeContribution ε W X := by
+  unfold pascalCenteredXiMellinQuadraticOrientedPrimeSurface
+  rw [pascalPrimePowerRightEdgeCutoffIntegral_eq_vonMangoldt_sum
+    (pascalCenteredXiMellinSecondDifferenceWeight_differentiable hε)
+    W.rectangle.σ W.rectangle.T X]
+  unfold pascalCenteredXiMellinQuadraticNormalizedPrimeContribution
+  change (pascalCenteredXiVerticalDeorient _).re =
+    Real.pi * (((2 * Real.pi * Complex.I)⁻¹ * _).re)
+  exact pascalCenteredXiVerticalDeorient_re_eq_pi_mul_normalized_re _
+
+theorem pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface_deorient_re_eq_pi_mul_normalized
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) :
+    (pascalCenteredXiVerticalDeorient
+      (pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface ε W)).re =
+      Real.pi * pascalCenteredXiMellinQuadraticNormalizedArchimedeanContribution ε W := by
+  unfold pascalCenteredXiVerticalDeorient
+    pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface
+  change (pascalCenteredXiVerticalDeorient
+    (pascalXiArchimedeanRightEdgeIntegral
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ W.rectangle.T)).re =
+    Real.pi * ((2 * Real.pi * Complex.I)⁻¹ *
+      (2 * pascalXiArchimedeanRightEdgeIntegral
+        (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+        W.rectangle.σ W.rectangle.T)).re
+  exact pascalCenteredXiVerticalDeorient_re_eq_pi_mul_normalized_re
+    (pascalXiArchimedeanRightEdgeIntegral
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ W.rectangle.T)
+
+theorem pascalCenteredXiMellinQuadraticOrientedElementarySurface_deorient_re_eq_pi_mul_normalized
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) :
+    (pascalCenteredXiVerticalDeorient
+      (pascalCenteredXiMellinQuadraticOrientedElementarySurface ε W)).re =
+      Real.pi * pascalCenteredXiMellinQuadraticNormalizedElementaryContribution ε W := by
+  unfold pascalCenteredXiVerticalDeorient
+    pascalCenteredXiMellinQuadraticOrientedElementarySurface
+  change (pascalCenteredXiVerticalDeorient
+    (pascalXiElementaryRightEdgeIntegral
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ W.rectangle.T)).re =
+    Real.pi * ((2 * Real.pi * Complex.I)⁻¹ *
+      (2 * pascalXiElementaryRightEdgeIntegral
+        (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+        W.rectangle.σ W.rectangle.T)).re
+  exact pascalCenteredXiVerticalDeorient_re_eq_pi_mul_normalized_re
+    (pascalXiElementaryRightEdgeIntegral
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ W.rectangle.T)
+
+theorem pascalCenteredXiMellinQuadraticComplexWholeSurface_re_eq_scalarSurface
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).re =
+      pascalCenteredXiMellinQuadraticScalarSurface ε W X := by
+  unfold pascalCenteredXiMellinQuadraticComplexWholeSurface
+    pascalCenteredXiMellinQuadraticComplexVerticalSurface
+    pascalCenteredXiMellinQuadraticScalarSurface
+    pascalCenteredXiMellinQuadraticVerticalBase
+  have hde := pascalCenteredXiVerticalDeorient_add_re
+    (pascalCenteredXiMellinQuadraticOrientedPrimeSurface ε W X)
+    (pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface ε W)
+    (pascalCenteredXiMellinQuadraticOrientedElementarySurface ε W)
+  simp only [Complex.sub_re]
+  rw [hde]
+  rw [pascalCenteredXiMellinQuadraticOrientedPrimeSurface_deorient_re_eq_pi_mul_normalized
+      hε W X,
+    pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface_deorient_re_eq_pi_mul_normalized,
+    pascalCenteredXiMellinQuadraticOrientedElementarySurface_deorient_re_eq_pi_mul_normalized]
+  simp only [Complex.mul_re, Complex.I_re, Complex.I_im,
+    zero_mul, one_mul, Complex.add_re,
+    pascalCenteredXiMellinQuadraticPrimeVerticalBase,
+    pascalCenteredXiMellinQuadraticArchimedeanVerticalBase,
+    pascalCenteredXiMellinQuadraticElementaryVerticalBase,
+    Complex.ofReal_re, Complex.ofReal_im]
+  ring
+
+theorem pascalCenteredXiMellinQuadraticScalarExcess_eq_complexWholeSurface_re_sub_radial
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticScalarExcess ε W X =
+      (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).re -
+        Real.pi * pascalCenteredXiFixedRadialSecondMomentFunctional W.R := by
+  rw [pascalCenteredXiMellinQuadraticComplexWholeSurface_re_eq_scalarSurface hε W X]
+  rfl
 
 end DkMath.RH.CFBRCProjection
