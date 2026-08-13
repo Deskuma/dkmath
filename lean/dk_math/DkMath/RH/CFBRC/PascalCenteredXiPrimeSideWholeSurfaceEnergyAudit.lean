@@ -352,4 +352,119 @@ theorem pascalCenteredXiMellinQuadraticScalarExcess_eq_complexWholeSurface_re_su
   rw [pascalCenteredXiMellinQuadraticComplexWholeSurface_re_eq_scalarSurface hε W X]
   rfl
 
+/-! ## Gate 3B.1a: pointwise source audit -/
+
+/-- The pointwise prime source after applying the complex deorientation.
+The finite cutoff and the original right-edge `I` remain visible. -/
+noncomputable def pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  pascalCenteredXiVerticalDeorient
+    (pascalPrimePowerRightEdgeCutoffIntegrand
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ X t)
+
+/-- The pointwise archimedean source after complex deorientation. -/
+noncomputable def pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) : ℂ :=
+  pascalCenteredXiVerticalDeorient
+    (pascalXiArchimedeanRightEdgeIntegrand
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ t)
+
+/-- The pointwise elementary source after complex deorientation. -/
+noncomputable def pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (t : ℝ) : ℂ :=
+  pascalCenteredXiVerticalDeorient
+    (pascalXiElementaryRightEdgeIntegrand
+      (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+      W.rectangle.σ t)
+
+/-- The pointwise deoriented vertical source, before interval integration. -/
+noncomputable def pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) : ℂ :=
+  pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand ε W X t +
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand ε W t +
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand ε W t
+
+theorem pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand_eq_deorient_source
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t : ℝ) :
+    pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand ε W X t =
+      pascalCenteredXiVerticalDeorient
+        (pascalPrimePowerRightEdgeCutoffIntegrand
+            (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+            W.rectangle.σ X t +
+          pascalXiArchimedeanRightEdgeIntegrand
+            (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+            W.rectangle.σ t +
+          pascalXiElementaryRightEdgeIntegrand
+            (pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+            W.rectangle.σ t) := by
+  simp only [pascalCenteredXiMellinQuadraticDeorientedVerticalIntegrand,
+    pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand,
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand,
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand,
+    pascalCenteredXiVerticalDeorient, mul_add, add_assoc]
+
+/-- Finite interval lift of the deoriented prime source. -/
+noncomputable def pascalCenteredXiMellinQuadraticPrimeDeorientedSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand ε W X t
+
+/-- Finite interval lift of the deoriented archimedean source. -/
+noncomputable def pascalCenteredXiMellinQuadraticArchimedeanDeorientedSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand ε W t
+
+/-- Finite interval lift of the deoriented elementary source. -/
+noncomputable def pascalCenteredXiMellinQuadraticElementaryDeorientedSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand ε W t
+
+theorem pascalCenteredXiMellinQuadraticDeorientedSurfaces_eq_complexVerticalSurface
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticPrimeDeorientedSurface ε W X +
+        pascalCenteredXiMellinQuadraticArchimedeanDeorientedSurface ε W +
+      pascalCenteredXiMellinQuadraticElementaryDeorientedSurface ε W =
+      pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X := by
+  unfold pascalCenteredXiMellinQuadraticPrimeDeorientedSurface
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedSurface
+    pascalCenteredXiMellinQuadraticElementaryDeorientedSurface
+    pascalCenteredXiMellinQuadraticPrimeDeorientedIntegrand
+    pascalCenteredXiMellinQuadraticArchimedeanDeorientedIntegrand
+    pascalCenteredXiMellinQuadraticElementaryDeorientedIntegrand
+    pascalCenteredXiMellinQuadraticComplexVerticalSurface
+    pascalCenteredXiMellinQuadraticOrientedPrimeSurface
+    pascalCenteredXiMellinQuadraticOrientedArchimedeanSurface
+    pascalCenteredXiMellinQuadraticOrientedElementarySurface
+    pascalCenteredXiVerticalDeorient
+  rw [intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul,
+    intervalIntegral.integral_const_mul]
+  rw [mul_add, mul_add]
+  rfl
+
+/-! ## Gate 3B.1b: explicit radial comparison -/
+
+/-- The scalar radial comparison carried by the current finite excess. -/
+noncomputable def pascalCenteredXiMellinQuadraticRadialComparison
+    (W : PascalCenteredXiResidueTransportWindow) : ℝ :=
+  Real.pi * pascalCenteredXiFixedRadialSecondMomentFunctional W.R
+
+theorem pascalCenteredXiMellinQuadraticScalarExcess_eq_complexWholeSurface_re_sub_radialComparison
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticScalarExcess ε W X =
+      (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).re -
+        pascalCenteredXiMellinQuadraticRadialComparison W := by
+  rw [pascalCenteredXiMellinQuadraticScalarExcess_eq_complexWholeSurface_re_sub_radial
+    hε W X]
+  rfl
+
+/-! Gate 3B.1c remains an explicit obstruction boundary: this module supplies
+no positive energy provider.  The source reconstruction and radial comparison
+do not by themselves yield a square, Gram form, or nonnegativity theorem for
+the finite scalar excess. -/
+
 end DkMath.RH.CFBRCProjection
