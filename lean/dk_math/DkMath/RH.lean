@@ -54,6 +54,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiPrimeRightEdgeTransport
 import DkMath.RH.CFBRC.PascalCenteredXiFiniteArithmeticExplicitFormula
 import DkMath.RH.CFBRC.PascalCenteredXiMellinArithmeticSpecialization
 import DkMath.RH.CFBRC.PascalCenteredXiMellinQuadraticArithmeticLimit
+import DkMath.RH.CFBRC.PascalCenteredXiArithmeticDefectRepresentation
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
