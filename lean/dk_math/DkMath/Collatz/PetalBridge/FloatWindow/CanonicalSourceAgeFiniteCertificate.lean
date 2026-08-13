@@ -700,7 +700,15 @@ inductive CanonicalSourceAgeFrontierDriftClass where
   | negative
   | zero
   | positive
-deriving DecidableEq, Fintype
+deriving DecidableEq
+
+instance : Fintype CanonicalSourceAgeFrontierDriftClass where
+  elems := {CanonicalSourceAgeFrontierDriftClass.negative,
+    CanonicalSourceAgeFrontierDriftClass.zero,
+    CanonicalSourceAgeFrontierDriftClass.positive}
+  complete := by
+    intro x
+    cases x <;> simp
 
 /-- First finite source-age frontier signature. -/
 structure CanonicalSourceAgeFrontierSignature (H queueCap : ℕ) where
