@@ -14,7 +14,7 @@ import Mathlib.RingTheory.Polynomial.Eisenstein.IsIntegral
 
 namespace DkMath.FLT.Seven
 
-open Algebra Polynomial
+open Polynomial
 open NumberField.InfinitePlace
 
 open scoped NumberField nonZeroDivisors
@@ -221,7 +221,7 @@ theorem field_discr :
     ext i
     simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
       PowerBasis.coe_basis, pB, integralPowerBasis_gen]
-    simp
+    rfl
   · norm_num
 
 /-- The cubic field has no complex places.  Positivity of its discriminant
@@ -285,6 +285,7 @@ order. -/
 def alphaInteger : 𝓞 Field :=
   integralPowerBasis.gen + 3
 
+set_option backward.isDefEq.respectTransparency.types false in
 theorem thetaInteger_relation :
     integralPowerBasis.gen ^ 3 +
         7 * integralPowerBasis.gen ^ 2 +
@@ -294,7 +295,8 @@ theorem thetaInteger_relation :
     integralPowerBasis_gen, NumberField.RingOfIntegers.map_mk]
   have h := minpoly.aeval ℚ powerBasis.gen
   rw [powerBasis_minpoly] at h
-  simpa [polynomialQ, eisensteinPolynomial, map_ofNat] using h
+  convert h using 1
+  simp [aeval_def, polynomialQ, eisensteinPolynomial]
 
 theorem alphaInteger_cube :
     alphaInteger ^ 3 =
@@ -339,9 +341,11 @@ def modelToRingOfIntegers :
 @[simp] theorem modelToRingOfIntegers_eisensteinAxis :
     modelToRingOfIntegers SevenRealCubicInt.eisensteinAxis =
       integralPowerBasis.gen := by
-  norm_num [modelToRingOfIntegers, SevenRealCubicInt.eisensteinAxis,
+  simp [modelToRingOfIntegers, SevenRealCubicInt.eisensteinAxis,
     alphaInteger]
+  abel
 
+set_option backward.isDefEq.respectTransparency.types false in
 theorem modelToRingOfIntegers_surjective :
     Function.Surjective modelToRingOfIntegers := by
   intro y
@@ -394,8 +398,13 @@ theorem modelToRingOfIntegers_injective :
           (y.snd + 6 * y.thd) •
             integralPowerBasis.basis i1 +
           y.thd • integralPowerBasis.basis i2 := by
-    simpa [i0, i1, i2, Algebra.smul_def,
-      integralPowerBasis.basis_eq_pow] using hxy
+    simpa only [
+      integralPowerBasis.basis_eq_pow,
+      i0, i1, i2,
+      zsmul_eq_mul,
+      pow_zero, pow_one,
+      mul_one
+    ] using hxy
   have hrepr :=
     congr_arg integralPowerBasis.basis.repr hlinear
   simp only [map_add, LinearEquiv.map_smul,
