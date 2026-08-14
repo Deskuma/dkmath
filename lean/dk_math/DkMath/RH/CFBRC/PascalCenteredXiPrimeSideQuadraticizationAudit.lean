@@ -2301,6 +2301,264 @@ theorem pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_scalarSurface
       linarith [him']
     simpa using hz
 
+/-! ## Q2-K: whole shifted energies and polarization -/
+
+/- The whole shifted energies are deliberately distinct from the earlier
+vertical-only energies.  Their feature contains the source-derived horizontal
+symmetrization as well as the vertical aggregate. -/
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℝ :=
+  ((2 * ε)⁻¹) *
+    ∫ v in (-ε)..ε,
+      Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1)
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℝ :=
+  ((2 * ε)⁻¹) *
+    ∫ v in (-ε)..ε,
+      Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1)
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlus_intervalIntegrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (fun v : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1))
+      volume (-ε) ε := by
+  have hwhole := pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_continuousOn
+    ε W X
+  have hshift : ContinuousOn
+      (fun v : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1)
+      (Set.uIcc (-ε) ε) := by
+    exact hwhole.add continuousOn_const
+  have hnorm : ContinuousOn
+      (fun v : ℝ => Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1))
+      (Set.uIcc (-ε) ε) := by
+    exact Complex.continuous_normSq.continuousOn.comp hshift
+      (fun _ _ => Set.mem_univ _)
+  exact hnorm.intervalIntegrable
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinus_intervalIntegrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (fun v : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1))
+      volume (-ε) ε := by
+  have hwhole := pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_continuousOn
+    ε W X
+  have hshift : ContinuousOn
+      (fun v : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1)
+      (Set.uIcc (-ε) ε) := by
+    exact hwhole.sub continuousOn_const
+  have hnorm : ContinuousOn
+      (fun v : ℝ => Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1))
+      (Set.uIcc (-ε) ε) := by
+    exact Complex.continuous_normSq.continuousOn.comp hshift
+      (fun _ _ => Set.mem_univ _)
+  exact hnorm.intervalIntegrable
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    0 ≤ pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy
+  have hscale : 0 ≤ (2 * ε)⁻¹ := by positivity
+  have hinterval : -ε ≤ ε := by linarith
+  have hmass :
+      0 ≤ ∫ v in (-ε)..ε,
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) := by
+    apply intervalIntegral.integral_nonneg_of_ae hinterval
+    exact Filter.Eventually.of_forall (fun v => Complex.normSq_nonneg _)
+  exact mul_nonneg hscale hmass
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    0 ≤ pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy
+  have hscale : 0 ≤ (2 * ε)⁻¹ := by positivity
+  have hinterval : -ε ≤ ε := by linarith
+  have hmass :
+      0 ≤ ∫ v in (-ε)..ε,
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) := by
+    apply intervalIntegral.integral_nonneg_of_ae hinterval
+    exact Filter.Eventually.of_forall (fun v => Complex.normSq_nonneg _)
+  exact mul_nonneg hscale hmass
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_polarization_pointwise
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (v : ℝ) :
+    (4 : ℂ) *
+        pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v =
+      (Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ) -
+      (Complex.normSq
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ) := by
+  apply pascalCenteredXiPrimeSideQuadraticization_polarization_pointwise
+  exact pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_eq_conj W X v
+
+theorem pascalCenteredXiPrimeSideQuadraticization_wholeSurface_eq_shiftedEnergyDifference_of_integrable
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
+    (hplus : IntervalIntegrable
+      (fun v : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1))
+      volume (-ε) ε)
+    (hminus : IntervalIntegrable
+      (fun v : ℝ =>
+        Complex.normSq
+          (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1))
+      volume (-ε) ε) :
+    (4 : ℂ) * pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+      (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X : ℂ) -
+        (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X : ℂ) := by
+  have hpol :
+      (fun v : ℝ =>
+        (4 : ℂ) *
+          pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v) =
+      (fun v : ℝ =>
+        (Complex.normSq
+            (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ) -
+          (Complex.normSq
+            (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ)) := by
+    funext v
+    exact pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_polarization_pointwise
+      W X v
+  calc
+    (4 : ℂ) * pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+        (4 : ℂ) *
+          (((2 * ε : ℝ)⁻¹ : ℂ) *
+            ∫ v in (-ε)..ε,
+              pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v) := by
+      rw [pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_normalized_wholeBoxFeature
+        hε W X]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          (4 : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v := by
+      rw [intervalIntegral.integral_const_mul]
+      ring
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          ((Complex.normSq
+              (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ) -
+            (Complex.normSq
+              (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ)) := by
+      congr 1
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [] with v hv
+      exact congrFun hpol v
+    _ = (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X : ℂ) -
+        (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X : ℂ) := by
+      have hplusC : IntervalIntegrable
+          (fun v : ℝ =>
+            (Complex.normSq
+              (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ))
+          volume (-ε) ε := by
+        have h1 := Complex.ofRealCLM.integrable_comp hplus.1
+        have h2 := Complex.ofRealCLM.integrable_comp hplus.2
+        exact ⟨by
+            change Integrable
+              (fun v : ℝ =>
+                (Complex.normSq
+                  (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ))
+              (volume.restrict (Set.Ioc (-ε) ε))
+            simpa [Function.comp_def] using h1,
+          by
+            change Integrable
+              (fun v : ℝ =>
+                (Complex.normSq
+                  (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v + 1) : ℂ))
+              (volume.restrict (Set.Ioc ε (-ε)))
+            simpa [Function.comp_def] using h2⟩
+      have hminusC : IntervalIntegrable
+          (fun v : ℝ =>
+            (Complex.normSq
+              (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ))
+          volume (-ε) ε := by
+        have h1 := Complex.ofRealCLM.integrable_comp hminus.1
+        have h2 := Complex.ofRealCLM.integrable_comp hminus.2
+        exact ⟨by
+            change Integrable
+              (fun v : ℝ =>
+                (Complex.normSq
+                  (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ))
+              (volume.restrict (Set.Ioc (-ε) ε))
+            simpa [Function.comp_def] using h1,
+          by
+            change Integrable
+              (fun v : ℝ =>
+                (Complex.normSq
+                  (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v - 1) : ℂ))
+              (volume.restrict (Set.Ioc ε (-ε)))
+            simpa [Function.comp_def] using h2⟩
+      rw [intervalIntegral.integral_sub hplusC hminusC]
+      unfold pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy
+        pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy
+      simp only [Complex.ofReal_mul]
+      rw [← intervalIntegral.integral_ofReal, ← intervalIntegral.integral_ofReal]
+      ring_nf
+      have hc :
+          (↑(2 : ℝ))⁻¹ * (↑ε : ℂ)⁻¹ =
+            (↑(ε⁻¹ * (1 / 2 : ℝ)) : ℂ) := by
+        norm_num [Complex.ofReal_inv, Complex.ofReal_mul]
+        ring
+      rw [hc]
+      ring
+
+theorem pascalCenteredXiPrimeSideQuadraticization_wholeSurface_eq_shiftedEnergyDifference
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    (4 : ℂ) * pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+      (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X : ℂ) -
+        (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X : ℂ) := by
+  exact pascalCenteredXiPrimeSideQuadraticization_wholeSurface_eq_shiftedEnergyDifference_of_integrable
+    hε W X
+    (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlus_intervalIntegrable ε W X)
+    (pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinus_intervalIntegrable ε W X)
+
+theorem pascalCenteredXiPrimeSideQuadraticization_scalarSurface_eq_shiftedEnergyDifference
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    4 * pascalCenteredXiMellinQuadraticScalarSurface ε W X =
+      pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X -
+        pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X := by
+  have hid := pascalCenteredXiPrimeSideQuadraticization_wholeSurface_eq_shiftedEnergyDifference
+    hε W X
+  have hscalar := pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_scalarSurface hε W X
+  have hreal := congrArg Complex.re hid
+  rw [hscalar] at hreal
+  simpa [Complex.mul_re] using hreal
+
+theorem pascalCenteredXiPrimeSideQuadraticization_wholeShiftedEnergy_order_iff_scalarSurface_nonneg
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiPrimeSideQuadraticizationWholeShiftedMinusEnergy ε W X ≤
+        pascalCenteredXiPrimeSideQuadraticizationWholeShiftedPlusEnergy ε W X ↔
+      0 ≤ pascalCenteredXiMellinQuadraticScalarSurface ε W X := by
+  have hid := pascalCenteredXiPrimeSideQuadraticization_scalarSurface_eq_shiftedEnergyDifference
+    hε W X
+  constructor <;> intro h
+  · linarith
+  · linarith
+
+/-! The vertical-only ordering gap above does not classify the whole
+observables.  The whole shifted beams have their own explicit provider gap;
+the scalar equivalence is algebraic and is not an independent ordering
+theorem. -/
+inductive PascalCenteredXiPrimeSideQuadraticizationWholeShiftedEnergyOrderingGap : Prop
+  | noIndependentWholeOrderingProvider :
+      PascalCenteredXiPrimeSideQuadraticizationWholeShiftedEnergyOrderingGap
+
 /-! The individual shifted beams are PSD, but no independent ordering
 provider is present.  The lower-level conditional equivalence and its
 unconditional wrapper record that the ordering is exactly the vertical sign;
