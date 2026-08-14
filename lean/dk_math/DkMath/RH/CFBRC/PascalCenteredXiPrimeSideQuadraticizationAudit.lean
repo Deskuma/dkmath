@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Analysis.MellinQuadraticGramKernel
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideWholeSurfaceEnergyAudit
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Sinc
 import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.NumberTheory.Harmonic.ZetaAsymp
 import Mathlib.Tactic
@@ -2702,6 +2704,32 @@ theorem pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_eq_commonSourceM
       simp [Complex.mul_re]
       ring
 
+theorem pascalCenteredXiFixedSecondMomentDefectFunctional_eq_commonSourceLimitMoment
+    (W : PascalCenteredXiResidueTransportWindow) :
+    pascalCenteredXiFixedSecondMomentDefectFunctional W.R =
+      ∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) * (2 * a.re ^ 2) := by
+  classical
+  rw [pascalCenteredXiFixedSecondMomentDefectFunctional_eq_two_mul_horizontalEnergy
+    W.circle_safe]
+  unfold pascalCriticalMirrorZeroWindowHorizontalEnergy
+  rw [← image_pascalCenterZeroShift_window_eq_centeredXiDisk W.R]
+  rw [Finset.sum_image]
+  · rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro s hs
+    change 2 * ((riemannZetaZeroMultiplicity s : ℝ) *
+        (s.re - (1 : ℝ) / 2) ^ 2) =
+      (pascalCenteredXiZeroMultiplicity (s - criticalLineCenter) : ℝ) *
+        (2 * (s - criticalLineCenter).re ^ 2)
+    rw [pascalCenteredXiZeroMultiplicity_sub_center_eq_riemannZetaZeroMultiplicity
+      ((mem_pascalCriticalMirrorZeroWindowFinset_iff.mp hs).2)]
+    simp [criticalLineCenter]
+    ring
+  · intro s hs t ht hst
+    have h := congrArg pascalUncenterZeroShift hst
+    simpa using h
+
 theorem tendsto_pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
     (z : ℂ) :
     Tendsto
@@ -2736,5 +2764,314 @@ theorem pascalCenteredXiFixedDefect_nonpos_of_endpoint_le_vanishingEnvelope
   exact le_of_tendsto_of_tendsto
     (tendsto_pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_epsilon W)
     hr hupper
+
+/-! ## IPSM-030: smoothing residual and finite-radius envelope -/
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+    (ε : ℝ) (z : ℂ) : ℝ :=
+  pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε z -
+    2 * z.re ^ 2
+
+theorem pascalCenteredXiPrimeSideQuadraticization_commonSourceDefectWeight_eq_limitDensity_add_remainder
+    (ε : ℝ) (z : ℂ) :
+    pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε z =
+      2 * z.re ^ 2 +
+        pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight ε z := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+  ring
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope
+    (ε R : ℝ) : ℝ :=
+  (ε ^ 2 / 3) * R ^ 4 *
+    (pascalCenteredXiZeroDiskMultiplicity R : ℝ)
+
+theorem pascalCenteredXiPrimeSideQuadraticization_mellinMultiplier_I_mul
+    {ε y : ℝ} (hε : 0 < ε) :
+    centeredMellinSpectralWeight
+        (centeredMellinBoxApprox ε)
+        ((y : ℂ) * Complex.I) =
+      (Real.sinc (ε * y) : ℂ) := by
+  rw [centeredMellinSpectralWeight_centeredMellinBoxApprox_eq_logAverage hε]
+  by_cases hy : y = 0
+  · subst y
+    simp [Real.sinc]
+    field_simp [ne_of_gt hε]
+    norm_num
+  have hscale := intervalIntegral.integral_comp_mul_left
+    (f := fun t : ℝ => Complex.exp ((t : ℂ) * Complex.I))
+    (a := -ε) (b := ε) hy
+  have harg (t : ℝ) :
+      (t : ℂ) * ((y : ℂ) * Complex.I) =
+        ((y * t : ℝ) : ℂ) * Complex.I := by
+    push_cast
+    ring
+  have hint :
+      (∫ t in (-ε)..ε,
+          Complex.exp ((t : ℂ) * ((y : ℂ) * Complex.I))) =
+        (∫ t in (-ε)..ε,
+          Complex.exp (((y * t : ℝ) : ℂ) * Complex.I)) := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    exact congrArg Complex.exp (harg t)
+  calc
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (∫ t in (-ε)..ε,
+          Complex.exp ((t : ℂ) * ((y : ℂ) * Complex.I))) =
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          (∫ t in (-ε)..ε,
+            Complex.exp (((y * t : ℝ) : ℂ) * Complex.I)) := by
+              rw [hint]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ((y : ℝ)⁻¹ •
+            (∫ t in y * (-ε)..y * ε,
+              Complex.exp ((t : ℂ) * Complex.I))) := by
+              rw [hscale]
+    _ = (Real.sinc (ε * y) : ℂ) := by
+              rw [show y * (-ε) = -(ε * y) by ring,
+                show y * ε = ε * y by ring]
+              rw [integral_exp_mul_I_eq_sinc]
+              simp only [Complex.ofReal_mul, Complex.ofReal_ofNat]
+              norm_num [smul_eq_mul]
+              field_simp [hy, ne_of_gt hε]
+
+theorem pascalCenteredXiPrimeSideQuadraticization_commonSourceDefectWeight_I_mul
+    {ε y : ℝ} (hε : 0 < ε) :
+    pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε ((y : ℂ) * Complex.I) =
+      y ^ 2 * (1 - Real.sinc (ε * y)) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+    pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight
+  rw [pascalCenteredXiPrimeSideQuadraticization_mellinMultiplier_I_mul hε]
+  rw [mul_pow, Complex.I_sq]
+  simp only [Complex.normSq, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Complex.mul_re,
+    Complex.ofReal_re, Complex.I_re, mul_zero, Complex.ofReal_im, Complex.I_im, mul_one, sub_self,
+    Complex.mul_im, add_zero, zero_add, mul_neg, neg_mul, Complex.neg_re, sub_zero]
+  have hreal : ((y : ℂ) ^ 2).re = y ^ 2 := by
+    rw [pow_two]
+    simp [Complex.mul_re, pow_two]
+  rw [hreal]
+  ring
+
+theorem pascalCenteredXiPrimeSideQuadraticization_commonSourceDefectWeight_I_mul_nonneg
+    {ε y : ℝ} (hε : 0 < ε) :
+    0 ≤ pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+      ε ((y : ℂ) * Complex.I) := by
+  rw [pascalCenteredXiPrimeSideQuadraticization_commonSourceDefectWeight_I_mul hε]
+  have hsinc := Real.sinc_le_one (ε * y)
+  have hy2 : 0 ≤ y ^ 2 := sq_nonneg y
+  nlinarith
+
+theorem pascalCenteredXiPrimeSideQuadraticization_commonSourceSmoothingRemainderWeight_abs_le
+    {ε : ℝ} (hε : 0 < ε) (z : ℂ)
+    (hsmall : ε * ‖z‖ ≤ 1) :
+    |pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight ε z| ≤
+      (ε ^ 2 / 3) * ‖z‖ ^ 4 := by
+  let f : ℝ → ℂ := fun t => Complex.exp ((t : ℂ) * z)
+  let g : ℝ → ℂ := fun t => f t - 1 - (t : ℂ) * z
+  let q : ℝ → ℝ := fun t => t ^ 2 * ‖z‖ ^ 2
+  have hf : IntervalIntegrable f volume (-ε) ε := by
+    exact (by fun_prop : Continuous f).intervalIntegrable (μ := volume) (-ε) ε
+  have hg : IntervalIntegrable g volume (-ε) ε := by
+    exact (by fun_prop : Continuous g).intervalIntegrable (μ := volume) (-ε) ε
+  have hq : IntervalIntegrable q volume (-ε) ε := by
+    exact (by fun_prop : Continuous q).intervalIntegrable (μ := volume) (-ε) ε
+  have hbound : ∀ᵐ t ∂volume,
+      t ∈ Set.Ioc (-ε) ε → ‖g t‖ ≤ q t := by
+    refine Filter.Eventually.of_forall ?_
+    intro t ht
+    have ht_abs : |t| ≤ ε := by
+      rw [abs_le]
+      constructor
+      · exact le_of_lt (by linarith [ht.1])
+      · exact ht.2
+    have htz : ‖(t : ℂ) * z‖ ≤ 1 := by
+      calc
+        ‖(t : ℂ) * z‖ = |t| * ‖z‖ := by simp
+        _ ≤ ε * ‖z‖ := mul_le_mul_of_nonneg_right ht_abs (norm_nonneg z)
+        _ ≤ 1 := hsmall
+    dsimp [g, q, f]
+    calc
+      ‖Complex.exp ((t : ℂ) * z) - 1 - (t : ℂ) * z‖ ≤
+          ‖(t : ℂ) * z‖ ^ 2 :=
+        Complex.norm_exp_sub_one_sub_id_le htz
+      _ = t ^ 2 * ‖z‖ ^ 2 := by
+        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, mul_pow, sq_abs]
+  have hnorm :
+      ‖∫ t in (-ε)..ε, g t‖ ≤ ∫ t in (-ε)..ε, q t := by
+    have hinterval : -ε ≤ ε := by linarith
+    exact intervalIntegral.norm_integral_le_of_norm_le hinterval hbound hq
+  have hqint :
+      (∫ t in (-ε)..ε, q t) = (2 * ε ^ 3 / 3) * ‖z‖ ^ 2 := by
+    dsimp [q]
+    rw [intervalIntegral.integral_mul_const, integral_pow]
+    ring
+  have hdiff :
+      (∫ t in (-ε)..ε, g t) =
+        (∫ t in (-ε)..ε, f t) - (2 * ε : ℂ) := by
+    dsimp [g]
+    have hone : IntervalIntegrable (fun _ : ℝ => (1 : ℂ)) volume (-ε) ε := by
+      exact (by fun_prop : Continuous (fun _ : ℝ => (1 : ℂ))).intervalIntegrable
+        (μ := volume) (-ε) ε
+    have hlin : IntervalIntegrable (fun t : ℝ => (t : ℂ) * z) volume (-ε) ε := by
+      exact (by fun_prop : Continuous (fun t : ℝ => (t : ℂ) * z)).intervalIntegrable
+        (μ := volume) (-ε) ε
+    have hfm : IntervalIntegrable (fun t : ℝ => f t - 1) volume (-ε) ε :=
+      hf.sub hone
+    rw [intervalIntegral.integral_sub hfm hlin,
+      intervalIntegral.integral_sub hf hone,
+      intervalIntegral.integral_const,
+      intervalIntegral.integral_mul_const, intervalIntegral.integral_ofReal,
+      integral_id]
+    dsimp [f]
+    norm_num
+    ring
+  have hweight := centeredMellinSpectralWeight_centeredMellinBoxApprox_eq_logAverage hε z
+  have hH :
+      centeredMellinSpectralWeight (centeredMellinBoxApprox ε) z - 1 =
+        ((2 * ε : ℝ)⁻¹ : ℂ) * ∫ t in (-ε)..ε, g t := by
+    rw [hweight, hdiff]
+    change ((2 * ε : ℝ)⁻¹ : ℂ) * (∫ t in (-ε)..ε, f t) - 1 =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ((∫ t in (-ε)..ε, f t) - (2 * ε : ℂ))
+    field_simp [ne_of_gt hε]
+    congr 1
+    push_cast
+    ring
+  have hrem :
+      pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε z -
+          2 * z.re ^ 2 =
+        (z ^ 2 *
+          (centeredMellinSpectralWeight (centeredMellinBoxApprox ε) z - 1)).re := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+      pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight
+    simp [Complex.normSq, Complex.mul_re, pow_two]
+    ring
+  unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+  rw [hrem, hH]
+  calc
+    |(z ^ 2 * (((2 * ε : ℝ)⁻¹ : ℂ) * ∫ t in (-ε)..ε, g t)).re| ≤
+        ‖z ^ 2 * (((2 * ε : ℝ)⁻¹ : ℂ) * ∫ t in (-ε)..ε, g t)‖ :=
+      Complex.abs_re_le_norm _
+    _ ≤ ‖z‖ ^ 2 * (2 * ε)⁻¹ * ‖∫ t in (-ε)..ε, g t‖ := by
+      have h2ε : 0 < 2 * ε := by linarith
+      have hscalar : ‖((2 * ε : ℝ)⁻¹ : ℂ)‖ = (2 * ε)⁻¹ := by
+        simp [norm_inv, Real.norm_eq_abs, abs_of_nonneg hε.le]
+      rw [norm_mul, norm_pow, norm_mul, hscalar]
+      apply le_of_eq
+      ring
+    _ ≤ ‖z‖ ^ 2 * (2 * ε)⁻¹ * ((2 * ε ^ 3 / 3) * ‖z‖ ^ 2) := by
+      have hnorm' : ‖∫ t in (-ε)..ε, g t‖ ≤
+          (2 * ε ^ 3 / 3) * ‖z‖ ^ 2 := hnorm.trans_eq hqint
+      have h2ε : 0 < 2 * ε := by linarith
+      have hc : 0 ≤ ‖z‖ ^ 2 * (2 * ε)⁻¹ :=
+        mul_nonneg (sq_nonneg _) (inv_nonneg.mpr h2ε.le)
+      exact mul_le_mul_of_nonneg_left hnorm' hc
+    _ = (ε ^ 2 / 3) * ‖z‖ ^ 4 := by
+      field_simp
+
+theorem pascalCenteredXiPrimeSideQuadraticization_commonSourceSmoothingRemainderWeight_abs_le_of_mem_disk
+    {ε R : ℝ} (hε : 0 < ε) (hsmall : ε * R ≤ 1)
+    {z : ℂ} (hz : z ∈ pascalCenteredXiZeroDiskFinset R) :
+    |pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight ε z| ≤
+      (ε ^ 2 / 3) * R ^ 4 := by
+  have hzR : ‖z‖ ≤ R := by
+    have hz' := (mem_pascalCenteredXiZeroDiskFinset_iff.mp hz).1
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hz'
+  have hR : 0 ≤ R := le_trans (norm_nonneg z) hzR
+  have hsmallz : ε * ‖z‖ ≤ 1 := by
+    exact (mul_le_mul_of_nonneg_left hzR hε.le).trans hsmall
+  calc
+    |pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight ε z| ≤
+        (ε ^ 2 / 3) * ‖z‖ ^ 4 :=
+      pascalCenteredXiPrimeSideQuadraticization_commonSourceSmoothingRemainderWeight_abs_le
+        hε z hsmallz
+    _ ≤ (ε ^ 2 / 3) * R ^ 4 := by
+      gcongr
+
+theorem pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_sub_fixedDefect_abs_le_smoothingEnvelope
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow)
+    (hsmall : ε * W.R ≤ 1) :
+    |pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint ε W -
+      pascalCenteredXiFixedSecondMomentDefectFunctional W.R| ≤
+      pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope ε W.R := by
+  classical
+  let S := pascalCenteredXiZeroDiskFinset W.R
+  have hdiff :
+      (∑ a ∈ S,
+          (pascalCenteredXiZeroMultiplicity a : ℝ) *
+            pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε a) -
+        ∑ a ∈ S,
+          (pascalCenteredXiZeroMultiplicity a : ℝ) * (2 * a.re ^ 2) =
+    ∑ a ∈ S,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+            ε a := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+    rw [← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro a ha
+    ring
+  rw [pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_eq_commonSourceMoment W,
+    pascalCenteredXiFixedSecondMomentDefectFunctional_eq_commonSourceLimitMoment W]
+  change |(∑ a ∈ S,
+      (pascalCenteredXiZeroMultiplicity a : ℝ) *
+        pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε a) -
+      ∑ a ∈ S,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) * (2 * a.re ^ 2)| ≤ _
+  rw [hdiff]
+  calc
+    |∑ a ∈ S,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+            ε a| ≤
+        ∑ a ∈ S,
+          |(pascalCenteredXiZeroMultiplicity a : ℝ) *
+            pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+              ε a| := by
+      exact Finset.abs_sum_le_sum_abs _ _
+    _ = ∑ a ∈ S,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          |pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingRemainderWeight
+            ε a| := by
+      apply Finset.sum_congr rfl
+      intro a ha
+      rw [abs_mul, abs_of_nonneg]
+      positivity
+    _ ≤ ∑ a ∈ S,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          ((ε ^ 2 / 3) * W.R ^ 4) := by
+      apply Finset.sum_le_sum
+      intro a ha
+      exact mul_le_mul_of_nonneg_left
+        (pascalCenteredXiPrimeSideQuadraticization_commonSourceSmoothingRemainderWeight_abs_le_of_mem_disk
+          hε hsmall ha)
+        (by positivity)
+    _ = pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope ε W.R := by
+      unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope
+        pascalCenteredXiZeroDiskMultiplicity
+      rw [← Finset.sum_mul]
+      rw [← Nat.cast_sum]
+      ring
+
+theorem tendsto_pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope_zero
+    (R : ℝ) :
+    Tendsto
+      (fun ε : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope ε R)
+      (𝓝[>] 0) (nhds 0) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEnvelope
+  have hid : Tendsto (fun ε : ℝ => ε) (𝓝[>] 0) (nhds 0) :=
+    tendsto_id'.2 nhdsWithin_le_nhds
+  have hpow : Tendsto (fun ε : ℝ => ε ^ 2) (𝓝[>] 0) (nhds 0) :=
+    by simpa using hid.pow 2
+  have hconst : Tendsto
+      (fun _ : ℝ => (R ^ 4 / 3) * (pascalCenteredXiZeroDiskMultiplicity R : ℝ))
+      (𝓝[>] 0)
+      (nhds ((R ^ 4 / 3) * (pascalCenteredXiZeroDiskMultiplicity R : ℝ))) :=
+    tendsto_const_nhds
+  convert hpow.mul hconst using 1
+  · funext ε
+    ring
+  · ring
 
 end DkMath.RH.CFBRCProjection
