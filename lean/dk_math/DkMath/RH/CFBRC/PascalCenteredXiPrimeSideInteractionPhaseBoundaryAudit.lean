@@ -57,8 +57,9 @@ private theorem cs26PhaseCandidate_hasDerivAt
       (Real.hasDerivAt_sin (r * x)).comp x hrt
   have htc : HasDerivAt (fun t : ℝ => t * Real.cos (r * t))
       (Real.cos (r * x) - x * r * Real.sin (r * x)) x := by
-    convert! (hasDerivAt_id' x).mul hcos using 1 <;> simp [Pi.mul_apply,
-      id_eq, mul_comm, mul_left_comm, mul_assoc] <;> ring
+    convert! (hasDerivAt_id' x).mul hcos using 1
+    simp [mul_comm, mul_left_comm, mul_assoc]
+    ring
   have hfirst : HasDerivAt (fun t : ℝ => t * Real.cos (r * t) / r)
       ((Real.cos (r * x) - x * r * Real.sin (r * x)) / r) x := by
     simpa using htc.div_const r
@@ -280,7 +281,7 @@ private theorem cs26_boundary_integrand_eq_phase_difference
           Real.exp (a * r) *
             (a * Real.sin (r * t) + t * Real.cos (r * t)) := by
       simp [Complex.mul_im, Complex.exp_re, Complex.exp_im]
-      ring
+      ring_nf
     rw [Complex.mul_re]
     rw [real_part_affine_exp_phase]
     rw [him]
@@ -288,17 +289,21 @@ private theorem cs26_boundary_integrand_eq_phase_difference
         ((Real.exp (-(1 / 2 : ℝ) * Real.log n) : ℂ) *
             ((2 * ε : ℝ)⁻¹ : ℂ)).re =
           Real.exp (-(1 / 2 : ℝ) * Real.log n) * (2 * ε)⁻¹ := by
-      have h2ε : (2 * ε : ℝ) ≠ 0 := by nlinarith
-      simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-        mul_zero, sub_zero, zero_mul, add_zero]
-      simp [h2ε]
+      -- have h2ε : (2 * ε : ℝ) ≠ 0 := by nlinarith  -- unuse
+      simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, sub_zero, zero_mul]
+      simp only [one_div, neg_mul, Complex.ofReal_mul, Complex.ofReal_ofNat, mul_inv_rev,
+        Complex.mul_re, Complex.inv_re, Complex.ofReal_re, Complex.normSq_ofReal,
+        div_self_mul_self', Complex.re_ofNat, Complex.normSq_ofNat, Complex.inv_im,
+        Complex.ofReal_im, neg_zero, zero_div, Complex.im_ofNat, mul_zero, sub_zero]
     have hscalar_im :
         ((Real.exp (-(1 / 2 : ℝ) * Real.log n) : ℂ) *
             ((2 * ε : ℝ)⁻¹ : ℂ)).im = 0 := by
       have h2ε : (2 * ε : ℝ) ≠ 0 := by nlinarith
-      simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
-        mul_zero, sub_zero, zero_mul, add_zero]
-      simp [h2ε]
+      simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im, zero_mul, add_zero]
+      simp only [one_div, neg_mul, Complex.ofReal_mul, Complex.ofReal_ofNat, mul_inv_rev,
+        Complex.mul_im, Complex.inv_re, Complex.ofReal_re, Complex.normSq_ofReal,
+        div_self_mul_self', Complex.inv_im, Complex.im_ofNat, neg_zero, Complex.normSq_ofNat,
+        zero_div, mul_zero, Complex.ofReal_im, Complex.re_ofNat, zero_mul, add_zero]
     rw [hscalar, hscalar_im]
     simp only [pascalCenteredXiPrimeSidePhaseCarrier,
       pascalCenteredXiPrimeSidePhaseIntegrand]
@@ -321,9 +326,9 @@ private theorem cs26_boundary_integrand_eq_phase_difference
         (((a : ℂ) + (t : ℂ) * Complex.I) *
           Complex.exp ((pascalCenteredXiPrimeSidePhaseFrequencyMinus ε n : ℂ) *
             ((a : ℂ) + (t : ℂ) * Complex.I)))) := by
-    congr 1 <;>
       simp [pascalCenteredXiPrimeSidePhaseFrequencyPlus,
-        pascalCenteredXiPrimeSidePhaseFrequencyMinus] <;> ring
+        pascalCenteredXiPrimeSidePhaseFrequencyMinus]
+      ring
   have hassoc :
       Complex.re (((Real.exp (-(1 / 2 : ℝ) * Real.log n) : ℂ) *
           (((2 * ε : ℝ)⁻¹ : ℂ) *
@@ -345,7 +350,7 @@ private theorem cs26_boundary_integrand_eq_phase_difference
             Complex.exp (((-ε - Real.log n : ℝ) : ℂ) *
               (((W.rectangle.σ - (1 / 2 : ℝ) : ℝ) : ℂ) +
                 (t : ℂ) * Complex.I))))) := by
-    congr 1 <;> ring
+    congr 1; ring
   have hsplit' :
       Complex.re (((Real.exp (-(1 / 2 : ℝ) * Real.log n) : ℂ) *
           ((2 * ε : ℝ)⁻¹ : ℂ)) *
@@ -363,8 +368,7 @@ private theorem cs26_boundary_integrand_eq_phase_difference
           ((2 * ε : ℝ)⁻¹ : ℂ)) *
         (((a : ℂ) + (t : ℂ) * Complex.I) *
           Complex.exp (((-ε - Real.log n : ℝ) : ℂ) *
-            ((a : ℂ) + (t : ℂ) * Complex.I)))) := by
-    congr 1 <;> ring
+            ((a : ℂ) + (t : ℂ) * Complex.I)))) := by congr 1
   rw [hassoc, hsplit', hphase, hphase]
   simp only [pascalCenteredXiPrimeSidePhaseCarrier,
     pascalCenteredXiPrimeSidePhaseIntegrand]
@@ -499,7 +503,7 @@ theorem pascalCenteredXiPrimeSideAggregateInteraction_eq_closedPhaseLedger
   apply Finset.sum_congr rfl
   intro n hn
   by_cases hn0 : n = 0
-  · simp [hn0, pascalCenteredXiPrimeSide_vonMangoldt_zero]
+  · simp [hn0]
   · rw [pascalCenteredXiPrimeSideFiniteClosedPhaseModeTerm_eq_kernel hε W
       (Nat.pos_of_ne_zero hn0)]
 
@@ -512,7 +516,7 @@ inductive PascalCenteredXiPrimeSideInteractionPhaseTopBoundaryMatchGap : Prop
 
 theorem pascalCenteredXiPrimeSide_phase_frequencies_nonzero
     {ε : ℝ} {n : ℕ} (hε : 0 < ε)
-    (hεn : ε < Real.log n) (hn : 0 < n) :
+    (hεn : ε < Real.log n) :
     ε - Real.log n ≠ 0 ∧ -ε - Real.log n ≠ 0 := by
   constructor <;> nlinarith [hεn]
 
@@ -530,6 +534,6 @@ theorem pascalCenteredXiPrimeSide_phase_frequencies_safe_cutoff
   refine ⟨hεn, ?_⟩
   simpa [pascalCenteredXiPrimeSidePhaseFrequencyPlus,
     pascalCenteredXiPrimeSidePhaseFrequencyMinus] using
-    pascalCenteredXiPrimeSide_phase_frequencies_nonzero hε hεn (by omega : 0 < n)
+    pascalCenteredXiPrimeSide_phase_frequencies_nonzero hε hεn
 
 end DkMath.RH.CFBRCProjection
