@@ -2567,4 +2567,58 @@ inductive PascalCenteredXiPrimeSideQuadraticizationShiftedEnergyOrderingGap : Pr
   | noIndependentOrderingProvider :
       PascalCenteredXiPrimeSideQuadraticizationShiftedEnergyOrderingGap
 
+/-! ## Q3: radial comparison audit -/
+
+theorem pascalCenteredXiPrimeSideQuadraticization_scalarSurface_eq_pi_mul_normalizedArithmetic_re
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticScalarSurface ε W X =
+      Real.pi *
+        (pascalCenteredXiMellinQuadraticNormalizedArithmeticApproximant ε W X).re := by
+  rw [pascalCenteredXiMellinQuadraticNormalizedArithmeticApproximant_re_eq_scalarSurface_div_pi
+    hε W X]
+  field_simp [Real.pi_ne_zero]
+
+theorem pascalCenteredXiPrimeSideQuadraticization_radial_le_scalarSurface_iff_defect_nonpos
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    Real.pi * pascalCenteredXiFixedRadialSecondMomentFunctional W.R ≤
+        pascalCenteredXiMellinQuadraticScalarSurface ε W X ↔
+      pascalCenteredXiMellinQuadraticArithmeticDefectApproximant ε W X ≤ 0 := by
+  have hcomp :
+      Real.pi * pascalCenteredXiFixedRadialSecondMomentFunctional W.R ≤
+          pascalCenteredXiMellinQuadraticScalarSurface ε W X ↔
+        0 ≤ pascalCenteredXiMellinQuadraticScalarExcess ε W X := by
+    unfold pascalCenteredXiMellinQuadraticScalarExcess
+    constructor <;> intro h <;> linarith
+  rw [hcomp,
+    pascalCenteredXiMellinQuadraticScalarExcess_eq_neg_pi_mul_defect hε W X]
+  constructor <;> intro h <;> nlinarith [Real.pi_pos]
+
+/-- The fixed radial observable is nonnegative on safe radii.  This is a
+radial representation fact only; it is not a comparison with the arithmetic
+surface. -/
+theorem pascalCenteredXiFixedRadialSecondMomentFunctional_nonneg
+    {R : ℝ} (hR : IsPascalCenteredXiBoundarySafeRadius R) :
+    0 ≤ pascalCenteredXiFixedRadialSecondMomentFunctional R := by
+  rw [pascalCenteredXiFixedRadialSecondMomentFunctional_eq_cf2dRadial hR]
+  unfold pascalCriticalMirrorZeroWindowCF2DRadialMass
+  apply Finset.sum_nonneg
+  intro ρ hρ
+  have hmult : 0 ≤ (riemannZetaZeroMultiplicity ρ : ℝ) := by positivity
+  have hq2 : 0 ≤
+      DkMath.CosmicFormula.Rotation.CF2D.Vec.q2
+        (pascalCenteredZeroCF2DState ρ) := by
+    rw [pascalCenteredZeroCF2DState_q2_eq_normSq]
+    exact Complex.normSq_nonneg _
+  exact mul_nonneg hmult hq2
+
+/-! The radial nonnegativity above does not imply the radial comparison:
+`0 ≤ radial` and `0 ≤ scalar surface` do not order the two quantities.  The
+zero-side fixed-defect and RH-frontier theorems are intentionally not used as
+providers for the finite arithmetic inequality. -/
+inductive PascalCenteredXiPrimeSideQuadraticizationRadialComparisonGap : Prop
+  | noIndependentArithmeticToRadialProvider :
+      PascalCenteredXiPrimeSideQuadraticizationRadialComparisonGap
+
 end DkMath.RH.CFBRCProjection
