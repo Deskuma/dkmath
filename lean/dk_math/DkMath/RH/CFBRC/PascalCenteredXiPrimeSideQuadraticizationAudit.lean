@@ -450,6 +450,28 @@ theorem continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
         pascalCenteredXiPrimeSideQuadraticizationTopNode W p.1))
   exact (hnode'.pow 2).mul hexp
 
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel_left
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    Continuous (fun x : ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v) := by
+  have hnode : Continuous
+      (pascalCenteredXiPrimeSideQuadraticizationTopNode W) :=
+    continuous_pascalCenteredXiPrimeSideQuadraticizationTopNode W
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
+  exact (hnode.pow 2).mul
+    (Complex.continuous_exp.comp (continuous_const.mul hnode))
+
+theorem continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel_right
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) :
+    Continuous (fun v : ℝ =>
+      pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v) := by
+  have hnode : Continuous
+      (fun _ : ℝ => pascalCenteredXiPrimeSideQuadraticizationTopNode W x) :=
+    continuous_const
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel
+  exact (hnode.pow 2).mul
+    (Complex.continuous_exp.comp (Complex.continuous_ofReal.mul hnode))
+
 theorem pascalCenteredXiPrimeSideQuadraticization_topBoxFeature_integrableOn_rectangle
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) :
     IntegrableOn
@@ -1000,7 +1022,7 @@ theorem pascalCenteredRiemannXiKernel_conj (z : ℂ) :
         criticalLineCenter + starRingEnd ℂ z := by
     apply Complex.ext <;>
       simp [criticalLineCenter]
-  rw [← harg, pascalRiemannXiKernel_conj]
+  simp only [← harg, pascalRiemannXiKernel_conj]
 
 theorem pascalCenteredXiNegLogDeriv_conj (z : ℂ) :
     pascalCenteredXiNegLogDeriv (starRingEnd ℂ z) =
@@ -1056,6 +1078,244 @@ theorem pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature_one_sub_eq_neg_co
   rw [hexp]
   simp only [map_pow, map_mul]
   ring_nf
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_neg_eq_neg_conj
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W (-v) =
+      -starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W v) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature
+  calc
+    (∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x (-v)) =
+      ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W (1 - x) (-v) := by
+          rw [intervalIntegral.integral_comp_sub_left
+            (f := fun x : ℝ =>
+              pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x (-v))
+            (d := 1)]
+          congr 1
+          all_goals ring
+    _ = ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        -starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) := by
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with x hx
+          simpa only [neg_neg] using
+            (pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature_one_sub_eq_neg_conj
+              W x (-v))
+    _ = -starRingEnd ℂ
+        (∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) := by
+          simp only [intervalIntegral.integral_neg, intervalIntegral.intervalIntegral_conj]
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) : ℂ :=
+  -Complex.I *
+    pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W v
+
+theorem pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate_neg_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v) =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W v) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate
+  rw [pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_neg_eq_neg_conj]
+  simp [map_mul]
+
+theorem pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_continuousOn
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) :
+    ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W)
+      (Set.uIcc (-ε) ε) := by
+  let A : Set ℝ := Set.uIoc W.rectangle.σ (1 - W.rectangle.σ)
+  let K : Set (ℝ × ℝ) :=
+    Set.uIcc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ Set.uIcc (-ε) ε
+  let μ : Measure ℝ := volume.restrict A
+  have hK : IsCompact K := by
+    exact isCompact_uIcc.prod isCompact_uIcc
+  have hkernelGlobal : Continuous
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W)) :=
+    continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W
+  have hkernel : ContinuousOn
+      (Function.uncurry
+        (pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W)) K :=
+    hkernelGlobal.continuousOn
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hkernel
+  have hamp : Integrable
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W) μ := by
+    change Integrable
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W)
+      (volume.restrict A)
+    exact intervalIntegrable_iff.mp
+      (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude_intervalIntegrable W)
+  have hbound : Integrable (fun x : ℝ => C *
+      ‖pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x‖) μ := by
+    exact hamp.norm.const_mul C
+  have hcont :=
+    continuousOn_of_dominated
+      (μ := μ)
+      (s := Set.uIcc (-ε) ε)
+      (F := fun v x : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v *
+          pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x)
+      (bound := fun x : ℝ => C *
+        ‖pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x‖)
+      (fun v hv => by
+        have hkv : ContinuousOn
+            (fun x : ℝ =>
+              pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v)
+            (Set.uIcc W.rectangle.σ (1 - W.rectangle.σ)) := by
+          exact continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel_left
+            W v |>.continuousOn
+        have hampOn : IntegrableOn
+            (pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W)
+            A volume := by
+          exact hamp
+        have hprod : IntegrableOn
+            (fun x : ℝ =>
+              pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v *
+                pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x)
+            A volume := by
+          exact hampOn.continuousOn_mul_of_subset hkv isCompact_uIcc
+            measurableSet_uIoc Set.uIoc_subset_uIcc
+        exact hprod.aestronglyMeasurable)
+      (fun v hv => by
+        filter_upwards [ae_restrict_mem measurableSet_uIoc] with x hx
+        have hpair : (x, v) ∈ K := ⟨Set.uIoc_subset_uIcc hx, hv⟩
+        calc
+          ‖pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v *
+              pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x‖ =
+              ‖pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel W x v‖ *
+                ‖pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x‖ :=
+            norm_mul _ _
+          _ ≤ C * ‖pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x‖ := by
+            exact mul_le_mul_of_nonneg_right (hC (x, v) hpair) (norm_nonneg _))
+      hbound
+      (Filter.Eventually.of_forall (fun x => by
+        have hku :=
+          continuous_pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel_right W x
+        exact (hku.mul continuous_const).continuousOn))
+  have htarget : ContinuousOn
+      (fun v : ℝ => ∫ x in A,
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v)
+      (Set.uIcc (-ε) ε) := by
+    simpa [μ, A, pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature,
+      pascalCenteredXiPrimeSideQuadraticizationTopBoxKernel] using hcont
+  have htarget' : ContinuousOn
+      (fun v : ℝ => ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v)
+      (Set.uIcc (-ε) ε) := by
+    have hσ : 1 - W.rectangle.σ ≤ W.rectangle.σ := by
+      linarith [W.rectangle.hσ]
+    have heq :
+        (fun v : ℝ => ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) =
+        (fun v : ℝ => -∫ x in A,
+          pascalCenteredXiPrimeSideQuadraticizationTopBoxFeature W x v) := by
+      funext v
+      rw [intervalIntegral.integral_of_ge hσ]
+      simp [A, Set.uIoc_of_ge hσ]
+    rw [heq]
+    exact htarget.neg
+  exact htarget'
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) : ℂ :=
+  (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W v +
+    pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v)) / 2
+
+theorem pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature_neg
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W (-v) =
+      pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+  rw [neg_neg]
+  ring
+
+theorem pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+  have htwo : starRingEnd ℂ (2 : ℂ) = 2 := by
+    simp only [map_ofNat]
+  rw [map_div₀, htwo, map_add,
+    ← pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate_neg_eq_conj
+      W v,
+    ← pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate_neg_eq_conj
+      W (-v)]
+  simp only [neg_neg]
+  ring
+
+theorem pascalCenteredXiPrimeSideQuadraticization_horizontalSymmetricFeature_average_eq_deorientedHorizontalBase
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) :
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v =
+      -Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W := by
+  have htop := pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_continuousOn
+    ε W
+  have htopInt : IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W)
+      volume (-ε) ε :=
+    htop.intervalIntegrable
+  have hdeoriented : IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+      volume (-ε) ε := by
+    have hcont : ContinuousOn
+        (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+        (Set.uIcc (-ε) ε) := by
+      exact continuousOn_const.mul htop
+    exact hcont.intervalIntegrable
+  have hdeorientedNeg : IntervalIntegrable
+      (fun v : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v))
+      volume (-ε) ε := by
+    simpa only [neg_neg] using
+      ((IntervalIntegrable.iff_comp_neg (f :=
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+        (a := -ε) (b := ε)).mp hdeoriented).symm
+  have hneg :
+      (∫ v in (-ε)..ε,
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v)) =
+      ∫ v in (-ε)..ε,
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W v := by
+    simpa only [neg_neg] using
+      (intervalIntegral.integral_comp_neg
+        (f := pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+        (a := -ε) (b := ε))
+  calc
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (((∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W v) +
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v)) / 2) := by
+          congr 1
+          unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+          rw [intervalIntegral.integral_div]
+          congr 1
+          exact intervalIntegral.integral_add hdeoriented hdeorientedNeg
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W v := by
+          rw [hneg]
+          ring
+    _ = -Complex.I *
+        (((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature W v) := by
+          unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate
+          rw [intervalIntegral.integral_const_mul]
+          ring
+    _ = -Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W := by
+          simp [pascalCenteredXiPrimeSideQuadraticization_horizontalBase_eq_normalized_topAggregate hε W]
 
 theorem pascalSymmetricRectangleRightEdge_neg_eq_conj
     (σ t : ℝ) :
@@ -1826,6 +2086,220 @@ theorem pascalCenteredXiPrimeSideQuadraticization_shiftedEnergy_order_iff_vertic
     hε W X
     (pascalCenteredXiPrimeSideQuadraticizationShiftedPlus_intervalIntegrable ε W X)
     (pascalCenteredXiPrimeSideQuadraticizationShiftedMinus_intervalIntegrable ε W X)
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (v : ℝ) : ℂ :=
+  pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v +
+    pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_eq_conj
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (v : ℝ) :
+    pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v =
+      starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature
+  calc
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v +
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v =
+      starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v) +
+        starRingEnd ℂ
+          (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v) := by
+            congr 1
+            · exact pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_eq_conj
+                W X v
+            · exact pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature_eq_conj
+                W v
+    _ = starRingEnd ℂ
+        (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v +
+          pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v) := by
+            exact (map_add (starRingEnd ℂ)
+              (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v)
+              (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v)).symm
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_continuousOn
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X)
+      (Set.uIcc (-ε) ε) := by
+  unfold pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature
+  have hvert :=
+    pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_continuousOn
+      ε W X
+  have htop :=
+    pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_continuousOn
+      ε W
+  have hdeoriented : ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+      (Set.uIcc (-ε) ε) := by
+    exact continuousOn_const.mul htop
+  have hdeorientedNeg : ContinuousOn
+      (fun v : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v))
+      (Set.uIcc (-ε) ε) := by
+    apply hdeoriented.comp continuous_neg.continuousOn
+    intro v hv
+    simp only [Set.mem_uIcc] at hv ⊢
+    rcases hv with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+    · exact Or.inl ⟨by linarith, by linarith⟩
+    · exact Or.inr ⟨by linarith, by linarith⟩
+  have hsymmetric : ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W)
+      (Set.uIcc (-ε) ε) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+    exact (hdeoriented.add hdeorientedNeg).div_const 2
+  exact hvert.add hsymmetric
+
+theorem pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_intervalIntegrable
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X)
+      volume (-ε) ε := by
+  exact (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_continuousOn
+    ε W X).intervalIntegrable
+
+theorem pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_normalized_wholeBoxFeature
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v := by
+  have hvert : IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X)
+      volume (-ε) ε :=
+    (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature_continuousOn
+      ε W X).intervalIntegrable
+  have htop :=
+    pascalCenteredXiPrimeSideQuadraticizationTopAggregatedBoxFeature_continuousOn
+      ε W
+  have hdeoriented : ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W)
+      (Set.uIcc (-ε) ε) := by
+    exact continuousOn_const.mul htop
+  have hdeorientedNeg : ContinuousOn
+      (fun v : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationHorizontalDeorientedAggregate W (-v))
+      (Set.uIcc (-ε) ε) := by
+    apply hdeoriented.comp continuous_neg.continuousOn
+    intro v hv
+    simp only [Set.mem_uIcc] at hv ⊢
+    rcases hv with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+    · exact Or.inl ⟨by linarith, by linarith⟩
+    · exact Or.inr ⟨by linarith, by linarith⟩
+  have hsymmetric : ContinuousOn
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W)
+      (Set.uIcc (-ε) ε) := by
+    unfold pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature
+    exact (hdeoriented.add hdeorientedNeg).div_const 2
+  have hsymmetricInt : IntervalIntegrable
+      (pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W)
+      volume (-ε) ε := hsymmetric.intervalIntegrable
+  calc
+    pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+        pascalCenteredXiMellinQuadraticComplexVerticalSurface ε W X -
+          Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W := rfl
+    _ = (((2 * ε : ℝ)⁻¹ : ℂ) *
+          (∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v)) +
+        (((2 * ε : ℝ)⁻¹ : ℂ) *
+          (∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v)) := by
+      have hh :=
+        pascalCenteredXiPrimeSideQuadraticization_horizontalSymmetricFeature_average_eq_deorientedHorizontalBase
+          hε W
+      rw [pascalCenteredXiMellinQuadraticComplexVerticalSurface_eq_normalized_aggregate
+        hε W X]
+      calc
+        (((2 * ε : ℝ)⁻¹ : ℂ) *
+              (∫ v in (-ε)..ε,
+                pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v) -
+            Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W) =
+          ((2 * ε : ℝ)⁻¹ : ℂ) *
+              (∫ v in (-ε)..ε,
+                pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v) +
+            (-Complex.I * pascalCenteredXiMellinQuadraticHorizontalBase ε W) := by
+              ring
+        _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+              (∫ v in (-ε)..ε,
+                pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v) +
+            ((2 * ε : ℝ)⁻¹ : ℂ) *
+              (∫ v in (-ε)..ε,
+                pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v) := by
+              rw [← hh]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+          (((∫ v in (-ε)..ε,
+              pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v) +
+            ∫ v in (-ε)..ε,
+              pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v)) := by
+      ring
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            (pascalCenteredXiPrimeSideQuadraticizationAggregatedBoxFeature W X v +
+              pascalCenteredXiPrimeSideQuadraticizationHorizontalSymmetricFeature W v) := by
+      rw [intervalIntegral.integral_add hvert hsymmetricInt]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v := by
+      rfl
+
+theorem pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_conj
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+      starRingEnd ℂ
+        (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X) := by
+  rw [pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_normalized_wholeBoxFeature
+    hε W X]
+  have hwhole := pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_intervalIntegrable
+    ε W X
+  calc
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          starRingEnd ℂ
+            (pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v) := by
+          congr 1
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with v hv
+          exact pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature_eq_conj W X v
+    _ = starRingEnd ℂ
+        (((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiPrimeSideQuadraticizationWholeBoxFeature W X v) := by
+          have hscale :
+              starRingEnd ℂ ((2 * ε : ℝ)⁻¹ : ℂ) =
+                ((2 * ε : ℝ)⁻¹ : ℂ) := by
+            have htwo : starRingEnd ℂ (2 : ℂ) = 2 := by
+              simp only [map_ofNat]
+            simp [map_inv₀, htwo, Complex.ofReal_mul]
+          simp only [map_mul, hscale, intervalIntegral.intervalIntegral_conj]
+
+theorem pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_scalarSurface
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X =
+      (pascalCenteredXiMellinQuadraticScalarSurface ε W X : ℂ) := by
+  apply Complex.ext
+  · exact pascalCenteredXiMellinQuadraticComplexWholeSurface_re_eq_scalarSurface
+      hε W X
+  · have hconj := pascalCenteredXiMellinQuadraticComplexWholeSurface_eq_conj hε W X
+    have him := congrArg Complex.im hconj
+    have him' :
+        (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im =
+          -(pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im := by
+      exact (show
+        (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im =
+          -(pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im by
+        change (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im =
+          -(pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im at him
+        exact him)
+    have hz :
+        (pascalCenteredXiMellinQuadraticComplexWholeSurface ε W X).im = 0 := by
+      linarith [him']
+    simpa using hz
 
 /-! The individual shifted beams are PSD, but no independent ordering
 provider is present.  The lower-level conditional equivalence and its
