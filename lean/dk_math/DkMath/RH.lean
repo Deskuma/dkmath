@@ -61,6 +61,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideWholeSurfaceEnergyAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideMirrorAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideQuadraticizationAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideArithmeticUpperEnvelopeAudit
+import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideUpperEnvelopeStrengthAudit
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
