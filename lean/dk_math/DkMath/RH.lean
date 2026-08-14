@@ -67,6 +67,7 @@ import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideSignedTailPairingAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideFiniteTailProjectionAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideModeKernelPhaseAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSidePrimePowerRayAudit
+import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideFiniteGeometricRayAudit
 import DkMath.RH.CFBRC.PascalCenteredXiOuterContourResidueBridge
 import DkMath.RH.CFBRC.PascalCenteredXiRadialLayerCakeOuterCountBridge
 import DkMath.RH.CFBRC.PascalCenteredXiFixedSecondMomentDefectBridge
