@@ -30,6 +30,7 @@ noncomputable section
 namespace DkMath.RH.CFBRCProjection
 
 open DkMath.Analysis
+open Filter
 open MeasureTheory
 open scoped Interval Topology
 
@@ -2620,5 +2621,120 @@ providers for the finite arithmetic inequality. -/
 inductive PascalCenteredXiPrimeSideQuadraticizationRadialComparisonGap : Prop
   | noIndependentArithmeticToRadialProvider :
       PascalCenteredXiPrimeSideQuadraticizationRadialComparisonGap
+
+/-! ## IPSM-029: common centered-Xi source -/
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight
+    (ε : ℝ) (z : ℂ) : ℂ :=
+  z ^ 2 * centeredMellinSpectralWeight
+    (centeredMellinBoxApprox ε) z
+
+theorem pascalCenteredXiMellinQuadraticZeroMoment_eq_commonSourceMoment
+    {ε : ℝ} (W : PascalCenteredXiResidueTransportWindow) :
+    pascalCenteredXiMellinQuadraticZeroMoment ε W =
+      pascalCenteredXiZeroDiskWeightedMoment
+        (pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε)
+        W.R := by
+  exact pascalCenteredXiMellinSecondDifferenceZeroMoment_tau_zero_eq W
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationRadialWeight
+    (z : ℂ) : ℂ :=
+  (Complex.normSq z : ℂ)
+
+theorem pascalCenteredXiZeroDiskWeightedMoment_radialWeight_eq
+    (R : ℝ) :
+    pascalCenteredXiZeroDiskWeightedMoment
+        pascalCenteredXiPrimeSideQuadraticizationRadialWeight R =
+      (pascalCenteredXiZeroDiskRadialSecondMoment R : ℂ) := by
+  classical
+  unfold pascalCenteredXiZeroDiskWeightedMoment
+    pascalCenteredXiPrimeSideQuadraticizationRadialWeight
+    pascalCenteredXiZeroDiskRadialSecondMoment
+  rw [Complex.ofReal_sum]
+  apply Finset.sum_congr rfl
+  intro a ha
+  norm_num
+
+noncomputable def pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+    (ε : ℝ) (z : ℂ) : ℝ :=
+  Complex.normSq z +
+    (pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε z).re
+
+theorem pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_eq_commonSourceMoment
+    {ε : ℝ}
+    (W : PascalCenteredXiResidueTransportWindow) :
+    pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint ε W =
+      ∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε a := by
+  unfold pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint
+  rw [pascalCenteredXiFixedRadialSecondMomentFunctional_eq_windowRadial W.circle_safe,
+    ← pascalCenteredXiZeroDiskRadialSecondMoment_eq_window W.R,
+    pascalCenteredXiMellinQuadraticNormalizedArithmeticEndpoint_eq,
+    pascalCenteredXiMellinQuadraticZeroMoment_eq_commonSourceMoment]
+  unfold pascalCenteredXiZeroDiskRadialSecondMoment
+    pascalCenteredXiZeroDiskWeightedMoment
+    pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+  simp only [Complex.neg_re]
+  rw [Complex.re_sum]
+  calc
+    (∑ z ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (pascalCenteredXiZeroMultiplicity z : ℝ) * Complex.normSq z) -
+        -(∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+          ((pascalCenteredXiZeroMultiplicity a : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε a).re) =
+      (∑ z ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (pascalCenteredXiZeroMultiplicity z : ℝ) * Complex.normSq z) +
+        ∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+          ((pascalCenteredXiZeroMultiplicity a : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε a).re := by ring
+    _ = (∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (((pascalCenteredXiZeroMultiplicity a : ℝ) * Complex.normSq a) +
+          ((pascalCenteredXiZeroMultiplicity a : ℂ) *
+            pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε a).re)) := by
+      rw [Finset.sum_add_distrib]
+    _ = (∑ a ∈ pascalCenteredXiZeroDiskFinset W.R,
+        (pascalCenteredXiZeroMultiplicity a : ℝ) *
+          (Complex.normSq a +
+            (pascalCenteredXiPrimeSideQuadraticizationMellinZeroWeight ε a).re)) := by
+      apply Finset.sum_congr rfl
+      intro a ha
+      simp [Complex.mul_re]
+      ring
+
+theorem tendsto_pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight
+    (z : ℂ) :
+    Tendsto
+      (fun ε : ℝ =>
+        pascalCenteredXiPrimeSideQuadraticizationCommonSourceDefectWeight ε z)
+      (𝓝[>] 0)
+      (nhds (2 * z.re ^ 2)) := by
+  have hweight := tendsto_centeredMellinBoxApprox_quadraticWeight z
+  have hreal := (Complex.continuous_re.tendsto (z ^ 2)).comp hweight
+  have hnorm : Tendsto (fun _ : ℝ => Complex.normSq z) (𝓝[>] 0)
+      (nhds (Complex.normSq z)) := tendsto_const_nhds
+  have hsum : Tendsto
+      (fun ε : ℝ =>
+        Complex.normSq z +
+          (z ^ 2 * centeredMellinSpectralWeight
+            (centeredMellinBoxApprox ε) z).re)
+      (𝓝[>] 0)
+      (nhds (Complex.normSq z + (z ^ 2).re)) := hnorm.add hreal
+  convert hsum using 1
+  · funext ε
+    rfl
+  · simp [Complex.normSq, pow_two, Complex.mul_re]
+    ring
+
+theorem pascalCenteredXiFixedDefect_nonpos_of_endpoint_le_vanishingEnvelope
+    (W : PascalCenteredXiResidueTransportWindow)
+    (r : ℝ → ℝ)
+    (hr : Tendsto r (𝓝[>] 0) (nhds 0))
+    (hupper : ∀ᶠ ε : ℝ in 𝓝[>] 0,
+      pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint ε W ≤ r ε) :
+    pascalCenteredXiFixedSecondMomentDefectFunctional W.R ≤ 0 := by
+  exact le_of_tendsto_of_tendsto
+    (tendsto_pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint_epsilon W)
+    hr hupper
 
 end DkMath.RH.CFBRCProjection
