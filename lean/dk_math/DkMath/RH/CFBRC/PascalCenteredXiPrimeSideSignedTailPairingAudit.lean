@@ -58,7 +58,7 @@ private theorem intervalIntegrable_pascalPrimePowerRightEdgeCutoffIntegrand
     change Continuous (fun t : ℝ =>
       pascalSymmetricRectangleRightEdge σ t - criticalLineCenter)
     convert hpath.sub continuous_const using 1
-    all_goals ext t <;> rfl
+    all_goals ext t; rfl
   have hterm : ∀ n : ℕ, Continuous (fun t : ℝ =>
       LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
         (pascalSymmetricRectangleRightEdge σ t) n) := by
@@ -87,7 +87,7 @@ private theorem intervalIntegrable_pascalPrimePowerRightEdgeCutoffIntegrand
       convert continuous_const.mul
           ((continuous_const_cpow (n : ℂ)).comp
             (continuous_neg.comp hpath)) using 1
-      all_goals ext t <;> rfl
+      all_goals ext t; rfl
   have hsum : Continuous (fun t : ℝ =>
       ∑ n ∈ Finset.range (X + 1),
         LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
@@ -417,6 +417,92 @@ theorem pascalCenteredXiPrimeSideFiniteCutoffRawDifference_eq_neg_weight_mul_pri
         pascalCenteredXiPrimeSideFinitePrimeTail W X t) := by
   unfold pascalCenteredXiPrimeSideFiniteCutoffRawDifference
     pascalCenteredXiPrimeSideFinitePrimeTail
+  ring
+
+/-- The raw finite residual amplitude is interval-integrable on the complete
+finite residue window.  This adapter is exported for the finite block layer;
+it does not assert integrability of an infinite tail. -/
+theorem intervalIntegrable_pascalCenteredXiPrimeSideFiniteCutoffRawDifference
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntervalIntegrable
+      (pascalCenteredXiPrimeSideFiniteCutoffRawDifference ε W X)
+      volume (-W.rectangle.T) W.rectangle.T := by
+  have hcut := intervalIntegrable_pascalPrimePowerRightEdgeCutoffIntegrand
+    (h := pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+    (pascalCenteredXiMellinSecondDifferenceWeight_differentiable
+      (ε := ε) (τ := 0) hε)
+    (σ := W.rectangle.σ) (T := W.rectangle.T) X
+  have hzeta := intervalIntegrable_pascalXiOrdinaryZetaRightEdgeIntegrand_of_residueWindow
+    (h := pascalCenteredXiMellinSecondDifferenceWeight ε 0)
+    (pascalCenteredXiMellinSecondDifferenceWeight_differentiable
+      (ε := ε) (τ := 0) hε) W
+  have hcut' := hcut.mul_const (-Complex.I)
+  have hzeta' := hzeta.mul_const (-Complex.I)
+  apply (hcut'.sub hzeta').congr
+  intro t ht
+  simp only [pascalPrimePowerRightEdgeCutoffIntegrand,
+    pascalXiOrdinaryZetaRightEdgeIntegrand,
+    pascalCenteredXiPrimeSideFiniteCutoffRawDifference]
+  ring_nf
+  simp [Complex.I_sq]
+  ring
+
+/-! ## CS11 closeout: the exact signed tail formula -/
+
+/-- The finite defect error is exactly the positive-convention signed tail
+projection.  This is a finite source identity: it uses neither an infinite
+tail representation nor a sum/integral exchange. -/
+theorem pascalCenteredXiMellinQuadraticArithmeticDefectApproximant_sub_endpoint_eq_two_over_pi_integral_primeTail
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinQuadraticArithmeticDefectApproximant ε W X -
+        pascalCenteredXiMellinQuadraticArithmeticDefectEndpoint ε W =
+      (2 / Real.pi) *
+        ∫ t in (0 : ℝ)..W.rectangle.T,
+          (pascalCenteredXiMellinSecondDifferenceWeight ε 0
+              (pascalOrdinaryToCentered
+                (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+            pascalCenteredXiPrimeSideFinitePrimeTail W X t).re := by
+  rw [pascalCenteredXiMellinQuadraticArithmeticDefectApproximant_sub_endpoint_eq_neg_primeResidual_im_div_pi
+    hε W X,
+    pascalCenteredXiPrimeSideFiniteCutoffResidual_im_eq_two_mul_half_re hε W X]
+  have hpoint : ∀ t : ℝ,
+      pascalCenteredXiPrimeSideFiniteCutoffRawDifference ε W X t =
+        -(pascalCenteredXiMellinSecondDifferenceWeight ε 0
+          (pascalOrdinaryToCentered
+            (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+          pascalCenteredXiPrimeSideFinitePrimeTail W X t) :=
+    fun t => pascalCenteredXiPrimeSideFiniteCutoffRawDifference_eq_neg_weight_mul_primeTail
+      W X t
+  have hInt :
+      ∫ t in (0 : ℝ)..W.rectangle.T,
+          (pascalCenteredXiPrimeSideFiniteCutoffRawDifference ε W X t).re =
+        ∫ t in (0 : ℝ)..W.rectangle.T,
+          (-(pascalCenteredXiMellinSecondDifferenceWeight ε 0
+            (pascalOrdinaryToCentered
+              (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+            pascalCenteredXiPrimeSideFinitePrimeTail W X t)).re := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [] with t ht
+    rw [hpoint]
+  rw [hInt]
+  have hneg :
+      ∫ t in (0 : ℝ)..W.rectangle.T,
+          (-(pascalCenteredXiMellinSecondDifferenceWeight ε 0
+            (pascalOrdinaryToCentered
+              (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+            pascalCenteredXiPrimeSideFinitePrimeTail W X t)).re =
+        -(∫ t in (0 : ℝ)..W.rectangle.T,
+          (pascalCenteredXiMellinSecondDifferenceWeight ε 0
+            (pascalOrdinaryToCentered
+              (pascalSymmetricRectangleRightEdge W.rectangle.σ t)) *
+            pascalCenteredXiPrimeSideFinitePrimeTail W X t).re) := by
+    rw [← intervalIntegral.integral_neg]
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [] with t ht
+    simp only [Complex.neg_re]
+  rw [hneg]
   ring
 
 inductive PascalCenteredXiPrimeSideSignedTailPairingGap : Prop
