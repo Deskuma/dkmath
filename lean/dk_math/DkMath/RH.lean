@@ -31,6 +31,7 @@ import DkMath.RH.CFBRC.CosmicFormulaZetaPrimePowerModeProjection
 import DkMath.RH.CFBRC.CosmicFormulaZetaMirrorGapBeamProjection
 import DkMath.RH.CFBRC.CosmicFormulaZetaFiniteAggregateProjection
 import DkMath.RH.CFBRC.CosmicFormulaZetaFinitePolarizationProjection
+import DkMath.RH.CFBRC.CosmicFormulaZetaMellinSourceProjection
 import DkMath.RH.CFBRC.PascalVonMangoldtLSeriesBridge
 import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge
