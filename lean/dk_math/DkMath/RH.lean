@@ -42,6 +42,7 @@ import DkMath.RH.CFBRC.CosmicFormulaZetaFullSignedGramLimitRecoveryAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaTopEdgeGramSpecializationAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaTopEdgeWeightedPolarizationAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaProjectedMirrorPolarizationAudit
+import DkMath.RH.CFBRC.CosmicFormulaZetaForwardPolarizedRectangleCompletionAudit
 import DkMath.RH.CFBRC.PascalVonMangoldtLSeriesBridge
 import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge
