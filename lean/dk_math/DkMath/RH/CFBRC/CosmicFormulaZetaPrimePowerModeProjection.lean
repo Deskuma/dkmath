@@ -46,6 +46,13 @@ noncomputable def cfzpPrimePowerCycleState (q : ℕ) (t : ℝ) : ℂ :=
 theorem norm_cfzpPrimePowerCycleState (q : ℕ) (t : ℝ) :
     ‖cfzpPrimePowerCycleState q t‖ = 1 := by
   rw [cfzpPrimePowerCycleState, Complex.norm_exp]
+  have hreal :
+      (-Complex.I * (((t * Real.log (q : ℝ) : ℝ) : ℂ))).re = 0 := by
+    rw [Complex.mul_re]
+    simp only [Complex.neg_re, Complex.I_re, Complex.ofReal_re,
+      Complex.neg_im, Complex.I_im, Complex.ofReal_im]
+    ring
+  rw [hreal]
   simp
 
 /--
@@ -128,7 +135,7 @@ theorem primeMirrorLeftAmplitude_one_sub_eq_right
     primeMirrorLeftAmplitude q (centeredSigma (1 - s).re) =
       primeMirrorRightAmplitude q (centeredSigma s.re) := by
   unfold primeMirrorLeftAmplitude primeMirrorRightAmplitude centeredSigma
-  simp
+  rw [Complex.sub_re, Complex.one_re]
   congr 1
   ring
 
