@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.RH.CFBRC.PrimeMirrorOffsetCore
-import DkMath.RH.CFBRC.PascalPrimePowerModeBridge
+import DkMath.RH.CFBRC.PascalPrimePowerCanonicalFold
 import DkMath.RH.CFBRC.CriticalMirrorGeometry
 import Mathlib.Tactic
 
@@ -20,6 +20,10 @@ positive natural mode.  It factors the exact complex power into
 * a common critical-line radial carrier,
 * the already existing prime-mirror real amplitude, and
 * a unit cycle state carrying the imaginary coordinate.
+
+The existing canonical-fold theorem
+`eulerPrimePowerMode_eq_primePower_cpow_neg` is reused for the arithmetic
+prime-power label `q = p^k`; no second prime-power/cpow bridge is introduced.
 
 No argument function, infinite Euler product, zero set, limit, or RH statement
 is used here.
@@ -142,23 +146,6 @@ theorem natCpowNeg_one_sub_eq_commonRadial_mul_rightAmplitude_mul_cycle
   rw [primeMirrorLeftAmplitude_one_sub_eq_right]
   simp
 
-/--
-The existing Euler prime-power mode is exactly the natural-label mode at
-`q = p^k`.
--/
-theorem eulerPrimePowerMode_eq_naturalLabelCpowNeg
-    {p : ℕ} (hp : Nat.Prime p) (k : ℕ) (s : ℂ) :
-    eulerPrimePowerMode p k s =
-      (((p ^ k : ℕ) : ℂ) ^ (-s)) := by
-  rw [eulerPrimePowerMode, eulerPrimePrimitiveMode_eq_cpow_neg hp]
-  calc
-    ((p : ℂ) ^ (-s)) ^ k =
-        (p : ℂ) ^ ((k : ℂ) * (-s)) := by
-      symm
-      simpa using (Complex.cpow_nat_mul (p : ℂ) k (-s))
-    _ = (((p ^ k : ℕ) : ℂ) ^ (-s)) := by
-      simpa using (Complex.natCast_cpow_natCast_mul p k (-s))
-
 /-- Actual Euler prime-power mode factorization on the original side. -/
 theorem eulerPrimePowerMode_eq_commonRadial_mul_leftAmplitude_mul_cycle
     {p : ℕ} (hp : Nat.Prime p) (k : ℕ) (s : ℂ) :
@@ -166,7 +153,7 @@ theorem eulerPrimePowerMode_eq_commonRadial_mul_leftAmplitude_mul_cycle
       cfzpPrimePowerCommonRadialCarrier (p ^ k) *
         (primeMirrorLeftAmplitude (p ^ k) (centeredSigma s.re) : ℂ) *
           cfzpPrimePowerCycleState (p ^ k) s.im := by
-  rw [eulerPrimePowerMode_eq_naturalLabelCpowNeg hp]
+  rw [eulerPrimePowerMode_eq_primePower_cpow_neg hp]
   exact natCpowNeg_eq_commonRadial_mul_leftAmplitude_mul_cycle
     (pow_pos hp.pos k) s
 
@@ -177,7 +164,7 @@ theorem eulerPrimePowerMode_criticalMirror_eq_commonRadial_mul_rightAmplitude_mu
       cfzpPrimePowerCommonRadialCarrier (p ^ k) *
         (primeMirrorRightAmplitude (p ^ k) (centeredSigma s.re) : ℂ) *
           cfzpPrimePowerCycleState (p ^ k) s.im := by
-  rw [eulerPrimePowerMode_eq_naturalLabelCpowNeg hp]
+  rw [eulerPrimePowerMode_eq_primePower_cpow_neg hp]
   exact natCpowNeg_criticalMirror_eq_commonRadial_mul_rightAmplitude_mul_cycle
     (pow_pos hp.pos k) s
 
@@ -188,7 +175,7 @@ theorem eulerPrimePowerMode_one_sub_eq_commonRadial_mul_rightAmplitude_mul_cycle
       cfzpPrimePowerCommonRadialCarrier (p ^ k) *
         (primeMirrorRightAmplitude (p ^ k) (centeredSigma s.re) : ℂ) *
           cfzpPrimePowerCycleState (p ^ k) (-s.im) := by
-  rw [eulerPrimePowerMode_eq_naturalLabelCpowNeg hp]
+  rw [eulerPrimePowerMode_eq_primePower_cpow_neg hp]
   exact natCpowNeg_one_sub_eq_commonRadial_mul_rightAmplitude_mul_cycle
     (pow_pos hp.pos k) s
 
