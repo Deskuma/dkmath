@@ -27,6 +27,8 @@ import DkMath.RH.CFBRC.PascalPrimeEulerModeBridge
 import DkMath.RH.CFBRC.PascalPrimePowerModeBridge
 import DkMath.RH.CFBRC.PascalPrimePowerPHZFinite
 import DkMath.RH.CFBRC.PascalPrimePowerCanonicalFold
+import DkMath.RH.CFBRC.CosmicFormulaZetaPrimePowerModeProjection
+import DkMath.RH.CFBRC.CosmicFormulaZetaMirrorGapBeamProjection
 import DkMath.RH.CFBRC.PascalVonMangoldtLSeriesBridge
 import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge
