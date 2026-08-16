@@ -1052,3 +1052,56 @@ phase-cell sign -> integrated threshold crossing: OPEN analytic route
 phase-cell coverage、equidistribution、threshold-crossing provider、joint limit、
 limit exchange、pointwise/integrated rename equality、common-baseline reach、global RH
 は導入しない。
+
+## 30. CFZP-018 — prime-threshold approximate-reach frontier
+
+CFZP-018 は、CFZP-017 の normalized prime threshold を既存 CS24 correction source
+へ戻し、さらに zero-cutoff radial contact deficit と同一化した。有限 exact に
+
+```text
+Threshold = FixedRadialSecondMomentFunctional - IndependentCorrectionSourceReal
+π * Threshold = ZeroCutoffRadialContactDeficit
+```
+
+を証明した。これにより CFZP-017 の finite margin は CS22 の radial-contact
+coordinates で
+
+```text
+WholeShiftedRadialMargin = -4 * FiniteRadialContactDeficit
+```
+
+となり、exact prime-threshold crossing は finite radial deficit の nonpositive
+crossing と同値になる。さらに CS25 の aggregate interaction identity により、
+threshold crossing は zero-cutoff deficit 以下の aggregate interaction reach として
+も読める。
+
+次に exact crossing を、任意の正の normalized slack `δ` と任意に大きい cutoff `N`
+に対し
+
+```text
+Threshold - δ ≤ NormalizedPrimeContribution(ε,W,X)
+```
+
+を満たす `X ≥ N` が存在するという `Cfzp018CofinalPrimeThresholdApproximateReachAt`
+へ弱めた。この条件と既存 CS22 の
+`PascalCenteredXiPrimeSideCofinalRadialContactZeroAt` は、`η = π * δ` の正の
+スケール変換を通じて exact に同値である。従って fixed-ε endpoint defect の非正性、
+outer `ε → 0+` の doubly-cofinal approximate reach、safe-radius nonnegativity、
+finite-window criticality までを条件付きに再公開した。
+
+CFZP-017 の doubly-cofinal exact crossing は CFZP-018 の approximate reach を含意
+するが、逆 implication は主張しない。pointwise の positive slack が exact crossing
+を含意しない実数 countermodel も置き、三つの frontier を分離した。
+
+```text
+π * normalized threshold = zero-cutoff radial deficit: CLOSED
+whole shifted margin = -4 * finite radial deficit: CLOSED
+exact crossing = finite deficit zero-crossing: CLOSED
+approximate reach <-> CS22 cofinal radial contact zero: CLOSED
+017 exact crossing -> 018 approximate reach: CLOSED
+independent doubly-cofinal approximate-reach provider: OPEN / GAP
+phase-cell sign -> approximate magnitude reach: OPEN analytic route
+```
+
+phase-cell sign、phase equidistribution、exact/approximate provider existence、joint
+limit、limit exchange、contour relocation、common-baseline reach、global RH は導入しない。
