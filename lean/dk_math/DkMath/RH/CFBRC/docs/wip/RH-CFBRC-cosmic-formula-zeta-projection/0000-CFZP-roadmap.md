@@ -1167,3 +1167,57 @@ independent doubly-cofinal signed-mass budget provider: OPEN / GAP
 positive/debt の個別 cutoff monotonicity・increment theorem は既存 public API に無いため
 本段では追加せず、次段の監査対象として残す。phase equidistribution、universal
 phase-cell coverage、budget provider、joint limit、limit exchange、global RH は導入しない。
+
+## 32. CFZP-020 — signed-mass cutoff frontier increments
+
+CFZP-020 は CFZP-019 の cumulative positive event mass / negative event debt を
+canonical prime-power pair support の cutoff frontier へ分解した。membership
+characterization から `X ≤ Y` に対する support inclusion を示し、`X + 1` の新規部分を
+
+```text
+frontier(X) = support(X + 1) \ support(X)
+support(X + 1) = support(X) ∪ frontier(X)
+```
+
+として exact に固定した。
+
+この disjoint partition 上で、positive mass と negative debt の one-step recurrence、
+双方の nonnegativity・cutoff monotonicity、signed branch-free ledger の increment
+
+```text
+ledger(X + 1) - ledger(X)
+  = frontierPositiveMass(X) - frontierNegativeDebt(X)
+```
+
+を証明した。safe-frequency regime `0 < ε < log 2` では radial contact deficit の
+中心 recurrence も
+
+```text
+G_(X + 1) = G_X + frontierNegativeDebt(X) - frontierPositiveMass(X)
+```
+
+として閉じた。
+
+さらに frontier 上の全 event sign を仮定した local-to-frontier adapter により、
+nonnegative frontier では debt が消えて deficit が非増加、nonpositive frontier では
+positive mass が消えて deficit が非減少となることを示した。empty frontier では mass、
+debt、ledger、radial deficit が不変である。
+
+この段階の classification は Green-A とする。
+
+```text
+pair-support cutoff monotonicity: CLOSED
+one-step frontier partition: CLOSED
+positive/debt one-step recurrence: CLOSED
+positive/debt cutoff monotonicity: CLOSED
+signed ledger frontier increment: CLOSED
+radial deficit one-step recurrence: CLOSED
+frontier event sign -> one-step deficit direction: CLOSED
+frontier sign provider / quantitative dominance: OPEN / GAP
+cofinal signed-mass budget provider: OPEN / GAP
+```
+
+個別 frontier sign の conditional theorem は cofinal/eventual provider ではない。frontier
+events の eventual sign、net-positive dominance、cofinal signed-mass budget、phase-cell
+coverage、asymptotic density、joint limit、limit exchange、finite-window criticality の
+無条件化、global RH は導入しない。
