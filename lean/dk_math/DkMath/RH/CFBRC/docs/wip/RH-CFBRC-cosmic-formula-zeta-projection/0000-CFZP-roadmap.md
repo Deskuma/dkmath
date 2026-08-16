@@ -913,3 +913,47 @@ reversed right-edge source -> CS38 top-edge source: OPEN
 `Cfzp014FunctionalReflectionRightToTopEdgeTransportGap` に境界化した。top-edge
 observable との rename equality、contour relocation、無限 cutoff exchange、
 baseline collapse、amplitude Gap との equality、および RH は導入しない。
+
+## 27. CFZP-015 — arithmetic radial domination margin frontier
+
+CFZP-015 は、CFZP-014 で閉じた canonical finite source と既存の scalar surface
+を接続し、有限 cutoff ごとの arithmetic radial domination margin を導入した。
+margin は
+
+```text
+WholeShiftedPlusEnergy - WholeShiftedMinusEnergy
+  - 4 * π * FixedRadialSecondMomentFunctional
+```
+
+と定義し、既存の shifted-energy difference と scalar Mellin excess の exact
+identity から
+
+```text
+margin = -4 * π * ArithmeticDefectApproximant
+```
+
+を証明した。したがって margin の非負性は finite arithmetic defect approximant
+の非正性と同値であり、同じ条件を shifted-energy gap および scalar radial
+comparison の形でも読める。局所の `hε : 0 < ε` は明示的に保持した。
+
+ordered finite radial domination は、全ての正の ε について cutoff X の atTop で
+margin が eventually 非負であるという命題
+`Cfzp015OrderedFiniteRadialDomination` として公開した。ただし、その命題の
+inhabitant や独立した eventual provider は導入していない。もしこの provider を
+別途仮定すれば、既存の ordered-limit transport により endpoint defect の非正性、
+fixed defect の非正性を得られる。さらに fixed second-moment defect の安全半径
+上の非負性と zero iff を合わせると fixed defect は零となり、finite window の
+criticality を得る。
+
+この段階の classification は Green-A とする。
+
+```text
+finite arithmetic radial margin identity: CLOSED
+margin sign <-> finite defect sign: CLOSED
+ordered finite radial domination proposition: CLOSED as a conditional interface
+independent eventual domination provider: OPEN / GAP
+```
+
+従って、この実装は global provider、極限交換、source completion、baseline collapse
+または global RH を主張しない。CFZP-014 の right-edge から top-edge への relocation
+gap と common-baseline reach も引き続き未解決の frontier として保持する。
