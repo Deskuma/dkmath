@@ -47,13 +47,14 @@ noncomputable def cfzpCriticalLinePoint (t : ℝ) : ℂ :=
 
 theorem cfzp_one_sub_criticalLinePoint_eq_conj (t : ℝ) :
     1 - cfzpCriticalLinePoint t = starRingEnd ℂ (cfzpCriticalLinePoint t) := by
-  apply Complex.ext <;> simp [cfzpCriticalLinePoint, criticalLineCenter] <;> ring
+  apply Complex.ext <;> simp [cfzpCriticalLinePoint, criticalLineCenter]
+  ring
 
 theorem cfzpCriticalLinePoint_div_two_eq_quarter_add_half_im (t : ℝ) :
     cfzpCriticalLinePoint t / 2 =
       (1 / 4 : ℂ) + (t / 2 : ℂ) * Complex.I := by
   apply Complex.ext <;> simp [cfzpCriticalLinePoint, criticalLineCenter]
-  <;> ring
+  ring
 
 /-! ## B. GammaR factorization and nonvanishing -/
 
