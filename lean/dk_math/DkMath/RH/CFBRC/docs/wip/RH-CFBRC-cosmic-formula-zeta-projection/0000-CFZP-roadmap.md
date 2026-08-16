@@ -882,3 +882,34 @@ common-baseline reach、または既存 CS37/CS38 aggregate channel への有限
 `Complex.cpow_def_of_ne_zero` と `Complex.natCast_log` による explicit exponential
 routeへ置換した。positive natural base の非零性だけを使い、theorem statement、
 downstream self-recurrence surface、および 013 の Green-A classification は維持する。
+
+## 26. CFZP-014 — functional-reflection prime-ray canonical aggregate transport
+
+CFZP-014 は、013 の prime ごとの functional-reflection ray contribution を
+既存の Pascal prime support、`(p,k)` pair support、および canonical prime-power
+supportへ有限 exact に再集約した。`log p` を明示した prime-weighted aggregateを
+導入し、既存の pair-label image と injectivity を使って
+
+```text
+AggregateFunctionalReflectionPrimeRayAmplitude
+  = weight(node(t)) * canonicalFunctionalReflectionSource
+```
+
+を reversed right-edge point `s_R(-t)` で証明した。さらに既存の
+`cfzpCanonicalFunctionalReflectionLinearSourceUpTo_eq_finiteSymmetricEulerRate`
+を再利用し、同じ aggregate が finite symmetric Euler rate に一致することを固定した。
+`canonicalPrimePowerShadowCost q` は引き続き canonical base-prime の `log p` として
+扱い、`log q` への誤同一視は行っていない。
+
+したがって CFZP-014 の core classification は Green-A とする。
+
+```text
+functional-reflection per-prime ray -> canonical finite aggregate: CLOSED
+canonical functional-reflection source -> finite symmetric Euler rate: CLOSED
+reversed right-edge source -> CS38 top-edge source: OPEN
+```
+
+最後の edge relocation は既存 exact contour transport provider が未提供のため、
+`Cfzp014FunctionalReflectionRightToTopEdgeTransportGap` に境界化した。top-edge
+observable との rename equality、contour relocation、無限 cutoff exchange、
+baseline collapse、amplitude Gap との equality、および RH は導入しない。
