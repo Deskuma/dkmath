@@ -57,6 +57,7 @@ import DkMath.RH.CFBRC.CosmicFormulaZetaSafeFrequencyTrigonometricPhaseBoundaryA
 import DkMath.RH.CFBRC.CosmicFormulaZetaBranchFreePrimePowerSignCellAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaNegativeFrequencyProfileDerivativeAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaPrimePowerCenteredPhaseCellCoverageAudit
+import DkMath.RH.CFBRC.CosmicFormulaZetaSourceProjectionCloseoutAudit
 import DkMath.RH.CFBRC.PascalVonMangoldtLSeriesBridge
 import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge

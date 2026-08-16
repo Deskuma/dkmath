@@ -625,3 +625,22 @@ completed-zeta / standard-zeta sourceへ射影しても同じ Gap なのか？
 ```
 
 この問いが exact に Yes となった地点で、CFBRC はリーマンゼータ関数の説明模型ではなく、同じ source observable を別の代数座標で表す体系へ昇格する。
+
+## 19. CFZP-006Z closeout / CFZP-007 re-steering
+
+CFZP-006Z までに、interaction chain と phase-cell localization は有限・条件付きの exact API として閉じた。rectangle completion remainder は signed のままであり、source ray 側の minus whole は nonnegative だが、両者の差は common-baseline defect
+
+`D_X = G_0 - C_X`
+
+として残る。現在の exact relation は
+
+`π * CompletionRemainder_X = Eminus_X + D_X`。
+
+したがって CFZP-006 の original exit condition に対する stage status は Green-B とする。`D_X = 0` と amplitude-side Gap から ray-minus-whole への exact projection bridge は未解決であり、CompletionRemainder を無条件に genuine SourceGap と同一視しない。
+
+CFZP-007 は limit closure へ直行せず、まず次の二つへ再誘導する。
+
+1. common-baseline alignment `D_X = 0` の finite/canonical surface audit。
+2. amplitude Gap から source ray minus whole への exact projection bridge。
+
+この二つが閉じた場合にのみ、finite completion と limit closure を再開する。
