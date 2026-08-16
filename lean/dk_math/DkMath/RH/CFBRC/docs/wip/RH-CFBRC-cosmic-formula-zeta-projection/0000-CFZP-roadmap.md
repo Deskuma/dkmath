@@ -648,3 +648,11 @@ CFZP-007 は limit closure へ直行せず、まず次の二つへ再誘導す�
 CFZP-007 は prime-power event monotonicity を追わず、OOL-KND の drift-free carrier 候補を completed-zeta の `Gammaℝ` critical-line factor から branch-free に同定する段階へ再誘導する。critical-line の `s(t) / 2 = 1/4 + i t/2`、unit GammaR carrier、critical-line completed-zeta の realness、Hardy carrier、および Archimedean phase-rate を exact API として追加する。006 の common-baseline alignment と amplitude-Gap/ray-minus bridge は backlog のまま保持する。
 
 007 Green 後は、OOL の旧 phase convention を比較する normalization audit へ進むか、006 backlog へ戻るかを改めて判定する。
+
+CFZP-007 は Green-A とする。critical-line `Gammaℝ` unit carrier、Hardy real carrier、および Archimedean phase-rate は exact に同定された。
+
+CFZP-008 では、零でない critical-line zeta の unit carrier を `HardySign × conj(GammaR unit)` に exact 分解し、二乗によって Hardy sign を消去した projective doubled-phase carrier equality を閉じた。これは branch-free に歴史的 OOL の doubled-phase 規約を正規化する。
+
+008 の real angle lift、unwrapped phase、zero-crossing jump ledger は未解決のまま `Cfzp008RealAngleLiftAndZeroJumpLedgerGap` に境界化する。`Complex.arg`、global `Complex.log`、zero-counting identification、RH、006 の common-baseline / amplitude-source projection backlog は導入・解決しない。
+
+008 終了後は、projective carrier を 006 の source bridge に接続できるかを大局監査する。接続しない場合は phase investigation を closeout し、006 backlog へ戻る。
