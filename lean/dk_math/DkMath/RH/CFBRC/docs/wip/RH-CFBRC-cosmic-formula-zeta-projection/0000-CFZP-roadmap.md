@@ -1282,16 +1282,27 @@ cofinal provider、global RH は導入しない。
 
 CFZP-022 は CFZP-021 の one-mode pulse を有限の右閉区間 `(A, B]` へ持ち上げた。
 `Finset.Ioc` による pulse block について、aggregate interaction、branch-free ledger、
-radial contact deficit の三つの finite telescope を exact に証明し、safe-frequency
- regime では block を
+radial contact deficit の三つの finite telescope を exact に証明した。radial telescope
+は `0 < ε` だけで閉じ、branch-free ledger だけが safe-frequency regime を要求する。
+また block の one-step singleton、concatenation、additive telescope を公開した。
+
+radial deficit の endpoint payment は
+
+```text
+G_B ≤ η ↔ G_A ≤ PulseBlock(A,B) + η
+```
+
+であり、safe-frequency regime では block を
 
 ```text
 positiveEventMassBlock - negativeEventDebtBlock
 ```
 
 へ書き換えた。従って終点の radial slack は、始点の deficit と finite signed pulse
-block compensation の不等式と同値である。これを既存 CS22 の cofinal radial-contact
-zero predicate と fixed-`ε` で exact に同一化した。
+block compensation の不等式と同値である。raw pulse payment contract と signed block
+budget contract をそれぞれ first-class Prop とし、後者は既存 CFZP-019 signed-mass
+budget、CFZP-018 approximate reach、CS22 cofinal radial-contact zero と fixed-`ε`
+で exact に同一化した。
 
 非 prime-power mode の pulse block が消える quiescence lemma と、独立の cofinal
 signed block-budget provider が未導入であることを表す Gap marker も追加した。
@@ -1299,9 +1310,12 @@ signed block-budget provider が未導入であることを表す Gap marker も
 ```text
 finite `(A, B]` pulse block: CLOSED
 aggregate / ledger / radial finite telescope: CLOSED
+one-step block and block concatenation: CLOSED
+G_B ≤ η <-> G_A ≤ PulseBlock + η: CLOSED
 finite pulse block = positive mass - negative debt: CLOSED
 radial slack <-> finite block compensation: CLOSED
 finite block compensation <-> CS22 cofinal contact zero: CLOSED
+cofinal signed block budget <-> CFZP-019/018 fixed-ε interfaces: CLOSED
 non-prime-power block quiescence: CLOSED
 independent cofinal signed block-budget provider: OPEN / GAP
 ```
