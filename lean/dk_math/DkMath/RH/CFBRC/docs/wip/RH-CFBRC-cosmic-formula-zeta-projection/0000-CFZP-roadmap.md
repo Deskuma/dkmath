@@ -1105,3 +1105,65 @@ phase-cell sign -> approximate magnitude reach: OPEN analytic route
 
 phase-cell sign、phase equidistribution、exact/approximate provider existence、joint
 limit、limit exchange、contour relocation、common-baseline reach、global RH は導入しない。
+
+## 31. CFZP-019 — branch-free prime-power signed-mass budget
+
+CFZP-019 は、CFZP-006V/006Y の既存 branch-free prime-power event を同じ canonical
+pair support 上で正質量と負債へ分解した。各 event について
+
+```text
+event = positiveMass(event) - negativeDebt(event)
+```
+
+を `max` による canonical algebraic identity として証明し、有限 ledger を
+
+```text
+branchFreeTrigLedger
+  = positiveEventMass - negativeEventDebt
+```
+
+へ exact に展開した。safe-frequency regime `0 < ε < log 2` では既存 radial-deficit
+identity と合成して
+
+```text
+finiteRadialContactDeficit
+  = zeroCutoffBaseline + negativeEventDebt - positiveEventMass
+```
+
+を得た。従って任意の geometric slack `η > 0` について
+
+```text
+finiteRadialContactDeficit ≤ η
+  ↔ zeroCutoffBaseline + negativeEventDebt
+       ≤ positiveEventMass + η
+```
+
+である。
+
+006Y の既存 phase-cell sign theorem は local adapter として再利用し、nonnegative
+event では debt が消え、nonpositive event では positive mass が消えることを証明した。
+有限 support 全体の sign-only 仮定から debt が消えることも閉じたが、非負 mass だけでは
+固定 baseline を arbitrary slack まで支払えない実数 firewall を併記した。
+
+safe-frequency restriction は `Real.log 2 > 0` により outer `ε → 0+` で eventually
+成立する。したがって doubly-cofinal safe signed-mass budget は CFZP-018 の
+approximate-reach frontier と exact に同値であり、既存 finite-window criticality へ
+は条件付き adapter を与えた。
+
+この段階の classification は Green-A とする。
+
+```text
+one-event positive/negative decomposition: CLOSED
+branch-free ledger = positive mass - negative debt: CLOSED
+finite radial deficit = baseline + debt - positive mass: CLOSED
+slack radial contact <-> signed-mass budget: CLOSED
+safe fixed-ε signed-mass budget <-> CFZP-018 approximate reach: CLOSED
+safe-frequency restriction near ε -> 0+: NO STRENGTH COST
+006Y local phase-cell sign -> local mass/debt elimination: CLOSED
+local sign -> global signed-mass budget: OPEN / NOT INFERRED
+independent doubly-cofinal signed-mass budget provider: OPEN / GAP
+```
+
+positive/debt の個別 cutoff monotonicity・increment theorem は既存 public API に無いため
+本段では追加せず、次段の監査対象として残す。phase equidistribution、universal
+phase-cell coverage、budget provider、joint limit、limit exchange、global RH は導入しない。
