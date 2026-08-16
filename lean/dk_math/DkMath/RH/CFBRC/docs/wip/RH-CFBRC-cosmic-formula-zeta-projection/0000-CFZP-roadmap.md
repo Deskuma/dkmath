@@ -763,3 +763,48 @@ mirror baseline residual の collapse や aggregate weighted Gram transportを
 証明済みとは扱わない。finite shape と algebraic decomposition の範囲を越えて
 common-baseline reach、無限極限、RH、または amplitude Gap と ray-minus の
 直接 equality は導入しない。
+
+## 24. CFZP-012 — mirror-baseline functional-reflection height-reversal audit
+
+CFZP-012 は、0037 で残った mirror baseline residual
+`Z_M - 1` を、既存の functional-reflection channel と right-edge height
+reversal の有限 exact surfaceへ分類した。right edge
+`s_R(t) = σ + i t` について、critical mirror は
+
+```text
+criticalMirror(s_R(t)) = 1 - s_R(-t)
+```
+
+となることを証明した。この座標 identity により、same-height mirror mode
+は height-reversed functional-reflection mode と、
+`q^(-s_R(-t)) - q^(-s_R(t))` の vertical displacement に分解される。
+
+この分解を Mellin-weighted source summand と既存 exponent support 上の
+finite rayへ持ち上げ、
+
+```text
+Z_M = functionalReflectionPart + reweightedReversedRightRay
+Z_M - 1 = functionalReflectionPart
+        + (reweightedReversedRightRay - 1)
+```
+
+を exact に固定した。ここで current-time Mellin weight は保持され、
+`weight(t) = weight(-t)` や `weight(-t) = conj(weight(t))` は仮定していない。
+
+さらに reweighted reversed-right ray と actual right ray at `-t` の差を、
+有限和の explicit weight-reversal correction として表現した。従って 012 の
+classification は Green-A とする。
+
+```text
+CFZP-011 Layer 1: CLOSED
+CFZP-012 mirror baseline identity: CLASSIFIED
+Layer 2 weighted Gram/interference: OPEN
+common-baseline finite/cofinal reach: OPEN
+```
+
+weight reversal / conjugation の provider は
+`Cfzp012WeightReversalConjugationGap` として残した。したがって 012 は
+baseline collapse、common-energy defect との rename equality、無限 cutoff
+交換、RH を主張しない。次の判断は、explicit correction を既存 completed
+source geometryへ接続するか、Layer 2 の finite weighted Gram/interference
+transportへ戻るかである。
