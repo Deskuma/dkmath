@@ -877,3 +877,8 @@ direct baseline collapse、amplitude Gap との equality、無限 cutoff、RH �
 しない。次段階は Layer 2 の finite weighted Gram/interference transport、
 common-baseline reach、または既存 CS37/CS38 aggregate channel への有限 transport
 のいずれかを選択する。
+
+0040 の reinforcement では、Gate B の positive prime-power conjugation proof を
+`Complex.cpow_def_of_ne_zero` と `Complex.natCast_log` による explicit exponential
+routeへ置換した。positive natural base の非零性だけを使い、theorem statement、
+downstream self-recurrence surface、および 013 の Green-A classification は維持する。

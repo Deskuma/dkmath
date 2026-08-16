@@ -68,14 +68,14 @@ theorem cfzp013PrimePowerMode_rightEdge_neg_eq_conj
       conj (pascalSymmetricRectangleRightEdge W.rectangle.σ t) := by
     apply Complex.ext <;>
       simp [pascalSymmetricRectangleRightEdge]
-  have harg : ((p ^ (k + 1) : ℕ) : ℂ).arg ≠ Real.pi := by
-    rw [Complex.natCast_arg]
-    exact ne_of_lt Real.pi_pos
+  have hq : 0 < p ^ (k + 1) := pow_pos _hp.pos _
+  have hq0 : ((p ^ (k + 1) : ℕ) : ℂ) ≠ 0 := by
+    exact_mod_cast hq.ne'
   rw [hcoord]
-  have hcpow := Complex.cpow_conj
-    ((p ^ (k + 1) : ℕ) : ℂ)
-    (-(pascalSymmetricRectangleRightEdge W.rectangle.σ t)) harg
-  simpa using hcpow
+  rw [Complex.cpow_def_of_ne_zero hq0,
+    Complex.cpow_def_of_ne_zero hq0, ← Complex.natCast_log]
+  rw [← Complex.exp_conj]
+  simp only [map_mul, map_neg, Complex.conj_ofReal]
 
 /-! ## Gate C: source summand and finite ray conjugation -/
 
