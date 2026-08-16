@@ -644,3 +644,7 @@ CFZP-007 は limit closure へ直行せず、まず次の二つへ再誘導す�
 2. amplitude Gap から source ray minus whole への exact projection bridge。
 
 この二つが閉じた場合にのみ、finite completion と limit closure を再開する。
+
+CFZP-007 は prime-power event monotonicity を追わず、OOL-KND の drift-free carrier 候補を completed-zeta の `Gammaℝ` critical-line factor から branch-free に同定する段階へ再誘導する。critical-line の `s(t) / 2 = 1/4 + i t/2`、unit GammaR carrier、critical-line completed-zeta の realness、Hardy carrier、および Archimedean phase-rate を exact API として追加する。006 の common-baseline alignment と amplitude-Gap/ray-minus bridge は backlog のまま保持する。
+
+007 Green 後は、OOL の旧 phase convention を比較する normalization audit へ進むか、006 backlog へ戻るかを改めて判定する。
