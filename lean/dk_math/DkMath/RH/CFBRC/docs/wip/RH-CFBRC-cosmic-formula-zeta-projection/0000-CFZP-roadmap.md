@@ -957,3 +957,44 @@ independent eventual domination provider: OPEN / GAP
 従って、この実装は global provider、極限交換、source completion、baseline collapse
 または global RH を主張しない。CFZP-014 の right-edge から top-edge への relocation
 gap と common-baseline reach も引き続き未解決の frontier として保持する。
+
+## 28. CFZP-016 — cofinal radial-domination frontier minimization
+
+CFZP-016 は、CFZP-015 の eventual finite radial domination provider を、現在の
+ordered-limit route で十分な、より弱い二重 cofinal sign condition へ縮小した。
+まず CFZP-015 の finite margin の endpoint と fixed limit を first-class に定義し、
+既存の arithmetic defect convergence と定数倍の Tendsto だけから
+
+```text
+M_X(ε,W) -> EndpointMargin(ε,W)
+EndpointMargin(ε,W) -> FixedMargin(W)  as ε -> 0+
+```
+
+を exact に transport した。`Frequently (0 ≤ f x)` と実数 Tendsto から
+`0 ≤ limit` を得る局所補題も追加し、fixed `ε` について cofinally many cutoff
+margin の非負性が endpoint margin の非負性を強制することを閉じた。
+
+さらに
+`Cfzp016DoublyCofinalRadialDomination W` を、`𝓝[>] 0` で cofinally many の正の
+`ε` が fixed-`ε` cutoff cofinal domination を持つ命題として定義した。この条件から
+fixed margin の非負性、fixed arithmetic defect の非正性、safe-radius nonnegativity
+との組み合わせによる fixed defect の零性、および有限 zero window の criticality
+を得る。CFZP-015 の stronger eventual provider からこの doubly-cofinal provider
+への implication も hierarchy adapter として閉じた。
+
+この段階の classification は Green-A とする。
+
+```text
+finite margin -> endpoint margin -> fixed margin: CLOSED
+frequently nonnegative + convergence -> nonnegative limit: CLOSED
+fixed-ε cofinal cutoff domination -> endpoint sign: CLOSED
+double cofinal radial domination -> finite-window criticality: CLOSED conditionally
+CFZP-015 eventual provider -> CFZP-016 cofinal provider: CLOSED
+independent doubly-cofinal provider: OPEN / GAP
+```
+
+従って「minimal」は絶対的な論理最小性ではなく、現行 ordered-limit route に対する
+strictly weakened / sharpened sufficient frontier を意味する。phase-cell coverage、
+prime-power arithmetic coverage、equidistribution、zero counting などを provider と
+して仮定していない。joint `(ε,X)` limit、limit exchange、unconditional margin sign、
+contour relocation、common-baseline reach、global RH も導入しない。
