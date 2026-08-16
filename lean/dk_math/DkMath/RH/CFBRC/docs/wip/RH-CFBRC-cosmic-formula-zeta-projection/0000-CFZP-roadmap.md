@@ -1221,3 +1221,59 @@ cofinal signed-mass budget provider: OPEN / GAP
 events の eventual sign、net-positive dominance、cofinal signed-mass budget、phase-cell
 coverage、asymptotic density、joint limit、limit exchange、finite-window criticality の
 無条件化、global RH は導入しない。
+
+## 33. CFZP-021 — von Mangoldt pulse compression
+
+CFZP-021 は既存 CFZP-006R の signed cutoff increment を
+
+```text
+Pulse(n) = 2 * Λ(n) * FiniteModeKernel(n)
+```
+
+という public pulse observable として再公開した。finite von-Mangoldt mode sum の
+`Finset.range` successor identity により
+
+```text
+Aggregate(X + 1) = Aggregate(X) + Pulse(X + 1)
+```
+
+を exact に証明した。
+
+safe-frequency regime では既存 branch-free ledger と CFZP-020 frontier net flow を
+同じ pulse に transportし、radial contact deficit について
+
+```text
+G_(X + 1) = G_X - Pulse(X + 1)
+frontierPositiveMass(X) - frontierNegativeDebt(X) = Pulse(X + 1)
+```
+
+を閉じた。pulse の符号から one-step deficit direction への adapterも追加したが、
+pulse 自体の符号は仮定している。
+
+`¬ IsPrimePow (X + 1)` では `Λ(X + 1) = 0` により pulse、aggregate、ledger、radial
+deficit が不変となる。frontier pair の exact natural label が `X + 1` であることを
+canonical support の injectivity から証明し、prime-power witness `X + 1 = p^j` では
+pulse が既存 branch-free prime-power event と一致することを閉じた。
+
+006Y の phase-cell theorem は一つの prime-power pulse の符号と one-step deficit方向へ
+のみ transportした。これは eventual sign、block dominance、cofinal reach を意味しない。
+
+この段階の classification は Green-A とする。
+
+```text
+one-mode von Mangoldt pulse: CLOSED
+aggregate one-step pulse identity: CLOSED
+branch-free ledger increment = pulse: CLOSED
+frontier net increment = pulse: CLOSED
+radial deficit pulse recurrence: CLOSED
+non-prime-power quiescence: CLOSED
+prime-power pulse/event identification: CLOSED
+pulse sign -> one-step deficit direction: CLOSED
+phase-cell -> one-pulse sign: CONDITIONAL / CLOSED
+cofinal net-positive pulse accumulation: OPEN / GAP
+signed-mass budget provider: OPEN / GAP
+```
+
+`Λ(n) ≥ 0` から pulse の符号を推論せず、one-step identity から global monotonicityを
+推論しない。phase equidistribution、block dominance、joint limit、limit exchange、
+cofinal provider、global RH は導入しない。
