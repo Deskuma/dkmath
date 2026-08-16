@@ -669,6 +669,16 @@ CFZP-0034 は CFZP-009 を再オープンせず、0031–0032 の critical-line 
 
 critical-line zeta path については、複素 chain rule と実スカラーの Fréchet 微分を用いて `Re`/`Im` の実微分を exact に得た。したがって Gate D まで、OOL の Cartesian phase-velocity surface、`Re(ζ'/ζ)`、および `-Re(pascalXiOrdinaryZetaNegLogDeriv)` の一致が Green である。
 
-completed-zeta の real-path derivative transportから `cfzpRiemannSiegelPhaseRate` への最終 balance は、現行 API 上の独立した技術 frontier として `CfzpCriticalLineCompletedZetaAngularVelocityBalanceGap` に一個の marker で境界化した。`Complex.arg`、global `Complex.log`、zero-counting、RH、および 006 の common-baseline / amplitude-source projection backlog は導入・解決しない。
+completed-zeta の real-path derivative transportから `cfzpRiemannSiegelPhaseRate` への最終 balance は、0035 で exact に閉じた。`Complex.arg`、global `Complex.log`、zero-counting、RH、および 006 の common-baseline / amplitude-source projection backlog は導入・解決しない。
 
 0034 完了後は phase investigation を拡張せず、CFZP-009 で残した finite/cofinal reach provider と amplitude-side Gap から source ray-minus-whole への exact projection backlog へ戻る。
+
+## 21. CFZP-0035 — critical-line completed-zeta angular balance amendment
+
+CFZP-0035 は 0034 で残した completed-zeta angular balance の一穴を閉じた。`cfzpCriticalLineCompletedProductPath` を `ζ(s(t)) * Gammaℝ(s(t))` として定義し、0031 の completed-zeta critical-line realness と factorization により、全ての `t` でその虚部が零であることを exact に固定した。
+
+さらに zeta path と `Gammaℝ` path を実パラメータで微分し、product rule と `imCLM` を通して
+`Re(ζ'(s) * Gammaℝ(s) + ζ(s) * Gammaℝ'(s)) = 0` を得た。非零 zeta point では completed product の実値性・非零性を用いて
+`Re(ζ'/ζ) + Re(logDeriv Gammaℝ) = 0` を exact に証明し、0034 の angular velocity と 0031 の `cfzpRiemannSiegelPhaseRate` を接続した。
+
+0035 により `cfzpCriticalLineZetaAngularVelocity_eq_neg_riemannSiegelPhaseRate` が Green となった。0031〜0035 の critical-line phase toolkit は GammaR carrier、Hardy/projective normalization、Cartesian angular velocity、および zeta/GammaR phase-rate balance まで閉じたため、以後は CFZP-009 の source-side backlogへ戻る。
