@@ -682,3 +682,37 @@ CFZP-0035 は 0034 で残した completed-zeta angular balance の一穴を閉�
 `Re(ζ'/ζ) + Re(logDeriv Gammaℝ) = 0` を exact に証明し、0034 の angular velocity と 0031 の `cfzpRiemannSiegelPhaseRate` を接続した。
 
 0035 により `cfzpCriticalLineZetaAngularVelocity_eq_neg_riemannSiegelPhaseRate` が Green となった。0031〜0035 の critical-line phase toolkit は GammaR carrier、Hardy/projective normalization、Cartesian angular velocity、および zeta/GammaR phase-rate balance まで閉じたため、以後は CFZP-009 の source-side backlogへ戻る。
+
+## 22. CFZP-010 — amplitude-Gap / ray-minus observable-shape audit
+
+CFZP-010 は、CFZP-009 で残った amplitude-side Gap と source-side
+ray-minus whole の直接 projection を、まず observable shape の exact audit
+として再分類した。amplitude 側は same-height mirror-mode difference の
+modewise `normSq` を足し上げる diagonal Gap ledger であり、source 側は各
+prime の有限 complex geometric ray を先に和として作ってから
+`normSq (Z - 1)` を取る。後者は baseline `1` と signed interaction に加え、
+一般には ordered Gram/interference cross terms を含む。
+
+したがって 010 の Green-A は、direct
+`amplitude-Gap = ray-minus-whole` は現在の有限代数からは正当化されず、
+成立し得る bridge は次の三層を同時に輸送する必要がある、という exact
+classification である。
+
+1. mirror amplitude mode から source geometric mode への transform。
+2. finite Gram/interference ledger の transport。
+3. source baseline `1` と interaction normalization。
+
+有限 Gram 恒等式と二つの等しい mode による反例により、
+`normSq (sum modes) = sum normSq(modes)` を無条件には使えないことも固定した。
+新しい `Cfzp010AmplitudeGapToRayMinusSameObservableBridgeGap` はこの三層
+bridge が未提供であることを明示する。0035 までの critical-line phase
+toolkit は再オープンしない。
+
+010 後の source-side frontier は、次の二つに整理される。
+
+1. common-baseline の finite/cofinal reach provider。
+2. mode-transform + interference + normalization bridge。
+
+いずれも 010 の結果だけでは証明済みとしない。また、finite shape audit
+から infinite cutoff exchange、RH、または amplitude Gap と ray-minus の
+rename equality は導入しない。
