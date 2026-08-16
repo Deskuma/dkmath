@@ -656,3 +656,9 @@ CFZP-008 では、零でない critical-line zeta の unit carrier を `HardySig
 008 の real angle lift、unwrapped phase、zero-crossing jump ledger は未解決のまま `Cfzp008RealAngleLiftAndZeroJumpLedgerGap` に境界化する。`Complex.arg`、global `Complex.log`、zero-counting identification、RH、006 の common-baseline / amplitude-source projection backlog は導入・解決しない。
 
 008 終了後は、projective carrier を 006 の source bridge に接続できるかを大局監査する。接続しない場合は phase investigation を closeout し、006 backlog へ戻る。
+
+CFZP-008 Green-A closeout: projective doubled-phase / OOL normalization は branch-free に exact 化され、phase investigation は一旦完了した。
+
+CFZP-009 では、common-baseline defect を universal finite identity ではなく polarized whole-mass baseline reach problem として再分類した。`C_X = (Eplus_X + Eminus_X) / 2`、`D_X = G_0 - C_X`、cutoff-zero の `C_0 = 0` と `D_0 = G_0`、および finite reach predicate の同値を exact に固定した。
+
+009 は finite reach の存在、common-energy の monotonicity、cofinal limit、source projection bridge を主張しない。残る frontier は finite/cofinal reach provider と amplitude-side Gap から source ray-minus whole への exact projection である。
