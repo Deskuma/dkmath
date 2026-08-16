@@ -61,6 +61,7 @@ import DkMath.RH.CFBRC.CosmicFormulaZetaSourceProjectionCloseoutAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaCriticalLineGammaRPhaseCarrierAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaCriticalLineProjectivePhaseNormalizationAudit
 import DkMath.RH.CFBRC.CosmicFormulaZetaCommonBaselineAlignmentReachAudit
+import DkMath.RH.CFBRC.CosmicFormulaZetaCriticalLineAngularVelocityAudit
 import DkMath.RH.CFBRC.PascalVonMangoldtLSeriesBridge
 import DkMath.RH.CFBRC.PascalZetaLogDerivativeZeroBridge
 import DkMath.RH.CFBRC.PascalCriticalMirrorZeroWindowEnergyBridge

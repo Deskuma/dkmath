@@ -662,3 +662,13 @@ CFZP-008 Green-A closeout: projective doubled-phase / OOL normalization は bran
 CFZP-009 では、common-baseline defect を universal finite identity ではなく polarized whole-mass baseline reach problem として再分類した。`C_X = (Eplus_X + Eminus_X) / 2`、`D_X = G_0 - C_X`、cutoff-zero の `C_0 = 0` と `D_0 = G_0`、および finite reach predicate の同値を exact に固定した。
 
 009 は finite reach の存在、common-energy の monotonicity、cofinal limit、source projection bridge を主張しない。残る frontier は finite/cofinal reach provider と amplitude-side Gap から source ray-minus whole への exact projection である。
+
+## 20. CFZP-0034 — critical-line zeta angular velocity / phase-rate amendment
+
+CFZP-0034 は CFZP-009 を再オープンせず、0031–0032 の critical-line phase toolkit に不足していた局所位相速度を補完した。`cfzpComplexAngularVelocity` により、複素状態と速度の branch-free Cartesian observable を定義し、非零状態では `Im(dz / z)` との exact identity を固定した。
+
+critical-line zeta path については、複素 chain rule と実スカラーの Fréchet 微分を用いて `Re`/`Im` の実微分を exact に得た。したがって Gate D まで、OOL の Cartesian phase-velocity surface、`Re(ζ'/ζ)`、および `-Re(pascalXiOrdinaryZetaNegLogDeriv)` の一致が Green である。
+
+completed-zeta の real-path derivative transportから `cfzpRiemannSiegelPhaseRate` への最終 balance は、現行 API 上の独立した技術 frontier として `CfzpCriticalLineCompletedZetaAngularVelocityBalanceGap` に一個の marker で境界化した。`Complex.arg`、global `Complex.log`、zero-counting、RH、および 006 の common-baseline / amplitude-source projection backlog は導入・解決しない。
+
+0034 完了後は phase investigation を拡張せず、CFZP-009 で残した finite/cofinal reach provider と amplitude-side Gap から source ray-minus-whole への exact projection backlog へ戻る。
