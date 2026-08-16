@@ -716,3 +716,50 @@ toolkit は再オープンしない。
 いずれも 010 の結果だけでは証明済みとしない。また、finite shape audit
 から infinite cutoff exchange、RH、または amplitude Gap と ray-minus の
 rename equality は導入しない。
+
+## 23. CFZP-011 — same-height mirror/source mode-transform audit
+
+CFZP-011 は CFZP-010 の三層 bridge のうち Layer 1 だけを閉じた。
+既存の finite source summand を `weight(t) * q^(-sR(t))` として明示し、
+同じ height を保った `criticalMirror(sR(t))` の mirror summand を追加した。
+その結果、各 prime-power mode について
+
+```text
+mirrorSourceSummand - rightSourceSummand
+  = MellinWeight * sameHeightMirrorModeDifference
+```
+
+が exact になった。さらに modewise `normSq` では Mellin weight の
+`normSq` factor を残したまま、既存の mirror carrier / primeMirrorOffsetGap
+へ展開できることを固定した。weight を無条件に 1 とする同一視は行わない。
+
+既存 exponent support 上の finite same-height mirror ray についても、right
+ray との差を weighted same-height mode-difference の有限和として exact に
+再構成した。最後に
+
+```text
+ZR - 1 = (ZR - ZM) + (ZM - 1)
+```
+
+およびその `normSq` 展開を証明し、ray-minus の未解決部分を mirror baseline
+residual `ZM - 1` と、transformed amplitude part との interference に局在化
+した。
+
+したがって 011 の分類は Green-A とする。
+
+```text
+Layer 1: CLOSED
+  mirror amplitude mode -> Mellin-weighted same-height source pair
+
+Layer 2: OPEN
+  weighted modewise diagonal -> finite Gram/interference transport
+
+Layer 3: SHARPENED
+  ray-minus -> mirror baseline residual + its interference
+```
+
+残る marker は `Cfzp011MirrorBaselineResidualAndInterferenceBridgeGap` とし、
+mirror baseline residual の collapse や aggregate weighted Gram transportを
+証明済みとは扱わない。finite shape と algebraic decomposition の範囲を越えて
+common-baseline reach、無限極限、RH、または amplitude Gap と ray-minus の
+直接 equality は導入しない。
