@@ -998,3 +998,57 @@ strictly weakened / sharpened sufficient frontier を意味する。phase-cell c
 prime-power arithmetic coverage、equidistribution、zero counting などを provider と
 して仮定していない。joint `(ε,X)` limit、limit exchange、unconditional margin sign、
 contour relocation、common-baseline reach、global RH も導入しない。
+
+## 29. CFZP-017 — radial-margin prime-threshold decomposition
+
+CFZP-017 は、CFZP-015 の finite radial margin を、`X` に依存しない background
+threshold と normalized prime contribution の excess に分解した。threshold は
+
+```text
+FixedRadialSecondMomentFunctional
+  - NormalizedArchimedeanContribution
+  - NormalizedElementaryContribution
+  - NormalizedTopContribution
+```
+
+で定義し、既存の four-term normalized arithmetic decomposition と scalar-surface
+identity から
+
+```text
+WholeShiftedRadialMargin
+  = 4 * π * (NormalizedPrimeContribution - NormalizedPrimeThreshold)
+```
+
+を有限 exact に証明した。従って margin の非負性は prime contribution が
+threshold を越えることと同値である。
+
+さらに既存の CS25 API により、同じ crossing を
+
+```text
+π * NormalizedPrimeThreshold ≤ AggregateRayInteractionEnergy
+```
+
+および `2 *` von Mangoldt finite mode sum の形へ transport した。CFZP-016 の
+fixed-ε cofinal radial domination と cofinal prime-threshold crossing は同値であり、
+外側の `ε → 0+` cofinality を含む doubly-cofinal provider も同値になる。そのため
+CFZP-016 の finite-window criticality を threshold-crossing provider から再公開した。
+
+sign-only route と magnitude route は明示的に分離した。threshold が非正なら
+prime contribution の非負性で margin 非負性を得られるが、正の threshold に対して
+prime contribution の非負性だけでは不十分であることを実数 countermodel で固定した。
+したがって CFZP-006W/006Y の pointwise phase-cell sign を integrated threshold
+crossing へ rename していない。
+
+この段階の classification は Green-A とする。
+
+```text
+radial margin -> prime/background threshold decomposition: CLOSED
+threshold crossing -> aggregate interaction/mode sum: CLOSED
+cofinal radial domination <-> cofinal prime-threshold crossing: CLOSED
+independent doubly-cofinal threshold-crossing provider: OPEN / GAP
+phase-cell sign -> integrated threshold crossing: OPEN analytic route
+```
+
+phase-cell coverage、equidistribution、threshold-crossing provider、joint limit、
+limit exchange、pointwise/integrated rename equality、common-baseline reach、global RH
+は導入しない。
