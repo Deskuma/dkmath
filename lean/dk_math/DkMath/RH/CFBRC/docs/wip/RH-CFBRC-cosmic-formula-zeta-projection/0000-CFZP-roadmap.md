@@ -1277,3 +1277,35 @@ signed-mass budget provider: OPEN / GAP
 `Λ(n) ≥ 0` から pulse の符号を推論せず、one-step identity から global monotonicityを
 推論しない。phase equidistribution、block dominance、joint limit、limit exchange、
 cofinal provider、global RH は導入しない。
+
+## 34. CFZP-022 — finite pulse-block compensation
+
+CFZP-022 は CFZP-021 の one-mode pulse を有限の右閉区間 `(A, B]` へ持ち上げた。
+`Finset.Ioc` による pulse block について、aggregate interaction、branch-free ledger、
+radial contact deficit の三つの finite telescope を exact に証明し、safe-frequency
+ regime では block を
+
+```text
+positiveEventMassBlock - negativeEventDebtBlock
+```
+
+へ書き換えた。従って終点の radial slack は、始点の deficit と finite signed pulse
+block compensation の不等式と同値である。これを既存 CS22 の cofinal radial-contact
+zero predicate と fixed-`ε` で exact に同一化した。
+
+非 prime-power mode の pulse block が消える quiescence lemma と、独立の cofinal
+signed block-budget provider が未導入であることを表す Gap marker も追加した。
+
+```text
+finite `(A, B]` pulse block: CLOSED
+aggregate / ledger / radial finite telescope: CLOSED
+finite pulse block = positive mass - negative debt: CLOSED
+radial slack <-> finite block compensation: CLOSED
+finite block compensation <-> CS22 cofinal contact zero: CLOSED
+non-prime-power block quiescence: CLOSED
+independent cofinal signed block-budget provider: OPEN / GAP
+```
+
+本段は有限和と有限不等式に限定し、block dominance、phase equidistribution、
+infinite sum、joint limit、limit exchange、finite-window criticality の無条件化、
+global RH は導入しない。
