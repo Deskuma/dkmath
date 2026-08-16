@@ -808,3 +808,72 @@ baseline collapse、common-energy defect との rename equality、無限 cutoff
 交換、RH を主張しない。次の判断は、explicit correction を既存 completed
 source geometryへ接続するか、Layer 2 の finite weighted Gram/interference
 transportへ戻るかである。
+
+## 25. CFZP-013 — weight-reversal conjugation and ray self-recurrence audit
+
+CFZP-013 は CFZP-012 で残した weight-reversal correction を有限 exact に
+監査した。`τ = 0` の Mellin weight について、既存の quadratic-weight と
+log-average の共役則を再利用し、
+
+```text
+weight(conj z) = conj(weight z)
+weight(node(-t)) = conj(weight(node(t)))
+```
+
+を証明した。また positive natural prime-power mode について
+
+```text
+q^(-s_R(-t)) = conj(q^(-s_R(t)))
+```
+
+を exact に固定した。これらを掛け合わせ、source summand と finite right
+ray の height-reversal conjugation
+
+```text
+Z_R(-t) = conj(Z_R(t))
+```
+
+を閉じた。
+
+CFZP-012 の reweighted reversed-right correction は、weight skew
+
+```text
+skew(t) = weight(t) - conj(weight(t))
+```
+
+と有限 bare reversed-mode sum の積に rewrite した。skew は
+`conj(skew) = -skew`、`Re(skew) = 0`、および `2 * I * Im(weight)` の形を
+持つが、skew の消滅は主張していない。
+
+従って mirror baseline residual は exact に
+
+```text
+functionalReflectionPart
++ (conj(Z_R(t)) - 1)
++ skewCorrection(t)
+```
+
+へ再分解された。さらに
+`normSq(conj(Z_R(t)) - 1) = normSq(Z_R(t) - 1)` を証明した。ただし
+functional-reflection contribution、skew correction、および interference
+を含むため、`normSq(Z_M - 1) = normSq(Z_R - 1)` や baseline collapse は導かない。
+
+013 の Green-A classification は次の通り。
+
+```text
+CFZP-012 weight-reversal classification:
+  conjugation law: CLOSED
+  actual right-ray height reversal: CLOSED
+  weight mismatch: IDENTIFIED as pure-imaginary skew correction
+
+mirror baseline residual:
+  functional-reflection contribution
+  + conjugate copy of the original right-ray residual
+  + explicit skew correction
+```
+
+残る marker は `Cfzp013FunctionalReflectionSkewInterferenceClosureGap` とし、
+direct baseline collapse、amplitude Gap との equality、無限 cutoff、RH は導入
+しない。次段階は Layer 2 の finite weighted Gram/interference transport、
+common-baseline reach、または既存 CS37/CS38 aggregate channel への有限 transport
+のいずれかを選択する。

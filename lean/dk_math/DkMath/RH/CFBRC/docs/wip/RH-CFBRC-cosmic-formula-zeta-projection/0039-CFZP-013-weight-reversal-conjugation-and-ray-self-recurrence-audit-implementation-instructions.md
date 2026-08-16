@@ -1,4 +1,5 @@
 # CFZP-0039 / CFZP-013
+
 ## weight-reversal conjugation and ray self-recurrence audit — implementation instructions
 
 作業 branch:
