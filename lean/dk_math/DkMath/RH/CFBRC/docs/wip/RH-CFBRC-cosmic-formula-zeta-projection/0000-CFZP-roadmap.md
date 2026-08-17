@@ -1427,3 +1427,60 @@ certificate の `Good`、`κ`、`K` は明示的な有限データであり、�
 arithmetic/phase theoremは導入していない。phase equidistribution、density、uniform
 margin、eventual positivity、automatic block dominance、infinite sum、joint limit、
 limit exchange、finite-window criticality の無条件化、global RH は導入しない。
+
+## 37. CFZP-025 — quantitative phase-core margin synthesis
+
+CFZP-025 は CFZP-024 の Good certificate に含まれていた derivative-level margin を、
+CFZP-006X/Y の dimensionless phase core から合成する spine を追加した。
+centered prime-power frequency interval の右端で評価した
+
+```text
+PrefactorFloor = exp(-a * right) / right^3
+```
+
+を定義し、safe-frequency regime では正であること、interval 内の exact positive
+prefactor `exp(-a*u) / u^3` がこの floor 以上であることを有限不等式として証明した。
+
+phase-angle interval 上の
+`PhaseDerivativeCore ≤ -δ` を first-class contract として定義し、angle/magnitude
+endpoint identities と exact coordinate formula により frequency derivative core の
+`≤ -δ` へ transportした。さらに正の prefactor と符号を明示的に管理して
+
+```text
+PhaseCore ≤ -δ
+  -> Profile' ≤ -(PrefactorFloor * δ)
+  -> CFZP-023 event credit
+  -> prime-power pulse credit
+```
+
+を閉じた。
+
+quantitative third-quadrant の pure real algebra theoremも追加した。`A₀`, `B₀`, `s`,
+`c` の非負性、sin coefficient / trigonometric lower boundsを明示的に仮定し、
+
+```text
+PhaseDerivativeCore α θ ≤ -(A₀*s + B₀*c)
+```
+
+を証明する。phase-cell membership や bounds 自体は自動供給しない。
+
+最後に Good pair ごとの phase-core margin `δ` から、explicit prefactor floor による
+`κ = PrefactorFloor * δ` を持つ CFZP-024 finite certificate を構成する constructor
+を追加した。Bad 側の envelope dataは従来どおり明示的仮定である。
+
+この段階の classification は Green-A とする。
+
+```text
+centered derivative prefactor floor: CLOSED
+phase-core quantitative margin interface: CLOSED
+phase-core -> derivative-core transport: CLOSED
+phase-core margin -> CFZP-023 derivative margin: CLOSED
+phase-core margin -> event/pulse credit: CLOSED
+quantitative third-quadrant algebra: CLOSED
+phase-core Good-data -> CFZP-024 certificate: CLOSED
+independent quantitative phase-cell coverage provider: OPEN / GAP
+```
+
+prime-power phase centersの good-cell membership、density/equidistribution、uniform
+positive `δ`/`κ`、cofinal certified dominance、CFZP-018 provider、joint limit、limit
+exchange、finite-window criticality の無条件化、global RH は導入しない。
