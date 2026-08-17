@@ -293,8 +293,28 @@ noncomputable def cfzp040RawPrimeCarrierCellMass
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow)
     (c : ℝ) (n : ℕ) : ℝ :=
   ∑ p ∈ cfzp040RawPrimeCarrierCellSupport W c n,
-    cfzp034PrimeAxisSigmaWeight W p *
+      cfzp034PrimeAxisSigmaWeight W p *
       cfzp036PrimeAxisLeadingPeriodicCarrier ε W (Real.log (p : ℝ))
+
+/-- The finite Abel sum at exponential cell endpoints is the raw prime mass. -/
+theorem cfzp040PrimeCarrierSumIoc_cellEndpoints_eq_rawCellMass
+    (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow)
+    (c : ℝ) (n : ℕ) :
+    cfzp040PrimeCarrierSumIoc ε W
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n) =
+      cfzp040RawPrimeCarrierCellMass ε W c n := by
+  classical
+  unfold cfzp040PrimeCarrierSumIoc cfzp040RawPrimeCarrierCellMass
+    cfzp040RawPrimeCarrierCellSupport
+  rw [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro p hp
+  by_cases hprime : Nat.Prime p
+  · simp only [hprime, if_true,
+      cfzp040PrimeIndicator_eq_one_of_prime, mul_one]
+    exact cfzp040PrimeAxisCarrierTestFunction_natPrime ε W hprime
+  · simp [hprime, cfzp040PrimeIndicator_eq_zero_of_not_prime]
 
 /-! ## Gate E: raw-cell to CFZP-039 finite-block adapter -/
 
@@ -408,6 +428,86 @@ theorem cfzp040RawPrimeCarrierCellMass_eq_cfzp039CellMass
     intro p hp q hq heq
     exact congrArg Prod.fst heq
   rw [Finset.sum_image hinj]
+
+/-- The finite Abel cell sum reaches the existing CFZP-039 carrier cell mass. -/
+theorem cfzp040PrimeCarrierSumIoc_cellEndpoints_eq_cfzp039CellMass
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow)
+    (c : ℝ) (n : ℕ)
+    (hcell : max (3 * ε) 1 ≤ cfzp039CarrierCellLeft W c n) :
+    cfzp040PrimeCarrierSumIoc ε W
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n) =
+      cfzp039PrimeAxisLeadingCarrierCellMass ε W c n
+        (cfzp040CarrierCellNaturalLeft W c n)
+        (cfzp040CarrierCellNaturalRight W c n) := by
+  calc
+    cfzp040PrimeCarrierSumIoc ε W
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n) =
+        cfzp040RawPrimeCarrierCellMass ε W c n :=
+      cfzp040PrimeCarrierSumIoc_cellEndpoints_eq_rawCellMass ε W c n
+    _ = cfzp039PrimeAxisLeadingCarrierCellMass ε W c n
+        (cfzp040CarrierCellNaturalLeft W c n)
+        (cfzp040CarrierCellNaturalRight W c n) :=
+      cfzp040RawPrimeCarrierCellMass_eq_cfzp039CellMass hε W c n hcell
+
+/-- Abel's endpoint-minus-integral expression for a late CFZP-039 cell. -/
+theorem cfzp040PrimeCarrierCellAbel_eq_cfzp039CellMass
+    {ε : ℝ} (hε : 0 < ε)
+    (W : PascalCenteredXiResidueTransportWindow)
+    (c : ℝ) (n : ℕ)
+    (hcell : max (3 * ε) 1 ≤ cfzp039CarrierCellLeft W c n)
+    (hf_diff : ∀ t ∈ Set.Icc
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n),
+      DifferentiableAt ℝ (cfzp040PrimeAxisCarrierTestFunction ε W) t)
+    (hf_int : IntegrableOn
+      (deriv (cfzp040PrimeAxisCarrierTestFunction ε W)) (Set.Icc
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n))) :
+    cfzp040PrimeAxisCarrierTestFunction ε W
+          (cfzp040CarrierCellExpRight W c n) *
+        (Nat.primeCounting
+          (cfzp040CarrierCellNaturalRight W c n) : ℝ) -
+      cfzp040PrimeAxisCarrierTestFunction ε W
+          (cfzp040CarrierCellExpLeft W c n) *
+        (Nat.primeCounting
+          (cfzp040CarrierCellNaturalLeft W c n) : ℝ) -
+      ∫ t in Set.Ioc
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n),
+        deriv (cfzp040PrimeAxisCarrierTestFunction ε W) t *
+          (Nat.primeCounting ⌊t⌋₊ : ℝ) =
+      cfzp039PrimeAxisLeadingCarrierCellMass ε W c n
+        (cfzp040CarrierCellNaturalLeft W c n)
+        (cfzp040CarrierCellNaturalRight W c n) := by
+  calc
+    cfzp040PrimeAxisCarrierTestFunction ε W
+          (cfzp040CarrierCellExpRight W c n) *
+        (Nat.primeCounting
+          (cfzp040CarrierCellNaturalRight W c n) : ℝ) -
+      cfzp040PrimeAxisCarrierTestFunction ε W
+          (cfzp040CarrierCellExpLeft W c n) *
+        (Nat.primeCounting
+          (cfzp040CarrierCellNaturalLeft W c n) : ℝ) -
+      ∫ t in Set.Ioc
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n),
+        deriv (cfzp040PrimeAxisCarrierTestFunction ε W) t *
+          (Nat.primeCounting ⌊t⌋₊ : ℝ) =
+        cfzp040PrimeCarrierSumIoc ε W
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n) :=
+      (cfzp040PrimeCarrierSumIoc_eq_abel
+        (ha := (cfzp040CarrierCellExpLeft_pos W c n).le)
+        (hab := (cfzp040CarrierCellExpLeft_lt_right W c n).le)
+        W hf_diff hf_int).symm
+    _ = cfzp039PrimeAxisLeadingCarrierCellMass ε W c n
+        (cfzp040CarrierCellNaturalLeft W c n)
+        (cfzp040CarrierCellNaturalRight W c n) :=
+      cfzp040PrimeCarrierSumIoc_cellEndpoints_eq_cfzp039CellMass
+        hε W c n hcell
 
 /-! ## Gate F: exact smooth/discrepancy decomposition -/
 

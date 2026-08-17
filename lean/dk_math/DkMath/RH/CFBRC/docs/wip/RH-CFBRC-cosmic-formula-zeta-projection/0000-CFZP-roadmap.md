@@ -2131,6 +2131,7 @@ prime indicator cumulative sum = primeCounting: CLOSED
 finite Abel prime carrier identity: CLOSED
 period-cell exponential endpoints / raw prime support: CLOSED
 raw cell <-> CFZP-039 prime-axis cell adapter: CLOSED
+Abel prime sum -> raw prime cell -> CFZP-039 carrier cell: CLOSED
 prime-counting smooth/discrepancy exact split: CLOSED
 smooth Abel model -> density integral: OPEN / GAP
 log-coordinate density integral adapter: OPEN / GAP
