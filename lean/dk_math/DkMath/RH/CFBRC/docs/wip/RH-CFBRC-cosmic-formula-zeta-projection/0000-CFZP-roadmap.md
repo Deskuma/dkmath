@@ -2146,3 +2146,36 @@ summability、limit exchange、Good/Bad の主 route、automatic `σ < 1`、exce
 higher-power residual の消去、CFZP-018 provider、global RH を導入しない。未解決の
 analytic inputs は `Cfzp040PrimeAxisFiniteAbelPrimeCountingDiscrepancyGap` として
 明示的に保持している。
+
+## 53. CFZP-041 — smooth/discrepancy cell reservoir reduction
+
+CFZP-041 は 040A の finite Abel → raw prime cell → CFZP-039 cell bridge を、自然数の
+floor block 全体の eligible prime-axis support へ拡張した。cell の natural endpoints
+の順序、eligible block と 039 carrier-cell support の exact equality、eligible leading
+mass / remainder debt の cell 表現を有限 Finset の事実として閉じている。
+
+さらに、039 cell leading mass を 040 の smooth Abel model と named discrepancy
+functional の exact sumに接続し、discrepancy の絶対値を cell debt として定義した。
+外部から有限 bound `D` が供給されると `Smooth - D ≤ actual carrier cell` が得られ、
+039 の leading-carrier reservoir theorem を通じて radial contact endpoint へ運ぶ有限
+reservoir theorem も閉じている。
+
+```text
+cell natural block order: CLOSED
+eligible axis block = carrier-cell support: CLOSED
+CFZP-039 cell mass = smooth Abel + discrepancy: CLOSED
+functional discrepancy debt: CLOSED
+smooth - discrepancy <= actual carrier cell: CLOSED
+smooth/discrepancy cell reservoir -> radial endpoint: CLOSED
+smooth Abel positive cell lower bound: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+smooth density/log-coordinate reduction: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、smooth model の無条件 positivity、
+discrepancy decay、exceptional/higher-power residual の消去、CFZP-018 provider、global
+RH を導入しない。未解決の analytic inputs は
+`Cfzp041PrimeAxisSmoothDiscrepancyCellReservoirGap` として明示的に保持している。
