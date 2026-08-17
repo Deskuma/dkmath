@@ -2111,3 +2111,37 @@ prime-log equidistribution、infinite sums、summability、limit exchange、auto
 `σ < 1`、prime-axis carrier の無条件の符号断定、exceptional/higher-power residual の
 消去、CFZP-018 provider、global RH を導入しない。未解決事項は
 `Cfzp039PrimeAxisExactCarrierRemainderSignedMomentGap` に明示的に残している。
+
+## 52. CFZP-040 — finite Abel / prime-counting discrepancy bridge
+
+CFZP-040 は CFZP-039 の有限 prime-axis leading-carrier cell を、Mathlib の finite
+Abel summation と `Nat.primeCounting` に接続した。実数軸上の carrier test function と
+その derivative、prime indicator の累積和、実数端点 `Ioc` の finite Abel identity を
+閉じ、指数変換した period cell の raw prime support を 039 の prime-axis finite block
+へ floor/log の有限 adapter で同一視した。
+
+さらに有限 smooth model `x / log x` と named discrepancy
+`primeCounting - smoothModel` を定義し、actual finite prime carrier sum を smooth
+Abel model と discrepancy functional の exact sum に分解した。これは PNT や discrepancy
+decay を仮定する theorem ではない。
+
+```text
+x-axis carrier test function and derivative: CLOSED
+prime indicator cumulative sum = primeCounting: CLOSED
+finite Abel prime carrier identity: CLOSED
+period-cell exponential endpoints / raw prime support: CLOSED
+raw cell <-> CFZP-039 prime-axis cell adapter: CLOSED
+prime-counting smooth/discrepancy exact split: CLOSED
+smooth Abel model -> density integral: OPEN / GAP
+log-coordinate density integral adapter: OPEN / GAP
+prime-counting discrepancy decay / relative error: OPEN / GAP
+carrier-cell asymptotic dominance: OPEN / GAP
+exceptional / higher-prime-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、Good/Bad の主 route、automatic `σ < 1`、exceptional /
+higher-power residual の消去、CFZP-018 provider、global RH を導入しない。未解決の
+analytic inputs は `Cfzp040PrimeAxisFiniteAbelPrimeCountingDiscrepancyGap` として
+明示的に保持している。
