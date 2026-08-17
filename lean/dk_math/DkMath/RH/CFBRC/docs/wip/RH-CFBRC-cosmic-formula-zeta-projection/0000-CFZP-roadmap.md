@@ -1484,3 +1484,58 @@ independent quantitative phase-cell coverage provider: OPEN / GAP
 prime-power phase centersの good-cell membership、density/equidistribution、uniform
 positive `δ`/`κ`、cofinal certified dominance、CFZP-018 provider、joint limit、limit
 exchange、finite-window criticality の無条件化、global RH は導入しない。
+
+## 38. CFZP-026 — periodic third-quadrant phase-cell certificate
+
+CFZP-026 は CFZP-025 の abstract な phase-core margin を、周期的な第三象限の
+trimmed cell に対する有限 containment から構成する API を追加した。
+`k : ℕ` と `0 < τ ≤ π/4` に対して
+
+```text
+left  = π + 2πk + τ
+right = 3π/2 + 2πk - τ
+```
+
+を first-class endpoint とし、セル内の角度について periodicity と monotonicity
+から
+
+```text
+sin θ ≤ -sin τ
+cos θ ≤ -sin τ
+```
+
+を純粋な実数・三角関数の補題として証明した。prime-power centered angle interval
+の cell containment、center/half-width 形式、さらに
+
+```text
+left + T*ε ≤ T * (j * log p)
+T * (j * log p) + T*ε ≤ right
+```
+
+という explicit arithmetic hit 形式の同値 adapterも公開した。
+
+cell の endpoint coefficient floors `A₀`, `B₀` を定義し、`0 ≤ aspectRatio ≤ 1`、
+`0 ≤ A₀` のもとで `δ = (A₀ + B₀) * sin τ` 型の phase-core margin を構成する。
+この margin は CFZP-025 の prefactor floor、CFZP-023 の event/pulse credit、
+CFZP-024 の finite Good certificate constructorへ直接 transportされる。
+Good pair ごとの `k`、`τ`、cell containment と Bad 側 envelope を入力する
+`cfzp026FiniteBlockCertificate_of_periodicThirdQuadrantCellHits` も追加した。
+
+この段階の classification は Green-A とする。
+
+```text
+periodic third-quadrant cell geometry: CLOSED
+cell membership -> quantitative sin/cos margins: CLOSED
+prime-power centered interval containment: CLOSED
+containment <-> explicit T*j*log(p) inequalities: CLOSED
+phase coefficient endpoint floors: CLOSED
+cell containment -> explicit phase-core δ: CLOSED
+cell certificate -> event/pulse quantitative credit: CLOSED
+periodic-cell Good data -> CFZP-024 certificate constructor: CLOSED
+cofinal quantitative third-quadrant hit provider: OPEN / GAP
+```
+
+全 prime-power pair の Good-cell membership、任意 block の Good pair 存在、density/
+equidistribution、`j * log p` の無条件稠密性、uniform positive `τ`/`δ`/`κ`、automatic
+cofinal dominance、CFZP-018 provider、infinite sum、joint limit、limit exchange、
+finite-window criticality の無条件化、global RH は導入しない。
