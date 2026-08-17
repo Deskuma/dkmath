@@ -2179,3 +2179,41 @@ summability、limit exchange、automatic `σ < 1`、smooth model の無条件 po
 discrepancy decay、exceptional/higher-power residual の消去、CFZP-018 provider、global
 RH を導入しない。未解決の analytic inputs は
 `Cfzp041PrimeAxisSmoothDiscrepancyCellReservoirGap` として明示的に保持している。
+
+## 54. CFZP-042 — smooth density and log-coordinate transform
+
+CFZP-042 は、041 に残った finite smooth Abel cell の解析的正体を分解した。`x / log x`
+の derivative density、finite integration-by-parts による x-density integral、`x = exp u`
+による log-coordinate cell integral、period cell の `[0,P]` translation を順に closed
+した。さらに、指数 carrier の一周期 interval integral を明示的な原始関数で評価し、
+039 の exponential carrier transform と exact に同一視した。
+
+最後に、smooth cell を
+
+```text
+exp(β U) * (q(U) * exponential transform + weight variation error)
+```
+
+へ finite integral linearity だけで exact 分解した。variation error の量的評価はこの段
+の対象外であり、caller-supplied finite integrability data と smooth-cell/log-cell bridge
+を明示的に要求する。
+
+```text
+smooth counting density derivative: CLOSED
+smooth Abel model -> x-density integral: CLOSED
+x-density integral -> log-coordinate cell integral: CLOSED
+period-cell translation to [0,P]: CLOSED
+exponential carrier moment = CFZP-039 transform: CLOSED
+smooth cell = transform main + weight-variation error: CLOSED
+weight-variation quantitative bound: OPEN / GAP
+eventual smooth-cell positive lower bound: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、variation error の無条件 negligible claim、
+smooth-cell の無条件 positivity、exceptional/higher-power residual の消去、CFZP-018
+provider、global RH を導入しない。未解決事項は
+`Cfzp042PrimeAxisSmoothDensityLogCoordinateTransformGap` に明示的に保持している。
