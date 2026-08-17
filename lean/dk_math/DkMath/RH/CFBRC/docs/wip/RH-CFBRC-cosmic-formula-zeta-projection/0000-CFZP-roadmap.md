@@ -1371,3 +1371,59 @@ margin provider は導入していない。phase sign から quantitative margin
 positivity、block dominance、phase-cell coverage、density/equidistribution、infinite
 sum、joint limit、limit exchange、finite-window criticality の無条件化、global RH は
 導入しない。
+
+## 36. CFZP-024 — certified block credit/debt dominance
+
+CFZP-024 は CFZP-023 の one-prime-power quantitative certificate を、有限 canonical
+prime-power pair block `(A, B]` へ合算した。block support を
+
+```text
+pascalPrimePowerPairSupportUpTo B \
+  pascalPrimePowerPairSupportUpTo A
+```
+
+として明示し、CFZP-022 の positive mass / negative debt increment をこの support
+差分上の finite sum として再表示した。任意に選んだ `Good` subset とその補集合
+`Bad` の union、disjointness、subset を公開した。
+
+`Good` 上では CFZP-023 の derivative-drop margin `κ` を合算した
+`cfzp024CertifiedGoodCredit` を定義し、
+
+```text
+CertifiedGoodCredit ≤ BlockPositiveMass
+```
+
+を証明した。各 Good pair の event は nonnegative となるため、Good の negative debt
+sum は exact に `0` へ消える。一方、`Bad` 上の absolute derivative envelope `K` を
+合算した `cfzp024CertifiedBadDebtEnvelope` を定義し、
+
+```text
+BlockNegativeDebt ≤ CertifiedBadDebtEnvelope
+```
+
+を証明した。これらを CFZP-022 の signed block budget と合成し、独立の
+`Cfzp024CertifiedBlockDominance` から終点の radial deficit `G_B ≤ η` を得る theorem
+を追加した。
+
+さらに fixed-`ε` の cofinal certified-dominance provider interface を定義し、その仮定
+から CFZP-022 の signed pulse-block budget、続いて CFZP-018 approximate reach へ
+一方向に transportする conditional adapterを追加した。
+
+この段階の classification は Green-A とする。
+
+```text
+pair block-support difference: CLOSED
+block mass/debt exact finite sums: CLOSED
+Good/Bad finite support split: CLOSED
+Good quantitative credit ≤ positive block mass: CLOSED
+Good negative debt = 0: CLOSED
+block negative debt ≤ Bad envelope: CLOSED
+certified dominance → finite radial payment: CLOSED
+cofinal certified dominance → CFZP-022/018: CONDITIONAL / CLOSED
+independent certified-dominance provider: OPEN / GAP
+```
+
+certificate の `Good`、`κ`、`K` は明示的な有限データであり、これらを供給する
+arithmetic/phase theoremは導入していない。phase equidistribution、density、uniform
+margin、eventual positivity、automatic block dominance、infinite sum、joint limit、
+limit exchange、finite-window criticality の無条件化、global RH は導入しない。
