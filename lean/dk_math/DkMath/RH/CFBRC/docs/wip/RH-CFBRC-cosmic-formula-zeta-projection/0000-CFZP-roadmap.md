@@ -1914,3 +1914,47 @@ higher-power sigma-weight normalization: CLOSED
 prime-log phase weighted occupancy provider: OPEN / GAP
 exceptional and higher-power residual elimination: OPEN / GAP
 ```
+
+## 47. CFZP-035 — exact signed efficiency normalization
+
+CFZP-035 は CFZP-034 の粗い reservoir 定数と、実際の branch-free prime-power event
+との間を exact signed efficiency で正規化した。safe prime-power cell ごとに
+
+```text
+signedEfficiency(p,j) = branchFreeEvent(p,j) / referenceMass(p,j)
+```
+
+を定義し、reference mass との積が actual event に戻ること、および signed score が
+`[-1, 1]` に入ることを閉じた。CFZP-030 の ready Good credit はこの exact score の
+下界であり、CFZP-034 の uniform ready-Good floor も同じ score へ移送できる。
+
+さらに、finite block の signed efficiency mass を定義し、それが branch-free event
+block、von Mangoldt pulse block、ledger subtraction、radial-contact recurrence と
+exactly 一致することを証明した。eligible prime-axis、exceptional prime-axis、
+higher-power の三つの actual signed contribution は envelope で置換せず、そのまま
+有限 residual として保持する。prime axis では CFZP-033 の sigma weight を抽出した
+signed amplitude も追加した。
+
+Gate A の粗い係数差は有限 diagnostic として閉じた。一方、actual signed score の
+prime-axis 全体にわたる優越、prime-log phase distribution、automatic subcritical
+window、残差消去は明示的な `Cfzp035ExactSignedEfficiencyNormalizationGap` に残した。
+
+```text
+coarse finite coefficient obstruction: CLOSED
+exact event/reference-mass signed efficiency: CLOSED
+signed efficiency absolute bound: CLOSED
+ready Good efficiency -> exact score lower bound: CLOSED
+uniform floor -> exact score adapter: CLOSED
+finite exact signed block/event/ledger identities: CLOSED
+finite radial-contact recurrence and endpoint adapter: CLOSED
+exact three-way signed decomposition with residuals: CLOSED
+prime-axis sigma-weighted signed amplitude: CLOSED
+prime-axis signed phase dominance: OPEN / GAP
+prime-log signed phase distribution: OPEN / GAP
+automatic subcritical window and residual elimination: OPEN / GAP
+infinite sums, limit exchange, and global RH: OPEN / OUT OF SCOPE
+```
+
+本段は prime distribution、PNT/Mertens/Dirichlet、positive density、infinite sum、
+summability、limit exchange、actual score が Good cell で自動的に `-1` になること、
+CFZP-018 provider、global RH を導入しない。
