@@ -1658,3 +1658,44 @@ cofinal credit-debt dominance: OPEN / GAP
 density/equidistribution、Bad debt envelope の制御、automatic block dominance、
 infinite sum、joint limit、limit exchange、finite-window criticality の無条件化、
 global RH は導入しない。
+
+## 41. CFZP-029 — universal prime-power Bad-debt envelope
+
+CFZP-029 は CFZP-027 に残っていた Bad pair ごとの解析入力を自動化した。
+centered frequency cell の左端から derivative prefactor ceiling を作り、
+dimensionless phase derivative core を `|sin| ≤ 1`, `|cos| ≤ 1` と右端角度で
+抑える universal polynomial envelope を導入した。これにより safe prime power
+ごとに、次の explicit finite spine を閉じた。
+
+```text
+left prefactor ceiling
+  -> centered derivative absolute envelope
+  -> event / prime-power pulse absolute bound
+  -> one-event negative-debt bound
+  -> finite Bad-debt envelope sum
+  -> CFZP-027 certificate with no per-Bad K / henvelope inputs
+```
+
+critical scale は既存の
+`cfzpModeCriticalScale n = exp (-(1 / 2) * log n)` をそのまま用いるため、
+prime-power `p^j` では exponent とともに減衰する。universal core envelope は
+`α ≤ 1` を仮定せず、`|1 - α^2|` によって任意の非負 aspect ratio に適用する。
+
+この段階の classification は Green-A（finite and conditional interfaces）とする。
+
+```text
+left-endpoint derivative prefactor ceiling: CLOSED
+universal phase-core absolute envelope: CLOSED
+centered derivative-core absolute envelope: CLOSED
+automatic CFZP-023 derivative envelope for every safe prime power: CLOSED
+automatic event/pulse absolute envelope: CLOSED
+automatic one-event negative-debt bound: CLOSED
+automatic finite Bad-debt sum: CLOSED
+CFZP-024 certificate constructor without per-Bad K/henvelope: CLOSED
+weighted Good-credit vs Bad-debt dominance: OPEN / GAP
+```
+
+cofinally many Good hitsから weighted credit/debt dominance、automatic Bad sum の
+小ささ、任意 window の subcriticality、prime phase rotation の irrationality、
+positive density/equidistribution、infinite sum、joint limit、limit exchange、
+finite-window criticality の無条件化、CFZP-018 provider、global RH は導入しない。
