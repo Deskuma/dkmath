@@ -1792,14 +1792,16 @@ ReadyGoodEfficiency
 に分解し、Bad 側の universal phase envelope の右端単調性と、subcritical aspect
 ratio における共通 quadratic coefficient
 `q(α) = 1 + 2α - α²` を固定した。large-cell quadratic-vs-linear inequalities と
-prefactor の左端条件を明示する `Cfzp032UniformReadyCell` を導入し、そこから
+prefactor の左端条件を明示する `Cfzp032UniformReadyCell` を導入した。さらに
+`k ≥ 1` と `j ≥ 3` からこの contract を内部で生成する threshold theorem を閉じ、そこから
 
 ```text
 exp(-(a * 2ε)) * sin(τ) / 128
 ```
 
 という prime/exponent-independent な positive efficiency floor を得る有限 theorem
-を追加した。cell threshold を暗黙に仮定せず、readiness contract として公開している。
+を追加した。cell threshold は caller-supplied hypothesis ではなく、明示的な有限
+index threshold から内部生成される。
 
 さらに block 全体と Good subset の reference mass を定義し、
 
@@ -1821,13 +1823,12 @@ direct EfficiencyLedger endpoint adapter: CLOSED
 prefactor/phase efficiency factorization: CLOSED
 phase-envelope right-endpoint monotonicity: CLOSED
 common subcritical quadratic coefficient: CLOSED
-explicit large-cell readiness contract: CLOSED
-uniform positive efficiency floor: CLOSED / readiness-conditional
-cofinal uniformly-efficient hit transport: CLOSED / provider-conditional
+internal finite large-cell threshold: CLOSED
+uniform positive efficiency floor independent of p,j: CLOSED
+CFZP-028 cofinal hit -> cofinal uniformly-efficient hit: CLOSED / irrationality-conditional
 weighted reference-mass split and ledger lower bound: CLOSED
-weighted coverage endpoint criterion: CLOSED / finite conditional
-positive weighted density and automatic coverage provider: OPEN / GAP
-prime-axis mass, infinite sum, limit exchange, and global RH: OPEN / OUT OF SCOPE
+weighted coverage endpoint criterion: CLOSED
+weighted Good reference-mass coverage provider: OPEN / GAP
 ```
 
 本段は equidistribution、positive density、PNT、automatic weighted coverage、prime-axis

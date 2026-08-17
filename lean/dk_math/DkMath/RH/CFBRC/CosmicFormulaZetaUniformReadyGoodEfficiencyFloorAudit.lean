@@ -18,9 +18,11 @@ phase and prefactor ratios are separated, their common quadratic coefficient
 is recorded, and an explicit large-cell contract gives a prime-independent
 positive efficiency floor.
 
-The large-cell contract is deliberately explicit.  It is a finite readiness
-condition, not an equidistribution theorem.  Cofinal hits, positive density,
-infinite sums, limit exchange, and RH remain outside this module.
+The large-cell contract is closed internally at the explicit thresholds
+`k ≥ 1` and `j ≥ 3`.  This is a finite algebraic threshold, not an
+equidistribution theorem.  Cofinal hits remain conditional on the existing
+providers, while positive density, infinite sums, limit exchange, and RH
+remain outside this module.
 -/
 
 noncomputable section
@@ -395,6 +397,49 @@ def Cfzp032LargeCellEfficiencyReady (α : ℝ) (k : ℕ) (τ : ℝ) : Prop :=
   2 * (α + 1) * R + 2 ≤ q * R ^ 2 ∧
   R ≤ 2 * L
 
+/-- The large-cell contract is automatic once the periodic index is positive. -/
+theorem cfzp032LargeCellEfficiencyReady_of_one_le
+    {α τ : ℝ} {k : ℕ}
+    (hα0 : 0 ≤ α) (hα1 : α < 1)
+    (hτ0 : 0 ≤ τ) (hτ4 : τ ≤ Real.pi / 4)
+    (hk : 1 ≤ k) :
+    Cfzp032LargeCellEfficiencyReady α k τ := by
+  have hpi : 3 < Real.pi := Real.pi_gt_three
+  have hk' : (1 : ℝ) ≤ k := by exact_mod_cast hk
+  have hα1' : α ≤ 1 := hα1.le
+  have hL : 9 < cfzp026ThirdQuadrantCellLeft k τ := by
+    unfold cfzp026ThirdQuadrantCellLeft
+    nlinarith [Real.pi_pos]
+  have hR : 9 < cfzp026ThirdQuadrantCellRight k τ := by
+    unfold cfzp026ThirdQuadrantCellRight
+    nlinarith [Real.pi_pos]
+  have hLR : cfzp026ThirdQuadrantCellRight k τ ≤
+      2 * cfzp026ThirdQuadrantCellLeft k τ := by
+    unfold cfzp026ThirdQuadrantCellRight cfzp026ThirdQuadrantCellLeft
+    nlinarith [Real.pi_pos]
+  have hq : 1 ≤ cfzp032SubcriticalQuadraticCoefficient α :=
+    cfzp032SubcriticalQuadraticCoefficient_ge_one hα0 hα1
+  refine ⟨?_, ?_, hLR⟩
+  · nlinarith [sq_nonneg (cfzp026ThirdQuadrantCellLeft k τ)]
+  · nlinarith [sq_nonneg (cfzp026ThirdQuadrantCellRight k τ)]
+
+/-- The prefactor-left threshold is automatic for prime powers with `j ≥ 3`. -/
+theorem cfzp032_two_epsilon_le_phaseMagnitudeLeft_of_three_le
+    {ε : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
+    {p j : ℕ} (hp : Nat.Prime p) (hj : 3 ≤ j) :
+    2 * ε ≤ cfzpPrimePowerPhaseMagnitudeLeft ε p j := by
+  have hp2 : 2 ≤ p := hp.two_le
+  have hp2r : (2 : ℝ) ≤ p := by exact_mod_cast hp2
+  have hlog : Real.log 2 ≤ Real.log (p : ℝ) := by
+    apply Real.strictMonoOn_log.monotoneOn
+    · norm_num
+    · change (0 : ℝ) < (p : ℝ)
+      exact_mod_cast hp.pos
+    · exact hp2r
+  unfold cfzpPrimePowerPhaseMagnitudeLeft cfzpPrimePowerPhaseCenter
+  have hj' : (3 : ℝ) ≤ j := by exact_mod_cast hj
+  nlinarith
+
 /-- A finite contract combining cell size and the prefactor containment. -/
 def Cfzp032UniformReadyCell
     (ε : ℝ) (W : PascalCenteredXiResidueTransportWindow)
@@ -402,6 +447,22 @@ def Cfzp032UniformReadyCell
   Cfzp032LargeCellEfficiencyReady
     (cfzpModePhaseAspectRatio W) k τ ∧
   2 * ε ≤ cfzpPrimePowerPhaseMagnitudeLeft ε p j
+
+/-- Both components of `UniformReadyCell` follow from explicit large indices. -/
+theorem cfzp032UniformReadyCell_of_large_indices
+    {ε : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
+    (W : PascalCenteredXiResidueTransportWindow)
+    {p j k : ℕ} {τ : ℝ}
+    (hp : Nat.Prime p)
+    (hsub : Cfzp027SubcriticalPhaseAspect W)
+    (hτ : 0 < τ) (hτ4 : τ ≤ Real.pi / 4)
+    (hj : 3 ≤ j) (hk : 1 ≤ k) :
+    Cfzp032UniformReadyCell ε W p j k τ := by
+  refine ⟨?_, ?_⟩
+  · exact cfzp032LargeCellEfficiencyReady_of_one_le
+      (cfzpModePhaseAspectRatio_pos W).le hsub hτ.le hτ4 hk
+  · exact cfzp032_two_epsilon_le_phaseMagnitudeLeft_of_three_le
+      hε hε2 hp hj
 
 /-- A large-cell phase contract gives the explicit `sin τ / 16` floor. -/
 theorem cfzp032PhaseEfficiency_ge_sin_div_16
@@ -521,10 +582,24 @@ theorem cfzp032UniformReadyGoodEfficiencyFloor_le
     (hsub : Cfzp027SubcriticalPhaseAspect W) (hτ : 0 < τ)
     (hτ4 : τ ≤ Real.pi / 4)
     (hhit : Cfzp027PrimePowerReadyThirdQuadrantHit ε W p j k τ)
-    (hlarge : Cfzp032UniformReadyCell ε W p j k τ) :
+    (hj : 3 ≤ j) (hk : 1 ≤ k) :
     cfzp032UniformReadyGoodEfficiencyFloor ε W τ ≤
       cfzp031ReadyGoodEfficiency ε W p j k τ := by
+  have hlarge := cfzp032UniformReadyCell_of_large_indices
+    hε hε2 W hp hsub hτ hτ4 hj hk
+  have hjpos : 0 < j := by omega
   have hphase := hlarge.1
+  change
+    2 * (cfzpModePhaseAspectRatio W *
+        cfzp026ThirdQuadrantCellRight k τ + 1) ≤
+        cfzp032SubcriticalQuadraticCoefficient (cfzpModePhaseAspectRatio W) *
+          cfzp026ThirdQuadrantCellLeft k τ ^ 2 / 2 ∧
+      2 * (cfzpModePhaseAspectRatio W + 1) *
+          cfzp026ThirdQuadrantCellRight k τ + 2 ≤
+        cfzp032SubcriticalQuadraticCoefficient (cfzpModePhaseAspectRatio W) *
+          cfzp026ThirdQuadrantCellRight k τ ^ 2 ∧
+      cfzp026ThirdQuadrantCellRight k τ ≤
+        2 * cfzp026ThirdQuadrantCellLeft k τ at hphase
   have hL := cfzp026ThirdQuadrantCellLeft_pos (k := k) hτ.le
   have hR : 0 < cfzp026ThirdQuadrantCellRight k τ := by
     have hLR := cfzp026ThirdQuadrantCellLeft_le_right (k := k) (τ := τ) hτ4
@@ -533,10 +608,10 @@ theorem cfzp032UniformReadyGoodEfficiencyFloor_le
     (Real.sin_pos_of_pos_of_lt_pi hτ (by nlinarith [hτ4, Real.pi_pos])).le
   have hratio := cfzp032PhaseEfficiency_ge_sin_div_16
     (cfzpModePhaseAspectRatio_pos W).le hsub hL hR hsin hphase
-  have hpref := cfzp031PrefactorEfficiency_ge_exp_div_eight hε hε2 W hp hj
+  have hpref := cfzp031PrefactorEfficiency_ge_exp_div_eight hε hε2 W hp hjpos
     hlarge.2
   have hfac := cfzp031ReadyGoodEfficiency_eq_prefactor_mul_phase
-    hε hε2 W hp hj hsub hτ hτ4 hhit
+    hε hε2 W hp hjpos hsub hτ hτ4 hhit
   have hphaseActual :
       cfzp032ReadyGoodPhaseEfficiency ε W p j k τ ≥ Real.sin τ / 16 := by
     unfold cfzp032ReadyGoodPhaseEfficiency
@@ -545,7 +620,7 @@ theorem cfzp032UniformReadyGoodEfficiencyFloor_le
     have hright := hangle
     have hRactual : 0 ≤ cfzpPrimePowerPhaseAngleRight ε W p j := by
       have hm := cfzpPrimePowerPhaseMagnitudes_pos_of_epsilon_lt_log_two
-        hε hε2 hp hj
+        hε hε2 hp hjpos
       rw [cfzpPrimePowerPhaseAngleRight_eq_rectangleT_mul_phaseMagnitudeRight]
       exact (mul_pos W.rectangle.hT hm.2).le
     have hmono := cfzp029PhaseDerivativeCoreAbsEnvelope_mono_right
@@ -561,7 +636,7 @@ theorem cfzp032UniformReadyGoodEfficiencyFloor_le
       apply div_le_div_of_nonneg_left
       · exact (cfzp027PhaseCoreMargin_pos_of_subcritical_ready_hit
           W hsub hτ hτ4 hhit).le
-      · exact (cfzp032PhaseEnvelope_pos hε hε2 W hp hj)
+      · exact (cfzp032PhaseEnvelope_pos hε hε2 W hp hjpos)
       · exact hmono)
   unfold cfzp032UniformReadyGoodEfficiencyFloor
   calc
@@ -572,7 +647,7 @@ theorem cfzp032UniformReadyGoodEfficiencyFloor_le
           cfzp032ReadyGoodPhaseEfficiency ε W p j k τ := by
       have hsin16 : 0 ≤ Real.sin τ / 16 := by positivity
       have hpref0 : 0 ≤ cfzp031PrefactorEfficiency ε W p j :=
-        (cfzp031PrefactorEfficiency_pos hε hε2 W hp hj).le
+        (cfzp031PrefactorEfficiency_pos hε hε2 W hp hjpos).le
       exact mul_le_mul hpref hphaseActual hsin16 hpref0
     _ = cfzp031ReadyGoodEfficiency ε W p j k τ := hfac.symm
 
@@ -582,32 +657,39 @@ theorem cfzp032_exists_uniformly_efficient_ready_hit_of_cofinal
     (W : PascalCenteredXiResidueTransportWindow) {p : ℕ} {τ : ℝ}
     (hp : Nat.Prime p) (hsub : Cfzp027SubcriticalPhaseAspect W)
     (hτ : 0 < τ) (hτ4 : τ ≤ Real.pi / 4)
-    (hcofinal : Cfzp027CofinalReadyThirdQuadrantHitsForPrime ε W p τ)
-    (hlarge : ∃ J₀ K₀ : ℕ, ∀ j k : ℕ,
-      J₀ ≤ j → K₀ ≤ k → Cfzp032UniformReadyCell ε W p j k τ) :
+    (hcofinal : Cfzp027CofinalReadyThirdQuadrantHitsForPrime ε W p τ) :
     ∀ J K : ℕ, ∃ j k : ℕ,
       J ≤ j ∧ K ≤ k ∧
         Cfzp027PrimePowerReadyThirdQuadrantHit ε W p j k τ ∧
     cfzp032UniformReadyGoodEfficiencyFloor ε W τ ≤
           cfzp031ReadyGoodEfficiency ε W p j k τ := by
   intro J K
-  obtain ⟨J₀, K₀, hlarge⟩ := hlarge
-  let J₁ : ℕ := max J (max J₀ 1)
-  obtain ⟨j, k, hj, hk, hhit⟩ := hcofinal J₁ (max K K₀)
-  have hJ₁_one : 1 ≤ J₁ := by
-    dsimp [J₁]
-    omega
-  have hJ₀ : J₀ ≤ j := le_trans
-    (le_trans (le_max_left J₀ 1) (le_max_right J (max J₀ 1))) hj
-  have hjpos : 0 < j := lt_of_lt_of_le Nat.zero_lt_one
-    (le_trans hJ₁_one hj)
-  have hcell := hlarge j k
-    hJ₀
-    (le_trans (le_max_right _ _) hk)
-  refine ⟨j, k, le_trans (le_max_left _ _) hj,
-    le_trans (le_max_left _ _) hk, hhit, ?_⟩
+  obtain ⟨j, k, hj, hk, hhit⟩ := hcofinal (max J 3) (max K 1)
+  have hjpos : 0 < j := by omega
+  have hj3 : 3 ≤ j := le_trans (le_max_right J 3) hj
+  have hk1 : 1 ≤ k := le_trans (le_max_right K 1) hk
+  refine ⟨j, k, le_trans (le_max_left J 3) hj,
+    le_trans (le_max_left K 1) hk, hhit, ?_⟩
   exact cfzp032UniformReadyGoodEfficiencyFloor_le hε hε2 W hp hjpos
-    hsub hτ hτ4 hhit hcell
+    hsub hτ hτ4 hhit hj3 hk1
+
+/-- The irrational-rotation adapter supplies the cofinal provider directly. -/
+theorem cfzp032_exists_uniformly_efficient_ready_hit_of_irrationalRotation
+    {ε : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
+    (W : PascalCenteredXiResidueTransportWindow) {p : ℕ} {τ : ℝ}
+    (hp : Nat.Prime p) (hsub : Cfzp027SubcriticalPhaseAspect W)
+    (hτ : 0 < τ) (hτ4 : τ ≤ Real.pi / 4)
+    (hinterior : Cfzp027ThirdQuadrantTargetHasInterior ε W τ)
+    (hirr : Cfzp028PrimePhaseRotationIrrational W p) :
+    ∀ J K : ℕ, ∃ j k : ℕ,
+      J ≤ j ∧ K ≤ k ∧
+        Cfzp027PrimePowerReadyThirdQuadrantHit ε W p j k τ ∧
+    cfzp032UniformReadyGoodEfficiencyFloor ε W τ ≤
+          cfzp031ReadyGoodEfficiency ε W p j k τ := by
+  apply cfzp032_exists_uniformly_efficient_ready_hit_of_cofinal
+    hε hε2 W hp hsub hτ hτ4
+  exact cfzp028CofinalReadyThirdQuadrantHitsForPrime_of_irrationalRotation
+    W hp hε hτ hτ4 hsub hinterior hirr
 
 /-! ## Gate I: weighted reference-mass coverage -/
 
