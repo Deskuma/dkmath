@@ -1539,3 +1539,65 @@ cofinal quantitative third-quadrant hit provider: OPEN / GAP
 equidistribution、`j * log p` の無条件稠密性、uniform positive `τ`/`δ`/`κ`、automatic
 cofinal dominance、CFZP-018 provider、infinite sum、joint limit、limit exchange、
 finite-window criticality の無条件化、global RH は導入しない。
+
+## 39. CFZP-027 — subcritical large-cell coefficient readiness
+
+CFZP-027 は CFZP-026 に残っていた Good pair ごとの
+`0 ≤ PhaseSinCoeffFloor α L R` 入力を、subcritical aspect ratio と explicit
+large-cell readiness contract から自動生成する API を追加した。
+
+`Cfzp027SubcriticalPhaseAspect W` は
+`cfzpModePhaseAspectRatio W < 1` を first-class にし、`0 < 1 - α^2`、および
+`α < 1 ↔ cfzpModePhaseAbscissa W < W.rectangle.T` を証明する。さらに trim `τ`
+を外した第三象限 cell の coefficient floor を定義し、`0 ≤ τ` の下で
+
+```text
+UntrimmedFloor α k ≤ TrimmedFloor α k τ
+```
+
+を exact finite algebra として閉じた。
+
+ready contract は
+
+```text
+4 ≤ (1 - α^2) * (2πk)
+3π + 2 ≤ 2 * (2πk)
+```
+
+という有限不等式であり、これから untrimmed floor、続いて任意の trimmed cell
+floor の非負性を構成する。`Tendsto Nat.cast atTop atTop` と正の定数倍だけを用いて、
+subcritical `α` では ready cell index が任意の finite cutoff より上に存在することも
+証明した。これは phase hit や density を仮定・証明するものではない。
+
+center target の width
+
+```text
+π/2 - 2τ - 2*T*ε
+```
+
+と、target interior の同値条件 `τ + T*ε < π/4` を first-class にした。
+`Cfzp027PrimePowerReadyThirdQuadrantHit` は arithmetic hit と readiness を束ね、
+CFZP-026 の containment、explicit positive phase-core margin、event/pulse credit
+へ接続する。さらに per-pair `hA` を要求しない CFZP-024 certificate constructor
+を追加した。
+
+この段階の classification は Green-A とする。
+
+```text
+subcritical aspect gap positivity: CLOSED
+subcritical aspect <-> a<T adapter: CLOSED
+untrimmed floor is worst trimmed floor: CLOSED
+explicit large-cell readiness -> A0≥0: CLOSED
+cofinally large cells are ready: CLOSED
+center target exact width: CLOSED
+target interior condition: CLOSED
+ready arithmetic hit -> CFZP-026 hA: CLOSED
+ready hit -> event/pulse credit: CLOSED
+ready-hit Good data -> CFZP-024 certificate: CLOSED
+cofinal ready phase-hit provider: OPEN / GAP
+```
+
+`cfzpModePhaseAspectRatio W < 1` 自体の全 window での成立、prime-power phase hit、
+`T * log p / (2π)` の irrationality、density/equidistribution、automatic Bad debt
+control、automatic cofinal dominance、CFZP-018 provider、infinite sum、joint limit、
+limit exchange、finite-window criticality の無条件化、global RH は導入しない。
