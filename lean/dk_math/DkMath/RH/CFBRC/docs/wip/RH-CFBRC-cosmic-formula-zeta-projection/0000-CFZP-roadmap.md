@@ -1876,3 +1876,41 @@ weighted Good reference-mass coverage provider: OPEN / GAP
 本段は fixed-prime total mass の収束、prime-axis total mass の発散、prime-axis dominance、
 weighted Good coverage、prime reciprocal divergence、PNT/Mertens、density、infinite
 sum、summability、limit exchange、CFZP-018 provider、global RH を導入しない。
+
+## 46. CFZP-034 — prime-axis mass reservoir reduction and finite residual decomposition
+
+CFZP-034 は prime axis `j = 1` の large-prime threshold を正式に開き、有限 block の
+reference mass を eligible prime-axis、exceptional prime-axis、higher-prime-power の
+三つの有限質量へ exact に分解した。rectangle の `σ > 1/2` と
+`exp(-σ log p)` による canonical prime-axis weight を固定し、
+`3ε ≤ log p` から CFZP-032 の prefactor threshold
+`2ε ≤ phaseMagnitudeLeft` を回収した。
+
+また `Cfzp032UniformReadyCell` を直接受ける generic efficiency adapter を追加し、
+prime axis `j = 1` について `k ≥ 1`、eligible、ready hit、subcritical window の下で
+CFZP-032 の uniform positive efficiency floor を得た。eligible support 上では
+CFZP-033 の finite two-sided comparison を項別に加え、lower/upper constants と
+sigma-weight sum の比較を閉じた。exceptional prime-axis mass と higher-power mass は
+捨てずに named finite residual として保持し、これらを含む具体的 reservoir inequality
+から CFZP-032 の radial-contact endpoint へ流す theorem を追加した。
+
+Gate H では higher-power の sigma factor を prime-axis weight の有限自然数冪へ正規化した。
+prime-log phase の weighted occupancy、PNT/Mertens、Dirichlet、prime reciprocal divergence、
+positive density、infinite sum、summability、limit exchange、CFZP-018 provider、global RH
+は導入していない。prime phase occupancy と exceptional/higher residual elimination は
+explicit Gap のままである。
+
+```text
+σ > 1/2 and prime-axis weight: CLOSED
+prime-axis j = 1 threshold 3ε ≤ log p: CLOSED
+prime-axis uniform ready-Good floor: CLOSED
+prime-axis/higher-power exact support split: CLOSED
+eligible/exceptional exact support split: CLOSED
+exact three-way finite reference-mass decomposition: CLOSED
+eligible sigma-weighted upper bound: CLOSED
+Good sigma-weighted lower bound: CLOSED
+finite prime-axis reservoir -> radial endpoint: CLOSED / residual-conditional
+higher-power sigma-weight normalization: CLOSED
+prime-log phase weighted occupancy provider: OPEN / GAP
+exceptional and higher-power residual elimination: OPEN / GAP
+```
