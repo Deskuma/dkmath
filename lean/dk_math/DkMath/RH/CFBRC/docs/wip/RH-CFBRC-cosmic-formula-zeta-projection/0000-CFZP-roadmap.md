@@ -1699,3 +1699,46 @@ cofinally many Good hitsから weighted credit/debt dominance、automatic Bad su
 小ささ、任意 window の subcriticality、prime phase rotation の irrationality、
 positive density/equidistribution、infinite sum、joint limit、limit exchange、
 finite-window criticality の無条件化、CFZP-018 provider、global RH は導入しない。
+
+## 42. CFZP-030 — weighted prime-power credit/debt factorization
+
+CFZP-030 は Good credit と CFZP-029 の automatic Bad debt に共通する arithmetic
+carrier
+
+```text
+2 * log(p) * cfzpModeCriticalScale(p^j)
+```
+
+を first-class に切り出した。critical scale の prime-power specialization は
+exact に
+
+```text
+cfzpModeCriticalScale(p^j)
+  = exp(-(j / 2) * log p)
+```
+
+となり、Good 側の normalized shape は
+`CenteredDerivativePrefactorFloor * PhaseCoreMargin`、Bad 側の normalized shape は
+CFZP-029 の automatic centered derivative bound で表される。さらに finite Good sum
+から finite automatic Bad sum を引く `cfzp030CertifiedNetBalance` を定義し、
+CFZP-024 の dominance inequality を net-balance inequality に書き換える代数 API と
+既存の radial-deficit endpoint bridge を追加した。
+
+この段階の classification は Green-A（finite exact factorization）とする。
+
+```text
+common critical carrier and positivity: CLOSED
+prime-power critical-scale exponent factorization: CLOSED
+Good local carrier factorization: CLOSED
+Bad local carrier factorization: CLOSED
+Good prefactor floor <= Bad prefactor ceiling sanity: CLOSED
+finite automatic net balance: CLOSED
+explicit finite Good/Bad weighted-sum identity: CLOSED
+CFZP-024 dominance rewrite through net balance: CLOSED / explicit equality bridge
+independent weighted finite-balance provider: OPEN / GAP
+prime-axis weighted mass provider: OPEN / GAP
+```
+
+本段は weighted Good sum の優越、prime-axis mass の収束・発散、cofinal dominance、
+arbitrary window の subcriticality、rotation irrationality、infinite sum、joint limit、
+limit exchange、CFZP-018 provider、global RH を導入しない。
