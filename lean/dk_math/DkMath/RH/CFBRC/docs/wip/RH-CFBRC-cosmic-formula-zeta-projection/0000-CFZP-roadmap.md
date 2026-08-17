@@ -2217,3 +2217,51 @@ summability、limit exchange、automatic `σ < 1`、variation error の無条件
 smooth-cell の無条件 positivity、exceptional/higher-power residual の消去、CFZP-018
 provider、global RH を導入しない。未解決事項は
 `Cfzp042PrimeAxisSmoothDensityLogCoordinateTransformGap` に明示的に保持している。
+
+## 55. CFZP-043 — smooth weight variation and eventual positive cells
+
+CFZP-043 は、042 の有限一周期分解で隔離された log-density weight variation error を
+first-class な有限 absolute carrier moment によって評価した。`q(u) = 1/u - 1/u^2`
+について late-coordinate positivity、`q(U) >= 1/(2U)`、一周期上の variation bound
+`|q(U+t)-q(U)| <= P/U^2` を閉じ、interval-integral の単調性から
+
+```text
+|WeightError(U,c)| <= Cvar(c) / U^2
+```
+
+を得た。さらに 042 の exact split に有限の `hcell`、`hA_int`、`hE_int` を入力し、
+positive transform phase `M(c) > 0` と
+
+```text
+U >= max (2) (4 * Cvar(c) / M(c))
+```
+
+の下で
+
+```text
+exp(β U) * M(c) / (4U) <= SmoothCell(U)
+```
+
+および strict positivity を閉じた。cell-left のコファイナル性は carrier period の
+positivity と Archimedean property だけで示し、039 の positive-transform phase と
+explicit threshold を同時に選ぶ有限 theorem を公開した。
+
+```text
+log-density positivity / 1/(2U) lower bound: CLOSED
+log-density one-period variation <= P/U^2: CLOSED
+finite exponential carrier absolute moment: CLOSED
+weight-variation error <= Cvar/U^2: CLOSED
+positive-transform explicit smooth-cell lower bound: CLOSED
+positive transform phase + cofinal late cell coordinates: CLOSED
+explicit smooth-margin reservoir -> radial endpoint: OPEN / GAP
+automatic smooth-cell analytic readiness: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、prime-counting discrepancy decay、
+exceptional/higher-power residual の消去、CFZP-018 provider、global RH を導入しない。
+解析的 readiness は各有限 cell の明示的 premise として残し、未解決事項は
+`Cfzp043PrimeAxisSmoothWeightVariationEventualPositivityGap` に保持している。
