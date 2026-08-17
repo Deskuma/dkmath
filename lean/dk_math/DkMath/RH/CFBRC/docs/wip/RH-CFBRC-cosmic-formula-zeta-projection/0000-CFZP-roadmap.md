@@ -1834,3 +1834,45 @@ weighted Good reference-mass coverage provider: OPEN / GAP
 本段は equidistribution、positive density、PNT、automatic weighted coverage、prime-axis
 mass theorem、infinite sum、joint limit、limit exchange、finite-window criticality の
 無条件化、CFZP-018 provider、global RH を導入しない。
+
+## 45. CFZP-033 — reference-mass axis diagnostics and sigma-decay normalization
+
+CFZP-033 は CFZP-032 の finite reference mass を prime-power logarithmic coordinate
+`u = j * log p` に展開した。phase center、left/right magnitude、right angle の exact
+adapter と exponent-axis successor identity を追加し、critical carrier
+`exp(-(1/2)u)` と boundary factor `exp(-(σ-1/2)(u-ε))` を
+
+```text
+exp((σ - 1/2)ε) * exp(-σu)
+```
+
+へ再結合した。従って reference mass の exponential decay exponent は rectangle
+parameter `σ` であることを generic real-coordinate theorem として固定した。
+
+さらに reference mass を
+
+```text
+2 * log p * exp((σ - 1/2)ε) * exp(-σu) * ReducedShape(u)
+```
+
+へ exact factorization し、subcritical window の finite large-coordinate region で
+`ReducedShape` を `T²/u` と `64*(T+1)²/u` の間に挟んだ。これにより prime axis
+`j = 1` では `log p` が有限 comparison の中で cancel し、fixed-prime exponent axis
+では `1/j` が残ることを theorem/API として記録した。
+
+```text
+prime-power logarithmic coordinate adapters: CLOSED
+critical-scale/boundary exponential recombination to σ: CLOSED
+exact reference-mass sigma-decay factorization: CLOSED
+subcritical reduced-shape polynomial normal form: CLOSED
+large-coordinate reduced-shape lower bound c1/u: CLOSED
+large-coordinate reduced-shape upper bound c2/u: CLOSED
+prime-axis finite two-sided mass comparison: CLOSED / subcritical-conditional
+fixed-prime exponent-axis finite two-sided mass comparison: CLOSED / subcritical-conditional
+axis diagnostic without infinite-sum claims: CLOSED
+weighted Good reference-mass coverage provider: OPEN / GAP
+```
+
+本段は fixed-prime total mass の収束、prime-axis total mass の発散、prime-axis dominance、
+weighted Good coverage、prime reciprocal divergence、PNT/Mertens、density、infinite
+sum、summability、limit exchange、CFZP-018 provider、global RH を導入しない。
