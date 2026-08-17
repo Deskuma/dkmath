@@ -1323,3 +1323,51 @@ independent cofinal signed block-budget provider: OPEN / GAP
 本段は有限和と有限不等式に限定し、block dominance、phase equidistribution、
 infinite sum、joint limit、limit exchange、finite-window criticality の無条件化、
 global RH は導入しない。
+
+## 35. CFZP-023 — quantitative prime-power pulse margins
+
+CFZP-023 は CFZP-006W/X の safe-frequency prime-power event factorization と
+exact derivative API を、有限区間上の quantitative derivative hypothesis へ接続した。
+centered phase-magnitude interval の幅
+
+```text
+right - left = 2 * ε
+```
+
+を first-class theorem として固定し、centered interval 上で
+`Profile'(u) ≤ -κ` を仮定すると
+
+```text
+2 * ε * κ ≤ Profile(left) - Profile(right)
+Event(p,j) ≥ 2 * log(p) * CriticalScale(p^j) * κ
+```
+
+を証明した。event factorization に含まれる `(2 * ε)⁻¹` と interval width の
+`2 * ε` は exact に相殺される。`κ > 0` の場合の event の strict positivity も
+追加した。
+
+同じ centered interval の absolute derivative envelope `|Profile'(u)| ≤ K` から、
+profile difference、event、prime-power von-Mangoldt pulse の absolute upper bound を
+公開した。さらに event の quantitative credit を CFZP-019 の positive mass へ、
+absolute envelope を negative debt へ transportし、prime-power pulse へ同じ bounds を
+transportする adapterを追加した。
+
+この段階の classification は Green-A とする。
+
+```text
+generic derivative-drop / absolute envelope: CLOSED
+centered phase-magnitude width: CLOSED
+quantitative centered profile drop: CLOSED
+event width-normalization cancellation: CLOSED
+strict quantitative event positivity: CLOSED
+event / pulse absolute envelope: CLOSED
+positive-mass / negative-debt adapters: CLOSED
+prime-power pulse quantitative transport: CLOSED
+independent uniform derivative-margin provider: OPEN / GAP
+```
+
+`κ` や `K` は明示的な theorem hypothesis であり、prime-power geometry からの uniform
+margin provider は導入していない。phase sign から quantitative margin、eventual
+positivity、block dominance、phase-cell coverage、density/equidistribution、infinite
+sum、joint limit、limit exchange、finite-window criticality の無条件化、global RH は
+導入しない。
