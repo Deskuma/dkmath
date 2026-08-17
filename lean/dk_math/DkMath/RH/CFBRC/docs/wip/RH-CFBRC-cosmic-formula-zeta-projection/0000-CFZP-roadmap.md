@@ -2036,3 +2036,39 @@ exceptional or higher-power residual elimination / CFZP-018 provider / global RH
 density、summability、limit exchange、`σ < 1` の新規仮定、exceptional/higher-power
 residual の消去、CFZP-018 provider、global RH を導入しない。次段の arithmetic
 frontier は、固定比の prime intervals に入る sigma-weighted prime mass の証明である。
+
+## 50. CFZP-038 — prime-axis positive-carrier weighted mass reduction
+
+CFZP-038 は CFZP-037 の positive carrier hit を、034 の eligible prime-axis pair
+support と 035 の exact signed-efficiency ledger に有限かつ直接に接続した。単一 cell
+および有限 cell window の Good support、witness cell elimination、late Good の
+sigma-weighted positive credit、任意 subset の `-referenceMass` debt envelope、
+eligible Good/Bad の exact partition を追加している。
+
+Good credit と Bad / exceptional / higher-power の named debt envelope を組み合わせ、
+残差を消去せずに exact carrier-reservoir inequality から radial contact endpoint を
+得る theorem を閉じた。さらに 034 の finite sigma upper comparison を使う coarse
+sigma-only reservoir corollary と、single-cell の right-end sigma floor による
+cardinality-to-weighted-mass adapter も用意した。
+
+```text
+positive-arc Good pair support: CLOSED
+late positive hit -> sigma-weighted actual-event credit: CLOSED
+universal signed debt envelope: CLOSED
+eligible Good/Bad exact split: CLOSED
+exact positive-carrier reservoir -> radial endpoint: CLOSED
+sigma-only Good/Bad reservoir reduction: CLOSED
+right-end sigma floor: CLOSED
+finite cardinality -> weighted mass adapter: CLOSED
+prime count lower bound in carrier cells: OPEN / GAP
+positive-arc weighted mass dominance: OPEN / GAP
+prime-log weighted distribution: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、positive density、
+infinite sums、summability、limit exchange、`σ < 1` の無根拠導出、ReadyThirdQuadrantHit
+への偽接続、exceptional/higher-power residual の消去、CFZP-018 provider、global RH を
+導入しない。Good support の occupancy と weighted mass dominance は
+`Cfzp038PrimeAxisPositiveCarrierWeightedMassGap` に明示的に残している。
