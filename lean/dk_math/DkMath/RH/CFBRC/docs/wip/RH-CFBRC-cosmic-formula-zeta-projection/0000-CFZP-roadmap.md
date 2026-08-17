@@ -1742,3 +1742,39 @@ prime-axis weighted mass provider: OPEN / GAP
 本段は weighted Good sum の優越、prime-axis mass の収束・発散、cofinal dominance、
 arbitrary window の subcriticality、rotation irrationality、infinite sum、joint limit、
 limit exchange、CFZP-018 provider、global RH を導入しない。
+
+## 43. CFZP-031 — universal-envelope efficiency ledger
+
+CFZP-031 は CFZP-029 の automatic Bad envelope を safe prime-power cell の
+reference mass `μ(p,j)` とし、ready Good shape を同じ mass に対する dimensionless
+efficiency `ρ(p,j)` で正規化した。これにより、finite block の Good contribution は
+`ρ * μ`、Bad contribution は `-μ` として、Good-minus-Bad ledger を構成できる。
+
+新しい finite API は、reference mass の automatic Bad debt との一致、ready Good
+efficiency の正値性、prefactor efficiency の exact factorization と `≤ 1` bound、
+Good local credit との積表示、finite ledger の local-credit-minus-automatic-debt
+表示、および block support 上の一つの reference-mass-weighted signed occupancy sum
+を閉じる。既存の CFZP-030 radial-contact endpoint adapter も ledger bound の有限
+形として再利用する。
+
+この段階の classification は Green-A（有限の正規化 ledger）とする。
+
+```text
+universal reference mass = automatic Bad envelope: CLOSED
+strict positivity on safe prime-power cells: CLOSED
+ready Good efficiency and positive efficiency: CLOSED
+prefactor efficiency exact relation and upper bound: CLOSED
+Good credit = efficiency * reference mass: CLOSED
+finite efficiency ledger identity: CLOSED
+single weighted signed occupancy representation: CLOSED
+finite radial-contact endpoint adapter: CLOSED / existing bridge
+weighted occupancy dominance: OPEN / GAP
+positive weighted density and prime-axis mass: OPEN / GAP
+subcritical window, irrational rotation, infinite sum, and limit exchange: OPEN / GAP
+global RH: OPEN / OUT OF SCOPE
+```
+
+本段は weighted occupancy dominance、positive density/equidistribution、automatic
+subcritical window provider、prime-axis weighted mass、infinite sum、joint limit、
+limit exchange、finite-window criticality の無条件化、CFZP-018 provider、global RH を
+導入しない。
