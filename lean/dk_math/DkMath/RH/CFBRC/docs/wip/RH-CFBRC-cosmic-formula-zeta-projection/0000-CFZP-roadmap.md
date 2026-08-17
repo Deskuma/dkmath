@@ -2072,3 +2072,42 @@ infinite sums、summability、limit exchange、`σ < 1` の無根拠導出、Rea
 への偽接続、exceptional/higher-power residual の消去、CFZP-018 provider、global RH を
 導入しない。Good support の occupancy と weighted mass dominance は
 `Cfzp038PrimeAxisPositiveCarrierWeightedMassGap` に明示的に残している。
+
+## 51. CFZP-039 — exact carrier/remainder signed moment
+
+CFZP-039 は 038 の Good/Bad worst-case route を保持したまま、eligible prime-axis
+全体の actual signed mass を 036 の periodic leading carrier と有限 `K / log p`
+remainder に exact に分解した。remainder は sigma-weighted finite debt envelope
+`Σ sigmaWeight * K / log p` によって上下から挟み、exceptional / higher-power residual
+は 038 の named finite debt と組み合わせて leading-carrier reservoir から radial
+contact endpoint へ接続している。
+
+さらに、`σ < 1` を自動導出しない explicit interior-strip predicate と
+`β = 1 - σ` を追加した。指数 one-period transform の coefficient pair、positive
+scale、period / half-period sign reversal、positive / negative existence を有限代数
+として閉じ、prime distribution bridge が後段で利用する closed-form model を first-class
+にした。`Ioc` 型の有限 period-cell support、cell leading mass、cell remainder debt も
+追加している。
+
+```text
+eligible signed mass = exact leading carrier + exact remainder: CLOSED
+finite K/log(p) remainder debt and absolute bound: CLOSED
+leading-carrier reservoir -> radial endpoint: CLOSED
+explicit interior strip σ < 1 and β = 1 - σ: CLOSED
+exponential transformed coefficient identities and nontriviality: CLOSED
+positive-scale exponential one-period transform model: CLOSED
+period / half-period sign reversal / positive-negative existence: CLOSED
+finite Ioc period-cell support interface: CLOSED
+prime-axis carrier-cell distribution: OPEN / GAP
+prime-axis asymptotic / Abel bridge: OPEN / GAP
+interval-integral identification: OPEN / GAP
+exceptional prime-axis residual elimination: OPEN / GAP
+higher-prime-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は Good/Bad partition を主 route に再導入せず、PNT、Mertens、Dirichlet、Bertrand、
+prime-log equidistribution、infinite sums、summability、limit exchange、automatic
+`σ < 1`、prime-axis carrier の無条件の符号断定、exceptional/higher-power residual の
+消去、CFZP-018 provider、global RH を導入しない。未解決事項は
+`Cfzp039PrimeAxisExactCarrierRemainderSignedMomentGap` に明示的に残している。
