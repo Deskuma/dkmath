@@ -1601,3 +1601,60 @@ cofinal ready phase-hit provider: OPEN / GAP
 `T * log p / (2π)` の irrationality、density/equidistribution、automatic Bad debt
 control、automatic cofinal dominance、CFZP-018 provider、infinite sum、joint limit、
 limit exchange、finite-window criticality の無条件化、global RH は導入しない。
+
+## 40. CFZP-028 — additive-circle irrational rotation and cofinal phase hits
+
+CFZP-028 は固定 prime `p` の一指数 phase increment
+
+```text
+T * log p
+```
+
+を `AddCircle (2π)` の first-class rotation step として定義した。
+`Irrational ((T * log p) / (2π))` から、Mathlib の additive-circle
+irrational-rotation theorem と compact-group の integer/natural orbit bridge を
+用いて natural multiples の dense orbit を得る。さらに任意 cutoff より後の
+natural hit を、target の逆平行移動で構成し、`AddCircle.openPartialHomeomorphCoe`
+の fundamental chart を通じて実数 representative と natural periodic cell index
+へ lift した。
+
+first-period target は
+
+```text
+π + τ + T*ε < residue < 3π/2 - τ - T*ε
+```
+
+であり、CFZP-027 の target interior から open/nonempty target と
+`Cfzp026PrimePowerQuantitativeThirdQuadrantHit` への exact adapter を閉じた。
+phase center の正の線形成長を使い、cell index cutoff と CFZP-027 の readiness
+threshold の最大値以上を選ぶことで、次を conditional に閉じた。
+
+```text
+irrational fixed-prime rotation
+  -> dense natural AddCircle orbit
+  -> arbitrarily late target hits
+  -> cofinal periodic cell indices
+  -> Cfzp027PrimePowerReadyThirdQuadrantHit
+  -> Cfzp027CofinalReadyThirdQuadrantHitsForPrime
+```
+
+この段階の classification は Green-A（conditional）とする。
+
+```text
+fixed-prime rotation step and positivity: CLOSED
+rotation irrationality interface: CLOSED / explicit hypothesis
+irrationality -> dense natural AddCircle orbit: CLOSED
+fundamental QIII target open/nonempty: CLOSED
+arbitrarily late natural target hits: CLOSED
+circle hit -> periodic natural cell lift: CLOSED
+cofinal cell-index lift: CLOSED
+irrational rotation -> CFZP-027 cofinal ready-hit provider: CONDITIONAL / CLOSED
+independent irrationality provider: OPEN / GAP
+subcritical-window provider: OPEN / GAP
+cofinal credit-debt dominance: OPEN / GAP
+```
+
+任意 window の subcriticality、`T * log p / (2π)` の irrationality、positive
+density/equidistribution、Bad debt envelope の制御、automatic block dominance、
+infinite sum、joint limit、limit exchange、finite-window criticality の無条件化、
+global RH は導入しない。
