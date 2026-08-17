@@ -2002,3 +2002,37 @@ infinite sums / prime distribution / global RH: OPEN / OUT OF SCOPE
 本段は prime distribution、Bertrand、PNT/Mertens/Dirichlet、prime-log equidistribution、
 positive density、infinite sum、summability、limit exchange、exceptional/higher-power
 residual elimination、CFZP-018 provider、global RH を導入しない。
+
+## 49. CFZP-037 — periodic carrier arc geometry and prime-log target intervals
+
+CFZP-037 は CFZP-036 の非零 periodic carrier から、各自然周期 cell に同じ幅と
+同じ margin を持つ positive / negative carrier arc を構成した。half-period の
+符号反転、明示的な positive / negative carrier point、連続性による閉区間 arc、
+自然数倍 period の翻訳を有限 theorem として閉じている。
+
+また `K/u` remainder を吸収する explicit finite threshold と late-cell index を
+導入し、late positive / negative arc 上で sigma-stripped coordinate amplitude の
+一様な符号 margin を得た。log-coordinate の positive arc は `exp` によって
+固定比 `exp (2 * halfWidth) > 1` の実数乗法区間へ exact に移送され、prime-log
+hit predicate と sigma-weighted event の有限 lower-bound transport も追加した。
+
+```text
+carrier half-period sign reversal: CLOSED
+explicit positive / negative carrier point: CLOSED
+uniform positive / negative carrier arc data: CLOSED
+natural-period translated arcs: CLOSED
+finite late-cell threshold for K/u absorption: CLOSED
+late arc -> coordinate amplitude uniform sign margin: CLOSED
+log arc -> exact multiplicative real interval: CLOSED
+fixed interval ratio exp (2 * halfWidth) > 1: CLOSED
+prime hit -> quantitative signed event transport: CLOSED
+prime-arc hit predicate and finite sigma-weighted mass frontier: CLOSED
+prime occupancy / weighted prime mass in every interval: OPEN / GAP
+prime distribution / positive density / infinite sums / limit exchange: OPEN / OUT OF SCOPE
+exceptional or higher-power residual elimination / CFZP-018 provider / global RH: OPEN / OUT OF SCOPE
+```
+
+本段は Bertrand、PNT、Mertens、Dirichlet、prime-log equidistribution、positive
+density、summability、limit exchange、`σ < 1` の新規仮定、exceptional/higher-power
+residual の消去、CFZP-018 provider、global RH を導入しない。次段の arithmetic
+frontier は、固定比の prime intervals に入る sigma-weighted prime mass の証明である。
