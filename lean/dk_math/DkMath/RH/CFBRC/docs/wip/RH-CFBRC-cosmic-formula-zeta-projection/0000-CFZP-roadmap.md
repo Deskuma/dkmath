@@ -1958,3 +1958,47 @@ infinite sums, limit exchange, and global RH: OPEN / OUT OF SCOPE
 本段は prime distribution、PNT/Mertens/Dirichlet、positive density、infinite sum、
 summability、limit exchange、actual score が Good cell で自動的に `-1` になること、
 CFZP-018 provider、global RH を導入しない。
+
+## 48. CFZP-036 — prime-axis sigma-stripped periodic carrier
+
+CFZP-036 は CFZP-035 の prime-axis signed amplitude から sigma weight を剥がし、
+`u = log p` の coordinate amplitude を first-class にした。safe prime-power の
+有限 identity から prime-axis specialization を接続し、boundary core を
+
+```text
+v * (a sin(vT) - T cos(vT)) + sin(vT)
+```
+
+へ exact に分解した。従って coordinate amplitude は、単一の periodic carrier と
+有限 rational remainder の和になる。remainder は `p` や `u` に依存しない定数
+`K(ε,W)` により `K/u` で有限に抑えた。
+
+さらに leading carrier を
+
+```text
+(S₀ * sin(Tu) + C₀ * cos(Tu)) / ε
+```
+
+へ exact に展開し、`S₀² + C₀² > 0` を exponential の順序と
+`sin² + cos² = 1` から内部証明した。carrier period `2π/T` と、有限 remainder
+envelope から positive/negative carrier margin を actual coordinate amplitude の
+符号へ移す theorem も追加した。
+
+```text
+coordinate sigma-stripped amplitude: CLOSED
+prime specialization to CFZP-035 amplitude: CLOSED
+boundary core linear-phase decomposition: CLOSED
+exact leading periodic carrier + remainder: CLOSED
+finite K/u remainder envelope: CLOSED
+single sin/cos coefficient normal form: CLOSED
+leading coefficient nontriviality: CLOSED / internally proved
+explicit period 2π/T: CLOSED
+finite carrier-margin -> actual-amplitude transport: CLOSED
+prime-log carrier-arc hit provider: OPEN / GAP
+weighted signed carrier dominance: OPEN / GAP
+infinite sums / prime distribution / global RH: OPEN / OUT OF SCOPE
+```
+
+本段は prime distribution、Bertrand、PNT/Mertens/Dirichlet、prime-log equidistribution、
+positive density、infinite sum、summability、limit exchange、exceptional/higher-power
+residual elimination、CFZP-018 provider、global RH を導入しない。
