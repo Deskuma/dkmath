@@ -1778,3 +1778,58 @@ global RH: OPEN / OUT OF SCOPE
 subcritical window provider、prime-axis weighted mass、infinite sum、joint limit、
 limit exchange、finite-window criticality の無条件化、CFZP-018 provider、global RH を
 導入しない。
+
+## 44. CFZP-032 — uniform ready-Good efficiency floor and weighted coverage
+
+CFZP-032 は CFZP-031 の efficiency ledger を、Good efficiency の uniform floor と
+reference-mass coverage の有限 criterion へ接続した。まず Good efficiency を
+
+```text
+ReadyGoodEfficiency
+  = PrefactorEfficiency * ReadyGoodPhaseEfficiency
+```
+
+に分解し、Bad 側の universal phase envelope の右端単調性と、subcritical aspect
+ratio における共通 quadratic coefficient
+`q(α) = 1 + 2α - α²` を固定した。large-cell quadratic-vs-linear inequalities と
+prefactor の左端条件を明示する `Cfzp032UniformReadyCell` を導入し、そこから
+
+```text
+exp(-(a * 2ε)) * sin(τ) / 128
+```
+
+という prime/exponent-independent な positive efficiency floor を得る有限 theorem
+を追加した。cell threshold を暗黙に仮定せず、readiness contract として公開している。
+
+さらに block 全体と Good subset の reference mass を定義し、
+
+```text
+(1 + ρ₀) * GoodReferenceMass - BlockReferenceMass
+  ≤ EfficiencyLedger
+```
+
+を証明した。これにより、finite weighted reference-mass coverage inequality から
+radial-contact endpoint へ到達する API を閉じた。fixed-prime cofinal hit の強化は
+既存 provider と finite readiness threshold を条件にした theorem とし、density や
+mass share を自動的には主張しない。
+
+この段階の classification は Green-A（有限 exact factorization と条件付き floor）と
+する。
+
+```text
+direct EfficiencyLedger endpoint adapter: CLOSED
+prefactor/phase efficiency factorization: CLOSED
+phase-envelope right-endpoint monotonicity: CLOSED
+common subcritical quadratic coefficient: CLOSED
+explicit large-cell readiness contract: CLOSED
+uniform positive efficiency floor: CLOSED / readiness-conditional
+cofinal uniformly-efficient hit transport: CLOSED / provider-conditional
+weighted reference-mass split and ledger lower bound: CLOSED
+weighted coverage endpoint criterion: CLOSED / finite conditional
+positive weighted density and automatic coverage provider: OPEN / GAP
+prime-axis mass, infinite sum, limit exchange, and global RH: OPEN / OUT OF SCOPE
+```
+
+本段は equidistribution、positive density、PNT、automatic weighted coverage、prime-axis
+mass theorem、infinite sum、joint limit、limit exchange、finite-window criticality の
+無条件化、CFZP-018 provider、global RH を導入しない。
