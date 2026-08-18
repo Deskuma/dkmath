@@ -2485,3 +2485,36 @@ infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
 infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
 decay、prime-axis remainder decay、CFZP-018 provider、global RH を導入しない。残る provider
 境界は `Cfzp047HigherPrimePowerCompetitionDecayGap` に保持している。
+
+## 60. CFZP-048 — prime-axis remainder Abel/smooth-discrepancy reduction
+
+CFZP-048 は、`K / log p` 型の prime-axis remainder を有限 Abel summationで、elementary
+smooth Abel model と明示的な prime-counting discrepancy functional に分解した。指数変数
+`x = exp u` による有限区間の change of variables で smooth model を log-cell integral に
+移し、`u >= 2` の cell では integrand の非負性と endpoint exponential envelope を
+`intervalIntegral.integral_mono_on` で閉じた。
+
+```text
+remainder test function and derivative: CLOSED
+finite prime remainder sum = Abel endpoint/integral form: CLOSED
+raw prime support -> eligible prime-axis pair support: CLOSED (finite exact image)
+smooth Abel model + discrepancy functional split: CLOSED
+smooth Abel model -> density integral: CLOSED with finite regularity certificates
+density integral -> smooth log-cell: CLOSED with finite change-of-variables certificates
+smooth remainder cell nonnegativity and endpoint envelope: CLOSED
+smooth remainder debt <= quarter explicit smooth margin: CLOSED under threshold
+remainder debt <= quarter margin + discrepancy debt: CLOSED
+remaining quarter-margin budget -> finite radial endpoint: CLOSED with supplied providers
+prime-counting discrepancy decay: OPEN / GAP
+prime-axis remainder discrepancy decay: OPEN / GAP
+automatic interior-strip window provider: OPEN / GAP
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+automatic pointwise discrepancy-to-functional bound: OPEN / GAP
+cofinal remaining quarter-margin budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density theorem、
+infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
+または remainder decay、CFZP-018 provider、global RH を導入しない。未証明の供給条件は
+`Cfzp048PrimeAxisRemainderAbelSmoothDiscrepancyGap` に明示的に保持している。
