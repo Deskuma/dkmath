@@ -902,7 +902,5 @@ inductive Cfzp053FiniteSmoothAbelReadinessRadialEighthDescentGap : Prop
   | noPrimeCountingPNTRatioProvider
   | noAutomaticInteriorStripWindowProvider
   | noAutomaticSubcriticalAspectProvider
-  | noCumulativeEighthMarginCreditEscapeProvider
-  | noCofinalFinalRadialBudgetProvider
 
 end DkMath.RH.CFBRCProjection

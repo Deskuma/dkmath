@@ -2679,7 +2679,7 @@ finite telescoping of radial eighth recurrence: CLOSED
 finite discrepancy analytic readiness: inherited CLOSED from CFZP-052
 standard PNT ratio theorem: OPEN / external arithmetic provider
 automatic interior-strip / subcritical window provider: OPEN / GAP
-cumulative eighth-margin credit sufficient for final radial escape: OPEN / GAP
+cumulative eighth-margin credit sufficient for final radial escape: RETIRED at radial-deficit level by CFZP-054
 CFZP-018 / global RH: OUT OF SCOPE
 ```
 
@@ -2690,3 +2690,40 @@ provides the finite readiness structure, automatic carrier/remainder smooth-cell
 the PNT-synchronized eventual recurrence, and finite telescoping. It does not introduce PNT,
 infinite prime sums, limit exchange, automatic interior-strip or subcritical providers, smooth
 margin divergence, a final radial budget, or global RH.
+
+## 66. CFZP-054 — explicit smooth-margin escape and radial deficit `atBot`
+
+CFZP-054 は CFZP-053 の finite eighth recurrence を、positive exponential carrier
+margin の explicit growth と有限 tail inductionで `atBot` へ押し進める。ここで
+`Margin_n = exp (beta * U_n) * (M0 / (4 * U_n))` を first-class に扱い、
+`beta > 0` と `M0 > 0` から `Margin_n → +∞`、したがって eventually `Margin_n ≥ 8`
+を得る。以後は `G_(n+1) ≤ G_n - 1` の有限 descent のみを使い、無限 margin 和や
+limit exchange は導入しない。
+
+```text
+exp(beta * U) / U -> +infinity for beta > 0: CLOSED by pure real analysis
+explicit smooth margin -> +infinity: CLOSED
+explicit margin eventually >= 8: CLOSED
+PNT ratio -> eventual unit radial descent: CLOSED
+finite unit-descent iteration: CLOSED
+left radial deficit -> -infinity: CLOSED under PNT + explicit window hypotheses
+arbitrary radial target eventually reached: CLOSED
+carrier natural left cutoffs cofinal: CLOSED
+cofinal natural-cutoff radial escape: CLOSED under PNT + explicit window hypotheses
+cumulative eighth-margin credit escape GAP: RETIRED at radial-deficit level
+cofinal final radial budget GAP: RETIRED at radial-deficit level
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+automatic interior-strip provider: OPEN / GAP
+automatic subcritical-window provider: OPEN / GAP
+CFZP-018 adapter composition: NEXT FRONTIER
+RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaExplicitSmoothMarginEscapeRadialAtBotAudit`
+provides the explicit-margin `atTop` theorem, the eventual unit recurrence, finite linear
+descent, `cfzp054_pntRatio_leftRadialDeficit_tendsto_atBot`, and the cofinal natural-cutoff
+radial-deficit statement. It retains `Cfzp051PrimeCountingPNTRatioAtTop`, the interior-strip
+hypothesis, and the subcritical-window hypothesis as explicit inputs. It does not prove PNT,
+Mertens/Dirichlet/Bertrand, infinite prime sums, limit exchange, CFZP-018 approximate reach,
+or global RH.
