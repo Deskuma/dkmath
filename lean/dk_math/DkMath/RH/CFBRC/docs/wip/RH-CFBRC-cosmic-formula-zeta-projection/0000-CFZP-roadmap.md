@@ -2727,3 +2727,39 @@ radial-deficit statement. It retains `Cfzp051PrimeCountingPNTRatioAtTop`, the in
 hypothesis, and the subcritical-window hypothesis as explicit inputs. It does not prove PNT,
 Mertens/Dirichlet/Bertrand, infinite prime sums, limit exchange, CFZP-018 approximate reach,
 or global RH.
+
+## 67. CFZP-055 — radial escape to exact prime-threshold crossing
+
+CFZP-055 は CFZP-054 の `eta := 0` における cofinal natural-cutoff radial escapeを、
+既存の CFZP-018 finite radial-contact deficit equivalenceを介して、まず CFZP-017 の
+fixed-epsilon exact prime-threshold crossingへ transportした。さらに
+`0 < epsilon < log 2` が `𝓝[>] 0` で eventually 成立することを使い、
+CFZP-017 の doubly cofinal exact crossing、CFZP-018 の approximate reach、fixed defectの
+符号・零化、および選択された finite safe window の criticalityを一つの条件付き chain
+として公開した。
+
+```text
+CFZP-054 cofinal natural-cutoff radial escape -> exact threshold crossing: CLOSED
+fixed-epsilon PNT provider -> CFZP-017 cofinal exact crossing: CLOSED
+fixed-epsilon exact crossing -> CFZP-018 approximate reach: CLOSED
+small positive epsilon neighborhood synchronization: CLOSED
+doubly cofinal CFZP-017 exact crossing: CLOSED under PNT + explicit window hypotheses
+doubly cofinal CFZP-018 approximate reach: CLOSED under PNT + explicit window hypotheses
+fixed second-moment defect <= 0: CLOSED under same hypotheses
+safe-window fixed defect = 0: CLOSED under same hypotheses
+finite-window criticality: CLOSED under same hypotheses
+CFZP-018 adapter frontier: RETIRED conditionally on PNT + window hypotheses
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+automatic interior-strip provider: OPEN / GAP
+automatic subcritical-aspect provider: OPEN / GAP
+globalization from finite safe windows / global RH: OPEN / later frontier
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaRadialEscapePrimeThresholdCrossingClosureAudit`
+keeps `Cfzp051PrimeCountingPNTRatioAtTop`,
+`Cfzp039PrimeAxisInteriorStrip W`, and `Cfzp027SubcriticalPhaseAspect W` as explicit
+assumptions. Its criticality conclusion is only for the finite safe window and does not prove
+PNT, automatic window construction, infinite sums, limit exchange, or global RH. The former
+CFZP-018 independent-provider frontier is therefore retired only conditionally on these three
+providers; the provider Gap remains explicit.
