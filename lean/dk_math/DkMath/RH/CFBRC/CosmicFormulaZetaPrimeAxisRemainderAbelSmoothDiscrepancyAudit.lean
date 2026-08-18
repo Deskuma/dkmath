@@ -800,24 +800,79 @@ theorem cfzp048PrimeAxisRemainderCellDebt_le_quarterMargin_add_discrepancyDebt
     le_trans hsmooth hquarter
   linarith
 
-/-- The remaining three-quarter margin budget after the smooth quarter is
-spent.  This is an interface, not an assertion that the budget is available. -/
-  def Cfzp048RemainingQuarterMarginBudgetAt
+/-- The remaining quarter budget after the structural half- and quarter-margin
+payments have been made.  This is an interface, not an assertion that the
+budget is available. -/
+def Cfzp048RemainingQuarterMarginBudgetAt
     (ε η D : ℝ)
     (W : PascalCenteredXiResidueTransportWindow)
     (c : ℝ) (n : ℕ) : Prop :=
   pascalCenteredXiPrimeSideFiniteRadialContactDeficit ε W
       (cfzp040CarrierCellNaturalLeft W c n) +
-    cfzp048PrimeAxisRemainderDiscrepancyCellDebt ε W c n +
-    cfzp034HigherPowerReferenceMass ε W
-      (cfzp040CarrierCellNaturalLeft W c n)
-      (cfzp040CarrierCellNaturalRight W c n) + D ≤
-    (3 / 4 : ℝ) * cfzp044ExplicitSmoothMargin ε W c n + η
+    D + cfzp048PrimeAxisRemainderDiscrepancyCellDebt ε W c n ≤
+      cfzp044ExplicitSmoothMargin ε W c n / 4 + η
 
-/-- A supplied remaining-quarter budget feeds the existing finite radial
-reservoir theorem.  All discrepancy and smooth-cell certificates remain
-explicit inputs. -/
-theorem Cfzp048RemainingQuarterMarginBudget_implies_radialContactDeficit_le
+/-- A supplied remaining-quarter budget feeds the canonical CFZP-044 radial
+adapter.  The higher-power half-margin and the finite remainder quarter
+estimate are explicit inputs, while the remaining predicate contains only
+the debts that are still unpaid. -/
+theorem cfzp048RemainingQuarterMarginBudget_implies_radialContactDeficit_le
+    {ε η D : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
+    (W : PascalCenteredXiResidueTransportWindow)
+    (c : ℝ) (n : ℕ)
+    (hM : 0 < cfzp039ExponentialCarrierPeriodTransform ε W c)
+    (hLate : cfzp044RadialLateThreshold ε W c ≤
+      cfzp039CarrierCellLeft W c n)
+    (hSmoothLog :
+      cfzp040SmoothAbelCarrierModel ε W
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n) =
+        cfzp042SmoothLogCellIntegral ε W c n)
+    (hf_diff : ∀ t ∈ Set.Icc
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n),
+      DifferentiableAt ℝ (cfzp040PrimeAxisCarrierTestFunction ε W) t)
+    (hf_int : IntegrableOn
+      (deriv (cfzp040PrimeAxisCarrierTestFunction ε W)) (Set.Icc
+        (cfzp040CarrierCellExpLeft W c n)
+        (cfzp040CarrierCellExpRight W c n)))
+    (hM_int : IntegrableOn
+      (fun t => deriv (cfzp040PrimeAxisCarrierTestFunction ε W) t *
+        cfzp040PrimeCountingSmoothModel t) (Set.Ioc
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n)))
+    (hD_int : IntegrableOn
+      (fun t => deriv (cfzp040PrimeAxisCarrierTestFunction ε W) t *
+        cfzp040PrimeCountingDiscrepancy t) (Set.Ioc
+          (cfzp040CarrierCellExpLeft W c n)
+          (cfzp040CarrierCellExpRight W c n)))
+    (hD : Cfzp041PrimeCountingDiscrepancyFunctionalBoundAt
+      ε W c n D)
+    (hHigher :
+      cfzp034HigherPowerReferenceMass ε W
+          (cfzp040CarrierCellNaturalLeft W c n)
+          (cfzp040CarrierCellNaturalRight W c n) ≤
+        cfzp044ExplicitSmoothMargin ε W c n / 2)
+    (hRemainder :
+      cfzp039PrimeAxisRemainderCellDebt ε W c n
+          (cfzp040CarrierCellNaturalLeft W c n)
+          (cfzp040CarrierCellNaturalRight W c n) ≤
+        cfzp044ExplicitSmoothMargin ε W c n / 4 +
+          cfzp048PrimeAxisRemainderDiscrepancyCellDebt ε W c n)
+    (hQuarter : Cfzp048RemainingQuarterMarginBudgetAt ε η D W c n) :
+    pascalCenteredXiPrimeSideFiniteRadialContactDeficit ε W
+      (cfzp040CarrierCellNaturalRight W c n) ≤ η := by
+  have hbudget044 : Cfzp044ExplicitSmoothMarginBudgetAt ε η D W c n := by
+    unfold Cfzp048RemainingQuarterMarginBudgetAt at hQuarter
+    unfold Cfzp044ExplicitSmoothMarginBudgetAt
+    linarith
+  exact cfzp044ExplicitSmoothMarginBudget_implies_radialContactDeficit_le
+    hε hε2 W c n hM hLate hSmoothLog hf_diff hf_int hM_int hD_int hD
+      hbudget044
+
+/-- The structural 048 remainder certificate supplies the remainder debt
+ bound needed by the canonical remaining-quarter adapter. -/
+theorem cfzp048StructuralRemainderRemainingQuarterBudget_implies_radialContactDeficit_le
     {ε η D : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
     (W : PascalCenteredXiResidueTransportWindow)
     (c : ℝ) (n : ℕ)
@@ -876,39 +931,52 @@ theorem Cfzp048RemainingQuarterMarginBudget_implies_radialContactDeficit_le
           (cfzp040CarrierCellExpRight W c n)))
     (hD : Cfzp041PrimeCountingDiscrepancyFunctionalBoundAt
       ε W c n D)
-    (hbudget : Cfzp048RemainingQuarterMarginBudgetAt ε η D W c n) :
+    (hHigher :
+      cfzp034HigherPowerReferenceMass ε W
+          (cfzp040CarrierCellNaturalLeft W c n)
+          (cfzp040CarrierCellNaturalRight W c n) ≤
+        cfzp044ExplicitSmoothMargin ε W c n / 2)
+    (hQuarter : Cfzp048RemainingQuarterMarginBudgetAt ε η D W c n) :
     pascalCenteredXiPrimeSideFiniteRadialContactDeficit ε W
       (cfzp040CarrierCellNaturalRight W c n) ≤ η := by
+  have hRemainder :=
+    cfzp048PrimeAxisRemainderCellDebt_le_quarterMargin_add_discrepancyDebt
+      hε W c n hstrip hM hThreshold hG_int hSplit hDebtEq hSmoothEq
   have hLate : cfzp044RadialLateThreshold ε W c ≤
       cfzp039CarrierCellLeft W c n :=
     le_trans (le_max_left _ _) hThreshold
-  have hrem := cfzp048PrimeAxisRemainderCellDebt_le_quarterMargin_add_discrepancyDebt
-    hε W c n hstrip hM hThreshold hG_int hSplit hDebtEq hSmoothEq
-  have hcell := cfzp044_eligibilityThreshold_le_of_radialLate hLate
-  have hexception := cfzp044ExceptionalPrimeAxisReferenceMass_eq_zero
-    W c n hcell
-  have hreservoir :
-      pascalCenteredXiPrimeSideFiniteRadialContactDeficit ε W
-          (cfzp040CarrierCellNaturalLeft W c n) +
-        cfzp039PrimeAxisRemainderCellDebt ε W c n
+  exact cfzp048RemainingQuarterMarginBudget_implies_radialContactDeficit_le
+    hε hε2 W c n hM hLate hSmoothLog hf_diff hf_int hM_int hD_int hD
+      hHigher hRemainder hQuarter
+
+/-- The CFZP-047 half-margin certificate and the CFZP-048 quarter threshold
+ are eventually available on one synchronized tail.  This wrapper does not
+ assert the separate remainder-discrepancy or analytic readiness estimates. -/
+theorem cfzp048_eventually_higherPowerHalf_and_remainderQuarterLate
+    {ε : ℝ} (hε : 0 < ε) (hε2 : ε < Real.log 2)
+    (W : PascalCenteredXiResidueTransportWindow)
+    (hsub : Cfzp027SubcriticalPhaseAspect W)
+    (c : ℝ)
+    (hM : 0 < cfzp039ExponentialCarrierPeriodTransform ε W c) :
+    ∃ N : ℕ, ∀ n : ℕ, N ≤ n →
+      cfzp048PrimeAxisRemainderQuarterMarginThreshold ε W c ≤
+          cfzp039CarrierCellLeft W c n ∧
+      cfzp034HigherPowerReferenceMass ε W
           (cfzp040CarrierCellNaturalLeft W c n)
-          (cfzp040CarrierCellNaturalRight W c n) +
-        cfzp034ExceptionalPrimeAxisReferenceMass ε W
-          (cfzp040CarrierCellNaturalLeft W c n)
-          (cfzp040CarrierCellNaturalRight W c n) +
-        cfzp034HigherPowerReferenceMass ε W
-          (cfzp040CarrierCellNaturalLeft W c n)
-          (cfzp040CarrierCellNaturalRight W c n) + D ≤
-      cfzp040SmoothAbelCarrierModel ε W
-          (cfzp040CarrierCellExpLeft W c n)
-          (cfzp040CarrierCellExpRight W c n) + η := by
-    unfold Cfzp048RemainingQuarterMarginBudgetAt at hbudget
-    rw [hexception]
-    have hmargin := cfzp044_explicitSmoothMargin_le_smoothCell
-      hε W c n hM hLate hSmoothLog
-    linarith
-  exact cfzp041SmoothDiscrepancyCellReservoir_implies_radialContactDeficit_le
-    hε hε2 W c n hcell hf_diff hf_int hM_int hD_int hD hreservoir
+          (cfzp040CarrierCellNaturalRight W c n) ≤
+        cfzp044ExplicitSmoothMargin ε W c n / 2 := by
+  obtain ⟨Nquarter, hquarter⟩ := cfzp043_carrierCellLeft_eventually_ge W c
+    (cfzp048PrimeAxisRemainderQuarterMarginThreshold ε W c)
+  obtain ⟨Nhigher, hhigher⟩ :=
+    cfzp047HigherPowerReferenceMass_eventually_le_half_explicitSmoothMargin
+      hε hε2 W hsub c hM
+  refine ⟨max Nquarter Nhigher, ?_⟩
+  intro n hn
+  have hnquarter : Nquarter ≤ n :=
+    le_trans (Nat.le_max_left _ _) hn
+  have hnhigher : Nhigher ≤ n :=
+    le_trans (Nat.le_max_right _ _) hn
+  exact ⟨(hquarter n hnquarter), (hhigher n hnhigher).2⟩
 
 /-- Explicit boundaries left open by the finite Abel reduction. -/
 inductive Cfzp048PrimeAxisRemainderAbelSmoothDiscrepancyGap : Prop

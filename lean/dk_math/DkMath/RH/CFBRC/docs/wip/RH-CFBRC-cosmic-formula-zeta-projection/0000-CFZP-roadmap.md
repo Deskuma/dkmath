@@ -2504,7 +2504,9 @@ density integral -> smooth log-cell: CLOSED with finite change-of-variables cert
 smooth remainder cell nonnegativity and endpoint envelope: CLOSED
 smooth remainder debt <= quarter explicit smooth margin: CLOSED under threshold
 remainder debt <= quarter margin + discrepancy debt: CLOSED
-remaining quarter-margin budget -> finite radial endpoint: CLOSED with supplied providers
+CFZP-047 higher-power half-margin + CFZP-048 remainder quarter-margin composition: CLOSED
+remaining-quarter predicate excludes higher-power and structural smooth remainder: CLOSED
+remaining-quarter budget -> CFZP-044 explicit-margin radial endpoint: CLOSED with supplied providers
 prime-counting discrepancy decay: OPEN / GAP
 prime-axis remainder discrepancy decay: OPEN / GAP
 automatic interior-strip window provider: OPEN / GAP
