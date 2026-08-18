@@ -2520,3 +2520,35 @@ infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
 infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
 または remainder decay、CFZP-018 provider、global RH を導入しない。未証明の供給条件は
 `Cfzp048PrimeAxisRemainderAbelSmoothDiscrepancyGap` に明示的に保持している。
+
+## 61. CFZP-049 — combined prime-counting discrepancy functional envelope
+
+CFZP-049 は、carrier と `K / log p` 型 prime-axis remainder に現れる二つの有限 discrepancy
+functional を、同じ pointwise error
+`E(x) = primeCounting(floor x) - x / log x` の Abel functional として共通化した。
+有限 sensitivity
+`|f(b)| + |f(a)| + ∫ |f'|` により、一つの pointwise bound から両 functional、combined
+discrepancy debt までを明示的に支配する。relative bound からは `exp R / U` を保持した
+finite cell envelope を得る。
+
+```text
+generic finite Abel discrepancy sensitivity: CLOSED
+pointwise discrepancy -> carrier functional: CLOSED
+pointwise discrepancy -> remainder functional: CLOSED
+pointwise discrepancy -> combined discrepancy debt: CLOSED
+relative discrepancy -> uniform cell bound with exp(R) / U: CLOSED
+combined relative-discrepancy finite envelope: CLOSED
+combined debt -> corrected CFZP-048 remaining-quarter adapter: CLOSED with supplied certificates
+explicit carrier/remainder sensitivity asymptotic envelope: OPEN / GAP
+relative prime-counting discrepancy decay provider: OPEN / GAP
+automatic PNT/relative-error hookup: OPEN / GAP
+leading SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+interior-strip provider and cofinal final budget: OPEN / GAP
+CFZP-018 provider / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `σ < 1`、unconditional discrepancy decay、CFZP-018
+provider、global RH を導入しない。有限 pointwise/relative discrepancy predicate は provider
+interface としてのみ使用し、未証明の小ささは
+`Cfzp049CombinedPrimeCountingDiscrepancyEnvelopeGap` に残す。
