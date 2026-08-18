@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.Basic
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic.PowerGauge"
 
@@ -64,7 +64,7 @@ change the visible sector.
 /-- A pure multiple of the gauge period projects to the zero sector. -/
 @[simp] theorem projectExponent_period_mul (d k : ℕ) :
     projectExponent d (d * k) = 0 := by
-  simpa using projectExponent_add_period d 0 k
+  simpa [projectExponent] using Nat.mul_mod_right d k
 
 namespace SamePowerSector
 
