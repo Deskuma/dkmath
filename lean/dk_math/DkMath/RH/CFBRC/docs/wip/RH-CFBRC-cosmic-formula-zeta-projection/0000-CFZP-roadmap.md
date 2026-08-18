@@ -2552,3 +2552,32 @@ summability、limit exchange、automatic `σ < 1`、unconditional discrepancy de
 provider、global RH を導入しない。有限 pointwise/relative discrepancy predicate は provider
 interface としてのみ使用し、未証明の小ささは
 `Cfzp049CombinedPrimeCountingDiscrepancyEnvelopeGap` に残す。
+
+## 62. CFZP-050 — combined discrepancy sensitivity explicit cell envelope
+
+CFZP-050 は CFZP-049 の finite combined sensitivity を、一周期 cell 上の明示的な有限係数
+へ落とした。leading carrier の sine/cosine pair には triangle-inequality coefficient を与え、
+carrier と `K / log p` remainder の endpoint/derivative envelope は有限セル証明書として明示した。
+その結果、combined sensitivity は `C_sens * exp(-sigma * U)` に抑えられ、`R = U + P` により
+relative discrepancy の `exp(R) / U` と explicit smooth margin の
+`exp((1-sigma) * U) / (4U)` が同じ座標スケールに正規化される。
+
+```text
+finite leading-carrier amplitude and derivative constants: CLOSED
+finite carrier/remainder sensitivity coefficient API: CLOSED with explicit cell certificates
+combined sensitivity -> explicit relative envelope: CLOSED
+general margin-share coefficient cancellation: CLOSED
+quarter coefficient condition and reduced remaining-quarter adapter: CLOSED
+eighth coefficient constant: EXPOSED
+automatic finite-cell endpoint/derivative certificate generation: OPEN / GAP
+relative prime-counting discrepancy decay provider: OPEN / GAP
+automatic interior-strip and SmoothAbel -> SmoothLogCell providers: OPEN / GAP
+automatic left radial-deficit budget and cofinal final budget: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `sigma < 1`、unconditional discrepancy decay、CFZP-018
+provider、global RH を導入しない。有限セルの endpoint/derivative envelope は
+`Cfzp050CellSensitivityEnvelope` として供給境界を明示し、未証明の漸近小ささは
+`Cfzp050CombinedDiscrepancySensitivityEnvelopeGap` に保持している。
