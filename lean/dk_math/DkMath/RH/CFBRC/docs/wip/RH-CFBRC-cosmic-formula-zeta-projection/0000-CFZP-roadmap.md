@@ -2265,3 +2265,56 @@ summability、limit exchange、automatic `σ < 1`、prime-counting discrepancy d
 exceptional/higher-power residual の消去、CFZP-018 provider、global RH を導入しない。
 解析的 readiness は各有限 cell の明示的 premise として残し、未解決事項は
 `Cfzp043PrimeAxisSmoothWeightVariationEventualPositivityGap` に保持している。
+
+## 56. CFZP-044 — explicit smooth-margin radial budget and late exceptional elimination
+
+CFZP-044 は、043 の smooth positivity threshold と 041 の prime-axis eligibility
+threshold を一つの radial-late threshold に統合した。positive transform phase の選択と
+cell-left の cofinality から、十分 late な radial cell を有限に選べる。
+
+late cell の prime-axis block support については、finite floor/log bridge から
+`CellLeft < log p <= CellRight` を回収し、`max (3 * ε) 1 <= CellLeft` を適用することで
+全 prime-axis point が eligible になることを exact に証明した。したがって exceptional
+prime-axis support と reference mass は、その cell ではともに `0` となる。これは
+asymptotic residual elimination ではなく、有限 support の消滅である。
+
+さらに 043 の interval-integral readiness を公開 helper として圧縮し、
+
+```text
+ExplicitSmoothMargin(U,c) := exp(β U) * Transform(c) / (4 U)
+```
+
+を first-class にした。042 の smooth/log-cell equality を有限 premise として受け取ると、
+この margin が smooth Abel cell 以下になる。exceptional mass を除いた
+
+```text
+starting radial deficit
++ prime-axis remainder debt
++ higher-power reference mass
++ discrepancy debt D
+<= ExplicitSmoothMargin + η
+```
+
+という budget predicate から、041 の finite reservoir theorem によって右端 radial
+contact deficit `<= η` を得る main theorem も閉じた。discrepancy regularity と
+`SmoothAbel = SmoothLogCell` の readiness は caller-supplied のまま保持している。
+
+```text
+combined radial-late threshold: CLOSED
+late prime-axis block = eligible prime-axis block: CLOSED
+late exceptional prime-axis support/mass = 0: CLOSED
+finite one-period carrier/error integrability compression: CLOSED
+explicit smooth margin first-class and <= SmoothAbelCell: CLOSED
+explicit smooth-margin budget -> radial endpoint: CLOSED
+positive phase + cofinal radial-late cells: CLOSED
+cofinal explicit-margin budget interface: CLOSED (provider remains open)
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+higher-prime-power residual domination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、discrepancy decay、higher-power residual
+の無条件 elimination、CFZP-018 provider、global RH を導入しない。残る境界は
+`Cfzp044PrimeAxisExplicitSmoothMarginRadialBudgetGap` に明示的に保持している。
