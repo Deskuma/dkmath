@@ -2318,3 +2318,52 @@ infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
 summability、limit exchange、automatic `σ < 1`、discrepancy decay、higher-power residual
 の無条件 elimination、CFZP-018 provider、global RH を導入しない。残る境界は
 `Cfzp044PrimeAxisExplicitSmoothMarginRadialBudgetGap` に明示的に保持している。
+
+## 57. CFZP-045 — higher-prime-power sigma-tail envelope
+
+CFZP-045 は、044 の radial budget に残る higher-prime-power reference mass を、各 pair
+の exact sigma decay を保つ有限 tail envelopeへ置き換えた。higher-power support の
+actual exponent `pk.2 + 1` が `>= 2` であることと base prime の回収を閉じ、033 の
+fixed-prime upper bound を 034 の sigma-weight power identity と結合した。log-coordinate
+の有限 algebra
+
+```text
+log p / (j log p) = 1 / j
+```
+
+により、各 pair の reference mass は
+
+```text
+K(ε,W) * sigmaWeight(p)^j / j
+```
+
+以下となる。これを有限 block 上で sum して、raw higher-power mass が
+`K(ε,W) * HigherPowerSigmaTail` 以下になることを exact に証明した。
+
+さらに `floor(exp U)` による current support の向きを使い、late carrier cell では
+全 higher-power pair が `2 ε <= j log p` および `1 <= j log p` を満たすことを閉じた。
+したがって carrier-cell higher-power mass も同じ finite sigma-tail envelope 以下であり、
+044 の explicit smooth-margin budget に代入して右端 radial contact deficit `<= η` を
+得る main theoremを公開した。
+
+```text
+higher-power actual exponent >= 2: CLOSED
+higher-power base prime recovery: CLOSED
+log p / (j log p) = 1/j: CLOSED
+per-pair reference mass <= constant * sigmaWeight^j / j: CLOSED
+finite higher-power sigma tail: CLOSED
+raw higher-power block mass <= constant * sigma tail: CLOSED
+late carrier-cell higher-power block safety: CLOSED
+carrier-cell higher-power mass <= sigma-tail envelope: CLOSED
+sigma-tail explicit-margin budget -> radial endpoint: CLOSED
+higher-power sigma-tail cardinality bound: OPEN / GAP
+higher-power sigma-tail exponential decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+actual cofinal budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `σ < 1`、sigma-tail の無条件 negligible claim、
+CFZP-018 provider、global RH を導入しない。残る provider 境界は
+`Cfzp045HigherPrimePowerSigmaTailEnvelopeGap` に明示的に保持している。
