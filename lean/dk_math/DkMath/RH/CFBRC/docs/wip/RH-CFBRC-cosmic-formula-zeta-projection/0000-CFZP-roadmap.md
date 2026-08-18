@@ -2146,3 +2146,620 @@ summability、limit exchange、Good/Bad の主 route、automatic `σ < 1`、exce
 higher-power residual の消去、CFZP-018 provider、global RH を導入しない。未解決の
 analytic inputs は `Cfzp040PrimeAxisFiniteAbelPrimeCountingDiscrepancyGap` として
 明示的に保持している。
+
+## 53. CFZP-041 — smooth/discrepancy cell reservoir reduction
+
+CFZP-041 は 040A の finite Abel → raw prime cell → CFZP-039 cell bridge を、自然数の
+floor block 全体の eligible prime-axis support へ拡張した。cell の natural endpoints
+の順序、eligible block と 039 carrier-cell support の exact equality、eligible leading
+mass / remainder debt の cell 表現を有限 Finset の事実として閉じている。
+
+さらに、039 cell leading mass を 040 の smooth Abel model と named discrepancy
+functional の exact sumに接続し、discrepancy の絶対値を cell debt として定義した。
+外部から有限 bound `D` が供給されると `Smooth - D ≤ actual carrier cell` が得られ、
+039 の leading-carrier reservoir theorem を通じて radial contact endpoint へ運ぶ有限
+reservoir theorem も閉じている。
+
+```text
+cell natural block order: CLOSED
+eligible axis block = carrier-cell support: CLOSED
+CFZP-039 cell mass = smooth Abel + discrepancy: CLOSED
+functional discrepancy debt: CLOSED
+smooth - discrepancy <= actual carrier cell: CLOSED
+smooth/discrepancy cell reservoir -> radial endpoint: CLOSED
+smooth Abel positive cell lower bound: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+smooth density/log-coordinate reduction: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、smooth model の無条件 positivity、
+discrepancy decay、exceptional/higher-power residual の消去、CFZP-018 provider、global
+RH を導入しない。未解決の analytic inputs は
+`Cfzp041PrimeAxisSmoothDiscrepancyCellReservoirGap` として明示的に保持している。
+
+## 54. CFZP-042 — smooth density and log-coordinate transform
+
+CFZP-042 は、041 に残った finite smooth Abel cell の解析的正体を分解した。`x / log x`
+の derivative density、finite integration-by-parts による x-density integral、`x = exp u`
+による log-coordinate cell integral、period cell の `[0,P]` translation を順に closed
+した。さらに、指数 carrier の一周期 interval integral を明示的な原始関数で評価し、
+039 の exponential carrier transform と exact に同一視した。
+
+最後に、smooth cell を
+
+```text
+exp(β U) * (q(U) * exponential transform + weight variation error)
+```
+
+へ finite integral linearity だけで exact 分解した。variation error の量的評価はこの段
+の対象外であり、caller-supplied finite integrability data と smooth-cell/log-cell bridge
+を明示的に要求する。
+
+```text
+smooth counting density derivative: CLOSED
+smooth Abel model -> x-density integral: CLOSED
+x-density integral -> log-coordinate cell integral: CLOSED
+period-cell translation to [0,P]: CLOSED
+exponential carrier moment = CFZP-039 transform: CLOSED
+smooth cell = transform main + weight-variation error: CLOSED
+weight-variation quantitative bound: OPEN / GAP
+eventual smooth-cell positive lower bound: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、variation error の無条件 negligible claim、
+smooth-cell の無条件 positivity、exceptional/higher-power residual の消去、CFZP-018
+provider、global RH を導入しない。未解決事項は
+`Cfzp042PrimeAxisSmoothDensityLogCoordinateTransformGap` に明示的に保持している。
+
+## 55. CFZP-043 — smooth weight variation and eventual positive cells
+
+CFZP-043 は、042 の有限一周期分解で隔離された log-density weight variation error を
+first-class な有限 absolute carrier moment によって評価した。`q(u) = 1/u - 1/u^2`
+について late-coordinate positivity、`q(U) >= 1/(2U)`、一周期上の variation bound
+`|q(U+t)-q(U)| <= P/U^2` を閉じ、interval-integral の単調性から
+
+```text
+|WeightError(U,c)| <= Cvar(c) / U^2
+```
+
+を得た。さらに 042 の exact split に有限の `hcell`、`hA_int`、`hE_int` を入力し、
+positive transform phase `M(c) > 0` と
+
+```text
+U >= max (2) (4 * Cvar(c) / M(c))
+```
+
+の下で
+
+```text
+exp(β U) * M(c) / (4U) <= SmoothCell(U)
+```
+
+および strict positivity を閉じた。cell-left のコファイナル性は carrier period の
+positivity と Archimedean property だけで示し、039 の positive-transform phase と
+explicit threshold を同時に選ぶ有限 theorem を公開した。
+
+```text
+log-density positivity / 1/(2U) lower bound: CLOSED
+log-density one-period variation <= P/U^2: CLOSED
+finite exponential carrier absolute moment: CLOSED
+weight-variation error <= Cvar/U^2: CLOSED
+positive-transform explicit smooth-cell lower bound: CLOSED
+positive transform phase + cofinal late cell coordinates: CLOSED
+explicit smooth-margin reservoir -> radial endpoint: OPEN / GAP
+automatic smooth-cell analytic readiness: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+exceptional/higher-power residual elimination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、prime-counting discrepancy decay、
+exceptional/higher-power residual の消去、CFZP-018 provider、global RH を導入しない。
+解析的 readiness は各有限 cell の明示的 premise として残し、未解決事項は
+`Cfzp043PrimeAxisSmoothWeightVariationEventualPositivityGap` に保持している。
+
+## 56. CFZP-044 — explicit smooth-margin radial budget and late exceptional elimination
+
+CFZP-044 は、043 の smooth positivity threshold と 041 の prime-axis eligibility
+threshold を一つの radial-late threshold に統合した。positive transform phase の選択と
+cell-left の cofinality から、十分 late な radial cell を有限に選べる。
+
+late cell の prime-axis block support については、finite floor/log bridge から
+`CellLeft < log p <= CellRight` を回収し、`max (3 * ε) 1 <= CellLeft` を適用することで
+全 prime-axis point が eligible になることを exact に証明した。したがって exceptional
+prime-axis support と reference mass は、その cell ではともに `0` となる。これは
+asymptotic residual elimination ではなく、有限 support の消滅である。
+
+さらに 043 の interval-integral readiness を公開 helper として圧縮し、
+
+```text
+ExplicitSmoothMargin(U,c) := exp(β U) * Transform(c) / (4 U)
+```
+
+を first-class にした。042 の smooth/log-cell equality を有限 premise として受け取ると、
+この margin が smooth Abel cell 以下になる。exceptional mass を除いた
+
+```text
+starting radial deficit
++ prime-axis remainder debt
++ higher-power reference mass
++ discrepancy debt D
+<= ExplicitSmoothMargin + η
+```
+
+という budget predicate から、041 の finite reservoir theorem によって右端 radial
+contact deficit `<= η` を得る main theorem も閉じた。discrepancy regularity と
+`SmoothAbel = SmoothLogCell` の readiness は caller-supplied のまま保持している。
+
+```text
+combined radial-late threshold: CLOSED
+late prime-axis block = eligible prime-axis block: CLOSED
+late exceptional prime-axis support/mass = 0: CLOSED
+finite one-period carrier/error integrability compression: CLOSED
+explicit smooth margin first-class and <= SmoothAbelCell: CLOSED
+explicit smooth-margin budget -> radial endpoint: CLOSED
+positive phase + cofinal radial-late cells: CLOSED
+cofinal explicit-margin budget interface: CLOSED (provider remains open)
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+higher-prime-power residual domination: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite sums、
+summability、limit exchange、automatic `σ < 1`、discrepancy decay、higher-power residual
+の無条件 elimination、CFZP-018 provider、global RH を導入しない。残る境界は
+`Cfzp044PrimeAxisExplicitSmoothMarginRadialBudgetGap` に明示的に保持している。
+
+## 57. CFZP-045 — higher-prime-power sigma-tail envelope
+
+CFZP-045 は、044 の radial budget に残る higher-prime-power reference mass を、各 pair
+の exact sigma decay を保つ有限 tail envelopeへ置き換えた。higher-power support の
+actual exponent `pk.2 + 1` が `>= 2` であることと base prime の回収を閉じ、033 の
+fixed-prime upper bound を 034 の sigma-weight power identity と結合した。log-coordinate
+の有限 algebra
+
+```text
+log p / (j log p) = 1 / j
+```
+
+により、各 pair の reference mass は
+
+```text
+K(ε,W) * sigmaWeight(p)^j / j
+```
+
+以下となる。これを有限 block 上で sum して、raw higher-power mass が
+`K(ε,W) * HigherPowerSigmaTail` 以下になることを exact に証明した。
+
+さらに `floor(exp U)` による current support の向きを使い、late carrier cell では
+全 higher-power pair が `2 ε <= j log p` および `1 <= j log p` を満たすことを閉じた。
+したがって carrier-cell higher-power mass も同じ finite sigma-tail envelope 以下であり、
+044 の explicit smooth-margin budget に代入して右端 radial contact deficit `<= η` を
+得る main theoremを公開した。
+
+```text
+higher-power actual exponent >= 2: CLOSED
+higher-power base prime recovery: CLOSED
+log p / (j log p) = 1/j: CLOSED
+per-pair reference mass <= constant * sigmaWeight^j / j: CLOSED
+finite higher-power sigma tail: CLOSED
+raw higher-power block mass <= constant * sigma tail: CLOSED
+late carrier-cell higher-power block safety: CLOSED
+carrier-cell higher-power mass <= sigma-tail envelope: CLOSED
+sigma-tail explicit-margin budget -> radial endpoint: CLOSED
+higher-power sigma-tail cardinality bound: OPEN / GAP
+higher-power sigma-tail exponential decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+actual cofinal budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `σ < 1`、sigma-tail の無条件 negligible claim、
+CFZP-018 provider、global RH を導入しない。残る provider 境界は
+`Cfzp045HigherPrimePowerSigmaTailEnvelopeGap` に明示的に保持している。
+
+## 58. CFZP-046 — higher-prime-power deterministic cell counting and exponential envelope
+
+CFZP-046 は、045 の有限 sigma-tail を prime distribution なしの自然数 rectangular
+overcount で評価し、floor-free な指数 envelope に変換した。higher-power pair の
+log-coordinate について、有限 floor/exp/log bridge から
+
+```text
+U < j * log p <= R,
+p <= floor(exp(R/2)),
+j <= floor(R/log 2)
+```
+
+を exact に回収した。これにより全自然数 base と exponent の有限 bounding box、support
+cardinality bound、各 term の `exp(-σ U) / 2` bound、finite sigma-tail の cardinality
+envelope を閉じた。
+
+さらに floor を除去して
+
+```text
+HigherPowerSigmaTail(cell)
+<= exp(R/2) * (R/log2 + 1) * exp(-σ U)
+```
+
+を証明し、`R = U + P` による canonical form
+`exp(P/2) * (R/log2 + 1) * exp((1/2 - σ) U)` を公開した。045 の raw reference mass
+bound と合成した explicit-envelope radial budget adapter も閉じている。
+
+最後に smooth margin との競合を
+
+```text
+competitionKernel(U)
+= 8 * U * K(ε,W) * exp(P/2) * (R/log2 + 1) * exp(-U/2)
+```
+
+として first-class にし、kernel が positive transform 以下なら higher-power envelope
+が explicit smooth margin の半分以下になる有限代数 theorem を閉じた。
+
+```text
+higher-power pair log-coordinate cell interval: CLOSED
+j >= 2 -> base <= exp(R/2): CLOSED
+p >= 2 -> j <= R/log 2: CLOSED
+deterministic finite bounding box: CLOSED
+higher-power support cardinality bound: CLOSED
+uniform cell sigma-tail term <= exp(-σU)/2: CLOSED
+finite sigma tail <= cardinality envelope: CLOSED
+floor-free exponential envelope: CLOSED
+normal form exp(P/2)*(R/log2+1)*exp((1/2-σ)U): CLOSED
+raw higher-power mass <= K * exponential envelope: CLOSED
+exponential-envelope budget -> radial endpoint: CLOSED
+higher-power vs smooth-margin competition kernel: CLOSED
+kernel condition -> higher debt <= half smooth margin: CLOSED
+competition-kernel eventual decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+prime-axis remainder-cell debt decay: OPEN / GAP
+actual cofinal budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density
+theorem、infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional
+discrepancy/remainder decay、CFZP-018 provider、global RH を導入しない。base cap は全自然数
+base、exponent cap は全自然数 exponent を数える deliberate overcount であり、残る
+eventual kernel と cofinal budget provider は
+`Cfzp046HigherPrimePowerCellCountingEnvelopeGap` に保持している。
+
+## 59. CFZP-047 — higher-prime-power competition-kernel decay
+
+CFZP-047 は、046 の competition kernel を cell-left coordinate `U` の profile に正規化し、
+その eventual decay を標準的な実指数極限だけで閉じた。`R = U + P` を代入すると、profile
+は exact に
+
+```text
+A₂ * U² * exp(-U/2) + A₁ * U * exp(-U/2)
+```
+
+へ展開できる。Mathlib の `Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero` を `U/2` に
+compose して、二つの項がともに 0 に収束することを証明した。043 の Archimedean cell-left
+cofinalityとの合成により、実際の 046 kernel も `n → ∞` で 0 に収束する。
+
+この結果から、positive transform が存在する固定 phase では、十分 late な全 cell で
+
+```text
+competitionKernel <= positiveTransform
+K * higherPowerEnvelope <= ExplicitSmoothMargin / 2
+rawHigherPowerReferenceMass <= ExplicitSmoothMargin / 2
+```
+
+を得る cofinal theorem を閉じた。したがって higher-prime-power residual domination は
+OPEN/GAP から CLOSED へ移った。さらに higher-power の半分を先に支払った後に残る
+`ExplicitSmoothMargin / 2 + η` の finite radial budget と、044 の endpoint theorem を
+接続する adapter も公開した。
+
+```text
+cell-free higher-power competition profile: CLOSED
+profile quadratic/linear exponential normal form: CLOSED
+U * exp(-U/2) -> 0: CLOSED
+U^2 * exp(-U/2) -> 0: CLOSED
+higher-power competition profile -> 0: CLOSED
+carrier cell-left -> +infinity: CLOSED
+actual cell competition kernel -> 0: CLOSED
+positive transform eventually dominates kernel: CLOSED
+higher-power exponential envelope eventually <= half smooth margin: CLOSED
+raw higher-power reference mass eventually <= half smooth margin: CLOSED
+positive phase + cofinal higher-power domination package: CLOSED
+remaining-half budget -> radial endpoint: CLOSED
+higher-prime-power residual domination: CLOSED
+prime-axis remainder-cell debt decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+actual cofinal remaining-half budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density theorem、
+infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
+decay、prime-axis remainder decay、CFZP-018 provider、global RH を導入しない。残る provider
+境界は `Cfzp047HigherPrimePowerCompetitionDecayGap` に保持している。
+
+## 60. CFZP-048 — prime-axis remainder Abel/smooth-discrepancy reduction
+
+CFZP-048 は、`K / log p` 型の prime-axis remainder を有限 Abel summationで、elementary
+smooth Abel model と明示的な prime-counting discrepancy functional に分解した。指数変数
+`x = exp u` による有限区間の change of variables で smooth model を log-cell integral に
+移し、`u >= 2` の cell では integrand の非負性と endpoint exponential envelope を
+`intervalIntegral.integral_mono_on` で閉じた。
+
+```text
+remainder test function and derivative: CLOSED
+finite prime remainder sum = Abel endpoint/integral form: CLOSED
+raw prime support -> eligible prime-axis pair support: CLOSED (finite exact image)
+smooth Abel model + discrepancy functional split: CLOSED
+smooth Abel model -> density integral: CLOSED with finite regularity certificates
+density integral -> smooth log-cell: CLOSED with finite change-of-variables certificates
+smooth remainder cell nonnegativity and endpoint envelope: CLOSED
+smooth remainder debt <= quarter explicit smooth margin: CLOSED under threshold
+remainder debt <= quarter margin + discrepancy debt: CLOSED
+CFZP-047 higher-power half-margin + CFZP-048 remainder quarter-margin composition: CLOSED
+remaining-quarter predicate excludes higher-power and structural smooth remainder: CLOSED
+remaining-quarter budget -> CFZP-044 explicit-margin radial endpoint: CLOSED with supplied providers
+prime-counting discrepancy decay: OPEN / GAP
+prime-axis remainder discrepancy decay: OPEN / GAP
+automatic interior-strip window provider: OPEN / GAP
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+automatic pointwise discrepancy-to-functional bound: OPEN / GAP
+cofinal remaining quarter-margin budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density theorem、
+infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
+または remainder decay、CFZP-018 provider、global RH を導入しない。未証明の供給条件は
+`Cfzp048PrimeAxisRemainderAbelSmoothDiscrepancyGap` に明示的に保持している。
+
+## 61. CFZP-049 — combined prime-counting discrepancy functional envelope
+
+CFZP-049 は、carrier と `K / log p` 型 prime-axis remainder に現れる二つの有限 discrepancy
+functional を、同じ pointwise error
+`E(x) = primeCounting(floor x) - x / log x` の Abel functional として共通化した。
+有限 sensitivity
+`|f(b)| + |f(a)| + ∫ |f'|` により、一つの pointwise bound から両 functional、combined
+discrepancy debt までを明示的に支配する。relative bound からは `exp R / U` を保持した
+finite cell envelope を得る。
+
+```text
+generic finite Abel discrepancy sensitivity: CLOSED
+pointwise discrepancy -> carrier functional: CLOSED
+pointwise discrepancy -> remainder functional: CLOSED
+pointwise discrepancy -> combined discrepancy debt: CLOSED
+relative discrepancy -> uniform cell bound with exp(R) / U: CLOSED
+combined relative-discrepancy finite envelope: CLOSED
+combined debt -> corrected CFZP-048 remaining-quarter adapter: CLOSED with supplied certificates
+explicit carrier/remainder sensitivity asymptotic envelope: OPEN / GAP
+relative prime-counting discrepancy decay provider: OPEN / GAP
+automatic PNT/relative-error hookup: OPEN / GAP
+leading SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+interior-strip provider and cofinal final budget: OPEN / GAP
+CFZP-018 provider / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `σ < 1`、unconditional discrepancy decay、CFZP-018
+provider、global RH を導入しない。有限 pointwise/relative discrepancy predicate は provider
+interface としてのみ使用し、未証明の小ささは
+`Cfzp049CombinedPrimeCountingDiscrepancyEnvelopeGap` に残す。
+
+## 62. CFZP-050 — combined discrepancy sensitivity explicit cell envelope
+
+CFZP-050 は CFZP-049 の finite combined sensitivity を、一周期 cell 上の明示的な有限係数
+へ落とした。leading carrier の sine/cosine pair には triangle-inequality coefficient を与え、
+carrier と `K / log p` remainder の endpoint/derivative envelope は有限セル証明書として明示した。
+その結果、combined sensitivity は `C_sens * exp(-sigma * U)` に抑えられ、`R = U + P` により
+relative discrepancy の `exp(R) / U` と explicit smooth margin の
+`exp((1-sigma) * U) / (4U)` が同じ座標スケールに正規化される。
+
+```text
+finite leading-carrier amplitude and derivative constants: CLOSED
+finite carrier/remainder sensitivity coefficient API: CLOSED from actual finite-cell estimates
+combined sensitivity -> explicit relative envelope: CLOSED
+general margin-share coefficient cancellation: CLOSED
+quarter coefficient condition and reduced remaining-quarter adapter: CLOSED
+eighth coefficient constant: EXPOSED
+automatic finite-cell endpoint/derivative certificate generation: CLOSED with finite integrability inputs
+relative prime-counting discrepancy decay provider: OPEN / GAP
+automatic interior-strip and SmoothAbel -> SmoothLogCell providers: OPEN / GAP
+automatic left radial-deficit budget and cofinal final budget: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
+summability、limit exchange、automatic `sigma < 1`、unconditional discrepancy decay、CFZP-018
+provider、global RH を導入しない。有限セルの endpoint/derivative envelope は actual test
+function から有限 derivative-integrability premise のもとで生成し、未証明の漸近小ささは
+`Cfzp050CombinedDiscrepancySensitivityEnvelopeGap` に保持している。
+
+## 63. CFZP-051 — prime-counting PNT ratio to relative cell discrepancy
+
+CFZP-051 は Mathlib v4.32.2 に PNT 定理が存在しないことを前提に、real/floor の
+`primeCounting (floor x) / (x / log x)` ratio を唯一の標準 arithmetic provider として
+定義した。PNT ratio の証明や外部 Lake dependency はこの checkpoint では導入せず、provider
+から先の有限・filter-theoretic reduction を実装した。
+
+```text
+standard real/floor PNT ratio provider interface: DEFINED
+PNT ratio -> normalized discrepancy ratio -> 0: CLOSED
+PNT ratio -> eventual pointwise relative discrepancy: CLOSED
+carrier exp-left -> +infinity: CLOSED
+pointwise eventual bound -> eventual cell-relative bound: CLOSED
+explicit positive eighth-margin tolerance: CLOSED
+PNT tolerance -> CFZP-050 eighth coefficient condition: CLOSED
+eighth condition -> combined debt <= explicit margin / 8: CLOSED
+PNT provider -> eventual combined debt <= margin / 8: CLOSED modulo finite integrability readiness
+left radial eighth-credit + discrepancy eighth -> remaining quarter budget: CLOSED
+custom relative cell discrepancy provider: RETIRED in the Green-facing chain
+standard PNT ratio theorem itself: OPEN / external arithmetic provider
+finite derivative-integrability readiness: OPEN / finite analytic readiness input
+automatic interior-strip, SmoothAbel -> SmoothLogCell, and left eighth-credit providers: OPEN / GAP
+Mathlib PNT theorem: NOT AVAILABLE in current v4.32.2 dependency
+external PNT+ dependency: NOT INTRODUCED in CFZP-051
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaPrimeCountingPNTToRelativeDiscrepancyAudit` keeps the
+PNT ratio, finite cell transport, eighth-margin debt theorem, and explicit
+`Cfzp051PrimeCountingPNTToRelativeDiscrepancyGap` firewall together. It does not assert PNT,
+explicit error terms, Mertens/Dirichlet/Bertrand input, infinite prime distribution, limit
+exchange, automatic finite integrability, automatic left radial credit, or global RH.
+
+## 64. CFZP-052 — finite discrepancy analytic readiness auto audit
+
+CFZP-052 は CFZP-051 に残っていた四つの有限 `IntegrableOn` readiness 条件を、実際の
+floor prime-counting discrepancy、smooth model、carrier/remainder の exact derivative
+formula、および CFZP-050 の finite derivative envelope から自動生成した。有限セルの
+measurability と boundedness だけを使い、PNT ratio や左 radial eighth-credit を新たに
+仮定・証明していない。
+
+```text
+primeCounting(floor x) measurability: CLOSED
+prime-counting discrepancy measurability: CLOSED
+carrier derivative exact formula on late cell: CLOSED
+remainder derivative exact formula on late cell: CLOSED
+carrier absolute derivative finite-cell integrability: CLOSED
+remainder absolute derivative finite-cell integrability: CLOSED
+distribution-free finite cell discrepancy absolute bound: CLOSED
+carrier derivative * discrepancy integrability: CLOSED
+remainder derivative * discrepancy integrability: CLOSED
+Cfzp051FiniteDiscrepancyAnalyticReadyAt from 1 <= U: CLOSED
+eventual finite analytic readiness: CLOSED
+PNT provider -> eventual combined debt <= margin / 8 without hReady: CLOSED
+PNT + left eighth-credit provider -> eventual remaining-quarter budget: CLOSED
+finite discrepancy analytic readiness GAP: RETIRED
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+left radial eighth-credit provider: OPEN / next structural frontier
+automatic interior-strip / SmoothAbel -> SmoothLogCell providers: OPEN / GAP
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaFiniteDiscrepancyAnalyticReadinessAudit` closes
+`Cfzp051FiniteDiscrepancyAnalyticReadyAt` from `1 ≤ U`, and its PNT wrapper removes the
+former finite-readiness argument from the Green-facing CFZP-051 reduction. The module remains
+finite and distribution-free: it does not prove PNT, infinite prime-sum convergence, limit
+exchange, automatic left radial credit, the final radial budget, or global RH.
+
+## 65. CFZP-053 — finite smooth-Abel readiness and one-cell radial eighth descent
+
+CFZP-053 は CFZP-052 の finite discrepancy readiness を引き継ぎ、late な一セル上で
+smooth-Abel 側の有限解析証明書を actual carrier/remainder test functions から自動生成
+した。さらに CFZP-049 の combined eighth-credit を `eta := G_left - Margin / 8`
+へ specialize し、右端 radial deficit の実減少と next-left recurrence を閉じた。
+無限和の発散や最終 radial escape はこの段階では主張していない。
+
+```text
+carrier differentiability / derivative finite-cell readiness: CLOSED
+remainder differentiability / derivative finite-cell readiness: CLOSED
+carrier derivative * smooth-model integrability: CLOSED
+remainder derivative * smooth-model integrability: CLOSED
+carrier SmoothAbel -> SmoothLogCell readiness: CLOSED automatically
+remainder finite smooth+discrepancy split: CLOSED automatically
+remainder SmoothAbel -> SmoothLogCell readiness: CLOSED automatically
+remainder smooth log-integrand interval integrability: CLOSED automatically
+canonical remainder debt equality hookup: CLOSED
+all finite smooth radial readiness: CLOSED from late threshold
+carrier real/exp/natural endpoint contiguity: CLOSED
+combined discrepancy eighth -> one-cell radial deficit decrease by Margin/8: CLOSED
+left-to-next-left radial eighth recurrence: CLOSED
+PNT provider -> eventual radial eighth recurrence: CLOSED modulo explicit window hypotheses
+finite telescoping of radial eighth recurrence: CLOSED
+finite discrepancy analytic readiness: inherited CLOSED from CFZP-052
+standard PNT ratio theorem: OPEN / external arithmetic provider
+automatic interior-strip / subcritical window provider: OPEN / GAP
+cumulative eighth-margin credit sufficient for final radial escape: RETIRED at radial-deficit level by CFZP-054
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaFiniteSmoothAbelReadinessRadialEighthDescentAudit`
+provides the finite readiness structure, automatic carrier/remainder smooth-cell bridges,
+`cfzp053_oneCell_radialDeficit_le_sub_eighthMargin`, exact adjacent-cell endpoint identities,
+the PNT-synchronized eventual recurrence, and finite telescoping. It does not introduce PNT,
+infinite prime sums, limit exchange, automatic interior-strip or subcritical providers, smooth
+margin divergence, a final radial budget, or global RH.
+
+## 66. CFZP-054 — explicit smooth-margin escape and radial deficit `atBot`
+
+CFZP-054 は CFZP-053 の finite eighth recurrence を、positive exponential carrier
+margin の explicit growth と有限 tail inductionで `atBot` へ押し進める。ここで
+`Margin_n = exp (beta * U_n) * (M0 / (4 * U_n))` を first-class に扱い、
+`beta > 0` と `M0 > 0` から `Margin_n → +∞`、したがって eventually `Margin_n ≥ 8`
+を得る。以後は `G_(n+1) ≤ G_n - 1` の有限 descent のみを使い、無限 margin 和や
+limit exchange は導入しない。
+
+```text
+exp(beta * U) / U -> +infinity for beta > 0: CLOSED by pure real analysis
+explicit smooth margin -> +infinity: CLOSED
+explicit margin eventually >= 8: CLOSED
+PNT ratio -> eventual unit radial descent: CLOSED
+finite unit-descent iteration: CLOSED
+left radial deficit -> -infinity: CLOSED under PNT + explicit window hypotheses
+arbitrary radial target eventually reached: CLOSED
+carrier natural left cutoffs cofinal: CLOSED
+cofinal natural-cutoff radial escape: CLOSED under PNT + explicit window hypotheses
+cumulative eighth-margin credit escape GAP: RETIRED at radial-deficit level
+cofinal final radial budget GAP: RETIRED at radial-deficit level
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+automatic interior-strip provider: OPEN / GAP
+automatic subcritical-window provider: OPEN / GAP
+CFZP-018 adapter composition: NEXT FRONTIER
+RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaExplicitSmoothMarginEscapeRadialAtBotAudit`
+provides the explicit-margin `atTop` theorem, the eventual unit recurrence, finite linear
+descent, `cfzp054_pntRatio_leftRadialDeficit_tendsto_atBot`, and the cofinal natural-cutoff
+radial-deficit statement. It retains `Cfzp051PrimeCountingPNTRatioAtTop`, the interior-strip
+hypothesis, and the subcritical-window hypothesis as explicit inputs. It does not prove PNT,
+Mertens/Dirichlet/Bertrand, infinite prime sums, limit exchange, CFZP-018 approximate reach,
+or global RH.
+
+## 67. CFZP-055 — radial escape to exact prime-threshold crossing
+
+CFZP-055 は CFZP-054 の `eta := 0` における cofinal natural-cutoff radial escapeを、
+既存の CFZP-018 finite radial-contact deficit equivalenceを介して、まず CFZP-017 の
+fixed-epsilon exact prime-threshold crossingへ transportした。さらに
+`0 < epsilon < log 2` が `𝓝[>] 0` で eventually 成立することを使い、
+CFZP-017 の doubly cofinal exact crossing、CFZP-018 の approximate reach、fixed defectの
+符号・零化、および選択された finite safe window の criticalityを一つの条件付き chain
+として公開した。
+
+```text
+CFZP-054 cofinal natural-cutoff radial escape -> exact threshold crossing: CLOSED
+fixed-epsilon PNT provider -> CFZP-017 cofinal exact crossing: CLOSED
+fixed-epsilon exact crossing -> CFZP-018 approximate reach: CLOSED
+small positive epsilon neighborhood synchronization: CLOSED
+doubly cofinal CFZP-017 exact crossing: CLOSED under PNT + explicit window hypotheses
+doubly cofinal CFZP-018 approximate reach: CLOSED under PNT + explicit window hypotheses
+fixed second-moment defect <= 0: CLOSED under same hypotheses
+safe-window fixed defect = 0: CLOSED under same hypotheses
+finite-window criticality: CLOSED under same hypotheses
+CFZP-018 adapter frontier: RETIRED conditionally on PNT + window hypotheses
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+automatic interior-strip provider: OPEN / GAP
+automatic subcritical-aspect provider: OPEN / GAP
+globalization from finite safe windows / global RH: OPEN / later frontier
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaRadialEscapePrimeThresholdCrossingClosureAudit`
+keeps `Cfzp051PrimeCountingPNTRatioAtTop`,
+`Cfzp039PrimeAxisInteriorStrip W`, and `Cfzp027SubcriticalPhaseAspect W` as explicit
+assumptions. Its criticality conclusion is only for the finite safe window and does not prove
+PNT, automatic window construction, infinite sums, limit exchange, or global RH. The former
+CFZP-018 independent-provider frontier is therefore retired only conditionally on these three
+providers; the provider Gap remains explicit.
