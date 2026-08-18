@@ -2581,3 +2581,37 @@ summability、limit exchange、automatic `sigma < 1`、unconditional discrepancy
 provider、global RH を導入しない。有限セルの endpoint/derivative envelope は actual test
 function から有限 derivative-integrability premise のもとで生成し、未証明の漸近小ささは
 `Cfzp050CombinedDiscrepancySensitivityEnvelopeGap` に保持している。
+
+## 63. CFZP-051 — prime-counting PNT ratio to relative cell discrepancy
+
+CFZP-051 は Mathlib v4.32.2 に PNT 定理が存在しないことを前提に、real/floor の
+`primeCounting (floor x) / (x / log x)` ratio を唯一の標準 arithmetic provider として
+定義した。PNT ratio の証明や外部 Lake dependency はこの checkpoint では導入せず、provider
+から先の有限・filter-theoretic reduction を実装した。
+
+```text
+standard real/floor PNT ratio provider interface: DEFINED
+PNT ratio -> normalized discrepancy ratio -> 0: CLOSED
+PNT ratio -> eventual pointwise relative discrepancy: CLOSED
+carrier exp-left -> +infinity: CLOSED
+pointwise eventual bound -> eventual cell-relative bound: CLOSED
+explicit positive eighth-margin tolerance: CLOSED
+PNT tolerance -> CFZP-050 eighth coefficient condition: CLOSED
+eighth condition -> combined debt <= explicit margin / 8: CLOSED
+PNT provider -> eventual combined debt <= margin / 8: CLOSED modulo finite integrability readiness
+left radial eighth-credit + discrepancy eighth -> remaining quarter budget: CLOSED
+custom relative cell discrepancy provider: RETIRED in the Green-facing chain
+standard PNT ratio theorem itself: OPEN / external arithmetic provider
+finite derivative-integrability readiness: OPEN / finite analytic readiness input
+automatic interior-strip, SmoothAbel -> SmoothLogCell, and left eighth-credit providers: OPEN / GAP
+Mathlib PNT theorem: NOT AVAILABLE in current v4.32.2 dependency
+external PNT+ dependency: NOT INTRODUCED in CFZP-051
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaPrimeCountingPNTToRelativeDiscrepancyAudit` keeps the
+PNT ratio, finite cell transport, eighth-margin debt theorem, and explicit
+`Cfzp051PrimeCountingPNTToRelativeDiscrepancyGap` firewall together. It does not assert PNT,
+explicit error terms, Mertens/Dirichlet/Bertrand input, infinite prime distribution, limit
+exchange, automatic finite integrability, automatic left radial credit, or global RH.
