@@ -93,7 +93,7 @@ theorem samePowerStructure_primeCoordinates_mul_pow
     SamePowerStructure d
       (primeExponentCoordinates n)
       (primeExponentCoordinates (n * a ^ d)) := by
-  unfold SamePowerStructure projectPrimeCoordinates at *
+  unfold SamePowerStructure
   exact (projectPrimeCoordinates_mul_pow hn ha).symm
 
 /-- The raw period-zero prime observation is exactly the valuation vector. -/

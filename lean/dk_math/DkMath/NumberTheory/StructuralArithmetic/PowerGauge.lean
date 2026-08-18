@@ -51,7 +51,7 @@ def SamePowerSector (d a b : ℕ) : Prop :=
 
 @[simp] theorem projectExponent_period_one (n : ℕ) :
     projectExponent 1 n = 0 := by
-  simp [projectExponent]
+  exact Nat.mod_one n
 
 /--
 Red-ribbon law for one exponent coordinate: adding whole gauge periods does not
@@ -59,12 +59,12 @@ change the visible sector.
 -/
 @[simp] theorem projectExponent_add_period (d n k : ℕ) :
     projectExponent d (n + d * k) = projectExponent d n := by
-  simpa [projectExponent] using Nat.add_mul_mod_self_left n d k
+  simp [projectExponent, Nat.add_mul_mod_self_left n d k]
 
 /-- A pure multiple of the gauge period projects to the zero sector. -/
 @[simp] theorem projectExponent_period_mul (d k : ℕ) :
     projectExponent d (d * k) = 0 := by
-  simpa [projectExponent] using Nat.mul_mod_right d k
+  simp [projectExponent, Nat.mul_mod_right d k]
 
 namespace SamePowerSector
 
@@ -73,12 +73,12 @@ namespace SamePowerSector
 
 @[symm] theorem symm {d a b : ℕ} (h : SamePowerSector d a b) :
     SamePowerSector d b a :=
-  h.symm
+  Eq.symm h
 
 @[trans] theorem trans {d a b c : ℕ}
     (hab : SamePowerSector d a b) (hbc : SamePowerSector d b c) :
     SamePowerSector d a c :=
-  hab.trans hbc
+  Eq.trans hab hbc
 
 /-- Period zero retains exact exponent information. -/
 @[simp] theorem period_zero_iff {a b : ℕ} :
@@ -144,13 +144,13 @@ namespace SamePowerStructure
 @[symm] theorem symm {ι : Type*} {d : ℕ} {v w : ι → ℕ}
     (h : SamePowerStructure d v w) :
     SamePowerStructure d w v :=
-  h.symm
+  Eq.symm h
 
 @[trans] theorem trans {ι : Type*} {d : ℕ} {u v w : ι → ℕ}
     (huv : SamePowerStructure d u v)
     (hvw : SamePowerStructure d v w) :
     SamePowerStructure d u w :=
-  huv.trans hvw
+  Eq.trans huv hvw
 
 /-- Period zero is equality of the complete raw coordinate structure. -/
 @[simp] theorem period_zero_iff {ι : Type*} {v w : ι → ℕ} :
