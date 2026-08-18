@@ -313,7 +313,6 @@ theorem cfzp051_eighthDiscrepancy_and_leftEighthCredit_implies_combinedBudget
 /-- Unresolved arithmetic and analytic providers retained after CFZP-051. -/
 inductive Cfzp051PrimeCountingPNTToRelativeDiscrepancyGap : Prop
   | noPrimeCountingPNTRatioProvider
-  | noAutomaticFiniteDiscrepancyAnalyticReadinessProvider
   | noAutomaticInteriorStripWindowProvider
   | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noAutomaticLeftRadialEighthCreditBudgetProvider

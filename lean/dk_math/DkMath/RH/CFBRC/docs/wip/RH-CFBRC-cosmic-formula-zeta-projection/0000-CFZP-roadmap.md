@@ -2615,3 +2615,39 @@ PNT ratio, finite cell transport, eighth-margin debt theorem, and explicit
 `Cfzp051PrimeCountingPNTToRelativeDiscrepancyGap` firewall together. It does not assert PNT,
 explicit error terms, Mertens/Dirichlet/Bertrand input, infinite prime distribution, limit
 exchange, automatic finite integrability, automatic left radial credit, or global RH.
+
+## 64. CFZP-052 — finite discrepancy analytic readiness auto audit
+
+CFZP-052 は CFZP-051 に残っていた四つの有限 `IntegrableOn` readiness 条件を、実際の
+floor prime-counting discrepancy、smooth model、carrier/remainder の exact derivative
+formula、および CFZP-050 の finite derivative envelope から自動生成した。有限セルの
+measurability と boundedness だけを使い、PNT ratio や左 radial eighth-credit を新たに
+仮定・証明していない。
+
+```text
+primeCounting(floor x) measurability: CLOSED
+prime-counting discrepancy measurability: CLOSED
+carrier derivative exact formula on late cell: CLOSED
+remainder derivative exact formula on late cell: CLOSED
+carrier absolute derivative finite-cell integrability: CLOSED
+remainder absolute derivative finite-cell integrability: CLOSED
+distribution-free finite cell discrepancy absolute bound: CLOSED
+carrier derivative * discrepancy integrability: CLOSED
+remainder derivative * discrepancy integrability: CLOSED
+Cfzp051FiniteDiscrepancyAnalyticReadyAt from 1 <= U: CLOSED
+eventual finite analytic readiness: CLOSED
+PNT provider -> eventual combined debt <= margin / 8 without hReady: CLOSED
+PNT + left eighth-credit provider -> eventual remaining-quarter budget: CLOSED
+finite discrepancy analytic readiness GAP: RETIRED
+standard PNT ratio theorem itself: OPEN / arithmetic provider
+left radial eighth-credit provider: OPEN / next structural frontier
+automatic interior-strip / SmoothAbel -> SmoothLogCell providers: OPEN / GAP
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaFiniteDiscrepancyAnalyticReadinessAudit` closes
+`Cfzp051FiniteDiscrepancyAnalyticReadyAt` from `1 ≤ U`, and its PNT wrapper removes the
+former finite-readiness argument from the Green-facing CFZP-051 reduction. The module remains
+finite and distribution-free: it does not prove PNT, infinite prime-sum convergence, limit
+exchange, automatic left radial credit, the final radial budget, or global RH.
