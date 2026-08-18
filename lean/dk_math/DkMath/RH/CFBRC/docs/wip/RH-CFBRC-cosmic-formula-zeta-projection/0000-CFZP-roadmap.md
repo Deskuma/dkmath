@@ -2367,3 +2367,68 @@ infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
 summability、limit exchange、automatic `σ < 1`、sigma-tail の無条件 negligible claim、
 CFZP-018 provider、global RH を導入しない。残る provider 境界は
 `Cfzp045HigherPrimePowerSigmaTailEnvelopeGap` に明示的に保持している。
+
+## 58. CFZP-046 — higher-prime-power deterministic cell counting and exponential envelope
+
+CFZP-046 は、045 の有限 sigma-tail を prime distribution なしの自然数 rectangular
+overcount で評価し、floor-free な指数 envelope に変換した。higher-power pair の
+log-coordinate について、有限 floor/exp/log bridge から
+
+```text
+U < j * log p <= R,
+p <= floor(exp(R/2)),
+j <= floor(R/log 2)
+```
+
+を exact に回収した。これにより全自然数 base と exponent の有限 bounding box、support
+cardinality bound、各 term の `exp(-σ U) / 2` bound、finite sigma-tail の cardinality
+envelope を閉じた。
+
+さらに floor を除去して
+
+```text
+HigherPowerSigmaTail(cell)
+<= exp(R/2) * (R/log2 + 1) * exp(-σ U)
+```
+
+を証明し、`R = U + P` による canonical form
+`exp(P/2) * (R/log2 + 1) * exp((1/2 - σ) U)` を公開した。045 の raw reference mass
+bound と合成した explicit-envelope radial budget adapter も閉じている。
+
+最後に smooth margin との競合を
+
+```text
+competitionKernel(U)
+= 8 * U * K(ε,W) * exp(P/2) * (R/log2 + 1) * exp(-U/2)
+```
+
+として first-class にし、kernel が positive transform 以下なら higher-power envelope
+が explicit smooth margin の半分以下になる有限代数 theorem を閉じた。
+
+```text
+higher-power pair log-coordinate cell interval: CLOSED
+j >= 2 -> base <= exp(R/2): CLOSED
+p >= 2 -> j <= R/log 2: CLOSED
+deterministic finite bounding box: CLOSED
+higher-power support cardinality bound: CLOSED
+uniform cell sigma-tail term <= exp(-σU)/2: CLOSED
+finite sigma tail <= cardinality envelope: CLOSED
+floor-free exponential envelope: CLOSED
+normal form exp(P/2)*(R/log2+1)*exp((1/2-σ)U): CLOSED
+raw higher-power mass <= K * exponential envelope: CLOSED
+exponential-envelope budget -> radial endpoint: CLOSED
+higher-power vs smooth-margin competition kernel: CLOSED
+kernel condition -> higher debt <= half smooth margin: CLOSED
+competition-kernel eventual decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+prime-axis remainder-cell debt decay: OPEN / GAP
+actual cofinal budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density
+theorem、infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional
+discrepancy/remainder decay、CFZP-018 provider、global RH を導入しない。base cap は全自然数
+base、exponent cap は全自然数 exponent を数える deliberate overcount であり、残る
+eventual kernel と cofinal budget provider は
+`Cfzp046HigherPrimePowerCellCountingEnvelopeGap` に保持している。
