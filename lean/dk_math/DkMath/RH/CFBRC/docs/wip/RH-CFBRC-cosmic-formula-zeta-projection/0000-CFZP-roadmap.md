@@ -2432,3 +2432,56 @@ discrepancy/remainder decay、CFZP-018 provider、global RH を導入しない�
 base、exponent cap は全自然数 exponent を数える deliberate overcount であり、残る
 eventual kernel と cofinal budget provider は
 `Cfzp046HigherPrimePowerCellCountingEnvelopeGap` に保持している。
+
+## 59. CFZP-047 — higher-prime-power competition-kernel decay
+
+CFZP-047 は、046 の competition kernel を cell-left coordinate `U` の profile に正規化し、
+その eventual decay を標準的な実指数極限だけで閉じた。`R = U + P` を代入すると、profile
+は exact に
+
+```text
+A₂ * U² * exp(-U/2) + A₁ * U * exp(-U/2)
+```
+
+へ展開できる。Mathlib の `Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero` を `U/2` に
+compose して、二つの項がともに 0 に収束することを証明した。043 の Archimedean cell-left
+cofinalityとの合成により、実際の 046 kernel も `n → ∞` で 0 に収束する。
+
+この結果から、positive transform が存在する固定 phase では、十分 late な全 cell で
+
+```text
+competitionKernel <= positiveTransform
+K * higherPowerEnvelope <= ExplicitSmoothMargin / 2
+rawHigherPowerReferenceMass <= ExplicitSmoothMargin / 2
+```
+
+を得る cofinal theorem を閉じた。したがって higher-prime-power residual domination は
+OPEN/GAP から CLOSED へ移った。さらに higher-power の半分を先に支払った後に残る
+`ExplicitSmoothMargin / 2 + η` の finite radial budget と、044 の endpoint theorem を
+接続する adapter も公開した。
+
+```text
+cell-free higher-power competition profile: CLOSED
+profile quadratic/linear exponential normal form: CLOSED
+U * exp(-U/2) -> 0: CLOSED
+U^2 * exp(-U/2) -> 0: CLOSED
+higher-power competition profile -> 0: CLOSED
+carrier cell-left -> +infinity: CLOSED
+actual cell competition kernel -> 0: CLOSED
+positive transform eventually dominates kernel: CLOSED
+higher-power exponential envelope eventually <= half smooth margin: CLOSED
+raw higher-power reference mass eventually <= half smooth margin: CLOSED
+positive phase + cofinal higher-power domination package: CLOSED
+remaining-half budget -> radial endpoint: CLOSED
+higher-prime-power residual domination: CLOSED
+prime-axis remainder-cell debt decay: OPEN / GAP
+prime-counting discrepancy decay: OPEN / GAP
+automatic SmoothAbel -> SmoothLogCell readiness: OPEN / GAP
+actual cofinal remaining-half budget provider: OPEN / GAP
+infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
+```
+
+本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、prime density theorem、
+infinite prime sums、summability、limit exchange、automatic `σ < 1`、unconditional discrepancy
+decay、prime-axis remainder decay、CFZP-018 provider、global RH を導入しない。残る provider
+境界は `Cfzp047HigherPrimePowerCompetitionDecayGap` に保持している。
