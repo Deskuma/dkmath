@@ -2564,12 +2564,12 @@ relative discrepancy の `exp(R) / U` と explicit smooth margin の
 
 ```text
 finite leading-carrier amplitude and derivative constants: CLOSED
-finite carrier/remainder sensitivity coefficient API: CLOSED with explicit cell certificates
+finite carrier/remainder sensitivity coefficient API: CLOSED from actual finite-cell estimates
 combined sensitivity -> explicit relative envelope: CLOSED
 general margin-share coefficient cancellation: CLOSED
 quarter coefficient condition and reduced remaining-quarter adapter: CLOSED
 eighth coefficient constant: EXPOSED
-automatic finite-cell endpoint/derivative certificate generation: OPEN / GAP
+automatic finite-cell endpoint/derivative certificate generation: CLOSED with finite integrability inputs
 relative prime-counting discrepancy decay provider: OPEN / GAP
 automatic interior-strip and SmoothAbel -> SmoothLogCell providers: OPEN / GAP
 automatic left radial-deficit budget and cofinal final budget: OPEN / GAP
@@ -2578,6 +2578,6 @@ infinite prime distribution / limit exchange / global RH: OUT OF SCOPE
 
 本段は PNT、Mertens、Dirichlet、Bertrand、prime-log equidistribution、infinite prime sums、
 summability、limit exchange、automatic `sigma < 1`、unconditional discrepancy decay、CFZP-018
-provider、global RH を導入しない。有限セルの endpoint/derivative envelope は
-`Cfzp050CellSensitivityEnvelope` として供給境界を明示し、未証明の漸近小ささは
+provider、global RH を導入しない。有限セルの endpoint/derivative envelope は actual test
+function から有限 derivative-integrability premise のもとで生成し、未証明の漸近小ささは
 `Cfzp050CombinedDiscrepancySensitivityEnvelopeGap` に保持している。
