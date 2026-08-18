@@ -314,7 +314,6 @@ theorem cfzp051_eighthDiscrepancy_and_leftEighthCredit_implies_combinedBudget
 inductive Cfzp051PrimeCountingPNTToRelativeDiscrepancyGap : Prop
   | noPrimeCountingPNTRatioProvider
   | noAutomaticInteriorStripWindowProvider
-  | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noAutomaticLeftRadialEighthCreditBudgetProvider
   | noCofinalFinalRadialBudgetProvider
 

@@ -2651,3 +2651,42 @@ The public module
 former finite-readiness argument from the Green-facing CFZP-051 reduction. The module remains
 finite and distribution-free: it does not prove PNT, infinite prime-sum convergence, limit
 exchange, automatic left radial credit, the final radial budget, or global RH.
+
+## 65. CFZP-053 — finite smooth-Abel readiness and one-cell radial eighth descent
+
+CFZP-053 は CFZP-052 の finite discrepancy readiness を引き継ぎ、late な一セル上で
+smooth-Abel 側の有限解析証明書を actual carrier/remainder test functions から自動生成
+した。さらに CFZP-049 の combined eighth-credit を `eta := G_left - Margin / 8`
+へ specialize し、右端 radial deficit の実減少と next-left recurrence を閉じた。
+無限和の発散や最終 radial escape はこの段階では主張していない。
+
+```text
+carrier differentiability / derivative finite-cell readiness: CLOSED
+remainder differentiability / derivative finite-cell readiness: CLOSED
+carrier derivative * smooth-model integrability: CLOSED
+remainder derivative * smooth-model integrability: CLOSED
+carrier SmoothAbel -> SmoothLogCell readiness: CLOSED automatically
+remainder finite smooth+discrepancy split: CLOSED automatically
+remainder SmoothAbel -> SmoothLogCell readiness: CLOSED automatically
+remainder smooth log-integrand interval integrability: CLOSED automatically
+canonical remainder debt equality hookup: CLOSED
+all finite smooth radial readiness: CLOSED from late threshold
+carrier real/exp/natural endpoint contiguity: CLOSED
+combined discrepancy eighth -> one-cell radial deficit decrease by Margin/8: CLOSED
+left-to-next-left radial eighth recurrence: CLOSED
+PNT provider -> eventual radial eighth recurrence: CLOSED modulo explicit window hypotheses
+finite telescoping of radial eighth recurrence: CLOSED
+finite discrepancy analytic readiness: inherited CLOSED from CFZP-052
+standard PNT ratio theorem: OPEN / external arithmetic provider
+automatic interior-strip / subcritical window provider: OPEN / GAP
+cumulative eighth-margin credit sufficient for final radial escape: OPEN / GAP
+CFZP-018 / global RH: OUT OF SCOPE
+```
+
+The public module
+`DkMath.RH.CFBRC.CosmicFormulaZetaFiniteSmoothAbelReadinessRadialEighthDescentAudit`
+provides the finite readiness structure, automatic carrier/remainder smooth-cell bridges,
+`cfzp053_oneCell_radialDeficit_le_sub_eighthMargin`, exact adjacent-cell endpoint identities,
+the PNT-synchronized eventual recurrence, and finite telescoping. It does not introduce PNT,
+infinite prime sums, limit exchange, automatic interior-strip or subcritical providers, smooth
+margin divergence, a final radial budget, or global RH.

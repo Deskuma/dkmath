@@ -574,7 +574,6 @@ inductive Cfzp049CombinedPrimeCountingDiscrepancyEnvelopeGap : Prop
   | noExplicitSensitivityAsymptoticEnvelopeProvider
   | noRelativePrimeCountingDiscrepancyDecayProvider
   | noAutomaticPNTRelativeErrorHookup
-  | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noAutomaticInteriorStripWindowProvider
   | noCofinalCombinedRemainingQuarterBudgetProvider
 

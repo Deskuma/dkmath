@@ -1250,7 +1250,6 @@ theorem cfzp050_quarterDiscrepancy_and_leftDeficit_implies_combinedBudget
 /-- These are the finite providers deliberately left outside CFZP-050. -/
 inductive Cfzp050CombinedDiscrepancySensitivityEnvelopeGap : Prop
   | noAutomaticInteriorStripWindowProvider
-  | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noRelativePrimeCountingDiscrepancyDecayProvider
   | noAutomaticLeftRadialDeficitBudgetProvider
   | noCofinalReducedRemainingQuarterBudgetProvider

@@ -541,7 +541,6 @@ theorem cfzp052_pntRatio_and_leftEighthCredit_eventually_remainingQuarter
 inductive Cfzp052FiniteDiscrepancyAnalyticReadinessGap : Prop
   | noPrimeCountingPNTRatioProvider
   | noAutomaticInteriorStripWindowProvider
-  | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noAutomaticLeftRadialEighthCreditBudgetProvider
   | noCofinalFinalRadialBudgetProvider
 

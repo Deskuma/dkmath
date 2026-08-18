@@ -981,7 +981,6 @@ theorem cfzp048_eventually_higherPowerHalf_and_remainderQuarterLate
 /-- Explicit boundaries left open by the finite Abel reduction. -/
 inductive Cfzp048PrimeAxisRemainderAbelSmoothDiscrepancyGap : Prop
   | noAutomaticInteriorStripWindowProvider
-  | noAutomaticLeadingSmoothAbelLogCellReadinessProvider
   | noPrimeCountingCarrierDiscrepancyFunctionalDecayProvider
   | noPrimeAxisRemainderDiscrepancyFunctionalDecayProvider
   | noPointwiseDiscrepancyToCombinedFunctionalBound
