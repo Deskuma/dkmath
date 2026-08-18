@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.StructuralArithmetic.PowerGauge
+import DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -15,7 +16,8 @@ Public aggregation point for the structure-preserving / projection vocabulary
 used to connect KUS, prime coordinates, DHNT scaling, Cosmic Formula GN, and
 power-gauge quotient views.
 
-The initial implementation contains only the period/exponent projection kernel.
+The initial implementation now contains the period/exponent projection kernel
+and its first concrete specialization to ordinary prime-valuation coordinates.
 Further bridges are intentionally added here only after their local modules are
 stable.
 -/
