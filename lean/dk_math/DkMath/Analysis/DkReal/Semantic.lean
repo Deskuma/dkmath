@@ -142,6 +142,24 @@ theorem eq_semanticValue_of_mem_all_intervals
   exact sub_eq_zero.mp (abs_eq_zero.mp heq)
 
 /--
+Two real points in every cast approximation interval of one `DkReal`
+representation are equal.
+
+The common interval family has a unique semantic value because its widths
+tend to zero.  This theorem exposes that uniqueness directly for two
+candidates, without introducing a completeness assumption or choosing a new
+real representation.
+-/
+theorem eq_of_mem_all_intervals
+    (x : DkMath.Analysis.DkReal) {r s : ℝ}
+    (hr : ∀ n, r ∈ Set.Icc (lowerReal x n) (upperReal x n))
+    (hs : ∀ n, s ∈ Set.Icc (lowerReal x n) (upperReal x n)) :
+    r = s := by
+  calc
+    r = semanticValue x := eq_semanticValue_of_mem_all_intervals x r hr
+    _ = s := (eq_semanticValue_of_mem_all_intervals x s hs).symm
+
+/--
 Equivalent interval representations select the same semantic real.
 
 The rational lower-endpoint difference tends to zero by representation
