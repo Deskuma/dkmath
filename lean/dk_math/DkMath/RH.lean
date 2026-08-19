@@ -333,6 +333,15 @@ open DkMath.RH.Basic
 open CFBRCProjection
 
 -- cid: 6a6deaaf-6240-83e8-8f97-f1ef176868b2
+/--
+The standard-zeta `map_zero` obligation for a positive-degree CFBRC is
+equivalent to Mathlib's exact `RiemannHypothesis`.
+
+The forward direction is the conditional zero-preserving bridge.  The reverse
+direction uses only the RH characterization of `NontrivialRiemannZetaZero` and
+the algebraic positive-degree CFBRC zero characterization.  This theorem is an
+audit boundary: it does not construct the `map_zero` provider.
+-/
 theorem standardZeta_map_zero_iff_riemannHypothesis
     {d : ℕ} (hd : 0 < d) (phase : ℂ → ℝ) :
     (∀ {s : ℂ}, NontrivialRiemannZetaZero s →
