@@ -260,6 +260,12 @@ noncomputable def pascalCenteredXiPrimeSideFiniteEulerCompensator
     (X : ℕ) (s : ℂ) : ℂ :=
   Complex.exp (-pascalCenteredXiPrimeSideFiniteEulerLogPotential X s)
 
+/--
+Finite Euler-renormalized residual obtained by multiplying the complete zeta
+value by a nonvanishing finite compensator.  Its vanishing at a zeta zero is
+therefore carried entirely by `riemannZeta s`; it is not a prime-derived
+zero-to-source identity and must not be classified as P2.
+-/
 noncomputable def pascalCenteredXiPrimeSideFiniteEulerRenormalizedZetaResidual
     (X : ℕ) (s : ℂ) : ℂ :=
   riemannZeta s * pascalCenteredXiPrimeSideFiniteEulerCompensator X s
