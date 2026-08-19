@@ -16,6 +16,9 @@ zero-derived value is exactly the previously audited Eta defect partial.  This
 module records the strongest source-preserving endpoint decomposition and a
 small cancellation firewall.  It does not manufacture a centered-coordinate
 certificate or reopen the closed positive-density/current-majorant route.
+It is a terminal audit module for the current ZDI finite-certificate branch:
+the missing ingredient is an independent zero-derived upper control for a
+positive prime-coordinate scalar.
 -/
 
 noncomputable section
@@ -46,7 +49,11 @@ theorem etaPrimeFactorMirrorDefectPairedPartial_eq_separate_endpoint_difference
     exact etaCriticalMirrorDefectPairTerm_eq_etaPairTerm_sub s k]
   rw [Finset.sum_sub_distrib]
 
-/-- The separate endpoint identity remains available at a standard zero. -/
+/--
+The endpoint decomposition is unconditional; the zero and nonreal-height
+arguments are retained in this thin corollary to keep the source-spine shape
+visible.  They do not supply separate endpoint identities or a certificate.
+-/
 theorem etaPrimeFactorMirrorDefectPairedPartial_eq_separate_endpoint_difference_of_zero
     {s : ℂ} (_hs : NontrivialRiemannZetaZero s) (_him : s.im ≠ 0)
     (K : ℕ) :
@@ -107,7 +114,11 @@ rigidity, but no theorem in this audit identifies it with the zero-derived
 P2-F source or supplies the required zero-derived upper control.
 -/
 
-/-- A finite positive-weight mirror energy is nonnegative. -/
+/--
+A finite positive-weight mirror energy is nonnegative.  This is retained only
+as the unconditional coordinate-lower candidate; this audit supplies no
+zero-derived upper bridge to it.
+-/
 theorem primeMirrorEnergy_candidate_nonneg
     {S : Finset ℕ} {weight : ℕ → ℝ}
     (hweight : ∀ n ∈ S, 0 ≤ weight n) (δ : ℝ) :
