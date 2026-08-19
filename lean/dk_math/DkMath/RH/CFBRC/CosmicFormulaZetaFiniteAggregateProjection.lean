@@ -184,6 +184,11 @@ theorem cfzpAggregateMirrorGapUpTo_nonneg
   intro q hq
   exact (canonicalPrimePowerShadowCost_pos_of_mem hq).le
 
+/--
+The finite canonical aggregate detects the horizontal offset exactly, but this
+is only an intrinsic source-side statement.  No zeta-zero hypothesis makes
+the aggregate vanish here.
+-/
 theorem cfzpAggregateMirrorGapUpTo_eq_zero_iff_delta_eq_zero
     {X : ℕ} (hX : 2 ≤ X) (δ : ℝ) :
     cfzpAggregateMirrorGapUpTo X δ = 0 ↔ δ = 0 := by
@@ -241,6 +246,12 @@ theorem cfzpAggregateMirrorBigUpTo_pos
 
 /-! ## Aggregate coordinate factorization -/
 
+/--
+The finite source-side mirror Gap factors through the square of the centered
+coordinate and a finite nonnegative Gap-Beam coefficient.  This identity is
+not a quantitative zero-to-prime estimate: it supplies no bound on `δ` until
+an independent theorem controls the left-hand finite aggregate.
+-/
 theorem cfzpAggregateMirrorGapUpTo_eq_delta_sq_mul_gapBeam
     (X : ℕ) (δ : ℝ) :
     cfzpAggregateMirrorGapUpTo X δ =
