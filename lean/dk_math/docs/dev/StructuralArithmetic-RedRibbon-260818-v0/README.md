@@ -333,12 +333,15 @@ Erdos `PrimitiveSet` or Zsigmondy `PrimitiveBeam` meanings.
 `FinitePrimeEscapeBridge` reuses the existing Hackathon provider and proves
 `GN5_escape_not_primeScaleGeneratedBy_two_three_five`.
 
-### Phase F — Cosmic Formula / GN bridge (next gap)
+### Phase F — Cosmic Formula / GN bridge (completed and build-checked)
 
-Connect the generic `DkMath.CosmicFormula.GN` and the FLT5-specialized `GN5`
-to the structural projection vocabulary.  Keep **degree `d`** distinct from
-**projection period `d`** even when a theorem specializes both to the same
-number such as `5`.
+`GNBridge` transports an existing `PrimitiveBeam` primitive prime factor to a
+`FreshPrimeDirection` and non-generation theorem for generic GN, with the
+explicit hypothesis that the witness is outside the supplied finite scale set.
+It also proves the exact identity
+`FLT.Five.GN5 g y = CosmicFormulaBinom.GN 5 g y` and rewrites the existing
+`{2, 3, 5}` finite escape to the specialized `GN5 1 1` target.  Degree `5`,
+additive congruence modulo `5`, and PowerGauge period `5` remain separate.
 
 ### Phase G — golden-unit bridge
 
@@ -368,8 +371,8 @@ period d : adding d-period gauge motion is observationally invisible
 period m : a period-d observation forgets canonically to m when m divides d
 ```
 
-The kernel, prime-coordinate bridge, KUS observation bridge, and primitive
-finite-escape bridge are now public through
-`DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap is a
-generic GN / GN5 structural bridge; the raw prime-direction layer remains
-distinct from period projection and from arbitrary KUS observations.
+The kernel, prime-coordinate bridge, KUS observation bridge, primitive
+finite-escape bridge, and generic GN/GN5 bridge are now public through
+`DkMath.NumberTheory.StructuralArithmetic`. The next bounded gap is the
+golden-unit bridge; the raw prime-direction layer remains distinct from period
+projection and from arbitrary KUS observations.

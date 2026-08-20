@@ -10,6 +10,7 @@ import DkMath.NumberTheory.StructuralArithmetic.InterPeriod
 import DkMath.NumberTheory.StructuralArithmetic.KUSObservation
 import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
 import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
+import DkMath.NumberTheory.StructuralArithmetic.GNBridge
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -23,6 +24,8 @@ power-gauge quotient views.
 The implementation contains the period/exponent projection kernel, its first
 concrete specialization to ordinary prime-valuation coordinates, canonical
 forgetting from period `d` to period `m` when `m ∣ d`, and an explicit observer
-bridge from retained KUS support to projected coordinates. Further bridges are
-intentionally added here only after their local modules are stable.
+bridge from retained KUS support to projected coordinates. The GN bridge
+reuses the existing PrimitiveBeam divisibility theorem, keeps finite-scale
+freshness explicit, and transports the Phase-E finite escape through the exact
+degree-five `GN5`/generic-`GN` identity.
 -/
