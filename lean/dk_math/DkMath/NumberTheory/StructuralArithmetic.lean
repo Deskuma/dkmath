@@ -12,6 +12,7 @@ import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
 import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
 import DkMath.NumberTheory.StructuralArithmetic.GNBridge
 import DkMath.NumberTheory.StructuralArithmetic.GoldenUnitBridge
+import DkMath.NumberTheory.StructuralArithmetic.RadialScaling
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -31,4 +32,7 @@ freshness explicit, and transports the Phase-E finite escape through the exact
 degree-five `GN5`/generic-`GN` identity.
 The golden-unit bridge adds a relation-valued fifth-power sector observer,
 its Red Ribbon absorption law, and a receiver for stripped FLT5 packets.
+The radial-scaling bridge separately records fixed-index real scalar motion,
+zero-pattern preservation for nonzero scales, and the real-valued image of
+the existing natural prime-exponent coordinates.
 -/

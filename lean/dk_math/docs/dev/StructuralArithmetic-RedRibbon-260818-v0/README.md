@@ -353,6 +353,16 @@ sector selector or uniqueness theorem is claimed.  Golden fifth-power
 classes, natural prime-exponent period five, and additive congruence modulo
 five remain separate constructions.
 
+### Phase H — DHNT radial scaling / rebase distinction (completed and build-checked)
+
+`RadialScaling` defines fixed-index real coordinate scaling `k * v`, proves
+identity, zero, and composition laws, and shows that nonzero scaling preserves
+the coordinate zero-pattern and `Function.support`.  It reuses
+`primeExponentCoordinates` through a real-valued view and exposes the
+corresponding scaled prime-coordinate image.  This is distinct from KUS
+`ScaleSpec` transport/rebase and from PowerGauge projection; no real
+prime-factorization or `Real.log`/`Real.rpow` reconstruction is claimed.
+
 ## 9. Non-goals for the first implementation
 
 - no new axiom;
@@ -377,8 +387,7 @@ period m : a period-d observation forgets canonically to m when m divides d
 ```
 
 The kernel, prime-coordinate bridge, KUS observation bridge, primitive
-finite-escape bridge, generic GN/GN5 bridge, and golden-unit bridge are now
-public through `DkMath.NumberTheory.StructuralArithmetic`. The next bounded
-gap is determined by the remaining A--G integration state; the raw
-prime-direction and golden-unit observers remain distinct from period
-projection and from arbitrary KUS observations.
+finite-escape bridge, generic GN/GN5 bridge, golden-unit bridge, and radial
+scaling bridge are now public through
+`DkMath.NumberTheory.StructuralArithmetic`. Radial scaling, KUS transport, and
+PowerGauge projection remain distinct operations.
