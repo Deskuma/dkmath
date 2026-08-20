@@ -343,10 +343,15 @@ It also proves the exact identity
 `{2, 3, 5}` finite escape to the specialized `GN5 1 1` target.  Degree `5`,
 additive congruence modulo `5`, and PowerGauge period `5` remain separate.
 
-### Phase G — golden-unit bridge
+### Phase G — golden-unit bridge (completed and build-checked)
 
-Re-express the existing fifth-power unit-sector theorem as an instance of
-period-five gauge reduction, without replacing the existing proven FLT5 route.
+`GoldenUnitBridge` introduces the relation-valued `GoldenFifthSector` observer,
+reuses the certified golden-unit classification, and proves that multiplying
+by a complete fifth power preserves a fixed visible sector.  It also exposes
+the existing stripped FLT5 packet theorem through this relation.  No canonical
+sector selector or uniqueness theorem is claimed.  Golden fifth-power
+classes, natural prime-exponent period five, and additive congruence modulo
+five remain separate constructions.
 
 ## 9. Non-goals for the first implementation
 
@@ -372,7 +377,8 @@ period m : a period-d observation forgets canonically to m when m divides d
 ```
 
 The kernel, prime-coordinate bridge, KUS observation bridge, primitive
-finite-escape bridge, and generic GN/GN5 bridge are now public through
-`DkMath.NumberTheory.StructuralArithmetic`. The next bounded gap is the
-golden-unit bridge; the raw prime-direction layer remains distinct from period
+finite-escape bridge, generic GN/GN5 bridge, and golden-unit bridge are now
+public through `DkMath.NumberTheory.StructuralArithmetic`. The next bounded
+gap is determined by the remaining A--G integration state; the raw
+prime-direction and golden-unit observers remain distinct from period
 projection and from arbitrary KUS observations.

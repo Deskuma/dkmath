@@ -11,6 +11,7 @@ import DkMath.NumberTheory.StructuralArithmetic.KUSObservation
 import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
 import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
 import DkMath.NumberTheory.StructuralArithmetic.GNBridge
+import DkMath.NumberTheory.StructuralArithmetic.GoldenUnitBridge
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -28,4 +29,6 @@ bridge from retained KUS support to projected coordinates. The GN bridge
 reuses the existing PrimitiveBeam divisibility theorem, keeps finite-scale
 freshness explicit, and transports the Phase-E finite escape through the exact
 degree-five `GN5`/generic-`GN` identity.
+The golden-unit bridge adds a relation-valued fifth-power sector observer,
+its Red Ribbon absorption law, and a receiver for stripped FLT5 packets.
 -/
