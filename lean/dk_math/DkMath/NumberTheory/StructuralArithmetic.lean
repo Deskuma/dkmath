@@ -8,6 +8,8 @@ import DkMath.NumberTheory.StructuralArithmetic.PowerGauge
 import DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
 import DkMath.NumberTheory.StructuralArithmetic.InterPeriod
 import DkMath.NumberTheory.StructuralArithmetic.KUSObservation
+import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 

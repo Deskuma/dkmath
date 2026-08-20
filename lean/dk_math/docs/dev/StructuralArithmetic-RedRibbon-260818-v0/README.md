@@ -1,7 +1,7 @@
 # Structural Arithmetic / Red Ribbon integration
 
 Date: 2026-08-20
-Status: Phases A-D implemented and build-checked locally
+Status: Phases A-E implemented and build-checked locally
 Branch: `wip/structural-arithmetic-red-ribbon-260818-v0`
 Base: `develop`
 
@@ -325,13 +325,15 @@ explicit observer, reuses `projectCoordinates` and `InterPeriod`, and expresses
 `ScaleSpec` compatibility as an explicit hypothesis. The existing cosmic-term
 support provides a concrete nonconstant witness.
 
-### Phase E — primitive direction layer (next gap)
+### Phase E — primitive direction layer (completed and build-checked)
 
-Formalize a multiplicative generated-closure API without reusing the existing
-Erdos `PrimitiveSet` name.  Connect fresh primes to new valuation directions
-and promote the finite-prime escape theorem out of the Hackathon namespace.
+`PrimitiveDirection` defines `KnownPrimeScales`,
+`PrimeScaleGeneratedBy`, and `FreshPrimeDirection` without reusing the existing
+Erdos `PrimitiveSet` or Zsigmondy `PrimitiveBeam` meanings.
+`FinitePrimeEscapeBridge` reuses the existing Hackathon provider and proves
+`GN5_escape_not_primeScaleGeneratedBy_two_three_five`.
 
-### Phase F — Cosmic Formula / GN bridge
+### Phase F — Cosmic Formula / GN bridge (next gap)
 
 Connect the generic `DkMath.CosmicFormula.GN` and the FLT5-specialized `GN5`
 to the structural projection vocabulary.  Keep **degree `d`** distinct from
@@ -366,7 +368,8 @@ period d : adding d-period gauge motion is observationally invisible
 period m : a period-d observation forgets canonically to m when m divides d
 ```
 
-The kernel, prime-coordinate bridge, and KUS observation bridge are now public
-through `DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap
-is the primitive multiplicative-direction / finite-prime-escape layer; it must
-remain distinct from the existing Erdos-style `PrimitiveSet` API.
+The kernel, prime-coordinate bridge, KUS observation bridge, and primitive
+finite-escape bridge are now public through
+`DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap is a
+generic GN / GN5 structural bridge; the raw prime-direction layer remains
+distinct from period projection and from arbitrary KUS observations.
