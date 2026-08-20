@@ -191,7 +191,7 @@ noncomputable def pascalCenteredXiPrimeSidePhaseIntegrand
     (a r t : ℝ) : ℝ :=
   Real.exp (a * r) * (a * Real.cos (r * t) - t * Real.sin (r * t))
 
-private theorem cs26_boundary_integrand_eq_phase_difference
+theorem pascalCenteredXiPrimeSideFiniteModeBoundaryPhaseIntegrand_eq_phaseDensityDifference
     {ε : ℝ} (hε : 0 < ε)
     (W : PascalCenteredXiResidueTransportWindow) {n : ℕ} (hn : 0 < n)
     (t : ℝ) :
@@ -449,7 +449,8 @@ theorem pascalCenteredXiPrimeSideFiniteModeKernel_eq_phasePrimitive_difference
   rw [← intervalIntegral.integral_const_mul]
   apply intervalIntegral.integral_congr_ae
   filter_upwards [] with t ht
-  exact cs26_boundary_integrand_eq_phase_difference hε W hn t
+  exact pascalCenteredXiPrimeSideFiniteModeBoundaryPhaseIntegrand_eq_phaseDensityDifference
+    hε W hn t
 
 theorem pascalCenteredXiPrimeSideFiniteModeKernel_eq_closedPhaseBoundary_difference
     {ε : ℝ} (hε : 0 < ε)
