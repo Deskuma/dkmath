@@ -1,13 +1,13 @@
 # Structural Arithmetic / Red Ribbon integration
 
 Date: 2026-08-20
-Status: Phases A-E implemented and build-checked locally
+Status: **Phases A-I implemented, build-checked locally, and closeout-audited**
 Branch: `wip/structural-arithmetic-red-ribbon-260818-v0`
 Base: `develop`
 
 ## 1. Purpose
 
-This document records the integration point between ideas that have previously
+This document records the integration point between ideas that had previously
 been developed separately in DkMath:
 
 - KUS structural preservation `(K, U, S_U)`;
@@ -19,80 +19,69 @@ been developed separately in DkMath:
 - the exponent-five / golden-unit modulo-fifth-power reduction;
 - finite-prime escape and primitive-scale directions.
 
-The immediate goal is not to rename or refactor those mature modules.  The goal
-is to introduce a small mathematically standard kernel that distinguishes
-three operations which have often been discussed together:
+The integration does not rename or refactor those mature modules. Its purpose
+is to provide a small public StructuralArithmetic layer that keeps several
+operations distinct while proving the bridges that are actually justified.
 
-1. **scale** — change magnitude while preserving structural direction;
-2. **rebase / transport** — change the unit/support used to encode a structure;
-3. **project / quotient** — intentionally forget periodic information.
+The main operations are:
 
-KUS is the existing DkMath layer whose job is to preserve support and blueprint
-information while values are changed or transported.  The new structural
-arithmetic layer should therefore sit beside / above KUS rather than replace it.
+1. **radial scale** — multiply a fixed real coordinate vector by a scalar;
+2. **rebase / transport** — change typed unit/support/blueprint information;
+3. **project / quotient** — intentionally forget periodic exponent information;
+4. **escape / new direction** — exhibit a prime direction absent from a known
+   finite prime-scale world.
+
+KUS remains the preservation/transport layer. StructuralArithmetic sits beside
+and above it as an observation, projection, multiplicative-direction, and
+scaling vocabulary.
 
 ## 2. Terminology fixed here
 
 ### 2.1 Multiplicative identity
 
-`1` remains the ordinary algebraic multiplicative identity.  It is the
-**basepoint label** of a multiplicative structure:
+`1` remains the ordinary algebraic multiplicative identity:
 
 ```text
 x * 1 = 1 * x = x
 ```
 
-Do not call a congruence period such as `5` the ring/monoid identity.
+A congruence period such as `5` is not a ring/monoid identity.
 
 ### 2.2 Gauge period
 
-For exponent data, a natural `d` is a **gauge period** when exponents differing
-by a multiple of `d` are observed as the same sector:
+For natural exponent data, `d` is a **gauge period** when exponents differing
+by a multiple of `d` have the same projected observation:
 
 ```text
 n ~_d n + d*k
-```
-
-The observable coordinate is
-
-```text
 projectExponent d n = n % d
 ```
 
-This is the precise congruence form of the red-ribbon idea that one full period
-returns to the same visible position.
+### 2.3 Raw and projected prime structure
 
-### 2.3 Raw structure and projected structure
-
-A raw multiplicative coordinate structure is represented abstractly as
+A raw multiplicative coordinate structure is abstractly
 
 ```text
 v : ι -> Nat
 ```
 
-For prime coordinates, the implemented specialization is
+and for ordinary naturals the prime specialization is
 
 ```text
-v p = v_p(n)
+p |-> v_p(n).
 ```
 
-where `v_p` is the prime valuation of `n`.
-
-The projected structure is
+A period-`d` observation is
 
 ```text
-p |-> v p % d
+p |-> v_p(n) % d.
 ```
 
-and the raw structure must remain available when information-preserving
-transport is required.
+The raw source is retained independently of the lossy projection.
 
-### 2.4 The two boundary periods
+### 2.4 Boundary periods
 
-There is an important asymmetry which must be fixed before using names such as
-`GN1` for a structural world.
-
-In Lean's natural remainder arithmetic:
+Lean natural remainder arithmetic gives:
 
 ```text
 n % 0 = n
@@ -101,23 +90,17 @@ n % 1 = 0
 
 Therefore:
 
-- period `0` gives the identity / unprojected view;
-- period `1` collapses every exponent coordinate to one visible sector.
+- period `0` is the identity / unprojected view;
+- period `1` is total exponent-coordinate collapse.
 
-Consequently, the ordinary natural prime world must **not** be modeled as the
-quotient `mod 1`.  The ordinary world is the raw structure (or equivalently the
-period-zero identity view in this minimal coordinate API).
+The ordinary raw prime world is therefore not modeled as `mod 1`.
 
-This also prevents a naming collision with the already existing
-`DkMath.CosmicFormula.GN`, where the argument `d` is the degree of the Cosmic
-Formula polynomial rather than the index of a quotient world.
+The `d` argument of `DkMath.CosmicFormula.GN` remains the polynomial degree,
+not a StructuralArithmetic gauge period.
 
-For now the new layer uses the neutral term **PowerGauge** / **Structural
-Projection** rather than introducing a second incompatible `GNn` notation.
+## 3. PowerGauge Red Ribbon kernel
 
-## 3. Red Ribbon theorem
-
-The first formal contract is deliberately elementary:
+`PowerGauge` proves the elementary Red Ribbon contract:
 
 ```text
 projectExponent d (n + d*k) = projectExponent d n
@@ -127,279 +110,273 @@ and coordinatewise:
 
 ```text
 projectCoordinates d (fun i => v i + d * k i)
-  = projectCoordinates d v
+  = projectCoordinates d v.
 ```
 
 Interpretation:
 
-- `v` is the retained structure;
-- `d*k` is motion in the invisible period direction;
-- the quotient observer sees no change.
-
-This is the first formal red-ribbon law.
+- `v` is retained raw structure;
+- `d*k` is whole-period motion;
+- the projected observer does not see that motion.
 
 ### 3.1 Canonical inter-period forgetting
 
-`DkMath.NumberTheory.StructuralArithmetic.InterPeriod` formalizes the direct
-map from a period-`d` observation to a period-`m` observation when `m ∣ d`:
+`InterPeriod` formalizes the canonical map from period `d` to period `m` when
+`m ∣ d`:
 
 ```text
 projectExponent m (projectExponent d n) = projectExponent m n
 projectCoordinates m (projectCoordinates d v) = projectCoordinates m v
 ```
 
-The public theorems are `projectExponent_project_of_dvd`,
-`projectCoordinates_project_of_dvd`, `SamePowerSector.of_dvd`, and
-`SamePowerStructure.of_dvd`. The prime-coordinate specializations are
-`projectPrimeCoordinates_coarsen_of_dvd` and
-`projectPrimeCoordinates_eq_of_dvd`.
-
-This map is deliberately one-way: it forgets additional periodic information
-but does not reconstruct the raw exponent source. The theorem includes both
-boundary periods. If `m = 0`, the hypothesis `m ∣ d` forces `d = 0`; if `m = 1`,
-the target observation is the already established total collapse.
+The relation-level and prime-coordinate forms are public as well. This is
+one-way information loss; no reconstruction from a coarser observation is
+claimed.
 
 ### 3.2 Explicit KUS observation
 
-`DkMath.NumberTheory.StructuralArithmetic.KUSObservation` retains a typed KUS
-source through `extract_g`, interprets it with an explicit `ObservationSpec`,
-and applies the existing `projectCoordinates` kernel through `observePeriod`.
-The public laws are `observePeriod_period_zero`,
-`observePeriod_period_one`, `observePeriod_eq_project`, and
-`observePeriod_project_of_dvd`.
+`KUSObservation` keeps a `GKUS` source, interprets its retained support through
+an explicit `ObservationSpec`, and then applies the existing projection kernel.
 
-Transport is not assumed to preserve meaning. `ObservationCompatible` is an
-explicit support-level proposition; only under it do
-`rawObservation_scaleGKUS_of_compatible` and
-`observePeriod_scaleGKUS_of_compatible` prove transport compatibility.
+`ObservationCompatible` is a separate semantic hypothesis. Arbitrary
+`DkMath.KUS.ScaleSpec` transports are not declared observation-preserving.
+Under compatibility, raw and projected observations commute with the KUS
+transport.
+
 The concrete `cosmicUnitObservation` reads the retained dimension of the
-existing `DkMath.KUS.CosmicBridge.cosmicTerm`, and
-`observePeriod_cosmicTerm` shows the resulting nontrivial `d % p` projection.
+existing `DkMath.KUS.CosmicBridge.cosmicTerm`, giving a genuine nonconstant
+KUS witness.
 
-## 4. Connection to fifth-power unit classification
+## 4. Golden fifth-power Red Ribbon bridge
 
-The exponent-five golden-unit classification used in FLT5 has the same shape:
+`GoldenUnitBridge` now connects the already-certified FLT5 golden-unit
+classification to StructuralArithmetic without changing the FLT5 proof route.
 
-```text
-epsilon = phi^r * delta^5
-```
-
-with the fifth-power factor absorbed into the invisible/gauge part and only the
-sector `r mod 5` remaining visible.
-
-The present implementation does **not** yet refactor the FLT5 golden-unit files.
-A later bridge should state explicitly that the existing modulo-fifth-power
-classification is an instance of the same period-five projection principle.
-
-## 5. Connection to prime coordinates
-
-For a positive natural
+The relation-valued observer is:
 
 ```text
-n = product p^(v_p(n))
+GoldenFifthSector i x
+  := exists delta, x = phi^i * delta^5.
 ```
 
-the prime-exponent map is the canonical raw multiplicative structure.
-`DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates` defines the
-period-`d` observation
+Every golden unit obtains such a sector witness from the existing
+`goldenUnitFifthClass_of_unit` theorem. The new load-bearing Red Ribbon law is:
 
 ```text
-p |-> v_p(n) % d
+GoldenFifthSector i x
+  -> GoldenFifthSector i (x * eta^5).
 ```
 
-and proves the expected power-gauge invariance
+Thus complete fifth-power multiplication changes only the hidden witness and
+preserves the visible representative. No canonical sector selector or sector
+uniqueness theorem is introduced.
+
+This construction remains distinct from:
+
+- natural prime-exponent reduction modulo `5`;
+- ordinary additive congruence modulo `5`;
+- Cosmic Formula degree `5`.
+
+The common principle is only that a corresponding complete fifth-power gauge
+motion is invisible to its chosen observer.
+
+## 5. Prime directions and finite escape
+
+`PrimeCoordinates` supplies the raw valuation coordinates and proves:
 
 ```text
-project_d (n * a^d) = project_d n
+v_p(n * a^d) = v_p(n) + d * v_p(a),
 ```
 
-as `projectPrimeCoordinates_mul_pow`, under nonzero hypotheses on `n` and `a`.
-Its relation form is `samePowerStructure_primeCoordinates_mul_pow`.
+hence multiplication by a `d`-th power is invisible after period-`d`
+projection.
 
-The prime directions themselves belong to the **raw** world: a prime `p`
-introduces one basis direction in the valuation coordinate system.  The
-projection layer may hide repeated multiples of that direction but does not
-create the primitive direction.
-
-## 6. Connection to DHNT dynamic scaling
-
-For a fixed positive real scale exponent `k`, the familiar identity
+`PrimitiveDirection` introduces a deliberately separate primitive notion:
 
 ```text
-(product p^(a_p))^k = product p^(k*a_p)
+KnownPrimeScales S
+PrimeScaleGeneratedBy S n
+FreshPrimeDirection S n q
 ```
 
-is a radial scaling of the exponent vector.  In the numerical example
+This does not rename the existing Erdos-style `PrimitiveOn` or the
+Zsigmondy-style `PrimitivePrimeFactorOfDiffPow`.
+
+The intended semantic reading of `S` as a prime-scale basis is certified by
+`KnownPrimeScales S`. The core generated-world predicate itself is kept small:
+a nonzero natural is generated when every prime divisor belongs to `S`.
+
+`FinitePrimeEscapeBridge` reuses the existing Hackathon `FreshPrimeFactor`
+provider instead of reproving Euclid-style escape. In particular, the existing
+`{2,3,5}` example proves that the generic degree-five GN target lies outside
+the old prime-scale world.
+
+## 6. Generic GN and FLT5 GN5
+
+`GNBridge` connects an existing `PrimitiveBeam` primitive-prime witness to a
+`FreshPrimeDirection` of the generic GN target, provided the prime is explicitly
+absent from the finite scale set.
+
+It also proves the exact specialization identity:
 
 ```text
-30 = 2 * 3 * 5
-x = sqrt(31) - 1
-k = log(x) / log(30)
-x = 2^k * 3^k * 5^k
+DkMath.FLT.Five.GN5 g y = DkMath.CosmicFormulaBinom.GN 5 g y.
 ```
 
-the support / exponent direction `(1,1,1)` is retained and scaled to
-`(k,k,k)`.
+The Phase-E `{2,3,5}` escape is then transported by equality to the explicit
+FLT5 `GN5 1 1` target. No new computation of the concrete value is used in the
+bridge.
 
-Changing the base from `30` to `6` and solving a new exponent is a different
-operation because the support changes from `{2,3,5}` to `{2,3}`.  That is a
-**rebase**, not the same structure-preserving scale operation.
+## 7. DHNT radial scaling and rebase distinction
 
-A later DHNT bridge should make this distinction explicit in types/theorem
-names.
-
-## 7. Connection to KUS
-
-KUS already provides the preservation layer:
+`RadialScaling` formalizes fixed-index real coordinate scaling:
 
 ```text
-GKUS C U Blueprint
-  coeff
-  unit
-  blueprint
+radialScaleCoordinates k v i = k * v i.
 ```
 
-and `ScaleSpec` transports unit/blueprint data while preserving the visible
-coefficient.  KUS therefore remains the canonical DkMath machinery for
-remembering support/blueprint information across value-changing operations.
-
-The structural-arithmetic projection layer must not discard the KUS source when
-an inverse comparison or a projection into another period is required.
-
-The intended architecture is:
+It proves identity, zero, composition, and—most importantly—for `k ≠ 0`:
 
 ```text
-raw structural source / KUS support
-            |
-            +---- scale / transport ----> raw structural source
-            |
-            `---- project d ------------> observable period-d view
+radialScaleCoordinates k v i = 0 <-> v i = 0
+Function.support (radialScaleCoordinates k v) = Function.support v.
 ```
 
-Different projected worlds should normally be compared through their retained
-raw source.  A direct map from period `n` to period `m` is canonical only when
-the relevant congruence map is canonical (for example when `m | n`).
+Therefore a nonzero radial scale changes magnitudes but cannot erase an
+existing coordinate direction.
 
-## 8. Implementation phases
-
-### Phase A — minimal power-gauge kernel (completed and build-checked)
-
-Target module:
+The existing natural valuation vector is reused through:
 
 ```text
-DkMath.NumberTheory.StructuralArithmetic.PowerGauge
+realPrimeExponentCoordinates n
+radialScalePrimeCoordinates k n.
 ```
 
-Contracts:
+These are real-valued images of integer valuation coordinates; they are not a
+prime factorization theory for arbitrary real numbers.
 
-- `projectExponent`;
-- `SamePowerSector`;
-- identity behavior at period `0`;
-- total collapse at period `1`;
-- red-ribbon invariance under `+ d*k`;
-- coordinatewise projection;
-- coordinatewise power-sector equivalence.
-
-### Phase B — prime valuation bridge (completed and build-checked)
-
-`DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates` implements the raw
-valuation coordinates and proves:
+This operation is intentionally different from KUS `ScaleSpec`:
 
 ```text
-v_p(n * a^d) = v_p(n) + d * v_p(a)
+Radial scaling:
+  fixed index type
+  v -> k*v
+  nonzero k preserves the zero-pattern
+
+KUS ScaleSpec:
+  typed unit / blueprint transport
+  may change support interpretation
+  needs explicit ObservationCompatible to preserve a chosen observation
 ```
 
-under the needed nonzero/prime hypotheses, then projects modulo `d` via
-`projectPrimeCoordinates_mul_pow`.
+Changing from the support of `30 = 2*3*5` to the support of `6 = 2*3` is thus a
+rebase/support change, not a nonzero radial scale of the same coordinate
+vector.
 
-### Phase C — inter-period projection (completed and build-checked)
+## 8. Cosmic-square analytic dynamic scaling
 
-`DkMath.NumberTheory.StructuralArithmetic.InterPeriod` proves canonical
-forgetting from period `d` to period `m` under `m ∣ d`, first for one exponent,
-then arbitrary coordinates, equivalence relations, and prime coordinates.
-
-### Phase D — KUS observation bridge (completed and build-checked)
-
-`KUSObservation` retains the raw `GKUS` support, derives coordinates through an
-explicit observer, reuses `projectCoordinates` and `InterPeriod`, and expresses
-`ScaleSpec` compatibility as an explicit hypothesis. The existing cosmic-term
-support provides a concrete nonconstant witness.
-
-### Phase E — primitive direction layer (completed and build-checked)
-
-`PrimitiveDirection` defines `KnownPrimeScales`,
-`PrimeScaleGeneratedBy`, and `FreshPrimeDirection` without reusing the existing
-Erdos `PrimitiveSet` or Zsigmondy `PrimitiveBeam` meanings.
-`FinitePrimeEscapeBridge` reuses the existing Hackathon provider and proves
-`GN5_escape_not_primeScaleGeneratedBy_two_three_five`.
-
-### Phase F — Cosmic Formula / GN bridge (completed and build-checked)
-
-`GNBridge` transports an existing `PrimitiveBeam` primitive prime factor to a
-`FreshPrimeDirection` and non-generation theorem for generic GN, with the
-explicit hypothesis that the witness is outside the supplied finite scale set.
-It also proves the exact identity
-`FLT.Five.GN5 g y = CosmicFormulaBinom.GN 5 g y` and rewrites the existing
-`{2, 3, 5}` finite escape to the specialized `GN5 1 1` target.  Degree `5`,
-additive congruence modulo `5`, and PowerGauge period `5` remain separate.
-
-### Phase G — golden-unit bridge (completed and build-checked)
-
-`GoldenUnitBridge` introduces the relation-valued `GoldenFifthSector` observer,
-reuses the certified golden-unit classification, and proves that multiplying
-by a complete fifth power preserves a fixed visible sector.  It also exposes
-the existing stripped FLT5 packet theorem through this relation.  No canonical
-sector selector or uniqueness theorem is claimed.  Golden fifth-power
-classes, natural prime-exponent period five, and additive congruence modulo
-five remain separate constructions.
-
-### Phase H — DHNT radial scaling / rebase distinction (completed and build-checked)
-
-`RadialScaling` defines fixed-index real coordinate scaling `k * v`, proves
-identity, zero, and composition laws, and shows that nonzero scaling preserves
-the coordinate zero-pattern and `Function.support`.  It reuses
-`primeExponentCoordinates` through a real-valued view and exposes the
-corresponding scaled prime-coordinate image.  This is distinct from KUS
-`ScaleSpec` transport/rebase and from PowerGauge projection; no real
-prime-factorization or `Real.log`/`Real.rpow` reconstruction is claimed.
-
-### Phase I — DHNT Cosmic-square analytic scaling (completed and build-checked)
-
-`CosmicSquareScaling` names the square image
-`F(y) = sqrt (1 + y) - 1`, defines its logarithmic scale, and proves the exact
-positive-domain reconstruction `y ^ kappa(y) = F(y)`.  It records the collapse
-boundary `y = 3`, where the image is `1` and the scale is `0`, and connects a
-nonzero dynamic scale to the Phase-H prime-coordinate support theorem.  The
-exact symbolic `y = 30` reconstruction is certified without decimal
-approximation.  This remains a pointwise analytic identity, not a real
-prime-factorization or multiplicative-map theorem.
-
-## 9. Non-goals for the first implementation
-
-- no new axiom;
-- no replacement of KUS;
-- no broad namespace move;
-- no claim that nonzero reals have ordinary prime factorization;
-- no definition of `2^k`, `3^k`, ... as ring-theoretic real primes;
-- no direct identification of `mod 1` with the natural prime world;
-- no modification of the completed FLT5 proof tower before the bridge API is
-  stable.
-
-## 10. Completed structural checkpoint
-
-The current public modules make the following distinctions theorem-level rather
-than prose-level:
+`CosmicSquareScaling` provides one bounded analytic realization of the radial
+scalar idea:
 
 ```text
-period 0 : structure preserved exactly
-period 1 : projected structure completely collapsed
-period d : adding d-period gauge motion is observationally invisible
-period m : a period-d observation forgets canonically to m when m divides d
+F(y) = sqrt(1 + y) - 1
+kappa(y) = log(F(y)) / log(y).
 ```
 
-The kernel, prime-coordinate bridge, KUS observation bridge, primitive
-finite-escape bridge, generic GN/GN5 bridge, golden-unit bridge, radial
-scaling bridge, and Cosmic-square analytic scaling bridge are now public
-through `DkMath.NumberTheory.StructuralArithmetic`. Radial scaling, KUS
-transport, PowerGauge projection, and analytic reconstruction remain distinct
-operations.
+For `0 < y` and `y ≠ 1`, it proves the exact local reconstruction:
+
+```text
+Real.rpow y (kappa(y)) = F(y).
+```
+
+The reusable `rpow_log_ratio` theorem isolates the positive-real analytic
+identity from the Cosmic-square specialization.
+
+The dynamic scalar is then fed directly to Phase-H coordinates:
+
+```text
+dynamicPrimeCoordinates y n
+  = radialScalePrimeCoordinates (kappa(y)) n.
+```
+
+When `kappa(y) ≠ 0`, the prime-coordinate zero-pattern and `Function.support`
+are preserved.
+
+Two exact boundaries/examples are certified:
+
+```text
+y = 3  : F(3) = 1, kappa(3) = 0
+          -> radial collapse boundary
+
+y = 30 : 30 ^ kappa(30) = sqrt(31) - 1
+          and kappa(30) ≠ 0
+          -> prime-coordinate support preserved
+```
+
+The second statement is an analytic reconstruction plus a scaled coordinate
+image. It does **not** assert that `sqrt(31) - 1` has an ordinary real prime
+factorization or that the dynamic map is multiplicative.
+
+## 9. Implementation phases
+
+- **Phase A — PowerGauge:** completed and build-checked.
+- **Phase B — PrimeCoordinates:** completed and build-checked.
+- **Phase C — InterPeriod:** completed and build-checked.
+- **Phase D — KUSObservation:** completed and build-checked.
+- **Phase E — PrimitiveDirection / FinitePrimeEscapeBridge:** completed and
+  build-checked.
+- **Phase F — GNBridge:** completed and build-checked.
+- **Phase G — GoldenUnitBridge:** completed and build-checked.
+- **Phase H — RadialScaling:** completed and build-checked.
+- **Phase I — CosmicSquareScaling:** completed and build-checked.
+
+All of these modules are public through
+`DkMath.NumberTheory.StructuralArithmetic`.
+
+## 10. Explicit non-goals and semantic boundaries
+
+This integration does not claim:
+
+- a new axiom or replacement foundation;
+- replacement of KUS;
+- a broad namespace/refactor of mature FLT5, KUS, or DHNT code;
+- ordinary prime factorization for arbitrary nonzero reals;
+- ring-theoretic “real primes” `2^k`, `3^k`, ...;
+- a global multiplicative homomorphism for the dynamic square map;
+- equality of Cosmic Formula degree, additive modulus, and PowerGauge period;
+- equality of golden fifth-power classes and natural valuation mod-5 classes;
+- canonical golden-sector uniqueness;
+- reconstruction of raw exponent coordinates from a coarser period;
+- automatic observation preservation for arbitrary KUS `ScaleSpec` values.
+
+## 11. Completed structural checkpoint
+
+The A-I integration establishes the following public picture:
+
+```text
+retained raw source / coordinates
+        |
+        +-- project d ----------------> lossy period-d observation
+        |                                 |
+        |                                 `-- coarsen to m when m | d
+        |
+        +-- KUS transport ------------> typed support transport
+        |                                 only observation-preserving
+        |                                 under explicit compatibility
+        |
+        +-- fresh prime direction ----> escape from finite prime-scale world
+        |                                 |
+        |                                 `-- generic GN / FLT5 GN5 bridge
+        |
+        +-- golden fifth-power class -> visible phi^i sector
+        |                                 invariant under * eta^5
+        |
+        `-- real radial scaling ------> k * valuation coordinates
+                                          |
+                                          `-- Cosmic-square dynamic kappa(y)
+                                              with exact rpow reconstruction
+```
+
+The integration is therefore closed at Phase I. Further work should begin from
+a new, separately justified mathematical question rather than automatically
+opening a Phase J abstraction layer.
