@@ -6,6 +6,14 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.StructuralArithmetic.PowerGauge
 import DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
+import DkMath.NumberTheory.StructuralArithmetic.InterPeriod
+import DkMath.NumberTheory.StructuralArithmetic.KUSObservation
+import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
+import DkMath.NumberTheory.StructuralArithmetic.GNBridge
+import DkMath.NumberTheory.StructuralArithmetic.GoldenUnitBridge
+import DkMath.NumberTheory.StructuralArithmetic.RadialScaling
+import DkMath.NumberTheory.StructuralArithmetic.CosmicSquareScaling
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -16,8 +24,19 @@ Public aggregation point for the structure-preserving / projection vocabulary
 used to connect KUS, prime coordinates, DHNT scaling, Cosmic Formula GN, and
 power-gauge quotient views.
 
-The initial implementation now contains the period/exponent projection kernel
-and its first concrete specialization to ordinary prime-valuation coordinates.
-Further bridges are intentionally added here only after their local modules are
-stable.
+The implementation contains the period/exponent projection kernel, its first
+concrete specialization to ordinary prime-valuation coordinates, canonical
+forgetting from period `d` to period `m` when `m ∣ d`, and an explicit observer
+bridge from retained KUS support to projected coordinates. The GN bridge
+reuses the existing PrimitiveBeam divisibility theorem, keeps finite-scale
+freshness explicit, and transports the Phase-E finite escape through the exact
+degree-five `GN5`/generic-`GN` identity.
+The golden-unit bridge adds a relation-valued fifth-power sector observer,
+its Red Ribbon absorption law, and a receiver for stripped FLT5 packets.
+The radial-scaling bridge separately records fixed-index real scalar motion,
+zero-pattern preservation for nonzero scales, and the real-valued image of
+the existing natural prime-exponent coordinates.
+The Cosmic-square scaling bridge then certifies a positive-domain
+`Real.rpow` reconstruction and feeds its dynamic scalar into the radial
+prime-coordinate image, including the exact zero-scale boundary at `y = 3`.
 -/

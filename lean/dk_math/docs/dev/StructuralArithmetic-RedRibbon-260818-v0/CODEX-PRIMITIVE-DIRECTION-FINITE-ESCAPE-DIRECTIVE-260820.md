@@ -1,0 +1,656 @@
+# Codex autonomous implementation directive — Primitive Multiplicative Direction / Finite Prime Escape
+
+Date: 2026-08-20
+Repository: `Deskuma/dkmath`
+Expected working branch: `wip/structural-arithmetic-red-ribbon-260818-v0`
+Primary integration area: `lean/dk_math/DkMath/NumberTheory/StructuralArithmetic/`
+Target phase: Phase E — primitive multiplicative direction / finite-prime-escape bridge
+
+## 0. Mission
+
+Continue the Structural Arithmetic / Red Ribbon integration by implementing the next load-bearing layer:
+
+```text
+known prime-scale world
+        ↓
+multiplicative generation semantics
+        ↓
+fresh prime / new primitive direction
+        ↓
+finite-prime escape provider
+        ↓
+existing GN5 escape example reinterpreted through the new API
+```
+
+This is an autonomous Lean implementation task. Do not treat this document as a fixed patch recipe. First inspect the actual repository state, existing APIs, current Mathlib interfaces, and successful build baseline. Then choose the smallest mathematically correct implementation that closes this gap without duplicating existing proofs.
+
+The central concept to formalize is **not** either of the existing meanings of “primitive” already present in DkMath:
+
+1. `DkMath.NumberTheory.PrimitiveSet.PrimitiveOn` is an Erdős-style divisibility antichain predicate.
+2. `DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow` is a Zsigmondy-style primitive prime divisor of `a^d - b^d`.
+
+The new concept is different:
+
+> a prime direction is new relative to a known finite prime-scale world when it is not already among the known prime generators, and an integer escapes that world when one of its prime factors is such a new direction.
+
+Keep all three notions separate in namespaces and theorem names.
+
+Do not rename or repurpose the existing `PrimitiveSet` or `PrimitiveBeam` APIs.
+
+---
+
+## 1. Repository-first preflight — mandatory
+
+Before editing, determine the actual worktree and branch state. The repository and successful Lean builds are the source of truth; documents are secondary.
+
+Run at minimum:
+
+```bash
+git status -sb
+git branch --show-current
+git rev-parse HEAD
+git log --oneline --decorate -20
+git merge-base HEAD develop
+git diff --stat develop...HEAD
+```
+
+If unrelated user changes exist, do not reset, stash, overwrite, or stage them. Work only in the StructuralArithmetic / directly required bridge scope.
+
+Read the current versions of:
+
+```text
+DkMath/NumberTheory/StructuralArithmetic.lean
+DkMath/NumberTheory/StructuralArithmetic/PowerGauge.lean
+DkMath/NumberTheory/StructuralArithmetic/PrimeCoordinates.lean
+DkMath/NumberTheory/StructuralArithmetic/InterPeriod.lean
+DkMath/NumberTheory/StructuralArithmetic/KUSObservation.lean
+
+docs/dev/StructuralArithmetic-RedRibbon-260818-v0/README.md
+docs/dev/StructuralArithmetic-RedRibbon-260818-v0/KUS-OBSERVATION-IMPLEMENTATION-REPORT-260820.md
+```
+
+Inspect the pre-existing “primitive” and finite-escape meanings in full:
+
+```text
+DkMath/NumberTheory/PrimitiveSet/Basic.lean
+DkMath/NumberTheory/PrimitiveSet.lean
+DkMath/NumberTheory/PrimitiveBeam.lean
+DkMath/NumberTheory/PrimitiveBeamExamples.lean
+DkMath/Hackathon/FinitePrimeEscape.lean
+DkMath/Hackathon/FinitePrimeEscapeGN5.lean
+DkMath/NumberTheory/UniqueFactorizationGN.lean
+```
+
+Also inspect the factorization / prime-support infrastructure already present in DkMath and Mathlib before choosing a representation:
+
+```bash
+rg -n "factorization|support_factorization|mem_support_factorization|prime_mem_support|prod_factorization" DkMath
+rg -n "FreshPrimeFactor|exists_fresh_prime_factor|finitePrimeEscape" DkMath
+rg -n "PrimitiveOn|PrimitivePrimeFactorOfDiffPow|primitive_prime_dvd_GN" DkMath
+rg -n "Submonoid\.closure|closure.*Submonoid|generated" DkMath
+rg -n "primeExponentCoordinates|padicValNat" DkMath/NumberTheory DkMath/ABC
+```
+
+Inspect exact Mathlib theorem signatures in the installed version before using them. Do not guess API names from memory.
+
+Baseline build the current StructuralArithmetic tower before editing:
+
+```bash
+lake build DkMath.NumberTheory.StructuralArithmetic.PowerGauge
+lake build DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
+lake build DkMath.NumberTheory.StructuralArithmetic.InterPeriod
+lake build DkMath.NumberTheory.StructuralArithmetic.KUSObservation
+lake build DkMath.NumberTheory.StructuralArithmetic
+```
+
+If the baseline does not build, diagnose that first and report the blocker rather than building Phase E on a broken baseline.
+
+---
+
+## 2. Mathematical distinction to preserve
+
+### 2.1 Existing Erdős primitive set
+
+`PrimitiveSet.PrimitiveOn S` means roughly:
+
+```text
+inside S, divisibility implies equality
+```
+
+This is a divisibility-antichain property of the *members of S*.
+
+It does **not** mean that `S` is a set of multiplicative generators, and it does not express whether a new prime direction lies outside the multiplicative world generated by known primes.
+
+### 2.2 Existing PrimitiveBeam
+
+`PrimitivePrimeFactorOfDiffPow q a b d` means roughly:
+
+```text
+q divides a^d - b^d,
+and q did not divide lower exponent differences
+```
+
+This is an exponent-history / Zsigmondy notion.
+
+It does **not** mean “q is a new generator relative to an arbitrary finite known prime set S.”
+
+### 2.3 New primitive-direction meaning
+
+The new layer should express the ordinary unique-factorization idea:
+
+```text
+known prime scales S
+       ↓
+integers whose every prime divisor lies in S
+       ↓
+old generated world
+```
+
+A prime `q` with `q ∉ S` is a new prime direction relative to that known prime-scale set. If `q ∣ n`, then `n` is outside the world generated by `S`.
+
+The intended semantic slogan is:
+
+```text
+1 = multiplicative basepoint / unit, adds no prime direction.
+prime q = one primitive multiplicative direction.
+fresh q ∉ S = extension by a genuinely new prime direction.
+```
+
+Do not turn this slogan into claims stronger than unique factorization actually provides.
+
+---
+
+## 3. Important correctness constraint: `q ∉ S` alone is not enough for arbitrary generator sets
+
+Do not silently interpret an arbitrary finite set of naturals as a set of prime generators.
+
+Example:
+
+```text
+S = {6}
+q = 2
+```
+
+Then `q ∉ S`, but the prime direction `2` is already present inside the composite generator `6`.
+
+Therefore the new API must make the intended “known prime-scale world” explicit.
+
+One acceptable pattern is a predicate/specification such as:
+
+```lean
+KnownPrimeScales (S : Finset ℕ) : Prop :=
+  ∀ p ∈ S, Nat.Prime p
+```
+
+or another equivalent type-safe design discovered from existing APIs.
+
+Do not require this hypothesis where it is mathematically unnecessary, but do require it whenever the theorem’s interpretation depends on `S` being a list of prime directions rather than arbitrary natural generators.
+
+---
+
+## 4. Representation choice — investigate before committing
+
+Two implementation strategies are plausible. Inspect the repository and choose the smaller load-bearing one.
+
+### Strategy A — prime-divisor / factorization-support semantics
+
+A simple candidate is:
+
+```lean
+PrimeScaleGeneratedBy S n :=
+  n ≠ 0 ∧
+  ∀ q, Nat.Prime q → q ∣ n → q ∈ S
+```
+
+Equivalent factorization-support formulations are also acceptable if the existing DkMath API makes them cleaner.
+
+This strategy matches the current `PrimeCoordinates` layer and ordinary unique factorization directly.
+
+### Strategy B — `Submonoid.closure`
+
+A more algebraic implementation may characterize the multiplicative submonoid generated by `S`.
+
+Use this only if the exact Mathlib API is already convenient and it gives a genuinely cleaner result. Do not introduce a large algebraic abstraction merely to restate a simple finite prime-support property.
+
+If both are implemented, prove their equivalence only if it is cheap and directly useful. Do not expand Phase E into a general monoid-generation project.
+
+### Decision rule
+
+Prefer the representation that gives the following with the least machinery:
+
+1. `1` is generated by every known prime-scale set.
+2. a prime `q` is generated exactly when `q ∈ S` (under the appropriate semantics/hypotheses).
+3. if `q` is prime, `q ∣ n`, and `q ∉ S`, then `n` is not generated by `S`.
+4. existing `FreshPrimeFactor` yields this escape immediately.
+
+Document the rejected alternative briefly in the implementation report.
+
+---
+
+## 5. Minimum public API contract
+
+Names are suggestions, not mandatory. Search for conflicts first and choose coherent names.
+
+A good module target is one of:
+
+```text
+DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+DkMath.NumberTheory.StructuralArithmetic.PrimeScaleEscape
+```
+
+or two small modules if dependency direction is clearer.
+
+The minimum semantic API should cover the following concepts.
+
+### 5.1 Known prime-scale world
+
+Define or encode the fact that a finite set represents known prime directions.
+
+Possible shape:
+
+```lean
+KnownPrimeScales S
+```
+
+with basic access theorem(s).
+
+### 5.2 Generated world
+
+Define when a nonzero natural uses no prime directions outside `S`.
+
+Possible shape:
+
+```lean
+PrimeScaleGeneratedBy S n
+```
+
+Do not conflate this with `PrimitiveSet.PrimitiveOn`.
+
+### 5.3 Unit/basepoint theorem
+
+Prove theorem-level unit redundancy:
+
+```text
+1 is generated by S
+```
+
+This is an important Red Ribbon / structural arithmetic checkpoint: the multiplicative identity introduces no new prime direction.
+
+### 5.4 Prime membership characterization
+
+For prime `q`, prove the intended form of:
+
+```text
+PrimeScaleGeneratedBy S q ↔ q ∈ S
+```
+
+If your chosen representation needs `KnownPrimeScales S`, state it explicitly. Do not hide necessary hypotheses.
+
+### 5.5 Fresh direction / escape theorem
+
+Prove a theorem of the form:
+
+```text
+Nat.Prime q
+q ∣ n
+q ∉ S
+--------------------------
+¬ PrimeScaleGeneratedBy S n
+```
+
+or an equivalent proposition-valued API such as `FreshPrimeDirection S n q` with a theorem connecting it to non-generation.
+
+This theorem is the main semantic bridge from “fresh prime factor” to “new primitive multiplicative direction.”
+
+---
+
+## 6. Bridge the existing Hackathon finite-prime escape — do not duplicate it
+
+The repository already contains:
+
+```lean
+DkMath.Hackathon.FreshPrimeFactor
+DkMath.Hackathon.exists_fresh_prime_factor
+```
+
+and the concrete GN5 demo:
+
+```lean
+DkMath.Hackathon.finitePrimeEscape_hits_GN5
+DkMath.Hackathon.freshPrimeFactor_GN5_eq_31
+DkMath.Hackathon.finitePrimeEscape_hits_clean_GN5_channel
+```
+
+Do not reprove Euclid’s product-plus-offset argument in the new StructuralArithmetic module.
+
+Instead, add a bridge theorem which consumes the existing provider and concludes the new structural statement.
+
+At least one generic theorem should have the shape:
+
+```text
+existing FreshPrimeFactor S n q
+        ↓
+q is a fresh primitive direction relative to S
+        ↓
+n is not generated by the old prime-scale world S
+```
+
+If dependency direction makes importing `DkMath.Hackathon.FinitePrimeEscape` directly into the core StructuralArithmetic module undesirable, isolate the dependency in a small bridge module such as:
+
+```text
+DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
+```
+
+Prefer a one-way bridge over moving mature Hackathon code during this phase.
+
+Only promote/move the old theorem if repository inspection shows a clearly superior dependency-safe location and the move can be done without broad churn. Otherwise leave the old theorem where it is and bridge it.
+
+---
+
+## 7. Concrete GN5 witness — required
+
+Phase E must not stop at an unused generic predicate.
+
+Reuse the existing concrete result:
+
+```text
+S = {2, 3, 5}
+GN 5 1 1 = 31
+31 is the fresh escaped prime
+```
+
+Prove, through the new structural vocabulary, a theorem stating that the existing GN5 escape target is **outside the multiplicative prime-scale world generated by `{2,3,5}`**.
+
+Do not re-evaluate `GN 5 1 1 = 31` from scratch if the existing Hackathon theorem already supplies exactly the witness you need.
+
+The important new theorem is the interpretation, not the arithmetic recomputation.
+
+A satisfactory conclusion could be equivalent to:
+
+```text
+¬ PrimeScaleGeneratedBy ({2,3,5}) (GN 5 1 1)
+```
+
+or a bundled fresh-direction statement from which this follows.
+
+This concrete theorem is the checkpoint proving that the new layer connects an existing DkMath result rather than creating an isolated abstraction.
+
+---
+
+## 8. Connection to `PrimeCoordinates` — preferred if cheap, do not force a large detour
+
+The conceptual target is that a prime is a basis-like direction in the raw valuation-coordinate world:
+
+```text
+q ↦ e_q
+```
+
+Investigate whether the current `padicValNat` / factorization APIs make one of the following cheap to prove:
+
+```text
+primeExponentCoordinates q at q = 1
+primeExponentCoordinates q at p = 0 for p ≠ q
+```
+
+or an equivalent support statement.
+
+If this can be proved cleanly with existing Mathlib lemmas, add a small theorem showing that the new “fresh prime direction” language agrees with the already implemented raw prime-coordinate layer.
+
+If exact valuation-of-prime API friction would substantially enlarge the phase, do **not** create custom valuation machinery. Record this as a later bridge and keep Phase E focused on generation/escape.
+
+The finite-prime-escape bridge and GN5 concrete theorem are mandatory; the explicit basis-vector theorem is preferred but secondary.
+
+---
+
+## 9. Relation to period projections
+
+Do not confuse “new raw prime direction” with “visible difference after a period projection.”
+
+Primitive direction belongs to the raw multiplicative source:
+
+```text
+raw prime support / valuation coordinates
+```
+
+`PowerGauge` may later identify exponent changes modulo `d`, but it does not create a prime direction and should not define primality.
+
+The architecture after Phase E should remain:
+
+```text
+raw prime directions / generated world
+        │
+        ├── escape introduces a new prime direction
+        │
+        └── PowerGauge observes exponents modulo d
+```
+
+Do not make `SamePowerStructure` the definition of primitive escape.
+
+---
+
+## 10. Relation to KUS
+
+Phase D established:
+
+```text
+KUS preserves source
+ObservationSpec interprets source
+PowerGauge projects coordinates
+```
+
+Phase E is orthogonal: it identifies new multiplicative directions in the ordinary prime-factor world.
+
+Do not force arbitrary KUS blueprints into the new prime-generation semantics.
+
+A KUS-to-primitive bridge should only be added if an existing concrete observer already yields ordinary prime-factor coordinates with an explicit semantic proof. The current `cosmicUnitObservation` reads a retained dimension and is **not** such a prime-factor observer.
+
+Therefore no new KUS theorem is required for Phase E unless repository inspection reveals a genuinely existing prime-coordinate KUS bridge.
+
+---
+
+## 11. Public aggregation and dependency discipline
+
+When the new local modules build cleanly, expose the stable API through:
+
+```text
+DkMath.NumberTheory.StructuralArithmetic
+```
+
+Keep imports directional and minimal.
+
+Preferred dependency direction:
+
+```text
+PowerGauge
+PrimeCoordinates
+InterPeriod
+KUSObservation
+PrimitiveDirection
+FinitePrimeEscapeBridge   -- if Hackathon dependency needs isolation
+StructuralArithmetic      -- aggregate
+```
+
+Avoid making foundational `PowerGauge` / `PrimeCoordinates` import Hackathon or GN5 material.
+
+The concrete GN5 bridge may live in a higher bridge module if needed to preserve this direction.
+
+---
+
+## 12. Required theorem documentation
+
+Every new public definition and theorem must have a Lean docstring explaining its mathematical meaning.
+
+Especially document these distinctions:
+
+- `PrimitiveOn` = divisibility antichain;
+- `PrimitivePrimeFactorOfDiffPow` = first occurrence across powers;
+- new primitive direction = new prime generator relative to known prime scales;
+- `1` introduces no prime direction;
+- fresh prime factor is a provider for escape from the old generated world;
+- raw primitive direction is distinct from period-`d` observation.
+
+Do not use the word “primitive” without qualification in prose when ambiguity would result.
+
+---
+
+## 13. Anti-maze rules
+
+This phase is at risk of expanding into general commutative algebra. Avoid that.
+
+### Do not
+
+- redesign unique factorization;
+- create a general free commutative monoid framework unless absolutely necessary;
+- generalize from `Nat` to arbitrary UFDs in this phase;
+- refactor the existing Erdős `PrimitiveSet` hierarchy;
+- refactor the existing Zsigmondy `PrimitiveBeam` hierarchy;
+- rewrite `FinitePrimeEscape` from scratch;
+- move completed FLT5/GN proof towers;
+- identify a quotient-period identity with multiplicative identity;
+- claim arbitrary real numbers have ordinary prime factorization;
+- add axioms, `sorry`, `admit`, or `unsafe` escapes.
+
+### One-checkpoint rule
+
+Count Phase E as complete only when a single chain works end-to-end:
+
+```text
+known prime scales S
+  → generated-world predicate
+  → fresh prime factor q
+  → q is outside old directions
+  → n escapes old generated world
+  → existing finite-prime-escape theorem supplies q
+  → existing GN5 example is reinterpreted through this chain
+```
+
+If you implement abstractions but cannot connect the existing finite-prime escape / GN5 result, the phase is not complete.
+
+---
+
+## 14. Suggested theorem checklist
+
+Exact names may differ, but the final implementation should provide theorem-level equivalents of most of these:
+
+```text
+KnownPrimeScales
+PrimeScaleGeneratedBy
+primeScaleGeneratedBy_one
+primeScaleGeneratedBy_prime_iff_mem
+not_primeScaleGeneratedBy_of_fresh_prime_dvd
+FreshPrimeDirection          -- optional bundled predicate
+freshPrimeFactor_to_freshDirection
+finitePrimeEscape_not_generated
+GN5_escape_not_generated_by_two_three_five
+```
+
+If the chosen representation naturally yields stronger or cleaner names, use them and explain the mapping in the report.
+
+Do not add redundant aliases merely to satisfy this list.
+
+---
+
+## 15. Verification — mandatory
+
+Build every new module directly, then the aggregate.
+
+Example commands, adapt to actual module names:
+
+```bash
+lake build DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+lake build DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
+lake build DkMath.NumberTheory.StructuralArithmetic
+```
+
+Also re-run the existing relevant baseline modules if imports changed:
+
+```bash
+lake build DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
+lake build DkMath.NumberTheory.StructuralArithmetic.KUSObservation
+```
+
+Run:
+
+```bash
+git diff --check
+```
+
+Audit the new source:
+
+```bash
+rg -n "\bsorry\b|\badmit\b|^\s*axiom\b|\bunsafe\b" DkMath/NumberTheory/StructuralArithmetic
+```
+
+Use `#print axioms` or equivalent on the principal new public theorem(s). Report any inherited Lean/Mathlib foundational axioms accurately; there must be no newly introduced project-specific axiom.
+
+Do not call a theorem “verified” unless its module actually builds.
+
+---
+
+## 16. Documentation update
+
+Update:
+
+```text
+docs/dev/StructuralArithmetic-RedRibbon-260818-v0/README.md
+```
+
+so the phase table matches code reality.
+
+Add an implementation report, suggested path:
+
+```text
+docs/dev/StructuralArithmetic-RedRibbon-260818-v0/PRIMITIVE-DIRECTION-IMPLEMENTATION-REPORT-260820.md
+```
+
+The report must include:
+
+1. baseline HEAD;
+2. files inspected;
+3. representation chosen and rejected alternative;
+4. exact distinction from `PrimitiveSet` and `PrimitiveBeam`;
+5. new definitions/theorems;
+6. how existing `FreshPrimeFactor` is reused;
+7. concrete GN5 theorem obtained;
+8. build commands and results;
+9. axiom / `sorry` audit;
+10. next unresolved load-bearing gap.
+
+If the next gap changes after implementation, report the actual result rather than copying the old roadmap mechanically.
+
+---
+
+## 17. Git scope / completion behavior
+
+After successful implementation and verification:
+
+1. inspect `git status` and `git diff`;
+2. stage only files belonging to this Phase E work;
+3. commit with a descriptive message;
+4. push to the current branch `wip/structural-arithmetic-red-ribbon-260818-v0`.
+
+Do not merge to `develop`.
+Do not create a PR unless separately requested.
+Do not modify or delete unrelated user work.
+
+Your final report should state the commit SHA and the next load-bearing gap.
+
+---
+
+## 18. Definition of done
+
+Phase E is complete when Lean verifies an end-to-end structural statement equivalent to:
+
+```text
+Start with a finite world of known prime directions S.
+Numbers generated inside that world use only primes from S.
+The multiplicative identity 1 introduces no new direction.
+A prime divisor q outside S witnesses escape from that world.
+The existing finite-prime-escape theorem produces such a q.
+The existing GN5 `{2,3,5} → 31` example is therefore formally recognized
+as an escape into a genuinely new prime direction.
+```
+
+The important result is not merely that `31 ∉ {2,3,5}`. The new layer must make precise why this is a **new multiplicative generator direction** relative to the retained prime-scale structure.
+
+That theorem chain is the load-bearing checkpoint for the next GN / generalized structural bridge.
