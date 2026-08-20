@@ -1,7 +1,7 @@
 # Structural Arithmetic / Red Ribbon integration
 
-Date: 2026-08-18
-Status: implementation started
+Date: 2026-08-20
+Status: Phases A-C implemented and build-checked locally
 Branch: `wip/structural-arithmetic-red-ribbon-260818-v0`
 Base: `develop`
 
@@ -70,7 +70,7 @@ A raw multiplicative coordinate structure is represented abstractly as
 v : ι -> Nat
 ```
 
-For prime coordinates, the intended later specialization is
+For prime coordinates, the implemented specialization is
 
 ```text
 v p = v_p(n)
@@ -138,6 +138,27 @@ Interpretation:
 
 This is the first formal red-ribbon law.
 
+### 3.1 Canonical inter-period forgetting
+
+`DkMath.NumberTheory.StructuralArithmetic.InterPeriod` formalizes the direct
+map from a period-`d` observation to a period-`m` observation when `m ∣ d`:
+
+```text
+projectExponent m (projectExponent d n) = projectExponent m n
+projectCoordinates m (projectCoordinates d v) = projectCoordinates m v
+```
+
+The public theorems are `projectExponent_project_of_dvd`,
+`projectCoordinates_project_of_dvd`, `SamePowerSector.of_dvd`, and
+`SamePowerStructure.of_dvd`. The prime-coordinate specializations are
+`projectPrimeCoordinates_coarsen_of_dvd` and
+`projectPrimeCoordinates_eq_of_dvd`.
+
+This map is deliberately one-way: it forgets additional periodic information
+but does not reconstruct the raw exponent source. The theorem includes both
+boundary periods. If `m = 0`, the hypothesis `m ∣ d` forces `d = 0`; if `m = 1`,
+the target observation is the already established total collapse.
+
 ## 4. Connection to fifth-power unit classification
 
 The exponent-five golden-unit classification used in FLT5 has the same shape:
@@ -162,19 +183,21 @@ n = product p^(v_p(n))
 ```
 
 the prime-exponent map is the canonical raw multiplicative structure.
-A future bridge will define the period-`d` observation
+`DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates` defines the
+period-`d` observation
 
 ```text
 p |-> v_p(n) % d
 ```
 
-and prove the expected power-gauge invariance
+and proves the expected power-gauge invariance
 
 ```text
 project_d (n * a^d) = project_d n
 ```
 
-under a suitable positive-natural / valuation representation.
+as `projectPrimeCoordinates_mul_pow`, under nonzero hypotheses on `n` and `a`.
+Its relation form is `samePowerStructure_primeCoordinates_mul_pow`.
 
 The prime directions themselves belong to the **raw** world: a prime `p`
 introduces one basis direction in the valuation coordinate system.  The
@@ -242,7 +265,7 @@ the relevant congruence map is canonical (for example when `m | n`).
 
 ## 8. Implementation phases
 
-### Phase A — minimal power-gauge kernel (started in this branch)
+### Phase A — minimal power-gauge kernel (completed and build-checked)
 
 Target module:
 
@@ -260,36 +283,45 @@ Contracts:
 - coordinatewise projection;
 - coordinatewise power-sector equivalence.
 
-### Phase B — prime valuation bridge
+### Phase B — prime valuation bridge (completed and build-checked)
 
-Add a positive-natural valuation-coordinate representation and prove:
+`DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates` implements the raw
+valuation coordinates and proves:
 
 ```text
 v_p(n * a^d) = v_p(n) + d * v_p(a)
 ```
 
-under the needed nonzero/prime hypotheses, then project modulo `d`.
+under the needed nonzero/prime hypotheses, then projects modulo `d` via
+`projectPrimeCoordinates_mul_pow`.
 
-### Phase C — primitive direction layer
+### Phase C — inter-period projection (completed and build-checked)
+
+`DkMath.NumberTheory.StructuralArithmetic.InterPeriod` proves canonical
+forgetting from period `d` to period `m` under `m ∣ d`, first for one exponent,
+then arbitrary coordinates, equivalence relations, and prime coordinates.
+
+### Phase D — KUS observation bridge (next gap)
+
+Retain a raw KUS source/support while attaching a StructuralArithmetic
+observation through an explicit observation specification. Any compatibility
+with `ScaleSpec` must be an explicit hypothesis rather than an intrinsic claim
+about arbitrary KUS blueprints.
+
+### Phase E — primitive direction layer
 
 Formalize a multiplicative generated-closure API without reusing the existing
 Erdos `PrimitiveSet` name.  Connect fresh primes to new valuation directions
 and promote the finite-prime escape theorem out of the Hackathon namespace.
 
-### Phase D — KUS bridge
-
-Retain raw source/support while attaching period observations.  Prove explicitly
-which operations preserve support, which transport support, and which discard
-information.
-
-### Phase E — Cosmic Formula / GN bridge
+### Phase F — Cosmic Formula / GN bridge
 
 Connect the generic `DkMath.CosmicFormula.GN` and the FLT5-specialized `GN5`
 to the structural projection vocabulary.  Keep **degree `d`** distinct from
 **projection period `d`** even when a theorem specializes both to the same
 number such as `5`.
 
-### Phase F — golden-unit bridge
+### Phase G — golden-unit bridge
 
 Re-express the existing fifth-power unit-sector theorem as an instance of
 period-five gauge reduction, without replacing the existing proven FLT5 route.
@@ -305,17 +337,19 @@ period-five gauge reduction, without replacing the existing proven FLT5 route.
 - no modification of the completed FLT5 proof tower before the bridge API is
   stable.
 
-## 10. First success criterion
+## 10. Completed structural checkpoint
 
-The first checkpoint succeeds when Lean has a tiny reusable module in which the
-following distinction is theorem-level rather than prose-level:
+The current public modules make the following distinctions theorem-level rather
+than prose-level:
 
 ```text
 period 0 : structure preserved exactly
 period 1 : projected structure completely collapsed
 period d : adding d-period gauge motion is observationally invisible
+period m : a period-d observation forgets canonically to m when m divides d
 ```
 
-That kernel becomes the fixed vocabulary from which prime coordinates, KUS,
-DHNT scaling, Cosmic Formula GN, finite-prime escape, and golden-unit fifth-power
-classes can subsequently be integrated.
+The kernel and prime-coordinate bridge are now public through
+`DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap is an
+explicit KUS observation specification that retains the raw support while
+exposing one of these deliberately lossy period views.
