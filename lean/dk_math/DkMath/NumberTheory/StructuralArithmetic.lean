@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.StructuralArithmetic.PowerGauge
 import DkMath.NumberTheory.StructuralArithmetic.PrimeCoordinates
 import DkMath.NumberTheory.StructuralArithmetic.InterPeriod
+import DkMath.NumberTheory.StructuralArithmetic.KUSObservation
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -18,7 +19,8 @@ used to connect KUS, prime coordinates, DHNT scaling, Cosmic Formula GN, and
 power-gauge quotient views.
 
 The implementation contains the period/exponent projection kernel, its first
-concrete specialization to ordinary prime-valuation coordinates, and canonical
-forgetting from period `d` to period `m` when `m ∣ d`. Further bridges are
+concrete specialization to ordinary prime-valuation coordinates, canonical
+forgetting from period `d` to period `m` when `m ∣ d`, and an explicit observer
+bridge from retained KUS support to projected coordinates. Further bridges are
 intentionally added here only after their local modules are stable.
 -/

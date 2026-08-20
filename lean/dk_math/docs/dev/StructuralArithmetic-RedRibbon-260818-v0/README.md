@@ -1,7 +1,7 @@
 # Structural Arithmetic / Red Ribbon integration
 
 Date: 2026-08-20
-Status: Phases A-C implemented and build-checked locally
+Status: Phases A-D implemented and build-checked locally
 Branch: `wip/structural-arithmetic-red-ribbon-260818-v0`
 Base: `develop`
 
@@ -159,6 +159,23 @@ but does not reconstruct the raw exponent source. The theorem includes both
 boundary periods. If `m = 0`, the hypothesis `m ∣ d` forces `d = 0`; if `m = 1`,
 the target observation is the already established total collapse.
 
+### 3.2 Explicit KUS observation
+
+`DkMath.NumberTheory.StructuralArithmetic.KUSObservation` retains a typed KUS
+source through `extract_g`, interprets it with an explicit `ObservationSpec`,
+and applies the existing `projectCoordinates` kernel through `observePeriod`.
+The public laws are `observePeriod_period_zero`,
+`observePeriod_period_one`, `observePeriod_eq_project`, and
+`observePeriod_project_of_dvd`.
+
+Transport is not assumed to preserve meaning. `ObservationCompatible` is an
+explicit support-level proposition; only under it do
+`rawObservation_scaleGKUS_of_compatible` and
+`observePeriod_scaleGKUS_of_compatible` prove transport compatibility.
+The concrete `cosmicUnitObservation` reads the retained dimension of the
+existing `DkMath.KUS.CosmicBridge.cosmicTerm`, and
+`observePeriod_cosmicTerm` shows the resulting nontrivial `d % p` projection.
+
 ## 4. Connection to fifth-power unit classification
 
 The exponent-five golden-unit classification used in FLT5 has the same shape:
@@ -301,14 +318,14 @@ under the needed nonzero/prime hypotheses, then projects modulo `d` via
 forgetting from period `d` to period `m` under `m ∣ d`, first for one exponent,
 then arbitrary coordinates, equivalence relations, and prime coordinates.
 
-### Phase D — KUS observation bridge (next gap)
+### Phase D — KUS observation bridge (completed and build-checked)
 
-Retain a raw KUS source/support while attaching a StructuralArithmetic
-observation through an explicit observation specification. Any compatibility
-with `ScaleSpec` must be an explicit hypothesis rather than an intrinsic claim
-about arbitrary KUS blueprints.
+`KUSObservation` retains the raw `GKUS` support, derives coordinates through an
+explicit observer, reuses `projectCoordinates` and `InterPeriod`, and expresses
+`ScaleSpec` compatibility as an explicit hypothesis. The existing cosmic-term
+support provides a concrete nonconstant witness.
 
-### Phase E — primitive direction layer
+### Phase E — primitive direction layer (next gap)
 
 Formalize a multiplicative generated-closure API without reusing the existing
 Erdos `PrimitiveSet` name.  Connect fresh primes to new valuation directions
@@ -349,7 +366,7 @@ period d : adding d-period gauge motion is observationally invisible
 period m : a period-d observation forgets canonically to m when m divides d
 ```
 
-The kernel and prime-coordinate bridge are now public through
-`DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap is an
-explicit KUS observation specification that retains the raw support while
-exposing one of these deliberately lossy period views.
+The kernel, prime-coordinate bridge, and KUS observation bridge are now public
+through `DkMath.NumberTheory.StructuralArithmetic`. The primary unresolved gap
+is the primitive multiplicative-direction / finite-prime-escape layer; it must
+remain distinct from the existing Erdos-style `PrimitiveSet` API.
