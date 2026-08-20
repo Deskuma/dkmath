@@ -363,6 +363,17 @@ corresponding scaled prime-coordinate image.  This is distinct from KUS
 `ScaleSpec` transport/rebase and from PowerGauge projection; no real
 prime-factorization or `Real.log`/`Real.rpow` reconstruction is claimed.
 
+### Phase I — DHNT Cosmic-square analytic scaling (completed and build-checked)
+
+`CosmicSquareScaling` names the square image
+`F(y) = sqrt (1 + y) - 1`, defines its logarithmic scale, and proves the exact
+positive-domain reconstruction `y ^ kappa(y) = F(y)`.  It records the collapse
+boundary `y = 3`, where the image is `1` and the scale is `0`, and connects a
+nonzero dynamic scale to the Phase-H prime-coordinate support theorem.  The
+exact symbolic `y = 30` reconstruction is certified without decimal
+approximation.  This remains a pointwise analytic identity, not a real
+prime-factorization or multiplicative-map theorem.
+
 ## 9. Non-goals for the first implementation
 
 - no new axiom;
@@ -387,7 +398,8 @@ period m : a period-d observation forgets canonically to m when m divides d
 ```
 
 The kernel, prime-coordinate bridge, KUS observation bridge, primitive
-finite-escape bridge, generic GN/GN5 bridge, golden-unit bridge, and radial
-scaling bridge are now public through
-`DkMath.NumberTheory.StructuralArithmetic`. Radial scaling, KUS transport, and
-PowerGauge projection remain distinct operations.
+finite-escape bridge, generic GN/GN5 bridge, golden-unit bridge, radial
+scaling bridge, and Cosmic-square analytic scaling bridge are now public
+through `DkMath.NumberTheory.StructuralArithmetic`. Radial scaling, KUS
+transport, PowerGauge projection, and analytic reconstruction remain distinct
+operations.

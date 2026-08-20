@@ -13,6 +13,7 @@ import DkMath.NumberTheory.StructuralArithmetic.FinitePrimeEscapeBridge
 import DkMath.NumberTheory.StructuralArithmetic.GNBridge
 import DkMath.NumberTheory.StructuralArithmetic.GoldenUnitBridge
 import DkMath.NumberTheory.StructuralArithmetic.RadialScaling
+import DkMath.NumberTheory.StructuralArithmetic.CosmicSquareScaling
 
 #print "file: DkMath.NumberTheory.StructuralArithmetic"
 
@@ -35,4 +36,7 @@ its Red Ribbon absorption law, and a receiver for stripped FLT5 packets.
 The radial-scaling bridge separately records fixed-index real scalar motion,
 zero-pattern preservation for nonzero scales, and the real-valued image of
 the existing natural prime-exponent coordinates.
+The Cosmic-square scaling bridge then certifies a positive-domain
+`Real.rpow` reconstruction and feeds its dynamic scalar into the radial
+prime-coordinate image, including the exact zero-scale boundary at `y = 3`.
 -/
