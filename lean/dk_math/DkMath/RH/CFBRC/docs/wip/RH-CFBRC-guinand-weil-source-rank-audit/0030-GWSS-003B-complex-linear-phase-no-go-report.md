@@ -117,12 +117,15 @@ part of the finite RHS and has not been removed by an unproved limit argument.
 
 ## 6. Provider classification
 
-The 003B classification is:
+The 003B classification hierarchy is:
 
 ```text
+Primary classification:
+TARGET-SPECIFIC-QUANTITATIVE-CONTROL-REQUIRED
+
+Secondary findings:
 UNIVERSAL-COMPLEX-LINEAR-PHASE-PROVIDER-NOGO
 CONJUGATION-SYMMETRY-API-GAP
-TARGET-SPECIFIC-QUANTITATIVE-CONTROL-REQUIRED
 ```
 
 The first label is proved by the new finite algebra.  The second records that
