@@ -14,8 +14,10 @@ This module closes the GWSS-002 zero-side construction.  An actual centered-Xi
 zero with nonzero real part gives a squared orbit with nonzero imaginary part;
 the existing multiplicity API makes every occupied orbit mass nonzero.  The
 full-rank C2 Mellin matrix is then inverted only as a finite matrix: one row of
-its inverse extracts a chosen orbit mass.  Finally that row is packaged as a
-finite linear combination of the canonical Mellin second-difference weights.
+its inverse extracts a chosen orbit mass.  The row is scaled by the imaginary
+part of the target squared coordinate, so the resulting finite linear
+combination has the exact off-critical detector value
+`q.im * orbitMass q`.
 
 The result is a target-dependent finite witness on a fixed actual window.  It
 does not remove the top-horizontal term, pass to infinite height, assert Weil
@@ -161,6 +163,65 @@ theorem exists_pascalCenteredXiMellinMoment_coordinate_extractor
       rfl
     _ = pascalCenteredXiSquaredOrbitMassVec R j0 := hc _
 
+/-! ## GWSS-002-D: off-critical scalar detector -/
+
+/-- The off-critical squared-orbit scalar detector is nonzero.  Both its
+imaginary-coordinate factor and its occupied-orbit mass are load-bearing. -/
+theorem pascalCenteredXiOffCriticalOrbitScalarDetector_ne_zero
+    {R : ℝ}
+    (j0 : Fin (pascalCenteredXiSquaredOrbitIndexCard R))
+    (hoff : (pascalCenteredXiSquaredOrbitCoordinate R j0).im ≠ 0)
+    (hmass : pascalCenteredXiSquaredOrbitMassVec R j0 ≠ 0) :
+    ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+        pascalCenteredXiSquaredOrbitMassVec R j0 ≠ 0 := by
+  exact mul_ne_zero (Complex.ofReal_ne_zero.mpr hoff) hmass
+
+/-- Scaling a finite Mellin coordinate extractor by the target squared
+coordinate's imaginary part produces the exact off-critical detector scalar. -/
+theorem exists_pascalCenteredXiMellin_offCritical_detector_coefficients
+    {R ε : ℝ}
+    (hε : 0 < ε)
+    {τ : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℝ}
+    (hdet : (pascalCenteredXiMellinEvaluationMatrix R ε τ).det ≠ 0)
+    (j0 : Fin (pascalCenteredXiSquaredOrbitIndexCard R)) :
+    ∃ c : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℂ,
+      (∑ i, c i * pascalCenteredXiMellinMomentVec R ε τ i) =
+        ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+          pascalCenteredXiSquaredOrbitMassVec R j0 := by
+  obtain ⟨c₀, hc₀⟩ :=
+    exists_pascalCenteredXiMellinMoment_coordinate_extractor hε hdet j0
+  let qIm : ℂ := (pascalCenteredXiSquaredOrbitCoordinate R j0).im
+  refine ⟨fun i => qIm * c₀ i, ?_⟩
+  have hmul (a : ℂ) (f : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℂ) :
+      a * (∑ i, f i) = ∑ i, a * f i := by
+    simpa using (Finset.mul_sum
+      (Finset.univ : Finset (Fin (pascalCenteredXiSquaredOrbitIndexCard R))) f a)
+  calc
+    ∑ i, (qIm * c₀ i) * pascalCenteredXiMellinMomentVec R ε τ i =
+        ∑ i, qIm * (c₀ i * pascalCenteredXiMellinMomentVec R ε τ i) := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      ring
+    _ = qIm * (∑ i, c₀ i * pascalCenteredXiMellinMomentVec R ε τ i) := by
+      rw [hmul]
+    _ = qIm * pascalCenteredXiSquaredOrbitMassVec R j0 := by
+      rw [hc₀]
+    _ = ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+        pascalCenteredXiSquaredOrbitMassVec R j0 := by
+      rfl
+
+/-- On the centered critical line, the squared-orbit scalar detector vanishes.
+This is a semantic sanity check, not an equivalence theorem. -/
+theorem pascalCenteredXiCriticalOrbitScalarDetector_eq_zero
+    {R : ℝ} {z : ℂ}
+    (hz : z ∈ pascalCenteredXiZeroDiskFinset R)
+    (hre : z.re = 0) :
+    ((z ^ 2).im : ℂ) * pascalCenteredXiSquaredOrbitMass R (z ^ 2) = 0 := by
+  have hqim : (z ^ 2).im = 0 :=
+    (pascalCenteredXiZeroDiskFinset_re_eq_zero_iff_sq_im_eq_zero hz).mp hre
+  rw [hqim]
+  simp
+
 /-! ## GWSS-002-D/E: finite admissible witness synthesis -/
 
 /-- A finite target-dependent linear combination of the canonical Mellin
@@ -264,6 +325,40 @@ theorem exists_pascalCenteredXiMellinWitness_of_full_rank_target
   rw [hlinear]
   exact hmass
 
+/-- A full-rank target with nonzero squared-coordinate imaginary part admits
+an admissible Mellin witness whose moment is exactly the off-critical scalar
+detector, and hence is nonzero. -/
+theorem exists_pascalCenteredXiMellinOffCriticalWitness_of_full_rank_target
+    {R ε : ℝ}
+    (hε : 0 < ε)
+    {τ : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℝ}
+    (hdet : (pascalCenteredXiMellinEvaluationMatrix R ε τ).det ≠ 0)
+    (j0 : Fin (pascalCenteredXiSquaredOrbitIndexCard R))
+    (hoff : (pascalCenteredXiSquaredOrbitCoordinate R j0).im ≠ 0)
+    (hmass : pascalCenteredXiSquaredOrbitMassVec R j0 ≠ 0) :
+    ∃ c : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℂ,
+      Differentiable ℂ (pascalCenteredXiMellinWitnessWeight ε τ c) ∧
+      PascalCenteredEvenWeight (pascalCenteredXiMellinWitnessWeight ε τ c) ∧
+      pascalCenteredXiZeroDiskWeightedMoment
+          (pascalCenteredXiMellinWitnessWeight ε τ c) R =
+        ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+          pascalCenteredXiSquaredOrbitMassVec R j0 ∧
+      pascalCenteredXiZeroDiskWeightedMoment
+          (pascalCenteredXiMellinWitnessWeight ε τ c) R ≠ 0 := by
+  obtain ⟨c, hc⟩ :=
+    exists_pascalCenteredXiMellin_offCritical_detector_coefficients hε hdet j0
+  refine ⟨c, pascalCenteredXiMellinWitnessWeight_differentiable hε τ c,
+    pascalCenteredXiMellinWitnessWeight_even hε τ c, ?_, ?_⟩
+  · rw [pascalCenteredXiMellinWitnessWeight_moment_eq]
+    simpa [pascalCenteredXiMellinMomentVec] using hc
+  · rw [show pascalCenteredXiZeroDiskWeightedMoment
+        (pascalCenteredXiMellinWitnessWeight ε τ c) R =
+        ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+          pascalCenteredXiSquaredOrbitMassVec R j0 by
+      rw [pascalCenteredXiMellinWitnessWeight_moment_eq]
+      simpa [pascalCenteredXiMellinMomentVec] using hc]
+    exact pascalCenteredXiOffCriticalOrbitScalarDetector_ne_zero j0 hoff hmass
+
 /-! ## Final GWSS-002 witness theorem -/
 
 /-- An off-critical actual centered-Xi zero admits a target-dependent finite
@@ -280,6 +375,9 @@ theorem exists_pascalCenteredXiMellinOffCriticalWitness
         ∃ c : Fin (pascalCenteredXiSquaredOrbitIndexCard R) → ℂ,
           Differentiable ℂ (pascalCenteredXiMellinWitnessWeight ε τ c) ∧
           PascalCenteredEvenWeight (pascalCenteredXiMellinWitnessWeight ε τ c) ∧
+          pascalCenteredXiZeroDiskWeightedMoment
+              (pascalCenteredXiMellinWitnessWeight ε τ c) R =
+            ((z ^ 2).im : ℂ) * pascalCenteredXiSquaredOrbitMass R (z ^ 2) ∧
           pascalCenteredXiZeroDiskWeightedMoment
               (pascalCenteredXiMellinWitnessWeight ε τ c) R ≠ 0 := by
   have hq : z ^ 2 ∈ pascalCenteredXiSquaredOrbitFinset R :=
@@ -298,8 +396,23 @@ theorem exists_pascalCenteredXiMellinOffCriticalWitness
   have hmass : pascalCenteredXiSquaredOrbitMassVec R j0 ≠ 0 := by
     rw [pascalCenteredXiSquaredOrbitMassVec, hjcoord]
     exact pascalCenteredXiSquaredOrbitMass_ne_zero hq
-  obtain ⟨c, hcdiff, hceven, hcmoment⟩ :=
-    exists_pascalCenteredXiMellinWitness_of_full_rank_target hε hεdet j0 hmass
-  exact ⟨ε, hε, hqim, τ, hτ, hinj, c, hcdiff, hceven, hcmoment⟩
+  have hjoff : (pascalCenteredXiSquaredOrbitCoordinate R j0).im ≠ 0 := by
+    simpa [hjcoord] using hqim
+  obtain ⟨c, hcdiff, hceven, hcmoment, hcmoment_ne⟩ :=
+    exists_pascalCenteredXiMellinOffCriticalWitness_of_full_rank_target
+      hε hεdet j0 hjoff hmass
+  have hcmoment_target :
+      pascalCenteredXiZeroDiskWeightedMoment
+          (pascalCenteredXiMellinWitnessWeight ε τ c) R =
+        ((z ^ 2).im : ℂ) * pascalCenteredXiSquaredOrbitMass R (z ^ 2) := by
+    calc
+      pascalCenteredXiZeroDiskWeightedMoment
+          (pascalCenteredXiMellinWitnessWeight ε τ c) R =
+          ((pascalCenteredXiSquaredOrbitCoordinate R j0).im : ℂ) *
+            pascalCenteredXiSquaredOrbitMassVec R j0 := hcmoment
+      _ = ((z ^ 2).im : ℂ) * pascalCenteredXiSquaredOrbitMass R (z ^ 2) := by
+        simp [pascalCenteredXiSquaredOrbitMassVec, hjcoord]
+  exact ⟨ε, hε, hqim, τ, hτ, hinj, c, hcdiff, hceven,
+    hcmoment_target, hcmoment_ne⟩
 
 end DkMath.RH.CFBRCProjection

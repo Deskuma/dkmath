@@ -6,6 +6,13 @@ zero configuration -> independent source -> off-critical detector -> arithmetic 
 Current GWSS stage:
 GWSS-002
 
+Correction status:
+The initial occupancy-witness statement in this report is corrected by
+`0026-GWSS-002D-off-critical-detector-correction-report.md`.  In the initial
+version, off-criticality and nonzero witness moment were reported in parallel;
+the corrected theorem makes off-criticality load-bearing through the scalar
+detector.
+
 Load-bearing provider boundary:
 The implementation is a finite zero-side witness construction on a fixed
 actual centered-Xi window.  It reuses the C2 full-rank canonical Mellin matrix,
