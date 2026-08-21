@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.CFBRC.PascalCenteredXiMellinArithmeticSpecialization
 import DkMath.RH.CFBRC.PascalCenteredXiMellinOffCriticalWitnessAudit
+import DkMath.RH.CFBRC.PascalCenteredXiMellinWitnessQuantitativeHomogeneityAudit
 import DkMath.RH.CFBRC.PascalCenteredXiPrimeSideQuadraticizationAudit
 import Mathlib.Tactic
 
@@ -442,6 +443,159 @@ theorem pascalCenteredXiMellinGeneralTau_top_horizontal_source_eq_normalized_agg
       hε hτ W
       (pascalCenteredXiMellinGeneralTauTopBoxFeature_integrableOn_rectangle ε τ W)
 
+/-! ## F4.2: synthesized top-horizontal source -/
+
+/-- The finite synthesized top-horizontal feature, with the GWSS-002
+coefficients retained term by term. -/
+noncomputable def pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+    {n : ℕ} (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (x v : ℝ) : ℂ :=
+  ∑ i, c i * pascalCenteredXiMellinGeneralTauTopBoxFeature (τ i) W x v
+
+/-- The normalized top-horizontal source feature of a synthesized witness. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_integral_eq_witnessWeight_mul_amplitude
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε)
+    (τ : Fin n → ℝ) (c : Fin n → ℂ) (hτ : ∀ i, τ i ≠ 0)
+    (W : PascalCenteredXiResidueTransportWindow) (x : ℝ) :
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        (∫ v in (-ε)..ε,
+          pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W x v) =
+      pascalCenteredXiMellinWitnessWeight ε τ c
+          (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x := by
+  classical
+  have hInt : ∀ i : Fin n,
+      IntervalIntegrable
+        (fun v : ℝ => c i *
+          pascalCenteredXiMellinGeneralTauTopBoxFeature (τ i) W x v)
+        volume (-ε) ε := by
+    intro i
+    apply Continuous.intervalIntegrable
+    unfold pascalCenteredXiMellinGeneralTauTopBoxFeature
+      pascalCenteredXiMellinGeneralTauBoxFeature
+      pascalCenteredXiMellinGeneralTauBoxKernel
+    fun_prop
+  have hsum := intervalIntegral_sum_univ_eq_sum_intervalIntegral hInt
+  unfold pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+  calc
+    ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          ∑ i, c i * pascalCenteredXiMellinGeneralTauTopBoxFeature (τ i) W x v =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∑ i, ∫ v in (-ε)..ε,
+          c i * pascalCenteredXiMellinGeneralTauTopBoxFeature (τ i) W x v := by
+          rw [hsum]
+    _ = ∑ i, c i *
+        (((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiMellinGeneralTauTopBoxFeature (τ i) W x v) := by
+          simp_rw [intervalIntegral.integral_const_mul]
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro i hi
+          ring
+    _ = ∑ i, c i *
+        (pascalCenteredXiMellinSecondDifferenceWeight ε (τ i)
+            (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+          pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rw [pascalCenteredXiMellinGeneralTauTopBoxFeature_integral_eq_weight_mul_amplitude
+            hε (hτ i) W x]
+    _ = pascalCenteredXiMellinWitnessWeight ε τ c
+          (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+        pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x := by
+          unfold pascalCenteredXiMellinWitnessWeight
+          rw [Finset.sum_mul]
+          apply Finset.sum_congr rfl
+          intro i hi
+          ring
+
+/-- The synthesized top feature is integrable on each finite source
+rectangle by finite-sum closure of the single-basis top certificate. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_integrableOn_rectangle
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) :
+    IntegrableOn
+      (Function.uncurry
+        (pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W))
+      (Set.uIoc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ Set.uIoc (-ε) ε)
+      volume := by
+  classical
+  let S : Set (ℝ × ℝ) :=
+    Set.uIoc W.rectangle.σ (1 - W.rectangle.σ) ×ˢ Set.uIoc (-ε) ε
+  change Integrable
+    (fun p : ℝ × ℝ =>
+      ∑ i, c i * pascalCenteredXiMellinGeneralTauTopBoxFeature
+        (τ i) W p.1 p.2)
+    (volume.restrict S)
+  apply integrable_finsetSum (μ := volume.restrict S) (Finset.univ : Finset (Fin n))
+  intro i hi
+  exact
+    (pascalCenteredXiMellinGeneralTauTopBoxFeature_integrableOn_rectangle
+      ε (τ i) W).integrable.const_mul (c i)
+
+/-- The synthesized top feature aggregated over the finite edge. -/
+noncomputable def pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+    {n : ℕ} (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) : ℂ :=
+  ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+    pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W x v
+
+/-- The actual synthesized witness top-horizontal contribution is the
+normalized integral of the synthesized top feature. -/
+theorem pascalCenteredXiMellinGeneralTauWitness_top_horizontal_source_eq_normalized_aggregate
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε)
+    (τ : Fin n → ℝ) (c : Fin n → ℂ) (hτ : ∀ i, τ i ≠ 0)
+    (W : PascalCenteredXiResidueTransportWindow) :
+    pascalCenteredXiTopHorizontalContribution
+        (pascalCenteredXiMellinWitnessWeight ε τ c)
+          W.toContourTransportWindow =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+            τ c W v := by
+  have hbox :=
+    pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_integrableOn_rectangle
+      ε τ c W
+  unfold pascalCenteredXiTopHorizontalContribution
+  calc
+    (∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiWeightedNegLogDeriv
+          (pascalCenteredXiMellinWitnessWeight ε τ c)
+          (pascalOrdinaryToCentered
+            (pascalSymmetricRectangleTopEdge x W.rectangle.T))) =
+      ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        pascalCenteredXiMellinWitnessWeight ε τ c
+            (pascalCenteredXiPrimeSideQuadraticizationTopNode W x) *
+          pascalCenteredXiPrimeSideQuadraticizationTopAmplitude W x := by
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with x hx
+          rfl
+    _ = ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+        ((2 * ε : ℝ)⁻¹ : ℂ) *
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W x v := by
+          apply intervalIntegral.integral_congr_ae
+          filter_upwards [] with x hx
+          exact
+            (pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_integral_eq_witnessWeight_mul_amplitude
+              hε τ c hτ W x).symm
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+          ∫ v in (-ε)..ε,
+            pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W x v := by
+          rw [intervalIntegral.integral_const_mul]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          ∫ x in W.rectangle.σ..(1 - W.rectangle.σ),
+            pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature τ c W x v := by
+          rw [intervalIntegral_intervalIntegral_swap hbox]
+    _ = ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ v in (-ε)..ε,
+          pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature τ c W v := by
+          simp only [pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature]
+
 /-! ## F5: finite synthesized target witness -/
 
 /-- The logarithmic-box feature synthesized with the same finite coefficients
@@ -588,18 +742,36 @@ noncomputable def pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFe
   ∫ t in (-W.rectangle.T)..W.rectangle.T,
     pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature τ c W X t u
 
+/-- Finite coefficient sums preserve the already-proved single-basis
+rectangle integrability of the right-edge source feature. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature_integrableOn_rectangle
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    IntegrableOn
+      (Function.uncurry
+        (pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature τ c W X))
+      (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
+      volume := by
+  classical
+  let S : Set (ℝ × ℝ) :=
+    Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε
+  change Integrable
+    (fun p : ℝ × ℝ =>
+      ∑ i, c i * pascalCenteredXiMellinGeneralTauVerticalBoxFeature
+        (τ i) W X p.1 p.2)
+    (volume.restrict S)
+  apply integrable_finsetSum (μ := volume.restrict S) (Finset.univ : Finset (Fin n))
+  intro i hi
+  exact
+    (pascalCenteredXiMellinGeneralTauVerticalBoxFeature_integrableOn_rectangle
+      ε (τ i) W X).integrable.const_mul (c i)
+
 /-- The general-`τ` source bridge lifts through a finite synthesized witness
 on the right edge, including the finite rectangle Fubini step. -/
 theorem pascalCenteredXiMellinGeneralTauWitness_weighted_vertical_source_eq_normalized_aggregate
     {n : ℕ} {ε : ℝ} (hε : 0 < ε)
     (τ : Fin n → ℝ) (c : Fin n → ℂ) (hτ : ∀ i, τ i ≠ 0)
-    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
-    (hbox :
-      IntegrableOn
-        (Function.uncurry
-          (pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature τ c W X))
-        (Set.uIoc (-W.rectangle.T) W.rectangle.T ×ˢ Set.uIoc (-ε) ε)
-        volume) :
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
     (∫ t in (-W.rectangle.T)..W.rectangle.T,
       pascalCenteredXiMellinWitnessWeight ε τ c
           (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
@@ -608,6 +780,9 @@ theorem pascalCenteredXiMellinGeneralTauWitness_weighted_vertical_source_eq_norm
         ∫ u in (-ε)..ε,
           pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
             τ c W X u := by
+  have hbox :=
+    pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature_integrableOn_rectangle
+      ε τ c W X
   calc
     (∫ t in (-W.rectangle.T)..W.rectangle.T,
         pascalCenteredXiMellinWitnessWeight ε τ c
@@ -639,6 +814,300 @@ theorem pascalCenteredXiMellinGeneralTauWitness_weighted_vertical_source_eq_norm
           simp only [pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature]
 
 /-! ## F7: fixed complex references -/
+
+/-! ## F6: synthesized whole-source assembly -/
+
+/-- The deoriented vertical source attached to a synthesized witness.
+
+The three finite right-edge arithmetic terms are represented by the source
+amplitude.  The contour factor `Complex.I` is intentionally absent here; it
+is restored in the finite arithmetic assembly below. -/
+noncomputable def pascalCenteredXiMellinGeneralTauWitnessVerticalSource
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  ∫ t in (-W.rectangle.T)..W.rectangle.T,
+    pascalCenteredXiMellinWitnessWeight ε τ c
+        (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+      pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t
+
+/-- The whole finite source, with the orientation convention
+`2 * I * (vertical - I * top)` used by the finite ledger. -/
+noncomputable def pascalCenteredXiMellinGeneralTauWitnessWholeSource
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) : ℂ :=
+  pascalCenteredXiMellinGeneralTauWitnessVerticalSource ε τ c W X -
+    Complex.I * pascalCenteredXiTopHorizontalContribution
+      (pascalCenteredXiMellinWitnessWeight ε τ c)
+      W.toContourTransportWindow
+
+/-- The synthesized whole source feature.  It retains both the vertical and
+top-horizontal aggregates and therefore does not silently discard the finite
+top term. -/
+noncomputable def pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+    {n : ℕ} (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) : ℂ :=
+  pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
+      τ c W X u -
+    Complex.I * pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+      τ c W u
+
+/-- The normalized whole-source bridge, conditional only on the two scalar
+interval-integrability facts needed to integrate the displayed difference.
+The vertical and top source representations themselves are unconditional
+finite-rectangle statements proved above. -/
+theorem pascalCenteredXiMellinGeneralTauWitness_whole_source_eq_normalized_aggregate_of_integrable
+    {n : ℕ} {ε : ℝ} (hε : 0 < ε)
+    (τ : Fin n → ℝ) (c : Fin n → ℂ) (hτ : ∀ i, τ i ≠ 0)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
+    (hV : IntervalIntegrable
+      (pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
+        τ c W X) volume (-ε) ε)
+    (hT : IntervalIntegrable
+      (pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+        τ c W) volume (-ε) ε) :
+    pascalCenteredXiMellinGeneralTauWitnessWholeSource ε τ c W X =
+      ((2 * ε : ℝ)⁻¹ : ℂ) *
+        ∫ u in (-ε)..ε,
+          pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature τ c W X u := by
+  rw [pascalCenteredXiMellinGeneralTauWitnessWholeSource,
+    pascalCenteredXiMellinGeneralTauWitnessVerticalSource]
+  rw [pascalCenteredXiMellinGeneralTauWitness_weighted_vertical_source_eq_normalized_aggregate
+    hε τ c hτ W X]
+  rw [pascalCenteredXiMellinGeneralTauWitness_top_horizontal_source_eq_normalized_aggregate
+    hε τ c hτ W]
+  simp only [pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature]
+  have hIT := hT.const_mul Complex.I
+  have hsub := intervalIntegral.integral_sub hV hIT
+  rw [hsub, intervalIntegral.integral_const_mul]
+  ring
+
+/-- The vertical synthesized feature is complex-linear in its finite
+coefficient vector. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature_const_mul
+    {n : ℕ} (a : ℂ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (t u : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature
+        τ (fun i => a * c i) W X t u =
+      a * pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature
+        τ c W X t u := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  ring
+
+/-- The top synthesized feature is complex-linear in its finite coefficient
+vector. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_const_mul
+    {n : ℕ} (a : ℂ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (x v : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+        τ (fun i => a * c i) W x v =
+      a * pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+        τ c W x v := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  ring
+
+/-- The vertical aggregate preserves coefficient scaling. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature_const_mul
+    {n : ℕ} (a : ℂ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
+        τ (fun i => a * c i) W X u =
+      a * pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
+        τ c W X u := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature
+  rw [show
+      (fun t : ℝ =>
+        pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature
+          τ (fun i => a * c i) W X t u) =
+      (fun t : ℝ => a *
+        pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature
+          τ c W X t u) by
+        funext t
+        exact pascalCenteredXiMellinGeneralTauWitnessVerticalBoxFeature_const_mul
+          a τ c W X t u]
+  exact intervalIntegral.integral_const_mul a _
+
+/-- The top aggregate preserves coefficient scaling. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature_const_mul
+    {n : ℕ} (a : ℂ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (v : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+        τ (fun i => a * c i) W v =
+      a * pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+        τ c W v := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature
+  rw [show
+      (fun x : ℝ =>
+        pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+          τ (fun i => a * c i) W x v) =
+      (fun x : ℝ => a *
+        pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature
+          τ c W x v) by
+        funext x
+        exact pascalCenteredXiMellinGeneralTauWitnessTopBoxFeature_const_mul
+          a τ c W x v]
+  exact intervalIntegral.integral_const_mul a _
+
+/-- The whole source feature is complex-linear in the finite coefficient
+vector. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature_const_mul
+    {n : ℕ} (a : ℂ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+        τ (fun i => a * c i) W X u =
+      a * pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+        τ c W X u := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+  rw [pascalCenteredXiMellinGeneralTauWitnessVerticalAggregatedBoxFeature_const_mul,
+    pascalCenteredXiMellinGeneralTauWitnessTopAggregatedBoxFeature_const_mul]
+  ring
+
+/-- The deoriented vertical source preserves coefficient scaling. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessVerticalSource_const_mul
+    {n : ℕ} (a : ℂ) (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinGeneralTauWitnessVerticalSource
+        ε τ (fun i => a * c i) W X =
+      a * pascalCenteredXiMellinGeneralTauWitnessVerticalSource ε τ c W X := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessVerticalSource
+  rw [pascalCenteredXiMellinWitnessWeight_scaled_coefficients]
+  rw [show
+      (fun t : ℝ =>
+        (a * pascalCenteredXiMellinWitnessWeight ε τ c
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t)) *
+          pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t) =
+      (fun t : ℝ => a *
+        (pascalCenteredXiMellinWitnessWeight ε τ c
+          (pascalCenteredXiPrimeSideQuadraticizationRightEdgeNode W t) *
+          pascalCenteredXiPrimeSideQuadraticizationVerticalAmplitude W X t)) by
+        funext t
+        ring]
+  exact intervalIntegral.integral_const_mul a _
+
+/-- The assembled whole source preserves coefficient scaling. -/
+theorem pascalCenteredXiMellinGeneralTauWitnessWholeSource_const_mul
+    {n : ℕ} (a : ℂ) (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiMellinGeneralTauWitnessWholeSource
+        ε τ (fun i => a * c i) W X =
+      a * pascalCenteredXiMellinGeneralTauWitnessWholeSource ε τ c W X := by
+  unfold pascalCenteredXiMellinGeneralTauWitnessWholeSource
+  rw [pascalCenteredXiMellinGeneralTauWitnessVerticalSource_const_mul,
+    pascalCenteredXiMellinWitnessTopHorizontalContribution_const_mul]
+  ring
+
+/-- The whole source feature and whole source both transport the off-critical
+`q.im` scalar used by the GWSS-003C witness construction. -/
+theorem pascalCenteredXiMellinGeneralTauWitness_qIm_whole_source_transport
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ) (q : ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) (u : ℝ) :
+    pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+        τ (fun i => (q.im : ℂ) * c i) W X u =
+      (q.im : ℂ) * pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature
+        τ c W X u ∧
+    pascalCenteredXiMellinGeneralTauWitnessWholeSource
+        ε τ (fun i => (q.im : ℂ) * c i) W X =
+      (q.im : ℂ) * pascalCenteredXiMellinGeneralTauWitnessWholeSource
+        ε τ c W X := by
+  constructor
+  · exact pascalCenteredXiMellinGeneralTauWitnessWholeBoxFeature_const_mul
+      (q.im : ℂ) τ c W X u
+  · exact pascalCenteredXiMellinGeneralTauWitnessWholeSource_const_mul
+      (q.im : ℂ) ε τ c W X
+
+/-! ## F6.2: the finite ledger boundary -/
+
+/-- The exact finite whole-source assembly once the vertical arithmetic ledger
+has identified its three retained right-edge terms with the deoriented source.
+
+The hypothesis is deliberately explicit: the currently imported finite
+arithmetic API names the three terms separately, but does not yet export this
+combined orientation identity for an arbitrary synthesized witness. -/
+theorem pascalCenteredXiMellinFiniteArithmeticApproximant_eq_two_mul_I_mul_wholeSource_of_vertical_ledger
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ)
+    (hvertical :
+      2 * pascalPrimePowerRightEdgeCutoffIntegral
+          (pascalCenteredXiMellinWitnessWeight ε τ c)
+          W.rectangle.σ W.rectangle.T X +
+        2 * pascalXiArchimedeanRightEdgeIntegral
+          (pascalCenteredXiMellinWitnessWeight ε τ c)
+          W.rectangle.σ W.rectangle.T +
+        2 * pascalXiElementaryRightEdgeIntegral
+          (pascalCenteredXiMellinWitnessWeight ε τ c)
+          W.rectangle.σ W.rectangle.T =
+      2 * Complex.I *
+        pascalCenteredXiMellinGeneralTauWitnessVerticalSource ε τ c W X) :
+    pascalCenteredXiFiniteArithmeticApproximant
+        (pascalCenteredXiMellinWitnessWeight ε τ c) W X =
+      2 * Complex.I * pascalCenteredXiMellinGeneralTauWitnessWholeSource
+        ε τ c W X := by
+  unfold pascalCenteredXiFiniteArithmeticApproximant
+    pascalCenteredXiMellinGeneralTauWitnessWholeSource
+  rw [hvertical]
+  ring_nf
+  simp [Complex.I_sq]
+
+/-- The finite whole-source ledger is also complex-linear in the witness
+coefficients, provided the vertical ledger is transported with the same
+scalar. -/
+theorem pascalCenteredXiMellinFiniteArithmeticApproximant_const_mul
+    {n : ℕ} (a : ℂ) (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiFiniteArithmeticApproximant
+        (pascalCenteredXiMellinWitnessWeight ε τ (fun i => a * c i)) W X =
+      a * pascalCenteredXiFiniteArithmeticApproximant
+        (pascalCenteredXiMellinWitnessWeight ε τ c) W X := by
+  rw [pascalCenteredXiMellinWitnessWeight_scaled_coefficients]
+  unfold pascalCenteredXiFiniteArithmeticApproximant
+  have hprime :
+      pascalPrimePowerRightEdgeCutoffIntegral
+          (fun z => a * pascalCenteredXiMellinWitnessWeight ε τ c z)
+          W.rectangle.σ W.rectangle.T X =
+        a * pascalPrimePowerRightEdgeCutoffIntegral
+          (pascalCenteredXiMellinWitnessWeight ε τ c)
+          W.rectangle.σ W.rectangle.T X := by
+    unfold pascalPrimePowerRightEdgeCutoffIntegral
+    rw [show
+        (fun t : ℝ =>
+          pascalPrimePowerRightEdgeCutoffIntegrand
+            (fun z => a * pascalCenteredXiMellinWitnessWeight ε τ c z)
+            W.rectangle.σ X t) =
+        (fun t : ℝ => a *
+          pascalPrimePowerRightEdgeCutoffIntegrand
+            (pascalCenteredXiMellinWitnessWeight ε τ c)
+            W.rectangle.σ X t) by
+          funext t
+          unfold pascalPrimePowerRightEdgeCutoffIntegrand
+          ring]
+    exact intervalIntegral.integral_const_mul a _
+  have harch := pascalCenteredXiMellinWitnessArchimedeanRightEdgeIntegral_const_mul
+    a ε τ c W.rectangle.σ W.rectangle.T
+  have helem := pascalCenteredXiMellinWitnessElementaryRightEdgeIntegral_const_mul
+    a ε τ c W.rectangle.σ W.rectangle.T
+  have htop := pascalCenteredXiMellinWitnessTopHorizontalContribution_const_mul
+    a ε τ c W.toContourTransportWindow
+  rw [pascalCenteredXiMellinWitnessWeight_scaled_coefficients] at harch helem htop
+  rw [hprime, harch, helem, htop]
+  ring
+
+/-- The off-critical detector scalar `q.im` transports the complete finite
+approximant without changing its finite window or cutoff. -/
+theorem pascalCenteredXiMellinFiniteArithmeticApproximant_qIm_const_mul
+    {n : ℕ} (ε : ℝ) (τ : Fin n → ℝ) (c : Fin n → ℂ)
+    (q : ℂ) (W : PascalCenteredXiResidueTransportWindow) (X : ℕ) :
+    pascalCenteredXiFiniteArithmeticApproximant
+        (pascalCenteredXiMellinWitnessWeight ε τ
+          (fun i => (q.im : ℂ) * c i)) W X =
+      (q.im : ℂ) * pascalCenteredXiFiniteArithmeticApproximant
+        (pascalCenteredXiMellinWitnessWeight ε τ c) W X := by
+  exact pascalCenteredXiMellinFiniteArithmeticApproximant_const_mul
+    (q.im : ℂ) ε τ c W X
 
 /-- Polarization against the real reference `1` extracts the real component
 of an arbitrary complex feature. -/
