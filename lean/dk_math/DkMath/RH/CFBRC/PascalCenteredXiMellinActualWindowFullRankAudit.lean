@@ -114,6 +114,16 @@ theorem pascalCenteredXiSquaredOrbitCoordinate_mem
     pascalCenteredXiSquaredOrbitFinset R
   exact ((pascalCenteredXiSquaredOrbitIndexEquiv R).symm j).property
 
+/-- The `Fin` coordinate presentation is injective.  This is a presentation
+bridge only: distinct indices represent distinct points of the finite image
+carrier, independently of the representative chosen for each square. -/
+theorem pascalCenteredXiSquaredOrbitCoordinate_injective (R : ℝ) :
+    Function.Injective (pascalCenteredXiSquaredOrbitCoordinate R) := by
+  intro i j hij
+  apply (pascalCenteredXiSquaredOrbitIndexEquiv R).symm.injective
+  apply Subtype.ext
+  exact hij
+
 /-- Every squared-orbit coordinate in the subtype carrier occurs in the
 `Fin` presentation.  This is the public reindexing bridge needed when a
 concrete actual orbit is selected as a target of the full-rank matrix. -/
