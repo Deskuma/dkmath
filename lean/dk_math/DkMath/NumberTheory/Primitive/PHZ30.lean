@@ -8,6 +8,7 @@ import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Tactic
 import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+import DkMath.NumberTheory.Primitive.PrimeWorldRefinement
 
 #print "file: DkMath.NumberTheory.Primitive.PHZ30"
 
@@ -90,6 +91,33 @@ theorem supportDisjointFrom_primeWorld235_iff_mod_mem_phzResidues30
     _ ↔ m % 30 ∈ phzResidues30 :=
       supportDisjointFrom_primeWorld235_iff_mem_phzResidues30
         (Nat.mod_lt m (by norm_num))
+
+/--
+The concrete PHZ30 world is the canonical bounded prime world at `P = 5`.
+This identifies the named example with the existing finite-world constructor.
+-/
+theorem primeWorld235_eq_primeScalesUpTo_five :
+    primeWorld235 = primeScalesUpTo 5 := by
+  ext p
+  constructor
+  · intro hp
+    simp only [primeWorld235, Finset.mem_insert, Finset.mem_singleton] at hp
+    rcases hp with rfl | rfl | rfl
+    · exact (mem_primeScalesUpTo).2 ⟨by norm_num, by norm_num⟩
+    · exact (mem_primeScalesUpTo).2 ⟨by norm_num, by norm_num⟩
+    · exact (mem_primeScalesUpTo).2 ⟨by norm_num, by norm_num⟩
+  · intro hp
+    have hp' := (mem_primeScalesUpTo.mp hp)
+    have hp5 : p ≤ 5 := hp'.2
+    interval_cases p <;> norm_num at hp' <;>
+      simp [primeWorld235, Finset.mem_insert, Finset.mem_singleton]
+
+/-- The `{2,3,5}` world grows to modulus `210` after inserting the fresh direction `7`. -/
+@[simp] theorem primeWorldModulus_insert_seven_primeWorld235 :
+    primeWorldModulus (insert 7 primeWorld235) = 210 := by
+  have h7 : 7 ∉ primeWorld235 := by
+    simp [primeWorld235]
+  rw [primeWorldModulus_insert h7, primeWorldModulus_primeWorld235]
 
 /--
 The concrete observer inherits the generic period theorem in `r + 30 * k`

@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
 import DkMath.NumberTheory.Primitive.FinitePrimeWorld
 import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+import DkMath.NumberTheory.Primitive.PrimeWorldRefinement
 import DkMath.NumberTheory.Primitive.PHZ30
 import DkMath.NumberTheory.Primitive.SquareBody
 
