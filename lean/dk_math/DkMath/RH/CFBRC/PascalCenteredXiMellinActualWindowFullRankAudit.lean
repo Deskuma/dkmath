@@ -105,6 +105,15 @@ noncomputable def pascalCenteredXiSquaredOrbitCoordinate
     (R : ℝ) (j : Fin (pascalCenteredXiSquaredOrbitIndexCard R)) : ℂ :=
   (pascalCenteredXiSquaredOrbitIndexEquiv R).symm j
 
+/-- Every `Fin`-indexed squared-orbit coordinate belongs to the image carrier. -/
+theorem pascalCenteredXiSquaredOrbitCoordinate_mem
+    (R : ℝ) (j : Fin (pascalCenteredXiSquaredOrbitIndexCard R)) :
+    pascalCenteredXiSquaredOrbitCoordinate R j ∈
+      pascalCenteredXiSquaredOrbitFinset R := by
+  change ↑((pascalCenteredXiSquaredOrbitIndexEquiv R).symm j) ∈
+    pascalCenteredXiSquaredOrbitFinset R
+  exact ((pascalCenteredXiSquaredOrbitIndexEquiv R).symm j).property
+
 /-- Every squared-orbit coordinate in the subtype carrier occurs in the
 `Fin` presentation.  This is the public reindexing bridge needed when a
 concrete actual orbit is selected as a target of the full-rank matrix. -/
