@@ -23,6 +23,7 @@ not assumed here.
 namespace DkMath.NumberTheory.Legendre
 
 open DkMath.NumberTheory.Primitive
+open DkMath.NumberTheory.StructuralArithmetic
 
 /-- The open interval between the consecutive squares anchored at `n`. -/
 def SquareCell (n m : ℕ) : Prop :=
@@ -66,12 +67,29 @@ directions at most the anchor.
 def SquareAnchoredSupportEscape : Prop :=
   ∀ n : ℕ, 0 < n →
     ∃ r, SquareOffset n r ∧
-      ∀ ⦃q : ℕ⦄, Nat.Prime q → q ≤ n → ¬ q ∣ n ^ 2 + r
+      SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r)
+
+/--
+The semantic square-escape provider expanded into its elementary bounded-prime
+form.  This is a rewrite theorem, not an existence theorem.
+-/
+theorem squareAnchoredSupportEscape_iff_raw :
+    SquareAnchoredSupportEscape ↔
+      ∀ n : ℕ, 0 < n →
+        ∃ r, SquareOffset n r ∧
+          ∀ ⦃q : ℕ⦄, Nat.Prime q → q ≤ n → ¬ q ∣ n ^ 2 + r := by
+  constructor
+  · intro hEscape n hn
+    obtain ⟨r, hr, hdisj⟩ := hEscape n hn
+    exact ⟨r, hr, supportDisjointFrom_primeScalesUpTo_iff.mp hdisj⟩
+  · intro hRaw n hn
+    obtain ⟨r, hr, hdisj⟩ := hRaw n hn
+    exact ⟨r, hr, supportDisjointFrom_primeScalesUpTo_iff.mpr hdisj⟩
 
 /-- A support-free offset produces a prime point in its square cell. -/
 theorem prime_of_squareAnchoredSupportEscape
     {n r : ℕ} (hn : 0 < n) (hr : SquareOffset n r)
-    (hdisj : ∀ ⦃q : ℕ⦄, Nat.Prime q → q ≤ n → ¬ q ∣ n ^ 2 + r) :
+    (hdisj : SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r)) :
     Nat.Prime (n ^ 2 + r) := by
   have hnSq : 1 ≤ n ^ 2 := by nlinarith
   have hm : 1 < n ^ 2 + r := by
@@ -81,7 +99,7 @@ theorem prime_of_squareAnchoredSupportEscape
     dsimp [SquareOffset] at hr
     dsimp [squareBody]
     omega
-  exact prime_of_supportDisjointFrom_le_squareBody hm hmUpper hdisj
+  exact prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody hm hmUpper hdisj
 
 /-- The support-escape provider gives the usual Legendre witness. -/
 theorem legendreConjecture_of_squareAnchoredSupportEscape
@@ -107,6 +125,7 @@ theorem legendreConjecture_iff_squareAnchoredSupportEscape :
     obtain ⟨r, hr, hrEq⟩ :=
       (squareCell_iff_exists_squareOffset n p).1 hcell
     refine ⟨r, hr, ?_⟩
+    apply supportDisjointFrom_primeScalesUpTo_iff.mpr
     intro q hq hqle hqdiv
     have hqdiv' : q ∣ p := by simpa [hrEq] using hqdiv
     have hqp : q = p :=

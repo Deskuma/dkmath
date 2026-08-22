@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.Data.Nat.Prime.Basic
 import DkMath.CosmicFormula.CosmicFormulaBinom
+import DkMath.NumberTheory.Primitive.FinitePrimeWorld
 
 #print "file: DkMath.NumberTheory.Primitive.SquareBody"
 
@@ -25,6 +26,7 @@ only in the natural-number theorems below.
 namespace DkMath.NumberTheory.Primitive
 
 open DkMath.CosmicFormulaBinom
+open DkMath.NumberTheory.StructuralArithmetic
 
 /-- The unit-one square Body, written in its natural-number normal form. -/
 def squareBody (P : ℕ) : ℕ := P ^ 2 + 2 * P
@@ -75,5 +77,18 @@ theorem prime_of_supportDisjointFrom_le_squareBody
   obtain ⟨q, hq, hqd, hqle⟩ :=
     exists_prime_dvd_le_of_not_prime_of_le_squareBody hm hmUpper hmPrime
   exact (hdisj hq hqle) hqd
+
+/--
+The canonical bounded prime world supplies the support condition for the
+generic square-Body closure theorem.
+-/
+theorem prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
+    {P m : ℕ}
+    (hm : 1 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hdisj : SupportDisjointFrom (primeScalesUpTo P) m) :
+    Nat.Prime m := by
+  exact prime_of_supportDisjointFrom_le_squareBody hm hmUpper
+    (supportDisjointFrom_primeScalesUpTo_iff.mp hdisj)
 
 end DkMath.NumberTheory.Primitive
