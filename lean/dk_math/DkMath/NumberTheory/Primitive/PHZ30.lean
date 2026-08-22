@@ -147,6 +147,45 @@ theorem card_seven_refinement_survivors_of_mem_phzResidues30
     knownPrimeScales_primeWorld235 (by norm_num) h7 hrPeriod
   simpa using hcard
 
+/-
+The global PHZ210 construction is kept as an image of the generic refinement.
+This gives a compact constructive certificate instead of an enumerated list of
+the forty-eight representatives.
+-/
+
+/-- The PHZ30 candidate seats refined by the fresh direction `7`. -/
+def phzResidues210 : Finset ℕ :=
+  refinedSurvivingSeats primeWorld235 7 phzResidues30
+
+/-- The PHZ210 refinement contains exactly `8 * (7 - 1) = 48` candidate seats. -/
+theorem card_phzResidues210 :
+    phzResidues210.card = 48 := by
+  have h7 : 7 ∉ primeWorld235 := by
+    simp [primeWorld235]
+  have hR : ∀ r ∈ phzResidues30,
+      r < primeWorldModulus primeWorld235 := by
+    intro r hr
+    simpa [primeWorldModulus_primeWorld235] using
+      lt_thirty_of_mem_phzResidues30 hr
+  have hcard := card_refinedSurvivingSeats
+    (S := primeWorld235) (q := 7) (R := phzResidues30)
+    knownPrimeScales_primeWorld235 (by norm_num) h7 hR
+  have hRcard : phzResidues30.card = 8 := by
+    norm_num [phzResidues30]
+  simpa [phzResidues210, hRcard] using hcard
+
+/-- Every constructed PHZ210 candidate is support-disjoint from `2, 3, 5, 7`. -/
+theorem supportDisjointFrom_of_mem_phzResidues210
+    {n : ℕ} (hn : n ∈ phzResidues210) :
+    SupportDisjointFrom (insert 7 primeWorld235) n := by
+  apply supportDisjointFrom_of_mem_refinedSurvivingSeats
+    (S := primeWorld235) (q := 7) (R := phzResidues30)
+    (by norm_num)
+  · intro r hr
+    exact (supportDisjointFrom_primeWorld235_iff_mem_phzResidues30
+    (lt_thirty_of_mem_phzResidues30 hr)).2 hr
+  exact hn
+
 /--
 The concrete observer inherits the generic period theorem in `r + 30 * k`
 coordinates.

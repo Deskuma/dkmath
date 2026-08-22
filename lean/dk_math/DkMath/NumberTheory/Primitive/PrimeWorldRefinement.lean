@@ -94,6 +94,37 @@ def primeWorldChild (S : Finset ℕ) (r j : ℕ) : ℕ :=
 def primeWorldChildIndices (q : ℕ) : Finset ℕ :=
   Finset.range q
 
+/--
+The bounded parent/index coordinates of a child are unique.
+
+The parent representatives are reduced modulo the old product modulus.  Thus
+the child coordinate map is injective on the canonical rectangle; this is the
+finite coordinate fact used by the global refinement below.
+-/
+theorem primeWorldChild_eq_iff_of_lt_modulus
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {r₁ r₂ j₁ j₂ : ℕ}
+    (hr₁ : r₁ < primeWorldModulus S)
+    (hr₂ : r₂ < primeWorldModulus S) :
+    primeWorldChild S r₁ j₁ = primeWorldChild S r₂ j₂ ↔
+      r₁ = r₂ ∧ j₁ = j₂ := by
+  have hMpos : 0 < primeWorldModulus S := by
+    simpa [primeWorldModulus] using
+      (Finset.prod_pos (s := S) (f := fun p : ℕ => p)
+        (fun p hp => (hS hp).pos))
+  constructor
+  · intro hchild
+    have hmod := congrArg (fun n => n % primeWorldModulus S) hchild
+    have hr : r₁ = r₂ := by
+      simpa [primeWorldChild, Nat.add_mul_mod_self_left,
+        Nat.mod_eq_of_lt hr₁, Nat.mod_eq_of_lt hr₂] using hmod
+    subst r₂
+    have hmul : j₁ * primeWorldModulus S = j₂ * primeWorldModulus S := by
+      exact Nat.add_left_cancel (n := r₁) (by simpa [primeWorldChild] using hchild)
+    exact ⟨rfl, Nat.mul_right_cancel hMpos hmul⟩
+  · rintro ⟨rfl, rfl⟩
+    rfl
+
 /-- The bounded child indices that lie on the new `q`-divisibility wave. -/
 def reservedChildIndices (S : Finset ℕ) (q r : ℕ) : Finset ℕ :=
   (primeWorldChildIndices q).filter (fun j => q ∣ primeWorldChild S r j)
@@ -309,5 +340,141 @@ theorem card_supportDisjointFrom_insert_prime_children
   refine ⟨card_survivingChildIndices hS hq hqS hrPeriod, ?_⟩
   intro j hj
   exact (mem_survivingChildIndices_iff_supportDisjointFrom_insert hq hrSeat).mp hj |>.2
+
+/--
+The global finite set of surviving `(parent, child-index)` coordinates.
+
+Membership records the parent membership, the bounded index, and avoidance of
+the newly inserted prime.  It is a coordinate-level object; the corresponding
+seat values are defined by `refinedSurvivingSeats` below.
+-/
+def survivingChildPairs (S : Finset ℕ) (q : ℕ) (R : Finset ℕ) : Finset (ℕ × ℕ) :=
+  (R.product (primeWorldChildIndices q)).filter
+    (fun pair => pair.2 ∈ survivingChildIndices S q pair.1)
+
+/-- Membership in `survivingChildPairs` exposes its three defining conditions. -/
+theorem mem_survivingChildPairs_iff
+    {S : Finset ℕ} {q : ℕ} {R : Finset ℕ} {r j : ℕ} :
+    (r, j) ∈ survivingChildPairs S q R ↔
+      r ∈ R ∧ j < q ∧ ¬ q ∣ primeWorldChild S r j := by
+  simp only [survivingChildPairs, Finset.mem_filter, Finset.product_eq_sprod,
+    Finset.mem_product, mem_survivingChildIndices_iff,
+    primeWorldChildIndices, Finset.mem_range]
+  constructor
+  · rintro ⟨⟨hr, hj⟩, _, havoid⟩
+    exact ⟨hr, hj, havoid⟩
+  · rintro ⟨hr, hj, havoid⟩
+    exact ⟨⟨hr, hj⟩, hj, havoid⟩
+
+private def survivingChildPairFiber
+    (S : Finset ℕ) (q r : ℕ) : Finset (ℕ × ℕ) :=
+  (survivingChildIndices S q r).image (fun j => (r, j))
+
+private theorem survivingChildPairs_eq_biUnion
+    (S : Finset ℕ) (q : ℕ) (R : Finset ℕ) :
+    survivingChildPairs S q R =
+      R.biUnion (fun r => survivingChildPairFiber S q r) := by
+  ext pair
+  rcases pair with ⟨r, j⟩
+  simp only [survivingChildPairs, survivingChildPairFiber,
+    Finset.mem_filter, Finset.product_eq_sprod, Finset.mem_product,
+    Finset.mem_biUnion, Finset.mem_image, mem_survivingChildIndices_iff,
+    primeWorldChildIndices, Finset.mem_range]
+  constructor
+  · rintro ⟨⟨hr, hj⟩, _, havoid⟩
+    exact ⟨r, hr, ⟨j, ⟨hj, havoid⟩, rfl⟩⟩
+  · rintro ⟨r', hr', j', hj', hpair⟩
+    cases hpair
+    exact ⟨⟨hr', hj'.1⟩, hj'.1, hj'.2⟩
+
+/-- The coordinate fibers over distinct parent representatives are disjoint. -/
+private theorem survivingChildPairFiber_pairwiseDisjoint
+    {S : Finset ℕ} {q : ℕ} {R : Finset ℕ} :
+    (R : Set ℕ).PairwiseDisjoint (survivingChildPairFiber S q) := by
+  intro r₁ hr₁ r₂ hr₂ hne
+  refine Finset.disjoint_left.2 ?_
+  intro pair hpair₁ hpair₂
+  apply hne
+  have hfirst₁ : pair.1 = r₁ := by
+    rcases Finset.mem_image.mp hpair₁ with ⟨j, hj, rfl⟩
+    rfl
+  have hfirst₂ : pair.1 = r₂ := by
+    rcases Finset.mem_image.mp hpair₂ with ⟨j, hj, rfl⟩
+    rfl
+  exact hfirst₁.symm.trans hfirst₂
+
+/-- The global number of surviving coordinates is `R.card * (q - 1)`. -/
+theorem card_survivingChildPairs
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q : ℕ} {R : Finset ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hR : ∀ r ∈ R, r < primeWorldModulus S) :
+    (survivingChildPairs S q R).card = R.card * (q - 1) := by
+  classical
+  rw [survivingChildPairs_eq_biUnion,
+    Finset.card_biUnion survivingChildPairFiber_pairwiseDisjoint]
+  calc
+    ∑ r ∈ R, (survivingChildPairFiber S q r).card =
+        ∑ r ∈ R, (survivingChildIndices S q r).card := by
+          apply Finset.sum_congr rfl
+          intro r hr
+          rw [survivingChildPairFiber, Finset.card_image_of_injective]
+          intro j₁ j₂ h
+          exact congrArg Prod.snd h
+    _ = ∑ _r ∈ R, (q - 1) := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      exact card_survivingChildIndices hS hq hqS (hR r hr)
+    _ = R.card * (q - 1) := by simp
+
+/-- The seat values obtained from all globally surviving coordinates. -/
+def refinedSurvivingSeats (S : Finset ℕ) (q : ℕ) (R : Finset ℕ) : Finset ℕ :=
+  (survivingChildPairs S q R).image (fun pair => primeWorldChild S pair.1 pair.2)
+
+/-- The child-coordinate map is injective on `survivingChildPairs`. -/
+private theorem refinedChild_injective_on_survivingChildPairs
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q : ℕ} {R : Finset ℕ}
+    (hR : ∀ r ∈ R, r < primeWorldModulus S) :
+    Set.InjOn (fun pair : ℕ × ℕ => primeWorldChild S pair.1 pair.2)
+      (survivingChildPairs S q R : Set (ℕ × ℕ)) := by
+  intro pair₁ hp₁ pair₂ hp₂ hchild
+  rcases pair₁ with ⟨r₁, j₁⟩
+  rcases pair₂ with ⟨r₂, j₂⟩
+  have hp₁' := (mem_survivingChildPairs_iff.mp hp₁)
+  have hp₂' := (mem_survivingChildPairs_iff.mp hp₂)
+  have hcoords := (primeWorldChild_eq_iff_of_lt_modulus hS
+    (hR r₁ hp₁'.1) (hR r₂ hp₂'.1)).mp hchild
+  exact Prod.ext hcoords.1 hcoords.2
+
+/-- The refined seat set has the same cardinality as its surviving coordinates. -/
+theorem card_refinedSurvivingSeats
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q : ℕ} {R : Finset ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hR : ∀ r ∈ R, r < primeWorldModulus S) :
+    (refinedSurvivingSeats S q R).card = R.card * (q - 1) := by
+  classical
+  calc
+    (refinedSurvivingSeats S q R).card =
+        (survivingChildPairs S q R).card := by
+      exact Finset.card_image_of_injOn
+        (refinedChild_injective_on_survivingChildPairs hS hR)
+    _ = R.card * (q - 1) := card_survivingChildPairs hS hq hqS hR
+
+/-- Every refined seat is support-disjoint from the enlarged prime world. -/
+theorem supportDisjointFrom_of_mem_refinedSurvivingSeats
+    {S : Finset ℕ} {q : ℕ} {R : Finset ℕ}
+    (hq : Nat.Prime q)
+    (hRseat : ∀ r ∈ R, SupportDisjointFrom S r)
+    {n : ℕ} (hn : n ∈ refinedSurvivingSeats S q R) :
+    SupportDisjointFrom (insert q S) n := by
+  rcases Finset.mem_image.mp hn with ⟨pair, hp, rfl⟩
+  rcases pair with ⟨r, j⟩
+  have hp' := (mem_survivingChildPairs_iff.mp hp)
+  exact (mem_survivingChildIndices_iff_supportDisjointFrom_insert hq
+    (hRseat r hp'.1)).mp (Finset.mem_filter.mp hp |>.2) |>.2
 
 end DkMath.NumberTheory.Primitive
