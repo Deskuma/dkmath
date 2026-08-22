@@ -82,6 +82,80 @@ theorem supportDisjointFrom_add_mul_primeWorldModulus_iff
       dvd_mul_of_dvd_right hqperiod k
     exact hdisj hq ((Nat.dvd_add_iff_left hqmul).mpr hqsum) hqmem
 
+/-
+The subtraction-side companion uses the natural-number bound explicitly.  It
+is kept local to the observer theorem so that the public result below exposes
+the centered geometry without introducing a second general-purpose
+divisibility API.
+-/
+
+/--
+Support disjointness is invariant under reflection from a multiple of the
+finite-world modulus to its left-hand side.
+
+The hypothesis `hr` is essential because subtraction on `ℕ` is truncated:
+it identifies `k * primeWorldModulus S - r` with the intended difference only
+when `r` lies at or to the left of the center.
+-/
+theorem supportDisjointFrom_mul_primeWorldModulus_sub_iff
+    {S : Finset ℕ} {k r : ℕ}
+    (hr : r ≤ k * primeWorldModulus S) :
+    SupportDisjointFrom S (k * primeWorldModulus S - r) ↔
+      SupportDisjointFrom S r := by
+  constructor
+  · intro hdisj q hq hqr hqmem
+    have hqperiod : q ∣ primeWorldModulus S :=
+      dvd_primeWorldModulus_of_mem hqmem
+    have hqmul : q ∣ k * primeWorldModulus S :=
+      dvd_mul_of_dvd_right hqperiod k
+    have hqsub : q ∣ k * primeWorldModulus S - r :=
+      Nat.dvd_sub hqmul hqr
+    exact hdisj hq hqsub hqmem
+  · intro hdisj q hq hqsub hqmem
+    have hqperiod : q ∣ primeWorldModulus S :=
+      dvd_primeWorldModulus_of_mem hqmem
+    have hqmul : q ∣ k * primeWorldModulus S :=
+      dvd_mul_of_dvd_right hqperiod k
+    have hqcenter : q ∣ r + (k * primeWorldModulus S - r) := by
+      simpa only [Nat.add_comm r, Nat.sub_add_cancel hr] using hqmul
+    exact hdisj hq ((Nat.dvd_add_iff_left hqsub).mpr hqcenter) hqmem
+
+/--
+Support disjointness is invariant under translation from the centered
+coordinate `r` to the positive side of the same multiple of the modulus.
+
+This is a naming-oriented corollary of the generic periodicity theorem; the
+divisibility argument is not duplicated here.
+-/
+theorem supportDisjointFrom_mul_primeWorldModulus_add_iff
+    {S : Finset ℕ} {k r : ℕ} :
+    SupportDisjointFrom S (k * primeWorldModulus S + r) ↔
+      SupportDisjointFrom S r := by
+  simpa [Nat.add_comm] using
+    (supportDisjointFrom_add_mul_primeWorldModulus_iff
+      (S := S) (m := r) (k := k))
+
+/--
+The finite-world support observer is mirror-symmetric around every multiple
+of its product modulus.
+
+This theorem compares candidate seats only: it says that the old-prime
+support state agrees at the two reflected positions.  It does not assert
+that either position is prime.
+-/
+theorem supportDisjointFrom_centered_mirror_iff
+    {S : Finset ℕ} {k r : ℕ}
+    (hr : r ≤ k * primeWorldModulus S) :
+    SupportDisjointFrom S (k * primeWorldModulus S - r) ↔
+      SupportDisjointFrom S (k * primeWorldModulus S + r) := by
+  calc
+    SupportDisjointFrom S (k * primeWorldModulus S - r) ↔
+        SupportDisjointFrom S r :=
+      supportDisjointFrom_mul_primeWorldModulus_sub_iff hr
+    _ ↔ SupportDisjointFrom S (k * primeWorldModulus S + r) :=
+      (supportDisjointFrom_mul_primeWorldModulus_add_iff (S := S) (k := k)
+        (r := r)).symm
+
 /--
 For a certified prime world, support disjointness is equivalent to coprimality
 with the world modulus.
@@ -125,5 +199,21 @@ theorem supportDisjointFrom_primeScalesUpTo_add_period_iff
         (m + k * primeWorldModulus (primeScalesUpTo P)) ↔
       SupportDisjointFrom (primeScalesUpTo P) m :=
   supportDisjointFrom_add_mul_primeWorldModulus_iff
+
+/--
+The canonical bounded prime world inherits the generic centered mirror
+theorem.  This wrapper keeps applications on `primeScalesUpTo P` in the same
+observer vocabulary as the generic result.
+-/
+theorem supportDisjointFrom_primeScalesUpTo_centered_mirror_iff
+    {P k r : ℕ}
+    (hr : r ≤ k * primeWorldModulus (primeScalesUpTo P)) :
+    SupportDisjointFrom
+        (primeScalesUpTo P)
+        (k * primeWorldModulus (primeScalesUpTo P) - r) ↔
+      SupportDisjointFrom
+        (primeScalesUpTo P)
+        (k * primeWorldModulus (primeScalesUpTo P) + r) :=
+  supportDisjointFrom_centered_mirror_iff hr
 
 end DkMath.NumberTheory.Primitive
