@@ -55,6 +55,19 @@ theorem supportDisjointFrom_insert_prime_iff
     · exact hqavoid hpn
     · exact hold hp hpn hpS
 
+/--
+Inserting a prime direction preserves the certified-prime-world invariant.
+The statement intentionally allows redundant insertion.
+-/
+theorem knownPrimeScales_insert
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q : ℕ} (hq : Nat.Prime q) :
+    KnownPrimeScales (insert q S) := by
+  intro p hp
+  rcases Finset.mem_insert.mp hp with rfl | hpS
+  · exact hq
+  · exact hS hpS
+
 /-- A genuinely fresh insertion multiplies the finite-world product modulus by `q`. -/
 theorem primeWorldModulus_insert
     {S : Finset ℕ} {q : ℕ}
@@ -76,6 +89,25 @@ theorem prime_coprime_primeWorldModulus_of_not_mem
 /-- The child of an old seat `r` with child index `j`. -/
 def primeWorldChild (S : Finset ℕ) (r j : ℕ) : ℕ :=
   r + j * primeWorldModulus S
+
+/-- The bounded indices of the children produced by a new prime direction. -/
+def primeWorldChildIndices (q : ℕ) : Finset ℕ :=
+  Finset.range q
+
+/-- The bounded child indices that lie on the new `q`-divisibility wave. -/
+def reservedChildIndices (S : Finset ℕ) (q r : ℕ) : Finset ℕ :=
+  (primeWorldChildIndices q).filter (fun j => q ∣ primeWorldChild S r j)
+
+/-- The bounded child indices that avoid the new `q`-divisibility wave. -/
+def survivingChildIndices (S : Finset ℕ) (q r : ℕ) : Finset ℕ :=
+  (primeWorldChildIndices q).filter (fun j => ¬ q ∣ primeWorldChild S r j)
+
+/-- Membership in `survivingChildIndices` exposes its bounded index and wave avoidance. -/
+theorem mem_survivingChildIndices_iff
+    {S : Finset ℕ} {q r j : ℕ} :
+    j ∈ survivingChildIndices S q r ↔
+      j < q ∧ ¬ q ∣ primeWorldChild S r j := by
+  simp [survivingChildIndices, primeWorldChildIndices]
 
 /-- Every child has the same old-world support state as its parent seat. -/
 theorem supportDisjointFrom_child_iff
@@ -189,5 +221,93 @@ theorem exists_unique_reserved_child_and_other_children_survive
   refine ⟨hrSeat, ?_⟩
   intro hjdvd
   exact hjne (hj0uniq j ⟨hj, hjdvd⟩)
+
+/--
+Under the PRIM-042 hypotheses, the reserved bounded child-index set is a
+singleton.  This is a Finset packaging of the existing unique-child theorem;
+the CRT argument is not repeated.
+-/
+theorem reservedChildIndices_eq_singleton
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q r : ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hr : r < primeWorldModulus S) :
+    ∃ j0,
+      j0 < q ∧ reservedChildIndices S q r = {j0} := by
+  obtain ⟨j0, hj0, hj0uniq⟩ :=
+    existsUnique_child_dvd_new_prime hS hq hqS hr
+  refine ⟨j0, hj0.1, ?_⟩
+  ext j
+  simp only [reservedChildIndices, primeWorldChildIndices,
+    Finset.mem_filter, Finset.mem_range, Finset.mem_singleton]
+  constructor
+  · intro hj
+    exact hj0uniq j hj
+  · intro hj
+    subst j
+    exact hj0
+
+/--
+Exactly `q - 1` bounded child indices avoid the new prime wave.
+
+The proof counts the range as the disjoint union of the reserved filter and
+its negated filter, then uses the singleton certificate above.
+-/
+theorem card_survivingChildIndices
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q r : ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hr : r < primeWorldModulus S) :
+    (survivingChildIndices S q r).card = q - 1 := by
+  obtain ⟨j0, hj0, hreserved⟩ :=
+    reservedChildIndices_eq_singleton hS hq hqS hr
+  have hcard :
+      (reservedChildIndices S q r).card +
+          (survivingChildIndices S q r).card = q := by
+    simpa [reservedChildIndices, survivingChildIndices,
+      primeWorldChildIndices] using
+      (Finset.card_filter_add_card_filter_not
+        (s := primeWorldChildIndices q)
+        (p := fun j => q ∣ primeWorldChild S r j))
+  rw [hreserved, Finset.card_singleton] at hcard
+  omega
+
+/--
+For an old support-disjoint parent seat, surviving-index membership is exactly
+support disjointness in the enlarged prime world.
+-/
+theorem mem_survivingChildIndices_iff_supportDisjointFrom_insert
+    {S : Finset ℕ} {q r j : ℕ}
+    (hq : Nat.Prime q)
+    (hrSeat : SupportDisjointFrom S r) :
+    j ∈ survivingChildIndices S q r ↔
+      j < q ∧
+        SupportDisjointFrom (insert q S) (primeWorldChild S r j) := by
+  rw [mem_survivingChildIndices_iff]
+  constructor
+  · rintro ⟨hj, hjavoid⟩
+    exact ⟨hj, (supportDisjointFrom_insert_prime_child_iff hq).2
+      ⟨hrSeat, hjavoid⟩⟩
+  · rintro ⟨hj, hjnew⟩
+    have hjavoid :=
+      (supportDisjointFrom_insert_prime_child_iff hq).1 hjnew |>.2
+    exact ⟨hj, hjavoid⟩
+
+/-- The refined-world support-disjoint child indices have the same `q - 1` cardinality. -/
+theorem card_supportDisjointFrom_insert_prime_children
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q r : ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hrPeriod : r < primeWorldModulus S)
+    (hrSeat : SupportDisjointFrom S r) :
+    (survivingChildIndices S q r).card = q - 1 ∧
+      ∀ j, j ∈ survivingChildIndices S q r →
+        SupportDisjointFrom (insert q S) (primeWorldChild S r j) := by
+  refine ⟨card_survivingChildIndices hS hq hqS hrPeriod, ?_⟩
+  intro j hj
+  exact (mem_survivingChildIndices_iff_supportDisjointFrom_insert hq hrSeat).mp hj |>.2
 
 end DkMath.NumberTheory.Primitive

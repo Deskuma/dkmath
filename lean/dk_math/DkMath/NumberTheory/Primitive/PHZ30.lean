@@ -120,6 +120,34 @@ theorem primeWorld235_eq_primeScalesUpTo_five :
   rw [primeWorldModulus_insert h7, primeWorldModulus_primeWorld235]
 
 /--
+Every explicit PHZ30 residue is a valid representative of the old period.
+-/
+theorem lt_thirty_of_mem_phzResidues30
+    {r : ℕ} (hr : r ∈ phzResidues30) :
+    r < 30 := by
+  simp only [phzResidues30, Finset.mem_insert, Finset.mem_singleton] at hr
+  rcases hr with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
+  all_goals norm_num
+
+/--
+Each PHZ30 candidate seat has exactly six surviving child indices after the
+fresh direction `7` is inserted.  This is a count certificate only; the
+individual PHZ210 residues are intentionally not enumerated.
+-/
+theorem card_seven_refinement_survivors_of_mem_phzResidues30
+    {r : ℕ} (hr : r ∈ phzResidues30) :
+    (survivingChildIndices primeWorld235 7 r).card = 6 := by
+  have hr30 : r < 30 := lt_thirty_of_mem_phzResidues30 hr
+  have hrPeriod : r < primeWorldModulus primeWorld235 := by
+    simpa [primeWorldModulus_primeWorld235] using hr30
+  have h7 : 7 ∉ primeWorld235 := by
+    simp [primeWorld235]
+  have hcard := card_survivingChildIndices
+    (S := primeWorld235) (q := 7) (r := r)
+    knownPrimeScales_primeWorld235 (by norm_num) h7 hrPeriod
+  simpa using hcard
+
+/--
 The concrete observer inherits the generic period theorem in `r + 30 * k`
 coordinates.
 -/
