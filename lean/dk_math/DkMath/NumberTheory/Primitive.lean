@@ -10,6 +10,7 @@ import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
 import DkMath.NumberTheory.Primitive.PrimeWorldRefinement
 import DkMath.NumberTheory.Primitive.PrimeWorldResidues
 import DkMath.NumberTheory.Primitive.PrimeWorldCardinality
+import DkMath.NumberTheory.Primitive.EulerTotientBridge
 import DkMath.NumberTheory.Primitive.PHZ30
 import DkMath.NumberTheory.Primitive.SquareBody
 
