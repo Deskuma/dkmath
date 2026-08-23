@@ -255,6 +255,112 @@ def squareOffsets (n : ℕ) : Finset ℕ :=
     r ∈ squareOffsets n ↔ SquareOffset n r := by
   simp [squareOffsets, SquareOffset]
 
+/-- The square-offset window has exactly its geometric length many seats. -/
+@[simp] theorem card_squareOffsets (n : ℕ) :
+    (squareOffsets n).card = 2 * n := by
+  simp [squareOffsets, Nat.card_Icc]
+
+/-!
+### PRIM-L006: local wave seats
+
+The following finite sets distinguish a single anchored wave from its prime
+specialization.  Their cardinalities count seats in the local window, not
+global residue density.
+-/
+
+/-- The square-window seats hit by an anchored wave of modulus `m`. -/
+noncomputable def squareWaveOffsets (n m : ℕ) : Finset ℕ := by
+  classical
+  exact (squareOffsets n).filter (fun r => SquareOffsetForbiddenBy n m r)
+
+/-- Membership in a generic anchored wave is window membership plus divisibility. -/
+@[simp] theorem mem_squareWaveOffsets
+    {n m r : ℕ} :
+    r ∈ squareWaveOffsets n m ↔
+      SquareOffset n r ∧ m ∣ n ^ 2 + r := by
+  simp [squareWaveOffsets, SquareOffsetForbiddenBy]
+
+/-- The seats in the square window hit by one old prime wave. -/
+noncomputable def squarePrimeWaveOffsets (n q : ℕ) : Finset ℕ :=
+  squareWaveOffsets n q
+
+/-- Membership in a prime wave seat set does not require primality of its modulus. -/
+@[simp] theorem mem_squarePrimeWaveOffsets
+    {n q r : ℕ} :
+    r ∈ squarePrimeWaveOffsets n q ↔
+      SquareOffset n r ∧ SquareOffsetForbiddenBy n q r := by
+  simp [squarePrimeWaveOffsets, squareWaveOffsets]
+
+/-- Two hits of a positive wave larger than the window must be the same seat. -/
+theorem eq_of_mem_squareWaveOffsets_of_two_mul_lt_modulus
+    {n m r₁ r₂ : ℕ}
+    (hm : 0 < m)
+    (hlarge : 2 * n < m)
+    (hr₁ : r₁ ∈ squareWaveOffsets n m)
+    (hr₂ : r₂ ∈ squareWaveOffsets n m) :
+    r₁ = r₂ := by
+  have hphase₁ :=
+    (squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue
+      (n := n) (q := m) (r := r₁) hm).mp (mem_squareWaveOffsets.mp hr₁).2
+  have hphase₂ :=
+    (squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue
+      (n := n) (q := m) (r := r₂) hm).mp (mem_squareWaveOffsets.mp hr₂).2
+  have hmod : r₁ ≡ r₂ [MOD m] := by
+    rw [Nat.ModEq]
+    exact hphase₁.trans hphase₂.symm
+  have hr₁le : r₁ ≤ 2 * n := (mem_squareWaveOffsets.mp hr₁).1.2
+  have hr₂le : r₂ ≤ 2 * n := (mem_squareWaveOffsets.mp hr₂).1.2
+  apply hmod.eq_of_lt_of_lt
+  · exact lt_of_le_of_lt hr₁le hlarge
+  · exact lt_of_le_of_lt hr₂le hlarge
+
+/-- A wave whose modulus is longer than the square window has at most one hit. -/
+theorem card_squareWaveOffsets_le_one_of_two_mul_lt_modulus
+    {n m : ℕ}
+    (hm : 0 < m)
+    (hlarge : 2 * n < m) :
+    (squareWaveOffsets n m).card ≤ 1 := by
+  rw [Finset.card_le_one]
+  intro r₁ hr₁ r₂ hr₂
+  exact eq_of_mem_squareWaveOffsets_of_two_mul_lt_modulus hm hlarge hr₁ hr₂
+
+/-- The simultaneous seats of two old prime waves. -/
+noncomputable def squarePrimePairOverlapOffsets (n p q : ℕ) : Finset ℕ := by
+  classical
+  exact (squareOffsets n).filter
+    (fun r => SquareOffsetForbiddenBy n p r ∧ SquareOffsetForbiddenBy n q r)
+
+/-- Membership in a pair-overlap seat set is simultaneous divisibility. -/
+@[simp] theorem mem_squarePrimePairOverlapOffsets
+    {n p q r : ℕ} :
+    r ∈ squarePrimePairOverlapOffsets n p q ↔
+      SquareOffset n r ∧ SquareOffsetForbiddenBy n p r ∧
+        SquareOffsetForbiddenBy n q r := by
+  simp [squarePrimePairOverlapOffsets]
+
+/-- Distinct prime-wave overlap is exactly the product wave. -/
+theorem squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product
+    {n p q : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hpq : p ≠ q) :
+    squarePrimePairOverlapOffsets n p q = squareWaveOffsets n (p * q) := by
+  ext r
+  rw [mem_squarePrimePairOverlapOffsets, mem_squareWaveOffsets]
+  rw [squareOffsetForbiddenBy_pair_iff_product_dvd hp hq hpq]
+
+/-- A large product modulus makes a distinct-prime overlap locally unique. -/
+theorem card_squarePrimePairOverlapOffsets_le_one_of_two_mul_lt_product
+    {n p q : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hpq : p ≠ q)
+    (hlarge : 2 * n < p * q) :
+    (squarePrimePairOverlapOffsets n p q).card ≤ 1 := by
+  rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq hpq]
+  exact card_squareWaveOffsets_le_one_of_two_mul_lt_modulus
+    (Nat.mul_pos hp.pos hq.pos) hlarge
+
 /-- The finite subset of square offsets hit by an old prime wave. -/
 noncomputable def coveredSquareOffsets (n : ℕ) : Finset ℕ := by
   classical
@@ -313,6 +419,66 @@ theorem card_squareOffsets_le_squareCoverIncidenceCount_of_fullyCovered
         hfull r (mem_squareOffsets.mp hr)
       exact (Finset.card_pos.mpr
         (squareOffsetCovered_iff_primeSupport_nonempty.mp hcovered))
+
+/-- Full cover gives the incidence lower bound in the explicit window length. -/
+theorem two_mul_le_squareCoverIncidenceCount_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    2 * n ≤ squareCoverIncidenceCount n := by
+  rw [← card_squareOffsets]
+  exact card_squareOffsets_le_squareCoverIncidenceCount_of_fullyCovered hfull
+
+/-- The incidence ledger is exactly the transposed sum of local prime-wave seats. -/
+theorem squareCoverIncidenceCount_eq_sum_primeWave_cards
+    (n : ℕ) :
+    squareCoverIncidenceCount n =
+      ∑ q ∈ primeScalesUpTo n, (squarePrimeWaveOffsets n q).card := by
+  classical
+  unfold squareCoverIncidenceCount
+  calc
+    (∑ r ∈ squareOffsets n, (squareOffsetPrimeSupport n r).card) =
+        ∑ r ∈ squareOffsets n, ∑ q ∈ primeScalesUpTo n,
+          if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      simp [squareOffsetPrimeSupport]
+    _ = ∑ q ∈ primeScalesUpTo n, ∑ r ∈ squareOffsets n,
+          if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      rw [Finset.sum_comm]
+    _ = ∑ q ∈ primeScalesUpTo n, (squarePrimeWaveOffsets n q).card := by
+      apply Finset.sum_congr rfl
+      intro q hq
+      simp [squarePrimeWaveOffsets, squareWaveOffsets]
+
+/-- The repeated-support excess beyond one mandatory incidence per seat. -/
+noncomputable def squareCoverOverlapExcess (n : ℕ) : ℕ :=
+  ∑ r ∈ squareOffsets n,
+    ((squareOffsetPrimeSupport n r).card - 1)
+
+/-- Under full cover, total incidence is window length plus overlap excess. -/
+theorem squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    squareCoverIncidenceCount n =
+      2 * n + squareCoverOverlapExcess n := by
+  classical
+  unfold squareCoverIncidenceCount squareCoverOverlapExcess
+  calc
+    (∑ r ∈ squareOffsets n, (squareOffsetPrimeSupport n r).card) =
+        ∑ r ∈ squareOffsets n,
+          (1 + ((squareOffsetPrimeSupport n r).card - 1)) := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      have hcovered : SquareOffsetCovered n r :=
+        hfull r (mem_squareOffsets.mp hr)
+      have hpos : 0 < (squareOffsetPrimeSupport n r).card :=
+        squareOffsetCovered_iff_primeSupport_card_pos.mp hcovered
+      omega
+    _ = (∑ r ∈ squareOffsets n, 1) +
+          (∑ r ∈ squareOffsets n,
+            ((squareOffsetPrimeSupport n r).card - 1)) := by
+      rw [Finset.sum_add_distrib]
+    _ = 2 * n + ∑ r ∈ squareOffsets n,
+          ((squareOffsetPrimeSupport n r).card - 1) := by
+      simp [card_squareOffsets]
 
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
