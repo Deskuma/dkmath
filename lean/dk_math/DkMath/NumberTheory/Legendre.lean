@@ -386,6 +386,133 @@ theorem card_squareWaveOffsets_eq_div_sub_div
     _ = (n ^ 2 + 2 * n) / m - (n ^ 2) / m := by
       rw [Nat.Ioc_filter_dvd_card_eq_div, Nat.Ioc_filter_dvd_card_eq_div]
 
+/-!
+### PRIM-L008: square-anchor carries
+
+PRIM-L007 counts local hits by a difference of endpoint quotients.  The next
+definition isolates the only correction beyond the complete periods in the
+window: the anchor remainder and the window-length remainder can cross one
+modulus boundary.  This is a finite arithmetic correction, not a density or
+valuation quantity.
+-/
+
+/-- The one-bit boundary carry contributed by a square anchor and a modulus. -/
+def squareWaveCarry (n m : ℕ) : ℕ :=
+  ((n ^ 2 % m) + ((2 * n) % m)) / m
+
+/-- The square-anchor carry is at most one for every positive modulus. -/
+theorem squareWaveCarry_le_one
+    {n m : ℕ} (hm : 0 < m) :
+    squareWaveCarry n m ≤ 1 := by
+  unfold squareWaveCarry
+  have hsum : n ^ 2 % m + (2 * n) % m < 2 * m := by
+    have h₁ := Nat.mod_lt (n ^ 2) hm
+    have h₂ := Nat.mod_lt (2 * n) hm
+    omega
+  have hlt : (n ^ 2 % m + (2 * n) % m) / m < 2 := by
+    apply (Nat.div_lt_iff_lt_mul hm).2
+    simpa [Nat.mul_comm] using hsum
+  omega
+
+/-- The carry is one exactly when the two remainders cross the modulus. -/
+theorem squareWaveCarry_eq_one_iff
+    {n m : ℕ} (hm : 0 < m) :
+    squareWaveCarry n m = 1 ↔
+      m ≤ (n ^ 2 % m) + ((2 * n) % m) := by
+  unfold squareWaveCarry
+  have hsum : n ^ 2 % m + (2 * n) % m < 2 * m := by
+    have h₁ := Nat.mod_lt (n ^ 2) hm
+    have h₂ := Nat.mod_lt (2 * n) hm
+    omega
+  constructor
+  · intro hcarry
+    by_contra hnot
+    have hlt : n ^ 2 % m + (2 * n) % m < m := lt_of_not_ge hnot
+    have hzero := Nat.div_eq_of_lt hlt
+    omega
+  · intro hcross
+    exact Nat.div_eq_of_lt_le (by simpa using hcross) (by omega)
+
+/-- The carry vanishes exactly when the remainder sum stays below the modulus. -/
+theorem squareWaveCarry_eq_zero_iff
+    {n m : ℕ} (hm : 0 < m) :
+    squareWaveCarry n m = 0 ↔
+      (n ^ 2 % m) + ((2 * n) % m) < m := by
+  unfold squareWaveCarry
+  constructor
+  · intro hzero
+    by_contra hnot
+    have hcross : m ≤ n ^ 2 % m + (2 * n) % m := le_of_not_gt hnot
+    have hone : (n ^ 2 % m + (2 * n) % m) / m = 1 := by
+      have hsum : n ^ 2 % m + (2 * n) % m < 2 * m := by
+        have h₁ := Nat.mod_lt (n ^ 2) hm
+        have h₂ := Nat.mod_lt (2 * n) hm
+        omega
+      exact Nat.div_eq_of_lt_le (by simpa using hcross) (by omega)
+    omega
+  · intro hlt
+    exact Nat.div_eq_of_lt hlt
+
+/-- Exact local occupancy as complete periods plus the square-anchor carry. -/
+theorem card_squareWaveOffsets_eq_div_add_carry
+    {n m : ℕ} (hm : 0 < m) :
+    (squareWaveOffsets n m).card =
+      (2 * n) / m + squareWaveCarry n m := by
+  rw [card_squareWaveOffsets_eq_div_sub_div hm]
+  unfold squareWaveCarry
+  by_cases hcross : m ≤ (n ^ 2 % m) + ((2 * n) % m)
+  · rw [Nat.add_div_eq_of_le_mod_add_mod hcross hm]
+    have hsum : n ^ 2 % m + (2 * n) % m < 2 * m := by
+      have h₁ := Nat.mod_lt (n ^ 2) hm
+      have h₂ := Nat.mod_lt (2 * n) hm
+      omega
+    have hcarry :
+        (n ^ 2 % m + (2 * n) % m) / m = 1 :=
+      Nat.div_eq_of_lt_le (by simpa [Nat.one_mul] using hcross) (by omega)
+    rw [hcarry]
+    have hle : n ^ 2 / m ≤ n ^ 2 / m + 2 * n / m :=
+      Nat.le_add_right _ _
+    omega
+  · have hlt : n ^ 2 % m + (2 * n) % m < m := lt_of_not_ge hcross
+    rw [Nat.add_div_eq_of_add_mod_lt hlt, Nat.div_eq_of_lt hlt]
+    simp [Nat.add_comm]
+
+/-- A modulus dividing the anchor has no boundary carry. -/
+theorem squareWaveCarry_eq_zero_of_dvd_anchor
+    {n m : ℕ} (hm : 0 < m) (hmn : m ∣ n) :
+    squareWaveCarry n m = 0 := by
+  have hsq : m ∣ n ^ 2 := dvd_pow hmn (by decide)
+  have hlen : m ∣ 2 * n := dvd_mul_of_dvd_right hmn 2
+  rw [squareWaveCarry_eq_zero_iff hm]
+  rw [Nat.mod_eq_zero_of_dvd hsq, Nat.mod_eq_zero_of_dvd hlen]
+  exact hm
+
+/-- A divisor of the anchor contributes exactly the complete-period count. -/
+theorem card_squareWaveOffsets_eq_div_of_dvd_anchor
+    {n m : ℕ} (hm : 0 < m) (hmn : m ∣ n) :
+    (squareWaveOffsets n m).card = (2 * n) / m := by
+  rw [card_squareWaveOffsets_eq_div_add_carry hm,
+    squareWaveCarry_eq_zero_of_dvd_anchor hm hmn, Nat.add_zero]
+
+/-! The preceding carry identities specialize directly to the prime waves
+used by the finite square-cover ledger. -/
+
+/-- Exact prime-wave occupancy as complete periods plus the anchor carry. -/
+theorem card_squarePrimeWaveOffsets_eq_div_add_carry
+    {n q : ℕ} (hq : Nat.Prime q) :
+    (squarePrimeWaveOffsets n q).card =
+      (2 * n) / q + squareWaveCarry n q := by
+  simpa [squarePrimeWaveOffsets] using
+    (card_squareWaveOffsets_eq_div_add_carry (n := n) (m := q) hq.pos)
+
+/-- A prime divisor of the anchor contributes no carry. -/
+theorem card_squarePrimeWaveOffsets_eq_div_of_dvd_anchor
+    {n q : ℕ} (hq : Nat.Prime q) (hqn : q ∣ n) :
+    (squarePrimeWaveOffsets n q).card = (2 * n) / q := by
+  simpa [squarePrimeWaveOffsets] using
+    (card_squareWaveOffsets_eq_div_of_dvd_anchor (n := n) (m := q)
+      hq.pos hqn)
+
 /-- Exact occupancy for an old prime wave, specialized from the generic formula. -/
 theorem card_squarePrimeWaveOffsets_eq_div_sub_div
     {n q : ℕ}
@@ -516,6 +643,14 @@ def SquareOffsetsFullyCovered (n : ℕ) : Prop :=
 noncomputable def squareCoverIncidenceCount (n : ℕ) : ℕ :=
   ∑ r ∈ squareOffsets n, (squareOffsetPrimeSupport n r).card
 
+/-- The complete-period part of the finite prime-wave incidence ledger. -/
+noncomputable def squareCoverBaselineIncidence (n : ℕ) : ℕ :=
+  ∑ q ∈ primeScalesUpTo n, (2 * n) / q
+
+/-- The total one-bit anchor-carry contribution of the old prime waves. -/
+noncomputable def squareAnchorCarryCount (n : ℕ) : ℕ :=
+  ∑ q ∈ primeScalesUpTo n, squareWaveCarry n q
+
 /-- Full finite cover forces at least one old-prime incidence per offset. -/
 theorem card_squareOffsets_le_squareCoverIncidenceCount_of_fullyCovered
     {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
@@ -560,6 +695,31 @@ theorem squareCoverIncidenceCount_eq_sum_primeWave_cards
       apply Finset.sum_congr rfl
       intro q hq
       simp [squarePrimeWaveOffsets, squareWaveOffsets]
+
+/-- The incidence ledger splits exactly into baseline periods and carries. -/
+theorem squareCoverIncidenceCount_eq_baseline_add_carry
+    (n : ℕ) :
+    squareCoverIncidenceCount n =
+      squareCoverBaselineIncidence n + squareAnchorCarryCount n := by
+  rw [squareCoverIncidenceCount_eq_sum_primeWave_cards]
+  unfold squareCoverBaselineIncidence squareAnchorCarryCount
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro q hq
+  exact card_squarePrimeWaveOffsets_eq_div_add_carry
+    (mem_primeScalesUpTo.mp hq).1
+
+/-- The carry ledger is bounded by the number of old prime scales. -/
+theorem squareAnchorCarryCount_le_card_primeScalesUpTo (n : ℕ) :
+    squareAnchorCarryCount n ≤ (primeScalesUpTo n).card := by
+  unfold squareAnchorCarryCount
+  calc
+    (∑ q ∈ primeScalesUpTo n, squareWaveCarry n q) ≤
+        ∑ q ∈ primeScalesUpTo n, 1 := by
+      apply Finset.sum_le_sum
+      intro q hq
+      exact squareWaveCarry_le_one (mem_primeScalesUpTo.mp hq).1.pos
+    _ = (primeScalesUpTo n).card := by simp
 
 /-- The total incidence count written entirely as endpoint quotient differences. -/
 theorem squareCoverIncidenceCount_eq_sum_div_sub_div
@@ -612,6 +772,18 @@ theorem squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered
     _ = 2 * n + ∑ r ∈ squareOffsets n,
           ((squareOffsetPrimeSupport n r).card - 1) := by
       simp [card_squareOffsets]
+
+/-- Under full cover, baseline plus carries equals the exact incidence budget. -/
+theorem squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_overlapExcess_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n =
+      2 * n + squareCoverOverlapExcess n := by
+  calc
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n =
+        squareCoverIncidenceCount n :=
+      (squareCoverIncidenceCount_eq_baseline_add_carry n).symm
+    _ = 2 * n + squareCoverOverlapExcess n :=
+      squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered hfull
 
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
