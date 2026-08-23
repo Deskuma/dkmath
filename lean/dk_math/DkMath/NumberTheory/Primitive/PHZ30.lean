@@ -8,7 +8,7 @@ import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Tactic
 import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
-import DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+import DkMath.NumberTheory.Primitive.PrimeWorldResidues
 
 #print "file: DkMath.NumberTheory.Primitive.PHZ30"
 
@@ -173,6 +173,45 @@ theorem card_phzResidues210 :
   have hRcard : phzResidues30.card = 8 := by
     norm_num [phzResidues30]
   simpa [phzResidues210, hRcard] using hcard
+
+/-- The explicit PHZ30 list is the canonical residue space of `primeWorld235`. -/
+theorem phzResidues30_eq_primeWorldResidues :
+    phzResidues30 = primeWorldResidues primeWorld235 := by
+  ext r
+  have hmod : primeWorldModulus primeWorld235 = 30 :=
+    primeWorldModulus_primeWorld235
+  rw [mem_primeWorldResidues, hmod]
+  constructor
+  · intro hr
+    have hr30 := lt_thirty_of_mem_phzResidues30 hr
+    have hseat :=
+      (supportDisjointFrom_primeWorld235_iff_mem_phzResidues30 hr30).mpr hr
+    exact ⟨hr30,
+      (supportDisjointFrom_iff_coprime_primeWorldModulus
+        knownPrimeScales_primeWorld235).mp hseat⟩
+  · rintro ⟨hr30, hcop⟩
+    have hseat :=
+      (supportDisjointFrom_iff_coprime_primeWorldModulus
+        knownPrimeScales_primeWorld235).mpr hcop
+    exact (supportDisjointFrom_primeWorld235_iff_mem_phzResidues30 hr30).mp hseat
+
+/-- PHZ210 is exactly the canonical residue space after inserting `7`. -/
+theorem phzResidues210_eq_primeWorldResidues_insert_seven :
+    phzResidues210 = primeWorldResidues (insert 7 primeWorld235) := by
+  rw [phzResidues210, phzResidues30_eq_primeWorldResidues]
+  exact refinedSurvivingSeats_primeWorldResidues_eq
+    knownPrimeScales_primeWorld235 (by norm_num) (by simp [primeWorld235])
+
+/-- One-period exact support-disjoint classification for PHZ210. -/
+theorem mem_phzResidues210_iff
+    {n : ℕ} :
+    n ∈ phzResidues210 ↔
+      n < 210 ∧
+      SupportDisjointFrom (insert 7 primeWorld235) n := by
+  rw [phzResidues210_eq_primeWorldResidues_insert_seven,
+    mem_primeWorldResidues_iff_supportDisjointFrom
+      (knownPrimeScales_insert knownPrimeScales_primeWorld235 (by norm_num))]
+  simp [primeWorldModulus_insert_seven_primeWorld235]
 
 /-- Every constructed PHZ210 candidate is support-disjoint from `2, 3, 5, 7`. -/
 theorem supportDisjointFrom_of_mem_phzResidues210
