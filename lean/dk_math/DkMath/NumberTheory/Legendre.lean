@@ -990,6 +990,249 @@ theorem baseline_add_carry_le_two_mul_add_sum_product_div_add_carry_of_fullyCove
   rw [← squarePrimePairOverlapCount_eq_sum_product_div_add_carry]
   exact baseline_add_carry_le_two_mul_add_pairOverlapCount_of_fullyCovered hfull
 
+/-!
+### PRIM-L010: near/far pair localization
+
+The second-order pair ledger is now localized by the product modulus relative
+to the actual square-window length `2 * n`.  Near products retain a complete
+period baseline, while far products have no complete period and can contribute
+only their one-bit square-anchor carry.  This is finite localization, not an
+analytic estimate or a claim of independence between prime directions.
+-/
+
+/-- Canonical old-prime pairs whose product period fits in the square window. -/
+noncomputable def squarePrimeNearPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+  classical
+  exact (squarePrimePairs n).filter
+    (fun pair => pair.1 * pair.2 ≤ 2 * n)
+
+/-- Canonical old-prime pairs whose product period exceeds the square window. -/
+noncomputable def squarePrimeFarPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+  classical
+  exact (squarePrimePairs n).filter
+    (fun pair => 2 * n < pair.1 * pair.2)
+
+/-- Membership in the near canonical pair set. -/
+@[simp] theorem mem_squarePrimeNearPairs
+    {n p q : ℕ} :
+    (p, q) ∈ squarePrimeNearPairs n ↔
+      (p, q) ∈ squarePrimePairs n ∧ p * q ≤ 2 * n := by
+  simp [squarePrimeNearPairs]
+
+/-- Membership in the far canonical pair set. -/
+@[simp] theorem mem_squarePrimeFarPairs
+    {n p q : ℕ} :
+    (p, q) ∈ squarePrimeFarPairs n ↔
+      (p, q) ∈ squarePrimePairs n ∧ 2 * n < p * q := by
+  simp [squarePrimeFarPairs]
+
+/-- The near and far pair sets form an exact disjoint partition. -/
+theorem squarePrimeNearPairs_union_farPairs (n : ℕ) :
+    squarePrimeNearPairs n ∪ squarePrimeFarPairs n = squarePrimePairs n := by
+  ext pair
+  rcases pair with ⟨p, q⟩
+  by_cases hnear : p * q ≤ 2 * n
+  · simp [squarePrimeNearPairs, squarePrimeFarPairs, hnear]
+  · have hfar : 2 * n < p * q := lt_of_not_ge hnear
+    simp [squarePrimeNearPairs, squarePrimeFarPairs, hnear, hfar]
+
+/-- Near and far canonical pairs are disjoint. -/
+theorem disjoint_squarePrimeNearPairs_squarePrimeFarPairs (n : ℕ) :
+    Disjoint (squarePrimeNearPairs n) (squarePrimeFarPairs n) := by
+  rw [Finset.disjoint_left]
+  intro pair hnear hfar
+  have hnear' := mem_squarePrimeNearPairs.mp hnear
+  have hfar' := mem_squarePrimeFarPairs.mp hfar
+  omega
+
+/-- The near-pair contribution to the second-order overlap ledger. -/
+noncomputable def squarePrimeNearPairOverlapCount (n : ℕ) : ℕ :=
+  ∑ pair ∈ squarePrimeNearPairs n,
+    (squarePrimePairOverlapOffsets n pair.1 pair.2).card
+
+/-- The far-pair contribution to the second-order overlap ledger. -/
+noncomputable def squarePrimeFarPairOverlapCount (n : ℕ) : ℕ :=
+  ∑ pair ∈ squarePrimeFarPairs n,
+    (squarePrimePairOverlapOffsets n pair.1 pair.2).card
+
+/-- The total pair ledger splits exactly into near and far contributions. -/
+theorem squarePrimePairOverlapCount_eq_near_add_far
+    (n : ℕ) :
+    squarePrimePairOverlapCount n =
+      squarePrimeNearPairOverlapCount n +
+        squarePrimeFarPairOverlapCount n := by
+  unfold squarePrimePairOverlapCount squarePrimeNearPairOverlapCount
+    squarePrimeFarPairOverlapCount
+  rw [show squarePrimePairs n =
+      squarePrimeNearPairs n ∪ squarePrimeFarPairs n by
+        symm
+        exact squarePrimeNearPairs_union_farPairs n]
+  rw [Finset.sum_union (disjoint_squarePrimeNearPairs_squarePrimeFarPairs n)]
+
+/-- A wave longer than the window has occupancy equal to its anchor carry. -/
+theorem card_squareWaveOffsets_eq_carry_of_two_mul_lt_modulus
+    {n m : ℕ}
+    (hm : 0 < m)
+    (hfar : 2 * n < m) :
+    (squareWaveOffsets n m).card = squareWaveCarry n m := by
+  rw [card_squareWaveOffsets_eq_div_add_carry hm,
+    Nat.div_eq_of_lt hfar, Nat.zero_add]
+
+/-- A far canonical prime pair has overlap occupancy equal to its product carry. -/
+theorem card_squarePrimePairOverlapOffsets_eq_carry_of_mem_far
+    {n p q : ℕ}
+    (hpq : (p, q) ∈ squarePrimeFarPairs n) :
+    (squarePrimePairOverlapOffsets n p q).card =
+      squareWaveCarry n (p * q) := by
+  rcases mem_squarePrimeFarPairs.mp hpq with ⟨hpair, hfar⟩
+  rcases mem_squarePrimePairs.mp hpair with ⟨hp, hpn, hq, hqn, hpq'⟩
+  rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq hpq'.ne]
+  exact card_squareWaveOffsets_eq_carry_of_two_mul_lt_modulus
+    (Nat.mul_pos hp.pos hq.pos) hfar
+
+/-- Far pairs whose product wave actually hits the square window. -/
+noncomputable def squarePrimeActiveFarPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+  classical
+  exact (squarePrimeFarPairs n).filter
+    (fun pair => squareWaveCarry n (pair.1 * pair.2) = 1)
+
+/-- Membership in the active far-pair set. -/
+@[simp] theorem mem_squarePrimeActiveFarPairs
+    {n p q : ℕ} :
+    (p, q) ∈ squarePrimeActiveFarPairs n ↔
+      (p, q) ∈ squarePrimeFarPairs n ∧
+        squareWaveCarry n (p * q) = 1 := by
+  simp [squarePrimeActiveFarPairs]
+
+/-- The far overlap ledger is exactly the number of active far pairs. -/
+theorem squarePrimeFarPairOverlapCount_eq_card_activeFarPairs
+    (n : ℕ) :
+    squarePrimeFarPairOverlapCount n =
+      (squarePrimeActiveFarPairs n).card := by
+  unfold squarePrimeFarPairOverlapCount
+  calc
+    (∑ pair ∈ squarePrimeFarPairs n,
+        (squarePrimePairOverlapOffsets n pair.1 pair.2).card) =
+        ∑ pair ∈ squarePrimeFarPairs n,
+          squareWaveCarry n (pair.1 * pair.2) := by
+      apply Finset.sum_congr rfl
+      intro pair hpair
+      exact card_squarePrimePairOverlapOffsets_eq_carry_of_mem_far hpair
+    _ = ∑ pair ∈ squarePrimeFarPairs n,
+          if squareWaveCarry n (pair.1 * pair.2) = 1 then 1 else 0 := by
+      apply Finset.sum_congr rfl
+      intro pair hpair
+      have hmem := mem_squarePrimeFarPairs.mp hpair
+      rcases mem_squarePrimePairs.mp hmem.1 with ⟨hp, hpn, hq, hqn, hpq⟩
+      have hle := squareWaveCarry_le_one (n := n)
+        (m := pair.1 * pair.2) (Nat.mul_pos hp.pos hq.pos)
+      split_ifs with hcarry
+      · simp [hcarry]
+      · have hzero : squareWaveCarry n (pair.1 * pair.2) = 0 := by
+          omega
+        simp [hzero]
+    _ = (squarePrimeActiveFarPairs n).card := by
+      rw [Finset.sum_boole]
+      rfl
+
+/-- A far pair is active exactly when its product wave is nonempty. -/
+theorem mem_squarePrimeActiveFarPairs_iff_overlap_nonempty
+    {n p q : ℕ} :
+    (p, q) ∈ squarePrimeActiveFarPairs n ↔
+      (p, q) ∈ squarePrimeFarPairs n ∧
+        (squarePrimePairOverlapOffsets n p q).Nonempty := by
+  constructor
+  · intro hactive
+    refine ⟨(mem_squarePrimeActiveFarPairs.mp hactive).1, ?_⟩
+    apply Finset.card_pos.mp
+    rw [card_squarePrimePairOverlapOffsets_eq_carry_of_mem_far
+      (mem_squarePrimeActiveFarPairs.mp hactive).1]
+    exact (mem_squarePrimeActiveFarPairs.mp hactive).2 ▸ Nat.zero_lt_one
+  · rintro ⟨hfar, hnonempty⟩
+    rw [mem_squarePrimeActiveFarPairs]
+    refine ⟨hfar, ?_⟩
+    have hpos := Finset.card_pos.mpr hnonempty
+    have hcard := card_squarePrimePairOverlapOffsets_eq_carry_of_mem_far hfar
+    have hpair := mem_squarePrimeFarPairs.mp hfar
+    rcases mem_squarePrimePairs.mp hpair.1 with ⟨hp, hpn, hq, hqn, hpq⟩
+    have hle := squareWaveCarry_le_one (n := n)
+      (m := p * q) (Nat.mul_pos hp.pos hq.pos)
+    omega
+
+/-- The complete product-period baseline contributed by near pairs. -/
+noncomputable def squarePrimeNearPairBaseline (n : ℕ) : ℕ :=
+  ∑ pair ∈ squarePrimeNearPairs n,
+    (2 * n) / (pair.1 * pair.2)
+
+/-- The product-wave carry count contributed by near pairs. -/
+noncomputable def squarePrimeNearPairCarryCount (n : ℕ) : ℕ :=
+  ∑ pair ∈ squarePrimeNearPairs n,
+    squareWaveCarry n (pair.1 * pair.2)
+
+/-- Near-pair overlap is exactly baseline periods plus product carries. -/
+theorem squarePrimeNearPairOverlapCount_eq_baseline_add_carry
+    (n : ℕ) :
+    squarePrimeNearPairOverlapCount n =
+      squarePrimeNearPairBaseline n + squarePrimeNearPairCarryCount n := by
+  unfold squarePrimeNearPairOverlapCount squarePrimeNearPairBaseline
+    squarePrimeNearPairCarryCount
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro pair hpair
+  rcases pair with ⟨p, q⟩
+  rcases mem_squarePrimeNearPairs.mp hpair with ⟨hprimepair, hnear⟩
+  rcases mem_squarePrimePairs.mp hprimepair with ⟨hp, hpn, hq, hqn, hpq⟩
+  simpa using
+    (show (squarePrimePairOverlapOffsets n p q).card =
+        (2 * n) / (p * q) + squareWaveCarry n (p * q) by
+      rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq
+        hpq.ne]
+      exact card_squareWaveOffsets_eq_div_add_carry
+        (Nat.mul_pos hp.pos hq.pos))
+
+/-- Every near pair contributes at least one product-wave overlap seat. -/
+theorem one_le_card_squarePrimePairOverlapOffsets_of_mem_near
+    {n p q : ℕ}
+    (hpq : (p, q) ∈ squarePrimeNearPairs n) :
+    1 ≤ (squarePrimePairOverlapOffsets n p q).card := by
+  rcases mem_squarePrimeNearPairs.mp hpq with ⟨hpair, hnear⟩
+  rcases mem_squarePrimePairs.mp hpair with ⟨hp, hpn, hq, hqn, hpq'⟩
+  rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq hpq'.ne,
+    card_squareWaveOffsets_eq_div_add_carry (Nat.mul_pos hp.pos hq.pos)]
+  have hdiv : 1 ≤ (2 * n) / (p * q) := by
+    apply (Nat.le_div_iff_mul_le (Nat.mul_pos hp.pos hq.pos)).2
+    simpa using hnear
+  omega
+
+/-- The complete pair ledger has near baseline, near carry, and active far parts. -/
+theorem squarePrimePairOverlapCount_eq_nearBaseline_add_nearCarry_add_activeFar
+    (n : ℕ) :
+    squarePrimePairOverlapCount n =
+      squarePrimeNearPairBaseline n +
+        squarePrimeNearPairCarryCount n +
+          (squarePrimeActiveFarPairs n).card := by
+  rw [squarePrimePairOverlapCount_eq_near_add_far,
+    squarePrimeNearPairOverlapCount_eq_baseline_add_carry,
+    squarePrimeFarPairOverlapCount_eq_card_activeFarPairs]
+
+/-- Full cover in the localized near/far second-order normal form. -/
+theorem baseline_add_carry_le_two_mul_add_near_far_pair_budget_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n ≤
+      2 * n +
+        (squarePrimeNearPairBaseline n +
+          squarePrimeNearPairCarryCount n +
+            (squarePrimeActiveFarPairs n).card) := by
+  calc
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n ≤
+        2 * n + squarePrimePairOverlapCount n :=
+      baseline_add_carry_le_two_mul_add_pairOverlapCount_of_fullyCovered hfull
+    _ = 2 * n +
+        (squarePrimeNearPairBaseline n +
+          squarePrimeNearPairCarryCount n +
+            (squarePrimeActiveFarPairs n).card) := by
+      rw [squarePrimePairOverlapCount_eq_nearBaseline_add_nearCarry_add_activeFar]
+
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
     {n : ℕ} :
