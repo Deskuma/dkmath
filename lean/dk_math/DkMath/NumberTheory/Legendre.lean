@@ -2417,6 +2417,239 @@ theorem two_mul_totient_le_card_globalQuotients_of_fullyCovered
   two_mul_totient_le_squareAnchorCoprimeGlobalQuotients_of_four_le_of_fullyCovered
     hn hfull
 
+/-!
+### PRIM-L015: quotient co-support and direction/depth dichotomy
+
+Dividing an anchored point `n^2 + r` by one selected old support prime `p`
+preserves every other old prime direction.  The selected direction is the only
+exception: it remains in the quotient exactly when one further `p`-factor was
+present.  The finite support sets below record distinct prime directions, not
+prime-power exponents.  The resulting direction/depth decomposition is
+elementary and does not assert quotient primality, primitive origin, descent,
+or Legendre's conjecture.
+-/
+
+/-! ### PRIM-L015.1: old directions in one quotient -/
+
+/--
+The old nondivisor prime directions dividing a selected complementary quotient.
+
+This is a direction set: membership records one prime divisor, without
+recording its multiplicity.
+-/
+noncomputable def squareQuotientAnchorNondivisorSupport
+    (n p r : ℕ) : Finset ℕ := by
+  classical
+  exact (squareAnchorNondivisorPrimes n).filter
+    (fun q => q ∣ squareOffsetSupportQuotient n p r)
+
+/-- Exact finite semantics of old directions in a complementary quotient. -/
+@[simp] theorem mem_squareQuotientAnchorNondivisorSupport
+    {n p r q : ℕ} :
+    q ∈ squareQuotientAnchorNondivisorSupport n p r ↔
+      Nat.Prime q ∧ q ≤ n ∧ ¬ q ∣ n ∧
+        q ∣ squareOffsetSupportQuotient n p r := by
+  simp [squareQuotientAnchorNondivisorSupport, and_assoc]
+
+/-! ### PRIM-L015.2: support transfer -/
+
+/-- Every old direction in the quotient already divides the anchored point. -/
+theorem squareQuotientAnchorNondivisorSupport_subset_offsetSupport
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    squareQuotientAnchorNondivisorSupport n p r ⊆
+      squareOffsetAnchorNondivisorSupport n r := by
+  intro q hq
+  have hq' := mem_squareQuotientAnchorNondivisorSupport.mp hq
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hqpoint : q ∣ n ^ 2 + r := by
+    rw [← mul_squareOffsetSupportQuotient_eq hp'.2.2.2]
+    exact dvd_mul_of_dvd_right hq'.2.2.2 p
+  exact mem_squareOffsetAnchorNondivisorSupport.mpr
+    ⟨hq'.1, hq'.2.1, hq'.2.2.1, hqpoint⟩
+
+/-- Every off-diagonal old direction survives division by the selected prime. -/
+theorem mem_quotientSupport_iff_mem_offsetSupport_of_ne
+    {n p q r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hqp : q ≠ p) :
+    q ∈ squareQuotientAnchorNondivisorSupport n p r ↔
+      q ∈ squareOffsetAnchorNondivisorSupport n r := by
+  constructor
+  · apply squareQuotientAnchorNondivisorSupport_subset_offsetSupport hp
+  · intro hq
+    have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+    have hq' := mem_squareOffsetAnchorNondivisorSupport.mp hq
+    have hqprod : q ∣ p * squareOffsetSupportQuotient n p r := by
+      rw [mul_squareOffsetSupportQuotient_eq hp'.2.2.2]
+      exact hq'.2.2.2
+    rcases (Nat.Prime.dvd_mul hq'.1).mp hqprod with hqpdiv | hqdiv
+    · have hqeqp : q = p :=
+        ((Nat.dvd_prime hp'.1).mp hqpdiv).resolve_left hq'.1.ne_one
+      exact False.elim (hqp hqeqp)
+    · exact mem_squareQuotientAnchorNondivisorSupport.mpr
+        ⟨hq'.1, hq'.2.1, hq'.2.2.1, hqdiv⟩
+
+/-- Erasing the selected direction gives exact off-diagonal support equality. -/
+theorem erase_squareQuotientSupport_eq_erase_offsetSupport
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    (squareQuotientAnchorNondivisorSupport n p r).erase p =
+      (squareOffsetAnchorNondivisorSupport n r).erase p := by
+  ext q
+  by_cases hqp : q = p
+  · simp [hqp]
+  · simp only [Finset.mem_erase]
+    rw [mem_quotientSupport_iff_mem_offsetSupport_of_ne hp hqp]
+
+/-! ### PRIM-L015.3: cardinality and selected-direction depth -/
+
+/-- Quotient support loses at most the selected prime direction. -/
+theorem offsetSupport_card_sub_one_le_quotientSupport_card
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    (squareOffsetAnchorNondivisorSupport n r).card - 1 ≤
+      (squareQuotientAnchorNondivisorSupport n p r).card := by
+  have hsub :
+      (squareOffsetAnchorNondivisorSupport n r).erase p ⊆
+        squareQuotientAnchorNondivisorSupport n p r := by
+    rw [← erase_squareQuotientSupport_eq_erase_offsetSupport hp]
+    exact Finset.erase_subset _ _
+  have hcard := Finset.card_le_card hsub
+  rw [Finset.card_erase_of_mem hp] at hcard
+  exact hcard
+
+/-- Quotient support is contained in the original support. -/
+theorem quotientSupport_card_le_offsetSupport_card
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    (squareQuotientAnchorNondivisorSupport n p r).card ≤
+      (squareOffsetAnchorNondivisorSupport n r).card := by
+  exact Finset.card_le_card
+    (squareQuotientAnchorNondivisorSupport_subset_offsetSupport hp)
+
+/-- The selected direction persists exactly when a second `p`-factor remains. -/
+theorem selectedPrime_mem_quotientSupport_iff_square_dvd
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    p ∈ squareQuotientAnchorNondivisorSupport n p r ↔
+      p ^ 2 ∣ n ^ 2 + r := by
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  constructor
+  · intro hq
+    have hq' := mem_squareQuotientAnchorNondivisorSupport.mp hq
+    have hmuldiv : p * p ∣ p * squareOffsetSupportQuotient n p r :=
+      Nat.mul_dvd_mul_left p hq'.2.2.2
+    rw [mul_squareOffsetSupportQuotient_eq hp'.2.2.2] at hmuldiv
+    simpa [pow_two] using hmuldiv
+  · intro hsq
+    have hsq' : p * p ∣ p * squareOffsetSupportQuotient n p r := by
+      rw [mul_squareOffsetSupportQuotient_eq hp'.2.2.2]
+      simpa [pow_two] using hsq
+    have hpquot : p ∣ squareOffsetSupportQuotient n p r :=
+      (Nat.mul_dvd_mul_iff_left hp'.1.pos).mp hsq'
+    exact mem_squareQuotientAnchorNondivisorSupport.mpr
+      ⟨hp'.1, hp'.2.1, hp'.2.2.1, hpquot⟩
+
+/-! ### PRIM-L015.4: square-Body closure and direction/depth dichotomy -/
+
+/-- A complementary quotient remains inside the certified square Body. -/
+theorem squareOffsetSupportQuotient_le_squareBody
+    {n p r : ℕ}
+    (hr : SquareOffset n r)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    squareOffsetSupportQuotient n p r ≤ squareBody n := by
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hfactor := mul_squareOffsetSupportQuotient_eq hp'.2.2.2
+  have hpoint : n ^ 2 + r ≤ squareBody n := by
+    dsimp [SquareOffset] at hr
+    dsimp [squareBody]
+    omega
+  have hfactor_le : p * squareOffsetSupportQuotient n p r ≤
+      squareBody n := by
+    rw [hfactor]
+    exact hpoint
+  have hpone : 1 ≤ p := hp'.1.one_le
+  have hquot_le : squareOffsetSupportQuotient n p r ≤
+      p * squareOffsetSupportQuotient n p r := by
+    simpa using Nat.mul_le_mul_right (squareOffsetSupportQuotient n p r)
+      hpone
+  exact hquot_le.trans hfactor_le
+
+/-- A non-prime quotient in the square Body exposes an old nondivisor prime. -/
+theorem exists_old_prime_dvd_quotient_of_not_prime
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hnotprime : ¬ Nat.Prime (squareOffsetSupportQuotient n p r)) :
+    ∃ q, q ∈ squareQuotientAnchorNondivisorSupport n p r := by
+  have hr' := mem_squareAnchorCoprimeOffsets.mp hr
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hlarge : n < squareOffsetSupportQuotient n p r :=
+    anchor_lt_squareOffsetSupportQuotient hr'.1 hp'.2.1 hp'.2.2.2
+  have hupper : squareOffsetSupportQuotient n p r ≤ squareBody n :=
+    squareOffsetSupportQuotient_le_squareBody hr'.1 hp
+  have hquot_one : 1 < squareOffsetSupportQuotient n p r := by
+    omega
+  obtain ⟨q, hqprime, hqdiv, hqle⟩ :=
+    exists_prime_dvd_le_of_not_prime_of_le_squareBody hquot_one hupper
+      hnotprime
+  have hcop : Nat.Coprime n (squareOffsetSupportQuotient n p r) :=
+    (coprime_anchor_squareOffsetSupportQuotient_iff hp'.1 hp'.2.2.1
+      hp'.2.2.2).mpr hr'.2
+  have hqnotn : ¬ q ∣ n := by
+    intro hqn
+    have hqgcd : q ∣ Nat.gcd n (squareOffsetSupportQuotient n p r) :=
+      Nat.dvd_gcd hqn hqdiv
+    rw [hcop.gcd_eq_one] at hqgcd
+    exact hqprime.ne_one (Nat.dvd_one.mp hqgcd)
+  exact ⟨q, mem_squareQuotientAnchorNondivisorSupport.mpr
+    ⟨hqprime, hqle, hqnotn, hqdiv⟩⟩
+
+/-- Quotient non-primality splits into selected depth or another old direction. -/
+theorem not_prime_quotient_iff_self_depth_or_distinct_support
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    ¬ Nat.Prime (squareOffsetSupportQuotient n p r) ↔
+      p ∣ squareOffsetSupportQuotient n p r ∨
+      ∃ q,
+        q ≠ p ∧ q ∈ squareOffsetAnchorNondivisorSupport n r := by
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hlarge : n < squareOffsetSupportQuotient n p r :=
+    anchor_lt_squareOffsetSupportQuotient
+      (mem_squareAnchorCoprimeOffsets.mp hr).1 hp'.2.1 hp'.2.2.2
+  constructor
+  · intro hnotprime
+    obtain ⟨q, hq⟩ := exists_old_prime_dvd_quotient_of_not_prime
+      hn hr hp hnotprime
+    have hq' := mem_squareQuotientAnchorNondivisorSupport.mp hq
+    by_cases hqp : q = p
+    · left
+      simpa [hqp] using hq'.2.2.2
+    · right
+      exact ⟨q, hqp,
+        squareQuotientAnchorNondivisorSupport_subset_offsetSupport hp hq⟩
+  · rintro (hself | ⟨q, hqp, hqoff⟩)
+    · intro hprime
+      rcases (Nat.dvd_prime hprime).mp hself with hone | heq
+      · exact hp'.1.ne_one hone
+      · have hplt : p < squareOffsetSupportQuotient n p r :=
+          lt_of_le_of_lt hp'.2.1 hlarge
+        omega
+    · have hqquot : q ∈ squareQuotientAnchorNondivisorSupport n p r :=
+        (mem_quotientSupport_iff_mem_offsetSupport_of_ne hp hqp).mpr hqoff
+      have hq' := mem_squareQuotientAnchorNondivisorSupport.mp hqquot
+      have hqoff' := mem_squareOffsetAnchorNondivisorSupport.mp hqoff
+      intro hprime
+      rcases (Nat.dvd_prime hprime).mp hq'.2.2.2 with hone | heq
+      · exact hqoff'.1.ne_one hone
+      · have hqlt : q < squareOffsetSupportQuotient n p r :=
+          lt_of_le_of_lt hqoff'.2.1 hlarge
+        omega
+
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
     {n : ℕ} :
