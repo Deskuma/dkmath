@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Data.Finset.Interval
 import DkMath.NumberTheory.Primitive.SquareBody
 
@@ -324,6 +325,106 @@ theorem card_squareWaveOffsets_le_one_of_two_mul_lt_modulus
   intro r₁ hr₁ r₂ hr₂
   exact eq_of_mem_squareWaveOffsets_of_two_mul_lt_modulus hm hlarge hr₁ hr₂
 
+/-- Exact occupancy of a positive anchored wave by endpoint quotient difference.
+
+The proof counts the translated multiples `n ^ 2 + r` in the half-open local
+interval `(n ^ 2, n ^ 2 + 2 * n]`.  Thus this is an actual local hit count,
+not a density assertion for a full period.
+-/
+theorem card_squareWaveOffsets_eq_div_sub_div
+    {n m : ℕ}
+    (_hm : 0 < m) :
+    (squareWaveOffsets n m).card =
+      (n ^ 2 + 2 * n) / m - (n ^ 2) / m := by
+  classical
+  let t : Finset ℕ :=
+    (Finset.Ioc (n ^ 2) (n ^ 2 + 2 * n)).filter (fun x => m ∣ x)
+  have hcard : (squareWaveOffsets n m).card = t.card := by
+    apply Finset.card_bij (fun r _ => n ^ 2 + r)
+    · intro r hr
+      have hr' := mem_squareWaveOffsets.mp hr
+      change n ^ 2 + r ∈
+        (Finset.Ioc (n ^ 2) (n ^ 2 + 2 * n)).filter (fun x => m ∣ x)
+      simp only [Finset.mem_filter, Finset.mem_Ioc]
+      dsimp [SquareOffset] at hr'
+      exact ⟨⟨by omega, by omega⟩, hr'.2⟩
+    · intro r₁ hr₁ r₂ hr₂ hEq
+      omega
+    · intro x hx
+      have hx' := (Finset.mem_filter.mp (show x ∈ t from hx))
+      rcases hx' with ⟨hxIoc, hxdvd⟩
+      have hxIoc' : n ^ 2 < x ∧ x ≤ n ^ 2 + 2 * n :=
+        Finset.mem_Ioc.mp hxIoc
+      have hxle : n ^ 2 ≤ x := le_of_lt hxIoc'.1
+      refine ⟨x - n ^ 2, ?_, ?_⟩
+      · apply mem_squareWaveOffsets.mpr
+        constructor
+        · dsimp [SquareOffset]
+          constructor <;> omega
+        · simpa [Nat.add_sub_of_le hxle] using hxdvd
+      · exact Nat.add_sub_of_le hxle
+  have ht : t =
+      (Finset.Ioc 0 (n ^ 2 + 2 * n)).filter (fun x => m ∣ x) \
+        (Finset.Ioc 0 (n ^ 2)).filter (fun x => m ∣ x) := by
+    ext x
+    simp [t, Finset.mem_Ioc]
+    omega
+  have hsub :
+      (Finset.Ioc 0 (n ^ 2)).filter (fun x => m ∣ x) ⊆
+        (Finset.Ioc 0 (n ^ 2 + 2 * n)).filter (fun x => m ∣ x) := by
+    intro x hx
+    rcases Finset.mem_filter.mp hx with ⟨hxIoc, hxdvd⟩
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_Ioc.mpr ?_, hxdvd⟩
+    have hxIoc' := Finset.mem_Ioc.mp hxIoc
+    exact ⟨hxIoc'.1, by omega⟩
+  calc
+    (squareWaveOffsets n m).card = t.card := hcard
+    _ = ((Finset.Ioc 0 (n ^ 2 + 2 * n)).filter (fun x => m ∣ x)).card -
+        ((Finset.Ioc 0 (n ^ 2)).filter (fun x => m ∣ x)).card := by
+      rw [ht, Finset.card_sdiff_of_subset hsub]
+    _ = (n ^ 2 + 2 * n) / m - (n ^ 2) / m := by
+      rw [Nat.Ioc_filter_dvd_card_eq_div, Nat.Ioc_filter_dvd_card_eq_div]
+
+/-- Exact occupancy for an old prime wave, specialized from the generic formula. -/
+theorem card_squarePrimeWaveOffsets_eq_div_sub_div
+    {n q : ℕ}
+    (hq : Nat.Prime q) :
+    (squarePrimeWaveOffsets n q).card =
+      (n ^ 2 + 2 * n) / q - (n ^ 2) / q := by
+  simpa [squarePrimeWaveOffsets] using
+    (card_squareWaveOffsets_eq_div_sub_div (n := n) (m := q) hq.pos)
+
+/-- The local occupancy is bounded below by the number of complete wave periods. -/
+theorem div_le_card_squareWaveOffsets
+    {n m : ℕ}
+    (hm : 0 < m) :
+    (2 * n) / m ≤ (squareWaveOffsets n m).card := by
+  rw [card_squareWaveOffsets_eq_div_sub_div hm]
+  have hdiv := Nat.add_div_le_add_div (n ^ 2) (2 * n) m
+  omega
+
+/-- The local occupancy is at most one more than the number of complete periods. -/
+theorem card_squareWaveOffsets_le_div_add_one
+    {n m : ℕ}
+    (hm : 0 < m) :
+    (squareWaveOffsets n m).card ≤ (2 * n) / m + 1 := by
+  rw [card_squareWaveOffsets_eq_div_sub_div hm]
+  rw [Nat.add_div hm]
+  split <;> simp [Nat.add_assoc, Nat.add_comm]
+
+/-- Every old prime wave has at least two hits in the anchored square window. -/
+theorem two_le_card_squarePrimeWaveOffsets_of_mem
+    {n q : ℕ}
+    (hq : q ∈ primeScalesUpTo n) :
+    2 ≤ (squarePrimeWaveOffsets n q).card := by
+  have hq' := mem_primeScalesUpTo.mp hq
+  have htwo_div : 2 ≤ (2 * n) / q := by
+    apply (Nat.le_div_iff_mul_le hq'.1.pos).2
+    omega
+  exact htwo_div.trans
+    (div_le_card_squareWaveOffsets hq'.1.pos)
+
 /-- The simultaneous seats of two old prime waves. -/
 noncomputable def squarePrimePairOverlapOffsets (n p q : ℕ) : Finset ℕ := by
   classical
@@ -348,6 +449,17 @@ theorem squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product
   ext r
   rw [mem_squarePrimePairOverlapOffsets, mem_squareWaveOffsets]
   rw [squareOffsetForbiddenBy_pair_iff_product_dvd hp hq hpq]
+
+/-- Exact quotient occupancy of a distinct-prime pair overlap. -/
+theorem card_squarePrimePairOverlapOffsets_eq_div_sub_div
+    {n p q : ℕ}
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hpq : p ≠ q) :
+    (squarePrimePairOverlapOffsets n p q).card =
+      (n ^ 2 + 2 * n) / (p * q) - (n ^ 2) / (p * q) := by
+  rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq hpq]
+  exact card_squareWaveOffsets_eq_div_sub_div (Nat.mul_pos hp.pos hq.pos)
 
 /-- A large product modulus makes a distinct-prime overlap locally unique. -/
 theorem card_squarePrimePairOverlapOffsets_le_one_of_two_mul_lt_product
@@ -448,6 +560,27 @@ theorem squareCoverIncidenceCount_eq_sum_primeWave_cards
       apply Finset.sum_congr rfl
       intro q hq
       simp [squarePrimeWaveOffsets, squareWaveOffsets]
+
+/-- The total incidence count written entirely as endpoint quotient differences. -/
+theorem squareCoverIncidenceCount_eq_sum_div_sub_div
+    (n : ℕ) :
+    squareCoverIncidenceCount n =
+      ∑ q ∈ primeScalesUpTo n,
+        ((n ^ 2 + 2 * n) / q - (n ^ 2) / q) := by
+  rw [squareCoverIncidenceCount_eq_sum_primeWave_cards]
+  apply Finset.sum_congr rfl
+  intro q hq
+  exact card_squarePrimeWaveOffsets_eq_div_sub_div
+    (mem_primeScalesUpTo.mp hq).1
+
+/-- Full cover yields the quotient-arithmetic incidence necessary condition. -/
+theorem two_mul_le_sum_div_sub_div_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    2 * n ≤
+      ∑ q ∈ primeScalesUpTo n,
+        ((n ^ 2 + 2 * n) / q - (n ^ 2) / q) := by
+  rw [← squareCoverIncidenceCount_eq_sum_div_sub_div]
+  exact two_mul_le_squareCoverIncidenceCount_of_fullyCovered hfull
 
 /-- The repeated-support excess beyond one mandatory incidence per seat. -/
 noncomputable def squareCoverOverlapExcess (n : ℕ) : ℕ :=
