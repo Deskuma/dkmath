@@ -1853,6 +1853,266 @@ theorem two_mul_totient_le_coprimeNondivisorIncidence_of_fullyCovered
       have hpos := Finset.card_pos.mpr ⟨q, hqmem⟩
       omega
 
+/-!
+### PRIM-L013: coprime quotient lift and packet factorization
+
+PRIM-L012 separated the coprime square window into packets `(r, n + r)` and
+showed that full cover supplies distinct nondivisor prime directions on the
+two seats.  This checkpoint attaches the complementary factor
+`k = (n ^ 2 + r) / q` to each such finite incidence.  The factor equation is
+exact, and the square-window bounds force `k > n` when `q ≤ n`.
+
+For an anchor-nondivisor prime, coprimality with `n` transfers from the offset
+to its complementary factor.  The quotient image is only a coordinate change
+for existing finite support incidences: no primality, primitivity, uniqueness
+of factorization, or contradiction is asserted for the quotient.  In
+particular, the packet equation exposed below is a structural frontier rather
+than a proof of Legendre's conjecture.
+-/
+
+/-! ### PRIM-L013.1: complementary factors -/
+
+/-- The complementary factor attached to a known support divisor. -/
+def squareOffsetSupportQuotient (n q r : ℕ) : ℕ :=
+  (n ^ 2 + r) / q
+
+/-- Exact reconstruction of an anchored point from its support quotient. -/
+theorem mul_squareOffsetSupportQuotient_eq
+    {n q r : ℕ}
+    (hdiv : q ∣ n ^ 2 + r) :
+    q * squareOffsetSupportQuotient n q r = n ^ 2 + r := by
+  exact Nat.mul_div_cancel' hdiv
+
+/-- A square-window support factor has a complementary factor larger than `n`. -/
+theorem anchor_lt_squareOffsetSupportQuotient
+    {n q r : ℕ}
+    (hr : SquareOffset n r)
+    (hqle : q ≤ n)
+    (hdiv : q ∣ n ^ 2 + r) :
+    n < squareOffsetSupportQuotient n q r := by
+  have hpoint : n ^ 2 < n ^ 2 + r := by
+    dsimp [SquareOffset] at hr
+    omega
+  have hfactor := mul_squareOffsetSupportQuotient_eq hdiv
+  by_contra hnot
+  have hkle : squareOffsetSupportQuotient n q r ≤ n := by omega
+  have hbound : q * squareOffsetSupportQuotient n q r ≤ n ^ 2 := by
+    calc
+      q * squareOffsetSupportQuotient n q r ≤ q * n :=
+        Nat.mul_le_mul_left q hkle
+      _ ≤ n * n := Nat.mul_le_mul_right n hqle
+      _ = n ^ 2 := by simp [pow_two]
+  omega
+
+/-- A nondivisor support incidence has a complementary factor above the anchor. -/
+theorem anchor_lt_squareOffsetSupportQuotient_of_mem_nondivisorSupport
+    {n q r : ℕ}
+    (hr : SquareOffset n r)
+    (hq : q ∈ squareOffsetAnchorNondivisorSupport n r) :
+    n < squareOffsetSupportQuotient n q r := by
+  have hq' := mem_squareOffsetAnchorNondivisorSupport.mp hq
+  exact anchor_lt_squareOffsetSupportQuotient hr hq'.2.1 hq'.2.2.2
+
+/-- Coprimality transfers between a coprime offset and its support quotient. -/
+theorem coprime_anchor_squareOffsetSupportQuotient_iff
+    {n q r : ℕ}
+    (hq : Nat.Prime q)
+    (hqn : ¬ q ∣ n)
+    (hdiv : q ∣ n ^ 2 + r) :
+    Nat.Coprime n (squareOffsetSupportQuotient n q r) ↔
+      Nat.Coprime n r := by
+  have hqcop : Nat.Coprime n q :=
+    (hq.coprime_iff_not_dvd.mpr hqn).symm
+  have hmul :
+      Nat.Coprime n (q * squareOffsetSupportQuotient n q r) ↔
+        Nat.Coprime n (squareOffsetSupportQuotient n q r) := by
+    constructor
+    · intro h
+      exact (Nat.coprime_mul_iff_right.mp h).2
+    · intro h
+      exact hqcop.mul_right h
+  have hpoint : Nat.Coprime n (n ^ 2 + r) ↔ Nat.Coprime n r := by
+    simpa only [pow_two] using Nat.coprime_mul_left_add_right n r n
+  calc
+    Nat.Coprime n (squareOffsetSupportQuotient n q r) ↔
+        Nat.Coprime n (q * squareOffsetSupportQuotient n q r) := hmul.symm
+    _ ↔ Nat.Coprime n (n ^ 2 + r) := by
+      rw [mul_squareOffsetSupportQuotient_eq hdiv]
+    _ ↔ Nat.Coprime n r := hpoint
+
+/-! ### PRIM-L013.2: finite coprime wave quotient images -/
+
+/-- Coprime square seats hit by one old nondivisor prime wave. -/
+noncomputable def squareAnchorCoprimeWaveOffsets (n q : ℕ) : Finset ℕ := by
+  classical
+  exact (squareAnchorCoprimeOffsets n).filter
+    (fun r => SquareOffsetForbiddenBy n q r)
+
+/-- Exact membership in a coprime nondivisor wave. -/
+@[simp] theorem mem_squareAnchorCoprimeWaveOffsets
+    {n q r : ℕ} :
+    r ∈ squareAnchorCoprimeWaveOffsets n q ↔
+      SquareOffset n r ∧ Nat.Coprime n r ∧
+        SquareOffsetForbiddenBy n q r := by
+  simp [squareAnchorCoprimeWaveOffsets, and_assoc]
+
+/-- A nondivisor coprime-wave seat carries a large coprime quotient factor. -/
+theorem squareAnchorCoprimeWaveOffsets_quotient_properties
+    {n q r : ℕ}
+    (hq : q ∈ squareAnchorNondivisorPrimes n)
+    (hr : r ∈ squareAnchorCoprimeWaveOffsets n q) :
+    n < squareOffsetSupportQuotient n q r ∧
+      Nat.Coprime n (squareOffsetSupportQuotient n q r) ∧
+      q * squareOffsetSupportQuotient n q r = n ^ 2 + r := by
+  have hq' := mem_squareAnchorNondivisorPrimes.mp hq
+  have hr' := mem_squareAnchorCoprimeWaveOffsets.mp hr
+  refine ⟨anchor_lt_squareOffsetSupportQuotient hr'.1 hq'.2.1 hr'.2.2,
+    (coprime_anchor_squareOffsetSupportQuotient_iff hq'.1 hq'.2.2
+      hr'.2.2).mpr hr'.2.1, ?_⟩
+  exact mul_squareOffsetSupportQuotient_eq hr'.2.2
+
+/-- Complementary factors carried by a coprime wave are represented finitely. -/
+noncomputable def squareAnchorCoprimeSupportQuotients (n q : ℕ) : Finset ℕ :=
+  (squareAnchorCoprimeWaveOffsets n q).image
+    (fun r => squareOffsetSupportQuotient n q r)
+
+/-- Membership in the finite complementary-factor image. -/
+@[simp] theorem mem_squareAnchorCoprimeSupportQuotients
+    {n q k : ℕ} :
+    k ∈ squareAnchorCoprimeSupportQuotients n q ↔
+      ∃ r, r ∈ squareAnchorCoprimeWaveOffsets n q ∧
+        squareOffsetSupportQuotient n q r = k := by
+  simp [squareAnchorCoprimeSupportQuotients]
+
+/-- A quotient-image member recovers its large, coprime factorization data. -/
+theorem squareAnchorCoprimeSupportQuotients_mem_properties
+    {n q k : ℕ}
+    (hq : q ∈ squareAnchorNondivisorPrimes n)
+    (hk : k ∈ squareAnchorCoprimeSupportQuotients n q) :
+    ∃ r, r ∈ squareAnchorCoprimeWaveOffsets n q ∧
+      n < k ∧ Nat.Coprime n k ∧ q * k = n ^ 2 + r := by
+  rcases mem_squareAnchorCoprimeSupportQuotients.mp hk with ⟨r, hr, hrk⟩
+  have hprops := squareAnchorCoprimeWaveOffsets_quotient_properties hq hr
+  refine ⟨r, hr, ?_, ?_, ?_⟩
+  · simpa [hrk] using hprops.1
+  · simpa [hrk] using hprops.2.1
+  · rw [← hrk]
+    exact hprops.2.2
+
+/-- The quotient map is injective on the seats of a positive prime wave. -/
+theorem card_squareAnchorCoprimeSupportQuotients
+    {n q : ℕ}
+    (hq : q ∈ squareAnchorNondivisorPrimes n) :
+    (squareAnchorCoprimeSupportQuotients n q).card =
+      (squareAnchorCoprimeWaveOffsets n q).card := by
+  classical
+  apply (Finset.card_image_iff).2
+  intro r₁ hr₁ r₂ hr₂ heq
+  have hq' := mem_squareAnchorNondivisorPrimes.mp hq
+  have h₁ := mem_squareAnchorCoprimeWaveOffsets.mp hr₁
+  have h₂ := mem_squareAnchorCoprimeWaveOffsets.mp hr₂
+  have hf₁ := mul_squareOffsetSupportQuotient_eq h₁.2.2
+  have hf₂ := mul_squareOffsetSupportQuotient_eq h₂.2.2
+  have heq' : squareOffsetSupportQuotient n q r₁ =
+      squareOffsetSupportQuotient n q r₂ := heq
+  have hpoint : n ^ 2 + r₁ = n ^ 2 + r₂ := by
+    calc
+      n ^ 2 + r₁ = q * squareOffsetSupportQuotient n q r₁ := hf₁.symm
+      _ = q * squareOffsetSupportQuotient n q r₂ := by rw [heq']
+      _ = n ^ 2 + r₂ := hf₂
+  omega
+
+/-! ### PRIM-L013.3: quotient-coordinate incidence -/
+
+/-- Restricted coprime incidence transposed to one-prime coprime waves. -/
+theorem squareAnchorCoprimeNondivisorIncidence_eq_sum_coprimeWave_cards
+    (n : ℕ) :
+    squareAnchorCoprimeNondivisorIncidence n =
+      ∑ q ∈ squareAnchorNondivisorPrimes n,
+        (squareAnchorCoprimeWaveOffsets n q).card := by
+  classical
+  unfold squareAnchorCoprimeNondivisorIncidence
+  calc
+    (∑ r ∈ squareAnchorCoprimeOffsets n,
+        (squareOffsetAnchorNondivisorSupport n r).card) =
+        ∑ r ∈ squareAnchorCoprimeOffsets n,
+          ∑ q ∈ squareAnchorNondivisorPrimes n,
+            if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      simp [squareOffsetAnchorNondivisorSupport]
+    _ = ∑ q ∈ squareAnchorNondivisorPrimes n,
+          ∑ r ∈ squareAnchorCoprimeOffsets n,
+            if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      rw [Finset.sum_comm]
+    _ = ∑ q ∈ squareAnchorNondivisorPrimes n,
+          (squareAnchorCoprimeWaveOffsets n q).card := by
+      apply Finset.sum_congr rfl
+      intro q hq
+      simp [squareAnchorCoprimeWaveOffsets]
+
+/-- Restricted coprime incidence transposed to quotient-image cardinalities. -/
+theorem squareAnchorCoprimeNondivisorIncidence_eq_sum_quotient_cards
+    (n : ℕ) :
+    squareAnchorCoprimeNondivisorIncidence n =
+      ∑ q ∈ squareAnchorNondivisorPrimes n,
+        (squareAnchorCoprimeSupportQuotients n q).card := by
+  rw [squareAnchorCoprimeNondivisorIncidence_eq_sum_coprimeWave_cards]
+  apply Finset.sum_congr rfl
+  intro q hq
+  exact (card_squareAnchorCoprimeSupportQuotients hq).symm
+
+/-! ### PRIM-L013.4: full-cover packet factorization -/
+
+/-- A fully covered coprime packet yields two distinct small primes and two
+large anchor-coprime complementary factors. -/
+theorem exists_distinct_prime_large_cofactor_packet_of_fullyCovered
+    {n r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeBaseOffsets n)
+    (hfull : SquareOffsetsFullyCovered n) :
+    ∃ p q a b,
+      p ≠ q ∧
+      p ∈ squareAnchorNondivisorPrimes n ∧
+      q ∈ squareAnchorNondivisorPrimes n ∧
+      n < a ∧ n < b ∧
+      Nat.Coprime n a ∧ Nat.Coprime n b ∧
+      p * a = n ^ 2 + r ∧
+      q * b = n ^ 2 + (n + r) ∧
+      p * a + n = q * b := by
+  rcases exists_distinct_anchorNondivisor_cover_pair_of_fullyCovered
+      hn hr hfull with ⟨p, q, hpq, hp, hq⟩
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hq' := mem_squareOffsetAnchorNondivisorSupport.mp hq
+  have hpmem : p ∈ squareAnchorNondivisorPrimes n :=
+    mem_squareAnchorNondivisorPrimes.mpr
+      ⟨hp'.1, hp'.2.1, hp'.2.2.1⟩
+  have hqmem : q ∈ squareAnchorNondivisorPrimes n :=
+    mem_squareAnchorNondivisorPrimes.mpr
+      ⟨hq'.1, hq'.2.1, hq'.2.2.1⟩
+  have hr' := mem_squareAnchorCoprimeBaseOffsets.mp hr
+  have hrbaseSquare : SquareOffset n r := ⟨hr'.1, by omega⟩
+  have hrshiftmem : n + r ∈ squareAnchorCoprimeOffsets n :=
+    mem_squareAnchorCoprimeBaseOffsets_shift_mem_coprimeOffsets hr
+  have hrshift' := mem_squareAnchorCoprimeOffsets.mp hrshiftmem
+  have hrshift : Nat.Coprime n (n + r) := coprime_anchor_add_iff.mpr hr'.2.2
+  have hpa : n < squareOffsetSupportQuotient n p r :=
+    anchor_lt_squareOffsetSupportQuotient hrbaseSquare hp'.2.1 hp'.2.2.2
+  have hqb : n < squareOffsetSupportQuotient n q (n + r) :=
+    anchor_lt_squareOffsetSupportQuotient hrshift'.1 hq'.2.1 hq'.2.2.2
+  have hpa' : Nat.Coprime n (squareOffsetSupportQuotient n p r) :=
+    (coprime_anchor_squareOffsetSupportQuotient_iff hp'.1 hp'.2.2.1
+      hp'.2.2.2).mpr hr'.2.2
+  have hqb' : Nat.Coprime n (squareOffsetSupportQuotient n q (n + r)) :=
+    (coprime_anchor_squareOffsetSupportQuotient_iff hq'.1 hq'.2.2.1
+      hq'.2.2.2).mpr hrshift
+  have hpaeq := mul_squareOffsetSupportQuotient_eq hp'.2.2.2
+  have hqbeq := mul_squareOffsetSupportQuotient_eq hq'.2.2.2
+  refine ⟨p, q, squareOffsetSupportQuotient n p r,
+    squareOffsetSupportQuotient n q (n + r), hpq, hpmem, hqmem,
+    hpa, hqb, hpa', hqb', hpaeq, hqbeq, ?_⟩
+  omega
+
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
     {n : ℕ} :
