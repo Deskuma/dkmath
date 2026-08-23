@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Finset.Interval
 import DkMath.NumberTheory.Primitive.SquareBody
 
 #print "file: DkMath.NumberTheory.Legendre"
@@ -32,6 +34,72 @@ def SquareCell (n m : ℕ) : Prop :=
 /-- The offset coordinates of a point in a consecutive-square cell. -/
 def SquareOffset (n r : ℕ) : Prop :=
   1 ≤ r ∧ r ≤ 2 * n
+
+/-- A fixed prime direction forbids an offset when it divides the anchored point. -/
+def SquareOffsetForbiddenBy (n q r : ℕ) : Prop :=
+  q ∣ n ^ 2 + r
+
+/-- An offset is covered when at least one old bounded prime wave forbids it. -/
+def SquareOffsetCovered (n r : ℕ) : Prop :=
+  ∃ q, q ∈ primeScalesUpTo n ∧ SquareOffsetForbiddenBy n q r
+
+/-- The finite-world cover predicate in explicit prime-and-bound form. -/
+theorem squareOffsetCovered_iff_exists_prime_dvd
+    {n r : ℕ} :
+    SquareOffsetCovered n r ↔
+      ∃ q, Nat.Prime q ∧ q ≤ n ∧ q ∣ n ^ 2 + r := by
+  constructor
+  · rintro ⟨q, hq, hdiv⟩
+    exact ⟨q, (mem_primeScalesUpTo.mp hq).1,
+      (mem_primeScalesUpTo.mp hq).2, hdiv⟩
+  · rintro ⟨q, hq, hqle, hdiv⟩
+    exact ⟨q, (mem_primeScalesUpTo.mpr ⟨hq, hqle⟩), hdiv⟩
+
+/-- Support-disjointness is exactly failure of the old prime-wave cover. -/
+theorem supportDisjointFrom_primeScalesUpTo_square_add_iff_not_covered
+    {n r : ℕ} :
+    SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r) ↔
+      ¬ SquareOffsetCovered n r := by
+  constructor
+  · intro hdisj hcovered
+    rcases hcovered with ⟨q, hq, hdiv⟩
+    exact supportDisjointFrom_primeScalesUpTo_iff.mp hdisj
+      (mem_primeScalesUpTo.mp hq).1 (mem_primeScalesUpTo.mp hq).2 hdiv
+  · intro hnot
+    apply supportDisjointFrom_primeScalesUpTo_iff.mpr
+    intro q hq hqle hdiv
+    exact hnot ⟨q, mem_primeScalesUpTo.mpr ⟨hq, hqle⟩, hdiv⟩
+
+/-- The canonical forbidden residue phase of a square anchor modulo `q`. -/
+def squareAnchorForbiddenResidue (n q : ℕ) : ℕ :=
+  (q - (n ^ 2 % q)) % q
+
+/-- A fixed positive wave forbids exactly one residue phase of the offset. -/
+theorem squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue
+    {n q r : ℕ} (hq : 0 < q) :
+    SquareOffsetForbiddenBy n q r ↔
+      r % q = squareAnchorForbiddenResidue n q := by
+  have hnmod : n ^ 2 % q < q := Nat.mod_lt _ hq
+  have hrmod : r % q < q := Nat.mod_lt _ hq
+  rw [SquareOffsetForbiddenBy, Nat.dvd_iff_mod_eq_zero, Nat.add_mod]
+  dsimp [squareAnchorForbiddenResidue]
+  by_cases hzero : n ^ 2 % q = 0
+  · simp [hzero, Nat.mod_eq_of_lt hrmod]
+  · have hpos : 0 < n ^ 2 % q := Nat.pos_of_ne_zero hzero
+    have hsub : q - n ^ 2 % q < q := by omega
+    rw [Nat.mod_eq_of_lt hsub]
+    by_cases hsum : n ^ 2 % q + r % q < q
+    · rw [Nat.mod_eq_of_lt hsum]
+      omega
+    · have hqsum : q ≤
+          n ^ 2 % q % q + r % q % q := by
+        simpa [Nat.mod_eq_of_lt hnmod, Nat.mod_eq_of_lt hrmod] using hsum
+      have hrel := Nat.add_mod_add_of_le_add_mod hqsum
+      have hrel' :
+          (n ^ 2 % q + r % q) % q + q =
+            n ^ 2 % q + r % q := by
+        simpa [Nat.mod_eq_of_lt hnmod, Nat.mod_eq_of_lt hrmod] using hrel
+      omega
 
 /-- Exact conversion between square-cell and square-offset coordinates. -/
 theorem squareCell_iff_exists_squareOffset (n m : ℕ) :
@@ -67,7 +135,110 @@ directions at most the anchor.
 def SquareAnchoredSupportEscape : Prop :=
   ∀ n : ℕ, 0 < n →
     ∃ r, SquareOffset n r ∧
-      SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r)
+          SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r)
+
+/-- The square-cell offsets as a finite interval. -/
+def squareOffsets (n : ℕ) : Finset ℕ :=
+  Finset.Icc 1 (2 * n)
+
+/-- Membership in `squareOffsets` is exactly the existing square-offset shell. -/
+@[simp] theorem mem_squareOffsets
+    {n r : ℕ} :
+    r ∈ squareOffsets n ↔ SquareOffset n r := by
+  simp [squareOffsets, SquareOffset]
+
+/-- The finite subset of square offsets hit by an old prime wave. -/
+noncomputable def coveredSquareOffsets (n : ℕ) : Finset ℕ := by
+  classical
+  exact (squareOffsets n).filter (SquareOffsetCovered n)
+
+/-- The finite subset of square offsets escaping every old prime wave. -/
+noncomputable def escapingSquareOffsets (n : ℕ) : Finset ℕ := by
+  classical
+  exact (squareOffsets n).filter (fun r => ¬ SquareOffsetCovered n r)
+
+/-- Membership in the finite covered-offset set. -/
+@[simp] theorem mem_coveredSquareOffsets
+    {n r : ℕ} :
+    r ∈ coveredSquareOffsets n ↔
+      SquareOffset n r ∧ SquareOffsetCovered n r := by
+  classical
+  simp [coveredSquareOffsets, mem_squareOffsets]
+
+/-- Membership in the finite escaping-offset set. -/
+@[simp] theorem mem_escapingSquareOffsets
+    {n r : ℕ} :
+    r ∈ escapingSquareOffsets n ↔
+      SquareOffset n r ∧ ¬ SquareOffsetCovered n r := by
+  classical
+  simp [escapingSquareOffsets, mem_squareOffsets]
+
+/-- Escaping membership is the square-shell support-disjointness condition. -/
+theorem mem_escapingSquareOffsets_iff_supportDisjointFrom
+    {n r : ℕ} :
+    r ∈ escapingSquareOffsets n ↔
+      SquareOffset n r ∧
+        SupportDisjointFrom (primeScalesUpTo n) (n ^ 2 + r) := by
+  rw [mem_escapingSquareOffsets,
+    supportDisjointFrom_primeScalesUpTo_square_add_iff_not_covered]
+
+/-- The bad local event that every square-shell offset is covered. -/
+def SquareOffsetsFullyCovered (n : ℕ) : Prop :=
+  ∀ r, SquareOffset n r → SquareOffsetCovered n r
+
+/-- Full cover is equivalent to equality of the covered and shell sets. -/
+theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
+    {n : ℕ} :
+    SquareOffsetsFullyCovered n ↔
+      coveredSquareOffsets n = squareOffsets n := by
+  constructor
+  · intro hfull
+    ext r
+    constructor
+    · intro hr
+      exact mem_squareOffsets.mpr (mem_coveredSquareOffsets.mp hr).1
+    · intro hr
+      exact mem_coveredSquareOffsets.mpr ⟨mem_squareOffsets.mp hr, hfull r
+        (mem_squareOffsets.mp hr)⟩
+  · intro heq r hr
+    have hmem : r ∈ coveredSquareOffsets n := by
+      rw [heq]
+      exact mem_squareOffsets.mpr hr
+    exact (mem_coveredSquareOffsets.mp hmem).2
+
+/-- Failure of full cover is equivalent to a nonempty escaping finite set. -/
+theorem not_squareOffsetsFullyCovered_iff_escaping_nonempty
+    {n : ℕ} :
+    ¬ SquareOffsetsFullyCovered n ↔
+      (escapingSquareOffsets n).Nonempty := by
+  constructor
+  · intro hnot
+    classical
+    by_contra hne
+    apply hnot
+    intro r hr
+    by_contra hnotcovered
+    apply hne
+    exact ⟨r, mem_escapingSquareOffsets.mpr ⟨hr, hnotcovered⟩⟩
+  · rintro ⟨r, hr⟩ hfull
+    exact (mem_escapingSquareOffsets.mp hr).2 (hfull r
+      (mem_escapingSquareOffsets.mp hr).1)
+
+/-- The existing provider is exactly failure of complete finite square-wave cover. -/
+theorem squareAnchoredSupportEscape_iff_not_fully_covered :
+    SquareAnchoredSupportEscape ↔
+      ∀ n : ℕ, 0 < n → ¬ SquareOffsetsFullyCovered n := by
+  constructor
+  · intro hEscape n hn hfull
+    obtain ⟨r, hr, hdisj⟩ := hEscape n hn
+    exact (supportDisjointFrom_primeScalesUpTo_square_add_iff_not_covered.mp
+      hdisj) (hfull r hr)
+  · intro hCover n hn
+    obtain ⟨r, hr⟩ :=
+      (not_squareOffsetsFullyCovered_iff_escaping_nonempty.mp (hCover n hn))
+    have hmem := mem_escapingSquareOffsets.mp hr
+    exact ⟨r, hmem.1,
+      (supportDisjointFrom_primeScalesUpTo_square_add_iff_not_covered.mpr hmem.2)⟩
 
 /--
 The semantic square-escape provider expanded into its elementary bounded-prime
@@ -138,5 +309,12 @@ theorem legendreConjecture_iff_squareAnchoredSupportEscape :
     rw [hqp] at hqle
     omega
   · exact legendreConjecture_of_squareAnchoredSupportEscape
+
+/-- The Legendre conjecture is equivalently the finite square-offset escape frontier. -/
+theorem legendreConjecture_iff_squareOffsets_not_fully_covered :
+    LegendreConjecture ↔
+      ∀ n : ℕ, 0 < n → ¬ SquareOffsetsFullyCovered n :=
+  legendreConjecture_iff_squareAnchoredSupportEscape.trans
+    squareAnchoredSupportEscape_iff_not_fully_covered
 
 end DkMath.NumberTheory.Legendre
