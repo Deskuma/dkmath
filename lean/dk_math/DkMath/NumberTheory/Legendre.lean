@@ -2650,6 +2650,220 @@ theorem not_prime_quotient_iff_self_depth_or_distinct_support
           lt_of_le_of_lt hqoff'.2.1 hlarge
         omega
 
+/-!
+### PRIM-L016: simple support and a fresh quotient direction
+
+PRIM-L015 classified quotient non-primality by two finite old-world
+obstructions: persistence of the selected direction, or another old support
+direction.  This checkpoint formalizes the complementary case.  Singleton
+support means one distinct old direction, while depth one is the elementary
+condition `p^2 ∤ n^2 + r`; no general valuation API is introduced.
+
+Under these hypotheses the quotient is prime, lies above the anchor, and is
+fresh relative to `primeScalesUpTo n`.  This is finite-world freshness only:
+it is not a Zsigmondy, PrimitiveBeam, or Legendre theorem.
+-/
+
+/-! ### PRIM-L016.1: singleton support and depth one -/
+
+/-- No old support direction other than `p` is equivalent to singleton support. -/
+theorem no_distinct_anchorNondivisorSupport_iff_eq_singleton
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    (¬ ∃ q,
+        q ≠ p ∧ q ∈ squareOffsetAnchorNondivisorSupport n r) ↔
+      squareOffsetAnchorNondivisorSupport n r = {p} := by
+  constructor
+  · intro hnodist
+    ext q
+    constructor
+    · intro hq
+      by_cases hqp : q = p
+      · simp [hqp]
+      · exact False.elim (hnodist ⟨q, hqp, hq⟩)
+    · intro hq
+      simp only [Finset.mem_singleton] at hq
+      simpa [hq] using hp
+  · intro hsingle hex
+    rcases hex with ⟨q, hqp, hq⟩
+    have hq' : q ∈ ({p} : Finset ℕ) := by
+      rw [← hsingle]
+      exact hq
+    exact hqp (by simpa using hq')
+
+/-- Depth one is the negated selected-direction persistence condition. -/
+theorem selectedPrime_not_dvd_quotient_iff_not_square_dvd
+    {n p r : ℕ}
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    ¬ p ∣ squareOffsetSupportQuotient n p r ↔
+      ¬ p ^ 2 ∣ n ^ 2 + r := by
+  constructor
+  · intro hnot hsq
+    have hqmem : p ∈ squareQuotientAnchorNondivisorSupport n p r :=
+      (selectedPrime_mem_quotientSupport_iff_square_dvd hp).mpr hsq
+    exact hnot (mem_squareQuotientAnchorNondivisorSupport.mp hqmem).2.2.2
+  · intro hnot hpdvd
+    apply hnot
+    exact (selectedPrime_mem_quotientSupport_iff_square_dvd hp).mp
+      (mem_squareQuotientAnchorNondivisorSupport.mpr
+        ⟨(mem_squareOffsetAnchorNondivisorSupport.mp hp).1,
+          (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.1,
+          (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.2.1,
+          hpdvd⟩)
+
+/-- Exact criterion for a simple-support, depth-one quotient to be prime. -/
+theorem prime_squareOffsetSupportQuotient_iff_singleton_support_and_depth_one
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    Nat.Prime (squareOffsetSupportQuotient n p r) ↔
+      squareOffsetAnchorNondivisorSupport n r = {p} ∧
+      ¬ p ^ 2 ∣ n ^ 2 + r := by
+  have hdich := not_prime_quotient_iff_self_depth_or_distinct_support
+    hn hr hp
+  constructor
+  · intro hprime
+    have hnodist : ¬ ∃ q,
+        q ≠ p ∧ q ∈ squareOffsetAnchorNondivisorSupport n r := by
+      intro hother
+      exact (hdich.mpr (Or.inr hother)) hprime
+    have hsingle :=
+      (no_distinct_anchorNondivisorSupport_iff_eq_singleton hp).mp hnodist
+    have hdepth : ¬ p ^ 2 ∣ n ^ 2 + r := by
+      apply (selectedPrime_not_dvd_quotient_iff_not_square_dvd hp).mp
+      intro hpdvd
+      exact (hdich.mpr (Or.inl hpdvd)) hprime
+    exact ⟨hsingle, hdepth⟩
+  · rintro ⟨hsingle, hdepth⟩
+    by_contra hnotprime
+    rcases hdich.mp hnotprime with hself | hother
+    · exact (selectedPrime_not_dvd_quotient_iff_not_square_dvd hp).mpr
+        hdepth hself
+    · exact (no_distinct_anchorNondivisorSupport_iff_eq_singleton hp).mpr
+        hsingle hother
+
+/-- Convenient constructor for a prime quotient from the simple hypotheses. -/
+theorem prime_squareOffsetSupportQuotient_of_singleton_support_of_not_square_dvd
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hsingle : squareOffsetAnchorNondivisorSupport n r = {p})
+    (hdepth : ¬ p ^ 2 ∣ n ^ 2 + r) :
+    Nat.Prime (squareOffsetSupportQuotient n p r) :=
+  (prime_squareOffsetSupportQuotient_iff_singleton_support_and_depth_one
+    hn hr hp).mpr ⟨hsingle, hdepth⟩
+
+/-! ### PRIM-L016.2: finite-world freshness -/
+
+/-- A complementary quotient lies outside the old bounded prime world. -/
+theorem squareOffsetSupportQuotient_not_mem_primeScalesUpTo
+    {n p r : ℕ}
+    (hr : SquareOffset n r)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    squareOffsetSupportQuotient n p r ∉ primeScalesUpTo n := by
+  intro hk
+  have hk' := mem_primeScalesUpTo.mp hk
+  have hlarge : n < squareOffsetSupportQuotient n p r :=
+    anchor_lt_squareOffsetSupportQuotient hr
+      (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.1
+      (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.2.2
+  omega
+
+/-- The simple quotient is fresh relative to the finite old prime world. -/
+theorem freshPrimeDirection_squareOffsetSupportQuotient_of_singleton_support_of_depth_one
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hsingle : squareOffsetAnchorNondivisorSupport n r = {p})
+    (hdepth : ¬ p ^ 2 ∣ n ^ 2 + r) :
+    FreshPrimeDirection
+      (primeScalesUpTo n)
+      (squareOffsetSupportQuotient n p r)
+      (squareOffsetSupportQuotient n p r) := by
+  let k := squareOffsetSupportQuotient n p r
+  have hkprime : Nat.Prime k := by
+    dsimp [k]
+    exact prime_squareOffsetSupportQuotient_of_singleton_support_of_not_square_dvd
+      hn hr hp hsingle hdepth
+  have hknotmem : k ∉ primeScalesUpTo n := by
+    dsimp [k]
+    exact squareOffsetSupportQuotient_not_mem_primeScalesUpTo
+      (mem_squareAnchorCoprimeOffsets.mp hr).1 hp
+  exact ⟨hkprime, dvd_refl k, hknotmem⟩
+
+/-- The simple quotient has no prime divisor from the old finite world. -/
+theorem supportDisjointFrom_squareOffsetSupportQuotient_of_singleton_support_of_depth_one
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hsingle : squareOffsetAnchorNondivisorSupport n r = {p})
+    (hdepth : ¬ p ^ 2 ∣ n ^ 2 + r) :
+    SupportDisjointFrom
+      (primeScalesUpTo n)
+      (squareOffsetSupportQuotient n p r) := by
+  have hprime := prime_squareOffsetSupportQuotient_of_singleton_support_of_not_square_dvd
+    hn hr hp hsingle hdepth
+  have hnotmem := squareOffsetSupportQuotient_not_mem_primeScalesUpTo
+    (mem_squareAnchorCoprimeOffsets.mp hr).1 hp
+  intro q hqprime hqdiv hqmem
+  rcases (Nat.dvd_prime hprime).mp hqdiv with hqone | hqeq
+  · exact hqprime.ne_one hqone
+  · exact hnotmem (by simpa [hqeq] using hqmem)
+
+/-! ### PRIM-L016.3: the simple old-prime times fresh-prime factorization -/
+
+/-- The simple incidence factors as one old prime and one large fresh prime. -/
+theorem simple_support_depth_one_factorization
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r)
+    (hsingle : squareOffsetAnchorNondivisorSupport n r = {p})
+    (hdepth : ¬ p ^ 2 ∣ n ^ 2 + r) :
+    let k := squareOffsetSupportQuotient n p r
+    Nat.Prime p ∧ p ≤ n ∧ ¬ p ∣ n ∧
+    Nat.Prime k ∧ n < k ∧ Nat.Coprime n k ∧
+    p * k = n ^ 2 + r := by
+  dsimp
+  have hp' := mem_squareOffsetAnchorNondivisorSupport.mp hp
+  have hr' := mem_squareAnchorCoprimeOffsets.mp hr
+  have hkprime := prime_squareOffsetSupportQuotient_of_singleton_support_of_not_square_dvd
+    hn hr hp hsingle hdepth
+  have hklarge := anchor_lt_squareOffsetSupportQuotient hr'.1 hp'.2.1 hp'.2.2.2
+  have hkcop :=
+    (coprime_anchor_squareOffsetSupportQuotient_iff hp'.1 hp'.2.2.1
+      hp'.2.2.2).mpr hr'.2
+  have hkfactor := mul_squareOffsetSupportQuotient_eq hp'.2.2.2
+  exact ⟨hp'.1, hp'.2.1, hp'.2.2.1, hkprime, hklarge, hkcop, hkfactor⟩
+
+/-! ### PRIM-L016.4: fresh-or-obstructed trichotomy -/
+
+/-- Every selected coprime incidence is simple or has an old-world obstruction. -/
+theorem quotient_prime_or_self_depth_or_distinct_support
+    {n p r : ℕ}
+    (hn : 0 < n)
+    (hr : r ∈ squareAnchorCoprimeOffsets n)
+    (hp : p ∈ squareOffsetAnchorNondivisorSupport n r) :
+    Nat.Prime (squareOffsetSupportQuotient n p r) ∨
+      p ^ 2 ∣ n ^ 2 + r ∨
+      ∃ q,
+        q ≠ p ∧ q ∈ squareOffsetAnchorNondivisorSupport n r := by
+  by_cases hprime : Nat.Prime (squareOffsetSupportQuotient n p r)
+  · exact Or.inl hprime
+  · rcases (not_prime_quotient_iff_self_depth_or_distinct_support hn hr hp).mp
+      hprime with hself | hother
+    · exact Or.inr (Or.inl ((selectedPrime_mem_quotientSupport_iff_square_dvd hp).mp
+        (mem_squareQuotientAnchorNondivisorSupport.mpr
+          ⟨(mem_squareOffsetAnchorNondivisorSupport.mp hp).1,
+            (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.1,
+            (mem_squareOffsetAnchorNondivisorSupport.mp hp).2.2.1,
+            hself⟩)))
+    · exact Or.inr (Or.inr hother)
+
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
     {n : ℕ} :
