@@ -26,6 +26,7 @@ namespace DkMath.NumberTheory.Legendre
 
 open DkMath.NumberTheory.Primitive
 open DkMath.NumberTheory.StructuralArithmetic
+open scoped BigOperators
 
 /-- The open interval between the consecutive squares anchored at `n`. -/
 def SquareCell (n m : ℕ) : Prop :=
@@ -100,6 +101,113 @@ theorem squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue
             n ^ 2 % q + r % q := by
         simpa [Nat.mod_eq_of_lt hnmod, Nat.mod_eq_of_lt hrmod] using hrel
       omega
+
+/-!
+### PRIM-L005: square-anchor prime-wave overlaps
+
+The next definitions keep the finite support of an offset explicit.  A support
+cardinality counts distinct old prime waves; it is not a valuation and carries
+no information about the depth of a prime-power divisor.
+-/
+
+/-- The old prime waves that cover one square offset. -/
+noncomputable def squareOffsetPrimeSupport (n r : ℕ) : Finset ℕ := by
+  classical
+  exact (primeScalesUpTo n).filter (fun q => SquareOffsetForbiddenBy n q r)
+
+/-- Membership in the offset support is bounded primality plus divisibility. -/
+@[simp] theorem mem_squareOffsetPrimeSupport
+    {n r q : ℕ} :
+    q ∈ squareOffsetPrimeSupport n r ↔
+      Nat.Prime q ∧ q ≤ n ∧ q ∣ n ^ 2 + r := by
+  simp [squareOffsetPrimeSupport, SquareOffsetForbiddenBy, and_assoc]
+
+/-- Ordinary square-offset coverage is exactly nonempty prime-wave support. -/
+theorem squareOffsetCovered_iff_primeSupport_nonempty
+    {n r : ℕ} :
+    SquareOffsetCovered n r ↔ (squareOffsetPrimeSupport n r).Nonempty := by
+  rw [squareOffsetCovered_iff_exists_prime_dvd]
+  constructor
+  · rintro ⟨q, hq, hqle, hdiv⟩
+    exact ⟨q, mem_squareOffsetPrimeSupport.mpr ⟨hq, hqle, hdiv⟩⟩
+  · rintro ⟨q, hq⟩
+    exact ⟨q, (mem_squareOffsetPrimeSupport.mp hq).1,
+      (mem_squareOffsetPrimeSupport.mp hq).2.1,
+      (mem_squareOffsetPrimeSupport.mp hq).2.2⟩
+
+/-- Coverage has positive support cardinality exactly when it is nonempty. -/
+theorem squareOffsetCovered_iff_primeSupport_card_pos
+    {n r : ℕ} :
+    SquareOffsetCovered n r ↔ 0 < (squareOffsetPrimeSupport n r).card := by
+  rw [squareOffsetCovered_iff_primeSupport_nonempty, Finset.card_pos]
+
+/-- Two distinct old prime waves overlap exactly when their product divides the point. -/
+theorem squareOffsetForbiddenBy_pair_iff_product_dvd
+    {n p q r : ℕ} (hp : Nat.Prime p) (hq : Nat.Prime q) (hpq : p ≠ q) :
+    SquareOffsetForbiddenBy n p r ∧ SquareOffsetForbiddenBy n q r ↔
+      p * q ∣ n ^ 2 + r := by
+  constructor
+  · rintro ⟨hpdiv, hqdiv⟩
+    exact hp.dvd_mul_of_dvd_ne hpq hq hpdiv hqdiv
+  · intro hprod
+    exact ⟨dvd_trans (dvd_mul_right p q) hprod,
+      dvd_trans (dvd_mul_left q p) hprod⟩
+
+/-- A two-wave overlap is one forbidden residue phase modulo the product modulus. -/
+theorem squareOffsetForbiddenBy_pair_iff_product_phase
+    {n p q r : ℕ} (hp : Nat.Prime p) (hq : Nat.Prime q) (hpq : p ≠ q) :
+    SquareOffsetForbiddenBy n p r ∧ SquareOffsetForbiddenBy n q r ↔
+      r % (p * q) = squareAnchorForbiddenResidue n (p * q) := by
+  calc
+    SquareOffsetForbiddenBy n p r ∧ SquareOffsetForbiddenBy n q r ↔
+        p * q ∣ n ^ 2 + r :=
+      squareOffsetForbiddenBy_pair_iff_product_dvd hp hq hpq
+    _ ↔ SquareOffsetForbiddenBy n (p * q) r := by
+      constructor
+      · intro h
+        exact h
+      · intro h
+        exact h
+    _ ↔ r % (p * q) = squareAnchorForbiddenResidue n (p * q) :=
+      squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue
+        (Nat.mul_pos hp.pos hq.pos)
+
+/-- Whether an offset is covered by at least two distinct old prime waves.
+
+This is a support-cardinality predicate: repeated divisibility by one prime
+power is deliberately not counted as additional support.
+-/
+def SquareOffsetOverlap (n r : ℕ) : Prop :=
+  2 ≤ (squareOffsetPrimeSupport n r).card
+
+/-- Overlap has an exact witness consisting of two distinct support primes. -/
+theorem squareOffsetOverlap_iff_exists_distinct_support
+    {n r : ℕ} :
+    SquareOffsetOverlap n r ↔
+      ∃ p q, p ≠ q ∧ p ∈ squareOffsetPrimeSupport n r ∧
+        q ∈ squareOffsetPrimeSupport n r := by
+  constructor
+  · intro hcard
+    dsimp [SquareOffsetOverlap] at hcard
+    have hpos : 0 < (squareOffsetPrimeSupport n r).card :=
+      Nat.zero_lt_of_lt hcard
+    obtain ⟨p, hp⟩ := Finset.card_pos.mp hpos
+    have hgt : 1 < (squareOffsetPrimeSupport n r).card := by omega
+    obtain ⟨q, hq, hqp⟩ := Finset.exists_mem_ne hgt p
+    exact ⟨p, q, Ne.symm hqp, hp, hq⟩
+  · rintro ⟨p, q, hpq, hp, hq⟩
+    have hsubset : ({p, q} : Finset ℕ) ⊆ squareOffsetPrimeSupport n r := by
+      intro x hx
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+      rcases hx with rfl | rfl
+      · exact hp
+      · exact hq
+    have hcard := Finset.card_le_card hsubset
+    change 2 ≤ (squareOffsetPrimeSupport n r).card
+    have hpair : ({p, q} : Finset ℕ).card = 2 :=
+      Finset.card_pair_eq_two_iff.mpr hpq
+    rw [hpair] at hcard
+    exact hcard
 
 /-- Exact conversion between square-cell and square-offset coordinates. -/
 theorem squareCell_iff_exists_squareOffset (n m : ℕ) :
@@ -185,6 +293,26 @@ theorem mem_escapingSquareOffsets_iff_supportDisjointFrom
 /-- The bad local event that every square-shell offset is covered. -/
 def SquareOffsetsFullyCovered (n : ℕ) : Prop :=
   ∀ r, SquareOffset n r → SquareOffsetCovered n r
+
+/-- The total number of old-prime incidences across the square shell. -/
+noncomputable def squareCoverIncidenceCount (n : ℕ) : ℕ :=
+  ∑ r ∈ squareOffsets n, (squareOffsetPrimeSupport n r).card
+
+/-- Full finite cover forces at least one old-prime incidence per offset. -/
+theorem card_squareOffsets_le_squareCoverIncidenceCount_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    (squareOffsets n).card ≤ squareCoverIncidenceCount n := by
+  classical
+  unfold squareCoverIncidenceCount
+  calc
+    (squareOffsets n).card = ∑ r ∈ squareOffsets n, 1 := by simp
+    _ ≤ ∑ r ∈ squareOffsets n, (squareOffsetPrimeSupport n r).card := by
+      apply Finset.sum_le_sum
+      intro r hr
+      have hcovered : SquareOffsetCovered n r :=
+        hfull r (mem_squareOffsets.mp hr)
+      exact (Finset.card_pos.mpr
+        (squareOffsetCovered_iff_primeSupport_nonempty.mp hcovered))
 
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
