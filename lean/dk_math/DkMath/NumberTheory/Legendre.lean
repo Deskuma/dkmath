@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Data.Nat.ModEq
 import Mathlib.Data.Nat.Factorization.Basic
+import Mathlib.Data.Nat.Totient
 import Mathlib.Data.Finset.Interval
 import Mathlib.Data.Finset.Prod
 import DkMath.NumberTheory.Primitive.SquareBody
@@ -1232,6 +1233,292 @@ theorem baseline_add_carry_le_two_mul_add_near_far_pair_budget_of_fullyCovered
           squarePrimeNearPairCarryCount n +
             (squarePrimeActiveFarPairs n).card) := by
       rw [squarePrimePairOverlapCount_eq_nearBaseline_add_nearCarry_add_activeFar]
+
+/-!
+### PRIM-L011: anchor-divisor and coprime-offset localization
+
+This checkpoint partitions old prime directions according to whether they
+divide the square anchor `n`.  A divisor direction has zero forbidden phase
+and therefore sees exactly the offsets divisible by that prime.  Consequently
+the coprime part of the square window can only be covered by nondivisor
+directions.  This is an exact finite partition, not a density estimate or a
+statement about p-adic depth.
+-/
+
+/-- Old prime directions that divide the square anchor. -/
+noncomputable def squareAnchorDivisorPrimes (n : ℕ) : Finset ℕ := by
+  classical
+  exact (primeScalesUpTo n).filter (fun q => q ∣ n)
+
+/-- Old prime directions that do not divide the square anchor. -/
+noncomputable def squareAnchorNondivisorPrimes (n : ℕ) : Finset ℕ := by
+  classical
+  exact (primeScalesUpTo n).filter (fun q => ¬ q ∣ n)
+
+/-- Membership in the anchor-divisor prime world. -/
+@[simp] theorem mem_squareAnchorDivisorPrimes
+    {n q : ℕ} :
+    q ∈ squareAnchorDivisorPrimes n ↔
+      Nat.Prime q ∧ q ≤ n ∧ q ∣ n := by
+  simp [squareAnchorDivisorPrimes, and_assoc]
+
+/-- Membership in the anchor-nondivisor prime world. -/
+@[simp] theorem mem_squareAnchorNondivisorPrimes
+    {n q : ℕ} :
+    q ∈ squareAnchorNondivisorPrimes n ↔
+      Nat.Prime q ∧ q ≤ n ∧ ¬ q ∣ n := by
+  simp [squareAnchorNondivisorPrimes, and_assoc]
+
+/-- The divisor and nondivisor prime worlds partition the old prime scales. -/
+theorem squareAnchorDivisorPrimes_union_nondivisorPrimes (n : ℕ) :
+    squareAnchorDivisorPrimes n ∪ squareAnchorNondivisorPrimes n =
+      primeScalesUpTo n := by
+  ext q
+  by_cases hqn : q ∣ n
+  · simp [squareAnchorDivisorPrimes, squareAnchorNondivisorPrimes, hqn]
+  · simp [squareAnchorDivisorPrimes, squareAnchorNondivisorPrimes, hqn]
+
+/-- The two anchor prime classes are disjoint. -/
+theorem disjoint_squareAnchorDivisorPrimes_squareAnchorNondivisorPrimes
+    (n : ℕ) :
+    Disjoint (squareAnchorDivisorPrimes n) (squareAnchorNondivisorPrimes n) := by
+  rw [Finset.disjoint_left]
+  intro q hdiv hnondiv
+  exact (mem_squareAnchorNondivisorPrimes.mp hnondiv).2.2
+    (mem_squareAnchorDivisorPrimes.mp hdiv).2.2
+
+/-- A divisor prime wave is equivalent to divisibility of the offset itself. -/
+theorem squareOffsetForbiddenBy_iff_dvd_offset_of_dvd_anchor
+    {n q r : ℕ}
+    (hqn : q ∣ n) :
+    SquareOffsetForbiddenBy n q r ↔ q ∣ r := by
+  have hsq : q ∣ n ^ 2 := dvd_pow hqn (by decide)
+  rw [SquareOffsetForbiddenBy]
+  rw [← Nat.dvd_add_iff_right hsq]
+
+/-- A prime dividing the anchor has zero forbidden square-anchor phase. -/
+theorem squareAnchorForbiddenResidue_eq_zero_of_dvd_anchor
+    {n q : ℕ}
+    (_hq : 0 < q)
+    (hqn : q ∣ n) :
+    squareAnchorForbiddenResidue n q = 0 := by
+  unfold squareAnchorForbiddenResidue
+  rw [Nat.mod_eq_zero_of_dvd (dvd_pow hqn (by decide))]
+  simp
+
+/-- A prime not dividing the anchor has nonzero forbidden square-anchor phase. -/
+theorem squareAnchorForbiddenResidue_ne_zero_of_prime_not_dvd_anchor
+    {n q : ℕ}
+    (hq : Nat.Prime q)
+    (hqn : ¬ q ∣ n) :
+    squareAnchorForbiddenResidue n q ≠ 0 := by
+  intro hres
+  have hforbid : SquareOffsetForbiddenBy n q 0 := by
+    rw [squareOffsetForbiddenBy_iff_mod_eq_forbiddenResidue hq.pos]
+    simp [hres]
+  have hsq : q ∣ n ^ 2 := by
+    simpa [SquareOffsetForbiddenBy] using hforbid
+  exact hqn (hq.dvd_of_dvd_pow hsq)
+
+/-- Coverage by an old prime direction dividing the anchor. -/
+def SquareOffsetCoveredByAnchorDivisorPrime (n r : ℕ) : Prop :=
+  ∃ q, q ∈ squareAnchorDivisorPrimes n ∧
+    SquareOffsetForbiddenBy n q r
+
+/-- Coverage by an old prime direction not dividing the anchor. -/
+def SquareOffsetCoveredByAnchorNondivisorPrime (n r : ℕ) : Prop :=
+  ∃ q, q ∈ squareAnchorNondivisorPrimes n ∧
+    SquareOffsetForbiddenBy n q r
+
+/-- Ordinary coverage splits exactly into divisor and nondivisor coverage. -/
+theorem squareOffsetCovered_iff_anchorDivisor_or_nondivisor
+    {n r : ℕ} :
+    SquareOffsetCovered n r ↔
+      SquareOffsetCoveredByAnchorDivisorPrime n r ∨
+        SquareOffsetCoveredByAnchorNondivisorPrime n r := by
+  constructor
+  · rintro ⟨q, hq, hforbid⟩
+    by_cases hqn : q ∣ n
+    · left
+      exact ⟨q, mem_squareAnchorDivisorPrimes.mpr
+        ⟨(mem_primeScalesUpTo.mp hq).1,
+          (mem_primeScalesUpTo.mp hq).2, hqn⟩, hforbid⟩
+    · right
+      exact ⟨q, mem_squareAnchorNondivisorPrimes.mpr
+        ⟨(mem_primeScalesUpTo.mp hq).1,
+          (mem_primeScalesUpTo.mp hq).2, hqn⟩, hforbid⟩
+  · rintro (hdiv | hnondiv)
+    · rcases hdiv with ⟨q, hq, hforbid⟩
+      have hq' := mem_squareAnchorDivisorPrimes.mp hq
+      exact ⟨q, mem_primeScalesUpTo.mpr ⟨hq'.1, hq'.2.1⟩, hforbid⟩
+    · rcases hnondiv with ⟨q, hq, hforbid⟩
+      have hq' := mem_squareAnchorNondivisorPrimes.mp hq
+      exact ⟨q, mem_primeScalesUpTo.mpr ⟨hq'.1, hq'.2.1⟩, hforbid⟩
+
+/-- Divisor-prime coverage is exactly failure of coprimality with the anchor. -/
+theorem squareOffsetCoveredByAnchorDivisorPrime_iff_not_coprime
+    {n r : ℕ}
+    (hn : 0 < n) :
+    SquareOffsetCoveredByAnchorDivisorPrime n r ↔
+      ¬ Nat.Coprime n r := by
+  constructor
+  · rintro ⟨q, hq, hforbid⟩
+    have hq' := mem_squareAnchorDivisorPrimes.mp hq
+    apply Nat.Prime.not_coprime_iff_dvd.mpr
+    exact ⟨q, hq'.1, hq'.2.2,
+      (squareOffsetForbiddenBy_iff_dvd_offset_of_dvd_anchor hq'.2.2).mp
+        hforbid⟩
+  · intro hnot
+    rcases Nat.Prime.not_coprime_iff_dvd.mp hnot with ⟨q, hq, hqn, hqr⟩
+    have hqle : q ≤ n := Nat.le_of_dvd hn hqn
+    refine ⟨q, mem_squareAnchorDivisorPrimes.mpr ⟨hq, hqle, hqn⟩, ?_⟩
+    exact (squareOffsetForbiddenBy_iff_dvd_offset_of_dvd_anchor hqn).mpr hqr
+
+/-- A coprime offset can only be covered by an anchor-nondivisor prime. -/
+theorem squareOffsetCovered_iff_anchorNondivisor_of_coprime
+    {n r : ℕ}
+    (hn : 0 < n)
+    (hcop : Nat.Coprime n r) :
+    SquareOffsetCovered n r ↔
+      SquareOffsetCoveredByAnchorNondivisorPrime n r := by
+  rw [squareOffsetCovered_iff_anchorDivisor_or_nondivisor]
+  constructor
+  · rintro (hdiv | hnondiv)
+    · exact False.elim
+        ((squareOffsetCoveredByAnchorDivisorPrime_iff_not_coprime hn).mp hdiv hcop)
+    · exact hnondiv
+  · intro hnondiv
+    exact Or.inr hnondiv
+
+/-- Coprime offsets in the finite square window. -/
+noncomputable def squareAnchorCoprimeOffsets (n : ℕ) : Finset ℕ := by
+  classical
+  exact (squareOffsets n).filter (fun r => Nat.Coprime n r)
+
+/-- Membership in the coprime part of the square-offset window. -/
+@[simp] theorem mem_squareAnchorCoprimeOffsets
+    {n r : ℕ} :
+    r ∈ squareAnchorCoprimeOffsets n ↔
+      SquareOffset n r ∧ Nat.Coprime n r := by
+  simp [squareAnchorCoprimeOffsets]
+
+/-- The coprime square window consists of two complete totient periods. -/
+theorem card_squareAnchorCoprimeOffsets
+    {n : ℕ}
+    (hn : 0 < n) :
+    (squareAnchorCoprimeOffsets n).card = 2 * Nat.totient n := by
+  classical
+  have hinterval :
+      Finset.Icc 1 (2 * n) =
+        Finset.Ico 1 (n + 1) ∪ Finset.Ico (n + 1) (2 * n + 1) := by
+    ext r
+    simp
+    omega
+  have hdisjoint :
+      Disjoint (Finset.Ico 1 (n + 1))
+        (Finset.Ico (n + 1) (2 * n + 1)) := by
+    rw [Finset.disjoint_left]
+    intro r hr₁ hr₂
+    simp only [Finset.mem_Ico] at hr₁ hr₂
+    omega
+  have hcard₁ :
+      ((Finset.Ico 1 (n + 1)).filter (fun r => Nat.Coprime n r)).card =
+        Nat.totient n := by
+    simpa [Nat.add_comm] using
+      (Nat.filter_coprime_Ico_eq_totient n 1)
+  have hcard₂ :
+      ((Finset.Ico (n + 1) (2 * n + 1)).filter
+          (fun r => Nat.Coprime n r)).card = Nat.totient n := by
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, two_mul] using
+      (Nat.filter_coprime_Ico_eq_totient n (n + 1))
+  have hdisjoint' :
+      Disjoint
+        ((Finset.Ico 1 (n + 1)).filter (fun r => Nat.Coprime n r))
+        ((Finset.Ico (n + 1) (2 * n + 1)).filter
+          (fun r => Nat.Coprime n r)) := by
+    rw [Finset.disjoint_left]
+    intro r hr₁ hr₂
+    exact (Finset.disjoint_left.mp hdisjoint)
+      (Finset.mem_of_mem_filter _ hr₁) (Finset.mem_of_mem_filter _ hr₂)
+  unfold squareAnchorCoprimeOffsets squareOffsets
+  rw [hinterval, Finset.filter_union, Finset.card_union_of_disjoint hdisjoint',
+    hcard₁, hcard₂]
+  omega
+
+/-- Incidence mass supplied by old primes not dividing the anchor. -/
+noncomputable def squareAnchorNondivisorIncidence (n : ℕ) : ℕ :=
+  ∑ q ∈ squareAnchorNondivisorPrimes n,
+    (squarePrimeWaveOffsets n q).card
+
+/-- Full cover forces a nondivisor incidence on every coprime offset. -/
+theorem card_squareAnchorCoprimeOffsets_le_nondivisorIncidence_of_fullyCovered
+    {n : ℕ}
+    (hn : 0 < n)
+    (hfull : SquareOffsetsFullyCovered n) :
+    (squareAnchorCoprimeOffsets n).card ≤
+      squareAnchorNondivisorIncidence n := by
+  classical
+  unfold squareAnchorNondivisorIncidence
+  calc
+    (squareAnchorCoprimeOffsets n).card =
+        ∑ r ∈ squareAnchorCoprimeOffsets n, 1 := by simp
+    _ ≤ ∑ r ∈ squareAnchorCoprimeOffsets n,
+          ∑ q ∈ squareAnchorNondivisorPrimes n,
+            if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      apply Finset.sum_le_sum
+      intro r hr
+      have hcop := mem_squareAnchorCoprimeOffsets.mp hr
+      have hcovered := hfull r hcop.1
+      have hnondiv :=
+        (squareOffsetCovered_iff_anchorNondivisor_of_coprime hn hcop.2).mp
+          hcovered
+      rcases hnondiv with ⟨q, hq, hforbid⟩
+      have hsingle := Finset.single_le_sum
+        (f := fun q => if SquareOffsetForbiddenBy n q r then 1 else 0)
+        (fun q _ => Nat.zero_le _) hq
+      simpa [hforbid] using hsingle
+    _ = ∑ q ∈ squareAnchorNondivisorPrimes n,
+          ∑ r ∈ squareAnchorCoprimeOffsets n,
+            if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+      rw [Finset.sum_comm]
+    _ ≤ ∑ q ∈ squareAnchorNondivisorPrimes n,
+          (squarePrimeWaveOffsets n q).card := by
+      apply Finset.sum_le_sum
+      intro q hq
+      have hsubset : squareAnchorCoprimeOffsets n ⊆ squareOffsets n := by
+        intro r hr
+        exact (mem_squareOffsets).2 (mem_squareAnchorCoprimeOffsets.mp hr).1
+      calc
+        (∑ r ∈ squareAnchorCoprimeOffsets n,
+            if SquareOffsetForbiddenBy n q r then 1 else 0) ≤
+            ∑ r ∈ squareOffsets n,
+              if SquareOffsetForbiddenBy n q r then 1 else 0 := by
+          exact Finset.sum_le_sum_of_subset_of_nonneg hsubset
+            (fun r hr hnot => by simp)
+        _ = (squarePrimeWaveOffsets n q).card := by
+          simp [squarePrimeWaveOffsets, squareWaveOffsets]
+
+/-- Nondivisor-prime incidence in exact baseline-plus-carry form. -/
+theorem squareAnchorNondivisorIncidence_eq_sum_div_add_carry
+    (n : ℕ) :
+    squareAnchorNondivisorIncidence n =
+      ∑ q ∈ squareAnchorNondivisorPrimes n,
+        ((2 * n) / q + squareWaveCarry n q) := by
+  unfold squareAnchorNondivisorIncidence
+  apply Finset.sum_congr rfl
+  intro q hq
+  exact card_squarePrimeWaveOffsets_eq_div_add_carry
+    (mem_squareAnchorNondivisorPrimes.mp hq).1
+
+/-- Totient-form coprime full-cover frontier. -/
+theorem two_mul_totient_le_nondivisorIncidence_of_fullyCovered
+    {n : ℕ}
+    (hn : 0 < n)
+    (hfull : SquareOffsetsFullyCovered n) :
+    2 * Nat.totient n ≤ squareAnchorNondivisorIncidence n := by
+  rw [← card_squareAnchorCoprimeOffsets hn]
+  exact card_squareAnchorCoprimeOffsets_le_nondivisorIncidence_of_fullyCovered
+    hn hfull
 
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
