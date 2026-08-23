@@ -8,6 +8,7 @@ import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Data.Nat.ModEq
 import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Data.Finset.Interval
+import Mathlib.Data.Finset.Prod
 import DkMath.NumberTheory.Primitive.SquareBody
 
 #print "file: DkMath.NumberTheory.Legendre"
@@ -784,6 +785,210 @@ theorem squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_o
       (squareCoverIncidenceCount_eq_baseline_add_carry n).symm
     _ = 2 * n + squareCoverOverlapExcess n :=
       squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered hfull
+
+/-!
+### PRIM-L009: pair-overlap budget
+
+The second-order ledger records unordered pairs of distinct old prime
+directions.  It is a finite double count of support intersections: an offset
+with support size `k` contributes `k - 1` to the overlap excess and
+`Nat.choose k 2` to the pair ledger.  No higher-order inclusion-exclusion or
+analytic estimate is used here.
+-/
+
+/-- Canonical ordered representatives of the unordered pairs in a finite set. -/
+private def upperPairs (s : Finset ℕ) : Finset (ℕ × ℕ) :=
+  s.offDiag.filter (fun pair => pair.1 < pair.2)
+
+/-- The reverse orientation of the canonical representatives. -/
+private def lowerPairs (s : Finset ℕ) : Finset (ℕ × ℕ) :=
+  s.offDiag.filter (fun pair => pair.2 < pair.1)
+
+/-- Canonical pair representatives have the expected binomial cardinality. -/
+private theorem card_upperPairs_eq_choose (s : Finset ℕ) :
+    (upperPairs s).card = Nat.choose s.card 2 := by
+  classical
+  have hswap : (lowerPairs s).card = (upperPairs s).card := by
+    apply Finset.card_bij (fun pair _ => (pair.2, pair.1))
+    · intro pair hpair
+      have hpair' := Finset.mem_filter.mp hpair
+      have hdiag := Finset.mem_offDiag.mp hpair'.1
+      apply Finset.mem_filter.mpr
+      exact ⟨Finset.mem_offDiag.mpr
+          ⟨hdiag.2.1, hdiag.1, Ne.symm hdiag.2.2⟩,
+        hpair'.2⟩
+    · intro pair₁ hpair₁ pair₂ hpair₂ heq
+      exact Prod.ext (congrArg Prod.snd heq) (congrArg Prod.fst heq)
+    · intro pair hpair
+      refine ⟨(pair.2, pair.1), ?_, ?_⟩
+      · have hpair' := Finset.mem_filter.mp hpair
+        have hdiag := Finset.mem_offDiag.mp hpair'.1
+        apply Finset.mem_filter.mpr
+        exact ⟨Finset.mem_offDiag.mpr
+            ⟨hdiag.2.1, hdiag.1, Ne.symm hdiag.2.2⟩,
+          hpair'.2⟩
+      · rfl
+  have hneg : s.offDiag.filter (fun pair => ¬ pair.1 < pair.2) =
+      lowerPairs s := by
+    ext pair
+    simp [lowerPairs]
+    omega
+  have hsplit := Finset.card_filter_add_card_filter_not
+    (s := s.offDiag) (p := fun pair : ℕ × ℕ => pair.1 < pair.2)
+  rw [hneg] at hsplit
+  have hsum : (upperPairs s).card + (lowerPairs s).card = s.offDiag.card := by
+    simpa [upperPairs] using hsplit
+  have htwice : 2 * (upperPairs s).card = s.offDiag.card := by
+    omega
+  rw [Nat.choose_two_right, Nat.mul_sub_left_distrib, mul_one,
+    ← Finset.offDiag_card]
+  exact (Nat.div_eq_of_eq_mul_right Nat.zero_lt_two htwice.symm).symm
+
+/-- One offset's unordered support-pair multiplicity. -/
+noncomputable def squareOffsetPrimePairMultiplicity (n r : ℕ) : ℕ :=
+  Nat.choose (squareOffsetPrimeSupport n r).card 2
+
+/-- A support of size `k` has at least `k - 1` unordered distinct pairs. -/
+theorem primeSupport_sub_one_le_pairMultiplicity
+    {n r : ℕ} :
+    (squareOffsetPrimeSupport n r).card - 1 ≤
+      squareOffsetPrimePairMultiplicity n r := by
+  unfold squareOffsetPrimePairMultiplicity
+  rw [Nat.choose_two_right]
+  by_cases hsmall : (squareOffsetPrimeSupport n r).card ≤ 1
+  · omega
+  · have hlarge : 2 ≤ (squareOffsetPrimeSupport n r).card := by omega
+    apply (Nat.le_div_iff_mul_le Nat.zero_lt_two).2
+    simpa [Nat.mul_comm] using
+      (Nat.mul_le_mul_right ((squareOffsetPrimeSupport n r).card - 1) hlarge)
+
+/-- One copy of every unordered pair of old prime directions. -/
+noncomputable def squarePrimePairs (n : ℕ) : Finset (ℕ × ℕ) := by
+  classical
+  exact ((primeScalesUpTo n).product (primeScalesUpTo n)).filter
+    (fun pair => pair.1 < pair.2)
+
+/-- Membership in the canonical old-prime pair set. -/
+@[simp] theorem mem_squarePrimePairs
+    {n p q : ℕ} :
+    (p, q) ∈ squarePrimePairs n ↔
+      Nat.Prime p ∧ p ≤ n ∧ Nat.Prime q ∧ q ≤ n ∧ p < q := by
+  simp [squarePrimePairs, and_assoc, and_left_comm, and_comm]
+
+/-- Pair-overlap incidence count over canonical old-prime pairs. -/
+noncomputable def squarePrimePairOverlapCount (n : ℕ) : ℕ :=
+  ∑ pair ∈ squarePrimePairs n,
+    (squarePrimePairOverlapOffsets n pair.1 pair.2).card
+
+/-- The pair ledger is exactly the sum of local unordered support-pair counts. -/
+theorem squarePrimePairOverlapCount_eq_sum_local_pairMultiplicity
+    (n : ℕ) :
+    squarePrimePairOverlapCount n =
+      ∑ r ∈ squareOffsets n,
+        squareOffsetPrimePairMultiplicity n r := by
+  classical
+  have hpairset (r : ℕ) :
+      (squarePrimePairs n).filter
+          (fun pair => pair.1 ∈ squareOffsetPrimeSupport n r ∧
+            pair.2 ∈ squareOffsetPrimeSupport n r) =
+        upperPairs (squareOffsetPrimeSupport n r) := by
+    ext pair
+    rcases pair with ⟨p, q⟩
+    simp [squarePrimePairs, upperPairs, mem_squareOffsetPrimeSupport,
+      and_assoc, and_left_comm, and_comm]
+    omega
+  unfold squarePrimePairOverlapCount
+  calc
+    (∑ pair ∈ squarePrimePairs n,
+        (squarePrimePairOverlapOffsets n pair.1 pair.2).card) =
+        ∑ pair ∈ squarePrimePairs n, ∑ r ∈ squareOffsets n,
+          if SquareOffsetForbiddenBy n pair.1 r ∧
+              SquareOffsetForbiddenBy n pair.2 r then 1 else 0 := by
+      apply Finset.sum_congr rfl
+      intro pair hpair
+      simp [squarePrimePairOverlapOffsets, squareOffsets]
+    _ = ∑ r ∈ squareOffsets n, ∑ pair ∈ squarePrimePairs n,
+          if SquareOffsetForbiddenBy n pair.1 r ∧
+              SquareOffsetForbiddenBy n pair.2 r then 1 else 0 := by
+      rw [Finset.sum_comm]
+    _ = ∑ r ∈ squareOffsets n,
+          ((squarePrimePairs n).filter
+            (fun pair => pair.1 ∈ squareOffsetPrimeSupport n r ∧
+              pair.2 ∈ squareOffsetPrimeSupport n r)).card := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      rw [Finset.sum_boole]
+      apply congrArg Finset.card
+      ext pair
+      rcases pair with ⟨p, q⟩
+      simp [mem_squareOffsetPrimeSupport, SquareOffsetForbiddenBy]
+      aesop
+    _ = ∑ r ∈ squareOffsets n,
+          (upperPairs (squareOffsetPrimeSupport n r)).card := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      rw [hpairset]
+    _ = ∑ r ∈ squareOffsets n,
+          squareOffsetPrimePairMultiplicity n r := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      unfold squareOffsetPrimePairMultiplicity
+      exact card_upperPairs_eq_choose _
+
+/-- Pair multiplicity dominates the repeated-support excess at every offset. -/
+theorem squareCoverOverlapExcess_le_squarePrimePairOverlapCount
+    (n : ℕ) :
+    squareCoverOverlapExcess n ≤ squarePrimePairOverlapCount n := by
+  rw [squarePrimePairOverlapCount_eq_sum_local_pairMultiplicity]
+  unfold squareCoverOverlapExcess
+  apply Finset.sum_le_sum
+  intro r hr
+  exact primeSupport_sub_one_le_pairMultiplicity
+
+/-- Full cover obeys the second-order pair-overlap budget constraint. -/
+theorem baseline_add_carry_le_two_mul_add_pairOverlapCount_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n ≤
+      2 * n + squarePrimePairOverlapCount n := by
+  calc
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n =
+        2 * n + squareCoverOverlapExcess n :=
+      squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_overlapExcess_of_fullyCovered
+        hfull
+    _ ≤ 2 * n + squarePrimePairOverlapCount n := by
+      exact Nat.add_le_add_left
+        (squareCoverOverlapExcess_le_squarePrimePairOverlapCount n) (2 * n)
+
+/-- Pair overlap reduces to exact occupancy of the product-modulus wave. -/
+theorem squarePrimePairOverlapCount_eq_sum_product_div_add_carry
+    (n : ℕ) :
+    squarePrimePairOverlapCount n =
+      ∑ pair ∈ squarePrimePairs n,
+        ((2 * n) / (pair.1 * pair.2) +
+          squareWaveCarry n (pair.1 * pair.2)) := by
+  unfold squarePrimePairOverlapCount
+  apply Finset.sum_congr rfl
+  intro pair hpair
+  rcases pair with ⟨p, q⟩
+  rcases mem_squarePrimePairs.mp hpair with ⟨hp, hpn, hq, hqn, hpq⟩
+  simpa using
+    (show (squarePrimePairOverlapOffsets n p q).card =
+        (2 * n) / (p * q) + squareWaveCarry n (p * q) by
+      rw [squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product hp hq
+        hpq.ne]
+      exact card_squareWaveOffsets_eq_div_add_carry
+        (Nat.mul_pos hp.pos hq.pos))
+
+/-- The full-cover pair budget in its expanded product-wave arithmetic form. -/
+theorem baseline_add_carry_le_two_mul_add_sum_product_div_add_carry_of_fullyCovered
+    {n : ℕ} (hfull : SquareOffsetsFullyCovered n) :
+    squareCoverBaselineIncidence n + squareAnchorCarryCount n ≤
+      2 * n +
+        ∑ pair ∈ squarePrimePairs n,
+          ((2 * n) / (pair.1 * pair.2) +
+            squareWaveCarry n (pair.1 * pair.2)) := by
+  rw [← squarePrimePairOverlapCount_eq_sum_product_div_add_carry]
+  exact baseline_add_carry_le_two_mul_add_pairOverlapCount_of_fullyCovered hfull
 
 /-- Full cover is equivalent to equality of the covered and shell sets. -/
 theorem squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq
