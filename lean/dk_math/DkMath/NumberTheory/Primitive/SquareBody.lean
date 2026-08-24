@@ -91,4 +91,207 @@ theorem prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
   exact prime_of_supportDisjointFrom_le_squareBody hm hmUpper
     (supportDisjointFrom_primeScalesUpTo_iff.mp hdisj)
 
+/-! ### PRIM-C001: the old-times-one-fresh square-Body decomposition -/
+
+/--
+A prime strictly above the anchor cannot occur twice in a positive square-Body
+point.  The proof uses only the exact endpoint
+`squareBody P + 1 = (P + 1)^2`; it is a generic finite arithmetic statement,
+not a primitive-origin or Legendre assertion.
+-/
+theorem not_prime_sq_dvd_of_anchor_lt_of_le_squareBody
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (_hp : Nat.Prime p)
+    (hlarge : P < p) :
+    ¬ p ^ 2 ∣ m := by
+  intro hsq
+  have hsq_le : p ^ 2 ≤ m := Nat.le_of_dvd hm hsq
+  have hanchor : P + 1 ≤ p := by omega
+  have hpow : (P + 1) ^ 2 ≤ p ^ 2 := by
+    simpa [pow_two] using Nat.mul_le_mul hanchor hanchor
+  have hbody_lt : squareBody P < (P + 1) ^ 2 := by
+    rw [← squareBody_add_one_eq P]
+    omega
+  omega
+
+/--
+Two prime divisors above the anchor must coincide inside a positive
+square-Body point.  Thus the square bound controls the number of fresh
+directions without enumerating a factorization.
+-/
+theorem eq_of_large_primes_dvd_le_squareBody
+    {P m p q : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hq : Nat.Prime q)
+    (hpLarge : P < p)
+    (hqLarge : P < q)
+    (hpd : p ∣ m)
+    (hqd : q ∣ m) :
+    p = q := by
+  by_contra hne
+  have hprod : p * q ∣ m :=
+    hp.dvd_mul_of_dvd_ne hne hq hpd hqd
+  have hprod_le : p * q ≤ m := Nat.le_of_dvd hm hprod
+  have hpAnchor : P + 1 ≤ p := by omega
+  have hqAnchor : P + 1 ≤ q := by omega
+  have hprod_lower : (P + 1) ^ 2 ≤ p * q := by
+    simpa [pow_two] using Nat.mul_le_mul hpAnchor hqAnchor
+  have hbody_lt : squareBody P < (P + 1) ^ 2 := by
+    rw [← squareBody_add_one_eq P]
+    omega
+  omega
+
+/--
+A prime above `P` dividing `m` is fresh relative to the canonical finite
+world `primeScalesUpTo P`.  Here freshness is finite-world membership only;
+it does not mean first occurrence in the Zsigmondy or `PrimitiveBeam` sense.
+-/
+theorem freshPrimeDirection_of_anchor_lt_prime_dvd
+    {P m p : ℕ}
+    (hp : Nat.Prime p)
+    (hlarge : P < p)
+    (hpd : p ∣ m) :
+    FreshPrimeDirection (primeScalesUpTo P) m p := by
+  apply freshPrimeDirection_of_prime_dvd_not_mem hp hpd
+  intro hpMem
+  have hpLe : p ≤ P := (mem_primeScalesUpTo.mp hpMem).2
+  omega
+
+/--
+The quotient by a large prime divisor reconstructs the original point,
+contains no second copy of that prime, and is coprime to it.  The square-body
+hypothesis is used precisely for the depth-one conclusion.
+-/
+theorem large_prime_cofactor_properties_of_le_squareBody
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m) :
+    p * (m / p) = m ∧
+      ¬ p ∣ m / p ∧
+      Nat.Coprime p (m / p) := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  have hnot : ¬ p ∣ m / p := by
+    intro hpk
+    have hsq : p ^ 2 ∣ p * (m / p) := by
+      simpa [pow_two] using Nat.mul_dvd_mul_left p hpk
+    rw [hprod] at hsq
+    exact not_prime_sq_dvd_of_anchor_lt_of_le_squareBody
+      hm hmUpper hp hpLarge hsq
+  exact ⟨hprod, hnot, hp.coprime_iff_not_dvd.mpr hnot⟩
+
+/--
+After removing a large prime from a positive square-Body point, every prime
+in the cofactor belongs to the old finite world.  `PrimeScaleGeneratedBy`
+records this prime support only; it does not claim that the cofactor is
+squarefree or that its exponents are bounded.
+-/
+theorem primeScaleGeneratedBy_div_of_large_prime_dvd_le_squareBody
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m) :
+    PrimeScaleGeneratedBy (primeScalesUpTo P) (m / p) := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  have hk0 : m / p ≠ 0 := by
+    intro hk0
+    have hm0 : m = 0 := by simpa [hk0] using hprod.symm
+    exact (Nat.ne_of_gt hm) hm0
+  have hnot : ¬ p ∣ m / p :=
+    (large_prime_cofactor_properties_of_le_squareBody
+      hm hmUpper hp hpLarge hpd).2.1
+  refine ⟨hk0, ?_⟩
+  intro q hq hqk
+  have hqm : q ∣ m := by
+    rw [← hprod]
+    exact dvd_mul_of_dvd_right hqk p
+  by_cases hqLarge : P < q
+  · have hqp : q = p := eq_of_large_primes_dvd_le_squareBody
+      hm hmUpper hq hp hqLarge hpLarge hqm hpd
+    have hpk : p ∣ m / p := by simpa [hqp] using hqk
+    exact False.elim (hnot hpk)
+  · have hqLe : q ≤ P := by omega
+    exact (mem_primeScalesUpTo).2 ⟨hq, hqLe⟩
+
+/--
+Package the generic square-Body split for a specified large prime divisor:
+the quotient is old-generated and coprime to the unique fresh direction, and
+every other fresh direction is equal to `p`.
+-/
+theorem squareBody_large_prime_split
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m) :
+    let k := m / p
+    p * k = m ∧
+    PrimeScaleGeneratedBy (primeScalesUpTo P) k ∧
+    Nat.Coprime p k ∧
+    FreshPrimeDirection (primeScalesUpTo P) m p ∧
+    ∀ ⦃q : ℕ⦄,
+      FreshPrimeDirection (primeScalesUpTo P) m q → q = p := by
+  have hcof := large_prime_cofactor_properties_of_le_squareBody
+    hm hmUpper hp hpLarge hpd
+  have hfresh := freshPrimeDirection_of_anchor_lt_prime_dvd hp hpLarge hpd
+  have hgen := primeScaleGeneratedBy_div_of_large_prime_dvd_le_squareBody
+    hm hmUpper hp hpLarge hpd
+  have huniq : ∀ ⦃q : ℕ⦄,
+      FreshPrimeDirection (primeScalesUpTo P) m q → q = p := by
+    intro q hq
+    have hqLarge : P < q := by
+      by_contra hqNotLarge
+      have hqLe : q ≤ P := by omega
+      exact hq.2.2 ((mem_primeScalesUpTo).2 ⟨hq.1, hqLe⟩)
+    exact (eq_of_large_primes_dvd_le_squareBody
+      hm hmUpper hp hq.1 hpLarge hqLarge hpd hq.2.1).symm
+  dsimp
+  exact ⟨hcof.1, hgen, hcof.2.2, hfresh, huniq⟩
+
+/--
+Every positive point in the square Body is either generated entirely by the
+old finite prime world or is old-generated times one unique fresh prime.
+Freshness here is relative only to `primeScalesUpTo P`; the theorem does not
+assert that a fresh factor exists, nor does it assert primitive origin.
+-/
+theorem primeScaleGeneratedBy_or_uniqueFresh_split_of_le_squareBody
+    {P m : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P) :
+    PrimeScaleGeneratedBy (primeScalesUpTo P) m ∨
+      ∃ p k,
+        Nat.Prime p ∧
+        P < p ∧
+        FreshPrimeDirection (primeScalesUpTo P) m p ∧
+        p * k = m ∧
+        PrimeScaleGeneratedBy (primeScalesUpTo P) k ∧
+        Nat.Coprime p k ∧
+        (∀ ⦃q : ℕ⦄,
+          FreshPrimeDirection (primeScalesUpTo P) m q → q = p) := by
+  classical
+  by_cases hex : ∃ p, Nat.Prime p ∧ p ∣ m ∧
+      p ∉ primeScalesUpTo P
+  · obtain ⟨p, hp, hpd, hpNotMem⟩ := hex
+    have hpLarge : P < p := by
+      by_contra hpNotLarge
+      have hpLe : p ≤ P := by omega
+      exact hpNotMem ((mem_primeScalesUpTo).2 ⟨hp, hpLe⟩)
+    rcases squareBody_large_prime_split hm hmUpper hp hpLarge hpd with
+      ⟨hprod, hgen, hcop, hfresh, huniq⟩
+    exact Or.inr ⟨p, m / p, hp, hpLarge, hfresh, hprod, hgen, hcop, huniq⟩
+  · apply Or.inl
+    refine ⟨Nat.ne_of_gt hm, ?_⟩
+    intro q hq hqd
+    by_contra hqNotMem
+    exact hex ⟨q, hq, hqd, hqNotMem⟩
+
 end DkMath.NumberTheory.Primitive
