@@ -31,6 +31,11 @@ finite completed-zeta orbit API expands an already RH-sufficient residual
 collapse, first-order functional reflection transports derivative data, and
 prime-coordinate decomposition retains cancellation.  None supplies the
 frequent common-scale upper control formalized here.
+
+The module is publicly re-exported by `DkMath.RH` for CKSS-000 frontier
+consolidation.  Its declarations remain diagnostic frontier audits: they do
+not expose a common-kernel source, a positive centered detector, or an RH
+provider.
 -/
 
 noncomputable section
