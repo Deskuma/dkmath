@@ -70,7 +70,7 @@ theorem cfzp028_denseRange_nsmul_primePhaseRotation
     (hirr : Cfzp028PrimePhaseRotationIrrational W p) :
     DenseRange (fun j : ℕ =>
       j • (↑(cfzp028PrimePhaseRotationStep W p) : AddCircle (2 * Real.pi))) := by
-  letI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  let : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
   have hz : DenseRange (fun z : ℤ =>
       z • (↑(cfzp028PrimePhaseRotationStep W p) : AddCircle (2 * Real.pi))) := by
     exact (AddCircle.denseRange_zsmul_coe_iff).2 hirr
@@ -124,7 +124,7 @@ theorem cfzp028TargetCircle_isOpen
     (hε : 0 < ε) (hτ : 0 < τ)
     (hinterior : Cfzp027ThirdQuadrantTargetHasInterior ε W τ) :
     IsOpen (cfzp028TargetCircle ε W τ) := by
-  letI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  let : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
   change IsOpen ((AddCircle.openPartialHomeomorphCoe (2 * Real.pi) 0) '' _)
   apply OpenPartialHomeomorph.isOpen_image_of_subset_source
   · exact isOpen_Ioo
@@ -138,7 +138,7 @@ theorem cfzp028TargetCircle_nonempty
     {ε τ : ℝ} (W : PascalCenteredXiResidueTransportWindow)
     (hinterior : Cfzp027ThirdQuadrantTargetHasInterior ε W τ) :
     (cfzp028TargetCircle ε W τ).Nonempty := by
-  letI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  let : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
   unfold cfzp028TargetCircle
   have hlt := cfzp028TargetLeft_lt_right hinterior
   let x := (cfzp028TargetLeft ε W τ + cfzp028TargetRight ε W τ) / 2
@@ -268,7 +268,7 @@ theorem cfzp028CofinalReadyThirdQuadrantHitsForPrime_of_irrationalRotation
     (hinterior : Cfzp027ThirdQuadrantTargetHasInterior ε W τ)
     (hirr : Cfzp028PrimePhaseRotationIrrational W p) :
     Cfzp027CofinalReadyThirdQuadrantHitsForPrime ε W p τ := by
-  letI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  let : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
   have hstep : 0 < cfzp028PrimePhaseRotationStep W p :=
     cfzp028PrimePhaseRotationStep_pos W hp
   have hdense := cfzp028_denseRange_nsmul_primePhaseRotation W hirr

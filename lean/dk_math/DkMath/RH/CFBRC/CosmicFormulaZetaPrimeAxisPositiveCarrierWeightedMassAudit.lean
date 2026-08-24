@@ -237,7 +237,7 @@ theorem cfzp038PositiveArcEligibleSignedMass_eq_good_add_bad
       cfzp035SignedEfficiencyMassOn ε W
         (cfzp038PositiveArcBadPairSupport ε W arc N₀ N₁ A B) := by
   rw [← cfzp038PositiveArcGoodUnionBad_eq_eligible]
-  unfold cfzp035SignedEfficiencyMassOn
+  all_goals try unfold cfzp035SignedEfficiencyMassOn
   rw [Finset.sum_union (cfzp038PositiveArcGoodDisjointBad N₀ N₁ A B)]
 
 theorem cfzp038PositiveArcEligibleWeightSum_eq_good_add_bad
@@ -251,7 +251,7 @@ theorem cfzp038PositiveArcEligibleWeightSum_eq_good_add_bad
       cfzp034PrimeAxisSigmaWeightSum W
         (cfzp038PositiveArcBadPairSupport ε W arc N₀ N₁ A B) := by
   rw [← cfzp038PositiveArcGoodUnionBad_eq_eligible]
-  unfold cfzp034PrimeAxisSigmaWeightSum
+  all_goals try unfold cfzp034PrimeAxisSigmaWeightSum
   rw [Finset.sum_union (cfzp038PositiveArcGoodDisjointBad N₀ N₁ A B)]
 
 /-! ## Gate E: the exact carrier-reservoir endpoint -/
@@ -347,8 +347,8 @@ theorem cfzp038PositiveCarrierSigmaReservoir_implies_radialContactDeficit_le
     (ε := ε) (W := W) (arc := arc) N₀ N₁ A B
   have hupper := cfzp034PrimeAxisSigmaWeightSum_upper hε hε2 W hAB hsub
     _ hbad
-  apply cfzp038PositiveCarrierExactReservoir_implies_radialContactDeficit_le
-    hε hε2 W arc hAB hNlate hlate
+  refine cfzp038PositiveCarrierExactReservoir_implies_radialContactDeficit_le
+    (N₀ := N₀) (N₁ := N₁) hε hε2 W arc hAB hNlate hlate ?_
   have hreplace :
       pascalCenteredXiPrimeSideFiniteRadialContactDeficit ε W A +
           cfzp032GoodReferenceMass ε W

@@ -398,7 +398,7 @@ theorem pascalCenteredXiPrimeSideFiniteRightCompanion_eq_pathIntegral
           · subst n
             simpa [vonMangoldt_LSeries_term_eq] using
               (continuous_const : Continuous (fun _ : ℝ => (0 : ℂ)))
-          · letI : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
+          · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
             have htermEq : (fun t : ℝ =>
               LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
                 (pascalSymmetricRectangleRightEdge W.rectangle.σ t) n) =

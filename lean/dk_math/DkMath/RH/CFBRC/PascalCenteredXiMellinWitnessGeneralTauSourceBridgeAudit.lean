@@ -1050,7 +1050,7 @@ theorem pascalCenteredXiMellinGeneralTau_vertical_prime_integrable
         simp
       rw [hz]
       exact continuous_const
-    · letI : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
+    · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
       have hnterm : (fun t : ℝ =>
           LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
             (pascalSymmetricRectangleRightEdge W.rectangle.σ t) n) =
