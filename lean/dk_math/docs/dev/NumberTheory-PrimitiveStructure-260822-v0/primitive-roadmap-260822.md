@@ -2,6 +2,8 @@
 
 Date: 2026-08-22
 
+Last synchronized: 2026-08-24
+
 Branch: `wip/number-theory-primitive-structure-260822-v0`
 
 Base: `develop` at `8646c3f56591aa04a35b49d5e01ce107caf8cc3b`
@@ -13,522 +15,688 @@ The project is **Primitive Structure first, Legendre first application**.
 The project is not allowed to hide a conjecture-equivalent provider inside a
 framework theorem.
 
-The intended development order is:
+The current dependency direction is:
 
 ```text
-documentation
-  ↓
-reconnaissance
-  ↓
-small generic Primitive API
-  ↓
-generic square-Body arithmetic closure
-  ↓
-finite-prime / PHZ observer bridge
-  ↓
-Legendre exact reduction
-  ↓
-only then investigate the hard localization provider
+CosmicFormula
+     ↓
+generic NumberTheory / Primitive
+     ↓
+finite prime-world observers
+     ↓
+Legendre application geometry
+     ↓
+explicit Legendre frontier
 ```
 
-The current phase is documentation only.
+Application discoveries may be promoted downward only when their theorem owner
+is genuinely generic.  PRIM-C001/C002 are the model example: they were
+motivated by Legendre quotient geometry but belong in `Primitive/SquareBody`.
 
 ---
 
-# Phase P0 — project architecture
+# 1. Current summit map
 
-## PRIM-000 — project scope
+The initial documentation-only phase is long past.  The project has completed a
+large finite-arithmetic spine without proving Legendre's conjecture.
 
-Status: **complete in docs**
-
-Deliverables:
+Current main result chain:
 
 ```text
-README.md
-primitive-structure-design-260822.md
-primitive-asset-map-260822.md
-primitive-roadmap-260822.md
+finite prime support semantics
+        ↓
+periodic prime worlds / exact residue refinement
+        ↓
+generic square-Body composite detection
+        ↓
+exact Legendre reduction to non-full-cover
+        ↓
+wave / carry / overlap geometry
+        ↓
+coprime packet geometry
+        ↓
+quotient Direction/Depth classification
+        ↓
+localized obstruction ledgers
+        ↓
+packet cross-factor geometry
+        ↓
+Primitive square-Body unique-fresh factor theorem
+        ↓
+small-cofactor / large-quotient dual normal form
 ```
 
-Fixed decisions:
+The hard frontier remains:
+
+$$
+\forall n>0,\quad
+\neg\operatorname{SquareOffsetsFullyCovered}(n).
+$$
+
+No theorem below this line is currently claimed.
+
+---
+
+# 2. Completed architecture and Primitive core
+
+## PRIM-000 / PRIM-001 — project architecture and reconnaissance
+
+Status: **complete**
+
+Persistent decisions:
 
 1. Primitive Structure is the main subject.
-2. Legendre is the first application, not the owner of the abstraction.
-3. Cosmic Formula identities stay above NumberTheory.
-4. Primorial / PHZ structures are observers or arithmetic specializations.
-5. Existing theorem owners are reused rather than moved initially.
-6. RH/CFBRC is not imported into the Primitive core.
-7. Category theory is deferred; map/naturality lemmas are the preparation.
+2. Legendre is the first application, not the abstraction owner.
+3. Cosmic Formula identities remain above NumberTheory.
+4. Finite prime worlds and PHZ are observers/specializations.
+5. `FreshPrimeDirection`, `PrimeScaleGeneratedBy`, and
+   `SupportDisjointFrom` remain distinct.
+6. RH/CFBRC is not a Primitive-core dependency.
+7. Category theory remains deferred.
 
-Exit gate:
+## PRIM-020 family — support semantics
 
-- architecture and dependency direction are explicit;
-- hard Legendre provider is visibly separated from provable framework layers.
+Status: **complete for the current natural-number use**
 
-## PRIM-001 — current-source reconnaissance
-
-Status: **initial inventory complete in docs**
-
-Current inspected assets:
+The public semantics support:
 
 ```text
-CosmicFormula.CosmicFormulaBinom
-StructuralArithmetic.PrimitiveDirection
-Hackathon.FinitePrimeEscape
-StructuralArithmetic.FinitePrimeEscapeBridge
-StructuralArithmetic.PrimeCoordinates
-PrimitiveBeam
-PrimitiveSet.FullExponentSlot
-ValuationFlow.Basic
-StructuralArithmetic aggregator
+old-generated
+some fresh direction
+all old directions absent
 ```
 
-Before Lean implementation begins, perform one focused reconnaissance pass for:
+without conflating them.
+
+## PRIM-030 / PRIM-031 — square-Body arithmetic closure
+
+Status: **complete**
+
+Implemented in:
 
 ```text
-StructuralArithmetic.GNBridge
-PrimitiveSet public aggregators
-existing support-disjoint / coprime-support predicates under other names
-existing square-bound / least-prime-factor lemmas in Mathlib or DkMath
-existing map lemmas for GN / GZ / Body / Gap
+DkMath.NumberTheory.Primitive.SquareBody
 ```
 
-Outcome choices:
+Key certified fact:
 
 ```text
-A. existing theorem already provides the desired API
-   → reuse / alias / facade only
-
-B. equivalent theorem exists in a lower layer
-   → add thin bridge
-
-C. semantic concept is genuinely missing
-   → add minimal new definition/theorem
-```
-
----
-
-# Phase P1 — algebraic square facade
-
-This phase is intentionally independent of primality.
-
-## PRIM-010 — square specialization audit
-
-Goal:
-
-Identify the smallest existing theorem path for
-
-$$
-(x+u)^2=x(x+2u)+u^2.
-$$
-
-Do not create a new theory if `CosmicFormulaBinom` / `GZ` already provides the
-necessary normal form.
-
-Candidate theorem surface, subject to reconnaissance:
-
-```text
-squareBig
-squareBody
-squareGap
-square_big_eq_body_add_gap
-square_body_eq_mul_add
-```
-
-These are conceptual targets, not fixed Lean names.
-
-Exit gate:
-
-- a downstream module can use the square identity without unfolding a long
-  generic binomial sum;
-- no NumberTheory import is required.
-
-## PRIM-011 — unit-one square Body
-
-Goal:
-
-Expose the specialization
-
-$$
-(P+1)^2=P(P+2)+1.
-$$
-
-and
-
-$$
-P^2+2P=(P+1)^2-1
-$$
-
-in a form usable by natural-number applications while retaining the generic
-source theorem.
-
-Exit gate:
-
-- the expression `P^2 + 2*P` is identified as a square Body specialization,
-  not as a Legendre-local definition.
-
-## PRIM-012 — unit transport / map reconnaissance
-
-Goal:
-
-Determine which of the following already exist and which require thin wrappers:
-
-```text
-map Big
-map Body / GZ
-map Gap
-map GN
-unit scaling x = u*y
-```
-
-No category-theory imports.
-
-Exit gate:
-
-- later `ℕ`, `ℝ`, and `ℂ` applications can share the same algebraic theorem
-  family without re-proving the decomposition.
-
----
-
-# Phase P2 — Primitive semantic core
-
-## PRIM-020 — support-disjoint semantic gap
-
-Goal:
-
-Add or expose a predicate representing:
-
-> no prime divisor of `n` belongs to the old finite prime world `S`.
-
-Working documentation name:
-
-```text
-SupportDisjointFrom S n
-```
-
-Required relation to current APIs:
-
-```text
-PrimeScaleGeneratedBy
-FreshPrimeDirection
-SupportDisjointFrom
-```
-
-must remain three distinct notions.
-
-Minimum theorem goals:
-
-```text
-supportDisjointFrom_iff_no_old_prime_dvd
-supportDisjointFrom_of_all_prime_dvd_not_mem
-freshPrimeDirection_of_supportDisjointFrom
-  -- with nontriviality / prime-factor existence assumptions as needed
-```
-
-Do not over-generalize before the natural-number API is stable.
-
-Exit gate:
-
-- Legendre can state "all old directions absent" without ad hoc quantified
-  formulas in every theorem.
-
-## PRIM-021 — finite-prime escape bridge upgrade
-
-Goal:
-
-Audit whether `prime_dvd_product_add_coprime_not_mem` can feed the new
-support-disjoint predicate directly for suitable product-plus-offset targets.
-
-Important:
-
-The arithmetic proof remains owned by `DkMath.Hackathon.FinitePrimeEscape`
-unless a later refactor is separately justified.
-
-Exit gate:
-
-- the Primitive facade can express both existential fresh escape and full old
-  support exclusion when the provider theorem genuinely supplies it.
-
----
-
-# Phase P3 — generic square-Body arithmetic closure
-
-## PRIM-030 — composite divisor bound inside the Body
-
-Target mathematical statement:
-
-For natural `P` and `m`, if
-
-$$
-1<m\le P^2+2P
-$$
-
-and `m` is composite, then
-
-$$
-\exists q,\ q\text{ prime}\land q\mid m\land q\le P.
-$$
-
-This theorem must not mention Legendre or primorials.
-
-Preferred proof source:
-
-- existing least-prime-factor / prime-divisor bound in Mathlib if available;
-- otherwise a thin theorem built from existing prime-factor and square-order
-  lemmas.
-
-Exit gate:
-
-- the Cosmic square Body has a precise natural-number composite-detection
-  interpretation.
-
-## PRIM-031 — Primitive prime closure inside the Body
-
-Target statement:
-
-Inside
-
-$$
-1<m\le P^2+2P,
-$$
-
-if `m` is support-disjoint from every prime direction `q ≤ P`, then `m` is
-prime.
-
-This should be a direct wrapper over PRIM-030 plus Primitive support semantics.
-
-Exit gate:
-
-- an arithmetic Primitive escape becomes a prime witness inside the certified
-  square Body.
-
-## PRIM-032 — sharp boundary certificate
-
-Target statement:
-
-If `P+1` is prime, then `(P+1)^2` is the first obvious boundary point showing
-that the `≤ P` prime-direction detector cannot be extended through the next
-square without adding the new direction `P+1`.
-
-Example certificates:
-
-```text
-P = 30   → Body endpoint 960, next point 31² = 961
-P = 210  → Body endpoint 44520, next point 211² = 44521
-```
-
-This theorem is explanatory infrastructure; keep it separate from the core
-closure theorem.
-
----
-
-# Phase P4 — finite prime worlds and PHZ observer
-
-## PRIM-040 — finite active prime world
-
-Goal:
-
-Define or reuse a finite active set of prime directions and the notion that a
-position is reserved by at least one active prime wave.
-
-Conceptual API:
-
-```text
-ReservedBy S m
-UnreservedBy S m
-```
-
-Prefer reusing `SupportDisjointFrom` instead of duplicating semantics:
-
-```text
-UnreservedBy S m
-  ≈ SupportDisjointFrom S m
-```
-
-when `S` is a genuine prime set.
-
-Exit gate:
-
-- PHZ can be defined as an observer on top of semantic support.
-
-## PRIM-041 — periodic residue observer
-
-Goal:
-
-For a finite prime base with product modulus `M`, formalize the periodicity of
-reserved/unreserved positions.
-
-Example observation:
-
-```text
-S = {2,3,5}
-M = 30
-unreserved residues = {1,7,11,13,17,19,23,29}
-```
-
-The observer theorem must not say that every unreserved residue instance is
-prime.
-
-Exit gate:
-
-- candidate seats and prime seats are formally distinguished.
-
-## PRIM-042 — observer update rule
-
-Goal:
-
-Describe how adding a new prime direction refines the reserved seats of a
-periodic observer.
-
-This checkpoint should expose the sieve update mechanism without claiming a
-Legendre result.
-
-Possible later theorem family:
-
-```text
-old seat → q translated child seats
-exactly one child reserved by q modulo q
-remaining q-1 children survive the new q-wave
-```
-
-Only implement after the required CRT / Finset API is assessed.
-
----
-
-# Phase P5 — Legendre first application
-
-## PRIM-L001 — square shell
-
-Define the natural-number consecutive-square interior independently of primes.
-
-Conceptual forms:
-
-```text
-SquareCell n m
-SquareOffset n r
-```
-
-with exact conversion
-
-$$
-n^2<m<(n+1)^2
-\Longleftrightarrow
-m=n^2+r,\ 1\le r\le2n.
-$$
-
-## PRIM-L002 — support-free shell point implies prime
-
-Use PRIM-031 with `P=n`.
-
-Target:
-
-```text
-SquareCell n m
-+ no prime q ≤ n divides m
+1 < m ≤ P^2 + 2P
++ no prime q ≤ P divides m
 → Nat.Prime m
 ```
 
-This theorem is framework, not conjecture.
-
-## PRIM-L003 — residue-cover equivalence
-
-For offsets `1 ≤ r ≤ 2n`, express the forbidden wave of prime `p ≤ n` as
-
-$$
-p\mid n^2+r
-$$
-
-or equivalently the residue class
-
-$$
-r\equiv-n^2\pmod p.
-$$
-
-Target result:
-
-```text
-support-disjoint square offset
-↔ offset not covered by any old prime wave
-```
-
-## PRIM-L004 — exact Legendre reduction
-
-Define the hard provider explicitly.
-
-Working name:
-
-```text
-SquareAnchoredSupportEscape
-```
-
-with meaning
-
-$$
-\forall n>0,\ \exists r,\ 1\le r\le2n
-$$
-
-such that no prime `p ≤ n` divides `n²+r`.
-
-Then prove the exact equivalence to the usual Legendre statement.
-
-Exit gate:
-
-- the conjecture has been transformed into one finite local support-escape
-  obligation;
-- no provider is assumed or smuggled into the framework.
-
-### Mandatory stop after PRIM-L004
-
-Stop and review the mathematics before attempting to prove the universal
-escape provider.
-
-At this point classify all available routes:
-
-```text
-PHZ / periodic reservation
-square-anchor residue constraints
-finite-prime escape localization
-prime-power depth / mass
-other Primitive application theorems
-```
-
-Only then choose the next research branch.
+The bound is the arithmetic interior below `(P+1)^2` and does not require a
+primorial hypothesis.
 
 ---
 
-# Phase P6 — broader Primitive facade
+# 3. Completed finite-prime observer stack
 
-This phase comes after the first Legendre reduction is stable.
+## PRIM-040–047 — finite prime world / periodic refinement
 
-## PRIM-060 — Depth facade
+Status: **complete**
 
-Index/re-export the reusable part of prime-power exponent-slot APIs.
-
-Do not move `PrimitiveSet.FullExponentSlot` initially.
-
-## PRIM-061 — Origin facade
-
-Expose the reusable semantic role of
-`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow` and its GN transport theorems.
-
-Keep finite-set freshness and exponent-first-occurrence definitions distinct.
-
-## PRIM-062 — Mass facade
-
-Index valuation / radical / logarithmic mass APIs without inventing a universal
-mass structure prematurely.
-
-Candidate owners to bridge:
+Implemented modules:
 
 ```text
-ValuationFlow
-ABC valuation/radical APIs
-PrimitiveSet channel cost APIs
+FinitePrimeWorld
+PeriodicPrimeWorld
+PrimeWorldRefinement
+PHZ30
+PrimeWorldResidues
+PrimeWorldCardinality
+EulerTotientBridge
 ```
 
-## PRIM-063 — application map
+Main outcomes:
 
-Document and, only where useful, add thin bridges for:
+- `primeScalesUpTo P` gives the exact old prime world;
+- prime-wave divisibility is periodic modulo the finite-world modulus;
+- adding a new prime direction refines each old residue fiber by one reserved
+  child and `q-1` surviving children;
+- the surviving residue set is exact;
+- cardinality is the product of `(p-1)` and agrees with Euler totient.
+
+These theorems describe observer geometry.  They do not claim that a local
+short interval contains a survivor.
+
+---
+
+# 4. Completed exact Legendre reduction
+
+## PRIM-L001–L004 — square shell and exact frontier
+
+Status: **complete**
+
+Core definitions:
+
+```text
+SquareCell
+SquareOffset
+SquareOffsetCovered
+SquareOffsetsFullyCovered
+SquareAnchoredSupportEscape
+LegendreConjecture
+```
+
+The central equivalence is complete:
+
+$$
+\operatorname{LegendreConjecture}
+\iff
+\forall n>0,\;\neg\operatorname{SquareOffsetsFullyCovered}(n).
+$$
+
+This is a reduction theorem, not a proof that full cover is impossible.
+
+---
+
+# 5. Completed local wave / overlap program
+
+## PRIM-L005 — exact support on one seat
+
+Status: **complete**
+
+- finite prime support of `n^2+r` inside `primeScalesUpTo n`;
+- support overlap cardinality;
+- pair divisibility equivalence.
+
+## PRIM-L006 — wave cardinality / far-pair uniqueness
+
+Status: **complete**
+
+- generic `squareWaveOffsets`;
+- pair overlaps as product waves;
+- long-modulus waves have cardinality at most one;
+- incidence transpose.
+
+## PRIM-L007 / L008 — exact wave count and carry
+
+Status: **complete**
+
+Exact count:
+
+$$
+|W_m|
+=
+\left\lfloor\frac{n^2+2n}{m}\right\rfloor
+-
+\left\lfloor\frac{n^2}{m}\right\rfloor.
+$$
+
+Then:
+
+```text
+wave count = baseline + 0/1 carry
+```
+
+Carry is deterministic arithmetic boundary data, not a probabilistic term.
+
+## PRIM-L009 / L010 — pair ledger and near/far split
+
+Status: **complete**
+
+- unordered distinct-prime pair multiplicity;
+- exact pair-overlap transpose;
+- near/far split by `p*q ≤ 2*n` versus `2*n < p*q`;
+- far pair contribution becomes a finite active-pair count.
+
+No third-order inclusion-exclusion was introduced.
+
+---
+
+# 6. Completed coprime-packet / quotient program
+
+## PRIM-L011 — anchor divisor/nondivisor split
+
+Status: **complete**
+
+On coprime offsets, all anchor-divisor prime waves disappear and coverage is
+exactly nondivisor coverage.  The coprime window has cardinality
+
+$$
+2\varphi(n).
+$$
+
+## PRIM-L012 — canonical packets
+
+Status: **complete**
+
+The coprime window splits into `φ(n)` packets
+
+$$
+(r,n+r).
+$$
+
+The old nondivisor supports of the two packet sides are disjoint.
+
+## PRIM-L013 — support quotient
+
+Status: **complete**
+
+For an old support prime `p`,
+
+$$
+p\,Q=n^2+r,
+$$
+
+with `Q > n`, and coprimality with the anchor transfers to `Q`.
+
+## PRIM-L014 — global quotient rigidity
+
+Status: **complete**
+
+Distinct selected primes cannot produce the same quotient once `n ≥ 4`.
+The global quotient projection is injective on the relevant incidence set.
+
+## PRIM-L015 / L016 — quotient support and Direction/Depth trichotomy
+
+Status: **complete**
+
+The quotient is prime exactly in the simple case:
+
+$$
+Q\text{ prime}
+\iff
+\operatorname{support}=\{p\}
+\land
+p^2\nmid n^2+r.
+$$
+
+Composite quotient obstruction is completely classified as:
+
+```text
+selected-prime self-depth
+or
+a distinct old support direction.
+```
+
+Finite-world freshness obtained here is not `PrimitiveBeam` origin.
+
+---
+
+# 7. Completed obstruction bookkeeping
+
+## PRIM-L017 — three seat classes
+
+Status: **complete**
+
+Covered coprime seats split disjointly into:
+
+```text
+simple/fresh
+singleton-depth
+multi-support
+```
+
+Under full cover:
+
+$$
+2\varphi(n)
+=
+\#\text{Simple}
++
+\#\text{Depth}
++
+\#\text{Multi}.
+$$
+
+A coarse depth-wave budget and global pair ledger yield a necessary full-cover
+frontier, not a contradiction.
+
+## PRIM-L018 — localized obstruction ledgers
+
+Status: **complete**
+
+The depth and pair ledgers were restricted to the same coprime/nondivisor
+region as the seat partition.
+
+Main outcome:
+
+```text
+localized budget ≤ previous global budget
+```
+
+and the full-cover frontier now uses the localized quantities.
+
+This removed avoidable overcount but did not by itself force a simple seat.
+
+---
+
+# 8. Completed packet cross-geometry
+
+## PRIM-L019 — packet cross-pair ledger
+
+Status: **complete**
+
+Ordered left/right old-prime pairs are counted exactly by
+
+$$
+\sum_r |A_r|\,|B_r|.
+$$
+
+Full cover implies
+
+$$
+\varphi(n)
+\le
+\operatorname{PacketCrossPairCount}(n).
+$$
+
+For a fixed ordered `(p,q)`, two packet hits imply product-period divisibility;
+therefore
+
+$$
+n<pq
+$$
+
+forces at most one packet hit.  The packet threshold is `n`, sharper than the
+single-seat `2*n` threshold.
+
+## PRIM-L020 — packet coprimality
+
+Status: **complete**
+
+For a coprime base offset, the two complete packet points are coprime.  Hence
+all cross-side prime factors are separated, not only old support primes.
+
+The factor rectangle satisfies
+
+$$
+p a+n=q b.
+$$
+
+Same-side relations `p ⟂ a` and `q ⟂ b` are intentionally not asserted;
+selected-prime depth may remain there.
+
+## PRIM-L021 — reduced-residue rectangle
+
+Status: **complete**
+
+The rectangle satisfies
+
+$$
+p a\equiv q b\equiv r\pmod n,
+$$
+
+and all four factors are coprime to the anchor.  The exact additive gap remains
+
+$$
+q b-p a=n.
+$$
+
+No `ZMod`, inverse-selection, matching argument, or contradiction was added.
+
+---
+
+# 9. Completed refactor
+
+## PRIM-R001 — Legendre module decomposition
+
+Status: **complete**
+
+The former monolithic `Legendre.lean` was decomposed into theorem-owner modules:
+
+```text
+Basic
+Wave
+PairOverlap
+CoprimePacket
+Quotient
+QuotientSupport
+Obstruction
+LocalizedObstruction
+PacketCross
+PacketCoprimality
+PacketUnitResidue
+SmallCofactor
+Frontier
+Internal/PairCombinatorics
+```
+
+`DkMath.NumberTheory.Legendre` remains a thin historical facade.
+
+The two application branches remain structurally distinct until `Frontier`:
+
+```text
+within-seat obstruction
+packet cross-coupling
+```
+
+---
+
+# 10. Primitive theorem promotion from the Legendre investigation
+
+## PRIM-C001 — unique fresh factor inside square Body
+
+Status: **complete**
+
+For positive `m ≤ squareBody P`, a fresh prime divisor `ℓ > P` is unique and
+occurs only to depth one.  Removing it leaves an old-generated cofactor.
+
+## PRIM-C002 — bounded fresh cofactor
+
+Status: **complete**
+
+The cofactor is not merely old-generated:
+
+$$
+0<k=\frac m\ell\le P.
+$$
+
+Old support transfers exactly from `m` to `k`, and
+
+```text
+m prime ↔ k = 1.
+```
+
+Thus the generic square-Body normal form is now:
+
+```text
+old-generated
+or
+unique fresh ℓ > P × small old-generated k ≤ P.
+```
+
+This is a Primitive-core theorem and is reusable outside Legendre.
+
+---
+
+# 11. Completed dual normal form
+
+## PRIM-L022 — SmallCofactor bridge
+
+Status: **complete**
+
+Implemented in:
+
+```text
+DkMath.NumberTheory.Legendre.SmallCofactor
+```
+
+For a coprime square seat with fresh split
+
+$$
+\ell k=n^2+r,
+\qquad
+\ell>n,
+\qquad
+0<k\le n,
+$$
+
+the small cofactor returns to the canonical base packet world:
+
+```text
+k ∈ squareAnchorCoprimeBaseOffsets n.
+```
+
+If an old support prime `p ≤ n` is selected, then `p ∣ k`, and the large
+quotient is exactly
+
+$$
+Q=\ell\left(\frac{k}{p}\right).
+$$
+
+Therefore
+
+$$
+Q\text{ prime}
+\iff
+k=p,
+$$
+
+and equivalently
+
+```text
+singleton old support + selected-prime depth one
+↔ small cofactor equals the selected prime.
+```
+
+Under full cover every coprime seat has the necessary normal form:
+
+```text
+old-generated
+or
+unique fresh ℓ > n × nontrivial small cofactor 2 ≤ k ≤ n.
+```
+
+The old-generated branch is still explicit and unresolved.
+
+---
+
+# 12. Documentation synchronization checkpoint
+
+Status: **complete after PRIM-L022**
+
+Updated:
+
+```text
+primitive-structure-design-260822.md
+primitive-roadmap-260822.md
+```
+
+Purpose:
+
+- replace the original documentation-only status with the theorem graph that
+  Lean has actually certified;
+- promote C001/C002 into the Primitive core architecture;
+- record L022 as the bridge between the generic small cofactor and the
+  application large quotient;
+- identify the next research frontier without prematurely issuing another
+  implementation instruction.
+
+---
+
+# 13. Candidate next phase — valuation tower parity retention
+
+Status: **reconnaissance candidate; not yet an implementation checkpoint**
+
+The next expected obstruction is loss of parity information in prime-power
+exponent towers.
+
+For a fixed prime direction with valuation `v`, the desired finite
+normalization is
+
+$$
+v=2j+\varepsilon,
+\qquad
+\varepsilon\in\{0,1\}.
+$$
+
+Interpretation:
+
+```text
+j
+  number of complete two-depth packets
+
+ε
+  terminal unpaired depth / parity Gap
+```
+
+Before adding new definitions, inspect and reuse existing DkMath assets:
+
+```text
+padicValNat divisibility-height API
+padicValNat first-layer/deep-layer split
+PrimitiveSet exponent-slot / prime-power channel APIs
+NPUnit half-phase / two-step return API
+existing finite factorization support sums
+```
+
+### Reconnaissance questions
+
+1. Is there already an exact theorem equivalent to
+   `v = 2 * (v / 2) + v % 2` in the desired valuation-facing namespace?
+2. Can membership of the finite `p^k` tower be rewritten directly through
+   `padicValNat` without introducing a second depth notion?
+3. Is an existing finite-support definition of `Ω` available, or should the
+   first checkpoint stop at local prime-direction parity?
+4. Can parity information be transported through the C002 split
+   `m = ℓ * k` without rebuilding factorization theory?
+5. Does the resulting information constrain the unresolved old-generated/full-
+   cover branch, or is it merely a lossless coordinate rewrite?
+
+### Required stop condition
+
+Do not claim that a parity-retention API solves the classical sieve parity
+problem.
+
+In particular,
+
+```text
+Ω(m) odd
+```
+
+does not distinguish `Ω(m)=1` from `Ω(m)=3,5,...` by itself.
+
+The value of this phase is information preservation: keep Direction and Depth
+available long enough that later square-shell arguments do not throw parity
+away prematurely.
+
+If reconnaissance shows that the proposed parity layer is only a repackaging
+with no new leverage on the Legendre frontier, stop before building a large
+abstraction.
+
+---
+
+# 14. Parallel research route — finite-difference invariant extraction
+
+Status: **background / not active in the current exact square checkpoint**
+
+A separate DkMath route keeps a nonzero discrete unit/difference parameter
+before extracting invariant information.  Conceptually:
+
+```text
+u ≠ 0 finite-difference world
+        ↓
+extract invariant / conserved quantity
+        ↓
+specialize or pass to differential observation
+```
+
+The current Legendre implementation is the exact unit-one natural-number
+specialization.  Do not mix the continuous/differential route into the current
+modules until a concrete bridge theorem is identified.
+
+---
+
+# 15. Broader Primitive facade — deferred but still valid
+
+Later work may expose reusable Depth / Origin / Mass families across DkMath:
+
+```text
+Depth
+  prime-power exponent slots / valuation
+
+Origin
+  PrimitiveBeam first occurrence across exponents
+
+Mass
+  valuation / radical / logarithmic channel cost
+```
+
+Application map targets remain:
 
 ```text
 Legendre
@@ -540,72 +708,28 @@ Pascal
 Collatz
 ```
 
-The goal is a coherent public map, not forced unification of mathematically
+The goal is a coherent public map, not forced identification of mathematically
 different primitive predicates.
 
 ---
 
-# Naming policy
+# 16. Verification and review policy
 
-During documentation, conceptual names are allowed.
-
-Before implementation, every proposed public name must be checked against:
-
-```text
-existing DkMath declarations
-Mathlib vocabulary
-current namespace ownership
-```
-
-Avoid creating aliases merely for aesthetic uniformity unless they materially
-improve the public Primitive facade.
-
----
-
-# Dependency policy
-
-The desired dependency graph is:
-
-```text
-CosmicFormula
-     ↓
-NumberTheory generic arithmetic
-     ↓
-Primitive facade
-     ↓
-observer/application bridges
-```
-
-Forbidden initial direction:
-
-```text
-RH/CFBRC → Primitive core
-ABC       → Primitive core
-FLT       → Primitive core
-Legendre  → Primitive core
-```
-
-If a reusable theorem is discovered in an application module, first determine
-whether it should be promoted to an appropriate lower NumberTheory owner.
-
----
-
-# Verification policy for later Lean phases
-
-Each Lean checkpoint should be small enough to answer one question:
+Each future Lean checkpoint must answer one question:
 
 ```text
 What new semantic fact did Lean certify?
 ```
 
-Build success alone is not the project metric.  The review should check:
+Review should continue to check:
 
 1. theorem meaning;
 2. dependency direction;
-3. whether an existing theorem was duplicated;
-4. whether a hard provider was hidden in assumptions;
-5. what Primitive coordinate the theorem belongs to;
-6. whether the result is reusable outside Legendre.
+3. whether a lower theorem owner exists;
+4. whether support and valuation depth were conflated;
+5. whether a conjecture-equivalent provider was hidden in an assumption;
+6. whether a new counting layer adds information or only notation;
+7. whether the result is reusable outside Legendre;
+8. whether the remaining frontier is stated explicitly.
 
-The documentation phase intentionally ends before any of these Lean
-checkpoints are started.
+Build success is a gate, not the mathematical project metric.
