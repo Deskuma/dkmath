@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.NumberTheory.Legendre.LocalizedObstruction
 import DkMath.NumberTheory.Legendre.PacketUnitResidue
+import DkMath.NumberTheory.Legendre.SmallCofactor
 
 #print "file: DkMath.NumberTheory.Legendre.Frontier"
 
