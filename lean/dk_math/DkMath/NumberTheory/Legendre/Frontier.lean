@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.NumberTheory.Legendre.LocalizedObstruction
-import DkMath.NumberTheory.Legendre.PacketCoprimality
+import DkMath.NumberTheory.Legendre.PacketUnitResidue
 
 #print "file: DkMath.NumberTheory.Legendre.Frontier"
 
