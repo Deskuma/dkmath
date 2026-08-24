@@ -283,9 +283,28 @@ theorem squareAnchorCoprimePrimePairOverlapCount_eq_sum_choose_support
       apply congrArg Finset.card
       ext pair
       rcases pair with ⟨p, q⟩
-      simp [mem_squareOffsetAnchorNondivisorSupport,
-        SquareOffsetForbiddenBy]
-      aesop
+      have hfilter :
+          (squareAnchorNondivisorPrimePairs n).filter
+              (fun pair => SquareOffsetForbiddenBy n pair.1 r ∧
+                SquareOffsetForbiddenBy n pair.2 r) =
+            (squareAnchorNondivisorPrimePairs n).filter
+              (fun pair => pair.1 ∈
+                  squareOffsetAnchorNondivisorSupport n r ∧
+                pair.2 ∈
+                  squareOffsetAnchorNondivisorSupport n r) := by
+        ext pair
+        simp only [Finset.mem_filter]
+        rw [mem_squareOffsetAnchorNondivisorSupport,
+          mem_squareOffsetAnchorNondivisorSupport]
+        constructor
+        · rintro ⟨hmem, h₁, h₂⟩
+          rcases mem_squareAnchorNondivisorPrimePairs.mp hmem with
+            ⟨hp, hpn, hnp, hq, hqn, hnq, hpq⟩
+          exact ⟨hmem, ⟨hp, hpn, hnp, h₁⟩, hq, hqn, hnq, h₂⟩
+        · rintro ⟨hmem, ⟨hp, hpn, hnp, h₁⟩,
+            hq, hqn, hnq, h₂⟩
+          exact ⟨hmem, h₁, h₂⟩
+      exact (congrArg (fun S => (p, q) ∈ S) hfilter).to_iff
     _ = ∑ r ∈ squareAnchorCoprimeOffsets n,
           (upperPairs (squareOffsetAnchorNondivisorSupport n r)).card := by
       apply Finset.sum_congr rfl
@@ -454,4 +473,3 @@ theorem squareAnchorCoprimeLocalDepth_add_pairOverlap_le_globalDepth_add_pairOve
   omega
 
 end DkMath.NumberTheory.Legendre
-

@@ -120,7 +120,9 @@ noncomputable def squareOffsetPrimeSupport (n r : ℕ) : Finset ℕ := by
     {n r q : ℕ} :
     q ∈ squareOffsetPrimeSupport n r ↔
       Nat.Prime q ∧ q ≤ n ∧ q ∣ n ^ 2 + r := by
-  simp [squareOffsetPrimeSupport, SquareOffsetForbiddenBy, and_assoc]
+  classical
+  rw [squareOffsetPrimeSupport, Finset.mem_filter, mem_primeScalesUpTo]
+  simp [SquareOffsetForbiddenBy, and_assoc]
 
 /-- Ordinary square-offset coverage is exactly nonempty prime-wave support. -/
 theorem squareOffsetCovered_iff_primeSupport_nonempty
