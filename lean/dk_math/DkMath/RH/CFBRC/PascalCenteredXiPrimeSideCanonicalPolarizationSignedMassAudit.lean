@@ -128,7 +128,7 @@ private theorem cs24ContinuousPHZ
         simp
       rw [hz]
       exact continuous_const
-    · let _ : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
+    · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
       have hnterm : (fun t : ℝ =>
           LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
             (pascalSymmetricRectangleRightEdge W.rectangle.σ t) n) =
@@ -270,7 +270,7 @@ private theorem cs24ContinuousModeIntegrand
       simp [pascalCenteredXiPrimeSideFiniteModeIntegrand]
     rw [hz]
     exact continuous_const
-  · let _ : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
+  · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
     have hpow : Continuous (fun t : ℝ =>
         ((n : ℂ) ^
           (-(pascalSymmetricRectangleRightEdge W.rectangle.σ t)))) := by

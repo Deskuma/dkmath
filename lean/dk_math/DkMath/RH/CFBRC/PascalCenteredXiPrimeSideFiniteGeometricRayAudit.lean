@@ -128,7 +128,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFinitePrimePowerRaySummand
   have hpow : Continuous (fun t : ℝ =>
       (((p ^ (k + 1) : ℕ) : ℂ) ^
         (-(pascalSymmetricRectangleRightEdge W.rectangle.σ t)))) := by
-    let _ : NeZero ((p ^ (k + 1) : ℕ) : ℂ) :=
+    let : NeZero ((p ^ (k + 1) : ℕ) : ℂ) :=
       ⟨by exact_mod_cast (pow_ne_zero (k + 1) hp.ne_zero)⟩
     exact (continuous_const_cpow (((p ^ (k + 1) : ℕ) : ℂ))).comp
       (continuous_neg.comp hpath)
