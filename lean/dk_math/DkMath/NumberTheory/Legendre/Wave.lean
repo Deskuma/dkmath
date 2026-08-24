@@ -38,7 +38,9 @@ noncomputable def squareWaveOffsets (n m : ℕ) : Finset ℕ := by
     {n m r : ℕ} :
     r ∈ squareWaveOffsets n m ↔
       SquareOffset n r ∧ m ∣ n ^ 2 + r := by
-  simp [squareWaveOffsets, SquareOffsetForbiddenBy]
+  classical
+  rw [squareWaveOffsets, Finset.mem_filter, mem_squareOffsets]
+  rfl
 
 /-- The seats in the square window hit by one old prime wave. -/
 noncomputable def squarePrimeWaveOffsets (n q : ℕ) : Finset ℕ :=
@@ -287,7 +289,7 @@ theorem div_le_card_squareWaveOffsets
     (hm : 0 < m) :
     (2 * n) / m ≤ (squareWaveOffsets n m).card := by
   rw [card_squareWaveOffsets_eq_div_sub_div hm]
-  have hdiv := Nat.add_div_le_add_div (n ^ 2) (2 * n) m
+  have hdiv := Nat.div_add_div_le_add_div (x := n ^ 2) (y := 2 * n) (z := m)
   omega
 
 /-- The local occupancy is at most one more than the number of complete periods. -/
@@ -546,4 +548,3 @@ theorem squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_o
 
 
 end DkMath.NumberTheory.Legendre
-

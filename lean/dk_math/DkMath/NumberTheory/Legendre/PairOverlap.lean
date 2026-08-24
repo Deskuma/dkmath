@@ -99,8 +99,24 @@ theorem squarePrimePairOverlapCount_eq_sum_local_pairMultiplicity
       apply congrArg Finset.card
       ext pair
       rcases pair with ⟨p, q⟩
-      simp [mem_squareOffsetPrimeSupport, SquareOffsetForbiddenBy]
-      aesop
+      have hfilter :
+          (squarePrimePairs n).filter
+              (fun pair => SquareOffsetForbiddenBy n pair.1 r ∧
+                SquareOffsetForbiddenBy n pair.2 r) =
+            (squarePrimePairs n).filter
+              (fun pair => pair.1 ∈ squareOffsetPrimeSupport n r ∧
+                pair.2 ∈ squareOffsetPrimeSupport n r) := by
+        ext pair
+        simp only [Finset.mem_filter]
+        rw [mem_squareOffsetPrimeSupport, mem_squareOffsetPrimeSupport]
+        constructor
+        · rintro ⟨hmem, h₁, h₂⟩
+          rcases mem_squarePrimePairs.mp hmem with
+            ⟨hp, hpn, hq, hqn, hpq⟩
+          exact ⟨hmem, ⟨hp, hpn, h₁⟩, hq, hqn, h₂⟩
+        · rintro ⟨hmem, ⟨hp, hpn, h₁⟩, hq, hqn, h₂⟩
+          exact ⟨hmem, h₁, h₂⟩
+      exact (congrArg (fun S => (p, q) ∈ S) hfilter).to_iff
     _ = ∑ r ∈ squareOffsets n,
           (upperPairs (squareOffsetPrimeSupport n r)).card := by
       apply Finset.sum_congr rfl

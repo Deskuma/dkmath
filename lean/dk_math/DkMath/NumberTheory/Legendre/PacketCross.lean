@@ -149,9 +149,28 @@ theorem squareAnchorPacketCrossPairCount_eq_sum_support_card_mul
       apply congrArg Finset.card
       ext pair
       rcases pair with ⟨p, q⟩
-      simp [mem_squareOffsetAnchorNondivisorSupport,
-        SquareOffsetForbiddenBy]
-      aesop
+      have hfilter :
+          (squareAnchorNondivisorOrderedPrimePairs n).filter
+              (fun pair => SquareOffsetForbiddenBy n pair.1 r ∧
+                SquareOffsetForbiddenBy n pair.2 (n + r)) =
+            (squareAnchorNondivisorOrderedPrimePairs n).filter
+              (fun pair => pair.1 ∈
+                  squareOffsetAnchorNondivisorSupport n r ∧
+                pair.2 ∈
+                  squareOffsetAnchorNondivisorSupport n (n + r)) := by
+        ext pair
+        simp only [Finset.mem_filter]
+        rw [mem_squareOffsetAnchorNondivisorSupport,
+          mem_squareOffsetAnchorNondivisorSupport]
+        constructor
+        · rintro ⟨hmem, h₁, h₂⟩
+          rcases mem_squareAnchorNondivisorOrderedPrimePairs.mp hmem with
+            ⟨hp, hpn, hnp, hq, hqn, hnq, hpq⟩
+          exact ⟨hmem, ⟨hp, hpn, hnp, h₁⟩, hq, hqn, hnq, h₂⟩
+        · rintro ⟨hmem, ⟨hp, hpn, hnp, h₁⟩,
+            hq, hqn, hnq, h₂⟩
+          exact ⟨hmem, h₁, h₂⟩
+      exact (congrArg (fun S => (p, q) ∈ S) hfilter).to_iff
     _ = ∑ r ∈ squareAnchorCoprimeBaseOffsets n,
           ((squareOffsetAnchorNondivisorSupport n r).product
             (squareOffsetAnchorNondivisorSupport n (n + r))).card := by
@@ -421,4 +440,3 @@ theorem squareAnchorPacketFarCrossPairCount_le_card_farCrossPairs
     _ = (squareAnchorPacketFarCrossPairs n).card := by simp
 
 end DkMath.NumberTheory.Legendre
-
