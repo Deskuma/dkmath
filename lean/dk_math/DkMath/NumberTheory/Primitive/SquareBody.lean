@@ -294,4 +294,198 @@ theorem primeScaleGeneratedBy_or_uniqueFresh_split_of_le_squareBody
     by_contra hqNotMem
     exact hex ⟨q, hq, hqd, hqNotMem⟩
 
+/-! ### PRIM-C002: bounded fresh cofactors -/
+
+/--
+The cofactor left after removing a prime `p > P` from a positive square-Body
+point is at most the anchor.  This is the strict-boundary statement behind
+the small-old-factor normal form: both factors cannot exceed `P` because
+`m < (P + 1)^2`.
+-/
+theorem div_le_anchor_of_large_prime_dvd_le_squareBody
+    {P m p : ℕ}
+    (_hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (_hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m) :
+    m / p ≤ P := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  by_contra hkNot
+  have hpAnchor : P + 1 ≤ p := by omega
+  have hkAnchor : P + 1 ≤ m / p := by omega
+  have hprodLower : (P + 1) ^ 2 ≤ p * (m / p) := by
+    simpa [pow_two] using Nat.mul_le_mul hpAnchor hkAnchor
+  have hbody_lt : squareBody P < (P + 1) ^ 2 := by
+    rw [← squareBody_add_one_eq P]
+    omega
+  omega
+
+/--
+Under a specified large-prime split, the complementary cofactor is positive.
+The proof uses `p * (m / p) = m`, so no factorization or valuation API is
+needed.
+-/
+theorem positive_div_of_large_prime_dvd_le_squareBody
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (_hmUpper : m ≤ squareBody P)
+    (_hp : Nat.Prime p)
+    (_hpLarge : P < p)
+    (hpd : p ∣ m) :
+    0 < m / p := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  have hk0 : m / p ≠ 0 := by
+    intro hk0
+    have hm0 : m = 0 := by simpa [hk0] using hprod.symm
+    exact (Nat.ne_of_gt hm) hm0
+  exact Nat.pos_of_ne_zero hk0
+
+/--
+For an old prime `q ≤ P`, divisibility is preserved exactly when the unique
+large prime factor is removed.  Thus the small cofactor has precisely the
+old prime support of the original point; its old prime exponents may still
+be arbitrary.
+-/
+theorem old_prime_dvd_iff_dvd_large_prime_cofactor
+    {P m p q : ℕ}
+    (_hm : 0 < m)
+    (_hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m)
+    (hq : Nat.Prime q)
+    (hqLe : q ≤ P) :
+    q ∣ m ↔ q ∣ m / p := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  have hqp : q ≠ p := by omega
+  constructor
+  · intro hqm
+    have hqm' : q ∣ p * (m / p) := by
+      rw [hprod]
+      exact hqm
+    rcases (Nat.Prime.dvd_mul hq).mp hqm' with hqpdiv | hqk
+    · have hqeqp : q = p :=
+        ((Nat.dvd_prime hp).mp hqpdiv).resolve_left hq.ne_one
+      exact False.elim (hqp hqeqp)
+    · exact hqk
+  · intro hqk
+    rw [← hprod]
+    exact dvd_mul_of_dvd_right hqk p
+
+/--
+The PRIM-C001 specified split with the stronger information that its
+old-generated cofactor satisfies `0 < k ≤ P`.  This remains a finite-world
+freshness theorem, not a Zsigmondy or Legendre theorem.
+-/
+theorem squareBody_large_prime_small_cofactor_split
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m) :
+    let k := m / p
+    p * k = m ∧
+    0 < k ∧
+    k ≤ P ∧
+    PrimeScaleGeneratedBy (primeScalesUpTo P) k ∧
+    Nat.Coprime p k ∧
+    FreshPrimeDirection (primeScalesUpTo P) m p ∧
+    (∀ ⦃q : ℕ⦄,
+      FreshPrimeDirection (primeScalesUpTo P) m q → q = p) := by
+  rcases squareBody_large_prime_split hm hmUpper hp hpLarge hpd with
+    ⟨hprod, hgen, hcop, hfresh, huniq⟩
+  have hkpos := positive_div_of_large_prime_dvd_le_squareBody
+    hm hmUpper hp hpLarge hpd
+  have hkLe := div_le_anchor_of_large_prime_dvd_le_squareBody
+    hm hmUpper hp hpLarge hpd
+  dsimp
+  exact ⟨hprod, hkpos, hkLe, hgen, hcop, hfresh, huniq⟩
+
+/--
+For a specified fresh split, the point is prime exactly when the bounded
+cofactor is `1`.  The forward implication uses that a prime has no proper
+prime divisor; the reverse implication is the reconstruction equation.
+-/
+theorem prime_iff_large_prime_cofactor_eq_one
+    {P m p : ℕ}
+    (_hm : 0 < m)
+    (_hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (_hpLarge : P < p)
+    (hpd : p ∣ m) :
+    Nat.Prime m ↔ m / p = 1 := by
+  have hprod : p * (m / p) = m := Nat.mul_div_cancel' hpd
+  constructor
+  · intro hmPrime
+    have hpm : p = m :=
+      ((Nat.dvd_prime hmPrime).mp hpd).resolve_left hp.ne_one
+    simpa [hpm] using Nat.div_self hmPrime.pos
+  · intro hk
+    have hmp : m = p := by simpa [hk] using hprod.symm
+    simpa [hmp] using hp
+
+/--
+If a positive square-Body point with a specified fresh divisor is composite,
+its cofactor is genuinely nontrivial: `2 ≤ m / p ≤ P`.
+-/
+theorem two_le_large_prime_cofactor_of_not_prime
+    {P m p : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P)
+    (hp : Nat.Prime p)
+    (hpLarge : P < p)
+    (hpd : p ∣ m)
+    (hmPrime : ¬ Nat.Prime m) :
+    2 ≤ m / p := by
+  have hkpos := positive_div_of_large_prime_dvd_le_squareBody
+    hm hmUpper hp hpLarge hpd
+  have hkOne : m / p ≠ 1 := by
+    intro hk
+    exact hmPrime ((prime_iff_large_prime_cofactor_eq_one
+      hm hmUpper hp hpLarge hpd).2 hk)
+  omega
+
+/--
+The global PRIM-C001 dichotomy with the sharper small-cofactor normal form:
+either `m` is entirely old-generated, or `m = p * k` with `0 < k ≤ P`,
+old-generated `k`, and one unique fresh prime `p > P`.  The theorem is
+generic Primitive structure and makes no assertion of fresh-prime existence
+beyond the second branch of this disjunction.
+-/
+theorem primeScaleGeneratedBy_or_uniqueFresh_small_split_of_le_squareBody
+    {P m : ℕ}
+    (hm : 0 < m)
+    (hmUpper : m ≤ squareBody P) :
+    PrimeScaleGeneratedBy (primeScalesUpTo P) m ∨
+      ∃ p k,
+        Nat.Prime p ∧
+        P < p ∧
+        0 < k ∧
+        k ≤ P ∧
+        FreshPrimeDirection (primeScalesUpTo P) m p ∧
+        p * k = m ∧
+        PrimeScaleGeneratedBy (primeScalesUpTo P) k ∧
+        Nat.Coprime p k ∧
+        (∀ ⦃q : ℕ⦄,
+          FreshPrimeDirection (primeScalesUpTo P) m q → q = p) := by
+  rcases primeScaleGeneratedBy_or_uniqueFresh_split_of_le_squareBody
+      hm hmUpper with hgen | ⟨p, k, hp, hpLarge, hfresh, hprod, hkgen, hcop, huniq⟩
+  · exact Or.inl hgen
+  · have hpd : p ∣ m := by
+      rw [← hprod]
+      exact dvd_mul_right p k
+    have hkEq : k = m / p :=
+      Nat.eq_of_mul_eq_mul_left hp.pos
+        (hprod.trans (Nat.mul_div_cancel' hpd).symm)
+    have hkpos := positive_div_of_large_prime_dvd_le_squareBody
+      hm hmUpper hp hpLarge hpd
+    have hkLe := div_le_anchor_of_large_prime_dvd_le_squareBody
+      hm hmUpper hp hpLarge hpd
+    have hkpos' : 0 < k := by simpa [hkEq] using hkpos
+    have hkLe' : k ≤ P := by simpa [hkEq] using hkLe
+    exact Or.inr ⟨p, k, hp, hpLarge, hkpos', hkLe', hfresh, hprod,
+      hkgen, hcop, huniq⟩
+
 end DkMath.NumberTheory.Primitive
