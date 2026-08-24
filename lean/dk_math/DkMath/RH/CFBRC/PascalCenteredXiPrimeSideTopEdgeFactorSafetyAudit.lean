@@ -281,7 +281,7 @@ theorem pascalCenteredXiPrimeSideFiniteArithmeticTopEdgeCompanion_eq_pathIntegra
               simp
             rw [hz]
             exact continuous_const
-          · let _ : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
+          · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
             have hnterm : (fun u : ℝ =>
                 LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
                   (pascalSymmetricRectangleTopEdge u W.rectangle.T) n) =
