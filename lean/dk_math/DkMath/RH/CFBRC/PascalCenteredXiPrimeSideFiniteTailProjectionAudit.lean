@@ -252,7 +252,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFiniteModeIntegrand
       simp [pascalCenteredXiPrimeSideFiniteModeIntegrand]
     rw [hz]
     exact continuous_const
-  · letI : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
+  · let _ : NeZero (n : ℂ) := ⟨by exact_mod_cast hn⟩
     have hpow : Continuous (fun t : ℝ =>
         ((n : ℂ) ^
           (-(pascalSymmetricRectangleRightEdge W.rectangle.σ t)))) := by

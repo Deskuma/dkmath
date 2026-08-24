@@ -289,7 +289,7 @@ theorem div_le_card_squareWaveOffsets
     (hm : 0 < m) :
     (2 * n) / m ≤ (squareWaveOffsets n m).card := by
   rw [card_squareWaveOffsets_eq_div_sub_div hm]
-  have hdiv := Nat.add_div_le_add_div (n ^ 2) (2 * n) m
+  have hdiv := Nat.div_add_div_le_add_div (x := n ^ 2) (y := 2 * n) (z := m)
   omega
 
 /-- The local occupancy is at most one more than the number of complete periods. -/

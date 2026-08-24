@@ -198,7 +198,7 @@ private theorem continuous_pascalPrimePowerRightEdgeCutoffIntegrand
           simp
       rw [hz]
       exact continuous_const
-    · letI : NeZero (n : ℂ) := ⟨by
+    · let _ : NeZero (n : ℂ) := ⟨by
         exact_mod_cast hn⟩
       have hnterm : (fun t : ℝ =>
           LSeries.term pascalVonMangoldtCoeff
@@ -384,7 +384,7 @@ theorem pascalPrimePowerRightEdgeCutoffIntegral_eq_vonMangoldt_sum
         simp [F]
       rw [hz]
       exact intervalIntegrable_const (μ := volume) (a := -T) (b := T)
-    · letI : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
+    · let _ : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
       have hpath := continuous_pascalOrdinaryRightEdge σ
       have hweight := continuous_pascalCenteredRightEdgeWeight hh σ
       have hpow := (continuous_const_cpow (n : ℂ)).comp

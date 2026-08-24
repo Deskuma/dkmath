@@ -215,7 +215,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFiniteGeometricRayEndpointAm
       pascalCenteredXiPrimeSidePrimeRatioAtRightEdge W p t) := by
     unfold pascalCenteredXiPrimeSidePrimeRatioAtRightEdge
       pascalCenteredXiPrimeSidePrimeRatio
-    letI : NeZero ((p : ℕ) : ℂ) :=
+    let _ : NeZero ((p : ℕ) : ℂ) :=
       ⟨by exact_mod_cast hp.ne_zero⟩
     exact (continuous_const_cpow ((p : ℕ) : ℂ)).comp
       (continuous_neg.comp hpath)
@@ -239,7 +239,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFiniteGeometricRayDenominato
       pascalCenteredXiPrimeSidePrimeRatioAtRightEdge W p t) := by
     unfold pascalCenteredXiPrimeSidePrimeRatioAtRightEdge
       pascalCenteredXiPrimeSidePrimeRatio
-    letI : NeZero ((p : ℕ) : ℂ) :=
+    let _ : NeZero ((p : ℕ) : ℂ) :=
       ⟨by exact_mod_cast hp.ne_zero⟩
     exact (continuous_const_cpow ((p : ℕ) : ℂ)).comp
       (continuous_neg.comp hpath)
