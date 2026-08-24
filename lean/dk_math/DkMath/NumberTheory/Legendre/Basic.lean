@@ -28,10 +28,6 @@ open DkMath.NumberTheory.Primitive
 open DkMath.NumberTheory.StructuralArithmetic
 open scoped BigOperators
 
-open DkMath.NumberTheory.Primitive
-open DkMath.NumberTheory.StructuralArithmetic
-open scoped BigOperators
-
 /-- The open interval between the consecutive squares anchored at `n`. -/
 def SquareCell (n m : ℕ) : Prop :=
   n ^ 2 < m ∧ m < (n + 1) ^ 2
@@ -266,4 +262,3 @@ def squareOffsets (n : ℕ) : Finset ℕ :=
 
 
 end DkMath.NumberTheory.Legendre
-

@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.NumberTheory.Legendre.LocalizedObstruction
-import DkMath.NumberTheory.Legendre.PacketCross
+import DkMath.NumberTheory.Legendre.PacketCoprimality
 
 #print "file: DkMath.NumberTheory.Legendre.Frontier"
 
@@ -152,4 +152,3 @@ theorem legendreConjecture_iff_squareOffsets_not_fully_covered :
     squareAnchoredSupportEscape_iff_not_fully_covered
 
 end DkMath.NumberTheory.Legendre
-
