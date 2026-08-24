@@ -38,7 +38,9 @@ noncomputable def squareWaveOffsets (n m : ℕ) : Finset ℕ := by
     {n m r : ℕ} :
     r ∈ squareWaveOffsets n m ↔
       SquareOffset n r ∧ m ∣ n ^ 2 + r := by
-  simp [squareWaveOffsets, SquareOffsetForbiddenBy]
+  classical
+  rw [squareWaveOffsets, Finset.mem_filter, mem_squareOffsets]
+  rfl
 
 /-- The seats in the square window hit by one old prime wave. -/
 noncomputable def squarePrimeWaveOffsets (n q : ℕ) : Finset ℕ :=
@@ -546,4 +548,3 @@ theorem squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_o
 
 
 end DkMath.NumberTheory.Legendre
-

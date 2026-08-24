@@ -445,8 +445,10 @@ noncomputable def squareOffsetAnchorNondivisorSupport
     {n r q : ℕ} :
     q ∈ squareOffsetAnchorNondivisorSupport n r ↔
       Nat.Prime q ∧ q ≤ n ∧ ¬ q ∣ n ∧ q ∣ n ^ 2 + r := by
-  simp [squareOffsetAnchorNondivisorSupport, and_assoc,
-    SquareOffsetForbiddenBy]
+  classical
+  rw [squareOffsetAnchorNondivisorSupport, Finset.mem_filter,
+    mem_squareAnchorNondivisorPrimes]
+  simp [SquareOffsetForbiddenBy, and_assoc]
 
 /-- On a coprime offset, old support is exactly nondivisor support. -/
 theorem squareOffsetPrimeSupport_eq_anchorNondivisorSupport_of_coprime
@@ -641,4 +643,3 @@ theorem two_mul_totient_le_coprimeNondivisorIncidence_of_fullyCovered
 
 
 end DkMath.NumberTheory.Legendre
-
