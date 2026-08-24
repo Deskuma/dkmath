@@ -89,7 +89,7 @@ private theorem pascalCenteredXiPrimeSideFinitePHZ_top_continuous
       simp
     rw [hz]
     exact continuous_const
-  · letI : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
+  · let : NeZero (n : ℂ) := ⟨by exact_mod_cast hn0⟩
     have hnterm : (fun u : ℝ =>
         LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
           (pascalSymmetricRectangleTopEdge u W.rectangle.T) n) =

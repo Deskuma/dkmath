@@ -129,7 +129,7 @@ theorem pascalCenteredXiPrimeSideFiniteGeometricRayPlusDensity_nonneg
     {X p : ℕ} (hp : Nat.Prime p) (t : ℝ) :
     0 ≤ pascalCenteredXiPrimeSideFiniteGeometricRayPlusDensity ε W X p t := by
   unfold pascalCenteredXiPrimeSideFiniteGeometricRayPlusDensity
-  exact div_nonneg (Complex.normSq_nonneg _) 
+  exact div_nonneg (Complex.normSq_nonneg _)
     (pascalCenteredXiPrimeSideFiniteGeometricRayDenominatorVector_normSq_pos
       W hp t).le
 
@@ -138,7 +138,7 @@ theorem pascalCenteredXiPrimeSideFiniteGeometricRayMinusDensity_nonneg
     {X p : ℕ} (hp : Nat.Prime p) (t : ℝ) :
     0 ≤ pascalCenteredXiPrimeSideFiniteGeometricRayMinusDensity ε W X p t := by
   unfold pascalCenteredXiPrimeSideFiniteGeometricRayMinusDensity
-  exact div_nonneg (Complex.normSq_nonneg _) 
+  exact div_nonneg (Complex.normSq_nonneg _)
     (pascalCenteredXiPrimeSideFiniteGeometricRayDenominatorVector_normSq_pos
       W hp t).le
 
@@ -215,7 +215,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFiniteGeometricRayEndpointAm
       pascalCenteredXiPrimeSidePrimeRatioAtRightEdge W p t) := by
     unfold pascalCenteredXiPrimeSidePrimeRatioAtRightEdge
       pascalCenteredXiPrimeSidePrimeRatio
-    letI : NeZero ((p : ℕ) : ℂ) :=
+    let : NeZero ((p : ℕ) : ℂ) :=
       ⟨by exact_mod_cast hp.ne_zero⟩
     exact (continuous_const_cpow ((p : ℕ) : ℂ)).comp
       (continuous_neg.comp hpath)
@@ -239,7 +239,7 @@ private theorem continuous_pascalCenteredXiPrimeSideFiniteGeometricRayDenominato
       pascalCenteredXiPrimeSidePrimeRatioAtRightEdge W p t) := by
     unfold pascalCenteredXiPrimeSidePrimeRatioAtRightEdge
       pascalCenteredXiPrimeSidePrimeRatio
-    letI : NeZero ((p : ℕ) : ℂ) :=
+    let : NeZero ((p : ℕ) : ℂ) :=
       ⟨by exact_mod_cast hp.ne_zero⟩
     exact (continuous_const_cpow ((p : ℕ) : ℂ)).comp
       (continuous_neg.comp hpath)

@@ -386,7 +386,7 @@ theorem exists_pascalCenteredXiMellinOffCriticalWitness
     pascalCenteredXiZeroDiskFinset_sq_im_ne_zero hz hre
   obtain ⟨τ, hτ, hinj, hdet⟩ :=
     eventually_pascalCenteredXiActualWindow_mellin_evaluation_det_ne_zero R
-  letI : NeBot (nhdsWithin (0 : ℝ) (Set.Ioi (0 : ℝ))) :=
+  let : NeBot (nhdsWithin (0 : ℝ) (Set.Ioi (0 : ℝ))) :=
     nhdsWithin_Ioi_neBot le_rfl
   obtain ⟨ε, hεdet, hεmem⟩ :=
     (hdet.and self_mem_nhdsWithin).exists
