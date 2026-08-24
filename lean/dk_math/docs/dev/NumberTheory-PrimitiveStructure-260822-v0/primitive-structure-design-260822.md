@@ -2,47 +2,48 @@
 
 Date: 2026-08-22
 
-Status: design / documentation phase
+Last synchronized: 2026-08-24
+
+Status: implemented architecture through PRIM-C002 / PRIM-L022
 
 ## 1. Design objective
 
 The objective is to expose a reusable Primitive Structure without making any
 single conjecture the owner of the abstraction.
 
-The project starts from two facts already present in DkMath:
+The project still follows the original dependency direction:
 
-1. Cosmic Formula identities are algebraic and are not intrinsically about
-   primes or even natural numbers.
-2. Several NumberTheory subprojects already encode different aspects of
-   primitive arithmetic information: fresh prime directions, first occurrence
-   in difference powers, exponent depth, valuation mass, and finite escape.
+```text
+CosmicFormula / generic algebraic identities
+                ↓
+NumberTheory Primitive Structure
+                ↓
+finite prime-world / residue / valuation observers
+                ↓
+application geometry
+                ↓
+Legendre / ABC / FLT / RH / Erdos / Pascal / Collatz
+```
 
-Legendre's conjecture is chosen as the first application because a
-consecutive-square window supplies a particularly sharp bridge from support
-escape to primality.
+Legendre remains the first application, not the owner of the Primitive layer.
+The project has now passed the initial architecture phase and has a substantial
+Lean implementation.  This document records the architecture that actually
+emerged from those proofs.
+
+The central design rule remains:
+
+> Put identities at the highest algebraic layer.  Add order, discreteness,
+> divisibility, primality, residue structure, and application geometry only in
+> lower layers.
 
 ## 2. Layer A — algebraic Cosmic source
 
-The highest layer must contain no primality or order assumptions.
+The highest layer contains no primality or order assumptions.
 
-For a suitable commutative semiring, the square family is
-
-$$
-\operatorname{Big}_2(x,u)=(x+u)^2,
-$$
+For square degree,
 
 $$
-\operatorname{Gap}_2(u)=u^2,
-$$
-
-$$
-\operatorname{Body}_2(x,u)=x(x+2u),
-$$
-
-with
-
-$$
-\operatorname{Big}_2(x,u)=\operatorname{Body}_2(x,u)+\operatorname{Gap}_2(u).
+(x+u)^2=x(x+2u)+u^2.
 $$
 
 The unit-one specialization is
@@ -51,470 +52,551 @@ $$
 (P+1)^2=P(P+2)+1.
 $$
 
-The generic DkMath source is the higher-degree identity
+The generic DkMath source remains
 
 $$
 (x+u)^d=x\,GN_d(x,u)+u^d.
 $$
 
-### Design requirement A1
+Primitive and Legendre modules do not redefine `GN`, `Big`, `Body`, or `Gap`.
+They specialize existing CosmicFormula identities only where arithmetic order
+or divisibility becomes relevant.
 
-Do not define a new Legendre-local version of `GN`, `Big`, `Body`, or `Gap`.
-Use existing CosmicFormula definitions and prove only thin specializations or
-bridges when a missing API is identified.
+The variable `u` must not be conflated with the natural-number unit `1` at the
+algebraic layer.  The current Legendre application intentionally works in the
+unit-one specialization; later finite-difference or variable-unit work belongs
+above the Legendre-specific modules.
 
-### Design requirement A2
+## 3. Layer B — Primitive support semantics
 
-Prepare algebraic map-compatibility lemmas before any future category-theory
-layer is attempted.
-
-The desired pattern is conceptually:
-
-```text
-map Big  = Big of mapped inputs
-map Body = Body of mapped inputs
-map Gap  = Gap of mapped inputs
-map GN   = GN of mapped inputs
-```
-
-These lemmas are the practical naturality certificates needed for later
-abstraction.
-
-### Design requirement A3 — unit transport
-
-For square degree, if `x = u*y`, then
-
-$$
-(uy+u)^2=u^2(y+1)^2,
-$$
-
-$$
-uy(uy+2u)=u^2y(y+2).
-$$
-
-Hence the `u`-world is a scaled image of the normalized unit-one world whenever
-such a factorization is available.  This transport should remain algebraic and
-must not be tied to natural-number divisibility.
-
-## 3. Layer B — Primitive semantics
-
-Primitive Structure is not identified with one theorem such as Zsigmondy or
-Euclid escape.  It is a vocabulary for describing what information is new
-relative to a known world.
-
-For the natural-number prime-support specialization, the existing notions are:
+The natural-number finite-support specialization now uses three distinct
+notions:
 
 ```text
-KnownPrimeScales S
 PrimeScaleGeneratedBy S n
 FreshPrimeDirection S n q
-```
-
-The project adds a missing dual viewpoint:
-
-```text
 SupportDisjointFrom S n
 ```
 
-with intended semantics:
-
-```text
-n != 0
-and every prime divisor q of n satisfies q ∉ S
-```
-
-The exact final Lean name is intentionally not fixed during documentation.
-The important point is the logical separation.
+They answer different questions.
 
 ### 3.1 Generated world
 
 `PrimeScaleGeneratedBy S n` means every prime divisor of `n` belongs to `S`.
-
-This answers:
-
-> Is all multiplicative support already explained by the old world?
+All multiplicative support is already explained by the old world.
 
 ### 3.2 Fresh direction
 
-`FreshPrimeDirection S n q` means one prime divisor `q` lies outside `S`.
-
-This answers:
-
-> Is there at least one new direction?
+`FreshPrimeDirection S n q` means `q` is a prime divisor of `n` and `q ∉ S`.
+At least one new direction is visible.
 
 ### 3.3 Support disjointness
 
-`SupportDisjointFrom S n` should mean no prime divisor of `n` belongs to `S`.
+`SupportDisjointFrom S n` means no prime divisor of `n` belongs to `S`.
+All old directions are absent.
 
-This answers:
-
-> Have all old directions disappeared?
-
-The implications are intentionally asymmetric:
+These notions must never be collapsed:
 
 ```text
-SupportDisjointFrom + n > 1
-  → some fresh direction exists
+FreshPrimeDirection
+  some new direction exists
 
-FreshDirection
-  ↛ SupportDisjointFrom
+SupportDisjointFrom
+  every old direction is absent
+
+PrimeScaleGeneratedBy
+  every direction is old
 ```
 
-The second non-implication is essential.  A number can contain both old and new
-prime directions.
+A number may contain both old and fresh directions.
 
-## 4. Layer C — the four Primitive coordinates
+## 4. Layer C — four Primitive coordinates
 
-The public conceptual API is organized around four orthogonal questions.
+The public conceptual API is still organized around four orthogonal
+coordinates.
 
 ### C1. Direction
 
-Which base prime direction is present, known, or fresh?
+Which base-prime direction is present, known, fresh, or absent?
 
-Primary current assets:
-
-```text
-StructuralArithmetic.PrimitiveDirection
-Hackathon.FinitePrimeEscape
-StructuralArithmetic.FinitePrimeEscapeBridge
-```
+Primary owners include the StructuralArithmetic PrimitiveDirection API and the
+new Primitive finite-world modules.
 
 ### C2. Depth
 
-How many exponent slots exist above a fixed base prime?
+How deep does a fixed prime direction occur?
 
-The canonical model is
+The canonical ray is
 
 $$
 p,p^2,p^3,\ldots,p^k.
 $$
 
-Primary current assets include the `PrimitiveSet.FullExponentSlot` family and
-other prime-power channel APIs.
+Depth is valuation/exponent information and is not the same as distinct support.
+The Legendre obstruction layers deliberately keep these separate.
 
 ### C3. Origin
 
-At which structural boundary or degree did the direction first appear?
+Where did a direction first become visible?
 
-For difference powers the current model is
-`PrimitiveBeam.PrimitivePrimeFactorOfDiffPow`.
-A primitive prime witness is absent from all lower difference powers, cannot
-come from the first boundary `a-b`, and therefore appears on the `GN` / Beam
-side of
-
-$$
-a^d-b^d=(a-b)\,GN_d(a-b,b).
-$$
+`PrimitiveBeam` continues to own first-occurrence semantics across difference
+powers.  Finite-world freshness is not identified with Zsigmondy or
+`PrimitiveBeam` origin.
 
 ### C4. Mass
 
-How much arithmetic load is carried by that direction?
+How much arithmetic load belongs to a direction?
 
-Examples include:
+Examples include valuation depth, radical support, valuation excess, and
+logarithmic / von-Mangoldt-style channel costs.
 
-```text
-padic valuation
-factorization exponent
-radical support
-valuation excess
-log / von-Mangoldt-style channel cost
-```
-
-Direction existence and direction mass must not be conflated.
+A later parity layer may use the Depth coordinate, but parity is not currently
+part of the Primitive core theorem surface.
 
 ## 5. Layer D — generic natural-number square Body
 
-The first important arithmetic theorem suggested by the project does **not**
-need primorials.
-
-Let `P : ℕ`.  The unit-one square Body is
+The generic square Body is
 
 $$
-B(P):=P^2+2P=(P+1)^2-1.
+\operatorname{squareBody}(P)=P^2+2P=(P+1)^2-1.
 $$
 
-For any composite `m` satisfying
+This layer is independent of Legendre.
+
+### 5.1 Composite-detection closure
+
+For a composite `m` with
 
 $$
-1<m\le B(P),
+1<m\le P^2+2P,
 $$
 
-there exists a prime divisor `q` with
+there is a prime divisor `q ≤ P`.
 
-$$
-q\le P.
-$$
+Consequently, if every prime divisor at most `P` is absent, then `m` is prime.
+This is the generic bridge from bounded support escape to primality.
 
-Reason: a composite `m < (P+1)^2` has a prime divisor at most `sqrt(m)`, hence
-strictly below `P+1`.
+### 5.2 Unique-fresh theorem inside the square Body
 
-This gives the key closure principle:
+PRIM-C001 strengthened the square Body from a mere prime-closure region to a
+factor-normal-form region.
 
-$$
-1<m\le P^2+2P
-$$
-
-and
-
-$$
-\forall q\le P,\ q\text{ prime}\Rightarrow q\nmid m
-$$
-
-imply
-
-$$
-m\text{ prime}.
-$$
-
-This theorem is a major bridge between the generic Cosmic Body and Primitive
-support semantics.
-
-### Sharp boundary when `P+1` is prime
-
-If `P+1` is prime, then
-
-$$
-(P+1)^2
-$$
-
-is composite but has no prime divisor at most `P`.  Therefore the Body endpoint
-
-$$
-P^2+2P
-$$
-
-is sharp for the `≤ P` composite-detection world.
-
-This explains the examples
-
-$$
-30^2+2\cdot30=960,
-$$
-
-with the next point
-
-$$
-961=31^2,
-$$
-
-and
-
-$$
-210^2+2\cdot210=44520,
-$$
-
-with the next point
-
-$$
-44521=211^2.
-$$
-
-No primorial hypothesis is required for the closure theorem itself.  A
-primorial or wheel becomes relevant only when one chooses a periodic residue
-observer for the bounded prime directions.
-
-## 6. Layer E — finite prime worlds and PHZ observers
-
-A finite prime world chooses a finite set of base prime directions and observes
-which integer positions they reserve by divisibility.
-
-A primorial or wheel modulus is one convenient periodic coordinate system, not
-the definition of Primitive Structure.
-
-For example the base set `{2,3,5}` has period `30` and the unreserved residue
-classes
-
-$$
-1,7,11,13,17,19,23,29\pmod{30}.
-$$
-
-These positions are **candidates relative to the current observer**, not
-intrinsically prime positions.
-
-As further prime directions are learned, their multiples reserve additional
-positions.  The observer can remain on a convenient base coordinate system
-while the active set of prime waves grows.
-
-### Design separation
+For a positive point `m ≤ squareBody P`, any prime divisor `ℓ > P` satisfies:
 
 ```text
-Primitive Structure
-  abstract support / direction / depth / origin / mass
-
-Finite prime world
-  finite natural-number specialization
-
-PHZ
-  periodic residue-wave observer of that finite world
+ℓ is the unique fresh prime direction above P;
+ℓ^2 does not divide m;
+m = ℓ * (m / ℓ);
+ℓ is coprime to m / ℓ;
+all prime support of m / ℓ lies in primeScalesUpTo P.
 ```
 
-The PHZ layer must therefore depend on Primitive semantics, not the reverse.
+Two distinct primes greater than `P` cannot both divide such an `m`, because
+their product would already reach `(P+1)^2`.
 
-## 7. Layer F — Legendre first application
+### 5.3 Bounded fresh cofactor
 
-For positive `n`, define the open consecutive-square shell by
+PRIM-C002 sharpened the cofactor itself:
 
 $$
-n^2<m<(n+1)^2.
+0<k=\frac m\ell\le P.
+$$
+
+Thus every positive square-Body point has the exact finite-world alternative
+
+```text
+old-generated
+or
+unique fresh prime ℓ > P × small old-generated cofactor k ≤ P.
+```
+
+The old support transfers exactly to the small cofactor.  For every old prime
+`q ≤ P`, under the fresh split,
+
+$$
+q\mid m\iff q\mid k.
+$$
+
+Moreover,
+
+```text
+m prime      ↔ k = 1
+m composite  → 2 ≤ k ≤ P
+```
+
+This `small × unique-fresh` normal form is now a central Primitive theorem, not
+a Legendre-local observation.
+
+## 6. Layer E — finite prime worlds and periodic observers
+
+The Primitive implementation now contains a concrete finite-prime observer
+stack:
+
+```text
+FinitePrimeWorld
+PeriodicPrimeWorld
+PrimeWorldRefinement
+PHZ30
+PrimeWorldResidues
+PrimeWorldCardinality
+EulerTotientBridge
+```
+
+The semantic separation is:
+
+```text
+Primitive support semantics
+        ↓
+finite prime world
+        ↓
+periodic prime-wave observer
+        ↓
+residue/cardinality/totient coordinates
+```
+
+A wheel survivor is only a candidate relative to the observer.  It becomes a
+certified prime only when it is additionally placed inside an arithmetic region
+such as the square Body where bounded composite detection is valid.
+
+Prime-world refinement has an exact child-seat interpretation: adding a fresh
+prime direction reserves one child phase and leaves the other `q-1` phases.
+The resulting residue cardinality is expressed both as a product of `(p-1)`
+and through Euler's totient.
+
+## 7. Layer F — exact Legendre reduction
+
+For positive `n`, a square-cell point is written
+
+$$
+m=n^2+r,\qquad 1\le r\le2n.
+$$
+
+The old finite world is
+
+```text
+primeScalesUpTo n = { prime q | q ≤ n }.
+```
+
+A prime `q ≤ n` covers the offset `r` when
+
+$$
+q\mid n^2+r.
+$$
+
+The current facade proves the exact frontier
+
+$$
+\operatorname{LegendreConjecture}
+\iff
+\forall n>0,\;\neg\operatorname{SquareOffsetsFullyCovered}(n).
+$$
+
+Equivalently, Legendre is exactly the assertion that every square shell has at
+least one offset whose point is support-disjoint from all old prime directions.
+The project does not assume or hide this provider.
+
+## 8. Layer G — local wave and obstruction geometry
+
+After the exact reduction, the application was developed as finite arithmetic
+rather than by analytic prime estimates.
+
+### 8.1 Exact waves and carry
+
+For a modulus `m`, the square-wave hit count is exact:
+
+$$
+|\operatorname{squareWaveOffsets}(n,m)|
+=
+\left\lfloor\frac{n^2+2n}{m}\right\rfloor
+-
+\left\lfloor\frac{n^2}{m}\right\rfloor.
+$$
+
+It is decomposed into a baseline plus a deterministic `0/1` carry.  Carry is a
+boundary correction, not a probability.
+
+### 8.2 Pair overlap
+
+Distinct old prime directions are tracked by unordered pair multiplicity.
+Near and far pairs are split by the product threshold.  The pair ledger counts
+distinct direction pairs, not valuation depth.
+
+### 8.3 Anchor-divisor split and coprime packets
+
+Prime directions dividing the anchor `n` are separated from nondivisor
+directions.  On coprime offsets, divisor directions disappear completely.
+
+The canonical coprime window contains exactly
+
+$$
+2\varphi(n)
+$$
+
+seats and splits into `φ(n)` packets
+
+$$
+(r,n+r).
+$$
+
+The old nondivisor supports of the two packet sides are disjoint.
+
+### 8.4 Quotient geometry
+
+Selecting an old support prime `p ≤ n` gives
+
+$$
+p\,Q=n^2+r,
+$$
+
+with `Q > n`.  Quotient collisions from distinct selected primes are rigid;
+for `n ≥ 4` the global quotient projection is injective on the relevant
+incidences.
+
+PRIM-L015/L016 identify the exact quotient obstruction:
+
+```text
+Q is prime
+↔ selected old support is singleton
+   and p^2 does not divide the square point.
+```
+
+Thus distinct support and selected-prime depth are the two ways the large
+quotient can remain composite.
+
+## 9. Layer H — localized obstruction and packet coupling
+
+### 9.1 Seat partition
+
+Covered coprime seats are partitioned into three disjoint classes:
+
+```text
+simple/fresh
+singleton-depth
+multi-support
+```
+
+The corresponding cardinality identity is exact under full cover.
+
+### 9.2 Localized ledgers
+
+Depth and pair budgets were then restricted to the same coprime/nondivisor
+region as the seat classification.  This removes global overcount without
+claiming a contradiction.
+
+### 9.3 Packet cross pairs
+
+A packet is treated as a two-seat object.  Left and right old supports are
+disjoint, and the ordered cross-pair count transposes exactly to
+
+$$
+\sum_r |A_r|\,|B_r|.
+$$
+
+For a fixed ordered pair `(p,q)`, two packet hits force `p*q` to divide the
+representative difference.  Since the base packet window has length `n`,
+
+$$
+n<pq
+$$
+
+implies that the ordered pair hits at most one packet.
+
+### 9.4 Full factor rectangle
+
+For a coprime packet, the two square points themselves are coprime.  Hence all
+prime factors on opposite sides are separated, not merely the old support.
+
+Writing
+
+$$
+p a=n^2+r,
+$$
+
+$$
+q b=n^2+n+r,
+$$
+
+gives the exact rectangle relation
+
+$$
+p a+n=q b,
+$$
+
+with cross-side coprimality.
+
+Modulo the anchor,
+
+$$
+p a\equiv q b\equiv r\pmod n,
+$$
+
+and all four factors are coprime to `n`.  This is the current reduced-residue
+factor rectangle.
+
+## 10. Layer I — small-cofactor / quotient duality
+
+PRIM-L022 connects the generic C002 factorization to the Legendre quotient
+factorization.
+
+Fix a coprime square seat with a fresh split
+
+$$
+\ell k=n^2+r,
+$$
+
+where
+
+$$
+\ell>n,
+\qquad
+0<k\le n.
+$$
+
+The small cofactor returns to the canonical base packet:
+
+```text
+k ∈ squareAnchorCoprimeBaseOffsets n.
+```
+
+If an old support prime `p ≤ n` is selected, then
+
+$$
+p\mid k.
+$$
+
+The large Legendre quotient therefore has the dual normal form
+
+$$
+\operatorname{squareOffsetSupportQuotient}(n,p,r)
+=
+\ell\left(\frac{k}{p}\right).
+$$
+
+This compresses PRIM-L016 to
+
+$$
+Q\text{ prime}
+\iff
+k=p.
 $$
 
 Equivalently,
 
-$$
-m=n^2+r,\qquad1\le r\le2n.
-$$
-
-The Layer-D closure theorem specializes with `P=n`:
-
-> Any shell point disjoint from every prime direction `p ≤ n` is prime.
-
-Thus Legendre is equivalent to a local support-escape provider:
-
-$$
-\forall n>0,\ \exists r,\ 1\le r\le2n\ \land\
-\forall p\le n,\ p\text{ prime}\Rightarrow p\nmid n^2+r.
-$$
-
-Suggested conceptual name:
-
 ```text
-SquareAnchoredPrimeEscape
+singleton old support + selected-prime depth one
+↔ the entire bounded old cofactor is exactly p.
 ```
 
+Under full cover, each coprime seat is now known to satisfy the necessary
+normal form
+
+```text
+old-generated
 or
-
-```text
-SquareAnchoredSupportEscape
+unique fresh ℓ > n × nontrivial small cofactor 2 ≤ k ≤ n.
 ```
 
-The final Lean name will be chosen after existing naming conventions are
-reviewed.
+The old-generated branch remains a genuine branch and is not eliminated.
 
-### Critical boundary
+## 11. Current module ownership
 
-The following must remain separate:
-
-```text
-provable framework
-  square Body closure
-  finite support semantics
-  residue equivalences
-  periodic observer facts
-
-hard provider
-  every square shell contains a support-disjoint point
-```
-
-The hard provider is Legendre-equivalent.  It must not be hidden inside a
-definition, typeclass, or imported assumption.
-
-## 8. Relation to existing finite-prime escape
-
-`DkMath.Hackathon.FinitePrimeEscape` proves a Euclidean product-plus-offset
-escape theorem.  Its key local theorem says that a prime divisor of the
-product-plus-offset boundary cannot belong to the finite source set under the
-coprimality hypothesis.
-
-This is stronger than a mere existential statement **for a selected prime
-divisor**, but the existing public bridge currently packages the result mainly
-as `FreshPrimeDirection`: at least one fresh direction exists.
-
-Legendre requires a different property:
-
-```text
-all old directions absent
-```
-
-and also a localization condition:
-
-```text
-the escape point lies inside a specified square shell
-```
-
-Therefore the finite-prime escape theorem is a reusable Primitive provider but
-is not by itself a Legendre provider.
-
-## 9. Relation to PrimitiveBeam
-
-`PrimitiveBeam` supplies a different origin coordinate.
-
-Its primitive witness is defined by first occurrence across difference-power
-exponents.  Existing theorems show that such a witness:
-
-- does not divide the boundary `a-b` when `d > 1`;
-- divides the `GN` factor;
-- has difference-power valuation equal to the `GN` valuation.
-
-This should be exposed through the Primitive facade as an **Origin** family,
-not merged definitionally with finite-set freshness.
-
-The two notions answer different questions:
-
-```text
-finite-world fresh direction
-  new relative to a finite support set
-
-primitive difference-power direction
-  new relative to all lower exponents
-```
-
-A future bridge may relate them in concrete settings, but the core definitions
-should stay distinct.
-
-## 10. Future categorical preparation
-
-The current project should not introduce abstract category theory merely for
-future-proofing.
-
-Instead it should preserve the following structure boundaries:
-
-1. algebraic identities independent of order;
-2. order/shell notions independent of primality;
-3. support/divisibility notions independent of analytic mass;
-4. observer-specific residue coordinates separate from semantic support;
-5. target conjectures implemented as thin application bridges.
-
-If map-compatibility and unit-transport theorems are available at the algebraic
-layer, a later categorical formulation can treat those theorems as naturality
-data rather than forcing a rewrite of the NumberTheory API.
-
-## 11. Proposed future module direction
-
-This is a design sketch, not an implementation instruction yet.
+The implemented Primitive core is currently centered on:
 
 ```text
 DkMath/NumberTheory/Primitive/
-  Basic.lean
-  Direction.lean
-  Support.lean
-  Depth.lean
-  Origin.lean
-  Mass.lean
-  Escape.lean
+  FinitePrimeWorld.lean
+  PeriodicPrimeWorld.lean
+  PrimeWorldRefinement.lean
+  PHZ30.lean
+  PrimeWorldResidues.lean
+  PrimeWorldCardinality.lean
+  EulerTotientBridge.lean
   SquareBody.lean
 
 DkMath/NumberTheory/Primitive.lean
-
-DkMath/NumberTheory/Legendre/
-  Basic.lean
-  SquareEscape.lean
-  ResidueObserver.lean
-  Frontier.lean
 ```
 
-The first implementation should be significantly smaller than this full tree.
-Files should be created only when theorem ownership becomes clear.
+The Legendre application has been decomposed into application-owned layers:
 
-## 12. Non-goals for the initial project phase
+```text
+DkMath/NumberTheory/Legendre/
+  Basic.lean
+  Wave.lean
+  PairOverlap.lean
+  CoprimePacket.lean
+  Quotient.lean
+  QuotientSupport.lean
+  Obstruction.lean
+  LocalizedObstruction.lean
+  PacketCross.lean
+  PacketCoprimality.lean
+  PacketUnitResidue.lean
+  SmallCofactor.lean
+  Frontier.lean
+  Internal/PairCombinatorics.lean
 
-- Do not prove Legendre's conjecture by declaration or hidden provider.
-- Do not import RH/CFBRC into the Primitive core.
-- Do not move or rename existing PrimitiveBeam / PrimitiveSet modules yet.
-- Do not duplicate finite-prime escape arithmetic.
-- Do not introduce category theory before the algebraic map API exists.
-- Do not treat a wheel residue survivor as automatically prime outside a
-  certified arithmetic Body.
-- Do not identify `FreshPrimeDirection` with support disjointness.
+DkMath/NumberTheory/Legendre.lean
+```
 
-The immediate goal is a stable conceptual and dependency architecture from
-which small Lean checkpoints can later be derived.
+`Legendre.lean` remains a thin historical facade.  Generic theorems discovered
+from the application are promoted only when their theorem ownership is truly
+Primitive-generic, as happened with PRIM-C001/C002 in `SquareBody.lean`.
+
+## 12. Next structural frontier
+
+The project has not proved the universal square escape provider.  The remaining
+frontier is not another missing rewrite of the Legendre statement.
+
+The current finite information includes:
+
+```text
+old/fresh support
+valuation depth
+localized overlap
+coprime packet separation
+cross-factor rectangle
+reduced-residue coordinates
+small × unique-fresh normal form
+```
+
+A likely next research phase is to retain prime-power parity information rather
+than discard exponent depth after support detection.  For a prime direction
+with finite valuation `v`, the prospective normalization is
+
+$$
+v=2j+\varepsilon,
+\qquad
+\varepsilon\in\{0,1\}.
+$$
+
+Here `j` records complete two-layer packets and `ε` is a terminal parity gap.
+Existing DkMath `padicValNat`, exponent-slot, and half-phase APIs should be
+reconnoitered before introducing any new abstraction.
+
+This is a candidate information-preservation layer, not a claim that the
+classical sieve parity problem has been solved.
+
+A second independent research route remains the finite-difference viewpoint:
+keep a nonzero unit/difference parameter before extracting invariants, rather
+than setting the discrete step to zero prematurely.  That route should remain
+above or beside the current exact unit-one Legendre application until a genuine
+bridge theorem is identified.
+
+## 13. Non-goals and hard boundary
+
+The following remain explicit non-goals of the current implementation:
+
+- no proof of Legendre's conjecture;
+- no hidden provider asserting a support-free square seat;
+- no elimination of the old-generated branch;
+- no claim that finite-world freshness is Zsigmondy/PrimitiveBeam origin;
+- no third-order inclusion-exclusion merely by escalation;
+- no analytic PNT/Mertens/prime-gap input in the current finite route;
+- no RH/CFBRC dependency in Primitive core;
+- no category-theory layer before concrete map/naturality needs appear;
+- no claim that retaining valuation parity alone distinguishes primes from all
+  odd-`Ω` composites.
+
+The architecture remains successful only if every new theorem says exactly
+what new information Lean certified and keeps conjecture-equivalent providers
+visible at the application frontier.
