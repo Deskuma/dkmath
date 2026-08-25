@@ -23,6 +23,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
 import DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
 import DkMath.NumberTheory.Legendre.ParitySafePairResidual
+import DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
 
 #print "file: DkMath.NumberTheory.Legendre"
 
