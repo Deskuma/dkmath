@@ -9,6 +9,7 @@ import DkMath.NumberTheory.Legendre.CenteredPair
 import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
 import DkMath.NumberTheory.Legendre.CenteredPacketDiamond
 import DkMath.NumberTheory.Legendre.CenteredPacketClique4
+import DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
