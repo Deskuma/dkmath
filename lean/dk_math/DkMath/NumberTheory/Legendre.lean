@@ -13,6 +13,7 @@ import DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
 import DkMath.NumberTheory.Legendre.OldSupportCapacity
 import DkMath.NumberTheory.Legendre.OldSupportGcd
 import DkMath.NumberTheory.Legendre.FreshCollisionMatching
+import DkMath.NumberTheory.Legendre.FreshCollisionRepair
 
 #print "file: DkMath.NumberTheory.Legendre"
 
