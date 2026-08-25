@@ -17,6 +17,7 @@ import DkMath.NumberTheory.Legendre.FreshCollisionRepair
 import DkMath.NumberTheory.Legendre.ActivePrimeCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
 
 #print "file: DkMath.NumberTheory.Legendre"
 
