@@ -12,6 +12,7 @@ import DkMath.NumberTheory.Legendre.CenteredPacketClique4
 import DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
 import DkMath.NumberTheory.Legendre.OldSupportCapacity
 import DkMath.NumberTheory.Legendre.OldSupportGcd
+import DkMath.NumberTheory.Legendre.FreshCollisionMatching
 
 #print "file: DkMath.NumberTheory.Legendre"
 
