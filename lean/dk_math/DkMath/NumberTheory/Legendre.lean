@@ -14,6 +14,7 @@ import DkMath.NumberTheory.Legendre.OldSupportCapacity
 import DkMath.NumberTheory.Legendre.OldSupportGcd
 import DkMath.NumberTheory.Legendre.FreshCollisionMatching
 import DkMath.NumberTheory.Legendre.FreshCollisionRepair
+import DkMath.NumberTheory.Legendre.ActivePrimeCapacity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
