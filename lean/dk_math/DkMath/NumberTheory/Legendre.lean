@@ -19,6 +19,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeWavePruning
 import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
 import DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+import DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
 
 #print "file: DkMath.NumberTheory.Legendre"
 
