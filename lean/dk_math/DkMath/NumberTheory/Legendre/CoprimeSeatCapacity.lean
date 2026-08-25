@@ -226,46 +226,4 @@ theorem four_le_primeScalesUpTo_card_of_centeredPacketClique4_fullyCovered
   rw [hRcard] at hcard
   exact hcard
 
---  ---------------------------------------------------------------------------
-
-namespace Example
-
--- n = 4, R = {1, 3} の場合に PairwiseCoprimeSquareSeatFamily が成り立つことの証明例
-theorem example_family : PairwiseCoprimeSquareSeatFamily 4 {1, 3} := by
-  constructor
-  · -- 1. すべての要素 r ∈ {1, 3} が SquareOffset 4 r を満たすことの証明
-    intro r hr
-    simp only [Finset.mem_insert, Finset.mem_singleton] at hr
-    rcases hr with rfl | rfl
-    · -- r = 1 の場合: 1 ≤ 1 ∧ 1 ≤ 2 * 4
-      dsimp [SquareOffset]
-      omega
-    · -- r = 3 の場合: 1 ≤ 3 ∧ 3 ≤ 2 * 4
-      dsimp [SquareOffset]
-      omega
-  · -- 2. r, s ∈ {1, 3} (r ≠ s) に対し Nat.Coprime (4^2 + r) (4^2 + s) であることの証明
-    intro r hr s hs hrs
-    simp only [Finset.mem_insert, Finset.mem_singleton] at hr hs
-    rcases hr with rfl | rfl <;> rcases hs with rfl | rfl
-    · -- r = 1, s = 1 (r ≠ s に矛盾)
-      exact (hrs rfl).elim
-    · -- r = 1, s = 3: Nat.Coprime (4^2 + 1) (4^2 + 3) => Nat.Coprime 17 19
-      decide
-    · -- r = 3, s = 1: Nat.Coprime (4^2 + 3) (4^2 + 1) => Nat.Coprime 19 17
-      decide
-    · -- r = 3, s = 3 (r ≠ s に矛盾)
-      exact (hrs rfl).elim
-
-theorem empty_is_pairwiseCoprimeSquareSeatFamily (n : ℕ) :
-    PairwiseCoprimeSquareSeatFamily n ∅ := by
-  constructor
-  · intro r hr
-    cases hr -- 空集合に要素は存在しないため即座に終了
-  · intro r hr
-    cases hr
-
-end Example
-
---  ---------------------------------------------------------------------------
-
 end DkMath.NumberTheory.Legendre
