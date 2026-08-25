@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.NumberTheory.Legendre.CenteredPacketClique4
+import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
 import DkMath.NumberTheory.Legendre.Frontier
 
 #print "file: DkMath.NumberTheory.Legendre.CoprimeSeatCapacity"
@@ -157,73 +157,5 @@ theorem exists_prime_squareCell_of_primeWorld_card_lt_pairwiseCoprimeSquareSeats
     prime_of_squareAnchoredSupportEscape hn hescape.1 hdisj, ?_⟩
   exact (squareCell_iff_exists_squareOffset n (n ^ 2 + r)).mpr
     ⟨r, hescape.1, rfl⟩
-
-/-! ### PRIM-L028.8: L027 four-seat sanity consumer -/
-
-/-- The repaired L027 four-seat family has four distinct seats. -/
-def centeredPacketClique4Offsets (k : ℕ) : Finset ℕ :=
-  {2 * k, 2 * k + 1, 6 * k + 1, 6 * k + 3}
-
-/-- Under the repaired hypotheses, the L027 offsets form a generic seat family. -/
-theorem pairwiseCoprimeSquareSeatFamily_centeredPacketClique4
-    {k : ℕ} (hk : 2 ≤ k)
-    (hcop15 : Nat.Coprime (4 * k + 3) 15) :
-    PairwiseCoprimeSquareSeatFamily
-      (4 * k) (centeredPacketClique4Offsets k) := by
-  have hAB := coprime_centeredPacketTriangle_AB k
-  have hAC := coprime_centeredPacketClique4_AC k
-  have hAD := coprime_centeredPacketClique4_AD hcop15
-  have hBC := coprime_centeredPacketTriangle_BC k
-  have hBD := coprime_centeredPacketClique4_BD (k := k)
-  have hCD := coprime_centeredPacketClique4_CD k
-  have hBA := Nat.Coprime.symm hAB
-  have hCA := Nat.Coprime.symm hAC
-  have hDA := Nat.Coprime.symm hAD
-  have hCB := Nat.Coprime.symm hBC
-  have hDB := Nat.Coprime.symm hBD
-  have hDC := Nat.Coprime.symm hCD
-  constructor
-  · intro r hr
-    simp only [centeredPacketClique4Offsets, Finset.mem_insert,
-      Finset.mem_singleton] at hr
-    rcases hr with rfl | rfl | rfl | rfl
-    · exact squareOffset_centeredPacketTriangle_A (by omega)
-    · exact squareOffset_centeredPacketTriangle_B (by omega)
-    · exact squareOffset_centeredPacketTriangle_C (by omega)
-    · exact squareOffset_centeredPacketClique4_D hk
-  · intro r hr s hs hrs
-    simp only [centeredPacketClique4Offsets, Finset.mem_insert,
-      Finset.mem_singleton] at hr hs
-    rcases hr with rfl | rfl | rfl | rfl <;>
-      rcases hs with rfl | rfl | rfl | rfl
-    all_goals first | exact (hrs rfl).elim | assumption
-
-/-- Full cover forces at least four old-prime directions for the repaired K4. -/
-theorem four_le_primeScalesUpTo_card_of_centeredPacketClique4_fullyCovered
-    {k : ℕ} (hk : 2 ≤ k)
-    (hcop15 : Nat.Coprime (4 * k + 3) 15)
-    (hfull : SquareOffsetsFullyCovered (4 * k)) :
-    4 ≤ (primeScalesUpTo (4 * k)).card := by
-  have hfamily := pairwiseCoprimeSquareSeatFamily_centeredPacketClique4 hk hcop15
-  have hcard :=
-    card_pairwiseCoprimeSquareSeatFamily_le_primeScalesUpTo_of_fullyCovered
-      hfamily hfull
-  have hRcard : (centeredPacketClique4Offsets k).card = 4 := by
-    have hA : 2 * k ∉ ({2 * k + 1, 6 * k + 1, 6 * k + 3} : Finset ℕ) := by
-      simp only [Finset.mem_insert, Finset.mem_singleton]
-      omega
-    have hB : 2 * k + 1 ∉ ({6 * k + 1, 6 * k + 3} : Finset ℕ) := by
-      simp only [Finset.mem_insert, Finset.mem_singleton]
-      omega
-    have hC : 6 * k + 1 ∉ ({6 * k + 3} : Finset ℕ) := by
-      simp only [Finset.mem_singleton]
-      omega
-    rw [centeredPacketClique4Offsets,
-      Finset.card_insert_of_notMem hA,
-      Finset.card_insert_of_notMem hB,
-      Finset.card_insert_of_notMem hC]
-    simp
-  rw [hRcard] at hcard
-  exact hcard
 
 end DkMath.NumberTheory.Legendre
