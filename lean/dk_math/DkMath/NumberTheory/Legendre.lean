@@ -21,6 +21,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
 import DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+import DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
 
 #print "file: DkMath.NumberTheory.Legendre"
 
