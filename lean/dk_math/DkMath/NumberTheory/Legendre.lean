@@ -30,6 +30,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
 import DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
 import DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
 import DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+import DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
 
 #print "file: DkMath.NumberTheory.Legendre"
 
