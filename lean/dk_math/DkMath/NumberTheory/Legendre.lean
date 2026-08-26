@@ -27,6 +27,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
 import DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
 import DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
 import DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+import DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
 
 #print "file: DkMath.NumberTheory.Legendre"
 
