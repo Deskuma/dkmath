@@ -11,14 +11,14 @@ import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 /-!
 ## ParitySafeTerminalSupportCost
 
-PRIM-L060T introduces the terminal seat image and its membership surface.  A
-terminal key returns to its canonical far residual seat, its next quotient `1`
-gives the exact point equation `n ^ 2 + r = p * q * s`, and L060S already
-provides the exact support-card decomposition at each terminal key.
+PRIM-L060U closes direct same-seat reconstruction from the L060S exact
+three-support surface.  A terminal key returns to its canonical far residual
+seat, its next quotient `1` gives the exact point equation
+`n ^ 2 + r = p * q * s`, and equal terminal seats determine equal ordered keys.
 
-The attempted next-seat injectivity is recorded as an engineering boundary in
-the checkpoint report; this module therefore does not claim image-card
-equality, disjoint support cost, or a global descent.
+The resulting finite image has the same card as its key domain.  The module
+does not add the later disjoint support-cost ledger, near counting, or a global
+descent.
 -/
 
 namespace DkMath.NumberTheory.Legendre
@@ -219,7 +219,7 @@ theorem paritySafeTerminalSupport_regression_16 :
   norm_num [paritySafeFarProductWaveNextQuotient,
     paritySafeFarProductWaveNextSeat, paritySafeTripleProductModulus]
 
-/-! ### PRIM-L060T: terminal seat image -/
+/-! ### PRIM-L060T/U: terminal seat image and direct reconstruction -/
 
 /-- The set of next seats contributed by surviving terminal far-product keys. -/
 noncomputable def paritySafeTerminalFarProductSeats (n : ℕ) : Finset ℕ :=
@@ -233,6 +233,85 @@ noncomputable def paritySafeTerminalFarProductSeats (n : ℕ) : Finset ℕ :=
       ∃ key ∈ paritySafeTerminalSurvivingFarProductKeys n,
         paritySafeFarProductWaveNextSeat n key = r := by
   simp [paritySafeTerminalFarProductSeats]
+
+/-! ### PRIM-L060U: direct same-seat reconstruction -/
+
+/-- Equal terminal seats force equality of the three ordered key components.
+
+This uses only the exact three-element support and the ordering packet from
+L060S; in particular, it does not unfold a next-seat formula or use a
+cofactor API. -/
+theorem paritySafeTerminalKeys_components_eq_of_nextSeat_eq
+    {n p₁ q₁ s₁ p₂ q₂ s₂ : ℕ}
+    (h₁ : (p₁, (q₁, s₁)) ∈ paritySafeTerminalSurvivingFarProductKeys n)
+    (h₂ : (p₂, (q₂, s₂)) ∈ paritySafeTerminalSurvivingFarProductKeys n)
+    (hseat :
+      paritySafeFarProductWaveNextSeat n (p₁, (q₁, s₁)) =
+        paritySafeFarProductWaveNextSeat n (p₂, (q₂, s₂))) :
+    p₁ = p₂ ∧ q₁ = q₂ ∧ s₁ = s₂ := by
+  have hpacket₁ :=
+    paritySafeTerminalSurvivingFarProductKey_prime_packet h₁
+  have hpacket₂ :=
+    paritySafeTerminalSurvivingFarProductKey_prime_packet h₂
+  rcases hpacket₁ with ⟨hp₁, hq₁, hs₁, hp₁q₁, hq₁s₁, hcanon₁⟩
+  rcases hpacket₂ with ⟨hp₂, hq₂, hs₂, hp₂q₂, hq₂s₂, hcanon₂⟩
+  have hp_eq : p₁ = p₂ := by
+    have hcanon_eq := congrArg (paritySafeCanonicalSupportPrime n) hseat
+    exact hcanon₁.trans (hcanon_eq.trans hcanon₂.symm)
+  have hthree₂ :=
+    paritySafeTerminalSurvivingFarProductKey_three_mem_activeSupport h₂
+  have hq₂support : q₂ ∈ paritySafeActiveSupport n
+      (paritySafeFarProductWaveNextSeat n (p₁, (q₁, s₁))) := by
+    rw [hseat]
+    exact hthree₂.2.1
+  have hs₂support : s₂ ∈ paritySafeActiveSupport n
+      (paritySafeFarProductWaveNextSeat n (p₁, (q₁, s₁))) := by
+    rw [hseat]
+    exact hthree₂.2.2
+  have hq₂cases :=
+    paritySafeTerminalSurvivingFarProductKey_activeSupport_cases h₁ hq₂support
+  have hs₂cases :=
+    paritySafeTerminalSurvivingFarProductKey_activeSupport_cases h₁ hs₂support
+  rcases hq₂cases with hq₂p | hq₂q | hq₂s <;>
+    rcases hs₂cases with hs₂p | hs₂q | hs₂s <;>
+    omega
+
+/-- Equal next seats determine equality of surviving terminal keys by the
+explicit scalar reconstruction theorem. -/
+theorem paritySafeTerminalKeys_eq_of_nextSeat_eq
+    {n : ℕ}
+    {key₁ key₂ : ℕ × (ℕ × ℕ)}
+    (h₁ : key₁ ∈ paritySafeTerminalSurvivingFarProductKeys n)
+    (h₂ : key₂ ∈ paritySafeTerminalSurvivingFarProductKeys n)
+    (hseat : paritySafeFarProductWaveNextSeat n key₁ =
+      paritySafeFarProductWaveNextSeat n key₂) :
+    key₁ = key₂ := by
+  rcases key₁ with ⟨p₁, q₁, s₁⟩
+  rcases key₂ with ⟨p₂, q₂, s₂⟩
+  obtain ⟨hp, hq, hs⟩ :=
+    paritySafeTerminalKeys_components_eq_of_nextSeat_eq h₁ h₂ hseat
+  subst p₂
+  subst q₂
+  subst s₂
+  rfl
+
+/-- The terminal next-seat map is injective on surviving terminal keys. -/
+theorem paritySafeTerminalFarProductWaveNextSeat_injectiveOn
+    {n : ℕ} :
+    Set.InjOn
+      (paritySafeFarProductWaveNextSeat n)
+      (paritySafeTerminalSurvivingFarProductKeys n : Set (ℕ × (ℕ × ℕ))) := by
+  intro key₁ h₁ key₂ h₂ hseat
+  exact paritySafeTerminalKeys_eq_of_nextSeat_eq h₁ h₂ hseat
+
+/-- The terminal seat image has the same cardinality as its key domain. -/
+theorem paritySafeTerminalFarProductSeats_card_eq_terminalKeys
+    (n : ℕ) :
+    (paritySafeTerminalFarProductSeats n).card =
+      (paritySafeTerminalSurvivingFarProductKeys n).card := by
+  unfold paritySafeTerminalFarProductSeats
+  exact Finset.card_image_iff.mpr
+    (paritySafeTerminalFarProductWaveNextSeat_injectiveOn (n := n))
 
 end
 end DkMath.NumberTheory.Legendre
