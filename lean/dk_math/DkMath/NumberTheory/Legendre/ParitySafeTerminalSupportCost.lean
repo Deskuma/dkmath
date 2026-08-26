@@ -11,10 +11,13 @@ import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 /-!
 ## ParitySafeTerminalSupportCost
 
-PRIM-L060 isolates the terminal far-product branch.  The formal packet below
-returns a terminal key to its canonical far residual seat and records the
-exact point equation.  The stronger exact-support/cardinality and combined
-support-cost ledger remain an explicit follow-up boundary for this checkout.
+PRIM-L060R keeps the terminal far-product spine in a heartbeat-safe public
+surface.  A terminal key returns to its canonical far residual seat, and its
+next quotient `1` gives the exact point equation `n ^ 2 + r = p * q * s`.
+
+The attempted exact-support repair is deliberately not hidden here: the
+support-card decomposition is recorded in the repair report after the first
+two decomposed support theorems still exceed the local elaboration budget.
 -/
 
 namespace DkMath.NumberTheory.Legendre
