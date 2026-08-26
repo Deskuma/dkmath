@@ -11,13 +11,14 @@ import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 /-!
 ## ParitySafeTerminalSupportCost
 
-PRIM-L060S closes the terminal active-support membership bridge.  A terminal
-key returns to its canonical far residual seat, its next quotient `1` gives
-the exact point equation `n ^ 2 + r = p * q * s`, and the support-card
-decomposition is proved by a three-element card sandwich.
+PRIM-L060T introduces the terminal seat image and its membership surface.  A
+terminal key returns to its canonical far residual seat, its next quotient `1`
+gives the exact point equation `n ^ 2 + r = p * q * s`, and L060S already
+provides the exact support-card decomposition at each terminal key.
 
-The module remains deliberately finite: it does not add an image or
-injectivity argument, a disjoint support-cost ledger, or a global descent.
+The attempted next-seat injectivity is recorded as an engineering boundary in
+the checkpoint report; this module therefore does not claim image-card
+equality, disjoint support cost, or a global descent.
 -/
 
 namespace DkMath.NumberTheory.Legendre
@@ -217,6 +218,21 @@ theorem paritySafeTerminalSupport_regression_16 :
       16 ^ 2 + 17 = 3 * 7 * 13 := by
   norm_num [paritySafeFarProductWaveNextQuotient,
     paritySafeFarProductWaveNextSeat, paritySafeTripleProductModulus]
+
+/-! ### PRIM-L060T: terminal seat image -/
+
+/-- The set of next seats contributed by surviving terminal far-product keys. -/
+noncomputable def paritySafeTerminalFarProductSeats (n : ℕ) : Finset ℕ :=
+  (paritySafeTerminalSurvivingFarProductKeys n).image
+    (paritySafeFarProductWaveNextSeat n)
+
+/-- A terminal seat is exactly the next-seat image of a surviving terminal key. -/
+@[simp] theorem mem_paritySafeTerminalFarProductSeats
+    {n r : ℕ} :
+    r ∈ paritySafeTerminalFarProductSeats n ↔
+      ∃ key ∈ paritySafeTerminalSurvivingFarProductKeys n,
+        paritySafeFarProductWaveNextSeat n key = r := by
+  simp [paritySafeTerminalFarProductSeats]
 
 end
 end DkMath.NumberTheory.Legendre
