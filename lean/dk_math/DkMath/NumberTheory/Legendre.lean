@@ -35,6 +35,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
 import DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
 import DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+import DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
 
 #print "file: DkMath.NumberTheory.Legendre"
 
