@@ -40,6 +40,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
 import DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
 import DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
 import DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 
 #print "file: DkMath.NumberTheory.Legendre"
 
