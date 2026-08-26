@@ -87,6 +87,21 @@ private theorem paritySafeRechargeExactSeat_eq_waveNextSeat
   apply Nat.sub_eq_iff_eq_add (by omega) |>.mpr
   simpa [Nat.add_comm] using hpoint.symm
 
+/-- The exact seat of a surviving recharge coordinate is its wave next seat.
+
+This public wrapper exposes the return identity needed by the subsequent
+fixed-seat residual-pair capacity module while keeping the reconstruction
+proof local to the depth-seat layer.
+-/
+theorem paritySafeRechargeExactSeat_eq_waveNextSeat_of_recharge_key
+    {n b t : ℕ}
+    {key : ℕ × (ℕ × ℕ)}
+    (hkey : key ∈ paritySafeRechargeSurvivingFarProductKeys n)
+    (hcoord : paritySafeRechargeDualBaseKey n key = (b, t)) :
+    paritySafeRechargeExactSeat n b t =
+      paritySafeFarProductWaveNextSeat n key :=
+  paritySafeRechargeExactSeat_eq_waveNextSeat hkey hcoord
+
 /-- An exact pair returns to an odd coprime L018 seat and its shell point. -/
 theorem paritySafeRechargeExactPair_seat_packet
     {n b t : ℕ}
