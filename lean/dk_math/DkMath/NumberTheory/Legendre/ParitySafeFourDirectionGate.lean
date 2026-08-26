@@ -72,6 +72,24 @@ theorem three_mul_depthFiberCollisionSeats_card_le_supportExcess
       intro r _ _
       exact Nat.zero_le _
 
+/-! ### PRIM-L060V.1: collision seats in the candidate surface -/
+
+/-- Every exact-depth collision seat is an odd coprime candidate seat.
+
+This is the reusable candidate-side half of the L059 collision cost
+argument.  It exposes no new counting principle; it only packages the
+existing collision-seat witness and covered-candidate bridge. -/
+theorem paritySafeRechargeExactDepthFiberCollisionSeats_subset_candidate
+    (n : ℕ) :
+    paritySafeRechargeExactDepthFiberCollisionSeats n ⊆
+      squareAnchorOddPointCoprimeOffsets n := by
+  intro r hr
+  have hseat := (mem_paritySafeRechargeExactDepthFiberCollisionSeats.mp hr).1
+  rcases paritySafeRechargeExactDepthPairsAtSeat_nonempty_of_mem_depthSeats hseat with
+    ⟨bt, hbt⟩
+  exact (mem_paritySafeCoveredCandidates.mp
+    (paritySafeRechargeExactDepthPair_mem_covered hbt)).1
+
 /-! ### PRIM-L059.2: fourth-power gate -/
 
 /-- Active primes whose fourth powers fit strictly inside the square body. -/

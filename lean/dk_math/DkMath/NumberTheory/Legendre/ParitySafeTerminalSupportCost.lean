@@ -17,8 +17,8 @@ seat, its next quotient `1` gives the exact point equation
 `n ^ 2 + r = p * q * s`, and equal terminal seats determine equal ordered keys.
 
 The resulting finite image has the same card as its key domain.  The module
-does not add the later disjoint support-cost ledger, near counting, or a global
-descent.
+also closes the bounded L060V disjoint weighted support-cost ledger, but does
+not add near counting or a global descent.
 -/
 
 namespace DkMath.NumberTheory.Legendre
@@ -234,6 +234,34 @@ noncomputable def paritySafeTerminalFarProductSeats (n : ℕ) : Finset ℕ :=
         paritySafeFarProductWaveNextSeat n key = r := by
   simp [paritySafeTerminalFarProductSeats]
 
+/-! ### PRIM-L060V.2: terminal seat support and candidate surface -/
+
+/-- A seat in the terminal image has exactly three active support primes. -/
+theorem paritySafeTerminalFarProductSeat_activeSupport_card_eq_three
+    {n r : ℕ}
+    (hr : r ∈ paritySafeTerminalFarProductSeats n) :
+    (paritySafeActiveSupport n r).card = 3 := by
+  rcases mem_paritySafeTerminalFarProductSeats.mp hr with ⟨key, hkey, hseat⟩
+  rcases key with ⟨p, q, s⟩
+  have hcard :=
+    paritySafeTerminalSurvivingFarProductKey_activeSupport_card_eq_three hkey
+  rw [hseat] at hcard
+  exact hcard
+
+/-- Every terminal seat lies in the common odd coprime candidate surface. -/
+theorem paritySafeTerminalFarProductSeats_subset_candidate
+    (n : ℕ) :
+    paritySafeTerminalFarProductSeats n ⊆
+      squareAnchorOddPointCoprimeOffsets n := by
+  intro r hr
+  rcases mem_paritySafeTerminalFarProductSeats.mp hr with ⟨key, hkey, hseat⟩
+  rcases key with ⟨p, q, s⟩
+  have hfar := paritySafeTerminalSurvivingFarProductKey_residual_seat hkey
+  have hcandidate := (mem_paritySafeCanonicalFarResidualTripleIncidences.mp hfar).1
+  rw [hseat] at hcandidate
+  exact (mem_paritySafeCoveredCandidates.mp
+    (Finset.mem_product.mp (Finset.mem_filter.mp hcandidate).1).1).1
+
 /-! ### PRIM-L060U: direct same-seat reconstruction -/
 
 /-- Equal terminal seats force equality of the three ordered key components.
@@ -312,6 +340,117 @@ theorem paritySafeTerminalFarProductSeats_card_eq_terminalKeys
   unfold paritySafeTerminalFarProductSeats
   exact Finset.card_image_iff.mpr
     (paritySafeTerminalFarProductWaveNextSeat_injectiveOn (n := n))
+
+/-! ### PRIM-L060V.3--V.8: disjoint weighted support-cost ledger -/
+
+/-- Terminal and exact-depth collision seats are disjoint by support size. -/
+theorem paritySafeTerminalFarProductSeats_disjoint_depthFiberCollisionSeats
+    (n : ℕ) :
+    Disjoint
+      (paritySafeTerminalFarProductSeats n)
+      (paritySafeRechargeExactDepthFiberCollisionSeats n) := by
+  rw [Finset.disjoint_left]
+  intro r hterminal hcollision
+  have hterminalCard :=
+    paritySafeTerminalFarProductSeat_activeSupport_card_eq_three hterminal
+  have hcollisionCard :=
+    paritySafeRechargeExactDepthFiberCollision_support_card_ge_four hcollision
+  omega
+
+/-- The exact terminal support cost is two per terminal seat. -/
+theorem paritySafeTerminalFarProductSeats_supportCost_sum_eq
+    (n : ℕ) :
+    (∑ r ∈ paritySafeTerminalFarProductSeats n,
+      ((paritySafeActiveSupport n r).card - 1)) =
+      2 * (paritySafeTerminalFarProductSeats n).card := by
+  calc
+    (∑ r ∈ paritySafeTerminalFarProductSeats n,
+        ((paritySafeActiveSupport n r).card - 1)) =
+        ∑ _r ∈ paritySafeTerminalFarProductSeats n, 2 := by
+      apply Finset.sum_congr rfl
+      intro r hr
+      rw [paritySafeTerminalFarProductSeat_activeSupport_card_eq_three hr]
+    _ = 2 * (paritySafeTerminalFarProductSeats n).card := by
+      simp [Nat.mul_comm]
+
+/-- A collision seat contributes at least three units of local support cost. -/
+theorem three_mul_depthFiberCollisionSeats_card_le_localSupportCost
+    (n : ℕ) :
+    3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card ≤
+      ∑ r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n,
+        ((paritySafeActiveSupport n r).card - 1) := by
+  have hterm : ∀ r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n,
+      3 ≤ (paritySafeActiveSupport n r).card - 1 := by
+    intro r hr
+    have hfour := paritySafeRechargeExactDepthFiberCollision_support_card_ge_four hr
+    omega
+  calc
+    3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card =
+        ∑ _r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n, 3 := by
+      simp [Nat.mul_comm]
+    _ ≤ ∑ r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n,
+        ((paritySafeActiveSupport n r).card - 1) := by
+      apply Finset.sum_le_sum
+      intro r hr
+      exact hterm r hr
+
+/-- The terminal and collision seat union remains inside the candidate set. -/
+theorem paritySafeTerminalCollisionSeats_union_subset_candidate
+    (n : ℕ) :
+    paritySafeTerminalFarProductSeats n ∪
+      paritySafeRechargeExactDepthFiberCollisionSeats n ⊆
+        squareAnchorOddPointCoprimeOffsets n := by
+  intro r hr
+  rcases Finset.mem_union.mp hr with hterminal | hcollision
+  · exact paritySafeTerminalFarProductSeats_subset_candidate n hterminal
+  · exact paritySafeRechargeExactDepthFiberCollisionSeats_subset_candidate n hcollision
+
+/-- The terminal and collision charges fit in one disjoint candidate-side
+support-excess sum.
+
+The proof deliberately uses the union sum, so the same support excess is not
+charged independently to the two seat families. -/
+theorem two_mul_terminalKeys_add_three_mul_collisionSeats_le_supportExcess
+    (n : ℕ) :
+    2 * (paritySafeTerminalSurvivingFarProductKeys n).card +
+      3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card ≤
+        paritySafeSupportExcess n := by
+  have hdisjoint :=
+    paritySafeTerminalFarProductSeats_disjoint_depthFiberCollisionSeats n
+  have hsubset := paritySafeTerminalCollisionSeats_union_subset_candidate n
+  have hcollision := three_mul_depthFiberCollisionSeats_card_le_localSupportCost n
+  have hunion_le :
+      (∑ r ∈ paritySafeTerminalFarProductSeats n ∪
+          paritySafeRechargeExactDepthFiberCollisionSeats n,
+        ((paritySafeActiveSupport n r).card - 1)) ≤
+        ∑ r ∈ squareAnchorOddPointCoprimeOffsets n,
+          ((paritySafeActiveSupport n r).card - 1) := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg hsubset
+    intro r _ _
+    exact Nat.zero_le _
+  calc
+    2 * (paritySafeTerminalSurvivingFarProductKeys n).card +
+        3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card =
+        2 * (paritySafeTerminalFarProductSeats n).card +
+          3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card := by
+      rw [paritySafeTerminalFarProductSeats_card_eq_terminalKeys]
+    _ = (∑ r ∈ paritySafeTerminalFarProductSeats n,
+          ((paritySafeActiveSupport n r).card - 1)) +
+          3 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card := by
+      rw [paritySafeTerminalFarProductSeats_supportCost_sum_eq]
+    _ ≤ (∑ r ∈ paritySafeTerminalFarProductSeats n,
+          ((paritySafeActiveSupport n r).card - 1)) +
+          ∑ r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n,
+            ((paritySafeActiveSupport n r).card - 1) := by
+      exact Nat.add_le_add_left hcollision _
+    _ = ∑ r ∈ paritySafeTerminalFarProductSeats n ∪
+          paritySafeRechargeExactDepthFiberCollisionSeats n,
+        ((paritySafeActiveSupport n r).card - 1) := by
+      rw [Finset.sum_union hdisjoint]
+    _ ≤ ∑ r ∈ squareAnchorOddPointCoprimeOffsets n,
+          ((paritySafeActiveSupport n r).card - 1) := hunion_le
+    _ = paritySafeSupportExcess n := by
+      rfl
 
 end
 end DkMath.NumberTheory.Legendre
