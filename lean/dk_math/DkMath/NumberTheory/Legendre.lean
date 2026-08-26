@@ -33,6 +33,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
 import DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
 import DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
 import DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+import DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
