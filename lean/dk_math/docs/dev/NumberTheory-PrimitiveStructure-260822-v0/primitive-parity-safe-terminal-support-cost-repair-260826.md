@@ -1,54 +1,58 @@
-# PRIM-L060R — Terminal support proof decomposition
+# PRIM-L060S — Active-support membership bridge / terminal exact-support closure
 
 ## Outcome
 
-Outcome P — ENGINEERING PARTIAL.
+Outcome A — bounded checkpoint complete.
 
-The already-verified L060 terminal spine was retained.  The requested
-heartbeat repair was attempted by splitting exact support into independent
-theorems, but the first two mandatory support declarations still hit the
-local elaboration budget:
+The L060R heartbeat repair was resumed at the requested smaller boundary.  A
+definition-local membership bridge was added first, and the terminal support
+cardinality then closed without a global heartbeat change or a combined
+ledger.
 
-1. `paritySafeTerminalSurvivingFarProductKey_three_mem_activeSupport`
-2. `paritySafeTerminalSurvivingFarProductKey_activeSupport_cases`
+## Implemented bridge
 
-Both were given a local `set_option maxHeartbeats 800000 in` annotation and
-still timed out.  No mathematical counterexample was found.
+`mem_paritySafeActiveSupport_iff_dvd` now states, with `[simp]`, that
 
-## Verified spine
+```text
+q ∈ paritySafeActiveSupport n r
+  ↔ q ∈ squareAnchorOddActivePrimes n ∧ q ∣ n ^ 2 + r.
+```
 
-The module continues to prove:
+It is located immediately after `paritySafeActiveSupport` in
+`ParitySafeIncidenceBalance.lean` and compiles at the normal heartbeat.
 
-- terminal key → rough selector → canonical far residual seat;
-- `n ^ 2 + nextSeat = p * q * s` for next quotient `1`;
-- the `n = 16`, `(3,(7,13))`, `nextSeat = 17` regression.
+## Terminal exact-support closure
 
-These are exposed in
-`DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost` with public
-docstrings and imported by the facade.
+`ParitySafeTerminalSupportCost.lean` now exposes:
 
-## Stopped boundary
+- the terminal prime/order/canonical-owner packet;
+- membership of the three ordered primes in the terminal active support;
+- the arbitrary-support-member factorization cases
+  `u = p ∨ u = q ∨ u = s`;
+- lower and upper support inclusions and the resulting
+  `activeSupport.card = 3` card sandwich;
+- the `n = 16`, `r = 17` support-card regression.
 
-Because `three_mem_activeSupport` and `activeSupport_cases` did not close,
-the card sandwich, terminal seat cost, key/seat injectivity, collision
-disjointness, and combined support-cost ledger were not added.  No
-`sorry`, `admit`, axiom, or `native_decide` was used.
+The existing terminal residual-seat and exact point-equation spine remains
+unchanged.  The proof uses the terminal identity
+`n ^ 2 + r = p * q * s`, `Nat.Prime.dvd_mul`, and `Nat.dvd_prime`.
 
-The next attempt should reduce the support-membership bridge itself—possibly
-as a separately compiled theorem for active-support membership—before
-reintroducing the three-prime cases theorem.  The exact Finset equality route
-remains out of scope until the card theorem closes.
+## Remaining boundary
 
-## Non-goals
-
-Near branches, first-prime fiber counting, fifth directions, generic
-factorization/hypergraphs, analytic estimates, descent, global contradiction,
-Legendre's conjecture, and RH remain outside this checkpoint.
+This checkpoint does not add seat-image injectivity, key/seat injectivity,
+disjointness, terminal support cost, or a combined global support-cost ledger.
+Near branches, fifth directions, analytic estimates, descent, a global
+contradiction, Legendre's conjecture, and RH remain outside scope.
 
 ## Validation
 
-`lake build DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost`,
-`lake build DkMath.NumberTheory.Legendre`, and `git diff --check` pass after
-restoring the last compiling partial surface.  The new Lean source is clean
-of the prohibited tokens listed above.  No commit, push, PR, or CI action was
-performed.
+- `lake build DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance`
+  passed.
+- `lake build DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost`
+  passed.
+- `lake build DkMath.NumberTheory.Legendre` passed.
+- `git diff --check` passed.
+- The changed Lean source files contain no `sorry`, `admit`, `axiom`, or
+  `native_decide`.
+
+No commit, push, PR, or CI action was performed.

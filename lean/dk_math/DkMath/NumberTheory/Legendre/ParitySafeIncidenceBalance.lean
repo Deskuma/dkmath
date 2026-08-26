@@ -33,6 +33,15 @@ noncomputable def paritySafeActiveSupport (n r : ℕ) : Finset ℕ := by
   exact (squareAnchorOddActivePrimes n).filter
     (fun q => SquareOffsetForbiddenBy n q r)
 
+/-- Active support membership is the old-prime condition together with
+divisibility of the corresponding square-shell point. -/
+@[simp] theorem mem_paritySafeActiveSupport_iff_dvd
+    {n q r : ℕ} :
+    q ∈ paritySafeActiveSupport n r ↔
+      q ∈ squareAnchorOddActivePrimes n ∧
+        q ∣ n ^ 2 + r := by
+  simp [paritySafeActiveSupport, SquareOffsetForbiddenBy]
+
 /-- On a parity-safe candidate, the old nondivisor support is exactly active support. -/
 theorem squareOffsetAnchorNondivisorSupport_eq_paritySafeActiveSupport_of_candidate
     {n r : ℕ} (hr : r ∈ squareAnchorOddPointCoprimeOffsets n) :
