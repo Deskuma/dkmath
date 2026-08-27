@@ -48,6 +48,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
 import DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+import DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
 
 #print "file: DkMath.NumberTheory.Legendre"
 
