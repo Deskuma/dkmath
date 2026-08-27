@@ -15,6 +15,7 @@ import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
 import DkMath.NumberTheory.PrimorialUniverse.WheelProjection
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
