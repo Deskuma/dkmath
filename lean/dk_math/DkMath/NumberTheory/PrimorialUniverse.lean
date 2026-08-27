@@ -12,6 +12,7 @@ import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
 import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
 import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
 import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+import DkMath.NumberTheory.PrimorialUniverse.WheelProjection
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -26,7 +27,9 @@ positive-real refinement of natural coordinates, the canonical fiber
 positive intersection and integer commensurability, and the finite
 prime-scale synchronization period.  It now also exposes the one-period
 wheel survivor Finset and its exact product-period reflection, together with
-the per-old-survivor fresh-prime lift and unique-deletion layer.  Rational/
-irrational classification, global next-wheel decomposition, PowerSwap, and
-Legendre consumers belong to later checkpoints.
+the per-old-survivor fresh-prime lift, unique-deletion, and global replication
+layers.  It also exposes the canonical modulo projection from an enlarged
+wheel, its constant `(q - 1)` fibers, and its compatibility with reflection.
+Rational/irrational classification, square-anchor and Legendre consumers,
+PowerSwap, and analytic consumers belong to later checkpoints.
 -/
