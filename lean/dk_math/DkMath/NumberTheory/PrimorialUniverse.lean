@@ -20,6 +20,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -50,6 +51,10 @@ degree.
 The coprime phase fiber is also exposed as a subcover of the finite wheel
 survivors, including the `q = 3` equality and the strict two-of-`(q - 1)`
 comparison for fresh primes above `3`.
+Its raw lift-index refinement is also exported: exactly one index has residue
+`+a`, exactly one has residue `-a`, exactly one is deleted by `q`, and the
+remaining `q - 3` indices are neutral surviving lifts.  The corresponding
+phase seats are the image of the two sign-selected indices.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
