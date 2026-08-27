@@ -59,6 +59,7 @@ import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
 import DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
+import DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
 
 #print "file: DkMath.NumberTheory.Legendre"
 
