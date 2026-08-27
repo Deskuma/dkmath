@@ -572,8 +572,9 @@ noncomputable def canonicalPositiveDriftImageAndInternalPositiveSpareEmbedding
       have hspare : (canonicalInternalPositiveSpareCharge n q m b).2 ∈
           canonicalSelectedDriftSpareCarrier n
             (canonicalInternalPositiveSpareCharge n q m b).1.val := by
-        simpa only [canonicalInternalPositiveSpareCharge_fst] using
-          canonicalInternalPositiveSpareCharge_mem_spare b
+        change (canonicalInternalPositiveSpareCharge n q m b).2 ∈
+          canonicalSelectedDriftSpareCarrier n (b.val + 1)
+        exact canonicalInternalPositiveSpareCharge_mem_spare b
       exact (Finset.mem_sdiff.mp hspare).2 himage
 
 /-- Cardinality form of the no-reuse positive-spare absorption certificate. -/

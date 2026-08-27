@@ -23,9 +23,9 @@ end DkMath.ABC.Basic
 
 namespace Real
 
--- 非負数の累乗は非負であることを示すフック補題(AIが間違えて定義名を多用するので)
-lemma rpow_nonneg_of_nonneg {x : ℝ} (hx : 0 ≤ x) (r : ℝ) : 0 ≤ x ^ r :=
-  Real.rpow_nonneg hx r
+-- 非負数の累乗は非負であることを示す (wrapper)
+-- 2026/07/27 18:25 [修正済み] 参照している箇所は無い
+abbrev rpow_nonneg_of_nonneg {x : ℝ} (hx : 0 ≤ x) (r : ℝ) : 0 ≤ x ^ r := Real.rpow_nonneg hx r
 
 end Real
 

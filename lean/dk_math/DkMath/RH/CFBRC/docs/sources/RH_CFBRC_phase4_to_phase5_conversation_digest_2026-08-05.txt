@@ -1,0 +1,85 @@
+# RH-CFBRC Phase 4→5 conversation source digest
+
+Date range: 2026-08-03 to 2026-08-05
+Project: Riemann Hypothsis
+Scope: current ChatGPT project conversation
+Status: curated source digest, not a verbatim full transcript
+
+## Chronology
+
+1. Rotated defect-tail integral infrastructure reached Green.
+2. Eta tail Euler half decomposition was implemented and fixed for Lean 4.32.2.
+3. Exact half-endpoint main term and one-extra-power remainder were established.
+4. Pair-index normalized rotated eta tails were shown to converge to explicit constants.
+5. Right off-critical rotated defect tail obtained a positive constant; left obtained a negative constant.
+6. Scaled frame step phase and scaled sine coefficient were analyzed.
+7. Right sine-transport term obtained a negative power-law constant; left obtained a positive power-law constant.
+8. A general monotonicity-free power-tail Abelian theorem was implemented.
+9. User applied Lean 4.32.2 compatibility fixes and reported full build success.
+10. ROADMAP review placed the project at Phase 5: final closure invariant.
+
+## Green checkpoint
+
+Repository: Deskuma/dkmath
+Branch: wip/RH-CFBRC-off-critical-exclusion-260802-v2
+Head: 06db1f443e2ae923a6df3b7f9c82cd88db6605e9
+Commit: fix: error
+
+The latest fix changed proof elaboration only. It did not change the mathematical statement of the Abelian theorem.
+
+## Main theorem chain discussed
+
+```text
+signed correction exact split
+→ sine transport + cosine loss
+→ cosine loss normalized vanishing
+→ rotated defect-tail exact split
+→ eta-tail Euler half decomposition
+→ normalized rotated tail constants
+→ scaled sine coefficient constant
+→ sine-transport term constants
+→ power-tail Abelian bridge
+→ Phase 5
+```
+
+## Phase 5 gates agreed in the conversation
+
+```text
+Gate 1:
+  PowerTailAbelian Green — completed
+
+Gate 2:
+  normalized sine-transport tail limit
+
+Gate 3:
+  normalized correction projection tail limit
+
+Gate 4:
+  normalized exact Abel balance audit
+
+Gate 5:
+  same-object zero/nonzero collision, or named obstruction
+```
+
+## Non-negotiable warning
+
+```text
+eventually positive + tends to zero
+```
+
+does not produce a contradiction. A final proof requires zero-forced and nonzero-forced statements about the same Lean object or the same normalized limit.
+
+## Conversation search terms
+
+```text
+EtaTailEulerHalf
+NormalizedDominantTailLimit
+NormalizedSineTransportTermLimit
+PowerTailAbelian
+ROADMAP
+Phase 5
+zero/nonzero collision
+same-object
+```
+
+The complete source context remains the ChatGPT project conversation. This digest exists so a new conversation can locate the relevant phase quickly and avoid re-opening already Green layers.

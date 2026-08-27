@@ -183,13 +183,13 @@ example (hp : Nat.Prime 3) (ha : 6 ≠ 0) :
 p が素因数として a に k 回現れるなら、a^d には d*k 回現れます。
 これは v_p(a^d) = d · v_p(a) と表記されます。
 -/
-lemma padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (ha : a ≠ 0) :
+lemma padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (_ha : a ≠ 0) :
     padicValNat p (a ^ d) = d * padicValNat p a := by
   -- Fact インスタンスを用意
   haveI : Fact p.Prime := ⟨hp⟩
   -- Mathlib の padicValNat.pow を適用
-  -- padicValNat.pow (n : ℕ) (ha : a ≠ 0) : padicValNat p (a ^ n) = n * padicValNat p a
-  exact padicValNat.pow d ha
+  -- v4.32.2 の `padicValNat.pow` は底と指数を明示的に受け取り、非零仮定を要求しない。
+  exact padicValNat.pow a d
 
 /--
 `padicValNat_pow'` は `padicValNat_pow` の変形版で、

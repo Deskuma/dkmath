@@ -428,7 +428,7 @@ private theorem nonempty_even_factorData
         exact dvd_mul_of_dvd_right hqA1 8
       · rw [hB8, hB2]
         convert dvd_mul_of_dvd_right hqB2 16 using 1
-        all_goals ring
+        all_goals first | ring | rfl
     have hred : A1 * B2 = Q2 ^ 5 := by
       apply Nat.mul_left_cancel (show 0 < 128 by norm_num)
       calc
@@ -488,7 +488,7 @@ private theorem nonempty_even_factorData
         apply p.no_common_odd_prime q hq hq2
         · rw [hA8, hA2]
           convert dvd_mul_of_dvd_right hqA2 16 using 1
-          all_goals ring
+          all_goals first | ring | rfl
         · rw [hB8]
           exact dvd_mul_of_dvd_right hqB1 8
       exact hcop'.symm

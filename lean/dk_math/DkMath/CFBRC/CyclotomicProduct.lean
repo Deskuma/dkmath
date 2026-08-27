@@ -43,7 +43,7 @@ theorem prod_cyclotomicEval_eq_geomSum {R : Type _} [CommRing R]
         ∑ i ∈ Finset.range d, (Polynomial.X : Polynomial ℤ) ^ i :=
     Polynomial.prod_cyclotomic_eq_geom_sum hd ℤ
   have hEval := congrArg (Polynomial.eval₂ (Int.castRingHom R) X) hpoly
-  simpa [cyclotomicEval, Polynomial.eval₂_finset_prod, Polynomial.eval₂_finset_sum] using hEval
+  simpa [cyclotomicEval, Polynomial.eval₂_finsetProd, Polynomial.eval₂_finsetSum] using hEval
 
 /--
 shifted 版の局所評価器（`u=1` で plain eval に戻る形）。

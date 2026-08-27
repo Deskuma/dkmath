@@ -1,0 +1,262 @@
+diff --git a/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean b/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean
+index c603eb33..35b94b0f 100644
+--- a/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean
++++ b/lean/dk_math/DkMath/FLT/docs/StandAlone/FLT5#StandAlone-v0.lean
+@@ -367,7 +367,7 @@ theorem fifth_power_factor_split
+     {g n x : ℕ} (hcop : Nat.Coprime g n) (hbody : g * n = x ^ 5) :
+     (∃ a : ℕ, g = a ^ 5) ∧ (∃ b : ℕ, n = b ^ 5) := by
+   have hunit : IsUnit (GCDMonoid.gcd g n) := by
+-    simpa [Nat.Coprime] using hcop
++    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcop
+   constructor
+   · exact exists_eq_pow_of_mul_eq_pow hunit hbody
+   · have hunit' : IsUnit (GCDMonoid.gcd n g) := by
+@@ -3061,16 +3061,23 @@ The norm-Euclidean structure supplies a gcd monoid on `GoldenInt`.  Consequently
+ the finite unit-class layer; it introduces no FLT-specific assumption.
+ -/
+ 
++/-- The explicit coordinate one agrees with the ring one. -/
++@[simp] theorem goldenOne_eq_one :
++    goldenOne = (1 : GoldenInt) := by
++  ext <;> simp [goldenOne]
++
+ /-- The explicit golden-unit predicate agrees with the standard ring predicate. -/
+ theorem goldenUnit_iff_isUnit {x : GoldenInt} : GoldenUnit x ↔ IsUnit x := by
+   constructor
+   · rintro ⟨y, hxy, _⟩
+     apply isUnit_iff_exists_inv.mpr
+-    exact ⟨y, by simpa using hxy⟩
++    exact ⟨y, by
++      simpa only [golden_mul_eq, goldenOne_eq_one] using hxy⟩
+   · intro hx
+     rcases isUnit_iff_exists_inv.mp hx with ⟨y, hxy⟩
+-    refine ⟨y, by simpa using hxy, ?_⟩
+-    simpa [mul_comm] using hxy
++    refine ⟨y, ?_, ?_⟩
++    · simpa only [golden_mul_eq, goldenOne_eq_one] using hxy
++    · simpa only [golden_mul_eq, goldenOne_eq_one, mul_comm] using hxy
+ 
+ /-- Coprime factors of a fifth power in the golden integers are fifth powers up to a unit. -/
+ theorem goldenCoprimeFactorOfFifthPower : GoldenCoprimeFactorOfFifthPower := by
+@@ -3288,15 +3295,15 @@ theorem five_dvd_goldenNorm_of_five_dvd_fifthFst
+     (gamma : GoldenInt)
+     (hF : (5 : ℤ) ∣ goldenFifthFstPoly gamma.fst gamma.snd) :
+     (5 : ℤ) ∣ goldenNorm gamma := by
+-  have hdiff := five_dvd_goldenFifthFstPoly_sub_linear gamma.fst gamma.snd
++  have hdiff :=
++    five_dvd_goldenFifthFstPoly_sub_linear gamma.fst gamma.snd
+   have hlinear : (5 : ℤ) ∣ gamma.fst + 3 * gamma.snd := by
+-    convert dvd_sub hF hdiff using 1
+-    all_goals ring
++    simpa only [sub_sub_cancel] using dvd_sub hF hdiff
+   have hsq : (5 : ℤ) ∣ (gamma.fst + 3 * gamma.snd) ^ 2 :=
+     dvd_pow hlinear (by decide)
+-  have hnormDiff := five_dvd_goldenNorm_sub_linear_sq gamma
+-  convert dvd_add hnormDiff hsq using 1
+-  all_goals ring
++  have hnormDiff :=
++    five_dvd_goldenNorm_sub_linear_sq gamma
++  simpa only [sub_add_cancel] using dvd_add hnormDiff hsq
+ 
+ private theorem five_dvd_beta_snd
+     {u v w : ℕ} (p : SignedGoldenRamifierStrippedPacket u v w) :
+@@ -3312,7 +3319,8 @@ theorem signedGolden_nonzero_unitSector_false
+     (hbeta : p.beta =
+       goldenMul (goldenPow goldenPhi i.val) (goldenPow gamma 5)) : False := by
+   have hnotNorm : ¬ (5 : ℤ) ∣ goldenNorm gamma :=
+-    p.five_not_dvd_gamma_norm (goldenUnit_pow goldenUnit_phi i.val) hbeta
++    p.five_not_dvd_gamma_norm
++      (goldenUnit_pow goldenUnit_phi i.val) hbeta
+   apply hnotNorm
+   apply five_dvd_goldenNorm_of_five_dvd_fifthFst
+   have hb := five_dvd_beta_snd p
+@@ -3320,24 +3328,28 @@ theorem signedGolden_nonzero_unitSector_false
+   fin_cases i
+   · exact (hi rfl).elim
+   · rw [hbeta, golden_unit_one_mul_fifth_snd] at hb
+-    convert dvd_sub hb hS using 1
+-    all_goals ring
++    have h := dvd_sub hb hS
++    ring_nf at h
++    exact h
+   · rw [hbeta, golden_unit_two_mul_fifth_snd] at hb
+-    convert dvd_sub hb (dvd_mul_of_dvd_right hS 2) using 1
+-    all_goals ring
++    have h := dvd_sub hb (dvd_mul_of_dvd_right hS 2)
++    ring_nf at h
++    exact h
+   · rw [hbeta, golden_unit_three_mul_fifth_snd] at hb
+-    have h2F : (5 : ℤ) ∣ 2 * goldenFifthFstPoly gamma.fst gamma.snd :=
+-      by
+-        convert dvd_sub hb (dvd_mul_of_dvd_right hS 3) using 1
+-        all_goals ring
++    have h2F :
++        (5 : ℤ) ∣ 2 * goldenFifthFstPoly gamma.fst gamma.snd := by
++      have h := dvd_sub hb (dvd_mul_of_dvd_right hS 3)
++      ring_nf at h
++      grind only
+     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h2F with h52 | hF
+     · norm_num at h52
+     · exact hF
+   · rw [hbeta, golden_unit_four_mul_fifth_snd] at hb
+-    have h3F : (5 : ℤ) ∣ 3 * goldenFifthFstPoly gamma.fst gamma.snd :=
+-      by
+-        convert dvd_sub hb (dvd_mul_of_dvd_right hS 5) using 1
+-        all_goals ring
++    have h3F :
++        (5 : ℤ) ∣ 3 * goldenFifthFstPoly gamma.fst gamma.snd := by
++      have h := dvd_sub hb (dvd_mul_of_dvd_right hS 5)
++      ring_nf at h
++      grind only
+     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h3F with h53 | hF
+     · norm_num at h53
+     · exact hF
+@@ -3433,8 +3445,9 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_five_not_dvd_sndFactor
+   apply p.zeroSector_five_not_dvd_gamma_norm hbeta
+   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
+   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
+-    convert dvd_sub hH hdiff using 1
+-    all_goals ring
++    have h := dvd_sub hH hdiff
++    ring_nf at h
++    exact h
+   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
+ 
+ /-- Natural absolute-value form of the zero-sector product equation. -/
+@@ -3503,8 +3516,9 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_coprime_s_sndFactor
+       simp only [goldenFifthSndFactor]
+       rw [hk]
+       ring
+-    convert dvd_sub hqHZ htail using 1
+-    all_goals ring
++    have h := dvd_sub hqHZ htail
++    ring_nf at h
++    exact h
+   have hqr4 : q ∣ gamma.fst.natAbs ^ 4 := by
+     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
+   have hqr : q ∣ gamma.fst.natAbs := hqPrime.dvd_of_dvd_pow hqr4
+@@ -3549,7 +3563,7 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_tenthPower_split
+   have hcopTH : Nat.Coprime t H :=
+     (p.zeroSector_coprime_s_sndFactor hbeta).of_dvd_left htDvdS
+   have hunit : IsUnit (gcd t H) := by
+-    simpa [Nat.Coprime] using hcopTH
++    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcopTH
+   obtain ⟨c, hc⟩ :=
+     exists_eq_pow_of_mul_eq_pow hunit htProduct
+   have hunit' : IsUnit (gcd H t) := by
+@@ -3692,8 +3706,9 @@ theorem coprime_natAbs_goldenFifthSndFactor_of_coprime
+       simp only [goldenFifthSndFactor]
+       rw [hk]
+       ring
+-    convert dvd_sub hqHZ htail using 1
+-    all_goals ring
++    have h := dvd_sub hqHZ htail
++    ring_nf at h
++    exact h
+   have hqr4 : q ∣ r.natAbs ^ 4 := by
+     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
+   have hqr : q ∣ r.natAbs := hqPrime.dvd_of_dvd_pow hqr4
+@@ -3804,8 +3819,9 @@ theorem five_not_dvd_H (p : GoldenZeroSectorCandidate) :
+   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq
+     (⟨p.r, p.s⟩ : GoldenInt)
+   have hnormSq : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ ^ 2 := by
+-    convert dvd_sub hH hdiff using 1
+-    all_goals ring
++    have h := dvd_sub hH hdiff
++    ring_nf at h
++    exact h
+   have hnorm : (5 : ℤ) ∣ goldenNorm ⟨p.r, p.s⟩ :=
+     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
+   apply p.five_not_dvd_b
+@@ -4515,8 +4531,8 @@ private theorem nonempty_even_factorData
+       · rw [hA8]
+         exact dvd_mul_of_dvd_right hqA1 8
+       · rw [hB8, hB2]
+-        convert dvd_mul_of_dvd_right hqB2 16 using 1
+-        all_goals ring
++        exact Nat.dvd_mul_left_of_dvd
++          (Nat.dvd_mul_left_of_dvd hqB2 2) 8
+     have hred : A1 * B2 = Q2 ^ 5 := by
+       apply Nat.mul_left_cancel (show 0 < 128 by norm_num)
+       calc
+@@ -4575,8 +4591,8 @@ private theorem nonempty_even_factorData
+         intro q hq hq2 hqB1 hqA2
+         apply p.no_common_odd_prime q hq hq2
+         · rw [hA8, hA2]
+-          convert dvd_mul_of_dvd_right hqA2 16 using 1
+-          all_goals ring
++          exact Nat.dvd_mul_left_of_dvd
++            (Nat.dvd_mul_left_of_dvd hqA2 2) 8
+         · rw [hB8]
+           exact dvd_mul_of_dvd_right hqB1 8
+       exact hcop'.symm
+@@ -5120,8 +5136,9 @@ theorem five_not_dvd_H (p : GoldenZeroSectorDescentPacket) :
+   apply p.five_not_dvd_norm
+   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq p.base
+   have hnormSq : (5 : ℤ) ∣ goldenNorm p.base ^ 2 := by
+-    convert dvd_sub hH hdiff using 1
+-    all_goals ring
++    have h := dvd_sub hH hdiff
++    ring_nf at h
++    exact h
+   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
+ 
+ theorem five_not_dvd_D (p : GoldenZeroSectorDescentPacket) :
+@@ -5211,24 +5228,28 @@ theorem five_dvd_norm_of_nonzero_goldenUnitSector
+   fin_cases i
+   · exact (hi rfl).elim
+   · rw [hAlpha, golden_unit_one_mul_fifth_snd] at hFive
+-    convert dvd_sub hFive hS using 1
+-    all_goals ring
++    have h := dvd_sub hFive hS
++    ring_nf at h
++    exact h
+   · rw [hAlpha, golden_unit_two_mul_fifth_snd] at hFive
+-    convert dvd_sub hFive (dvd_mul_of_dvd_right hS 2) using 1
+-    all_goals ring
++    have h := dvd_sub hFive (dvd_mul_of_dvd_right hS 2)
++    ring_nf at h
++    exact h
+   · rw [hAlpha, golden_unit_three_mul_fifth_snd] at hFive
+     have h2F : (5 : ℤ) ∣
+         2 * goldenFifthFstPoly gamma.fst gamma.snd := by
+-      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 3) using 1
+-      all_goals ring
++      have h := dvd_sub hFive (dvd_mul_of_dvd_right hS 3)
++      ring_nf at h ⊢
++      exact h
+     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h2F with h52 | hF
+     · norm_num at h52
+     · exact hF
+   · rw [hAlpha, golden_unit_four_mul_fifth_snd] at hFive
+     have h3F : (5 : ℤ) ∣
+         3 * goldenFifthFstPoly gamma.fst gamma.snd := by
+-      convert dvd_sub hFive (dvd_mul_of_dvd_right hS 5) using 1
+-      all_goals ring
++      have h := dvd_sub hFive (dvd_mul_of_dvd_right hS 5)
++      ring_nf at h ⊢
++      exact h
+     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h3F with h53 | hF
+     · norm_num at h53
+     · exact hF
+@@ -5363,8 +5384,9 @@ theorem fifthRoot_five_not_dvd_H
+   intro hH
+   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
+   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
+-    convert dvd_sub hH hdiff using 1
+-    all_goals ring
++    have h := dvd_sub hH hdiff
++    ring_nf at h
++    exact h
+   have hnormFive : (5 : ℤ) ∣ goldenNorm gamma :=
+     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
+   rw [hnorm] at hnormFive
+@@ -5477,7 +5499,7 @@ theorem fifthRoot_power_split
+     hcopNH.of_dvd_left hn0Dvd
+   have hunit : IsUnit (gcd n0
+       (goldenFifthSndFactor gamma.fst gamma.snd).natAbs) := by
+-    simpa [Nat.Coprime] using hcopN0H
++    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcopN0H
+   obtain ⟨u, hu⟩ := exists_eq_pow_of_mul_eq_pow hunit hn0Eq
+   have hunit' : IsUnit (gcd
+       (goldenFifthSndFactor gamma.fst gamma.snd).natAbs n0) := by

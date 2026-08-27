@@ -30,7 +30,7 @@ namespace Prob
 
 /-- `|MidBlock k X| ≥ c0·2^k` があるとき，指数を `2^k` に吸わせる受け口。 -/
 theorem mid_block_upper_hp_dep_twoPow_exists
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -74,7 +74,7 @@ theorem mid_block_upper_hp_dep_twoPow_exists
 
 /-- `2^(k+1) ≤ X+1` のとき，mid-block 上側尾を `C · exp( - cθ · 2^k )` へ。 -/
 theorem mid_block_upper_hp_dep_twoPow_exists_of_2k_le_X
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ]
   {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam)
@@ -174,7 +174,7 @@ lemma summable_exp_neg_two_pow (c : ℝ) (hc : 0 < c) :
 
 /-- card(MidBlock) に基づく存在形を dyadic (2^k) 指数に落とす補題。 -/
 lemma midblock_tail_dep_dyadic
-  {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
+  {Ω : Type*} [MeasureSpace Ω] [DecidableEq Ω] [MeasurableSingletonClass Ω]
   (μ : Measure Ω) [IsProbabilityMeasure μ] {k X : ℕ} (Smap : ℕ → Finset Ω)
   (P : SubGammaParam) (h1 : 0 < P.v) (h2 : P.c * P.lambda0 ≤ 1)
   (h_sub : ∀ {lambda : ℝ}, 0 ≤ lambda → lambda ≤ P.lambda0 →

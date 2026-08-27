@@ -571,12 +571,14 @@ theorem sevenDepthAllocation_card : sevenDepthAllocation.card = 3 := by
 /-- Public-root form of the first seven endpoint drift. -/
 theorem endpointAccountingTerm_sevenDepthRegressionRoot_zero :
     endpointAccountingTerm sevenDepthRegressionRoot 0 = 1 := by
-  simpa [sevenDepthRegressionRoot, sevenDepthOdd] using endpointAccountingTerm_seven_zero
+  convert endpointAccountingTerm_seven_zero using 1
+  congr 1
 
 /-- Public-root form of the second seven endpoint drift. -/
 theorem endpointAccountingTerm_sevenDepthRegressionRoot_one :
     endpointAccountingTerm sevenDepthRegressionRoot 1 = -1 := by
-  simpa [sevenDepthRegressionRoot, sevenDepthOdd] using endpointAccountingTerm_seven_one
+  convert endpointAccountingTerm_seven_one using 1
+  congr 1
 
 end SevenDepthRegression
 

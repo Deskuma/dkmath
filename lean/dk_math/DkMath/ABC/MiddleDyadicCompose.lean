@@ -117,7 +117,7 @@ theorem head_absorb (θ α ε : ℝ) (hpos : 0 < α + ε) (k0 : ℕ) :
           · exact Nat.succ_le_succ (Nat.le_of_lt hk_lt)
         exact Finset.mem_range.2 (lt_of_lt_of_le hlt hpow)
       have hcard_bound := Finset.card_le_card hsub
-      simpa [Finset.card_range] using hcard_bound
+      simpa [BadCountOn, Finset.card_range] using hcard_bound
     -- simplify the sum of constants to k0 * 2^(k0+1)
     simpa [Finset.sum_const, Finset.card_range] using hsum_le
   -- Cast to ℝ and finish by absorbing X^(α+ε) ≥ 1

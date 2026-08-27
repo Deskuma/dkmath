@@ -215,7 +215,7 @@ lemma color3_add_basis0 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
   have hv_val : (color3 v).val = r.toNat := by
     simpa [axis0, axis1, diff, r] using color3_val hd v
   have hvp_val_diff : (color3 (v + basis0 hd)).val = (((diff + 1) % 3).toNat) := by
-    simpa [axis0, axis1] using color3_val_add_basis0 hd v
+    simpa [axis0, axis1, diff] using color3_val_add_basis0 hd v
   have hmod_plus : ((diff + 1) % 3) = ((r + 1) % 3) := by
     calc
       ((diff + 1) % 3) = (((diff % 3) + (1 % 3)) % 3) := by
@@ -261,7 +261,7 @@ lemma color3_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
   have hv_val : (color3 v).val = r.toNat := by
     simpa [axis0, axis1, diff, r] using color3_val hd v
   have hvm_val_diff : (color3 (v + basis1 hd)).val = (((diff - 1) % 3).toNat) := by
-    simpa [axis0, axis1] using color3_val_add_basis1 hd v
+    simpa [axis0, axis1, diff] using color3_val_add_basis1 hd v
   have hmod_minus : ((diff - 1) % 3) = ((r + 2) % 3) := by
     calc
       ((diff - 1) % 3) = ((diff + (-1)) % 3) := by ring_nf
@@ -887,7 +887,7 @@ lemma card_filter_image_piCons_axis0 {d : ℕ} (hd : 2 ≤ d)
             - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
                 (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).image
           (Finset.Pi.cons s (axis0 hd) b) := by
-    simpa [emb, Finset.map_eq_image] using
+    simpa [emb, Finset.map_eq_image, piCoordOn] using
       (Finset.filter_map (s := u) (f := emb)
         (p := fun g =>
           ((((g (axis0 hd) (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
@@ -996,7 +996,7 @@ lemma card_filter_image_piCons_axis1 {d : ℕ} (hd : 2 ≤ d)
             - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
                 (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).image
           (Finset.Pi.cons s (axis1 hd) b) := by
-    simpa [emb, Finset.map_eq_image] using
+    simpa [emb, Finset.map_eq_image, piCoordOn] using
       (Finset.filter_map (s := u) (f := emb)
         (p := fun g =>
           ((((g (axis0 hd) (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
@@ -1216,7 +1216,8 @@ lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :
     (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val
       = ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) := by
-  simpa [piCoord, axis0, axis1] using
+  simpa [piCoord, piCoordOn, axis0, axis1,
+    DkMath.CellDim.ofNatCellEmb, DkMath.CellDim.piToFunEmb] using
     color3_val hd (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)
 
 /-- `pi` 側での `color3 = k` filter card を、座標差 mod3 条件へ変換。 -/

@@ -1,0 +1,441 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixDomain
+
+#print "file: DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicRamifiedPrime"
+
+namespace DkMath.FLT.Seven
+
+noncomputable section
+
+set_option linter.style.longLine false
+
+open scoped QuadraticAlgebra
+
+namespace SevenCyclotomicDegreeSixInt
+
+open SevenRealCubicInt
+
+/-- The canonical prime element above seven in the quadratic carrier. -/
+def ramifiedUniformizer : Ring :=
+  1 - zeta
+
+/-- Its quadratic conjugate. -/
+def ramifiedUniformizerConj : Ring :=
+  1 - zetaInv
+
+/-- The conjugate uniformizer is an explicit unit multiple of the selected
+uniformizer. -/
+theorem ramifiedUniformizerConj_eq :
+    ramifiedUniformizerConj =
+      -zetaInv * ramifiedUniformizer := by
+  rw [ramifiedUniformizerConj, ramifiedUniformizer]
+  calc
+    1 - zetaInv =
+        -zetaInv + zetaInv * zeta := by
+      rw [zetaInv_mul_zeta]
+      ring
+    _ = -zetaInv * (1 - zeta) := by ring
+
+/-- The selected ramified element is nonzero. -/
+theorem ramifiedUniformizer_ne_zero :
+    ramifiedUniformizer ≠ 0 := by
+  intro hzero
+  apply zeta_ne_one
+  rw [ramifiedUniformizer] at hzero
+  exact sub_eq_zero.mp hzero |>.symm
+
+/-- Extension of the real-cubic Eisenstein axis is a unit times the square
+of the degree-six ramified uniformizer. -/
+theorem ofReal_eisensteinAxis_eq :
+    ofReal eisensteinAxis =
+      zetaInv * ramifiedUniformizer ^ 2 := by
+  rw [SevenRealCubicInt.eisensteinAxis_eq, map_sub,
+    ofReal_alpha]
+  norm_num only [map_ofNat]
+  symm
+  calc
+    zetaInv * ramifiedUniformizer ^ 2 =
+        zetaInv * (1 - zeta) ^ 2 := rfl
+    _ =
+        zetaInv - 2 * (zetaInv * zeta) +
+          (zetaInv * zeta) * zeta := by ring
+    _ = zetaInv - 2 + zeta := by
+      rw [zetaInv_mul_zeta]
+      ring
+    _ = 1 + zeta + zetaInv - 3 := by ring
+
+/-- Unit coefficient in the total-ramification identity for seven. -/
+def ramifiedSevenUnit : Ring :=
+  zetaInv ^ 3 * ofReal thetaSevenUnit
+
+/-- The displayed coefficient is a unit. -/
+theorem ramifiedSevenUnit_isUnit :
+    IsUnit ramifiedSevenUnit := by
+  have hzetaInv : IsUnit zetaInv := by
+    exact ⟨zetaUnit⁻¹, rfl⟩
+  exact
+    (hzetaInv.pow 3).mul
+      (thetaSevenUnit_isUnit.map ofReal)
+
+/-- Total ramification of seven in the concrete degree-six carrier, without
+identifying that carrier with a full ring of integers. -/
+theorem ofReal_seven_eq_uniformizer_pow_six_mul_unit :
+    ofReal (7 : SevenRealCubicInt) =
+      ramifiedUniformizer ^ 6 * ramifiedSevenUnit := by
+  have hseven :=
+    congrArg ofReal seven_eq_eisensteinAxis_cube_mul_unit
+  simp only [map_mul, map_pow] at hseven
+  rw [hseven, ofReal_eisensteinAxis_eq]
+  simp only [ramifiedSevenUnit]
+  ring
+
+/-- Evaluation at the unique ramified residue root `zeta = 1`. -/
+def ramifiedEval : Ring →+* ZMod 7 where
+  toFun x :=
+    thetaResidue x.re + thetaResidue x.im
+  map_zero' := by
+    simp only [QuadraticAlgebra.re_zero,
+      QuadraticAlgebra.im_zero, map_zero, add_zero]
+  map_one' := by
+    simp only [QuadraticAlgebra.re_one,
+      QuadraticAlgebra.im_one, map_one, map_zero, add_zero]
+  map_add' x y := by
+    simp only [QuadraticAlgebra.re_add,
+      QuadraticAlgebra.im_add, map_add]
+    ring
+  map_mul' x y := by
+    simp only [QuadraticAlgebra.re_mul,
+      QuadraticAlgebra.im_mul, map_add, map_mul, map_neg,
+      map_sub, map_one]
+    norm_num [thetaResidue, thetaConstModSeven, alpha]
+    ring
+
+@[simp] theorem ramifiedEval_ofReal
+    (x : SevenRealCubicInt) :
+    ramifiedEval (ofReal x) = thetaResidue x := by
+  simp [ramifiedEval, ofReal, QuadraticAlgebra.algebraMap_eq]
+
+@[simp] theorem ramifiedEval_zeta :
+    ramifiedEval zeta = 1 := by
+  norm_num [ramifiedEval, zeta, thetaResidue,
+    thetaConstModSeven]
+
+@[simp] theorem ramifiedEval_zetaInv :
+    ramifiedEval zetaInv = 1 := by
+  norm_num [ramifiedEval, zetaInv, thetaResidue,
+    thetaConstModSeven, alpha]
+
+@[simp] theorem ramifiedEval_uniformizer :
+    ramifiedEval ramifiedUniformizer = 0 := by
+  rw [ramifiedUniformizer, map_sub, map_one, ramifiedEval_zeta,
+    sub_self]
+
+/-- The ramified residue evaluation is onto. -/
+theorem ramifiedEval_surjective :
+    Function.Surjective ramifiedEval := by
+  intro x
+  refine ⟨ofReal (x.val : SevenRealCubicInt), ?_⟩
+  rw [ramifiedEval_ofReal]
+  change ((x.val : ℕ) : ZMod 7) = x
+  exact ZMod.natCast_zmod_val x
+
+/-- The unique displayed prime above seven. -/
+def ramifiedPrime : Ideal Ring :=
+  RingHom.ker ramifiedEval
+
+/-- The ramified kernel is maximal. -/
+theorem ramifiedPrime_isMaximal :
+    ramifiedPrime.IsMaximal := by
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  exact RingHom.ker_isMaximal_of_surjective
+    ramifiedEval ramifiedEval_surjective
+
+/-- The kernel is exactly the principal ideal generated by `1-zeta`. -/
+theorem ramifiedPrime_eq_span_uniformizer :
+    ramifiedPrime = Ideal.span {ramifiedUniformizer} := by
+  apply le_antisymm
+  · intro x hx
+    change ramifiedEval x = 0 at hx
+    have hsum :
+        thetaResidue (x.re + x.im) = 0 := by
+      change thetaResidue x.re + thetaResidue x.im = 0 at hx
+      simpa only [map_add] using hx
+    have hdiv :
+        eisensteinAxis ∣ x.re + x.im := by
+      rw [eisensteinAxis_dvd_iff_thetaConstModSeven_eq_zero]
+      exact hsum
+    rcases hdiv with ⟨t, ht⟩
+    rw [Ideal.mem_span_singleton]
+    refine
+      ⟨zetaInv * ramifiedUniformizer * ofReal t -
+          ofReal x.im, ?_⟩
+    calc
+      x =
+          ofReal (x.re + x.im) -
+            ramifiedUniformizer * ofReal x.im := by
+        rw [ramifiedUniformizer]
+        ext <;> simp [ofReal, zeta]
+      _ =
+          ofReal (eisensteinAxis * t) -
+            ramifiedUniformizer * ofReal x.im := by
+        rw [ht]
+      _ =
+          ramifiedUniformizer *
+            (zetaInv * ramifiedUniformizer * ofReal t -
+              ofReal x.im) := by
+        rw [map_mul, ofReal_eisensteinAxis_eq]
+        ring
+  · rw [Ideal.span_le]
+    intro x hx
+    simp only [Set.mem_singleton_iff] at hx
+    subst x
+    exact ramifiedEval_uniformizer
+
+end SevenCyclotomicDegreeSixInt
+
+namespace RamifiedSignedRootDepthPacket
+
+open SevenCyclotomicDegreeSixInt
+open SevenRealCubicInt
+
+/-- The left signed root is a unit modulo seven. -/
+theorem signedLeftRoot_modSeven_ne_zero
+    (p : RamifiedSignedRootDepthPacket) :
+    (p.signedLeftRoot : ZMod 7) ≠ 0 := by
+  intro hleftZero
+  have hleft :
+      (7 : ℤ) ∣ p.signedLeftRoot :=
+    (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mp hleftZero
+  have hgap :
+      (7 : ℤ) ∣ p.signedRightRoot - p.signedLeftRoot := by
+    rw [p.signedGap_eq]
+    exact dvd_mul_of_dvd_left (by norm_num) _
+  have hright :
+      (7 : ℤ) ∣ p.signedRightRoot := by
+    simpa using dvd_add hgap hleft
+  have hunit :=
+    p.signedRoots_isCoprime.isUnit_of_dvd' hleft hright
+  rcases Int.isUnit_iff.mp hunit with hunit | hunit <;>
+    norm_num at hunit
+
+/-- The high ramified tail remaining after extracting two uniformizers from
+the exact signed gap. -/
+def ramifiedGapTail
+    (p : RamifiedSignedRootDepthPacket) :
+    SevenCyclotomicDegreeSixInt.Ring :=
+  ramifiedUniformizer ^ 22 *
+    ramifiedSevenUnit ^ 4 *
+    ofReal (p.gapRoot : SevenRealCubicInt)
+
+/-- The signed gap has at least uniformizer-depth two (in fact depth 24). -/
+theorem ofReal_signedGap_eq_uniformizer_sq_mul_gapTail
+    (p : RamifiedSignedRootDepthPacket) :
+    ofReal (p.signedRightRoot : SevenRealCubicInt) -
+        ofReal (p.signedLeftRoot : SevenRealCubicInt) =
+      ramifiedUniformizer ^ 2 * p.ramifiedGapTail := by
+  have hgap :=
+    congrArg
+      (fun z : ℤ => ofReal (z : SevenRealCubicInt))
+      p.signedGap_eq
+  simp only [Int.cast_sub, Int.cast_mul, Int.cast_pow,
+    map_sub, map_mul, map_pow] at hgap
+  norm_num only [Int.cast_ofNat] at hgap
+  rw [hgap, ofReal_seven_eq_uniformizer_pow_six_mul_unit]
+  simp only [ramifiedGapTail]
+  ring
+
+/-- Quotient after extracting the first ramified uniformizer from the
+oriented linear carrier. -/
+def ramifiedCarrierQuotient
+    (p : RamifiedSignedRootDepthPacket) :
+    SevenCyclotomicDegreeSixInt.Ring :=
+  ofReal (p.signedLeftRoot : SevenRealCubicInt) +
+    ramifiedUniformizer * p.ramifiedGapTail
+
+/-- Exact first-uniformizer factorization of the oriented carrier. -/
+theorem cyclotomicDegreeSixCarrier_eq_uniformizer_mul_quotient
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrier =
+      ramifiedUniformizer * p.ramifiedCarrierQuotient := by
+  calc
+    p.cyclotomicDegreeSixCarrier =
+        (ofReal (p.signedRightRoot : SevenRealCubicInt) -
+          ofReal (p.signedLeftRoot : SevenRealCubicInt)) +
+          ramifiedUniformizer *
+            ofReal (p.signedLeftRoot : SevenRealCubicInt) := by
+      simp only [cyclotomicDegreeSixCarrier,
+        ramifiedUniformizer]
+      ring
+    _ =
+        ramifiedUniformizer ^ 2 * p.ramifiedGapTail +
+          ramifiedUniformizer *
+            ofReal (p.signedLeftRoot : SevenRealCubicInt) := by
+      rw [p.ofReal_signedGap_eq_uniformizer_sq_mul_gapTail]
+    _ =
+        ramifiedUniformizer * p.ramifiedCarrierQuotient := by
+      simp only [ramifiedCarrierQuotient]
+      ring
+
+/-- The extracted oriented quotient retains the nonzero left-root residue. -/
+theorem ramifiedEval_carrierQuotient
+    (p : RamifiedSignedRootDepthPacket) :
+    ramifiedEval p.ramifiedCarrierQuotient =
+      (p.signedLeftRoot : ZMod 7) := by
+  rw [ramifiedCarrierQuotient, map_add, map_mul,
+    ramifiedEval_ofReal, ramifiedEval_uniformizer,
+    zero_mul, add_zero]
+  simp [thetaResidue, thetaConstModSeven]
+
+/-- The oriented quotient is excluded from the ramified prime. -/
+theorem ramifiedCarrierQuotient_not_mem_ramifiedPrime
+    (p : RamifiedSignedRootDepthPacket) :
+    p.ramifiedCarrierQuotient ∉ ramifiedPrime := by
+  change ramifiedEval p.ramifiedCarrierQuotient ≠ 0
+  rw [p.ramifiedEval_carrierQuotient]
+  exact p.signedLeftRoot_modSeven_ne_zero
+
+/-- The oriented carrier belongs to the ramified prime. -/
+theorem cyclotomicDegreeSixCarrier_mem_ramifiedPrime
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrier ∈ ramifiedPrime := by
+  rw [p.cyclotomicDegreeSixCarrier_eq_uniformizer_mul_quotient]
+  change ramifiedEval
+      (ramifiedUniformizer * p.ramifiedCarrierQuotient) = 0
+  rw [map_mul, ramifiedEval_uniformizer, zero_mul]
+
+/-- Exact ramified-prime multiplicity one for the oriented carrier. -/
+theorem cyclotomicDegreeSixCarrier_not_mem_ramifiedPrime_sq
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrier ∉ ramifiedPrime ^ 2 := by
+  intro hsquare
+  rw [ramifiedPrime_eq_span_uniformizer,
+    Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hsquare
+  rcases hsquare with ⟨c, hc⟩
+  have hcancel :
+      ramifiedUniformizer * p.ramifiedCarrierQuotient =
+        ramifiedUniformizer *
+          (ramifiedUniformizer * c) := by
+    rw [← p.cyclotomicDegreeSixCarrier_eq_uniformizer_mul_quotient,
+      hc]
+    ring
+  have hquotient :
+      p.ramifiedCarrierQuotient =
+        ramifiedUniformizer * c :=
+    mul_left_cancel₀ ramifiedUniformizer_ne_zero hcancel
+  apply p.ramifiedCarrierQuotient_not_mem_ramifiedPrime
+  rw [ramifiedPrime_eq_span_uniformizer,
+    Ideal.mem_span_singleton]
+  exact ⟨c, hquotient⟩
+
+/-- Quotient after extracting the same ramified uniformizer from the
+quadratic-conjugate carrier. -/
+def ramifiedConjugateCarrierQuotient
+    (p : RamifiedSignedRootDepthPacket) :
+    SevenCyclotomicDegreeSixInt.Ring :=
+  -zetaInv * ofReal (p.signedLeftRoot : SevenRealCubicInt) +
+    ramifiedUniformizer * p.ramifiedGapTail
+
+/-- Exact first-uniformizer factorization of the conjugate carrier. -/
+theorem cyclotomicDegreeSixCarrierConj_eq_uniformizer_mul_quotient
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrierConj =
+      ramifiedUniformizer *
+        p.ramifiedConjugateCarrierQuotient := by
+  calc
+    p.cyclotomicDegreeSixCarrierConj =
+        (ofReal (p.signedRightRoot : SevenRealCubicInt) -
+          ofReal (p.signedLeftRoot : SevenRealCubicInt)) +
+          ramifiedUniformizerConj *
+            ofReal (p.signedLeftRoot : SevenRealCubicInt) := by
+      simp only [cyclotomicDegreeSixCarrierConj,
+        ramifiedUniformizerConj]
+      ring
+    _ =
+        ramifiedUniformizer ^ 2 * p.ramifiedGapTail +
+          (-zetaInv * ramifiedUniformizer) *
+            ofReal (p.signedLeftRoot : SevenRealCubicInt) := by
+      rw [p.ofReal_signedGap_eq_uniformizer_sq_mul_gapTail,
+        ramifiedUniformizerConj_eq]
+    _ =
+        ramifiedUniformizer *
+          p.ramifiedConjugateCarrierQuotient := by
+      simp only [ramifiedConjugateCarrierQuotient]
+      ring
+
+/-- The conjugate quotient has the negative nonzero left-root residue. -/
+theorem ramifiedEval_conjugateCarrierQuotient
+    (p : RamifiedSignedRootDepthPacket) :
+    ramifiedEval p.ramifiedConjugateCarrierQuotient =
+      -(p.signedLeftRoot : ZMod 7) := by
+  rw [ramifiedConjugateCarrierQuotient, map_add, map_mul,
+    map_neg, ramifiedEval_zetaInv, ramifiedEval_ofReal,
+    map_mul, ramifiedEval_uniformizer, zero_mul, add_zero]
+  simp [thetaResidue, thetaConstModSeven]
+
+/-- The conjugate quotient is also excluded from the unique ramified prime. -/
+theorem ramifiedConjugateCarrierQuotient_not_mem_ramifiedPrime
+    (p : RamifiedSignedRootDepthPacket) :
+    p.ramifiedConjugateCarrierQuotient ∉ ramifiedPrime := by
+  change ramifiedEval p.ramifiedConjugateCarrierQuotient ≠ 0
+  rw [p.ramifiedEval_conjugateCarrierQuotient]
+  exact neg_ne_zero.mpr p.signedLeftRoot_modSeven_ne_zero
+
+/-- The conjugate carrier belongs to the same unique ramified prime. -/
+theorem cyclotomicDegreeSixCarrierConj_mem_ramifiedPrime
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrierConj ∈ ramifiedPrime := by
+  rw [p.cyclotomicDegreeSixCarrierConj_eq_uniformizer_mul_quotient]
+  change ramifiedEval
+      (ramifiedUniformizer *
+        p.ramifiedConjugateCarrierQuotient) = 0
+  rw [map_mul, ramifiedEval_uniformizer, zero_mul]
+
+/-- Exact ramified-prime multiplicity one for the conjugate carrier. -/
+theorem cyclotomicDegreeSixCarrierConj_not_mem_ramifiedPrime_sq
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrierConj ∉ ramifiedPrime ^ 2 := by
+  intro hsquare
+  rw [ramifiedPrime_eq_span_uniformizer,
+    Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hsquare
+  rcases hsquare with ⟨c, hc⟩
+  have hcancel :
+      ramifiedUniformizer *
+          p.ramifiedConjugateCarrierQuotient =
+        ramifiedUniformizer *
+          (ramifiedUniformizer * c) := by
+    rw [← p.cyclotomicDegreeSixCarrierConj_eq_uniformizer_mul_quotient,
+      hc]
+    ring
+  have hquotient :
+      p.ramifiedConjugateCarrierQuotient =
+        ramifiedUniformizer * c :=
+    mul_left_cancel₀ ramifiedUniformizer_ne_zero hcancel
+  apply p.ramifiedConjugateCarrierQuotient_not_mem_ramifiedPrime
+  rw [ramifiedPrime_eq_span_uniformizer,
+    Ideal.mem_span_singleton]
+  exact ⟨c, hquotient⟩
+
+/-- Compact q=7 ramified ownership packet for both conjugate linear
+carriers. -/
+theorem ramifiedPrime_ownership_packet
+    (p : RamifiedSignedRootDepthPacket) :
+    p.cyclotomicDegreeSixCarrier ∈ ramifiedPrime ∧
+      p.cyclotomicDegreeSixCarrier ∉ ramifiedPrime ^ 2 ∧
+      p.cyclotomicDegreeSixCarrierConj ∈ ramifiedPrime ∧
+      p.cyclotomicDegreeSixCarrierConj ∉ ramifiedPrime ^ 2 :=
+  ⟨p.cyclotomicDegreeSixCarrier_mem_ramifiedPrime,
+    p.cyclotomicDegreeSixCarrier_not_mem_ramifiedPrime_sq,
+    p.cyclotomicDegreeSixCarrierConj_mem_ramifiedPrime,
+    p.cyclotomicDegreeSixCarrierConj_not_mem_ramifiedPrime_sq⟩
+
+end RamifiedSignedRootDepthPacket
+
+
+end
+
+end DkMath.FLT.Seven

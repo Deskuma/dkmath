@@ -35,8 +35,7 @@ theorem padicValNat_lower_bound_d5
   letI : Fact (Nat.Prime q) := ⟨hq⟩
   have hvalX : 1 ≤ padicValNat q x := by
     exact (@padicValNat_dvd_iff_le q (Fact.mk hq) x 1 hx.ne').mp (by simpa using hqx)
-  have hpow : padicValNat q (x ^ 5) = 5 * padicValNat q x := by
-    simpa using (padicValNat.pow (p := q) (a := x) 5 hx.ne')
+  have hpow : padicValNat q (x ^ 5) = 5 * padicValNat q x := by simp
   rw [hpow]
   omega
 

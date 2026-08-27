@@ -117,7 +117,8 @@ theorem upperGrowth_delayedPayment_or_mod8Seven
   · left
     have hnext := orbitWindowNextHeight_two_le_of_mod_eight_eq_three n 0 (by
       simpa [oddOrbitLabel, iterateT] using hthree)
-    simpa [orbitWindowHeight_eq_s_iterateT, iterateT_succ_eq_T_iterateT] using hnext
+    simpa [iterateT, orbitWindowHeight_eq_s_iterateT,
+      iterateT_succ_eq_T_iterateT] using hnext
   · exact Or.inr hseven
 
 /-- Growth from `3 mod 8` is bounded by existing delayed-payment receivers. -/
