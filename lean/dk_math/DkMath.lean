@@ -26,6 +26,9 @@ import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Filla
 import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
 import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePower: prime-power rows in Pascal's triangle
 import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
+import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+import DkMath.NumberTheory.Primitive
+import DkMath.NumberTheory.Legendre
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
