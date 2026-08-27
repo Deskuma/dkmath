@@ -52,6 +52,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
 import DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
 import DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
 import DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+import DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
 
 #print "file: DkMath.NumberTheory.Legendre"
 
