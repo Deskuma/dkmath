@@ -54,6 +54,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
 import DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
 import DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
 import DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+import DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
 
 #print "file: DkMath.NumberTheory.Legendre"
 
