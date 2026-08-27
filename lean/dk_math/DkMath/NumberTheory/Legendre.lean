@@ -57,6 +57,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
 import DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
 import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
 
 #print "file: DkMath.NumberTheory.Legendre"
 
