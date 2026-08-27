@@ -19,6 +19,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -46,6 +47,9 @@ prime `2` excluded from the sign index.
 Fresh-prime projection of these fibers is also exported: an odd fresh prime
 gives an exact two-sheet finite cover, while fresh `2` contributes no new sign
 degree.
+The coprime phase fiber is also exposed as a subcover of the finite wheel
+survivors, including the `q = 3` equality and the strict two-of-`(q - 1)`
+comparison for fresh primes above `3`.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
