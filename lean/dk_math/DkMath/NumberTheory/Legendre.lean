@@ -44,6 +44,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 import DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
 import DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
 import DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+import DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
