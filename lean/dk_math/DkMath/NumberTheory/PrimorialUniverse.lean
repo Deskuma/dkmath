@@ -8,6 +8,7 @@ import DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
 import DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement
 import DkMath.NumberTheory.PrimorialUniverse.CommonLattice
 import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
+import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -17,9 +18,10 @@ import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
 Public entry point for the finite reservation, integer unit-coordinate, and
 coprime common-lattice and two-unit intersection-classification layers.  The current checkpoints expose exact
 Euclidean escape for a finite set of ordinary `Nat.Prime`s, synchronized
-positive-real refinement of natural coordinates, and the canonical fiber
-`(m,n) = (a*t,b*t)` of two synchronized units, together with the equivalence
-between positive intersection and integer commensurability.  Rational/
-irrational classification, canonical primorial wheels, PowerSwap, and
-Legendre consumers belong to later checkpoints.
+positive-real refinement of natural coordinates, the canonical fiber
+`(m,n) = (a*t,b*t)` of two synchronized units, the equivalence between
+positive intersection and integer commensurability, and the finite
+prime-scale synchronization period.  Rational/irrational classification,
+canonical primorial wheels, PowerSwap, and Legendre consumers belong to later
+checkpoints.
 -/
