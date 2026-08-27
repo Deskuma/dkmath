@@ -55,6 +55,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
 import DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
 import DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
 import DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 
 #print "file: DkMath.NumberTheory.Legendre"
 
@@ -65,5 +66,7 @@ Public entry point for the square-anchored finite-prime localization stack.
 The implementation is organized by dependency-ordered modules; this facade
 preserves the historical import path and declaration namespace.  The current
 formalization remains a bounded finite-arithmetic framework and does not add
-a proof of Legendre's conjecture.
+a proof of Legendre's conjecture.  The provider-side finite primorial-wheel
+bridge is exposed separately through `PrimorialWheelBridge`; it preserves the
+dependency direction from `PrimorialUniverse` into this application layer.
 -/
