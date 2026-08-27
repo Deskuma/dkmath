@@ -50,6 +50,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
 import DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
 import DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
 import DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+import DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
 
 #print "file: DkMath.NumberTheory.Legendre"
 
