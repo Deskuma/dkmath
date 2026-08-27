@@ -43,6 +43,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
 import DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
 import DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+import DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
 
 #print "file: DkMath.NumberTheory.Legendre"
 
