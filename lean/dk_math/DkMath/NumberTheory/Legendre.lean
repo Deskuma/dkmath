@@ -58,6 +58,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
 import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
+import DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
 
 #print "file: DkMath.NumberTheory.Legendre"
 
