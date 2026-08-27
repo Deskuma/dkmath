@@ -162,8 +162,12 @@ theorem equiv_le
     {x y : DkMath.Analysis.DkReal} (hxy : Equiv x y) :
     Le x y := by
   have hlo := equiv_tendsto_lo_sub_zero hxy
-  simpa only [Le, orderDefect, max_comm] using
-    hlo.max tendsto_const_nhds
+  unfold Le orderDefect
+  have hmax := hlo.max
+    (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => (0 : ℚ))
+      Filter.atTop (nhds 0))
+  rw [show max (0 : ℚ) 0 = 0 by simp] at hmax
+  simpa [max_comm] using hmax
 
 /--
 Asymptotic order is transitive.

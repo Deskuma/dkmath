@@ -97,7 +97,7 @@ noncomputable def addViaSpec (w : DHNT.Unit) :
 @[simp] theorem addVia_toCoeff (w : DHNT.Unit) (a b : Qty) :
     toCoeff (HarmonizeSpec.harmonizeAdd (addViaSpec w) (embedQty a) (embedQty b))
       = a.x + b.x := by
-  simpa using HarmonizeSpec.toCoeff_harmonizeAdd
+  simpa only [toCoeff_embedQty] using HarmonizeSpec.toCoeff_harmonizeAdd
     (hs := addViaSpec w) (x := embedQty a) (y := embedQty b)
 
 /-- `harmonizeAdd (addViaSpec w)` の結果 unit は `phiUnit w` に等しい。 -/
@@ -155,7 +155,7 @@ noncomputable def mulViaSpec (w : DHNT.Unit) :
 @[simp] theorem mulVia_toCoeff (w : DHNT.Unit) (a b : Qty) :
     toCoeff (HarmonizeSpec.harmonizeMul (mulViaSpec w) (embedQty a) (embedQty b))
       = a.x * b.x := by
-  simpa using HarmonizeSpec.toCoeff_harmonizeMul
+  simpa only [toCoeff_embedQty] using HarmonizeSpec.toCoeff_harmonizeMul
     (hs := mulViaSpec w) (x := embedQty a) (y := embedQty b)
 
 /-- `harmonizeMul (mulViaSpec w)` の結果 unit は `phiUnit w` に等しい。 -/

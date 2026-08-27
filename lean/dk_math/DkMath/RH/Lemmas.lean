@@ -114,7 +114,8 @@ lemma phaseVel_mul
   unfold phaseVel
   have hderiv :
       deriv (fun u => f u * g u) t = deriv f t * g t + f t * deriv g t := by
-    simpa using deriv_mul hf hg
+    rw [show (fun u => f u * g u) = f * g by funext u; rfl]
+    exact deriv_mul hf hg
   rw [hderiv]
   have hdiv :
       (deriv f t * g t + f t * deriv g t) / (f t * g t) =

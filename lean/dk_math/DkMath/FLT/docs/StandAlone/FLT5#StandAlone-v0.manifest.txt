@@ -1,0 +1,35 @@
+# FLT5 full standalone production-source manifest.
+# Paths are relative to the lean/dk_math repository root.
+DkMath/FLT/Five/Basic.lean
+DkMath/FLT/Five/GN5.lean
+DkMath/FLT/Five/CleanChannel.lean
+DkMath/FLT/Five/Reduction.lean
+DkMath/FLT/Five/NormalForm.lean
+DkMath/FLT/Five/BranchB.lean
+DkMath/FLT/Five/Provider.lean
+DkMath/FLT/Five/BranchA.lean
+DkMath/FLT/Five/SignedBranchA.lean
+DkMath/FLT/Five/SignedFiveAdic.lean
+DkMath/FLT/Five/SignedFiveAdicPowerSplit.lean
+DkMath/FLT/Five/SquareGoldenBridge.lean
+DkMath/FLT/Five/SquareGoldenNormalForm.lean
+DkMath/FLT/Five/SignedSquareGoldenExceptional.lean
+DkMath/FLT/Five/GoldenOrder.lean
+DkMath/FLT/Five/GoldenDivisibility.lean
+DkMath/FLT/Five/GoldenEuclidean.lean
+DkMath/FLT/Five/SignedGoldenRamifierStripped.lean
+DkMath/FLT/Five/SignedGoldenConjugateCoprime.lean
+DkMath/FLT/Five/SignedGoldenFifthPower.lean
+DkMath/FLT/Five/GoldenFifthPowerCoordinates.lean
+DkMath/FLT/Five/GoldenCoprimeFactor.lean
+DkMath/FLT/Five/SignedGoldenUnitClasses.lean
+DkMath/FLT/Five/SignedGoldenSectorArithmetic.lean
+DkMath/FLT/Five/SignedGoldenZeroSector.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorInversion.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorFactorization.lean
+DkMath/FLT/Five/GoldenUnitClassification.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorDescent.lean
+DkMath/FLT/Five/SignedGoldenClosure.lean
+DkMath/FLT/Five/SignedGoldenZeroSectorFinal.lean
+DkMath/FLT/Five/Valuation.lean
+DkMath/FLT/Five/Main.lean

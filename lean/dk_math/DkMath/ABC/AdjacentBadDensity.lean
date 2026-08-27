@@ -78,7 +78,8 @@ lemma adjBadCount_le_diag (δ : ℝ) (X : ℕ) :
             n + (n + 1) = 2 * n + 1 := by ring
             _ ≤ 2 * X + 1 := this
         exact this
-      · simpa [Adj_eq_Adj'] using hBad
+      · rw [Adj_eq_Adj'] at hBad
+        exact hBad
     have hbIcc : g n ∈ Finset.Icc 1 (2*X+1) := by
       refine Finset.mem_Icc.2 ?_
       constructor
@@ -121,7 +122,10 @@ theorem tendsto_adj_bad_fraction_zero :
     have hε3 : 0 < ε3 := by exact div_pos hε (by norm_num)
     have hdiag := eventually_diagBadCount_oX (hU := Bad_diff_uniform 0.435) ε3 hε3
     have ⟨s, hs_mem, hs_forall⟩ := Filter.eventually_iff_exists_mem.1 hdiag
-    have ⟨N, hIci⟩ : ∃ N, Set.Ici N ⊆ s := by simpa using hs_mem
+    have ⟨N, hN⟩ := (mem_atTop_sets.mp hs_mem)
+    have hIci : Set.Ici N ⊆ s := by
+      intro X hX
+      exact hN X hX
     let M := max 1 N
     refine Filter.eventually_atTop.2 ⟨M, fun X hM => by
       have one_le_X : 1 ≤ X := le_trans (le_max_left 1 N) hM
@@ -168,14 +172,14 @@ theorem tendsto_adj_bad_fraction_zero :
 theorem eventually_forall_on_Icc_of_eventually {P : ℕ → Prop} (h : ∀ᶠ n in atTop, P n) :
   ∃ M, ∀ X, M ≤ X → ∀ n ∈ (Finset.Icc 1 X), (n < M) ∨ P n := by
   rcases (Filter.eventually_iff_exists_mem.1 h) with ⟨S, S_mem, S_forall⟩
-  have ⟨N, hN⟩ : ∃ N, Set.Ici N ⊆ S := by simpa using S_mem
+  have ⟨N, hN⟩ := (mem_atTop_sets.mp S_mem)
   use N
   intro X hX n hn
   by_cases hnm : n < N
   · left; exact hnm
   · right
     have hge : n ≥ N := not_lt.mp hnm
-    have hinS : n ∈ S := hN hge
+    have hinS : n ∈ S := hN n hge
     exact S_forall n hinS
 
 /- 小補題：固定された prefix 長さ M に対して M / X → 0 -/

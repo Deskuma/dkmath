@@ -205,7 +205,7 @@ theorem borel_cantelli_one
 
     -- hconv を unfold した形に変換
     have hconv' : Tendsto (fun N => (μ (⋃ n ∈ {m | N ≤ m}, E n)).toReal) atTop (nhds 0) := by
-      convert hconv using 2
+      simpa [Measure.real] using hconv
 
     -- ENNReal.toReal は連続（≠ ⊤ のとき）
     have h_ne_top : μ (⋂ N, ⋃ n ∈ {m | N ≤ m}, E n) ≠ ⊤ := measure_ne_top μ _

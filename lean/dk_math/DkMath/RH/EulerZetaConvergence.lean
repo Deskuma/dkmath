@@ -363,12 +363,12 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     let f : {p // Nat.Prime p} → ℝ := fun p => a p - 1
     -- a_p = 1 + f_p を確認（ring で処理）
     have h_eq : ∀ p, a p = 1 + (a p - 1) := fun p => by ring
+    have h_eq_fun : a = (fun p => 1 + (a p - 1)) := funext h_eq
     -- multipliable_one_add_of_summable を直接使用
     -- ∑' ‖a_p - 1‖ が収束することから ∏' a_p が Multipliable
     have hsum : Summable fun p => ‖a p - 1‖ := summable_norm_eulerZetaFactorMag_sub_one σ t hσ
-    convert multipliable_one_add_of_summable hsum using 1
-    ext p
-    ring
+    rw [h_eq_fun]
+    exact multipliable_one_add_of_summable hsum
   -- 目標を達成：h_multipliable から EulerZetaMagMultipliable σ t を得る
   exact h_multipliable
 

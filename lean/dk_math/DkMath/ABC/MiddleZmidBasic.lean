@@ -163,7 +163,7 @@ theorem mid_block_sum_integrable {Ω : Type*} [MeasurableSpace Ω] [DecidableEq 
       Prob.indR_range01_ae_of_all (μ := μ) (S := Smap v)
     have hmeas := (Prob.indR_aestronglyMeasurable (μ := μ) (S := Smap v)).aemeasurable
     exact Integrable.of_mem_Icc 0 1 hmeas hbound
-  exact integrable_finset_sum' s fun v hv => H v hv
+  exact MeasureTheory.integrable_finsetSum' s fun v hv => H v hv
 
 /-- Definition: `Zmid` is the mid-block indicator sum. -/
 noncomputable def Zmid {Ω : Type*} [DecidableEq Ω] {k X : ℕ} (Smap : ℕ → Finset Ω) : Ω → ℝ :=

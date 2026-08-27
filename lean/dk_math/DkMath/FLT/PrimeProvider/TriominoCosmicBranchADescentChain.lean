@@ -1483,7 +1483,7 @@ theorem geomSumFirstOrderSqZero_concrete : GeomSumFirstOrderSqZeroTarget := by
       Polynomial.eval R
         (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod m)) ^ x))
       = ∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1)) := by
-    simp [Polynomial.derivative_X_pow, Polynomial.eval_finset_sum]
+    simp [Polynomial.derivative_X_pow, Polynomial.eval_finsetSum]
   calc
     (∑ i ∈ Finset.range p, (R + Δ) ^ i)
         = (∑ i ∈ Finset.range p, R ^ i)
@@ -1740,7 +1740,7 @@ theorem henselLiftStepDerivativeNonzeroModQPrime_concrete :
             = ∑ x ∈ Finset.range p,
                 Polynomial.eval r (Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x)) := by
                     simpa using
-                      (Polynomial.eval_finset_sum
+                      (Polynomial.eval_finsetSum
                         (s := Finset.range p)
                         (g := fun x => Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
                         (x := r)

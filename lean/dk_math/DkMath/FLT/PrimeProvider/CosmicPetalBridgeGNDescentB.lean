@@ -134,7 +134,7 @@ structure TriominoWieferichShrinkWitnessB
   hz0' : z' ≠ 0
 
 /-- 完全 witness から「等式と順序」部分だけを取り出す。 -/
-def TriominoWieferichShrinkWitnessB.toEq
+theorem TriominoWieferichShrinkWitnessB.toEq
     {p x y z q x' y' z' : ℕ}
     (hW : TriominoWieferichShrinkWitnessB p x y z q x' y' z') :
     TriominoWieferichShrinkWitnessEqB p x y z q x' y' z' :=
@@ -143,7 +143,7 @@ def TriominoWieferichShrinkWitnessB.toEq
     hyzLt := hW.hyzLt }
 
 /-- 完全 witness から「不変量」部分だけを取り出す。 -/
-def TriominoWieferichShrinkWitnessB.toInv
+theorem TriominoWieferichShrinkWitnessB.toInv
     {p x y z q x' y' z' : ℕ}
     (hW : TriominoWieferichShrinkWitnessB p x y z q x' y' z') :
     TriominoWieferichShrinkWitnessInvB p x y z q x' y' z' :=
@@ -153,7 +153,7 @@ def TriominoWieferichShrinkWitnessB.toInv
     hz0' := hW.hz0' }
 
 /-- `Eq / Inv` から従来の完全 witness を回収する。 -/
-def TriominoWieferichShrinkWitnessB.ofEqInv
+theorem TriominoWieferichShrinkWitnessB.ofEqInv
     {p x y z q x' y' z' : ℕ}
     (hEq : TriominoWieferichShrinkWitnessEqB p x y z q x' y' z')
     (hInv : TriominoWieferichShrinkWitnessInvB p x y z q x' y' z') :
@@ -179,7 +179,7 @@ structure TriominoWieferichShrinkCtorB
   hInv : TriominoWieferichShrinkWitnessInvB p x y z q x' y' z'
 
 /-- `ctor` から従来の完全 witness を回収する。 -/
-def TriominoWieferichShrinkCtorB.hW
+theorem TriominoWieferichShrinkCtorB.hW
     {p x y z q x' y' z' : ℕ}
     (c : TriominoWieferichShrinkCtorB p x y z q x' y' z') :
     TriominoWieferichShrinkWitnessB p x y z q x' y' z' :=
@@ -258,7 +258,7 @@ structure TriominoWieferichShrinkCandB (p z : ℕ) where
   hzlt : z' < z
 
 /-- 候補から prime-ge5 反例パックを組み直す。 -/
-def TriominoWieferichShrinkCandB.toPack
+theorem TriominoWieferichShrinkCandB.toPack
     {p z : ℕ}
     (hp5 : 5 ≤ p)
     (hp : Nat.Prime p)
@@ -486,7 +486,7 @@ theorem triominoWieferichShrink_q_dvd_x_core
   have hq_dvd_GN : q ∣ GN p (z - y) y := by
     exact dvd_trans hq_dvd_qpow hqpow_dvd_GN
   have hxpow : x ^ p = (z - y) * GN p (z - y) y := by
-    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hq_dvd_xpow : q ∣ x ^ p := by
     have hq_dvd_rhs : q ∣ (z - y) * GN p (z - y) y := by
       exact dvd_mul_of_dvd_right hq_dvd_GN (z - y)
@@ -829,7 +829,7 @@ def triominoWieferichShrink_xdiv_eq_mul_of_gap_GN_powers_data_core
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hgap_body :
       x ^ p = (z - y) * GN p (z - y) y := by
-    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+    simpa [PrimeGe5CounterexamplePack.gap, PrimeCounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
   have hpow_eq : (q * (x / q)) ^ p = (q * (u * v1)) ^ p := by
     calc
       (q * (x / q)) ^ p = x ^ p := by rw [← hxMul]
@@ -2237,6 +2237,21 @@ def TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec
     hpB' := hs.hpB'
     hInv := hs.hInv }
 
+@[simp] theorem TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec_x'
+    {p x y z q : ℕ} (c : TriominoWieferichShrinkNumsInvCandidateB p x y z q)
+    (hs : TriominoWieferichShrinkNumsInvCandidateSpecB p x y z q c) :
+    (TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec c hs).x' = c.x' := rfl
+
+@[simp] theorem TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec_y'
+    {p x y z q : ℕ} (c : TriominoWieferichShrinkNumsInvCandidateB p x y z q)
+    (hs : TriominoWieferichShrinkNumsInvCandidateSpecB p x y z q c) :
+    (TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec c hs).y' = c.y' := rfl
+
+@[simp] theorem TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec_z'
+    {p x y z q : ℕ} (c : TriominoWieferichShrinkNumsInvCandidateB p x y z q)
+    (hs : TriominoWieferichShrinkNumsInvCandidateSpecB p x y z q c) :
+    (TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec c hs).z' = c.z' := rfl
+
 /-- `Recipe` から `KernelNums` を梱包する。 -/
 def TriominoWieferichShrinkNumsInvRecipeB.toNums
     {p x y z q : ℕ}
@@ -2310,6 +2325,60 @@ def triominoWieferichShrinkNumsInvCandidate_of_pack_clean
       y' := r0.y'
       z' := r0.z' }
 
+@[simp]
+theorem triominoWieferichShrinkNumsInvCandidate_of_pack_clean_x'
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ z - y)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ z - y)
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' =
+    (triominoWieferichShrinkKernelNums_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+  simp [
+    triominoWieferichShrinkNumsInvCandidate_of_pack_clean,
+    triominoWieferichShrinkNumsInvRecipe_of_pack_clean
+  ]
+
+@[simp]
+theorem triominoWieferichShrinkNumsInvCandidate_of_pack_clean_y'
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ z - y)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ z - y)
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' =
+    (triominoWieferichShrinkKernelNums_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' := by
+  simp [
+    triominoWieferichShrinkNumsInvCandidate_of_pack_clean,
+    triominoWieferichShrinkNumsInvRecipe_of_pack_clean
+  ]
+
+@[simp]
+theorem triominoWieferichShrinkNumsInvCandidate_of_pack_clean_z'
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ z - y)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ z - y)
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' =
+    (triominoWieferichShrinkKernelNums_of_pack_clean
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
+  simp [
+    triominoWieferichShrinkNumsInvCandidate_of_pack_clean,
+    triominoWieferichShrinkNumsInvRecipe_of_pack_clean
+  ]
+
 /-- `_of_pack` backend から `x = q * x'` を回収する（clean）。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack_clean
     (hNW5 : TriominoNoWieferichBridge)
@@ -2335,7 +2404,9 @@ theorem triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack_clean
       hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [triominoWieferichShrinkNumsInvCandidate_of_pack_clean, r0, n] using
+  simpa [triominoWieferichShrinkNumsInvCandidate_of_pack_clean,
+    triominoWieferichShrinkNumsInvRecipe_of_pack_clean,
+    TriominoWieferichShrinkNumsInvRecipeB.toNums, r0, n] using
     triominoWieferichShrinkKernel_hxmul_of_pack_clean
       hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
@@ -2364,7 +2435,9 @@ theorem triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack_clean
       hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [triominoWieferichShrinkNumsInvCandidate_of_pack_clean, r0, n] using
+  simpa [triominoWieferichShrinkNumsInvCandidate_of_pack_clean,
+    triominoWieferichShrinkNumsInvRecipe_of_pack_clean,
+    TriominoWieferichShrinkNumsInvRecipeB.toNums, r0, n] using
     triominoWieferichShrinkKernel_hy_eq_of_pack_clean
       hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
@@ -3270,7 +3343,8 @@ theorem triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel
       rcases hfields with ⟨hx, hy, hz⟩
       rw [← hz, ← hy, ← hx]
       simpa [triominoWieferichShrinkKernelNums_of_pack_clean] using hEqb
-    simpa [c, triominoWieferichShrinkNumsInvCandidateB_kernel] using hEq_shadow
+    simpa [c, cs, triominoWieferichShrinkNumsInvCandidateB_kernel,
+      triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_default] using hEq_shadow
   have hx0' : c.x' ≠ 0 := by
     intro hx0
     apply hpack.hx0
@@ -3448,7 +3522,8 @@ theorem triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel_clean
       rcases hfields with ⟨hx, hy, hz⟩
       rw [← hz, ← hy, ← hx]
       simpa [triominoWieferichShrinkKernelNums_of_pack_clean] using hEqb
-    simpa [c, triominoWieferichShrinkNumsInvCandidateB_kernel_clean] using hEq_shadow
+    simpa [c, cs, triominoWieferichShrinkNumsInvCandidateB_kernel_clean,
+      triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean] using hEq_shadow
   have hx0' : c.x' ≠ 0 := by
     intro hx0
     apply hpack.hx0
@@ -3904,8 +3979,10 @@ theorem triominoWieferichShrinkNumsInvCandidate_hzlt_core
   have hzc : c.z' = cs.z' := by
     rfl
   have hzlt_shadow : cs.z' < z := by
-    simpa [hz] using hzlt_pack
-  simpa [hzc] using hzlt_shadow
+    rw [← hz]
+    exact hzlt_pack
+  rw [hzc]
+  exact hzlt_shadow
 
 /-- `Spec_of_kernel` 用に `hpB'` を先行回収する pack 依存 helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hpB'_of_pack
@@ -4030,7 +4107,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_hpB'_core
   have hzc : c.z' = cs.z' := by
     rfl
   have hpB'_shadow : ¬ p ∣ (cs.z' - cs.y') := by
-    simpa [hy, hz] using hpB'_pack
+    rw [← hz, ← hy]
+    exact hpB'_pack
   intro hp_div
   have hp_div_c : p ∣ (c.z' - c.y') := by
     simpa [c] using hp_div
@@ -5316,10 +5394,15 @@ theorem triominoWieferichShrinkKernel_hxmul_of_core_path
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   simpa
       [triominoWieferichShrinkKernelNumsB_kernel,
+        triominoWieferichShrinkKernelCoreB_kernel,
+        triominoWieferichShrinkNumsInvRecipeB_kernel,
+        triominoWieferichShrinkNumsInvCoreB_kernel,
+        triominoWieferichShrinkKernelNumsCoreB_kernel,
         triominoWieferichShrinkKernelSeedB_kernel,
         triominoWieferichShrinkKernelEqSeedB_kernel,
         triominoWieferichShrinkKernelEqSeedCoreB_kernel,
         triominoWieferichShrinkKernelEqSeedTraceB_kernel,
+        triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel,
         TriominoWieferichShrinkKernelCoreB.toSeed, c]
     using c.hxMul
 
@@ -5340,10 +5423,15 @@ theorem triominoWieferichShrinkKernel_hy_eq_of_core_path
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   simpa
       [triominoWieferichShrinkKernelNumsB_kernel,
+        triominoWieferichShrinkKernelCoreB_kernel,
+        triominoWieferichShrinkNumsInvRecipeB_kernel,
+        triominoWieferichShrinkNumsInvCoreB_kernel,
+        triominoWieferichShrinkKernelNumsCoreB_kernel,
         triominoWieferichShrinkKernelSeedB_kernel,
         triominoWieferichShrinkKernelEqSeedB_kernel,
         triominoWieferichShrinkKernelEqSeedCoreB_kernel,
         triominoWieferichShrinkKernelEqSeedTraceB_kernel,
+        triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel,
         TriominoWieferichShrinkKernelCoreB.toSeed, c]
     using c.hyEq
 
@@ -5603,8 +5691,10 @@ theorem triominoWieferichShrinkNumsInvCandidate_hzlt_core_clean
   have hzc : c.z' = cs.z' := by
     rfl
   have hzlt_shadow : cs.z' < z := by
-    simpa [hz] using hzlt_pack
-  simpa [hzc] using hzlt_shadow
+    rw [← hz]
+    exact hzlt_pack
+  rw [hzc]
+  exact hzlt_shadow
 
 /-- clean kernel 用に `hpB'` を回収する core helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hpB'_core_clean
@@ -5676,7 +5766,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_hpB'_core_clean
   have hzc : c.z' = cs.z' := by
     rfl
   have hpB'_shadow : ¬ p ∣ (cs.z' - cs.y') := by
-    simpa [hy, hz] using hpB'_pack
+    rw [← hz, ← hy]
+    exact hpB'_pack
   intro hp_div
   have hp_div_c : p ∣ (c.z' - c.y') := by
     simpa [c] using hp_div
@@ -6244,10 +6335,15 @@ theorem triominoWieferichShrinkKernel_hxmul_of_core_path_clean
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   simpa
       [triominoWieferichShrinkKernelNumsB_kernel_clean,
+        triominoWieferichShrinkKernelCoreB_kernel_clean,
+        triominoWieferichShrinkNumsInvRecipeB_kernel_clean,
+        triominoWieferichShrinkNumsInvCoreB_kernel_clean,
+        triominoWieferichShrinkKernelNumsCoreB_kernel_clean,
         triominoWieferichShrinkKernelSeedB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedCoreB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedTraceB_kernel_clean,
+        triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel_clean,
         TriominoWieferichShrinkKernelCoreB.toSeed, c]
     using c.hxMul
 
@@ -6271,10 +6367,15 @@ theorem triominoWieferichShrinkKernel_hy_eq_of_core_path_clean
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   simpa
       [triominoWieferichShrinkKernelNumsB_kernel_clean,
+        triominoWieferichShrinkKernelCoreB_kernel_clean,
+        triominoWieferichShrinkNumsInvRecipeB_kernel_clean,
+        triominoWieferichShrinkNumsInvCoreB_kernel_clean,
+        triominoWieferichShrinkKernelNumsCoreB_kernel_clean,
         triominoWieferichShrinkKernelSeedB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedCoreB_kernel_clean,
         triominoWieferichShrinkKernelEqSeedTraceB_kernel_clean,
+        triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel_clean,
         TriominoWieferichShrinkKernelCoreB.toSeed, c]
     using c.hyEq
 

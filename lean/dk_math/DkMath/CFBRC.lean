@@ -11,6 +11,11 @@ import DkMath.CFBRC.CyclotomicProduct
 import DkMath.CFBRC.TrigBridge.General
 import DkMath.CFBRC.TrigBridge.ClosedForm
 import DkMath.CFBRC.TrigBridge.Main
+import DkMath.CFBRC.Regularization.ForwardDifference
+import DkMath.CFBRC.Regularization.NegativeInteger
+import DkMath.CFBRC.Regularization.AbelLinear
+import DkMath.CFBRC.Regularization.DualAudit
+import DkMath.CFBRC.Regularization.RiemannZetaOracleAudit
 
 #print "file: DkMath.CFBRC"
 

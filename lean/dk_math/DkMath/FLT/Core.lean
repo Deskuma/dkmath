@@ -165,13 +165,12 @@ lemma gcd_three_case_contra_template
 lemma exponent_alignment_failure_of_val_not_dvd
     {p x u G d : ℕ}
     (hp : Nat.Prime p) (_hd : 2 ≤ d)
-    (hx : x ≠ 0) (hu0 : u ≠ 0) (hG0 : G ≠ 0)
+    (_hx : x ≠ 0) (hu0 : u ≠ 0) (hG0 : G ≠ 0)
     (hG : ¬ p ∣ G)
     (hndvd : ¬ d ∣ padicValNat p u)
     (h : x ^ d = u * G) : False := by
   letI : Fact (Nat.Prime p) := ⟨hp⟩
-  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by
-    simpa using (padicValNat.pow (p := p) (a := x) d hx)
+  have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by simp
   have hdvd_left : d ∣ padicValNat p (x ^ d) := by
     -- d | (d * v_p(x))
     simp only [hpow, dvd_mul_right]

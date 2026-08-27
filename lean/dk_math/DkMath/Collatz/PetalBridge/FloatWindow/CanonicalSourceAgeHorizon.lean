@@ -774,7 +774,8 @@ theorem canonicalCarryTwoIndicator_fiftyNine_origin_eq_one :
     canonicalCarryTwoIndicator fiftyNineSaturatedOdd
       (canonicalBlockStartTime fiftyNineSaturatedOdd 0 - 1) = 1 := by
   rw [canonicalCarryTwoIndicator_eq_one_iff]
-  simpa using fiftyNine_carry_zero
+  simpa [canonicalBlockStartTime, canonicalEndpointBlockStart] using
+    fiftyNine_carry_zero
 
 /-- Therefore the mature saturated `H = 1` formula cannot be extended across
 the origin without an explicit early-boundary correction. -/

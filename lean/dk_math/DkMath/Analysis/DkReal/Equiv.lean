@@ -240,7 +240,6 @@ theorem equiv_mulNonneg
         Filter.atTop (nhds 0) := by
     convert hleft.add hright using 1
     · funext n
-      dsimp
       ring
     · simp
   have hproductAbs :

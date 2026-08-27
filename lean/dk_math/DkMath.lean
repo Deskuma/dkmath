@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Lib  -- Reusable library components
+import DkMath.Algebra.MetallicRatioCore  -- Signed-unit square and metallic-ratio framework
 import DkMath.Verification  -- Reusable verification certificate layer
 import DkMath.Samples  -- Sample Theorems and Examples
 -- ABC: abc Conjecture Module
@@ -16,6 +17,7 @@ import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
 import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
+import DkMath.EuclideanGeometry  -- CF2D regular orbits and arithmetic construction boundary
 import DkMath.Zsigmondy  -- Zsigmondy bridge layer
 -- PowerSwap Module
 import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations

@@ -760,11 +760,7 @@ theorem fixedLowUpperBoundarySignature_T_upperCycleA_eq_upperCycleB
       rw [stateUpperCarry_T_upperCycleA_eq_one hr,
         stateUpperCarry_upperCycleB_eq_one hr]
     · simp [s_T_upperCycleA_eq_one hr, s_upperCycleB_eq_one]
-    · change decide (bitWidth (T (T (upperCycleA r))).1 =
-          bitWidth (T (upperCycleA r)).1 + 1) =
-        decide (bitWidth (T (upperCycleB r)).1 =
-          bitWidth (upperCycleB r).1 + 1)
-      rw [bitWidth_T_upperCycleA hr, bitWidth_T_T_upperCycleA hr,
+    · rw [bitWidth_T_upperCycleA hr, bitWidth_T_T_upperCycleA hr,
         bitWidth_upperCycleB hr, bitWidth_T_upperCycleB hr]
       norm_num
   · apply Fin.ext
@@ -796,11 +792,7 @@ theorem fixedLowUpperBoundarySignature_T_upperCycleB_eq_upperCycleA
       rw [stateUpperCarry_T_upperCycleB_eq_two hr,
         stateUpperCarry_upperCycleA_eq_two hr]
     · simp [s_T_upperCycleB_eq_one hr, s_upperCycleA_eq_one]
-    · change decide (bitWidth (T (T (upperCycleB r))).1 =
-          bitWidth (T (upperCycleB r)).1 + 1) =
-        decide (bitWidth (T (upperCycleA r)).1 =
-          bitWidth (upperCycleA r).1 + 1)
-      rw [bitWidth_T_upperCycleB hr, bitWidth_T_T_upperCycleB hr,
+    · rw [bitWidth_T_upperCycleB hr, bitWidth_T_T_upperCycleB hr,
         bitWidth_upperCycleA hr, bitWidth_T_upperCycleA hr]
   · apply Fin.ext
     change normalizedTopTwoBits (T (upperCycleB r)).1 % 4 =

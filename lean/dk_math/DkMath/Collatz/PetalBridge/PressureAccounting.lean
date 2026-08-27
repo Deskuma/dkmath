@@ -1525,7 +1525,8 @@ theorem
       L hsorted).items).map
       (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum ≤
         -((L.length : ℕ) : ℤ) := by
-  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList,
+    sourcePressureAccountedIntervalFamily_of_sortedBefore]
     using sourcePressureIntervalPulseAddressList_sum_le_neg_length L
 
 theorem
@@ -1537,7 +1538,8 @@ theorem
     (((sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList
       L hsorted).items).map
       (fun A => SourcePressureIntervalNetDrop n k r A.start A.len)).sum < 0 := by
-  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList]
+  simpa [sourcePressureAccountedIntervalFamily_of_sortedIntervalPulseAddressList,
+    sourcePressureAccountedIntervalFamily_of_sortedBefore]
     using sourcePressureIntervalPulseAddressList_sum_neg_of_nonempty hL
 
 /--
@@ -1779,11 +1781,8 @@ theorem sourcePressureLocalIslandWitnessList_no_failure_singleton
     (W : SourcePressureLocalIslandWitness n k r) :
     ¬ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure [W] := by
   intro h
-  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
-    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
-    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
-    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
-    sourcePressureAccountedIntervalList_of_intervalPulseAddressList] using h
+  change False at h
+  exact h
 
 /-- The empty witness list has no adjacent sorted-before failure. -/
 theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false
@@ -1791,11 +1790,8 @@ theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_nil_false
     ¬ SourcePressureLocalIslandWitnessListHasSortedBeforeFailure
       ([] : List (SourcePressureLocalIslandWitness n k r)) := by
   intro h
-  simpa [SourcePressureLocalIslandWitnessListHasSortedBeforeFailure,
-    sourcePressureIntervalPulseAddressFamily_of_localIslandWitnessList,
-    SourcePressureIntervalPulseAddressFamilyHasSortedBeforeFailure,
-    SourcePressureIntervalPulseAddressListHasSortedBeforeFailure,
-    sourcePressureAccountedIntervalList_of_intervalPulseAddressList] using h
+  change False at h
+  exact h
 
 /-- Name aligned with the failure predicate: singleton lists cannot fail. -/
 theorem SourcePressureLocalIslandWitnessListHasSortedBeforeFailure_singleton_false

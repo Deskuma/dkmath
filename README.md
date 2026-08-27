@@ -50,6 +50,17 @@ $$
 
 ## News
 
+> ## FLT5: Fermat's Last Theorem (n=5)
+
+$$
+\Large
+x,y,z\in\mathbb{N}_{>0}
+\quad\Longrightarrow\quad
+x^5+y^5\ne z^5
+$$
+
+- FLT5 Standalone Lean Code Project: <https://github.com/Deskuma/flt5_dk_math_lean4>
+
 > ## OpenAI Build Week: Breaking Math Verification
 
 DkMath's second OpenAI Build Week submission presents **Breaking Math Verification**, a developer workflow for turning newly reported mathematical claims into auditable Lean certificates with GPT-5.6 and Codex.
@@ -110,6 +121,7 @@ This result is kernel-checked by Lean. Independent external mathematical review 
 - FLT5 public Lean API: [DkMath.FLT.Five](./lean/dk_math/DkMath/FLT/Five.lean)
 - Axiom audit entry point: [CheckAxioms.lean](./lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
 - Devpost submission: [DkMath — Verifiable AI Mathematical Research](https://devpost.com/software/dkmath-verifiable-ai-mathematical-research)
+- (New) Standalone Lean Code Project: <https://github.com/Deskuma/flt5_dk_math_lean4>
 
 ---
 

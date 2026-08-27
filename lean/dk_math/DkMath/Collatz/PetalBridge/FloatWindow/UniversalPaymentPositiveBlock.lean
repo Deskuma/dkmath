@@ -388,7 +388,7 @@ theorem CanonicalSaturatedBorderBlock.pow_length_sub_one_dvd_terminalCarrier
     {n : OddNat} {k : ℕ} (h : CanonicalSaturatedBorderBlock n k) :
     2 ^ (canonicalBlockLength n k - 1) ∣ canonicalBlockTerminalCarrier n k := by
   rw [← h.terminalValuation_eq_length_sub_one]
-  simpa [v2] using
+  simpa [canonicalBlockTerminalValuation, v2] using
     (pow_padicValNat_dvd (p := 2) (n := canonicalBlockTerminalCarrier n k))
 
 /-- Saturation is exact: the next power of two does not divide the carrier. -/

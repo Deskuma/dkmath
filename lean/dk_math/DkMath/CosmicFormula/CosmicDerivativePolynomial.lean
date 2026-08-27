@@ -102,7 +102,7 @@ theorem cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero
               exact congrArg (fun q : Polynomial ℝ => q.eval y) p.as_sum_range_C_mul_X_pow
       _ = Finset.sum (Finset.range (p.natDegree + 1))
             (fun n => (Polynomial.C (p.coeff n) * Polynomial.X ^ n).eval y) := by
-            rw [Polynomial.eval_finset_sum]
+            rw [Polynomial.eval_finsetSum]
       _ = Finset.sum (Finset.range (p.natDegree + 1))
             (fun n => p.coeff n * y ^ n) := by
             refine Finset.sum_congr rfl ?_
@@ -167,7 +167,7 @@ and finite sums and scalar multiples preserve continuity.
 theorem continuous_polynomialKernelExt (p : Polynomial ℝ) (x : ℝ) :
     Continuous (fun u : ℝ => polynomialKernelExt p x u) := by
   unfold polynomialKernelExt
-  refine continuous_finset_sum (s := Finset.range (p.natDegree + 1)) ?_
+  refine continuous_finsetSum (s := Finset.range (p.natDegree + 1)) ?_
   intro n hn
   exact (continuous_const.mul (continuous_powerKernel n x))
 
@@ -236,7 +236,8 @@ theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
   refine tendsto_nhdsWithin_congr ?hEq hExt
   intro u hu
   have hu0 : u ≠ 0 := by
-    simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
+    change u ∉ ({(0 : ℝ)} : Set ℝ) at hu
+    simpa only [Set.mem_singleton_iff] using hu
   exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
 
 /--
@@ -402,7 +403,7 @@ theorem hasDerivAt_polynomial_eval_finset_sum_cosmic
     {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => Finset.sum s (fun i => (P i).eval y))
       (Finset.sum s (fun i => ((P i).derivative).eval x)) x := by
-  simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
+  simpa [Polynomial.eval_finsetSum, Polynomial.derivative_sum] using
     (hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p := Finset.sum s P) (x := x))
 
 /--
@@ -416,7 +417,7 @@ theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
       (fun u : ℝ => cosmicKernel (fun y : ℝ => Finset.sum s (fun i => (P i).eval y)) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (Finset.sum s (fun i => ((P i).derivative).eval x))) := by
-  simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
+  simpa [Polynomial.eval_finsetSum, Polynomial.derivative_sum] using
     (tendsto_cosmicKernel_polynomial_eval_via_powerKernel (p := Finset.sum s P) (x := x))
 
 /--

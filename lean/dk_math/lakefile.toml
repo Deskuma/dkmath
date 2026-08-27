@@ -9,11 +9,13 @@ pp.unicode.fun = true                 # pretty-prints `fun a ↦ b`
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
+weak.linter.style.header = false
+weak.linter.style.longLine = false
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.29.0"
+rev = "v4.32.2"
 # rev = "stable"
 
 [[lean_lib]]
