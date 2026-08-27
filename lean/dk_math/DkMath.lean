@@ -28,6 +28,7 @@ import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePowe
 import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
 import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
 import DkMath.NumberTheory.Primitive
+import DkMath.NumberTheory.PrimorialUniverse
 import DkMath.NumberTheory.Legendre
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
