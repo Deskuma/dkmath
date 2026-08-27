@@ -13,6 +13,7 @@ import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
 import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
 import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
 import DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -30,6 +31,10 @@ wheel survivor Finset and its exact product-period reflection, together with
 the per-old-survivor fresh-prime lift, unique-deletion, and global replication
 layers.  It also exposes the canonical modulo projection from an enlarged
 wheel, its constant `(q - 1)` fibers, and its compatibility with reflection.
+The square-anchor and fixed-shell finite orbit modulo the wheel period is also
+available, together with reservation/projection equivalence and fresh-prime
+nested coherence.  These provider-side statements remain independent of the
+Legendre application layer.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
