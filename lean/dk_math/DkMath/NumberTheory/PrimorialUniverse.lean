@@ -6,16 +6,18 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
 import DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement
+import DkMath.NumberTheory.PrimorialUniverse.CommonLattice
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
 /-!
 # Primorial Unit Universe
 
-Public entry point for the finite reservation and integer unit-coordinate
-layers.  The current checkpoint exposes exact Euclidean escape for a finite
-set of ordinary `Nat.Prime`s and synchronized positive-real refinement of
-natural coordinates.  Rational/irrational common lattices, canonical
-primorial wheels, PowerSwap, and Legendre consumers belong to later
-checkpoints.
+Public entry point for the finite reservation, integer unit-coordinate, and
+coprime common-lattice layers.  The current checkpoints expose exact
+Euclidean escape for a finite set of ordinary `Nat.Prime`s, synchronized
+positive-real refinement of natural coordinates, and the canonical fiber
+`(m,n) = (a*t,b*t)` of two synchronized units.  Rational/irrational lattice
+classification, canonical primorial wheels, PowerSwap, and Legendre consumers
+belong to later checkpoints.
 -/
