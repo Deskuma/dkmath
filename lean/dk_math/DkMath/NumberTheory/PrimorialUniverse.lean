@@ -10,6 +10,7 @@ import DkMath.NumberTheory.PrimorialUniverse.CommonLattice
 import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
 import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
 import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -23,7 +24,8 @@ positive-real refinement of natural coordinates, the canonical fiber
 `(m,n) = (a*t,b*t)` of two synchronized units, the equivalence between
 positive intersection and integer commensurability, and the finite
 prime-scale synchronization period.  It now also exposes the one-period
-wheel survivor Finset and its exact product-period reflection.  Rational/
-irrational classification, next-prime wheel lifts, PowerSwap, and Legendre
-consumers belong to later checkpoints.
+wheel survivor Finset and its exact product-period reflection, together with
+the per-old-survivor fresh-prime lift and unique-deletion layer.  Rational/
+irrational classification, global next-wheel decomposition, PowerSwap, and
+Legendre consumers belong to later checkpoints.
 -/
