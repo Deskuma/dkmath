@@ -17,6 +17,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -38,6 +39,9 @@ The square-anchor and fixed-shell finite orbit modulo the wheel period is also
 available, together with reservation/projection equivalence and fresh-prime
 nested coherence.  These provider-side statements remain independent of the
 Legendre application layer.
+The CRT-generated one-period square-anchor phase fiber is also available: for
+a coprime anchor its cardinality is exactly `2 ^ (S.erase 2).card`, with the
+prime `2` excluded from the sign index.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
