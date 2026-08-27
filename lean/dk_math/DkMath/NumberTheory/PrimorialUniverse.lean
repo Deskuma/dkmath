@@ -11,6 +11,7 @@ import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
 import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
 import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
 import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
