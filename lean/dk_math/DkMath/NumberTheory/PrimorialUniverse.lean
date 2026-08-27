@@ -9,6 +9,7 @@ import DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement
 import DkMath.NumberTheory.PrimorialUniverse.CommonLattice
 import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
 import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -21,7 +22,8 @@ Euclidean escape for a finite set of ordinary `Nat.Prime`s, synchronized
 positive-real refinement of natural coordinates, the canonical fiber
 `(m,n) = (a*t,b*t)` of two synchronized units, the equivalence between
 positive intersection and integer commensurability, and the finite
-prime-scale synchronization period.  Rational/irrational classification,
-canonical primorial wheels, PowerSwap, and Legendre consumers belong to later
-checkpoints.
+prime-scale synchronization period.  It now also exposes the one-period
+wheel survivor Finset and its exact product-period reflection.  Rational/
+irrational classification, next-prime wheel lifts, PowerSwap, and Legendre
+consumers belong to later checkpoints.
 -/
