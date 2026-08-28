@@ -34,6 +34,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetPositiveFirstHitAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFreshPrimeFirstHitTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairFreshPrimeTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -133,6 +134,13 @@ old first hit persists exactly when its raw square-shell seat is not divisible
 by the fresh prime.  The `30 → 210` regression records both deletion delay and
 persistence, together with the pair-radius increase `5 → 7`; this remains a
 finite basis-growth law and supplies no quantitative universal delay bound.
+The fresh-prime successor-pair transport is also exported: pair first hits are
+monotone, persistence is equivalent to survival of one old minimizing side,
+and strict delay is equivalent to deletion of every old minimizer.  In the
+tied case, simultaneous deletion forces the fresh prime to divide the exact
+successor increment `2 * n + 1`; consequently a fresh prime missing that
+increment preserves the pair.  This is a provider-side obstruction seed, not
+a uniform coverage theorem.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
