@@ -287,7 +287,7 @@ theorem galoisEval_otherLoad_ne_zero
     (a : p.QuotientPrimeGCDLoadAddress q)
     (i j : Fin 3) (hij : i ≠ j) :
     a.galoisEval i (a.family.load p j) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro hother
   rcases a.family.loads_pairwiseCoprime p hij with
     ⟨u, v, huv⟩
@@ -343,7 +343,7 @@ theorem galoisKernel_isMaximal
     (a : p.QuotientPrimeGCDLoadAddress q)
     (i : Fin 3) :
     (a.galoisKernel i).IsMaximal := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   exact RingHom.ker_isMaximal_of_surjective
     (a.galoisEval i) (a.galoisEval_surjective i)
 
@@ -366,7 +366,7 @@ theorem galoisKernel_cardQuot
     (a : p.QuotientPrimeGCDLoadAddress q)
     (i : Fin 3) :
     Submodule.cardQuot (a.galoisKernel i) = q := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   rw [Submodule.cardQuot_apply]
   calc
     Nat.card

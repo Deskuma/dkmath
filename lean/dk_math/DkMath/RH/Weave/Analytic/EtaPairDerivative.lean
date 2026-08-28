@@ -49,8 +49,8 @@ theorem norm_etaRealKernel_sub_le
     (ha : 0 < a) (hab : a ≤ b) :
     ‖etaRealKernel s b - etaRealKernel s a‖ ≤
       (‖s‖ * a ^ (-s.re - 1)) * (b - a) := by
-  letI : NormedAddCommGroup ℂ := Complex.instNormedAddCommGroup
-  letI : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+  let : NormedAddCommGroup ℂ := Complex.instNormedAddCommGroup
+  let : NormedSpace ℝ ℂ := NormedSpace.complexToReal
   let f : ℝ → ℂ := fun x => (x : ℂ) ^ (-s)
   let f' : ℝ → ℂ := fun x => -(s * (x : ℂ) ^ (-s - 1))
   have hs : s ≠ 0 := by

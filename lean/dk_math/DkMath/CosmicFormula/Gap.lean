@@ -43,7 +43,7 @@ lemma exponent_alignment_failure_of_val_eq_one
     (hG : ¬ p ∣ G)
     (h : x ^ d = u * G) : False := by
   -- `padicValNat.*` の補題は `[Fact (Nat.Prime p)]` を要求する
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   -- 左：v_p(x^d) = d * v_p(x)
   have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by simp
   -- よって d | v_p(x^d)

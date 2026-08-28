@@ -1932,8 +1932,8 @@ lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
   have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
     Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
   apply (algebraMap ℚ E).injective
-  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
-  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  let := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  let := IsCyclotomicExtension.isGalois {p} ℚ K
   rw [Algebra.norm_eq_prod_embeddings]
   conv_lhs =>
     congr
@@ -3078,8 +3078,8 @@ theorem chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin
   let x : 𝓞 K := chosenCyclotomicLinearFactorInRingOfIntegers hζ y z
   have hcoe : ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := by
     exact congrArg (algebraMap ℚ K) (Algebra.coe_norm_int x)
-  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
-  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  let := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  let := IsCyclotomicExtension.isGalois {p} ℚ K
   calc
     ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := hcoe
     _ = ∏ σ : Gal(K/ℚ), σ (((x : 𝓞 K) : K)) := by
@@ -3097,7 +3097,7 @@ theorem gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_th
     σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) =
       ((cyclotomicLinearFactorInRingOfIntegers hζ y z
         (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val : 𝓞 K) : K) := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   let k : ℕ := (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val
   have hsigma_base : σ ζ = ζ ^ k := by
     simpa [k] using
@@ -3132,7 +3132,7 @@ theorem chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thi
     (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
       ∏ u : (ZMod p)ˣ,
         ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K) := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   rw [chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin hζ]
   simpa using
     (Fintype.prod_equiv
@@ -3156,7 +3156,7 @@ theorem prod_units_zmod_eq_prod_range_erase_zero
     {p : ℕ} [hp : Fact p.Prime]
     {M : Type*} [CommMonoid M] (f : ℕ → M) :
     ∏ u : (ZMod p)ˣ, f u.val.val = ∏ j ∈ (Finset.range p).erase 0, f j := by
-  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let : NeZero p := ⟨hp.out.ne_zero⟩
   apply Finset.prod_nbij (fun u : (ZMod p)ˣ => u.val.val)
   · -- hi: image lands in (Finset.range p).erase 0
     intro u _

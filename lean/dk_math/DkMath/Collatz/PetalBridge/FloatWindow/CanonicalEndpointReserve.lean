@@ -450,7 +450,7 @@ theorem not_exists_globalFiniteProjectedInitialDriftUpperTable
         endpointAccountingTerm n 0 ≤
           upper (sourceSignature n) (targetSignature n) := by
   classical
-  letI := Fintype.ofFinite Signature
+  let := Fintype.ofFinite Signature
   rintro ⟨upper, hupper⟩
   let B : ℤ := ∑ s : Signature, ∑ t : Signature, |upper s t|
   obtain ⟨n, hn⟩ := exists_endpointAccountingTerm_gt B

@@ -620,7 +620,7 @@ theorem unitClassModSeven_natCard :
 theorem unitClassProjectiveLog_bijective :
     Function.Bijective unitClassProjectiveLog := by
   classical
-  letI : Fintype UnitClassModSeven :=
+  let : Fintype UnitClassModSeven :=
     Fintype.ofFinite UnitClassModSeven
   rw [Fintype.bijective_iff_surjective_and_card]
   refine ⟨unitClassProjectiveLog_surjective, ?_⟩

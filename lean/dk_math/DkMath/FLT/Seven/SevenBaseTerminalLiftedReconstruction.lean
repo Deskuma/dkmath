@@ -200,7 +200,7 @@ noncomputable def signedRepresentativePacket
   have hMpos : 0 < family.combinedModulus := by
     rw [family.combinedModulus_eq_cubicRootLoad]
     exact awaySevenBaseTerminalCubicRootLoad_pos r
-  letI : NeZero family.combinedModulus := ⟨hMpos.ne'⟩
+  let : NeZero family.combinedModulus := ⟨hMpos.ne'⟩
   exact {
     scale := candidate.scale.combinedScale.valMinAbs
     model := candidate.model.globalModel.signedRepresentative

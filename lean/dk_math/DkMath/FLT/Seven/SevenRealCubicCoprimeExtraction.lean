@@ -22,7 +22,7 @@ namespace SevenRealCubic
 explicit equivalence with the full ring of integers. -/
 noncomputable instance modelIsPrincipalIdealRing :
     IsPrincipalIdealRing SevenRealCubicInt := by
-  letI : IsPrincipalIdealRing (𝓞 Field) :=
+  let : IsPrincipalIdealRing (𝓞 Field) :=
     ringOfIntegers_isPrincipalIdealRing
   exact
     IsPrincipalIdealRing.of_surjective

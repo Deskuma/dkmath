@@ -1587,7 +1587,7 @@ theorem henselLiftStepKernelDivision_concrete : HenselLiftStepKernelDivisionTarg
   intro q n hq hn hdiv x hx
   have hqpow_pos : 0 < q ^ (n + 1) := pow_pos hq.pos _
   have hne : NeZero (q ^ (n + 1)) := ⟨Nat.ne_of_gt hqpow_pos⟩
-  letI : NeZero (q ^ (n + 1)) := hne
+  let : NeZero (q ^ (n + 1)) := hne
   have hx_cast : (ZMod.cast x : ZMod (q ^ n)) = 0 := by
     simpa [ZMod.castHom_apply] using hx
   have hx_val_mod : ((x.val : ZMod (q ^ n)) = 0) := by
@@ -1714,7 +1714,7 @@ theorem henselLiftStepDerivativeNonzeroModQPrime_concrete :
   have hp_ne_zero_q : (p : ZMod q) ≠ 0 := by
     intro hp0
     exact hq_not_dvd_p ((ZMod.natCast_eq_zero_iff p q).1 hp0)
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hroot : r ≠ 1 ∧ r ^ p = 1 :=
     geomSum_zero_imp_pow_eq_one (q := q) (p := p) r (Nat.pos_of_ne_zero hp.ne_zero) hp_ne_zero_q hsum_q
   have hr_ne_one : r ≠ 1 := hroot.1
@@ -2271,7 +2271,7 @@ branch 情報 `R mod q = ω^j` は `QAdicResidue` から供給する。
 theorem strongSuperWieferichCongruenceV2_concrete : StrongSuperWieferichCongruenceV2Target := by
   intro p x y z hPack gap hgap q hq hq_ne_p hqpow_dvd_GN hq_ndvd_gap hq_coprime_y ω hω hω_ne
   have hp_pos : 0 < p := hPack.hp.pos
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hqpow : q ∣ q ^ p := by
     exact dvd_pow_self q hp_pos.ne'
   have hq_dvd_GN : q ∣ GN p gap y := dvd_trans hqpow hqpow_dvd_GN

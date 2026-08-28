@@ -171,7 +171,7 @@ theorem CanonicalEndpointForwardWindowMatching.to_excursionRepaidAt
     (h : CanonicalEndpointForwardWindowMatching n q r) :
     CanonicalEndpointExcursionRepaidAt n q r := by
   rcases h with ⟨hqr, pay, hpay, _⟩
-  letI : Finite (CanonicalEndpointCapacityWindowCarrier n q r) := by
+  let : Finite (CanonicalEndpointCapacityWindowCarrier n q r) := by
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective pay hpay

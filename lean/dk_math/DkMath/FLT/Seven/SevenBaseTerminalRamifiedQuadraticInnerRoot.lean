@@ -125,7 +125,7 @@ theorem sndCore_cubic_factors_coprime
   rw [Nat.coprime_iff_gcd_eq_one]
   by_contra hg
   rcases Nat.exists_prime_and_dvd hg with ⟨q, hq, hqg⟩
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   let u : ZMod q := root.fst
   let v : ZMod q := root.snd
   have hqL : (q : ℤ) ∣
@@ -177,7 +177,7 @@ theorem sndCore_cubic_factors_coprime
         exact eq_zero_of_pow_eq_zero (neg_eq_zero.mp hL)
       exact False.elim (hprimitive ⟨by simp [hu, hv0], hv0⟩)
   subst q
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hnorm0 : (norm root : ZMod 7) = 0 := by
     have hadd :
         ((2 : ZMod 7) * u + v) * (norm root : ZMod 7) = 0 := by

@@ -61,7 +61,7 @@ theorem minkowskiFloor_le_four :
 /-- The residue degree of two in the seventh cyclotomic field is three. -/
 theorem orderOf_two_zmodSeven :
     orderOf (2 : ZMod 7) = 3 := by
-  letI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+  let : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
   exact orderOf_eq_prime (by decide) (by decide)
 
 /-- The residue degree of three in the seventh cyclotomic field is six. -/
@@ -91,7 +91,7 @@ not identify the concrete rank-six carrier used by the FLT7 development with
 that ring of integers. -/
 theorem ringOfIntegers_isPrincipalIdealRing :
     IsPrincipalIdealRing (𝓞 K) := by
-  letI : IsGalois ℚ K :=
+  let : IsGalois ℚ K :=
     IsCyclotomicExtension.isGalois {7} ℚ K
   apply
     RingOfIntegers.isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOver_of_mem_Icc
@@ -109,16 +109,16 @@ theorem ringOfIntegers_isPrincipalIdealRing :
         norm_num at hodd
       exact Or.inr (by omega)
   rcases hp_cases with rfl | rfl
-  · letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-    letI :
+  · let : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+    let :
         (Ideal.span ({(2 : ℤ)} : Set ℤ)).IsPrime :=
       (Ideal.span_singleton_prime (by norm_num)).mpr
         (Nat.prime_iff_prime_int.mp Nat.prime_two)
     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
       (Ideal.span ({(2 : ℤ)} : Set ℤ)).nonempty_primesOver
         (S := 𝓞 K)
-    letI : P.IsPrime := hPprime
-    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPlies
+    let : P.IsPrime := hPprime
+    let : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPlies
     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
     have hdeg :
         P.inertiaDeg ℤ =
@@ -131,16 +131,16 @@ theorem ringOfIntegers_isPrincipalIdealRing :
           P.inertiaDeg ℤ
     rw [hdeg, orderOf_two_zmodSeven]
     exact lt_of_le_of_lt (minkowskiFloor_le_four K) (by norm_num)
-  · letI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
-    letI :
+  · let : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+    let :
         (Ideal.span ({(3 : ℤ)} : Set ℤ)).IsPrime :=
       (Ideal.span_singleton_prime (by norm_num)).mpr
         (Nat.prime_iff_prime_int.mp Nat.prime_three)
     obtain ⟨⟨P, hPprime, hPlies⟩⟩ :=
       (Ideal.span ({(3 : ℤ)} : Set ℤ)).nonempty_primesOver
         (S := 𝓞 K)
-    letI : P.IsPrime := hPprime
-    letI : P.LiesOver (Ideal.span ({(3 : ℤ)} : Set ℤ)) := hPlies
+    let : P.IsPrime := hPprime
+    let : P.LiesOver (Ideal.span ({(3 : ℤ)} : Set ℤ)) := hPlies
     refine ⟨P, ⟨hPprime, hPlies⟩, Or.inl ?_⟩
     have hdeg :
         P.inertiaDeg ℤ =

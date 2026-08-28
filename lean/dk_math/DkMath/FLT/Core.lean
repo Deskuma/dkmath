@@ -122,7 +122,7 @@ lemma GN_zmod_ne_zero_of_dvd_x
     (hd0 : (d : ZMod p) ≠ 0)
     (hu0 : (u : ZMod p) ≠ 0) :
     GN (R := ZMod p) d (x : ZMod p) (u : ZMod p) ≠ 0 := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   have hhead :=
     GN_zmod_eq_head_of_dvd (p := p) (d := d) (x := x) (u := u) hp hd hx
   -- GN を先頭項へ
@@ -169,7 +169,7 @@ lemma exponent_alignment_failure_of_val_not_dvd
     (hG : ¬ p ∣ G)
     (hndvd : ¬ d ∣ padicValNat p u)
     (h : x ^ d = u * G) : False := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   have hpow : padicValNat p (x ^ d) = d * padicValNat p x := by simp
   have hdvd_left : d ∣ padicValNat p (x ^ d) := by
     -- d | (d * v_p(x))

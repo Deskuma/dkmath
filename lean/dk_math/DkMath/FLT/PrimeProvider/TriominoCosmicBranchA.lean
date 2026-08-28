@@ -1083,7 +1083,7 @@ lemma primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow
     (hEq : x ^ p = u * N)
     (hNval : padicValNat p N = 1) :
     ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by simp
   have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
     simpa using (padicValNat.mul (p := p) hu0 hN0)

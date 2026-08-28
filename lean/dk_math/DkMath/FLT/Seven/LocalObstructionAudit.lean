@@ -50,7 +50,7 @@ theorem localSolubilitySource_of_primeWitness {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (w : AwayRoutingPrimeWitness r)
     (hq7 : w.q ≠ 7) :
     Nonempty (AwayNonSevenLocalSolubilitySource w.q w.row w.column) := by
-  letI : Fact (Nat.Prime w.q) := ⟨w.q_prime⟩
+  let : Fact (Nat.Prime w.q) := ⟨w.q_prime⟩
   let actual := w.toLocalSolution hq7
   cases hc : w.column with
   | sevenV =>

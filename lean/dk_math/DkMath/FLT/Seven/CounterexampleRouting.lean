@@ -170,7 +170,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_seventh
     (hEq : carrier * residual = distinguished ^ 7)
     (hrVal : padicValNat 7 residual = 1) :
     ∃ m : ℕ, padicValNat 7 carrier = 6 + 7 * m := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hpow : padicValNat 7 (distinguished ^ 7) =
       7 * padicValNat 7 distinguished := by
     exact padicValNat.pow (p := 7) (a := distinguished) 7
