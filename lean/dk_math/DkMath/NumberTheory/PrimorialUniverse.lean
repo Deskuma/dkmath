@@ -21,6 +21,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -55,6 +56,10 @@ Its raw lift-index refinement is also exported: exactly one index has residue
 `+a`, exactly one has residue `-a`, exactly one is deleted by `q`, and the
 remaining `q - 3` indices are neutral surviving lifts.  The corresponding
 phase seats are the image of the two sign-selected indices.
+The affine raw-lift map is also exposed modulo the fresh prime: the deleted
+index is the unique midpoint of the `+a` and `-a` phase indices, and reflection
+about it exchanges the two phase indices.  This remains finite provider-side
+geometry.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
