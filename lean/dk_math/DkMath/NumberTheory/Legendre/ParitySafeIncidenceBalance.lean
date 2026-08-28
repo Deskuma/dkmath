@@ -40,7 +40,10 @@ divisibility of the corresponding square-shell point. -/
     q ∈ paritySafeActiveSupport n r ↔
       q ∈ squareAnchorOddActivePrimes n ∧
         q ∣ n ^ 2 + r := by
-  simp [paritySafeActiveSupport, SquareOffsetForbiddenBy]
+  classical
+  rw [paritySafeActiveSupport, Finset.mem_filter,
+    mem_squareAnchorOddActivePrimes]
+  rfl
 
 /-- On a parity-safe candidate, the old nondivisor support is exactly active support. -/
 theorem squareOffsetAnchorNondivisorSupport_eq_paritySafeActiveSupport_of_candidate
