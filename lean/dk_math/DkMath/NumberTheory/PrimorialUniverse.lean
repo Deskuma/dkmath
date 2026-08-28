@@ -31,6 +31,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTranspor
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetPositiveFirstHitAudit
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -113,6 +114,11 @@ radii, with `SquareRadius ≤ GenericRadius`.  The `{2,3}` and `{2,3,5}`
 regressions show respectively strict improvement and equality, so the
 quadratic restriction is real but nonuniform and does not by itself give a
 coverage obstruction.
+The positive-offset first-hit audit is also exported: the anchor seat `t = 0`
+is removed, the first positive offset is bounded by one period, and the
+`{2,3}` and `{2,3,5}` regressions give equal generic and square radii `4` and
+`6`.  Thus square-phase restriction alone does not improve the worst forward
+positive first hit.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
