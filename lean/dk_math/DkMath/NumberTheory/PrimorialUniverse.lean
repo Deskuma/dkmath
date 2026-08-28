@@ -24,6 +24,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -69,6 +70,10 @@ The affine normal form is also exported: the phase radius is the inverse-period
 coordinate `a / M` in `ZMod q`, the plus/minus indices are the deleted center
 plus/minus that radius, and the resulting offsets and separation are
 independent of the old representative.
+The deleted-center transport layer is also exported: the center is the unique
+zero-residue coordinate `-b / M`, changing `b` translates it by
+`(b₁ - b₂) / M`, and both phase sheets undergo the same translation while the
+radius stays fixed.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
