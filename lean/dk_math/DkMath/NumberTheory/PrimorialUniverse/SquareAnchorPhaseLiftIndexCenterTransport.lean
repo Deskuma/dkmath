@@ -35,7 +35,7 @@ theorem freshPrimeDeletedCenterCoord_zero_residue
     {q b : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S) :
     (b : ZMod q) + freshPrimeDeletedCenterCoord S q b *
         (finitePrimeBasisProduct S : ZMod q) = 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   simp [freshPrimeDeletedCenterCoord, hM]
@@ -48,7 +48,7 @@ theorem freshPrimeDeletedCenterCoord_unique
     {z : ZMod q}
     (hz : (b : ZMod q) + z * (finitePrimeBasisProduct S : ZMod q) = 0) :
     z = freshPrimeDeletedCenterCoord S q b := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   apply mul_right_cancel₀ hM
@@ -69,7 +69,7 @@ theorem freshPrime_deleted_index_eq_centerCoord
     (hqS : q ∉ S)
     (hzero : IsFreshPrimeDeletedLiftIndex S q b jzero) :
     (jzero : ZMod q) = freshPrimeDeletedCenterCoord S q b := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hzero' : (primeBasisWheelLift S b jzero : ZMod q) = 0 :=
     (ZMod.natCast_eq_zero_iff _ _).mpr hzero.2
   rw [primeBasisWheelLift_cast_freshPrime] at hzero'
