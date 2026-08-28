@@ -1,0 +1,146 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+import DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement
+import DkMath.NumberTheory.PrimorialUniverse.CommonLattice
+import DkMath.NumberTheory.PrimorialUniverse.UnitIntersectionClassification
+import DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+import DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetPositiveFirstHitAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFreshPrimeFirstHitTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairFreshPrimeTransport
+
+#print "file: DkMath.NumberTheory.PrimorialUniverse"
+
+/-!
+# Primorial Unit Universe
+
+Public entry point for the finite reservation, integer unit-coordinate, and
+coprime common-lattice and two-unit intersection-classification layers.  The current checkpoints expose exact
+Euclidean escape for a finite set of ordinary `Nat.Prime`s, synchronized
+positive-real refinement of natural coordinates, the canonical fiber
+`(m,n) = (a*t,b*t)` of two synchronized units, the equivalence between
+positive intersection and integer commensurability, and the finite
+prime-scale synchronization period.  It now also exposes the one-period
+wheel survivor Finset and its exact product-period reflection, together with
+the per-old-survivor fresh-prime lift, unique-deletion, and global replication
+layers.  It also exposes the canonical modulo projection from an enlarged
+wheel, its constant `(q - 1)` fibers, and its compatibility with reflection.
+The square-anchor and fixed-shell finite orbit modulo the wheel period is also
+available, together with reservation/projection equivalence and fresh-prime
+nested coherence.  These provider-side statements remain independent of the
+Legendre application layer.
+The CRT-generated one-period square-anchor phase fiber is also available: for
+a coprime anchor its cardinality is exactly `2 ^ (S.erase 2).card`, with the
+prime `2` excluded from the sign index.
+Fresh-prime projection of these fibers is also exported: an odd fresh prime
+gives an exact two-sheet finite cover, while fresh `2` contributes no new sign
+degree.
+The coprime phase fiber is also exposed as a subcover of the finite wheel
+survivors, including the `q = 3` equality and the strict two-of-`(q - 1)`
+comparison for fresh primes above `3`.
+Its raw lift-index refinement is also exported: exactly one index has residue
+`+a`, exactly one has residue `-a`, exactly one is deleted by `q`, and the
+remaining `q - 3` indices are neutral surviving lifts.  The corresponding
+phase seats are the image of the two sign-selected indices.
+The affine raw-lift map is also exposed modulo the fresh prime: the deleted
+index is the unique midpoint of the `+a` and `-a` phase indices, and reflection
+about it exchanges the two phase indices.  This remains finite provider-side
+geometry.
+The full fresh-prime index-circle reflection is also exported: it is an
+involution fixing the deleted center, negates raw residues, preserves survivor
+and neutral status, and pairs neutral indices without fixed points.
+The affine normal form is also exported: the phase radius is the inverse-period
+coordinate `a / M` in `ZMod q`, the plus/minus indices are the deleted center
+plus/minus that radius, and the resulting offsets and separation are
+independent of the old representative.
+The deleted-center transport layer is also exported: the center is the unique
+zero-residue coordinate `-b / M`, changing `b` translates it by
+`(b₁ - b₂) / M`, and both phase sheets undergo the same translation while the
+radius stays fixed.
+The square-anchor successor transport is also exported: the canonical phase
+representative is `n % M`, its step carry records the old-period wrap, the
+center moves by `carry - M⁻¹`, and the plus/minus dynamic sheets satisfy their
+corresponding exact successor laws.
+The square-anchor period transport is also exported: Euclidean division gives
+the exact old-period block quotient, the plus sheet is that quotient modulo a
+fresh prime, and `k` old-period turns translate the two sheets by `(+k, -k)`
+while fixing the center.  Repeating this `q` times gives exact closure at the
+enlarged fresh-prime period `q * M`; this remains a finite compatibility
+statement and does not assert least-period or escape behavior.
+The fresh-prime mixed-radix transport is also exported: the block quotient
+digit `Q % q` is the raw lift index of the canonical enlarged representative,
+the dynamic plus sheet is this digit in `ZMod q`, and the representative lies
+in the corresponding static projection fiber.  Old-period turns advance the
+digit modulo `q`, and the `q`-turn orbit closes at the enlarged period.
+The mixed-radix information audit is also exported: one enlarged period is
+exactly the bounded rectangular grid of old coordinates and fresh digits,
+every such pair is realized by an explicit canonical orbit point, and the
+enlarged reservation condition is the existing old-reservation/new-prime
+deletion rule.  Thus this finite coordinate route is complete but supplies no
+new coverage obstruction yet.
+The square-shifted one-period unreserved offset profile is also exported: it is
+the inverse cyclic translate of the fixed wheel-survivor pattern by the square
+anchor coordinate, has the same cardinality as that pattern, is invariant
+under equal square phase, and transports under the odd successor increment.
+This remains a whole-period finite statement and supplies no short-prefix or
+escape conclusion.
+The first-hit audit is also exported: arbitrary cyclic shifts and reachable
+square phases have explicit least unreserved offsets and finite worst-case
+radii, with `SquareRadius ≤ GenericRadius`.  The `{2,3}` and `{2,3,5}`
+regressions show respectively strict improvement and equality, so the
+quadratic restriction is real but nonuniform and does not by itself give a
+coverage obstruction.
+The positive-offset first-hit audit is also exported: the anchor seat `t = 0`
+is removed, the first positive offset is bounded by one period, and the
+`{2,3}` and `{2,3,5}` regressions give equal generic and square radii `4` and
+`6`.  Thus square-phase restriction alone does not improve the worst forward
+positive first hit.
+The successor-pair positive first-hit audit is also exported: taking the
+minimum over adjacent square anchors gives the exact simultaneous-badness
+threshold semantics, is periodic in the anchor parameter, and is bounded by
+the square positive radius.  The finite regressions give pair radii `1 < 4`
+for `{2,3}` and `5 < 6` for `{2,3,5}`; this is finite strict gain only, not a
+uniform coverage or escape theorem.
+The fresh-prime positive first-hit transport is also exported: insertion adds
+exactly the fresh divisibility channel, old first hits are monotone, and an
+old first hit persists exactly when its raw square-shell seat is not divisible
+by the fresh prime.  The `30 → 210` regression records both deletion delay and
+persistence, together with the pair-radius increase `5 → 7`; this remains a
+finite basis-growth law and supplies no quantitative universal delay bound.
+The fresh-prime successor-pair transport is also exported: pair first hits are
+monotone, persistence is equivalent to survival of one old minimizing side,
+and strict delay is equivalent to deletion of every old minimizer.  In the
+tied case, simultaneous deletion forces the fresh prime to divide the exact
+successor increment `2 * n + 1`; consequently a fresh prime missing that
+increment preserves the pair.  This is a provider-side obstruction seed, not
+a uniform coverage theorem.
+Rational/irrational classification, square-anchor and Legendre consumers,
+PowerSwap, and analytic consumers belong to later checkpoints.
+-/
