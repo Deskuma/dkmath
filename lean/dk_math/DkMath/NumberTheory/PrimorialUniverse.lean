@@ -29,6 +29,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -99,6 +100,12 @@ every such pair is realized by an explicit canonical orbit point, and the
 enlarged reservation condition is the existing old-reservation/new-prime
 deletion rule.  Thus this finite coordinate route is complete but supplies no
 new coverage obstruction yet.
+The square-shifted one-period unreserved offset profile is also exported: it is
+the inverse cyclic translate of the fixed wheel-survivor pattern by the square
+anchor coordinate, has the same cardinality as that pattern, is invariant
+under equal square phase, and transports under the odd successor increment.
+This remains a whole-period finite statement and supplies no short-prefix or
+escape conclusion.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
