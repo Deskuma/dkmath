@@ -410,6 +410,8 @@ theorem pascalCenteredXiPrimeSideFiniteEulerRenormalizedZetaResidual_negLogDeriv
       pascalCenteredXiPrimeSideFiniteEulerRenormalizedZetaResidual X z) =
       (fun z : ℂ => riemannZeta z *
         pascalCenteredXiPrimeSideFiniteEulerCompensator X z) by rfl]
+  change -logDeriv (riemannZeta *
+      pascalCenteredXiPrimeSideFiniteEulerCompensator X) s = _
   rw [hmul, pascalCenteredXiPrimeSideFiniteEulerCompensator_logDeriv]
   unfold pascalXiOrdinaryZetaNegLogDeriv
   simp only [logDeriv_apply, div_eq_mul_inv]

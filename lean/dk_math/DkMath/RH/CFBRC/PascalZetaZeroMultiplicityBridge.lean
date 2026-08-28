@@ -127,6 +127,8 @@ theorem tendsto_mul_pascalZetaNegLogDeriv_zeroMultiplicity
         =ᶠ[𝓝[≠] ρ] (fun w => -(m : ℂ) - (w - ρ) * logDeriv g w) := by
       filter_upwards [hg_ne, hg_analytic, self_mem_nhdsWithin] with w hw hgw hwρmem
       have hwρ : w - ρ ≠ 0 := sub_ne_zero.mpr (by simpa using hwρmem)
+      change (w - ρ) * -logDeriv ((fun z : ℂ => (z - ρ) ^ m) * g) w =
+        -(m : ℂ) - (w - ρ) * logDeriv g w
       rw [logDeriv_mul (f := fun z : ℂ => (z - ρ) ^ m) (g := g) w
         (show (w - ρ) ^ m ≠ 0 from pow_ne_zero m hwρ) hw
         (by fun_prop) hgw.differentiableAt]

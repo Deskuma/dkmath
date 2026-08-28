@@ -287,6 +287,8 @@ theorem tendsto_mul_pascalCenteredXiNegLogDeriv_zeroMultiplicity
         =ᶠ[𝓝[≠] z] (fun w => -(m : ℂ) - (w - z) * logDeriv g w) := by
       filter_upwards [hg_ne, hg_analytic, self_mem_nhdsWithin] with w hw hgw hwmem
       have hwz : w - z ≠ 0 := sub_ne_zero.mpr (by simpa using hwmem)
+      change (w - z) * -logDeriv ((fun u : ℂ => (u - z) ^ m) * g) w =
+        -(m : ℂ) - (w - z) * logDeriv g w
       rw [logDeriv_mul (f := fun u : ℂ => (u - z) ^ m) (g := g) w
         (show (w - z) ^ m ≠ 0 from pow_ne_zero m hwz) hw
         (by fun_prop) hgw.differentiableAt]

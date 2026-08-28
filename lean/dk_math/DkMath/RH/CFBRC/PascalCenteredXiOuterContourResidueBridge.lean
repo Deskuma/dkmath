@@ -109,6 +109,8 @@ theorem exists_pascalCenteredXiNegLogDeriv_local_expansion
   filter_upwards [hlog, hg_ne, hg_analytic, self_mem_nhdsWithin] with w hw hgw hgwA hwmem
   have hwne : w - a ≠ 0 := sub_ne_zero.mpr (by simpa using hwmem)
   rw [pascalCenteredXiNegLogDeriv, hw]
+  change -logDeriv ((fun u : ℂ => (u - a) ^ m) * g) w =
+    -↑(pascalCenteredXiZeroMultiplicity a) * (w - a)⁻¹ - logDeriv g w
   rw [logDeriv_mul (f := fun u : ℂ => (u - a) ^ m) (g := g) w
     (pow_ne_zero m hwne) hgw (by fun_prop) hgwA.differentiableAt]
   have hderiv : deriv (fun u : ℂ => (u - a) ^ m) w =

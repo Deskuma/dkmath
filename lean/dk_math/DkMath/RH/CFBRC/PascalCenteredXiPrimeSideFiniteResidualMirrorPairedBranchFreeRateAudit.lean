@@ -83,6 +83,7 @@ theorem pascalCenteredXiPrimeSideFiniteCompletedZetaNegLogRate_eq_ordinary_add_g
   have hprod : logDeriv (fun t : ℂ =>
       riemannZeta t * Complex.Gammaℝ t) s =
       logDeriv riemannZeta s + logDeriv Complex.Gammaℝ s := by
+    change logDeriv (riemannZeta * Complex.Gammaℝ) s = _
     rw [logDeriv_mul (f := riemannZeta) (g := Complex.Gammaℝ) s
       hzeta hGamma hzf hgf]
   unfold pascalCenteredXiPrimeSideFiniteCompletedZetaNegLogRate
