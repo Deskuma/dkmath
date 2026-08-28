@@ -23,6 +23,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -64,6 +65,10 @@ geometry.
 The full fresh-prime index-circle reflection is also exported: it is an
 involution fixing the deleted center, negates raw residues, preserves survivor
 and neutral status, and pairs neutral indices without fixed points.
+The affine normal form is also exported: the phase radius is the inverse-period
+coordinate `a / M` in `ZMod q`, the plus/minus indices are the deleted center
+plus/minus that radius, and the resulting offsets and separation are
+independent of the old representative.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
