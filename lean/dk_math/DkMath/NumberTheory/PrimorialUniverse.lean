@@ -32,6 +32,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetPositiveFirstHitAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairAudit
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -119,6 +120,12 @@ is removed, the first positive offset is bounded by one period, and the
 `{2,3}` and `{2,3,5}` regressions give equal generic and square radii `4` and
 `6`.  Thus square-phase restriction alone does not improve the worst forward
 positive first hit.
+The successor-pair positive first-hit audit is also exported: taking the
+minimum over adjacent square anchors gives the exact simultaneous-badness
+threshold semantics, is periodic in the anchor parameter, and is bounded by
+the square positive radius.  The finite regressions give pair radii `1 < 4`
+for `{2,3}` and `5 < 6` for `{2,3,5}`; this is finite strict gain only, not a
+uniform coverage or escape theorem.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
