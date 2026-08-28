@@ -33,6 +33,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetPositiveFirstHitAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetSuccessorPairAudit
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFreshPrimeFirstHitTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -126,6 +127,12 @@ threshold semantics, is periodic in the anchor parameter, and is bounded by
 the square positive radius.  The finite regressions give pair radii `1 < 4`
 for `{2,3}` and `5 < 6` for `{2,3,5}`; this is finite strict gain only, not a
 uniform coverage or escape theorem.
+The fresh-prime positive first-hit transport is also exported: insertion adds
+exactly the fresh divisibility channel, old first hits are monotone, and an
+old first hit persists exactly when its raw square-shell seat is not divisible
+by the fresh prime.  The `30 → 210` regression records both deletion delay and
+persistence, together with the pair-radius increase `5 → 7`; this remains a
+finite basis-growth law and supplies no quantitative universal delay bound.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
