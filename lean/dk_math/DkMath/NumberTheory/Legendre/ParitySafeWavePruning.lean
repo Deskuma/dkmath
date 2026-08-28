@@ -48,7 +48,9 @@ noncomputable def paritySafeActiveWaveOffsets (n q : ℕ) : Finset ℕ := by
     {n q r : ℕ} :
     r ∈ paritySafeActiveWaveOffsets n q ↔
       r ∈ squareAnchorOddPointCoprimeOffsets n ∧ q ∣ n ^ 2 + r := by
-  simp [paritySafeActiveWaveOffsets, SquareOffsetForbiddenBy]
+  classical
+  rw [paritySafeActiveWaveOffsets, Finset.mem_filter]
+  rfl
 
 /-- The least hit of a wave, with a harmless default for an empty wave. -/
 noncomputable def paritySafeActiveWaveRepresentative (n q : ℕ) : ℕ :=
