@@ -1,6 +1,6 @@
 # NumberTheory Primorial Unit Universe — Roadmap
 
-> Revised: 2026-08-28 after PUU-L033
+> Revised: 2026-08-28 after PUU-L034
 >
 > Branch: `wip/number-theory-primorial-unit-universe-260827-v0`
 
@@ -32,11 +32,13 @@ INFORMATION AUDIT — coordinate route closed
         ↓
 square-value × offset-profile interaction
         ↓
-single-phase first-hit audits — closed as obstruction source
+single-phase positive first-hit route — closed
         ↓
-SUCCESSOR-PAIR COUPLING — active
+SUCCESSOR-PAIR COUPLING — finite gain found
         ↓
-finite coverage obstruction, if one exists
+FRESH-PRIME BASIS-GROWTH TRANSPORT — active
+        ↓
+tower-level incompatibility / coverage obstruction, if one exists
         ↓
 consumer re-entry
         ↓
@@ -86,7 +88,7 @@ PowerSwap / GN / CosmicFormula connection, if structurally natural
 
 ---
 
-## 3. Implemented architecture
+## 3. Implemented architecture through L030
 
 ### Phase A — finite reservation and unit synchronization — COMPLETE
 
@@ -178,20 +180,10 @@ and obtained `(+1,-1)` old-period monodromy with closure after `q` old periods.
 digit_q(n) = Q_S(n) mod q
 ```
 
-and proved the mixed-radix decomposition
+and proved the exact mixed-radix decomposition and identification of the
+enlarged canonical representative with the actual old raw lift at that digit.
 
-```text
-n = r_S(n)
-    + digit_q(n) * M
-    + Q_(insert q S)(n) * (q*M),
-```
-
-with the enlarged canonical representative equal to the actual old raw lift at
-that digit.
-
----
-
-## 4. L030 information audit — COMPLETE / COORDINATE ROUTE CLOSED
+### L030 — mixed-radix information audit — COMPLETE / ROUTE CLOSED
 
 Verdict:
 
@@ -199,22 +191,16 @@ Verdict:
 Outcome B — COORDINATE-COMPLETE / NO-OBSTRUCTION-YET
 ```
 
-Every admissible mixed-radix pair is realized by the explicit anchor
-
-```text
-n = r + d*M,
-```
-
-and enlarged reservation reduces exactly to old reservation plus the existing
-fresh-prime unique-deletion rule.
+Every admissible `(old coordinate, fresh digit)` pair is realized. Enlarged
+reservation reduces exactly to old reservation plus the existing fresh-prime
+unique-deletion rule.
 
 Therefore the pure coordinate / quotient / digit route is **closed as a source
-of new obstruction**. L016–L030 remain the complete coordinate language, but
-more equivalent coordinate identities do not count as new provider information.
+of new obstruction**. L016–L030 remain the complete coordinate language.
 
 ---
 
-## 5. Phase F1 — square-value / offset-profile coupling — COMPLETE
+## 4. Phase F1 — square-value / offset-profile coupling — COMPLETE
 
 ### PUU-L031 — Square-Shifted Survivor Offset Profile
 
@@ -225,18 +211,8 @@ Profile_S(n)
   = { t < M | ¬ ReservedByPrimeBasis S (n²+t) }.
 ```
 
-L031 proves the exact translated-survivor form
-
-```text
-t ∈ Profile_S(n)
-  ↔ t < M ∧ ((n² mod M)+t) mod M is a wheel survivor.
-```
-
-Consequences:
-
-- `|Profile_S(n)| = |WheelSurvivors(S)|`;
-- same square phase gives identical profiles;
-- successor transport is the cyclic shift by the odd increment `2*n+1`.
+L031 proves the exact translated-survivor form, whole-period cardinality
+preservation, same-phase invariance, and successor translation by `2*n+1`.
 
 Information verdict:
 
@@ -244,26 +220,13 @@ Information verdict:
 new information = square-phase-dependent cyclic translation only.
 ```
 
-Whole-period cardinality and transport do not by themselves give a short-prefix
-or first-hit obstruction.
+Whole-period structure alone does not give a positive short-prefix obstruction.
 
 ---
 
-## 6. Phase F2 — square-phase first-hit audit — COMPLETE
+## 5. Phase F2 — square-phase first-hit audit — COMPLETE
 
 ### PUU-L032 — Square-Phase First-Hit Radius / Generic-Shift Comparison
-
-L032 compares arbitrary cyclic labels with labels reachable as
-
-```text
-A_n = n² mod M.
-```
-
-It defines generic and square-restricted first-hit radii and proves
-
-```text
-SquareRadius(S) ≤ GenericRadius(S).
-```
 
 Exact finite regressions:
 
@@ -275,7 +238,6 @@ S={2,3}, M=6:
 S={2,3,5}, M=30:
   GenericRadius = 5
   SquareRadius  = 5
-  reachable square label 24 attains the generic worst case.
 ```
 
 Verdict:
@@ -284,25 +246,17 @@ Verdict:
 Outcome B — QUADRATIC-RESTRICTION-REAL-BUT-NONUNIFORM
 ```
 
-Square phase is genuine information, but square phase alone does not give a
-uniform first-hit obstruction.
+Square phase is genuine information, but the first-hit improvement is not
+uniform.
 
 ---
 
-## 7. Phase F3 — positive-offset first-hit audit — COMPLETE / SINGLE-PHASE ROUTE CLOSED
+## 6. Phase F3 — positive-offset first-hit audit — COMPLETE / SINGLE-PHASE ROUTE CLOSED
 
 ### PUU-L033 — Positive-Offset First-Hit / Anchor-Seat Exclusion Audit
 
-L033 removes the anchor seat `t=0` and defines the least strictly positive hit
-`H⁺(A)` over `1 ≤ t ≤ M`.
-
-Semantics:
-
-```text
-0 < H⁺(A) ≤ M
-(A + H⁺(A)) mod M is a wheel survivor
-no smaller positive offset is a survivor.
-```
+L033 removes `t=0` and defines the least positive first hit `H_S⁺(n)` over
+`1 ≤ t ≤ M`.
 
 Exact finite regressions:
 
@@ -322,97 +276,185 @@ Verdict:
 Outcome B — ANCHOR-SEAT-GAIN-COLLAPSES
 ```
 
-The strict gain seen in L032 disappears after excluding the square-anchor seat.
+The L032 strict gain disappears once the square-anchor seat is excluded.
 Therefore **square-phase-alone positive first-hit refinement is closed as an
 independent obstruction source**.
 
-This does not mean square phase is useless: L031/L032 still prove a genuine
-restriction of the cyclic profile. It means an additional independent coupling
-is required for forward positive-offset information.
-
 ---
 
-## 8. Phase F4 — successor-pair positive first-hit coupling — ACTIVE
+## 7. Phase F4 — successor-pair positive first-hit coupling — COMPLETE / FIRST POSITIVE GAIN
 
 ### PUU-L034 — Successor-Pair Positive First-Hit / Adjacent Bad-Phase Isolation Audit
 
-Use the L033 positive first-hit coordinate
+Define
 
 ```text
-H⁺(n) = squareAnchorFirstPositiveUnreservedOffset S n hS hSne
+PairH_S⁺(n) = min(H_S⁺(n), H_S⁺(n+1)).
 ```
 
-and define
+The public threshold semantics are
 
 ```text
-PairH⁺(n) = min(H⁺(n), H⁺(n+1)).
+k ≤ PairH_S⁺(n)
+  ↔ k ≤ H_S⁺(n) ∧ k ≤ H_S⁺(n+1),
 ```
 
-This adds information absent from one square phase because adjacent labels satisfy
+so the pair coordinate measures how long two adjacent square anchors can remain
+simultaneously bad at the same positive threshold.
+
+The pair coordinate is positive, bounded by both sides and one period, reaches a
+survivor on at least one side at the pair distance, and is periodic under
+`n -> n+M`.
+
+Define
 
 ```text
-A_(n+1) = (A_n + (2*n+1)) mod M.
+PairRadius(S) = sup_{n<M} PairH_S⁺(n).
 ```
 
-The pair coordinate has the exact threshold semantics
-
-```text
-k ≤ PairH⁺(n)
-  ↔ k ≤ H⁺(n) ∧ k ≤ H⁺(n+1),
-```
-
-so it measures whether two consecutive square anchors can be simultaneously bad
-at the same positive-offset threshold.
-
-Define the one-period worst pair statistic
-
-```text
-SuccessorPairPositiveRadius
-  = sup_{n<M} PairH⁺(n)
-```
-
-and compare it with `SquarePositiveRadius`.
-
-Required finite information-gain regressions:
+Exact finite information-gain regressions:
 
 ```text
 S={2,3}, M=6:
-  SquarePositiveRadius         = 4
-  SuccessorPairPositiveRadius  = 1
+  SquarePositiveRadius = 4
+  PairRadius           = 1
 
 S={2,3,5}, M=30:
-  SquarePositiveRadius         = 6
-  SuccessorPairPositiveRadius  = 5
+  SquarePositiveRadius = 6
+  PairRadius           = 5
   n=11: H⁺(11)=6, H⁺(12)=5, PairH⁺(11)=5.
 ```
 
-If both strict gains are formalized, preferred verdict:
+Verdict:
 
 ```text
 Outcome A — SUCCESSOR-PAIR-COUPLING-GAIN-FOUND
 FINITE STRICT GAIN, NO UNIFORM COVERAGE BOUND YET.
 ```
 
-The purpose is to answer whether the **successor relation itself** contributes
-forward information that square phase alone did not provide.
+This is the first post-audit checkpoint where adding a genuinely independent
+interaction restores forward positive-offset information after the single-phase
+route failed.
+
+The gain is not yet known to be uniform across all finite prime bases.
 
 ---
 
-## 9. Next gate after L034
+## 8. Phase F5 — fresh-prime basis-growth first-hit transport — ACTIVE
 
-Do not immediately generalize to longer anchor windows.
+### PUU-L035 — Fresh-Prime Positive First-Hit Persistence / Deletion-Delay Law
 
-If L034 finds strict finite gain:
+The next question is how `H_S⁺(n)` changes under
 
-1. record the exact adjacent-badness mechanism;
-2. audit whether the gain persists under basis growth `S -> insert q S`;
-3. only then ask whether a basis-independent structural bound exists.
+```text
+S -> insert q S
+```
 
-If L034 does not find gain, close successor-pair first-hit as another insufficient
-coupling and reconsider basis growth / another independent provider coordinate.
+for fresh prime `q`.
 
-No consumer width such as `2*n` should be introduced before this information gate
-is passed.
+The old first-hit seat is
+
+```text
+x = n² + H_S⁺(n).
+```
+
+Since `x` is already unreserved by `S`, the only new reason it can disappear
+under `insert q S` is divisibility by `q`.
+
+Target exact transition law:
+
+```text
+H_(insert q S)⁺(n) = H_S⁺(n)
+  ↔ ¬ q ∣ (n² + H_S⁺(n)).
+```
+
+Strict branch:
+
+```text
+q ∣ (n² + H_S⁺(n))
+  → H_S⁺(n) < H_(insert q S)⁺(n).
+```
+
+Also prove pointwise monotonicity
+
+```text
+H_S⁺(n) ≤ H_(insert q S)⁺(n)
+PairH_S⁺(n) ≤ PairH_(insert q S)⁺(n)
+```
+
+and pair-radius monotonicity across the enlarged period.
+
+Required `30 -> 210` contrast:
+
+```text
+n=1:
+  H_30⁺(1)=6
+  1²+6=7
+  q=7 deletes the old hit
+  H_210⁺(1)=10
+
+n=11:
+  H_30⁺(11)=6
+  11²+6=127
+  7 ∤ 127
+  H_210⁺(11)=6.
+```
+
+Basis-level finite audit:
+
+```text
+PairRadius({2,3,5})   = 5
+PairRadius({2,3,5,7}) = 7
+
+SquarePositiveRadius({2,3,5,7}) = 10
+PairRadius({2,3,5,7})            = 7
+```
+
+The last strict comparison is only another finite persistence example. Do not
+claim uniform strict pair gain yet.
+
+Expected verdict if the exact local classification is proved:
+
+```text
+Outcome A — FRESH-PRIME DELETION-DELAY LAW FOUND
+```
+
+Interpretation:
+
+```text
+basis growth does not arbitrarily move a positive first hit;
+it preserves the old hit unless the new prime deletes that exact seat.
+```
+
+This is a more informative tower transition than the free mixed-radix coordinate
+law closed at L030.
+
+---
+
+## 9. Next gate after L035
+
+Do not jump directly to a consumer shell width.
+
+If L035 succeeds, the next research question becomes:
+
+> Can successor-pair isolation plus repeated fresh-prime deletion-delay produce a
+> tower-level incompatibility among long simultaneous positive reserved prefixes?
+
+Possible next audits:
+
+```text
+old pair-minimizing seat
+    ↓ fresh-prime deletion / persistence
+new pair coordinate
+    ↓ repeated basis growth
+can every bad adjacent pair be perpetually delayed?
+```
+
+Do not assume the answer is no. Formalize the transition mechanism first, then
+audit whether repeated deletion can always evade a bound.
+
+Longer anchor windows are still deferred until the pair/basis-growth interaction
+is understood.
 
 ---
 
@@ -447,7 +489,8 @@ Do not divert this branch into:
 - PowerSwap / GN integration before a concrete finite invariant exists;
 - least-period claims not already proved;
 - endless local affine or first-hit lemmas;
-- three-or-more-anchor windows before the successor-pair audit is understood.
+- three-or-more-anchor windows before the successor-pair / basis-growth mechanism is understood;
+- a claim that pair gain or deletion delay obeys a universal quantitative bound before it is proved.
 
 ---
 
@@ -468,11 +511,12 @@ Do not divert this branch into:
 12. square-phase first-hit audit                              DONE — L032 / Outcome B
 13. positive-offset first-hit audit                           DONE — L033 / Outcome B
 14. square-phase-alone positive first-hit route               CLOSED
-15. successor-pair positive first-hit coupling               ACTIVE — L034
-16. basis-growth persistence audit                           NEXT IF EARNED
-17. finite coverage obstruction                              CONDITIONAL
-18. consumer re-entry                                        CONDITIONAL
-19. Unit Universe / PowerSwap / GN generalization            CONDITIONAL
+15. successor-pair positive first-hit coupling               DONE — L034 / Outcome A
+16. fresh-prime first-hit deletion-delay transport           ACTIVE — L035
+17. pair × basis-growth tower audit                           NEXT IF EARNED
+18. finite coverage obstruction                              CONDITIONAL
+19. consumer re-entry                                        CONDITIONAL
+20. Unit Universe / PowerSwap / GN generalization            CONDITIONAL
 ```
 
 Central research principle:
