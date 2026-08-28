@@ -405,7 +405,7 @@ theorem GNExcessProfileDensityWeight_eq_prod_active
   rw [Finset.prod_div_distrib]
   rw [Finset.prod_mul_distrib]
   rw [Finset.prod_const]
-  ring
+  ring_nf
 
 /-- Arithmetic density weight equals the product of all local weights, with
 inactive components automatically equal to one. -/

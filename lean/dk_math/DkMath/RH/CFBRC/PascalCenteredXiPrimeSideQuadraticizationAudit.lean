@@ -3072,6 +3072,6 @@ theorem tendsto_pascalCenteredXiPrimeSideQuadraticizationCommonSourceSmoothingEn
   convert hpow.mul hconst using 1
   · funext ε
     ring
-  · ring
+  · ring_nf
 
 end DkMath.RH.CFBRCProjection
