@@ -27,6 +27,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalFor
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -86,6 +87,11 @@ fresh prime, and `k` old-period turns translate the two sheets by `(+k, -k)`
 while fixing the center.  Repeating this `q` times gives exact closure at the
 enlarged fresh-prime period `q * M`; this remains a finite compatibility
 statement and does not assert least-period or escape behavior.
+The fresh-prime mixed-radix transport is also exported: the block quotient
+digit `Q % q` is the raw lift index of the canonical enlarged representative,
+the dynamic plus sheet is this digit in `ZMod q`, and the representative lies
+in the corresponding static projection fiber.  Old-period turns advance the
+digit modulo `q`, and the `q`-turn orbit closes at the enlarged period.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
