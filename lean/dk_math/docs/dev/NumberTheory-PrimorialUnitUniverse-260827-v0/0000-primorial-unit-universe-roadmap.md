@@ -1,16 +1,15 @@
 # NumberTheory Primorial Unit Universe — Roadmap
 
-> Revised: 2026-08-28 after PUU-L032
+> Revised: 2026-08-28 after PUU-L033
 >
 > Branch: `wip/number-theory-primorial-unit-universe-260827-v0`
 
 ## 0. Branch purpose
 
 This branch was opened after closing the Legendre finite-support / residual-ledger
-route.  Its purpose is **not** to rename Legendre's conjecture and prove the
-renamed statement.  The purpose is to build an independent finite arithmetic
-provider, audit its information content, and only then ask what a consumer can
-read from it.
+route. Its purpose is **not** to rename Legendre's conjecture and prove the renamed
+statement. The purpose is to build an independent finite arithmetic provider,
+audit its information content, and only then ask what a consumer can read from it.
 
 Current hierarchy:
 
@@ -33,9 +32,9 @@ INFORMATION AUDIT — coordinate route closed
         ↓
 square-value × offset-profile interaction
         ↓
-first-hit information audits
+single-phase first-hit audits — closed as obstruction source
         ↓
-additional independent coupling, if needed
+SUCCESSOR-PAIR COUPLING — active
         ↓
 finite coverage obstruction, if one exists
         ↓
@@ -51,7 +50,7 @@ Legendre remains a **consumer / audit target**, not the foundational layer.
 ## 1. Permanent anti-relabeling gate — PUU-L011–L015
 
 PUU-L011–L014 built the exact square-offset / primorial-wheel bridge and
-successor-threshold classification.  PUU-L015 then proved
+successor-threshold classification. PUU-L015 then proved
 
 ```text
 SuccessorOldEscapeProvider ↔ LegendreConjecture.
@@ -113,7 +112,7 @@ PowerSwap / GN / CosmicFormula connection, if structurally natural
 - **L014** twin-threshold exception;
 - **L015** exact old-escape frontier equivalence audit.
 
-Status: consumer reduction limit reached.  This route stays closed until a
+Status: consumer reduction limit reached. This route stays closed until a
 new provider invariant exists independently.
 
 ### Phase D — square-anchor phase / CRT / affine geometry — COMPLETE
@@ -210,7 +209,7 @@ and enlarged reservation reduces exactly to old reservation plus the existing
 fresh-prime unique-deletion rule.
 
 Therefore the pure coordinate / quotient / digit route is **closed as a source
-of new obstruction**.  L016–L030 remain the complete coordinate language, but
+of new obstruction**. L016–L030 remain the complete coordinate language, but
 more equivalent coordinate identities do not count as new provider information.
 
 ---
@@ -288,23 +287,16 @@ Outcome B — QUADRATIC-RESTRICTION-REAL-BUT-NONUNIFORM
 Square phase is genuine information, but square phase alone does not give a
 uniform first-hit obstruction.
 
-### Important semantic note after L032
-
-The L032 statistic allows offset `t=0`.  That is correct for the defined cyclic
-first-hit quantity, but `t=0` is the square-anchor seat itself.  Before using
-first-hit data as a forward short-prefix statistic, the anchor seat must be
-excluded explicitly.
-
 ---
 
-## 7. Phase F3 — positive-offset first-hit audit — ACTIVE
+## 7. Phase F3 — positive-offset first-hit audit — COMPLETE / SINGLE-PHASE ROUTE CLOSED
 
 ### PUU-L033 — Positive-Offset First-Hit / Anchor-Seat Exclusion Audit
 
-Define the least strictly positive cyclic hit `H⁺(A)` and its generic / square
-worst-case radii.
+L033 removes the anchor seat `t=0` and defines the least strictly positive hit
+`H⁺(A)` over `1 ≤ t ≤ M`.
 
-Required semantics:
+Semantics:
 
 ```text
 0 < H⁺(A) ≤ M
@@ -312,7 +304,7 @@ Required semantics:
 no smaller positive offset is a survivor.
 ```
 
-Required finite regressions:
+Exact finite regressions:
 
 ```text
 S={2,3}, M=6:
@@ -324,56 +316,107 @@ S={2,3,5}, M=30:
   SquarePositiveRadius  = 6
 ```
 
-The audit asks whether the L032 quadratic gain survives after excluding the
-anchor seat.
-
-Expected verdict if both equalities are formalized:
+Verdict:
 
 ```text
 Outcome B — ANCHOR-SEAT-GAIN-COLLAPSES
 ```
 
-If so, close **square-phase-alone first-hit refinement** and add a genuinely
-independent coupling next.  Preferred candidates are successor-pair dynamics
-or basis growth, using the positive-offset statistic.
+The strict gain seen in L032 disappears after excluding the square-anchor seat.
+Therefore **square-phase-alone positive first-hit refinement is closed as an
+independent obstruction source**.
+
+This does not mean square phase is useless: L031/L032 still prove a genuine
+restriction of the cyclic profile. It means an additional independent coupling
+is required for forward positive-offset information.
 
 ---
 
-## 8. Next information gate after L033
+## 8. Phase F4 — successor-pair positive first-hit coupling — ACTIVE
 
-Do not choose the next route merely because another identity is available.
-After the positive-offset audit, require an interaction absent from a single
-square phase.
+### PUU-L034 — Successor-Pair Positive First-Hit / Adjacent Bad-Phase Isolation Audit
 
-Primary candidate:
+Use the L033 positive first-hit coordinate
 
 ```text
-successor pair
-  (n² mod M, (n+1)² mod M)
+H⁺(n) = squareAnchorFirstPositiveUnreservedOffset S n hS hSne
 ```
 
-with the exact relation
+and define
 
 ```text
-(n+1)² - n² = 2*n+1.
+PairH⁺(n) = min(H⁺(n), H⁺(n+1)).
 ```
 
-The desired question is whether two adjacent square anchors can simultaneously
-support long positive reserved prefixes.  This is different information from
-the single-phase radius.
-
-Alternative candidate:
+This adds information absent from one square phase because adjacent labels satisfy
 
 ```text
-basis growth S -> insert q S
+A_(n+1) = (A_n + (2*n+1)) mod M.
 ```
 
-but only if the theorem uses more than the already-audited unique-deletion
-coordinate law.
+The pair coordinate has the exact threshold semantics
+
+```text
+k ≤ PairH⁺(n)
+  ↔ k ≤ H⁺(n) ∧ k ≤ H⁺(n+1),
+```
+
+so it measures whether two consecutive square anchors can be simultaneously bad
+at the same positive-offset threshold.
+
+Define the one-period worst pair statistic
+
+```text
+SuccessorPairPositiveRadius
+  = sup_{n<M} PairH⁺(n)
+```
+
+and compare it with `SquarePositiveRadius`.
+
+Required finite information-gain regressions:
+
+```text
+S={2,3}, M=6:
+  SquarePositiveRadius         = 4
+  SuccessorPairPositiveRadius  = 1
+
+S={2,3,5}, M=30:
+  SquarePositiveRadius         = 6
+  SuccessorPairPositiveRadius  = 5
+  n=11: H⁺(11)=6, H⁺(12)=5, PairH⁺(11)=5.
+```
+
+If both strict gains are formalized, preferred verdict:
+
+```text
+Outcome A — SUCCESSOR-PAIR-COUPLING-GAIN-FOUND
+FINITE STRICT GAIN, NO UNIFORM COVERAGE BOUND YET.
+```
+
+The purpose is to answer whether the **successor relation itself** contributes
+forward information that square phase alone did not provide.
 
 ---
 
-## 9. Legendre re-entry gate
+## 9. Next gate after L034
+
+Do not immediately generalize to longer anchor windows.
+
+If L034 finds strict finite gain:
+
+1. record the exact adjacent-badness mechanism;
+2. audit whether the gain persists under basis growth `S -> insert q S`;
+3. only then ask whether a basis-independent structural bound exists.
+
+If L034 does not find gain, close successor-pair first-hit as another insufficient
+coupling and reconsider basis growth / another independent provider coordinate.
+
+No consumer width such as `2*n` should be introduced before this information gate
+is passed.
+
+---
+
+## 10. Legendre re-entry gate
 
 Legendre-specific work may resume only if a theorem satisfies all of:
 
@@ -390,7 +433,7 @@ record that fact and close the route.
 
 ---
 
-## 10. Current non-goals
+## 11. Current non-goals
 
 Do not divert this branch into:
 
@@ -403,11 +446,12 @@ Do not divert this branch into:
 - prime-power modulus generalization before the squarefree geometry is used;
 - PowerSwap / GN integration before a concrete finite invariant exists;
 - least-period claims not already proved;
-- endless local affine or first-hit lemmas.
+- endless local affine or first-hit lemmas;
+- three-or-more-anchor windows before the successor-pair audit is understood.
 
 ---
 
-## 11. Completion sequence
+## 12. Completion sequence
 
 ```text
 1. finite reservation / unit synchronization                 DONE
@@ -422,11 +466,13 @@ Do not divert this branch into:
 10. pure coordinate refinement route                         CLOSED
 11. square-value / offset-profile coupling                   DONE — L031
 12. square-phase first-hit audit                              DONE — L032 / Outcome B
-13. positive-offset first-hit audit                           ACTIVE — L033
-14. additional independent coupling                          NEXT GATE
-15. finite coverage obstruction                              CONDITIONAL
-16. consumer re-entry                                        CONDITIONAL
-17. Unit Universe / PowerSwap / GN generalization            CONDITIONAL
+13. positive-offset first-hit audit                           DONE — L033 / Outcome B
+14. square-phase-alone positive first-hit route               CLOSED
+15. successor-pair positive first-hit coupling               ACTIVE — L034
+16. basis-growth persistence audit                           NEXT IF EARNED
+17. finite coverage obstruction                              CONDITIONAL
+18. consumer re-entry                                        CONDITIONAL
+19. Unit Universe / PowerSwap / GN generalization            CONDITIONAL
 ```
 
 Central research principle:
