@@ -28,6 +28,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTra
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -92,6 +93,12 @@ digit `Q % q` is the raw lift index of the canonical enlarged representative,
 the dynamic plus sheet is this digit in `ZMod q`, and the representative lies
 in the corresponding static projection fiber.  Old-period turns advance the
 digit modulo `q`, and the `q`-turn orbit closes at the enlarged period.
+The mixed-radix information audit is also exported: one enlarged period is
+exactly the bounded rectangular grid of old coordinates and fresh digits,
+every such pair is realized by an explicit canonical orbit point, and the
+enlarged reservation condition is the existing old-reservation/new-prime
+deletion rule.  Thus this finite coordinate route is complete but supplies no
+new coverage obstruction yet.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
