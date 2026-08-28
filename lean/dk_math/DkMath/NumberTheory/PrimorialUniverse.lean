@@ -26,6 +26,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflectio
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -79,6 +80,12 @@ The square-anchor successor transport is also exported: the canonical phase
 representative is `n % M`, its step carry records the old-period wrap, the
 center moves by `carry - M⁻¹`, and the plus/minus dynamic sheets satisfy their
 corresponding exact successor laws.
+The square-anchor period transport is also exported: Euclidean division gives
+the exact old-period block quotient, the plus sheet is that quotient modulo a
+fresh prime, and `k` old-period turns translate the two sheets by `(+k, -k)`
+while fixing the center.  Repeating this `q` times gives exact closure at the
+enlarged fresh-prime period `q * M`; this remains a finite compatibility
+statement and does not assert least-period or escape behavior.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
