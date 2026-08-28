@@ -30,6 +30,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetProfile
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOffsetFirstHitAudit
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -106,6 +107,12 @@ anchor coordinate, has the same cardinality as that pattern, is invariant
 under equal square phase, and transports under the odd successor increment.
 This remains a whole-period finite statement and supplies no short-prefix or
 escape conclusion.
+The first-hit audit is also exported: arbitrary cyclic shifts and reachable
+square phases have explicit least unreserved offsets and finite worst-case
+radii, with `SquareRadius ≤ GenericRadius`.  The `{2,3}` and `{2,3,5}`
+regressions show respectively strict improvement and equality, so the
+quadratic restriction is real but nonuniform and does not by itself give a
+coverage obstruction.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
