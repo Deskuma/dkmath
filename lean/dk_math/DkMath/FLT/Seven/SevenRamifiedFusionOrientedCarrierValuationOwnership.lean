@@ -391,7 +391,7 @@ theorem otherCore_not_mem_realKernel
     (s : p.QuotientPrimeSupport)
     (i j : Fin 3) (hij : i ≠ j) :
     p.signedDepth.realPairCore j ∉ s.realKernel i := by
-  letI : Fact (Nat.Prime s.1) := ⟨s.prime⟩
+  let : Fact (Nat.Prime s.1) := ⟨s.prime⟩
   intro hother
   rcases
       p.signedDepth.realPairCores_pairwiseCoprime hij with
@@ -416,7 +416,7 @@ theorem realKernels_pairwise_ne
 theorem realEval_surjective
     (s : p.QuotientPrimeSupport) (i : Fin 3) :
     Function.Surjective (s.realEval i) := by
-  letI : Fact (Nat.Prime s.1) := ⟨s.prime⟩
+  let : Fact (Nat.Prime s.1) := ⟨s.prime⟩
   fin_cases i
   · change
       Function.Surjective
@@ -447,14 +447,14 @@ theorem realEval_surjective
 theorem realKernel_isMaximal
     (s : p.QuotientPrimeSupport) (i : Fin 3) :
     (s.realKernel i).IsMaximal := by
-  letI : Fact (Nat.Prime s.1) := ⟨s.prime⟩
+  let : Fact (Nat.Prime s.1) := ⟨s.prime⟩
   exact RingHom.ker_isMaximal_of_surjective
     (s.realEval i) (s.realEval_surjective i)
 
 theorem realKernel_cardQuot
     (s : p.QuotientPrimeSupport) (i : Fin 3) :
     Submodule.cardQuot (s.realKernel i) = s.1 := by
-  letI : Fact (Nat.Prime s.1) := ⟨s.prime⟩
+  let : Fact (Nat.Prime s.1) := ⟨s.prime⟩
   rw [Submodule.cardQuot_apply]
   calc
     Nat.card (SevenRealCubicInt ⧸ s.realKernel i) =
@@ -576,7 +576,7 @@ def quotientExponent (s : p.QuotientPrimeSupport) : ℕ :=
 
 private theorem quotientRoot_ne_zero :
     p.signedDepth.quotientRoot ≠ 0 := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   intro hzero
   have hmod := p.signedDepth.quotientRoot_modSeven_eq_one
   rw [hzero] at hmod
@@ -730,7 +730,7 @@ theorem realPairCore_mem_realKernelPower_iff
     p.signedDepth.realPairCore 0 ∈
         s.realKernel 0 ^ k ↔
       k ≤ s.quotientExponent := by
-  letI : Fact (Nat.Prime s.1) := ⟨s.prime⟩
+  let : Fact (Nat.Prime s.1) := ⟨s.prime⟩
   constructor
   · intro hmem
     have hdiv :

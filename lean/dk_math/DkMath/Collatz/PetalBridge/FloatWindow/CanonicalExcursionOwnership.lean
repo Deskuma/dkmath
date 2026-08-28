@@ -210,14 +210,14 @@ theorem card_canonicalInternalSaturatedZeroSpareIndices_le_zeroSpareSelectedCarr
     (canonicalInternalSaturatedZeroSpareIndices n q m).card ≤
       Nat.card (CanonicalInternalZeroSpareSelectedCarrier n q m) := by
   classical
-  letI : Fintype {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m} :=
+  let : Fintype {k : ℕ // k ∈ canonicalInternalSaturatedZeroSpareIndices n q m} :=
     Fintype.ofFinset (canonicalInternalSaturatedZeroSpareIndices n q m) (by simp)
-  letI : Fintype {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m} :=
+  let : Fintype {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m} :=
     Fintype.ofFinset (canonicalInternalZeroSpareSuccessorIndices n q m) (by simp)
-  letI (j : {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m}) :
+  let (j : {j : ℕ // j ∈ canonicalInternalZeroSpareSuccessorIndices n q m}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n j.val) (by simp)
-  letI : Fintype (CanonicalInternalZeroSpareSelectedCarrier n q m) := by
+  let : Fintype (CanonicalInternalZeroSpareSelectedCarrier n q m) := by
     unfold CanonicalInternalZeroSpareSelectedCarrier
     infer_instance
   have h :=
@@ -584,23 +584,23 @@ theorem natCard_globalSelectedDriftImage_add_internalPositiveSpare_le_globalSele
         (canonicalInternalSaturatedPositiveSpareIndices n q m).card ≤
       Nat.card (CanonicalGlobalSelectedPressureCarrier n q m) := by
   classical
-  letI : Fintype {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m} :=
+  let : Fintype {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m} :=
     Fintype.ofFinset (canonicalPositiveDriftBlockIndices n q m) (by simp)
-  letI (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
+  let (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
       Fintype {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedPressureCarrier n k.val) (by simp)
-  letI (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
+  let (k : {k : ℕ // k ∈ canonicalPositiveDriftBlockIndices n q m}) :
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n k.val} //
         i ∈ canonicalSelectedDriftImageCarrier n k.val} :=
     Fintype.ofFinset (canonicalSelectedDriftImageCarrier n k.val) (by simp)
-  letI : Fintype (CanonicalGlobalSelectedDriftImageCarrier n q m) := by
+  let : Fintype (CanonicalGlobalSelectedDriftImageCarrier n q m) := by
     unfold CanonicalGlobalSelectedDriftImageCarrier
     infer_instance
-  letI : Fintype
+  let : Fintype
       {k : ℕ // k ∈ canonicalInternalSaturatedPositiveSpareIndices n q m} :=
     Fintype.ofFinset (canonicalInternalSaturatedPositiveSpareIndices n q m)
       (by simp)
-  letI : Fintype (CanonicalGlobalSelectedPressureCarrier n q m) := by
+  let : Fintype (CanonicalGlobalSelectedPressureCarrier n q m) := by
     unfold CanonicalGlobalSelectedPressureCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective

@@ -167,7 +167,7 @@ theorem squareAnchorFreshPrimeCenter_succ
         squareAnchorFreshPrimeCenter S q n =
       (squareAnchorPhaseStepCarry S n : ZMod q) -
         freshPrimePhaseRadius S q 1 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   have hdecomp := squareAnchorPhaseRepresentative_succ_decomposition hS n

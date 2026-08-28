@@ -203,7 +203,7 @@ set_option linter.flexible false in
 noncomputable def AwayRoutingPrimeWitness.toLocalSolution {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (w : AwayRoutingPrimeWitness r)
     (hq7 : w.q ≠ 7) : AwayRoutingLocalSolution w.q w.row w.column := by
-  letI : Fact (Nat.Prime w.q) := ⟨w.q_prime⟩
+  let : Fact (Nat.Prime w.q) := ⟨w.q_prime⟩
   let u : ZMod w.q := r.cubic.rootTriple.normal.root.fst
   let v : ZMod w.q := r.cubic.rootTriple.normal.root.snd
   let yy : ZMod w.q := y

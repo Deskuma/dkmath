@@ -1365,7 +1365,7 @@ theorem petalNoLiftPrimeChannel_padicValNat_GN_eq_one
     {d x u q : ℕ}
     (h : PetalNoLiftPrimeChannel d x u q) :
     padicValNat q (GN d x u) = 1 := by
-  letI : Fact q.Prime := ⟨petalNoLiftPrimeChannel_prime h⟩
+  let : Fact q.Prime := ⟨petalNoLiftPrimeChannel_prime h⟩
   have hGN0 : GN d x u ≠ 0 := petalNoLiftPrimeChannel_GN_ne_zero h
   have hq_dvd : q ∣ GN d x u := anchoredGNCarrier_dvd_GN h.1
   have hle_one : 1 ≤ padicValNat q (GN d x u) :=

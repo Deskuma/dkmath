@@ -233,7 +233,7 @@ theorem canonicalSaturatedSuccessorIndices_union_eq
         have hempty := hzero.2
         unfold CanonicalSuccessorSpareAvailable at hspare
         rcases hspare with ⟨i, _hi⟩
-        letI : IsEmpty {i : ℕ //
+        let : IsEmpty {i : ℕ //
             i ∈ canonicalSelectedPressureCarrier n (k + 1)} := by
           rw [hempty]
           infer_instance
@@ -419,13 +419,13 @@ theorem card_canonicalSaturatedSpareSuccessorIndices_le_globalCarrier
     (canonicalSaturatedSpareSuccessorIndices n q m).card ≤
       Nat.card (CanonicalGlobalSuccessorSpareCarrier n q m) := by
   classical
-  letI : Fintype {j : ℕ // j ∈ Finset.Icc (q + 1) (m + 1)} :=
+  let : Fintype {j : ℕ // j ∈ Finset.Icc (q + 1) (m + 1)} :=
     Fintype.ofFinset (Finset.Icc (q + 1) (m + 1)) (by simp)
-  letI : ∀ j : {j : ℕ // j ∈ Finset.Icc (q + 1) (m + 1)},
+  let : ∀ j : {j : ℕ // j ∈ Finset.Icc (q + 1) (m + 1)},
       Fintype {i : {i : ℕ // i ∈ canonicalSelectedPressureCarrier n j.1} //
         i ∈ canonicalSelectedDriftSpareCarrier n j.1} := fun j =>
     Fintype.ofFinset (canonicalSelectedDriftSpareCarrier n j.1) (by simp)
-  letI : Fintype (CanonicalGlobalSuccessorSpareCarrier n q m) := by
+  let : Fintype (CanonicalGlobalSuccessorSpareCarrier n q m) := by
     unfold CanonicalGlobalSuccessorSpareCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective

@@ -507,7 +507,7 @@ theorem body_not_perfect_pow_of_squarefree_GN
     rw [show N = GN d x u by rfl]
     rw [add_pow_gap_factor]
     exact Nat.add_sub_cancel_left _ _
-  letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  let : Fact (Nat.Prime q) := ⟨hq_prime⟩
   have hval_body : padicValNat q ((x + u) ^ d - u ^ d) = 1 := by
     rw [hbody_factor, padicValNat.mul hx_ne hN_ne0]
     rw [padicValNat.eq_zero_of_not_dvd hq_not_dvd_x, hval_N_eq]

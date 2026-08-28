@@ -447,7 +447,7 @@ theorem rhs_exactThetaDepth_thirteen
 theorem eisensteinAxis_dvd_rootGap
     (p : RamifiedRealCubicExactPowerPacket) :
     eisensteinAxis ∣ p.rightRoot - p.leftRoot := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hpow :
       eisensteinAxis ∣
         p.rightRoot ^ 7 - p.leftRoot ^ 7 := by

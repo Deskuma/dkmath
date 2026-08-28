@@ -57,7 +57,7 @@ theorem PrimitiveRamifiedSummitPacket.root_coordinates_isCoprime
   rw [Int.isCoprime_iff_gcd_eq_one]
   by_contra hg
   rcases Nat.exists_prime_and_dvd hg with ⟨q, hq, hqg⟩
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hqu : (q : ℤ) ∣ p.root.fst :=
     (Int.natCast_dvd_natCast.mpr hqg).trans (Int.gcd_dvd_left _ _)
   have hqv : (q : ℤ) ∣ p.root.snd :=

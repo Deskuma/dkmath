@@ -38,7 +38,7 @@ theorem goldenUnit_iff_isUnit {x : GoldenInt} : GoldenUnit x ↔ IsUnit x := by
 /-- Coprime factors of a fifth power in the golden integers are fifth powers up to a unit. -/
 theorem goldenCoprimeFactorOfFifthPower : GoldenCoprimeFactorOfFifthPower := by
   intro x y z hrel hpow
-  letI : GCDMonoid GoldenInt := EuclideanDomain.gcdMonoid GoldenInt
+  let : GCDMonoid GoldenInt := EuclideanDomain.gcdMonoid GoldenInt
   have hgcd : IsUnit (gcd x y) := by
     rw [← goldenUnit_iff_isUnit]
     apply hrel (gcd x y)

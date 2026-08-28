@@ -335,7 +335,7 @@ theorem CanonicalEndpointBackwardCreditMatching.to_prefixCapacityDominance
     · apply Fin.ext
       exact hblock
     · exact hslot
-  letI : Finite (CanonicalEndpointCapacityCarrier n q) :=
+  let : Finite (CanonicalEndpointCapacityCarrier n q) :=
     Finite.of_injective (canonicalEndpointCapacityCarrierEquiv n q).toFun
       (canonicalEndpointCapacityCarrierEquiv n q).injective
   have hcard := Nat.card_le_card_of_injective prefixPay hprefixInjective
@@ -348,7 +348,7 @@ theorem CanonicalEndpointForwardRepaymentMatching.claims_le_capacity
     (h : CanonicalEndpointForwardRepaymentMatching n q r) :
     cumulativeCanonicalEndpointClaims n q ≤ cumulativeCanonicalEndpointCapacity n r := by
   rcases h with ⟨_, pay, hpayInjective, _⟩
-  letI : Finite (CanonicalEndpointCapacityCarrier n r) :=
+  let : Finite (CanonicalEndpointCapacityCarrier n r) :=
     Finite.of_injective (canonicalEndpointCapacityCarrierEquiv n r).toFun
       (canonicalEndpointCapacityCarrierEquiv n r).injective
   have hcard := Nat.card_le_card_of_injective pay hpayInjective

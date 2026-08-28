@@ -98,7 +98,7 @@ theorem upperModulus_dvd_pivot {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
 theorem next_upper_power_not_dvd_pivot {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) :
     ¬ 7 ^ (p.exponent + 1) ∣ p.pivot := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   rw [p.pivot_eq]
   simpa [p.exponent_eq_pivot, p.pivot_eq, Nat.add_comm] using
     (pow_succ_padicValNat_not_dvd (p := 7)
@@ -119,7 +119,7 @@ theorem lowerModulus_dvd_vPart {x y z : ℕ}
 theorem upperModulus_not_dvd_vPart {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r) :
     ¬ p.upperModulus ∣ r.cubic.rootTriple.vPart := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hn := pow_succ_padicValNat_not_dvd (p := 7)
     r.cubic.rootTriple.vPart_pos.ne'
   simpa [upperModulus, ← p.depth_eq, Nat.add_comm] using hn

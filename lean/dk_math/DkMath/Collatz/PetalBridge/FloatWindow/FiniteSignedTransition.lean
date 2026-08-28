@@ -227,7 +227,7 @@ theorem exists_finiteSignatureSuccessorUpperWeight_iff_uniformUpperBound
         signature weight projectedUpperWeight) ↔
       ∃ B : ℤ, ∀ m, weight m ≤ B := by
   classical
-  letI := Fintype.ofFinite Signature
+  let := Fintype.ofFinite Signature
   constructor
   · rintro ⟨upper, hupper⟩
     refine ⟨∑ s : Signature, ∑ t : Signature, |upper s t|, ?_⟩

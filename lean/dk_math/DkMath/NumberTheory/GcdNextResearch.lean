@@ -259,7 +259,7 @@ lemma padicValNat_d3_boundary_eq_boundary_of_ne_three :
   have hmul :
       padicValNat q (a ^ 3 - b ^ 3) =
         padicValNat q (a - b) + padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) := by
-    letI : Fact (Nat.Prime q) := ⟨hq⟩
+    let : Fact (Nat.Prime q) := ⟨hq⟩
     exact congrArg (padicValNat q) hfact ▸
       padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
   have hzero : padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) = 0 :=

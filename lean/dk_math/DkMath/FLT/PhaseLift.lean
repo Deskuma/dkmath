@@ -679,7 +679,7 @@ lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
     (hq_dvd_c : q ∣ c) :
     3 ≤ padicValNat q (c ^ 3) := by
   have h_c_ne : c ≠ 0 := Nat.ne_of_gt hc_pos
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have h_val_c_ge_1 : 1 ≤ padicValNat q c := by
     have h_ne_zero : padicValNat q c ≠ 0 := by
       intro h
@@ -720,7 +720,7 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     have hab_pos : 0 < a * b := by positivity
     have hb2_pos : 0 < b ^ 2 := by positivity
     omega
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have h_val_diff_zero : padicValNat q (a - b) = 0 :=
     padicValNat.eq_zero_of_not_dvd hq_ndiv_diff
   have h_val_mult : padicValNat q (a ^ 3 - b ^ 3) =
