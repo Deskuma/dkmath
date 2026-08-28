@@ -25,6 +25,7 @@ import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse"
 
@@ -74,6 +75,10 @@ The deleted-center transport layer is also exported: the center is the unique
 zero-residue coordinate `-b / M`, changing `b` translates it by
 `(b₁ - b₂) / M`, and both phase sheets undergo the same translation while the
 radius stays fixed.
+The square-anchor successor transport is also exported: the canonical phase
+representative is `n % M`, its step carry records the old-period wrap, the
+center moves by `carry - M⁻¹`, and the plus/minus dynamic sheets satisfy their
+corresponding exact successor laws.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
 -/
