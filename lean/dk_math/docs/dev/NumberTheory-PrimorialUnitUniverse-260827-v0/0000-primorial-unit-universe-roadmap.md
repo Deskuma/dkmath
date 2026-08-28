@@ -1,12 +1,12 @@
 # NumberTheory Primorial Unit Universe — Roadmap
 
-> Revised: 2026-08-28 after PUU-L025
+> Revised: 2026-08-28 after PUU-L027
 >
 > Branch: `wip/number-theory-primorial-unit-universe-260827-v0`
 >
-> This is the current route map.  The branch purpose is unchanged, but the
-> implementation has produced a much richer provider-side square-phase geometry
-> than the initial checkpoint sketch anticipated.
+> This is the current route map. The original branch purpose is unchanged, but
+> the implementation has now moved from static finite geometry into exact
+> square-anchor transport.
 
 ## 0. Branch purpose
 
@@ -14,10 +14,10 @@ This branch was opened after closing the Legendre finite-support / residual-ledg
 route on `wip/number-theory-primitive-structure-260822-v2`.
 
 The purpose is **not** to rename Legendre's conjecture and prove the renamed
-statement.  The purpose is to formalize a higher-level finite arithmetic provider
-whose consequences can later be read by consumers.
+statement. The purpose is to formalize a higher-level finite arithmetic provider
+whose consequences may later be read by consumers.
 
-The intended hierarchy is:
+The intended hierarchy is now:
 
 ```text
 finite prime basis / reservation
@@ -26,9 +26,13 @@ unit-relative coordinates / synchronization
         ↓
 primorial finite-wheel tower
         ↓
-square-anchor phase geometry
+square-anchor phase / CRT geometry
         ↓
-transport under representative / anchor / basis motion
+fresh-prime affine geometry
+        ↓
+representative and square-anchor transport
+        ↓
+old-period / fresh-prime tower monodromy
         ↓
 independent finite coverage obstruction, if one exists
         ↓
@@ -37,11 +41,11 @@ consumer re-entry
 possible Unit Universe / PowerSwap / GN generalization
 ```
 
-Legendre is therefore a **consumer / audit target**, not the foundational layer.
+Legendre remains a **consumer / audit target**, not the foundational layer.
 
 ---
 
-## 1. Original mathematical starting point
+## 1. Original finite-reservation principle
 
 For a finite prime basis `S`, let
 
@@ -56,7 +60,7 @@ A natural seat `n` is reserved by `S` when
 ```
 
 Every basis prime divides `M(S)`, hence `M(S)+1` is not reserved by any member of
-`S`.  A prime divisor of `M(S)+1` is therefore outside `S`.
+`S`. Any prime divisor of `M(S)+1` is therefore outside `S`.
 
 ```text
 finite basis S
@@ -68,14 +72,15 @@ Euclid escape M(S)+1
 new prime divisor q ∉ S
 ```
 
-This is a global finite escape principle.  It does **not** by itself place a prime
+This is a global finite escape principle. It does **not** by itself place a prime
 inside a prescribed short interval such as a square cell.
 
-The branch seeks the missing finite structure between these two scales.
+The branch seeks the missing finite structural layer between global finite escape
+and local consumer statements.
 
 ---
 
-## 2. Permanent correction from PUU-L011–L015
+## 2. Permanent anti-relabeling gate from PUU-L011–L015
 
 The first roadmap expected a Legendre-specific route roughly of the form
 
@@ -87,9 +92,7 @@ square-hole
 ```
 
 PUU-L011–L014 built the exact square-offset / wheel bridge and successor-threshold
-classification.  PUU-L015 then performed the anti-relabeling audit.
-
-The decisive result is
+classification. PUU-L015 then proved the decisive equivalence
 
 ```text
 SuccessorOldEscapeProvider ↔ LegendreConjecture.
@@ -101,23 +104,23 @@ Therefore the strategy
 "prove the branch-exact old escape criterion"
 ```
 
-is **not** an independent provider route.  It is already the consumer statement in
-new vocabulary.
+is not an independent provider route. It is already the consumer statement in new
+vocabulary.
 
-PUU-L015 is now a permanent gate:
+PUU-L015 is a permanent gate:
 
 - do not continue by renaming square-shell escape;
-- do not treat a lower bound for the exact old-escape criterion as independent
-  information unless it comes from a separately proved provider invariant;
-- any future Legendre re-entry must occur only after a theorem has been stated and
-  proved entirely inside provider geometry.
+- do not treat a lower bound for the exact old-escape criterion as new information
+  unless it follows from a separately proved provider invariant;
+- future Legendre re-entry is allowed only after the provider theorem already
+  exists independently in `PrimorialUniverse`.
 
 ---
 
 ## 3. PowerSwap / GN status
 
 The initial sketch placed a PowerSwap prime-support connection early in the branch.
-The actual implementation instead needed a clean finite synchronization and wheel
+The actual implementation needed a clean synchronization / wheel / phase provider
 layer first.
 
 Actual early order:
@@ -132,7 +135,7 @@ L005 finite-prime synchronization
 
 **PowerSwap is deferred, not failed and not implemented here yet.**
 
-Preferred future order:
+Preferred later direction:
 
 ```text
 finite provider invariant
@@ -150,31 +153,25 @@ PowerSwap / GN / CosmicFormula connection, if structurally natural.
 
 #### PUU-L001 — Finite Reservation Escape
 
-- finite prime basis;
-- product period;
-- `M+1` escape;
-- prime outside the finite basis.
+Finite basis, product period, `M+1` escape, prime outside the basis.
 
 #### PUU-L002 — Unit Coordinate Refinement
 
-- common absolute point under different positive units;
-- synchronized integer refinement;
-- preservation of old coordinate factors.
+Common absolute point under different positive units and synchronized integer
+refinement.
 
 #### PUU-L003 — Common Lattice
 
-- exact common-lattice parameterization;
-- canonical common-point fiber.
+Exact common-lattice parameterization and canonical common-point fiber.
 
 #### PUU-L004 — Unit Intersection Classification
 
-- exact intersection / commensurability classification in the implemented setting;
-- synchronized vs. unsynchronized coordinate worlds.
+Exact implemented intersection / commensurability classification.
 
 #### PUU-L005 — Finite Prime Synchronization
 
-- finite prime scales share the product synchronization period;
-- basis-prime reservation is periodic on that lattice.
+Finite prime scales share the product synchronization period; reservation is
+periodic on that lattice.
 
 ---
 
@@ -182,28 +179,20 @@ PowerSwap / GN / CosmicFormula connection, if structurally natural.
 
 #### PUU-L006 — Wheel Survivor / Reflection
 
-For one period `0 < r < M(S)`, a survivor is a seat not divisible by any basis
-prime.  Reduced-residue / coprime equivalence and
+One-period reduced-residue survivors and
 
 ```text
-r ↔ M(S)-r
+r ↔ M-r
 ```
 
-reflection are formalized.
+reflection.
 
 #### PUU-L007 — Fresh-Prime Lift / Unique Deletion
 
-For fresh prime `q ∉ S`, every old survivor `r` has raw lifts
-
-```text
-r + j*M(S),    0 ≤ j < q,
-```
-
-and exactly one is divisible by `q`.
+For fresh prime `q ∉ S`, every old survivor has `q` raw lifts and exactly one is
+`q`-divisible.
 
 #### PUU-L008 — Wheel Replication
-
-The exact global growth law is
 
 ```text
 |WheelSurvivors(insert q S)|
@@ -212,17 +201,21 @@ The exact global growth law is
 
 #### PUU-L009 — Nested Wheel Projection
 
-The enlarged wheel projects canonically to the old wheel; every old survivor has
-an exact fiber of size `q-1`.
+The enlarged wheel projects canonically to the old wheel; every old survivor has an
+exact projection fiber of size `q-1`.
 
 #### PUU-L010 — Square-Anchor Orbit
 
 Square anchors and fixed shell offsets are projected modulo the same period.
-Reservation is characterized by projected coordinates, and fresh-prime insertion
-is coherent with old projection.
+The square-value successor law is
 
-PUU-L010 is the provider-side anchor-dynamics entry point to which the branch must
-return after the static phase geometry is normalized.
+```text
+n² → (n+1)² = n² + (2*n+1)
+```
+
+modulo the finite basis product.
+
+PUU-L010 is the provider-side square-value dynamics entry point.
 
 ---
 
@@ -230,14 +223,12 @@ return after the static phase geometry is normalized.
 
 #### PUU-L011 — Legendre / Primorial Wheel Bridge
 
-Square-offset coverage is identified with finite-basis reservation.  Within the
-bounded square shell, projected survivor is equivalent to the corresponding prime
-witness.
+Square-offset coverage is identified with finite-basis reservation.
 
 #### PUU-L012 — Successor Square-Shell Transition
 
 The successor basis is decomposed into the old basis and a possible threshold
-prime; the threshold has only its bounded shell seats.
+prime.
 
 #### PUU-L013 — Old-Basis Escape / Deletion Capacity
 
@@ -251,14 +242,14 @@ The second threshold seat is an old-basis escape exactly in the twin-prime case.
 
 The branch-exact global provider candidate is shown equivalent to Legendre.
 
-**Status:** consumer reduction limit reached.  This route is closed unless a new,
+**Status:** consumer reduction limit reached. This route is closed unless a new,
 independently proved provider invariant becomes available.
 
 ---
 
-### Phase D — square-anchor phase / CRT / affine provider geometry — COMPLETE
+### Phase D — square-anchor phase / CRT / affine geometry — COMPLETE
 
-PUU-L016 restarted from the provider layer after the L015 audit.  L016–L025 do not
+PUU-L016 restarted from the provider layer after the L015 audit. L016–L027 do not
 import the Legendre consumer layer.
 
 #### PUU-L016 — Square-Anchor Phase Symmetry
@@ -267,26 +258,26 @@ import the Legendre consumer layer.
 a² ≡ b² (mod M(S))
 ```
 
-is promoted to a phase relation.  Same phase preserves every shell-offset
-projection and the complete finite-basis reservation pattern.
+is promoted to a phase relation preserving the complete fixed-offset reservation
+pattern.
 
 #### PUU-L017 — Local Prime Sign Dichotomy
 
-For each basis prime `p`:
+For each basis prime:
 
 ```text
-a² ≡ b² (mod p)
-  ↔ a ≡ +b or a ≡ -b (mod p).
+a² ≡ b²
+  ↔ a ≡ +b or a ≡ -b.
 ```
 
 #### PUU-L018 — Mixed-Sign CRT Synthesis
 
-Local sign profiles and global square phase are equivalent.  Arbitrary mixed signs
-are realized by CRT.
+Local sign profiles and global square phase are equivalent. Arbitrary mixed sign
+assignments are CRT-realizable.
 
 #### PUU-L019 — Coprime Phase-Fiber Cardinality
 
-For `Nat.Coprime a M(S)`:
+For a coprime anchor:
 
 ```text
 |PhaseFiber_S(a)| = 2 ^ |S.erase 2|.
@@ -301,9 +292,6 @@ fresh odd q : ×2
 fresh q = 2 : ×1.
 ```
 
-Every old phase representative has exactly two enlarged phase lifts for fresh odd
-`q`.
-
 #### PUU-L021 — Phase / Survivor Subcover
 
 On a fresh-prime projection fiber:
@@ -313,7 +301,7 @@ phase cover : 2 seats
 wheel cover : q-1 seats.
 ```
 
-For `q=3` they are equal; for `3<q` the phase cover is proper.
+For `q=3` they coincide; for `3<q` the phase cover is proper.
 
 #### PUU-L022 — Fresh-Prime Lift-Index Trichotomy
 
@@ -326,20 +314,13 @@ q raw indices
 
 #### PUU-L023 — Affine Midpoint Geometry
 
-With raw affine residue map
+For raw affine residue map
 
 ```text
 F(j) = b + j*M  (mod q),
 ```
 
-the distinguished indices satisfy
-
-```text
-jplus - jzero = -(jminus - jzero)
-jplus + jminus = 2*jzero.
-```
-
-The deleted index is the affine midpoint of the phase pair.
+the deleted index is the midpoint of the `+a/-a` phase pair.
 
 #### PUU-L024 — Reflection Involution / Neutral Two-Cycles
 
@@ -349,210 +330,298 @@ rho(rho(j)) = j
 F(rho(j)) = -F(j).
 ```
 
-Hence
-
-```text
-+a phase  ↔ -a phase
-0 deleted ↔ 0 deleted
-neutral   ↔ neutral.
-```
-
-For odd `q`, the deleted center is the unique fixed point; neutral indices occur in
-fixed-point-free two-cycles.
+The deleted center is the unique fixed point for odd `q`; neutral indices occur in
+fixed-point-free pairs.
 
 #### PUU-L025 — Affine Normal Form / Constant Phase Radius
 
-Let
+Define
 
 ```text
-R(S,q,a) := a * M(S)⁻¹  in ZMod q.
+R(S,q,a) = a * M(S)⁻¹  in ZMod q.
 ```
 
-The radius is the unique coordinate satisfying
-
-```text
-R * M = a.
-```
-
-For a coprime anchor it is nonzero.  The phase pair has the explicit normal form
+Then
 
 ```text
 jplus  = jzero + R
 jminus = jzero - R
-```
-
-and
-
-```text
 jplus - jminus = 2*R.
 ```
 
-Most importantly:
+Changing the old representative changes the center but not the radius.
 
-```text
-changing the old representative b changes the center,
-but does not change R.
-```
-
-Thus the static local fresh-prime geometry is now normalized into **center +
-constant radius** form.
-
-**Status:** Phase D static geometry is complete enough.  Do not continue with
-endless local affine refinements unless they are needed by transport.
+**Status:** static local affine geometry is complete enough. Further local lemmas
+must serve transport rather than become an end in themselves.
 
 ---
 
-## 5. Current exact mathematical picture
+### Phase E1 — representative transport — COMPLETE
 
-The same fresh-prime raw fiber now carries three compatible structures.
+#### PUU-L026 — Deleted-Center Transport / Rigid Phase Translation
 
-### Wheel-survivor growth
-
-```text
-q raw lifts
-  → exactly one deleted lift
-  → q-1 survivors.
-```
-
-### Square-phase growth
+Define the canonical center
 
 ```text
-old phase representative
-  → exactly two enlarged phase representatives
-  → residues +a and -a modulo q.
+C(b) = -b * M⁻¹.
 ```
 
-### Affine index-circle geometry
+It is the unique coordinate satisfying
 
 ```text
-1 deleted center / fixed point
-+ 1 phase two-cycle at radius R
-+ neutral reflection two-cycles.
+b + C(b)*M = 0.
 ```
 
-At cardinality level:
+For two old representatives:
 
 ```text
-q = 1 + 2 + (q-3).
+C(b₂) - C(b₁) = (b₁-b₂) * M⁻¹.
 ```
 
-At coordinate level:
+The phase pair is
 
 ```text
-center = jzero
-phase  = center ± R
-R      = a / M.
+C(b) ± R(a)
 ```
 
-The entire picture is finite provider-side congruence geometry.  No prime-in-square
-shell existence theorem was used to obtain it.
+and both sheets translate rigidly by exactly the center displacement.
+
+This is the first genuine transport theorem of the revised roadmap.
 
 ---
 
-## 6. Revised research question
+### Phase E2 — moving square-anchor successor transport — COMPLETE
 
-The branch should no longer ask
+#### PUU-L027 — Canonical Phase Transport / Successor Carry Law
+
+A critical distinction is now formalized:
 
 ```text
-"can we prove an old-basis escape exists?"
+anchor coordinate     r_n = n mod M
+square-value coordinate    = n² mod M = r_n² mod M.
 ```
 
-because PUU-L015 showed that the exact branch version is already Legendre.
-
-The current question is:
-
-> Can the independent wheel / phase / affine geometry force a transport invariant
-> or coverage obstruction for a moving square-anchor orbit, without assuming or
-> re-encoding square-shell escape?
-
-The missing ingredient is now **dynamics / transport**.
-
-We must understand how the normalized geometry moves when
-
-1. the old representative changes;
-2. the square anchor changes;
-3. the finite prime basis grows;
-4. these operations are iterated through the primorial tower.
-
----
-
-## 7. Active provider program — Phase E
-
-### Phase E1 — old-representative center transport — ACTIVE
-
-PUU-L025 proved that the radius is fixed.  The moving part is the deleted center.
-
-From
+The canonical representative satisfies
 
 ```text
-b + jzero*M = 0  (mod q),
+r_(n+1) = (r_n + 1) mod M.
 ```
 
-expect the canonical center coordinate
+Define the wrap carry by
 
 ```text
-C(b) = -b / M.
-```
-
-Hence
-
-```text
-C(b₂) - C(b₁) = (b₁-b₂) / M.
-```
-
-The immediate implementation target is **PUU-L026 — Fresh-Prime Deleted-Center
-Transport / Old-Representative Translation Law**.
-
-Desired outcome:
-
-```text
-old representative b  → translated center C(b)
-anchor a              → constant radius R(a)
-phase pair             → C(b) ± R(a).
-```
-
-The point is not another static affine identity.  It is the first explicit
-transport law of the revised roadmap.
-
-### Phase E2 — square-anchor evolution on a fixed basis
-
-After center transport is closed, return to PUU-L010 and the actual anchor step
-
-```text
-n² → (n+1)² = n² + (2n+1).
-```
-
-The target is an exact provider theorem describing how phase / center / reservation
-coordinates move under `n → n+1`.
-
-A useful theorem here must be stated without `SquareCell`,
-`escapingSquareOffsets`, `SuccessorOldEscapeCriterion`, or a prime witness.
-
-### Phase E3 — compatibility with fresh-prime tower growth
-
-Combine
-
-```text
-anchor evolution
+r_n + 1 = r_(n+1) + carry_n * M,
 ```
 
 with
 
 ```text
-S → insert q S.
+carry_n ∈ {0,1}.
 ```
 
-Audit:
+For a fresh prime `q`, define the moving center/radius
 
-- whether anchor motion commutes with old/new projection in a useful coordinate;
-- how centers and constant radii lift through repeated fresh-prime extensions;
-- whether a conserved or forbidden pattern appears under repeated anchor motion;
-- whether the transport is coherent across the primorial tower.
+```text
+C_n = -r_n / M
+R_n =  n  / M
+```
 
-### Phase E4 — finite coverage obstruction audit
+inside `ZMod q`. PUU-L027 proves
 
-Only after a genuine transport invariant exists should the branch ask whether it
-obstructs complete finite reservation of a moving square-offset window.
+```text
+C_(n+1) - C_n = carry_n - M⁻¹
+R_(n+1) - R_n = M⁻¹.
+```
+
+Hence the dynamic phase sheets
+
+```text
+Pplus_n  = C_n + R_n
+Pminus_n = C_n - R_n
+```
+
+obey
+
+```text
+Pplus_(n+1)  - Pplus_n  = carry_n
+Pminus_(n+1) - Pminus_n = carry_n - 2*M⁻¹.
+```
+
+Actual deleted / plus / minus lift witnesses over the canonical representative are
+connected back to these moving coordinates.
+
+**Status:** one-step square-anchor transport is complete.
+
+---
+
+## 5. Current exact mathematical picture
+
+The branch now has four compatible levels on the same finite-prime hierarchy.
+
+### Wheel level
+
+```text
+q raw lifts
+  → one deleted
+  → q-1 survivors.
+```
+
+### Phase level
+
+```text
+old phase representative
+  → two fresh-prime phase lifts
+  → +a / -a.
+```
+
+### Static affine level
+
+```text
+center C(b) = -b/M
+radius R(a) =  a/M
+phase pair  = C(b) ± R(a).
+```
+
+### Dynamic anchor level
+
+```text
+r_n = n mod M
+carry_n = old-period wrap bit
+
+Δcenter = carry_n - M⁻¹
+Δradius = M⁻¹
+Δplus   = carry_n
+Δminus  = carry_n - 2*M⁻¹.
+```
+
+This is still entirely finite provider-side congruence geometry. No square-shell
+prime existence theorem was used to obtain it.
+
+---
+
+## 6. New closed-form observation after PUU-L027
+
+Write the Euclidean decomposition
+
+```text
+n = r_n + Q_n * M,
+Q_n = n / M.
+```
+
+Then the dynamic plus coordinate simplifies to
+
+```text
+Pplus_n
+  = (-r_n + n) * M⁻¹
+  = Q_n          in ZMod q.
+```
+
+So the plus sheet is exactly the **old-period block quotient modulo the fresh
+prime**.
+
+This explains the L027 carry law:
+
+```text
+Q_(n+1) = Q_n + carry_n.
+```
+
+It also predicts the whole-period monodromy
+
+```text
+n → n+M:
+  center unchanged
+  radius +1
+  plus   +1
+  minus  -1.
+```
+
+After `q` old-period turns:
+
+```text
+n → n+q*M
+```
+
+the `ZMod q` phase coordinates return. Since
+
+```text
+finitePrimeBasisProduct (insert q S) = q*M
+```
+
+for fresh `q`, this is the first direct compatibility expected between moving
+anchor dynamics and fresh-prime tower enlargement.
+
+---
+
+## 7. Active provider program — Phase E3
+
+### PUU-L028 — Square-Anchor Block Quotient / Old-Period Monodromy — ACTIVE
+
+The immediate target is to formalize the closed form and period transport predicted
+above.
+
+Required core:
+
+```text
+Pplus_n = n / M                  in ZMod q
+Q_(n+1) = Q_n + carry_n
+
+C_(n+M)      = C_n
+R_(n+M)      = R_n + 1
+Pplus_(n+M)  = Pplus_n + 1
+Pminus_(n+M) = Pminus_n - 1.
+```
+
+Then generalize to `k` old periods:
+
+```text
+C_(n+kM)      = C_n
+R_(n+kM)      = R_n + k
+Pplus_(n+kM)  = Pplus_n + k
+Pminus_(n+kM) = Pminus_n - k.
+```
+
+Finally set `k=q` and identify `q*M` with the enlarged fresh-prime period.
+
+Desired conceptual result:
+
+```text
+one old-period revolution:
+  phase monodromy (+1,-1)
+
+q old-period revolutions:
+  closure at the enlarged fresh-prime period q*M.
+```
+
+This is the preferred Phase E3 bridge between anchor dynamics and prime-basis
+growth.
+
+---
+
+## 8. Phase E3 continuation after L028
+
+Only after the period monodromy is formalized should the branch choose the next
+basis-transport theorem.
+
+Questions to audit:
+
+- does the `q*M` closure coincide naturally with the existing L009/L020 enlarged
+  projection fibers?
+- can the two phase sheets be viewed as a canonical orbit through all `q` fresh
+  index coordinates over successive old-period blocks?
+- how does old-period monodromy compose across two successive fresh-prime
+  extensions?
+- is there a conserved or forbidden pattern under repeated anchor motion through a
+  primorial tower?
+
+Do not generalize to an abstract dynamical system before these exact finite
+questions are answered.
+
+---
+
+## 9. Phase E4 — finite coverage obstruction audit
+
+Only after a genuine tower-level transport invariant exists should the branch ask
+whether it obstructs complete finite reservation of a moving square-offset window.
 
 Desired direction:
 
@@ -574,11 +643,11 @@ prove the renamed statement
 claim a new provider.
 ```
 
-PUU-L015 remains the anti-relabeling gate.
+PUU-L015 remains the permanent anti-relabeling gate.
 
 ---
 
-## 8. Legendre re-entry gate
+## 10. Legendre re-entry gate
 
 Legendre-specific work may resume only when a theorem satisfies all of:
 
@@ -594,28 +663,16 @@ new provider content, record that fact and close the route.
 
 ---
 
-## 9. Unit Universe / PowerSwap / GN reconnection
+## 11. Unit Universe / PowerSwap / GN reconnection
 
 The branch began from a broader DkMath question than Legendre: primitive scales
 should be understood relative to synchronized number universes.
 
-That wider objective remains open.
-
-### Unit Universe
-
 L002–L005 provide the coordinate / common-lattice / synchronization foundation.
 The current primorial geometry is its discrete finite-prime model.
 
-### PowerSwap
-
-Reconnect only when the provider geometry has a clear scaling statement, such as
-phase/reservation data preserved by exponent normalization or a transport theorem
-naturally expressible through existing PowerSwap APIs.
-
-### GN / CosmicFormula
-
-Reconnect only after the finite provider theorem has a clear unit-relative
-interpretation.
+Reconnect PowerSwap or GN/CosmicFormula only when the finite provider geometry has a
+clear scaling statement.
 
 Preferred direction:
 
@@ -629,7 +686,7 @@ PowerSwap / GN / CosmicFormula generalization.
 
 ---
 
-## 10. Current non-goals
+## 12. Current non-goals
 
 Do not divert this branch into:
 
@@ -637,19 +694,19 @@ Do not divert this branch into:
 - another old-escape lower bound without an independent invariant;
 - generic Jacobsthal / maximum-wheel-gap machinery;
 - PNT, RH, analytic sieve, or asymptotic prime density;
-- re-opening the old residual-ledger refinements;
+- re-opening old residual-ledger refinements;
 - neutral-seat primality/compositeness without a structural reason;
-- prime-power modulus generalization before the squarefree geometry is used;
-- PowerSwap / GN integration before a concrete transport invariant exists;
-- ordered/geodesic notions of circle distance;
-- endless local affine lemmas that do not advance representative / anchor / basis
-  transport.
+- prime-power modulus generalization before the squarefree tower geometry is used;
+- PowerSwap / GN integration before a concrete tower transport invariant exists;
+- ordered/geodesic circle distance;
+- claiming `q*M` is a least period before minimality is proved;
+- endless local affine lemmas that do not advance anchor / basis transport.
 
 The branch is strongest while it stays finite, exact, and provider-side.
 
 ---
 
-## 11. Completion criteria
+## 13. Completion criteria
 
 This branch does **not** need a Legendre proof to be mathematically successful.
 
@@ -660,20 +717,19 @@ Current completion sequence:
 2. exact primorial wheel tower                               DONE
 3. exact square-phase / CRT finite-fiber geometry            DONE
 4. fresh-prime affine / reflection normal form               DONE through L025
-5. representative center transport                           ACTIVE — L026
-6. square-anchor / basis transport                            NEXT MAJOR OBJECTIVE
-7. independent finite coverage-obstruction audit             FUTURE GATE
-8. consumer re-entry, only if earned                         CONDITIONAL
-9. Unit Universe / PowerSwap / GN generalization             CONDITIONAL
+5. representative center transport                           DONE — L026
+6. one-step square-anchor transport                          DONE — L027
+7. old-period / enlarged-period monodromy                     ACTIVE — L028
+8. multi-level fresh-prime tower transport                    NEXT MAJOR OBJECTIVE
+9. independent finite coverage-obstruction audit             FUTURE GATE
+10. consumer re-entry, only if earned                        CONDITIONAL
+11. Unit Universe / PowerSwap / GN generalization            CONDITIONAL
 ```
 
-The central research principle is:
+The central research principle remains:
 
 ```text
 Do not search for a prime directly.
-Formalize the finite geometry that could make complete reservation structurally
-impossible, and let a consumer bridge read the consequence afterwards.
+Formalize the finite geometry and transport that could make complete reservation
+structurally impossible, and let a consumer bridge read the consequence afterwards.
 ```
-
-PUU-L025 closes the static affine-normal-form phase.  PUU-L026 begins the transport
-phase.
