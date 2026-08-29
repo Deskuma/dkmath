@@ -24,6 +24,18 @@ The following three real sequences are pointwise equal:
 * `fun m => (((centralRatioQ m * mirrorOddRatioPartialQ m : ℚ) : ℝ))`.
 
 Mathlib's Wallis theorem then sends each of them to `Real.pi / 2`.
+
+## Dependency audit
+
+`Real.Wallis.tendsto_W_nhds_pi_div_two` is declared in
+`Mathlib/Analysis/Real/Pi/Wallis.lean`.  That source imports
+`Mathlib.Analysis.SpecialFunctions.Integrals.Basic`; its proof uses the
+explicit sine-power integral formulas, the corresponding integral bounds, and
+the squeeze theorem.  The Wallis source and this direct integral source do not
+refer to Gamma or Stirling.  Thus this module records source-level Gamma
+independence of the imported Wallis proof, but does not claim that the broad
+`import Mathlib` surface used by this DkMath module is a minimal transitive
+import closure.
 -/
 
 namespace DkMath.Pascal.WallisLimitBridge
