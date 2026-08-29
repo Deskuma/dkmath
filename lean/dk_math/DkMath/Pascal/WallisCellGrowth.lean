@@ -1671,6 +1671,105 @@ theorem certifiedCentralBinomialNat_eq_choose_of_width_lt_one
   exact ceil_centralBinomialWallisLowerR_eq_choose_of_width_lt_one m hwidth
 
 /-!
+## Corrected finite interval
+
+The explicit second-order relative remainder gives a corrected interval around
+the low-operation approximation.  Its width is recorded exactly, so the same
+ceil-based exact-rounding API can be reused whenever the width test succeeds.
+-/
+
+noncomputable def centralBinomialSecondLowerR (m : ℕ) : ℝ :=
+  centralBinomialFastApproxR m *
+    (centralBinomialSecondApproxRelativeR m -
+      1 / (64 * (m : ℝ) ^ 3))
+
+noncomputable def centralBinomialSecondUpperR (m : ℕ) : ℝ :=
+  centralBinomialFastApproxR m *
+    (centralBinomialSecondApproxRelativeR m +
+      1 / (64 * (m : ℝ) ^ 3))
+
+theorem centralBinomialSecondLowerR_le_choose
+    {m : ℕ} (hm : m ≠ 0) :
+    centralBinomialSecondLowerR m ≤
+      ((Nat.choose (2 * m) m : ℕ) : ℝ) := by
+  have hA : 0 < centralBinomialFastApproxR m := by
+    unfold centralBinomialFastApproxR
+    exact div_pos (pow_pos (by norm_num) _)
+      (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+        (by exact_mod_cast (Nat.pos_of_ne_zero hm))))
+  have hrel := secondApprox_sub_remainder_le_centralBinomialRelative hm
+  unfold centralBinomialSecondLowerR
+  have hmul := mul_le_mul_of_nonneg_left hrel hA.le
+  rw [div_eq_mul_inv] at hmul ⊢
+  field_simp [hA.ne'] at hmul ⊢
+  exact hmul
+
+theorem choose_le_centralBinomialSecondUpperR
+    {m : ℕ} (hm : m ≠ 0) :
+    ((Nat.choose (2 * m) m : ℕ) : ℝ) ≤
+      centralBinomialSecondUpperR m := by
+  have hA : 0 < centralBinomialFastApproxR m := by
+    unfold centralBinomialFastApproxR
+    exact div_pos (pow_pos (by norm_num) _)
+      (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+        (by exact_mod_cast (Nat.pos_of_ne_zero hm))))
+  have hrel := centralBinomialRelative_le_secondApprox_add_remainder hm
+  unfold centralBinomialSecondUpperR
+  have hmul := mul_le_mul_of_nonneg_left hrel hA.le
+  rw [div_eq_mul_inv] at hmul ⊢
+  field_simp [hA.ne'] at hmul ⊢
+  exact hmul
+
+theorem centralBinomial_mem_secondInterval {m : ℕ} (hm : m ≠ 0) :
+    ((Nat.choose (2 * m) m : ℕ) : ℝ) ∈
+      Set.Icc (centralBinomialSecondLowerR m)
+        (centralBinomialSecondUpperR m) :=
+  ⟨centralBinomialSecondLowerR_le_choose hm,
+    choose_le_centralBinomialSecondUpperR hm⟩
+
+theorem centralBinomialSecondInterval_width_eq
+    {m : ℕ} (hm : m ≠ 0) :
+    centralBinomialSecondUpperR m - centralBinomialSecondLowerR m =
+      centralBinomialFastApproxR m /
+        (32 * (m : ℝ) ^ 3) := by
+  unfold centralBinomialSecondUpperR centralBinomialSecondLowerR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast hm
+  field_simp [hmR]
+  ring
+
+theorem ceil_centralBinomialSecondLowerR_eq_choose_of_width_lt_one
+    {m : ℕ} (hm : m ≠ 0)
+    (hwidth : centralBinomialSecondUpperR m <
+      centralBinomialSecondLowerR m + 1) :
+    Nat.ceil (centralBinomialSecondLowerR m) = Nat.choose (2 * m) m := by
+  have hchoose_pos : Nat.choose (2 * m) m ≠ 0 :=
+    (Nat.choose_pos (by omega : m ≤ 2 * m)).ne'
+  apply (Nat.ceil_eq_iff hchoose_pos).2
+  constructor
+  · have hupper := choose_le_centralBinomialSecondUpperR hm
+    have hpred_cast :
+        (((Nat.choose (2 * m) m) - 1 : ℕ) : ℝ) =
+          ((Nat.choose (2 * m) m : ℕ) : ℝ) - 1 := by
+      rw [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hchoose_pos)]
+      norm_num
+    rw [hpred_cast]
+    exact (sub_lt_iff_lt_add).2 (hupper.trans_lt hwidth)
+  · exact centralBinomialSecondLowerR_le_choose hm
+
+noncomputable def certifiedCentralBinomialSecondNat (m : ℕ) : ℕ :=
+  if centralBinomialSecondUpperR m < centralBinomialSecondLowerR m + 1 then
+    Nat.ceil (centralBinomialSecondLowerR m)
+  else 0
+
+theorem certifiedCentralBinomialSecondNat_eq_choose_of_width_lt_one
+    {m : ℕ} (hm : m ≠ 0)
+    (hwidth : centralBinomialSecondUpperR m <
+      centralBinomialSecondLowerR m + 1) :
+    certifiedCentralBinomialSecondNat m = Nat.choose (2 * m) m := by
+  rw [certifiedCentralBinomialSecondNat, if_pos hwidth]
+  exact ceil_centralBinomialSecondLowerR_eq_choose_of_width_lt_one hm hwidth
+
+/-!
 ## Central-to-offset transport in an even row
 -/
 
