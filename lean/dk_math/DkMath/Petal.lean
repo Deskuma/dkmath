@@ -9,6 +9,7 @@ import DkMath.Petal.Forms
 import DkMath.Petal.RelPolygon
 import DkMath.Petal.CoreUnit
 import DkMath.Petal.Counting
+import DkMath.Petal.Factorial
 import DkMath.Petal.Address
 import DkMath.Petal.GNBridge
 import DkMath.Petal.GcdBridge

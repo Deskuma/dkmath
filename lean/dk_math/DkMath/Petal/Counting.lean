@@ -4,7 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Petal.Basic
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
+import Mathlib.Algebra.Ring.GeomSum
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Tactic.Order
 
 #print "file: DkMath.Petal.Counting"
 
@@ -35,6 +39,49 @@ def lapBase (n : Nat) : Nat :=
 def relPetalTotal (n lap : Nat) : Nat :=
   baseUnitCore n * lapBase n ^ lap
 
+/-!
+## Core validity
+
+The natural-number counting layer distinguishes a degenerate zero core from a
+valid Petal core.  This is independent of the existing `CoreUnit` alias,
+which belongs to the FLT phase-space model.
+-/
+
+/-- A natural-number core is valid when it is positive. -/
+def IsValidPetalCore (n : Nat) : Prop :=
+  0 < n
+
+/-- The zero natural-number core is the degenerate Petal case. -/
+def IsDegeneratePetalCore (n : Nat) : Prop :=
+  n = 0
+
+/-- A positive natural-number type for valid Petal counting cores. -/
+abbrev PositivePetalCore := {n : Nat // IsValidPetalCore n}
+
+/-- The least valid Petal counting core. -/
+def unitPetalCore : PositivePetalCore :=
+  ⟨1, by
+    change 0 < (1 : Nat)
+    decide⟩
+
+/-- The unit natural number is a valid Petal core. -/
+theorem validPetalCore_one : IsValidPetalCore 1 := by
+  change 0 < (1 : Nat)
+  decide
+
+/-- Every valid Petal core is at least the unit core. -/
+theorem one_le_of_validPetalCore
+    {n : Nat} (hn : IsValidPetalCore n) :
+    1 ≤ n := by
+  change 0 < n at hn
+  omega
+
+/-- The distinguished unit core is minimal among positive Petal cores. -/
+theorem unitPetalCore_is_minimum
+    (c : PositivePetalCore) :
+    unitPetalCore.1 ≤ c.1 := by
+  exact one_le_of_validPetalCore c.2
+
 /-- The one-lap relative polygon kernel. -/
 def relPolygonKernel (n : Nat) : Nat :=
   baseUnitCore n * lapBase n
@@ -53,6 +100,20 @@ theorem relPetalTotal_zero (n : Nat) :
 theorem relPetalTotal_succ (n lap : Nat) :
     relPetalTotal n (lap + 1) = relPetalTotal n lap * lapBase n := by
   simp [relPetalTotal, pow_succ, Nat.mul_assoc]
+
+/-- A zero core is degenerate at every lap. -/
+@[simp]
+theorem relPetalTotal_zero_core (lap : Nat) :
+    relPetalTotal 0 lap = 0 := by
+  simp [relPetalTotal, baseUnitCore]
+
+/-- A positive core produces a positive fixed-base Petal total. -/
+theorem relPetalTotal_pos_of_pos_core
+    {n : Nat} (hn : IsValidPetalCore n) (lap : Nat) :
+    0 < relPetalTotal n lap := by
+  change 0 < n at hn
+  unfold relPetalTotal baseUnitCore lapBase inheritanceSlot
+  exact Nat.mul_pos hn (Nat.pow_pos (by omega))
 
 /--
 Dynamic orbit total.
@@ -118,6 +179,69 @@ theorem dynamicOrbitTotal_const (b k : Nat) :
       rw [dynamicOrbitTotal_succ, ih]
       rw [pow_succ]
 
+/-!
+## Canonical Petal orbit
+
+`dynamicOrbitTotal` is the raw prefix product.  `petalOrbitTotal` adds an
+independently chosen initial core, so zero laps preserve that core while a
+zero core remains degenerate.
+-/
+
+/-- The canonical Petal total with an independent initial core and base list. -/
+def petalOrbitTotal
+    (core : Nat) (base : Nat → Nat) (lap : Nat) : Nat :=
+  core * dynamicOrbitTotal base lap
+
+/-- Zero laps preserve the initial Petal core. -/
+@[simp]
+theorem petalOrbitTotal_zero
+    (core : Nat) (base : Nat → Nat) :
+    petalOrbitTotal core base 0 = core := by
+  simp [petalOrbitTotal, dynamicOrbitTotal_zero]
+
+/-- A zero initial core is degenerate at every lap. -/
+@[simp]
+theorem petalOrbitTotal_zero_core
+    (base : Nat → Nat) (lap : Nat) :
+    petalOrbitTotal 0 base lap = 0 := by
+  simp [petalOrbitTotal]
+
+/-- One more lap multiplies the current total by the next base. -/
+theorem petalOrbitTotal_succ
+    (core : Nat) (base : Nat → Nat) (lap : Nat) :
+    petalOrbitTotal core base (lap + 1) =
+      petalOrbitTotal core base lap * base lap := by
+  simp [petalOrbitTotal, dynamicOrbitTotal_succ, Nat.mul_assoc]
+
+/-- A constant base list gives the usual geometric Petal growth. -/
+theorem petalOrbitTotal_const
+    (core base lap : Nat) :
+    petalOrbitTotal core (fun _ => base) lap = core * base ^ lap := by
+  simp [petalOrbitTotal, dynamicOrbitTotal_const]
+
+/-- A positive core and positive base list give a positive Petal total. -/
+theorem petalOrbitTotal_pos
+    {core : Nat} (hcore : 0 < core)
+    {base : Nat → Nat} (hbase : ∀ i, 0 < base i)
+    (lap : Nat) :
+    0 < petalOrbitTotal core base lap := by
+  unfold petalOrbitTotal
+  exact Nat.mul_pos hcore (Finset.prod_pos fun i _ => hbase i)
+
+/-- The existing dynamic Petal form is a canonical Petal orbit specialization. -/
+theorem dynamicPetalTotal_eq_petalOrbitTotal
+    (a : Nat → Nat) (k : Nat) :
+    dynamicPetalTotal a k =
+      petalOrbitTotal (a 0) (fun i => a i + 1) k := by
+  rfl
+
+/-- The fixed relative Petal is the constant-base canonical orbit. -/
+theorem relPetalTotal_eq_petalOrbitTotal_const
+    (n lap : Nat) :
+    relPetalTotal n lap =
+      petalOrbitTotal n (fun _ => lapBase n) lap := by
+  simp [relPetalTotal, petalOrbitTotal, dynamicOrbitTotal_const, baseUnitCore]
+
 /--
 Every base already passed by a dynamic orbit divides the current prefix product.
 -/
@@ -125,20 +249,6 @@ theorem dynamicOrbitTotal_base_dvd_of_lt
     (b : Nat → Nat) {i k : Nat} (hi : i < k) :
     b i ∣ dynamicOrbitTotal b k := by
   exact Finset.dvd_prod_of_mem b (by simpa [dynamicOrbitTotal] using hi)
-
-/--
-Factorial orbit.
-
-The dynamic orbit with lap base `i + 1` is the ordinary factorial.
--/
-theorem dynamicOrbitTotal_succIndex_eq_factorial (k : Nat) :
-    dynamicOrbitTotal (fun i => i + 1) k = Nat.factorial k := by
-  induction k with
-  | zero =>
-      simp [dynamicOrbitTotal_zero]
-  | succ k ih =>
-      rw [dynamicOrbitTotal_succ, ih, Nat.factorial_succ]
-      rw [Nat.mul_comm]
 
 /--
 Abstract prime-base orbit total.
@@ -351,6 +461,21 @@ theorem relPetalTotal_five_one :
 theorem relPetalTotal_five_two :
     relPetalTotal 5 2 = 180 := by
   decide
+
+/-! Small canonical-orbit examples fixing the zero-lap and constant-base cases. -/
+
+example : petalOrbitTotal 5 (fun _ => 6) 0 = 5 := by
+  decide
+
+example : petalOrbitTotal 5 (fun _ => 6) 1 = 30 := by
+  decide
+
+example : petalOrbitTotal 5 (fun _ => 6) 2 = 180 := by
+  decide
+
+example (base : Nat → Nat) (lap : Nat) :
+    petalOrbitTotal 0 base lap = 0 := by
+  simp
 
 /--
 Relative unit-core orbit equivalence.
