@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.Petal.Factorial
 
 #print "file: DkMath.Pascal.WallisCosmicPetalBridge"
 
@@ -19,6 +20,7 @@ Wallis-Cosmic Petal bridge over `ℚ`.  It deliberately avoids limits,
 namespace DkMath.Pascal.WallisCosmicPetalBridge
 
 open Finset
+open DkMath.Petal
 
 /-- Left odd factor `2*k + 1`, viewed in `ℚ`. -/
 def oddLeftQ (k : ℕ) : ℚ :=
@@ -211,9 +213,14 @@ def centralOddRatioPartialQ (m : ℕ) : ℚ :=
 def mirrorOddRatioPartialQ (m : ℕ) : ℚ :=
   ∏ k ∈ Finset.range m, evenCenterQ k / oddRightQ k
 
-/-- The central binomial ratio `2^(2*m) / Nat.choose (2*m) m`, viewed in `ℚ`. -/
+/-- The legacy choose-based central ratio, retained as a compatibility entry. -/
 def centralRatioQ (m : ℕ) : ℚ :=
   (2 ^ (2 * m) : ℚ) / (Nat.choose (2 * m) m : ℚ)
+
+/-- The central ratio built from the canonical Petal factorial. -/
+def petalCentralRatioQ (m : ℕ) : ℚ :=
+  ((2 : ℚ) ^ (2 * m) * (factorialPetal m : ℚ) ^ 2) /
+    (factorialPetal (2 * m) : ℚ)
 
 /-- The central odd half-product is positive. -/
 theorem centralOddRatioPartialQ_pos (m : ℕ) :
@@ -227,21 +234,9 @@ theorem mirrorOddRatioPartialQ_pos (m : ℕ) :
   unfold mirrorOddRatioPartialQ
   exact Finset.prod_pos fun k _ => div_pos (evenCenterQ_pos k) (oddRightQ_pos k)
 
-/-- The central binomial ratio is positive. -/
-theorem centralRatioQ_pos (m : ℕ) :
-    0 < centralRatioQ m := by
-  unfold centralRatioQ
-  have hchoose : 0 < (Nat.choose (2 * m) m : ℚ) := by
-    exact_mod_cast Nat.choose_pos (by omega : m ≤ 2 * m)
-  exact div_pos (pow_pos (by norm_num : (0 : ℚ) < 2) _) hchoose
-
-private def centralRatioFactorialQ (m : ℕ) : ℚ :=
-  ((2 : ℚ) ^ (2 * m) * (Nat.factorial m : ℚ) ^ 2) /
-    (Nat.factorial (2 * m) : ℚ)
-
-private theorem centralRatioQ_eq_factorialQ (m : ℕ) :
-    centralRatioQ m = centralRatioFactorialQ m := by
-  unfold centralRatioQ centralRatioFactorialQ
+theorem centralRatioQ_eq_petalCentralRatioQ (m : ℕ) :
+    centralRatioQ m = petalCentralRatioQ m := by
+  unfold centralRatioQ petalCentralRatioQ
   have hm : m ≤ 2 * m := by omega
   have hchoose : (Nat.choose (2 * m) m : ℚ) =
       (Nat.factorial (2 * m) : ℚ) /
@@ -253,41 +248,51 @@ private theorem centralRatioQ_eq_factorialQ (m : ℕ) :
       simp
     · simpa using Nat.factorial_mul_factorial_dvd_factorial hm
   rw [hchoose]
+  rw [← factorialPetal_eq_factorial m, ← factorialPetal_eq_factorial (2 * m)]
   field_simp
 
-private theorem factorial_two_mul_succ_cast_Q (m : ℕ) :
-    ((Nat.factorial (2 * (m + 1)) : ℕ) : ℚ) =
-      (2 * m + 2 : ℚ) * ((2 * m + 1 : ℚ) *
-        (Nat.factorial (2 * m) : ℚ)) := by
-  rw [show 2 * (m + 1) = (2 * m + 1) + 1 by omega]
-  rw [Nat.factorial_succ]
-  rw [show 2 * m + 1 = (2 * m) + 1 by omega]
-  rw [Nat.factorial_succ]
-  norm_num
-  left
-  ring
+/-- The legacy central ratio is positive via the Petal central ratio. -/
+theorem centralRatioQ_pos (m : ℕ) :
+    0 < centralRatioQ m := by
+  rw [centralRatioQ_eq_petalCentralRatioQ]
+  unfold petalCentralRatioQ
+  have hm_pos : (0 : ℚ) < factorialPetal m := by
+    exact_mod_cast factorialPetal_pos m
+  have h2m_pos : (0 : ℚ) < factorialPetal (2 * m) := by
+    exact_mod_cast factorialPetal_pos (2 * m)
+  exact div_pos
+    (mul_pos (pow_pos (by norm_num : (0 : ℚ) < 2) _) (sq_pos_of_pos hm_pos))
+    h2m_pos
 
-private theorem centralRatioFactorialQ_eq_centralOddRatioPartialQ (m : ℕ) :
-    centralRatioFactorialQ m = centralOddRatioPartialQ m := by
+/-- The Petal factorial central ratio equals the central odd half-product.
+
+The induction stays on the Petal successor API throughout. -/
+theorem petalCentralRatioQ_eq_centralOddRatioPartialQ (m : ℕ) :
+    petalCentralRatioQ m = centralOddRatioPartialQ m := by
   induction m with
   | zero =>
-      simp [centralRatioFactorialQ, centralOddRatioPartialQ]
+      simp [petalCentralRatioQ, centralOddRatioPartialQ]
   | succ m ih =>
       rw [centralOddRatioPartialQ, Finset.prod_range_succ]
       rw [← centralOddRatioPartialQ, ← ih]
-      unfold centralRatioFactorialQ evenCenterQ oddLeftQ
-      have hm_factorial : ((Nat.factorial (m + 1) : ℕ) : ℚ) =
-          (m + 1 : ℚ) * (Nat.factorial m : ℚ) := by
-        rw [Nat.factorial_succ]
-        norm_num
-      rw [hm_factorial, factorial_two_mul_succ_cast_Q]
-      field_simp
+      unfold petalCentralRatioQ evenCenterQ oddLeftQ
+      rw [factorialPetal_succ m]
+      rw [show 2 * (m + 1) = (2 * m + 1) + 1 by omega]
+      rw [factorialPetal_succ (2 * m + 1)]
+      rw [factorialPetal_succ (2 * m)]
+      have hm_ne : (factorialPetal m : ℚ) ≠ 0 := by
+        exact_mod_cast (factorialPetal_pos m).ne'
+      have h2m_ne : (factorialPetal (2 * m) : ℚ) ≠ 0 := by
+        exact_mod_cast (factorialPetal_pos (2 * m)).ne'
+      field_simp [hm_ne, h2m_ne]
+      norm_num
       ring_nf
 
 /-- The central binomial ratio equals the central odd half-product. -/
 theorem centralRatioQ_eq_centralOddRatioPartialQ (m : ℕ) :
     centralRatioQ m = centralOddRatioPartialQ m := by
-  rw [centralRatioQ_eq_factorialQ, centralRatioFactorialQ_eq_centralOddRatioPartialQ]
+  rw [centralRatioQ_eq_petalCentralRatioQ,
+    petalCentralRatioQ_eq_centralOddRatioPartialQ]
 
 private theorem halfFactor_mul_eq_wallisFactorQ (k : ℕ) :
     evenCenterQ k / oddLeftQ k * (evenCenterQ k / oddRightQ k) =
@@ -302,11 +307,17 @@ theorem centralOdd_mul_mirror_eq_wallisPartialQ (m : ℕ) :
   rw [← Finset.prod_mul_distrib]
   exact Finset.prod_congr rfl fun k _ => halfFactor_mul_eq_wallisFactorQ k
 
+/-- The Petal factorial central ratio times the mirror product equals Wallis. -/
+theorem petalCentralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
+    petalCentralRatioQ m * mirrorOddRatioPartialQ m = wallisPartialQ m := by
+  rw [petalCentralRatioQ_eq_centralOddRatioPartialQ,
+    centralOdd_mul_mirror_eq_wallisPartialQ]
+
 /-- The central binomial ratio times the mirror product equals the finite Wallis product. -/
 theorem centralRatioQ_mul_mirror_eq_wallisPartialQ (m : ℕ) :
     centralRatioQ m * mirrorOddRatioPartialQ m = wallisPartialQ m := by
-  rw [centralRatioQ_eq_centralOddRatioPartialQ,
-    centralOdd_mul_mirror_eq_wallisPartialQ]
+  rw [centralRatioQ_eq_petalCentralRatioQ,
+    petalCentralRatioQ_mul_mirror_eq_wallisPartialQ]
 
 /--
 The proof-note central-ratio expression is the ordered finite product of the
@@ -329,14 +340,20 @@ theorem centralOdd_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
     centralOddRatioPartialQ m * mirrorOddRatioPartialQ m = cosmicPartialQ m := by
   rw [centralOdd_mul_mirror_eq_wallisPartialQ, wallisPartialQ_eq_cosmicPartialQ]
 
+/-- The Petal factorial central ratio times the mirror product equals Cosmic. -/
+theorem petalCentralRatioQ_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
+    petalCentralRatioQ m * mirrorOddRatioPartialQ m = cosmicPartialQ m := by
+  rw [petalCentralRatioQ_mul_mirror_eq_wallisPartialQ,
+    wallisPartialQ_eq_cosmicPartialQ]
+
 /--
 The proof-note form of the finite Wallis-Cosmic Petal bridge:
 the central binomial ratio times the mirror product equals the cosmic gap product.
 -/
 theorem centralRatioQ_mul_mirror_eq_cosmicPartialQ (m : ℕ) :
     centralRatioQ m * mirrorOddRatioPartialQ m = cosmicPartialQ m := by
-  rw [centralRatioQ_eq_centralOddRatioPartialQ,
-    centralOdd_mul_mirror_eq_cosmicPartialQ]
+  rw [centralRatioQ_eq_petalCentralRatioQ,
+    petalCentralRatioQ_mul_mirror_eq_cosmicPartialQ]
 
 /--
 The proof-note central-ratio expression is the ordered finite product of the
