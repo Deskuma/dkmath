@@ -1243,6 +1243,223 @@ theorem abs_normalizedCentralSquare_sub_secondPolynomial_le
   rw [abs_le]
   constructor <;> linarith [h.1, h.2]
 
+/-!
+## Finite corrected central-binomial interval
+
+The second-order square interval can be transported without approximating a
+square root numerically.  All endpoint checks below are rational polynomial
+inequalities after denominators are cleared.
+-/
+
+noncomputable def centralBinomialSecondApproxRelativeR (m : ℕ) : ℝ :=
+  1 - 1 / (8 * (m : ℝ)) + 1 / (128 * (m : ℝ) ^ 2)
+
+theorem secondApprox_lower_sq_le_secondPolynomial
+    {m : ℕ} (hm : m ≠ 0) :
+    (centralBinomialSecondApproxRelativeR m -
+      1 / (64 * (m : ℝ) ^ 3)) ^ 2 ≤
+      1 / (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) := by
+  unfold centralBinomialSecondApproxRelativeR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  field_simp [ne_of_gt hmR]
+  set x : ℝ := (m : ℝ) - 1
+  have hx : 0 ≤ x := by dsimp [x]; linarith
+  have hmx : (m : ℝ) = x + 1 := by
+    dsimp [x]
+    ring
+  rw [hmx]
+  ring_nf
+  apply sub_nonneg.mp
+  ring_nf
+  positivity
+
+theorem secondApprox_upper_sq_ge_secondPolynomial_minus_remainder
+    {m : ℕ} (hm : m ≠ 0) :
+    1 ≤
+      (centralBinomialSecondApproxRelativeR m +
+        1 / (64 * (m : ℝ) ^ 3)) ^ 2 *
+        ((1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) -
+          1 / (64 * (m : ℝ) ^ 3)) := by
+  unfold centralBinomialSecondApproxRelativeR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  field_simp [ne_of_gt hmR]
+  set x : ℝ := (m : ℝ) - 1
+  have hx : 0 ≤ x := by dsimp [x]; linarith
+  have hmx : (m : ℝ) = x + 1 := by
+    dsimp [x]
+    ring
+  rw [hmx]
+  ring_nf
+  apply sub_nonneg.mp
+  ring_nf
+  positivity
+
+theorem secondApprox_sub_remainder_le_centralBinomialRelative
+    {m : ℕ} (hm : m ≠ 0) :
+    centralBinomialSecondApproxRelativeR m -
+        1 / (64 * (m : ℝ) ^ 3) ≤
+      (((Nat.choose (2 * m) m : ℕ) : ℝ) /
+        centralBinomialFastApproxR m) := by
+  let u : ℝ := ((centralRatioQ m : ℚ) : ℝ) /
+    Real.sqrt (Real.pi * (m : ℝ))
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hcr_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  have hsqrt_pos : 0 < Real.sqrt (Real.pi * (m : ℝ)) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos hmR)
+  have hu_pos : 0 < u := by
+    dsimp [u]
+    exact div_pos hcr_pos hsqrt_pos
+  have hu_sq : normalizedCentralSquareR m = u ^ 2 := by
+    unfold normalizedCentralSquareR u
+    rw [div_pow, Real.sq_sqrt (mul_nonneg Real.pi_pos.le hmR.le)]
+  have hP : 0 <
+      1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2) := by
+    have h := normalizedSquareSecondUpperBarrierR_pos hm
+    simpa [normalizedSquareSecondUpperBarrierR] using h
+  have hqD : 0 ≤ centralBinomialSecondApproxRelativeR m -
+      1 / (64 * (m : ℝ) ^ 3) := by
+    unfold centralBinomialSecondApproxRelativeR
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    field_simp [ne_of_gt hmR]
+    nlinarith
+  have hsq := secondApprox_lower_sq_le_secondPolynomial hm
+  have hsqrtP : 0 < Real.sqrt
+      (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) :=
+    Real.sqrt_pos.2 hP
+  have hq_sqrt : centralBinomialSecondApproxRelativeR m -
+      1 / (64 * (m : ℝ) ^ 3) ≤ 1 / Real.sqrt
+        (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) := by
+    apply (le_div_iff₀ hsqrtP).2
+    have hsqrtP_sq : (Real.sqrt
+        (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2))) ^ 2 =
+        1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2) :=
+      Real.sq_sqrt hP.le
+    have hprod :
+        (centralBinomialSecondApproxRelativeR m -
+          1 / (64 * (m : ℝ) ^ 3)) ^ 2 *
+          (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) ≤ 1 :=
+      (le_div_iff₀ hP).mp hsq
+    have hnonneg : 0 ≤
+        (centralBinomialSecondApproxRelativeR m -
+          1 / (64 * (m : ℝ) ^ 3)) * Real.sqrt
+            (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) := by
+      positivity
+    nlinarith [sq_nonneg ((centralBinomialSecondApproxRelativeR m -
+      1 / (64 * (m : ℝ) ^ 3)) * Real.sqrt
+        (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) - 1)]
+  have hSupper := normalizedSquareSecond_le_upperBarrier hm
+  have hu_sqrt : u ≤
+      Real.sqrt (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) := by
+    apply (Real.le_sqrt hu_pos.le hP.le).2
+    rw [← hu_sq]
+    exact hSupper
+  have hinv : 1 / Real.sqrt
+      (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) ≤ 1 / u :=
+    one_div_le_one_div_of_le hu_pos hu_sqrt
+  have hrel : (((Nat.choose (2 * m) m : ℕ) : ℝ) /
+      centralBinomialFastApproxR m) = 1 / u := by
+    have hchoose := real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ m
+    unfold centralBinomialFastApproxR
+    rw [hchoose]
+    dsimp [u]
+    field_simp [ne_of_gt hmR, hsqrt_pos.ne']
+  rw [hrel]
+  exact hq_sqrt.trans hinv
+
+theorem centralBinomialRelative_le_secondApprox_add_remainder
+    {m : ℕ} (hm : m ≠ 0) :
+    (((Nat.choose (2 * m) m : ℕ) : ℝ) /
+        centralBinomialFastApproxR m) ≤
+      centralBinomialSecondApproxRelativeR m +
+        1 / (64 * (m : ℝ) ^ 3) := by
+  let u : ℝ := ((centralRatioQ m : ℚ) : ℝ) /
+    Real.sqrt (Real.pi * (m : ℝ))
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hcr_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  have hsqrt_pos : 0 < Real.sqrt (Real.pi * (m : ℝ)) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos hmR)
+  have hu_pos : 0 < u := by
+    dsimp [u]
+    exact div_pos hcr_pos hsqrt_pos
+  have hu_sq : normalizedCentralSquareR m = u ^ 2 := by
+    unfold normalizedCentralSquareR u
+    rw [div_pow, Real.sq_sqrt (mul_nonneg Real.pi_pos.le hmR.le)]
+  let P : ℝ := 1 + 1 / (4 * (m : ℝ)) +
+    1 / (32 * (m : ℝ) ^ 2)
+  let D : ℝ := 1 / (64 * (m : ℝ) ^ 3)
+  let r : ℝ := centralBinomialSecondApproxRelativeR m + D
+  have hPd : 0 < P - D := by
+    dsimp [P, D]
+    simpa [normalizedSquareSecondLowerBarrierR] using
+      normalizedSquareSecondLowerBarrierR_pos m
+  have hSlow : P - D ≤ u ^ 2 := by
+    rw [← hu_sq]
+    dsimp [P, D]
+    exact normalizedSquareSecondLowerBarrier_le hm
+  have hsq_le : Real.sqrt (P - D) ≤ u := by
+    apply (Real.sqrt_le_iff).2
+    refine ⟨hu_pos.le, ?_⟩
+    simpa [Real.sq_sqrt hPd.le] using hSlow
+  have hr_pos : 0 < r := by
+    dsimp [r, D]
+    unfold centralBinomialSecondApproxRelativeR
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    field_simp [ne_of_gt hmR]
+    set x : ℝ := (m : ℝ) - 1
+    have hx : 0 ≤ x := by dsimp [x]; linarith
+    have hmx : (m : ℝ) = x + 1 := by dsimp [x]; ring
+    rw [hmx]
+    ring_nf
+    positivity
+  have hrecip : 1 / r ≤ Real.sqrt (P - D) := by
+    apply (Real.le_sqrt (by positivity) hPd.le).2
+    have hpoly := secondApprox_upper_sq_ge_secondPolynomial_minus_remainder hm
+    have hsqinv : (1 / r) ^ 2 ≤ P - D := by
+      rw [one_div, inv_pow]
+      rw [← one_div]
+      apply (div_le_iff₀ (by positivity : 0 < r ^ 2)).2
+      dsimp [P, D, r] at hpoly ⊢
+      nlinarith [hpoly]
+    exact hsqinv
+  have hinv : 1 / Real.sqrt (P - D) ≤ r := by
+    have h := one_div_le_one_div_of_le (by positivity : 0 < 1 / r) hrecip
+    simpa [one_div] using h
+  have hrel : (((Nat.choose (2 * m) m : ℕ) : ℝ) /
+      centralBinomialFastApproxR m) = 1 / u := by
+    have hchoose := real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ m
+    unfold centralBinomialFastApproxR
+    rw [hchoose]
+    dsimp [u]
+    field_simp [ne_of_gt hmR, hsqrt_pos.ne']
+  rw [hrel]
+  have hsqrtPd : 0 < Real.sqrt (P - D) := Real.sqrt_pos.2 hPd
+  have hfirst : 1 / u ≤ 1 / Real.sqrt (P - D) :=
+    one_div_le_one_div_of_le hsqrtPd (by simpa [P] using hsq_le)
+  exact hfirst.trans (by simpa [r, P, D] using hinv)
+
+theorem abs_centralBinomialRelative_sub_secondApprox_le
+    {m : ℕ} (hm : m ≠ 0) :
+    |(((Nat.choose (2 * m) m : ℕ) : ℝ) /
+        centralBinomialFastApproxR m) -
+      centralBinomialSecondApproxRelativeR m| ≤
+      1 / (64 * (m : ℝ) ^ 3) := by
+  have hlow := secondApprox_sub_remainder_le_centralBinomialRelative hm
+  have hupp := centralBinomialRelative_le_secondApprox_add_remainder hm
+  rw [abs_le]
+  constructor <;> linarith
+
 theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correction :
     Filter.Tendsto
       (fun m : ℕ => (m : ℝ) ^ 2 *
