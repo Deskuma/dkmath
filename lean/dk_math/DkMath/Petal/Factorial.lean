@@ -31,7 +31,9 @@ def factorialPetal (n : Nat) : Nat :=
 @[simp]
 theorem factorialPetal_zero :
     factorialPetal 0 = 1 := by
-  simp [factorialPetal, petalOrbitTotal, dynamicOrbitTotal_zero, unitPetalCore]
+  unfold factorialPetal
+  rw [petalOrbitTotal_zero]
+  rfl
 
 /-- One more factorial Petal lap uses the next successor base. -/
 theorem factorialPetal_succ (n : Nat) :
