@@ -111,6 +111,108 @@ theorem real_wallis_lower_le_cosmicPartialQ (m : ℕ) :
     real_coe_wallisPartialQ_eq_Wallis_W]
   exact Real.Wallis.le_W m
 
+/-!
+## Quantitative Wallis remainder
+
+The two finite Wallis inequalities immediately give a certified `O(1/m)`
+remainder for the Cosmic product.  This is the first sharp quantitative layer:
+it costs no additional product evaluation and is strong enough to transport a
+finite error certificate to every centered cell.
+-/
+
+/-- The signed finite remainder from the Cosmic product to `π/2`. -/
+noncomputable def wallisRemainderR (m : ℕ) : ℝ :=
+  Real.pi / 2 - ((cosmicPartialQ m : ℚ) : ℝ)
+
+/-- The Wallis remainder is nonnegative. -/
+theorem wallisRemainderR_nonneg (m : ℕ) :
+    0 ≤ wallisRemainderR m := by
+  unfold wallisRemainderR
+  linarith [real_cosmicPartialQ_le_pi_div_two m]
+
+/--
+Explicit `O(1/m)` upper bound for the finite Wallis remainder.
+
+The denominator is written as `4*m+4`, avoiding any hidden asymptotic
+notation and making the bound suitable for later numerical certification.
+-/
+theorem wallisRemainderR_le_pi_div_four_mul_add_four (m : ℕ) :
+    wallisRemainderR m ≤ Real.pi / (4 * (m : ℝ) + 4) := by
+  unfold wallisRemainderR
+  have hlower := real_wallis_lower_le_cosmicPartialQ m
+  have hrewrite :
+      Real.pi / 2 -
+          ((2 * m + 1 : ℝ) / (2 * m + 2 : ℝ)) * (Real.pi / 2) =
+        Real.pi / (4 * (m : ℝ) + 4) := by
+    field_simp
+    ring
+  rw [← hrewrite]
+  linarith
+
+/-!
+## Low-operation asymptotic evaluator
+
+This evaluator uses one real power and one square root; unlike the exact
+Cosmic readout it does not multiply an `m`-term product.  Its correctness is
+the already-proved Wallis asymptotic, exposed under a calculator-facing name.
+-/
+
+/-- The low-operation central-binomial approximation `4^m / √(πm)`. -/
+noncomputable def centralBinomialFastApproxR (m : ℕ) : ℝ :=
+  (4 : ℝ) ^ m / Real.sqrt (Real.pi * (m : ℝ))
+
+/-- The low-operation evaluator has asymptotic relative error zero. -/
+theorem tendsto_real_centralBinomial_div_fastApprox_one :
+    Filter.Tendsto
+      (fun m : ℕ =>
+        ((Nat.choose (2 * m) m : ℕ) : ℝ) / centralBinomialFastApproxR m)
+      Filter.atTop (nhds 1) := by
+  simpa [centralBinomialFastApproxR] using
+    tendsto_real_centralBinomial_div_four_pow_div_sqrt_pi_mul_nat_one
+
+/--
+Exact finite correction identity for the low-operation evaluator.
+
+The square of the ratio to `4^m/√(πm)` is completely determined by the
+finite Wallis product.  This is the preferred starting point for sharper
+remainder work, since it isolates the only finite correction factor before a
+square-root estimate is attempted.
+-/
+theorem real_centralBinomial_sq_div_fastApprox_sq_eq_pi_mul_nat_div_wallis
+    {m : ℕ} (hm : m ≠ 0) :
+    (((Nat.choose (2 * m) m : ℕ) : ℝ) ^ 2 /
+        (centralBinomialFastApproxR m) ^ 2) =
+      (Real.pi * (m : ℝ)) /
+        ((2 * m + 1 : ℝ) * ((wallisPartialQ m : ℚ) : ℝ)) := by
+  rw [centralBinomialFastApproxR,
+    real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ,
+    div_pow,
+    real_coe_centralRatioQ_sq_eq_odd_mul_wallisPartialQ]
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast hm
+  have hW : ((wallisPartialQ m : ℚ) : ℝ) ≠ 0 := by
+    exact_mod_cast (wallisPartialQ_pos m).ne'
+  have hm_pos : 0 < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 :=
+    (Real.sqrt_pos.2 (mul_pos Real.pi_pos hm_pos)).ne'
+  field_simp [hmR, hW, hsqrt, Real.pi_ne_zero]
+  rw [Real.sq_sqrt (mul_nonneg hm_pos.le Real.pi_pos.le)]
+
+/-!
+## Executable certification boundary
+
+The interval test is itself an executable branch once a numerical real
+backend is supplied.  The theorem below packages the successful branch as a
+single exact-rounding function; the failed branch deliberately returns no
+claim.
+-/
+
+/-- Certified central-cell readout when the Wallis interval has width `< 1`. -/
+noncomputable def certifiedCentralBinomialNat (m : ℕ) : ℕ :=
+  if centralBinomialWallisUpperR m < centralBinomialWallisLowerR m + 1 then
+    Nat.ceil (centralBinomialWallisLowerR m)
+  else 0
+
 /-- Certified finite lower bound for the central Pascal cell. -/
 theorem centralBinomialWallisLowerR_le_choose (m : ℕ) :
     centralBinomialWallisLowerR m ≤
@@ -195,6 +297,15 @@ theorem ceil_centralBinomialWallisLowerR_eq_choose_of_width_lt_one
     rw [hpred_cast]
     exact (sub_lt_iff_lt_add).2 (hupper.trans_lt hwidth)
   · exact centralBinomialWallisLowerR_le_choose m
+
+/-- Successful branch of `certifiedCentralBinomialNat` is exact. -/
+theorem certifiedCentralBinomialNat_eq_choose_of_width_lt_one
+    (m : ℕ)
+    (hwidth : centralBinomialWallisUpperR m <
+      centralBinomialWallisLowerR m + 1) :
+    certifiedCentralBinomialNat m = Nat.choose (2 * m) m := by
+  rw [certifiedCentralBinomialNat, if_pos hwidth]
+  exact ceil_centralBinomialWallisLowerR_eq_choose_of_width_lt_one m hwidth
 
 /-!
 ## Central-to-offset transport in an even row
@@ -410,6 +521,53 @@ theorem abs_choose_odd_symmetric_sub_wallisApprox_le_error
         oddCellWallisApproxR m s| ≤ oddCellWallisErrorR m s := by
   rw [Nat.choose_symm (by omega : s ≤ 2 * m + 1)]
   exact abs_choose_odd_sub_wallisApprox_le_error m s hs
+
+/-!
+## Executable natural-number path
+
+The rational evaluator is ideal for algebraic transport, but an implementation
+that is intended to produce a big integer should avoid rational normalization.
+The following recurrence performs one natural multiplication and one exact
+natural division per edge step.  Its correctness is proved from
+`Nat.choose_succ_right_eq`.
+-/
+
+/-- Edge-to-column recurrence used by the optimized natural evaluator. -/
+def pascalCellGrowthNatFastAux (n j : ℕ) : ℕ :=
+  match j with
+  | 0 => 1
+  | j + 1 =>
+      pascalCellGrowthNatFastAux n j * (n - j) / (j + 1)
+
+theorem pascalCellGrowthNatFastAux_eq_choose (n j : ℕ) :
+    pascalCellGrowthNatFastAux n j = Nat.choose n j := by
+  induction j with
+  | zero => simp [pascalCellGrowthNatFastAux]
+  | succ j ih =>
+      unfold pascalCellGrowthNatFastAux
+      rw [ih]
+      apply Nat.div_eq_of_eq_mul_left (Nat.zero_lt_succ j)
+      simpa [mul_comm] using (Nat.choose_succ_right_eq n j).symm
+
+/--
+Optimized exact big-int evaluator for an arbitrary Pascal cell.
+
+Only `min k (n-k)` recurrence steps are performed, and no `ℚ` values are
+constructed.  Out-of-range columns return zero.
+-/
+def pascalCellGrowthNatFast (n k : ℕ) : ℕ :=
+  if k ≤ n then pascalCellGrowthNatFastAux n (min k (n - k)) else 0
+
+theorem pascalCellGrowthNatFast_eq_choose (n k : ℕ) :
+    pascalCellGrowthNatFast n k = Nat.choose n k := by
+  by_cases hk : k ≤ n
+  · rw [pascalCellGrowthNatFast, if_pos hk,
+      pascalCellGrowthNatFastAux_eq_choose]
+    rcases le_total k (n - k) with hleft | hright
+    · rw [min_eq_left hleft]
+    · rw [min_eq_right hright, Nat.choose_symm hk]
+  · rw [pascalCellGrowthNatFast, if_neg hk]
+    norm_num [Nat.choose_eq_zero_of_lt (Nat.lt_of_not_ge hk)]
 
 /-!
 ## Arbitrary Pascal-cell growth evaluator
