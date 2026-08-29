@@ -201,7 +201,7 @@ private theorem card_filter_odd_coprime_Ioc_eq_odd_moebius_sum
             if d ∣ k then ArithmeticFunction.moebius d else 0
         else 0 := by
     by_cases hodd : Odd k
-    · simp only [hodd, true_and, if_true]
+    · simp only [hodd, true_and, ite_true]
       have hfilter := divisors_filter_dvd_gcd hM (k := k)
       have hsum :
           (∑ d ∈ M.divisors, if d ∣ k then ArithmeticFunction.moebius d else 0) =
@@ -252,7 +252,7 @@ private theorem card_filter_odd_coprime_Ioc_eq_odd_moebius_sum
       simp only [Finset.sum_const]
       by_cases hdOdd : Odd d
       · rw [card_filter_odd_dvd_Ioc_eq_delta hdOdd hAB]
-        simp only [if_pos hdOdd]
+        simp only [ite_eq_left hdOdd]
         simp only [nsmul_eq_mul]
         ring
       · have hdEven : Even d := Nat.not_odd_iff_even.mp hdOdd

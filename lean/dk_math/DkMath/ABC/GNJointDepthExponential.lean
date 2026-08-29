@@ -57,7 +57,7 @@ theorem GNDepthMassAt_eq_support_add_excess
   by_cases hqdvd : q ∣ GN p a b
   · have hvone : 1 ≤ padicValNat q (GN p a b) :=
       one_le_padicValNat_of_dvd hGN hqdvd
-    rw [if_pos hqdvd]
+    rw [ite_eq_left hqdvd]
     have hvsplit :
         (padicValNat q (GN p a b) : ℝ) =
           1 + ((padicValNat q (GN p a b) - 1 : ℕ) : ℝ) := by
@@ -71,7 +71,7 @@ theorem GNDepthMassAt_eq_support_add_excess
   · have hvzero :
       padicValNat q (GN p a b) = 0 :=
       padicValNat.eq_zero_of_not_dvd hqdvd
-    rw [if_neg hqdvd, hvzero]
+    rw [ite_eq_right hqdvd, hvzero]
     norm_num
 
 /-- On a coprime interval point, the canonical non-exceptional interval family
@@ -140,7 +140,7 @@ theorem GNDepthMassAt_intervalFamily_eq_log_nonExceptionalPart
           Nat.Prime q :=
         (mem_support_factorization_iff.mp
           (Finset.mem_filter.mp hq).1).2.1
-      rw [GNNonExceptionalPart_factorization, if_pos hq]
+      rw [GNNonExceptionalPart_factorization, ite_eq_left hq]
       rw [Nat.factorization_def (GN p a b) hqprime]
     _ = Real.log (GNNonExceptionalPart p a b : ℝ) := by
       dsimp [S]

@@ -87,7 +87,7 @@ theorem GNNonExceptionalPart_factorization
   simp only [f, Nat.factorization_pow, Finsupp.coe_smul,
     Pi.smul_apply, nsmul_eq_mul]
   by_cases hr : r ∈ S
-  · rw [if_pos hr]
+  · rw [ite_eq_left hr]
     calc
       ∑ q ∈ S,
           (GN p a b).factorization q * q.factorization r =
@@ -101,7 +101,7 @@ theorem GNNonExceptionalPart_factorization
       _ = (GN p a b).factorization r := by
           rw [(hprime r hr).factorization, Finsupp.single_eq_same]
           simp
-  · rw [if_neg hr]
+  · rw [ite_eq_right hr]
     apply Finset.sum_eq_zero
     intro q hq
     rw [(hprime q hq).factorization, Finsupp.single_apply]
@@ -131,7 +131,7 @@ theorem GNNonExceptionalPart_factorization_support
   rw [Finsupp.mem_support_iff,
     GNNonExceptionalPart_factorization]
   by_cases hr : r ∈ GNNonExceptionalSupport p a b
-  · rw [if_pos hr]
+  · rw [ite_eq_left hr]
     exact iff_of_true
       (Finsupp.mem_support_iff.mp
         (Finset.mem_filter.mp hr).1)
@@ -157,7 +157,7 @@ theorem valuationExcess_GNNonExceptionalPart_eq
   rw [GNNonExceptionalPart_factorization_support]
   apply Finset.sum_congr rfl
   intro q hq
-  rw [GNNonExceptionalPart_factorization, if_pos hq]
+  rw [GNNonExceptionalPart_factorization, ite_eq_left hq]
 
 /--
 The current non-exceptional valuation excess is the logarithm of the old
@@ -350,7 +350,7 @@ theorem GNPolynomial_monic
           ((Nat.choose p (i + 1) *
             b ^ (p - (i + 1)) : ℕ) : R) *
             Polynomial.X ^ i).coeff (p - 1) = 0
-      rw [Polynomial.coeff_C_mul_X_pow, if_neg]
+      rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right]
       exact Ne.symm hne
     · intro hnot
       exact

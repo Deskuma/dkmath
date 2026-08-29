@@ -80,7 +80,7 @@ theorem repeatedPrimePowerPart_factorization
         r ∈ n.factorization.support ∧
           2 ≤ n.factorization r :=
       Finset.mem_filter.mp hr
-    rw [if_pos hr']
+    rw [ite_eq_left hr']
     calc
       ∑ q ∈ S,
           n.factorization q * q.factorization r =
@@ -100,7 +100,7 @@ theorem repeatedPrimePowerPart_factorization
         ¬(r ∈ n.factorization.support ∧
           2 ≤ n.factorization r) := by
       simpa [S] using hr
-    rw [if_neg hr']
+    rw [ite_eq_right hr']
     apply Finset.sum_eq_zero
     intro q hq
     rw [(hprime q hq).factorization,
@@ -126,9 +126,9 @@ theorem repeatedPrimePowerPart_factorization_support
   by_cases hr :
       r ∈ n.factorization.support ∧
         2 ≤ n.factorization r
-  · rw [if_pos hr]
+  · rw [ite_eq_left hr]
     exact iff_of_true (by omega) (Finset.mem_filter.mpr hr)
-  · rw [if_neg hr]
+  · rw [ite_eq_right hr]
     exact iff_of_false (by simp) fun h =>
       hr (Finset.mem_filter.mp h)
 
@@ -366,7 +366,7 @@ theorem GNExcessActivePrimeSet_target_eq_repeatedSupport
       rw [GNNonExceptionalPart_factorization_support]
       exact hqS
     refine Finset.mem_filter.mpr ⟨hqpart, ?_⟩
-    rw [GNNonExceptionalPart_factorization, if_pos hqS,
+    rw [GNNonExceptionalPart_factorization, ite_eq_left hqS,
       hfacGN]
     exact hv
   · intro hqrepeated
@@ -388,7 +388,7 @@ theorem GNExcessActivePrimeSet_target_eq_repeatedSupport
       Nat.factorization_def (GN p a b) hqprime
     have hv :
         2 ≤ padicValNat q (GN p a b) := by
-      rw [GNNonExceptionalPart_factorization, if_pos hqS,
+      rw [GNNonExceptionalPart_factorization, ite_eq_left hqS,
         hfacGN] at hvpart
       exact hvpart
     apply Finset.mem_filter.mpr
@@ -443,7 +443,7 @@ theorem GNExcessJointDepthModulus_target_eq_repeatedPart
   have hfacpart :
       (GNNonExceptionalPart p a b).factorization q =
         padicValNat q (GN p a b) := by
-    rw [GNNonExceptionalPart_factorization, if_pos hqS,
+    rw [GNNonExceptionalPart_factorization, ite_eq_left hqS,
       hfacGN]
   have hvalue :
       GNExcessProfileValue Q
@@ -475,7 +475,7 @@ theorem prime_sq_dvd_repeatedPrimePowerPart
   have hcond :=
     Finset.mem_filter.mp hqmem
   rw [repeatedPrimePowerPart_factorization,
-    if_pos ⟨hcond.1, hcond.2⟩]
+    ite_eq_left ⟨hcond.1, hcond.2⟩]
   exact hcond.2
 
 /-- A prime divisor of the GN repeated part belongs to the non-exceptional

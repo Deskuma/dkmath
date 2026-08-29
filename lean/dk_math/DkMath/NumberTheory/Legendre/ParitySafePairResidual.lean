@@ -461,7 +461,7 @@ theorem paritySafeCanonicalResidualTriple_witness_16_17 :
     exact ⟨hcandidate, by rw [hsupport]; simp⟩
   have hcanonical : paritySafeCanonicalSupportPrime 16 17 = 3 := by
     have hnonempty := (mem_paritySafeCoveredCandidates.mp hcovered).2
-    rw [paritySafeCanonicalSupportPrime, dif_pos hnonempty]
+    rw [paritySafeCanonicalSupportPrime, dite_eq_left hnonempty]
     apply (Finset.min'_eq_iff
       (s := paritySafeActiveSupport 16 17) (H := hnonempty) 3).2
     constructor

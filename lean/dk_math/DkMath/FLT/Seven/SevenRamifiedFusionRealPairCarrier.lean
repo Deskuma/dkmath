@@ -87,14 +87,14 @@ def pairAxisUnit (i : Fin 3) : SevenRealCubicInt :=
   else alpha ^ 2
 
 @[simp] theorem pairAxisUnit_zero : pairAxisUnit 0 = 1 := by
-  simp only [pairAxisUnit, if_pos]
+  simp only [pairAxisUnit, ite_eq_left]
 
 @[simp] theorem pairAxisUnit_one : pairAxisUnit 1 = 1 + alpha := by
-  rw [pairAxisUnit, if_neg (by decide), if_pos]
+  rw [pairAxisUnit, ite_eq_right (by decide), ite_eq_left]
   rfl
 
 @[simp] theorem pairAxisUnit_two : pairAxisUnit 2 = alpha ^ 2 := by
-  rw [pairAxisUnit, if_neg (by decide), if_neg (by decide)]
+  rw [pairAxisUnit, ite_eq_right (by decide), ite_eq_right (by decide)]
 
 theorem cyclicAlpha_sub_three_eq_axis_mul_pairAxisUnit
     (i : Fin 3) :

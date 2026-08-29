@@ -55,7 +55,7 @@ theorem paritySafeRechargeExactKeyOfPair_packet
       paritySafeRechargeDualBaseKey n
           (paritySafeRechargeExactKeyOfPair n bt) = bt := by
   classical
-  simp only [paritySafeRechargeExactKeyOfPair, dif_pos hbt]
+  simp only [paritySafeRechargeExactKeyOfPair, dite_eq_left hbt]
   exact Classical.choose_spec
     (paritySafeRechargeExactDualBasePairs_exists_recharge_key hbt)
 

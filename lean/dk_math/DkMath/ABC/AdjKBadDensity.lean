@@ -91,7 +91,7 @@ theorem adjKBadCount_le_half_range {δ : ℝ} {k X : ℕ} (_ : k < X) :
   · simp [adjKBadCount, h]
   · have hgt : ¬(X ≤ k) := by exact h
     -- unfold adjKBadCount to the explicit filter.card form
-    simp only [adjKBadCount, dite_eq_ite, if_neg hgt, ge_iff_le]
+    simp only [adjKBadCount, dite_eq_ite, ite_eq_right hgt, ge_iff_le]
     -- apply card_filter_le using the same decidable predicate as in the filter
     have hcard_le := @Finset.card_filter_le ℕ (Finset.Icc 1 ((X - k) / 2)) (fun n => BadPair δ X (n, n + k))
       (fun n => Classical.propDecidable (BadPair δ X (n, n + k)))
@@ -199,7 +199,7 @@ theorem tendsto_adjK_bad_fraction_zero (k : Nat) :
       _ ≤ (ε' * (X : ℝ) ^ 2) * (1 / (X : ℝ)) := by apply mul_le_mul_of_nonneg_right hbcX (le_of_lt (one_div_pos.2 hpos))
       _ = ε' * (X : ℝ) := by field_simp [Ne.symm (by exact_mod_cast (ne_of_gt hpos))]
   have h_final_le : ((adjKBadCount (0.435 : ℝ) k X : ℝ)) ≤ ε' * (X : ℝ) + ε' * (X : ℝ) := by
-    simp only [adjKBadCount, dite_eq_ite, if_neg hX_gt_k]
+    simp only [adjKBadCount, dite_eq_ite, ite_eq_right hX_gt_k]
     calc
       (S.card : ℝ) ≤ (R.card : ℝ) := by exact_mod_cast card_le_res
       _ ≤ (BadCount 0.435 X : ℝ) / (X : ℝ) + ε' * (X : ℝ) := by exact_mod_cast hR_le

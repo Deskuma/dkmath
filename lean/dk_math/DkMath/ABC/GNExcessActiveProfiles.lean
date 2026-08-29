@@ -264,8 +264,8 @@ theorem GNExcessActiveProfileMass_eq_sum_active
   intro q hq
   simp only [GNExcessProfileValue, hq, ↓reduceDIte]
   by_cases he : 0 < excess q hq
-  · rw [if_pos he]
-  · rw [if_neg he]
+  · rw [ite_eq_left he]
+  · rw [ite_eq_right he]
     have hz : excess q hq = 0 := Nat.eq_zero_of_not_pos he
     simp [hz]
 
@@ -623,7 +623,7 @@ theorem exp_GNExcessMassAt_sum_le_small_add_large
       rw [hmass]
       by_cases hsmall :
           GNExcessJointDepthModulus Q excess ≤ X + 1
-      · rw [if_pos hsmall]
+      · rw [ite_eq_left hsmall]
         unfold GNExcessProfileDensityWeight
         calc
           (E.card : ℝ) *
@@ -646,7 +646,7 @@ theorem exp_GNExcessMassAt_sum_le_small_add_large
                 Real.exp
                   (t * GNExcessActiveProfileMass Q excess)) := by
             ring
-      · rw [if_neg hsmall]
+      · rw [ite_eq_right hsmall]
         apply mul_le_mul_of_nonneg_right
         · exact_mod_cast
             card_GNExactExcessProfileEvent_le_largeBoundary

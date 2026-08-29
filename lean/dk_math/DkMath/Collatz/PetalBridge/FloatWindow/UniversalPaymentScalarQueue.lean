@@ -118,7 +118,7 @@ theorem canonicalWindowDriftInt_succ
       (if q ≤ m then canonicalWindowDriftInt n q m else 0) +
         endpointAccountingTerm n (m + 1) := by
   by_cases hq : q ≤ m
-  · rw [if_pos hq]
+  · rw [ite_eq_left hq]
     unfold canonicalWindowDriftInt
     have hIcc : Finset.Icc q (m + 1) = insert (m + 1) (Finset.Icc q m) := by
       ext x
@@ -174,7 +174,7 @@ theorem intToNat_canonicalWindowDriftInt_le_outstandingClaimQueue
   | succ m ih =>
       rw [canonicalOutstandingClaimQueue_succ_eq_intToNat]
       by_cases hq : q ≤ m
-      · rw [canonicalWindowDriftInt_succ n (by omega), if_pos hq]
+      · rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left hq]
         apply Int.toNat_le_toNat
         have hle := ih hq
         have hself := Int.self_le_toNat (canonicalWindowDriftInt n q m)
@@ -210,7 +210,7 @@ theorem outstandingClaimQueue_eq_zero_or_exists_windowDrift
           simp
         · refine ⟨q, by omega, ?_⟩
           rw [canonicalOutstandingClaimQueue_succ_eq_intToNat]
-          rw [canonicalWindowDriftInt_succ n (by omega), if_pos hqm]
+          rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left hqm]
           have hnonneg : 0 ≤ canonicalWindowDriftInt n q m := by
             by_contra hneg
             have htoNat : Int.toNat (canonicalWindowDriftInt n q m) = 0 := by

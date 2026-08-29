@@ -40,7 +40,7 @@ theorem primeScalesUpTo_succ_eq
       else
         primeScalesUpTo n := by
   by_cases hq : Nat.Prime (n + 1)
-  · rw [if_pos hq]
+  · rw [ite_eq_left hq]
     ext p
     simp only [mem_primeScalesUpTo, Finset.mem_insert]
     constructor
@@ -51,7 +51,7 @@ theorem primeScalesUpTo_succ_eq
     · rintro (rfl | ⟨hp, hple⟩)
       · exact ⟨hq, le_rfl⟩
       · exact ⟨hp, by omega⟩
-  · rw [if_neg hq]
+  · rw [ite_eq_right hq]
     ext p
     simp only [mem_primeScalesUpTo]
     constructor

@@ -146,7 +146,7 @@ theorem centeredMellinSecondDifferenceWeight_eq_kernel_mul
       ((Complex.exp ((τ : ℂ) * z) - 2 +
           Complex.exp (-(τ : ℂ) * z)) /
         (τ : ℂ) ^ 2) * centeredMellinSpectralWeight h z := by
-  rw [centeredMellinSecondDifferenceWeight, if_neg hτ,
+  rw [centeredMellinSecondDifferenceWeight, ite_eq_right hτ,
     centeredMellinDilatedSpectralWeight_eq,
     centeredMellinDilatedSpectralWeight_eq]
   rw [show ((-τ : ℝ) : ℂ) = -(τ : ℂ) by norm_num]
@@ -206,7 +206,6 @@ theorem tendsto_complexExpSecondDifferenceKernel_zero
       by_cases hτ : τ = 0
       · simp [hτ, complexExpSecondDifferenceRemainder]
       · field_simp [hτ, hz]
-    
   have hminus : Tendsto
       (fun τ : ℝ =>
         complexExpSecondDifferenceRemainder (-(τ : ℂ) * z) /
@@ -243,7 +242,7 @@ theorem tendsto_complexExpSecondDifferenceKernel_zero
   by_cases hτ : τ = 0
   · simp [complexExpSecondDifferenceKernel, hτ,
       complexExpSecondDifferenceRemainder]
-  · rw [complexExpSecondDifferenceKernel, if_neg hτ]
+  · rw [complexExpSecondDifferenceKernel, ite_eq_right hτ]
     unfold complexExpSecondDifferenceRemainder
     rw [show -(τ : ℂ) * z = -(z * (τ : ℂ)) by ring]
     field_simp [hτ]
@@ -265,7 +264,7 @@ theorem tendsto_centeredMellinSecondDifferenceWeight_zero
   · simp [centeredMellinSecondDifferenceWeight, complexExpSecondDifferenceKernel,
       hτ]
   · rw [centeredMellinSecondDifferenceWeight_eq_kernel_mul hτ]
-    rw [complexExpSecondDifferenceKernel, if_neg hτ]
+    rw [complexExpSecondDifferenceKernel, ite_eq_right hτ]
 
 /-- Every patched centered Mellin second-difference weight is entire under the
 same positive compact-support contract as the undilated Mellin weight.  At

@@ -183,7 +183,7 @@ private theorem paritySafeCovered_of_candidate_of_canonical_eq
     by_contra hne
     have hzero : paritySafeCanonicalSupportPrime n r = 0 := by
       unfold paritySafeCanonicalSupportPrime
-      rw [dif_neg hne]
+      rw [dite_eq_right hne]
     have hpne : p ≠ 0 := (mem_squareAnchorOddActivePrimes.mp hpactive).1.ne_zero
     exact hpne (hcanonical.trans hzero)
   exact mem_paritySafeCoveredCandidates.mpr ⟨hr, hnonempty⟩

@@ -123,7 +123,7 @@ theorem primePowerShadow_spec
       0 < primePowerExponentShadow q ∧
       q = primePowerBaseShadow q ^ primePowerExponentShadow q := by
   unfold primePowerBaseShadow primePowerExponentShadow
-  rw [dif_pos hq, dif_pos hq]
+  rw [dite_eq_left hq, dite_eq_left hq]
   let p := Classical.choose hq
   have hp := Classical.choose_spec hq
   let k := Classical.choose hp
@@ -137,7 +137,7 @@ theorem canonicalPrimePowerShadowCost_eq_log_of_witness
   have hs := primePowerShadow_spec (q := q) ⟨p, j, hp, hj, hq⟩
   have hu := primePower_witness_unique hs.1 hp hs.2.1 hj hs.2.2 hq
   unfold canonicalPrimePowerShadowCost
-  rw [dif_pos ⟨p, j, hp, hj, hq⟩, hu.1]
+  rw [dite_eq_left ⟨p, j, hp, hj, hq⟩, hu.1]
 
 /-- The pair label is injective on one finite prime-power support. -/
 theorem primePowerPairLabel_injOn (X : ℕ) :

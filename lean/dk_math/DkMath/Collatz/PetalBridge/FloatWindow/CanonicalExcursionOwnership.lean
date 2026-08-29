@@ -368,7 +368,7 @@ theorem canonicalSaturatedTokenCount_eq_internalClassCounts_add_terminal
               canonicalInternalRigidSaturatedResidualCount n q m := by
       simpa [canonicalInternalSaturatedIndices] using hinternal
     unfold canonicalSaturatedTokenCount canonicalTerminalSaturatedIndicator
-    rw [if_pos hs]
+    rw [ite_eq_left hs]
     omega
   · have hm : m ∉ canonicalSaturatedBlockIndices n q m := by
       intro hm
@@ -380,7 +380,7 @@ theorem canonicalSaturatedTokenCount_eq_internalClassCounts_add_terminal
               canonicalInternalRigidSaturatedResidualCount n q m := by
       simpa [canonicalInternalSaturatedIndices] using hinternal
     unfold canonicalSaturatedTokenCount canonicalTerminalSaturatedIndicator
-    rw [if_neg hs] at *
+    rw [ite_eq_right hs] at *
     rw [Finset.erase_eq_of_notMem hm] at hinternal'
     omega
 

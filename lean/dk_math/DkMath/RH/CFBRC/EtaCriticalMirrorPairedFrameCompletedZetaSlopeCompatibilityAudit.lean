@@ -93,7 +93,7 @@ theorem norm_deriv_completedRiemannZeta_eq_dominantTailConstant_of_completedZeta
             ‖etaCriticalMirrorDominantNormalizedEndpointCarrier k s‖)
           atTop (nhds ‖-etaPairIndexNormalizedTailConstant s‖) := by
       simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-        if_pos hle] using hcert
+        ite_eq_left hle] using hcert
     exact Or.inl
       ⟨hleft, tendsto_nhds_unique hnormEndpoint hcert'⟩
   · have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
@@ -107,7 +107,7 @@ theorem norm_deriv_completedRiemannZeta_eq_dominantTailConstant_of_completedZeta
           atTop
           (nhds ‖etaPairIndexNormalizedTailConstant (criticalMirror s)‖) := by
       simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-        if_neg hnotle] using hcert
+        ite_eq_right hnotle] using hcert
     exact Or.inr
       ⟨hright, tendsto_nhds_unique hnormEndpoint hcert'⟩
 

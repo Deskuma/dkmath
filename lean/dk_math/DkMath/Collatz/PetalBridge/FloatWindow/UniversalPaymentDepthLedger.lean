@@ -260,7 +260,7 @@ theorem natCard_canonicalEndpointDepthClaimCarrier
   unfold cumulativeCanonicalEndpointClaims
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk), canonicalPaymentClaimDepths_card]
+  rw [dite_eq_left (Finset.mem_range.mp hk), canonicalPaymentClaimDepths_card]
 
 /-- Level-addressed capacity carrier has exactly the cumulative capacity count. -/
 theorem natCard_canonicalEndpointLevelCapacityCarrier
@@ -274,7 +274,7 @@ theorem natCard_canonicalEndpointLevelCapacityCarrier
   unfold cumulativeCanonicalEndpointCapacity
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk),
+  rw [dite_eq_left (Finset.mem_range.mp hk),
     canonicalEndpointCapacityDepthSlots_card, canonicalEndpointCapacitySlots_card]
 
 /-- Source-time claims mapped to their exact canonical recovery depths. -/

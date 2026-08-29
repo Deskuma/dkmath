@@ -44,7 +44,7 @@ theorem centeredMellinSpectralWeight_centeredMellinBoxApprox_conj
   simp only [map_mul, map_inv₀, Complex.conj_ofReal]
   simp only [intervalIntegral.intervalIntegral_eq_integral_uIoc]
   have hne : -ε ≤ ε := by linarith
-  simp only [if_pos hne, one_smul]
+  simp only [ite_eq_left hne, one_smul]
   rw [← integral_conj]
   apply congrArg (fun x : ℂ => ((2 * ε : ℝ)⁻¹ : ℂ) * x)
   apply MeasureTheory.integral_congr_ae

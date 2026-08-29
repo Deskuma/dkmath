@@ -31,11 +31,11 @@ theorem sumGN5_eq_goldenNorm_signed (u v : ℕ) :
       (SumGN5 u v : ℤ) := by
   unfold GoldenNorm SumGN5
   by_cases h : v ≤ u
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     push_cast
     rw [Nat.cast_sub h]
     ring
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     have huv : u ≤ v := Nat.le_of_not_ge h
     push_cast
     rw [Nat.cast_sub huv]

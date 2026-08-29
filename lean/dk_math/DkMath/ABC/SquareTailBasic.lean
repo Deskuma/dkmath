@@ -347,7 +347,7 @@ lemma decomp_piRad_twoTail (c : ℕ) (hc : c ≠ 0) :
     trans (∏ p ∈ S, p ^ 1)
     · apply Finset.prod_congr rfl
       intro p hp
-      rw [if_pos (this p hp)]
+      rw [ite_eq_left (this p hp)]
     -- Now just need: ∏ p∈S, p^1 = ∏ p∈S, p
     simp only [pow_one]
     -- And rad is defined as exactly this product

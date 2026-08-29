@@ -174,12 +174,12 @@ theorem padicValNat_GN_seven_sub_eq_if
             Int.natAbs (((GN 7 (a - b) b : ℕ) : ℤ)) := by
               rw [GN_seven_sub_eq_traceOneNorm_negTwo a b hab]
         _ = GN 7 (a - b) b := rfl
-    rw [if_pos hgap]
+    rw [ite_eq_left hgap]
     exact hbridge.symm.trans hdepth
   · have hnot : ¬ 7 ∣ GN 7 (a - b) b := by
       rw [seven_dvd_GN_seven_sub_iff a b hab]
       exact hgap
-    rw [if_neg hgap]
+    rw [ite_eq_right hgap]
     exact padicValNat.eq_zero_of_not_dvd hnot
 
 /-- Primitive `GN 7` valuation is always at most one. -/

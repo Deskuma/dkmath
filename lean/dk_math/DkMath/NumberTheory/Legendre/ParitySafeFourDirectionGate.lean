@@ -242,7 +242,7 @@ theorem paritySafeRechargeDepthFiberCollision_fourDirection_packet
   have hpmin : paritySafeCanonicalSupportPrime n r =
       (paritySafeActiveSupport n r).min' hnonempty := by
     dsimp [paritySafeCanonicalSupportPrime]
-    rw [dif_pos hnonempty]
+    rw [dite_eq_left hnonempty]
   have hple : paritySafeCanonicalSupportPrime n r ≤ u := by
     rw [hpmin]
     exact Finset.min'_le _ _ huactive

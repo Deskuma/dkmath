@@ -201,7 +201,7 @@ theorem pascalPrimeCoordinateSupportUpTo_succ (N : ℕ) :
   ext p
   rw [mem_pascalPrimeCoordinateSupportUpTo_iff]
   by_cases hp : Nat.Prime (N + 1)
-  · simp only [hp, if_true, Finset.mem_insert, mem_pascalPrimeCoordinateSupportUpTo_iff]
+  · simp only [hp, ite_true, Finset.mem_insert, mem_pascalPrimeCoordinateSupportUpTo_iff]
     constructor
     · rintro ⟨hpp, hle⟩
       by_cases heq : p = N + 1
@@ -211,7 +211,7 @@ theorem pascalPrimeCoordinateSupportUpTo_succ (N : ℕ) :
       rcases h with h | ⟨hpp, hle⟩
       · subst p; exact ⟨hp, by omega⟩
       · exact ⟨hpp, by omega⟩
-  · simp only [hp, if_false, mem_pascalPrimeCoordinateSupportUpTo_iff]
+  · simp only [hp, ite_false, mem_pascalPrimeCoordinateSupportUpTo_iff]
     constructor
     · rintro ⟨hpp, hle⟩
       by_cases heq : p = N + 1

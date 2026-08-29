@@ -96,7 +96,7 @@ theorem finiteSignedWindowBalance_succ
       (if t ≤ m then finiteSignedWindowBalance arrivals service t m else 0) +
         ((arrivals (m + 1) : ℤ) - service (m + 1)) := by
   by_cases htm : t ≤ m
-  · rw [if_pos htm]
+  · rw [ite_eq_left htm]
     unfold finiteSignedWindowBalance
     have hIcc : Finset.Icc t (m + 1) = insert (m + 1) (Finset.Icc t m) := by
       ext x
@@ -152,7 +152,7 @@ theorem intToNat_finiteSignedWindowBalance_le_reflectedQueueOn
       omega
   | succ m ih =>
       by_cases htm' : t ≤ m
-      · rw [finiteSignedWindowBalance_succ arrivals service (by omega), if_pos htm']
+      · rw [finiteSignedWindowBalance_succ arrivals service (by omega), ite_eq_left htm']
         rw [finiteReflectedQueueOn_succ arrivals service (by omega)]
         have hprev := ih hqt htm'
         have hself := Int.self_le_toNat
@@ -204,7 +204,7 @@ theorem finiteReflectedQueueOn_eq_zero_or_exists_suffix
             refine ⟨t, Finset.mem_Icc.mpr ⟨htBounds.1, by omega⟩, ?_⟩
             rw [finiteReflectedQueueOn_succ_eq_intToNat arrivals service hqm',
               finiteSignedWindowBalance_succ arrivals service (by omega),
-              if_pos htBounds.2]
+              ite_eq_left htBounds.2]
             have hnonneg : 0 ≤ finiteSignedWindowBalance arrivals service t m := by
               by_contra hneg
               have hz : Int.toNat

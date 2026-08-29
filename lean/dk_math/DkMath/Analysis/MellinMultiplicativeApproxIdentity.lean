@@ -70,7 +70,7 @@ theorem centeredMellinBoxApprox_support_subset
     rcases not_and_or.mp hnot with hnotε | hnotI
     · exact (hnotε hε).elim
     · apply hxne
-      rw [centeredMellinBoxApprox, if_neg]
+      rw [centeredMellinBoxApprox, ite_eq_right]
       intro hcond
       exact hnotI hcond.2
   exact hx'.2
@@ -160,7 +160,7 @@ theorem centeredMellinSpectralWeight_centeredMellinBoxApprox_eq_logAverage
       apply hxnot
       simpa [lo, hi] using h.2
     dsimp [F]
-    rw [centeredMellinBoxApprox, if_neg hcond]
+    rw [centeredMellinBoxApprox, ite_eq_right hcond]
     simp
   have hbelow : (∫ x in (0 : ℝ)..lo, F x) = 0 := by
     have hEq : Set.EqOn F (fun _ => 0) (Set.Ioo (0 : ℝ) lo) := by
@@ -175,7 +175,7 @@ theorem centeredMellinSpectralWeight_centeredMellinBoxApprox_eq_logAverage
         simpa [lo, hi] using h.2
       dsimp [F]
       rw [centeredMellinBoxApprox]
-      rw [if_neg hcond]
+      rw [ite_eq_right hcond]
       simp
     rw [intervalIntegral.integral_congr_Ioo_of_le (le_of_lt hlo) hEq]
     simp
@@ -229,7 +229,7 @@ theorem centeredMellinSpectralWeight_centeredMellinBoxApprox_eq_logAverage
     dsimp [F, G]
     have hxbox' : x ∈ Set.Icc (Real.exp (-ε)) (Real.exp ε) := by
       simpa [lo, hi] using hxbox
-    rw [centeredMellinBoxApprox, if_pos (by exact ⟨hε, hxbox'⟩)]
+    rw [centeredMellinBoxApprox, ite_eq_left (by exact ⟨hε, hxbox'⟩)]
     calc
       (x : ℂ) ^ (s - 1) *
           (((2 * ε : ℝ)⁻¹ : ℂ) * (x : ℂ) ^ (-(1 : ℂ) / 2)) =

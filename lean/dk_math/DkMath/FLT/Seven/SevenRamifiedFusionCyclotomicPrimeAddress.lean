@@ -469,7 +469,7 @@ theorem evalAlphaRoot_realPairCarrier_zero
       (a.ratio⁻¹ : ZMod q) * (a.ratio : ZMod q) = 1
     exact Units.inv_mul' a.ratio
   simp only [RamifiedSignedRootDepthPacket.realPairCarrier,
-    SevenRealCubicInt.cyclicAlpha, if_pos, map_sub, map_add,
+    SevenRealCubicInt.cyclicAlpha, ite_eq_left, map_sub, map_add,
     map_mul, map_pow, map_intCast, a.evalAlphaRoot_alpha]
   change
     r ^ 2 + r * l + l ^ 2 -

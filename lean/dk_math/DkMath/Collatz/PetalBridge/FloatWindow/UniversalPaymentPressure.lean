@@ -195,12 +195,12 @@ theorem canonicalPaymentBlockRecoveryFiber_card
     (canonicalPaymentBlockRecoveryFiber n k d).card =
       if 1 ≤ d ∧ d ≤ canonicalPaymentBlockLength n k then 1 else 0 := by
   by_cases hd : 1 ≤ d ∧ d ≤ canonicalPaymentBlockLength n k
-  · rw [if_pos hd]
+  · rw [ite_eq_left hd]
     have hpos : 0 < (canonicalPaymentBlockRecoveryFiber n k d).card :=
       Finset.card_pos.mpr ((canonicalPaymentBlockRecoveryFiber_nonempty_iff n k d).2 hd)
     have hle := canonicalPaymentBlockRecoveryFiber_card_le_one n k d
     omega
-  · rw [if_neg hd]
+  · rw [ite_eq_right hd]
     exact Finset.card_eq_zero.mpr (by
       rw [← Finset.not_nonempty_iff_eq_empty]
       simpa [canonicalPaymentBlockRecoveryFiber_nonempty_iff n k d] using hd)

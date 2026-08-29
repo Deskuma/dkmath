@@ -1113,7 +1113,7 @@ private theorem cfzp048PrimeRemainderSumIoc_eq_rawCellSum
   apply Finset.sum_congr rfl
   intro p hp
   by_cases hprime : Nat.Prime p
-  · simp only [hprime, if_true,
+  · simp only [hprime, ite_true,
       cfzp040PrimeIndicator_eq_one_of_prime, mul_one]
   · simp [hprime, cfzp040PrimeIndicator_eq_zero_of_not_prime]
 

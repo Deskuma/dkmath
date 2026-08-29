@@ -592,7 +592,7 @@ theorem orbitWindowResidueCountPow2_depth_zero_eq_window
       rw [orbitWindowResidueCountPow2_succ, ih]
       have hlast : oddOrbitLabel n k % 2 ^ 0 = 0 := by
         rw [pow_zero, Nat.mod_one]
-      rw [if_pos hlast]
+      rw [ite_eq_left hlast]
 
 /--
 Residues outside the modulus range have zero occupation.

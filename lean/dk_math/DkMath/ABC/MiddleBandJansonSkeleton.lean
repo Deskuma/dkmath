@@ -52,7 +52,7 @@ open _root_.Nat _root_.Finset
 theorem adjKBadCount_unfold {δ : ℝ} {k X : ℕ} (h : ¬ X ≤ k) :
   adjKBadCount δ k X = (@Finset.filter ℕ (fun n => BadPair δ X (n, n + k))
     (fun n => Classical.propDecidable (BadPair δ X (n, n + k))) (Finset.Icc 1 ((X - k) / 2))).card := by
-  simp [adjKBadCount, if_neg h]
+  simp [adjKBadCount, ite_eq_right h]
 
 
 /-- k-diagonal triple: (n, n+k, 2n+k)

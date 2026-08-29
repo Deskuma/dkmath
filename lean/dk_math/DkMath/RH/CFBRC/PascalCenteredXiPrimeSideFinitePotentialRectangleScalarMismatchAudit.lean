@@ -65,14 +65,14 @@ theorem pascalCenteredXiPrimeSideComplexPhasePotential_conj
         (pascalCenteredXiPrimeSideComplexPhasePotential r z) := by
   by_cases hr : r = 0
   · subst r
-    simp only [pascalCenteredXiPrimeSideComplexPhasePotential, if_pos]
+    simp only [pascalCenteredXiPrimeSideComplexPhasePotential, ite_eq_left]
     rw [map_div₀, map_pow]
     have htwo : starRingEnd ℂ (2 : ℂ) = (2 : ℂ) := by
       simp only [map_ofNat]
     rw [htwo]
   · rw [pascalCenteredXiPrimeSideComplexPhasePotential,
-      if_neg hr]
-    simp only [pascalCenteredXiPrimeSideComplexPhasePotential, if_neg hr]
+      ite_eq_right hr]
+    simp only [pascalCenteredXiPrimeSideComplexPhasePotential, ite_eq_right hr]
     rw [map_div₀]
     simp only [map_mul, map_sub, map_pow]
     have harg : (r : ℂ) * starRingEnd ℂ z =
@@ -90,7 +90,7 @@ theorem pascalCenteredXiPrimeSideComplexModePhasePotential_conj
   by_cases hn : n = 0
   · subst n
     simp [pascalCenteredXiPrimeSideComplexModePhasePotential]
-  · simp only [pascalCenteredXiPrimeSideComplexModePhasePotential, if_neg hn,
+  · simp only [pascalCenteredXiPrimeSideComplexModePhasePotential, ite_eq_right hn,
       map_mul, map_sub]
     rw [pascalCenteredXiPrimeSideComplexPhasePotential_conj,
       pascalCenteredXiPrimeSideComplexPhasePotential_conj]
@@ -120,7 +120,7 @@ theorem pascalCenteredXiPrimeSideComplexModePhasePotential_ofReal_im
   by_cases hn : n = 0
   · subst n
     simp [pascalCenteredXiPrimeSideComplexModePhasePotential]
-  · simp only [pascalCenteredXiPrimeSideComplexModePhasePotential, if_neg hn,
+  · simp only [pascalCenteredXiPrimeSideComplexModePhasePotential, ite_eq_right hn,
       Complex.sub_im, Complex.mul_im, Complex.ofReal_im]
     rw [pascalCenteredXiPrimeSideComplexPhasePotential_ofReal_im,
       pascalCenteredXiPrimeSideComplexPhasePotential_ofReal_im]

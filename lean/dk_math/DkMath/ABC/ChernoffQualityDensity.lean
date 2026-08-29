@@ -104,7 +104,7 @@ lemma construct_HΛ_for_quality (ε : ℝ) (hε : 0 < ε) :
     have hp3 : p ≥ 3 := hp_filter.2.2
     have hγdef : γ_values p = ε / (4 * Real.log (p : ℝ)) := by
       dsimp [γ_values]
-      rw [if_neg]
+      rw [ite_eq_right]
       have h_gt : p > 2 := Nat.lt_of_succ_le hp3
       exact not_le_of_gt (by exact_mod_cast h_gt : (p : ℝ) > 2)
     have hp_pos : 0 < (p : ℝ) := by exact_mod_cast Nat.Prime.pos hpPrime
@@ -181,9 +181,9 @@ lemma bad_set_density_bound_quality (ε : ℝ) (hε : 0 < ε) :
     intro n
     dsimp [γ_values]
     by_cases hn : n ≤ 2
-    · rw [if_pos hn]
+    · rw [ite_eq_left hn]
       norm_num
-    · rw [if_neg hn]
+    · rw [ite_eq_right hn]
       have hn_pos : 2 < n := Nat.lt_of_not_le hn
       have hpos : (n : ℝ) > 1 := by norm_cast; linarith [hn_pos]
       have hlog_pos : 0 < Real.log (n : ℝ) := Real.log_pos hpos

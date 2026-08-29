@@ -33,7 +33,7 @@ theorem basePrimeOf_eq_of_prime_pow_mem
     (hq : q = p ^ k) :
     W.basePrimeOf n I hI q = p := by
   unfold basePrimeOf
-  rw [dif_pos hqI]
+  rw [dite_eq_left hqI]
   let L := W.label n q (hI q hqI)
   have hLdvd_q : L.p ∣ q := by
     have hLdvd_Lq : L.p ∣ L.q := by

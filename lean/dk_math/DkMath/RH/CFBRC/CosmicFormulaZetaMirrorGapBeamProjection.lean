@@ -79,7 +79,7 @@ theorem cfzpMirrorAmplitudeDifference_eq_delta_mul_beam
   · subst δ
     simp [cfzpMirrorAmplitudeDifference, cfzpMirrorAmplitudeDifferenceBeam,
       primeMirrorLeftAmplitude, primeMirrorRightAmplitude]
-  · rw [cfzpMirrorAmplitudeDifferenceBeam, if_neg hδ]
+  · rw [cfzpMirrorAmplitudeDifferenceBeam, ite_eq_right hδ]
     field_simp
 
 theorem primeMirrorOffsetGap_eq_delta_sq_mul_cfzpMirrorGapBeam
@@ -166,7 +166,7 @@ theorem tendsto_cfzpMirrorAmplitudeDifferenceBeam_zero
     filter_upwards [self_mem_nhdsWithin] with δ hδ
     have hδ' : δ ≠ 0 := by
       simpa only [Set.mem_compl_iff, Set.mem_singleton_iff] using hδ
-    rw [cfzpMirrorAmplitudeDifferenceBeam, if_neg hδ']
+    rw [cfzpMirrorAmplitudeDifferenceBeam, ite_eq_right hδ']
   rw [← nhdsNE_sup_pure 0]
   refine hbeam_punct.sup ?_
   have hpure :

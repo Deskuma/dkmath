@@ -195,14 +195,14 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_mul_threshold
         rw [List.range_succ]
         simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
           List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
-          hlast, if_true, Nat.add_mul, one_mul]
+          hlast, ite_true, Nat.add_mul, one_mul]
         exact Nat.add_le_add ih' hlast
       · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
         unfold orbitWindowHeightCountGe orbitWindowHeightSeq
         rw [List.range_succ]
         simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
           List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
-          hlast, if_false, Nat.add_zero]
+          hlast, ite_false, Nat.add_zero]
         exact Nat.le_add_right_of_le ih'
 
 /--
@@ -228,12 +228,12 @@ theorem orbitWindowHeightCountEq_le_countGe
         have hself : h ≤ h := le_rfl
         simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
           List.countP_map, List.countP_singleton, beq_iff_eq, decide_eq_true_eq,
-          ge_iff_le, hlast, hself, if_true]
+          ge_iff_le, hlast, hself, ite_true]
         exact Nat.add_le_add ih' le_rfl
       · rw [List.range_succ]
         simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
           List.countP_map, List.countP_singleton, beq_iff_eq, decide_eq_true_eq,
-          ge_iff_le, hlast, if_false]
+          ge_iff_le, hlast, ite_false]
         exact Nat.le_add_right_of_le ih'
 
 /--
@@ -322,7 +322,7 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
         rw [List.range_succ]
         simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
           List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
-          hone, htwo, if_true]
+          hone, htwo, ite_true]
         omega
       · by_cases hone : 1 ≤ orbitWindowHeight n k
         · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
@@ -330,14 +330,14 @@ theorem orbitWindowHeightSeq_sum_ge_countGe_one_add_countGe_two
           rw [List.range_succ]
           simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
             List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
-            hone, htwo, if_true, if_false]
+            hone, htwo, ite_true, ite_false]
           omega
         · rw [sumS, ← orbitWindowHeight_eq_s_iterateT]
           unfold orbitWindowHeightCountGe orbitWindowHeightSeq
           rw [List.range_succ]
           simp only [List.map_append, List.map_cons, List.map_nil, List.countP_append,
             List.countP_map, List.countP_singleton, decide_eq_true_eq, ge_iff_le,
-            hone, htwo, if_false]
+            hone, htwo, ite_false]
           exact Nat.le_add_right_of_le ih'
 
 /--

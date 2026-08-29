@@ -526,7 +526,7 @@ theorem basePrimeOf_one_le
     ∀ q, q ∈ I → 1 ≤ W.basePrimeOf n I hI q := by
   intro q hq
   unfold basePrimeOf
-  rw [dif_pos hq]
+  rw [dite_eq_left hq]
   exact W.basePrime_one_le (hI q hq)
 
 /-- On the selected sub-index, `basePrimeOf` reads a prime. -/
@@ -539,7 +539,7 @@ theorem basePrimeOf_prime_on
     ∀ q, q ∈ I → Nat.Prime (W.basePrimeOf n I hI q) := by
   intro q hq
   unfold basePrimeOf
-  rw [dif_pos hq]
+  rw [dite_eq_left hq]
   exact (W.label n q (hI q hq)).prime
 
 /-- The base prime of an indexed prime-power witness divides its label. -/
@@ -583,7 +583,7 @@ theorem basePrimeOf_dvd_source_on
     ∀ q, q ∈ I → W.basePrimeOf n I hI q ∣ n := by
   intro q hq
   unfold basePrimeOf
-  rw [dif_pos hq]
+  rw [dite_eq_left hq]
   exact W.basePrime_dvd_source (hI q hq)
 
 /--
@@ -616,7 +616,7 @@ theorem baseExponentOf_pos_on
     ∀ q, q ∈ I → 0 < W.baseExponentOf n I hI q := by
   intro q hq
   unfold baseExponentOf
-  rw [dif_pos hq]
+  rw [dite_eq_left hq]
   exact (W.label n q (hI q hq)).k_pos
 
 /--
@@ -633,7 +633,7 @@ theorem basePrimeOf_pow_baseExponentOf_eq_on
       W.basePrimeOf n I hI q ^ W.baseExponentOf n I hI q = q := by
   intro q hq
   unfold basePrimeOf baseExponentOf
-  rw [dif_pos hq, dif_pos hq]
+  rw [dite_eq_left hq, dite_eq_left hq]
   exact ((W.label_q n q (hI q hq)).symm.trans
     (W.label n q (hI q hq)).eq_pow).symm
 
@@ -1201,7 +1201,7 @@ def sampleTenDivisorTransitionKernel : DivisorTransitionKernel where
     intro n q hq
     by_cases hn : n = 10
     · subst n
-      simp only [if_true, Finset.mem_insert, Finset.mem_singleton] at hq
+      simp only [ite_true, Finset.mem_insert, Finset.mem_singleton] at hq
       rcases hq with rfl | rfl <;> norm_num
     · simp [hn] at hq
   next_eq_div := by
@@ -1287,7 +1287,7 @@ def sampleTenPrimePowerWitnessProvider :
         exact samplePrimePowerLabel_two
       · have hq_five : q = 5 := by
           simp only [sampleTenPrimePowerDivisorTransitionKernel,
-            sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+            sampleTenDivisorTransitionKernel, ite_true, Finset.mem_insert,
             Finset.mem_singleton] at hq
           rcases hq with hq_two' | hq_five
           · exact False.elim (hq_two hq_two')
@@ -1301,7 +1301,7 @@ def sampleTenPrimePowerWitnessProvider :
     by_cases hn : n = 10
     · subst n
       simp only [sampleTenPrimePowerDivisorTransitionKernel,
-        sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+        sampleTenDivisorTransitionKernel, ite_true, Finset.mem_insert,
         Finset.mem_singleton] at hq
       rcases hq with rfl | rfl <;> rfl
     · simp [sampleTenPrimePowerDivisorTransitionKernel,
@@ -1490,7 +1490,7 @@ theorem sampleTenPrimePowerWitnessProvider_weightOfBase_primeWitnessDependent :
       by_cases hn : n = 10
       · subst n
         simp only [sampleTenPrimePowerDivisorTransitionKernel,
-          sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+          sampleTenDivisorTransitionKernel, ite_true, Finset.mem_insert,
           Finset.mem_singleton] at hq
         rcases hq with rfl | rfl
         · norm_num [sampleTenPrimePowerWitnessProvider,
@@ -1511,7 +1511,7 @@ theorem sampleTenToyPrimeBaseWeight_nonneg_on_index :
   by_cases hn : n = 10
   · subst n
     simp only [sampleTenPrimePowerDivisorTransitionKernel,
-      sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+      sampleTenDivisorTransitionKernel, ite_true, Finset.mem_insert,
       Finset.mem_singleton] at hq
     rcases hq with rfl | rfl
     · norm_num [sampleTenPrimePowerWitnessProvider,
@@ -1575,7 +1575,7 @@ theorem sampleTenToyWeight_primeWitnessDependent :
   by_cases hn : n = 10
   · subst n
     simp only [sampleTenPrimePowerDivisorTransitionKernel,
-      sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+      sampleTenDivisorTransitionKernel, ite_true, Finset.mem_insert,
       Finset.mem_singleton] at hq
     rcases hq with rfl | rfl
     · refine ⟨2, 1, by norm_num, by norm_num, by norm_num, ?_, by norm_num [sampleTenToyWeight]⟩

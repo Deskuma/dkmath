@@ -278,7 +278,7 @@ theorem natCard_canonicalEndpointClaimCarrier
   rw [Finset.sum_fin_eq_sum_range]
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk)]
+  rw [dite_eq_left (Finset.mem_range.mp hk)]
   rw [carryTwoPaymentClaimFiberAt_card_eq_growthDebt_card_add_endpoint_card
     n (paymentEndpointSeq n k)
       (orbitPaymentSourceFiberAt_nonempty_paymentEndpointSeq n k)]
@@ -294,7 +294,7 @@ theorem natCard_canonicalEndpointCapacityCarrier
   rw [Finset.sum_fin_eq_sum_range]
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk)]
+  rw [dite_eq_left (Finset.mem_range.mp hk)]
 
 /-- A backward-credit matching is a no-overdraft certificate on every prefix. -/
 theorem CanonicalEndpointBackwardCreditMatching.to_prefixCapacityDominance

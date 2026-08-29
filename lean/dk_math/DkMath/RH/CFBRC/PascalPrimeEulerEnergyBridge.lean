@@ -41,14 +41,14 @@ noncomputable def pascalPrimeEulerBirthFactor (n : ℕ) (s : ℂ) : ℂ :=
     pascalPrimeEulerProductUpTo (N + 1) s =
       pascalPrimeEulerProductUpTo N s * pascalPrimeEulerBirthFactor (N + 1) s := by
   by_cases hp : Nat.Prime (N + 1)
-  · rw [pascalPrimeEulerBirthFactor, if_pos hp]
+  · rw [pascalPrimeEulerBirthFactor, ite_eq_left hp]
     simp only [pascalPrimeEulerProductUpTo]
     have hnot : N + 1 ∉ pascalPrimeCoordinateSupportUpTo N := by
       rw [mem_pascalPrimeCoordinateSupportUpTo_iff]
       omega
     simp [pascalPrimeCoordinateSupportUpTo_succ, hp, hnot]
     ring
-  · rw [pascalPrimeEulerBirthFactor, if_neg hp]
+  · rw [pascalPrimeEulerBirthFactor, ite_eq_right hp]
     simp only [pascalPrimeEulerProductUpTo]
     simp [pascalPrimeCoordinateSupportUpTo_succ, hp]
 

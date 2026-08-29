@@ -66,7 +66,7 @@ theorem mem_GNExcessActivePrimeSet_target_iff_GNWieferichLift
       T.nonExceptionalSupport_fresh hp.one_le ha hqS
     have hv :
         2 ≤ (GN p a b).factorization q := by
-      rw [GNNonExceptionalPart_factorization, if_pos hqS] at hvpart
+      rw [GNNonExceptionalPart_factorization, ite_eq_left hqS] at hvpart
       exact hvpart
     have hq2 : q ^ 2 ∣ GN p a b :=
       (hfresh.1.pow_dvd_iff_le_factorization hGN0).2 hv
@@ -194,7 +194,7 @@ theorem GNNonExceptionalRepeatedPart_eq_wieferichPrimePowerProduct
       Nat.Prime q :=
     (mem_support_factorization_iff.mp
       (Finset.mem_filter.mp hqS).1).2.1
-  rw [GNNonExceptionalPart_factorization, if_pos hqS,
+  rw [GNNonExceptionalPart_factorization, ite_eq_left hqS,
     Nat.factorization_def (GN p a b) hqprime]
 
 /--

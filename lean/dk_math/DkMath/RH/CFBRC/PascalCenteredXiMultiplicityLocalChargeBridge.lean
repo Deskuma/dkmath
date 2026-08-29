@@ -352,7 +352,7 @@ theorem pascalCenteredXiIsolatingRadius_spec
     IsPascalCenteredXiIsolatingRadius z
       (pascalCenteredXiIsolatingRadius z) := by
   classical
-  simp only [pascalCenteredXiIsolatingRadius, dif_pos hz]
+  simp only [pascalCenteredXiIsolatingRadius, dite_eq_left hz]
   exact Classical.choose_spec (exists_isPascalCenteredXiIsolatingRadius hz)
 
 theorem pascalCenteredXiIsolatingRadius_pos

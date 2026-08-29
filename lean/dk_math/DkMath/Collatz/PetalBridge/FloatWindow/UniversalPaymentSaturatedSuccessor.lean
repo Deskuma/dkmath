@@ -611,12 +611,12 @@ theorem endpointAccountingTerm_le_dynamicPressure_add_saturatedUnit
   · simp only [canonicalDynamicPressureDepth, hs, ↓reduceIte, canonicalSaturatedUnit]
     rw [hs.pressure_eq_zero, hs.2.2]
     norm_num
-  · simp only [canonicalDynamicPressureDepth, canonicalSaturatedUnit, if_neg hs,
+  · simp only [canonicalDynamicPressureDepth, canonicalSaturatedUnit, ite_eq_right hs,
       add_zero]
     by_cases hv : 2 ≤ canonicalBlockTerminalValuation n k
-    · rw [if_pos hv]
+    · rw [ite_eq_left hv]
       exact endpointAccountingTerm_le_blockPressure_pred_terminal hpos hv
-    · rw [if_neg hv]
+    · rw [ite_eq_right hv]
       rw [blockPressureContributionInt_zero]
       have hdrift := endpointAccountingTerm_le_length_sub_capacity n k
       rw [canonicalBlockCapacityCount_eq_terminalValuation] at hdrift

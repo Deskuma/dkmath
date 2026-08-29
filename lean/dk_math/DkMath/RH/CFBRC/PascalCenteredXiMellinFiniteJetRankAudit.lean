@@ -121,7 +121,7 @@ theorem tendsto_complexExpSecondDifferenceKernel_quarticJet
   filter_upwards [self_mem_nhdsWithin] with τ hτ
   have hτ0 : τ ≠ 0 := by
     simpa only [Set.mem_compl_iff, Set.mem_singleton_iff] using hτ
-  rw [complexExpSecondDifferenceKernel, if_neg hτ0]
+  rw [complexExpSecondDifferenceKernel, ite_eq_right hτ0]
   unfold expTaylorRemainder
   field_simp [hτ0]
   norm_num [Finset.sum_range_succ, Nat.factorial]
@@ -154,7 +154,7 @@ theorem tendsto_complexExpSecondDifferenceKernel_sexticJet
   filter_upwards [self_mem_nhdsWithin] with τ hτ
   have hτ0 : τ ≠ 0 := by
     simpa only [Set.mem_compl_iff, Set.mem_singleton_iff] using hτ
-  rw [complexExpSecondDifferenceKernel, if_neg hτ0]
+  rw [complexExpSecondDifferenceKernel, ite_eq_right hτ0]
   unfold expTaylorRemainder
   field_simp [hτ0]
   norm_num [Finset.sum_range_succ, Nat.factorial]

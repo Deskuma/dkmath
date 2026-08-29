@@ -43,7 +43,7 @@ theorem paritySafeCanonicalSupportPrime_mem_activeSupport
     paritySafeCanonicalSupportPrime n r ∈ paritySafeActiveSupport n r := by
   classical
   have hnonempty := (mem_paritySafeCoveredCandidates.mp hr).2
-  rw [paritySafeCanonicalSupportPrime, dif_pos hnonempty]
+  rw [paritySafeCanonicalSupportPrime, dite_eq_left hnonempty]
   exact Finset.min'_mem _ hnonempty
 
 /-- The canonical prime has the old nondivisor and parity-safe active packets. -/

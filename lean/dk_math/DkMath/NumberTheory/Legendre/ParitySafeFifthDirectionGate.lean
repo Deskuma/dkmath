@@ -111,7 +111,7 @@ theorem paritySafeRechargeDepthFiveDirectionCollision_fiveDirection_packet
   have hpmin : paritySafeCanonicalSupportPrime n r =
       (paritySafeActiveSupport n r).min' hnonempty := by
     dsimp [paritySafeCanonicalSupportPrime]
-    rw [dif_pos hnonempty]
+    rw [dite_eq_left hnonempty]
   have hpv : paritySafeCanonicalSupportPrime n r < v := by
     apply lt_of_le_of_ne
     · rw [hpmin]

@@ -284,8 +284,8 @@ lemma chernoff_upper_from_quad_mgf_upto
     have hres := chernoff_upper_from_local_mgf_pos (μ := μ) (Z := Z) (m := m)
       (lambda := tau / (2 * A)) (A := A) (tau := tau)
       h_nonneg hintg hbnd
-    -- use if_pos to reduce the expected if-expression to the then-branch
-    rw [if_pos hcase]
+    -- use ite_eq_left to reduce the expected if-expression to the then-branch
+    rw [ite_eq_left hcase]
     simpa [Real.exp_add, add_comm, add_left_comm, add_assoc, mul_comm] using hres
   · -- レンジ外：lambda は L を使う
     have hL_nonneg : 0 ≤ L := hL0
@@ -294,8 +294,8 @@ lemma chernoff_upper_from_quad_mgf_upto
     have hresL := chernoff_upper_from_local_mgf_pos (μ := μ) (Z := Z) (m := m)
       (lambda := L) (A := A) (tau := tau)
       hL_nonneg hintg hbnd
-    -- use if_neg to reduce the expected if-expression to the else-branch
-    simpa [Real.exp_add, add_comm, add_left_comm, add_assoc, if_neg hcase] using hresL
+    -- use ite_eq_right to reduce the expected if-expression to the else-branch
+    simpa [Real.exp_add, add_comm, add_left_comm, add_assoc, ite_eq_right hcase] using hresL
 
 
 -- ### Zmid 用の短い上側尾（Janson/Suen 版の受け口）
@@ -360,7 +360,7 @@ lemma chernoff_upper_from_quad_mgf_upto_linear
   · -- then-branch（最適 λ）: use the tau/(2A) branch of `h` and compare exponents
     have hApos : 0 < A := H.Apos
     -- reduce `h` to the then-branch form (no `simpa` to avoid fragile simp failures)
-    have h_then := h; rw [if_pos hcase] at h_then
+    have h_then := h; rw [ite_eq_left hcase] at h_then
     -- h_then : μ.real {..} ≤ Real.exp (-(tau/(2*A)) * tau + A * (tau/(2*A))^2)
     -- derive that the then-branch exponent is ≤ (-L * tau + A * L ^ 2)
     -- Consider the difference RHS - LHS and show it equals a nonnegative quantity.
@@ -386,7 +386,7 @@ lemma chernoff_upper_from_quad_mgf_upto_linear
     exact bound
   · -- else-branch（λ = L）: directly rewrite the exponent into product form and finish
     have h_else := h
-    rw [if_neg hcase] at h_else
+    rw [ite_eq_right hcase] at h_else
     -- rewrite the single-exponent `Real.exp (-L * tau + A * L ^ 2)` into the product
     -- `Real.exp (A * L ^ 2) * Real.exp (-L * tau)` so the order matches the goal.
     have rhs_eq : Real.exp (-L * tau + A * L ^ 2) = Real.exp (A * L ^ 2) * Real.exp (-L * tau) := by
