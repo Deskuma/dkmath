@@ -590,6 +590,369 @@ theorem normalizedSquareLowerBarrier_le {m : ℕ} (hm : m ≠ 0) :
   simpa using (le_div_iff₀ (normalizedSquareLowerBarrierR_pos m)).mp hge
 
 /-!
+## Second-order Wallis barriers
+
+The first two terms are now matched directly at the recurrence level.  The
+upper barrier is `1 + 1/(4m) + 1/(32m²)`; the small negative cubic term on
+the lower barrier makes its residual have the opposite sign.
+-/
+
+noncomputable def normalizedSquareSecondUpperBarrierR (m : ℕ) : ℝ :=
+  1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)
+
+noncomputable def normalizedSquareSecondLowerBarrierR (m : ℕ) : ℝ :=
+  1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2) -
+    1 / (64 * (m : ℝ) ^ 3)
+
+theorem normalizedSquareSecondUpperBarrierR_pos {m : ℕ} (hm : m ≠ 0) :
+    0 < normalizedSquareSecondUpperBarrierR m := by
+  unfold normalizedSquareSecondUpperBarrierR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have h4 : 0 ≤ 1 / (4 * (m : ℝ)) := by positivity
+  have h32 : 0 ≤ 1 / (32 * (m : ℝ) ^ 2) := by positivity
+  linarith
+
+theorem normalizedSquareSecondLowerBarrierR_pos (m : ℕ) :
+    0 < normalizedSquareSecondLowerBarrierR m := by
+  unfold normalizedSquareSecondLowerBarrierR
+  have hmR : (0 : ℝ) ≤ (m : ℝ) := by exact_mod_cast (Nat.zero_le m)
+  by_cases hm : m = 0
+  · simp [hm]
+  · have hmpos : (0 : ℝ) < (m : ℝ) := by exact_mod_cast (Nat.pos_of_ne_zero hm)
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    have hterm : 0 ≤
+        1 / (32 * (m : ℝ) ^ 2) - 1 / (64 * (m : ℝ) ^ 3) := by
+      apply sub_nonneg.mpr
+      apply (div_le_div_iff₀ (by positivity) (by positivity)).2
+      nlinarith
+    have h4term : 0 ≤ 1 / (4 * (m : ℝ)) := by positivity
+    nlinarith
+
+theorem normalizedSquareSecondUpperBarrier_step_le
+    {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareSecondUpperBarrierR (m + 1) ≤
+      normalizedCentralSquareStepR m *
+        normalizedSquareSecondUpperBarrierR m := by
+  unfold normalizedSquareSecondUpperBarrierR normalizedCentralSquareStepR
+  push_cast
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hden : (0 : ℝ) < 4 * (m : ℝ) - 1 := by
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    nlinarith
+  field_simp [ne_of_gt hmR, ne_of_gt hden]
+  ring_nf
+  nlinarith [sq_nonneg (m : ℝ), sq_nonneg (m + 1 : ℝ),
+    sq_nonneg (2 * (m : ℝ) + 1)]
+
+theorem normalizedSquareSecondLowerBarrier_step_ge
+    {m : ℕ} (hm : m ≠ 0) :
+    normalizedCentralSquareStepR m *
+      normalizedSquareSecondLowerBarrierR m ≤
+      normalizedSquareSecondLowerBarrierR (m + 1) := by
+  unfold normalizedSquareSecondLowerBarrierR normalizedCentralSquareStepR
+  push_cast
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  field_simp [ne_of_gt hmR, ne_of_gt (show (0 : ℝ) < 4 * (m : ℝ) + 1 by positivity)]
+  ring_nf
+  nlinarith [sq_nonneg (m : ℝ), sq_nonneg (m + 1 : ℝ),
+    sq_nonneg (2 * (m : ℝ) + 1)]
+
+noncomputable def normalizedSquareSecondUpperRatio (n : ℕ) : ℝ :=
+  normalizedCentralSquareR (n + 1) /
+    normalizedSquareSecondUpperBarrierR (n + 1)
+
+noncomputable def normalizedSquareSecondLowerRatio (n : ℕ) : ℝ :=
+  normalizedCentralSquareR (n + 1) /
+    normalizedSquareSecondLowerBarrierR (n + 1)
+
+theorem normalizedSquareSecondUpperRatio_succ_ge (n : ℕ) :
+    normalizedSquareSecondUpperRatio n ≤
+      normalizedSquareSecondUpperRatio (n + 1) := by
+  let m := n + 1
+  have hm : m ≠ 0 := by dsimp [m]; omega
+  have hrec := normalizedCentralSquareR_succ_eq_mul_step hm
+  have hstep := normalizedSquareSecondUpperBarrier_step_le hm
+  have hApos := normalizedCentralSquareStepR_pos hm
+  have hSpos := normalizedCentralSquareR_pos hm
+  have hUpos := normalizedSquareSecondUpperBarrierR_pos hm
+  have hUnextpos := normalizedSquareSecondUpperBarrierR_pos (by omega : m + 1 ≠ 0)
+  have hUstep : normalizedSquareSecondUpperBarrierR (m + 1) ≤
+      normalizedCentralSquareStepR m *
+        normalizedSquareSecondUpperBarrierR m := hstep
+  unfold normalizedSquareSecondUpperRatio
+  dsimp [m] at hrec hUstep hSpos hUpos hUnextpos ⊢
+  rw [hrec]
+  apply (div_le_div_iff₀ hUpos hUnextpos).2
+  calc
+    normalizedCentralSquareR (n + 1) *
+        normalizedSquareSecondUpperBarrierR (n + 1 + 1) ≤
+      normalizedCentralSquareR (n + 1) *
+        (normalizedCentralSquareStepR (n + 1) *
+          normalizedSquareSecondUpperBarrierR (n + 1)) := by
+      exact mul_le_mul_of_nonneg_left hUstep hSpos.le
+    _ = (normalizedCentralSquareR (n + 1) *
+        normalizedCentralSquareStepR (n + 1)) *
+        normalizedSquareSecondUpperBarrierR (n + 1) := by ring
+
+theorem normalizedSquareSecondLowerRatio_succ_le (n : ℕ) :
+    normalizedSquareSecondLowerRatio (n + 1) ≤
+      normalizedSquareSecondLowerRatio n := by
+  let m := n + 1
+  have hm : m ≠ 0 := by dsimp [m]; omega
+  have hrec := normalizedCentralSquareR_succ_eq_mul_step hm
+  have hstep := normalizedSquareSecondLowerBarrier_step_ge hm
+  have hApos := normalizedCentralSquareStepR_pos hm
+  have hSpos := normalizedCentralSquareR_pos hm
+  have hLpos := normalizedSquareSecondLowerBarrierR_pos m
+  have hLnextpos := normalizedSquareSecondLowerBarrierR_pos (m + 1)
+  have hLstep : normalizedCentralSquareStepR m *
+      normalizedSquareSecondLowerBarrierR m ≤
+      normalizedSquareSecondLowerBarrierR (m + 1) := hstep
+  unfold normalizedSquareSecondLowerRatio
+  dsimp [m] at hrec hLstep hSpos hLpos hLnextpos ⊢
+  rw [hrec]
+  apply (div_le_div_iff₀ hLnextpos hLpos).2
+  calc
+    (normalizedCentralSquareR (n + 1) *
+        normalizedCentralSquareStepR (n + 1)) *
+        normalizedSquareSecondLowerBarrierR (n + 1) ≤
+      normalizedCentralSquareR (n + 1) *
+        normalizedSquareSecondLowerBarrierR (n + 1 + 1) := by
+      simpa [mul_assoc] using mul_le_mul_of_nonneg_left hLstep hSpos.le
+    _ = normalizedCentralSquareR (n + 1) *
+        normalizedSquareSecondLowerBarrierR (n + 1 + 1) := rfl
+
+theorem normalizedSquareSecondUpperRatio_monotone :
+    Monotone normalizedSquareSecondUpperRatio :=
+  monotone_nat_of_le_succ normalizedSquareSecondUpperRatio_succ_ge
+
+theorem normalizedSquareSecondLowerRatio_antitone :
+    Antitone normalizedSquareSecondLowerRatio :=
+  antitone_nat_of_succ_le normalizedSquareSecondLowerRatio_succ_le
+
+theorem one_le_normalizedSquareSecondUpperBarrierR {m : ℕ} (hm : m ≠ 0) :
+    1 ≤ normalizedSquareSecondUpperBarrierR m := by
+  unfold normalizedSquareSecondUpperBarrierR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have h4 : 0 ≤ 1 / (4 * (m : ℝ)) := by positivity
+  have h32 : 0 ≤ 1 / (32 * (m : ℝ) ^ 2) := by positivity
+  linarith
+
+theorem one_le_normalizedSquareSecondLowerBarrierR (m : ℕ) :
+    1 ≤ normalizedSquareSecondLowerBarrierR m := by
+  unfold normalizedSquareSecondLowerBarrierR
+  by_cases hm : m = 0
+  · simp [hm]
+  · have hmpos : (0 : ℝ) < (m : ℝ) := by
+      exact_mod_cast (Nat.pos_of_ne_zero hm)
+    have hterm : 0 ≤
+        1 / (32 * (m : ℝ) ^ 2) - 1 / (64 * (m : ℝ) ^ 3) := by
+      apply sub_nonneg.mpr
+      apply (div_le_div_iff₀ (by positivity) (by positivity)).2
+      have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+        exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+      nlinarith
+    have h4term : 0 ≤ 1 / (4 * (m : ℝ)) := by positivity
+    nlinarith
+
+theorem normalizedSquareSecondUpper_le_firstUpper {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareSecondUpperBarrierR m ≤
+      normalizedSquareUpperBarrierR m := by
+  unfold normalizedSquareSecondUpperBarrierR normalizedSquareUpperBarrierR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hden : (0 : ℝ) < 4 * (m : ℝ) - 1 := by
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    nlinarith
+  field_simp [ne_of_gt hmR, ne_of_gt hden,
+    ne_of_gt (show (0 : ℝ) < 4 * (m : ℝ) + 1 by positivity)]
+  have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  nlinarith
+
+theorem normalizedSquareLower_first_le_second {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareLowerBarrierR m ≤
+      normalizedSquareSecondLowerBarrierR m := by
+  unfold normalizedSquareLowerBarrierR normalizedSquareSecondLowerBarrierR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  field_simp [ne_of_gt hmR,
+    ne_of_gt (show (0 : ℝ) < 4 * (m : ℝ) + 1 by positivity)]
+  have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  nlinarith
+
+theorem normalizedSquareSecondLower_le_firstUpper {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareSecondLowerBarrierR m ≤
+      normalizedSquareUpperBarrierR m := by
+  unfold normalizedSquareSecondLowerBarrierR normalizedSquareUpperBarrierR
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hden : (0 : ℝ) < 4 * (m : ℝ) - 1 := by
+    have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    nlinarith
+  field_simp [ne_of_gt hmR, ne_of_gt hden,
+    ne_of_gt (show (0 : ℝ) < 4 * (m : ℝ) + 1 by positivity)]
+  have hmone : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  nlinarith
+
+theorem tendsto_normalizedSquareSecondUpperBarrier_shift_one :
+    Filter.Tendsto
+      (fun n : ℕ => normalizedSquareSecondUpperBarrierR (n + 1))
+      Filter.atTop (nhds (1 : ℝ)) := by
+  apply Filter.Tendsto.squeeze'
+    tendsto_const_nhds
+    tendsto_normalizedSquareUpperBarrier_shift_one
+  · filter_upwards [] with n
+    exact one_le_normalizedSquareSecondUpperBarrierR (by omega)
+  · filter_upwards [] with n
+    exact normalizedSquareSecondUpper_le_firstUpper (by omega)
+
+theorem tendsto_normalizedSquareSecondLowerBarrier_shift_one :
+    Filter.Tendsto
+      (fun n : ℕ => normalizedSquareSecondLowerBarrierR (n + 1))
+      Filter.atTop (nhds (1 : ℝ)) := by
+  apply Filter.Tendsto.squeeze'
+    tendsto_normalizedSquareLowerBarrier_shift_one
+    tendsto_normalizedSquareUpperBarrier_shift_one
+  · filter_upwards [] with n
+    exact normalizedSquareLower_first_le_second (by omega)
+  · filter_upwards [] with n
+    exact normalizedSquareSecondLower_le_firstUpper (by omega)
+
+theorem tendsto_normalizedSquareSecondUpperRatio_one :
+    Filter.Tendsto normalizedSquareSecondUpperRatio Filter.atTop (nhds 1) := by
+  have hS := tendsto_normalizedCentralSquareR_one.comp
+    (tendsto_add_atTop_nat 1)
+  have hU := tendsto_normalizedSquareSecondUpperBarrier_shift_one
+  have hQ := hS.div hU (by norm_num : (1 : ℝ) ≠ 0)
+  convert hQ using 1
+  · funext n
+    rfl
+  · norm_num
+
+theorem tendsto_normalizedSquareSecondLowerRatio_one :
+    Filter.Tendsto normalizedSquareSecondLowerRatio Filter.atTop (nhds 1) := by
+  have hS := tendsto_normalizedCentralSquareR_one.comp
+    (tendsto_add_atTop_nat 1)
+  have hL := tendsto_normalizedSquareSecondLowerBarrier_shift_one
+  have hQ := hS.div hL (by norm_num : (1 : ℝ) ≠ 0)
+  convert hQ using 1
+  · funext n
+    rfl
+  · norm_num
+
+theorem normalizedSquareSecond_le_upperBarrier {m : ℕ} (hm : m ≠ 0) :
+    normalizedCentralSquareR m ≤ normalizedSquareSecondUpperBarrierR m := by
+  let n := m - 1
+  have hn : n + 1 = m := by dsimp [n]; omega
+  have hle : normalizedSquareSecondUpperRatio n ≤ 1 := by
+    exact normalizedSquareSecondUpperRatio_monotone.ge_of_tendsto
+      tendsto_normalizedSquareSecondUpperRatio_one n
+  unfold normalizedSquareSecondUpperRatio at hle
+  rw [hn] at hle
+  simpa using (div_le_iff₀ (normalizedSquareSecondUpperBarrierR_pos hm)).mp hle
+
+theorem normalizedSquareSecondLowerBarrier_le {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareSecondLowerBarrierR m ≤ normalizedCentralSquareR m := by
+  let n := m - 1
+  have hn : n + 1 = m := by dsimp [n]; omega
+  have hge : 1 ≤ normalizedSquareSecondLowerRatio n := by
+    exact normalizedSquareSecondLowerRatio_antitone.le_of_tendsto
+      tendsto_normalizedSquareSecondLowerRatio_one n
+  unfold normalizedSquareSecondLowerRatio at hge
+  rw [hn] at hge
+  simpa using (le_div_iff₀ (normalizedSquareSecondLowerBarrierR_pos m)).mp hge
+
+theorem tendsto_nat_sq_secondUpperBarrier_sub_first :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (normalizedSquareSecondUpperBarrierR m - 1 -
+          1 / (4 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := by
+  have hconst : Filter.Tendsto (fun _ : ℕ => (1 / 32 : ℝ))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := tendsto_const_nhds
+  refine hconst.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  unfold normalizedSquareSecondUpperBarrierR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hmR]
+  ring
+
+theorem tendsto_nat_sq_secondLowerBarrier_sub_first :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (normalizedSquareSecondLowerBarrierR m - 1 -
+          1 / (4 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := by
+  have hinv : Filter.Tendsto
+      (fun m : ℕ => (1 : ℝ) / (m : ℝ)) Filter.atTop (nhds 0) :=
+    tendsto_one_div_atTop_nhds_zero_nat
+  have hterm : Filter.Tendsto
+      (fun m : ℕ => (1 : ℝ) / (64 * (m : ℝ)))
+      Filter.atTop (nhds 0) := by
+    have h := hinv.div_const (64 : ℝ)
+    convert h using 1
+    · funext m
+      field_simp
+    · norm_num
+  have hlim : Filter.Tendsto
+      (fun m : ℕ => (1 / 32 : ℝ) - 1 / (64 * (m : ℝ)))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := by
+    have hconst : Filter.Tendsto (fun _ : ℕ => (1 / 32 : ℝ))
+        Filter.atTop (nhds (1 / 32 : ℝ)) := tendsto_const_nhds
+    convert hconst.sub hterm using 1
+    all_goals norm_num
+  refine hlim.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  unfold normalizedSquareSecondLowerBarrierR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hmR]
+  ring
+
+theorem tendsto_nat_sq_sub_first_of_second_barriers
+    (S : ℕ → ℝ)
+    (hlower : ∀ {m : ℕ}, m ≠ 0 →
+      normalizedSquareSecondLowerBarrierR m ≤ S m)
+    (hupper : ∀ {m : ℕ}, m ≠ 0 →
+      S m ≤ normalizedSquareSecondUpperBarrierR m) :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (S m - 1 - 1 / (4 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := by
+  apply Filter.Tendsto.squeeze'
+    tendsto_nat_sq_secondLowerBarrier_sub_first
+    tendsto_nat_sq_secondUpperBarrier_sub_first
+  · filter_upwards [eventually_gt_atTop 0] with m hm
+    have hmR : 0 ≤ (m : ℝ) ^ 2 := sq_nonneg _
+    have h := hlower (Nat.ne_of_gt hm)
+    nlinarith
+  · filter_upwards [eventually_gt_atTop 0] with m hm
+    have hmR : 0 ≤ (m : ℝ) ^ 2 := sq_nonneg _
+    have h := hupper (Nat.ne_of_gt hm)
+    nlinarith
+
+theorem tendsto_nat_sq_normalizedCentralSquare_second_correction :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (normalizedCentralSquareR m - 1 - 1 / (4 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 32 : ℝ)) := by
+  apply tendsto_nat_sq_sub_first_of_second_barriers
+  · intro m hm
+    exact normalizedSquareSecondLowerBarrier_le hm
+  · intro m hm
+    exact normalizedSquareSecond_le_upperBarrier hm
+
+/-!
 Square-root transport turns the normalized-square coefficient `1/4` into the
 central-ratio coefficient `1/8`.  The proof is the exact identity
 `u - 1 = (u^2 - 1)/(u + 1)` on the eventual positive tail; no Taylor
@@ -650,6 +1013,110 @@ theorem tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
   have hsum : u m + 1 ≠ 0 := ne_of_gt (by linarith)
   dsimp [u]
   field_simp [hsqrt, hsum]
+  ring
+
+theorem tendsto_nat_sq_centralRatio_normalized_sub_first_of_second_correction_core :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (((((centralRatioQ m : ℚ) : ℝ) /
+          Real.sqrt (Real.pi * (m : ℝ))) - 1) -
+          1 / (8 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+  let u : ℕ → ℝ := fun m =>
+    ((centralRatioQ m : ℚ) : ℝ) /
+      Real.sqrt (Real.pi * (m : ℝ))
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
+  have hfirst : Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) * (u m - 1))
+      Filter.atTop (nhds (1 / 8 : ℝ)) := by
+    simpa [u] using
+      tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
+        (tendsto_mul_sub_one_of_normalizedSquare_barriers
+          normalizedCentralSquareR
+          normalizedSquareLowerBarrier_le normalizedSquare_le_upperBarrier)
+  have hfirstSq := hfirst.pow 2
+  have hfirstSq' : Filter.Tendsto
+      (fun m : ℕ => ((m : ℝ) * (u m - 1)) ^ 2)
+      Filter.atTop (nhds (1 / 64 : ℝ)) := by
+    convert hfirstSq using 1
+    all_goals norm_num
+  have hsecond := tendsto_nat_sq_normalizedCentralSquare_second_correction
+  have hdiff := hsecond.sub hfirstSq'
+  have hdiff' : Filter.Tendsto
+      (fun m : ℕ =>
+        ((m : ℝ) ^ 2 *
+          (normalizedCentralSquareR m - 1 - 1 / (4 * (m : ℝ))) -
+          ((m : ℝ) * (u m - 1)) ^ 2) / 2)
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+    convert hdiff.div_const (2 : ℝ) using 1
+    all_goals norm_num
+  refine hdiff'.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    exact (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+      (by exact_mod_cast hm))).ne'
+  have hu_sq : normalizedCentralSquareR m = (u m) ^ 2 := by
+    unfold normalizedCentralSquareR u
+    rw [div_pow]
+    rw [Real.sq_sqrt (mul_nonneg Real.pi_pos.le
+      (by exact_mod_cast (Nat.zero_le m)))]
+  rw [hu_sq]
+  dsimp [u]
+  field_simp [hmR, hsqrt]
+  ring
+
+theorem tendsto_nat_sq_centralRatio_normalized_sub_first_of_second_correction :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (((((centralRatioQ m : ℚ) : ℝ) /
+          Real.sqrt (Real.pi * (m : ℝ))) - 1) -
+          1 / (8 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+  let u : ℕ → ℝ := fun m =>
+    ((centralRatioQ m : ℚ) : ℝ) /
+      Real.sqrt (Real.pi * (m : ℝ))
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
+  have hfirst : Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) * (u m - 1))
+      Filter.atTop (nhds (1 / 8 : ℝ)) := by
+    simpa [u] using
+      tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
+        (tendsto_mul_sub_one_of_normalizedSquare_barriers
+          normalizedCentralSquareR
+          normalizedSquareLowerBarrier_le normalizedSquare_le_upperBarrier)
+  have hfirstSq := hfirst.pow 2
+  have hfirstSq' : Filter.Tendsto
+      (fun m : ℕ => ((m : ℝ) * (u m - 1)) ^ 2)
+      Filter.atTop (nhds (1 / 64 : ℝ)) := by
+    convert hfirstSq using 1
+    all_goals norm_num
+  have hsecond := tendsto_nat_sq_normalizedCentralSquare_second_correction
+  have hdiff := hsecond.sub hfirstSq'
+  have hdiff' : Filter.Tendsto
+      (fun m : ℕ =>
+        ((m : ℝ) ^ 2 *
+          (normalizedCentralSquareR m - 1 - 1 / (4 * (m : ℝ))) -
+          ((m : ℝ) * (u m - 1)) ^ 2) / 2)
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+    convert hdiff.div_const (2 : ℝ) using 1
+    all_goals norm_num
+  refine hdiff'.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    exact (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+      (by exact_mod_cast hm))).ne'
+  have hu_sq : normalizedCentralSquareR m = (u m) ^ 2 := by
+    unfold normalizedCentralSquareR u
+    rw [div_pow]
+    rw [Real.sq_sqrt (mul_nonneg Real.pi_pos.le
+      (by exact_mod_cast (Nat.zero_le m)))]
+  rw [hu_sq]
+  dsimp [u]
+  field_simp [hmR, hsqrt]
   ring
 
 /-!
@@ -744,6 +1211,107 @@ theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one :
     exact normalizedSquareLowerBarrier_le hm
   · intro m hm
     exact normalizedSquare_le_upperBarrier hm
+
+theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correction :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        ((((Nat.choose (2 * m) m : ℕ) : ℝ) /
+          centralBinomialFastApproxR m) - 1 +
+          1 / (8 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+  let u : ℕ → ℝ := fun m =>
+    ((centralRatioQ m : ℚ) : ℝ) /
+      Real.sqrt (Real.pi * (m : ℝ))
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
+  have he : Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (u m - 1 - 1 / (8 * (m : ℝ))))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+    simpa [u] using
+      tendsto_nat_sq_centralRatio_normalized_sub_first_of_second_correction
+  have ha2 : Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) ^ 2 *
+        (1 / (8 * (m : ℝ))) ^ 2)
+      Filter.atTop (nhds (1 / 64 : ℝ)) := by
+    have hconst : Filter.Tendsto (fun _ : ℕ => (1 / 64 : ℝ))
+        Filter.atTop (nhds (1 / 64 : ℝ)) := tendsto_const_nhds
+    refine hconst.congr' ?_
+    filter_upwards [eventually_gt_atTop 0] with m hm
+    have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+    field_simp [hmR]
+    ring
+  have ha2div : Filter.Tendsto
+      (fun m : ℕ => ((m : ℝ) ^ 2 *
+        (1 / (8 * (m : ℝ))) ^ 2) / u m)
+      Filter.atTop (nhds (1 / 64 : ℝ)) := by
+    have h := ha2.div hu (by norm_num : (1 : ℝ) ≠ 0)
+    convert h using 1
+    · ext m
+      rfl
+    · norm_num
+  have hinv : Filter.Tendsto
+      (fun m : ℕ => (1 : ℝ) / (m : ℝ)) Filter.atTop (nhds 0) :=
+    tendsto_one_div_atTop_nhds_zero_nat
+  have ha : Filter.Tendsto
+      (fun m : ℕ => 1 / (8 * (m : ℝ))) Filter.atTop (nhds 0) := by
+    have h := hinv.div_const (8 : ℝ)
+    convert h using 1
+    · funext m
+      field_simp
+    · norm_num
+  have hfactor : Filter.Tendsto
+      (fun m : ℕ => (1 - 1 / (8 * (m : ℝ))) / u m)
+      Filter.atTop (nhds (1 : ℝ)) := by
+    have hsub : Filter.Tendsto
+        (fun m : ℕ => 1 - 1 / (8 * (m : ℝ)))
+        Filter.atTop (nhds (1 : ℝ)) := by
+      have hconst : Filter.Tendsto (fun _ : ℕ => (1 : ℝ))
+          Filter.atTop (nhds 1) := tendsto_const_nhds
+      convert hconst.sub ha using 1
+      all_goals norm_num
+    have h := hsub.div hu (by norm_num : (1 : ℝ) ≠ 0)
+    convert h using 1
+    · ext m
+      rfl
+    · norm_num
+  have hprod : Filter.Tendsto
+      (fun m : ℕ => ((m : ℝ) ^ 2 *
+        (u m - 1 - 1 / (8 * (m : ℝ)))) *
+          ((1 - 1 / (8 * (m : ℝ))) / u m))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+    have h := he.mul hfactor
+    convert h using 1
+    all_goals norm_num
+  have hdiff : Filter.Tendsto
+      (fun m : ℕ =>
+        (((m : ℝ) ^ 2 * (1 / (8 * (m : ℝ))) ^ 2) / u m) -
+          (((m : ℝ) ^ 2 *
+            (u m - 1 - 1 / (8 * (m : ℝ)))) *
+            ((1 - 1 / (8 * (m : ℝ))) / u m)))
+      Filter.atTop (nhds (1 / 128 : ℝ)) := by
+    have h := ha2div.sub hprod
+    convert h using 1
+    all_goals norm_num
+  refine hdiff.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hcr_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    exact (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+      (by exact_mod_cast hm))).ne'
+  have hu_pos : 0 < u m := by
+    dsimp [u]
+    exact div_pos hcr_pos (Real.sqrt_pos.2
+      (mul_pos Real.pi_pos (by exact_mod_cast hm)))
+  have hu_ne : u m ≠ 0 := hu_pos.ne'
+  have hchoose := real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ m
+  unfold centralBinomialFastApproxR
+  rw [hchoose]
+  dsimp [u]
+  field_simp [hmR, hsqrt, hu_ne]
+  ring
 
 /-!
 ## Executable certification boundary
