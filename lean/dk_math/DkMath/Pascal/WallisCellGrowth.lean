@@ -1212,6 +1212,37 @@ theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one :
   · intro m hm
     exact normalizedSquare_le_upperBarrier hm
 
+/-!
+## Explicit finite second-order remainder
+
+The global second-order barriers give a finite, executable remainder interval,
+not just a limit coefficient.  Writing
+`P_m = 1 + 1/(4m) + 1/(32m²)`, the exact normalized square lies in
+`[P_m - 1/(64m³), P_m]`.
+-/
+
+theorem normalizedCentralSquare_second_remainder_interval
+    {m : ℕ} (hm : m ≠ 0) :
+    -(1 / (64 * (m : ℝ) ^ 3)) ≤
+        normalizedCentralSquareR m -
+          (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) ∧
+      normalizedCentralSquareR m -
+          (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2)) ≤ 0 := by
+  have hlow := normalizedSquareSecondLowerBarrier_le hm
+  have hupp := normalizedSquareSecond_le_upperBarrier hm
+  unfold normalizedSquareSecondLowerBarrierR at hlow
+  unfold normalizedSquareSecondUpperBarrierR at hupp
+  constructor <;> linarith
+
+theorem abs_normalizedCentralSquare_sub_secondPolynomial_le
+    {m : ℕ} (hm : m ≠ 0) :
+    |normalizedCentralSquareR m -
+        (1 + 1 / (4 * (m : ℝ)) + 1 / (32 * (m : ℝ) ^ 2))| ≤
+      1 / (64 * (m : ℝ) ^ 3) := by
+  have h := normalizedCentralSquare_second_remainder_interval hm
+  rw [abs_le]
+  constructor <;> linarith [h.1, h.2]
+
 theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correction :
     Filter.Tendsto
       (fun m : ℕ => (m : ℝ) ^ 2 *
