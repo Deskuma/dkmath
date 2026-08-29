@@ -388,6 +388,208 @@ theorem tendsto_normalizedCentralSquareR_one :
   field_simp [hmR, Real.pi_ne_zero]
 
 /-!
+## Ratio monotonicity and global barrier comparison
+
+The local barrier inequalities become global once the ratios are taken.  We
+start the ratios at `m = 1`, avoiding the intentionally undefined `π * 0`
+normalization and the negative upper-barrier denominator at `m = 0`.
+-/
+
+noncomputable def normalizedSquareUpperRatio (n : ℕ) : ℝ :=
+  normalizedCentralSquareR (n + 1) /
+    normalizedSquareUpperBarrierR (n + 1)
+
+noncomputable def normalizedSquareLowerRatio (n : ℕ) : ℝ :=
+  normalizedCentralSquareR (n + 1) /
+    normalizedSquareLowerBarrierR (n + 1)
+
+theorem normalizedCentralSquareR_pos {m : ℕ} (hm : m ≠ 0) :
+    0 < normalizedCentralSquareR m := by
+  unfold normalizedCentralSquareR
+  exact div_pos (sq_pos_of_pos (by
+    exact_mod_cast centralRatioQ_pos m))
+    (mul_pos Real.pi_pos (by exact_mod_cast (Nat.pos_of_ne_zero hm)))
+
+theorem normalizedCentralSquareStepR_pos {m : ℕ} (hm : m ≠ 0) :
+    0 < normalizedCentralSquareStepR m := by
+  unfold normalizedCentralSquareStepR
+  positivity
+
+theorem normalizedSquareUpperBarrierR_pos {m : ℕ} (hm : m ≠ 0) :
+    0 < normalizedSquareUpperBarrierR m := by
+  unfold normalizedSquareUpperBarrierR
+  have hden : (0 : ℝ) < 4 * (m : ℝ) - 1 := by
+    have hm1 : (1 : ℝ) ≤ (m : ℝ) := by
+      exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+    nlinarith
+  positivity
+
+theorem normalizedSquareLowerBarrierR_pos (m : ℕ) :
+    0 < normalizedSquareLowerBarrierR m := by
+  unfold normalizedSquareLowerBarrierR
+  positivity
+
+theorem normalizedSquareUpperRatio_succ_ge (n : ℕ) :
+    normalizedSquareUpperRatio n ≤ normalizedSquareUpperRatio (n + 1) := by
+  let m := n + 1
+  have hm : m ≠ 0 := by dsimp [m]; omega
+  have hrec := normalizedCentralSquareR_succ_eq_mul_step hm
+  have hstep := normalizedSquareUpperBarrier_step_le hm
+  have hApos := normalizedCentralSquareStepR_pos hm
+  have hSpos := normalizedCentralSquareR_pos hm
+  have hUpos := normalizedSquareUpperBarrierR_pos hm
+  have hUnextpos := normalizedSquareUpperBarrierR_pos (by omega : m + 1 ≠ 0)
+  have hUstep : normalizedSquareUpperBarrierR (m + 1) ≤
+      normalizedCentralSquareStepR m * normalizedSquareUpperBarrierR m := by
+    simpa [mul_comm] using (div_le_iff₀ hApos).mp hstep
+  unfold normalizedSquareUpperRatio
+  dsimp [m] at hrec hUstep hSpos hUpos hUnextpos ⊢
+  rw [hrec]
+  apply (div_le_div_iff₀ hUpos hUnextpos).2
+  calc
+    normalizedCentralSquareR (n + 1) *
+        normalizedSquareUpperBarrierR (n + 1 + 1) ≤
+      normalizedCentralSquareR (n + 1) *
+        (normalizedCentralSquareStepR (n + 1) *
+          normalizedSquareUpperBarrierR (n + 1)) := by
+      exact mul_le_mul_of_nonneg_left hUstep hSpos.le
+    _ = (normalizedCentralSquareR (n + 1) *
+        normalizedCentralSquareStepR (n + 1)) *
+        normalizedSquareUpperBarrierR (n + 1) := by ring
+
+theorem normalizedSquareLowerRatio_succ_le (n : ℕ) :
+    normalizedSquareLowerRatio (n + 1) ≤ normalizedSquareLowerRatio n := by
+  let m := n + 1
+  have hm : m ≠ 0 := by dsimp [m]; omega
+  have hrec := normalizedCentralSquareR_succ_eq_mul_step hm
+  have hstep := normalizedSquareLowerBarrier_step_ge hm
+  have hApos := normalizedCentralSquareStepR_pos hm
+  have hSpos := normalizedCentralSquareR_pos hm
+  have hLpos := normalizedSquareLowerBarrierR_pos m
+  have hLnextpos := normalizedSquareLowerBarrierR_pos (m + 1)
+  have hLstep : normalizedCentralSquareStepR m *
+      normalizedSquareLowerBarrierR m ≤
+      normalizedSquareLowerBarrierR (m + 1) := by
+    simpa [mul_comm] using (le_div_iff₀ hApos).mp hstep
+  unfold normalizedSquareLowerRatio
+  dsimp [m] at hrec hLstep hSpos hLpos hLnextpos ⊢
+  rw [hrec]
+  apply (div_le_div_iff₀ hLnextpos hLpos).2
+  calc
+    (normalizedCentralSquareR (n + 1) *
+        normalizedCentralSquareStepR (n + 1)) *
+        normalizedSquareLowerBarrierR (n + 1) ≤
+      normalizedCentralSquareR (n + 1) *
+        normalizedSquareLowerBarrierR (n + 1 + 1) := by
+      simpa [mul_assoc] using mul_le_mul_of_nonneg_left hLstep hSpos.le
+    _ = normalizedCentralSquareR (n + 1) *
+        normalizedSquareLowerBarrierR (n + 1 + 1) := rfl
+
+theorem normalizedSquareUpperRatio_monotone :
+    Monotone normalizedSquareUpperRatio :=
+  monotone_nat_of_le_succ normalizedSquareUpperRatio_succ_ge
+
+theorem normalizedSquareLowerRatio_antitone :
+    Antitone normalizedSquareLowerRatio :=
+  antitone_nat_of_succ_le normalizedSquareLowerRatio_succ_le
+
+theorem tendsto_normalizedSquareUpperBarrier_shift_one :
+    Filter.Tendsto
+      (fun n : ℕ => normalizedSquareUpperBarrierR (n + 1))
+      Filter.atTop (nhds (1 : ℝ)) := by
+  have hzero : Filter.Tendsto
+      (fun n : ℕ => 1 / (4 * (n : ℝ) + 3))
+      Filter.atTop (nhds (0 : ℝ)) := by
+    apply squeeze_zero' (g := fun n : ℕ => (1 : ℝ) / (n : ℝ))
+    · filter_upwards [] with n
+      positivity
+    · filter_upwards [eventually_gt_atTop 0] with n hn
+      have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
+      have hden : (0 : ℝ) < 4 * (n : ℝ) + 3 := by positivity
+      field_simp [hnR.ne', hden.ne']
+      nlinarith
+    · exact (tendsto_one_div_atTop_nhds_zero_nat :
+        Filter.Tendsto (fun n : ℕ => (1 : ℝ) / (n : ℝ))
+          Filter.atTop (nhds 0))
+  have hone := hzero.add_const (1 : ℝ)
+  convert hone using 1
+  · funext n
+    unfold normalizedSquareUpperBarrierR
+    push_cast
+    ring
+  · norm_num
+
+theorem tendsto_normalizedSquareLowerBarrier_shift_one :
+    Filter.Tendsto
+      (fun n : ℕ => normalizedSquareLowerBarrierR (n + 1))
+      Filter.atTop (nhds (1 : ℝ)) := by
+  have hzero : Filter.Tendsto
+      (fun n : ℕ => 1 / (4 * (n : ℝ) + 5))
+      Filter.atTop (nhds (0 : ℝ)) := by
+    apply squeeze_zero' (g := fun n : ℕ => (1 : ℝ) / (n : ℝ))
+    · filter_upwards [] with n
+      positivity
+    · filter_upwards [eventually_gt_atTop 0] with n hn
+      have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
+      have hden : (0 : ℝ) < 4 * (n : ℝ) + 5 := by positivity
+      field_simp [hnR.ne', hden.ne']
+      nlinarith
+    · exact (tendsto_one_div_atTop_nhds_zero_nat :
+        Filter.Tendsto (fun n : ℕ => (1 : ℝ) / (n : ℝ))
+          Filter.atTop (nhds 0))
+  have hone := hzero.add_const (1 : ℝ)
+  convert hone using 1
+  · funext n
+    unfold normalizedSquareLowerBarrierR
+    push_cast
+    ring
+  · norm_num
+
+theorem tendsto_normalizedSquareUpperRatio_one :
+    Filter.Tendsto normalizedSquareUpperRatio Filter.atTop (nhds 1) := by
+  have hS := tendsto_normalizedCentralSquareR_one.comp
+    (tendsto_add_atTop_nat 1)
+  have hU := tendsto_normalizedSquareUpperBarrier_shift_one
+  have hQ := hS.div hU (by norm_num : (1 : ℝ) ≠ 0)
+  convert hQ using 1
+  · funext n
+    rfl
+  · norm_num
+
+theorem tendsto_normalizedSquareLowerRatio_one :
+    Filter.Tendsto normalizedSquareLowerRatio Filter.atTop (nhds 1) := by
+  have hS := tendsto_normalizedCentralSquareR_one.comp
+    (tendsto_add_atTop_nat 1)
+  have hL := tendsto_normalizedSquareLowerBarrier_shift_one
+  have hQ := hS.div hL (by norm_num : (1 : ℝ) ≠ 0)
+  convert hQ using 1
+  · funext n
+    rfl
+  · norm_num
+
+theorem normalizedSquare_le_upperBarrier {m : ℕ} (hm : m ≠ 0) :
+    normalizedCentralSquareR m ≤ normalizedSquareUpperBarrierR m := by
+  let n := m - 1
+  have hn : n + 1 = m := by dsimp [n]; omega
+  have hle : normalizedSquareUpperRatio n ≤ 1 := by
+    exact normalizedSquareUpperRatio_monotone.ge_of_tendsto
+      tendsto_normalizedSquareUpperRatio_one n
+  unfold normalizedSquareUpperRatio at hle
+  rw [hn] at hle
+  simpa using (div_le_iff₀ (normalizedSquareUpperBarrierR_pos hm)).mp hle
+
+theorem normalizedSquareLowerBarrier_le {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareLowerBarrierR m ≤ normalizedCentralSquareR m := by
+  let n := m - 1
+  have hn : n + 1 = m := by dsimp [n]; omega
+  have hge : 1 ≤ normalizedSquareLowerRatio n := by
+    exact normalizedSquareLowerRatio_antitone.le_of_tendsto
+      tendsto_normalizedSquareLowerRatio_one n
+  unfold normalizedSquareLowerRatio at hge
+  rw [hn] at hge
+  simpa using (le_div_iff₀ (normalizedSquareLowerBarrierR_pos m)).mp hge
+
+/-!
 Square-root transport turns the normalized-square coefficient `1/4` into the
 central-ratio coefficient `1/8`.  The proof is the exact identity
 `u - 1 = (u^2 - 1)/(u + 1)` on the eventual positive tail; no Taylor
@@ -525,6 +727,23 @@ theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_barriers
   exact tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_square_correction
     (tendsto_mul_sub_one_of_normalizedSquare_barriers
       normalizedCentralSquareR hlower hupper)
+
+/--
+Unconditional first Wallis correction for the central Pascal cell.  The global
+barrier comparison above is obtained solely from the exact recurrence, the
+local barrier steps, and the already-known limit `S_m → 1`.
+-/
+theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        ((((Nat.choose (2 * m) m : ℕ) : ℝ) /
+          centralBinomialFastApproxR m) - 1))
+      Filter.atTop (nhds (-1 / 8 : ℝ)) := by
+  apply tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_barriers
+  · intro m hm
+    exact normalizedSquareLowerBarrier_le hm
+  · intro m hm
+    exact normalizedSquare_le_upperBarrier hm
 
 /-!
 ## Executable certification boundary
