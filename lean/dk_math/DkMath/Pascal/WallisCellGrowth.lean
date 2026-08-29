@@ -40,6 +40,7 @@ nearest edge.  The square-root formula is likewise an exact theorem over
 namespace DkMath.Pascal.WallisCellGrowth
 
 open Finset
+open Filter Topology
 open DkMath.Pascal.WallisCosmicPetalBridge
 open DkMath.Pascal.WallisLimitBridge
 open DkMath.Pascal.WallisGrowthBridge
@@ -197,6 +198,333 @@ theorem real_centralBinomial_sq_div_fastApprox_sq_eq_pi_mul_nat_div_wallis
     (Real.sqrt_pos.2 (mul_pos Real.pi_pos hm_pos)).ne'
   field_simp [hmR, hW, hsqrt, Real.pi_ne_zero]
   rw [Real.sq_sqrt (mul_nonneg hm_pos.le Real.pi_pos.le)]
+
+/-!
+## First-correction recurrence
+
+The following layer does not import Stirling.  It normalizes the exact
+central-ratio square by `πm` and records its one-step recurrence.  The two
+rational barriers below are local supersolution/subsolution inequalities for
+that recurrence; both have first coefficient `1/4`.  A later tail-comparison
+lemma can therefore extract the normalized correction `+1/(4m)`, which in
+turn gives the binomial correction `-1/(8m)` after taking a square root and
+inverting.
+-/
+
+/-- The normalized central-ratio square `R_m²/(πm)`. -/
+noncomputable def normalizedCentralSquareR (m : ℕ) : ℝ :=
+  (((centralRatioQ m : ℚ) : ℝ) ^ 2) /
+    (Real.pi * (m : ℝ))
+
+/-- The exact rational step factor in the normalized-square recurrence. -/
+noncomputable def normalizedCentralSquareStepR (m : ℕ) : ℝ :=
+  4 * (m : ℝ) * (m + 1 : ℝ) / (2 * m + 1 : ℝ) ^ 2
+
+/-- Exact recurrence forced by the finite central-ratio identity. -/
+theorem normalizedCentralSquareR_succ_eq_mul_step
+    {m : ℕ} (hm : m ≠ 0) :
+    normalizedCentralSquareR (m + 1) =
+      normalizedCentralSquareR m * normalizedCentralSquareStepR m := by
+  have hratioQ := centralRatioQ_succ_eq m
+  have hratio :
+      ((centralRatioQ (m + 1) : ℚ) : ℝ) =
+        ((centralRatioQ m : ℚ) : ℝ) *
+          ((2 * m + 2 : ℚ) / (2 * m + 1 : ℚ) : ℝ) := by
+    exact_mod_cast hratioQ
+  push_cast at hratio
+  rw [normalizedCentralSquareR, normalizedCentralSquareR,
+    normalizedCentralSquareStepR, hratio]
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast hm
+  field_simp [hmR, Real.pi_ne_zero]
+  norm_num [Nat.cast_add, Nat.cast_one]
+  ring_nf
+
+/-- Upper rational barrier for the normalized-square recurrence. -/
+noncomputable def normalizedSquareUpperBarrierR (m : ℕ) : ℝ :=
+  1 + 1 / (4 * (m : ℝ) - 1)
+
+/-- Lower rational barrier for the normalized-square recurrence. -/
+noncomputable def normalizedSquareLowerBarrierR (m : ℕ) : ℝ :=
+  1 + 1 / (4 * (m : ℝ) + 1)
+
+/-- The upper barrier is a local supersolution. -/
+theorem normalizedSquareUpperBarrier_step_le
+    {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareUpperBarrierR (m + 1) /
+        normalizedCentralSquareStepR m ≤
+      normalizedSquareUpperBarrierR m := by
+  unfold normalizedSquareUpperBarrierR normalizedCentralSquareStepR
+  push_cast
+  have hmR : (0 : ℝ) < (m : ℝ) := by exact_mod_cast (Nat.pos_of_ne_zero hm)
+  have hm1 : (1 : ℝ) ≤ (m : ℝ) := by
+    exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hm)
+  have hden : (0 : ℝ) < 4 * (m : ℝ) - 1 := by nlinarith
+  have hden_next : (0 : ℝ) < 4 * (m + 1 : ℝ) - 1 := by
+    nlinarith
+  field_simp [ne_of_gt hmR, ne_of_gt hden, ne_of_gt hden_next]
+  ring_nf
+  nlinarith [sq_nonneg (4 * (m : ℝ) - 1)]
+
+/-- The lower barrier is a local subsolution. -/
+theorem normalizedSquareLowerBarrier_step_ge
+    {m : ℕ} (hm : m ≠ 0) :
+    normalizedSquareLowerBarrierR m ≤
+      normalizedSquareLowerBarrierR (m + 1) /
+        normalizedCentralSquareStepR m := by
+  unfold normalizedSquareLowerBarrierR normalizedCentralSquareStepR
+  push_cast
+  have hmR : (0 : ℝ) < (m : ℝ) := by exact_mod_cast (Nat.pos_of_ne_zero hm)
+  field_simp [ne_of_gt (show (0 : ℝ) < 4 * (m : ℝ) + 1 by positivity),
+    ne_of_gt (show (0 : ℝ) < 4 * (m + 1 : ℝ) + 1 by positivity),
+    ne_of_gt (show (0 : ℝ) < 2 * (m : ℝ) + 1 by positivity)]
+  ring_nf
+  nlinarith [sq_nonneg (2 * (m : ℝ) + 1)]
+
+/-- The upper barrier has first coefficient `1/4`. -/
+theorem tendsto_nat_mul_upperBarrier_sub_one :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        (normalizedSquareUpperBarrierR m - 1))
+      Filter.atTop (nhds (1 / 4 : ℝ)) := by
+  have hden : Filter.Tendsto
+      (fun m : ℕ => 4 - 1 / (m : ℝ)) Filter.atTop (nhds (4 : ℝ)) := by
+    simpa using (tendsto_const_nhds.sub
+      (tendsto_one_div_atTop_nhds_zero_nat :
+        Filter.Tendsto (fun m : ℕ => (1 : ℝ) / (m : ℝ))
+          Filter.atTop (nhds 0)))
+  have hratio : Filter.Tendsto
+      (fun m : ℕ => 1 / (4 - 1 / (m : ℝ))) Filter.atTop
+        (nhds (1 / 4 : ℝ)) := by
+    have hconst : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop
+        (nhds 1) := tendsto_const_nhds
+    have hh := hconst.div hden (by norm_num : (4 : ℝ) ≠ 0)
+    refine hh.congr' ?_
+    filter_upwards [] with m
+    rfl
+  refine hratio.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  unfold normalizedSquareUpperBarrierR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hmR]
+  ring
+
+/-- The lower barrier has the same first coefficient `1/4`. -/
+theorem tendsto_nat_mul_lowerBarrier_sub_one :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        (normalizedSquareLowerBarrierR m - 1))
+      Filter.atTop (nhds (1 / 4 : ℝ)) := by
+  have hden : Filter.Tendsto
+      (fun m : ℕ => 4 + 1 / (m : ℝ)) Filter.atTop (nhds (4 : ℝ)) := by
+    simpa using (tendsto_const_nhds.add
+      (tendsto_one_div_atTop_nhds_zero_nat :
+        Filter.Tendsto (fun m : ℕ => (1 : ℝ) / (m : ℝ))
+          Filter.atTop (nhds 0)))
+  have hratio : Filter.Tendsto
+      (fun m : ℕ => 1 / (4 + 1 / (m : ℝ))) Filter.atTop
+        (nhds (1 / 4 : ℝ)) := by
+    have hconst : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop
+        (nhds 1) := tendsto_const_nhds
+    have hh := hconst.div hden (by norm_num : (4 : ℝ) ≠ 0)
+    refine hh.congr' ?_
+    filter_upwards [] with m
+    rfl
+  refine hratio.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  unfold normalizedSquareLowerBarrierR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hmR]
+  ring
+
+/-!
+The preceding two limits are the coefficient calculation for the rational
+barriers themselves.  The next lemma isolates the only remaining comparison
+step: once the exact normalized-square sequence is placed between those two
+barriers, the coefficient `1/4` follows by an order squeeze.  This keeps the
+analytic tail comparison explicit instead of hiding it in an asymptotic
+notation.
+-/
+
+theorem tendsto_mul_sub_one_of_normalizedSquare_barriers
+    (S : ℕ → ℝ)
+    (hlower : ∀ {m : ℕ}, m ≠ 0 →
+      normalizedSquareLowerBarrierR m ≤ S m)
+    (hupper : ∀ {m : ℕ}, m ≠ 0 →
+      S m ≤ normalizedSquareUpperBarrierR m) :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) * (S m - 1))
+      Filter.atTop (nhds (1 / 4 : ℝ)) := by
+  apply Filter.Tendsto.squeeze'
+    tendsto_nat_mul_lowerBarrier_sub_one
+    tendsto_nat_mul_upperBarrier_sub_one
+  · filter_upwards [eventually_gt_atTop 0] with m hm
+    have hmR : 0 ≤ (m : ℝ) := by exact_mod_cast (Nat.zero_le m)
+    have h := hlower (Nat.ne_of_gt hm)
+    nlinarith
+  · filter_upwards [eventually_gt_atTop 0] with m hm
+    have hmR : 0 ≤ (m : ℝ) := by exact_mod_cast (Nat.zero_le m)
+    have h := hupper (Nat.ne_of_gt hm)
+    nlinarith
+
+/-!
+For the actual sequence, the uncorrected limit is already available from the
+Wallis growth bridge.  The following identity records that this limit is the
+same normalized quantity used by the barrier argument.
+-/
+
+theorem tendsto_normalizedCentralSquareR_one :
+    Filter.Tendsto normalizedCentralSquareR Filter.atTop (nhds 1) := by
+  have hdiv := tendsto_real_centralRatioQ_sq_div_nat_pi.div_const Real.pi
+  have hdiv_one :
+      Filter.Tendsto
+        (fun m : ℕ =>
+          (((centralRatioQ m : ℚ) : ℝ) ^ 2 / (m : ℝ)) / Real.pi)
+        Filter.atTop (nhds (1 : ℝ)) := by
+    simpa [div_self Real.pi_ne_zero] using hdiv
+  refine hdiv_one.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  unfold normalizedCentralSquareR
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  field_simp [hmR, Real.pi_ne_zero]
+
+/-!
+Square-root transport turns the normalized-square coefficient `1/4` into the
+central-ratio coefficient `1/8`.  The proof is the exact identity
+`u - 1 = (u^2 - 1)/(u + 1)` on the eventual positive tail; no Taylor
+expansion is used.
+-/
+
+theorem tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
+    (hcorr :
+      Filter.Tendsto
+        (fun m : ℕ => (m : ℝ) *
+          (normalizedCentralSquareR m - 1))
+        Filter.atTop (nhds (1 / 4 : ℝ))) :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        ((((centralRatioQ m : ℚ) : ℝ) /
+          Real.sqrt (Real.pi * (m : ℝ))) - 1))
+      Filter.atTop (nhds (1 / 8 : ℝ)) := by
+  let u : ℕ → ℝ := fun m =>
+    ((centralRatioQ m : ℚ) : ℝ) /
+      Real.sqrt (Real.pi * (m : ℝ))
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
+  have hden : Filter.Tendsto (fun m => u m + 1) Filter.atTop
+      (nhds (2 : ℝ)) := by
+    have hone : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop
+        (nhds 1) := tendsto_const_nhds
+    convert hu.add hone using 1
+    all_goals norm_num
+  have hquot := hcorr.div hden (by norm_num : (2 : ℝ) ≠ 0)
+  have hquot' : Filter.Tendsto
+      (fun m : ℕ =>
+        ((m : ℝ) * (normalizedCentralSquareR m - 1)) /
+          (u m + 1))
+      Filter.atTop (nhds (1 / 8 : ℝ)) := by
+    convert hquot using 1
+    · ext m
+      simp only [Pi.div_apply]
+    · norm_num
+  refine hquot'.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    exact (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+      (by exact_mod_cast hm))).ne'
+  have hu_sq : normalizedCentralSquareR m = (u m) ^ 2 := by
+    unfold normalizedCentralSquareR u
+    rw [div_pow]
+    rw [Real.sq_sqrt (mul_nonneg Real.pi_pos.le
+      (by exact_mod_cast (Nat.zero_le m)))]
+  rw [hu_sq]
+  have hcr_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  have hu_pos : 0 < u m := by
+    dsimp [u]
+    exact div_pos hcr_pos (Real.sqrt_pos.2
+      (mul_pos Real.pi_pos (by exact_mod_cast hm)))
+  have hsum : u m + 1 ≠ 0 := ne_of_gt (by linarith)
+  dsimp [u]
+  field_simp [hsqrt, hsum]
+  ring
+
+/-!
+Finally invert the central ratio.  Since the central binomial coefficient is
+`4^m / centralRatioQ m`, the `+1/8` ratio correction becomes the desired
+`-1/8` correction for `4^m / √(πm)`.  The statement is conditional only on
+the square-correction input above; all inversion and sign changes are exact.
+-/
+
+theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_square_correction
+    (hcorr :
+      Filter.Tendsto
+        (fun m : ℕ => (m : ℝ) *
+          (normalizedCentralSquareR m - 1))
+        Filter.atTop (nhds (1 / 4 : ℝ))) :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        ((((Nat.choose (2 * m) m : ℕ) : ℝ) /
+          centralBinomialFastApproxR m) - 1))
+      Filter.atTop (nhds (-1 / 8 : ℝ)) := by
+  let u : ℕ → ℝ := fun m =>
+    ((centralRatioQ m : ℚ) : ℝ) /
+      Real.sqrt (Real.pi * (m : ℝ))
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using tendsto_real_centralRatioQ_div_sqrt_pi_mul_nat_one
+  have hratio :=
+    tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction hcorr
+  have hneg := hratio.neg
+  have hinv := hneg.div hu (by norm_num : (1 : ℝ) ≠ 0)
+  have hinv' : Filter.Tendsto
+      (fun m : ℕ =>
+        (-(m : ℝ) * (u m - 1)) / u m)
+      Filter.atTop (nhds (-1 / 8 : ℝ)) := by
+    convert hinv using 1
+    · ext m
+      dsimp [u]
+      ring
+    · norm_num
+  refine hinv'.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with m hm
+  have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hcr_pos : 0 < ((centralRatioQ m : ℚ) : ℝ) := by
+    exact_mod_cast centralRatioQ_pos m
+  have hsqrt : Real.sqrt (Real.pi * (m : ℝ)) ≠ 0 := by
+    exact (Real.sqrt_pos.2 (mul_pos Real.pi_pos
+      (by exact_mod_cast hm))).ne'
+  have hu_pos : 0 < u m := by
+    dsimp [u]
+    exact div_pos hcr_pos (Real.sqrt_pos.2
+      (mul_pos Real.pi_pos (by exact_mod_cast hm)))
+  have hu_ne : u m ≠ 0 := hu_pos.ne'
+  have hchoose := real_nat_choose_two_mul_self_eq_pow_four_div_centralRatioQ m
+  unfold centralBinomialFastApproxR
+  rw [hchoose]
+  dsimp [u]
+  field_simp [hmR, hsqrt, hu_ne]
+  ring
+
+/-!
+Public boundary theorem for the first Wallis correction.  Supplying global
+lower/upper barrier comparison for the exact normalized-square sequence now
+closes the entire coefficient chain in one call.
+-/
+
+theorem tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_barriers
+    (hlower : ∀ {m : ℕ}, m ≠ 0 →
+      normalizedSquareLowerBarrierR m ≤ normalizedCentralSquareR m)
+    (hupper : ∀ {m : ℕ}, m ≠ 0 →
+      normalizedCentralSquareR m ≤ normalizedSquareUpperBarrierR m) :
+    Filter.Tendsto
+      (fun m : ℕ => (m : ℝ) *
+        ((((Nat.choose (2 * m) m : ℕ) : ℝ) /
+          centralBinomialFastApproxR m) - 1))
+      Filter.atTop (nhds (-1 / 8 : ℝ)) := by
+  exact tendsto_nat_mul_centralBinomial_fast_relative_sub_one_of_square_correction
+    (tendsto_mul_sub_one_of_normalizedSquare_barriers
+      normalizedCentralSquareR hlower hupper)
 
 /-!
 ## Executable certification boundary
