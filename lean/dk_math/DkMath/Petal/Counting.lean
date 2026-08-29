@@ -4,7 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Petal.Basic
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
+import Mathlib.Algebra.Ring.GeomSum
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Tactic.Order
 
 #print "file: DkMath.Petal.Counting"
 

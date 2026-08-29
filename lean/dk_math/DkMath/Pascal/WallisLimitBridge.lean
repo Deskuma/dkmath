@@ -4,7 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Analysis.Real.Pi.Wallis
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.NormNum
 import DkMath.Analysis.DkLimit
 import DkMath.Pascal.WallisCosmicPetalBridge
 
