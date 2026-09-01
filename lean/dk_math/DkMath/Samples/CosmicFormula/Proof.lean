@@ -97,6 +97,32 @@ theorem NZ_eq_NZ' (x : ℤ) :
   unfold PZ
   ring
 
+/--
+宇宙式の恒等式の証明（整数版）
+NZ + 1 = (PZ + 1)^2
+-/
+theorem CosmicFormulaZ
+  (x : ℤ) :
+  NZ x + 1 = (PZ x + 1) ^ 2 := by
+    unfold PZ NZ
+    -- ⊢ PZ x * (PZ x + 2) + 1 = (x + 1) ^ 2
+    unfold PZ
+    -- ⊢ x * (x + 2) + 1 = (x + 1) ^ 2
+    ring
+
+/--
+宇宙式の恒等式の自然数版と整数版の同値証明（引数が自然数）
+N + 1 = (P + 1)^2 ↔ NZ + 1 = (PZ + 1)^2
+-/
+theorem CosmicFormulaN_iff_Z
+  (x : ℕ) :
+  N x + 1 = (P x + 1) ^ 2 ↔ NZ x + 1 = (PZ x + 1) ^ 2 := by
+    unfold P N PZ NZ
+    -- ⊢ P x * (P x + 2) + 1 = (x + 1) ^ 2 ↔ PZ ↑x * (PZ ↑x + 2) + 1 = (↑x + 1) ^ 2
+    unfold P PZ
+    -- ⊢ x * (x + 2) + 1 = (x + 1) ^ 2 ↔ ↑x * (↑x + 2) + 1 = (↑x + 1) ^ 2
+    ring_nf
+
 -- 複素数
 theorem NC_eq_NC' (s : ℂ) :
     NC s = NC' s := by
