@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic
 
 #print "file: DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement"
