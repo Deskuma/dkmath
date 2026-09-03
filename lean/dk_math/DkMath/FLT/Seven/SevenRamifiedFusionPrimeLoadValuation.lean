@@ -22,6 +22,11 @@ open SevenRealCubicInt
 open Module
 open UniqueFactorizationMonoid
 
+instance : Infinite SevenRealCubicInt :=
+  Infinite.of_injective SevenRealCubicInt.ofInt (by
+    intro a b hab
+    exact congrArg (fun x : SevenRealCubicInt => x.fst) hab)
+
 variable {p : RamifiedSignedRootRoutingPacket} {q : ℕ}
 
 private def coordinateAddEquiv :
