@@ -44,6 +44,19 @@ theorem squareBody_add_one_eq (P : ℕ) :
   simp [squareBody]
   ring
 
+/-- The natural square Body is monotone in its anchor. -/
+theorem squareBody_mono {q P : ℕ} (h : q ≤ P) :
+    squareBody q ≤ squareBody P := by
+  calc
+    squareBody q = q * (q + 2) := by
+      simp [squareBody]
+      ring
+    _ ≤ P * (P + 2) := by
+      exact Nat.mul_le_mul h (Nat.add_le_add_right h 2)
+    _ = squareBody P := by
+      simp [squareBody]
+      ring
+
 /--
 Any composite point in the square Body has a prime divisor at most the
 anchor.  This is the reusable arithmetic theorem; it does not mention
