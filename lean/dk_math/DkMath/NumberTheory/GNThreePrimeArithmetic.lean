@@ -177,7 +177,7 @@ theorem three_dvd_prime_sub_one_of_prime_dvd_GN_three_of_coprime_of_ne_three
     prime_not_dvd_second_coordinate_of_dvd_GN_three hq hq_u hqGN
   have hq_sum : ¬ q ∣ x + u :=
     prime_not_dvd_sum_coordinate_of_dvd_GN_three hq hq_x hqGN
-  letI : Fact q.Prime := ⟨hq⟩
+  let : Fact q.Prime := ⟨hq⟩
   have haZ : ((x + u : ℕ) : ZMod q) ≠ 0 := by
     intro hzero
     exact hq_sum ((ZMod.natCast_eq_zero_iff (x + u) q).mp hzero)
