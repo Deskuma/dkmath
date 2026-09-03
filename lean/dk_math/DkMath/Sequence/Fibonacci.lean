@@ -39,7 +39,7 @@ def fibonacciSequence (n : ℕ) : List ℕ :=
     fibonacciTerm 1 = 1 := by
   rfl
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 @[simp] theorem fibonacciSequence_seven :
     fibonacciSequence 7 = [0, 1, 1, 2, 3, 5, 8] := by
   native_decide

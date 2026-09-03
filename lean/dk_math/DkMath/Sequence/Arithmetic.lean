@@ -100,20 +100,20 @@ def variableDiffTerm [Add C] (a : C) (d : ℕ → C) (i : ℕ) : C :=
 
 /-! ## Small rational examples mirroring the Python demo without rounding -/
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 example :
     dynamicSequence (1 : ℚ) 2 1 10 =
       [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] := by
   native_decide
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 example :
     dynamicSequence (3 : ℚ) 5 (102 / 100) 10 =
       [3, 81 / 10, 66 / 5, 183 / 10, 117 / 5,
         57 / 2, 168 / 5, 387 / 10, 219 / 5, 489 / 10] := by
   native_decide
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 example :
     variableDiffTerm (0 : ℕ) (fun i => i + 1) 4 = 10 := by
   native_decide

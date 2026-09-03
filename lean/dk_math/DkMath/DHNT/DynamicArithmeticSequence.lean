@@ -73,13 +73,13 @@ abbrev dynamicSequence [Semiring C] (a d k : C) (n : ℕ) : List C :=
 
 /-! ## Small rational examples mirroring the Python demo without rounding -/
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 example :
     dynamicSequence (1 : ℚ) 2 1 10 =
       [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] := by
   native_decide
 
-set_option linter.style.nativeDecide false in
+set_option linter.style.native false in
 example :
     dynamicSequence (3 : ℚ) 5 (102 / 100) 10 =
       [3, 81 / 10, 66 / 5, 183 / 10, 117 / 5,
