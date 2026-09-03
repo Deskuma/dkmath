@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Pascal.WallisCosmicPetalBridge
 import DkMath.Pascal.WallisLimitBridge
 import DkMath.Pascal.WallisGrowthBridge
+import DkMath.Pascal.WallisCellGrowth
 
 #print "file: DkMath.Pascal"
 
