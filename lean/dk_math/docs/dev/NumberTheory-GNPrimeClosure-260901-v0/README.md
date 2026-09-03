@@ -372,3 +372,40 @@ report には最低限、
 - deferred items
 
 を記録する。
+
+## 13. Public surface / merge readiness
+
+Public entry point:
+
+```text
+import DkMath.NumberTheory.GNPrime
+```
+
+Root availability:
+
+```text
+import DkMath
+```
+
+transitively imports `DkMath.NumberTheory.GNPrime`.
+
+General GN prime layer:
+
+```text
+GNPrimeClosure
+GNRepresentationBounds
+GNDegreeFactorization
+GNPrimeTargetResidue
+```
+
+Degree-three shell/local layer:
+
+```text
+GNThreeQuadratic
+GNThreePrimeArithmetic
+GNThreeHenselLift
+GNThreeHenselDepth
+```
+
+Application-specific FLT3 integration is intentionally deferred to the next
+branch/checkpoint and is not part of this merge.
