@@ -1667,7 +1667,7 @@ theorem certifiedCentralBinomialNat_eq_choose_of_width_lt_one
     (hwidth : centralBinomialWallisUpperR m <
       centralBinomialWallisLowerR m + 1) :
     certifiedCentralBinomialNat m = Nat.choose (2 * m) m := by
-  rw [certifiedCentralBinomialNat, if_pos hwidth]
+  rw [certifiedCentralBinomialNat, ite_eq_left hwidth]
   exact ceil_centralBinomialWallisLowerR_eq_choose_of_width_lt_one m hwidth
 
 /-!
@@ -1766,7 +1766,7 @@ theorem certifiedCentralBinomialSecondNat_eq_choose_of_width_lt_one
     (hwidth : centralBinomialSecondUpperR m <
       centralBinomialSecondLowerR m + 1) :
     certifiedCentralBinomialSecondNat m = Nat.choose (2 * m) m := by
-  rw [certifiedCentralBinomialSecondNat, if_pos hwidth]
+  rw [certifiedCentralBinomialSecondNat, ite_eq_left hwidth]
   exact ceil_centralBinomialSecondLowerR_eq_choose_of_width_lt_one hm hwidth
 
 /-!
@@ -2023,12 +2023,12 @@ def pascalCellGrowthNatFast (n k : ℕ) : ℕ :=
 theorem pascalCellGrowthNatFast_eq_choose (n k : ℕ) :
     pascalCellGrowthNatFast n k = Nat.choose n k := by
   by_cases hk : k ≤ n
-  · rw [pascalCellGrowthNatFast, if_pos hk,
+  · rw [pascalCellGrowthNatFast, ite_eq_left hk,
       pascalCellGrowthNatFastAux_eq_choose]
     rcases le_total k (n - k) with hleft | hright
     · rw [min_eq_left hleft]
     · rw [min_eq_right hright, Nat.choose_symm hk]
-  · rw [pascalCellGrowthNatFast, if_neg hk]
+  · rw [pascalCellGrowthNatFast, ite_eq_right hk]
     norm_num [Nat.choose_eq_zero_of_lt (Nat.lt_of_not_ge hk)]
 
 /-!
@@ -2080,11 +2080,11 @@ theorem pascalCellGrowthQ_index_le_half (n k : ℕ) :
 theorem pascalCellGrowthQ_eq_cast_choose (n k : ℕ) :
     pascalCellGrowthQ n k = (Nat.choose n k : ℚ) := by
   by_cases hk : k ≤ n
-  · rw [pascalCellGrowthQ, if_pos hk, pascalPrefixGrowthQ_eq_cast_choose]
+  · rw [pascalCellGrowthQ, ite_eq_left hk, pascalPrefixGrowthQ_eq_cast_choose]
     rcases le_total k (n - k) with hleft | hright
     · rw [min_eq_left hleft]
     · rw [min_eq_right hright, Nat.choose_symm hk]
-  · rw [pascalCellGrowthQ, if_neg hk]
+  · rw [pascalCellGrowthQ, ite_eq_right hk]
     norm_num [Nat.choose_eq_zero_of_lt (Nat.lt_of_not_ge hk)]
 
 /--
