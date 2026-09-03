@@ -4,7 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
 import DkMath.Pascal.WallisCosmicPetalBridge
 import DkMath.Pascal.WallisLimitBridge
 

@@ -330,6 +330,16 @@ theorem GN_eq_sum {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
       ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k) := by
   simpa [GN] using DkMath.CosmicFormula.GTail_one_eq_sum (R := R) d x u
 
+lemma GN_eq_G {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+  GN d x u = G d x u := by
+    unfold GN G
+    exact GN_eq_sum d x u
+
+lemma G_eq_GN {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+  G d x u = GN d x u := by
+    unfold GN G
+    exact (GN_eq_sum d x u).symm
+
 /-- 無次元版: Big の定義 -/
 @[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
 
