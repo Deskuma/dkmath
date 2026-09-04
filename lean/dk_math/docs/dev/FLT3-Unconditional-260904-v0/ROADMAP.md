@@ -415,7 +415,7 @@ for U008.
 
 ## 10. FLT3U-008 — Sector arithmetic exclusion
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -470,23 +470,79 @@ Do not reconstruct the smaller FLT3 solution until U009.
 
 ## 11. FLT3U-009 — Zero-sector strict descent reconstruction
 
-Goal:
+### FLT3U-009A — Origin-Preserving Signed Cube Factorization
 
-残る cube sector から、元と同型で測度が厳密に小さい primitive FLT3 packet を構成する。
+Status: active next task
 
-候補となる cube coordinate identity を実コードで確認する。
+Preserve the original primitive triple provenance through the exact-cube chain.
 
-Conceptual form:
+From
 
-$$
-\gamma=(r,s)
-\quad\Longrightarrow\quad
-(\gamma^3)_2=3rs(r+s)
-$$
+$
+r\,s\,(r+s)=A^3,
+$
 
-pairwise coprime 化から各因子を cube へ分離し、新 counterexample を再構成する。
+$
+r^2+rs+s^2=B,
+$
 
-最重要 checkpoint。
+$
+\gcd(A,B)=1,
+$
+
+prove that
+
+$
+|r|,\quad |s|,\quad |r+s|
+$
+
+are pairwise coprime cubes:
+
+$
+|r|=R^3,\qquad
+|s|=S^3,\qquad
+|r+s|=T^3.
+$
+
+Also prove
+
+$
+RST=A
+$
+
+and, using origin-preserving routing,
+
+$
+A<abc.
+$
+
+No sign routing yet.
+
+### FLT3U-009B — Positive Strict Descent Reconstruction
+
+Status: planned after U009A
+
+Use the signs of r,s,r+s and the identity
+
+$
+r+s=(r+s)
+$
+
+to permute the positive roots R,S,T into a new positive primitive cubic solution
+
+$
+x^3+y^3=z^3.
+$
+
+Preserve pairwise coprimality and prove
+
+$
+xyz=RST=A<abc.
+$
+
+The output is the strict smaller primitive FLT3 packet consumed by U010.
+
+This is the final mathematical descent-construction checkpoint before well-founded closure.
 
 ## 12. FLT3U-010 — Well-founded closure
 
