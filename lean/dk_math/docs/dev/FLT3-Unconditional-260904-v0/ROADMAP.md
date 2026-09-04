@@ -343,7 +343,7 @@ No cube extraction in U006A.
 
 ### FLT3U-006B — Coprime Cube Extraction
 
-Status: active next task
+Status: completed — Outcome A
 
 Use the Euclidean/GCDMonoid infrastructure and
 
@@ -365,19 +365,53 @@ Completed external FLT3 theorem remains forbidden.
 
 ## 9. FLT3U-007 — Unit classes modulo cubes
 
+Status: active next task
+
 Goal:
 
-Eisenstein unit を cube equivalence で有限分類する。
+Eisenstein unit を完全分類し、cube equivalence で三 sector へ正規化する。
 
-Expected finite sectors:
+Current trace-one basis has exactly six units:
 
-$$
-1,\omega,\omega^2
-$$
+$
+\pm1,\quad
+\pm\tau,\quad
+\pm\tau^2.
+$
 
-相当。
+Since
 
-実際の Mathlib representation に合わせて theorem surface を設計する。
+$
+\tau^3=-1,
+$
+
+the sign is itself a cube-unit factor. Therefore canonical modulo-cube representatives are
+
+$
+1,\quad\tau,\quad\tau^2.
+$
+
+Normalize every
+
+$
+\beta=\varepsilon\gamma^3
+$
+
+to
+
+$
+\beta=\rho\gamma'^3,
+\qquad
+\rho\in\{1,\tau,\tau^2\}.
+$
+
+Retain the stripped coordinate identity
+
+$
+\beta_{\rm snd}=3A^3
+$
+
+for U008.
 
 ## 10. FLT3U-008 — Sector arithmetic exclusion
 
