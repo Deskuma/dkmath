@@ -1,7 +1,7 @@
 /-
-Copyright (c) 2026 Deskuma. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Deskuma
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
 -/
 import DkMath.NumberTheory.Primitive.SquareBody
 
