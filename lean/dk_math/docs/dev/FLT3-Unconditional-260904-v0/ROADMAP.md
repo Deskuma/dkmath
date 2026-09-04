@@ -127,7 +127,7 @@ Do not prove arbitrary-depth descent yet.
 
 ## 4. FLT3U-002 — Exact Cubic Depth and Forced High-Lift
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -149,28 +149,41 @@ $
 
 旧 conditional route は NoLift fast contradiction として保存し、unconditional proof は forced high-lift から Eisenstein descent へ進む。
 
-## 5. FLT3U-003 — Eisenstein arithmetic substrate
+## 5. FLT3U-003 — Eisenstein Coordinate Substrate
+
+Status: active next task
 
 Goal:
 
-strict descent に必要な最小 Eisenstein arithmetic を決める。
+既存 TraceOneInt (-1) を FLT3 の production Eisenstein coordinate ring として採用し、座標規約を固定する。
 
-Reconnaissance 結果に応じて次のどちらかを選ぶ。
+この basis は
 
-A. Mathlib / DkMath の既存 Eisenstein integer type を直接利用
-B. FLT3 専用の局所的な二座標 model を作り、後で一般化
+$
+\tau^2-\tau+1=0
+$
 
-Required surface:
+であり、
 
-- conjugation
-- norm
-- multiplicativity
-- ramifier above 3
-- units
-- divisibility / gcd or ideal coprimality
-- cube coordinate formula
+$
+N(r+s\tau)=r^2+rs+s^2.
+$
 
-S0 / GN3 との norm bridge を production theorem にする。
+この checkpoint では conjugation / norm multiplicativity / basis unit identities / ramifier candidate
+
+$
+\lambda=1+\tau,\qquad N(\lambda)=3
+$
+
+/ cube coordinate identity
+
+$
+((r+s\tau)^3)_2=3rs(r+s)
+$
+
+/ S0 and GN3 norm bridge を production theorem として固定する。
+
+UFD/PID、ramifier ownership、conjugate coprimality、complete unit classification、strict descent は後続 checkpoint に残す。
 
 ## 6. FLT3U-004 — Exact ramified routing
 
