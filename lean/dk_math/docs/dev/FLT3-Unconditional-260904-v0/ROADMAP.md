@@ -30,16 +30,15 @@ DkMath 内の証明として完結させ、既成 FLT3 theorem を import して
       ↓
     q-adic mass is transported to GN3 = S0
       ↓
-    ┌──────────────────────────┬─────────────────────────────┐
-    │ NoLift                   │ Lift                        │
-    │ q² ∤ GN3                 │ q² ∣ GN3                    │
-    │                          │                             │
-    │ existing valuation       │ depth is compatible with   │
-    │ 3 ≤ v_q ≤ 1             │ a perfect cube              │
-    │ → False                  │                             │
-    └──────────────────────────┴──────────────┬──────────────┘
-                                              ↓
-                                      Eisenstein arithmetic
+    PrimitiveCubicLiftPacket
+      ↓
+    exact cubic depth v_q(GN3) = 3 * v_q(a)
+      ↓
+    q³ ∣ GN3
+      ↓
+    forced high-lift branch
+      ↓
+    Eisenstein arithmetic
                                               ↓
                                       ramifier ownership
                                               ↓
@@ -57,7 +56,7 @@ DkMath 内の証明として完結させ、既成 FLT3 theorem を import して
 
 ## 2. FLT3U-000 — Workspace reconnaissance
 
-Status: active first task
+Status: completed — Outcome A
 
 Goal:
 
@@ -85,6 +84,8 @@ Mandatory findings:
 12. recommended minimal imports for FLT3U-001
 
 ## 3. FLT3U-001 — Primitive Cubic Lift Packet
+
+Status: completed — Outcome A
 
 Goal:
 
@@ -124,20 +125,29 @@ $$
 
 Do not prove arbitrary-depth descent yet.
 
-## 4. FLT3U-002 — NoLift / Lift exact split
+## 4. FLT3U-002 — Exact Cubic Depth and Forced High-Lift
+
+Status: active next task
 
 Goal:
 
-既存 conditional FLT3 route を NoLift consumer として保存し、残存 branch を high-lift packet に正確に変換する。
+FLT3U-001 の packet と FLT3 equation から valuation を exact に強化し、
 
-Desired shape:
+$
+v_q(GN_3(c-b,b))=3v_q(a)
+$
 
-    either q^2 ∤ GN3 and contradiction
-    or q^2 ∣ GN3 and HighLiftCubicPacket
+および
 
-重要:
+$
+q^3\mid GN_3(c-b,b)
+$
 
-Lift branch は異常状態ではない。GN3(17,1)=7^3 が存在するため、branch 自体を否定してはいけない。
+を production theorem として固定する。
+
+この結果、primitive FLT3 counterexample の本流は NoLift / Lift の一般場合分けではなく high-lift branch へ強制される。
+
+旧 conditional route は NoLift fast contradiction として保存し、unconditional proof は forced high-lift から Eisenstein descent へ進む。
 
 ## 5. FLT3U-003 — Eisenstein arithmetic substrate
 
