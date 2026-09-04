@@ -277,7 +277,7 @@ $
 
 ## 7. FLT3U-005 — Conjugate coprimality
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -313,17 +313,55 @@ This checkpoint deliberately avoids assuming a UFD/PID structure.
 
 ## 8. FLT3U-006 — Cube extraction
 
-Goal:
+### FLT3U-006A — Eisenstein Norm-Euclidean Foundation
 
-UFD / PID / ideal factorization により
+Status: active next task
 
-$$
+Construct an honest EuclideanDomain instance for TraceOneInt (-1).
+
+Use the positive-definite norm
+
+$
+N(r+s\tau)=r^2+rs+s^2
+$
+
+and the skew rounding cell
+
+$
+N_{\mathbb Q}(u,v)
+=
+\left(u+\frac v2\right)^2
++
+\frac34v^2
+\le
+\frac7{16}
+<
+1.
+$
+
+No cube extraction in U006A.
+
+### FLT3U-006B — Coprime Cube Extraction
+
+Status: planned after U006A
+
+Use the Euclidean/GCDMonoid infrastructure and
+
+$
+\beta\overline\beta=B^3,
+$
+
+together with the completed conjugate-relative-prime certificate, to obtain
+
+$
 \beta=\varepsilon\gamma^3
-$$
+$
 
-を得る。
+for an Eisenstein unit epsilon.
 
-既成 FLT3 theorem は使用禁止。
+Complete unit classification is deferred to U007.
+
+Completed external FLT3 theorem remains forbidden.
 
 ## 9. FLT3U-007 — Unit classes modulo cubes
 
