@@ -315,7 +315,7 @@ This checkpoint deliberately avoids assuming a UFD/PID structure.
 
 ### FLT3U-006A — Eisenstein Norm-Euclidean Foundation
 
-Status: active next task
+Status: completed — Outcome A
 
 Construct an honest EuclideanDomain instance for TraceOneInt (-1).
 
@@ -343,7 +343,7 @@ No cube extraction in U006A.
 
 ### FLT3U-006B — Coprime Cube Extraction
 
-Status: planned after U006A
+Status: active next task
 
 Use the Euclidean/GCDMonoid infrastructure and
 
