@@ -365,7 +365,7 @@ Completed external FLT3 theorem remains forbidden.
 
 ## 9. FLT3U-007 — Unit classes modulo cubes
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -415,11 +415,58 @@ for U008.
 
 ## 10. FLT3U-008 — Sector arithmetic exclusion
 
+Status: active next task
+
 Goal:
 
-strict descent へ戻らない unit sectors を有限 arithmetic で排除する。
+tau / tauSq sectors を second-coordinate mod 3 arithmetic で排除する。
 
-数値 residue / coordinate congruence で閉じられるところは abstract algebra を増やさない。
+For gamma = r + s tau, both nontrivial sectors satisfy modulo 3:
+
+$
+(\rho\gamma^3)_{\rm snd}
+\equiv
+r-s
+\pmod3.
+$
+
+But the stripped packet gives
+
+$
+\beta_{\rm snd}=3A^3.
+$
+
+Therefore nontrivial sectors force
+
+$
+3\mid r-s,
+$
+
+hence
+
+$
+3\mid N(\gamma)=B,
+$
+
+contradicting
+
+$
+3\nmid B.
+$
+
+Thus only the one sector remains, giving
+
+$
+\beta=\gamma^3
+$
+
+and
+
+$
+rs(r+s)=A^3.
+$
+
+Do not reconstruct the smaller FLT3 solution until U009.
 
 ## 11. FLT3U-009 — Zero-sector strict descent reconstruction
 
