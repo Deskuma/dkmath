@@ -151,7 +151,7 @@ $
 
 ## 5. FLT3U-003 — Eisenstein Coordinate Substrate
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -187,21 +187,73 @@ UFD/PID、ramifier ownership、conjugate coprimality、complete unit classificat
 
 ## 6. FLT3U-004 — Exact ramified routing
 
-Goal:
+### FLT3U-004A — Signed Three-Adic Routing and Exact Power Split
 
-FLT3 equation の factorization において 3-adic ramifier がどの因子へ何回所属するかを exact に固定する。
+Status: active next task
 
-No heuristic valuation statement.
+primitive FLT3 counterexample を mod 9 で signed orientation へ正規化し、common packet を作る。
 
-Output:
+Target:
 
-ramifier stripping 後の element β と
+$
+\operatorname{carrier}=9A^3,
+$
 
-$$
-N(\beta)=B^3
-$$
+$
+\operatorname{residual}=3B^3,
+$
 
-型の exact norm packet。
+$
+\operatorname{distinguished}=3AB,
+$
+
+with
+
+$
+\gcd(A,B)=1,
+\qquad
+3\nmid B.
+$
+
+Signed Eisenstein coordinate alpha must satisfy
+
+$
+N(\alpha)=\operatorname{residual},
+$
+
+$
+\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+$
+
+### FLT3U-004B — Eisenstein Ramifier Stripping
+
+Status: planned after U004A
+
+Using
+
+$
+\lambda=1+\tau,
+\qquad
+N(\lambda)=3,
+$
+
+construct beta with
+
+$
+\alpha=\lambda\beta,
+$
+
+$
+N(\beta)=B^3,
+$
+
+and the exact second-coordinate equation expected from the signed convention, ideally
+
+$
+\beta_{\rm snd}=3A^3.
+$
+
+No UFD/PID or conjugate coprimality is required until U005.
 
 ## 7. FLT3U-005 — Conjugate coprimality
 
@@ -264,7 +316,7 @@ Conceptual form:
 $$
 \gamma=(r,s)
 \quad\Longrightarrow\quad
-(\gamma^3)_2=3rs(r-s)
+(\gamma^3)_2=3rs(r+s)
 $$
 
 pairwise coprime 化から各因子を cube へ分離し、新 counterexample を再構成する。
