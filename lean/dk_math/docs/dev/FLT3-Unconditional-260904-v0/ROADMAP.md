@@ -189,7 +189,7 @@ UFD/PID、ramifier ownership、conjugate coprimality、complete unit classificat
 
 ### FLT3U-004A — Signed Three-Adic Routing and Exact Power Split
 
-Status: active next task
+Status: completed — Outcome A
 
 primitive FLT3 counterexample を mod 9 で signed orientation へ正規化し、common packet を作る。
 
@@ -227,7 +227,7 @@ $
 
 ### FLT3U-004B — Eisenstein Ramifier Stripping
 
-Status: planned after U004A
+Status: active next task
 
 Using
 
@@ -254,6 +254,26 @@ $
 $
 
 No UFD/PID or conjugate coprimality is required until U005.
+
+Mandatory stripped normal form:
+
+$
+\alpha=\lambda\beta,
+$
+
+$
+N(\beta)=B^3,
+$
+
+$
+\beta_{\rm snd}=3A^3,
+$
+
+with the ramified norm load exhausted:
+
+$
+3\nmid N(\beta).
+$
 
 ## 7. FLT3U-005 — Conjugate coprimality
 
