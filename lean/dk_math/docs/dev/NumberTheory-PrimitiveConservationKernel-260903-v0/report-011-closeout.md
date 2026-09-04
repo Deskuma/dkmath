@@ -191,8 +191,14 @@ The source dependency graph is:
       -> Primitive public aggregator
 
 The public aggregators depend on owner modules; no owner was changed to import
-its aggregator. The Legendre modules consume the SquareBody interface, while
-the Collatz Gnomon owner consumes the separate SquareGnomon vocabulary.
+its aggregator. The Legendre modules consume the SquareBody interface. The
+Collatz side already has an independent Gnomon vocabulary consumer,
+`DkMath.Collatz.GnomonEvaluation`; it does not currently import
+`SquareGnomon`, but could be bridged to that generic owner in future work:
+
+    SquareGnomon        Collatz.GnomonEvaluation
+          \                 /
+           future bridge candidate
 
 ## Generic PrimitiveKernel audit
 
@@ -227,9 +233,11 @@ The current status is:
     DKMATH-LIB-GNOMON: CANDIDATE / SEPARATE CAMPAIGN
 
 The evidence is the existing generic owner
-`DkMath.CosmicFormula.SquareGnomon`, its independent vocabulary consumer
-`DkMath.Collatz.GnomonEvaluation`, and the exact GN/GTail, square-growth,
-fixed-Gap, kernel-increment, area-increment, and scaling identities.
+`DkMath.CosmicFormula.SquareGnomon`, the independent Collatz vocabulary
+consumer `DkMath.Collatz.GnomonEvaluation`, and the exact GN/GTail,
+square-growth, fixed-Gap, kernel-increment, area-increment, and scaling
+identities. These are separate current owners; a bridge between them is a
+future candidate, not an implemented dependency.
 
 Promotion was not part of PCK-009. A future promotion requires a dedicated
 audit of canonical names and namespace, Collatz bridge direction,
