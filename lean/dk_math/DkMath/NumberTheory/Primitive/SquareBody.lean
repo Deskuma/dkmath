@@ -104,6 +104,22 @@ theorem prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
   exact prime_of_supportDisjointFrom_le_squareBody hm hmUpper
     (supportDisjointFrom_primeScalesUpTo_iff.mp hdisj)
 
+/--
+A complete prime support at a coarse anchor P certifies every fine
+square-Body world whose anchor q satisfies q ≤ P.
+-/
+theorem prime_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+    {q P m : ℕ}
+    (hqP : q ≤ P)
+    (hm : 1 < m)
+    (hmUpper : m ≤ squareBody q)
+    (hdisj : SupportDisjointFrom (primeScalesUpTo P) m) :
+    Nat.Prime m := by
+  have hmUpperCoarse : m ≤ squareBody P :=
+    hmUpper.trans (squareBody_mono hqP)
+  exact prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
+    hm hmUpperCoarse hdisj
+
 /-! ### PRIM-C001: the old-times-one-fresh square-Body decomposition -/
 
 /--
