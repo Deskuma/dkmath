@@ -227,7 +227,7 @@ $
 
 ### FLT3U-004B — Eisenstein Ramifier Stripping
 
-Status: active next task
+Status: completed — Outcome A
 
 Using
 
@@ -277,13 +277,39 @@ $
 
 ## 7. FLT3U-005 — Conjugate coprimality
 
+Status: active next task
+
 Goal:
 
-β と conjugate β が、許された ramified factor を除去した後に coprime であることを証明する。
+β と conjugate β が、ramifier 除去後に common nonunit divisor を持たないことを証明する。
 
-ここが cube extraction の gate。
+Current stripped identities:
 
-必要なら element gcd ではなく ideal language を使う。
+$
+N(\beta)=B^3,
+$
+
+$
+\beta_{\rm snd}=3A^3.
+$
+
+Hence
+
+$
+N(\beta-\overline\beta)=27A^6.
+$
+
+Using
+
+$
+\gcd(A,B)=1,
+\qquad
+3\nmid B,
+$
+
+prove that every common divisor d of beta and conjugate beta has unit norm and therefore is a unit.
+
+This checkpoint deliberately avoids assuming a UFD/PID structure.
 
 ## 8. FLT3U-006 — Cube extraction
 
