@@ -44,6 +44,19 @@ theorem squareBody_add_one_eq (P : ℕ) :
   simp [squareBody]
   ring
 
+/-- The natural square Body is monotone in its anchor. -/
+theorem squareBody_mono {q P : ℕ} (h : q ≤ P) :
+    squareBody q ≤ squareBody P := by
+  calc
+    squareBody q = q * (q + 2) := by
+      simp [squareBody]
+      ring
+    _ ≤ P * (P + 2) := by
+      exact Nat.mul_le_mul h (Nat.add_le_add_right h 2)
+    _ = squareBody P := by
+      simp [squareBody]
+      ring
+
 /--
 Any composite point in the square Body has a prime divisor at most the
 anchor.  This is the reusable arithmetic theorem; it does not mention
@@ -90,6 +103,43 @@ theorem prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
     Nat.Prime m := by
   exact prime_of_supportDisjointFrom_le_squareBody hm hmUpper
     (supportDisjointFrom_primeScalesUpTo_iff.mp hdisj)
+
+/--
+A complete prime support at a coarse anchor P certifies every fine
+square-Body world whose anchor q satisfies q ≤ P.
+-/
+theorem prime_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+    {q P m : ℕ}
+    (hqP : q ≤ P)
+    (hm : 1 < m)
+    (hmUpper : m ≤ squareBody q)
+    (hdisj : SupportDisjointFrom (primeScalesUpTo P) m) :
+    Nat.Prime m := by
+  have hmUpperCoarse : m ≤ squareBody P :=
+    hmUpper.trans (squareBody_mono hqP)
+  exact prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
+    hm hmUpperCoarse hdisj
+
+/--
+A support-disjoint point in a certified fine square world is not merely
+carrying some fresh prime divisor: square certification makes the point
+itself prime, hence the point itself is the fresh direction relative to the
+complete coarse world.
+-/
+theorem freshPrimeDirection_self_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+    {q P m : ℕ}
+    (hqP : q ≤ P)
+    (hm : 1 < m)
+    (hmUpper : m ≤ squareBody q)
+    (hdisj : SupportDisjointFrom (primeScalesUpTo P) m) :
+    FreshPrimeDirection (primeScalesUpTo P) m m := by
+  have hmPrime : Nat.Prime m :=
+    prime_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+      hqP hm hmUpper hdisj
+  have hmNotMem : m ∉ primeScalesUpTo P :=
+    hdisj hmPrime (dvd_refl m)
+  exact freshPrimeDirection_of_prime_dvd_not_mem
+    hmPrime (dvd_refl m) hmNotMem
 
 /-! ### PRIM-C001: the old-times-one-fresh square-Body decomposition -/
 
