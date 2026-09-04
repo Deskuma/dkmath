@@ -120,6 +120,27 @@ theorem prime_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBod
   exact prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody
     hm hmUpperCoarse hdisj
 
+/--
+A support-disjoint point in a certified fine square world is not merely
+carrying some fresh prime divisor: square certification makes the point
+itself prime, hence the point itself is the fresh direction relative to the
+complete coarse world.
+-/
+theorem freshPrimeDirection_self_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+    {q P m : ℕ}
+    (hqP : q ≤ P)
+    (hm : 1 < m)
+    (hmUpper : m ≤ squareBody q)
+    (hdisj : SupportDisjointFrom (primeScalesUpTo P) m) :
+    FreshPrimeDirection (primeScalesUpTo P) m m := by
+  have hmPrime : Nat.Prime m :=
+    prime_of_supportDisjointFrom_primeScalesUpTo_coarse_of_le_fine_squareBody
+      hqP hm hmUpper hdisj
+  have hmNotMem : m ∉ primeScalesUpTo P :=
+    hdisj hmPrime (dvd_refl m)
+  exact freshPrimeDirection_of_prime_dvd_not_mem
+    hmPrime (dvd_refl m) hmNotMem
+
 /-! ### PRIM-C001: the old-times-one-fresh square-Body decomposition -/
 
 /--
