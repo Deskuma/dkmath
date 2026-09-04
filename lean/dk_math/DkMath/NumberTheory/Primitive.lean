@@ -13,6 +13,8 @@ import DkMath.NumberTheory.Primitive.PrimeWorldCardinality
 import DkMath.NumberTheory.Primitive.EulerTotientBridge
 import DkMath.NumberTheory.Primitive.PHZ30
 import DkMath.NumberTheory.Primitive.SquareBody
+import DkMath.NumberTheory.Primitive.SquarePrimeExpansion
+import DkMath.NumberTheory.Primitive.PrimitiveConservationKernel
 
 #print "file: DkMath.NumberTheory.Primitive"
 
@@ -20,7 +22,8 @@ import DkMath.NumberTheory.Primitive.SquareBody
 ## Primitive Structure public entry point
 
 This module collects the finite-world direction semantics and the generic
-natural-number square-Body closure.  Application-specific providers, such as
-the square-anchored support escape used by Legendre, remain in their own
-modules.
+natural-number square-Body closure.  It also exposes finite square expansion
+and the nested old-or-one-fresh Primitive Conservation Kernel facade.
+Application-specific providers, such as the square-anchored support escape
+used by Legendre, remain in their own modules.
 -/
