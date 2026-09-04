@@ -471,7 +471,8 @@ No `sorry`, `admit`, project-specific axiom, or hidden RH/prime-existence assump
 PCK-000  reconnaissance / exact existing theorem inventory
 PCK-001  half-unit zero-conjugate algebra
 PCK-002  fine square-anchor nesting
-PCK-003  complete-prime-support adapter
+PCK-002G square Gnomon / GN = GTail bridge (inserted checkpoint)
+PCK-003  complete-prime-support / coarse-to-fine certification adapter
 PCK-004  square escape -> fresh prime direction
 PCK-005  finite square prime expansion
 PCK-006  primorial coarse -> fine anchor bridge
