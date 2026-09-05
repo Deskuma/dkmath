@@ -472,7 +472,7 @@ Do not reconstruct the smaller FLT3 solution until U009.
 
 ### FLT3U-009A — Origin-Preserving Signed Cube Factorization
 
-Status: active next task
+Status: completed — Outcome A
 
 Preserve the original primitive triple provenance through the exact-cube chain.
 
@@ -520,7 +520,7 @@ No sign routing yet.
 
 ### FLT3U-009B — Positive Strict Descent Reconstruction
 
-Status: planned after U009A
+Status: active next task
 
 Use the signs of r,s,r+s and the identity
 
