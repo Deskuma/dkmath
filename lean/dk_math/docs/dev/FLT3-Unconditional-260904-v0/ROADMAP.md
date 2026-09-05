@@ -520,7 +520,7 @@ No sign routing yet.
 
 ### FLT3U-009B — Positive Strict Descent Reconstruction
 
-Status: active next task
+Status: completed — Outcome A
 
 Use the signs of r,s,r+s and the identity
 
@@ -546,15 +546,45 @@ This is the final mathematical descent-construction checkpoint before well-found
 
 ## 12. FLT3U-010 — Well-founded closure
 
+Status: active next task
+
 Goal:
 
-strict descent packet を Nat-valued measure に接続し、無限降下を Lean の well-founded induction / strong induction で閉じる。
+The closure-facing theorem now gives every
 
-Primitive theorem をここで無条件化する。
+    PrimitiveCubicPack a b c
 
-Target:
+a strictly smaller primitive packet in product measure:
+
+$
+x y z < a b c.
+$
+
+Use Nat strong induction on the product measure to prove
+
+    primitiveCubicPack_false.
+
+Then expose the primitive unconditional endpoint
 
     FLT_d3_unconditional
+
+with assumptions only
+
+$
+a,b,c>0,
+\qquad
+\gcd(a,b)=1,
+$
+
+and conclusion
+
+$
+a^3+b^3\ne c^3.
+$
+
+No hS0_not_sq / NoSqOnS0 / completed FLT3 theorem is permitted.
+
+Arbitrary positive-triple gcd normalization remains U011.
 
 ## 13. FLT3U-011 — Positive-natural normalization and public API
 
