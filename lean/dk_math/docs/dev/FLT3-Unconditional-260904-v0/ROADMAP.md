@@ -1,5 +1,7 @@
 # FLT3 Unconditional ROADMAP
 
+Project status: completed — Outcome A
+
 cid: 6a9aa2b0-937c-83e8-aa29-b3474c8acdf9
 
 Branch: wip/flt3-unconditional-260904-v0
@@ -588,7 +590,7 @@ Arbitrary positive-triple gcd normalization remains U011.
 
 ## 13. FLT3U-011 — Positive-natural normalization and public API
 
-Status: active final task
+Status: completed — Outcome A
 
 Goal:
 
@@ -642,12 +644,29 @@ Final theorem dependency / axiom audit を行う。
 
 ## 15. Completion gate
 
-完了宣言には最低限次を要求する。
+Status: completed — Outcome A
 
-1. primitive unconditional theorem
-2. full positive-natural theorem
-3. no hS0_not_sq / NoSqOnS0 assumption
-4. no completed external FLT3 theorem dependency
-5. no project-specific axiom / sorry
-6. public import path
-7. theorem dependency / axiom audit document
+完了条件:
+
+1. primitive unconditional theorem — completed:
+   `DkMath.FLT.Three.FLT_d3_unconditional`
+2. full positive-natural theorem — completed:
+   `DkMath.FLT.Three.fermatThree_no_positive_solution`
+3. no hS0_not_sq / NoSqOnS0 assumption — confirmed
+4. no completed external FLT3 theorem used as a proof step — confirmed
+5. no project-specific axiom / new sorry in the Three tower — confirmed
+6. standalone public import path — completed:
+   `import DkMath.FLT.Three`
+7. theorem dependency / axiom audit — completed in report-014.md
+
+Final endpoint:
+
+$
+\forall a,b,c\in\mathbb N_{>0},
+\qquad
+a^3+b^3\ne c^3.
+$
+
+The independent public surface is `DkMath.FLT.Three`.
+
+Legacy `DkMath.FLT.Main` and the old conditional theorem remain in the repository and are outside this project's cleanup scope.
