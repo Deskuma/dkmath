@@ -52,6 +52,14 @@ structure SignedThreeAdicPacket (a b c : ℕ) : Type where
   residual_mod_nine : residual % 9 = 3
   gcd_eq_three : Nat.gcd carrier residual = 3
 
+/-- A routed packet retaining which original coordinate was distinguished. -/
+structure SignedThreeAdicOriginPacket (a b c : ℕ) : Type where
+  packet : SignedThreeAdicPacket a b c
+  distinguished_cases :
+    packet.distinguished = a ∨
+      packet.distinguished = b ∨
+        packet.distinguished = c
+
 private theorem mod_nine_at_least_one_divisible_by_three :
     ∀ x y z : Fin 9,
       (x.1 ^ 3 + y.1 ^ 3) % 9 = z.1 ^ 3 % 9 →
@@ -434,6 +442,43 @@ theorem exists_signedThreeAdicPacket_of_primitive_solution
   · exact ⟨packet_of_a ha hb hc hab hEq h.1 h.2.1 h.2.2⟩
   · exact ⟨packet_of_b ha hb hc hab hEq h.1 h.2.1 h.2.2⟩
   · exact ⟨packet_of_c ha hb hc hab hEq h.1 h.2.1 h.2.2⟩
+
+/-- Existence of a routed packet without discarding its provenance. -/
+private theorem exists_signedThreeAdicOriginPacket_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nonempty (SignedThreeAdicOriginPacket a b c) := by
+  rcases exact_one_three_dvd_of_fermat_cube hEq hab with h | h | h
+  · exact ⟨⟨packet_of_a ha hb hc hab hEq h.1 h.2.1 h.2.2, Or.inl rfl⟩⟩
+  · exact ⟨⟨packet_of_b ha hb hc hab hEq h.1 h.2.1 h.2.2,
+      Or.inr (Or.inl rfl)⟩⟩
+  · exact ⟨⟨packet_of_c ha hb hc hab hEq h.1 h.2.1 h.2.2,
+      Or.inr (Or.inr rfl)⟩⟩
+
+/-- Construct a routed packet without discarding its original-coordinate provenance. -/
+noncomputable def signedThreeAdicOriginPacket_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    SignedThreeAdicOriginPacket a b c :=
+  Classical.choice
+    (exists_signedThreeAdicOriginPacket_of_primitive_solution ha hb hc hab hEq)
+
+/-- The distinguished coordinate is bounded by the original triple product. -/
+theorem SignedThreeAdicOriginPacket.distinguished_le_product
+    {a b c : ℕ} (p : SignedThreeAdicOriginPacket a b c)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    p.packet.distinguished ≤ a * b * c := by
+  rcases p.distinguished_cases with h | h | h
+  · rw [h]
+    exact (Nat.le_mul_of_pos_right a hb).trans
+      (Nat.le_mul_of_pos_right (a * b) hc)
+  · rw [h]
+    exact (Nat.le_mul_of_pos_left b ha).trans
+      (Nat.le_mul_of_pos_right (a * b) hc)
+  · rw [h]
+    exact (Nat.le_mul_of_pos_right c hb).trans
+      (by simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+        (Nat.le_mul_of_pos_left (b * c) ha))
 
 /-- A chosen packet for a positive primitive cubic solution. -/
 noncomputable def signedThreeAdicPacket_of_primitive_solution

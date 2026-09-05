@@ -54,7 +54,7 @@ private theorem cube_factor_split
 
 private theorem nonempty_signedThreeAdicPowerSplit_of_packet
     {a b c : ℕ} (p : SignedThreeAdicPacket a b c) :
-    Nonempty (SignedThreeAdicPowerSplit a b c) := by
+    Nonempty {s : SignedThreeAdicPowerSplit a b c // s.packet = p} := by
   let C := p.carrier / 3
   let R := p.residual / 3
   let D := p.distinguished / 3
@@ -148,7 +148,7 @@ private theorem nonempty_signedThreeAdicPowerSplit_of_packet
     have hz := Nat.mod_eq_zero_of_dvd h9
     rw [p.residual_mod_nine] at hz
     omega
-  exact ⟨{
+  exact ⟨⟨{
     packet := p
     A := A0
     B := B
@@ -158,13 +158,19 @@ private theorem nonempty_signedThreeAdicPowerSplit_of_packet
     carrier_eq := hcarrier
     residual_eq := hresidual
     distinguished_eq := hdistinguished
-    three_not_dvd_B := h3B }⟩
+    three_not_dvd_B := h3B }, rfl⟩⟩
+
+/-- A power split whose packet field is definitionally routed back to `p`. -/
+noncomputable def signedThreeAdicPowerSplit_with_packet
+    {a b c : ℕ} (p : SignedThreeAdicPacket a b c) :
+    {s : SignedThreeAdicPowerSplit a b c // s.packet = p} :=
+  Classical.choice (nonempty_signedThreeAdicPowerSplit_of_packet p)
 
 /-- A chosen exact split of a signed three-adic packet. -/
 noncomputable def signedThreeAdicPowerSplit_of_packet
     {a b c : ℕ} (p : SignedThreeAdicPacket a b c) :
     SignedThreeAdicPowerSplit a b c :=
-  Classical.choice (nonempty_signedThreeAdicPowerSplit_of_packet p)
+  (signedThreeAdicPowerSplit_with_packet p).1
 
 /-- The exact split obtained directly from a positive primitive cubic solution. -/
 noncomputable def signedThreeAdicPowerSplit_of_primitive_solution
