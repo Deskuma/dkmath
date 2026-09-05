@@ -546,7 +546,7 @@ This is the final mathematical descent-construction checkpoint before well-found
 
 ## 12. FLT3U-010 — Well-founded closure
 
-Status: active next task
+Status: completed — Outcome A
 
 Goal:
 
@@ -588,15 +588,45 @@ Arbitrary positive-triple gcd normalization remains U011.
 
 ## 13. FLT3U-011 — Positive-natural normalization and public API
 
+Status: active final task
+
 Goal:
 
-任意の正の自然数解を primitive counterexample へ gcd normalization し、primitive theorem へ送る。
+任意の正の自然数解
 
-Final target:
+$
+a^3+b^3=c^3
+$
+
+を
+
+$
+d=\gcd(a,b)
+$
+
+で正規化し、
+
+$
+a'=a/d,\qquad
+b'=b/d,\qquad
+c'=c/d
+$
+
+から positive primitive cubic packet を構成する。
+
+Primitive endpoint FLT_d3_unconditional / primitiveCubicPack_false へ送り、final target
 
     fermatThree_no_positive_solution
 
-Public aggregator と axiom audit を追加する。
+を閉じる。
+
+Standalone public aggregator
+
+    DkMath.FLT.Three
+
+を追加し、legacy DkMath.FLT.Main を import しない独立公開面とする。
+
+Final theorem dependency / axiom audit を行う。
 
 ## 14. Stop conditions
 
