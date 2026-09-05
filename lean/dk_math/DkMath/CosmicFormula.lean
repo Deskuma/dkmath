@@ -12,6 +12,7 @@ import DkMath.CosmicFormula.PowerGapBeam  -- Power Gap/Beam for higher degrees
 import DkMath.CosmicFormula.PowerGapBeamGcd  -- GCD control for Power Gap/Beam
 import DkMath.CosmicFormula.PowerGapBeamGN  -- Bridge from Power Beam to GN
 import DkMath.CosmicFormula.PowerGapBeamPrimitive  -- Primitive Power Beam bridge
+import DkMath.CosmicFormula.SquareGnomon  -- Degree-two square Gnomon algebra
 import DkMath.CosmicFormula.Mass  -- Cosmic mass and Body/Gap split layer
 import DkMath.CosmicFormula.ThreeElement.Basic  -- Core/interaction-Beam/Gap exact decomposition
 import DkMath.CosmicFormula.ThreeElement.MagicCore  -- Static nonnegative-Big realizations
@@ -31,4 +32,7 @@ import DkMath.CosmicFormula.Rotation  -- Cosmic Formula rotation layer
 -- ----------------------------------------------------------------------------
 -- Note#2: Theorems previously written here have been moved to
 -- `CosmicFormulaBasic.lean` for better organization.
+-- ----------------------------------------------------------------------------
+-- The public surface also includes the generic degree-two Square Gnomon
+-- algebra.
 -- ----------------------------------------------------------------------------

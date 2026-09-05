@@ -13,6 +13,7 @@ import DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
 import DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
 import DkMath.NumberTheory.PrimorialUniverse.WheelReplication
 import DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+import DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
 import DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
@@ -143,4 +144,6 @@ increment preserves the pair.  This is a provider-side obstruction seed, not
 a uniform coverage theorem.
 Rational/irrational classification, square-anchor and Legendre consumers,
 PowerSwap, and analytic consumers belong to later checkpoints.
+The generic finite-basis product-to-square-world bridge is also public here;
+the concrete thirty-world regression remains a separate regression module.
 -/

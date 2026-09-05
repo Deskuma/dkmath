@@ -127,7 +127,7 @@ theorem existsUnique_GN_three_powLift_digit
       q ^ (k + 1) ∣
         DkMath.CosmicFormulaBinom.GN 3
           (u + q ^ k * (t : ℕ)) x := by
-  letI : Fact q.Prime := ⟨hq⟩
+  let : Fact q.Prime := ⟨hq⟩
   have hderZ : ((2 * u + 3 * x : ℕ) : ZMod q) ≠ 0 := by
     intro hzero
     exact hqder ((ZMod.natCast_eq_zero_iff (2 * u + 3 * x) q).mp hzero)

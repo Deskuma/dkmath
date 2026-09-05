@@ -226,7 +226,13 @@ theorem petalOrbitTotal_pos
     (lap : Nat) :
     0 < petalOrbitTotal core base lap := by
   unfold petalOrbitTotal
-  exact Nat.mul_pos hcore (Finset.prod_pos fun i _ => hbase i)
+  have hprod : 0 < Finset.prod (Finset.range lap) base := by
+    induction lap with
+    | zero => simp
+    | succ lap ih =>
+      rw [Finset.prod_range_succ]
+      exact Nat.mul_pos ih (hbase lap)
+  exact Nat.mul_pos hcore hprod
 
 /-- The existing dynamic Petal form is a canonical Petal orbit specialization. -/
 theorem dynamicPetalTotal_eq_petalOrbitTotal

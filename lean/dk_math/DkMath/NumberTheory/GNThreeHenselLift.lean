@@ -116,7 +116,7 @@ theorem existsUnique_GN_three_sqLift_digit
       q ^ 2 ∣
         DkMath.CosmicFormulaBinom.GN 3
           (u + q * (t : ℕ)) x := by
-  letI : Fact q.Prime := ⟨hq⟩
+  let : Fact q.Prime := ⟨hq⟩
   have hqder : ¬ q ∣ 2 * u + 3 * x :=
     prime_not_dvd_cubic_boundary_derivative hq hcop hqGN hq3
   have hderZ : ((2 * u + 3 * x : ℕ) : ZMod q) ≠ 0 := by
