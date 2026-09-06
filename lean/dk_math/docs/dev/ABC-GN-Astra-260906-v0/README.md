@@ -137,6 +137,14 @@ actual current definitions and proved in Lean before being used downstream.
 - [ROADMAP.md](ROADMAP.md) — current strategy and stop/go gates.
 - [instruction-000.md](instruction-000.md) — read-only reconnaissance task for
   the first Astra/Codex pass.
+- [report-000.md](report-000.md) — completed reconnaissance: scratch Lean proves
+  orientation gcd / repeated-support separation, coprime repeated moduli, and
+  the actual cubic `3/8` target weight bound. The large-profile sum and ABC
+  quality coupling remain open (Outcome B).
+- [scratch-000.lean.txt](scratch-000.lean.txt),
+  [numeric-000.py](numeric-000.py), and
+  [validation-000.txt](validation-000.txt) — replayable proof and experiment
+  evidence; no production theorem is exported at ASTRA-000.
 
 ## Research discipline
 

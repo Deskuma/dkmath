@@ -89,7 +89,10 @@ Consequences for ABC strategy:
 
 ### ASTRA-000 — workspace and theorem-surface audit
 
-Status: active via `instruction-000.md`.
+Status: complete; see [report-000.md](report-000.md) (Outcome B).
+Scratch Lean verifies H1, coprimality of the actual repeated moduli, and H2.
+The large-profile sum and quality coupling remain open. Production work in
+ASTRA-001 and later phases has not started.
 
 Objectives:
 
