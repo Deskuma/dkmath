@@ -145,6 +145,9 @@ actual current definitions and proved in Lean before being used downstream.
   [numeric-000.py](numeric-000.py), and
   [validation-000.txt](validation-000.txt) — replayable proof and experiment
   evidence; no production theorem is exported at ASTRA-000.
+- [report-002.md](report-002.md) — realizability-aware profile foundation:
+  realized large profiles, generic height admissibility, cubic height bridge,
+  and exclusion of the known 7/13 ghost profile.
 
 ## Research discipline
 

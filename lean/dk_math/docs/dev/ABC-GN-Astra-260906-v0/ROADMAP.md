@@ -92,7 +92,8 @@ Consequences for ABC strategy:
 Status: complete; see [report-000.md](report-000.md) (Outcome B).
 Scratch Lean verifies H1, coprimality of the actual repeated moduli, and H2.
 The large-profile sum and quality coupling remain open. Production work in
-ASTRA-001 and later phases has not started.
+ASTRA-001 was completed in the prior review; ASTRA-002 now provides the
+realizability-aware profile foundation in [report-002.md](report-002.md).
 
 Objectives:
 

@@ -19,6 +19,7 @@ import DkMath.ABC.GNCubicOrientation
 import DkMath.ABC.GNCubicBoundaryWeight
 import DkMath.ABC.GNCubicPairedDepth
 import DkMath.ABC.GNExcessProfileOvercount
+import DkMath.ABC.GNExcessRealizableProfiles
 import DkMath.ABC.ABCEpsilonJointPressureBridge
 import DkMath.ABC.ABCEpsilonSlopeBridge
 
