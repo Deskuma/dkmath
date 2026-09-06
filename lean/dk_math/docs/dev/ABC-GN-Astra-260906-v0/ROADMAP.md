@@ -60,6 +60,9 @@ DO NOT:
   or count such a repackaging as progress.
 ```
 
+The ordinary Luna implementation checkpoint LUNA-003 is complete; see
+[report-003.md](report-003.md) for the exact realized-profile fiber partition.
+
 ### 1.4 Exact large-boundary object
 
 For one target profile, the large CRT modulus is exactly the complete repeated

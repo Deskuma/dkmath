@@ -11,7 +11,7 @@ bound, or asymptotic estimate was attempted.
 ## Workspace and files
 
 - Branch: `wip/ABC-GN-astra-260906-v0`.
-- Final HEAD: `9ba7fdba30f7807d6fce946ce188d7e6099c58bb`.
+- Final HEAD: `b7a3c3de882ac4980d3b1fbe6f4af493badfe361`.
 - New production module: `DkMath/ABC/GNExcessRealizableProfiles.lean`.
 - Public aggregator: `DkMath/ABC.lean` now imports the new module immediately
   after `GNExcessProfileOvercount`.

@@ -148,6 +148,8 @@ actual current definitions and proved in Lean before being used downstream.
 - [report-002.md](report-002.md) — realizability-aware profile foundation:
   realized large profiles, generic height admissibility, cubic height bridge,
   and exclusion of the known 7/13 ghost profile.
+- [report-003.md](report-003.md) — exact realized-profile image, disjoint
+  fibers, interval coverage, and cardinal partition.
 
 ## Research discipline
 
