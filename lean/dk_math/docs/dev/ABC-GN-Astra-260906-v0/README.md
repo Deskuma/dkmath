@@ -150,6 +150,8 @@ actual current definitions and proved in Lean before being used downstream.
   and exclusion of the known 7/13 ghost profile.
 - [report-003.md](report-003.md) — exact realized-profile image, disjoint
   fibers, interval coverage, and cardinal partition.
+- [report-004.md](report-004.md) — ghost-free exponential moment bridge with
+  the realized large-boundary contribution.
 
 ## Research discipline
 

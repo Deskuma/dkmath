@@ -62,6 +62,8 @@ DO NOT:
 
 The ordinary Luna implementation checkpoint LUNA-003 is complete; see
 [report-003.md](report-003.md) for the exact realized-profile fiber partition.
+LUNA-004 is also complete; see [report-004.md](report-004.md) for the
+realized moment bridge.
 
 ### 1.4 Exact large-boundary object
 
