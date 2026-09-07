@@ -28,3 +28,13 @@ MAX MODULUS 10000 (6355441, 4365, 3)
 MAX MODULUS 200000 (7906143973, 88915, 1)
 BOTH ABOVE INTERVAL []
 PAIR PRODUCT ABOVE INTERVAL SQUARED []
+
+FINAL ASTRA-007 REPLAY
+Lean command: (cd lean/dk_math && lake env lean /tmp/all007.lean)
+Exit: 0. Warnings: linter-only (unused simp/tactic diagnostics).
+Numerical command: python3 numeric-007.py --limit 200000
+Exit: 0. Exact sieve and independent factorization checks passed.
+Certified highlights: M=8281 has four full-part roots [2173,3018,5260,6105];
+mixed CRT moduli 2989441 and 2872852801 have 6 and 12 exact arithmetic roots.
+The Pell ledger begins (a,d)=(0,1),(21,13),(312,181),(4365,2521),
+(60816,35113),(847077,489061). No ABC closure claim is made.

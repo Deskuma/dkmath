@@ -142,3 +142,53 @@ Eight explicit repeated-part evaluations (17,21,145,2173,3018,5260,6105,88915)
 are also compiled using prime-factorization certificates and norm_num, without
 native_decide. In particular the four-root example concerns the exact FULL
 repeated part, not just a common divisor. All blocks are persisted.
+
+### Branch E and final obstruction ledger
+The paired-product route is algebraically valid but gives no monotone descent:
+`F(a)*(3*a^2+3*a+1)=3*(a+1)^4+a^2` and
+`3*F(a)-(3*a^2+3*a+1)=6*a+8` are kernel-checked. The numerical scan to
+200000 found no pair for which both complementary full factors are above the
+corresponding height. This is evidence only; it is not a universal theorem.
+The absolute Pell family is now formalized: `a_0=0,d_0=1` and
+`a_(n+1)=7*a_n+12*d_n+9`, `d_(n+1)=4*a_n+7*d_n+6` satisfy
+`F(a_n)=3*d_n^2`, strict growth, and repeated part `d_n^2`. Hence complements
+can remain exactly 3 while the height grows, so a local complement lower bound
+cannot close the sum.
+
+The new Lean lemma `squarefull_block_obstruction` records a necessary strength
+for any direct linear closure: if every `a` in a block `[X,2X]` has full
+repeated part `F(a)`, then its cardinality times `X^(3/4)` is bounded by the
+realized modulus moment at `2X`. Thus such a block can have only the scale
+`O(X^(1/4))` under a linear moment bound. Establishing this polynomial-value
+count, or an equivalent global incidence estimate, remains the exact frontier.
+
+All five permitted branches A--E have now been investigated. No branch gives
+the requested ABC closure, and no new axiom, `sorry`, research provider, or
+production theorem was added. The checkpoint therefore stops at a documented
+research boundary; the next Luna-sized task is to prove a quantitative global
+incidence/counting lemma and integrate it only after an independent provider is
+available.
+
+### Final verification
+`lake env lean /tmp/all007.lean` exits 0 (warnings are linter-only); the exact
+source is copied to `scratch-007.lean.txt`. The numerical script exits 0 at
+`--limit 200000`, checks all sieve identities with integer arithmetic and an
+independent factorization sample, and emits certified fixed-point fractional
+moment intervals. The production tree is unchanged.
+
+### Decisive theorem candidate for Luna
+For every `ε < 1/8`, prove a uniform dyadic incidence estimate
+`N_X(D) ≤ C_ε X^(1+ε)/sqrt D` for realized full repeated moduli in
+`D ≤ M < 2D`, `X+1 ≤ D ≲ X²`. Together with the exact finite Euler reduction,
+this would yield a sublinear dyadic sum and hence the desired linear bound.
+The scratch theorem `squarefull_block_obstruction` records a necessary
+polynomial-value consequence of any such closure. No assumption of this
+candidate is imported into production.
+
+### Closed routes and remaining frontier
+Closed as proof methods: quadratic injectivity, at-most-two witness claims,
+local Hensel uniqueness, naive squareful counting, and paired-factor size
+inference from coprimality. They are retained as exact identities or
+counterexamples. The remaining gap is a genuinely global incidence estimate
+for the quadratic values with their full repeated parts; this is the only
+recommended next production-sized investigation.
