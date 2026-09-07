@@ -156,6 +156,10 @@ actual current definitions and proved in Lean before being used downstream.
   fibers to the realized joint-modulus moment.
 - [report-006.md](report-006.md) — extraction of distinct realized cubic
   joint moduli and the quadratic divisor bridge.
+- [report-007.md](report-007.md) — ASTRA research boundary: complement,
+  Pell, spacing, and incidence obstruction ledger.
+- [report-008.md](report-008.md) — LUNA canonical repeated/complement
+  production API and quadratic spacing foundation.
 
 ## Research discipline
 

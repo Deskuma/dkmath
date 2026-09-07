@@ -1,0 +1,25 @@
+LUNA-008 validation
+
+Production module:
+  lake build DkMath.ABC.GNExcessCubicComplement
+  PASS
+
+ABC aggregator:
+  lake build DkMath.ABC
+  PASS
+
+Regression module:
+  lake env lean DkMathTest/ABC/GNCubicComplementRegression.lean
+  PASS
+
+Principal axiom audit:
+  GNNonExceptionalRepeatedPart_three_one_eq_repeatedPrimePowerPart
+  squarefree_repeatedPrimePowerComplement
+  coprime_repeatedPrimePowerPart_complement
+  GNExcessCubicRealizedLargeModulusSpace_exists_complement_packet
+  cubicQuadratic_commonDivisor_dvd_rootDifference
+  cubicQuadratic_commonDivisor_le_spacingProduct
+  = expected propext / Classical.choice / Quot.sound boundary only.
+
+Forbidden-construct scan of changed production/test files: no sorry, admit,
+new axiom, abc_main_axiom, or native_decide.

@@ -24,6 +24,7 @@ import DkMath.ABC.GNExcessRealizedFibers
 import DkMath.ABC.GNExcessRealizedMoment
 import DkMath.ABC.GNExcessCubicRealizedBoundary
 import DkMath.ABC.GNExcessCubicRealizedModuli
+import DkMath.ABC.GNExcessCubicComplement
 import DkMath.ABC.ABCEpsilonJointPressureBridge
 import DkMath.ABC.ABCEpsilonSlopeBridge
 

@@ -69,6 +69,10 @@ LUNA-005 is complete; see [report-005.md](report-005.md) for the cubic
 modulus moment remains the explicit frontier.
 LUNA-006 is complete; see [report-006.md](report-006.md) for the finite
 distinct realized-modulus extraction and cubic quadratic-divisor certificate.
+LUNA-008 is complete; see [report-008.md](report-008.md) for the production
+canonical repeated/complement packet, sharp `S ≤ X` certificate, spacing
+lemmas, and collision regressions. The global incidence frontier remains
+open; ASTRA-007 research obstructions are intentionally deferred.
 
 ### 1.4 Exact large-boundary object
 
