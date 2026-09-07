@@ -160,6 +160,8 @@ actual current definitions and proved in Lean before being used downstream.
   Pell, spacing, and incidence obstruction ledger.
 - [report-008.md](report-008.md) — LUNA canonical repeated/complement
   production API and quadratic spacing foundation.
+- [report-009.md](report-009.md) — LUNA Pell family and exact
+  squarefull-block incidence obstruction.
 
 ## Research discipline
 

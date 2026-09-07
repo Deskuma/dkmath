@@ -73,6 +73,9 @@ LUNA-008 is complete; see [report-008.md](report-008.md) for the production
 canonical repeated/complement packet, sharp `S ≤ X` certificate, spacing
 lemmas, and collision regressions. The global incidence frontier remains
 open; ASTRA-007 research obstructions are intentionally deferred.
+LUNA-009 is complete; see [report-009.md](report-009.md) for the production
+Pell family with constant complement `3` and the exact squarefull-block
+necessary-condition inequality. No incidence estimate is claimed.
 
 ### 1.4 Exact large-boundary object
 
