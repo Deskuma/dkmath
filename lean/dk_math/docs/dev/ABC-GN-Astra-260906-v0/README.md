@@ -162,6 +162,8 @@ actual current definitions and proved in Lean before being used downstream.
   production API and quadratic spacing foundation.
 - [report-009.md](report-009.md) — LUNA Pell family and exact
   squarefull-block incidence obstruction.
+- [report-010.md](report-010.md) — LUNA exact realized-modulus dyadic
+  shell partition and moment bookkeeping.
 
 ## Research discipline
 

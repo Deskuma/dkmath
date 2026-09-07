@@ -1,0 +1,15 @@
+LUNA-010 validation
+
+Focused production build:
+  lake build DkMath.ABC.GNExcessCubicRealizedDyadic  PASS
+
+ABC aggregator:
+  lake build DkMath.ABC                           PASS
+
+Axiom audit:
+  shell lower/upper bounds, exact dyadic reindex, card-bound consumer, and
+  empty-shell guards use only propext / Classical.choice / Quot.sound or a
+  subset.
+
+Changed Lean files contain no sorry, admit, new axiom, abc_main_axiom, or
+native_decide.

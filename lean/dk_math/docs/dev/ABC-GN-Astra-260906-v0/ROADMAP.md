@@ -76,6 +76,10 @@ open; ASTRA-007 research obstructions are intentionally deferred.
 LUNA-009 is complete; see [report-009.md](report-009.md) for the production
 Pell family with constant complement `3` and the exact squarefull-block
 necessary-condition inequality. No incidence estimate is claimed.
+LUNA-010 is complete; see [report-010.md](report-010.md) for the exact
+realized-modulus dyadic shell partition, deterministic shell weight bounds,
+and finite moment consumers. Shell counts remain an arithmetic research
+frontier.
 
 ### 1.4 Exact large-boundary object
 
