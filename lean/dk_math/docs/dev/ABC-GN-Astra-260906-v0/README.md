@@ -152,6 +152,8 @@ actual current definitions and proved in Lean before being used downstream.
   fibers, interval coverage, and cardinal partition.
 - [report-004.md](report-004.md) — ghost-free exponential moment bridge with
   the realized large-boundary contribution.
+- [report-005.md](report-005.md) — cubic `3/8` transfer from realized large
+  fibers to the realized joint-modulus moment.
 
 ## Research discipline
 
