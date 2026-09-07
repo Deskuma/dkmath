@@ -67,6 +67,8 @@ realized moment bridge.
 LUNA-005 is complete; see [report-005.md](report-005.md) for the cubic
 `3/8` realized-fiber transfer to the joint-modulus moment.  The aggregate
 modulus moment remains the explicit frontier.
+LUNA-006 is complete; see [report-006.md](report-006.md) for the finite
+distinct realized-modulus extraction and cubic quadratic-divisor certificate.
 
 ### 1.4 Exact large-boundary object
 

@@ -154,6 +154,8 @@ actual current definitions and proved in Lean before being used downstream.
   the realized large-boundary contribution.
 - [report-005.md](report-005.md) — cubic `3/8` transfer from realized large
   fibers to the realized joint-modulus moment.
+- [report-006.md](report-006.md) — extraction of distinct realized cubic
+  joint moduli and the quadratic divisor bridge.
 
 ## Research discipline
 

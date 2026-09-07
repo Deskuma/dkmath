@@ -173,7 +173,7 @@ theorem GNExcess_cubic_realizedLarge_modulus_rpow_le_height_rpow
   apply Real.rpow_le_rpow (Nat.cast_nonneg _) _ (by norm_num)
   exact_mod_cast mem_realizedLargeProfileSpace_cubic_heightAdmissible h
 
-/-! ## Final LUNA-004 composition -/
+/-! ## Final LUNA-005 composition -/
 
 /-- The LUNA-004 finite-Euler bridge with the realized cubic modulus moment. -/
 theorem exp_GNExcessMassAt_sum_cubic_three_eighths_le_finiteEuler_add_modulusMoment
