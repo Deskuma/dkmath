@@ -104,6 +104,10 @@ three-sector conic. No sector count, density, or sparsity estimate is claimed.
 LUNA-017 is complete; see [report-017.md](report-017.md) for exact fixed-`T`
 and normalized-`T3` finite filters, partitions, and card identities. No
 multiplicity, density, or sparsity estimate is claimed.
+LUNA-018 is complete; see [report-018.md](report-018.md) for the paired
+orientation factor ledger, exact mod-7 overlap classification, and all
+cross-gcd-divides-7/off-seven packets. No relative-height or ABC closure is
+claimed.
 
 ### 1.4 Exact large-boundary object
 
