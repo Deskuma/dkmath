@@ -80,6 +80,9 @@ LUNA-010 is complete; see [report-010.md](report-010.md) for the exact
 realized-modulus dyadic shell partition, deterministic shell weight bounds,
 and finite moment consumers. Shell counts remain an arithmetic research
 frontier.
+LUNA-011 is complete; see [report-011.md](report-011.md) for exact witness
+images, shell/fiber partitions, complement certificates, and fixed-modulus
+spacing. No incidence sparsity estimate is claimed.
 
 ### 1.4 Exact large-boundary object
 

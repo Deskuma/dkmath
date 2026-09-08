@@ -164,6 +164,8 @@ actual current definitions and proved in Lean before being used downstream.
   squarefull-block incidence obstruction.
 - [report-010.md](report-010.md) — LUNA exact realized-modulus dyadic
   shell partition and moment bookkeeping.
+- [report-011.md](report-011.md) — LUNA exact witness images, modulus fibers,
+  shell partition, complement packets, and spacing.
 
 ## Research discipline
 
