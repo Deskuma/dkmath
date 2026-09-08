@@ -1,0 +1,20 @@
+LUNA-012 validation
+
+Focused module:
+  lake build DkMath.ABC.GNExcessCubicComplementIncidence  PASS
+
+Public aggregator:
+  lake build DkMath.ABC  PASS
+
+Changed Lean-file forbidden scan:
+  sorry/admit/new axiom/abc_main_axiom/native_decide  NONE
+
+Key declaration axiom audit:
+  GNExcessCubicIncidencePair_injective
+  complement-fiber partition and card identity
+  pair-space card/projection identities
+  pair packet and unique witness
+  standard boundary: propext, Classical.choice, Quot.sound (or subset)
+
+Formatting:
+  git diff --check  PASS

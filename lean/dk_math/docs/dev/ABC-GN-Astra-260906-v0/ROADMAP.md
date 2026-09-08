@@ -83,6 +83,10 @@ frontier.
 LUNA-011 is complete; see [report-011.md](report-011.md) for exact witness
 images, shell/fiber partitions, complement certificates, and fixed-modulus
 spacing. No incidence sparsity estimate is claimed.
+LUNA-012 is complete; see [report-012.md](report-012.md) for complement
+ slices, injective `(M,S)` incidence pairs, exact shell projections, and the
+ three-way finite cardinal ledger. No nontrivial cardinality estimate is
+ claimed.
 
 ### 1.4 Exact large-boundary object
 

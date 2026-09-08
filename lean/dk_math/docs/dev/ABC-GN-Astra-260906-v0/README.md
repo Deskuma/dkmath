@@ -166,6 +166,8 @@ actual current definitions and proved in Lean before being used downstream.
   shell partition and moment bookkeeping.
 - [report-011.md](report-011.md) — LUNA exact witness images, modulus fibers,
   shell partition, complement packets, and spacing.
+- [report-012.md](report-012.md) — LUNA complement slices, injective incidence
+  pairs, shell projections, and the exact three-way finite ledger.
 
 ## Research discipline
 
