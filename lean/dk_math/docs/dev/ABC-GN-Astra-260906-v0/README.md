@@ -180,6 +180,8 @@ actual current definitions and proved in Lean before being used downstream.
   normalized `T3` images/fibers, and exact card identities.
 - [report-018.md](report-018.md) — LUNA paired-orientation exact arithmetic
   ledger, mod-7 overlap sectors, and cross-gcd packets.
+- [report-019.md](report-019.md) — LUNA paired squareful/square-cube ledger,
+  prime support, quartic square divisibility, and sector consumers.
 
 ## Research discipline
 

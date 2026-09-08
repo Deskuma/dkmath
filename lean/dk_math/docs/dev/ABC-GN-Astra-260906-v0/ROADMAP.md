@@ -108,6 +108,10 @@ LUNA-018 is complete; see [report-018.md](report-018.md) for the paired
 orientation factor ledger, exact mod-7 overlap classification, and all
 cross-gcd-divides-7/off-seven packets. No relative-height or ABC closure is
 claimed.
+LUNA-019 is complete; see [report-019.md](report-019.md) for the paired
+squareful square-cube coordinates, combined cube-core, prime-square quartic
+consumer, and sector packets. No size-relative or density conclusion is
+claimed.
 
 ### 1.4 Exact large-boundary object
 
