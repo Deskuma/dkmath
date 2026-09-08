@@ -182,6 +182,9 @@ actual current definitions and proved in Lean before being used downstream.
   ledger, mod-7 overlap sectors, and cross-gcd packets.
 - [report-019.md](report-019.md) — LUNA paired squareful/square-cube ledger,
   prime support, quartic square divisibility, and sector consumers.
+- [report-020.md](report-020.md) — LUNA seven-depth state normalization,
+  exact mod-49 residue classes, three state packets, and exact cross-gcd
+  consumers.
 
 ## Research discipline
 

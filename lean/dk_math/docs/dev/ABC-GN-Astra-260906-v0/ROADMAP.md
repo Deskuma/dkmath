@@ -112,6 +112,10 @@ LUNA-019 is complete; see [report-019.md](report-019.md) for the paired
 squareful square-cube coordinates, combined cube-core, prime-square quartic
 consumer, and sector packets. No size-relative or density conclusion is
 claimed.
+LUNA-020 is complete; see [report-020.md](report-020.md) for the generic
+repeated-prime bridge, exact mod-49 forward/swap classes, three seven-depth
+state packets, and exact cross-gcd normalization. No depth bound above two,
+counting, density, relative-height, or ABC closure is claimed.
 
 ### 1.4 Exact large-boundary object
 
