@@ -170,6 +170,8 @@ actual current definitions and proved in Lean before being used downstream.
   pairs, shell projections, and the exact three-way finite ledger.
 - [report-013.md](report-013.md) — LUNA squareful parity decomposition and
   exact negative-Pell shell coordinates.
+- [report-014.md](report-014.md) — LUNA square-cube quotient coordinates,
+  squarefree Pell-parameter fibers, and the exact four-way shell ledger.
 
 ## Research discipline
 

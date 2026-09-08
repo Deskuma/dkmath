@@ -90,6 +90,10 @@ claimed.
 LUNA-013 is complete; see [report-013.md](report-013.md) for the squareful
 parity packet and exact negative-Pell coordinates of every represented pair.
 No Pell or shell cardinality estimate is claimed.
+LUNA-014 is complete; see [report-014.md](report-014.md) for canonical
+square-cube quotient coordinates, squarefree Pell-parameter fibers, the exact
+fixed-parameter conic equation, and the four-way finite shell ledger. No Pell
+solution count or incidence estimate is claimed.
 
 ### 1.4 Exact large-boundary object
 
