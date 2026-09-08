@@ -39,6 +39,7 @@ import DkMath.ABC.GNExcessCubicPairedOrientation
 import DkMath.ABC.GNExcessCubicPairedSquareful
 import DkMath.ABC.GNExcessCubicSevenDepth
 import DkMath.ABC.GNExcessCubicSevenDepthIncidence
+import DkMath.ABC.GNExcessCubicResearchFrontier
 import DkMath.ABC.ABCEpsilonJointPressureBridge
 import DkMath.ABC.ABCEpsilonSlopeBridge
 

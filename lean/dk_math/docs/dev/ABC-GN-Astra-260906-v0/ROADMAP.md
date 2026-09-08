@@ -120,6 +120,10 @@ LUNA-021 is complete; see [report-021.md](report-021.md) for the exact finite
 seven-sector shell filters, three-state disjoint union, cardinal ledger,
 LUNA-020 packet consumers, and repeated-product deep union. No state count
 estimate, density, relative-height, or ABC closure is claimed.
+LUNA-022 is complete; see [report-022.md](report-022.md) for the provider-free
+end-to-end cubic `3/8` capstone. The deterministic reduction now stops at the
+explicit shell-count quantity `GNExcessCubicRealizedLargeModulusShellCount`;
+ABC, density, relative-height exclusion, and shell sparsity remain open.
 
 ### 1.4 Exact large-boundary object
 

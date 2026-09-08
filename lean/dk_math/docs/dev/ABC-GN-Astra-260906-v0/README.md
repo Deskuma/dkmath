@@ -188,6 +188,9 @@ actual current definitions and proved in Lean before being used downstream.
 - [report-021.md](report-021.md) — LUNA finite seven-depth incidence ledger,
   exact three-state shell partition, cardinal split, packet consumers, and
   repeated-product deep union.
+- [report-022.md](report-022.md) — LUNA ABC–GN cubic research-frontier
+  capstone, generic shell-card consumer, complete deterministic ledger, and
+  explicit remaining shell-count obstruction.
 
 ## Research discipline
 
