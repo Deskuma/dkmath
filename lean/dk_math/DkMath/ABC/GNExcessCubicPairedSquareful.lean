@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.GNExcessCubicPairedOrientation
 import DkMath.ABC.GNExcessCubicPellParameterIncidence
 
+#print "file: DkMath.ABC.GNExcessCubicPairedSquareful"
+
 /-!
 # Paired squareful and square-cube coordinates
 

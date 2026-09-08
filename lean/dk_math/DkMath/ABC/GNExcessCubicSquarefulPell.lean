@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicComplementIncidence
 
+#print "file: DkMath.ABC.GNExcessCubicSquarefulPell"
+
 /-!
 # Squareful parity and Pell-shell coordinates
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicRealizedIncidence
 
+#print "file: DkMath.ABC.GNExcessCubicRealizedIncidence"
+
 /-!
 # Complement slices and incidence-pair coordinates
 

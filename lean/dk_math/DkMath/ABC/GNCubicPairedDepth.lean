@@ -7,7 +7,6 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.GNCubicOrientation
 import DkMath.NumberTheory.GNThreePairedDepth
 
-open DkMath.CosmicFormulaBinom DkMath.NumberTheory
 #print "file: DkMath.ABC.GNCubicPairedDepth"
 
 /-!
@@ -20,6 +19,8 @@ about their size relative to height or the original ABC radical.
 -/
 
 namespace DkMath.ABC
+
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
 
 /-- A non-exceptional GN prime power of depth at least two belongs to the actual repeated part. -/
 theorem prime_pow_dvd_GNNonExceptionalRepeatedPart {p a b q k : ℕ}

@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.GNExcessCubicRealizedModuli
 import Mathlib.Data.Nat.Squarefree
 
+#print "file: DkMath.ABC.GNExcessCubicComplement"
+
 /-!
 # Canonical repeated/complement coordinates for the cubic GN family
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicSquarefulPell
 
+#print "file: DkMath.ABC.GNExcessCubicSquarefulPell"
+
 /-!
 # Square-cube and Pell-parameter incidence ledger
 

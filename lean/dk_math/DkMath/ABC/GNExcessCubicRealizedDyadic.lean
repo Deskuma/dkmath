@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicIncidenceObstruction
 
+#print "file: DkMath.ABC.GNExcessCubicRealizedDyadic"
+
 /-!
 # Exact dyadic bookkeeping for realized cubic moduli
 

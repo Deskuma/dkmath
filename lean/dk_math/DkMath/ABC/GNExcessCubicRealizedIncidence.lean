@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicRealizedDyadic
 
+#print "file: DkMath.ABC.GNExcessCubicRealizedIncidence"
+
 /-!
 # Exact witness/fiber coordinates for realized cubic moduli
 

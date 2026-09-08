@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicComplementPell
 
+#print "file: DkMath.ABC.GNExcessCubicIncidenceObstruction"
+
 /-!
 # Necessary incidence strength for the cubic realized modulus moment
 

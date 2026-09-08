@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicPellParameterIncidence
 
+#print "file: DkMath.ABC.GNExcessCubicPellParameterIncidence"
+
 /-!
 # Primitive support packet for the cubic Pell coordinates
 

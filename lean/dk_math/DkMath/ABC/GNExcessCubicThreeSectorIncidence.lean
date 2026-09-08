@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicThreeSector
 
+#print "file: DkMath.ABC.GNExcessCubicThreeSectorIncidence"
+
 /-!
 # Finite three-sector incidence ledger
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicPrimitivePell
 
+#print "file: DkMath.ABC.GNExcessCubicThreeSector"
+
 /-!
 # Exceptional-prime three-sector normalization
 

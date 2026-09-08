@@ -7,7 +7,6 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.GNExcessLargeBoundaryPacket
 import DkMath.NumberTheory.GNThreeQuadratic
 
-open DkMath.CosmicFormulaBinom DkMath.NumberTheory
 #print "file: DkMath.ABC.GNExcessProfileOvercount"
 
 /-!
@@ -22,6 +21,8 @@ These are statements about the existing majorant, not the actual moment or ABC.
 -/
 
 namespace DkMath.ABC
+
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
 
 /-- Both 7 and 13 request depth 2n; other primes are inactive. -/
 def GNExcessTwoPrimeProfile (Q : Finset ℕ) (n : ℕ) : ∀ q ∈ Q, ℕ :=

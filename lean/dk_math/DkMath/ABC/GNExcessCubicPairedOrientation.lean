@@ -8,6 +8,8 @@ import DkMath.ABC.GNExcessCubicThreeSectorIncidence
 import DkMath.ABC.GNCubicPairedDepth
 import DkMath.ABC.GNExcessCubicComplementPell
 
+#print "file: DkMath.ABC.GNExcessCubicPairedOrientation"
+
 /-!
 # Paired cubic orientations
 
