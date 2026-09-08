@@ -168,6 +168,8 @@ actual current definitions and proved in Lean before being used downstream.
   shell partition, complement packets, and spacing.
 - [report-012.md](report-012.md) — LUNA complement slices, injective incidence
   pairs, shell projections, and the exact three-way finite ledger.
+- [report-013.md](report-013.md) — LUNA squareful parity decomposition and
+  exact negative-Pell shell coordinates.
 
 ## Research discipline
 
