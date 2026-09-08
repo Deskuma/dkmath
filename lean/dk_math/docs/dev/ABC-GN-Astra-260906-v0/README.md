@@ -174,6 +174,8 @@ actual current definitions and proved in Lean before being used downstream.
   squarefree Pell-parameter fibers, and the exact four-way shell ledger.
 - [report-015.md](report-015.md) — LUNA primitive divisibility, support,
   coprimality, gcd, and prime-square Pell packets.
+- [report-016.md](report-016.md) — LUNA exceptional-three sector normalization,
+  exact gcd classification, and the two fixed-`T` normal forms.
 
 ## Research discipline
 

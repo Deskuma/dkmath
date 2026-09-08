@@ -98,6 +98,9 @@ LUNA-015 is complete; see [report-015.md](report-015.md) for the primitive
 divisibility hierarchy, `q % 3 = 1` support consumers, Pell-coordinate
 coprimality, `gcd(y,T) ∣ 3`, square divisibility, and fixed-`T` primitive
 packets. No Pell or shell/fiber count is claimed.
+LUNA-016 is complete; see [report-016.md](report-016.md) for the exact
+exceptional-three split, gcd `1/3` classification, and normalized
+three-sector conic. No sector count, density, or sparsity estimate is claimed.
 
 ### 1.4 Exact large-boundary object
 

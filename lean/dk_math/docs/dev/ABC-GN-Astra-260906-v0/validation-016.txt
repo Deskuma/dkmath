@@ -1,0 +1,32 @@
+LUNA-016 validation
+====================
+
+Working directory:
+  lean/dk_math
+
+Focused build:
+  lake build DkMath.ABC.GNExcessCubicThreeSector
+  PASS (8797 jobs)
+
+ABC aggregator:
+  lake build DkMath.ABC
+  PASS (8854 jobs)
+
+Forbidden-construct scan:
+  rg -n -i 'sorry|admit|^[[:space:]]*axiom|abc_main_axiom|native_decide' \
+    DkMath/ABC/GNExcessCubicThreeSector.lean
+  PASS (no matches)
+
+Declaration axiom audit:
+  three_dvd_cubicQuadratic_iff
+  GNExcessCubicRealizedLargeModulusShellWitness_three_dvd_complement_iff
+  GNExcessCubicRealizedLargeModulusShellWitness_three_dvd_pellParameter_iff
+  GNExcessCubicRealizedLargeModulusShellIncidencePair_gcd_pellY_pellParameter_eq_one_or_three
+  GNExcessCubicRealizedLargeModulusShellPellParameterFiber_threeSector_equation
+  GNExcessCubicRealizedLargeModulusShellPellParameterFiber_threeSector_coprime
+  GNExcessCubicRealizedLargeModulusShellPellParameterFiber_threeSector_cases
+  PASS; each depends only on propext, Classical.choice, Quot.sound
+
+Formatting:
+  git diff --check
+  PASS
