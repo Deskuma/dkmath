@@ -1,0 +1,32 @@
+LUNA-017 validation
+====================
+
+Working directory:
+  lean/dk_math
+
+Focused build:
+  lake build DkMath.ABC.GNExcessCubicThreeSectorIncidence
+  PASS (8798 jobs)
+
+ABC aggregator:
+  lake build DkMath.ABC
+  PASS (8855 jobs)
+
+Forbidden-construct scan:
+  rg -n -i 'sorry|admit|^[[:space:]]*axiom|abc_main_axiom|native_decide' \
+    DkMath/ABC/GNExcessCubicThreeSector.lean \
+    DkMath/ABC/GNExcessCubicThreeSectorIncidence.lean DkMath/ABC.lean
+  PASS (no matches)
+
+Declaration axiom audit:
+  fixed-T sector union/card identity
+  non-three and three packet consumers
+  normalized parameter support packet
+  normalized T3 witness bi-union/card identity
+  normalized primitive packet
+  shell-level sector card split
+  PASS; audited declarations depend only on propext, Classical.choice, Quot.sound
+
+Formatting:
+  git diff --check
+  PASS

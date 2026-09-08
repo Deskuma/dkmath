@@ -34,6 +34,7 @@ import DkMath.ABC.GNExcessCubicSquarefulPell
 import DkMath.ABC.GNExcessCubicPellParameterIncidence
 import DkMath.ABC.GNExcessCubicPrimitivePell
 import DkMath.ABC.GNExcessCubicThreeSector
+import DkMath.ABC.GNExcessCubicThreeSectorIncidence
 import DkMath.ABC.ABCEpsilonJointPressureBridge
 import DkMath.ABC.ABCEpsilonSlopeBridge
 

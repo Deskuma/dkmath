@@ -176,6 +176,8 @@ actual current definitions and proved in Lean before being used downstream.
   coprimality, gcd, and prime-square Pell packets.
 - [report-016.md](report-016.md) — LUNA exceptional-three sector normalization,
   exact gcd classification, and the two fixed-`T` normal forms.
+- [report-017.md](report-017.md) — LUNA finite three-sector incidence ledger,
+  normalized `T3` images/fibers, and exact card identities.
 
 ## Research discipline
 

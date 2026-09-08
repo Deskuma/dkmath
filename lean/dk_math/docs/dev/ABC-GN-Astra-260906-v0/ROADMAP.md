@@ -101,6 +101,9 @@ packets. No Pell or shell/fiber count is claimed.
 LUNA-016 is complete; see [report-016.md](report-016.md) for the exact
 exceptional-three split, gcd `1/3` classification, and normalized
 three-sector conic. No sector count, density, or sparsity estimate is claimed.
+LUNA-017 is complete; see [report-017.md](report-017.md) for exact fixed-`T`
+and normalized-`T3` finite filters, partitions, and card identities. No
+multiplicity, density, or sparsity estimate is claimed.
 
 ### 1.4 Exact large-boundary object
 
