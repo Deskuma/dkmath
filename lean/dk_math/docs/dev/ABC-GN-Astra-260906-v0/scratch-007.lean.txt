@@ -1,0 +1,488 @@
+import DkMath.ABC.GNExcessCubicRealizedModuli
+import Mathlib.Data.Nat.Squarefree
+namespace DkMath.ABC.Astra007
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
+
+lemma discriminant (a : ℕ) :
+    4 * (a^2 + 3*a + 3) = (2*a+3)^2 + 3 := by ring
+
+lemma not_nine (a : ℕ) : ¬ 9 ∣ a^2 + 3*a + 3 := by
+  have h := Nat.mod_lt a (by decide : 0 < 9)
+  intro hd
+  have hz := Nat.mod_eq_zero_of_dvd hd
+  interval_cases he : a % 9 <;>
+    norm_num [Nat.add_mod, Nat.mul_mod, Nat.pow_mod, he] at hz
+
+lemma full_repeated (a : ℕ) :
+    GNNonExceptionalRepeatedPart 3 a 1 = repeatedPrimePowerPart (GN 3 a 1) := by
+  have hn : GN 3 a 1 ≠ 0 := by rw [GN_three_dual_explicit]; positivity
+  apply Nat.eq_of_factorization_eq
+    (repeatedPrimePowerPart_pos _).ne' (repeatedPrimePowerPart_pos _).ne'
+  intro q
+  have hdepth : 2 ≤ (GN 3 a 1).factorization q →
+      q ∈ GNNonExceptionalSupport 3 a 1 := by
+    intro hv
+    have hs : q ∈ (GN 3 a 1).factorization.support :=
+      Finsupp.mem_support_iff.mpr (by omega)
+    have hp := (mem_support_factorization_iff.mp hs).2.1
+    refine Finset.mem_filter.mpr ⟨hs, ?_⟩
+    intro hq3
+    have heq : q = 3 := ((Nat.dvd_prime Nat.prime_three).mp hq3).resolve_left hp.ne_one
+    subst q
+    have hd := (Nat.prime_three.pow_dvd_iff_le_factorization hn).mpr hv
+    apply not_nine a
+    change 3^2 ∣ GN 3 a 1 at hd
+    rw [GN_three_dual_explicit] at hd
+    simpa only [mul_one, one_pow, show (3:ℕ)^2 = 9 from rfl] using hd
+  rw [repeatedPrimePowerPart_factorization, repeatedPrimePowerPart_factorization]
+  by_cases hs : q ∈ GNNonExceptionalSupport 3 a 1
+  · rw [GNNonExceptionalPart_factorization_support,
+      GNNonExceptionalPart_factorization, if_pos hs]
+    have hq := (Finset.mem_filter.mp hs).1
+    simp only [hs, hq, true_and]
+  · have hv : ¬ 2 ≤ (GN 3 a 1).factorization q := fun h => hs (hdepth h)
+    rw [GNNonExceptionalPart_factorization_support,
+      GNNonExceptionalPart_factorization, if_neg hs]
+    simp only [hs, hv, false_and, and_false, if_false]
+
+lemma complement_decomposition {n : ℕ} (hn : n ≠ 0) :
+    repeatedPrimePowerPart n * (n / repeatedPrimePowerPart n) = n ∧
+    Squarefree (n / repeatedPrimePowerPart n) ∧
+    Nat.Coprime (repeatedPrimePowerPart n) (n / repeatedPrimePowerPart n) := by
+  have hd := repeatedPrimePowerPart_dvd hn
+  have hid := Nat.mul_div_cancel' hd
+  have hS : n / repeatedPrimePowerPart n ≠ 0 := by
+    intro hz
+    rw [hz, mul_zero] at hid
+    exact hn hid.symm
+  have hfac (q : ℕ) :
+      (n / repeatedPrimePowerPart n).factorization q =
+        n.factorization q - (repeatedPrimePowerPart n).factorization q := by
+    rw [Nat.factorization_div hd, Finsupp.tsub_apply]
+  refine ⟨hid, (Nat.squarefree_iff_factorization_le_one hS).mpr ?_, ?_⟩
+  · intro q
+    rw [hfac, repeatedPrimePowerPart_factorization]
+    by_cases hv : 2 ≤ n.factorization q
+    · have hq : q ∈ n.factorization.support := Finsupp.mem_support_iff.mpr (by omega)
+      rw [if_pos ⟨hq, hv⟩]
+      omega
+    · split_ifs <;> omega
+  · by_contra hc
+    obtain ⟨q, hq, hqM, hqS⟩ := Nat.Prime.not_coprime_iff_dvd.mp hc
+    have hsupport := mem_support_factorization_iff.mpr
+      ⟨(repeatedPrimePowerPart_pos n).ne', hq, hqM⟩
+    rw [repeatedPrimePowerPart_factorization_support] at hsupport
+    have hcond := Finset.mem_filter.mp hsupport
+    have hvS := (hq.pow_dvd_iff_le_factorization hS).mp (by simpa using hqS : q^1 ∣ _)
+    rw [hfac, repeatedPrimePowerPart_factorization, if_pos hcond, Nat.sub_self] at hvS
+    omega
+
+lemma canonical_decomposition (a : ℕ) :
+    let M := GNNonExceptionalRepeatedPart 3 a 1
+    M * (GN 3 a 1 / M) = GN 3 a 1 ∧
+    Squarefree (GN 3 a 1 / M) ∧ Nat.Coprime M (GN 3 a 1 / M) := by
+  dsimp
+  rw [full_repeated]
+  exact complement_decomposition (by rw [GN_three_dual_explicit]; positivity)
+
+lemma complement_small {a X M S : ℕ} (ha : a ≤ X)
+    (heq : M*S = a^2+3*a+3) (hlarge : X+1 < M) : S ≤ X+1 := by
+  have hquad : a^2+3*a+3 ≤ X^2+3*X+3 := by nlinarith
+  by_contra hs
+  have hM : X+2 ≤ M := by omega
+  have hS : X+2 ≤ S := by omega
+  have hprod := Nat.mul_le_mul hM hS
+  nlinarith
+end DkMath.ABC.Astra007
+namespace DkMath.ABC.Astra007
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
+
+lemma complement_sharp {a X M S : ℕ} (hX : 0 < X) (ha : a ≤ X)
+    (heq : M*S = a^2+3*a+3) (hlarge : X+1 < M) : S ≤ X := by
+  have hs := complement_small ha heq hlarge
+  by_contra h
+  have hS : S = X+1 := by omega
+  subst S
+  have hM : X+2 ≤ M := by omega
+  have hprod := Nat.mul_le_mul_right (X+1) hM
+  have haa : a = X := by
+    by_contra hh
+    have hlt : a+1 ≤ X := by omega
+    nlinarith [sq_nonneg (X-a)]
+  subst a
+  have hmm : M = X+2 ∨ X+3 ≤ M := by omega
+  rcases hmm with hh | hh
+  · subst M; nlinarith
+  · have hprod2 := Nat.mul_le_mul_right (X+1) hh
+    nlinarith
+
+lemma no_square (a d : ℕ) : a^2+3*a+3 ≠ d^2 := by
+  intro he
+  have hl : a+1 < d := by nlinarith
+  have hu : d < a+2 := by nlinarith
+  omega
+
+lemma pell_shell {a d T : ℕ} (h : a^2+3*a+3 = T*d^2) :
+    (2*a+3)^2+3 = 4*T*d^2 := by nlinarith [discriminant a]
+
+lemma pell_step {a d : ℕ} (h : a^2+3*a+3 = 3*d^2) :
+    (7*a+12*d+9)^2 + 3*(7*a+12*d+9)+3 =
+      3*(4*a+7*d+6)^2 := by nlinarith
+
+lemma pell_step_grows (a d : ℕ) : a < 7*a+12*d+9 := by omega
+
+lemma roots_difference {a b M : ℕ}
+    (ha : M ∣ a^2+3*a+3) (hb : M ∣ b^2+3*b+3) :
+    (M : ℤ) ∣ ((b:ℤ)-a)*((a:ℤ)+b+3) := by
+  have ha' : (M:ℤ) ∣ (a:ℤ)^2+3*a+3 := by exact_mod_cast ha
+  have hb' : (M:ℤ) ∣ (b:ℤ)^2+3*b+3 := by exact_mod_cast hb
+  have hid : ((b:ℤ)^2+3*b+3)-((a:ℤ)^2+3*a+3) =
+      ((b:ℤ)-a)*((a:ℤ)+b+3) := by ring
+  rw [← hid]
+  exact dvd_sub hb' ha'
+
+lemma spacing {a b M : ℕ} (hab : a < b)
+    (ha : M ∣ a^2+3*a+3) (hb : M ∣ b^2+3*b+3) :
+    M ≤ (b-a)*(a+b+3) := by
+  have he : b^2+3*b+3 = a^2+3*a+3 + (b-a)*(a+b+3) := by
+    have := Nat.sub_add_cancel (Nat.le_of_lt hab)
+    nlinarith
+  have hd := Nat.dvd_sub hb ha
+  rw [he, Nat.add_sub_cancel_left] at hd
+  exact Nat.le_of_dvd (Nat.mul_pos (Nat.sub_pos_of_lt hab) (by omega)) hd
+
+-- The norm multiplication algebra needed for an Eisenstein square-divisor route.
+lemma norm_square_product (u v s t : ℤ) :
+    let A := s*(u^2-v^2)-t*(2*u*v-v^2)
+    let B := t*(u^2-v^2)+(s-t)*(2*u*v-v^2)
+    A^2-A*B+B^2 = (s^2-s*t+t^2)*(u^2-u*v+v^2)^2 := by
+  dsimp; ring
+
+lemma paired_product (a : ℕ) :
+    (a^2+3*a+3)*(3*a^2+3*a+1) = 3*(a+1)^4+a^2 := by ring
+
+lemma paired_complement_congruence (a : ℤ) :
+    3*(a^2+3*a+3)-(3*a^2+3*a+1) = 6*a+8 := by ring
+end DkMath.ABC.Astra007
+namespace DkMath.ABC.Astra007
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
+
+lemma repeated_factor_at (n q : ℕ) :
+    (repeatedPrimePowerPart n).factorization q =
+      if 2 ≤ n.factorization q then n.factorization q else 0 := by
+  rw [repeatedPrimePowerPart_factorization]
+  by_cases h : 2 ≤ n.factorization q
+  · have hs : q ∈ n.factorization.support := Finsupp.mem_support_iff.mpr (by omega)
+    rw [if_pos ⟨hs,h⟩, if_pos h]
+  · simp only [h, and_false, if_false]
+
+lemma repeated_three_square {d : ℕ} (hd : d ≠ 0) (h3 : ¬ 3 ∣ d) :
+    repeatedPrimePowerPart (3*d^2) = d^2 := by
+  apply Nat.eq_of_factorization_eq (repeatedPrimePowerPart_pos _).ne' (pow_ne_zero _ hd)
+  intro q
+  rw [repeated_factor_at, Nat.factorization_mul (by decide) (pow_ne_zero _ hd),
+    Nat.factorization_pow, Nat.prime_three.factorization]
+  simp only [Finsupp.add_apply, Finsupp.smul_apply, Finsupp.single_apply,
+    smul_eq_mul]
+  by_cases hq : 3 = q
+  · subst q
+    rw [Nat.factorization_eq_zero_of_not_dvd h3]
+    norm_num
+  · rw [if_neg hq]
+    by_cases hv : d.factorization q = 0
+    · rw [hv]; norm_num
+    · have htwo : 2 ≤ 0+2*d.factorization q := by omega
+      rw [if_pos htwo]; omega
+
+lemma full_complement_three {a d : ℕ}
+    (h : a^2+3*a+3=3*d^2) (hd : d ≠ 0) (h3 : ¬ 3 ∣ d) :
+    GNNonExceptionalRepeatedPart 3 a 1 = d^2 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  simp only [mul_one, one_pow]
+  rw [h]
+  exact repeated_three_square hd h3
+
+def pell : ℕ → ℕ × ℕ
+  | 0 => (0,1)
+  | n+1 => let (a,d) := pell n; (7*a+12*d+9, 4*a+7*d+6)
+
+lemma pell_invariant (n : ℕ) :
+    (pell n).1^2+3*(pell n).1+3=3*(pell n).2^2 ∧
+    (pell n).1 % 3 = 0 ∧ (pell n).2 % 3 = 1 := by
+  induction n with
+  | zero => norm_num [pell]
+  | succ n ih =>
+    refine ⟨pell_step ih.1, ?_, ?_⟩
+    · change (7*(pell n).1+12*(pell n).2+9)%3=0
+      omega
+    · change (4*(pell n).1+7*(pell n).2+6)%3=1
+      omega
+
+lemma pell_repeated (n : ℕ) :
+    GNNonExceptionalRepeatedPart 3 (pell n).1 1 = (pell n).2^2 := by
+  have hi := pell_invariant n
+  apply full_complement_three hi.1
+  · omega
+  · intro hd
+    have := Nat.mod_eq_zero_of_dvd hd
+    omega
+
+lemma pell_strictMono : StrictMono (fun n => (pell n).1) := by
+  apply strictMono_nat_of_lt_succ
+  intro n
+  exact pell_step_grows _ _
+
+lemma pell_complement (n : ℕ) :
+    GN 3 (pell n).1 1 / GNNonExceptionalRepeatedPart 3 (pell n).1 1 = 3 := by
+  have hi := pell_invariant n
+  have hd : 0 < (pell n).2^2 := by
+    have hp : 0 < (pell n).2 := by omega
+    positivity
+  rw [pell_repeated, GN_three_dual_explicit]
+  simp only [mul_one, one_pow]
+  rw [hi.1, Nat.mul_div_cancel _ hd]
+end DkMath.ABC.Astra007
+namespace DkMath.ABC.Astra007
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
+-- Exact factorization certificate at a=17.
+lemma repeated_at_17 : GNNonExceptionalRepeatedPart 3 17 1 = 343 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (17^2+3*17*1+3*1^2:ℕ) = 7^3 := by norm_num
+  rw [hid]
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hf : (7^3:ℕ).factorization = Finsupp.single 7 3 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp7.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 7 3 : ℕ →₀ ℕ).support = {7} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h7q : 7 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=21.
+lemma repeated_at_21 : GNNonExceptionalRepeatedPart 3 21 1 = 169 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (21^2+3*21*1+3*1^2:ℕ) = 3^1*13^2 := by norm_num
+  rw [hid]
+  have hp3 : Nat.Prime 3 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hf : (3^1*13^2:ℕ).factorization = Finsupp.single 3 1 + Finsupp.single 13 2 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp3.factorization, hp13.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 3 1 + Finsupp.single 13 2 : ℕ →₀ ℕ).support = {3,13} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h3q : 3 = q <;> by_cases h13q : 13 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=145.
+lemma repeated_at_145 : GNNonExceptionalRepeatedPart 3 145 1 = 169 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (145^2+3*145*1+3*1^2:ℕ) = 13^2*127^1 := by norm_num
+  rw [hid]
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp127 : Nat.Prime 127 := by norm_num
+  have hf : (13^2*127^1:ℕ).factorization = Finsupp.single 13 2 + Finsupp.single 127 1 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp13.factorization, hp127.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 13 2 + Finsupp.single 127 1 : ℕ →₀ ℕ).support = {13,127} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h13q : 13 = q <;> by_cases h127q : 127 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=2173.
+lemma repeated_at_2173 : GNNonExceptionalRepeatedPart 3 2173 1 = 8281 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (2173^2+3*2173*1+3*1^2:ℕ) = 7^2*13^2*571^1 := by norm_num
+  rw [hid]
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp571 : Nat.Prime 571 := by norm_num
+  have hf : (7^2*13^2*571^1:ℕ).factorization = Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 571 1 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp7.factorization, hp13.factorization, hp571.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 571 1 : ℕ →₀ ℕ).support = {7,13,571} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h7q : 7 = q <;> by_cases h13q : 13 = q <;> by_cases h571q : 571 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=3018.
+lemma repeated_at_3018 : GNNonExceptionalRepeatedPart 3 3018 1 = 8281 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (3018^2+3*3018*1+3*1^2:ℕ) = 3^1*7^2*13^2*367^1 := by norm_num
+  rw [hid]
+  have hp3 : Nat.Prime 3 := by norm_num
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp367 : Nat.Prime 367 := by norm_num
+  have hf : (3^1*7^2*13^2*367^1:ℕ).factorization = Finsupp.single 3 1 + Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 367 1 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp3.factorization, hp7.factorization, hp13.factorization, hp367.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 3 1 + Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 367 1 : ℕ →₀ ℕ).support = {3,7,13,367} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h3q : 3 = q <;> by_cases h7q : 7 = q <;> by_cases h13q : 13 = q <;> by_cases h367q : 367 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=5260.
+lemma repeated_at_5260 : GNNonExceptionalRepeatedPart 3 5260 1 = 8281 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (5260^2+3*5260*1+3*1^2:ℕ) = 7^2*13^2*3343^1 := by norm_num
+  rw [hid]
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp3343 : Nat.Prime 3343 := by norm_num
+  have hf : (7^2*13^2*3343^1:ℕ).factorization = Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 3343 1 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp7.factorization, hp13.factorization, hp3343.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 3343 1 : ℕ →₀ ℕ).support = {7,13,3343} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h7q : 7 = q <;> by_cases h13q : 13 = q <;> by_cases h3343q : 3343 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=6105.
+lemma repeated_at_6105 : GNNonExceptionalRepeatedPart 3 6105 1 = 8281 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (6105^2+3*6105*1+3*1^2:ℕ) = 3^1*7^2*13^2*19^1*79^1 := by norm_num
+  rw [hid]
+  have hp3 : Nat.Prime 3 := by norm_num
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp19 : Nat.Prime 19 := by norm_num
+  have hp79 : Nat.Prime 79 := by norm_num
+  have hf : (3^1*7^2*13^2*19^1*79^1:ℕ).factorization = Finsupp.single 3 1 + Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 19 1 + Finsupp.single 79 1 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp3.factorization, hp7.factorization, hp13.factorization, hp19.factorization, hp79.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 3 1 + Finsupp.single 7 2 + Finsupp.single 13 2 + Finsupp.single 19 1 + Finsupp.single 79 1 : ℕ →₀ ℕ).support = {3,7,13,19,79} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h3q : 3 = q <;> by_cases h7q : 7 = q <;> by_cases h13q : 13 = q <;> by_cases h19q : 19 = q <;> by_cases h79q : 79 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+-- Exact factorization certificate at a=88915.
+lemma repeated_at_88915 : GNNonExceptionalRepeatedPart 3 88915 1 = 7906143973 := by
+  rw [full_repeated, GN_three_dual_explicit]
+  have hid : (88915^2+3*88915*1+3*1^2:ℕ) = 7^2*13^3*271^2 := by norm_num
+  rw [hid]
+  have hp7 : Nat.Prime 7 := by norm_num
+  have hp13 : Nat.Prime 13 := by norm_num
+  have hp271 : Nat.Prime 271 := by norm_num
+  have hf : (7^2*13^3*271^2:ℕ).factorization = Finsupp.single 7 2 + Finsupp.single 13 3 + Finsupp.single 271 2 := by
+    repeat rw [Nat.factorization_mul (by norm_num) (by norm_num)]
+    simp only [Nat.factorization_pow, hp7.factorization, hp13.factorization, hp271.factorization]
+    simp
+  unfold repeatedPrimePowerPart
+  rw [hf]
+  have hs : (Finsupp.single 7 2 + Finsupp.single 13 3 + Finsupp.single 271 2 : ℕ →₀ ℕ).support = {7,13,271} := by
+    ext q
+    simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_apply,
+      Finset.mem_insert, Finset.mem_singleton]
+    by_cases h7q : 7 = q <;> by_cases h13q : 13 = q <;> by_cases h271q : 271 = q <;> simp_all [eq_comm]
+  rw [hs]
+  norm_num [Finset.filter_insert, Finset.filter_singleton, Finset.prod_insert, Finsupp.single_apply]
+
+end DkMath.ABC.Astra007
+namespace DkMath.ABC.Astra007
+open DkMath.CosmicFormulaBinom DkMath.NumberTheory
+
+lemma full_modulus_mem {X a M : ℕ} (ha : a ∈ Finset.Icc 0 X)
+    (he : GNNonExceptionalRepeatedPart 3 a 1 = M) (hlarge : X+1 < M) :
+    M ∈ GNExcessCubicRealizedLargeModulusSpace X := by
+  have hm : GNExcessJointDepthModulus (GNNonExceptionalIntervalPrimeFamily 3 1 X)
+      (GNExcessDepthProfileAt (GNNonExceptionalIntervalPrimeFamily 3 1 X) 3 1 a) = M := by
+    rw [GNExcessJointDepthModulus_target_eq_repeatedPart Nat.prime_three ha (by simp), he]
+  apply mem_GNExcessCubicRealizedLargeModulusSpace_iff.mpr
+  refine ⟨_, ?_, hm⟩
+  apply (mem_realizedLargeProfileSpace_iff_realized_and_large (by decide : 0 < (1:ℕ))).mpr
+  exact ⟨point_profile_mem_realizedProfileSpace ha, hm ▸ hlarge⟩
+
+-- A converse only for the FULL repeated part, never for arbitrary squareful divisors.
+set_option maxRecDepth 100000 in
+example : 8281 ∈ GNExcessCubicRealizedLargeModulusSpace 6105 :=
+  full_modulus_mem (X := 6105) (a := 2173) (M := 8281)
+    (Finset.mem_Icc.mpr ⟨by omega, by omega⟩) repeated_at_2173 (by omega)
+
+example : GNNonExceptionalRepeatedPart 3 2173 1 = 8281 ∧
+    GNNonExceptionalRepeatedPart 3 3018 1 = 8281 ∧
+    GNNonExceptionalRepeatedPart 3 5260 1 = 8281 ∧
+    GNNonExceptionalRepeatedPart 3 6105 1 = 8281 :=
+  ⟨repeated_at_2173, repeated_at_3018, repeated_at_5260, repeated_at_6105⟩
+
+lemma quadratic_injective : Function.Injective (fun a : ℕ => a^2+3*a+3) := by
+  intro a b h
+  rcases lt_trichotomy a b with hab | he | hba
+  · nlinarith
+  · exact he
+  · nlinarith
+
+-- Necessary squarefull-polynomial counting strength of Success A.
+lemma squarefull_block_obstruction {X : ℕ} (hX : 0 < X) (A : Finset ℕ)
+    (hA : ∀ a ∈ A, X ≤ a ∧ a ≤ 2*X ∧
+      GNNonExceptionalRepeatedPart 3 a 1 = a^2+3*a+3) :
+    (A.card : ℝ) * ((X:ℝ)^2)^(3/8:ℝ) ≤
+      ∑ M ∈ GNExcessCubicRealizedLargeModulusSpace (2*X),
+        (M:ℝ)^(3/8:ℝ) := by
+  classical
+  let f : ℕ → ℕ := fun a => a^2+3*a+3
+  have hsub : A.image f ⊆ GNExcessCubicRealizedLargeModulusSpace (2*X) := by
+    intro M hM
+    obtain ⟨a, ha, rfl⟩ := Finset.mem_image.mp hM
+    have hh := hA a ha
+    exact full_modulus_mem (Finset.mem_Icc.mpr ⟨by omega, hh.2.1⟩) hh.2.2 (by
+      dsimp [f]; nlinarith)
+  calc
+    _ = ∑ _a ∈ A, ((X:ℝ)^2)^(3/8:ℝ) := by simp
+    _ ≤ ∑ a ∈ A, (f a:ℝ)^(3/8:ℝ) := by
+      apply Finset.sum_le_sum
+      intro a ha
+      apply Real.rpow_le_rpow (by positivity) _ (by norm_num)
+      have hsq : X^2 ≤ f a := by
+        have hh := hA a ha
+        dsimp [f]; nlinarith
+      exact_mod_cast hsq
+    _ = ∑ M ∈ A.image f, (M:ℝ)^(3/8:ℝ) := by
+      symm
+      apply Finset.sum_image
+      intro a ha b hb he
+      exact quadratic_injective he
+    _ ≤ _ := Finset.sum_le_sum_of_subset_of_nonneg hsub
+      (fun M _ _ => Real.rpow_nonneg (Nat.cast_nonneg M) _)
+end DkMath.ABC.Astra007

@@ -1,0 +1,28 @@
+LUNA-014 validation
+
+Focused module:
+  lake build DkMath.ABC.GNExcessCubicPellParameterIncidence  PASS
+
+Public aggregator:
+  lake build DkMath.ABC  PASS
+
+New production Lean file scan:
+  sorry/admit/new axiom/abc_main_axiom/native_decide  NONE
+
+Key axiom audit:
+  canonical quotient reconstruction
+  canonical square-times-cube identity
+  realized modulus square-cube packet
+  odd-part cube bound and shell strict bound
+  Pell-parameter support packet
+  Pell-parameter fiber nonemptiness and disjoint partition
+  fixed-T conic equation
+  four-way shell card ledger
+  standard boundary: propext, Classical.choice, Quot.sound (or subset)
+
+Formatting:
+  git diff --check  PASS
+
+Research boundary:
+  no Pell-solution count, parameter sparsity estimate, incidence estimate,
+  provider assumption, or ABC closure theorem was added.

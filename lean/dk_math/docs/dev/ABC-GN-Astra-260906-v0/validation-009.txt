@@ -1,0 +1,24 @@
+LUNA-009 validation
+
+Focused production builds:
+  lake build DkMath.ABC.GNExcessCubicComplementPell                 PASS
+  lake build DkMath.ABC.GNExcessCubicIncidenceObstruction           PASS
+  lake build DkMath.ABC                                               PASS
+
+Regression:
+  lake env lean DkMathTest/ABC/GNCubicPellRegression.lean            PASS
+
+Axiom audit:
+  repeatedPrimePowerPart_three_mul_sq
+  GNCubicComplementPell_invariant
+  GNCubicComplementPell_repeatedPart
+  GNCubicComplementPell_complement_eq_three
+  GNCubicComplementPell_strictMono
+  exists_large_cubic_point_complement_eq_three
+  mem_GNExcessCubicRealizedLargeModulusSpace_of_fullRepeatedPart
+  cubicSquarefullBlock_card_mul_weight_le_realizedModulusMoment
+  all use only the expected propext / Classical.choice / Quot.sound boundary
+  or a subset.
+
+Changed Lean files contain no sorry, admit, new axiom, abc_main_axiom, or
+native_decide.

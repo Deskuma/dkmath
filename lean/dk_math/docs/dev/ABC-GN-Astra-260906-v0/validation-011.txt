@@ -1,0 +1,15 @@
+LUNA-011 validation
+
+Focused production build:
+  lake build DkMath.ABC.GNExcessCubicRealizedIncidence  PASS
+
+ABC aggregator:
+  lake build DkMath.ABC                              PASS
+
+Axiom audit:
+  witness-image equality, shell-image equality, shell fiber-card identity,
+  complement packet, and fiber spacing use only the expected
+  propext / Classical.choice / Quot.sound boundary or a subset.
+
+Changed Lean files contain no sorry, admit, new axiom, abc_main_axiom, or
+native_decide.

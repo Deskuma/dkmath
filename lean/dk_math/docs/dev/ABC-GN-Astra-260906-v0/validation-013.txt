@@ -1,0 +1,24 @@
+LUNA-013 validation
+
+Focused module:
+  lake build DkMath.ABC.GNExcessCubicSquarefulPell  PASS
+
+Public aggregator:
+  lake build DkMath.ABC  PASS
+
+New production Lean file scan:
+  sorry/admit/new axiom/abc_main_axiom/native_decide  NONE
+
+Key axiom audit:
+  squarefree_oddPart
+  oddPart_dvd_evenPart_of_squarefull
+  squareful_oddEven_packet
+  exists_sq_mul_cube_of_squarefull
+  realized-modulus squarefull bridge
+  incidence-pair squareful packet
+  squarefree Pell parameter
+  exact Pell identity and Pell packet
+  standard boundary: propext, Classical.choice, Quot.sound (or subset)
+
+Formatting:
+  git diff --check  PASS
