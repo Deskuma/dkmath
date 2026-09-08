@@ -94,6 +94,10 @@ LUNA-014 is complete; see [report-014.md](report-014.md) for canonical
 square-cube quotient coordinates, squarefree Pell-parameter fibers, the exact
 fixed-parameter conic equation, and the four-way finite shell ledger. No Pell
 solution count or incidence estimate is claimed.
+LUNA-015 is complete; see [report-015.md](report-015.md) for the primitive
+divisibility hierarchy, `q % 3 = 1` support consumers, Pell-coordinate
+coprimality, `gcd(y,T) ∣ 3`, square divisibility, and fixed-`T` primitive
+packets. No Pell or shell/fiber count is claimed.
 
 ### 1.4 Exact large-boundary object
 

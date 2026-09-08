@@ -172,6 +172,8 @@ actual current definitions and proved in Lean before being used downstream.
   exact negative-Pell shell coordinates.
 - [report-014.md](report-014.md) — LUNA square-cube quotient coordinates,
   squarefree Pell-parameter fibers, and the exact four-way shell ledger.
+- [report-015.md](report-015.md) — LUNA primitive divisibility, support,
+  coprimality, gcd, and prime-square Pell packets.
 
 ## Research discipline
 

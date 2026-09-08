@@ -32,6 +32,7 @@ import DkMath.ABC.GNExcessCubicRealizedIncidence
 import DkMath.ABC.GNExcessCubicComplementIncidence
 import DkMath.ABC.GNExcessCubicSquarefulPell
 import DkMath.ABC.GNExcessCubicPellParameterIncidence
+import DkMath.ABC.GNExcessCubicPrimitivePell
 import DkMath.ABC.ABCEpsilonJointPressureBridge
 import DkMath.ABC.ABCEpsilonSlopeBridge
 
