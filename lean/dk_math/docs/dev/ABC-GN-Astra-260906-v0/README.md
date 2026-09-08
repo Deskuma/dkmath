@@ -185,6 +185,9 @@ actual current definitions and proved in Lean before being used downstream.
 - [report-020.md](report-020.md) — LUNA seven-depth state normalization,
   exact mod-49 residue classes, three state packets, and exact cross-gcd
   consumers.
+- [report-021.md](report-021.md) — LUNA finite seven-depth incidence ledger,
+  exact three-state shell partition, cardinal split, packet consumers, and
+  repeated-product deep union.
 
 ## Research discipline
 

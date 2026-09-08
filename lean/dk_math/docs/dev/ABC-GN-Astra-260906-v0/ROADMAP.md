@@ -116,6 +116,10 @@ LUNA-020 is complete; see [report-020.md](report-020.md) for the generic
 repeated-prime bridge, exact mod-49 forward/swap classes, three seven-depth
 state packets, and exact cross-gcd normalization. No depth bound above two,
 counting, density, relative-height, or ABC closure is claimed.
+LUNA-021 is complete; see [report-021.md](report-021.md) for the exact finite
+seven-sector shell filters, three-state disjoint union, cardinal ledger,
+LUNA-020 packet consumers, and repeated-product deep union. No state count
+estimate, density, relative-height, or ABC closure is claimed.
 
 ### 1.4 Exact large-boundary object
 
