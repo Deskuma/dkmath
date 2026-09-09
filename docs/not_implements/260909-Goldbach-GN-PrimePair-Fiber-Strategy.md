@@ -1,10 +1,16 @@
 # Goldbach via GN Prime-Pair Fiber — Strategy Note
 
 Date: 2026-09-09  
-Status: not implemented / strategy checkpoint  
+Status: finite GN-fiber reductions implemented; universal paired-fiber escape unresolved
 Target branch: `develop`  
 Suggested future branch: `wip/NumberTheory-Goldbach-GNFiber-260910-v0`
 cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
+
+Implementation follow-up (2026-09-10):
+[`NumberTheory-Goldbach-GNFiber-260910-v0`](../../lean/dk_math/docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/README.md).
+The original strategy below is retained as the research proposal. The follow-up
+distinguishes proved finite reductions, counterexamples to stronger shortcuts,
+and the still-missing universal escape provider.
 
 ## 1. Purpose
 
