@@ -50,3 +50,11 @@
 - `./lean-build.sh DkMath.NumberTheory.Goldbach.PairOverlap`: 成功。
 - `./lean-build.sh DkMath.NumberTheory.Goldbach DkMathTest.NumberTheory.GoldbachGNFiber`: 成功。`decide +kernel` の n=10 exact cardinality は不要に高コストだったため、n=10 は `GoldbachPairAt` と一般 pair-overlap bound の回帰に限定。n=2 と n=6 は exact overlap values を kernel 検証。
 - 指示書の停止点以後の provider、mirror、CRT occupancy theorem、new axiom は追加していない。
+
+## 007: Pascal pair layer
+
+- `PairOverlap.lean` に local residual `choose (card - 1) 2`、generic `r`-fold multiplicity、`r=0,1,2` の simp facts、local Pascal identity、global residual sum を追加した。
+- `goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual` を exact global decomposition として実装し、`goldbachOverlapExcess_le_primePairOverlapCount` はその corollary に整理した。
+- `n=2` の residual 0、`n=6` の pair overlap 1、`n=35,u=5` の support card 3 / local residual 1 を kernel regression に追加した。`n=10` は高コストな exact cardinality decide を避け、finite pair existence と一般 bound を検証した。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.PairOverlap`、facade、回帰テスト、`AxiomAudit.lean`、`git diff --check`、root `DkMath` build を実行する。
+- GTail import、GTail equivalence、product-wave、uniform escape、Strong Goldbach theorem は停止境界として未実装のまま維持する。

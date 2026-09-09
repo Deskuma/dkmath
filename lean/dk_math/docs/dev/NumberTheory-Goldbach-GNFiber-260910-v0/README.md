@@ -8,9 +8,9 @@ cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
 
 **有限還元・CRT 計数・条件付き閉包を実装した。ゴールドバッハ予想の全称証明は閉じていない。**
 
-10 個の owner モジュールに overlap ledger を追加した。数学的な意味、必要な仮定、証明が主張しない範囲は Lean の module/public docstring に記載した。公開入口は [DkMath.NumberTheory.Goldbach](../../../DkMath/NumberTheory/Goldbach.lean) で、`DkMath.lean` からも import する。
+既存の owner モジュール群に GN fiber、obstruction、CRT、capacity、overlap ledger を実装した。数学的な意味、必要な仮定、証明が主張しない範囲は Lean の module/public docstring に記載した。公開入口は [DkMath.NumberTheory.Goldbach](../../../DkMath/NumberTheory/Goldbach.lean) で、`DkMath.lean` からも import する。
 
-instruction-006 の停止境界は遵守し、最後の定理は `goldbachOverlapExcess_le_primePairOverlapCount`。この段階で universal escape provider や Goldbach の最終証明は追加していない。
+instruction-007 までの停止境界を遵守し、最後の定理は Pascal residual を含む `goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual` と、その corollary `goldbachOverlapExcess_le_primePairOverlapCount` である。この段階で universal escape provider や Goldbach の最終証明は追加していない。
 
 ## 方針文書との対応
 
@@ -33,6 +33,7 @@ instruction-006 の停止境界は遵守し、最後の定理は `goldbachOverla
 | 証明経路の検証 | 強すぎる中間命題の反例を kernel で証明 | [Limitations](../../../DkMath/NumberTheory/Goldbach/Limitations.lean) |
 | 14. overlap ledger | `Incidence = Covered + OverlapExcess` と survivor conservation | [Overlap](../../../DkMath/NumberTheory/Goldbach/Overlap.lean) |
 | 15. pair-overlap ledger | unordered support-pair の二重計数と excess 上界 | [PairOverlap](../../../DkMath/NumberTheory/Goldbach/PairOverlap.lean) |
+| 16. Pascal pair layer | `choose k 2 = (k-1) + choose (k-1) 2` の局所・大域分解。`n=35,u=5` で residual が正 | [PairOverlap](../../../DkMath/NumberTheory/Goldbach/PairOverlap.lean): `goldbach_pairMultiplicity_eq_localOverlap_add_residual`, `goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual` |
 
 添付文書にある保存量の候補列挙（prime-wave、q-adic signature の輸送等）は具体的な数学命題や provider を与えていない。本実装はそれらの存在を仮定していない。signature の片側から他方の素数性を無条件に輸送する単純な形は、反例により否定した。
 
@@ -86,12 +87,17 @@ def GoldbachCapacityEscape : Prop :=
 
 instruction-006 ではこの例を重複帳簿の最小回帰に昇格した。`goldbachOverlapExcess 6 = 1`、`goldbachPrimePairOverlapCount 6 = 1`、および一般定理 `goldbachIncidenceConservation 6` を kernel で検査している。
 
+instruction-007 では pair-overlap を Pascal の第 `r=2` 層として分解した。各 offset について
+`choose k 2 = (k-1) + choose (k-1) 2` を kernel で証明し、全 offset の和に持ち上げた。`n=2` の residual は 0、`n=6` の pair count は 1、さらに `n=35,u=5` では obstruction support が `{2,3,5}` で local residual が 1 となることを回帰に加えた。`goldbachOffsetROverlapMultiplicity` と `r=0,1,2` の簡約も公開した。GTail との形式的同値や product-wave provider は追加していない。
+
+この checkpoint で固定中心の GN fiber、有限 obstruction、CRT、PCK 条件付き橋渡し、incidence、pair-overlap、Pascal residual の帳簿は実装完了とする。branch は develop へ統合可能な状態だが、実際の merge は行っていない。次段階は GTail refactor 後の独立した Pascal 接続であり、Strong Goldbach の全称証明は依然として未証明である。
+
 ## 検証
 
 - [回帰コード](../../../DkMathTest/NumberTheory/GoldbachGNFiber.lean): 等しい素数対、cutoff 素数の endpoint 例外、平方根境界、局所合流、paired 30-wheel、空世界、精密化、`n=0,1`、および `2≤n≤100`。
 - `goldbach_centers_two_through_one_hundred`: 偶数 `4..200` に対する有限証明。`decide +kernel` を使用し、全称予想の証明とは区別する。
 - [AxiomAudit.lean](AxiomAudit.lean): 96 個の全名前付き owner 宣言と有限範囲定理の依存公理を検査する再実行可能コード。
-- 最終ビルドと監査の実測結果は [report-005.md](report-005.md) と [report-006.md](report-006.md) に記載する。
+- 最終ビルドと監査の実測結果は [report-005.md](report-005.md)、[report-006.md](report-006.md)、[report-007.md](report-007.md) に記載する。
 
 再現コマンドの cwd は `lean/dk_math`。
 
@@ -109,5 +115,6 @@ lake env lean docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/AxiomAudit.lean
 - [report-004](report-004.md): CRT 全周期計数と反例。
 - [report-005](report-005.md): 最終検証結果。
 - [report-006](report-006.md): overlap ledger / pair-overlap checkpoint。
+- [report-007](report-007.md): Pascal pair layer、global residual、positive residual regression、最終停止境界。
 - [verification-notes](verification-notes.md): 検証順と局所修正のメモ。
 - [declaration-index](declaration-index.md): 実ソースから抽出した宣言一覧。

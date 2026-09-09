@@ -51,15 +51,22 @@ example : ¬ GoldbachPairAt 0 ∧ ¬ GoldbachPairAt 1 := by decide +kernel
 
 /-- The overlap ledger starts with the endpoint-only equal pair at center two. -/
 example : goldbachOverlapExcess 2 = 0 ∧
-    goldbachPrimePairOverlapCount 2 = 0 := by decide +kernel
+    goldbachPrimePairOverlapCount 2 = 0 ∧
+    goldbachPairOverlapResidual 2 = 0 := by decide +kernel
 
 /-- Center six is the first positive overlap-payment regression. -/
 example : goldbachIncidence 6 (goldbachSmallPrimes 6) = 5 ∧
     goldbachOverlapExcess 6 = 1 ∧
-    goldbachPrimePairOverlapCount 6 = 1 := by decide +kernel
+    goldbachPrimePairOverlapCount 6 = 1 ∧
+    goldbachPairOverlapResidual 6 = 0 := by decide +kernel
 
 theorem goldbach_six_overlap_excess : goldbachOverlapExcess 6 = 1 := by
   decide +kernel
+
+theorem goldbach_six_pair_overlap_decomposition :
+    goldbachPrimePairOverlapCount 6 =
+      goldbachOverlapExcess 6 + goldbachPairOverlapResidual 6 := by
+  exact goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual 6
 
 theorem goldbach_six_incidence_conservation :
     (goldbachSurvivors 6 (goldbachSmallPrimes 6)).card +
@@ -72,6 +79,11 @@ example : GoldbachPairAt 10 := by decide +kernel
 
 example : goldbachOverlapExcess 10 ≤ goldbachPrimePairOverlapCount 10 := by
   exact goldbachOverlapExcess_le_primePairOverlapCount 10
+
+/-- A three-prime obstruction support has positive higher Pascal residual. -/
+example : (goldbachObstructionSupport 35 5).card = 3 ∧
+    goldbachLocalPairOverlapResidual 35 5 = 1 := by
+  decide +kernel
 
 /-- Kernel-checked bounded verification for even targets four through two hundred. -/
 theorem goldbach_centers_two_through_one_hundred :
@@ -91,8 +103,17 @@ theorem goldbach_centers_two_through_one_hundred :
 #print axioms strongGoldbach_of_capacityEscape
 #print axioms goldbachIncidence_eq_covered_add_overlapExcess
 #print axioms goldbachIncidenceConservation
+#print axioms goldbach_six_pair_overlap_decomposition
 #print axioms goldbachPairAt_iff_incidence_lt_offsets_add_overlap
 #print axioms goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity
+#print axioms goldbachLocalPairOverlapResidual
+#print axioms goldbachOffsetROverlapMultiplicity
+#print axioms goldbachOffsetROverlapMultiplicity_zero
+#print axioms goldbachOffsetROverlapMultiplicity_one
+#print axioms goldbachOffsetROverlapMultiplicity_two
+#print axioms goldbach_pairMultiplicity_eq_localOverlap_add_residual
+#print axioms goldbachPairOverlapResidual
+#print axioms goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual
 #print axioms goldbachOverlapExcess_le_primePairOverlapCount
 
 end DkMathTest.NumberTheory.GoldbachGNFiber

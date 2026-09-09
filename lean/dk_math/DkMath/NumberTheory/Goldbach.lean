@@ -26,6 +26,7 @@ requires `GoldbachCapacityEscape`, which is proved equivalent to it; no
 unconditional provider is present. `Limitations` records kernel-checked
 counterexamples to stronger shortcuts, including the strict incidence bound.
 
-`Overlap` and `PairOverlap` add exact finite ledger identities. They stop at
-the pair-overlap upper bound and do not provide a universal escape theorem.
+`Overlap` and `PairOverlap` add exact finite ledger identities, including the
+Pascal pair-overlap residual decomposition. They stop at this finite ledger
+layer and do not provide a universal escape theorem.
 -/

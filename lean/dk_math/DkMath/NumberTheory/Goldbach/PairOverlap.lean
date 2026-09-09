@@ -13,10 +13,14 @@ import Mathlib.Tactic
 # Goldbach unordered prime-pair overlap ledger
 
 An offset with `k` distinct obstruction primes has `choose k 2` unordered
-obstruction pairs, while its overlap excess is only `k - 1`.  Summing the
-canonical pairs over offsets gives an exact double-count identity.  The final
-inequality in this file is only an overlap upper bound; it is not a Goldbach
-escape theorem.
+obstruction pairs.  Pascal's identity splits this pair layer into the first
+repeated-obstruction payment `k - 1` and a higher local residual
+`choose (k - 1) 2`.  Thus pair overlap is the `r = 2` layer of the local
+Pascal hierarchy.  Summing the canonical pairs over offsets gives an exact
+double-count identity and an exact global residual decomposition.  This
+suggests a future connection to the canonical GTail/Pascal filtration, but no
+formal GTail equivalence is asserted here.  None of these ledgers is a
+Goldbach escape theorem.
 -/
 
 namespace DkMath.NumberTheory
@@ -26,6 +30,49 @@ open scoped BigOperators
 /-- One offset's unordered pair multiplicity among proper small obstructions. -/
 def goldbachOffsetPrimePairMultiplicity (n u : ℕ) : ℕ :=
   Nat.choose (goldbachObstructionSupport n u).card 2
+
+/-- The higher local pair-overlap residual after removing the first payment. -/
+def goldbachLocalPairOverlapResidual (n u : ℕ) : ℕ :=
+  Nat.choose ((goldbachObstructionSupport n u).card - 1) 2
+
+/-- The general local `r`-fold observer for the finite Pascal hierarchy. -/
+def goldbachOffsetROverlapMultiplicity (n u r : ℕ) : ℕ :=
+  Nat.choose (goldbachObstructionSupport n u).card r
+
+@[simp] theorem goldbachOffsetROverlapMultiplicity_zero (n u : ℕ) :
+    goldbachOffsetROverlapMultiplicity n u 0 = 1 := by
+  simp [goldbachOffsetROverlapMultiplicity]
+
+@[simp] theorem goldbachOffsetROverlapMultiplicity_one (n u : ℕ) :
+    goldbachOffsetROverlapMultiplicity n u 1 =
+      (goldbachObstructionSupport n u).card := by
+  simp [goldbachOffsetROverlapMultiplicity]
+
+@[simp] theorem goldbachOffsetROverlapMultiplicity_two (n u : ℕ) :
+    goldbachOffsetROverlapMultiplicity n u 2 =
+      goldbachOffsetPrimePairMultiplicity n u := by
+  rfl
+
+private theorem choose_two_eq_sub_one_add_choose_sub_one (k : ℕ) :
+    Nat.choose k 2 = (k - 1) + Nat.choose (k - 1) 2 := by
+  cases k with
+  | zero => simp
+  | succ k =>
+    cases k with
+    | zero => simp
+    | succ k =>
+      rw [Nat.choose_succ_succ]
+      simp [Nat.choose_succ_succ, Nat.add_comm, Nat.add_left_comm,
+        Nat.add_assoc]
+
+/-- Exact local Pascal decomposition of pair multiplicity. -/
+theorem goldbach_pairMultiplicity_eq_localOverlap_add_residual
+    (n u : ℕ) :
+    goldbachOffsetPrimePairMultiplicity n u =
+      goldbachLocalOverlapExcess n u +
+        goldbachLocalPairOverlapResidual n u := by
+  unfold goldbachOffsetPrimePairMultiplicity goldbachLocalPairOverlapResidual
+  exact choose_two_eq_sub_one_add_choose_sub_one _
 
 /-- A support of size `k` has at least `k-1` unordered distinct pairs. -/
 theorem goldbach_support_sub_one_le_pairMultiplicity
@@ -62,6 +109,10 @@ def goldbachPrimePairOverlapOffsets (n p q : ℕ) : Finset ℕ :=
 def goldbachPrimePairOverlapCount (n : ℕ) : ℕ :=
   ∑ pair ∈ goldbachPrimePairs n,
     (goldbachPrimePairOverlapOffsets n pair.1 pair.2).card
+
+/-- Global residual mass in the pair-overlap Pascal layer. -/
+def goldbachPairOverlapResidual (n : ℕ) : ℕ :=
+  ∑ u ∈ goldbachOffsets n, goldbachLocalPairOverlapResidual n u
 
 private def goldbachUpperPairs (s : Finset ℕ) : Finset (ℕ × ℕ) :=
   s.offDiag.filter (fun pair => pair.1 < pair.2)
@@ -184,13 +235,22 @@ theorem goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity (n : ℕ) :
       intro u hu
       exact goldbach_card_upperPairs_eq_choose _
 
+/-- Exact global pair-overlap decomposition into first payment and residual. -/
+theorem goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual
+    (n : ℕ) :
+    goldbachPrimePairOverlapCount n =
+      goldbachOverlapExcess n + goldbachPairOverlapResidual n := by
+  rw [goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity]
+  unfold goldbachOverlapExcess goldbachPairOverlapResidual
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro u hu
+  exact goldbach_pairMultiplicity_eq_localOverlap_add_residual n u
+
 /-- Pair overlap dominates the repeated-obstruction excess at every offset. -/
 theorem goldbachOverlapExcess_le_primePairOverlapCount (n : ℕ) :
     goldbachOverlapExcess n ≤ goldbachPrimePairOverlapCount n := by
-  rw [goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity]
-  unfold goldbachOverlapExcess
-  apply Finset.sum_le_sum
-  intro u hu
-  exact goldbach_support_sub_one_le_pairMultiplicity
+  rw [goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual]
+  omega
 
 end DkMath.NumberTheory
