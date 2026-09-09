@@ -1,0 +1,59 @@
+LUNA-005 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Added:
+  DkMath/ABC/GNExcessCubicMordellIncidence.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicMordellIncidence immediately after
+  GNExcessCubicMordellTransport
+
+Focused build
+-------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicMordellIncidence
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-005-output.txt
+
+Principal declarations:
+  mem_GNExcessCubicRealizedLargeModulusShellMordellParameterSpace_iff
+  GNExcessCubicRealizedLargeModulusShellWitnessSpace_eq_biUnion_mordellParameterFibers
+  GNExcessCubicRealizedLargeModulusShellMordellCoordinateSpace_equation
+  GNExcessCubicRealizedLargeModulusShellMordellCoordinateSpace_card
+  GNExcessCubicRealizedLargeModulusShellWitnessCount_eq_sum_mordellCoordinateCards
+
+Aggregator build
+----------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-005-abc-output.txt
+
+Forbidden construct scan
+------------------------
+Scanned the changed production module for:
+  sorry admit axiom abc_main_axiom native_decide unsafe
+Result: no matches.
+
+Trust boundary
+--------------
+New principal declarations report only:
+  propext
+  Classical.choice
+  Quot.sound
+or subsets thereof. No sorryAx occurs in the new declarations.
+
+Scope audit
+-----------
+The module contains exact finite parameter/fiber partitions, coordinate-image
+membership, the one-way Mordell equation, fixed-parameter injectivity, and
+exact card identities. It does not contain an integral-point estimate,
+Helfgott--Venkatesh formalization, rank or moment bound, balanced-box saving,
+analytic provider, or ABC theorem.
+
+`git diff --check`: exit 0.

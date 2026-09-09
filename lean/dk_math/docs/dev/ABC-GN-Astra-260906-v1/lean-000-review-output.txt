@@ -1,0 +1,4 @@
+'DkMath.ABC.SOL000Scratch.pellParameter_height_cube_aux' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.SOL000Scratch.realized_shell_pellParameter_height_cube' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
