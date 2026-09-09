@@ -518,15 +518,30 @@ The first arrow is the only current research target.
 v0 deterministic reduction:
   COMPLETE
 
-v1 Sol mathematical attack:
-  READY
+SOL-000:
+  COMPLETE / Outcome B
 
-Astra review:
-  WAITING FOR SOL CANDIDATES
+ASTRA-001:
+  COMPLETE / Outcome B
 
-production implementation:
-  PAUSED
+validated deterministic facts:
+  fixed-(T,r) shell fiber card <= 1
+  shell-local a |-> (r,S) injective
+
+LUNA-002:
+  ACTIVE
+  productionize validated shell uniqueness only
+
+Astra:
+  PAUSED UNTIL RECHARGE
+
+research analytics:
+  REMAIN OUTSIDE PRODUCTION
 
 ABC:
   NOT PROVED
+
+next research frontier after coding phase:
+  balanced-box represented-pair saving
+  Q(B) << B^(2-delta+epsilon)
 ~~~
