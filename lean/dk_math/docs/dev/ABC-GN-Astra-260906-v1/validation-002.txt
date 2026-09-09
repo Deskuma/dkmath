@@ -1,0 +1,83 @@
+LUNA-002 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Added:
+  DkMath/ABC/GNExcessCubicShellFiberUniqueness.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicShellFiberUniqueness
+
+Focused build
+-------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicShellFiberUniqueness
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-002-output.txt
+
+The module exports and checks:
+  conic_cross_identity
+  conic_y_lower
+  conic_no_close_denominators
+  cubic_parameter_ge_two
+  conic_shell_unique
+  mem_GNExcessCubicRealizedLargeModulusShellPellCubeCoreFiber_iff
+  GNExcessCubicRealizedLargeModulusShellPellCubeCoreFiber_subsingleton
+  GNExcessCubicRealizedLargeModulusShellPellCubeCoreFiber_card_le_one
+  GNExcessCubicRealizedLargeModulusShellWitness_pair_injective
+
+Aggregator build
+----------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-002-abc-output.txt
+
+The new import is after GNExcessCubicPrimitivePell and before the unrelated
+three-sector modules. No unrelated import was reordered.
+
+Forbidden construct scan
+------------------------
+Command:
+  rg -n '\b(sorry|admit|axiom|abc_main_axiom|native_decide|unsafe)\b' \
+    DkMath/ABC/GNExcessCubicShellFiberUniqueness.lean
+Exit: 1 (no matches; successful absence check).
+
+`git diff --check` exit: 0.
+
+Axiom audit
+-----------
+The `#print axioms` output in lean-002-output.txt gives:
+  conic_no_close_denominators:
+    [propext, Classical.choice, Quot.sound]
+  conic_shell_unique:
+    [propext, Classical.choice, Quot.sound]
+  refined fiber card <= 1:
+    [propext, Classical.choice, Quot.sound]
+  shell pair injectivity:
+    [propext, Classical.choice, Quot.sound]
+
+No `sorryAx` occurs in the final new declarations. The aggregator output may
+replay historical warnings from unrelated repository files; those are not
+introduced by this checkpoint.
+
+Scope audit
+-----------
+The new module has no asymptotic estimate, external theorem, Mordell count,
+Eisenstein factorization existence theorem, provider, or ABC claim. The
+research-only scratch identities remain outside the production import graph.
+
+The exact verified boundary is:
+  fixed (T,r) and one dyadic shell => at most one realized witness;
+  inside one shell, a ↦ (r,S) is injective.
+
+The following remain open and were intentionally not implemented:
+  global modulus/fixed-T/fixed-S multiplicity bounds,
+  near-linear shell counts,
+  balanced-box power savings,
+  analytic moment estimates,
+  ABC.
