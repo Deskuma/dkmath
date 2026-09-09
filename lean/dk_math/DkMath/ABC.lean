@@ -35,6 +35,7 @@ import DkMath.ABC.GNExcessCubicPellParameterIncidence
 import DkMath.ABC.GNExcessCubicPrimitivePell
 import DkMath.ABC.GNExcessCubicShellFiberUniqueness
 import DkMath.ABC.GNExcessCubicShellParameterBounds
+import DkMath.ABC.GNExcessCubicMordellTransport
 import DkMath.ABC.GNExcessCubicThreeSector
 import DkMath.ABC.GNExcessCubicThreeSectorIncidence
 import DkMath.ABC.GNExcessCubicPairedOrientation
