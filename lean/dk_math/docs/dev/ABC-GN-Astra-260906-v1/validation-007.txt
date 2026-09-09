@@ -1,0 +1,71 @@
+LUNA-007 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Extended:
+  DkMath/NumberTheory/EisensteinCoordinates.lean
+Added:
+  DkMath/ABC/GNExcessCubicEisensteinFactorConsequences.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicEisensteinFactorConsequences immediately after
+  GNExcessCubicEisensteinCoordinates
+
+Focused neutral build
+---------------------
+Command:
+  lake build DkMath.NumberTheory.EisensteinCoordinates
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-007-numbertheory-output.txt
+
+Focused ABC bridge build
+------------------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicEisensteinFactorConsequences
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-007-abc-output.txt
+
+ABC aggregator build
+--------------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-007-abc-output.txt
+
+Principal declarations audited
+------------------------------
+  eisenstein_mul_sq_eq_cubicCoord_fst
+  eisenstein_mul_sq_eq_cubicCoord_snd
+  eisenstein_mul_sq_eq_cubicCoord_coefficients_isCoprime
+  eisenstein_mul_sq_eq_cubicCoord_norm
+  eisenstein_mul_sq_eq_cubicCoord_polynomial_norm
+  GNExcessCubicRealizedLargeModulusShellWitness_eisensteinFactor_coeff_one
+  GNExcessCubicRealizedLargeModulusShellWitness_eisensteinFactor_coefficients_isCoprime
+  GNExcessCubicRealizedLargeModulusShellWitness_eisensteinFactor_norm
+
+Forbidden construct scan
+------------------------
+Scanned changed production Lean for:
+  sorry admit axiom abc_main_axiom native_decide unsafe
+Result: no matches.
+
+Trust boundary
+--------------
+New declarations report only propext, Classical.choice, and Quot.sound, or
+subsets thereof. No sorryAx occurs in the new declarations.
+
+Scope audit
+-----------
+The implementation contains only conditional consequences of an explicit
+factor equality: coordinate equations, Bezout coprimality, and norm identities.
+It contains no factor search, existence theorem, Classical.choose construction,
+UFD extraction, factor count, analytic provider, balanced-box estimate, or ABC
+claim.
+
+git diff --check: exit 0.
+
