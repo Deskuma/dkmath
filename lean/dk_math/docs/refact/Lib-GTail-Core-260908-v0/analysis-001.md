@@ -93,9 +93,7 @@ $$
 The standard GN kernel is only
 
 $$
-GN_d(x,u)
-=
-GTail(d,1,x,u).
+GN_d(x,u)=GTail(d,1,x,u).
 $$
 
 This distinction must become visible in the public API and documentation.
@@ -107,12 +105,7 @@ This distinction must become visible in the public API and documentation.
 The strongest already-implemented algebraic theorem is not the old GN identity but the general tail decomposition:
 
 $$
-(x+u)^d
-=
-\sum_{j<r}
-\binom dj x^j u^{d-j}
-+
-x^r GTail(d,r,x,u).
+(x+u)^d=\sum_{j<r}\binom dj x^j u^{d-j}+x^r GTail(d,r,x,u).
 $$
 
 Lean:
@@ -132,9 +125,7 @@ This should be treated as the canonical Cosmic/GTail decomposition theorem.
 The familiar identity
 
 $$
-(x+u)^d
-=
-u^d + x\,GN_d(x,u)
+(x+u)^d=u^d + x\,GN_d(x,u)
 $$
 
 is only the `r = 1` corollary.
@@ -165,11 +156,7 @@ Verified core:
 The generic recursion is:
 
 $$
-GTail(d,r,x,u)
-=
-\binom dr u^{d-r}
-+
-x\,GTail(d,r+1,x,u).
+GTail(d,r,x,u)=\binom dr u^{d-r}+x\,GTail(d,r+1,x,u).
 $$
 
 This equation is the key to the newly clarified boundary interpretation.
@@ -201,12 +188,7 @@ Verified:
 In particular, the generic theorem already implies the boundary collapse
 
 $$
-x \equiv 0 \pmod n
-\quad\Longrightarrow\quad
-GTail(d,r,x,u)
-\equiv
-\binom dr u^{d-r}
-\pmod n.
+x \equiv 0 \pmod n \quad\Longrightarrow\quad GTail(d,r,x,u) \equiv \binom dr u^{d-r} \pmod n.
 $$
 
 This is one of the most important facts for the new interpretation.
@@ -239,20 +221,13 @@ The most important conceptual result of this investigation is that `r` is not me
 From
 
 $$
-GTail(d,r,x,u)
-=
-\binom dr u^{d-r}
-+
-x\,GTail(d,r+1,x,u),
+GTail(d,r,x,u)=\binom dr u^{d-r}+x\,GTail(d,r+1,x,u),
 $$
 
 we obtain the boundary reading
 
 $$
-GTail(d,r,x,u)
-\equiv
-\binom dr u^{d-r}
-\pmod x.
+GTail(d,r,x,u)\equiv\binom dr u^{d-r}\pmod x.
 $$
 
 Therefore:
@@ -262,9 +237,7 @@ Therefore:
 The map
 
 $$
-r
-\longmapsto
-\binom dr
+r \longmapsto \binom dr
 $$
 
 is therefore a boundary-support scan across Pascal row `d`.
@@ -314,24 +287,15 @@ $$
 Thus:
 
 $$
-GTail(7,1,x,u)
-\equiv
-7u^6
-\pmod x,
+GTail(7,1,x,u) \equiv 7u^6 \pmod x,
 $$
 
 $$
-GTail(7,2,x,u)
-\equiv
-21u^5
-\pmod x,
+GTail(7,2,x,u) \equiv 21u^5 \pmod x,
 $$
 
 $$
-GTail(7,3,x,u)
-\equiv
-35u^4
-\pmod x.
+GTail(7,3,x,u) \equiv 35u^4 \pmod x.
 $$
 
 The `r = 1` tail sees the pure support `{7}`, whereas deeper tails expose additional prime support inherited from interior Pascal coefficients.
@@ -353,11 +317,7 @@ The generic congruence theorem strongly suggests the following reusable theorem.
 Under suitable natural-number hypotheses,
 
 $$
-\gcd\!\left(x,GTail(d,r,x,u)\right)
-=
-\gcd\!\left(
-x,\binom dr u^{d-r}
-\right).
+\gcd\!\left(x,GTail(d,r,x,u)\right)=\gcd\!\left(x,\binom dr u^{d-r}\right).
 $$
 
 If additionally
@@ -370,18 +330,14 @@ then the expected simplification is
 
 $$
 \boxed{
-\gcd\!\left(x,GTail(d,r,x,u)\right)
-=
-\gcd\!\left(x,\binom dr\right).
+\gcd\!\left(x,GTail(d,r,x,u)\right)=\gcd\!\left(x,\binom dr\right).
 }
 $$
 
 For `r = 1` this becomes
 
 $$
-\gcd(x,GN_d(x,u))
-=
-\gcd(x,d),
+\gcd(x,GN_d(x,u))=\gcd(x,d),
 $$
 
 again under the appropriate coprimality hypotheses.
@@ -389,9 +345,7 @@ again under the appropriate coprimality hypotheses.
 For prime degree `p`:
 
 $$
-\gcd(x,GN_p(x,u))
-=
-\gcd(x,p).
+\gcd(x,GN_p(x,u))=\gcd(x,p).
 $$
 
 This would compress a large family of downstream boundary / coprimality / exceptional-prime arguments.
@@ -415,13 +369,7 @@ $$
 expect
 
 $$
-GTail(d,r,x,u)
-=
-\sum_{k=0}^{s-r-1}
-\binom{d}{r+k}
-x^k u^{d-r-k}
-+
-x^{s-r}GTail(d,s,x,u).
+GTail(d,r,x,u)=\sum_{k=0}^{s-r-1}\binom{d}{r+k}x^k u^{d-r-k}+x^{s-r}GTail(d,s,x,u).
 $$
 
 Possible Lean names:
@@ -435,13 +383,7 @@ GTail_transport_depth
 This would make the sequence
 
 $$
-GTail(d,0)
-\to
-GTail(d,1)
-\to
-\cdots
-\to
-GTail(d,d)=1
+GTail(d,0) \to GTail(d,1) \to \cdots \to GTail(d,d)=1
 $$
 
 an explicit filtration rather than a collection of unrelated recurrences.
@@ -477,10 +419,7 @@ $$
 Using the recurrence, the expected stronger congruence is
 
 $$
-GTail(p,r,x,u)
-\equiv
-\binom pr u^{p-r}
-\pmod{p^2},
+GTail(p,r,x,u) \equiv \binom pr u^{p-r} \pmod{p^2},
 $$
 
 and hence
@@ -492,17 +431,13 @@ $$
 At the terminal nontrivial layer:
 
 $$
-GTail(p,p-1,x,u)
-=
-pu+x.
+GTail(p,p-1,x,u)=pu+x.
 $$
 
 If `x = pt`, then
 
 $$
-GTail(p,p-1,x,u)
-=
-p(u+t),
+GTail(p,p-1,x,u)=p(u+t),
 $$
 
 so any excess valuation is concentrated in the final linear factor.
@@ -533,9 +468,7 @@ The existing CFBRC cyclotomic work already contains a general-`d` bridge between
 For prime degree `p`, the familiar identity
 
 $$
-\frac{X^p-Y^p}{X-Y}
-=
-\Phi_p(X,Y)
+\frac{X^p-Y^p}{X-Y}=\Phi_p(X,Y)
 $$
 
 combined with
@@ -547,9 +480,7 @@ $$
 identifies
 
 $$
-GTail(p,1,x,u)
-=
-GN_p(x,u)
+GTail(p,1,x,u)=GN_p(x,u)
 $$
 
 with the homogeneous `p`-th cyclotomic shell.
@@ -557,10 +488,7 @@ with the homogeneous `p`-th cyclotomic shell.
 For composite `d`, the full quotient decomposes over divisors:
 
 $$
-\frac{X^d-Y^d}{X-Y}
-=
-\prod_{\substack{m\mid d\\m>1}}
-\Phi_m(X,Y).
+\frac{X^d-Y^d}{X-Y}=\prod_{\substack{m\mid d\\m>1}}\Phi_m(X,Y).
 $$
 
 This gives the structural distinction:
@@ -581,10 +509,7 @@ Pascal-side work detects where a prime first appears in binomial coefficients.
 GTail-side work exposes a selected Pascal coefficient on the boundary:
 
 $$
-GTail(d,r,x,u)
-\equiv
-\binom dr u^{d-r}
-\pmod x.
+GTail(d,r,x,u) \equiv \binom dr u^{d-r} \pmod x.
 $$
 
 The `r = 1` prime-degree specialization then exposes exactly the exponent prime.
