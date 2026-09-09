@@ -290,8 +290,39 @@ survived mathematical review.
 
 ## Files
 
-- ROADMAP.md — v1 mathematical research program.
-- instruction-000.md — first Sol full-reasoning shell-count exploration task.
+- ROADMAP.md — v1 mathematical research and production-gate program.
+- instruction-000.md — SOL shell-count exploration.
+- report-000.md — SOL-000 research result.
+- instruction-001.md — ASTRA adversarial review.
+- report-001.md — ASTRA-001 validated fiber theorem and research frontier.
+- instruction-002.md — LUNA production freeze of shell-fiber uniqueness.
+
+## Current production gate
+
+ASTRA-001 validated a new deterministic theorem in scratch Lean:
+
+~~~text
+fixed (T,r) + one dyadic shell
+=>
+at most one witness.
+~~~
+
+It also validated shell-local injectivity of:
+
+~~~text
+a |-> (r,S).
+~~~
+
+These facts are now approved for productionization by LUNA-002.
+
+The following remain research-only:
+
+~~~text
+Helfgott-Venkatesh specialization
+31/24 + epsilon moment estimate
+balanced-box power saving
+ABC closure.
+~~~
 
 ## Status
 
@@ -299,12 +330,21 @@ survived mathematical review.
 v0 production reduction:
   COMPLETE / PAUSED
 
-v1 mathematical research:
-  STARTED
+v1 Sol research:
+  COMPLETE / Outcome B
+
+v1 Astra review:
+  COMPLETE / Outcome B
+
+v1 LUNA production freeze:
+  ACTIVE / instruction-002
+
+Astra:
+  PAUSED UNTIL RECHARGE
 
 ABC:
   NOT PROVED
 
-single frontier:
-  GNExcessCubicRealizedLargeModulusShellCount X D
+current research frontier after production freeze:
+  balanced-box represented-pair saving
 ~~~
