@@ -3,7 +3,8 @@
 Date: 2026-09-09  
 Status: not implemented / strategy checkpoint  
 Target branch: `develop`  
-Suggested future branch: `NumberTheory-Goldbach-GNFiber-v0`
+Suggested future branch: `wip/NumberTheory-Goldbach-GNFiber-260910-v0`
+cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
 
 ## 1. Purpose
 
