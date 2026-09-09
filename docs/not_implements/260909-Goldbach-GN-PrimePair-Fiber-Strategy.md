@@ -29,59 +29,59 @@ For the canonical degree-two kernel,
 GN 2 x u = x + 2u.
 ```
 
-Hence every odd number (P) has the trivial positive representation
+Hence every odd number \(P\) has the trivial positive representation
 
-[
-P = GN_2!left(1,rac{P-1}{2}ight).
-]
+$$
+P = GN_2\!\left(1,\frac{P-1}{2}\right).
+$$
 
 Therefore the statement
 
-[
-orall P>2,; operatorname{Prime}(P)
-	o
-exists d,x,u,; GN_d(x,u)=P
-]
+$$
+\forall P>2,\quad \operatorname{Prime}(P)
+\to
+\exists d,x,u,\quad GN_d(x,u)=P
+$$
 
-is not strong enough to imply Goldbach. In fact degree (2) already represents every odd target, not only primes.
+is not strong enough to imply Goldbach. In fact degree \(2\) already represents every odd target, not only primes.
 
 The Goldbach problem must keep the **fiber center fixed**.
 
 ## 3. Goldbach as a degree-two GN fiber theorem
 
-For an even target (2n), write
+For an even target \(2n\), write
 
-[
-p=n-u,qquad q=n+u.
-]
+$$
+p=n-u,\qquad q=n+u.
+$$
 
 Set
 
-[
+$$
 x:=n-u.
-]
+$$
 
 Then
 
-[
+$$
 x+u=n
-]
+$$
 
 and
 
-[
+$$
 GN_2(x,u)=x+2u=n+u.
-]
+$$
 
-Therefore the strong Goldbach statement at (2n) is equivalent to the existence of a degree-two GN point satisfying
+Therefore the strong Goldbach statement at \(2n\) is equivalent to the existence of a degree-two GN point satisfying
 
-[
+$$
 x+u=n,
-qquad
-operatorname{Prime}(x),
-qquad
-operatorname{Prime}(GN_2(x,u)).
-]
+\qquad
+\operatorname{Prime}(x),
+\qquad
+\operatorname{Prime}(GN_2(x,u)).
+$$
 
 Suggested predicate:
 
@@ -99,33 +99,33 @@ The first formal checkpoint should prove an exact equivalence between the usual 
 
 The degree-two Cosmic Formula gives
 
-[
+$$
 (x+u)^2=x(x+2u)+u^2.
-]
+$$
 
-With (n=x+u),
+With \(n=x+u\),
 
-[
+$$
 n^2=(n-u)(n+u)+u^2.
-]
+$$
 
 Hence
 
-[
-mathrm{Big}=n^2,
-qquad
-mathrm{Gap}=u^2,
-qquad
-mathrm{Body}=n^2-u^2=(n-u)(n+u).
-]
+$$
+\mathrm{Big}=n^2,
+\qquad
+\mathrm{Gap}=u^2,
+\qquad
+\mathrm{Body}=n^2-u^2=(n-u)(n+u).
+$$
 
 Goldbach becomes:
 
-> For every (nge2), the square fiber
+> For every \(n\ge2\), the square fiber
 >
-> [
-> mathrm{Body}_n(u)=n^2-u^2
-> ]
+> $$
+> \mathrm{Body}_n(u)=n^2-u^2
+> $$
 >
 > contains at least one point whose two canonical factors are both prime.
 
@@ -144,15 +144,15 @@ prime_dvd_weightedBinomialInnerBeamSum
 prime_inner_choose_eq_zero_zmod
 ```
 
-For prime row (p),
+For prime row \(p\),
 
-[
+$$
 0<k<p
-Longrightarrow
-pmidinom pk,
-]
+\Longrightarrow
+p\mid\binom pk,
+$$
 
-so the inner Pascal Beam vanishes modulo (p).
+so the inner Pascal Beam vanishes modulo \(p\).
 
 This supplies a canonical prime-row residue pattern.
 
@@ -166,12 +166,12 @@ theorem GN_mul_degree
 
 with mathematical content
 
-[
+$$
 GN_{ab}(x,u)
 =
-GN_a(x,u),
-GN_b!left(x,GN_a(x,u),u^aight).
-]
+GN_a(x,u)\,
+GN_b\!\left(x\,GN_a(x,u),u^a\right).
+$$
 
 The second factor is evaluated in transported coordinates; the formula is not a naive same-coordinate product.
 
@@ -186,11 +186,11 @@ GNPositiveRepresentation.degree_prime_of_target_prime
 
 Thus, in the positive nondegenerate region,
 
-[
-GN_d(x,u)	ext{ prime}
-Longrightarrow
-d	ext{ prime}.
-]
+$$
+GN_d(x,u)\text{ prime}
+\Longrightarrow
+d\text{ prime}.
+$$
 
 ### 5.3 Prime-target fiber constraints
 
@@ -205,21 +205,21 @@ GNPositiveRepresentation.prime_degree_constraints
 
 For a positive representation
 
-[
+$$
 GN_d(x,u)=P,
-qquad
-P	ext{ prime},
-]
+\qquad
+P\text{ prime},
+$$
 
 the existing constraints include
 
-[
-d	ext{ prime},
-qquad
-dmid P-1,
-qquad
-2^d-1le P.
-]
+$$
+d\text{ prime},
+\qquad
+d\mid P-1,
+\qquad
+2^d-1\le P.
+$$
 
 Thus the prime-target degree fiber is already very thin.
 
@@ -236,25 +236,25 @@ mem_GNPositiveRepresentations_iff
 
 For
 
-[
+$$
 GN_d(x,u)=P
-]
+$$
 
 in the positive region,
 
-[
-2^d-1le P,
-qquad
+$$
+2^d-1\le P,
+\qquad
 x^{d-1}<P,
-qquad
-d,u^{d-1}<P,
-]
+\qquad
+d\,u^{d-1}<P,
+$$
 
 and in particular
 
-[
-d<P,qquad x<P,qquad u<P.
-]
+$$
+d<P,\qquad x<P,\qquad u<P.
+$$
 
 This gives an executable finite search surface.
 
@@ -279,33 +279,33 @@ These modules are the natural substrate for a Goldbach paired-residue layer.
 
 ## 6. The real obstruction problem
 
-For fixed (n), define the left and right coordinates
+For fixed \(n\), define the left and right coordinates
 
-[
+$$
 L_n(u):=n-u,
-qquad
+\qquad
 R_n(u):=n+u.
-]
+$$
 
-A candidate (u) fails Goldbach if at least one side is composite.
+A candidate \(u\) fails Goldbach if at least one side is composite.
 
-For a prime (r), the local forbidden conditions are
+For a prime \(r\), the local forbidden conditions are
 
-[
-rmid n-u
-quadLongleftrightarrowquad
-uequiv npmod r,
-]
+$$
+r\mid n-u
+\quad\Longleftrightarrow\quad
+u\equiv n\pmod r,
+$$
 
 and
 
-[
-rmid n+u
-quadLongleftrightarrowquad
-uequiv -npmod r.
-]
+$$
+r\mid n+u
+\quad\Longleftrightarrow\quad
+u\equiv -n\pmod r.
+$$
 
-Thus each prime direction normally removes at most two residue classes from the (u)-fiber.
+Thus each prime direction normally removes at most two residue classes from the \(u\)-fiber.
 
 This suggests a paired finite-world object.
 
@@ -322,62 +322,60 @@ and eventually a canonical finite paired residue space analogous to `primeWorldR
 
 ## 7. Finite reduction by small prime divisors
 
-If (m>1) is composite, then (m) has a prime divisor at most (sqrt m).
+If \(m>1\) is composite, then \(m\) has a prime divisor at most \(\sqrt m\).
 
 Since on the Goldbach fiber
 
-[
-n-ule 2n,
-qquad
-n+ule2n,
-]
+$$
+n-u\le 2n,
+\qquad
+n+u\le2n,
+$$
 
 every composite side has a small prime witness bounded by roughly
 
-[
-rlesqrt{2n}.
-]
+$$
+r\le\sqrt{2n}.
+$$
 
-Therefore, for fixed (n), a hypothetical Goldbach failure can be converted into a finite covering statement:
+Therefore, for fixed \(n\), a hypothetical Goldbach failure can be converted into a finite covering statement:
 
-> every (u) in the admissible fiber is covered by at least one small-prime left/right obstruction.
+> every \(u\) in the admissible fiber is covered by at least one small-prime left/right obstruction.
 
 This is the key finite reduction.
 
 The desired contradiction route is then not “prove primality directly”, but:
 
-[
-	ext{Goldbach failure}
-Longrightarrow
-	ext{finite obstruction cover}
-Longrightarrow
-	ext{capacity / conservation contradiction}.
-]
+$$
+\text{Goldbach failure}
+\Longrightarrow
+\text{finite obstruction cover}
+\Longrightarrow
+\text{capacity / conservation contradiction}.
+$$
 
 ## 8. Proposed paired-prime-world layer
 
 A future implementation should introduce a finite residue structure for the pair
 
-[
-(n-u,;n+u).
-]
+$$
+(n-u,\;n+u).
+$$
 
-For a finite known-prime set (S), define survivors satisfying
+For a finite known-prime set \(S\), define survivors satisfying
 
-[
-orall rin S,quad
-r
-mid(n-u)land r
-mid(n+u),
-]
+$$
+\forall r\in S,\quad
+r\nmid(n-u)\land r\nmid(n+u),
+$$
 
-with endpoint exceptions handled explicitly when one side itself equals (r).
+with endpoint exceptions handled explicitly when one side itself equals \(r\).
 
 The period should be controlled by
 
-[
-M=prod_{rin S}r.
-]
+$$
+M=\prod_{r\in S}r.
+$$
 
 CRT then makes the obstruction pattern periodic.
 
@@ -397,21 +395,21 @@ GoldbachPairedPHZ
 
 The target is not a naive sieve density statement. The decisive theorem should have the shape:
 
-[
-	ext{finite old-prime obstruction capacity}
+$$
+\text{finite old-prime obstruction capacity}
 <
-	ext{Goldbach fiber capacity}.
-]
+\text{Goldbach fiber capacity}.
+$$
 
 Equivalently, at least one fiber seat must escape all old-prime obstructions.
 
 That escaping seat should then be forced, using the small-prime-divisor bound, to yield
 
-[
-operatorname{Prime}(n-u)
-land
-operatorname{Prime}(n+u).
-]
+$$
+\operatorname{Prime}(n-u)
+\land
+\operatorname{Prime}(n+u).
+$$
 
 This is where Primitive Conservation Kernel ideas may be able to break the ordinary sieve parity barrier.
 
@@ -419,10 +417,10 @@ This is where Primitive Conservation Kernel ideas may be able to break the ordin
 
 A plain density heuristic such as
 
-[
-prod_{rlesqrt{2n}}
-left(1-rac{2}{r}ight)
-]
+$$
+\prod_{r\le\sqrt{2n}}
+\left(1-\frac{2}{r}\right)
+$$
 
 is not by itself a proof strategy. Classical sieve methods face the parity problem precisely when trying to distinguish “no small prime factor” from genuine primality in paired settings.
 
@@ -433,50 +431,50 @@ Candidate extra structure:
 - Primitive Conservation Kernel escape;
 - exact paired incidence capacity;
 - prime-wave conservation;
-- GN / GTail (q)-adic signatures;
+- GN / GTail \(q\)-adic signatures;
 - transport of prime-target residue patterns;
-- square-Body conservation across the (u)-fiber.
+- square-Body conservation across the \(u\)-fiber.
 
 ## 11. Higher-degree GN as a classifier, not the direct Goldbach equation
 
-Goldbach itself lives naturally at (d=2).
+Goldbach itself lives naturally at \(d=2\).
 
 Higher-degree GN remains relevant as a prime-pattern classifier.
 
-For a prime target (P), define conceptually
+For a prime target \(P\), define conceptually
 
-[
-Sigma(P)
+$$
+\Sigma(P)
 =
-{q	ext{ prime}:
-exists x,u, GN_q(x,u)=P}.
-]
+\{q\text{ prime}:
+\exists x,u,\ GN_q(x,u)=P\}.
+$$
 
 Existing DkMath theorems force
 
-[
-qmid P-1
-]
+$$
+q\mid P-1
+$$
 
 and
 
-[
-2^q-1le P.
-]
+$$
+2^q-1\le P.
+$$
 
-Thus (Sigma(P)) is finite and thin.
+Thus \(\Sigma(P)\) is finite and thin.
 
 The possible research question is whether the higher-degree GN / GTail signature of
 
-[
+$$
 P=n-u
-]
+$$
 
 constrains or transports to
 
-[
+$$
 Q=n+u.
-]
+$$
 
 A conserved signature across the degree-two Goldbach fiber could provide the missing structure beyond ordinary sieve theory.
 
@@ -501,14 +499,14 @@ Suggested sequence:
 9. exact local forbidden-seat count
 10. global incidence / capacity bound
 11. Primitive Conservation Kernel bridge
-12. survivor (Rightarrow) prime-pair closure
+12. survivor \(\Rightarrow\) prime-pair closure
 13. final Goldbach endpoint, only if the previous conservation theorem closes
 
 ## 13. Stop / success criteria
 
 Do not claim progress toward Goldbach merely from any of the following:
 
-- all odd primes are representable by (GN_2);
+- all odd primes are representable by \(GN_2\);
 - prime-row Pascal divisibility;
 - finite residue survival for a fixed primorial;
 - numerical verification over large ranges;
@@ -518,15 +516,15 @@ The branch becomes mathematically decisive only when it proves or refutes the un
 
 The critical unresolved theorem is:
 
-[
-oxed{
-orall nge2,;
-exists u<n,;
-operatorname{Prime}(n-u)
-land
-operatorname{Prime}(n+u)
+$$
+\boxed{
+\forall n\ge2,\;
+\exists u<n,\;
+\operatorname{Prime}(n-u)
+\land
+\operatorname{Prime}(n+u)
 }
-]
+$$
 
 or the exactly equivalent GN form.
 
@@ -536,16 +534,16 @@ DkMath now appears to have enough infrastructure to make this a concrete formal 
 
 The strongest current strategic advantage is the combination of:
 
-[
-	ext{finite fiber}
+$$
+\text{finite fiber}
 +
-	ext{exact residue obstruction}
+\text{exact residue obstruction}
 +
-	ext{PrimeWorld periodicity}
+\text{PrimeWorld periodicity}
 +
-	ext{Primitive conservation}.
-]
+\text{Primitive conservation}.
+$$
 
-The main unknown is whether the conservation layer is strong enough to rule out a complete two-sided obstruction cover for every (n).
+The main unknown is whether the conservation layer is strong enough to rule out a complete two-sided obstruction cover for every \(n\).
 
 That is the next real decision point.
