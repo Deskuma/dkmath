@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-10",
+  "cwd": "lean/dk_math",
+  "toolchain": "leanprover/lean4:v4.32.2",
+  "builds": [
+    {
+      "command": "./lean-build.sh DkMath.NumberTheory.Goldbach DkMathTest.NumberTheory.GoldbachGNFiber",
+      "exit_code": 0,
+      "warnings": 0
+    },
+    {
+      "command": "./lean-build.sh DkMath",
+      "exit_code": 0,
+      "warnings": 5
+    }
+  ],
+  "axiom_audit": {
+    "command": "lake env lean docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/AxiomAudit.lean",
+    "exit_code": 0,
+    "declarations": 97,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "bounded_certificate": {
+    "center_min": 2,
+    "center_max": 100,
+    "even_target_min": 4,
+    "even_target_max": 200,
+    "method": "decide +kernel"
+  },
+  "git_diff_check_exit_code": 0,
+  "new_source_forbidden_construct_matches": 0,
+  "source_sha256": {
+    "DkMath/NumberTheory/Goldbach/Basic.lean": "db111cc88885f084f813a0a3c2fad4553e48d5764b5cbb90e8bc8f0d92e97361",
+    "DkMath/NumberTheory/Goldbach/Capacity.lean": "6a1806d51200fdc7733632dacdb387970b1607490b6f02a7020ead92cbd8f8ce",
+    "DkMath/NumberTheory/Goldbach/Cardinality.lean": "0b6f18e67b1f704b4db134e4a2a10c874944002754e26d306932a46ff37575f1",
+    "DkMath/NumberTheory/Goldbach/Conservation.lean": "6448c9e2e55ae86ef4473bb2660a20774406b346494d2cbd610f04e888c70a89",
+    "DkMath/NumberTheory/Goldbach/Limitations.lean": "0ff52fe3dda7f2c10e5e0bcc912278ea882ba05bd890f4f63a6d6ca4abdb27d8",
+    "DkMath/NumberTheory/Goldbach/Obstruction.lean": "b61564a46a81c4a7f722f253b910690018ecdd73b300e85bb5f7855904791b99",
+    "DkMath/NumberTheory/Goldbach/PrimeWorld.lean": "fe54e61e1599789eff23c59f6b4d171308e79258b6c7f5ec8795c8b75daa2ff8",
+    "DkMath/NumberTheory/Goldbach/Signature.lean": "653997b02856d5abbbfd409b19765702f90656458d480abe53f6e8e991c3a6ac",
+    "DkMath/NumberTheory/Goldbach.lean": "9eeae38f032b404d4455e23b288606d1ce30e4c1a6661a7f50ec6e9d1437bd90",
+    "DkMathTest/NumberTheory/GoldbachGNFiber.lean": "50add67ac583ca32623f701c662225ca69a042fb4028ae6d306c41ece7740d6f",
+    "DkMath.lean": "808ca6aad96e62744ed0550b09d81e6e9659b3894369a94399d983685dfeaa3c",
+    "docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/AxiomAudit.lean": "db6dc62f7e74de22e0d52e9696e7720a1b55570563e267b83437eaf7180f13cc"
+  },
+  "unconditional_strong_goldbach_proved": false
+}

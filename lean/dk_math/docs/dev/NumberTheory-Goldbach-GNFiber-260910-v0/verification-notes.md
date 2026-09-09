@@ -1,0 +1,60 @@
+# 検証メモ
+
+## 001: 調査
+
+- 作業場所: `/home/deskuma/develop/lean/dkmath`。開始時の `git status --short` は空。
+- 使用 toolchain: `leanprover/lean4:v4.32.2`。
+- 指定の `logs/__dkmath-all.lean.txt.gz` を `zgrep` で検索し、平方窓の小素数因子定理と有限容量からの既存条件付き閉包を確認。その後に実ソースを確認。
+- 再利用候補: `Nat.minFac_sq_le_self`, `Nat.minFac_prime`, `Nat.minFac_dvd`, `Nat.chineseRemainderOfFinset`, `primitiveConservationKernel_dichotomy_of_le_fine_squareBody`, `GNPositiveRepresentation.prime_degree_constraints`。
+- 注意: 既存の Legendre 向け容量超過定理も入力に容量の不等式を要する。Goldbach の独立した生存証明とはならない。
+
+## 002: Basic / Obstruction
+
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.Basic`: 成功。
+- `Obstruction` 初回: 量化命題に対する `tauto` と `not_and` の展開形が不一致。明示的な witness の取り出しと構成に修正。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.Obstruction`: 修正後成功。
+- `sorry` による穴埋めは使用せず、定理の意味と仮定を保った局所的な修正を実施。
+
+## 003: PrimeWorld / Capacity / Conservation / Signature
+
+- `PrimeWorld` 初回: implicit な素数の束縛、`n=-n` を `simp` に渡した再帰、scoped `on` 記法を局所修正。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.PrimeWorld`: 成功。
+- `Capacity` 初回ビルドは成功したが `push_neg` の非推奨警告あり。`push Not` に変更して再検証。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.Conservation DkMath.NumberTheory.Goldbach.Signature DkMath.NumberTheory.Goldbach.Capacity`: 成功、当該出力に警告なし。
+- 数学的な条件変更はなし。自然数の減算や endpoint 例外は明示条件のまま維持。
+
+## 004: Cardinality / Limitations
+
+- CRT 単射・全射を `Finset.card_bij` で構成。dependent subtype の積は `Finset.prod_coe_sort` を明示適用して解決。
+- 有限集合を含む計算は通常の `decide` では展開が停止したため `decide +kernel` を使用。外部実行結果の信頼や新規 axiom は導入しない。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.Cardinality DkMath.NumberTheory.Goldbach.Limitations`: 成功。
+- 追加の区間容量上界では、除法の単調性を型付き fact で使用し、商座標の射影等式も型を明示して局所修正。
+
+## 005: 公開面・最終検証
+
+- conventional な偶数ターゲットとの同値と、固定中心の有限 `Decidable` instance を追加。
+- 剰余・商座標への単射から、各素数の区間障害数の具体的上界を証明。射影の目的式には `change` で型を明示。
+- `Limitations` に既存 PCK の old-generated 分岐が合成数 `6` を含む証明を追加。
+- `DkMath.NumberTheory.Goldbach` facade、root import、回帰コードを追加。
+- 回帰の平方端点は admissible 条件も検査する `n=14,u=11`、端点 `3,25` に整えた。
+- focused build は成功・警告なし。`2≤n≤100` の有限範囲証明は `decide +kernel` で検査。
+- root build は成功。既存研究モジュールの `sorry` 警告のみ 5 件。
+- 96 件の全名前付き owner 宣言と有限範囲定理、合計 97 件を `#print axioms` で監査。標準の 3 公理以外の依存なし。
+- ビルドログと監査出力の要約および証拠ファイルは `report-005.md` を参照。
+
+## 006: Overlap / PairOverlap
+
+- 指示書の境界を確認。既存定義を再利用し、Goldbach から Legendre facade への依存は追加しなかった。
+- `Overlap.lean`: obstruction support、support/cardinality bridge、wave-side incidence double count、`Incidence = Covered + OverlapExcess`、survivor/incidence conservation、固定中心 criterion を実装。
+- `PairOverlap.lean`: unordered small-prime pair、local `choose k 2` multiplicity、pair overlap offsets、canonical pair の exact double count、`OverlapExcess ≤ PairOverlapCount` を実装。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.PairOverlap`: 成功。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach DkMathTest.NumberTheory.GoldbachGNFiber`: 成功。`decide +kernel` の n=10 exact cardinality は不要に高コストだったため、n=10 は `GoldbachPairAt` と一般 pair-overlap bound の回帰に限定。n=2 と n=6 は exact overlap values を kernel 検証。
+- 指示書の停止点以後の provider、mirror、CRT occupancy theorem、new axiom は追加していない。
+
+## 007: Pascal pair layer
+
+- `PairOverlap.lean` に local residual `choose (card - 1) 2`、generic `r`-fold multiplicity、`r=0,1,2` の simp facts、local Pascal identity、global residual sum を追加した。
+- `goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual` を exact global decomposition として実装し、`goldbachOverlapExcess_le_primePairOverlapCount` はその corollary に整理した。
+- `n=2` の residual 0、`n=6` の pair overlap 1、`n=35,u=5` の support card 3 / local residual 1 を kernel regression に追加した。`n=10` は高コストな exact cardinality decide を避け、finite pair existence と一般 bound を検証した。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.PairOverlap`、facade、回帰テスト、`AxiomAudit.lean`、`git diff --check`、root `DkMath` build を実行する。
+- GTail import、GTail equivalence、product-wave、uniform escape、Strong Goldbach theorem は停止境界として未実装のまま維持する。
