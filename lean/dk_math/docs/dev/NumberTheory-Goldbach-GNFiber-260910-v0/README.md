@@ -8,7 +8,9 @@ cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
 
 **有限還元・CRT 計数・条件付き閉包を実装した。ゴールドバッハ予想の全称証明は閉じていない。**
 
-8 個の owner モジュールに 70 定理、定義・構造を含めて 96 個の名前付き宣言を追加した。数学的な意味、必要な仮定、証明が主張しない範囲は Lean の module/public docstring に記載した。公開入口は [DkMath.NumberTheory.Goldbach](../../../DkMath/NumberTheory/Goldbach.lean) で、`DkMath.lean` からも import する。
+10 個の owner モジュールに overlap ledger を追加した。数学的な意味、必要な仮定、証明が主張しない範囲は Lean の module/public docstring に記載した。公開入口は [DkMath.NumberTheory.Goldbach](../../../DkMath/NumberTheory/Goldbach.lean) で、`DkMath.lean` からも import する。
+
+instruction-006 の停止境界は遵守し、最後の定理は `goldbachOverlapExcess_le_primePairOverlapCount`。この段階で universal escape provider や Goldbach の最終証明は追加していない。
 
 ## 方針文書との対応
 
@@ -29,6 +31,8 @@ cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
 | 13. 最終 endpoint | **条件付きで実装。全称的な escape provider は未証明** | `strongGoldbach_of_capacityEscape`, `goldbachGNFiberAt_of_capacityEscape` |
 | 高次数 classifier | 有限 signature と既存 GN 必要条件を接続 | [Signature](../../../DkMath/NumberTheory/Goldbach/Signature.lean): `goldbachGNSignature`, `goldbach_signature_constraints` |
 | 証明経路の検証 | 強すぎる中間命題の反例を kernel で証明 | [Limitations](../../../DkMath/NumberTheory/Goldbach/Limitations.lean) |
+| 14. overlap ledger | `Incidence = Covered + OverlapExcess` と survivor conservation | [Overlap](../../../DkMath/NumberTheory/Goldbach/Overlap.lean) |
+| 15. pair-overlap ledger | unordered support-pair の二重計数と excess 上界 | [PairOverlap](../../../DkMath/NumberTheory/Goldbach/PairOverlap.lean) |
 
 添付文書にある保存量の候補列挙（prime-wave、q-adic signature の輸送等）は具体的な数学命題や provider を与えていない。本実装はそれらの存在を仮定していない。signature の片側から他方の素数性を無条件に輸送する単純な形は、反例により否定した。
 
@@ -80,12 +84,14 @@ def GoldbachCapacityEscape : Prop :=
 
 生存 offset は `u=1`、素数対は `5+7`。この具体例から単純 incidence 経路の全称条件を反証し、同時に正確な容量式から `GoldbachPairAt 6` を証明した。これは Goldbach の反例でも、他の構造的証明の不可能性証明でもない。
 
+instruction-006 ではこの例を重複帳簿の最小回帰に昇格した。`goldbachOverlapExcess 6 = 1`、`goldbachPrimePairOverlapCount 6 = 1`、および一般定理 `goldbachIncidenceConservation 6` を kernel で検査している。
+
 ## 検証
 
 - [回帰コード](../../../DkMathTest/NumberTheory/GoldbachGNFiber.lean): 等しい素数対、cutoff 素数の endpoint 例外、平方根境界、局所合流、paired 30-wheel、空世界、精密化、`n=0,1`、および `2≤n≤100`。
 - `goldbach_centers_two_through_one_hundred`: 偶数 `4..200` に対する有限証明。`decide +kernel` を使用し、全称予想の証明とは区別する。
 - [AxiomAudit.lean](AxiomAudit.lean): 96 個の全名前付き owner 宣言と有限範囲定理の依存公理を検査する再実行可能コード。
-- 最終ビルドと監査の実測結果は [report-005.md](report-005.md) に記載する。
+- 最終ビルドと監査の実測結果は [report-005.md](report-005.md) と [report-006.md](report-006.md) に記載する。
 
 再現コマンドの cwd は `lean/dk_math`。
 
@@ -102,5 +108,6 @@ lake env lean docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/AxiomAudit.lean
 - [report-003](report-003.md): 容量閉包、PCK、signature。
 - [report-004](report-004.md): CRT 全周期計数と反例。
 - [report-005](report-005.md): 最終検証結果。
+- [report-006](report-006.md): overlap ledger / pair-overlap checkpoint。
 - [verification-notes](verification-notes.md): 検証順と局所修正のメモ。
 - [declaration-index](declaration-index.md): 実ソースから抽出した宣言一覧。

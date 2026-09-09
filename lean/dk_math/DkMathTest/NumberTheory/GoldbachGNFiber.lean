@@ -49,6 +49,30 @@ example : goldbachSurvivors 6 {2} = {1, 3} ∧
 /-- Centers zero and one have no prime pair. -/
 example : ¬ GoldbachPairAt 0 ∧ ¬ GoldbachPairAt 1 := by decide +kernel
 
+/-- The overlap ledger starts with the endpoint-only equal pair at center two. -/
+example : goldbachOverlapExcess 2 = 0 ∧
+    goldbachPrimePairOverlapCount 2 = 0 := by decide +kernel
+
+/-- Center six is the first positive overlap-payment regression. -/
+example : goldbachIncidence 6 (goldbachSmallPrimes 6) = 5 ∧
+    goldbachOverlapExcess 6 = 1 ∧
+    goldbachPrimePairOverlapCount 6 = 1 := by decide +kernel
+
+theorem goldbach_six_overlap_excess : goldbachOverlapExcess 6 = 1 := by
+  decide +kernel
+
+theorem goldbach_six_incidence_conservation :
+    (goldbachSurvivors 6 (goldbachSmallPrimes 6)).card +
+        goldbachIncidence 6 (goldbachSmallPrimes 6) =
+      (6 - 1) + goldbachOverlapExcess 6 := by
+  rw [goldbachIncidenceConservation]
+
+/-- Center ten exercises proper endpoint exceptions and the exact finite ledger. -/
+example : GoldbachPairAt 10 := by decide +kernel
+
+example : goldbachOverlapExcess 10 ≤ goldbachPrimePairOverlapCount 10 := by
+  exact goldbachOverlapExcess_le_primePairOverlapCount 10
+
 /-- Kernel-checked bounded verification for even targets four through two hundred. -/
 theorem goldbach_centers_two_through_one_hundred :
     ∀ n ∈ Finset.range 101, 2 ≤ n → GoldbachPairAt n := by
@@ -65,5 +89,10 @@ theorem goldbach_centers_two_through_one_hundred :
 #print axioms goldbach_not_universal_strict_incidence
 #print axioms strongGoldbach_iff_capacityEscape
 #print axioms strongGoldbach_of_capacityEscape
+#print axioms goldbachIncidence_eq_covered_add_overlapExcess
+#print axioms goldbachIncidenceConservation
+#print axioms goldbachPairAt_iff_incidence_lt_offsets_add_overlap
+#print axioms goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity
+#print axioms goldbachOverlapExcess_le_primePairOverlapCount
 
 end DkMathTest.NumberTheory.GoldbachGNFiber

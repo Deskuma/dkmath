@@ -41,3 +41,12 @@
 - root build は成功。既存研究モジュールの `sorry` 警告のみ 5 件。
 - 96 件の全名前付き owner 宣言と有限範囲定理、合計 97 件を `#print axioms` で監査。標準の 3 公理以外の依存なし。
 - ビルドログと監査出力の要約および証拠ファイルは `report-005.md` を参照。
+
+## 006: Overlap / PairOverlap
+
+- 指示書の境界を確認。既存定義を再利用し、Goldbach から Legendre facade への依存は追加しなかった。
+- `Overlap.lean`: obstruction support、support/cardinality bridge、wave-side incidence double count、`Incidence = Covered + OverlapExcess`、survivor/incidence conservation、固定中心 criterion を実装。
+- `PairOverlap.lean`: unordered small-prime pair、local `choose k 2` multiplicity、pair overlap offsets、canonical pair の exact double count、`OverlapExcess ≤ PairOverlapCount` を実装。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach.PairOverlap`: 成功。
+- `./lean-build.sh DkMath.NumberTheory.Goldbach DkMathTest.NumberTheory.GoldbachGNFiber`: 成功。`decide +kernel` の n=10 exact cardinality は不要に高コストだったため、n=10 は `GoldbachPairAt` と一般 pair-overlap bound の回帰に限定。n=2 と n=6 は exact overlap values を kernel 検証。
+- 指示書の停止点以後の provider、mirror、CRT occupancy theorem、new axiom は追加していない。

@@ -11,6 +11,8 @@ import DkMath.NumberTheory.Goldbach.Capacity
 import DkMath.NumberTheory.Goldbach.Conservation
 import DkMath.NumberTheory.Goldbach.Signature
 import DkMath.NumberTheory.Goldbach.Limitations
+import DkMath.NumberTheory.Goldbach.Overlap
+import DkMath.NumberTheory.Goldbach.PairOverlap
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -23,4 +25,7 @@ GN signature APIs. `StrongGoldbach` is a proposition. Its conditional closure
 requires `GoldbachCapacityEscape`, which is proved equivalent to it; no
 unconditional provider is present. `Limitations` records kernel-checked
 counterexamples to stronger shortcuts, including the strict incidence bound.
+
+`Overlap` and `PairOverlap` add exact finite ledger identities. They stop at
+the pair-overlap upper bound and do not provide a universal escape theorem.
 -/
