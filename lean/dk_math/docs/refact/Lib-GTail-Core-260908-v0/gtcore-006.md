@@ -1,15 +1,22 @@
-# GTCORE-006 Compatibility Layer (Deprecation Deferred)
+# GTCORE-006 Compatibility Layer — Final Outcome
 
 Date: 2026-09-10
-Status: compatibility layer complete; deprecation deferred
+Status: compatibility layer complete; trial replacement validated; deprecation deferred
 Branch: `refact/DkMath-Lib-GTail-Core-260908-v0`
 Source/build root: `lean/dk_math`
+Evidence commit: `a4e39690a` (`refact: GTCORE-006: test refact replace`)
 
 このメモは、`analysis-001.md` の GTCORE-006
 「compatibility / deprecated layer」を、既存 consumer の全面移行を開始せずに
 実施した記録である。対象は、旧 `GN` / `cosmic_id_csr'` endpoint と、Lib 側に
 残る重複 alias の documented wrapper 化である。互換性を優先し、今回の checkpoint
 では `@[deprecated]` を付けない判断に変更した。
+
+今回の trial replacement では canonical `GN` を実 consumer の一部へ直接適用し、
+全体の `DkMath` / `DkMathTest` build が通ることまで確認した。ただし、これは
+global rename や全 downstream の移行完了を意味しない。互換 wrapper を残したまま、
+どこまでが機械的に置換でき、どこからが意味・elaboration・証明形状の調整を要するか
+を確定した checkpoint である。
 
 ## 1. Canonical replacement
 
@@ -68,7 +75,66 @@ see:
 
 - [GN, G parameter order investigation](gn-g-parameter-order-investigation.md)
 
-## 3. Regression
+## 3. Trial replacement: confirmed results and remaining issues
+
+今回の試行変更では、次の範囲を canonical surface に寄せた。
+
+- `Defs.GN` を `{R} d x u` に固定した。`GTail d r x u` および legacy
+  `CosmicFormulaBinom.GN d x u` と degree-first が一致し、通常の呼び出しでは `R`
+  を `x` / `u` から推論できる。
+- `CosmicFormulaBinom.GN` は旧公開名・旧引数順の compatibility wrapper として残し、
+  canonical `CosmicFormula.GN` へ委譲した。
+- `BodyN`、`CoreBeamGap`、`SquareGnomon`、`SquareBody` の代表的な consumer で、
+  canonical `GN` または `GTail` の直接参照を試した。
+- `GN_eq_G`、`G_eq_GN`、`cosmic_id_csr'` および `GN_eq_sum` は、canonical
+  theorem を根にした既存公開面として維持した。
+- compatibility regression で旧名と canonical 名の definitional compatibility および
+  endpoint identity を確認した。
+
+### 3.1 What the full-build trial establishes
+
+全モジュールの成功は、今回変更した canonical signature と wrapper の組み合わせが、
+現行 import graph と既存 theorem 群の範囲で elaboration を壊していないことを示す。
+特に、`BodyN` の定義本体を canonical `GN` にしても、既存 consumer を wrapper 経由で
+残せるため、段階移行の足場として機能する。
+
+これは数学的な新結果ではなく、次の API 境界を build で確認した結果である。
+
+```text
+GTail d r x u
+        ↓ r = 1
+CosmicFormula.GN d x u
+        ↓ compatibility wrapper
+CosmicFormulaBinom.GN d x u
+```
+
+### 3.2 Issues exposed by the trial
+
+単純な textual replacement だけでは全 consumer を移行できないことも確定した。
+
+- canonical `GN` の `R` を implicit にしたため、旧試行のように `GN R ...` や
+  `GN ℚ ...` と型を positional に渡す呼び出しは、そのままでは成立しない。必要な箇所は
+  `(R := R)` / `(R := ℚ)` または named arguments に直す必要がある。
+- `GN` を `GTail` の abbrev として残しても、tactic の `rw` が常に abbrev を展開して
+  `GTail_one_eq_sum` を見つけるわけではない。`BodyN` / canonical `GN` を明示的に
+  unfold してから `GTail_one_eq_sum` を使う証明形状が必要になる場合がある。
+  `SquareGnomon` と `SquareBody` がこの実例である。
+- `SquareGnomon` は式の意味上 `GN 2 u x` を使う。一般の `GN d x u` を機械的に
+  置換すると `2 * u + x` になり、必要な `2 * x + u` と一致しない。これは API 順序の
+  問題ではなく、Gnomon 用途で `x` と `u` を交換している数学的役割の問題である。
+- `CosmicFormulaBinom.G` と `CosmicFormula.G` は同じ名前の文字列でも意味が異なる。
+  前者は gap-normalized GN family、後者は body-normalized `GZ` alias であるため、
+  `G` の global rename は実施できない。
+- 現在も多数の FLT / ABC / Primitive / Goldbach / research consumer は旧
+  `CosmicFormulaBinom.GN`、`GN_eq_sum`、`cosmic_id_csr'` を参照している。今回の
+  full build 成功は wrapper が残る状態での互換性を示すもので、consumer 全面移行の
+  完了を示さない。
+
+したがって、canonical signature の採用自体は成立したが、deprecated warning を一斉に
+有効化するには、残存 consumer の semantic role と proof-shape を個別に確認する必要が
+ある。
+
+## 4. Regression
 
 新規 regression
 `DkMathTest/CosmicFormula/GTailCompatibility.lean` を追加した。
@@ -83,7 +149,7 @@ see:
 旧名を実際に参照する regression でも、今回の wrapper は deprecation warning を
 発生させない。
 
-## 4. Verification
+## 5. Verification
 
 ### Focused build
 
@@ -125,7 +191,27 @@ diagnostics も出力されたが、今回追加した source / regression に�
 `git diff --check`、対象 source / regression の末尾空白監査、および対象 source /
 regression の `sorry|axiom` 監査も成功した。
 
-## 5. Not done
+### Full module and test build after the trial replacement
+
+現コミット `a4e39690a` に対して、リポジトリの build wrapper を再実行した。
+
+```bash
+cd lean/dk_math
+./lean-build.sh
+```
+
+結果は `DkMath` の `9841` jobs 完了、exit code `0`、`build succeeded` である。
+続けて regression を含む test 側も再実行した。
+
+```bash
+./lean-build.sh -T
+```
+
+結果は `DkMathTest` の `10043` jobs 完了、exit code `0`、`test build succeeded`
+である。出力された `sorry` 警告は既存 research declaration に由来し、今回の
+compatibility layer に新たな `sorry` / `axiom` は追加していない。
+
+## 6. Not done / next boundary
 
 - global `GN -> GTail` rename
 - FLT / ABC / Primitive / RH / CFBRC / Goldbach consumer の downstream migration

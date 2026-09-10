@@ -1,7 +1,7 @@
 # GN / G Parameter-Order Investigation
 
 Date: 2026-09-10
-Status: design investigation only; no source implementation performed here
+Status: design investigation plus bounded trial evidence; broad migration not performed
 Source/build root: `lean/dk_math`
 
 このメモは、ユーザー提供の `__git.diff` を指示書ではなく、試行変更の証拠として
@@ -149,14 +149,16 @@ surface の独立した変更として行う。`Defs.G` を残す場合は `GZ` 
 処理する。`GN d x u` の positional call は既に大量に存在するため、全 consumer を
 named arguments に変換する必要はない。
 
-## 5. Treatment of the current worktree
+## 5. Treatment of the trial result
 
-現在の trial diff は、`Defs.GN` の d-first 化という採用候補と、generic theorem の
-誤った cubic 固定、canonical direct reference への大規模な置換を混在させている。
-従って、そのまま積み上げず、設計確定後に trial source changes をいったん捨てて、
-上記 Phase A の最小差分として作り直すのが安全である。
+trial diff のうち、`Defs.GN` の d-first 化、`R` の implicit 化、compatibility wrapper、
+および代表 consumer の canonical direct reference は evidence commit
+`a4e39690a` に採用された。generic theorem の `d` を誤って cubic `3` に固定する変更や、
+全 consumer の大規模置換は採用していない。
 
-この調査では、ユーザー変更を保つため source の reset は実行していない。
+従って、現在の結論は「canonical signature は採用可能だが、compatibility wrapper を
+残した bounded migration に限る」である。full `DkMath` / `DkMathTest` build の結果と
+残存 consumer の課題は `gtcore-006.md` に最終記録した。
 
 ## 6. Non-goals of this investigation
 
@@ -225,3 +227,7 @@ declaration の `R` を implicit にする必要がある。
 従って推奨は、`GN` については `R` implicit + `d x u` を canonical signature に
 してから wrapper を置換すること、`G` については前節の semantic split を維持して
 別 owner ごとに移行することである。
+
+この推奨は bounded trial で確認された。`@[deprecated]` の導入と global rename は、
+残存 consumer の意味・証明形状・warning 処理計画が確定するまで後続 checkpoint に
+延期する。
