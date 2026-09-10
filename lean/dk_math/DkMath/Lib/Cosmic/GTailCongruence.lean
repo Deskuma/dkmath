@@ -124,6 +124,76 @@ theorem GN_modEq_mul_pow_self_of_dvd_x
   simpa [Nat.choose_one_right] using h
 
 /-!
+### Prime divisibility address
+
+Modulo a prime `p`, the `r = 1` row has only its terminal power of `x`
+remaining.  This gives the exact divisibility address without any
+coprimality assumption on the endpoints.
+-/
+
+private theorem prime_row_modEq_last
+    {p g u : ℕ} (hp : Nat.Prime p) :
+    GTail p 1 g u ≡ g ^ (p - 1) [MOD p] := by
+  let f : ℕ → ℕ := fun k =>
+    Nat.choose p (k + 1) * g ^ k * u ^ (p - 1 - k)
+  have hsum : GTail p 1 g u = ∑ k ∈ Finset.range p, f k := by
+    simpa [f] using (GTail_one_eq_sum (R := ℕ) p g u)
+  have hprev : ∀ k, k < p - 1 → f k ≡ 0 [MOD p] := by
+    intro k hk
+    have hchoose : p ∣ Nat.choose p (k + 1) :=
+      hp.dvd_choose_self (by omega) (by omega)
+    have hterm : p ∣ f k := by
+      dsimp [f]
+      simpa [mul_assoc] using
+        (dvd_mul_of_dvd_left hchoose (g ^ k * u ^ (p - 1 - k)))
+    exact Nat.modEq_zero_iff_dvd.mpr hterm
+  have hlast : f (p - 1) ≡ g ^ (p - 1) [MOD p] := by
+    dsimp [f]
+    have hp1 : 1 ≤ p := hp.one_le
+    simpa [Nat.sub_add_cancel hp1] using
+      (Nat.ModEq.rfl : g ^ (p - 1) ≡ g ^ (p - 1) [MOD p])
+  have hsplit : p - 1 + 1 = p := Nat.sub_add_cancel hp.one_le
+  have hsum_eq :
+      (∑ k ∈ Finset.range p, f k) =
+        (∑ k ∈ Finset.range (p - 1), f k) + f (p - 1) := by
+    calc
+      (∑ k ∈ Finset.range p, f k) =
+          ∑ k ∈ Finset.range (p - 1 + 1), f k := by rw [hsplit]
+      _ = (∑ k ∈ Finset.range (p - 1), f k) + f (p - 1) := by
+        rw [Finset.sum_range_succ]
+  rw [hsum, hsum_eq]
+  have hprevZero' :
+      (∑ k ∈ Finset.range (p - 1), f k) ≡ 0 [MOD p] := by
+    have hprevZero :=
+      sum_range_modEq (n := p) (m := p - 1) (f := f)
+        (g := fun _ : ℕ => 0) (fun k hk => hprev k hk)
+    simpa using hprevZero
+  simpa using hprevZero'.add hlast
+
+/-
+The prime divisibility address for the normalized prime row.  This theorem
+includes `p = 2`; the odd-prime restriction starts at the mod-`p^2` layer.
+-/
+theorem prime_dvd_GN_iff_dvd_gap
+    {p g u : ℕ} (hp : Nat.Prime p) :
+    p ∣ GTail p 1 g u ↔ p ∣ g := by
+  constructor
+  · intro hGN
+    have hzero : GTail p 1 g u ≡ 0 [MOD p] :=
+      Nat.modEq_zero_iff_dvd.mpr hGN
+    have hpow : g ^ (p - 1) ≡ 0 [MOD p] :=
+      (prime_row_modEq_last hp).symm.trans hzero
+    exact hp.dvd_of_dvd_pow (Nat.modEq_zero_iff_dvd.mp hpow)
+  · intro hpg
+    have hmod := GN_modEq_choose_mul_pow_of_dvd_x
+      (d := p) (n := p) g u hp.one_le hpg
+    apply Nat.dvd_iff_mod_eq_zero.mpr
+    change GTail p 1 g u % p =
+      (Nat.choose p 1 * u ^ (p - 1)) % p at hmod
+    rw [hmod]
+    simp [Nat.choose_one_right]
+
+/-!
 ### Prime-row interior boundary
 
 For an interior row of a prime Pascal row, the next normalized tail is
@@ -175,6 +245,16 @@ This is the `mod p^2` version of the cosmic formula collapse.
 theorem GN_modEq_head_mod_sq_of_prime_dvd_x
     {p : ℕ} (x u : ℕ)
     (hp : Nat.Prime p) (hp5 : 5 ≤ p)
+    (hpx : p ∣ x) :
+    GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 2] := by
+  simpa [Nat.choose_one_right] using
+      (GTail_modEq_head_mod_sq_of_prime_dvd_x
+      (p := p) (r := 1) x u hp (by omega) (by omega) hpx)
+
+/-- The `r = 1` mod-`p^2` API specialized to odd primes. -/
+theorem GN_modEq_head_mod_sq_of_odd_prime_dvd_x
+    {p : ℕ} (x u : ℕ)
+    (hp : Nat.Prime p) (hp3 : 3 ≤ p)
     (hpx : p ∣ x) :
     GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 2] := by
   simpa [Nat.choose_one_right] using
