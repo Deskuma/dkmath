@@ -317,7 +317,8 @@ This wrapper is kept to avoid breaking downstream imports during the transition.
 refactor 移行期のあいだはこの公開名を温存し、downstream は段階的に
 `GTail` 直接参照へ寄せていく。
 -/
-@[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+@[deprecated DkMath.CosmicFormula.GN (since := "2026-09-10"), simp]
+abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
   DkMath.CosmicFormula.GN R x u d
 
 /--
@@ -326,6 +327,7 @@ Compatibility bridge to the legacy explicit sum shape of `GN`.
 This lemma is kept so that downstream files depending on the old expansion can
 be migrated incrementally instead of switching to `GTail` all at once.
 -/
+@[deprecated DkMath.CosmicFormula.GTail_one_eq_sum (since := "2026-09-10")]
 theorem GN_eq_sum {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     GN d x u =
       ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k) := by
@@ -364,16 +366,16 @@ theorem cosmic_id_csr {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
       pow_zero, pow_one, Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
+/-!
+Compatibility wrapper for the canonical lower-Lib `GTail` identity.  New code
+should use `DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap`.
+-/
+@[deprecated DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap
+  (since := "2026-09-10")]
 theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
         (x + u) ^ d = x * GN d x u + u ^ d := by
-  by_cases hd : d = 0
-  · subst hd
-    simp [GN]
-  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
-    have htail :=
-      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
-    simpa [GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one, pow_zero, pow_one,
-      Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
+  simpa [GN] using
+    DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap (R := R) d x u
 
 /--
 Big-Gap（1 Gap 抽出版）:
