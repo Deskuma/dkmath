@@ -123,6 +123,50 @@ theorem GN_modEq_mul_pow_self_of_dvd_x
   have h := GN_modEq_head_of_dvd_x x u hdpos hdx
   simpa [Nat.choose_one_right] using h
 
+/-!
+### Prime-row interior boundary
+
+For an interior row of a prime Pascal row, the next normalized tail is
+divisible by `p`.  Combined with `p ∣ x`, this makes the recursive remainder
+divisible by `p^2`.
+-/
+
+/--
+For a prime `p`, an interior `GTail` row has the boundary congruence modulo
+`p^2` whenever `p ∣ x`.
+
+The range `1 ≤ r` and `r + 1 < p` is exactly the prime-row interior
+`1 ≤ r ≤ p - 2`.  This is the general `r` form of the existing `GN`
+(`r = 1`) congruence.  No coprimality or `p ∤ u` assumption is needed for
+this finite congruence.
+-/
+theorem GTail_modEq_head_mod_sq_of_prime_dvd_x
+    {p r : ℕ} (x u : ℕ)
+    (hp : Nat.Prime p) (hr : 1 ≤ r) (hrp : r + 1 < p)
+    (hpx : p ∣ x) :
+    GTail p r x u ≡ Nat.choose p r * u ^ (p - r) [MOD p ^ 2] := by
+  have hlt : r < p := by omega
+  rw [GTail_rec p r x u hlt]
+  have hnext := GTail_modEq_eval_zero_of_dvd_x x u hpx (n := p) (d := p) (r := r + 1)
+  rw [GTail_eval_zero p (r + 1) u] at hnext
+  have hchoose : p ∣ Nat.choose p (r + 1) :=
+    hp.dvd_choose_self (by omega) (by omega)
+  have hnext_head : p ∣ Nat.choose p (r + 1) * u ^ (p - (r + 1)) :=
+    dvd_mul_of_dvd_left hchoose _
+  have hnext_dvd : p ∣ GTail p (r + 1) x u := by
+    apply Nat.dvd_iff_mod_eq_zero.mpr
+    change GTail p (r + 1) x u % p =
+      (Nat.choose p (r + 1) * u ^ (p - (r + 1))) % p at hnext
+    rw [hnext, Nat.dvd_iff_mod_eq_zero.mp hnext_head]
+  have hprod : p ^ 2 ∣ x * GTail p (r + 1) x u := by
+    rw [pow_two p]
+    exact Nat.mul_dvd_mul hpx hnext_dvd
+  change
+    (Nat.choose p r * u ^ (p - r) + x * GTail p (r + 1) x u) % p ^ 2 =
+      (Nat.choose p r * u ^ (p - r)) % p ^ 2
+  have hmod := Nat.dvd_iff_mod_eq_zero.mp hprod
+  rw [Nat.add_mod, hmod, Nat.add_zero, Nat.mod_mod]
+
 /--
 When `p` is prime and `p ∣ x`, then `GN p x u ≡ p * u^{p-1} [MOD p^2]`.
 
@@ -133,36 +177,9 @@ theorem GN_modEq_head_mod_sq_of_prime_dvd_x
     (hp : Nat.Prime p) (hp5 : 5 ≤ p)
     (hpx : p ∣ x) :
     GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 2] := by
-  have hlt : 1 < p := hp.one_lt
-  rw [GN_tail_rec p x u hlt]
-  simp only [Nat.choose_one_right]
-  suffices h : p ^ 2 ∣ x * GTail p 2 x u by
-    change (p * u ^ (p - 1) + x * GTail p 2 x u) % p ^ 2 = (p * u ^ (p - 1)) % p ^ 2
-    have hmod := Nat.dvd_iff_mod_eq_zero.mp h
-    rw [Nat.add_mod, hmod, Nat.add_zero, Nat.mod_mod]
-  have hGTail2 : GTail p 2 x u =
-      (Nat.choose p 2 : ℕ) * u ^ (p - 2) + x * GTail p 3 x u :=
-    GTail_rec p 2 x u (by omega)
-  rw [hGTail2]
-  have hchoose2 : p ∣ Nat.choose p 2 :=
-    hp.dvd_choose_self (by omega) (by omega)
-  have h1 : p ^ 2 ∣ x * (Nat.choose p 2 * u ^ (p - 2)) := by
-    have hpp : p ^ 2 ∣ x * Nat.choose p 2 :=
-      pow_two p ▸ Nat.mul_dvd_mul hpx hchoose2
-    have : x * (Nat.choose p 2 * u ^ (p - 2)) = x * Nat.choose p 2 * u ^ (p - 2) := by
-      ring
-    rw [this]
-    exact dvd_mul_of_dvd_left hpp _
-  have h2 : p ^ 2 ∣ x * (x * GTail p 3 x u) := by
-    have : x * (x * GTail p 3 x u) = x * x * GTail p 3 x u := by
-      ring
-    rw [this]
-    exact dvd_mul_of_dvd_left (pow_two p ▸ Nat.mul_dvd_mul hpx hpx) _
-  have heq : x * (Nat.choose p 2 * u ^ (p - 2) + x * GTail p 3 x u) =
-      x * (Nat.choose p 2 * u ^ (p - 2)) + x * (x * GTail p 3 x u) := by
-    ring
-  rw [heq]
-  exact Nat.dvd_add h1 h2
+  simpa [Nat.choose_one_right] using
+    (GTail_modEq_head_mod_sq_of_prime_dvd_x
+      (p := p) (r := 1) x u hp (by omega) (by omega) hpx)
 
 /--
 Plan-name alias: `mod p^2` head congruence for `GN`.
