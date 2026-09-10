@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.Basic
 import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.Cosmic.GTail
+import DkMath.Lib.Cosmic.GTailCyclotomic
 import DkMath.Lib.Cosmic.GTailPascal
 import DkMath.Lib.Cosmic.GTailBoundary
 import DkMath.Lib.Cosmic.GTailNat
