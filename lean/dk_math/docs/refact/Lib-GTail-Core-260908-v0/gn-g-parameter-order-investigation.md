@@ -165,3 +165,63 @@ named arguments に変換する必要はない。
 - FLT / ABC / Zsigmondy / RH の一括 migration
 - deprecation warning の全消去
 - 新しい数学的 theorem の追加
+
+## 7. Exact cause of the application type mismatch
+
+この error の直接原因は、degree の順序だけではなく、型引数 `R` の explicit / implicit
+属性の差である。
+
+旧 wrapper は概念的に次の型を持つ。
+
+```lean
+@DkMath.CosmicFormulaBinom.GN :
+  {R : Type u} → [CommSemiring R] → ℕ → R → R → R
+```
+
+そのため通常の `GN d x u` では、implicit な `R` が `x` / `u` から推論され、最初の
+positional argument は `d` になる。
+
+一方、試行中の canonical declaration は次の型である。
+
+```lean
+@DkMath.CosmicFormula.GN :
+  (R : Type u) → [CommSemiring R] → ℕ → R → R → R
+```
+
+従って `DkMath.CosmicFormula.GN d x u` は elaborator には
+`@DkMath.CosmicFormula.GN d ...` と見え、最初の `d : ℕ` を型引数 `R : Type u` に
+渡そうとする。`__build.log` の
+
+```text
+argument d has type ℕ but is expected to have type Type ?u
+in @CosmicFormula.GN d
+```
+
+はこの対応をそのまま表示している。error 中の `@` はユーザーが書いたものではなく、
+Lean が implicit parameter を展開して表示しているものでもある。
+
+したがって、現在の explicit-`R` API を維持するなら、次は正しい。
+
+```lean
+DkMath.CosmicFormula.GN (R := R) (d := d) (x := x) (u := u)
+```
+
+`x` / `u` から `R` が一意に推論できる箇所では、`(R := R)` を省略してもよい。
+
+本当に単純な textual replacement
+`GN d x u` → `DkMath.CosmicFormula.GN d x u` を成立させたい場合は、canonical
+declaration の `R` を implicit にする必要がある。
+
+```lean
+@[simp] abbrev GN {R : Type*} [CommSemiring R]
+    (d : ℕ) (x u : R) : R :=
+  GTail d 1 x u
+```
+
+この変更を採用した場合、`DkMath.CosmicFormula.GN (R := R) d x u` はそのまま利用
+でき、`DkMath.CosmicFormula.GN R d x u` と `DkMath.CosmicFormula.GN ℚ d x u` の
+ように `R` を positional に渡していた箇所だけを更新する必要がある。
+
+従って推奨は、`GN` については `R` implicit + `d x u` を canonical signature に
+してから wrapper を置換すること、`G` については前節の semantic split を維持して
+別 owner ごとに移行することである。

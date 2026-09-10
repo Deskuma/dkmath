@@ -20,7 +20,7 @@ example (d : ℕ) (x u : ℚ) :
   exact add_pow_eq_mul_GTail_one_add_gap d x u
 
 example (d : ℕ) (x u : ℚ) :
-    DkMath.CosmicFormulaBinom.GN d x u = DkMath.CosmicFormula.GN ℚ x u d := by
+    DkMath.CosmicFormulaBinom.GN d x u = DkMath.CosmicFormula.GN d x u := by
   rfl
 
 example (d : ℕ) (x u : ℚ) :

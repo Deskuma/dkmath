@@ -82,7 +82,7 @@ Canonical gap-normalized kernel.
 
 This is the `r = 1` specialization of the general tail family.
 -/
-@[simp] abbrev GN (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
+@[simp] abbrev GN {R : Type*} [CommSemiring R] (d : ℕ) (x u : R) : R :=
   GTail d 1 x u
 
 /--

@@ -201,7 +201,6 @@ theorem GN_tail_rec
 /--
 Compatibility alias matching the implementation-plan naming.
 -/
-@[deprecated GN_tail_rec (since := "2026-09-10")]
 theorem GN_tail_decomposition
     {R : Type _} [CommSemiring R]
     (d : ℕ) (x u : R) (hd : 1 < d) :
@@ -214,7 +213,6 @@ Compatibility alias for the old `Gbinom`-flavored recursion name.
 
 [GNZC] New code should prefer `GN_tail_rec`.
 -/
-@[deprecated GN_tail_rec (since := "2026-09-10")]
 theorem Gbinom_tail_rec
     {R : Type _} [CommSemiring R]
     (d : ℕ) (x u : R) (hd : 1 < d) :
@@ -272,7 +270,6 @@ Compatibility alias for the old `Gbinom`-flavored zero-evaluation name.
 
 [GNZC] New code should prefer `GN_zero_eval`.
 -/
-@[deprecated GN_zero_eval (since := "2026-09-10")]
 theorem Gbinom_zero_eval
     {R : Type _} [CommSemiring R]
     (d : ℕ) (u : R) :
