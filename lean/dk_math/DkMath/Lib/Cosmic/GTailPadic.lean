@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Lib.Cosmic.GTailNat
-import DkMath.ABC.PadicValNat
+import DkMath.Lib.NumberTheory.PadicValNat
 
 #print "file: DkMath.Lib.Cosmic.GTailPadic"
 
@@ -66,15 +66,17 @@ theorem padicValNat_higher_tail_lower_bound
     apply htail_ne
     rw [hk, hxpow0, zero_mul]
   have hvxpow : padicValNat p (x ^ r) = r * padicValNat p x :=
-    DkMath.ABC.padicValNat_pow' hp r hxpow_ne
+    DkMath.Lib.NumberTheory.padicValNat_pow' hp r hxpow_ne
   have hpk_dvd_xpow : p ^ (r * padicValNat p x) ∣ x ^ r := by
-    exact (DkMath.ABC.padicValNat_le_iff_dvd hp hxpow_ne (r * padicValNat p x)).mp
+    exact (DkMath.Lib.NumberTheory.padicValNat_le_iff_dvd hp hxpow_ne
+      (r * padicValNat p x)).mp
       (by simp [hvxpow])
   have hpk_dvd_tail :
       p ^ (r * padicValNat p x) ∣
         ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) :=
     dvd_trans hpk_dvd_xpow hxdvd
-  exact (DkMath.ABC.padicValNat_le_iff_dvd hp htail_ne (r * padicValNat p x)).mpr
+  exact (DkMath.Lib.NumberTheory.padicValNat_le_iff_dvd hp htail_ne
+    (r * padicValNat p x)).mpr
     hpk_dvd_tail
 
 /--
@@ -122,7 +124,7 @@ theorem padicValNat_tail_exact_of_head_unit
   letI : Fact (Nat.Prime p) := ⟨hp⟩
   rw [hfactor]
   rw [padicValNat.mul hxpow_ne hgtail_ne]
-  rw [DkMath.ABC.padicValNat_pow' hp r hxpow_ne]
+  rw [DkMath.Lib.NumberTheory.padicValNat_pow' hp r hxpow_ne]
   rw [padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x hp hr hhead hpx]
   simp
 

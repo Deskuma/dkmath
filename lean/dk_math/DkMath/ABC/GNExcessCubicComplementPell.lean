@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.GNExcessCubicComplement
 
-#print "file: DkMath.ABC.GNExcessCubicComplement"
+#print "file: DkMath.ABC.GNExcessCubicComplementPell"
 
 /-!
 # Pell family for the canonical cubic complement
