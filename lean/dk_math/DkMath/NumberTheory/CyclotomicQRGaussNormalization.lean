@@ -114,6 +114,48 @@ theorem quadraticGauss_ne_zero
     rcases signedPrimeDiscriminant_eq_or_neg p with h | h <;> omega
   exact hne hsq.symm
 
+/-! The finite-field nonvanishing input needed for a residue-field transport
+argument does not require an `Algebra ℚ` structure.  The source of the Gauss
+sum is still `ZMod p`, while the target field may have a distinct prime
+characteristic `q`; the cardinality hypothesis is exactly `q ∤ p`. -/
+
+theorem quadraticGauss_ne_zero_of_char_ne
+    {K : Type*} [Field K] {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
+    [CharP K q] (hp2 : p ≠ 2) (hq2 : q ≠ 2) (hpq : q ≠ p)
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) :
+    quadraticGauss ζ hζ ≠ 0 := by
+  have htwo : (2 : K) ≠ 0 := by
+    intro hzero
+    have hdiv : q ∣ 2 := (CharP.cast_eq_zero_iff K q 2).mp hzero
+    have hqle : q ≤ 2 := Nat.le_of_dvd (by norm_num) hdiv
+    have hqpos : 2 ≤ q := (Fact.out : Nat.Prime q).two_le
+    omega
+  have hsource_char : ringChar (ZMod p) ≠ 2 := by
+    rw [ZMod.ringChar_zmod_n]
+    exact hp2
+  have hχ : quadraticCharL (L := K) (p := p) ≠ 1 := by
+    obtain ⟨a, ha⟩ := quadraticChar_exists_neg_one' (F := ZMod p) hsource_char
+    refine MulChar.ne_one_iff.mpr ⟨a, ?_⟩
+    simpa only [quadraticCharL, MulChar.ringHomComp_apply, ha,
+      eq_intCast, Int.cast_neg, Int.cast_one] using
+      (show (-1 : K) ≠ 1 from by
+        intro h
+        apply htwo
+        calc
+          (2 : K) = 1 + 1 := by norm_num
+          _ = (-1 : K) + 1 := (congrArg (fun x : K => x + 1) h).symm
+          _ = 0 := neg_add_cancel _)
+  have hcard : (Fintype.card (ZMod p) : K) ≠ 0 := by
+    rw [ZMod.card]
+    intro hzero
+    have hdiv : q ∣ p := (CharP.cast_eq_zero_iff K q p).mp hzero
+    rcases (Nat.dvd_prime (Fact.out : Nat.Prime p)).mp hdiv with hq1 | hqp
+    · exact (Fact.out : Nat.Prime q).ne_one hq1
+    · exact hpq hqp
+  change gaussSum (quadraticCharL (L := K)) (quadraticAddChar ζ hζ) ≠ 0
+  exact gaussSum_ne_zero_of_nontrivial hcard hχ
+    (AddChar.zmodChar_primitive_of_primitive_root p hζ)
+
 private theorem quadraticAddChar_map
     {L : Type*} [Field L] [Algebra ℚ L]
     {p : ℕ} [Fact p.Prime]
