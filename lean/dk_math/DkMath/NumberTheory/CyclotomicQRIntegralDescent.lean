@@ -84,6 +84,14 @@ theorem Dpoly_sq_integral
   simpa [Dpoly] using
     ((qrFactorPoly_integral ζ hζ).sub (qnrFactorPoly_integral ζ hζ)).pow 2
 
+theorem Dpoly_integral
+    {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
+    (ζ : L) (hζ : IsPrimitiveRoot ζ p) :
+    IsIntegral (MvPolynomial (Fin 2) ℤ)
+      (Dpoly (p := p) ζ) := by
+  simpa [Dpoly] using
+    (qrFactorPoly_integral ζ hζ).sub (qnrFactorPoly_integral ζ hζ)
+
 theorem coeff_Rpoly_isIntegral_int
     {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
@@ -95,6 +103,12 @@ theorem coeff_Dpoly_sq_isIntegral_int
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
     IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2)) :=
   (MvPolynomial.isIntegral_iff_isIntegral_coeff.mp (Dpoly_sq_integral ζ hζ)) d
+
+theorem coeff_Dpoly_isIntegral_int
+    {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
+    (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
+    IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) :=
+  (MvPolynomial.isIntegral_iff_isIntegral_coeff.mp (Dpoly_integral ζ hζ)) d
 
 /-! ## Rational coefficients mapped into an integral cyclotomic extension -/
 
