@@ -20,13 +20,7 @@ open DkMath.FLT.Seven
 theorem primeAdicFactorPacket_of_seven
     {x y z : ℕ} (P : SevenAdicCounterexamplePacket x y z) :
     PrimeAdicFactorPacket 7 (z - y) y x :=
-  { prime := by norm_num
-    odd := by norm_num
-    gap_pos := gap_pos_of_fermat7Equation P.counterexample.hx P.counterexample.hEq
-    distinguished_pos := P.counterexample.hx
-    coprime_gap_unit := coprime_gap_y_of_counterexamplePack P.counterexample
-    prime_dvd_gap := P.seven_dvd_gap
-    factor_eq := by simpa using P.factor_eq }
+  P.toPrimeAdicFactorPacket
 
 theorem generic_split_of_seven_packet
     {x y z : ℕ} (P : SevenAdicCounterexamplePacket x y z) :
