@@ -90,9 +90,13 @@ import DkMath.FLT.Seven.SevenRamifiedSignedRootRouting
 import DkMath.FLT.Seven.SevenRealCubicNormFirstVariation
 import DkMath.FLT.Seven.SevenRealCubicSourcePlane
 import DkMath.FLT.Seven.SevenRealCubicThetaCoordinates
-import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPower
 import DkMath.FLT.Seven.SevenRamifiedFusionUnitSector
-import DkMath.FLT.Seven.SevenRamifiedThetaJetLifting
+/-
+The theta-jet existence branch is proved and remains available through
+`SevenRamifiedPairedThetaRootJetExistence`, but no current production endpoint
+consumes its constructor.  Keep the ordinary facade on the structural packet
+and FUSION API so this expensive branch is not part of its default closure.
+-/
 import DkMath.FLT.Seven.SevenRamifiedPairedThetaRootJet
 import DkMath.FLT.Seven.SevenRamifiedFusionSectorEquiv
 import DkMath.FLT.Seven.SevenRamifiedFusionRoutingAudit
