@@ -168,44 +168,44 @@ The preferred route is:
 2. Therefore the rational trace and norm are integral over `ℤ`.
 3. Since they lie in `ℚ`, use the already-proved rational-integral bridge from Phase 11 (or the pinned equivalent) to obtain
 
-```text
-T := trace x in ℤ
-N := norm x  in ℤ.
-```
+    ```text
+    T := trace x in ℤ
+    N := norm x  in ℤ.
+    ```
 
 4. Use the quadratic identity
 
-```text
-T^2 - D_p * b^2 = 4*N.
-```
+    ```text
+    T^2 - D_p * b^2 = 4*N.
+    ```
 
 5. Hence `D_p * b^2` is an integer.  Reuse the Phase-12 squarefree-prime rational denominator lemma where possible:
 
-```text
-rat_eq_int_of_signedPrime_mul_sq
-```
+    ```text
+    rat_eq_int_of_signedPrime_mul_sq
+    ```
 
-to conclude
+    to conclude
 
-```text
-b in ℤ.
-```
+    ```text
+    b in ℤ.
+    ```
 
 6. Since `D_p ≡ 1 (mod 4)` and
 
-```text
-T^2 - D_p*b^2 ≡ 0 (mod 4),
-```
+    ```text
+    T^2 - D_p*b^2 ≡ 0 (mod 4),
+    ```
 
-deduce `T` and `b` have the same parity.
+    deduce `T` and `b` have the same parity.
 
 7. Therefore
 
-```text
-a = (T - b)/2
-```
+    ```text
+    a = (T - b)/2
+    ```
 
-is an integer.
+    is an integer.
 
 8. Conclude that every integral element of the rational quadratic field lies in the image of `TraceOneInt s_p`.
 
