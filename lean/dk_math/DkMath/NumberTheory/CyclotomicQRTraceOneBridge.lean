@@ -282,23 +282,80 @@ theorem exists_half_difference
 
 /-! ## The arbitrary-prime TraceOne bridge -/
 
-theorem exists_prime_traceOne_coordinates
+/-- The complete provenance packet for the arbitrary-prime TraceOne
+coordinates.
+
+The older existential API below intentionally exposes only the two integer
+coordinate polynomials and their norm identity.  This packet keeps the
+integral Gauss-form witnesses and the characteristic-two half extraction
+which produced those coordinates, so later cyclotomic arguments can inspect
+the construction rather than receiving an opaque norm endpoint. -/
+structure PrimeTraceOneCoordinatePacket
+    (L : Type*) [Field L] [Algebra ℚ L]
+    (p : ℕ) [Fact p.Prime]
+    [IsCyclotomicExtension {p} ℚ L]
+    (ζ : L) (hζ : IsPrimitiveRoot ζ p) where
+  RZ : MvPolynomial (Fin 2) ℤ
+  SZ : MvPolynomial (Fin 2) ℤ
+  AZ : MvPolynomial (Fin 2) ℤ
+  map_RZ :
+    MvPolynomial.map (algebraMap ℤ L) RZ = Rpoly (p := p) ζ
+  gauss_form :
+    MvPolynomial.C 4 * primeCyclotomicShellPoly p =
+      RZ ^ 2 - MvPolynomial.C (signedPrimeDiscriminant p) * SZ ^ 2
+  gauss_difference :
+    MvPolynomial.C (quadraticGauss ζ hζ) *
+        MvPolynomial.map (algebraMap ℤ L) SZ = Dpoly (p := p) ζ
+  half_relation :
+    RZ = MvPolynomial.C 2 * AZ + SZ
+  norm_eq :
+    ∀ z y : ℤ,
+      norm
+          (⟨MvPolynomial.eval ![z, y] AZ,
+             MvPolynomial.eval ![z, y] SZ⟩ :
+            TraceOneInt (signedPrimeParameter p)) =
+        GTailCyclotomicShell p (z - y) y
+
+/-- Evaluate the retained arbitrary-prime TraceOne coordinates. -/
+def PrimeTraceOneCoordinatePacket.coord
+    {L : Type*} [Field L] [Algebra ℚ L]
+    {p : ℕ} [Fact p.Prime]
+    [IsCyclotomicExtension {p} ℚ L]
+    {ζ : L} {hζ : IsPrimitiveRoot ζ p}
+    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) (z y : ℤ) :
+    TraceOneInt (signedPrimeParameter p) :=
+  ⟨MvPolynomial.eval ![z, y] P.AZ,
+    MvPolynomial.eval ![z, y] P.SZ⟩
+
+theorem PrimeTraceOneCoordinatePacket.coord_norm_eq
+    {L : Type*} [Field L] [Algebra ℚ L]
+    {p : ℕ} [Fact p.Prime]
+    [IsCyclotomicExtension {p} ℚ L]
+    {ζ : L} {hζ : IsPrimitiveRoot ζ p}
+    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) (z y : ℤ) :
+    norm (P.coord z y) = GTailCyclotomicShell p (z - y) y :=
+  P.norm_eq z y
+
+/-- The QR/QNR/Gauss construction supplies a complete provenance packet. -/
+theorem exists_prime_traceOne_coordinate_packet
     {L : Type*} [Field L] [Algebra ℚ L]
     {p : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} ℚ L]
     (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p) :
-    ∃ AZ SZ : MvPolynomial (Fin 2) ℤ,
-      ∀ z y : ℤ,
-        norm
-          (⟨MvPolynomial.eval ![z, y] AZ,
-             MvPolynomial.eval ![z, y] SZ⟩ :
-            TraceOneInt (signedPrimeParameter p)) =
-          GTailCyclotomicShell p (z - y) y := by
+    Nonempty (PrimeTraceOneCoordinatePacket L p ζ hζ) := by
   obtain ⟨RZ, SZ, hRZ, hform, hSZ⟩ :=
     exists_integral_gauss_form hp2 ζ hζ
   obtain ⟨AZ, hAZ⟩ := exists_half_difference RZ SZ
     (map_modTwo_eq_of_integral_gauss_form hp2 RZ SZ hform)
-  refine ⟨AZ, SZ, ?_⟩
+  refine ⟨{
+    RZ := RZ
+    SZ := SZ
+    AZ := AZ
+    map_RZ := hRZ
+    gauss_form := hform
+    gauss_difference := hSZ
+    half_relation := hAZ
+    norm_eq := ?_ }⟩
   intro z y
   let A : ℤ := MvPolynomial.eval ![z, y] AZ
   let S : ℤ := MvPolynomial.eval ![z, y] SZ
@@ -313,6 +370,21 @@ theorem exists_prime_traceOne_coordinates
       GTailCyclotomicShell, sub_add_cancel] using hform_eval
   apply norm_eq_of_gauss_coordinates hR
   simpa [discr_signedPrimeParameter (Fact.out : p.Prime) hp2] using hform_int
+
+theorem exists_prime_traceOne_coordinates
+    {L : Type*} [Field L] [Algebra ℚ L]
+    {p : ℕ} [Fact p.Prime]
+    [IsCyclotomicExtension {p} ℚ L]
+    (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p) :
+    ∃ AZ SZ : MvPolynomial (Fin 2) ℤ,
+      ∀ z y : ℤ,
+        norm
+          (⟨MvPolynomial.eval ![z, y] AZ,
+             MvPolynomial.eval ![z, y] SZ⟩ :
+            TraceOneInt (signedPrimeParameter p)) =
+          GTailCyclotomicShell p (z - y) y := by
+  obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet hp2 ζ hζ
+  exact ⟨P.AZ, P.SZ, P.norm_eq⟩
 
 end
 
