@@ -27,32 +27,6 @@ private theorem prime_sq_dvd_traceOne_norm
   refine ⟨a' ^ 2 + a' * b' - s * b' ^ 2, ?_⟩
   ring
 
-private theorem natCast_GTail_one_eq_shell
-    {p g u : ℕ} (hg : g ≠ 0) :
-    ((GTail p 1 g u : ℕ) : ℤ) =
-      GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
-  have hq : GTail p 1 (g : ℚ) (u : ℚ) =
-      GTailCyclotomicShell p (g : ℚ) (u : ℚ) :=
-    GTail_one_eq_GTailCyclotomicShell_of_ne_zero
-      (R := ℚ) (d := p) (g : ℚ) (u : ℚ) (by exact_mod_cast hg)
-  have hcast : GTail p 1 (g : ℚ) (u : ℚ) =
-      (GTail p 1 g u : ℚ) := by
-    simp only [GTail]
-  have hcast_shell :
-      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) =
-        GTailCyclotomicShell p (g : ℚ) (u : ℚ) := by
-    simp only [GTailCyclotomicShell]
-    push_cast
-    rfl
-  have hq' : (GTail p 1 g u : ℚ) =
-      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) :=
-    hcast.symm.trans (hq.trans hcast_shell.symm)
-  have hcast_target :
-      (((GTail p 1 g u : ℕ) : ℤ) : ℚ) =
-        ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) := by
-    simpa using hq'
-  exact (Int.cast_injective : Function.Injective (Int.cast : ℤ → ℚ)) hcast_target
-
 private theorem coordinate_prime_dvd_residual
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u x : ℕ} [Fact p.Prime]
@@ -82,7 +56,8 @@ private theorem coordinate_prime_dvd_residual
     have hshell : (p : ℤ) ^ 2 ∣
         GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
       simpa using hnorm_shell
-    rw [← natCast_GTail_one_eq_shell P0.gap_pos.ne'] at hshell
+    rw [← DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell
+      P0.gap_pos.ne'] at hshell
     exact_mod_cast hshell
   exact P0.residual_not_prime_sq (by exact_mod_cast hres)
 

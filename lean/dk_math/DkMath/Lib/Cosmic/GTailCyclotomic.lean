@@ -115,6 +115,34 @@ theorem GTail_one_eq_GTailCyclotomicShell_of_ne_zero
           (add_pow_eq_mul_GTailCyclotomicShell_add_gap (d + 1) x u)
       exact mul_left_cancel₀ hx (htail.symm.trans hshell)
 
+/-! The Nat row and its integer homogeneous-shell realization. -/
+
+theorem natCast_GTail_one_eq_GTailCyclotomicShell
+    {p g u : ℕ} (hg : g ≠ 0) :
+    ((GTail p 1 g u : ℕ) : ℤ) =
+      GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
+  have hq : GTail p 1 (g : ℚ) (u : ℚ) =
+      GTailCyclotomicShell p (g : ℚ) (u : ℚ) :=
+    GTail_one_eq_GTailCyclotomicShell_of_ne_zero
+      (R := ℚ) (d := p) (g : ℚ) (u : ℚ) (by exact_mod_cast hg)
+  have hcast : GTail p 1 (g : ℚ) (u : ℚ) =
+      (GTail p 1 g u : ℚ) := by
+    simp only [GTail]
+  have hcast_shell :
+      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) =
+        GTailCyclotomicShell p (g : ℚ) (u : ℚ) := by
+    simp only [GTailCyclotomicShell]
+    push_cast
+    rfl
+  have hq' : (GTail p 1 g u : ℚ) =
+      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) :=
+    hcast.symm.trans (hq.trans hcast_shell.symm)
+  have hcast_target :
+      (((GTail p 1 g u : ℕ) : ℤ) : ℚ) =
+        ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) := by
+    simpa using hq'
+  exact (Int.cast_injective : Function.Injective (Int.cast : ℤ → ℚ)) hcast_target
+
 theorem GTailCyclotomicHomEval_prime_eq_shell
     {R : Type _} [CommRing R] {p : ℕ} (hp : Nat.Prime p) (x u : R) :
     GTailCyclotomicHomEval p (Polynomial.cyclotomic p ℤ) x u =

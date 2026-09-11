@@ -198,4 +198,19 @@ theorem PrimeDiscriminantPacket.exists_terminal_discrAxis_mul_of_natAbs_norm_eq_
       norm_cast
   exact ⟨y, hxy', hyNorm, hyAxis, hpow⟩
 
+/-! ## Coordinate primitivity under one axis strip -/
+
+/-- A single discriminant-axis multiplication cannot create a common integer
+divisor in the coordinates. -/
+theorem coordinate_isCoprime_of_eq_discrAxis_mul
+    {s : ℤ} {x y : TraceOneInt s}
+    (hxy : x = discrAxis s * y)
+    (hx : IsCoprime x.fst x.snd) :
+    IsCoprime y.fst y.snd := by
+  rcases hx with ⟨m, n, hbezout⟩
+  refine ⟨-m + 2 * n, 2 * s * m + n, ?_⟩
+  rw [hxy, discrAxis_eq] at hbezout
+  simp only [TraceOneQuadratic.fst_mul, TraceOneQuadratic.snd_mul] at hbezout
+  linear_combination hbezout
+
 end DkMath.NumberTheory.TraceOneQuadratic
