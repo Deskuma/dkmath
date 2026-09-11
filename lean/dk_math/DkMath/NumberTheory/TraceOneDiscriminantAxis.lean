@@ -45,6 +45,67 @@ theorem trace_discrAxis_mul (s c d : ℤ) :
   simp [trace, discr]
   ring
 
+/-! ## Neutral conjugate-coordinate identities -/
+
+/-- The difference from the conjugate records the second coordinate along the
+discriminant axis. -/
+theorem sub_conj_eq_snd_mul_discrAxis (w : TraceOneInt s) :
+    w - conj w = (w.snd : TraceOneInt s) * discrAxis s := by
+  rcases w with ⟨a, b⟩
+  change (⟨a, b⟩ : TraceOneInt s) - conj ⟨a, b⟩ =
+    (⟨b, 0⟩ : TraceOneInt s) * discrAxis s
+  rw [discrAxis_eq]
+  ext
+  · simp [conj]
+  · simp [conj]
+    ring
+
+/-- A second coordinate identity for the first coordinate along the same
+discriminant axis. -/
+theorem discrAxis_mul_sub_tau_mul_sub_conj (w : TraceOneInt s) :
+    discrAxis s * w - tau s * (w - conj w) =
+      (w.fst : TraceOneInt s) * discrAxis s := by
+  rcases w with ⟨a, b⟩
+  change discrAxis s * (⟨a, b⟩ : TraceOneInt s) -
+      tau s * ((⟨a, b⟩ : TraceOneInt s) - conj ⟨a, b⟩) =
+    (⟨a, 0⟩ : TraceOneInt s) * discrAxis s
+  rw [discrAxis_eq]
+  ext
+  · simp [tau, conj]
+    ring
+  · simp [tau, conj]
+    ring
+
+/-- A common divisor of an element and its conjugate divides the
+discriminant axis whenever the two integral coordinates are coprime. -/
+theorem common_divisor_dvd_discrAxis_of_coordinate_coprime
+    {w d : TraceOneInt s} (hcoords : IsCoprime w.fst w.snd)
+    (hdw : d ∣ w) (hdconj : d ∣ conj w) : d ∣ discrAxis s := by
+  have hdsnd : d ∣ (w.snd : TraceOneInt s) * discrAxis s := by
+    rw [← sub_conj_eq_snd_mul_discrAxis]
+    exact dvd_sub hdw hdconj
+  have hdfst : d ∣ (w.fst : TraceOneInt s) * discrAxis s := by
+    rw [← discrAxis_mul_sub_tau_mul_sub_conj]
+    exact dvd_sub (dvd_mul_of_dvd_right hdw (discrAxis s))
+      (dvd_mul_of_dvd_right (dvd_sub hdw hdconj) (tau s))
+  rcases hcoords with ⟨m, n, hbezout⟩
+  rcases hdfst with ⟨a, ha⟩
+  rcases hdsnd with ⟨b, hb⟩
+  refine ⟨(m : TraceOneInt s) * a + (n : TraceOneInt s) * b, ?_⟩
+  have hcast : ((m * w.fst + n * w.snd : ℤ) : TraceOneInt s) = 1 := by
+    rw [hbezout]
+    norm_num
+  calc
+    discrAxis s = ((m * w.fst + n * w.snd : ℤ) : TraceOneInt s) *
+        discrAxis s := by rw [hcast, one_mul]
+    _ = (m : TraceOneInt s) * ((w.fst : TraceOneInt s) * discrAxis s) +
+        (n : TraceOneInt s) * ((w.snd : TraceOneInt s) * discrAxis s) := by
+      push_cast
+      ring
+    _ = d * ((m : TraceOneInt s) * a + (n : TraceOneInt s) * b) := by
+      rw [ha, hb]
+      ring
+
 /-! ## The neutral Gauss-form adapter -/
 
 /-- Convert the classical discriminant form into a TraceOne norm equality. -/
