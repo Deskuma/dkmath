@@ -20,14 +20,37 @@ def A11 (z y : ℤ) : ℤ :=
 
 def B11 (z y : ℤ) : ℤ := z ^ 4 * y + z * y ^ 4
 
+def R11 (z y : ℤ) : ℤ := 2 * A11 z y + B11 z y
+
+def S11 (z y : ℤ) : ℤ := B11 z y
+
 theorem endpoint11 (z y : ℤ) : (z - y) + y = z := by ring
 
-theorem norm11 (z y : ℤ) :
+theorem parity11 (z y : ℤ) : R11 z y - S11 z y = 2 * A11 z y := by
+  simp [R11, S11]
+
+theorem discr_neg_three : discr (-3) = -11 := by norm_num [discr]
+
+theorem gauss_form11 (z y : ℤ) :
+    4 * GTailCyclotomicShell 11 (z - y) y =
+      R11 z y ^ 2 - (-11 : ℤ) * S11 z y ^ 2 := by
+  norm_num [R11, S11, A11, B11, GTailCyclotomicShell,
+    Finset.sum_range_succ]
+  ring
+
+theorem norm11_direct (z y : ℤ) :
     norm (⟨A11 z y, B11 z y⟩ : TraceOneInt (-3)) =
       GTailCyclotomicShell 11 (z - y) y := by
   norm_num [A11, B11, DkMath.NumberTheory.TraceOneQuadratic.norm,
     GTailCyclotomicShell, Finset.sum_range_succ]
   ring
+
+theorem norm11 (z y : ℤ) :
+    norm (⟨A11 z y, B11 z y⟩ : TraceOneInt (-3)) =
+      GTailCyclotomicShell 11 (z - y) y := by
+  apply norm_eq_of_gauss_coordinates (R := R11 z y) (S := S11 z y)
+  · rfl
+  · simpa [discr_neg_three] using gauss_form11 z y
 
 theorem norm11_expanded (z y : ℤ) :
     norm (⟨A11 z y, B11 z y⟩ : TraceOneInt (-3)) =
@@ -46,14 +69,37 @@ def A13 (z y : ℤ) : ℤ :=
 
 def B13 (z y : ℤ) : ℤ := z ^ 5 * y + z ^ 3 * y ^ 3 + z * y ^ 5
 
+def R13 (z y : ℤ) : ℤ := 2 * A13 z y + B13 z y
+
+def S13 (z y : ℤ) : ℤ := B13 z y
+
 theorem endpoint13 (z y : ℤ) : (z - y) + y = z := by ring
 
-theorem norm13 (z y : ℤ) :
+theorem parity13 (z y : ℤ) : R13 z y - S13 z y = 2 * A13 z y := by
+  simp [R13, S13]
+
+theorem discr_three : discr 3 = 13 := by norm_num [discr]
+
+theorem gauss_form13 (z y : ℤ) :
+    4 * GTailCyclotomicShell 13 (z - y) y =
+      R13 z y ^ 2 - (13 : ℤ) * S13 z y ^ 2 := by
+  norm_num [R13, S13, A13, B13, GTailCyclotomicShell,
+    Finset.sum_range_succ]
+  ring
+
+theorem norm13_direct (z y : ℤ) :
     norm (⟨A13 z y, B13 z y⟩ : TraceOneInt 3) =
       GTailCyclotomicShell 13 (z - y) y := by
   norm_num [A13, B13, DkMath.NumberTheory.TraceOneQuadratic.norm,
     GTailCyclotomicShell, Finset.sum_range_succ]
   ring
+
+theorem norm13 (z y : ℤ) :
+    norm (⟨A13 z y, B13 z y⟩ : TraceOneInt 3) =
+      GTailCyclotomicShell 13 (z - y) y := by
+  apply norm_eq_of_gauss_coordinates (R := R13 z y) (S := S13 z y)
+  · rfl
+  · exact gauss_form13 z y
 
 theorem norm13_expanded (z y : ℤ) :
     norm (⟨A13 z y, B13 z y⟩ : TraceOneInt 3) =
@@ -67,5 +113,7 @@ theorem norm13_expanded (z y : ℤ) :
 
 #print axioms norm11
 #print axioms norm13
+#print axioms gauss_form11
+#print axioms gauss_form13
 
 end DkMathTest.FLT.Prime

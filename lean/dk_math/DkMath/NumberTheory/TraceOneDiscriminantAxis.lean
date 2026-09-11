@@ -45,6 +45,39 @@ theorem trace_discrAxis_mul (s c d : ℤ) :
   simp [trace, discr]
   ring
 
+/-! ## The neutral Gauss-form adapter -/
+
+/-- Convert the classical discriminant form into a TraceOne norm equality. -/
+theorem norm_eq_of_discriminant_form
+    {s A B V : ℤ}
+    (h : 4 * V = (2 * A + B) ^ 2 - discr s * B ^ 2) :
+    norm (⟨A, B⟩ : TraceOneInt s) = V := by
+  apply mul_left_cancel₀ (by norm_num : (4 : ℤ) ≠ 0)
+  calc
+    4 * norm (⟨A, B⟩ : TraceOneInt s) =
+        (2 * A + B) ^ 2 - discr s * B ^ 2 :=
+      four_mul_traceOneNorm_eq_discriminant ⟨A, B⟩
+    _ = 4 * V := h.symm
+
+/-- Recover the classical discriminant form from a TraceOne norm equality. -/
+theorem discriminant_form_of_norm_eq
+    {s A B V : ℤ}
+    (h : norm (⟨A, B⟩ : TraceOneInt s) = V) :
+    4 * V = (2 * A + B) ^ 2 - discr s * B ^ 2 := by
+  calc
+    4 * V = 4 * norm (⟨A, B⟩ : TraceOneInt s) := by rw [h]
+    _ = (2 * A + B) ^ 2 - discr s * B ^ 2 :=
+      four_mul_traceOneNorm_eq_discriminant ⟨A, B⟩
+
+/-- Convert division-free Gauss coordinates into TraceOne coordinates. -/
+theorem norm_eq_of_gauss_coordinates
+    {s A R S V : ℤ}
+    (hR : R = 2 * A + S)
+    (hForm : 4 * V = R ^ 2 - discr s * S ^ 2) :
+    norm (⟨A, S⟩ : TraceOneInt s) = V := by
+  apply norm_eq_of_discriminant_form
+  simpa [hR] using hForm
+
 /-- Divisibility by the discriminant axis is exactly divisibility of the trace
 by the discriminant.  The converse uses the explicit coordinate witness
 `⟨2*s*k-a,k⟩`. -/

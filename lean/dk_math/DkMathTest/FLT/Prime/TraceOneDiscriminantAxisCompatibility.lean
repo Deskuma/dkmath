@@ -74,6 +74,33 @@ example (x : TraceOneInt (-2)) :
     (7 : ℤ) ∣ norm x ↔ (7 : ℤ) ∣ trace x := by
   exact packet7.norm_dvd_iff_trace_dvd x
 
+/-! ## Discriminant-form normalization of the existing three samples -/
+
+example (a b : ℕ) :
+    4 * (DkMath.FLT.PetalDetect.S0_nat a b : ℤ) =
+      trace (⟨(a : ℤ), (b : ℤ)⟩ : TraceOneInt (-1)) ^ 2 -
+        discr (-1) * (b : ℤ) ^ 2 := by
+  rw [DkMath.FLT.S0_nat_eq_traceOneNorm_negOne]
+  exact four_mul_traceOneNorm_eq_discriminant
+    (⟨(a : ℤ), (b : ℤ)⟩ : TraceOneInt (-1))
+
+example (x : DkMath.FLT.Five.GoldenInt) :
+    4 * DkMath.FLT.Five.goldenNorm x =
+      trace (DkMath.FLT.Five.goldenToTraceOne x) ^ 2 -
+        discr 1 * (DkMath.FLT.Five.goldenToTraceOne x).snd ^ 2 := by
+  rw [DkMath.FLT.Five.goldenNorm_eq_traceOneNorm_one]
+  exact four_mul_traceOneNorm_eq_discriminant
+    (DkMath.FLT.Five.goldenToTraceOne x)
+
+example (z y : ℤ) :
+    4 * DkMath.FLT.Seven.cyclotomicSeven z y =
+      trace (DkMath.FLT.Seven.cyclotomicSevenToTraceOne z y) ^ 2 -
+        discr (-2) *
+          (DkMath.FLT.Seven.cyclotomicSevenToTraceOne z y).snd ^ 2 := by
+  rw [DkMath.FLT.Seven.cyclotomicSeven_eq_traceOneNorm_negTwo]
+  exact four_mul_traceOneNorm_eq_discriminant
+    (DkMath.FLT.Seven.cyclotomicSevenToTraceOne z y)
+
 -- Existing concrete surfaces remain available as separate, small-family APIs.
 #check DkMath.FLT.S0_nat_eq_traceOneNorm_negOne
 #check DkMath.FLT.Five.goldenNorm_eq_traceOneNorm_one
