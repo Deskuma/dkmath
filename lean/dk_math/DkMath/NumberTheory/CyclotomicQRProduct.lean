@@ -149,14 +149,16 @@ theorem primitiveRoots_product_eq_shell
           (∏ μ ∈ primitiveRoots p K, (Polynomial.X - Polynomial.C μ))
           (p - 1) =
         ∏ μ ∈ primitiveRoots p K,
-          (MvPolynomial.X 0 - MvPolynomial.C μ * MvPolynomial.X 1) := by
+          (MvPolynomial.X (0 : Fin 2) - MvPolynomial.C μ *
+            MvPolynomial.X (1 : Fin 2)) := by
     rw [hcardone] at hprod
     simpa [Polynomial.homogenize_sub, Polynomial.homogenize_X,
       Polynomial.homogenize_C] using hprod
   have hsum :
       Polynomial.homogenize (Polynomial.cyclotomic p K) (p - 1) =
         ∑ k ∈ Finset.range p,
-          MvPolynomial.X 0 ^ k * MvPolynomial.X 1 ^ (p - 1 - k) := by
+          MvPolynomial.X (0 : Fin 2) ^ k *
+            MvPolynomial.X (1 : Fin 2) ^ (p - 1 - k) := by
     rw [Polynomial.cyclotomic_prime K p]
     rw [Polynomial.homogenize_finsetSum]
     apply Finset.sum_congr rfl
@@ -185,6 +187,69 @@ theorem primitiveRoots_product_eq_shell
       rw [hsum]
     _ = ∑ k ∈ Finset.range p, X ^ k * Y ^ (p - 1 - k) := by
       simp
+
+theorem primitiveRoots_product_poly_eq_shell
+    {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) :
+    ∏ μ ∈ primitiveRoots p K,
+        (MvPolynomial.X (0 : Fin 2) - MvPolynomial.C μ *
+          MvPolynomial.X (1 : Fin 2)) =
+      ∑ k ∈ Finset.range p,
+        MvPolynomial.X (0 : Fin 2) ^ k *
+          MvPolynomial.X (1 : Fin 2) ^ (p - 1 - k) := by
+  classical
+  have hp : p.Prime := Fact.out
+  have hcard : (primitiveRoots p K).card = p - 1 := by
+    simpa [Nat.totient_prime hp] using hζ.card_primitiveRoots
+  have hpoly :
+      Polynomial.cyclotomic p K =
+        ∏ μ ∈ primitiveRoots p K, (Polynomial.X - Polynomial.C μ) :=
+    Polynomial.cyclotomic_eq_prod_X_sub_primitiveRoots hζ
+  have hprod :=
+    Polynomial.homogenize_finsetProd
+      (s := primitiveRoots p K)
+      (p := fun μ : K => Polynomial.X - Polynomial.C μ)
+      (n := fun _ => 1)
+      (by
+        intro μ hμ
+        simp)
+  have hcardone :
+      (∑ _μ ∈ primitiveRoots p K, (1 : ℕ)) = p - 1 := by
+    simp [hcard]
+  have hprod' :
+      Polynomial.homogenize
+          (∏ μ ∈ primitiveRoots p K, (Polynomial.X - Polynomial.C μ))
+          (p - 1) =
+        ∏ μ ∈ primitiveRoots p K,
+          (MvPolynomial.X (0 : Fin 2) - MvPolynomial.C μ *
+            MvPolynomial.X (1 : Fin 2)) := by
+    rw [hcardone] at hprod
+    simpa [Polynomial.homogenize_sub, Polynomial.homogenize_X,
+      Polynomial.homogenize_C] using hprod
+  have hsum :
+      Polynomial.homogenize (Polynomial.cyclotomic p K) (p - 1) =
+        ∑ k ∈ Finset.range p,
+          MvPolynomial.X (0 : Fin 2) ^ k *
+            MvPolynomial.X (1 : Fin 2) ^ (p - 1 - k) := by
+    rw [Polynomial.cyclotomic_prime K p]
+    rw [Polynomial.homogenize_finsetSum]
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hk' : k < p := Finset.mem_range.mp hk
+    have hk_le : k ≤ p - 1 := by omega
+    rw [Polynomial.homogenize_X_pow hk_le]
+  calc
+    ∏ μ ∈ primitiveRoots p K,
+        (MvPolynomial.X (0 : Fin 2) - MvPolynomial.C μ *
+          MvPolynomial.X (1 : Fin 2)) =
+        Polynomial.homogenize
+          (∏ μ ∈ primitiveRoots p K, (Polynomial.X - Polynomial.C μ))
+          (p - 1) := hprod'.symm
+    _ = Polynomial.homogenize (Polynomial.cyclotomic p K) (p - 1) := by
+      rw [hpoly]
+    _ = ∑ k ∈ Finset.range p,
+        MvPolynomial.X (0 : Fin 2) ^ k *
+          MvPolynomial.X (1 : Fin 2) ^ (p - 1 - k) := hsum
 
 /-! The exponent image has no repetitions on the nonzero residue classes. -/
 
