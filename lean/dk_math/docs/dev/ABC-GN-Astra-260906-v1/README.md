@@ -4,347 +4,346 @@ cid: 6a9d5951-68dc-83ee-b422-0b21f77bac4a
 
 ## Purpose
 
-This directory is the mathematical restart point after the completed v0
-fact-freezing campaign.
+This directory is the mathematical restart and production-freeze hub after the completed v0 ABC–GN reduction campaign.
 
-The v0 capstone is:
+The v0 capstone remains:
 
-~~~text
+```text
 DkMath.ABC.GNExcessCubicResearchFrontier
-~~~
+```
 
-with the provider-free theorem:
+with the provider-free reduction:
 
-~~~text
-exp_GNExcessMassAt_sum_cubic_three_eighths_le_of_dyadicShellCardBounds
-~~~
+```text
+explicit realized dyadic shell-count bounds
+-> cubic 3/8 excess-sum bound.
+```
 
-The deterministic Lean reduction is complete up to one explicit finite
-arithmetic quantity:
+The open arithmetic object remains the realized cubic shell count.
 
-~~~text
-GNExcessCubicRealizedLargeModulusShellCount X D
-~~~
+ABC is not proved.
 
-v1 does not begin by adding another production layer around that quantity.
-
-v1 begins by doing new mathematics on the shell count itself.
+---
 
 ## Branch
 
-~~~text
+```text
 branch: wip/ABC-GN-astra-260906-v1
-
 predecessor:
   lean/dk_math/docs/dev/ABC-GN-Astra-260906-v0/
-~~~
+```
 
-The v0 reports remain the authoritative record of the completed production
-reduction.  In particular:
+On 2026-09-12 this branch was fast-forwarded to the current `develop` head after the FLT prime-generalization / DkMath.Lib promotion work.
 
-~~~text
-v0/report-022.md
-~~~
+The current campaign therefore includes:
 
-is the capstone status report.
+```text
+ABC-GN v1 production checkpoints
++
+latest DkMath.Lib promotion
++
+latest odd-prime FLT TraceOne architecture.
+```
 
-## Exact frontier
+---
+
+## Mathematical frontier
 
 For the canonical cubic value
 
-~~~text
+```text
 F(a) = a^2 + 3*a + 3 = GN 3 a 1,
-~~~
+```
 
-a realized large repeated modulus M has a positive witness a with:
+a realized large repeated modulus M has a witness a with canonical coordinates
 
-~~~text
-1 <= a <= X
-
-D <= M < 2D
-
-X + 1 < M
-
-M <= 3*(X+1)^2.
-~~~
-
-There is a canonical complement S:
-
-~~~text
+```text
 M*S = a^2 + 3*a + 3
-
-1 <= S <= X
-
-Squarefree S
-
-Coprime M S.
-~~~
-
-The modulus is squarefull and has canonical square-cube coordinates:
-
-~~~text
 M = u^2*r^3
-
-r = oddPart M
-
-u = evenPart M / oddPart M
-
-Squarefree r.
-~~~
-
-With
-
-~~~text
 T = r*S
+y = 2*a+3
+y^2 + 3 = 4*T*d^2.
+```
 
-d = evenPart M
+Production now also freezes:
 
-y = 2*a+3,
-~~~
+```text
+fixed (T,r) + one dyadic shell
+-> at most one witness;
 
-production gives:
+inside one shell:
+a |-> (r,S) is injective;
 
-~~~text
-y^2 + 3 = 4*T*d^2
+D^2*T^3 < 54*(X+1)^6;
 
-Squarefree T
+shell witness count
+= represented (r,S) pair count;
 
-Coprime y d
+shell witness count
+= sum over represented (S,u)
+    of exact Mordell-coordinate image cards;
 
-gcd(y,T) divides 3.
-~~~
+Y^2 + 48*S^2*u^4 = Z^3
+for every production Mordell image point.
+```
 
-The exceptional prime 3 is completely normalized into primitive sectors.
+No integral-point counting theorem is included in production.
 
-The paired orientation is also production-normalized:
+---
 
-~~~text
-F(a) = GN 3 a 1
-G(a) = GN 3 1 a
+## Eisenstein production surface
 
-ordinary common support occurs only at 7;
+LUNA-006/007 added a neutral Eisenstein coordinate presentation backed by
 
-the repeated parts are coprime;
+```text
+TraceOneInt (-1).
+```
 
-the seven sector is exactly split modulo 49 into
-  forward-deep,
-  swap-deep,
-  shallow-seven.
-~~~
+The current production facts include:
 
-These are exact arithmetic facts, not density estimates.
+```text
+Norm(m+n*omega) = m^2-m*n+n^2;
 
-## Research object
+beta*gamma^2 exact coordinate formulas;
 
-Conceptually set
+coefficient-one
+-> IsCoprime of the square coefficients;
 
-~~~text
-N_X(D)
-=
-GNExcessCubicRealizedLargeModulusShellCount X D
-~~~
+a^2+3*a+3 = Norm((a+2)+omega);
 
-so that N_X(D) counts the distinct realized repeated moduli in the shell
+IF beta*gamma^2 = (a+2)+omega,
+THEN the exact coordinate equations,
+     coprimality,
+     and norm-factor identity hold.
+```
 
-~~~text
-D <= M < 2D.
-~~~
+The factorization-existence hypothesis itself is not proved.
 
-The capstone accepts any explicit bound
+---
 
-~~~text
-N_X(2^k) <= B(k)
-~~~
+## Result of SOL-000 / ASTRA-001
 
-and propagates it to the cubic 3/8 excess-sum estimate.
+SOL-000 and ASTRA-001 isolated the shell-count mechanism and validated the elementary deterministic layer.
 
-Therefore the v1 problem is:
+Research-only analytic deductions include:
 
-> Find a genuinely nontrivial upper bound for the number of distinct realized
-> cubic repeated moduli in one dyadic shell.
+```text
+elementary hybrid moment improvement;
+Helfgott–Venkatesh-based O_epsilon(X^(31/24+epsilon)) route;
+balanced-box represented-pair sparsity target.
+```
 
-## Research target
+These remain outside production Lean.
 
-ASTRA-007 identified a sufficient target of rough shape:
+The balanced-box research target is still conceptually:
 
-~~~text
-N_X(D)
-<=
-C_epsilon * X^(1+epsilon) / sqrt(D)
-~~~
+```text
+Q(B) << B^(2-delta+epsilon)
+```
 
-through the realized large range, with epsilon sufficiently small.
+for a useful positive delta.
 
-This is:
+---
 
-~~~text
-RESEARCH TARGET — NOT PROVED
-~~~
+## DkMath.Lib / FLT-prime-generalization reconciliation
 
-The exact exponent is not assumed.  A different shell estimate is welcome if
-it is strong enough to improve the capstone dyadic moment.
+The repository has since promoted reusable arithmetic into:
+
+```text
+DkMath.Lib.NumberTheory.*
+```
+
+including:
+
+```text
+PadicValNat
+PowerFactor
+IdealPowerFactor
+PrincipalIdealPower
+UnitPowerSector.
+```
+
+The odd-prime FLT architecture now runs through generic TraceOne coordinates, principal-ideal power extraction, and generic unit-sector normalization.
+
+The ABC-GN v1 Eisenstein core predates that promotion and currently lives at:
+
+```text
+DkMath.NumberTheory.EisensteinCoordinates.
+```
+
+The reconciliation task is recorded in:
+
+```text
+reconciliation-008.md
+instruction-008.md.
+```
+
+Target state:
+
+```text
+DkMath.Lib.NumberTheory.EisensteinCoordinates
+  = canonical reusable owner;
+
+DkMath.NumberTheory.EisensteinCoordinates
+  = compatibility facade;
+
+ABC Eisenstein modules
+  -> import Lib owner directly.
+```
+
+---
+
+## p=3 TraceOne / Eisenstein contact
+
+The FLT prime-generalization closeout records a p=3 carrier/API boundary.
+
+The concrete implementation shows:
+
+```text
+EisensteinInt := TraceOneInt (-1)
+```
+
+and the generic signed-prime parameter specializes to
+
+```text
+signedPrimeParameter 3 = -1.
+```
+
+Thus there is no mathematical carrier mismatch.
+
+The remaining compatibility work is:
+
+```text
+omega/tau coordinate convention;
+namespace/API ownership;
+unit-sector packaging.
+```
+
+Existing FLT3 cube-unit sectors can be packaged through the new generic:
+
+```text
+UnitPowerSectorSystem (TraceOneInt (-1)) 3.
+```
+
+This is an API reconciliation only; it does not by itself establish a new generic FLT p=3 theorem.
+
+---
 
 ## Regression barriers
 
-Do not restart routes already falsified.
+Still active:
 
-### Point-to-modulus injectivity
+```text
+a -> M is not injective;
+fixed S can have infinitely many witnesses;
+independent paired exact depths exist;
+both paired repeated parts can be arbitrarily large;
+Hensel uniqueness alone does not imply global rarity;
+mod-49 state normalization is not a density theorem.
+```
 
-False.
+Known regressions such as M=169, M=8281, and the complement-3 Pell family remain mandatory tests.
 
-Multiple witnesses can share one modulus.  Production regressions include
-M=169 and M=8281.
+---
 
-### Fixed complement has bounded multiplicity
+## Research / production boundary
 
-False.
+### Production-proved
 
-There is an infinite strictly increasing Pell family with canonical
-complement S=3.
+```text
+v0 deterministic reduction;
+realized profile/fiber machinery;
+cubic complement / Pell / squareful packets;
+paired orientation / seven-state normalization;
+shell fiber card <= 1;
+shell (r,S) injectivity;
+Pell parameter height bound;
+Mordell exact transport and finite incidence ledger;
+neutral Eisenstein coordinate algebra;
+conditional explicit beta*gamma^2 consequences.
+```
 
-### Local paired depth competition
+### Research-only / open
 
-False.
+```text
+actual beta*gamma^2 factorization existence for ABC shell witnesses;
+factor counting;
+Mordell integral-point bounds in Lean;
+Helfgott–Venkatesh specialization in production;
+balanced-box power saving;
+near-linear shell count;
+ABC closure.
+```
 
-Independent exact depths can be forced in opposite orientations.
-
-### Coprime repeated parts imply one is small
-
-False.
-
-Both repeated parts can be arbitrarily large in absolute size while remaining
-coprime.
-
-### Hensel uniqueness implies global rarity
-
-False as a general inference.
-
-Simple roots lift to arbitrary finite depth.
-
-### Mod-49 state normalization proves density
-
-False.
-
-The forward-deep / swap-deep / shallow-seven split is local arithmetic only.
-
-## Research discipline
-
-The first v1 pass is pure mathematics.
-
-Do not begin by creating a new production DkMath module.
-
-Allowed:
-
-~~~text
-exact derivations
-scratch Lean for delicate identities
-numerical falsification
-literature research when genuinely useful
-~~~
-
-Required status labels:
-
-~~~text
-PRODUCTION-PROVED
-SCRATCH-PROVED
-NUMERIC
-OPEN
-DEAD
-~~~
-
-The desired result is not a long brainstorm.
-
-The desired result is:
-
-~~~text
-many plausible routes
-->
-one or two surviving mechanisms
-->
-one precise quantitative theorem target.
-~~~
+---
 
 ## Model roles
 
-### Sol
-
-First attacker.
-
-Reconstruct the shell-count problem, derive candidate mechanisms, and prune
-branches aggressively.
-
-### Astra
-
-Second-pass artillery / referee.
-
-Use Astra only after Sol has isolated a small set of serious candidate routes.
-Astra should attack proof gaps, hidden multiplicity, and exponent loss rather
-than reconstruct the whole campaign.
-
-### Luna / implementation model
-
-Do not use for new hard mathematics.
-
-Return to production implementation only after a genuinely new theorem has
-survived mathematical review.
-
-## Files
-
-- ROADMAP.md — v1 mathematical research and production-gate program.
-- instruction-000.md — SOL shell-count exploration.
-- report-000.md — SOL-000 research result.
-- instruction-001.md — ASTRA adversarial review.
-- report-001.md — ASTRA-001 validated fiber theorem and research frontier.
-- instruction-002.md — LUNA production freeze of shell-fiber uniqueness.
-
-## Current production gate
-
-ASTRA-001 validated a new deterministic theorem in scratch Lean:
-
-~~~text
-fixed (T,r) + one dyadic shell
-=>
-at most one witness.
-~~~
-
-It also validated shell-local injectivity of:
-
-~~~text
-a |-> (r,S).
-~~~
-
-These facts are now approved for productionization by LUNA-002.
-
-The following remain research-only:
-
-~~~text
-Helfgott-Venkatesh specialization
-31/24 + epsilon moment estimate
-balanced-box power saving
-ABC closure.
-~~~
-
-## Status
-
-~~~text
-v0 production reduction:
-  COMPLETE / PAUSED
-
-v1 Sol research:
-  COMPLETE / Outcome B
-
-v1 Astra review:
-  COMPLETE / Outcome B
-
-v1 LUNA production freeze:
-  ACTIVE / instruction-002
+```text
+Sol:
+  mathematical attacker / route design.
 
 Astra:
-  PAUSED UNTIL RECHARGE
+  expensive independent referee / branch pruner.
+
+Luna:
+  production implementation of already validated deterministic facts.
+```
+
+Do not use Luna to invent the missing counting theorem.
+
+---
+
+## Key files
+
+```text
+ROADMAP.md
+
+instruction-000.md / report-000.md
+  SOL shell-count attack
+
+instruction-001.md / report-001.md
+  ASTRA adversarial review
+
+instruction-002.md ... instruction-007.md
+report-002.md ... report-007.md
+  deterministic production freeze
+
+reconciliation-008.md
+  delta against new Lib / FLT-prime-generalization architecture
+
+instruction-008.md
+  Lib promotion and p=3 Eisenstein API reconciliation
+```
+
+---
+
+## Current status
+
+```text
+v0 deterministic reduction:
+  COMPLETE
+
+SOL-000:
+  COMPLETE / Outcome B
+
+ASTRA-001:
+  COMPLETE / Outcome B
+
+LUNA-002 ... LUNA-007:
+  COMPLETE / APPROVED
+
+branch sync to develop:
+  COMPLETE
+
+LUNA-008 Lib / p=3 API reconciliation:
+  READY / ACTIVE TASK
 
 ABC:
   NOT PROVED
 
-current research frontier after production freeze:
-  balanced-box represented-pair saving
-~~~
+current mathematical frontier:
+  actual Eisenstein factorization existence/counting
+  and/or
+  balanced-box represented-pair power saving.
+```
