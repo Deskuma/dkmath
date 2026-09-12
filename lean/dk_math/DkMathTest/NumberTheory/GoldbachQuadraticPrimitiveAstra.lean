@@ -248,4 +248,69 @@ example : Nat.gcd (3 - 1) (3 + 1) = 2 ∧
 /-- Dropping primitivity permits a shared odd proper factor even with odd endpoints. -/
 example : 12 % 2 ≠ 3 % 2 ∧ 3 ∈ leftSupport 12 3 ∧ 3 ∈ rightSupport 12 3 := by decide +kernel
 
+/-- QP-003: the degree-two Vandermonde identity includes empty supports. -/
+theorem choose_two_add (L R : ℕ) :
+    Nat.choose (L + R) 2 = Nat.choose L 2 + L * R + Nat.choose R 2 := by
+  induction L with
+  | zero => simp
+  | succ L ih =>
+    rw [Nat.succ_add, Nat.choose_succ_succ, Nat.choose_succ_succ]
+    simp only [Nat.choose_one_right]
+    rw [ih]
+    ring
+
+/-- LL is the unordered pair count within the left support. -/
+def localLL (n u : ℕ) : ℕ := Nat.choose (leftSupport n u).card 2
+/-- LR counts the Cartesian product of the two disjoint supports. -/
+def localLR (n u : ℕ) : ℕ := (leftSupport n u).card * (rightSupport n u).card
+/-- RR is the unordered pair count within the right support. -/
+def localRR (n u : ℕ) : ℕ := Nat.choose (rightSupport n u).card 2
+
+/-- Split the existing local pair multiplicity, conditional only on disjointness. -/
+theorem local_pair_split {n u : ℕ}
+    (hd : Disjoint (leftSupport n u) (rightSupport n u)) :
+    goldbachOffsetPrimePairMultiplicity n u = localLL n u + localLR n u + localRR n u := by
+  unfold goldbachOffsetPrimePairMultiplicity localLL localLR localRR
+  rw [← support_union, Finset.card_union_of_disjoint hd]
+  exact choose_two_add _ _
+
+/-- Restricted ledger: same local terms, summed over the normalized fiber. -/
+theorem primitive_pair_split (n : ℕ) :
+    (∑ u ∈ primitiveParityOffsets n, goldbachOffsetPrimePairMultiplicity n u) =
+      (∑ u ∈ primitiveParityOffsets n, localLL n u) +
+      (∑ u ∈ primitiveParityOffsets n, localLR n u) +
+      (∑ u ∈ primitiveParityOffsets n, localRR n u) := by
+  rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro u hu
+  exact local_pair_split (primitive_support_disjoint hu)
+
+/-- Exact reconciliation with the original full pair ledger. Removed offsets
+retain their unsplit contribution; no global disjointness is assumed. -/
+theorem full_pair_split (n : ℕ) :
+    goldbachPrimePairOverlapCount n =
+      ((∑ u ∈ primitiveParityOffsets n, localLL n u) +
+       (∑ u ∈ primitiveParityOffsets n, localLR n u) +
+       (∑ u ∈ primitiveParityOffsets n, localRR n u)) +
+      ∑ u ∈ (goldbachOffsets n).filter (fun u => u ∉ primitiveParityOffsets n),
+        goldbachOffsetPrimePairMultiplicity n u := by
+  rw [← primitive_pair_split, goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity]
+  have hs : (goldbachOffsets n).filter (fun u => u ∈ primitiveParityOffsets n) =
+      primitiveParityOffsets n := by
+    ext u
+    simp only [Finset.mem_filter]
+    exact ⟨And.right, fun h => ⟨(mem_primitiveParityOffsets.mp h).1, h⟩⟩
+  have hsum := Finset.sum_filter_add_sum_filter_not (goldbachOffsets n)
+    (fun u => u ∈ primitiveParityOffsets n) (goldbachOffsetPrimePairMultiplicity n)
+  rw [hs] at hsum
+  exact hsum.symm
+
+/-- Higher overlap survives primitive/parity normalization: 27 and 35 have
+three distinct proper obstructions, with one on the left and two on the right. -/
+theorem higher_overlap_regression :
+    4 ∈ primitiveParityOffsets 31 ∧ leftSupport 31 4 = {3} ∧
+    rightSupport 31 4 = {5, 7} ∧ localLL 31 4 = 0 ∧ localLR 31 4 = 2 ∧
+    localRR 31 4 = 1 ∧ goldbachLocalPairOverlapResidual 31 4 = 1 := by
+  decide +kernel
+
 end DkMathTest.GoldbachQuadraticPrimitiveAstra
