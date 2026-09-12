@@ -130,4 +130,88 @@ lemma dvd_padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (ha : a ≠ 0) :
   rw [padicValNat_pow hp d ha]
   exact dvd_mul_right d _
 
+/-! ### Prime-power product conservation -/
+
+/--
+If a nonzero product is a `p`-th power and the residual has valuation one,
+the carrier valuation is congruent to `p - 1` modulo `p`.
+-/
+theorem padicValNat_carrier_shape_of_mul_eq_prime
+    {p carrier residual distinguished : ℕ}
+    (hp : Nat.Prime p)
+    (hc0 : carrier ≠ 0)
+    (hr0 : residual ≠ 0)
+    (hd0 : distinguished ≠ 0)
+    (hEq : carrier * residual = distinguished ^ p)
+    (hrVal : padicValNat p residual = 1) :
+    ∃ m : ℕ,
+      padicValNat p carrier = (p - 1) + p * m := by
+  have hpow : padicValNat p (distinguished ^ p) =
+      p * padicValNat p distinguished :=
+    padicValNat_pow hp p hd0
+  have hmul : padicValNat p (carrier * residual) =
+      padicValNat p carrier + padicValNat p residual := by
+    letI : Fact (Nat.Prime p) := ⟨hp⟩
+    simpa using (padicValNat.mul (p := p) hc0 hr0)
+  have hvalEq : p * padicValNat p distinguished =
+      padicValNat p carrier + 1 := by
+    calc
+      p * padicValNat p distinguished =
+          padicValNat p (distinguished ^ p) := hpow.symm
+      _ = padicValNat p (carrier * residual) := by rw [hEq]
+      _ = padicValNat p carrier + padicValNat p residual := hmul
+      _ = padicValNat p carrier + 1 := by rw [hrVal]
+  have hdValPos : 0 < padicValNat p distinguished := by
+    have hpos : 0 < p * padicValNat p distinguished := by
+      rw [hvalEq]
+      omega
+    exact Nat.pos_of_mul_pos_left hpos
+  have hcVal : padicValNat p carrier =
+      p * padicValNat p distinguished - 1 :=
+    Nat.eq_sub_of_add_eq hvalEq.symm
+  refine ⟨padicValNat p distinguished - 1, ?_⟩
+  have hsplit :
+      (padicValNat p distinguished - 1) + 1 = padicValNat p distinguished :=
+    Nat.sub_add_cancel (Nat.succ_le_of_lt hdValPos)
+  calc
+    padicValNat p carrier = p * padicValNat p distinguished - 1 := hcVal
+    _ = p * ((padicValNat p distinguished - 1) + 1) - 1 := by rw [hsplit]
+    _ = (p - 1) + p * (padicValNat p distinguished - 1) := by
+      have hv : 1 ≤ padicValNat p distinguished := Nat.succ_le_of_lt hdValPos
+      have hpv : p ≤ p * padicValNat p distinguished := by
+        calc
+          p = p * 1 := by simp
+          _ ≤ p * padicValNat p distinguished := Nat.mul_le_mul_left p hv
+      rw [hsplit]
+      have hv_eq :
+          p * padicValNat p distinguished =
+            p * (padicValNat p distinguished - 1) + p := by
+        calc
+          p * padicValNat p distinguished =
+              (p * padicValNat p distinguished - p) + p :=
+            (Nat.sub_add_cancel hpv).symm
+          _ = p * (padicValNat p distinguished - 1) + p := by
+            rw [Nat.mul_sub_left_distrib]
+            simp
+      rw [hv_eq]
+      have hp1 : 1 ≤ p := hp.one_le
+      omega
+
+/-- The carrier contains the forced `p^(p-1)` divisibility layer. -/
+theorem prime_pow_sub_one_dvd_carrier
+    {p carrier residual distinguished : ℕ}
+    (hp : Nat.Prime p)
+    (hc0 : carrier ≠ 0)
+    (hr0 : residual ≠ 0)
+    (hd0 : distinguished ≠ 0)
+    (hEq : carrier * residual = distinguished ^ p)
+    (hrVal : padicValNat p residual = 1) :
+    p ^ (p - 1) ∣ carrier := by
+  have hshape := padicValNat_carrier_shape_of_mul_eq_prime
+    hp hc0 hr0 hd0 hEq hrVal
+  apply (padicValNat_le_iff_dvd hp hc0 (p - 1)).mp
+  rcases hshape with ⟨m, hm⟩
+  rw [hm]
+  omega
+
 end DkMath.Lib.NumberTheory

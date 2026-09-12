@@ -45,4 +45,8 @@ example {x y z : ℕ} (s : SevenAdicPowerSplit x y z) : ¬ 7 ∣ s.b :=
 #print axioms sevenAdicPacket_coprime_scaledGap_residual
 #print axioms sevenAdicPacket_normalized_product
 #print axioms SevenAdicPowerSplit.seven_not_dvd_b
+#print axioms SevenAdicCounterexamplePacket.toPrimeAdicFactorPacket
 #print axioms nonempty_sevenAdicPowerSplit_of_packet
+#print axioms sevenAdicPowerSplit_of_packet
+#print axioms sevenAdicPowerSplit_of_counterexample
+#print axioms SevenQuadraticResidualPacket.norm_is_seventh_power

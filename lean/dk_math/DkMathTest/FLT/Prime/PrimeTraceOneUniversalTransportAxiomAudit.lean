@@ -1,0 +1,23 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Prime.PrimeTraceOneCoordinateCoprime
+
+#print "file: DkMathTest.FLT.Prime.PrimeTraceOneUniversalTransportAxiomAudit"
+
+open DkMath.FLT.Prime
+open DkMath.NumberTheory.CyclotomicQRCommonPrimeSupport
+open DkMath.NumberTheory.CyclotomicQRUniversalTransport
+open DkMath.NumberTheory.CyclotomicQRUniversalTraceOneAnchor
+
+#print axioms DkMath.NumberTheory.CyclotomicQRUniversalTransport.map_universalRpoly
+#print axioms DkMath.NumberTheory.CyclotomicQRUniversalTransport.map_universalRpoly_positiveChar
+#print axioms DkMath.NumberTheory.CyclotomicQRUniversalTransport.specializePrimitiveRoot_zeta
+#print axioms DkMath.NumberTheory.CyclotomicQRUniversalTraceOneAnchor.phase22_RZ_anchor_eq_universal
+#print axioms DkMath.NumberTheory.CyclotomicQRUniversalTraceOneAnchor.packet_RZ_map_eq_Rpoly_of_primitive_root
+#print axioms DkMath.NumberTheory.CyclotomicQRCommonPrimeSupport.not_common_coordinate_prime_of_odd_ne
+#print axioms DkMath.NumberTheory.CyclotomicQRCommonPrimeSupport.not_common_coordinate_prime_two
+#print axioms DkMath.NumberTheory.CyclotomicQRCommonPrimeSupport.common_coordinate_prime_eq_exponent
+#print axioms DkMath.FLT.Prime.prime_packet_coordinate_isCoprime
