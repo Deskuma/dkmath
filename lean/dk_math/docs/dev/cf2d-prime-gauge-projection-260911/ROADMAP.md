@@ -3,8 +3,8 @@
 Date: 2026-09-12  
 Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
 Base: `develop`  
-Status: CPG-V1-008 complete as independent reusable API work; the next source
-milestone is CPG-V1-009.
+Status: CPG-V1-009 complete as independent geometry/API work; the next source
+milestone is CPG-V1-010.
 
 ## 0. Current campaign state
 
@@ -69,7 +69,7 @@ route after the dynamic-phase information-gain verdict.
 | CPG-V1-006 | complete | Cross-fiber center transport | `GoldbachRefinement.lean` proves the successor law `Δ(relative shape) * M = 2`; focused build and audits recorded in `report-006.md`. |
 | CPG-V1-007 | complete — Outcome B | Information-gain audit | Dependency/derivability audit, bounded Lean countermodel, and Capacity/PairOverlap comparison recorded in `report-007.md`; no strict Goldbach information gain. |
 | CPG-V1-008 | complete | Finite prime-family synchronization | `PrimeGauge/PrimorialSync.lean` proves family-wide return iff world-modulus divisibility and least-positive synchronization; focused build and audits recorded in `report-008.md`. |
-| CPG-V1-009 | deferred | Production Projection API and CF2D bridge | Move only the minimal `Pi`/`U` facts from `Samples.Projection` to a production owner; prove the `1/k` bridge. |
+| CPG-V1-009 | complete | Production Projection API and CF2D bridge | `CosmicFormula/Projection/Basic.lean` and `CF2DBridge.lean` own the minimal `Pi`/`U` algebra and `1/k` bridge; focused build and audits are recorded in `report-009.md`. |
 | CPG-V1-010 | deferred | World-modulus projection and mesh | Connect fresh-prime modulus multiplication to `1/M` mesh; retain geometry-only semantics. |
 | CPG-V1-011 | deferred | Finite normalized grid | Prove finite `1/k` approximation; any infinite density theorem requires a separately identified growth provider. |
 
@@ -159,7 +159,8 @@ successor law. The existing zero-target theorem and interval endpoint
 conditions remain separate compatibility providers, and neither phase identity
 nor cardinality theorem is a proof of the Goldbach moving-wave statement.
 
-CPG-V1-008 is complete as independent reusable-API work. CPG-V1-009 and later
-Projection/continuum items require separately stated objectives and remain
-geometry/API work; they are not providers of an interval survivor,
-`GoldbachCapacityEscape`, or a Strong Goldbach proof.
+CPG-V1-008 is complete as independent reusable-API work, and CPG-V1-009 is
+complete as independent Projection/CF2D geometry/API work. The next source
+milestone is CPG-V1-010, world-modulus projection/mesh. These items remain
+separate from interval/prime realization and do not provide a continuum prime
+claim.

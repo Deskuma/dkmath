@@ -15,6 +15,7 @@ see: [CF2D PrimeGauge CosmicProjection Continuum](/docs/not_implements/260911-CF
 - [CPG-V1-006 cross-fiber center transport](report-006.md)
 - [CPG-V1-007 Outcome B information-gain audit](report-007.md)
 - [CPG-V1-008 finite prime-family synchronization](report-008.md)
+- [CPG-V1-009 Projection / CF2D bridge](report-009.md)
 
-Current state: CPG-V1-008 complete as an independent reusable API. The next
-authorized source milestone is CPG-V1-009, the minimal Projection/CF2D bridge.
+Current state: CPG-V1-009 complete as independent geometry/API work. The next
+authorized source milestone is CPG-V1-010, world-modulus projection / mesh.
