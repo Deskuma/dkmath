@@ -15,6 +15,7 @@ import DkMath.NumberTheory.Goldbach.Overlap
 import DkMath.NumberTheory.Goldbach.PairOverlap
 import DkMath.NumberTheory.Goldbach.CrossGapExchange
 import DkMath.NumberTheory.Goldbach.CrossGapEscape
+import DkMath.NumberTheory.Goldbach.CrossGapSquareCertification
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -39,4 +40,8 @@ Strong Goldbach theorem.
 `CrossGapEscape` adds the fixed-even-fiber finite obstruction certification
 endpoint and its one-hole bridge to `GoldbachPairAt`; it does not provide a
 survivor-existence theorem.
+
+`CrossGapSquareCertification` connects arbitrary-degree Cross-Gap pairs to
+the existing SquareBody prime-certification envelope and balanced-window
+transport, without adding a near-balanced existence provider.
 -/
