@@ -2,7 +2,7 @@
 
 Date: 2026-09-12  
 Branch: `research/NumberTheory-Goldbach-QuadraticPrimitiveFiber-260912-v0`  
-Status: research kickoff; no production theorem migration requested
+Status: research completed; Outcome B — structural normalization only
 
 This branch investigates whether the degree-two specialization of the canonical GTail boundary kernel gives a genuinely stronger finite structure for the Goldbach fixed-center fiber.
 
@@ -33,3 +33,25 @@ The existing Goldbach implementation already proves exact fixed-center GN equiva
 The recent GTail core refactor adds a general exact boundary gcd theorem whose degree-two specialization motivates this branch. The main question is not whether the primitive/parity reformulation is elegant, but whether it creates **strict information gain** over the existing Goldbach CRT/capacity ledger.
 
 No production file under `DkMath/NumberTheory/Goldbach/**` or `DkMath/Lib/**` should be modified during this research pass.
+
+
+## Completed research record
+
+The research concludes **Outcome B**. Primitive/parity normalization, the
+canonical quadratic gcd boundary, support separation and LL/LR/RR accounting
+are kernel-checked. Restoring the prime-center diagonal makes the normalized
+capacity criterion exactly equivalent to the existing Goldbach capacity
+criterion. No unconditional Strong Goldbach proof or strict capacity gain was
+obtained.
+
+- [QP-000: theorem inventory](report-000.md)
+- [QP-001: primitive quadratic boundary](report-001.md)
+- [QP-002: proper support separation](report-002.md)
+- [QP-003: LL/LR/RR ledger](report-003.md)
+- [QP-004: CRT geometry and counterexamples](report-004.md)
+- [QP-005: final information-gain audit and verification](report-005.md)
+
+Implementation: [scratch Lean](../../../DkMathTest/NumberTheory/GoldbachQuadraticPrimitiveAstra.lean),
+[Python experiment](numeric/goldbach_quadratic_primitive.py),
+[final numerical summary](numeric/qp-005-summary.json),
+[axiom audit](AxiomAudit.lean), [verification](verification/audit-summary.txt).

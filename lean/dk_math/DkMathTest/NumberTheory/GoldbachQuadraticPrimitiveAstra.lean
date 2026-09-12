@@ -416,4 +416,148 @@ theorem cardinality_not_width_regression :
     orientedResidue 50 7 3 1 ∧ orientedResidue 50 7 3 43 := by
   decide +kernel
 
+/-- QP-005: normalized survivors use the reduced world, with proper exceptions. -/
+def normalizedSurvivors (n : ℕ) : Finset ℕ :=
+  (primitiveParityOffsets n).filter (GoldbachSurvives n (reducedWorld n))
+
+/-- Covered candidates in exactly the same normalized finite fiber. -/
+def normalizedCovered (n : ℕ) : Finset ℕ :=
+  (primitiveParityOffsets n).filter (fun u => ¬ GoldbachSurvives n (reducedWorld n) u)
+
+/-- The omitted diagonal is present precisely at prime centers. -/
+def diagonalSeats (n : ℕ) : Finset ℕ := if Nat.Prime n then {0} else ∅
+
+/-- Reduced-world normalized survival is exactly positive original survival. -/
+theorem normalized_survivors_eq_positive (n : ℕ) :
+    normalizedSurvivors n =
+      (goldbachSurvivors n (goldbachSmallPrimes n)).filter (fun u => 0 < u) := by
+  ext u
+  constructor
+  · intro h
+    obtain ⟨hu, hs⟩ := Finset.mem_filter.mp h
+    have hm := mem_primitiveParityOffsets.mp hu
+    exact Finset.mem_filter.mpr ⟨mem_goldbachSurvivors.mpr
+      ⟨hm.1, (survives_reduced_iff hu).mp hs⟩, hm.2.2.1⟩
+  · intro h
+    obtain ⟨hs, hpos⟩ := Finset.mem_filter.mp h
+    obtain ⟨hb, hs⟩ := mem_goldbachSurvivors.mp hs
+    obtain ⟨hl, hr⟩ := (goldbach_survives_iff_prime_pair hb).mp hs
+    have hm := mem_primitiveParityOffsets.mpr
+      ⟨hb, positive_pair_primitive hpos hl hr, hpos, positive_pair_parity hpos hl hr⟩
+    exact Finset.mem_filter.mpr ⟨hm, (survives_reduced_iff hm).mpr hs⟩
+
+/-- Exact original zero-seat criterion, including the empty small-center fibers. -/
+theorem zero_survivor_iff (n : ℕ) :
+    0 ∈ goldbachSurvivors n (goldbachSmallPrimes n) ↔ Nat.Prime n := by
+  constructor
+  · intro h
+    obtain ⟨hb, hs⟩ := mem_goldbachSurvivors.mp h
+    have hh := (goldbach_survives_iff_prime_pair hb).mp hs
+    simpa using hh.1
+  · intro hn
+    have hb : 0 ∈ goldbachOffsets n := Finset.mem_range.mpr (by have := hn.two_le; omega)
+    exact mem_goldbachSurvivors.mpr
+      ⟨hb, (goldbach_survives_iff_prime_pair hb).mpr (by simpa using And.intro hn hn)⟩
+
+/-- Set-level accounting: every original solution is either the prime diagonal
+or a normalized survivor; no new solution is created by removing directions. -/
+theorem survivors_exact_split (n : ℕ) :
+    goldbachSurvivors n (goldbachSmallPrimes n) =
+      normalizedSurvivors n ∪ diagonalSeats n := by
+  rw [normalized_survivors_eq_positive]
+  ext u
+  have hdiag : u ∈ diagonalSeats n ↔ u = 0 ∧ Nat.Prime n := by
+    by_cases hp : Nat.Prime n <;> simp [diagonalSeats, hp]
+  simp only [Finset.mem_union, Finset.mem_filter, hdiag]
+  by_cases hz : u = 0
+  · subst u
+    rw [zero_survivor_iff]
+    simp only [Nat.lt_irrefl, and_false, false_or, true_and]
+  · simp only [Nat.pos_of_ne_zero hz, and_true, hz, false_and, or_false]
+
+/-- Exact solution-count loss is one at prime centers and zero otherwise. -/
+theorem survivor_card_exact (n : ℕ) :
+    (goldbachSurvivors n (goldbachSmallPrimes n)).card =
+      (normalizedSurvivors n).card + if Nat.Prime n then 1 else 0 := by
+  have hd : Disjoint (normalizedSurvivors n) (diagonalSeats n) := by
+    apply Finset.disjoint_left.mpr
+    intro u hu hv
+    have hpos : 0 < u := (Finset.mem_filter.mp (normalized_survivors_eq_positive n ▸ hu)).2
+    by_cases hn : Nat.Prime n
+    · have hz : u = 0 := by simpa [diagonalSeats, hn] using hv
+      omega
+    · simp [diagonalSeats, hn] at hv
+  rw [survivors_exact_split, Finset.card_union_of_disjoint hd]
+  by_cases hp : Nat.Prime n <;> simp [diagonalSeats, hp]
+
+/-- The normalized candidate partition has the same exact finite capacity law. -/
+theorem normalized_conservation (n : ℕ) :
+    (normalizedSurvivors n).card + (normalizedCovered n).card =
+      (primitiveParityOffsets n).card := by
+  exact Finset.card_filter_add_card_filter_not (GoldbachSurvives n (reducedWorld n))
+
+/-- Quantitative comparison without truncated differences: removed-candidate
+and removed-cover counts compensate, except for the prime-center diagonal. -/
+theorem capacity_balance (n : ℕ) :
+    (n - 1) + (normalizedCovered n).card =
+      (primitiveParityOffsets n).card +
+      (goldbachCoveredSeats n (goldbachSmallPrimes n)).card +
+      if Nat.Prime n then 1 else 0 := by
+  have ho := goldbach_survivors_add_covered n (goldbachSmallPrimes n)
+  have hn := normalized_conservation n
+  have hs := survivor_card_exact n
+  omega
+
+/-- Restoring the diagonal gives exactly the existing fixed-center capacity
+criterion, not a stronger sufficient estimate. -/
+theorem pair_iff_normalized_capacity (n : ℕ) :
+    GoldbachPairAt n ↔ Nat.Prime n ∨
+      (normalizedCovered n).card < (primitiveParityOffsets n).card := by
+  rw [goldbachPairAt_iff_survivors_nonempty, ← Finset.card_pos, survivor_card_exact]
+  have hn := normalized_conservation n
+  by_cases hp : Nat.Prime n
+  · rw [if_pos hp]
+    exact ⟨fun _ => Or.inl hp, fun _ => by omega⟩
+  · rw [if_neg hp, Nat.add_zero, or_iff_right hp]
+    omega
+
+/-- Exact universal equivalence classifies the normalized criterion as a
+reformulation. This theorem supplies no proof of either side. -/
+theorem strongGoldbach_iff_normalized_capacity :
+    StrongGoldbach ↔ ∀ n : ℕ, 2 ≤ n → Nat.Prime n ∨
+      (normalizedCovered n).card < (primitiveParityOffsets n).card := by
+  unfold StrongGoldbach
+  exact forall_congr' fun n => forall_congr' fun _ => pair_iff_normalized_capacity n
+
+/-- Direct comparison to the production provider, with the diagonal restored. -/
+theorem capacityEscape_iff_normalized_capacity :
+    GoldbachCapacityEscape ↔ ∀ n : ℕ, 2 ≤ n → Nat.Prime n ∨
+      (normalizedCovered n).card < (primitiveParityOffsets n).card :=
+  strongGoldbach_iff_capacityEscape.symm.trans strongGoldbach_iff_normalized_capacity
+
+/-- The naive strict incidence bound still fails after normalization: n=19
+has eight candidates, seven covered seats, one survivor, and incidence eight. -/
+theorem normalized_incidence_counterexample :
+    (primitiveParityOffsets 19).card = 8 ∧ (normalizedCovered 19).card = 7 ∧
+    (normalizedSurvivors 19).card = 1 ∧
+    (∑ u ∈ primitiveParityOffsets 19, (goldbachObstructionSupport 19 u).card) = 8 := by
+  decide +kernel
+
+/-- The candidate-cardinality shortcut also fails for proper LR occupancy:
+53 candidates < 65, yet both offsets carry the same proper 5-left/13-right wave. -/
+theorem proper_cardinality_not_width_regression :
+    (primitiveParityOffsets 162).card = 53 ∧ 53 < 5 * 13 ∧
+    7 ∈ primitiveParityOffsets 162 ∧ 137 ∈ primitiveParityOffsets 162 ∧
+    5 ∈ leftSupport 162 7 ∧ 13 ∈ rightSupport 162 7 ∧
+    5 ∈ leftSupport 162 137 ∧ 13 ∈ rightSupport 162 137 := by
+  decide +kernel
+
+/-- Minimal unbounded-subtraction failure found in QP-002. -/
+example : Nat.Coprime 0 1 ∧ 0 % 2 ≠ 1 % 2 ∧
+    Nat.gcd (0 - 1) (0 + 1) ≠ Nat.gcd (0 - 1) 2 := by decide
+
+/-- The smallest parity-only shared odd factor is a composite diagonal. -/
+example : 9 % 2 ≠ 0 % 2 ∧ 3 ∈ leftSupport 9 0 ∧ 3 ∈ rightSupport 9 0 := by
+  decide +kernel
+
 end DkMathTest.GoldbachQuadraticPrimitiveAstra

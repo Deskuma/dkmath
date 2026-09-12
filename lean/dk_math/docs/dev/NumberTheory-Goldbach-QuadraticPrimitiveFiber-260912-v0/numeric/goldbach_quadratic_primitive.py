@@ -3,7 +3,8 @@
 
 Offsets and prime cutoff match production Lean: 0 <= u < n-1, r*r <= 2*n.
 Raw support uses divisibility; proper support additionally excludes endpoint=r.
-All reported minima use lexicographic (n,u[,p,q]) order within the stated range.
+Seat minima use lexicographic (n,u) order within the stated range.
+Wave minima scan (n,min(p,q),max(p,q),orientation), forward then reverse.
 """
 import argparse
 import csv
@@ -109,12 +110,28 @@ def audit(max_center, selected):
                 'primitive_without_parity_gcd_one': primitive and gcd(a, b) != 1,
                 'primitive_without_parity_proper_disjoint': primitive and bool(left & right),
                 'parity_without_primitive_proper_disjoint': n % 2 != u % 2 and bool(left & right),
+                'positive_parity_without_primitive_proper_disjoint': u > 0 and n % 2 != u % 2 and bool(left & right),
                 'raw_equals_proper_on_parity': parity and (raw_l != left or raw_r != right),
             }
             for name, failed in checks.items():
                 first(name, failed, detail)
             first('first_positive_higher_overlap_primitive', primitive and u > 0 and k >= 3, detail)
             first('first_positive_higher_overlap_parity', parity and k >= 3, detail)
+        counts['totient_n'] = sum(gcd(n, u) == 1 for u in range(n))
+        counts['totient_twice_n'] = sum(gcd(2*n, u) == 1 for u in range(2*n))
+        if n >= 2:
+            assert counts['primitive'] == counts['totient_n'] - 1
+            assert counts['parity'] == counts['totient_twice_n'] // 2 - 1
+        counts['removed_prime_directions'] = len(world) - len(reduced)
+        counts['raw_forbidden_classes_sum'] = sum(1 if 2*n % r == 0 else 2 for r in world)
+        counts['reduced_raw_forbidden_classes_sum'] = 2*len(reduced)
+        assert counts['raw_forbidden_classes_sum'] - counts['reduced_raw_forbidden_classes_sum'] == counts['removed_prime_directions']
+        if n >= 4 and counts['parity_incidence'] >= counts['parity']:
+            first('normalized_strict_incidence_failure', True, dict(n=n, u=None,
+                  candidates=counts['parity'], incidence=counts['parity_incidence'],
+                  survivors=counts['parity_survivors']))
+        if n >= 2 and counts['survivors'] and not counts['parity_survivors']:
+            first('primitive_only_criterion_failure', True, dict(n=n, u=0))
         counts['removed_candidates'] = counts['candidates'] - counts['parity']
         counts['removed_covered'] = counts['covered'] - counts['parity_covered']
         counts['diagonal_survivors'] = int(n in primes)
@@ -134,9 +151,26 @@ def audit(max_center, selected):
     nonempty = [r for r in rows if r['parity']]
     density_worst = sorted(nonempty, key=lambda r: (Fraction(r['parity_density']), r['n']))[:5]
     changes = sorted([r for r in rows if r['n'] >= 2], key=lambda r: (r['removed_candidates'], r['n']))
+    correct_invariants = ['coordinate_coprimality', 'quadratic_boundary',
+                          'positive_pair_primitive', 'positive_pair_parity',
+                          'center_factor_removal', 'two_removal',
+                          'parity_support_disjoint', 'reduced_support_equality',
+                          'survivor_prime_pair', 'LL_LR_RR']
+    assert not set(correct_invariants).intersection(failures)
+    density_changes = {}
+    for stage in ['primitive', 'parity']:
+        comparable = [r for r in rows if r[f'{stage}_density'] is not None and r['density'] is not None]
+        delta = lambda r: Fraction(r[f'{stage}_density']) - Fraction(r['density'])
+        density_changes[stage] = dict(
+            improved=sum(delta(r) > 0 for r in comparable),
+            equal=sum(delta(r) == 0 for r in comparable),
+            worsened=sum(delta(r) < 0 for r in comparable),
+            undefined=sum(r['n'] >= 2 and r[f'{stage}_density'] is None for r in rows),
+            first_worsened=next((r['n'] for r in comparable if delta(r) < 0), None))
     summary = dict(max_center=max_center, centers_checked=len(rows),
                    selected_centers=sorted(selected),
-                   minima=failures,
+                   minima=failures, checked_invariants=correct_invariants,
+                   density_changes=density_changes,
                    worst_parity_density=[{k: r[k] for k in ('n', 'parity', 'parity_survivors', 'parity_density')} for r in density_worst],
                    least_candidate_removal=changes[:3], most_candidate_removal=changes[-3:])
     return dict(summary=summary, centers=rows, selected_seats=seats)
@@ -186,6 +220,8 @@ def wave_audit(max_center, selected):
                         first('multiple_normalized_same_orientation', case)
                     if len(normalized) < modulus and len(restricted) > 1:
                         first('candidate_cardinality_not_geometric_width', case)
+                    if len(normalized) < modulus and len(proper) > 1:
+                        first('candidate_cardinality_not_width_proper', case)
                     if restricted != proper:
                         first('raw_LR_endpoint_exception', case)
                     if restricted and n-1 <= modulus:
@@ -217,6 +253,7 @@ def main():
     parser.add_argument('--select', default='2,3,5,6,12,35,100')
     parser.add_argument('--json', type=Path)
     parser.add_argument('--csv', type=Path)
+    parser.add_argument('--summary-json', type=Path)
     args = parser.parse_args()
     if args.max_center < 2:
         parser.error('--max-center must be at least 2')
@@ -225,14 +262,18 @@ def main():
     data['waves'] = wave_audit(args.max_center, selected)
     if args.json:
         args.json.write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
+    if args.summary_json:
+        summary = dict(data['summary'], waves={k: v for k, v in data['waves'].items() if k != 'selected_waves'})
+        args.summary_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if args.csv:
         with args.csv.open('w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=list(data['centers'][0]))
+            writer = csv.DictWriter(f, fieldnames=list(data['centers'][0]), lineterminator='\n')
             writer.writeheader()
             writer.writerows(data['centers'])
     print(f"Centers 0..{args.max_center}; exact diagonal/survivor/coverage identities passed")
     for name, case in data['summary']['minima'].items():
         print(f"{name}: n={case['n']}, u={case['u']}")
+    print('Density changes:', data['summary']['density_changes'])
     print('Worst parity survivor densities:', data['summary']['worst_parity_density'])
     print('CRT interval orientations:', data['waves']['interval_orientation_tests'])
     print('CRT full-period orientations:', data['waves']['full_period_orientation_tests'])

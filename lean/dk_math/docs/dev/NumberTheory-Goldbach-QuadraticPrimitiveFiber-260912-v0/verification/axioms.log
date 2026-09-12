@@ -1,0 +1,129 @@
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.coordinate_coprime' depends on axioms: [propext, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.right_coordinate_coprime' depends on axioms: [propext, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.quadratic_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.quadratic_boundary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.parity_iff_odd_left' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.endpoints_coprime_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.positive_pair_primitive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.positive_pair_parity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.diagonal_pair' depends on axioms: [propext]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.pair_of_center_prime' depends on axioms: [propext, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.primitiveOffsets' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.primitivePositiveOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.primitiveParityOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.mem_primitiveOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.mem_primitivePositiveOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.mem_primitiveParityOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.center_divisor_absent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.two_absent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.leftSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.rightSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.support_union' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.support_disjoint_of_coprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.shared_support_eq_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.support_disjoint_iff_not_shared_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.primitive_support_disjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.reducedWorld' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.survives_reduced_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.choose_two_add' depends on axioms: [propext]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.localLL' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.localLR' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.localRR' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.local_pair_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.primitive_pair_split' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.full_pair_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.higher_overlap_regression' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.orientedResidue' depends on axioms: [propext, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_iff_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_modEq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_crt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.orientations_exclusive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_spacing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_at_most_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.oriented_parity_spacing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.sharp_spacing_regression' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.cardinality_not_width_regression' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.normalizedSurvivors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.normalizedCovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.diagonalSeats' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.normalized_survivors_eq_positive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.zero_survivor_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.survivors_exact_split' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.survivor_card_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.normalized_conservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.capacity_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.pair_iff_normalized_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.strongGoldbach_iff_normalized_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.capacityEscape_iff_normalized_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.normalized_incidence_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachQuadraticPrimitiveAstra.proper_cardinality_not_width_regression' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
