@@ -84,6 +84,23 @@ def UnitPairAt (n d e : ℕ) : Prop :=
   ∃ u v : ℕ, 0 < u ∧ 0 < v ∧ Nat.Prime (GN d 1 u) ∧ Nat.Prime (GN e 1 v) ∧
     pairBody d e u v = 2 * n
 
+theorem unitPairAt_swap (n d e : ℕ) : UnitPairAt n d e ↔ UnitPairAt n e d := by
+  have swap : ∀ a b : ℕ, UnitPairAt n a b → UnitPairAt n b a := by
+    intro a b
+    rintro ⟨u, v, hu, hv, hp, hq, hsum⟩
+    refine ⟨v, u, hv, hu, hq, hp, ?_⟩
+    change GN b 1 v + GN a 1 u = 2 * n
+    rw [Nat.add_comm]
+    exact hsum
+  exact ⟨swap d e, swap e d⟩
+
+/-- The combined Big is strictly greater than its combined Body in the positive region. -/
+theorem pairBody_lt_pairBig {d e u v : ℕ} (hu : 0 < u) (hv : 0 < v) :
+    pairBody d e u v < pairBig d e u v := by
+  have h := pairBody_add_pairGap d e u v
+  have hgap : 0 < pairGap d e u v := add_pos (Nat.pow_pos hu) (Nat.pow_pos hv)
+  omega
+
 theorem goldbachPairAt_of_unitPairAt {n d e : ℕ} (h : UnitPairAt n d e) :
     GoldbachPairAt n := by
   obtain ⟨u, v, _, _, hp, hq, hsum⟩ := h
