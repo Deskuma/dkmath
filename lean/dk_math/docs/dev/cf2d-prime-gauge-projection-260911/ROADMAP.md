@@ -1,7 +1,7 @@
 # ROADMAP — CF2D / Prime Gauge / Goldbach Dynamic Phase / Cosmic Projection / Continuum v1
 
 Date: 2026-09-12  
-Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
+Branch: `wip/cf2d-prime-gauge-projection-260911-v2`  
 Base: `develop`  
 Status: CPG-V1-011 complete as independent finite normalized-grid API work; no
 further v1 source milestone is authorized.
