@@ -1,43 +1,26 @@
-# CF2D / Prime Gauge / Primorial / Cosmic Projection / Continuum 実装計画
+# CF2D / Prime Gauge / Goldbach Dynamic Phase / Cosmic Projection / Continuum 実装計画
 
-- Status: implementation plan / not implemented
+- Status: implementation plan / v1 research direction / not implemented
 - Date: 2026-09-11
-- Branch at recording: `docs/cf2d-prime-gauge-projection-260911-v0`
+- Updated: 2026-09-12
+- Previous branch: `docs/cf2d-prime-gauge-projection-260911-v0` — merged to `develop`
+- Suggested next branch: `docs/cf2d-prime-gauge-projection-260911-v1`
 - Base branch: `develop`
 - Repository: `Deskuma/dkmath`
-- Related plans:
+- Related plans / reports:
   - `docs/not_implements/260901-実装可能定理候補-実装順調査.md`
   - `docs/not_implements/260826-Prime-Harmony-PHZ-GN-PrimeGauge-ImplementationPlan.md`
   - `docs/not_implements/260830-PrimeGauge-CosmicProjection-TwinPrimeHarmony-ImplementationDesign.md`
+  - `docs/not_implements/260909-Goldbach-GN-PrimePair-Fiber-Strategy.md`
   - `docs/not_implements/宇宙式の反転射影-260708.md`
+  - `lean/dk_math/docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/README.md`
+  - `lean/dk_math/docs/dev/NumberTheory-Goldbach-QuadraticPrimitiveFiber-260912-v0/report-005.md`
 
 ---
 
-## 0. この文書の目的
+## 0. 2026-09-12 更新要旨
 
-本資料は、これまで別々の未実装案件として記録されていた
-
-```text
-CF2D finite rotation / exact order
-Prime Gauge
-Primorial / finite prime-world synchronization
-Cosmic Inversion Projection
-CRT / residue phase observer
-continuous completion / no-hole
-```
-
-を、一つの実装幹へ統合するための計画である。
-
-今回新しく得た中心視座は次である。
-
-```text
-CF2D は「円を描かずに有限回転を表す」既実装 provider である。
-Prime Gauge は、その有限回転の周期を整数可除性として観測する層にできる。
-Primorial は、複数 prime gauge の最小同時帰還周期として読める。
-Cosmic Projection の gap 1/(P+1) は、P = k - 1 と置くと CF2D の normalized cycle step 1/k と一致する。
-```
-
-したがって新しい幹は、概念的に
+本資料の v0 は、次の一本化を目的としていた。
 
 ```text
 CF2D exact finite orbit
@@ -55,52 +38,101 @@ Cosmic Projection gap bridge
 mesh → 0 / continuum completion
 ```
 
-とする。
+この spine 自体は維持する。
 
-重要なのは、**continuous no-hole から prime existence を結論しない**ことである。
-この計画の初期実装は、既存の exact algebraic / finite arithmetic theorem を接続することに限定する。
+ただし 2026-09-12 に完了した Goldbach quadratic primitive audit により、優先順位を変更する。
+
+Astra による調査では、固定中心 `n` の Goldbach fiber に対する
+
+```text
+primitive normalization
+parity normalization
+left/right support separation
+LL / LR / RR split
+oriented CRT product-wave
+```
+
+はすべて有効な構造である一方、対角解を戻した normalized capacity 条件は既存 `GoldbachCapacityEscape` と exact に同値であった。
+
+従って結果は
+
+> **Outcome B — structural normalization only**
+
+であり、固定された一枚の fiber をさらに静的に正規化するだけでは、Strong Goldbach に対する strict information gain は得られなかった。
+
+この結果を受け、v1 では CF2D / Prime Gauge を単なる可除性の別表現として終わらせず、**Goldbach obstruction configuration の center motion / seat motion / prime-world refinement を exact finite dynamics として固定すること**を第一研究目的へ昇格する。
+
+新しい優先 spine は次である。
+
+```text
+CF2D exact order
+        ↓
+return ⇔ divisibility / phase equality
+        ↓
+Goldbach left/right conjugate prime gauges
+        ↓
+center motion n → n+1
+        ↓
+paired refinement under fresh prime q
+        ↓
+parent-independent relative phase / two-hole shape
+        ↓
+finite prime-world dynamic phase vector
+        ↓
+information-gain audit
+        ↓
+[有望なら] Cosmic Projection / mesh / continuum
+```
+
+**重要:** Projection / continuum は廃止しない。ただし Goldbach への応用では、dynamic phase 層で strict information gain が確認できるまで後段へ送る。
 
 ---
 
-## 1. 2026-09-01 候補文書との照合結果
+## 1. v1 の研究判断基準
 
-`260901-実装可能定理候補-実装順調査.md` には、以下は既に現れている。
+今回の Goldbach audit から、次の区別を明示する。
 
-- Boundary / GN 二チャネル
-- unit Boundary
-- 整数側 Prime Gauge
-- Cosmic Projection の後段利用
-- continuous no-hole を prime existence と混同しない停止条件
+### 1.1 static equivalence
 
-また `260830-PrimeGauge-CosmicProjection-TwinPrimeHarmony-ImplementationDesign.md` には、
+次は有用な正規形であっても、それ自体では新情報ではない可能性が高い。
 
-- Prime Gauge
-- Cosmic Inversion Projection
-- `discreteCellRealization`
-- Prime Harmony の周期波 `cos(2πn/p)`
+```text
+residue ↔ phase
+CRT residue vector ↔ product-modulus coordinate
+primitive/parity filtering
+full-period survivor count
+local support cardinality
+same-orientation spacing
+```
 
-が記録されている。
+固定 `n` について既存 theorem の言い換えに留まるなら、Goldbach の universal short-fiber escape へ進んだとは数えない。
 
-一方、今回の中心である次の橋は、既存候補文書では theorem family として明示されていない。
+### 1.2 dynamic information
 
-1. `CF2D.regularKernel k` の exact order を、`k ∣ n` と return event の同値へ変換すること。
-2. 素数 `p` を prime-order gauge として読むこと。
-3. 異なる素数 gauge の帰還排他性を可除性から得ること。
-4. 有限 prime family の同時帰還を product modulus / primorial に接続すること。
-5. Cosmic Projection の gap と `CF2D.regularPhaseStep` を
-   `U(k - 1) = 1/k` で直接同一視すること。
-6. Primorial refinement の mesh `1/Q` と、projection boundary gap `Pi(Q-1)+1` を同一の量として扱うこと。
-7. この mesh が 0 に近づくことを、prime existence とは独立な continuum approximation として切り出すこと。
+v1 で狙うのは、次のいずれかを与える theorem である。
 
-よって本資料は、旧計画を置き換えるものではなく、**既存計画間に欠けていた CF2D 軸を追加する統合 bridge 計画**と位置づける。
+- center `n → n+1` で obstruction configuration がどう移動するか。
+- seat `u → u+1` と center motion の二つの flow の関係。
+- prime-world refinement `M → qM` において、複数 parent cell の間で保存される形。
+- left/right forbidden children の相対位相が parent に依存しないこと。
+- 複数 prime gauge を束ねたとき、単なる独立 CRT 座標では表現されない collision / transport constraint。
+- neighboring fibers 間で保存・単調化・交換される有限量。
+
+最終的な判定は次の三段階とする。
+
+```text
+Outcome A: strict information gain が得られた。
+Outcome B: 正しい dynamic normal form だが既存 CRT / capacity の再表現。
+Outcome C: 想定した保存・分離・局所化が反例で崩れる。
+```
 
 ---
 
 ## 2. 既実装 provider
 
-### 2.1 CF2D
+### 2.1 CF2D exact finite orbit
 
-現在の `develop` には既に次がある。
+現在の `develop` には次がある。
 
 ```text
 DkMath.CosmicFormula.Rotation.CF2D.Basic
@@ -110,7 +142,7 @@ DkMath.CosmicFormula.Rotation.CF2D.RegularOrbit
 DkMath.CosmicFormula.Rotation.CF2D.EuclideanRegularOrbit
 ```
 
-特に再利用する theorem / definition は次である。
+再利用する中心 API:
 
 ```lean
 regularPhaseStep
@@ -125,15 +157,17 @@ regularVertex_injective
 regularVertex_ncard_range
 ```
 
-中心事実は、正の `k` について
+正の `k` について既に
 
 $$
-\operatorname{orderOf}(\operatorname{regularKernel}(k))=k.
+\operatorname{orderOf}(\operatorname{regularKernel}(k))=k
 $$
 
-したがって、円・角・多角形を新規定義せず、有限周期構造をそのまま使える。
+が成立する。
 
-### 2.2 finite prime world / product modulus
+ここから return / phase equality / residue observer を薄い bridge として構築する。
+
+### 2.2 finite prime world / periodicity / refinement
 
 既存の
 
@@ -142,14 +176,63 @@ FinitePrimeWorld
 PeriodicPrimeWorld
 PrimeWorldResidues
 PrimeWorldRefinement
+PrimeWorldCardinality
+EulerTotientBridge
 PHZ30
 ```
 
 を再利用する。
 
-既知 prime set `S` の product modulus は、新しい primorial 定義を重複して作らず、可能な限り既存 `primeWorldModulus S` を使う。
+特に重要な既実装 theorem は次である。
 
-### 2.3 Cosmic Projection prototype
+```lean
+primeWorldModulus
+dvd_primeWorldModulus_of_mem
+supportDisjointFrom_add_mul_primeWorldModulus_iff
+supportDisjointFrom_mod_primeWorldModulus_iff
+supportDisjointFrom_centered_mirror_iff
+primeWorldModulus_insert
+prime_coprime_primeWorldModulus_of_not_mem
+primeWorldChild
+existsUnique_child_dvd_new_prime
+exists_unique_reserved_child_and_other_children_survive
+reservedChildIndices_eq_singleton
+card_survivingChildIndices
+```
+
+one-sided prime-world refinement では、fresh prime `q` により old parent の `q` children のうち exactly one が新 `q` wave に予約され、残り `q-1` が survive するところまで実装済みである。
+
+v1 ではこれを **Goldbach paired refinement** へ拡張する。
+
+### 2.3 Goldbach fixed-center layer
+
+現在の production Goldbach modules は、少なくとも次を実装済みである。
+
+```text
+fixed-center degree-two GN equivalence
+proper small-prime obstruction
+small-prime completeness
+full-period CRT counting
+covered / survivor capacity
+incidence / overlap conservation
+Pascal pair residual
+```
+
+また research scratch では、次を kernel-check 済みである。
+
+```text
+positive prime pair → Nat.Coprime n u
+primitive + opposite parity → endpoint coprime
+center divisors / 2 removal on normalized fiber
+left/right proper support disjointness
+LL / LR / RR split
+oriented CRT spacing
+normalized capacity ↔ existing capacity ↔ StrongGoldbach
+```
+
+従って v1 で同じ fixed-center normalization を再実装しない。
+
+### 2.4 Cosmic Projection prototype
 
 `DkMath/Samples/Projection.lean` には試作として
 
@@ -163,24 +246,13 @@ cosmicProjection_mem_interval
 
 がある。
 
-これは正式 API ではないため、実装時には `Samples` を provider として import せず、必要な定義・定理を `DkMath.CosmicFormula.Projection` へ回収する。
+Projection は依然として正式化候補だが、Goldbach dynamic phase の事実監査より後に置く。
 
 ---
 
-## 3. 中心数学
+## 3. 第一基礎 bridge — CF2D return / phase equality / divisibility
 
-### 3.1 CF2D return と可除性
-
-正の `k` に対して、`regularKernel k` は exact order `k` を持つ。
-従って任意の `n` について
-
-$$
-(\operatorname{regularKernel}(k))^n=1
-\iff
-k\mid n.
-$$
-
-これは今回の最重要 bridge である。
+### 3.1 return ⇔ divisibility
 
 候補 theorem:
 
@@ -190,49 +262,53 @@ theorem regularKernel_pow_eq_one_iff_dvd
     regularKernel k ^ n = 1 ↔ k ∣ n
 ```
 
-証明は `orderOf_regularKernel hk` と Mathlib の `orderOf_dvd_iff_pow_eq_one` を使う薄い wrapper とする。
+数学的内容:
 
-この theorem により、
+$$
+(\operatorname{regularKernel}(k))^n=1
+\iff
+k\mid n.
+$$
+
+証明は `orderOf_regularKernel hk` と Mathlib の order theorem を利用する薄い wrapper とする。
+
+この theorem 単独は新しい数論結果ではない。目的は DkMath 内で
 
 ```text
-CF2D kernel return
-        ⇕
+CF2D return event
+⇕
 integer divisibility
 ```
 
-が kernel-checked に固定される。
+を canonical に固定することである。
 
-### 3.2 Prime Gauge
+### 3.2 phase equality ⇔ congruence
 
-`p` が素数であるとき、`regularKernel p` を prime-period gauge と読む。
+Goldbach 応用では return-to-one だけでなく二つの phase の一致が必要になる。
 
-ここで注意する。
-
-`regularKernel k` が最初に `k` で帰還すること自体は、合成数 `k` に対しても成立する。
-素数性の意味は「first return」だけではなく、周期群の位数 `p` が素数であり、非自明な proper divisor / subgroup decomposition を持たない点にある。
-
-初期実装では新しい大きな structure を作らず、semantic theorem wrapper に留める。
-
-候補:
+候補 theorem:
 
 ```lean
-def IsPrimePeriodGauge (r : UnitKernel ℝ) : Prop :=
-  Nat.Prime (orderOf r)
-
- theorem regularKernel_isPrimePeriodGauge
-    {p : ℕ} (hp : Nat.Prime p) :
-    IsPrimePeriodGauge (regularKernel p)
+theorem regularKernel_pow_eq_pow_iff_modEq
+    {k a b : ℕ} (hk : 0 < k) :
+    regularKernel k ^ a = regularKernel k ^ b ↔ Nat.ModEq k a b
 ```
 
-ただしこの定義が単なる `Nat.Prime (orderOf r)` の別名に過ぎず API 価値が小さい場合、定義自体は作らず theorem 名と docstring のみに意味論を置く。
+名称・statement は repository audit 後に調整する。
 
-### 3.3 異なる prime gauge の帰還排他性
+この theorem により、可除性だけでなく residue class 全体を CF2D phase で観測できる。
 
-異なる素数 `p ≠ q` に対して
+### 3.3 prime-period semantics
 
-$$
-(\operatorname{regularKernel}(q))^p\ne1.
-$$
+`p` が素数なら `regularKernel p` は prime-order cyclic gauge と読める。
+
+新 structure は原則作らない。単なる
+
+```lean
+Nat.Prime (orderOf r)
+```
+
+の言い換えしか持たない場合は theorem / docstring の semantic wrapper に留める。
 
 候補:
 
@@ -243,39 +319,388 @@ theorem distinct_prime_regularKernel_not_return
     regularKernel q ^ p ≠ 1
 ```
 
-証明方針:
+---
 
-```text
-return at p
-→ q ∣ p
-→ prime divisor of prime
-→ q = p
-→ contradiction
+## 4. Goldbach conjugate prime gauge
+
+固定 center `n` と prime `p` に対し、Goldbach obstruction は
+
+$$
+p\mid n-u
+\qquad\text{or}\qquad
+p\mid n+u
+$$
+
+である。
+
+`g_p := regularKernel p` と読むと、第一候補 bridge は
+
+$$
+p\mid n-u
+\iff
+g_p^n=g_p^u,
+$$
+
+$$
+p\mid n+u
+\iff
+g_p^u=g_p^{-n}.
+$$
+
+自然数減算の truncation を避けるため、実装では `u ≤ n` を明示するか、`Nat.ModEq` / `ZMod p` を中間層に使う。
+
+候補 theorem family:
+
+```lean
+goldbachLeftObstructed_iff_gauge_eq
+goldbachRightObstructed_iff_gauge_eq_inv
+goldbachProperLeftObstructed_iff_gauge_eq_and_endpoint_ne
+goldbachProperRightObstructed_iff_gauge_eq_inv_and_endpoint_ne
 ```
 
-これは Prime Harmony の `p ∣ n ↔ phase return` を、cosine observer より前の exact algebraic layer で固定する。
+重要なのは、proper endpoint exception を phase periodicity と混同しないこと。
+
+### 4.1 two forbidden markers
+
+各 odd prime `p` に対し、center `n` は二つの forbidden phase
+
+$$
+g_p^n,
+\qquad
+g_p^{-n}
+$$
+
+を持つ。
+
+固定 `n` ではこれは既存二 residue obstruction の同値表現に過ぎない。
+
+v1 では、この pair を **動く conjugate marker** として扱う。
+
+候補 definition は必要最小限とし、structure が重い場合は pair theorem に留める。
+
+```lean
+GoldbachGaugeMarkers p n := (regularKernel p ^ n, (regularKernel p ^ n)⁻¹)
+```
 
 ---
 
-## 4. 有限 prime family と Primorial synchronization
+## 5. center motion と seat motion
 
-有限 prime set `S` を考える。
+### 5.1 center motion `n → n+1`
 
-各 `p ∈ S` に対し gauge `regularKernel p` を置く。
-
-同時帰還条件は
+`g_p := regularKernel p` とすると、forbidden markers は
 
 $$
-\forall p\in S,\quad (\operatorname{regularKernel}(p))^n=1.
+(g_p^n,g_p^{-n})
+\longmapsto
+(g_p\,g_p^n,\;g_p^{-1}g_p^{-n}).
 $$
 
-各 return を可除性へ変換すれば
+従って left/right marker は CF2D cycle 上を逆方向に一 step ずつ進む。
+
+候補 theorem:
+
+```lean
+goldbachGaugeMarkers_succ
+```
+
+この theorem 自体は group algebra で薄いが、後段の cross-fiber observer の基礎とする。
+
+### 5.2 seat motion `u → u+1`
+
+Goldbach coordinates
 
 $$
-\forall p\in S,\quad p\mid n.
+L_n(u)=n-u,
+\qquad
+R_n(u)=n+u
 $$
 
-`S` が prime set なら pairwise coprime なので、これは product modulus
+では、seat を一つ進めると left は -1、right は +1 だけ進む。
+
+```text
+center motion n → n+1
+  : left marker +1, right marker +1 in endpoint coordinates
+
+seat motion u → u+1
+  : left endpoint -1, right endpoint +1
+```
+
+phase observer 上ではこの二 flow を明確に区別する。
+
+### 5.3 relative phase
+
+二つの forbidden markers の相対位相は
+
+$$
+\rho_p(n)
+:=
+g_p^n(g_p^{-n})^{-1}
+=
+g_p^{2n}.
+$$
+
+従って
+
+$$
+\rho_p(n)=1
+\iff
+p\mid2n.
+$$
+
+odd prime `p` なら
+
+$$
+\rho_p(n)=1
+\iff
+p\mid n.
+$$
+
+これは既存 Goldbach residue theorem
+
+```text
+left/right forbidden residues coincide ↔ p ∣ 2*n
+```
+
+の dynamic phase 読みである。
+
+候補 theorem family:
+
+```lean
+goldbachGaugeRelativePhase_eq_pow_two_mul
+goldbachGaugeRelativePhase_eq_one_iff_dvd_two_center
+goldbachGaugeRelativePhase_succ
+```
+
+**判定条件:** ここまでが既存 residue theorem の同値再表現だけなら Outcome B。次の paired refinement で cross-parent / cross-fiber 情報を探す。
+
+---
+
+## 6. Goldbach paired prime-world refinement
+
+既存 `PrimeWorldRefinement` は one-sided divisibility wave に対し、fresh prime `q` を挿入すると old parent `r` の `q` children
+
+$$
+u_j=r+jM,
+\qquad
+0\le j<q,
+\qquad
+M=\operatorname{primeWorldModulus}(S)
+$$
+
+のうち exactly one を新 `q` wave が予約する。
+
+Goldbach では fresh odd prime `q` に対し、raw obstruction は
+
+$$
+q\mid n-u_j
+$$
+
+または
+
+$$
+q\mid n+u_j.
+$$
+
+従って通常は left/right それぞれ exactly one child が予約される。
+
+### 6.1 paired unique children
+
+候補 theorem family:
+
+```lean
+existsUnique_leftReservedChild
+existsUnique_rightReservedChild
+leftReservedChild_eq_rightReservedChild_iff_dvd_two_center
+leftReservedChild_ne_rightReservedChild_of_not_dvd_two_center
+```
+
+`q ∤ 2*n` の場合、二つの reserved child は distinct であるため raw level では
+
+$$
+q-2
+$$
+
+children が新しい `q` の左右 obstruction を回避する。
+
+候補:
+
+```lean
+pairedReservedChildIndices_card_eq_two
+pairedSurvivingChildIndices_card_eq_q_sub_two
+```
+
+これは既存 full-period Goldbach factor `q-2` の local tree versionであり、**この cardinality だけでは strict information gain とみなさない**。
+
+### 6.2 parent-independent relative position — v1 の本命候補
+
+old modulus を `M`、parent を `r` とし、left/right reserved child index を `jL`, `jR` とする。
+
+`M` は fresh prime `q` と coprime なので `ZMod q` 上で invertible である。
+
+formal target は次の形で置く。
+
+$$
+[j_L-j_R]_q
+=
+[2n]_q\,[M]^{-1}_q.
+$$
+
+同値に、inverse を避けるなら
+
+$$
+M(j_L-j_R)\equiv2n\pmod q.
+$$
+
+**重要な点は右辺に parent `r` が現れないこと。**
+
+一方、pair の absolute placement は parent に依存する。
+
+したがって各 old parent cell に開く二つの forbidden child は
+
+> absolute phase は parent ごとに変わるが、二穴の相対形状は同じ
+
+という構造を持つ。
+
+候補 theorem family:
+
+```lean
+pairedReserved_relative_modEq_two_center
+pairedReserved_relativePhase_independent_of_parent
+pairedReserved_shape_eq_of_parents
+```
+
+この部分は v1 の第一 research checkpoint とする。
+
+### 6.3 center motion of the two-hole shape
+
+center を `n → n+1` と動かすと
+
+$$
+[j_L-j_R]_{n+1}
+=
+[j_L-j_R]_n+2[M]^{-1}
+\pmod q.
+$$
+
+したがって fresh `q` refinement が作る二穴 shape は、center ごとに一定速度で phase space を移動する。
+
+候補:
+
+```lean
+pairedReserved_relativePhase_succ
+pairedReserved_relativePhase_periodic
+```
+
+ここで初めて cross-fiber dynamic theorem となる。
+
+---
+
+## 7. finite prime-family dynamic phase vector
+
+finite prime world `S` に対し、各 `p ∈ S` の Goldbach relative phase
+
+$$
+\rho_p(n)=g_p^{2n}
+$$
+
+を束ねる。
+
+概念上の observer:
+
+$$
+\rho_S(n)
+=
+(\rho_p(n))_{p\in S}.
+$$
+
+CRT により、これは `n mod primeWorldModulus S` と密接に対応する。
+
+ただし v1 では、単なる CRT isomorphism を再証明することを目的としない。
+
+狙うのは次である。
+
+- `n → n+1` が phase vector に一様な translation を与える。
+- fresh `q` insertion が old state を children へどう refinement するか。
+- paired two-hole relative shape が parent independent であることを family level に持ち上げられるか。
+- proper endpoint exception が dynamic orbit 上でどのような finite defect として現れるか。
+
+候補 module:
+
+```text
+DkMath/NumberTheory/PrimeGauge/GoldbachPhase.lean
+DkMath/NumberTheory/PrimeGauge/GoldbachRefinement.lean
+```
+
+候補 theorem family:
+
+```lean
+primeGaugePhaseVector
+primeGaugePhaseVector_succ
+primeGaugePhaseVector_eq_iff_mod_worldModulus
+goldbachRelativePhaseVector
+goldbachRelativePhaseVector_succ
+```
+
+既存 finite-world residue API と同値なだけなら alias / bridge / docstring に留める。
+
+---
+
+## 8. information-gain audit — Projection へ進む前の停止点
+
+Goldbach v1 consumer としては、ここで一度必ず停止し、次を判定する。
+
+### Outcome A
+
+次のいずれかが得られた場合。
+
+- parent-independent relative shape から short-fiber occupancy に新しい bound が出る。
+- neighboring centers の phase transport から survivor existence に利用できる monotone / conservation law が出る。
+- multiple prime refinements 間に独立 CRT では説明できない collision constraint が出る。
+- proper endpoint defect を uniform に control する cross-fiber theorem が出る。
+
+この場合、Goldbach dynamic phase 研究を継続する。
+
+### Outcome B
+
+すべての theorem が
+
+```text
+CRT coordinate change
+full-period cardinality
+existing spacing
+existing capacity
+```
+
+へ exact に還元される場合。
+
+この場合も reusable API として価値はあるが、Goldbach の strict progress と主張しない。
+
+### Outcome C
+
+期待した parent-independence / two-hole distinctness / cross-fiber rule が条件不足で崩れる場合。
+
+最小反例と exact hypothesis を記録して branch を閉じる。
+
+---
+
+## 9. Prime-family synchronization — v0 spine の維持
+
+Goldbach dynamic phase とは独立に、v0 で計画した finite prime-family synchronization は依然有効である。
+
+有限 prime set `S` に対し
+
+$$
+\forall p\in S,\quad (\operatorname{regularKernel}(p))^n=1
+$$
+
+は
+
+$$
+\forall p\in S,\quad p\mid n
+$$
+
+と同値であり、`KnownPrimeScales S` なら product modulus
 
 $$
 M_S=\prod_{p\in S}p
@@ -287,80 +712,40 @@ $$
 M_S\mid n
 $$
 
-と同値になる。
+へ接続する。
 
-中心 theorem 候補:
-
-```lean
-theorem all_primeGauge_return_iff_worldModulus_dvd
-    (S : Finset ℕ)
-    (hS : KnownPrimeScales S)
-    (n : ℕ) :
-    (∀ p ∈ S, regularKernel p ^ n = 1) ↔
-      primeWorldModulus S ∣ n
-```
-
-さらに正の同期点について、最小同期周期を得る。
+候補 theorem:
 
 ```lean
-theorem primeGauge_worldModulus_is_first_positive_sync
+all_primeGauge_return_iff_worldModulus_dvd
+primeGauge_worldModulus_is_first_positive_sync
 ```
 
 意味:
 
-$$
-0<n\land\bigl(\forall p\in S, r_p^n=1\bigr)
-\Longrightarrow
-M_S\le n,
-$$
+> `primeWorldModulus S` は finite prime-family の最小正同期周期。
 
-かつ `n = M_S` では全 gauge が帰還する。
-
-この結果により primorial / product modulus は
-
-> finite prime-family の最小同時帰還周期
-
-として CF2D semantics を持つ。
-
-**非目標:** 初期 phase では、全 kernel の積 `∏ regularKernel p` の `orderOf` が product modulus に等しいことは要求しない。family synchronization と product-kernel order を混同しない。
+**非目標:** `∏ regularKernel p` という product kernel の `orderOf` を product modulus と同一視しない。family synchronization と product-kernel order は別概念。
 
 ---
 
-## 5. CRT phase observer
+## 10. CRT phase observer
 
-同時帰還だけでなく、各 gauge の途中位相を整数剰余として観測する。
-
-算術側の基本 observer は
+算術側の observer は
 
 $$
 n\mapsto n\bmod p.
 $$
 
-必要なら `ZMod p` を使う。
-
-有限 `S` では CRT により
+有限 `S` では
 
 $$
 \mathbb Z/M_S\mathbb Z
 \simeq
-\prod_{p\in S}\mathbb Z/p\mathbb Z.
+\prod_{p\in S}\mathbb Z/p\mathbb Z
 $$
 
-これを
-
-```text
-one product-modulus phase
-        ⇕ CRT
-vector of prime-gauge phases
-```
-
-として読む。
-
-候補 module:
-
-```text
-DkMath/NumberTheory/PrimeGauge/CRTPhase.lean
-```
+と読める。
 
 候補 theorem family:
 
@@ -371,13 +756,15 @@ primeGaugePhaseVector_eq_iff_mod_worldModulus
 primeGaugePhaseVector_injective_mod_worldModulus
 ```
 
-既存 finite prime-world API が同値内容を既に持つ場合は、新 theorem を増やさず bridge / alias / docstring に留める。
+ただし既存 `PrimeWorldResidues` / `PeriodicPrimeWorld` / Mathlib CRT と重複する場合は新 API を増やさない。
+
+Goldbach consumer では absolute residue vector より **conjugate pair / relative phase** を優先する。
 
 ---
 
-## 6. Cosmic Projection と CF2D の直接 bridge
+## 11. Cosmic Projection と CF2D の直接 bridge
 
-Cosmic Projection を
+Projection を
 
 $$
 \Pi(P)=-\frac{P}{P+1},
@@ -387,32 +774,13 @@ $$
 
 とする。
 
-CF2D の normalized cycle step は
+CF2D normalized cycle step は
 
 $$
 \operatorname{regularPhaseStep}(k)=\frac1k.
 $$
 
-そこで
-
-$$
-P=k-1
-$$
-
-と置くと
-
-$$
-U(k-1)=\frac1k
-=\operatorname{regularPhaseStep}(k).
-$$
-
-さらに
-
-$$
-\Pi(P)+1=U(P)
-$$
-
-より
+`P=k-1` と置けば
 
 $$
 \boxed{
@@ -423,38 +791,30 @@ $$
 }.
 $$
 
-これを本計画の第二中心 bridge とする。
-
 候補 theorem:
 
 ```lean
-theorem projectionGap_eq_regularPhaseStep
-    {k : ℕ} (hk : 0 < k) :
-    Projection.U ((k : ℝ) - 1) = regularPhaseStep k
-
- theorem projection_add_one_eq_regularPhaseStep
-    {k : ℕ} (hk : 0 < k) :
-    Projection.Pi ((k : ℝ) - 1) + 1 = regularPhaseStep k
-
- theorem projection_eq_regularPhaseStep_sub_one
-    {k : ℕ} (hk : 0 < k) :
-    Projection.Pi ((k : ℝ) - 1) = regularPhaseStep k - 1
+projectionGap_eq_regularPhaseStep
+projection_add_one_eq_regularPhaseStep
+projection_eq_regularPhaseStep_sub_one
 ```
 
-この bridge の意味は、
+意味:
 
 ```text
-CF2D side       : cycle resolution / step size
+CF2D side       : finite cycle resolution
 Projection side : distance from compactified boundary -1
 ```
 
-が同じ数 `1/k` で測られることである。
+が同じ `1/k` で測られる。
+
+Projection API を正式化する際は `Samples.Projection` を直接 provider とせず、必要部分を `DkMath.CosmicFormula.Projection` へ回収する。
 
 ---
 
-## 7. Primorial refinement と projection boundary
+## 12. Primorial refinement と projection boundary
 
-finite prime world の product modulus `M_S` に対して
+finite prime world の product modulus `M_S` に対し
 
 $$
 \Delta_S:=\frac1{M_S}
@@ -462,184 +822,92 @@ $$
 
 を mesh / gauge resolution と読む。
 
-Projection bridge により
+Projection bridge から
 
 $$
 \Delta_S
-=
-U(M_S-1)
-=
-\Pi(M_S-1)+1.
+=U(M_S-1)
+=\Pi(M_S-1)+1.
 $$
 
-特に primorial chain
+fresh prime `q` の insertion で
 
 $$
-2,6,30,210,\ldots
+M'=qM
 $$
 
-では
+なら
 
 $$
-\frac12,\frac16,\frac1{30},\frac1{210},\ldots
+\Delta'=\frac{\Delta}{q}.
 $$
-
-が CF2D/prime-world の解像度であり、Projection 上では
-
-$$
--\frac12,-\frac56,-\frac{29}{30},-\frac{209}{210},\ldots
-$$
-
-として境界 `-1` に接近する。
 
 候補 theorem:
 
 ```lean
-theorem worldModulus_projection_gap
-
-theorem worldModulus_projection_add_one
+worldModulus_projection_gap
+worldModulus_projection_add_one
+freshPrime_refinement_mesh
 ```
 
-新しい素数 `q` を追加し
+ここで既存 `primeWorldModulus_insert` を再利用する。
 
-$$
-M' = qM
-$$
+Goldbach dynamic phase との接続が得られた場合には、各 old cell が `q` children に refinement され、そのうち raw Goldbach obstruction が通常二つの moving forbidden subcells を作る、と読むことができる。
 
-となる refinement に対して
-
-$$
-\Delta' = \frac{\Delta}{q}
-$$
-
-も fixed theorem とする候補がある。
-
-```lean
-theorem freshPrime_refinement_mesh
-```
-
-これは既存 `PrimeWorldRefinement` の `M' = q*M` identity を再利用する。
+ただしこれは geometry / semantics であり、survivor existence を自動的には与えない。
 
 ---
 
-## 8. Continuum completion の安全な範囲
+## 13. Continuum completion の安全な範囲
 
-今回の「素数は連続を埋めるゲージ」という直観は、Lean ではまず次の安全な形へ落とす。
-
-整数 `k > 0` に対する normalized grid
+整数 `k>0` に対する normalized grid
 
 $$
 G_k
 =
-\left\{\frac{j}{k}\mid 0\le j<k\right\}
+\left\{\frac{j}{k}\mid0\le j<k\right\}
 $$
 
-を考える。
+を考える。mesh は `1/k`。
 
-mesh は `1/k` である。
-
-`k` が増大して `1/k → 0` なら、任意の `x ∈ [0,1]` は grid point で任意精度近似できる。
-
-初期 theorem は「素数そのものが実数点を全て踏む」とせず、例えば
+候補 theorem:
 
 ```lean
 normalizedGrid_approx
 ```
 
-として
-
 $$
 \forall x\in[0,1],\quad
 \exists j\le k,\quad
-\left|x-\frac jk\right|\le\frac1k
+\left|x-\frac jk\right|\le\frac1k.
 $$
 
-を証明する。
-
-その後、増大する product modulus sequence `M_n` と
-
-$$
-\frac1{M_n}\to0
-$$
-
-を仮定または既存 primorial growth theorem から供給し、grid union の稠密性へ進む。
-
-候補:
+さらに `M_n → ∞` または `1/M_n → 0` の provider が得られる場合のみ
 
 ```lean
 normalizedGrid_dense_of_inv_tendsto_zero
 primeWorldGrid_dense_of_modulus_tendsto_atTop
 ```
 
-ここでの dense / no-hole は実数区間の近似性だけを意味する。
+へ進む。
 
 **明確な非主張:** 
 
 ```text
 dense grid
 ≠ every grid point is prime
-≠ every interval contains a newly realized prime from this theorem alone
-≠ continuous no-hole implies prime existence
+≠ every interval contains a new prime
+≠ continuum no-hole implies Goldbach / Twin Prime / Legendre
+≠ projection boundary completion implies prime realization
 ```
 
-この分離を docstring と設計文書で維持する。
+Goldbach consumer では、Section 8 の information-gain audit を通る前に continuum を proof provider として使用しない。
 
 ---
 
-## 9. 既存「宇宙式反転射影」計画との接続
+## 14. 推奨 module 構成 v1
 
-`宇宙式の反転射影-260708.md` には既に
-
-```text
-Cosmic Projection
-p-scale valuation flow
-finite synchronization / CRT
-cofinal extension
-no-hole
-Collatz odd-core transfer
-```
-
-が記録されている。
-
-本計画は、その前半の汎用部分を次のように具体化する。
-
-```text
-旧: finite synchronization / CRT
-新: CF2D return ⇔ divisibility
-    → finite prime-family synchronization
-    → product modulus / CRT
-
-旧: Cosmic Projection gap
-新: U(k-1) = regularPhaseStep k
-
-旧: no-hole / continuum
-新: mesh = 1/M = projection boundary gap
-    → grid approximation
-```
-
-一方、Collatz 側の相対 scale
-
-$$
-P_m=\frac{2^{R_m}}{3^m}
-$$
-
-は、今回の `P = k - 1` と意味が異なる。
-
-同じ Projection API を共有してよいが、入力 `P` の semantics は明示的に分離する。
-
-```text
-cycle bridge P = k - 1
-  : discrete period → normalized cycle resolution
-
-Collatz P_m = 2^{R_m}/3^m
-  : relative valuation scale
-```
-
----
-
-## 10. 推奨 module 構成
-
-新規候補:
+候補:
 
 ```text
 DkMath/CosmicFormula/Projection/
@@ -652,6 +920,8 @@ DkMath/NumberTheory/PrimeGauge/
   PrimePeriod.lean
   PrimorialSync.lean
   CRTPhase.lean
+  GoldbachPhase.lean
+  GoldbachRefinement.lean
   ContinuumGrid.lean
 ```
 
@@ -662,303 +932,308 @@ DkMath/CosmicFormula/Projection.lean
 DkMath/NumberTheory/PrimeGauge.lean
 ```
 
-ただし `Return.lean` / `PrimePeriod.lean` が薄すぎる場合は統合する。
+ただし薄い file / structure を量産しない。
 
-既存 `260830` 計画の
-
-```text
-BoundaryGN.lean
-UnitBoundary.lean
-Crystal.lean
-```
-
-は別軸として残し、今回の CF2D bridge と無理に同じファイルへ詰め込まない。
-
-Prime Gauge には今後二つの独立 observer があると整理する。
+Prime Gauge は少なくとも二 observer を持つと整理する。
 
 ```text
 multiplicative / GN observer
-  Boundary → GN → primitive fresh direction
+  Boundary → GTail/GN → primitive fresh direction
 
 periodic / CF2D observer
-  exact order → return ⇔ divisibility → finite synchronization
+  exact order → return / phase equality → finite synchronization
 ```
 
-両者は `Nat.Prime` / finite prime-world を介して後段で合流する。
+Goldbach は後者の consumer として
+
+```text
+left/right conjugate marker
+paired child refinement
+center motion
+relative phase
+```
+
+を追加する。
 
 ---
 
-## 11. 実装 checkpoint
+## 15. v1 実装 checkpoint
 
-### CPG-000: repository-first audit
+### CPG-V1-000: repository-first audit
 
 確認対象:
 
 ```text
 CF2D.CycleDivision
 CF2D.RegularOrbit
-FinitePrimeWorld
 PeriodicPrimeWorld
 PrimeWorldRefinement
-StructuralArithmetic.GNBridge
+PrimeWorldResidues
+Goldbach.Basic
+Goldbach.Obstruction
+Goldbach.PrimeWorld
+Goldbach.PairOverlap
+Goldbach quadratic primitive Astra scratch
 Samples.Projection
 ```
 
 完了条件:
 
 - theorem 名・namespace・引数順を現行 `develop` で固定。
-- `orderOf_dvd_iff_pow_eq_one` の向きを `#check`。
-- product modulus の既存 divisibility API を確認。
-- `Samples.Projection` を正式 module へ昇格する際の依存を洗う。
+- Mathlib の `orderOf` / pow equality / `Nat.ModEq` API を確認。
+- Goldbach raw/proper obstruction の既存 theorem と重複監査。
+- one-sided unique child theorem の再利用範囲を固定。
+- `ZMod q` inverse を使う場合の `q ≠ 0` / coprimality hypotheses を固定。
 
-### CPG-001: CF2D return / divisibility bridge
+### CPG-V1-001: CF2D return / congruence bridge
 
-実装:
+実装候補:
 
 ```lean
 regularKernel_pow_eq_one_iff_dvd
+regularKernel_pow_eq_pow_iff_modEq
 ```
 
-加えて `n % k = 0` / `ZMod` との bridge が既存 API で薄く書けるなら追加。
-
-検証:
+回帰:
 
 ```text
 k = 2,3,5,6
 n = 0,k,2k,k+1
 ```
 
-`#print axioms` で CF2D 既存依存以外の axiom を増やさない。
+### CPG-V1-002: Goldbach conjugate gauge bridge
 
-### CPG-002: prime-period wrappers
-
-実装:
+実装候補:
 
 ```lean
-distinct_prime_regularKernel_not_return
+goldbachLeftObstructed_iff_gauge_eq
+goldbachRightObstructed_iff_gauge_eq_inv
 ```
 
-必要なら prime-order semantic wrapper。
+raw / proper の区別を維持する。
 
-停止条件:
-新 structure が単なる `Nat.Prime` の言い換えだけなら structure は作らない。
+### CPG-V1-003: center / relative phase dynamics
 
-### CPG-003: finite prime-family synchronization
+実装候補:
 
-実装:
+```lean
+goldbachGaugeMarkers_succ
+goldbachGaugeRelativePhase_eq_pow_two_mul
+goldbachGaugeRelativePhase_eq_one_iff_dvd_two_center
+goldbachGaugeRelativePhase_succ
+```
+
+ここまでは既存 residue theorem の phase lift である可能性が高い。
+
+### CPG-V1-004: paired prime-world refinement
+
+one-sided `existsUnique_child_dvd_new_prime` を利用し、left/right reserved child を構成する。
+
+候補:
+
+```lean
+existsUnique_leftReservedChild
+existsUnique_rightReservedChild
+leftReservedChild_ne_rightReservedChild_of_not_dvd_two_center
+pairedReservedChildIndices_card_eq_two
+pairedSurvivingChildIndices_card_eq_q_sub_two
+```
+
+### CPG-V1-005: parent-independent two-hole shape
+
+第一研究頂上。
+
+候補 statement:
+
+$$
+M(j_L-j_R)\equiv2n\pmod q.
+$$
+
+Lean では `Nat.ModEq` または `ZMod q` を使い、truncated subtraction を避ける。
+
+候補:
+
+```lean
+pairedReserved_relative_modEq_two_center
+pairedReserved_relativePhase_independent_of_parent
+pairedReserved_shape_eq_of_parents
+```
+
+### CPG-V1-006: cross-fiber center transport
+
+候補:
+
+```lean
+pairedReserved_relativePhase_succ
+pairedReserved_relativePhase_periodic
+goldbachRelativePhaseVector_succ
+```
+
+`n → n+1` で two-hole shape が一定 step で動くことを固定する。
+
+### CPG-V1-007: information-gain audit
+
+ここで必ず停止する。
+
+- existing CRT/capacity への exact reduction を調べる。
+- short-fiber localization に新 bound が出るか検査する。
+- counterexample を Python / Lean regression で探索する。
+- Outcome A/B/C を明記する。
+
+**Outcome B/C なら Goldbach proof campaign としては一旦閉じる。**
+
+### CPG-V1-008: finite prime-family synchronization
+
+v0 の
 
 ```lean
 all_primeGauge_return_iff_worldModulus_dvd
 primeGauge_worldModulus_is_first_positive_sync
 ```
 
-既存 `KnownPrimeScales` と `primeWorldModulus` を再利用。
+を実装する。
 
-回帰:
+Goldbach outcome に依存しない reusable core。
 
-```text
-{2,3}   → 6
-{2,3,5} → 30
-{2,3,5,7} → 210
-```
+### CPG-V1-009: Projection API / CF2D bridge
 
-### CPG-004: Projection API 正式化
-
-`Samples.Projection` の必要最小限を正式 module へ移す。
-
-実装優先:
+必要最小限を正式 module 化する。
 
 ```lean
 Pi
 U
 cosmicProjection_gap_eq
-cosmicProjection_mem_interval
 cosmicProjection_inverse
 cosmicProjection_injective
-```
-
-旧 sample を直ちに削除する必要はない。compatibility / migration を先に作る。
-
-### CPG-005: CF2D–Projection bridge
-
-実装:
-
-```lean
 projectionGap_eq_regularPhaseStep
 projection_add_one_eq_regularPhaseStep
-projection_eq_regularPhaseStep_sub_one
 ```
 
-ここが第一統合頂上。
-
-### CPG-006: Primorial / world-modulus projection
-
-実装:
+### CPG-V1-010: world-modulus projection / mesh
 
 ```lean
 worldModulus_projection_gap
 freshPrime_refinement_mesh
 ```
 
-`30 → 210` を regression example として固定する。
-
-### CPG-007: CRT phase observer
-
-既存 finite-world residue API と重複監査後、必要な theorem のみ追加。
-
-第一目標:
-
-```text
-prime gauge return vector
-⇔ divisibility vector
-⇔ residue phase zero vector
-```
-
-全 CRT 同型そのものを DkMath で再証明しない。
-
-### CPG-008: finite grid approximation
-
-実装:
+### CPG-V1-011: continuum grid
 
 ```lean
 normalizedGrid_approx
 ```
 
-この checkpoint では primorial の無限性を必要としない。
+までを基本 milestone とする。
 
-### CPG-009: continuum completion
-
-必要な growth provider が既に存在する場合のみ
-
-```lean
-primeWorldGrid_dense_of_modulus_tendsto_atTop
-```
-
-へ進む。
-
-ここで review stop とする。
-
-`continuous no-hole → prime realization` は次 phase の research contract であり、この campaign の完了条件に含めない。
+無限 dense theorem は growth provider と用途が明確な場合のみ別 campaign とする。
 
 ---
 
-## 12. 旧 PGN / CP 計画との統合順序
+## 16. 実装時の数値・scratch 調査
 
-2026-09-01 の実装候補列は
+Goldbach dynamic phase 層は、production 実装前に scratch / Python で反例探索を行う価値が高い。
 
-```text
-PGN-001 Boundary/GN
-PGN-002 GN ↔ cyclotomic
-PGN-003 unit Boundary / integer fresh direction
-PGN-004 PowerSwap
-PGN-005 FLT/GN/Jacobian projection demo
-```
-
-であった。
-
-今回の CPG 列は、これと競合しない。
-
-統合後の全体像は次のように読む。
+最低限、次を検査する。
 
 ```text
-                         ┌─ GN / multiplicative branch ─ PGN-001..003
-existing arithmetic ────┤
-                         └─ CF2D / periodic branch ───── CPG-001..003
-                                                       ↓
-                                              finite prime world
-                                                       ↓
-                                                product modulus
-                                                       ↓
-                       Cosmic Projection ← CPG-004..006
-                                                       ↓
-                                  CRT / grid / continuum observer
+1. q-children 上の left/right reserved index の uniqueness
+2. q ∤ 2n のとき二 index が distinct
+3. M(jL-jR) ≡ 2n (mod q)
+4. parent r を変えても relative difference が不変
+5. n → n+1 で relative difference が定 step で変化
+6. proper endpoint exception が raw phase orbit から削除する seat
+7. 複数 q を束ねたとき独立 CRT 以上の constraint が本当に存在するか
 ```
 
-`PGN-004 PowerSwap` は独立 branch。
-`PGN-005 FLT/GN/Jacobian projection` は Cosmic Projection の共通中間表現という別用途なので、CPG の Projection API が安定すれば consumer にできる可能性がある。
+反例が出た場合は hypothesis を強めるか theorem を破棄し、数値観測だけを普遍定理として昇格しない。
 
 ---
 
-## 13. 非目標・誤読防止
+## 17. 非目標・誤読防止
 
 この計画から次を結論しない。
 
 - `regularKernel k` の exact order `k` だけから `k` が prime である。
+- residue を CF2D phase と書き換えただけで Goldbach に新情報が加わる。
+- paired `q-2` child count だけから short-fiber survivor が存在する。
+- parent-independent two-hole shape が証明されただけで Strong Goldbach が従う。
 - finite prime-family synchronization だけから新しい prime が存在する。
 - primorial grid の稠密性から任意区間に prime が存在する。
 - Cosmic Projection の全射性から整数 prime realization が得られる。
-- CRT から無限個の prime を同時同期する有限 modulus が得られる。
-- CF2D の real trigonometric model が prime distribution を自動的に決定する。
-- Prime Harmony cosine observer が primality oracle になる。
-- continuum completion が Twin Prime / Legendre / RH を閉じる。
+- continuum completion が Twin Prime / Legendre / RH / Goldbach を閉じる。
 
 また、次を区別する。
 
 ```text
 first return of generator
 prime order of a cyclic gauge
+integer residue phase
+Goldbach conjugate marker
+relative left/right phase
 family simultaneous return
 order of a product kernel
-integer residue phase
+product-modulus coordinate
 real normalized phase
 projection boundary gap
+continuum mesh
 ```
 
-これらは接続できるが、同一概念として潰さない。
+これらは接続できるが同一概念として潰さない。
 
 ---
 
-## 14. 最初の実装目標
+## 18. v1 の最初の実装目標
 
-最短の有効 chain は次である。
+v1 の最短 chain は、v0 の Projection 直行ではなく次とする。
 
 ```text
 orderOf_regularKernel
         ↓
 regularKernel_pow_eq_one_iff_dvd
         ↓
-distinct_prime_regularKernel_not_return
+regularKernel_pow_eq_pow_iff_modEq
         ↓
-all_primeGauge_return_iff_worldModulus_dvd
+Goldbach left/right gauge bridge
         ↓
-projectionGap_eq_regularPhaseStep
+center / relative phase dynamics
         ↓
-worldModulus_projection_gap
+paired fresh-prime refinement
+        ↓
+parent-independent two-hole shape
+        ↓
+cross-fiber center transport
+        ↓
+information-gain audit
 ```
 
-数学的には、
+第一研究核は
 
 $$
 \boxed{
-(\operatorname{regularKernel}(k))^n=1
-\iff
-k\mid n
+M(j_L-j_R)\equiv2n\pmod q
 }
 $$
 
-と
+である。
 
-$$
-\boxed{
-\Pi(k-1)+1
-=U(k-1)
-=\operatorname{regularPhaseStep}(k)
-=\frac1k
-}
-$$
+この式が期待通り formalize できれば、fresh prime `q` が各 old parent cell に作る二つの Goldbach obstruction hole は
 
-の二本を中心に置く。
+> parent により absolute phase は変わるが、relative shape は保存される
 
-この二本が Lean で固定されれば、
+と読める。
+
+さらに center motion により、この保存形状自体が phase space 上を一定 step で移動する。
+
+これは現在の Goldbach fixed-center capacity / static normalization には無かった **cross-parent / cross-fiber dynamic observer** の候補である。
+
+この dynamic layer が既存 CRT の単なる言い換えを超えるかどうかを Lean と数値検証で判定し、その結果が有望な場合に限って、v0 由来の
 
 ```text
-回転周期
-↔ 可除性
-↔ prime-family synchronization
-↔ primorial/product modulus
-↔ projection boundary resolution
+prime-family synchronization
+→ Cosmic Projection
+→ mesh refinement
+→ continuum observer
 ```
 
-という一つの実装 spine が成立する。
+へ接続する。
 
-ここまでを first milestone とする。
+ここを v1 の first milestone とする。
