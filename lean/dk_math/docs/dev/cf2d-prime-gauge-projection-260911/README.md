@@ -12,7 +12,8 @@ see: [CF2D PrimeGauge CosmicProjection Continuum](/docs/not_implements/260911-CF
 - [CPG-V1-004a target-congruence child](report-004a.md)
 - [CPG-V1-004 paired Goldbach refinement](report-004.md)
 - [CPG-V1-005 parent-independent relative shape](report-005.md)
+- [CPG-V1-006 cross-fiber center transport](report-006.md)
 
-Current state: CPG-V1-005 complete. The next authorized source milestone is
-CPG-V1-006; CPG-V1-007 is the mandatory information-gain stop gate before
+Current state: CPG-V1-006 complete. The next authorized work item is the
+CPG-V1-007 information-gain stop gate before
 Projection/continuum work.

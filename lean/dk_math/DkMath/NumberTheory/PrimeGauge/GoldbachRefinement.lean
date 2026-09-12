@@ -117,6 +117,36 @@ theorem goldbach_reservedChild_relative_shape
       push_cast
       ring
 
+/-- The relative shape advances by two when the center advances by one. -/
+theorem goldbach_reservedChild_relative_shape_succ
+    {S : Finset ℕ}
+    {q r r' n jL jR jL' jR' : ℕ}
+    (hL :
+      (primeWorldChild S r jL : ZMod q) = (n : ZMod q))
+    (hR :
+      (primeWorldChild S r jR : ZMod q) = -(n : ZMod q))
+    (hL' :
+      (primeWorldChild S r' jL' : ZMod q) = (n + 1 : ℕ))
+    (hR' :
+      (primeWorldChild S r' jR' : ZMod q) = -(n + 1 : ℕ)) :
+    (((jL' : ZMod q) - jR') - ((jL : ZMod q) - jR)) *
+        (primeWorldModulus S : ZMod q) = 2 := by
+  have hshape := goldbach_reservedChild_relative_shape hL hR
+  have hshape' := goldbach_reservedChild_relative_shape hL' hR'
+  calc
+    (((jL' : ZMod q) - jR') - ((jL : ZMod q) - jR)) *
+          (primeWorldModulus S : ZMod q) =
+        ((jL' : ZMod q) - jR') *
+            (primeWorldModulus S : ZMod q) -
+          ((jL : ZMod q) - jR) *
+            (primeWorldModulus S : ZMod q) := by
+              ring
+    _ = (2 * (n + 1) : ℕ) - (2 * n : ℕ) := by
+      rw [hshape', hshape]
+    _ = 2 := by
+      push_cast
+      ring
+
 /-- The paired reserved-child set has two elements when the targets do not merge. -/
 theorem pairedReservedChildIndices_card_eq_two
     {S : Finset ℕ} (hS : KnownPrimeScales S)
