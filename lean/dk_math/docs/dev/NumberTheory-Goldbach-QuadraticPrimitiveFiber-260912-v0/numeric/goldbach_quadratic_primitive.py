@@ -142,6 +142,75 @@ def audit(max_center, selected):
     return dict(summary=summary, centers=rows, selected_seats=seats)
 
 
+def wave_audit(max_center, selected):
+    """Each orientation is a residue, not a new escape theorem.
+
+    Full normalization is periodic modulo 2*n*p*q (a valid, sometimes
+    nonminimal period). Primitive/parity membership is not well-defined on
+    residues modulo the odd number p*q alone. Full-period enumeration is
+    deliberately bounded to centers <=40; interval counts cover the full range.
+    """
+    primes = primes_up_to(isqrt(2 * max_center))
+    minima, diagnostics = {}, []
+    orientation_tests = full_period_tests = 0
+
+    def first(name, case):
+        minima.setdefault(name, case)
+
+    for n in range(2, max_center + 1):
+        world = sorted(p for p in primes if p != 2 and p*p <= 2*n)
+        normalized = {u for u in range(1, n-1) if gcd(n, u) == 1 and (n-u) % 2}
+        for i, p in enumerate(world):
+            for q in world[i+1:]:
+                modulus = p*q
+                # a=n (mod p), a=-n (mod q), using an exact modular inverse.
+                a = (n + p * ((-2*n * pow(p, -1, q)) % q)) % modulus
+                b = (-a) % modulus
+                assert (a % p, a % q) == (n % p, (-n) % q)
+                assert (b % p, b % q) == ((-n) % p, n % q)
+                assert (a == b) == (n % p == 0 and n % q == 0)
+                for left_prime, right_prime, residue in [(p, q, a), (q, p, b)]:
+                    orientation_tests += 1
+                    raw = list(range(residue, max(0, n-1), modulus))
+                    restricted = [u for u in raw if u in normalized]
+                    proper = [u for u in restricted
+                              if n-u != left_prime and n+u != right_prime]
+                    case = dict(n=n, p=left_prime, q=right_prime, residue=residue,
+                                modulus=modulus, normalized_candidates=len(normalized),
+                                raw_interval=raw, normalized_interval=restricted,
+                                proper_normalized_interval=proper)
+                    assert n-1 > modulus or len(raw) <= 1
+                    assert all(v-u >= modulus for u, v in zip(raw, raw[1:]))
+                    assert all(v-u >= 2*modulus for u, v in zip(restricted, restricted[1:]))
+                    if len(restricted) > 1:
+                        first('multiple_normalized_same_orientation', case)
+                    if len(normalized) < modulus and len(restricted) > 1:
+                        first('candidate_cardinality_not_geometric_width', case)
+                    if restricted != proper:
+                        first('raw_LR_endpoint_exception', case)
+                    if restricted and n-1 <= modulus:
+                        first('occupied_at_most_one_wave', case)
+                    if any(v-u == 2*modulus for u, v in zip(proper, proper[1:])):
+                        first('sharp_parity_spacing_proper', case)
+                    if n <= 40:
+                        full_period_tests += 1
+                        # residue+k*pq spans one period of length 2*n*pq.
+                        count = sum(gcd(n, residue+k*modulus) == 1 and
+                                    (n-residue-k*modulus) % 2 == 1
+                                    for k in range(2*n))
+                        expected = (sum(gcd(k, 2*n) == 1 for k in range(2*n))
+                                    if n % p and n % q else 0)
+                        assert count == expected
+                        case['full_period'] = 2*n*modulus
+                        case['normalized_residues_per_orientation'] = count
+                    if n in selected:
+                        diagnostics.append(case)
+    return dict(centers=f'2..{max_center}', interval_orientation_tests=orientation_tests,
+                full_period_centers='2..40 (within requested range)',
+                full_period_orientation_tests=full_period_tests,
+                minima=minima, selected_waves=diagnostics)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--max-center', type=int, default=500)
@@ -153,6 +222,7 @@ def main():
         parser.error('--max-center must be at least 2')
     selected = {int(x) for x in args.select.split(',') if x}
     data = audit(args.max_center, selected)
+    data['waves'] = wave_audit(args.max_center, selected)
     if args.json:
         args.json.write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
     if args.csv:
@@ -164,6 +234,10 @@ def main():
     for name, case in data['summary']['minima'].items():
         print(f"{name}: n={case['n']}, u={case['u']}")
     print('Worst parity survivor densities:', data['summary']['worst_parity_density'])
+    print('CRT interval orientations:', data['waves']['interval_orientation_tests'])
+    print('CRT full-period orientations:', data['waves']['full_period_orientation_tests'])
+    for name, case in data['waves']['minima'].items():
+        print(f"{name}: n={case['n']}, p={case['p']}, q={case['q']}, seats={case['normalized_interval']}")
 
 
 if __name__ == '__main__':

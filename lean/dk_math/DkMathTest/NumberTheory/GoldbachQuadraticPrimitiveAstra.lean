@@ -313,4 +313,107 @@ theorem higher_overlap_regression :
     localRR 31 4 = 1 ∧ goldbachLocalPairOverlapResidual 31 4 = 1 := by
   decide +kernel
 
+/-- QP-004: oriented raw residue observer, globally periodic even where
+natural subtraction would truncate. Within u≤n it is the raw LR pattern. -/
+def orientedResidue (n p q u : ℕ) : Prop :=
+  (u : ZMod p) = (n : ZMod p) ∧ (u : ZMod q) = -(n : ZMod q)
+
+instance (n p q u : ℕ) : Decidable (orientedResidue n p q u) := by
+  unfold orientedResidue
+  infer_instance
+
+/-- This is exactly the pair of production raw congruence theorems. -/
+theorem oriented_iff_raw {n p q u : ℕ} (hu : u ≤ n) :
+    orientedResidue n p q u ↔ p ∣ n - u ∧ q ∣ n + u := by
+  exact and_congr (goldbach_left_obstructed_iff hu).symm
+    (goldbach_right_obstructed_iff n q u).symm
+
+/-- Coprime moduli, not prime moduli, suffice for oriented uniqueness. -/
+theorem oriented_modEq {n p q u v : ℕ} (hc : Nat.Coprime p q)
+    (hu : orientedResidue n p q u) (hv : orientedResidue n p q v) :
+    Nat.ModEq (p * q) u v := by
+  apply (Nat.modEq_and_modEq_iff_modEq_mul hc).mp
+  exact ⟨(ZMod.natCast_eq_natCast_iff u v p).mp (hu.1.trans hv.1.symm),
+    (ZMod.natCast_eq_natCast_iff u v q).mp (hu.2.trans hv.2.symm)⟩
+
+/-- Explicit CRT residue: CRT(n, val(-n)); unique in one product period. -/
+theorem oriented_crt (n p q : ℕ) (hp : p ≠ 0) (hq : q ≠ 0)
+    (hc : Nat.Coprime p q) :
+    ∃! u : ℕ, u < p * q ∧ orientedResidue n p q u := by
+  letI : NeZero q := ⟨hq⟩
+  let a := Nat.chineseRemainder hc n (-(n : ZMod q)).val
+  have ha : orientedResidue n p q a.val := by
+    constructor
+    · exact (ZMod.natCast_eq_natCast_iff _ _ _).mpr a.property.1
+    · have hh := (ZMod.natCast_eq_natCast_iff _ _ _).mpr a.property.2
+      simpa only [ZMod.natCast_zmod_val] using hh
+  refine ⟨a.val, ⟨Nat.chineseRemainder_lt_mul hc _ _ hp hq, ha⟩, ?_⟩
+  intro v hv
+  exact (oriented_modEq hc hv.2 ha).eq_of_lt_of_lt hv.1
+    (Nat.chineseRemainder_lt_mul hc _ _ hp hq)
+
+/-- The reverse orientation is reflection of both residue signs. If even one
+modulus does not divide 2*n, no seat can have both orientations. -/
+theorem orientations_exclusive {n p q u : ℕ} (hp : ¬ p ∣ 2 * n)
+    (hu : orientedResidue n p q u) : ¬ orientedResidue n q p u := by
+  intro hv
+  apply hp
+  apply (goldbach_residue_eq_neg_iff n p).mp
+  exact hu.1.symm.trans hv.2
+
+/-- Any two seats in one orientation are separated by at least the product. -/
+theorem oriented_spacing {n p q u v : ℕ} (hc : Nat.Coprime p q)
+    (hu : orientedResidue n p q u) (hv : orientedResidue n p q v) (hlt : u < v) :
+    p * q ≤ v - u := by
+  exact Nat.le_of_dvd (Nat.sub_pos_of_lt hlt)
+    ((Nat.modEq_iff_dvd' (Nat.le_of_lt hlt)).mp (oriented_modEq hc hu hv))
+
+/-- If the actual interval is shorter than the modulus, one orientation has
+at most one seat. No primitive hypothesis is used. -/
+theorem oriented_at_most_one {n p q u v : ℕ} (hc : Nat.Coprime p q)
+    (hsize : n - 1 ≤ p * q) (hu : u ∈ goldbachOffsets n) (hv : v ∈ goldbachOffsets n)
+    (hlu : orientedResidue n p q u) (hlv : orientedResidue n p q v) : u = v := by
+  apply (oriented_modEq hc hlu hlv).eq_of_lt_of_lt
+  · exact lt_of_lt_of_le (Finset.mem_range.mp hu) hsize
+  · exact lt_of_lt_of_le (Finset.mem_range.mp hv) hsize
+
+/-- Parity adds the ordinary CRT modulus two; this strengthens spacing to 2pq
+for odd p,q, but follows from the existing parity coordinate. -/
+theorem oriented_parity_spacing {n p q u v : ℕ} (hc : Nat.Coprime p q)
+    (hodd : Nat.Coprime 2 (p * q)) (hu : orientedResidue n p q u)
+    (hv : orientedResidue n p q v) (hpu : n % 2 ≠ u % 2)
+    (hpv : n % 2 ≠ v % 2) (hlt : u < v) : 2 * (p * q) ≤ v - u := by
+  have htwo : Nat.ModEq 2 u v := by
+    change u % 2 = v % 2
+    omega
+  have hmod := (Nat.modEq_and_modEq_iff_modEq_mul hodd).mp
+    ⟨htwo, oriented_modEq hc hu hv⟩
+  exact Nat.le_of_dvd (Nat.sub_pos_of_lt hlt)
+    ((Nat.modEq_iff_dvd' (Nat.le_of_lt hlt)).mp hmod)
+
+/-- Primitivity and parity are not predicates on a residue modulo pq alone:
+adding the odd product changes the parity coordinate. -/
+example : orientedResidue 34 3 5 1 ∧ orientedResidue 34 3 5 16 ∧
+    34 % 2 ≠ 1 % 2 ∧ ¬ (34 % 2 ≠ 16 % 2) := by decide +kernel
+
+/-- Endpoint exceptions remain even when a raw LR seat has coprime odd ends. -/
+example : 2 ∈ primitiveParityOffsets 5 ∧ 3 ∣ 5 - 2 ∧
+    ¬ (3 ∣ 5 - 2 ∧ 5 - 2 ≠ 3) := by decide +kernel
+
+/-- The parity spacing 2pq is sharp even for proper obstructions on the
+primitive fiber. Therefore normalization cannot universally demand a larger gap. -/
+theorem sharp_spacing_regression :
+    8 ∈ primitiveParityOffsets 47 ∧ 38 ∈ primitiveParityOffsets 47 ∧
+    3 ∈ leftSupport 47 8 ∧ 5 ∈ rightSupport 47 8 ∧
+    3 ∈ leftSupport 47 38 ∧ 5 ∈ rightSupport 47 38 ∧ 38 - 8 = 2 * (3 * 5) := by
+  decide +kernel
+
+/-- Candidate cardinality is not geometric interval width: fewer than pq
+normalized seats can still include two positions of the same orientation. -/
+theorem cardinality_not_width_regression :
+    (primitiveParityOffsets 50).card = 19 ∧ 19 < 7 * 3 ∧
+    1 ∈ primitiveParityOffsets 50 ∧ 43 ∈ primitiveParityOffsets 50 ∧
+    orientedResidue 50 7 3 1 ∧ orientedResidue 50 7 3 43 := by
+  decide +kernel
+
 end DkMathTest.GoldbachQuadraticPrimitiveAstra
