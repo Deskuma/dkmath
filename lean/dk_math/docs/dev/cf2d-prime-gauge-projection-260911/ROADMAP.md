@@ -3,12 +3,13 @@
 Date: 2026-09-12  
 Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
 Base: `develop`  
-Status: staged implementation in progress; CPG-V1-000 through CPG-V1-004 are complete.
+Status: staged implementation in progress; CPG-V1-000 through CPG-V1-005 are complete.
 
 ## 0. Current campaign state
 
 `CPG-V1-000` repository-first audit, the first three thin bridges, the typed
-target-congruence prerequisite, and the paired phase refinement are complete.
+target-congruence prerequisite, the paired phase refinement, and the
+parent-independent relative-shape identity are complete.
 The current workspace has the
 CF2D exact-order provider, finite prime-world periodic/refinement providers,
 the Goldbach fixed-center paired-residue/capacity layers, and the new Prime
@@ -60,7 +61,7 @@ dynamic-phase information-gain verdict.
 | CPG-V1-003 | complete | Center motion and relative phase | `GoldbachPhase.lean` proves marker successor, double-center relative phase, return/divisibility, and relative successor laws; focused build and audits recorded in `report-003.md`. |
 | CPG-V1-004a | complete | Target-congruence child prerequisite | `PrimeWorldRefinement.lean` proves `existsUnique_child_eq_target` for arbitrary `a : ZMod q`; focused build and audits recorded in `report-004a.md`. |
 | CPG-V1-004 | complete | Paired fresh-prime refinement | `GoldbachRefinement.lean` proves left/right target uniqueness, distinctness under `q ∤ 2*n`, and the `q-2` phase-level surviving-child count; interval/raw endpoint filtering remains separate. |
-| CPG-V1-005 | queued | Parent-independent two-hole shape | Prove `M * (jL - jR) ≡ 2*n [MOD q]` with explicit subtraction/cast handling; no absolute-placement claim. |
+| CPG-V1-005 | complete | Parent-independent two-hole shape | `GoldbachRefinement.lean` proves the requested `ZMod q` identity from the two child target equations; focused build and audits recorded in `report-005.md`. |
 | CPG-V1-006 | queued | Cross-fiber center transport | Prove the successor/period law for the relative shape and identify all endpoint hypotheses. |
 | CPG-V1-007 | stop gate | Information-gain audit | Compare against existing CRT/capacity APIs, run bounded Lean/scratch counterexample checks, and record Outcome A/B/C. Outcome B/C closes the Goldbach proof campaign for this route. |
 | CPG-V1-008 | deferred | Finite prime-family synchronization | Implement reusable simultaneous return/world-modulus APIs independently of any Goldbach conclusion. |
@@ -144,8 +145,9 @@ The words `candidate seat`, `raw obstruction`, `proper obstruction`, and
 
 ## 6. Next work item
 
-The next source change is `CPG-V1-005` only. The target-congruence prerequisite
+The next source change is `CPG-V1-006` only. The target-congruence prerequisite
 is available as `existsUnique_child_eq_target`; CPG-V1-004 packages its two
-`ZMod q` targets. The existing zero-target theorem and interval endpoint
-conditions remain separate compatibility providers, and neither phase
+`ZMod q` targets, and CPG-V1-005 records their parent-independent relative
+shape. The existing zero-target theorem and interval endpoint conditions
+remain separate compatibility providers, and neither phase identity nor
 cardinality theorem is a proof of the Goldbach moving-wave statement.

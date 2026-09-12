@@ -92,6 +92,31 @@ theorem leftReservedChild_ne_rightReservedChild_of_not_dvd_two_center
       (primeWorldChild S r j : ZMod q)) heq).trans hR.2)
   exact hnot ((goldbach_residue_eq_neg_iff n q).mp htargets)
 
+/-- The two reserved child indices have the parent-independent relative shape. -/
+theorem goldbach_reservedChild_relative_shape
+    {S : Finset ℕ} {q r n jL jR : ℕ}
+    (hL :
+      (primeWorldChild S r jL : ZMod q) = (n : ZMod q))
+    (hR :
+      (primeWorldChild S r jR : ZMod q) = -(n : ZMod q)) :
+    ((jL : ZMod q) - (jR : ZMod q)) *
+        (primeWorldModulus S : ZMod q)
+      = (2 * n : ℕ) := by
+  calc
+      ((jL : ZMod q) - (jR : ZMod q)) *
+          (primeWorldModulus S : ZMod q) =
+        (jL * primeWorldModulus S : ZMod q) -
+          (jR * primeWorldModulus S : ZMod q) := by
+            ring
+    _ = (primeWorldChild S r jL : ZMod q) -
+          (primeWorldChild S r jR : ZMod q) := by
+            simp only [primeWorldChild, Nat.cast_add, Nat.cast_mul]
+            ring
+    _ = (n : ZMod q) - -(n : ZMod q) := by rw [hL, hR]
+    _ = (2 * n : ℕ) := by
+      push_cast
+      ring
+
 /-- The paired reserved-child set has two elements when the targets do not merge. -/
 theorem pairedReservedChildIndices_card_eq_two
     {S : Finset ℕ} (hS : KnownPrimeScales S)

@@ -41,6 +41,17 @@ example : ¬ (7 : ℕ) ∣ 2 * 10 := by
   norm_num
 
 example :
+    ((1 : ZMod 7) - (5 : ZMod 7)) *
+        (primeWorldModulus primeWorld235 : ZMod 7) = (2 * 10 : ℕ) := by
+  apply goldbach_reservedChild_relative_shape
+    (S := primeWorld235) (q := 7) (r := 1) (n := 10)
+    (jL := 1) (jR := 5)
+  · change (31 : ZMod 7) = (10 : ZMod 7)
+    decide
+  · change (151 : ZMod 7) = -(10 : ZMod 7)
+    decide
+
+example :
     (pairedReservedChildIndices 10 primeWorld235 7 1).card = 2 := by
   apply pairedReservedChildIndices_card_eq_two
     knownPrimeScales_primeWorld235
@@ -60,6 +71,6 @@ example :
 
 #print axioms pairedReservedChildIndices_card_eq_two
 #print axioms pairedSurvivingChildIndices_card_eq_q_sub_two
+#print axioms goldbach_reservedChild_relative_shape
 
 end DkMathTest.NumberTheory.PrimeGaugeGoldbachRefinement
-
