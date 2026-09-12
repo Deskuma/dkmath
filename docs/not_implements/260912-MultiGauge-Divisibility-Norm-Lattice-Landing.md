@@ -1,5 +1,6 @@
 # Multi-Gauge Divisibility / Norm–Lattice Landing 研究計画
 
+- cid: `6a9d5951-68dc-83ee-b422-0b21f77bac4a`
 - Status: research plan / not implemented
 - Date: 2026-09-12
 - Branch at recording: `wip/ABC-GN-astra-260906-v1`
@@ -40,8 +41,7 @@ ABC 予想はこの理論の応用候補の一つにすぎない。FLT、Zsigmon
 `DkMath.Lib.Cosmic.GTailBoundary` には、一般 `GTail` に対して既に
 
 $$
-\gcd(x,GTail(d,r,x,u))
-=
+\gcd(x,GTail(d,r,x,u))=
 \gcd\!\left(x,\binom dr u^{d-r}\right)
 $$
 
@@ -50,8 +50,7 @@ $$
 `Nat.Coprime x u` の下では、
 
 $$
-\gcd(x,GTail(d,r,x,u))
-=
+\gcd(x,GTail(d,r,x,u))=
 \gcd\!\left(x,\binom dr\right)
 $$
 
@@ -327,16 +326,14 @@ $$
 共役を使えば
 
 $$
-\frac{\alpha}{\beta}
-=
+\frac{\alpha}{\beta}=
 \frac{\alpha\overline\beta}{N(\beta)}
 $$
 
 となり、分子の座標は
 
 $$
-\alpha\overline\beta
-=
+\alpha\overline\beta=
 (ac-ad+bd)+(bc-ad)\omega
 $$
 
