@@ -1,5 +1,6 @@
 # Tromino Boundary Flow / Four-Color Path Reduction 実装計画
 
+- cid: `6aa51f66-502c-83e9-994c-dbd0118584c1`
 - Status: implementation plan / not implemented
 - Date: 2026-09-12
 - Branch at recording: `develop`
