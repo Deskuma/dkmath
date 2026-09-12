@@ -13,6 +13,7 @@ import DkMath.NumberTheory.Goldbach.Signature
 import DkMath.NumberTheory.Goldbach.Limitations
 import DkMath.NumberTheory.Goldbach.Overlap
 import DkMath.NumberTheory.Goldbach.PairOverlap
+import DkMath.NumberTheory.Goldbach.CrossGapExchange
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -29,4 +30,8 @@ counterexamples to stronger shortcuts, including the strict incidence bound.
 `Overlap` and `PairOverlap` add exact finite ledger identities, including the
 Pascal pair-overlap residual decomposition. They stop at this finite ledger
 layer and do not provide a universal escape theorem.
+
+`CrossGapExchange` adds the full-coordinate algebraic Gap exchange API. It is
+an exact conservation and residue-transport layer, not a prime-output or
+Strong Goldbach theorem.
 -/
