@@ -3,8 +3,8 @@
 Date: 2026-09-12  
 Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
 Base: `develop`  
-Status: CPG-V1-009 complete as independent geometry/API work; the next source
-milestone is CPG-V1-010.
+Status: CPG-V1-010 complete as independent finite geometry/API work; the next
+source milestone is CPG-V1-011.
 
 ## 0. Current campaign state
 
@@ -35,6 +35,8 @@ CF2D exact order
 `CPG-V1-007` was the mandatory stop gate. Projection, mesh, and continuum work
 remain downstream and must not be used as a Goldbach proof provider for this
 route after the dynamic-phase information-gain verdict.
+CPG-V1-009 and CPG-V1-010 now provide the finite Projection/CF2D coordinate and
+world-modulus mesh layers.
 
 ## 1. Scope contract
 
@@ -70,7 +72,7 @@ route after the dynamic-phase information-gain verdict.
 | CPG-V1-007 | complete — Outcome B | Information-gain audit | Dependency/derivability audit, bounded Lean countermodel, and Capacity/PairOverlap comparison recorded in `report-007.md`; no strict Goldbach information gain. |
 | CPG-V1-008 | complete | Finite prime-family synchronization | `PrimeGauge/PrimorialSync.lean` proves family-wide return iff world-modulus divisibility and least-positive synchronization; focused build and audits recorded in `report-008.md`. |
 | CPG-V1-009 | complete | Production Projection API and CF2D bridge | `CosmicFormula/Projection/Basic.lean` and `CF2DBridge.lean` own the minimal `Pi`/`U` algebra and `1/k` bridge; focused build and audits are recorded in `report-009.md`. |
-| CPG-V1-010 | deferred | World-modulus projection and mesh | Connect fresh-prime modulus multiplication to `1/M` mesh; retain geometry-only semantics. |
+| CPG-V1-010 | complete | World-modulus projection and mesh | `Projection/WorldModulus.lean` proves the `1/M` projection gap and fresh-prime mesh refinement; focused build and audits are recorded in `report-010.md`. |
 | CPG-V1-011 | deferred | Finite normalized grid | Prove finite `1/k` approximation; any infinite density theorem requires a separately identified growth provider. |
 
 `queued` means planned but not started; `deferred` means intentionally held
@@ -86,6 +88,7 @@ The planned production surface is intentionally thin:
 DkMath/CosmicFormula/Projection/
   Basic.lean
   CF2DBridge.lean
+  WorldModulus.lean
 
 DkMath/NumberTheory/PrimeGauge/
   Return.lean
@@ -159,8 +162,8 @@ successor law. The existing zero-target theorem and interval endpoint
 conditions remain separate compatibility providers, and neither phase identity
 nor cardinality theorem is a proof of the Goldbach moving-wave statement.
 
-CPG-V1-008 is complete as independent reusable-API work, and CPG-V1-009 is
-complete as independent Projection/CF2D geometry/API work. The next source
-milestone is CPG-V1-010, world-modulus projection/mesh. These items remain
-separate from interval/prime realization and do not provide a continuum prime
-claim.
+CPG-V1-008 is complete as independent reusable-API work, CPG-V1-009 is complete
+as independent Projection/CF2D geometry/API work, and CPG-V1-010 is complete as
+independent finite world-modulus mesh work. The next source milestone is
+CPG-V1-011, finite normalized grid. These items remain separate from
+interval/prime realization and do not provide a continuum prime claim.
