@@ -3,8 +3,8 @@
 Date: 2026-09-12  
 Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
 Base: `develop`  
-Status: CPG-V1-010 complete as independent finite geometry/API work; the next
-source milestone is CPG-V1-011.
+Status: CPG-V1-011 complete as independent finite normalized-grid API work; no
+further v1 source milestone is authorized.
 
 ## 0. Current campaign state
 
@@ -37,6 +37,7 @@ remain downstream and must not be used as a Goldbach proof provider for this
 route after the dynamic-phase information-gain verdict.
 CPG-V1-009 and CPG-V1-010 now provide the finite Projection/CF2D coordinate and
 world-modulus mesh layers.
+CPG-V1-011 adds the finite normalized-grid approximation layer.
 
 ## 1. Scope contract
 
@@ -73,7 +74,7 @@ world-modulus mesh layers.
 | CPG-V1-008 | complete | Finite prime-family synchronization | `PrimeGauge/PrimorialSync.lean` proves family-wide return iff world-modulus divisibility and least-positive synchronization; focused build and audits recorded in `report-008.md`. |
 | CPG-V1-009 | complete | Production Projection API and CF2D bridge | `CosmicFormula/Projection/Basic.lean` and `CF2DBridge.lean` own the minimal `Pi`/`U` algebra and `1/k` bridge; focused build and audits are recorded in `report-009.md`. |
 | CPG-V1-010 | complete | World-modulus projection and mesh | `Projection/WorldModulus.lean` proves the `1/M` projection gap and fresh-prime mesh refinement; focused build and audits are recorded in `report-010.md`. |
-| CPG-V1-011 | deferred | Finite normalized grid | Prove finite `1/k` approximation; any infinite density theorem requires a separately identified growth provider. |
+| CPG-V1-011 | complete | Finite normalized grid | `Projection/NormalizedGrid.lean` defines the endpoint-inclusive finite grid and proves `normalizedGrid_approx`; dense/limit work requires a separately authorized growth campaign. |
 
 `queued` means planned but not started; `deferred` means intentionally held
 behind the dynamic-phase stop gate or retained only as an independent API
@@ -89,13 +90,13 @@ DkMath/CosmicFormula/Projection/
   Basic.lean
   CF2DBridge.lean
   WorldModulus.lean
+  NormalizedGrid.lean
 
 DkMath/NumberTheory/PrimeGauge/
   Return.lean
   GoldbachPhase.lean
   GoldbachRefinement.lean
   PrimorialSync.lean
-  ContinuumGrid.lean
 ```
 
 Create a file only when a stable public boundary exists. Candidate import
@@ -163,7 +164,8 @@ conditions remain separate compatibility providers, and neither phase identity
 nor cardinality theorem is a proof of the Goldbach moving-wave statement.
 
 CPG-V1-008 is complete as independent reusable-API work, CPG-V1-009 is complete
-as independent Projection/CF2D geometry/API work, and CPG-V1-010 is complete as
-independent finite world-modulus mesh work. The next source milestone is
-CPG-V1-011, finite normalized grid. These items remain separate from
-interval/prime realization and do not provide a continuum prime claim.
+as independent Projection/CF2D geometry/API work, CPG-V1-010 is complete as
+independent finite world-modulus mesh work, and CPG-V1-011 is complete as an
+independent finite normalized-grid API. Further dense/limit work requires a
+separately authorized growth provider and campaign; these items do not provide
+a continuum prime claim.
