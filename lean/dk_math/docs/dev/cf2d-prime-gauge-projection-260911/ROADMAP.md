@@ -54,7 +54,7 @@ dynamic-phase information-gain verdict.
 | ID | Status | Deliverable | Required evidence / exit condition |
 |---|---|---|---|
 | CPG-V1-000 | complete | Repository-first audit | Current declarations, imports, branch, and focused replay recorded in `report-000.md`. |
-| CPG-V1-001 | queued | CF2D return and congruence bridge | Prove only `regularKernel_pow_eq_one_iff_dvd` and the phase-equality bridge after exact Mathlib signature audit; regress `k = 2,3,5,6`. |
+| CPG-V1-001 | complete | CF2D return and congruence bridge | `Return.lean` proves both bridges; focused production/test build and axiom/forbidden-construct checks passed. |
 | CPG-V1-002 | queued | Goldbach conjugate gauge bridge | Bridge existing raw `ZMod` residue theorems to CF2D notation; preserve `u ≤ n` and raw/proper distinction. |
 | CPG-V1-003 | queued | Center motion and relative phase | Kernel-check marker successor and relative-phase identities; classify as static re-expression unless a new invariant appears. |
 | CPG-V1-004a | queued | Target-congruence child prerequisite | Generalize the zero-target child observer to `r + j*M ≡ a [MOD q]`, or establish an equivalent typed `ZMod q` API. This is a prerequisite to paired Goldbach refinement. |
@@ -143,8 +143,7 @@ The words `candidate seat`, `raw obstruction`, `proper obstruction`, and
 
 ## 6. Next work item
 
-The next source change, after review of this roadmap, is `CPG-V1-001` only.
+The next source change is `CPG-V1-002` only.
 Before `CPG-V1-004`, perform the target-congruence design in `CPG-V1-004a`;
 the existing zero-target theorem is evidence for the arithmetic pattern, not
 itself a proof of the Goldbach moving-wave statement.
-
