@@ -126,4 +126,126 @@ example : primitiveParityOffsets 0 = ∅ ∧ primitiveParityOffsets 1 = ∅ ∧
 example : Nat.Coprime 1 0 ∧ Nat.gcd (1 - 0) (1 + 0) = 1 ∧
     ¬ Nat.Coprime 0 0 := by decide
 
+/-- QP-002: any nonunit divisor of the center is absent from both raw
+supports on a bounded primitive fiber; primality is unnecessary. -/
+theorem center_divisor_absent {n u r : ℕ} (hu : u ≤ n)
+    (hc : Nat.Coprime n u) (hr : 1 < r) (hd : r ∣ n) :
+    ¬ r ∣ n - u ∧ ¬ r ∣ n + u := by
+  have hcu : Nat.Coprime r u := hc.of_dvd_left hd
+  constructor
+  · intro hl
+    have hh := Nat.dvd_sub hd hl
+    rw [Nat.sub_sub_self hu] at hh
+    have := hcu.eq_one_of_dvd hh
+    omega
+  · intro hright
+    have hh := Nat.dvd_sub hright hd
+    have hdu : r ∣ u := by simpa using hh
+    have := hcu.eq_one_of_dvd hdu
+    omega
+
+/-- Opposite parity alone removes two from both raw supports. -/
+theorem two_absent {n u : ℕ} (hu : u ≤ n) (hp : n % 2 ≠ u % 2) :
+    ¬ 2 ∣ n - u ∧ ¬ 2 ∣ n + u := by
+  simp only [Nat.dvd_iff_mod_eq_zero]
+  omega
+
+/-- Scratch left proper support uses precisely the production cutoff. -/
+def leftSupport (n u : ℕ) : Finset ℕ :=
+  (goldbachSmallPrimes n).filter (fun r => r ∣ n - u ∧ n - u ≠ r)
+
+/-- Scratch right proper support uses precisely the production cutoff. -/
+def rightSupport (n u : ℕ) : Finset ℕ :=
+  (goldbachSmallPrimes n).filter (fun r => r ∣ n + u ∧ n + u ≠ r)
+
+/-- The split support always recombines to the existing union support. -/
+theorem support_union (n u : ℕ) :
+    leftSupport n u ∪ rightSupport n u = goldbachObstructionSupport n u := by
+  ext r
+  simp [leftSupport, rightSupport, goldbachObstructionSupport,
+    GoldbachProperObstructed, or_and_left]
+  tauto
+
+/-- Endpoint coprimality alone suffices, without coordinate or order assumptions. -/
+theorem support_disjoint_of_coprime {n u : ℕ}
+    (hc : Nat.Coprime (n - u) (n + u)) :
+    Disjoint (leftSupport n u) (rightSupport n u) := by
+  apply Finset.disjoint_left.mpr
+  intro r hl hr
+  have hl' := Finset.mem_filter.mp hl
+  have hr' := Finset.mem_filter.mp hr
+  have hprime := (mem_goldbachSmallPrimes.mp hl'.1).1
+  have hd := Nat.dvd_gcd hl'.2.1 hr'.2.1
+  rw [hc.gcd_eq_one] at hd
+  exact hprime.ne_one (Nat.dvd_one.mp hd)
+
+/-- On a primitive bounded fiber, only prime two can be shared. -/
+theorem shared_support_eq_two {n u r : ℕ} (hu : u ≤ n) (hc : Nat.Coprime n u)
+    (hl : r ∈ leftSupport n u) (hr : r ∈ rightSupport n u) : r = 2 := by
+  have hl' := Finset.mem_filter.mp hl
+  have hr' := Finset.mem_filter.mp hr
+  have hp := (mem_goldbachSmallPrimes.mp hl'.1).1
+  have hd := Nat.dvd_gcd hl'.2.1 hr'.2.1
+  rw [quadratic_boundary hu hc] at hd
+  exact (Nat.prime_dvd_prime_iff_eq hp Nat.prime_two).mp
+    (dvd_trans hd (Nat.gcd_dvd_right _ _))
+
+/-- Exact weakest condition within the bounded primitive regime: two must
+not be a proper obstruction on both sides. Oddness is sufficient, not necessary. -/
+theorem support_disjoint_iff_not_shared_two {n u : ℕ}
+    (hu : u ≤ n) (hc : Nat.Coprime n u) :
+    Disjoint (leftSupport n u) (rightSupport n u) ↔
+      ¬ (2 ∈ leftSupport n u ∧ 2 ∈ rightSupport n u) := by
+  rw [Finset.disjoint_left]
+  constructor
+  · intro h hh
+    exact h hh.1 hh.2
+  · intro h r hl hr
+    have he := shared_support_eq_two hu hc hl hr
+    subst r
+    exact h ⟨hl, hr⟩
+
+/-- Scratch parity fiber has disjoint proper supports. -/
+theorem primitive_support_disjoint {n u : ℕ} (hu : u ∈ primitiveParityOffsets n) :
+    Disjoint (leftSupport n u) (rightSupport n u) := by
+  obtain ⟨hb, hc, _, hp⟩ := mem_primitiveParityOffsets.mp hu
+  exact support_disjoint_of_coprime
+    ((endpoints_coprime_iff (goldbachOffset_bounds hb).1 hc).mpr hp)
+
+/-- Reduced prime world only removes directions already impossible on this fiber. -/
+def reducedWorld (n : ℕ) : Finset ℕ :=
+  (goldbachSmallPrimes n).filter (fun r => r ≠ 2 ∧ ¬ r ∣ n)
+
+/-- Exact equality of proper-obstruction predicates on each retained candidate. -/
+theorem survives_reduced_iff {n u : ℕ} (hu : u ∈ primitiveParityOffsets n) :
+    GoldbachSurvives n (reducedWorld n) u ↔
+      GoldbachSurvives n (goldbachSmallPrimes n) u := by
+  obtain ⟨hb, hc, _, hp⟩ := mem_primitiveParityOffsets.mp hu
+  have hbound := (goldbachOffset_bounds hb).1
+  constructor
+  · intro hs r hr ho
+    have hnraw : r ∣ n - u ∨ r ∣ n + u := ho.elim (fun h => Or.inl h.1) (fun h => Or.inr h.1)
+    have hne : r ≠ 2 := by
+      intro he
+      subst r
+      exact hnraw.elim (two_absent hbound hp).1 (two_absent hbound hp).2
+    have hnd : ¬ r ∣ n := by
+      intro hd
+      have hh := center_divisor_absent hbound hc
+        (mem_goldbachSmallPrimes.mp hr).1.one_lt hd
+      exact hnraw.elim hh.1 hh.2
+    exact hs r (Finset.mem_filter.mpr ⟨hr, hne, hnd⟩) ho
+  · intro hs r hr
+    exact hs r (Finset.mem_filter.mp hr).1
+
+/-- Primitivity without parity does not separate proper supports. -/
+example : Nat.Coprime 5 1 ∧ 2 ∈ leftSupport 5 1 ∧ 2 ∈ rightSupport 5 1 := by decide +kernel
+
+/-- Endpoint equality can separate proper supports even with reflected gcd two. -/
+example : Nat.gcd (3 - 1) (3 + 1) = 2 ∧
+    Disjoint (leftSupport 3 1) (rightSupport 3 1) := by decide +kernel
+
+/-- Dropping primitivity permits a shared odd proper factor even with odd endpoints. -/
+example : 12 % 2 ≠ 3 % 2 ∧ 3 ∈ leftSupport 12 3 ∧ 3 ∈ rightSupport 12 3 := by decide +kernel
+
 end DkMathTest.GoldbachQuadraticPrimitiveAstra
