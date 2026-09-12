@@ -19,7 +19,7 @@ UFD argument, or counting statement.
 namespace DkMath.ABC
 
 open DkMath.NumberTheory.TraceOneQuadratic
-open DkMath.NumberTheory.EisensteinCoordinates
+open DkMath.Lib.NumberTheory
 
 local notation "tqNorm" => DkMath.NumberTheory.TraceOneQuadratic.norm
 

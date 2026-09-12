@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.ABC.GNExcessCubicMordellIncidence
-import DkMath.NumberTheory.EisensteinCoordinates
+import DkMath.Lib.NumberTheory.EisensteinCoordinates
 
 #print "file: DkMath.ABC.GNExcessCubicEisensteinCoordinates"
 
@@ -20,7 +20,7 @@ Eisenstein factorization, uniqueness, or any counting statement.
 namespace DkMath.ABC
 
 open DkMath.NumberTheory.TraceOneQuadratic
-open DkMath.NumberTheory.EisensteinCoordinates
+open DkMath.Lib.NumberTheory
 
 local notation "tqNorm" => DkMath.NumberTheory.TraceOneQuadratic.norm
 

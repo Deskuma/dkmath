@@ -49,6 +49,11 @@ theorem signedPrimeDiscriminant_mod_four
 def signedPrimeParameter (p : ℕ) : ℤ :=
   (signedPrimeDiscriminant p - 1) / 4
 
+/-- The signed-prime trace-one parameter specializes to `-1` at `p = 3`. -/
+theorem signedPrimeParameter_three :
+    signedPrimeParameter 3 = -1 := by
+  norm_num [signedPrimeParameter, signedPrimeDiscriminant]
+
 theorem discr_signedPrimeParameter
     {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
     discr (signedPrimeParameter p) = signedPrimeDiscriminant p := by
