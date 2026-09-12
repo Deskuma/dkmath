@@ -1,11 +1,11 @@
 # CF2D / Prime Gauge / Goldbach Dynamic Phase / Cosmic Projection / Continuum 実装計画
 
 - cid: `6aa35ef2-c298-83ee-96f9-391d89f175f1`
-- Status: implementation plan / v1 research direction / not implemented
+- Status: implementation plan / v1 v2 research direction / implemented
 - Date: 2026-09-11
 - Updated: 2026-09-12
 - Previous branch: `docs/cf2d-prime-gauge-projection-260911-v0` — merged to `develop`
-- Suggested next branch: `wip/cf2d-prime-gauge-projection-260911-v1`
+- Suggested next branch: `wip/cf2d-prime-gauge-projection-260911-v1` and `wip/cf2d-prime-gauge-projection-260911-v2`
 - Base branch: `develop`
 - Repository: `Deskuma/dkmath`
 - Related plans / reports:
@@ -1085,6 +1085,8 @@ goldbachRelativePhaseVector_succ
 
 ### CPG-V1-008: finite prime-family synchronization
 
+※ branch は `v2` だが継続案件として識別コードは `V1` のままとする。
+
 v0 の
 
 ```lean
@@ -1237,4 +1239,4 @@ prime-family synchronization
 
 へ接続する。
 
-ここを v1 の first milestone とする。
+ここを v1, v2 の first milestone とする。

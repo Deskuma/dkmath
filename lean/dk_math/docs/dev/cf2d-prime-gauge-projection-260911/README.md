@@ -14,8 +14,10 @@ see: [CF2D PrimeGauge CosmicProjection Continuum](/docs/not_implements/260911-CF
 - [CPG-V1-005 parent-independent relative shape](report-005.md)
 - [CPG-V1-006 cross-fiber center transport](report-006.md)
 - [CPG-V1-007 Outcome B information-gain audit](report-007.md)
+- [CPG-V1-008 finite prime-family synchronization](report-008.md)
+- [CPG-V1-009 Projection / CF2D bridge](report-009.md)
+- [CPG-V1-010 world-modulus projection / mesh](report-010.md)
+- [CPG-V1-011 finite normalized grid](report-011.md)
 
-Current state: CPG-V1-007 complete with Outcome B. The Goldbach proof campaign
-is closed at the structural normalization/transport boundary. Projection,
-continuum, and later synchronization work require an independent API
-objective and are not Goldbach proof providers.
+Current state: CPG-V1-011 complete as independent finite normalized-grid API
+work. Further dense/limit work requires a separately authorized campaign.
