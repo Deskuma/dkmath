@@ -1,0 +1,19 @@
+'DkMath.NumberTheory.FixedBigGauge.scale_unit_conservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_squareBody_normalization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.freshPrime_fixedBigUnit_refinement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_in_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_of_physical_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.next_square_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.incomplete_world_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
