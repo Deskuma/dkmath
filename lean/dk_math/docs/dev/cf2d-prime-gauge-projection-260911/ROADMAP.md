@@ -3,15 +3,15 @@
 Date: 2026-09-12  
 Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
 Base: `develop`  
-Status: pre-implementation planning; no production theorem in this campaign has been added yet.
+Status: staged implementation in progress; CPG-V1-000 through CPG-V1-003 are complete.
 
 ## 0. Current campaign state
 
-`CPG-V1-000` repository-first audit is complete. The current workspace has the
+`CPG-V1-000` repository-first audit and the first three thin bridges are complete.
+The current workspace has the
 CF2D exact-order provider, finite prime-world periodic/refinement providers,
-and the Goldbach fixed-center paired-residue/capacity layers. The Prime Gauge
-and Goldbach dynamic-phase production modules named in the implementation plan
-do not yet exist.
+the Goldbach fixed-center paired-residue/capacity layers, and the new Prime
+Gauge return/Goldbach phase modules.
 
 The first implementation target is the finite, kernel-checked bridge:
 
@@ -55,8 +55,8 @@ dynamic-phase information-gain verdict.
 |---|---|---|---|
 | CPG-V1-000 | complete | Repository-first audit | Current declarations, imports, branch, and focused replay recorded in `report-000.md`. |
 | CPG-V1-001 | complete | CF2D return and congruence bridge | `Return.lean` proves both bridges; focused production/test build and axiom/forbidden-construct checks passed. |
-| CPG-V1-002 | queued | Goldbach conjugate gauge bridge | Bridge existing raw `ZMod` residue theorems to CF2D notation; preserve `u ≤ n` and raw/proper distinction. |
-| CPG-V1-003 | queued | Center motion and relative phase | Kernel-check marker successor and relative-phase identities; classify as static re-expression unless a new invariant appears. |
+| CPG-V1-002 | complete | Goldbach conjugate gauge bridge | `GoldbachPhase.lean` bridges raw left/right `ZMod` obstruction to equality/conjugacy of CF2D markers; focused build and audits recorded in `report-002.md`. |
+| CPG-V1-003 | complete | Center motion and relative phase | `GoldbachPhase.lean` proves marker successor, double-center relative phase, return/divisibility, and relative successor laws; focused build and audits recorded in `report-003.md`. |
 | CPG-V1-004a | queued | Target-congruence child prerequisite | Generalize the zero-target child observer to `r + j*M ≡ a [MOD q]`, or establish an equivalent typed `ZMod q` API. This is a prerequisite to paired Goldbach refinement. |
 | CPG-V1-004 | queued | Paired fresh-prime refinement | Prove left/right reserved-child existence and uniqueness, distinctness under `q ∤ 2*n`, and the `q-2` raw surviving-child count. |
 | CPG-V1-005 | queued | Parent-independent two-hole shape | Prove `M * (jL - jR) ≡ 2*n [MOD q]` with explicit subtraction/cast handling; no absolute-placement claim. |
@@ -143,7 +143,7 @@ The words `candidate seat`, `raw obstruction`, `proper obstruction`, and
 
 ## 6. Next work item
 
-The next source change is `CPG-V1-002` only.
+The next source change is `CPG-V1-004a` only.
 Before `CPG-V1-004`, perform the target-congruence design in `CPG-V1-004a`;
 the existing zero-target theorem is evidence for the arithmetic pattern, not
 itself a proof of the Goldbach moving-wave statement.

@@ -6,7 +6,10 @@ see: [CF2D PrimeGauge CosmicProjection Continuum](/docs/not_implements/260911-CF
 
 - [ROADMAP](ROADMAP.md)
 - [CPG-V1-000 repository-first audit](report-000.md)
+- [CPG-V1-001 CF2D return bridge](report-001.md)
+- [CPG-V1-002 Goldbach phase bridge](report-002.md)
+- [CPG-V1-003 center/relative phase](report-003.md)
 
-Current state: CPG-V1-001 complete. The next authorized source milestone is
-CPG-V1-002; CPG-V1-007 is the mandatory information-gain stop gate before
+Current state: CPG-V1-003 complete. The next authorized source milestone is
+CPG-V1-004a; CPG-V1-007 is the mandatory information-gain stop gate before
 Projection/continuum work.
