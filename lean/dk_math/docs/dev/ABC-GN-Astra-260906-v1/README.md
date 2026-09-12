@@ -33,17 +33,9 @@ predecessor:
   lean/dk_math/docs/dev/ABC-GN-Astra-260906-v0/
 ```
 
-On 2026-09-12 this branch was fast-forwarded to the current `develop` head after the FLT prime-generalization / DkMath.Lib promotion work.
+On 2026-09-12 this branch was synchronized to `develop` after the FLT prime-generalization / DkMath.Lib promotion work, then completed the bounded LUNA-008 reconciliation checkpoint.
 
-The current campaign therefore includes:
-
-```text
-ABC-GN v1 production checkpoints
-+
-latest DkMath.Lib promotion
-+
-latest odd-prime FLT TraceOne architecture.
-```
+This branch is now closed for further implementation and is proposed for merge back into `develop`.
 
 ---
 
@@ -99,7 +91,7 @@ LUNA-006/007 added a neutral Eisenstein coordinate presentation backed by
 TraceOneInt (-1).
 ```
 
-The current production facts include:
+The production facts include:
 
 ```text
 Norm(m+n*omega) = m^2-m*n+n^2;
@@ -147,7 +139,7 @@ for a useful positive delta.
 
 ## DkMath.Lib / FLT-prime-generalization reconciliation
 
-The repository has since promoted reusable arithmetic into:
+The repository now promotes reusable arithmetic into:
 
 ```text
 DkMath.Lib.NumberTheory.*
@@ -160,25 +152,11 @@ PadicValNat
 PowerFactor
 IdealPowerFactor
 PrincipalIdealPower
-UnitPowerSector.
+UnitPowerSector
+EisensteinCoordinates.
 ```
 
-The odd-prime FLT architecture now runs through generic TraceOne coordinates, principal-ideal power extraction, and generic unit-sector normalization.
-
-The ABC-GN v1 Eisenstein core predates that promotion and currently lives at:
-
-```text
-DkMath.NumberTheory.EisensteinCoordinates.
-```
-
-The reconciliation task is recorded in:
-
-```text
-reconciliation-008.md
-instruction-008.md.
-```
-
-Target state:
+LUNA-008 completed the ownership migration:
 
 ```text
 DkMath.Lib.NumberTheory.EisensteinCoordinates
@@ -191,41 +169,43 @@ ABC Eisenstein modules
   -> import Lib owner directly.
 ```
 
+The reconciliation record and implementation evidence are:
+
+```text
+reconciliation-008.md
+instruction-008.md
+report-008.md
+validation-008.txt.
+```
+
 ---
 
 ## p=3 TraceOne / Eisenstein contact
 
-The FLT prime-generalization closeout records a p=3 carrier/API boundary.
-
-The concrete implementation shows:
+The concrete implementation has
 
 ```text
 EisensteinInt := TraceOneInt (-1)
 ```
 
-and the generic signed-prime parameter specializes to
+and production now proves
 
 ```text
 signedPrimeParameter 3 = -1.
 ```
 
-Thus there is no mathematical carrier mismatch.
+Therefore the former p=3 carrier boundary is closed at the API level.
 
-The remaining compatibility work is:
-
-```text
-omega/tau coordinate convention;
-namespace/API ownership;
-unit-sector packaging.
-```
-
-Existing FLT3 cube-unit sectors can be packaged through the new generic:
+LUNA-008 also completed:
 
 ```text
-UnitPowerSectorSystem (TraceOneInt (-1)) 3.
+omega/tau coordinate conversion;
+namespace/API ownership reconciliation;
+FLT3 cube-unit sector packaging as
+  UnitPowerSectorSystem (TraceOneInt (-1)) 3.
 ```
 
-This is an API reconciliation only; it does not by itself establish a new generic FLT p=3 theorem.
+This does not claim full generic odd-prime p=3 facade integration or a new FLT theorem.
 
 ---
 
@@ -260,7 +240,9 @@ shell (r,S) injectivity;
 Pell parameter height bound;
 Mordell exact transport and finite incidence ledger;
 neutral Eisenstein coordinate algebra;
-conditional explicit beta*gamma^2 consequences.
+conditional explicit beta*gamma^2 consequences;
+Lib-owned Eisenstein coordinate API;
+p=3 TraceOne carrier / coordinate / unit-sector reconciliation.
 ```
 
 ### Research-only / open
@@ -277,6 +259,28 @@ ABC closure.
 
 ---
 
+## New independent research thread
+
+The discussion following LUNA-008 exposed a broader topic that is not ABC-specific:
+
+```text
+multi-gauge GN divisibility
+-> Norm divisibility
+-> coordinate divisibility
+-> integer-lattice landing
+-> power/Core-image landing.
+```
+
+This is recorded separately in:
+
+```text
+docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
+```
+
+It should be developed as generic DkMath infrastructure rather than as an extension of this ABC branch.
+
+---
+
 ## Model roles
 
 ```text
@@ -290,7 +294,7 @@ Luna:
   production implementation of already validated deterministic facts.
 ```
 
-Do not use Luna to invent the missing counting theorem.
+Do not use Luna to invent the missing ABC counting theorem.
 
 ---
 
@@ -312,8 +316,8 @@ report-002.md ... report-007.md
 reconciliation-008.md
   delta against new Lib / FLT-prime-generalization architecture
 
-instruction-008.md
-  Lib promotion and p=3 Eisenstein API reconciliation
+instruction-008.md / report-008.md / validation-008.txt
+  completed Lib promotion and p=3 Eisenstein API reconciliation
 ```
 
 ---
@@ -333,17 +337,21 @@ ASTRA-001:
 LUNA-002 ... LUNA-007:
   COMPLETE / APPROVED
 
-branch sync to develop:
-  COMPLETE
-
 LUNA-008 Lib / p=3 API reconciliation:
-  READY / ACTIVE TASK
+  COMPLETE / APPROVED
+
+ABC-GN Astra v1 branch:
+  CLOSED FOR FURTHER WORK
+  PROPOSED FOR MERGE TO develop
 
 ABC:
   NOT PROVED
 
-current mathematical frontier:
+current ABC mathematical frontier:
   actual Eisenstein factorization existence/counting
   and/or
   balanced-box represented-pair power saving.
+
+new independent DkMath research frontier:
+  multi-gauge divisibility / Norm-lattice landing.
 ```
