@@ -1,0 +1,126 @@
+$ lake env lean DkMath/NumberTheory/FixedBigGauge/Basic.lean
+EXIT_CODE=0
+$ lake env lean DkMath/NumberTheory/FixedBigGauge/BoundedChildren.lean
+EXIT_CODE=0
+$ lake env lean DkMath/NumberTheory/FixedBigGauge/Goldbach.lean
+EXIT_CODE=0
+$ lake env lean DkMath/NumberTheory/FixedBigGauge/SquareCertificate.lean
+EXIT_CODE=0
+$ lake env lean DkMathTest/NumberTheory/FixedBigGaugeAudit.lean
+'DkMath.NumberTheory.FixedBigGauge.scale_unit_conservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_squareBody_normalization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.freshPrime_fixedBigUnit_refinement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_in_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_of_physical_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.next_square_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.incomplete_world_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+EXIT_CODE=0
+$ lake env lean DkMathTest/NumberTheory/FixedBigGoldbachAudit.lean
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.scale_unit_conservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.unit_eq_iff_scale_mul_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_div_edge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_div_edge_eq_projectionGap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_div_edge_eq_regularPhaseStep' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.normalized_unit_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBig_squareBody_normalization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.fixedBigUnit_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.world_unit_eq_edge_mul_projectionGap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.freshPrime_fixedBigUnit_refinement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.mem_boundedChildIndices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.boundedChildIndices_initial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.boundedChildIndices_eq_zero_of_large_modulus' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.boundedChildIndices_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.bounded_survivors_add_reserved' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.bounded_survivor_of_two_holes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.three_le_bounded_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.bounded_paired_survivor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.scaled_sum_eq_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.gaugePrimePairAt_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.exists_gaugePrimePairAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.resolution_eq_original_of_preserved_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.unit_eq_one_of_preserved_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.original_gauge_iff_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.strongGoldbach_iff_original_gauge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_scaled_label_iff' depends on axioms: [propext]
+'DkMath.NumberTheory.FixedBigGauge.scaled_lt_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.scaled_child_in_interval_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_supportDisjointFrom_in_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_in_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.scaled_le_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.FixedBigGauge.prime_iff_coprime_of_physical_squareShell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.lower_bound_is_necessary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.next_square_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.incomplete_world_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.zero_edge_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGaugeAudit.composite_direction_arithmetic' depends on axioms: [propext]
+'DkMathTest.FixedBigGoldbachAudit.phase_count_does_not_supply_visible_child' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.scaled_countermodel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.moving_holes_can_remove_last_visible_survivor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.three_visible_seats_supply_fresh_survivor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.square_fold_does_not_preserve_primality' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.gauge_pair_can_have_composite_physical_lengths' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.FixedBigGoldbachAudit.original_gauge_centers_two_through_one_hundred' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+EXIT_CODE=0
