@@ -1,0 +1,150 @@
+# ROADMAP — CF2D / Prime Gauge / Goldbach Dynamic Phase / Cosmic Projection / Continuum v1
+
+Date: 2026-09-12  
+Branch: `wip/cf2d-prime-gauge-projection-260911-v1`  
+Base: `develop`  
+Status: pre-implementation planning; no production theorem in this campaign has been added yet.
+
+## 0. Current campaign state
+
+`CPG-V1-000` repository-first audit is complete. The current workspace has the
+CF2D exact-order provider, finite prime-world periodic/refinement providers,
+and the Goldbach fixed-center paired-residue/capacity layers. The Prime Gauge
+and Goldbach dynamic-phase production modules named in the implementation plan
+do not yet exist.
+
+The first implementation target is the finite, kernel-checked bridge:
+
+```text
+CF2D exact order
+-> return / phase equality
+-> Goldbach left-right conjugate gauge
+-> center and relative-phase dynamics
+-> typed paired fresh-prime refinement
+-> parent-independent two-hole shape
+-> cross-fiber transport
+-> information-gain audit
+```
+
+`CPG-V1-007` is a mandatory stop gate. Projection, mesh, and continuum work
+remain downstream and must not be used as a Goldbach proof provider before the
+dynamic-phase information-gain verdict.
+
+## 1. Scope contract
+
+### User-requested work completed by this planning pass
+
+- Inspect the workspace before implementation.
+- Fix the current source/API/import boundaries.
+- Prepare a staged implementation plan and roadmap management artifact.
+- Place the work report under this directory.
+
+### Attached-document material retained as design constraints
+
+- The attached document is an implementation plan and research boundary, not
+  an unconditional command to implement every listed candidate theorem.
+- Its `CPG-V1-000` audit and `CPG-V1-007` information-gain stop are retained.
+- Its non-goals are retained: no Strong Goldbach, Twin Prime, Legendre, RH,
+  prime-existence, universal escape, or continuum prime-realization claim.
+- Static fixed-center normalization is not repeated after the audited Outcome B
+  result.
+
+## 2. Milestones and gates
+
+| ID | Status | Deliverable | Required evidence / exit condition |
+|---|---|---|---|
+| CPG-V1-000 | complete | Repository-first audit | Current declarations, imports, branch, and focused replay recorded in `report-000.md`. |
+| CPG-V1-001 | queued | CF2D return and congruence bridge | Prove only `regularKernel_pow_eq_one_iff_dvd` and the phase-equality bridge after exact Mathlib signature audit; regress `k = 2,3,5,6`. |
+| CPG-V1-002 | queued | Goldbach conjugate gauge bridge | Bridge existing raw `ZMod` residue theorems to CF2D notation; preserve `u ≤ n` and raw/proper distinction. |
+| CPG-V1-003 | queued | Center motion and relative phase | Kernel-check marker successor and relative-phase identities; classify as static re-expression unless a new invariant appears. |
+| CPG-V1-004a | queued | Target-congruence child prerequisite | Generalize the zero-target child observer to `r + j*M ≡ a [MOD q]`, or establish an equivalent typed `ZMod q` API. This is a prerequisite to paired Goldbach refinement. |
+| CPG-V1-004 | queued | Paired fresh-prime refinement | Prove left/right reserved-child existence and uniqueness, distinctness under `q ∤ 2*n`, and the `q-2` raw surviving-child count. |
+| CPG-V1-005 | queued | Parent-independent two-hole shape | Prove `M * (jL - jR) ≡ 2*n [MOD q]` with explicit subtraction/cast handling; no absolute-placement claim. |
+| CPG-V1-006 | queued | Cross-fiber center transport | Prove the successor/period law for the relative shape and identify all endpoint hypotheses. |
+| CPG-V1-007 | stop gate | Information-gain audit | Compare against existing CRT/capacity APIs, run bounded Lean/scratch counterexample checks, and record Outcome A/B/C. Outcome B/C closes the Goldbach proof campaign for this route. |
+| CPG-V1-008 | deferred | Finite prime-family synchronization | Implement reusable simultaneous return/world-modulus APIs independently of any Goldbach conclusion. |
+| CPG-V1-009 | deferred | Production Projection API and CF2D bridge | Move only the minimal `Pi`/`U` facts from `Samples.Projection` to a production owner; prove the `1/k` bridge. |
+| CPG-V1-010 | deferred | World-modulus projection and mesh | Connect fresh-prime modulus multiplication to `1/M` mesh; retain geometry-only semantics. |
+| CPG-V1-011 | deferred | Finite normalized grid | Prove finite `1/k` approximation; any infinite density theorem requires a separately identified growth provider. |
+
+`queued` means planned but not started; `deferred` means intentionally held
+behind the dynamic-phase stop gate. These are roadmap labels, not Lean
+propositions.
+
+## 3. Ownership and import policy
+
+The planned production surface is intentionally thin:
+
+```text
+DkMath/CosmicFormula/Projection/
+  Basic.lean
+  CF2DBridge.lean
+
+DkMath/NumberTheory/PrimeGauge/
+  Return.lean
+  GoldbachPhase.lean
+  GoldbachRefinement.lean
+  PrimorialSync.lean
+  ContinuumGrid.lean
+```
+
+Create a file only when a stable public boundary exists. Candidate import
+owners are:
+
+- `CF2D.CycleDivision` / `CF2D.RegularOrbit` for the exact finite orbit;
+- `Goldbach.PrimeWorld` for existing `ZMod` left/right residue semantics;
+- `Primitive.PrimeWorldRefinement` for old-world child coordinates and fresh
+  prime hypotheses;
+- `PeriodicPrimeWorld` / `PrimeWorldResidues` for period and canonical residue
+  semantics;
+- `Samples.Projection` only as a source audit, never as a production dependency;
+- `PrimorialUniverse.SquareAnchorPhaseSuccessorTransport` only as a separately
+  audited pattern. Its square-anchor center/radius semantics are not silently
+  identified with Goldbach markers.
+
+Do not add a new top-level aggregator until the corresponding modules have
+focused builds and a public import audit. Do not add `PrimeGauge` structures
+when theorem/docstring wrappers express the same existing mathematics.
+
+## 4. Implementation protocol
+
+For each queued milestone:
+
+1. Freeze the statement and namespace from the current source audit.
+2. Implement the smallest typed bridge, with natural subtraction bounds made
+   explicit or with `Nat.ModEq`/`ZMod` used as the intermediate language.
+3. Add a focused regression in `DkMathTest` and keep research scratch separate
+   from the production facade.
+4. Run the narrow module build from `lean/dk_math` and inspect the fresh log for
+   errors and warnings.
+5. Run a forbidden-construct/axiom audit appropriate to the checkpoint.
+6. Record the exact result in a numbered report before advancing the roadmap.
+
+The paired refinement implementation must first settle whether its child
+observer is stated in `Nat.ModEq` or `ZMod`. The choice is part of CPG-V1-004a,
+not an assumption carried into production files.
+
+## 5. Mandatory semantic barriers
+
+The following statements remain outside the campaign's proof claims:
+
+```text
+exact order of regularKernel k -> primality of k
+phase/residue equivalence -> new Goldbach information
+q-2 children -> short-interval survivor
+finite synchronization -> existence of a new prime
+dense normalized grid -> prime in every interval
+Projection boundary completion -> integer prime realization
+any finite observer identity -> Strong Goldbach / Twin Prime / Legendre / RH
+```
+
+The words `candidate seat`, `raw obstruction`, `proper obstruction`, and
+`survivor` must remain distinct in definitions and docstrings.
+
+## 6. Next work item
+
+The next source change, after review of this roadmap, is `CPG-V1-001` only.
+Before `CPG-V1-004`, perform the target-congruence design in `CPG-V1-004a`;
+the existing zero-target theorem is evidence for the arithmetic pattern, not
+itself a proof of the Goldbach moving-wave statement.
+
