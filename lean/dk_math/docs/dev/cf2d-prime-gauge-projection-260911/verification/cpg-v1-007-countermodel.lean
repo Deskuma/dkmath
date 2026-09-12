@@ -26,6 +26,48 @@ example :
       primeWorldChild primeWorld235 29 3) = (29, 59, 89, 119) := by
   decide
 
+example :
+    (primeWorldChild primeWorld235 29 4,
+      primeWorldChild primeWorld235 29 5,
+      primeWorldChild primeWorld235 29 6,
+      primeWorldChild primeWorld235 29 7) = (149, 179, 209, 239) := by
+  decide
+
+example :
+    (primeWorldChild primeWorld235 29 8,
+      primeWorldChild primeWorld235 29 9,
+      primeWorldChild primeWorld235 29 10,
+      primeWorldChild primeWorld235 29 11) = (270-1, 300-1, 330-1, 360-1) := by
+  decide
+
+example :
+    (primeWorldChild primeWorld235 (2*3*5-1) 12,
+      primeWorldChild primeWorld235 29 13,
+      primeWorldChild primeWorld235 29 14,
+      primeWorldChild primeWorld235 29 15) = ((2*3*5)*(12+1)-1, (29+1)*(13+1)-1, 30*(14+1)-1, 30*(15+1)-1) := by
+  ring_nf
+  decide
+
+example :
+    (primeWorldChild primeWorld235 (2*3*5-1) (2*3*5)) = ((2*3*5)*((2*3*5)+1)-1) := by
+  ring_nf
+  decide
+
+example :
+    (primeWorldChild primeWorld235 29 31) = (30*(31+1)-1) := by
+  ring_nf
+  decide
+
+example :
+    (primeWorldChild primeWorld235 29 32) = (30*(32+1)-1) := by
+  ring_nf
+  decide
+
+example :
+    (primeWorldChild primeWorld235 29 33) = (30*(33+1)-1) := by
+  ring_nf
+  decide
+
 /-!
 The finite phase survivor set is indexed by `j < q`, while the actual
 Goldbach interval is a set of offset values.  This local observer records the
