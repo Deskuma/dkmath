@@ -14,6 +14,7 @@ import DkMath.NumberTheory.Goldbach.Limitations
 import DkMath.NumberTheory.Goldbach.Overlap
 import DkMath.NumberTheory.Goldbach.PairOverlap
 import DkMath.NumberTheory.Goldbach.CrossGapExchange
+import DkMath.NumberTheory.Goldbach.CrossGapEscape
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -34,4 +35,8 @@ layer and do not provide a universal escape theorem.
 `CrossGapExchange` adds the full-coordinate algebraic Gap exchange API. It is
 an exact conservation and residue-transport layer, not a prime-output or
 Strong Goldbach theorem.
+
+`CrossGapEscape` adds the fixed-even-fiber finite obstruction certification
+endpoint and its one-hole bridge to `GoldbachPairAt`; it does not provide a
+survivor-existence theorem.
 -/
