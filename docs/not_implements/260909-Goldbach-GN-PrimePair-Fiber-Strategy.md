@@ -1,22 +1,133 @@
 # Goldbach via GN Prime-Pair Fiber — Strategy Note
 
 Date: 2026-09-09  
-Status: finite GN-fiber reductions implemented; universal paired-fiber escape unresolved
+Updated: 2026-09-12  
+Status: original strategy largely implemented; static fixed-center normalization audited; universal short-fiber escape unresolved  
 Target branch: `develop`  
-Suggested future branch: `wip/NumberTheory-Goldbach-GNFiber-260910-v0`
+Current frontier: a genuinely new cross-seat / cross-fiber invariant; next research branch not yet fixed  
 cid: `6aa15236-f2b0-83ee-bfbf-a1b3c5615e5d`
 
-Implementation follow-up (2026-09-10):
-[`NumberTheory-Goldbach-GNFiber-260910-v0`](../../lean/dk_math/docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/README.md).
-The original strategy below is retained as the research proposal. The follow-up
-distinguishes proved finite reductions, counterexamples to stronger shortcuts,
-and the still-missing universal escape provider.
+Implementation follow-ups:
+
+- 2026-09-10: [`NumberTheory-Goldbach-GNFiber-260910-v0`](../../lean/dk_math/docs/dev/NumberTheory-Goldbach-GNFiber-260910-v0/README.md)
+- 2026-09-12: [`NumberTheory-Goldbach-QuadraticPrimitiveFiber-260912-v0`](../../lean/dk_math/docs/dev/NumberTheory-Goldbach-QuadraticPrimitiveFiber-260912-v0/report-005.md)
+- GTail core refactor: [`Lib-GTail-Core-260908-v0`](../../lean/dk_math/docs/refact/Lib-GTail-Core-260908-v0/analysis-001.md)
+
+The original strategy below is retained as the research proposal, but the current frontier has moved substantially. The finite GN-fiber reduction, proper small-prime obstruction model, CRT / PrimeWorld layer, exact survivor criterion, overlap accounting, Pascal residual layer, and primitive/parity normalization have all been formalized or audited. Strong Goldbach remains unproved.
+
+## 0. Current Status — 2026-09-12
+
+### 0.1 What is now implemented
+
+The original plan has been realized through almost all of its finite/static layers.
+
+Implemented and kernel-checked components include:
+
+1. `GoldbachPairAt`, `GoldbachGNFiberAt`, and exact equivalence with the usual fixed-center prime-pair statement.
+2. The degree-two identity
+
+$$
+n^2=(n-u)(n+u)+u^2.
+$$
+
+3. Proper left/right obstruction predicates with endpoint exceptions.
+4. The complete small-prime cutoff up to the square-root boundary.
+5. Exact equivalence between survival from all proper small-prime obstructions and primality of both endpoints.
+6. PrimeWorld residue coordinates, CRT periodicity, and exact full-period survivor cardinality.
+7. Exact finite covered/survivor capacity accounting and
+   `strongGoldbach_iff_capacityEscape`.
+8. PCK / old-fresh bridge results, with explicit limitations showing that pointwise primitive escape does not force a simultaneous prime pair.
+9. Exact overlap conservation and pair-overlap accounting.
+10. Pascal residual decomposition of pair overlap.
+11. Canonical GTail core promotion, including tail filtration, exact boundary gcd, prime-row congruence, p-adic support, and cyclotomic bridge.
+12. Degree-two primitive/parity normalization and left/right support separation, audited by GPT-6 Astra.
+
+The key static capacity statement is therefore no longer merely a proposed theorem shape. It is an exact reformulation of Goldbach itself.
+
+### 0.2 Exact current bottleneck
+
+The missing step is still a universal **short fixed-center fiber escape**:
+
+$$
+\boxed{
+\forall n\ge2,\;
+\exists u<n,\;
+\operatorname{Prime}(n-u)
+\land
+\operatorname{Prime}(n+u)
+}
+$$
+
+or equivalently a proof that not every admissible seat is covered by proper small-prime obstructions.
+
+Full-period CRT existence is already available. The unresolved problem is **location inside the short fiber**, not existence somewhere in the periodic world.
+
+### 0.3 Astra quadratic-primitive audit: Outcome B
+
+The 2026-09-12 research pass tested whether the newly promoted GTail boundary theorem creates a genuinely stronger degree-two Goldbach route.
+
+The following normalization facts were proved in scratch Lean:
+
+- every positive non-diagonal Goldbach prime pair forces `Nat.Coprime n u`;
+- primitive coordinates plus opposite parity give coprime reflected endpoints;
+- center divisors and `2` disappear from the retained primitive-parity obstruction world;
+- proper left/right supports become disjoint;
+- pair overlap splits exactly into `LL + LR + RR`;
+- the `LR` term admits the expected oriented CRT/product-wave description;
+- parity improves the same-orientation spacing to `2*p*q` for odd coprime moduli.
+
+However, the exact survivor comparison shows that normalization creates no new positive survivors:
+
+$$
+S' = \{u\in S : 0<u\},
+$$
+
+with the omitted zero seat present exactly when the center itself is prime.
+
+After restoring that diagonal, the normalized capacity criterion is exactly equivalent to both `GoldbachCapacityEscape` and `StrongGoldbach`.
+
+Hence the audit result is:
+
+> **Outcome B — structural normalization only.**
+>
+> The primitive/parity and left/right product-wave structure is correct and useful as a canonical normal form, but it is not an independent escape provider.
+
+Important branch-cutting counterexamples were also fixed:
+
+- strict incidence still fails after normalization (`n = 19`);
+- higher overlap remains (`n = 31, u = 4`);
+- the `2*p*q` spacing bound is sharp (`n = 47, p = 3, q = 5`);
+- candidate cardinality cannot replace geometric interval width, even for proper LR occupancy (`n = 162`).
+
+### 0.4 Updated research direction
+
+Further normalization of a **single fixed fiber** is now unlikely, by itself, to create strict information gain. In particular, merely refining
+
+- primitive candidate density,
+- CRT moduli,
+- residue cardinalities,
+- local support counts,
+- or same-orientation spacing
+
+risks reproducing an already equivalent capacity ledger.
+
+The next promising direction should introduce information not present in one static fiber. Candidate forms include:
+
+- relations between multiple seats in the same fiber that are not reducible to independent CRT coordinates;
+- transport between neighboring centers `n → n+1`;
+- scale/fiber morphisms linking survivor or overlap structures across different square fibers;
+- a dynamic conservation law for prime-wave mass / overlap under center motion;
+- a genuinely new invariant carried by GTail / PCK / Pascal structure across fibers rather than at one seat.
+
+In DkMath terminology, the frontier has shifted from **static normalization** toward **dynamic harmonic arithmetic**.
+
+---
 
 ## 1. Purpose
 
-This note preserves the current strategy before implementation begins.
+This note preserves the original strategy before implementation began.
 
-The immediate observation is that DkMath already contains many of the structural tools needed to reformulate the strong Goldbach conjecture inside the GN / Cosmic Formula framework:
+The immediate observation was that DkMath already contained many of the structural tools needed to reformulate the strong Goldbach conjecture inside the GN / Cosmic Formula framework:
 
 - canonical GN / GTail decomposition;
 - prime-row Pascal divisibility;
@@ -26,7 +137,7 @@ The immediate observation is that DkMath already contains many of the structural
 - finite prime-world residue spaces;
 - Primitive Conservation Kernel machinery.
 
-The remaining task is not to collect more isolated lemmas first, but to choose a proof architecture that forces a prime-pair point to survive on every square fiber.
+The original remaining task was to choose a proof architecture that forces a prime-pair point to survive on every square fiber. Most finite/static infrastructure proposed below has since been implemented; the universal forcing theorem has not.
 
 ## 2. Important correction: “all primes are representable by GN” is too weak
 
@@ -90,17 +201,7 @@ x+u=n,
 \operatorname{Prime}(GN_2(x,u)).
 $$
 
-Suggested predicate:
-
-```lean
-def GoldbachGNFiberAt (n : ℕ) : Prop :=
-  ∃ x u : ℕ,
-    x + u = n ∧
-    Nat.Prime x ∧
-    Nat.Prime (DkMath.CosmicFormulaBinom.GN 2 x u)
-```
-
-The first formal checkpoint should prove an exact equivalence between the usual prime-pair statement and this GN-fiber statement.
+This equivalence is now implemented by the production Goldbach modules.
 
 ## 4. Body / Big / Gap interpretation
 
@@ -136,42 +237,17 @@ Goldbach becomes:
 >
 > contains at least one point whose two canonical factors are both prime.
 
-This is the preferred DkMath reading.
+This remains the preferred DkMath reading.
 
-## 5. Existing DkMath weapons
+## 5. DkMath weapons and their present role
 
-### 5.1 Pascal prime-row divisibility
+### 5.1 Pascal / GTail
 
-Existing NumberTheory APIs include:
-
-```text
-prime_dvd_inner_choose
-prime_allInnerWeightedTermDivisible
-prime_dvd_weightedBinomialInnerBeamSum
-prime_inner_choose_eq_zero_zmod
-```
-
-For prime row \(p\),
-
-$$
-0<k<p
-\Longrightarrow
-p\mid\binom pk,
-$$
-
-so the inner Pascal Beam vanishes modulo \(p\).
-
-This supplies a canonical prime-row residue pattern.
+Prime-row Pascal divisibility and the canonical GTail filtration are now lower-level reusable infrastructure. The Goldbach overlap ledger also exposes a Pascal hierarchy, but no theorem identifies that hierarchy with GTail as an escape mechanism.
 
 ### 5.2 Composite-degree GN factorization
 
-`DkMath.NumberTheory.GNDegreeFactorization` already proves
-
-```lean
-theorem GN_mul_degree
-```
-
-with mathematical content
+`GN_mul_degree` gives
 
 $$
 GN_{ab}(x,u)
@@ -180,18 +256,7 @@ GN_a(x,u)\,
 GN_b\!\left(x\,GN_a(x,u),u^a\right).
 $$
 
-The second factor is evaluated in transported coordinates; the formula is not a naive same-coordinate product.
-
-The same module already proves:
-
-```text
-one_lt_factors_of_composite_degree
-not_prime_GN_of_mul_degree
-prime_degree_of_prime_GN
-GNPositiveRepresentation.degree_prime_of_target_prime
-```
-
-Thus, in the positive nondegenerate region,
+In the positive nondegenerate region,
 
 $$
 GN_d(x,u)\text{ prime}
@@ -199,26 +264,11 @@ GN_d(x,u)\text{ prime}
 d\text{ prime}.
 $$
 
-### 5.3 Prime-target fiber constraints
+This remains important for higher-degree classification, but Goldbach itself is intrinsically the degree-two fiber.
 
-`DkMath.NumberTheory.GNPrimeTargetResidue` already proves:
+### 5.3 Prime-target constraints and signatures
 
-```text
-GNPositiveRepresentation.degree_not_dvd_boundary_of_target_prime
-GNPositiveRepresentation.target_modEq_one_degree_of_target_prime
-GNPositiveRepresentation.degree_dvd_target_sub_one_of_target_prime
-GNPositiveRepresentation.prime_degree_constraints
-```
-
-For a positive representation
-
-$$
-GN_d(x,u)=P,
-\qquad
-P\text{ prime},
-$$
-
-the existing constraints include
+For positive prime-target representations, DkMath constrains the possible degree by conditions such as
 
 $$
 d\text{ prime},
@@ -228,65 +278,41 @@ d\mid P-1,
 2^d-1\le P.
 $$
 
-Thus the prime-target degree fiber is already very thin.
+These signatures are finite and thin, but current formalization does not transport primality from one reflected endpoint to the other. They should therefore be treated as classifiers, not as a solved Goldbach bridge.
 
-### 5.4 Finite coordinate bounds
+### 5.4 Primitive / PrimeWorld / PCK
 
-`DkMath.NumberTheory.GNRepresentationBounds` provides
+The Primitive and PrimeWorld infrastructure now supports the implemented Goldbach residue, cardinality, and conservation layers. PCK provides useful old/fresh decomposition facts, but current bridges do not force simultaneous escape of both reflected endpoints.
 
-```text
-GNPositiveRepresentation.bounds
-GNRepresentationBox
-GNPositiveRepresentations
-mem_GNPositiveRepresentations_iff
-```
+### 5.5 Exact GTail boundary gcd
 
-For
+The GTail refactor added the general theorem
 
 $$
-GN_d(x,u)=P
+\gcd(x,GTail(d,r,x,u))
+=
+\gcd\!\left(x,\binom dr u^{d-r}\right),
 $$
 
-in the positive region,
+and, under `Coprime x u`,
 
 $$
-2^d-1\le P,
-\qquad
-x^{d-1}<P,
-\qquad
-d\,u^{d-1}<P,
+\gcd(x,GTail(d,r,x,u))
+=
+\gcd\!\left(x,\binom dr\right).
 $$
 
-and in particular
+At `r = 1` this yields
 
 $$
-d<P,\qquad x<P,\qquad u<P.
+\gcd(x,GN_d(x,u))=\gcd(x,d).
 $$
 
-This gives an executable finite search surface.
+Its degree-two specialization supplied the primitive/parity normalization audited in QP-001 through QP-005. This is a useful canonical normal form, but not a strict capacity improvement.
 
-### 5.5 Primitive / prime-world infrastructure
+## 6. The obstruction problem — implemented form
 
-The public `DkMath.NumberTheory.Primitive` facade already exposes:
-
-```text
-FinitePrimeWorld
-PeriodicPrimeWorld
-PrimeWorldRefinement
-PrimeWorldResidues
-PrimeWorldCardinality
-EulerTotientBridge
-PHZ30
-SquareBody
-SquarePrimeExpansion
-PrimitiveConservationKernel
-```
-
-These modules are the natural substrate for a Goldbach paired-residue layer.
-
-## 6. The real obstruction problem
-
-For fixed \(n\), define the left and right coordinates
+For fixed \(n\), define
 
 $$
 L_n(u):=n-u,
@@ -294,9 +320,7 @@ L_n(u):=n-u,
 R_n(u):=n+u.
 $$
 
-A candidate \(u\) fails Goldbach if at least one side is composite.
-
-For a prime \(r\), the local forbidden conditions are
+For a prime \(r\), the raw forbidden conditions are
 
 $$
 r\mid n-u
@@ -312,115 +336,61 @@ r\mid n+u
 u\equiv -n\pmod r.
 $$
 
-Thus each prime direction normally removes at most two residue classes from the \(u\)-fiber.
+The implementation distinguishes these raw waves from **proper** obstruction, because endpoint equality `r = n-u` or `r = n+u` must not kill an endpoint that is itself prime.
 
-This suggests a paired finite-world object.
+This endpoint correction is essential and makes the proper obstruction predicate nonperiodic even though its raw residue skeleton is periodic.
 
-Suggested definitions:
+## 7. Finite reduction by small prime divisors — implemented
 
-```lean
-def GoldbachLeftObstructed  (n r u : ℕ) : Prop := r ∣ n - u
-def GoldbachRightObstructed (n r u : ℕ) : Prop := r ∣ n + u
-def GoldbachObstructed      (n r u : ℕ) : Prop :=
-  GoldbachLeftObstructed n r u ∨ GoldbachRightObstructed n r u
-```
-
-and eventually a canonical finite paired residue space analogous to `primeWorldResidues`.
-
-## 7. Finite reduction by small prime divisors
-
-If \(m>1\) is composite, then \(m\) has a prime divisor at most \(\sqrt m\).
-
-Since on the Goldbach fiber
+Every composite endpoint in the admissible fiber has a proper prime divisor bounded by the square-root cutoff. Since
 
 $$
-n-u\le 2n,
+n-u\le2n,
 \qquad
 n+u\le2n,
 $$
 
-every composite side has a small prime witness bounded by roughly
+the complete obstruction world is finite.
+
+The production theorem now gives the exact equivalence
 
 $$
-r\le\sqrt{2n}.
+\text{survives all proper small-prime obstructions}
+\iff
+\operatorname{Prime}(n-u)\land\operatorname{Prime}(n+u).
 $$
 
-Therefore, for fixed \(n\), a hypothetical Goldbach failure can be converted into a finite covering statement:
+Thus the unresolved conjecture is exactly the nonemptiness of the finite survivor set for every `n ≥ 2`.
 
-> every \(u\) in the admissible fiber is covered by at least one small-prime left/right obstruction.
+## 8. Paired PrimeWorld / CRT — implemented frontier
 
-This is the key finite reduction.
+The paired residue structure and CRT periodicity have been formalized. For a finite prime world, local forbidden residue counts and the full-period survivor cardinality are exact.
 
-The desired contradiction route is then not “prove primality directly”, but:
+This proves that raw survivors exist in a full product period. It does **not** locate one inside the short admissible Goldbach interval.
 
-$$
-\text{Goldbach failure}
-\Longrightarrow
-\text{finite obstruction cover}
-\Longrightarrow
-\text{capacity / conservation contradiction}.
-$$
-
-## 8. Proposed paired-prime-world layer
-
-A future implementation should introduce a finite residue structure for the pair
+The Astra audit further decomposed primitive-parity pair overlap into
 
 $$
-(n-u,\;n+u).
+LL+LR+RR,
 $$
 
-For a finite known-prime set \(S\), define survivors satisfying
+where the cross term `LR` is an oriented CRT product wave. Same-orientation seats are separated by `pq`, or by `2pq` after adjoining the parity coordinate for odd moduli. These spacing results are sharp and still do not imply short-fiber survival.
+
+## 9. Main strategic theorem shape — exact but still open universally
+
+The decisive statement remains
 
 $$
-\forall r\in S,\quad
-r\nmid(n-u)\land r\nmid(n+u),
-$$
-
-with endpoint exceptions handled explicitly when one side itself equals \(r\).
-
-The period should be controlled by
-
-$$
-M=\prod_{r\in S}r.
-$$
-
-CRT then makes the obstruction pattern periodic.
-
-This is conceptually a two-sided / paired version of the existing PHZ / PrimeWorld machinery.
-
-Possible future names:
-
-```text
-GoldbachPrimeWorld
-GoldbachPrimeWorldResidues
-GoldbachPrimeWorldRefinement
-GoldbachPrimeWorldCardinality
-GoldbachPairedPHZ
-```
-
-## 9. Main strategic theorem shape
-
-The target is not a naive sieve density statement. The decisive theorem should have the shape:
-
-$$
-\text{finite old-prime obstruction capacity}
+\text{proper old-prime obstruction capacity}
 <
 \text{Goldbach fiber capacity}.
 $$
 
-Equivalently, at least one fiber seat must escape all old-prime obstructions.
+Production code now packages the exact fixed-center form of this condition as `GoldbachCapacityEscape`, and proves its equivalence with Strong Goldbach.
 
-That escaping seat should then be forced, using the small-prime-divisor bound, to yield
+Therefore any future theorem advertised as a new capacity criterion must be compared against this exact baseline. If it is merely equivalent after a coordinate normalization, it is not strict information gain.
 
-$$
-\operatorname{Prime}(n-u)
-\land
-\operatorname{Prime}(n+u).
-$$
-
-This is where Primitive Conservation Kernel ideas may be able to break the ordinary sieve parity barrier.
-
-## 10. Parity barrier warning
+## 10. Parity barrier warning — confirmed
 
 A plain density heuristic such as
 
@@ -429,26 +399,23 @@ $$
 \left(1-\frac{2}{r}\right)
 $$
 
-is not by itself a proof strategy. Classical sieve methods face the parity problem precisely when trying to distinguish “no small prime factor” from genuine primality in paired settings.
+is not a proof strategy.
 
-Therefore the DkMath route must seek an additional structural invariant, not merely a sharper counting estimate.
+The subsequent implementation has reinforced this warning:
 
-Candidate extra structure:
+- exact residue counts do not control short-interval placement;
+- local incidence can exceed the number of seats while survivors still remain;
+- higher overlap persists after primitive/parity normalization;
+- reducing the candidate set can improve relative survivor density without increasing the number of positive survivors;
+- candidate cardinality is not a substitute for interval width.
 
-- Primitive Conservation Kernel escape;
-- exact paired incidence capacity;
-- prime-wave conservation;
-- GN / GTail \(q\)-adic signatures;
-- transport of prime-target residue patterns;
-- square-Body conservation across the \(u\)-fiber.
+The required next ingredient must be structurally independent of these static sieve/counting reformulations.
 
 ## 11. Higher-degree GN as a classifier, not the direct Goldbach equation
 
 Goldbach itself lives naturally at \(d=2\).
 
-Higher-degree GN remains relevant as a prime-pattern classifier.
-
-For a prime target \(P\), define conceptually
+For a prime target \(P\), one may still define conceptually
 
 $$
 \Sigma(P)
@@ -457,57 +424,38 @@ $$
 \exists x,u,\ GN_q(x,u)=P\}.
 $$
 
-Existing DkMath theorems force
+Existing DkMath theorems make \(\Sigma(P)\) finite and thin. The open research question is not the existence of such signatures, but whether some **nontrivial transported invariant** across different endpoints or fibers can be extracted from them.
 
-$$
-q\mid P-1
-$$
+Current code does not supply such a transport theorem.
 
-and
+## 12. Original implementation checkpoints — present status
 
-$$
-2^q-1\le P.
-$$
+| # | Original checkpoint | 2026-09-12 status |
+|---|---|---|
+| 1 | `GoldbachGNFiberAt` | complete |
+| 2 | exact equivalence with standard Goldbach pair | complete |
+| 3 | `goldbachBody_eq_square_sub_square` | complete |
+| 4 | left/right obstruction predicates | complete |
+| 5 | small-prime obstruction witness | complete |
+| 6 | finite square-root obstruction world | complete |
+| 7 | paired residue / PrimeWorld layer | complete |
+| 8 | CRT / periodicity | complete |
+| 9 | exact local forbidden-seat count | complete |
+| 10 | global incidence / capacity | exact ledger complete; universal strict bound unresolved |
+| 11 | PCK bridge | implemented, insufficient for simultaneous escape |
+| 12 | survivor ⇒ prime-pair closure | complete |
+| 13 | final Goldbach endpoint | open |
 
-Thus \(\Sigma(P)\) is finite and thin.
+Post-plan additions now also include:
 
-The possible research question is whether the higher-degree GN / GTail signature of
-
-$$
-P=n-u
-$$
-
-constrains or transports to
-
-$$
-Q=n+u.
-$$
-
-A conserved signature across the degree-two Goldbach fiber could provide the missing structure beyond ordinary sieve theory.
-
-## 12. Suggested first implementation checkpoints
-
-Future branch:
-
-```text
-NumberTheory-Goldbach-GNFiber-v0
-```
-
-Suggested sequence:
-
-1. `GoldbachGNFiberAt`
-2. exact equivalence with the standard Goldbach pair statement
-3. `goldbachBody_eq_square_sub_square`
-4. left/right obstruction predicates
-5. small-prime obstruction witness for composite endpoints
-6. finite obstruction-prime set up to the required square-root bound
-7. paired residue space over a finite prime world
-8. CRT / periodicity theorem
-9. exact local forbidden-seat count
-10. global incidence / capacity bound
-11. Primitive Conservation Kernel bridge
-12. survivor \(\Rightarrow\) prime-pair closure
-13. final Goldbach endpoint, only if the previous conservation theorem closes
+- exact overlap conservation;
+- pair-overlap double counting;
+- Pascal pair residual;
+- GTail core promotion;
+- quadratic primitive/parity normalization;
+- LL/LR/RR support split;
+- oriented product-wave / spacing audit;
+- exact proof that the normalized capacity criterion is only a reformulation of the existing one.
 
 ## 13. Stop / success criteria
 
@@ -515,42 +463,37 @@ Do not claim progress toward Goldbach merely from any of the following:
 
 - all odd primes are representable by \(GN_2\);
 - prime-row Pascal divisibility;
-- finite residue survival for a fixed primorial;
-- numerical verification over large ranges;
-- positive heuristic density.
+- full-period finite residue survival;
+- primitive/parity normalization;
+- reduced obstruction worlds;
+- improved relative survivor density;
+- CRT spacing or product-wave uniqueness in one period;
+- numerical verification over large ranges.
 
-The branch becomes mathematically decisive only when it proves or refutes the universal paired-fiber survival statement.
-
-The critical unresolved theorem is:
-
-$$
-\boxed{
-\forall n\ge2,\;
-\exists u<n,\;
-\operatorname{Prime}(n-u)
-\land
-\operatorname{Prime}(n+u)
-}
-$$
-
-or the exactly equivalent GN form.
+A future branch becomes mathematically decisive only when it supplies **new information** strong enough to force a short-fiber survivor, or proves a genuinely stronger theorem that is not equivalent to the existing capacity condition.
 
 ## 14. Current assessment
 
-DkMath now appears to have enough infrastructure to make this a concrete formal research program rather than a speculative analogy.
+The original strategy succeeded in converting Goldbach into a concrete formal finite research problem and in implementing almost all static infrastructure proposed in 2026-09-09.
 
-The strongest current strategic advantage is the combination of:
+The strongest exact package currently available is
 
 $$
-\text{finite fiber}
+\text{fixed GN fiber}
 +
-\text{exact residue obstruction}
+\text{complete proper obstruction world}
 +
-\text{PrimeWorld periodicity}
+\text{CRT / PrimeWorld periodicity}
 +
-\text{Primitive conservation}.
+\text{exact capacity conservation}
++
+\text{overlap / Pascal ledger}
++
+\text{primitive/parity normal form}.
 $$
 
-The main unknown is whether the conservation layer is strong enough to rule out a complete two-sided obstruction cover for every \(n\).
+What it still lacks is an invariant that changes the **short-fiber location problem** rather than merely reparameterizing it.
 
-That is the next real decision point.
+Accordingly, the next real decision point is no longer “can the fixed fiber be normalized further?” The Astra audit answered that route at the current level: yes structurally, but without strict information gain.
+
+The next search should target a genuinely dynamic relation — between seats, between neighboring centers, or between scaled fibers — capable of transporting or conserving information that is invisible to one static obstruction cover.
