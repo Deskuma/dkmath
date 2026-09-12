@@ -4,14 +4,9 @@
 
 The original v1 research attack is complete through SOL-000 / ASTRA-001, and the validated deterministic consequences have been frozen through LUNA-007.
 
-The branch has now been fast-forwarded to the current `develop` after the FLT prime-generalization and DkMath.Lib promotion work.
+LUNA-008 has now completed the bounded DkMath.Lib promotion and p=3 Eisenstein API reconciliation checkpoint.
 
-Current task:
-
-```text
-LUNA-008
-  Lib promotion + p=3 Eisenstein API reconciliation.
-```
+This branch is closed for further implementation and proposed for merge to `develop`.
 
 ABC remains unproved.
 
@@ -33,7 +28,9 @@ v0 shell-count reduction
 -> Pell-to-Mordell exact transport
 -> fixed-(S,u) Mordell incidence ledger
 -> neutral Eisenstein coordinate algebra
--> explicit beta*gamma^2 consequence API.
+-> explicit beta*gamma^2 consequence API
+-> Lib-owned Eisenstein coordinate API
+-> p=3 TraceOne / FLT3 carrier-coordinate-sector reconciliation.
 ```
 
 No asymptotic counting theorem is hidden in this chain.
@@ -42,7 +39,7 @@ No asymptotic counting theorem is hidden in this chain.
 
 ## 2. Current mathematical frontier
 
-Two closely related research routes remain open:
+Two closely related ABC research routes remain open:
 
 ### A — balanced-box represented-pair sparsity
 
@@ -56,7 +53,7 @@ for a useful positive `delta`.
 
 ### B — actual Eisenstein factorization existence/counting
 
-Production currently proves only:
+Production proves only:
 
 ```text
 IF
@@ -86,19 +83,20 @@ Do not formalize it merely as a provider or axiom.
 
 ---
 
-## 4. New DkMath.Lib context
+## 4. DkMath.Lib context
 
-The current `develop` now contains reusable generic number-theory components:
+The reusable generic number-theory layer now includes:
 
 ```text
 DkMath.Lib.NumberTheory.PadicValNat
 DkMath.Lib.NumberTheory.PowerFactor
 DkMath.Lib.NumberTheory.IdealPowerFactor
 DkMath.Lib.NumberTheory.PrincipalIdealPower
-DkMath.Lib.NumberTheory.UnitPowerSector.
+DkMath.Lib.NumberTheory.UnitPowerSector
+DkMath.Lib.NumberTheory.EisensteinCoordinates.
 ```
 
-The odd-prime FLT architecture now exposes the generic chain:
+The odd-prime FLT architecture exposes the generic chain:
 
 ```text
 ideal p-th power
@@ -111,38 +109,26 @@ This does not automatically solve the ABC-side factorization problem, but it rem
 
 ---
 
-## 5. Eisenstein promotion gap
+## 5. Eisenstein promotion — COMPLETE
 
-ABC-GN v1 currently owns reusable Eisenstein coordinates at:
-
-```text
-DkMath.NumberTheory.EisensteinCoordinates.
-```
-
-The preferred stable owner is now:
+LUNA-008 completed the migration:
 
 ```text
-DkMath.Lib.NumberTheory.EisensteinCoordinates.
+DkMath.Lib.NumberTheory.EisensteinCoordinates
+  = canonical implementation
+
+DkMath.NumberTheory.EisensteinCoordinates
+  = compatibility facade
+
+ABC Eisenstein modules
+  -> import Lib owner directly.
 ```
 
-Migration target:
-
-```text
-Lib owner
-  -> canonical implementation
-
-old NumberTheory path
-  -> compatibility facade
-
-ABC
-  -> imports Lib owner directly.
-```
-
-This is LUNA-008 Part I–IV.
+The theorem content was preserved; this was an API ownership refactor, not new ABC mathematics.
 
 ---
 
-## 6. p=3 TraceOne / Eisenstein reconciliation
+## 6. p=3 TraceOne / Eisenstein reconciliation — COMPLETE
 
 The generic odd-prime carrier is:
 
@@ -150,63 +136,42 @@ The generic odd-prime carrier is:
 TraceOneInt (signedPrimeParameter p).
 ```
 
-At p=3:
+Production now proves:
 
 ```text
 signedPrimeParameter 3 = -1.
 ```
 
-FLT3 defines:
+FLT3 already defines:
 
 ```text
 abbrev EisensteinInt := TraceOneInt (-1).
 ```
 
-Therefore the former p=3 carrier boundary is not a mathematical type-equivalence problem.
-
-The remaining reconciliation is only:
-
-```text
-1. API ownership;
-2. omega/tau coordinate convention;
-3. unit-sector packaging.
-```
-
-The coordinate conversion is:
-
-```text
-standard omega coordinates:  (m,n)
-trace-one tau coordinates:   (m,-n)
-
-tau = -omega.
-```
-
-FLT3 already classifies units modulo cubes into the three sectors:
-
-```text
-1, tau, tau^2.
-```
-
-LUNA-008 should package these as:
+LUNA-008 also records the omega/tau sign bridge and packages the existing three FLT3 cube-unit sectors as:
 
 ```text
 UnitPowerSectorSystem (TraceOneInt (-1)) 3.
 ```
 
-Do not claim full generic p=3 FLT facade integration from this alone.
+Thus the former carrier/API mismatch is closed at this bounded interface.
+
+Do not claim full generic odd-prime p=3 facade integration from this alone.
 
 ---
 
-## 7. LUNA-008 implementation gate
+## 7. LUNA-008 validation
 
 See:
 
 ```text
 reconciliation-008.md
-instruction-008.md.
+instruction-008.md
+report-008.md
+validation-008.txt.
 ```
 
-Required deliverables:
+Completed deliverables:
 
 ```text
 A. Lib-owned Eisenstein coordinate core;
@@ -218,7 +183,7 @@ F. omega/tau coordinate bridge;
 G. FLT3 cube sectors packaged as UnitPowerSectorSystem.
 ```
 
-This is a refactor / API-alignment checkpoint only.
+Focused builds and aggregators recorded in `validation-008.txt` succeeded. Forbidden and warning scans are clean for the checkpoint.
 
 ---
 
@@ -256,7 +221,29 @@ all mod-49 seven states.
 
 ---
 
-## 10. Model roles
+## 10. Independent research extracted from this branch
+
+A broader, non-ABC-specific research direction emerged after LUNA-008:
+
+```text
+multi-gauge GN divisibility
+-> Norm divisibility
+-> coordinate divisibility
+-> integer-lattice landing
+-> power/Core-image landing.
+```
+
+It is recorded in:
+
+```text
+docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
+```
+
+This should continue as generic DkMath research, not as LUNA-009 on this ABC branch.
+
+---
+
+## 11. Model roles
 
 ```text
 Sol:
@@ -269,29 +256,11 @@ Luna:
   implementation of already validated deterministic facts and refactors.
 ```
 
-LUNA-008 belongs entirely to the third category.
+No further Luna sequence is opened here.
 
 ---
 
-## 11. Next research phase after reconciliation
-
-After LUNA-008, pause implementation again unless another already-validated deterministic fact is identified.
-
-Next genuine mathematics should return to one of:
-
-```text
-balanced-box represented-pair sparsity;
-
-or
-
-actual Eisenstein factorization existence/counting for shell witnesses.
-```
-
-The new Lib principal-ideal and unit-sector APIs should be treated as reusable downstream tools, not as proof of either research target.
-
----
-
-## 12. Current status
+## 12. Closeout status
 
 ```text
 v0 deterministic reduction:
@@ -306,17 +275,20 @@ ASTRA-001:
 LUNA-002 ... LUNA-007:
   COMPLETE / APPROVED
 
-sync with latest develop:
-  COMPLETE
-
 LUNA-008 Lib / p=3 reconciliation:
-  ACTIVE TASK
+  COMPLETE / APPROVED
+
+ABC-GN Astra v1:
+  CLOSED / MERGE CANDIDATE
 
 ABC:
   NOT PROVED
 
-next mathematical frontier:
+remaining ABC frontier:
   balanced-box sparsity
   and/or
-  Eisenstein factorization existence/counting.
+  Eisenstein factorization existence/counting
+
+new independent DkMath frontier:
+  multi-gauge divisibility / Norm-lattice landing.
 ```
