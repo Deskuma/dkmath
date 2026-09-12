@@ -1,0 +1,667 @@
+{
+  "centers_checked": 501,
+  "checked_invariants": [
+    "coordinate_coprimality",
+    "quadratic_boundary",
+    "positive_pair_primitive",
+    "positive_pair_parity",
+    "center_factor_removal",
+    "two_removal",
+    "parity_support_disjoint",
+    "reduced_support_equality",
+    "survivor_prime_pair",
+    "LL_LR_RR"
+  ],
+  "density_changes": {
+    "parity": {
+      "equal": 0,
+      "first_worsened": null,
+      "improved": 497,
+      "undefined": 2,
+      "worsened": 0
+    },
+    "primitive": {
+      "equal": 0,
+      "first_worsened": 3,
+      "improved": 404,
+      "undefined": 1,
+      "worsened": 94
+    }
+  },
+  "least_candidate_removal": [
+    {
+      "LL": 0,
+      "LR": 0,
+      "RR": 0,
+      "candidates": 1,
+      "covered": 0,
+      "density": "1",
+      "diagonal_survivors": 1,
+      "endpoint_exception_incidences": 2,
+      "endpoint_exception_seats": 1,
+      "n": 2,
+      "parity": 0,
+      "parity_covered": 0,
+      "parity_density": null,
+      "parity_endpoint_exception_incidences": 0,
+      "parity_incidence": 0,
+      "parity_overlap_excess": 0,
+      "parity_pair_count": 0,
+      "parity_pair_residual": 0,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 0,
+      "parity_survivors": 0,
+      "positive": 0,
+      "prime_pairs": 1,
+      "primitive": 0,
+      "primitive_covered": 0,
+      "primitive_density": null,
+      "primitive_positive": 0,
+      "primitive_survivors": 0,
+      "proper_intersection_sum": 0,
+      "raw_forbidden_classes_sum": 1,
+      "raw_intersection_sum": 1,
+      "raw_survivors": 0,
+      "reduced_raw_forbidden_classes_sum": 0,
+      "reduced_world_size": 0,
+      "removed_candidates": 1,
+      "removed_covered": 0,
+      "removed_prime_directions": 1,
+      "survivors": 1,
+      "totient_n": 1,
+      "totient_twice_n": 2,
+      "world_size": 1
+    },
+    {
+      "LL": 0,
+      "LR": 0,
+      "RR": 0,
+      "candidates": 2,
+      "covered": 1,
+      "density": "1/2",
+      "diagonal_survivors": 1,
+      "endpoint_exception_incidences": 1,
+      "endpoint_exception_seats": 1,
+      "n": 3,
+      "parity": 0,
+      "parity_covered": 0,
+      "parity_density": null,
+      "parity_endpoint_exception_incidences": 0,
+      "parity_incidence": 0,
+      "parity_overlap_excess": 0,
+      "parity_pair_count": 0,
+      "parity_pair_residual": 0,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 0,
+      "parity_survivors": 0,
+      "positive": 1,
+      "prime_pairs": 1,
+      "primitive": 1,
+      "primitive_covered": 1,
+      "primitive_density": "0",
+      "primitive_positive": 1,
+      "primitive_survivors": 0,
+      "proper_intersection_sum": 0,
+      "raw_forbidden_classes_sum": 1,
+      "raw_intersection_sum": 1,
+      "raw_survivors": 1,
+      "reduced_raw_forbidden_classes_sum": 0,
+      "reduced_world_size": 0,
+      "removed_candidates": 2,
+      "removed_covered": 1,
+      "removed_prime_directions": 1,
+      "survivors": 1,
+      "totient_n": 2,
+      "totient_twice_n": 2,
+      "world_size": 1
+    },
+    {
+      "LL": 0,
+      "LR": 0,
+      "RR": 0,
+      "candidates": 3,
+      "covered": 2,
+      "density": "1/3",
+      "diagonal_survivors": 0,
+      "endpoint_exception_incidences": 1,
+      "endpoint_exception_seats": 1,
+      "n": 4,
+      "parity": 1,
+      "parity_covered": 0,
+      "parity_density": "1",
+      "parity_endpoint_exception_incidences": 0,
+      "parity_incidence": 0,
+      "parity_overlap_excess": 0,
+      "parity_pair_count": 0,
+      "parity_pair_residual": 0,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 1,
+      "parity_survivors": 1,
+      "positive": 2,
+      "prime_pairs": 1,
+      "primitive": 1,
+      "primitive_covered": 0,
+      "primitive_density": "1",
+      "primitive_positive": 1,
+      "primitive_survivors": 1,
+      "proper_intersection_sum": 1,
+      "raw_forbidden_classes_sum": 1,
+      "raw_intersection_sum": 2,
+      "raw_survivors": 1,
+      "reduced_raw_forbidden_classes_sum": 0,
+      "reduced_world_size": 0,
+      "removed_candidates": 2,
+      "removed_covered": 2,
+      "removed_prime_directions": 1,
+      "survivors": 1,
+      "totient_n": 2,
+      "totient_twice_n": 4,
+      "world_size": 1
+    }
+  ],
+  "max_center": 500,
+  "minima": {
+    "first_positive_higher_overlap_parity": {
+      "LL": 0,
+      "LR": 2,
+      "RR": 1,
+      "endpoint_exceptions": 0,
+      "left_endpoint": 27,
+      "n": 31,
+      "parity": true,
+      "prime_pair": false,
+      "primitive": true,
+      "proper_intersection": 0,
+      "proper_left": [
+        3
+      ],
+      "proper_right": [
+        5,
+        7
+      ],
+      "raw_intersection": 0,
+      "raw_left": [
+        3
+      ],
+      "raw_right": [
+        5,
+        7
+      ],
+      "right_endpoint": 35,
+      "u": 4
+    },
+    "first_positive_higher_overlap_primitive": {
+      "LL": 1,
+      "LR": 4,
+      "RR": 1,
+      "endpoint_exceptions": 0,
+      "left_endpoint": 6,
+      "n": 13,
+      "parity": false,
+      "prime_pair": false,
+      "primitive": true,
+      "proper_intersection": 1,
+      "proper_left": [
+        2,
+        3
+      ],
+      "proper_right": [
+        2,
+        5
+      ],
+      "raw_intersection": 1,
+      "raw_left": [
+        2,
+        3
+      ],
+      "raw_right": [
+        2,
+        5
+      ],
+      "right_endpoint": 20,
+      "u": 7
+    },
+    "normalized_strict_incidence_failure": {
+      "candidates": 8,
+      "incidence": 8,
+      "n": 19,
+      "survivors": 1,
+      "u": null
+    },
+    "parity_without_primitive_proper_disjoint": {
+      "LL": 0,
+      "LR": 1,
+      "RR": 0,
+      "endpoint_exceptions": 0,
+      "left_endpoint": 9,
+      "n": 9,
+      "parity": false,
+      "prime_pair": false,
+      "primitive": false,
+      "proper_intersection": 1,
+      "proper_left": [
+        3
+      ],
+      "proper_right": [
+        3
+      ],
+      "raw_intersection": 1,
+      "raw_left": [
+        3
+      ],
+      "raw_right": [
+        3
+      ],
+      "right_endpoint": 9,
+      "u": 0
+    },
+    "positive_parity_without_primitive_proper_disjoint": {
+      "LL": 0,
+      "LR": 1,
+      "RR": 0,
+      "endpoint_exceptions": 0,
+      "left_endpoint": 9,
+      "n": 12,
+      "parity": false,
+      "prime_pair": false,
+      "primitive": false,
+      "proper_intersection": 1,
+      "proper_left": [
+        3
+      ],
+      "proper_right": [
+        3
+      ],
+      "raw_intersection": 1,
+      "raw_left": [
+        3
+      ],
+      "raw_right": [
+        3
+      ],
+      "right_endpoint": 15,
+      "u": 3
+    },
+    "primitive_only_criterion_failure": {
+      "n": 2,
+      "u": 0
+    },
+    "primitive_without_parity_gcd_one": {
+      "LL": 0,
+      "LR": 0,
+      "RR": 0,
+      "endpoint_exceptions": 1,
+      "left_endpoint": 2,
+      "n": 3,
+      "parity": false,
+      "prime_pair": false,
+      "primitive": true,
+      "proper_intersection": 0,
+      "proper_left": [],
+      "proper_right": [
+        2
+      ],
+      "raw_intersection": 1,
+      "raw_left": [
+        2
+      ],
+      "raw_right": [
+        2
+      ],
+      "right_endpoint": 4,
+      "u": 1
+    },
+    "primitive_without_parity_proper_disjoint": {
+      "LL": 0,
+      "LR": 2,
+      "RR": 1,
+      "endpoint_exceptions": 0,
+      "left_endpoint": 4,
+      "n": 5,
+      "parity": false,
+      "prime_pair": false,
+      "primitive": true,
+      "proper_intersection": 1,
+      "proper_left": [
+        2
+      ],
+      "proper_right": [
+        2,
+        3
+      ],
+      "raw_intersection": 1,
+      "raw_left": [
+        2
+      ],
+      "raw_right": [
+        2,
+        3
+      ],
+      "right_endpoint": 6,
+      "u": 1
+    },
+    "raw_equals_proper_on_parity": {
+      "LL": 0,
+      "LR": 0,
+      "RR": 0,
+      "endpoint_exceptions": 1,
+      "left_endpoint": 3,
+      "n": 5,
+      "parity": true,
+      "prime_pair": true,
+      "primitive": true,
+      "proper_intersection": 0,
+      "proper_left": [],
+      "proper_right": [],
+      "raw_intersection": 0,
+      "raw_left": [
+        3
+      ],
+      "raw_right": [],
+      "right_endpoint": 7,
+      "u": 2
+    },
+    "unbounded_quadratic_boundary": {
+      "n": 0,
+      "u": 1
+    }
+  },
+  "most_candidate_removal": [
+    {
+      "LL": 20,
+      "LR": 30,
+      "RR": 15,
+      "candidates": 482,
+      "covered": 437,
+      "density": "45/482",
+      "diagonal_survivors": 0,
+      "endpoint_exception_incidences": 11,
+      "endpoint_exception_seats": 11,
+      "n": 483,
+      "parity": 131,
+      "parity_covered": 86,
+      "parity_density": "45/131",
+      "parity_endpoint_exception_incidences": 7,
+      "parity_incidence": 137,
+      "parity_overlap_excess": 51,
+      "parity_pair_count": 65,
+      "parity_pair_residual": 14,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 42,
+      "parity_survivors": 45,
+      "positive": 481,
+      "prime_pairs": 45,
+      "primitive": 263,
+      "primitive_covered": 218,
+      "primitive_density": "45/263",
+      "primitive_positive": 263,
+      "primitive_survivors": 45,
+      "proper_intersection_sum": 488,
+      "raw_forbidden_classes_sum": 18,
+      "raw_intersection_sum": 492,
+      "raw_survivors": 42,
+      "reduced_raw_forbidden_classes_sum": 14,
+      "reduced_world_size": 7,
+      "removed_candidates": 351,
+      "removed_covered": 351,
+      "removed_prime_directions": 4,
+      "survivors": 45,
+      "totient_n": 264,
+      "totient_twice_n": 264,
+      "world_size": 11
+    },
+    {
+      "LL": 18,
+      "LR": 23,
+      "RR": 8,
+      "candidates": 479,
+      "covered": 434,
+      "density": "45/479",
+      "diagonal_survivors": 0,
+      "endpoint_exception_incidences": 10,
+      "endpoint_exception_seats": 10,
+      "n": 480,
+      "parity": 127,
+      "parity_covered": 82,
+      "parity_density": "45/127",
+      "parity_endpoint_exception_incidences": 7,
+      "parity_incidence": 121,
+      "parity_overlap_excess": 39,
+      "parity_pair_count": 49,
+      "parity_pair_residual": 10,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 41,
+      "parity_survivors": 45,
+      "positive": 478,
+      "prime_pairs": 45,
+      "primitive": 127,
+      "primitive_covered": 82,
+      "primitive_density": "45/127",
+      "primitive_positive": 127,
+      "primitive_survivors": 45,
+      "proper_intersection_sum": 493,
+      "raw_forbidden_classes_sum": 17,
+      "raw_intersection_sum": 496,
+      "raw_survivors": 41,
+      "reduced_raw_forbidden_classes_sum": 14,
+      "reduced_world_size": 7,
+      "removed_candidates": 352,
+      "removed_covered": 352,
+      "removed_prime_directions": 3,
+      "survivors": 45,
+      "totient_n": 128,
+      "totient_twice_n": 256,
+      "world_size": 10
+    },
+    {
+      "LL": 15,
+      "LR": 18,
+      "RR": 9,
+      "candidates": 494,
+      "covered": 442,
+      "density": "2/19",
+      "diagonal_survivors": 0,
+      "endpoint_exception_incidences": 11,
+      "endpoint_exception_seats": 11,
+      "n": 495,
+      "parity": 119,
+      "parity_covered": 67,
+      "parity_density": "52/119",
+      "parity_endpoint_exception_incidences": 7,
+      "parity_incidence": 100,
+      "parity_overlap_excess": 33,
+      "parity_pair_count": 42,
+      "parity_pair_residual": 9,
+      "parity_proper_intersection_sum": 0,
+      "parity_raw_survivors": 48,
+      "parity_survivors": 52,
+      "positive": 493,
+      "prime_pairs": 52,
+      "primitive": 239,
+      "primitive_covered": 187,
+      "primitive_density": "52/239",
+      "primitive_positive": 239,
+      "primitive_survivors": 52,
+      "proper_intersection_sum": 552,
+      "raw_forbidden_classes_sum": 18,
+      "raw_intersection_sum": 556,
+      "raw_survivors": 48,
+      "reduced_raw_forbidden_classes_sum": 14,
+      "reduced_world_size": 7,
+      "removed_candidates": 375,
+      "removed_covered": 375,
+      "removed_prime_directions": 4,
+      "survivors": 52,
+      "totient_n": 240,
+      "totient_twice_n": 240,
+      "world_size": 11
+    }
+  ],
+  "selected_centers": [
+    2,
+    3,
+    5,
+    6,
+    12,
+    35,
+    100
+  ],
+  "waves": {
+    "centers": "2..500",
+    "full_period_centers": "2..40 (within requested range)",
+    "full_period_orientation_tests": 120,
+    "interval_orientation_tests": 21192,
+    "minima": {
+      "candidate_cardinality_not_geometric_width": {
+        "modulus": 21,
+        "n": 50,
+        "normalized_candidates": 19,
+        "normalized_interval": [
+          1,
+          43
+        ],
+        "p": 7,
+        "proper_normalized_interval": [
+          1
+        ],
+        "q": 3,
+        "raw_interval": [
+          1,
+          22,
+          43
+        ],
+        "residue": 1
+      },
+      "candidate_cardinality_not_width_proper": {
+        "modulus": 65,
+        "n": 162,
+        "normalized_candidates": 53,
+        "normalized_interval": [
+          7,
+          137
+        ],
+        "p": 5,
+        "proper_normalized_interval": [
+          7,
+          137
+        ],
+        "q": 13,
+        "raw_interval": [
+          7,
+          72,
+          137
+        ],
+        "residue": 7
+      },
+      "multiple_normalized_same_orientation": {
+        "full_period": 1020,
+        "modulus": 15,
+        "n": 34,
+        "normalized_candidates": 15,
+        "normalized_interval": [
+          1,
+          31
+        ],
+        "normalized_residues_per_orientation": 32,
+        "p": 3,
+        "proper_normalized_interval": [
+          1
+        ],
+        "q": 5,
+        "raw_interval": [
+          1,
+          16,
+          31
+        ],
+        "residue": 1
+      },
+      "occupied_at_most_one_wave": {
+        "full_period": 390,
+        "modulus": 15,
+        "n": 13,
+        "normalized_candidates": 5,
+        "normalized_interval": [
+          8
+        ],
+        "normalized_residues_per_orientation": 12,
+        "p": 5,
+        "proper_normalized_interval": [],
+        "q": 3,
+        "raw_interval": [
+          8
+        ],
+        "residue": 8
+      },
+      "raw_LR_endpoint_exception": {
+        "full_period": 390,
+        "modulus": 15,
+        "n": 13,
+        "normalized_candidates": 5,
+        "normalized_interval": [
+          8
+        ],
+        "normalized_residues_per_orientation": 12,
+        "p": 5,
+        "proper_normalized_interval": [],
+        "q": 3,
+        "raw_interval": [
+          8
+        ],
+        "residue": 8
+      },
+      "sharp_parity_spacing_proper": {
+        "modulus": 15,
+        "n": 47,
+        "normalized_candidates": 22,
+        "normalized_interval": [
+          8,
+          38
+        ],
+        "p": 3,
+        "proper_normalized_interval": [
+          8,
+          38
+        ],
+        "q": 5,
+        "raw_interval": [
+          8,
+          23,
+          38
+        ],
+        "residue": 8
+      }
+    }
+  },
+  "worst_parity_density": [
+    {
+      "n": 496,
+      "parity": 239,
+      "parity_density": "13/239",
+      "parity_survivors": 13
+    },
+    {
+      "n": 439,
+      "parity": 218,
+      "parity_density": "13/218",
+      "parity_survivors": 13
+    },
+    {
+      "n": 199,
+      "parity": 98,
+      "parity_density": "3/49",
+      "parity_survivors": 6
+    },
+    {
+      "n": 346,
+      "parity": 171,
+      "parity_density": "11/171",
+      "parity_survivors": 11
+    },
+    {
+      "n": 316,
+      "parity": 155,
+      "parity_density": "2/31",
+      "parity_survivors": 10
+    }
+  ]
+}

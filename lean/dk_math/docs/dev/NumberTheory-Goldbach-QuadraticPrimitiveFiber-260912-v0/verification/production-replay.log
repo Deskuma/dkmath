@@ -1,0 +1,118 @@
+ℹ [8654/8692] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+ℹ [8655/8692] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+ℹ [8656/8692] Replayed DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+info: DkMath/NumberTheory/Primitive/PeriodicPrimeWorld.lean:13:0: file: DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+ℹ [8657/8692] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+ℹ [8659/8692] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:9:0: file: DkMath.Algebra.BinomTail
+ℹ [8660/8692] Replayed DkMath.CellDim
+info: DkMath/CellDim.lean:9:0: file: DkMath.CellDim
+ℹ [8661/8692] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:9:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [8662/8692] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:9:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [8663/8692] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:9:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [8664/8692] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:9:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [8665/8692] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:9:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [8666/8692] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [8667/8692] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [8668/8692] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:11:0: file: DkMath.CosmicFormula.Defs
+ℹ [8670/8692] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [8671/8692] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:13:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [8672/8692] Replayed DkMath.NumberTheory.Goldbach.Basic
+info: DkMath/NumberTheory/Goldbach/Basic.lean:9:0: file: DkMath.NumberTheory.Goldbach.Basic
+ℹ [8673/8692] Replayed DkMath.NumberTheory.Goldbach.Obstruction
+info: DkMath/NumberTheory/Goldbach/Obstruction.lean:9:0: file: DkMath.NumberTheory.Goldbach.Obstruction
+ℹ [8674/8692] Replayed DkMath.NumberTheory.Goldbach.PrimeWorld
+info: DkMath/NumberTheory/Goldbach/PrimeWorld.lean:11:0: file: DkMath.NumberTheory.Goldbach.PrimeWorld
+ℹ [8675/8692] Replayed DkMath.NumberTheory.Goldbach.Cardinality
+info: DkMath/NumberTheory/Goldbach/Cardinality.lean:10:0: file: DkMath.NumberTheory.Goldbach.Cardinality
+ℹ [8676/8692] Replayed DkMath.NumberTheory.Goldbach.Capacity
+info: DkMath/NumberTheory/Goldbach/Capacity.lean:8:0: file: DkMath.NumberTheory.Goldbach.Capacity
+ℹ [8677/8692] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+ℹ [8678/8692] Replayed DkMath.NumberTheory.Primitive.PrimitiveConservationKernel
+info: DkMath/NumberTheory/Primitive/PrimitiveConservationKernel.lean:8:0: file: DkMath.NumberTheory.Primitive.PrimitiveConservationKernel
+ℹ [8679/8692] Replayed DkMath.NumberTheory.Goldbach.Conservation
+info: DkMath/NumberTheory/Goldbach/Conservation.lean:9:0: file: DkMath.NumberTheory.Goldbach.Conservation
+ℹ [8680/8692] Replayed DkMath.NumberTheory.GNRepresentationBounds
+info: DkMath/NumberTheory/GNRepresentationBounds.lean:10:0: file: DkMath.NumberTheory.GNRepresentationBounds
+ℹ [8681/8692] Replayed DkMath.NumberTheory.GNDegreeFactorization
+info: DkMath/NumberTheory/GNDegreeFactorization.lean:10:0: file: DkMath.NumberTheory.GNDegreeFactorization
+ℹ [8682/8692] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+ℹ [8683/8692] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+ℹ [8684/8692] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+ℹ [8685/8692] Replayed DkMath.NumberTheory.WeightedGNBridge
+info: DkMath/NumberTheory/WeightedGNBridge.lean:10:0: file: DkMath.NumberTheory.WeightedGNBridge
+ℹ [8686/8692] Replayed DkMath.NumberTheory.GNPrimeTargetResidue
+info: DkMath/NumberTheory/GNPrimeTargetResidue.lean:10:0: file: DkMath.NumberTheory.GNPrimeTargetResidue
+ℹ [8687/8692] Replayed DkMath.NumberTheory.Goldbach.Signature
+info: DkMath/NumberTheory/Goldbach/Signature.lean:9:0: file: DkMath.NumberTheory.Goldbach.Signature
+ℹ [8688/8692] Replayed DkMath.NumberTheory.Goldbach.Limitations
+info: DkMath/NumberTheory/Goldbach/Limitations.lean:11:0: file: DkMath.NumberTheory.Goldbach.Limitations
+ℹ [8689/8692] Replayed DkMath.NumberTheory.Goldbach.Overlap
+info: DkMath/NumberTheory/Goldbach/Overlap.lean:9:0: file: DkMath.NumberTheory.Goldbach.Overlap
+ℹ [8690/8692] Replayed DkMath.NumberTheory.Goldbach.PairOverlap
+info: DkMath/NumberTheory/Goldbach/PairOverlap.lean:10:0: file: DkMath.NumberTheory.Goldbach.PairOverlap
+ℹ [8691/8692] Replayed DkMath.NumberTheory.Goldbach
+info: DkMath/NumberTheory/Goldbach.lean:17:0: file: DkMath.NumberTheory.Goldbach
+ℹ [8692/8692] Built DkMathTest.NumberTheory.GoldbachGNFiber (5.9s)
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:8:0: file: DkMathTest.NumberTheory.GoldbachGNFiber
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:93:0: 'DkMathTest.NumberTheory.GoldbachGNFiber.goldbach_centers_two_through_one_hundred' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:94:0: 'DkMath.NumberTheory.goldbachPairAt_iff_gnFiberAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:95:0: 'DkMath.NumberTheory.goldbach_failure_iff_finite_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:96:0: 'DkMath.NumberTheory.goldbach_card_primeWorld' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:97:0: 'DkMath.NumberTheory.goldbach_primeWorld_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:98:0: 'DkMath.NumberTheory.goldbach_blocked_card_le_residue_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:99:0: 'DkMath.NumberTheory.goldbach_paired_primitive_dichotomy' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:100:0: 'DkMath.NumberTheory.goldbach_signature_constraints' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:101:0: 'DkMath.NumberTheory.goldbach_not_universal_strict_incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:102:0: 'DkMath.NumberTheory.strongGoldbach_iff_capacityEscape' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:103:0: 'DkMath.NumberTheory.strongGoldbach_of_capacityEscape' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:104:0: 'DkMath.NumberTheory.goldbachIncidence_eq_covered_add_overlapExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:105:0: 'DkMath.NumberTheory.goldbachIncidenceConservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:106:0: 'DkMathTest.NumberTheory.GoldbachGNFiber.goldbach_six_pair_overlap_decomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:107:0: 'DkMath.NumberTheory.goldbachPairAt_iff_incidence_lt_offsets_add_overlap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:108:0: 'DkMath.NumberTheory.goldbachPrimePairOverlapCount_eq_sum_local_pairMultiplicity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:109:0: 'DkMath.NumberTheory.goldbachLocalPairOverlapResidual' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:110:0: 'DkMath.NumberTheory.goldbachOffsetROverlapMultiplicity' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:111:0: 'DkMath.NumberTheory.goldbachOffsetROverlapMultiplicity_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:112:0: 'DkMath.NumberTheory.goldbachOffsetROverlapMultiplicity_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:113:0: 'DkMath.NumberTheory.goldbachOffsetROverlapMultiplicity_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:114:0: 'DkMath.NumberTheory.goldbach_pairMultiplicity_eq_localOverlap_add_residual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:115:0: 'DkMath.NumberTheory.goldbachPairOverlapResidual' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:116:0: 'DkMath.NumberTheory.goldbachPrimePairOverlapCount_eq_overlapExcess_add_residual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GoldbachGNFiber.lean:117:0: 'DkMath.NumberTheory.goldbachOverlapExcess_le_primePairOverlapCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8692 jobs).

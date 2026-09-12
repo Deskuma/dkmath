@@ -1,0 +1,12 @@
+Final verification (2026-09-12)
+Scratch focused build: exit 0; 8692 jobs; scratch 8.6 seconds.
+Production Goldbach + GoldbachGNFiber replay: exit 0; 8692 jobs.
+AxiomAudit.lean: exit 0; all 59 named scratch definitions/theorems queried.
+Observed axiom dependencies: Classical.choice, Quot.sound, propext.
+Warnings/errors in all three final logs: none.
+Forbidden tokens in scratch (sorry/admit/axiom/unsafe/native_decide): none.
+Production facade does not import scratch.
+Tracked diff against initial HEAD is confined to the two authorized path scopes.
+Python centers 0..500: exact checks passed; 21,192 interval orientations;
+120 full-period orientation checks at centers <=40.
+JSON, CSV, and text snapshots reproduced byte-for-byte on a second run.
