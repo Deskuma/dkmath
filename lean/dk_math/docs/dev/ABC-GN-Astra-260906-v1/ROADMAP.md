@@ -1,520 +1,268 @@
 # ROADMAP — ABC–GN Astra Campaign 260906 v1
 
-## 0. Strategic reset
+## 0. Current campaign state
 
-v1 begins after the successful v0 capstone.
+The original v1 research attack is complete through SOL-000 / ASTRA-001, and the validated deterministic consequences have been frozen through LUNA-007.
 
-The previous phase answered:
+LUNA-008 has now completed the bounded DkMath.Lib promotion and p=3 Eisenstein API reconciliation checkpoint.
 
-> What deterministic structure can be extracted and formalized before a new
-> global counting theorem is required?
+This branch is closed for further implementation and proposed for merge to `develop`.
 
-Answer:
-
-~~~text
-essentially all currently known deterministic structure has been frozen.
-~~~
-
-The new question is narrower:
-
-> How many distinct realized cubic repeated moduli can occur in one dyadic
-> shell?
-
-The central object is:
-
-~~~text
-N_X(D)
-=
-GNExcessCubicRealizedLargeModulusShellCount X D.
-~~~
-
-Do not add more bookkeeping layers around N_X(D).
-
-Attack N_X(D).
+ABC remains unproved.
 
 ---
 
-## 1. Fixed production facts
+## 1. Fixed production chain
 
-Treat the following as infrastructure.
+Treat the following as infrastructure:
 
-### 1.1 Capstone reduction
+```text
+v0 shell-count reduction
+-> realized profile/fiber machinery
+-> cubic complement / Pell / squareful packets
+-> paired orientation / seven-state normalization
+-> fixed-(T,r) shell fiber card <= 1
+-> shell-local a |-> (r,S) injective
+-> D^2*T^3 < 54*(X+1)^6
+-> exact represented (r,S) pair ledger
+-> Pell-to-Mordell exact transport
+-> fixed-(S,u) Mordell incidence ledger
+-> neutral Eisenstein coordinate algebra
+-> explicit beta*gamma^2 consequence API
+-> Lib-owned Eisenstein coordinate API
+-> p=3 TraceOne / FLT3 carrier-coordinate-sector reconciliation.
+```
 
-The v0 capstone gives:
-
-~~~text
-explicit shell-card bounds
-=>
-cubic 3/8 excess-sum bound.
-~~~
-
-Therefore any useful new shell-count theorem has an immediate downstream
-consumer.
-
-### 1.2 Canonical witness packet
-
-A represented shell modulus M has a positive witness a with:
-
-~~~text
-1 <= a <= X
-
-D <= M < 2D
-
-X + 1 < M
-
-M*S = a^2 + 3*a + 3
-
-1 <= S <= X
-
-Squarefree S
-
-Coprime M S.
-~~~
-
-### 1.3 Square-cube packet
-
-~~~text
-M = u^2*r^3
-
-r = oddPart M
-
-u = evenPart M / oddPart M
-
-Squarefree r.
-~~~
-
-### 1.4 Pell/conic packet
-
-With
-
-~~~text
-T = r*S
-
-d = evenPart M
-
-y = 2*a+3,
-~~~
-
-production gives:
-
-~~~text
-Squarefree T
-
-y^2 + 3 = 4*T*d^2
-
-Coprime y d
-
-gcd(y,T) divides 3.
-~~~
-
-The exceptional 3-sector is completely normalized.
-
-### 1.5 Paired orientation packet
-
-For F(a)=GN 3 a 1 and G(a)=GN 3 1 a:
-
-~~~text
-ordinary overlap only at 7;
-
-repeated parts coprime;
-
-deep 7-support occurs exactly in mod-49 residues 29 or 22;
-
-the remaining seven-sector is shallow.
-~~~
-
-Do not confuse these local facts with a counting theorem.
+No asymptotic counting theorem is hidden in this chain.
 
 ---
 
-## 2. Hard regression barriers
+## 2. Current mathematical frontier
 
-Every candidate route must be checked against these facts.
+Two closely related ABC research routes remain open:
 
-### R1 — modulus collisions exist
+### A — balanced-box represented-pair sparsity
 
-a -> M is not injective.
+Target conceptually:
 
-Therefore any argument that counts witnesses by moduli must explicitly control
-fiber multiplicity.
+```text
+Q(B) << B^(2-delta+epsilon)
+```
 
-### R2 — fixed complement can have infinitely many witnesses
+for a useful positive `delta`.
 
-S=3 occurs along an infinite Pell family.
+### B — actual Eisenstein factorization existence/counting
 
-Therefore a fixed-S O(1) witness bound is false.
+Production proves only:
 
-### R3 — independent deep orientation lifts exist
+```text
+IF
+  beta*gamma^2 = (a+2)+omega
+THEN
+  exact coordinate equations,
+  coefficient-one Bezout relation,
+  coprimality,
+  and norm-factor identities.
+```
 
-Paired local depth competition cannot be used as a universal obstruction.
-
-### R4 — coprime repeated parts may both be huge
-
-No absolute-size dichotomy follows from paired coprimality.
-
-### R5 — Hensel depth is not rare by itself
-
-Local root uniqueness does not automatically produce global sparsity.
-
-### R6 — mod-49 state normalization is not an asymptotic estimate
-
-Residue classification alone does not solve the shell count.
+It does not prove the IF hypothesis.
 
 ---
 
-## 3. Phase S0 — Sol reconstruction
+## 3. Research-only analytic route
 
-Status: start here.
+ASTRA-001 derived, outside production Lean, a Helfgott–Venkatesh-based shell-moment improvement of rough order
 
-Goal:
+```text
+O_epsilon(X^(31/24+epsilon)).
+```
 
-Reconstruct N_X(D) as a pure number-theoretic incidence problem using only
-production facts.
+This remains research-only.
 
-Required output:
-
-~~~text
-- exact mathematical restatement of shell membership;
-- best immediate/trivial upper bounds;
-- exact place where each trivial bound loses;
-- comparison of the most rigid coordinate systems.
-~~~
-
-Candidate coordinates:
-
-~~~text
-(a,M)
-
-(M,S)
-
-(r,u,S)
-
-(T,d)
-
-paired forward/swap coordinates.
-~~~
-
-Do not assume one coordinate system is best.
+Do not formalize it merely as a provider or axiom.
 
 ---
 
-## 4. Phase S1 — branch generation and immediate falsification
+## 4. DkMath.Lib context
 
-Generate several genuinely different mechanisms, then kill weak ones quickly.
+The reusable generic number-theory layer now includes:
 
-### A — square-cube shell geometry
+```text
+DkMath.Lib.NumberTheory.PadicValNat
+DkMath.Lib.NumberTheory.PowerFactor
+DkMath.Lib.NumberTheory.IdealPowerFactor
+DkMath.Lib.NumberTheory.PrincipalIdealPower
+DkMath.Lib.NumberTheory.UnitPowerSector
+DkMath.Lib.NumberTheory.EisensteinCoordinates.
+```
 
-Use:
+The odd-prime FLT architecture exposes the generic chain:
 
-~~~text
-D <= u^2*r^3 < 2D
+```text
+ideal p-th power
+-> principalization hypothesis
+-> unit * element^p
+-> unit-sector normalization.
+```
 
-r squarefree.
-~~~
-
-Questions:
-
-- for fixed r, how many u are shell-admissible?
-- what is the useful range of r?
-- does realization M | a^2+3a+3 improve generic squarefull counting?
-- can r | d or q == 1 mod 3 support produce an extra saving?
-
-Danger:
-
-Counting all squarefull integers in the shell is already known to be too weak.
-
-### B — product incidence
-
-Use:
-
-~~~text
-M*S = a^2 + 3*a + 3
-
-M ~ D
-
-S <= X.
-~~~
-
-Questions:
-
-- can distinct M be counted by lattice/product incidences?
-- can dyadic slicing in S produce a true average multiplicity estimate?
-- can fixed-M spacing combine with shell geometry?
-- is there a divisor-switching or energy argument that avoids false
-  injectivity?
-
-Mandatory warning:
-
-~~~text
-fixed S can have infinitely many witnesses;
-a -> M is not injective.
-~~~
-
-### C — Pell/conic incidence
-
-Use:
-
-~~~text
-y^2 + 3 = 4*T*d^2
-
-T squarefree
-
-T = r*S.
-~~~
-
-Questions:
-
-- what is the actual shell range of T and d?
-- for fixed T, does D <= M < 2D cut a Pell orbit into a short segment?
-- does r | d add a restriction absent from generic Pell counting?
-- can average-over-T bounds beat worst-case multiplicity?
-- can Eisenstein factorization help?
-
-Mandatory regression:
-
-~~~text
-the S=3 Pell family.
-~~~
-
-### D — squarefree kernel T=r*S
-
-Use:
-
-~~~text
-r squarefree
-
-S squarefree
-
-Coprime r S
-
-T=r*S
-
-r^3 <= M < 2D
-
-S <= X.
-~~~
-
-Questions:
-
-- is the effective T-space substantially smaller than the naive range?
-- can (r,S) be counted by a hyperbola-type argument?
-- does the requirement that T support a conic point with d carrying r give
-  a genuine sieve?
-- can q == 1 mod 3 support of r be used quantitatively?
-
-### E — paired orientation
-
-Use paired facts only if they produce a genuinely global gain.
-
-Questions:
-
-- does a large forward repeated modulus force a constrained swap state?
-- does MF*MG | 3*(a+1)^4+a^2 help count forward shell moduli?
-- can the exact mod-49 state split isolate a smaller exceptional family?
-- is there an average relation between the two square-cube cores?
-
-Mandatory regression:
-
-~~~text
-MF and MG can both be arbitrarily large in absolute size.
-~~~
-
-Any useful paired theorem must be height-relative, averaged, or
-incidence-based.
+This does not automatically solve the ABC-side factorization problem, but it removes the need to rebuild downstream ideal/unit machinery if the required ABC ideal-power statement is found later.
 
 ---
 
-## 5. Phase S2 — quantitative benchmark
+## 5. Eisenstein promotion — COMPLETE
 
-Before accepting any route, derive its explicit shell-count consequence.
+LUNA-008 completed the migration:
 
-The rough ASTRA-007 target is:
+```text
+DkMath.Lib.NumberTheory.EisensteinCoordinates
+  = canonical implementation
 
-~~~text
-N_X(D)
-<=
-C_epsilon * X^(1+epsilon) / sqrt(D).
-~~~
+DkMath.NumberTheory.EisensteinCoordinates
+  = compatibility facade
 
-Do not treat this form as sacred.
+ABC Eisenstein modules
+  -> import Lib owner directly.
+```
 
-For each surviving route derive something explicit such as:
-
-~~~text
-N_X(D) <= X^alpha * D^beta * log(X)^gamma.
-~~~
-
-Then insert the shell weight:
-
-~~~text
-shell contribution
-~
-N_X(D) * D^(3/8).
-~~~
-
-Classify the resulting top-shell behavior as:
-
-~~~text
-sublinear in X
-linear in X
-superlinear in X.
-~~~
-
-A route is not promising until this exponent check is done.
+The theorem content was preserved; this was an API ownership refactor, not new ABC mathematics.
 
 ---
 
-## 6. Phase S3 — multiplicity audit
+## 6. p=3 TraceOne / Eisenstein reconciliation — COMPLETE
 
-Any proposed shell-count argument must state which map is being counted:
+The generic odd-prime carrier is:
 
-~~~text
-a -> M
+```text
+TraceOneInt (signedPrimeParameter p).
+```
 
-a -> (M,S)
+Production now proves:
 
-a -> T
+```text
+signedPrimeParameter 3 = -1.
+```
 
-(M,S) -> T
+FLT3 already defines:
 
-a -> paired coordinates.
-~~~
+```text
+abbrev EisensteinInt := TraceOneInt (-1).
+```
 
-For each map answer:
+LUNA-008 also records the omega/tau sign bridge and packages the existing three FLT3 cube-unit sectors as:
 
-~~~text
-injective?
+```text
+UnitPowerSectorSystem (TraceOneInt (-1)) 3.
+```
 
-finite-to-one?
+Thus the former carrier/API mismatch is closed at this bounded interface.
 
-known unbounded multiplicity?
-
-what exact theorem controls the multiplicity?
-~~~
-
-Do not hide multiplicity inside Finset.image notation.
-
----
-
-## 7. Phase S4 — arithmetic falsification
-
-For every serious candidate theorem:
-
-1. test small and medium X numerically;
-2. target collision moduli 169 and 8281;
-3. target the S=3 Pell family;
-4. target paired exact-depth CRT families;
-5. target all three mod-49 seven states.
-
-The purpose is not numerical proof.
-
-The purpose is cheap falsification.
+Do not claim full generic odd-prime p=3 facade integration from this alone.
 
 ---
 
-## 8. Phase S5 — theorem isolation
+## 7. LUNA-008 validation
 
-A successful Sol pass ends with one of:
+See:
 
-### Outcome A — strong candidate
+```text
+reconciliation-008.md
+instruction-008.md
+report-008.md
+validation-008.txt.
+```
 
-A precise shell-count theorem with a plausible proof route and no known
-regression conflict.
+Completed deliverables:
 
-### Outcome B — meaningful partial mechanism
+```text
+A. Lib-owned Eisenstein coordinate core;
+B. old-path compatibility facade;
+C. ABC direct Lib migration;
+D. DkMath.Lib entry-point update;
+E. signedPrimeParameter_three;
+F. omega/tau coordinate bridge;
+G. FLT3 cube sectors packaged as UnitPowerSectorSystem.
+```
 
-A quantitatively useful theorem in a regime such as:
-
-~~~text
-large D
-
-small cube-core
-
-large complement
-
-one arithmetic sector.
-~~~
-
-### Outcome C — obstruction
-
-A convincing reason why all obvious coordinate attacks remain insufficient,
-plus the exact missing theorem.
-
-Outcome C is acceptable.
-
-Do not manufacture a production task merely to continue.
+Focused builds and aggregators recorded in `validation-008.txt` succeeded. Forbidden and warning scans are clean for the checkpoint.
 
 ---
 
-## 9. Phase A0 — Astra review
+## 8. Hard boundaries
 
-Do not enter until Sol reduces the candidate set to one or two serious routes.
+Do not infer any of the following from the new Lib layer:
 
-Astra's job:
+```text
+actual ABC Eisenstein factorization existence;
+uniqueness of beta/gamma;
+factor counting;
+class-group torsion-freeness for the ABC problem;
+Mordell integral-point bounds;
+balanced-box power saving;
+ABC closure.
+```
 
-~~~text
-- attack proof gaps;
-- search for hidden counterfamilies;
-- compare exponents;
-- identify the weakest sufficient statement;
-- replace an unnecessarily strong route with a cleaner one when possible.
-~~~
-
-Do not spend Astra budget reconstructing v0.
-
-Provide Astra the Sol report and the v0 capstone facts.
+Likewise, do not claim the whole generic odd-prime FLT architecture now specializes to p=3 merely because the carrier and unit-sector APIs align.
 
 ---
 
-## 10. Production gate
+## 9. Regression barriers
 
-Return to Lean production only if a genuinely new theorem survives review.
+Mandatory checks remain:
 
-Before implementation require:
-
-~~~text
-precise theorem statement
-
-counterexample audit passed
-
-dependency on production facts identified
-
-quantitative gain demonstrated
-
-no abc_main_axiom
-
-no provider assumption.
-~~~
-
-Until then:
-
-~~~text
-NO LUNA production sequence.
-~~~
+```text
+M=169 collisions;
+M=8281 four-witness collision;
+complement-3 Pell family;
+independent paired exact depths;
+arbitrarily large coprime paired repeated parts;
+arbitrary finite Hensel lifting;
+all mod-49 seven states.
+```
 
 ---
 
-## 11. Success criterion
+## 10. Independent research extracted from this branch
 
-The desired bridge is:
+A broader, non-ABC-specific research direction emerged after LUNA-008:
 
-~~~text
-new arithmetic incidence theorem
-->
-nontrivial N_X(D) bound
-->
-capstone dyadic moment bound
-->
-ABC-side progress.
-~~~
+```text
+multi-gauge GN divisibility
+-> Norm divisibility
+-> coordinate divisibility
+-> integer-lattice landing
+-> power/Core-image landing.
+```
 
-The first arrow is the only current research target.
+It is recorded in:
+
+```text
+docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
+```
+
+This should continue as generic DkMath research, not as LUNA-009 on this ABC branch.
 
 ---
 
-## 12. Current status
+## 11. Model roles
 
-~~~text
+```text
+Sol:
+  new mathematics / proof-route design.
+
+Astra:
+  expensive adversarial review and branch pruning.
+
+Luna:
+  implementation of already validated deterministic facts and refactors.
+```
+
+No further Luna sequence is opened here.
+
+---
+
+## 12. Closeout status
+
+```text
 v0 deterministic reduction:
   COMPLETE
 
@@ -524,24 +272,23 @@ SOL-000:
 ASTRA-001:
   COMPLETE / Outcome B
 
-validated deterministic facts:
-  fixed-(T,r) shell fiber card <= 1
-  shell-local a |-> (r,S) injective
+LUNA-002 ... LUNA-007:
+  COMPLETE / APPROVED
 
-LUNA-002:
-  ACTIVE
-  productionize validated shell uniqueness only
+LUNA-008 Lib / p=3 reconciliation:
+  COMPLETE / APPROVED
 
-Astra:
-  PAUSED UNTIL RECHARGE
-
-research analytics:
-  REMAIN OUTSIDE PRODUCTION
+ABC-GN Astra v1:
+  CLOSED / MERGE CANDIDATE
 
 ABC:
   NOT PROVED
 
-next research frontier after coding phase:
-  balanced-box represented-pair saving
-  Q(B) << B^(2-delta+epsilon)
-~~~
+remaining ABC frontier:
+  balanced-box sparsity
+  and/or
+  Eisenstein factorization existence/counting
+
+new independent DkMath frontier:
+  multi-gauge divisibility / Norm-lattice landing.
+```
