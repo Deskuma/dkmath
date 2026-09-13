@@ -435,6 +435,60 @@ example : GoldbachPairAt 50 := by
     (n := 50) (w := 10) (P := 7)
   all_goals decide +kernel
 
+/-! ## CGE-010 bounded quadruple regression -/
+
+example :
+    (goldbachObstructionSupportIn 22 0 (primeScalesUpTo 7)).card = 1 ∧
+      (goldbachObstructionSupportIn 22 1 (primeScalesUpTo 7)).card = 2 ∧
+      (goldbachObstructionSupportIn 22 2 (primeScalesUpTo 7)).card = 3 ∧
+      (goldbachObstructionSupportIn 22 3 (primeScalesUpTo 7)).card = 1 ∧
+      (goldbachObstructionSupportIn 22 4 (primeScalesUpTo 7)).card = 2 ∧
+      (goldbachObstructionSupportIn 22 5 (primeScalesUpTo 7)).card = 1 ∧
+      (goldbachObstructionSupportIn 22 6 (primeScalesUpTo 7)).card = 2 ∧
+      (goldbachObstructionSupportIn 22 7 (primeScalesUpTo 7)).card = 2 ∧
+      (goldbachObstructionSupportIn 22 8 (primeScalesUpTo 7)).card = 4 ∧
+      (goldbachObstructionSupportIn 22 9 (primeScalesUpTo 7)).card = 0 := by
+  decide +kernel
+
+example :
+    (goldbachBalancedOffsets 22 9).card = 10 ∧
+      goldbachWindowIncidence 22 9 (primeScalesUpTo 7) = 18 ∧
+      goldbachWindowPairOverlapCount 22 9 (primeScalesUpTo 7) = 13 ∧
+      goldbachWindowTripleOverlapCount 22 9 (primeScalesUpTo 7) = 5 ∧
+      goldbachWindowQuadrupleOverlapCount 22 9 (primeScalesUpTo 7) = 1 ∧
+      goldbachWindowOverlapExcess 22 9 (primeScalesUpTo 7) = 9 ∧
+      goldbachSignedQuadrupleCRTSum 22 9 (primeScalesUpTo 7) = 1 := by
+  decide +kernel
+
+example :
+    ¬ (18 < 10 + (13 - 5)) ∧
+      18 < 10 + ((13 - 5) + 1) := by
+  decide +kernel
+
+example :
+    Nat.choose 5 2 = 10 ∧ Nat.choose 5 3 = 10 ∧
+      Nat.choose 5 4 = 5 ∧ 5 - 1 = 4 ∧
+      10 - 10 + 5 = 5 ∧ 5 ≠ 4 := by
+  decide +kernel
+
+example : (goldbachWindowSurvivors 22 9 (primeScalesUpTo 7)).Nonempty := by
+  apply goldbachWindowSurvivor_of_exact_signed_crt_quadruple_budget
+    (n := 22) (w := 9) (P := 7) (S := primeScalesUpTo 7)
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 7
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · intro t ht
+    exact goldbach_support_card_le_four_of_world_card_le_four
+      (n := 22) (w := 9) (S := primeScalesUpTo 7) (by decide +kernel) t ht
+  · decide +kernel
+
+example : GoldbachPairAt 22 := by
+  apply goldbachPairAt_of_exact_signed_crt_quadruple_budget
+    (n := 22) (w := 9) (P := 7)
+  all_goals decide +kernel
+
 end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 
 #print axioms DkMath.NumberTheory.goldbachWindow_survivors_add_covered
@@ -468,6 +522,13 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachPairAt_of_exact_signed_crt_budget
 #print axioms DkMath.NumberTheory.goldbachSignedPairCRTSum_eq_windowPairOverlapCount
 #print axioms DkMath.NumberTheory.goldbachSignedTripleCRTSum_eq_windowTripleOverlapCount
+#print axioms DkMath.NumberTheory.choose_sub_one_eq_pair_sub_triple_add_quadruple_of_le_four
+#print axioms DkMath.NumberTheory.goldbachWindowLocalOverlapExcess_eq_pair_sub_triple_add_quadruple
+#print axioms DkMath.NumberTheory.goldbachWindowOverlapExcess_eq_pair_sub_triple_add_quadruple
+#print axioms DkMath.NumberTheory.goldbachSignedQuadrupleCRTCount_eq_supportSeats_card
+#print axioms DkMath.NumberTheory.goldbachSignedQuadrupleCRTSum_eq_windowQuadrupleOverlapCount
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_exact_signed_crt_quadruple_budget
+#print axioms DkMath.NumberTheory.goldbachPairAt_of_exact_signed_crt_quadruple_budget
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_signed_crt_budget_exact
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_residue_capacity_of_signed_crt_budget_exact
 #print axioms DkMath.NumberTheory.signedTripleResidues_target_eq_existing_witness

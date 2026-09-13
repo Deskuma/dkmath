@@ -23,6 +23,7 @@ import DkMath.NumberTheory.Goldbach.BalancedCRTOverlap
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTOverlap
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTExact
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTIncidence
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTQuadruple
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
