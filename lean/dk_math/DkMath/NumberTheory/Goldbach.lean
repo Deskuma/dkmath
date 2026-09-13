@@ -13,6 +13,19 @@ import DkMath.NumberTheory.Goldbach.Signature
 import DkMath.NumberTheory.Goldbach.Limitations
 import DkMath.NumberTheory.Goldbach.Overlap
 import DkMath.NumberTheory.Goldbach.PairOverlap
+import DkMath.NumberTheory.Goldbach.CrossGapExchange
+import DkMath.NumberTheory.Goldbach.CrossGapEscape
+import DkMath.NumberTheory.Goldbach.CrossGapSquareCertification
+import DkMath.NumberTheory.Goldbach.BalancedReflection
+import DkMath.NumberTheory.Goldbach.BalancedCapacity
+import DkMath.NumberTheory.Goldbach.BalancedPascalOverlap
+import DkMath.NumberTheory.Goldbach.BalancedCRTOverlap
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTOverlap
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTExact
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTIncidence
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTQuadruple
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTParityTail
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTMargin
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -29,4 +42,45 @@ counterexamples to stronger shortcuts, including the strict incidence bound.
 `Overlap` and `PairOverlap` add exact finite ledger identities, including the
 Pascal pair-overlap residual decomposition. They stop at this finite ledger
 layer and do not provide a universal escape theorem.
+
+`CrossGapExchange` adds the full-coordinate algebraic Gap exchange API. It is
+an exact conservation and residue-transport layer, not a prime-output or
+Strong Goldbach theorem.
+
+`CrossGapEscape` adds the fixed-even-fiber finite obstruction certification
+endpoint and its one-hole bridge to `GoldbachPairAt`; it does not provide a
+survivor-existence theorem.
+
+`CrossGapSquareCertification` connects arbitrary-degree Cross-Gap pairs to
+the existing SquareBody prime-certification envelope and balanced-window
+transport, without adding a near-balanced existence provider.
+
+`BalancedCRTOverlap` adds canonical left pair/triple witnesses, center-aligned
+residue collapse, and a finite strict-triple CRT progression ledger.  These
+are bounded witness and accounting APIs; they do not add a universal escape
+provider.
+
+`BalancedSignedCRTOverlap` adds canonical signed pair/triple residue families,
+their finite cardinality bounds, explicit progression-seat counts, and the
+anchor-local raw-to-proper support bridge.  Coincident signed classes are
+deduplicated by the canonical residue family; no primality or universal
+capacity provider is added.
+
+`BalancedSignedCRTExact` identifies the signed progression seats exactly with
+the balanced support seats, and closes the pair/triple global double counts
+under the explicit finite-world anchor.  The progression normalization keeps
+the endpoint condition `2 ≤ n` visible; these are finite identities, not a
+universal survivor or Strong Goldbach provider.
+
+`BalancedSignedCRTParityTail` generalizes the signed CRT layer to arbitrary
+finite prime subsets, proves the full finite j-layer Pascal double count, and
+splits the nonnegative Pascal tail by parity.  Its exact survivor budget and
+the resulting endpoint wrapper remain conditional on the finite anchor and
+do not assert a universal inequality.
+
+`BalancedSignedCRTMargin` packages that budget as an exact nonnegative parity
+margin, proves its fixed-world window monotonicity, and identifies the maximal
+anchor-safe window.  The maximal-window search reduction and endpoint wrapper
+remain conditional on the explicit finite anchor; no one-seat recurrence or
+universal positivity provider is introduced.
 -/
