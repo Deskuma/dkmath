@@ -133,6 +133,37 @@ example :
   · decide +kernel
   · decide +kernel
 
+/-- The local Pascal firewall at support size three. -/
+example :
+    Nat.choose 3 2 = 3 ∧ Nat.choose 3 3 = 1 ∧ 3 - 1 = 2 ∧
+      ¬ (Nat.choose 3 2 ≤ 3 - 1) ∧
+      Nat.choose 3 2 ≤ (3 - 1) + Nat.choose 3 3 := by
+  decide +kernel
+
+/-- At support size four, pair-minus-triple is a strict lower bound. -/
+example :
+    Nat.choose 4 2 = 6 ∧ Nat.choose 4 3 = 4 ∧ 4 - 1 = 3 ∧
+      Nat.choose 4 2 - Nat.choose 4 3 = 2 ∧
+      Nat.choose 4 2 - Nat.choose 4 3 ≤ 4 - 1 := by
+  decide +kernel
+
+/-- The target-30 window has pair overlap three and no triple overlap. -/
+example :
+    goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachWindowTripleOverlapCount 15 8 (primeScalesUpTo 5) = 0 ∧
+      goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) -
+          goldbachWindowTripleOverlapCount 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) -
+          goldbachWindowTripleOverlapCount 15 8 (primeScalesUpTo 5) =
+        goldbachWindowOverlapExcess 15 8 (primeScalesUpTo 5) := by
+  decide +kernel
+
+/-- The pair-minus-triple budget supplies the conditional target-30 endpoint. -/
+example : GoldbachPairAt 15 := by
+  apply goldbachPairAt_of_goldbachWindow_residue_capacity_of_pairMinusTriple_budget
+    (n := 15) (w := 8) (P := 5)
+  all_goals decide +kernel
+
 /-- A surviving seat enters the `P=2` shell and closes to Goldbach. -/
 example : GoldbachPairAt 3 := by
   apply goldbachPairAt_of_goldbachWindowSurvivor
@@ -155,3 +186,7 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachWindowIncidence_eq_covered_add_overlapExcess
 #print axioms DkMath.NumberTheory.goldbachWindowIncidenceConservation
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_incidence_le_of_overlap_le
+#print axioms DkMath.NumberTheory.choose_two_le_sub_one_add_choose_three
+#print axioms DkMath.NumberTheory.goldbachWindowPairOverlapCount_le_overlap_add_triple
+#print axioms DkMath.NumberTheory.goldbachWindowPairOverlap_sub_triple_le_overlap
+#print axioms DkMath.NumberTheory.goldbachPairAt_of_goldbachWindow_residue_capacity_of_pairMinusTriple_budget
