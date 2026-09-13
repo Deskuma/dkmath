@@ -38,15 +38,24 @@ theorem goldbachCoveredSeats_eq_filter (n : ℕ) (S : Finset ℕ) :
     goldbachCoveredSeats n S =
       (goldbachOffsets n).filter (fun u => ¬ GoldbachSurvives n S u) := by
   ext u
-  simp only [goldbachCoveredSeats, Finset.mem_biUnion, goldbachBlockedSeats,
-    Finset.mem_filter, GoldbachSurvives]
+  change u ∈ S.biUnion (goldbachBlockedSeats n) ↔
+    u ∈ (goldbachOffsets n).filter (fun u => ¬ GoldbachSurvives n S u)
   constructor
-  · rintro ⟨r, hr, hu, ho⟩
-    exact ⟨hu, fun hs => hs r hr ho⟩
-  · rintro ⟨hu, hs⟩
-    push Not at hs
-    obtain ⟨r, hr, ho⟩ := hs
-    exact ⟨r, hr, hu, ho⟩
+  · intro hu
+    obtain ⟨r, hr, hu⟩ := Finset.mem_biUnion.mp hu
+    have hu' := Finset.mem_filter.mp hu
+    apply Finset.mem_filter.mpr
+    exact ⟨hu'.1, by
+      intro hs
+      exact hs r hr hu'.2⟩
+  · intro hu
+    have hu' := Finset.mem_filter.mp hu
+    apply Finset.mem_biUnion.mpr
+    have hsurv := hu'.2
+    unfold GoldbachSurvives at hsurv
+    push Not at hsurv
+    obtain ⟨r, hr, ho⟩ := hsurv
+    exact ⟨r, hr, Finset.mem_filter.mpr ⟨hu'.1, ho⟩⟩
 
 /-- Exact conservation of finite seat count into survivors and covered seats. -/
 theorem goldbach_survivors_add_covered (n : ℕ) (S : Finset ℕ) :

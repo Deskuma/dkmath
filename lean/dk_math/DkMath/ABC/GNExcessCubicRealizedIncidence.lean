@@ -35,8 +35,8 @@ theorem mem_GNExcessCubicRealizedLargeWitnessSpace_iff
     a ∈ GNExcessCubicRealizedLargeWitnessSpace X ↔
       1 ≤ a ∧ a ≤ X ∧
         X + 1 < GNExcessCubicFullRepeatedModulus a := by
-  simp [GNExcessCubicRealizedLargeWitnessSpace,
-    GNExcessCubicFullRepeatedModulus, and_assoc]
+  rw [GNExcessCubicRealizedLargeWitnessSpace, Finset.mem_filter, Finset.mem_Icc]
+  simp only [and_assoc]
 
 /-- The realized large modulus space is exactly the image of actual witnesses. -/
 theorem GNExcessCubicRealizedLargeWitnessSpace_image_eq_modulusSpace
