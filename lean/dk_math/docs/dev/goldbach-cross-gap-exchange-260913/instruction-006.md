@@ -347,7 +347,7 @@ exact floor `(w-t0)/M+1` が無理なく証明できるならそちらを優先�
 
 ---
 
-# Part D: CRT payment provider
+## Part D: CRT payment provider
 
 Part A と C を CGE-005 に接続する。
 

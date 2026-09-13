@@ -290,8 +290,7 @@ window 上で総和し、exact に
 
 \[
 \boxed{
-I_w(n,S)
-=
+I_w(n,S)=
 \#Covered_w(n,S)+E_w(n,S)
 }
 \]
@@ -326,8 +325,7 @@ I_w=\#Covered+E_w
 
 \[
 \boxed{
-\#Survivors + I_w
-=
+\#Survivors + I_w=
 \#Window + E_w
 }
 \]
