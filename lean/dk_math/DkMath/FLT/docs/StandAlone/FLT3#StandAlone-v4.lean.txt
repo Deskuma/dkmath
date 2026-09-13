@@ -1,0 +1,2644 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import Mathlib
+
+#print "file: FLT3#StandAloneV4"
+
+namespace DkMath.NumberTheory.TraceOneQuadratic
+
+/-- Integral coordinates `a + b * tau`, reduced by `tau^2 = tau + s`. -/
+structure TraceOneInt (s : ℤ) where
+  fst : ℤ
+  snd : ℤ
+deriving DecidableEq, Repr
+
+@[ext] theorem traceOne_ext {s} {x y : TraceOneInt s}
+    (hfst : x.fst = y.fst) (hsnd : x.snd = y.snd) : x = y := by
+  cases x
+  cases y
+  simp_all
+
+def ofInt (s a : ℤ) : TraceOneInt s := ⟨a, 0⟩
+def tau (s : ℤ) : TraceOneInt s := ⟨0, 1⟩
+
+def mul {s} (x y : TraceOneInt s) : TraceOneInt s :=
+  ⟨x.fst * y.fst + s * x.snd * y.snd,
+    x.fst * y.snd + x.snd * y.fst + x.snd * y.snd⟩
+
+def conj {s} (x : TraceOneInt s) : TraceOneInt s :=
+  ⟨x.fst + x.snd, -x.snd⟩
+
+def trace {s} (x : TraceOneInt s) : ℤ := 2 * x.fst + x.snd
+def norm {s} (x : TraceOneInt s) : ℤ := x.fst ^ 2 + x.fst * x.snd - s * x.snd ^ 2
+def discr (s : ℤ) : ℤ := 1 + 4 * s
+
+instance {s} : Zero (TraceOneInt s) := ⟨⟨0, 0⟩⟩
+instance {s} : One (TraceOneInt s) := ⟨⟨1, 0⟩⟩
+instance {s} : Add (TraceOneInt s) := ⟨fun x y => ⟨x.fst + y.fst, x.snd + y.snd⟩⟩
+instance {s} : Neg (TraceOneInt s) := ⟨fun x => ⟨-x.fst, -x.snd⟩⟩
+instance {s} : Sub (TraceOneInt s) := ⟨fun x y => ⟨x.fst - y.fst, x.snd - y.snd⟩⟩
+instance {s} : Mul (TraceOneInt s) := ⟨mul⟩
+
+@[simp] theorem fst_zero {s} : (0 : TraceOneInt s).fst = 0 := rfl
+@[simp] theorem snd_zero {s} : (0 : TraceOneInt s).snd = 0 := rfl
+@[simp] theorem fst_one {s} : (1 : TraceOneInt s).fst = 1 := rfl
+@[simp] theorem snd_one {s} : (1 : TraceOneInt s).snd = 0 := rfl
+@[simp] theorem fst_add {s} (x y : TraceOneInt s) : (x + y).fst = x.fst + y.fst := rfl
+@[simp] theorem snd_add {s} (x y : TraceOneInt s) : (x + y).snd = x.snd + y.snd := rfl
+@[simp] theorem fst_neg {s} (x : TraceOneInt s) : (-x).fst = -x.fst := rfl
+@[simp] theorem snd_neg {s} (x : TraceOneInt s) : (-x).snd = -x.snd := rfl
+@[simp] theorem fst_sub {s} (x y : TraceOneInt s) : (x - y).fst = x.fst - y.fst := rfl
+@[simp] theorem snd_sub {s} (x y : TraceOneInt s) : (x - y).snd = x.snd - y.snd := rfl
+@[simp] theorem fst_mul {s} (x y : TraceOneInt s) :
+    (x * y).fst = x.fst * y.fst + s * x.snd * y.snd := rfl
+@[simp] theorem snd_mul {s} (x y : TraceOneInt s) :
+    (x * y).snd = x.fst * y.snd + x.snd * y.fst + x.snd * y.snd := rfl
+
+instance traceOneAddCommGroup {s} : AddCommGroup (TraceOneInt s) := by
+  refine
+    { sub := fun x y => ⟨x.fst - y.fst, x.snd - y.snd⟩
+      nsmul := @nsmulRec (TraceOneInt s) inferInstance inferInstance
+      zsmul := @zsmulRec (TraceOneInt s) inferInstance inferInstance inferInstance
+        (@nsmulRec (TraceOneInt s) inferInstance inferInstance)
+      add_assoc := ?_
+      zero_add := ?_
+      add_zero := ?_
+      neg_add_cancel := ?_
+      add_comm := ?_ } <;>
+    intros <;> ext <;> simp [add_comm, add_left_comm]
+
+instance traceOneAddGroupWithOne {s} : AddGroupWithOne (TraceOneInt s) :=
+  { traceOneAddCommGroup with
+    natCast := fun n => ⟨n, 0⟩
+    intCast := fun z => ⟨z, 0⟩ }
+
+instance traceOneCommRing {s} : CommRing (TraceOneInt s) := by
+  refine
+    { traceOneAddGroupWithOne with
+      add_comm := ?_
+      mul_assoc := ?_
+      one_mul := ?_
+      mul_one := ?_
+      left_distrib := ?_
+      right_distrib := ?_
+      zero_mul := ?_
+      mul_zero := ?_
+      mul_comm := ?_ } <;>
+    intros <;> ext <;> simp <;> ring
+
+@[simp] theorem traceOne_tau_sq {s} : tau s * tau s = tau s + ofInt s s := by
+  ext <;> simp [tau, ofInt]
+
+@[simp] theorem traceOne_conj_invol {s} (x : TraceOneInt s) : conj (conj x) = x := by
+  ext <;> simp [conj]
+
+theorem traceOne_conj_mul {s} (x y : TraceOneInt s) : conj (x * y) = conj x * conj y := by
+  ext <;> simp [conj] <;> ring
+
+theorem traceOne_mul_conj {s} (x : TraceOneInt s) : x * conj x = ofInt s (norm x) := by
+  ext <;> simp [conj, ofInt, norm] <;> ring
+
+theorem traceOne_norm_mul {s} (x y : TraceOneInt s) : norm (x * y) = norm x * norm y := by
+  simp [norm]
+  ring
+
+theorem four_mul_traceOneNorm_eq_discriminant {s} (x : TraceOneInt s) :
+    4 * norm x = trace x ^ 2 - discr s * x.snd ^ 2 := by
+  simp [norm, trace, discr]
+  ring
+
+theorem traceOneNorm_neg_one (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-1)) = a ^ 2 + a * b + b ^ 2 := by
+  simp [norm]
+
+theorem traceOneNorm_one (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt 1) = a ^ 2 + a * b - b ^ 2 := by
+  simp [norm]
+
+/-! ## The positive-definite `s = -2` specialization -/
+
+/-- The central quadratic scale axis at discriminant `-7`.  Its norm is `7`,
+so this is deliberately not described as a ring unit. -/
+def sevenAxis : TraceOneInt (-2) :=
+  2 * tau (-2) - 1
+
+theorem sevenAxis_eq : sevenAxis = ⟨-1, 2⟩ := by
+  rfl
+
+@[simp] theorem sevenAxis_fst : sevenAxis.fst = -1 := by
+  rw [sevenAxis_eq]
+
+@[simp] theorem sevenAxis_snd : sevenAxis.snd = 2 := by
+  rw [sevenAxis_eq]
+
+/-- The scale axis squares to the embedded integer `-7`. -/
+theorem sevenAxis_sq : sevenAxis ^ 2 = (-7 : TraceOneInt (-2)) := by
+  rw [sevenAxis_eq]
+  change (⟨-1, 2⟩ : TraceOneInt (-2)) ^ 2 = ⟨-7, 0⟩
+  ext <;> norm_num [pow_two]
+
+/-- Conjugation reverses the scale axis. -/
+theorem conj_sevenAxis : conj sevenAxis = -sevenAxis := by
+  rw [sevenAxis_eq]
+  ext <;> norm_num [conj]
+
+/-- The scale axis has norm `7`, rather than unit norm. -/
+theorem sevenAxis_norm : norm sevenAxis = 7 := by
+  rw [sevenAxis_eq]
+  norm_num [norm]
+
+/-- Coordinate formula for the `s = -2` trace-one norm. -/
+theorem traceOneNorm_neg_two (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = a ^ 2 + a * b + 2 * b ^ 2 := by
+  simp [norm]
+
+/-- Completed-square form of the discriminant `-7` norm. -/
+theorem four_mul_traceOneNorm_negTwo_eq_sum_sq (a b : ℤ) :
+    4 * norm (⟨a, b⟩ : TraceOneInt (-2)) =
+      (2 * a + b) ^ 2 + 7 * b ^ 2 := by
+  rw [traceOneNorm_neg_two]
+  ring
+
+/-- The positive-definite `s = -2` norm vanishes only at zero coordinates. -/
+theorem traceOneNorm_negTwo_eq_zero_iff (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = 0 ↔ a = 0 ∧ b = 0 := by
+  constructor
+  · intro h
+    have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+    have hb_sq : b ^ 2 = 0 := by
+      nlinarith [sq_nonneg (2 * a + b), sq_nonneg b]
+    have hb : b = 0 := by nlinarith [sq_nonneg b]
+    subst b
+    have ha : a = 0 := by
+      rw [traceOneNorm_neg_two] at h
+      nlinarith [sq_nonneg a]
+    exact ⟨ha, rfl⟩
+  · rintro ⟨rfl, rfl⟩
+    norm_num [norm]
+
+/-- Structured zero-fiber form for the `s = -2` norm. -/
+theorem norm_eq_zero_iff_of_negTwo (x : TraceOneInt (-2)) :
+    norm x = 0 ↔ x = 0 := by
+  rcases x with ⟨a, b⟩
+  rw [traceOneNorm_negTwo_eq_zero_iff]
+  constructor
+  · rintro ⟨rfl, rfl⟩
+    rfl
+  · intro h
+    have hf := congrArg TraceOneInt.fst h
+    have hs := congrArg TraceOneInt.snd h
+    simpa using And.intro hf hs
+
+/-- Every nonzero integral `s = -2` core has norm at least one. -/
+theorem one_le_traceOneNorm_negTwo_of_ne_zero
+    (x : TraceOneInt (-2)) (hx : x ≠ 0) :
+    1 ≤ norm x := by
+  rcases x with ⟨a, b⟩
+  have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+  have hnonneg : 0 ≤ norm (⟨a, b⟩ : TraceOneInt (-2)) := by
+    nlinarith [sq_nonneg (2 * a + b), sq_nonneg b]
+  have hne : norm (⟨a, b⟩ : TraceOneInt (-2)) ≠ 0 := by
+    intro h
+    apply hx
+    exact (norm_eq_zero_iff_of_negTwo ⟨a, b⟩).mp h
+  omega
+
+/-- The norm-one shell consists exactly of the two embedded signs. -/
+theorem traceOneNorm_negTwo_eq_one_iff (a b : ℤ) :
+    norm (⟨a, b⟩ : TraceOneInt (-2)) = 1 ↔
+      (a = 1 ∧ b = 0) ∨ (a = -1 ∧ b = 0) := by
+  constructor
+  · intro h
+    have hs := four_mul_traceOneNorm_negTwo_eq_sum_sq a b
+    have hb_lt : b ^ 2 < 1 := by
+      nlinarith [sq_nonneg (2 * a + b)]
+    have hb_sq : b ^ 2 = 0 := by
+      have := sq_nonneg b
+      omega
+    have hb : b = 0 := by nlinarith [sq_nonneg b]
+    subst b
+    rw [traceOneNorm_neg_two] at h
+    have hfactor : (a - 1) * (a + 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp hfactor with ha | ha
+    · left
+      constructor <;> omega
+    · right
+      constructor <;> omega
+  · rintro (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩) <;> norm_num [norm]
+
+/-- Structured norm-one classification. -/
+theorem norm_eq_one_iff_of_negTwo (x : TraceOneInt (-2)) :
+    norm x = 1 ↔ x = 1 ∨ x = -1 := by
+  rcases x with ⟨a, b⟩
+  rw [traceOneNorm_negTwo_eq_one_iff]
+  constructor
+  · rintro (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+    · exact Or.inl rfl
+    · exact Or.inr rfl
+  · rintro (h | h)
+    · left
+      exact ⟨congrArg TraceOneInt.fst h, congrArg TraceOneInt.snd h⟩
+    · right
+      exact ⟨congrArg TraceOneInt.fst h, congrArg TraceOneInt.snd h⟩
+
+end DkMath.NumberTheory.TraceOneQuadratic
+
+open DkMath.NumberTheory.TraceOneQuadratic
+
+/-!
+# Positive-natural normalization for the cubic endpoint
+
+This module reduces an arbitrary positive cubic solution by `gcd a b` and
+feeds the resulting primitive packet to the independent Three tower closure.
+It does not modify the legacy `DkMath.FLT.Main` surface.
+-/
+
+/-- A positive primitive solution of the cubic equation. -/
+structure PrimitiveCubicPack (x y z : ℕ) : Prop where
+  hx : 0 < x
+  hy : 0 < y
+  hz : 0 < z
+  coprime_xy : Nat.Coprime x y
+  equation : x ^ 3 + y ^ 3 = z ^ 3
+
+/-- The subtraction-safe natural form of `a^2 - a*b + b^2`. -/
+def signedThreeAdicResidual (a b : ℕ) : ℕ := a ^ 2 + b ^ 2 - a * b
+
+/-- The three possible locations of the ramified factor in a primitive triple. -/
+inductive SignedThreeAdicOrientation where
+  | a
+  | b
+  | c
+  deriving DecidableEq, Repr
+
+/-- The concrete trace-one coordinate ring used by the FLT3 substrate. -/
+abbrev EisensteinInt := TraceOneInt (-1)
+
+/-- The trace-one basis element. -/
+def eisensteinTau : EisensteinInt := tau (-1)
+
+/-- Coordinate constructor for `r + s * tau (-1)`. -/
+def eisensteinCoord (r s : ℤ) : EisensteinInt := ⟨r, s⟩
+
+/-- The common signed packet produced by the mod-nine routing. -/
+structure SignedThreeAdicPacket (a b c : ℕ) : Type where
+  orientation : SignedThreeAdicOrientation
+  carrier : ℕ
+  residual : ℕ
+  distinguished : ℕ
+  alpha : EisensteinInt
+  carrier_pos : 0 < carrier
+  residual_pos : 0 < residual
+  distinguished_pos : 0 < distinguished
+  factorization : carrier * residual = distinguished ^ 3
+  alpha_norm : norm alpha = (residual : ℤ)
+  alpha_signed_gap : alpha.snd - alpha.fst = (carrier : ℤ)
+  three_dvd_carrier : 3 ∣ carrier
+  three_dvd_distinguished : 3 ∣ distinguished
+  residual_mod_nine : residual % 9 = 3
+  gcd_eq_three : Nat.gcd carrier residual = 3
+
+/-- A routed packet retaining which original coordinate was distinguished. -/
+structure SignedThreeAdicOriginPacket (a b c : ℕ) : Type where
+  packet : SignedThreeAdicPacket a b c
+  distinguished_cases :
+    packet.distinguished = a ∨
+      packet.distinguished = b ∨
+        packet.distinguished = c
+
+/-- The exact cube split after the common factor `3` has been assigned. -/
+structure SignedThreeAdicPowerSplit (a b c : ℕ) : Type where
+  packet : SignedThreeAdicPacket a b c
+  A : ℕ
+  B : ℕ
+  A_pos : 0 < A
+  B_pos : 0 < B
+  coprime_A_B : Nat.Coprime A B
+  carrier_eq : packet.carrier = 3 ^ 2 * A ^ 3
+  residual_eq : packet.residual = 3 * B ^ 3
+  distinguished_eq : packet.distinguished = 3 * A * B
+  three_not_dvd_B : ¬ 3 ∣ B
+
+/-- The ramifier candidate above `3` in the trace-one convention. -/
+def eisensteinRamifier : EisensteinInt := 1 + eisensteinTau
+
+/-- The production packet after one exact ramifier removal. -/
+structure EisensteinRamifierStrippedPacket
+    (a b c : ℕ) : Type where
+  powerSplit : SignedThreeAdicPowerSplit a b c
+  beta : EisensteinInt
+  alpha_eq :
+    powerSplit.packet.alpha = eisensteinRamifier * beta
+  beta_norm :
+    norm beta = (powerSplit.B : ℤ) ^ 3
+  beta_snd :
+    beta.snd = 3 * (powerSplit.A : ℤ) ^ 3
+
+/-- Every common divisor in the trace-one Eisenstein ring is a unit. -/
+def EisensteinRelPrime (x y : EisensteinInt) : Prop :=
+  ∀ d : EisensteinInt, d ∣ x → d ∣ y → IsUnit d
+
+/-- A stripped packet carrying its certified conjugate relative primality. -/
+structure EisensteinConjugateCoprimePacket
+    (a b c : ℕ) : Type where
+  stripped : EisensteinRamifierStrippedPacket a b c
+  relPrime : EisensteinRelPrime stripped.beta (conj stripped.beta)
+
+/-- A stripped packet together with its unit-times-cube factorization. -/
+structure EisensteinCubeUpToUnitPacket
+    (a b c : ℕ) : Type where
+  conjugateCoprime : EisensteinConjugateCoprimePacket a b c
+  epsilon : EisensteinIntˣ
+  gamma : EisensteinInt
+  beta_eq :
+    conjugateCoprime.stripped.beta =
+      (epsilon : EisensteinInt) * gamma ^ 3
+
+/-- The three canonical unit sectors modulo cubes. -/
+inductive EisensteinUnitSector
+  | one
+  | tau
+  | tauSq
+  deriving DecidableEq, Repr
+
+def EisensteinUnitSector.rep : EisensteinUnitSector → EisensteinInt
+  | .one => 1
+  | .tau => eisensteinTau
+  | .tauSq => eisensteinTau ^ 2
+
+/-- A cube-up-to-unit packet normalized to one of the three sectors. -/
+structure EisensteinCubeSectorPacket
+    (a b c : ℕ) : Type where
+  cubeUpToUnit : EisensteinCubeUpToUnitPacket a b c
+  sector : EisensteinUnitSector
+  gamma : EisensteinInt
+  beta_eq :
+    cubeUpToUnit.conjugateCoprime.stripped.beta =
+      sector.rep * gamma ^ 3
+
+/-- An exact-cube packet ready for the next descent checkpoint. -/
+structure EisensteinExactCubePacket
+    (a b c : ℕ) : Type where
+  sectorPacket : EisensteinCubeSectorPacket a b c
+  sector_one : sectorPacket.sector = .one
+  beta_eq_cube :
+    sectorPacket.cubeUpToUnit.conjugateCoprime.stripped.beta =
+      sectorPacket.gamma ^ 3
+  coordinate_product :
+    sectorPacket.gamma.fst * sectorPacket.gamma.snd *
+        (sectorPacket.gamma.fst + sectorPacket.gamma.snd) =
+      (sectorPacket.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.A : ℤ) ^ 3
+  coordinate_norm :
+    norm sectorPacket.gamma =
+      (sectorPacket.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.B : ℤ)
+
+/-- The flattened exact-cube source used by the descent-factor API. -/
+structure EisensteinDescentFactorSource
+    (a b c : ℕ) : Type where
+  origin : SignedThreeAdicOriginPacket a b c
+  exactCube : EisensteinExactCubePacket a b c
+  A : ℕ
+  B : ℕ
+  r : ℤ
+  s : ℤ
+  A_pos : 0 < A
+  B_pos : 0 < B
+  coprime_A_B : Nat.Coprime A B
+  three_not_dvd_B : ¬ 3 ∣ B
+  distinguished_eq :
+    origin.packet.distinguished = 3 * A * B
+  product_eq :
+    r * s * (r + s) = (A : ℤ) ^ 3
+  norm_eq :
+    r ^ 2 + r * s + s ^ 2 = (B : ℤ)
+
+/-- Signed factors packaged as pairwise-coprime natural cubes. -/
+structure EisensteinSignedCubeFactors
+    (a b c : ℕ) : Type where
+  source : EisensteinDescentFactorSource a b c
+  R : ℕ
+  S : ℕ
+  T : ℕ
+  R_pos : 0 < R
+  S_pos : 0 < S
+  T_pos : 0 < T
+  abs_r_eq : source.r.natAbs = R ^ 3
+  abs_s_eq : source.s.natAbs = S ^ 3
+  abs_sum_eq : (source.r + source.s).natAbs = T ^ 3
+  coprime_RS : Nat.Coprime R S
+  coprime_RT : Nat.Coprime R T
+  coprime_ST : Nat.Coprime S T
+  root_product_eq : R * S * T = source.A
+
+theorem EisensteinDescentFactorSource.abs_factor_product_eq_A_cube
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    p.r.natAbs * p.s.natAbs * (p.r + p.s).natAbs = p.A ^ 3 := by
+  have h := congrArg Int.natAbs p.product_eq
+  simpa [Int.natAbs_mul, Int.natAbs_pow] using h
+
+private theorem int_dvd_of_natAbs_dvd
+    {d : ℕ} {x : ℤ} (h : d ∣ x.natAbs) :
+    (d : ℤ) ∣ x := by
+  apply (Int.natAbs_dvd_natAbs).mp
+  simpa using h
+
+private theorem natAbs_dvd_of_int_dvd
+    {d : ℕ} {x : ℤ} (h : (d : ℤ) ∣ x) :
+    d ∣ x.natAbs := by
+  have h' := (Int.natAbs_dvd_natAbs).mpr h
+  simpa using h'
+
+private theorem common_factor_eq_one
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c)
+    {d : ℕ} (hr : d ∣ p.r.natAbs) (hs : d ∣ p.s.natAbs) :
+    d = 1 := by
+  have hdA3 : d ∣ p.A ^ 3 := by
+    rw [← p.abs_factor_product_eq_A_cube]
+    simpa [Nat.mul_assoc] using dvd_mul_of_dvd_left hr
+      (p.s.natAbs * (p.r + p.s).natAbs)
+  have hdr : (d : ℤ) ∣ p.r := int_dvd_of_natAbs_dvd hr
+  have hds : (d : ℤ) ∣ p.s := int_dvd_of_natAbs_dvd hs
+  have hdNorm : (d : ℤ) ∣
+      p.r ^ 2 + p.r * p.s + p.s ^ 2 := by
+    exact dvd_add (dvd_add (dvd_pow hdr (by decide))
+        (dvd_mul_of_dvd_left hdr p.s))
+      (dvd_pow hds (by decide))
+  have hdBcast : (d : ℤ) ∣ (p.B : ℤ) := by
+    rw [← p.norm_eq]
+    exact hdNorm
+  have hdB : d ∣ p.B := by
+    exact_mod_cast hdBcast
+  have hAB : Nat.Coprime (p.A ^ 3) p.B :=
+    Nat.Coprime.pow_left 3 p.coprime_A_B
+  have hdd : Nat.Coprime d d :=
+    Nat.Coprime.of_dvd hdA3 hdB hAB
+  exact (Nat.coprime_self d).mp hdd
+
+theorem EisensteinDescentFactorSource.coprime_abs_r_s
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    Nat.Coprime p.r.natAbs p.s.natAbs := by
+  rw [Nat.coprime_iff_gcd_eq_one]
+  exact common_factor_eq_one p (Nat.gcd_dvd_left _ _) (Nat.gcd_dvd_right _ _)
+
+theorem EisensteinDescentFactorSource.coprime_abs_r_sum
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    Nat.Coprime p.r.natAbs (p.r + p.s).natAbs := by
+  let d := Nat.gcd p.r.natAbs (p.r + p.s).natAbs
+  have hr : d ∣ p.r.natAbs := Nat.gcd_dvd_left _ _
+  have hsum : d ∣ (p.r + p.s).natAbs := Nat.gcd_dvd_right _ _
+  have hdr : (d : ℤ) ∣ p.r := int_dvd_of_natAbs_dvd hr
+  have hdsum : (d : ℤ) ∣ p.r + p.s := int_dvd_of_natAbs_dvd hsum
+  have hds : (d : ℤ) ∣ p.s := by
+    have h := dvd_sub hdsum hdr
+    simpa only [add_sub_cancel_left] using h
+  have hsnat : d ∣ p.s.natAbs := natAbs_dvd_of_int_dvd hds
+  rw [Nat.coprime_iff_gcd_eq_one]
+  exact common_factor_eq_one p hr hsnat
+
+theorem EisensteinDescentFactorSource.coprime_abs_s_sum
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    Nat.Coprime p.s.natAbs (p.r + p.s).natAbs := by
+  let d := Nat.gcd p.s.natAbs (p.r + p.s).natAbs
+  have hs : d ∣ p.s.natAbs := Nat.gcd_dvd_left _ _
+  have hsum : d ∣ (p.r + p.s).natAbs := Nat.gcd_dvd_right _ _
+  have hds : (d : ℤ) ∣ p.s := int_dvd_of_natAbs_dvd hs
+  have hdsum : (d : ℤ) ∣ p.r + p.s := int_dvd_of_natAbs_dvd hsum
+  have hdr : (d : ℤ) ∣ p.r := by
+    have h := dvd_sub hdsum hds
+    simpa only [add_sub_cancel_right] using h
+  have hrnat : d ∣ p.r.natAbs := natAbs_dvd_of_int_dvd hdr
+  rw [Nat.coprime_iff_gcd_eq_one]
+  exact common_factor_eq_one p hrnat hs
+
+private theorem nat_cube_of_coprime_mul_eq_cube
+    {x y z : ℕ} (hcop : Nat.Coprime x y) (h : x * y = z ^ 3) :
+    ∃ t : ℕ, x = t ^ 3 := by
+  have hunit : IsUnit (GCDMonoid.gcd x y) := by
+    change IsUnit (Nat.gcd x y)
+    rw [isUnit_iff_dvd_one]
+    simpa [Nat.Coprime] using hcop
+  exact exists_eq_pow_of_mul_eq_pow hunit h
+
+private theorem exists_abs_cube_roots
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    ∃ R S T : ℕ,
+      p.r.natAbs = R ^ 3 ∧
+      p.s.natAbs = S ^ 3 ∧
+      (p.r + p.s).natAbs = T ^ 3 := by
+  have hrs := p.coprime_abs_r_s
+  have hrt := p.coprime_abs_r_sum
+  have hst := p.coprime_abs_s_sum
+  have hRcop : p.r.natAbs.Coprime
+      (p.s.natAbs * (p.r + p.s).natAbs) :=
+    Nat.Coprime.mul_right hrs hrt
+  have hScop : p.s.natAbs.Coprime
+      (p.r.natAbs * (p.r + p.s).natAbs) :=
+    Nat.Coprime.mul_right hrs.symm hst
+  have hTcop : (p.r + p.s).natAbs.Coprime
+      (p.r.natAbs * p.s.natAbs) :=
+    Nat.Coprime.mul_right hrt.symm hst.symm
+  have hRprod : p.r.natAbs *
+      (p.s.natAbs * (p.r + p.s).natAbs) = p.A ^ 3 := by
+    simpa [Nat.mul_assoc] using p.abs_factor_product_eq_A_cube
+  have hSprod : p.s.natAbs *
+      (p.r.natAbs * (p.r + p.s).natAbs) = p.A ^ 3 := by
+    simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+      p.abs_factor_product_eq_A_cube
+  have hTprod : (p.r + p.s).natAbs *
+      (p.r.natAbs * p.s.natAbs) = p.A ^ 3 := by
+    simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+      p.abs_factor_product_eq_A_cube
+  rcases nat_cube_of_coprime_mul_eq_cube hRcop hRprod with ⟨R, hR⟩
+  rcases nat_cube_of_coprime_mul_eq_cube hScop hSprod with ⟨S, hS⟩
+  rcases nat_cube_of_coprime_mul_eq_cube hTcop hTprod with ⟨T, hT⟩
+  exact ⟨R, S, T, hR, hS, hT⟩
+
+theorem EisensteinDescentFactorSource.r_ne_zero
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    p.r ≠ 0 := by
+  intro hr
+  have hzero : (p.A : ℤ) ^ 3 = 0 := by
+    rw [← p.product_eq, hr]
+    simp
+  have hpos : 0 < (p.A : ℤ) ^ 3 := by
+    exact_mod_cast (pow_pos p.A_pos 3)
+  exact (ne_of_gt hpos) hzero
+
+theorem EisensteinDescentFactorSource.s_ne_zero
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    p.s ≠ 0 := by
+  intro hs
+  have hzero : (p.A : ℤ) ^ 3 = 0 := by
+    rw [← p.product_eq, hs]
+    simp
+  have hpos : 0 < (p.A : ℤ) ^ 3 := by
+    exact_mod_cast (pow_pos p.A_pos 3)
+  exact (ne_of_gt hpos) hzero
+
+theorem EisensteinDescentFactorSource.sum_ne_zero
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    p.r + p.s ≠ 0 := by
+  intro hsum
+  have hzero : (p.A : ℤ) ^ 3 = 0 := by
+    rw [← p.product_eq, hsum]
+    simp
+  have hpos : 0 < (p.A : ℤ) ^ 3 := by
+    exact_mod_cast (pow_pos p.A_pos 3)
+  exact (ne_of_gt hpos) hzero
+
+private theorem roots_pairwise_coprime
+    {a b c R S T : ℕ} (p : EisensteinDescentFactorSource a b c)
+    (hR : p.r.natAbs = R ^ 3)
+    (hS : p.s.natAbs = S ^ 3)
+    (hT : (p.r + p.s).natAbs = T ^ 3) :
+    Nat.Coprime R S ∧ Nat.Coprime R T ∧ Nat.Coprime S T := by
+  have hRS : Nat.Coprime (R ^ 3) (S ^ 3) := by
+    simpa [hR, hS] using p.coprime_abs_r_s
+  have hRT : Nat.Coprime (R ^ 3) (T ^ 3) := by
+    simpa [hR, hT] using p.coprime_abs_r_sum
+  have hST : Nat.Coprime (S ^ 3) (T ^ 3) := by
+    simpa [hS, hT] using p.coprime_abs_s_sum
+  have hRS' : Nat.Coprime R S := by
+    exact (Nat.coprime_pow_right_iff (by decide) R S).mp
+      ((Nat.coprime_pow_left_iff (by decide) R (S ^ 3)).mp hRS)
+  have hRT' : Nat.Coprime R T := by
+    exact (Nat.coprime_pow_right_iff (by decide) R T).mp
+      ((Nat.coprime_pow_left_iff (by decide) R (T ^ 3)).mp hRT)
+  have hST' : Nat.Coprime S T := by
+    exact (Nat.coprime_pow_right_iff (by decide) S T).mp
+      ((Nat.coprime_pow_left_iff (by decide) S (T ^ 3)).mp hST)
+  exact ⟨hRS', hRT', hST'⟩
+
+noncomputable def eisensteinSignedCubeFactors_of_source
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c) :
+    EisensteinSignedCubeFactors a b c := by
+  classical
+  let hRoots := exists_abs_cube_roots p
+  let R := Classical.choose hRoots
+  have hRData := Classical.choose_spec hRoots
+  let S := Classical.choose hRData
+  have hSData := Classical.choose_spec hRData
+  let T := Classical.choose hSData
+  have hData := Classical.choose_spec hSData
+  have hR : p.r.natAbs = R ^ 3 := by
+    simpa [R] using hData.1
+  have hS : p.s.natAbs = S ^ 3 := by
+    simpa [S] using hData.2.1
+  have hT : (p.r + p.s).natAbs = T ^ 3 := by
+    simpa [T] using hData.2.2
+  have hRpos : 0 < R := by
+    have hn : p.r.natAbs ≠ 0 := Int.natAbs_ne_zero.mpr p.r_ne_zero
+    have hRne : R ≠ 0 := by
+      intro h
+      apply hn
+      rw [hR, h]
+      simp
+    exact Nat.pos_of_ne_zero hRne
+  have hSpos : 0 < S := by
+    have hn : p.s.natAbs ≠ 0 := Int.natAbs_ne_zero.mpr p.s_ne_zero
+    have hSne : S ≠ 0 := by
+      intro h
+      apply hn
+      rw [hS, h]
+      simp
+    exact Nat.pos_of_ne_zero hSne
+  have hTpos : 0 < T := by
+    have hn : (p.r + p.s).natAbs ≠ 0 :=
+      Int.natAbs_ne_zero.mpr p.sum_ne_zero
+    have hTne : T ≠ 0 := by
+      intro h
+      apply hn
+      rw [hT, h]
+      simp
+    exact Nat.pos_of_ne_zero hTne
+  have hcop := roots_pairwise_coprime p hR hS hT
+  have hcube : (R * S * T) ^ 3 = p.A ^ 3 := by
+    calc
+      (R * S * T) ^ 3 = R ^ 3 * S ^ 3 * T ^ 3 := by ring
+      _ = p.r.natAbs * p.s.natAbs * (p.r + p.s).natAbs := by
+        rw [hR, hS, hT]
+      _ = p.A ^ 3 := p.abs_factor_product_eq_A_cube
+  have hroot : R * S * T = p.A :=
+    Nat.pow_left_injective (by decide) hcube
+  exact {
+    source := p
+    R := R
+    S := S
+    T := T
+    R_pos := hRpos
+    S_pos := hSpos
+    T_pos := hTpos
+    abs_r_eq := hR
+    abs_s_eq := hS
+    abs_sum_eq := hT
+    coprime_RS := hcop.1
+    coprime_RT := hcop.2.1
+    coprime_ST := hcop.2.2
+    root_product_eq := hroot }
+
+/-- A strict descent packet retaining the source and its same-source factors. -/
+structure PrimitiveCubicStrictDescent (a b c : ℕ) : Type where
+  source : PrimitiveCubicPack a b c
+  factors : EisensteinSignedCubeFactors a b c
+  x : ℕ
+  y : ℕ
+  z : ℕ
+  next : PrimitiveCubicPack x y z
+  next_product_eq : x * y * z = factors.source.A
+  measure_lt : x * y * z < a * b * c
+
+private theorem mod_nine_at_least_one_divisible_by_three :
+    ∀ x y z : Fin 9,
+      (x.1 ^ 3 + y.1 ^ 3) % 9 = z.1 ^ 3 % 9 →
+      3 ∣ x.1 ∨ 3 ∣ y.1 ∨ 3 ∣ z.1 := by
+  decide +kernel
+
+private theorem exact_one_three_dvd_of_fermat_cube
+    {a b c : ℕ} (hEq : a ^ 3 + b ^ 3 = c ^ 3)
+    (hab : Nat.Coprime a b) :
+    (3 ∣ a ∧ ¬ 3 ∣ b ∧ ¬ 3 ∣ c) ∨
+      (¬ 3 ∣ a ∧ 3 ∣ b ∧ ¬ 3 ∣ c) ∨
+        (¬ 3 ∣ a ∧ ¬ 3 ∣ b ∧ 3 ∣ c) := by
+  have hEqMod :
+      ((a % 9) ^ 3 + (b % 9) ^ 3) % 9 = c ^ 3 % 9 := by
+    have h := congrArg (fun n : ℕ => n % 9) hEq
+    simpa [Nat.add_mod, Nat.pow_mod] using h
+  have hsome : 3 ∣ a ∨ 3 ∣ b ∨ 3 ∣ c := by
+    let ar : Fin 9 := ⟨a % 9, Nat.mod_lt _ (by decide)⟩
+    let br : Fin 9 := ⟨b % 9, Nat.mod_lt _ (by decide)⟩
+    let cr : Fin 9 := ⟨c % 9, Nat.mod_lt _ (by decide)⟩
+    have hf := mod_nine_at_least_one_divisible_by_three ar br cr
+    have hfinite : 3 ∣ ar.1 ∨ 3 ∣ br.1 ∨ 3 ∣ cr.1 := by
+      apply hf
+      have hcmod : c ^ 3 % 9 = (c % 9) ^ 3 % 9 := by
+        rw [Nat.pow_mod]
+      simpa [ar, br, cr] using hEqMod.trans hcmod
+    rcases hfinite with h | h | h
+    · exact Or.inl ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h)
+    · exact Or.inr (Or.inl ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h))
+    · exact Or.inr (Or.inr ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h))
+  have hnotboth_ab : ¬ (3 ∣ a ∧ 3 ∣ b) := by
+    rintro ⟨ha, hb⟩
+    exact (Nat.not_coprime_of_dvd_of_dvd (by norm_num : 1 < 3) ha hb) hab
+  have hnotboth_ac : ¬ (3 ∣ a ∧ 3 ∣ c) := by
+    rintro ⟨ha, hc⟩
+    have ha3 : 3 ∣ a ^ 3 := ha.trans (dvd_pow_self a (by decide))
+    have hc3 : 3 ∣ c ^ 3 := hc.trans (dvd_pow_self c (by decide))
+    have hb3 : 3 ∣ b ^ 3 := by
+      have hsub : c ^ 3 - a ^ 3 = b ^ 3 := by omega
+      simpa [hsub] using (Nat.dvd_sub hc3 ha3)
+    have hb : 3 ∣ b := Nat.prime_three.dvd_of_dvd_pow hb3
+    exact (Nat.not_coprime_of_dvd_of_dvd (by norm_num : 1 < 3) ha hb) hab
+  have hnotboth_bc : ¬ (3 ∣ b ∧ 3 ∣ c) := by
+    rintro ⟨hb, hc⟩
+    have hb3 : 3 ∣ b ^ 3 := hb.trans (dvd_pow_self b (by decide))
+    have hc3 : 3 ∣ c ^ 3 := hc.trans (dvd_pow_self c (by decide))
+    have ha3 : 3 ∣ a ^ 3 := by
+      have hsub : c ^ 3 - b ^ 3 = a ^ 3 := by omega
+      simpa [hsub] using (Nat.dvd_sub hc3 hb3)
+    have ha : 3 ∣ a := Nat.prime_three.dvd_of_dvd_pow ha3
+    exact (Nat.not_coprime_of_dvd_of_dvd (by norm_num : 1 < 3) ha hb) hab
+  by_cases ha : 3 ∣ a
+  · have hnb : ¬ 3 ∣ b := by
+      intro hb
+      exact hnotboth_ab ⟨ha, hb⟩
+    have hnc : ¬ 3 ∣ c := by
+      intro hc
+      exact hnotboth_ac ⟨ha, hc⟩
+    exact Or.inl ⟨ha, hnb, hnc⟩
+  · by_cases hb : 3 ∣ b
+    · have hnc : ¬ 3 ∣ c := by
+        intro hc
+        exact hnotboth_bc ⟨hb, hc⟩
+      exact Or.inr (Or.inl ⟨ha, hb, hnc⟩)
+    · have hc : 3 ∣ c := by
+        rcases hsome with h | h | h
+        · exact (ha h).elim
+        · exact (hb h).elim
+        · exact h
+      exact Or.inr (Or.inr ⟨ha, hb, hc⟩)
+
+/--
+`a^3 + b^3 = c^3` から `c^3 - b^3 = a^3` を得る。
+-/
+lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    c ^ 3 - b ^ 3 = a ^ 3 := by
+  rw [← h]
+  omega
+
+/--
+`gcd(a,b)=1` かつ `a^3+b^3=c^3` なら `gcd(c,b)=1`。
+-/
+lemma coprime_cb_of_eq {a b c : ℕ}
+    (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nat.Coprime c b := by
+  by_contra hnot
+  have hgcd_ne : Nat.gcd c b ≠ 1 := by
+    intro hg
+    apply hnot
+    exact (Nat.coprime_iff_gcd_eq_one).2 hg
+  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
+  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
+  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
+  have hp_dvd_c3 : p ∣ c ^ 3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
+  have hp_dvd_b3 : p ∣ b ^ 3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
+  have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h
+  have hp_dvd_sub : p ∣ c ^ 3 - b ^ 3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
+  have hp_dvd_a3 : p ∣ a ^ 3 := by simpa [hsub] using hp_dvd_sub
+  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
+  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
+  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
+  exact hp.not_dvd_one this
+
+/-- ℕ 版の S0 -/
+def S0_nat (a b : ℕ) : ℕ := a^2 + a*b + b^2
+
+/--
+`d=3` の標準因数分解:
+`c^3 - b^3 = (c-b) * S0_nat c b`。
+-/
+lemma cube_sub_eq_mul_sub_S0 {c b : ℕ} (hbc : b < c) :
+    c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
+  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
+    zify [hbc, h_pow]
+    ring_nf
+  simpa [S0_nat] using hdiff
+
+private theorem mod_nine_cube_zero_iff_three_dvd {x : ℕ} :
+    x ^ 3 % 9 = 0 ↔ 3 ∣ x := by
+  constructor
+  · intro hx
+    have h9 : 9 ∣ x ^ 3 := Nat.dvd_of_mod_eq_zero hx
+    exact Nat.prime_three.dvd_of_dvd_pow
+      (dvd_trans (by norm_num : 3 ∣ 9) h9)
+  · rintro ⟨k, rfl⟩
+    apply Nat.mod_eq_zero_of_dvd
+    refine ⟨3 * k ^ 3, ?_⟩
+    ring
+
+private theorem mod_nine_difference_residual :
+    ∀ x y : Fin 9,
+      ¬ 3 ∣ x.1 → ¬ 3 ∣ y.1 →
+      x.1 ^ 3 % 9 = y.1 ^ 3 % 9 →
+      (x.1 ^ 2 + x.1 * y.1 + y.1 ^ 2) % 9 = 3 ∧
+        x.1 % 3 = y.1 % 3 := by
+  decide +kernel
+
+private theorem residual_mod_nine_difference
+    {x y : ℕ} (hx : ¬ 3 ∣ x) (hy : ¬ 3 ∣ y)
+    (hxy : x ^ 3 % 9 = y ^ 3 % 9) :
+    (x ^ 2 + x * y + y ^ 2) % 9 = 3 ∧ x % 3 = y % 3 := by
+  let xr : Fin 9 := ⟨x % 9, Nat.mod_lt _ (by decide)⟩
+  let yr : Fin 9 := ⟨y % 9, Nat.mod_lt _ (by decide)⟩
+  have hx' : ¬ 3 ∣ xr.1 := by
+    intro h
+    exact hx ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h)
+  have hy' : ¬ 3 ∣ yr.1 := by
+    intro h
+    exact hy ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h)
+  have hxy' : xr.1 ^ 3 % 9 = yr.1 ^ 3 % 9 := by
+    simpa [xr, yr, Nat.pow_mod] using hxy
+  have hf := mod_nine_difference_residual xr yr hx' hy' hxy'
+  constructor
+  · have hmod :
+        x ^ 2 + x * y + y ^ 2 ≡
+          xr.1 ^ 2 + xr.1 * yr.1 + yr.1 ^ 2 [MOD 9] := by
+      simpa [xr, yr, add_assoc] using
+        (((Nat.mod_modEq x 9).symm.pow 2).add
+          ((Nat.mod_modEq x 9).symm.mul (Nat.mod_modEq y 9).symm)).add
+            ((Nat.mod_modEq y 9).symm.pow 2)
+    simpa [Nat.ModEq, hf.1] using hmod
+  · simpa [xr, yr, Nat.ModEq] using hf.2
+
+private theorem three_dvd_sub_of_mod_three_eq
+    {x y : ℕ} (hxy : x % 3 = y % 3) :
+    3 ∣ x - y := by
+  apply Nat.dvd_of_mod_eq_zero
+  exact Nat.sub_mod_eq_zero_of_mod_eq hxy
+
+/-- The positive-definite trace-one norm in coordinates. -/
+theorem eisenstein_norm_coords (r s : ℤ) :
+    norm (eisensteinCoord r s) = r ^ 2 + r * s + s ^ 2 := by
+  exact traceOneNorm_neg_one r s
+
+@[simp] def GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+  ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
+
+/-- GN 3 x u の明示的計算 — ✅ 完成！NEW!
+-/
+lemma GN_three_explicit (x u : ℕ) :
+    GN 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
+  apply Int.subNat_eq_zero_iff.mp
+  -- G 3 x u - (x^2 + 3xu + 3u^2) = 0 を示す
+  unfold GN
+  -- 計算を進める
+  have h1 : Nat.choose 3 1 = 3 := by norm_num
+  have h2 : Nat.choose 3 2 = 3 := by norm_num
+  have h3 : Nat.choose 3 3 = 1 := by norm_num
+  -- Finset.range をシンプルにするため、具体的に展開
+  simp [Finset.range_add_one]
+  ring
+
+/--
+`x = c-b`, `u = b` を代入した d=3 の橋:
+`GN 3 (c-b) b = S0_nat c b`。
+-/
+/-
+NOTE: 将来エラーで引っかかる可能性があるため、`GN 3 (c-b) b` を `S0_nat c b` に置き換えるのは避けるべきである。
+参照先: prime_dvd_S0_via_cosmic_bridge
+
+---
+
+MathlibDemo.lean:530:36
+Tactic state
+1 goal
+c b : ℕ
+hbc : b < c
+⊢ GN 3 (c - b) b = S0_nat c b
+Messages (1)
+MathlibDemo.lean:530:35
+
+unsolved goals
+c b : ℕ
+hbc : b < c
+⊢ ↑c * ↑b * Nat.rawCast 1 + ↑c ^ 2 + ↑b ^ 2 * Nat.rawCast 1 = ↑c * ↑b + ↑c ^ 2 + ↑b ^ 2
+
+All Messages (2)
+MathlibDemo.lean:17:0
+
+DkMath.FLT.docs.StandAlone.FLT3#StandAlone-NC
+
+MathlibDemo.lean:530:35
+
+unsolved goals
+c b : ℕ
+hbc : b < c
+⊢ ↑c * ↑b * Nat.rawCast 1 + ↑c ^ 2 + ↑b ^ 2 * Nat.rawCast 1 = ↑c * ↑b + ↑c ^ 2 + ↑b ^ 2
+---
+-/
+lemma GN_three_sub_eq_S0_nat {c b : ℕ} (hbc : b < c) :
+    GN 3 (c - b) b = S0_nat c b := by
+  rw [GN_three_explicit (c - b) b]
+  unfold S0_nat
+  zify [hbc]
+  ring_nf
+
+/--
+Petal-facing direction of the degree-three GN/S0 bridge.
+
+This reads the Petal detector as the visible degree-three face of `GN`.
+-/
+theorem S0_nat_eq_GN_three_sub {c b : ℕ} (hbc : b < c) :
+    S0_nat c b = GN 3 (c - b) b := by
+  exact (GN_three_sub_eq_S0_nat hbc).symm
+
+/-- `d = 3` では `gcd(x, GN 3 x u)` は `gcd(x, 3)` に等しい。 -/
+theorem gcd_boundary_GN_three_eq_gcd_boundary_three
+    {x u : ℕ} (hcop : Nat.Coprime x u) :
+    Nat.gcd x (GN 3 x u) = Nat.gcd x 3 := by
+  rw [GN_three_explicit]
+  have hstep : Nat.gcd x (x ^ 2 + 3 * x * u + 3 * u ^ 2) = Nat.gcd x (3 * u ^ 2) := by
+    have hx : x ^ 2 + 3 * x * u + 3 * u ^ 2 = 3 * u ^ 2 + (x + 3 * u) * x := by
+      ring
+    rw [hx, Nat.gcd_add_mul_right_right]
+  rw [hstep]
+  have hpow : Nat.Coprime x (u ^ 2) := Nat.Coprime.pow_right 2 hcop
+  rw [Nat.gcd_comm, hpow.symm.gcd_mul_right_cancel, Nat.gcd_comm]
+
+/--
+If `c` and `b` are coprime, then the Petal boundary gap `c - b` is coprime to
+`b`.
+
+This is the standard subtraction form of coprimality used to enter the GN gcd
+API from Petal coordinates.
+-/
+theorem coprime_sub_right_of_coprime
+    {c b : ℕ} (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
+    Nat.Coprime (c - b) b := by
+  exact (Nat.coprime_sub_self_left hbc).2 hcop
+
+/--
+Degree-three Petal gcd formula.
+
+In coprime Petal coordinates, the common divisor between the boundary gap and
+the `S0_nat` detector is exactly the common divisor between the gap and `3`.
+-/
+theorem gcd_sub_S0_nat_eq_gcd_sub_three
+    {c b : ℕ} (hbc : b < c) (hcop : Nat.Coprime c b) :
+    Nat.gcd (c - b) (S0_nat c b) = Nat.gcd (c - b) 3 := by
+  rw [S0_nat_eq_GN_three_sub hbc]
+  exact
+    gcd_boundary_GN_three_eq_gcd_boundary_three
+      (x := c - b) (u := b)
+      (coprime_sub_right_of_coprime hbc.le hcop)
+
+private def packet_of_a
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3)
+    (h3a : 3 ∣ a) (h3b : ¬ 3 ∣ b) (h3c : ¬ 3 ∣ c) :
+    SignedThreeAdicPacket a b c := by
+  have hcop : Nat.Coprime c b := coprime_cb_of_eq hab hEq
+  have hbc : b < c := by
+    have hlt : b ^ 3 < c ^ 3 := by
+      rw [← hEq]
+      exact Nat.lt_add_of_pos_left (pow_pos ha 3)
+    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp hlt
+  have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq hEq
+  have hfact : (c - b) * S0_nat c b = a ^ 3 := by
+    rw [← cube_sub_eq_mul_sub_S0 hbc]
+    exact hsub
+  have hrespos : 0 < S0_nat c b := by
+    unfold S0_nat
+    positivity
+  have hresmod : S0_nat c b % 9 = 3 := by
+    have ha0 : a ^ 3 % 9 = 0 :=
+      (mod_nine_cube_zero_iff_three_dvd).2 h3a
+    have hcube : c ^ 3 % 9 = b ^ 3 % 9 := by
+      have h := congrArg (fun n : ℕ => n % 9) hEq
+      simpa [Nat.add_mod, ha0] using h.symm
+    exact (residual_mod_nine_difference h3c h3b hcube).1
+  have h3gap : 3 ∣ c - b := by
+    have hmod : c % 3 = b % 3 := by
+      have ha0 : a ^ 3 % 3 = 0 := by
+        exact Nat.mod_eq_zero_of_dvd (h3a.trans (dvd_pow_self a (by decide)))
+      have h := congrArg (fun n : ℕ => n % 3) hEq
+      have hcube : c ^ 3 % 3 = b ^ 3 % 3 := by
+        simpa [Nat.add_mod, ha0] using h.symm
+      have hcubes : c % 3 = b % 3 := by
+        have hclt : c % 3 < 3 := Nat.mod_lt _ (by decide)
+        have hblt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+        interval_cases hcv : c % 3 <;> interval_cases hbv : b % 3 <;>
+          simp_all [Nat.pow_mod]
+      exact hcubes
+    exact three_dvd_sub_of_mod_three_eq hmod
+  refine {
+    orientation := .a
+    carrier := c - b
+    residual := S0_nat c b
+    distinguished := a
+    alpha := eisensteinCoord (-c) (-b)
+    carrier_pos := Nat.sub_pos_of_lt hbc
+    residual_pos := hrespos
+    distinguished_pos := ha
+    factorization := hfact
+    alpha_norm := by
+      rw [eisenstein_norm_coords]
+      simp [S0_nat]
+    alpha_signed_gap := by
+      change (- (b : ℤ)) - (- (c : ℤ)) = (c - b : ℕ)
+      rw [Nat.cast_sub hbc.le]
+      ring
+    three_dvd_carrier := h3gap
+    three_dvd_distinguished := h3a
+    residual_mod_nine := hresmod
+    gcd_eq_three := by
+      have hg := gcd_sub_S0_nat_eq_gcd_sub_three hbc hcop
+      rw [hg]
+      apply Nat.dvd_antisymm
+      · exact Nat.gcd_dvd_right (c - b) 3
+      · exact Nat.dvd_gcd h3gap (dvd_refl 3) }
+
+private def packet_of_b
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3)
+    (h3a : ¬ 3 ∣ a) (h3b : 3 ∣ b) (h3c : ¬ 3 ∣ c) :
+    SignedThreeAdicPacket a b c := by
+  have hEq' : b ^ 3 + a ^ 3 = c ^ 3 := by simpa [Nat.add_comm] using hEq
+  have hba : Nat.Coprime b a := hab.symm
+  have p := packet_of_a hb ha hc hba hEq' h3b h3a h3c
+  exact { p with orientation := .b }
+
+private theorem three_dvd_sum_of_mod_three_zero
+    {x y : ℕ} (hxy : (x + y) % 3 = 0) : 3 ∣ x + y :=
+  Nat.dvd_of_mod_eq_zero hxy
+
+private theorem residual_positive_sum {x y : ℕ} (hx : 0 < x) (hy : 0 < y) :
+    0 < signedThreeAdicResidual x y := by
+  have hle : x * y ≤ x ^ 2 + y ^ 2 := by
+    have h : (x : ℤ) * y ≤ (x : ℤ) ^ 2 + (y : ℤ) ^ 2 := by
+      nlinarith [sq_nonneg ((x : ℤ) - y)]
+    exact_mod_cast h
+  unfold signedThreeAdicResidual
+  have hstrict : x * y < x ^ 2 + y ^ 2 := by
+    have h : (x : ℤ) * y < (x : ℤ) ^ 2 + (y : ℤ) ^ 2 := by
+      nlinarith [sq_nonneg ((x : ℤ) - y), mul_pos (show (0 : ℤ) < x by exact_mod_cast hx)
+        (show (0 : ℤ) < y by exact_mod_cast hy)]
+    exact_mod_cast h
+  omega
+
+private theorem mod_nine_sum_residual :
+    ∀ x y : Fin 9,
+      ¬ 3 ∣ x.1 → ¬ 3 ∣ y.1 →
+      (x.1 ^ 3 + y.1 ^ 3) % 9 = 0 →
+      (x.1 ^ 2 + y.1 ^ 2 - x.1 * y.1) % 9 = 3 ∧
+        (x.1 + y.1) % 3 = 0 := by
+  decide +kernel
+
+private theorem residual_mod_nine_sum
+    {x y : ℕ} (hx : ¬ 3 ∣ x) (hy : ¬ 3 ∣ y)
+    (hxy : (x ^ 3 + y ^ 3) % 9 = 0) :
+    signedThreeAdicResidual x y % 9 = 3 ∧ (x + y) % 3 = 0 := by
+  let xr : Fin 9 := ⟨x % 9, Nat.mod_lt _ (by decide)⟩
+  let yr : Fin 9 := ⟨y % 9, Nat.mod_lt _ (by decide)⟩
+  have hx' : ¬ 3 ∣ xr.1 := by
+    intro h
+    exact hx ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h)
+  have hy' : ¬ 3 ∣ yr.1 := by
+    intro h
+    exact hy ((Nat.dvd_mod_iff (by norm_num : 3 ∣ 9)).mp h)
+  have hxy' : (xr.1 ^ 3 + yr.1 ^ 3) % 9 = 0 := by
+    simpa [xr, yr, Nat.add_mod, Nat.pow_mod] using hxy
+  have hf := mod_nine_sum_residual xr yr hx' hy' hxy'
+  constructor
+  · have hab_le : x * y ≤ x ^ 2 + y ^ 2 := by
+      have h : (x : ℤ) * y ≤ (x : ℤ) ^ 2 + (y : ℤ) ^ 2 := by
+        nlinarith [sq_nonneg ((x : ℤ) - y)]
+      exact_mod_cast h
+    have hxy_le : xr.1 * yr.1 ≤ xr.1 ^ 2 + yr.1 ^ 2 := by
+      have h : (xr.1 : ℤ) * yr.1 ≤ (xr.1 : ℤ) ^ 2 + (yr.1 : ℤ) ^ 2 := by
+        nlinarith [sq_nonneg ((xr.1 : ℤ) - yr.1)]
+      exact_mod_cast h
+    have hmod :
+        signedThreeAdicResidual x y ≡
+          xr.1 ^ 2 + yr.1 ^ 2 - xr.1 * yr.1 [MOD 9] := by
+      unfold signedThreeAdicResidual
+      exact (((Nat.mod_modEq x 9).symm.pow 2).add
+        ((Nat.mod_modEq y 9).symm.pow 2)).sub
+          hab_le hxy_le
+          (((Nat.mod_modEq x 9).symm.mul (Nat.mod_modEq y 9).symm))
+    simpa [Nat.ModEq, hf.1] using hmod
+  · have hmod : x + y ≡ xr.1 + yr.1 [MOD 3] := by
+      simpa [xr, yr] using
+        ((Nat.mod_modEq x 9).symm.of_dvd (by norm_num : 3 ∣ 9)).add
+          ((Nat.mod_modEq y 9).symm.of_dvd (by norm_num : 3 ∣ 9))
+    have hzero : (xr.1 + yr.1) % 3 = 0 := hf.2
+    simpa [Nat.ModEq, hzero] using hmod
+
+private def packet_of_c
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3)
+    (h3a : ¬ 3 ∣ a) (h3b : ¬ 3 ∣ b) (h3c : 3 ∣ c) :
+    SignedThreeAdicPacket a b c := by
+  have h3c3 : 3 ∣ c ^ 3 := h3c.trans (dvd_pow_self c (by decide))
+  have h3sum : 3 ∣ a ^ 3 + b ^ 3 := by simpa [hEq] using h3c3
+  have h3carrier : 3 ∣ a + b := by
+    have hmod : (a ^ 3 + b ^ 3) % 3 = 0 := Nat.mod_eq_zero_of_dvd h3sum
+    have hpow_a : a ^ 3 % 3 = a % 3 := by
+      rw [Nat.pow_mod]
+      have halt : a % 3 < 3 := Nat.mod_lt _ (by decide)
+      interval_cases h : a % 3 <;> simp
+    have hpow_b : b ^ 3 % 3 = b % 3 := by
+      rw [Nat.pow_mod]
+      have hblt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+      interval_cases h : b % 3 <;> simp
+    apply three_dvd_sum_of_mod_three_zero
+    simpa [Nat.add_mod, hpow_a, hpow_b] using hmod
+  have hrespos : 0 < signedThreeAdicResidual a b := residual_positive_sum ha hb
+  have hresmod : signedThreeAdicResidual a b % 9 = 3 := by
+    have hmod : (a ^ 3 + b ^ 3) % 9 = 0 := by
+      have h := congrArg (fun n : ℕ => n % 9) hEq
+      have hc0 : c ^ 3 % 9 = 0 := by
+        exact (mod_nine_cube_zero_iff_three_dvd).2 h3c
+      simpa [Nat.add_mod, hc0] using h
+    exact (residual_mod_nine_sum h3a h3b hmod).1
+  have hfact : (a + b) * signedThreeAdicResidual a b = c ^ 3 := by
+    have hle : a * b ≤ a ^ 2 + b ^ 2 := by
+      have h : (a : ℤ) * b ≤ (a : ℤ) ^ 2 + (b : ℤ) ^ 2 := by
+        nlinarith [sq_nonneg ((a : ℤ) - b)]
+      exact_mod_cast h
+    have hInt : (((a + b) * signedThreeAdicResidual a b : ℕ) : ℤ) =
+        (a ^ 3 + b ^ 3 : ℕ) := by
+      unfold signedThreeAdicResidual
+      rw [Nat.cast_mul, Nat.cast_add, Nat.cast_sub hle]
+      push_cast
+      ring
+    have hNat : (a + b) * signedThreeAdicResidual a b = a ^ 3 + b ^ 3 := by
+      exact_mod_cast hInt
+    rw [hNat, hEq]
+  refine {
+    orientation := .c
+    carrier := a + b
+    residual := signedThreeAdicResidual a b
+    distinguished := c
+    alpha := eisensteinCoord (-a) b
+    carrier_pos := by omega
+    residual_pos := hrespos
+    distinguished_pos := hc
+    factorization := hfact
+    alpha_norm := by
+      rw [eisenstein_norm_coords]
+      unfold signedThreeAdicResidual
+      rw [Nat.cast_sub (by
+        have h : (a : ℤ) * b ≤ (a : ℤ) ^ 2 + (b : ℤ) ^ 2 := by
+          nlinarith [sq_nonneg ((a : ℤ) - b)]
+        exact_mod_cast h)]
+      push_cast
+      ring
+    alpha_signed_gap := by
+      change (b : ℤ) - (- (a : ℤ)) = (a + b : ℕ)
+      push_cast
+      ring
+    three_dvd_carrier := h3carrier
+    three_dvd_distinguished := h3c
+    residual_mod_nine := hresmod
+    gcd_eq_three := by
+      let g := Nat.gcd (a + b) (signedThreeAdicResidual a b)
+      have hsum_a : Nat.Coprime (a + b) a := by
+        simpa [Nat.add_comm] using (Nat.coprime_add_self_left).2 hab.symm
+      have hsum_b : Nat.Coprime (a + b) b :=
+        (Nat.coprime_add_self_left).2 hab
+      have hsum_ab : Nat.Coprime (a + b) (a * b) :=
+        Nat.Coprime.mul_right hsum_a hsum_b
+      have hg_car : g ∣ a + b := by
+        exact Nat.gcd_dvd_left _ _
+      have hg_res : g ∣ signedThreeAdicResidual a b := by
+        exact Nat.gcd_dvd_right _ _
+      have hle : a * b ≤ a ^ 2 + b ^ 2 := by
+        have h : (a : ℤ) * b ≤ (a : ℤ) ^ 2 + (b : ℤ) ^ 2 := by
+          nlinarith [sq_nonneg ((a : ℤ) - b)]
+        exact_mod_cast h
+      have hidentity : (a + b) ^ 2 =
+          signedThreeAdicResidual a b + 3 * (a * b) := by
+        calc
+          (a + b) ^ 2 = (a ^ 2 + b ^ 2) + 2 * (a * b) := by ring
+          _ = (a ^ 2 + b ^ 2 - a * b) + a * b + 2 * (a * b) := by
+            rw [Nat.sub_add_cancel hle]
+          _ = signedThreeAdicResidual a b + 3 * (a * b) := by
+            unfold signedThreeAdicResidual
+            ring
+      have hgsq : g ∣ (a + b) ^ 2 := hg_car.trans (dvd_pow_self _ (by decide))
+      have hg3ab : g ∣ 3 * (a * b) := by
+        apply (Nat.dvd_add_iff_left hg_res).mpr
+        rw [add_comm]
+        rw [← hidentity]
+        exact hgsq
+      have hgg3 : g ∣ 3 := by
+        exact hsum_ab.of_dvd_left hg_car |>.dvd_of_dvd_mul_right hg3ab
+      have h3res : 3 ∣ signedThreeAdicResidual a b := by
+        refine ⟨3 * (signedThreeAdicResidual a b / 9) + 1, ?_⟩
+        have hs := Nat.mod_add_div (signedThreeAdicResidual a b) 9
+        omega
+      apply Nat.dvd_antisymm
+      · exact hgg3
+      · exact Nat.dvd_gcd h3carrier h3res }
+
+/-- Existence of a routed packet without discarding its provenance. -/
+private theorem exists_signedThreeAdicOriginPacket_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nonempty (SignedThreeAdicOriginPacket a b c) := by
+  rcases exact_one_three_dvd_of_fermat_cube hEq hab with h | h | h
+  · exact ⟨⟨packet_of_a ha hb hc hab hEq h.1 h.2.1 h.2.2, Or.inl rfl⟩⟩
+  · exact ⟨⟨packet_of_b ha hb hc hab hEq h.1 h.2.1 h.2.2,
+      Or.inr (Or.inl rfl)⟩⟩
+  · exact ⟨⟨packet_of_c ha hb hc hab hEq h.1 h.2.1 h.2.2,
+      Or.inr (Or.inr rfl)⟩⟩
+
+/-- Construct a routed packet without discarding its original-coordinate provenance. -/
+noncomputable def signedThreeAdicOriginPacket_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    SignedThreeAdicOriginPacket a b c :=
+  Classical.choice
+    (exists_signedThreeAdicOriginPacket_of_primitive_solution ha hb hc hab hEq)
+
+private theorem three_dvd_of_mod_nine_eq_three
+    {n : ℕ} (h : n % 9 = 3) : 3 ∣ n := by
+  refine ⟨3 * (n / 9) + 1, ?_⟩
+  have hs := Nat.mod_add_div n 9
+  omega
+
+private theorem cube_factor_split
+    {g n x : ℕ} (hcop : Nat.Coprime g n)
+    (hbody : g * n = x ^ 3) :
+    (∃ A : ℕ, g = A ^ 3) ∧ (∃ B : ℕ, n = B ^ 3) := by
+  have hunit : IsUnit (GCDMonoid.gcd g n) := by
+    change IsUnit (Nat.gcd g n)
+    rw [isUnit_iff_dvd_one]
+    simpa [Nat.Coprime] using hcop
+  constructor
+  · exact exists_eq_pow_of_mul_eq_pow hunit hbody
+  · have hunit' : IsUnit (GCDMonoid.gcd n g) := by
+      simpa [gcd_comm] using hunit
+    exact exists_eq_pow_of_mul_eq_pow hunit' (by simpa [mul_comm] using hbody)
+
+private theorem nonempty_signedThreeAdicPowerSplit_of_packet
+    {a b c : ℕ} (p : SignedThreeAdicPacket a b c) :
+    Nonempty {s : SignedThreeAdicPowerSplit a b c // s.packet = p} := by
+  let C := p.carrier / 3
+  let R := p.residual / 3
+  let D := p.distinguished / 3
+  have h3res : 3 ∣ p.residual :=
+    three_dvd_of_mod_nine_eq_three p.residual_mod_nine
+  have hc : p.carrier = 3 * C :=
+    (Nat.mul_div_cancel' p.three_dvd_carrier).symm
+  have hr : p.residual = 3 * R :=
+    (Nat.mul_div_cancel' h3res).symm
+  have hd : p.distinguished = 3 * D :=
+    (Nat.mul_div_cancel' p.three_dvd_distinguished).symm
+  have hcopCR : Nat.Coprime C R := by
+    have h := Nat.coprime_div_gcd_div_gcd
+      (show 0 < Nat.gcd p.carrier p.residual by
+        rw [p.gcd_eq_three]
+        decide)
+    simpa [C, R, p.gcd_eq_three] using h
+  have h3R : ¬ 3 ∣ R := by
+    intro h
+    have h9 : 9 ∣ p.residual := by
+      rcases h with ⟨k, hk⟩
+      refine ⟨k, ?_⟩
+      rw [hr, hk]
+      ring
+    have hz := Nat.mod_eq_zero_of_dvd h9
+    rw [p.residual_mod_nine] at hz
+    omega
+  have hnormalized : C * R = 3 * D ^ 3 := by
+    have hraw : (3 * C) * (3 * R) = (3 * D) ^ 3 := by
+      simpa [hc, hr, hd] using p.factorization
+    nlinarith
+  have h3C : 3 ∣ C := by
+    have h3CR : 3 ∣ C * R := by
+      rw [hnormalized]
+      exact ⟨D ^ 3, by ring⟩
+    rcases Nat.prime_three.dvd_mul.mp h3CR with h | h
+    · exact h
+    · exact (h3R h).elim
+  let A := C / 3
+  have hC : C = 3 * A :=
+    (Nat.mul_div_cancel' h3C).symm
+  have hAR : A * R = D ^ 3 := by
+    have hcancel : 3 * (A * R) = 3 * D ^ 3 := by
+      calc
+        3 * (A * R) = C * R := by rw [hC]; ring
+        _ = 3 * D ^ 3 := hnormalized
+    exact Nat.eq_of_mul_eq_mul_left (by decide : 0 < 3) hcancel
+  have hcopAR : Nat.Coprime A R := by
+    apply Nat.Coprime.of_dvd_left (a₁ := A) (a₂ := C)
+    · exact ⟨3, by rw [hC]; ring⟩
+    · exact hcopCR
+  rcases cube_factor_split hcopAR hAR with
+    ⟨⟨A0, hA0⟩, ⟨B, hB⟩⟩
+  have hcarrier : p.carrier = 3 ^ 2 * A0 ^ 3 := by
+    calc
+      p.carrier = 3 * C := hc
+      _ = 3 * (3 * A) := by rw [hC]
+      _ = 3 ^ 2 * A0 ^ 3 := by rw [hA0]; ring
+  have hresidual : p.residual = 3 * B ^ 3 := by
+    rw [hr, hB]
+  have hdistinguished : p.distinguished = 3 * A0 * B := by
+    apply Nat.pow_left_injective (by decide : 3 ≠ 0)
+    change p.distinguished ^ 3 = (3 * A0 * B) ^ 3
+    calc
+      p.distinguished ^ 3 = p.carrier * p.residual := p.factorization.symm
+      _ = (3 * A0 * B) ^ 3 := by rw [hcarrier, hresidual]; ring
+  have hApos : 0 < A0 := by
+    by_contra h
+    have hzero : A0 = 0 := by omega
+    rw [hzero] at hcarrier
+    norm_num at hcarrier
+    exact (Nat.ne_of_gt p.carrier_pos) hcarrier
+  have hBpos : 0 < B := by
+    by_contra h
+    have hzero : B = 0 := by omega
+    rw [hzero] at hresidual
+    norm_num at hresidual
+    exact (Nat.ne_of_gt p.residual_pos) hresidual
+  have hpowcop : Nat.Coprime (A0 ^ 3) (B ^ 3) := by
+    simpa [hA0, hB] using hcopAR
+  have hcopAB : Nat.Coprime A0 B := by
+    apply (Nat.coprime_pow_right_iff (by decide : 0 < 3) A0 B).mp
+    exact (Nat.coprime_pow_left_iff (by decide : 0 < 3) A0 (B ^ 3)).mp hpowcop
+  have h3B : ¬ 3 ∣ B := by
+    intro h
+    have h9 : 9 ∣ p.residual := by
+      rcases h with ⟨k, hk⟩
+      refine ⟨9 * k ^ 3, ?_⟩
+      rw [hresidual, hk]
+      ring
+    have hz := Nat.mod_eq_zero_of_dvd h9
+    rw [p.residual_mod_nine] at hz
+    omega
+  exact ⟨⟨{
+    packet := p
+    A := A0
+    B := B
+    A_pos := hApos
+    B_pos := hBpos
+    coprime_A_B := hcopAB
+    carrier_eq := hcarrier
+    residual_eq := hresidual
+    distinguished_eq := hdistinguished
+    three_not_dvd_B := h3B }, rfl⟩⟩
+
+/-- A power split whose packet field is definitionally routed back to `p`. -/
+noncomputable def signedThreeAdicPowerSplit_with_packet
+    {a b c : ℕ} (p : SignedThreeAdicPacket a b c) :
+    {s : SignedThreeAdicPowerSplit a b c // s.packet = p} :=
+  Classical.choice (nonempty_signedThreeAdicPowerSplit_of_packet p)
+
+/-- The explicit ramifier-free coordinate chosen from a power split. -/
+def eisensteinRamifierStrippedBeta
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) : EisensteinInt :=
+  eisensteinCoord
+    (s.packet.alpha.fst + 3 * (s.A : ℤ) ^ 3)
+    (3 * (s.A : ℤ) ^ 3)
+
+private theorem signed_gap_eq_nine_cube
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) :
+    s.packet.alpha.snd - s.packet.alpha.fst =
+      9 * (s.A : ℤ) ^ 3 := by
+  rw [s.packet.alpha_signed_gap, s.carrier_eq]
+  push_cast
+  ring
+
+/-- Multiplication by the ramifier in trace-one coordinates. -/
+theorem eisenstein_ramifier_mul_coord (u v : ℤ) :
+    eisensteinRamifier * eisensteinCoord u v =
+      eisensteinCoord (u - v) (u + 2 * v) := by
+  change (⟨1, 1⟩ : TraceOneInt (-1)) * ⟨u, v⟩ =
+    (⟨u - v, u + 2 * v⟩ : TraceOneInt (-1))
+  ext <;> norm_num [DkMath.NumberTheory.TraceOneQuadratic.mul] <;> ring
+
+private theorem alpha_eq_ramifier_mul_stripped_beta
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) :
+    s.packet.alpha = eisensteinRamifier * eisensteinRamifierStrippedBeta s := by
+  have hgap := signed_gap_eq_nine_cube s
+  have hcoords :
+      s.packet.alpha = eisensteinCoord s.packet.alpha.fst s.packet.alpha.snd := by
+    rfl
+  rw [eisensteinRamifierStrippedBeta, eisenstein_ramifier_mul_coord]
+  rw [hcoords]
+  ext <;> simp only [eisensteinCoord]
+  · ring
+  · linarith
+
+/-- Norm multiplicativity on the concrete coordinate ring. -/
+theorem eisenstein_norm_mul (x y : EisensteinInt) :
+    norm (x * y) = norm x * norm y := by
+  exact traceOne_norm_mul x y
+
+/-- The ramifier candidate has norm `3`. -/
+theorem eisenstein_ramifier_norm : norm eisensteinRamifier = 3 := by
+  change norm (eisensteinCoord 1 1) = 3
+  rw [eisenstein_norm_coords]
+  norm_num
+
+private theorem stripped_beta_norm
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) :
+    norm (eisensteinRamifierStrippedBeta s) = (s.B : ℤ) ^ 3 := by
+  have hαβ :
+      s.packet.alpha =
+        eisensteinRamifier * eisensteinRamifierStrippedBeta s :=
+    alpha_eq_ramifier_mul_stripped_beta s
+  have hnorm :
+      norm s.packet.alpha =
+        norm eisensteinRamifier *
+          norm (eisensteinRamifierStrippedBeta s) := by
+    rw [hαβ, eisenstein_norm_mul]
+  rw [s.packet.alpha_norm, eisenstein_ramifier_norm, s.residual_eq] at hnorm
+  push_cast at hnorm
+  nlinarith
+
+/-- Construct the stripped packet from an exact signed three-adic split. -/
+def eisensteinRamifierStrippedPacket_of_powerSplit
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) :
+    EisensteinRamifierStrippedPacket a b c := {
+  powerSplit := s
+  beta := eisensteinRamifierStrippedBeta s
+  alpha_eq := alpha_eq_ramifier_mul_stripped_beta s
+  beta_norm := stripped_beta_norm s
+  beta_snd := rfl }
+
+/-- Norm carries ordinary Eisenstein divisibility to integer divisibility. -/
+theorem eisenstein_norm_dvd_of_dvd {d x : EisensteinInt} (h : d ∣ x) :
+    norm d ∣ norm x := by
+  rcases h with ⟨k, hk⟩
+  rw [hk, eisenstein_norm_mul]
+  exact dvd_mul_right _ _
+
+/-- Subtracting the conjugate isolates the second coordinate. -/
+theorem eisenstein_sub_conj_coords (x : EisensteinInt) :
+    x - conj x = eisensteinCoord (-x.snd) (2 * x.snd) := by
+  rcases x with ⟨r, s⟩
+  apply traceOne_ext
+  · simp [eisensteinCoord, conj]
+  · simp [eisensteinCoord, conj]
+    ring
+
+/-- The norm of the conjugate difference is three times the square coordinate. -/
+theorem eisenstein_norm_sub_conj (x : EisensteinInt) :
+    norm (x - conj x) = 3 * x.snd ^ 2 := by
+  rw [eisenstein_sub_conj_coords, eisenstein_norm_coords]
+  ring
+
+/-- For a stripped packet, the conjugate-difference norm is `27*A^6`. -/
+theorem EisensteinRamifierStrippedPacket.norm_sub_conj_eq
+    {a b c : ℕ} (p : EisensteinRamifierStrippedPacket a b c) :
+    norm (p.beta - conj p.beta) =
+      27 * (p.powerSplit.A : ℤ) ^ 6 := by
+  rw [eisenstein_norm_sub_conj, p.beta_snd]
+  ring
+
+/-- The two integer masses supplied by a power split are coprime. -/
+theorem powerSplit_coprime_B3_threeCube_A6
+    {a b c : ℕ} (s : SignedThreeAdicPowerSplit a b c) :
+    Nat.Coprime (s.B ^ 3) (3 ^ 3 * s.A ^ 6) := by
+  have hB3 : Nat.Coprime s.B 3 := by
+    exact (Nat.prime_three.coprime_iff_not_dvd.mpr s.three_not_dvd_B).symm
+  have hB3_three : Nat.Coprime (s.B ^ 3) (3 ^ 3) := by
+    exact (Nat.Coprime.pow_left 3 hB3).pow_right 3
+  have hBA : Nat.Coprime s.B s.A := s.coprime_A_B.symm
+  have hB3_A6 : Nat.Coprime (s.B ^ 3) (s.A ^ 6) := by
+    exact (Nat.Coprime.pow_left 3 hBA).pow_right 6
+  exact hB3_three.mul_right hB3_A6
+
+/-- A norm-one Eisenstein element is a ring unit, with conjugate as inverse. -/
+theorem eisenstein_isUnit_of_norm_eq_one {d : EisensteinInt}
+    (h : norm d = 1) : IsUnit d := by
+  rw [isUnit_iff_dvd_one]
+  refine ⟨conj d, ?_⟩
+  change (⟨1, 0⟩ : EisensteinInt) = d * conj d
+  simpa [h, ofInt] using (traceOne_mul_conj d).symm
+
+/-- The norm of every trace-one Eisenstein integer is nonnegative. -/
+theorem eisenstein_norm_nonneg (d : EisensteinInt) : 0 ≤ norm d := by
+  rcases d with ⟨r, s⟩
+  change 0 ≤ norm (eisensteinCoord r s)
+  rw [eisenstein_norm_coords]
+  nlinarith [sq_nonneg r, sq_nonneg (r + s), sq_nonneg s]
+
+private theorem norm_eq_one_of_natAbs_eq_one
+    {d : EisensteinInt} (h : (norm d).natAbs = 1) : norm d = 1 := by
+  have hnonneg : 0 ≤ norm d := eisenstein_norm_nonneg d
+  have hcast : ((norm d).natAbs : ℤ) = norm d :=
+    Int.natAbs_of_nonneg hnonneg
+  rw [← hcast]
+  exact_mod_cast h
+
+/-! The standalone artifact includes the Euclidean witness needed by the
+    generic coprime-power extraction below. -/
+
+/- The positive-definite norm has no nonzero zeroes. -/
+theorem eisenstein_norm_eq_zero_iff (x : EisensteinInt) :
+    norm x = 0 ↔ x = 0 := by
+  rcases x with ⟨r, s⟩
+  change norm (eisensteinCoord r s) = 0 ↔ (eisensteinCoord r s : EisensteinInt) = 0
+  rw [eisenstein_norm_coords]
+  constructor
+  · intro h
+    have hsq : (2 * r + s) ^ 2 + 3 * s ^ 2 = 0 := by
+      nlinarith
+    have hs : s = 0 := by
+      nlinarith [sq_nonneg (2 * r + s), sq_nonneg s]
+    subst s
+    have hr : r = 0 := by
+      nlinarith [sq_nonneg r]
+    subst r
+    rfl
+  · intro h
+    have hr := congrArg TraceOneInt.fst h
+    have hs := congrArg TraceOneInt.snd h
+    have hr' : r = 0 := by simpa [eisensteinCoord] using hr
+    have hs' : s = 0 := by simpa [eisensteinCoord] using hs
+    simp [hr', hs']
+
+theorem traceOneNegOne_eq_zero_or_eq_zero_of_mul_eq_zero
+    {x y : TraceOneInt (-1)} (h : x * y = 0) : x = 0 ∨ y = 0 := by
+  have hnorm : norm x * norm y = 0 := by
+    rw [← traceOne_norm_mul, h]
+    rfl
+  rcases mul_eq_zero.mp hnorm with hx | hy
+  · exact Or.inl ((eisenstein_norm_eq_zero_iff x).mp hx)
+  · exact Or.inr ((eisenstein_norm_eq_zero_iff y).mp hy)
+
+instance traceOneNegOneNoZeroDivisors : NoZeroDivisors (TraceOneInt (-1)) where
+  eq_zero_or_eq_zero_of_mul_eq_zero := traceOneNegOne_eq_zero_or_eq_zero_of_mul_eq_zero
+
+instance traceOneNegOneNontrivial : Nontrivial (TraceOneInt (-1)) := by
+  refine ⟨⟨0, 1, ?_⟩⟩
+  intro h
+  have hf := congrArg TraceOneInt.fst h
+  norm_num at hf
+
+instance traceOneNegOneIsDomain : IsDomain (TraceOneInt (-1)) where
+
+abbrev EisensteinRat := ℚ × ℚ
+
+def eisensteinRatNorm (x : EisensteinRat) : ℚ :=
+  x.1 ^ 2 + x.1 * x.2 + x.2 ^ 2
+
+theorem eisensteinRatNorm_completed_square (u v : ℚ) :
+    eisensteinRatNorm (u, v) =
+      (u + v / 2) ^ 2 + (3 / 4 : ℚ) * v ^ 2 := by
+  simp [eisensteinRatNorm]
+  ring
+
+theorem eisensteinRatNorm_le_seven_sixteen
+    {u v : ℚ} (hv : |v| ≤ (1 : ℚ) / 2)
+    (hu : |u + v / 2| ≤ (1 : ℚ) / 2) :
+    eisensteinRatNorm (u, v) ≤ (7 : ℚ) / 16 := by
+  have hv' := abs_le.mp hv
+  have hu' := abs_le.mp hu
+  rw [eisensteinRatNorm_completed_square]
+  nlinarith [sq_nonneg v, sq_nonneg (u + v / 2)]
+
+theorem eisensteinRatNorm_lt_one
+    {u v : ℚ} (hv : |v| ≤ (1 : ℚ) / 2)
+    (hu : |u + v / 2| ≤ (1 : ℚ) / 2) :
+    eisensteinRatNorm (u, v) < 1 := by
+  have h := eisensteinRatNorm_le_seven_sixteen hv hu
+  norm_num at h ⊢
+  linarith
+
+def eisensteinQuotientNumerator
+    (x y : EisensteinInt) : EisensteinInt := x * conj y
+
+theorem eisensteinQuotientNumerator_fst (x y : EisensteinInt) :
+    (eisensteinQuotientNumerator x y).fst =
+      x.fst * (y.fst + y.snd) + x.snd * y.snd := by
+  simp [eisensteinQuotientNumerator, conj]
+
+theorem eisensteinQuotientNumerator_snd (x y : EisensteinInt) :
+    (eisensteinQuotientNumerator x y).snd =
+      x.snd * y.fst - x.fst * y.snd := by
+  simp [eisensteinQuotientNumerator, conj]
+  ring
+
+def eisensteinQuotientCoords (x y : EisensteinInt) : EisensteinRat :=
+  (((eisensteinQuotientNumerator x y).fst : ℚ) / norm y,
+    ((eisensteinQuotientNumerator x y).snd : ℚ) / norm y)
+
+def eisensteinRoundedSnd (x y : EisensteinInt) : ℤ :=
+  round (eisensteinQuotientCoords x y).2
+
+def eisensteinRoundedFst (x y : EisensteinInt) : ℤ :=
+  let B := (eisensteinQuotientCoords x y).2
+  let n := eisensteinRoundedSnd x y
+  round ((eisensteinQuotientCoords x y).1 + (B - n) / 2)
+
+def eisensteinQuotient (x y : EisensteinInt) : EisensteinInt :=
+  ⟨eisensteinRoundedFst x y, eisensteinRoundedSnd x y⟩
+
+def eisensteinRemainder (x y : EisensteinInt) : EisensteinInt :=
+  x - eisensteinQuotient x y * y
+
+theorem eisensteinQuotient_zero (x : EisensteinInt) :
+    eisensteinQuotient x 0 = 0 := by
+  ext <;> simp [eisensteinQuotient, eisensteinRoundedFst,
+    eisensteinRoundedSnd, eisensteinQuotientCoords,
+    eisensteinQuotientNumerator, conj,
+    DkMath.NumberTheory.TraceOneQuadratic.norm]
+
+theorem eisenstein_quotient_mul_add_remainder
+    (x y : EisensteinInt) :
+    y * eisensteinQuotient x y + eisensteinRemainder x y = x := by
+  simp [eisensteinRemainder]
+  ring
+
+def eisensteinEuclideanSize (x : EisensteinInt) : ℕ :=
+  Int.natAbs (norm x)
+
+theorem eisensteinEuclideanSize_pos_of_ne_zero
+    {x : EisensteinInt} (hx : x ≠ 0) :
+    0 < eisensteinEuclideanSize x := by
+  rw [eisensteinEuclideanSize, Int.natAbs_pos]
+  exact fun hn => hx ((eisenstein_norm_eq_zero_iff x).mp hn)
+
+theorem eisensteinEuclideanSize_mul (x y : EisensteinInt) :
+    eisensteinEuclideanSize (x * y) =
+      eisensteinEuclideanSize x * eisensteinEuclideanSize y := by
+  change (norm (x * y)).natAbs = (norm x).natAbs * (norm y).natAbs
+  rw [traceOne_norm_mul, Int.natAbs_mul]
+
+private theorem eisensteinRemainder_norm_rat_identity
+    (x y : EisensteinInt) (hy : y ≠ 0) :
+    (norm (eisensteinRemainder x y) : ℚ) =
+      (norm y : ℚ) *
+        eisensteinRatNorm
+          ((eisensteinQuotientCoords x y).1 -
+              (eisensteinQuotient x y).fst,
+           (eisensteinQuotientCoords x y).2 -
+              (eisensteinQuotient x y).snd) := by
+  have hn : (norm y : ℚ) ≠ 0 := by
+    exact_mod_cast fun h => hy ((eisenstein_norm_eq_zero_iff y).mp h)
+  have hn' : (y.fst : ℚ) ^ 2 + y.fst * y.snd + y.snd ^ 2 ≠ 0 := by
+    simpa [DkMath.NumberTheory.TraceOneQuadratic.norm] using hn
+  let A : ℚ := (eisensteinQuotientCoords x y).1
+  let B : ℚ := (eisensteinQuotientCoords x y).2
+  let m : ℤ := (eisensteinQuotient x y).fst
+  let n : ℤ := (eisensteinQuotient x y).snd
+  have hx1 : (x.fst : ℚ) = y.fst * A - y.snd * B := by
+    dsimp [A, B, eisensteinQuotientCoords]
+    rw [eisensteinQuotientNumerator_fst, eisensteinQuotientNumerator_snd]
+    field_simp [hn']
+    simp [DkMath.NumberTheory.TraceOneQuadratic.norm]
+    ring
+  have hx2 : (x.snd : ℚ) = y.snd * A + y.fst * B + y.snd * B := by
+    dsimp [A, B, eisensteinQuotientCoords]
+    rw [eisensteinQuotientNumerator_fst, eisensteinQuotientNumerator_snd]
+    field_simp [hn']
+    simp [DkMath.NumberTheory.TraceOneQuadratic.norm]
+    ring
+  have hr1 : ((eisensteinRemainder x y).fst : ℚ) =
+      y.fst * (A - m) - y.snd * (B - n) := by
+    simp only [eisensteinRemainder, fst_sub, fst_mul,
+      Int.cast_sub, Int.cast_add, Int.cast_mul, m, n]
+    rw [hx1]
+    ring
+  have hr2 : ((eisensteinRemainder x y).snd : ℚ) =
+      y.snd * (A - m) + y.fst * (B - n) + y.snd * (B - n) := by
+    simp only [eisensteinRemainder, snd_sub, snd_mul,
+      Int.cast_sub, Int.cast_add, Int.cast_mul, m, n]
+    rw [hx2]
+    ring
+  dsimp only [DkMath.NumberTheory.TraceOneQuadratic.norm,
+    eisensteinRatNorm]
+  push_cast
+  change _ = _ * ((A - (m : ℚ)) ^ 2 +
+    (A - (m : ℚ)) * (B - (n : ℚ)) + (B - (n : ℚ)) ^ 2)
+  rw [hr1, hr2]
+  ring
+
+theorem eisensteinRoundedSnd_error_bound (x y : EisensteinInt) :
+    |(eisensteinQuotientCoords x y).2 - eisensteinRoundedSnd x y| ≤
+      (1 : ℚ) / 2 := by
+  exact abs_sub_round (eisensteinQuotientCoords x y).2
+
+theorem eisensteinRoundedFst_skew_error_bound (x y : EisensteinInt) :
+    |((eisensteinQuotientCoords x y).1 - eisensteinRoundedFst x y) +
+      ((eisensteinQuotientCoords x y).2 - eisensteinRoundedSnd x y) / 2| ≤
+        (1 : ℚ) / 2 := by
+  let A := (eisensteinQuotientCoords x y).1
+  let B := (eisensteinQuotientCoords x y).2
+  let n := eisensteinRoundedSnd x y
+  have h := abs_sub_round (A + (B - n) / 2)
+  dsimp [eisensteinRoundedFst, A, B, n] at h ⊢
+  convert h using 1
+  all_goals first | rfl | ring_nf
+
+theorem eisenstein_remainder_size_lt
+    (x : EisensteinInt) {y : EisensteinInt} (hy : y ≠ 0) :
+    eisensteinEuclideanSize (eisensteinRemainder x y) <
+      eisensteinEuclideanSize y := by
+  let A := (eisensteinQuotientCoords x y).1
+  let B := (eisensteinQuotientCoords x y).2
+  let m := eisensteinRoundedFst x y
+  let n := eisensteinRoundedSnd x y
+  have hv : |B - n| ≤ (1 : ℚ) / 2 :=
+    eisensteinRoundedSnd_error_bound x y
+  have hu : |(A - m) + (B - n) / 2| ≤ (1 : ℚ) / 2 :=
+    eisensteinRoundedFst_skew_error_bound x y
+  have hcell : eisensteinRatNorm (A - m, B - n) < 1 :=
+    eisensteinRatNorm_lt_one hv hu
+  have hnorm_pos : 0 < norm y := by
+    have hnonneg : 0 ≤ norm y := eisenstein_norm_nonneg y
+    have hne : norm y ≠ 0 := by
+      intro h
+      exact hy ((eisenstein_norm_eq_zero_iff y).mp h)
+    omega
+  have hnpos : 0 < (norm y : ℚ) := by exact_mod_cast hnorm_pos
+  have hid := eisensteinRemainder_norm_rat_identity x y hy
+  have hrat : (norm (eisensteinRemainder x y) : ℚ) < (norm y : ℚ) := by
+    rw [hid]
+    have hmul := mul_lt_mul_of_pos_left hcell hnpos
+    simpa [A, B, m, n, eisensteinQuotient] using hmul
+  have hInt : norm (eisensteinRemainder x y) < norm y := by
+    exact_mod_cast hrat
+  change (norm (eisensteinRemainder x y)).natAbs < (norm y).natAbs
+  rw [← Int.ofNat_lt]
+  simpa only [Int.natAbs_of_nonneg (eisenstein_norm_nonneg _),
+    Int.natAbs_of_nonneg (eisenstein_norm_nonneg _)] using hInt
+
+noncomputable instance traceOneNegOneEuclideanDomain :
+    EuclideanDomain (TraceOneInt (-1)) where
+  quotient := eisensteinQuotient
+  quotient_zero := eisensteinQuotient_zero
+  remainder := eisensteinRemainder
+  quotient_mul_add_remainder_eq := eisenstein_quotient_mul_add_remainder
+  r := fun a b => eisensteinEuclideanSize a < eisensteinEuclideanSize b
+  r_wellFounded := (measure eisensteinEuclideanSize).wf
+  remainder_lt := eisenstein_remainder_size_lt
+  mul_left_not_lt := by
+    intro a b hb
+    apply not_lt_of_ge
+    rw [eisensteinEuclideanSize_mul]
+    have hbSize : 1 ≤ eisensteinEuclideanSize b :=
+      eisensteinEuclideanSize_pos_of_ne_zero hb
+    exact Nat.le_mul_of_pos_right _ hbSize
+
+/-- Every common divisor of a stripped beta and its conjugate is a unit. -/
+theorem beta_relPrime_conj
+    {a b c : ℕ} (p : EisensteinRamifierStrippedPacket a b c) :
+    EisensteinRelPrime p.beta (conj p.beta) := by
+  intro d hdbeta hdconj
+  have hddiff : d ∣ p.beta - conj p.beta := dvd_sub hdbeta hdconj
+  have hnormBeta : norm d ∣ norm p.beta :=
+    eisenstein_norm_dvd_of_dvd hdbeta
+  have hnormDiff : norm d ∣ norm (p.beta - conj p.beta) :=
+    eisenstein_norm_dvd_of_dvd hddiff
+  have hdB : (norm d).natAbs ∣ p.powerSplit.B ^ 3 := by
+    apply Int.dvd_natCast.mp
+    simpa [p.beta_norm] using hnormBeta
+  have hdA : (norm d).natAbs ∣ 27 * p.powerSplit.A ^ 6 := by
+    apply Int.dvd_natCast.mp
+    simpa [p.norm_sub_conj_eq] using hnormDiff
+  have hcop := powerSplit_coprime_B3_threeCube_A6 p.powerSplit
+  have hone : (norm d).natAbs = 1 := by
+    exact Nat.eq_one_of_dvd_coprimes hcop hdB hdA
+  exact eisenstein_isUnit_of_norm_eq_one (norm_eq_one_of_natAbs_eq_one hone)
+
+/-- Construct the conjugate-coprime packet from a stripped packet. -/
+def eisensteinConjugateCoprimePacket_of_stripped
+    {a b c : ℕ} (p : EisensteinRamifierStrippedPacket a b c) :
+    EisensteinConjugateCoprimePacket a b c :=
+  ⟨p, beta_relPrime_conj p⟩
+
+noncomputable instance traceOneNegOneGCDMonoid :
+    GCDMonoid EisensteinInt := EuclideanDomain.gcdMonoid EisensteinInt
+
+/-- Extract an explicit unit times a cube from coprime factors of a cube. -/
+theorem exists_unit_mul_cube_of_coprime_mul_eq_cube
+    {x y z : EisensteinInt}
+    (hcop : IsUnit (gcd x y)) (hpow : x * y = z ^ 3) :
+    ∃ epsilon : EisensteinIntˣ,
+      ∃ gamma : EisensteinInt,
+        x = (epsilon : EisensteinInt) * gamma ^ 3 := by
+  rcases exists_associated_pow_of_mul_eq_pow hcop hpow with
+    ⟨gamma, u, hu⟩
+  refine ⟨u, gamma, ?_⟩
+  simpa [mul_comm] using hu.symm
+
+/-- Element-wise relative primality makes the concrete gcd a unit. -/
+theorem isUnit_gcd_of_eisensteinRelPrime
+    {x y : EisensteinInt}
+    (h : EisensteinRelPrime x y) :
+    IsUnit (gcd x y) := by
+  exact h (gcd x y) (gcd_dvd_left x y) (gcd_dvd_right x y)
+
+/-- The stripped beta times its conjugate is the integral cube `B^3`. -/
+theorem EisensteinRamifierStrippedPacket.beta_mul_conj_eq_cube
+    {a b c : ℕ} (p : EisensteinRamifierStrippedPacket a b c) :
+    p.beta * conj p.beta =
+      (p.powerSplit.B : EisensteinInt) ^ 3 := by
+  rw [traceOne_mul_conj, p.beta_norm]
+  change (⟨(p.powerSplit.B : ℤ) ^ 3, 0⟩ : EisensteinInt) =
+    (⟨(p.powerSplit.B : ℤ), 0⟩ : EisensteinInt) ^ 3
+  ext <;> simp [pow_succ]
+
+/-- Construct the cube-up-to-unit packet from conjugate coprimality. -/
+noncomputable def eisensteinCubeUpToUnitPacket_of_conjugateCoprime
+    {a b c : ℕ} (p : EisensteinConjugateCoprimePacket a b c) :
+    EisensteinCubeUpToUnitPacket a b c := by
+  classical
+  let hFact :=
+    exists_unit_mul_cube_of_coprime_mul_eq_cube
+      (x := p.stripped.beta)
+      (y := conj p.stripped.beta)
+      (z := (p.stripped.powerSplit.B : EisensteinInt))
+      (isUnit_gcd_of_eisensteinRelPrime p.relPrime)
+      p.stripped.beta_mul_conj_eq_cube
+  let epsilon := Classical.choose hFact
+  have hEpsilon := Classical.choose_spec hFact
+  let gamma := Classical.choose hEpsilon
+  have hEq := Classical.choose_spec hEpsilon
+  exact ⟨p, epsilon, gamma, hEq⟩
+
+/-- A ring unit is exactly an Eisenstein element of norm one. -/
+theorem eisenstein_isUnit_iff_norm_eq_one {x : EisensteinInt} :
+    IsUnit x ↔ norm x = 1 := by
+  constructor
+  · intro hx
+    rcases isUnit_iff_exists_inv.mp hx with ⟨y, hxy⟩
+    have hy : IsUnit y := by
+      apply isUnit_iff_exists_inv.mpr
+      exact ⟨x, by simpa [mul_comm] using hxy⟩
+    have hxNorm : 0 ≤ norm x := eisenstein_norm_nonneg x
+    have hyNorm : 0 ≤ norm y := eisenstein_norm_nonneg y
+    have hxPos : 0 < norm x := by
+      have hne : norm x ≠ 0 := by
+        intro h
+        exact hx.ne_zero ((eisenstein_norm_eq_zero_iff x).mp h)
+      omega
+    have hyPos : 0 < norm y := by
+      have hne : norm y ≠ 0 := by
+        intro h
+        exact hy.ne_zero ((eisenstein_norm_eq_zero_iff y).mp h)
+      omega
+    have hprod : norm x * norm y = 1 := by
+      rw [← traceOne_norm_mul, hxy]
+      rfl
+    nlinarith
+  · exact eisenstein_isUnit_of_norm_eq_one
+
+/-- Exact coordinate classification of the norm-one Eisenstein elements. -/
+theorem eisenstein_norm_eq_one_iff_coords (x : EisensteinInt) :
+    norm x = 1 ↔
+      (x.fst = 1 ∧ x.snd = 0) ∨
+      (x.fst = -1 ∧ x.snd = 0) ∨
+      (x.fst = 0 ∧ x.snd = 1) ∨
+      (x.fst = 0 ∧ x.snd = -1) ∨
+      (x.fst = -1 ∧ x.snd = 1) ∨
+      (x.fst = 1 ∧ x.snd = -1) := by
+  rcases x with ⟨r, s⟩
+  change norm (eisensteinCoord r s) = 1 ↔
+    (r = 1 ∧ s = 0) ∨
+    (r = -1 ∧ s = 0) ∨
+    (r = 0 ∧ s = 1) ∨
+    (r = 0 ∧ s = -1) ∨
+    (r = -1 ∧ s = 1) ∨
+    (r = 1 ∧ s = -1)
+  rw [eisenstein_norm_coords]
+  constructor
+  · intro h
+    have hs_sq_lt : s ^ 2 < 2 := by
+      nlinarith [sq_nonneg (2 * r + s)]
+    have hs_sq : s ^ 2 ≤ 1 := by omega
+    have hs_bounds : -1 ≤ s ∧ s ≤ 1 := by
+      constructor <;> nlinarith [sq_nonneg (s - 1), sq_nonneg (s + 1)]
+    have hs_cases : s = -1 ∨ s = 0 ∨ s = 1 := by omega
+    rcases hs_cases with rfl | rfl | rfl
+    · have hfactor : r * (r - 1) = 0 := by nlinarith
+      rcases mul_eq_zero.mp hfactor with hr | hr
+      · right; right; right; left; exact ⟨by omega, rfl⟩
+      · right; right; right; right; right; exact ⟨by omega, rfl⟩
+    · have hfactor : (r - 1) * (r + 1) = 0 := by nlinarith
+      rcases mul_eq_zero.mp hfactor with hr | hr
+      · left; exact ⟨by omega, rfl⟩
+      · right; left; exact ⟨by omega, rfl⟩
+    · have hfactor : r * (r + 1) = 0 := by nlinarith
+      rcases mul_eq_zero.mp hfactor with hr | hr
+      · right; right; left; exact ⟨by omega, rfl⟩
+      · right; right; right; right; left; exact ⟨by omega, rfl⟩
+  · rintro (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ |
+      ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩) <;> norm_num
+
+/-- The trace-one basis equation `tau^2 = tau - 1`. -/
+theorem eisenstein_tau_sq : eisensteinTau ^ 2 = eisensteinTau - 1 := by
+  change tau (-1) * tau (-1) = tau (-1) - 1
+  rw [traceOne_tau_sq]
+  ext <;> norm_num [tau, ofInt]
+
+/-- The basis element has norm `1`. -/
+theorem eisenstein_tau_norm : norm eisensteinTau = 1 := by
+  change norm (eisensteinCoord 0 1) = 1
+  rw [eisenstein_norm_coords]
+  norm_num
+
+/-- The six norm-one elements in the trace-one Eisenstein convention. -/
+theorem eisenstein_norm_eq_one_iff_six_units (x : EisensteinInt) :
+    norm x = 1 ↔
+      x = 1 ∨
+      x = -1 ∨
+      x = eisensteinTau ∨
+      x = -eisensteinTau ∨
+      x = eisensteinTau ^ 2 ∨
+      x = -(eisensteinTau ^ 2) := by
+  constructor
+  · intro hx
+    rcases (eisenstein_norm_eq_one_iff_coords x).mp hx with
+      ⟨h1, h2⟩ | ⟨h1, h2⟩ | ⟨h1, h2⟩ | ⟨h1, h2⟩ | ⟨h1, h2⟩ | ⟨h1, h2⟩
+    · apply Or.inl
+      apply traceOne_ext <;> simp [h1, h2]
+    · apply Or.inr; apply Or.inl
+      apply traceOne_ext <;> simp [h1, h2]
+    · apply Or.inr; apply Or.inr; apply Or.inl
+      apply traceOne_ext <;> simp [h1, h2, eisensteinTau, tau]
+    · apply Or.inr; apply Or.inr; apply Or.inr; apply Or.inl
+      apply traceOne_ext <;> simp [h1, h2, eisensteinTau, tau]
+    · apply Or.inr; apply Or.inr; apply Or.inr; apply Or.inr; apply Or.inl
+      rw [eisenstein_tau_sq]
+      apply traceOne_ext <;> simp [h1, h2, eisensteinTau, tau]
+    · apply Or.inr; apply Or.inr; apply Or.inr; apply Or.inr; apply Or.inr
+      rw [eisenstein_tau_sq]
+      apply traceOne_ext <;> simp [h1, h2, eisensteinTau, tau]
+  · rintro (rfl | rfl | rfl | rfl | rfl | rfl)
+    · norm_num [DkMath.NumberTheory.TraceOneQuadratic.norm]
+    · norm_num [DkMath.NumberTheory.TraceOneQuadratic.norm]
+    · exact eisenstein_tau_norm
+    · norm_num [DkMath.NumberTheory.TraceOneQuadratic.norm,
+        eisensteinTau, tau]
+    · rw [pow_two, traceOne_norm_mul]
+      simp [eisenstein_tau_norm]
+    · norm_num [DkMath.NumberTheory.TraceOneQuadratic.norm,
+        eisensteinTau, tau, pow_two,
+        DkMath.NumberTheory.TraceOneQuadratic.mul]
+
+/-- Units-facing public classification. -/
+theorem eisensteinUnit_cases (epsilon : EisensteinIntˣ) :
+    (epsilon : EisensteinInt) = 1 ∨
+      (epsilon : EisensteinInt) = -1 ∨
+      (epsilon : EisensteinInt) = eisensteinTau ∨
+      (epsilon : EisensteinInt) = -eisensteinTau ∨
+      (epsilon : EisensteinInt) = eisensteinTau ^ 2 ∨
+      (epsilon : EisensteinInt) = -(eisensteinTau ^ 2) := by
+  exact (eisenstein_norm_eq_one_iff_six_units (epsilon : EisensteinInt)).mp
+    (eisenstein_isUnit_iff_norm_eq_one.mp epsilon.isUnit)
+
+/-- The basis element has cube `-1`. -/
+theorem eisenstein_tau_cube : eisensteinTau ^ 3 = -1 := by
+  calc
+    eisensteinTau ^ 3 = eisensteinTau ^ 2 * eisensteinTau := by ring
+    _ = (eisensteinTau - 1) * eisensteinTau := by rw [eisenstein_tau_sq]
+    _ = -1 := by
+      rw [sub_mul, one_mul, ← pow_two, eisenstein_tau_sq]
+      ring
+
+/-- Every unit is a canonical sector representative times a unit cube. -/
+theorem exists_sector_mul_cube_of_unit (epsilon : EisensteinIntˣ) :
+    ∃ sector : EisensteinUnitSector,
+      ∃ delta : EisensteinInt,
+        IsUnit delta ∧
+          (epsilon : EisensteinInt) = sector.rep * delta ^ 3 := by
+  rcases eisensteinUnit_cases epsilon with h | h | h | h | h | h
+  · refine ⟨.one, 1, by simp, ?_⟩
+    simpa [EisensteinUnitSector.rep] using h
+  · refine ⟨.one, eisensteinTau,
+      eisenstein_isUnit_iff_norm_eq_one.mpr eisenstein_tau_norm, ?_⟩
+    rw [EisensteinUnitSector.rep, h, eisenstein_tau_cube]
+    simp
+  · refine ⟨.tau, 1, by simp, ?_⟩
+    simpa [EisensteinUnitSector.rep] using h
+  · refine ⟨.tau, eisensteinTau,
+      eisenstein_isUnit_iff_norm_eq_one.mpr eisenstein_tau_norm, ?_⟩
+    rw [EisensteinUnitSector.rep, h, eisenstein_tau_cube]
+    ring
+  · refine ⟨.tauSq, 1, by simp, ?_⟩
+    simpa [EisensteinUnitSector.rep] using h
+  · refine ⟨.tauSq, eisensteinTau,
+      eisenstein_isUnit_iff_norm_eq_one.mpr eisenstein_tau_norm, ?_⟩
+    rw [EisensteinUnitSector.rep, h, eisenstein_tau_cube]
+    ring
+
+/-- Cubing coordinates in the trace-one basis. -/
+theorem eisenstein_cube_coords (r s : ℤ) :
+    (eisensteinCoord r s) ^ 3 =
+      eisensteinCoord
+        (r ^ 3 - 3 * r * s ^ 2 - s ^ 3)
+        (3 * r * s * (r + s)) := by
+  change (⟨r, s⟩ : TraceOneInt (-1)) ^ 3 =
+    ⟨r ^ 3 - 3 * r * s ^ 2 - s ^ 3, 3 * r * s * (r + s)⟩
+  ext <;>
+    simp [pow_succ] <;>
+    ring
+
+/-- The second coordinate of `tau * gamma^3` in the trace-one convention. -/
+theorem eisenstein_tau_mul_cube_snd (r s : ℤ) :
+    (eisensteinTau * (eisensteinCoord r s) ^ 3).snd =
+      r ^ 3 + 3 * r ^ 2 * s - s ^ 3 := by
+  rw [eisenstein_cube_coords]
+  simp [eisensteinTau, eisensteinCoord, tau]
+  ring
+
+/-- Normalize a cube-up-to-unit packet to a canonical unit sector. -/
+noncomputable def eisensteinCubeSectorPacket_of_cubeUpToUnit
+    {a b c : ℕ} (p : EisensteinCubeUpToUnitPacket a b c) :
+    EisensteinCubeSectorPacket a b c := by
+  classical
+  let hSector := exists_sector_mul_cube_of_unit p.epsilon
+  let sector := Classical.choose hSector
+  have hSectorData := Classical.choose_spec hSector
+  let delta := Classical.choose hSectorData
+  have hDeltaData := Classical.choose_spec hSectorData
+  have hEpsilon := hDeltaData.2
+  have hBeta :
+      p.conjugateCoprime.stripped.beta =
+        sector.rep * (delta * p.gamma) ^ 3 := by
+    calc
+      p.conjugateCoprime.stripped.beta =
+          (p.epsilon : EisensteinInt) * p.gamma ^ 3 := p.beta_eq
+      _ = (sector.rep * delta ^ 3) * p.gamma ^ 3 := by rw [hEpsilon]
+      _ = sector.rep * (delta * p.gamma) ^ 3 := by
+        rw [mul_pow]
+        ring
+  exact ⟨p, sector, delta * p.gamma, hBeta⟩
+
+/-- A cube difference divisible by three has a difference divisible by three. -/
+private theorem three_dvd_sub_of_three_dvd_cube_sub
+    {r s : ℤ} (h : (3 : ℤ) ∣ r ^ 3 - s ^ 3) :
+    (3 : ℤ) ∣ r - s := by
+  have hzero : ((r ^ 3 - s ^ 3 : ℤ) : ZMod 3) = 0 :=
+    (ZMod.intCast_zmod_eq_zero_iff_dvd (r ^ 3 - s ^ 3) 3).mpr h
+  have hdiff : (((r - s : ℤ) : ZMod 3) ^ 3) = 0 := by
+    calc
+      (((r - s : ℤ) : ZMod 3) ^ 3) =
+          ((r ^ 3 - s ^ 3 : ℤ) : ZMod 3) := by
+            push_cast
+            ring_nf
+            have h3 : (3 : ZMod 3) = 0 := by exact ZMod.natCast_self 3
+            simp only [h3, mul_zero, sub_zero, zero_add]
+      _ = 0 := hzero
+  have hcast : ((r - s : ℤ) : ZMod 3) = 0 :=
+    eq_zero_of_pow_eq_zero hdiff
+  exact (ZMod.intCast_zmod_eq_zero_iff_dvd (r - s) 3).mp hcast
+
+/-- If `r-s` is divisible by three, then the Eisenstein norm is too. -/
+theorem three_dvd_eisenstein_norm_of_three_dvd_sub
+    {r s : ℤ} (h : (3 : ℤ) ∣ r - s) :
+    (3 : ℤ) ∣ norm (eisensteinCoord r s) := by
+  rw [eisenstein_norm_coords]
+  rcases h with ⟨k, hk⟩
+  have hrs : r = s + 3 * k := by omega
+  rw [hrs]
+  refine ⟨s ^ 2 + 3 * s * k + 3 * k ^ 2, ?_⟩
+  ring
+
+theorem EisensteinUnitSector.rep_norm (sector : EisensteinUnitSector) :
+    norm sector.rep = 1 := by
+  cases sector with
+  | one => norm_num [EisensteinUnitSector.rep,
+      DkMath.NumberTheory.TraceOneQuadratic.norm]
+  | tau => exact eisenstein_tau_norm
+  | tauSq =>
+      rw [EisensteinUnitSector.rep, pow_two, traceOne_norm_mul]
+      simp [eisenstein_tau_norm]
+
+/-- The norm of the adjusted cube root is exactly the residual base `B`. -/
+theorem EisensteinCubeSectorPacket.gamma_norm_eq_B
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    norm p.gamma =
+      (p.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.B : ℤ) := by
+  let q := p.cubeUpToUnit.conjugateCoprime.stripped
+  have hcube : norm p.gamma ^ 3 = (q.powerSplit.B : ℤ) ^ 3 := by
+    calc
+      norm p.gamma ^ 3 = norm (p.sector.rep * p.gamma ^ 3) := by
+        rw [eisenstein_norm_mul, p.sector.rep_norm]
+        have hnormpow : norm (p.gamma ^ 3) = norm p.gamma ^ 3 := by
+          calc
+            norm (p.gamma ^ 3) = norm (p.gamma ^ 2 * p.gamma) := by
+              congr 1
+            _ = norm (p.gamma ^ 2) * norm p.gamma :=
+              traceOne_norm_mul _ _
+            _ = (norm p.gamma * norm p.gamma) * norm p.gamma := by
+              rw [show p.gamma ^ 2 = p.gamma * p.gamma by ring,
+                traceOne_norm_mul]
+            _ = norm p.gamma ^ 3 := by ring
+        rw [hnormpow]
+        ring
+      _ = norm q.beta := by
+        rw [← p.beta_eq]
+      _ = (q.powerSplit.B : ℤ) ^ 3 := q.beta_norm
+  exact (show Odd 3 by decide).pow_injective hcube
+
+/-- The tau sector is incompatible with `3 ∤ B`. -/
+theorem tau_sector_false
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c)
+    (hsector : p.sector = .tau) :
+    False := by
+  let q := p.cubeUpToUnit.conjugateCoprime.stripped
+  have hsecond :
+      (p.sector.rep * p.gamma ^ 3).snd =
+        3 * (q.powerSplit.A : ℤ) ^ 3 := by
+    rw [← p.beta_eq]
+    exact q.beta_snd
+  have hgamma : p.gamma = eisensteinCoord p.gamma.fst p.gamma.snd := by
+    rfl
+  have hformula :
+      p.gamma.fst ^ 3 + 3 * p.gamma.fst ^ 2 * p.gamma.snd -
+          p.gamma.snd ^ 3 =
+        3 * (q.powerSplit.A : ℤ) ^ 3 := by
+    have hsecond' := hsecond
+    rw [hsector, EisensteinUnitSector.rep, hgamma] at hsecond'
+    simpa only [eisenstein_tau_mul_cube_snd] using hsecond'
+  have hdivformula :
+      (3 : ℤ) ∣ p.gamma.fst ^ 3 + 3 * p.gamma.fst ^ 2 * p.gamma.snd -
+          p.gamma.snd ^ 3 := by
+    exact ⟨(q.powerSplit.A : ℤ) ^ 3, hformula⟩
+  have hdivcube :
+      (3 : ℤ) ∣ p.gamma.fst ^ 3 - p.gamma.snd ^ 3 := by
+    refine ⟨(q.powerSplit.A : ℤ) ^ 3 -
+      p.gamma.fst ^ 2 * p.gamma.snd, ?_⟩
+    calc
+      p.gamma.fst ^ 3 - p.gamma.snd ^ 3 =
+          (p.gamma.fst ^ 3 + 3 * p.gamma.fst ^ 2 * p.gamma.snd -
+            p.gamma.snd ^ 3) - 3 * p.gamma.fst ^ 2 * p.gamma.snd := by ring
+      _ = 3 * (q.powerSplit.A : ℤ) ^ 3 -
+          3 * p.gamma.fst ^ 2 * p.gamma.snd := by rw [hformula]
+      _ = 3 * ((q.powerSplit.A : ℤ) ^ 3 -
+          p.gamma.fst ^ 2 * p.gamma.snd) := by ring
+  have hsub : (3 : ℤ) ∣ p.gamma.fst - p.gamma.snd :=
+    three_dvd_sub_of_three_dvd_cube_sub hdivcube
+  have hnormdiv : (3 : ℤ) ∣ norm p.gamma := by
+    rw [show p.gamma = eisensteinCoord p.gamma.fst p.gamma.snd by rfl]
+    exact three_dvd_eisenstein_norm_of_three_dvd_sub hsub
+  have hBdiv : (3 : ℤ) ∣ (q.powerSplit.B : ℤ) := by
+    simpa [EisensteinCubeSectorPacket.gamma_norm_eq_B p] using hnormdiv
+  have hBNat : 3 ∣ q.powerSplit.B := by
+    exact_mod_cast hBdiv
+  exact q.powerSplit.three_not_dvd_B hBNat
+
+/-- The second coordinate of `tau^2 * gamma^3` in the trace-one convention. -/
+theorem eisenstein_tau_sq_mul_cube_snd (r s : ℤ) :
+    (eisensteinTau ^ 2 * (eisensteinCoord r s) ^ 3).snd =
+      r ^ 3 - 3 * r * s ^ 2 - s ^ 3 := by
+  rw [eisenstein_tau_sq, eisenstein_cube_coords]
+  simp [eisensteinTau, eisensteinCoord, tau]
+
+/-- The `tau^2` sector is incompatible with `3 ∤ B`. -/
+theorem tauSq_sector_false
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c)
+    (hsector : p.sector = .tauSq) :
+    False := by
+  let q := p.cubeUpToUnit.conjugateCoprime.stripped
+  have hsecond :
+      (p.sector.rep * p.gamma ^ 3).snd =
+        3 * (q.powerSplit.A : ℤ) ^ 3 := by
+    rw [← p.beta_eq]
+    exact q.beta_snd
+  have hgamma : p.gamma = eisensteinCoord p.gamma.fst p.gamma.snd := by
+    rfl
+  have hformula :
+      p.gamma.fst ^ 3 - 3 * p.gamma.fst * p.gamma.snd ^ 2 -
+          p.gamma.snd ^ 3 =
+        3 * (q.powerSplit.A : ℤ) ^ 3 := by
+    have hsecond' := hsecond
+    rw [hsector, EisensteinUnitSector.rep, hgamma] at hsecond'
+    simpa only [eisenstein_tau_sq_mul_cube_snd] using hsecond'
+  have hdivformula :
+      (3 : ℤ) ∣ p.gamma.fst ^ 3 - 3 * p.gamma.fst * p.gamma.snd ^ 2 -
+          p.gamma.snd ^ 3 := by
+    exact ⟨(q.powerSplit.A : ℤ) ^ 3, hformula⟩
+  have hdivcube :
+      (3 : ℤ) ∣ p.gamma.fst ^ 3 - p.gamma.snd ^ 3 := by
+    refine ⟨(q.powerSplit.A : ℤ) ^ 3 +
+      p.gamma.fst * p.gamma.snd ^ 2, ?_⟩
+    calc
+      p.gamma.fst ^ 3 - p.gamma.snd ^ 3 =
+          (p.gamma.fst ^ 3 - 3 * p.gamma.fst * p.gamma.snd ^ 2 -
+            p.gamma.snd ^ 3) + 3 * p.gamma.fst * p.gamma.snd ^ 2 := by ring
+      _ = 3 * (q.powerSplit.A : ℤ) ^ 3 +
+          3 * p.gamma.fst * p.gamma.snd ^ 2 := by rw [hformula]
+      _ = 3 * ((q.powerSplit.A : ℤ) ^ 3 +
+          p.gamma.fst * p.gamma.snd ^ 2) := by ring
+  have hsub : (3 : ℤ) ∣ p.gamma.fst - p.gamma.snd :=
+    three_dvd_sub_of_three_dvd_cube_sub hdivcube
+  have hnormdiv : (3 : ℤ) ∣ norm p.gamma := by
+    rw [show p.gamma = eisensteinCoord p.gamma.fst p.gamma.snd by rfl]
+    exact three_dvd_eisenstein_norm_of_three_dvd_sub hsub
+  have hBdiv : (3 : ℤ) ∣ (q.powerSplit.B : ℤ) := by
+    simpa [EisensteinCubeSectorPacket.gamma_norm_eq_B p] using hnormdiv
+  have hBNat : 3 ∣ q.powerSplit.B := by
+    exact_mod_cast hBdiv
+  exact q.powerSplit.three_not_dvd_B hBNat
+
+/-- Every sector packet is forced into the one sector. -/
+theorem sector_eq_one
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    p.sector = .one := by
+  cases h : p.sector with
+  | one => rfl
+  | tau => exact (tau_sector_false p h).elim
+  | tauSq => exact (tauSq_sector_false p h).elim
+
+/-- The normalized beta is an exact cube. -/
+theorem beta_eq_cube
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    p.cubeUpToUnit.conjugateCoprime.stripped.beta = p.gamma ^ 3 := by
+  rw [p.beta_eq, sector_eq_one p, EisensteinUnitSector.rep]
+  simp
+
+/-- The second coordinate of a cube, in the exact sign convention used here. -/
+theorem eisenstein_cube_snd (r s : ℤ) :
+    ((eisensteinCoord r s) ^ 3).snd = 3 * r * s * (r + s) := by
+  rw [eisenstein_cube_coords]
+  rfl
+
+/-- The coordinates of the exact cube satisfy `r*s*(r+s)=A^3`. -/
+theorem gamma_coordinate_product_eq_A_cube
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    p.gamma.fst * p.gamma.snd * (p.gamma.fst + p.gamma.snd) =
+      (p.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.A : ℤ) ^ 3 := by
+  let q := p.cubeUpToUnit.conjugateCoprime.stripped
+  have hsecond :
+      (p.gamma ^ 3).snd = 3 * (q.powerSplit.A : ℤ) ^ 3 := by
+    rw [← beta_eq_cube p]
+    exact q.beta_snd
+  have hgamma : p.gamma = eisensteinCoord p.gamma.fst p.gamma.snd := by
+    rfl
+  have hcube := eisenstein_cube_snd p.gamma.fst p.gamma.snd
+  rw [hgamma] at hsecond
+  rw [hcube] at hsecond
+  nlinarith
+
+/-- The coordinate form of the residual norm is `B`. -/
+theorem gamma_coordinate_norm_eq_B
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    p.gamma.fst ^ 2 + p.gamma.fst * p.gamma.snd + p.gamma.snd ^ 2 =
+      (p.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.B : ℤ) := by
+  rw [← eisenstein_norm_coords p.gamma.fst p.gamma.snd]
+  exact EisensteinCubeSectorPacket.gamma_norm_eq_B p
+
+/-- Package the forced one-sector identities without another choice. -/
+def eisensteinExactCubePacket_of_sectorPacket
+    {a b c : ℕ} (p : EisensteinCubeSectorPacket a b c) :
+    EisensteinExactCubePacket a b c :=
+  { sectorPacket := p
+    sector_one := sector_eq_one p
+    beta_eq_cube := beta_eq_cube p
+    coordinate_product := gamma_coordinate_product_eq_A_cube p
+    coordinate_norm := EisensteinCubeSectorPacket.gamma_norm_eq_B p }
+
+/-- Build the flattened source through one and the same origin packet. -/
+noncomputable def eisensteinDescentFactorSource_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    EisensteinDescentFactorSource a b c := by
+  let origin := signedThreeAdicOriginPacket_of_primitive_solution ha hb hc hab hEq
+  let splitWithPacket := signedThreeAdicPowerSplit_with_packet origin.packet
+  let split := splitWithPacket.1
+  let stripped := eisensteinRamifierStrippedPacket_of_powerSplit split
+  let conjugateCoprime := eisensteinConjugateCoprimePacket_of_stripped stripped
+  let cubeUpToUnit :=
+    eisensteinCubeUpToUnitPacket_of_conjugateCoprime conjugateCoprime
+  let sector := eisensteinCubeSectorPacket_of_cubeUpToUnit cubeUpToUnit
+  let exactCube := eisensteinExactCubePacket_of_sectorPacket sector
+  let r := exactCube.sectorPacket.gamma.fst
+  let s := exactCube.sectorPacket.gamma.snd
+  have hA :
+      exactCube.sectorPacket.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.A =
+        split.A := by
+    rfl
+  have hB :
+      exactCube.sectorPacket.cubeUpToUnit.conjugateCoprime.stripped.powerSplit.B =
+        split.B := by
+    rfl
+  refine {
+    origin := origin
+    exactCube := exactCube
+    A := split.A
+    B := split.B
+    r := r
+    s := s
+    A_pos := split.A_pos
+    B_pos := split.B_pos
+    coprime_A_B := split.coprime_A_B
+    three_not_dvd_B := split.three_not_dvd_B
+    distinguished_eq := ?_
+    product_eq := ?_
+    norm_eq := ?_ }
+  · rw [← splitWithPacket.2]
+    exact split.distinguished_eq
+  · simpa [r, s, hA] using
+      gamma_coordinate_product_eq_A_cube exactCube.sectorPacket
+  · simpa [r, s, hB] using
+      gamma_coordinate_norm_eq_B exactCube.sectorPacket
+
+noncomputable def eisensteinSignedCubeFactors_of_primitive_solution
+    {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b) (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    EisensteinSignedCubeFactors a b c :=
+  eisensteinSignedCubeFactors_of_source
+    (eisensteinDescentFactorSource_of_primitive_solution ha hb hc hab hEq)
+
+/-- Recover the signed cube from its natural absolute value. -/
+theorem int_eq_cube_or_neg_cube_of_natAbs_eq
+    {x : ℤ} {n : ℕ} (h : x.natAbs = n ^ 3) :
+    x = (n : ℤ) ^ 3 ∨ x = -((n : ℤ) ^ 3) := by
+  by_cases hx : 0 ≤ x
+  · left
+    calc
+      x = (x.natAbs : ℤ) := Int.eq_natAbs_of_nonneg hx
+      _ = ((n ^ 3 : ℕ) : ℤ) := by rw [h]
+      _ = (n : ℤ) ^ 3 := by rw [Nat.cast_pow]
+  · right
+    have hxle : x ≤ 0 := le_of_not_ge hx
+    have hnat : (x.natAbs : ℤ) = -x :=
+      Int.ofNat_natAbs_of_nonpos hxle
+    calc
+      x = -(x.natAbs : ℤ) := by linarith
+      _ = -((n ^ 3 : ℕ) : ℤ) := by rw [h]
+      _ = -((n : ℤ) ^ 3) := by rw [Nat.cast_pow]
+
+private theorem int_eq_pos_cube_of_natAbs_eq
+    {x : ℤ} {n : ℕ} (hx : 0 < x) (h : x.natAbs = n ^ 3) :
+    x = (n : ℤ) ^ 3 := by
+  rcases int_eq_cube_or_neg_cube_of_natAbs_eq h with hpos | hneg
+  · exact hpos
+  · have hnonneg : 0 ≤ (n : ℤ) ^ 3 := by positivity
+    linarith
+
+private theorem int_eq_neg_cube_of_natAbs_eq
+    {x : ℤ} {n : ℕ} (hx : x < 0) (h : x.natAbs = n ^ 3) :
+    x = -((n : ℤ) ^ 3) := by
+  rcases int_eq_cube_or_neg_cube_of_natAbs_eq h with hpos | hneg
+  · have hnonneg : 0 ≤ (n : ℤ) ^ 3 := by positivity
+    linarith
+  · exact hneg
+
+private theorem signed_cube_roots_route_of_factors
+    {a b c : ℕ} (p : EisensteinSignedCubeFactors a b c) :
+    (p.R ^ 3 + p.S ^ 3 = p.T ^ 3) ∨
+      (p.R ^ 3 + p.T ^ 3 = p.S ^ 3) ∨
+        (p.S ^ 3 + p.T ^ 3 = p.R ^ 3) := by
+  have hprod : 0 < p.source.r * p.source.s * (p.source.r + p.source.s) := by
+    rw [p.source.product_eq]
+    exact_mod_cast (pow_pos p.source.A_pos 3)
+  have hr : 0 < p.source.r ∨ p.source.r < 0 :=
+    lt_or_gt_of_ne (Ne.symm p.source.r_ne_zero)
+  have hs : 0 < p.source.s ∨ p.source.s < 0 :=
+    lt_or_gt_of_ne (Ne.symm p.source.s_ne_zero)
+  rcases hr with hrpos | hrneg
+  · rcases hs with hspos | hsneg
+    · left
+      have hsumpos : 0 < p.source.r + p.source.s := add_pos hrpos hspos
+      have hR : p.source.r = (p.R : ℤ) ^ 3 :=
+        int_eq_pos_cube_of_natAbs_eq hrpos p.abs_r_eq
+      have hS : p.source.s = (p.S : ℤ) ^ 3 :=
+        int_eq_pos_cube_of_natAbs_eq hspos p.abs_s_eq
+      have hT : p.source.r + p.source.s = (p.T : ℤ) ^ 3 := by
+        exact int_eq_pos_cube_of_natAbs_eq hsumpos p.abs_sum_eq
+      have hEq : (p.R : ℤ) ^ 3 + (p.S : ℤ) ^ 3 = (p.T : ℤ) ^ 3 := by
+        linarith [hR, hS, hT]
+      exact_mod_cast hEq
+    · right
+      left
+      have hsumneg : p.source.r + p.source.s < 0 := by
+        rcases lt_or_gt_of_ne p.source.sum_ne_zero with hneg | hpos
+        · exact hneg
+        · have hrs : p.source.r * p.source.s < 0 :=
+            mul_neg_of_pos_of_neg hrpos hsneg
+          have hbad : p.source.r * p.source.s *
+              (p.source.r + p.source.s) < 0 :=
+            mul_neg_of_neg_of_pos hrs hpos
+          linarith
+      have hR : p.source.r = (p.R : ℤ) ^ 3 :=
+        int_eq_pos_cube_of_natAbs_eq hrpos p.abs_r_eq
+      have hS : p.source.s = -((p.S : ℤ) ^ 3) :=
+        int_eq_neg_cube_of_natAbs_eq hsneg p.abs_s_eq
+      have hT : p.source.r + p.source.s = -((p.T : ℤ) ^ 3) := by
+        exact int_eq_neg_cube_of_natAbs_eq hsumneg p.abs_sum_eq
+      have hEq : (p.R : ℤ) ^ 3 + (p.T : ℤ) ^ 3 = (p.S : ℤ) ^ 3 := by
+        linarith [hR, hS, hT]
+      exact_mod_cast hEq
+  · rcases hs with hspos | hsneg
+    · right
+      right
+      have hsumneg : p.source.r + p.source.s < 0 := by
+        rcases lt_or_gt_of_ne p.source.sum_ne_zero with hneg | hpos
+        · exact hneg
+        · have hrs : p.source.r * p.source.s < 0 :=
+            mul_neg_of_neg_of_pos hrneg hspos
+          have hbad : p.source.r * p.source.s *
+              (p.source.r + p.source.s) < 0 :=
+            mul_neg_of_neg_of_pos hrs hpos
+          linarith
+      have hR : p.source.r = -((p.R : ℤ) ^ 3) :=
+        int_eq_neg_cube_of_natAbs_eq hrneg p.abs_r_eq
+      have hS : p.source.s = (p.S : ℤ) ^ 3 :=
+        int_eq_pos_cube_of_natAbs_eq hspos p.abs_s_eq
+      have hT : p.source.r + p.source.s = -((p.T : ℤ) ^ 3) := by
+        exact int_eq_neg_cube_of_natAbs_eq hsumneg p.abs_sum_eq
+      have hEq : (p.S : ℤ) ^ 3 + (p.T : ℤ) ^ 3 = (p.R : ℤ) ^ 3 := by
+        linarith [hR, hS, hT]
+      exact_mod_cast hEq
+    · have hsumneg : p.source.r + p.source.s < 0 := add_neg hrneg hsneg
+      have hrs : 0 < p.source.r * p.source.s :=
+        mul_pos_of_neg_of_neg hrneg hsneg
+      have hbad : p.source.r * p.source.s *
+          (p.source.r + p.source.s) < 0 :=
+        mul_neg_of_pos_of_neg hrs hsumneg
+      linarith
+
+/-- The three positive cube equations forced by the signed factors. -/
+theorem signed_cube_roots_route
+    {a b c : ℕ} (p : EisensteinSignedCubeFactors a b c) :
+    (p.R ^ 3 + p.S ^ 3 = p.T ^ 3) ∨
+      (p.R ^ 3 + p.T ^ 3 = p.S ^ 3) ∨
+        (p.S ^ 3 + p.T ^ 3 = p.R ^ 3) :=
+  signed_cube_roots_route_of_factors p
+
+/-- The distinguished coordinate is bounded by the original triple product. -/
+theorem SignedThreeAdicOriginPacket.distinguished_le_product
+    {a b c : ℕ} (p : SignedThreeAdicOriginPacket a b c)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    p.packet.distinguished ≤ a * b * c := by
+  rcases p.distinguished_cases with h | h | h
+  · rw [h]
+    exact (Nat.le_mul_of_pos_right a hb).trans
+      (Nat.le_mul_of_pos_right (a * b) hc)
+  · rw [h]
+    exact (Nat.le_mul_of_pos_left b ha).trans
+      (Nat.le_mul_of_pos_right (a * b) hc)
+  · rw [h]
+    exact (Nat.le_mul_of_pos_right c hb).trans
+      (by simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+        (Nat.le_mul_of_pos_left (b * c) ha))
+
+theorem EisensteinDescentFactorSource.source_A_lt_original_product
+    {a b c : ℕ} (p : EisensteinDescentFactorSource a b c)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    p.A < a * b * c := by
+  have hABpos : 0 < p.A * p.B := Nat.mul_pos p.A_pos p.B_pos
+  have hstep : p.A * p.B < 3 * (p.A * p.B) := by
+    have h13 : (1 : ℕ) < 3 := by norm_num
+    simpa using Nat.mul_lt_mul_of_pos_right h13 hABpos
+  have hA_lt : p.A < 3 * p.A * p.B := by
+    have hA_le : p.A ≤ p.A * p.B := Nat.le_mul_of_pos_right p.A p.B_pos
+    exact hA_le.trans_lt (by simpa [Nat.mul_assoc] using hstep)
+  calc
+    p.A < 3 * p.A * p.B := hA_lt
+    _ = p.origin.packet.distinguished := p.distinguished_eq.symm
+    _ ≤ a * b * c :=
+      p.origin.distinguished_le_product ha hb hc
+
+theorem EisensteinSignedCubeFactors.strict_product_lt
+    {a b c : ℕ} (p : EisensteinSignedCubeFactors a b c)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    p.R * p.S * p.T < a * b * c := by
+  rw [p.root_product_eq]
+  exact p.source.source_A_lt_original_product ha hb hc
+
+private theorem primitiveCubicStrictDescent_nonempty
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c) :
+    Nonempty (PrimitiveCubicStrictDescent a b c) := by
+  let factors := eisensteinSignedCubeFactors_of_primitive_solution
+    source.hx source.hy source.hz source.coprime_xy source.equation
+  rcases signed_cube_roots_route factors with hP | hL | hR
+  · let next : PrimitiveCubicPack factors.R factors.S factors.T :=
+      { hx := factors.R_pos
+        hy := factors.S_pos
+        hz := factors.T_pos
+        coprime_xy := factors.coprime_RS
+        equation := hP }
+    exact ⟨{
+      source := source
+      factors := factors
+      x := factors.R
+      y := factors.S
+      z := factors.T
+      next := next
+      next_product_eq := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.root_product_eq
+      measure_lt := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.strict_product_lt source.hx source.hy source.hz }⟩
+  · let next : PrimitiveCubicPack factors.R factors.T factors.S :=
+      { hx := factors.R_pos
+        hy := factors.T_pos
+        hz := factors.S_pos
+        coprime_xy := factors.coprime_RT
+        equation := hL }
+    exact ⟨{
+      source := source
+      factors := factors
+      x := factors.R
+      y := factors.T
+      z := factors.S
+      next := next
+      next_product_eq := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.root_product_eq
+      measure_lt := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.strict_product_lt source.hx source.hy source.hz }⟩
+  · let next : PrimitiveCubicPack factors.S factors.T factors.R :=
+      { hx := factors.S_pos
+        hy := factors.T_pos
+        hz := factors.R_pos
+        coprime_xy := factors.coprime_ST
+        equation := hR }
+    exact ⟨{
+      source := source
+      factors := factors
+      x := factors.S
+      y := factors.T
+      z := factors.R
+      next := next
+      next_product_eq := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.root_product_eq
+      measure_lt := by
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          factors.strict_product_lt source.hx source.hy source.hz }⟩
+
+/-- Choose the strict descent packet produced from one primitive source. -/
+noncomputable def primitiveCubicStrictDescent
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c) :
+    PrimitiveCubicStrictDescent a b c :=
+  Classical.choice (primitiveCubicStrictDescent_nonempty source)
+
+/-- Normalize a positive cubic solution to a positive primitive cubic pack. -/
+theorem exists_primitiveCubicPack_of_positive_solution
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
+    ∃ a' b' c' : ℕ, PrimitiveCubicPack a' b' c' := by
+  let d := Nat.gcd a b
+  let a' := a / d
+  let b' := b / d
+  have hdPos : 0 < d := Nat.gcd_pos_of_pos_left b ha
+  have hda : d ∣ a := Nat.gcd_dvd_left a b
+  have hdb : d ∣ b := Nat.gcd_dvd_right a b
+  have hd3c3 : d ^ 3 ∣ c ^ 3 := by
+    have hd3a3 : d ^ 3 ∣ a ^ 3 := pow_dvd_pow_of_dvd hda 3
+    have hd3b3 : d ^ 3 ∣ b ^ 3 := pow_dvd_pow_of_dvd hdb 3
+    rw [← hEq]
+    exact dvd_add hd3a3 hd3b3
+  have hdc : d ∣ c := by
+    have hroot := (Nat.dvd_pow_iff_ceilRoot_dvd (a := d ^ 3) (b := c)
+      (by decide : 3 ≠ 0)).mp hd3c3
+    simpa using hroot
+  let c' := c / d
+  have haEq : d * a' = a := Nat.mul_div_cancel' hda
+  have hbEq : d * b' = b := Nat.mul_div_cancel' hdb
+  have hcEq : d * c' = c := Nat.mul_div_cancel' hdc
+  have haPos : 0 < a' := Nat.div_pos (Nat.le_of_dvd ha hda) hdPos
+  have hbPos : 0 < b' := Nat.div_pos (Nat.le_of_dvd hb hdb) hdPos
+  have hcPos : 0 < c' := Nat.div_pos (Nat.le_of_dvd hc hdc) hdPos
+  have hcop : Nat.Coprime a' b' := by
+    exact Nat.coprime_div_gcd_div_gcd hdPos
+  have hEq' : a' ^ 3 + b' ^ 3 = c' ^ 3 := by
+    have hscaled : d ^ 3 * (a' ^ 3 + b' ^ 3) = d ^ 3 * c' ^ 3 := by
+      calc
+        d ^ 3 * (a' ^ 3 + b' ^ 3) = (d * a') ^ 3 + (d * b') ^ 3 := by
+          ring
+        _ = a ^ 3 + b ^ 3 := by rw [haEq, hbEq]
+        _ = c ^ 3 := hEq
+        _ = (d * c') ^ 3 := by rw [hcEq]
+        _ = d ^ 3 * c' ^ 3 := by ring
+    exact Nat.mul_left_cancel (pow_pos hdPos 3) hscaled
+  exact ⟨a', b', c', {
+    hx := haPos
+    hy := hbPos
+    hz := hcPos
+    coprime_xy := hcop
+    equation := hEq' }⟩
+
+/-- Every primitive positive cubic solution has a smaller one in product measure. -/
+theorem exists_smaller_primitiveCubicPack
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c) :
+    ∃ x y z : ℕ,
+      PrimitiveCubicPack x y z ∧ x * y * z < a * b * c := by
+  let descent := primitiveCubicStrictDescent source
+  exact ⟨descent.x, descent.y, descent.z, descent.next, descent.measure_lt⟩
+
+/-- No positive primitive cubic pack can exist, by strong induction on `a*b*c`. -/
+theorem primitiveCubicPack_false
+    {a b c : ℕ} (p : PrimitiveCubicPack a b c) : False := by
+  have noAt : ∀ n : ℕ, ∀ {a b c : ℕ},
+      PrimitiveCubicPack a b c → a * b * c = n → False := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+        intro a b c p hp
+        obtain ⟨x, y, z, next, hlt⟩ :=
+          exists_smaller_primitiveCubicPack p
+        exact ih (x * y * z)
+          (by simpa [hp] using hlt)
+          next rfl
+  exact noAt (a * b * c) p rfl
+
+/-- No positive natural numbers solve the cubic Fermat equation. -/
+theorem fermatThree_no_positive_solution
+    (a b c : ℕ)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  intro hEq
+  rcases exists_primitiveCubicPack_of_positive_solution ha hb hc hEq with
+    ⟨a', b', c', p⟩
+  exact primitiveCubicPack_false p

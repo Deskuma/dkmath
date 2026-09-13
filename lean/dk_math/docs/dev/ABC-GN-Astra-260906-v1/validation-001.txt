@@ -1,0 +1,117 @@
+ASTRA-001 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Environment
+-----------
+Lean 4.32.2, commit f3b06c705e6c85f5314019d5d3baab0fec5b580c
+Python 3.12.3
+SymPy 1.12
+
+New scratch verification
+------------------------
+Command:
+  lake env lean docs/dev/ABC-GN-Astra-260906-v1/scratch-001.lean
+Exit: 0
+Raw stdout: lean-001-output.txt
+No Lean errors or warnings were emitted.
+
+Checked namespace: DkMath.ABC.ASTRA001Scratch
+Checked theorem declarations:
+  conic_cross_identity
+  conic_y_lower
+  conic_no_close_denominators
+  cubic_parameter_ge_two
+  conic_shell_unique
+  shellFiber_subsingleton
+  shellFiber_card_le_one
+  shellFiber_card_le_two
+  shell_pair_injective
+  mordell_transport
+  eisenstein_square_product_norm
+  eisenstein_coefficient_coprime
+
+The principal verified consumer applies to a filter of the actual production
+GNExcessCubicRealizedLargeModulusShellPellParameterFiber, not a replacement
+model with assumed uniqueness. It proves cardinality at most one.
+
+Axiom output:
+  conic_no_close_denominators: [propext, Classical.choice, Quot.sound]
+  shellFiber_card_le_one: [propext, Classical.choice, Quot.sound]
+  shell_pair_injective: [propext, Classical.choice, Quot.sound]
+  mordell_transport: [propext, Classical.choice, Quot.sound]
+  eisenstein_square_product_norm: [propext, Quot.sound]
+
+Previous scratch independently rechecked
+----------------------------------------
+Command:
+  lake env lean docs/dev/ABC-GN-Astra-260906-v1/scratch-000.lean
+Exit: 0
+Raw stdout: lean-000-review-output.txt
+No Lean errors or warnings were emitted.
+
+Checked namespace: DkMath.ABC.SOL000Scratch
+  pellParameter_height_cube_aux
+  realized_shell_pellParameter_height_cube
+Conclusion: D^2 * T^3 < 54 * (X+1)^6
+Both depend only on [propext, Classical.choice, Quot.sound].
+
+Numerical falsification and regression diagnostics
+-------------------------------------------------
+Command:
+  python3 docs/dev/ABC-GN-Astra-260906-v1/numeric-001.py --limit 3000000
+Exit: 0
+Raw stdout: numeric-001-output.txt
+
+Sparse prime-square-root sieve:
+  limit = 3000000
+  repeated points = 195455
+  lifted roots checked = 216678
+  independent factorint checks = 875
+  deterministic random seed = 1001
+  refined fiber maximum = 1
+  fibers of size two = 0
+  fibers of size at least three = 0
+  adjacent fixed-(T,r) denominator comparisons = 17
+
+Independent conic enumeration:
+  2 <= T <= 2000, 1 <= d <= 3000
+  solutions = 122, adjacent gap checks = 17
+
+All assertions passed, including:
+  exact production-coordinate identities;
+  exact Mordell transport for every repeated point;
+  M=169 and M=8281 collisions;
+  ten terms of the complement-three Pell recurrence;
+  independent paired exact depths at a=7428;
+  all seven mod-49 representatives and their three states.
+
+The finite computations do not certify the infinite/quantified v0
+regressions. Their compatibility is analyzed separately in report-001.md.
+
+Source and trust audit
+----------------------
+Command:
+  rg -n '\b(sorry|admit|axiom|native_decide|unsafe)\b' \
+    docs/dev/ABC-GN-Astra-260906-v1/scratch-001.lean \
+    docs/dev/ABC-GN-Astra-260906-v1/scratch-000.lean
+Exit: 1, no matches (the expected successful absence check).
+
+git diff --check: exit 0.
+Only research artifacts were added; no tracked production source changed.
+This is focused scratch elaboration with production imports, not a claim
+of a fresh full repository build or a rerun of every v0 regression module.
+
+Mathematical verification boundary
+----------------------------------
+The elementary counting estimates in report-001.md are mathematical
+derivations from the checked coordinates and fiber theorem; they are not
+Lean cardinality or asymptotic theorems.
+
+The uniform fixed-field Mordell estimate is derived from the unconditional
+Helfgott--Venkatesh Corollary 3.11 and Lemma 4.1. The report records their
+hypotheses, coefficient dependencies, and the specialization. No external
+estimate is a Lean axiom or proof dependency.
+
+The resulting shell moment exponent 31/24+epsilon remains above one.
+The balanced-box saving is open. Verdict: Outcome B.

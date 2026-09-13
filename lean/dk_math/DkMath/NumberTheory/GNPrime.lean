@@ -12,6 +12,8 @@ import DkMath.NumberTheory.GNThreeQuadratic
 import DkMath.NumberTheory.GNThreePrimeArithmetic
 import DkMath.NumberTheory.GNThreeHenselLift
 import DkMath.NumberTheory.GNThreeHenselDepth
+import DkMath.NumberTheory.GNThreeOrientation
+import DkMath.NumberTheory.GNThreePairedDepth
 
 #print "file: DkMath.NumberTheory.GNPrime"
 
@@ -22,7 +24,8 @@ This facade collects the elementary GN prime closure, finite positive GN
 representation bounds, composite-degree factorization and prime-degree
 necessity, prime-target residue filters, the degree-three discriminant
 `-3`/trace-one quadratic shell, primitive cubic prime-divisor arithmetic, and
-one-step and arbitrary finite-depth simple-root lifting.
+one-step and arbitrary finite-depth simple-root lifting, orientation gcd
+arithmetic, and arithmetic progressions with independent exact paired depths.
 
 This public surface is pure NumberTheory.  FLT-specific bridges, infinite
 `q`-adic completions, and application endpoints remain outside this facade.

@@ -33,8 +33,8 @@ def squareBody (P : ℕ) : ℕ := P ^ 2 + 2 * P
 
 theorem unitSquare_body_eq (P : ℕ) :
     BodyN 2 P 1 = squareBody P := by
-  simp only [BodyN]
-  rw [GN_eq_sum]
+  simp only [BodyN, DkMath.CosmicFormula.GN]
+  rw [DkMath.CosmicFormula.GTail_one_eq_sum]
   norm_num [Finset.sum_range_succ, squareBody]
   ring
 

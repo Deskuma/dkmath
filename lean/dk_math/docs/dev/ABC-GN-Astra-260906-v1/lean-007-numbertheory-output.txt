@@ -1,0 +1,28 @@
+ℹ [8655/8657] Replayed DkMath.Basic
+info: DkMath/Basic.lean:9:0: file: DkMath.Basic
+info: DkMath/Basic.lean:24:0: "world"
+ℹ [8656/8657] Replayed DkMath.NumberTheory.TraceOneQuadratic
+info: DkMath/NumberTheory/TraceOneQuadratic.lean:9:0: file: DkMath.NumberTheory.TraceOneQuadratic
+ℹ [8657/8657] Replayed DkMath.NumberTheory.EisensteinCoordinates
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:9:0: file: DkMath.NumberTheory.EisensteinCoordinates
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:165:0: 'DkMath.NumberTheory.EisensteinCoordinates.norm_eisensteinCoord' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:166:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisensteinCoord_mul' depends on axioms: [propext]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:167:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisensteinCoord_sq' depends on axioms: [propext]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:168:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisensteinCoord_mul_sq' depends on axioms: [propext, Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:169:0: 'DkMath.NumberTheory.EisensteinCoordinates.norm_eisensteinCoord_mul_sq' depends on axioms: [propext, Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:170:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_square_coefficient_coprime' depends on axioms: [propext]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:171:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_mul_sq_eq_cubicCoord_fst' depends on axioms: [propext, Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:172:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_mul_sq_eq_cubicCoord_snd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:173:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_mul_sq_eq_cubicCoord_coefficients_isCoprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:174:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_mul_sq_eq_cubicCoord_norm' depends on axioms: [propext,
+ Quot.sound]
+info: DkMath/NumberTheory/EisensteinCoordinates.lean:175:0: 'DkMath.NumberTheory.EisensteinCoordinates.eisenstein_mul_sq_eq_cubicCoord_polynomial_norm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8657 jobs).

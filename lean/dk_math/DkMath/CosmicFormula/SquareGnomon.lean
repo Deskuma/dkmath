@@ -74,7 +74,7 @@ variable {R : Type*} [CommSemiring R]
 
 /-- Degree-two GN kernel read in the Gnomon orientation. -/
 abbrev squareGnomonKernel (x u : R) : R :=
-  DkMath.CosmicFormula.GN R u x 2
+  DkMath.CosmicFormula.GN (R := R) 2 u x
 
 /-- Square-growth Gnomon layer at anchor x with fixed unit u. -/
 abbrev squareGnomon (x u : R) : R :=
@@ -110,8 +110,10 @@ remains fixed.
 theorem bodyN_two_add_squareGnomon (x u : R) :
     BodyN 2 (x + u) u =
       BodyN 2 x u + squareGnomon (x + u) u := by
-  simp only [BodyN]
-  rw [GN_eq_sum, GN_eq_sum, squareGnomon, squareGnomonKernel_eq_two_mul_add]
+  simp only [BodyN, DkMath.CosmicFormula.GN]
+  rw [DkMath.CosmicFormula.GTail_one_eq_sum,
+    DkMath.CosmicFormula.GTail_one_eq_sum, squareGnomon,
+    squareGnomonKernel_eq_two_mul_add]
   norm_num [Finset.sum_range_succ]; ring
 
 /-- The Big step exposes Body growth followed by the unchanged Gap. -/

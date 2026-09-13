@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Data.Nat.ModEq
 import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic
 import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
 
@@ -220,6 +221,74 @@ theorem existsUnique_child_dvd_new_prime
   have hchildren :
       primeWorldChild S r i ≡ primeWorldChild S r j [MOD q] := by
     exact hchild.modEq_zero_nat.trans hqchild.modEq_zero_nat.symm
+  have hijM : i * M ≡ j * M [MOD q] := by
+    apply (Nat.ModEq.rfl (n := q) (a := r)).add_left_cancel
+    simpa [primeWorldChild, M] using hchildren
+  have hij : i ≡ j [MOD q] :=
+    Nat.ModEq.cancel_right_of_coprime hqcop hijM
+  exact hij.eq_of_lt_of_lt hi.1 hjq
+
+/--
+Exactly one bounded child of an old-period representative realizes any target
+in `ZMod q` on the new prime coordinate.
+
+This is the target-congruence form of the zero-target child observer above.
+The target is represented by `a.val`; no primality or application-level
+conclusion is attached to the resulting candidate child.
+-/
+theorem existsUnique_child_eq_target
+    {S : Finset ℕ} (hS : KnownPrimeScales S)
+    {q r : ℕ}
+    (hq : Nat.Prime q)
+    (hqS : q ∉ S)
+    (hr : r < primeWorldModulus S)
+    (a : ZMod q) :
+    ∃! j : ℕ,
+      j < q ∧
+      (primeWorldChild S r j : ZMod q) = a := by
+  letI : NeZero q := ⟨hq.ne_zero⟩
+  let M := primeWorldModulus S
+  have hMpos : 0 < M := by
+    simpa [M] using primeWorldModulus_pos hS
+  have hqcop : Nat.Coprime q M := by
+    simpa [M] using prime_coprime_primeWorldModulus_of_not_mem hS hq hqS
+  let z : ℕ := Nat.chineseRemainder hqcop a.val r
+  have hzlt : z < q * M := by
+    simpa [z] using
+      (Nat.chineseRemainder_lt_mul hqcop a.val r hq.ne_zero hMpos.ne')
+  have hzq : z ≡ a.val [MOD q] := by
+    simpa [z] using (Nat.chineseRemainder hqcop a.val r).prop.1
+  have hzM : z ≡ r [MOD M] := by
+    simpa [z] using (Nat.chineseRemainder hqcop a.val r).prop.2
+  have hrM : r < M := by simpa [M] using hr
+  have hrz : r ≤ z := by
+    apply hzM.symm.le_of_lt_add
+    omega
+  obtain ⟨j, hzj⟩ := (Nat.modEq_iff_exists_eq_add hrz).mp hzM.symm
+  have hzrep : z = r + j * M := by
+    simpa [Nat.mul_comm] using hzj
+  have hjmul : j * M < q * M := by
+    calc
+      j * M ≤ r + j * M := Nat.le_add_left _ _
+      _ = z := hzrep.symm
+      _ < q * M := hzlt
+  have hjq : j < q := (Nat.mul_lt_mul_right hMpos).mp hjmul
+  have hchild_mod : primeWorldChild S r j ≡ a.val [MOD q] := by
+    simpa [primeWorldChild, M, hzrep, Nat.mul_comm] using hzq
+  have hchild_eq : (primeWorldChild S r j : ZMod q) = a := by
+    rw [← ZMod.natCast_zmod_val a]
+    exact (ZMod.natCast_eq_natCast_iff _ _ _).mpr hchild_mod
+  refine ⟨j, ⟨hjq, hchild_eq⟩, ?_⟩
+  intro i hi
+  have hi_mod : primeWorldChild S r i ≡ a.val [MOD q] := by
+    apply (ZMod.natCast_eq_natCast_iff _ _ _).mp
+    calc
+      (primeWorldChild S r i : ZMod q) = a := hi.2
+      _ = (a.val : ZMod q) := (ZMod.natCast_zmod_val a).symm
+  have hchild_mod' : primeWorldChild S r j ≡ a.val [MOD q] := hchild_mod
+  have hchildren :
+      primeWorldChild S r i ≡ primeWorldChild S r j [MOD q] :=
+    hi_mod.trans hchild_mod'.symm
   have hijM : i * M ≡ j * M [MOD q] := by
     apply (Nat.ModEq.rfl (n := q) (a := r)).add_left_cancel
     simpa [primeWorldChild, M] using hchildren

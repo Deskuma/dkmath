@@ -5,6 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Three.PositiveCubicNormalization
+import DkMath.FLT.Three.EisensteinLibBridge
+
+#print "file: DkMath.FLT.Three"
 
 /-!
 # DkMath exponent-three public surface
