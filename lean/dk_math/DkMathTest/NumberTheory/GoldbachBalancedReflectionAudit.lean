@@ -587,6 +587,67 @@ example : GoldbachPairAt 68 := by
     (n := 68) (w := 15) (P := 11)
   all_goals decide +kernel
 
+example :
+    goldbachMaxAnchorWindow 15 5 = 9 ∧
+      goldbachMaxAnchorWindow 50 7 = 13 ∧
+      goldbachMaxAnchorWindow 22 7 = 14 ∧
+      goldbachMaxAnchorWindow 68 11 = 56 := by
+  decide +kernel
+
+example :
+    let wMax := goldbachMaxAnchorWindow 15 5
+    wMax ≤ 15 ∧ 5 < 15 - wMax ∧ 15 + wMax ≤ squareBody 5 := by
+  simpa using (goldbachMaxAnchorWindow_safe
+    (n := 15) (P := 5) (by decide +kernel) (by decide +kernel))
+
+example : 8 ≤ goldbachMaxAnchorWindow 15 5 := by
+  apply goldbachMaxAnchorWindow_maximal
+  · decide +kernel
+  · decide +kernel
+
+example :
+    goldbachSignedParityMargin 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachSignedParityMargin 15 9 (primeScalesUpTo 5) = 3 ∧
+      goldbachSignedParityMargin 50 10 (primeScalesUpTo 7) = 2 ∧
+      goldbachSignedParityMargin 50 13 (primeScalesUpTo 7) = 2 ∧
+      goldbachSignedParityMargin 22 9 (primeScalesUpTo 7) = 1 ∧
+      goldbachSignedParityMargin 22 14 (primeScalesUpTo 7) = 1 ∧
+      goldbachSignedParityMargin 68 15 (primeScalesUpTo 11) = 1 ∧
+      goldbachSignedParityMargin 68 56 (primeScalesUpTo 11) = 4 := by
+  decide +kernel
+
+example :
+    (goldbachWindowSurvivors 68 56 (primeScalesUpTo 11)).card = 4 := by
+  decide +kernel
+
+example :
+    goldbachSignedParityMargin 22 9 (primeScalesUpTo 7) =
+      (goldbachWindowSurvivors 22 9 (primeScalesUpTo 7)).card := by
+  apply goldbachSignedParityMargin_eq_survivors_card
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 7
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+
+example :
+    (∃ w, 7 < 22 - w ∧ 22 + w ≤ squareBody 7 ∧
+      0 < goldbachSignedParityMargin 22 w (primeScalesUpTo 7)) ↔
+      0 < goldbachSignedParityMargin 22
+        (goldbachMaxAnchorWindow 22 7) (primeScalesUpTo 7) := by
+  apply goldbachSignedParityMargin_exists_admissible_iff_max_positive
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 7
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · decide +kernel
+
+example : GoldbachPairAt 68 := by
+  apply goldbachPairAt_of_maxAnchorWindow_margin_pos
+    (n := 68) (P := 11)
+  all_goals decide +kernel
+
 end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 
 #print axioms DkMath.NumberTheory.goldbachWindow_survivors_add_covered
@@ -638,3 +699,13 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachSignedOddTailCRTSum_eq_windowOddTailMass
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivors_nonempty_iff_exact_signed_parity_budget
 #print axioms DkMath.NumberTheory.goldbachPairAt_of_exact_signed_parity_budget
+#print axioms DkMath.NumberTheory.goldbachSignedParityMargin_eq_survivors_card
+#print axioms DkMath.NumberTheory.goldbachSignedParityMargin_pos_iff_survivors_nonempty
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivors_subset_of_window_le
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivors_card_mono_window
+#print axioms DkMath.NumberTheory.goldbachSignedParityMargin_mono_window
+#print axioms DkMath.NumberTheory.goldbachMaxAnchorWindow_safe
+#print axioms DkMath.NumberTheory.goldbachMaxAnchorWindow_maximal
+#print axioms DkMath.NumberTheory.goldbachSignedParityMargin_le_maxAnchorWindow
+#print axioms DkMath.NumberTheory.goldbachSignedParityMargin_exists_admissible_iff_max_positive
+#print axioms DkMath.NumberTheory.goldbachPairAt_of_maxAnchorWindow_margin_pos

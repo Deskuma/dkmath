@@ -25,6 +25,7 @@ import DkMath.NumberTheory.Goldbach.BalancedSignedCRTExact
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTIncidence
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTQuadruple
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTParityTail
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTMargin
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -76,4 +77,10 @@ finite prime subsets, proves the full finite j-layer Pascal double count, and
 splits the nonnegative Pascal tail by parity.  Its exact survivor budget and
 the resulting endpoint wrapper remain conditional on the finite anchor and
 do not assert a universal inequality.
+
+`BalancedSignedCRTMargin` packages that budget as an exact nonnegative parity
+margin, proves its fixed-world window monotonicity, and identifies the maximal
+anchor-safe window.  The maximal-window search reduction and endpoint wrapper
+remain conditional on the explicit finite anchor; no one-seat recurrence or
+universal positivity provider is introduced.
 -/
