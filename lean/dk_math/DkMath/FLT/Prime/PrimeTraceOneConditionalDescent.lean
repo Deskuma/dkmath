@@ -32,14 +32,14 @@ theorem exists_unit_mul_pow_of_primeTraceOneStrippedIdealPacket
     (P0 : PrimeAdicFactorPacket p g u x)
     (P : PrimeTraceOneCoordinatePacket L p ζ hζ)
     (Q : PrimeTraceOneStrippedIdealPacket L P0 P) (hp2 : p ≠ 2) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root P0.prime hp2⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) :=
       traceOneRatField P0.prime hp2
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain P0.prime hp2
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p →
       ∃ u gamma : TraceOneInt (signedPrimeParameter p),
@@ -47,14 +47,14 @@ theorem exists_unit_mul_pow_of_primeTraceOneStrippedIdealPacket
         Ideal.span ({gamma} : Set (TraceOneInt (signedPrimeParameter p))) =
           Q.idealRoot ∧
         Q.residual = u * gamma ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root P0.prime hp2⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRatField P0.prime hp2
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime hp2
   intro hfree
   exact exists_unit_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
@@ -73,27 +73,27 @@ theorem exists_sector_mul_pow_of_primeTraceOneStrippedIdealPacket
     (Q : PrimeTraceOneStrippedIdealPacket L P0 P)
     (S : UnitPowerSectorSystem (TraceOneInt (signedPrimeParameter p)) p)
     (hp2 : p ≠ 2) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root P0.prime hp2⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) :=
       traceOneRatField P0.prime hp2
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain P0.prime hp2
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p →
       ∃ s : S.Sector, ∃ delta : TraceOneInt (signedPrimeParameter p),
         Q.residual = (S.rep s : TraceOneInt (signedPrimeParameter p)) *
           delta ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root P0.prime hp2⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRatField P0.prime hp2
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime hp2
   intro hfree
   exact exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
@@ -110,26 +110,26 @@ theorem exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket
     (P : PrimeTraceOneCoordinatePacket L p ζ hζ)
     (Q : PrimeTraceOneStrippedIdealPacket L P0 P)
     (hp7 : 7 ≤ p) (hmod : p % 4 = 3) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root P0.prime (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) :=
       traceOneRatField P0.prime (by omega)
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain P0.prime (by omega)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p →
       ∃ delta : TraceOneInt (signedPrimeParameter p),
         Q.residual = delta ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root P0.prime (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRatField P0.prime (by omega)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime (by omega)
   intro hfree
   exact traceOnePrimeImaginary_exists_eq_pow_of_span_eq_pow
@@ -144,41 +144,41 @@ theorem exists_sector_mul_pow_of_primeTraceOneRealStrippedIdealPacket
     (P : PrimeTraceOneCoordinatePacket L p ζ hζ)
     (Q : PrimeTraceOneStrippedIdealPacket L P0 P)
     (hmod : p % 4 = 1) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root P0.prime (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) :=
       traceOneRatField P0.prime (by omega)
-    letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+    let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
         change q₁ = q₂ at hre
         exact hre)
       to_finiteDimensional := inferInstance }
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain P0.prime (by omega)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p →
       ∃ i : Fin p, ∃ delta : TraceOneInt (signedPrimeParameter p),
         Q.residual =
           (traceOnePrimeRealFinSectorSystem P0.prime hmod).rep i * delta ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root P0.prime (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRatField P0.prime (by omega)
-  letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+  let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
       change q₁ = q₂ at hre
       exact hre)
     to_finiteDimensional := inferInstance }
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime (by omega)
   intro hfree
   exact traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow

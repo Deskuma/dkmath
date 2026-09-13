@@ -105,7 +105,7 @@ def charZeroAnchorMap
     {L : Type*} [Field L] [Algebra ℚ L]
     {p : ℕ} [Fact p.Prime] (ζ : L) (hζ : IsPrimitiveRoot ζ p) :
     universalCyclotomicCarrier p →+* L := by
-  letI : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
+  let : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
   exact specializePrimitiveRoot ζ hζ
 
 @[simp]
@@ -113,7 +113,7 @@ theorem charZeroAnchorMap_zeta
     {L : Type*} [Field L] [Algebra ℚ L]
     {p : ℕ} [Fact p.Prime] {ζ : L} (hζ : IsPrimitiveRoot ζ p) :
     charZeroAnchorMap ζ hζ (zetaU p) = ζ := by
-  letI : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
+  let : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
   exact specializePrimitiveRoot_zeta ζ hζ
 
 /-- The integral cyclotomic quotient is separated by every characteristic-zero
@@ -192,7 +192,7 @@ theorem charZeroAnchorMap_injective
     {L : Type*} [Field L] [Algebra ℚ L]
     {p : ℕ} [Fact p.Prime] {ζ : L} (hζ : IsPrimitiveRoot ζ p) :
     Function.Injective (charZeroAnchorMap ζ hζ) := by
-  letI : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
+  let : NeZero (p : L) := NeZero.of_faithfulSMul ℚ L p
   exact specializePrimitiveRoot_injective hζ
 
 /-! ## Specialization away from the cyclotomic prime -/
@@ -215,7 +215,7 @@ def positiveCharSpecializeRoot
     {K : Type*} [Field K] {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     [CharP K q] (hpq : q ≠ p) (ξ : K) (hξ : IsPrimitiveRoot ξ p) :
     universalCyclotomicCarrier p →+* K := by
-  letI : NeZero (p : K) := neZero_primeCast_of_charPrime hpq
+  let : NeZero (p : K) := neZero_primeCast_of_charPrime hpq
   exact specializePrimitiveRoot ξ hξ
 
 @[simp]
@@ -223,7 +223,7 @@ theorem positiveCharSpecializeRoot_zeta
     {K : Type*} [Field K] {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     [CharP K q] (hpq : q ≠ p) (ξ : K) (hξ : IsPrimitiveRoot ξ p) :
     positiveCharSpecializeRoot hpq ξ hξ (zetaU p) = ξ := by
-  letI : NeZero (p : K) := neZero_primeCast_of_charPrime hpq
+  let : NeZero (p : K) := neZero_primeCast_of_charPrime hpq
   exact specializePrimitiveRoot_zeta ξ hξ
 
 /-! ## Functoriality of the QR/QNR factors -/

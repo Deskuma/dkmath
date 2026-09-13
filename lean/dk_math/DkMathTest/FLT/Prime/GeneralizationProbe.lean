@@ -232,7 +232,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_prime
     DkMath.Lib.NumberTheory.padicValNat_pow hp p hd0
   have hmul : padicValNat p (carrier * residual) =
       padicValNat p carrier + padicValNat p residual := by
-    letI : Fact (Nat.Prime p) := ⟨hp⟩
+    let : Fact (Nat.Prime p) := ⟨hp⟩
     simpa using (padicValNat.mul (p := p) hc0 hr0)
   have hvalEq : p * padicValNat p distinguished =
       padicValNat p carrier + 1 := by

@@ -340,7 +340,7 @@ theorem oriented_modEq {n p q u v : ℕ} (hc : Nat.Coprime p q)
 theorem oriented_crt (n p q : ℕ) (hp : p ≠ 0) (hq : q ≠ 0)
     (hc : Nat.Coprime p q) :
     ∃! u : ℕ, u < p * q ∧ orientedResidue n p q u := by
-  letI : NeZero q := ⟨hq⟩
+  let : NeZero q := ⟨hq⟩
   let a := Nat.chineseRemainder hc n (-(n : ZMod q)).val
   have ha : orientedResidue n p q a.val := by
     constructor

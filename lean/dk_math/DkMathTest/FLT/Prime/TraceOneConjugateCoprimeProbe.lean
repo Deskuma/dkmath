@@ -25,11 +25,11 @@ example {w : TraceOneInt (signedPrimeParameter 3)}
     (hterminal : ¬ discrAxis (signedPrimeParameter 3) ∣ w) :
     IsCoprime (Ideal.span ({w} : Set (TraceOneInt (signedPrimeParameter 3))))
       (Ideal.span ({conj w} : Set (TraceOneInt (signedPrimeParameter 3)))) := by
-  letI : Field (TraceOneRat (signedPrimeParameter 3)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 3)) :=
     traceOneRatField (p := 3) (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 3)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 3)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 3)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 3)) :=
     traceOneRat_isDedekindDomain (p := 3) (by norm_num) (by norm_num)
   let P : PrimeDiscriminantPacket 3 (signedPrimeParameter 3) :=
     { prime := by norm_num
@@ -71,11 +71,11 @@ example :
         cyclotomicSevenSnd (2 : ℤ) (1 : ℤ)⟩
     IsCoprime (Ideal.span ({w} : Set (TraceOneInt (signedPrimeParameter 7))))
       (Ideal.span ({conj w} : Set (TraceOneInt (signedPrimeParameter 7)))) := by
-  letI : Field (TraceOneRat (signedPrimeParameter 7)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 7)) :=
     traceOneRatField (p := 7) (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
     traceOneRat_isDedekindDomain (p := 7) (by norm_num) (by norm_num)
   let P : PrimeDiscriminantPacket 7 (signedPrimeParameter 7) :=
     { prime := by norm_num
@@ -104,9 +104,9 @@ the imaginary p=11 and real p=13 carriers. -/
 
 example :
     Prime (discrAxis (signedPrimeParameter 11)) := by
-  letI : Field (TraceOneRat (signedPrimeParameter 11)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 11)) :=
     traceOneRatField (p := 11) (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let P : PrimeDiscriminantPacket 11 (signedPrimeParameter 11) :=
     { prime := by norm_num
@@ -119,11 +119,11 @@ example {w : TraceOneInt (signedPrimeParameter 13)}
     (hterminal : ¬ discrAxis (signedPrimeParameter 13) ∣ w) :
     IsCoprime (Ideal.span ({w} : Set (TraceOneInt (signedPrimeParameter 13))))
       (Ideal.span ({conj w} : Set (TraceOneInt (signedPrimeParameter 13)))) := by
-  letI : Field (TraceOneRat (signedPrimeParameter 13)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 13)) :=
     traceOneRatField (p := 13) (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
     traceOneRat_isDedekindDomain (p := 13) (by norm_num) (by norm_num)
   let P : PrimeDiscriminantPacket 13 (signedPrimeParameter 13) :=
     { prime := by norm_num
