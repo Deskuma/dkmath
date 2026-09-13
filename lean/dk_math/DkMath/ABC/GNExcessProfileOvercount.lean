@@ -35,13 +35,19 @@ theorem GNExcessTwoPrimeProfile_active {Q : Finset ℕ} {n : ℕ}
   ext q
   by_cases hq7 : q = 7
   · subst q
-    simp [GNExcessActivePrimeSet, GNExcessProfileValue, GNExcessTwoPrimeProfile,
+    unfold GNExcessActivePrimeSet
+    rw [Finset.mem_filter]
+    simp [GNExcessProfileValue, GNExcessTwoPrimeProfile,
       h7, show 0 < 2*n-1 by omega]
   by_cases hq13 : q = 13
   · subst q
-    simp [GNExcessActivePrimeSet, GNExcessProfileValue, GNExcessTwoPrimeProfile,
+    unfold GNExcessActivePrimeSet
+    rw [Finset.mem_filter]
+    simp [GNExcessProfileValue, GNExcessTwoPrimeProfile,
       h13, show 0 < 2*n-1 by omega]
-  · simp [GNExcessActivePrimeSet, GNExcessProfileValue, GNExcessTwoPrimeProfile, hq7, hq13]
+  · unfold GNExcessActivePrimeSet
+    rw [Finset.mem_filter]
+    simp [GNExcessProfileValue, GNExcessTwoPrimeProfile, hq7, hq13]
 
 /-- The exact two-prime modulus is the product of the two requested prime powers. -/
 theorem GNExcessTwoPrimeProfile_modulus {Q : Finset ℕ} {n : ℕ}
