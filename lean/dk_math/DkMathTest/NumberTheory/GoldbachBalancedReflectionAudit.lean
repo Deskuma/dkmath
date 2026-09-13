@@ -219,6 +219,78 @@ example :
           goldbachTripleCRTUpperSum 15 8 (primeScalesUpTo 5)) := by
   decide +kernel
 
+/-! ## CGE-007 signed residue regression -/
+
+/-- Coincident local signs are represented once in the canonical family. -/
+example :
+    signedPairResidues 15 2 3 = ({3} : Finset ℕ) ∧
+      signedPairResidues 15 2 5 = ({5} : Finset ℕ) ∧
+      signedPairResidues 15 3 5 = ({0} : Finset ℕ) ∧
+      signedTripleResidues 15 2 3 5 = ({15} : Finset ℕ) := by
+  decide +kernel
+
+example :
+    signedTripleResidues 15 2 3 5 =
+      ({goldbachTripleWitness 15 2 3 5} : Finset ℕ) := by
+  apply signedTripleResidues_center_aligned_eq_singleton
+  all_goals norm_num
+
+example :
+    goldbachSignedPairCRTSum 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachSignedTripleCRTSum 15 8 (primeScalesUpTo 5) = 0 := by
+  decide +kernel
+
+example :
+    ¬ GoldbachCenterAlignedWorld 50 (primeScalesUpTo 7) := by
+  intro hcenter
+  have h := hcenter 3 (by decide +kernel)
+  norm_num at h
+
+/-- The mixed-sign target is an exact finite accounting regression. -/
+example :
+    (goldbachBalancedOffsets 50 10).card = 11 ∧
+      goldbachWindowPairOverlapCount 50 10 (primeScalesUpTo 7) = 12 ∧
+      goldbachWindowTripleOverlapCount 50 10 (primeScalesUpTo 7) = 2 ∧
+      goldbachWindowPairOverlapCount 50 10 (primeScalesUpTo 7) -
+          goldbachWindowTripleOverlapCount 50 10 (primeScalesUpTo 7) = 10 := by
+  decide +kernel
+
+example :
+    (∑ r ∈ primeScalesUpTo 7,
+      (if r ∣ 2 * 50 then 1 else 2) * (10 / r + 1)) = 21 ∧
+      ¬ (21 < (goldbachBalancedOffsets 50 10).card +
+        (goldbachWindowPairOverlapCount 50 10 (primeScalesUpTo 7) -
+          goldbachWindowTripleOverlapCount 50 10 (primeScalesUpTo 7))) := by
+  decide +kernel
+
+example :
+    (goldbachSignedPairCRTSum 50 10 (primeScalesUpTo 7) = 12) ∧
+      (goldbachSignedTripleCRTSum 50 10 (primeScalesUpTo 7) = 2) := by
+  decide +kernel
+
+example :
+    (∀ t ∈ goldbachBalancedOffsets 15 8, ∀ r ∈ primeScalesUpTo 5,
+      ((t : ZMod r) ∈ goldbachForbiddenResidues 15 r ↔
+        r ∈ goldbachObstructionSupportIn 15 t (primeScalesUpTo 5))) := by
+  intro t ht r hr
+  refine goldbach_signed_pair_raw_iff_support
+    (n := 15) (w := 8) (S := primeScalesUpTo 5) (P := 5)
+      (t := t) (r := r) ?_ ?_ ?_ ht hr
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro s hs
+    exact (mem_primeScalesUpTo.mp hs).2
+  · decide +kernel
+
+/-- The signed counts feed the existing Pascal provider only with explicit
+comparison hypotheses; the target-30 comparisons are kernel-checked here. -/
+example :
+    (goldbachWindowSurvivors 15 8 (primeScalesUpTo 5)).Nonempty := by
+  apply goldbachWindowSurvivor_of_signed_crt_budget (C := 10)
+  · decide +kernel
+  · decide +kernel
+  · decide +kernel
+  · decide +kernel
+
 /-- A surviving seat enters the `P=2` shell and closes to Goldbach. -/
 example : GoldbachPairAt 3 := by
   apply goldbachPairAt_of_goldbachWindowSurvivor
@@ -249,3 +321,10 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachTripleWitness_dvd_left
 #print axioms DkMath.NumberTheory.goldbachCenterAlignedWorld_forbiddenResidues
 #print axioms DkMath.NumberTheory.goldbachTripleWitness_center_aligned_progression
+#print axioms DkMath.NumberTheory.signedPairResidues_card_le_four
+#print axioms DkMath.NumberTheory.signedTripleResidues_card_le_eight
+#print axioms DkMath.NumberTheory.goldbachProgressionSeats_card
+#print axioms DkMath.NumberTheory.goldbach_signed_pair_raw_iff_support
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_signed_crt_budget
+#print axioms DkMath.NumberTheory.signedTripleResidues_target_eq_existing_witness
+#print axioms DkMath.NumberTheory.signedTripleResidues_center_aligned_eq_singleton

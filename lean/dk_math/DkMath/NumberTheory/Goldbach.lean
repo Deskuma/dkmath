@@ -20,6 +20,7 @@ import DkMath.NumberTheory.Goldbach.BalancedReflection
 import DkMath.NumberTheory.Goldbach.BalancedCapacity
 import DkMath.NumberTheory.Goldbach.BalancedPascalOverlap
 import DkMath.NumberTheory.Goldbach.BalancedCRTOverlap
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTOverlap
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -53,4 +54,10 @@ transport, without adding a near-balanced existence provider.
 residue collapse, and a finite strict-triple CRT progression ledger.  These
 are bounded witness and accounting APIs; they do not add a universal escape
 provider.
+
+`BalancedSignedCRTOverlap` adds canonical signed pair/triple residue families,
+their finite cardinality bounds, explicit progression-seat counts, and the
+anchor-local raw-to-proper support bridge.  Coincident signed classes are
+deduplicated by the canonical residue family; no primality or universal
+capacity provider is added.
 -/
