@@ -281,6 +281,83 @@ example :
     exact (mem_primeScalesUpTo.mp hs).2
   · decide +kernel
 
+/-! ## CGE-008 exact signed / Pascal identification -/
+
+example :
+    goldbachSignedPairCRTCount 15 8 2 3 =
+      (goldbachWindowPairSupportSeats 15 8 (primeScalesUpTo 5) 2 3).card := by
+  apply goldbachSignedPairCRTCount_eq_pairSupportSeats_card
+    (n := 15) (w := 8) (P := 5) (p := 2) (q := 3)
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · decide +kernel
+
+example :
+    goldbachSignedTripleCRTCount 15 8 2 3 5 =
+      (goldbachWindowTripleSupportSeats 15 8 (primeScalesUpTo 5) 2 3 5).card := by
+  apply goldbachSignedTripleCRTCount_eq_tripleSupportSeats_card
+    (n := 15) (w := 8) (P := 5) (p := 2) (q := 3) (r := 5)
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro s hs
+    exact (mem_primeScalesUpTo.mp hs).2
+  · decide +kernel
+  · decide +kernel
+
+example :
+    goldbachSignedPairCRTSum 15 8 (primeScalesUpTo 5) =
+      goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) ∧
+    goldbachSignedTripleCRTSum 15 8 (primeScalesUpTo 5) =
+      goldbachWindowTripleOverlapCount 15 8 (primeScalesUpTo 5) := by
+  constructor
+  · apply goldbachSignedPairCRTSum_eq_windowPairOverlapCount
+      (n := 15) (w := 8) (P := 5)
+    · decide +kernel
+    · exact knownPrimeScales_primeScalesUpTo 5
+    · intro r hr
+      exact (mem_primeScalesUpTo.mp hr).2
+    · decide +kernel
+  · apply goldbachSignedTripleCRTSum_eq_windowTripleOverlapCount
+      (n := 15) (w := 8) (P := 5)
+    · decide +kernel
+    · exact knownPrimeScales_primeScalesUpTo 5
+    · intro r hr
+      exact (mem_primeScalesUpTo.mp hr).2
+    · decide +kernel
+
+example :
+    goldbachSignedPairCRTSum 50 10 (primeScalesUpTo 7) = 12 ∧
+      goldbachSignedTripleCRTSum 50 10 (primeScalesUpTo 7) = 2 ∧
+      goldbachWindowPairOverlapCount 50 10 (primeScalesUpTo 7) = 12 ∧
+      goldbachWindowTripleOverlapCount 50 10 (primeScalesUpTo 7) = 2 := by
+  have hp := knownPrimeScales_primeScalesUpTo 7
+  have hb : ∀ ⦃r : ℕ⦄, r ∈ primeScalesUpTo 7 → r ≤ 7 := by
+    intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  have ha : 7 < 50 - 10 := by decide
+  have hpair := goldbachSignedPairCRTSum_eq_windowPairOverlapCount
+    (n := 50) (w := 10) (P := 7) (S := primeScalesUpTo 7)
+    (by decide) hp hb ha
+  have htriple := goldbachSignedTripleCRTSum_eq_windowTripleOverlapCount
+    (n := 50) (w := 10) (P := 7) (S := primeScalesUpTo 7)
+    (by decide) hp hb ha
+  exact ⟨by decide +kernel, by decide +kernel,
+    hpair ▸ rfl, htriple ▸ rfl⟩
+
+example :
+    (goldbachWindowSurvivors 15 8 (primeScalesUpTo 5)).Nonempty := by
+  apply goldbachWindowSurvivor_of_residue_capacity_of_signed_crt_budget_exact
+    (n := 15) (w := 8) (P := 5) (S := primeScalesUpTo 5)
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · decide +kernel
+
 /-- The signed counts feed the existing Pascal provider only with explicit
 comparison hypotheses; the target-30 comparisons are kernel-checked here. -/
 example :
@@ -326,5 +403,12 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachProgressionSeats_card
 #print axioms DkMath.NumberTheory.goldbach_signed_pair_raw_iff_support
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_signed_crt_budget
+#print axioms DkMath.NumberTheory.mem_goldbachProgressionSeats_iff_balanced_modEq
+#print axioms DkMath.NumberTheory.goldbachSignedPairCRTCount_eq_pairSupportSeats_card
+#print axioms DkMath.NumberTheory.goldbachSignedTripleCRTCount_eq_tripleSupportSeats_card
+#print axioms DkMath.NumberTheory.goldbachSignedPairCRTSum_eq_windowPairOverlapCount
+#print axioms DkMath.NumberTheory.goldbachSignedTripleCRTSum_eq_windowTripleOverlapCount
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_signed_crt_budget_exact
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_residue_capacity_of_signed_crt_budget_exact
 #print axioms DkMath.NumberTheory.signedTripleResidues_target_eq_existing_witness
 #print axioms DkMath.NumberTheory.signedTripleResidues_center_aligned_eq_singleton

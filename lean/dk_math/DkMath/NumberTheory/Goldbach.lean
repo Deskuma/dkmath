@@ -21,6 +21,7 @@ import DkMath.NumberTheory.Goldbach.BalancedCapacity
 import DkMath.NumberTheory.Goldbach.BalancedPascalOverlap
 import DkMath.NumberTheory.Goldbach.BalancedCRTOverlap
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTOverlap
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTExact
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -60,4 +61,10 @@ their finite cardinality bounds, explicit progression-seat counts, and the
 anchor-local raw-to-proper support bridge.  Coincident signed classes are
 deduplicated by the canonical residue family; no primality or universal
 capacity provider is added.
+
+`BalancedSignedCRTExact` identifies the signed progression seats exactly with
+the balanced support seats, and closes the pair/triple global double counts
+under the explicit finite-world anchor.  The progression normalization keeps
+the endpoint condition `2 ≤ n` visible; these are finite identities, not a
+universal survivor or Strong Goldbach provider.
 -/

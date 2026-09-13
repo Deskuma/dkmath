@@ -335,11 +335,11 @@ theorem goldbachProgressionWindowCount_eq_card
 
 def goldbachSignedPairCRTCount (n w p q : ℕ) : ℕ :=
   ∑ t₀ ∈ signedPairResidues n p q,
-    goldbachProgressionWindowCount (min (n - 1) w) t₀ (p * q)
+    goldbachProgressionWindowCount (min (n - 2) w) t₀ (p * q)
 
 def goldbachSignedTripleCRTCount (n w p q r : ℕ) : ℕ :=
   ∑ t₀ ∈ signedTripleResidues n p q r,
-    goldbachProgressionWindowCount (min (n - 1) w) t₀ (p * q * r)
+    goldbachProgressionWindowCount (min (n - 2) w) t₀ (p * q * r)
 
 def goldbachStrictPrimePairs (S : Finset ℕ) : Finset (ℕ × ℕ) :=
   (S.product S).filter (fun pair => pair.1 < pair.2)
@@ -384,7 +384,7 @@ theorem goldbach_signed_pair_count_eq_progression_sum
     {n w p q : ℕ} (hM : 0 < p * q) :
     goldbachSignedPairCRTCount n w p q =
       ∑ t₀ ∈ signedPairResidues n p q,
-        (goldbachProgressionSeats (min (n - 1) w) t₀ (p * q)).card := by
+        (goldbachProgressionSeats (min (n - 2) w) t₀ (p * q)).card := by
   unfold goldbachSignedPairCRTCount
   apply Finset.sum_congr rfl
   intro t₀ ht₀
@@ -394,7 +394,7 @@ theorem goldbach_signed_triple_count_eq_progression_sum
     {n w p q r : ℕ} (hM : 0 < p * q * r) :
     goldbachSignedTripleCRTCount n w p q r =
       ∑ t₀ ∈ signedTripleResidues n p q r,
-        (goldbachProgressionSeats (min (n - 1) w) t₀ (p * q * r)).card := by
+        (goldbachProgressionSeats (min (n - 2) w) t₀ (p * q * r)).card := by
   unfold goldbachSignedTripleCRTCount
   apply Finset.sum_congr rfl
   intro t₀ ht₀
