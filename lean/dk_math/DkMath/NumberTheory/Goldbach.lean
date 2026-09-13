@@ -24,6 +24,7 @@ import DkMath.NumberTheory.Goldbach.BalancedSignedCRTOverlap
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTExact
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTIncidence
 import DkMath.NumberTheory.Goldbach.BalancedSignedCRTQuadruple
+import DkMath.NumberTheory.Goldbach.BalancedSignedCRTParityTail
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -69,4 +70,10 @@ the balanced support seats, and closes the pair/triple global double counts
 under the explicit finite-world anchor.  The progression normalization keeps
 the endpoint condition `2 ≤ n` visible; these are finite identities, not a
 universal survivor or Strong Goldbach provider.
+
+`BalancedSignedCRTParityTail` generalizes the signed CRT layer to arbitrary
+finite prime subsets, proves the full finite j-layer Pascal double count, and
+splits the nonnegative Pascal tail by parity.  Its exact survivor budget and
+the resulting endpoint wrapper remain conditional on the finite anchor and
+do not assert a universal inequality.
 -/

@@ -489,6 +489,104 @@ example : GoldbachPairAt 22 := by
     (n := 22) (w := 9) (P := 7)
   all_goals decide +kernel
 
+/-! ## CGE-011 full parity-tail regressions -/
+
+example :
+    goldbachWindowEvenTailMass 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachWindowOddTailMass 15 8 (primeScalesUpTo 5) = 0 ∧
+      goldbachWindowEvenTailMass 15 8 (primeScalesUpTo 5) =
+        goldbachWindowOverlapExcess 15 8 (primeScalesUpTo 5) +
+          goldbachWindowOddTailMass 15 8 (primeScalesUpTo 5) := by
+  decide +kernel
+
+example :
+    goldbachWindowIncidence 50 10 (primeScalesUpTo 7) = 19 ∧
+      goldbachWindowEvenTailMass 50 10 (primeScalesUpTo 7) = 12 ∧
+      goldbachWindowOddTailMass 50 10 (primeScalesUpTo 7) = 2 ∧
+      19 + 2 < 11 + 12 := by
+  decide +kernel
+
+example :
+    goldbachWindowIncidence 22 9 (primeScalesUpTo 7) = 18 ∧
+      goldbachWindowEvenTailMass 22 9 (primeScalesUpTo 7) = 14 ∧
+      goldbachWindowOddTailMass 22 9 (primeScalesUpTo 7) = 5 ∧
+      14 = 9 + 5 ∧ 13 + 1 = 14 := by
+  decide +kernel
+
+example :
+    Nat.choose 5 2 = 10 ∧ Nat.choose 5 3 = 10 ∧
+      Nat.choose 5 4 = 5 ∧ Nat.choose 5 5 = 1 ∧
+      10 + 5 = 15 ∧ 10 + 1 = 11 ∧
+      15 = 5 - 1 + 11 ∧ 10 - 10 + 5 = 5 := by
+  decide +kernel
+
+example :
+    (goldbachObstructionSupportIn 68 0 (primeScalesUpTo 11)).card = 1 ∧
+      (goldbachObstructionSupportIn 68 1 (primeScalesUpTo 11)).card = 1 ∧
+      (goldbachObstructionSupportIn 68 2 (primeScalesUpTo 11)).card = 5 ∧
+      (goldbachObstructionSupportIn 68 3 (primeScalesUpTo 11)).card = 1 ∧
+      (goldbachObstructionSupportIn 68 4 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 5 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 6 (primeScalesUpTo 11)).card = 1 ∧
+      (goldbachObstructionSupportIn 68 7 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 8 (primeScalesUpTo 11)).card = 3 ∧
+      (goldbachObstructionSupportIn 68 9 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 10 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 11 (primeScalesUpTo 11)).card = 1 ∧
+      (goldbachObstructionSupportIn 68 12 (primeScalesUpTo 11)).card = 3 ∧
+      (goldbachObstructionSupportIn 68 13 (primeScalesUpTo 11)).card = 3 ∧
+      (goldbachObstructionSupportIn 68 14 (primeScalesUpTo 11)).card = 2 ∧
+      (goldbachObstructionSupportIn 68 15 (primeScalesUpTo 11)).card = 0 := by
+  decide +kernel
+
+example :
+    (goldbachBalancedOffsets 68 15).card = 16 ∧
+      goldbachWindowIncidence 68 15 (primeScalesUpTo 11) = 31 ∧
+      (goldbachWindowCoveredSeats 68 15 (primeScalesUpTo 11)).card = 15 ∧
+      goldbachWindowPairOverlapCount 68 15 (primeScalesUpTo 11) = 25 ∧
+      goldbachWindowTripleOverlapCount 68 15 (primeScalesUpTo 11) = 13 ∧
+      goldbachWindowQuadrupleOverlapCount 68 15 (primeScalesUpTo 11) = 5 ∧
+      goldbachWindowJOverlapCount 68 15 (primeScalesUpTo 11) 5 = 1 ∧
+      goldbachWindowEvenTailMass 68 15 (primeScalesUpTo 11) = 30 ∧
+      goldbachWindowOddTailMass 68 15 (primeScalesUpTo 11) = 14 ∧
+      goldbachWindowOverlapExcess 68 15 (primeScalesUpTo 11) = 16 := by
+  decide +kernel
+
+example :
+    goldbachSignedJCRTSum 68 15 (primeScalesUpTo 11) 5 = 1 ∧
+      goldbachWindowJOverlapCount 68 15 (primeScalesUpTo 11) 5 = 1 := by
+  decide +kernel
+
+example :
+    goldbachSignedEvenTailCRTSum 68 15 (primeScalesUpTo 11) = 30 ∧
+      goldbachSignedOddTailCRTSum 68 15 (primeScalesUpTo 11) = 14 := by
+  have he := goldbachSignedEvenTailCRTSum_eq_windowEvenTailMass
+    (n := 68) (w := 15) (P := 11) (S := primeScalesUpTo 11)
+    (by decide +kernel) (knownPrimeScales_primeScalesUpTo 11)
+    (fun {_} hr => (mem_primeScalesUpTo.mp hr).2) (by decide +kernel)
+  have ho := goldbachSignedOddTailCRTSum_eq_windowOddTailMass
+    (n := 68) (w := 15) (P := 11) (S := primeScalesUpTo 11)
+    (by decide +kernel) (knownPrimeScales_primeScalesUpTo 11)
+    (fun {_} hr => (mem_primeScalesUpTo.mp hr).2) (by decide +kernel)
+  rw [he, ho]
+  decide +kernel
+
+example :
+    (goldbachWindowSurvivors 68 15 (primeScalesUpTo 11)).Nonempty ↔
+      goldbachSignedSingleCRTSum 68 15 (primeScalesUpTo 11) +
+          goldbachSignedOddTailCRTSum 68 15 (primeScalesUpTo 11) <
+        (goldbachBalancedOffsets 68 15).card +
+          goldbachSignedEvenTailCRTSum 68 15 (primeScalesUpTo 11) := by
+  exact goldbachWindowSurvivors_nonempty_iff_exact_signed_parity_budget
+    (n := 68) (w := 15) (P := 11) (S := primeScalesUpTo 11)
+    (by decide +kernel) (knownPrimeScales_primeScalesUpTo 11)
+    (fun {_} hr => (mem_primeScalesUpTo.mp hr).2) (by decide +kernel)
+
+example : GoldbachPairAt 68 := by
+  apply goldbachPairAt_of_exact_signed_parity_budget
+    (n := 68) (w := 15) (P := 11)
+  all_goals decide +kernel
+
 end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 
 #print axioms DkMath.NumberTheory.goldbachWindow_survivors_add_covered
@@ -533,3 +631,10 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_residue_capacity_of_signed_crt_budget_exact
 #print axioms DkMath.NumberTheory.signedTripleResidues_target_eq_existing_witness
 #print axioms DkMath.NumberTheory.signedTripleResidues_center_aligned_eq_singleton
+#print axioms DkMath.NumberTheory.goldbachSignedSubsetCRTCount_eq_supportSeats_card
+#print axioms DkMath.NumberTheory.goldbachSignedJCRTSum_eq_windowJOverlapCount
+#print axioms DkMath.NumberTheory.goldbachWindowLocalEvenTailMass_eq_overlapExcess_add_oddTail
+#print axioms DkMath.NumberTheory.goldbachSignedEvenTailCRTSum_eq_windowEvenTailMass
+#print axioms DkMath.NumberTheory.goldbachSignedOddTailCRTSum_eq_windowOddTailMass
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivors_nonempty_iff_exact_signed_parity_budget
+#print axioms DkMath.NumberTheory.goldbachPairAt_of_exact_signed_parity_budget
