@@ -380,6 +380,61 @@ example : GoldbachPairAt 3 := by
     (n := 3) (w := 0) (P := 2)
   all_goals decide +kernel
 
+/-! ## CGE-009 exact single-prime incidence regression -/
+
+/-- The target-30 single-prime sum is the exact window incidence nine. -/
+example :
+    goldbachSignedSingleCRTSum 15 8 (primeScalesUpTo 5) = 9 ∧
+      goldbachWindowIncidence 15 8 (primeScalesUpTo 5) = 9 ∧
+      goldbachSignedPairCRTSum 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachSignedTripleCRTSum 15 8 (primeScalesUpTo 5) = 0 ∧
+      (goldbachBalancedOffsets 15 8).card = 9 ∧
+      9 < 9 + (3 - 0) := by
+  decide +kernel
+
+example :
+    goldbachSignedSingleCRTCount 15 8 2 = 4 ∧
+      goldbachSignedSingleCRTCount 15 8 3 = 3 ∧
+      goldbachSignedSingleCRTCount 15 8 5 = 2 := by
+  decide +kernel
+
+example :
+    goldbachSignedSingleCRTSum 50 10 (primeScalesUpTo 7) = 19 ∧
+      goldbachWindowIncidence 50 10 (primeScalesUpTo 7) = 19 ∧
+      goldbachSignedSingleCRTCount 50 10 2 = 6 ∧
+      goldbachSignedSingleCRTCount 50 10 3 = 7 ∧
+      goldbachSignedSingleCRTCount 50 10 5 = 3 ∧
+      goldbachSignedSingleCRTCount 50 10 7 = 3 := by
+  decide +kernel
+
+example :
+    19 < (goldbachBalancedOffsets 50 10).card +
+      (goldbachSignedPairCRTSum 50 10 (primeScalesUpTo 7) -
+        goldbachSignedTripleCRTSum 50 10 (primeScalesUpTo 7)) ∧
+    19 < 21 := by
+  decide +kernel
+
+example :
+    (goldbachWindowSurvivors 15 8 (primeScalesUpTo 5)).Nonempty := by
+  apply goldbachWindowSurvivor_of_exact_signed_crt_budget
+    (n := 15) (w := 8) (P := 5) (S := primeScalesUpTo 5)
+  · decide +kernel
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · decide +kernel
+
+example : GoldbachPairAt 15 := by
+  apply goldbachPairAt_of_exact_signed_crt_budget
+    (n := 15) (w := 8) (P := 5)
+  all_goals decide +kernel
+
+example : GoldbachPairAt 50 := by
+  apply goldbachPairAt_of_exact_signed_crt_budget
+    (n := 50) (w := 10) (P := 7)
+  all_goals decide +kernel
+
 end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 
 #print axioms DkMath.NumberTheory.goldbachWindow_survivors_add_covered
@@ -406,6 +461,11 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.mem_goldbachProgressionSeats_iff_balanced_modEq
 #print axioms DkMath.NumberTheory.goldbachSignedPairCRTCount_eq_pairSupportSeats_card
 #print axioms DkMath.NumberTheory.goldbachSignedTripleCRTCount_eq_tripleSupportSeats_card
+#print axioms DkMath.NumberTheory.signedSingleResidues_card_eq_forbidden
+#print axioms DkMath.NumberTheory.goldbachSignedSingleCRTCount_eq_windowBlockedSeats_card
+#print axioms DkMath.NumberTheory.goldbachSignedSingleCRTSum_eq_windowIncidence
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_exact_signed_crt_budget
+#print axioms DkMath.NumberTheory.goldbachPairAt_of_exact_signed_crt_budget
 #print axioms DkMath.NumberTheory.goldbachSignedPairCRTSum_eq_windowPairOverlapCount
 #print axioms DkMath.NumberTheory.goldbachSignedTripleCRTSum_eq_windowTripleOverlapCount
 #print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_signed_crt_budget_exact
