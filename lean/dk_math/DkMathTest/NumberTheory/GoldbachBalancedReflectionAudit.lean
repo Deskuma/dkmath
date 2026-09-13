@@ -22,6 +22,7 @@ open DkMath.NumberTheory
 open DkMath.NumberTheory.GoldbachCrossGapExchange
 open DkMath.NumberTheory.GoldbachCrossGapEscape
 open DkMath.NumberTheory.Primitive
+open scoped BigOperators
 
 /-- The central window is an exact filter of the admissible offset fiber. -/
 example :
@@ -96,6 +97,42 @@ example :
         (goldbachWindowCoveredSeats 3 0 (primeScalesUpTo 2)).card = 1 := by
   decide +kernel
 
+/-- The width-local block capacity uses `w / r + 1`, not the full-fiber width. -/
+example :
+    (goldbachWindowBlockedSeats 15 8 2).card ≤
+      (if 2 ∣ 2 * 15 then 1 else 2) * (8 / 2 + 1) := by
+  exact goldbachWindow_blocked_card_le_residue_capacity 15 8 2
+
+/-- The target-30 window has six covered seats and nine incidences. -/
+example :
+    (goldbachWindowCoveredSeats 15 8 (primeScalesUpTo 5)).card = 6 ∧
+      goldbachWindowIncidence 15 8 (primeScalesUpTo 5) = 9 ∧
+      goldbachWindowOverlapExcess 15 8 (primeScalesUpTo 5) = 3 := by
+  decide +kernel
+
+example :
+    (∑ r ∈ primeScalesUpTo 5,
+      (if r ∣ 2 * 15 then 1 else 2) * (8 / r + 1)) = 10 ∧
+      ¬ (10 < (goldbachBalancedOffsets 15 8).card) ∧
+      10 < (goldbachBalancedOffsets 15 8).card +
+        goldbachWindowOverlapExcess 15 8 (primeScalesUpTo 5) := by
+  decide +kernel
+
+/-- Exact incidence conservation is replayed on the target-30 finite window. -/
+example :
+    (goldbachWindowSurvivors 15 8 (primeScalesUpTo 5)).card +
+        goldbachWindowIncidence 15 8 (primeScalesUpTo 5) =
+      (goldbachBalancedOffsets 15 8).card +
+        goldbachWindowOverlapExcess 15 8 (primeScalesUpTo 5) := by
+  exact goldbachWindowIncidenceConservation 15 8 (primeScalesUpTo 5)
+
+example :
+    (goldbachWindowSurvivors 15 8 (primeScalesUpTo 5)).Nonempty := by
+  apply goldbachWindowSurvivor_of_residue_capacity_of_overlap_lower
+    (S := primeScalesUpTo 5) (e := 3)
+  · decide +kernel
+  · decide +kernel
+
 /-- A surviving seat enters the `P=2` shell and closes to Goldbach. -/
 example : GoldbachPairAt 3 := by
   apply goldbachPairAt_of_goldbachWindowSurvivor
@@ -114,3 +151,7 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.crossGapReflectionOffset_min_max
 #print axioms DkMath.NumberTheory.prime_pair_of_goldbachWindowSurvivor
 #print axioms DkMath.NumberTheory.goldbachPairAt_of_goldbachWindow_cover_shortfall
+#print axioms DkMath.NumberTheory.goldbachWindow_blocked_card_le_residue_capacity
+#print axioms DkMath.NumberTheory.goldbachWindowIncidence_eq_covered_add_overlapExcess
+#print axioms DkMath.NumberTheory.goldbachWindowIncidenceConservation
+#print axioms DkMath.NumberTheory.goldbachWindowSurvivor_of_incidence_le_of_overlap_le

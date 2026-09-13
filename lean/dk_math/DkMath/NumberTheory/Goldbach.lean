@@ -17,6 +17,7 @@ import DkMath.NumberTheory.Goldbach.CrossGapExchange
 import DkMath.NumberTheory.Goldbach.CrossGapEscape
 import DkMath.NumberTheory.Goldbach.CrossGapSquareCertification
 import DkMath.NumberTheory.Goldbach.BalancedReflection
+import DkMath.NumberTheory.Goldbach.BalancedCapacity
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
