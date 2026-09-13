@@ -164,6 +164,61 @@ example : GoldbachPairAt 15 := by
     (n := 15) (w := 8) (P := 5)
   all_goals decide +kernel
 
+/-- The canonical target-30 left witnesses are exactly the three unordered
+prime pairs from the `P=5` world. -/
+example :
+    goldbachLeftPairWitness 15 2 3 = 3 ∧
+      goldbachLeftPairWitness 15 2 5 = 5 ∧
+      goldbachLeftPairWitness 15 3 5 = 0 ∧
+      goldbachWindowPairLower 15 8 (primeScalesUpTo 5) = 3 := by
+  decide +kernel
+
+example :
+    goldbachWindowPairLower 15 8 (primeScalesUpTo 5) ≤
+      goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) := by
+  apply goldbachWindowPairLower_le_pairOverlap
+    (S := primeScalesUpTo 5) (P := 5)
+  · exact knownPrimeScales_primeScalesUpTo 5
+  · intro r hr
+    exact (mem_primeScalesUpTo.mp hr).2
+  · decide +kernel
+  · decide +kernel
+
+example :
+    goldbachWindowPairLower 15 8 (primeScalesUpTo 5) =
+        goldbachWindowPairOverlapCount 15 8 (primeScalesUpTo 5) ∧
+    goldbachTripleCRTUpperSum 15 8 (primeScalesUpTo 5) =
+        goldbachWindowTripleOverlapCount 15 8 (primeScalesUpTo 5) := by
+  decide +kernel
+
+/-- The center-aligned target world collapses every local signed class. -/
+example : GoldbachCenterAlignedWorld 15 (primeScalesUpTo 5) := by
+  rw [show primeScalesUpTo 5 = ({2, 3, 5} : Finset ℕ) by decide +kernel]
+  intro r hr
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hr
+  rcases hr with rfl | rfl | rfl
+  all_goals norm_num
+
+example :
+    goldbachTripleWitness 15 2 3 5 = 15 ∧
+      goldbachTripleCRTUpperSum 15 8 (primeScalesUpTo 5) = 0 := by
+  decide +kernel
+
+example :
+    goldbachTripleWitness 15 2 3 5 > 8 ∧
+      goldbachTripleCRTUpper 15 8 2 3 5 = 0 := by
+  decide +kernel
+
+example :
+    (∑ r ∈ primeScalesUpTo 5,
+      (if r ∣ 2 * 15 then 1 else 2) * (8 / r + 1)) = 10 ∧
+      goldbachWindowPairLower 15 8 (primeScalesUpTo 5) = 3 ∧
+      goldbachTripleCRTUpperSum 15 8 (primeScalesUpTo 5) = 0 ∧
+      10 < (goldbachBalancedOffsets 15 8).card +
+        (goldbachWindowPairLower 15 8 (primeScalesUpTo 5) -
+          goldbachTripleCRTUpperSum 15 8 (primeScalesUpTo 5)) := by
+  decide +kernel
+
 /-- A surviving seat enters the `P=2` shell and closes to Goldbach. -/
 example : GoldbachPairAt 3 := by
   apply goldbachPairAt_of_goldbachWindowSurvivor
@@ -190,3 +245,7 @@ end DkMathTest.NumberTheory.GoldbachBalancedReflectionAudit
 #print axioms DkMath.NumberTheory.goldbachWindowPairOverlapCount_le_overlap_add_triple
 #print axioms DkMath.NumberTheory.goldbachWindowPairOverlap_sub_triple_le_overlap
 #print axioms DkMath.NumberTheory.goldbachPairAt_of_goldbachWindow_residue_capacity_of_pairMinusTriple_budget
+#print axioms DkMath.NumberTheory.goldbachLeftPairWitness_dvd_left
+#print axioms DkMath.NumberTheory.goldbachTripleWitness_dvd_left
+#print axioms DkMath.NumberTheory.goldbachCenterAlignedWorld_forbiddenResidues
+#print axioms DkMath.NumberTheory.goldbachTripleWitness_center_aligned_progression

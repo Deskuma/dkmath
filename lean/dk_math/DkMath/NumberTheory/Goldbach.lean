@@ -19,6 +19,7 @@ import DkMath.NumberTheory.Goldbach.CrossGapSquareCertification
 import DkMath.NumberTheory.Goldbach.BalancedReflection
 import DkMath.NumberTheory.Goldbach.BalancedCapacity
 import DkMath.NumberTheory.Goldbach.BalancedPascalOverlap
+import DkMath.NumberTheory.Goldbach.BalancedCRTOverlap
 
 #print "file: DkMath.NumberTheory.Goldbach"
 
@@ -47,4 +48,9 @@ survivor-existence theorem.
 `CrossGapSquareCertification` connects arbitrary-degree Cross-Gap pairs to
 the existing SquareBody prime-certification envelope and balanced-window
 transport, without adding a near-balanced existence provider.
+
+`BalancedCRTOverlap` adds canonical left pair/triple witnesses, center-aligned
+residue collapse, and a finite strict-triple CRT progression ledger.  These
+are bounded witness and accounting APIs; they do not add a universal escape
+provider.
 -/
