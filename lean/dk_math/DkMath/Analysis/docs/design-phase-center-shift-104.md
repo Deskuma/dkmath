@@ -1202,3 +1202,19 @@ After the algebraic shifted-frame theorem is closed at the semantic path
 level, bridge the one-eighth phase displacement to the Euclidean `pi / 4`
 reading.
 ```
+
+# Change Roadmap
+
+Up to No. 136:
+  Path packaging checkpoint closed
+
+After Wallis:
+  pi is read as symmetric normalization product,
+  not as circle-first geometry
+
+Next:
+  scale synchronization
+  Wallis-type normalization observable
+  continuous theta later
+
+--> detail: [research-wallis-pi-alignment](./research-wallis-pi-alignment.md)
