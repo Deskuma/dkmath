@@ -6,10 +6,12 @@ Authors: DkMath contributors.
 
 import DkMath.NumberTheory.MultiGauge.Basic
 import DkMath.NumberTheory.MultiGauge.PrimeTransport
+import DkMath.NumberTheory.MultiGauge.Path
 
 #print "file: DkMath.NumberTheory.MultiGauge"
 
 /-! # Generic multi-gauge divisibility facade
 
-This facade intentionally exposes only the MG-000 arithmetic front half.
+This facade exposes the MG-000 arithmetic front half and the MG-001 finite
+path extension.
 -/
