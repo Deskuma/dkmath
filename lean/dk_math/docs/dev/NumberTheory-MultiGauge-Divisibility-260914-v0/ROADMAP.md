@@ -259,58 +259,36 @@ This completes the common-scale answer to the original MultiGauge question for f
 
 API note: the current escape-to-capture witness proves the arithmetic step and factor localization, but its exported type does not separately encode a list-indexed adjacency certificate. Add one only if a downstream theorem needs order/uniqueness.
 
+---
+
+## Phase MG-003C — primitive-shape transition provider audit
+
+Status: COMPLETE / AUDITED — Outcome B: NO UNCONDITIONAL PRIMITIVE PROVIDER FOUND
+
+The mandatory FLT q-adic/GN reduced-gap, FLT3, FLT5/golden,
+Petal/StructuralArithmetic, and ABC/complement candidate families were
+audited.  The q-adic route has a conditional/open shape suggesting
+`old.value = q^p * new.value`, but its integer local-to-global input is an
+open target and no pair of coprime `GNGaugeStage`s is packaged.  The other
+families provide different-carrier descent, one-stage GN support identities,
+or factor/complement relations rather than the required same-observer balance.
+
+No decorative transition wrapper was added.  MG-003A/B remains
+`COMMON-SCALE-ONLY`; it does not count as primitive shape change.
+
+See:
+
+```text
+instruction-005.md
+report-005.md
+```
+
 See:
 
 ```text
 instruction-004.md
 report-004.md
 review-004.md
-```
-
----
-
-## Phase MG-003C — concrete primitive-shape transition provider audit
-
-Status: NEXT / AUDIT-FIRST
-
-Common-scale transport is now separated and complete. The remaining front-half question is whether the repository already contains a genuine change of primitive coprime GN shape with an independently meaningful multiplicative observer balance.
-
-Audit candidates include:
-
-```text
-FLT q-adic / GN reduced-gap descent;
-FLT3 unconditional cubic descent;
-FLT5 golden descent;
-Petal / StructuralArithmetic primitive-boundary transport;
-ABC or other arithmetic packets only when the same GN observer appears on both sides.
-```
-
-A qualifying provider must produce two `GNGaugeStage d` values of the same degree, with genuinely different primitive coordinates, and derive
-
-```text
-second.value * denominator
-=
-first.value * numerator
-```
-
-from independent source semantics.
-
-Endpoint-copy transitions do not qualify.
-
-Conditional/open target wrappers must be classified as such and must not be reported as unconditional providers.
-
-Possible outcomes:
-
-```text
-Outcome A — GENUINE PRIMITIVE TRANSITION PROVIDER FOUND
-Outcome B — NO UNCONDITIONAL PRIMITIVE PROVIDER FOUND
-Outcome P — ENGINEERING PARTIAL
-```
-
-See:
-
-```text
-instruction-005.md
 ```
 
 ---
@@ -382,12 +360,10 @@ MG-003B
   Outcome A — FINITE RAW-REFINEMENT PATHS AND PRIMITIVE-SHAPE INVARIANCE
 
 instruction-005
-  NEXT
-  audit genuine primitive-shape transition providers
-  classify unconditional / conditional / open / wrong-observer candidates
+  COMPLETE / AUDITED
+  Outcome B — NO UNCONDITIONAL PRIMITIVE PROVIDER FOUND
 
-report-005 + review
-  decide whether MG-002 is now justified,
-  whether a concrete application bridge should be developed,
-  or whether the MultiGauge front half should close before Norm/lattice work.
+report-005
+  conditional/open q-adic and wrong-observer candidates recorded;
+  no application bridge or MG-002 automaton is justified by the current source.
 ```
