@@ -11,7 +11,7 @@ The central question is:
 ```text
 q escapes in gauge u₁
 -> does q escape in gauge u₂?
--> if not, which transition factor introduced q?
+-> if not, which scale/transition factor introduced q?
 -> along a finite chain, where is first capture possible?
 ```
 
@@ -88,18 +88,7 @@ endStage.value * denominatorProduct
 start.value * numeratorProduct.
 ```
 
-Prime-escape path theorems now include:
-
-```text
-endpoint support localization;
-all-stage escape under numerator avoidance;
-start/end visibility iff outside total transition support;
-escape -> capture transition witness with q | numerator;
-start escape + end capture -> q | numeratorProduct;
-start capture + end escape -> q | denominatorProduct.
-```
-
-The implementation uses a simple recursive `List` path and requires no automaton layer.
+Prime-escape path theorems include endpoint support localization, all-stage escape under numerator avoidance, visibility equivalence outside total path support, and an actual escape-to-capture transition witness whose numerator contains the newly captured prime.
 
 See:
 
@@ -113,101 +102,57 @@ review-001.md
 
 ## Phase MG-L2 — Legendre degree-two bridge / audit
 
-Status: NEXT
+Status: COMPLETE / APPROVED — Outcome B: CHANNEL BRIDGE ONLY
 
-This is the first major downstream audit before any quadratic-order work.
-
-Keep the bridge outside the generic MultiGauge core.
-
-### Orientation correction
-
-For the production `GTail` orientation:
+Production:
 
 ```text
-GTail 2 1 x u = x + 2*u.
+DkMath/NumberTheory/Legendre/MultiGaugeBridge.lean
 ```
 
-Therefore the successor increment is represented by the reversed degree-two stage:
+The exact production orientation is:
+
+```text
+GTail 2 1 1 n = 2*n + 1.
+```
+
+The canonical reversed degree-two stage has:
 
 ```text
 x = 1
 u = n
-GTail 2 1 1 n = 2*n + 1.
+value = gnValue = 2*n+1.
 ```
 
-Since the boundary is `1`, the full stage value is also `2*n+1`.
-
-Do not use the false orientation `GTail 2 1 n 1 = 2*n+1`.
-
-### Existing production fact
-
-PrimorialUnitUniverse already proves:
+Production now packages:
 
 ```text
 fresh tied successor-pair delay
--> q | 2*n + 1.
+-> PrimeCaught q (successorIncrementGaugeStage n);
+
+PrimeEscapes q (successorIncrementGaugeStage n)
+-> tied successor pair persists.
 ```
 
-The first bridge target is therefore:
+The audit found no non-tautological `GNGaugeTransition 2` from current Legendre/primorial semantics. The untied case gained no localization beyond existing single-seat divisibility, and the Legendre global square-shell frontier did not advance.
 
-```text
-fresh tied successor-pair delay
--> PrimeCaught q (successorIncrementGaugeStage n).
-```
-
-This is a single-stage GN/channel reinterpretation.
-
-### Genuine-transition audit
-
-A stronger MultiGauge interpretation requires a non-tautological `GNGaugeTransition 2` whose balance law comes from actual Legendre / primorial / gauge semantics and whose numerator support gives independent pruning.
-
-Endpoint-copy constructions such as
-
-```text
-numerator   := second.value
-denominator := first.value
-```
-
-are mathematically valid but provide no new information and do not count as a successful transition bridge.
-
-Audit:
-
-```text
-successor increment stage n -> n+1;
-fresh-prime insertion S -> insert q S;
-existing fixed/refined gauge semantics;
-short paths with independently localized numerator support;
-untied successor case.
-```
-
-Outcome policy:
-
-```text
-Outcome A — GENUINE TRANSITION GAIN
-  a non-tautological transition/path yields new Legendre pruning.
-
-Outcome B — CHANNEL BRIDGE ONLY
-  reversed-stage L036 bridge is useful, but no genuine transition/global survivor theorem.
-
-Outcome C — NO MATERIAL GAIN
-  do not add decorative bridge abstractions.
-```
-
-No Legendre conjecture endpoint may be claimed unless an actual square-shell escape provider is proved.
+This is an informative boundary, not a failed implementation.
 
 See:
 
 ```text
 instruction-002.md
+report-002.md
+review-002.md
 ```
 
 ---
 
 ## Phase MG-002 — exact channel path states
 
-Status: PLANNED / CONDITIONAL
+Status: DEFERRED / CONDITIONAL
 
-Only after the Legendre audit, investigate whether stages should expose the three off-exponent prime states:
+Candidate states remain:
 
 ```text
 escape
@@ -215,29 +160,91 @@ boundary-only
 gn-only
 ```
 
-For prime `q` with `q ∤ d`, simultaneous boundary + GN capture is forbidden by the existing gcd firewall.
+for primes away from the exponent support.
 
-A state API is warranted only if it proves transition pruning that is awkward in raw divisibility language.
+However, after MG-L2 no concrete primitive-shape transition provider is available. Building an automaton now would be mostly descriptive.
+
+Resume MG-002 only after concrete transition semantics make channel-switch pruning mathematically useful.
 
 ---
 
-## Phase MG-003 — concrete normalization/refinement bridges
+## Phase MG-003A — raw/primitive gauge normalization and synchronized refinement
 
-Status: DEFERRED UNTIL AFTER LEGENDRE CHECKPOINT
+Status: NEXT
 
-Candidate providers:
+The MG-L2 audit exposed the missing abstraction boundary.
+
+`GNGaugeStage` is already primitive/coprime:
 
 ```text
-FixedBigGauge.fixedBigUnit_transport
-FixedBigGauge.fixedBigUnit_refinement
-freshPrime_fixedBigUnit_refinement
-explicit quotient/normalization packets from FLT or ABC
-Petal / primitive-boundary transitions
+Coprime x u.
 ```
 
-Each bridge must prove the generic balance law from its own concrete semantics.
+But concrete unit refinement in PrimorialUniverse transports raw natural coordinates by common scaling:
 
-Do not make the generic MultiGauge layer depend on these applications.
+```text
+(x,u) -> (x*k,u*k).
+```
+
+For `k > 1`, the refined pair is generally not coprime and therefore does not directly inhabit `GNGaugeStage`.
+
+The new layer is:
+
+```text
+raw pair
+=
+common gcd/scale
+×
+primitive coprime stage.
+```
+
+Targets:
+
+```text
+GNRawGaugeStage;
+raw observer homogeneity A_d(kx,ku)=k^d*A_d(x,u);
+gcd/common-scale extraction;
+primitiveStage normalization;
+rawValue = scale^d * primitiveValue;
+prime capture iff scale support OR primitive-stage support;
+raw escape + refined capture -> q | refinement factor k;
+bridge to PrimorialUniverse.UnitCoordinateRefinement.
+```
+
+Important architecture:
+
+```text
+common-scale refinement
+!=
+primitive-shape GNGaugeTransition.
+```
+
+Do not weaken the existing coprimality invariant to force these layers together.
+
+See:
+
+```text
+instruction-003.md
+```
+
+---
+
+## Phase MG-003B — concrete primitive-shape transition providers
+
+Status: PLANNED AFTER MG-003A
+
+After raw/common-scale support is separated, re-audit candidate genuine primitive-stage transitions:
+
+```text
+explicit quotient/normalization packets;
+Petal / primitive-boundary transitions;
+FLT or ABC descent packets;
+other arithmetic coordinate changes not equal to common scaling.
+```
+
+A provider must derive the `GNGaugeTransition` balance from independent semantics. Endpoint-copy constructions remain excluded.
+
+`FixedBigGauge` real-valued refinement may provide semantic context, but it does not by itself supply a natural-number primitive-stage balance.
 
 ---
 
@@ -251,13 +258,14 @@ Resume the second half of:
 docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
 ```
 
-only after prime-escape transport and concrete gauge-transition semantics are stable.
+only after raw scale transport and concrete primitive-shape transition semantics are stable.
 
 Intended later chain:
 
 ```text
 GN gcd sieve
--> gauge transition / path admissibility
+-> raw gauge normalization / scale support
+-> primitive gauge transition / path admissibility
 -> Norm divisibility
 -> coordinate divisibility
 -> integer-lattice landing
@@ -271,13 +279,13 @@ GN gcd sieve
 ```text
 1. Existing one-stage gcd facts are dependencies, not targets for re-proof.
 2. Generic MultiGauge code remains independent of ABC, FLT, and Legendre.
-3. Transition support is explicit: numerator injects possible new prime support;
-   denominator removes possible old prime support.
-4. New capture must be localized before any counting or asymptotic argument.
-5. Finite paths remain simple unless a stronger representation is mathematically required.
+3. Raw common scale and primitive coprime shape are distinct layers.
+4. Transition support is explicit: numerator injects possible new primitive support; denominator removes possible old primitive support.
+5. Common-scale refinement localizes new raw support to the independent scale factor.
 6. Application bridges must not manufacture tautological transitions and call them pruning.
-7. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
-8. No sorry/admit/new axiom declarations.
+7. MG-002 state machinery is introduced only when it proves genuine pruning.
+8. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
+9. No sorry/admit/new axiom declarations.
 ```
 
 ---
@@ -291,16 +299,19 @@ MG-000
 MG-001
   COMPLETE / APPROVED
 
-instruction-002
-  NEXT
-  reversed d=2 successor-increment stage
-  L036 capture/persistence bridge
-  genuine-transition audit
-  untied-case audit
-  Legendre-frontier impact assessment
+MG-L2
+  COMPLETE / APPROVED
+  Outcome B — CHANNEL BRIDGE ONLY
 
-report-002 + review
-  decide whether to continue Legendre,
-  return to generic channel/path states,
-  or move to concrete gauge transitions.
+instruction-003
+  NEXT
+  raw stage
+  common-scale homogeneity
+  gcd primitive normalization
+  exact raw support decomposition
+  synchronized unit-refinement capture localization
+
+report-003 + review
+  decide whether raw/common-scale transport is established,
+  then re-open genuine primitive-shape transition providers.
 ```
