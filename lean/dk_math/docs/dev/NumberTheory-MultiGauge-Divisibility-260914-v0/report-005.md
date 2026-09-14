@@ -139,6 +139,4 @@ lake build DkMath.NumberTheory.MultiGauge
 
 and completed successfully.  `git diff --check` completed successfully.  The
 relevant current MultiGauge Lean sources were scanned for `sorry`, `admit`,
-and new `axiom` declarations; none were found.  The shell profile emitted
-`/opt/wonderful/bin/wf-env: Permission denied` during commands; this was
-environmental noise and did not affect the successful build.
+and new `axiom` declarations; none were found.
