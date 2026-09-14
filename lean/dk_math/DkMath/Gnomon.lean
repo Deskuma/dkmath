@@ -6,13 +6,15 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Gnomon.Algebra
 import DkMath.Gnomon.CosmicBridge
+import DkMath.Gnomon.PetalPrime
 
 #print "file: DkMath.Gnomon"
 
 /-!
 # DkMath Gnomon
 
-Public entry point for the neutral square-gnomon arithmetic layer.
+Public entry point for the neutral square-gnomon arithmetic layer, including
+Petal multiplication and prime/atomicity transport.
 -/
 
 namespace DkMath.Gnomon
