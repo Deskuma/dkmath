@@ -222,7 +222,7 @@ review-003.md
 
 ## Phase MG-003B — finite raw-refinement paths and primitive-shape invariance
 
-Status: NEXT
+Status: COMPLETE / IMPLEMENTED — Outcome A
 
 Before searching for primitive-shape transition providers, close the common-scale theory completely.
 
@@ -274,6 +274,7 @@ See:
 
 ```text
 instruction-004.md
+report-004.md
 ```
 
 ---
@@ -363,13 +364,13 @@ MG-003A
   Outcome A — RAW NORMALIZATION AND UNIT-REFINEMENT TRANSPORT ESTABLISHED
 
 instruction-004
-  NEXT
+  COMPLETE / Outcome A
   primitive-shape invariance under positive scaleBy
   finite raw refinement path
   cumulative homogeneous law
   all-stage escape
   new-capture refinement-factor localization
 
-report-004 + review
-  then re-audit genuine primitive-shape GNGaugeTransition providers in MG-003C.
+review-004
+  NEXT — re-audit genuine primitive-shape GNGaugeTransition providers in MG-003C.
 ```
