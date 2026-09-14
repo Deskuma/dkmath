@@ -8,6 +8,12 @@
 - Scope: DkMath generic arithmetic / CosmicFormula / quadratic-order infrastructure
 - Origin: ABC-GN Astra v1 discussion, but this topic is **not ABC-specific**
 
+implemented
+
+- cid: `6aa763a7-1a14-83e8-9041-1029d978663c`
+- wip: `wip/number-theory-multi-gauge-divisibility-260914-v0` closed
+- PR: <https://github.com/Deskuma/dkmath/pull/97> (merged to `develop`)
+
 ## 1. 目的
 
 本資料は、宇宙式 / GN の可除性を一段の固定単位 `u` だけで見るのではなく、
