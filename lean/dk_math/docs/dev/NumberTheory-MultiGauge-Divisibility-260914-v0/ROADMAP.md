@@ -23,9 +23,7 @@ The v0 branch intentionally stops before Norm / Eisenstein / TraceOne lattice la
 
 Status: COMPLETE / APPROVED
 
-Implemented the smallest production packet supporting prime escape transport.
-
-Production output:
+Production:
 
 ```text
 DkMath/NumberTheory/MultiGauge/Basic.lean
@@ -50,29 +48,7 @@ $$
 A_2\delta=A_1\nu.
 $$
 
-Production theorem family now includes:
-
-```text
-second capture -> first capture OR q | numerator
-first escape + q ∤ numerator -> second escape
-
-first capture -> second capture OR q | denominator
-second escape + q ∤ denominator -> first escape
-
-q ∤ numerator and q ∤ denominator
--> prime visibility iff across the transition
-```
-
-The one-stage observer is decomposed into boundary / GN channels, and the existing GN gcd firewall yields the stronger reusable localization:
-
-```text
-q | stage.x
-q | stage.gnValue
-1 <= d
--> q | d
-```
-
-without requiring `q` prime.
+Production theorem family includes both-direction prime transport, visibility equivalence outside transition support, boundary/GN channel decomposition, and common-channel localization into the exponent.
 
 See:
 
@@ -85,53 +61,144 @@ review-000.md
 
 ## Phase MG-001 — finite prime-escape paths
 
-Status: NEXT
+Status: COMPLETE / APPROVED
 
-Introduce the minimal finite-chain representation justified by MG-000.
-
-Research target:
-
-$$
-q\nmid A_0
-\land
-\forall i<k,\;q\nmid\nu_i
-\Longrightarrow
-\forall j\le k,\;q\nmid A_j.
-$$
-
-First-capture localization target:
-
-$$
-q\nmid A_0
-\land
-q\mid A_j
-\Longrightarrow
-q\mid\prod_{i<j}\nu_i.
-$$
-
-The preferred path invariant is the telescoped balance:
-
-```text
-Ak * product(denominators)
-=
-A0 * product(numerators).
-```
-
-In addition to endpoint localization, MG-001 must prove an all-stage escape theorem and an actual escape-to-capture transition witness whose numerator is divisible by `q`.
-
-Prefer a simple `List` / recursive linked-path representation over a custom automaton framework unless the theorem statements demand more structure.
-
-Expected output:
+Production:
 
 ```text
 DkMath/NumberTheory/MultiGauge/Path.lean
-report-001.md
 ```
+
+Implemented:
+
+```text
+GNGaugePath
+Linked
+endStage
+stages
+numeratorProduct
+denominatorProduct
+```
+
+Exact path balance:
+
+```text
+endStage.value * denominatorProduct
+=
+start.value * numeratorProduct.
+```
+
+Prime-escape path theorems now include:
+
+```text
+endpoint support localization;
+all-stage escape under numerator avoidance;
+start/end visibility iff outside total transition support;
+escape -> capture transition witness with q | numerator;
+start escape + end capture -> q | numeratorProduct;
+start capture + end escape -> q | denominatorProduct.
+```
+
+The implementation uses a simple recursive `List` path and requires no automaton layer.
 
 See:
 
 ```text
 instruction-001.md
+report-001.md
+review-001.md
+```
+
+---
+
+## Phase MG-L2 — Legendre degree-two bridge / audit
+
+Status: NEXT
+
+This is the first major downstream audit before any quadratic-order work.
+
+Keep the bridge outside the generic MultiGauge core.
+
+### Orientation correction
+
+For the production `GTail` orientation:
+
+```text
+GTail 2 1 x u = x + 2*u.
+```
+
+Therefore the successor increment is represented by the reversed degree-two stage:
+
+```text
+x = 1
+u = n
+GTail 2 1 1 n = 2*n + 1.
+```
+
+Since the boundary is `1`, the full stage value is also `2*n+1`.
+
+Do not use the false orientation `GTail 2 1 n 1 = 2*n+1`.
+
+### Existing production fact
+
+PrimorialUnitUniverse already proves:
+
+```text
+fresh tied successor-pair delay
+-> q | 2*n + 1.
+```
+
+The first bridge target is therefore:
+
+```text
+fresh tied successor-pair delay
+-> PrimeCaught q (successorIncrementGaugeStage n).
+```
+
+This is a single-stage GN/channel reinterpretation.
+
+### Genuine-transition audit
+
+A stronger MultiGauge interpretation requires a non-tautological `GNGaugeTransition 2` whose balance law comes from actual Legendre / primorial / gauge semantics and whose numerator support gives independent pruning.
+
+Endpoint-copy constructions such as
+
+```text
+numerator   := second.value
+denominator := first.value
+```
+
+are mathematically valid but provide no new information and do not count as a successful transition bridge.
+
+Audit:
+
+```text
+successor increment stage n -> n+1;
+fresh-prime insertion S -> insert q S;
+existing fixed/refined gauge semantics;
+short paths with independently localized numerator support;
+untied successor case.
+```
+
+Outcome policy:
+
+```text
+Outcome A — GENUINE TRANSITION GAIN
+  a non-tautological transition/path yields new Legendre pruning.
+
+Outcome B — CHANNEL BRIDGE ONLY
+  reversed-stage L036 bridge is useful, but no genuine transition/global survivor theorem.
+
+Outcome C — NO MATERIAL GAIN
+  do not add decorative bridge abstractions.
+```
+
+No Legendre conjecture endpoint may be claimed unless an actual square-shell escape provider is proved.
+
+See:
+
+```text
+instruction-002.md
 ```
 
 ---
@@ -140,7 +207,7 @@ instruction-001.md
 
 Status: PLANNED / CONDITIONAL
 
-Only after MG-001 is stable, investigate whether each stage should expose the three off-exponent prime states:
+Only after the Legendre audit, investigate whether stages should expose the three off-exponent prime states:
 
 ```text
 escape
@@ -148,75 +215,15 @@ boundary-only
 gn-only
 ```
 
-For prime `q` with `q ∤ d`, `boundary + gn` is forbidden by the existing gcd firewall.
+For prime `q` with `q ∤ d`, simultaneous boundary + GN capture is forbidden by the existing gcd firewall.
 
-The purpose of this phase is not to build a decorative state machine. A state API is warranted only if it proves transition pruning theorems that are awkward in raw divisibility language.
-
-Candidate questions:
-
-```text
-Can a boundary-only prime become gn-only without entering transition support?
-Can a gn-only prime disappear without entering denominator support?
-Which channel switches are forced by x/u normalization?
-```
-
----
-
-## Phase MG-L2 — Legendre degree-two bridge
-
-Status: PLANNED CHECKPOINT
-
-This is the first major downstream audit before any quadratic-order work.
-
-Keep this bridge outside the generic MultiGauge core.
-
-Relevant production fact from the PrimorialUnitUniverse development:
-
-```text
-fresh tied successor-pair delay
--> q | 2*n + 1.
-```
-
-Degree-two interpretation:
-
-```text
-2*n + 1 = GN₂(n,1)
-```
-
-Target questions:
-
-```text
-1. Can the tied-pair theorem be expressed as a MultiGauge first-capture localization?
-2. Does the transition formulation explain the exceptional support as GN₂ support?
-3. Can the same framework constrain the untied successor case?
-4. Does a two-stage or short finite-path theorem yield a genuine new square-shell escape theorem?
-```
-
-Outcome policy:
-
-```text
-Outcome A:
-  transition-aware pruning gives a new Legendre production theorem;
-  continue Legendre bridge.
-
-Outcome B:
-  useful localization only, no global survivor theorem;
-  record the obstruction and return to generic MultiGauge path theory.
-
-Outcome C:
-  no gain beyond L036 restatement;
-  do not force further Legendre integration.
-```
-
-No Legendre conjecture endpoint may be claimed unless an actual square-shell escape provider is proved.
+A state API is warranted only if it proves transition pruning that is awkward in raw divisibility language.
 
 ---
 
 ## Phase MG-003 — concrete normalization/refinement bridges
 
 Status: DEFERRED UNTIL AFTER LEGENDRE CHECKPOINT
-
-Connect the generic transition balance law to existing concrete DkMath mechanisms, one bridge at a time.
 
 Candidate providers:
 
@@ -244,7 +251,7 @@ Resume the second half of:
 docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
 ```
 
-Only after the prime-escape transport theory is stable.
+only after prime-escape transport and concrete gauge-transition semantics are stable.
 
 Intended later chain:
 
@@ -257,13 +264,9 @@ GN gcd sieve
 -> power/Core-image landing
 ```
 
-This branch may contain planning documents for this future work, but MG-000 and MG-001 must not acquire quadratic-order dependencies.
-
 ---
 
 ## Architectural invariants
-
-Throughout the branch:
 
 ```text
 1. Existing one-stage gcd facts are dependencies, not targets for re-proof.
@@ -271,9 +274,10 @@ Throughout the branch:
 3. Transition support is explicit: numerator injects possible new prime support;
    denominator removes possible old prime support.
 4. New capture must be localized before any counting or asymptotic argument.
-5. Finite-path generalization follows a successful two-stage theorem, not vice versa.
-6. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
-7. No sorry/admit/new axiom declarations.
+5. Finite paths remain simple unless a stronger representation is mathematically required.
+6. Application bridges must not manufacture tautological transitions and call them pruning.
+7. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
+8. No sorry/admit/new axiom declarations.
 ```
 
 ---
@@ -284,16 +288,19 @@ Throughout the branch:
 MG-000
   COMPLETE / APPROVED
 
-instruction-001
+MG-001
+  COMPLETE / APPROVED
+
+instruction-002
   NEXT
-  finite path composition
-  telescoped support balance
-  all-stage escape
-  first-capture localization
+  reversed d=2 successor-increment stage
+  L036 capture/persistence bridge
+  genuine-transition audit
+  untied-case audit
+  Legendre-frontier impact assessment
 
-report-001 + review
-  decide whether MG-L2 Legendre audit is justified
-
-MG-L2 Legendre bridge
-  only after MG-001 review, unless a genuinely stronger result emerges earlier
+report-002 + review
+  decide whether to continue Legendre,
+  return to generic channel/path states,
+  or move to concrete gauge transitions.
 ```
