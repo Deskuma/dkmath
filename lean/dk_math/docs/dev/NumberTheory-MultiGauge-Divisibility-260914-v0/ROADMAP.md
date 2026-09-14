@@ -170,7 +170,7 @@ Resume MG-002 only after concrete transition semantics make channel-switch pruni
 
 ## Phase MG-003A — raw/primitive gauge normalization and synchronized refinement
 
-Status: NEXT
+Status: COMPLETE / IMPLEMENTED — Outcome A
 
 The MG-L2 audit exposed the missing abstraction boundary.
 
@@ -225,6 +225,7 @@ See:
 
 ```text
 instruction-003.md
+report-003.md
 ```
 
 ---
@@ -304,14 +305,16 @@ MG-L2
   Outcome B — CHANNEL BRIDGE ONLY
 
 instruction-003
-  NEXT
+  COMPLETE / Outcome A
   raw stage
   common-scale homogeneity
   gcd primitive normalization
   exact raw support decomposition
   synchronized unit-refinement capture localization
 
-report-003 + review
-  decide whether raw/common-scale transport is established,
-  then re-open genuine primitive-shape transition providers.
+report-003
+  COMPLETE / Outcome A
+
+review-003
+  NEXT — re-audit genuine primitive-shape transition providers.
 ```

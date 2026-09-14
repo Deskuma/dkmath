@@ -7,6 +7,7 @@ Authors: DkMath contributors.
 import DkMath.NumberTheory.MultiGauge.Basic
 import DkMath.NumberTheory.MultiGauge.PrimeTransport
 import DkMath.NumberTheory.MultiGauge.Path
+import DkMath.NumberTheory.MultiGauge.RawNormalization
 
 #print "file: DkMath.NumberTheory.MultiGauge"
 
