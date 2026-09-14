@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Gnomon.Algebra
+import DkMath.Gnomon.CosmicBridge
 
 #print "file: DkMath.Gnomon"
 
