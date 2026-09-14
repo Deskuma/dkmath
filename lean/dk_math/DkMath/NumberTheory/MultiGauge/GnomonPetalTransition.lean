@@ -94,7 +94,7 @@ theorem prime_dvd_oddGnomon_factor_of_petal_new_capture
     (hCaught : PrimeCaught q (oddGnomonGaugeStage (petalMul a b))) :
     q ∣ oddGnomon b := by
   have hCaught' : q ∣ (gnomonPetalTransition a b).second.value := by
-    simpa using hCaught
+    simpa [PrimeCaught] using hCaught
   rcases prime_dvd_second_value_imp_dvd_first_or_numerator
       hq (gnomonPetalTransition a b) hCaught' with hOld | hNew
   · exact False.elim (hEscape (by simpa using hOld))

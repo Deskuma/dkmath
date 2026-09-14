@@ -107,7 +107,7 @@ theorem prime_oddGnomon_iff_petalAtom (n : ℕ) :
 theorem odd_prime_existsUnique_gnomonAddress
     {p : ℕ} (hp : Nat.Prime p) (hp2 : p ≠ 2) :
     ∃! n : ℕ, oddGnomon n = p := by
-  have hpOdd : Odd p := (hp.eq_two_or_odd).resolve_left hp2
+  have hpOdd : Odd p := Nat.Prime.odd_of_ne_two hp hp2
   obtain ⟨n, hn⟩ := exists_eq_oddGnomon_of_odd hpOdd
   refine ⟨n, hn, ?_⟩
   intro m hm
