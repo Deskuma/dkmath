@@ -2,7 +2,7 @@
 
 ## GMPT-000 — degree-two provider
 
-Status: IMPLEMENTED / UNVALIDATED
+Status: IMPLEMENTED / VALIDATED
 
 Target:
 
@@ -25,7 +25,7 @@ This checkpoint updates the previous MG-003C audit only in degree two.  No arbit
 
 ## GMPT-001 — Legendre lower-turnover bridge
 
-Status: IMPLEMENTED / UNVALIDATED
+Status: IMPLEMENTED / VALIDATED
 
 Target:
 
@@ -57,7 +57,7 @@ Then identify the second alternative with the numerator support of `gnomonPetalT
 
 ## GMPT-002 — Petal atomicity
 
-Status: NEXT / DETERMINISTIC
+Status: IMPLEMENTED / VALIDATED
 
 Candidate production home:
 
@@ -87,9 +87,22 @@ This should be treated as algebraic factorization/transport, not as a new prime-
 
 ## GMPT-003 — finite Petal transition paths
 
-Status: PLANNED
+Status: IMPLEMENTED / VALIDATED
 
-Build a finite path whose steps are canonical `gnomonPetalTransition`s and reuse existing `GNGaugePath` theorems.
+Production home:
+
+```text
+DkMath/NumberTheory/MultiGauge/GnomonPetalPath.lean
+```
+
+The canonical `petalFold` address sequence and `gnomonPetalPath` reuse the
+existing `GNGaugePath` linked-list framework.  The validated API proves the
+exact numerator/denominator products, endpoint observer/telescoping law,
+all-stage escape preservation under factor avoidance, and localization of a
+first or endpoint capture to an actual factor in the input list.
+
+The finite path uses canonical `gnomonPetalTransition`s and the existing
+`GNGaugePath` theorems; no second path framework is introduced.
 
 Desired consequences:
 
@@ -130,4 +143,5 @@ Stop and report Outcome B rather than adding decorative APIs if:
 - keep generic MultiGauge independent of Legendre;
 - keep Legendre bridges application-owned;
 - no `sorry`, `admit`, or new axioms;
-- distinguish IMPLEMENTED / UNVALIDATED from PRODUCTION-PROVED until builds pass.
+- distinguish IMPLEMENTED / UNVALIDATED from PRODUCTION-PROVED for future
+  work until its focused builds pass.

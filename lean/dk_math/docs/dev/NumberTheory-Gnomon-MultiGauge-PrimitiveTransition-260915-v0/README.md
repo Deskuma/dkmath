@@ -64,20 +64,32 @@ The numerator `oddGnomon b` is an independent Petal factor, not an endpoint-copy
 
 ```text
 DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean
+DkMath/NumberTheory/MultiGauge/GnomonPetalPath.lean
 DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean
 ```
 
-The first module owns the generic degree-two provider.  The second module is application-side only and connects the provider to the exact lower adjacent-shell turnover theorem.
+The first module owns the generic degree-two provider; the path module
+composes it through the generic `GNGaugePath` API; and the Legendre module is
+application-side only, connecting the provider to the exact lower
+adjacent-shell turnover theorem.
 
 ## Current checkpoint
 
-Implemented in the branch, pending Lean/CI validation:
+Implemented and validated in the branch:
 
 ```text
 oddGnomonGaugeStage
 gnomonPetalTransition
 primeEscapes_gnomonPetalTransition_second_of_first
 prime_dvd_oddGnomon_factor_of_petal_new_capture
+petalFold
+petalPathTransitions
+gnomonPetalPath
+gnomonPetalPath_balance_value
+oddGnomon_petalFold
+primeEscapes_all_stages_gnomonPetalPath
+exists_petalFactor_dvd_of_start_escape_of_captured_stage
+exists_petalFactor_dvd_of_start_escape_of_end_caught
 
 mem_reindexed_primeSupport_inter_lower_petalMul_iff
 common_lower_dvd_gnomonPetalTransition_numerator_of_not_dvd_first
@@ -104,16 +116,16 @@ a prime in every square interval;
 full-cover failure;
 a quantitative turnover capacity bound;
 a general primitive transition for arbitrary degree;
-PetalAtom <-> prime until separately formalized;
+prime existence or global coverage derived from Petal atomicity;
 Norm/lattice consequences beyond already merged MultiGauge/TraceOne work.
 ```
 
 ## Validation status
 
-A draft PR is open only to trigger repository CI:
-
-```text
-PR #100
-```
-
-Until a successful build is observed, new declarations in this branch are **IMPLEMENTED / UNVALIDATED**, not PRODUCTION-PROVED.
+Focused Lean builds for `DkMath.Gnomon.PetalPrime`,
+`DkMath.NumberTheory.Legendre.GnomonPetalTurnover`,
+`DkMath.NumberTheory.MultiGauge.GnomonPetalPath`, and the
+`DkMath.NumberTheory.MultiGauge` facade pass.  The GMPT-000/001/002/003
+declarations above are therefore **IMPLEMENTED / VALIDATED** at the checked
+module boundary.  This does not extend the scope to Legendre's conjecture,
+prime existence, or a quantitative capacity result.

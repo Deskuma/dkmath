@@ -10,6 +10,7 @@ import DkMath.NumberTheory.MultiGauge.Path
 import DkMath.NumberTheory.MultiGauge.RawNormalization
 import DkMath.NumberTheory.MultiGauge.RawRefinementPath
 import DkMath.NumberTheory.MultiGauge.GnomonPetalTransition
+import DkMath.NumberTheory.MultiGauge.GnomonPetalPath
 
 #print "file: DkMath.NumberTheory.MultiGauge"
 
