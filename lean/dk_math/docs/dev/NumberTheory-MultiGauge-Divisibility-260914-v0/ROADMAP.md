@@ -162,7 +162,7 @@ gn-only
 
 for primes away from the exponent support.
 
-After MG-L2 and MG-003A there is still no concrete primitive-shape transition provider. Building an automaton now would remain mostly descriptive.
+There is still no concrete primitive-shape transition provider. Building an automaton now would remain mostly descriptive.
 
 Resume MG-002 only after concrete primitive-shape transition semantics make channel-switch pruning mathematically useful.
 
@@ -222,83 +222,96 @@ review-003.md
 
 ## Phase MG-003B — finite raw-refinement paths and primitive-shape invariance
 
-Status: COMPLETE / IMPLEMENTED — Outcome A
+Status: COMPLETE / APPROVED — Outcome A
 
-Before searching for primitive-shape transition providers, close the common-scale theory completely.
-
-First prove the normalization-invariance theorem for positive synchronized scaling:
+Production:
 
 ```text
-primitiveStage (scaleBy k s)
+DkMath/NumberTheory/MultiGauge/RawRefinementPath.lean
+```
+
+Positive synchronized scaling now satisfies:
+
+```text
+scale (scaleBy k s) = k * scale s;
+primitiveStage (scaleBy k s) = primitiveStage s.
+```
+
+For a finite positive factor list, production proves:
+
+```text
+endStage = scaleBy cumulativeFactor start;
+
+endStage.value
 =
-primitiveStage s
-```
-
-under the natural positivity assumptions.
-
-This formally establishes:
-
-```text
-synchronized unit refinement
-changes common scale,
-not primitive coprime shape.
-```
-
-Then introduce a minimal finite positive raw-refinement path with factors:
-
-```text
-k₁, k₂, ..., k_r.
-```
-
-Target path theorems:
-
-```text
-end.value
-=
-(product factors)^d * start.value;
+cumulativeFactor^d * start.value;
 
 start escape
-+ every refinement factor avoids q
++ every listed factor avoids q
 -> every visited raw stage escapes q;
 
 start escape
-+ some visited raw stage captures q
--> some actual refinement factor is divisible by q.
++ capture at some visited raw stage
+-> some actual listed factor is divisible by q.
 ```
 
-A stronger adjacent escape-to-capture step witness is preferred if it remains simple.
+This completes the common-scale answer to the original MultiGauge question for finite synchronized unit-refinement chains.
 
-This checkpoint directly answers the original MultiGauge question for synchronized unit refinements.
+API note: the current escape-to-capture witness proves the arithmetic step and factor localization, but its exported type does not separately encode a list-indexed adjacency certificate. Add one only if a downstream theorem needs order/uniqueness.
 
 See:
 
 ```text
 instruction-004.md
 report-004.md
+review-004.md
 ```
 
 ---
 
-## Phase MG-003C — concrete primitive-shape transition providers
+## Phase MG-003C — concrete primitive-shape transition provider audit
 
-Status: PLANNED AFTER MG-003B
+Status: NEXT / AUDIT-FIRST
 
-Once common-scale refinement is completely separated and its finite path theory is closed, re-audit genuine primitive-stage transitions.
+Common-scale transport is now separated and complete. The remaining front-half question is whether the repository already contains a genuine change of primitive coprime GN shape with an independently meaningful multiplicative observer balance.
 
-Candidate providers:
+Audit candidates include:
 
 ```text
-explicit quotient/normalization packets;
-Petal / primitive-boundary transitions;
-FLT or ABC descent packets;
-other arithmetic coordinate changes not equal to common scaling.
+FLT q-adic / GN reduced-gap descent;
+FLT3 unconditional cubic descent;
+FLT5 golden descent;
+Petal / StructuralArithmetic primitive-boundary transport;
+ABC or other arithmetic packets only when the same GN observer appears on both sides.
 ```
 
-A provider must derive the `GNGaugeTransition` balance from independent semantics. Endpoint-copy constructions remain excluded.
+A qualifying provider must produce two `GNGaugeStage d` values of the same degree, with genuinely different primitive coordinates, and derive
 
-`FixedBigGauge` real-valued refinement may provide semantic context, but it does not by itself supply a natural-number primitive-stage balance.
+```text
+second.value * denominator
+=
+first.value * numerator
+```
 
-If no genuine provider exists, record Outcome B and do not create decorative transition wrappers.
+from independent source semantics.
+
+Endpoint-copy transitions do not qualify.
+
+Conditional/open target wrappers must be classified as such and must not be reported as unconditional providers.
+
+Possible outcomes:
+
+```text
+Outcome A — GENUINE PRIMITIVE TRANSITION PROVIDER FOUND
+Outcome B — NO UNCONDITIONAL PRIMITIVE PROVIDER FOUND
+Outcome P — ENGINEERING PARTIAL
+```
+
+See:
+
+```text
+instruction-005.md
+```
 
 ---
 
@@ -312,7 +325,7 @@ Resume the second half of:
 docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
 ```
 
-only after raw scale transport and concrete primitive-shape transition semantics are stable.
+only after raw scale transport and concrete primitive-shape transition semantics are stable, or after MG-003C explicitly records that no current primitive provider exists.
 
 Intended later chain:
 
@@ -335,13 +348,14 @@ GN gcd sieve
 1. Existing one-stage gcd facts are dependencies, not targets for re-proof.
 2. Generic MultiGauge code remains independent of ABC, FLT, and Legendre.
 3. Raw common scale and primitive coprime shape are distinct layers.
-4. Synchronized common scaling must preserve primitive shape.
+4. Synchronized common scaling preserves primitive shape.
 5. Transition support is explicit: numerator injects possible new primitive support; denominator removes possible old primitive support.
 6. Common-scale refinement localizes new raw support to the independent scale factor.
 7. Application bridges must not manufacture tautological transitions and call them pruning.
-8. MG-002 state machinery is introduced only when it proves genuine pruning.
-9. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
-10. No sorry/admit/new axiom declarations.
+8. Conditional/open descent targets are not unconditional providers.
+9. MG-002 state machinery is introduced only when it proves genuine pruning.
+10. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
+11. No sorry/admit/new axiom declarations.
 ```
 
 ---
@@ -363,14 +377,17 @@ MG-003A
   COMPLETE / APPROVED
   Outcome A — RAW NORMALIZATION AND UNIT-REFINEMENT TRANSPORT ESTABLISHED
 
-instruction-004
-  COMPLETE / Outcome A
-  primitive-shape invariance under positive scaleBy
-  finite raw refinement path
-  cumulative homogeneous law
-  all-stage escape
-  new-capture refinement-factor localization
+MG-003B
+  COMPLETE / APPROVED
+  Outcome A — FINITE RAW-REFINEMENT PATHS AND PRIMITIVE-SHAPE INVARIANCE
 
-review-004
-  NEXT — re-audit genuine primitive-shape GNGaugeTransition providers in MG-003C.
+instruction-005
+  NEXT
+  audit genuine primitive-shape transition providers
+  classify unconditional / conditional / open / wrong-observer candidates
+
+report-005 + review
+  decide whether MG-002 is now justified,
+  whether a concrete application bridge should be developed,
+  or whether the MultiGauge front half should close before Norm/lattice work.
 ```
