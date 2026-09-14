@@ -155,7 +155,9 @@ For lower-half common old support, the specialization
 `oldPrime_30_not_common_lower_reindex` uses `61` and `q ≤ 30` to exclude every
 old prime channel.  For the upper half,
 `oldPrime_30_common_upper_reindex_dvd_62` proves divisibility by `62 = 2*31`;
-among old primes at most `30`, only the channel `2` can remain.
+among old primes at most `30`, only the channel `2` can remain.  The production
+theorem itself stops at `q ∣ 62`; the final `Nat.Prime q ∧ q ≤ 30 -> q = 2`
+corollary is immediate but is not exported in GNIP-004.
 
 ## 7. Answers to the checkpoint questions
 
@@ -167,20 +169,20 @@ among old primes at most `30`, only the channel `2` can remain.
    `2*(n+1)` above it.
 4. **Yes.** `oddGnomon n` is an exact same-offset persistence firewall.
 5. **At 30→31:** no old prime can persist in the lower inserted region; the
-   upper region can retain only `2`.
+   upper region can retain only `2` as a prime channel at most `30`.
 6. **No.** None of these finite identities implies full-cover propagation or
    full-cover failure, and no Legendre provider is added.
-7. The production source does contain the separate real API
-   `DkMath.CosmicFormula.Projection.Pi`, `U`, and
-   `cosmicProjection_gap_eq` for `Pi P + 1 = U P`.  There is no current exact
-   bridge from that real observer to this discrete successor-support firewall;
-   the relation is therefore **NOT CONNECTED** in GNIP-004.  No new real or
-   rational theory was introduced.
-8. A bounded GNIP-005 is justified only as a finite support-image audit:
-   test whether the old prime-support sets under
-   `successorThresholdInsert` admit an exact image/intersection description,
-   stopping at the firewall if they do not.  It must not be promoted to a
-   full-cover or Legendre route.
+7. The repository contains a separate real sample API in
+   `DkMath/Samples/Projection.lean`, namely `DkMath.Cosmic.Pi`,
+   `DkMath.Cosmic.U`, and `DkMath.Cosmic.cosmicProjection_gap_eq` for
+   `Pi P + 1 = U P`.  There is no current exact bridge from that real observer
+   to this discrete successor-support firewall; the relation is therefore
+   **NOT CONNECTED** in GNIP-004.  No new real or rational theory was introduced.
+8. A support-image/intersection audit is mathematically possible, but it is no
+   longer required to close the GNIP recovery campaign.  Turning the firewall
+   into a full-cover contradiction would require support handoff/collision
+   analysis and therefore belongs to the Legendre application work rather than
+   to the neutral/inversion-recovery campaign.
 
 ## 8. Dependencies and validation
 
