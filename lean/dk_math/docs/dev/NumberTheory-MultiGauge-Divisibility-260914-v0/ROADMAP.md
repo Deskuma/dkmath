@@ -15,7 +15,9 @@ q escapes in gauge u₁
 -> along a finite chain, where is first capture possible?
 ```
 
-The v0 branch intentionally stops before Norm / Eisenstein / TraceOne lattice landing.
+The v0 front-half branch intentionally stopped before Norm / Eisenstein /
+TraceOne lattice landing; MG-004A now records the first concrete neutral
+receiver layer after that boundary.
 
 ---
 
@@ -293,17 +295,53 @@ review-004.md
 
 ---
 
-## Phase MG-004 — Norm / lattice landing
+## Phase MG-004A — Eisenstein lattice landing
 
-Status: OUT OF CURRENT FRONT-HALF SCOPE
+Status: COMPLETE / APPROVED — Outcome A: LATTICE LANDING IFF ESTABLISHED
 
-Resume the second half of:
+Production:
 
 ```text
-docs/not_implements/260912-MultiGauge-Divisibility-Norm-Lattice-Landing.md
+DkMath/Lib/NumberTheory/EisensteinLatticeLanding.lean
 ```
 
-only after raw scale transport and concrete primitive-shape transition semantics are stable, or after MG-003C explicitly records that no current primitive provider exists.
+The existing standard Eisenstein coordinate model in `TraceOneInt (-1)` now
+proves the exact criterion:
+
+```text
+beta ∣ alpha
+<->
+norm beta ∣ (alpha * conj beta).fst
+and
+norm beta ∣ (alpha * conj beta).snd
+```
+
+The explicit coordinate form, nonzero-norm cancellation, norm-divisibility
+necessity corollary, and norm-only counterexample are all production-proved.
+The neutral `DkMath.Lib` facade exports the new module.
+
+See:
+
+```text
+instruction-006.md
+report-006.md
+```
+
+MG-004A does not generalize the carrier parameter, add application bridges, or
+implement power-image landing.
+
+---
+
+## Phase MG-004B — general TraceOne lattice landing
+
+Status: JUSTIFIED / NEXT — AUDIT-FIRST
+
+MG-004A establishes a concrete receiver layer and isolates the generalization
+boundary.  A future checkpoint may audit positive-definite norm parameters and
+coordinate reconstruction for general `TraceOneInt s`, while preserving the
+neutral Lib namespace and avoiding MultiGauge/ABC/FLT/Petal imports.
+
+The general theorem is not implemented in MG-004A.
 
 Intended later chain:
 
