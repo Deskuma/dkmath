@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
 
 #print "file: DkMath.Lib.NumberTheory.EisensteinLatticeLanding"
@@ -226,6 +227,56 @@ theorem eisenstein_dvd_iff_norm_dvd_conjugate_coordinates
   · rintro ⟨hA, hB⟩
     exact eisenstein_dvd_of_norm_dvd_conjugate_coordinates hbeta hA hB
 
+/-- The generic TraceOne criterion specializes back to the approved Eisenstein API. -/
+theorem eisenstein_dvd_iff_norm_dvd_conjugate_coordinates_via_generic
+    {a b c d : ℤ}
+    (hNorm : tqNorm (eisensteinCoord c d) ≠ 0) :
+    eisensteinCoord c d ∣ eisensteinCoord a b ↔
+      tqNorm (eisensteinCoord c d) ∣
+          (a * c - a * d + b * d) ∧
+        tqNorm (eisensteinCoord c d) ∣ (b * c - a * d) := by
+  have hNorm' : tqNorm (⟨c, -d⟩ : TraceOneInt (-1)) ≠ 0 := by
+    simpa [eisensteinCoord] using hNorm
+  have hgeneric :=
+    traceOne_dvd_iff_norm_dvd_mul_conj_coordinates
+      (s := (-1 : ℤ))
+      (alpha := (⟨a, -b⟩ : TraceOneInt (-1)))
+      (beta := (⟨c, -d⟩ : TraceOneInt (-1))) hNorm'
+  change (⟨c, -d⟩ : TraceOneInt (-1)) ∣
+      (⟨a, -b⟩ : TraceOneInt (-1)) ↔ _
+  have hN : tqNorm (eisensteinCoord c d) =
+      tqNorm (⟨c, -d⟩ : TraceOneInt (-1)) := by
+    rfl
+  constructor
+  · intro hdiv
+    have hg := hgeneric.mp hdiv
+    rw [hN]
+    constructor
+    · have hfst := hg.1
+      rw [traceOne_mul_conj_fst (-1) a (-b) c (-d)] at hfst
+      convert hfst using 1
+      all_goals first | exact hN | exact hN.symm | ring
+    · have hsnd := hg.2
+      rw [traceOne_mul_conj_snd (-1) a (-b) c (-d)] at hsnd
+      have hneg : tqNorm (eisensteinCoord c d) ∣
+          -(b * c - a * d) := by
+        convert hsnd using 1
+        all_goals first | exact hN | exact hN.symm | ring
+      exact Int.dvd_neg.mp hneg
+  · intro hdiv
+    rw [hN] at hdiv
+    apply hgeneric.mpr
+    constructor
+    · have hA := hdiv.1
+      rw [traceOne_mul_conj_fst (-1) a (-b) c (-d)]
+      convert hA using 1
+      all_goals first | exact hN | exact hN.symm | ring
+    · have hneg : tqNorm (eisensteinCoord c d) ∣
+          -(b * c - a * d) := Int.dvd_neg.mpr hdiv.2
+      rw [traceOne_mul_conj_snd (-1) a (-b) c (-d)]
+      convert hneg using 1
+      all_goals first | exact hN | exact hN.symm | ring
+
 /-- Polynomial form of the exact standard Eisenstein lattice criterion. -/
 theorem eisenstein_dvd_iff_polynomial_norm_dvd_conjugate_coordinates
     {a b c d : ℤ}
@@ -266,6 +317,7 @@ end DkMath.Lib.NumberTheory
 #print axioms DkMath.Lib.NumberTheory.eisensteinCoord_mul_conj
 #print axioms DkMath.Lib.NumberTheory.norm_eisensteinCoord_eq_zero_iff
 #print axioms DkMath.Lib.NumberTheory.eisenstein_dvd_iff_norm_dvd_conjugate_coordinates
+#print axioms DkMath.Lib.NumberTheory.eisenstein_dvd_iff_norm_dvd_conjugate_coordinates_via_generic
 #print axioms DkMath.Lib.NumberTheory.eisenstein_dvd_iff_polynomial_norm_dvd_conjugate_coordinates
 #print axioms DkMath.Lib.NumberTheory.eisenstein_dvd_imp_norm_dvd_norm
 #print axioms DkMath.Lib.NumberTheory.eisenstein_norm_divisibility_not_sufficient

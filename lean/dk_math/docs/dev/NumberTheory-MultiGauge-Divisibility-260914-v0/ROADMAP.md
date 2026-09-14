@@ -16,8 +16,8 @@ q escapes in gauge u₁
 ```
 
 The v0 front-half branch intentionally stopped before Norm / Eisenstein /
-TraceOne lattice landing; MG-004A now records the first concrete neutral
-receiver layer after that boundary.
+TraceOne lattice landing; MG-004A and MG-004B now record the concrete and
+generic neutral receiver layers after that boundary.
 
 ---
 
@@ -334,14 +334,35 @@ implement power-image landing.
 
 ## Phase MG-004B — general TraceOne lattice landing
 
-Status: JUSTIFIED / NEXT — AUDIT-FIRST
+Status: COMPLETE / APPROVED — Outcome A: GENERAL TRACEONE LANDING ESTABLISHED
 
-MG-004A establishes a concrete receiver layer and isolates the generalization
-boundary.  A future checkpoint may audit positive-definite norm parameters and
-coordinate reconstruction for general `TraceOneInt s`, while preserving the
-neutral Lib namespace and avoiding MultiGauge/ABC/FLT/Petal imports.
+The neutral module
+`DkMath/Lib/NumberTheory/TraceOneLatticeLanding.lean` proves the exact
+nonzero-norm lattice-landing criterion for arbitrary `TraceOneInt s`.  The
+proof uses the coordinate multiplication determinant, reconstructs an
+integral quotient from the two coordinate divisibility witnesses, and keeps
+the hypothesis `norm beta ≠ 0` explicit.  It does not assume a general
+zero-fiber theorem for the norm.  The polynomial corollary, norm-divisibility
+necessity, `s = 0` zero-norm regression, and the MG-004A Eisenstein
+specialization regression are also production-checked.
 
-The general theorem is not implemented in MG-004A.
+See:
+
+```text
+instruction-007.md
+report-007.md
+```
+
+The next boundary is power/Core-image landing; no such provider is claimed by
+MG-004B.
+
+## Phase MG-004C — power/Core-image landing
+
+Status: NEXT — AUDIT-FIRST
+
+Audit whether a later power/Core-image landing theorem can be stated over the
+generic TraceOne receiver without introducing a new universal provider,
+Euclidean/UFD infrastructure, or an unjustified prime-existence assertion.
 
 Intended later chain:
 
@@ -396,6 +417,18 @@ MG-003A
 MG-003B
   COMPLETE / APPROVED
   Outcome A — FINITE RAW-REFINEMENT PATHS AND PRIMITIVE-SHAPE INVARIANCE
+
+MG-004A
+  COMPLETE / APPROVED
+  Outcome A — EISENSTEIN LATTICE LANDING IFF ESTABLISHED
+
+MG-004B
+  COMPLETE / APPROVED
+  Outcome A — GENERAL TRACEONE LANDING ESTABLISHED
+
+MG-004C
+  NEXT — AUDIT-FIRST
+  power/Core-image landing boundary to be investigated; no provider yet.
 
 instruction-005
   COMPLETE / AUDITED
