@@ -21,11 +21,11 @@ The v0 branch intentionally stops before Norm / Eisenstein / TraceOne lattice la
 
 ## Phase MG-000 — two-stage arithmetic kernel
 
-Status: NEXT
+Status: COMPLETE / APPROVED
 
-Implement the smallest production packet supporting prime escape transport.
+Implemented the smallest production packet supporting prime escape transport.
 
-Expected output:
+Production output:
 
 ```text
 DkMath/NumberTheory/MultiGauge/Basic.lean
@@ -50,7 +50,7 @@ $$
 A_2\delta=A_1\nu.
 $$
 
-Required theorem family:
+Production theorem family now includes:
 
 ```text
 second capture -> first capture OR q | numerator
@@ -63,29 +63,29 @@ q ∤ numerator and q ∤ denominator
 -> prime visibility iff across the transition
 ```
 
-Also package the one-stage channel decomposition:
+The one-stage observer is decomposed into boundary / GN channels, and the existing GN gcd firewall yields the stronger reusable localization:
 
 ```text
-q | stage.value
-<->
-q | stage.x OR q | stage.gnValue
+q | stage.x
+q | stage.gnValue
+1 <= d
+-> q | d
 ```
 
-and, using the existing GN gcd firewall:
+without requiring `q` prime.
+
+See:
 
 ```text
-q prime
-q ∤ d
--> not (q | stage.x AND q | stage.gnValue)
+report-000.md
+review-000.md
 ```
-
-Do not implement finite paths yet unless the resulting code is genuinely trivial after MG-000.
 
 ---
 
 ## Phase MG-001 — finite prime-escape paths
 
-Status: PLANNED
+Status: NEXT
 
 Introduce the minimal finite-chain representation justified by MG-000.
 
@@ -109,12 +109,29 @@ q\mid A_j
 q\mid\prod_{i<j}\nu_i.
 $$
 
-Prefer a simple `List` / indexed finite sequence representation over a custom automaton framework unless the theorem statements demand more structure.
+The preferred path invariant is the telescoped balance:
 
-Possible output:
+```text
+Ak * product(denominators)
+=
+A0 * product(numerators).
+```
+
+In addition to endpoint localization, MG-001 must prove an all-stage escape theorem and an actual escape-to-capture transition witness whose numerator is divisible by `q`.
+
+Prefer a simple `List` / recursive linked-path representation over a custom automaton framework unless the theorem statements demand more structure.
+
+Expected output:
 
 ```text
 DkMath/NumberTheory/MultiGauge/Path.lean
+report-001.md
+```
+
+See:
+
+```text
+instruction-001.md
 ```
 
 ---
@@ -264,16 +281,19 @@ Throughout the branch:
 ## Immediate execution order
 
 ```text
-instruction-000
-  MG-000 two-stage kernel + prime escape transport
-
-report-000
-  theorem inventory, exact files, build evidence, unresolved issues
+MG-000
+  COMPLETE / APPROVED
 
 instruction-001
-  only after review of MG-000
-  finite path / first-capture localization
+  NEXT
+  finite path composition
+  telescoped support balance
+  all-stage escape
+  first-capture localization
 
-Legendre bridge
-  only after MG-001 or earlier if MG-000 already gives a meaningful d=2 theorem
+report-001 + review
+  decide whether MG-L2 Legendre audit is justified
+
+MG-L2 Legendre bridge
+  only after MG-001 review, unless a genuinely stronger result emerges earlier
 ```
