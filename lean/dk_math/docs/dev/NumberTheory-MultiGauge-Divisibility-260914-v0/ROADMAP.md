@@ -358,11 +358,27 @@ MG-004B.
 
 ## Phase MG-004C — power/Core-image landing
 
-Status: NEXT — AUDIT-FIRST
+Status: COMPLETE / APPROVED — Outcome A: SQUARE/CORE LANDING ESTABLISHED
 
-Audit whether a later power/Core-image landing theorem can be stated over the
-generic TraceOne receiver without introducing a new universal provider,
-Euclidean/UFD infrastructure, or an unjustified prime-existence assertion.
+The neutral module
+`DkMath/Lib/NumberTheory/TraceOnePowerLanding.lean` proves the square
+coordinate formula and the exact square/Core-image landing criterion over the
+generic `TraceOneInt s` receiver.  It reconstructs the square witness from
+the two conjugate-product coordinates and uses the existing nonzero-norm
+cancelation theorem.  A norm-power identity and a kernel-checked strictness
+regression show that integral lattice landing does not imply square/Core
+landing.
+
+No arbitrary root provider, UFD/Euclidean infrastructure, or application
+bridge is introduced.  An arbitrary-power receiver remains outside this
+checkpoint because the square criterion is the primary substantive result.
+
+See:
+
+```text
+instruction-008.md
+report-008.md
+```
 
 Intended later chain:
 
@@ -427,8 +443,8 @@ MG-004B
   Outcome A — GENERAL TRACEONE LANDING ESTABLISHED
 
 MG-004C
-  NEXT — AUDIT-FIRST
-  power/Core-image landing boundary to be investigated; no provider yet.
+  COMPLETE / APPROVED
+  Outcome A — SQUARE/CORE LANDING ESTABLISHED
 
 instruction-005
   COMPLETE / AUDITED
