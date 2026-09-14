@@ -162,33 +162,24 @@ gn-only
 
 for primes away from the exponent support.
 
-However, after MG-L2 no concrete primitive-shape transition provider is available. Building an automaton now would be mostly descriptive.
+After MG-L2 and MG-003A there is still no concrete primitive-shape transition provider. Building an automaton now would remain mostly descriptive.
 
-Resume MG-002 only after concrete transition semantics make channel-switch pruning mathematically useful.
+Resume MG-002 only after concrete primitive-shape transition semantics make channel-switch pruning mathematically useful.
 
 ---
 
 ## Phase MG-003A — raw/primitive gauge normalization and synchronized refinement
 
-Status: COMPLETE / IMPLEMENTED — Outcome A
+Status: COMPLETE / APPROVED — Outcome A
 
-The MG-L2 audit exposed the missing abstraction boundary.
-
-`GNGaugeStage` is already primitive/coprime:
+Production:
 
 ```text
-Coprime x u.
+DkMath/NumberTheory/MultiGauge/RawNormalization.lean
+DkMath/NumberTheory/PrimorialUniverse/MultiGaugeUnitRefinementBridge.lean
 ```
 
-But concrete unit refinement in PrimorialUniverse transports raw natural coordinates by common scaling:
-
-```text
-(x,u) -> (x*k,u*k).
-```
-
-For `k > 1`, the refined pair is generally not coprime and therefore does not directly inhabit `GNGaugeStage`.
-
-The new layer is:
+The missing abstraction boundary is now explicit:
 
 ```text
 raw pair
@@ -198,43 +189,102 @@ common gcd/scale
 primitive coprime stage.
 ```
 
-Targets:
+Production proves:
 
 ```text
-GNRawGaugeStage;
-raw observer homogeneity A_d(kx,ku)=k^d*A_d(x,u);
-gcd/common-scale extraction;
-primitiveStage normalization;
-rawValue = scale^d * primitiveValue;
-prime capture iff scale support OR primitive-stage support;
-raw escape + refined capture -> q | refinement factor k;
-bridge to PrimorialUniverse.UnitCoordinateRefinement.
+(scaleBy k s).value = k^d * s.value;
+
+s.value = s.scale^d * (s.primitiveStage hg).value;
+
+RawPrimeCaught q s
+<->
+q | s.scale OR PrimeCaught q (s.primitiveStage hg);
+
+RawPrimeEscapes q s
+RawPrimeCaught q (scaleBy k s)
+->
+q | k.
 ```
 
-Important architecture:
+The downstream PUU bridge proves that an actual `UnitRefinesBy` coordinate change sends the two natural coordinates to the same generic `scaleBy k` raw stage.
 
-```text
-common-scale refinement
-!=
-primitive-shape GNGaugeTransition.
-```
-
-Do not weaken the existing coprimality invariant to force these layers together.
+This is the first non-tautological concrete gauge-refinement transport of the campaign.
 
 See:
 
 ```text
 instruction-003.md
 report-003.md
+review-003.md
 ```
 
 ---
 
-## Phase MG-003B — concrete primitive-shape transition providers
+## Phase MG-003B — finite raw-refinement paths and primitive-shape invariance
 
-Status: PLANNED AFTER MG-003A
+Status: NEXT
 
-After raw/common-scale support is separated, re-audit candidate genuine primitive-stage transitions:
+Before searching for primitive-shape transition providers, close the common-scale theory completely.
+
+First prove the normalization-invariance theorem for positive synchronized scaling:
+
+```text
+primitiveStage (scaleBy k s)
+=
+primitiveStage s
+```
+
+under the natural positivity assumptions.
+
+This formally establishes:
+
+```text
+synchronized unit refinement
+changes common scale,
+not primitive coprime shape.
+```
+
+Then introduce a minimal finite positive raw-refinement path with factors:
+
+```text
+k₁, k₂, ..., k_r.
+```
+
+Target path theorems:
+
+```text
+end.value
+=
+(product factors)^d * start.value;
+
+start escape
++ every refinement factor avoids q
+-> every visited raw stage escapes q;
+
+start escape
++ some visited raw stage captures q
+-> some actual refinement factor is divisible by q.
+```
+
+A stronger adjacent escape-to-capture step witness is preferred if it remains simple.
+
+This checkpoint directly answers the original MultiGauge question for synchronized unit refinements.
+
+See:
+
+```text
+instruction-004.md
+```
+
+---
+
+## Phase MG-003C — concrete primitive-shape transition providers
+
+Status: PLANNED AFTER MG-003B
+
+Once common-scale refinement is completely separated and its finite path theory is closed, re-audit genuine primitive-stage transitions.
+
+Candidate providers:
 
 ```text
 explicit quotient/normalization packets;
@@ -246,6 +296,8 @@ other arithmetic coordinate changes not equal to common scaling.
 A provider must derive the `GNGaugeTransition` balance from independent semantics. Endpoint-copy constructions remain excluded.
 
 `FixedBigGauge` real-valued refinement may provide semantic context, but it does not by itself supply a natural-number primitive-stage balance.
+
+If no genuine provider exists, record Outcome B and do not create decorative transition wrappers.
 
 ---
 
@@ -266,6 +318,7 @@ Intended later chain:
 ```text
 GN gcd sieve
 -> raw gauge normalization / scale support
+-> raw refinement path transport
 -> primitive gauge transition / path admissibility
 -> Norm divisibility
 -> coordinate divisibility
@@ -281,12 +334,13 @@ GN gcd sieve
 1. Existing one-stage gcd facts are dependencies, not targets for re-proof.
 2. Generic MultiGauge code remains independent of ABC, FLT, and Legendre.
 3. Raw common scale and primitive coprime shape are distinct layers.
-4. Transition support is explicit: numerator injects possible new primitive support; denominator removes possible old primitive support.
-5. Common-scale refinement localizes new raw support to the independent scale factor.
-6. Application bridges must not manufacture tautological transitions and call them pruning.
-7. MG-002 state machinery is introduced only when it proves genuine pruning.
-8. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
-9. No sorry/admit/new axiom declarations.
+4. Synchronized common scaling must preserve primitive shape.
+5. Transition support is explicit: numerator injects possible new primitive support; denominator removes possible old primitive support.
+6. Common-scale refinement localizes new raw support to the independent scale factor.
+7. Application bridges must not manufacture tautological transitions and call them pruning.
+8. MG-002 state machinery is introduced only when it proves genuine pruning.
+9. No Norm/lattice abstraction is introduced merely because it belongs to the long-term plan.
+10. No sorry/admit/new axiom declarations.
 ```
 
 ---
@@ -304,17 +358,18 @@ MG-L2
   COMPLETE / APPROVED
   Outcome B — CHANNEL BRIDGE ONLY
 
-instruction-003
-  COMPLETE / Outcome A
-  raw stage
-  common-scale homogeneity
-  gcd primitive normalization
-  exact raw support decomposition
-  synchronized unit-refinement capture localization
+MG-003A
+  COMPLETE / APPROVED
+  Outcome A — RAW NORMALIZATION AND UNIT-REFINEMENT TRANSPORT ESTABLISHED
 
-report-003
-  COMPLETE / Outcome A
+instruction-004
+  NEXT
+  primitive-shape invariance under positive scaleBy
+  finite raw refinement path
+  cumulative homogeneous law
+  all-stage escape
+  new-capture refinement-factor localization
 
-review-003
-  NEXT — re-audit genuine primitive-shape transition providers.
+report-004 + review
+  then re-audit genuine primitive-shape GNGaugeTransition providers in MG-003C.
 ```
