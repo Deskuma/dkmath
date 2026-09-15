@@ -60,7 +60,7 @@ theorem GNExcess_cubic_target_boundaryWeight_le_repeatedPart_three_eighths {a b 
     calc
       (2 ^ S.card) ^ 8 = ∏ q ∈ S, (256:ℕ) := by rw [← pow_mul, Nat.mul_comm, pow_mul]; norm_num
       _ ≤ ∏ q ∈ S, q ^ 3 := by
-        apply Finset.prod_le_prod (fun _ _ => Nat.zero_le _)
+        apply Finset.prod_le_prod
         intro q hq
         have h := hq7 q hq
         exact (by norm_num : 256 ≤ 7^3).trans (Nat.pow_le_pow_left h 3)
