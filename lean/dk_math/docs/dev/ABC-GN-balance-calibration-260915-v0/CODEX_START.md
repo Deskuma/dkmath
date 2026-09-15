@@ -7,11 +7,14 @@ repository: Deskuma/dkmath
 branch: research/ABC-GN-balance-calibration-260915-v0
 ```
 
-Current accepted checkpoint:
+Accepted checkpoints:
 
 ```text
 BCAL-000 — Outcome A
 commit: 39022f480db874c91432f4c114bb7e1c3661fa5b
+
+BCAL-001 — Outcome A
+commit: 748adca6ee93715ecf5d30c90ed2352f7e0d23c2
 ```
 
 Read in this order:
@@ -19,51 +22,63 @@ Read in this order:
 ```text
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-000.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-001.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-001.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-002.md
 ```
 
-Then execute `instruction-001.md` repository-first.
+Then execute `instruction-002.md` repository-first.
 
 Current core rule:
 
 ```text
-The balance coordinates already exist.
-Now expose the actual pointwise calibration function before any uniform bound.
+The inner GN mass/balance coordinates and the outer ABC balance now exist.
+The actual pointwise correction also exists.
+Now open that correction and identify exactly which terms are genuine arithmetic slack.
 Do not improve exponents.
 Do not prove a uniform calibration bound.
 Do not construct a new ABC contract.
-Do not claim either zero contour is globally optimal.
+Do not claim a balance contour is globally optimal.
 ```
 
-Checkpoint 000 established:
+Checkpoint 001 established:
 
 ```text
-S = fresh non-exceptional support log mass
-E = non-exceptional valuation depth mass
-M = S + E
-Q = S - E
-Cal(T,p,ρ) = M - ρ * radLog(T)
+GNPointwiseCalibrationCorrection
+  = (Cal + log(rad p)) / ((p-1) * radLog)
 
-odd-prime joint pressure
-  iff
-Cal(T,p,ρ) <= C
+ABCOuterBalance
+  = output depth - input support
+  = abcGap
+  = abcEpsilon * radLog
 ```
 
-Checkpoint 001 must extract:
+Checkpoint 002 should distinguish the exact odd-prime accounting from the safe envelope by extracting:
 
 ```text
-pointwise calibration correction
-  := (Cal(T,p,ρ) + log(rad p)) / ((p-1) * radLog(T))
+ReturnSlack
+  = log GN - (p-1) log c
 
-outer ABC balance
-  := valuationExcess(T.c) - log(rad(T.a*T.b))
-  = abcGap(T)
+ExceptionalGaugeSlack
+  = log(rad p) - log(exceptional support)
+
+ExactCalibrationCorrection
 ```
 
-Reuse existing production bridges. Do not rebuild the GN accounting or epsilon proof.
+and should aim for the exact identities
+
+```text
+abcEpsilon
+  = GNEpsilon + ExactCalibrationCorrection
+
+GNPointwiseCalibrationCorrection
+  = ExactCalibrationCorrection
+    + normalized(ReturnSlack + ExceptionalGaugeSlack).
+```
+
+Reuse existing production identities. Do not rebuild GN support or return proofs.
 
 Write results and build/audit evidence to:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-001.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-002.md
 ```
