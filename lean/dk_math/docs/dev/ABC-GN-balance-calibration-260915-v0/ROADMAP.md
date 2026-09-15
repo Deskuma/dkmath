@@ -111,7 +111,7 @@ Status: **complete / Outcome B — PARTIAL BRIDGE** at commit `e211e0472280515ff
 
 ## BCAL-005 — Exceptional cubic gauge completion
 
-BCAL-004's bounded mismatch is now completed exactly.
+BCAL-004's bounded mismatch is completed exactly.
 
 For `F(a) = GN 3 a 1`:
 
@@ -128,7 +128,7 @@ GNExcessCubicComplement
     * non-exceptional single layer.
 ```
 
-The exceptional factor never enters `twoTail`, because its valuation is at most one.  Therefore the unconditional full-shell bridge is:
+The exceptional factor never enters `twoTail`, because its valuation is at most one. Therefore the unconditional full-shell bridge is:
 
 ```text
 GNChannelBalance
@@ -143,44 +143,75 @@ Status: **complete / Outcome A — EXACT EXCEPTIONAL COMPLETION** at commit `7aa
 
 ## BCAL-006 — Depth-step / finite Hensel transport audit
 
-Active via `instruction-006.md`.
+The local ruler and finite root tree are now connected without confusing exact valuation with divisibility threshold depth.
 
-The local ruler already says what an **exact valuation increase** by one would do:
+Level A proves, under the explicit exact successor hypothesis
 
 ```text
-v -> v + 1
+v_q(GN p a' b) = v_q(GN p a b) + 1,
+```
+
+the exact coordinate transport
+
+```text
 localMass    -> localMass + log q
 localBalance -> localBalance - log q.
 ```
 
-The arithmetic question is separate: what depth transport is actually supplied by the existing finite Hensel API?
-
-Existing production already gives simple-root uniqueness in the non-exceptional channel, but not a theorem that every depth-`k` root lifts to depth `k+1`.
-
-The checkpoint therefore separates:
+Level B proves canonical downward reduction
 
 ```text
-A. algebraic exact-valuation successor law
-B. canonical downward reduction: depth k+1 -> depth k
-C. simple-root injectivity of successor reduction
-D. branch-count law: card R_(k+1) <= card R_k
+R_(k+1) -> R_k,
+r |-> r mod q^k.
 ```
 
-The inequality is the intended finite Hensel transport endpoint.  Equality or infinite-branch existence must not be asserted without an independently proved lift-existence theorem.
-
-## BCAL-007 — PowerSwap / contour abstraction audit
-
-Only if the preceding checkpoints reveal genuine reuse, audit whether the common pattern belongs in a generic module rather than ABC:
+Level C combines the existing simple-root Hensel uniqueness with that reduction to obtain successor injectivity and
 
 ```text
-two real components U,V
-mass    M = U + V
-balance Q = U - V
-reconstruction U=(M+Q)/2, V=(M-Q)/2
-zero contour Q=0
+card R_(k+1) <= card R_k.
 ```
 
-Do not force an abstraction merely for aesthetic symmetry. A generic layer is justified only if it has at least two substantive consumers.
+No lift-existence theorem, infinite branch, or cardinality equality is asserted.
+
+Status: **complete / Outcome A — EXACT DEPTH TRANSPORT** at commit `f68cb617a2db3fed875655037ce966db3d659b51`.
+
+## BCAL-007 — Two-channel / PowerSwap abstraction audit
+
+Active via `instruction-007.md`.
+
+The preceding checkpoints now provide two substantive consumers of the same exact linear coordinate transform.
+
+PowerSwap:
+
+```text
+U = gapU
+V = gapV
+center  = (U + V)/2
+balance = U - V.
+```
+
+ABC/GN:
+
+```text
+U = GNChannelSupportMass
+V = GNChannelDepthMass
+mass    = U + V
+balance = U - V.
+```
+
+BCAL-006 additionally gives the right-channel transport instance
+
+```text
+V -> V + δ
+mass    -> mass + δ
+balance -> balance - δ.
+```
+
+The checkpoint first audits for an existing public abstraction. If none exists, it may extract a small dependency-neutral `DkMath.Lib.*` two-channel kernel containing only exact reconstruction, zero-contour, swap-symmetry, and one-channel transport laws.
+
+PowerSwap and ABC/GN should consume the kernel through bridge theorems while retaining their existing domain-specific public definitions and meanings.
+
+The goal is reuse of the linear coordinate transform, **not** an assertion that PowerSwap and ABC are the same mathematical theory.
 
 ## BCAL-008 — Quantitative calibration frontier
 
