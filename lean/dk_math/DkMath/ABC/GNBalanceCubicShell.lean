@@ -271,4 +271,222 @@ theorem GNChannelBalance_cubic_eq_log_complement_sub_log_twoTail
   rw [hpart, hrep]
   simp [repeatedPrimePowerComplement]
 
+/-! ## Unconditional exceptional support completion -/
+
+theorem GNExceptionalSupportProduct_three_one_eq_if
+    (a : ℕ) :
+    GNExceptionalSupportProduct 3 a 1 =
+      if 3 ∣ GN 3 a 1 then 3 else 1 := by
+  have hGN : GN 3 a 1 ≠ 0 := by
+    rw [GN_three_dual_explicit]
+    positivity
+  by_cases h3 : 3 ∣ GN 3 a 1
+  · have hmem3 : 3 ∈ (GN 3 a 1).factorization.support :=
+      mem_support_factorization_iff.mpr ⟨hGN, Nat.prime_three, h3⟩
+    have hE : GNExceptionalSupport 3 a 1 = {3} := by
+      ext q
+      constructor
+      · intro hq
+        have hq' := Finset.mem_filter.mp hq
+        have hqprime := (mem_support_factorization_iff.mp hq'.1).2.1
+        have hqeq : q = 3 :=
+          ((Nat.dvd_prime Nat.prime_three).mp hq'.2).resolve_left hqprime.ne_one
+        subst q
+        simp
+      · intro hq
+        have hqeq : q = 3 := by simpa using hq
+        subst q
+        exact Finset.mem_filter.mpr ⟨hmem3, by simp⟩
+    rw [GNExceptionalSupportProduct, hE, if_pos h3]
+    rfl
+  · have hE : GNExceptionalSupport 3 a 1 = ∅ := by
+      ext q
+      constructor
+      · intro hq
+        have hq' := Finset.mem_filter.mp hq
+        have hqprime := (mem_support_factorization_iff.mp hq'.1).2.1
+        have hqeq : q = 3 :=
+          ((Nat.dvd_prime Nat.prime_three).mp hq'.2).resolve_left hqprime.ne_one
+        subst q
+        exact False.elim (h3 (mem_support_factorization_iff.mp hq'.1).2.2)
+      · simp
+    rw [GNExceptionalSupportProduct, hE, if_neg h3]
+    rfl
+
+theorem GN_cubic_eq_exceptional_mul_nonExceptionalPart
+    (a : ℕ) :
+    GN 3 a 1 =
+      GNExceptionalSupportProduct 3 a 1 * GNNonExceptionalPart 3 a 1 := by
+  have hGN : GN 3 a 1 ≠ 0 := by
+    rw [GN_three_dual_explicit]
+    positivity
+  have hEpos : 0 < GNExceptionalSupportProduct 3 a 1 :=
+    GNExceptionalSupportProduct_pos 3 a 1
+  have hNpos : 0 < GNNonExceptionalPart 3 a 1 :=
+    GNNonExceptionalPart_pos 3 a 1
+  have hEprime : ∀ q ∈ GNExceptionalSupport 3 a 1, Nat.Prime q := by
+    intro q hq
+    exact (mem_support_factorization_iff.mp
+      (Finset.mem_filter.mp hq).1).2.1
+  apply Nat.eq_of_factorization_eq hGN
+    (mul_ne_zero hEpos.ne' hNpos.ne')
+  intro q
+  have hEpos' : 0 < (GNExceptionalSupport 3 a 1).prod id := by
+    exact hEpos
+  rw [GNExceptionalSupportProduct]
+  rw [Nat.factorization_mul hEpos'.ne' hNpos.ne']
+  change (GN 3 a 1).factorization q =
+    ((GNExceptionalSupport 3 a 1).prod (fun p => p)).factorization q +
+      (GNNonExceptionalPart 3 a 1).factorization q
+  rw [factorization_prod_primes q (GNExceptionalSupport 3 a 1) hEprime,
+    GNNonExceptionalPart_factorization]
+  by_cases hqE : q ∈ GNExceptionalSupport 3 a 1
+  · have hqN : q ∉ GNNonExceptionalSupport 3 a 1 := by
+      intro hqN
+      exact Finset.disjoint_left.mp
+        (GNExceptionalSupport_disjoint_nonExceptional 3 a 1) hqE hqN
+    have hq' := Finset.mem_filter.mp hqE
+    have hqprime := (mem_support_factorization_iff.mp hq'.1).2.1
+    have hqeq : q = 3 :=
+      ((Nat.dvd_prime Nat.prime_three).mp hq'.2).resolve_left hqprime.ne_one
+    have h3 : 3 ∣ GN 3 a 1 := by
+      simpa only [hqeq] using (mem_support_factorization_iff.mp hq'.1).2.2
+    subst q
+    have hv := GN_cubic_three_factorization_eq_one_of_dvd h3
+    rw [if_pos hqE, if_neg hqN, hv]
+  · by_cases hqN : q ∈ GNNonExceptionalSupport 3 a 1
+    · rw [if_neg hqE, if_pos hqN]
+      simp only [zero_add]
+    · have hqF : q ∉ (GN 3 a 1).factorization.support := by
+        intro hqF
+        have hu : q ∈ GNExceptionalSupport 3 a 1 ∪
+            GNNonExceptionalSupport 3 a 1 := by
+          rw [← GN_support_eq_exceptional_union_nonExceptional]
+          exact hqF
+        rcases Finset.mem_union.mp hu with hqE' | hqN'
+        · exact hqE hqE'
+        · exact hqN hqN'
+      have hzero : (GN 3 a 1).factorization q = 0 := by
+        by_contra hne
+        exact hqF (Finsupp.mem_support_iff.mpr hne)
+      rw [if_neg hqE, if_neg hqN, hzero]
+
+theorem GNExcessCubicComplement_eq_exceptional_mul_nonExceptionalSingleLayer
+    (a : ℕ) :
+    GNExcessCubicComplement a =
+      GNExceptionalSupportProduct 3 a 1 * GNNonExceptionalSingleLayer 3 a 1 := by
+  have hN : GNNonExceptionalPart 3 a 1 ≠ 0 :=
+    Nat.ne_of_gt (GNNonExceptionalPart_pos 3 a 1)
+  have hPdvd : repeatedPrimePowerPart (GNNonExceptionalPart 3 a 1) ∣
+      GNNonExceptionalPart 3 a 1 :=
+    repeatedPrimePowerPart_dvd hN
+  have hrep := GNNonExceptionalRepeatedPart_three_one_eq_repeatedPrimePowerPart a
+  have hquot :
+      GN 3 a 1 / repeatedPrimePowerPart (GN 3 a 1) =
+        (GNExceptionalSupportProduct 3 a 1 *
+          GNNonExceptionalPart 3 a 1) /
+          repeatedPrimePowerPart (GNNonExceptionalPart 3 a 1) := by
+    congr 1
+    · exact GN_cubic_eq_exceptional_mul_nonExceptionalPart a
+    · exact hrep.symm
+  unfold GNExcessCubicComplement GNNonExceptionalSingleLayer
+  rw [hrep, hquot]
+  exact Nat.mul_div_assoc _ hPdvd
+
+theorem twoTail_GN_cubic_eq_twoTail_nonExceptionalPart
+    (a : ℕ) :
+    twoTail (GN 3 a 1) =
+      twoTail (GNNonExceptionalPart 3 a 1) := by
+  classical
+  have hdis := GNExceptionalSupport_disjoint_nonExceptional 3 a 1
+  have hEone :
+      (GNExceptionalSupport 3 a 1).prod
+        (fun q => q ^ ((GN 3 a 1).factorization q - 2)) = 1 := by
+    apply Finset.prod_eq_one
+    intro q hq
+    have hq' := Finset.mem_filter.mp hq
+    have hqprime := (mem_support_factorization_iff.mp hq'.1).2.1
+    have hqeq : q = 3 :=
+      ((Nat.dvd_prime Nat.prime_three).mp hq'.2).resolve_left hqprime.ne_one
+    have h3 : 3 ∣ GN 3 a 1 := by
+      simpa only [hqeq] using (mem_support_factorization_iff.mp hq'.1).2.2
+    subst q
+    have hv := GN_cubic_three_factorization_eq_one_of_dvd h3
+    rw [hv]
+    norm_num
+  calc
+    twoTail (GN 3 a 1) =
+        (GN 3 a 1).factorization.support.prod
+          (fun q => q ^ ((GN 3 a 1).factorization q - 2)) := rfl
+    _ = (GNExceptionalSupport 3 a 1 ∪
+        GNNonExceptionalSupport 3 a 1).prod
+          (fun q => q ^ ((GN 3 a 1).factorization q - 2)) := by
+      rw [GN_support_eq_exceptional_union_nonExceptional]
+    _ = (GNExceptionalSupport 3 a 1).prod
+          (fun q => q ^ ((GN 3 a 1).factorization q - 2)) *
+        (GNNonExceptionalSupport 3 a 1).prod
+          (fun q => q ^ ((GN 3 a 1).factorization q - 2)) :=
+      Finset.prod_union hdis
+    _ = (GNNonExceptionalSupport 3 a 1).prod
+          (fun q => q ^ ((GN 3 a 1).factorization q - 2)) := by
+      rw [hEone, one_mul]
+    _ = twoTail (GNNonExceptionalPart 3 a 1) := by
+      rw [← GNNonExceptionalPart_factorization_support]
+      apply Finset.prod_congr rfl
+      intro q hq
+      have hqS : q ∈ GNNonExceptionalSupport 3 a 1 := by
+        rw [← GNNonExceptionalPart_factorization_support]
+        exact hq
+      rw [GNNonExceptionalPart_factorization, if_pos hqS]
+
+/-! ## The unconditional full-shell balance and gauge form -/
+
+theorem GNChannelBalance_cubic_eq_log_fullComplement_sub_log_twoTail_sub_log_exceptional
+    (a : ℕ) :
+    GNChannelBalance (Triple.mk a 1 (a + 1) rfl (by simp)) 3 =
+      Real.log (GNExcessCubicComplement a : ℝ) -
+        Real.log (twoTail (GN 3 a 1) : ℝ) -
+        Real.log (GNExceptionalSupportProduct 3 a 1 : ℝ) := by
+  have hEpos : 0 < GNExceptionalSupportProduct 3 a 1 :=
+    GNExceptionalSupportProduct_pos 3 a 1
+  have hSpos : 0 < GNNonExceptionalSingleLayer 3 a 1 :=
+    GNNonExceptionalSingleLayer_pos 3 a 1
+  have hEcast : (GNExceptionalSupportProduct 3 a 1 : ℝ) ≠ 0 :=
+    by exact_mod_cast hEpos.ne'
+  have hScast : (GNNonExceptionalSingleLayer 3 a 1 : ℝ) ≠ 0 :=
+    by exact_mod_cast hSpos.ne'
+  calc
+    GNChannelBalance (Triple.mk a 1 (a + 1) rfl (by simp)) 3 =
+        Real.log (GNNonExceptionalSingleLayer 3 a 1 : ℝ) -
+          Real.log (twoTail (GNNonExceptionalPart 3 a 1) : ℝ) := by
+      simpa using GNChannelBalance_eq_log_singleLayer_sub_log_twoTail
+        (Triple.mk a 1 (a + 1) rfl (by simp)) 3
+    _ = Real.log (GNExcessCubicComplement a : ℝ) -
+          Real.log (twoTail (GN 3 a 1) : ℝ) -
+          Real.log (GNExceptionalSupportProduct 3 a 1 : ℝ) := by
+      rw [twoTail_GN_cubic_eq_twoTail_nonExceptionalPart,
+        GNExcessCubicComplement_eq_exceptional_mul_nonExceptionalSingleLayer,
+        Nat.cast_mul, Real.log_mul hEcast hScast]
+      ring
+
+theorem GNChannelBalance_cubic_eq_log_complement_sub_log_twoTail_recovered
+    {a : ℕ} (h3 : ¬ 3 ∣ GN 3 a 1) :
+    GNChannelBalance (Triple.mk a 1 (a + 1) rfl (by simp)) 3 =
+      Real.log (GNExcessCubicComplement a : ℝ) -
+        Real.log (twoTail (GN 3 a 1) : ℝ) := by
+  rw [GNChannelBalance_cubic_eq_log_fullComplement_sub_log_twoTail_sub_log_exceptional,
+    GNExceptionalSupportProduct_three_one_eq_if, if_neg h3]
+  norm_num
+
+theorem GNChannelBalance_cubic_eq_fullShell_sub_radLog_add_gaugeSlack
+    (a : ℕ) :
+    GNChannelBalance (Triple.mk a 1 (a + 1) rfl (by simp)) 3 =
+      (Real.log (GNExcessCubicComplement a : ℝ) -
+        Real.log (twoTail (GN 3 a 1) : ℝ)) -
+        Real.log (rad 3 : ℝ) +
+        GNExceptionalGaugeSlack (Triple.mk a 1 (a + 1) rfl (by simp)) 3 := by
+  rw [GNChannelBalance_cubic_eq_log_fullComplement_sub_log_twoTail_sub_log_exceptional]
+  unfold GNExceptionalGaugeSlack
+  ring
+
 end DkMath.ABC
