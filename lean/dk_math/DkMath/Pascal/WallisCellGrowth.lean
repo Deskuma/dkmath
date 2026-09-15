@@ -989,8 +989,7 @@ theorem tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
       Filter.atTop (nhds (1 / 8 : ℝ)) := by
     convert hquot using 1
     · ext m
-      simp only [Pi.div_apply]
-    · norm_num
+      ring_nf
   refine hquot'.congr' ?_
   filter_upwards [eventually_gt_atTop 0] with m hm
   have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
@@ -1496,8 +1495,7 @@ theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correct
     have h := ha2.div hu (by norm_num : (1 : ℝ) ≠ 0)
     convert h using 1
     · ext m
-      rfl
-    · norm_num
+      ring_nf
   have hinv : Filter.Tendsto
       (fun m : ℕ => (1 : ℝ) / (m : ℝ)) Filter.atTop (nhds 0) :=
     tendsto_one_div_atTop_nhds_zero_nat
@@ -1521,8 +1519,7 @@ theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correct
     have h := hsub.div hu (by norm_num : (1 : ℝ) ≠ 0)
     convert h using 1
     · ext m
-      rfl
-    · norm_num
+      ring_nf
   have hprod : Filter.Tendsto
       (fun m : ℕ => ((m : ℝ) ^ 2 *
         (u m - 1 - 1 / (8 * (m : ℝ)))) *

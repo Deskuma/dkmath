@@ -109,8 +109,8 @@ theorem sum_oddGnomonLayer_eq_square
         zero_pow]
   | succ n ih =>
       rw [Finset.sum_range_succ, ih]
-      unfold OddGnomonLayer
-      ring
+      unfold OddGnomonLayer Gnomon.oddGnomon
+      ring_nf
 
 /--
 The classical odd-number sum form.

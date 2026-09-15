@@ -276,7 +276,7 @@ theorem card_GNJointDepthResidues_le
     _ = ∏ q ∈ Q, (R q).card := by
       simp [P]
     _ ≤ ∏ _q ∈ Q, (p - 1) := by
-      apply Finset.prod_le_prod (fun _q _hq => Nat.zero_le _)
+      apply Finset.prod_le_prod
       intro q hq
       by_cases hk : depth q = 0
       · have hone : 1 ≤ p - 1 := by
