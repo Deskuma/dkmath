@@ -24,70 +24,67 @@ commit: d083a6a2b9752baa1524ceab80dfd5ddc58966a8
 
 BCAL-004 — Outcome B / PARTIAL BRIDGE
 commit: e211e0472280515ff0adca8f2b287a387fa1e2c1
+
+BCAL-005 — Outcome A / EXACT EXCEPTIONAL COMPLETION
+commit: 7aa08d384b8c6b21c5da095e73964cc5ba15d8b2
 ```
 
 Read in this order:
 
 ```text
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-004.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-005.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-005.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-006.md
 ```
 
-Then execute `instruction-005.md` repository-first.
+Then execute `instruction-006.md` repository-first.
 
 Current core rule:
 
 ```text
-BCAL-004 already found the exact non-exceptional shell bridge.
-Do not hide the cubic exceptional prime 3 behind a side condition.
-Expose its exact single-layer contribution and recover an unconditional full-shell identity.
-Reuse the BCAL-002 exceptional gauge coordinate.
+BCAL-005 completed the full cubic exceptional bookkeeping exactly.
+The next task is a bounded depth-step / finite Hensel transport audit.
+Do not infer Hensel lift existence from Hensel uniqueness.
+Do not identify q^k divisibility with exact valuation k.
 Do not return to exponent optimization.
-Do not prove Hensel transport yet.
 Do not construct a new ABC contract.
 ```
 
 Established exact structure:
 
 ```text
-local balance(q) = (2 - v_q(GN)) * log q
+localMass(q)    = v_q(GN) * log q
+localBalance(q) = (2 - v_q(GN)) * log q
 
-GNChannelBalance
-  = log(nonExceptionalSingleLayer)
-    - log(twoTail(nonExceptionalPart))
+exact valuation +1
+  should algebraically imply:
+    localMass    + log q
+    localBalance - log q
 ```
 
-In the cubic family `GN 3 a 1`, prime `3` has valuation at most one.  Therefore it never enters the repeated part / `twoTail`, but it may remain in the full cubic squarefree complement while the BCAL non-exceptional channel omits it.
-
-Checkpoint 005 should test and, if valid, formalize the exact completion:
+Existing finite Hensel infrastructure already provides, in the non-exceptional simple-root channel:
 
 ```text
-full cubic complement
-  = exceptional support product
-    * non-exceptional single layer
+GNDeepLiftCongruenceUnique_of_simpleRoot
+GNDeepLiftReductionInjective_of_simpleRoot
+GNDeepLiftResidues_card_le_of_simpleRoot
 ```
 
-and hence an unconditional identity of the form
+but these are uniqueness/counting statements, not lift-existence statements.
+
+Checkpoint 006 should distinguish and formalize, where valid:
 
 ```text
-GNChannelBalance
-  = log(full cubic complement)
-    - log(full twoTail)
-    - log(exceptional support product).
+A. explicit exact-valuation successor law
+B. canonical downward reduction: depth k+1 -> depth k
+C. simple-root injectivity of that successor reduction
+D. card R_(k+1) <= card R_k
 ```
 
-Then rewrite the exceptional-support term through
-
-```text
-GNExceptionalGaugeSlack
-  = log(rad 3) - log(exceptional support product).
-```
-
-The goal is to show that the BCAL-004 mismatch is exactly the already-known exceptional gauge coordinate, not a new error term.
+Do not strengthen the final inequality to equality without a separately audited existence theorem.
 
 Write results and build/audit evidence to:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-005.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-006.md
 ```
