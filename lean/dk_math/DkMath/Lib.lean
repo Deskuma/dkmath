@@ -6,7 +6,11 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.Basic
 import DkMath.Lib.NumberTheory.PadicValNat
+import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
+import DkMath.Lib.NumberTheory.TraceOnePowerLanding
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
+import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
+import DkMath.Lib.NumberTheory.SquarefreePowerFactor
 import DkMath.Lib.Cosmic.GTail
 import DkMath.Lib.Cosmic.GTailCyclotomic
 import DkMath.Lib.Cosmic.GTailPascal
