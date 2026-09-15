@@ -123,7 +123,7 @@ theorem GNExcessTwoPrimeProfile_event_eq_empty {Q : Finset ℕ} {n : ℕ}
     have hqQ : q ∈ Q := by rcases hq' with rfl | rfl <;> assumption
     have hv := congr_fun (congr_fun haE q) hqQ
     change padicValNat q (GN 3 a 1)-1 = (if q=7 ∨ q=13 then 2*n-1 else 0) at hv
-    rw [if_pos hq'] at hv
+    rw [ite_eq_left hq'] at hv
     have hv' : padicValNat q (GN 3 a 1) = 2*n := by omega
     rw [← hv']
     exact pow_padicValNat_dvd

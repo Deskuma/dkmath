@@ -252,9 +252,9 @@ private theorem card_even_powerset_eq_card_odd_powerset
     constructor
     · apply Finset.mem_powerset.mpr
       by_cases hmem : a ∈ A
-      · simp only [if_pos hmem]
+      · simp only [ite_eq_left hmem]
         exact Finset.erase_subset _ _ |>.trans hsub
-      · simp only [if_neg hmem]
+      · simp only [ite_eq_right hmem]
         exact Finset.insert_subset ha hsub
     · by_cases hmem : a ∈ A
       · have hcard : (A.erase a).card + 1 = A.card :=
@@ -262,19 +262,19 @@ private theorem card_even_powerset_eq_card_odd_powerset
         have hnot : ¬ Even (A.erase a).card := by
           intro he
           exact (Nat.even_add_one.mp (by simpa [hcard] using hpar)) he
-        simp only [if_pos hmem]
+        simp only [ite_eq_left hmem]
         exact Nat.not_even_iff_odd.mp hnot
-      · simp only [if_neg hmem]
+      · simp only [ite_eq_right hmem]
         simpa [hmem] using hpar.add_one
   · intro A hA B hB hEq
     by_cases hA_mem : a ∈ A <;> by_cases hB_mem : a ∈ B
     · simp [hA_mem, hB_mem] at hEq
       simpa [Finset.insert_erase hA_mem, Finset.insert_erase hB_mem] using
         congrArg (insert a) hEq
-    · simp only [if_pos hA_mem, if_neg hB_mem] at hEq
+    · simp only [ite_eq_left hA_mem, ite_eq_right hB_mem] at hEq
       have : a ∈ A.erase a := hEq ▸ Finset.mem_insert_self a B
       simp at this
-    · simp only [if_neg hA_mem, if_pos hB_mem] at hEq
+    · simp only [ite_eq_right hA_mem, ite_eq_left hB_mem] at hEq
       have : a ∈ B.erase a := hEq ▸ Finset.mem_insert_self a A
       simp at this
     · simp [hA_mem, hB_mem] at hEq

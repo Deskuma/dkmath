@@ -86,13 +86,13 @@ theorem GNNonExceptionalRepeatedPart_three_swap_one_eq_repeatedPrimePowerPart
     repeatedPrimePowerPart_factorization]
   by_cases hs : q ∈ GNNonExceptionalSupport 3 1 a
   · rw [GNNonExceptionalPart_factorization_support,
-      GNNonExceptionalPart_factorization, if_pos hs]
+      GNNonExceptionalPart_factorization, ite_eq_left hs]
     have hq := (Finset.mem_filter.mp hs).1
     simp only [hs, hq, true_and]
   · have hv : ¬ 2 ≤ (GN 3 1 a).factorization q := fun h => hs (hdepth h)
     rw [GNNonExceptionalPart_factorization_support,
-      GNNonExceptionalPart_factorization, if_neg hs]
-    simp only [hs, hv, false_and, and_false, if_false]
+      GNNonExceptionalPart_factorization, ite_eq_right hs]
+    simp only [hs, hv, false_and, and_false, ite_false]
 
 noncomputable def GNExcessCubicSwapComplement (a : ℕ) : ℕ :=
   GN 3 1 a / GNNonExceptionalRepeatedPart 3 1 a

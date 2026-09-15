@@ -77,9 +77,9 @@ theorem goldbach_local_capacity_pos (n : ℕ) {r : ℕ} (hr : Nat.Prime r) :
     0 < r - (if r ∣ 2 * n then 1 else 2) := by
   have hr2 := hr.two_le
   by_cases hd : r ∣ 2 * n
-  · rw [if_pos hd]
+  · rw [ite_eq_left hd]
     omega
-  · rw [if_neg hd]
+  · rw [ite_eq_right hd]
     have hne : r ≠ 2 := by
       intro he
       subst r

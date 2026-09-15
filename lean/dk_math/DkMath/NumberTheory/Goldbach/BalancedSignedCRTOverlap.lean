@@ -300,7 +300,7 @@ theorem goldbachProgressionSeats_card
     {w t₀ M : ℕ} (hM : 0 < M) (ht₀ : t₀ ≤ w) :
     (goldbachProgressionSeats w t₀ M).card = (w - t₀) / M + 1 := by
   classical
-  rw [goldbachProgressionSeats, if_pos ht₀]
+  rw [goldbachProgressionSeats, ite_eq_left ht₀]
   have hinj : Set.InjOn (fun k => t₀ + M * k)
       (Finset.range ((w - t₀) / M + 1) : Set ℕ) := by
     intro a ha b hb hab
@@ -328,7 +328,7 @@ theorem goldbachProgressionWindowCount_eq_card
   unfold goldbachProgressionWindowCount
   split
   · exact (goldbachProgressionSeats_card hM ‹t₀ ≤ w›).symm
-  · rw [goldbachProgressionSeats, if_neg ‹¬t₀ ≤ w›]
+  · rw [goldbachProgressionSeats, ite_eq_right ‹¬t₀ ≤ w›]
     simp
 
 /-! ## Window sums and the anchor-local support bridge -/

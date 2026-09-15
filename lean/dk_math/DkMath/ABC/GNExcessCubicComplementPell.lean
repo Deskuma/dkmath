@@ -42,8 +42,8 @@ private theorem repeatedPrimePowerPart_factorization_at (n q : ℕ) :
   by_cases h : 2 ≤ n.factorization q
   · have hs : q ∈ n.factorization.support :=
       Finsupp.mem_support_iff.mpr (by omega)
-    rw [if_pos ⟨hs, h⟩, if_pos h]
-  · simp only [h, and_false, if_false]
+    rw [ite_eq_left ⟨hs, h⟩, ite_eq_left h]
+  · simp only [h, and_false, ite_false]
 
 theorem repeatedPrimePowerPart_three_mul_sq {d : ℕ}
     (hd : d ≠ 0) (h3 : ¬ 3 ∣ d) :
@@ -60,12 +60,12 @@ theorem repeatedPrimePowerPart_three_mul_sq {d : ℕ}
   · subst q
     rw [Nat.factorization_eq_zero_of_not_dvd h3]
     norm_num
-  · rw [if_neg hq]
+  · rw [ite_eq_right hq]
     by_cases hv : d.factorization q = 0
     · rw [hv]
       norm_num
     · have htwo : 2 ≤ 0 + 2 * d.factorization q := by omega
-      rw [if_pos htwo]
+      rw [ite_eq_left htwo]
       omega
 
 /-- The canonical repeated part is `d^2` whenever the quadratic equals

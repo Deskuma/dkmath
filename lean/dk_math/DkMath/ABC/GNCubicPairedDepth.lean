@@ -35,11 +35,11 @@ theorem prime_pow_dvd_GNNonExceptionalRepeatedPart {p a b q k : ℕ}
     rw [GNNonExceptionalPart_factorization_support]
     exact hqS
   have hvN : k ≤ (GNNonExceptionalPart p a b).factorization q := by
-    rw [GNNonExceptionalPart_factorization, if_pos hqS]
+    rw [GNNonExceptionalPart_factorization, ite_eq_left hqS]
     exact hv
   apply (hq.pow_dvd_iff_le_factorization (Nat.ne_of_gt (repeatedPrimePowerPart_pos _))).mpr
   rw [repeatedPrimePowerPart_factorization,
-    if_pos ⟨hqN, hk.trans hvN⟩]
+    ite_eq_left ⟨hqN, hk.trans hvN⟩]
   exact hvN
 
 /-- Both actual repeated parts can exceed every fixed bound while remaining coprime. -/

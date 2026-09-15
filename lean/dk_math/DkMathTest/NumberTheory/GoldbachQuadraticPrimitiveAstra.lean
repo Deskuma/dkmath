@@ -516,9 +516,9 @@ theorem pair_iff_normalized_capacity (n : ℕ) :
   rw [goldbachPairAt_iff_survivors_nonempty, ← Finset.card_pos, survivor_card_exact]
   have hn := normalized_conservation n
   by_cases hp : Nat.Prime n
-  · rw [if_pos hp]
+  · rw [ite_eq_left hp]
     exact ⟨fun _ => Or.inl hp, fun _ => by omega⟩
-  · rw [if_neg hp, Nat.add_zero, or_iff_right hp]
+  · rw [ite_eq_right hp, Nat.add_zero, or_iff_right hp]
     omega
 
 /-- Exact universal equivalence classifies the normalized criterion as a

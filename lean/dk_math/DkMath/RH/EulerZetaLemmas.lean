@@ -578,8 +578,8 @@ lemma differentiableAt_eulerZetaExpSubOneFinite
           DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
         (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
       unfold eulerZetaExpSubOneFinite
-      convert hd_p.mul ih using 1 <;>
-        first | rfl | (funext u; simp [eulerZetaExpSubOneFinite, hp])
+      convert hd_p.mul ih using 1
+      (funext u; simp [eulerZetaExpSubOneFinite, hp])
 
 /--
 `insert` 1ステップ版の積→和補題。
@@ -810,8 +810,8 @@ lemma differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne
           DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t :=
         ih hS_ne'
       unfold eulerZetaFactorVerticalExpFinite
-      convert hd_p.mul hd_S using 1 <;>
-        first | rfl | (funext u; simp [eulerZetaFactorVerticalExpFinite, hp])
+      convert hd_p.mul hd_S using 1
+      (funext u; simp [eulerZetaFactorVerticalExpFinite, hp])
 
 /--
 exp 形 Euler 因子有限積の位相速度は、局所位相速度寄与の有限和に一致する。

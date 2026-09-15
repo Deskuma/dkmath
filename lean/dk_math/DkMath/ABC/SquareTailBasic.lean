@@ -380,7 +380,7 @@ lemma piSqRad_ge_one (n : ℕ) : 1 ≤ piSqRad n := by
   -- piSqRad is the product over primes p with v_p ≥ 2
   -- Product over Finset is always ≥ 1 (empty gives 1, non-empty gives product of primes ≥ 2)
   dsimp [piSqRad]
-  apply Finset.one_le_prod'
+  apply Finset.one_le_prod
   intro p hp
   -- p is prime with v_p ≥ 2, so p ≥ 2 ≥ 1
   have : p ∈ n.factorization.support := Finset.mem_filter.mp hp |>.1

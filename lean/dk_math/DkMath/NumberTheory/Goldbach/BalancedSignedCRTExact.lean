@@ -56,7 +56,7 @@ private theorem mem_progressionSeats_iff_le_and_mod
       apply (Nat.le_div_iff_mul_le hM).mpr
       simpa [Nat.mul_comm] using hkm
     have hk : t / M < (w - t₀) / M + 1 := by omega
-    rw [goldbachProgressionSeats, if_pos (by omega)]
+    rw [goldbachProgressionSeats, ite_eq_left (by omega)]
     exact Finset.mem_image.mpr ⟨t / M, Finset.mem_range.mpr hk, ht0⟩
 
 theorem mem_goldbachProgressionSeats_iff_balanced_modEq
