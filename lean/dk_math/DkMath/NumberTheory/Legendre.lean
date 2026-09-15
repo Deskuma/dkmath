@@ -8,6 +8,7 @@ import DkMath.NumberTheory.Legendre.Frontier
 import DkMath.NumberTheory.Legendre.GnomonBridge
 import DkMath.NumberTheory.Legendre.GnomonSuccessor
 import DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+import DkMath.NumberTheory.Legendre.GnomonPetalTurnover
 import DkMath.NumberTheory.Legendre.CenteredPair
 import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
 import DkMath.NumberTheory.Legendre.CenteredPacketDiamond
