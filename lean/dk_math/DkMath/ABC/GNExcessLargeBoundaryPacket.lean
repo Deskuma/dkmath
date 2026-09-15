@@ -767,7 +767,7 @@ theorem GNExcessRootAddressCharge_target_le_piSqRad
   calc
     (p - 1) ^ A.card = ∏ _q ∈ A, (p - 1) := by simp
     _ ≤ ∏ q ∈ A, q := by
-      apply Finset.prod_le_prod (fun _q _hq => Nat.zero_le _)
+      apply Finset.prod_le_prod
       intro q hqA
       have hqrep : q ∣ GNNonExceptionalRepeatedPart p a b := by
         have hqmem :

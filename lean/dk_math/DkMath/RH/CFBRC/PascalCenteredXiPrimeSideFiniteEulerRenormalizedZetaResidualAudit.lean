@@ -357,9 +357,8 @@ theorem pascalCenteredXiPrimeSideFiniteEulerLogPotential_hasDerivAt
     have hj : 0 < pk.2 + 1 := by omega
     have hmode := eulerPrimePowerMode_hasDerivAt_neg_log_mul hp hj s
     convert hmode.const_mul (((pk.2 + 1 : ℕ) : ℂ)⁻¹) using 1
-    · rfl
-    · simp only [Nat.cast_add, Nat.cast_one]
-      ring
+    norm_cast
+    ring_nf
   convert hsum using 1
   · funext z
     simp only [Finset.sum_apply]
