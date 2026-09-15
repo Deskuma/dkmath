@@ -40,7 +40,7 @@ inner GN calibration:
   Cal = S + E - ρ*radLog
 ```
 
-The key refinement after BCAL-000 is to remove the arbitrary allowance `C` from the pointwise view and expose the actual correction attached to one triple:
+The pointwise calibration function is:
 
 ```text
 pointwiseCorrection(T,p,ρ)
@@ -48,42 +48,56 @@ pointwiseCorrection(T,p,ρ)
       / ((p-1) * radLog(T)).
 ```
 
-Re-express the existing epsilon bridge directly from this pointwise residual, then show that a uniform allowance `Cal <= C` envelopes the pointwise correction when clean.
-
-This checkpoint must distinguish exactly:
+The checkpoint also exposes the outer ABC support/depth mass coordinates and the exact outer balance
 
 ```text
-slope term       GNEpsilon(p,ρ)
-pointwise residual Cal(T,p,ρ)
-uniform allowance C
-fixed-p term     log(rad p)
-scale            (p-1)*radLog(T)
+ABCOuterBalance = abcGap.
 ```
 
-Also expose the outer ABC support/depth mass coordinates and the exact outer balance `ABCOuterBalance = abcGap`.
+The GN inner balance and ABC outer balance deliberately retain opposite sign conventions and are not identified.
 
-No attempt to bound `Cal` uniformly.
+Status: **complete / Outcome A** at commit `748adca6ee93715ecf5d30c90ed2352f7e0d23c2`.
 
-Status: **active via `instruction-001.md`**.
+## BCAL-002 — Exact calibration-source decomposition
 
-## BCAL-002 — Calibration-source decomposition audit
+Open the checkpoint-001 safe pointwise correction and identify its exact slack sources.
 
-Inventory every place where the existing derivation loses equality or adds an affine allowance.
-
-Classify each contribution as one of:
+The current odd-prime proof chain already gives the candidate decomposition:
 
 ```text
-exact structural mass
-exceptional-support correction
-fixed-exponent gauge correction
-transport inequality slack
-positivity/safe-envelope slack
-uniformization allowance
+ReturnSlack
+  = log GN - (p-1) log c
+  >= 0
+
+ExceptionalGaugeSlack
+  = log(rad p) - log(exceptional support)
+  >= 0
 ```
 
-The main question is whether the present field `C` can be replaced by an exact sum of named residual components before any uniform bound is attempted.
+At the same time, prime-exponent lifted-radical transport is already exact:
 
-Expected output may be documentation-only if no new exact theorem is justified.
+```text
+log(rad lift) = radLog + log(nonExceptionalSupport).
+```
+
+Hence it is not a genuine slack source on the prime-exponent route.
+
+Introduce an exact correction based on actual exceptional support and return slack, and target:
+
+```text
+abcEpsilon
+  = GNEpsilon + ExactCalibrationCorrection
+
+GNPointwiseCalibrationCorrection
+  = ExactCalibrationCorrection
+    + normalized(ReturnSlack + ExceptionalGaugeSlack).
+```
+
+The purpose is to distinguish the exact arithmetic correction from the safe envelope used by the historical epsilon theorem.
+
+No uniform bounds are attempted.
+
+Status: **active via `instruction-002.md`**.
 
 ## BCAL-003 — Balance transport under local arithmetic operations
 
