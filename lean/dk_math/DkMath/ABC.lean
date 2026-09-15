@@ -39,6 +39,7 @@ import DkMath.ABC.GNExcessCubicMordellTransport
 import DkMath.ABC.GNExcessCubicMordellIncidence
 import DkMath.ABC.GNExcessCubicEisensteinCoordinates
 import DkMath.ABC.GNExcessCubicEisensteinFactorConsequences
+import DkMath.ABC.GNExcessCubicEisensteinSquareFactorProvider
 import DkMath.ABC.GNExcessCubicThreeSector
 import DkMath.ABC.GNExcessCubicThreeSectorIncidence
 import DkMath.ABC.GNExcessCubicPairedOrientation
