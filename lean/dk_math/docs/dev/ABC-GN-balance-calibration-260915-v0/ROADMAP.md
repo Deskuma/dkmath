@@ -88,22 +88,22 @@ Status: **complete / Outcome A** at commit `670acf204798d7965f32faffb0e1ab5ac110
 
 ## BCAL-003 — Local valuation balance law
 
-The next checkpoint studies the signed coordinate
+The signed coordinate
 
 ```text
 Q = S - E
 ```
 
-using the already-formalized finite depth-layer decomposition.
+was expanded prime by prime using the existing finite depth-layer decomposition.
 
-For every fresh non-exceptional support prime `q`, write conceptually
+For every fresh non-exceptional support prime `q`, with
 
 ```text
 v = v_q(GN)
-w = log q.
+w = log q,
 ```
 
-Then the exact local accounting should expose
+the exact local accounting is:
 
 ```text
 support contribution = w
@@ -120,54 +120,96 @@ v = 2  -> zero local balance
 v >= 3 -> negative depth-side contribution.
 ```
 
-Global targets:
+Global `Q = 0` is not identified with all valuations being `2`; cancellation remains possible.
 
-```text
-GNChannelMass
-  = sum of local masses
-
-GNChannelBalance
-  = sum of local balances
-  = first support layer - all repeated-depth layers.
-```
-
-This checkpoint identifies the local ruler of the scale. It does **not** claim that global `Q = 0` forces every valuation to equal `2`; local positive and negative contributions may cancel.
-
-Status: **active via `instruction-003.md`**.
+Status: **complete / Outcome A** at commit `d083a6a2b9752baa1524ceab80dfd5ddc58966a8`.
 
 ## BCAL-004 — Cubic shell coordinate bridge
 
-For the cubic specialization, compare the GN balance coordinates with the shell decomposition
+The cubic shell audit compared the BCAL signed balance with repeated-prime-power / squarefree-complement coordinates.
+
+The generic non-exceptional bridge is exact:
 
 ```text
-F(a) = M_shell * S_shell
+GNChannelBalance
+  = log(nonExceptionalSingleLayer)
+    - log(twoTail(nonExceptionalPart)).
 ```
 
-where `M_shell` is the complete repeated/square-full part and `S_shell` is the squarefree complement.
-
-Introduce logarithmic shell coordinates only after exact production identities have been inventoried:
+The existing repeated part already splits as
 
 ```text
-shellMass    = log(M_shell) + log(S_shell)
-shellBalance = log(M_shell) - log(S_shell)
+repeatedPrimePowerPart
+  = piSqRad^2 * twoTail,
 ```
 
-Research question:
+so `piSqRad^2` is the neutral valuation-two pivot and `twoTail` contains exactly the over-depth `v-2` tail.
+
+For the cubic family, the full complement may additionally contain exceptional prime `3` at valuation one.  Therefore the full complement cannot be identified unconditionally with the BCAL non-exceptional single layer.
+
+Status: **complete / Outcome B — PARTIAL BRIDGE** at commit `e211e0472280515ff0adca8f2b287a387fa1e2c1`.
+
+This is a bounded information mismatch, not a failure of the generic bridge.
+
+## BCAL-005 — Exceptional cubic gauge completion
+
+Active via `instruction-005.md`.
+
+The goal is to make the BCAL-004 missing exceptional single layer explicit rather than excluding it by the side condition `¬ 3 ∣ GN 3 a 1`.
+
+Primary candidate identities:
 
 ```text
-Does an exact or monotone transport exist between
-  GNChannelBalance
+full cubic complement
+  = exceptional support product
+    * non-exceptional single layer
+```
+
 and
-  shellBalance ?
+
+```text
+GNChannelBalance
+  = log(full cubic complement)
+    - log(full twoTail)
+    - log(exceptional support product).
 ```
 
-The local valuation law from BCAL-003 should be used to interpret shell repeated powers before any counting estimate is attempted.
+Then reuse BCAL-002:
 
-A negative result is acceptable and should be recorded precisely.
+```text
+ExceptionalGaugeSlack
+  = log(rad 3) - log(exceptional support product)
+```
 
-## BCAL-005 — PowerSwap / contour abstraction audit
+so the cubic full-shell discrepancy is recognized as the same exceptional gauge coordinate already present in the exact calibration accounting.
 
-Only if BCAL-000 through BCAL-004 reveal genuine reuse, audit whether the common pattern belongs in a generic module rather than ABC:
+No new numerical estimate or ABC-strength contract is permitted.
+
+## BCAL-006 — Depth-step / Hensel transport audit
+
+Only after the shell coordinate is exact, investigate whether existing valuation/Hensel APIs support a genuine transition law for a fixed prime channel.
+
+The local balance formula suggests the formal target
+
+```text
+v -> v + 1
+localMass    -> localMass + log q
+localBalance -> localBalance - log q.
+```
+
+This is currently a **research target**, not an established theorem.
+
+The checkpoint must first inventory existing Hensel / lifting / valuation-step APIs and distinguish:
+
+- a tautological arithmetic rewrite under an explicit valuation-equality hypothesis;
+- an actual arithmetic theorem producing the next valuation depth;
+- a merely heuristic "mutation" interpretation.
+
+A negative audit result is acceptable.
+
+## BCAL-007 — PowerSwap / contour abstraction audit
+
+Only if the preceding checkpoints reveal genuine reuse, audit whether the common pattern belongs in a generic module rather than ABC:
 
 ```text
 two real components U,V
@@ -177,9 +219,9 @@ reconstruction U=(M+Q)/2, V=(M-Q)/2
 zero contour Q=0
 ```
 
-Do not force an abstraction merely for aesthetic symmetry. A generic layer is justified only if it has at least two real consumers, e.g. `PowerSwap` and `ABC`.
+Do not force an abstraction merely for aesthetic symmetry.  A generic layer is justified only if it has at least two substantive consumers, e.g. `PowerSwap` and `ABC`.
 
-## BCAL-006 — Quantitative calibration frontier
+## BCAL-008 — Quantitative calibration frontier
 
 Only after the structural checkpoints are stable should the project return to numerical estimates.
 
