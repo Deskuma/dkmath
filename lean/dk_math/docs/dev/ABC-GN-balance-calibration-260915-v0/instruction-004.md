@@ -30,35 +30,35 @@ BCAL-004 では、既存 ABC cubic-shell 系で用いられている repeated-pa
 
 1. cubic polynomial family
 
-$$
-F(a)=a^2+3a+3
-$$
+    $$
+    F(a)=a^2+3a+3
+    $$
 
-に対する repeated part / squarefree complement の現行定義。
+    に対する repeated part / squarefree complement の現行定義。
 
 2. `repeatedPrimePowerPart` と、それに関係する既存 factorization API。
 
 3. `piSqRad` および `twoTail` の現行定義と theorem。
 
-既存コードには少なくとも概念的に
+    既存コードには少なくとも概念的に
 
-$$
-\operatorname{repeatedPrimePowerPart}(n)=\operatorname{piSqRad}(n)^2\operatorname{twoTail}(n)
-$$
+    $$
+    \operatorname{repeatedPrimePowerPart}(n)=\operatorname{piSqRad}(n)^2\operatorname{twoTail}(n)
+    $$
 
-という exact decomposition が存在する。
+    という exact decomposition が存在する。
 
-この既存 theorem を優先して再利用し、同型の新定義を重複して作らないこと。
+    この既存 theorem を優先して再利用し、同型の新定義を重複して作らないこと。
 
 4. squarefree complement が valuation $v=1$ の prime のみを保持しているのか、それとも別の情報も含むのか。
 
 5. repeated part が単に
 
-$$
-v_q\ge2
-$$
+    $$
+    v_q\ge2
+    $$
 
-という support 情報だけを保持するのか、実際の exponent depth まで recover 可能なのか。
+    という support 情報だけを保持するのか、実際の exponent depth まで recover 可能なのか。
 
 6. prime $3$ に exceptional handling が存在する場合、その条件・分岐・既存 theorem を明示的に確認すること。
 
