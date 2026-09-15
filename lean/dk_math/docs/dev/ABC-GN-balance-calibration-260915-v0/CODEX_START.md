@@ -27,64 +27,60 @@ commit: e211e0472280515ff0adca8f2b287a387fa1e2c1
 
 BCAL-005 — Outcome A / EXACT EXCEPTIONAL COMPLETION
 commit: 7aa08d384b8c6b21c5da095e73964cc5ba15d8b2
+
+BCAL-006 — Outcome A / EXACT DEPTH TRANSPORT
+commit: f68cb617a2db3fed875655037ce966db3d659b51
 ```
 
 Read in this order:
 
 ```text
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-005.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-006.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-006.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-007.md
 ```
 
-Then execute `instruction-006.md` repository-first.
+Then execute `instruction-007.md` repository-first.
 
 Current core rule:
 
 ```text
-BCAL-005 completed the full cubic exceptional bookkeeping exactly.
-The next task is a bounded depth-step / finite Hensel transport audit.
-Do not infer Hensel lift existence from Hensel uniqueness.
-Do not identify q^k divisibility with exact valuation k.
+BCAL-006 completed the bounded local/depth transport audit.
+Do not pursue lift existence here.
+Audit whether the exact two-channel linear coordinate transform deserves a stable DkMath.Lib kernel.
+Require real reuse by both PowerSwap and ABC/GN.
+Preserve existing public APIs and dependency direction.
 Do not return to exponent optimization.
 Do not construct a new ABC contract.
 ```
 
-Established exact structure:
+Established exact structures now include:
 
 ```text
-localMass(q)    = v_q(GN) * log q
-localBalance(q) = (2 - v_q(GN)) * log q
+PowerSwap:
+  U = gapU
+  V = gapV
+  gapP = (U + V)/2
+  gapQ = U - V
 
-exact valuation +1
-  should algebraically imply:
-    localMass    + log q
-    localBalance - log q
+ABC/GN:
+  U = GNChannelSupportMass
+  V = GNChannelDepthMass
+  GNChannelMass    = U + V
+  GNChannelBalance = U - V
+
+BCAL-006 right-channel step:
+  V -> V + δ
+  M -> M + δ
+  Q -> Q - δ
 ```
 
-Existing finite Hensel infrastructure already provides, in the non-exceptional simple-root channel:
+Checkpoint 007 should first search for an existing generic replacement. If none exists and extraction is dependency-neutral, add only a small stable two-channel coordinate kernel and exact consumer bridges.
 
-```text
-GNDeepLiftCongruenceUnique_of_simpleRoot
-GNDeepLiftReductionInjective_of_simpleRoot
-GNDeepLiftResidues_card_le_of_simpleRoot
-```
-
-but these are uniqueness/counting statements, not lift-existence statements.
-
-Checkpoint 006 should distinguish and formalize, where valid:
-
-```text
-A. explicit exact-valuation successor law
-B. canonical downward reduction: depth k+1 -> depth k
-C. simple-root injectivity of that successor reduction
-D. card R_(k+1) <= card R_k
-```
-
-Do not strengthen the final inequality to equality without a separately audited existence theorem.
+Do not claim that PowerSwap and ABC are the same mathematics. The shared object under audit is only the linear sum/difference coordinate transform.
 
 Write results and build/audit evidence to:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-006.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-007.md
 ```
