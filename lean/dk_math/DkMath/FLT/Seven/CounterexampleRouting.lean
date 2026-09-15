@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.PrimitiveCyclotomicDepth
 import DkMath.FLT.Seven.Basic
+import DkMath.FLT.Prime.AdicPowerSplit
 
 #print "file: DkMath.FLT.Seven.CounterexampleRouting"
 
@@ -77,37 +78,21 @@ theorem GN_seven_eq_gap_mul_add_seven_mul_y_pow_six (g y : ℕ) :
 
 theorem gcd_gap_GN_seven_dvd_seven {g y : ℕ} (hcop : Nat.Coprime g y) :
     Nat.gcd g (GN 7 g y) ∣ 7 := by
-  let d := Nat.gcd g (GN 7 g y)
-  have hdg : d ∣ g := Nat.gcd_dvd_left _ _
-  have hdGN : d ∣ GN 7 g y := Nat.gcd_dvd_right _ _
-  have hprefix : d ∣ g * (g ^ 5 + 7 * g ^ 4 * y + 21 * g ^ 3 * y ^ 2
-      + 35 * g ^ 2 * y ^ 3 + 35 * g * y ^ 4 + 21 * y ^ 5) :=
-    dvd_mul_of_dvd_left hdg _
-  have hdy6 : d ∣ 7 * y ^ 6 := by
-    rw [GN_seven_eq_gap_mul_add_seven_mul_y_pow_six] at hdGN
-    exact (Nat.dvd_add_right hprefix).mp hdGN
-  have hdy : Nat.Coprime d y := hcop.of_dvd_left hdg
-  exact (hdy.pow_right 6).dvd_of_dvd_mul_right hdy6
+  rw [DkMath.CosmicFormula.gcd_GN_eq_gcd_of_one_le
+    (d := 7) (g := g) (u := y) (by norm_num) hcop]
+  exact Nat.gcd_dvd_right _ _
 
 theorem gcd_gap_GN_seven_eq_one_of_not_seven_dvd
     {g y : ℕ} (hcop : Nat.Coprime g y) (h7g : ¬ 7 ∣ g) :
     Nat.gcd g (GN 7 g y) = 1 := by
-  have hd := gcd_gap_GN_seven_dvd_seven hcop
-  rcases (Nat.dvd_prime (by norm_num : Nat.Prime 7)).mp hd with h | h
-  · exact h
-  · exfalso
-    apply h7g
-    rw [← h]
-    exact Nat.gcd_dvd_left _ _
+  exact DkMath.CosmicFormula.gcd_GN_prime_eq_one_of_not_dvd
+    (by norm_num) hcop h7g
 
 theorem gcd_gap_GN_seven_eq_seven_of_seven_dvd
     {g y : ℕ} (hcop : Nat.Coprime g y) (h7g : 7 ∣ g) :
     Nat.gcd g (GN 7 g y) = 7 := by
-  apply Nat.dvd_antisymm (gcd_gap_GN_seven_dvd_seven hcop)
-  apply Nat.dvd_gcd h7g
-  have hGN : 7 ∣ GN 7 ((g + y) - y) y :=
-    (seven_dvd_GN_seven_sub_iff (g + y) y (by omega)).2 (by simpa using h7g)
-  simpa using hGN
+  exact DkMath.CosmicFormula.gcd_GN_prime_eq_prime_of_dvd
+    (by norm_num) hcop h7g
 
 theorem branchAway_coprime_gap_GN_seven
     {x y z : ℕ} (hPack : CounterexamplePack x y z)
@@ -127,12 +112,7 @@ theorem branchRamified_gcd_gap_GN_seven
 theorem seventh_power_factor_split {a b x : ℕ}
     (hcop : Nat.Coprime a b) (hbody : a * b = x ^ 7) :
     (∃ u : ℕ, a = u ^ 7) ∧ (∃ v : ℕ, b = v ^ 7) := by
-  have hunit : IsUnit (GCDMonoid.gcd a b) := by
-    simpa [gcd_eq_nat_gcd, Nat.Coprime, Nat.isUnit_iff] using hcop
-  constructor
-  · exact exists_eq_pow_of_mul_eq_pow hunit hbody
-  · have hunit' : IsUnit (GCDMonoid.gcd b a) := by simpa [gcd_comm] using hunit
-    exact exists_eq_pow_of_mul_eq_pow hunit' (by simpa [mul_comm] using hbody)
+  exact DkMath.Lib.NumberTheory.power_factor_split hcop hbody
 
 theorem branchAway_seventh_power_factor_split
     {x y z : ℕ} (hPack : CounterexamplePack x y z)
@@ -160,9 +140,9 @@ theorem padicValNat_GN_seven_eq_one_of_counterexample
     {x y z : ℕ} (hPack : CounterexamplePack x y z)
     (hBranch : 7 ∣ z - y) :
     padicValNat 7 (GN 7 (z - y) y) = 1 := by
-  exact (padicValNat_GN_seven_sub_eq_one_iff
-    (right_lt_of_fermat7Equation hPack.hx hPack.hEq).le
-    (coprime_y_z_of_counterexamplePack hPack).symm).2 hBranch
+  exact DkMath.CosmicFormula.padicValNat_GN_prime_eq_one_of_dvd_gap
+    (by norm_num) (by norm_num)
+    (coprime_gap_y_of_counterexamplePack hPack) hBranch
 
 theorem padicValNat_carrier_shape_of_mul_eq_seventh
     {carrier residual distinguished : ℕ}
@@ -170,29 +150,8 @@ theorem padicValNat_carrier_shape_of_mul_eq_seventh
     (hEq : carrier * residual = distinguished ^ 7)
     (hrVal : padicValNat 7 residual = 1) :
     ∃ m : ℕ, padicValNat 7 carrier = 6 + 7 * m := by
-  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
-  have hpow : padicValNat 7 (distinguished ^ 7) =
-      7 * padicValNat 7 distinguished := by
-    exact padicValNat.pow (p := 7) (a := distinguished) 7
-  have hmul : padicValNat 7 (carrier * residual) =
-      padicValNat 7 carrier + padicValNat 7 residual := by
-    simpa using (padicValNat.mul (p := 7) hc0 hr0)
-  have hvalEq : 7 * padicValNat 7 distinguished =
-      padicValNat 7 carrier + 1 := by
-    calc
-      _ = padicValNat 7 (distinguished ^ 7) := hpow.symm
-      _ = padicValNat 7 (carrier * residual) := by rw [hEq]
-      _ = _ := hmul
-      _ = _ := by rw [hrVal]
-  have hdPos : 0 < padicValNat 7 distinguished := by
-    have : 0 < 7 * padicValNat 7 distinguished := by rw [hvalEq]; omega
-    exact Nat.pos_of_mul_pos_left this
-  have hcVal : padicValNat 7 carrier =
-      7 * padicValNat 7 distinguished - 1 := Nat.eq_sub_of_add_eq hvalEq.symm
-  refine ⟨padicValNat 7 distinguished - 1, ?_⟩
-  have hs := Nat.sub_add_cancel (Nat.succ_le_of_lt hdPos)
-  rw [hcVal, ← hs]
-  omega
+  simpa using DkMath.Lib.NumberTheory.padicValNat_carrier_shape_of_mul_eq_prime
+    (by norm_num : Nat.Prime 7) hc0 hr0 _hd0 hEq hrVal
 
 theorem padicValNat_gap_shape_of_counterexample
     {x y z : ℕ} (hPack : CounterexamplePack x y z)
@@ -208,12 +167,13 @@ theorem padicValNat_gap_shape_of_counterexample
 theorem seven_pow_six_dvd_gap_of_counterexample
     {x y z : ℕ} (hPack : CounterexamplePack x y z)
     (hBranch : 7 ∣ z - y) : 7 ^ 6 ∣ z - y := by
-  have hshape := padicValNat_gap_shape_of_counterexample hPack hBranch
-  apply (@padicValNat_dvd_iff_le 7 (Fact.mk (by norm_num)) (z - y) 6
-    (gap_pos_of_fermat7Equation hPack.hx hPack.hEq).ne').2
-  rcases hshape with ⟨m, hm⟩
-  rw [hm]
-  omega
+  simpa using DkMath.Lib.NumberTheory.prime_pow_sub_one_dvd_carrier
+    (by norm_num : Nat.Prime 7)
+    (gap_pos_of_fermat7Equation hPack.hx hPack.hEq).ne'
+    (GN_seven_pos_of_counterexample hPack).ne'
+    hPack.hx.ne'
+    (body7_eq_seventh_power_of_counterexample hPack)
+    (padicValNat_GN_seven_eq_one_of_counterexample hPack hBranch)
 
 structure SevenAdicCounterexamplePacket (x y z : ℕ) : Prop where
   counterexample : CounterexamplePack x y z

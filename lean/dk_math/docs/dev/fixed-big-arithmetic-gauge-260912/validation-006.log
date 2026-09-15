@@ -1,0 +1,98 @@
+$ lake env lean DkMath/NumberTheory/Goldbach/PairGN.lean
+EXIT_CODE=0
+$ lake env lean DkMath/NumberTheory/Goldbach/PairGNCubic.lean
+EXIT_CODE=0
+$ lake env lean DkMathTest/NumberTheory/GoldbachPairGNAudit.lean
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_add_pairGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBig_sub_pairGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.singleBig_sub_GN' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.single_complement_not_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.prime_unitGN_constraints' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.prime_unitGN_quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_eq_iff_weighted_quotients' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.unitPairAt_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_lt_pairBig' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.goldbachPairAt_of_unitPairAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.exists_unitGN_two_of_odd_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.prime_pair_odd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.goldbachPairAt_iff_unitPairAt_two_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.exists_prime_degrees_iff_goldbach' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.strongGoldbach_iff_unitPairAt_two_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.cubic_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.cubic_unit_quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.cubic_quotient_eq_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_three_three_eq_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_three_three_eq_iff_circle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_three_three_eq_iff_circle_sub' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.center_mod_three_of_cubic_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.pairBody_two_three_eq_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.mixed_left_parameter_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.unitPairAt_two_three_iff_on_mod_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.cubic_unit_mod_nine' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.not_unitPairAt_two_three_of_mod_nine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.mixed_degrees_miss_progression' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GoldbachPairGN.thirteen_not_in_cubic_row' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.prime_degree_is_not_sufficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.circle_geometry_does_not_certify_primes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.weighted_prime_labels_do_not_supply_cubic_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.degree_two_does_not_represent_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.positive_pair_cannot_represent_target_four' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.strict_degree_asymmetry_misses_six' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.mixed_pair_is_strictly_restrictive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.mixed_pair_misses_twenty_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.mixed_pair_positive_example' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.cubic_pair_positive_example' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.GoldbachPairGNAudit.goldbach_target_can_equal_a_single_big' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+EXIT_CODE=0

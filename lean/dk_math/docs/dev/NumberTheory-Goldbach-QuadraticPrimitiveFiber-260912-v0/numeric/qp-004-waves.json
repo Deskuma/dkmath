@@ -1,0 +1,305 @@
+{
+  "centers": "2..500",
+  "full_period_centers": "2..40 (within requested range)",
+  "full_period_orientation_tests": 120,
+  "interval_orientation_tests": 21192,
+  "minima": {
+    "candidate_cardinality_not_geometric_width": {
+      "modulus": 21,
+      "n": 50,
+      "normalized_candidates": 19,
+      "normalized_interval": [
+        1,
+        43
+      ],
+      "p": 7,
+      "proper_normalized_interval": [
+        1
+      ],
+      "q": 3,
+      "raw_interval": [
+        1,
+        22,
+        43
+      ],
+      "residue": 1
+    },
+    "multiple_normalized_same_orientation": {
+      "full_period": 1020,
+      "modulus": 15,
+      "n": 34,
+      "normalized_candidates": 15,
+      "normalized_interval": [
+        1,
+        31
+      ],
+      "normalized_residues_per_orientation": 32,
+      "p": 3,
+      "proper_normalized_interval": [
+        1
+      ],
+      "q": 5,
+      "raw_interval": [
+        1,
+        16,
+        31
+      ],
+      "residue": 1
+    },
+    "occupied_at_most_one_wave": {
+      "full_period": 390,
+      "modulus": 15,
+      "n": 13,
+      "normalized_candidates": 5,
+      "normalized_interval": [
+        8
+      ],
+      "normalized_residues_per_orientation": 12,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        8
+      ],
+      "residue": 8
+    },
+    "raw_LR_endpoint_exception": {
+      "full_period": 390,
+      "modulus": 15,
+      "n": 13,
+      "normalized_candidates": 5,
+      "normalized_interval": [
+        8
+      ],
+      "normalized_residues_per_orientation": 12,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        8
+      ],
+      "residue": 8
+    },
+    "sharp_parity_spacing_proper": {
+      "modulus": 15,
+      "n": 47,
+      "normalized_candidates": 22,
+      "normalized_interval": [
+        8,
+        38
+      ],
+      "p": 3,
+      "proper_normalized_interval": [
+        8,
+        38
+      ],
+      "q": 5,
+      "raw_interval": [
+        8,
+        23,
+        38
+      ],
+      "residue": 8
+    }
+  },
+  "selected_waves": [
+    {
+      "full_period": 930,
+      "modulus": 15,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [
+        4
+      ],
+      "normalized_residues_per_orientation": 30,
+      "p": 3,
+      "proper_normalized_interval": [
+        4
+      ],
+      "q": 5,
+      "raw_interval": [
+        4,
+        19
+      ],
+      "residue": 4
+    },
+    {
+      "full_period": 930,
+      "modulus": 15,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [
+        26
+      ],
+      "normalized_residues_per_orientation": 30,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        11,
+        26
+      ],
+      "residue": 11
+    },
+    {
+      "full_period": 1302,
+      "modulus": 21,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [
+        4
+      ],
+      "normalized_residues_per_orientation": 30,
+      "p": 3,
+      "proper_normalized_interval": [
+        4
+      ],
+      "q": 7,
+      "raw_interval": [
+        4,
+        25
+      ],
+      "residue": 4
+    },
+    {
+      "full_period": 1302,
+      "modulus": 21,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 30,
+      "p": 7,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        17
+      ],
+      "residue": 17
+    },
+    {
+      "full_period": 2170,
+      "modulus": 35,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 30,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 7,
+      "raw_interval": [
+        11
+      ],
+      "residue": 11
+    },
+    {
+      "full_period": 2170,
+      "modulus": 35,
+      "n": 31,
+      "normalized_candidates": 14,
+      "normalized_interval": [
+        24
+      ],
+      "normalized_residues_per_orientation": 30,
+      "p": 7,
+      "proper_normalized_interval": [],
+      "q": 5,
+      "raw_interval": [
+        24
+      ],
+      "residue": 24
+    },
+    {
+      "full_period": 1050,
+      "modulus": 15,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 3,
+      "proper_normalized_interval": [],
+      "q": 5,
+      "raw_interval": [
+        5,
+        20
+      ],
+      "residue": 5
+    },
+    {
+      "full_period": 1050,
+      "modulus": 15,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        10,
+        25
+      ],
+      "residue": 10
+    },
+    {
+      "full_period": 1470,
+      "modulus": 21,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 3,
+      "proper_normalized_interval": [],
+      "q": 7,
+      "raw_interval": [
+        14
+      ],
+      "residue": 14
+    },
+    {
+      "full_period": 1470,
+      "modulus": 21,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 7,
+      "proper_normalized_interval": [],
+      "q": 3,
+      "raw_interval": [
+        7,
+        28
+      ],
+      "residue": 7
+    },
+    {
+      "full_period": 2450,
+      "modulus": 35,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 5,
+      "proper_normalized_interval": [],
+      "q": 7,
+      "raw_interval": [
+        0
+      ],
+      "residue": 0
+    },
+    {
+      "full_period": 2450,
+      "modulus": 35,
+      "n": 35,
+      "normalized_candidates": 11,
+      "normalized_interval": [],
+      "normalized_residues_per_orientation": 0,
+      "p": 7,
+      "proper_normalized_interval": [],
+      "q": 5,
+      "raw_interval": [
+        0
+      ],
+      "residue": 0
+    }
+  ]
+}

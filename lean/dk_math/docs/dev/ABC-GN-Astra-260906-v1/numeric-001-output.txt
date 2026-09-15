@@ -1,0 +1,13 @@
+SIEVE {"limit": 3000000, "repeated_points": 195455, "lifted_roots_checked": 216678, "cross_checks": 875, "seed": 1001}
+FIBERS {"maximum": 1, "size_two": 0, "size_three_or_more": 0, "adjacent_same_Tr_pairs": 17, "scope": "all repeated points, without large-height filtering"}
+WINDOW {"X": 100000, "distinct": 86, "witnesses": 99, "shells": 13}
+WINDOW {"X": 300000, "distinct": 138, "witnesses": 172, "shells": 15}
+WINDOW {"X": 1000000, "distinct": 250, "witnesses": 304, "shells": 15}
+WINDOW {"X": 3000000, "distinct": 436, "witnesses": 535, "shells": 17}
+MODULUS_REGRESSION 169 [21, 145]
+MODULUS_REGRESSION 8281 [2173, 3018, 5260, 6105]
+PELL [[0, 1], [21, 13], [312, 181], [4365, 2521], [60816, 35113], [847077, 489061], [11798280, 6811741], [164328861, 94875313], [2288805792, 1321442641], [31878952245, 18405321661]]
+MOD49 {"1": "shallow", "8": "shallow", "15": "shallow", "22": "swap-deep", "29": "forward-deep", "36": "shallow", "43": "shallow"}
+PAIRED_EXACT_DEPTH 7428 v7(F)=2, v13(G)=2
+DIRECT_CONICS {"T_range": [2, 2000], "d_range": [1, 3000], "points": 122, "adjacent_checks": 17}
+EXACT_EXPONENTS {"old_box_hybrid": "3/2", "r_split_hybrid": "17/12", "Mordell_transition_delta": "5/3", "fixed_field_hybrid": "31/24", "fixed_field_top": "23/20", "critical_box_extra_saving_in_B_for_linear": "7/8", "critical_box_extra_saving_in_H_for_linear": "7/24"}

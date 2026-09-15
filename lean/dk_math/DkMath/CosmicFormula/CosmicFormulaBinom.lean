@@ -8,6 +8,7 @@ import Mathlib
 import DkMath.Algebra.BinomTail
 import DkMath.CosmicFormula.Defs
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
+import DkMath.ABC.PadicValNat
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
 
@@ -316,8 +317,9 @@ This wrapper is kept to avoid breaking downstream imports during the transition.
 refactor 移行期のあいだはこの公開名を温存し、downstream は段階的に
 `GTail` 直接参照へ寄せていく。
 -/
-@[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
-  DkMath.CosmicFormula.GN R x u d
+@[simp]
+abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+  DkMath.CosmicFormula.GN (R := R) d x u
 
 /--
 Compatibility bridge to the legacy explicit sum shape of `GN`.
@@ -331,14 +333,14 @@ theorem GN_eq_sum {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
   simpa [GN] using DkMath.CosmicFormula.GTail_one_eq_sum (R := R) d x u
 
 lemma GN_eq_G {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
-  GN d x u = G d x u := by
-    unfold GN G
-    exact GN_eq_sum d x u
+  DkMath.CosmicFormula.GN d x u = G d x u := by
+    unfold DkMath.CosmicFormula.GN G
+    exact DkMath.CosmicFormula.GTail_one_eq_sum d x u
 
 lemma G_eq_GN {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
-  G d x u = GN d x u := by
-    unfold GN G
-    exact (GN_eq_sum d x u).symm
+  G d x u = DkMath.CosmicFormula.GN d x u := by
+    unfold DkMath.CosmicFormula.GN G
+    exact (DkMath.CosmicFormula.GTail_one_eq_sum d x u).symm
 
 /-- 無次元版: Big の定義 -/
 @[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
@@ -347,7 +349,7 @@ lemma G_eq_GN {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 @[simp] def GapN {R : Type _} [CommSemiring R] (d : ℕ) (u : R) : R := u ^ d
 
 /-- 無次元版: Body の定義 -/
-@[simp] def BodyN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := x * GN d x u
+@[simp] def BodyN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := x * DkMath.CosmicFormula.GN d x u
 
 /-- 無次元宇宙式に対する恒等式（CommSemiring）：
 `(x + u) ^ d = x * G d x u + u ^ d` が成り立つことを示す定理。 -/
@@ -355,32 +357,30 @@ theorem cosmic_id_csr {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     BigN d x u = BodyN d x u + GapN d u := by
   by_cases hd : d = 0
   · subst hd
-    simp [BigN, BodyN, GapN, GN]
+    simp [BigN, BodyN, GapN, DkMath.CosmicFormula.GN]
   · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
     have htail :=
       DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
-    simpa [BigN, BodyN, GapN, GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one,
+    simpa [BigN, BodyN, GapN, DkMath.CosmicFormula.GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one,
       pow_zero, pow_one, Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
+/-!
+Compatibility wrapper for the canonical lower-Lib `GTail` identity.  New code
+should use `DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap`.
+-/
 theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
         (x + u) ^ d = x * GN d x u + u ^ d := by
-  by_cases hd : d = 0
-  · subst hd
-    simp [GN]
-  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
-    have htail :=
-      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
-    simpa [GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one, pow_zero, pow_one,
-      Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
+  simpa [GN] using
+    DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap (R := R) d x u
 
 /--
 Big-Gap（1 Gap 抽出版）:
 `(x+u)^d - u^d` は必ず `x` を因子に持つ（加法形）。
 -/
 theorem add_pow_gap_factor {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
-    (x + u) ^ d = u ^ d + x * GN d x u := by
-  simpa [add_comm, add_left_comm, add_assoc] using (cosmic_id_csr' (R := R) d x u)
+    (x + u) ^ d = u ^ d + x * DkMath.CosmicFormula.GN d x u := by
+  simpa [add_comm, add_left_comm, add_assoc] using (DkMath.CosmicFormula.add_pow_eq_mul_GTail_one_add_gap (R := R) d x u)
 
 /--
 Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BigN d x u` は端点の 2 項
@@ -438,7 +438,7 @@ Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は 0 でない。
 -/
 theorem GN_ne_zero_nat_of_two_le {d x u : ℕ}
     (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
-    GN d x u ≠ 0 := by
+    DkMath.CosmicFormula.GN d x u ≠ 0 := by
   have hbody_pos : 0 < BodyN d x u :=
     bodyN_pos_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu
   intro hGN
@@ -452,7 +452,7 @@ Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は少なくとも 1�
 -/
 theorem one_le_GN_nat_of_two_le {d x u : ℕ}
     (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
-    1 ≤ GN d x u := by
+    1 ≤ DkMath.CosmicFormula.GN d x u := by
   exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu))
 
 /--
@@ -495,11 +495,11 @@ FLT-like: it directly refutes a local branch of
 theorem body_not_perfect_pow_of_squarefree_GN
     {d x u : ℕ}
     (hd : 1 < d)
-    (hGN_gt : 1 < GN d x u)
-    (hcop : Nat.Coprime x (GN d x u))
-    (hSq : Squarefree (GN d x u)) :
+    (hGN_gt : 1 < DkMath.CosmicFormula.GN d x u)
+    (hcop : Nat.Coprime x (DkMath.CosmicFormula.GN d x u))
+    (hSq : Squarefree (DkMath.CosmicFormula.GN d x u)) :
     ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
-  let N := GN d x u
+  let N := DkMath.CosmicFormula.GN d x u
   have hN_ne1 : N ≠ 1 := Nat.ne_of_gt hGN_gt
   have hN_ne0 : N ≠ 0 := Nat.ne_of_gt (lt_trans Nat.zero_lt_one hGN_gt)
   obtain ⟨q, hq_prime, hq_dvd_N⟩ := Nat.exists_prime_and_dvd hN_ne1
@@ -514,7 +514,7 @@ theorem body_not_perfect_pow_of_squarefree_GN
     intro hx0
     exact hq_not_dvd_x (by simp [hx0])
   have hbody_factor : (x + u) ^ d - u ^ d = x * N := by
-    rw [show N = GN d x u by rfl]
+    rw [show N = DkMath.CosmicFormula.GN d x u by rfl]
     rw [add_pow_gap_factor]
     exact Nat.add_sub_cancel_left _ _
   let : Fact (Nat.Prime q) := ⟨hq_prime⟩

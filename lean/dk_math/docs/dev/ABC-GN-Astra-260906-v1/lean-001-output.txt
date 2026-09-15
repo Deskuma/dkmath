@@ -1,0 +1,5 @@
+'DkMath.ABC.ASTRA001Scratch.conic_no_close_denominators' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ASTRA001Scratch.shellFiber_card_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ASTRA001Scratch.shell_pair_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ASTRA001Scratch.mordell_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ASTRA001Scratch.eisenstein_square_product_norm' depends on axioms: [propext, Quot.sound]

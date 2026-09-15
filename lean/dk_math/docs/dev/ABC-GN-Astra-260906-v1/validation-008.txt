@@ -1,0 +1,41 @@
+LUNA-008 validation record
+==========================
+
+Checkout: wip/ABC-GN-astra-260906-v1
+Scope: Lib promotion, historical facade, ABC import migration, p=3 carrier/coordinate bridge, FLT3 UnitPowerSectorSystem packaging.
+
+Required focused builds (all exit 0):
+  lake build DkMath.Lib.NumberTheory.EisensteinCoordinates
+  lake build DkMath.NumberTheory.EisensteinCoordinates
+  lake build DkMath.ABC.GNExcessCubicEisensteinFactorConsequences
+  lake build DkMath.FLT.Three.EisensteinLibBridge
+
+Updated aggregators (all exit 0):
+  lake build DkMath.Lib
+  lake build DkMath.ABC
+  lake build DkMath.FLT.Three
+
+Output files:
+  lean-008-eisenstein-lib-output.txt
+  lean-008-eisenstein-facade-output.txt
+  lean-008-abc-factor-output.txt
+  lean-008-eisenstein-bridge-output.txt
+  lean-008-lib-output.txt
+  lean-008-abc-output.txt
+  lean-008-flt3-output.txt
+
+Audited declarations:
+  DkMath.Lib.NumberTheory.norm_eisensteinCoord
+  DkMath.Lib.NumberTheory.eisensteinCoord_mul
+  DkMath.Lib.NumberTheory.eisensteinCoord_mul_sq
+  DkMath.FLT.Three.traceOneInt_signedPrimeParameter_three_type
+  DkMath.FLT.Three.lib_eisensteinCoord_eq_FLT3_coord
+  DkMath.FLT.Three.lib_eisensteinCoord_norm_eq_FLT3_coord_norm
+  DkMath.FLT.Three.eisensteinCubeUnitPowerSectorSystem_complete
+
+Axiom results: expected propext / Classical.choice / Quot.sound subset; the coordinate equality bridge has no axioms.
+Forbidden scan: zero matches for sorry, admit, axiom, abc_main_axiom, native_decide, unsafe in changed production Lean.
+Filtered warning scan: zero matches in recorded LUNA-008 outputs.
+Whitespace check: git diff --check passed.
+
+Boundary: no new FLT theorem, ABC factorization existence, asymptotic counting, class-group theorem, or full generic odd-prime p=3 facade integration.
