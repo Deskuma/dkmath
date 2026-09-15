@@ -24,11 +24,11 @@ joint pressure iff Cal <= C
 
 No new arithmetic bound.
 
-Status: active via `instruction-000.md`.
+Status: **complete / Outcome A** at commit `39022f480db874c91432f4c114bb7e1c3661fa5b`.
 
-## BCAL-001 — Outer ABC balance bridge
+## BCAL-001 — Outer ABC balance bridge / pointwise calibration
 
-After BCAL-000 is accepted, place the GN calibration coordinate and the already-existing outer ABC coordinate in one module/diagram:
+Place the GN calibration coordinate and the already-existing outer ABC coordinate in one bridge layer:
 
 ```text
 outer imbalance:
@@ -40,24 +40,31 @@ inner GN calibration:
   Cal = S + E - ρ*radLog
 ```
 
-Re-express the existing theorem
+The key refinement after BCAL-000 is to remove the arbitrary allowance `C` from the pointwise view and expose the actual correction attached to one triple:
 
-```lean
-Triple.abcEpsilon_le_GNEpsilon_add_correction
+```text
+pointwiseCorrection(T,p,ρ)
+  = (Cal(T,p,ρ) + log(rad p))
+      / ((p-1) * radLog(T)).
 ```
 
-as a transport theorem from a pointwise calibration residual bound.
+Re-express the existing epsilon bridge directly from this pointwise residual, then show that a uniform allowance `Cal <= C` envelopes the pointwise correction when clean.
 
 This checkpoint must distinguish exactly:
 
 ```text
 slope term       GNEpsilon(p,ρ)
-residual term    C
+pointwise residual Cal(T,p,ρ)
+uniform allowance C
 fixed-p term     log(rad p)
 scale            (p-1)*radLog(T)
 ```
 
+Also expose the outer ABC support/depth mass coordinates and the exact outer balance `ABCOuterBalance = abcGap`.
+
 No attempt to bound `Cal` uniformly.
+
+Status: **active via `instruction-001.md`**.
 
 ## BCAL-002 — Calibration-source decomposition audit
 
