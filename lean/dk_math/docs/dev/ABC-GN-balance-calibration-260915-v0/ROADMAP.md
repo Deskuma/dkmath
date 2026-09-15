@@ -62,7 +62,7 @@ Status: **complete / Outcome A** at commit `748adca6ee93715ecf5d30c90ed2352f7e0d
 
 Open the checkpoint-001 safe pointwise correction and identify its exact slack sources.
 
-The current odd-prime proof chain already gives the candidate decomposition:
+The completed decomposition is:
 
 ```text
 ReturnSlack
@@ -72,19 +72,7 @@ ReturnSlack
 ExceptionalGaugeSlack
   = log(rad p) - log(exceptional support)
   >= 0
-```
 
-At the same time, prime-exponent lifted-radical transport is already exact:
-
-```text
-log(rad lift) = radLog + log(nonExceptionalSupport).
-```
-
-Hence it is not a genuine slack source on the prime-exponent route.
-
-Introduce an exact correction based on actual exceptional support and return slack, and target:
-
-```text
 abcEpsilon
   = GNEpsilon + ExactCalibrationCorrection
 
@@ -93,33 +81,59 @@ GNPointwiseCalibrationCorrection
     + normalized(ReturnSlack + ExceptionalGaugeSlack).
 ```
 
-The purpose is to distinguish the exact arithmetic correction from the safe envelope used by the historical epsilon theorem.
+Prime-exponent lifted-radical transport is exact, so it contributes no slack on this route.
+The uniform allowance `C` remains a later family-level envelope, not a source of pointwise arithmetic slack.
 
-No uniform bounds are attempted.
+Status: **complete / Outcome A** at commit `670acf204798d7965f32faffb0e1ab5ac1102282`.
 
-Status: **active via `instruction-002.md`**.
+## BCAL-003 — Local valuation balance law
 
-## BCAL-003 — Balance transport under local arithmetic operations
-
-Study the signed coordinate
+The next checkpoint studies the signed coordinate
 
 ```text
 Q = S - E
 ```
 
-under already-formalized operations only:
+using the already-formalized finite depth-layer decomposition.
+
+For every fresh non-exceptional support prime `q`, write conceptually
 
 ```text
-fresh-prime return
-Hensel / repeated-depth growth
-exceptional vs non-exceptional split
-orientation changes when available
-prime-exponent specialization
+v = v_q(GN)
+w = log q.
 ```
 
-Targets should be exact transformation identities or one-step inequalities derived from existing theorems.
+Then the exact local accounting should expose
 
-Do not state global monotonicity without proof.
+```text
+support contribution = w
+depth contribution   = (v-1)w
+local mass            = vw
+local balance         = (2-v)w.
+```
+
+Thus valuation depth `v = 2` is the **local** support/depth balance pivot:
+
+```text
+v = 1  -> positive support-side contribution
+v = 2  -> zero local balance
+v >= 3 -> negative depth-side contribution.
+```
+
+Global targets:
+
+```text
+GNChannelMass
+  = sum of local masses
+
+GNChannelBalance
+  = sum of local balances
+  = first support layer - all repeated-depth layers.
+```
+
+This checkpoint identifies the local ruler of the scale. It does **not** claim that global `Q = 0` forces every valuation to equal `2`; local positive and negative contributions may cancel.
+
+Status: **active via `instruction-003.md`**.
 
 ## BCAL-004 — Cubic shell coordinate bridge
 
@@ -147,6 +161,8 @@ and
   shellBalance ?
 ```
 
+The local valuation law from BCAL-003 should be used to interpret shell repeated powers before any counting estimate is attempted.
+
 A negative result is acceptable and should be recorded precisely.
 
 ## BCAL-005 — PowerSwap / contour abstraction audit
@@ -154,7 +170,7 @@ A negative result is acceptable and should be recorded precisely.
 Only if BCAL-000 through BCAL-004 reveal genuine reuse, audit whether the common pattern belongs in a generic module rather than ABC:
 
 ```text
-two nonnegative/real components U,V
+two real components U,V
 mass    M = U + V
 balance Q = U - V
 reconstruction U=(M+Q)/2, V=(M-Q)/2
