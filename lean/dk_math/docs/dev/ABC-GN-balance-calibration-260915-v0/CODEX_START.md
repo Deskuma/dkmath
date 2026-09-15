@@ -10,9 +10,6 @@ branch: research/ABC-GN-balance-calibration-260915-v0
 Read in this order:
 
 ```text
-README.md
-AGENT.md
-SUMMARY.md
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-000.md
 ```
