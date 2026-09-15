@@ -358,7 +358,7 @@ theorem GNExcessFiniteEulerDensity_le_envelope
         GNExcessLocalDensityFactor p q
           (Nat.log q (p * (X + b) ^ p) + 1) t) ≤
         ∏ q ∈ Q, Real.exp (g q) := by
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun q _ =>
           GNExcessLocalDensityFactor_nonneg)
         (fun q hq =>

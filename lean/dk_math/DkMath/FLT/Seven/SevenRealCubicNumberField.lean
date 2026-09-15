@@ -102,7 +102,6 @@ theorem powerBasis_discr :
     pow_two, Matrix.ofNat_apply, Matrix.natCast_apply,
     Matrix.mul_apply, Fin.sum_univ_three,
     Matrix.det_fin_three]
-  split_ifs <;> simp_all <;> norm_num
 
 theorem powerBasis_minpoly_int :
     minpoly ℤ powerBasis.gen = eisensteinPolynomial := by
@@ -222,7 +221,6 @@ theorem field_discr :
     simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply,
       PowerBasis.coe_basis, pB, integralPowerBasis_gen]
     rfl
-  · norm_num
 
 /-- The cubic field has no complex places.  Positivity of its discriminant
 forces an even number of complex places, while degree three bounds that
