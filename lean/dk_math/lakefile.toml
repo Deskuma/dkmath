@@ -15,7 +15,7 @@ weak.linter.style.longLine = false
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-# rev = "stable"
+rev = "v4.34.0"
 
 [[lean_lib]]
 name = "DkMath"
