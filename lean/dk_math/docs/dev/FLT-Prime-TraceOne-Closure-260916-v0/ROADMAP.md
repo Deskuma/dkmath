@@ -115,26 +115,31 @@ branch residual. Check `p=7` and `p=11` as regressions.
 This checkpoint should identify the next contradiction target without assuming
 that the coordinate equations are already impossible.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
-## FPTC-005 — p=3 generic sector adapter
+## FPTC-005 — p=3 generic Eisenstein sector closure
 
-Re-audit the Phase-26 p=3 boundary with the production fact
+Re-audit the Phase-26 p=3 boundary with the production facts
 
 ```lean
 abbrev EisensteinInt := TraceOneInt (-1)
 ```
 
-and the existing FLT3 unit-sector results.
+and
 
-If the only missing piece is packaging, construct a neutral
-`UnitPowerSectorSystem (TraceOneInt (-1)) 3` adapter and compose it with the
-generic stripped-ideal packet.
+```lean
+eisensteinCubeUnitPowerSectorSystem :
+  UnitPowerSectorSystem (TraceOneInt (-1)) 3
+```
 
-Do not duplicate the Eisenstein ring or invent an equivalence for definitionally
-identical carriers.
+The sector adapter already exists, so do not duplicate it.  Instead compose the
+existing Eisenstein sector system and Euclidean/PID class-group discharge with
+the branch-independent generic stripped-ideal sector endpoint at `p = 3`.
 
-Status: **planned**.
+Keep the nontrivial unit sector explicit; do not convert a sector-weighted cube
+into an exact cube without a checked theorem.
+
+Status: **next**.
 
 ## FPTC-006 — p=5 Golden/TraceOne carrier bridge audit
 
