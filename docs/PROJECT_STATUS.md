@@ -2,9 +2,8 @@
 
 **Updated:** 2026-09-16
 
-**Documentation baseline:** `__snapshot-dk_math-lean-code-260916-1826.tar.gz`
-
-**SHA-256:** `1f0b8ee3dd0a9a5f829447eba7656060c1d2e19f085153a19e5040fa63f0dde7`
+**Documentation baseline:**  
+commit hash: `defafa474285bab64c004b5fd98822e44a646116`
 
 This document is the authoritative dated status summary for the public DkMath repository documentation. Dated files under `lean/dk_math/docs/dev`, `docs/feature`, and `docs/refact` remain research records for their own checkpoints; they are not automatically current project summaries.
 
@@ -343,13 +342,3 @@ To avoid the stale-document problem that motivated the 2026-09-16 refactor:
 - `lean/dk_math/docs/dev/*`, `docs/feature/*`, `docs/refact/*` — dated checkpoint/history records; not global current-state authorities unless explicitly stated.
 
 When these disagree, the dated `PROJECT_STATUS.md` and the actual Lean source at the referenced revision take precedence over older narrative documents.
-
-## 10. Snapshot provenance
-
-This rewrite was grounded in the supplied snapshot:
-
-```text
-1f0b8ee3dd0a9a5f829447eba7656060c1d2e19f085153a19e5040fa63f0dde7  __snapshot-dk_math-lean-code-260916-1826.tar.gz
-```
-
-The snapshot contains the Lean source tree and associated Markdown research records used for this audit. The checksum was re-evaluated before the documentation rewrite and matched the supplied value.

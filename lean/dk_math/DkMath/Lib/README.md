@@ -24,7 +24,6 @@ research owner
   -> reuse from later owners
 ```
 
-
 ## 1.1 Aggregator coverage in this snapshot
 
 `DkMath.Lib.lean` currently imports the following promoted families directly:
@@ -317,9 +316,3 @@ The current architecture treats the fixed-degree GN5 project as an important his
 ## 7. Current status
 
 As of the 2026-09-16 documentation snapshot, `DkMath.Lib` is an established promoted layer but is still evolving. Some reusable mathematics remains in older owner namespaces and may be migrated in later refactors.
-
-Snapshot provenance:
-
-```text
-1f0b8ee3dd0a9a5f829447eba7656060c1d2e19f085153a19e5040fa63f0dde7  __snapshot-dk_math-lean-code-260916-1826.tar.gz
-```

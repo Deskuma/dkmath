@@ -22,6 +22,17 @@ This refactor resets the current-state documentation around what the repository 
 
 Supplied snapshot:
 
+### create snapshot file
+
+baseline commit hash: `defafa474285bab64c004b5fd98822e44a646116`
+
+project root:
+
+```sh
+cd lean/
+./snapshot-dk_math.sh
+```
+
 ```text
 __snapshot-dk_math-lean-code-260916-1826.tar.gz
 ```

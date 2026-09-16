@@ -195,9 +195,3 @@ Research modules that are intentionally outside the normal production build shou
 - `docs/dev`, `docs/feature`, `docs/refact`: dated checkpoint records.
 
 Old checkpoint documents are normally preserved as historical records rather than rewritten to match later architecture.
-
-## 9. Snapshot used for the 2026-09-16 documentation reset
-
-```text
-1f0b8ee3dd0a9a5f829447eba7656060c1d2e19f085153a19e5040fa63f0dde7  __snapshot-dk_math-lean-code-260916-1826.tar.gz
-```
