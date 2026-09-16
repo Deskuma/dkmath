@@ -22,6 +22,40 @@ open DkMath.NumberTheory.TraceOneQuadratic
 
 local notation "traceNorm" => DkMath.NumberTheory.TraceOneQuadratic.norm
 
+/-! ## Arbitrary-power integer coordinates -/
+
+/-- Integer coordinates obtained by repeatedly multiplying by `⟨m, n⟩`. -/
+def traceOnePowCoords (s m n : ℤ) : ℕ → ℤ × ℤ
+  | 0 => (1, 0)
+  | r + 1 =>
+      let (a, b) := traceOnePowCoords s m n r
+      (a * m + s * b * n, a * n + b * m + b * n)
+
+@[simp] theorem traceOnePowCoords_zero (s m n : ℤ) :
+    traceOnePowCoords s m n 0 = (1, 0) := rfl
+
+theorem traceOnePowCoords_succ (s m n : ℤ) (r : ℕ) :
+    traceOnePowCoords s m n (r + 1) =
+      ( (traceOnePowCoords s m n r).1 * m +
+          s * (traceOnePowCoords s m n r).2 * n,
+        (traceOnePowCoords s m n r).1 * n +
+          (traceOnePowCoords s m n r).2 * m +
+          (traceOnePowCoords s m n r).2 * n ) := by
+  rfl
+
+/-- Exact integer coordinates for every natural power in `TraceOneInt s`. -/
+theorem traceOne_pow_coordinates (s m n : ℤ) (r : ℕ) :
+    (⟨m, n⟩ : TraceOneInt s) ^ r =
+      ⟨(traceOnePowCoords s m n r).1,
+       (traceOnePowCoords s m n r).2⟩ := by
+  induction r with
+  | zero =>
+      change (⟨1, 0⟩ : TraceOneInt s) = ⟨1, 0⟩
+      rfl
+  | succ r ih =>
+      rw [pow_succ, ih]
+      apply traceOne_ext <;> simp [traceOnePowCoords]
+
 /-- Coordinates of a square in the arbitrary TraceOne quadratic carrier. -/
 theorem traceOne_sq_coordinates (s m n : ℤ) :
     (⟨m, n⟩ : TraceOneInt s) ^ 2 =
