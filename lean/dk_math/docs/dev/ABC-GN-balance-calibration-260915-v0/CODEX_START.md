@@ -1,11 +1,24 @@
 # Codex Start — ABC/GN Balance Calibration
 
-Work only on:
+Repository:
 
 ```text
-repository: Deskuma/dkmath
-branch: research/ABC-GN-balance-calibration-260915-v0
+Deskuma/dkmath
 ```
+
+Branch:
+
+```text
+research/ABC-GN-balance-calibration-260915-v0
+```
+
+Campaign status:
+
+```text
+CLOSED / STRUCTURAL-CALIBRATION COMPLETE
+```
+
+There is no active implementation instruction on this branch.
 
 Accepted checkpoints:
 
@@ -32,31 +45,21 @@ BCAL-006 — Outcome A / EXACT DEPTH TRANSPORT
 commit: f68cb617a2db3fed875655037ce966db3d659b51
 
 BCAL-007 — Outcome A / GENERIC KERNEL JUSTIFIED
+commit: 7c4a1137c92c21d83a3803f46eaec062b30cf718
+
+BCAL-008 — Outcome A / CALIBRATED QUANTITATIVE MAP COMPLETE
+commit: 6dcf3f7c5051a898d7233a6d79648d1cbacc1849
 ```
 
-Read in this order:
+Read the final state in this order:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-007.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-008.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/FINAL_REPORT.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/ROADMAP.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-008.md
 ```
 
-Then execute `instruction-008.md` repository-first.
-
-Current core rule:
-
-```text
-BCAL-007 justified and extracted a dependency-neutral TwoChannel kernel.
-The structural phase is now mature enough to revisit old numerical estimates.
-Do not optimize exponents yet.
-Classify every existing quantitative theorem by the exact coordinate and population it measures.
-Keep pointwise, counting, average, moment, and asymptotic statements separate.
-Do not silently add constants from incompatible dimensions.
-Do not construct a new ABC contract.
-```
-
-Established exact coordinate frame:
+Final exact coordinate frame:
 
 ```text
 S = support mass
@@ -65,28 +68,52 @@ M = S + E
 Q = S - E
 Cal = M - rho*R
 
-TwoChannel:
-  mass(u,v)    = u+v
-  balance(u,v) = u-v
-  center(u,v)  = (u+v)/2
-
-local prime:
-  localMass    = v_q(GN) * log q
-  localBalance = (2-v_q(GN)) * log q
-
-shell:
-  Q = log(single layer) - log(twoTail)
-  with exact cubic exceptional correction
-
-calibration:
-  abcEpsilon = GNEpsilon + ExactCalibrationCorrection
-  safe correction = exact correction + normalized(return + gauge slacks)
+localMass(q)    = v_q(GN) * log q
+localBalance(q) = (2-v_q(GN)) * log q
 ```
 
-Checkpoint 008 is the quantitative calibration frontier audit.  Audit the actual current theorem statements behind historical constants such as `0.435`, classify what they really measure, and identify the strongest existing pointwise and counting/average endpoints separately.
-
-Write results and any minimal exact bridge evidence to:
+The campaign also established:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-008.md
+cubic shell:
+  single / neutral pivot / over-depth decomposition
+  + exact exceptional prime-3 gauge completion
+
+finite depth transport:
+  exact valuation +1 -> mass +log q, balance -log q
+  canonical depth k+1 -> k reduction
+  simple-root successor injectivity
+  card R_(k+1) <= card R_k
+
+generic kernel:
+  DkMath.Lib.TwoChannel
+  with PowerSwap and ABC/GN consumers
 ```
+
+The quantitative audit found no theorem that turns the existing counting, average, shell, incidence, or moment estimates into a uniform pointwise calibration budget.
+
+Do **not** continue on this branch by:
+
+```text
+optimizing 0.435, 3/8, rho, or C
+adding count/moment exponents as if they were pointwise slopes
+promoting density or average statements to pointwise bounds
+constructing a new ABC contract from the current aggregate estimates
+claiming an ABC theorem
+```
+
+The next quantitative research campaign, if created, must begin with the missing deterministic frontier:
+
+```text
+aggregate counting / layer / incidence / moment control
+        ↓
+selector / cover / compensation theorem
+        ↓
+pointwise S and E in one R-normalization
+        ↓
+M <= rho*R + C
+        <->
+Cal <= C
+```
+
+Until that bridge is supplied, stop here.
