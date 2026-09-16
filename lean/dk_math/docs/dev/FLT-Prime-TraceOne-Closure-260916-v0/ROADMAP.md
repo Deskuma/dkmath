@@ -92,7 +92,7 @@ exists integer coordinates of gamma whose r-th-power coordinate image matches
 
 under the explicit nonzero-norm hypothesis on `beta`.
 
-Keep this checkpoint neutral.  Composition with the generic FLT prime endpoint
+Keep this checkpoint neutral. Composition with the generic FLT prime endpoint
 is deferred to FPTC-004.
 
 Status: **completed — Outcome A**.
@@ -132,27 +132,40 @@ eisensteinCubeUnitPowerSectorSystem :
   UnitPowerSectorSystem (TraceOneInt (-1)) 3
 ```
 
-The sector adapter already exists, so do not duplicate it.  Instead compose the
+The sector adapter already exists, so do not duplicate it. Instead compose the
 existing Eisenstein sector system and Euclidean/PID class-group discharge with
 the branch-independent generic stripped-ideal sector endpoint at `p = 3`.
 
 Keep the nontrivial unit sector explicit; do not convert a sector-weighted cube
 into an exact cube without a checked theorem.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
-## FPTC-006 — p=5 Golden/TraceOne carrier bridge audit
+## FPTC-006 — p=5 Golden/TraceOne carrier bridge and sector closure
 
 Compare `GoldenInt` with `TraceOneInt 1` exactly at the ring-operation level.
+The coordinate multiplication laws agree, but the carriers are distinct
+structures, so establish an actual kernel-checked ring equivalence rather than
+relying on coordinate analogy.
 
-If a clean equivalence is justified, implement it in a dependency-neutral or
-FLT5 adapter module and transport only the unit-sector facts needed by the
-generic prime route.
+If the equivalence is clean, use it to transport only the structural facts
+needed by the generic prime route:
 
-Use the specialized FLT5 development as a regression oracle, not as a hidden
-proof of the generic theorem.
+```text
+GoldenInt Euclidean/PID
+  -> TraceOneInt 1 principal-ideal consequence
+  -> classGroupPTorsionFreeAt (TraceOneInt 1) 5
 
-Status: **planned**.
+GoldenUnitClassesModFifth
+  -> explicit Fin 5 UnitPowerSectorSystem on TraceOneInt 1
+  -> generic p=5 stripped-ideal sector endpoint
+```
+
+Keep the golden representatives explicit so later work can compare them with
+the specialized FLT5 sector arithmetic. Do not eliminate nonzero sectors in
+this checkpoint.
+
+Status: **next**.
 
 ## FPTC-007 — Prime-discriminant class-number frontier
 
