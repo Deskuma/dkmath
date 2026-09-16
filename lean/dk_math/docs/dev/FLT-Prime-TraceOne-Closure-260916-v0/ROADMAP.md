@@ -165,7 +165,7 @@ Keep the golden representatives explicit so later work can compare them with
 the specialized FLT5 sector arithmetic. Do not eliminate nonzero sectors in
 this checkpoint.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-007 — Prime-discriminant class-number frontier
 
@@ -173,21 +173,22 @@ After FPTC-000/001, formulate the remaining imaginary-branch arithmetic target
 in the most concrete form available, ideally involving the class number of the
 quadratic order/field associated to `signedPrimeParameter p`.
 
-Audit existing Minkowski machinery from FLT7 and Mathlib before introducing new
-bounds.
+First connect the ring-of-integers class number to the actual TraceOne class
+group cardinality if the pinned ClassGroup/RingEquiv API supports a clean
+transport. Then audit the available discriminant, signature, Minkowski, and
+bounded-ideal counting APIs before attempting any uniform estimate.
 
-Possible outcomes:
+The intended target is only
 
 ```text
-A. a reusable theorem proves p-torsion-freeness for the required family;
-B. a finite/computable criterion is obtained for bounded p;
-C. the general class-number statement is identified as a genuine external
-   number-theoretic frontier.
+Coprime(p, classNumber K_p)
 ```
 
-No unproved class-number claim may be promoted to production.
+for the imaginary prime-discriminant family, not uniform class number one.
+A precise theorem-shaped external frontier is an acceptable research outcome
+if current checked APIs do not prove the required coprimality.
 
-Status: **research frontier**.
+Status: **next**.
 
 ## FPTC-008 — Real `Fin p` sector obstruction
 
