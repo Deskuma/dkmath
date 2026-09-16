@@ -1,807 +1,631 @@
-# dkmath (nightly) 構成マップ（目次・補題/定理インデックス案）
+# DkMath Index
 
-> 目的：リポジトリ全体を「何がどこにあるか」「どんな定理・補題が積み上がっているか」の観点で、**見出し/目次**として眺められる 1 枚 Markdown を作る。
->
-> 注：nightly ブランチは `sorry` を含み得る（ビルドは通っている前提）。このドキュメントは \*\*現状の“地図”\*\*であり、証明完了度のラベル（✅/🚧/⚠️）は後で埋められるようにしてある。
->
-> **最終更新**: 2026-04-01（`logs/summary_report` と `DkMath.lean` の実データで更新）
+**Updated:** 2026-09-16  
+**Documentation baseline:**  
+commit hash: `defafa474285bab64c004b5fd98822e44a646116`
+
+このファイルは DkMath の **現在の入口を辿るための索引** である。
+定理を全件列挙する百科事典ではなく、完成成果、再利用ライブラリ、進行中研究、歴史資料を分離して「どこから読むべきか」を示す。
+
+> [!IMPORTANT]
+> 完了度・研究境界の正本は [`../../docs/PROJECT_STATUS.md`](../../docs/PROJECT_STATUS.md)。
+> `docs/dev`, `docs/feature`, `docs/refact` 以下の dated documents は各 checkpoint の研究記録であり、自動的に現在状態を表すものではない。
+
+## 0. Start here
+
+| 目的 | 入口 |
+|---|---|
+| プロジェクト全体の公開概要 | [`../../README.md`](../../README.md) |
+| 現在の完成成果・研究境界 | [`../../docs/PROJECT_STATUS.md`](../../docs/PROJECT_STATUS.md) |
+| Lean 実装全体の入口 | [`README.md`](./README.md) |
+| 再利用可能な中立 API | [`DkMath/Lib/README.md`](./DkMath/Lib/README.md) |
+| FLT の現行 public surface と歴史路線 | [`DkMath/FLT/README.md`](./DkMath/FLT/README.md) |
+| DkMath 全体 aggregator | [`DkMath.lean`](./DkMath.lean) |
+| `DkMath.Lib.*` aggregator | [`DkMath/Lib.lean`](./DkMath/Lib.lean) |
+
+現在の読み順は次を推奨する。
+
+```text
+completed formal results
+  -> DkMath.Lib.* reusable kernels
+  -> active research
+  -> historical / dated research records
+```
+
 ---
 
-## 1. トップレベル（リポジトリ直下）
+# I. Completed formal results
 
-（直下は Lean 以外も含む：ドキュメント、Python、各種スクリプト、ログなど）
+## I-1. FLT3 — exponent 3 over positive naturals
 
-- `README.md`
-- `CODE_OF_CONDUCT.md` / `CONTRIBUTING.md` / `LICENSE`
-- `create-summary-report-data.sh` : サマリーレポート生成
-- `docs/` : 研究ノート/記事/解説（構造説明・結果ログ）
-- `lean/` : Lean プロジェクト本体
-- `logs/` : 自動レポート・差分・スナップショット
-- `python/` : 実験・可視化・数値検証
-- （他：設定ファイル、CI、ライセンスなど）
+**Status:** COMPLETE
+
+Canonical import:
+
+```lean
+import DkMath.FLT.Three
+```
+
+Public endpoints:
+
+```lean
+DkMath.FLT.Three.FLT_d3_unconditional
+DkMath.FLT.Three.fermatThree_no_positive_solution
+```
+
+Main public surface:
+
+- [`DkMath/FLT/Three.lean`](./DkMath/FLT/Three.lean)
+
+Representative proof tower:
+
+```text
+positive solution
+  -> gcd normalization
+  -> PrimitiveCubicPack
+  -> signed 3-adic routing
+  -> Eisenstein ramifier stripping
+  -> coprime conjugate factors
+  -> cube extraction
+  -> unit-sector exclusion
+  -> exact Eisenstein cube
+  -> strict descent
+  -> contradiction
+```
+
+Representative modules:
+
+- [`PositiveCubicNormalization.lean`](./DkMath/FLT/Three/PositiveCubicNormalization.lean)
+- [`PrimitiveCubicLiftPacket.lean`](./DkMath/FLT/Three/PrimitiveCubicLiftPacket.lean)
+- [`SignedThreeAdic.lean`](./DkMath/FLT/Three/SignedThreeAdic.lean)
+- [`SignedThreeAdicPowerSplit.lean`](./DkMath/FLT/Three/SignedThreeAdicPowerSplit.lean)
+- [`EisensteinEuclidean.lean`](./DkMath/FLT/Three/EisensteinEuclidean.lean)
+- [`EisensteinCubeExtraction.lean`](./DkMath/FLT/Three/EisensteinCubeExtraction.lean)
+- [`EisensteinSectorExclusion.lean`](./DkMath/FLT/Three/EisensteinSectorExclusion.lean)
+- [`PrimitiveCubicDescent.lean`](./DkMath/FLT/Three/PrimitiveCubicDescent.lean)
+- [`PrimitiveCubicClosure.lean`](./DkMath/FLT/Three/PrimitiveCubicClosure.lean)
+
+Implementation report:
+
+- [`docs/dev/FLT3-Unconditional-260904-v0/report-014.md`](./docs/dev/FLT3-Unconditional-260904-v0/report-014.md)
+
+Standalone exhibition project:
+
+- <https://github.com/Deskuma/flt3_dk_math_lean4>
+
+The completed tower is independent of the legacy conditional `DkMath.FLT.Main` / `FLT_d3_by_padicValNat` / `NoSqOnS0` route.
+
+## I-2. FLT5 — exponent 5 over positive naturals
+
+**Status:** COMPLETE
+
+Canonical import:
+
+```lean
+import DkMath.FLT.Five
+```
+
+Public endpoints:
+
+```lean
+DkMath.FLT.Five.flt5Target
+DkMath.FLT.Five.fermatFive_no_positive_solution
+```
+
+Main public surface:
+
+- [`DkMath/FLT/Five.lean`](./DkMath/FLT/Five.lean)
+- [`DkMath/FLT/Five/Main.lean`](./DkMath/FLT/Five/Main.lean)
+
+Representative proof route:
+
+```text
+positive solution normalization
+  -> signed gap orientation
+  -> GN5 / five-adic factor splitting
+  -> golden-order factorization
+  -> unit classes modulo fifth powers
+  -> nonzero-sector exclusion
+  -> zero-sector strict descent
+  -> contradiction
+```
+
+Axiom audit entry point:
+
+- [`DkMathTest/FLT/Five/CheckAxioms.lean`](./DkMathTest/FLT/Five/CheckAxioms.lean)
+
+Standalone exhibition project:
+
+- <https://github.com/Deskuma/flt5_dk_math_lean4>
+
+The OpenAI Build Week GN5 work is the historical origin of this route. The reusable mathematics extracted from that line now belongs primarily under `DkMath.Lib.*`.
+
+## I-3. Infinitely many primes from the Cosmic Formula boundary
+
+**Status:** COMPLETE proof route
+
+Core boundary identities:
+
+$$
+\operatorname{cosmicN}(P)=P(P+2),
+$$
+
+$$
+\operatorname{cosmicN}(P)+1=(P+1)^2.
+$$
+
+Main route:
+
+```lean
+DkMath.CosmicFormula.euclid_from_cosmic_boundary
+```
+
+Comparator sample endpoint:
+
+```lean
+InfinitudeOfPrimes
+```
+
+Read:
+
+- [`DkMath/Samples/Prime/A.lean`](./DkMath/Samples/Prime/A.lean)
+- [`DkMath/Samples/Prime/README.md`](./DkMath/Samples/Prime/README.md)
+- [`DkMath/Samples/Prime/Lean4Web.md`](./DkMath/Samples/Prime/Lean4Web.md)
 
 ---
 
-## 2. Lean パッケージの入口
+# II. Reusable library — `DkMath.Lib.*`
 
-### 2.1 `lean/README.md`
+## II-1. Public development aggregator
 
-- Lean 側の概要・ビルド手順・方針
+Recommended lightweight import for the currently exported reusable subset:
 
-### 2.2 `lean/dk_math/`
+```lean
+import DkMath.Lib
+```
 
-- Mathlib 上に構築された `DkMath` ライブラリ。
-- エントリポイント：`DkMath.lean`
+[`DkMath/Lib.lean`](./DkMath/Lib.lean) currently imports:
+
+```text
+DkMath.Lib.Basic
+DkMath.Lib.TwoChannel
+DkMath.Lib.NumberTheory.PadicValNat
+DkMath.Lib.NumberTheory.TraceOneLatticeLanding
+DkMath.Lib.NumberTheory.TraceOnePowerLanding
+DkMath.Lib.NumberTheory.EisensteinCoordinates
+DkMath.Lib.NumberTheory.EisensteinLatticeLanding
+DkMath.Lib.NumberTheory.SquarefreePowerFactor
+DkMath.Lib.Cosmic.GTail
+DkMath.Lib.Cosmic.GTailCyclotomic
+DkMath.Lib.Cosmic.GTailPascal
+DkMath.Lib.Cosmic.GTailBoundary
+DkMath.Lib.Cosmic.GTailNat
+DkMath.Lib.Cosmic.GTailCongruence
+DkMath.Lib.Cosmic.GTailPadic
+```
+
+Full guide:
+
+- [`DkMath/Lib/README.md`](./DkMath/Lib/README.md)
+
+## II-2. Cosmic / GTail family
+
+`GTail` is the neutral binomial-tail kernel behind the standard GN layer.
+
+For general depth $r$:
+
+$$
+(x+u)^d
+=
+\sum_{j<r}\binom dj x^j u^{d-j}
++x^r\operatorname{GTail}(d,r,x,u).
+$$
+
+The standard GN layer is the specialization
+
+$$
+GN_d(x,u)=\operatorname{GTail}(d,1,x,u).
+$$
+
+Modules:
+
+- [`GTail.lean`](./DkMath/Lib/Cosmic/GTail.lean) — core decomposition / recursion
+- [`GTailBoundary.lean`](./DkMath/Lib/Cosmic/GTailBoundary.lean) — exact gcd boundary formulas
+- [`GTailCongruence.lean`](./DkMath/Lib/Cosmic/GTailCongruence.lean) — congruence transport / head collapse
+- [`GTailCyclotomic.lean`](./DkMath/Lib/Cosmic/GTailCyclotomic.lean) — cyclotomic shell bridge
+- [`GTailNat.lean`](./DkMath/Lib/Cosmic/GTailNat.lean) — natural-number divisibility
+- [`GTailPadic.lean`](./DkMath/Lib/Cosmic/GTailPadic.lean) — exact p-adic consequences
+- [`GTailPascal.lean`](./DkMath/Lib/Cosmic/GTailPascal.lean) — finite-depth Pascal filtration
+
+The old degree-specific GN5 story is therefore no longer the right library-level abstraction. New neutral code should prefer the `GTail` family when the statement is not intrinsically degree-specific.
+
+## II-3. Number-theory promoted modules
+
+Aggregator-exposed modules:
+
+- [`PadicValNat.lean`](./DkMath/Lib/NumberTheory/PadicValNat.lean)
+- [`TraceOneLatticeLanding.lean`](./DkMath/Lib/NumberTheory/TraceOneLatticeLanding.lean)
+- [`TraceOnePowerLanding.lean`](./DkMath/Lib/NumberTheory/TraceOnePowerLanding.lean)
+- [`EisensteinCoordinates.lean`](./DkMath/Lib/NumberTheory/EisensteinCoordinates.lean)
+- [`EisensteinLatticeLanding.lean`](./DkMath/Lib/NumberTheory/EisensteinLatticeLanding.lean)
+- [`SquarefreePowerFactor.lean`](./DkMath/Lib/NumberTheory/SquarefreePowerFactor.lean)
+
+Neutral direct-import modules that exist in `DkMath.Lib.NumberTheory` but are not re-exported by `DkMath.Lib.lean` in this snapshot:
+
+- [`PowerFactor.lean`](./DkMath/Lib/NumberTheory/PowerFactor.lean)
+- [`IdealPowerFactor.lean`](./DkMath/Lib/NumberTheory/IdealPowerFactor.lean)
+- [`PrincipalIdealPower.lean`](./DkMath/Lib/NumberTheory/PrincipalIdealPower.lean)
+- [`UnitPowerSector.lean`](./DkMath/Lib/NumberTheory/UnitPowerSector.lean)
+
+This distinction is only about aggregator coverage; all four are intended as reusable neutral APIs.
 
 ---
 
-## 3. `DkMath.lean`（import グラフの最上位）
+# III. Full workspace entry point
 
-`DkMath.lean` は、外部へ見せたいモジュールをまとめて import している「目次ファイル」。
+## III-1. `DkMath.lean`
 
-### 3.1 コア
+[`DkMath.lean`](./DkMath.lean) is the broad workspace aggregator.
+
+```lean
+import DkMath
+```
+
+imports not only stable/reusable layers but also active research facades and hackathon material. Use `import DkMath.Lib`, `import DkMath.FLT.Three`, or `import DkMath.FLT.Five` when a narrower dependency surface is desired.
+
+Major families currently imported by `DkMath.lean` include:
+
+### Foundation / reusable infrastructure
 
 - `DkMath.Basic`
+- `DkMath.Lib`
+- `DkMath.Algebra.MetallicRatioCore`
+- `DkMath.Verification`
 - `DkMath.Samples`
-  - 推奨導線サンプル: `DkMath.Samples.UniqueFactorizationGNFacade`
-  - 最終推奨入口（NumberTheory 側）:
-    `DkMath.NumberTheory.unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
-- `DkMath.PowerSwap`  -- PowerSwap: pow-swapping relations
-- `DkMath.NumberTheory.PowerSums`  -- Number theory power sum fillability
-- `DkMath.CFBRC`  -- Cosmic Formula Binomial Real Complex
-- `DkMath.Research`  -- 研究用エントリポイント（補助/実験用）
+- `DkMath.Sequence`
+- `DkMath.Kernel`
+- `DkMath.Analysis`
 
-### 3.2 ABC まわり
+### Number theory / combinatorics
 
-- `DkMath.ABC`
-- 推奨 bridge 入口:
-  `DkMath.ABC.Bridge`
-  - Erdos #1196 系の bridge API (`supportMass`, prime-channel family lower bounds,
-    `PrimitiveWitnessFamily` とその counting / extraction API) を読む標準入口
-- `DkMath.ABC.ABC038Bridge`
-  - `ABC.Chernoff` convenience theorem 群へ接続する
-    `rad(abc)` 直結 route の入口
-  - 推奨定理:
-    `ABC.Chernoff.quality_le_of_not_bad_with_targetRadTail_on_radAbc`
-    /
-    `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
-- `DkMath.ABC.PadicValNat`
-- `DkMath.ABC.CountPowersDividing2n1`
+- `DkMath.NumberTheory.PowerSums`
+- `DkMath.NumberTheory.BinomialPrime`
+- `DkMath.NumberTheory.BinomialPrimePower`
+- `DkMath.NumberTheory.PascalPrimeDial`
+- `DkMath.NumberTheory.PascalPrimeCoordinateDecoder`
+- `DkMath.NumberTheory.Primitive`
+- `DkMath.NumberTheory.PrimorialUniverse`
+- `DkMath.NumberTheory.Legendre`
+- `DkMath.NumberTheory.AKSBridge`
+- `DkMath.NumberTheory.WeightedBinomial`
+- `DkMath.NumberTheory.WeightedGNBridge`
+- `DkMath.NumberTheory.GNPrime`
+- `DkMath.NumberTheory.Goldbach`
+- `DkMath.Pascal`
+- `DkMath.Petal`
 
-### 3.3 コラッツ
-
-- `DkMath.Collatz.Collatz2K26`
-- `DkMath.Collatz.PetalBridge`
-
-### 3.4 宇宙式（Cosmic Formula）
+### Geometry / structural arithmetic
 
 - `DkMath.CosmicFormula`
-- `DkMath.PowerSwap`  -- 次元間の冪交換と調和構造
-- `DkMath.NumberTheory.PowerSums`  -- power sums 関連理論
-- `DkMath.CFBRC`  -- Cosmic Formula Binomial Real Complex
-
-### 3.4.1 Zsigmondy ブリッジ
-
-- `DkMath.Zsigmondy`
-
-### 3.5 ポリオミノ／トロミノ
-
+- `DkMath.EuclideanGeometry`
+- `DkMath.PowerSwap`
 - `DkMath.Polyomino`
 - `DkMath.PolyominoPrototype`
 - `DkMath.Tromino`
-
-### 3.6 白銀比・表示の一意性
-
 - `DkMath.SilverRatio`
 - `DkMath.UniqueRepSimple`
 - `DkMath.UniqueRepresentation`
-
-### 3.7 DHNT（動的調和数論）
-
-- `DkMath.DHNT`
-
-### 3.8 RH（リーマン予想関連）
-
-- `DkMath.RH`
-
-### 3.9 単位巡回
-
 - `DkMath.UnitCycle`
 
-### 3.10 FLT（フェルマー最終定理関連）
+### Research-owner facades
 
-- `DkMath.FLT`
-- public/provider 導線の現状:
-  - abstract regular-prime mainline:
-    `DkMath.FLT.Kummer.RegularPrimeRoute.FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-  - provider concrete public route:
-    `DkMath.FLT.Kummer.RegularPrimeRoute.triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-    /
-    `DkMath.FLT.Kummer.RegularPrimeRoute.triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  - `TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
-    上の provider concrete route を canonical 導線として使う
-
-### 3.11 KUS（単位構造演算）
-
-- `DkMath.KUS.Unit` — `US` 構造（unit + blueprint 束）
-- `DkMath.KUS.Blueprint` — `BlueprintFamily` / `BlueprintAt` 型エイリアス
-- `DkMath.KUS.Core` — `KUS` 構造・`mkWith`・`zeroState`
-- `DkMath.KUS.NatEmbed` — `ofNat` / `toNat`
-- `DkMath.KUS.Extract` — `extract`（support 取り出し）
-- `DkMath.KUS.RoundTrip` — 往復定理（`reconstruct_from_extract` 等）
-- `DkMath.KUS.Add` — `kusAdd`・`SameSupport`
-- `DkMath.KUS.Mul` — `kusMul`・`oneState`
-- `DkMath.KUS.Scale` — `ScaleSpec`（異 support 間スケール写像）
-- `DkMath.KUS.Monoid` — `Fiber` 型エイリアス
-- `DkMath.KUS.Coeff` — `GKUS`（汎用係数型）・`gOp`/`gAdd`/`gMul`/`gDiv` 等
-- `DkMath.KUS.Examples` — `ToyUnit` / `toyX` / `toyScale` サンプル
-
----
-
-## 3.12 理論依存グラフ（章立て再編）
-
-ここからは「理論の流れ」で再構成する。
-
----
-
-# I. FLT幹線（代数 → gcd → 原始素因子 → FLT）
-
-## I-1. 構造の中核：差の冪と gcd 制御
-
-```mermaid
-graph TD
-  Basic[DkMath.Basic] --> DiffPow[DkMath.Algebra.DiffPow]
-  Basic --> BinomTail[DkMath.Algebra.BinomTail]
-  DiffPow --> GcdDiffPow[DkMath.NumberTheory.GcdDiffPow]
-  DiffPow --> GcdLemmas[DkMath.NumberTheory.GcdLemmas]
-  GcdDiffPow --> ZC[DkMath.NumberTheory.ZsigmondyCyclotomic]
-  GdcDivD[DkMath.NumberTheory.GdcDivD] --> ZC
-  ABCPadic[DkMath.ABC.PadicValNat] --> ZC
-```
-
-- `DiffPow` が **指数構造の分解装置**。
-- `GcdDiffPow` / `GcdLemmas` が **整除制御層**。
-- `ZsigmondyCyclotomic` が **原始素因子エンジン**。
-
-## I-2. 最終合流点：FLT
-
-```mermaid
-graph TD
-  ZC[DkMath.NumberTheory.ZsigmondyCyclotomic] --> GcdNext[DkMath.NumberTheory.GcdNext]
-  GcdNext --> FLTBasic[DkMath.FLT.Basic]
-  DiffPow[DkMath.Algebra.DiffPow] --> FLTBasic
-  BinomTail[DkMath.Algebra.BinomTail] --> FLTBasic
-```
-
-- `ZsigmondyCyclotomic` の完成度が FLT の進捗を決定する。
-- 構造的には **ここが本丸**。
-
----
-
-## I-3. Zsigmondy 中心・補題インデックス（FLT幹線コア）
-
-ここでは `NumberTheory.ZsigmondyCyclotomic` を中心に、 **役割ごとに補題群を分解して管理する。**
-
-### I-3-a. 基礎分解層（差の冪の構造）
-
-主に `Algebra.DiffPow` / `Algebra.BinomTail`。
-
-**（抽出）**
-
-- `def diffPowSum`
-- `lemma diffPowSum_sub_const_mul`
-- `theorem pow_sub_pow_factor`
-- `def BodyPow`
-- `theorem BodyPow_factor`
-- `def diffPowSum'`
-- `theorem pow_sub_pow_factor'`
-- `theorem pow_sub_pow_nat`
-
-**（抽出）**
-
-- `lemma add_pow_tail_exists`
-- `lemma binom_tail_nat_dvd`
-
-役割：
-
-- 冪差 \(a^d-b^d\) を「線形因子 × 高次項」に分解する。
-- 二項展開の“尾項”を \(u^2\) で束ね、以後の p-adic 制御へ渡す。
-
----
-
-### I-3-b. gcd 制御層
-
-主に `NumberTheory.GcdDiffPow` / `NumberTheory.GcdLemmas` / `NumberTheory.GdcDivD`。
-
-**（抽出）**
-
-- `theorem gcd_divides_d`
-
-**（抽出）**
-
-- `theorem prime_dividing_gcd_divides_d`
-- `def quotientPrimePow`
-- `lemma pow_sub_pow_eq_diff_mul_quotient`
-- `lemma quotientPrimePow_gt_one`
-- `lemma exists_prime_divisor_not_dividing_diff_of_prime_exp`
-
-**（抽出）**
-
-- `lemma nat_dvd_of_all_prime_powers_dvd`
-- `lemma prime_pow_dividing_gcd_divides_d_pow`
-- `lemma nat_dvd_of_all_prime_factors_dvd`
-
-役割：
-
-- 「既知の素因子」と「新しい素因子」を分離する（primitive の前提）。
-- `gcd(...) ∣ d` 型の制御で、指数の情報を素因子側へ押し込む。
-
----
-
-### I-3-c. 原始素因子層（Zsigmondy 本体）— さらに分解
-
-モジュール：`DkMath.NumberTheory.ZsigmondyCyclotomic`
-
-ここは「Zsigmondy の心臓部」ゆえ、補題を **機能ブロック**に切り分けて管理する。
-
----
-
-#### I-3-c1. 宇宙式コア（因数分解の“器”）
-
-（※この節は `ZsigmondyCyclotomic` 内にある **cosmic 系因数分解補題**を指す。）
-
-- `lemma pow_sub_pow_factor_cosmic`（ℤ 上の因数分解）
-- `lemma pow_sub_pow_factor_cosmic_N`（ℕ 上の因数分解）
-
-役割：
-
-- \(a^d-b^d=(a-b)\,G(a,b,d)\) 型の分解を **Zsigmondy 側から直接呼べる形**にする。
-
----
-
-#### I-3-c2. primitive（原始性）の抽出
-
-- `lemma exists_primitive_prime_factor_basic`
-- `lemma prime_exp_not_dvd_diff_imp_primitive`（群論・位数で primitive を出す）
-- `lemma exists_primitive_prime_factor_prime`
-
-役割：
-
-- 「ある素数 q が a^d - b^d を割る」だけでなく、 「k < d の差の冪を割らない」という **新規性**（primitive）を保証する。
-
----
-
-#### I-3-c3. cyclotomic（円分多項式）ブロック
-
-- `lemma cyclotomic_dvd_pow_sub_one`
-- `lemma cyclotomic_squarefree`
-- `lemma cyclotomic_eval_divides`
-
-役割：
-
-- 一般 d の Zsigmondy を「円分多項式 Φ\_d」経由で実装するための足場。
-- squarefree 性は p-adic 上界（valuation ≤ 1）に直結しやすい。
-
----
-
-#### I-3-c4. padicValNat（p-adic valuation）ブロック
-
-- `lemma padicValNat_factorization`
-- `lemma padicValNat_of_primitive_prime_factor_via_G`
-- `lemma squarefree_implies_padic_val_le_one`
-- `lemma padicValNat_primitive_prime_factor_ge_one`
-- `lemma padicValNat_primitive_prime_factor_le_one`
-- `lemma padicValNat_le_one_of_prime_divisor_case_three` 🚧
-- `lemma padicValNat_le_one_of_prime_divisor_case_three_strong`
-
-役割：
-
-- 原始素因子 \(q\) について \(v_q(a^d-b^d)\) を押さえ、 「高い冪（\(d\) 乗）」の形を拒否する。
-
-（`🚧` はこの最新版スナップショットでも `sorry` が残る箇所。）
-
----
-
-#### I-3-c5. 二項係数の p-adic（Lucas/Kummer）
-
-- `lemma lucas_theorem_for_binomial_coeff`
-- `lemma kummer_theorem_for_binomial_coeff`
-
-役割：
-
-- 二項係数の p-進評価を通じて、 G(a,b,d) の係数や項の割れ方を制御する。
-
----
-
-#### I-3-c6. d = 3 の“特化エンジン”（明示計算）
-
-- `lemma G_three_explicit`
-- `lemma GN_three_explicit`
-- `lemma prime_divides_G3`
-- `lemma padicValNat_binomial_coeff_three`
-- `lemma padicValNat_G_three_coeffs_le_one`
-- `lemma padicValNat_le_one_of_prime_divisor_case_three`（未完の可能性：d=3最終）
-
-役割：
-
-- 一般論が重い部分を、d=3 で「明示計算」に落として閉じる。
-- FLT の具体指数（3,5,7…）を先に締める戦略にも使える。
-
----
-
-#### I-3-c7. 例外ケース管理（Zsigmondy の“落とし穴”）
-
-Zsigmondy は「ほとんど常に」原始素因子が出るが、古典的に例外がある。 （例：よく知られた (a,b,n)=(2,1,6) 型など）
-
-このリポジトリの設計としては：
-
-- **例外条件の前提化**（`¬ d ∣ a - b` など）
-- **d=3 特化での反例検査**（具体値が紛れ込む場合の条件精査）
-- **squarefree/p-adic 上界が要る箇所**を「研究課題」として隔離
-
-…という方針で「本体ルート（FLTへ）」が塞がらないようにする。
-
----
-
-#### I-3-c8. 別解ルート：p-adic値による FLT d=3（Main.lean）✅
-
-**新規追加**（2026-02-22 完成）
-
-モジュール：`DkMath.FLT.Main`（「別解」として展開）
-
-本ファイルは、従来の Cosmic Formula + coprimality ルートとは異なる
-**Zsigmondy 原始素因子 + p-adic値評価**による FLT d=3 の形式化証明である。
-
-- `lemma cube_sub_eq_of_add_eq`：立方差の基本恒等式
-- `lemma coprime_cb_of_eq`：互いに素性の遺伝
-- `lemma exists_prime_factor_cube_diff`：立方差の原始素因子存在（3整除分岐対応）
-- `lemma exists_primitive_prime_factor_d3`：Zsigmondy d=3 版
-- `lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb`：平方非整除条件（外部化）
-- `lemma padicValNat_lower_bound_of_dvd_d3`：p-adic下界 `v_q(c³) ≥ 3`
-- `lemma padicValNat_upper_bound_d3`：p-adic上界 `v_q(a³-b³) ≤ 1`
-- **`theorem FLT_d3_by_padicValNat`**：メイン定理（矛盾導出）✅ PROVEN
-
-**アクシオム依存**：
-`[propext, Classical.choice, Quot.sound]`（標準的） — **追加仮定なし**
-
-**詳細資料**：
-補題チェーン、依存グラフ、論文化ガイドは `docs/FLT_LEMMA_CHAIN.*` に完全記述。
-
----
-
-### I-3-d. 橋渡し層（GcdNext → FLT.Basic）
-
-モジュール：`NumberTheory.GcdNext` と `FLT.Basic`。
-
-**（抽出）**
-
-- `def Sd` / `def Body`
-- `theorem gcd_specialized_divides_d`
-- `lemma dvd_padicVal_of_eq_pow`
-- `lemma padicVal_mul_eq_add_of_coprime`
-- `lemma prime_not_dvd_d_of_gcd_dvd`
-- `theorem pow_sub_pos`
-- `lemma gcdAg_eq_one_imp_coprime_after_factor2` 🚧
-- `lemma coprime_of_gcdAg_eq_one`
-- `lemma phi_bit_structure_diff`
-- `lemma apb_not_dvd_S0_coprime`
-- `lemma petal_phi_detection`
-- `theorem body_not_perfect_pow` 🚧
-- `lemma padicValNat_d3_upper_bound`
-- `lemma padicValNat_general_upper_bound` 🚧
-- `lemma padicValNat_upper_bound_integrated`
-
-**（抽出）**
-
-- `lemma GN_linear` / `lemma GN_quadratic`
-- `lemma GN3_one_not_cube_use_FLT3`
-- `lemma coprime_of_mul_eq_cube`
-- `lemma u_eq_one_of_coprime_gcd`
-- `lemma x3_div_u2`
-- `lemma gcd_u_GN3`
-- `theorem FLT_case_3`
-- `theorem FLT_of_coprime`
-- `theorem FLT`
-
-役割：
-
-- 原始素因子（Zsigmondy）や p-adic 上界を、 「\(n\) 乗は作れない」形の矛盾へ翻訳する。
-
----
-
-### I-3-e. 作業優先順位（戦略）
-
-構造から見た優先順位：
-
-1. `ZsigmondyCyclotomic` の原始素因子補題を完了
-2. `GcdNext` の橋渡し補題を整理
-3. `FLT.Basic` の最終矛盾導出を閉じる
-
-→ 下層から順に固めるのが合理的。
-
----
-
----
-
-# II. Cosmic幹線（幾何 → 次元 → 二項 → 数論接続）
-
-## II-1. 幾何からの流入
-
-```mermaid
-graph TD
-  CellDim[DkMath.CellDim] --> CFDefs[DkMath.CosmicFormula.Defs]
-  CFDefs --> CFBasic[DkMath.CosmicFormula.CosmicFormulaBasic]
-  CFBasic --> CFDim[DkMath.CosmicFormula.CosmicFormulaDim]
-  CFDim --> CFCell[DkMath.CosmicFormula.CosmicFormulaCellDim]
-  CFBasic --> CFGeom[DkMath.CosmicFormula.CosmicFormulaGeom]
-```
-
-- `CellDim` → `Defs` が宇宙式の幾何的入口。
-- `Dim` / `Geom` / `CellDim` が宇宙式の主戦場。
-
-## II-2. 数論側への橋
-
-```mermaid
-graph TD
-  CFDim[DkMath.CosmicFormula.CosmicFormulaDim] --> CFbinom[DkMath.CosmicFormula.CosmicFormulaBinom]
-  CFbinom --> ZC[DkMath.NumberTheory.ZsigmondyCyclotomic]
-```
-
-- CosmicFormulaBinom が NumberTheory 幹線へ接続する。
-- 幾何と数論がここで融合する。
-
----
-
-# III. RH柱（解析的構造の塔）
-
-```mermaid
-graph TD
-  RHBasic[DkMath.RH.Basic] --> RHDefs[DkMath.RH.Defs]
-  RHDefs --> RHLem[DkMath.RH.Lemmas]
-  RHLem --> RHEZ[DkMath.RH.EulerZeta]
-  RHEZ --> RHEZL[DkMath.RH.EulerZetaLemmas]
-  RHEZL --> RHEZC[DkMath.RH.EulerZetaConvergence]
-```
-
-- Defs → Lemmas → EulerZeta → Convergence の縦構造。
-- 解析塔は FLT 幹線とは独立した別宇宙。
-
----
-
-# IV. 独立柱（SilverRatio / Collatz / UnitCycle / DHNT）
-
-- SilverRatio / UniqueRepresentation は **代数的独立柱**。
-- Collatz は **動的離散系の実験塔**。PetalBridge により、加速軌道の label 分離と collision を Petal RangeFamily の窓口で読める。
-- UnitCycle / DHNT は **宇宙式と接続可能な補助構造**。
-
----
-
-# V. KUS柱（単位構造演算）
-
-## V-1. 設計概要
-
-```mermaid
-graph TD
-  Unit[DkMath.KUS.Unit] --> Blueprint[DkMath.KUS.Blueprint]
-  Blueprint --> Core[DkMath.KUS.Core]
-  Core --> NatEmbed[DkMath.KUS.NatEmbed]
-  NatEmbed --> Extract[DkMath.KUS.Extract]
-  Extract --> RoundTrip[DkMath.KUS.RoundTrip]
-  RoundTrip --> Add[DkMath.KUS.Add]
-  RoundTrip --> Mul[DkMath.KUS.Mul]
-  RoundTrip --> Scale[DkMath.KUS.Scale]
-  Add --> Coeff[DkMath.KUS.Coeff]
-  Mul --> Coeff
-  Coeff --> Examples[DkMath.KUS.Examples]
-```
-
-- **KUS** = Knowledge Unit Structure（単位構造演算体）
-- `coeff` が観測される可視係数、`unit` + `blueprint` が「構造保持側（US）」。
-- 係数が 0 になっても US は消えない — これが **zero tracking** 保証。
-- **GKUS** = Generic KUS：`Nat` 以外の任意係数型 `C` を扱う汎用版。
-
----
-
-## V-2. 補題インデックス
-
-### V-2-a. 基盤層（Unit / Blueprint / Core）
-
-主に `DkMath.KUS.Unit` / `DkMath.KUS.Blueprint` / `DkMath.KUS.Core`。
-
-- `structure US` : unit + blueprint を束ねる構造保持核
-- `abbrev BlueprintFamily` : `U → Type v` のエイリアス
-- `structure KUS` : coeff + unit + blueprint の最小核
-- `def toUS` : KUS → US の forgetful map
-- `def mkWith` : 係数と support から KUS を構築
-- `def zeroState` : 係数 0 の zero state
-
----
-
-### V-2-b. 埋め込み・抽出層（NatEmbed / Extract / RoundTrip）
-
-主に `DkMath.KUS.NatEmbed` / `DkMath.KUS.Extract` / `DkMath.KUS.RoundTrip`。
-
-- `def ofNat` : Nat → KUS 埋め込み
-- `def toNat` : KUS → Nat 可視係数取り出し
-- `def extract` : KUS → US 構造取り出し
-- `theorem roundTrip_nat` : `toNat (ofNat s n) = n`
-- `theorem roundTrip_support` : `extract (ofNat s n) = s`
-- `theorem reconstruct_from_extract` : `ofNat (extract x) (toNat x) = x` ✅
-
----
-
-### V-2-c. 演算層（Add / Mul / Scale）
-
-主に `DkMath.KUS.Add` / `DkMath.KUS.Mul` / `DkMath.KUS.Scale`。
-
-- `def SameSupport` : 2 つの KUS が同一 support を持つ述語
-- `theorem SameSupport.symm` / `theorem SameSupport.trans`
-- `def kusAdd` : SameSupport 保証付き Nat 係数加算
-- `def kusMul` : SameSupport 保証付き Nat 係数乗算
-- `def oneState` : 乗法単位元 KUS
-- `theorem kusAdd.zero_tracking` : 和が 0 でも extract は support を保持
-- `theorem kusMul.zero_tracking` : 積が 0 でも extract は support を保持
-- `structure ScaleSpec` : 異 support 間スケール写像
-- `theorem scale_toKUS` / `theorem extract_scale_toKUS` / `theorem toNat_scale_toKUS_add`
-
----
-
-### V-2-d. 汎用係数層 GKUS（Coeff）✅
-
-モジュール：`DkMath.KUS.Coeff`
-
-- `structure GKUS C U Blueprint` : 係数型 `C` を汎用化した KUS
-- `def mkGWith` / `def extract_g` / `def toCoeff`
-- `def GSameSupport` : GKUS 版同一 support 述語
-- `def gOp (op : C → C → C)` : 基底二項演算（全操作の共通カーネル）
-- `abbrev gAdd [Add C]` / `abbrev gMul [Mul C]` / `abbrev gSub [Sub C]` / `abbrev gDiv [Div C]`
-- `theorem gAdd.zero_tracking` / `theorem gMul.zero_tracking` / …（各演算版）
-- `def kusToGKUS` / `def gKUSToKUS` / `theorem gKUSToKUS_roundtrip` ✅
-
-**section Algebra（代数法則）✅**  型クラス `[DivisionRing C]` / `[CommMonoid C]` / `[Distrib C]` 等：
-
-- `theorem gAdd_comm [AddCommMonoid C]`
-- `theorem gAdd_assoc [AddSemigroup C]`
-- `theorem gMul_comm [CommMonoid C]`
-- `theorem gMul_assoc [Semigroup C]`
-- `theorem gMul_gAdd [Distrib C]` — 左分配則
-- `theorem gAdd_gMul [Distrib C]` — 右分配則
-- `theorem gDiv_one [DivisionRing C]`
-- `theorem gDiv_add_distrib [DivisionRing C]`
-- `theorem gMul_gDiv_assoc [DivisionRing C]`
-
----
-
-### V-2-e. Examples（おもちゃ例）
-
-- `ToyUnit = Nat`, `ToyBlueprint (u) = Fin (u + 1)`
-- `toySupport`, `toyX`, `toyY`, `toyMul`
-- `toyScale : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint`
-
----
-
-## V-3. 設計原則
-
-- **二層分離**: 観測層（coefficient）× 構造層（support = US）
-- **zero tracking 保証**: 係数が 0 になっても support は消えない（gAdd/gMul/gSub/gDiv すべてで保証）
-- **gOp 抽象化**: 全演算の共通カーネル — `gAdd/gMul/gSub/gDiv` は `gOp` の特殊化
-- **証明パターン**: `GKUS.ext` → 3 サブゴール → `simp [gOp, <代数則>]`
-
-## V-4. 関連ドキュメント
-
-- `DkMath/KUS/docs/KUS-CoeffDesign.md` — GKUS 設計背景
-- `DkMath/KUS/docs/GKUS-Design-Synthesis.md` — 設計総括（論文形式、phase-18 作成）
-- `DkMath/KUS/docs/KUS-History.md` — 開発履歴（Work Unit 27–32）
-- `DkMath/KUS/docs/KUS-WorkNotes.md` — 作業ノート（phase-14〜18 ログ）
-
----
-
-## 3.13 ダッシュボード（規模と未完集中）
-
-（この節は 2026-03-10 時点のワークツリー実測から更新。）
-
-### 3.13.1 宣言（`def/lemma/theorem`）の総数
-
-- `rg -n "^(theorem|lemma|def)\\s+" lean/dk_math/DkMath -S` で抽出：**2612 件**
-- 対象 Lean ファイル数（`find lean/dk_math/DkMath -name "*.lean"`）：**163 ファイル**
-
-※以前の集計（`rg` ベース）と差が出るのは、
-
-- 対象ファイル集合の違い（Lean全体 vs 一部スナップショット）
-- `theorem/lemma/def` の抽出ルール差（属性/インデント/生成コードなど）
-
-が理由としてあり得る。
-
-### 3.13.2 `sorry`（証明穴）の総数
-
-- `rg -n --type-add 'lean:*.lean' --type lean "\\bsorry\\b" lean/dk_math/DkMath -S` で抽出：**25 件**
-
-#### `sorry` 集中（上位）
-
-- `DkMath/ABC/ABC021.lean`（10 件）
-- `DkMath/ABC/ABC038.lean`（3 件）
-- `DkMath/NumberTheory/GcdNextResearch.lean`（2 件）
-- `DkMath/Collatz/V2#pending.lean`（2 件）
-- `DkMath/ABC/ABC039.lean`（2 件）
-- その他（詳細は `logs/summary_report/__sorries.txt` 参照）
-
-**注記**：`DkMath/FLT/Main.lean` は ✅ **sorry-free**（2026-03-10 再確認）。
-
-→ 現状は **ABC 系（特に `ABC021.lean`）への集中**が大きい。詳細は `logs/summary_report/__sorries.txt` 参照。
-
----
-
-## 4. モジュール別ガイド（詳細は自動分析に委ねる）
-
-> **方針変更（2026-02-22）**: 各モジュールの詳細リスト（補題名、定理一覧）は、
-> 手で管理する代わりに **サマリーレポート** に委ねる。
-> ここは「概説」と「参照先」のみを記載。
-
-### 4.1 補題・定理の自動索引
-
-以下をリポジトリ直下（またはGitHub Pages等）で常時更新：
-
-| ファイル | 内容 | 更新 |
-|---------|------|------|
-| `logs/summary_report/__theorems-heading.txt` | 補題/定理の見出し（全ファイル） | 自動 |
-| `logs/summary_report/___theorems-with-filename.txt` | 補題・定理と所属ファイル | 自動 |
-| `logs/summary_report/__sorries.txt` | `sorry` の位置と文脈 | 自動 |
-| `logs/summary_report/__imports.txt` | import グラフ | 自動 |
-| `logs/summary_report/__file_tree_in_dkmath.txt` | ファイル構成ツリー | 自動 |
-
-**使い方**：このINDEX.md で「概要」を把握した後、詳細は上記ファイルから検索。
-
----
-
-### 4.2 主要モジュール（紹介＆参照ガイド）
-
-各モジュールの**詳細な補題リスト**は自動生成済みです。以下は概要のみ
-
-#### 代数系
-
-- `DkMath.Algebra.DiffPow`（差の冪）：詳細は `__theorems-heading.txt` 参照
-- `DkMath.Algebra.BinomTail`（二項尾項）：詳細は `__theorems-heading.txt` 参照
-
-#### 数論系
-
-- `DkMath.NumberTheory.GcdDiffPow`（gcd と冪差）
-- `DkMath.NumberTheory.ZsigmondyCyclotomic`（**原始素因子エンジン**）
-- `DkMath.NumberTheory.GcdNext`（橋渡し層、未完部分あり）
-
-**未完情報**：`logs/summary_report/__sorries.txt` で sorry の位置を確認
-
-#### ABC・数値系
-
-- `DkMath.ABC.PadicValNat`（p-adic 値評価）
 - `DkMath.ABC`
 - `DkMath.Collatz.Collatz2K26`
+- `DkMath.DHNT`
+- `DkMath.KUS`
+- `DkMath.RH`
+- `DkMath.FLT`
+- `DkMath.CFBRC`
+- `DkMath.BookOfMagic`
+- `DkMath.Zsigmondy`
 
-#### 幾何・組合せ系
+### Hackathon entries imported by the broad workspace
 
-- `DkMath.CosmicFormula`（宇宙式全般）：階層構造は `__file_tree_in_dkmath.txt` 参照
-- `DkMath.Polyomino` / `DkMath.Tromino`：タイル・格子構造
-- `DkMath.CellDim`：セル次元
-
-#### 代数的独立柱
-
-- `DkMath.SilverRatio`（白銀比、√2）
-- `DkMath.UniqueRepresentation`（一意表現）
-
-#### その他
-
-- `DkMath.RH`（リーマン予想関連）
-- `DkMath.DHNT`（動的調和数論）
-- `DkMath.UnitCycle`（単位巡回）
-
-#### **FLT**（フェルマー最終定理）— 本丸
-
-- **`DkMath.FLT.Main`** ✅ — **別解ルート（Zsigmondy + p-adic）**【2026-02-22 完成】
-- `DkMath.FLT.Basic` — 従来ルート
-- `DkMath.FLT.PetalDetect` — 多角数構造
-- `DkMath.FLT.GEisensteinBridge` — Eisenstein 多項式
+- `DkMath.Hackathon.FinitePrimeEscapeGN5`
+- `DkMath.Hackathon.JacobianCounterexample3`
 
 ---
 
-## 5. 自動分析ツール（実装済み）
+# IV. FLT map
 
-このINDEX.mdの定形部分（補題リスト、ファイルツリーなど）は、
-以下の **自動生成スクリプト**によって定期的に更新されます。
+## IV-1. Completed exponent-specific surfaces
 
-### 5.1 生成済みレポート（毎回更新）
+| Exponent | Canonical import | Public endpoint | Status |
+|---:|---|---|---|
+| $3$ | `DkMath.FLT.Three` | `fermatThree_no_positive_solution` | COMPLETE |
+| $5$ | `DkMath.FLT.Five` | `fermatFive_no_positive_solution` | COMPLETE |
 
-```bash
-# repository root で実行
-./create-summary-report-data.sh
+These are the two completed public FLT results that should be presented first.
+
+## IV-2. General odd-prime research
+
+**Status:** ACTIVE / INCOMPLETE
+
+Current prime-generalization modules:
+
+- [`AdicPowerSplit.lean`](./DkMath/FLT/Prime/AdicPowerSplit.lean)
+- [`PrimeTraceOneCoordinateCoprime.lean`](./DkMath/FLT/Prime/PrimeTraceOneCoordinateCoprime.lean)
+- [`PrimeTraceOneStrippedIdeal.lean`](./DkMath/FLT/Prime/PrimeTraceOneStrippedIdeal.lean)
+- [`PrimeTraceOneConditionalDescent.lean`](./DkMath/FLT/Prime/PrimeTraceOneConditionalDescent.lean)
+
+Latest bounded architecture:
+
+```text
+odd-prime factor packet
+  -> exact p-adic split
+  -> QR/QNR TraceOne coordinate
+  -> primitive coordinates
+  -> prime-discriminant / conjugate-coprime strip
+  -> residual principal ideal = I^p
+  -> class-group p-torsion condition
+  -> residual = unit * gamma^p
+  -> unit-sector normalization
+  -> final FLT contradiction still open in general
 ```
 
-生成ファイル（`logs/summary_report/`）：
+Current detailed checkpoint:
 
-```
-__theorems-heading.txt          補題/定理の見出し（ALL）
-___theorems.txt                 補題コード片（ALL）
-___theorems-with-filename.txt   ファイル所属付き補題
-__sorries.txt                   sorry の位置と文脈
-__imports.txt                   import グラフ
-__file_tree_in_dkmath.txt       ファイル構成ツリー
-```
+- [`docs/refact/FLT-Prime-Generalization-260911-v0/summary-026.md`](./docs/refact/FLT-Prime-Generalization-260911-v0/summary-026.md)
 
-### 5.2 参照方法
+Important supporting neutral / number-theory modules include:
 
-このINDEX.mdで「詳細は __XXX.txt を参照」の指示後、
-実際には以下の方法で確認：
+- [`CyclotomicQRTraceOneBridge.lean`](./DkMath/NumberTheory/CyclotomicQRTraceOneBridge.lean)
+- [`CyclotomicQRUniversalTransport.lean`](./DkMath/NumberTheory/CyclotomicQRUniversalTransport.lean)
+- [`TraceOnePrimeDiscriminant.lean`](./DkMath/NumberTheory/TraceOnePrimeDiscriminant.lean)
+- [`TraceOneConjugateCoprime.lean`](./DkMath/NumberTheory/TraceOneConjugateCoprime.lean)
+- [`TraceOneIdealPower.lean`](./DkMath/NumberTheory/TraceOneIdealPower.lean)
+- [`TraceOnePrimeUnitSectors.lean`](./DkMath/NumberTheory/TraceOnePrimeUnitSectors.lean)
 
-```bash
-# 補題をモジュール別に検索
-grep "DkMath/NumberTheory" logs/summary_report/__theorems-heading.txt | head -20
+## IV-3. FLT7 research tower
 
-# sorry の箇所を確認
-grep -A3 "GcdNext.lean" logs/summary_report/__sorries.txt | head -20
+[`DkMath.FLT.Seven`](./DkMath/FLT/Seven.lean) and [`DkMath/FLT/Seven/`](./DkMath/FLT/Seven/) contain a large exponent-seven research tower used to explore routing, quadratic/real-cubic/cyclotomic carriers, ramified fusion, prime-power cells, and descent boundaries.
 
-# ファイル構成を眺める
-cat logs/summary_report/__file_tree_in_dkmath.txt
-```
+It is **not** indexed here as a completed unconditional FLT7 endpoint. For current generalization status, use the prime-generalization summary above.
 
-### 5.3 スクリプト詳細（整備済み）
+## IV-4. Historical / alternate FLT surfaces
 
-シェルスクリプト `create-summary-report-data.sh`（リポジトリ直下）が以下を実装：
+These remain valuable research records and bridge layers, but they are not the canonical completed FLT3 story:
 
-- **定理ヘッダ抽出**：`rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2 --heading`
-- **sorry ロケーション**：`rg -n --type-add 'lean:*.lean' --type lean "\bsorry\b" -S -A5 -B5 --heading`
-- **import グラフ**：`rg -n "^import\s+" lean/dk_math/DkMath -S --heading`
-- **ツリー出力**：`tree lean/dk_math/DkMath`（`tree` 非搭載時は `find` へフォールバック）
+- [`DkMath/FLT/Main.lean`](./DkMath/FLT/Main.lean)
+- [`DkMath/FLT/PhaseLift.lean`](./DkMath/FLT/PhaseLift.lean)
+- [`DkMath/FLT/CounterexamplePattern.lean`](./DkMath/FLT/CounterexamplePattern.lean)
+- [`DkMath/FLT/GEisensteinBridge.lean`](./DkMath/FLT/GEisensteinBridge.lean)
+- [`DkMath/FLT/PrimeProvider.lean`](./DkMath/FLT/PrimeProvider.lean)
+- [`DkMath/FLT/Kummer.lean`](./DkMath/FLT/Kummer.lean)
+- [`DkMath/FLT/TriominoMainBridge.lean`](./DkMath/FLT/TriominoMainBridge.lean)
+- [`DkMath/FLT/TriominoPrimeProvider.lean`](./DkMath/FLT/TriominoPrimeProvider.lean)
+
+Use [`DkMath/FLT/README.md`](./DkMath/FLT/README.md) for the current classification of these routes.
 
 ---
 
-## 6. 次の編集ポイント（手書き部分）
+# V. Active research map
 
-- ✅/🚧/⚠️ の進捗ラベルを各モジュールに付ける（`sorry` 有無もここで管理）。
-- 「宇宙式」「FLT」「ABC」「RH」を"論理の流れ"で再配置した 2nd 目次を作る。
-- README と実ファイルのズレ（例：Polyomino の分割構成）をこの地図で検知できるようにする。
+This section is a navigation map, not a completion claim.
 
----
+## V-1. ABC / GN excess / balance calibration
 
-## 付録：メモ欄
+Facade:
 
-- 命名規則と設計ルール（テンプレとして重要）
-- 新しい定理を追加した際の docstring テンプレ
+- [`DkMath/ABC.lean`](./DkMath/ABC.lean)
 
----
+Current families include:
 
-**最後に**: このドキュメントは「**目次との参照**」設計です。
-詳細は常に  `logs/summary_report/` を**真実の源泉**と見なしてください。🧠
+- GN exceptional excess and depth pressure
+- realizable / realized profile and moment layers
+- cubic complement / Pell / incidence machinery
+- Eisenstein coordinate and square-factor providers
+- balance / calibration / depth-transport layers
 
-- `theorem|lemma|def` の行だけ拾える。
-- これをモジュール単位に整形して「見出し化」すると、かなり高品質な索引になる。
+Recent calibration entries:
 
-### 5.2 Python で Markdown 生成（雛形）
+- [`GNBalanceCalibration.lean`](./DkMath/ABC/GNBalanceCalibration.lean)
+- [`ABCBalanceCalibrationBridge.lean`](./DkMath/ABC/ABCBalanceCalibrationBridge.lean)
+- [`ABCCalibrationSourceDecomposition.lean`](./DkMath/ABC/ABCCalibrationSourceDecomposition.lean)
 
-```python
-# tools/make_index.py （例）
-import re
-from pathlib import Path
+The facade itself still describes the ABC development as experimental / unproven research. Do not interpret its importability as a completed ABC theorem.
 
-ROOT = Path("lean/dk_math/DkMath")
-PAT = re.compile(r"^(theorem|lemma|def)\s+([A-Za-z0-9_']+)")
+## V-2. Goldbach fixed-center GN fibers
 
-out = []
-for p in sorted(ROOT.rglob("*.lean")):
-    rel = p.relative_to(ROOT)
-    names = []
-    for line in p.read_text(encoding="utf-8", errors="ignore").splitlines():
-        m = PAT.match(line.strip())
-        if m:
-            names.append((m.group(1), m.group(2)))
-    if names:
-        out.append(f"## {rel.as_posix()}\n")
-        for k, n in names[:40]:
-            out.append(f"- `{k} {n}`")
-        if len(names) > 40:
-            out.append(f"- … ({len(names)-40} more)")
-        out.append("")
+Facade:
 
-Path("docs/INDEX_AUTO.md").write_text("\n".join(out), encoding="utf-8")
-print("wrote docs/INDEX_AUTO.md")
+- [`DkMath/NumberTheory/Goldbach.lean`](./DkMath/NumberTheory/Goldbach.lean)
+
+The current facade exports exact finite reformulations, obstruction search, capacity/accounting identities, CRT overlap layers, and conditional endpoints. It explicitly does **not** provide an unconditional Strong Goldbach provider.
+
+Representative subareas:
+
+```text
+Basic / Obstruction / PrimeWorld
+Cardinality / Capacity / Conservation
+Overlap / PairOverlap
+CrossGapExchange / CrossGapEscape
+BalancedCRT* / BalancedSignedCRT*
 ```
 
-- まずは「名前だけ」の索引を吐く。
-- 次に、docstring 先頭（`/-- ... -/`）も抽出して 1 行概要を付ければ“辞書”になる。
+## V-3. Primitive / primorial / Legendre line
+
+Primary entries:
+
+- [`DkMath/NumberTheory/Primitive.lean`](./DkMath/NumberTheory/Primitive.lean)
+- [`DkMath/NumberTheory/PrimorialUniverse.lean`](./DkMath/NumberTheory/PrimorialUniverse.lean)
+- [`DkMath/NumberTheory/Legendre.lean`](./DkMath/NumberTheory/Legendre.lean)
+
+Related primitive-conservation work is used as infrastructure for prime-scale and finite-support research.
+
+## V-4. Pascal / prime rows / AKS-facing bridges
+
+Entries:
+
+- [`DkMath/Pascal.lean`](./DkMath/Pascal.lean)
+- [`BinomialPrime.lean`](./DkMath/NumberTheory/BinomialPrime.lean)
+- [`BinomialPrimePower.lean`](./DkMath/NumberTheory/BinomialPrimePower.lean)
+- [`PascalPrimeDial.lean`](./DkMath/NumberTheory/PascalPrimeDial.lean)
+- [`PascalPrimeCoordinateDecoder.lean`](./DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean)
+- [`AKSBridge.lean`](./DkMath/NumberTheory/AKSBridge.lean)
+- [`WeightedBinomial.lean`](./DkMath/NumberTheory/WeightedBinomial.lean)
+- [`WeightedGNBridge.lean`](./DkMath/NumberTheory/WeightedGNBridge.lean)
+
+## V-5. GN prime arithmetic / Hensel depth
+
+Facade:
+
+- [`DkMath/NumberTheory/GNPrime.lean`](./DkMath/NumberTheory/GNPrime.lean)
+
+Related modules include prime closure, representations, target residues, cubic orientation, paired depth, finite Hensel lifting/depth, and Wieferich structure.
+
+## V-6. CF2D / Euclidean geometry
+
+Public aggregate:
+
+- [`DkMath/EuclideanGeometry.lean`](./DkMath/EuclideanGeometry.lean)
+
+It aggregates stable v0 layers for:
+
+- unit-kernel powers
+- normalized cycle division
+- exact finite CF2D regular orbits
+- oriented Euclidean interpretation
+- Fermat-form predicates
+- quadratic-expression constructibility bridges
+
+The module explicitly does **not** claim a complete Gauss-Wantzel theorem.
+
+## V-7. Other research-owner facades
+
+- [`DkMath/RH.lean`](./DkMath/RH.lean) — RH-related observer / bridge research
+- [`DkMath/CFBRC.lean`](./DkMath/CFBRC.lean) — Cosmic Formula Binomial Real Complex bridge layer
+- [`DkMath/Collatz/Collatz2K26.lean`](./DkMath/Collatz/Collatz2K26.lean) — accelerated Collatz cartography
+- [`DkMath/DHNT.lean`](./DkMath/DHNT.lean) — Dynamic Harmonic Number Theory
+- [`DkMath/KUS.lean`](./DkMath/KUS.lean) — coefficient / unit / blueprint kernel
+- [`DkMath/BookOfMagic.lean`](./DkMath/BookOfMagic.lean) — dependent Core-Gap API
+- [`DkMath/PowerSwap.lean`](./DkMath/PowerSwap.lean) — power-swapping relations
+- [`DkMath/UnitCycle.lean`](./DkMath/UnitCycle.lean) — unit-cycle structures
+
+---
+
+# VI. Hackathon and verification projects
+
+## VI-1. GN5 / Cosmic Formula inversion
+
+- [`DkMath/Hackathon/FinitePrimeEscapeGN5.lean`](./DkMath/Hackathon/FinitePrimeEscapeGN5.lean)
+- [`docs/hackathon/cosmic-formula-inversion-260715/README.md`](./docs/hackathon/cosmic-formula-inversion-260715/README.md)
+
+This line is historically important as the GN5 experiment that developed into the completed FLT5 formalization and helped expose reusable kernels later promoted to `DkMath.Lib.*`.
+
+## VI-2. Breaking Math Verification / Jacobian certificate
+
+- [`DkMath/Hackathon/JacobianCounterexample3.lean`](./DkMath/Hackathon/JacobianCounterexample3.lean)
+- [`DkMath/Verification.lean`](./DkMath/Verification.lean)
+- [`docs/hackathon/jacobian-counterexample-verification-260721/README.md`](./docs/hackathon/jacobian-counterexample-verification-260721/README.md)
+
+The verification layer is reusable independently of the case study.
+
+---
+
+# VII. Documentation and research records
+
+## VII-1. Current documents
+
+These documents are intended to describe the current public structure:
+
+- [`../../README.md`](../../README.md)
+- [`../../docs/PROJECT_STATUS.md`](../../docs/PROJECT_STATUS.md)
+- [`README.md`](./README.md)
+- [`INDEX.md`](./INDEX.md)
+- [`DkMath/Lib/README.md`](./DkMath/Lib/README.md)
+- [`DkMath/FLT/README.md`](./DkMath/FLT/README.md)
+
+## VII-2. Dated research records
+
+The following trees preserve checkpoint history:
+
+```text
+docs/dev/
+docs/feature/
+docs/refact/
+docs/hackathon/
+```
+
+Do not rewrite old checkpoint documents merely because the current architecture changed. When an old route can be mistaken for the current public route, add a historical-status note or link back to the current documents instead.
+
+Current documentation-refactor record:
+
+- [`docs/refact/documentation-current-state-260916-v0/README.md`](./docs/refact/documentation-current-state-260916-v0/README.md)
+
+---
+
+# VIII. Build / audit quick paths
+
+Focused public builds:
+
+```sh
+lake build DkMath.Lib
+lake build DkMath.FLT.Three
+lake build DkMath.FLT.Five
+```
+
+Broad workspace build:
+
+```sh
+lake build DkMath
+```
+
+FLT5 axiom audit source:
+
+```text
+DkMathTest/FLT/Five/CheckAxioms.lean
+```
+
+FLT3 completion report and endpoint axiom audit:
+
+```text
+docs/dev/FLT3-Unconditional-260904-v0/report-014.md
+```
+
+---
+
+# IX. Maintenance policy for this index
+
+`INDEX.md` should remain a **navigation map**, not a manually maintained list of every theorem.
+
+When the repository changes:
+
+1. add a new section here only when a new public facade, completed result, or durable research family appears;
+2. keep exact theorem inventories in module docs / generated API docs rather than duplicating them here;
+3. use [`../../docs/PROJECT_STATUS.md`](../../docs/PROJECT_STATUS.md) for dated status claims;
+4. keep `DkMath.Lib.lean` aggregator coverage distinct from all physical modules under `DkMath.Lib.*`;
+5. never promote a conditional or research endpoint to `COMPLETE` merely because the module builds;
+6. preserve historical documents as checkpoint records instead of silently rewriting their mathematics.
+
+The intended long-term shape is:
+
+```text
+DkMath
+  ├─ completed formal results
+  │    ├─ FLT3
+  │    ├─ FLT5
+  │    └─ prime infinitude via Cosmic Formula boundary
+  ├─ DkMath.Lib.*
+  │    ├─ GTail / GN neutral kernels
+  │    ├─ p-adic / divisibility
+  │    ├─ TraceOne / Eisenstein lattice landing
+  │    └─ power / ideal / unit-sector factorization
+  ├─ active research
+  │    ├─ general odd-prime FLT
+  │    ├─ ABC
+  │    ├─ Goldbach
+  │    ├─ primitive / Legendre / prime geometry
+  │    └─ CF2D / RH / Collatz / other owners
+  └─ dated historical research records
+```
