@@ -357,9 +357,8 @@ theorem pascalCenteredXiPrimeSideFiniteEulerLogPotential_hasDerivAt
     have hj : 0 < pk.2 + 1 := by omega
     have hmode := eulerPrimePowerMode_hasDerivAt_neg_log_mul hp hj s
     convert hmode.const_mul (((pk.2 + 1 : ℕ) : ℂ)⁻¹) using 1
-    · rfl
-    · simp only [Nat.cast_add, Nat.cast_one]
-      ring
+    norm_cast
+    ring_nf
   convert hsum using 1
   · funext z
     simp only [Finset.sum_apply]
@@ -410,6 +409,8 @@ theorem pascalCenteredXiPrimeSideFiniteEulerRenormalizedZetaResidual_negLogDeriv
       pascalCenteredXiPrimeSideFiniteEulerRenormalizedZetaResidual X z) =
       (fun z : ℂ => riemannZeta z *
         pascalCenteredXiPrimeSideFiniteEulerCompensator X z) by rfl]
+  change -logDeriv (riemannZeta *
+      pascalCenteredXiPrimeSideFiniteEulerCompensator X) s = _
   rw [hmul, pascalCenteredXiPrimeSideFiniteEulerCompensator_logDeriv]
   unfold pascalXiOrdinaryZetaNegLogDeriv
   simp only [logDeriv_apply, div_eq_mul_inv]

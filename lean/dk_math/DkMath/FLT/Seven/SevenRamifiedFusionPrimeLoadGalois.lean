@@ -20,6 +20,11 @@ namespace RamifiedFusionRow2LoadFamily
 
 open SevenRealCubicInt
 
+instance : Infinite SevenRealCubicInt :=
+  Infinite.of_injective SevenRealCubicInt.ofInt (by
+    intro a b hab
+    exact congrArg (fun x : SevenRealCubicInt => x.fst) hab)
+
 /-- The first Galois step transports the zeroth load to the first load,
 up to the normalization unit chosen by `gcd`. -/
 theorem rotate_load_zero_associated_one

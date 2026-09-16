@@ -166,13 +166,13 @@ private theorem prime_dvd_root_v_implies_root_u
       (dvd_pow hv (by decide : 2 ≠ 0)) (-15 * u)
     have h3 := dvd_mul_of_dvd_right
       (dvd_pow hv (by decide : 3 ≠ 0)) (-13)
-    convert dvd_add (dvd_add h1 h2) h3 using 1 <;>
-      first | rfl | ring
+    convert dvd_add (dvd_add h1 h2) h3 using 1
+    ring
   have hu3 : (q : ℤ) ∣ u ^ 3 := by
     have := dvd_sub hL hrest
     simpa [ramifiedLeftCubic] using this
   have hu := (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hu3
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (hprimitive.isUnit_of_dvd' hu hv)
 
 theorem PrimitiveRamifiedSummitPacket.coprime_linear_left
@@ -202,7 +202,6 @@ theorem PrimitiveRamifiedSummitPacket.coprime_linear_left
           55 * p.root.snd ^ 2))
       (dvd_mul_of_dvd_right hL 8)
     convert hd using 1
-    all_goals first | rfl | (try simp)
     linear_combination hidentity
   rcases (Nat.prime_iff_prime_int.mp hq).dvd_mul.mp h49v3 with hq49 | hqv3
   · have hq49Nat : q ∣ 49 := by exact_mod_cast hq49
@@ -244,7 +243,6 @@ theorem PrimitiveRamifiedSummitPacket.coprime_linear_right
       (dvd_mul_of_dvd_right hR 8)
     have hdneg : (q : ℤ) ∣ -(49 * p.root.snd ^ 3) := by
       convert hd using 1
-      all_goals first | rfl | (try simp)
       linear_combination hidentity
     simpa only [dvd_neg] using hdneg
   rcases (Nat.prime_iff_prime_int.mp hq).dvd_mul.mp h49v3 with hq49 | hqv3
@@ -264,8 +262,8 @@ theorem PrimitiveRamifiedSummitPacket.coprime_linear_right
         exact dvd_mul_of_dvd_left
           (dvd_mul_of_dvd_right hqv 7) _
       have hd := dvd_sub hR hdiff
-      convert hd using 1 <;>
-        first | rfl | ring
+      convert hd using 1
+      ring
     exact prime_dvd_root_v_implies_root_u hq
       p.root_coordinates_isCoprime hqv hLfromR
 

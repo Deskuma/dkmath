@@ -440,7 +440,7 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
   -- q | S0 より padicValNat q (S0) ≥ 1
   -- q² ∤ S0 より padicValNat q (S0) ≤ 1
   -- したがって padicValNat q (S0) ≤ 1
-  haveI hp : Fact q.Prime := ⟨hq⟩
+  have hp : Fact q.Prime := ⟨hq⟩
   have h_S0_ne : S0_nat a b ≠ 0 := by
     unfold S0_nat
     intro h

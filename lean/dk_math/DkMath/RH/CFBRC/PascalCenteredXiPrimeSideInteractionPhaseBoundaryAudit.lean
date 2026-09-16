@@ -487,7 +487,7 @@ theorem pascalCenteredXiPrimeSideFiniteClosedPhaseModeTerm_eq_kernel
     (W : PascalCenteredXiResidueTransportWindow) {n : ℕ} (hn : 0 < n) :
     pascalCenteredXiPrimeSideFiniteClosedPhaseModeTerm ε W n =
       pascalCenteredXiPrimeSideFiniteModeKernel ε W n := by
-  rw [pascalCenteredXiPrimeSideFiniteClosedPhaseModeTerm, if_neg hn.ne']
+  rw [pascalCenteredXiPrimeSideFiniteClosedPhaseModeTerm, ite_eq_right hn.ne']
   exact (pascalCenteredXiPrimeSideFiniteModeKernel_eq_closedPhaseBoundary_difference
     hε W hn).symm
 

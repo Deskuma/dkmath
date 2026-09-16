@@ -1,0 +1,76 @@
+LUNA-003 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Added:
+  DkMath/ABC/GNExcessCubicShellParameterBounds.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicShellParameterBounds immediately after
+  GNExcessCubicShellFiberUniqueness
+
+Focused build
+-------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicShellParameterBounds
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-003-output.txt
+
+Checked declarations:
+  pellParameter_height_cube_aux
+  GNExcessCubicRealizedLargeModulusShellIncidencePair_DS_le
+  GNExcessCubicRealizedLargeModulusShellPellParameter_height_cube
+  GNExcessCubicRealizedLargeModulusShellWitness_pellParameter_height_cube
+  mem_GNExcessCubicRealizedLargeModulusShellCubeCoreComplementSpace_iff
+  GNExcessCubicRealizedLargeModulusShellCubeCoreComplementSpace_card
+
+Aggregator build
+----------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-003-abc-output.txt
+
+The new production module was built both as a focused target and through the
+ABC aggregator. No unrelated import was reordered.
+
+Forbidden construct scan
+------------------------
+Command:
+  rg -n '\b(sorry|admit|axiom|abc_main_axiom|native_decide|unsafe)\b' \
+    DkMath/ABC/GNExcessCubicShellParameterBounds.lean
+Exit: 1 (no matches; successful absence check).
+
+`git diff --check`: exit 0.
+
+Axiom audit
+-----------
+The focused output reports:
+  pellParameter_height_cube_aux:
+    [propext, Classical.choice, Quot.sound]
+  GNExcessCubicRealizedLargeModulusShellPellParameter_height_cube:
+    [propext, Classical.choice, Quot.sound]
+  GNExcessCubicRealizedLargeModulusShellCubeCoreComplementSpace_card:
+    [propext, Classical.choice, Quot.sound]
+
+No `sorryAx` occurs in the new declarations. No external theorem enters the
+Lean dependency graph.
+
+Scope audit
+-----------
+The module contains only deterministic inequalities, finite-image membership,
+and an exact finite cardinality identity. It contains no asymptotic estimate,
+external theorem, Mordell count, average Pell theorem, Eisenstein existence
+statement, balanced-box bound, provider, or ABC claim.
+
+The verified production boundary is:
+  represented T in shell (X,D) => D^2*T^3 < 54*(X+1)^6;
+  shell witness card = represented canonical (r,S) image card.
+
+The following remain intentionally unresolved:
+  represented-pair sparsity, near-linear shell bounds, Lean moment bounds,
+  balanced-box power savings, and ABC.

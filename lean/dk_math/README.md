@@ -16,8 +16,9 @@ presented by D. and Wise Wolf
 - プロジェクト全体の進捗要約はルート [README.md](../../README.md) を参照してください。
 - FLT 最新進捗の正本は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) です。
 
-## 最新ステータス（2026-03-15）
+## 最新ステータス（2026/09/16 15:41）
 
+- Lean v4.34.0 + mathlib に対応
 - 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-15）」に集約しています。
 - 詳細分析は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照してください。
 

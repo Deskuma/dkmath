@@ -1,0 +1,15 @@
+LUNA-018 validation
+
+Focused build:
+  lake build DkMath.ABC.GNExcessCubicPairedOrientation  PASS
+
+Public aggregator:
+  lake build DkMath.ABC  PASS
+
+Forbidden-construct scan (changed production Lean sources):
+  rg -n '^\\s*(axiom|sorry|admit)\\b|abc_main_axiom|native_decide' \
+    DkMath/ABC/GNExcessCubicPairedOrientation.lean DkMath/ABC.lean
+  PASS: no forbidden declarations or tactics
+
+Principal declaration axiom audit:
+  PASS: propext, Classical.choice, Quot.sound only

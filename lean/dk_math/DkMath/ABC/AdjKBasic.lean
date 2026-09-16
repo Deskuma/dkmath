@@ -23,7 +23,9 @@ namespace DkMath.ABC
 open DkMath.Basic.Nat
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
+open _root_.Nat _root_.Finset
+
 -- Final Theorems --
 
 /-

@@ -181,7 +181,6 @@ namespace DkMath.FLT.Seven
 #print axioms RamifiedSignedRootDepthPacket.quotientRoot_modSeven_eq_one
 #print axioms RamifiedSignedRootDepthPacket.gapRoot_modSeven_eq
 
-#print axioms RamifiedSignedRootDepthPacket.nonempty_pairedThetaRootJet
 #print axioms RamifiedPairedThetaRootJetPacket.gapCore_thetaResidue_eq
 #print axioms RamifiedPairedThetaRootJetPacket.left_not_sourcePlane
 #print axioms RamifiedPairedThetaRootJetPacket.fusionSlope_eq_gapRoot_div_cube
@@ -191,11 +190,6 @@ namespace DkMath.FLT.Seven
 
 #print axioms RamifiedSignedRootDepthPacket.nonempty_coherent_signedRootRouting
 #print axioms RamifiedSignedRootDepthPacket.nonempty_signedRootRouting
-
-#print axioms triangularJet_depth_step
-#print axioms triangularJet_depth_three_six
-#print axioms nonempty_triangularThetaJetExact
-#print axioms triangularJetJacobianDet_ne_zero
 
 #print axioms SevenRealCubicInt.eisensteinAxis_prime
 #print axioms RamifiedRealCubicExactPowerPacket.roots_isCoprime
@@ -247,9 +241,6 @@ namespace DkMath.FLT.Seven
 #print axioms SevenRealCubicInt.pow_seven_isSourcePlane_iff
 
 #print axioms SevenRealCubicInt.theta_coordinate_decomposition
-
-#print axioms SevenRealCubicInt.thetaLinear_pow_seven
-#print axioms SevenRealCubicInt.thetaSquare_pow_seven
 
 #print axioms SevenRealCubicInt.thetaConstModSeven_mul
 #print axioms SevenRealCubicInt.projectiveLog_pow_seven

@@ -109,7 +109,7 @@ theorem etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier_tendsto_zero
     unfold etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier
     unfold etaCriticalMirrorDominantIndexPower
     unfold etaPairIndexScaledEulerRemainder
-    simp only [if_pos hside]
+    simp only [ite_eq_left hside]
     ring
   · have horiginal : (criticalMirror s).re ≤ s.re := by
       simp only [criticalMirror_re]
@@ -141,7 +141,7 @@ theorem etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier_tendsto_zero
     unfold etaCriticalMirrorDominantWeightedTailEulerRemainderCarrier
     unfold etaCriticalMirrorDominantIndexPower
     unfold etaPairIndexScaledEulerRemainder
-    simp only [if_neg hside]
+    simp only [ite_eq_right hside]
     ring
 
 /-- The weighted Euler remainder contributes no asymptotic transverse defect. -/

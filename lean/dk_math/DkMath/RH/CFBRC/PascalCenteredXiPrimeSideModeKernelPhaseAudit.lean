@@ -89,7 +89,7 @@ private theorem intervalIntegral_exp_mul_complex_eq_boundary
           (z⁻¹ * Complex.exp ((ε : ℂ) * z)) -
             (z⁻¹ * Complex.exp ((-ε : ℂ) * z)) := by
       simpa using hfund
-    rw [if_neg hz, hscale]
+    rw [ite_eq_right hz, hscale]
     ring
 
 theorem mellinQuadraticBoxWeight_eq_boundaryDifference
@@ -105,7 +105,7 @@ theorem mellinQuadraticBoxWeight_eq_boundaryDifference
   by_cases hz : z = 0
   · subst z
     simp
-  · simp only [if_neg hz]
+  · simp only [ite_eq_right hz]
     field_simp [hz]
 
 /-! ## CS13-C: one natural mode phase transport -/
@@ -195,7 +195,7 @@ theorem pascalCenteredXiPrimeSideFiniteModeKernel_eq_boundaryPhaseKernel
   apply intervalIntegral.integral_congr_ae
   filter_upwards [] with t ht
   simp only [pascalCenteredXiPrimeSideFiniteModeIntegrand,
-    if_neg (ne_of_gt hn),
+    ite_eq_right (ne_of_gt hn),
     pascalCenteredXiPrimeSideFiniteModeBoundaryPhaseIntegrand]
   unfold pascalCenteredXiPrimeSideModePhaseNode
   have hweight : ∀ z : ℂ,

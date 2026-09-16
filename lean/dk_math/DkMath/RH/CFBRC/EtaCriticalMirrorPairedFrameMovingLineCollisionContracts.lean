@@ -224,7 +224,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock :
       complexRealAxisDefect,
       etaCriticalMirrorDominantNormalizedEndpointCarrier,
       etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      if_pos hle, Function.comp_apply] using himaginary
+      ite_eq_left hle, Function.comp_apply] using himaginary
   · have hrotated :=
       (etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hright).rotated_endpoint_tendsto
@@ -248,7 +248,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_localMovingLineLock :
       complexRealAxisDefect,
       etaCriticalMirrorDominantNormalizedEndpointCarrier,
       etaCriticalMirrorIndexNormalizedRotatedEvenDefectEndpoint,
-      if_neg hnotle, Function.comp_apply, criticalMirror] using himaginary
+      ite_eq_right hnotle, Function.comp_apply, criticalMirror] using himaginary
 
 /-- The concrete dominant endpoint carrier does not collapse off critical. -/
 theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_noncollapse :
@@ -274,7 +274,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_noncollapse :
     filter_upwards [heventually] with k hk
     have hle : s.re ≤ (1 : ℝ) / 2 := le_of_lt hleft
     simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-      if_pos hle] using le_of_lt hk
+      ite_eq_left hle] using le_of_lt hk
   · have cert :=
       etaCriticalMirrorRightNormalizedEvenDefectEndpointAsymptoticCertificate_of_zero
         hs him hright
@@ -296,7 +296,7 @@ theorem etaCriticalMirrorDominantNormalizedEndpointCarrier_noncollapse :
     filter_upwards [heventually] with k hk
     have hnotle : ¬ s.re ≤ (1 : ℝ) / 2 := not_le.mpr hright
     simpa only [etaCriticalMirrorDominantNormalizedEndpointCarrier,
-      if_neg hnotle] using le_of_lt hk
+      ite_eq_right hnotle] using le_of_lt hk
 
 /-- Contract for the historical real-axis branch. -/
 def StandardZetaRealAxisClosure : Prop :=

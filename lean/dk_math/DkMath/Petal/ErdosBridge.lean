@@ -223,7 +223,7 @@ theorem petalNthPrimeLabel_prime
 theorem petalNthPrimeLabel_injective :
     Function.Injective petalNthPrimeLabel := by
   unfold petalNthPrimeLabel
-  exact Nat.nth_injective Nat.infinite_setOf_prime
+  exact Nat.nth_injective Nat.infinite_setOfPred_prime
 
 /-- Equal Petal nth-prime labels recover equal source values. -/
 theorem petalNthPrimeLabel_eq_imp_eq

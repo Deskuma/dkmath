@@ -90,7 +90,7 @@ theorem pascalCenteredXiPrimeSideComplexPhasePotential_ofReal_im
     (pascalCenteredXiPrimeSideComplexPhasePotential r (a : ℂ)).im = 0 := by
   by_cases hr : r = 0
   · simp [pascalCenteredXiPrimeSideComplexPhasePotential, hr, Complex.mul_im, pow_two]
-  · rw [pascalCenteredXiPrimeSideComplexPhasePotential, if_neg hr]
+  · rw [pascalCenteredXiPrimeSideComplexPhasePotential, ite_eq_right hr]
     rw [show ((r : ℂ) ^ 2) = (r ^ 2 : ℝ) by norm_num]
     rw [Complex.div_ofReal_im]
     simp [Complex.mul_im, Complex.exp_re, Complex.exp_im]
@@ -103,7 +103,7 @@ private theorem cs27_phase_potential_vertical_im_nonzero
         (T * Real.cos (r * T) / r +
           (a * r - 1) * Real.sin (r * T) / r ^ 2) := by
   unfold pascalCenteredXiPrimeSideComplexPhasePotential
-  simp only [if_neg hr]
+  simp only [ite_eq_right hr]
   rw [show ((r : ℂ) ^ 2) = (r ^ 2 : ℝ) by norm_num]
   rw [Complex.div_ofReal_im]
   simp [Complex.mul_im, Complex.exp_re, Complex.exp_im]
@@ -248,7 +248,7 @@ theorem pascalCenteredXiPrimeSideFiniteModeKernel_eq_im_complexModePhasePotentia
           ((W.rectangle.σ - (1 / 2 : ℝ)) : ℂ)).im := by
   rw [pascalCenteredXiPrimeSideFiniteModeKernel_eq_phasePrimitive_difference hε W hn]
   unfold pascalCenteredXiPrimeSideComplexModePhasePotential
-  simp only [if_neg hn.ne']
+  simp only [ite_eq_right hn.ne']
   have hp := pascalCenteredXiPrimeSidePhasePrimitive_eq_im_potential_endpoint
     (W.rectangle.σ - (1 / 2 : ℝ))
     (pascalCenteredXiPrimeSidePhaseFrequencyPlus ε n) W.rectangle.T

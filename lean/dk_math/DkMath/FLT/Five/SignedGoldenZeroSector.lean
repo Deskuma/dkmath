@@ -68,7 +68,7 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_five_not_dvd_sndFactor
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
     convert dvd_sub hH hdiff using 1
-    all_goals first | ring | rfl
+    ring
   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
 
 /-- Natural absolute-value form of the zero-sector product equation. -/
@@ -138,7 +138,7 @@ theorem SignedGoldenRamifierStrippedPacket.zeroSector_coprime_s_sndFactor
       rw [hk]
       ring
     convert dvd_sub hqHZ htail using 1
-    all_goals first | ring | rfl
+    ring
   have hqr4 : q ∣ gamma.fst.natAbs ^ 4 := by
     simpa [Int.natAbs_pow] using Int.natCast_dvd.mp hqR4
   have hqr : q ∣ gamma.fst.natAbs := hqPrime.dvd_of_dvd_pow hqr4

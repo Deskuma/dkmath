@@ -1,0 +1,180 @@
+ℹ [8654/8733] Replayed DkMath.FLT.OctagonCore
+info: DkMath/FLT/OctagonCore.lean:10:0: file: DkMath.FLT.OctagonCore
+ℹ [8655/8733] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+ℹ [8657/8733] Replayed DkMath.Basic
+info: DkMath/Basic.lean:9:0: file: DkMath.Basic
+info: DkMath/Basic.lean:24:0: "world"
+ℹ [8658/8733] Replayed DkMath.SilverRatio.GcdAg
+info: DkMath/SilverRatio/GcdAg.lean:9:0: file: DkMath.SilverRatio.GcdAg
+ℹ [8659/8733] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:9:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [8660/8733] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [8662/8733] Replayed DkMath.NumberTheory.GcdDiffPow
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+ℹ [8663/8733] Replayed DkMath.NumberTheory.GcdLemmas
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+ℹ [8664/8733] Replayed DkMath.NumberTheory.GcdNatAbsDivD
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+ℹ [8665/8733] Replayed DkMath.NumberTheory.GdcDivD
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+ℹ [8666/8733] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:9:0: file: DkMath.Algebra.BinomTail
+ℹ [8667/8733] Replayed DkMath.CellDim
+info: DkMath/CellDim.lean:9:0: file: DkMath.CellDim
+ℹ [8668/8733] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:9:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [8669/8733] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:9:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [8670/8733] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:9:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [8671/8733] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:9:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [8672/8733] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [8673/8733] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [8674/8733] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:11:0: file: DkMath.CosmicFormula.Defs
+ℹ [8676/8733] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:13:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [8677/8733] Replayed DkMath.NumberTheory.ZsigmondyCyclotomic
+info: DkMath/NumberTheory/ZsigmondyCyclotomic.lean:24:0: file: DkMath.NumberTheory.ZsigmondyCyclotomic
+ℹ [8678/8733] Replayed DkMath.FLT.PetalDetect
+info: DkMath/FLT/PetalDetect.lean:13:0: file: DkMath.FLT.PetalDetect
+ℹ [8679/8733] Replayed DkMath.CFBRC.Defs
+info: DkMath/CFBRC/Defs.lean:9:0: file: DkMath.CFBRC.Defs
+ℹ [8680/8733] Replayed DkMath.CFBRC.Basic
+info: DkMath/CFBRC/Basic.lean:10:0: file: DkMath.CFBRC.Basic
+ℹ [8681/8733] Replayed DkMath.CosmicFormula.CoreBeamGap
+info: DkMath/CosmicFormula/CoreBeamGap.lean:10:0: file: DkMath.CosmicFormula.CoreBeamGap
+ℹ [8682/8733] Replayed DkMath.Zsigmondy
+info: DkMath/Zsigmondy.lean:11:0: file: DkMath.Zsigmondy
+ℹ [8683/8733] Replayed DkMath.FLT.CosmicPetalBridge
+info: DkMath/FLT/CosmicPetalBridge.lean:13:0: file: DkMath.FLT.CosmicPetalBridge
+ℹ [8684/8733] Replayed DkMath.Units.NPUnit
+info: DkMath/Units/NPUnit.lean:9:0: file: DkMath.Units.NPUnit
+ℹ [8685/8733] Replayed DkMath.FLT.PetalCoreUnit
+info: DkMath/FLT/PetalCoreUnit.lean:9:0: file: DkMath.FLT.PetalCoreUnit
+ℹ [8686/8733] Replayed DkMath.NumberTheory.GcdNext
+info: DkMath/NumberTheory/GcdNext.lean:12:0: file: DkMath.NumberTheory.GcdNext
+ℹ [8687/8733] Replayed DkMath.FLT.PhaseLift
+info: DkMath/FLT/PhaseLift.lean:16:0: file: DkMath.FLT.PhaseLift
+ℹ [8688/8733] Replayed DkMath.NumberTheory.GNRepresentationBounds
+info: DkMath/NumberTheory/GNRepresentationBounds.lean:10:0: file: DkMath.NumberTheory.GNRepresentationBounds
+ℹ [8689/8733] Replayed DkMath.NumberTheory.GNDegreeFactorization
+info: DkMath/NumberTheory/GNDegreeFactorization.lean:10:0: file: DkMath.NumberTheory.GNDegreeFactorization
+ℹ [8690/8733] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+ℹ [8691/8733] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+ℹ [8692/8733] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+ℹ [8693/8733] Replayed DkMath.NumberTheory.WeightedGNBridge
+info: DkMath/NumberTheory/WeightedGNBridge.lean:10:0: file: DkMath.NumberTheory.WeightedGNBridge
+ℹ [8694/8733] Replayed DkMath.NumberTheory.GNPrimeTargetResidue
+info: DkMath/NumberTheory/GNPrimeTargetResidue.lean:10:0: file: DkMath.NumberTheory.GNPrimeTargetResidue
+ℹ [8695/8733] Replayed DkMath.NumberTheory.TraceOneQuadratic
+info: DkMath/NumberTheory/TraceOneQuadratic.lean:9:0: file: DkMath.NumberTheory.TraceOneQuadratic
+ℹ [8696/8733] Replayed DkMath.NumberTheory.GNThreeQuadratic
+info: DkMath/NumberTheory/GNThreeQuadratic.lean:10:0: file: DkMath.NumberTheory.GNThreeQuadratic
+ℹ [8697/8733] Replayed DkMath.NumberTheory.GNThreePrimeArithmetic
+info: DkMath/NumberTheory/GNThreePrimeArithmetic.lean:14:0: file: DkMath.NumberTheory.GNThreePrimeArithmetic
+ℹ [8698/8733] Replayed DkMath.NumberTheory.GNThreeHenselLift
+info: DkMath/NumberTheory/GNThreeHenselLift.lean:12:0: file: DkMath.NumberTheory.GNThreeHenselLift
+ℹ [8699/8733] Replayed DkMath.NumberTheory.GNThreeHenselDepth
+info: DkMath/NumberTheory/GNThreeHenselDepth.lean:12:0: file: DkMath.NumberTheory.GNThreeHenselDepth
+ℹ [8700/8733] Replayed DkMath.FLT.Three.PrimitiveCubicLiftPacket
+info: DkMath/FLT/Three/PrimitiveCubicLiftPacket.lean:10:0: file: DkMath.FLT.Three.PrimitiveCubicLiftPacket
+ℹ [8701/8733] Replayed DkMath.FLT.Three.CubicValuationDepth
+info: DkMath/FLT/Three/CubicValuationDepth.lean:9:0: file: DkMath.FLT.Three.CubicValuationDepth
+ℹ [8702/8733] Replayed DkMath.FLT.Three.EisensteinSubstrate
+info: DkMath/FLT/Three/EisensteinSubstrate.lean:10:0: file: DkMath.FLT.Three.EisensteinSubstrate
+ℹ [8703/8733] Replayed DkMath.Petal.Basic
+info: DkMath/Petal/Basic.lean:9:0: file: DkMath.Petal.Basic
+ℹ [8704/8733] Replayed DkMath.Petal.Forms
+info: DkMath/Petal/Forms.lean:9:0: file: DkMath.Petal.Forms
+ℹ [8705/8733] Replayed DkMath.Petal.GNBridge
+info: DkMath/Petal/GNBridge.lean:11:0: file: DkMath.Petal.GNBridge
+ℹ [8706/8733] Replayed DkMath.NumberTheory.Gcd.Basic
+info: DkMath/NumberTheory/Gcd/Basic.lean:10:0: file: DkMath.NumberTheory.Gcd.Basic
+ℹ [8707/8733] Replayed DkMath.ABC.Rad
+info: DkMath/ABC/Rad.lean:3:0: file: DkMath.ABC.Rad
+ℹ [8708/8733] Replayed DkMath.ABC.Square
+info: DkMath/ABC/Square.lean:9:0: file: DkMath.ABC.Square
+ℹ [8709/8733] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+info: DkMath/NumberTheory/ZsigmondyCyclotomicSquarefree.lean:11:0: file: DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+info: DkMath/NumberTheory/ZsigmondyCyclotomicSquarefree.lean:85:0: 'DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+⚠ [8710/8733] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+info: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:9:0: file: DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+ℹ [8711/8733] Replayed DkMath.NumberTheory.PrimitiveBeam
+info: DkMath/NumberTheory/PrimitiveBeam.lean:10:0: file: DkMath.NumberTheory.PrimitiveBeam
+ℹ [8712/8733] Replayed DkMath.NumberTheory.Gcd.GN
+info: DkMath/NumberTheory/Gcd/GN.lean:13:0: file: DkMath.NumberTheory.Gcd.GN
+ℹ [8713/8733] Replayed DkMath.Petal.GcdBridge
+info: DkMath/Petal/GcdBridge.lean:10:0: file: DkMath.Petal.GcdBridge
+ℹ [8714/8733] Replayed DkMath.FLT.Three.SignedThreeAdic
+info: DkMath/FLT/Three/SignedThreeAdic.lean:10:0: file: DkMath.FLT.Three.SignedThreeAdic
+ℹ [8715/8733] Replayed DkMath.FLT.Three.SignedThreeAdicPowerSplit
+info: DkMath/FLT/Three/SignedThreeAdicPowerSplit.lean:10:0: file: DkMath.FLT.Three.SignedThreeAdicPowerSplit
+ℹ [8716/8733] Replayed DkMath.FLT.Three.EisensteinRamifierStripped
+info: DkMath/FLT/Three/EisensteinRamifierStripped.lean:9:0: file: DkMath.FLT.Three.EisensteinRamifierStripped
+ℹ [8717/8733] Replayed DkMath.FLT.Three.EisensteinConjugateCoprime
+info: DkMath/FLT/Three/EisensteinConjugateCoprime.lean:9:0: file: DkMath.FLT.Three.EisensteinConjugateCoprime
+ℹ [8718/8733] Replayed DkMath.FLT.Three.EisensteinEuclidean
+info: DkMath/FLT/Three/EisensteinEuclidean.lean:11:0: file: DkMath.FLT.Three.EisensteinEuclidean
+ℹ [8719/8733] Replayed DkMath.FLT.Three.EisensteinCubeExtraction
+info: DkMath/FLT/Three/EisensteinCubeExtraction.lean:9:0: file: DkMath.FLT.Three.EisensteinCubeExtraction
+ℹ [8720/8733] Replayed DkMath.FLT.Three.EisensteinUnitSectors
+info: DkMath/FLT/Three/EisensteinUnitSectors.lean:9:0: file: DkMath.FLT.Three.EisensteinUnitSectors
+ℹ [8721/8733] Replayed DkMath.FLT.Three.EisensteinSectorExclusion
+info: DkMath/FLT/Three/EisensteinSectorExclusion.lean:9:0: file: DkMath.FLT.Three.EisensteinSectorExclusion
+ℹ [8722/8733] Replayed DkMath.FLT.Three.EisensteinDescentFactors
+info: DkMath/FLT/Three/EisensteinDescentFactors.lean:9:0: file: DkMath.FLT.Three.EisensteinDescentFactors
+ℹ [8723/8733] Replayed DkMath.FLT.Three.PrimitiveCubicDescent
+info: DkMath/FLT/Three/PrimitiveCubicDescent.lean:9:0: file: DkMath.FLT.Three.PrimitiveCubicDescent
+ℹ [8724/8733] Replayed DkMath.FLT.Three.PrimitiveCubicClosure
+info: DkMath/FLT/Three/PrimitiveCubicClosure.lean:9:0: file: DkMath.FLT.Three.PrimitiveCubicClosure
+ℹ [8725/8733] Replayed DkMath.FLT.Three.PositiveCubicNormalization
+info: DkMath/FLT/Three/PositiveCubicNormalization.lean:9:0: file: DkMath.FLT.Three.PositiveCubicNormalization
+ℹ [8726/8733] Replayed DkMath.Lib.NumberTheory.EisensteinCoordinates
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:9:0: file: DkMath.Lib.NumberTheory.EisensteinCoordinates
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:165:0: 'DkMath.Lib.NumberTheory.norm_eisensteinCoord' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:166:0: 'DkMath.Lib.NumberTheory.eisensteinCoord_mul' depends on axioms: [propext]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:167:0: 'DkMath.Lib.NumberTheory.eisensteinCoord_sq' depends on axioms: [propext]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:168:0: 'DkMath.Lib.NumberTheory.eisensteinCoord_mul_sq' depends on axioms: [propext, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:169:0: 'DkMath.Lib.NumberTheory.norm_eisensteinCoord_mul_sq' depends on axioms: [propext, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:170:0: 'DkMath.Lib.NumberTheory.eisenstein_square_coefficient_coprime' depends on axioms: [propext]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:171:0: 'DkMath.Lib.NumberTheory.eisenstein_mul_sq_eq_cubicCoord_fst' depends on axioms: [propext, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:172:0: 'DkMath.Lib.NumberTheory.eisenstein_mul_sq_eq_cubicCoord_snd' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:173:0: 'DkMath.Lib.NumberTheory.eisenstein_mul_sq_eq_cubicCoord_coefficients_isCoprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:174:0: 'DkMath.Lib.NumberTheory.eisenstein_mul_sq_eq_cubicCoord_norm' depends on axioms: [propext, Quot.sound]
+info: DkMath/Lib/NumberTheory/EisensteinCoordinates.lean:175:0: 'DkMath.Lib.NumberTheory.eisenstein_mul_sq_eq_cubicCoord_polynomial_norm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [8727/8733] Replayed DkMath.Lib.NumberTheory.IdealPowerFactor
+info: DkMath/Lib/NumberTheory/IdealPowerFactor.lean:9:0: file: DkMath.Lib.NumberTheory.IdealPowerFactor
+ℹ [8728/8733] Replayed DkMath.Lib.NumberTheory.PowerFactor
+info: DkMath/Lib/NumberTheory/PowerFactor.lean:9:0: file: DkMath.Lib.NumberTheory.PowerFactor
+ℹ [8729/8733] Replayed DkMath.Lib.NumberTheory.PrincipalIdealPower
+info: DkMath/Lib/NumberTheory/PrincipalIdealPower.lean:10:0: file: DkMath.Lib.NumberTheory.PrincipalIdealPower
+ℹ [8730/8733] Replayed DkMath.Lib.NumberTheory.UnitPowerSector
+info: DkMath/Lib/NumberTheory/UnitPowerSector.lean:9:0: file: DkMath.Lib.NumberTheory.UnitPowerSector
+ℹ [8731/8733] Replayed DkMath.NumberTheory.PrimeQuadraticDiscriminant
+info: DkMath/NumberTheory/PrimeQuadraticDiscriminant.lean:8:0: file: DkMath.NumberTheory.PrimeQuadraticDiscriminant
+ℹ [8732/8733] Replayed DkMath.FLT.Three.EisensteinLibBridge
+info: DkMath/FLT/Three/EisensteinLibBridge.lean:12:0: file: DkMath.FLT.Three.EisensteinLibBridge
+info: DkMath/FLT/Three/EisensteinLibBridge.lean:76:0: 'DkMath.FLT.Three.traceOneInt_signedPrimeParameter_three_type' depends on axioms: [propext]
+info: DkMath/FLT/Three/EisensteinLibBridge.lean:77:0: 'DkMath.FLT.Three.lib_eisensteinCoord_eq_FLT3_coord' does not depend on any axioms
+info: DkMath/FLT/Three/EisensteinLibBridge.lean:78:0: 'DkMath.FLT.Three.lib_eisensteinCoord_norm_eq_FLT3_coord_norm' depends on axioms: [propext]
+info: DkMath/FLT/Three/EisensteinLibBridge.lean:79:0: 'DkMath.FLT.Three.eisensteinCubeUnitPowerSectorSystem_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+✔ [8733/8733] Built DkMath.FLT.Three (3.0s)
+Build completed successfully (8733 jobs).

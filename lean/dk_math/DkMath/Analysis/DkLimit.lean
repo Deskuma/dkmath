@@ -4,7 +4,9 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Topology.Basic
+import Mathlib.Topology.Instances.Real.Lemmas
 
 #print "file: DkMath.Analysis.DkLimit"
 

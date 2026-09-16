@@ -108,7 +108,7 @@ theorem rootSnd_sndCore_coprime_of_coordinates_isCoprime
     all_goals first | rfl | ring
   have hqu : (q : ℤ) ∣ root.fst :=
     (Nat.prime_iff_prime_int.mp hq).dvd_of_dvd_pow hqu6
-  exact (Nat.prime_iff_prime_int.mp hq).not_unit
+  exact (Nat.prime_iff_prime_int.mp hq).not_isUnit
     (hcoords.isUnit_of_dvd' hqu hqv)
 
 /-- The two cubic factors of the seventh-power second-coordinate core are

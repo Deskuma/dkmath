@@ -1,0 +1,79 @@
+LUNA-004 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Added:
+  DkMath/ABC/GNExcessCubicMordellTransport.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicMordellTransport immediately after
+  GNExcessCubicShellParameterBounds
+
+Focused build
+-------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicMordellTransport
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-004-output.txt
+
+Checked declarations:
+  cubicPell_to_Mordell_identity
+  cubicPell_to_Mordell_identity_nat
+  GNExcessCubicRealizedLargeModulusShellWitness_squareCube_conic
+  GNExcessCubicRealizedLargeModulusShellWitness_mordell_identity
+  mordellCoordinates_injective_fixed_SU
+
+Aggregator build
+----------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-004-abc-output.txt
+
+The new module was built directly and through the ABC aggregator. No
+unrelated import was reordered.
+
+Forbidden construct scan
+------------------------
+Command:
+  rg -n '\b(sorry|admit|axiom|abc_main_axiom|native_decide|unsafe)\b' \
+    DkMath/ABC/GNExcessCubicMordellTransport.lean
+Exit: 1 (no matches; successful absence check).
+
+`git diff --check`: exit 0.
+
+Axiom audit
+-----------
+The focused output reports:
+  cubicPell_to_Mordell_identity: [propext]
+  cubicPell_to_Mordell_identity_nat: [propext]
+  production square-cube conic:
+    [propext, Classical.choice, Quot.sound]
+  production Mordell identity:
+    [propext, Classical.choice, Quot.sound]
+  mordellCoordinates_injective_fixed_SU:
+    [propext, Classical.choice, Quot.sound]
+
+No `sorryAx` occurs in the new declarations. No external theorem enters the
+Lean dependency graph.
+
+Scope audit
+-----------
+The module contains exact polynomial identities, production coordinate
+rewriting, and natural-number cancellation only. It does not contain an
+elliptic-curve structure, integral-point count, rank theorem, asymptotic
+estimate, balanced-box theorem, Eisenstein production API, provider, or ABC
+claim.
+
+The verified boundary is:
+  production shell witness => exact Mordell coordinate identity;
+  fixed positive (S,u) => coordinate map injective in (a,r).
+
+The following remain open:
+  characterization or counting of all integral Mordell points,
+  Helfgott--Venkatesh formalization, rank bounds, moment bounds,
+  balanced-box power saving, and ABC.

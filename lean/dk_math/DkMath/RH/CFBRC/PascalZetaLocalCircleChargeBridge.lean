@@ -69,7 +69,7 @@ theorem pascalZetaIsolatingRadius_spec
     {ρ : ℂ} (hρ : ρ ∈ riemannZetaZeros) :
     IsPascalZetaIsolatingRadius ρ (pascalZetaIsolatingRadius ρ) := by
   classical
-  simp only [pascalZetaIsolatingRadius, dif_pos hρ]
+  simp only [pascalZetaIsolatingRadius, dite_eq_left hρ]
   exact Classical.choose_spec (exists_isPascalZetaIsolatingRadius hρ)
 
 theorem pascalZetaIsolatingRadius_pos

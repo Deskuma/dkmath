@@ -79,7 +79,7 @@ theorem boundedMonotoneNatMassSpace_logCapacitySourceMassBound
   intro s
   by_cases hs : s.1 = 0
   · simp [boundedMonotoneNatMassSpace, hs]
-  · simp only [boundedMonotoneNatMassSpace, hs, if_false, Rat.cast_le]
+  · simp only [boundedMonotoneNatMassSpace, hs, ite_false, Rat.cast_le]
     exact hbound s.1
 
 /-- Finite step tail mass is uniformly bounded by its total increment. -/

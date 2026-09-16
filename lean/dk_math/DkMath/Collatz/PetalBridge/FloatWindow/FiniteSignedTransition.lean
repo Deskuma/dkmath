@@ -447,7 +447,7 @@ theorem canonicalWindowDriftInt_add_eq_sum_range
   | zero => simp [canonicalWindowDriftInt_self]
   | succ length ih =>
       change canonicalWindowDriftInt n q ((q + length) + 1) = _
-      rw [canonicalWindowDriftInt_succ n (by omega), if_pos (by omega), ih]
+      rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left (by omega), ih]
       conv_rhs => rw [Finset.sum_range_succ]
       congr 2
 

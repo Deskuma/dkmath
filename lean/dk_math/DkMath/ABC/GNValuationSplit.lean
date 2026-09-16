@@ -49,7 +49,7 @@ theorem Triple.padic_powerDiff_eq_boundary_add_GN
       padicValNat q T.a + padicValNat q (GN n T.a T.b) := by
   have hGN : GN n T.a T.b ≠ 0 :=
     GN_ne_zero_nat_of_two_le hn ha hb
-  haveI : Fact q.Prime := ⟨hq⟩
+  have : Fact q.Prime := ⟨hq⟩
   rw [T.powerDiff_eq_boundary_mul_GN n]
   exact padicValNat.mul (Nat.ne_of_gt ha) hGN
 
@@ -65,7 +65,7 @@ theorem Triple.padic_gnPowerLift_a_eq_boundary_add_GN
   rw [T.gnPowerLift_a]
   have hGN : GN n T.a T.b ≠ 0 :=
     GN_ne_zero_nat_of_two_le hn ha hb
-  haveI : Fact q.Prime := ⟨hq⟩
+  have : Fact q.Prime := ⟨hq⟩
   exact padicValNat.mul (Nat.ne_of_gt ha) hGN
 
 /--

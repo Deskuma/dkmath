@@ -27,8 +27,9 @@ export DkMath.Basic.Nat (succ_sub_self dvd_one_iff gcd_succ coprime_succ)
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- Auxiliary lemma: 3^(X+1) ≥ 2X+1 for all X (帰納法で証明)
 lemma three_pow_ge_linear (X : ℕ) : 3 ^ (X + 1) ≥ 2 * X + 1 := by

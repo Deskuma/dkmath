@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Collatz.Accelerated
+import DkMath.Gnomon.Algebra
 
 #print "file: DkMath.Collatz.GnomonEvaluation"
 
@@ -53,7 +54,10 @@ This is the square-difference layer
 ```
 -/
 def OddGnomonLayer (n : ℕ) : ℕ :=
-  2 * n + 1
+  DkMath.Gnomon.oddGnomon n
+
+@[simp] theorem oddGnomonLayer_eq_oddGnomon (n : ℕ) :
+    OddGnomonLayer n = DkMath.Gnomon.oddGnomon n := rfl
 
 /--
 The raw Collatz odd-step numerator read as a gnomon correction.
@@ -71,7 +75,9 @@ def RawGnomonStep (n : ℕ) : ℕ :=
 theorem rawGnomonStep_eq_three_mul_add_one
     (n : ℕ) :
     RawGnomonStep n = 3 * n + 1 := by
-  unfold RawGnomonStep OddGnomonLayer
+  unfold RawGnomonStep
+  rw [oddGnomonLayer_eq_oddGnomon]
+  simp only [DkMath.Gnomon.oddGnomon]
   ring
 
 /-- Bridge to the existing base definition `threeNPlusOne`. -/
@@ -90,8 +96,8 @@ real or Euclidean geometry.
 theorem square_succ_eq_square_add_oddGnomonLayer
     (n : ℕ) :
     (n + 1) ^ 2 = n ^ 2 + OddGnomonLayer n := by
-  unfold OddGnomonLayer
-  ring
+  simpa only [oddGnomonLayer_eq_oddGnomon] using
+    (DkMath.Gnomon.square_add_oddGnomon n).symm
 
 /-- The first `n` odd gnomon layers sum to `n^2`. -/
 theorem sum_oddGnomonLayer_eq_square
@@ -99,11 +105,12 @@ theorem sum_oddGnomonLayer_eq_square
     (Finset.range n).sum OddGnomonLayer = n ^ 2 := by
   induction n with
   | zero =>
-      simp [OddGnomonLayer]
+      simp only [Finset.range_zero, Finset.sum_empty, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+        zero_pow]
   | succ n ih =>
       rw [Finset.sum_range_succ, ih]
-      unfold OddGnomonLayer
-      ring
+      unfold OddGnomonLayer Gnomon.oddGnomon
+      ring_nf
 
 /--
 The classical odd-number sum form.
@@ -114,7 +121,8 @@ This alias is useful for callers that do not want the named
 theorem sum_odd_eq_square
     (n : ℕ) :
     (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2 := by
-  simpa [OddGnomonLayer] using sum_oddGnomonLayer_eq_square n
+  convert sum_oddGnomonLayer_eq_square n using 1
+  rfl
 
 /--
 A shifted gnomon band from `P` of length `u`.
@@ -127,21 +135,24 @@ theorem square_add_eq_square_add_gnomon_sum
     (P u : ℕ) :
     (P + u) ^ 2 =
       P ^ 2 + (Finset.range u).sum (fun i => 2 * (P + i) + 1) := by
-  induction u with
-  | zero =>
-      simp
-  | succ u ih =>
-      rw [Finset.sum_range_succ]
-      calc
-        (P + (u + 1)) ^ 2 = (P + u) ^ 2 + (2 * (P + u) + 1) := by
-          ring
-        _ = P ^ 2 + (Finset.range u).sum (fun i => 2 * (P + i) + 1) +
-            (2 * (P + u) + 1) := by
-          rw [ih]
-        _ = P ^ 2 +
-            ((Finset.range u).sum (fun i => 2 * (P + i) + 1) +
-              (2 * (P + u) + 1)) := by
-          ring
+  calc
+    (P + u) ^ 2 = P ^ 2 + DkMath.Gnomon.squareGnomonBand P u :=
+      (DkMath.Gnomon.square_add_squareGnomonBand P u).symm
+    _ = P ^ 2 +
+        (Finset.range u).sum
+          (fun i => DkMath.Gnomon.oddGnomon (P + i)) := by
+      rw [DkMath.Gnomon.squareGnomonBand_eq_sum_shifted_oddGnomon]
+    _ = P ^ 2 + (Finset.range u).sum (fun i => 2 * (P + i) + 1) := by
+      simp [DkMath.Gnomon.oddGnomon]
+
+example : OddGnomonLayer 0 = 1 := by
+  norm_num [OddGnomonLayer, DkMath.Gnomon.oddGnomon]
+
+example : OddGnomonLayer 1 = 3 := by
+  norm_num [OddGnomonLayer, DkMath.Gnomon.oddGnomon]
+
+example : OddGnomonLayer 30 = 61 := by
+  norm_num [OddGnomonLayer, DkMath.Gnomon.oddGnomon]
 
 /--
 Power-of-two alignment height of the raw gnomon step.

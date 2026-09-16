@@ -24,8 +24,9 @@ namespace DkMath.ABC
 namespace Chernoff
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 axiom mgf_padic_excess_bound_uniform
     {p : ℕ} [Fact p.Prime] (hp3 : pge3 p)

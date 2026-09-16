@@ -178,7 +178,7 @@ theorem pascalCenteredXiPrimeSideFinitePrimePowerRayComplexKernel_eq_rayKernel
     apply Finset.sum_congr rfl
     intro k hk
     by_cases hcut : p ^ (k + 1) ≤ X
-    · simp only [hcut, if_pos, pascalCenteredXiPrimeSideFiniteModeKernel]
+    · simp only [hcut, ite_eq_left, pascalCenteredXiPrimeSideFiniteModeKernel]
       congr 1
       funext t
       have hpow : p ^ (k + 1) ≠ 0 := pow_ne_zero (k + 1) hp.ne_zero

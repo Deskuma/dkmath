@@ -5,6 +5,7 @@
 - Branch at recording: `develop`
 - Repository: `Deskuma/dkmath`
 - Target area: `DkMath.NumberTheory.Primitive`, `DkMath.NumberTheory.Gcd`, `DkMath.CosmicFormula`, future `DkMath.NumberTheory.PrimeHarmony` / RH bridge
+- cid: `6a8db21d-11b4-83e8-afec-71e3bf88d24c`
 
 ## 1. 目的
 

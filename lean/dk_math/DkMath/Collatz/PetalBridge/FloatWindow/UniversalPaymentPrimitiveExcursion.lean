@@ -110,7 +110,7 @@ private theorem queue_eq_intToNat_windowDrift_of_positive_prefix
   | base => exact queue_eq_intToNat_windowDrift_self_of_before_eq_zero hbefore
   | succ m hqm ih =>
       rw [canonicalOutstandingClaimQueue_succ_eq_intToNat]
-      rw [canonicalWindowDriftInt_succ n (by omega), if_pos hqm]
+      rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left hqm]
       have hmPos : 0 < canonicalOutstandingClaimQueue n m :=
         hpositive m (Finset.mem_Ico.mpr ⟨hqm, by omega⟩)
       have hsumPos : 0 < canonicalWindowDriftInt n q m := by
@@ -152,7 +152,7 @@ private theorem queue_eq_intToNat_windowDrift_of_positive_drift_prefix
           canonicalWindowDriftInt n q m := by
         rw [Int.ofNat_toNat, max_eq_left (le_of_lt hmPos)]
       rw [canonicalOutstandingClaimQueue_succ_eq_intToNat,
-        canonicalWindowDriftInt_succ n (by omega), if_pos hqm,
+        canonicalWindowDriftInt_succ n (by omega), ite_eq_left hqm,
         ih hprefix, hcast]
 
 /-- Queue and signed-partial-sum presentations of a repaid primitive excursion agree. -/

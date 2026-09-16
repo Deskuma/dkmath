@@ -72,7 +72,7 @@ theorem mellinSymmetricNumerator_eq_kernel_mul
     {τ : ℝ} (hτ : τ ≠ 0) (z : ℂ) :
     mellinSymmetricNumerator τ z = (τ : ℂ) ^ 2 *
       complexExpSecondDifferenceKernel τ z := by
-  rw [complexExpSecondDifferenceKernel, if_neg hτ]
+  rw [complexExpSecondDifferenceKernel, ite_eq_right hτ]
   unfold mellinSymmetricNumerator
   field_simp [hτ]
 

@@ -121,7 +121,7 @@ theorem padicValNat_GN_prime_eq_one_of_dvd
     exact hEmultInt
   have hGN0 : GN p a b ≠ 0 := by
     intro hzero
-    rw [hzero, emultiplicity_zero] at hEmultNat
+    rw [hzero, emultiplicity_zero_right] at hEmultNat
     exact WithTop.top_ne_one hEmultNat
   let : Fact p.Prime := ⟨hp⟩
   simp only [← Nat.cast_inj (R := ℕ∞)]

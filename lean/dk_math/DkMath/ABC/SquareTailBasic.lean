@@ -23,8 +23,9 @@ namespace DkMath.ABC
 open DkMath.Basic.Nat
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- Auxiliary lemma: For non-negative exponent γ, rad(a)^γ ≥ 1. -/
 lemma rad_pow_ge_one {a : ℕ} {γ : ℝ} (hγ : 0 ≤ γ) :
@@ -346,7 +347,7 @@ lemma decomp_piRad_twoTail (c : ℕ) (hc : c ≠ 0) :
     trans (∏ p ∈ S, p ^ 1)
     · apply Finset.prod_congr rfl
       intro p hp
-      rw [if_pos (this p hp)]
+      rw [ite_eq_left (this p hp)]
     -- Now just need: ∏ p∈S, p^1 = ∏ p∈S, p
     simp only [pow_one]
     -- And rad is defined as exactly this product
@@ -379,7 +380,7 @@ lemma piSqRad_ge_one (n : ℕ) : 1 ≤ piSqRad n := by
   -- piSqRad is the product over primes p with v_p ≥ 2
   -- Product over Finset is always ≥ 1 (empty gives 1, non-empty gives product of primes ≥ 2)
   dsimp [piSqRad]
-  apply Finset.one_le_prod'
+  apply Finset.one_le_prod
   intro p hp
   -- p is prime with v_p ≥ 2, so p ≥ 2 ≥ 1
   have : p ∈ n.factorization.support := Finset.mem_filter.mp hp |>.1

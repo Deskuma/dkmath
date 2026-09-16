@@ -470,14 +470,14 @@ theorem canonicalOwnedOutstandingClaimsHaveSourceAgeAtMost_iff_maximumAge_le
   · intro h m
     by_cases hne :
         (canonicalOwnedOutstandingClaimsBeforeBlock n m).Nonempty
-    · rw [canonicalOwnedMaximumSourceAge, dif_pos hne]
+    · rw [canonicalOwnedMaximumSourceAge, dite_eq_left hne]
       exact h m _ (Finset.min'_mem _ hne)
     · simp [canonicalOwnedMaximumSourceAge, hne]
   · intro h m i hi
     have hne : (canonicalOwnedOutstandingClaimsBeforeBlock n m).Nonempty :=
       ⟨i, hi⟩
     have hmax := h m
-    rw [canonicalOwnedMaximumSourceAge, dif_pos hne] at hmax
+    rw [canonicalOwnedMaximumSourceAge, dite_eq_left hne] at hmax
     have hmin := Finset.min'_le
       (canonicalOwnedOutstandingClaimsBeforeBlock n m) i hi
     exact (Nat.sub_le_sub_left hmin _).trans hmax

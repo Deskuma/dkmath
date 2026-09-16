@@ -162,7 +162,7 @@ lemma prime_exp_not_dvd_diff_imp_primitive
     ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ a^k - b^k := by
   -- 群論による primitive 証明
   classical
-  haveI : Fact q.Prime := ⟨hq⟩
+  have : Fact q.Prime := ⟨hq⟩
 
   have hd_pos : 0 < d := Nat.Prime.pos hd
   have hd_nonzero : d ≠ 0 := Nat.Prime.ne_zero hd
@@ -456,7 +456,7 @@ lemma padicValNat_factorization {a b d q N : ℕ} (_hd : 0 < d) (hab : b < a)
   -- hfactor を使って padicValNat.mul を適用
   rw [hfactor]
   -- Fact q.Prime のインスタンスを作成
-  haveI : Fact q.Prime := ⟨hq_prime⟩
+  have : Fact q.Prime := ⟨hq_prime⟩
   exact padicValNat.mul hab_ne hN
 
 /-- 原始素因子と G の関係（padicValNat の帰着）— ✅ 完成！NEW!

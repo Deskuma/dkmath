@@ -1,0 +1,21 @@
+Centers 0..500; exact diagonal/survivor/coverage identities passed
+primitive_only_criterion_failure: n=2, u=0
+primitive_without_parity_gcd_one: n=3, u=1
+primitive_without_parity_proper_disjoint: n=5, u=1
+raw_equals_proper_on_parity: n=5, u=2
+parity_without_primitive_proper_disjoint: n=9, u=0
+positive_parity_without_primitive_proper_disjoint: n=12, u=3
+first_positive_higher_overlap_primitive: n=13, u=7
+normalized_strict_incidence_failure: n=19, u=None
+first_positive_higher_overlap_parity: n=31, u=4
+unbounded_quadratic_boundary: n=0, u=1
+Density changes: {'primitive': {'improved': 404, 'equal': 0, 'worsened': 94, 'undefined': 1, 'first_worsened': 3}, 'parity': {'improved': 497, 'equal': 0, 'worsened': 0, 'undefined': 2, 'first_worsened': None}}
+Worst parity survivor densities: [{'n': 496, 'parity': 239, 'parity_survivors': 13, 'parity_density': '13/239'}, {'n': 439, 'parity': 218, 'parity_survivors': 13, 'parity_density': '13/218'}, {'n': 199, 'parity': 98, 'parity_survivors': 6, 'parity_density': '3/49'}, {'n': 346, 'parity': 171, 'parity_survivors': 11, 'parity_density': '11/171'}, {'n': 316, 'parity': 155, 'parity_survivors': 10, 'parity_density': '2/31'}]
+CRT interval orientations: 21192
+CRT full-period orientations: 120
+raw_LR_endpoint_exception: n=13, p=5, q=3, seats=[8]
+occupied_at_most_one_wave: n=13, p=5, q=3, seats=[8]
+multiple_normalized_same_orientation: n=34, p=3, q=5, seats=[1, 31]
+sharp_parity_spacing_proper: n=47, p=3, q=5, seats=[8, 38]
+candidate_cardinality_not_geometric_width: n=50, p=7, q=3, seats=[1, 43]
+candidate_cardinality_not_width_proper: n=162, p=5, q=13, seats=[7, 137]

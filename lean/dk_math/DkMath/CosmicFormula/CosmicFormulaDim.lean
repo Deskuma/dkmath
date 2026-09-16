@@ -585,7 +585,7 @@ lemma differentiableAt_one_div_Gamma_affine (s : ℂ) :
   -- 合成
   have h := h_outer.comp s h_inner
   -- 1/z = z⁻¹ を使って型を合わせる
-  convert h using 1 <;> try rfl
+  convert h using 1
   funext z
   simp only [Function.comp_apply, one_div]
 
@@ -608,7 +608,7 @@ theorem differentiableAt_volConstC (s : ℂ) :
   -- 仕上げ：積の正則性
   -- `volConstC` の定義が `/` なら `div_eq_mul_inv` と `one_div` で合わせる
   unfold volConstC
-  convert hnum.mul hrec using 1 <;> try rfl
+  convert hnum.mul hrec using 1
   funext z
   simp only [div_eq_mul_inv, one_mul, Pi.mul_apply]
 

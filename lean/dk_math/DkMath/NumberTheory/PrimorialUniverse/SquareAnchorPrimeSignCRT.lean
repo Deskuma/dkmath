@@ -190,7 +190,7 @@ theorem exists_anchor_lt_period_realizing_primeSignChoice
             simpa [b, c, hσ] using h
           have hcast : (b : ZMod p) = (a : ZMod p) :=
             (ZMod.natCast_eq_natCast_iff b a p).mpr hbp
-          simp only [if_pos hσ]
+          simp only [ite_eq_left hσ]
           exact hcast
         · have hbc : b ≡ (p - a % p) [MOD p] := by
             have h := (Nat.chineseRemainder hcop c bS).property.1
@@ -198,7 +198,7 @@ theorem exists_anchor_lt_period_realizing_primeSignChoice
           have hcast : (b : ZMod p) =
               ((p - a % p : ℕ) : ZMod p) :=
             (ZMod.natCast_eq_natCast_iff b (p - a % p) p).mpr hbc
-          simp only [if_neg hσ]
+          simp only [ite_eq_right hσ]
           exact hcast.trans (neg_residue_in_zmod hp)
       · have hmodS : b ≡ bS [MOD finitePrimeBasisProduct S] := by
           simpa [b] using
@@ -212,11 +212,11 @@ theorem exists_anchor_lt_period_realizing_primeSignChoice
         by_cases hσ : sigma q = true
         · have hplus : (bS : ZMod q) = (a : ZMod q) := by
             simpa [RealizesPrimeSignChoice, hσ] using hold
-          simp only [if_pos hσ]
+          simp only [ite_eq_left hσ]
           exact hcast.trans hplus
         · have hminus : (bS : ZMod q) = -(a : ZMod q) := by
             simpa [RealizesPrimeSignChoice, hσ] using hold
-          simp only [if_neg hσ]
+          simp only [ite_eq_right hσ]
           exact hcast.trans hminus
 
 /-- CRT synthesis also returns an anchor in the same square phase as the base anchor. -/

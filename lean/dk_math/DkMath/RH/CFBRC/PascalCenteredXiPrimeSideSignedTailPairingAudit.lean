@@ -58,7 +58,6 @@ private theorem intervalIntegrable_pascalPrimePowerRightEdgeCutoffIntegrand
     change Continuous (fun t : ℝ =>
       pascalSymmetricRectangleRightEdge σ t - criticalLineCenter)
     convert hpath.sub continuous_const using 1
-    all_goals ext t; rfl
   have hterm : ∀ n : ℕ, Continuous (fun t : ℝ =>
       LSeries.term (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ))
         (pascalSymmetricRectangleRightEdge σ t) n) := by

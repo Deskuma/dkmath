@@ -109,6 +109,8 @@ theorem exists_pascalCenteredXiNegLogDeriv_local_expansion
   filter_upwards [hlog, hg_ne, hg_analytic, self_mem_nhdsWithin] with w hw hgw hgwA hwmem
   have hwne : w - a ≠ 0 := sub_ne_zero.mpr (by simpa using hwmem)
   rw [pascalCenteredXiNegLogDeriv, hw]
+  change -logDeriv ((fun u : ℂ => (u - a) ^ m) * g) w =
+    -↑(pascalCenteredXiZeroMultiplicity a) * (w - a)⁻¹ - logDeriv g w
   rw [logDeriv_mul (f := fun u : ℂ => (u - a) ^ m) (g := g) w
     (pow_ne_zero m hwne) hgw (by fun_prop) hgwA.differentiableAt]
   have hderiv : deriv (fun u : ℂ => (u - a) ^ m) w =
@@ -221,7 +223,7 @@ theorem pascalCenteredXiDiskWeightedRawRegularizerLimit_spec
     Tendsto (pascalCenteredXiDiskWeightedRawRegularizer h R)
       (𝓝[≠] a) (𝓝 (pascalCenteredXiDiskWeightedRawRegularizerLimit h R a)) := by
   classical
-  simp only [pascalCenteredXiDiskWeightedRawRegularizerLimit, dif_pos hh, dif_pos ha]
+  simp only [pascalCenteredXiDiskWeightedRawRegularizerLimit, dite_eq_left hh, dite_eq_left ha]
   exact Classical.choose_spec (exists_tendsto_pascalCenteredXiDiskWeightedRawRegularizer hh ha)
 
 /-! ## Phase C: finite removable patch -/
@@ -371,7 +373,7 @@ theorem pascalCenteredXiDiskWeightedRegularizer_eventuallyEq_raw_of_not_mem
     exact hx x hxS' rfl
   filter_upwards [havoid] with x hx
   have hxS : x ∉ pascalCenteredXiZeroDiskFinset R := by simpa [S] using hx
-  simp only [pascalCenteredXiDiskWeightedRegularizer, if_neg hxS]
+  simp only [pascalCenteredXiDiskWeightedRegularizer, ite_eq_right hxS]
 
 /-- The patched regularizer is continuous on the whole closed disk. -/
 theorem pascalCenteredXiDiskWeightedRegularizer_continuousOn_closedBall

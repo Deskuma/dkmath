@@ -115,7 +115,7 @@ theorem padicValNat_natAbs_mul_eq_right_of_not_dvd_left
     (hp : Nat.Prime p)
     (hgap : ¬ p ∣ gap.natAbs) :
     padicValNat p (gap * beam).natAbs = padicValNat p beam.natAbs := by
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   by_cases hbeam : beam.natAbs = 0
   · have hprod : (gap * beam).natAbs = 0 := by
       have hbeam_int : beam = 0 := Int.natAbs_eq_zero.mp hbeam
@@ -192,7 +192,7 @@ theorem flt_padicValNat_beam_eq_d_mul_y_of_beam_prime
         padicValNat p (powerBeam d x z).natAbs :=
     flt_padicValNat_product_eq_beam_of_beam_prime
       (d := d) (p := p) (x := x) (y := y) (z := z) hd hcop hflt hp hpnd hbeam
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   calc
     padicValNat p (powerBeam d x z).natAbs
         = padicValNat p (powerGap x z * powerBeam d x z).natAbs := hval_prod.symm
@@ -220,7 +220,7 @@ theorem flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
         padicValNat p (powerBeam d y z).natAbs :=
     flt_padicValNat_product_eq_beam_of_beam_prime_symm
       (d := d) (p := p) (x := x) (y := y) (z := z) hd hcop hflt hp hpnd hbeam
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   calc
     padicValNat p (powerBeam d y z).natAbs
         = padicValNat p (powerGap y z * powerBeam d y z).natAbs := hval_prod.symm
@@ -261,7 +261,7 @@ theorem one_le_padicValNat_of_prime_dvd
     (hn : n ≠ 0)
     (hdvd : p ∣ n) :
     1 ≤ padicValNat p n := by
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   have hp_pow : p ^ 1 ∣ n := by
     simpa using hdvd
   exact (@padicValNat_dvd_iff_le p (Fact.mk hp) n 1 hn).mp hp_pow
