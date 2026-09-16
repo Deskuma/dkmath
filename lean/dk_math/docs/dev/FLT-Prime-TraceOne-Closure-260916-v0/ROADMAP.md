@@ -51,7 +51,7 @@ group theory layer when Mathlib already exposes the needed element-order facts.
 This checkpoint should convert the abstract Phase-26 hypothesis into a concrete
 class-number target whenever the class group is finite.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-002 — Arbitrary-power TraceOne coordinate kernel
 
@@ -76,7 +76,7 @@ the existing square theorem.
 
 Do not add an existential power-root provider.
 
-Status: **planned**.
+Status: **next**.
 
 ## FPTC-003 — Arbitrary-power TraceOne landing criterion
 
