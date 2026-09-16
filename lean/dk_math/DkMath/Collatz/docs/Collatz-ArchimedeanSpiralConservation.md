@@ -131,13 +131,13 @@ Big_j  = (P_j + 1)²
 Hence
 
 $$
-\operatorname{Body}_j+\operatorname{Gap}_j=\operatorname{Big}_j.
+\text{Body}_j+\text{Gap}_j=\text{Big}_j.
 $$
 
 The decisive successor identity is
 
 $$
-\operatorname{Big}_j=\operatorname{Body}_{j+1}.
+\text{Big}_j=\text{Body}_{j+1}.
 $$
 
 Completion is therefore not termination.
@@ -157,13 +157,13 @@ revolution.
 The gnomon Gap decomposes as
 
 $$
-2P_j+1=2P_j+\operatorname{SuccessorKernel}.
+2P_j+1=2P_j+\text{SuccessorKernel}.
 $$
 
 with
 
 $$
-\operatorname{SuccessorKernel}=1.
+\text{SuccessorKernel}=1.
 $$
 
 The term $2P_j$ records the boundary contribution at the beginning of the
@@ -273,7 +273,7 @@ $$
 Equivalently,
 
 $$
-\sum_{j=0}^{k-1}\operatorname{Gap}(P+j)=(P+k)^2-P^2.
+\sum_{j=0}^{k-1}\text{Gap}(P+j)=(P+k)^2-P^2.
 $$
 
 This is the proposed conservation law.
@@ -332,9 +332,9 @@ In the DkMath reading, the Gap is the external factor required to reconcile the
 old Body with the new completed Big.
 
 $$
-\operatorname{ExternalFactor}_j
-=\operatorname{Gap}_j
-=\operatorname{Big}_j-\operatorname{Body}_j.
+\text{ExternalFactor}_j
+=\text{Gap}_j
+=\text{Big}_j-\text{Body}_j.
 $$
 
 Adding this external factor always completes the next square boundary:
@@ -377,14 +377,14 @@ AvailableGapMass(n,k):
 The required mass is algebraically fixed:
 
 $$
-\operatorname{RequiredGapMass}(P,k)=(P+k)^2-P^2.
+\text{RequiredGapMass}(P,k)=(P+k)^2-P^2.
 $$
 
 The desired global comparison is:
 
 $$
-\operatorname{AvailableGapMass}(n,k)
-<\operatorname{RequiredGapMass}(P,k)
+\text{AvailableGapMass}(n,k)
+<\text{RequiredGapMass}(P,k)
 $$
 
 for some finite $k$ whenever the orbit attempts to remain permanently on or

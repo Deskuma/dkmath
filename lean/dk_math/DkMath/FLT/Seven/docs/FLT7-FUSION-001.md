@@ -25,7 +25,7 @@ real-cubic axis drop
 最終的に Lean は、
 
 $$
-X_R-X_L=\operatorname{droppedAxis}^3\operatorname{descentWitness}^7
+X_R-X_L=\text{droppedAxis}^3\text{descentWitness}^7
 $$
 
 を固定しました。

@@ -318,16 +318,16 @@ r^d=1,\qquad r\ne 1
 を満たす。
 なぜ \( r\ne 1 \) かと言えば、\( r=1 \) なら \( u\equiv u-1 \pmod q \)、すなわち \( 1\equiv 0 \pmod q \) となってしまうからじゃ。
 
-したがって \( r \) の位数 \( \operatorname{ord}_q(r) \) は
+したがって \( r \) の位数 \( \text{ord}_q(r) \) は
 
 \[
-\operatorname{ord}_q(r) > 1,\qquad \operatorname{ord}_q(r)\mid d
+\text{ord}_q(r) > 1,\qquad \text{ord}_q(r)\mid d
 \]
 
 を満たす。さらに有限体の乗法群の基本より
 
 \[
-\operatorname{ord}_q(r)\mid (q-1)
+\text{ord}_q(r)\mid (q-1)
 \]
 
 でもある。
@@ -335,7 +335,7 @@ r^d=1,\qquad r\ne 1
 ゆえに
 
 \[
-\operatorname{ord}_q(r)\mid \gcd(d,q-1)
+\text{ord}_q(r)\mid \gcd(d,q-1)
 \]
 
 となる。
@@ -416,7 +416,7 @@ q\equiv 1 \pmod p
 \( q \mid GN_d(1,u-1) \) から得られるのは
 
 \[
-\operatorname{ord}_q(r)\mid d,\qquad \operatorname{ord}_q(r)>1
+\text{ord}_q(r)\mid d,\qquad \text{ord}_q(r)>1
 \]
 
 までで、位数は \( d \) 全体でなく、その約数かもしれぬ。

@@ -93,7 +93,7 @@ $$
 そして `abc_squarefree_support_lower_bound` は、名前の通り lower bound 形式にしておるが、実質の中身は squarefree なら
 
 $$
-\operatorname{rad}(n) = n
+\text{rad}(n) = n
 $$
 
 じゃから、

@@ -70,7 +70,7 @@ The hard frontier remains:
 
 $$
 \forall n>0,\quad
-\neg\operatorname{SquareOffsetsFullyCovered}(n).
+\neg\text{SquareOffsetsFullyCovered}(n).
 $$
 
 No theorem below this line is currently claimed.
@@ -183,9 +183,9 @@ LegendreConjecture
 The central equivalence is complete:
 
 $$
-\operatorname{LegendreConjecture}
+\text{LegendreConjecture}
 \iff
-\forall n>0,\;\neg\operatorname{SquareOffsetsFullyCovered}(n).
+\forall n>0,\;\neg\text{SquareOffsetsFullyCovered}(n).
 $$
 
 This is a reduction theorem, not a proof that full cover is impossible.
@@ -299,7 +299,7 @@ The quotient is prime exactly in the simple case:
 $$
 Q\text{ prime}
 \iff
-\operatorname{support}=\{p\}
+\text{support}=\{p\}
 \land
 p^2\nmid n^2+r.
 $$
@@ -381,7 +381,7 @@ Full cover implies
 $$
 \varphi(n)
 \le
-\operatorname{PacketCrossPairCount}(n).
+\text{PacketCrossPairCount}(n).
 $$
 
 For a fixed ordered `(p,q)`, two packet hits imply product-period divisibility;

@@ -162,10 +162,10 @@ theorem pascalCenteredXiZeroDiskWeightedMoment_actualSquaredOrbitSelector
   apply Finset.sum_congr rfl
   intro a ha
   by_cases hasq : a ^ 2 = z ^ 2
-  · simp only [if_pos hasq]
+  · simp only [ite_eq_left hasq]
     rw [gwssSquaredOrbitSelector_eq_one_of_sq_eq hasq]
     simp
-  · simp only [if_neg hasq]
+  · simp only [ite_eq_right hasq]
     rw [gwssSquaredOrbitSelector_eq_zero_of_sq_ne ha hasq]
     simp
 

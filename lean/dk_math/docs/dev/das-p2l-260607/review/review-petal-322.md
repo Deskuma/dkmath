@@ -139,9 +139,9 @@ selectedPressureBucketEquivActive
 したがって、
 
 $$
-\operatorname{SelectedBucket}(d)
+\text{SelectedBucket}(d)
 \simeq
-\operatorname{ActiveSelectedBucket}(d)
+\text{ActiveSelectedBucket}(d)
 $$
 
 が成立する。
@@ -155,10 +155,10 @@ globalSelectedPressureCarrierEquivActiveBuckets
 によって、
 
 $$
-\operatorname{GlobalSelectedCarrier}
+\text{GlobalSelectedCarrier}
 \simeq
-\bigsqcup_{d\in\operatorname{ActiveSupport}}
-\operatorname{ActiveBucket}(d)
+\bigsqcup_{d\in\text{ActiveSupport}}
+\text{ActiveBucket}(d)
 $$
 
 が得られた。
@@ -196,7 +196,7 @@ exactLengthTokenBlockEmbedding
 したがって、
 
 $$
-|\operatorname{ExactLengthTokens}_{q,m}|
+|\text{ExactLengthTokens}_{q,m}|
 \le m-q+1
 $$
 
@@ -216,12 +216,12 @@ depth $d$ について、
 
 $$
 B_d=
-|\operatorname{ActiveSelectedBucket}(d)|
+|\text{ActiveSelectedBucket}(d)|
 $$
 
 $$
 E_d=
-|\operatorname{ExactLengthTokens}(d)|
+|\text{ExactLengthTokens}(d)|
 $$
 
 と置く。
@@ -296,7 +296,7 @@ positive nonsaturated block $k$ について、
 $$
 D_k
 \le
-|\operatorname{SelectedCarrier}_k|
+|\text{SelectedCarrier}_k|
 $$
 
 じゃ。
@@ -307,7 +307,7 @@ $$
 
 $$
 U_d=
-\sum_{\substack{k\text{ active}\\operatorname{selectedDepth}(k)=d}}
+\sum_{\substack{k\text{ active}\\text{selectedDepth}(k)=d}}
 D_k
 $$
 
@@ -376,9 +376,9 @@ exact-length charge 後に残ったのか
 exact-length tokens を selected bucket へ任意に単射し、その image を取り除く。
 
 $$
-\operatorname{ResidualIncidence}(d) = \operatorname{SelectedBucket}(d)
+\text{ResidualIncidence}(d) = \text{SelectedBucket}(d)
 \setminus
-\operatorname{image}(\operatorname{ExactLengthTokens}(d))
+\text{image}(\text{ExactLengthTokens}(d))
 $$
 
 この cardinality は、
@@ -482,7 +482,7 @@ $$
 今回の主 theorem は、
 
 $$
-|\operatorname{GlobalSelectedCarrier}| \le (m-q+1) + |\operatorname{SelectedResidualCarrier}|
+|\text{GlobalSelectedCarrier}| \le (m-q+1) + |\text{SelectedResidualCarrier}|
 $$
 
 じゃ。
@@ -490,7 +490,7 @@ $$
 positive drift unit まで戻すと、
 
 $$
-|\operatorname{PositiveDriftUnits}| \le (m-q+1) + |\operatorname{SelectedResidualCarrier}| + \frac{m-q+2}{2}
+|\text{PositiveDriftUnits}| \le (m-q+1) + |\text{SelectedResidualCarrier}| + \frac{m-q+2}{2}
 $$
 
 となった。
@@ -656,13 +656,13 @@ noncomputable def canonicalPaymentBlockWindow
 そして、
 
 $$
-\operatorname{BlockWindow}(q,m) = \operatorname{Icc}(b_q,e_m)
+\text{BlockWindow}(q,m) = \text{Icc}(b_q,e_m)
 $$
 
 または、
 
 $$
-\operatorname{BlockWindow}(q,m) = \operatorname{range}(e_m+1) \setminus \operatorname{range}(b_q)
+\text{BlockWindow}(q,m) = \text{range}(e_m+1) \setminus \text{range}(b_q)
 $$
 
 を証明する。
@@ -670,7 +670,7 @@ $$
 これにより、任意の predicate $P$ について、
 
 $$
-|{i\in\operatorname{BlockWindow}(q,m)\mid P(i)}| = \sum_{k=q}^{m} |{i\in B_k\mid P(i)}|
+|{i\in\text{BlockWindow}(q,m)\mid P(i)}| = \sum_{k=q}^{m} |{i\in B_k\mid P(i)}|
 $$
 
 が得られる。
@@ -766,7 +766,7 @@ theorem activeSelectedPressureBlock_not_exactLength
 cp-320 までの成果から、positive nonsaturated successor が terminal valuation $v\ge2$ なら、
 
 $$
-D_{k+1}+1 \le |\operatorname{SelectedCarrier}_{k+1}|
+D_{k+1}+1 \le |\text{SelectedCarrier}_{k+1}|
 $$
 
 が期待できる。
@@ -786,7 +786,7 @@ $$
 一方 selected carrier は、
 
 $$
-|\operatorname{Carrier}|=L-v
+|\text{Carrier}|=L-v
 $$
 
 じゃ。

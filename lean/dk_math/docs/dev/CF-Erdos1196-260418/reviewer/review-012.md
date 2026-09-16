@@ -164,7 +164,7 @@ $$
 $$
 \text{independent primitive channels}
 \Rightarrow
-\operatorname{rad}\text{ 下界}
+\text{rad}\text{ 下界}
 $$
 
 という変換を欲しているかを洗う。

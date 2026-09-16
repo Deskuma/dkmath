@@ -56,13 +56,13 @@ $$
 この沈み込み係数を
 
 $$
-\operatorname{phaseDepth}(t)=(1-t)^2+t^2
+\text{phaseDepth}(t)=(1-t)^2+t^2
 $$
 
 と見ると、
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 で半折返し対称を持つ。ここが「繰り返す直線世界」の核じゃ。

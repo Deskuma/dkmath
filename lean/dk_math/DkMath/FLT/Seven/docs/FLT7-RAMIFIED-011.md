@@ -79,11 +79,11 @@ modelEquivRingOfIntegers :
 さらに、
 
 $$
-\operatorname{disc}(K)=49
+\text{disc}(K)=49
 $$
 
 $$
-\operatorname{MinkowskiBound}(K)=\frac{14}{9}<2
+\text{MinkowskiBound}(K)=\frac{14}{9}<2
 $$
 
 から、
@@ -119,7 +119,7 @@ $$
 $$
 
 $$
-\sigma^3=\operatorname{id}
+\sigma^3=\text{id}
 $$
 
 が Lean に固定されました。

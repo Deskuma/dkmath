@@ -1,0 +1,75 @@
+LUNA-006 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Production implementation
+-------------------------
+Added:
+  DkMath/NumberTheory/EisensteinCoordinates.lean
+  DkMath/ABC/GNExcessCubicEisensteinCoordinates.lean
+Updated:
+  DkMath/ABC.lean
+  import DkMath.ABC.GNExcessCubicEisensteinCoordinates immediately after
+  GNExcessCubicMordellIncidence
+
+Focused neutral build
+---------------------
+Command:
+  lake build DkMath.NumberTheory.EisensteinCoordinates
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-006-numbertheory-output.txt
+
+Focused ABC bridge build
+------------------------
+Command:
+  lake build DkMath.ABC.GNExcessCubicEisensteinCoordinates
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/lean-006-abc-output.txt
+
+ABC aggregator build
+--------------------
+Command:
+  lake build DkMath.ABC
+Exit: 0
+Output artifact:
+  docs/dev/ABC-GN-Astra-260906-v1/build-006-abc-output.txt
+
+Principal declarations audited
+------------------------------
+  norm_eisensteinCoord
+  eisensteinCoord_mul
+  eisensteinCoord_sq
+  eisensteinCoord_mul_sq
+  norm_eisensteinCoord_mul_sq
+  eisenstein_square_coefficient_coprime
+  cubicQuadratic_eq_eisensteinNorm
+  GNExcessCubicRealizedLargeModulusShellWitness_product_eq_eisensteinNorm
+
+Forbidden construct scan
+------------------------
+Scanned changed production Lean for:
+  sorry admit axiom abc_main_axiom native_decide unsafe
+Result: no matches.
+
+Trust boundary
+--------------
+The new declarations report only propext, Classical.choice, and Quot.sound,
+or subsets thereof. No sorryAx occurs in the new declarations.
+
+Dependency audit
+----------------
+The neutral module imports only DkMath.NumberTheory.TraceOneQuadratic.
+The ABC bridge imports the LUNA-005 Mordell incidence module and the neutral
+Eisenstein coordinate module. No FLT or Petal import was added.
+
+Scope audit
+-----------
+The implementation contains exact neutral coordinate identities and the cubic
+norm bridge. It does not contain factorization existence or uniqueness, UFD
+extraction, factor counting, integral-point bounds, balanced-box estimates,
+an analytic provider, or an ABC theorem.
+
+git diff --check: exit 0.
+

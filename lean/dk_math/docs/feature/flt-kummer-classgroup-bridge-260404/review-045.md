@@ -33,7 +33,7 @@ $$
 \to
 z-\zeta y = u\cdot\beta^p
 \to
-\operatorname{Norm}(z-\zeta y)=GN
+\text{Norm}(z-\zeta y)=GN
 \to
 GN=s^p
 \to

@@ -82,7 +82,7 @@ $$
 PrimeGe5 の pack と gap-divisible 条件のもとで、ある cyclotomic local context と principal ideal (I) があって、
 
 $$
-\operatorname{span}(z-\zeta y) = I^p
+\text{span}(z-\zeta y) = I^p
 $$
 
 が成り立つなら、
@@ -101,7 +101,7 @@ $$
 
 1 本目は、Stage 1 の結果から
 $$
-\operatorname{span}(z-\zeta y) = I^p
+\text{span}(z-\zeta y) = I^p
 $$
 を与える theorem。
 

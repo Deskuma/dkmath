@@ -24,7 +24,7 @@ def GNDeepLiftResidues (p q b k : ℕ) : Finset ℕ :=
 
 membership は exact に、
 
-$$r\in\operatorname{GNDeepLiftResidues}(p,q,b,k)\iff r<q^k\land q^k\mid GN_p(r,b)$$
+$$r\in\text{GNDeepLiftResidues}(p,q,b,k)\iff r<q^k\land q^k\mid GN_p(r,b)$$
 
 じゃ。
 

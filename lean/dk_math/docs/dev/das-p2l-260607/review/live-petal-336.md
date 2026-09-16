@@ -59,7 +59,7 @@ horizon crossing 数 - actual consumed 数
 
 今回確定した第一の事実は、
 
-$$|\operatorname{ExpiredOutstanding}_H(m)|=\operatorname{Int.toNat}!\left(\operatorname{SourceAgeDeficit}_H(m)\right)$$
+$$|\text{ExpiredOutstanding}_H(m)|=\text{Int.toNat}!\left(\text{SourceAgeDeficit}_H(m)\right)$$
 
 じゃ。
 
@@ -79,7 +79,7 @@ deficit > 0
 
 第二の事実はさらに大きい。
 
-$$\operatorname{UniformAge}(H)\iff\forall m,\ \sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le0$$
+$$\text{UniformAge}(H)\iff\forall m,\ \sum_{k<m}\text{FrontierIncrement}_H(k)\le0$$
 
 ここまで来ると、残る命題は完全に signed-flow 問題じゃ。
 
@@ -97,13 +97,13 @@ horizon を越えて old 側へ入る claim 数
 
 単に、
 
-$$\sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le C$$
+$$\sum_{k<m}\text{FrontierIncrement}_H(k)\le C$$
 
 を得ても、source age は閉じない。
 
 必要なのは、
 
-$$\sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le0$$
+$$\sum_{k<m}\text{FrontierIncrement}_H(k)\le0$$
 
 じゃ。
 
@@ -132,13 +132,13 @@ potential が有限範囲にあるだけなら、得られるのは有限上界�
 
 saturated branch で pointwise に、
 
-$$\operatorname{FrontierIncrement}_H(m)\le0$$
+$$\text{FrontierIncrement}_H(m)\le0$$
 
 まで言えれば最強じゃが、毎 block で horizon crossing と consumption が同期するとは限らぬ。
 
 その場合は、
 
-$$\sum_{j=0}^{L-1}\operatorname{FrontierIncrement}_H(m+j)\le0$$
+$$\sum_{j=0}^{L-1}\text{FrontierIncrement}_H(m+j)\le0$$
 
 という固定短窓 discharge theorem が本命になる。
 
@@ -181,7 +181,7 @@ Stage J と K も対象ビルドを通過しました。監査結果は重要で
 
 おお、これは**非常に価値の高い反例確定**じゃ。
 
-$$\operatorname{FrontierIncrement}_{0}(m)=2-1=1$$
+$$\text{FrontierIncrement}_{0}(m)=2-1=1$$
 
 つまり saturated block では、
 
@@ -199,7 +199,7 @@ $$\operatorname{FrontierIncrement}_{0}(m)=2-1=1$$
 
 しかし、source-age route 自体が倒れたわけではない。uniform age に必要なのは各項の非正性ではなく、
 
-$$\forall m,\ \sum_{k<m}\operatorname{FrontierIncrement}_{H}(k)\le0$$
+$$\forall m,\ \sum_{k<m}\text{FrontierIncrement}_{H}(k)\le0$$
 
 という**全 prefix の非正性**じゃ。
 
@@ -215,7 +215,7 @@ $H>0$ では crossing claim は現在 block の demand ではなく、$H$ source
 
 例えば saturated block の $+1$ に対し、後続 block が $-1$ 以下を供給して、
 
-$$\sum_{j=0}^{L-1}\operatorname{FrontierIncrement}_{H}(m+j)\le0$$
+$$\sum_{j=0}^{L-1}\text{FrontierIncrement}_{H}(m+j)\le0$$
 
 を証明する道じゃ。
 

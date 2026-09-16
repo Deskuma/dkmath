@@ -48,7 +48,7 @@ Build completed successfully (8565 jobs).
 今回の意味論値は、
 
 \[
-\operatorname{semanticValue}(x)=\sup_n \operatorname{lowerReal}(x,n)
+\text{semanticValue}(x)=\sup_n \text{lowerReal}(x,n)
 \]
 
 として定義されている。
@@ -70,7 +70,7 @@ Build completed successfully (8565 jobs).
 次に、`lowerReal_le_upperReal` がよい。これは単に同じ stage の `lo ≤ hi` を示すだけでなく、任意の \(m,n\) について、
 
 \[
-\operatorname{lowerReal}(x,m)\le \operatorname{upperReal}(x,n)
+\text{lowerReal}(x,m)\le \text{upperReal}(x,n)
 \]
 
 を示している。これにより、どの upper endpoint も lower sequence 全体の上界になる。ここが `semanticValue_le_upperReal` に効いておる。
@@ -108,7 +108,7 @@ theorem eq_semanticValue_of_mem_all_intervals
 証明方針は、`r` と `semanticValue x` がどちらも同じ区間に入るので、
 
 \[
-|r-\operatorname{semanticValue}(x)|\le \operatorname{upperReal}(x,n)-\operatorname{lowerReal}(x,n)
+|r-\text{semanticValue}(x)|\le \text{upperReal}(x,n)-\text{lowerReal}(x,n)
 \]
 
 を任意の \(n\) で示す。右辺が \(0\) に収束するので、左辺は \(0\)。よって等しい。

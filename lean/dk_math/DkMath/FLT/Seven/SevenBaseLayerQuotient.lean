@@ -70,7 +70,7 @@ structure AwaySevenBaseCarrierQuotient {x y z : ℕ}
 theorem nonempty_awaySevenBaseCarrierQuotient {x y z : ℕ}
     {r : AwayCubicRoutingPacket x y z} (p : AwaySevenPivotDepthPacket r)
     (hbase : p.exponent = 1) : Nonempty (AwaySevenBaseCarrierQuotient p) := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   let endpoint := endpointRoutingFactorNat y z p.row
   have endpoint_pos : 0 < endpoint := by
     simpa [endpoint] using p.endpoint_factor_pos

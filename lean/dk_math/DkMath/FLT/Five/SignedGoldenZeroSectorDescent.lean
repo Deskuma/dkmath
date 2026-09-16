@@ -104,7 +104,7 @@ theorem five_not_dvd_H (p : GoldenZeroSectorDescentPacket) :
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq p.base
   have hnormSq : (5 : ℤ) ∣ goldenNorm p.base ^ 2 := by
     convert dvd_sub hH hdiff using 1
-    all_goals first | ring | rfl
+    ring
   exact (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
 
 theorem five_not_dvd_D (p : GoldenZeroSectorDescentPacket) :
@@ -195,15 +195,15 @@ theorem five_dvd_norm_of_nonzero_goldenUnitSector
   · exact (hi rfl).elim
   · rw [hAlpha, golden_unit_one_mul_fifth_snd] at hFive
     convert dvd_sub hFive hS using 1
-    all_goals first | ring | rfl
+    ring
   · rw [hAlpha, golden_unit_two_mul_fifth_snd] at hFive
     convert dvd_sub hFive (dvd_mul_of_dvd_right hS 2) using 1
-    all_goals first | ring | rfl
+    ring
   · rw [hAlpha, golden_unit_three_mul_fifth_snd] at hFive
     have h2F : (5 : ℤ) ∣
         2 * goldenFifthFstPoly gamma.fst gamma.snd := by
       convert dvd_sub hFive (dvd_mul_of_dvd_right hS 3) using 1
-      all_goals first | ring | rfl
+      ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h2F with h52 | hF
     · norm_num at h52
     · exact hF
@@ -211,7 +211,7 @@ theorem five_dvd_norm_of_nonzero_goldenUnitSector
     have h3F : (5 : ℤ) ∣
         3 * goldenFifthFstPoly gamma.fst gamma.snd := by
       convert dvd_sub hFive (dvd_mul_of_dvd_right hS 5) using 1
-      all_goals first | ring | rfl
+      all_goals first | ring
     rcases (show Prime (5 : ℤ) by norm_num).dvd_mul.mp h3F with h53 | hF
     · norm_num at h53
     · exact hF
@@ -347,7 +347,7 @@ theorem fifthRoot_five_not_dvd_H
   have hdiff := five_dvd_goldenFifthSndFactor_sub_norm_sq gamma
   have hnormSq : (5 : ℤ) ∣ goldenNorm gamma ^ 2 := by
     convert dvd_sub hH hdiff using 1
-    all_goals first | ring | rfl
+    ring
   have hnormFive : (5 : ℤ) ∣ goldenNorm gamma :=
     (show Prime (5 : ℤ) by norm_num).dvd_of_dvd_pow hnormSq
   rw [hnorm] at hnormFive

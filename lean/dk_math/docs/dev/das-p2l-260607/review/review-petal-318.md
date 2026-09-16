@@ -116,7 +116,7 @@ $d>v$ の claim source は exact depth $d$ を持つので、depth $v$ ではま
 したがって、
 
 $$
-C_{>v}\hookrightarrow\operatorname{ContinuationFiber}(v)
+C_{>v}\hookrightarrow\text{ContinuationFiber}(v)
 $$
 
 が成立し、
@@ -124,7 +124,7 @@ $$
 $$
 |C_{>v}|
 \le
-|\operatorname{ContinuationFiber}(v)|
+|\text{ContinuationFiber}(v)|
 $$
 
 となる。
@@ -163,7 +163,7 @@ $$
 $$
 0<D
 \Longrightarrow
-M_v>0\lor\operatorname{Saturated}
+M_v>0\lor\text{Saturated}
 $$
 
 という cp-318 の二分は正確じゃ。
@@ -235,7 +235,7 @@ $$
 また saturated drift は $1$ なので、exact block ledger より、
 
 $$
-\operatorname{bitWidth}(x') = \operatorname{bitWidth}(x)+1
+\text{bitWidth}(x') = \text{bitWidth}(x)+1
 $$
 
 となる。
@@ -293,7 +293,7 @@ $$
 しかし saturated drift $1$ は bit width の厳密増加を要求している。
 
 $$
-\operatorname{bitWidth}(x') = \operatorname{bitWidth}(x)+1
+\text{bitWidth}(x') = \text{bitWidth}(x)+1
 $$
 
 これは $x'\le x$ と両立しない。
@@ -454,7 +454,7 @@ $$
 二つの saturated block はそれぞれ drift $1$ なので、
 
 $$
-\operatorname{bitWidth}(x_2) = \operatorname{bitWidth}(x_0)+2
+\text{bitWidth}(x_2) = \text{bitWidth}(x_0)+2
 $$
 
 となる。
@@ -499,9 +499,9 @@ $$
 
 $$
 \boxed{
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longrightarrow
-\neg\operatorname{Saturated}(k+1)
+\neg\text{Saturated}(k+1)
 }
 $$
 
@@ -529,7 +529,7 @@ saturated block
 したがって既存の二分定理から、
 
 $$
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \land 0<D_{k+1}
 \Longrightarrow
 0<M_{v_{k+1}}(k+1)
@@ -553,7 +553,7 @@ $$
 
 $$
 \boxed{
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longrightarrow
 D_{k+1}\le0
 \ \lor
@@ -685,9 +685,9 @@ theorem CanonicalOpenPositiveQueueExcursion.positive_successor_of_saturated_has_
 さらに saturated index は隣接しないので、有限 interval 内で、
 
 $$
-2\,|\operatorname{SaturatedIndices}|
+2\,|\text{SaturatedIndices}|
 \le
-\operatorname{length}+1
+\text{length}+1
 $$
 
 型の packing bound が得られる。

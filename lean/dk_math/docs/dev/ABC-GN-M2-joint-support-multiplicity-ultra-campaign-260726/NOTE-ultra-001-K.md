@@ -114,7 +114,7 @@ q ∤ b
 
 構造は、
 
-$$#\operatorname{Roots}(q^k)\le#\operatorname{Roots}(q)\le p-1$$
+$$#\text{Roots}(q^k)\le#\text{Roots}(q)\le p-1$$
 
 となった。
 

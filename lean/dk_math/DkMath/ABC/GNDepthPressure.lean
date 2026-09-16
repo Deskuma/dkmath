@@ -149,12 +149,12 @@ theorem GNNonExceptionalValuationExcess_eq_sum_depthMass
             apply Finset.sum_congr rfl
             intro k hk
             by_cases hkTwo : 2 ≤ k
-            · rw [if_pos hkTwo]
+            · rw [ite_eq_left hkTwo]
               simp only [hkTwo, true_and]
               unfold GNNonExceptionalDepthMass
               rw [← Finset.sum_filter]
               rfl
-            · rw [if_neg hkTwo]
+            · rw [ite_eq_right hkTwo]
               simp only [hkTwo, false_and, ↓reduceIte, Finset.sum_const_zero]
     _ = ∑ k ∈ (Finset.range (GN p a b)).filter (fun k => 2 ≤ k),
           GNNonExceptionalDepthMass p a b k := by

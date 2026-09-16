@@ -361,7 +361,7 @@ theorem gapRoot_isCoprime_quotientRoot
       have hqRight : q ∣ p.signedRightRoot := by
         have := dvd_add hqSignedGap hqLeft
         simpa using this
-      exact hq.not_unit
+      exact hq.not_isUnit
         (p.signedRoots_isCoprime.isUnit_of_dvd'
           hqLeft hqRight)
 

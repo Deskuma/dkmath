@@ -26,7 +26,7 @@ $$
 CB=w^7\iff C=c^7\ \land\ B=b^7
 $$
 
-が Lean に固定されています。ここで $B=\operatorname{residualRoot}=\operatorname{norm}(\rho)$ です。
+が Lean に固定されています。ここで $B=\text{residualRoot}=\text{norm}(\rho)$ です。
 
 公開 PR head も報告どおり `2af8e2d29efb0130c672e7590c2d2a5919952733` です。PR は open / draft / mergeable。Lean CI run 407 は監査時点では進行中です。
 
@@ -80,7 +80,7 @@ $$
 また、
 
 $$
-\operatorname{norm}(\rho)=B
+\text{norm}(\rho)=B
 $$
 
 かつ、
@@ -128,13 +128,13 @@ $$
 従って summit coordinate は、
 
 $$
-\operatorname{cyclotomicSevenToTraceOne}(c,e)=\operatorname{sevenAxis}\rho^7
+\text{cyclotomicSevenToTraceOne}(c,e)=\text{sevenAxis}\rho^7
 $$
 
 から、
 
 $$
-\boxed{\operatorname{cyclotomicSevenToTraceOne}(c,e)=\operatorname{sevenAxis}\gamma^{49}}
+\boxed{\text{cyclotomicSevenToTraceOne}(c,e)=\text{sevenAxis}\gamma^{49}}
 $$
 
 へ昇格します。
@@ -168,7 +168,7 @@ $$
 一方 $\rho=\gamma^7$ なので、$\gamma=(a,n)$ と置けば、
 
 $$
-v=\operatorname{seventhPowerSnd}(a,n)
+v=\text{seventhPowerSnd}(a,n)
 $$
 
 です。
@@ -176,7 +176,7 @@ $$
 既存の second-coordinate factorization は、
 
 $$
-\operatorname{seventhPowerSnd}(a,n)=7n,S(a,n)
+\text{seventhPowerSnd}(a,n)=7n,S(a,n)
 $$
 
 です。
@@ -198,7 +198,7 @@ $$
 ここで、
 
 * $\gamma$ の coordinates は primitive
-* $\operatorname{norm}(\gamma)=b$
+* $\text{norm}(\gamma)=b$
 * $7\nmid b$
 * よって $7\nmid S(a,n)$
 * $\gcd(|n|,|S(a,n)|)=1$
@@ -301,7 +301,7 @@ $$
 二つの cubic form の判別式を計算すると、
 
 $$
-\operatorname{disc}(L)=\operatorname{disc}(R)=49
+\text{disc}(L)=\text{disc}(R)=49
 $$
 
 です。
@@ -333,11 +333,11 @@ $$
 を考えると、直接 determinant 計算により、
 
 $$
-\boxed{L(a,n)=\operatorname{Norm}_{\mathcal O_7/\mathbb Z}(a-\alpha n)}
+\boxed{L(a,n)=\text{Norm}_{\mathcal O_7/\mathbb Z}(a-\alpha n)}
 $$
 
 $$
-\boxed{R(a,n)=\operatorname{Norm}_{\mathcal O_7/\mathbb Z}(a+(1+\alpha)n)}
+\boxed{R(a,n)=\text{Norm}_{\mathcal O_7/\mathbb Z}(a+(1+\alpha)n)}
 $$
 
 となります。
@@ -345,11 +345,11 @@ $$
 つまり receiver 成立後の二つの七乗方程式は、
 
 $$
-\operatorname{Norm}(a-\alpha n)=\ell^7
+\text{Norm}(a-\alpha n)=\ell^7
 $$
 
 $$
-\operatorname{Norm}(a+(1+\alpha)n)=r^7
+\text{Norm}(a+(1+\alpha)n)=r^7
 $$
 
 という、**実三次整数環上の norm seventh-power equation**です。
@@ -365,7 +365,7 @@ $$
 直接計算すると、
 
 $$
-\boxed{\operatorname{Norm}(\pi)=-7}
+\boxed{\text{Norm}(\pi)=-7}
 $$
 
 です。
@@ -385,7 +385,7 @@ $$
 で、
 
 $$
-\operatorname{Norm}(\varepsilon)=-1
+\text{Norm}(\varepsilon)=-1
 $$
 
 です。
@@ -467,7 +467,7 @@ ramified prime^6 × seventh power
 もし三次整数環で conjugate ideals の coprimalityを証明できれば、
 
 $$
-\operatorname{Norm}(\eta_L)=\ell^7
+\text{Norm}(\eta_L)=\ell^7
 $$
 
 から、
@@ -574,13 +574,13 @@ $$
 もし新しい整数 endpoint pair $(z',y')$ を構成し、
 
 $$
-\operatorname{cyclotomicSevenToTraceOne}(z',y')=\rho
+\text{cyclotomicSevenToTraceOne}(z',y')=\rho
 $$
 
 を証明できれば、
 
 $$
-\operatorname{cyclotomicSevenToTraceOne}(z',y')=\gamma^7
+\text{cyclotomicSevenToTraceOne}(z',y')=\gamma^7
 $$
 
 となります。
@@ -732,7 +732,7 @@ $$
 という quadratic root の内部解除と、
 
 $$
-\boxed{\operatorname{disc}(L)=\operatorname{disc}(R)=49}
+\boxed{\text{disc}(L)=\text{disc}(R)=49}
 $$
 
 という実三次魔核です。

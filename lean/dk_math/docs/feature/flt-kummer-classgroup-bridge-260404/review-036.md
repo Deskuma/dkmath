@@ -83,19 +83,19 @@ $$
 具体的には、まず別 theorem として
 
 $$
-\operatorname{span}(\text{chosen}) \cdot \operatorname{span}(\text{tail}) = \operatorname{span}(x)^p
+\text{span}(\text{chosen}) \cdot \text{span}(\text{tail}) = \text{span}(x)^p
 $$
 
 を返す theorem、ついで
 
 $$
-\operatorname{IsCoprime}(\operatorname{span}(\text{chosen}),\operatorname{span}(\text{tail}))
+\text{IsCoprime}(\text{span}(\text{chosen}),\text{span}(\text{tail}))
 $$
 
 を返す theorem、さらに
 
 $$
-\operatorname{span}(x)\neq \bot
+\text{span}(x)\neq \bot
 $$
 
 を返す theorem を、**actual first-case specialization の名で個別に固定** するのじゃ。

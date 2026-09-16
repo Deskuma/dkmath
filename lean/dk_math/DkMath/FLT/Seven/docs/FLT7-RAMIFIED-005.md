@@ -55,7 +55,7 @@ c-e=7^6A^7
 $$
 
 $$
-\operatorname{norm}(u,v)=B
+\text{norm}(u,v)=B
 $$
 
 を持っています。
@@ -99,7 +99,7 @@ $$
 $v\equiv0\pmod{49}$ なので、trace-one norm、
 
 $$
-B=\operatorname{norm}(u,v)
+B=\text{norm}(u,v)
 $$
 
 は、
@@ -335,7 +335,7 @@ residualRoot B の principal digit が 0 か？
 という一桁の問いになります。
 
 $$
-\boxed{\text{魔核は }U\text{ ではなく }B=\operatorname{norm}(root)}
+\boxed{\text{魔核は }U\text{ ではなく }B=\text{norm}(root)}
 $$
 
 です。

@@ -47,7 +47,7 @@ $$
 その上で、\(\omega := z y^{-1} \in \mathbb Z/q\mathbb Z\) が
 
 $$
-\omega^p = 1,\qquad \omega \neq 1,\qquad \operatorname{ord}(\omega)=p
+\omega^p = 1,\qquad \omega \neq 1,\qquad \text{ord}(\omega)=p
 $$
 
 を満たす、つまり **primitive \(p\)-th root of unity** であることが証明された。

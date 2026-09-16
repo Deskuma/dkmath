@@ -1,0 +1,61 @@
+FOCUSED BUILD: exit 0; ./lean-build.sh DkMath.ABC.GNCubicOrientedContract DkMath.NumberTheory.GNThreeHenselDepth
+🔍 Running default build...
+🚀 Starting build Lean...
+⚠ [8685/8810] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+🔍 Checking build results...
+  see: __build.log:1
+✅️ build succeeded
+
+FINAL SCRATCH: exit 0; lake env lean /tmp/astra000/FinalRecon.lean (copy of scratch-000.lean.txt)
+'Astra000.orientation_gcd_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.wieferich_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.repeated_parts_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.cubic_boundary_three_eighths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.mandatory_regression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.regression_primes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.both_wieferich_regression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Astra000.both_large_regression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.GNExcessJointDepthModulus_target_eq_repeatedPart' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.GNNonExceptionalRepeatedPart_eq_wieferichPrimePowerProduct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.ABC.GNExcess_target_boundaryWeight_le_repeatedPart_rpow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.ABC.exp_GNExcessMassAt_sum_le_halfEuler_add_large' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.existsUnique_GN_three_powLift_digit_of_primitive_nonramified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+ADDITIONAL SURFACE AUDIT SOURCE
+import DkMath.ABC.GNCubicOrientedContract
+import DkMath.ABC.ABCEpsilonIdentity
+open DkMath.ABC
+#print axioms exists_oriented_cubicPetalWieferichPacket
+#print axioms ABCRawBound_iff_nonempty_GNOddPrimeJointContract
+#print axioms ABCRawBound_iff_nonempty_GNCubicOrientedContract
+#print axioms Triple.quality_eq_one_add_abcEpsilon
+#print axioms Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime
+#print axioms Triple.mod_eq_one_of_mem_GNNonExceptionalSupport
+
+ADDITIONAL SURFACE AUDIT: exit 0; lake env lean /tmp/astra000/SurfaceAudit.lean
+'DkMath.ABC.exists_oriented_cubicPetalWieferichPacket' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ABCRawBound_iff_nonempty_GNOddPrimeJointContract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.ABCRawBound_iff_nonempty_GNCubicOrientedContract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.Triple.quality_eq_one_add_abcEpsilon' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.ABC.Triple.GNExceptionalValuationExcess_eq_zero_of_oddPrime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.ABC.Triple.mod_eq_one_of_mem_GNNonExceptionalSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+EXACT NUMERICAL EXPERIMENT: exit 0; python docs/dev/ABC-GN-Astra-260906-v0/numeric-000.py; SymPy 1.12
+mandatory {"a": 605, "b": 370688, "c": 371293, "coprime": true, "F": 412901944777, "G": 138083490139, "factors": [{"7": 1, "37": 2, "1777": 1, "24247": 1}, {"7": 3, "41413": 1, "9721": 1}], "repeated": [{"37": 2}, {"7": 3}], "moduli": [1369, 343], "gcd": 7}
+first_both {"a": 11, "b": 40, "c": 51, "coprime": true, "F": 6241, "G": 3283, "factors": [{"79": 2}, {"7": 2, "67": 1}], "repeated": [{"79": 2}, {"7": 2}], "moduli": [6241, 49], "gcd": 1}
+first_both_moduli_gt_c_plus_one {"a": 56, "b": 59, "c": 115, "coprime": true, "F": 23491, "G": 22801, "factors": [{"13": 2, "139": 1}, {"151": 2}], "repeated": [{"13": 2}, {"151": 2}], "moduli": [169, 22801], "gcd": 1}
+scan {"c_max": 1000, "positive_pairs_a_lt_b": 152095, "gcd_or_disjointness_counterexamples": []}
+paired_fixed_sum {"c": 115, "moduli": [169, 22801], "product": 3853369, "roots1": [56, 120], "roots2": [56, 22630], "addresses": [56, 455849, 2097748, 2553541], "positive_interval_points": [56], "pure_density_bound_fails": true}
+paired_finite_depth {"k": 2, "a": 7428, "b": 1, "divisors": [49, 169], "verified": true}
+paired_finite_depth {"k": 4, "a": 43267372, "b": 1, "divisors": [2401, 28561], "verified": true}
+paired_finite_depth {"k": 8, "a": 3832738617884597, "b": 1, "divisors": [5764801, 815730721], "verified": true}
+paired_finite_depth {"k": 16, "a": 8231168636035898637629074937191, "b": 1, "divisors": [33232930569601, 665416609183179841], "verified": true}

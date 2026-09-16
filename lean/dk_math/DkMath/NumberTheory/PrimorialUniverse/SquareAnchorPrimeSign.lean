@@ -55,7 +55,7 @@ theorem square_mod_prime_eq_iff_sameSquarePrimeSign
     (hp : Nat.Prime p) :
     ((a : ZMod p) ^ 2 = (b : ZMod p) ^ 2) ↔
       SameSquarePrimeSign p a b := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   constructor
   · intro hsq
     have hfactor :

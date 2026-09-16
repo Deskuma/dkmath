@@ -360,7 +360,7 @@ Then every prime divisor of `P + u` lies outside `S`.
 The preferred public existence theorem is:
 
 $$
-\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 under:
@@ -983,7 +983,7 @@ $$
 The intended uniqueness criterion is:
 
 $$
-\operatorname{width}(J_n)<1
+\text{width}(J_n)<1
 $$
 
 which implies that `J_n` contains at most one integer.

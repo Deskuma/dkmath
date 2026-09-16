@@ -128,7 +128,7 @@ theorem freshPrimeLiftIndexReflection_fixed_unique
     {jzero j : ZMod q}
     (hfix : freshPrimeLiftIndexReflection q jzero j = j) :
     j = jzero := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have h2 : (2 : ZMod q) ≠ 0 := by
     intro h2zero
     have hdiv : q ∣ 2 := (ZMod.natCast_eq_zero_iff _ _).mp h2zero
@@ -157,8 +157,8 @@ theorem freshPrimeSurvivingLiftIndex_reflection_iff
     j ∈ freshPrimeSurvivingLiftIndices S q b ↔
       freshPrimeLiftIndexReflectionNat q jzero j ∈
         freshPrimeSurvivingLiftIndices S q b := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
-  letI : NeZero q := ⟨hq.ne_zero⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
+  let : NeZero q := ⟨hq.ne_zero⟩
   let k := freshPrimeLiftIndexReflectionNat q jzero j
   have hk : k < q := freshPrimeLiftIndexReflectionNat_lt
   have hcast : (k : ZMod q) =
@@ -203,8 +203,8 @@ theorem freshPrimePhaseLiftIndex_reflection_iff
     j ∈ freshPrimePhaseLiftIndices S q a b ↔
       freshPrimeLiftIndexReflectionNat q jzero j ∈
         freshPrimePhaseLiftIndices S q a b := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
-  letI : NeZero q := ⟨hq.ne_zero⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
+  let : NeZero q := ⟨hq.ne_zero⟩
   let k := freshPrimeLiftIndexReflectionNat q jzero j
   have hk : k < q := freshPrimeLiftIndexReflectionNat_lt
   have hcast : (k : ZMod q) =
@@ -297,8 +297,8 @@ theorem freshPrimeNeutralLiftIndex_existsUnique_reflected_partner
       k ≠ j ∧
       (k : ZMod q) =
         freshPrimeLiftIndexReflection q (jzero : ZMod q) (j : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
-  letI : NeZero q := ⟨hq.ne_zero⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
+  let : NeZero q := ⟨hq.ne_zero⟩
   let k := freshPrimeLiftIndexReflectionNat q jzero j
   have hk : k < q := freshPrimeLiftIndexReflectionNat_lt
   have hcast : (k : ZMod q) =

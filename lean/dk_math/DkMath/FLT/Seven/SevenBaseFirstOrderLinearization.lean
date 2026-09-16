@@ -28,7 +28,7 @@ theorem AwaySevenBaseCarrierQuotient.linearized_first_order_eq_mod_seven
     AwaySevenBaseLinearEquationModSeven p.row
       r.cubic.rootTriple.normal.root.fst
       r.cubic.rootTriple.normal.root.snd y z := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have h := q.first_order_eq_mod_seven
   cases hrow : p.row <;>
     simp only [AwaySevenBaseFirstOrderEquationModSeven,
@@ -100,7 +100,7 @@ theorem AwaySevenBaseCarrierQuotient.endpoint_isUnit_mod_seven
     {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
     AwaySevenBaseEndpointIsUnitModSeven p.row y z := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   have hne := q.endpoint_ne_zero_mod_seven
   cases hrow : p.row <;>
     simp only [AwaySevenBaseEndpointNonzeroModSeven,
@@ -129,7 +129,7 @@ theorem nonempty_awaySevenBaseLinearUnitPacket
     {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
     Nonempty (AwaySevenBaseLinearUnitPacket p) := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   rcases nonempty_awaySevenBaseSignedKernel p q.depth_eq_one with ⟨kernel⟩
   have hroot :
       ((r.cubic.rootTriple.normal.root.fst +
@@ -181,7 +181,7 @@ theorem nonempty_awaySevenBaseUnitEquationPacket
     {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     {p : AwaySevenPivotDepthPacket r} (q : AwaySevenBaseCarrierQuotient p) :
     Nonempty (AwaySevenBaseUnitEquationPacket p) := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   rcases nonempty_awaySevenBaseLinearUnitPacket q with ⟨linear⟩
   have hroot : IsUnit (awaySevenBaseRootLinearValueModSeven
       r.cubic.rootTriple.normal.root.fst

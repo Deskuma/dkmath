@@ -43,7 +43,7 @@ theorem squareAnchorFreshPrimePlus_eq_blockQuotient
     {q : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S) (n : ℕ) :
     squareAnchorFreshPrimePlus S q n =
       (squareAnchorPhaseBlockQuotient S n : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   have hdecomp := squareAnchorPhaseRepresentative_add_blockQuotient hS n
@@ -155,7 +155,7 @@ theorem squareAnchorFreshPrimeRadius_add_period
     {q : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S) (n : ℕ) :
     squareAnchorFreshPrimeRadius S q (n + finitePrimeBasisProduct S) =
       squareAnchorFreshPrimeRadius S q n + 1 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   unfold squareAnchorFreshPrimeRadius freshPrimePhaseRadius
@@ -228,7 +228,7 @@ theorem squareAnchorFreshPrimeRadius_add_mul_period
     {q : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S) (n k : ℕ) :
     squareAnchorFreshPrimeRadius S q (n + k * finitePrimeBasisProduct S) =
       squareAnchorFreshPrimeRadius S q n + (k : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   have hMi : (finitePrimeBasisProduct S : ZMod q) *

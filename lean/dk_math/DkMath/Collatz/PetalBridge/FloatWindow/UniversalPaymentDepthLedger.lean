@@ -171,7 +171,7 @@ theorem CanonicalEndpointForwardWindowMatching.to_excursionRepaidAt
     (h : CanonicalEndpointForwardWindowMatching n q r) :
     CanonicalEndpointExcursionRepaidAt n q r := by
   rcases h with ⟨hqr, pay, hpay, _⟩
-  letI : Finite (CanonicalEndpointCapacityWindowCarrier n q r) := by
+  let : Finite (CanonicalEndpointCapacityWindowCarrier n q r) := by
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective pay hpay
@@ -260,7 +260,7 @@ theorem natCard_canonicalEndpointDepthClaimCarrier
   unfold cumulativeCanonicalEndpointClaims
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk), canonicalPaymentClaimDepths_card]
+  rw [dite_eq_left (Finset.mem_range.mp hk), canonicalPaymentClaimDepths_card]
 
 /-- Level-addressed capacity carrier has exactly the cumulative capacity count. -/
 theorem natCard_canonicalEndpointLevelCapacityCarrier
@@ -274,7 +274,7 @@ theorem natCard_canonicalEndpointLevelCapacityCarrier
   unfold cumulativeCanonicalEndpointCapacity
   apply Finset.sum_congr rfl
   intro k hk
-  rw [dif_pos (Finset.mem_range.mp hk),
+  rw [dite_eq_left (Finset.mem_range.mp hk),
     canonicalEndpointCapacityDepthSlots_card, canonicalEndpointCapacitySlots_card]
 
 /-- Source-time claims mapped to their exact canonical recovery depths. -/
@@ -497,9 +497,10 @@ theorem canonicalEndpointCapacityLevelSlots_seven_zero :
   classical
   rw [canonicalEndpointCapacityLevelSlots, canonicalEndpointCapacityDepthSlots,
     sevenDepth_endpoint_zero]
+  rw [orbitWindowHeight_eq_s_iterateT]
   norm_num [orbitWindowHeight_eq_s_iterateT, s, iterateT, T, sevenDepthOdd,
     mkOddNat, threeNPlusOne, pow2, sevenDepth_v2_22, sevenDepth_v2_34,
-    sevenDepth_v2_52]
+    sevenDepth_v2_52, sevenDepth_v2_8, sevenDepth_v2_14, sevenDepth_v2_40]
 
 /-- The second seven-regression block has only its immediate depth-one claim. -/
 theorem canonicalPaymentClaimDepths_seven_one :
@@ -523,9 +524,10 @@ theorem canonicalEndpointCapacityLevelSlots_seven_one :
   classical
   rw [canonicalEndpointCapacityLevelSlots, canonicalEndpointCapacityDepthSlots,
     sevenDepth_endpoint_one]
+  rw [orbitWindowHeight_eq_s_iterateT]
   norm_num [orbitWindowHeight_eq_s_iterateT, s, iterateT, T, sevenDepthOdd,
     mkOddNat, threeNPlusOne, pow2, sevenDepth_v2_22, sevenDepth_v2_34,
-    sevenDepth_v2_52, sevenDepth_v2_40]
+    sevenDepth_v2_52, sevenDepth_v2_40, sevenDepth_v2_8, sevenDepth_v2_14]
   ext d
   simp
   omega

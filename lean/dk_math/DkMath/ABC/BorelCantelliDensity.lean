@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- 可算和収束 ⇒ limsup が測度 0（Borel–Cantelli #1 の素朴版）
     標準手順：
@@ -41,7 +42,7 @@ theorem borel_cantelli_one
     simp only [limsup_eq_iInf_iSup_of_nat, Set.iInf_eq_iInter, Set.iSup_eq_iUnion]
     -- ⋃ i, ⋃ (_ : i ≥ N), E i を ⋃ n ∈ {m | N ≤ m}, E n に書き換える
     ext N
-    simp only [Set.mem_iInter, Set.mem_iUnion, Set.mem_setOf_eq, ge_iff_le]
+    simp only [Set.mem_iInter, Set.mem_iUnion, Set.mem_ofPred_eq, ge_iff_le]
 
 
   -- 尾和が 0 に収束
@@ -64,7 +65,7 @@ theorem borel_cantelli_one
     -- 可算劣加法を使う
     have h_Union : (⋃ n ∈ {m | N ≤ m}, E n) = ⋃ k, E (N + k) := by
       ext x
-      simp only [Set.mem_iUnion, Set.mem_setOf_eq]
+      simp only [Set.mem_iUnion, Set.mem_ofPred_eq]
       constructor
       · intro ⟨n, hn, hx⟩
         use n - N
@@ -164,7 +165,7 @@ theorem borel_cantelli_one
   -- 測度の連続性を使う：単調減少列の交わり
   have h_anti : ∀ N M, N ≤ M → (⋃ n ∈ {m | M ≤ m}, E n) ⊆ (⋃ n ∈ {m | N ≤ m}, E n) := by
     intro N M hNM x
-    simp only [Set.mem_iUnion, Set.mem_setOf_eq]
+    simp only [Set.mem_iUnion, Set.mem_ofPred_eq]
     intro ⟨n, hn, hx⟩
     exact ⟨n, le_trans hNM hn, hx⟩
 
@@ -179,7 +180,7 @@ theorem borel_cantelli_one
       -- これは ⋃ k, E (N + k) と同じ（h_Union で証明済み）
       have h_Union : (⋃ n ∈ {m | N ≤ m}, E n) = ⋃ k, E (N + k) := by
         ext x
-        simp only [Set.mem_iUnion, Set.mem_setOf_eq]
+        simp only [Set.mem_iUnion, Set.mem_ofPred_eq]
         constructor
         · intro ⟨n, hn, hx⟩
           use n - N
@@ -242,7 +243,7 @@ theorem eventually_not_is_bad_adjacent
   -- 任意確率空間で良いが、ここでは Unit 空間に固定
   let Ω := Unit
   let μ : Measure Ω := Measure.dirac ()
-  haveI : IsProbabilityMeasure μ := by infer_instance
+  have : IsProbabilityMeasure μ := by infer_instance
 
   -- 尾確率の上界（既存 API を利用）
   have hTailProbμ :

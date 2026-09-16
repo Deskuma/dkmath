@@ -18,50 +18,33 @@ import DkMath.FLT.QuadraticEssence
 set_option linter.style.longLine false
 
 /-!
-# DkMath FLT Aggregator
+# DkMath FLT historical broad aggregator
 
-`DkMath.FLT` は、FLT 関連の公開面をまとめる top-level import 入口。
+`DkMath.FLT` is a broad compatibility/research aggregator that predates the
+independent completed exponent-three public surface.  It still imports legacy
+`Main`, Kummer/provider research, FLT5, FLT7 research, and related bridge
+modules, so it is intentionally **not** the canonical discovery import for the
+current standalone FLT3 proof.
 
-主な役割:
-- `Main` 側の `d = 3` 公開 API を束ねる
-- `Kummer` 側の regular-prime / class-group route を公開面へ載せる
-- `PrimeProvider` 側の provider chain を同じ入口から辿れるようにする
-- `Samples` 側の discovery 用 example を同じ入口から辿れるようにする
-- `Five` 側の standalone-first FLT5 / GN5 実験塔を公開面へ載せる
+For completed exponent-specific public results, prefer explicit imports:
 
-## public/provider 導線の現状
+```lean
+import DkMath.FLT.Three
+import DkMath.FLT.Five
+```
 
-`RegularPrimeRoute` には、
-`TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch 向けの
-provider-facing theorem として次を用意している。
+with endpoints:
 
-- `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-- `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+- `DkMath.FLT.Three.fermatThree_no_positive_solution`
+- `DkMath.FLT.Five.fermatFive_no_positive_solution`
 
-これらは
-`FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-を既存の core bridge
-`triominoCosmic_globalProvider_of_FLTPrimeGe5`
-/
-`triominoPrimeProvider_of_FLTPrimeGe5`
-へ合成した薄い wrapper であり、
-`DkMath.FLT` を import すれば top-level 公開面からそのまま使える。
+For the current odd-prime generalization architecture, see `DkMath.FLT.Prime.*`
+and `docs/refact/FLT-Prime-Generalization-260911-v0/summary-026.md`.
 
-住み分け:
-- abstract theorem-parameterized route:
-  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-- provider concrete route:
-  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  /
-  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+For neutral reusable mathematics extracted from FLT and other research owners,
+prefer `DkMath.Lib` where an appropriate promoted API exists.
 
-したがって、
-`TriominoSquarefreeGNBridgeProvider` を持てる branch では、
-上の provider concrete route を canonical な public/provider 導線として使う。
-
-sample ベースで入口を見たい場合は、
-`DkMath.FLT.Samples`
-と
-`DkMath/FLT/README-provider-route.md`
-を参照。
+No import semantics are changed by this documentation note: in particular,
+`DkMath.FLT.Three` remains an explicit independent import rather than being
+silently added to this historical aggregator.
 -/

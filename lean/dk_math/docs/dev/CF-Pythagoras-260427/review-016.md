@@ -8,18 +8,18 @@
 今回の主な成果は、endpoint 型の Beam と gap 型の GN の対応じゃ。
 
 $$
-\operatorname{powerBeam}_3(b,a)=GN(3,a-b,b)
+\text{powerBeam}_3(b,a)=GN(3,a-b,b)
 $$
 
 $$
-\operatorname{powerBeam}_4(b,a)=GN(4,a-b,b)
+\text{powerBeam}_4(b,a)=GN(4,a-b,b)
 $$
 
 これが `powerBeam_three_eq_GN_of_gap` と `powerBeam_four_eq_GN_of_gap` として入った。
 前回の shifted bridge
 
 $$
-\operatorname{powerBeam}_d(x,x+u)=GN(d,u,x)
+\text{powerBeam}_d(x,x+u)=GN(d,u,x)
 $$
 
 より、今回の形の方が実戦向きじゃ。実際の FLT 文脈では (a,b) が先にあり、gap を (a-b) として読むことが多いからの。
@@ -35,7 +35,7 @@ dvd_powerBeam_three_of_dvd_GN_gap
 $$
 q\mid GN(3,a-b,b)
 \Rightarrow
-q\mid \operatorname{powerBeam}_3(b,a)
+q\mid \text{powerBeam}_3(b,a)
 $$
 
 が入り、
@@ -47,7 +47,7 @@ powerBeam_three_padicValNat_eq_GN_gap
 で
 
 $$
-v_p(|\operatorname{powerBeam}_3(b,a)|)=v_p(|GN(3,a-b,b)|)
+v_p(|\text{powerBeam}_3(b,a)|)=v_p(|GN(3,a-b,b)|)
 $$
 
 も入った。
@@ -66,14 +66,14 @@ $$
 から
 
 $$
-y^d=(z-x)\operatorname{powerBeam}_d(x,z)
+y^d=(z-x)\text{powerBeam}_d(x,z)
 $$
 
 を得る。
 そして (d=3) なら、
 
 $$
-\operatorname{powerBeam}_3(x,z)=GN(3,z-x,x)
+\text{powerBeam}_3(x,z)=GN(3,z-x,x)
 $$
 
 と読める。
@@ -101,7 +101,7 @@ $$
 型の情報を、
 
 $$
-q\mid \operatorname{powerBeam}_3(b,a)
+q\mid \text{powerBeam}_3(b,a)
 $$
 
 へ移せるようになった。
@@ -170,7 +170,7 @@ $$
 を既存補題から取り、
 
 $$
-q\mid \operatorname{powerBeam}_3(b,a)
+q\mid \text{powerBeam}_3(b,a)
 $$
 
 へ移す。
@@ -188,7 +188,7 @@ $$
 のような既存補題があるなら、
 
 $$
-v_p(\operatorname{powerBeam}_3(b,a))\le1
+v_p(\text{powerBeam}_3(b,a))\le1
 $$
 
 へ移す。

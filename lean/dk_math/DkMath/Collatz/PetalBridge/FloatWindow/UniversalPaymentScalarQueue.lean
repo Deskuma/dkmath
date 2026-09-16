@@ -118,7 +118,7 @@ theorem canonicalWindowDriftInt_succ
       (if q ≤ m then canonicalWindowDriftInt n q m else 0) +
         endpointAccountingTerm n (m + 1) := by
   by_cases hq : q ≤ m
-  · rw [if_pos hq]
+  · rw [ite_eq_left hq]
     unfold canonicalWindowDriftInt
     have hIcc : Finset.Icc q (m + 1) = insert (m + 1) (Finset.Icc q m) := by
       ext x
@@ -174,7 +174,7 @@ theorem intToNat_canonicalWindowDriftInt_le_outstandingClaimQueue
   | succ m ih =>
       rw [canonicalOutstandingClaimQueue_succ_eq_intToNat]
       by_cases hq : q ≤ m
-      · rw [canonicalWindowDriftInt_succ n (by omega), if_pos hq]
+      · rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left hq]
         apply Int.toNat_le_toNat
         have hle := ih hq
         have hself := Int.self_le_toNat (canonicalWindowDriftInt n q m)
@@ -210,7 +210,7 @@ theorem outstandingClaimQueue_eq_zero_or_exists_windowDrift
           simp
         · refine ⟨q, by omega, ?_⟩
           rw [canonicalOutstandingClaimQueue_succ_eq_intToNat]
-          rw [canonicalWindowDriftInt_succ n (by omega), if_pos hqm]
+          rw [canonicalWindowDriftInt_succ n (by omega), ite_eq_left hqm]
           have hnonneg : 0 ≤ canonicalWindowDriftInt n q m := by
             by_contra hneg
             have htoNat : Int.toNat (canonicalWindowDriftInt n q m) = 0 := by
@@ -621,7 +621,7 @@ theorem CanonicalEndpointForwardWindowMatching.to_suffixClaims_le_capacity
     constructor
     · exact Subtype.ext (congrArg (fun slot => slot.1.val) hab)
     · exact (Sigma.ext_iff.mp hab).2
-  letI : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
+  let : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective suffixPay suffixPay_injective
@@ -638,16 +638,16 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
   classical
   let Claim := CanonicalEndpointClaimWindowCarrier n q r
   let Capacity := CanonicalEndpointCapacityWindowCarrier n q r
-  letI : Finite Claim := by
+  let : Finite Claim := by
     dsimp [Claim]
     unfold CanonicalEndpointClaimWindowCarrier
     infer_instance
-  letI : Finite Capacity := by
+  let : Finite Capacity := by
     dsimp [Capacity]
     unfold CanonicalEndpointCapacityWindowCarrier
     infer_instance
-  letI : Fintype Claim := Fintype.ofFinite Claim
-  letI : Fintype Capacity := Fintype.ofFinite Capacity
+  let : Fintype Claim := Fintype.ofFinite Claim
+  let : Fintype Capacity := Fintype.ofFinite Capacity
   let eligible : Claim → Capacity → Prop := fun claim slot => claim.1.val ≤ slot.1.val
   have hallSubsets : ∀ A : Finset Claim,
       A.card ≤ ({slot : Capacity | ∃ claim ∈ A, eligible claim slot} : Finset Capacity).card := by
@@ -679,10 +679,10 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
         · exact Subtype.ext (congrArg (fun claim => claim.1.val) hab)
         · exact (Sigma.ext_iff.mp hab).2
       have hAClaims : A.card ≤ canonicalEndpointWindowClaims n t r := by
-        letI : Finite (CanonicalEndpointClaimWindowCarrier n t r) := by
+        let : Finite (CanonicalEndpointClaimWindowCarrier n t r) := by
           unfold CanonicalEndpointClaimWindowCarrier
           infer_instance
-        letI : Fintype (CanonicalEndpointClaimWindowCarrier n t r) :=
+        let : Fintype (CanonicalEndpointClaimWindowCarrier n t r) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective claimsFromT claimsFromT_injective
         rw [← natCard_canonicalEndpointClaimWindowCarrier n t r]
@@ -711,10 +711,10 @@ theorem canonicalEndpointForwardWindowMatching_of_suffixClaims_le_capacity
           exact (Sigma.ext_iff.mp hsigma).2
       have hCapacityEligible : canonicalEndpointWindowCapacity n t r ≤
           ({slot : Capacity | ∃ claim ∈ A, eligible claim slot} : Finset Capacity).card := by
-        letI : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
+        let : Finite (CanonicalEndpointCapacityWindowCarrier n t r) := by
           unfold CanonicalEndpointCapacityWindowCarrier
           infer_instance
-        letI : Fintype (CanonicalEndpointCapacityWindowCarrier n t r) :=
+        let : Fintype (CanonicalEndpointCapacityWindowCarrier n t r) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective capacityToEligible
           capacityToEligible_injective

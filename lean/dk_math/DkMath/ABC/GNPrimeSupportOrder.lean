@@ -48,7 +48,7 @@ theorem Triple.exists_gnRatioUnit_orderOf_eq_prime
   have hqa : ¬ q ∣ T.a := hfresh.2.2.1
   have hqb : ¬ q ∣ T.b := hfresh.2.2.2.1
   have hqc : ¬ q ∣ T.c := hfresh.2.2.2.2.1
-  letI : Fact q.Prime := ⟨hqPrime⟩
+  let : Fact q.Prime := ⟨hqPrime⟩
   have hbZ : (T.b : ZMod q) ≠ 0 := by
     intro hb0
     exact hqb ((ZMod.natCast_eq_zero_iff T.b q).mp hb0)
@@ -112,7 +112,7 @@ theorem Triple.prime_dvd_sub_one_of_mem_GNNonExceptionalSupport
     (hq : q ∈ GNNonExceptionalSupport p T.a T.b) :
     p ∣ q - 1 := by
   have hfresh := T.nonExceptionalSupport_fresh hp.one_le ha hq
-  letI : Fact q.Prime := ⟨hfresh.1⟩
+  let : Fact q.Prime := ⟨hfresh.1⟩
   obtain ⟨r, hr⟩ :=
     T.exists_gnRatioUnit_orderOf_eq_prime hp ha hq
   rw [← hr]

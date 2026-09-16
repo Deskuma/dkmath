@@ -24,8 +24,9 @@ namespace DkMath.ABC
 open DkMath.Basic.Nat
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- diagonal specialization: if diag index is not bad then quality ≤ 1+ε -/
 

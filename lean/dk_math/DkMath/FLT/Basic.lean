@@ -455,7 +455,7 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider_core
       N = GN 3 (A - B) B := rfl
       _ = GN 3 (a ^ 3) y := by simp [A, B]
       _ = b ^ 3 := hb
-  letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  let : Fact (Nat.Prime q) := ⟨hq_prime⟩
   have hb_ne0 : b ≠ 0 := by
     intro hb0
     have : N = 0 := by simp [hN_eq_cube, hb0]

@@ -41,12 +41,12 @@ def SumGN5 (u v : ℕ) : ℕ :=
 theorem add_mul_sumGN5_eq_add_pow_five (u v : ℕ) :
     (u + v) * SumGN5 u v = u ^ 5 + v ^ 5 := by
   by_cases h : v ≤ u
-  · rw [SumGN5, if_pos h]
+  · rw [SumGN5, ite_eq_left h]
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le h
     subst u
     simp only [Nat.add_sub_cancel_left]
     ring
-  · rw [SumGN5, if_neg h]
+  · rw [SumGN5, ite_eq_right h]
     have huv : u ≤ v := Nat.le_of_not_ge h
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le huv
     subst v
@@ -58,10 +58,10 @@ theorem sumGN5_pos
     {u v : ℕ} (hu : 0 < u) (hv : 0 < v) :
     0 < SumGN5 u v := by
   by_cases h : v ≤ u
-  · rw [SumGN5, if_pos h]
+  · rw [SumGN5, ite_eq_left h]
     have hv4 : 0 < v ^ 4 := pow_pos hv 4
     omega
-  · rw [SumGN5, if_neg h]
+  · rw [SumGN5, ite_eq_right h]
     have hu4 : 0 < u ^ 4 := pow_pos hu 4
     omega
 
@@ -130,7 +130,7 @@ private theorem SumGN5_cast_mod25_eq_five
   have h5v : ¬ 5 ∣ v :=
     five_not_dvd_right_of_coprime_of_dvd_add hcop h5sum
   by_cases h : v ≤ u
-  · rw [SumGN5, if_pos h]
+  · rw [SumGN5, ite_eq_left h]
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le h
     subst u
     rcases h5sum with ⟨k, hk⟩
@@ -153,7 +153,7 @@ private theorem SumGN5_cast_mod25_eq_five
       show (250 : ZMod 25) = 0 by decide,
       show (625 : ZMod 25) = 0 by decide,
       mul_zero, add_zero, sub_zero]
-  · rw [SumGN5, if_neg h]
+  · rw [SumGN5, ite_eq_right h]
     have huv : u ≤ v := Nat.le_of_not_ge h
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le huv
     subst v
@@ -209,7 +209,7 @@ private theorem not_twentyFive_dvd_of_mod_eq_five
 theorem padicValNat_five_eq_one_of_dvd_not_sq
     {n : ℕ} (h5 : 5 ∣ n) (h25 : ¬ 25 ∣ n) :
     padicValNat 5 n = 1 := by
-  letI : Fact (Nat.Prime 5) := ⟨by decide⟩
+  let : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hnz : n ≠ 0 := by
     intro hn0
     apply h25
@@ -231,7 +231,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_fifth
     (hEq : carrier * residual = distinguished ^ 5)
     (hrVal : padicValNat 5 residual = 1) :
     ∃ m : ℕ, padicValNat 5 carrier = 4 + 5 * m := by
-  letI : Fact (Nat.Prime 5) := ⟨by decide⟩
+  let : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hpow :
       padicValNat 5 (distinguished ^ 5) = 5 * padicValNat 5 distinguished := by simp
   have hmul :

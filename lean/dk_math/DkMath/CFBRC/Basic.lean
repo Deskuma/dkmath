@@ -37,7 +37,7 @@ theorem cyclotomicPrimeCore_eq_shiftedHomEval_cyclotomic_of_prime
       cyclotomicShiftedHomEval p (Polynomial.cyclotomic p ℤ) x u := by
   have hΦ : Polynomial.cyclotomic p ℤ =
       ∑ i ∈ Finset.range p, (Polynomial.X : Polynomial ℤ) ^ i := by
-    letI : Fact p.Prime := ⟨hp⟩
+    let : Fact p.Prime := ⟨hp⟩
     simpa using (Polynomial.cyclotomic_prime ℤ p)
   have hcoeff : ∀ {k : ℕ}, k < p → (Polynomial.cyclotomic p ℤ).coeff k = 1 := by
     intro k hk

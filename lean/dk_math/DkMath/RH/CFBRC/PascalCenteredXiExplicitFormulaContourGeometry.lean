@@ -147,7 +147,7 @@ theorem mem_pascalSymmetricRectangleInterior_one_sub_iff
     {σ T : ℝ} {s : ℂ} :
     1 - s ∈ pascalSymmetricRectangleInterior σ T ↔
       s ∈ pascalSymmetricRectangleInterior σ T := by
-  simp only [pascalSymmetricRectangleInterior, Set.mem_setOf_eq,
+  simp only [pascalSymmetricRectangleInterior, Set.mem_ofPred_eq,
     Complex.sub_re, Complex.sub_im]
   norm_num
   constructor

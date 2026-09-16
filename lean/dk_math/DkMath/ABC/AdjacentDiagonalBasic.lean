@@ -23,8 +23,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- 中帯関連の再利用可能補題 -/
 
@@ -325,7 +326,7 @@ lemma tendsto_const_div_nat_rpow_atTop_0 {α K : ℝ}
   have hsmall : |K / (X : ℝ) ^ α| < eps :=
     abs_div_lt_for_large_nat α K eps hα heps_pos hK_ne' X hXge
   have h_in_ball : K / (X : ℝ) ^ α ∈ Metric.ball 0 eps := by
-    simp only [gt_iff_lt, ne_eq, abs_div, Metric.mem_ball, dist_zero_right, norm_div,
+    simp only [gt_iff_lt, ne_eq, abs_div, Metric.mem_ball, _root_.dist_zero_right, norm_div,
       norm_eq_abs] at *
     exact hsmall
   exact heps_mem h_in_ball
@@ -910,7 +911,7 @@ theorem eventually_log_rad_pos_adj :
     exact Real.log_pos this
   -- the goal uses the projections of `Adj n`; rewrite those projections to match the
   -- product we proved positive and finish
-  change 0 < log (↑(rad (Adj n).a) * ↑(rad (Adj n).b) * ↑(rad (Adj n).c))
+  change 0 < Real.log (↑(rad (Adj n).a) * ↑(rad (Adj n).b) * ↑(rad (Adj n).c))
   have H_simp : ((↑(rad (Adj n).a) * ↑(rad (Adj n).b) * ↑(rad (Adj n).c) : ℝ)) = (↑(rad n * rad (n + 1) * rad (2 * n + 1)) : ℝ) := by
     simp [Adj]
   -- rewrite the goal's argument to the one we proved positive above

@@ -46,7 +46,7 @@ $$
 で、datum 仮定は満たすが
 
 $$
-2 \nmid \operatorname{cyclotomicPrimeCore}(5,1,7-1)
+2 \nmid \text{cyclotomicPrimeCore}(5,1,7-1)
 $$
 
 となる。ゆえに「固定した datum のその (q) で universal に core を返す」枝は捨ててよい。
@@ -64,7 +64,7 @@ $$
 $$
 q \mid x+1
 \quad\text{と}\quad
-q \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を **同じ (q)** に背負わせる枝は、universal でも existential でも false じゃ。
@@ -87,7 +87,7 @@ $$
 で、仮定は満たすが
 
 $$
-\operatorname{cyclotomicPrimeCore}(5,1,1-1)=1
+\text{cyclotomicPrimeCore}(5,1,1-1)=1
 $$
 
 となり、素数 witness が存在しない。
@@ -111,7 +111,7 @@ $$
 理由は simple で、相手が
 
 $$
-\operatorname{cyclotomicPrimeCore}(d,x,u)
+\text{cyclotomicPrimeCore}(d,x,u)
 $$
 
 であり、これは (x,u) の両方に依存する。
@@ -119,7 +119,7 @@ $$
 実際 ((d,x,u)=(5,5,1)) でも
 
 $$
-\operatorname{cyclotomicPrimeCore}(5,5,1)=1555=5\cdot 311
+\text{cyclotomicPrimeCore}(5,5,1)=1555=5\cdot 311
 $$
 
 となり、(311\nmid 5) なので witness が取れる。
@@ -217,7 +217,7 @@ $$
 同じ ((5,5,1)) で
 
 $$
-\operatorname{cyclotomicPrimeCore}(5,5,1)=1555
+\text{cyclotomicPrimeCore}(5,5,1)=1555
 $$
 
 から witness が取れることは、既にレポートで具体計算されておる。

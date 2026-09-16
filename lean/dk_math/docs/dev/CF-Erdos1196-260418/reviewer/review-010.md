@@ -35,7 +35,7 @@
 \[
 q \in \text{support}
 \Rightarrow
-\bigl(\operatorname{Prime}(q) \wedge q \mid a^d-b^d\bigr)
+\bigl(\text{Prime}(q) \wedge q \mid a^d-b^d\bigr)
 \]
 
 を method 名で直接読めるようにした。
@@ -71,7 +71,7 @@ F.\texttt{channelCount} = F.\texttt{support}.\texttt{card}
 \[
 q \in F.\texttt{support}
 \Rightarrow
-\operatorname{Prime}(q)
+\text{Prime}(q)
 \]
 
 と

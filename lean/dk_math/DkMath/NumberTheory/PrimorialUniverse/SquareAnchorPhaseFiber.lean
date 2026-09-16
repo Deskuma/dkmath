@@ -75,7 +75,7 @@ theorem primeSign_plus_ne_minus_of_coprime_anchor
     {a : ℕ} (hcop : Nat.Coprime a (finitePrimeBasisProduct S))
     {p : ℕ} (hpS : p ∈ S) (hp2 : p ≠ 2) :
     (a : ZMod p) ≠ -(a : ZMod p) := by
-  letI : Fact (Nat.Prime p) := ⟨hS p hpS⟩
+  let : Fact (Nat.Prime p) := ⟨hS p hpS⟩
   intro hsign
   have hsum : (a : ZMod p) + (a : ZMod p) = 0 := by
     calc

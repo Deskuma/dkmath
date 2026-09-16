@@ -9,7 +9,7 @@
 まで no-sorry で入ったので、**explicit equality とその周辺 data が supply されれば、存在形 boundary も Stage 2 の concrete target も自動で回る** ところまで来ておる。つまり、残る honest open はほんに
 
 $$
-\operatorname{span}(z-\zeta y)=K^{\,\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\,\mathrm{ctx}.p}
 $$
 
 型の Stage 1 本命 theorem と、Stage 3 の norm descent だけじゃ。
@@ -37,7 +37,7 @@ $$
 すなわち
 
 $$
-\exists K,\ \operatorname{span}(z-\zeta y)=K^{\,\mathrm{ctx}.p}
+\exists K,\ \text{span}(z-\zeta y)=K^{\,\mathrm{ctx}.p}
 $$
 
 と、その companion としての
@@ -71,7 +71,7 @@ $$
 されど、Stage 1 の explicit equality を出すには、ただ割れるだけでは足りぬ。必要なのは
 
 $$
-\operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 を直接導く ideal arithmetic じゃ。
@@ -104,13 +104,13 @@ $$
 つまり、狙うべき本命は
 
 $$
-\operatorname{span}(\text{tail})\cdot \operatorname{span}(z-\zeta y) = \operatorname{span}(x)^{\mathrm{ctx}.p}
+\text{span}(\text{tail})\cdot \text{span}(z-\zeta y) = \text{span}(x)^{\mathrm{ctx}.p}
 $$
 
 に対して、さらに
 
 $$
-\operatorname{IsCoprime}!\bigl(\operatorname{span}(\text{tail}),\ \operatorname{span}(z-\zeta y)\bigr)
+\text{IsCoprime}!\bigl(\text{span}(\text{tail}),\ \text{span}(z-\zeta y)\bigr)
 $$
 
 を actual cyclotomic setting で示すことじゃ。
@@ -123,7 +123,7 @@ $$
 をそのまま適用して、
 
 $$
-\exists K,\ \operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\exists K,\ \text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 が一撃で出る。
@@ -142,9 +142,9 @@ full family route は、すべての \(\zeta^j\) を前面に出し、pairwise-c
 狙いは例えば次の意味内容じゃ。
 
 $$
-\operatorname{IsCoprime}!\Bigl(
-\operatorname{span}\Bigl(\sum_{i=0}^{p-1} z^i(\zeta y)^{p-1-i}\Bigr),
-\operatorname{span}(z-\zeta y)
+\text{IsCoprime}!\Bigl(
+\text{span}\Bigl(\sum_{i=0}^{p-1} z^i(\zeta y)^{p-1-i}\Bigr),
+\text{span}(z-\zeta y)
 \Bigr)
 $$
 
@@ -152,7 +152,7 @@ $$
 そのうえで
 
 $$
-\operatorname{span}(\text{tail})\cdot \operatorname{span}(z-\zeta y)=\operatorname{span}(x)^{\mathrm{ctx}.p}
+\text{span}(\text{tail})\cdot \text{span}(z-\zeta y)=\text{span}(x)^{\mathrm{ctx}.p}
 $$
 
 と合成して `CyclotomicLinearFactorSpanEqPowTarget` を返す。
@@ -193,7 +193,7 @@ $$
 $$
 \boxed{
 \text{Stage 1 の本丸は、}
-\operatorname{span}(\text{tail}) \text{ と } \operatorname{span}(z-\zeta y)
+\text{span}(\text{tail}) \text{ と } \text{span}(z-\zeta y)
 \text{ の cyclotomic-specific coprimality theorem}
 \text{ じゃ}
 }
@@ -202,7 +202,7 @@ $$
 これを取れば、explicit equality
 
 $$
-\operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 は 2-factor theorem で最短に落ちる。

@@ -12,7 +12,7 @@
 しかも、local factorization 側にはすでに
 
 $$
-\operatorname{span}(\text{tail}) \cdot \operatorname{span}(z-\zeta y) = \operatorname{span}(x)^p
+\text{span}(\text{tail}) \cdot \text{span}(z-\zeta y) = \text{span}(x)^p
 $$
 
 へつながる局所 ideal identity の核が用意されておる。差分でも `linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq` が既に入っており、chosen factor と tail の 2-factor 分解へ持ち込む土台はある。ゆえに、Stage 1 の残る本丸は **product equality そのもの** より、**actual cyclotomic setting での coprimality 供給** の方に寄っていると見るのが自然じゃ。
@@ -31,14 +31,14 @@ $$
 まず Stage 1 で local linear factor 1 本について
 
 $$
-\operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 を出す。
 すると既にある composition 層で
 
 $$
-\exists I,\ I\ \text{principal} \land \operatorname{span}(z-\zeta y)=I^{\mathrm{ctx}.p}
+\exists I,\ I\ \text{principal} \land \text{span}(z-\zeta y)=I^{\mathrm{ctx}.p}
 $$
 
 へ行ける。
@@ -54,12 +54,12 @@ $$
 
 $$
 \text{(A)}\quad
-\operatorname{span}(\text{tail}) \cdot \operatorname{span}(z-\zeta y)=\operatorname{span}(x)^{\mathrm{ctx}.p}
+\text{span}(\text{tail}) \cdot \text{span}(z-\zeta y)=\text{span}(x)^{\mathrm{ctx}.p}
 $$
 
 $$
 \text{(B)}\quad
-\operatorname{IsCoprime}\bigl(\operatorname{span}(\text{tail}),\operatorname{span}(z-\zeta y)\bigr)
+\text{IsCoprime}\bigl(\text{span}(\text{tail}),\text{span}(z-\zeta y)\bigr)
 $$
 
 \(A\) と \(B\) から、既にある generic theorem
@@ -98,7 +98,7 @@ $$
 と置いて、
 
 $$
-\operatorname{span}(\mathrm{tail})\cdot \operatorname{span}(z-\zeta y) = \operatorname{span}(x)^{\mathrm{ctx}.p}
+\text{span}(\mathrm{tail})\cdot \text{span}(z-\zeta y) = \text{span}(x)^{\mathrm{ctx}.p}
 $$
 
 を返すものじゃ。これは local factorization theorem の直 specialization としてかなり近い。
@@ -107,7 +107,7 @@ $$
 つまり
 
 $$
-\operatorname{IsCoprime}\bigl(\operatorname{span}(\mathrm{tail}),\operatorname{span}(z-\zeta y)\bigr)
+\text{IsCoprime}\bigl(\text{span}(\mathrm{tail}),\text{span}(z-\zeta y)\bigr)
 $$
 
 を、actual cyclotomic 条件から示す。ここで鍵になるのは、おそらく

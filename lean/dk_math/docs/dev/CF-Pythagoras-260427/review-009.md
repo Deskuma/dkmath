@@ -78,7 +78,7 @@ $$
 を仮定すると、
 
 $$
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 であり、さらに primitive 的な条件
@@ -90,17 +90,17 @@ $$
 のもとで、
 
 $$
-\gcd(z-x,\operatorname{Beam}_d(x,z))\mid d
+\gcd(z-x,\text{Beam}_d(x,z))\mid d
 $$
 
 となる。
 
 これにより、\(p\nmid d\) の素数については、Gap と Beam は同時に \(p\) を持てない。
 
-したがって、もし \(p\nmid d\) で \(p\mid \operatorname{Beam}_d(x,z)\) なら、積
+したがって、もし \(p\nmid d\) で \(p\mid \text{Beam}_d(x,z)\) なら、積
 
 $$
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 における \(p\)-進付値は Beam 側だけから来る。
@@ -116,7 +116,7 @@ $$
 一方、Beam 側で primitive prime や squarefree 上界により
 
 $$
-v_p(\operatorname{Beam}_d(x,z))\le 1
+v_p(\text{Beam}_d(x,z))\le 1
 $$
 
 のような上界が来れば、\(d\ge 2\) で衝突が起きる。
@@ -124,13 +124,13 @@ $$
 つまり、次段の核心は、
 
 $$
-p\mid \operatorname{Beam}_d,\quad p\nmid \operatorname{Gap}
+p\mid \text{Beam}_d,\quad p\nmid \text{Gap}
 $$
 
 から
 
 $$
-v_p(\operatorname{Gap}\cdot\operatorname{Beam}_d) = v_p(\operatorname{Beam}_d)
+v_p(\text{Gap}\cdot\text{Beam}_d) = v_p(\text{Beam}_d)
 $$
 
 へ渡すことじゃ。
@@ -182,7 +182,7 @@ $$
 または、Lean の `padicValNat` では `.natAbs` を介して、
 
 $$
-\operatorname{padicValNat}(p, (y^d).natAbs) = \operatorname{padicValNat}(p, \mathrm{Beam}.natAbs)
+\text{padicValNat}(p, (y^d).natAbs) = \text{padicValNat}(p, \mathrm{Beam}.natAbs)
 $$
 
 のような形を狙う。

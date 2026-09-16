@@ -94,11 +94,11 @@ $$
 The first and second coordinates are observed as:
 
 $$
-\operatorname{cfcos}(t)=K(t).\operatorname{core},
+\text{cfcos}(t)=K(t).\text{core},
 $$
 
 $$
-\operatorname{cfsin}(t)=K(t).\operatorname{beam}.
+\text{cfsin}(t)=K(t).\text{beam}.
 $$
 
 The addition formulas then follow from the kernel product. They are not separately inserted as trigonometric axioms.
@@ -116,13 +116,13 @@ This identification is useful, but the generic repetition theorem does not depen
 The normalized phase layer already contains:
 
 $$
-\operatorname{step}(k)=\frac1k.
+\text{step}(k)=\frac1k.
 $$
 
 For positive `k`, it proves:
 
 $$
-k\operatorname{step}(k)=1.
+k\text{step}(k)=1.
 $$
 
 This says that `k` equal scalar steps fill one normalized cycle.

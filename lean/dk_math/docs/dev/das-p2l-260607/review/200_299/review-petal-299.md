@@ -90,7 +90,7 @@ $$
 各 odd step では $s\ge1$ なので、
 
 $$
-\operatorname{sumS}(n,k)=k+\operatorname{sumExtraHeight}(n,k)
+\text{sumS}(n,k)=k+\text{sumExtraHeight}(n,k)
 $$
 
 が成立する。
@@ -98,13 +98,13 @@ $$
 これを前段の Float ledger、
 
 $$
-\operatorname{sumS}(n,k)+w(T^k(n))=w(n)+k+\operatorname{carryTwoCount}(n,k)
+\text{sumS}(n,k)+w(T^k(n))=w(n)+k+\text{carryTwoCount}(n,k)
 $$
 
 へ代入して、
 
 $$
-w(T^k(n))+\operatorname{sumExtraHeight}(n,k)=w(n)+\operatorname{carryTwoCount}(n,k)
+w(T^k(n))+\text{sumExtraHeight}(n,k)=w(n)+\text{carryTwoCount}(n,k)
 $$
 
 を得た。
@@ -156,7 +156,7 @@ orbitWindowWidthGrowthMod8EqSevenCount
 そして、
 
 $$
-\operatorname{GrowthCount}=\operatorname{GrowthThreeCount}+\operatorname{GrowthSevenCount}
+\text{GrowthCount}=\text{GrowthThreeCount}+\text{GrowthSevenCount}
 $$
 
 を証明した。
@@ -166,7 +166,7 @@ $$
 width growth なら、
 
 $$
-\operatorname{carry}=2
+\text{carry}=2
 $$
 
 かつ、
@@ -216,13 +216,13 @@ orbitWindowNextHeight_two_le_of_mod_eight_eq_three
 count 版でも、
 
 $$
-\operatorname{GrowthThreeCount}\le\operatorname{TailHeightGeTwoCount}
+\text{GrowthThreeCount}\le\text{TailHeightGeTwoCount}
 $$
 
 が得られ、
 
 $$
-\operatorname{GrowthCount}\le\operatorname{DelayedReceivers}+\operatorname{GrowthSevenCount}
+\text{GrowthCount}\le\text{DelayedReceivers}+\text{GrowthSevenCount}
 $$
 
 まで閉じた。
@@ -302,7 +302,7 @@ stateUpperCarry_eq_two_iff_pow_succ_le_threeNPlusOne
 は、
 
 $$
-\operatorname{stateUpperCarry}(n)=2\Longleftrightarrow 2^{w(n)+1}\le3n+1
+\text{stateUpperCarry}(n)=2\Longleftrightarrow 2^{w(n)+1}\le3n+1
 $$
 
 を述べる。
@@ -454,13 +454,13 @@ ResidualAllOnesDepth x := v2 (x + 1)
 時刻 $i$ の label を、
 
 $$
-x_i:=\operatorname{oddOrbitLabel}(n,i)
+x_i:=\text{oddOrbitLabel}(n,i)
 $$
 
 その all-ones depth を、
 
 $$
-A_i:=\operatorname{ResidualAllOnesDepth}(x_i)
+A_i:=\text{ResidualAllOnesDepth}(x_i)
 $$
 
 と置く。

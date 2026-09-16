@@ -142,7 +142,7 @@ DyadicFloat.lean
 正の奇数 $n$ に対して、二進桁数を
 
 $$
-w(n):=\operatorname{bitWidth}(n)=\lfloor\log_2 n\rfloor+1
+w(n):=\text{bitWidth}(n)=\lfloor\log_2 n\rfloor+1
 $$
 
 と置く。
@@ -288,7 +288,7 @@ C_k:=\sum_{i=0}^{k-1}c(n_i)
 $$
 
 $$
-H_k:=\sum_{i=0}^{k-1}h(n_i)=\operatorname{sumS}(n_0,k)
+H_k:=\sum_{i=0}^{k-1}h(n_i)=\text{sumS}(n_0,k)
 $$
 
 と置く。

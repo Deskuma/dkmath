@@ -45,13 +45,13 @@ However, the signed-tail objective is more directly controlled by **cutoff incre
 From CS12/CS17 we have finite identities of the form
 
 $$
-P_X-P_Y=\operatorname{BlockProjection}_{X,Y},
+P_X-P_Y=\text{BlockProjection}_{X,Y},
 $$
 
 and
 
 $$
-4\operatorname{BlockProjection}_{X,Y}=F(Y)-F(X).
+4\text{BlockProjection}_{X,Y}=F(Y)-F(X).
 $$
 
 Therefore
@@ -120,7 +120,7 @@ Also audit the canonical base cutoff (`X = 0` or the actual first empty-support 
 Package CS17-F as a direct increment theorem:
 
 $$
-F(Y)-F(X)=4\operatorname{BlockProjection}_{X,Y}.
+F(Y)-F(X)=4\text{BlockProjection}_{X,Y}.
 $$
 
 Prefer a theorem whose orientation matches later monotonicity use:
@@ -142,7 +142,7 @@ Use CS12's exact finite identity, not an infinite Dirichlet tail.
 Target:
 
 $$
-P_X-P_Y=\operatorname{BlockProjection}_{X,Y}.
+P_X-P_Y=\text{BlockProjection}_{X,Y}.
 $$
 
 Then combine with CS19-B:

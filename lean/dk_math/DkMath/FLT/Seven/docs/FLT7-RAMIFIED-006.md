@@ -45,23 +45,23 @@ B := residualRoot
 
 common summit は、
 
-$$\operatorname{distinguished}=7AB$$
+$$\text{distinguished}=7AB$$
 
 を保持しています。
 
 一方、元の terminal packet は、選択された endpoint factor を、
 
-$$\operatorname{distinguished}=7\cdot\operatorname{carrierUnit}$$
+$$\text{distinguished}=7\cdot\text{carrierUnit}$$
 
 とし、
 
-$$7\nmid\operatorname{carrierUnit}$$
+$$7\nmid\text{carrierUnit}$$
 
 まで持っています。
 
 Row-Y なら distinguished は $y$、Row-Z なら $z$ なので、両 branch で、
 
-$$\operatorname{carrierUnit}=AB$$
+$$\text{carrierUnit}=AB$$
 
 です。
 
@@ -167,7 +167,7 @@ $$S=B\left(u^4+2u^3v-9u^2v^2-10uv^3+25v^4\right)-49v^6$$
 
 ここで、
 
-$$B=\operatorname{norm}(u,v)=u^2+uv+2v^2$$
+$$B=\text{norm}(u,v)=u^2+uv+2v^2$$
 
 です。
 

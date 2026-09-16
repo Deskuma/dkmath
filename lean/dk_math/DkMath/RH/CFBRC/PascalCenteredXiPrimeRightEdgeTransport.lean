@@ -175,7 +175,6 @@ private theorem continuous_pascalCenteredRightEdgeWeight
   change Continuous (fun t : ℝ =>
     pascalSymmetricRectangleRightEdge σ t - criticalLineCenter)
   convert (continuous_pascalOrdinaryRightEdge σ).sub continuous_const using 1
-  all_goals (ext t; rfl)
 
 private theorem continuous_pascalPrimePowerRightEdgeCutoffIntegrand
     {h : ℂ → ℂ} (hh : Differentiable ℂ h) (σ : ℝ) (X : ℕ) :

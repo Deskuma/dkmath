@@ -35,14 +35,14 @@ private theorem dvd_five_mul_left_pow_four_of_dvd_sum_of_dvd_sumGN5
     (ZMod.natCast_eq_zero_iff (SumGN5 u v) q).2 hqres
   apply (ZMod.natCast_eq_zero_iff (5 * u ^ 4) q).1
   by_cases h : v ≤ u
-  · rw [SumGN5, if_pos h] at hresZ
+  · rw [SumGN5, ite_eq_left h] at hresZ
     push_cast at hresZ ⊢
     rw [Nat.cast_sub h] at hresZ
     rw [hvZ] at hresZ
     ring_nf at hresZ ⊢
     exact hresZ
   · have huv : u ≤ v := Nat.le_of_not_ge h
-    rw [SumGN5, if_neg h] at hresZ
+    rw [SumGN5, ite_eq_right h] at hresZ
     push_cast at hresZ ⊢
     rw [Nat.cast_sub huv] at hresZ
     rw [hvZ] at hresZ

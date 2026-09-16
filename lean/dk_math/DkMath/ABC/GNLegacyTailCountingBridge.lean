@@ -87,7 +87,7 @@ theorem GNNonExceptionalPart_factorization
   simp only [f, Nat.factorization_pow, Finsupp.coe_smul,
     Pi.smul_apply, nsmul_eq_mul]
   by_cases hr : r ∈ S
-  · rw [if_pos hr]
+  · rw [ite_eq_left hr]
     calc
       ∑ q ∈ S,
           (GN p a b).factorization q * q.factorization r =
@@ -101,7 +101,7 @@ theorem GNNonExceptionalPart_factorization
       _ = (GN p a b).factorization r := by
           rw [(hprime r hr).factorization, Finsupp.single_eq_same]
           simp
-  · rw [if_neg hr]
+  · rw [ite_eq_right hr]
     apply Finset.sum_eq_zero
     intro q hq
     rw [(hprime q hq).factorization, Finsupp.single_apply]
@@ -131,7 +131,7 @@ theorem GNNonExceptionalPart_factorization_support
   rw [Finsupp.mem_support_iff,
     GNNonExceptionalPart_factorization]
   by_cases hr : r ∈ GNNonExceptionalSupport p a b
-  · rw [if_pos hr]
+  · rw [ite_eq_left hr]
     exact iff_of_true
       (Finsupp.mem_support_iff.mp
         (Finset.mem_filter.mp hr).1)
@@ -157,7 +157,7 @@ theorem valuationExcess_GNNonExceptionalPart_eq
   rw [GNNonExceptionalPart_factorization_support]
   apply Finset.sum_congr rfl
   intro q hq
-  rw [GNNonExceptionalPart_factorization, if_pos hq]
+  rw [GNNonExceptionalPart_factorization, ite_eq_left hq]
 
 /--
 The current non-exceptional valuation excess is the logarithm of the old
@@ -350,7 +350,7 @@ theorem GNPolynomial_monic
           ((Nat.choose p (i + 1) *
             b ^ (p - (i + 1)) : ℕ) : R) *
             Polynomial.X ^ i).coeff (p - 1) = 0
-      rw [Polynomial.coeff_C_mul_X_pow, if_neg]
+      rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right]
       exact Ne.symm hne
     · intro hnot
       exact
@@ -386,7 +386,7 @@ theorem eval_derivative_GNPolynomial_ne_zero
     Polynomial.eval r
         (Polynomial.derivative
           (GNPolynomial p b (ZMod q))) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hp0 : (p : ZMod q) ≠ 0 := by
     intro h
     exact hqp ((ZMod.natCast_eq_zero_iff p q).mp h)
@@ -442,7 +442,7 @@ theorem GNDeepLiftResidues_card_base_le
     (hq : Nat.Prime q) :
     (GNDeepLiftResidues p q b 1).card ≤ p - 1 := by
   classical
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   let S := GNDeepLiftResidues p q b 1
   let f := fun r : ℕ => (r : ZMod q)
   let P := GNPolynomial p b (ZMod q)
@@ -623,7 +623,7 @@ theorem isUnit_zmod_primePow_of_castHom_ne_zero
         (ZMod q) a ≠ 0) :
     IsUnit a := by
   have hqpow_pos : 0 < q ^ k := pow_pos hq.pos _
-  letI : NeZero (q ^ k) := ⟨Nat.ne_of_gt hqpow_pos⟩
+  let : NeZero (q ^ k) := ⟨Nat.ne_of_gt hqpow_pos⟩
   let b : ℕ := a.val
   have hb_not_dvd_q : ¬ q ∣ b := by
     intro hqdb
@@ -665,7 +665,7 @@ theorem GNDeepLiftCongruenceUnique_of_simpleRoot
   intro a r ha hr har
   let m := q ^ k
   have hm : 0 < m := pow_pos hq.pos _
-  letI : NeZero m := ⟨Nat.ne_of_gt hm⟩
+  let : NeZero m := ⟨Nat.ne_of_gt hm⟩
   have hdiv : q ∣ m := by
     dsimp [m]
     obtain ⟨j, rfl⟩ :=
@@ -1135,7 +1135,7 @@ theorem sum_div_prime_pow_Icc_le
     (hq : Nat.Prime q) :
     ∑ k ∈ Finset.Icc 1 K, N / q ^ k ≤ N := by
   let B := max (K + 1) (Nat.log q N + 1)
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hlog : Nat.log q N < B := by
     exact (Nat.lt_succ_self _).trans_le
       (Nat.le_max_right _ _)

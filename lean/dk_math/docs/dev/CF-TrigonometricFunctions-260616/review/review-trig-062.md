@@ -63,11 +63,11 @@ $$
 追加された座標式は正しい。
 
 $$
-\operatorname{core}(k^4)=C^4-6C^2S^2+S^4
+\text{core}(k^4)=C^4-6C^2S^2+S^4
 $$
 
 $$
-\operatorname{beam}(k^4)=4CS(C^2-S^2)
+\text{beam}(k^4)=4CS(C^2-S^2)
 $$
 
 これを API として外に出したのは良い。

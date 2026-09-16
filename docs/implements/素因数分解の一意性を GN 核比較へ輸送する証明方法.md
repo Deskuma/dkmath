@@ -52,7 +52,7 @@ p^{v_p(n)} \mid n,\qquad p^{v_p(n)+1} \nmid n
 また、\(n\) を割る素数全体の集合を
 
 \[
-\operatorname{Supp}(n):=\{\,p \mid p \text{ は素数で } p\mid n\,\}
+\text{Supp}(n):=\{\,p \mid p \text{ は素数で } p\mid n\,\}
 \]
 
 と書く。

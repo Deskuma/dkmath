@@ -1083,7 +1083,7 @@ lemma primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow
     (hEq : x ^ p = u * N)
     (hNval : padicValNat p N = 1) :
     ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by simp
   have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
     simpa using (padicValNat.mul (p := p) hu0 hN0)
@@ -5564,8 +5564,8 @@ theorem restore_witness_cong_one_mod_p
   have hq_not_dvd_z : ¬ q ∣ z :=
     flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime hq_dvd_x hq_not_dvd_y
   -- Step 1: ZMod q 上での計算
-  haveI : Fact (Nat.Prime q) := ⟨hq_prime⟩
-  haveI : Fact (Nat.Prime p) := ⟨hp_prime⟩
+  have : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have : Fact (Nat.Prime p) := ⟨hp_prime⟩
   -- y は ZMod q で可逆
   have hy_ne_zero : (y : ZMod q) ≠ 0 := by
     intro heq

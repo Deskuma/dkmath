@@ -10,7 +10,7 @@ The FLT5 tower has certified the following data for every stripped exceptional p
 
 $$\beta\,\overline{\beta}=b^5$$
 
-$$\operatorname{GoldenRelPrime}(\beta,\overline{\beta})$$
+$$\text{GoldenRelPrime}(\beta,\overline{\beta})$$
 
 $$\beta_{\mathrm{snd}}=-5^7a^{10}$$
 
@@ -228,7 +228,7 @@ This is the desired Euclidean division theorem.
 
 Once a division theorem is certified with Euclidean measure
 
-$$\delta(x)=\operatorname{natAbs}(N(x)),$$
+$$\delta(x)=\text{natAbs}(N(x)),$$
 
 one may construct or derive:
 

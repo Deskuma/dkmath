@@ -752,7 +752,7 @@ projected value
 Required formal text:
 
 $$
-\operatorname{width}(I)<1
+\text{width}(I)<1
 $$
 
 Required conclusion wording:

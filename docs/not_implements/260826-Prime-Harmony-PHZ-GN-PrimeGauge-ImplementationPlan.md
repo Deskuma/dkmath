@@ -5,6 +5,7 @@
 - Branch at recording: `develop`
 - Repository: `Deskuma/dkmath`
 - Target area: `DkMath.NumberTheory.Primitive`, `DkMath.NumberTheory.Gcd`, `DkMath.CosmicFormula`, future `DkMath.NumberTheory.PrimeHarmony` / RH bridge
+- cid: `6a8db21d-11b4-83e8-afec-71e3bf88d24c`
 
 ## 1. 目的
 
@@ -144,7 +145,7 @@ DkMath.NumberTheory.Primitive.PHZ30
 `KnownPrimeScales S` の下では既に
 
 $$
-\operatorname{SupportDisjointFrom}(S,n)
+\text{SupportDisjointFrom}(S,n)
 \iff
 \gcd(n,M_S)=1
 $$
@@ -154,9 +155,9 @@ $$
 また support state は `M_S` 周期である。
 
 $$
-\operatorname{SupportDisjointFrom}(S,n+kM_S)
+\text{SupportDisjointFrom}(S,n+kM_S)
 \iff
-\operatorname{SupportDisjointFrom}(S,n)
+\text{SupportDisjointFrom}(S,n)
 $$
 
 ---
@@ -362,7 +363,7 @@ $$
 すなわち
 
 $$
-\operatorname{squareBody}(P)=P^2+2P=(P+1)^2-1
+\text{squareBody}(P)=P^2+2P=(P+1)^2-1
 $$
 
 となる。

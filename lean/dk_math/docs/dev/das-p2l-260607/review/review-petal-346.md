@@ -90,11 +90,11 @@ $$k+1\le m$$
 
 その上で、
 
-$$\operatorname{SatCount}=\operatorname{InternalNeg}+\operatorname{InternalSpare}+\operatorname{InternalRigid}+\operatorname{TerminalSat}$$
+$$\text{SatCount}=\text{InternalNeg}+\text{InternalSpare}+\text{InternalRigid}+\text{TerminalSat}$$
 
 が exact theoremになった。末端は indicator であり、
 
-$$\operatorname{TerminalSat}\le1$$
+$$\text{TerminalSat}\le1$$
 
 も閉じている。
 
@@ -130,7 +130,7 @@ targetが、
 
 結果として、
 
-$$\operatorname{InternalNegativeCount}\le\operatorname{NegativeMass}(q,m)$$
+$$\text{InternalNegativeCount}\le\text{NegativeMass}(q,m)$$
 
 が現在窓だけで成立する。
 
@@ -163,13 +163,13 @@ $$Q=P-N$$
 
 また既存結果から、
 
-$$P\le G+\operatorname{SatCount}$$
+$$P\le G+\text{SatCount}$$
 
 ここで $G$ は `CanonicalGlobalSelectedPressureCarrier` の cardinal。
 
 さらに、
 
-$$\operatorname{SatCount}=N_{\mathrm{int}}+S_{\mathrm{int}}+R_{\mathrm{int}}+T$$
+$$\text{SatCount}=N_{\mathrm{int}}+S_{\mathrm{int}}+R_{\mathrm{int}}+T$$
 
 かつ、
 
@@ -491,7 +491,7 @@ PredecessorSpareCharge(j)
 
 するとcardinalityはexactに、
 
-$$|\operatorname{OwnedArrival}(j)|=\operatorname{DriftArrival}(j)+\operatorname{PredecessorSpareIndicator}(j)$$
+$$|\text{OwnedArrival}(j)|=\text{DriftArrival}(j)+\text{PredecessorSpareIndicator}(j)$$
 
 となる。
 

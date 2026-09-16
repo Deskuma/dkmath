@@ -1,0 +1,27 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.NumberTheory.CyclotomicQRGaussNormalization
+
+#print "file: DkMathTest.FLT.Prime.CyclotomicQRGaussNormalizationAxiomAudit"
+
+open DkMath.NumberTheory.CyclotomicQRGaussNormalization
+open DkMath.NumberTheory.CyclotomicQRGaloisAction
+open DkMath.NumberTheory.PrimeQuadraticDiscriminant
+open DkMath.NumberTheory.CyclotomicQRIntegralDescent
+
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.quadraticGauss_sq
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.quadraticGauss_ne_zero
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.map_quadraticGauss_of_power
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.map_quadraticGauss_of_square
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.map_quadraticGauss_of_nonsquare
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.map_quadraticGauss_of_cyclotomicAut
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.coeff_Dpoly_eq_gauss_mul_rat
+#print axioms DkMath.NumberTheory.RationalSquarefreePrime.rat_eq_int_of_prime_mul_sq
+#print axioms DkMath.NumberTheory.RationalSquarefreePrime.rat_eq_int_of_signedPrime_mul_sq
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.exists_Dpoly_over_gauss_int
+#print axioms DkMath.NumberTheory.CyclotomicQRGaussNormalization.exists_Dpoly_square_normalization
+#print axioms DkMath.NumberTheory.CyclotomicQRIntegralDescent.Dpoly_integral
+#print axioms DkMath.NumberTheory.CyclotomicQRIntegralDescent.coeff_Dpoly_isIntegral_int

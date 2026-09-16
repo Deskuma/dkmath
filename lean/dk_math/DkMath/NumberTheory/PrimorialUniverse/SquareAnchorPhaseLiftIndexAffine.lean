@@ -59,7 +59,7 @@ theorem freshPrime_phase_offsets_opposite
     (hzero : IsFreshPrimeDeletedLiftIndex S q b jzero) :
     ((jplus : ZMod q) - (jzero : ZMod q)) =
       -((jminus : ZMod q) - (jzero : ZMod q)) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hplus' := hplus.2
   have hminus' := hminus.2
   have hzero' : (primeBasisWheelLift S b jzero : ZMod q) = 0 :=
@@ -111,7 +111,7 @@ theorem freshPrime_phase_midpoint_unique
     {z : ZMod q}
     (hz : (jplus : ZMod q) + (jminus : ZMod q) = 2 * z) :
     z = (jzero : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have h2 : (2 : ZMod q) ≠ 0 := by
     intro h2zero
     have hdiv : q ∣ 2 := (ZMod.natCast_eq_zero_iff _ _).mp h2zero

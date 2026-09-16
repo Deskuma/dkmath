@@ -191,13 +191,13 @@ a^n \equiv b^n \pmod q
 つまり
 
 \[
-\operatorname{ord}_q(a/b) \mid n.
+\text{ord}_q(a/b) \mid n.
 \]
 
 さらに primitive なら lower exponent では割らないので、
 
 \[
-\operatorname{ord}_q(a/b)=n
+\text{ord}_q(a/b)=n
 \]
 
 となる。

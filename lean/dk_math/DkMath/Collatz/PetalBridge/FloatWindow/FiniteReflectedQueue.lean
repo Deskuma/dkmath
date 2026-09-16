@@ -96,7 +96,7 @@ theorem finiteSignedWindowBalance_succ
       (if t ≤ m then finiteSignedWindowBalance arrivals service t m else 0) +
         ((arrivals (m + 1) : ℤ) - service (m + 1)) := by
   by_cases htm : t ≤ m
-  · rw [if_pos htm]
+  · rw [ite_eq_left htm]
     unfold finiteSignedWindowBalance
     have hIcc : Finset.Icc t (m + 1) = insert (m + 1) (Finset.Icc t m) := by
       ext x
@@ -152,7 +152,7 @@ theorem intToNat_finiteSignedWindowBalance_le_reflectedQueueOn
       omega
   | succ m ih =>
       by_cases htm' : t ≤ m
-      · rw [finiteSignedWindowBalance_succ arrivals service (by omega), if_pos htm']
+      · rw [finiteSignedWindowBalance_succ arrivals service (by omega), ite_eq_left htm']
         rw [finiteReflectedQueueOn_succ arrivals service (by omega)]
         have hprev := ih hqt htm'
         have hself := Int.self_le_toNat
@@ -204,7 +204,7 @@ theorem finiteReflectedQueueOn_eq_zero_or_exists_suffix
             refine ⟨t, Finset.mem_Icc.mpr ⟨htBounds.1, by omega⟩, ?_⟩
             rw [finiteReflectedQueueOn_succ_eq_intToNat arrivals service hqm',
               finiteSignedWindowBalance_succ arrivals service (by omega),
-              if_pos htBounds.2]
+              ite_eq_left htBounds.2]
             have hnonneg : 0 ≤ finiteSignedWindowBalance arrivals service t m := by
               by_contra hneg
               have hz : Int.toNat
@@ -392,10 +392,10 @@ theorem FiniteForwardWindowMatching.to_suffix_sum_le
     apply Sigma.ext_iff.mpr
     exact ⟨Subtype.ext (congrArg (fun x => x.1.val) hab),
       (Sigma.ext_iff.mp hab).2⟩
-  letI : Finite (FiniteArrivalWindowCarrier arrivals t m) := by
+  let : Finite (FiniteArrivalWindowCarrier arrivals t m) := by
     unfold FiniteArrivalWindowCarrier
     infer_instance
-  letI : Finite (FiniteServiceWindowCarrier service t m) := by
+  let : Finite (FiniteServiceWindowCarrier service t m) := by
     unfold FiniteServiceWindowCarrier
     infer_instance
   have hcard := Nat.card_le_card_of_injective suffixPay suffixPay_injective
@@ -413,16 +413,16 @@ theorem finiteForwardWindowMatching_of_suffix_sum_le
   classical
   let Claim := FiniteArrivalWindowCarrier arrivals q m
   let Slot := FiniteServiceWindowCarrier service q m
-  letI : Finite Claim := by
+  let : Finite Claim := by
     dsimp [Claim]
     unfold FiniteArrivalWindowCarrier
     infer_instance
-  letI : Finite Slot := by
+  let : Finite Slot := by
     dsimp [Slot]
     unfold FiniteServiceWindowCarrier
     infer_instance
-  letI : Fintype Claim := Fintype.ofFinite Claim
-  letI : Fintype Slot := Fintype.ofFinite Slot
+  let : Fintype Claim := Fintype.ofFinite Claim
+  let : Fintype Slot := Fintype.ofFinite Slot
   let eligible : Claim → Slot → Prop := fun claim slot =>
     claim.1.val ≤ slot.1.val
   have hallSubsets : ∀ A : Finset Claim,
@@ -452,10 +452,10 @@ theorem finiteForwardWindowMatching_of_suffix_sum_le
         exact ⟨Subtype.ext (congrArg (fun x => x.1.val) hab),
           (Sigma.ext_iff.mp hab).2⟩
       have hAClaims : A.card ≤ ∑ k ∈ Finset.Icc t m, arrivals k := by
-        letI : Finite (FiniteArrivalWindowCarrier arrivals t m) := by
+        let : Finite (FiniteArrivalWindowCarrier arrivals t m) := by
           unfold FiniteArrivalWindowCarrier
           infer_instance
-        letI : Fintype (FiniteArrivalWindowCarrier arrivals t m) :=
+        let : Fintype (FiniteArrivalWindowCarrier arrivals t m) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective claimsFromT
           claimsFromT_injective
@@ -479,10 +479,10 @@ theorem finiteForwardWindowMatching_of_suffix_sum_le
         · exact (Sigma.ext_iff.mp (congrArg Subtype.val hab)).2
       have hSlotsEligible : (∑ k ∈ Finset.Icc t m, service k) ≤
           ({slot : Slot | ∃ claim ∈ A, eligible claim slot} : Finset Slot).card := by
-        letI : Finite (FiniteServiceWindowCarrier service t m) := by
+        let : Finite (FiniteServiceWindowCarrier service t m) := by
           unfold FiniteServiceWindowCarrier
           infer_instance
-        letI : Fintype (FiniteServiceWindowCarrier service t m) :=
+        let : Fintype (FiniteServiceWindowCarrier service t m) :=
           Fintype.ofFinite _
         have hcard := Fintype.card_le_of_injective slotsToEligible
           slotsToEligible_injective

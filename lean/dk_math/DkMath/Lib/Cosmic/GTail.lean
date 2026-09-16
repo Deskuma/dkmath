@@ -121,6 +121,24 @@ theorem higher_tail_eq_pow_mul_GTail
   simpa [add_comm, add_left_comm, add_assoc] using
     add_pow_eq_prefix_add_xpow_mul_GTail d r x u hr
 
+/-!
+Canonical `r = 1` specialization of the cosmic power identity.
+
+This is the stable replacement for the legacy `cosmic_id_csr'` endpoint.  The
+generic prefix theorem remains the primary proof, while this specialization
+keeps the common gap-normalized statement available in the lower Lib layer.
+-/
+theorem add_pow_eq_mul_GTail_one_add_gap
+    {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    (x + u) ^ d = x * GTail d 1 x u + u ^ d := by
+  by_cases hd : d = 0
+  · subst hd
+    simp [GTail]
+  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
+    have htail := add_pow_eq_prefix_add_xpow_mul_GTail d 1 x u hle
+    simpa [Finset.range_one, Nat.choose_zero_right, Nat.cast_one, pow_zero, pow_one,
+      Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
+
 /-- The `r = 0` tail is the whole binomial expansion. -/
 theorem GTail_zero_eq_add_pow
     {R : Type _} [CommSemiring R]

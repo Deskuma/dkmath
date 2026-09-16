@@ -41,7 +41,7 @@ theorem freshPrimePhaseRadius_mul_period
     {q a : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S) :
     freshPrimePhaseRadius S q a *
         (finitePrimeBasisProduct S : ZMod q) = (a : ZMod q) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   simp [freshPrimePhaseRadius, hM]
@@ -54,7 +54,7 @@ theorem freshPrimePhaseRadius_unique
     {d : ZMod q}
     (hd : d * (finitePrimeBasisProduct S : ZMod q) = (a : ZMod q)) :
     d = freshPrimePhaseRadius S q a := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hM : (finitePrimeBasisProduct S : ZMod q) ≠ 0 :=
     finitePrimeBasisProduct_cast_ne_zero_of_freshPrime hS hq hqS
   apply mul_right_cancel₀ hM
@@ -71,7 +71,7 @@ theorem freshPrimePhaseRadius_ne_zero
     {q a : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
     (hcop : Nat.Coprime a (finitePrimeBasisProduct (insert q S))) :
     freshPrimePhaseRadius S q a ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hS' : IsFinitePrimeBasis (insert q S) := by
     intro p hp
     simp only [Finset.mem_insert] at hp
@@ -100,7 +100,7 @@ theorem freshPrime_plus_index_eq_center_add_radius
     (hplus : IsFreshPrimePlusLiftIndex S q a b jplus)
     (hzero : IsFreshPrimeDeletedLiftIndex S q b jzero) :
     (jplus : ZMod q) = (jzero : ZMod q) + freshPrimePhaseRadius S q a := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hplus' := hplus.2
   have hzero' : ((primeBasisWheelLift S b jzero : ℕ) : ZMod q) = 0 :=
     (ZMod.natCast_eq_zero_iff _ _).mpr hzero.2
@@ -134,7 +134,7 @@ theorem freshPrime_minus_index_eq_center_sub_radius
     (hminus : IsFreshPrimeMinusLiftIndex S q a b jminus)
     (hzero : IsFreshPrimeDeletedLiftIndex S q b jzero) :
     (jminus : ZMod q) = (jzero : ZMod q) - freshPrimePhaseRadius S q a := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hminus' := hminus.2
   have hzero' : ((primeBasisWheelLift S b jzero : ℕ) : ZMod q) = 0 :=
     (ZMod.natCast_eq_zero_iff _ _).mpr hzero.2

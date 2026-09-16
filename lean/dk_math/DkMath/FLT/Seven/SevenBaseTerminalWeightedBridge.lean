@@ -71,7 +71,7 @@ theorem AwaySevenBaseTerminalUnitSectorPacket.residual_mod_seven_dichotomy
     (packet.unitSector.rootLinearUnit *
         (packet.unitSector.endpointUnit ^ 3)⁻¹ = -1 ∧
       ((cyclotomicSevenFst (z : ℤ) (y : ℤ) + (y : ℤ) ^ 3 : ℤ) : ZMod 7) = 0) := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   rcases packet.endpoint_load_bridge_dichotomy with hpos | hneg
   · left
     refine ⟨hpos.1, ?_⟩

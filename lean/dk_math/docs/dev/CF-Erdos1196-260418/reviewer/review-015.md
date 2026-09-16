@@ -33,7 +33,7 @@ $$
 これは既存の `count_with_rad_eq_le_div` が持っていた
 
 $$
-\operatorname{rad}(a) = r
+\text{rad}(a) = r
 $$
 
 の exact class 上界を、より柔らかく
@@ -45,7 +45,7 @@ $$
 という **lower bound だけ** からでも
 
 $$
-\# {a \le X \mid \operatorname{rad}(a)=r}
+\# {a \le X \mid \text{rad}(a)=r}
 \le
 \frac{X}{R}+1
 $$
@@ -68,7 +68,7 @@ $$
 という前回までの bridge 下界を、そのまま `RatioBound` 側の count upper bound に流し込み、
 
 $$
-\# {n \le X \mid \operatorname{rad}(n)=\operatorname{rad}(a^d-b^d)}
+\# {n \le X \mid \text{rad}(n)=\text{rad}(a^d-b^d)}
 \le
 \frac{X}{2^{\texttt{channelCount}}}+1
 $$
@@ -134,14 +134,14 @@ $$
 $$
 \text{primitive channels}
 \;\to\;
-\operatorname{rad}\text{ 下界}
+\text{rad}\text{ 下界}
 $$
 
 だった。
 今回はそこからさらに
 
 $$
-\operatorname{rad}\text{ 下界}
+\text{rad}\text{ 下界}
 \;\to\;
 \text{個数上界}
 $$
@@ -168,7 +168,7 @@ $$
 `primitiveWitnessFamilyPack_6_5_3` を使って
 
 $$
-\# {n \le 100 \mid \operatorname{rad}(n)=\operatorname{rad}(6^3-5^3)}
+\# {n \le 100 \mid \text{rad}(n)=\text{rad}(6^3-5^3)}
 \le
 \frac{100}{2^{\texttt{channelCount}}}+1
 $$
@@ -181,7 +181,7 @@ $$
 ただし、今回の接続はまだ
 
 $$
-\operatorname{rad}(n)=\operatorname{rad}(a^d-b^d)
+\text{rad}(n)=\text{rad}(a^d-b^d)
 $$
 
 という **exact-rad class** に対する上界じゃ。
@@ -222,7 +222,7 @@ $$
 もしもう一歩だけ Lean を先に進めるなら、`RatioBound` 側で
 
 $$
-\operatorname{rad}(n) \ge R
+\text{rad}(n) \ge R
 $$
 
 型の class 全体を直接数える粗い corollary を作るのもありじゃ。じゃが、流れとしては `ABC038` 用の中間命題設計へ入るほうが、今は筋が良いように見える。

@@ -13,8 +13,8 @@ $$
 中央の $\Box$ に入るのが Level C、
 
 $$
-\operatorname{IsGaussWantzelIndex}(n)\longrightarrow
-\operatorname{QuadraticallyConstructibleUnitKernel}(\operatorname{regularKernel}(n))
+\text{IsGaussWantzelIndex}(n)\longrightarrow
+\text{QuadraticallyConstructibleUnitKernel}(\text{regularKernel}(n))
 $$
 
 じゃ。
@@ -103,7 +103,7 @@ regularKernel n → exp(2πi/n)
 EUC-005 の exact order があるので、原始性を円分多項式側から再証明する必要はない。
 
 $$
-\operatorname{orderOf}(\operatorname{regularKernel}(n))=n
+\text{orderOf}(\text{regularKernel}(n))=n
 $$
 
 を複素数側へ輸送すればよい。
@@ -459,7 +459,7 @@ theorem quadraticallyConstructibleVec_iff_geometricallyConstructible
 $$
 \text{正 }n\text{ 角形が作図可能}
 \longrightarrow
-\operatorname{IsGaussWantzelIndex}(n)
+\text{IsGaussWantzelIndex}(n)
 $$
 
 これは次の流れになる。
@@ -476,7 +476,7 @@ regular polygon constructible
 EUC-008 では意図的に未証明とした、
 
 $$
-\varphi(n)=2^e\longrightarrow\operatorname{IsGaussWantzelIndex}(n)
+\varphi(n)=2^e\longrightarrow\text{IsGaussWantzelIndex}(n)
 $$
 
 が、ここで必要になる。

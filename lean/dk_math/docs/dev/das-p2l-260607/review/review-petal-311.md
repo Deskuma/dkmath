@@ -40,7 +40,7 @@ cp-311 は、これまで別々に構築してきた二本の幹線を同時に�
 とくに重要なのは、次の完全分類じゃ。
 
 $$
-\operatorname{DebtFiber}(j)=\varnothing\Longrightarrow D_j\le0
+\text{DebtFiber}(j)=\varnothing\Longrightarrow D_j\le0
 $$
 
 さらに、
@@ -74,7 +74,7 @@ $$
 非空 universal block $[b,j]$ において、
 
 $$
-\operatorname{floatGrowthDebtFiberAt}(n,j)=\varnothing
+\text{floatGrowthDebtFiberAt}(n,j)=\varnothing
 $$
 
 とする。
@@ -124,7 +124,7 @@ mem_carryTwoPaymentClaimFiberAt_iff_eq_endpoint_and_carryTwo_of_growthDebtFiber_
 により、
 
 $$
-i\in\operatorname{ClaimFiber}(j)\Longleftrightarrow i=j\land c_j=2
+i\in\text{ClaimFiber}(j)\Longleftrightarrow i=j\land c_j=2
 $$
 
 が証明された。
@@ -132,7 +132,7 @@ $$
 したがって claim fiber は厳密に二択じゃ。
 
 $$
-\operatorname{ClaimFiber}(j)=\begin{cases}{j}&c_j=2\\\varnothing&c_j=1\end{cases}
+\text{ClaimFiber}(j)=\begin{cases}{j}&c_j=2\\\varnothing&c_j=1\end{cases}
 $$
 
 よって、
@@ -221,13 +221,13 @@ strict repayment pattern
 今回の定理の対偶から、直ちに次が出る。
 
 $$
-D_j>0\Longrightarrow\operatorname{floatGrowthDebtFiberAt}(n,j)\ne\varnothing
+D_j>0\Longrightarrow\text{floatGrowthDebtFiberAt}(n,j)\ne\varnothing
 $$
 
 さらに width 表面では、
 
 $$
-w_b<w_{j+1}\Longrightarrow\operatorname{floatGrowthDebtFiberAt}(n,j)\ne\varnothing
+w_b<w_{j+1}\Longrightarrow\text{floatGrowthDebtFiberAt}(n,j)\ne\varnothing
 $$
 
 じゃ。
@@ -259,7 +259,7 @@ growth block:
 今回の成果から、complete claim fiber は概念的に、
 
 $$
-\operatorname{ClaimFiber}(j)=\operatorname{GrowthDebtFiber}(j)\sqcup\operatorname{ImmediateClaim}(j)
+\text{ClaimFiber}(j)=\text{GrowthDebtFiber}(j)\sqcup\text{ImmediateClaim}(j)
 $$
 
 と分解できる。
@@ -275,7 +275,7 @@ $$
 ここで、
 
 $$
-R_j=\#\operatorname{floatGrowthDebtFiberAt}(n,j)
+R_j=\#\text{floatGrowthDebtFiberAt}(n,j)
 $$
 
 $$

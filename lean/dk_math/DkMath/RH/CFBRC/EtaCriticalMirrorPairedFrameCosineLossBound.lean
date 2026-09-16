@@ -114,8 +114,8 @@ private theorem inv_sq_mul_rpow_neg_eq_two_extra
         ((((k + 1 : ℕ) : ℝ)) ^ (-a)) =
       (((k + 1 : ℕ) : ℝ)) ^ (-a - 2) := by
   have hx : 0 < (((k + 1 : ℕ) : ℝ)) := by positivity
-  convert (Real.rpow_sub_natCast hx.ne' (-a) 2).symm using 1 <;>
-    field_simp; ring
+  convert (Real.rpow_sub_natCast hx.ne' (-a) 2).symm using 1
+  field_simp
 
 /-- Explicit two-extra-power majorant for one cosine-loss term. -/
 noncomputable def etaCriticalMirrorPairedFrameCosineLossMajorant

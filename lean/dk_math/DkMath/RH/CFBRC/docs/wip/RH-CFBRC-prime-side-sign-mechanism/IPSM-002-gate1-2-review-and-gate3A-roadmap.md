@@ -149,7 +149,7 @@ Therefore its real part is the real part of the vertical base divided by `π`.
 The top-horizontal contribution has a different path orientation and must not be folded into this rule blindly.  For a top contribution `H`,
 
 $$
-\operatorname{Re}((2\pi i)^{-1}\,2H)=\operatorname{Im}(H)/\pi.
+\text{Re}((2\pi i)^{-1}\,2H)=\text{Im}(H)/\pi.
 $$
 
 This orientation difference should be made explicit in Lean before any sign argument.
@@ -185,7 +185,7 @@ and retain a separate top-horizontal base `H_ε`.
 The normalized arithmetic real surface should then reduce to a single scalar identity of the form
 
 $$
-\operatorname{Re}A_{\varepsilon,X}(W)=\bigl(V_{\varepsilon,X}^{\mathrm{re}}(W)+H_\varepsilon^{\mathrm{im}}(W)\bigr)/\pi.
+\text{Re}A_{\varepsilon,X}(W)=\bigl(V_{\varepsilon,X}^{\mathrm{re}}(W)+H_\varepsilon^{\mathrm{im}}(W)\bigr)/\pi.
 $$
 
 This is the preferred Gate 3A normal form.

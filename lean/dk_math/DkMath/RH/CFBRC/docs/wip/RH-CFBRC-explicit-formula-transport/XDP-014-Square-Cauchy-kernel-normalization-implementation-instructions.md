@@ -98,6 +98,7 @@ z = x - δ I
 \[
 (x-i\delta)^{-1}
 =
+
 \frac{x+i\delta}{x^2+\delta^2}
 \]
 
@@ -194,11 +195,13 @@ Real.pi_pos
 \int_{-\delta}^{\delta}
 \frac{dt}{t^2+\delta^2}
 =
+
 \frac{1}{\delta}
 \left(
 \arctan(1)-\arctan(-1)
 \right)
 =
+
 \frac{\pi}{2\delta}.
 \]
 
@@ -217,6 +220,7 @@ Gate B と Gate C を合成し、principal target を閉じる。
 \cdot
 \frac{\pi}{2\delta}
 =
+
 2\pi i.
 \]
 
@@ -348,8 +352,9 @@ pascalCenteredXiWeightedPrincipalPart_comp_toCentered_eq_cauchyKernel
 
 \[
 \int_{\partial\mathcal R}
-\operatorname{PP}_a
+\text{PP}_a
 =
+
 -2\pi i\,m_a h(a).
 \]
 

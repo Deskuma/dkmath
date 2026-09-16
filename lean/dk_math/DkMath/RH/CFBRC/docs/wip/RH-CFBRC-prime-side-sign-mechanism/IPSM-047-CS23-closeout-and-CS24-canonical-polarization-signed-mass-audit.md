@@ -6,7 +6,7 @@ CS23 is **Green-B**.
 
 The complete finite normalized source is now source-complete, and the finite radial-contact deficit has the exact form
 
-$$G_{\varepsilon,W,X}=\pi\bigl(Q_R-\operatorname{CompleteSource}_{\varepsilon,W,X}\bigr).$$
+$$G_{\varepsilon,W,X}=\pi\bigl(Q_R-\text{CompleteSource}_{\varepsilon,W,X}\bigr).$$
 
 CS23 also proves the abstract adapter
 
@@ -59,14 +59,14 @@ pascalCenteredXiMellinQuadraticNormalizedPrimeContribution_eq_two_div_pi_modeSum
 
 with mathematical content
 
-$$\operatorname{PrimeContribution}_{\varepsilon,W,X}
+$$\text{PrimeContribution}_{\varepsilon,W,X}
 =\frac{2}{\pi}\sum_{n\le X}\Lambda(n)K_{\varepsilon,W}(n).$$
 
 The proof should reuse the CS11 conjugation pattern for the finite PHZ source. Do not introduce an infinite sum. The source is the same finite symmetric right-edge integral already present in `pascalCenteredXiMellinQuadraticNormalizedPrimeContribution`.
 
 Then combine it with CS17 to prove
 
-$$\operatorname{PrimeContribution}_{\varepsilon,W,X}
+$$\text{PrimeContribution}_{\varepsilon,W,X}
 =\frac{E^{\mathrm{agg}}_+(\varepsilon,W,X)-E^{\mathrm{agg}}_-(\varepsilon,W,X)}{2\pi}.$$
 
 Suggested theorem name:
@@ -95,8 +95,8 @@ where the three terms are the existing normalized archimedean, elementary, and t
 
 Prove the exact split
 
-$$\operatorname{CompleteSource}_{\varepsilon,W,X}
-=\operatorname{PrimeContribution}_{\varepsilon,W,X}+C_{\varepsilon,W}.$$
+$$\text{CompleteSource}_{\varepsilon,W,X}
+=\text{PrimeContribution}_{\varepsilon,W,X}+C_{\varepsilon,W}.$$
 
 This is algebra only.
 

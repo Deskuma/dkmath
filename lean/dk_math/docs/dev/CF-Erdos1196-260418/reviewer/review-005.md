@@ -6,7 +6,7 @@
 前回までで作った
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 側の二本 channel 下界と、`PrimitivePrimeFlowWitness` 側の primitive flow spine が、今回はついに **一本の Lean 補題列として接続された**。追加された中核は
@@ -91,7 +91,7 @@ $$
 `PrimitivePrimeFlowWitness q a b d` から、
 
 $$
-\operatorname{Prime}(q)
+\text{Prime}(q)
 \quad\text{と}\quad
 q \mid a^d - b^d
 $$
@@ -106,7 +106,7 @@ $$
 $$
 \text{primitive witness}
 \Rightarrow
-\bigl(\operatorname{Prime}(q) \wedge q \mid a^d - b^d\bigr)
+\bigl(\text{Prime}(q) \wedge q \mid a^d - b^d\bigr)
 $$
 
 であり、つまり primitive witness は diff 側に **prime channel** を与える、と読む。差分中の docstring にも「minimal adapter」とあり、この位置づけは正しい。抽象語ではなく、ABC 側の `supportMass_dvd_of_prime_channel` に食わせられる形へ変換したのが本体じゃ。
@@ -118,8 +118,8 @@ $$
 
 $$
 q_1 \neq q_2,\quad
-\operatorname{Prime}(q_1),\quad
-\operatorname{Prime}(q_2),\quad
+\text{Prime}(q_1),\quad
+\text{Prime}(q_2),\quad
 q_1 \mid a^d - b^d,\quad
 q_2 \mid a^d - b^d
 $$
@@ -139,7 +139,7 @@ $$
 を、primitive witness から得られる diff 側の prime channels に適用して、
 
 $$
-q_1 q_2 \le \operatorname{supportMass}(a^d - b^d)
+q_1 q_2 \le \text{supportMass}(a^d - b^d)
 $$
 
 を得ておる。
@@ -170,7 +170,7 @@ $$
 だから、$7$ と $13$ が互いに異なる primitive prime であり、そのまま
 
 $$
-7 \cdot 13 \le \operatorname{supportMass}(6^3 - 5^3)
+7 \cdot 13 \le \text{supportMass}(6^3 - 5^3)
 $$
 
 が出る。
@@ -257,7 +257,7 @@ $$
 二本版は閉じたが、一般 family
 
 $$
-\prod_{q \in S} q \le \operatorname{supportMass}(a^d - b^d)
+\prod_{q \in S} q \le \text{supportMass}(a^d - b^d)
 $$
 
 まではまだ行っておらぬ。じゃが、無理に今やる必要はない。二本版を canonical base case にしてから pairwise family 版へ上げるのが筋じゃ。

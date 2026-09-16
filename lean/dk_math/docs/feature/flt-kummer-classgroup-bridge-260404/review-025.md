@@ -25,7 +25,7 @@
 この 3 つが supply されれば、
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 という explicit equality が出て、さらに Stage 2 の
@@ -54,7 +54,7 @@ $$
 Stage 1 を閉じるには、
 
 $$
-\operatorname{IsCoprime}\bigl((\text{tail}),\ (z-\zeta y)\bigr)
+\text{IsCoprime}\bigl((\text{tail}),\ (z-\zeta y)\bigr)
 $$
 
 を、actual cyclotomic 条件から示さねばならぬ。

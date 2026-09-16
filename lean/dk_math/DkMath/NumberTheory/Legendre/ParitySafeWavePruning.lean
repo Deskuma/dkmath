@@ -48,7 +48,9 @@ noncomputable def paritySafeActiveWaveOffsets (n q : ℕ) : Finset ℕ := by
     {n q r : ℕ} :
     r ∈ paritySafeActiveWaveOffsets n q ↔
       r ∈ squareAnchorOddPointCoprimeOffsets n ∧ q ∣ n ^ 2 + r := by
-  simp [paritySafeActiveWaveOffsets, SquareOffsetForbiddenBy]
+  classical
+  rw [paritySafeActiveWaveOffsets, Finset.mem_filter]
+  rfl
 
 /-- The least hit of a wave, with a harmless default for an empty wave. -/
 noncomputable def paritySafeActiveWaveRepresentative (n q : ℕ) : ℕ :=
@@ -79,7 +81,7 @@ private theorem paritySafeActiveWaveExtraOffsets_card_le
       (paritySafeActiveWaveOffsets n q).card - 1 := by
   classical
   by_cases hq : (paritySafeActiveWaveOffsets n q).Nonempty
-  · rw [paritySafeActiveWaveExtraOffsets, dif_pos hq]
+  · rw [paritySafeActiveWaveExtraOffsets, dite_eq_left hq]
     exact Finset.card_erase_of_mem (Finset.min'_mem _ hq) ▸ le_rfl
   · have hempty : paritySafeActiveWaveOffsets n q = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hq
@@ -128,7 +130,7 @@ private theorem paritySafeWave_inter_pruned_subset_singleton
     · have hre' : r ≠ (paritySafeActiveWaveOffsets n q).min' hnonempty := by
         simpa [hrep] using hre
       have hrExtra : r ∈ paritySafeActiveWaveExtraOffsets n q := by
-        rw [paritySafeActiveWaveExtraOffsets, dif_pos hnonempty]
+        rw [paritySafeActiveWaveExtraOffsets, dite_eq_left hnonempty]
         exact Finset.mem_erase.mpr ⟨hre', hrwave⟩
       have hrDeletion : r ∈ paritySafeDuplicateDeletionSet n := by
         exact Finset.mem_biUnion.mpr ⟨q, hq, hrExtra⟩

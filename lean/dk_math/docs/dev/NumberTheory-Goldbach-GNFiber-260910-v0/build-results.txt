@@ -1,0 +1,25 @@
+$ ./lean-build.sh DkMath.NumberTheory.Goldbach DkMathTest.NumberTheory.GoldbachGNFiber
+exit_code: 0
+🔍 Running default build...
+🚀 Starting build Lean...
+🔍 Checking build results...
+  see: __build.log:1
+✅️ build succeeded
+
+$ ./lean-build.sh DkMath
+exit_code: 0
+🔍 Running default build...
+🚀 Starting build Lean...
+⚠ [8832/9835] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+⚠ [9156/9835] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+⚠ [9162/9835] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [9174/9835] Replayed DkMath.CosmicFormula.TriominoFLT
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1917:6: declaration uses `sorry`
+⚠ [9621/9835] Replayed DkMath.FLT.Kummer.CyclotomicPrincipalization
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5388:8: declaration uses `sorry`
+🔍 Checking build results...
+  see: __build.log:1
+✅️ build succeeded

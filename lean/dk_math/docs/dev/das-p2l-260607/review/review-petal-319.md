@@ -99,7 +99,7 @@ $$
 なので、block start を $x$、next start を $x'$ とすれば、
 
 $$
-\operatorname{bitWidth}(x') = \operatorname{bitWidth}(x) + 1
+\text{bitWidth}(x') = \text{bitWidth}(x) + 1
 $$
 
 である。
@@ -179,7 +179,7 @@ $$
 二回の unit drift は、
 
 $$
-\operatorname{bitWidth}(x_2) = \operatorname{bitWidth}(x_0)+2
+\text{bitWidth}(x_2) = \text{bitWidth}(x_0)+2
 $$
 
 を要求するので、
@@ -203,9 +203,9 @@ $$
 したがって、
 
 $$
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longrightarrow
-\neg\operatorname{Saturated}(k+1)
+\neg\text{Saturated}(k+1)
 $$
 
 が確定した。
@@ -223,7 +223,7 @@ $$
 有限監査で偽だったのは、
 
 $$
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longrightarrow
 D_{k+1}\le0
 $$
@@ -233,7 +233,7 @@ $$
 今回得た正しい theorem は、
 
 $$
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longrightarrow
 D_{k+1}\le0
 \ \lor
@@ -313,11 +313,11 @@ $$
 depth $0$ では、
 
 $$
-\#\operatorname{Recovery}(0)=0
+\#\text{Recovery}(0)=0
 $$
 
 $$
-\#\operatorname{Continuation}(0)=L
+\#\text{Continuation}(0)=L
 $$
 
 なので、
@@ -363,7 +363,7 @@ $$
 現在の theorem 群から、さらに次が証明できると見える。
 
 $$
-0<D_k \land A_k=L_k \Longleftrightarrow \operatorname{Saturated}(k)
+0<D_k \land A_k=L_k \Longleftrightarrow \text{Saturated}(k)
 $$
 
 逆向きは既に自明じゃ。
@@ -387,7 +387,7 @@ $$
 exact ledger より、
 
 $$
-\operatorname{bitWidth}(x') = \operatorname{bitWidth}(x)+(L-v)
+\text{bitWidth}(x') = \text{bitWidth}(x)+(L-v)
 $$
 
 となる。
@@ -513,7 +513,7 @@ $$
 最終的に、全 positive block について、
 
 $$
-D_k \le M_k(d_k)+\mathbf1_{\operatorname{Saturated}(k)}
+D_k \le M_k(d_k)+\mathbf1_{\text{Saturated}(k)}
 $$
 
 となる。
@@ -543,7 +543,7 @@ $$
 一方、
 
 $$
-\left|\operatorname{ContinuationFiber}(d+1)\right|=\#L-(d+1)=L-d-1
+\left|\text{ContinuationFiber}(d+1)\right|=\#L-(d+1)=L-d-1
 $$
 
 じゃ。
@@ -551,7 +551,7 @@ $$
 したがって、
 
 $$
-\boxed{M_d = \left|\operatorname{ContinuationFiber}(d+1)\right|}
+\boxed{M_d = \left|\text{ContinuationFiber}(d+1)\right|}
 $$
 
 となる。
@@ -580,7 +580,7 @@ canonicalSelectedPressureCarrier n k :=
 各 selected pressure carrier は、
 
 $$
-\operatorname{Carrier}_k\subseteq B_k
+\text{Carrier}_k\subseteq B_k
 $$
 
 である。
@@ -596,7 +596,7 @@ $$
 よって、
 
 $$
-\operatorname{Carrier}*k \cap \operatorname{Carrier}*\ell = \varnothing
+\text{Carrier}*k \cap \text{Carrier}*\ell = \varnothing
 $$
 
 となる。
@@ -610,7 +610,7 @@ $$
 有限区間では、
 
 $$
-\left|\bigsqcup_k\operatorname{Carrier}_k\right| = \sum_k|\operatorname{Carrier}_k|
+\left|\bigsqcup_k\text{Carrier}_k\right| = \sum_k|\text{Carrier}_k|
 $$
 
 を証明できる。

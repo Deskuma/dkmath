@@ -164,7 +164,7 @@ theorem exists_cubicPetalWieferichPacket_of_reduced
     refine ⟨?_, ?_⟩
     · rw [GNNonExceptionalPart_factorization_support]
       exact hqS
-    · rw [GNNonExceptionalPart_factorization, if_pos hqS]
+    · rw [GNNonExceptionalPart_factorization, ite_eq_left hqS]
       exact
         (hqprime.pow_dvd_iff_le_factorization hGN0).1 hq2
   · left

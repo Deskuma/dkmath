@@ -309,7 +309,7 @@ functional equation は零点集合の反射対称性を与えるが、各零点
 `0003` では、CFBRC 側では
 
 $$
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)=0
+\text{offCriticalCFBRC}(d,\sigma,\Theta)=0
 \iff
 \sigma=\frac12
 $$

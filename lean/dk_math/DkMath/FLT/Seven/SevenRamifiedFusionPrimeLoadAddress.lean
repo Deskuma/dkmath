@@ -315,7 +315,7 @@ theorem evalAlphaRoot_sameFamilyLoad_ne_zero
     (a : QuotientPrimeGCDLoadAddress p q)
     (i : Fin 3) (hi : i ≠ 0) :
     a.evalAlphaRoot (a.family.load p i) ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro hother
   rcases a.addressedLoad_isCoprime_sameFamilyLoad i hi with
     ⟨u, v, huv⟩
@@ -376,7 +376,7 @@ the other routing-cell load is excluded from this oriented prime address. -/
 theorem evalAlphaRoot_competingLoad_ne_zero
     (a : QuotientPrimeGCDLoadAddress p q) :
     a.evalAlphaRoot a.competingLoad ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro hother
   rcases a.addressedLoad_isCoprime_competingLoad with
     ⟨u, v, huv⟩
@@ -405,7 +405,7 @@ theorem span_competingLoad_not_le_evalKernel
 theorem evalAlphaRoot_competingScalar_ne_zero
     (a : QuotientPrimeGCDLoadAddress p q) :
     a.evalAlphaRoot a.competingScalar ≠ 0 := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   have hcop :
       IsCoprime a.addressedScalar a.competingScalar := by
     cases hfamily : a.family with
@@ -449,7 +449,7 @@ already map onto `ZMod q`. -/
 theorem evalAlphaRoot_surjective
     (a : QuotientPrimeGCDLoadAddress p q) :
     Function.Surjective a.evalAlphaRoot := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   intro z
   refine ⟨(z.val : SevenRealCubicInt), ?_⟩
   simpa only [map_natCast] using ZMod.natCast_zmod_val z
@@ -459,7 +459,7 @@ the addressed rational prime. -/
 theorem evalKernel_isMaximal
     (a : QuotientPrimeGCDLoadAddress p q) :
     a.evalKernel.IsMaximal := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   exact RingHom.ker_isMaximal_of_surjective
     a.evalAlphaRoot a.evalAlphaRoot_surjective
 
@@ -479,7 +479,7 @@ exactly `q` elements. -/
 theorem evalKernel_cardQuot
     (a : QuotientPrimeGCDLoadAddress p q) :
     Submodule.cardQuot a.evalKernel = q := by
-  letI : Fact (Nat.Prime q) := ⟨a.prime⟩
+  let : Fact (Nat.Prime q) := ⟨a.prime⟩
   rw [Submodule.cardQuot_apply]
   calc
     Nat.card (SevenRealCubicInt ⧸ a.evalKernel) =

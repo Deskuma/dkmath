@@ -241,7 +241,6 @@ private theorem continuous_pascalCenteredRightEdgeWeight
   change Continuous (fun t : ℝ =>
     pascalSymmetricRectangleRightEdge σ t - criticalLineCenter)
   convert (continuous_pascalXiRightEdgePath σ).sub continuous_const using 1
-  all_goals (ext t; rfl)
 
 /-- The elementary correction is continuous, and hence interval-integrable,
 on every safe right edge.  The two denominators are protected by the
@@ -275,8 +274,6 @@ theorem intervalIntegrable_pascalXiElementaryRightEdgeIntegrand
       sub_ne_zero.mpr (hs1 t).symm
     convert hminus.div hs hs0 |>.add
         (hone.div (hone.sub hs) h1s) using 1
-    funext t
-    rfl
   have htotal : Continuous (fun t : ℝ =>
       pascalXiElementaryRightEdgeIntegrand h W.rectangle.σ t) := by
     dsimp [pascalXiElementaryRightEdgeIntegrand, s]

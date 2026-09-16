@@ -32,7 +32,7 @@ theorem padicValNat_lower_bound_d5
     (hq : Nat.Prime q)
     (hqx : q ∣ x) :
     5 ≤ padicValNat q (x ^ 5) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hvalX : 1 ≤ padicValNat q x := by
     exact (@padicValNat_dvd_iff_le q (Fact.mk hq) x 1 hx.ne').mp (by simpa using hqx)
   have hpow : padicValNat q (x ^ 5) = 5 * padicValNat q x := by simp
@@ -44,7 +44,7 @@ theorem padicValNat_clean_body_upper_bound
     {g y q : ℕ}
     (h : CleanGN5Channel g y q) :
     padicValNat q (g * GN5 g y) ≤ 1 := by
-  letI : Fact (Nat.Prime q) := ⟨h.prime⟩
+  let : Fact (Nat.Prime q) := ⟨h.prime⟩
   have hBodyNe : g * GN5 g y ≠ 0 := by
     intro hzero
     apply h.not_sq_dvd_body
@@ -65,7 +65,7 @@ theorem padicValNat_clean_body_eq_one
     {g y q : ℕ}
     (h : CleanGN5Channel g y q) :
     padicValNat q (g * GN5 g y) = 1 := by
-  letI : Fact (Nat.Prime q) := ⟨h.prime⟩
+  let : Fact (Nat.Prime q) := ⟨h.prime⟩
   have hBodyNe : g * GN5 g y ≠ 0 := by
     intro hzero
     apply h.not_sq_dvd_body

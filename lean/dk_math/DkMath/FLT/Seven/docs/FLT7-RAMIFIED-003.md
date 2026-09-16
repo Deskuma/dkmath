@@ -30,7 +30,7 @@ PrimitiveRamifiedSummitPacket.root_coordinates_isCoprime
 
 これは単なる norm coprimality ではなく、
 
-$$\operatorname{IsCoprime}(u,v)$$
+$$\text{IsCoprime}(u,v)$$
 
 を直接回収しています。
 

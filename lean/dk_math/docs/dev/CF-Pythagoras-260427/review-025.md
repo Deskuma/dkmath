@@ -13,7 +13,7 @@ docstring 整備としては、ちょうどよい締め方じゃ。数学本体�
 ここで「征した」と呼べる範囲は、次のルートじゃ。
 
 $$
-\operatorname{
+\text{
     CubicPrimitiveFLTContext
 }
 $$
@@ -21,7 +21,7 @@ $$
 つまり、
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3),
 }
 \quad b<a,
@@ -41,7 +41,7 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     Squarefree(|GN(3,a-b,b)|)
 }
 $$

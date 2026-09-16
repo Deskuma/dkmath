@@ -1,0 +1,29 @@
+LUNA-015 validation
+
+Focused module:
+  lake build DkMath.ABC.GNExcessCubicPrimitivePell  PASS
+
+Public aggregator:
+  lake build DkMath.ABC  PASS
+
+Changed Lean source scan:
+  sorry/admit/new axiom/abc_main_axiom/native_decide  NONE
+
+Audited declaration groups:
+  divisibility hierarchy
+  coordinate prime-mod-three consumers
+  Coprime Pell y with M and inherited r/d/u packet
+  complement Coprime d/u packet
+  gcd(y,T) divides 3
+  d^2 and quotient^2 Pell-value divisibility
+  d-support prime-square packet
+  quotient-prime packet
+  fixed-T primitive conic packet
+  standard trust boundary: propext, Classical.choice, Quot.sound (or subset)
+
+Formatting:
+  git diff --check  PASS
+
+Research boundary:
+  no Pell-solution count, Hensel rarity, shell/fiber estimate, incidence
+  sparsity, provider assumption, or ABC closure theorem was added.

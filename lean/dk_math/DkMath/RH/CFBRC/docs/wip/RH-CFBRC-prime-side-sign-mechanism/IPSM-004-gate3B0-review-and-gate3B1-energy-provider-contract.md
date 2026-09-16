@@ -77,7 +77,7 @@ pascalCenteredXiMellinQuadraticScalarExcess_eq_complexWholeSurface_re_sub_radial
 Thus the finite scalar excess is now represented without reconstructing lost imaginary data.
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
+E_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
 $$
 
 Together with Gate 3A,

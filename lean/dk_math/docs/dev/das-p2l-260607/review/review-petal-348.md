@@ -104,7 +104,7 @@ $$k\longmapsto k+1$$
 
 また、successor shiftは単射なので、
 
-$$\left|\operatorname{ZeroSpareSuccessorIndices}\right|=\left|\operatorname{ZeroSparePredecessorIndices}\right|$$
+$$\left|\text{ZeroSpareSuccessorIndices}\right|=\left|\text{ZeroSparePredecessorIndices}\right|$$
 
 も正確に証明された。
 
@@ -122,7 +122,7 @@ CanonicalInternalZeroSpareSelectedCarrier
 
 は、
 
-$$\sum_{j\in\operatorname{ZeroSpareSuccessorIndices}}\operatorname{SelectedPressureCarrier}(j)$$
+$$\sum_{j\in\text{ZeroSpareSuccessorIndices}}\text{SelectedPressureCarrier}(j)$$
 
 というdependent sumになっている。
 
@@ -201,7 +201,7 @@ $$k_1+1=k_2+1\Longrightarrow k_1=k_2$$
 
 cardinalityとしても、
 
-$$\left|S_{\mathrm{zero}}\right|\le\left|\operatorname{ZeroSpareSelectedCarrier}\right|$$
+$$\left|S_{\mathrm{zero}}\right|\le\left|\text{ZeroSpareSelectedCarrier}\right|$$
 
 が得られた。
 
@@ -239,11 +239,11 @@ range of canonicalInternalZeroSpareChargeEmbedding:
 
 現在証明されたのは、
 
-$$|S_{\mathrm{zero}}|\le|\operatorname{HostCarrier}|$$
+$$|S_{\mathrm{zero}}|\le|\text{HostCarrier}|$$
 
 であって、
 
-$$|S_{\mathrm{zero}}|=|\operatorname{HostCarrier}|$$
+$$|S_{\mathrm{zero}}|=|\text{HostCarrier}|$$
 
 ではない。
 
@@ -271,7 +271,7 @@ $$Q\le G+S_{\mathrm{zero}}+R+T$$
 
 そして今回の、
 
-$$S_{\mathrm{zero}}\le|\operatorname{ZeroSpareSelectedCarrier}|$$
+$$S_{\mathrm{zero}}\le|\text{ZeroSpareSelectedCarrier}|$$
 
 を代入しても、右辺を別の量へ置き換えただけであり、queue boundにはならない。
 
@@ -469,7 +469,7 @@ Keep the report concise and write it only in the Codex response.
 
 その調査結果を賢狼側で読み、
 
-$$\operatorname{OwnedArrival}\longrightarrow\operatorname{Service}$$
+$$\text{OwnedArrival}\longrightarrow\text{Service}$$
 
 の橋が既にあるか、最小の欠損定理が何かを決める。
 

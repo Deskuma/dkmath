@@ -146,7 +146,7 @@ surjective power-basis map above. It does not assert that this map is injective
 or that the concrete carrier is definitionally the full ring of integers. -/
 noncomputable instance ringIsPrincipalIdealRing :
     IsPrincipalIdealRing Ring := by
-  letI : IsPrincipalIdealRing (𝓞 AbstractField) :=
+  let : IsPrincipalIdealRing (𝓞 AbstractField) :=
     CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing AbstractField
   exact
     IsPrincipalIdealRing.of_surjective

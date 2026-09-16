@@ -25,8 +25,9 @@ namespace Telescoping
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 
 variable {p : ℕ}

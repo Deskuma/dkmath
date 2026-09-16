@@ -219,13 +219,13 @@ $$
 The corresponding binary metallic norm is
 
 $$
-\operatorname{MetallicNorm}_k(M,N)=M^2+kMN-N^2.
+\text{MetallicNorm}_k(M,N)=M^2+kMN-N^2.
 $$
 
 It diagonalizes as
 
 $$
-4\operatorname{MetallicNorm}_k(M,N)
+4\text{MetallicNorm}_k(M,N)
 =(2M+kN)^2-(k^2+4)N^2.
 $$
 

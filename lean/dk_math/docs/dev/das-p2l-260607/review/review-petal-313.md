@@ -83,13 +83,13 @@ canonicalPaymentBlockContinuationFiber
 長さ $L$ の block について、
 
 $$
-\#\operatorname{Recovery}(d)=\begin{cases}1&1\le d\le L\\0&\text{otherwise}\end{cases}
+\#\text{Recovery}(d)=\begin{cases}1&1\le d\le L\\0&\text{otherwise}\end{cases}
 $$
 
 depth zero を明示的に除外したことも重要じゃ。
 
 $$
-\#\operatorname{Recovery}(0)=0
+\#\text{Recovery}(0)=0
 $$
 
 以前の粗い候補、
@@ -103,13 +103,13 @@ $$
 ### Continuation
 
 $$
-\#\operatorname{Continuation}(d)=L-d
+\#\text{Continuation}(d)=L-d
 $$
 
 これは $d=0$ でも成立する。
 
 $$
-\#\operatorname{Continuation}(0)=L
+\#\text{Continuation}(0)=L
 $$
 
 また `canonicalPaymentBlockContinuationFiber_eq_Icc` に $d<L$ を要求したのも正しい。
@@ -127,7 +127,7 @@ blockPressureContributionInt
 は、
 
 $$
-M_k(d)=\#\operatorname{Continuation}_k(d)-\#\operatorname{Recovery}_k(d)
+M_k(d)=\#\text{Continuation}_k(d)-\#\text{Recovery}_k(d)
 $$
 
 として実際の fiber から定義された。
@@ -169,7 +169,7 @@ sourcePressureMarginInt_paymentEndpointSeq_eq_sum_blockPressureContributionInt
 じゃ。
 
 $$
-\operatorname{SourcePressureMarginInt}(n,e_m+1,d)=\sum_{k=0}^{m}M_k(d)
+\text{SourcePressureMarginInt}(n,e_m+1,d)=\sum_{k=0}^{m}M_k(d)
 $$
 
 が証明された。
@@ -210,7 +210,7 @@ $$
 そして、
 
 $$
-d=\operatorname{orbitExactDepth}(n,i)
+d=\text{orbitExactDepth}(n,i)
 $$
 
 が証明された。
@@ -253,7 +253,7 @@ $$
 を capacity carrier として持ち、
 
 $$
-\#\operatorname{CapacitySlots}_k=P_k
+\#\text{CapacitySlots}_k=P_k
 $$
 
 を確定した。
@@ -520,7 +520,7 @@ final allocation
 delayed claim の不足分を後続 endpoint が返済する実際の向きは逆じゃ。
 
 $$
-\operatorname{claimBlock}\le\operatorname{paymentSlotBlock}
+\text{claimBlock}\le\text{paymentSlotBlock}
 $$
 
 したがって matching は二種類に分けるべきじゃ。
@@ -528,7 +528,7 @@ $$
 ### Backward credit matching
 
 $$
-\operatorname{slotBlock}\le\operatorname{claimBlock}
+\text{slotBlock}\le\text{claimBlock}
 $$
 
 prefix dominance、すなわち過去 credit だけで常に支払えることの証明書。
@@ -536,7 +536,7 @@ prefix dominance、すなわち過去 credit だけで常に支払えること�
 ### Forward repayment matching
 
 $$
-\operatorname{claimBlock}\le\operatorname{slotBlock}
+\text{claimBlock}\le\text{slotBlock}
 $$
 
 現在不足した claim を、同じ endpoint または後続 endpoint が返済する実際の discharge 構造。
@@ -621,7 +621,7 @@ canonicalPaymentSourceAtDepth n k d :=
 $1\le d\le L_k$ なら、
 
 $$
-\operatorname{orbitExactDepth}(n,i)=d
+\text{orbitExactDepth}(n,i)=d
 $$
 
 となる。
@@ -644,7 +644,7 @@ canonicalPaymentClaimDepths n k :=
 そして、
 
 $$
-\#\operatorname{ClaimDepths}_k=Q_k
+\#\text{ClaimDepths}_k=Q_k
 $$
 
 を証明できる。
@@ -786,11 +786,11 @@ $$
 ただし、まだ次の theorem がない。
 
 $$
-|\operatorname{ClaimCarrier}|=C_m
+|\text{ClaimCarrier}|=C_m
 $$
 
 $$
-|\operatorname{CapacityCarrier}|=P_m
+|\text{CapacityCarrier}|=P_m
 $$
 
 また、

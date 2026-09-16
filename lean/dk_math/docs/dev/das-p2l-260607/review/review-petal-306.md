@@ -54,7 +54,7 @@ orbitPaymentSourceFiberAt_eq_Icc_universalPaymentBlockStart
 によって、
 
 $$
-\operatorname{Fiber}(j)=\operatorname{Icc}(b,j)
+\text{Fiber}(j)=\text{Icc}(b,j)
 $$
 
 が Lean 上で確定した。
@@ -262,7 +262,7 @@ extra-height endpoint 集合
 より完全には、
 
 $$
-\operatorname{Image}(\tau)=\operatorname{FixedPoints}(\tau)={j\mid2\le h_j}
+\text{Image}(\tau)=\text{FixedPoints}(\tau)={j\mid2\le h_j}
 $$
 
 となる。
@@ -286,7 +286,7 @@ orbitPaymentSourceFiberAt_eq_Icc_universalPaymentBlockStart
 非空 fiber に対して、
 
 $$
-\operatorname{Fiber}(j)=\operatorname{Icc}(b,j)
+\text{Fiber}(j)=\text{Icc}(b,j)
 $$
 
 が成立する。
@@ -395,7 +395,7 @@ block start で最大深度 $j-b+1$ じゃ。
 この結果から、すぐ次も得られる。
 
 $$
-\#\operatorname{Fiber}(j)=j-b+1=A_b
+\#\text{Fiber}(j)=j-b+1=A_b
 $$
 
 つまり、
@@ -519,7 +519,7 @@ debt-supported theorem だけでは、最も重要な返済側 block が抜け�
 非空 universal fiber に対して、次が証明できる。
 
 $$
-i\in\operatorname{CarryTwoClaimFiber}(j)\Longleftrightarrow i\in[b,j]\land\operatorname{CarryTwoDebtAt}(n,i)
+i\in\text{CarryTwoClaimFiber}(j)\Longleftrightarrow i\in[b,j]\land\text{CarryTwoDebtAt}(n,i)
 $$
 
 ### 左から右
@@ -618,7 +618,7 @@ noncomputable def PaymentEndpoint.blockStart
 併せて、
 
 $$
-\operatorname{Fiber}(j)\ne\varnothing\Longleftrightarrow2\le h_j
+\text{Fiber}(j)\ne\varnothing\Longleftrightarrow2\le h_j
 $$
 
 も証明するとよい。

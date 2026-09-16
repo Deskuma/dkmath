@@ -123,13 +123,13 @@ $$
 左 witness の中心直後では margin が非正であり、
 
 $$
-\operatorname{Margin}(r+W.val+1)\le0
+\text{Margin}(r+W.val+1)\le0
 $$
 
 右 witness の中心では margin が正である。
 
 $$
-0<\operatorname{Margin}(r+W'.val)
+0<\text{Margin}(r+W'.val)
 $$
 
 もし $W'.val=W.val+1$ なら、同じ座標が正かつ非正となる。
@@ -277,7 +277,7 @@ $$
 現在の bit width を、
 
 $$
-w(n):=\operatorname{bitWidth}(n)
+w(n):=\text{bitWidth}(n)
 $$
 
 とする。
@@ -515,7 +515,7 @@ orbitWindowUpperCarryCountEqTwo
 各 carry は $1$ または $2$ なので、
 
 $$
-\operatorname{sumUpperCarry}(n,k)=k+\operatorname{carryTwoCount}(n,k)
+\text{sumUpperCarry}(n,k)=k+\text{carryTwoCount}(n,k)
 $$
 
 となる。
@@ -523,13 +523,13 @@ $$
 一歩 balance を telescope すると、
 
 $$
-\operatorname{sumS}(n,k)+w(T^k(n))=w(n)+\operatorname{sumUpperCarry}(n,k)
+\text{sumS}(n,k)+w(T^k(n))=w(n)+\text{sumUpperCarry}(n,k)
 $$
 
 したがって、
 
 $$
-\operatorname{sumS}(n,k)+w(T^k(n))=w(n)+k+\operatorname{carryTwoCount}(n,k)
+\text{sumS}(n,k)+w(T^k(n))=w(n)+k+\text{carryTwoCount}(n,k)
 $$
 
 が得られた。
@@ -537,12 +537,12 @@ $$
 これは言い換えると、
 
 $$
-w(T^k(n))+\bigl(\operatorname{sumS}(n,k)-k\bigr)=w(n)+\operatorname{carryTwoCount}(n,k)
+w(T^k(n))+\bigl(\text{sumS}(n,k)-k\bigr)=w(n)+\text{carryTwoCount}(n,k)
 $$
 
 じゃ。
 
-左の $\operatorname{sumS}-k$ は baseline $1$ を超えた **追加 peeling payment**。
+左の $\text{sumS}-k$ は baseline $1$ を超えた **追加 peeling payment**。
 
 右の carry-two count は baseline carry $1$ を超えた **追加 upper debt**。
 
@@ -715,7 +715,7 @@ g:=w(n)-q-r
 $$
 
 $$
-\operatorname{middleGapCapacity}:=2^g
+\text{middleGapCapacity}:=2^g
 $$
 
 と定義され、

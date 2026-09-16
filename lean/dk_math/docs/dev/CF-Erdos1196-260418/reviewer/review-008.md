@@ -93,7 +93,7 @@ $$
 $$
 ({2,3} : \mathrm{Finset},\mathbb{N}).\prod \mathrm{id}
 \le
-\operatorname{supportMass}(12)
+\text{supportMass}(12)
 $$
 
 を `supportMass_ge_prod_of_prime_channel_family` だけで通している。
@@ -111,13 +111,13 @@ $$
 その結果、
 
 $$
-\operatorname{Prime}(7) \wedge 7 \mid 8^1 - 1^1
+\text{Prime}(7) \wedge 7 \mid 8^1 - 1^1
 $$
 
 と
 
 $$
-\text{support.prod } id \le \operatorname{supportMass}(8^1 - 1^1)
+\text{support.prod } id \le \text{supportMass}(8^1 - 1^1)
 $$
 
 を、public surface だけで綺麗に出せる。

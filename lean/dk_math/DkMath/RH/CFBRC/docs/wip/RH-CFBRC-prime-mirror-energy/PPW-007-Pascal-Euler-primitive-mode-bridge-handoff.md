@@ -57,7 +57,7 @@ prime-mirror log energy は、同じ birth event で新しい非負項を一つ�
 $$
 \mathcal E_{N+1}(s)-\mathcal E_N(s)
 =
-\operatorname{BirthLogMass}(N+1)\,G_{N+1}(s)
+\text{BirthLogMass}(N+1)\,G_{N+1}(s)
 $$
 
 この `(N,N+1)` 更新則は整合している。
@@ -135,7 +135,7 @@ $$
 $$
 R_p(s)+R_p(s)^{-1}-2
 =
-\operatorname{primeMirrorOffsetGapAt}(p,s)
+\text{primeMirrorOffsetGapAt}(p,s)
 $$
 
 これにより、PPW-006 の energy は Euler factor から回収した primitive mode の mirror imbalance として読める。
@@ -506,7 +506,7 @@ DkMath.RH.CFBRC.PascalPrimePowerWaveBridge
 有限段階で次を定義する。
 
 $$
-\operatorname{PrimePowerWave}_{N,K}(s)
+\text{PrimePowerWave}_{N,K}(s)
 :=
 \sum_{p\le N}\sum_{1\le k\le K}
 (\log p)\,M_p(s)^k

@@ -213,7 +213,7 @@ private theorem first_depth_eq_product {q a b c : ℕ} (hq : Nat.Prime q)
     (ha : q ∣ a) (hab : Nat.Coprime a b) (hac : Nat.Coprime a c)
     (ha0 : a ≠ 0) (hb0 : b ≠ 0) (hc0 : c ≠ 0) :
     padicValNat q a = padicValNat q (a * b * c) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hb := prime_not_dvd_second_of_coprime hq hab ha
   have hc := prime_not_dvd_second_of_coprime hq hac ha
   rw [padicValNat.mul (mul_ne_zero ha0 hb0) hc0, padicValNat.mul ha0 hb0,
@@ -224,7 +224,7 @@ private theorem middle_depth_eq_product {q a b c : ℕ} (hq : Nat.Prime q)
     (hb : q ∣ b) (hab : Nat.Coprime a b) (hbc : Nat.Coprime b c)
     (ha0 : a ≠ 0) (hb0 : b ≠ 0) (hc0 : c ≠ 0) :
     padicValNat q b = padicValNat q (a * b * c) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have ha := prime_not_dvd_second_of_coprime hq hab.symm hb
   have hc := prime_not_dvd_second_of_coprime hq hbc hb
   rw [padicValNat.mul (mul_ne_zero ha0 hb0) hc0, padicValNat.mul ha0 hb0,
@@ -235,7 +235,7 @@ private theorem last_depth_eq_product {q a b c : ℕ} (hq : Nat.Prime q)
     (hc : q ∣ c) (hac : Nat.Coprime a c) (hbc : Nat.Coprime b c)
     (ha0 : a ≠ 0) (hb0 : b ≠ 0) (hc0 : c ≠ 0) :
     padicValNat q c = padicValNat q (a * b * c) := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have ha := prime_not_dvd_second_of_coprime hq hac.symm hc
   have hb := prime_not_dvd_second_of_coprime hq hbc.symm hc
   rw [padicValNat.mul (mul_ne_zero ha0 hb0) hc0, padicValNat.mul ha0 hb0,
@@ -390,7 +390,7 @@ def AwayRoutingPrimeAddress.toDepthPacket {x y z : ℕ}
   exponent := padicValNat a.q (routingCell r.routing a.row a.column)
   exponent_eq_cell := rfl
   exponent_pos := by
-    letI : Fact (Nat.Prime a.q) := ⟨a.q_prime⟩
+    let : Fact (Nat.Prime a.q) := ⟨a.q_prime⟩
     exact one_le_padicValNat_of_dvd (routingCell_ne_zero a.row a.column) a.q_dvd_cell
   endpoint_depth_eq := a.cell_depth_eq_endpoint_depth.symm
   root_depth_eq := a.cell_depth_eq_root_depth.symm

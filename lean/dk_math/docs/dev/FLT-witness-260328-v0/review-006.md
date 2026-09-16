@@ -142,7 +142,7 @@ $$
 狙うべきは
 
 $$
-\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)\equiv d \pmod{d^2}
+\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)\equiv d \pmod{d^2}
 $$
 
 またはそれと同値な

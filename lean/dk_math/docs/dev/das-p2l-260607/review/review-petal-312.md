@@ -190,7 +190,7 @@ $$
 今回、complete claim fiber は、
 
 $$
-\operatorname{ClaimFiber}(j)=\operatorname{GrowthDebtFiber}(j)\sqcup\operatorname{ImmediateFiber}(j)
+\text{ClaimFiber}(j)=\text{GrowthDebtFiber}(j)\sqcup\text{ImmediateFiber}(j)
 $$
 
 と分解された。
@@ -488,7 +488,7 @@ $$
 したがって recovery contribution は、
 
 $$
-\#\operatorname{Recovery}_d=\begin{cases}1&1\le d\le L\\0&\text{otherwise}\end{cases}
+\#\text{Recovery}_d=\begin{cases}1&1\le d\le L\\0&\text{otherwise}\end{cases}
 $$
 
 じゃ。
@@ -506,7 +506,7 @@ $d=0$ では recovery は $0$ である。
 一方 continuation は、
 
 $$
-\#\operatorname{Continuation}_d=L-d
+\#\text{Continuation}_d=L-d
 $$
 
 で、これは $d=0$ でも正しい。

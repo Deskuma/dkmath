@@ -253,7 +253,7 @@ dyadicPhaseNode_child_odd_mid
 既に同等の補題があるなら再利用でよいが、形としては、
 
 $$
-\operatorname{phaseDepth}(t)
+\text{phaseDepth}(t)
 ============================
 
 \frac12+2\left(t-\frac12\right)^2
@@ -264,10 +264,10 @@ $$
 すると反射対称はかなり扱いやすい。
 
 $$
-\operatorname{phaseDepth}(t_{n,2^n-k})
+\text{phaseDepth}(t_{n,2^n-k})
 ======================================
 
-\operatorname{phaseDepth}(t_{n,k})
+\text{phaseDepth}(t_{n,k})
 $$
 
 これはすぐ欲しくなる。

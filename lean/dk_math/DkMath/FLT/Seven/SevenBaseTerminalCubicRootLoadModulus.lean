@@ -19,7 +19,7 @@ theorem exponent_eq_padicValNat_cubicRootLoad
     (depth : AwayNonSevenPrimeDepthPacket r) :
     depth.exponent =
       padicValNat depth.q (awaySevenBaseTerminalCubicRootLoad r) := by
-  letI : Fact (Nat.Prime depth.q) := ⟨depth.q_prime⟩
+  let : Fact (Nat.Prime depth.q) := ⟨depth.q_prime⟩
   have hv0 : r.cubic.rootTriple.vPart ≠ 0 :=
     r.cubic.rootTriple.vPart_pos.ne'
   have hl0 : r.cubic.rootTriple.leftPart ≠ 0 :=

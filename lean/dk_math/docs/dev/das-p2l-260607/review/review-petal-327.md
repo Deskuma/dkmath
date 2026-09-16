@@ -88,9 +88,9 @@ saturated predecessor の odd core を $u$ とする。
 
 successor length が $1$ なら、
 
-$$\operatorname{nextOddCore}=\frac{9u+1}{4}$$
+$$\text{nextOddCore}=\frac{9u+1}{4}$$
 
-$$\operatorname{nextTerminalCarrier}=\frac{27u-1}{4}$$
+$$\text{nextTerminalCarrier}=\frac{27u-1}{4}$$
 
 が証明された。
 
@@ -161,41 +161,41 @@ $$3y+1<4x$$
 
 一方、saturated unit drift の width theorem は、
 
-$$\operatorname{bitWidth}(y)=\operatorname{bitWidth}(x)+1$$
+$$\text{bitWidth}(y)=\text{bitWidth}(x)+1$$
 
 を既に与えている。
 
 また、
 
-$$x<2^{\operatorname{bitWidth}(x)}$$
+$$x<2^{\text{bitWidth}(x)}$$
 
 なので、
 
-$$4x<2^{\operatorname{bitWidth}(x)+2}=2^{\operatorname{bitWidth}(y)+1}$$
+$$4x<2^{\text{bitWidth}(x)+2}=2^{\text{bitWidth}(y)+1}$$
 
 じゃ。
 
 以上から、
 
-$$3y+1<2^{\operatorname{bitWidth}(y)+1}$$
+$$3y+1<2^{\text{bitWidth}(y)+1}$$
 
 となる。
 
 しかし upper carry が $2$ であるための exact threshold は、
 
-$$\operatorname{stateUpperCarry}(y)=2\iff2^{\operatorname{bitWidth}(y)+1}\le3y+1$$
+$$\text{stateUpperCarry}(y)=2\iff2^{\text{bitWidth}(y)+1}\le3y+1$$
 
 だった。
 
 よって、
 
-$$\operatorname{stateUpperCarry}(y)\ne2$$
+$$\text{stateUpperCarry}(y)\ne2$$
 
 となる。
 
 positive state の upper carry は $1$ または $2$ なので、結論は、
 
-$$\operatorname{stateUpperCarry}(y)=1$$
+$$\text{stateUpperCarry}(y)=1$$
 
 じゃ。
 
@@ -233,19 +233,19 @@ block $j$ の length を $L_j$ とする。
 
 canonical source 座標では、
 
-$$\operatorname{SourceAtDepth}(L_j)=\operatorname{BlockStartTime}(j)$$
+$$\text{SourceAtDepth}(L_j)=\text{BlockStartTime}(j)$$
 
 となる。
 
 したがって saturated block の successor $j=k+1$ では、
 
-$$L_j\notin\operatorname{PaymentClaimDepths}(j)$$
+$$L_j\notin\text{PaymentClaimDepths}(j)$$
 
 である。
 
 つまり、
 
-$$L_j\in\operatorname{ClaimHoles}(j)$$
+$$L_j\in\text{ClaimHoles}(j)$$
 
 じゃ。
 
@@ -449,7 +449,7 @@ $$L=2,\qquad v=1,\qquad A=1$$
 
 さらに唯一の hole は最深 depth $2$ なので、
 
-$$\operatorname{Claims}={1}$$
+$$\text{Claims}={1}$$
 
 となる。
 
@@ -467,7 +467,7 @@ $$d_{\mathrm{miss}}=L$$
 
 従って claim set は、
 
-$$\operatorname{Claims}=\operatorname{Icc}(1,L-1)$$
+$$\text{Claims}=\text{Icc}(1,L-1)$$
 
 となる。
 

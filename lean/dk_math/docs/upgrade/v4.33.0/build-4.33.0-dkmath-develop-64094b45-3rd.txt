@@ -1,0 +1,285 @@
+✖ [8923/9584] Building DkMath.Kernel.Normalize (8.0s)
+info: DkMath/Kernel/Normalize.lean:9:0: file: DkMath.Kernel.Normalize
+error: DkMath/Kernel/Normalize.lean:71:2: Type mismatch: After simplification, term
+  normalizedOutgoing_le_one K a hcap
+ has type
+  @LE.le ℝ Real.instLE ((K.children a).sum (K.normalizedWeight a)) 1
+but is expected to have type
+  @LE.le ℝ Real.instLE (∑ b ∈ K.children a, K.cost a b / K.capacity a) 1
+error: Lean exited with code 1
+✖ [8931/9584] Building DkMath.Collatz.GnomonEvaluation (10s)
+info: DkMath/Collatz/GnomonEvaluation.lean:9:0: file: DkMath.Collatz.GnomonEvaluation
+error: DkMath/Collatz/GnomonEvaluation.lean:118:2: Type mismatch: After simplification, term
+  sum_oddGnomonLayer_eq_square n
+ has type
+  @Eq ℕ ((Finset.range n).sum OddGnomonLayer) (n ^ 2)
+but is expected to have type
+  @Eq ℕ (∑ i ∈ Finset.range n, (2 * i + 1)) (n ^ 2)
+error: Lean exited with code 1
+✖ [8936/9584] Building DkMath.Tromino (11s)
+info: DkMath/Tromino.lean:12:0: file: DkMath.Tromino
+error: DkMath/Tromino.lean:325:53: unsolved goals
+P : Shape
+c a b : Cell
+hb_mem : b ∈ P
+hb_eq : reflectXEmb b = a
+ha_eq : reflectXEmb a = c
+⊢ { toFun := fun c ↦ (c.1, -c.2), inj' := reflectXEmb._proof_1 }
+      ({ toFun := fun c ↦ (c.1, -c.2), inj' := reflectXEmb._proof_1 } b) =
+    b
+error: DkMath/Tromino.lean:332:2: unsolved goals
+case h
+P : Shape
+c : Cell
+hc : c ∈ P
+⊢ { toFun := fun c ↦ (c.1, -c.2), inj' := reflectXEmb._proof_1 }
+      ({ toFun := fun c ↦ (c.1, -c.2), inj' := reflectXEmb._proof_1 } c) =
+    c
+error: Lean exited with code 1
+✖ [8938/9584] Building DkMath.NumberTheory.AKSBridge (15s)
+info: DkMath/NumberTheory/AKSBridge.lean:12:0: file: DkMath.NumberTheory.AKSBridge
+error: DkMath/NumberTheory/AKSBridge.lean:734:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  @Eq (?m.73 ⧸ ?m.75) ((Ideal.Quotient.mk ?m.75) ?x) ((Ideal.Quotient.mk ?m.75) ?y)
+in the target expression
+  @Eq ((ZMod 4)[X] ⧸ Ideal.span {X ^ 1 - 1}) ((Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) ((X + C ↑1) ^ 4))
+    ((Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) (X ^ 4 + C ↑1))
+h :
+  (Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) ((X + C ↑1) ^ 4) =
+    (Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) (X ^ 4 + C ↑1)
+⊢ False
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    aksQuotientMap._proof_1 (ZMod 4) 1
+  has type
+    @Ideal.IsTwoSided (ZMod 4)[X] CommRing.toCommSemiring.toSemiring (aksCyclicIdeal (ZMod 4) 1)
+  but is expected to have type
+    @Ideal.IsTwoSided (ZMod 4)[X] ring.toSemiring (Ideal.span {X ^ 1 - 1})
+  in the application
+    @Ideal.Quotient.ring (ZMod 4)[X] ring (Ideal.span {X ^ 1 - 1}) ⋯
+error: DkMath/NumberTheory/AKSBridge.lean:757:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  @Eq (?m.73 ⧸ ?m.75) ((Ideal.Quotient.mk ?m.75) ?x) ((Ideal.Quotient.mk ?m.75) ?y)
+in the target expression
+  @Eq ((ZMod 4)[X] ⧸ Ideal.span {X ^ 1 - 1}) ((Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) ((X + C ↑1) ^ 4))
+    ((Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) (X ^ (4 % 1) + C ↑1))
+h :
+  (Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) ((X + C ↑1) ^ 4) =
+    (Ideal.Quotient.mk (Ideal.span {X ^ 1 - 1})) (X ^ (4 % 1) + C ↑1)
+⊢ False
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    aksQuotientMap._proof_1 (ZMod 4) 1
+  has type
+    @Ideal.IsTwoSided (ZMod 4)[X] CommRing.toCommSemiring.toSemiring (aksCyclicIdeal (ZMod 4) 1)
+  but is expected to have type
+    @Ideal.IsTwoSided (ZMod 4)[X] ring.toSemiring (Ideal.span {X ^ 1 - 1})
+  in the application
+    @Ideal.Quotient.ring (ZMod 4)[X] ring (Ideal.span {X ^ 1 - 1}) ⋯
+error: Lean exited with code 1
+✖ [8940/9584] Building DkMath.RH.CFBRC.PascalPrimeEulerEnergyBridge (13s)
+info: DkMath/RH/CFBRC/PascalPrimeEulerEnergyBridge.lean:12:0: file: DkMath.RH.CFBRC.PascalPrimeEulerEnergyBridge
+error: DkMath/RH/CFBRC/PascalPrimeEulerEnergyBridge.lean:86:2: Type mismatch: After simplification, term
+  Eq.symm (Finset.prod_attach (pascalPrimeCoordinateSupportUpTo N) fun p ↦ eulerZetaFactor p s)
+ has type
+  @Eq ℂ (∏ x ∈ pascalPrimeCoordinateSupportUpTo N, eulerZetaFactor x s)
+    (∏ x ∈ (pascalPrimeCoordinateSupportUpTo N).attach, eulerZetaFactor (↑x) s)
+but is expected to have type
+  @Eq ℂ (∏ p ∈ pascalPrimeCoordinateSupportUpTo N, eulerZetaFactor p s)
+    (∏ x ∈ (pascalPrimeCoordinateSupportUpTo N).attach,
+      eulerZetaFactor (↑({ toFun := fun p ↦ ⟨↑p, ⋯⟩, inj' := ⋯ } x)) s)
+error: Lean exited with code 1
+✖ [8967/9584] Building DkMath.CosmicFormula.CosmicFormulaCellDim (20s)
+info: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:11:0: file: DkMath.CosmicFormula.CosmicFormulaCellDim
+error: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:771:6: Type mismatch: After simplification, term
+  Eq.symm this
+ has type
+  @Eq ℤ (qi i) ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } riFun) i)
+but is expected to have type
+  @Eq ℤ (qi i) ↑(riFun i ⋯)
+error: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:783:6: Type mismatch: After simplification, term
+  Eq.symm this
+ has type
+  @Eq ℤ (qj i) ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } rjFun) i)
+but is expected to have type
+  @Eq ℤ (qj i) ↑(rjFun i ⋯)
+error: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:829:6: Type mismatch: After simplification, term
+  Eq.symm this
+ has type
+  @Eq ℤ (qj j) ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } rjFun) j)
+but is expected to have type
+  @Eq ℤ (qj j) ↑(rjFun j ⋯)
+error: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:843:6: Type mismatch: After simplification, term
+  Eq.symm this
+ has type
+  @Eq ℤ (qi j) ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } riFun) j)
+but is expected to have type
+  @Eq ℤ (qi j) ↑(riFun j ⋯)
+error: Lean exited with code 1
+⚠ [9010/9584] Built DkMath.NumberTheory.ZsigmondyCyclotomicResearch (11s)
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+✖ [9104/9584] Building DkMath.FLT.GEisensteinBridge (15s)
+info: DkMath/FLT/GEisensteinBridge.lean:12:0: file: DkMath.FLT.GEisensteinBridge
+error: DkMath/FLT/GEisensteinBridge.lean:330:14: unsolved goals
+c b n : ℕ
+s : (toyNatGEisensteinDescentFrame c b).State
+hs : (toyNatGEisensteinDescentFrame c b).measure s > 0
+⊢ s - 1 = id s - 1
+error: DkMath/FLT/GEisensteinBridge.lean:1116:4: Type mismatch: After simplification, term
+  Nat.find_min' hWitness hq
+ has type
+  Nat.find hWitness ≤ q
+but is expected to have type
+  ∃ m ≤ q, PrimitiveOnS0 c b m ∧ m ^ 2 ∣ S0_nat c b
+error: Lean exited with code 1
+✖ [9124/9584] Building DkMath.RH.CFBRC.EtaCriticalMirrorPhaseProjection (12s)
+info: DkMath/RH/CFBRC/EtaCriticalMirrorPhaseProjection.lean:10:0: file: DkMath.RH.CFBRC.EtaCriticalMirrorPhaseProjection
+error: DkMath/RH/CFBRC/EtaCriticalMirrorPhaseProjection.lean:39:2: Type mismatch: After simplification, term
+  etaCriticalMirrorTransportDefectEndpoint_eq_sum N s
+ has type
+  @Eq ℂ (etaCriticalMirrorTransportDefectEndpoint N s)
+    (∑ m ∈ Finset.range N, (etaCriticalMirrorTermWeight s m - 1) * etaSignedVector s m)
+but is expected to have type
+  @Eq ℂ (etaCriticalMirrorTransportDefectEndpoint N s) ((Finset.range N).sum (etaCriticalMirrorDefectTerm s))
+error: DkMath/RH/CFBRC/EtaCriticalMirrorPhaseProjection.lean:47:54: unsolved goals
+N : ℕ
+ω s : ℂ
+⊢ ∑ x ∈ Finset.range N, ω.re * (etaCriticalMirrorDefectTerm s x).re -
+      ∑ x ∈ Finset.range N, ω.im * (etaCriticalMirrorDefectTerm s x).im =
+    (Finset.range N).sum (etaCriticalMirrorProjectedDefectTerm ω s)
+error: Lean exited with code 1
+✖ [9181/9584] Building DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel (22s)
+info: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:10:0: file: DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
+error: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:1846:7: unsolved goals
+⊢ (PrimePowerChannelProvider.ofWitnessProviderWeight sampleTenPrimePowerWitnessProvider sampleTenToyPrimeBaseWeight
+              sampleTenToyPrimeBaseWeight_nonneg_on_index
+              sampleTenWitnessProviderWeightKernel_subProbability).kernel.toDivisorTransitionKernel.index
+      10 =
+    {2, 5}
+error: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:1857:7: unsolved goals
+⊢ (PrimePowerChannelProvider.ofWitnessProviderWeight sampleTenPrimePowerWitnessProvider sampleTenToyPrimeBaseWeight
+              sampleTenToyPrimeBaseWeight_nonneg_on_index
+              sampleTenWitnessProviderWeightKernel_subProbability).kernel.toDivisorTransitionKernel.index
+      10 =
+    {2, 5}
+error: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:1877:7: unsolved goals
+⊢ (PrimePowerChannelProvider.ofWitnessProviderWeight sampleTenPrimePowerWitnessProvider
+              (ratioBasePrimeWeight sampleTenRatioA sampleTenRatioB) ⋯ ⋯).kernel.toDivisorTransitionKernel.index
+      10 =
+    {2, 5}
+error: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:1891:7: unsolved goals
+⊢ (PrimePowerChannelProvider.ofWitnessProviderWeight sampleTenPrimePowerWitnessProvider
+              (ratioBasePrimeWeight sampleTenRatioA sampleTenRatioB) ⋯ ⋯).kernel.toDivisorTransitionKernel.index
+      10 =
+    {2, 5}
+error: DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean:1912:7: unsolved goals
+⊢ (PrimePowerChannelProvider.ofWitnessProviderWeight sampleTenPrimePowerWitnessProvider
+              (ratioBasePrimeWeight sampleTenRatioA sampleTenRatioB) ⋯ ⋯).kernel.toDivisorTransitionKernel.index
+      10 =
+    {2, 5}
+error: Lean exited with code 1
+⚠ [9359/9584] Built DkMath.FLT.PrimeProvider.TriominoCosmicBranchA (66s)
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+✖ [9386/9584] Building DkMath.FLT.Seven.SevenRealCubicNumberField (38s)
+info: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:13:0: file: DkMath.FLT.Seven.SevenRealCubicNumberField
+warning: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:17:5: Ambiguous namespace `Algebra`: it is interpreted as `_root_.DkMath.Algebra` because this `open` occurs inside `namespace DkMath.FLT.Seven`, while `_root_.Algebra` is silently not opened. Specify the namespace unambiguously, e.g. `_root_.DkMath.Algebra`. The warning can sometimes also be addressed by moving the `open` outside of the surrounding `namespace`.
+Note: This linter can be disabled with `set_option linter.ambiguousOpen false`
+error: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:216:2: unsolved goals
+case e'_2
+pB : PowerBasis ℤ (𝓞 Field) := integralPowerBasis
+hloc :
+  Algebra.discr ℚ ⇑(Module.Basis.localizationLocalization ℚ ℤ⁰ Field pB.basis) =
+    (algebraMap ℤ ℚ) (Algebra.discr ℤ ⇑pB.basis)
+hdim : pB.dim = powerBasis.dim
+i : Fin powerBasis.dim
+⊢ (algebraMap (𝓞 Field) Field) (⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ ↑i) = AdjoinRoot.root polynomialQ ^ ↑i
+error: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:297:2: Type mismatch: After simplification, term
+  h
+ has type
+  (aeval (AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)))) X ^ 3 +
+          7 * (aeval (AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)))) X ^ 2 +
+        14 * (aeval (AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)))) X +
+      7 =
+    0
+but is expected to have type
+  (algebraMap (𝓞 Field) Field)
+            (⟨AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)), ⋯⟩ ^ 3) +
+          7 *
+            (algebraMap (𝓞 Field) Field)
+              (⟨AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)), ⋯⟩ ^ 2) +
+        (algebraMap (𝓞 Field) Field)
+          (14 * ⟨AdjoinRoot.root (map (Int.castRingHom ℚ) (C 1 * X ^ 3 + C 7 * X ^ 2 + C 14 * X + C 7)), ⋯⟩) +
+      7 =
+    0
+warning: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:293:31: This simp argument is unused:
+  map_pow
+Hint: Omit it from the simp argument list.
+  [apply] simp only [map_add, map_mul, map_ofNat, map_zero, integralPowerBasis_gen, NumberField.RingOfIntegers.map_mk]
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:294:28: This simp argument is unused:
+  NumberField.RingOfIntegers.map_mk
+Hint: Omit it from the simp argument list.
+  [apply] simp only [map_add, map_mul, map_pow, map_ofNat, map_zero, integralPowerBasis_gen]
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:341:32: unsolved goals
+⊢ -3 + (⟨AdjoinRoot.root polynomialQ, ⋯⟩ + 3) = ⟨AdjoinRoot.root polynomialQ, ⋯⟩
+error: DkMath/FLT/Seven/SevenRealCubicNumberField.lean:397:4: Type mismatch: After simplification, term
+  hxy
+ has type
+  ↑x.fst + 3 * ↑x.snd + 9 * ↑x.thd + (↑x.snd + 6 * ↑x.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ +
+      ↑x.thd * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 2 =
+    ↑y.fst + 3 * ↑y.snd + 9 * ↑y.thd + (↑y.snd + 6 * ↑y.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ +
+      ↑y.thd * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 2
+but is expected to have type
+  (↑x.fst + 3 * ↑x.snd + 9 * ↑x.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 0 +
+        (↑x.snd + 6 * ↑x.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 1 +
+      ↑x.thd * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 2 =
+    (↑y.fst + 3 * ↑y.snd + 9 * ↑y.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 0 +
+        (↑y.snd + 6 * ↑y.thd) * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 1 +
+      ↑y.thd * ⟨AdjoinRoot.root polynomialQ, ⋯⟩ ^ 2
+error: Lean exited with code 1
+⚠ [9448/9584] Built DkMath.Petal.ErdosBridge (18s)
+warning: DkMath/Petal/ErdosBridge.lean:226:26: `Nat.infinite_setOf_prime` has been deprecated: Use `Nat.infinite_setOfPred_prime` instead
+✖ [9464/9584] Building DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem (13s)
+info: DkMath/FLT/Seven/SevenBaseTerminalCellwiseFixedSystem.lean:9:0: file: DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
+error: DkMath/FLT/Seven/SevenBaseTerminalCellwiseFixedSystem.lean:415:4: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.169
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: Lean exited with code 1
+✖ [9544/9584] Building DkMath.ABC.ChernoffDensity (8.0s)
+info: DkMath/ABC/ChernoffDensity.lean:10:0: file: DkMath.ABC.ChernoffDensity
+error: DkMath/ABC/ChernoffDensity.lean:71:6: Ambiguous term
+  and_self_left
+Possible interpretations:
+  _root_.and_self_left : ?m.171 ∧ ?m.171 ∧ ?m.172 ↔ ?m.171 ∧ ?m.172
+  
+  Nat.and_self_left : ∀ (a b : ℕ), a &&& (a &&& b) = a &&& b
+error: DkMath/ABC/ChernoffDensity.lean:91:31: Application type mismatch: The argument
+  hExcess
+has type
+  Excess p (γ_values p) n
+but is expected to have type
+  n ≤ X ∧ Excess p (γ_values p) n
+in the application
+  ⟨hnIcc, hExcess⟩
+error: Lean exited with code 1
+✖ [9565/9584] Building DkMath.Analysis.DkReal.SemanticCF2DPhaseShift (10s)
+info: DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean:9:0: file: DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
+error: DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean:2847:4: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.25
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: Lean exited with code 1
+Some required targets logged failures:
+- DkMath.Kernel.Normalize
+- DkMath.Collatz.GnomonEvaluation
+- DkMath.Tromino
+- DkMath.NumberTheory.AKSBridge
+- DkMath.RH.CFBRC.PascalPrimeEulerEnergyBridge
+- DkMath.CosmicFormula.CosmicFormulaCellDim
+- DkMath.FLT.GEisensteinBridge
+- DkMath.RH.CFBRC.EtaCriticalMirrorPhaseProjection
+- DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
+- DkMath.FLT.Seven.SevenRealCubicNumberField
+- DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
+- DkMath.ABC.ChernoffDensity
+- DkMath.Analysis.DkReal.SemanticCF2DPhaseShift

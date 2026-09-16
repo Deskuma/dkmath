@@ -585,7 +585,7 @@ cyclotomic 側には `Polynomial.squarefree_cyclotomic` などが既にあるの
 r^d = 1,\quad r\neq 1
 \]
 
-を満たすので、\(d\) 素数より \(\operatorname{ord}(r)=d\)。したがって \(0 < k < d\) では \(r^k \neq 1\)、ゆえに \(a^k \not\equiv b^k \pmod q\)、つまり \(q \nmid a^k - b^k\)。
+を満たすので、\(d\) 素数より \(\text{ord}(r)=d\)。したがって \(0 < k < d\) では \(r^k \neq 1\)、ゆえに \(a^k \not\equiv b^k \pmod q\)、つまり \(q \nmid a^k - b^k\)。
 
 以下が **Lean スケルトン** 。`sorry` を埋める場所が “詰まりポイント” になるように分割してある。
 

@@ -47,13 +47,13 @@ git diff --check
 `Vec.conj` を `Failure.lean` ではなく `Basic.lean` に入れたのは正解じゃ。
 
 $$
-\operatorname{conj}(x,y)=(x,-y)
+\text{conj}(x,y)=(x,-y)
 $$
 
 であり、
 
 $$
-Q(\operatorname{conj}(z))=Q(z)
+Q(\text{conj}(z))=Q(z)
 $$
 
 これは失敗例のためだけではなく、二成分平方質量そのものの基本対称性じゃ。
@@ -92,7 +92,7 @@ $$
 今回の核心はこれじゃ。
 
 $$
-\operatorname{starPlusMinus}(r,z)=\operatorname{star}(\operatorname{conj}(r),z)
+\text{starPlusMinus}(r,z)=\text{star}(\text{conj}(r),z)
 $$
 
 これにより、plus-minus 保存パターンは「第二の主積」ではなく、
@@ -339,7 +339,7 @@ $$
 は謎の別保存核ではなく、
 
 $$
-\operatorname{star}(\overline r,z)
+\text{star}(\overline r,z)
 $$
 
 だった。

@@ -1,0 +1,94 @@
+SOL-000 validation record
+Date: 2026-09-09 (Asia/Tokyo)
+
+Scope
+-----
+Research artifacts only:
+  docs/dev/ABC-GN-Astra-260906-v1/report-000.md
+  docs/dev/ABC-GN-Astra-260906-v1/scratch-000.lean
+  docs/dev/ABC-GN-Astra-260906-v1/numeric-000.py
+
+No DkMath production source or DkMath/ABC.lean import was changed.
+
+Lean scratch verification
+-------------------------
+Command:
+  lake env lean docs/dev/ABC-GN-Astra-260906-v1/scratch-000.lean
+
+Exit: 0
+
+Checked declarations:
+  DkMath.ABC.SOL000Scratch.pellParameter_height_cube_aux
+  DkMath.ABC.SOL000Scratch.realized_shell_pellParameter_height_cube
+
+Checked conclusion:
+  D^2 * T^3 < 54 * (X+1)^6
+
+Axiom output for both declarations:
+  [propext, Classical.choice, Quot.sound]
+
+Exact numerical diagnostics
+---------------------------
+Command:
+  python3 docs/dev/ABC-GN-Astra-260906-v1/numeric-000.py --limit 300000
+
+Exit: 0
+Runtime observed: 2.7 seconds
+Independent factorint cross-check: 228 points, deterministic seed 1000
+
+Aggregate selected results:
+  X=1000:   distinct M=7,   witnesses=8,   max M fiber=2,
+            max fixed-(T,r) shell fiber=1, weighted sum/X=0.2649964973
+  X=10000:  distinct M=25,  witnesses=28,  max M fiber=2,
+            max fixed-(T,r) shell fiber=1, weighted sum/X=0.2592863042
+  X=100000: distinct M=86,  witnesses=99,  max M fiber=3,
+            max fixed-(T,r) shell fiber=1, weighted sum/X=0.2736347232
+  X=300000: distinct M=138, witnesses=172, max M fiber=4,
+            max fixed-(T,r) shell fiber=1, weighted sum/X=0.2156187572
+
+Extended falsification scan
+---------------------------
+Command:
+  python3 docs/dev/ABC-GN-Astra-260906-v1/numeric-000.py --limit 1000000
+
+Exit: 0
+Runtime observed: 9.2 seconds
+
+At X=1000000:
+  represented shells=15
+  distinct large M=250
+  large witnesses=304
+  max M fiber=4
+  max fixed-T shell fiber=1
+  max fixed-(T,r) shell fiber=1
+  weighted shell sum/X=0.1899193755
+
+Global fixed-T collisions at X=1000000 (different shells):
+  T=3:  (a,M)=(4365,6355441),
+                  (60816,1232922769),
+                  (847077,239180661721)
+  T=13: (a,M)=(4610,1635841), (88915,7906143973)
+  T=7:  (a,M)=(4700,3157729), (165985,3935931169)
+
+Mandatory regression assertions passed
+--------------------------------------
+  M=169 witnesses: 21, 145
+  M=8281 witnesses: 2173, 3018, 5260, 6105
+  complement-3 Pell prefix:
+    (a,d)=(0,1),(21,13),(312,181),(4365,2521),
+          (60816,35113),(847077,489061),(11798280,6811741)
+  paired exact depth at a=7428:
+    v_7(a^2+3a+3)=2
+    v_13(3a^2+3a+1)=2
+  mod-49 seven states:
+    forward-deep=29
+    swap-deep=22
+    shallow=1,8,15,36,43
+  two Hensel roots modulo p^2 reducing to the two roots modulo p for:
+    p=7,13,19,31,37
+
+Interpretation boundary
+-----------------------
+The numerical scan is falsification evidence, not a proof of the proposed
+fixed-(T,r) fiber bound. The only new kernel-checked statement is the
+root-free Pell-parameter height inequality in scratch-000.lean.

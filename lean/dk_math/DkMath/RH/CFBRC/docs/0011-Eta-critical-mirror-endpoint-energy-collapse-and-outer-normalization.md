@@ -217,11 +217,11 @@ etaMirrorEndpointGapShare N s
 通常の実数除算としては
 
 $$
-\operatorname{CoreShare}_N=\frac{C_N}{O_N}
+\text{CoreShare}_N=\frac{C_N}{O_N}
 $$
 
 $$
-\operatorname{GapShare}_N=\frac{G_N}{O_N}
+\text{GapShare}_N=\frac{G_N}{O_N}
 $$
 
 である。
@@ -299,7 +299,7 @@ etaMirrorEndpointRegularizedTotalShare N s ε
 critical mirror geometry から
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 $$
 
 と

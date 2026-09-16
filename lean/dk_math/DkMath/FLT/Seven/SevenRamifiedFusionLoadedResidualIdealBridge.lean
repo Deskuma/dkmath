@@ -198,7 +198,7 @@ theorem quotientRoot_natAbs_eq_row2Loads_mul_residualNormRoot_pow
 private theorem quotientRoot_ne_zero
     (p : RamifiedSignedRootRoutingPacket) :
     p.signedDepth.quotientRoot ≠ 0 := by
-  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let : Fact (Nat.Prime 7) := ⟨by norm_num⟩
   intro hzero
   have hmod := p.signedDepth.quotientRoot_modSeven_eq_one
   rw [hzero] at hmod
@@ -241,7 +241,7 @@ theorem padicValNat_quotientRoot_eq_loads_add_seven_mul_residual
       padicValNat q p.routing.c21 +
         padicValNat q p.routing.c22 +
           7 * padicValNat q p.row2ResidualNormRoot := by
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hval :=
     congrArg (padicValNat q)
       p.quotientRoot_natAbs_eq_row2Loads_mul_residualNormRoot_pow

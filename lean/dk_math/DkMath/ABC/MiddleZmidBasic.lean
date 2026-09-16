@@ -23,8 +23,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /--
 If `2^(k+1) ≤ X+1`, then `MidBlock k X` contains the full dyadic interval
@@ -193,7 +194,7 @@ lemma integrable_exp_of_mid_block {Ω : Type*} [MeasurableSpace Ω] [DecidableEq
             exact mul_le_mul_of_nonneg_left hle_card (abs_nonneg lambda)
       exact Real.exp_le_exp.mpr hmul_le
   have hconst : Integrable (fun _ => Real.exp (|lambda| * (MidBlock k X).card)) μ := by
-    haveI : IsFiniteMeasure μ := inferInstance
+    have : IsFiniteMeasure μ := inferInstance
     apply integrable_const
   have hmeas : AEStronglyMeasurable (fun ω => Real.exp (lambda * (∑ v ∈ MidBlock k X, Prob.indR (Smap v) ω))) μ := by
     let hsum := mid_block_sum_aestronglyMeasurable (μ := μ) (k := k) (X := X) (Smap := Smap)

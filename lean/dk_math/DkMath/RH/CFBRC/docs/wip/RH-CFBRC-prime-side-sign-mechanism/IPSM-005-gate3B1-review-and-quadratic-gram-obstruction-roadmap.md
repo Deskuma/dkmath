@@ -93,7 +93,7 @@ $$
 The scalar excess is exactly
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W)-R(W).
+E_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W)-R(W).
 $$
 
 This is compatible with the already Green identity
@@ -148,7 +148,7 @@ The elementary algebra itself warns against pointwise positivity.
 For a complex number `a`, a real-part bilinear expression
 
 $$
-\operatorname{Re}(a b)
+\text{Re}(a b)
 $$
 
 has no fixed sign when `b` is unrestricted.

@@ -53,7 +53,7 @@ $$
 だけではなく、
 
 $$
-\tau=\frac{\operatorname{gapRoot}}{a^3}
+\tau=\frac{\text{gapRoot}}{a^3}
 $$
 
 として signed integer shadow にも接続されました。
@@ -215,7 +215,7 @@ $$
 Lean は、
 
 $$
-\tau=\frac{\operatorname{gapRoot}}{a^3}
+\tau=\frac{\text{gapRoot}}{a^3}
 $$
 
 を証明しました。
@@ -521,7 +521,7 @@ $$
 
 $$
 \boxed{
-\thetaResidue(\operatorname{gapCore})=-2m
+\thetaResidue(\text{gapCore})=-2m
 }
 $$
 

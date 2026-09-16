@@ -57,7 +57,7 @@ theorem modulus_dvd_cell {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
 theorem next_power_not_dvd_cell {x y z : ℕ} {r : AwayCubicRoutingPacket x y z}
     (p : AwayNonSevenPrimeDepthPacket r) :
     ¬ p.q ^ (p.exponent + 1) ∣ routingCell r.routing p.row p.column := by
-  letI : Fact (Nat.Prime p.q) := ⟨p.q_prime⟩
+  let : Fact (Nat.Prime p.q) := ⟨p.q_prime⟩
   have hn : routingCell r.routing p.row p.column ≠ 0 :=
     routingCell_ne_zero p.row p.column
   simpa [q, exponent, row, column, p.depth.exponent_eq_cell, Nat.add_comm] using

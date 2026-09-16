@@ -49,7 +49,7 @@ Failure.lean
 今回の一番安定した追加はこれじゃ。
 
 $$
-\operatorname{act}(r\star s,z)=\operatorname{act}(r,\operatorname{act}(s,z))
+\text{act}(r\star s,z)=\text{act}(r,\text{act}(s,z))
 $$
 
 Lean では、
@@ -188,13 +188,13 @@ $$
 もし
 
 $$
-\operatorname{conj}(a,b)=(a,-b)
+\text{conj}(a,b)=(a,-b)
 $$
 
 と置くと、
 
 $$
-\operatorname{starPlusMinus}(r,z)=\operatorname{star}(\operatorname{conj}(r),z)
+\text{starPlusMinus}(r,z)=\text{star}(\text{conj}(r),z)
 $$
 
 になる。
@@ -202,7 +202,7 @@ $$
 実際、
 
 $$
-\operatorname{star}((a,-b),(x,y))=(ax+by,\;ay-bx)
+\text{star}((a,-b),(x,y))=(ax+by,\;ay-bx)
 $$
 
 じゃ。
@@ -292,7 +292,7 @@ The plus-minus preserving pattern is the usual star action by the conjugated lef
 つまり、
 
 $$
-\operatorname{starPlusMinus}(r,z)=\operatorname{star}(\overline r,z)
+\text{starPlusMinus}(r,z)=\text{star}(\overline r,z)
 $$
 
 じゃな。
