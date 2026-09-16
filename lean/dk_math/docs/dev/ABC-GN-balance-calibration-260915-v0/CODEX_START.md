@@ -30,57 +30,63 @@ commit: 7aa08d384b8c6b21c5da095e73964cc5ba15d8b2
 
 BCAL-006 — Outcome A / EXACT DEPTH TRANSPORT
 commit: f68cb617a2db3fed875655037ce966db3d659b51
+
+BCAL-007 — Outcome A / GENERIC KERNEL JUSTIFIED
 ```
 
 Read in this order:
 
 ```text
 lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/README.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-006.md
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-007.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-007.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/instruction-008.md
 ```
 
-Then execute `instruction-007.md` repository-first.
+Then execute `instruction-008.md` repository-first.
 
 Current core rule:
 
 ```text
-BCAL-006 completed the bounded local/depth transport audit.
-Do not pursue lift existence here.
-Audit whether the exact two-channel linear coordinate transform deserves a stable DkMath.Lib kernel.
-Require real reuse by both PowerSwap and ABC/GN.
-Preserve existing public APIs and dependency direction.
-Do not return to exponent optimization.
+BCAL-007 justified and extracted a dependency-neutral TwoChannel kernel.
+The structural phase is now mature enough to revisit old numerical estimates.
+Do not optimize exponents yet.
+Classify every existing quantitative theorem by the exact coordinate and population it measures.
+Keep pointwise, counting, average, moment, and asymptotic statements separate.
+Do not silently add constants from incompatible dimensions.
 Do not construct a new ABC contract.
 ```
 
-Established exact structures now include:
+Established exact coordinate frame:
 
 ```text
-PowerSwap:
-  U = gapU
-  V = gapV
-  gapP = (U + V)/2
-  gapQ = U - V
+S = support mass
+E = depth mass
+M = S + E
+Q = S - E
+Cal = M - rho*R
 
-ABC/GN:
-  U = GNChannelSupportMass
-  V = GNChannelDepthMass
-  GNChannelMass    = U + V
-  GNChannelBalance = U - V
+TwoChannel:
+  mass(u,v)    = u+v
+  balance(u,v) = u-v
+  center(u,v)  = (u+v)/2
 
-BCAL-006 right-channel step:
-  V -> V + δ
-  M -> M + δ
-  Q -> Q - δ
+local prime:
+  localMass    = v_q(GN) * log q
+  localBalance = (2-v_q(GN)) * log q
+
+shell:
+  Q = log(single layer) - log(twoTail)
+  with exact cubic exceptional correction
+
+calibration:
+  abcEpsilon = GNEpsilon + ExactCalibrationCorrection
+  safe correction = exact correction + normalized(return + gauge slacks)
 ```
 
-Checkpoint 007 should first search for an existing generic replacement. If none exists and extraction is dependency-neutral, add only a small stable two-channel coordinate kernel and exact consumer bridges.
+Checkpoint 008 is the quantitative calibration frontier audit.  Audit the actual current theorem statements behind historical constants such as `0.435`, classify what they really measure, and identify the strongest existing pointwise and counting/average endpoints separately.
 
-Do not claim that PowerSwap and ABC are the same mathematics. The shared object under audit is only the linear sum/difference coordinate transform.
-
-Write results and build/audit evidence to:
+Write results and any minimal exact bridge evidence to:
 
 ```text
-lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-007.md
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/report-008.md
 ```
