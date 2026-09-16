@@ -33,7 +33,7 @@ The goal is to remove the explicit class-group hypothesis from the generic
 `p=7` residual exact-power endpoint without reusing the specialized FLT7 final
 theorem as a black box.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-001 — Finite class-group cardinality criterion
 
@@ -51,7 +51,7 @@ group theory layer when Mathlib already exposes the needed element-order facts.
 This checkpoint should convert the abstract Phase-26 hypothesis into a concrete
 class-number target whenever the class group is finite.
 
-Status: **planned**.
+Status: **next**.
 
 ## FPTC-002 — Arbitrary-power TraceOne coordinate kernel
 
