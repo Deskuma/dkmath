@@ -50,6 +50,19 @@ $$
 
 ## News
 
+> ## FLT3: Fermat's Last Theorem (n=3)
+
+$$
+\Large
+x,y,z\in\mathbb{N}_{>0}
+\quad\Longrightarrow\quad
+x^3+y^3\ne z^3
+$$
+
+- FLT3 Standalone Lean Code Project: <https://github.com/Deskuma/flt3_dk_math_lean4>
+
+---
+
 > ## FLT5: Fermat's Last Theorem (n=5)
 
 $$
@@ -218,9 +231,11 @@ Please refer to [dk_math/README.md](./lean/dk_math/README.md) for details.
 Refining foundational lemmas to stabilize and generalize the formalization of Fermat's Last Theorem (FLT).
 
 We aim to organize multiple approaches—particularly those centered on the case where `d = 3`—that differ from the approach taken in Mathlib.FLT.
-*Note: While the formal proof is already complete, this effort focuses on refining lemmas and stabilizing the proofs.* ### Latest Status (2026-03-15)
+*Note: While the formal proof is already complete, this effort focuses on refining lemmas and stabilizing the proofs.*
 
-Summary based on `docs/PROJECT_STATUS.md`:
+### Latest Status (2026-03-15)
+
+Summary based on [PROJECT STATUS(old)](docs/PROJECT_STATUS.md):
 
 - The public API for FLT `d = 3` is largely stable in `DkMath/FLT/Main.lean`.
 - The StandAlone artifact (`FLT3#StandAlone-NC-v0.lean-v2.lean`) builds successfully and contains no actual placeholders.
@@ -245,61 +260,93 @@ For details... See [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md).
 
 ### Introduction
 
-This project involves the implementation of a proof of FLT for $d=3$ by contradiction—utilizing Zsigmondy's theorem on primitive prime divisors and $p$-adic valuation analysis—and the organization of the resulting lemmas.
+This project contains an independent Lean formalization of Fermat's Last Theorem for exponent $3$.
 
-FLT3 API with Assumptions (Conceptual Diagram)
-
-*Note: The simplified code below is for conceptual illustration only. For exact signatures, please refer to the "Source Code Definitions" section below and `lean/dk_math/DkMath/FLT/Main.lean`.*
-
-**theorem FLT_d3_by_padicValNat**
+The final public theorem is unconditional:
 
 $$
-\boxed{x^3+y^3=z^3} \\
-\downarrow\\
-\text{hS0 not sq} : \forall q,\; \text{Prime } q \to q \mid (z^3-y^3) \to q \nmid (z-y) \to \neg q^2 \mid S0(z,y)
+\forall x,y,z\in\mathbb N_{>0},
+\qquad
+x^3+y^3\ne z^3.
 $$
 
-This is a proof by contradiction based on the stated assumption.
-
-The proof is structured by establishing the necessary premises to satisfy this condition and thereby completing the argument.
-
-An example of this construction, utilizing the DkMath lemma system, is provided here.
-
-#### A Note from the Assistant
-
-This theorem constructs a proof by contradiction for FLT ($d=3$) by combining the existence of Zsigmondy primitive prime divisors with upper bounds derived from $p$-adic valuation analysis. If the assumption `hS0_not_sq` holds, a contradiction arises, implying that $a^3 + b^3 \neq c^3$. This approach offers a novel method for proving FLT ($d=3$) by leveraging number-theoretic properties. While traditional proofs of FLT have relied on advanced mathematical structures such as elliptic curves and modular forms, this method focuses on more fundamental properties of number theory. Furthermore, the hypothesis hS0_not_sq represents a condition regarding the square-freeness of the relative polygonal number S0(c,b); by demonstrating how this contributes to the proof of FLT for d=3, we can gain a profound understanding of the relationship between number-theoretic structures and FLT. This approach is compelling as it offers a fresh perspective on FLT for d=3 and illustrates the pivotal role played by number-theoretic properties. Moreover, the theorem holds value within the field of number theory itself, as it presents a novel method for proving FLT for d=3 by leveraging these number-theoretic properties.
-
-(The AI ​​assistant speaks with great enthusiasm)
+The standalone public import surface is:
 
 ```lean
--- S0_nat(c,b) := c² + cb + b²
-def S0_nat (c b : ℕ) : ℕ := c^2 + c*b + b^2
+import DkMath.FLT.Three
+```
 
--- Zsigmondy素因子存在
-theorem Zsigmondy_exists {c b : ℕ} (h : ¬ ∃ q, Prime q ∧ q ∣ (c^3 - b^3) ∧ ¬ q ∣ (c - b)) : False := by ...
+with the final endpoint:
 
--- padicValNat上界評価
-theorem padicValNat_le_one {q c b : ℕ} (hprime : Prime q)
-    (hdvd : q ∣ c^3 - b^3) (hndvd : ¬ q ∣ c - b)
-    (h : ¬ q^2 ∣ S0_nat c b) :
-    padicValNat q (c^3 - b^3) ≤ 1 := by ...
+```lean
+DkMath.FLT.Three.fermatThree_no_positive_solution
+```
 
--- 立方差の不変性
-theorem cube_sub_eq_of_add_eq {a b c : ℕ} (h : a^3 + b^3 = c^3) :
-    ∀ q : ℕ, padicValNat q (a^3 - b^3) = padicValNat q (c^3 - b^3) := by ...
+The proof proceeds by contradiction. A hypothetical positive solution is first normalized to a primitive coprime solution, after which the proof follows a cubic descent route based on GN3, signed $3$-adic arithmetic, and Eisenstein integers.
 
--- 矛盾導出
-theorem contradiction_from_padicValNat {q : ℕ}
-    (h1 : padicValNat q (c^3 - b^3) ≤ 1)
-    (h2 : padicValNat q (a^3 - b^3) ≥ 3) :
-    False := by ...
+Conceptually, the proof spine is:
 
--- メイン定理：FLT d=3
-theorem FLT_d3_by_padicValNat {a b c : ℕ}
-    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (hab : Nat.Coprime a b)
-    (hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c^3 - b^3 → ¬ q ∣ c - b → ¬ q^2 ∣ S0_nat c b) :
-    a^3 + b^3 ≠ c^3 := by ...
+```text
+positive cubic solution
+        ↓
+gcd normalization
+        ↓
+PrimitiveCubicPack
+        ↓
+signed 3-adic routing
+        ↓
+Eisenstein ramifier stripping
+        ↓
+coprime conjugate factors
+        ↓
+Euclidean-domain cube extraction
+        ↓
+unit-sector classification
+        ↓
+nontrivial sectors excluded modulo 3
+        ↓
+exact Eisenstein cube
+        ↓
+integer cubic factorization
+        ↓
+smaller positive primitive cubic solution
+        ↓
+strict descent on a natural-number measure
+        ↓
+contradiction
+```
+
+At the primitive level, the central theorem is:
+
+```lean
+theorem FLT_d3_unconditional
+    {a b c : ℕ}
+    (ha : 0 < a)
+    (hb : 0 < b)
+    (hc : 0 < c)
+    (hab : Nat.Coprime a b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3
+```
+
+The unrestricted positive-natural theorem removes the coprimality requirement by gcd normalization:
+
+```lean
+theorem fermatThree_no_positive_solution
+    (a b c : ℕ)
+    (ha : 0 < a)
+    (hb : 0 < b)
+    (hc : 0 < c) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3
+```
+
+The completed `DkMath.FLT.Three` proof tower is independent of the legacy conditional FLT3 route in `DkMath.FLT.Main`. In particular, the final proof does not depend on `FLT_d3_by_padicValNat`, `hS0_not_sq`, or `NoSqOnS0`.
+
+The kernel-checked endpoint introduces no project-specific axioms; its axiom audit reports only:
+
+```text
+propext
+Classical.choice
+Quot.sound
 ```
 
 ---
